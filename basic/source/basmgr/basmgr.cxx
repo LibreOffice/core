@@ -106,7 +106,6 @@ static const char* szImbedded = "LIBIMBEDDED";
 static const char* szCryptingKey = "CryptedBasic";
 static const char* szScriptLanguage = "StarBasic";
 
-TYPEINIT1( BasicManager, SfxBroadcaster );
 DBG_NAME( BasicManager );
 
 StreamMode eStreamReadMode = STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYALL;
@@ -1283,9 +1282,10 @@ sal_Bool BasicManager::ImplLoadBasic( SvStream& rStrm, StarBASICRef& rOldBasic )
     sal_Bool bLoaded = sal_False;
     if( xNew.Is() )
     {
-        if( xNew->IsA( TYPE(StarBASIC) ) )
+        StarBASIC* pNew = dynamic_cast< StarBASIC* >((SbxBase*) xNew);
+
+        if( pNew )
         {
-            StarBASIC* pNew = (StarBASIC*)(SbxBase*) xNew;
             // Use the Parent of the old BASICs
             if( rOldBasic.Is() )
             {
@@ -2258,8 +2258,9 @@ sal_Bool DialogContainer_Impl::hasElements()
     sal_Int16 nCount = mpLib->GetObjects()->Count();
     for( sal_Int16 nObj = 0; nObj < nCount ; nObj++ )
     {
-        SbxVariable* pVar = mpLib->GetObjects()->Get( nObj );
-        if ( pVar->ISA( SbxObject ) && ( ((SbxObject*)pVar)->GetSbxId() == SBXID_DIALOG ) )
+        SbxObject* pVar = dynamic_cast< SbxObject* >(mpLib->GetObjects()->Get( nObj ));
+
+        if ( pVar && pVar->GetSbxId() == SBXID_DIALOG )
         {
             bRet = sal_True;
             break;
@@ -2272,16 +2273,16 @@ sal_Bool DialogContainer_Impl::hasElements()
 Any DialogContainer_Impl::getByName( const ::rtl::OUString& aName )
     throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    SbxVariable* pVar = mpLib->GetObjects()->Find( aName, SbxCLASS_DONTCARE );
-    if( !( pVar && pVar->ISA( SbxObject ) &&
-           ( ((SbxObject*)pVar)->GetSbxId() == SBXID_DIALOG ) ) )
+    SbxObject* pVar = dynamic_cast< SbxObject* >(mpLib->GetObjects()->Find( aName, SbxCLASS_DONTCARE ));
+
+    if( !( pVar && pVar->GetSbxId() == SBXID_DIALOG ) )
     {
         throw NoSuchElementException();
     }
 
     Reference< XStarBasicDialogInfo > xDialog =
         (XStarBasicDialogInfo*)new DialogInfo_Impl
-            ( aName, implGetDialogData( (SbxObject*)pVar ) );
+            ( aName, implGetDialogData( pVar ) );
 
     Any aRetAny;
     aRetAny <<= xDialog;
@@ -2299,8 +2300,9 @@ Sequence< ::rtl::OUString > DialogContainer_Impl::getElementNames()
 
     for( sal_Int16 nObj = 0; nObj < nCount ; nObj++ )
     {
-        SbxVariable* pVar = mpLib->GetObjects()->Get( nObj );
-        if ( pVar->ISA( SbxObject ) && ( ((SbxObject*)pVar)->GetSbxId() == SBXID_DIALOG ) )
+        SbxObject* pVar = dynamic_cast< SbxObject* >(mpLib->GetObjects()->Get( nObj ));
+
+        if ( pVar && pVar->GetSbxId() == SBXID_DIALOG )
         {
             pRetSeq[ nDialogCounter ] = ::rtl::OUString( pVar->GetName() );
             nDialogCounter++;
@@ -2314,9 +2316,9 @@ sal_Bool DialogContainer_Impl::hasByName( const ::rtl::OUString& aName )
     throw(RuntimeException)
 {
     sal_Bool bRet = sal_False;
-    SbxVariable* pVar = mpLib->GetObjects()->Find( aName, SbxCLASS_DONTCARE );
-    if( pVar && pVar->ISA( SbxObject ) &&
-           ( ((SbxObject*)pVar)->GetSbxId() == SBXID_DIALOG ) )
+    SbxObject* pVar = dynamic_cast< SbxObject* >(mpLib->GetObjects()->Find( aName, SbxCLASS_DONTCARE ));
+
+    if( pVar && pVar->GetSbxId() == SBXID_DIALOG )
     {
         bRet = sal_True;
     }
@@ -2352,12 +2354,13 @@ void DialogContainer_Impl::removeByName( const ::rtl::OUString& Name )
     throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     (void)Name;
-    SbxVariable* pVar = mpLib->GetObjects()->Find( Name, SbxCLASS_DONTCARE );
-    if( !( pVar && pVar->ISA( SbxObject ) &&
-           ( ((SbxObject*)pVar)->GetSbxId() == SBXID_DIALOG ) ) )
+    SbxObject* pVar = dynamic_cast< SbxObject* >(mpLib->GetObjects()->Find( Name, SbxCLASS_DONTCARE ));
+
+    if( !( pVar && pVar->GetSbxId() == SBXID_DIALOG ) )
     {
         throw NoSuchElementException();
     }
+
     mpLib->Remove( pVar );
 }
 

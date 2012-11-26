@@ -31,8 +31,7 @@
 class SVL_DLLPUBLIC SfxStringItem: public CntUnencodedStringItem
 {
 public:
-    TYPEINFO();
-
+    POOLITEM_FACTORY()
     SfxStringItem() {}
 
     SfxStringItem(sal_uInt16 which, const XubString & rValue):

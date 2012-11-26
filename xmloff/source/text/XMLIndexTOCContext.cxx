@@ -65,8 +65,6 @@ using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::lang::IllegalArgumentException;
 
 
-TYPEINIT1(XMLIndexTOCContext, SvXMLImportContext);
-
 static const sal_Char* aIndexServiceMap[] =
 {
     "com.sun.star.text.ContentIndex",

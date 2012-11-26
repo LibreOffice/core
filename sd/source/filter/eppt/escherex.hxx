@@ -61,7 +61,9 @@ class PptEscherEx : public EscherEx
         void    OpenContainer( sal_uInt16 n_EscherContainer, int nRecInstance = 0 );
         void    CloseContainer();
 
-        sal_uInt32 EnterGroup( Rectangle* pBoundRect, SvMemoryStream* pClientData );
+        sal_uInt32 EnterGroup(
+            const basegfx::B2DRange* pObjectRange,
+            SvMemoryStream* pClientData );
 
         sal_uInt32  DrawingGroupContainerSize();
         void    WriteDrawingGroupContainer( SvStream& rSt );

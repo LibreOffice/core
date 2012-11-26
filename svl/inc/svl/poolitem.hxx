@@ -28,7 +28,6 @@
 
 #define TF_POOLABLE
 #include <sal/config.h>
-#include <tools/rtti.hxx>
 #include <limits.h>
 #include <tools/solar.h>
 #include <tools/debug.hxx>
@@ -171,6 +170,18 @@ namespace rtl
 
 // -----------------------------------------------------------------------
 
+class SfxPoolItem;
+typedef SfxPoolItem* (*CreatePoolItem)();
+
+#define POOLITEM_FACTORY() \
+    using SfxPoolItem::Create; \
+    static SfxPoolItem* Create();
+
+#define IMPL_POOLITEM_FACTORY(Type) \
+    SfxPoolItem* Type::Create() { return new Type; }
+
+// -----------------------------------------------------------------------
+
 class SVL_DLLPUBLIC SfxPoolItem
 {
 friend class SfxItemPool;
@@ -203,7 +214,6 @@ protected:
                              SfxPoolItem( const SfxPoolItem& );
 
 public:
-                             TYPEINFO();
     virtual                  ~SfxPoolItem();
 
     void                     SetWhich( sal_uInt16 nId ) {
@@ -224,12 +234,12 @@ public:
                                     XubString &rText,
                                     const IntlWrapper * pIntlWrapper = 0 ) const;
 
-    virtual sal_uInt16           GetVersion( sal_uInt16 nFileFormatVersion ) const;
-    virtual int              ScaleMetrics( long lMult, long lDiv );
-    virtual int              HasMetrics() const;
+    virtual sal_uInt16       GetVersion( sal_uInt16 nFileFormatVersion ) const;
+    virtual void             ScaleMetrics( long lMult, long lDiv );
+    virtual bool             HasMetrics() const;
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual SfxPoolItem*     Create( SvStream &, sal_uInt16 nItemVersion ) const;
     virtual SvStream&        Store( SvStream &, sal_uInt16 nItemVersion ) const;
@@ -355,7 +365,8 @@ class SVL_DLLPUBLIC SfxVoidItem: public SfxPoolItem
 {
     SfxVoidItem & operator=( const SfxVoidItem& ); // not implemented.
 public:
-                            TYPEINFO();
+    POOLITEM_FACTORY()
+                            SfxVoidItem( );
                             SfxVoidItem( sal_uInt16 nWhich );
                             SfxVoidItem( sal_uInt16 nWhich, SvStream & );
                             SfxVoidItem( const SfxVoidItem& );
@@ -383,7 +394,6 @@ class SVL_DLLPUBLIC SfxSetItem: public SfxPoolItem
     SfxSetItem & operator=( const SfxSetItem& ); // not implemented.
 
 public:
-                            TYPEINFO();
                             SfxSetItem( sal_uInt16 nWhich, SfxItemSet *pSet );
                             SfxSetItem( sal_uInt16 nWhich, const SfxItemSet &rSet );
                             SfxSetItem( const SfxSetItem&, SfxItemPool *pPool = 0 );
@@ -418,7 +428,6 @@ friend class SfxItemSet;
     const SfxPoolItem*      pDefaultItem;
 
 private:
-                            TYPEINFO();
                             SfxInvalidItem( sal_uInt16 nWhich, const SfxPoolItem &rDefault );
                             SfxInvalidItem( const SfxInvalidItem& );
     virtual                 ~SfxInvalidItem();
@@ -469,7 +478,6 @@ class SfxItemChangedHint: public SfxHint
     const SfxPoolItem&  _rNew;
 
 public:
-                        TYPEINFO(); \
                         SfxItemChangedHint( const SfxPoolItem &rOld,
                                             const SfxPoolItem &rNew )
                         :   _rOld( rOld ),

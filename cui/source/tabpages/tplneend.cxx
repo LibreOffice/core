@@ -154,16 +154,16 @@ void SvxLineEndDefTabPage::Construct()
     {
         bCreateArrowPossible = false;
     }
-    else if( !pPolyObj->ISA( SdrPathObj ) )
+    else if( !dynamic_cast< const SdrPathObj* >(pPolyObj) )
     {
         SdrObjTransformInfoRec aInfoRec;
         pPolyObj->TakeObjInfo( aInfoRec );
         SdrObject* pNewObj = 0;
-        if( aInfoRec.bCanConvToPath )
+        if( aInfoRec.mbCanConvToPath )
             pNewObj = pPolyObj->ConvertToPolyObj( sal_True, sal_False );
 
-        bCreateArrowPossible = pNewObj && pNewObj->ISA( SdrPathObj );
-        SdrObject::Free( pNewObj );
+        bCreateArrowPossible = pNewObj && dynamic_cast< SdrPathObj* >(pNewObj);
+        deleteSdrObjectSafeAndClearPointer( pNewObj );
     }
 
     if( !bCreateArrowPossible )
@@ -428,7 +428,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         const SdrObject* pNewObj;
         SdrObject* pConvPolyObj = NULL;
 
-        if( pPolyObj->ISA( SdrPathObj ) )
+        if( dynamic_cast< const SdrPathObj* >(pPolyObj) )
         {
             pNewObj = pPolyObj;
         }
@@ -437,18 +437,18 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
             SdrObjTransformInfoRec aInfoRec;
             pPolyObj->TakeObjInfo( aInfoRec );
 
-            if( aInfoRec.bCanConvToPath )
+            if( aInfoRec.mbCanConvToPath )
             {
                 pNewObj = pConvPolyObj = pPolyObj->ConvertToPolyObj( sal_True, sal_False );
 
-                if( !pNewObj || !pNewObj->ISA( SdrPathObj ) )
+                if( !pNewObj || !dynamic_cast< const SdrPathObj* >(pNewObj) )
                     return( 0L ); // Abbruch, zusaetzliche Sicherheit, die bei
                             // Gruppenobjekten aber nichts bringt.
             }
             else return( 0L ); // Abbruch
         }
 
-        basegfx::B2DPolyPolygon aNewPolyPolygon(((SdrPathObj*)pNewObj)->GetPathPoly());
+        basegfx::B2DPolyPolygon aNewPolyPolygon(((SdrPathObj*)pNewObj)->getB2DPolyPolygonInObjectCoordinates());
         basegfx::B2DRange aNewRange(basegfx::tools::getRange(aNewPolyPolygon));
 
         // Normalisieren
@@ -456,7 +456,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
             -aNewRange.getMinX(), -aNewRange.getMinY()));
 
         // Loeschen des angelegten PolyObjektes
-        SdrObject::Free( pConvPolyObj );
+        deleteSdrObjectSafeAndClearPointer( pConvPolyObj );
 
         XLineEndEntry* pEntry;
 

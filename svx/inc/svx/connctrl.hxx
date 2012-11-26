@@ -47,7 +47,7 @@ class SVX_DLLPUBLIC SvxXConnectionPreview : public Control
 private:
     const SfxItemSet&   rAttrs;
     SdrEdgeObj*         pEdgeObj;
-    SdrObjList*         pObjList;
+    SdrObjectVector maSdrObjectVector;
     const SdrView*      pView;
 
     SVX_DLLPRIVATE void SetStyles();

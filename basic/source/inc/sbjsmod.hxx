@@ -36,7 +36,6 @@ class SbJScriptModule : public SbModule
     virtual sal_Bool StoreData( SvStream& ) const;
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_JSCRIPTMOD,1);
-    TYPEINFO();
     SbJScriptModule( const String& );       // DURCHREICHEN
 };
 

@@ -27,7 +27,6 @@
 #include <sfx2/shell.hxx>
 #include "shellids.hxx"
 #include <sfx2/module.hxx>
-#include <svx/svdmark.hxx>
 #include <tools/link.hxx>
 #include "formatsh.hxx"
 
@@ -65,7 +64,6 @@ private:
 
 public:
 
-    TYPEINFO();
     SFX_DECL_INTERFACE(SCID_CELL_SHELL)
 
                 ScCellShell(ScViewData* pData);

@@ -354,9 +354,9 @@ SvxColorDockingWindow::~SvxColorDockingWindow()
 
 void SvxColorDockingWindow::Notify( SfxBroadcaster& , const SfxHint& rHint )
 {
-    const SfxPoolItemHint *pPoolItemHint = PTR_CAST(SfxPoolItemHint, &rHint);
-    if ( pPoolItemHint
-         && ( pPoolItemHint->GetObject()->ISA( SvxColorTableItem ) ) )
+    const SfxPoolItemHint *pPoolItemHint = dynamic_cast< const SfxPoolItemHint* >( &rHint);
+
+    if ( pPoolItemHint && ( dynamic_cast< SvxColorTableItem* >(pPoolItemHint->GetObject()) ) )
     {
         // Die Liste der Farben hat sich geaendert
         pColorTable = ( (SvxColorTableItem*) pPoolItemHint->GetObject() )->GetColorTable();
@@ -537,7 +537,7 @@ IMPL_LINK( SvxColorDockingWindow, SelectHdl, void *, EMPTYARG )
                     SdrView* pView = pViewSh->GetDrawView();
                     if ( pView )
                     {
-                        SfxItemSet aAttrSet( pView->GetModel()->GetItemPool() );
+                        SfxItemSet aAttrSet( pView->getSdrModelFromSdrView().GetItemPool() );
                         pView->GetAttributes( aAttrSet );
                         if ( aAttrSet.GetItemState( XATTR_LINESTYLE ) != SFX_ITEM_DONTCARE )
                         {

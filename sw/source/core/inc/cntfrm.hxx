@@ -68,7 +68,6 @@ protected:
 
 public:
     virtual ~SwCntntFrm();
-    TYPEINFO(); //bereits in Basisklassen drin
 
     virtual void Cut();
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );

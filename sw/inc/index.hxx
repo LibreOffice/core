@@ -25,7 +25,6 @@
 
 #include <limits.h>
 #include <tools/solar.h>
-#include <tools/rtti.hxx>               // for RTTI of SwIndexReg
 #include <tools/string.hxx>             // for xub_StrLen
 #include <swdllapi.h>
 
@@ -138,7 +137,6 @@ public:
 
     // rtti, abgeleitete moegens gleichtun oder nicht. Wenn sie es gleichtun
     // kann ueber das SwIndexReg typsicher gecastet werden.
-    TYPEINFO();
 
     void MoveTo( SwIndexReg& rArr );
 };

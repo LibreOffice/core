@@ -1012,7 +1012,7 @@ void SvxColorWindow_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
 {
     if (( SFX_ITEM_DISABLED != eState ) && pState )
     {
-        if (( nSID == SID_COLOR_TABLE ) && ( pState->ISA( SvxColorTableItem )))
+        if (( nSID == SID_COLOR_TABLE ) && ( dynamic_cast< const SvxColorTableItem* >(pState)))
         {
             XColorTable* pColorTable = pState ? ((SvxColorTableItem *)pState)->GetColorTable() : NULL;
 
@@ -1278,7 +1278,7 @@ void SvxFrameWindow_Impl::StateChanged(
 {
     if ( pState && nSID == SID_BORDER_REDUCED_MODE)
     {
-        const SfxBoolItem* pItem = PTR_CAST( SfxBoolItem, pState );
+        const SfxBoolItem* pItem = dynamic_cast< const SfxBoolItem* >( pState );
 
         if ( pItem )
         {
@@ -1723,8 +1723,7 @@ void SfxStyleControllerItem_Impl::StateChanged(
 
             if ( SFX_ITEM_AVAILABLE == eState )
             {
-                const SfxTemplateItem* pStateItem =
-                    PTR_CAST( SfxTemplateItem, pState );
+                const SfxTemplateItem* pStateItem = dynamic_cast< const SfxTemplateItem* >( pState );
                 DBG_ASSERT( pStateItem != NULL, "SfxTemplateItem expected" );
                 rControl.SetFamilyState( nIdx, pStateItem );
             }
@@ -2373,7 +2372,7 @@ void SvxFontColorToolBoxControl::StateChanged(
     const SvxColorItem* pItem = 0;
 
     if ( SFX_ITEM_DONTCARE != eState )
-       pItem = PTR_CAST( SvxColorItem, pState );
+       pItem = dynamic_cast< const SvxColorItem* >( pState );
 
     if ( pItem )
         pBtnUpdater->Update( pItem->GetValue());
@@ -2441,7 +2440,7 @@ void SvxColorToolBoxControl::StateChanged(
 {
     const SvxColorItem* pItem   = 0;
     if ( SFX_ITEM_DONTCARE != eState )
-        pItem = PTR_CAST( SvxColorItem, pState );
+        pItem = dynamic_cast< const SvxColorItem* >( pState );
 
     if ( pItem )
         pBtnUpdater->Update( pItem->GetValue() );
@@ -2528,7 +2527,7 @@ void SvxFontColorExtToolBoxControl::StateChanged(
     {
         if ( SFX_ITEM_DONTCARE != eState )
         {
-            const SfxBoolItem* pBool = PTR_CAST( SfxBoolItem, pState );
+            const SfxBoolItem* pBool = dynamic_cast< const SfxBoolItem* >( pState );
             rTbx.CheckItem( nId, pBool && pBool->GetValue());
         }
         rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
@@ -2536,7 +2535,7 @@ void SvxFontColorExtToolBoxControl::StateChanged(
     else
     {
         if ( SFX_ITEM_DONTCARE != eState )
-           pItem = PTR_CAST( SvxColorItem, pState );
+           pItem = dynamic_cast< const SvxColorItem* >( pState );
 
         if ( pItem )
             pBtnUpdater->Update( pItem->GetValue() );
@@ -2728,7 +2727,7 @@ void SvxFrameLineColorToolBoxControl::StateChanged(
     const SvxColorItem* pItem = 0;
     if ( SFX_ITEM_DONTCARE != eState )
     {
-       pItem = PTR_CAST( SvxColorItem, pState );
+       pItem = dynamic_cast< const SvxColorItem* >( pState );
         if ( pItem )
             pBtnUpdater->Update( pItem->GetValue());
     }
@@ -2776,7 +2775,7 @@ SvxReloadControllerItem::~SvxReloadControllerItem()
 void SvxReloadControllerItem::StateChanged(
     sal_uInt16 , SfxItemState eState, const SfxPoolItem* pState )
 {
-    SfxBoolItem* pItem = PTR_CAST( SfxBoolItem, pState );
+    const SfxBoolItem* pItem = dynamic_cast< const SfxBoolItem* >( pState );
     ToolBox& rBox = GetToolBox();
     if( pItem )
     {
@@ -2807,7 +2806,7 @@ SvxSimpleUndoRedoController::~SvxSimpleUndoRedoController()
 
 void SvxSimpleUndoRedoController::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 {
-    SfxStringItem* pItem = PTR_CAST( SfxStringItem, pState );
+    const SfxStringItem* pItem = dynamic_cast< const SfxStringItem* >( pState );
     ToolBox& rBox = GetToolBox();
     if ( pItem && eState != SFX_ITEM_DISABLED )
     {
@@ -2843,7 +2842,7 @@ void lcl_CalcSizeValueSet( Window &rWin, ValueSet &rValueSet, const Size &aItemS
 
 sal_Bool lcl_FontChangedHint( const SfxHint &rHint )
 {
-    SfxPoolItemHint *pItemHint = PTR_CAST(SfxPoolItemHint, &rHint);
+    const SfxPoolItemHint *pItemHint = dynamic_cast< const SfxPoolItemHint* >( &rHint);
     if ( pItemHint )
     {
         SfxPoolItem *pItem = pItemHint->GetObject();
@@ -2851,7 +2850,7 @@ sal_Bool lcl_FontChangedHint( const SfxHint &rHint )
     }
     else
     {
-        SfxSimpleHint* pSimpleHint = PTR_CAST(SfxSimpleHint, &rHint);
+        const SfxSimpleHint* pSimpleHint = dynamic_cast< const SfxSimpleHint* >( &rHint);
         return pSimpleHint && ( SFX_HINT_DATACHANGED ==
                             ( pSimpleHint->GetId() & SFX_HINT_DATACHANGED ) );
     }

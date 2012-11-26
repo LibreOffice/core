@@ -87,10 +87,6 @@ SFX_IMPL_INTERFACE(SlideSorterViewShell, SfxShell, SdResId(STR_SLIDESORTERVIEWSH
 
 
 
-TYPEINIT1(SlideSorterViewShell, ViewShell);
-
-
-
 ::boost::shared_ptr<SlideSorterViewShell> SlideSorterViewShell::Create (
     SfxViewFrame* pFrame,
     ViewShellBase& rViewShellBase,
@@ -130,13 +126,13 @@ SlideSorterViewShell::SlideSorterViewShell (
 {
     meShellType = ST_SLIDE_SORTER;
 
-    SetPool( &GetDoc()->GetPool() );
+    SetPool( &GetDoc()->GetItemPool() );
     SetUndoManager( GetDoc()->GetDocSh()->GetUndoManager() );
 
     if (pFrameViewArgument != NULL)
         mpFrameView = pFrameViewArgument;
     else
-        mpFrameView = new FrameView(GetDoc());
+        mpFrameView = new FrameView(*GetDoc());
     GetFrameView()->Connect();
 
     SetName (String (RTL_CONSTASCII_USTRINGPARAM("SlideSorterViewShell")));
@@ -628,7 +624,7 @@ void SlideSorterViewShell::WriteFrameViewData (void)
         if (pActualPage != NULL)
         {
             if (IsMainViewShell())
-                mpFrameView->SetSelectedPage((pActualPage->GetPageNum()- 1) / 2);
+                mpFrameView->SetSelectedPage((pActualPage->GetPageNumber()- 1) / 2);
             // else
             // The slide sorter is not expected to switch the current page
             // other then by double clicks.  That is handled seperatly.
@@ -638,7 +634,7 @@ void SlideSorterViewShell::WriteFrameViewData (void)
             // We have no current page to set but at least we can make sure
             // that the index of the frame view has a legal value.
             if (mpFrameView->GetSelectedPage() >= mpSlideSorter->GetModel().GetPageCount())
-                mpFrameView->SetSelectedPage((sal_uInt16)mpSlideSorter->GetModel().GetPageCount()-1);
+                mpFrameView->SetSelectedPage(mpSlideSorter->GetModel().GetPageCount()-1);
         }
     }
 }
@@ -656,40 +652,45 @@ void SlideSorterViewShell::SetZoom (long int )
 
 
 
-void SlideSorterViewShell::SetZoomRect (const Rectangle& rZoomRect)
+void SlideSorterViewShell::SetZoomRange(const basegfx::B2DRange& rZoomRange)
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
     Size aPageSize (mpSlideSorter->GetView().GetLayouter().GetPageObjectSize());
+    basegfx::B2DRange aRange(rZoomRange);
 
-    Rectangle aRect(rZoomRect);
-
-    if (aRect.GetWidth()  < aPageSize.Width())
+    if (aRange.getWidth()  < aPageSize.Width())
     {
-        long nWidthDiff  = (aPageSize.Width() - aRect.GetWidth()) / 2;
+        const double fWidthDiff((aPageSize.Width() - aRange.getWidth()) * 0.5);
 
-        aRect.Left() -= nWidthDiff;
-        aRect.Right() += nWidthDiff;
+        aRange = basegfx::B2DRange(
+            aRange.getMinX() - fWidthDiff, aRange.getMinY(),
+            aRange.getMaxX() + fWidthDiff, aRange.getMaxY());
 
-        if (aRect.Left() < 0)
+        if (aRange.getMinX() < 0.0)
         {
-            aRect.SetPos(Point(0, aRect.Top()));
+            aRange = basegfx::B2DRange(
+                0.0, aRange.getMinY(),
+                aRange.getHeight(), aRange.getMaxY());
         }
     }
 
-    if (aRect.GetHeight()  < aPageSize.Height())
+    if (aRange.getHeight()  < aPageSize.Height())
     {
-        long nHeightDiff  = (aPageSize.Height() - aRect.GetHeight()) / 2;
+        const double fHeightDiff((aPageSize.Height() - aRange.getHeight()) * 0.5);
 
-        aRect.Top() -= nHeightDiff;
-        aRect.Bottom() += nHeightDiff;
+        aRange = basegfx::B2DRange(
+            aRange.getMinX(), aRange.getMinY() - fHeightDiff,
+            aRange.getMaxX(), aRange.getMaxY() + fHeightDiff);
 
-        if (aRect.Top() < 0)
+        if (aRange.getMinY() < 0.0)
         {
-            aRect.SetPos(Point(aRect.Left(), 0));
+            aRange = basegfx::B2DRange(
+                aRange.getMinX(), 0.0,
+                aRange.getMaxX(), aRange.getWidth());
         }
     }
 
-    ViewShell::SetZoomRect(aRect);
+    ViewShell::SetZoomRange(aRange);
 
     // #106268#
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
@@ -710,12 +711,13 @@ void SlideSorterViewShell::UpdateScrollBars (void)
 
 
 void SlideSorterViewShell::StartDrag (
-    const Point& rDragPt,
+    const basegfx::B2DPoint& rDragPt,
     ::Window* pWindow )
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
+    const Point aOldPoint(basegfx::fround(rDragPt.getX()), basegfx::fround(rDragPt.getY()));
     mpSlideSorter->GetController().GetClipboard().StartDrag (
-        rDragPt,
+        aOldPoint,
         pWindow);
 }
 
@@ -736,8 +738,8 @@ sal_Int8 SlideSorterViewShell::AcceptDrop (
     const AcceptDropEvent& rEvt,
     DropTargetHelper& rTargetHelper,
     ::sd::Window* pTargetWindow,
-    sal_uInt16 nPage,
-    sal_uInt16 nLayer)
+    sal_uInt32 nPage,
+    SdrLayerID aLayer)
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
     return mpSlideSorter->GetController().GetClipboard().AcceptDrop (
@@ -745,7 +747,7 @@ sal_Int8 SlideSorterViewShell::AcceptDrop (
         rTargetHelper,
         pTargetWindow,
         nPage,
-        nLayer);
+        aLayer);
 }
 
 
@@ -755,8 +757,8 @@ sal_Int8 SlideSorterViewShell::ExecuteDrop (
     const ExecuteDropEvent& rEvt,
     DropTargetHelper& rTargetHelper,
     ::sd::Window* pTargetWindow,
-    sal_uInt16 nPage,
-    sal_uInt16 nLayer)
+    sal_uInt32 nPage,
+    SdrLayerID aLayer)
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
     return mpSlideSorter->GetController().GetClipboard().ExecuteDrop (
@@ -764,7 +766,7 @@ sal_Int8 SlideSorterViewShell::ExecuteDrop (
         rTargetHelper,
         pTargetWindow,
         nPage,
-        nLayer);
+        aLayer);
 }
 
 

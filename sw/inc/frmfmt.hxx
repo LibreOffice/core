@@ -65,9 +65,7 @@ protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue );
 
 public:
-    TYPEINFO();     //Bereits in Basisklasse Client drin.
-
-    //Vernichtet alle Frms in aDepend (Frms werden per PTR_CAST erkannt).
+    //Vernichtet alle Frms in aDepend (Frms werden per RTTI erkannt).
     virtual void DelFrms();
 
     //Erzeugt die Ansichten
@@ -89,7 +87,7 @@ public:
                             const Point* pPoint = 0,
                             const sal_Bool bCalcFrm = sal_False ) const;
 
-    // Sucht das SdrObject. Der SdrObjUserCall ist Client vom Format.
+    // Sucht das SdrObject. Der SwDrawContact ist Client vom Format.
     // Der UserCall kennt sein SdrObject.
           SwContact *FindContactObj();
     const SwContact *FindContactObj() const
@@ -167,7 +165,6 @@ protected:
     {}
 
 public:
-    TYPEINFO();
     ~SwFlyFrmFmt();
 
     //Erzeugt die Ansichten
@@ -280,7 +277,6 @@ protected:
     {}
 
 public:
-    TYPEINFO();
     ~SwDrawFrmFmt();
 
     //DrawObjecte werden aus den Arrays am Layout entfernt. Die DrawObjecte

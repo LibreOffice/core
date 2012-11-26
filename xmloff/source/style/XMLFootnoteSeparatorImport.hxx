@@ -53,8 +53,6 @@ class XMLFootnoteSeparatorImport : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLFootnoteSeparatorImport(
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,

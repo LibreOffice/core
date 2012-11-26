@@ -617,7 +617,7 @@ void TableModel::unlockBroadcasts() throw (RuntimeException)
 void TableModel::notifyModification()
 {
     ::osl::MutexGuard guard( m_aMutex );
-    if( (mnNotifyLock == 0) && mpTableObj && mpTableObj->GetModel() )
+    if( (mnNotifyLock == 0) && mpTableObj )
     {
         mbNotifyPending = false;
 
@@ -635,47 +635,47 @@ void TableModel::notifyModification()
     }
 
 #ifdef PLEASE_DEBUG_THE_TABLES
-        FILE* file = fopen( "c:\\table.xml","w" );
+    FILE* file = fopen( "c:\\table.xml","w" );
 
-        const sal_Int32 nColCount = getColumnCountImpl();
-        const sal_Int32 nRowCount = getRowCountImpl();
+    const sal_Int32 nColCount = getColumnCountImpl();
+    const sal_Int32 nRowCount = getRowCountImpl();
 
-        fprintf( file, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\r" );
-        fprintf( file, "<table columns=\"%ld\" rows=\"%ld\" updated=\"%s\">\n\r", nColCount, nRowCount, mbNotifyPending ? "false" : "true");
+    fprintf( file, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\r" );
+    fprintf( file, "<table columns=\"%ld\" rows=\"%ld\" updated=\"%s\">\n\r", nColCount, nRowCount, mbNotifyPending ? "false" : "true");
 
+    for( sal_Int32 nCol = 0; nCol < nColCount; ++nCol )
+    {
+        fprintf( file, "<column this=\"%lx\"/>\n\r", maColumns[nCol].get() );
+    }
+
+    // first check merged cells before and inside the removed rows
+    for( sal_Int32 nRow = 0; nRow < nRowCount; ++nRow )
+    {
+        fprintf( file, "<row this=\"%lx\">\n\r", maRows[nRow].get() );
         for( sal_Int32 nCol = 0; nCol < nColCount; ++nCol )
         {
-            fprintf( file, "<column this=\"%lx\"/>\n\r", maColumns[nCol].get() );
+            CellRef xCell( getCell( nCol, nRow ) );
+            fprintf( file, "<cell this=\"%lx\"", xCell.get() );
+
+            sal_Int32 nRowSpan = xCell->getRowSpan();
+            sal_Int32 nColSpan = xCell->getColumnSpan();
+            sal_Bool bMerged = xCell->isMerged();
+
+            if( nColSpan != 1 )
+                fprintf( file, " column-span=\"%ld\"", nColSpan );
+            if( nRowSpan != 1 )
+                fprintf( file, " row-span=\"%ld\"", nRowSpan );
+
+            if( bMerged )
+                fprintf( file, " merged=\"true\"" );
+
+            fprintf( file, "/>" );
         }
+        fprintf( file, "\n\r</row>\n\r" );
+    }
 
-        // first check merged cells before and inside the removed rows
-        for( sal_Int32 nRow = 0; nRow < nRowCount; ++nRow )
-        {
-            fprintf( file, "<row this=\"%lx\">\n\r", maRows[nRow].get() );
-            for( sal_Int32 nCol = 0; nCol < nColCount; ++nCol )
-            {
-                CellRef xCell( getCell( nCol, nRow ) );
-                fprintf( file, "<cell this=\"%lx\"", xCell.get() );
-
-                sal_Int32 nRowSpan = xCell->getRowSpan();
-                sal_Int32 nColSpan = xCell->getColumnSpan();
-                sal_Bool bMerged = xCell->isMerged();
-
-                if( nColSpan != 1 )
-                    fprintf( file, " column-span=\"%ld\"", nColSpan );
-                if( nRowSpan != 1 )
-                    fprintf( file, " row-span=\"%ld\"", nRowSpan );
-
-                if( bMerged )
-                    fprintf( file, " merged=\"true\"" );
-
-                fprintf( file, "/>" );
-            }
-            fprintf( file, "\n\r</row>\n\r" );
-        }
-
-        fprintf( file, "</table>\n\r" );
-        fclose( file );
+    fprintf( file, "</table>\n\r" );
+    fclose( file );
 #endif
 }
 
@@ -695,26 +695,6 @@ CellRef TableModel::getCell( sal_Int32 nCol, sal_Int32 nRow ) const
 }
 
 // -----------------------------------------------------------------------------
-/*
-bool TableModel::getCellPos( const CellRef& xCell, ::sal_Int32& rnCol, ::sal_Int32& rnRow ) const
-{
-    const sal_Int32 nRowCount = getRowCount();
-    const sal_Int32 nColCount = getColumnCount();
-    for( rnRow = 0; rnRow < nRowCount; rnRow++ )
-    {
-        for( rnCol = 0; rnCol < nColCount; rnCol++ )
-        {
-            if( maRows[rnRow]->maCells[rnCol] == xCell )
-            {
-                return true;
-            }
-        }
-    }
-    return false;
-}
-*/
-
-// -----------------------------------------------------------------------------
 
 CellRef TableModel::createCell()
 {
@@ -732,8 +712,7 @@ void TableModel::insertColumns( sal_Int32 nIndex, sal_Int32 nCount )
     {
         try
         {
-            SdrModel* pModel = mpTableObj->GetModel();
-
+            SdrModel& rModel = mpTableObj->getSdrModelFromSdrObject();
             TableModelNotifyGuard aGuard( this );
             nIndex = insert_range<ColumnVector,ColumnVector::iterator,TableColumnRef>( maColumns, nIndex, nCount );
 
@@ -749,11 +728,11 @@ void TableModel::insertColumns( sal_Int32 nIndex, sal_Int32 nCount )
                 aNewColumns[nOffset] = xNewCol;
             }
 
-            const bool bUndo = pModel && mpTableObj->IsInserted() && pModel->IsUndoEnabled();
+            const bool bUndo = mpTableObj->IsObjectInserted() && rModel.IsUndoEnabled();
             if( bUndo )
             {
-                pModel->BegUndo( ImpGetResStr(STR_TABLE_INSCOL) );
-                pModel->AddUndo( pModel->GetSdrUndoFactory().CreateUndoGeoObject(*mpTableObj) );
+                rModel.BegUndo( ImpGetResStr(STR_TABLE_INSCOL) );
+                rModel.AddUndo( rModel.GetSdrUndoFactory().CreateUndoGeoObject(*mpTableObj) );
 
                 TableModelRef xThis( this );
 
@@ -768,7 +747,7 @@ void TableModel::insertColumns( sal_Int32 nIndex, sal_Int32 nCount )
                         (*aCellIter++) = getCell( nIndex + nOffset, nRow );
                 }
 
-                pModel->AddUndo( new InsertColUndo( xThis, nIndex, aNewColumns, aNewCells ) );
+                rModel.AddUndo( new InsertColUndo( xThis, nIndex, aNewColumns, aNewCells ) );
             }
 
             const sal_Int32 nRowCount = getRowCountImpl();
@@ -790,10 +769,9 @@ void TableModel::insertColumns( sal_Int32 nIndex, sal_Int32 nCount )
             }
 
             if( bUndo )
-                pModel->EndUndo();
+                rModel.EndUndo();
 
-            if( pModel )
-                pModel->SetChanged();
+            rModel.SetChanged();
 
         }
         catch( Exception& )
@@ -822,14 +800,13 @@ void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
                 nCount = nColCount - nIndex;
 
             sal_Int32 nRows = getRowCountImpl();
+            SdrModel& rModel = mpTableObj->getSdrModelFromSdrObject();
 
-            SdrModel* pModel = mpTableObj->GetModel();
-
-            const bool bUndo = pModel && mpTableObj->IsInserted() && pModel->IsUndoEnabled();
+            const bool bUndo = mpTableObj->IsObjectInserted() && rModel.IsUndoEnabled();
             if( bUndo  )
             {
-                pModel->BegUndo( ImpGetResStr(STR_UNDO_COL_DELETE) );
-                pModel->AddUndo( pModel->GetSdrUndoFactory().CreateUndoGeoObject(*mpTableObj) );
+                rModel.BegUndo( ImpGetResStr(STR_UNDO_COL_DELETE) );
+                rModel.AddUndo( rModel.GetSdrUndoFactory().CreateUndoGeoObject(*mpTableObj) );
 
                 TableModelRef xThis( this );
                 ColumnVector aRemovedCols( nCount );
@@ -847,7 +824,7 @@ void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
                         (*aCellIter++) = getCell( nIndex + nOffset, nRow );
                 }
 
-                pModel->AddUndo( new RemoveColUndo( xThis, nIndex, aRemovedCols, aRemovedCells ) );
+                rModel.AddUndo( new RemoveColUndo( xThis, nIndex, aRemovedCols, aRemovedCells ) );
             }
 
             // only rows before and inside the removed rows are considered
@@ -900,10 +877,9 @@ void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
                 maRows[nRows]->removeColumns( nIndex, nCount );
 
             if( bUndo )
-                pModel->EndUndo();
+                rModel.EndUndo();
 
-            if( pModel )
-                pModel->SetChanged();
+            rModel.SetChanged();
         }
         catch( Exception& )
         {
@@ -921,8 +897,9 @@ void TableModel::insertRows( sal_Int32 nIndex, sal_Int32 nCount )
 {
     if( nCount && mpTableObj )
     {
-        SdrModel* pModel = mpTableObj->GetModel();
-        const bool bUndo = pModel && mpTableObj->IsInserted() && pModel->IsUndoEnabled();
+        SdrModel& rModel = mpTableObj->getSdrModelFromSdrObject();
+        const bool bUndo = mpTableObj->IsObjectInserted() && rModel.IsUndoEnabled();
+
         try
         {
             TableModelNotifyGuard aGuard( this );
@@ -940,10 +917,10 @@ void TableModel::insertRows( sal_Int32 nIndex, sal_Int32 nCount )
 
             if( bUndo )
             {
-                pModel->BegUndo( ImpGetResStr(STR_TABLE_INSROW) );
-                pModel->AddUndo( pModel->GetSdrUndoFactory().CreateUndoGeoObject(*mpTableObj) );
+                rModel.BegUndo( ImpGetResStr(STR_TABLE_INSROW) );
+                rModel.AddUndo( rModel.GetSdrUndoFactory().CreateUndoGeoObject(*mpTableObj) );
                 TableModelRef xThis( this );
-                pModel->AddUndo( new InsertRowUndo( xThis, nIndex, aNewRows ) );
+                rModel.AddUndo( new InsertRowUndo( xThis, nIndex, aNewRows ) );
             }
 
             // check if cells merge over new columns
@@ -968,10 +945,9 @@ void TableModel::insertRows( sal_Int32 nIndex, sal_Int32 nCount )
             DBG_ERROR("sdr::table::TableModel::insertRows(), exception caught!");
         }
         if( bUndo )
-            pModel->EndUndo();
+            rModel.EndUndo();
 
-        if( pModel )
-            pModel->SetChanged();
+        rModel.SetChanged();
 
         updateRows();
         setModified(sal_True);
@@ -986,8 +962,8 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
 
     if( mpTableObj && nCount && (nIndex >= 0) && (nIndex < nRowCount) )
     {
-        SdrModel* pModel = mpTableObj->GetModel();
-        const bool bUndo = pModel && mpTableObj->IsInserted()&& pModel->IsUndoEnabled();
+        SdrModel& rModel = mpTableObj->getSdrModelFromSdrObject();
+        const bool bUndo = mpTableObj->IsObjectInserted()&& rModel.IsUndoEnabled();
 
         try
         {
@@ -999,8 +975,8 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
 
             if( bUndo )
             {
-                pModel->BegUndo( ImpGetResStr(STR_UNDO_ROW_DELETE) );
-                pModel->AddUndo( pModel->GetSdrUndoFactory().CreateUndoGeoObject(*mpTableObj) );
+                rModel.BegUndo( ImpGetResStr(STR_UNDO_ROW_DELETE) );
+                rModel.AddUndo( rModel.GetSdrUndoFactory().CreateUndoGeoObject(*mpTableObj) );
 
                 TableModelRef xThis( this );
 
@@ -1008,7 +984,7 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
                 for( sal_Int32 nOffset = 0; nOffset < nCount; ++nOffset )
                     aRemovedRows[nOffset] = maRows[nIndex+nOffset];
 
-                pModel->AddUndo( new RemoveRowUndo( xThis, nIndex, aRemovedRows ) );
+                rModel.AddUndo( new RemoveRowUndo( xThis, nIndex, aRemovedRows ) );
             }
 
             // only rows before and inside the removed rows are considered
@@ -1059,10 +1035,9 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
             remove_range<RowVector,RowVector::iterator>( maRows, nIndex, nCount );
 
             if( bUndo )
-                pModel->EndUndo();
+                rModel.EndUndo();
 
-            if( pModel )
-                pModel->SetChanged();
+            rModel.SetChanged();
         }
         catch( Exception& )
         {
@@ -1187,10 +1162,8 @@ void TableModel::optimize()
 
 void TableModel::merge( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nColSpan, sal_Int32 nRowSpan )
 {
-    SdrModel* pModel = mpTableObj->GetModel();
-
-    const bool bUndo = pModel && mpTableObj->IsInserted() && pModel->IsUndoEnabled();
-
+    SdrModel& rModel = mpTableObj->getSdrModelFromSdrObject();
+    const bool bUndo = mpTableObj->IsObjectInserted() && rModel.IsUndoEnabled();
     const sal_Int32 nLastRow = nRow + nRowSpan;
     const sal_Int32 nLastCol = nCol + nColSpan;
 

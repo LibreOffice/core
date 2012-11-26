@@ -98,7 +98,6 @@ SvxContourDlgItem::SvxContourDlgItem( sal_uInt16 _nId, SvxSuperContourDlg& rCont
 {
 }
 
-
 /*************************************************************************
 |*
 |*
@@ -109,7 +108,7 @@ void SvxContourDlgItem::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/, 
 {
     if ( pItem && ( SID_CONTOUR_EXEC == nSID ) )
     {
-        const SfxBoolItem* pStateItem = PTR_CAST( SfxBoolItem, pItem );
+        const SfxBoolItem* pStateItem = dynamic_cast< const SfxBoolItem* >( pItem );
 
         DBG_ASSERT( pStateItem || pItem == 0, "SfxBoolItem erwartet");
 
@@ -763,14 +762,14 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
         case( TBI_RECT ):
         {
             pTbx->CheckItem( nNewItemId, sal_True );
-            aContourWnd.SetObjKind( OBJ_RECT );
+            aContourWnd.setSdrObjectCreationInfo(SdrObjectCreationInfo(OBJ_RECT));
         }
         break;
 
         case( TBI_CIRCLE ):
         {
             pTbx->CheckItem( nNewItemId, sal_True );
-            aContourWnd.SetObjKind( OBJ_CIRC );
+            aContourWnd.setSdrObjectCreationInfo(SdrObjectCreationInfo(OBJ_CIRC));
 
         }
         break;
@@ -778,14 +777,20 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
         case( TBI_POLY ):
         {
             pTbx->CheckItem( nNewItemId, sal_True );
-            aContourWnd.SetObjKind( OBJ_POLY );
+            aContourWnd.setSdrObjectCreationInfo(SdrObjectCreationInfo(OBJ_POLY));
         }
         break;
 
         case( TBI_FREEPOLY ):
         {
             pTbx->CheckItem( nNewItemId, sal_True );
-            aContourWnd.SetObjKind( OBJ_FREEFILL );
+
+            SdrObjectCreationInfo aSdrObjectCreationInfo(OBJ_POLY);
+
+            aSdrObjectCreationInfo.setSdrPathObjType(PathType_ClosedBezier);
+            aSdrObjectCreationInfo.setFreehandMode(true);
+
+            aContourWnd.setSdrObjectCreationInfo(aSdrObjectCreationInfo);
         }
         break;
 
@@ -969,12 +974,12 @@ IMPL_LINK( SvxSuperContourDlg, StateHdl, ContourWindow*, pWnd )
 {
     const SdrObject*    pObj = pWnd->GetSelectedSdrObject();
     const SdrView*      pView = pWnd->GetSdrView();
-    const sal_Bool          bPolyEdit = ( pObj != NULL ) && pObj->ISA( SdrPathObj );
-    const sal_Bool          bDrawEnabled = !( bPolyEdit && aTbx1.IsItemChecked( TBI_POLYEDIT ) );
-    const sal_Bool          bPipette = aTbx1.IsItemChecked( TBI_PIPETTE );
-    const sal_Bool          bWorkplace = aTbx1.IsItemChecked( TBI_WORKPLACE );
-    const sal_Bool          bDontHide = !( bPipette || bWorkplace );
-    const sal_Bool          bBitmap = pWnd->GetGraphic().GetType() == GRAPHIC_BITMAP;
+    const bool bPolyEdit = pObj && dynamic_cast< const SdrPathObj* >(pObj);
+    const bool bDrawEnabled = !( bPolyEdit && aTbx1.IsItemChecked( TBI_POLYEDIT ) );
+    const bool bPipette = aTbx1.IsItemChecked( TBI_PIPETTE );
+    const bool bWorkplace = aTbx1.IsItemChecked( TBI_WORKPLACE );
+    const bool bDontHide = !( bPipette || bWorkplace );
+    const bool bBitmap = pWnd->GetGraphic().GetType() == GRAPHIC_BITMAP;
 
     aTbx1.EnableItem( TBI_APPLY, bDontHide && bExecState && pWnd->IsChanged() );
 

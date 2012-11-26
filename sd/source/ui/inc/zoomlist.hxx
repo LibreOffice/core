@@ -24,10 +24,9 @@
 #ifndef SD_ZOOM_LIST_HXX
 #define SD_ZOOM_LIST_HXX
 
-
 #include <tools/gen.hxx>
 #include <tools/list.hxx>
-
+#include <basegfx/range/b2drange.hxx>
 
 namespace sd {
 
@@ -39,15 +38,15 @@ public:
     ZoomList(ViewShell* pViewShell);
     virtual ~ZoomList();
 
-    void        InsertZoomRect(const Rectangle& rRect);
-    Rectangle   GetNextZoomRect();
-    Rectangle   GetPreviousZoomRect();
-    sal_Bool        IsNextPossible() const;
-    sal_Bool        IsPreviousPossible() const;
+    void InsertZoomRange(const basegfx::B2DRange& rRange);
+    basegfx::B2DRange GetNextZoomRange();
+    basegfx::B2DRange GetPreviousZoomRange();
+    bool IsNextPossible() const;
+    bool IsPreviousPossible() const;
 
 private:
     ViewShell*  mpViewShell;
-    sal_uLong       mnCurPos;
+    sal_uInt32  mnCurPos;
 };
 
 } // end of namespace sd

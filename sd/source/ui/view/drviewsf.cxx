@@ -108,11 +108,13 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
                 if ( abs( aSel.nEndPos - aSel.nStartPos ) == 1 )
                 {
                     const SvxFieldData* pField = pFieldItem->GetField();
-                    if (pField->ISA(SvxURLField))
+                    const SvxURLField* pSvxURLField = dynamic_cast< const SvxURLField* >(pField);
+
+                    if (pSvxURLField)
                     {
-                        aHLinkItem.SetName(((const SvxURLField*) pField)->GetRepresentation());
-                        aHLinkItem.SetURL(((const SvxURLField*) pField)->GetURL());
-                        aHLinkItem.SetTargetFrame(((const SvxURLField*) pField)->GetTargetFrame());
+                        aHLinkItem.SetName(pSvxURLField->GetRepresentation());
+                        aHLinkItem.SetURL(pSvxURLField->GetURL());
+                        aHLinkItem.SetTargetFrame(pSvxURLField->GetTargetFrame());
                         bField = true;
                     }
                 }
@@ -128,11 +130,9 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
         }
         else
         {
-            if (mpDrawView->GetMarkedObjectList().GetMarkCount() > 0)
-            {
+            SdrObject* pMarkedObj = mpDrawView->getSelectedIfSingle();
                 bool bFound = false;
 
-                SdrObject* pMarkedObj = mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
                 if( pMarkedObj && (FmFormInventor == pMarkedObj->GetObjInventor()) )
                 {
                     SdrUnoObj* pUnoCtrl = dynamic_cast< SdrUnoObj* >( pMarkedObj );
@@ -191,7 +191,6 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
                     aHLinkItem.SetInsertMode(HLINK_BUTTON);
                 }
             }
-        }
 
         rSet.Put(aHLinkItem);
     }
@@ -203,16 +202,16 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OUTPUT_QUALITY_BLACKWHITE ) ||
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OUTPUT_QUALITY_CONTRAST ) )
     {
-        const sal_uLong nMode = (sal_Int32)GetActiveWindow()->GetDrawMode();
-        rSet.Put( SfxBoolItem( SID_OUTPUT_QUALITY_COLOR, (sal_Bool)((sal_uLong)OUTPUT_DRAWMODE_COLOR == nMode) ) );
-        rSet.Put( SfxBoolItem( SID_OUTPUT_QUALITY_GRAYSCALE, (sal_Bool)((sal_uLong)OUTPUT_DRAWMODE_GRAYSCALE == nMode) ) );
-        rSet.Put( SfxBoolItem( SID_OUTPUT_QUALITY_BLACKWHITE, (sal_Bool)((sal_uLong)OUTPUT_DRAWMODE_BLACKWHITE == nMode) ) );
-        rSet.Put( SfxBoolItem( SID_OUTPUT_QUALITY_CONTRAST, (sal_Bool)((sal_uLong)OUTPUT_DRAWMODE_CONTRAST == nMode) ) );
+        const sal_uLong nMode = GetActiveWindow()->GetDrawMode();
+        rSet.Put( SfxBoolItem( SID_OUTPUT_QUALITY_COLOR, SD_OUTPUT_DRAWMODE_COLOR == nMode) );
+        rSet.Put( SfxBoolItem( SID_OUTPUT_QUALITY_GRAYSCALE, SD_OUTPUT_DRAWMODE_GRAYSCALE == nMode) );
+        rSet.Put( SfxBoolItem( SID_OUTPUT_QUALITY_BLACKWHITE, SD_OUTPUT_DRAWMODE_BLACKWHITE == nMode) );
+        rSet.Put( SfxBoolItem( SID_OUTPUT_QUALITY_CONTRAST, SD_OUTPUT_DRAWMODE_CONTRAST == nMode) );
     }
 
     if ( SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_MAIL_SCROLLBODY_PAGEDOWN) )
     {
-        rSet.Put( SfxBoolItem( SID_MAIL_SCROLLBODY_PAGEDOWN, sal_True ) );
+        rSet.Put( SfxBoolItem( SID_MAIL_SCROLLBODY_PAGEDOWN, true ) );
     }
 
     if ( SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_ATTR_YEAR2000) )
@@ -292,7 +291,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
     SfxWhichIter    aIter( rSet );
     sal_uInt16          nWhich = aIter.FirstWhich();
 
-    sal_Bool    bAttr = sal_False;
+    bool    bAttr = false;
     SfxAllItemSet aAllSet( *rSet.GetPool() );
 
     while ( nWhich )
@@ -314,17 +313,17 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             case SID_ATTR_LINE_COLOR:
             case SID_ATTR_TEXT_FITTOSIZE:
             {
-                bAttr = sal_True;
+                bAttr = true;
             }
             break;
 
             case SID_HYPHENATION:
             {
-                SfxItemSet aAttrs( GetDoc()->GetPool() );
+                SfxItemSet aAttrs( GetDoc()->GetItemPool() );
                 mpDrawView->GetAttributes( aAttrs );
                 if( aAttrs.GetItemState( EE_PARA_HYPHENATE ) >= SFX_ITEM_AVAILABLE )
                 {
-                    sal_Bool bValue = ( (const SfxBoolItem&) aAttrs.Get( EE_PARA_HYPHENATE ) ).GetValue();
+                    bool bValue = ( (const SfxBoolItem&) aAttrs.Get( EE_PARA_HYPHENATE ) ).GetValue();
                     rSet.Put( SfxBoolItem( SID_HYPHENATION, bValue ) );
                 }
             }
@@ -338,7 +337,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 SfxStyleSheet* pStyleSheet = mpDrawView->GetStyleSheet();
                 if( pStyleSheet )
                 {
-                    if( nSlotId != SID_STYLE_APPLY && !mpDrawView->AreObjectsMarked() )
+                    if( nSlotId != SID_STYLE_APPLY && !mpDrawView->areSdrObjectsSelected() )
                     {
                         SfxTemplateItem aTmpItem( nWhich, String() );
                         aAllSet.Put( aTmpItem, aTmpItem.Which()  );
@@ -377,7 +376,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 
             case SID_SET_DEFAULT:
             {
-                if( !mpDrawView->GetMarkedObjectList().GetMarkCount() ||
+                if( !mpDrawView->areSdrObjectsSelected() ||
                     ( !mpDrawView->IsTextEdit() && !mpDrawView->GetStyleSheet() )
                   )
                     rSet.DisableItem( nWhich );
@@ -388,7 +387,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             {
                 ISfxTemplateCommon* pTemplateCommon = SFX_APP()->GetCurrentTemplateCommon(GetViewFrame()->GetBindings());
                 if (pTemplateCommon && pTemplateCommon->GetActualFamily() == SD_STYLE_FAMILY_PSEUDO)
-                    rSet.Put(SfxBoolItem(nWhich,sal_False));
+                    rSet.Put(SfxBoolItem(nWhich,false));
                 else
                 {
                     SfxBoolItem aItem(nWhich, SD_MOD()->GetWaterCan());
@@ -426,7 +425,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                     }
                     else if (pTemplCommon->GetActualFamily() == SD_STYLE_FAMILY_GRAPHICS)
                     {
-                        if (!mpDrawView->AreObjectsMarked())
+                        if (!mpDrawView->areSdrObjectsSelected())
                         {
                             rSet.DisableItem(nWhich);
                         }
@@ -437,7 +436,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 // kann nicht beruecksichtigt werden
                 else
                 {
-                    if (!mpDrawView->AreObjectsMarked())
+                    if (!mpDrawView->areSdrObjectsSelected())
                     {
                         rSet.DisableItem(nWhich);
                     }
@@ -448,7 +447,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 
             case SID_STYLE_UPDATE_BY_EXAMPLE:
             {
-                if (!mpDrawView->AreObjectsMarked())
+                if (!mpDrawView->areSdrObjectsSelected())
                 {
                     rSet.DisableItem(nWhich);
                 }
@@ -462,19 +461,19 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 
     if( bAttr )
     {
-        pSet = new SfxItemSet( GetDoc()->GetPool() );
+        pSet = new SfxItemSet( GetDoc()->GetItemPool() );
         mpDrawView->GetAttributes( *pSet );
-        rSet.Put( *pSet, sal_False );
+        rSet.Put( *pSet, false );
     }
 
-    rSet.Put( aAllSet, sal_False );
+    rSet.Put( aAllSet, false );
 
     // Flaechen und/oder Linienattribute wurden geaendert
     if( bAttr && pSet )
     {
         // Wenn die View selektierte Objekte besitzt, muessen entspr. Items
         // von SFX_ITEM_DEFAULT (_ON) auf SFX_ITEM_DISABLED geaendert werden
-        if( mpDrawView->AreObjectsMarked() )
+        if( mpDrawView->areSdrObjectsSelected() )
         {
             SfxWhichIter aNewIter( *pSet, XATTR_LINE_FIRST, XATTR_FILL_LAST );
             nWhich = aNewIter.FirstWhich();
@@ -490,23 +489,6 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
         }
         delete pSet;
     }
-
-//    const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
-//    sal_uLong nMarkCount = rMarkList.GetMarkCount();
-//    sal_Bool bDisabled = sal_False;
-//
-//    for (sal_uLong i = 0;
-//         i < nMarkCount && !bDisabled && i < 50; i++)
-//    {
-//        SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-//
-//        if (pObj->GetObjInventor() == E3dInventor)
-//        {
-//            bDisabled = sal_True;
-//            rSet.ClearItem(SDRATTR_SHADOW);
-//            rSet.DisableItem(SDRATTR_SHADOW);
-//        }
-//    }
 }
 
 
@@ -516,7 +498,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 |*
 \************************************************************************/
 
-String DrawViewShell::GetSelectionText(sal_Bool bCompleteWords)
+String DrawViewShell::GetSelectionText(bool bCompleteWords)
 {
     String aStrSelection;
     ::Outliner* pOl = mpDrawView->GetTextEditOutliner();
@@ -548,9 +530,9 @@ String DrawViewShell::GetSelectionText(sal_Bool bCompleteWords)
 |*
 \************************************************************************/
 
-sal_Bool DrawViewShell::HasSelection(sal_Bool bText) const
+bool DrawViewShell::HasSelection(bool bText) const
 {
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     if (bText)
     {
@@ -558,12 +540,12 @@ sal_Bool DrawViewShell::HasSelection(sal_Bool bText) const
 
         if (pOlView && pOlView->GetSelected().Len() != 0)
         {
-            bReturn = sal_True;
+            bReturn = true;
         }
     }
-    else if (mpDrawView->GetMarkedObjectList().GetMarkCount() != 0)
+    else if (mpDrawView->areSdrObjectsSelected())
     {
-        bReturn = sal_True;
+        bReturn = true;
     }
 
     return bReturn;

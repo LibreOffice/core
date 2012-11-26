@@ -141,7 +141,6 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion, OutputD
     // zwei Paint-Events!
     // 19.10: Muss sogar vor Abfrage von bUpdate, falls nach Invalidate
     // noch Paints in der Queue, aber jemand schaltet den UpdateMode um!
-
     // pRegion: Wenn nicht NULL, dann nur Region berechnen.
     PolyPolygon* pPolyPoly = NULL;
     if ( pRegion )
@@ -1206,7 +1205,7 @@ const SvxFieldItem* ImpEditView::GetField( const Point& rPos, sal_uInt16* pPara,
         if ( pAttr->GetStart() == nXPos )
             if ( pAttr->Which() == EE_FEATURE_FIELD )
             {
-                DBG_ASSERT( pAttr->GetItem()->ISA( SvxFieldItem ), "Kein FeldItem..." );
+                DBG_ASSERT( dynamic_cast< const SvxFieldItem* >(pAttr->GetItem()), "Kein FeldItem..." );
                 if ( pPara )
                     *pPara = pEditEngine->pImpEditEngine->GetEditDoc().GetPos( aPaM.GetNode() );
                 if ( pPos )

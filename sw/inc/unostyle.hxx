@@ -216,8 +216,6 @@ public:
                                     //const SfxItemPropertyMap* _pMap);
     ~SwXStyle();
 
-    TYPEINFO();
-
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
     //XUnoTunnel

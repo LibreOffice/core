@@ -87,8 +87,6 @@ XMLTransformerOASISEventMap_Impl::~XMLTransformerOASISEventMap_Impl()
 
 // -----------------------------------------------------------------------------
 
-TYPEINIT1( XMLEventOASISTransformerContext, XMLRenameElemTransformerContext);
-
 XMLEventOASISTransformerContext::XMLEventOASISTransformerContext(
         XMLTransformerBase& rImp,
         const OUString& rQName ) :

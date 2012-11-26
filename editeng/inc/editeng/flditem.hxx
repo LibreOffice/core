@@ -67,8 +67,6 @@ private:
                     EDITENG_DLLPRIVATE SvxFieldItem( SvxFieldData* pField, const sal_uInt16 nId );
 
 public:
-            TYPEINFO();
-
             SvxFieldItem( const SvxFieldData& rField, const sal_uInt16 nId  );
             SvxFieldItem( const SvxFieldItem& rItem );
             ~SvxFieldItem();

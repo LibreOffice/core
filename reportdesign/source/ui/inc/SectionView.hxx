@@ -45,14 +45,12 @@ private:
     OSectionView(const OSectionView&);
     void operator =(const OSectionView&);
 public:
-    TYPEINFO();
-
-    OSectionView( SdrModel* pModel, OReportSection* _pSectionWindow, OReportWindow* pEditor );
+    OSectionView( SdrModel& rModel, OReportSection* _pSectionWindow, OReportWindow* pEditor );
     virtual ~OSectionView();
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-    virtual void MarkListHasChanged();
-    virtual void MakeVisible( const Rectangle& rRect, Window& rWin );
+    virtual void handleSelectionChange();
+    virtual void MakeVisibleAtView( const basegfx::B2DRange& rRange, Window& rWin );
 
     inline OReportSection*  getReportSection() const { return m_pSectionWindow; }
 

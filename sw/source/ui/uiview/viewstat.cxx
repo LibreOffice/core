@@ -75,7 +75,7 @@ void SwView::GetState(SfxItemSet &rSet)
     sal_uInt16 nWhich = aIter.FirstWhich();
     sal_uInt16 eFrmType = FRMTYPE_NONE;
     int bGetFrmType = sal_False;
-    sal_Bool bWeb = 0 != PTR_CAST(SwWebView, this);
+    sal_Bool bWeb = 0 != dynamic_cast< SwWebView* >( this);
 
     while(nWhich)
     {
@@ -330,7 +330,7 @@ void SwView::GetState(SfxItemSet &rSet)
 
             case SID_DOCUMENT_COMPARE:
             case SID_DOCUMENT_MERGE:
-                if( GetDocShell()->IsA( SwGlobalDocShell::StaticType() ) ||
+                if( dynamic_cast< SwGlobalDocShell* >(GetDocShell()) ||
 //                  pWrtShell->IsAnySectionInDoc( sal_True, sal_True, sal_True )||
                     (SID_DOCUMENT_MERGE == nWhich && pWrtShell->getIDocumentRedlineAccess()->GetRedlinePassword().getLength()))
                     rSet.DisableItem(nWhich);
@@ -440,7 +440,7 @@ void SwView::GetState(SfxItemSet &rSet)
 void SwView::GetDrawState(SfxItemSet &rSet)
 {
     SfxWhichIter aIter(rSet);
-    sal_Bool bWeb = 0 != PTR_CAST(SwWebView, this);
+    sal_Bool bWeb = 0 != dynamic_cast< SwWebView* >( this);
 
     for( sal_uInt16 nWhich = aIter.FirstWhich(); nWhich;
                                             nWhich = aIter.NextWhich() )

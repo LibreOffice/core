@@ -39,8 +39,6 @@ protected:
                                const ::rtl::OUString& rValue );
 
 public:
-    TYPEINFO();
-
     XMLChartStyleContext(
         SvXMLImport& rImport, sal_uInt16 nPrfx,
         const ::rtl::OUString& rLName,

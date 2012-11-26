@@ -358,7 +358,6 @@ Reference< XInterface > SAL_CALL FmXGridControl_NewInstance_Impl(const Reference
 {
     return *(new FmXGridControl(_rxFactory));
 }
-DBG_NAME(FmXGridControl )
 //------------------------------------------------------------------------------
 FmXGridControl::FmXGridControl(const Reference< XMultiServiceFactory >& _rxFactory)
                :UnoControl( _rxFactory)
@@ -371,13 +370,11 @@ FmXGridControl::FmXGridControl(const Reference< XMultiServiceFactory >& _rxFacto
                ,m_bInDraw(sal_False)
                ,m_xServiceFactory(_rxFactory)
 {
-    DBG_CTOR(FmXGridControl ,NULL);
 }
 
 //------------------------------------------------------------------------------
 FmXGridControl::~FmXGridControl()
 {
-    DBG_DTOR(FmXGridControl ,NULL);
 }
 
 //------------------------------------------------------------------
@@ -1466,9 +1463,9 @@ void FmXGridPeer::CellModified()
 void FmXGridPeer::propertyChange(const PropertyChangeEvent& evt) throw( RuntimeException )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-        // want to do a lot of VCL stuff here ...
-        // this should not be (deadlock) critical, as by definition, every component should release
-        // any own mutexes before notifying
+    // want to do a lot of VCL stuff here ...
+    // this should not be (deadlock) critical, as by definition, every component should release
+    // any own mutexes before notifying
 
     FmGridControl* pGrid = (FmGridControl*) GetWindow();
     if (!pGrid)

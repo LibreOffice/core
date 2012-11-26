@@ -32,8 +32,6 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
 
-TYPEINIT1( XMLLabelSeparatorContext, XMLElementPropertyContext );
-
 using namespace ::com::sun::star;
 
 XMLLabelSeparatorContext::XMLLabelSeparatorContext(

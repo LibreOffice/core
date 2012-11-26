@@ -313,45 +313,24 @@ void SAL_CALL GalleryTheme::update(  )
     throw (lang::WrappedTargetException, uno::RuntimeException)
 {
     const ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    sal_Int32           nRet = -1;
+    sal_Int32 nRet = -1;
 
     if( mpTheme )
     {
         GalleryDrawingModel* pModel = GalleryDrawingModel::getImplementation( Drawing );
 
-        if( pModel && pModel->GetDoc() && pModel->GetDoc()->ISA( FmFormModel ) )
+        if( pModel )
         {
-            nIndex = ::std::max( ::std::min( nIndex, getCount() ), sal_Int32( 0 ) );
+            FmFormModel* pFmFormModel = dynamic_cast< FmFormModel* >(pModel->GetDoc());
 
-            if( mpTheme->InsertModel( *static_cast< FmFormModel* >( pModel->GetDoc() ), nIndex ) )
-                nRet = nIndex;
-        }
-        else if (!pModel)
-        {
-            try
+            if( pFmFormModel )
             {
-                uno::Reference< drawing::XDrawPagesSupplier > xDrawPagesSupplier( Drawing, uno::UNO_QUERY_THROW );
-                uno::Reference< drawing::XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages(), uno::UNO_QUERY_THROW );
-                uno::Reference< drawing::XDrawPage > xPage( xDrawPages->getByIndex( 0 ), uno::UNO_QUERY_THROW );
-                SvxDrawPage* pUnoPage = xPage.is() ? SvxDrawPage::getImplementation( xPage ) : NULL;
-                SdrModel* pOrigModel = pUnoPage ? pUnoPage->GetSdrPage()->GetModel() : NULL;
-                SdrPage* pOrigPage = pUnoPage ? pUnoPage->GetSdrPage() : NULL;
+                nIndex = ::std::max( ::std::min( nIndex, getCount() ), sal_Int32( 0 ) );
 
-                if (pOrigPage && pOrigModel)
+                if( mpTheme->InsertModel( *pFmFormModel, nIndex ) )
                 {
-                    FmFormModel* pTmpModel = new FmFormModel(&pOrigModel->GetItemPool());
-                    SdrPage* pNewPage = pOrigPage->Clone();
-                    pTmpModel->InsertPage(pNewPage, 0);
-
-                    uno::Reference< lang::XComponent > xDrawing( new GalleryDrawingModel( pTmpModel ) );
-                    pTmpModel->setUnoModel( uno::Reference< uno::XInterface >::query( xDrawing ) );
-
-                    nRet = insertDrawingByIndex( xDrawing, nIndex );
-                    return nRet;
+                    nRet = nIndex;
                 }
-            }
-            catch (...)
-            {
             }
         }
     }

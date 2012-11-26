@@ -117,7 +117,7 @@ namespace basegfx
                 aArrowTransform.rotate(fRotation);
 
                 // move arrow docking position to polygon head
-                aArrowTransform.translate(aHead.getX(), aHead.getY());
+                aArrowTransform.translate(aHead);
 
                 // transform retval and close
                 aRetval.transform(aArrowTransform);

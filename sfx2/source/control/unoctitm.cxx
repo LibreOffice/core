@@ -845,7 +845,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
 //                aEvent.State = com::sun::star::frame::DispatchResultState::DONTKNOW;
 
             aEvent.Source = (::com::sun::star::frame::XDispatch*) pDispatch;
-            if ( bSuccess && pItem && !pItem->ISA(SfxVoidItem) )
+            if ( bSuccess && pItem && !dynamic_cast< const SfxVoidItem* >(pItem) )
             {
                 sal_uInt16 nSubId( 0 );
                 if ( eMapUnit == SFX_MAPUNIT_TWIP )
@@ -926,11 +926,11 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     sal_Bool bNotify = sal_True;
     if ( pState && !IsInvalidItem( pState ) )
     {
-        if ( !pState->ISA( SfxVisibilityItem ) )
+        if ( !dynamic_cast< const SfxVisibilityItem* >(pState) )
         {
             sal_Bool bBothAvailable = pLastState && !IsInvalidItem(pLastState);
             if ( bBothAvailable )
-                bNotify = pState->Type() != pLastState->Type() || *pState != *pLastState;
+                bNotify = typeid(*pState) != typeid(*pLastState) || *pState != *pLastState;
             if ( pLastState && !IsInvalidItem( pLastState ) )
                 delete pLastState;
             pLastState = !IsInvalidItem(pState) ? pState->Clone() : pState;
@@ -950,7 +950,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     if ( bNotify && pContnr )
     {
         ::com::sun::star::uno::Any aState;
-        if ( ( eState >= SFX_ITEM_AVAILABLE ) && pState && !IsInvalidItem( pState ) && !pState->ISA(SfxVoidItem) )
+        if ( ( eState >= SFX_ITEM_AVAILABLE ) && pState && !IsInvalidItem( pState ) && !dynamic_cast< const SfxVoidItem* >(pState) )
         {
             // Retrieve metric from pool to have correct sub ID when calling QueryValue
             sal_uInt16     nSubId( 0 );

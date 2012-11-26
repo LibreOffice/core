@@ -46,25 +46,28 @@ class DlgEditor;
 
 class DlgEdObj: public SdrUnoObj
 {
+private:
     friend class DlgEditor;
     friend class DlgEdFactory;
     friend class DlgEdPropListenerImpl;
     friend class DlgEdForm;
 
-private:
     sal_Bool        bIsListening;
     DlgEdForm*      pDlgEdForm;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener> m_xPropertyChangeListener;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener>  m_xContainerListener;
 
 protected:
-    DlgEdObj();
-    DlgEdObj(const ::rtl::OUString& rModelName,
+    DlgEdObj(
+        SdrModel& rSdrModel);
+    DlgEdObj(
+        SdrModel& rSdrModel,
+        const ::rtl::OUString& rModelName,
              const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac);
+    virtual ~DlgEdObj();
 
-    virtual void NbcMove( const Size& rSize );
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+    virtual void setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransformation);
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
 
     DECL_LINK(OnCreate, void* );
 
@@ -87,21 +90,19 @@ protected:
         sal_Int32 nXIn, sal_Int32 nYIn, sal_Int32 nWidthIn, sal_Int32 nHeightIn,
         sal_Int32& nXOut, sal_Int32& nYOut, sal_Int32& nWidthOut, sal_Int32& nHeightOut );
 
-public:
-    TYPEINFO();
+    /// method to copy all data from given source
+    virtual void copyDataFromSdrObject(const SdrObject& rSource);
 
-    virtual ~DlgEdObj();
-    virtual void SetPage(SdrPage* pNewPage);
+public:
+    /// create a copy, evtl. with a different target model (if given)
+    virtual SdrObject* CloneSdrObject(SdrModel* pTargetModel = 0) const;
+    virtual void clonedFrom(const DlgEdObj* _pSource);                          // not working yet
 
     virtual void SetDlgEdForm( DlgEdForm* pForm ) { pDlgEdForm = pForm; }
     virtual DlgEdForm* GetDlgEdForm() const { return pDlgEdForm; }
 
     virtual sal_uInt32 GetObjInventor() const;
     virtual sal_uInt16 GetObjIdentifier() const;
-
-    virtual SdrObject*  Clone() const;                                          // not working yet
-    virtual void        operator= (const SdrObject& rObj);                      // not working yet
-    virtual void clonedFrom(const DlgEdObj* _pSource);                          // not working yet
 
     // FullDrag support
     virtual SdrObject* getFullDragClone() const;
@@ -141,27 +142,30 @@ public:
 
 class DlgEdForm: public DlgEdObj
 {
+private:
     friend class DlgEditor;
     friend class DlgEdFactory;
 
-private:
     DlgEditor* pDlgEditor;
     ::std::vector<DlgEdObj*> pChilds;
 
     mutable ::boost::optional< ::com::sun::star::awt::DeviceInfo >   mpDeviceInfo;
 
+    void    ImplInvalidateDeviceInfo();
 
 protected:
-    DlgEdForm();
+    DlgEdForm(SdrModel& rSdrModel);
+    virtual ~DlgEdForm();
 
-    virtual void NbcMove( const Size& rSize );
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+    virtual void setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransformation);
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+
+    /// method to copy all data from given source
+    virtual void copyDataFromSdrObject(const SdrObject& rSource);
 
 public:
-    TYPEINFO();
-
-    virtual ~DlgEdForm();
+    /// create a copy, evtl. with a different target model (if given)
+    virtual SdrObject* CloneSdrObject(SdrModel* pTargetModel = 0) const;
 
     virtual void SetDlgEditor( DlgEditor* pEditor );
     virtual DlgEditor* GetDlgEditor() const { return pDlgEditor; }
@@ -183,9 +187,6 @@ public:
     virtual void UpdateTabOrderAndGroups();
 
     ::com::sun::star::awt::DeviceInfo getDeviceInfo() const;
-
-private:
-    void    ImplInvalidateDeviceInfo();
 };
 
 #endif // _BASCTL_DLGEDOBJ_HXX

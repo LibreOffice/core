@@ -1559,7 +1559,7 @@ sal_uInt16 SwTransferable::GetSotDestination( const SwWrtShell& rSh,
         break;
 
     case OBJCNT_FLY:
-        if( rSh.GetView().GetDocShell()->ISA(SwWebDocShell) )
+        if( dynamic_cast< const SwWebDocShell* >(rSh.GetView().GetDocShell()) )
             nRet = EXCHG_DEST_DOC_TEXTFRAME_WEB;
         else
             nRet = EXCHG_DEST_DOC_TEXTFRAME;
@@ -1587,7 +1587,7 @@ JP 13.07.98: Bug 52637: es wird ein URL-Feld erkannt also werden nur die
                 nRet = EXCHG_DEST_DOC_URLFIELD;
             else
 */
-            if( rSh.GetView().GetDocShell()->ISA(SwWebDocShell) )
+            if( dynamic_cast< const SwWebDocShell* >(rSh.GetView().GetDocShell()) )
                 nRet = EXCHG_DEST_SWDOC_FREE_AREA_WEB;
             else
                 nRet = EXCHG_DEST_SWDOC_FREE_AREA;
@@ -2309,7 +2309,7 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
     if( nRet )
     {
         String sURL;
-        if( rSh.GetView().GetDocShell()->ISA(SwWebDocShell) )
+        if( dynamic_cast< SwWebDocShell* >(rSh.GetView().GetDocShell()) )
             sURL = aBkmk.GetURL();
 
         switch( nAction )
@@ -2506,7 +2506,7 @@ int SwTransferable::_PasteFileName( TransferableDataHelper& rData,
                 const SfxFilter* pFlt = SW_PASTESDR_SETATTR == nAction
                         ? 0 : SwIoSystem::GetFileFilter(
                         sFileURL, aEmptyStr );
-                if( pFlt && !rSh.GetView().GetDocShell()->ISA(SwWebDocShell)
+                if( pFlt && !dynamic_cast< SwWebDocShell* >(rSh.GetView().GetDocShell())
     /*
     JP 02.07.98: warum nur fuer die Formate ??
                     && ( pFlt->GetUserData() == FILTER_SW5 ||
@@ -2595,7 +2595,7 @@ int SwTransferable::_PasteDBData( TransferableDataHelper& rData,
         {
             SdrObject* pObj;
             rSh.MakeDrawView();
-            FmFormView* pFmView = PTR_CAST( FmFormView, rSh.GetDrawView() );
+            FmFormView* pFmView = dynamic_cast< FmFormView* >( rSh.GetDrawView() );
             if(pFmView) {
                 const OXFormsDescriptor &rDesc = OXFormsTransferable::extractDescriptor(rData);
                 if(0 != (pObj = pFmView->CreateXFormsControl(rDesc)))
@@ -2658,7 +2658,7 @@ int SwTransferable::_PasteDBData( TransferableDataHelper& rData,
         {
             SdrObject* pObj;
             rSh.MakeDrawView();
-            FmFormView* pFmView = PTR_CAST( FmFormView, rSh.GetDrawView() );
+            FmFormView* pFmView = dynamic_cast< FmFormView* >( rSh.GetDrawView() );
             if (pFmView && bHaveColumnDescriptor)
             {
                 if ( 0 != (pObj = pFmView->CreateFieldControl( OColumnTransferable::extractColumnDescriptor(rData) ) ) )
@@ -3331,7 +3331,7 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
 
     //Nicht in Selektionen oder selektierten Rahmen
     if( rSh.ChgCurrPam( rDragPt ) ||
-        ( rSh.IsSelFrmMode() && rSh.IsInsideSelectedObj( rDragPt )) )
+        ( rSh.IsSelFrmMode() && rSh.IsInsideSelectedObj(basegfx::B2DPoint(rDragPt.X(), rDragPt.Y()) )) )
         return 0;
 
     if( rSrcSh.IsTableMode() )
@@ -3807,8 +3807,7 @@ void SwTrnsfrDdeLink::Disconnect( sal_Bool bRemoveDataAdvise )
 
 sal_Bool SwTrnsfrDdeLink::FindDocShell()
 {
-    TypeId aType( TYPE( SwDocShell ) );
-    SfxObjectShell* pTmpSh = SfxObjectShell::GetFirst( &aType );
+    SfxObjectShell* pTmpSh = SfxObjectShell::GetFirst( _IsObjectShell< SwDocShell > );
     while( pTmpSh )
     {
         if( pTmpSh == pDocShell )       // die wollen wir haben
@@ -3817,7 +3816,7 @@ sal_Bool SwTrnsfrDdeLink::FindDocShell()
                 return sal_True;
             break;      // das Doc ist nicht mehr vorhanden, also raus!
         }
-        pTmpSh = SfxObjectShell::GetNext( *pTmpSh, &aType );
+        pTmpSh = SfxObjectShell::GetNext( *pTmpSh, _IsObjectShell< SwDocShell > );
     }
 
     pDocShell = 0;

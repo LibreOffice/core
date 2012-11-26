@@ -59,8 +59,6 @@ namespace sd {
 
 class ViewShell;
 
-TYPEINIT1( FuHangulHanjaConversion, FuPoor );
-
 /*************************************************************************
 |*
 |* Konstruktor
@@ -75,16 +73,16 @@ FuHangulHanjaConversion::FuHangulHanjaConversion (
     SfxRequest& rReq )
        : FuPoor(pViewSh, pWin, pView, pDocument, rReq),
     pSdOutliner(NULL),
-    bOwnOutliner(sal_False)
+    bOwnOutliner(false)
 {
-    if ( mpViewShell->ISA(DrawViewShell) )
+    if ( dynamic_cast< DrawViewShell* >(mpViewShell) )
     {
-        bOwnOutliner = sal_True;
+        bOwnOutliner = true;
         pSdOutliner = new Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT );
     }
-    else if ( mpViewShell->ISA(OutlineViewShell) )
+    else if ( dynamic_cast< OutlineViewShell* >(mpViewShell) )
     {
-        bOwnOutliner = sal_False;
+        bOwnOutliner = false;
         pSdOutliner = mpDoc->GetOutliner();
     }
 
@@ -122,32 +120,32 @@ FunctionReference FuHangulHanjaConversion::Create( ViewShell* pViewSh, ::sd::Win
 \************************************************************************/
 
 void FuHangulHanjaConversion::StartConversion( sal_Int16 nSourceLanguage, sal_Int16 nTargetLanguage,
-        const Font *pTargetFont, sal_Int32 nOptions, sal_Bool bIsInteractive )
+        const Font *pTargetFont, sal_Int32 nOptions, bool bIsInteractive )
 {
 
     String aString( SdResId(STR_UNDO_HANGULHANJACONVERSION) );
     mpView->BegUndo( aString );
 
-    ViewShellBase* pBase = PTR_CAST(ViewShellBase, SfxViewShell::Current());
+    ViewShellBase* pBase = dynamic_cast< ViewShellBase* >(SfxViewShell::Current());
     if (pBase != NULL)
         mpViewShell = pBase->GetMainViewShell().get();
 
     if( mpViewShell )
     {
-        if ( pSdOutliner && mpViewShell->ISA(DrawViewShell) && !bOwnOutliner )
+        if ( pSdOutliner && dynamic_cast< DrawViewShell* >(mpViewShell) && !bOwnOutliner )
         {
             pSdOutliner->EndConversion();
 
-            bOwnOutliner = sal_True;
+            bOwnOutliner = true;
             pSdOutliner = new Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT );
             pSdOutliner->BeginConversion();
         }
-        else if ( pSdOutliner && mpViewShell->ISA(OutlineViewShell) && bOwnOutliner )
+        else if ( pSdOutliner && dynamic_cast< OutlineViewShell* >(mpViewShell) && bOwnOutliner )
         {
             pSdOutliner->EndConversion();
             delete pSdOutliner;
 
-            bOwnOutliner = sal_False;
+            bOwnOutliner = false;
             pSdOutliner = mpDoc->GetOutliner();
             pSdOutliner->BeginConversion();
         }
@@ -191,11 +189,11 @@ void FuHangulHanjaConversion::ConvertStyles( sal_Int16 nTargetLanguage, const Fo
 
         const bool bHasParent = pStyle->GetParent().Len() != 0;
 
-        if( !bHasParent || rSet.GetItemState( EE_CHAR_LANGUAGE_CJK, sal_False ) == SFX_ITEM_SET )
+        if( !bHasParent || rSet.GetItemState( EE_CHAR_LANGUAGE_CJK, false ) == SFX_ITEM_SET )
             rSet.Put( SvxLanguageItem( nTargetLanguage, EE_CHAR_LANGUAGE_CJK ) );
 
         if( pTargetFont &&
-            ( !bHasParent || rSet.GetItemState( EE_CHAR_FONTINFO_CJK, sal_False ) == SFX_ITEM_SET ) )
+            ( !bHasParent || rSet.GetItemState( EE_CHAR_FONTINFO_CJK, false ) == SFX_ITEM_SET ) )
         {
             // set new font attribute
             SvxFontItem aFontItem( (SvxFontItem&) rSet.Get( EE_CHAR_FONTINFO_CJK ) );

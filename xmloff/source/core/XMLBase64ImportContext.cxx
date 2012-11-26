@@ -37,9 +37,6 @@ using namespace ::com::sun::star::io;
 
 //-----------------------------------------------------------------------------
 
-TYPEINIT1( XMLBase64ImportContext, SvXMLImportContext );
-
-
 XMLBase64ImportContext::XMLBase64ImportContext(
         SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList >&,

@@ -169,10 +169,6 @@ sal_Bool    bNoInterrupt    = sal_False;
 #include <unomid.h>
 
 using namespace com::sun::star;
-
-
-TYPEINIT1( SwModule, SfxModule );
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 

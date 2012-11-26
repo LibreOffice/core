@@ -84,13 +84,11 @@
 #include "sectfrm.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/salbtype.hxx>     // FRound
+#include <svx/fmmodel.hxx>
 #include "switerator.hxx"
 
 using namespace ::com::sun::star;
 
-
-// OD 2004-03-23 #i26791
-TYPEINIT2(SwFlyFrm,SwLayoutFrm,SwAnchoredObject);
 
 /*************************************************************************
 |*
@@ -350,22 +348,23 @@ void SwFlyFrm::DeleteCnt()
         while ( pFrm->GetDrawObjs() && pFrm->GetDrawObjs()->Count() )
         {
             SwAnchoredObject *pAnchoredObj = (*pFrm->GetDrawObjs())[0];
-            if ( pAnchoredObj->ISA(SwFlyFrm) )
+            if ( dynamic_cast< SwFlyFrm* >(pAnchoredObj) )
                 delete pAnchoredObj;
-            else if ( pAnchoredObj->ISA(SwAnchoredDrawObject) )
+            else if ( dynamic_cast< SwAnchoredDrawObject* >(pAnchoredObj) )
             {
                 // OD 23.06.2003 #108784# - consider 'virtual' drawing objects
                 SdrObject* pObj = pAnchoredObj->DrawObj();
-                if ( pObj->ISA(SwDrawVirtObj) )
+                SwDrawVirtObj* pDrawVirtObj = dynamic_cast<SwDrawVirtObj*>(pObj);
+
+                if ( pDrawVirtObj )
                 {
-                    SwDrawVirtObj* pDrawVirtObj = static_cast<SwDrawVirtObj*>(pObj);
                     pDrawVirtObj->RemoveFromWriterLayout();
                     pDrawVirtObj->RemoveFromDrawingPage();
                 }
                 else
                 {
                     SwDrawContact* pContact =
-                            static_cast<SwDrawContact*>(::GetUserCall( pObj ));
+                            static_cast<SwDrawContact*>(::findConnectionToSdrObject( pObj ));
                     if ( pContact )
                     {
                         pContact->DisconnectFromLayout();
@@ -409,16 +408,12 @@ sal_uInt32 SwFlyFrm::_GetOrdNumForNewRef( const SwFlyDrawContact* pContact )
     if ( pFlyFrm )
     {
         // another Writer fly frame found. Take its order number
-        nOrdNum = pFlyFrm->GetVirtDrawObj()->GetOrdNum();
+        nOrdNum = pFlyFrm->GetVirtDrawObj()->GetNavigationPosition();
     }
     else
     {
         // no other Writer fly frame found. Take order number of 'master' object
-        // --> OD 2004-11-11 #i35748# - use method <GetOrdNumDirect()> instead
-        // of method <GetOrdNum()> to avoid a recalculation of the order number,
-        // which isn't intended.
-        nOrdNum = pContact->GetMaster()->GetOrdNumDirect();
-        // <--
+        nOrdNum = pContact->GetMaster()->GetNavigationPosition();
     }
 
     return nOrdNum;
@@ -427,25 +422,24 @@ sal_uInt32 SwFlyFrm::_GetOrdNumForNewRef( const SwFlyDrawContact* pContact )
 SwVirtFlyDrawObj* SwFlyFrm::CreateNewRef( SwFlyDrawContact *pContact )
 {
     SwVirtFlyDrawObj *pDrawObj = new SwVirtFlyDrawObj( *pContact->GetMaster(), this );
-    pDrawObj->SetModel( pContact->GetMaster()->GetModel() );
-    pDrawObj->SetUserCall( pContact );
+    establishConnectionToSdrObject(pDrawObj, pContact);
 
     //Der Reader erzeugt die Master und setzt diese, um die Z-Order zu
     //transportieren, in die Page ein. Beim erzeugen der ersten Referenz werden
     //die Master aus der Liste entfernt und fuehren von da an ein
     //Schattendasein.
-    SdrPage* pPg( 0L );
-    if ( 0 != ( pPg = pContact->GetMaster()->GetPage() ) )
+    SdrPage* pPg( 0 );
+    if ( 0 != ( pPg = pContact->GetMaster()->getSdrPageFromSdrObject() ) )
     {
-        const sal_uInt32 nOrdNum = pContact->GetMaster()->GetOrdNum();
-        pPg->ReplaceObject( pDrawObj, nOrdNum );
+        const sal_uInt32 nOrdNum = pContact->GetMaster()->GetNavigationPosition();
+        pPg->ReplaceObjectInSdrObjList( *pDrawObj, nOrdNum );
     }
     // --> OD 2004-08-16 #i27030# - insert new <SwVirtFlyDrawObj> instance
     // into drawing page with correct order number
     else
     {
         pContact->GetFmt()->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage( 0 )->
-                        InsertObject( pDrawObj, _GetOrdNumForNewRef( pContact ) );
+            InsertObjectToSdrObjList(*pDrawObj, _GetOrdNumForNewRef( pContact ) );
     }
     // <--
     // --> OD 2004-12-13 #i38889# - assure, that new <SwVirtFlyDrawObj> instance
@@ -469,7 +463,7 @@ void SwFlyFrm::InitDrawObj( sal_Bool bNotify )
     {
         // --> OD 2005-08-08 #i52858# - method name changed
         pContact = new SwFlyDrawContact( (SwFlyFrmFmt*)GetFmt(),
-                                          pIDDMA->GetOrCreateDrawModel() );
+            *pIDDMA->GetOrCreateDrawModel() );
         // <--
     }
     ASSERT( pContact, "InitDrawObj failed" );
@@ -546,10 +540,14 @@ void SwFlyFrm::FinitDrawObj()
     // Writer fly frame again.
     if ( pMyContact )
     {
-        pMyContact->GetMaster()->SetUserCall( 0 );
+        resetConnectionToSdrObject(pMyContact->GetMaster());
     }
-    GetVirtDrawObj()->SetUserCall( 0 ); //Ruft sonst Delete des ContactObj
-    delete GetVirtDrawObj();            //Meldet sich selbst beim Master ab.
+
+    SwVirtFlyDrawObj* pSwVirtFlyDrawObj = GetVirtDrawObj();
+
+    resetConnectionToSdrObject(pSwVirtFlyDrawObj);
+    deleteSdrObjectSafeAndClearPointer(pSwVirtFlyDrawObj);          //Meldet sich selbst beim Master ab.
+
     if ( pMyContact )
         delete pMyContact;      //zerstoert den Master selbst.
 }
@@ -1456,9 +1454,10 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
                     for ( sal_uInt16 i = 0; i < nCnt; ++i )
                     {
                         SwAnchoredObject* pAnchoredObj = (*GetDrawObjs())[i];
-                        if ( pAnchoredObj->ISA(SwFlyFrm) )
+                        SwFlyFrm* pFly = dynamic_cast< SwFlyFrm* >(pAnchoredObj);
+
+                        if ( pFly )
                         {
-                            SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
                             // OD 06.11.2003 #i22305# - consider
                             // only Writer fly frames, which follow the text flow.
                             if ( pFly->IsFlyLayFrm() &&
@@ -2328,19 +2327,19 @@ void SwFrm::RemoveFly( SwFlyFrm *pToRemove )
 |*************************************************************************/
 void SwFrm::AppendDrawObj( SwAnchoredObject& _rNewObj )
 {
-    if ( !_rNewObj.ISA(SwAnchoredDrawObject) )
+    if ( !dynamic_cast< SwAnchoredDrawObject* >(&_rNewObj) )
     {
         ASSERT( false,
                 "SwFrm::AppendDrawObj(..) - anchored object of unexcepted type -> object not appended" );
         return;
     }
 
-    if ( !_rNewObj.GetDrawObj()->ISA(SwDrawVirtObj) &&
+    if ( !dynamic_cast< const SwDrawVirtObj* >(_rNewObj.GetDrawObj()) &&
          _rNewObj.GetAnchorFrm() && _rNewObj.GetAnchorFrm() != this )
     {
         // perform disconnect from layout, if 'master' drawing object is appended
         // to a new frame.
-        static_cast<SwDrawContact*>(::GetUserCall( _rNewObj.GetDrawObj() ))->
+        static_cast<SwDrawContact*>(::findConnectionToSdrObject( _rNewObj.GetDrawObj() ))->
                                                 DisconnectFromLayout( false );
     }
 
@@ -2487,9 +2486,10 @@ void SwFrm::InvalidateObjs( const bool _bInvaPosOnly,
             }
             // <--
             // distinguish between writer fly frames and drawing objects
-            if ( pAnchoredObj->ISA(SwFlyFrm) )
+            SwFlyFrm* pFly = dynamic_cast<SwFlyFrm*>(pAnchoredObj);
+
+            if ( pFly )
             {
-                SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
                 pFly->_Invalidate();
                 pFly->_InvalidatePos();
                 if ( !_bInvaPosOnly )
@@ -2533,10 +2533,10 @@ void SwLayoutFrm::NotifyLowerObjs( const bool _bUnlockPosOfObjs )
             // text frame is taken.
             const SwFrm* pAnchorFrm = pObj->GetAnchorFrmContainingAnchPos();
             // <--
-            if ( pObj->ISA(SwFlyFrm) )
-            {
-                SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pObj);
+            SwFlyFrm* pFly = dynamic_cast< SwFlyFrm* >(pObj);
 
+            if ( pFly )
+            {
                 if ( pFly->Frm().Left() == WEIT_WECH )
                     continue;
 
@@ -2567,7 +2567,7 @@ void SwLayoutFrm::NotifyLowerObjs( const bool _bUnlockPosOfObjs )
             }
             else
             {
-                ASSERT( pObj->ISA(SwAnchoredDrawObject),
+                ASSERT( dynamic_cast< SwAnchoredDrawObject* >(pObj),
                         "<SwLayoutFrm::NotifyFlys() - anchored object of unexcepted type" );
                 // --> OD 2004-10-08 #i26945# - use <pAnchorFrm> to check, if
                 // fly frame is lower of layout frame resp. if fly frame is
@@ -2601,10 +2601,9 @@ void SwLayoutFrm::NotifyLowerObjs( const bool _bUnlockPosOfObjs )
 void SwFlyFrm::NotifyDrawObj()
 {
     SwVirtFlyDrawObj* pObj = GetVirtDrawObj();
+    const SdrObjectChangeBroadcaster aSdrObjectChangeBroadcaster(*pObj);
     pObj->SetRect();
-    pObj->SetRectsDirty();
     pObj->SetChanged();
-    pObj->BroadcastObjectChange();
     if ( GetFmt()->GetSurround().IsContour() )
         ClrContourCache( pObj );
 }

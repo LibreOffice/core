@@ -95,17 +95,18 @@ void SAL_CALL ScAccessiblePreviewTable::disposing()
 
 void ScAccessiblePreviewTable::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if (rHint.ISA( SfxSimpleHint ))
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if (pSfxSimpleHint)
     {
-        const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
-        sal_uLong nId = rRef.GetId();
+        sal_uLong nId = pSfxSimpleHint->GetId();
         if ( nId == SFX_HINT_DATACHANGED )
         {
             //  column / row layout may change with any document change,
             //  so it must be invalidated
             DELETEZ( mpTableInfo );
         }
-        else if (rRef.GetId() == SC_HINT_ACC_VISAREACHANGED)
+        else if (nId == SC_HINT_ACC_VISAREACHANGED)
         {
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::VISIBLE_DATA_CHANGED;

@@ -28,107 +28,154 @@
 #include <svx/svdglue.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdtrans.hxx>
+#include <svx/svdlegacy.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrGluePoint::SetReallyAbsolute(FASTBOOL bOn, const SdrObject& rObj)
+SdrGluePoint::SdrGluePoint()
+:   mnEscDir(SDRESC_SMART),
+    mnId(0),
+    mnAlign(0),
+    mbNoPercent(false),
+    mbReallyAbsolute(false),
+    mbUserDefined(true)
 {
-    if ( bReallyAbsolute != bOn )
-    {
-       if ( bOn )
-       {
-           aPos=GetAbsolutePos(rObj);
-           bReallyAbsolute=bOn;
-       }
-       else
-       {
-           bReallyAbsolute=bOn;
-           Point aPt(aPos);
-           SetAbsolutePos(aPt,rObj);
-       }
-    }
 }
 
-Point SdrGluePoint::GetAbsolutePos(const SdrObject& rObj) const
+SdrGluePoint::SdrGluePoint(const basegfx::B2DPoint& rNewPos,
+    bool bNewPercent,
+    sal_uInt16 nNewAlign)
+:   maPos(rNewPos),
+    mnEscDir(SDRESC_SMART),
+    mnId(0),
+    mnAlign(nNewAlign),
+    mbNoPercent(!bNewPercent),
+    mbReallyAbsolute(false),
+    mbUserDefined(true)
 {
-    if (bReallyAbsolute) return aPos;
-    Rectangle aSnap(rObj.GetSnapRect());
-    Rectangle aBound(rObj.GetSnapRect());
-    Point aPt(aPos);
+}
 
-    Point aOfs(aSnap.Center());
-    switch (GetHorzAlign()) {
-        case SDRHORZALIGN_LEFT  : aOfs.X()=aSnap.Left(); break;
-        case SDRHORZALIGN_RIGHT : aOfs.X()=aSnap.Right(); break;
+bool SdrGluePoint::operator==(const SdrGluePoint& rCmpGP) const
+{
+    return GetPos() == rCmpGP.GetPos()
+        && GetEscDir() == rCmpGP.GetEscDir()
+        && GetId() == rCmpGP.GetId()
+        && GetAlign() == rCmpGP.GetAlign()
+        && IsPercent() == rCmpGP.IsPercent()
+        && IsReallyAbsolute() == rCmpGP.IsReallyAbsolute()
+        && IsUserDefined() == rCmpGP.IsUserDefined();
+}
+
+basegfx::B2DPoint SdrGluePoint::GetAbsolutePos(const basegfx::B2DRange& rObjectRange) const
+{
+    if(IsReallyAbsolute() || rObjectRange.isEmpty())
+    {
+        return GetPos();
     }
-    switch (GetVertAlign()) {
-        case SDRVERTALIGN_TOP   : aOfs.Y()=aSnap.Top(); break;
-        case SDRVERTALIGN_BOTTOM: aOfs.Y()=aSnap.Bottom(); break;
-    }
-    if (!bNoPercent) {
-        long nXMul=aSnap.Right()-aSnap.Left();
-        long nYMul=aSnap.Bottom()-aSnap.Top();
-        long nXDiv=10000;
-        long nYDiv=10000;
-        if (nXMul!=nXDiv) {
-            aPt.X()*=nXMul;
-            aPt.X()/=nXDiv;
+
+    basegfx::B2DPoint aPt(GetPos());
+    basegfx::B2DPoint aOfs(rObjectRange.getCenter());
+
+    switch(GetHorzAlign())
+    {
+        case SDRHORZALIGN_LEFT  :
+        {
+            aOfs.setX(rObjectRange.getMinX());
+            break;
         }
-        if (nYMul!=nYDiv) {
-            aPt.Y()*=nYMul;
-            aPt.Y()/=nYDiv;
+        case SDRHORZALIGN_RIGHT :
+        {
+            aOfs.setX(rObjectRange.getMaxX());
+            break;
         }
     }
+
+    switch(GetVertAlign())
+    {
+        case SDRVERTALIGN_TOP   :
+        {
+            aOfs.setY(rObjectRange.getMinY());
+            break;
+        }
+        case SDRVERTALIGN_BOTTOM:
+        {
+            aOfs.setY(rObjectRange.getMaxY());
+            break;
+        }
+    }
+
+    if(IsPercent())
+    {
+        const basegfx::B2DVector aScale(rObjectRange.getRange() / basegfx::B2DTuple(10000.0, 10000.0));
+
+        aPt *= aScale;
+    }
+
     aPt+=aOfs;
-    // Und nun auf's BoundRect des Objekts begrenzen
-    if (aPt.X()<aBound.Left  ()) aPt.X()=aBound.Left  ();
-    if (aPt.X()>aBound.Right ()) aPt.X()=aBound.Right ();
-    if (aPt.Y()<aBound.Top   ()) aPt.Y()=aBound.Top   ();
-    if (aPt.Y()>aBound.Bottom()) aPt.Y()=aBound.Bottom();
+
+    // limit to object bound
+    aPt = rObjectRange.clamp(aPt);
+
     return aPt;
 }
 
-void SdrGluePoint::SetAbsolutePos(const Point& rNewPos, const SdrObject& rObj)
+void SdrGluePoint::SetAbsolutePos(const basegfx::B2DPoint& rNewPos, const basegfx::B2DRange& rObjectRange)
 {
-    if (bReallyAbsolute) {
-        aPos=rNewPos;
+    if(IsReallyAbsolute() || rObjectRange.isEmpty())
+    {
+        SetPos(rNewPos);
         return;
     }
-    Rectangle aSnap(rObj.GetSnapRect());
-    Point aPt(rNewPos);
 
-    Point aOfs(aSnap.Center());
-    switch (GetHorzAlign()) {
-        case SDRHORZALIGN_LEFT  : aOfs.X()=aSnap.Left(); break;
-        case SDRHORZALIGN_RIGHT : aOfs.X()=aSnap.Right(); break;
-    }
-    switch (GetVertAlign()) {
-        case SDRVERTALIGN_TOP   : aOfs.Y()=aSnap.Top(); break;
-        case SDRVERTALIGN_BOTTOM: aOfs.Y()=aSnap.Bottom(); break;
-    }
-    aPt-=aOfs;
-    if (!bNoPercent) {
-        long nXMul=aSnap.Right()-aSnap.Left();
-        long nYMul=aSnap.Bottom()-aSnap.Top();
-        if (nXMul==0) nXMul=1;
-        if (nYMul==0) nYMul=1;
-        long nXDiv=10000;
-        long nYDiv=10000;
-        if (nXMul!=nXDiv) {
-            aPt.X()*=nXDiv;
-            aPt.X()/=nXMul;
+    basegfx::B2DPoint aPt(rNewPos);
+    basegfx::B2DPoint aOfs(rObjectRange.getCenter());
+
+    switch(GetHorzAlign())
+    {
+        case SDRHORZALIGN_LEFT  :
+        {
+            aOfs.setX(rObjectRange.getMinX());
+            break;
         }
-        if (nYMul!=nYDiv) {
-            aPt.Y()*=nYDiv;
-            aPt.Y()/=nYMul;
+        case SDRHORZALIGN_RIGHT :
+        {
+            aOfs.setX(rObjectRange.getMaxX());
+            break;
         }
     }
-    aPos=aPt;
+
+    switch(GetVertAlign())
+    {
+        case SDRVERTALIGN_TOP   :
+        {
+            aOfs.setY(rObjectRange.getMinY());
+            break;
+        }
+        case SDRVERTALIGN_BOTTOM:
+        {
+            aOfs.setY(rObjectRange.getMaxY());
+            break;
+        }
+    }
+
+    aPt -= aOfs;
+
+    if(IsPercent())
+    {
+        const basegfx::B2DVector aScale(
+            10000.0 / (basegfx::fTools::equalZero(rObjectRange.getWidth()) ? rObjectRange.getWidth() : 1.0),
+            10000.0 / (basegfx::fTools::equalZero(rObjectRange.getHeight()) ? rObjectRange.getHeight() : 1.0));
+
+        aPt *= aScale;
+    }
+
+    SetPos(aPt);
 }
 
-long SdrGluePoint::GetAlignAngle() const
+sal_Int32 SdrGluePoint::GetAlignAngle() const
 {
-    switch (nAlign) {
+    switch(GetAlign())
+    {
         case SDRHORZALIGN_CENTER|SDRVERTALIGN_CENTER: return 0; // Invalid!
         case SDRHORZALIGN_RIGHT |SDRVERTALIGN_CENTER: return 0;
         case SDRHORZALIGN_RIGHT |SDRVERTALIGN_TOP   : return 4500;
@@ -138,193 +185,202 @@ long SdrGluePoint::GetAlignAngle() const
         case SDRHORZALIGN_LEFT  |SDRVERTALIGN_BOTTOM: return 22500;
         case SDRHORZALIGN_CENTER|SDRVERTALIGN_BOTTOM: return 27000;
         case SDRHORZALIGN_RIGHT |SDRVERTALIGN_BOTTOM: return 31500;
-    } // switch
+    }
+
     return 0;
 }
 
-void SdrGluePoint::SetAlignAngle(long nWink)
+void SdrGluePoint::SetAlignAngle(sal_Int32 nWink)
 {
     nWink=NormAngle360(nWink);
-    if (nWink>=33750 || nWink<2250) nAlign=SDRHORZALIGN_RIGHT |SDRVERTALIGN_CENTER;
-    else if (nWink< 6750) nAlign=SDRHORZALIGN_RIGHT |SDRVERTALIGN_TOP   ;
-    else if (nWink<11250) nAlign=SDRHORZALIGN_CENTER|SDRVERTALIGN_TOP   ;
-    else if (nWink<15750) nAlign=SDRHORZALIGN_LEFT  |SDRVERTALIGN_TOP   ;
-    else if (nWink<20250) nAlign=SDRHORZALIGN_LEFT  |SDRVERTALIGN_CENTER;
-    else if (nWink<24750) nAlign=SDRHORZALIGN_LEFT  |SDRVERTALIGN_BOTTOM;
-    else if (nWink<29250) nAlign=SDRHORZALIGN_CENTER|SDRVERTALIGN_BOTTOM;
-    else if (nWink<33750) nAlign=SDRHORZALIGN_RIGHT |SDRVERTALIGN_BOTTOM;
+
+    if(nWink >= 33750 || nWink < 2250)
+    {
+        SetAlign(SDRHORZALIGN_RIGHT |SDRVERTALIGN_CENTER);
+    }
+    else if(nWink < 6750)
+    {
+        SetAlign(SDRHORZALIGN_RIGHT |SDRVERTALIGN_TOP   );
+    }
+    else if(nWink < 11250)
+    {
+        SetAlign(SDRHORZALIGN_CENTER|SDRVERTALIGN_TOP   );
+    }
+    else if(nWink < 15750)
+    {
+        SetAlign(SDRHORZALIGN_LEFT  |SDRVERTALIGN_TOP   );
+    }
+    else if(nWink < 20250)
+    {
+        SetAlign(SDRHORZALIGN_LEFT  |SDRVERTALIGN_CENTER);
+    }
+    else if(nWink < 24750)
+    {
+        SetAlign(SDRHORZALIGN_LEFT  |SDRVERTALIGN_BOTTOM);
+    }
+    else if(nWink < 29250)
+    {
+        SetAlign(SDRHORZALIGN_CENTER|SDRVERTALIGN_BOTTOM);
+    }
+    else if(nWink < 33750)
+    {
+        SetAlign(SDRHORZALIGN_RIGHT |SDRVERTALIGN_BOTTOM);
+    }
 }
 
-long SdrGluePoint::EscDirToAngle(sal_uInt16 nEsc) const
+sal_Int32 SdrGluePoint::EscDirToAngle(sal_uInt16 nEsc) const
 {
-    switch (nEsc) {
+    switch(nEsc)
+    {
         case SDRESC_RIGHT : return 0;
         case SDRESC_TOP   : return 9000;
         case SDRESC_LEFT  : return 18000;
         case SDRESC_BOTTOM: return 27000;
-    } // switch
+    }
+
     return 0;
 }
 
-sal_uInt16 SdrGluePoint::EscAngleToDir(long nWink) const
+sal_uInt16 SdrGluePoint::EscAngleToDir(sal_Int32 nWink) const
 {
     nWink=NormAngle360(nWink);
-    if (nWink>=31500 || nWink<4500) return SDRESC_RIGHT;
-    if (nWink<13500) return SDRESC_TOP;
-    if (nWink<22500) return SDRESC_LEFT;
-    if (nWink<31500) return SDRESC_BOTTOM;
+
+    if(nWink >= 31500 || nWink < 4500)
+    {
+        return SDRESC_RIGHT;
+    }
+    if(nWink < 13500)
+    {
+        return SDRESC_TOP;
+    }
+    if(nWink < 22500)
+    {
+        return SDRESC_LEFT;
+    }
+    if(nWink < 31500)
+    {
+        return SDRESC_BOTTOM;
+    }
+
     return 0;
 }
 
-void SdrGluePoint::Rotate(const Point& rRef, long nWink, double sn, double cs, const SdrObject* pObj)
+void SdrGluePoint::Transform(const basegfx::B2DHomMatrix& rTransformation, const basegfx::B2DRange& rObjectRange)
 {
-    Point aPt(pObj!=NULL ? GetAbsolutePos(*pObj) : GetPos());
-    RotatePoint(aPt,rRef,sn,cs);
-    // Bezugskante drehen
-    if(nAlign != (SDRHORZALIGN_CENTER|SDRVERTALIGN_CENTER))
+    basegfx::B2DPoint aPt(GetAbsolutePos(rObjectRange));
+    aPt = rTransformation * aPt;
+
+    // check if old angle is needed
+    sal_Int32 nOldAngle(0);
+    const bool bTransformEscapes(GetEscDir() & (SDRESC_HORZ|SDRESC_VERT));
+    const bool bTransformAligns(GetAlign() != (SDRHORZALIGN_CENTER|SDRVERTALIGN_CENTER));
+
+    if(bTransformEscapes || bTransformAligns)
     {
-        SetAlignAngle(GetAlignAngle()+nWink);
+        const basegfx::B2DPoint aRotated(rTransformation * basegfx::B2DPoint(1.0, 0.0));
+        const double fAngleToXAxis(atan2(aRotated.getY(), aRotated.getX()));
+        nOldAngle = basegfx::fround((-fAngleToXAxis * 18000.0) / F_PI) % 36000;
     }
-    // Austrittsrichtungen drehen
-    sal_uInt16 nEscDir0=nEscDir;
-    sal_uInt16 nEscDir1=0;
-    if ((nEscDir0&SDRESC_LEFT  )!=0) nEscDir1|=EscAngleToDir(EscDirToAngle(SDRESC_LEFT  )+nWink);
-    if ((nEscDir0&SDRESC_TOP   )!=0) nEscDir1|=EscAngleToDir(EscDirToAngle(SDRESC_TOP   )+nWink);
-    if ((nEscDir0&SDRESC_RIGHT )!=0) nEscDir1|=EscAngleToDir(EscDirToAngle(SDRESC_RIGHT )+nWink);
-    if ((nEscDir0&SDRESC_BOTTOM)!=0) nEscDir1|=EscAngleToDir(EscDirToAngle(SDRESC_BOTTOM)+nWink);
-    nEscDir=nEscDir1;
-    if (pObj!=NULL) SetAbsolutePos(aPt,*pObj); else SetPos(aPt);
-}
 
-void SdrGluePoint::Mirror(const Point& rRef1, const Point& rRef2, const SdrObject* pObj)
-{
-    Point aPt(rRef2); aPt-=rRef1;
-    long nWink=GetAngle(aPt);
-    Mirror(rRef1,rRef2,nWink,pObj);
-}
-
-void SdrGluePoint::Mirror(const Point& rRef1, const Point& rRef2, long nWink, const SdrObject* pObj)
-{
-    Point aPt(pObj!=NULL ? GetAbsolutePos(*pObj) : GetPos());
-    MirrorPoint(aPt,rRef1,rRef2);
-    // Bezugskante spiegeln
-    if(nAlign != (SDRHORZALIGN_CENTER|SDRVERTALIGN_CENTER))
+    // transform escape directions
+    if(bTransformEscapes)
     {
-        long nAW=GetAlignAngle();
-        nAW+=2*(nWink-nAW);
-        SetAlignAngle(nAW);
-    }
-    // Austrittsrichtungen spiegeln
-    sal_uInt16 nEscDir0=nEscDir;
-    sal_uInt16 nEscDir1=0;
-    if ((nEscDir0&SDRESC_LEFT)!=0) {
-        long nEW=EscDirToAngle(SDRESC_LEFT);
-        nEW+=2*(nWink-nEW);
-        nEscDir1|=EscAngleToDir(nEW);
-    }
-    if ((nEscDir0&SDRESC_TOP)!=0) {
-        long nEW=EscDirToAngle(SDRESC_TOP);
-        nEW+=2*(nWink-nEW);
-        nEscDir1|=EscAngleToDir(nEW);
-    }
-    if ((nEscDir0&SDRESC_RIGHT)!=0) {
-        long nEW=EscDirToAngle(SDRESC_RIGHT);
-        nEW+=2*(nWink-nEW);
-        nEscDir1|=EscAngleToDir(nEW);
-    }
-    if ((nEscDir0&SDRESC_BOTTOM)!=0) {
-        long nEW=EscDirToAngle(SDRESC_BOTTOM);
-        nEW+=2*(nWink-nEW);
-        nEscDir1|=EscAngleToDir(nEW);
-    }
-    nEscDir=nEscDir1;
-    if (pObj!=NULL) SetAbsolutePos(aPt,*pObj); else SetPos(aPt);
-}
+        sal_uInt16 nNewEscDir(0);
 
-void SdrGluePoint::Shear(const Point& rRef, long /*nWink*/, double tn, FASTBOOL bVShear, const SdrObject* pObj)
-{
-    Point aPt(pObj!=NULL ? GetAbsolutePos(*pObj) : GetPos());
-    ShearPoint(aPt,rRef,tn,bVShear);
-    if (pObj!=NULL) SetAbsolutePos(aPt,*pObj); else SetPos(aPt);
-}
-
-void SdrGluePoint::Draw(OutputDevice& rOut, const SdrObject* pObj) const
-{
-    Color aBackPenColor(COL_WHITE);
-    Color aForePenColor(COL_LIGHTBLUE);
-
-    bool bMapMerk=rOut.IsMapModeEnabled();
-    Point aPt(pObj!=NULL ? GetAbsolutePos(*pObj) : GetPos());
-    aPt=rOut.LogicToPixel(aPt);
-    rOut.EnableMapMode(sal_False);
-    long x=aPt.X(),y=aPt.Y(); // Groesse erstmal fest auf 7 Pixel
-
-    rOut.SetLineColor( aBackPenColor );
-    rOut.DrawLine(Point(x-2,y-3),Point(x+3,y+2));
-    rOut.DrawLine(Point(x-3,y-2),Point(x+2,y+3));
-    rOut.DrawLine(Point(x-3,y+2),Point(x+2,y-3));
-    rOut.DrawLine(Point(x-2,y+3),Point(x+3,y-2));
-
-    if (bNoPercent)
-    {
-        switch (GetHorzAlign())
+        if(GetEscDir() & SDRESC_LEFT)
         {
-            case SDRHORZALIGN_LEFT  : rOut.DrawLine(Point(x-3,y-1),Point(x-3,y+1)); break;
-            case SDRHORZALIGN_RIGHT : rOut.DrawLine(Point(x+3,y-1),Point(x+3,y+1)); break;
+            nNewEscDir |= EscAngleToDir(EscDirToAngle(SDRESC_LEFT) + nOldAngle);
         }
 
-        switch (GetVertAlign())
+        if(GetEscDir() & SDRESC_TOP)
         {
-            case SDRVERTALIGN_TOP   : rOut.DrawLine(Point(x-1,y-3),Point(x+1,y-3)); break;
-            case SDRVERTALIGN_BOTTOM: rOut.DrawLine(Point(x-1,y+3),Point(x+1,y+3)); break;
+            nNewEscDir |= EscAngleToDir(EscDirToAngle(SDRESC_TOP) + nOldAngle);
         }
+
+        if(GetEscDir() & SDRESC_RIGHT)
+        {
+            nNewEscDir |= EscAngleToDir(EscDirToAngle(SDRESC_RIGHT) + nOldAngle);
+        }
+
+        if(GetEscDir() & SDRESC_BOTTOM)
+        {
+            nNewEscDir |= EscAngleToDir(EscDirToAngle(SDRESC_BOTTOM) + nOldAngle);
+        }
+
+        SetEscDir(nNewEscDir);
     }
 
-    rOut.SetLineColor( aForePenColor );
-    rOut.DrawLine(Point(x-2,y-2),Point(x+2,y+2));
-    rOut.DrawLine(Point(x-2,y+2),Point(x+2,y-2));
-    rOut.EnableMapMode(bMapMerk);
+    // transform alignment edge
+    if(bTransformAligns)
+    {
+        SetAlignAngle(GetAlignAngle() + nOldAngle);
+    }
+
+    SetAbsolutePos(aPt, rObjectRange);
 }
 
-void SdrGluePoint::Invalidate(Window& rWin, const SdrObject* pObj) const
+bool SdrGluePoint::IsHit(const basegfx::B2DPoint& rPnt, double fTolLog, const basegfx::B2DRange& rObjectRange) const
 {
-    bool bMapMerk=rWin.IsMapModeEnabled();
-    Point aPt(pObj!=NULL ? GetAbsolutePos(*pObj) : GetPos());
-    aPt=rWin.LogicToPixel(aPt);
-    rWin.EnableMapMode(sal_False);
-    long x=aPt.X(),y=aPt.Y(); // Groesse erstmal fest auf 7 Pixel
+    const basegfx::B2DPoint aPt(GetAbsolutePos(rObjectRange));
+    const double fDist(basegfx::B2DVector(aPt - rPnt).getLength());
 
-    // #111096#
-    // do not erase background, that causes flicker (!)
-    rWin.Invalidate(Rectangle(Point(x-3,y-3),Point(x+3,y+3)), INVALIDATE_NOERASE);
-
-    rWin.EnableMapMode(bMapMerk);
-}
-
-FASTBOOL SdrGluePoint::IsHit(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj) const
-{
-    Point aPt(pObj!=NULL ? GetAbsolutePos(*pObj) : GetPos());
-    Size aSiz=rOut.PixelToLogic(Size(3,3));
-    Rectangle aRect(aPt.X()-aSiz.Width(),aPt.Y()-aSiz.Height(),aPt.X()+aSiz.Width(),aPt.Y()+aSiz.Height());
-    return aRect.IsInside(rPnt);
+    return basegfx::fTools::lessOrEqual(fDist, fTolLog);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+SdrGluePointList::SdrGluePointList()
+:   maList()
+{
+}
+
+SdrGluePointList::SdrGluePointList(const SdrGluePointList& rSrcList)
+:   maList()
+{
+    *this = rSrcList;
+}
+
+SdrGluePointList::~SdrGluePointList()
+{
+    Clear();
+}
+
+SdrGluePoint* SdrGluePointList::GetObject(sal_uInt32 i) const
+{
+    if(i < maList.size())
+    {
+        return *(maList.begin() + i);
+    }
+    else
+    {
+        OSL_ENSURE(false, "SdrGluePointList::GetObject access out of range (!)");
+        return 0;
+    }
+}
+
 void SdrGluePointList::Clear()
 {
-    sal_uInt16 nAnz=GetCount();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
+    const sal_uInt32 nAnz(GetCount());
+
+    for(sal_uInt32 i(0); i < nAnz; i++)
+    {
         delete GetObject(i);
     }
-    aList.Clear();
+
+    maList.clear();
 }
 
 void SdrGluePointList::operator=(const SdrGluePointList& rSrcList)
 {
-    if (GetCount()!=0) Clear();
-    sal_uInt16 nAnz=rSrcList.GetCount();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
+    if(GetCount())
+    {
+        Clear();
+    }
+
+    const sal_uInt32 nAnz(rSrcList.GetCount());
+
+    for(sal_uInt32 i(0); i < nAnz; i++)
+    {
         Insert(rSrcList[i]);
     }
 }
@@ -332,115 +388,126 @@ void SdrGluePointList::operator=(const SdrGluePointList& rSrcList)
 // Die Id's der Klebepunkte in der Liste sind stets streng monoton steigend!
 // Ggf. wird dem neuen Klebepunkt eine neue Id zugewiesen (wenn diese bereits
 // vergeben ist). Die Id 0 ist reserviert.
-sal_uInt16 SdrGluePointList::Insert(const SdrGluePoint& rGP)
+sal_uInt32 SdrGluePointList::Insert(const SdrGluePoint& rGP)
 {
     SdrGluePoint* pGP=new SdrGluePoint(rGP);
-    sal_uInt16 nId=pGP->GetId();
-    sal_uInt16 nAnz=GetCount();
-    sal_uInt16 nInsPos=nAnz;
-    sal_uInt16 nLastId=nAnz!=0 ? GetObject(nAnz-1)->GetId() : 0;
+    sal_uInt16 nId(pGP->GetId());
+    const sal_uInt32 nAnz(GetCount());
+    sal_uInt32 nInsPos(nAnz);
+    const sal_uInt16 nLastId(nAnz ? GetObject(nAnz - 1)->GetId() : 0);
     DBG_ASSERT(nLastId>=nAnz,"SdrGluePointList::Insert(): nLastId<nAnz");
-    FASTBOOL bHole=nLastId>nAnz;
-    if (nId<=nLastId) {
-        if (!bHole || nId==0) {
+    const bool bHole(nLastId > nAnz);
+
+    if(nId <= nLastId)
+    {
+        if(!bHole || 0 == nId)
+        {
             nId=nLastId+1;
-        } else {
-            FASTBOOL bBrk=sal_False;
-            for (sal_uInt16 nNum=0; nNum<nAnz && !bBrk; nNum++) {
+        }
+        else
+        {
+            bool bBrk(false);
+
+            for(sal_uInt32 nNum(0); nNum < nAnz && !bBrk; nNum++)
+            {
                 const SdrGluePoint* pGP2=GetObject(nNum);
-                sal_uInt16 nTmpId=pGP2->GetId();
-                if (nTmpId==nId) {
+                const sal_uInt16 nTmpId(pGP2->GetId());
+
+                if(nTmpId == nId)
+                {
                     nId=nLastId+1; // bereits vorhanden
-                    bBrk=sal_True;
+                    bBrk = true;
                 }
-                if (nTmpId>nId) {
+
+                if(nTmpId > nId)
+                {
                     nInsPos=nNum; // Hier einfuegen (einsortieren)
-                    bBrk=sal_True;
+                    bBrk = true;
                 }
             }
         }
+
         pGP->SetId(nId);
     }
-    aList.Insert(pGP,nInsPos);
+
+    maList.insert(maList.begin() + nInsPos, pGP);
+
     return nInsPos;
 }
 
-void SdrGluePointList::Invalidate(Window& rWin, const SdrObject* pObj) const
+void SdrGluePointList::Delete(sal_uInt32 nPos)
 {
-    sal_uInt16 nAnz=GetCount();
-    for (sal_uInt16 nNum=0; nNum<nAnz; nNum++) {
-        GetObject(nNum)->Invalidate(rWin,pObj);
+    if(nPos < maList.size())
+    {
+        SdrGluePointContainerType::iterator a(maList.begin() + nPos);
+        delete *a;
+        maList.erase(a);
+    }
+    else
+    {
+        OSL_ENSURE(false, "SdrGluePointList::Delete out of range (!)");
     }
 }
 
-sal_uInt16 SdrGluePointList::FindGluePoint(sal_uInt16 nId) const
+sal_uInt32 SdrGluePointList::FindGluePoint(sal_uInt32 nId) const
 {
     // Hier noch einen optimaleren Suchalgorithmus implementieren.
     // Die Liste sollte stets sortiert sein!!!!
-    sal_uInt16 nAnz=GetCount();
-    sal_uInt16 nRet=SDRGLUEPOINT_NOTFOUND;
-    for (sal_uInt16 nNum=0; nNum<nAnz && nRet==SDRGLUEPOINT_NOTFOUND; nNum++) {
-        const SdrGluePoint* pGP=GetObject(nNum);
-        if (pGP->GetId()==nId) nRet=nNum;
-    }
-    return nRet;
-}
+    const sal_uInt32 nAnz(GetCount());
+    sal_uInt32 nRet(SDRGLUEPOINT_NOTFOUND);
 
-sal_uInt16 SdrGluePointList::HitTest(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj, FASTBOOL bBack, FASTBOOL bNext, sal_uInt16 nId0) const
-{
-    sal_uInt16 nAnz=GetCount();
-    sal_uInt16 nRet=SDRGLUEPOINT_NOTFOUND;
-    sal_uInt16 nNum=bBack ? 0 : nAnz;
-    while ((bBack ? nNum<nAnz : nNum>0) && nRet==SDRGLUEPOINT_NOTFOUND) {
-        if (!bBack) nNum--;
+    for(sal_uInt32 nNum(0); nNum < nAnz && SDRGLUEPOINT_NOTFOUND == nRet; nNum++)
+    {
         const SdrGluePoint* pGP=GetObject(nNum);
-        if (bNext) {
-            if (pGP->GetId()==nId0) bNext=sal_False;
-        } else {
-            if (pGP->IsHit(rPnt,rOut,pObj)) nRet=nNum;
+
+        if(pGP->GetId() == nId)
+        {
+            nRet = nNum;
         }
-        if (bBack) nNum++;
     }
+
     return nRet;
 }
 
-void SdrGluePointList::SetReallyAbsolute(FASTBOOL bOn, const SdrObject& rObj)
+sal_uInt32 SdrGluePointList::GPLHitTest(const basegfx::B2DPoint& rPnt, double fTolLog, const basegfx::B2DRange& rObjectRange,
+    bool bBack, sal_uInt32 nId0) const
 {
-    sal_uInt16 nAnz=GetCount();
-    for (sal_uInt16 nNum=0; nNum<nAnz; nNum++) {
-        GetObject(nNum)->SetReallyAbsolute(bOn,rObj);
+    const sal_uInt32 nAnz(GetCount());
+    sal_uInt32 nRet(SDRGLUEPOINT_NOTFOUND);
+    sal_uInt32 nNum(bBack ? 0 : nAnz);
+
+    while((bBack ? nNum < nAnz : nNum > 0) && SDRGLUEPOINT_NOTFOUND == nRet)
+    {
+        if(!bBack)
+        {
+            nNum--;
+        }
+
+        const SdrGluePoint* pGP = GetObject(nNum);
+
+        if(pGP->IsHit(rPnt, fTolLog, rObjectRange))
+        {
+            nRet = nNum;
+        }
+
+        if(bBack)
+        {
+            nNum++;
+        }
+    }
+
+    return nRet;
+}
+
+void SdrGluePointList::TransformGluePoints(const basegfx::B2DHomMatrix& rTransformation, const basegfx::B2DRange& rObjectRange)
+{
+    const sal_uInt32 nAnz(GetCount());
+
+    for(sal_uInt32 nNum(0); nNum < nAnz; nNum++)
+    {
+        GetObject(nNum)->Transform(rTransformation, rObjectRange);
     }
 }
 
-void SdrGluePointList::Rotate(const Point& rRef, long nWink, double sn, double cs, const SdrObject* pObj)
-{
-    sal_uInt16 nAnz=GetCount();
-    for (sal_uInt16 nNum=0; nNum<nAnz; nNum++) {
-        GetObject(nNum)->Rotate(rRef,nWink,sn,cs,pObj);
-    }
-}
-
-void SdrGluePointList::Mirror(const Point& rRef1, const Point& rRef2, const SdrObject* pObj)
-{
-    Point aPt(rRef2); aPt-=rRef1;
-    long nWink=GetAngle(aPt);
-    Mirror(rRef1,rRef2,nWink,pObj);
-}
-
-void SdrGluePointList::Mirror(const Point& rRef1, const Point& rRef2, long nWink, const SdrObject* pObj)
-{
-    sal_uInt16 nAnz=GetCount();
-    for (sal_uInt16 nNum=0; nNum<nAnz; nNum++) {
-        GetObject(nNum)->Mirror(rRef1,rRef2,nWink,pObj);
-    }
-}
-
-void SdrGluePointList::Shear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear, const SdrObject* pObj)
-{
-    sal_uInt16 nAnz=GetCount();
-    for (sal_uInt16 nNum=0; nNum<nAnz; nNum++) {
-        GetObject(nNum)->Shear(rRef,nWink,tn,bVShear,pObj);
-    }
-}
-
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // eof

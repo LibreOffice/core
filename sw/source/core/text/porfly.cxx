@@ -177,12 +177,12 @@ void SwTxtFrm::MoveFlyInCnt( SwTxtFrm *pNew, xub_StrLen nStart, xub_StrLen nEnd 
                 xub_StrLen nIdx = pPos->nContent.GetIndex();
                 if ( nIdx >= nStart && nEnd > nIdx )
                 {
-                    if ( pAnchoredObj->ISA(SwFlyFrm) )
+                    if ( dynamic_cast< SwFlyFrm* >(pAnchoredObj) )
                     {
                         RemoveFly( static_cast<SwFlyFrm*>(pAnchoredObj) );
                         pNew->AppendFly( static_cast<SwFlyFrm*>(pAnchoredObj) );
                     }
-                    else if ( pAnchoredObj->ISA(SwAnchoredDrawObject) )
+                    else if ( dynamic_cast< SwAnchoredDrawObject* >(pAnchoredObj) )
                     {
                         RemoveDrawObj( *pAnchoredObj );
                         pNew->AppendDrawObj( *pAnchoredObj );

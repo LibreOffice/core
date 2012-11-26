@@ -71,7 +71,7 @@ AnimationChildWindow::AnimationChildWindow(
 
     pAnimWin->aFltWinSize = pWindow->GetSizePixel();
     */
-    SetHideNotDelete( sal_True );
+    SetHideNotDelete( true );
 }
 
 } // end of namespace sd

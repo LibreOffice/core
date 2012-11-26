@@ -47,14 +47,12 @@ AccessibleShape* CreateSvxAccessibleShape (
         case DRAWING_3D_SPHERE:
         case DRAWING_CAPTION:
         case DRAWING_CLOSED_BEZIER:
-        case DRAWING_CLOSED_FREEHAND:
         case DRAWING_CONNECTOR:
         case DRAWING_ELLIPSE:
         case DRAWING_GROUP:
         case DRAWING_LINE:
         case DRAWING_MEASURE:
         case DRAWING_OPEN_BEZIER:
-        case DRAWING_OPEN_FREEHAND:
         case DRAWING_PAGE:
         case DRAWING_POLY_POLYGON:
         case DRAWING_POLY_LINE:
@@ -127,12 +125,6 @@ ShapeTypeDescriptor aSvxShapeTypeList[] = {
         CreateSvxAccessibleShape ),
     ShapeTypeDescriptor (   DRAWING_CLOSED_BEZIER,
         ::rtl::OUString::createFromAscii ("com.sun.star.drawing.ClosedBezierShape"),
-        CreateSvxAccessibleShape ),
-    ShapeTypeDescriptor (   DRAWING_OPEN_FREEHAND,
-        ::rtl::OUString::createFromAscii ("com.sun.star.drawing.OpenFreeHandShape"),
-        CreateSvxAccessibleShape ),
-    ShapeTypeDescriptor (   DRAWING_CLOSED_FREEHAND,
-        ::rtl::OUString::createFromAscii ("com.sun.star.drawing.ClosedFreeHandShape"),
         CreateSvxAccessibleShape ),
     ShapeTypeDescriptor (   DRAWING_POLY_POLYGON_PATH,
         ::rtl::OUString::createFromAscii ("com.sun.star.drawing.PolyPolygonPathShape"),

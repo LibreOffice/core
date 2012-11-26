@@ -65,9 +65,6 @@ namespace drawinglayer
             /// data read access
             Primitive3DSequence getChildren() const { return maChildren; }
 
-            /// compare operator
-            virtual bool operator==( const BasePrimitive3D& rPrimitive ) const;
-
             /// local decomposition. Implementation will just return children
             virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
 

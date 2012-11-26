@@ -96,9 +96,6 @@ using namespace ::com::sun::star;
 
 
 SV_DECL_PTRARR( TmpHints, SwTxtAttr*, 0, 4 )
-
-TYPEINIT1( SwTxtNode, SwCntntNode )
-
 SV_DECL_PTRARR(SwpHts,SwTxtAttr*,1,1)
 
 // Leider ist das SwpHints nicht ganz wasserdicht:
@@ -3721,8 +3718,7 @@ void SwTxtNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewVal
 SwFmtColl* SwTxtNode::ChgFmtColl( SwFmtColl *pNewColl )
 {
     ASSERT( pNewColl,"ChgFmtColl: Collectionpointer ist 0." );
-    ASSERT( HAS_BASE( SwTxtFmtColl, pNewColl ),
-                "ChgFmtColl: ist kein Text-Collectionpointer." );
+    ASSERT( dynamic_cast< SwTxtFmtColl* >( pNewColl ), "ChgFmtColl: ist kein Text-Collectionpointer." );
 
     SwTxtFmtColl *pOldColl = GetTxtColl();
     if( pNewColl != pOldColl )

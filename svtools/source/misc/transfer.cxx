@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 #ifdef WNT
@@ -53,7 +51,6 @@
 #include <comphelper/processfactory.hxx>
 #include <sot/filelist.hxx>
 #include <cppuhelper/implbase1.hxx>
-
 #include <comphelper/seqstream.hxx>
 #include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
@@ -68,6 +65,7 @@
 #include <svtools/imap.hxx>
 #include <svtools/transfer.hxx>
 #include <cstdio>
+#include <memory.h>
 
 // --------------
 // - Namespaces -

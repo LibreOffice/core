@@ -40,7 +40,6 @@ class ScDBData;
 class ScSimpleUndo: public SfxUndoAction
 {
 public:
-                    TYPEINFO();
                     ScSimpleUndo( ScDocShell* pDocSh );
     virtual         ~ScSimpleUndo();
 
@@ -70,7 +69,6 @@ enum ScBlockUndoMode { SC_UNDO_SIMPLE, SC_UNDO_MANUALHEIGHT, SC_UNDO_AUTOHEIGHT 
 class ScBlockUndo: public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
                     ScBlockUndo( ScDocShell* pDocSh, const ScRange& rRange,
                                  ScBlockUndoMode eBlockMode );
     virtual         ~ScBlockUndo();
@@ -101,7 +99,6 @@ class ScDBFuncUndo: public ScSimpleUndo
     SdrUndoAction*  mpDrawUndo;
 
 public:
-                    TYPEINFO();
                     ScDBFuncUndo( ScDocShell* pDocSh, const ScRange& rOriginal, SdrUndoAction* pDrawUndo = 0 );
     virtual         ~ScDBFuncUndo();
 
@@ -120,7 +117,6 @@ enum ScMoveUndoMode { SC_UNDO_REFFIRST, SC_UNDO_REFLAST };
 class ScMoveUndo: public ScSimpleUndo               // mit Referenzen
 {
 public:
-                    TYPEINFO();
                     ScMoveUndo( ScDocShell* pDocSh,
                                 ScDocument* pRefDoc, ScRefUndoData* pRefData,
                                 ScMoveUndoMode eRefMode );
@@ -148,7 +144,6 @@ class ScUndoWrapper: public SfxUndoAction           // for manual merging of act
     SfxUndoAction*  pWrappedUndo;
 
 public:
-                            TYPEINFO();
                             ScUndoWrapper( SfxUndoAction* pUndo );
     virtual                 ~ScUndoWrapper();
 

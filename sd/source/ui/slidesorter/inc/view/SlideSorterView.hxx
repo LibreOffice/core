@@ -72,8 +72,6 @@ class SlideSorterView
       public ::boost::noncopyable
 {
 public:
-    TYPEINFO ();
-
     /** Create a new view for the slide sorter.
         @param rViewShell
             This reference is simply passed to the base class and not used
@@ -103,14 +101,14 @@ public:
         @param rPosition
             The position is expected to be in pixel coordinates.
         @return
-            The returned index is -1 when there is no page object at the
+            The returned index is SDRPAGE_NOTFOUND when there is no page object at the
             given position.
     */
-    sal_Int32 GetPageIndexAtPoint (const Point& rPosition) const;
+    sal_uInt32 GetPageIndexAtPoint (const Point& rPosition) const;
 
     view::Layouter& GetLayouter (void);
 
-    virtual void ModelHasChanged (void);
+    virtual void LazyReactOnObjectChanges(void);
 
     void LocalModelHasChanged(void);
 

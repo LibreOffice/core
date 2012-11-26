@@ -59,7 +59,8 @@ void SAL_CALL ScDrawModelBroadcaster::removeEventListener( const uno::Reference<
 void ScDrawModelBroadcaster::Notify( SfxBroadcaster&,
         const SfxHint& rHint )
 {
-    const SdrHint *pSdrHint = PTR_CAST( SdrHint, &rHint );
+    const SdrBaseHint* pSdrHint = dynamic_cast< const SdrBaseHint* >(&rHint);
+
     if( !pSdrHint )
         return;
 

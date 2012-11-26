@@ -28,6 +28,7 @@
 #include <tools/zcodec.hxx>
 #include "codec.hxx"
 #include <tools/debug.hxx>
+#include "memory.h"
 
 // ----------------
 // - GalleryCodec -

@@ -87,7 +87,7 @@ void SfxApplication::RegisterToolBoxControl_Impl( SfxModule *pMod, SfxTbxCtrlFac
     for ( sal_uInt16 n=0; n<pAppData_Impl->pTbxCtrlFac->Count(); n++ )
     {
         SfxTbxCtrlFactory *pF = (*pAppData_Impl->pTbxCtrlFac)[n];
-        if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
+        if ( pF->rTypeInfo == pFact->rTypeInfo &&
             (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
         {
             DBG_WARNING("TbxController-Registrierung ist nicht eindeutig!");
@@ -112,7 +112,7 @@ void SfxApplication::RegisterStatusBarControl_Impl( SfxModule *pMod, SfxStbCtrlF
     for ( sal_uInt16 n=0; n<pAppData_Impl->pStbCtrlFac->Count(); n++ )
     {
         SfxStbCtrlFactory *pF = (*pAppData_Impl->pStbCtrlFac)[n];
-        if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
+        if ( pF->rTypeInfo == pFact->rTypeInfo &&
             (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
         {
             DBG_WARNING("StbController-Registrierung ist nicht eindeutig!");
@@ -137,7 +137,7 @@ void SfxApplication::RegisterMenuControl_Impl( SfxModule *pMod, SfxMenuCtrlFacto
     for ( sal_uInt16 n=0; n<pAppData_Impl->pMenuCtrlFac->Count(); n++ )
     {
         SfxMenuCtrlFactory *pF = (*pAppData_Impl->pMenuCtrlFac)[n];
-        if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
+        if ( pF->rTypeInfo == pFact->rTypeInfo &&
             (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
         {
             DBG_WARNING("MenuController-Registrierung ist nicht eindeutig!");

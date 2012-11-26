@@ -73,9 +73,6 @@ namespace drawinglayer
             /// data read access
             const Primitive2DSequence& getTransparence() const { return maTransparence; }
 
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
-
             /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };

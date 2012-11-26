@@ -46,18 +46,6 @@ namespace drawinglayer
         {
         }
 
-        bool TransformPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(GroupPrimitive2D::operator==(rPrimitive))
-            {
-                const TransformPrimitive2D& rCompare = static_cast< const TransformPrimitive2D& >(rPrimitive);
-
-                return (getTransformation() == rCompare.getTransformation());
-            }
-
-            return false;
-        }
-
         basegfx::B2DRange TransformPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
             basegfx::B2DRange aRetval(getB2DRangeFromPrimitive2DSequence(getChildren(), rViewInformation));

@@ -39,6 +39,7 @@ public:
                 sal_Int32 nTop,     sal_Int32 nBottom,
                 sal_uInt16  );
     virtual ~SvxGrfCrop();
+    virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const;
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int                 operator==( const SfxPoolItem& ) const;

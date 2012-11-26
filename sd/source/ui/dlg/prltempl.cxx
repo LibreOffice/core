@@ -111,14 +111,14 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
 
         // Fals in diesem Stylesheet kein Bullet Item ist, holen wir uns
         // das aus dem 'Outline 1' Stylesheet.
-        if( SFX_ITEM_SET != aInputSet.GetItemState(EE_PARA_NUMBULLET, sal_False, &pItem ))
+        if( SFX_ITEM_SET != aInputSet.GetItemState(EE_PARA_NUMBULLET, false, &pItem ))
         {
             String aStyleName((SdResId(STR_PSEUDOSHEET_OUTLINE)));
             aStyleName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " 1" ) );
             SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( aStyleName, SD_STYLE_FAMILY_PSEUDO);
 
             if(pFirstStyleSheet)
-                if( SFX_ITEM_SET == pFirstStyleSheet->GetItemSet().GetItemState(EE_PARA_NUMBULLET, sal_False, &pItem) )
+                if( SFX_ITEM_SET == pFirstStyleSheet->GetItemSet().GetItemState(EE_PARA_NUMBULLET, false, &pItem) )
                     aInputSet.Put( *pItem );
         }
 
@@ -320,7 +320,7 @@ const SfxItemSet* SdPresLayoutTemplateDlg::GetOutputItemSet() const
         pOutSet->Put( *SfxTabDialog::GetOutputItemSet() );
 
         const SvxNumBulletItem *pSvxNumBulletItem = NULL;
-        if( SFX_ITEM_SET == pOutSet->GetItemState(EE_PARA_NUMBULLET, sal_False, (const SfxPoolItem**)&pSvxNumBulletItem ))
+        if( SFX_ITEM_SET == pOutSet->GetItemState(EE_PARA_NUMBULLET, false, (const SfxPoolItem**)&pSvxNumBulletItem ))
             SdBulletMapper::MapFontsInNumRule( *pSvxNumBulletItem->GetNumRule(), *pOutSet );
         return pOutSet;
     }
@@ -344,7 +344,7 @@ sal_uInt16 SdPresLayoutTemplateDlg::GetOutlineLevel() const
     case PO_OUTLINE_8: return 7;
     case PO_OUTLINE_9: return 8;
     default:
-        DBG_ASSERT( sal_False, "Falscher Po! [CL]");
+        DBG_ASSERT( false, "Falscher Po! [CL]");
     }
     return 0;
 }

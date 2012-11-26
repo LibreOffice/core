@@ -56,8 +56,8 @@ class SvxFontSubstCheckListBox : public SvxSimpleTable
 
         sal_Bool            IsChecked(sal_uLong nPos, sal_uInt16 nCol = 0);
         sal_Bool            IsChecked(SvLBoxEntry* pEntry, sal_uInt16 nCol = 0);
-        void            CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, sal_Bool bChecked);
-        void            CheckEntry(SvLBoxEntry* pEntry, sal_uInt16 nCol, sal_Bool bChecked);
+        void            CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, bool bChecked);
+        void            CheckEntry(SvLBoxEntry* pEntry, sal_uInt16 nCol, bool bChecked);
         SvButtonState   GetCheckButtonState( SvLBoxEntry*, sal_uInt16 nCol ) const;
         void            SetCheckButtonState( SvLBoxEntry*, sal_uInt16 nCol, SvButtonState );
 };

@@ -448,7 +448,8 @@ sal_Bool SvMetaClass::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
 sal_Bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
                                  SvMetaAttribute & rAttr ) const
 {
-    if ( !rAttr.GetRef() && rAttr.IsA( TYPE( SvMetaSlot ) ) )
+    if ( !rAttr.GetRef() && dynamic_cast< const SvMetaSlot* >(&rAttr))
+//  if ( !rAttr.GetRef() && rAttr.IsA( TYPE( SvMetaSlot ) ) )
     {
         DBG_ERROR( "Neuer Slot : " );
         DBG_ERROR( rAttr.GetSlotId().GetBuffer() );

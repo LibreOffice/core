@@ -27,9 +27,6 @@
 #ifndef _TOOLS_GLOBNAME_HXX
 #include <tools/globname.hxx>
 #endif
-#ifndef _TOOLS_RTTI_HXX
-#include <tools/rtti.hxx>
-#endif
 #include "sot/sotdllapi.h"
 
 /*************************************************************************
@@ -53,7 +50,6 @@ class SOT_DLLPUBLIC SotFactory : public SvGlobalName
 protected:
     virtual             ~SotFactory();
 public:
-                        TYPEINFO();
     static  void        DeInit();
     static  void        IncSvObjectCount( SotObject * = NULL );
     static  void        DecSvObjectCount( SotObject * = NULL );

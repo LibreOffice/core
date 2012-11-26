@@ -754,10 +754,10 @@ SfxChildAlignment __EXPORT ScFunctionDockWin::CheckAlignment(SfxChildAlignment /
 #************************************************************************/
 void ScFunctionDockWin::Notify( SfxBroadcaster&, const SfxHint& /* rHint */ )
 {
-//    const SfxPoolItemHint *pPoolItemHint = PTR_CAST(SfxPoolItemHint, &rHint);
+//    const SfxPoolItemHint *pPoolItemHint = dynamic_cast< const SfxPoolItemHint* >( &rHint);
     /*
     if ( pPoolItemHint
-         && ( pPoolItemHint->GetObject()->ISA( SvxColorTableItem ) ) )
+         && ( dynamic_cast< SvxColorTableItem* >(pPoolItemHint->GetObject()) ) )
     {
         // Die Liste der Farben hat sich geaendert
         pColorTable = ( (SvxColorTableItem*) pPoolItemHint->GetObject() )->GetColorTable();
@@ -886,7 +886,7 @@ void ScFunctionDockWin::DoEnter(sal_Bool /* bOk */) //@@ ???
     {
 
         ScModule* pScMod = SC_MOD();
-        ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pCurSh);
+        ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell* >( pCurSh);
         ScInputHandler* pHdl = pScMod->GetInputHdl( pViewSh );
         if(!pScMod->IsEditMode())
         {

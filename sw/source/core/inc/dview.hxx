@@ -78,7 +78,7 @@ class SwDrawView : public FmFormView
         @author OD
     */
     void _MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
-                            const std::vector<SdrObject*>& _rMovedChildObjs ) const;
+                            const SdrObjectVector& _rMovedChildObjs ) const;
 
 protected:
     // add custom handles (used by other apps, e.g. AnchorPos)
@@ -86,27 +86,26 @@ protected:
 
     // overloaded to allow extra handling when picking SwVirtFlyDrawObj's
     using FmFormView::CheckSingleSdrObjectHit;
-    virtual SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObject* pObj, SdrPageView* pPV, sal_uLong nOptions, const SetOfByte* pMVisLay) const;
+    virtual SdrObject* CheckSingleSdrObjectHit(const basegfx::B2DPoint& rPnt, double fTol, SdrObject* pObj, sal_uInt32 nOptions, const SetOfByte* pMVisLay) const;
 
     // support enhanced text edit for draw objects
     virtual SdrUndoManager* getSdrUndoManagerForEnhancedTextEdit() const;
 
 public:
-    SwDrawView( SwViewImp &rI, SdrModel *pMd, OutputDevice* pOutDev=NULL );
+    SwDrawView( SwViewImp &rI, FmFormModel& rModel, OutputDevice* pOutDev = NULL );
 
     //aus der Basisklasse
     virtual SdrObject*   GetMaxToTopObj(SdrObject* pObj) const;
     virtual SdrObject*   GetMaxToBtmObj(SdrObject* pObj) const;
-    virtual void         MarkListHasChanged();
+    virtual void handleSelectionChange();
 
     // #i7672#
     // Overload to resue edit background color in active text edit view (OutlinerView)
-    virtual void ModelHasChanged();
+    virtual void LazyReactOnObjectChanges();
 
-    virtual void         ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
-                                            sal_uLong nNewPos );
-    virtual sal_Bool TakeDragLimit(SdrDragMode eMode, Rectangle& rRect) const;
-    virtual void MakeVisible( const Rectangle&, Window &rWin );
+    virtual void ObjOrderChanged( SdrObject* pObj, sal_uInt32 nOldPos, sal_uInt32 nNewPos );
+    virtual bool TakeDragLimit(SdrDragMode eMode, basegfx::B2DRange& rRange) const;
+    virtual void MakeVisibleAtView( const basegfx::B2DRange& rRange, Window &rWin );
     virtual void CheckPossibilities();
 
     const SwViewImp &Imp() const { return rImp; }
@@ -118,7 +117,7 @@ public:
     virtual void DeleteMarked();
 
     //JP 06.10.98: 2. Versuch
-    inline void ValidateMarkList() { FlushComeBackTimer(); }
+    inline void ValidateMarkList() { ForceLazyReactOnObjectChanges(); }
 
     // --> OD 2009-03-05 #i99665#
     sal_Bool IsAntiAliasing() const;

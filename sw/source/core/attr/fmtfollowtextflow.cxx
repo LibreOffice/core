@@ -25,8 +25,6 @@
 #include "precompiled_sw.hxx"
 #include <fmtfollowtextflow.hxx>
 
-TYPEINIT1(SwFmtFollowTextFlow, SfxBoolItem);
-
 SfxPoolItem*    SwFmtFollowTextFlow::Clone( SfxItemPool * ) const
 {
     return new SwFmtFollowTextFlow(*this);

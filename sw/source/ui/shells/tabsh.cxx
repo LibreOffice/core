@@ -126,8 +126,6 @@ SFX_IMPL_INTERFACE(SwTableShell, SwBaseShell, SW_RES(STR_SHELLNAME_TABLE))
 }
 
 
-TYPEINIT1(SwTableShell,SwBaseShell)
-
 /************************************************************************/
 
 const sal_uInt16 __FAR_DATA aUITableAttrRange[] =
@@ -638,7 +636,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             SfxBindings& rBindings = GetView().GetViewFrame()->GetBindings();
             SfxItemSet aCoreSet( GetPool(), aUITableAttrRange);
 
-            FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &rSh.GetView()));
+            FieldUnit eMetric = ::GetDfltMetric(0 != dynamic_cast< SwWebView* >( &rSh.GetView()));
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
             SwTableRep* pTblRep = ::lcl_TableParamToItemSet( aCoreSet, rSh );
             SfxAbstractTabDialog * pDlg = NULL;
@@ -690,7 +688,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             SwView* pView = GetActiveView();
             if(pView)
             {
-                FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, pView));
+                FieldUnit eMetric = ::GetDfltMetric(0 != dynamic_cast< SwWebView* >( pView));
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
                 SvNumberFormatter* pFormatter = rSh.GetNumberFormatter();
                 SfxItemSet aCoreSet( GetPool(),
@@ -978,11 +976,11 @@ void SwTableShell::Execute(SfxRequest &rReq)
         case FN_TABLE_SPLIT_CELLS:
         {
             long nCount=0;
-            sal_Bool bHorizontal=sal_True;
-            sal_Bool bProportional = sal_False;
-            SFX_REQUEST_ARG( rReq, pSplit, SfxInt32Item, FN_TABLE_SPLIT_CELLS, sal_False );
-            SFX_REQUEST_ARG( rReq, pHor, SfxBoolItem, FN_PARAM_1, sal_False );
-            SFX_REQUEST_ARG( rReq, pProp, SfxBoolItem, FN_PARAM_2, sal_False );
+            bool bHorizontal(true);
+            bool bProportional(false);
+            SFX_REQUEST_ARG( rReq, pSplit, SfxInt32Item, FN_TABLE_SPLIT_CELLS );
+            SFX_REQUEST_ARG( rReq, pHor, SfxBoolItem, FN_PARAM_1 );
+            SFX_REQUEST_ARG( rReq, pProp, SfxBoolItem, FN_PARAM_2 );
             if ( pSplit )
             {
                 nCount = pSplit->GetValue();
@@ -1023,7 +1021,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
         case FN_TABLE_SPLIT_TABLE:
         {
-            SFX_REQUEST_ARG( rReq, pType, SfxUInt16Item, FN_PARAM_1, sal_False );
+            SFX_REQUEST_ARG( rReq, pType, SfxUInt16Item, FN_PARAM_1 );
             if( pType )
             {
                 switch( pType->GetValue() )

@@ -168,7 +168,7 @@ Bitmap SdVectorizeDlg::GetPreparedBitmap( Bitmap& rBmp, Fraction& rScale )
 
 void SdVectorizeDlg::Calculate( Bitmap& rBmp, GDIMetaFile& rMtf )
 {
-    mpDocSh->SetWaitCursor( sal_True );
+    mpDocSh->SetWaitCursor( true );
     aPrgs.SetValue( 0 );
 
     Fraction    aScale;
@@ -236,7 +236,7 @@ void SdVectorizeDlg::Calculate( Bitmap& rBmp, GDIMetaFile& rMtf )
     }
 
     aPrgs.SetValue( 0 );
-    mpDocSh->SetWaitCursor( sal_False );
+    mpDocSh->SetWaitCursor( false );
 }
 
 // -----------------------------------------------------------------------------
@@ -276,8 +276,8 @@ void SdVectorizeDlg::AddTile( BitmapReadAccess* pRAcc, GDIMetaFile& rMtf,
     if( aRect.Bottom() > ( rMaxSize.Height() - 1L ) )
         aRect.Bottom() = rMaxSize.Height() - 1L;
 
-    rMtf.AddAction( new MetaLineColorAction( aColor, sal_True ) );
-    rMtf.AddAction( new MetaFillColorAction( aColor, sal_True ) );
+    rMtf.AddAction( new MetaLineColorAction( aColor, true ) );
+    rMtf.AddAction( new MetaFillColorAction( aColor, true ) );
     rMtf.AddAction( new MetaRectAction( aRect ) );
 }
 
@@ -352,19 +352,22 @@ void SdVectorizeDlg::LoadSettings()
     sal_uInt16              nLayers;
     sal_uInt16              nReduce;
     sal_uInt16              nFillHoles;
-    sal_Bool                bFillHoles;
+    bool                bFillHoles;
 
     if( xIStm.Is() )
     {
         SdIOCompat aCompat( *xIStm, STREAM_READ );
-        *xIStm >> nLayers >> nReduce >> nFillHoles >> bFillHoles;
+        sal_Bool bTempBOOL;
+
+        *xIStm >> nLayers >> nReduce >> nFillHoles;
+        *xIStm >> bTempBOOL; bFillHoles = bTempBOOL;
     }
     else
     {
         nLayers = 8;
         nReduce = 0;
         nFillHoles = 32;
-        bFillHoles = sal_False;
+        bFillHoles = false;
     }
 
     aNmLayers.SetValue( nLayers );
@@ -388,6 +391,6 @@ void SdVectorizeDlg::SaveSettings() const
     {
         SdIOCompat aCompat( *xOStm, STREAM_WRITE, 1 );
         *xOStm << (sal_uInt16) aNmLayers.GetValue() << (sal_uInt16) aMtReduce.GetValue();
-        *xOStm << (sal_uInt16) aMtFillHoles.GetValue() << aCbFillHoles.IsChecked();
+        *xOStm << (sal_uInt16) aMtFillHoles.GetValue() << (sal_Bool)aCbFillHoles.IsChecked();
     }
 }

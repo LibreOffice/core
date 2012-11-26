@@ -40,27 +40,26 @@ class HelpEvent;
 
 class SVX_DLLPUBLIC FmFormPage : public SdrPage
 {
+private:
     friend class FmFormObj;
+
     FmFormPageImpl*     m_pImpl;
     String              m_sPageName;
     StarBASIC*          m_pBasic;
 
-public:
-    TYPEINFO();
+protected:
+    /// method to copy all data from given source
+    virtual void copyDataFromSdrPage(const SdrPage& rSource);
 
-    FmFormPage(FmFormModel& rModel,StarBASIC*, FASTBOOL bMasterPage=sal_False);
-    FmFormPage(const FmFormPage& rPage);
+public:
+    /// create a copy, evtl. with a different target model (if given)
+    virtual SdrPage* CloneSdrPage(SdrModel* pTargetModel = 0) const;
+
+    FmFormPage(FmFormModel& rModel, StarBASIC*, bool bMasterPage = false);
     ~FmFormPage();
 
-    virtual void    SetModel(SdrModel* pNewModel);
-
-    virtual SdrPage* Clone() const;
-    using SdrPage::Clone;
-
-    virtual void    InsertObject(SdrObject* pObj, sal_uLong nPos = CONTAINER_APPEND,
-                                    const SdrInsertReason* pReason=NULL);
-
-    virtual SdrObject* RemoveObject(sal_uLong nObjNum);
+    virtual void InsertObjectToSdrObjList(SdrObject& rObj, sal_uInt32 nPos = CONTAINER_APPEND);
+    virtual SdrObject* RemoveObjectFromSdrObjList(sal_uInt32 nObjNum);
 
     // Zugriff auf alle Formulare
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& GetForms( bool _bForceCreate = true ) const;
@@ -69,7 +68,6 @@ public:
     FmFormPageImpl& GetImpl() const { return *m_pImpl; }
 #endif // SVX_LIGHT
 
-public:
     const String&       GetName() const { return m_sPageName; }
     void                SetName( const String& rName ) { m_sPageName = rName; }
     StarBASIC*          GetBasic() const { return m_pBasic; }

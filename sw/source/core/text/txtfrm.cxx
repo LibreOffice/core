@@ -86,9 +86,6 @@
 extern const sal_Char *GetPrepName( const enum PrepareHint ePrep );
 #endif
 
-
-TYPEINIT1( SwTxtFrm, SwCntntFrm );
-
 // Switches width and height of the text frame
 void SwTxtFrm::SwapWidthAndHeight()
 {
@@ -586,7 +583,7 @@ void SwTxtFrm::HideAndShowObjects()
             for ( sal_uInt32 i = 0; i < GetDrawObjs()->Count(); ++i )
             {
                 SdrObject* pObj = (*GetDrawObjs())[i]->DrawObj();
-                SwContact* pContact = static_cast<SwContact*>(pObj->GetUserCall());
+                SwContact* pContact = findConnectionToSdrObjectDirect(pObj);
                 // --> OD 2005-03-30 #120729# - hotfix: do not hide object
                 // under certain conditions
                 const RndStdIds eAnchorType( pContact->GetAnchorId() );
@@ -615,7 +612,7 @@ void SwTxtFrm::HideAndShowObjects()
             for ( sal_uInt32 i = 0; i < GetDrawObjs()->Count(); ++i )
             {
                 SdrObject* pObj = (*GetDrawObjs())[i]->DrawObj();
-                SwContact* pContact = static_cast<SwContact*>(pObj->GetUserCall());
+                SwContact* pContact = findConnectionToSdrObjectDirect(pObj);
                 // --> OD 2005-03-30 #120729# - determine anchor type only once
                 const RndStdIds eAnchorType( pContact->GetAnchorId() );
                 // <--
@@ -1216,9 +1213,10 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                 for ( int i = 0; GetDrawObjs() && i < int(pObjs->Count()); ++i )
                 {
                     SwAnchoredObject* pAnchoredObj = (*pObjs)[MSHORT(i)];
-                    if ( pAnchoredObj->ISA(SwFlyFrm) )
+                    SwFlyFrm* pFly = dynamic_cast< SwFlyFrm* >(pAnchoredObj);
+
+                    if ( pFly )
                     {
-                        SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
                         if( !pFly->IsFlyInCntFrm() )
                         {
                             const SvxBrushItem &rBack =

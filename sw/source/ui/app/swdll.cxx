@@ -19,22 +19,13 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <svx/svdobj.hxx>
 #include <rtl/logfile.hxx>
-
-#ifndef _GLOBDOC_HRC
 #include "globdoc.hrc"
-#endif
-
-#ifndef _SWDLL_HXX
 #include <swdll.hxx>
-#endif
 #include <wdocsh.hxx>
 #include <globdoc.hxx>
 #include <initui.hxx>
@@ -43,17 +34,12 @@
 #include <init.hxx>
 #include <dobjfac.hxx>
 #include <cfgid.h>
-
 #include <unotools/moduleoptions.hxx>
-
-#ifndef _FM_FMOBJFAC_HXX
 #include <svx/fmobjfac.hxx>
-#endif
 #include <svx/svdfield.hxx>
 #include <svx/objfac3d.hxx>
-
 #include <unomid.h>
-
+#include <svx/sdrobjectfactory.hxx>
 
 /*************************************************************************
 |*

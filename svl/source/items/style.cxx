@@ -69,16 +69,7 @@ aDbgStyleSheetReferences;
 
 #endif
 
-TYPEINIT0(SfxStyleSheetBase)
-
-TYPEINIT3(SfxStyleSheet, SfxStyleSheetBase, SfxListener, SfxBroadcaster)
-
-
 //=========================================================================
-
-TYPEINIT1(SfxStyleSheetHint, SfxHint);
-TYPEINIT1(SfxStyleSheetHintExtended, SfxStyleSheetHint);
-TYPEINIT1(SfxStyleSheetPoolHint, SfxHint);
 
 SfxStyleSheetHintExtended::SfxStyleSheetHintExtended
 (

@@ -434,11 +434,11 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
             {
                 SdrView* pDrawView = rSh.GetDrawView();
                 SdrPageView* pPV = pDrawView->GetSdrPageView();
-                if ( pPV && pObj->GetPage() == pPV->GetPage() )
+                if ( pPV && pObj->getSdrPageFromSdrObject() == &pPV->getSdrPageFromSdrPageView() )
                 {
                     pDrawView->SdrEndTextEdit();
                     pDrawView->UnmarkAll();
-                    pDrawView->MarkObj( pObj, pPV );
+                    pDrawView->MarkObj( *pObj );
                 }
                 return sal_True;
             }
@@ -474,9 +474,9 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
                     {
 //                      lcl_ShowObject( *m_pViewSh, *pDrawView, pObj );
                         SdrPageView* pPV = pDrawView->GetSdrPageView();
-                        if ( pPV && pObj->GetPage() == pPV->GetPage() )
+                        if ( pPV && pObj->getSdrPageFromSdrObject() == &pPV->getSdrPageFromSdrPageView() )
                         {
-                            pDrawView->MarkObj( pObj, pPV );
+                            pDrawView->MarkObj( *pObj );
                             return sal_True;
                         }
                     }
@@ -508,9 +508,9 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
 //                                      lcl_ShowObject( *m_pViewSh, *pDrawView, pObj );
                                         pPV = pDrawView->GetSdrPageView();
                                     }
-                                    if ( pPV && pObj->GetPage() == pPV->GetPage() )
+                                    if ( pPV && pObj->getSdrPageFromSdrObject() == &pPV->getSdrPageFromSdrPageView() )
                                     {
-                                        pDrawView->MarkObj( pObj, pPV );
+                                        pDrawView->MarkObj( *pObj );
                                         bSelected = sal_True;
                                     }
                                 }
@@ -612,14 +612,19 @@ uno::Any SwXTextView::getSelection(void) throw( uno::RuntimeException )
                 SwFmDrawPage* pSvxDrawPage =    pTextDoc->GetDrawPage()->GetSvxPage();
                 uno::Reference< drawing::XShapes >  xShCol = new SvxShapeCollection();
 
-                const SdrMarkList& rMarkList = rSh.GetDrawView()->GetMarkedObjectList();
-                for(sal_uInt16 i = 0; i < rMarkList.GetMarkCount(); i++)
+                if(rSh.GetDrawView() && rSh.GetDrawView()->areSdrObjectsSelected())
                 {
-                    SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
+                    const SdrObjectVector aSelection(rSh.GetDrawView()->getSelectedSdrObjectVectorFromSdrMarkView());
+
+                    for(sal_uInt32 i(0); i < aSelection.size(); i++)
+                    {
+                        SdrObject* pObj = aSelection[i];
                     uno::Reference< uno::XInterface >  xInt = pSvxDrawPage->GetInterface( pObj );
                     uno::Reference< drawing::XShape >  xShape(xInt, uno::UNO_QUERY);;
                     xShCol->add(xShape);
                 }
+                }
+
                 aRef = uno::Reference< uno::XInterface >(xShCol, uno::UNO_QUERY);
             }
             break;

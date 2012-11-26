@@ -28,7 +28,6 @@
 #include <tools/solar.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ustring.hxx>
-#include <tools/rtti.hxx>
 #include <xmloff/xmltoken.hxx>
 
 class SvXMLNamespaceMap;
@@ -55,8 +54,6 @@ protected:
     void SetQName( const ::rtl::OUString& rQName ) { m_aQName = rQName; }
 
 public:
-    TYPEINFO();
-
     const ::rtl::OUString& GetQName() const { return m_aQName; }
     sal_Bool HasQName( sal_uInt16 nPrefix,
                        ::xmloff::token::XMLTokenEnum eToken ) const;

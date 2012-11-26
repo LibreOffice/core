@@ -37,6 +37,7 @@
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <svx/svdlegacy.hxx>
 
 #include "drawview.hxx"
 #include "global.hxx"
@@ -55,7 +56,7 @@ using namespace com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
 
-Point aDragStartDiff;
+basegfx::B2DPoint aDragStartDiff;
 
 // -----------------------------------------------------------------------
 
@@ -67,25 +68,26 @@ Point aDragStartDiff;
 
 // -----------------------------------------------------------------------
 
-void lcl_CheckOle( const SdrMarkList& rMarkList, sal_Bool& rAnyOle, sal_Bool& rOneOle )
+void lcl_CheckOle( const SdrObjectVector& rSelection, sal_Bool& rAnyOle, sal_Bool& rOneOle )
 {
     rAnyOle = rOneOle = sal_False;
-    sal_uLong nCount = rMarkList.GetMarkCount();
-    for (sal_uLong i=0; i<nCount; i++)
+
+    for (sal_uInt32 i(0); i < rSelection.size(); i++)
     {
-        SdrMark* pMark = rMarkList.GetMark(i);
-        SdrObject* pObj = pMark->GetMarkedSdrObj();
-        sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
+        const SdrObject* pObj = rSelection[i];
+        const sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
+
         if (nSdrObjKind == OBJ_OLE2)
         {
             rAnyOle = sal_True;
-            rOneOle = (nCount == 1);
+            rOneOle = (1 == rSelection.size());
             break;
         }
-        else if ( pObj->ISA(SdrObjGroup) )
+        else if ( dynamic_cast< const SdrObjGroup* >(pObj) )
         {
             SdrObjListIter aIter( *pObj, IM_DEEPNOGROUPS );
             SdrObject* pSubObj = aIter.Next();
+
             while (pSubObj)
             {
                 if ( pSubObj->GetObjIdentifier() == OBJ_OLE2 )
@@ -94,6 +96,7 @@ void lcl_CheckOle( const SdrMarkList& rMarkList, sal_Bool& rAnyOle, sal_Bool& rO
                     // rOneOle remains sal_False - a group isn't treated like a single OLE object
                     return;
                 }
+
                 pSubObj = aIter.Next();
             }
         }
@@ -103,7 +106,7 @@ void lcl_CheckOle( const SdrMarkList& rMarkList, sal_Bool& rAnyOle, sal_Bool& rO
 #if 0
 void lcl_RefreshChartData( SdrModel* pModel, ScDocument* pSourceDoc )
 {
-    sal_uInt16 nPages = pModel->GetPageCount();
+    const sal_uInt32 nPages(pModel->GetPageCount());
     for (SCTAB nTab=0; nTab<nPages; nTab++)
     {
         SdrPage* pPage = pModel->GetPage(nTab);
@@ -138,22 +141,21 @@ void lcl_RefreshChartData( SdrModel* pModel, ScDocument* pSourceDoc )
 #endif
 
 
-sal_Bool ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
+sal_Bool ScDrawView::BeginDrag( Window* pWindow, const basegfx::B2DPoint& rStartPos )
 {
     sal_Bool bReturn = sal_False;
 
-    if ( AreObjectsMarked() )
+    if ( areSdrObjectsSelected() )
     {
         BrkAction();
 
-        Rectangle aMarkedRect = GetAllMarkedRect();
-        Region aRegion( aMarkedRect );
+        const basegfx::B2DRange aMarkedRange(getMarkedObjectSnapRange());
 
-        aDragStartDiff = rStartPos - aMarkedRect.TopLeft();
+        aDragStartDiff = rStartPos - aMarkedRange.getMinimum();
 
         sal_Bool bAnyOle, bOneOle;
-        const SdrMarkList& rMarkList = GetMarkedObjectList();
-        lcl_CheckOle( rMarkList, bAnyOle, bOneOle );
+        const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
+        lcl_CheckOle( aSelection, bAnyOle, bOneOle );
 
         ScDocShellRef aDragShellRef;
         if (bAnyOle)
@@ -194,8 +196,8 @@ sal_Bool ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
 void ScDrawView::DoCopy()
 {
     sal_Bool bAnyOle, bOneOle;
-    const SdrMarkList& rMarkList = GetMarkedObjectList();
-    lcl_CheckOle( rMarkList, bAnyOle, bOneOle );
+    const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
+    lcl_CheckOle( aSelection, bAnyOle, bOneOle );
 
     // update ScGlobal::pDrawClipDocShellRef
     ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc( bAnyOle ) );
@@ -230,8 +232,8 @@ void ScDrawView::DoCopy()
 uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()
 {
     sal_Bool bAnyOle, bOneOle;
-    const SdrMarkList& rMarkList = GetMarkedObjectList();
-    lcl_CheckOle( rMarkList, bAnyOle, bOneOle );
+    const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
+    lcl_CheckOle( aSelection, bAnyOle, bOneOle );
 
     // update ScGlobal::pDrawClipDocShellRef
     ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc( bAnyOle ) );
@@ -288,38 +290,37 @@ void ScDrawView::CalcNormScale( Fraction& rFractX, Fraction& rFractY ) const
 
 void ScDrawView::SetMarkedOriginalSize()
 {
-    SdrUndoGroup* pUndoGroup = new SdrUndoGroup(*GetModel());
-
-    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    SdrUndoGroup* pUndoGroup = new SdrUndoGroup(getSdrModelFromSdrView());
+    const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
     long nDone = 0;
-    sal_uLong nCount = rMarkList.GetMarkCount();
-    for (sal_uLong i=0; i<nCount; i++)
+
+    for (sal_uInt32 i(0); i < aSelection.size(); i++)
     {
-        SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-        sal_uInt16 nIdent = pObj->GetObjIdentifier();
+        SdrObject* pObj = aSelection[i];
         sal_Bool bDo = sal_False;
         Size aOriginalSize;
-        if (nIdent == OBJ_OLE2)
+
+        if(SdrOle2Obj* pSdrOle2Obj = dynamic_cast< SdrOle2Obj* >(pObj))
         {
             // TODO/LEAN: working with visual area can switch object to running state
-            uno::Reference < embed::XEmbeddedObject > xObj( ((SdrOle2Obj*)pObj)->GetObjRef(), uno::UNO_QUERY );
+            uno::Reference < embed::XEmbeddedObject > xObj( pSdrOle2Obj->GetObjRef(), uno::UNO_QUERY );
             if ( xObj.is() )    // #121612# NULL for an invalid object that couldn't be loaded
             {
-                sal_Int64 nAspect = ((SdrOle2Obj*)pObj)->GetAspect();
+                sal_Int64 nAspect = pSdrOle2Obj->GetAspect();
 
                 if ( nAspect == embed::Aspects::MSOLE_ICON )
                 {
                     MapMode aMapMode( MAP_100TH_MM );
-                    aOriginalSize = ((SdrOle2Obj*)pObj)->GetOrigObjSize( &aMapMode );
+                    aOriginalSize = pSdrOle2Obj->GetOrigObjSize( &aMapMode );
                     bDo = sal_True;
                 }
                 else
                 {
-                    MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( ((SdrOle2Obj*)pObj)->GetAspect() ) );
+                    MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( pSdrOle2Obj->GetAspect() ) );
                     awt::Size aSz;
                     try
                     {
-                        aSz = xObj->getVisualAreaSize( ((SdrOle2Obj*)pObj)->GetAspect() );
+                        aSz = xObj->getVisualAreaSize( pSdrOle2Obj->GetAspect() );
                         aOriginalSize = OutputDevice::LogicToLogic(
                                             Size( aSz.Width, aSz.Height ),
                                             aUnit, MAP_100TH_MM );
@@ -331,9 +332,9 @@ void ScDrawView::SetMarkedOriginalSize()
                 }
             }
         }
-        else if (nIdent == OBJ_GRAF)
+        else if (SdrGrafObj* pSdrGrafObj = dynamic_cast< SdrGrafObj* >(pObj))
         {
-            const Graphic& rGraphic = ((SdrGrafObj*)pObj)->GetGraphic();
+            const Graphic& rGraphic = pSdrGrafObj->GetGraphic();
 
             MapMode aSourceMap = rGraphic.GetPrefMapMode();
             MapMode aDestMap( MAP_100TH_MM );
@@ -360,10 +361,11 @@ void ScDrawView::SetMarkedOriginalSize()
 
         if ( bDo )
         {
-            Rectangle aDrawRect = pObj->GetLogicRect();
+            const Rectangle aDrawRect(sdr::legacy::GetLogicRect(*pObj));
 
             pUndoGroup->AddAction( new SdrUndoGeoObj( *pObj ) );
-            pObj->Resize( aDrawRect.TopLeft(), Fraction( aOriginalSize.Width(), aDrawRect.GetWidth() ),
+            sdr::legacy::ResizeSdrObject(*pObj, aDrawRect.TopLeft(),
+                Fraction( aOriginalSize.Width(), aDrawRect.GetWidth() ),
                                                  Fraction( aOriginalSize.Height(), aDrawRect.GetHeight() ) );
             ++nDone;
         }

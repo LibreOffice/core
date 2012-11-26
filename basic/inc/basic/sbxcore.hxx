@@ -24,10 +24,8 @@
 #ifndef _SBXCORE_HXX
 #define _SBXCORE_HXX
 
-#include <tools/rtti.hxx>
 #include <tools/ref.hxx>
 #include <tools/debug.hxx>
-
 #include <basic/sbxdef.hxx>
 
 class SvStream;
@@ -89,7 +87,6 @@ protected:
     virtual ~SbxBase();
     SBX_DECL_PERSIST(0,0,0);
 public:
-    TYPEINFO();
     inline void     SetFlags( sal_uInt16 n );
     inline sal_uInt16   GetFlags() const;
     inline void     SetFlag( sal_uInt16 n );

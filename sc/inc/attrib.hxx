@@ -59,7 +59,6 @@ class SC_DLLPUBLIC ScMergeAttr: public SfxPoolItem
     SCsCOL      nColMerge;
     SCsROW      nRowMerge;
 public:
-                TYPEINFO();
                 ScMergeAttr();
                 ScMergeAttr( SCsCOL nCol, SCsROW nRow = 0);
                 ScMergeAttr( const ScMergeAttr& );
@@ -93,6 +92,7 @@ public:
             ScMergeFlagAttr(sal_Int16 nFlags);
             ~ScMergeFlagAttr();
 
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     sal_Bool    IsHorOverlapped() const     { return ( GetValue() & SC_MF_HOR ) != 0;  }
     sal_Bool    IsVerOverlapped() const     { return ( GetValue() & SC_MF_VER ) != 0;  }
     sal_Bool    IsOverlapped() const        { return ( GetValue() & ( SC_MF_HOR | SC_MF_VER ) ) != 0; }
@@ -112,7 +112,7 @@ class SC_DLLPUBLIC ScProtectionAttr: public SfxPoolItem
     sal_Bool        bHideCell;      // Zelle nicht Anzeigen
     sal_Bool        bHidePrint;     // Zelle nicht Ausdrucken
 public:
-                            TYPEINFO();
+    POOLITEM_FACTORY()
                             ScProtectionAttr();
                             ScProtectionAttr(   sal_Bool bProtect,
                                                 sal_Bool bHFormula = sal_False,
@@ -165,8 +165,6 @@ public:
 class ScRangeItem : public SfxPoolItem
 {
 public:
-            TYPEINFO();
-
             inline  ScRangeItem( const sal_uInt16 nWhich );
             inline  ScRangeItem( const sal_uInt16   nWhich,
                                  const ScRange& rRange,
@@ -223,8 +221,6 @@ inline ScRangeItem& ScRangeItem::operator=( const ScRangeItem &rCpy )
 class ScTableListItem : public SfxPoolItem
 {
 public:
-    TYPEINFO();
-
     inline  ScTableListItem( const sal_uInt16 nWhich );
             ScTableListItem( const ScTableListItem& rCpy );
 //UNUSED2008-05  ScTableListItem( const sal_uInt16 nWhich, const List& rList );
@@ -267,7 +263,6 @@ class SC_DLLPUBLIC ScPageHFItem : public SfxPoolItem
     EditTextObject* pRightArea;
 
 public:
-                TYPEINFO();
                 ScPageHFItem( sal_uInt16 nWhich );
                 ScPageHFItem( const ScPageHFItem& rItem );
                 ~ScPageHFItem();
@@ -300,8 +295,6 @@ public:
 class SC_DLLPUBLIC ScViewObjectModeItem: public SfxEnumItem
 {
 public:
-                TYPEINFO();
-
                 ScViewObjectModeItem( sal_uInt16 nWhich );
                 ScViewObjectModeItem( sal_uInt16 nWhich, ScVObjMode eMode );
                 ~ScViewObjectModeItem();
@@ -324,8 +317,8 @@ public:
 class ScDoubleItem : public SfxPoolItem
 {
 public:
-                TYPEINFO();
-                ScDoubleItem( sal_uInt16 nWhich, double nVal=0 );
+    POOLITEM_FACTORY()
+                ScDoubleItem( sal_uInt16 nWhich = 0, double nVal=0 );
                 ScDoubleItem( const ScDoubleItem& rItem );
                 ~ScDoubleItem();
 
@@ -356,8 +349,6 @@ const sal_uInt8 SC_MID_PAGE_SCALETO_HEIGHT   = 2;
 class SC_DLLPUBLIC ScPageScaleToItem : public SfxPoolItem
 {
 public:
-                                TYPEINFO();
-
     /** Default c'tor sets the width and height to 0. */
     explicit                    ScPageScaleToItem();
     explicit                    ScPageScaleToItem( sal_uInt16 nWidth, sal_uInt16 nHeight );

@@ -47,9 +47,8 @@ namespace drawinglayer
     {
         Primitive3DSequence SdrCubePrimitive3D::create3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
-            const basegfx::B3DRange aUnitRange(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
             Primitive3DSequence aRetval;
-            basegfx::B3DPolyPolygon aFill(basegfx::tools::createCubeFillPolyPolygonFromB3DRange(aUnitRange));
+            basegfx::B3DPolyPolygon aFill(basegfx::tools::createCubeFillPolyPolygonFromB3DRange(basegfx::B3DRange::getUnitB3DRange()));
 
             // normal creation
             if(!getSdrLFSAttribute().getFill().isDefault())
@@ -130,7 +129,7 @@ namespace drawinglayer
 
                 // transform texture coordinates to texture size
                 basegfx::B2DHomMatrix aTexMatrix;
-                aTexMatrix.scale(getTextureSize().getX(), getTextureSize().getY());
+                aTexMatrix.scale(getTextureSize());
                 aFill.transformTextureCoordiantes(aTexMatrix);
             }
 
@@ -166,7 +165,7 @@ namespace drawinglayer
             // add line
             if(!getSdrLFSAttribute().getLine().isDefault())
             {
-                basegfx::B3DPolyPolygon aLine(basegfx::tools::createCubePolyPolygonFromB3DRange(aUnitRange));
+                basegfx::B3DPolyPolygon aLine(basegfx::tools::createCubePolyPolygonFromB3DRange(basegfx::B3DRange::getUnitB3DRange()));
                 const Primitive3DSequence aLines(create3DPolyPolygonLinePrimitives(
                     aLine, getTransform(), getSdrLFSAttribute().getLine()));
                 appendPrimitive3DSequenceToPrimitive3DSequence(aRetval, aLines);
@@ -190,11 +189,6 @@ namespace drawinglayer
             const attribute::Sdr3DObjectAttribute& rSdr3DObjectAttribute)
         :   SdrPrimitive3D(rTransform, rTextureSize, rSdrLFSAttribute, rSdr3DObjectAttribute)
         {
-        }
-
-        bool SdrCubePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
-        {
-            return SdrPrimitive3D::operator==(rPrimitive);
         }
 
         basegfx::B3DRange SdrCubePrimitive3D::getB3DRange(const geometry::ViewInformation3D& /*rViewInformation*/) const

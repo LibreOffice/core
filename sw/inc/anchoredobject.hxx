@@ -23,7 +23,6 @@
 #ifndef _ANCHOREDOBJECT_HXX
 #define _ANCHOREDOBJECT_HXX
 
-#include <tools/rtti.hxx>
 #include <swtypes.hxx>
 #include <swrect.hxx>
 
@@ -238,8 +237,6 @@ class SW_DLLPUBLIC SwAnchoredObject
         virtual const SwRect GetObjBoundRect() const = 0;
         // <--
     public:
-        TYPEINFO();
-
         virtual ~SwAnchoredObject();
 
         // accessors to member <mpDrawObj>

@@ -37,8 +37,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
 
 
-TYPEINIT1( XMLIndexBodyContext, SvXMLImportContext);
-
 XMLIndexBodyContext::XMLIndexBodyContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,

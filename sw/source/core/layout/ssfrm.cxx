@@ -291,8 +291,10 @@ void SwFrm::CheckDirChange()
             for ( sal_uInt32 i = 0; i < nCnt; ++i )
             {
                 SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
-                if( pAnchoredObj->ISA(SwFlyFrm) )
+                if( dynamic_cast< SwFlyFrm* >(pAnchoredObj) )
+                {
                     static_cast<SwFlyFrm*>(pAnchoredObj)->CheckDirChange();
+                }
                 else
                 {
                     // OD 2004-04-06 #i26791# - direct object
@@ -383,13 +385,15 @@ SwFrm::~SwFrm()
         for ( sal_uInt32 i = pDrawObjs->Count(); i; )
         {
             SwAnchoredObject* pAnchoredObj = (*pDrawObjs)[--i];
-            if ( pAnchoredObj->ISA(SwFlyFrm) )
+            if ( dynamic_cast< SwFlyFrm* >(pAnchoredObj) )
+            {
                 delete pAnchoredObj;
+            }
             else
             {
                 SdrObject* pSdrObj = pAnchoredObj->DrawObj();
                 SwDrawContact* pContact =
-                        static_cast<SwDrawContact*>(pSdrObj->GetUserCall());
+                        static_cast<SwDrawContact*>(findConnectionToSdrObjectDirect(pSdrObj));
                 ASSERT( pContact,
                         "<SwFrm::~SwFrm> - missing contact for drawing object" );
                 if ( pContact )
@@ -453,8 +457,8 @@ SwCntntFrm::SwCntntFrm( SwCntntNode * const pCntnt, SwFrm* pSib ) :
 |*************************************************************************/
 SwCntntFrm::~SwCntntFrm()
 {
-    SwCntntNode* pCNd;
-    if( 0 != ( pCNd = PTR_CAST( SwCntntNode, GetRegisteredIn() )) &&
+    const SwCntntNode* pCNd;
+    if( 0 != ( pCNd = dynamic_cast< const SwCntntNode* >(GetRegisteredIn())) &&
         !pCNd->GetDoc()->IsInDtor() )
     {
         //Bei der Root abmelden wenn ich dort noch im Turbo stehe.
@@ -577,13 +581,15 @@ SwLayoutFrm::~SwLayoutFrm()
                 nCnt = pFrm->GetDrawObjs()->Count();
                 // --> OD 2004-06-30 #i28701#
                 SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[0];
-                if ( pAnchoredObj->ISA(SwFlyFrm) )
+                if ( dynamic_cast< SwFlyFrm* >(pAnchoredObj) )
+                {
                     delete pAnchoredObj;
+                }
                 else
                 {
                     SdrObject* pSdrObj = pAnchoredObj->DrawObj();
                     SwDrawContact* pContact =
-                            static_cast<SwDrawContact*>(pSdrObj->GetUserCall());
+                            static_cast<SwDrawContact*>(findConnectionToSdrObjectDirect(pSdrObj));
                     ASSERT( pContact,
                             "<SwFrm::~SwFrm> - missing contact for drawing object" );
                     if ( pContact )
@@ -610,13 +616,15 @@ SwLayoutFrm::~SwLayoutFrm()
 
             // --> OD 2004-06-30 #i28701#
             SwAnchoredObject* pAnchoredObj = (*GetDrawObjs())[0];
-            if ( pAnchoredObj->ISA(SwFlyFrm) )
+            if ( dynamic_cast< SwFlyFrm* >(pAnchoredObj) )
+            {
                 delete pAnchoredObj;
+            }
             else
             {
                 SdrObject* pSdrObj = pAnchoredObj->DrawObj();
                 SwDrawContact* pContact =
-                        static_cast<SwDrawContact*>(pSdrObj->GetUserCall());
+                        static_cast<SwDrawContact*>(findConnectionToSdrObjectDirect(pSdrObj));
                 ASSERT( pContact,
                         "<SwFrm::~SwFrm> - missing contact for drawing object" );
                 if ( pContact )

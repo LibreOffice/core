@@ -121,7 +121,7 @@ public:
 class SfxItemSet;
 // Liefert eine Ersatzdarstellung fuer einen XFillStyle
 // Bei XFILL_NONE gibt's sal_False und rCol bleibt unveraendert.
-SVX_DLLPUBLIC FASTBOOL GetDraftFillColor(const SfxItemSet& rSet, Color& rCol);
+SVX_DLLPUBLIC bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol);
 
 // Ein Container fuer USHORTs (im Prinzip ein dynamisches Array)
 class UShortCont {
@@ -159,7 +159,7 @@ private: // damit keiner vergessen wird
 virtual
         void
                  Is1stLessThan2nd(const void* pElem1, const void* pElem2) const;
-//  virtual FASTBOOL Is1stLessThan2nd(const void* pElem1, const void* pElem2) const=NULL;
+//  virtual bool Is1stLessThan2nd(const void* pElem1, const void* pElem2) const=NULL;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -182,10 +182,10 @@ class ImpSdrHdcMerk
     Color*        pLineColorMerk;
     sal_uInt16        nMode;
 public:
-    ImpSdrHdcMerk(const OutputDevice& rOut, sal_uInt16 nNewMode=SDRHDC_SAVEALL, FASTBOOL bAutoMerk=sal_True);
+    ImpSdrHdcMerk(const OutputDevice& rOut, sal_uInt16 nNewMode=SDRHDC_SAVEALL, bool bAutoMerk=sal_True);
     ~ImpSdrHdcMerk();
     void Save(const OutputDevice& rOut);
-    FASTBOOL IsSaved() const                 { return pFarbMerk!=NULL || pClipMerk!=NULL || pLineColorMerk!=NULL; }
+    bool IsSaved() const                 { return pFarbMerk!=NULL || pClipMerk!=NULL || pLineColorMerk!=NULL; }
     void Restore(OutputDevice& rOut, sal_uInt16 nMask=SDRHDC_SAVEALL) const;
 };
 //#endif // __PRIVATE
@@ -193,8 +193,8 @@ public:
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Ein ItemSet auf Outliner- bzw. EditEngine-Items durchsuchen
-// Liefert sal_True, wenn der Set solchen Items enthaelt.
-sal_Bool SearchOutlinerItems(const SfxItemSet& rSet, sal_Bool bInklDefaults, sal_Bool* pbOnlyEE=NULL);
+// Liefert TRUE, wenn der Set solchen Items enthaelt.
+bool SearchOutlinerItems(const SfxItemSet& rSet, bool bInklDefaults, bool* pbOnlyEE = 0);
 
 // zurueck erhaelt man einen neuen WhichTable den
 // man dann irgendwann mit delete platthauen muss.
@@ -271,7 +271,7 @@ public:
     const Link& GetLink(unsigned nNum) const { return *((Link*)(aList.GetObject(nNum))); }
     void InsertLink(const Link& rLink, unsigned nPos=0xFFFF);
     void RemoveLink(const Link& rLink);
-    FASTBOOL HasLink(const Link& rLink) const { return FindEntry(rLink)!=0xFFFF; }
+    bool HasLink(const Link& rLink) const { return FindEntry(rLink)!=0xFFFF; }
 };
 
 // Fuer die Factory in SvdObj.CXX

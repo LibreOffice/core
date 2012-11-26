@@ -120,7 +120,7 @@ class SvxGrfCropPage : public SfxTabPage
 
     void            CalcZoom();
     void            CalcMinMaxBorder();
-    void            GraphicHasChanged(sal_Bool bFound);
+    void            GraphicHasChanged(bool bFound);
     virtual void    ActivatePage(const SfxItemSet& rSet);
 
     Size            GetGrfOrigSize( const Graphic& ) const;

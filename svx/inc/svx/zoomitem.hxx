@@ -48,8 +48,7 @@ class SVX_DLLPUBLIC SvxZoomItem: public SfxUInt16Item
     SvxZoomType             eType;
 
 public:
-    TYPEINFO();
-
+    POOLITEM_FACTORY()
     SvxZoomItem( SvxZoomType eZoomType = SVX_ZOOM_PERCENT,
                  sal_uInt16 nVal = 0, sal_uInt16 nWhich = SID_ATTR_ZOOM );
     SvxZoomItem( const SvxZoomItem& );
@@ -57,7 +56,7 @@ public:
 
     void                    SetValueSet( sal_uInt16 nValues ) { nValueSet = nValues; }
     sal_uInt16                  GetValueSet() const { return nValueSet; }
-    FASTBOOL                IsValueAllowed( sal_uInt16 nValue ) const
+    bool                IsValueAllowed( sal_uInt16 nValue ) const
                             { return nValue == ( nValue & nValueSet ); }
 
     SvxZoomType             GetType() const { return eType; }

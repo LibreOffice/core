@@ -46,6 +46,7 @@ SHL1TARGET= basctl$(DLLPOSTFIX)
 SHL1IMPLIB= basctl
 SHL1BASE  = 0x1d800000
 SHL1STDLIBS= \
+            $(BASEGFXLIB) \
             $(EDITENGLIB) \
             $(SVXCORELIB) \
             $(SVXLIB) \

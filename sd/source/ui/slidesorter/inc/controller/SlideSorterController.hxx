@@ -96,7 +96,7 @@ public:
         filler, the actual slide sorter view--are visible and place them in
         the area last passed to Resize().
         @param bForce
-            When <TRUE/> is given (<FALSE/> is the default) then the content
+            When <true/> is given (<false/> is the default) then the content
             window and with it the SlideSorterView is resized event when its
             size does not change (the size does change when the visibility
             of scroll bars changes.)
@@ -113,7 +113,7 @@ public:
             reference because when no page is found at the position
             then NULL is returned to indicate this.
     */
-    model::SharedPageDescriptor GetPageAt (const Point& rPixelPosition);
+    model::SharedPageDescriptor GetPageAt (const Point& aWindowPosition);
 
     PageSelector& GetPageSelector (void);
     FocusManager& GetFocusManager (void);
@@ -199,7 +199,7 @@ public:
         this method should be called between calls to
         PrepareEditModeChange() and FinishEditModeChange().
         @return
-            A return value of <TRUE/> indicates that the edit mode has
+            A return value of <true/> indicates that the edit mode has
             changed.
     */
     bool ChangeEditMode (EditMode eEditMode);

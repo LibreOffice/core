@@ -24,7 +24,6 @@
 #define _SFXBRDCST_HXX
 
 #include "svl/svldllapi.h"
-#include <tools/rtti.hxx>
 #include <svl/svarray.hxx>
 
 class SfxListener;
@@ -52,8 +51,6 @@ protected:
     virtual void            ListenersGone();
 
 public:
-                            TYPEINFO();
-
                             SfxBroadcaster();
                             SfxBroadcaster( const SfxBroadcaster &rBC );
     virtual                 ~SfxBroadcaster();

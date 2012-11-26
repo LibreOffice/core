@@ -90,9 +90,6 @@ namespace drawinglayer
             basegfx::B2DLineJoin getLineJoin() const { return maLineJoin; }
             com::sun::star::drawing::LineCap getLineCap() const { return maLineCap; }
 
-            /// compare operator
-            virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
-
             /** local decomposition. Use own buffering since we are not derived from
                 BufferedDecompositionPrimitive3D
              */

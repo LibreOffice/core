@@ -32,15 +32,6 @@
 #include <textdoc.hxx>
 #include <textdat2.hxx>
 
-TYPEINIT1( TextUndo, SfxUndoAction );
-TYPEINIT1( TextUndoDelPara, TextUndo );
-TYPEINIT1( TextUndoConnectParas, TextUndo );
-TYPEINIT1( TextUndoSplitPara, TextUndo );
-TYPEINIT1( TextUndoInsertChars, TextUndo );
-TYPEINIT1( TextUndoRemoveChars, TextUndo );
-TYPEINIT1( TextUndoSetAttribs, TextUndo );
-
-
 TextUndoManager::TextUndoManager( TextEngine* p )
 {
     mpTextEngine = p;
@@ -252,7 +243,7 @@ void __EXPORT TextUndoInsertChars::Redo()
 
 sal_Bool __EXPORT TextUndoInsertChars::Merge( SfxUndoAction* pNextAction )
 {
-    if ( !pNextAction->ISA( TextUndoInsertChars ) )
+    if ( !dynamic_cast< TextUndoInsertChars* >(pNextAction) )
         return sal_False;
 
     TextUndoInsertChars* pNext = (TextUndoInsertChars*)pNextAction;

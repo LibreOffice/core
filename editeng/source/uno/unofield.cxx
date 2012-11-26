@@ -721,35 +721,35 @@ void SAL_CALL SvxUnoTextField::setPropertyValue( const OUString& aPropertyName, 
         {
         case ID_DATEFIELD:
         {
-            SvxDateField* pDate = PTR_CAST( SvxDateField, aFieldItem.GetField() );
+            SvxDateField* pDate = dynamic_cast< SvxDateField* >( aFieldItem.GetField() );
             if(pDate)
                 pDate->SetFormat( (SvxDateFormat)nFormat );
             break;
         }
         case ID_URLFIELD:
         {
-            SvxURLField* pURL = PTR_CAST( SvxURLField, aFieldItem.GetField() );
+            SvxURLField* pURL = dynamic_cast< SvxURLField* >( aFieldItem.GetField() );
             if(pURL)
                 pURL->SetFormat( (SvxURLFormat)nFormat );
             break;
         }
         case ID_EXT_TIMEFIELD:
         {
-            SvxExtTimeField* pTime = PTR_CAST( SvxExtTimeField, aFieldItem.GetField() );
+            SvxExtTimeField* pTime = dynamic_cast< SvxExtTimeField* >( aFieldItem.GetField() );
             if(pTime)
                 pTime->SetFormat( (SvxTimeFormat)nFormat );
             break;
         }
         case ID_EXT_FILEFIELD:
         {
-            SvxExtFileField* pFile = PTR_CAST( SvxExtFileField, aFieldItem.GetField() );
+            SvxExtFileField* pFile = dynamic_cast< SvxExtFileField* >( aFieldItem.GetField() );
             if(pFile)
                 pFile->SetFormat( (SvxFileFormat)nFormat );
             break;
         }
         case ID_AUTHORFIELD:
         {
-            SvxAuthorField* pAuthor = PTR_CAST( SvxAuthorField, aFieldItem.GetField() );
+            SvxAuthorField* pAuthor = dynamic_cast< SvxAuthorField* >( aFieldItem.GetField() );
             if(pAuthor)
                 pAuthor->SetFormat( (SvxAuthorFormat)nFormat );
             break;
@@ -768,28 +768,28 @@ void SAL_CALL SvxUnoTextField::setPropertyValue( const OUString& aPropertyName, 
         {
         case ID_EXT_TIMEFIELD:
         {
-            SvxExtTimeField* pTime = PTR_CAST( SvxExtTimeField, aFieldItem.GetField() );
+            SvxExtTimeField* pTime = dynamic_cast< SvxExtTimeField* >( aFieldItem.GetField() );
             if(pTime)
                 pTime->SetType( (SvxTimeType)bFix?SVXTIMETYPE_FIX:SVXTIMETYPE_VAR );
             break;
         }
         case ID_DATEFIELD:
         {
-            SvxDateField* pDate = PTR_CAST( SvxDateField, aFieldItem.GetField() );
+            SvxDateField* pDate = dynamic_cast< SvxDateField* >( aFieldItem.GetField() );
             if(pDate)
                 pDate->SetType( (SvxDateType)bFix?SVXDATETYPE_FIX:SVXDATETYPE_VAR );
             break;
         }
         case ID_EXT_FILEFIELD:
         {
-            SvxExtFileField* pFile = PTR_CAST( SvxExtFileField, aFieldItem.GetField() );
+            SvxExtFileField* pFile = dynamic_cast< SvxExtFileField* >( aFieldItem.GetField() );
             if(pFile)
                 pFile->SetType( (SvxFileType)bFix?SVXFILETYPE_FIX:SVXFILETYPE_VAR );
             break;
         }
         case ID_AUTHORFIELD:
         {
-            SvxAuthorField* pAuthor = PTR_CAST( SvxAuthorField, aFieldItem.GetField() );
+            SvxAuthorField* pAuthor = dynamic_cast< SvxAuthorField* >( aFieldItem.GetField() );
             if(pAuthor)
                 pAuthor->SetType( (SvxAuthorType)bFix?SVXAUTHORTYPE_FIX:SVXAUTHORTYPE_VAR );
             break;
@@ -803,7 +803,7 @@ void SAL_CALL SvxUnoTextField::setPropertyValue( const OUString& aPropertyName, 
     case WID_URL:
     case WID_TARGET:
     {
-        SvxURLField* pURL = PTR_CAST( SvxURLField, aFieldItem.GetField() );
+        SvxURLField* pURL = dynamic_cast< SvxURLField* >( aFieldItem.GetField() );
         if(pURL)
         {
             OUString aUnoStr;
@@ -881,35 +881,35 @@ uno::Any SAL_CALL SvxUnoTextField::getPropertyValue( const OUString& PropertyNam
         {
         case ID_DATEFIELD:
         {
-            SvxDateField* pDate = PTR_CAST( SvxDateField, pFieldItem->GetField() );
+            SvxDateField* pDate = dynamic_cast< SvxDateField* >( pFieldItem->GetField() );
             if(pDate)
                 aValue <<= (sal_Int32)pDate->GetFormat();
             break;
         }
         case ID_URLFIELD:
         {
-            SvxURLField* pURL = PTR_CAST( SvxURLField, pFieldItem->GetField() );
+            SvxURLField* pURL = dynamic_cast< SvxURLField* >( pFieldItem->GetField() );
             if(pURL)
                 aValue <<= (sal_Int32)pURL->GetFormat();
             break;
         }
         case ID_EXT_TIMEFIELD:
         {
-            SvxExtTimeField* pTime = PTR_CAST( SvxExtTimeField, pFieldItem->GetField() );
+            SvxExtTimeField* pTime = dynamic_cast< SvxExtTimeField* >( pFieldItem->GetField() );
             if(pTime)
                 aValue <<= (sal_Int32)pTime->GetFormat();
             break;
         }
         case ID_EXT_FILEFIELD:
         {
-            SvxExtFileField* pFile = PTR_CAST( SvxExtFileField, pFieldItem->GetField() );
+            SvxExtFileField* pFile = dynamic_cast< SvxExtFileField* >( pFieldItem->GetField() );
             if(pFile)
                 aValue <<= (sal_Int32)pFile->GetFormat();
             break;
         }
         case ID_AUTHORFIELD:
         {
-            SvxAuthorField* pAuthor = PTR_CAST( SvxAuthorField, pFieldItem->GetField() );
+            SvxAuthorField* pAuthor = dynamic_cast< SvxAuthorField* >( pFieldItem->GetField() );
             if(pAuthor)
                 aValue <<= (sal_Int32)pAuthor->GetFormat();
             break;
@@ -925,28 +925,28 @@ uno::Any SAL_CALL SvxUnoTextField::getPropertyValue( const OUString& PropertyNam
         {
         case ID_EXT_TIMEFIELD:
         {
-            SvxExtTimeField* pTime = PTR_CAST( SvxExtTimeField, pFieldItem->GetField() );
+            SvxExtTimeField* pTime = dynamic_cast< SvxExtTimeField* >( pFieldItem->GetField() );
             if(pTime)
                 bFix = pTime->GetType() == SVXTIMETYPE_FIX;
             break;
         }
         case ID_DATEFIELD:
         {
-            SvxDateField* pDate = PTR_CAST( SvxDateField, pFieldItem->GetField() );
+            SvxDateField* pDate = dynamic_cast< SvxDateField* >( pFieldItem->GetField() );
             if(pDate)
                 bFix = pDate->GetType() == SVXDATETYPE_FIX;
             break;
         }
         case ID_EXT_FILEFIELD:
         {
-            SvxExtFileField* pFile = PTR_CAST( SvxExtFileField, pFieldItem->GetField() );
+            SvxExtFileField* pFile = dynamic_cast< SvxExtFileField* >( pFieldItem->GetField() );
             if(pFile)
                 bFix = pFile->GetType() == SVXFILETYPE_FIX;
             break;
         }
         case ID_AUTHORFIELD:
         {
-            SvxAuthorField* pAuthor = PTR_CAST( SvxAuthorField, pFieldItem->GetField() );
+            SvxAuthorField* pAuthor = dynamic_cast< SvxAuthorField* >( pFieldItem->GetField() );
             if(pAuthor)
                 bFix = pAuthor->GetType() == SVXAUTHORTYPE_FIX;
             break;
@@ -961,7 +961,7 @@ uno::Any SAL_CALL SvxUnoTextField::getPropertyValue( const OUString& PropertyNam
     case WID_URL:
     case WID_TARGET:
     {
-        SvxURLField* pURL = PTR_CAST( SvxURLField, pFieldItem->GetField() );
+        SvxURLField* pURL = dynamic_cast< SvxURLField* >( pFieldItem->GetField() );
         if(pURL)
         {
             OUString aStr;
@@ -1017,33 +1017,33 @@ void SvxUnoTextField::disposing()
 
 sal_Int32 SvxUnoTextField::GetFieldId( const SvxFieldData* pFieldData ) const throw()
 {
-    if( pFieldData->ISA( SvxURLField ) )
+    if( dynamic_cast< const SvxURLField* >(pFieldData))
         return ID_URLFIELD;
-    else if( pFieldData->ISA( SvxPageField ) )
+    else if( dynamic_cast< const SvxPageField* >( pFieldData ) )
         return ID_PAGEFIELD;
-    else if( pFieldData->ISA( SvxPagesField ) )
+    else if( dynamic_cast< const SvxPagesField* >( pFieldData ) )
         return ID_PAGESFIELD;
-    else if( pFieldData->ISA( SvxTimeField )    )
+    else if( dynamic_cast< const SvxTimeField* >( pFieldData ) )
         return ID_TIMEFIELD;
-    else if( pFieldData->ISA( SvxFileField )    )
+    else if( dynamic_cast< const SvxFileField* >( pFieldData ) )
         return ID_FILEFIELD;
-    else if( pFieldData->ISA( SvxTableField ) )
+    else if( dynamic_cast< const SvxTableField* >( pFieldData ) )
         return ID_TABLEFIELD;
-    else if( pFieldData->ISA( SvxExtTimeField ) )
+    else if( dynamic_cast< const SvxExtTimeField* >( pFieldData ) )
         return ID_EXT_TIMEFIELD;
-    else if( pFieldData->ISA( SvxExtFileField ) )
+    else if( dynamic_cast< const SvxExtFileField* >( pFieldData ) )
         return ID_EXT_FILEFIELD;
-    else if( pFieldData->ISA( SvxAuthorField ) )
+    else if( dynamic_cast< const SvxAuthorField* >( pFieldData ) )
         return ID_AUTHORFIELD;
-    else if( pFieldData->ISA( SvxDateField ) )
+    else if( dynamic_cast< const SvxDateField* >( pFieldData ) )
         return ID_EXT_DATEFIELD;
-    else if( pFieldData->ISA( SdrMeasureField ) )
+    else if( dynamic_cast< const SdrMeasureField* >( pFieldData ) )
         return ID_MEASUREFIELD;
-    else if( pFieldData->ISA( SvxHeaderField ) )
+    else if( dynamic_cast< const SvxHeaderField* >( pFieldData ) )
         return ID_HEADERFIELD;
-    else if( pFieldData->ISA( SvxFooterField ) )
+    else if( dynamic_cast< const SvxFooterField* >( pFieldData ) )
         return ID_FOOTERFIELD;
-    else if( pFieldData->ISA( SvxDateTimeField ) )
+    else if( dynamic_cast< const SvxDateTimeField* >( pFieldData ) )
         return ID_DATETIMEFIELD;
 
     return ID_UNKNOWN;

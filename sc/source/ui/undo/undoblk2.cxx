@@ -46,10 +46,6 @@
 #include "undoolk.hxx"              //! GetUndo ins Document verschieben!
 
 
-// STATIC DATA -----------------------------------------------------------
-
-TYPEINIT1(ScUndoWidthOrHeight,      SfxUndoAction);
-
 // -----------------------------------------------------------------------
 
 
@@ -191,13 +187,17 @@ void __EXPORT ScUndoWidthOrHeight::Redo()
 
 void __EXPORT ScUndoWidthOrHeight::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->SetMarkedWidthOrHeight( bWidth, eMode, nNewSize, sal_True );
+    ScTabViewTarget* pScTabViewTarget = dynamic_cast< ScTabViewTarget* >(&rTarget);
+
+    if (pScTabViewTarget)
+    {
+        pScTabViewTarget->GetViewShell()->SetMarkedWidthOrHeight( bWidth, eMode, nNewSize, sal_True );
+    }
 }
 
 sal_Bool __EXPORT ScUndoWidthOrHeight::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return 0 != dynamic_cast< ScTabViewTarget* >(&rTarget);
 }
 
 

@@ -932,7 +932,7 @@ sal_Bool SvMetaSlot::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
     if( pAttr )
     {
         // F"ur Testzwecke: Referenz bei Kurz-Syntax
-        SvMetaSlot * pKnownSlot = PTR_CAST( SvMetaSlot, pAttr );
+        SvMetaSlot * pKnownSlot = dynamic_cast< SvMetaSlot* >( pAttr );
         if( pKnownSlot )
         {
             SetRef( pKnownSlot );
@@ -957,7 +957,7 @@ sal_Bool SvMetaSlot::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
         if( pAttr2 )
         {
             // F"ur Testzwecke: Referenz bei kompletter Definition
-            SvMetaSlot * pKnownSlot = PTR_CAST( SvMetaSlot, pAttr2 );
+            SvMetaSlot * pKnownSlot = dynamic_cast< SvMetaSlot* >( pAttr2 );
             if( pKnownSlot )
             {
                 SetRef( pKnownSlot );
@@ -1098,7 +1098,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const ByteString & rPrefix,
     // EnumSlots plattklopfen
     SvMetaTypeEnum * pEnum = NULL;
     SvMetaType * pBType = GetType()->GetBaseType();
-    pEnum = PTR_CAST( SvMetaTypeEnum, pBType );
+    pEnum = dynamic_cast< SvMetaTypeEnum* >( pBType );
     if( GetPseudoSlots() && pEnum && pEnum->Count() )
     {
         // Den MasterSlot clonen
@@ -1121,7 +1121,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const ByteString & rPrefix,
                 SvMetaAttribute * pAttr = rBase.GetAttrList().GetObject( m );
                 if( pAttr->GetSlotId() == aSId )
                 {
-                    SvMetaSlot* pSlot = PTR_CAST( SvMetaSlot, pAttr );
+                    SvMetaSlot* pSlot = dynamic_cast< SvMetaSlot*>( pAttr );
                     xEnumSlot = pSlot->Clone();
                     break;
                 }
@@ -1623,7 +1623,7 @@ void SvMetaSlot::WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
         rOutStm << "};" << endl;
     }
 
-    SvMetaTypeEnum * pEnum = PTR_CAST( SvMetaTypeEnum, GetType() );
+    SvMetaTypeEnum* pEnum = dynamic_cast< SvMetaTypeEnum* >( GetType() );
     if( GetPseudoSlots() && pEnum )
     {
         for( sal_uLong n = 0; n < pEnum->Count(); n++ )
@@ -1675,7 +1675,7 @@ void SvMetaSlot::WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
         rOutStm << "#define " << GetSlotId().GetBuffer() << '\t' << ByteString::CreateFromInt32( nSId ).GetBuffer() << endl;
     }
 
-    SvMetaTypeEnum * pEnum = PTR_CAST( SvMetaTypeEnum, GetType() );
+    SvMetaTypeEnum* pEnum = dynamic_cast< SvMetaTypeEnum* >( GetType() );
     if( GetPseudoSlots() && pEnum )
     {
         for( sal_uLong n = 0; n < pEnum->Count(); n++ )

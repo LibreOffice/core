@@ -56,9 +56,6 @@ namespace drawinglayer
             const ::basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
             const attribute::SdrLineFillShadowTextAttribute& getSdrLFSTAttribute() const { return maSdrLFSTAttribute; }
 
-            // compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
-
             // provide unique ID
             DeclPrimitrive2DIDBlock()
         };
@@ -78,8 +75,8 @@ namespace drawinglayer
             double                                      mfEndAngle;
 
             // bitfield
-            unsigned                                    mbCloseSegment : 1;
-            unsigned                                    mbCloseUsingCenter : 1;
+            bool                                        mbCloseSegment : 1;
+            bool                                        mbCloseUsingCenter : 1;
 
         protected:
             // local decomposition.
@@ -99,9 +96,6 @@ namespace drawinglayer
             double getEndAngle() const { return mfEndAngle; }
             bool getCloseSegment() const { return mbCloseSegment; }
             bool getCloseUsingCenter() const { return mbCloseUsingCenter; }
-
-            // compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
             // provide unique ID
             DeclPrimitrive2DIDBlock()

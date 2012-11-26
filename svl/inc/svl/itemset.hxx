@@ -31,7 +31,6 @@
 #include <cstdarg>  // std::va_list and friends
 #endif
 #include <svl/poolitem.hxx>
-#include <tools/rtti.hxx>
 #include <tools/solar.h>
 
 class SfxItemPool;
@@ -63,8 +62,7 @@ typedef SfxPoolItem const** SfxItemArray;
 //========================================================================
 
 #define SFX_ITEMSET_GET( rSet, pItem, ItemType, nSlotId, bDeep ) \
-    const ItemType *pItem = (const ItemType*) \
-                            (rSet).GetItem( nSlotId, bDeep, TYPE(ItemType) )
+    const ItemType *pItem = dynamic_cast< const ItemType* >((rSet).GetItem( nSlotId, bDeep ))
 
 //========================================================================
 
@@ -121,39 +119,38 @@ protected:
     virtual void                Changed( const SfxPoolItem& rOld, const SfxPoolItem& rNew );
 
     // direkte Put-Methode
-    int                         PutDirect(const SfxPoolItem &rItem);
+    bool                        PutDirect(const SfxPoolItem &rItem);
 
 public:
                                 SfxItemSet( const SfxItemSet& );
 
-                                SfxItemSet( SfxItemPool&, sal_Bool bTotalPoolRanges = sal_False );
+                                SfxItemSet( SfxItemPool&, bool bTotalPoolRanges = false );
                                 SfxItemSet( SfxItemPool&, sal_uInt16 nWhich1, sal_uInt16 nWhich2 );
                                 SfxItemSet( SfxItemPool&, USHORT_ARG nWh1, USHORT_ARG nWh2, USHORT_ARG nNull, ... );
                                 SfxItemSet( SfxItemPool&, const sal_uInt16* nWhichPairTable );
     virtual                     ~SfxItemSet();
 
-    virtual SfxItemSet *        Clone(sal_Bool bItems = sal_True, SfxItemPool *pToPool = 0) const;
+    virtual SfxItemSet *        Clone(bool bItems = true, SfxItemPool *pToPool = 0) const;
 
     // Items erfragen
-    sal_uInt16                      Count() const { return _nCount; }
-    sal_uInt16                      TotalCount() const;
+    sal_uInt16                  Count() const { return _nCount; }
+    sal_uInt16                  TotalCount() const;
 
-    virtual const SfxPoolItem&  Get( sal_uInt16 nWhich, sal_Bool bSrchInParent = sal_True ) const;
-    const SfxPoolItem*          GetItem( sal_uInt16 nWhich, sal_Bool bSrchInParent = sal_True,
-                                         TypeId aItemType = 0 ) const;
+    virtual const SfxPoolItem&  Get( sal_uInt16 nWhich, bool bSrchInParent = true ) const;
+    const SfxPoolItem*          GetItem( sal_uInt16 nWhich, bool bSrchInParent = true ) const;
 
     // Which-Wert des Items an der Position nPos erfragen
     sal_uInt16                      GetWhichByPos(sal_uInt16 nPos) const;
 
     // Item-Status erfragen
     SfxItemState                GetItemState(   sal_uInt16 nWhich,
-                                                sal_Bool bSrchInParent = sal_True,
+                                                bool bSrchInParent = true,
                                                 const SfxPoolItem **ppItem = 0 ) const;
 
     virtual void                DisableItem(sal_uInt16 nWhich);
     virtual void                InvalidateItem( sal_uInt16 nWhich );
-    virtual sal_uInt16              ClearItem( sal_uInt16 nWhich = 0);
-    virtual void                ClearInvalidItems( sal_Bool bHardDefault = sal_False );
+    virtual sal_uInt16          ClearItem( sal_uInt16 nWhich = 0);
+    virtual void                ClearInvalidItems( bool bHardDefault = false );
             void                InvalidateAllItems(); HACK(via nWhich = 0)
 
     inline void                 SetParent( const SfxItemSet* pNew );
@@ -162,30 +159,30 @@ public:
     virtual const SfxPoolItem*  Put( const SfxPoolItem&, sal_uInt16 nWhich );
     const SfxPoolItem*          Put( const SfxPoolItem& rItem )
                                 { return Put(rItem, rItem.Which()); }
-    virtual int                 Put( const SfxItemSet&,
-                                     sal_Bool bInvalidAsDefault = sal_True );
+    virtual bool                Put( const SfxItemSet&,
+                                     bool bInvalidAsDefault = sal_True );
     void                        PutExtended( const SfxItemSet&,
                                              SfxItemState eDontCareAs = SFX_ITEM_UNKNOWN,
                                              SfxItemState eDefaultAs = SFX_ITEM_UNKNOWN );
 
-    virtual int                 Set( const SfxItemSet&, sal_Bool bDeep = sal_True );
+    virtual bool                Set( const SfxItemSet&, bool bDeep = true);
 
     virtual void                Intersect( const SfxItemSet& rSet );
-    virtual void                MergeValues( const SfxItemSet& rSet, sal_Bool bOverwriteDefaults = sal_False );
+    virtual void                MergeValues( const SfxItemSet& rSet, bool bOverwriteDefaults = false );
     virtual void                Differentiate( const SfxItemSet& rSet );
-    virtual void                MergeValue( const SfxPoolItem& rItem, sal_Bool bOverwriteDefaults = sal_False  );
+    virtual void                MergeValue( const SfxPoolItem& rItem, bool bOverwriteDefaults = false );
 
     SfxItemPool*                GetPool() const { return _pPool; }
-    const sal_uInt16*               GetRanges() const { return _pWhichRanges; }
+    const sal_uInt16*           GetRanges() const { return _pWhichRanges; }
     void                        SetRanges( const sal_uInt16 *pRanges );
     void                        MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo );
     const SfxItemSet*           GetParent() const { return _pParent; }
 
-    virtual SvStream &          Load( SvStream &, FASTBOOL bDirect = sal_False,
+    virtual SvStream &          Load( SvStream &, bool bDirect = false,
                                       const SfxItemPool *pRefPool = 0 );
-    virtual SvStream &          Store( SvStream &, FASTBOOL bDirect = sal_False ) const;
+    virtual SvStream &          Store( SvStream &, bool bDirect = false) const;
 
-    virtual int                 operator==(const SfxItemSet &) const;
+    virtual bool                operator==(const SfxItemSet &) const;
 
     //optimize a comparing operation from 'memcmp' to 'hash compare' to improve xls loading performance, i120575
     //in some situation (e.g.. ScPatternAttr::operator== ),
@@ -214,19 +211,19 @@ class SVL_DLLPUBLIC SfxAllItemSet: public SfxItemSet
 
 {
     SfxVoidItem                 aDefault;
-    sal_uInt16                      nFree;
+    sal_uInt16                  nFree;
 
 public:
                                 SfxAllItemSet( SfxItemPool &rPool );
                                 SfxAllItemSet( const SfxItemSet & );
                                 SfxAllItemSet( const SfxAllItemSet & );
 
-    virtual SfxItemSet *        Clone( sal_Bool bItems = sal_True, SfxItemPool *pToPool = 0 ) const;
+    virtual SfxItemSet *        Clone( bool bItems = true, SfxItemPool *pToPool = 0 ) const;
     virtual const SfxPoolItem*  Put( const SfxPoolItem&, sal_uInt16 nWhich );
     const SfxPoolItem*          Put( const SfxPoolItem& rItem )
     { return Put(rItem, rItem.Which()); }
-    virtual int                 Put( const SfxItemSet&,
-                                     sal_Bool bInvalidAsDefault = sal_True );
+    virtual bool                Put( const SfxItemSet&,
+                                     bool bInvalidAsDefault = true );
 };
 
 #endif // #ifndef _SFXITEMSET_HXX

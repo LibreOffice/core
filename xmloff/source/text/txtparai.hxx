@@ -62,8 +62,6 @@ class XMLParaContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLParaContext( SvXMLImport& rImport,
             sal_uInt16 nPrfx,
             const ::rtl::OUString& rLName,
@@ -97,8 +95,6 @@ class XMLNumberedParaContext : public SvXMLImportContext
         ::com::sun::star::container::XIndexReplace > m_xNumRules;
 
 public:
-
-    TYPEINFO();
 
     XMLNumberedParaContext( SvXMLImport& i_rImport,
             sal_uInt16 i_nPrefix,

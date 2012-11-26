@@ -52,15 +52,11 @@ class PolyPolygon;
 class FmFormModel;
 class SdrModel;
 class DffRecordHeader;
-
 class SwFlyFrmFmt;
-
 struct SvxMSDffBLIPInfo;
 struct SvxMSDffShapeInfo;
 struct SvxMSDffShapeOrder;
-
 class SvxMSDffManager;
-
 class SfxItemSet;
 class SdrObject;
 struct DffObjData;
@@ -259,31 +255,30 @@ SV_DECL_PTRARR_SORT_DEL_VISIBILITY(MSDffImportRecords, MSDffImportRec_Ptr, 16,16
 struct SvxMSDffImportData
 {
     MSDffImportRecords  aRecords;   // Shape-Pointer, -Ids und private Daten
-    Rectangle           aParentRect;// Rectangle der umgebenden Gruppe
+    basegfx::B2DRange   aParentRect;// Rectangle der umgebenden Gruppe
                                     // bzw. von aussen reingegebenes Rect
-    Rectangle           aNewRect;   // mit diesem Shape definiertes Rectangle
+    basegfx::B2DRange   aNewRect;   // mit diesem Shape definiertes Rectangle
 
     SvxMSDffImportData()
         {}
-    SvxMSDffImportData(const Rectangle& rParentRect)
+    SvxMSDffImportData(const basegfx::B2DRange& rParentRect)
         :aParentRect( rParentRect )
         {}
     void SetNewRect(sal_Int32 l, sal_Int32 o,
-                    sal_Int32 r, sal_Int32 u ){ aNewRect = Rectangle(l,o, r,u); }
-    sal_Bool HasParRect() const { return aParentRect.IsEmpty(); }
-    sal_Bool HasNewRect() const { return aNewRect.IsEmpty()   ; }
+                    sal_Int32 r, sal_Int32 u ){ aNewRect = basegfx::B2DRange(l,o,r,u); }
+    sal_Bool HasParRect() const { return aParentRect.isEmpty(); }
+    sal_Bool HasNewRect() const { return aNewRect.isEmpty()   ; }
     sal_Bool HasRecords() const { return 0 != aRecords.Count(); }
     sal_uInt16              GetRecCount() const { return aRecords.Count();  }
-    SvxMSDffImportRec*  GetRecord(sal_uInt16 iRecord) const
-                            {  return aRecords.GetObject( iRecord ); }
+    SvxMSDffImportRec*  GetRecord(sal_uInt16 iRecord) const { return aRecords.GetObject( iRecord ); }
 };
 
 struct DffObjData
 {
     const DffRecordHeader&  rSpHd;
 
-    Rectangle   aBoundRect;
-    Rectangle   aChildAnchor;
+    basegfx::B2DRange   aBoundRect;
+    basegfx::B2DRange   aChildAnchor;
 
     sal_uInt32      nShapeId;
     sal_uInt32      nSpFlags;
@@ -301,7 +296,7 @@ struct DffObjData
     int nCalledByGroup;
 
     DffObjData( const DffRecordHeader& rObjHd,
-                const Rectangle& rBoundRect,
+                const basegfx::B2DRange& rBoundRect,
                 int              nClByGroup ) :
         rSpHd( rObjHd ),
         aBoundRect( rBoundRect ),
@@ -414,7 +409,7 @@ protected :
     long            nEmuDiv;
     long            nPntMul;
     long            nPntDiv;
-    FASTBOOL        bNeedMap;
+    bool        bNeedMap;
     sal_uInt32          nSvxMSDffSettings;
     sal_uInt32          nSvxMSDffOLEConvFlags;
 
@@ -444,16 +439,16 @@ protected :
                                 const unsigned long nDrawingContainerId );
     // <--
 
-    FASTBOOL ReadGraphic( SvStream& rSt, sal_uLong nIndex, Graphic& rGraphic ) const;
-    SdrObject* ImportFontWork( SvStream&, SfxItemSet&, Rectangle& rBoundRect ) const;
+    bool ReadGraphic( SvStream& rSt, sal_uLong nIndex, Graphic& rGraphic ) const;
+    SdrObject* ImportFontWork( SvStream&, SfxItemSet&, basegfx::B2DRange& rBoundRect ) const;
     SdrObject* ImportGraphic( SvStream&, SfxItemSet&, const DffObjData& ) const;
     // --> OD 2004-12-14 #i32596# - pass <nCalledByGroup> to method
     // Needed in the Writer Microsoft Word import to avoid import of OLE objects
     // inside groups. Instead a graphic object is created.
     virtual SdrObject* ImportOLE( long nOLEId,
                                   const Graphic& rGraf,
-                                  const Rectangle& rBoundRect,
-                                  const Rectangle& rVisArea,
+                                  const basegfx::B2DRange& rBoundRect,
+                                  const basegfx::B2DRange& rVisArea,
                                   const int _nCalledByGroup,
                                   sal_Int64 nAspect ) const;
     // <--
@@ -463,7 +458,7 @@ protected :
                 sal_uInt32 nConvertFlags, SotStorage& rSrcStg,
                 const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xDestStg,
                 const Graphic& rGrf,
-                const Rectangle& rVisArea );
+                const basegfx::B2DRange& rVisArea );
 #endif
 
 /*
@@ -472,9 +467,9 @@ protected :
     virtual sal_Bool ProcessClientAnchor(SvStream& rStData, sal_uLong nDatLen, char*& rpBuff, sal_uInt32& rBuffLen ) const;
     virtual void ProcessClientAnchor2( SvStream& rStData, DffRecordHeader& rHd, void* pData, DffObjData& );
     virtual sal_Bool ProcessClientData(  SvStream& rStData, sal_uLong nDatLen, char*& rpBuff, sal_uInt32& rBuffLen ) const;
-    virtual SdrObject* ProcessObj( SvStream& rSt, DffObjData& rData, void* pData, Rectangle& rTextRect, SdrObject* pObj = NULL);
+    virtual SdrObject* ProcessObj( SvStream& rSt, DffObjData& rData, void* pData, basegfx::B2DRange& rTextRect, SdrObject* pObj = NULL);
     virtual sal_uLong Calc_nBLIPPos( sal_uLong nOrgVal, sal_uLong nStreamPos ) const;
-    virtual FASTBOOL GetColorFromPalette(sal_uInt16 nNum, Color& rColor) const;
+    virtual bool GetColorFromPalette(sal_uInt16 nNum, Color& rColor) const;
 
     // SJ: New implementation of ReadObjText is used by Fontwork objects, because
     // the old one does not properly import multiple paragraphs
@@ -498,6 +493,14 @@ protected :
     */
     virtual sal_Bool ShapeHasText(sal_uLong nShapeId, sal_uLong nFilePos) const;
 
+    // helper to apply rotation and mirroring to SdrObject
+    void ApplyRotationAndMirror(
+        SdrObject& rTarget,
+        const basegfx::B2DPoint& rCenter,
+        sal_Int32 nAngle, // in old DrawingLayer notation
+        bool bFlipHorizontal,
+        bool bFlipVertical);
+
 public:
 
     void*               pSvxMSDffDummy1;
@@ -514,11 +517,11 @@ public:
     Color MSO_TEXT_CLR_ToColor( sal_uInt32 nColorCode ) const;
     Color MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nContextProperty = DFF_Prop_lineColor ) const;
     virtual sal_Bool SeekToShape( SvStream& rSt, void* pClientData, sal_uInt32 nId ) const;
-    FASTBOOL SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMaxFilePos, DffRecordHeader* pRecHd = NULL, sal_uLong nSkipCount = 0 ) const;
-    FASTBOOL SeekToRec2( sal_uInt16 nRecId1, sal_uInt16 nRecId2, sal_uLong nMaxFilePos, DffRecordHeader* pRecHd = NULL, sal_uLong nSkipCount = 0 ) const;
+    bool SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMaxFilePos, DffRecordHeader* pRecHd = NULL, sal_uLong nSkipCount = 0 ) const;
+    bool SeekToRec2( sal_uInt16 nRecId1, sal_uInt16 nRecId2, sal_uLong nMaxFilePos, DffRecordHeader* pRecHd = NULL, sal_uLong nSkipCount = 0 ) const;
 
     // -----------------------------------------------------------------------
-    static void MSDFFReadZString( SvStream& rIn, String& rStr, sal_uLong nMaxLen, FASTBOOL bUniCode = sal_False );
+    static void MSDFFReadZString( SvStream& rIn, String& rStr, sal_uLong nMaxLen, bool bUniCode = sal_False );
 
     static sal_Bool ReadCommonRecordHeader( DffRecordHeader& rRec, SvStream& rIn );
     static sal_Bool ReadCommonRecordHeader( SvStream& rSt,
@@ -594,7 +597,7 @@ public:
 
     Rueckgabewert: sal_True, im Erfolgsfalls, sal_False bei Fehler
 */
-    sal_Bool GetBLIP( sal_uLong nIdx, Graphic& rData, Rectangle* pVisArea = NULL ) const;
+    sal_Bool GetBLIP( sal_uLong nIdx, Graphic& rData, basegfx::B2DRange* pVisArea = NULL ) const;
 
 /*
     GetBLIPDirect()     -Einlesen eines BLIP aus schon positioniertem Stream
@@ -607,7 +610,7 @@ public:
 
     Rueckgabewert: sal_True, im Erfolgsfalls, sal_False bei Fehler
 */
-    sal_Bool GetBLIPDirect(SvStream& rBLIPStream, Graphic& rData, Rectangle* pVisArea = NULL ) const;
+    sal_Bool GetBLIPDirect(SvStream& rBLIPStream, Graphic& rData, basegfx::B2DRange* pVisArea = NULL ) const;
 
     sal_Bool GetShape(sal_uLong nId,
                   SdrObject*& rpData, SvxMSDffImportData& rData);
@@ -652,18 +655,18 @@ public:
 //                                  sal_Bool bLookForEnd );
 //
     SdrObject* ImportObj(SvStream& rSt, void* pData,
-        Rectangle& rClientRect, const Rectangle& rGlobalChildRect, int nCalledByGroup = 0, sal_Int32* pShapeId = NULL);
+        basegfx::B2DRange& rClientRange, const basegfx::B2DRange& rGlobalChildRange, int nCalledByGroup = 0, sal_Int32* pShapeId = NULL);
 
     SdrObject* ImportGroup( const DffRecordHeader& rHd, SvStream& rSt, void* pData,
-        Rectangle& rClientRect, const Rectangle& rGlobalChildRect, int nCalledByGroup = 0, sal_Int32* pShapeId = NULL );
+        basegfx::B2DRange& rClientRange, const basegfx::B2DRange& rGlobalChildRange, int nCalledByGroup = 0, sal_Int32* pShapeId = NULL );
 
     SdrObject* ImportShape( const DffRecordHeader& rHd, SvStream& rSt, void* pData,
-        Rectangle& rClientRect, const Rectangle& rGlobalChildRect, int nCalledByGroup = 0, sal_Int32* pShapeId = NULL);
+        basegfx::B2DRange& rClientRange, const basegfx::B2DRange& rGlobalChildRange, int nCalledByGroup = 0, sal_Int32* pShapeId = NULL);
 
-    Rectangle GetGlobalChildAnchor( const DffRecordHeader& rHd, SvStream& rSt, Rectangle& aClientRect );
+    basegfx::B2DRange GetGlobalChildAnchor( const DffRecordHeader& rHd, SvStream& rSt, basegfx::B2DRange& aClientRange );
     void GetGroupAnchors( const DffRecordHeader& rHd, SvStream& rSt,
-                                Rectangle& rGroupClientAnchor, Rectangle& rGroupChildAnchor,
-                                    const Rectangle& rClientRect, const Rectangle& rGlobalChildRect );
+        basegfx::B2DRange& rGroupClientAnchor, basegfx::B2DRange& rGroupChildAnchor,
+        const basegfx::B2DRange& rClientRange, const basegfx::B2DRange& rGlobalChildRange );
 
     inline const SvxMSDffShapeInfos* GetShapeInfos( void ) const
         {
@@ -690,12 +693,14 @@ public:
 
     sal_uInt32  GetConvertFlags() const { return nSvxMSDffOLEConvFlags; }
 
-    static SdrOle2Obj* CreateSdrOLEFromStorage( const String& rStorageName,
+    static SdrOle2Obj* CreateSdrOLEFromStorage(
+        SdrModel& rTargetModel,
+        const String& rStorageName,
                                                 SotStorageRef& rSrcStorage,
                                                 const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xDestStg,
                                                 const Graphic& rGraf,
-                                                const Rectangle& rBoundRect,
-                                                const Rectangle& rVisArea,
+        const basegfx::B2DRange& rBoundRect,
+        const basegfx::B2DRange& rVisArea,
                                                 SvStream* pDataStrrm,
                                                 ErrCode& rError,
                                                 sal_uInt32 nConvertFlags,

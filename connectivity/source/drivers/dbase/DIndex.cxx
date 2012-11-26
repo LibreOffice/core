@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 #include "dbase/DIndex.hxx"
@@ -46,6 +44,7 @@
 #include <comphelper/types.hxx>
 #include "resource/dbase_res.hrc"
 #include <unotools/sharedunocomponent.hxx>
+#include <memory.h>
 
 using namespace ::comphelper;
 // -------------------------------------------------------------------------

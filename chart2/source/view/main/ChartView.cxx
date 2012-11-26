@@ -71,6 +71,7 @@
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
 #include <svx/unofill.hxx>
+#include <svx/svdlegacy.hxx>
 
 #include <time.h>
 
@@ -1791,7 +1792,7 @@ awt::Rectangle ChartView::getRectangleOfObject( const rtl::OUString& rObjectCID,
                 SdrObject* pRootSdrObject = pRoot->GetSdrObject();
                 if( pRootSdrObject )
                 {
-                    SdrObjList* pRootList = pRootSdrObject->GetSubList();
+                    SdrObjList* pRootList = pRootSdrObject->getChildrenOfSdrObject();
                     if( pRootList )
                     {
                         OUString aShapeName = C2U("MarkHandles");
@@ -1817,7 +1818,7 @@ awt::Rectangle ChartView::getRectangleOfObject( const rtl::OUString& rObjectCID,
                 SdrObject* pSdrObject = pShape->GetSdrObject();
                 if( pSdrObject )
                 {
-                    Rectangle aSnapRect( pSdrObject->GetSnapRect() );
+                    const Rectangle aSnapRect( sdr::legacy::GetSnapRect(*pSdrObject) );
                     aRet = awt::Rectangle(aSnapRect.Left(),aSnapRect.Top(),aSnapRect.GetWidth(),aSnapRect.GetHeight());
                 }
             }
@@ -2531,7 +2532,7 @@ void ChartView::createShapes()
 
     SdrPage* pPage = ChartView::getSdrPage();
     if(pPage) //it is neccessary to use the implementation here as the uno page does not provide a propertyset
-        pPage->SetSize(Size(aPageSize.Width,aPageSize.Height));
+        pPage->SetPageScale(basegfx::B2DVector(aPageSize.Width,aPageSize.Height));
     else
     {
         DBG_ERROR("could not set page size correctly");
@@ -2806,14 +2807,16 @@ void ChartView::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         }
     }
 
-    const SdrHint* pSdrHint = dynamic_cast< const SdrHint* >(&rHint);
+    const SdrBaseHint* pSdrHint = dynamic_cast< const SdrBaseHint* >(&rHint);
     if( !pSdrHint )
         return;
 
     bool bShapeChanged = false;
-    switch( pSdrHint->GetKind() )
+    switch( pSdrHint->GetSdrHintKind() )
     {
-         case HINT_OBJCHG:
+         case HINT_OBJCHG_MOVE:
+         case HINT_OBJCHG_RESIZE:
+         case HINT_OBJCHG_ATTR:
             bShapeChanged = true;
             break;
         case HINT_OBJINSERTED:
@@ -2835,7 +2838,7 @@ void ChartView::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     if(bShapeChanged)
     {
         //#i76053# do not send view modified notifications for changes on the hidden page which contains e.g. the symbols for the dialogs
-        if( ChartView::getSdrPage() != pSdrHint->GetPage() )
+        if( ChartView::getSdrPage() != pSdrHint->GetSdrHintPage() )
             bShapeChanged=false;
     }
 

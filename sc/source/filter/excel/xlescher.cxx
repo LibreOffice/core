@@ -107,11 +107,15 @@ long lclGetYFromRow( ScDocument& rDoc, SCTAB nScTab, sal_uInt16 nXclRow, sal_uIn
 /** Calculates an object column position from a drawing layer X position (in twips). */
 void lclGetColFromX(
         ScDocument& rDoc, SCTAB nScTab, sal_uInt16& rnXclCol,
-        sal_uInt16& rnOffset, sal_uInt16 nXclStartCol, sal_uInt16 nXclMaxCol,
-        long& rnStartW, long nX, double fScale )
+        sal_uInt16& rnOffset,
+        sal_uInt16 nXclStartCol,
+        sal_uInt16 nXclMaxCol,
+        long& rnStartW,
+        double fX,
+        double fScale )
 {
     // rnStartW in conjunction with nXclStartCol is used as buffer for previously calculated width
-    long nTwipsX = static_cast< long >( nX / fScale + 0.5 );
+    long nTwipsX = static_cast< long >( fX / fScale + 0.5 );
     long nColW = 0;
     for( rnXclCol = nXclStartCol; rnXclCol <= nXclMaxCol; ++rnXclCol )
     {
@@ -125,12 +129,18 @@ void lclGetColFromX(
 
 /** Calculates an object row position from a drawing layer Y position (in twips). */
 void lclGetRowFromY(
-        ScDocument& rDoc, SCTAB nScTab, sal_uInt16& rnXclRow,
-        sal_uInt16& rnOffset, sal_uInt16 nXclStartRow, sal_uInt16 nXclMaxRow,
-        long& rnStartH, long nY, double fScale )
+        ScDocument& rDoc,
+        SCTAB nScTab,
+        sal_uInt16& rnXclRow,
+        sal_uInt16& rnOffset,
+        sal_uInt16 nXclStartRow,
+        sal_uInt16 nXclMaxRow,
+        long& rnStartH,
+        double fY,
+        double fScale )
 {
     // rnStartH in conjunction with nXclStartRow is used as buffer for previously calculated height
-    long nTwipsY = static_cast< long >( nY / fScale + 0.5 );
+    long nTwipsY = static_cast< long >( fY / fScale + 0.5 );
     long nRowH = 0;
     bool bFound = false;
     for( SCROW nRow = static_cast< SCROW >( nXclStartRow ); nRow <= nXclMaxRow; ++nRow )
@@ -150,16 +160,16 @@ void lclGetRowFromY(
 }
 
 /** Mirrors a rectangle (from LTR to RTL layout or vice versa). */
-void lclMirrorRectangle( Rectangle& rRect )
+void lclMirrorRange( basegfx::B2DRange& rRange )
 {
-    long nLeft = rRect.Left();
-    rRect.Left() = -rRect.Right();
-    rRect.Right() = -nLeft;
+    rRange = basegfx::B2DRange(
+        -rRange.getMaxX(), rRange.getMinY(),
+        -rRange.getMinX(), rRange.getMaxY());
 }
 
-sal_uInt16 lclGetEmbeddedScale( long nPageSize, sal_Int32 nPageScale, long nPos, double fPosScale )
+sal_uInt16 lclGetEmbeddedScale( double fPageSize, double fPageScale, double fPos, double fPosScale )
 {
-    return static_cast< sal_uInt16 >( nPos * fPosScale / nPageSize * nPageScale + 0.5 );
+    return static_cast< sal_uInt16 >( fPos * fPosScale / fPageSize * fPageScale + 0.5 );
 }
 
 } // namespace
@@ -174,11 +184,11 @@ XclObjAnchor::XclObjAnchor() :
 {
 }
 
-Rectangle XclObjAnchor::GetRect( const XclRoot& rRoot, SCTAB nScTab, MapUnit eMapUnit ) const
+basegfx::B2DRange XclObjAnchor::GetRangeFromAnchor( const XclRoot& rRoot, SCTAB nScTab, MapUnit eMapUnit ) const
 {
     ScDocument& rDoc = rRoot.GetDoc();
-    double fScale = lclGetTwipsScale( eMapUnit );
-    Rectangle aRect(
+    const double fScale(lclGetTwipsScale(eMapUnit));
+    basegfx::B2DRange aRange(
         lclGetXFromCol( rDoc, nScTab, maFirst.mnCol, mnLX, fScale ),
         lclGetYFromRow( rDoc, nScTab, maFirst.mnRow, mnTY, fScale ),
         lclGetXFromCol( rDoc, nScTab, maLast.mnCol,  mnRX + 1, fScale ),
@@ -186,48 +196,64 @@ Rectangle XclObjAnchor::GetRect( const XclRoot& rRoot, SCTAB nScTab, MapUnit eMa
 
     // #106948# adjust coordinates in mirrored sheets
     if( rDoc.IsLayoutRTL( nScTab ) )
-        lclMirrorRectangle( aRect );
-    return aRect;
+    {
+        lclMirrorRange( aRange );
+    }
+
+    return aRange;
 }
 
-void XclObjAnchor::SetRect( const XclRoot& rRoot, SCTAB nScTab, const Rectangle& rRect, MapUnit eMapUnit )
+void XclObjAnchor::SetRangeAtAnchor(
+    const XclRoot& rRoot,
+    SCTAB nScTab,
+    const basegfx::B2DRange& rObjectRange,
+    MapUnit eMapUnit )
 {
+    basegfx::B2DRange aObjectRange(rObjectRange);
     ScDocument& rDoc = rRoot.GetDoc();
     sal_uInt16 nXclMaxCol = rRoot.GetXclMaxPos().Col();
     sal_uInt16 nXclMaxRow = static_cast<sal_uInt16>( rRoot.GetXclMaxPos().Row());
 
     // #106948# adjust coordinates in mirrored sheets
-    Rectangle aRect( rRect );
     if( rDoc.IsLayoutRTL( nScTab ) )
-        lclMirrorRectangle( aRect );
+    {
+        aObjectRange = basegfx::B2DRange(
+            -aObjectRange.getMinX(), aObjectRange.getMinY(),
+            -aObjectRange.getMaxX(), aObjectRange.getMaxY());
+    }
 
-    double fScale = lclGetTwipsScale( eMapUnit );
+    const double fScale(lclGetTwipsScale( eMapUnit ));
     long nDummy = 0;
-    lclGetColFromX( rDoc, nScTab, maFirst.mnCol, mnLX, 0,             nXclMaxCol, nDummy, aRect.Left(),   fScale );
-    lclGetColFromX( rDoc, nScTab, maLast.mnCol,  mnRX, maFirst.mnCol, nXclMaxCol, nDummy, aRect.Right(),  fScale );
+    lclGetColFromX( rDoc, nScTab, maFirst.mnCol, mnLX, 0,             nXclMaxCol, nDummy, aObjectRange.getMinX(), fScale );
+    lclGetColFromX( rDoc, nScTab, maLast.mnCol,  mnRX, maFirst.mnCol, nXclMaxCol, nDummy, aObjectRange.getMaxX(), fScale );
     nDummy = 0;
-    lclGetRowFromY( rDoc, nScTab, maFirst.mnRow, mnTY, 0,             nXclMaxRow, nDummy, aRect.Top(),    fScale );
-    lclGetRowFromY( rDoc, nScTab, maLast.mnRow,  mnBY, maFirst.mnRow, nXclMaxRow, nDummy, aRect.Bottom(), fScale );
+    lclGetRowFromY( rDoc, nScTab, maFirst.mnRow, mnTY, 0,             nXclMaxRow, nDummy, aObjectRange.getMinY(), fScale );
+    lclGetRowFromY( rDoc, nScTab, maLast.mnRow,  mnBY, maFirst.mnRow, nXclMaxRow, nDummy, aObjectRange.getMaxY(), fScale );
 }
 
-void XclObjAnchor::SetRect( const Size& rPageSize, sal_Int32 nScaleX, sal_Int32 nScaleY,
-        const Rectangle& rRect, MapUnit eMapUnit, bool bDffAnchor )
+void XclObjAnchor::SetRangeAtAnchor(
+    const basegfx::B2DVector& rPageScale,
+    double fScaleX,
+    double fScaleY,
+    const basegfx::B2DRange& rObjectRange,
+    MapUnit eMapUnit,
+    bool bDffAnchor )
 {
     double fScale = 1.0;
     switch( eMapUnit )
     {
         case MAP_TWIP:      fScale = HMM_PER_TWIPS; break;  // Calc twips -> 1/100mm
         case MAP_100TH_MM:  fScale = 1.0;           break;  // Calc 1/100mm -> 1/100mm
-        default:            DBG_ERRORFILE( "XclObjAnchor::SetRect - map unit not implemented" );
+        default:            DBG_ERRORFILE( "XclObjAnchor::SetRangeAtAnchor - map unit not implemented" );
     }
 
     /*  In objects with DFF client anchor, the position of the shape is stored
         in the cell address components of the client anchor. In old BIFF3-BIFF5
         objects, the position is stored in the offset components of the anchor. */
-    (bDffAnchor ? maFirst.mnCol : mnLX) = lclGetEmbeddedScale( rPageSize.Width(),  nScaleX, rRect.Left(),   fScale );
-    (bDffAnchor ? maFirst.mnRow : mnTY) = lclGetEmbeddedScale( rPageSize.Height(), nScaleY, rRect.Top(),    fScale );
-    (bDffAnchor ? maLast.mnCol  : mnRX) = lclGetEmbeddedScale( rPageSize.Width(),  nScaleX, rRect.Right(),  fScale );
-    (bDffAnchor ? maLast.mnRow  : mnBY) = lclGetEmbeddedScale( rPageSize.Height(), nScaleY, rRect.Bottom(), fScale );
+    (bDffAnchor ? maFirst.mnCol : mnLX) = lclGetEmbeddedScale( rPageScale.getX(), fScaleX, rObjectRange.getMinX(), fScale );
+    (bDffAnchor ? maFirst.mnRow : mnTY) = lclGetEmbeddedScale( rPageScale.getY(), fScaleY, rObjectRange.getMinY(), fScale );
+    (bDffAnchor ? maLast.mnCol  : mnRX) = lclGetEmbeddedScale( rPageScale.getX(), fScaleX, rObjectRange.getMaxX(), fScale );
+    (bDffAnchor ? maLast.mnRow  : mnBY) = lclGetEmbeddedScale( rPageScale.getY(), fScaleY, rObjectRange.getMaxY(), fScale );
 
     // for safety, clear the other members
     if( bDffAnchor )

@@ -80,6 +80,7 @@
 #include <fmtsrnd.hxx>
 #include <editeng/opaqitem.hxx>
 // <--
+#include <svx/svdlegacy.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -242,7 +243,7 @@ void SwFEShell::SelectFlyFrm( SwFlyFrm& rFrm, sal_Bool bNew )
     //  Der Rahmen darf nicht per Dokumentposition selektiert werden, weil er
     //  auf jedenfall selektiert sein muss!
     SwViewImp *pImpl = Imp();
-    if( GetWin() && (bNew || !pImpl->GetDrawView()->AreObjectsMarked()) )
+    if( GetWin() && (bNew || !pImpl->GetDrawView()->areSdrObjectsSelected()) )
     {
         ASSERT( rFrm.IsFlyFrm(), "SelectFlyFrm will einen Fly" );
 
@@ -262,11 +263,10 @@ void SwFEShell::SelectFlyFrm( SwFlyFrm& rFrm, sal_Bool bNew )
 //        if( !rFrm.GetAnchorFrm()->IsInFly() )
 //            rFrm.Calc();
 
-        if( pImpl->GetDrawView()->AreObjectsMarked() )
+        if( pImpl->GetDrawView()->areSdrObjectsSelected() )
             pImpl->GetDrawView()->UnmarkAll();
 
-        pImpl->GetDrawView()->MarkObj( rFrm.GetVirtDrawObj(),
-                                      pImpl->GetPageView(), sal_False, sal_False );
+        pImpl->GetDrawView()->MarkObj( *rFrm.GetVirtDrawObj(), false );
         KillPams();
         ClearMark();
         SelFlyGrabCrsr();
@@ -288,13 +288,14 @@ SwFlyFrm *SwFEShell::FindFlyFrm() const
     if ( Imp()->HasDrawView() )
     {
         // Ein Fly ist genau dann erreichbar, wenn er selektiert ist.
-        const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
-        if( rMrkList.GetMarkCount() != 1 )
-            return 0;
+        SwVirtFlyDrawObj* pCandidate = dynamic_cast< SwVirtFlyDrawObj* >(Imp()->GetDrawView()->getSelectedIfSingle());
 
-        SdrObject *pO = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
-        return ( pO && pO->ISA(SwVirtFlyDrawObj) ) ? ((SwVirtFlyDrawObj*)pO)->GetFlyFrm() : 0;
+        if(pCandidate)
+        {
+            return pCandidate->GetFlyFrm();
+        }
     }
+
     return 0;
 }
 
@@ -316,8 +317,23 @@ const SwFrmFmt* SwFEShell::IsFlyInFly()
     if ( !Imp()->HasDrawView() )
         return NULL;
 
-    const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
-    if ( !rMrkList.GetMarkCount() )
+    SdrObject *pObj = 0;
+
+    if(Imp()->GetDrawView()->areSdrObjectsSelected())
+    {
+        pObj = Imp()->GetDrawView()->getSelectedIfSingle();
+
+        if(!pObj)
+        {
+            return 0;
+        }
+
+        if(!findConnectionToSdrObject(pObj))
+        {
+            return 0;
+        }
+    }
+    else
     {
         SwCntntFrm *pCntnt = GetCurrFrm( sal_False );
         if( !pCntnt )
@@ -327,24 +343,21 @@ const SwFrmFmt* SwFEShell::IsFlyInFly()
             return NULL;
         return pFly->GetFmt();
     }
-    else if ( rMrkList.GetMarkCount() != 1 ||
-         !GetUserCall(rMrkList.GetMark( 0 )->GetMarkedSdrObj()) )
-        return NULL;
 
-    SdrObject *pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
 
     SwFrmFmt *pFmt = FindFrmFmt( pObj );
     if( pFmt && FLY_AT_FLY == pFmt->GetAnchor().GetAnchorId() )
     {
-        const SwFrm* pFly = pObj->ISA(SwVirtFlyDrawObj) ?
+        const SwFrm* pFly = dynamic_cast< SwVirtFlyDrawObj* >(pObj) ?
             ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->GetAnchorFrm() :
-            ((SwDrawContact*)GetUserCall(pObj))->GetAnchorFrm( pObj );
+            ((SwDrawContact*)findConnectionToSdrObject(pObj))->GetAnchorFrm( pObj );
         ASSERT( pFly, "IsFlyInFly: Where's my anchor?" );
         ASSERT( pFly->IsFlyFrm(), "IsFlyInFly: Funny anchor!" );
         return ((SwFlyFrm*)pFly)->GetFmt();
     }
 
-    Point aTmpPos = pObj->GetCurrentBoundRect().TopLeft();
+    const basegfx::B2DPoint aTopLeft(pObj->getObjectRange(Imp()->GetDrawView()).getMinimum());
+    Point aTmpPos(basegfx::fround(aTopLeft.getX()), basegfx::fround(aTopLeft.getY()));
 
     SwFrm *pTxtFrm;
     {
@@ -432,21 +445,22 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
     if ( !Imp()->HasDrawView() )
         return aRet;
 
-    const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
-    if ( rMrkList.GetMarkCount() != 1 ||
-         !GetUserCall(rMrkList.GetMark( 0 )->GetMarkedSdrObj()) )
-        return aRet;
+    SdrObject* pObj = Imp()->GetDrawView()->getSelectedIfSingle();
 
-    SdrObject* pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
+    if(!pObj || !findConnectionToSdrObject(pObj))
+    {
+        return aRet;
+    }
+
     // --> OD 2004-07-16 #i28701#
-    SwAnchoredObject* pAnchoredObj = ::GetUserCall( pObj )->GetAnchoredObj( pObj );
+    SwAnchoredObject* pAnchoredObj = ::findConnectionToSdrObject( pObj )->GetAnchoredObj( pObj );
     SwFrmFmt& rFmt = pAnchoredObj->GetFrmFmt();
     RndStdIds nAnchorId = rFmt.GetAnchor().GetAnchorId();
 
     if ( FLY_AS_CHAR == nAnchorId )
         return aRet;
 
-    sal_Bool bFlyFrame = pObj->ISA(SwVirtFlyDrawObj);
+    const bool bFlyFrame(dynamic_cast< SwVirtFlyDrawObj* >(pObj));
 
     SwFlyFrm* pFly = 0L;
     const SwFrm* pOldAnch;
@@ -943,14 +957,25 @@ void SwFEShell::InsertDrawObj( SdrObject& rDrawObj,
         const SwFrm* pFrm = aPam.GetCntntNode()->getLayoutFrm( GetLayout(), 0, 0, sal_False );
         const Point aRelPos( rInsertPosition.X() - pFrm->Frm().Left(),
                              rInsertPosition.Y() - pFrm->Frm().Top() );
-        rDrawObj.SetRelativePos( aRelPos );
+
+        // #i108739#
+        // rDrawObj.SetRelativePos( aRelPos );
+        {
+            const basegfx::B2DPoint aTopLeft(sdr::legacy::GetSnapRange(rDrawObj).getMinimum());
+            const basegfx::B2DPoint aAnchorPos(rDrawObj.GetAnchorPos());
+            const basegfx::B2DPoint aRelativePos(aRelPos.X(), aRelPos.Y());
+            sdr::legacy::transformSdrObject(
+                rDrawObj, basegfx::tools::createTranslateB2DHomMatrix(
+                    aRelativePos - aTopLeft + aAnchorPos));
+        }
+
         ::lcl_FindAnchorPos( *GetDoc(), rInsertPosition, *pFrm, rFlyAttrSet );
     }
     // insert drawing object into the document creating a new <SwDrawFrmFmt> instance
     SwDrawFrmFmt* pFmt = GetDoc()->Insert( aPam, rDrawObj, &rFlyAttrSet, 0 );
 
     // move object to visible layer
-    SwContact* pContact = static_cast<SwContact*>(rDrawObj.GetUserCall());
+    SwContact* pContact = findConnectionToSdrObjectDirect(&rDrawObj);
     if ( pContact )
     {
         pContact->MoveObjToVisibleLayer( &rDrawObj );
@@ -959,8 +984,7 @@ void SwFEShell::InsertDrawObj( SdrObject& rDrawObj,
     if ( pFmt )
     {
         // select drawing object
-        Imp()->GetDrawView()->MarkObj( &rDrawObj, Imp()->GetPageView(),
-                                       sal_False, sal_False );
+        Imp()->GetDrawView()->MarkObj( rDrawObj, false );
     }
     else
     {
@@ -1171,12 +1195,14 @@ sal_Bool SwFEShell::SetDrawingAttr( SfxItemSet& rSet )
             !Imp()->HasDrawView() )
         return bRet;
 
-    const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
-    if ( rMrkList.GetMarkCount() != 1 )
+    SdrObject *pObj = Imp()->GetDrawView()->getSelectedIfSingle();
+
+    if(!pObj)
+    {
         return bRet;
+    }
 
     StartUndo();
-    SdrObject *pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
     SwFrmFmt *pFmt = FindFrmFmt( pObj );
     StartAllAction();
     if( SFX_ITEM_SET == rSet.GetItemState( RES_ANCHOR, sal_False ))
@@ -1194,8 +1220,7 @@ sal_Bool SwFEShell::SetDrawingAttr( SfxItemSet& rSet )
     if( GetDoc()->SetFlyFrmAttr( *pFmt, rSet ))
     {
         bRet = sal_True;
-        Point aTmp;
-        SelectObj( aTmp, 0, pObj );
+        SelectObj( basegfx::B2DPoint(0.0, 0.0), 0, pObj );
     }
     EndAllActionAndCall();
     EndUndo();
@@ -1288,7 +1313,7 @@ void SwFEShell::SetFrmFmt( SwFrmFmt *pNewFmt, sal_Bool bKeepOrient, Point* pDocP
     {
         const SwFrmFmt* pFmt = GetFmtFromObj( *pDocPos );
 
-        if(PTR_CAST(SwFlyFrmFmt, pFmt))
+        if(dynamic_cast< const SwFlyFrmFmt* >( pFmt))
             pFly = ((SwFlyFrmFmt*)pFmt)->GetFrm();
     }
     else
@@ -1396,19 +1421,30 @@ SwRect SwFEShell::GetFlyRect() const
 SwRect SwFEShell::GetObjRect() const
 {
     if( Imp()->HasDrawView() )
-        return Imp()->GetDrawView()->GetAllMarkedRect();
-    else
     {
-        SwRect aRect;
-        return aRect;
+        const basegfx::B2DRange aAllRange(Imp()->GetDrawView()->getMarkedObjectSnapRange());
+
+        if(!aAllRange.isEmpty())
+        {
+            return Rectangle(
+                (sal_Int32)floor(aAllRange.getMinX()), (sal_Int32)floor(aAllRange.getMinY()),
+                (sal_Int32)ceil(aAllRange.getMaxX()), (sal_Int32)ceil(aAllRange.getMaxY()));
+        }
     }
+
+    return SwRect();
 }
 
 void SwFEShell::SetObjRect( const SwRect& rRect )
 {
     if ( Imp()->HasDrawView() )
     {
-        Imp()->GetDrawView()->SetAllMarkedRect( rRect.SVRect() );
+        const Rectangle aRectangle(rRect.SVRect());
+
+        Imp()->GetDrawView()->SetMarkedObjSnapRange(
+            basegfx::B2DRange(
+                aRectangle.Left(), aRectangle.Top(),
+                aRectangle.Right(), aRectangle.Bottom()));
         CallChgLnk();   // rufe das AttrChangeNotify auf der UI-Seite.
     }
 }
@@ -1632,15 +1668,14 @@ const SwFrmFmt* SwFEShell::IsURLGrfAtPos( const Point& rPt, String* pURL,
         return 0;
 
     SdrObject* pObj;
-    SdrPageView* pPV;
     const SwFrmFmt* pRet = 0;
     SwDrawView *pDView = (SwDrawView*)Imp()->GetDrawView();
 
     sal_uInt16 nOld = pDView->GetHitTolerancePixel();
     pDView->SetHitTolerancePixel( 2 );
 
-    if( pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPV,SDRSEARCH_PICKMACRO ) &&
-        pObj->ISA(SwVirtFlyDrawObj) )
+    if( pDView->PickObj( basegfx::B2DPoint(rPt.X(), rPt.Y()), pDView->getHitTolLog(), pObj, SDRSEARCH_PICKMACRO ) &&
+        dynamic_cast< SwVirtFlyDrawObj* >(pObj) )
     {
         SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
         const SwFmtURL &rURL = pFly->GetFmt()->GetURL();
@@ -1704,10 +1739,9 @@ const Graphic *SwFEShell::GetGrfAtPos( const Point &rPt,
         return 0;
 
     SdrObject* pObj;
-    SdrPageView* pPV;
     SwDrawView *pDView = (SwDrawView*)Imp()->GetDrawView();
 
-    if( pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPV ) && pObj->ISA(SwVirtFlyDrawObj) )
+    if( pDView->PickObj( basegfx::B2DPoint(rPt.X(), rPt.Y()), pDView->getHitTolLog(), pObj ) && dynamic_cast< SwVirtFlyDrawObj* >(pObj) )
     {
         SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
         if ( pFly->Lower() && pFly->Lower()->IsNoTxtFrm() )
@@ -1743,23 +1777,28 @@ const SwFrmFmt* SwFEShell::GetFmtFromObj( const Point& rPt, SwRect** pRectToFill
     if( Imp()->HasDrawView() )
     {
         SdrObject* pObj;
-        SdrPageView* pPView;
-
         SwDrawView *pDView = (SwDrawView*)Imp()->GetDrawView();
 
-        sal_uInt16 nOld = pDView->GetHitTolerancePixel();
+        const sal_uInt16 nOld(pDView->GetHitTolerancePixel());
         // Tattergrenze fuer Drawing-SS
         pDView->SetHitTolerancePixel( pDView->GetMarkHdlSizePixel()/2 );
 
-        if( pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPView, SDRSEARCH_PICKMARKABLE ) )
+        if( pDView->PickObj( basegfx::B2DPoint(rPt.X(), rPt.Y()), pDView->getHitTolLog(), pObj, SDRSEARCH_PICKMARKABLE ) )
         {
             // dann teste mal was es ist:
-            if ( pObj->ISA(SwVirtFlyDrawObj) )
+            if ( dynamic_cast< SwVirtFlyDrawObj* >(pObj) )
+            {
                 pRet = ((SwVirtFlyDrawObj*)pObj)->GetFmt();
-            else if ( pObj->GetUserCall() ) //nicht fuer Gruppenobjekte
-                pRet = ((SwDrawContact*)pObj->GetUserCall())->GetFmt();
+            }
+            else if ( findConnectionToSdrObjectDirect(pObj) ) //nicht fuer Gruppenobjekte
+            {
+                pRet = ((SwDrawContact*)findConnectionToSdrObjectDirect(pObj))->GetFmt();
+            }
+
             if(pRet && pRectToFill)
-                **pRectToFill = pObj->GetCurrentBoundRect();
+            {
+                **pRectToFill = sdr::legacy::GetBoundRect(*pObj);
+            }
         }
         pDView->SetHitTolerancePixel( nOld );
     }
@@ -1789,9 +1828,10 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj ) const
     // OD 23.06.2003 #108784# - investigate 'master' drawing object, if method
     // is called for a 'virtual' drawing object.
     const SdrObject* pInvestigatedObj;
-    if ( rObj.ISA(SwDrawVirtObj) )
+    const SwDrawVirtObj* pDrawVirtObj = dynamic_cast< const SwDrawVirtObj* >(&rObj);
+
+    if ( pDrawVirtObj )
     {
-        const SwDrawVirtObj* pDrawVirtObj = static_cast<const SwDrawVirtObj*>(&rObj);
         pInvestigatedObj = &(pDrawVirtObj->GetReferencedObj());
     }
     else
@@ -1820,7 +1860,7 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj ) const
             }
         }
     }
-    else if( pInvestigatedObj->ISA(SwVirtFlyDrawObj) )
+    else if( dynamic_cast< const SwVirtFlyDrawObj* >(pInvestigatedObj) )
     {
         SwFlyFrm *pFly = ((SwVirtFlyDrawObj&)(*pInvestigatedObj)).GetFlyFrm();
         if ( pFly->Lower() && pFly->Lower()->IsNoTxtFrm() )
@@ -1833,9 +1873,9 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj ) const
         else
             eType = OBJCNT_FLY;
     }
-    else if ( pInvestigatedObj->ISA( SdrObjGroup ) )
+    else if ( dynamic_cast< const SdrObjGroup* >(pInvestigatedObj) )
     {
-        SwDrawContact* pDrawContact( dynamic_cast<SwDrawContact*>(GetUserCall( pInvestigatedObj ) ) );
+        SwDrawContact* pDrawContact( dynamic_cast<SwDrawContact*>(findConnectionToSdrObject( pInvestigatedObj ) ) );
         if ( !pDrawContact )
         {
             ASSERT( false,
@@ -1869,15 +1909,13 @@ ObjCntType SwFEShell::GetObjCntType( const Point &rPt, SdrObject *&rpObj ) const
     if( Imp()->HasDrawView() )
     {
         SdrObject* pObj;
-        SdrPageView* pPView;
-
         SwDrawView *pDView = (SwDrawView*)Imp()->GetDrawView();
 
         sal_uInt16 nOld = pDView->GetHitTolerancePixel();
         // Tattergrenze fuer Drawing-SS
         pDView->SetHitTolerancePixel( pDView->GetMarkHdlSizePixel()/2 );
 
-        if( pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPView, SDRSEARCH_PICKMARKABLE ) )
+        if( pDView->PickObj( basegfx::B2DPoint(rPt.X(), rPt.Y()), pDView->getHitTolLog(), pObj, SDRSEARCH_PICKMARKABLE ) )
             eType = GetObjCntType( *(rpObj = pObj) );
 
         pDView->SetHitTolerancePixel( nOld );
@@ -1889,14 +1927,13 @@ ObjCntType SwFEShell::GetObjCntTypeOfSelection( SdrObject** ppObj ) const
 {
     ObjCntType eType = OBJCNT_NONE;
 
-    if( Imp()->HasDrawView() )
+    if( Imp()->HasDrawView() && Imp()->GetDrawView()->areSdrObjectsSelected())
     {
-        const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
-        for( sal_uInt32 i = 0, nE = rMrkList.GetMarkCount(); i < nE; ++i )
+        const SdrObjectVector aSelection(Imp()->GetDrawView()->getSelectedSdrObjectVectorFromSdrMarkView());
+
+        for( sal_uInt32 i(0); i < aSelection.size(); ++i )
         {
-            SdrObject* pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
-            if( !pObj )
-                continue;
+            SdrObject* pObj = aSelection[i];
             ObjCntType eTmp = GetObjCntType( *pObj );
             if( !i )
             {
@@ -1919,13 +1956,11 @@ sal_Bool SwFEShell::ReplaceSdrObj( const String& rGrfName, const String& rFltNam
                                 const Graphic* pGrf )
 {
     SET_CURR_SHELL( this );
-
     sal_Bool bRet = sal_False;
-    const SdrMarkList *pMrkList;
-    if( Imp()->HasDrawView() &&  1 ==
-        ( pMrkList = &Imp()->GetDrawView()->GetMarkedObjectList())->GetMarkCount() )
+    SdrObject* pObj = Imp()->HasDrawView() ? Imp()->GetDrawView()->getSelectedIfSingle() : 0;
+
+    if(pObj)
     {
-        SdrObject* pObj = pMrkList->GetMark( 0 )->GetMarkedSdrObj();
         SwFrmFmt *pFmt = FindFrmFmt( pObj );
 
         // Attribute sichern und dann an der Grafik setzen
@@ -1934,14 +1969,14 @@ sal_Bool SwFEShell::ReplaceSdrObj( const String& rGrfName, const String& rFltNam
         aFrmSet.Set( pFmt->GetAttrSet() );
 
         // Groesse und Position setzen ??
-        if( !pObj->ISA(SwVirtFlyDrawObj) )
+        if( !dynamic_cast< SwVirtFlyDrawObj* >(pObj) )
         {
             // dann mal los:
-            const Rectangle &rBound = pObj->GetSnapRect();
-            Point aRelPos( pObj->GetRelativePos() );
+            const Rectangle aBound(sdr::legacy::GetSnapRect(*pObj));
+            const Point aRelPos(aBound.TopLeft() - sdr::legacy::GetAnchorPos(*pObj));
 
-            const long nWidth = rBound.Right()  - rBound.Left();
-            const long nHeight= rBound.Bottom() - rBound.Top();
+            const long nWidth = aBound.Right()  - aBound.Left();
+            const long nHeight= aBound.Bottom() - aBound.Top();
             aFrmSet.Put( SwFmtFrmSize( ATT_MIN_SIZE,
                                 Max( nWidth,  long(MINFLY) ),
                                 Max( nHeight, long(MINFLY) )));
@@ -1953,8 +1988,6 @@ sal_Bool SwFEShell::ReplaceSdrObj( const String& rGrfName, const String& rFltNam
                 aFrmSet.Put( SwFmtVertOrient( aRelPos.Y(), text::VertOrientation::NONE, text::RelOrientation::FRAME ));
 
         }
-
-        pObj->GetOrdNum();
 
         StartAllAction();
         StartUndo();
@@ -2100,10 +2133,10 @@ const String SwFEShell::GetObjTitle() const
 
     if ( Imp()->HasDrawView() )
     {
-        const SdrMarkList *pMrkList = &Imp()->GetDrawView()->GetMarkedObjectList();
-        if ( pMrkList->GetMarkCount() == 1 )
+        const SdrObject* pObj = Imp()->GetDrawView()->getSelectedIfSingle();
+
+        if ( pObj )
         {
-            const SdrObject* pObj = pMrkList->GetMark( 0 )->GetMarkedSdrObj();
             const SwFrmFmt* pFmt = FindFrmFmt( pObj );
             if ( pFmt->Which() == RES_FLYFRMFMT )
             {
@@ -2123,10 +2156,10 @@ void SwFEShell::SetObjTitle( const String& rTitle )
 {
     if ( Imp()->HasDrawView() )
     {
-        const SdrMarkList *pMrkList = &Imp()->GetDrawView()->GetMarkedObjectList();
-        if ( pMrkList->GetMarkCount() == 1 )
+        SdrObject* pObj = Imp()->GetDrawView()->getSelectedIfSingle();
+
+        if ( pObj )
         {
-            SdrObject* pObj = pMrkList->GetMark( 0 )->GetMarkedSdrObj();
             SwFrmFmt* pFmt = FindFrmFmt( pObj );
             if ( pFmt->Which() == RES_FLYFRMFMT )
             {
@@ -2147,10 +2180,10 @@ const String SwFEShell::GetObjDescription() const
 
     if ( Imp()->HasDrawView() )
     {
-        const SdrMarkList *pMrkList = &Imp()->GetDrawView()->GetMarkedObjectList();
-        if ( pMrkList->GetMarkCount() == 1 )
+        const SdrObject* pObj = Imp()->GetDrawView()->getSelectedIfSingle();
+
+        if ( pObj )
         {
-            const SdrObject* pObj = pMrkList->GetMark( 0 )->GetMarkedSdrObj();
             const SwFrmFmt* pFmt = FindFrmFmt( pObj );
             if ( pFmt->Which() == RES_FLYFRMFMT )
             {
@@ -2170,10 +2203,10 @@ void SwFEShell::SetObjDescription( const String& rDescription )
 {
     if ( Imp()->HasDrawView() )
     {
-        const SdrMarkList *pMrkList = &Imp()->GetDrawView()->GetMarkedObjectList();
-        if ( pMrkList->GetMarkCount() == 1 )
+        SdrObject* pObj = Imp()->GetDrawView()->getSelectedIfSingle();
+
+        if ( pObj )
         {
-            SdrObject* pObj = pMrkList->GetMark( 0 )->GetMarkedSdrObj();
             SwFrmFmt* pFmt = FindFrmFmt( pObj );
             if ( pFmt->Which() == RES_FLYFRMFMT )
             {

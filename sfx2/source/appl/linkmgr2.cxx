@@ -521,14 +521,12 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
         String sNm( sTopic ), sTmp;
         aCC.toLower( sNm );
 
-        TypeId aType( TYPE(SfxObjectShell) );
-
         sal_Bool bFirst = sal_True;
         SfxObjectShell* pShell = pLink->GetLinkManager()->GetPersist();
         if( pShell && pShell->GetMedium() )
         {
             sReferer = pShell->GetMedium()->GetBaseURL();
-            SFX_ITEMSET_ARG( pShell->GetMedium()->GetItemSet(), pItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False );
+            SFX_ITEMSET_ARG( pShell->GetMedium()->GetItemSet(), pItem, SfxUInt16Item, SID_UPDATEDOCMODE );
             if ( pItem )
                 nUpdateMode = pItem->GetValue();
         }
@@ -539,7 +537,7 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
         if ( !pShell )
         {
             bFirst = sal_False;
-            pShell = SfxObjectShell::GetFirst( &aType, sal_False );
+            pShell = SfxObjectShell::GetFirst( _IsObjectShell< SfxObjectShell >, sal_False );
         }
 
         while( pShell )
@@ -561,10 +559,10 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
             if( bFirst )
             {
                 bFirst = sal_False;
-                pShell = SfxObjectShell::GetFirst( &aType, sal_False );
+                pShell = SfxObjectShell::GetFirst( _IsObjectShell< SfxObjectShell >, sal_False );
             }
             else
-                pShell = SfxObjectShell::GetNext( *pShell, &aType, sal_False );
+                pShell = SfxObjectShell::GetNext( *pShell, _IsObjectShell< SfxObjectShell >, sal_False );
 
             sTmp.Erase();
         }

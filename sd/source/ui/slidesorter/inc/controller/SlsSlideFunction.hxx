@@ -44,11 +44,9 @@ class SlideFunction
     : public FuPoor
 {
 public:
-    TYPEINFO();
-
-    virtual sal_Bool MouseMove (const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonUp (const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonDown (const MouseEvent& rMEvt);
+    virtual bool MouseMove (const MouseEvent& rMEvt);
+    virtual bool MouseButtonUp (const MouseEvent& rMEvt);
+    virtual bool MouseButtonDown (const MouseEvent& rMEvt);
 
     /** Called from ForceScroll() before the actual scrolling.
     */

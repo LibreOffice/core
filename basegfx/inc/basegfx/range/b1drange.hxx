@@ -148,6 +148,11 @@ namespace basegfx
         {
             maRange.grow(fValue);
         }
+
+        double clamp(double fValue) const
+        {
+            return maRange.clamp(fValue);
+        }
     };
 
     /** Round double to nearest integer for 1D range

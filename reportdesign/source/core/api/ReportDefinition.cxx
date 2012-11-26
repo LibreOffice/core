@@ -772,8 +772,8 @@ void OReportDefinition::init()
 
         m_pImpl->m_pReportModel.reset(new OReportModel(this));
         m_pImpl->m_pReportModel->GetItemPool().FreezeIdRanges();
-        m_pImpl->m_pReportModel->SetScaleUnit( MAP_100TH_MM );
-        SdrLayerAdmin& rAdmin = m_pImpl->m_pReportModel->GetLayerAdmin();
+        m_pImpl->m_pReportModel->SetExchangeObjectUnit( MAP_100TH_MM );
+        SdrLayerAdmin& rAdmin = m_pImpl->m_pReportModel->GetModelLayerAdmin();
         rAdmin.NewStandardLayer(RPT_LAYER_FRONT);
         rAdmin.NewLayer(UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "back" ) ), RPT_LAYER_BACK );
         rAdmin.NewLayer( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "HiddenLayer" ) ), RPT_LAYER_HIDDEN );
@@ -2022,7 +2022,7 @@ void SAL_CALL OReportDefinition::setModified( ::sal_Bool _bModified ) throw (bea
     if ( m_pImpl->m_bModified != _bModified )
     {
         m_pImpl->m_bModified = _bModified;
-        if ( m_pImpl->m_pReportModel->IsChanged() != _bModified )
+        if ( m_pImpl->m_pReportModel->IsChanged() != (bool)_bModified )
             m_pImpl->m_pReportModel->SetChanged(_bModified);
 
         lang::EventObject aEvent(*this);
@@ -2254,17 +2254,22 @@ uno::Reference< uno::XComponentContext > OReportDefinition::getContext()
     return m_aProps->m_xContext;
 }
 // -----------------------------------------------------------------------------
-::boost::shared_ptr<rptui::OReportModel> OReportDefinition::getSdrModel() const
+::boost::shared_ptr<rptui::OReportModel> OReportDefinition::getSharedSdrModel() const
 {
     return m_pImpl->m_pReportModel;
 }
 // -----------------------------------------------------------------------------
-::boost::shared_ptr<rptui::OReportModel> OReportDefinition::getSdrModel(const uno::Reference< report::XReportDefinition >& _xReportDefinition)
+SdrModel* OReportDefinition::getSdrModel() const
+{
+    return m_pImpl->m_pReportModel.get();
+}
+// -----------------------------------------------------------------------------
+::boost::shared_ptr<rptui::OReportModel> OReportDefinition::getSharedSdrModel(const uno::Reference< report::XReportDefinition >& _xReportDefinition)
 {
     ::boost::shared_ptr<rptui::OReportModel> pReportModel;
     uno::Reference< lang::XUnoTunnel > xUT( _xReportDefinition, uno::UNO_QUERY );
     if( xUT.is() )
-        pReportModel = reinterpret_cast<OReportDefinition*>(sal::static_int_cast<sal_uIntPtr>(xUT->getSomething( OReportDefinition::getUnoTunnelImplementationId())))->getSdrModel();
+        pReportModel = reinterpret_cast<OReportDefinition*>(sal::static_int_cast<sal_uIntPtr>(xUT->getSomething( OReportDefinition::getUnoTunnelImplementationId())))->getSharedSdrModel();
     return pReportModel;
 }
 // -----------------------------------------------------------------------------

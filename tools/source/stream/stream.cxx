@@ -160,9 +160,6 @@ void SvLockBytes::close()
 }
 
 //============================================================================
-TYPEINIT0(SvLockBytes);
-
-//============================================================================
 // virtual
 ErrCode SvLockBytes::ReadAt(sal_Size nPos, void * pBuffer, sal_Size nCount,
                             sal_Size * pRead) const
@@ -265,15 +262,11 @@ ErrCode SvLockBytes::Stat(SvLockBytesStat * pStat, SvLockBytesStatFlag) const
 //
 //============================================================================
 
-TYPEINIT1(SvOpenLockBytes, SvLockBytes);
-
 //============================================================================
 //
 //  class SvAsyncLockBytes
 //
 //============================================================================
-
-TYPEINIT1(SvAsyncLockBytes, SvOpenLockBytes);
 
 //============================================================================
 // virtual
@@ -2867,8 +2860,6 @@ void SvMemoryStream::SetSize( sal_Size nNewSize )
     long nDiff = (long)nNewSize - (long)nSize;
     ReAllocateMemory( nDiff );
 }
-
-TYPEINIT0 ( SvDataCopyStream )
 
 void SvDataCopyStream::Assign( const SvDataCopyStream& )
 {

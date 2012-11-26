@@ -77,9 +77,6 @@ namespace drawinglayer
             const basegfx::B2DVector& getTextureSize() const { return maTextureSize; }
             const attribute::SdrLineFillShadowAttribute3D& getSdrLFSAttribute() const { return maSdrLFSAttribute; }
             const attribute::Sdr3DObjectAttribute getSdr3DObjectAttribute() const { return maSdr3DObjectAttribute; }
-
-            /// compare operator
-            virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
         };
     } // end of namespace primitive3d
 } // end of namespace drawinglayer

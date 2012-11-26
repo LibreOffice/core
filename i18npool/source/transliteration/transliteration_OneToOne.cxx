@@ -91,7 +91,7 @@ transliteration_OneToOne::transliterate( const OUString& inStr, sal_Int32 startP
     }
     *dst = (sal_Unicode) 0;
 
-    return OUString( newStr, SAL_NO_ACQUIRE ); // take over ownership of <newStr>
+    return OUString( newStr ); // defined in rtl/usrting. The reference count is increased from 0 to 1.
 }
 
 sal_Unicode SAL_CALL

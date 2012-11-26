@@ -65,9 +65,9 @@ SvxXMeasurePreview::SvxXMeasurePreview
     Point aPt1 = Point( aSize.Width() / 5, (long) ( aSize.Height() / 2 ) );
     Point aPt2 = Point( aSize.Width() * 4 / 5, (long) ( aSize.Height() / 2 ) );
 
-    pMeasureObj = new SdrMeasureObj( aPt1, aPt2 );
     pModel = new SdrModel();
-    pMeasureObj->SetModel( pModel );
+    pMeasureObj = new SdrMeasureObj( *pModel, aPt1, aPt2 );
+    // pMeasureObj->SetModel( pModel );
 
     //pMeasureObj->SetItemSetAndBroadcast(rInAttrs);
     pMeasureObj->SetMergedItemSetAndBroadcast(rInAttrs);
@@ -91,7 +91,7 @@ SvxXMeasurePreview::~SvxXMeasurePreview()
     // a StyleSheet of the model which was set. Thus, if You want to keep the obnject,
     // set the modfel to 0L, if object is not needed (seems to be the case here),
     // delete it.
-    delete pMeasureObj;
+    deleteSdrObjectSafeAndClearPointer(pMeasureObj);
 
     delete pModel;
 }

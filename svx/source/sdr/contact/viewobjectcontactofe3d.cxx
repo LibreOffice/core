@@ -76,15 +76,26 @@ namespace sdr
             return rViewContact.impCreateWithGivenPrimitive3DSequence(getPrimitive3DSequence(rDisplayInfo));
         }
 
+        void ViewObjectContactOfE3d::ActionChanged()
+        {
+            // call parent
+            ViewObjectContactOfSdrObj::ActionChanged();
+
+            // reset local buffered primitive sequence. Do this always, there are
+            // cases where in-between ActionChanged calls someone requests the
+            // primitives again. Leaving them would mean to miss evtl. valid changes
+            if(mxPrimitive3DSequence.hasElements())
+            {
+                mxPrimitive3DSequence.realloc(0);
+            }
+        }
+
         drawinglayer::primitive3d::Primitive3DSequence ViewObjectContactOfE3d::getPrimitive3DSequence(const DisplayInfo& rDisplayInfo) const
         {
-            drawinglayer::primitive3d::Primitive3DSequence xNewPrimitive3DSeq(createPrimitive3DSequence(rDisplayInfo));
-
-            // local up-to-date checks. New list different from local one?
-            if(!drawinglayer::primitive3d::arePrimitive3DSequencesEqual(mxPrimitive3DSequence, xNewPrimitive3DSeq))
+            if(!mxPrimitive3DSequence.hasElements())
             {
-                // has changed, copy content
-                const_cast< ViewObjectContactOfE3d* >(this)->mxPrimitive3DSequence = xNewPrimitive3DSeq;
+                // create primitive list on demand
+                const_cast< ViewObjectContactOfE3d* >(this)->mxPrimitive3DSequence = createPrimitive3DSequence(rDisplayInfo);
             }
 
             // return current Primitive2DSequence

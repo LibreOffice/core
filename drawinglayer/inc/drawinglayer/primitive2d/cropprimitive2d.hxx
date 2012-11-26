@@ -85,9 +85,6 @@ namespace drawinglayer
             double getCropRight() const { return mfCropRight; }
             double getCropBottom() const { return mfCropBottom; }
 
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
-
             /// local decomposition
             virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 

@@ -30,9 +30,6 @@
 #include "anminfo.hxx"
 
 
-TYPEINIT1(SdAnimationPrmsUndoAction, SdUndoAction);
-
-
 /*************************************************************************
 |*
 |* Undo()
@@ -41,47 +38,47 @@ TYPEINIT1(SdAnimationPrmsUndoAction, SdUndoAction);
 
 void SdAnimationPrmsUndoAction::Undo()
 {
+    OSL_ENSURE(pObject, "SdAnimationPrmsUndoAction with no pObject (!)");
+    const SdrObjectChangeBroadcaster aSdrObjectChangeBroadcaster(*pObject);
+
     // keine neu Info erzeugt: Daten restaurieren
     if (!bInfoCreated)
     {
-        SdDrawDocument* pDoc   = (SdDrawDocument*)pObject->GetModel();
-        if( pDoc )
-        {
-            SdAnimationInfo* pInfo = pDoc->GetAnimationInfo( pObject );
-            // So nicht...
-            //SdAnimationInfo* pInfo = (SdAnimationInfo*)pObject->GetUserData(0);
-            pInfo->mbActive     = bOldActive;
-            pInfo->meEffect      = eOldEffect;
-            pInfo->meTextEffect  = eOldTextEffect;
-            pInfo->meSpeed      = eOldSpeed;
-            pInfo->mbDimPrevious = bOldDimPrevious;
-            pInfo->maDimColor    = aOldDimColor;
-            pInfo->mbDimHide     = bOldDimHide;
-            pInfo->mbSoundOn     = bOldSoundOn;
-            pInfo->maSoundFile   = aOldSoundFile;
-            pInfo->mbPlayFull    = bOldPlayFull;
+        SdDrawDocument& rDoc = static_cast< SdDrawDocument& >(pObject->getSdrModelFromSdrObject());
+        SdAnimationInfo* pInfo = rDoc.GetAnimationInfo( pObject );
+        // So nicht...
+        //SdAnimationInfo* pInfo = (SdAnimationInfo*)pObject->GetUserData(0);
+        pInfo->mbActive     = bOldActive;
+        pInfo->meEffect      = eOldEffect;
+        pInfo->meTextEffect  = eOldTextEffect;
+        pInfo->meSpeed      = eOldSpeed;
+        pInfo->mbDimPrevious = bOldDimPrevious;
+        pInfo->maDimColor    = aOldDimColor;
+        pInfo->mbDimHide     = bOldDimHide;
+        pInfo->mbSoundOn     = bOldSoundOn;
+        pInfo->maSoundFile   = aOldSoundFile;
+        pInfo->mbPlayFull    = bOldPlayFull;
 //          pInfo->mSetPath(pOldPathObj);
-            pInfo->meClickAction = eOldClickAction;
-            pInfo->SetBookmark( aOldBookmark );
+        pInfo->meClickAction = eOldClickAction;
+        pInfo->SetBookmark( aOldBookmark );
 //          pInfo->mbInvisibleInPresentation = bOldInvisibleInPres;
-            pInfo->mnVerb        = nOldVerb;
-            pInfo->mnPresOrder   = nOldPresOrder;
+        pInfo->mnVerb        = nOldVerb;
+        pInfo->mnPresOrder   = nOldPresOrder;
 
-            pInfo->meSecondEffect    = eOldSecondEffect;
-            pInfo->meSecondSpeed     = eOldSecondSpeed;
-            pInfo->mbSecondSoundOn   = bOldSecondSoundOn;
-            pInfo->mbSecondPlayFull  = bOldSecondPlayFull;
-        }
+        pInfo->meSecondEffect    = eOldSecondEffect;
+        pInfo->meSecondSpeed     = eOldSecondSpeed;
+        pInfo->mbSecondSoundOn   = bOldSecondSoundOn;
+        pInfo->mbSecondPlayFull  = bOldSecondPlayFull;
     }
     // Info wurde durch Aktion erzeugt: Info loeschen
     else
     {
         pObject->DeleteUserData(0);
     }
-    // Damit ein ModelHasChanged() ausgeloest wird, um das Effekte-Window
+
+    // Damit ein LazyReactOnObjectChanges() ausgeloest wird, um das Effekte-Window
     // auf Stand zu bringen (Animations-Reihenfolge)
     pObject->SetChanged();
-    pObject->BroadcastObjectChange();
 }
 
 /*************************************************************************
@@ -93,6 +90,7 @@ void SdAnimationPrmsUndoAction::Undo()
 void SdAnimationPrmsUndoAction::Redo()
 {
     SdAnimationInfo* pInfo = NULL;
+    const SdrObjectChangeBroadcaster aSdrObjectChangeBroadcaster(*pObject);
 
     pInfo = SdDrawDocument::GetShapeUserData(*pObject,true);
 
@@ -118,10 +116,9 @@ void SdAnimationPrmsUndoAction::Redo()
     pInfo->mbSecondSoundOn   = bNewSecondSoundOn;
     pInfo->mbSecondPlayFull  = bNewSecondPlayFull;
 
-    // Damit ein ModelHasChanged() ausgeloest wird, um das Effekte-Window
+    // Damit ein LazyReactOnObjectChanges() ausgeloest wird, um das Effekte-Window
     // auf Stand zu bringen (Animations-Reihenfolge)
     pObject->SetChanged();
-    pObject->BroadcastObjectChange();
 }
 
 /*************************************************************************

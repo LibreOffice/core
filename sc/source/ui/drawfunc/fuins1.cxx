@@ -96,49 +96,52 @@
 
 //------------------------------------------------------------------------
 
-void SC_DLLPUBLIC ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage )
+void SC_DLLPUBLIC ScLimitSizeOnDrawPage(basegfx::B2DVector& rSize, basegfx::B2DPoint& rPos, const basegfx::B2DVector& rPageSize)
 {
-    if ( !rPage.Width() || !rPage.Height() )
+    if(rPageSize.equalZero())
         return;
 
-    Size aPageSize = rPage;
-    sal_Bool bNegative = aPageSize.Width() < 0;
+    basegfx::B2DVector aPageSize(rPageSize);
+    const bool bNegative(aPageSize.getX() < 0.0);
+
     if ( bNegative )
     {
         //  make everything positive temporarily
-        aPageSize.Width() = -aPageSize.Width();
-        rPos.X() = -rPos.X() - rSize.Width();
+        aPageSize.setX(-aPageSize.getX());
+        rPos.setX(-rPos.getX() - rSize.getX());
     }
 
-    if ( rSize.Width() > aPageSize.Width() || rSize.Height() > aPageSize.Height() )
+    if ( rSize.getX() > aPageSize.getX() || rSize.getY() > aPageSize.getY() )
     {
-        double fX = aPageSize.Width()  / (double) rSize.Width();
-        double fY = aPageSize.Height() / (double) rSize.Height();
+        const double fX(aPageSize.getX() / rSize.getX());
+        const double fY(aPageSize.getY() / rSize.getY());
 
         if ( fX < fY )
         {
-            rSize.Width()  = aPageSize.Width();
-            rSize.Height() = (long) ( rSize.Height() * fX );
+            rSize.setX(aPageSize.getX());
+            rSize.setY(rSize.getY() * fX);
         }
         else
         {
-            rSize.Height() = aPageSize.Height();
-            rSize.Width()  = (long) ( rSize.Width() * fY );
+            rSize.setY(aPageSize.getY());
+            rSize.setX(rSize.getX() * fY);
         }
 
-        if (!rSize.Width())
-            rSize.Width() = 1;
-        if (!rSize.Height())
-            rSize.Height() = 1;
+        if(basegfx::fTools::equalZero(rSize.getX()))
+            rSize.setX(1.0);
+
+        if(basegfx::fTools::equalZero(rSize.getY()))
+            rSize.setY(1.0);
     }
 
-    if ( rPos.X() + rSize.Width() > aPageSize.Width() )
-        rPos.X() = aPageSize.Width() - rSize.Width();
-    if ( rPos.Y() + rSize.Height() > aPageSize.Height() )
-        rPos.Y() = aPageSize.Height() - rSize.Height();
+    if ( rPos.getX() + rSize.getX() > aPageSize.getX() )
+        rPos.setX(aPageSize.getX() - rSize.getX());
+
+    if ( rPos.getY() + rSize.getY() > aPageSize.getY() )
+        rPos.setY(aPageSize.getY() - rSize.getY());
 
     if ( bNegative )
-        rPos.X() = -rPos.X() - rSize.Width();       // back to real position
+        rPos.setX(-rPos.getX() - rSize.getX());     // back to real position
 }
 
 //------------------------------------------------------------------------
@@ -161,42 +164,46 @@ void lcl_InsertGraphic( const Graphic& rGraphic,
         aDestMap.SetScaleX(aScaleX);
         aDestMap.SetScaleY(aScaleY);
     }
-    Size aLogicSize = pWindow->LogicToLogic(
-                            rGraphic.GetPrefSize(), &aSourceMap, &aDestMap );
+
+    const Size aOldLogicSize(pWindow->LogicToLogic(rGraphic.GetPrefSize(), &aSourceMap, &aDestMap));
+    basegfx::B2DVector aLogicSize(aOldLogicSize.Width(), aOldLogicSize.Height());
 
     //  Limit size
-
     SdrPageView* pPV  = pView->GetSdrPageView();
-    SdrPage* pPage = pPV->GetPage();
-    Point aInsertPos = pViewSh->GetInsertPos();
 
-    ScViewData* pData = pViewSh->GetViewData();
-    if ( pData->GetDocument()->IsNegativePage( pData->GetTabNo() ) )
-        aInsertPos.X() -= aLogicSize.Width();       // move position to left edge
+    if(pPV)
+    {
+        SdrPage& rPage = pPV->getSdrPageFromSdrPageView();
+        basegfx::B2DPoint aInsertPos(pViewSh->GetInsertPos());
+        ScViewData* pData = pViewSh->GetViewData();
 
-    ScLimitSizeOnDrawPage( aLogicSize, aInsertPos, pPage->GetSize() );
+        if ( pData->GetDocument()->IsNegativePage( pData->GetTabNo() ) )
+            aInsertPos.setX(aInsertPos.getX() - aLogicSize.getX());     // move position to left edge
 
-    Rectangle aRect ( aInsertPos, aLogicSize );
+        ScLimitSizeOnDrawPage( aLogicSize, aInsertPos, rPage.GetPageScale() );
 
-    SdrGrafObj* pObj = new SdrGrafObj( rGraphic, aRect );
+        SdrGrafObj* pObj = new SdrGrafObj(
+            pView->getSdrModelFromSdrView(),
+            rGraphic,
+            basegfx::tools::createScaleTranslateB2DHomMatrix(aLogicSize, aInsertPos));
 
-    // #118522# calling SetGraphicLink here doesn't work
+        // #118522# calling SetGraphicLink here doesn't work
+        //  #49961# Path is no longer used as name for the graphics object
 
-    //  #49961# Path is no longer used as name for the graphics object
+        ScDrawLayer& rLayer = dynamic_cast< ScDrawLayer& >(pView->getSdrModelFromSdrView());
+        String aName = rLayer.GetNewGraphicName();                  // "Grafik x"
+        pObj->SetName(aName);
 
-    ScDrawLayer* pLayer = (ScDrawLayer*) pView->GetModel();
-    String aName = pLayer->GetNewGraphicName();                 // "Grafik x"
-    pObj->SetName(aName);
+        //  don't select if from (dispatch) API, to allow subsequent cell operations
+        sal_uLong nInsOptions = bApi ? SDRINSERT_DONTMARK : 0;
+        pView->InsertObjectAtView( *pObj, nInsOptions );
 
-    //  don't select if from (dispatch) API, to allow subsequent cell operations
-    sal_uLong nInsOptions = bApi ? SDRINSERT_DONTMARK : 0;
-    pView->InsertObjectAtView( pObj, *pPV, nInsOptions );
-
-    // #118522# SetGraphicLink has to be used after inserting the object,
-    // otherwise an empty graphic is swapped in and the contact stuff crashes.
-    // See #i37444#.
-    if ( bAsLink )
-        pObj->SetGraphicLink( rFileName, rFilterName );
+        // #118522# SetGraphicLink has to be used after inserting the object,
+        // otherwise an empty graphic is swapped in and the contact stuff crashes.
+        // See #i37444#.
+        if ( bAsLink )
+            pObj->SetGraphicLink( rFileName, rFilterName );
+    }
 }
 
 //------------------------------------------------------------------------
@@ -206,30 +213,44 @@ void lcl_InsertMedia( const ::rtl::OUString& rMediaURL, bool bApi,
                       const Size& rPrefSize )
 {
     SdrPageView*    pPV  = pView->GetSdrPageView();
-    SdrPage*        pPage = pPV->GetPage();
-    ScViewData*     pData = pViewSh->GetViewData();
-    Point           aInsertPos( pViewSh->GetInsertPos() );
-    Size            aSize;
 
-    if( rPrefSize.Width() && rPrefSize.Height() )
+    if(pPV)
     {
-        if( pWindow )
-            aSize = pWindow->PixelToLogic( rPrefSize, MAP_100TH_MM );
+        SdrPage& rPage = pPV->getSdrPageFromSdrPageView();
+        ScViewData*     pData = pViewSh->GetViewData();
+        basegfx::B2DPoint aInsertPos(pViewSh->GetInsertPos());
+        basegfx::B2DVector aScale(0.0, 0.0);
+
+        if( rPrefSize.Width() && rPrefSize.Height() )
+        {
+            const basegfx::B2DVector aPrefScale(rPrefSize.Width(), rPrefSize.Height());
+
+            if( pWindow )
+            {
+                aScale = pWindow->GetInverseViewTransformation(MapMode(MAP_100TH_MM)) * aPrefScale;
+            }
+            else
+            {
+                aScale = Application::GetDefaultDevice()->GetInverseViewTransformation(MapMode(MAP_100TH_MM)) * aPrefScale;
+            }
+        }
         else
-            aSize = Application::GetDefaultDevice()->PixelToLogic( rPrefSize, MAP_100TH_MM );
+        {
+            aScale = basegfx::B2DVector( 5000.0, 5000.0 );
+        }
+
+        ScLimitSizeOnDrawPage( aScale, aInsertPos, rPage.GetPageScale() );
+
+        if( pData->GetDocument()->IsNegativePage( pData->GetTabNo() ) )
+            aInsertPos.setX(aInsertPos.getX() - aScale.getX());
+
+        SdrMediaObj* pObj = new SdrMediaObj(
+            pView->getSdrModelFromSdrView(),
+            basegfx::tools::createScaleTranslateB2DHomMatrix(aScale, aInsertPos));
+
+        pObj->setURL( rMediaURL );
+        pView->InsertObjectAtView( *pObj, bApi ? SDRINSERT_DONTMARK : 0 );
     }
-    else
-        aSize = Size( 5000, 5000 );
-
-    ScLimitSizeOnDrawPage( aSize, aInsertPos, pPage->GetSize() );
-
-    if( pData->GetDocument()->IsNegativePage( pData->GetTabNo() ) )
-        aInsertPos.X() -= aSize.Width();
-
-    SdrMediaObj* pObj = new SdrMediaObj( Rectangle( aInsertPos, aSize ) );
-
-    pObj->setURL( rMediaURL );
-    pView->InsertObjectAtView( pObj, *pPV, bApi ? SDRINSERT_DONTMARK : 0 );
 }
 
 /*************************************************************************
@@ -376,7 +397,7 @@ FuInsertMedia::FuInsertMedia( ScTabViewShell*   pViewSh,
 
     if( pReqArgs )
     {
-        const SfxStringItem* pStringItem = PTR_CAST( SfxStringItem, &pReqArgs->Get( rReq.GetSlot() ) );
+        const SfxStringItem* pStringItem = dynamic_cast< const SfxStringItem* >( &pReqArgs->Get( rReq.GetSlot() ) );
 
         if( pStringItem )
         {

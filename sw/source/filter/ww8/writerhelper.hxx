@@ -242,7 +242,7 @@ namespace sw
         template<class T> const T & item_cast(const SfxPoolItem &rItem)
             throw(std::bad_cast)
         {
-            if (!rItem.IsA(STATICTYPE(T)))
+            if (!dynamic_cast< const T* >(&rItem))
                 throw std::bad_cast();
             return static_cast<const T &>(rItem);
         }
@@ -267,7 +267,7 @@ namespace sw
         */
         template<class T> const T * item_cast(const SfxPoolItem *pItem)
         {
-            if (pItem && !pItem->IsA(STATICTYPE(T)))
+            if (pItem && !dynamic_cast< const T* >(pItem))
                 pItem = 0;
             return static_cast<const T *>(pItem);
         }

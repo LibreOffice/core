@@ -304,7 +304,7 @@ sal_uLong OutlinerView::ImpCheckMousePos(const Point& rPosPix, MouseTarget& reTa
             {
                 // Check for hyperlink
                 const SvxFieldItem* pFieldItem = pEditView->GetField( aMousePosWin );
-                if ( pFieldItem && pFieldItem->GetField() && pFieldItem->GetField()->ISA( SvxURLField ) )
+                if ( pFieldItem && pFieldItem->GetField() && dynamic_cast< const SvxURLField* >(pFieldItem->GetField()) )
                     reTarget = MouseHypertext;
             }
         }

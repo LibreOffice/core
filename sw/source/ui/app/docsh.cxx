@@ -130,8 +130,6 @@ SFX_IMPL_INTERFACE( SwDocShell, SfxObjectShell, SW_RES(0) )
     SFX_CHILDWINDOW_REGISTRATION( SID_HYPERLINK_INSERT );
 }
 
-TYPEINIT2(SwDocShell, SfxObjectShell, SfxListener);
-
 //-------------------------------------------------------------------------
 SFX_IMPL_OBJECTFACTORY(SwDocShell, SvGlobalName(SO3_SW_CLASSID), SFXOBJECTSHELL_STD_NORMAL|SFXOBJECTSHELL_HASMENU, "swriter"  )
 
@@ -205,7 +203,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
     }
 
     // #i30171# set the UpdateDocMode at the SwDocShell
-    SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
+    SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE );
     nUpdateDocMode = pUpdateDocItem ? pUpdateDocItem->GetValue() : document::UpdateDocMode::NO_UPDATE;
 
     if( pFlt->GetDefaultTemplate().Len() )
@@ -248,7 +246,7 @@ sal_Bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
     SW_MOD()->SetEmbeddedLoadSave(
                             SFX_CREATE_MODE_EMBEDDED == GetCreateMode() );
 
-    pRdr->GetDoc()->set(IDocumentSettingAccess::HTML_MODE, ISA(SwWebDocShell));
+    pRdr->GetDoc()->set(IDocumentSettingAccess::HTML_MODE, dynamic_cast< SwWebDocShell* >(this));
 
     /* #106748# Restore the pool default if reading a saved document. */
     pDoc->RemoveAllFmtLanguageDependencies();
@@ -453,7 +451,7 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
     uno::Reference < embed::XStorage > xStor = rMedium.GetOutputStorage();
     if( SfxObjectShell::SaveAs( rMedium ) )
     {
-        if( GetDoc()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) && !ISA( SwGlobalDocShell ) )
+        if( GetDoc()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) && !dynamic_cast< SwGlobalDocShell* >(this) )
         {
             // This is to set the correct class id if SaveAs is
             // called from SwDoc::SplitDoc to save a normal doc as
@@ -534,7 +532,7 @@ SwSrcView* lcl_GetSourceView( SwDocShell* pSh )
     // sind wir in der SourceView?
     SfxViewFrame* pVFrame = SfxViewFrame::GetFirst( pSh );
     SfxViewShell* pViewShell = pVFrame ? pVFrame->GetViewShell() : 0;
-    return PTR_CAST( SwSrcView, pViewShell);
+    return dynamic_cast< SwSrcView* >( pViewShell);
 }
 
 sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
@@ -639,9 +637,9 @@ sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
     {
         // eigenen Typ ermitteln
         sal_uInt8 nMyType = 0;
-        if( ISA( SwWebDocShell) )
+        if( dynamic_cast< SwWebDocShell* >(this) )
             nMyType = 1;
-        else if( ISA( SwGlobalDocShell) )
+        else if( dynamic_cast< SwGlobalDocShell* >(this) )
             nMyType = 2;
 
         // gewuenschten Typ ermitteln
@@ -855,7 +853,7 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
     pDev->SetFillColor();
     pDev->SetLineColor();
     pDev->SetBackground();
-    sal_Bool bWeb = 0 != PTR_CAST(SwWebDocShell, this);
+    sal_Bool bWeb = 0 != dynamic_cast< SwWebDocShell* >( this);
     SwPrintData aOpts;
     ViewShell::PrtOle2( pDoc, SW_MOD()->GetUsrPref(bWeb), aOpts, pDev, aRect );
     pDev->Pop();
@@ -991,7 +989,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
                 SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this);
                 while (pTmpFrm)     // Preview suchen
                 {
-                    if ( PTR_CAST(SwView, pTmpFrm->GetViewShell()) &&
+                    if ( dynamic_cast< SwView* >(pTmpFrm->GetViewShell()) &&
                          ((SwView*)pTmpFrm->GetViewShell())->GetWrtShell().GetViewOptions()->getBrowseMode() )
                     {
                         bDisable = sal_True;
@@ -1005,9 +1003,9 @@ void SwDocShell::GetState(SfxItemSet& rSet)
                 rSet.DisableItem( SID_PRINTPREVIEW );
             else
             {
-                SfxBoolItem aBool( SID_PRINTPREVIEW, sal_False );
-                if( PTR_CAST( SwPagePreView, SfxViewShell::Current()) )
-                    aBool.SetValue( sal_True );
+                SfxBoolItem aBool( SID_PRINTPREVIEW, false);
+                if( dynamic_cast< SwPagePreView* >( SfxViewShell::Current()) )
+                    aBool.SetValue( true );
                 rSet.Put( aBool );
             }
         }
@@ -1016,7 +1014,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
         {
             SfxViewShell* pCurrView = GetView() ? (SfxViewShell*)GetView()
                                         : SfxViewShell::Current();
-            sal_Bool bSourceView = 0 != PTR_CAST(SwSrcView, pCurrView);
+            sal_Bool bSourceView = 0 != dynamic_cast< SwSrcView* >( pCurrView);
             rSet.Put(SfxBoolItem(SID_SOURCEVIEW, bSourceView));
         }
         break;
@@ -1050,12 +1048,12 @@ void SwDocShell::GetState(SfxItemSet& rSet)
             break;
 
         case FN_NEW_GLOBAL_DOC:
-            if ( ISA(SwGlobalDocShell) )
+            if ( dynamic_cast< SwGlobalDocShell* >(this) )
                 rSet.DisableItem( nWhich );
             break;
 
         case FN_NEW_HTML_DOC:
-            if( ISA( SwWebDocShell ) )
+            if( dynamic_cast< SwWebDocShell* >(this) )
                 rSet.DisableItem( nWhich );
             break;
 
@@ -1174,7 +1172,7 @@ void SwDocShell::LoadingFinished()
     if(pVFrame)
     {
         SfxViewShell* pShell = pVFrame->GetViewShell();
-        if(PTR_CAST(SwSrcView, pShell))
+        if(dynamic_cast< SwSrcView* >( pShell))
             ((SwSrcView*)pShell)->Load(this);
     }
 

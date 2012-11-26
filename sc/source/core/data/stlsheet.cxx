@@ -53,8 +53,6 @@
 #include "sc.hrc"
 //------------------------------------------------------------------------
 
-TYPEINIT1(ScStyleSheet, SfxStyleSheet);
-
 #define TWO_CM      1134
 #define HFDIST_CM   142
 
@@ -288,8 +286,9 @@ sal_Bool __EXPORT ScStyleSheet::IsUsed() const
 
 void __EXPORT ScStyleSheet::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.ISA(SfxSimpleHint) )
-        if ( ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if(pSfxSimpleHint && SFX_HINT_DYING == pSfxSimpleHint->GetId())
             GetItemSet().SetParent( NULL );
 }
 

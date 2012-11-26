@@ -75,9 +75,9 @@ public:
     ShowWindow ( const ::rtl::Reference< ::sd::SlideshowImpl >& xController, ::Window* pParent );
     virtual ~ShowWindow (void);
 
-       sal_Bool         SetEndMode();
-    sal_Bool            SetPauseMode( sal_Int32 nPageIndexToRestart, sal_Int32 nTimeoutSec = SLIDE_NO_TIMEOUT, Graphic* pLogo = NULL );
-    sal_Bool            SetBlankMode( sal_Int32 nPageIndexToRestart, const Color& rBlankColor );
+       bool         SetEndMode();
+    bool            SetPauseMode( sal_Int32 nPageIndexToRestart, sal_Int32 nTimeoutSec = SLIDE_NO_TIMEOUT, Graphic* pLogo = NULL );
+    bool            SetBlankMode( sal_Int32 nPageIndexToRestart, const Color& rBlankColor );
 
     const Color&        GetBlankColor() const { return maShowBackground.GetColor(); }
 
@@ -107,7 +107,7 @@ public:
     void            RestartShow();
 
 private:
-    void            DrawPauseScene( sal_Bool bTimeoutOnly );
+    void            DrawPauseScene( bool bTimeoutOnly );
     void            DrawEndScene();
     void            DrawBlankScene();
 
@@ -122,7 +122,7 @@ private:
     sal_uLong           mnPauseTimeout;
     sal_Int32       mnRestartPageIndex;
     ShowWindowMode  meShowWindowMode;
-    sal_Bool            mbShowNavigatorAfterSpecialMode;
+    bool            mbShowNavigatorAfterSpecialMode;
     Rectangle       maPresArea;
     bool            mbMouseAutoHide;
     bool            mbMouseCursorHidden;

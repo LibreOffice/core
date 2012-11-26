@@ -219,11 +219,12 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     IMPL_LINK( AccessibleTabListBoxTable, WindowEventListener, VclSimpleEvent*, pEvent )
     {
-        DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
-        if ( pEvent && pEvent->ISA( VclWindowEvent ) )
+        VclWindowEvent* pVclWindowEvent = dynamic_cast< VclWindowEvent* >(pEvent);
+        DBG_ASSERT( pVclWindowEvent, "Unknown WindowEvent!" );
+        if ( pVclWindowEvent )
         {
-            DBG_ASSERT( ( (VclWindowEvent*)pEvent )->GetWindow() && m_pTabListBox, "no event window" );
-            ProcessWindowEvent( *(VclWindowEvent*)pEvent );
+            DBG_ASSERT( pVclWindowEvent->GetWindow() && m_pTabListBox, "no event window" );
+            ProcessWindowEvent( *pVclWindowEvent );
         }
         return 0;
     }

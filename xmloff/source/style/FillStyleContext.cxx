@@ -45,8 +45,6 @@ using ::rtl::OUStringBuffer;
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1( XMLGradientStyleContext, SvXMLStyleContext );
-
 XMLGradientStyleContext::XMLGradientStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                               const OUString& rLName,
                                               const uno::Reference< xml::sax::XAttributeList >& xAttrList)
@@ -94,8 +92,6 @@ sal_Bool XMLGradientStyleContext::IsTransient() const
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1( XMLHatchStyleContext, SvXMLStyleContext );
-
 XMLHatchStyleContext::XMLHatchStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                               const OUString& rLName,
                                               const uno::Reference< xml::sax::XAttributeList >& xAttrList)
@@ -139,8 +135,6 @@ sal_Bool XMLHatchStyleContext::IsTransient() const
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
-
-TYPEINIT1( XMLBitmapStyleContext, SvXMLStyleContext );
 
 XMLBitmapStyleContext::XMLBitmapStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                               const OUString& rLName,
@@ -221,8 +215,6 @@ sal_Bool XMLBitmapStyleContext::IsTransient() const
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1( XMLTransGradientStyleContext, SvXMLStyleContext );
-
 XMLTransGradientStyleContext::XMLTransGradientStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                               const OUString& rLName,
                                               const uno::Reference< xml::sax::XAttributeList >& xAttrList)
@@ -267,8 +259,6 @@ sal_Bool XMLTransGradientStyleContext::IsTransient() const
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1( XMLMarkerStyleContext, SvXMLStyleContext );
-
 XMLMarkerStyleContext::XMLMarkerStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                               const OUString& rLName,
                                               const uno::Reference< xml::sax::XAttributeList >& xAttrList)
@@ -312,8 +302,6 @@ sal_Bool XMLMarkerStyleContext::IsTransient() const
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
-
-TYPEINIT1( XMLDashStyleContext, SvXMLStyleContext );
 
 XMLDashStyleContext::XMLDashStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                           const OUString& rLName,

@@ -236,7 +236,7 @@ namespace rptui
         uno::Reference<awt::XControl> xControl;
         OReportController *pController = (OReportController *)&m_rReportController;
 
-        ::boost::shared_ptr<OReportModel> pModel = pController->getSdrModel();
+        ::boost::shared_ptr<OReportModel> pModel = pController->getSharedSdrModel();
 
             uno::Reference<report::XSection> xSection(_xFixedText->getSection());
             if ( xSection.is() )

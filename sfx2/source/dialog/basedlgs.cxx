@@ -66,9 +66,11 @@ public:
 
 void SfxModelessDialog_Impl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.IsA(TYPE(SfxSimpleHint)) )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if ( pSfxSimpleHint )
     {
-        switch( ( (SfxSimpleHint&) rHint ).GetId() )
+        switch( pSfxSimpleHint->GetId() )
         {
             case SFX_HINT_DYING:
                 pMgr->Destroy();
@@ -90,9 +92,11 @@ public:
 
 void SfxFloatingWindow_Impl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.IsA(TYPE(SfxSimpleHint)) )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if ( pSfxSimpleHint )
     {
-        switch( ( (SfxSimpleHint&) rHint ).GetId() )
+        switch( pSfxSimpleHint->GetId() )
         {
             case SFX_HINT_DYING:
                 pMgr->Destroy();

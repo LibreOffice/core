@@ -50,18 +50,13 @@
 
 using namespace ::com::sun::star;
 
-TYPEINIT2_AUTOFACTORY( SwFmtDrop, SfxPoolItem, SwClient);
-TYPEINIT1_AUTOFACTORY( SwRegisterItem, SfxBoolItem);
-TYPEINIT1_AUTOFACTORY( SwNumRuleItem, SfxStringItem);
-TYPEINIT1_AUTOFACTORY( SwParaConnectBorderItem, SfxBoolItem);
-
 /*************************************************************************
 |*    Beschreibung      Methoden von SwFmtDrop
 |*    Ersterstellung    MS  19.02.91
 |*    Letzte Aenderung  JP 08.08.94
 *************************************************************************/
 
-
+IMPL_POOLITEM_FACTORY(SwFmtDrop)
 
 SwFmtDrop::SwFmtDrop()
     : SfxPoolItem( RES_PARATR_DROP ),
@@ -113,7 +108,7 @@ void SwFmtDrop::Modify( const SfxPoolItem*, const SfxPoolItem * )
 {
     if( pDefinedIn )
     {
-        if( !pDefinedIn->ISA( SwFmt ))
+        if( !dynamic_cast< SwFmt* >(pDefinedIn))
             pDefinedIn->ModifyNotification( this, this );
         else if( pDefinedIn->GetDepends() &&
                 !pDefinedIn->IsModifyLocked() )

@@ -50,10 +50,18 @@ class GradTransformer
 public:
     GradTransformer() {}
 
-    void GradToVec(GradTransGradient& rG, GradTransVector& rV,
+    void GradToVec(
+        GradTransGradient& rG,
+        GradTransVector& rV,
         const SdrObject* pObj);
-    void VecToGrad(GradTransVector& rV, GradTransGradient& rG,
-        GradTransGradient& rGOld, const SdrObject* pObj, sal_Bool bMoveSingle, sal_Bool bMoveFirst);
+
+    void VecToGrad(
+        GradTransVector& rV,
+        GradTransGradient& rG,
+        GradTransGradient& rGOld,
+        const SdrObject* pObj,
+        bool bMoveSingle,
+        bool bMoveFirst);
 };
 
 #endif // _GRADTRANS_HXX

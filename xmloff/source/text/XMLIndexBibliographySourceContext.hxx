@@ -43,8 +43,6 @@ class XMLIndexBibliographySourceContext : public XMLIndexSourceBaseContext
 
 public:
 
-    TYPEINFO();
-
     XMLIndexBibliographySourceContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,

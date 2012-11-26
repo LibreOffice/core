@@ -36,8 +36,6 @@ class FuInsertFile
     : public FuPoor
 {
 public:
-    TYPEINFO();
-
     static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
     virtual void DoExecute( SfxRequest& rReq );
 
@@ -56,9 +54,9 @@ private:
     String          aFile;          // gewaehlter Dateiname
 
     void            InsTextOrRTFinOlMode(SfxMedium* pMedium);
-    sal_Bool            InsSDDinOlMode(SfxMedium* pMedium);
+    bool            InsSDDinOlMode(SfxMedium* pMedium);
     void            InsTextOrRTFinDrMode(SfxMedium* pMedium);
-    sal_Bool            InsSDDinDrMode(SfxMedium* pMedium);
+    bool            InsSDDinDrMode(SfxMedium* pMedium);
 };
 
 } // end of namespace sd

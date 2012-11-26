@@ -49,7 +49,6 @@ private:
                                     // nicht zerstoerte Objekt!
 
 public:
-                    TYPEINFO();
                     EditUndoDelContent( ImpEditEngine* pImpEE, ContentNode* pNode, sal_uInt16 nPortio );
                     ~EditUndoDelContent();
 
@@ -77,7 +76,6 @@ private:
     sal_Bool            bBackward;
 
 public:
-                    TYPEINFO();
                     EditUndoConnectParas( ImpEditEngine* pImpEE, sal_uInt16 nNode, sal_uInt16 nSepPos,
                                             const SfxItemSet& rLeftParaAttribs, const SfxItemSet& rRightParaAttribs,
                                             const SfxStyleSheet* pLeftStyle, const SfxStyleSheet* pRightStyle, sal_Bool bBackward );
@@ -97,7 +95,6 @@ private:
     sal_uInt16          nSepPos;
 
 public:
-                    TYPEINFO();
                     EditUndoSplitPara( ImpEditEngine* pImpEE, sal_uInt16 nNode, sal_uInt16 nSepPos );
                     ~EditUndoSplitPara();
 
@@ -115,7 +112,6 @@ private:
     String          aText;
 
 public:
-                    TYPEINFO();
                     EditUndoInsertChars( ImpEditEngine* pImpEE, const EPaM& rEPaM, const String& rStr );
 
     const EPaM&     GetEPaM() { return aEPaM; }
@@ -137,7 +133,6 @@ private:
     String          aText;
 
 public:
-                    TYPEINFO();
                     EditUndoRemoveChars( ImpEditEngine* pImpEE, const EPaM& rEPaM, const String& rStr );
 
     const EPaM&     GetEPaM() { return aEPaM; }
@@ -157,7 +152,6 @@ private:
     SfxPoolItem*    pFeature;
 
 public:
-                    TYPEINFO();
                     EditUndoInsertFeature( ImpEditEngine* pImpEE, const EPaM& rEPaM,
                                             const SfxPoolItem& rFeature);
                     ~EditUndoInsertFeature();
@@ -176,7 +170,6 @@ private:
     sal_uInt16          nDest;
 
 public:
-                    TYPEINFO();
                     EditUndoMoveParagraphs( ImpEditEngine* pImpEE, const Range& rParas, sal_uInt16 nDest );
                     ~EditUndoMoveParagraphs();
 
@@ -198,8 +191,6 @@ private:
     SfxItemSet      aPrevParaAttribs;
 
 public:
-                    TYPEINFO();
-
                     EditUndoSetStyleSheet( ImpEditEngine* pImpEE, sal_uInt16 nPara,
                         const XubString& rPrevName, SfxStyleFamily ePrevFamily,
                         const XubString& rNewName, SfxStyleFamily eNewFamily,
@@ -221,7 +212,6 @@ private:
     SfxItemSet      aNewItems;
 
 public:
-                    TYPEINFO();
                     EditUndoSetParaAttribs( ImpEditEngine* pImpEE, sal_uInt16 nPara, const SfxItemSet& rPrevItems, const SfxItemSet& rNewItems );
                     ~EditUndoSetParaAttribs();
 
@@ -248,7 +238,6 @@ private:
 
 
 public:
-                        TYPEINFO();
                         EditUndoSetAttribs( ImpEditEngine* pImpEE, const ESelection& rESel, const SfxItemSet& rNewItems );
                         ~EditUndoSetAttribs();
 
@@ -278,7 +267,6 @@ private:
     String              aText;
 
 public:
-                        TYPEINFO();
                         EditUndoTransliteration( ImpEditEngine* pImpEE, const ESelection& rESel, sal_Int32 nMode );
                         ~EditUndoTransliteration();
 
@@ -299,7 +287,6 @@ private:
     ESelection      aSelection;
 
 public:
-                    TYPEINFO();
                     EditUndoMarkSelection( ImpEditEngine* pImpEE, const ESelection& rSel );
                     ~EditUndoMarkSelection();
 

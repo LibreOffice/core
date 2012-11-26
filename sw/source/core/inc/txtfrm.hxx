@@ -377,7 +377,6 @@ public:
     SwTwips HangingMargin() const;
 
     // RTTI
-    TYPEINFO();
     DECL_FIXEDMEMPOOL_NEWDEL(SwTxtFrm)
 
     // Locking

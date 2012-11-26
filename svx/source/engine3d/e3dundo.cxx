@@ -32,8 +32,6 @@
 
 /************************************************************************/
 
-TYPEINIT1(E3dUndoAction, SfxUndoAction);
-
 /************************************************************************\
 |*
 |* Destruktor der Basisklasse
@@ -54,8 +52,6 @@ sal_Bool E3dUndoAction::CanRepeat(SfxRepeatTarget&) const
 }
 
 /************************************************************************/
-
-TYPEINIT1(E3dRotateUndoAction, E3dUndoAction);
 
 /************************************************************************
 
@@ -80,7 +76,7 @@ E3dRotateUndoAction::~E3dRotateUndoAction ()
 void E3dRotateUndoAction::Undo ()
 {
     E3DModifySceneSnapRectUpdater aUpdater(pMy3DObj);
-    pMy3DObj->SetTransform(aMyOldRotation);
+    pMy3DObj->SetB3DTransform(aMyOldRotation);
 }
 
 /************************************************************************\
@@ -91,7 +87,7 @@ void E3dRotateUndoAction::Undo ()
 void E3dRotateUndoAction::Redo ()
 {
     E3DModifySceneSnapRectUpdater aUpdater(pMy3DObj);
-    pMy3DObj->SetTransform(aMyNewRotation);
+    pMy3DObj->SetB3DTransform(aMyNewRotation);
 }
 
 /*************************************************************************
@@ -99,8 +95,6 @@ void E3dRotateUndoAction::Redo ()
 |* E3dAttributesUndoAction
 |*
 \************************************************************************/
-
-TYPEINIT1(E3dAttributesUndoAction, SdrUndoAction);
 
 /*************************************************************************
 |*

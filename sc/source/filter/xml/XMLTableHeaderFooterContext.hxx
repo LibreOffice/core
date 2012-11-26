@@ -59,8 +59,6 @@ class XMLTableHeaderFooterContext: public SvXMLImportContext
     sal_Bool    bContainsCenter;
 
 public:
-    TYPEINFO();
-
     XMLTableHeaderFooterContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const ::rtl::OUString& rLName,
             const ::com::sun::star::uno::Reference<
@@ -88,8 +86,6 @@ private:
         ::com::sun::star::text::XTextCursor > xOldTextCursor;
 
 public:
-    TYPEINFO();
-
     XMLHeaderFooterRegionContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const ::rtl::OUString& rLName,
             const ::com::sun::star::uno::Reference<

@@ -99,12 +99,12 @@ SdPage* ViewClipboard::GetFirstMasterPage (const SdTransferable& rTransferable)
             for (int nIndex=0; nIndex<nBookmarkCount; nIndex++)
             {
                 String sName (*(String*) pBookmarks->GetObject(nIndex));
-                sal_Bool bIsMasterPage;
+                bool bIsMasterPage;
 
                 // SdPage* GetMasterSdPage(sal_uInt16 nPgNum, PageKind ePgKind);
                 // sal_uInt16 GetMasterSdPageCount(PageKind ePgKind) const;
 
-                sal_uInt16 nBMPage = pDocument->GetPageByName (
+                sal_uInt32 nBMPage = pDocument->GetPageByName (
                     sName, bIsMasterPage);
                 if ( ! bIsMasterPage)
                 {
@@ -145,10 +145,7 @@ void ViewClipboard::AssignMasterPage (
         if (pPageView == NULL)
             break;
 
-        SdPage* pPage = static_cast<SdPage*>(pPageView->GetPage());
-        if (pPage == NULL)
-            break;
-
+        SdPage& rPage = static_cast< SdPage& >(pPageView->getSdrPageFromSdrPageView());
         SdDrawDocument* pDocument = mrView.GetDoc();
         if (pDocument == NULL)
             break;
@@ -175,11 +172,11 @@ void ViewClipboard::AssignMasterPage (
             sLayoutName = String(sLayoutName, 0, sLayoutName.Len()-nLength);
 
         pDocument->SetMasterPage (
-            pPage->GetPageNum() / 2,
+            rPage.GetPageNumber() / 2,
             sLayoutName,
             pSourceDocument,
-            sal_False, // Exchange the master page of only the target page.
-            sal_False // Keep unused master pages.
+            false, // Exchange the master page of only the target page.
+            false // Keep unused master pages.
             );
     }
     while (false);
@@ -192,12 +189,12 @@ sal_uInt16 ViewClipboard::DetermineInsertPosition  (
     const SdTransferable& )
 {
     SdDrawDocument* pDoc = mrView.GetDoc();
-    sal_uInt16 nPgCnt = pDoc->GetSdPageCount( PK_STANDARD );
+    sal_uInt32 nPgCnt = pDoc->GetSdPageCount( PK_STANDARD );
 
     // Insert position is the behind the last selected page or behind the
     // last page when the selection is empty.
-    sal_uInt16 nInsertPos = pDoc->GetSdPageCount( PK_STANDARD ) * 2 + 1;
-    for( sal_uInt16 nPage = 0; nPage < nPgCnt; nPage++ )
+    sal_uInt32 nInsertPos = pDoc->GetSdPageCount( PK_STANDARD ) * 2 + 1;
+    for( sal_uInt32 nPage = 0; nPage < nPgCnt; nPage++ )
     {
         SdPage* pPage = pDoc->GetSdPage( nPage, PK_STANDARD );
 
@@ -218,7 +215,7 @@ sal_uInt16 ViewClipboard::InsertSlides (
     SdDrawDocument* pDoc = mrView.GetDoc();
 
     sal_uInt16 nInsertPgCnt = 0;
-    sal_Bool bMergeMasterPages = !rTransferable.HasSourceDoc( pDoc );
+    bool bMergeMasterPages = !rTransferable.HasSourceDoc( pDoc );
 
     // Prepare the insertion.
     const List* pBookmarkList;
@@ -246,7 +243,7 @@ sal_uInt16 ViewClipboard::InsertSlides (
     {
         const ::vos::OGuard aGuard( Application::GetSolarMutex() );
         ::sd::Window* pWin = mrView.GetViewShell()->GetActiveWindow();
-        const sal_Bool bWait = pWin && pWin->IsWait();
+        const bool bWait = pWin && pWin->IsWait();
 
         if( bWait )
             pWin->LeaveWait();
@@ -254,14 +251,14 @@ sal_uInt16 ViewClipboard::InsertSlides (
         pDoc->InsertBookmarkAsPage(
             const_cast<List*>(pBookmarkList),
             NULL,
-            sal_False,
-            sal_False,
+            false,
+            false,
             nInsertPosition,
             (&rTransferable == SD_MOD()->pTransferDrag),
             pDataDocSh,
-            sal_True,
+            true,
             bMergeMasterPages,
-            sal_False);
+            false);
 
         if( bWait )
             pWin->EnterWait();

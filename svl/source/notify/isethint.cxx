@@ -32,10 +32,6 @@
 
 //====================================================================
 
-TYPEINIT1(SfxItemSetHint, SfxHint);
-
-//====================================================================
-
 SfxItemSetHint::SfxItemSetHint( SfxItemSet *pItemSet )
 
 /*  [Beschreibung]

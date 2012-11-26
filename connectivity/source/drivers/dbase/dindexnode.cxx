@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 #include "dbase/dindexnode.hxx"
@@ -29,9 +27,8 @@
 #include "dbase/DIndex.hxx"
 #include <tools/debug.hxx>
 #include "diagnose_ex.h"
-
 #include <algorithm>
-
+#include <memory.h>
 
 using namespace connectivity;
 using namespace connectivity::dbase;

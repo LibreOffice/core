@@ -208,7 +208,7 @@ sal_Bool SwFEShell::InsertRow( sal_uInt16 nCnt, sal_Bool bBehind )
     if( !pFrm || !pFrm->IsInTab() )
         return sal_False;
 
-    if( pFrm->ImplFindTabFrm()->GetTable()->ISA( SwDDETable ))
+    if( dynamic_cast< SwDDETable* >(pFrm->ImplFindTabFrm()->GetTable()))
     {
         ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
                         ERRCODE_MSG_INFO | ERRCODE_BUTTON_DEF_OK );
@@ -239,7 +239,7 @@ sal_Bool SwFEShell::InsertCol( sal_uInt16 nCnt, sal_Bool bBehind )
     if( !pFrm || !pFrm->IsInTab() )
         return sal_False;
 
-    if( pFrm->ImplFindTabFrm()->GetTable()->ISA( SwDDETable ))
+    if( dynamic_cast< SwDDETable* >(pFrm->ImplFindTabFrm()->GetTable()))
     {
         ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
                         ERRCODE_MSG_INFO | ERRCODE_BUTTON_DEF_OK );
@@ -303,7 +303,7 @@ sal_Bool SwFEShell::DeleteCol()
     if( !pFrm || !pFrm->IsInTab() )
         return sal_False;
 
-    if( pFrm->ImplFindTabFrm()->GetTable()->ISA( SwDDETable ))
+    if( dynamic_cast< SwDDETable* >(pFrm->ImplFindTabFrm()->GetTable()))
     {
         ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
                         ERRCODE_MSG_INFO | ERRCODE_BUTTON_DEF_OK );
@@ -349,7 +349,7 @@ sal_Bool SwFEShell::DeleteRow()
     if( !pFrm || !pFrm->IsInTab() )
         return sal_False;
 
-    if( pFrm->ImplFindTabFrm()->GetTable()->ISA( SwDDETable ))
+    if( dynamic_cast< SwDDETable* >(pFrm->ImplFindTabFrm()->GetTable()))
     {
         ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
                         ERRCODE_MSG_INFO | ERRCODE_BUTTON_DEF_OK );
@@ -478,7 +478,7 @@ sal_uInt16 SwFEShell::MergeTab()
     {
         SwShellTableCrsr* pTableCrsr = GetTableCrsr();
         const SwTableNode* pTblNd = pTableCrsr->GetNode()->FindTableNode();
-        if( pTblNd->GetTable().ISA( SwDDETable ))
+        if( dynamic_cast< const SwDDETable* >(&pTblNd->GetTable()))
         {
             ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
                             ERRCODE_MSG_INFO | ERRCODE_BUTTON_DEF_OK );
@@ -508,7 +508,7 @@ sal_Bool SwFEShell::SplitTab( sal_Bool bVert, sal_uInt16 nCnt, sal_Bool bSameHei
     if( !pFrm || !pFrm->IsInTab() )
         return sal_False;
 
-    if( pFrm->ImplFindTabFrm()->GetTable()->ISA( SwDDETable ))
+    if( dynamic_cast< SwDDETable* >(pFrm->ImplFindTabFrm()->GetTable()))
     {
         ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
                         ERRCODE_MSG_INFO | ERRCODE_BUTTON_DEF_OK );
@@ -1012,19 +1012,19 @@ sal_Bool SwFEShell::HasBoxSelection() const
         pPam->GetMark()->nNode.GetIndex() + 1 ==
         pNd->EndOfSectionIndex())
     {
-            SwNodeIndex aIdx( *pNd->EndOfSectionNode(), -1 );
-            SwCntntNode* pCNd = aIdx.GetNode().GetCntntNode();
-            if( !pCNd )
-            {
-                pCNd = GetDoc()->GetNodes().GoPrevious( &aIdx );
-                ASSERT( pCNd, "kein ContentNode in der Box ??" );
-            }
-            if( pPam->GetMark()->nContent == pCNd->Len() )
-            {
-                if( bChg )
-                    pPam->Exchange();
-                return sal_True;
-            }
+        SwNodeIndex aIdx( *pNd->EndOfSectionNode(), -1 );
+        SwCntntNode* pCNd = aIdx.GetNode().GetCntntNode();
+        if( !pCNd )
+        {
+            pCNd = GetDoc()->GetNodes().GoPrevious( &aIdx );
+            ASSERT( pCNd, "kein ContentNode in der Box ??" );
+        }
+        if( pPam->GetMark()->nContent == pCNd->Len() )
+        {
+            if( bChg )
+                pPam->Exchange();
+            return sal_True;
+        }
     }
     if( bChg )
         pPam->Exchange();
@@ -1392,7 +1392,7 @@ sal_Bool SwFEShell::DeleteTblSel()
     if( !pFrm || !pFrm->IsInTab() )
         return sal_False;
 
-    if( pFrm->ImplFindTabFrm()->GetTable()->ISA( SwDDETable ))
+    if( dynamic_cast< SwDDETable* >(pFrm->ImplFindTabFrm()->GetTable()))
     {
         ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
                         ERRCODE_MSG_INFO | ERRCODE_BUTTON_DEF_OK );
@@ -1755,7 +1755,7 @@ const SwFrm* SwFEShell::GetBox( const Point &rPt, bool* pbRow, bool* pbCol ) con
             for ( sal_uInt16 i = 0; !pFrm && i < pPage->GetSortedObjs()->Count(); ++i )
             {
                 SwAnchoredObject* pObj = (*pPage->GetSortedObjs())[i];
-                if ( pObj->ISA(SwFlyFrm) )
+                if ( dynamic_cast< SwFlyFrm* >(pObj) )
                 {
                     pFrm = lcl_FindFrm( static_cast<SwFlyFrm*>(pObj),
                                         rPt, nFuzzy, pbRow, pbCol );
@@ -2311,7 +2311,7 @@ sal_Bool SwFEShell::SetColRowWidthHeight( sal_uInt16 eType, sal_uInt16 nDiff )
         return sal_False;
 
     if( nsTblChgWidthHeightType::WH_FLAG_INSDEL & eType &&
-        pFrm->ImplFindTabFrm()->GetTable()->ISA( SwDDETable ))
+        dynamic_cast< SwDDETable* >(pFrm->ImplFindTabFrm()->GetTable()))
     {
         ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
                         ERRCODE_MSG_INFO | ERRCODE_BUTTON_DEF_OK );

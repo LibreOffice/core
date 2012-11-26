@@ -26,6 +26,7 @@
 
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <basegfx/range/b2drange.hxx>
 
 #include "fumark.hxx"
 #include "sc.hrc"
@@ -77,8 +78,8 @@ sal_Bool FuMarkRect::MouseButtonDown(const MouseEvent& rMEvt)
     pView->UnmarkAll();         // der Einheitlichkeit halber und wegen #50558#
     bStartDrag = sal_True;
 
-    aBeginPos = pWindow->PixelToLogic( rMEvt.GetPosPixel() );
-    aZoomRect = Rectangle( aBeginPos, Size() );
+    aBeginPos = pWindow->GetInverseViewTransformation() * basegfx::B2DPoint(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
+    aZoomRange = basegfx::B2DRange(aBeginPos);
     return sal_True;
 }
 
@@ -93,15 +94,16 @@ sal_Bool FuMarkRect::MouseMove(const MouseEvent& rMEvt)
     if ( bStartDrag )
     {
         if ( bVisible )
-            pViewShell->DrawMarkRect(aZoomRect);
-        Point aPixPos= rMEvt.GetPosPixel();
-        ForceScroll(aPixPos);
+        {
+            pViewShell->DrawMarkRange(aZoomRange);
+        }
 
-        Point aEndPos = pWindow->PixelToLogic(aPixPos);
-        Rectangle aRect(aBeginPos, aEndPos);
-        aZoomRect = aRect;
-        aZoomRect.Justify();
-        pViewShell->DrawMarkRect(aZoomRect);
+        const basegfx::B2DPoint aPixPos(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
+        ForceScroll(rMEvt.GetPosPixel());
+
+        const basegfx::B2DPoint aEndPos(pWindow->GetInverseViewTransformation() * aPixPos);
+        aZoomRange = basegfx::B2DRange(aBeginPos, aEndPos);
+        pViewShell->DrawMarkRange(aZoomRange);
         bVisible = sal_True;
     }
 
@@ -124,18 +126,17 @@ sal_Bool FuMarkRect::MouseButtonUp(const MouseEvent& rMEvt)
     if ( bVisible )
     {
         // Hide ZoomRect
-        pViewShell->DrawMarkRect(aZoomRect);
+        pViewShell->DrawMarkRange(aZoomRange);
         bVisible = sal_False;
     }
 
-    Size aZoomSizePixel = pWindow->LogicToPixel(aZoomRect).GetSize();
+    const basegfx::B2DVector aZoomSizePixel(pWindow->GetViewTransformation() * aZoomRange.getRange());
+    const double fMinMove(pView->GetMinMoveDistancePixel());
 
-    sal_uInt16 nMinMove = pView->GetMinMoveDistancePixel();
-    if ( aZoomSizePixel.Width() < nMinMove || aZoomSizePixel.Height() < nMinMove )
+    if ( aZoomSizePixel.getX() < fMinMove || aZoomSizePixel.getY() < fMinMove )
     {
         // Klick auf der Stelle
-
-        aZoomRect.SetSize(Size());      // dann ganz leer
+        aZoomRange = basegfx::B2DRange(aZoomRange.getMinimum());
     }
 
     bStartDrag = sal_False;
@@ -146,7 +147,7 @@ sal_Bool FuMarkRect::MouseButtonUp(const MouseEvent& rMEvt)
 
         //  Daten an der View merken
 
-    pViewShell->SetChartArea( aSourceRange, aZoomRect );
+    pViewShell->SetChartArea(aSourceRange, aZoomRange);
 
         //  Chart-Dialog starten:
 
@@ -264,7 +265,7 @@ void FuMarkRect::Deactivate()
     if (bVisible)
     {
         // Hide ZoomRect
-        pViewShell->DrawMarkRect(aZoomRect);
+        pViewShell->DrawMarkRange(aZoomRange);
         bVisible = sal_False;
         bStartDrag = sal_False;
     }

@@ -101,7 +101,6 @@ public:
     void Update( const SfxItemSet* pAttr = 0,
                  const bool        _bNewTOX = false ); // Formatieren
     void UpdatePageNum();               // Seitennummern einfuegen
-    TYPEINFO();                         // fuers rtti
 
     sal_Bool SetPosAtStartEnd( SwPosition& rPos, sal_Bool bAtStart = sal_True ) const;
 };

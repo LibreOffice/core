@@ -204,7 +204,6 @@ using namespace ::svxform;
 //========================================================================
 // class FmPropBrw
 //========================================================================
-DBG_NAME(FmPropBrw);
 //------------------------------------------------------------------------
 FmPropBrw::FmPropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBindings* _pBindings,
             SfxChildWindow* _pMgr, Window* _pParent, const SfxChildWinInfo* _pInfo )
@@ -214,8 +213,6 @@ FmPropBrw::FmPropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBinding
     ,m_bInStateChange( false )
     ,m_xORB(_xORB)
 {
-    DBG_CTOR(FmPropBrw,NULL);
-
     ::Size aPropWinSize(STD_WIN_SIZE_X,STD_WIN_SIZE_Y);
     SetMinOutputSizePixel(::Size(STD_MIN_SIZE_X,STD_MIN_SIZE_Y));
     SetOutputSizePixel(aPropWinSize);
@@ -310,7 +307,6 @@ FmPropBrw::~FmPropBrw()
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-    DBG_DTOR(FmPropBrw,NULL);
 }
 
 //-----------------------------------------------------------------------
@@ -670,7 +666,7 @@ void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPool
     {
         if (eState >= SFX_ITEM_AVAILABLE)
         {
-            FmFormShell* pShell = PTR_CAST(FmFormShell,((SfxObjectItem*)pState)->GetShell());
+            FmFormShell* pShell = dynamic_cast< FmFormShell* >( ((SfxObjectItem*)pState)->GetShell());
             InterfaceBag aSelection;
             if ( pShell )
                 pShell->GetImpl()->getCurrentSelection( aSelection );

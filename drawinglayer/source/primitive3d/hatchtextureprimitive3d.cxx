@@ -280,18 +280,6 @@ namespace drawinglayer
         {
         }
 
-        bool HatchTexturePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
-        {
-            if(TexturePrimitive3D::operator==(rPrimitive))
-            {
-                const HatchTexturePrimitive3D& rCompare = (HatchTexturePrimitive3D&)rPrimitive;
-
-                return (getHatch() == rCompare.getHatch());
-            }
-
-            return false;
-        }
-
         Primitive3DSequence HatchTexturePrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );

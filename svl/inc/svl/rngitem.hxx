@@ -59,7 +59,6 @@ private:
     NUMTYPE                     nFrom;
     NUMTYPE                     nTo;
 public:
-                                TYPEINFO();
                                 SfxXRangeItem();
                                 SfxXRangeItem( sal_uInt16 nWID, NUMTYPE nFrom, NUMTYPE nTo );
                                 SfxXRangeItem( sal_uInt16 nWID, SvStream &rStream );
@@ -88,7 +87,6 @@ private:
     NUMTYPE*                    _pRanges;
 
 public:
-                                TYPEINFO();
                                 SfxXRangesItem();
                                 SfxXRangesItem( sal_uInt16 nWID, const NUMTYPE *pRanges );
                                 SfxXRangesItem( sal_uInt16 nWID, SvStream &rStream );

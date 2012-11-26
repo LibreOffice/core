@@ -27,9 +27,7 @@
 
 #include <sfx2/bindings.hxx>
 #include <svx/htmlmode.hxx>
-#include <svx/sdtacitm.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/sdtagitm.hxx>
 #include <svx/sdtakitm.hxx>
 #include <svx/sdtaditm.hxx>
 #include <svx/sdtaaitm.hxx>
@@ -58,6 +56,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdoashp.hxx>
 #include <editeng/adjitem.hxx>
+#include <svx/svdlegacy.hxx>
 
 #include <math.h>
 
@@ -149,7 +148,7 @@ sal_Bool ConstCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
 
 void ConstCustomShape::Activate(const sal_uInt16 nSlotId)
 {
-    m_pWin->SetSdrDrawMode( OBJ_CUSTOMSHAPE );
+    m_pWin->setSdrObjectCreationInfo(SdrObjectCreationInfo(OBJ_CUSTOMSHAPE));
 
     SwDrawBase::Activate(nSlotId);
 }
@@ -183,7 +182,7 @@ void ConstCustomShape::SetAttributes( SdrObject* pObj )
                         if( pSourceObj )
                         {
                             const SfxItemSet& rSource = pSourceObj->GetMergedItemSet();
-                            SfxItemSet aDest( pObj->GetModel()->GetItemPool(),              // ranges from SdrAttrObj
+                            SfxItemSet aDest( pObj->GetObjectItemPool(),                // ranges from SdrAttrObj
                             SDRATTR_START, SDRATTR_SHADOW_LAST,
                             SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
                             SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
@@ -199,11 +198,11 @@ void ConstCustomShape::SetAttributes( SdrObject* pObj )
                             0, 0);
                             aDest.Set( rSource );
                             pObj->SetMergedItemSet( aDest );
-                            sal_Int32 nAngle = pSourceObj->GetRotateAngle();
-                            if ( nAngle )
+
+                            const long aOldRotation(sdr::legacy::GetRotateAngle(*pSourceObj));
+                            if ( aOldRotation )
                             {
-                                double a = nAngle * F_PI18000;
-                                pObj->NbcRotate( pObj->GetSnapRect().Center(), nAngle, sin( a ), cos( a ) );
+                                sdr::legacy::RotateSdrObject(*pObj, sdr::legacy::GetSnapRect(*pObj).Center(), aOldRotation);
                             }
                             bAttributesAppliedFromGallery = sal_True;
                         }
@@ -218,7 +217,7 @@ void ConstCustomShape::SetAttributes( SdrObject* pObj )
         pObj->SetMergedItem( SvxAdjustItem( SVX_ADJUST_CENTER, RES_PARATR_ADJUST ) );
         pObj->SetMergedItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
         pObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
-        pObj->SetMergedItem( SdrTextAutoGrowHeightItem( sal_False ) );
+        pObj->SetMergedItem( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT, sal_False ) );
         ((SdrObjCustomShape*)pObj)->MergeDefaultAttributes( &aCustomShape );
     }
 }
@@ -229,15 +228,12 @@ void ConstCustomShape::CreateDefaultObject()
     SdrView *pSdrView = m_pSh->GetDrawView();
     if ( pSdrView )
     {
-        const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-        if ( rMarkList.GetMarkCount() == 1 )
-        {
-            SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-            if ( pObj && pObj->ISA( SdrObjCustomShape ) )
+        SdrObject* pObj = pSdrView->getSelectedIfSingle();
+
+        if ( pObj && dynamic_cast< SdrObjCustomShape* >(pObj) )
                 SetAttributes( pObj );
         }
     }
-}
 
 // #i33136#
 bool ConstCustomShape::doConstructOrthogonal() const

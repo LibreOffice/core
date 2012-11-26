@@ -819,7 +819,7 @@ SfxPopupWindow* SvxTableToolBoxControl::CreatePopupWindowCascading()
 
 void SvxTableToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 {
-    if ( pState && pState->ISA(SfxUInt16Item) )
+    if ( pState && dynamic_cast< const SfxUInt16Item* >(pState) )
     {
         sal_Int16 nValue = static_cast< const SfxUInt16Item* >( pState )->GetValue();
         bEnabled = ( nValue != 0 );

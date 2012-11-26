@@ -48,13 +48,14 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrPathObj::createViewIndependentPrimitive2DSequence() const
         {
+            drawinglayer::primitive2d::Primitive2DSequence xRetval;
             const SfxItemSet& rItemSet = GetPathObj().GetMergedItemSet();
             const drawinglayer::attribute::SdrLineFillShadowTextAttribute aAttribute(
                 drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(
                     rItemSet,
                     GetPathObj().getText(0),
                     false));
-            basegfx::B2DPolyPolygon aUnitPolyPolygon(GetPathObj().GetPathPoly());
+            basegfx::B2DPolyPolygon aUnitPolyPolygon(GetPathObj().getB2DPolyPolygonInObjectCoordinates());
             sal_uInt32 nPolyCount(aUnitPolyPolygon.count());
             sal_uInt32 nPointCount(0);
 
@@ -96,33 +97,16 @@ namespace sdr
                 aUnitPolyPolygon.setB2DPolygon(0, aNewPolygon);
 
                 // #i102548# fill objectMatrix with rotation and offset (no shear for lines)
-                aObjectMatrix = basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                aObjectMatrix = basegfx::tools::createScaleRotateTranslateB2DHomMatrix(
                     aLine.getLength(), 1.0,
-                    0.0,
                     atan2(aLine.getY(), aLine.getX()),
                     aStart.getX(), aStart.getY());
             }
             else
             {
-                // #i102548# create unscaled, unsheared, unrotated and untranslated polygon
-                // (unit polygon) by creating the object matrix and back-transforming the polygon
-                const basegfx::B2DRange aObjectRange(basegfx::tools::getRange(aUnitPolyPolygon));
-                const GeoStat& rGeoStat(GetPathObj().GetGeoStat());
-                const double fWidth(aObjectRange.getWidth());
-                const double fHeight(aObjectRange.getHeight());
-                const double fScaleX(basegfx::fTools::equalZero(fWidth) ? 1.0 : fWidth);
-                const double fScaleY(basegfx::fTools::equalZero(fHeight) ? 1.0 : fHeight);
-
-                aObjectMatrix = basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
-                    fScaleX, fScaleY,
-                    rGeoStat.nShearWink ? tan((36000 - rGeoStat.nShearWink) * F_PI18000) : 0.0,
-                    rGeoStat.nDrehWink ? (36000 - rGeoStat.nDrehWink) * F_PI18000 : 0.0,
-                    aObjectRange.getMinX(), aObjectRange.getMinY());
-
-                // ceate unit polygon from object's absolute path
-                basegfx::B2DHomMatrix aInverse(aObjectMatrix);
-                aInverse.invert();
-                aUnitPolyPolygon.transform(aInverse);
+                // get transformation and unit polygon
+                aUnitPolyPolygon = GetPathObj().getB2DPolyPolygonInNormalizedCoordinates();
+                aObjectMatrix = GetPathObj().getSdrObjectTransformation();
             }
 
             // create primitive. Always create primitives to allow the decomposition of
@@ -133,7 +117,9 @@ namespace sdr
                     aAttribute,
                     aUnitPolyPolygon));
 
-            return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+            xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+
+            return xRetval;
         }
     } // end of namespace contact
 } // end of namespace sdr

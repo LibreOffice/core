@@ -28,7 +28,6 @@
 #include "futransf.hxx"
 
 #include <svx/dialogs.hrc>
-#include <svx/polysc3d.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
 
@@ -39,10 +38,9 @@
 #include "drawdoc.hxx"
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/svdocapt.hxx>
 
 namespace sd {
-
-TYPEINIT1( FuTransform, FuPoor );
 
 /*************************************************************************
 |*
@@ -65,7 +63,7 @@ FunctionReference FuTransform::Create( ViewShell* pViewSh, ::sd::Window* pWin, :
 
 void FuTransform::DoExecute( SfxRequest& rReq )
 {
-    if( mpView->AreObjectsMarked() )
+    if( mpView->areSdrObjectsSelected() )
     {
         const SfxItemSet* pArgs = rReq.GetArgs();
 
@@ -73,15 +71,12 @@ void FuTransform::DoExecute( SfxRequest& rReq )
         {
             // --------- itemset for size and position --------
             SfxItemSet aSet( mpView->GetGeoAttrFromMarked() );
+            SdrCaptionObj* pSelected = dynamic_cast< SdrCaptionObj* >(mpView->getSelectedIfSingle());
 
-            const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-            SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-            if( rMarkList.GetMarkCount() == 1 &&
-                pObj->GetObjInventor() == SdrInventor &&
-                pObj->GetObjIdentifier() == OBJ_CAPTION )
+            if( pSelected )
             {
                 // --------- itemset for caption --------
-                SfxItemSet aNewAttr( mpDoc->GetPool() );
+                SfxItemSet aNewAttr( mpDoc->GetItemPool() );
                 mpView->GetAttributes( aNewAttr );
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -120,7 +115,8 @@ void FuTransform::DoExecute( SfxRequest& rReq )
         if( pArgs )
         {
             // Undo
-            String aString( mpView->GetDescriptionOfMarkedObjects() );
+            const SdrObjectVector aSelection(mpView->getSelectedSdrObjectVectorFromSdrMarkView());
+            String aString( getSelectionDescription(aSelection) );
             aString.Append( sal_Unicode(' ') );
             aString.Append( String( SdResId( STR_TRANSFORM ) ) );
             mpView->BegUndo( aString );

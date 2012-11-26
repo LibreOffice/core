@@ -50,8 +50,6 @@ using namespace ::xmloff::token;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-TYPEINIT1( XMLNotesTransformerContext, XMLPersElemContentTContext );
-
 XMLNotesTransformerContext::XMLNotesTransformerContext(
         XMLTransformerBase& rImp,
         const OUString& rQName,

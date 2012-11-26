@@ -38,7 +38,6 @@ class EDITENG_DLLPUBLIC SvxTwoLinesItem : public SfxPoolItem
     sal_Unicode cStartBracket, cEndBracket;
     sal_Bool bOn;
 public:
-    TYPEINFO();
     SvxTwoLinesItem( sal_Bool bOn /*= sal_True*/,
                      sal_Unicode nStartBracket /*= 0*/,
                      sal_Unicode nEndBracket /*= 0*/,

@@ -50,8 +50,6 @@ class XMLIndexChapterInfoEntryContext : public XMLIndexSimpleEntryContext
 
 public:
 
-    TYPEINFO();
-
     XMLIndexChapterInfoEntryContext(
         SvXMLImport& rImport,
         XMLIndexTemplateContext& rTemplate,

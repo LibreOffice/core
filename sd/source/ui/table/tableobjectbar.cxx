@@ -80,10 +80,6 @@ void RegisterInterfaces(SfxModule* pMod)
 // - TableObjectBar -
 // ------------------
 
-TYPEINIT1( TableObjectBar, SfxShell );
-
-// -----------------------------------------------------------------------------
-
 SFX_IMPL_INTERFACE( TableObjectBar, SfxShell, SdResId( STR_TABLEOBJECTBARSHELL ) )
 {
 }
@@ -196,7 +192,7 @@ void TableObjectBar::Execute( SfxRequest& rReq )
         case SID_TABLE_INSERT_ROW:
         case SID_TABLE_INSERT_COL:
         {
-            pView->AdjustMarkHdl();
+            pView->SetMarkHandles();
             pBindings->Invalidate( SID_TABLE_DELETE_ROW );
             pBindings->Invalidate( SID_TABLE_DELETE_COL );
             pBindings->Invalidate( SID_FRAME_LINESTYLE );

@@ -364,31 +364,7 @@ namespace drawinglayer
                  || getShadow());
         }
 
-        bool TextDecoratedPortionPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(TextSimplePortionPrimitive2D::operator==(rPrimitive))
-            {
-                const TextDecoratedPortionPrimitive2D& rCompare = (TextDecoratedPortionPrimitive2D&)rPrimitive;
-
-                return (getOverlineColor() == rCompare.getOverlineColor()
-                    && getTextlineColor() == rCompare.getTextlineColor()
-                    && getFontOverline() == rCompare.getFontOverline()
-                    && getFontUnderline() == rCompare.getFontUnderline()
-                    && getTextStrikeout() == rCompare.getTextStrikeout()
-                    && getTextEmphasisMark() == rCompare.getTextEmphasisMark()
-                    && getTextRelief() == rCompare.getTextRelief()
-                    && getUnderlineAbove() == rCompare.getUnderlineAbove()
-                    && getWordLineMode() == rCompare.getWordLineMode()
-                    && getEmphasisMarkAbove() == rCompare.getEmphasisMarkAbove()
-                    && getEmphasisMarkBelow() == rCompare.getEmphasisMarkBelow()
-                    && getShadow() == rCompare.getShadow());
-            }
-
-            return false;
-        }
-
-        // #i96475#
-        // Added missing implementation. Decorations may (will) stick out of the text's
+        // #i96475# Added missing implementation. Decorations may (will) stick out of the text's
         // inking area, so add them if needed
         basegfx::B2DRange TextDecoratedPortionPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {

@@ -24,13 +24,10 @@
 #define _SFXHINT_HXX
 
 #include "svl/svldllapi.h"
-#include <tools/rtti.hxx>
 
 class SVL_DLLPUBLIC SfxHint
 {
 public:
-    TYPEINFO();
-
     virtual ~SfxHint();
 };
 
@@ -43,7 +40,6 @@ public:
             sal_Bool  bIsOwner; \
         \
         public: \
-            TYPEINFO(); \
             Name( Type* Object, sal_Bool bOwnedByHint = sal_False ); \
             ~Name(); \
         \
@@ -52,13 +48,11 @@ public:
         }
 
 #define IMPL_PTRHINT_AUTODELETE(Name, Type) \
-        TYPEINIT1(Name, SfxHint);   \
         Name::Name( Type* pObject, sal_Bool bOwnedByHint ) \
             { pObj = pObject; bIsOwner = bOwnedByHint; } \
         Name::~Name() { if ( bIsOwner ) delete pObj; }
 
 #define IMPL_PTRHINT(Name, Type) \
-        TYPEINIT1(Name, SfxHint);   \
         Name::Name( Type* pObject, sal_Bool bOwnedByHint ) \
             { pObj = pObject; bIsOwner = bOwnedByHint; } \
         Name::~Name() {}

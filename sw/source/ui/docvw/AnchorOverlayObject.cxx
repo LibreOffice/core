@@ -94,8 +94,6 @@ public:
     bool getShadow() const { return mbShadow; }
     bool getLineSolid() const { return mbLineSolid; }
 
-    virtual bool operator==( const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive ) const;
-
     DeclPrimitrive2DIDBlock()
 };
 
@@ -216,25 +214,6 @@ drawinglayer::primitive2d::Primitive2DSequence AnchorPrimitive::create2DDecompos
     }
 
     return aRetval;
-}
-
-bool AnchorPrimitive::operator==( const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive ) const
-{
-    if(drawinglayer::primitive2d::DiscreteMetricDependentPrimitive2D::operator==(rPrimitive))
-    {
-        const AnchorPrimitive& rCompare = static_cast< const AnchorPrimitive& >(rPrimitive);
-
-        return (getTriangle() == rCompare.getTriangle()
-            && getLine() == rCompare.getLine()
-            && getLineTop() == rCompare.getLineTop()
-            && getAnchorState() == rCompare.getAnchorState()
-            && getColor() == rCompare.getColor()
-            && getLogicLineWidth() == rCompare.getLogicLineWidth()
-            && getShadow() == rCompare.getShadow()
-            && getLineSolid() == rCompare.getLineSolid());
-    }
-
-    return false;
 }
 
 ImplPrimitrive2DIDBlock(AnchorPrimitive, PRIMITIVE2D_ID_SWSIDEBARANCHORPRIMITIVE)

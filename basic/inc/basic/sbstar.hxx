@@ -97,7 +97,6 @@ protected:
 public:
 
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_BASIC,1);
-    TYPEINFO();
 
     StarBASIC( StarBASIC* pParent = NULL, sal_Bool bIsDocBasic = sal_False );
 

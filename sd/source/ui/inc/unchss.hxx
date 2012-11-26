@@ -25,24 +25,23 @@
 #define _SD_UNCHSS_HXX
 
 #include "sdundo.hxx"
+#include <svl/itemset.hxx>
 
-class SfxItemSet;
 class SfxStyleSheet;
 class SdDrawDocument;
 
 class StyleSheetUndoAction : public SdUndoAction
 {
-    SfxStyleSheet*  pStyleSheet;
-
-    SfxItemSet*     pNewSet;
-    SfxItemSet*     pOldSet;
+    SfxStyleSheet&  mrStyleSheet;
+    SfxItemSet      maNewSet;
+    SfxItemSet      maOldSet;
     String          aComment;
 
 public:
-    TYPEINFO();
-    StyleSheetUndoAction(SdDrawDocument* pTheDoc,
-                         SfxStyleSheet*  pTheStyleSheet,
-                         const SfxItemSet* pTheNewItemSet);
+    StyleSheetUndoAction(
+        SdDrawDocument& rTheDoc,
+        SfxStyleSheet&  rTheStyleSheet,
+        const SfxItemSet& rTheNewItemSet);
 
     virtual ~StyleSheetUndoAction();
     virtual void Undo();
@@ -53,3 +52,4 @@ public:
 
 #endif      // _SD_UNCHSS_HXX
 
+// eof

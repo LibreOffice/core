@@ -68,9 +68,6 @@ namespace rptxml
                                 const ::rtl::OUString& rValue );
 
     public:
-
-        TYPEINFO();
-
         OControlStyleContext( ORptFilter& rImport, sal_uInt16 nPrfx,
                 const ::rtl::OUString& rLName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
@@ -135,9 +132,6 @@ namespace rptxml
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     public:
-
-        TYPEINFO();
-
         OReportStylesContext( ORptFilter& rImport, sal_uInt16 nPrfx ,
                 const ::rtl::OUString& rLName ,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,

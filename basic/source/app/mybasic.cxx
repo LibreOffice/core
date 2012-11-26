@@ -56,8 +56,6 @@
 #include "processw.hxx"
 #include "basrid.hxx"
 
-TYPEINIT1(MyBasic,StarBASIC)
-
 class MyFactory : public SbxFactory
 {
 public:

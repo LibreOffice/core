@@ -46,8 +46,6 @@
 
 namespace sd {
 
-TYPEINIT1( FuOutlineBullet, FuPoor );
-
 /*************************************************************************
 |*
 |* Konstruktor
@@ -75,12 +73,12 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
     if( !pArgs )
     {
         // ItemSet fuer Dialog fuellen
-        SfxItemSet aEditAttr( mpDoc->GetPool() );
+        SfxItemSet aEditAttr( mpDoc->GetItemPool() );
         mpView->GetAttributes( aEditAttr );
 
         SfxItemSet aNewAttr( mpViewShell->GetPool(),
                              EE_ITEMS_START, EE_ITEMS_END );
-        aNewAttr.Put( aEditAttr, sal_False );
+        aNewAttr.Put( aEditAttr, false );
 
         // Dialog hochfahren und ausfuehren
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
@@ -98,13 +96,12 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
                     OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
 
                     std::auto_ptr< OutlineViewModelChangeGuard > aGuard;
+                    OutlineView* pOutlineView = dynamic_cast< OutlineView* >(mpView);
 
-                    if (mpView->ISA(OutlineView))
+                    if (pOutlineView)
                     {
-                        pOLV = static_cast<OutlineView*>(mpView)
-                            ->GetViewByWindow(mpViewShell->GetActiveWindow());
-
-                        aGuard.reset( new OutlineViewModelChangeGuard( static_cast<OutlineView&>(*mpView) ) );
+                        pOLV = pOutlineView->GetViewByWindow(mpViewShell->GetActiveWindow());
+                        aGuard.reset( new OutlineViewModelChangeGuard( *pOutlineView ) );
                     }
 
                     if( pOLV )

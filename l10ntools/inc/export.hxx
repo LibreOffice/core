@@ -38,6 +38,7 @@
 #include <tools/fsys.hxx>
 #include <osl/file.hxx>
 #include <osl/file.h>
+#include <string.h>
 
 #include <hash_map> /* std::hashmap*/
 #include <iterator> /* std::iterator*/

@@ -39,6 +39,8 @@
 #include <svx/svdoashp.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svditer.hxx>
+#include <svx/svdlegacy.hxx>
+#include <svx/svdtrans.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
 
@@ -70,49 +72,47 @@ using namespace ::com::sun::star;
 
 IMPL_LINK( DlgEdFunc, ScrollTimeout, Timer *,  )
 {
-    ForceScroll( m_pParent->PixelToLogic( m_pParent->GetPointerPosPixel() ) );
+    const basegfx::B2DPoint aPixelPos(m_pParent->GetPointerPosPixel().X(), m_pParent->GetPointerPosPixel().Y());
+    const basegfx::B2DPoint aLogicPos(m_pParent->GetInverseViewTransformation() * aPixelPos);
+    ForceScroll( aLogicPos );
     return 0;
 }
 
 //----------------------------------------------------------------------------
 
-void DlgEdFunc::ForceScroll( const Point& rPos )
+void DlgEdFunc::ForceScroll( const basegfx::B2DPoint& rPos )
 {
     aScrollTimer.Stop();
 
     OReportWindow* pReportWindow = m_pParent->getSectionWindow()->getViewsWindow()->getView();
     OScrollWindowHelper* pScrollWindow = pReportWindow->getScrollWindow();
+    const double fStartWidth(REPORT_STARTMARKER_WIDTH * double(m_pParent->GetMapMode().GetScaleX()));
+    basegfx::B2DRange aOutRange(basegfx::B2DTuple(pScrollWindow->getThumbPos().X(), pScrollWindow->getThumbPos().Y()));
+    basegfx::B2DRange aWorkArea(0.0, 0.0,
+        pScrollWindow->getTotalSize().Width() - fStartWidth,
+        pScrollWindow->getTotalSize().Height());
 
-    Size aOut = pReportWindow->GetOutputSizePixel();
-    Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH));
-    aStartWidth *= m_pParent->GetMapMode().GetScaleX();
+    aOutRange.expand(aOutRange.getMinimum() + basegfx::B2DVector(
+        pReportWindow->GetOutputSizePixel().Width() - fStartWidth,
+        pReportWindow->GetOutputSizePixel().Height()));
 
-    aOut.Width() -= (long)aStartWidth;
-    aOut.Height() = m_pParent->GetOutputSizePixel().Height();
+    aOutRange.transform(m_pParent->GetInverseViewTransformation());
+    aWorkArea.transform(pScrollWindow->GetInverseViewTransformation());
 
-    Point aPos = pScrollWindow->getThumbPos();
-    aPos.X() *= 0.5;
-    aPos.Y() *= 0.5;
-    Rectangle aOutRect( aPos, aOut );
-    aOutRect = m_pParent->PixelToLogic( aOutRect );
-    //Rectangle aWorkArea = m_pParent->getView()->GetWorkArea();
-    Point aGcc3WorkaroundTemporary;
-    Rectangle aWorkArea(aGcc3WorkaroundTemporary,pScrollWindow->getTotalSize());
-    aWorkArea.Right() -= (long)aStartWidth;
-    aWorkArea = pScrollWindow->PixelToLogic( aWorkArea );
-    if( !aOutRect.IsInside( rPos ) && aWorkArea.IsInside( rPos ) )
+    if( !aOutRange.isInside( rPos ) && aWorkArea.isInside( rPos ) )
     {
         ScrollBar* pHScroll = pScrollWindow->GetHScroll();
         ScrollBar* pVScroll = pScrollWindow->GetVScroll();
         ScrollType eH = SCROLL_LINEDOWN,eV = SCROLL_LINEDOWN;
-        if( rPos.X() < aOutRect.Left() )
+
+        if( rPos.getX() < aOutRange.getMinX() )
             eH = SCROLL_LINEUP;
-        else if( rPos.X() <= aOutRect.Right() )
+        else if( rPos.getX() <= aOutRange.getMaxX() )
             eH = SCROLL_DONTKNOW;
 
-        if( rPos.Y() < aOutRect.Top() )
+        if( rPos.getY() < aOutRange.getMinY() )
             eV = SCROLL_LINEUP;
-        else if( rPos.Y() <= aOutRect.Bottom() )
+        else if( rPos.getY() <= aOutRange.getMaxY() )
             eV = SCROLL_DONTKNOW;
 
         pHScroll->DoScrollAction(eH);
@@ -135,7 +135,7 @@ DlgEdFunc::DlgEdFunc( OReportSection* _pParent )
 {
     // m_pParent = _pParent;
     aScrollTimer.SetTimeoutHdl( LINK( this, DlgEdFunc, ScrollTimeout ) );
-    m_rView.SetActualWin( m_pParent);
+    m_rView.SetActualOutDev( m_pParent);
     aScrollTimer.SetTimeout( SELENG_AUTOREPEAT_INTERVAL );
 }
 
@@ -187,7 +187,7 @@ DlgEdFunc::~DlgEdFunc()
 
 sal_Bool DlgEdFunc::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    m_aMDPos = m_pParent->PixelToLogic( rMEvt.GetPosPixel() );
+    m_aMDPos = m_pParent->GetInverseViewTransformation() * basegfx::B2DPoint(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
     m_pParent->GrabFocus();
     sal_Bool bHandled = sal_False;
     if ( rMEvt.IsLeft() )
@@ -216,7 +216,7 @@ sal_Bool DlgEdFunc::MouseButtonDown( const MouseEvent& rMEvt )
             //m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(m_pView);
 
             // if selected object was hit, drag object
-            if ( pHdl!=NULL || m_rView.IsMarkedHit(m_aMDPos) )
+            if ( pHdl!=NULL || m_rView.IsMarkedObjHit(m_aMDPos) )
             {
                 bHandled = sal_True;
                 m_pParent->CaptureMouse();
@@ -226,12 +226,11 @@ sal_Bool DlgEdFunc::MouseButtonDown( const MouseEvent& rMEvt )
     }
     else if ( rMEvt.IsRight() && !rMEvt.IsLeft() && rMEvt.GetClicks() == 1 ) // mark object when context menu was selected
     {
-        SdrPageView* pPV = m_rView.GetSdrPageView();
         SdrViewEvent aVEvt;
         if ( m_rView.PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt) != SDRHIT_MARKEDOBJECT && !rMEvt.IsShift() )
             m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(NULL);
-        if ( aVEvt.pRootObj )
-            m_rView.MarkObj(aVEvt.pRootObj, pPV);
+        if ( aVEvt.mpRootObj )
+            m_rView.MarkObj(*aVEvt.mpRootObj);
         else
             m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(NULL);
 
@@ -260,16 +259,12 @@ void DlgEdFunc::checkTwoCklicks(const MouseEvent& rMEvt)
     const sal_uInt16 nClicks = rMEvt.GetClicks();
     if ( nClicks == 2 && rMEvt.IsLeft() )
     {
-        if ( m_rView.AreObjectsMarked() )
-        {
-            const SdrMarkList& rMarkList = m_rView.GetMarkedObjectList();
-            if (rMarkList.GetMarkCount() == 1)
+        SdrObject* pSelected = m_rView.getSelectedIfSingle();
+
+        if(pSelected)
             {
-                const SdrMark* pMark = rMarkList.GetMark(0);
-                SdrObject* pObj = pMark->GetMarkedSdrObj();
-                activateOle(pObj);
-            } // if (rMarkList.GetMarkCount() == 1)
-        } // if ( pView->AreObjectsMarked() )
+            activateOle(*pSelected);
+        }
     }
 }
 // -----------------------------------------------------------------------------
@@ -310,7 +305,7 @@ sal_Bool DlgEdFunc::handleKeyEvent(const KeyEvent& _rEvent)
                     m_rView.SdrEndTextEdit();
                     bReturn = sal_True;
                 }
-                else if ( m_rView.AreObjectsMarked() )
+                else if ( m_rView.areSdrObjectsSelected() )
                 {
                     const SdrHdlList& rHdlList = m_rView.GetHdlList();
                     SdrHdl* pHdl = rHdlList.GetFocusHdl();
@@ -341,8 +336,10 @@ sal_Bool DlgEdFunc::handleKeyEvent(const KeyEvent& _rEvent)
                         m_rView.MarkNextObj( !rCode.IsShift() );
                     }
 
-                    if ( m_rView.AreObjectsMarked() )
-                        m_rView.MakeVisible( m_rView.GetAllMarkedRect(), *m_pParent);
+                    if ( m_rView.areSdrObjectsSelected() )
+                    {
+                        m_rView.MakeVisibleAtView( m_rView.getMarkedObjectSnapRange(), *m_pParent);
+                    }
 
                     bReturn = sal_True;
                 }
@@ -356,9 +353,11 @@ sal_Bool DlgEdFunc::handleKeyEvent(const KeyEvent& _rEvent)
                     SdrHdl* pHdl = rHdlList.GetFocusHdl();
                     if ( pHdl )
                     {
-                        Point aHdlPosition( pHdl->GetPos() );
-                        Rectangle aVisRect( aHdlPosition - Point( DEFAUL_MOVE_SIZE, DEFAUL_MOVE_SIZE ), Size( 200, 200 ) );
-                        m_rView.MakeVisible( aVisRect, *m_pParent);
+                        const basegfx::B2DRange aRange(
+                            pHdl->getPosition() - basegfx::B2DPoint(DEFAUL_MOVE_SIZE, DEFAUL_MOVE_SIZE),
+                            pHdl->getPosition() + basegfx::B2DPoint(DEFAUL_MOVE_SIZE, DEFAUL_MOVE_SIZE));
+
+                        m_rView.MakeVisibleAtView( aRange, *m_pParent);
                     }
 
                     bReturn = sal_True;
@@ -377,11 +376,11 @@ sal_Bool DlgEdFunc::handleKeyEvent(const KeyEvent& _rEvent)
             case KEY_RETURN:
                 if ( !rCode.IsMod1() )
                 {
-                    const SdrMarkList& rMarkList = m_rView.GetMarkedObjectList();
-                    if ( rMarkList.GetMarkCount() == 1 )
+                    SdrObject* pSelected = m_rView.getSelectedIfSingle();
+
+                    if ( pSelected )
                     {
-                        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-                        activateOle(pObj);
+                        activateOle(*pSelected);
                     }
                 }
                 break;
@@ -406,46 +405,36 @@ sal_Bool DlgEdFunc::handleKeyEvent(const KeyEvent& _rEvent)
     return bReturn;
 }
 // -----------------------------------------------------------------------------
-void DlgEdFunc::activateOle(SdrObject* _pObj)
+void DlgEdFunc::activateOle(SdrObject& _rObj)
 {
-    if ( _pObj )
-    {
-        const sal_uInt16 nSdrObjKind = _pObj->GetObjIdentifier();
-        //
-        //  OLE: activate
-        //
-        if (nSdrObjKind == OBJ_OLE2)
-        {
-            bool bIsInplaceOle = false;
-            if (!bIsInplaceOle)
-            {
-                SdrOle2Obj* pOleObj = dynamic_cast<SdrOle2Obj*>(_pObj);
-                if ( pOleObj->GetObjRef().is() )
-                {
-                    if (m_rView.IsTextEdit())
-                    {
-                        m_rView.SdrEndTextEdit();
-                    }
+    //
+    //  OLE: activate
+    //
+    SdrOle2Obj* pOleObj = dynamic_cast< SdrOle2Obj* >(&_rObj);
 
-                    pOleObj->AddOwnLightClient();
-                    pOleObj->SetWindow(VCLUnoHelper::GetInterface(m_pParent));
-                    try
-                    {
-                        pOleObj->GetObjRef()->changeState( embed::EmbedStates::UI_ACTIVE );
-                        m_bUiActive = true;
-                        OReportController& rController = m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->getController();
-                        m_bShowPropertyBrowser = rController.isCommandChecked(SID_SHOW_PROPERTYBROWSER);
-                        if ( m_bShowPropertyBrowser )
-                            rController.executeChecked(SID_SHOW_PROPERTYBROWSER,uno::Sequence< beans::PropertyValue >());
-                    }
-                    catch( uno::Exception& )
-                    {
-                        DBG_UNHANDLED_EXCEPTION();
-                    }
-                }
-            }
-        } // if (nSdrObjKind == OBJ_OLE2)
-    } // if ( _pObj )
+    if (pOleObj && pOleObj->GetObjRef().is() )
+    {
+        if (m_rView.IsTextEdit())
+        {
+            m_rView.SdrEndTextEdit();
+        }
+
+        pOleObj->AddOwnLightClient();
+        pOleObj->SetWindow(VCLUnoHelper::GetInterface(m_pParent));
+        try
+        {
+            pOleObj->GetObjRef()->changeState( embed::EmbedStates::UI_ACTIVE );
+            m_bUiActive = true;
+            OReportController& rController = m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->getController();
+            m_bShowPropertyBrowser = rController.isCommandChecked(SID_SHOW_PROPERTYBROWSER);
+            if ( m_bShowPropertyBrowser )
+                rController.executeChecked(SID_SHOW_PROPERTYBROWSER,uno::Sequence< beans::PropertyValue >());
+        }
+        catch( uno::Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
 }
 // -----------------------------------------------------------------------------
 void DlgEdFunc::deactivateOle(bool _bSelect)
@@ -456,7 +445,7 @@ void DlgEdFunc::deactivateOle(bool _bSelect)
     for(sal_uLong i = 0 ; i< nCount;++i)
     {
         SdrOle2Obj* pObj = reinterpret_cast<SdrOle2Obj*>(rObjCache.GetObject(i));
-        if ( m_pParent->getPage() == pObj->GetPage() )
+        if ( m_pParent->getPage() == pObj->getSdrPageFromSdrObject() )
         {
             uno::Reference< embed::XEmbeddedObject > xObj = pObj->GetObjRef();
             if ( xObj.is() && xObj->getCurrentState() == embed::EmbedStates::UI_ACTIVE )
@@ -470,8 +459,7 @@ void DlgEdFunc::deactivateOle(bool _bSelect)
 
                 if ( _bSelect )
                 {
-                    SdrPageView* pPV = m_rView.GetSdrPageView();
-                    m_rView.MarkObj(pObj, pPV);
+                    m_rView.MarkObj(*pObj);
                 }
             } // if ( xObj.is() && xObj->getCurrentState() == embed::EmbedStates::UI_ACTIVE )
         }
@@ -486,10 +474,8 @@ void DlgEdFunc::colorizeOverlappedObject(SdrObject* _pOverlappedObj)
         uno::Reference<report::XReportComponent> xComponent = pObj->getReportComponent();
         if (xComponent.is() && xComponent != m_xOverlappingObj)
         {
-            OReportModel* pRptModel = static_cast<OReportModel*>(_pOverlappedObj->GetModel());
-            if ( pRptModel )
-            {
-                OXUndoEnvironment::OUndoEnvLock aLock(pRptModel->GetUndoEnv());
+            OReportModel& rRptModel = static_cast< OReportModel& >(_pOverlappedObj->getSdrModelFromSdrObject());
+            OXUndoEnvironment::OUndoEnvLock aLock(rRptModel.GetUndoEnv());
 
                 // uncolorize an old object, if there is one
                 unColorizeOverlappedObj();
@@ -500,33 +486,29 @@ void DlgEdFunc::colorizeOverlappedObject(SdrObject* _pOverlappedObj)
             }
         }
     }
-}
 // -----------------------------------------------------------------------------
 void DlgEdFunc::unColorizeOverlappedObj()
 {
     // uncolorize an old object, if there is one
     if (m_xOverlappingObj.is())
     {
-        OReportModel* pRptModel = static_cast<OReportModel*>(m_pOverlappingObj->GetModel());
-        if ( pRptModel )
-        {
-            OXUndoEnvironment::OUndoEnvLock aLock(pRptModel->GetUndoEnv());
+        OReportModel& rRptModel = static_cast< OReportModel& >(m_pOverlappingObj->getSdrModelFromSdrObject());
+        OXUndoEnvironment::OUndoEnvLock aLock(rRptModel.GetUndoEnv());
 
             lcl_setColorOfObject(m_xOverlappingObj, m_nOldColor);
             m_xOverlappingObj = NULL;
             m_pOverlappingObj = NULL;
         }
     }
-}
 // -----------------------------------------------------------------------------
 bool DlgEdFunc::isOverlapping(const MouseEvent& rMEvt)
 {
     bool bOverlapping = false;
     SdrViewEvent aVEvt;
     bOverlapping = m_rView.PickAnything(rMEvt, SDRMOUSEBUTTONUP, aVEvt) != SDRHIT_NONE;
-    if (bOverlapping && aVEvt.pObj)
+    if (bOverlapping && aVEvt.mpObj)
     {
-        colorizeOverlappedObject(aVEvt.pObj);
+        colorizeOverlappedObject(aVEvt.mpObj);
     }
     else
     {
@@ -546,7 +528,8 @@ void DlgEdFunc::checkMovementAllowed(const MouseEvent& rMEvt)
             m_pParent->getSectionWindow()->getViewsWindow()->BrkAction();
         }
         // object was dragged
-        Point aPnt( m_pParent->PixelToLogic( rMEvt.GetPosPixel() ) );
+        basegfx::B2DPoint aPnt(m_pParent->GetInverseViewTransformation() * basegfx::B2DPoint(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y()));
+
         if (m_bSelectionMode)
         {
             m_pParent->getSectionWindow()->getViewsWindow()->EndAction();
@@ -555,21 +538,20 @@ void DlgEdFunc::checkMovementAllowed(const MouseEvent& rMEvt)
         {
             bool bControlKeyPressed = rMEvt.IsMod1();
             // Don't allow points smaller 0
-            if (bControlKeyPressed && (aPnt.Y() < 0))
+            if (bControlKeyPressed && (aPnt.getY() < 0.0))
             {
-                aPnt.Y() = 0;
+                aPnt.setY(0.0);
             }
             if (m_rView.IsDragResize())
             {
                 // we resize the object don't resize to above sections
-                if ( aPnt.Y() < 0 )
+                if ( aPnt.getY() < 0.0 )
                 {
-                    aPnt.Y() = 0;
+                    aPnt.setY(0.0);
                 }
             }
             m_pParent->getSectionWindow()->getViewsWindow()->EndDragObj( bControlKeyPressed, &m_rView, aPnt );
         }
-        m_pParent->getSectionWindow()->getViewsWindow()->ForceMarkedToAnotherPage();
         m_pParent->Invalidate(INVALIDATE_CHILDREN);
     }
     else
@@ -579,13 +561,11 @@ void DlgEdFunc::checkMovementAllowed(const MouseEvent& rMEvt)
 bool DlgEdFunc::isOnlyCustomShapeMarked()
 {
     bool bReturn = true;
-    const SdrMarkList& rMarkList = m_rView.GetMarkedObjectList();
-    for (sal_uInt32 i =  0; i < rMarkList.GetMarkCount();++i )
+    const SdrObjectVector aSelection(m_rView.getSelectedSdrObjectVectorFromSdrMarkView());
+
+    for (sal_uInt32 i =  0; i < aSelection.size(); ++i )
     {
-        SdrMark* pMark = rMarkList.GetMark(i);
-        // bCheck = dynamic_cast<OUnoObject*>(pMark->GetMarkedSdrObj()) != NULL;
-        SdrObject* pObj = pMark->GetMarkedSdrObj();
-        if (pObj->GetObjIdentifier() != OBJ_CUSTOMSHAPE)
+        if (aSelection[i]->GetObjIdentifier() != OBJ_CUSTOMSHAPE)
         {
             // we found an object in the marked objects, which is not a custom shape.
             bReturn = false;
@@ -608,7 +588,6 @@ bool DlgEdFunc::isRectangleHit(const MouseEvent& rMEvt)
     if ( !bIsSetPoint )
     {
         // no drag rect, we have to check every single select rect
-        //const Rectangle& rRect = m_rView.GetDragStat().GetActionRect();
         const SdrDragStat& rDragStat = m_rView.GetDragStat();
         if (rDragStat.GetDragMethod() != NULL)
         {
@@ -617,24 +596,39 @@ bool DlgEdFunc::isRectangleHit(const MouseEvent& rMEvt)
             // loop through all marked objects and check if there new rect overlapps an old one.
             while( (pObjIter = aIter.Next()) != NULL && !bIsSetPoint)
             {
-                if ( m_rView.IsObjMarked(pObjIter)
+                if ( m_rView.IsObjMarked(*pObjIter)
                      && (dynamic_cast<OUnoObject*>(pObjIter) != NULL || dynamic_cast<OOle2Obj*>(pObjIter) != NULL) )
                 {
-                    Rectangle aNewRect = pObjIter->GetLastBoundRect();
-                    long nDx = rDragStat.IsHorFixed() ? 0 : rDragStat.GetDX();
-                    long nDy = rDragStat.IsVerFixed() ? 0 : rDragStat.GetDY();
-                    if ( (nDx + aNewRect.Left()) < 0 )
-                        nDx = -aNewRect.Left();
-                    if ( (nDy + aNewRect.Top()) < 0 )
-                        nDy = -aNewRect.Top();
+                    basegfx::B2DRange aNewRange(pObjIter->getObjectRange(&m_rView));
+                    double fDx(rDragStat.IsHorFixed() ? 0.0 : rDragStat.GetDX());
+                    double fDy(rDragStat.IsVerFixed() ? 0.0 : rDragStat.GetDY());
+
+                    if(fDx + aNewRange.getMinX() < 0.0)
+                    {
+                        fDx -= aNewRange.getMinX();
+                    }
+
+                    if(fDy + aNewRange.getMinY() < 0.0)
+                    {
+                        fDy -= aNewRange.getMinY();
+                    }
 
                     if ( rDragStat.GetDragMethod()->getMoveOnly() )
-                        aNewRect.Move(nDx,nDy);
+                    {
+                        aNewRange.transform(
+                            basegfx::tools::createTranslateB2DHomMatrix(fDx, fDy));
+                    }
                     else
-                        ::ResizeRect(aNewRect,rDragStat.GetRef1(),rDragStat.GetXFact(),rDragStat.GetYFact());
+                    {
+                        basegfx::B2DHomMatrix aTransform;
 
+                        aTransform.translate(-rDragStat.GetRef1());
+                        aTransform.scale(rDragStat.GetXFact(), rDragStat.GetYFact());
+                        aTransform.translate(rDragStat.GetRef1());
+                        aNewRange.transform(aTransform);
+                    }
 
-                    SdrObject* pObjOverlapped = isOver(aNewRect,*m_pParent->getPage(),m_rView,false,pObjIter, ISOVER_IGNORE_CUSTOMSHAPES);
+                    SdrObject* pObjOverlapped = isOver(aNewRange,*m_pParent->getPage(),m_rView,false,pObjIter, ISOVER_IGNORE_CUSTOMSHAPES);
                     bIsSetPoint = pObjOverlapped ? true : false;
                     if (pObjOverlapped && !m_bSelectionMode)
                     {
@@ -644,9 +638,9 @@ bool DlgEdFunc::isRectangleHit(const MouseEvent& rMEvt)
             }
         }
     }
-    else if ( aVEvt.pObj && (aVEvt.pObj->GetObjIdentifier() != OBJ_CUSTOMSHAPE) && !m_bSelectionMode)
+    else if ( aVEvt.mpObj && (aVEvt.mpObj->GetObjIdentifier() != OBJ_CUSTOMSHAPE) && !m_bSelectionMode)
     {
-        colorizeOverlappedObject(aVEvt.pObj);
+        colorizeOverlappedObject(aVEvt.mpObj);
     }
     else
         bIsSetPoint = false;
@@ -675,14 +669,14 @@ bool DlgEdFunc::setMovementPointer(const MouseEvent& rMEvt)
 DlgEdFuncInsert::DlgEdFuncInsert( OReportSection* _pParent ) :
     DlgEdFunc( _pParent )
 {
-    m_rView.SetCreateMode( sal_True );
+    m_rView.SetViewEditMode(SDREDITMODE_CREATE);
 }
 
 //----------------------------------------------------------------------------
 
 DlgEdFuncInsert::~DlgEdFuncInsert()
 {
-    m_rView.SetEditMode( sal_True );
+    m_rView.SetViewEditMode(SDREDITMODE_EDIT);
 }
 
 //----------------------------------------------------------------------------
@@ -693,7 +687,7 @@ sal_Bool DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
         return sal_True;
 
     SdrViewEvent aVEvt;
-    sal_Int16 nId = m_rView.GetCurrentObjIdentifier();
+    sal_Int16 nId = m_rView.getSdrObjectCreationInfo().getIdent();
 
     const SdrHitKind eHit = m_rView.PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
 
@@ -741,38 +735,38 @@ sal_Bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
     if ( DlgEdFunc::MouseButtonUp( rMEvt ) )
         return sal_True;
 
-    const Point aPos( m_pParent->PixelToLogic( rMEvt.GetPosPixel() ) );
-    const sal_uInt16 nHitLog = sal_uInt16 ( m_pParent->PixelToLogic(Size(3,0)).Width() );
+    const basegfx::B2DPoint aPos(m_pParent->GetInverseViewTransformation() * basegfx::B2DPoint(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y()));
+    const double fHitLog(basegfx::B2DVector(m_pParent->GetInverseViewTransformation() * basegfx::B2DVector(3.0, 0.0)).getLength());
 
     sal_Bool bReturn = sal_True;
     // object creation active?
-    if ( m_rView.IsCreateObj() )
+    if ( m_rView.GetCreateObj() )
     {
         if ( isOver(m_rView.GetCreateObj(),*m_pParent->getPage(),m_rView) )
         {
             m_pParent->getSectionWindow()->getViewsWindow()->BrkAction();
             // BrkAction disables the create mode
-            m_rView.SetCreateMode( sal_True );
+            m_rView.SetViewEditMode(SDREDITMODE_CREATE);
             return sal_True;
         }
 
         m_rView.EndCreateObj(SDRCREATE_FORCEEND);
 
-        if ( !m_rView.AreObjectsMarked() )
+        if ( !m_rView.areSdrObjectsSelected() )
         {
-            m_rView.MarkObj(aPos, nHitLog);
+            m_rView.MarkObj(aPos, fHitLog);
         }
 
-        bReturn = m_rView.AreObjectsMarked();
+        bReturn = m_rView.areSdrObjectsSelected();
         if ( bReturn )
         {
             OReportController& rController = m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->getController();
-            const SdrMarkList& rMarkList = m_rView.GetMarkedObjectList();
-            for (sal_uInt32 i =  0; i < rMarkList.GetMarkCount();++i )
+            const SdrObjectVector aSelection(m_rView.getSelectedSdrObjectVectorFromSdrMarkView());
+
+            for (sal_uInt32 i =  0; i < aSelection.size();++i )
             {
-                SdrMark* pMark = rMarkList.GetMark(i);
-                // bCheck = dynamic_cast<OUnoObject*>(pMark->GetMarkedSdrObj()) != NULL;
-                OOle2Obj* pObj = dynamic_cast<OOle2Obj*>(pMark->GetMarkedSdrObj());
+                OOle2Obj* pObj = dynamic_cast< OOle2Obj* >(aSelection[i]);
+
                 if ( pObj && !pObj->IsEmpty() )
                 {
                     pObj->initializeChart(rController.getModel());
@@ -783,15 +777,14 @@ sal_Bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
     else
         checkMovementAllowed(rMEvt);
 
-    if ( !m_rView.AreObjectsMarked() &&
-         Abs(m_aMDPos.X() - aPos.X()) < nHitLog &&
-         Abs(m_aMDPos.Y() - aPos.Y()) < nHitLog &&
+    if ( !m_rView.areSdrObjectsSelected() &&
+         fabs(m_aMDPos.getX() - aPos.getX()) < fHitLog &&
+         fabs(m_aMDPos.getY() - aPos.getY()) < fHitLog &&
          !rMEvt.IsShift() && !rMEvt.IsMod2() )
     {
-        SdrPageView* pPV = m_rView.GetSdrPageView();
         SdrViewEvent aVEvt;
         m_rView.PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
-        m_rView.MarkObj(aVEvt.pRootObj, pPV);
+        m_rView.MarkObj(*aVEvt.mpRootObj);
     } // ift() && !rMEvt.IsMod2() )
     checkTwoCklicks(rMEvt);
     m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->UpdatePropertyBrowserDelayed(m_rView);
@@ -804,11 +797,13 @@ sal_Bool DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
 {
     if ( DlgEdFunc::MouseMove(rMEvt ) )
         return sal_True;
-    Point   aPos( m_pParent->PixelToLogic( rMEvt.GetPosPixel() ) );
 
-    if ( m_rView.IsCreateObj() )
+    const basegfx::B2DPoint aPixelPos(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
+    basegfx::B2DPoint aLogicPos(m_pParent->GetInverseViewTransformation() * aPixelPos);
+
+    if ( m_rView.GetCreateObj() )
     {
-        m_rView.SetOrtho(SdrObjCustomShape::doConstructOrthogonal(m_rView.getReportSection()->getSectionWindow()->getViewsWindow()->getShapeType()) ? !rMEvt.IsShift() : rMEvt.IsShift());
+        m_rView.SetOrthogonal(SdrObjCustomShape::doConstructOrthogonal(m_rView.getReportSection()->getSectionWindow()->getViewsWindow()->getShapeType()) ? !rMEvt.IsShift() : rMEvt.IsShift());
         m_rView.SetAngleSnapEnabled(rMEvt.IsShift());
     }
 
@@ -818,21 +813,21 @@ sal_Bool DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
         if ( m_rView.IsDragResize() )
         {
             // we resize the object don't resize to above sections
-            if ( aPos.Y() < 0 )
+            if ( aLogicPos.getY() < 0.0 )
             {
-                aPos.Y() = 0;
+                aLogicPos.setY(0.0);
             }
         }
         bIsSetPoint = setMovementPointer(rMEvt);
-        ForceScroll(aPos);
-        m_pParent->getSectionWindow()->getViewsWindow()->MovAction(aPos,&m_rView, m_rView.GetDragMethod() == NULL, false);
+        ForceScroll(aLogicPos);
+        m_pParent->getSectionWindow()->getViewsWindow()->MovAction(aLogicPos,&m_rView, m_rView.GetDragMethod() == NULL, false);
     }
 
     //if ( isOver(m_rView.GetCreateObj(),*m_pParent->getPage(),*m_pView) )
     //    m_pParent->SetPointer( Pointer(POINTER_NOTALLOWED));
     //else
     if ( !bIsSetPoint )
-        m_pParent->SetPointer( m_rView.GetPreferedPointer( aPos, m_pParent) );
+        m_pParent->SetPointer( m_rView.GetPreferedPointer( aLogicPos, m_pParent) );
 
     return sal_True;
 }
@@ -890,7 +885,7 @@ sal_Bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
         }
         else
         {
-            m_rView.SdrBeginTextEdit( aVEvt.pRootObj,m_rView.GetSdrPageView(),m_pParent,sal_False );
+            m_rView.SdrBeginTextEdit( aVEvt.mpRootObj,m_pParent,sal_False );
         }
     }
 
@@ -905,7 +900,8 @@ sal_Bool DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
         return sal_True;
 
     // get view from parent
-    const Point aPnt( m_pParent->PixelToLogic( rMEvt.GetPosPixel() ) );
+    const basegfx::B2DPoint aPixelPos(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
+    const basegfx::B2DPoint aPnt(m_pParent->GetInverseViewTransformation() * aPixelPos);
 
     if ( rMEvt.IsLeft() )                     // left mousebutton pressed
         checkMovementAllowed(rMEvt);
@@ -928,46 +924,38 @@ sal_Bool DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
     if ( DlgEdFunc::MouseMove(rMEvt ) )
         return sal_True;
 
-    Point aPnt( m_pParent->PixelToLogic( rMEvt.GetPosPixel() ) );
+    const basegfx::B2DPoint aPixelPos(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
+    basegfx::B2DPoint aLogicPos(m_pParent->GetInverseViewTransformation() * aPixelPos);
     bool bIsSetPoint = false;
 
     if ( m_rView.IsAction() ) // Drag Mode
     {
         bIsSetPoint = setMovementPointer(rMEvt);
-        ForceScroll(aPnt);
+        ForceScroll(aLogicPos);
         if (m_rView.GetDragMethod()==NULL)
         {
             // create a selection
-            m_pParent->getSectionWindow()->getViewsWindow()->MovAction(aPnt, &m_rView, true, false);
+            m_pParent->getSectionWindow()->getViewsWindow()->MovAction(aLogicPos, &m_rView, true, false);
         }
         else
         {
             if ( m_rView.IsDragResize() )
             {
                 // we resize the object don't resize to above sections
-                if ( aPnt.Y() < 0 )
+                if ( aLogicPos.getY() < 0.0 )
                 {
-                    aPnt.Y() = 0;
+                    aLogicPos.setY(0.0);
                 }
-                // grow section if it is under the current section
-//                else
-//                {
-//                    const Size& aSectionSize = m_rView->GetSizePixel();
-//                    if ( aPnt.Y() > aSectionSize.Height() )
-//                    {
-//                        aPnt.Y() = aSectionSize.Height();
-//                    }
-//                }
             }
             // drag or resize an object
             bool bControlKey = rMEvt.IsMod1();
-            m_pParent->getSectionWindow()->getViewsWindow()->MovAction(aPnt, &m_rView, false, bControlKey);
+            m_pParent->getSectionWindow()->getViewsWindow()->MovAction(aLogicPos, &m_rView, false, bControlKey);
         }
     }
 
     if ( !bIsSetPoint )
     {
-        m_pParent->SetPointer( m_rView.GetPreferedPointer( aPnt, m_pParent) );
+        m_pParent->SetPointer( m_rView.GetPreferedPointer( aLogicPos, m_pParent) );
 
         // restore color
         unColorizeOverlappedObj();
@@ -975,147 +963,6 @@ sal_Bool DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
 
     return sal_True;
 }
-// -----------------------------------------------------------------------------
-//void DlgEdFuncSelect::SetInEditMode(SdrTextObj* _pTextObj,const MouseEvent& rMEvt, sal_Bool bQuickDrag)
-//{
-//
-//  SdrPageView* pPV = m_rView.GetSdrPageView();
-//  if( _pTextObj && _pTextObj->GetPage() == pPV->GetPage() )
-//  {
-//      m_rView.SetCurrentObj(OBJ_TEXT);
-//      m_rView.SetEditMode(SDREDITMODE_EDIT);
-//
-//      sal_Bool bEmptyOutliner = sal_False;
-//
-//      if (!_pTextObj->GetOutlinerParaObject() && m_rView.GetTextEditOutliner())
-//      {
-//          ::SdrOutliner* pOutl = m_rView.GetTextEditOutliner();
-//          sal_uLong nParaAnz = pOutl->GetParagraphCount();
-//          Paragraph* p1stPara = pOutl->GetParagraph( 0 );
-//
-//          if (nParaAnz==1 && p1stPara)
-//          {
-//              // Bei nur einem Pararaph
-//              if (pOutl->GetText(p1stPara).Len() == 0)
-//              {
-//                  bEmptyOutliner = sal_True;
-//              }
-//          }
-//      }
-//
-//      if (_pTextObj != m_rView.GetTextEditObject() || bEmptyOutliner)
-//      {
-//          sal_uInt32 nInv = _pTextObj->GetObjInventor();
-//          sal_uInt16 nSdrObjKind = _pTextObj->GetObjIdentifier();
-//
-//          if (nInv == SdrInventor && _pTextObj->HasTextEdit() &&
-//              (nSdrObjKind == OBJ_TEXT ||
-//              nSdrObjKind == OBJ_TITLETEXT ||
-//              nSdrObjKind == OBJ_OUTLINETEXT ||
-//              (_pTextObj->ISA(SdrTextObj) && !_pTextObj->IsEmptyPresObj())))
-//          {
-//              // Neuen Outliner machen (gehoert der SdrObjEditView)
-//                SdrModel* pModel = _pTextObj->GetModel();
-//                SdrOutliner* pOutl = SdrMakeOutliner( OUTLINERMODE_OUTLINEOBJECT, pModel );
-//              pOutl->SetMinDepth(0);
-//              pOutl->SetStyleSheetPool((SfxStyleSheetPool*) pModel->GetStyleSheetPool());
-//              //pOutl->SetCalcFieldValueHdl(LINK(SD_MOD(), SdModule, CalcFieldValueHdl));
-//              sal_uLong nCntrl = pOutl->GetControlWord();
-//              nCntrl |= EE_CNTRL_ALLOWBIGOBJS;
-//              nCntrl |= EE_CNTRL_URLSFXEXECUTE;
-//              nCntrl |= EE_CNTRL_MARKFIELDS;
-//              nCntrl |= EE_CNTRL_AUTOCORRECT;
-//
-//              nCntrl &= ~EE_CNTRL_ULSPACESUMMATION;
-//              //if ( pModel->IsSummationOfParagraphs() )
-//              //    nCntrl |= EE_CNTRL_ULSPACESUMMATION;
-//
-//              //SetSpellOptions( nCntrl );
-//
-//              pOutl->SetControlWord(nCntrl);
-//
-//                uno::Reference< linguistic2::XSpellChecker1 > xSpellChecker( LinguMgr::GetSpellChecker() );
-//              if ( xSpellChecker.is() )
-//                  pOutl->SetSpeller( xSpellChecker );
-//
-//                uno::Reference< linguistic2::XHyphenator > xHyphenator( LinguMgr::GetHyphenator() );
-//              if( xHyphenator.is() )
-//                  pOutl->SetHyphenator( xHyphenator );
-//
-//              pOutl->SetDefaultLanguage( Application::GetSettings().GetLanguage() );
-//
-//              // in einem Gliederungstext darf nicht auf die 0-te
-//              // Ebene ausgerueckt werden
-//              if (_pTextObj->GetObjInventor() == SdrInventor &&
-//                  _pTextObj->GetObjIdentifier() == OBJ_OUTLINETEXT)
-//              {
-//                  pOutl->SetMinDepth(1);
-//              }
-//
-//              if (bEmptyOutliner)
-//              {
-//                  m_rView.SdrEndTextEdit(sal_True);
-//              }
-//
-//              if( _pTextObj )
-//              {
-//                  OutlinerParaObject* pOPO = _pTextObj->GetOutlinerParaObject();
-//                  if( ( pOPO && pOPO->IsVertical() ) /*||
-//                      nSlotId == SID_ATTR_CHAR_VERTICAL ||
-//                      nSlotId == SID_TEXT_FITTOSIZE_VERTICAL */)
-//                      pOutl->SetVertical( sal_True );
-//
-//
-//                  if (m_rView.SdrBeginTextEdit(_pTextObj, pPV, pParent, sal_True, pOutl) && _pTextObj->GetObjInventor() == SdrInventor)
-//                  {
-//                      //bFirstObjCreated = sal_True;
-//                      //DeleteDefaultText();
-//
-//                      OutlinerView* pOLV = m_rView.GetTextEditOutlinerView();
-//
-//                      nSdrObjKind = _pTextObj->GetObjIdentifier();
-//
-//                      SdrViewEvent aVEvt;
-//                      SdrHitKind eHit = m_rView.PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
-//
-//                      if (eHit == SDRHIT_TEXTEDIT)
-//                      {
-//                          // Text getroffen
-//                          if (nSdrObjKind == OBJ_TEXT ||
-//                              nSdrObjKind == OBJ_TITLETEXT ||
-//                              nSdrObjKind == OBJ_OUTLINETEXT ||
-//                              //nSlotId == SID_TEXTEDIT ||
-//                              !bQuickDrag)
-//                          {
-//                              pOLV->MouseButtonDown(rMEvt);
-//                              pOLV->MouseMove(rMEvt);
-//                              pOLV->MouseButtonUp(rMEvt);
-//                          }
-//
-//                          if ( bQuickDrag && _pTextObj->GetOutlinerParaObject())
-//                          {
-//                              pOLV->MouseButtonDown(rMEvt);
-//                          }
-//                      }
-//                      else
-//                      {
-//                          // #98198# Move cursor to end of text
-//                          ESelection aNewSelection(EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND, EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND);
-//                          pOLV->SetSelection(aNewSelection);
-//                      }
-//                  }
-//                  else
-//                  {
-//                      //RestoreDefaultText();
-//                  }
-//              }
-//          }
-//      }
-//  }
-//  else
-//      _pTextObj = NULL;
-//}
-
 
 //----------------------------------------------------------------------------
 }

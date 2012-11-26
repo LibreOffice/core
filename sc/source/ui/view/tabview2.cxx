@@ -376,8 +376,8 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
         rMark.SetMarkArea( ScRange( nBlockStartX, nBlockStartY, nTab, nBlockEndX, nBlockEndY, nTab ) );
 
 #ifdef OLD_SELECTION_PAINT
-        sal_Bool bCont;
-        sal_Bool bDraw = aRect.GetXorDiff( nDrawStartCol, nDrawStartRow,
+        bool bCont;
+        bool bDraw = aRect.GetXorDiff( nDrawStartCol, nDrawStartRow,
                                         nDrawEndCol, nDrawEndRow, bCont );
         if ( bDraw )
         {

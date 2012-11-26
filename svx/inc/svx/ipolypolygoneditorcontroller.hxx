@@ -27,9 +27,8 @@
 #include "svx/svxdllapi.h"
 #include <svx/svdedtv.hxx>
 
-//************************************************************
+////////////////////////////////////////////////////////////////////////////////////////////////////
 //   Defines
-//************************************************************
 
 enum SdrPathSmoothKind  {SDRPATHSMOOTH_DONTCARE,   // nur fuer Statusabfrage
                          SDRPATHSMOOTH_ANGULAR,    // Eckig
@@ -46,27 +45,31 @@ enum SdrObjClosedKind   {SDROBJCLOSED_DONTCARE,    // nur fuer Statusabfrage
                          SDROBJCLOSED_CLOSED,      // Objekte geschlossen (Polygon, ...)
                          SDROBJCLOSED_TOGGLE};     // nur fuer Set: Toggle (not implemented yet)
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 class IPolyPolygonEditorController
 {
 public:
     virtual void DeleteMarkedPoints() = 0;
-    virtual sal_Bool IsDeleteMarkedPointsPossible() const = 0;
+    virtual bool IsDeleteMarkedPointsPossible() const = 0;
 
     virtual void RipUpAtMarkedPoints() = 0;
     virtual bool IsRipUpAtMarkedPointsPossible() const = 0;
 
-    virtual sal_Bool IsSetMarkedSegmentsKindPossible() const = 0;
+    virtual bool IsSetMarkedSegmentsKindPossible() const = 0;
     virtual SdrPathSegmentKind GetMarkedSegmentsKind() const = 0;
     virtual void SetMarkedSegmentsKind(SdrPathSegmentKind eKind) = 0;
 
-    virtual sal_Bool IsSetMarkedPointsSmoothPossible() const = 0;
+    virtual bool IsSetMarkedPointsSmoothPossible() const = 0;
     virtual SdrPathSmoothKind GetMarkedPointsSmooth() const = 0;
     virtual void SetMarkedPointsSmooth(SdrPathSmoothKind eKind) = 0;
 
-    virtual void CloseMarkedObjects(sal_Bool bToggle, sal_Bool bOpen ) = 0;
+    virtual void CloseMarkedObjects(bool bToggle, bool bOpen ) = 0;
     virtual bool IsOpenCloseMarkedObjectsPossible() const = 0;
     virtual SdrObjClosedKind GetMarkedObjectsClosedState() const = 0;
 };
 
 #endif //_SDR_IPOLYPOLYGONEDITORCONTROLLER_HXX
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// eof

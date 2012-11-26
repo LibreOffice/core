@@ -26,7 +26,8 @@
 
 #include <svx/svdoattr.hxx>
 #include <svx/xpool.hxx>
-#include "svx/svditext.hxx"
+#include <editeng/editdata.hxx>
+#include <svx/svditext.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdattr.hxx>
@@ -51,13 +52,9 @@
 #include <svx/xflbstit.hxx>
 #include <svx/xflbtoxy.hxx>
 #include <svx/xftshit.hxx>
-
-
 #include <editeng/colritem.hxx>
 #include "editeng/fontitem.hxx"
 #include <editeng/fhgtitem.hxx>
-
-//#include <editeng/charscaleitem.hxx>
 #include <svx/xlnstcit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svl/style.hxx>
@@ -81,7 +78,6 @@
 #include <svx/sdr/properties/attributeproperties.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include "svx/xlinjoit.hxx"
-#include <svdoimp.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -92,9 +88,8 @@ sdr::properties::BaseProperties* SdrAttrObj::CreateObjectSpecificProperties()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1(SdrAttrObj,SdrObject);
-
-SdrAttrObj::SdrAttrObj()
+SdrAttrObj::SdrAttrObj(SdrModel& rSdrModel, const basegfx::B2DHomMatrix& rTransform)
+:   SdrObject(rSdrModel, rTransform)
 {
 }
 
@@ -102,52 +97,15 @@ SdrAttrObj::~SdrAttrObj()
 {
 }
 
-const Rectangle& SdrAttrObj::GetSnapRect() const
-{
-    if(bSnapRectDirty)
-    {
-        ((SdrAttrObj*)this)->RecalcSnapRect();
-        ((SdrAttrObj*)this)->bSnapRectDirty = false;
-    }
-
-    return maSnapRect;
-}
-
-void SdrAttrObj::SetModel(SdrModel* pNewModel)
-{
-    SdrModel* pOldModel = pModel;
-
-    // test for correct pool in ItemSet; move to new pool if necessary
-    if(pNewModel && GetObjectItemPool() && GetObjectItemPool() != &pNewModel->GetItemPool())
-    {
-        MigrateItemPool(GetObjectItemPool(), &pNewModel->GetItemPool(), pNewModel);
-    }
-
-    // call parent
-    SdrObject::SetModel(pNewModel);
-
-    // modify properties
-    GetProperties().SetModel(pOldModel, pNewModel);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// syntactical sugar for ItemSet accesses
-
 void __EXPORT SdrAttrObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
-    SfxSimpleHint *pSimple = PTR_CAST(SfxSimpleHint, &rHint);
-    sal_Bool bDataChg(pSimple && SFX_HINT_DATACHANGED == pSimple->GetId());
+    const SfxSimpleHint *pSimple = dynamic_cast< const SfxSimpleHint* >(&rHint);
+    bool bDataChg(pSimple && SFX_HINT_DATACHANGED == pSimple->GetId());
 
     if(bDataChg)
     {
-        Rectangle aBoundRect = GetLastBoundRect();
-        SetBoundRectDirty();
-        SetRectsDirty(sal_True);
-
-        // This may have lead to object change
+        const SdrObjectChangeBroadcaster aSdrObjectChangeBroadcaster(*this, HINT_OBJCHG_ATTR);
         SetChanged();
-        BroadcastObjectChange();
-        SendUserCall(SDRUSERCALL_CHGATTR, aBoundRect);
     }
 }
 
@@ -155,22 +113,23 @@ sal_Int32 SdrAttrObj::ImpGetLineWdt() const
 {
     sal_Int32 nRetval(0);
 
-    if(XLINE_NONE != ((XLineStyleItem&)(GetObjectItem(XATTR_LINESTYLE))).GetValue())
+    if(XLINE_NONE != ((XLineStyleItem&)(GetProperties().GetObjectItemSet().Get(XATTR_LINESTYLE))).GetValue())
     {
-        nRetval = ((XLineWidthItem&)(GetObjectItem(XATTR_LINEWIDTH))).GetValue();
+        nRetval = ((XLineWidthItem&)(GetProperties().GetObjectItemSet().Get(XATTR_LINEWIDTH))).GetValue();
     }
 
     return nRetval;
 }
 
-sal_Bool SdrAttrObj::HasFill() const
+bool SdrAttrObj::HasFill() const
 {
-    return bClosedObj && ((XFillStyleItem&)(GetProperties().GetObjectItemSet().Get(XATTR_FILLSTYLE))).GetValue()!=XFILL_NONE;
+    return IsClosedObj() && XFILL_NONE != ((XFillStyleItem&)(GetProperties().GetObjectItemSet().Get(XATTR_FILLSTYLE))).GetValue();
 }
 
-sal_Bool SdrAttrObj::HasLine() const
+bool SdrAttrObj::HasLine() const
 {
-    return ((XLineStyleItem&)(GetProperties().GetObjectItemSet().Get(XATTR_LINESTYLE))).GetValue()!=XLINE_NONE;
+    return XLINE_NONE != ((XLineStyleItem&)(GetProperties().GetObjectItemSet().Get(XATTR_LINESTYLE))).GetValue();
 }
 
+//////////////////////////////////////////////////////////////////////////////
 // eof

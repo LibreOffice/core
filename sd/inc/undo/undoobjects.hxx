@@ -29,7 +29,6 @@
 #include <svx/svdobj.hxx>
 #include "pres.hxx"
 
-class SdrObjUserCall;
 class SdPage;
 
 namespace sd
@@ -48,7 +47,7 @@ protected:
     virtual void Redo();
 
 private:
-    SfxUndoAction*  mpUndoUsercall;
+    SfxUndoAction*  mpUndoSdPage;
     SfxUndoAction*  mpUndoAnimation;
     SfxUndoAction*  mpUndoPresObj;
 };
@@ -58,7 +57,7 @@ private:
 class UndoRemoveObject : public SdrUndoRemoveObj, public UndoRemovePresObjectImpl
 {
 public:
-    UndoRemoveObject( SdrObject& rObject, bool bOrdNumDirect );
+    UndoRemoveObject( SdrObject& rObject );
 
     virtual void Undo();
     virtual void Redo();
@@ -72,7 +71,7 @@ private:
 class UndoDeleteObject : public SdrUndoDelObj, public UndoRemovePresObjectImpl
 {
 public:
-    UndoDeleteObject( SdrObject& rObject, bool bOrdNumDirect );
+    UndoDeleteObject( SdrObject& rObject );
 
     virtual void Undo();
     virtual void Redo();
@@ -86,7 +85,7 @@ private:
 class UndoReplaceObject : public SdrUndoReplaceObj, public UndoRemovePresObjectImpl
 {
 public:
-    UndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject, bool bOrdNumDirect );
+    UndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject );
 
     virtual void Undo();
     virtual void Redo();
@@ -113,19 +112,19 @@ private:
 };
 
 //////////////////////////////////////////////////////////////////////////////
-// Undo for SdrObject::SetUserCall()
+// Undo for connecting SdrObject to SdPage
 
-class UndoObjectUserCall : public SdrUndoObj
+class UndoConnectionToSdrObject : public SdrUndoObj
 {
 public:
-    UndoObjectUserCall(SdrObject& rNewObj);
+    UndoConnectionToSdrObject(SdrObject& rNewObj);
 
     virtual void Undo();
     virtual void Redo();
 
 protected:
-    SdrObjUserCall* mpOldUserCall;
-    SdrObjUserCall* mpNewUserCall;
+    SdPage* mpOldSdPage;
+    SdPage* mpNewSdPage;
     SdrObjectWeakRef mxSdrObject;
 };
 

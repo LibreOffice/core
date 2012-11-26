@@ -96,10 +96,6 @@ SFX_IMPL_INTERFACE( ScDrawTextObjectBar, SfxShell, ScResId(SCSTR_DRAWTEXTSHELL) 
     SFX_CHILDWINDOW_REGISTRATION( ScGetFontWorkId() );
 }
 
-TYPEINIT1( ScDrawTextObjectBar, SfxShell );
-
-
-
 // abschalten der nicht erwuenschten Acceleratoren:
 
 void ScDrawTextObjectBar::StateDisableItems( SfxItemSet &rSet )
@@ -188,7 +184,7 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                 const SfxPoolItem* pItem;
                 if ( pReqArgs &&
                      pReqArgs->GetItemState(nSlot, sal_True, &pItem) == SFX_ITEM_SET &&
-                     pItem->ISA(SfxUInt32Item) )
+                     dynamic_cast< const SfxUInt32Item* >(pItem) )
                 {
                     nFormat = ((const SfxUInt32Item*)pItem)->GetValue();
                 }
@@ -233,7 +229,7 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                     aString = ((const SfxStringItem*)pItem)->GetValue();
                     const SfxPoolItem* pFtItem = NULL;
                     pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), sal_False, &pFtItem);
-                    const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
+                    const SfxStringItem* pFontItem = dynamic_cast< const SfxStringItem* >( pFtItem );
                     if ( pFontItem )
                     {
                         String aFontName(pFontItem->GetValue());
@@ -279,8 +275,9 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                         const SvxFieldItem* pFieldItem = pOutView->GetFieldAtSelection();
                         if (pFieldItem)
                         {
-                            const SvxFieldData* pField = pFieldItem->GetField();
-                            if ( pField && pField->ISA(SvxURLField) )
+                            const SvxURLField* pField = dynamic_cast< const SvxURLField* >(pFieldItem->GetField());
+
+                            if ( pField )
                             {
                                 //  altes Feld selektieren
 
@@ -328,11 +325,11 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                     const SvxFieldItem* pFieldItem = pOutView->GetFieldAtSelection();
                     if ( pFieldItem )
                     {
-                        const SvxFieldData* pField = pFieldItem->GetField();
-                        if( pField && pField->ISA( SvxURLField ) )
+                        const SvxURLField* pField = dynamic_cast< const SvxURLField* >(pFieldItem->GetField());
+
+                        if( pField )
                         {
-                            const SvxURLField* pURLField = static_cast< const SvxURLField* >( pField );
-                            ScGlobal::OpenURL( pURLField->GetURL(), pURLField->GetTargetFrame() );
+                            ScGlobal::OpenURL( pField->GetURL(), pField->GetTargetFrame() );
                         }
                     }
                 }
@@ -363,7 +360,7 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
         // Hyphenation is handled above - text edit is ended
         case SID_ENABLE_HYPHENATION:
             // force loading of hyphenator (object is skipped in repaint)
-            ((ScDrawLayer*)pView->GetModel())->UseHyphenator();
+            dynamic_cast< ScDrawLayer& >(pView->getSdrModelFromSdrView()).UseHyphenator();
             pOutliner->SetHyphenator( LinguMgr::GetHyphenator() );
             ExecuteGlobal( rReq );
             break;
@@ -372,7 +369,7 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
         case SID_THES:
             {
                 String aReplaceText;
-                SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES, sal_False );
+                SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES );
                 if (pItem2)
                     aReplaceText = pItem2->GetValue();
                 if (aReplaceText.Len() > 0)
@@ -417,13 +414,13 @@ void __EXPORT ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
             const SvxFieldItem* pFieldItem = pOutView->GetFieldAtSelection();
             if (pFieldItem)
             {
-                const SvxFieldData* pField = pFieldItem->GetField();
-                if ( pField && pField->ISA(SvxURLField) )
+                const SvxURLField* pField = dynamic_cast< const SvxURLField* >(pFieldItem->GetField());
+
+                if ( pField )
                 {
-                    const SvxURLField* pURLField = (const SvxURLField*) pField;
-                    aHLinkItem.SetName( pURLField->GetRepresentation() );
-                    aHLinkItem.SetURL( pURLField->GetURL() );
-                    aHLinkItem.SetTargetFrame( pURLField->GetTargetFrame() );
+                    aHLinkItem.SetName( pField->GetRepresentation() );
+                    aHLinkItem.SetURL( pField->GetURL() );
+                    aHLinkItem.SetTargetFrame( pField->GetTargetFrame() );
                     bField = sal_True;
                 }
             }
@@ -450,7 +447,7 @@ void __EXPORT ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
             if ( pFieldItem )
             {
                 const SvxFieldData* pField = pFieldItem->GetField();
-                bEnable = pField && pField->ISA( SvxURLField );
+                bEnable = pField && dynamic_cast< const SvxURLField* >(pField);
             }
         }
         if( !bEnable )
@@ -469,7 +466,7 @@ void __EXPORT ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
     if ( rSet.GetItemState( SID_ENABLE_HYPHENATION ) != SFX_ITEM_UNKNOWN )
     {
         SdrView* pView = pViewData->GetScDrawView();
-        SfxItemSet aAttrs( pView->GetModel()->GetItemPool() );
+        SfxItemSet aAttrs( pView->getSdrModelFromSdrView().GetItemPool() );
         pView->GetAttributes( aAttrs );
         if( aAttrs.GetItemState( EE_PARA_HYPHENATE ) >= SFX_ITEM_AVAILABLE )
         {
@@ -588,7 +585,7 @@ void __EXPORT ScDrawTextObjectBar::ExecuteToggle( SfxRequest &rReq )
 
     SfxItemSet aSet( pView->GetDefaultAttr() );
 
-    SfxItemSet aViewAttr(pView->GetModel()->GetItemPool());
+    SfxItemSet aViewAttr(pView->getSdrModelFromSdrView().GetItemPool());
     pView->GetAttributes(aViewAttr);
 
     //  Unterstreichung
@@ -702,7 +699,7 @@ void __EXPORT ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
     sal_Bool bArgsInReq = ( pArgs != NULL );
     if ( !bArgsInReq )
     {
-        SfxItemSet aEditAttr(pView->GetModel()->GetItemPool());
+        SfxItemSet aEditAttr(pView->getSdrModelFromSdrView().GetItemPool());
         pView->GetAttributes(aEditAttr);
         SfxItemSet  aNewAttr( *aEditAttr.GetPool(), aEditAttr.GetRanges() );
         sal_Bool        bDone = sal_True;
@@ -904,7 +901,7 @@ void __EXPORT ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     sal_Bool bDisableVerticalText = !aLangOpt.IsVerticalTextEnabled();
 
     SdrView* pView = pViewData->GetScDrawView();
-    SfxItemSet aAttrSet(pView->GetModel()->GetItemPool());
+    SfxItemSet aAttrSet(pView->getSdrModelFromSdrView().GetItemPool());
     pView->GetAttributes(aAttrSet);
 
     //  direkte Attribute

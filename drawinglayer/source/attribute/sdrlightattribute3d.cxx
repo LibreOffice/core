@@ -43,7 +43,7 @@ namespace drawinglayer
             basegfx::B3DVector                      maDirection;
 
             // bitfield
-            unsigned                                mbSpecular : 1;
+            bool                                    mbSpecular : 1;
 
             ImpSdr3DLightAttribute(
                 const basegfx::BColor& rColor,

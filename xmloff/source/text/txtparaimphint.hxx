@@ -224,10 +224,10 @@ public:
     {
         Reference <XTextContent > xTxt;
         SvXMLImportContext *pContext = &xContext;
-        if( pContext->ISA( XMLTextFrameContext ) )
-            xTxt = PTR_CAST( XMLTextFrameContext, pContext )->GetTextContent();
-        else if( pContext->ISA( XMLTextFrameHyperlinkContext ) )
-            xTxt = PTR_CAST( XMLTextFrameHyperlinkContext, pContext )
+        if( dynamic_cast< XMLTextFrameContext* >(pContext) )
+            xTxt = dynamic_cast< XMLTextFrameContext* >( pContext )->GetTextContent();
+        else if( dynamic_cast< XMLTextFrameHyperlinkContext* >(pContext) )
+            xTxt = dynamic_cast< XMLTextFrameHyperlinkContext* >( pContext )
                         ->GetTextContent();
 
         return xTxt;
@@ -238,10 +238,10 @@ public:
     {
         Reference < drawing::XShape > xShape;
         SvXMLImportContext *pContext = &xContext;
-        if( pContext->ISA( XMLTextFrameContext ) )
-            xShape = PTR_CAST( XMLTextFrameContext, pContext )->GetShape();
-        else if( pContext->ISA( XMLTextFrameHyperlinkContext ) )
-            xShape = PTR_CAST( XMLTextFrameHyperlinkContext, pContext )->GetShape();
+        if( dynamic_cast< XMLTextFrameContext* >(pContext) )
+            xShape = dynamic_cast< XMLTextFrameContext* >( pContext )->GetShape();
+        else if( dynamic_cast< XMLTextFrameHyperlinkContext* >(pContext) )
+            xShape = dynamic_cast< XMLTextFrameHyperlinkContext* >( pContext )->GetShape();
 
         return xShape;
     }
@@ -251,13 +251,13 @@ public:
     {
         sal_Bool bRet = sal_False;
         SvXMLImportContext *pContext = &xContext;
-        if( pContext->ISA( XMLTextFrameContext ) )
+        if( dynamic_cast< XMLTextFrameContext* >(pContext) )
             bRet = TextContentAnchorType_AT_CHARACTER ==
-                PTR_CAST( XMLTextFrameContext, pContext )
+                dynamic_cast< XMLTextFrameContext* >( pContext )
                     ->GetAnchorType();
-        else if( pContext->ISA( XMLTextFrameHyperlinkContext ) )
+        else if( dynamic_cast< XMLTextFrameHyperlinkContext* >(pContext) )
             bRet = TextContentAnchorType_AT_CHARACTER ==
-                PTR_CAST( XMLTextFrameHyperlinkContext, pContext )
+                dynamic_cast< XMLTextFrameHyperlinkContext* >( pContext )
                     ->GetAnchorType();
         return bRet;
     }

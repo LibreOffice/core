@@ -62,7 +62,6 @@ protected:
 
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_TEST,SBXID_MYBASIC,1);
-    TYPEINFO();
     ErrorList aErrors;
     MyBasic();
     virtual ~MyBasic();

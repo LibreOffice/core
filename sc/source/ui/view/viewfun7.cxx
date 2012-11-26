@@ -42,6 +42,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <svx/svdlegacy.hxx>
 
 #include "document.hxx"     // fuer MapMode Initialisierung in PasteDraw
 #include "viewfunc.hxx"
@@ -56,7 +57,7 @@
 #include "docsh.hxx"
 #include "convuno.hxx"
 
-extern Point aDragStartDiff;
+extern basegfx::B2DPoint aDragStartDiff;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -66,35 +67,37 @@ using namespace com::sun::star;
 
 //==================================================================
 
-void lcl_AdjustInsertPos( ScViewData* pData, Point& rPos, Size& rSize )
+void lcl_AdjustInsertPos( ScViewData* pData, basegfx::B2DPoint& rPos, basegfx::B2DVector& rSize )
 {
 //  SdrPage* pPage = pData->GetDocument()->GetDrawLayer()->GetPage( pData->GetTabNo() );
-    SdrPage* pPage = pData->GetScDrawView()->GetModel()->GetPage( static_cast<sal_uInt16>(pData->GetTabNo()) );
+    SdrPage* pPage = pData->GetScDrawView()->getSdrModelFromSdrView().GetPage( static_cast< sal_uInt32 >(pData->GetTabNo()) );
     DBG_ASSERT(pPage,"pPage ???");
-    Size aPgSize( pPage->GetSize() );
-    if (aPgSize.Width() < 0)
-        aPgSize.Width() = -aPgSize.Width();
-    long x = aPgSize.Width() - rPos.X() - rSize.Width();
-    long y = aPgSize.Height() - rPos.Y() - rSize.Height();
-    // ggf. Ajustments (80/200) fuer Pixel-Rundungsfehler
-    if( x < 0 )
-        rPos.X() += x + 80;
-    if( y < 0 )
-        rPos.Y() += y + 200;
-    rPos.X() += rSize.Width() / 2;          // Position bei Paste gibt Mittelpunkt an
-    rPos.Y() += rSize.Height() / 2;
+    const basegfx::B2DVector aPgScale(absolute(pPage->GetPageScale()));
+    basegfx::B2DVector aDelta(aPgScale - rPos - rSize);
+
+    if(aDelta.getX() < 0.0)
+    {
+        rPos.setX(rPos.getX() + aDelta.getX() + 80.0);
+    }
+
+    if(aDelta.getY() < 0.0)
+    {
+        rPos.setY(rPos.getY() + aDelta.getY() + 200.0);
+    }
+
+    rPos += rSize * 0.5;
 }
 
-void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
+void ScViewFunc::PasteDraw( const basegfx::B2DPoint& rLogicPos, SdrModel* pModel,
         sal_Bool bGroup, sal_Bool bSameDocClipboard )
 {
     MakeDrawLayer();
-    Point aPos( rLogicPos );
+    basegfx::B2DPoint aPos( rLogicPos );
 
     //  #64184# MapMode am Outliner-RefDevice muss stimmen (wie in FuText::MakeOutliner)
     //! mit FuText::MakeOutliner zusammenfassen?
     MapMode aOldMapMode;
-    OutputDevice* pRef = GetViewData()->GetDocument()->GetDrawLayer()->GetRefDevice();
+    OutputDevice* pRef = GetViewData()->GetDocument()->GetDrawLayer()->GetReferenceDevice();
     if (pRef)
     {
         aOldMapMode = pRef->GetMapMode();
@@ -112,44 +115,45 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         pDragEditView = pDrawTrans->GetDragSourceView();
 
         aPos -= aDragStartDiff;
+
         if ( bNegativePage )
         {
-            if (aPos.X() > 0) aPos.X() = 0;
+            if (aPos.getX() > 0.0) aPos.setX(0.0);
         }
         else
         {
-            if (aPos.X() < 0) aPos.X() = 0;
+            if (aPos.getX() < 0.0) aPos.setX(0.0);
         }
-        if (aPos.Y() < 0) aPos.Y() = 0;
+
+        if (aPos.getY() < 0.0) aPos.setY(0.0);
     }
 
     ScDrawView* pScDrawView = GetScDrawView();
     if (bGroup)
         pScDrawView->BegUndo( ScGlobal::GetRscString( STR_UNDO_PASTE ) );
 
-    sal_Bool bSameDoc = ( pDragEditView && pDragEditView->GetModel() == pScDrawView->GetModel() );
+    sal_Bool bSameDoc = ( pDragEditView && &pDragEditView->getSdrModelFromSdrView() == &pScDrawView->getSdrModelFromSdrView() );
     if (bSameDoc)
     {
             // lokal kopieren - incl. Charts
 
-        Point aSourceStart = pDragEditView->GetAllMarkedRect().TopLeft();
-        long nDiffX = aPos.X() - aSourceStart.X();
-        long nDiffY = aPos.Y() - aSourceStart.Y();
+        const basegfx::B2DPoint aSourceStart(pDragEditView->getMarkedObjectSnapRange().getMinimum());
+        const basegfx::B2DVector aDiff(aPos - aSourceStart);
 
             // innerhalb einer Page verschieben?
 
-        if ( bPasteIsMove &&
-                pScDrawView->GetSdrPageView()->GetPage() ==
-                pDragEditView->GetSdrPageView()->GetPage() )
+        if ( bPasteIsMove
+            && pScDrawView->GetSdrPageView()
+            && pDragEditView->GetSdrPageView()
+            && &pScDrawView->GetSdrPageView()->getSdrPageFromSdrPageView() == &pDragEditView->GetSdrPageView()->getSdrPageFromSdrPageView() )
         {
-            if ( nDiffX != 0 || nDiffY != 0 )
-                pDragEditView->MoveAllMarked(Size(nDiffX,nDiffY), sal_False);
+            if ( !aDiff.equalZero() )
+                pDragEditView->MoveMarkedObj(aDiff, false);
         }
         else
         {
-            SdrModel* pDrawModel = pDragEditView->GetModel();
-            SCTAB nTab = GetViewData()->GetTabNo();
-            SdrPage* pDestPage = pDrawModel->GetPage( static_cast< sal_uInt16 >( nTab ) );
+            const SCTAB nTab = GetViewData()->GetTabNo();
+            SdrPage* pDestPage = pDragEditView->getSdrModelFromSdrView().GetPage( static_cast<sal_uInt16>(nTab) );
             DBG_ASSERT(pDestPage,"nanu, Page?");
 
             ::std::vector< ::rtl::OUString > aExcludedChartNames;
@@ -158,29 +162,24 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
                 ScChartHelper::GetChartNames( aExcludedChartNames, pDestPage );
             }
 
-            SdrMarkList aMark = pDragEditView->GetMarkedObjectList();
-            aMark.ForceSort();
-            sal_uLong nMarkAnz=aMark.GetMarkCount();
-            for (sal_uLong nm=0; nm<nMarkAnz; nm++) {
-                const SdrMark* pM=aMark.GetMark(nm);
-                const SdrObject* pObj=pM->GetMarkedSdrObj();
+            const SdrObjectVector aSelection(pDragEditView->getSelectedSdrObjectVectorFromSdrMarkView());
 
-                // #116235#
-                SdrObject* pNeuObj=pObj->Clone();
-                //SdrObject* pNeuObj=pObj->Clone(pDestPage,pDrawModel);
+            for (sal_uInt32 nm(0); nm < aSelection.size(); nm++)
+            {
+                SdrObject* pNeuObj = aSelection[nm]->CloneSdrObject(&pDestPage->getSdrModelFromSdrPage());
 
-                if (pNeuObj!=NULL)
+                if (pNeuObj)
                 {
-                    pNeuObj->SetModel(pDrawModel);
-                    pNeuObj->SetPage(pDestPage);
-
                     //  #68787# copy graphics within the same model - always needs new name
-                    if ( pNeuObj->ISA(SdrGrafObj) && !bPasteIsMove )
-                        pNeuObj->SetName(((ScDrawLayer*)pDrawModel)->GetNewGraphicName());
+                    if ( dynamic_cast< SdrGrafObj* >(pNeuObj) && !bPasteIsMove )
+                    {
+                        ScDrawLayer& rScDrawLayer = dynamic_cast< ScDrawLayer& >(pDragEditView->getSdrModelFromSdrView());
+                        pNeuObj->SetName(rScDrawLayer.GetNewGraphicName());
+                    }
 
-                    if (nDiffX!=0 || nDiffY!=0)
-                        pNeuObj->NbcMove(Size(nDiffX,nDiffY));
-                    pDestPage->InsertObject( pNeuObj );
+                    if ( !aDiff.equalZero())
+                        sdr::legacy::transformSdrObject(*pNeuObj, basegfx::tools::createTranslateB2DHomMatrix(aDiff));
+                    pDestPage->InsertObjectToSdrObjList(*pNeuObj);
                     pScDrawView->AddUndo(new SdrUndoInsertObj( *pNeuObj ));
 
                     //  Chart braucht nicht mehr getrennt behandelt zu werden,
@@ -206,11 +205,12 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
     {
         bPasteIsMove = sal_False;       // kein internes Verschieben passiert
 
-        SdrView aView(pModel);      // #i71529# never create a base class of SdrView directly!
-        SdrPageView* pPv = aView.ShowSdrPage(aView.GetModel()->GetPage(0));
-        aView.MarkAllObj(pPv);
-        Size aSize = aView.GetAllMarkedRect().GetSize();
-        lcl_AdjustInsertPos( GetViewData(), aPos, aSize );
+        OSL_ENSURE(pModel, "ScViewFunc::PasteDraw without SdrModel (!)");
+        SdrView aView(*pModel);      // #i71529# never create a base class of SdrView directly!
+        aView.ShowSdrPage(*aView.getSdrModelFromSdrView().GetPage(0));
+        aView.MarkAllObj();
+        basegfx::B2DVector aScale(aView.getMarkedObjectSnapRange().getRange());
+        lcl_AdjustInsertPos( GetViewData(), aPos, aScale );
 
         //  #41333# Markierung nicht aendern, wenn Ole-Objekt aktiv
         //  (bei Drop aus Ole-Objekt wuerde sonst mitten im ExecuteDrag deaktiviert!)
@@ -221,8 +221,8 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
             nOptions |= SDRINSERT_DONTMARK;
 
         ::std::vector< ::rtl::OUString > aExcludedChartNames;
-        SCTAB nTab = GetViewData()->GetTabNo();
-        SdrPage* pPage = pScDrawView->GetModel()->GetPage( static_cast< sal_uInt16 >( nTab ) );
+        const SCTAB nTab = GetViewData()->GetTabNo();
+        SdrPage* pPage = pScDrawView->getSdrModelFromSdrView().GetPage(static_cast<sal_uInt16>(nTab));
         DBG_ASSERT( pPage, "Page?" );
         if ( pPage )
         {
@@ -247,8 +247,11 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
             SdrObject* pObject = aIter.Next();
             while (pObject)
             {
-                if ( pObject->ISA(SdrUnoObj) && pObject->GetLayer() != SC_LAYER_CONTROLS )
-                    pObject->NbcSetLayer(SC_LAYER_CONTROLS);
+                if ( dynamic_cast< SdrUnoObj* >(pObject) && pObject->GetLayer() != SC_LAYER_CONTROLS )
+                {
+                    pObject->SetLayer(SC_LAYER_CONTROLS);
+                }
+
                 pObject = aIter.Next();
             }
         }
@@ -277,18 +280,10 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
 
     if (pRef)
         pRef->SetMapMode( aOldMapMode );
-
-    // GetViewData()->GetViewShell()->SetDrawShell( sal_True );
-    // #99759# It is not sufficient to just set the DrawShell if we pasted, for
-    // example, a chart.  SetDrawShellOrSub() would only work for D&D in the
-    // same document but not if inserting from the clipboard, therefore
-    // MarkListHasChanged() is what we need.
-    pScDrawView->MarkListHasChanged();
-
 }
 
-sal_Bool ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embed::XEmbeddedObject >& xObj,
-                                const Size* pDescSize, const Graphic* pReplGraph, const ::rtl::OUString& aMediaType, sal_Int64 nAspect )
+sal_Bool ScViewFunc::PasteObject( const basegfx::B2DPoint& rPos, const uno::Reference < embed::XEmbeddedObject >& xObj,
+    const basegfx::B2DVector* pDescSize, const Graphic* pReplGraph, const ::rtl::OUString& aMediaType, sal_Int64 nAspect )
 {
     MakeDrawLayer();
     if ( xObj.is() )
@@ -305,11 +300,14 @@ sal_Bool ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embe
         if ( pReplGraph )
             aObjRef.SetGraphic( *pReplGraph, aMediaType );
 
-        Size aSize;
+        basegfx::B2DVector aScale(1.0, 1.0);
+
         if ( nAspect == embed::Aspects::MSOLE_ICON )
         {
             MapMode aMapMode( MAP_100TH_MM );
-            aSize = aObjRef.GetSize( &aMapMode );
+            const Size aOldSize(aObjRef.GetSize(&aMapMode));
+
+            aScale = basegfx::B2DVector(aOldSize.Width(), aOldSize.Height());
         }
         else
         {
@@ -317,17 +315,21 @@ sal_Bool ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embe
             MapUnit aMapObj = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
             MapUnit aMap100 = MAP_100TH_MM;
 
-            if ( pDescSize && pDescSize->Width() && pDescSize->Height() )
+            if(pDescSize && !pDescSize->equalZero())
             {
                 // use size from object descriptor if given
-                aSize = OutputDevice::LogicToLogic( *pDescSize, aMap100, aMapObj );
+                aScale = *pDescSize * OutputDevice::GetFactorLogicToLogic(aMap100, aMapObj);
+
                 awt::Size aSz;
-                aSz.Width = aSize.Width();
-                aSz.Height = aSize.Height();
+
+                aSz.Width = basegfx::fround(aScale.getX());
+                aSz.Height = basegfx::fround(aScale.getY());
+
                 xObj->setVisualAreaSize( nAspect, aSz );
             }
 
             awt::Size aSz;
+
             try
             {
                 aSz = xObj->getVisualAreaSize( nAspect );
@@ -337,32 +339,39 @@ sal_Bool ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embe
                 // the default size will be set later
             }
 
-            aSize = Size( aSz.Width, aSz.Height );
-            aSize = OutputDevice::LogicToLogic( aSize, aMapObj, aMap100 );  // fuer SdrOle2Obj
+            aScale = basegfx::B2DVector( aSz.Width, aSz.Height );
+            aScale *= OutputDevice::GetFactorLogicToLogic(aMapObj, aMap100);    // fuer SdrOle2Obj
 
-            if( aSize.Height() == 0 || aSize.Width() == 0 )
+            if(basegfx::fTools::equalZero(aScale.getY()) || basegfx::fTools::equalZero(aScale.getX()))
             {
                 DBG_ERROR("SvObjectDescriptor::GetSize == 0");
-                aSize.Width() = 5000;
-                aSize.Height() = 5000;
-                aSize = OutputDevice::LogicToLogic( aSize, aMap100, aMapObj );
-                aSz.Width = aSize.Width();
-                aSz.Height = aSize.Height();
+                aScale.setX(5000.0);
+                aScale.setY(5000.0);
+                aScale *= OutputDevice::GetFactorLogicToLogic(aMap100, aMapObj);
+                aSz.Width = basegfx::fround(aScale.getX());
+                aSz.Height = basegfx::fround(aScale.getY());
                 xObj->setVisualAreaSize( nAspect, aSz );
             }
         }
 
         // don't call AdjustInsertPos
-        Point aInsPos = rPos;
+        basegfx::B2DPoint aInsPos(rPos);
+
         if ( GetViewData()->GetDocument()->IsNegativePage( GetViewData()->GetTabNo() ) )
-            aInsPos.X() -= aSize.Width();
-        Rectangle aRect( aInsPos, aSize );
+        {
+            aInsPos.setX(aInsPos.getX() - aScale.getX());
+        }
 
         ScDrawView* pDrView = GetScDrawView();
-        SdrOle2Obj* pSdrObj = new SdrOle2Obj( aObjRef, aName, aRect );
+        SdrOle2Obj* pSdrObj = new SdrOle2Obj(
+            pDrView->getSdrModelFromSdrView(),
+            aObjRef,
+            aName,
+            basegfx::tools::createScaleTranslateB2DHomMatrix(
+                aScale,
+                aInsPos));
 
-        SdrPageView* pPV = pDrView->GetSdrPageView();
-        pDrView->InsertObjectSafe( pSdrObj, *pPV );             // nicht markieren wenn Ole
+        pDrView->InsertObjectSafe( *pSdrObj );
         GetViewData()->GetViewShell()->SetDrawShell( sal_True );
         return sal_True;
     }
@@ -370,27 +379,27 @@ sal_Bool ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embe
         return sal_False;
 }
 
-sal_Bool ScViewFunc::PasteBitmap( const Point& rPos, const Bitmap& rBmp )
+sal_Bool ScViewFunc::PasteBitmap( const basegfx::B2DPoint& rPos, const Bitmap& rBmp )
 {
     String aEmpty;
     Graphic aGraphic(rBmp);
     return PasteGraphic( rPos, aGraphic, aEmpty, aEmpty );
 }
 
-sal_Bool ScViewFunc::PasteMetaFile( const Point& rPos, const GDIMetaFile& rMtf )
+sal_Bool ScViewFunc::PasteMetaFile( const basegfx::B2DPoint& rPos, const GDIMetaFile& rMtf )
 {
     String aEmpty;
     Graphic aGraphic(rMtf);
     return PasteGraphic( rPos, aGraphic, aEmpty, aEmpty );
 }
 
-sal_Bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
+sal_Bool ScViewFunc::PasteGraphic( const basegfx::B2DPoint& rPos, const Graphic& rGraphic,
                                 const String& rFile, const String& rFilter )
 {
     MakeDrawLayer();
     ScDrawView* pScDrawView = GetScDrawView();
 
-    Point aPos( rPos );
+    basegfx::B2DPoint aPos( rPos );
     Window* pWin = GetActiveWin();
     MapMode aSourceMap = rGraphic.GetPrefMapMode();
     MapMode aDestMap( MAP_100TH_MM );
@@ -405,26 +414,34 @@ sal_Bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
         aDestMap.SetScaleY(aScaleY);
     }
 
-    Size aSize = pWin->LogicToLogic( rGraphic.GetPrefSize(), &aSourceMap, &aDestMap );
+    const basegfx::B2DHomMatrix aTransSourceMap2DestMap(pWin->GetTransformLogicToLogic(aSourceMap, aDestMap));
+    const basegfx::B2DVector aScale(aTransSourceMap2DestMap * basegfx::B2DVector(rGraphic.GetPrefSize().Width(), rGraphic.GetPrefSize().Height()));
+
 //  lcl_AdjustInsertPos( GetViewData(), aPos, aSize );
     if ( GetViewData()->GetDocument()->IsNegativePage( GetViewData()->GetTabNo() ) )
-        aPos.X() -= aSize.Width();
+    {
+        aPos.setX(aPos.getX() - aScale.getX());
+    }
 
     GetViewData()->GetViewShell()->SetDrawShell( sal_True );
 
-    Rectangle aRect(aPos, aSize);
-    SdrGrafObj* pGrafObj = new SdrGrafObj(rGraphic, aRect);
+    SdrGrafObj* pGrafObj = new SdrGrafObj(
+        pScDrawView->getSdrModelFromSdrView(),
+        rGraphic,
+        basegfx::tools::createScaleTranslateB2DHomMatrix(
+            aScale,
+            aPos));
 
     // #118522# calling SetGraphicLink here doesn't work
 
     //  #49961# Pfad wird nicht mehr als Name der Grafik gesetzt
 
-    ScDrawLayer* pLayer = (ScDrawLayer*) pScDrawView->GetModel();
-    String aName = pLayer->GetNewGraphicName();                 // "Grafik x"
+    ScDrawLayer& rLayer = dynamic_cast< ScDrawLayer& >(pScDrawView->getSdrModelFromSdrView());
+    String aName = rLayer.GetNewGraphicName();                  // "Grafik x"
     pGrafObj->SetName(aName);
 
     // nicht markieren wenn Ole
-    pScDrawView->InsertObjectSafe(pGrafObj, *pScDrawView->GetSdrPageView());
+    pScDrawView->InsertObjectSafe(*pGrafObj);
 
     // #118522# SetGraphicLink has to be used after inserting the object,
     // otherwise an empty graphic is swapped in and the contact stuff crashes.
@@ -446,29 +463,28 @@ sal_Bool ScViewFunc::ApplyGraphicToObject( SdrObject* pPickObj, const Graphic& r
         /**********************************************************************
         * Objekt neu attributieren
         **********************************************************************/
-        SdrPageView* pPV = pScDrawView->GetSdrPageView();
-        if (pPickObj->ISA(SdrGrafObj))
+        if (dynamic_cast< SdrGrafObj* >(pPickObj))
         {
             /******************************************************************
             * Das Graphik-Objekt bekommt eine neue Graphik
             ******************************************************************/
-            pNewGrafObj = (SdrGrafObj*) pPickObj->Clone();
+            pNewGrafObj = static_cast< SdrGrafObj* >(pPickObj->CloneSdrObject());
             pNewGrafObj->SetGraphic(rGraphic);
 
             pScDrawView->BegUndo(ScGlobal::GetRscString(STR_UNDO_DRAGDROP));
-            pScDrawView->ReplaceObjectAtView(pPickObj, *pPV, pNewGrafObj);
+            pScDrawView->ReplaceObjectAtView(*pPickObj, *pNewGrafObj);
             pScDrawView->EndUndo();
 
             bRet = sal_True;
         }
-        else if (pPickObj->IsClosedObj() && !pPickObj->ISA(SdrOle2Obj))
+        else if (pPickObj->IsClosedObj() && !dynamic_cast< SdrOle2Obj* >(pPickObj))
         {
             /******************************************************************
             * Das Objekt wird mit der Graphik gefuellt
             ******************************************************************/
             pScDrawView->AddUndo(new SdrUndoAttrObj(*pPickObj));
 
-            SfxItemSet aSet( pScDrawView->GetModel()->GetItemPool(),
+            SfxItemSet aSet( pScDrawView->getSdrModelFromSdrView().GetItemPool(),
                                 XATTR_FILLSTYLE, XATTR_FILLBITMAP );
             aSet.Put(XFillStyleItem(XFILL_BITMAP));
             aSet.Put(XFillBitmapItem(String(), rGraphic));

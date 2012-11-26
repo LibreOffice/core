@@ -31,6 +31,7 @@
 #include <command.hxx>
 #include <tools/fsys.hxx>
 #include <tools/string.hxx>
+#include <memory.h>
 
 #define BR 0x8000
 sal_Bool FileMove_Impl( const String & rFile1, const String & rFile2, sal_Bool bImmerVerschieben )

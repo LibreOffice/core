@@ -45,10 +45,8 @@ namespace rtl
 class EDITENG_DLLPUBLIC SvxCrossedOutItem : public SfxEnumItem
 {
 public:
-    TYPEINFO();
-
-    SvxCrossedOutItem( const FontStrikeout eSt /*= STRIKEOUT_NONE*/,
-                       const sal_uInt16 nId  );
+    POOLITEM_FACTORY()
+    SvxCrossedOutItem( const FontStrikeout eSt = STRIKEOUT_NONE, const sal_uInt16 nId = 0 );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,

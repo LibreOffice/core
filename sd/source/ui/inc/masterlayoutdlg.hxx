@@ -52,10 +52,10 @@ private:
     OKButton        maPBOK;
     CancelButton    maPBCancel;
 
-    sal_Bool            mbOldHeader;
-    sal_Bool            mbOldFooter;
-    sal_Bool            mbOldDate;
-    sal_Bool            mbOldPageNumber;
+    bool            mbOldHeader;
+    bool            mbOldFooter;
+    bool            mbOldDate;
+    bool            mbOldPageNumber;
 
     void applyChanges();
     void remove( PresObjKind eKind );

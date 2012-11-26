@@ -50,20 +50,6 @@ namespace drawinglayer
             maFontColor(rFontColor)
         {
         }
-
-        bool BaseTextStrikeoutPrimitive2D::operator==( const BasePrimitive2D& rPrimitive ) const
-        {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const BaseTextStrikeoutPrimitive2D& rCompare = (BaseTextStrikeoutPrimitive2D&)rPrimitive;
-
-                return (getObjectTransformation() == rCompare.getObjectTransformation()
-                    && getWidth() == rCompare.getWidth()
-                    && getFontColor() == rCompare.getFontColor());
-            }
-
-            return false;
-        }
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
@@ -77,7 +63,8 @@ namespace drawinglayer
         {
             // strikeout with character
             const String aSingleCharString(getStrikeoutChar());
-            basegfx::B2DVector aScale, aTranslate;
+            basegfx::B2DVector aScale;
+            basegfx::B2DPoint aTranslate;
             double fRotate, fShearX;
 
             // get decomposition
@@ -132,20 +119,6 @@ namespace drawinglayer
         {
         }
 
-        bool TextCharacterStrikeoutPrimitive2D::operator==( const BasePrimitive2D& rPrimitive ) const
-        {
-            if(BaseTextStrikeoutPrimitive2D::operator==(rPrimitive))
-            {
-                const TextCharacterStrikeoutPrimitive2D& rCompare = (TextCharacterStrikeoutPrimitive2D&)rPrimitive;
-
-                return (getStrikeoutChar() == rCompare.getStrikeoutChar()
-                    && getFontAttribute() == rCompare.getFontAttribute()
-                    && LocalesAreEqual(getLocale(), rCompare.getLocale()));
-            }
-
-            return false;
-        }
-
         // provide unique ID
         ImplPrimitrive2DIDBlock(TextCharacterStrikeoutPrimitive2D, PRIMITIVE2D_ID_TEXTCHARACTERSTRIKEOUTPRIMITIVE2D)
 
@@ -169,7 +142,8 @@ namespace drawinglayer
             bool bDoubleLine(false);
 
             // get decomposition
-            basegfx::B2DVector aScale, aTranslate;
+            basegfx::B2DVector aScale;
+            basegfx::B2DPoint aTranslate;
             double fRotate, fShearX;
             getObjectTransformation().decompose(aScale, aTranslate, fRotate, fShearX);
 
@@ -206,7 +180,9 @@ namespace drawinglayer
 
             const basegfx::B2DHomMatrix aUnscaledTransform(
                 basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
-                    fShearX, fRotate, aTranslate));
+                    fShearX,
+                    fRotate,
+                    aTranslate));
 
             aStrikeoutLine.transform(aUnscaledTransform);
 
@@ -222,8 +198,7 @@ namespace drawinglayer
                 const double fLineDist(2.0 * fStrikeoutHeight);
 
                 // move base point of text to 0.0 and de-rotate
-                basegfx::B2DHomMatrix aTransform(basegfx::tools::createTranslateB2DHomMatrix(
-                    -aTranslate.getX(), -aTranslate.getY()));
+                basegfx::B2DHomMatrix aTransform(basegfx::tools::createTranslateB2DHomMatrix(-aTranslate));
                 aTransform.rotate(-fRotate);
 
                 // translate in Y by offset
@@ -231,7 +206,7 @@ namespace drawinglayer
 
                 // move back and rotate
                 aTransform.rotate(fRotate);
-                aTransform.translate(aTranslate.getX(), aTranslate.getY());
+                aTransform.translate(aTranslate);
 
                 // add transform primitive
                 appendPrimitive2DReferenceToPrimitive2DSequence(xRetval,
@@ -256,20 +231,6 @@ namespace drawinglayer
             mfOffset(fOffset),
             meTextStrikeout(eTextStrikeout)
         {
-        }
-
-        bool TextGeometryStrikeoutPrimitive2D::operator==( const BasePrimitive2D& rPrimitive ) const
-        {
-            if(BaseTextStrikeoutPrimitive2D::operator==(rPrimitive))
-            {
-                const TextGeometryStrikeoutPrimitive2D& rCompare = (TextGeometryStrikeoutPrimitive2D&)rPrimitive;
-
-                return (getHeight() == rCompare.getHeight()
-                    && getOffset() == rCompare.getOffset()
-                    && getTextStrikeout() == rCompare.getTextStrikeout());
-            }
-
-            return false;
         }
 
         // provide unique ID

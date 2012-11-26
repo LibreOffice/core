@@ -25,21 +25,15 @@
 #include "precompiled_svx.hxx"
 
 #include <com/sun/star/text/WritingMode.hpp>
-
 #include <vcl/toolbox.hxx>
-
 #include <svl/itempool.hxx>
-
 #include <svtools/toolbarmenu.hxx>
 #include <svtools/popupwindowcontroller.hxx>
 #include <svtools/popupmenucontrollerbase.hxx>
-
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
-
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>
-
 #include <svx/fmmodel.hxx>
 #include <svx/svxids.hrc>
 #include <svx/dialmgr.hxx>
@@ -48,16 +42,13 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdoutl.hxx>
-
-#include "svx/gallery.hxx"
+#include <svx/gallery.hxx>
 #include <svx/dlgutil.hxx>
-
 #include <svx/fontworkgallery.hxx>
-#include "fontworkgallery.hrc"
-
+#include <fontworkgallery.hrc>
 #include <algorithm>
-
-#include "helpid.hrc"
+#include <helpid.hrc>
+#include <svx/svdlegacy.hxx>
 
 using ::rtl::OUString;
 using ::svtools::ToolbarMenu;
@@ -77,19 +68,21 @@ const int nLineCount = 4;
 /*************************************************************************
 |*  Svx3DWin - FloatingWindow
 \************************************************************************/
-FontWorkGalleryDialog::FontWorkGalleryDialog( SdrView* pSdrView, Window* pParent, sal_uInt16 /*nSID*/ ) :
-        ModalDialog( pParent, SVX_RES( RID_SVX_MDLG_FONTWORK_GALLERY ) ),
-        maFLFavorites       ( this, SVX_RES( FL_FAVORITES ) ),
-        maCtlFavorites      ( this, SVX_RES( CTL_FAVORITES ) ),
-        maOKButton          ( this, SVX_RES( BTN_OK ) ),
-        maCancelButton      ( this, SVX_RES( BTN_CANCEL ) ),
-        maHelpButton        ( this, SVX_RES( BTN_HELP ) ),
-        mnThemeId           ( 0xffff ),
-        mpSdrView           ( pSdrView ),
-        mpModel             ( (FmFormModel*)pSdrView->GetModel() ),
-        maStrClickToAddText ( SVX_RES( STR_CLICK_TO_ADD_TEXT ) ),
-        mppSdrObject        ( NULL ),
-        mpDestModel         ( NULL )
+FontWorkGalleryDialog::FontWorkGalleryDialog(
+    SdrView& rSdrView,
+    Window* pParent,
+    SdrObject** ppSdrObject)
+:   ModalDialog( pParent, SVX_RES( RID_SVX_MDLG_FONTWORK_GALLERY ) ),
+    maFLFavorites       ( this, SVX_RES( FL_FAVORITES ) ),
+    maCtlFavorites      ( this, SVX_RES( CTL_FAVORITES ) ),
+    maOKButton          ( this, SVX_RES( BTN_OK ) ),
+    maCancelButton      ( this, SVX_RES( BTN_CANCEL ) ),
+    maHelpButton        ( this, SVX_RES( BTN_HELP ) ),
+    mnThemeId           ( 0xffff ),
+    mrSdrView           ( rSdrView ),
+    mrModel             ( dynamic_cast< FmFormModel& >(rSdrView.getSdrModelFromSdrView()) ),
+    maStrClickToAddText ( SVX_RES( STR_CLICK_TO_ADD_TEXT ) ),
+    mppSdrObject        ( ppSdrObject )
 {
     FreeResource();
 
@@ -191,7 +184,7 @@ void FontWorkGalleryDialog::changeText( SdrTextObj* pObj )
 {
     if( pObj )
     {
-        SdrOutliner& rOutl = mpModel->GetDrawOutliner(pObj);
+        SdrOutliner& rOutl = mrModel.GetDrawOutliner(pObj);
 
         sal_uInt16 nOutlMode = rOutl.GetMode();
         Size aPaperSize = rOutl.GetPaperSize();
@@ -206,7 +199,7 @@ void FontWorkGalleryDialog::changeText( SdrTextObj* pObj )
         // to inside this method to work even when outliner is fetched here.
         rOutl.SetStyleSheet(0, pObj->GetStyleSheet());
 
-        rOutl.SetPaperSize( pObj->GetLogicRect().GetSize() );
+        rOutl.SetPaperSize( sdr::legacy::GetLogicRect(*pObj).GetSize() );
 
         rOutl.SetText( maStrClickToAddText, rOutl.GetParagraph( 0 ) );
         pObj->SetOutlinerParaObject( rOutl.CreateParaObject() );
@@ -218,12 +211,6 @@ void FontWorkGalleryDialog::changeText( SdrTextObj* pObj )
 
         rOutl.Clear();
     }
-}
-
-void FontWorkGalleryDialog::SetSdrObjectRef( SdrObject** ppSdrObject, SdrModel* pModel )
-{
-    mppSdrObject = ppSdrObject;
-    mpDestModel = pModel;
 }
 
 void FontWorkGalleryDialog::insertSelectedFontwork()
@@ -238,41 +225,39 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
         if( GalleryExplorer::GetSdrObj( mnThemeId, nItemId-1, pModel ) )
         {
             SdrPage* pPage = pModel->GetPage(0);
+
             if( pPage && pPage->GetObjCount() )
             {
-                SdrObject* pNewObject = pPage->GetObj(0)->Clone();
+                SdrObject* pNewObject = pPage->GetObj(0)->CloneSdrObject(&mrModel);
 
                 // center shape on current view
-                OutputDevice* pOutDev = mpSdrView->GetFirstOutputDevice();
+                OutputDevice* pOutDev = mrSdrView.GetFirstOutputDevice();
+
                 if( pOutDev )
                 {
-                    Rectangle aObjRect( pNewObject->GetLogicRect() );
-                    Rectangle aVisArea = pOutDev->PixelToLogic(Rectangle(Point(0,0), pOutDev->GetOutputSizePixel()));
-/*
-                    sal_Int32 nObjHeight = aObjRect.GetHeight();
-                    VirtualDevice aVirDev( 1 ); // calculating the optimal textwidth
-                    Font aFont;
-                    aFont.SetHeight( nObjHeight );
-                    aVirDev.SetMapMode( MAP_100TH_MM );
-                    aVirDev.SetFont( aFont );
-                    aObjRect.SetSize( Size( aVirDev.GetTextWidth( maStrClickToAddText ), nObjHeight ) );
-*/
-                    Point aPagePos = aVisArea.Center();
-                    aPagePos.X() -= aObjRect.GetWidth() / 2;
-                    aPagePos.Y() -= aObjRect.GetHeight() / 2;
-                    Rectangle aNewObjectRectangle(aPagePos, aObjRect.GetSize());
-                    SdrPageView* pPV = mpSdrView->GetSdrPageView();
+                    const basegfx::B2DVector aHalfObjectScale(sdr::legacy::GetLogicRange(*pNewObject).getRange() * 0.5);
+                    const basegfx::B2DPoint aVisibleCenter(pOutDev->GetLogicRange().getCenter());
 
-                    pNewObject->SetLogicRect(aNewObjectRectangle);
+                    sdr::legacy::SetLogicRange(*pNewObject,
+                        basegfx::B2DRange(
+                            aVisibleCenter - aHalfObjectScale,
+                            aVisibleCenter + aHalfObjectScale));
+
                     if ( mppSdrObject )
                     {
+                        // if handle is given register SdrObject there. Ownership change!
                         *mppSdrObject = pNewObject;
-                        (*mppSdrObject)->SetModel( mpDestModel );
                     }
-                    else if( pPV )
+                    else if( mrSdrView.GetSdrPageView() )
                     {
-                            mpSdrView->InsertObjectAtView( pNewObject, *pPV );
-    //                      changeText( PTR_CAST( SdrTextObj, pNewObject ) );
+                        // if a SdrPage is given instert SdrObject there. Ownership change!
+                        mrSdrView.InsertObjectAtView( *pNewObject );
+                    }
+                    else
+                    {
+                        // no target for created SdrObject (!)
+                        OSL_ENSURE(false, "FontWorkGalleryDialog: No target for created SDrObject (!)");
+                        deleteSdrObjectSafeAndClearPointer(pNewObject);
                     }
                 }
             }

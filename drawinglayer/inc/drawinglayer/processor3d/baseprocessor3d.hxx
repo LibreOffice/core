@@ -27,6 +27,7 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 #include <drawinglayer/geometry/viewinformation3d.hxx>
+#include <boost/utility.hpp>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -37,11 +38,13 @@ namespace drawinglayer
         /** BaseProcessor3D class
 
             Baseclass for all C++ implementations of instances which process
-            primitives.
+            primitives. Is is derived from boost::noncopyable to not copy it by
+            accident.
 
             Please have a look at baseprocessor2d.hxx for more comments.
          */
         class DRAWINGLAYER_DLLPUBLIC BaseProcessor3D
+        :   private boost::noncopyable
         {
         private:
             geometry::ViewInformation3D                     maViewInformation3D;

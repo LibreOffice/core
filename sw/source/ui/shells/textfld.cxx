@@ -323,7 +323,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             break;
             case FN_DELETE_NOTE_AUTHOR:
             {
-                SFX_REQUEST_ARG( rReq, pNoteItem, SfxStringItem, nSlot, sal_False);
+                SFX_REQUEST_ARG( rReq, pNoteItem, SfxStringItem, nSlot );
                 if ( pNoteItem && GetView().GetPostItMgr() )
                     GetView().GetPostItMgr()->Delete( pNoteItem->GetValue() );
             }
@@ -341,7 +341,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             break;
             case FN_HIDE_NOTE_AUTHOR:
             {
-                SFX_REQUEST_ARG( rReq, pNoteItem, SfxStringItem, nSlot, sal_False);
+                SFX_REQUEST_ARG( rReq, pNoteItem, SfxStringItem, nSlot );
                 if ( pNoteItem && GetView().GetPostItMgr() )
                     GetView().GetPostItMgr()->Hide( pNoteItem->GetValue() );
             }
@@ -507,8 +507,8 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 if ( pItem )
                 {
                     aText = ((SfxStringItem*)pItem)->GetValue();
-                    SFX_REQUEST_ARG( rReq, pType, SfxStringItem, FN_PARAM_2 , sal_False );
-                    SFX_REQUEST_ARG( rReq, pIsUrl, SfxBoolItem, FN_PARAM_1 , sal_False );
+                    SFX_REQUEST_ARG( rReq, pType, SfxStringItem, FN_PARAM_2 );
+                    SFX_REQUEST_ARG( rReq, pIsUrl, SfxBoolItem, FN_PARAM_1 );
                     if ( pType )
                         aType = pType->GetValue();
                     if ( pIsUrl )

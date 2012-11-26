@@ -48,8 +48,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
-TYPEINIT1( XMLTextListItemContext, SvXMLImportContext );
-
 XMLTextListItemContext::XMLTextListItemContext(
                         SvXMLImport& rImport,
                         XMLTextImportHelper& rTxtImp,

@@ -26,7 +26,6 @@
 
 #include <vcl/sv.h>
 #include <vcl/dllapi.h>
-#include <tools/rtti.hxx>
 
 // ---------------------
 // - Application-Types -
@@ -46,8 +45,7 @@
 class VCL_DLLPUBLIC ApplicationProperty
 {
 public:
-
-    TYPEINFO();
+    virtual ~ApplicationProperty();
 };
 
 #define INPUT_MOUSE                 0x0001

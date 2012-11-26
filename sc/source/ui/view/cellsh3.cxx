@@ -791,7 +791,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     if ( pReqArgs &&
                         pReqArgs->GetItemState(nSlot, sal_True, &pItem) == SFX_ITEM_SET )
                     {
-                        DBG_ASSERT(pItem && pItem->ISA(SfxBoolItem), "falsches Item");
+                        DBG_ASSERT(pItem && dynamic_cast< const SfxBoolItem* >(pItem), "falsches Item");
                         bMoveContents = ((const SfxBoolItem*)pItem)->GetValue();
                     }
 

@@ -37,8 +37,6 @@ class XMLAnimationsContext : public SvXMLImportContext
     AnimImpImpl*    mpImpl;
 
 public:
-    TYPEINFO();
-
     XMLAnimationsContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx,
         const rtl::OUString& rLocalName,

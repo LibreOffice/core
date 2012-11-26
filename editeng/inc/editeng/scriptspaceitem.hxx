@@ -39,8 +39,6 @@
 class EDITENG_DLLPUBLIC SvxScriptSpaceItem : public SfxBoolItem
 {
 public:
-    TYPEINFO();
-
     SvxScriptSpaceItem( sal_Bool bOn /*= sal_False*/,
                         const sal_uInt16 nId  );
 

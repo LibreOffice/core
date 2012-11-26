@@ -173,8 +173,8 @@ public:
     ~impXDashList()
     {
         delete mpVirtualDevice;
-        SdrObject::Free(mpBackgroundObject);
-        SdrObject::Free(mpLineObject);
+        deleteSdrObjectSafeAndClearPointer(mpBackgroundObject);
+        deleteSdrObjectSafeAndClearPointer(mpLineObject);
         delete mpSdrModel;
     }
 
@@ -187,7 +187,6 @@ void XDashList::impCreate()
 {
     if(!mpData)
     {
-        const Point aZero(0, 0);
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
         VirtualDevice* pVirDev = new VirtualDevice;
@@ -203,10 +202,11 @@ void XDashList::impCreate()
         OSL_ENSURE(0 != pSdrModel, "XDashList: no SdrModel created!" );
         pSdrModel->GetItemPool().FreezeIdRanges();
 
-        const Rectangle aBackgroundSize(aZero, aSize);
-        SdrObject* pBackgroundObject = new SdrRectObj(aBackgroundSize);
+        SdrObject* pBackgroundObject = new SdrRectObj(
+            *pSdrModel,
+            basegfx::tools::createScaleB2DHomMatrix(aSize.getWidth(), aSize.getHeight()));
         OSL_ENSURE(0 != pBackgroundObject, "XDashList: no BackgroundObject created!" );
-        pBackgroundObject->SetModel(pSdrModel);
+        //pBackgroundObject->SetModel(pSdrModel);
         pBackgroundObject->SetMergedItem(XFillStyleItem(XFILL_SOLID));
         pBackgroundObject->SetMergedItem(XLineStyleItem(XLINE_NONE));
         pBackgroundObject->SetMergedItem(XFillColorItem(String(), rStyleSettings.GetFieldColor()));
@@ -216,9 +216,11 @@ void XDashList::impCreate()
         basegfx::B2DPolygon aPolygon;
         aPolygon.append(aStart);
         aPolygon.append(aEnd);
-        SdrObject* pLineObject = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aPolygon));
+        SdrObject* pLineObject = new SdrPathObj(
+            *pSdrModel,
+            basegfx::B2DPolyPolygon(aPolygon));
         OSL_ENSURE(0 != pLineObject, "XDashList: no LineObject created!" );
-        pLineObject->SetModel(pSdrModel);
+        //pLineObject->SetModel(pSdrModel);
         pLineObject->SetMergedItem(XLineStyleItem(XLINE_DASH));
         pLineObject->SetMergedItem(XLineColorItem(String(), rStyleSettings.GetFieldTextColor()));
         pLineObject->SetMergedItem(XLineWidthItem(30));
@@ -351,7 +353,7 @@ Bitmap* XDashList::CreateBitmapForUI( long nIndex, sal_Bool bDelete )
     pLine->SetMergedItem(XLineStyleItem(XLINE_DASH));
     pLine->SetMergedItem(XLineDashItem(String(), GetDash(nIndex)->GetDash()));
 
-    sdr::contact::SdrObjectVector aObjectVector;
+    SdrObjectVector aObjectVector;
     aObjectVector.push_back(mpData->getBackgroundObject());
     aObjectVector.push_back(pLine);
     sdr::contact::ObjectContactOfObjListPainter aPainter(*pVD, aObjectVector, 0);

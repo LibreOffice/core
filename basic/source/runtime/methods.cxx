@@ -2377,7 +2377,7 @@ RTLFUNC(IsObject)
 
         SbUnoClass* pUnoClass;
         sal_Bool bObject;
-        if( pObj &&  NULL != ( pUnoClass=PTR_CAST(SbUnoClass,pObj) ) )
+        if( pObj &&  NULL != ( pUnoClass=dynamic_cast< SbUnoClass* >( pObj) ) )
         {
             bObject = pUnoClass->getUnoClass().is();
         }
@@ -3860,7 +3860,7 @@ RTLFUNC(LBound)
         return;
     }
     SbxBase* pParObj = rPar.Get(1)->GetObject();
-    SbxDimArray* pArr = PTR_CAST(SbxDimArray,pParObj);
+    SbxDimArray* pArr = dynamic_cast< SbxDimArray* >( pParObj);
     if( pArr )
     {
         sal_Int32 nLower, nUpper;
@@ -3887,7 +3887,7 @@ RTLFUNC(UBound)
     }
 
     SbxBase* pParObj = rPar.Get(1)->GetObject();
-    SbxDimArray* pArr = PTR_CAST(SbxDimArray,pParObj);
+    SbxDimArray* pArr = dynamic_cast< SbxDimArray* >( pParObj);
     if( pArr )
     {
         sal_Int32 nLower, nUpper;
@@ -4128,11 +4128,11 @@ RTLFUNC(Load)
     SbxBase* pObj = (SbxObject*)rPar.Get(1)->GetObject();
     if ( pObj )
     {
-        if( pObj->IsA( TYPE( SbUserFormModule ) ) )
+        if( dynamic_cast< SbUserFormModule* >(pObj) )
         {
             ((SbUserFormModule*)pObj)->Load();
         }
-        else if( pObj->IsA( TYPE( SbxObject ) ) )
+        else if( dynamic_cast< SbxObject* >(pObj) )
         {
             SbxVariable* pVar = ((SbxObject*)pObj)->
                 Find( String( RTL_CONSTASCII_USTRINGPARAM("Load") ), SbxCLASS_METHOD );
@@ -4158,12 +4158,12 @@ RTLFUNC(Unload)
     SbxBase* pObj = (SbxObject*)rPar.Get(1)->GetObject();
     if ( pObj )
     {
-        if( pObj->IsA( TYPE( SbUserFormModule ) ) )
+        if( dynamic_cast< SbUserFormModule* >(pObj) )
         {
             SbUserFormModule* pFormModule = ( SbUserFormModule* )pObj;
             pFormModule->Unload();
         }
-        else if( pObj->IsA( TYPE( SbxObject ) ) )
+        else if( dynamic_cast< SbxObject* >(pObj) )
         {
             SbxVariable* pVar = ((SbxObject*)pObj)->
                 Find( String( RTL_CONSTASCII_USTRINGPARAM("Unload") ), SbxCLASS_METHOD );
@@ -4212,7 +4212,7 @@ RTLFUNC(SavePicture)
     }
 
     SbxBase* pObj = (SbxObject*)rPar.Get(1)->GetObject();
-    if( pObj->IsA( TYPE( SbStdPicture ) ) )
+    if( dynamic_cast< SbStdPicture* >(pObj) )
     {
         SvFileStream aOStream( rPar.Get(2)->GetString(), STREAM_WRITE | STREAM_TRUNC );
         Graphic aGraphic = ((SbStdPicture*)pObj)->GetGraphic();

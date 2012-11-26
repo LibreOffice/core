@@ -113,8 +113,6 @@ static const char __FAR_DATA pStarMathDoc[] = "StarMathDocument";
 ////////////////////////////////////////////////////////////
 
 
-TYPEINIT1( SmDocShell, SfxObjectShell );
-
 SFX_IMPL_INTERFACE(SmDocShell, SfxObjectShell, SmResId(0))
 {
     SFX_POPUPMENU_REGISTRATION(SmResId(RID_VIEWMENU));

@@ -76,8 +76,6 @@ SFX_IMPL_INTERFACE(BezierObjectBar, ::SfxShell, SdResId(STR_BEZIEROBJECTBARSHELL
 {
 }
 
-TYPEINIT1(BezierObjectBar, ::SfxShell);
-
 /*************************************************************************
 |*
 |* Standard-Konstruktor
@@ -119,23 +117,30 @@ BezierObjectBar::~BezierObjectBar()
 
 void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
 {
-    SfxItemSet aAttrSet( mpView->GetDoc()->GetPool() );
+    SfxItemSet aAttrSet( mpView->GetDoc()->GetItemPool() );
     mpView->GetAttributes( aAttrSet );
-    rSet.Put(aAttrSet, sal_False); // <- sal_False, damit DontCare-Status uebernommen wird
+    rSet.Put(aAttrSet, false); // <- false, damit DontCare-Status uebernommen wird
 
     FunctionReference xFunc( mpViewSh->GetCurrentFunction() );
 
     if(xFunc.is())
     {
-        if(xFunc->ISA(FuSelection))
+        FuSelection* pFuSelection = dynamic_cast< FuSelection* >(xFunc.get());
+
+        if(pFuSelection)
         {
-            sal_uInt16 nEditMode = static_cast<FuSelection*>(xFunc.get())->GetEditMode();
-            rSet.Put(SfxBoolItem(nEditMode, sal_True));
+            sal_uInt16 nEditMode = pFuSelection->GetEditMode();
+            rSet.Put(SfxBoolItem(nEditMode, true));
         }
-        else if (xFunc->ISA(FuConstructBezierPolygon))
+        else
         {
-            sal_uInt16 nEditMode = static_cast<FuConstructBezierPolygon*>(xFunc.get())->GetEditMode();
-            rSet.Put(SfxBoolItem(nEditMode, sal_True));
+            FuConstructBezierPolygon* pFuConstructBezierPolygon = dynamic_cast< FuConstructBezierPolygon* >(xFunc.get());
+
+            if (pFuConstructBezierPolygon)
+            {
+                sal_uInt16 nEditMode = pFuConstructBezierPolygon->GetEditMode();
+                rSet.Put(SfxBoolItem(nEditMode, true));
+            }
         }
     }
 
@@ -160,7 +165,7 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
     else
     {
         IPolyPolygonEditorController* pIPPEC = 0;
-        if( mpView->GetMarkedObjectList().GetMarkCount() )
+        if( mpView->areSdrObjectsSelected() )
             pIPPEC = mpView;
         else
             pIPPEC = dynamic_cast< IPolyPolygonEditorController* >( mpView->getSmartTags().getSelected().get() );
@@ -183,8 +188,8 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
             switch (eSegm)
             {
                 case SDRPATHSEGMENT_DONTCARE: rSet.InvalidateItem(SID_BEZIER_CONVERT); break;
-                case SDRPATHSEGMENT_LINE    : rSet.Put(SfxBoolItem(SID_BEZIER_CONVERT,sal_False)); break; // Button reingedrueckt = Kurve
-                case SDRPATHSEGMENT_CURVE   : rSet.Put(SfxBoolItem(SID_BEZIER_CONVERT,sal_True));  break;
+                case SDRPATHSEGMENT_LINE    : rSet.Put(SfxBoolItem(SID_BEZIER_CONVERT,false)); break; // Button reingedrueckt = Kurve
+                case SDRPATHSEGMENT_CURVE   : rSet.Put(SfxBoolItem(SID_BEZIER_CONVERT,true));  break;
                 default: break;
             }
         }
@@ -200,9 +205,9 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
             switch (eSmooth)
             {
                 case SDRPATHSMOOTH_DONTCARE  : break;
-                case SDRPATHSMOOTH_ANGULAR   : rSet.Put(SfxBoolItem(SID_BEZIER_EDGE,  sal_True)); break;
-                case SDRPATHSMOOTH_ASYMMETRIC: rSet.Put(SfxBoolItem(SID_BEZIER_SMOOTH,sal_True)); break;
-                case SDRPATHSMOOTH_SYMMETRIC : rSet.Put(SfxBoolItem(SID_BEZIER_SYMMTR,sal_True)); break;
+                case SDRPATHSMOOTH_ANGULAR   : rSet.Put(SfxBoolItem(SID_BEZIER_EDGE,  true)); break;
+                case SDRPATHSMOOTH_ASYMMETRIC: rSet.Put(SfxBoolItem(SID_BEZIER_SMOOTH,true)); break;
+                case SDRPATHSMOOTH_SYMMETRIC : rSet.Put(SfxBoolItem(SID_BEZIER_SYMMTR,true)); break;
             }
         }
         if (!pIPPEC || !pIPPEC->IsOpenCloseMarkedObjectsPossible())
@@ -215,8 +220,8 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
             switch (eClose)
             {
                 case SDROBJCLOSED_DONTCARE: rSet.InvalidateItem(SID_BEZIER_CLOSE); break;
-                case SDROBJCLOSED_OPEN    : rSet.Put(SfxBoolItem(SID_BEZIER_CLOSE,sal_False)); break;
-                case SDROBJCLOSED_CLOSED  : rSet.Put(SfxBoolItem(SID_BEZIER_CLOSE,sal_True)); break;
+                case SDROBJCLOSED_OPEN    : rSet.Put(SfxBoolItem(SID_BEZIER_CLOSE,false)); break;
+                case SDROBJCLOSED_CLOSED  : rSet.Put(SfxBoolItem(SID_BEZIER_CLOSE,true)); break;
                 default: break;
             }
         }
@@ -249,10 +254,8 @@ void BezierObjectBar::Execute(SfxRequest& rReq)
         case SID_BEZIER_SYMMTR:
         case SID_BEZIER_CLOSE:
         {
-            const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-
             IPolyPolygonEditorController* pIPPEC = 0;
-            if( rMarkList.GetMarkCount() )
+            if( mpView->areSdrObjectsSelected() )
                 pIPPEC = mpView;
             else
                 pIPPEC = dynamic_cast< IPolyPolygonEditorController* >( mpView->getSmartTags().getSelected().get() );
@@ -295,26 +298,32 @@ void BezierObjectBar::Execute(SfxRequest& rReq)
 
                     case SID_BEZIER_CLOSE:
                     {
-                        SdrPathObj* pPathObj = (SdrPathObj*) rMarkList.GetMark(0)->GetMarkedSdrObj();
-                        const bool bUndo = mpView->IsUndoEnabled();
-                        if( bUndo )
-                            mpView->BegUndo(String(SdResId(STR_UNDO_BEZCLOSE)));
+                        SdrPathObj* pPathObj = dynamic_cast< SdrPathObj* >(mpView->getSelectedIfSingle());
+                        OSL_ENSURE(pPathObj, "Here the single selected object should be a SdrPathObj (!)");
 
-                        mpView->UnmarkAllPoints();
+                        if(pPathObj)
+                        {
+                            const bool bUndo = mpView->IsUndoEnabled();
 
-                        if( bUndo )
-                            mpView->AddUndo(mpView->GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pPathObj));
+                            if( bUndo )
+                                mpView->BegUndo(String(SdResId(STR_UNDO_BEZCLOSE)));
 
-                        pPathObj->ToggleClosed();
+                            mpView->MarkPoints(0, true); // unmarkall
 
-                        if( bUndo )
-                            mpView->EndUndo();
+                            if( bUndo )
+                                mpView->AddUndo(mpView->getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoGeoObject(*pPathObj));
+
+                            pPathObj->ToggleClosed();
+
+                            if( bUndo )
+                                mpView->EndUndo();
+                        }
                         break;
                     }
                 }
             }
 
-            if( (pIPPEC == mpView) && !mpView->AreObjectsMarked() )
+            if( (pIPPEC == mpView) && !mpView->areSdrObjectsSelected() )
                 mpViewSh->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
 
             rReq.Ignore();
@@ -336,13 +345,20 @@ void BezierObjectBar::Execute(SfxRequest& rReq)
 
             if(xFunc.is())
             {
-                if(xFunc->ISA(FuSelection))
+                FuSelection* pFuSelection = dynamic_cast< FuSelection* >(xFunc.get());
+
+                if(pFuSelection)
                 {
-                    static_cast<FuSelection*>(xFunc.get())->SetEditMode(rReq.GetSlot());
+                    pFuSelection->SetEditMode(rReq.GetSlot());
                 }
-                else if(xFunc->ISA(FuConstructBezierPolygon))
+                else
                 {
-                    static_cast<FuConstructBezierPolygon*>(xFunc.get())->SetEditMode(rReq.GetSlot());
+                    FuConstructBezierPolygon* pFuConstructBezierPolygon = dynamic_cast< FuConstructBezierPolygon* >(xFunc.get());
+
+                    if(pFuConstructBezierPolygon)
+                    {
+                        pFuConstructBezierPolygon->SetEditMode(rReq.GetSlot());
+                    }
                 }
             }
 

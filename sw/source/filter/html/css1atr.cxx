@@ -96,6 +96,7 @@
 
 #include <IDocumentStylePoolAccess.hxx>
 #include <numrule.hxx>
+#include <svx/svdlegacy.hxx>
 
 /*
  * um nicht immer wieder nach einem Update festzustellen, das irgendwelche
@@ -2161,7 +2162,8 @@ void SwHTMLWriter::OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt,
                     ASSERT( pSdrObj, "Wo ist das SdrObject" );
                     if( pSdrObj )
                     {
-                        Point aPos( pSdrObj->GetRelativePos() );
+                        // RGNFPoint aPos( pSdrObj->GetRelativePos() );
+                        const Point aPos(sdr::legacy::GetSnapRect(*pSdrObj).TopLeft() - sdr::legacy::GetAnchorPos(*pSdrObj));
                         nXPos = aPos.A();
                         nYPos = aPos.B();
                     }
@@ -2228,7 +2230,7 @@ void SwHTMLWriter::OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt,
             ASSERT( pSdrObj, "Wo ist das SdrObject" );
             if( pSdrObj )
             {
-                Size aTwipSz( pSdrObj->GetLogicRect().GetSize() );
+                Size aTwipSz( sdr::legacy::GetLogicRect(*pSdrObj).GetSize() );
                 if( nFrmOpts & HTML_FRMOPT_S_WIDTH )
                 {
                     if( nFrmOpts & HTML_FRMOPT_S_PIXSIZE )

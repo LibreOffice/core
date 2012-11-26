@@ -99,7 +99,7 @@ namespace drawinglayer
             bool bAutoUpsideDown(false);
             const attribute::SdrTextAttribute rTextAttribute = getSdrLSTAttribute().getText();
             const basegfx::B2DHomMatrix aObjectMatrix(
-                basegfx::tools::createShearXRotateTranslateB2DHomMatrix(0.0, fAngle, getStart()));
+                basegfx::tools::createRotateTranslateB2DHomMatrix(fAngle, getStart()));
 
             // preapare text, but do not add yet; it needs to be aligned to
             // the line geometry
@@ -470,30 +470,6 @@ namespace drawinglayer
             mbTextRotation(bTextRotation),
             mbTextAutoAngle(bTextAutoAngle)
         {
-        }
-
-        bool SdrMeasurePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const SdrMeasurePrimitive2D& rCompare = (SdrMeasurePrimitive2D&)rPrimitive;
-
-                return (getStart() == rCompare.getStart()
-                    && getEnd() == rCompare.getEnd()
-                    && getHorizontal() == rCompare.getHorizontal()
-                    && getVertical() == rCompare.getVertical()
-                    && getDistance() == rCompare.getDistance()
-                    && getUpper() == rCompare.getUpper()
-                    && getLower() == rCompare.getLower()
-                    && getLeftDelta() == rCompare.getLeftDelta()
-                    && getRightDelta() == rCompare.getRightDelta()
-                    && getBelow() == rCompare.getBelow()
-                    && getTextRotation() == rCompare.getTextRotation()
-                    && getTextAutoAngle() == rCompare.getTextAutoAngle()
-                    && getSdrLSTAttribute() == rCompare.getSdrLSTAttribute());
-            }
-
-            return false;
         }
 
         // provide unique ID

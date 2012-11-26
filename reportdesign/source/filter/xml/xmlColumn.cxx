@@ -150,7 +150,7 @@ void OXMLRowColumn::fillStyle(const ::rtl::OUString& _sStyleName)
             };
             pInfo->add(pMap);
             Reference<XPropertySet> xProp = GenericPropertySet_CreateInstance(pInfo);
-            XMLPropStyleContext* pAutoStyle = PTR_CAST(XMLPropStyleContext,pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_COLUMN,_sStyleName));
+            XMLPropStyleContext* pAutoStyle = const_cast< XMLPropStyleContext* >(dynamic_cast< const XMLPropStyleContext* >( pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_COLUMN,_sStyleName)));
             if ( pAutoStyle )
             {
                 pAutoStyle->FillPropertySet(xProp);
@@ -160,7 +160,7 @@ void OXMLRowColumn::fillStyle(const ::rtl::OUString& _sStyleName)
             }
             else
             {
-                pAutoStyle = PTR_CAST(XMLPropStyleContext,pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_ROW,_sStyleName));
+                pAutoStyle = const_cast< XMLPropStyleContext* >(dynamic_cast< const XMLPropStyleContext* >( pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_ROW,_sStyleName)));
                 if ( pAutoStyle )
                 {
                     pAutoStyle->FillPropertySet(xProp);

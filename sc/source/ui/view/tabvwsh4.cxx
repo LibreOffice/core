@@ -143,9 +143,7 @@ void __EXPORT ScTabViewShell::Activate(sal_Bool bMDI)
 
                     ScInputHandler* pOldHdl=pWin->GetInputHandler();
 
-                    TypeId aScType = TYPE(ScTabViewShell);
-
-                    SfxViewShell* pSh = SfxViewShell::GetFirst( &aScType );
+                    SfxViewShell* pSh = SfxViewShell::GetFirst( _IsSfxViewShell< ScTabViewShell > );
                     while ( pSh!=NULL && pOldHdl!=NULL)
                     {
                         if (((ScTabViewShell*)pSh)->GetInputHandler() == pOldHdl)
@@ -153,7 +151,7 @@ void __EXPORT ScTabViewShell::Activate(sal_Bool bMDI)
                             pOldHdl->ResetDelayTimer();
                             break;
                         }
-                        pSh = SfxViewShell::GetNext( *pSh, &aScType );
+                        pSh = SfxViewShell::GetNext( *pSh, _IsSfxViewShell< ScTabViewShell > );
                     }
 
                     pWin->SetInputHandler( pInputHandler );
@@ -528,7 +526,7 @@ void __EXPORT ScTabViewShell::Move()
 
 //------------------------------------------------------------------
 
-void __EXPORT ScTabViewShell::ShowCursor(FASTBOOL /* bOn */)
+void __EXPORT ScTabViewShell::ShowCursor(bool /* bOn */)
 {
 /*!!!   ShowCursor wird nicht paarweise wie im gridwin gerufen.
         Der CursorLockCount am Gridwin muss hier direkt auf 0 gesetzt werden
@@ -640,7 +638,7 @@ void ScTabViewShell::UpdateDrawShell()
     // Remove DrawShell if nothing is selected.
 
     SdrView* pDrView = GetSdrView();
-    if ( pDrView && !pDrView->AreObjectsMarked() && !IsDrawSelMode() )
+    if ( pDrView && !pDrView->areSdrObjectsSelected() && !IsDrawSelMode() )
         SetDrawShell( sal_False );
 }
 
@@ -1129,7 +1127,7 @@ void ScTabViewShell::SetDrawTextUndo( ::svl::IUndoManager* pNewUndoMgr )
 
 ScTabViewShell* ScTabViewShell::GetActiveViewShell()
 {
-    return PTR_CAST(ScTabViewShell,Current());
+    return dynamic_cast< ScTabViewShell* >( Current());
 }
 
 //------------------------------------------------------------------
@@ -1281,14 +1279,14 @@ sal_Bool ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
         return sal_False;
 
     KeyCode aCode   = rKEvt.GetKeyCode();
-    sal_Bool bShift     = aCode.IsShift();
-    sal_Bool bControl   = aCode.IsMod1();
-    sal_Bool bAlt       = aCode.IsMod2();
     sal_uInt16 nCode    = aCode.GetCode();
-    sal_Bool bUsed      = sal_False;
-    sal_Bool bInPlace   = pScMod->IsEditMode();     // Editengine bekommt alles
-    sal_Bool bAnyEdit   = pScMod->IsInputMode();    // nur Zeichen & Backspace
-    sal_Bool bDraw      = IsDrawTextEdit();
+    bool bShift     = aCode.IsShift();
+    bool bControl   = aCode.IsMod1();
+    bool bAlt       = aCode.IsMod2();
+    bool bUsed      = sal_False;
+    bool bInPlace   = pScMod->IsEditMode();     // Editengine bekommt alles
+    bool bAnyEdit   = pScMod->IsInputMode();    // nur Zeichen & Backspace
+    bool bDraw      = IsDrawTextEdit();
 
     HideNoteMarker();   // Notiz-Anzeige
 
@@ -1487,7 +1485,7 @@ sal_Bool ScTabViewShell::SfxKeyInput(const KeyEvent& rKeyEvent)
     return sal::static_int_cast<sal_Bool>(SfxViewShell::KeyInput( rKeyEvent ));
 }
 
-FASTBOOL __EXPORT ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
+bool __EXPORT ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
 {
 //  return SfxViewShell::KeyInput( rKeyEvent );
     return TabKeyInput( rKeyEvent );
@@ -1612,7 +1610,7 @@ void ScTabViewShell::Construct( sal_uInt8 nForceDesignMode )
     pInputHandler = new ScInputHandler;
 
     // Alte Version:
-    //  if ( !GetViewFrame()->ISA(SfxTopViewFrame) )        // OLE oder Plug-In
+    //  if ( !dynamic_cast< SfxTopViewFrame* >(GetViewFrame()) )        // OLE oder Plug-In
     //      pInputHandler = new ScInputHandler;
 
             //  FormShell vor MakeDrawView anlegen, damit die DrawView auf jeden Fall
@@ -1777,9 +1775,10 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     //  #106334# old DesignMode state from form layer must be restored, too
 
     sal_uInt8 nForceDesignMode = SC_FORCEMODE_NONE;
-    if ( pOldSh && pOldSh->ISA( ScPreviewShell ) )
+    ScPreviewShell* pPreviewShell = dynamic_cast< ScPreviewShell* >(pOldSh);
+
+    if ( pPreviewShell )
     {
-        ScPreviewShell* pPreviewShell = ((ScPreviewShell*)pOldSh);
         nForceDesignMode = pPreviewShell->GetSourceDesignMode();
     }
 
@@ -1890,7 +1889,7 @@ void ScTabViewShell::FillFieldData( ScHeaderFieldData& rData )
 
 //------------------------------------------------------------------
 
-void ScTabViewShell::SetChartArea( const ScRangeListRef& rSource, const Rectangle& rDest )
+void ScTabViewShell::SetChartArea( const ScRangeListRef& rSource, const basegfx::B2DRange& rDest )
 {
     bChartAreaValid = sal_True;
     aChartSource    = rSource;
@@ -1903,7 +1902,7 @@ void ScTabViewShell::SetChartArea( const ScRangeListRef& rSource, const Rectangl
 //UNUSED2008-05      bChartAreaValid = sal_False;
 //UNUSED2008-05  }
 
-sal_Bool ScTabViewShell::GetChartArea( ScRangeListRef& rSource, Rectangle& rDest, SCTAB& rTab ) const
+sal_Bool ScTabViewShell::GetChartArea( ScRangeListRef& rSource, basegfx::B2DRange& rDest, SCTAB& rTab ) const
 {
     rSource = aChartSource;
     rDest   = aChartPos;

@@ -300,7 +300,6 @@ public:
         , pView(pV)
         {}
 
-    TYPEINFO();
     const SwRedline* GetRedline() const { return pRedline; }
     sal_Int16 Which() const { return nWhich; }
         const SwView* GetView() const { return pView; }

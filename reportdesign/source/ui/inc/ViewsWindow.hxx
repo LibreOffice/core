@@ -295,20 +295,19 @@ namespace rptui
         *
         */
         void BrkAction();
-        void BegMarkObj(const Point& _aPnt,const OSectionView* _pSection);
+        void BegMarkObj(const basegfx::B2DPoint& _aPnt,const OSectionView* _pSection);
 
     private:
-        void BegDragObj_createInvisibleObjectAtPosition(const Rectangle& _aRect, const OSectionView& _rSection);
+        void BegDragObj_createInvisibleObjectAtPosition(const basegfx::B2DRange& _aRange, const OSectionView& _rSection);
         void EndDragObj_removeInvisibleObjects();
-        Point m_aDragDelta;
-        ::std::vector<SdrObject*> m_aBegDragTempList;
+        basegfx::B2DPoint m_aDragDelta;
+        SdrObjectVector m_aBegDragTempList;
         bool isObjectInMyTempList(SdrObject *);
     public:
-        void BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionView* _pSection);
-        void EndDragObj(sal_Bool _bDragIntoNewSection,const OSectionView* _pSection,const Point& _aPnt);
+        void BegDragObj(const basegfx::B2DPoint& _aPnt, const SdrHdl* _pHdl,const OSectionView* _pSection);
+        void EndDragObj(sal_Bool _bDragIntoNewSection,const OSectionView* _pSection,const basegfx::B2DPoint& _aPnt);
 
         void EndAction();
-        void ForceMarkedToAnotherPage();
         sal_Bool IsAction() const;
         sal_Bool IsDragObj() const;
         void handleKey(const KeyCode& _rCode);
@@ -320,9 +319,9 @@ namespace rptui
         * \param _rPnt the point, it will be changed that it is inside the section which will be returned
         * \return the section
         */
-        OSectionView* getSectionRelativeToPosition(const OSectionView* _pSection,Point& _rPnt);
+        OSectionView* getSectionRelativeToPosition(const OSectionView* _pSection,basegfx::B2DPoint& _rPnt);
 
-        void MovAction(const Point& rPnt,const OSectionView* _pSection,bool _bMove /*= true */, bool _bControlKeySet);
+        void MovAction(const basegfx::B2DPoint& rPnt,const OSectionView* _pSection,bool _bMove /*= true */, bool _bControlKeySet);
         // void MovAction2(const Point& rPnt,const OSectionView* _pSection);
 
         sal_uInt32 getMarkedObjectCount() const;

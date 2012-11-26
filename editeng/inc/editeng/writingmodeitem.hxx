@@ -34,8 +34,6 @@
 class EDITENG_DLLPUBLIC SvxWritingModeItem : public SfxUInt16Item
 {
 public:
-    TYPEINFO();
-
     SvxWritingModeItem( ::com::sun::star::text::WritingMode eValue /*= com::sun::star::text::WritingMode_LR_TB*/,
                 sal_uInt16 nWhich /*= SDRATTR_TEXTDIRECTION*/ );
     virtual ~SvxWritingModeItem();

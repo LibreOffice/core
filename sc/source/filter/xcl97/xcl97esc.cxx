@@ -196,7 +196,9 @@ bool lcl_IsFontwork( const SdrObject* pObj )
 
 } // namespace
 
-EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape, const Rectangle* pChildAnchor )
+EscherExHostAppData* XclEscherEx::StartShape(
+    const Reference< XShape >& rxShape,
+    const basegfx::B2DRange* pObjectRange)
 {
     if ( nAdditionalText )
         nAdditionalText++;
@@ -234,7 +236,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
                     SvGlobalName aObjClsId( xObj->getClassID() );
                     if ( SotExchange::IsChart( aObjClsId ) )
                     {   // yes, it's a chart diagram
-                        mrObjMgr.AddObj( new XclExpChartObj( mrObjMgr, rxShape, pChildAnchor ) );
+                        mrObjMgr.AddObj( new XclExpChartObj( mrObjMgr, rxShape, pObjectRange) );
                         pCurrXclObj = NULL;     // no metafile or whatsoever
                     }
                     else    // metafile and OLE object
@@ -260,13 +262,13 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
             aAny >>= nMsCtlType;
 
             if( nMsCtlType == 2 )  //OCX Form Control
-                pCurrXclObj = CreateOCXCtrlObj( rxShape, pChildAnchor );
+                pCurrXclObj = CreateOCXCtrlObj( rxShape, pObjectRange );
             else  //TBX Form Control
-                pCurrXclObj = CreateTBXCtrlObj( rxShape, pChildAnchor );
+                pCurrXclObj = CreateTBXCtrlObj( rxShape, pObjectRange );
             if( !pCurrXclObj )
                 pCurrXclObj = new XclObjAny( mrObjMgr );   // just a metafile
         }
-        else if( !ScDrawLayer::IsNoteCaption( pObj ) )
+        else if( !ScDrawLayer::IsNoteCaption( *pObj ) )
         {
             // #107540# ignore permanent note shapes
             // #i12190# do not ignore callouts (do not filter by object type ID)
@@ -290,12 +292,12 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
                     {
                         /*  Create a dummy anchor carrying the flags. Real
                             coordinates are calculated later in virtual call of
-                            WriteData(EscherEx&,const Rectangle&). */
+                            WriteData(EscherEx&,const basegfx::B2DPoint&,const basegfx::B2DVector&). */
                         XclExpDffAnchorBase* pAnchor = mrObjMgr.CreateDffAnchor();
                         pAnchor->SetFlags( *pObj );
                         pCurrAppData->SetClientAnchor( pAnchor );
                     }
-                    const SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, pObj );
+                    const SdrTextObj* pTextObj = dynamic_cast< const SdrTextObj* >( pObj );
                     if( pTextObj && !lcl_IsFontwork( pTextObj ) && (pObj->GetObjIdentifier() != OBJ_CAPTION) )
                     {
                         const OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject();
@@ -408,7 +410,9 @@ void XclEscherEx::EndDocument()
 //delete for exporting OCX
 //#if EXC_EXP_OCX_CTRL
 
-XclExpOcxControlObj* XclEscherEx::CreateOCXCtrlObj( Reference< XShape > xShape, const Rectangle* pChildAnchor )
+XclExpOcxControlObj* XclEscherEx::CreateOCXCtrlObj(
+    Reference< XShape > xShape,
+    const basegfx::B2DRange* pObjectRange)
 {
     ::std::auto_ptr< XclExpOcxControlObj > xOcxCtrl;
 
@@ -429,7 +433,7 @@ XclExpOcxControlObj* XclEscherEx::CreateOCXCtrlObj( Reference< XShape > xShape, 
                 sal_uInt32 nStrmSize = static_cast< sal_uInt32 >( mxCtlsStrm->Tell() - nStrmStart );
                 // adjust the class name to "Forms.***.1"
                 aClassName.InsertAscii( "Forms.", 0 ).AppendAscii( ".1" );
-                xOcxCtrl.reset( new XclExpOcxControlObj( mrObjMgr, xShape, pChildAnchor, aClassName, nStrmStart, nStrmSize ) );
+                xOcxCtrl.reset( new XclExpOcxControlObj( mrObjMgr, xShape, pObjectRange, aClassName, nStrmStart, nStrmSize ) );
             }
         }
     }
@@ -438,9 +442,11 @@ XclExpOcxControlObj* XclEscherEx::CreateOCXCtrlObj( Reference< XShape > xShape, 
 
 //#else
 
-XclExpTbxControlObj* XclEscherEx::CreateTBXCtrlObj( Reference< XShape > xShape, const Rectangle* pChildAnchor )
+XclExpTbxControlObj* XclEscherEx::CreateTBXCtrlObj(
+    Reference< XShape > xShape,
+    const basegfx::B2DRange* pObjectRange)
 {
-    ::std::auto_ptr< XclExpTbxControlObj > xTbxCtrl( new XclExpTbxControlObj( mrObjMgr, xShape, pChildAnchor ) );
+    ::std::auto_ptr< XclExpTbxControlObj > xTbxCtrl( new XclExpTbxControlObj( mrObjMgr, xShape, pObjectRange) );
     if( xTbxCtrl->GetObjType() == EXC_OBJTYPE_UNKNOWN )
         xTbxCtrl.reset();
 

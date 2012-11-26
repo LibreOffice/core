@@ -63,7 +63,7 @@ public:
     explicit Annotation( const Reference< XComponentContext >& context, SdPage* pPage );
 
     SdPage* GetPage() const { return mpPage; }
-    SdrModel* GetModel() { return (mpPage != 0) ? mpPage->GetModel() : 0; }
+    SdrModel* GetModel() { return mpPage ? &mpPage->getSdrModelFromSdrPage() : 0; }
 
     // XInterface:
     virtual Any SAL_CALL queryInterface(Type const & type) throw (RuntimeException);
@@ -341,7 +341,7 @@ Reference< XText > SAL_CALL Annotation::getTextRange() throw (RuntimeException)
     osl::MutexGuard g(m_aMutex);
     if( !m_TextRange.is() && (mpPage != 0) )
     {
-        m_TextRange = TextApiObject::create( static_cast< SdDrawDocument* >( mpPage->GetModel() ) );
+        m_TextRange = TextApiObject::create( static_cast< SdDrawDocument* >( &mpPage->getSdrModelFromSdrPage() ) );
     }
     return Reference< XText >( m_TextRange.get() );
 }

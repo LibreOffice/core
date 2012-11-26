@@ -38,30 +38,29 @@ namespace sdr { namespace contact { class ViewContactOfSdrMediaObj; } }
 
 class SVX_DLLPUBLIC SdrMediaObj : public SdrRectObj
 {
+private:
     friend class ::sdr::contact::ViewContactOfSdrMediaObj;
 
+protected:
+    virtual ~SdrMediaObj();
+
+    /// method to copy all data from given source
+    virtual void copyDataFromSdrObject(const SdrObject& rSource);
+
 public:
+    /// create a copy, evtl. with a different target model (if given)
+    virtual SdrObject* CloneSdrObject(SdrModel* pTargetModel = 0) const;
 
-                                    TYPEINFO();
+    SdrMediaObj(SdrModel& rSdrModel, const basegfx::B2DHomMatrix& rTransform = basegfx::B2DHomMatrix());
 
-                                    SdrMediaObj();
-                                    SdrMediaObj( const Rectangle& rRect );
-
-        virtual                     ~SdrMediaObj();
-
-        virtual FASTBOOL            HasTextEdit() const;
-
+    virtual bool HasTextEdit() const;
         virtual void                TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
         virtual sal_uInt16              GetObjIdentifier() const;
 
         virtual void                TakeObjNameSingul(String& rName) const;
         virtual void                TakeObjNamePlural(String& rName) const;
 
-        virtual void                operator=(const SdrObject& rObj);
-
-        virtual void                AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly = false );
-
-public:
+    virtual void AdjustToMaxRange( const basegfx::B2DRange& rMaxRange, bool bShrinkOnly = false );
 
         void                        setURL( const ::rtl::OUString& rURL );
         const ::rtl::OUString&      getURL() const;
@@ -76,12 +75,10 @@ public:
         void                        setGraphic( const Graphic* pGraphic = NULL );
 
 protected:
-
         virtual void                mediaPropertiesChanged( const ::avmedia::MediaItem& rNewState );
         virtual ::sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
 private:
-
         ::avmedia::MediaItem        maMediaProperties;
         ::std::auto_ptr< Graphic >  mapGraphic;
 };

@@ -82,6 +82,10 @@
 #include <vcl/svapp.hxx>
 #include <slist>
 #include <iterator>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <svx/svdlegacy.hxx>
+#include <svx/fmmodel.hxx>
 #include <switerator.hxx>
 
 using ::rtl::OUString;
@@ -277,40 +281,37 @@ public:
 ****************************************************************************/
 
 SwFmDrawPage::SwFmDrawPage( SdrPage* pPage ) :
-    SvxFmDrawPage( pPage ), pPageView(0)
+    SvxFmDrawPage( pPage )
 {
 }
 
 SwFmDrawPage::~SwFmDrawPage() throw ()
 {
-    RemovePageView();
+    if(mpView)
+        mpView->HideSdrPage();
 }
 
-const SdrMarkList&  SwFmDrawPage::PreGroup(const uno::Reference< drawing::XShapes > & xShapes)
+const SdrObjectVector SwFmDrawPage::PreGroup(const uno::Reference< drawing::XShapes > & xShapes)
 {
-    _SelectObjectsInView( xShapes, GetPageView() );
-    const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-    return rMarkList;
+    if(mpView)
+{
+        mpView->ShowSdrPage( *mpPage );
+}
+
+    _SelectObjectsInView( xShapes );
+
+    return mpView->getSelectedSdrObjectVectorFromSdrMarkView();
 }
 
 void SwFmDrawPage::PreUnGroup(const uno::Reference< drawing::XShapeGroup >  xShapeGroup)
 {
+    if(mpView)
+{
+        mpView->ShowSdrPage( *mpPage );
+}
+
     uno::Reference< drawing::XShape >  xShape( xShapeGroup, uno::UNO_QUERY);
-    _SelectObjectInView( xShape, GetPageView() );
-}
-
-SdrPageView*    SwFmDrawPage::GetPageView()
-{
-    if(!pPageView)
-        pPageView = mpView->ShowSdrPage( mpPage );
-    return pPageView;
-}
-
-void    SwFmDrawPage::RemovePageView()
-{
-    if(pPageView && mpView)
-        mpView->HideSdrPage();
-    pPageView = 0;
+    _SelectObjectInView( xShape );
 }
 
 uno::Reference< uno::XInterface >   SwFmDrawPage::GetInterface( SdrObject* pObj )
@@ -339,9 +340,9 @@ SdrObject* SwFmDrawPage::_CreateSdrObject( const uno::Reference< drawing::XShape
 uno::Reference< drawing::XShape >  SwFmDrawPage::_CreateShape( SdrObject *pObj ) const throw ()
 {
     uno::Reference< drawing::XShape >  xRet;
-    if(pObj->ISA(SwVirtFlyDrawObj) || pObj->GetObjInventor() == SWGInventor)
+    if(dynamic_cast< SwVirtFlyDrawObj* >(pObj) || pObj->GetObjInventor() == SWGInventor)
     {
-        SwFlyDrawContact* pFlyContact = (SwFlyDrawContact*)pObj->GetUserCall();
+        SwFlyDrawContact* pFlyContact = (SwFlyDrawContact*)findConnectionToSdrObjectDirect(pObj);
         if(pFlyContact)
         {
             FlyCntType eType = FLYCNTTYPE_ALL;
@@ -390,7 +391,7 @@ uno::Reference< drawing::XShape >  SwFmDrawPage::_CreateShape( SdrObject *pObj )
             uno::Reference< uno::XInterface > xCreate(xRet, uno::UNO_QUERY);
             xRet = 0;
             uno::Reference< beans::XPropertySet >  xPrSet;
-            if ( pObj->IsGroupObject() && (!pObj->Is3DObj() || ( PTR_CAST(E3dScene,pObj ) != NULL ) ) )
+            if ( pObj->getChildrenOfSdrObject() )
                 xPrSet = new SwXGroupShape( xCreate );
             else
                 xPrSet = new SwXShape( xCreate );
@@ -626,7 +627,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     // --> OD, HB
     if ( pSvxShape->GetSdrObject() )
     {
-        if ( pSvxShape->GetSdrObject()->IsInserted() )
+        if ( pSvxShape->GetSdrObject()->IsObjectInserted() )
         {
             return;
         }
@@ -791,13 +792,14 @@ uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference<
         if(pPage)//kann das auch Null sein?
         {
             //markieren und MarkList zurueckgeben
-            const SdrMarkList& rMarkList = pPage->PreGroup(xShapes);
-            if ( rMarkList.GetMarkCount() > 1 )
+            const SdrObjectVector aMarkList(pPage->PreGroup(xShapes));
+
+            if ( aMarkList.size() > 1 )
             {
                 sal_Bool bFlyInCnt = sal_False;
-                for ( sal_uInt16 i = 0; !bFlyInCnt && i < rMarkList.GetMarkCount(); ++i )
+                for ( sal_uInt16 i = 0; !bFlyInCnt && i < aMarkList.size(); ++i )
                 {
-                    const SdrObject *pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
+                    const SdrObject *pObj = aMarkList[i];
                     if (FLY_AS_CHAR == ::FindFrmFmt(const_cast<SdrObject*>(
                                             pObj))->GetAnchor().GetAnchorId())
                     {
@@ -812,8 +814,9 @@ uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference<
                     pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
 
                     SwDrawContact* pContact = pDoc->GroupSelection( *pPage->GetDrawView() );
+                    const SdrObjectVector aSdrObjectVector = pPage->GetDrawView()->getSelectedSdrObjectVectorFromSdrMarkView();
                     pDoc->ChgAnchor(
-                        pPage->GetDrawView()->GetMarkedObjectList(),
+                        aSdrObjectVector,
                         FLY_AT_PARA/*int eAnchorId*/,
                         sal_True, sal_False );
 
@@ -826,7 +829,11 @@ uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference<
                     pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
                 }
             }
-            pPage->RemovePageView();
+
+            if(pPage->GetDrawView())
+            {
+                pPage->GetDrawView()->HideSdrPage();
+            }
         }
     }
     return xRet;
@@ -847,12 +854,17 @@ void SwXDrawPage::ungroup(const uno::Reference< drawing::XShapeGroup > & xShapeG
             pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
 
             pDoc->UnGroupSelection( *pPage->GetDrawView() );
-            pDoc->ChgAnchor( pPage->GetDrawView()->GetMarkedObjectList(),
+            const SdrObjectVector aSdrObjectVector = pPage->GetDrawView()->getSelectedSdrObjectVectorFromSdrMarkView();
+            pDoc->ChgAnchor( aSdrObjectVector,
                         FLY_AT_PARA/*int eAnchorId*/,
                         sal_True, sal_False );
             pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
         }
-        pPage->RemovePageView();
+
+        if(pPage->GetDrawView())
+        {
+            pPage->GetDrawView()->HideSdrPage();
+        }
     }
 }
 
@@ -890,7 +902,6 @@ void SwXDrawPage::InvalidateSwDoc()
 /****************************************************************************
 
 ****************************************************************************/
-TYPEINIT1(SwXShape, SwClient);
 
 const uno::Sequence< sal_Int8 > & SwXShape::getUnoTunnelId()
 {
@@ -1280,12 +1291,11 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                     if(RES_ANCHOR == pEntry->nWID && MID_ANCHOR_ANCHORTYPE == pEntry->nMemberId)
                     {
                         SdrObject* pObj = pFmt->FindSdrObject();
-                        SdrMarkList aList;
-                        SdrMark aMark(pObj);
-                        aList.InsertEntry(aMark);
+                        SdrObjectVector aSdrObjectVector;
+                        aSdrObjectVector.push_back(pObj);
                         sal_Int32 nAnchor = 0;
                         cppu::enum2int( nAnchor, aValue );
-                        pDoc->ChgAnchor( aList, (RndStdIds)nAnchor,
+                        pDoc->ChgAnchor( aSdrObjectVector, (RndStdIds)nAnchor,
                                                 sal_False, sal_True );
                     }
                     else
@@ -1342,7 +1352,7 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                             if( pDoc->GetCurrentLayout() )
                             {
                                 SwCrsrMoveState aState( MV_SETONLYTEXT );
-                                Point aTmp( pObj->GetSnapRect().TopLeft() );
+                                Point aTmp( sdr::legacy::GetSnapRect(*pObj).TopLeft() );
                                 pDoc->GetCurrentLayout()->GetCrsrOfst( aPam.GetPoint(), aTmp, &aState );
                             }
                             else
@@ -1529,7 +1539,7 @@ uno::Any SwXShape::getPropertyValue(const rtl::OUString& rPropertyName)
                     if(pSvxShape)
                     {
                         SdrObject* pObj = pSvxShape->GetSdrObject();
-                        Point aPt = pObj->GetAnchorPos();
+                        const Point aPt(sdr::legacy::GetAnchorPos(*pObj));
                         awt::Point aPoint( TWIP_TO_MM100( aPt.X() ),
                                            TWIP_TO_MM100( aPt.Y() ) );
                         aRet.setValue(&aPoint, ::getCppuType( (awt::Point*)0 ));
@@ -1718,6 +1728,41 @@ uno::Any SwXShape::getPropertyValue(const rtl::OUString& rPropertyName)
                 // <--
             }
             // <--
+            else if ( rPropertyName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PolyPolygon"))) )
+            {
+                // support OWN_ATTR_VALUE_POLYPOLYGON
+                drawing::PointSequenceSequence aPath;
+                aRet >>= aPath;
+                aRet <<= _ConvertPointSequenceSequenceToLayoutDir( aPath );
+            }
+            /* Not needed; this path is relative to the obejct's transformation, thus an
+               adaption is not necessary
+            else if ( rPropertyName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Geometry"))) )
+            {
+                // support OWN_ATTR_BASE_GEOMETRY
+                drawing::PointSequenceSequence aPath;
+                aRet >>= aPath;
+                aRet <<= _ConvertPointSequenceSequenceToLayoutDir( aPath );
+            }
+            */
+            else if ( rPropertyName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Polygon"))) )
+            {
+                // support OWN_ATTR_VALUE_POLYGON
+                drawing::PointSequence aPath;
+                aRet >>= aPath;
+                aRet <<= _ConvertPointSequenceToLayoutDir( aPath );
+            }
+            /* Not needed; historically the CaptionPoint was written relative to the object's
+               position. For a relative position the anchor is no longer relevant
+            else if ( rPropertyName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CaptionPoint"))) )
+            {
+                // needed since else the relative, but relative to the normal object transformation
+                // position will be created in SvxShape::getPropertyValueImpl in case OWN_ATTR_CAPTION_POINT
+                awt::Point aEndPos;
+                aRet >>= aEndPos;
+                aRet <<= _ConvertStartOrEndPosToLayoutDir( aEndPos );
+            }
+            */
         }
     }
     return aRet;
@@ -1770,7 +1815,7 @@ uno::Sequence< beans::PropertyState > SwXShape::getPropertyStates(
         SdrObject* pObject = pSvxShape->GetSdrObject();
         if(pObject)
         {
-            bGroupMember = pObject->GetUpGroup() != 0;
+            bGroupMember = pObject->GetParentSdrObject() != 0;
             bFormControl = pObject->GetObjInventor() == FmFormInventor;
         }
         const rtl::OUString* pNames = aPropertyNames.getConstArray();
@@ -2113,8 +2158,8 @@ void SwXShape::dispose(void) throw( uno::RuntimeException )
         // OD 25.08.2003 #111713# - refine assertion for safety reason.
         // --> OD 2005-02-02 #119236# - correct assertion and refine it.
         ASSERT( !pObj ||
-                pObj->ISA(SwDrawVirtObj) ||
-                pObj->GetUpGroup() ||
+                dynamic_cast< SwDrawVirtObj* >(pObj) ||
+                pObj->GetParentSdrObject() ||
                 pObj == pFmt->FindSdrObject(),
                 "<SwXShape::dispose(..) - different 'master' drawing objects!!" );
         // <--
@@ -2123,9 +2168,9 @@ void SwXShape::dispose(void) throw( uno::RuntimeException )
         // --> OD 2005-02-02 #119236# - no delete of draw format for members
         // of a group
         if ( pObj &&
-             !pObj->ISA(SwDrawVirtObj) &&
-             !pObj->GetUpGroup() &&
-             pObj->IsInserted() )
+             !dynamic_cast< SwDrawVirtObj* >(pObj) &&
+             !pObj->GetParentSdrObject() &&
+             pObj->IsObjectInserted() )
         // <--
         {
             if (pFmt->GetAnchor().GetAnchorId() == FLY_AS_CHAR)
@@ -2241,8 +2286,8 @@ awt::Point SAL_CALL SwXShape::getPosition() throw ( uno::RuntimeException )
             // to the determined attribute position
             // --> OD 2004-10-01 #i34750# - correction:
             // consider the layout direction
-            const Rectangle aMemberObjRect = GetSvxShape()->GetSdrObject()->GetSnapRect();
-            const Rectangle aGroupObjRect = pTopGroupObj->GetSnapRect();
+            const Rectangle aMemberObjRect(sdr::legacy::GetSnapRect(*GetSvxShape()->GetSdrObject()));
+            const Rectangle aGroupObjRect(sdr::legacy::GetSnapRect(*pTopGroupObj));
             // --> OD 2005-08-16 #i53320# - relative position of group member and
             // top group object is always given in horizontal left-to-right layout.
 //            const SwFrmFmt::tLayoutDir eLayoutDir = GetFrmFmt()
@@ -2305,13 +2350,12 @@ void SAL_CALL SwXShape::setPosition( const awt::Point& aPosition )
             if ( pSvxShape )
             {
                 const SdrObject* pObj = pSvxShape->GetSdrObject();
-                if ( pObj &&
-                     pObj->GetAnchorPos().X() == 0 &&
-                     pObj->GetAnchorPos().Y() == 0 )
+                if ( pObj && pObj->GetAnchorPos().equalZero() )
                 {
                     bApplyPosAtDrawObj = true;
-                    if ( pObj->GetUserCall() &&
-                         pObj->GetUserCall()->ISA(SwDrawContact) )
+                    SwDrawContact* pSwDrawContact = dynamic_cast< SwDrawContact* >(findConnectionToSdrObjectDirect(pObj));
+
+                    if ( pSwDrawContact )
                     {
                         bNoAdjustOfPosProp = true;
                     }
@@ -2423,12 +2467,12 @@ SdrObject* SwXShape::_GetTopGroupObj( SvxShape* _pSvxShape )
     if ( pSvxShape )
     {
         SdrObject* pSdrObj = pSvxShape->GetSdrObject();
-        if ( pSdrObj && pSdrObj->GetUpGroup() )
+        if ( pSdrObj && pSdrObj->GetParentSdrObject() )
         {
-            pTopGroupObj = pSdrObj->GetUpGroup();
-            while ( pTopGroupObj->GetUpGroup() )
+            pTopGroupObj = pSdrObj->GetParentSdrObject();
+            while ( pTopGroupObj->GetParentSdrObject() )
             {
-                pTopGroupObj = pTopGroupObj->GetUpGroup();
+                pTopGroupObj = pTopGroupObj->GetParentSdrObject();
             }
         }
     }
@@ -2456,12 +2500,9 @@ awt::Point SwXShape::_GetAttrPosition()
     if ( pSvxShape )
     {
         const SdrObject* pObj = pSvxShape->GetSdrObject();
-        if ( pObj &&
-             pObj->GetAnchorPos().X() == 0 &&
-             pObj->GetAnchorPos().Y() == 0 &&
-             aAttrPos.X == 0 && aAttrPos.Y == 0 )
+        if ( pObj && pObj->GetAnchorPos().equalZero() && aAttrPos.X == 0 && aAttrPos.Y == 0 )
         {
-            const Rectangle aObjRect = pObj->GetSnapRect();
+            const Rectangle aObjRect(sdr::legacy::GetSnapRect(*pObj));
             aAttrPos.X = TWIP_TO_MM100(aObjRect.Left());
             aAttrPos.Y = TWIP_TO_MM100(aObjRect.Top());
         }
@@ -2556,10 +2597,11 @@ drawing::HomogenMatrix3 SwXShape::_ConvertTransformationToLayoutDir(
             // get position of object in Writer coordinate system.
             awt::Point aPos( getPosition() );
             // get position of object in Drawing layer coordinate system
-            const Point aTmpObjPos( pObj->GetSnapRect().TopLeft() );
+            const Point aTmpObjPos( sdr::legacy::GetSnapRect(*pObj).TopLeft() );
+            const Point aTmpObjAnch( sdr::legacy::GetAnchorPos(*pObj) );
             const awt::Point aObjPos(
-                    TWIP_TO_MM100( aTmpObjPos.X() - pObj->GetAnchorPos().X() ),
-                    TWIP_TO_MM100( aTmpObjPos.Y() - pObj->GetAnchorPos().Y() ) );
+                    TWIP_TO_MM100( aTmpObjPos.X() - aTmpObjAnch.X() ),
+                    TWIP_TO_MM100( aTmpObjPos.Y() - aTmpObjAnch.Y() ) );
             // determine difference between these positions according to the
             // Writer coordinate system
             const awt::Point aTranslateDiff( aPos.X - aObjPos.X,
@@ -2567,33 +2609,9 @@ drawing::HomogenMatrix3 SwXShape::_ConvertTransformationToLayoutDir(
             // apply translation difference to transformation matrix.
             if ( aTranslateDiff.X != 0 || aTranslateDiff.Y != 0 )
             {
-                // --> OD 2007-01-03 #i73079# - use correct matrix type
-                ::basegfx::B2DHomMatrix aTempMatrix;
-                // <--
-
-                aTempMatrix.set(0, 0, aMatrix.Line1.Column1 );
-                aTempMatrix.set(0, 1, aMatrix.Line1.Column2 );
-                aTempMatrix.set(0, 2, aMatrix.Line1.Column3 );
-                aTempMatrix.set(1, 0, aMatrix.Line2.Column1 );
-                aTempMatrix.set(1, 1, aMatrix.Line2.Column2 );
-                aTempMatrix.set(1, 2, aMatrix.Line2.Column3 );
-                aTempMatrix.set(2, 0, aMatrix.Line3.Column1 );
-                aTempMatrix.set(2, 1, aMatrix.Line3.Column2 );
-                aTempMatrix.set(2, 2, aMatrix.Line3.Column3 );
-
-                // --> OD 2007-01-03 #i73079#
+                basegfx::B2DHomMatrix aTempMatrix(basegfx::tools::UnoHomogenMatrix3ToB2DHomMatrix(aMatrix));
                 aTempMatrix.translate( aTranslateDiff.X, aTranslateDiff.Y );
-                // <--
-
-                aMatrix.Line1.Column1 = aTempMatrix.get(0, 0);
-                aMatrix.Line1.Column2 = aTempMatrix.get(0, 1);
-                aMatrix.Line1.Column3 = aTempMatrix.get(0, 2);
-                aMatrix.Line2.Column1 = aTempMatrix.get(1, 0);
-                aMatrix.Line2.Column2 = aTempMatrix.get(1, 1);
-                aMatrix.Line2.Column3 = aTempMatrix.get(1, 2);
-                aMatrix.Line3.Column1 = aTempMatrix.get(2, 0);
-                aMatrix.Line3.Column2 = aTempMatrix.get(2, 1);
-                aMatrix.Line3.Column3 = aTempMatrix.get(2, 2);
+                basegfx::tools::B2DHomMatrixToUnoHomogenMatrix3(aTempMatrix, aMatrix);
             }
         }
     }
@@ -2707,10 +2725,11 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
             // get position of object in Writer coordinate system.
             awt::Point aPos( getPosition() );
             // get position of object in Drawing layer coordinate system
-            const Point aTmpObjPos( pObj->GetSnapRect().TopLeft() );
+            const Point aTmpObjPos( sdr::legacy::GetSnapRect(*pObj).TopLeft() );
+            const Point aTmpObjAnch( sdr::legacy::GetAnchorPos(*pObj) );
             const awt::Point aObjPos(
-                    TWIP_TO_MM100( aTmpObjPos.X() - pObj->GetAnchorPos().X() ),
-                    TWIP_TO_MM100( aTmpObjPos.Y() - pObj->GetAnchorPos().Y() ) );
+                    TWIP_TO_MM100( aTmpObjPos.X() - aTmpObjAnch.X() ),
+                    TWIP_TO_MM100( aTmpObjPos.Y() - aTmpObjAnch.Y() ) );
             // determine difference between these positions according to the
             // Writer coordinate system
             const awt::Point aTranslateDiff( aPos.X - aObjPos.X,
@@ -2734,21 +2753,23 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
 
     SvxShape* pSvxShape = GetSvxShape();
     ASSERT( pSvxShape,
-            "<SwXShape::_ConvertStartOrEndPosToLayoutDir(..)> - no SvxShape found!")
+            "<SwXShape::__ConvertPolyPolygonBezierToLayoutDir(..)> - no SvxShape found!")
     if ( pSvxShape )
     {
         const SdrObject* pObj = pSvxShape->GetSdrObject();
         ASSERT( pObj,
-                "<SwXShape::_ConvertStartOrEndPosToLayoutDir(..)> - no SdrObject found!")
+                "<SwXShape::_ConvertPolyPolygonBezierToLayoutDir(..)> - no SdrObject found!")
         if ( pObj )
         {
             // get position of object in Writer coordinate system.
             awt::Point aPos( getPosition() );
             // get position of object in Drawing layer coordinate system
-            const Point aTmpObjPos( pObj->GetSnapRect().TopLeft() );
+            const basegfx::B2DPoint aCurrentTopLeft(pObj->getSdrObjectTransformation() * basegfx::B2DPoint(0.0, 0.0));
+            const Point aTmpObjPos(basegfx::fround(aCurrentTopLeft.getX()), basegfx::fround(aCurrentTopLeft.getY()));
+            const Point aTmpObjAnch( sdr::legacy::GetAnchorPos(*pObj) );
             const awt::Point aObjPos(
-                    TWIP_TO_MM100( aTmpObjPos.X() - pObj->GetAnchorPos().X() ),
-                    TWIP_TO_MM100( aTmpObjPos.Y() - pObj->GetAnchorPos().Y() ) );
+                    TWIP_TO_MM100( aTmpObjPos.X() - aTmpObjAnch.X() ),
+                    TWIP_TO_MM100( aTmpObjPos.Y() - aTmpObjAnch.Y() ) );
             // determine difference between these positions according to the
             // Writer coordinate system
             const awt::Point aTranslateDiff( aPos.X - aObjPos.X,
@@ -2756,25 +2777,103 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
             // apply translation difference to PolyPolygonBezier.
             if ( aTranslateDiff.X != 0 || aTranslateDiff.Y != 0 )
             {
-                const basegfx::B2DHomMatrix aMatrix(basegfx::tools::createTranslateB2DHomMatrix(
+                basegfx::B2DPolyPolygon aPolyPolygon(
+                    basegfx::tools::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(aConvertedPath));
+
+                aPolyPolygon.transform(basegfx::tools::createTranslateB2DHomMatrix(
                     aTranslateDiff.X, aTranslateDiff.Y));
+                basegfx::tools::B2DPolyPolygonToUnoPolyPolygonBezierCoords(
+                    aPolyPolygon, aConvertedPath);
+            }
+        }
+    }
 
-                const sal_Int32 nOuterSequenceCount(aConvertedPath.Coordinates.getLength());
-                drawing::PointSequence* pInnerSequence = aConvertedPath.Coordinates.getArray();
-                for(sal_Int32 a(0); a < nOuterSequenceCount; a++)
-                {
-                    const sal_Int32 nInnerSequenceCount(pInnerSequence->getLength());
-                    awt::Point* pArray = pInnerSequence->getArray();
+    return aConvertedPath;
+}
 
-                    for(sal_Int32 b(0); b < nInnerSequenceCount; b++)
-                    {
-                        basegfx::B2DPoint aNewCoordinatePair(pArray->X, pArray->Y);
-                        aNewCoordinatePair *= aMatrix;
-                        pArray->X = basegfx::fround(aNewCoordinatePair.getX());
-                        pArray->Y = basegfx::fround(aNewCoordinatePair.getY());
-                        pArray++;
+::com::sun::star::drawing::PointSequenceSequence SwXShape::_ConvertPointSequenceSequenceToLayoutDir(
+    const ::com::sun::star::drawing::PointSequenceSequence& aPath)
+{
+    drawing::PointSequenceSequence aConvertedPath(aPath);
+    SvxShape* pSvxShape = GetSvxShape();
+    OSL_ENSURE(pSvxShape, "<SwXShape::_ConvertPointSequenceSequenceToLayoutDir(..)> - no SvxShape found!");
+
+    if(pSvxShape)
+    {
+        const SdrObject* pObj = pSvxShape->GetSdrObject();
+        OSL_ENSURE(pObj, "<SwXShape::_ConvertPointSequenceSequenceToLayoutDir(..)> - no SdrObject found!");
+
+        if(pObj)
+        {
+            // get position of object in Writer coordinate system.
+            const awt::Point aPos(getPosition());
+
+            // get position of object in Drawing layer coordinate system
+            const Point aTmpObjPos(sdr::legacy::GetSnapRect(*pObj).TopLeft());
+            const Point aTmpObjAnch( sdr::legacy::GetAnchorPos(*pObj) );
+            const awt::Point aObjPos(
+                    TWIP_TO_MM100(aTmpObjPos.X() - aTmpObjAnch.X()),
+                    TWIP_TO_MM100(aTmpObjPos.Y() - aTmpObjAnch.Y()));
+
+            // determine difference between these positions according to the
+            // Writer coordinate system
+            const awt::Point aTranslateDiff(aPos.X - aObjPos.X, aPos.Y - aObjPos.Y);
+
+            // apply translation difference to PolyPolygonBezier.
+            if(aTranslateDiff.X || aTranslateDiff.Y)
+            {
+                basegfx::B2DPolyPolygon aPolyPolygon(
+                    basegfx::tools::UnoPointSequenceSequenceToB2DPolyPolygon(aConvertedPath));
+
+                aPolyPolygon.transform(basegfx::tools::createTranslateB2DHomMatrix(
+                    aTranslateDiff.X, aTranslateDiff.Y));
+                basegfx::tools::B2DPolyPolygonToUnoPointSequenceSequence(
+                    aPolyPolygon, aConvertedPath);
+            }
                     }
                 }
+
+    return aConvertedPath;
+}
+
+::com::sun::star::drawing::PointSequence SwXShape::_ConvertPointSequenceToLayoutDir(
+    const ::com::sun::star::drawing::PointSequence& aPath)
+{
+    drawing::PointSequence aConvertedPath(aPath);
+    SvxShape* pSvxShape = GetSvxShape();
+    OSL_ENSURE(pSvxShape, "<SwXShape::__ConvertPointSequenceToLayoutDir(..)> - no SvxShape found!");
+
+    if(pSvxShape)
+    {
+        const SdrObject* pObj = pSvxShape->GetSdrObject();
+        OSL_ENSURE(pObj, "<SwXShape::_ConvertPointSequenceToLayoutDir(..)> - no SdrObject found!");
+
+        if(pObj)
+        {
+            // get position of object in Writer coordinate system.
+            const awt::Point aPos(getPosition());
+
+            // get position of object in Drawing layer coordinate system
+            const Point aTmpObjPos(sdr::legacy::GetSnapRect(*pObj).TopLeft());
+            const Point aTmpObjAnch( sdr::legacy::GetAnchorPos(*pObj) );
+            const awt::Point aObjPos(
+                    TWIP_TO_MM100(aTmpObjPos.X() - aTmpObjAnch.X()),
+                    TWIP_TO_MM100(aTmpObjPos.Y() - aTmpObjAnch.Y()));
+
+            // determine difference between these positions according to the
+            // Writer coordinate system
+            const awt::Point aTranslateDiff(aPos.X - aObjPos.X, aPos.Y - aObjPos.Y);
+
+            // apply translation difference to PolyPolygonBezier.
+            if(aTranslateDiff.X || aTranslateDiff.Y)
+            {
+                basegfx::B2DPolygon aPolygon(
+                    basegfx::tools::UnoPointSequenceToB2DPolygon(aConvertedPath));
+
+                aPolygon.transform(basegfx::tools::createTranslateB2DHomMatrix(
+                    aTranslateDiff.X, aTranslateDiff.Y));
+                basegfx::tools::B2DPolygonToUnoPointSequence(
+                    aPolygon, aConvertedPath);
             }
         }
     }

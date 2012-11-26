@@ -48,8 +48,6 @@ namespace sd {
 #define BITMAP_WIDTH  32
 #define BITMAP_HEIGHT 12
 
-TYPEINIT1( FuLineEnd, FuPoor );
-
 /*************************************************************************
 |*
 |* Konstruktor
@@ -71,42 +69,41 @@ FunctionReference FuLineEnd::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::s
 
 void FuLineEnd::DoExecute( SfxRequest& )
 {
-    const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+    const SdrObject* pSelected = mpView->getSelectedIfSingle();
 
-    if( rMarkList.GetMarkCount() == 1 )
+    if( pSelected )
     {
-        const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
         const SdrObject* pNewObj;
         SdrObject* pConvPolyObj = NULL;
 
-        if( pObj->ISA( SdrPathObj ) )
+        if( dynamic_cast< const SdrPathObj* >(pSelected) )
         {
-            pNewObj = pObj;
+            pNewObj = pSelected;
         }
         else
         {
             SdrObjTransformInfoRec aInfoRec;
-            pObj->TakeObjInfo( aInfoRec );
+            pSelected->TakeObjInfo( aInfoRec );
 
-            if( aInfoRec.bCanConvToPath &&
-                pObj->GetObjInventor() == SdrInventor &&
-                pObj->GetObjIdentifier() != OBJ_GRUP )
-                // bCanConvToPath ist bei Gruppenobjekten sal_True,
+            if( aInfoRec.mbCanConvToPath &&
+                pSelected->GetObjInventor() == SdrInventor &&
+                pSelected->GetObjIdentifier() != OBJ_GRUP )
+                // mbCanConvToPath ist bei Gruppenobjekten true,
                 // stuerzt aber bei ConvertToPathObj() ab !
             {
-                pNewObj = pConvPolyObj = pObj->ConvertToPolyObj( sal_True, sal_False );
+                pNewObj = pConvPolyObj = pSelected->ConvertToPolyObj( true, false );
 
-                if( !pNewObj || !pNewObj->ISA( SdrPathObj ) )
+                if( !pNewObj || !dynamic_cast< const SdrPathObj* >(pNewObj) )
                     return; // Abbruch, zusaetzliche Sicherheit, die bei
                             // Gruppenobjekten aber nichts bringt.
             }
             else return; // Abbruch
         }
 
-        const ::basegfx::B2DPolyPolygon aPolyPolygon = ( (SdrPathObj*) pNewObj )->GetPathPoly();
+        const ::basegfx::B2DPolyPolygon aPolyPolygon = ( (SdrPathObj*) pNewObj )->getB2DPolyPolygonInObjectCoordinates();
 
         // Loeschen des angelegten PolyObjektes
-        SdrObject::Free( pConvPolyObj );
+        deleteSdrObjectSafeAndClearPointer( pConvPolyObj );
 
         XLineEndList* pLineEndList = mpDoc->GetLineEndList();
         XLineEndEntry* pEntry;
@@ -117,18 +114,18 @@ void FuLineEnd::DoExecute( SfxRequest& )
 
         long nCount = pLineEndList->Count();
         long j = 1;
-        sal_Bool bDifferent = sal_False;
+        bool bDifferent = false;
 
         while( !bDifferent )
         {
             aName = aNewName;
             aName.Append( sal_Unicode(' ') );
             aName.Append( UniString::CreateFromInt32( j++ ) );
-            bDifferent = sal_True;
+            bDifferent = true;
             for( long i = 0; i < nCount && bDifferent; i++ )
             {
                 if( aName == pLineEndList->GetLineEnd( i )->GetName() )
-                    bDifferent = sal_False;
+                    bDifferent = false;
             }
         }
 
@@ -142,12 +139,12 @@ void FuLineEnd::DoExecute( SfxRequest& )
             if( pDlg->Execute() == RET_OK )
             {
                 pDlg->GetName( aName );
-                bDifferent = sal_True;
+                bDifferent = true;
 
                 for( long i = 0; i < nCount && bDifferent; i++ )
                 {
                     if( aName == pLineEndList->GetLineEnd( i )->GetName() )
-                        bDifferent = sal_False;
+                        bDifferent = false;
                 }
 
                 if( bDifferent )

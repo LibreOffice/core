@@ -33,15 +33,11 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 //====================================================================
-
-TYPEINIT1_AUTOFACTORY(SfxObjectShellItem,SfxPoolItem)
-TYPEINIT1_AUTOFACTORY(SfxObjectItem,SfxPoolItem)
-
-//=========================================================================
+IMPL_POOLITEM_FACTORY(SfxObjectShellItem)
 
 int SfxObjectShellItem::operator==( const SfxPoolItem &rItem ) const
 {
-     return PTR_CAST(SfxObjectShellItem, &rItem)->pObjSh == pObjSh;
+     return dynamic_cast< const SfxObjectShellItem* >( &rItem)->pObjSh == pObjSh;
 }
 
 //--------------------------------------------------------------------
@@ -110,6 +106,7 @@ sal_Bool SfxObjectShellItem::PutValue( const com::sun::star::uno::Any& rVal, sal
 
 //=========================================================================
 
+IMPL_POOLITEM_FACTORY(SfxObjectItem)
 SfxObjectItem::SfxObjectItem( sal_uInt16 nWhichId, SfxShell *pSh )
 :   SfxPoolItem( nWhichId ),
     _pSh( pSh )
@@ -119,7 +116,7 @@ SfxObjectItem::SfxObjectItem( sal_uInt16 nWhichId, SfxShell *pSh )
 
 int SfxObjectItem::operator==( const SfxPoolItem &rItem ) const
 {
-     SfxObjectItem *pOther = PTR_CAST(SfxObjectItem, &rItem);
+     const SfxObjectItem *pOther = dynamic_cast< const SfxObjectItem* >( &rItem);
      return pOther->_pSh == _pSh;
 }
 

@@ -32,8 +32,6 @@ class FuInsertGraphic
     : public FuPoor
 {
 public:
-    TYPEINFO();
-
     static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
     virtual void DoExecute( SfxRequest& rReq );
 
@@ -54,8 +52,6 @@ class FuInsertClipboard
     : public FuPoor
 {
 public:
-    TYPEINFO();
-
     static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
     virtual void DoExecute( SfxRequest& rReq );
 
@@ -75,8 +71,6 @@ class FuInsertOLE
     : public FuPoor
 {
  public:
-    TYPEINFO();
-
     static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
     virtual void DoExecute( SfxRequest& rReq );
 
@@ -95,8 +89,6 @@ class FuInsertAVMedia
     : public FuPoor
 {
 public:
-    TYPEINFO();
-
     static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
     virtual void DoExecute( SfxRequest& rReq );
 

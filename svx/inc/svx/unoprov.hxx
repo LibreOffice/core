@@ -27,43 +27,14 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <svl/itemprop.hxx>
 #include <tools/list.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
+#include <editeng/unoipset.hxx>
 
 class SvxItemPropertySet;
 class SfxItemPool;
 
-/***********************************************************************
-* class UHashMap                                                       *
-***********************************************************************/
-
-struct UHashMapEntry
-{
-    ::rtl::OUString aIdentifier;
-    sal_uInt32 nId;
-
-    UHashMapEntry(const sal_Char * value, sal_Int32 length, sal_uInt32 _nId) : aIdentifier(value,length,RTL_TEXTENCODING_ASCII_US), nId(_nId) { }
-};
-
-DECLARE_LIST( UHashMapEntryList, UHashMapEntry* )
-
-#define HASHARRAYSIZE   0x10
-#define UHASHMAP_NOTFOUND sal::static_int_cast< sal_uInt32 >(~0)
-
-class UHashMap
-{
-private:
-    UHashMapEntryList m_aHashList[HASHARRAYSIZE];
-
-public:
-    UHashMap( UHashMapEntry* pMap );
-    ~UHashMap() {};
-
-    sal_uInt32 getId( const ::rtl::OUString& rCompareString );
-};
-
-/***********************************************************************
-* Soriterer                                                            *
-***********************************************************************/
+//////////////////////////////////////////////////////////////////////////////
+// Soriterer
 
 #define SVXMAP_SHAPE                0
 #define SVXMAP_CONNECTOR            1
@@ -92,9 +63,11 @@ public:
 #define SVXMAP_TABLE                24
 #define SVXMAP_PAGE                 25
 #define SVXMAP_END                  26  // last+1 !
+
 /***********************************************************************
 * SvxUnoPropertyMapProvider                                            *
 ***********************************************************************/
+
 class SVX_DLLPUBLIC SvxUnoPropertyMapProvider
 {
     SfxItemPropertyMapEntry* aMapArr[SVXMAP_END];
@@ -111,16 +84,15 @@ public:
 * Globals                                                              *
 ***********************************************************************/
 
-const sal_Int16 OBJ_OLE2_APPLET = 100;
-const sal_Int16 OBJ_OLE2_PLUGIN = 101;
-
 extern SvxUnoPropertyMapProvider aSvxMapProvider;
-extern UHashMapEntry pSdrShapeIdentifierMap[];
-extern UHashMap aSdrShapeIdentifierMap;
+//#define E3D_INVENTOR_FLAG         (0x80000000)
 
-#define E3D_INVENTOR_FLAG           (0x80000000)
-
-#include <editeng/unoipset.hxx>
+// object creation info creator
+//class rtl::OUString;
+//enum SvxShapeKind;
+//SvxShapeKind getSvxShapeKindFromTypeName(const rtl::OUString&);
+//std::vector< rtl::OUString > getAllSvxShapeTypeNames();
+//bool getNameForSvxShapeType(rtl::OUString&, SvxShapeKind);
 
 /***********************************************************************
 * class SvxPropertySetInfoPool                                         *
@@ -143,3 +115,5 @@ private:
 
 #endif
 
+//////////////////////////////////////////////////////////////////////////////
+// eof

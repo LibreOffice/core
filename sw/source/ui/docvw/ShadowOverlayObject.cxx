@@ -72,8 +72,6 @@ public:
     const basegfx::B2DPoint& getSecondPosition() const { return maSecondPosition; }
     ShadowState getShadowState() const { return maShadowState; }
 
-    virtual bool operator==( const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive ) const;
-
     DeclPrimitrive2DIDBlock()
 };
 
@@ -156,20 +154,6 @@ drawinglayer::primitive2d::Primitive2DSequence ShadowPrimitive::create2DDecompos
     }
 
     return xRetval;
-}
-
-bool ShadowPrimitive::operator==( const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive ) const
-{
-    if(drawinglayer::primitive2d::DiscreteMetricDependentPrimitive2D::operator==(rPrimitive))
-    {
-        const ShadowPrimitive& rCompare = static_cast< const ShadowPrimitive& >(rPrimitive);
-
-        return (getBasePosition() == rCompare.getBasePosition()
-            && getSecondPosition() == rCompare.getSecondPosition()
-            && getShadowState() == rCompare.getShadowState());
-    }
-
-    return false;
 }
 
 ImplPrimitrive2DIDBlock(ShadowPrimitive, PRIMITIVE2D_ID_SWSIDEBARSHADOWPRIMITIVE)

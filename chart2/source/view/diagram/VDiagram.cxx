@@ -242,8 +242,8 @@ E3dScene* lcl_getE3dScene( const uno::Reference< drawing::XShape >& xShape )
         if(pSvxShape)
         {
             SdrObject* pObj = pSvxShape->GetSdrObject();
-            if( pObj && pObj->ISA(E3dScene) )
-                pRet = (E3dScene*)pObj;
+            if( pObj )
+                pRet = dynamic_cast< E3dScene* >(pObj);
         }
     }
     return pRet;

@@ -69,6 +69,7 @@
 #   endif
 #       include <unotools/localfilehelper.hxx>
 #endif
+#include <svx/svdlegacy.hxx>
 
 using namespace com::sun::star;
 using namespace nsSwGetPoolIdFromName;
@@ -247,7 +248,7 @@ namespace sw
                         meWriterType = eFormControl;
                     else
                         meWriterType = eDrawing;
-                    maSize = pObj->GetSnapRect().GetSize();
+                    maSize = sdr::legacy::GetSnapRect(*pObj).GetSize();
                 }
                 else
                 {

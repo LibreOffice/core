@@ -36,7 +36,6 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-#include <tools/rtti.hxx>
 #define GLOBALOVERFLOW3
 
 #define _SVX_PARAITEM_CXX
@@ -76,30 +75,22 @@ using namespace ::com::sun::star;
 #define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
 #define MM100_TO_TWIP_UNSIGNED(MM100)    ((((MM100)*72L+63L)/127L))
 
-
-// STATIC DATA -----------------------------------------------------------
-
-
 // -----------------------------------------------------------------------
-
-
-TYPEINIT1_FACTORY(SvxLineSpacingItem, SfxPoolItem , new SvxLineSpacingItem(LINE_SPACE_DEFAULT_HEIGHT, 0));
-TYPEINIT1_FACTORY(SvxAdjustItem, SfxPoolItem, new SvxAdjustItem(SVX_ADJUST_LEFT, 0));
-TYPEINIT1_FACTORY(SvxWidowsItem, SfxByteItem, new SvxWidowsItem(0, 0));
-TYPEINIT1_FACTORY(SvxOrphansItem, SfxByteItem, new SvxOrphansItem(0, 0));
-TYPEINIT1_FACTORY(SvxHyphenZoneItem, SfxPoolItem, new SvxHyphenZoneItem(sal_False, 0));
-TYPEINIT1_FACTORY(SvxTabStopItem, SfxPoolItem, new SvxTabStopItem(0));
-TYPEINIT1_FACTORY(SvxFmtSplitItem, SfxBoolItem, new SvxFmtSplitItem(sal_False, 0));
-TYPEINIT1_FACTORY(SvxPageModelItem, SfxStringItem, new SvxPageModelItem(0));
-TYPEINIT1_FACTORY(SvxScriptSpaceItem, SfxBoolItem, new SvxScriptSpaceItem(sal_False, 0));
-TYPEINIT1_FACTORY(SvxHangingPunctuationItem, SfxBoolItem, new SvxHangingPunctuationItem(sal_False, 0));
-TYPEINIT1_FACTORY(SvxForbiddenRuleItem, SfxBoolItem, new SvxForbiddenRuleItem(sal_False, 0));
-TYPEINIT1_FACTORY(SvxParaVertAlignItem, SfxUInt16Item, new SvxParaVertAlignItem(0, 0));
-TYPEINIT1_FACTORY(SvxParaGridItem, SfxBoolItem, new SvxParaGridItem(sal_True, 0));
 
 SV_IMPL_VARARR_SORT( SvxTabStopArr, SvxTabStop )
 
 // -----------------------------------------------------------------------
+IMPL_POOLITEM_FACTORY(SvxLineSpacingItem)
+
+SvxLineSpacingItem::SvxLineSpacingItem( )
+    : SfxEnumItemInterface( 0 )
+{
+    nPropLineSpace = 100;
+    nInterLineSpace = 0;
+    nLineHeight = 0;
+    eLineSpace = SVX_LINE_SPACE_AUTO;
+    eInterLineSpace = SVX_INTER_LINE_SPACE_OFF;
+}
 
 SvxLineSpacingItem::SvxLineSpacingItem( sal_uInt16 nHeight, const sal_uInt16 nId )
     : SfxEnumItemInterface( nId )
@@ -363,6 +354,15 @@ void SvxLineSpacingItem::SetEnumValue( sal_uInt16 nVal )
 
 // class SvxAdjustItem ---------------------------------------------------
 
+IMPL_POOLITEM_FACTORY(SvxAdjustItem)
+
+SvxAdjustItem::SvxAdjustItem( )
+    : SfxEnumItemInterface( 0 ),
+    bOneBlock( sal_False ), bLastCenter( sal_False ), bLastBlock( sal_False )
+{
+    SetAdjust( SVX_ADJUST_LEFT );
+}
+
 SvxAdjustItem::SvxAdjustItem(const SvxAdjust eAdjst, const sal_uInt16 nId )
     : SfxEnumItemInterface( nId ),
     bOneBlock( sal_False ), bLastCenter( sal_False ), bLastBlock( sal_False )
@@ -550,6 +550,7 @@ SvStream& SvxAdjustItem::Store( SvStream& rStrm, sal_uInt16 nItemVersion ) const
 }
 
 // class SvxWidowsItem ---------------------------------------------------
+IMPL_POOLITEM_FACTORY(SvxWidowsItem)
 
 SvxWidowsItem::SvxWidowsItem(const sal_uInt8 nL, const sal_uInt16 nId ) :
     SfxByteItem( nId, nL )
@@ -622,6 +623,7 @@ SfxItemPresentation SvxWidowsItem::GetPresentation
 }
 
 // class SvxOrphansItem --------------------------------------------------
+IMPL_POOLITEM_FACTORY(SvxOrphansItem)
 
 SvxOrphansItem::SvxOrphansItem(const sal_uInt8 nL, const sal_uInt16 nId ) :
     SfxByteItem( nId, nL )
@@ -694,6 +696,7 @@ SfxItemPresentation SvxOrphansItem::GetPresentation
 }
 
 // class SvxHyphenZoneItem -----------------------------------------------
+IMPL_POOLITEM_FACTORY(SvxHyphenZoneItem)
 
 SvxHyphenZoneItem::SvxHyphenZoneItem( const sal_Bool bHyph, const sal_uInt16 nId ) :
     SfxPoolItem( nId )
@@ -922,6 +925,8 @@ XubString SvxTabStop::GetValueString() const
 }
 
 // class SvxTabStopItem --------------------------------------------------
+
+IMPL_POOLITEM_FACTORY(SvxTabStopItem)
 
 SvxTabStopItem::SvxTabStopItem( sal_uInt16 _nWhich ) :
     SfxPoolItem( _nWhich ),
@@ -1238,7 +1243,7 @@ SvStream& SvxTabStopItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) 
     //Alles nur SWG!
 
     const SfxItemPool *pPool = SfxItemPool::GetStoringPool();
-    const FASTBOOL bStoreDefTabs = pPool
+    const bool bStoreDefTabs = pPool
         && pPool->GetName().EqualsAscii("SWG")
         && ::IsDefaultItem( this );
 
@@ -1311,6 +1316,8 @@ void SvxTabStopItem::Insert( const SvxTabStopItem* pTabs, sal_uInt16 nStart,
 
 
 // class SvxFmtSplitItem -------------------------------------------------
+IMPL_POOLITEM_FACTORY(SvxFmtSplitItem)
+
 SvxFmtSplitItem::~SvxFmtSplitItem()
 {
 }
@@ -1416,7 +1423,7 @@ SfxItemPresentation SvxPageModelItem::GetPresentation
 )   const
 {
     rText.Erase();
-    FASTBOOL bSet = ( GetValue().Len() > 0 );
+    bool bSet = ( GetValue().Len() > 0 );
 
     switch ( ePres )
     {
@@ -1610,6 +1617,7 @@ SfxItemPresentation SvxForbiddenRuleItem::GetPresentation(
 /*************************************************************************
 |*    class SvxParaVertAlignItem
 *************************************************************************/
+IMPL_POOLITEM_FACTORY(SvxParaVertAlignItem)
 
 SvxParaVertAlignItem::SvxParaVertAlignItem( sal_uInt16 nValue,
     const sal_uInt16 nW )

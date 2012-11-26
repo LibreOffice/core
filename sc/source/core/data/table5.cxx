@@ -134,7 +134,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
 
     if ( pStyleSet->GetItemState( ATTR_PAGE_SCALETOPAGES, sal_False, &pItem ) == SFX_ITEM_SET )
     {
-        DBG_ASSERT( pItem->ISA(SfxUInt16Item), "falsches Item" );
+        DBG_ASSERT( dynamic_cast< const SfxUInt16Item* >(pItem), "falsches Item" );
         bSkipColBreaks = bSkipRowBreaks = ( ((const SfxUInt16Item*)pItem)->GetValue() > 0 );
     }
 

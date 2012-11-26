@@ -25,14 +25,12 @@
 #define SW_UNDOCORE_HXX
 
 #include <undobj.hxx>
-
 #include <calbck.hxx>
-
+#include <svx/svdobj.hxx>
 
 class SfxItemSet;
 class SwFmtColl;
 class SwFmtAnchor;
-class SdrMarkList;
 class SwUndoDelete;
 class SwRedlineSaveData;
 class SwFrm;
@@ -58,29 +56,34 @@ public:
         : m_rDoc(rDoc)
         , m_rCursorSupplier(rCursorSupplier)
         , m_pSelFmt(0)
-        , m_pMarkList(0)
+        , m_aMarkList()
     { }
 
     SwDoc & GetDoc() const { return m_rDoc; }
 
     IShellCursorSupplier & GetCursorSupplier() { return m_rCursorSupplier; }
 
-    void SetSelections(SwFrmFmt *const pSelFmt, SdrMarkList *const pMarkList)
+    void SetSelections(SwFrmFmt* const pSelFmt, const SdrObjectVector& rSdrObjectVector)
     {
         m_pSelFmt = pSelFmt;
-        m_pMarkList = pMarkList;
+        m_aMarkList = rSdrObjectVector;
     }
-    void GetSelections(SwFrmFmt *& o_rpSelFmt, SdrMarkList *& o_rpMarkList)
+    void SetSelections(SwFrmFmt* const pSelFmt)
+    {
+        m_pSelFmt = pSelFmt;
+        m_aMarkList.clear();
+    }
+    void GetSelections(SwFrmFmt *& o_rpSelFmt, SdrObjectVector& o_raSdrObjectVector)
     {
         o_rpSelFmt = m_pSelFmt;
-        o_rpMarkList = m_pMarkList;
+        o_raSdrObjectVector = m_aMarkList;
     }
 
 private:
     SwDoc & m_rDoc;
     IShellCursorSupplier & m_rCursorSupplier;
     SwFrmFmt * m_pSelFmt;
-    SdrMarkList * m_pMarkList;
+    SdrObjectVector m_aMarkList;
 };
 
 class SW_DLLPRIVATE RepeatContext

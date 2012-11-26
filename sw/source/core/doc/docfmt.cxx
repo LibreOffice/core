@@ -1435,7 +1435,7 @@ void SwDoc::DelCharFmt( SwCharFmt *pFmt, sal_Bool bBroadcast )
 
 void SwDoc::DelFrmFmt( SwFrmFmt *pFmt, sal_Bool bBroadcast )
 {
-    if( pFmt->ISA( SwTableBoxFmt ) || pFmt->ISA( SwTableLineFmt ))
+    if( dynamic_cast< SwTableBoxFmt* >(pFmt) || dynamic_cast< SwTableLineFmt* >(pFmt))
     {
         ASSERT( !this, "Format steht nicht mehr im DocArray, "
                        "kann per delete geloescht werden" );
@@ -2174,6 +2174,11 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
     delete pNewItem;
 }
 
+namespace
+{
+    bool ImpCheck(const SwClient& rClient) { return 0 != dynamic_cast< const SwFrm* >(&rClient); }
+}
+
 void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
                             sal_Bool bCopyPoolIds )
 {
@@ -2254,11 +2259,13 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
     {
         rDstDesc.SetFtnInfo( rSrcDesc.GetFtnInfo() );
         SwMsgPoolItem  aInfo( RES_PAGEDESC_FTNINFO );
+
         {
-            rDstDesc.GetMaster().ModifyBroadcast( &aInfo, 0, TYPE(SwFrm) );
+            rDstDesc.GetMaster().ModifyBroadcast( &aInfo, 0, &ImpCheck);
         }
+
         {
-            rDstDesc.GetLeft().ModifyBroadcast( &aInfo, 0, TYPE(SwFrm) );
+            rDstDesc.GetLeft().ModifyBroadcast( &aInfo, 0, &ImpCheck);
         }
     }
 }

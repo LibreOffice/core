@@ -55,8 +55,9 @@ ScSheetEventsObj::~ScSheetEventsObj()
 void ScSheetEventsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //! reference update
-    if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if(pSfxSimpleHint && SFX_HINT_DYING == pSfxSimpleHint->GetId())
     {
         mpDocShell = NULL;
     }

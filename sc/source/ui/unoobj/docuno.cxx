@@ -30,6 +30,7 @@
 #include <svx/svditer.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svxids.hrc>
+#include <svx/svdlegacy.hxx>
 #include <svx/unoshape.hxx>
 
 #include <svl/numuno.hxx>
@@ -349,6 +350,18 @@ void ScModelObj::CreateAndSet(ScDocShell* pDocSh)
         pDocSh->SetBaseModel( new ScModelObj(pDocSh) );
 }
 
+SdrModel* ScModelObj::getSdrModel() const
+{
+    ScDocument* pDoc = pDocShell->GetDocument();
+
+    if(!pDoc->GetDrawLayer())
+    {
+        pDoc->InitDrawLayer();
+    }
+
+    return pDoc->GetDrawLayer();
+}
+
 ScModelObj::ScModelObj( ScDocShell* pDocSh ) :
     SfxBaseModel( pDocSh ),
     aPropSet( lcl_GetDocOptPropertyMap() ),
@@ -564,10 +577,11 @@ uno::Sequence<sal_Int8> SAL_CALL ScModelObj::getImplementationId()
 void ScModelObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     //  Not interested in reference update hints here
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
 
-    if ( rHint.ISA( SfxSimpleHint ) )
+    if ( pSfxSimpleHint )
     {
-        sal_uLong nId = ((const SfxSimpleHint&)rHint).GetId();
+        sal_uLong nId = pSfxSimpleHint->GetId();
         if ( nId == SFX_HINT_DYING )
         {
             pDocShell = NULL;       // has become invalid
@@ -607,20 +621,26 @@ void ScModelObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
         }
     }
-    else if ( rHint.ISA( ScPointerChangedHint ) )
+    else
     {
-        sal_uInt16 nFlags = ((const ScPointerChangedHint&)rHint).GetFlags();
-        if (nFlags & SC_POINTERCHANGED_NUMFMT)
-        {
-            //  NumberFormatter-Pointer am Uno-Objekt neu setzen
+        const ScPointerChangedHint* pScPointerChangedHint = dynamic_cast< const ScPointerChangedHint* >(&rHint);
 
-            if (GetFormatter().is())
+        if ( pScPointerChangedHint )
+        {
+            sal_uInt16 nFlags = pScPointerChangedHint->GetFlags();
+
+            if (nFlags & SC_POINTERCHANGED_NUMFMT)
             {
-                SvNumberFormatsSupplierObj* pNumFmt =
-                    SvNumberFormatsSupplierObj::getImplementation(
-                        uno::Reference<util::XNumberFormatsSupplier>(xNumberAgg, uno::UNO_QUERY) );
-                if ( pNumFmt && pDocShell )
-                    pNumFmt->SetNumberFormatter( pDocShell->GetDocument()->GetFormatTable() );
+                //  NumberFormatter-Pointer am Uno-Objekt neu setzen
+
+                if (GetFormatter().is())
+                {
+                    SvNumberFormatsSupplierObj* pNumFmt =
+                        SvNumberFormatsSupplierObj::getImplementation(
+                            uno::Reference<util::XNumberFormatsSupplier>(xNumberAgg, uno::UNO_QUERY) );
+                    if ( pNumFmt && pDocShell )
+                        pNumFmt->SetNumberFormatter( pDocShell->GetDocument()->GetFormatTable() );
+                }
             }
         }
     }
@@ -739,7 +759,7 @@ bool lcl_ParseTarget( const String& rTarget, ScRange& rTargetRange, Rectangle& r
                     {
                         if ( ScDrawLayer::GetVisibleName( pObject ) == rTarget )
                         {
-                            rTargetRect = pObject->GetLogicRect();              // 1/100th mm
+                            rTargetRect = sdr::legacy::GetLogicRect(*pObject);              // 1/100th mm
                             rTargetRange = pDoc->GetRange( i, rTargetRect );    // underlying cells
                             bRangeValid = bRectValid = true;                    // rectangle is valid
                         }
@@ -872,7 +892,7 @@ sal_Bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
                         ScDocument* pDoc = pDocShell->GetDocument();
                         if( pDoc && pSdrObj )
                         {
-                            Rectangle aObjRect = pSdrObj->GetCurrentBoundRect();
+                            Rectangle aObjRect = sdr::legacy::GetBoundRect(*pSdrObj);
                             SCTAB nCurrentTab = ScDocShell::GetCurTab();
                             ScRange aRange = pDoc->GetRange( nCurrentTab, aObjRect );
                             rMark.SetMarkArea( aRange );
@@ -1140,8 +1160,9 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
 
     if( pModel )
     {
-        pDrawView = new FmFormView( pModel, pDev );
-        pDrawView->ShowSdrPage(pDrawView->GetModel()->GetPage(nTab));
+        pDrawView = new FmFormView( *pModel, pDev );
+        pDrawView->ShowSdrPage(*pDrawView->getSdrModelFromSdrView().GetPage(nTab));
+        pDrawView->SetPrintPreview(true);
         pDrawView->SetPrintPreview( sal_True );
     }
 
@@ -1170,7 +1191,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     long nDisplayStart = pPrintFuncCache->GetDisplayStart( nTab );
     long nTabStart = pPrintFuncCache->GetTabStart( nTab );
 
-    vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
+    vcl::PDFExtOutDevData* pPDFData = dynamic_cast< vcl::PDFExtOutDevData* >( pDev->GetExtOutDevData() );
     if ( nRenderer == nTabStart )
     {
         // first page of a sheet: add outline item for the sheet name
@@ -1298,8 +1319,6 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
         rBookmarks.clear();
     }
 
-    if ( pDrawView )
-        pDrawView->HideSdrPage();
     delete pDrawView;
 }
 
@@ -2368,9 +2387,9 @@ ScDrawPagesObj::~ScDrawPagesObj()
 void ScDrawPagesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
 
-    if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    if ( pSfxSimpleHint && SFX_HINT_DYING == pSfxSimpleHint->GetId() )
     {
         pDocShell = NULL;       // ungueltig geworden
     }
@@ -2423,7 +2442,7 @@ void SAL_CALL ScDrawPagesObj::remove( const uno::Reference<drawing::XDrawPage>& 
         SdrPage* pPage = pImp->GetSdrPage();
         if (pPage)
         {
-            SCTAB nPageNum = static_cast<SCTAB>(pPage->GetPageNum());
+            SCTAB nPageNum = static_cast<SCTAB>(pPage->GetPageNumber());
             ScDocFunc aFunc(*pDocShell);
             aFunc.DeleteTable( nPageNum, sal_True, sal_True );
         }
@@ -2482,9 +2501,9 @@ ScTableSheetsObj::~ScTableSheetsObj()
 void ScTableSheetsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
 
-    if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    if ( pSfxSimpleHint && SFX_HINT_DYING == pSfxSimpleHint->GetId() )
     {
         pDocShell = NULL;       // ungueltig geworden
     }
@@ -2870,17 +2889,23 @@ ScTableColumnsObj::~ScTableColumnsObj()
 
 void ScTableColumnsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.ISA( ScUpdateRefHint ) )
+    const ScUpdateRefHint* pScUpdateRefHint = dynamic_cast< const ScUpdateRefHint* >(&rHint);
+
+    if ( pScUpdateRefHint )
     {
 //        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
 
         //! Referenz-Update fuer Tab und Start/Ende
     }
-    else if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    else
+    {
+        const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+        if ( pSfxSimpleHint && SFX_HINT_DYING == pSfxSimpleHint->GetId() )
     {
         pDocShell = NULL;       // ungueltig geworden
     }
+}
 }
 
 // XTableColumns
@@ -3147,17 +3172,23 @@ ScTableRowsObj::~ScTableRowsObj()
 
 void ScTableRowsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.ISA( ScUpdateRefHint ) )
+    const ScUpdateRefHint* pScUpdateRefHint = dynamic_cast< const ScUpdateRefHint* >(&rHint);
+
+    if ( pScUpdateRefHint )
     {
 //        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
 
         //! Referenz-Update fuer Tab und Start/Ende
     }
-    else if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    else
+    {
+        const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+        if ( pSfxSimpleHint && SFX_HINT_DYING == pSfxSimpleHint->GetId() )
     {
         pDocShell = NULL;       // ungueltig geworden
     }
+}
 }
 
 // XTableRows
@@ -3427,9 +3458,9 @@ ScSpreadsheetSettingsObj::~ScSpreadsheetSettingsObj()
 void ScSpreadsheetSettingsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
 
-    if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    if ( pSfxSimpleHint && SFX_HINT_DYING == pSfxSimpleHint->GetId() )
     {
         pDocShell = NULL;       // ungueltig geworden
     }
@@ -3481,9 +3512,9 @@ ScAnnotationsObj::~ScAnnotationsObj()
 void ScAnnotationsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //! nTab bei Referenz-Update anpassen!!!
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
 
-    if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    if ( pSfxSimpleHint && SFX_HINT_DYING == pSfxSimpleHint->GetId() )
     {
         pDocShell = NULL;       // ungueltig geworden
     }
@@ -3627,16 +3658,22 @@ ScScenariosObj::~ScScenariosObj()
 
 void ScScenariosObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.ISA( ScUpdateRefHint ) )
+    const ScUpdateRefHint* pScUpdateRefHint = dynamic_cast< const ScUpdateRefHint* >(&rHint);
+
+    if ( pScUpdateRefHint )
     {
 //        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
 
         //! Referenz-Update fuer Tab und Start/Ende
     }
-    else if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    else
     {
-        pDocShell = NULL;       // ungueltig geworden
+        const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+        if ( pSfxSimpleHint && SFX_HINT_DYING == pSfxSimpleHint->GetId() )
+        {
+            pDocShell = NULL;       // ungueltig geworden
+        }
     }
 }
 

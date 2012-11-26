@@ -54,12 +54,13 @@
 #include <ndnotxt.hxx>
 #include <grfatr.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <dview.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::frame;
 
-SwDPage::SwDPage(SwDrawDocument& rNewModel, sal_Bool bMasterPage) :
+SwDPage::SwDPage(SwDrawDocument& rNewModel, bool bMasterPage) :
     FmFormPage(rNewModel, 0, bMasterPage),
     pGridLst( 0 ),
     rDoc(rNewModel.GetDoc())
@@ -72,24 +73,59 @@ SwDPage::~SwDPage()
     delete pGridLst;
 }
 
+void SwDPage::copyDataFromSdrPage(const SdrPage& rSource)
+{
+    if(this != &rSource)
+    {
+        const SwDPage* pSource = dynamic_cast< const SwDPage* >(&rSource);
+
+        if(pSource)
+        {
+            // call parent
+            FmFormPage::copyDataFromSdrPage(rSource);
+
+            // no local data to copy
+        }
+        else
+        {
+            OSL_ENSURE(false, "copyDataFromSdrObject with ObjectType of Source different from Target (!)");
+        }
+    }
+}
+
+SdrPage* SwDPage::CloneSdrPage(SdrModel* pTargetModel) const
+{
+    SwDrawDocument* pSwDrawDocument = static_cast< SwDrawDocument* >(pTargetModel ? pTargetModel : &getSdrModelFromSdrPage());
+    OSL_ENSURE(dynamic_cast< SwDrawDocument* >(pSwDrawDocument), "Wrong SdrModel type in SwDPage clone (!)");
+    SwDPage* pClone = new SwDPage(
+        *pSwDrawDocument,
+        IsMasterPage());
+    OSL_ENSURE(pClone, "CloneSdrPage error (!)");
+    pClone->copyDataFromSdrPage(*this);
+
+    return pClone;
+}
+
 /*************************************************************************
 |*
-|*  SwDPage::ReplaceObject()
+|*  SwDPage::ReplaceObjectInSdrObjList()
 |*
 |*  Ersterstellung      MA 07. Aug. 95
 |*  Letzte Aenderung    MA 07. Aug. 95
 |*
 *************************************************************************/
 
-SdrObject*  SwDPage::ReplaceObject( SdrObject* pNewObj, sal_uLong nObjNum )
+SdrObject*  SwDPage::ReplaceObjectInSdrObjList( SdrObject& rNewObj, sal_uInt32 nObjNum )
 {
     SdrObject *pOld = GetObj( nObjNum );
     ASSERT( pOld, "Oups, Object not replaced" );
-    SdrObjUserCall* pContact;
-    if ( 0 != ( pContact = GetUserCall(pOld) ) &&
-         RES_DRAWFRMFMT == ((SwContact*)pContact)->GetFmt()->Which())
-        ((SwDrawContact*)pContact)->ChangeMasterObject( pNewObj );
-    return FmFormPage::ReplaceObject( pNewObj, nObjNum );
+    SwContact* pContact;
+    if ( 0 != ( pContact = findConnectionToSdrObject(pOld) ) &&
+         RES_DRAWFRMFMT == pContact->GetFmt()->Which())
+        ((SwDrawContact*)pContact)->ChangeMasterObject( &rNewObj );
+
+    // call parent
+    return FmFormPage::ReplaceObjectInSdrObjList( rNewObj, nObjNum );
 }
 
 /*************************************************************************
@@ -107,17 +143,20 @@ void InsertGridFrame( SdrPageGridFrameList *pLst, const SwFrm *pPg )
     aPrt += pPg->Frm().Pos();
     const Rectangle aUser( aPrt.SVRect() );
     const Rectangle aPaper( pPg->Frm().SVRect() );
-    pLst->Insert( SdrPageGridFrame( aPaper, aUser ) );
+    pLst->Insert(
+        SdrPageGridFrame(
+            basegfx::B2DRange(aPaper.Left(), aPaper.Top(), aPaper.Right(), aPaper.Bottom()),
+            basegfx::B2DRange(aUser.Left(), aUser.Top(), aUser.Right(), aUser.Bottom())));
 }
 
 
 const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
-                        const SdrPageView* pPV, const Rectangle *pRect ) const
+    const SdrView& rSdrView, const Rectangle *pRect ) const
 {
-    ViewShell *pSh = ((SwDrawDocument*)GetModel())->GetDoc().GetCurrentViewShell(); //swmod 071108//swmod 071225
+    ViewShell *pSh = ((SwDrawDocument&)getSdrModelFromSdrPage()).GetDoc().GetCurrentViewShell();    //swmod 071108//swmod 071225
     if ( pSh )
     {
-        while ( pSh->Imp()->GetPageView() != pPV )
+        while ( pSh->Imp()->GetDrawView() != &rSdrView )
             pSh = (ViewShell*)pSh->GetNext();
         if ( pSh )
         {
@@ -159,14 +198,13 @@ sal_Bool SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
 
     if( rEvt.GetMode() & ( HELPMODE_QUICK | HELPMODE_BALLOON ))
     {
-        Point aPos( rEvt.GetMousePosPixel() );
-        aPos = pWindow->ScreenToOutputPixel( aPos );
-        aPos = pWindow->PixelToLogic( aPos );
+        const Point aOutputPixel(pWindow->ScreenToOutputPixel(rEvt.GetMousePosPixel()));
+        const basegfx::B2DPoint aB2DPos(pWindow->GetInverseViewTransformation() * basegfx::B2DPoint(aOutputPixel.X(), aOutputPixel.Y()));
+        const Point aPos(basegfx::fround(aB2DPos.getX()), basegfx::fround(aB2DPos.getY()));
 
-        SdrPageView* pPV;
         SdrObject* pObj;
-        if( pView->PickObj( aPos, 0, pObj, pPV, SDRSEARCH_PICKMACRO ) &&
-             pObj->ISA(SwVirtFlyDrawObj) )
+        if( pView->PickObj( aB2DPos, 0, pObj, SDRSEARCH_PICKMACRO ) &&
+             dynamic_cast< SwVirtFlyDrawObj* >(pObj) )
         {
             SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
             const SwFmtURL &rURL = pFly->GetFmt()->GetURL();

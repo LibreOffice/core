@@ -127,7 +127,7 @@ public:
 
     /** Paint a mouse over effect.
         @param bVisible
-            When bVisible is <FALSE/> then paint the area of the mouse over
+            When bVisible is <false/> then paint the area of the mouse over
             effect in the background color, i.e. erase it.
     */
     drawinglayer::primitive2d::Primitive2DSequence createMouseOverEffectPrimitive2DSequence();
@@ -164,7 +164,7 @@ public:
             The bounding box can be returned in model and in pixel
             (window) coordinates.
     */
-    Rectangle GetBoundingBox (
+    basegfx::B2DRange GetBoundingBox (
         OutputDevice& rDevice,
         BoundingBoxType eType,
         CoordinateSystem eCoordinateSystem) const;
@@ -193,7 +193,7 @@ private:
     static const sal_Int32 mnMouseOverEffectOffset;
     static const sal_Int32 mnMouseOverEffectThickness;
 
-    /** This flag is set to <TRUE/> when the destructor is called to
+    /** This flag is set to <true/> when the destructor is called to
         indicate that further calls made to it must not call outside.
     */
     bool mbInDestructor;
@@ -208,7 +208,7 @@ private:
 
     BitmapEx GetPreview (
         const sdr::contact::DisplayInfo& rDisplayInfo,
-        const Rectangle& rNewSizePixel);
+        const basegfx::B2DRange& rNewSizePixel);
 
     /** Return the bounding box of where the page number is painted (when it
         is painted).

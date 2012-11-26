@@ -39,11 +39,6 @@
 
 
 
-TYPEINIT1(SdPageFormatUndoAction, SdUndoAction);
-TYPEINIT1(SdPageLRUndoAction, SdUndoAction);
-TYPEINIT1(SdPageULUndoAction, SdUndoAction);
-
-
 /*************************************************************************
 |*
 |* Destruktor
@@ -62,13 +57,12 @@ SdPageFormatUndoAction::~SdPageFormatUndoAction()
 
 void SdPageFormatUndoAction::Undo()
 {
-    Rectangle aOldBorderRect(mnOldLeft, mnOldUpper, mnOldRight, mnOldLower);
-    mpPage->ScaleObjects(maOldSize, aOldBorderRect, mbNewScale);
-    mpPage->SetSize(maOldSize);
-    mpPage->SetLftBorder(mnOldLeft);
-    mpPage->SetRgtBorder(mnOldRight);
-    mpPage->SetUppBorder(mnOldUpper);
-    mpPage->SetLwrBorder(mnOldLower);
+    mpPage->ScaleObjects(maOldSize, mfOldLeft, mfOldTop, mfOldRight, mfOldBottom, mbNewScale);
+    mpPage->SetPageScale(maOldSize);
+    mpPage->SetLeftPageBorder(mfOldLeft);
+    mpPage->SetRightPageBorder(mfOldRight);
+    mpPage->SetTopPageBorder(mfOldTop);
+    mpPage->SetBottomPageBorder(mfOldBottom);
     mpPage->SetOrientation(meOldOrientation);
     mpPage->SetPaperBin( mnOldPaperBin );
 
@@ -80,13 +74,12 @@ void SdPageFormatUndoAction::Undo()
 
 void SdPageFormatUndoAction::Redo()
 {
-    Rectangle aNewBorderRect(mnNewLeft, mnNewUpper, mnNewRight, mnNewLower);
-    mpPage->ScaleObjects(maNewSize, aNewBorderRect, mbNewScale);
-    mpPage->SetSize(maNewSize);
-    mpPage->SetLftBorder(mnNewLeft);
-    mpPage->SetRgtBorder(mnNewRight);
-    mpPage->SetUppBorder(mnNewUpper);
-    mpPage->SetLwrBorder(mnNewLower);
+    mpPage->ScaleObjects(maNewSize, mfNewLeft, mfNewTop, mfNewRight, mfNewBottom, mbNewScale);
+    mpPage->SetPageScale(maNewSize);
+    mpPage->SetLeftPageBorder(mfNewLeft);
+    mpPage->SetRightPageBorder(mfNewRight);
+    mpPage->SetTopPageBorder(mfNewTop);
+    mpPage->SetBottomPageBorder(mfNewBottom);
     mpPage->SetOrientation(meNewOrientation);
     mpPage->SetPaperBin( mnNewPaperBin );
 
@@ -96,30 +89,26 @@ void SdPageFormatUndoAction::Redo()
 
 }
 
+/*************************************************************************
+|*
+|* LR-Redo()
+|*
+\************************************************************************/
+
 SdPageLRUndoAction::~SdPageLRUndoAction()
 {
 }
 
 void SdPageLRUndoAction::Undo()
 {
-    mpPage->SetLftBorder(mnOldLeft);
-    mpPage->SetRgtBorder(mnOldRight);
+    mpPage->SetLeftPageBorder(mfOldLeft);
+    mpPage->SetRightPageBorder(mfOldRight);
 }
 
 void SdPageLRUndoAction::Redo()
 {
-    mpPage->SetLftBorder(mnNewLeft);
-    mpPage->SetRgtBorder(mnNewRight);
-}
-
-SdPageULUndoAction::~SdPageULUndoAction()
-{
-}
-
-void SdPageULUndoAction::Undo()
-{
-    mpPage->SetUppBorder(mnOldUpper);
-    mpPage->SetLwrBorder(mnOldLower);
+    mpPage->SetLeftPageBorder(mfNewLeft);
+    mpPage->SetRightPageBorder(mfNewRight);
 }
 
 /*************************************************************************
@@ -128,9 +117,19 @@ void SdPageULUndoAction::Undo()
 |*
 \************************************************************************/
 
+SdPageULUndoAction::~SdPageULUndoAction()
+{
+}
+
+void SdPageULUndoAction::Undo()
+{
+    mpPage->SetTopPageBorder(mfOldTop);
+    mpPage->SetBottomPageBorder(mfOldBottom);
+}
+
 void SdPageULUndoAction::Redo()
 {
-    mpPage->SetUppBorder(mnNewUpper);
-    mpPage->SetLwrBorder(mnNewLower);
+    mpPage->SetTopPageBorder(mfNewTop);
+    mpPage->SetBottomPageBorder(mfNewBottom);
 }
 

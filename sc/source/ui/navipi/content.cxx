@@ -91,13 +91,12 @@ ScDocShell* ScContentTree::GetManualOrCurrent()
     ScDocShell* pSh = NULL;
     if ( aManualDoc.Len() )
     {
-        TypeId aScType = TYPE(ScDocShell);
-        SfxObjectShell* pObjSh = SfxObjectShell::GetFirst( &aScType );
+        SfxObjectShell* pObjSh = SfxObjectShell::GetFirst(_IsObjectShell< ScDocShell >);
         while ( pObjSh && !pSh )
         {
             if ( pObjSh->GetTitle() == aManualDoc )
-                pSh = PTR_CAST( ScDocShell, pObjSh );
-            pObjSh = SfxObjectShell::GetNext( *pObjSh, &aScType );
+                pSh = dynamic_cast< ScDocShell* >( pObjSh );
+            pObjSh = SfxObjectShell::GetNext( *pObjSh, _IsObjectShell< ScDocShell > );
         }
     }
     else
@@ -109,7 +108,7 @@ ScDocShell* ScContentTree::GetManualOrCurrent()
         if ( pViewSh )
         {
             SfxObjectShell* pObjSh = pViewSh->GetViewFrame()->GetObjectShell();
-            pSh = PTR_CAST( ScDocShell, pObjSh );
+            pSh = dynamic_cast< ScDocShell* >( pObjSh );
         }
     }
 
@@ -474,11 +473,11 @@ void __EXPORT ScContentTree::Command( const CommandEvent& rCEvt )
                 sal_uInt16 i=0;
                 sal_uInt16 nPos=0;
                 //  geladene Dokumente
-                ScDocShell* pCurrentSh = PTR_CAST( ScDocShell, SfxObjectShell::Current() );
+                ScDocShell* pCurrentSh = dynamic_cast< ScDocShell* >( SfxObjectShell::Current() );
                 SfxObjectShell* pSh = SfxObjectShell::GetFirst();
                 while ( pSh )
                 {
-                    if ( pSh->ISA(ScDocShell) )
+                    if ( dynamic_cast< ScDocShell* >(pSh) )
                     {
                         String aName = pSh->GetTitle();
                         String aEntry = aName;
@@ -833,8 +832,10 @@ void ScContentTree::GetLinkNames()
     for (sal_uInt16 i=0; i<nCount; i++)
     {
         ::sfx2::SvBaseLink* pBase = *rLinks[i];
-        if (pBase->ISA(ScAreaLink))
-            InsertContent( SC_CONTENT_AREALINK, ((ScAreaLink*)pBase)->GetSource() );
+        ScAreaLink* pScAreaLink = dynamic_cast< ScAreaLink* >(pBase);
+
+        if (pScAreaLink)
+            InsertContent( SC_CONTENT_AREALINK, pScAreaLink->GetSource() );
 
             //  in der Liste die Namen der Quellbereiche
     }
@@ -854,10 +855,12 @@ const ScAreaLink* ScContentTree::GetLink( sal_uLong nIndex )
     for (sal_uInt16 i=0; i<nCount; i++)
     {
         ::sfx2::SvBaseLink* pBase = *rLinks[i];
-        if (pBase->ISA(ScAreaLink))
+        ScAreaLink* pScAreaLink = dynamic_cast< ScAreaLink* >(pBase);
+
+        if (pScAreaLink)
         {
             if (nFound == nIndex)
-                return (const ScAreaLink*) pBase;
+                return pScAreaLink;
             ++nFound;
         }
     }
@@ -1063,10 +1066,9 @@ void lcl_DoDragObject( ScDocShell* pSrcShell, const String& rName, sal_uInt16 nT
         SdrObject* pObject = pModel->GetNamedObject( rName, nDrawId, nTab );
         if (pObject)
         {
-            SdrView aEditView( pModel );
-            aEditView.ShowSdrPage(aEditView.GetModel()->GetPage(nTab));
-            SdrPageView* pPV = aEditView.GetSdrPageView();
-            aEditView.MarkObj(pObject, pPV);
+            SdrView aEditView( *pModel );
+            aEditView.ShowSdrPage(*aEditView.getSdrModelFromSdrView().GetPage(nTab));
+            aEditView.MarkObj(*pObject);
 
             SdrModel* pDragModel = aEditView.GetAllMarkedModel();
 
@@ -1439,7 +1441,7 @@ void ScContentTree::SelectDoc(const String& rName)      // rName wie im Menue/Li
     SfxObjectShell* pSh = SfxObjectShell::GetFirst();
     while ( pSh && !bLoaded )
     {
-        if ( pSh->ISA(ScDocShell) )
+        if ( dynamic_cast< ScDocShell* >(pSh) )
             if ( pSh->GetTitle() == aRealName )
                 bLoaded = sal_True;
         pSh = SfxObjectShell::GetNext( *pSh );

@@ -147,19 +147,10 @@ namespace sdr
     {
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrMediaObj::createViewIndependentPrimitive2DSequence() const
         {
-            // create range using the model data directly. This is in SdrTextObj::aRect which i will access using
-            // GetGeoRect() to not trigger any calculations. It's the unrotated geometry which is okay for MediaObjects ATM.
-            const Rectangle& rRectangle(GetSdrMediaObj().GetGeoRect());
-            const basegfx::B2DRange aRange(
-                rRectangle.Left(), rRectangle.Top(),
-                rRectangle.Right(), rRectangle.Bottom());
+            drawinglayer::primitive2d::Primitive2DSequence xRetval;
 
-            // create object transform
-            basegfx::B2DHomMatrix aTransform;
-            aTransform.set(0, 0, aRange.getWidth());
-            aTransform.set(1, 1, aRange.getHeight());
-            aTransform.set(0, 2, aRange.getMinX());
-            aTransform.set(1, 2, aRange.getMinY());
+            // get object transformation
+            const basegfx::B2DHomMatrix& rObjectMatrix(GetSdrMediaObj().getSdrObjectTransformation());
 
             // create media primitive. Always create primitives to allow the
             // decomposition of MediaPrimitive2D to create needed invisible elements for HitTest
@@ -167,11 +158,16 @@ namespace sdr
             const basegfx::BColor aBackgroundColor(67.0 / 255.0, 67.0 / 255.0, 67.0 / 255.0);
             const rtl::OUString& rURL(GetSdrMediaObj().getURL());
             const sal_uInt32 nPixelBorder(4L);
-            const drawinglayer::primitive2d::Primitive2DReference xRetval(
+            const drawinglayer::primitive2d::Primitive2DReference xReference(
                 new drawinglayer::primitive2d::MediaPrimitive2D(
-                    aTransform, rURL, aBackgroundColor, nPixelBorder));
+                    rObjectMatrix,
+                    rURL,
+                    aBackgroundColor,
+                    nPixelBorder));
 
-            return drawinglayer::primitive2d::Primitive2DSequence(&xRetval, 1);
+            xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+
+            return xRetval;
         }
     } // end of namespace contact
 } // end of namespace sdr

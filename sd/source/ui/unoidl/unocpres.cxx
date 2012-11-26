@@ -111,7 +111,7 @@ void SAL_CALL SdXCustomPresentation::insertByIndex( sal_Int32 Index, const uno::
 
     if(pPage)
     {
-        if( NULL == mpModel )
+        if( !mpModel )
             mpModel = pPage->GetModel();
 
         if( NULL != mpModel && NULL == mpSdCustomShow && mpModel->GetDoc() )

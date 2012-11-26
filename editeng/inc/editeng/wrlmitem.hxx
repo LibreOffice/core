@@ -45,10 +45,8 @@ namespace rtl
 class EDITENG_DLLPUBLIC SvxWordLineModeItem : public SfxBoolItem
 {
 public:
-    TYPEINFO();
-
-    SvxWordLineModeItem( const sal_Bool bWordLineMode /*= sal_False*/,
-                     const sal_uInt16 nId  );
+    POOLITEM_FACTORY()
+    SvxWordLineModeItem( const sal_Bool bWordLineMode = sal_False, const sal_uInt16 nId = 0 );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;

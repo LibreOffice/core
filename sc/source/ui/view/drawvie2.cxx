@@ -35,7 +35,7 @@
 // -----------------------------------------------------------------------
 
 
-// UpdateBrowser in MarkListHasChanged gerufen
+// UpdateBrowser
 
 void ScDrawView::UpdateBrowser()
 {

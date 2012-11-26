@@ -49,6 +49,7 @@ public:
     virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
     virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
 
+    // pure virtual methods from SvxEditViewForwarder
     virtual sal_Bool    GetSelection( ESelection& rSelection ) const;
     virtual sal_Bool    SetSelection( const ESelection& rSelection );
     virtual sal_Bool    Copy();

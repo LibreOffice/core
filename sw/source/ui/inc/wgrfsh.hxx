@@ -32,7 +32,6 @@ public:
     virtual     ~SwWebGrfShell();
 
     SFX_DECL_INTERFACE(SW_WEBGRFSHELL)
-    TYPEINFO();
 };
 
 

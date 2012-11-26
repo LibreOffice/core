@@ -36,7 +36,6 @@ class GraphicViewShellBase
     : public ViewShellBase
 {
 public:
-    TYPEINFO();
     SFX_DECL_VIEWFACTORY(GraphicViewShellBase);
 
     /** This constructor is used by the view factory of the SFX

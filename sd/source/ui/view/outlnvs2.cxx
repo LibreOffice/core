@@ -129,7 +129,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
 
             if (pArgs && pArgs->Count () == 1 )
             {
-                SFX_REQUEST_ARG (rReq, pScale, SfxUInt16Item, SID_ATTR_ZOOMSLIDER, sal_False);
+                SFX_REQUEST_ARG (rReq, pScale, SfxUInt16Item, SID_ATTR_ZOOMSLIDER );
                 if (CHECK_RANGE (5, pScale->GetValue (), 3000))
                 {
                     SetZoom (pScale->GetValue ());
@@ -159,9 +159,8 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
         case SID_SIZE_REAL:
         {
             SetZoom( 100 );
-            Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0),
-                                             GetActiveWindow()->GetOutputSizePixel()) );
-            mpZoomList->InsertZoomRect(aVisAreaWin);
+            const basegfx::B2DRange aVisAreaWin(GetActiveWindow()->GetLogicRange());
+            mpZoomList->InsertZoomRange(aVisAreaWin);
             Invalidate( SID_ATTR_ZOOM );
             Invalidate( SID_ATTR_ZOOMSLIDER );
             Cancel();
@@ -172,9 +171,8 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
         case SID_ZOOM_IN:
         {
             SetZoom( Max( (long) ( GetActiveWindow()->GetZoom() / 2 ), (long) GetActiveWindow()->GetMinZoom() ) );
-            Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0),
-                                             GetActiveWindow()->GetOutputSizePixel()) );
-            mpZoomList->InsertZoomRect(aVisAreaWin);
+            const basegfx::B2DRange aVisAreaWin(GetActiveWindow()->GetLogicRange());
+            mpZoomList->InsertZoomRange(aVisAreaWin);
             Invalidate( SID_ATTR_ZOOM );
             Invalidate( SID_ZOOM_OUT);
             Invalidate( SID_ZOOM_IN );
@@ -428,7 +426,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
             /*
             ESelection aEsel= pOutlinerView->GetSelection();
             Outliner* pOutl = pOutlinerView->GetOutliner();
-            pOutl->SetUpdateMode(sal_False);
+            pOutl->SetUpdateMode(false);
             List* pSelectedParas = pOutlinerView->CreateSelectionList();
             Paragraph* pPara = (Paragraph*)pSelectedParas->First();
             while (pPara)
@@ -442,10 +440,10 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
                 pPara = (Paragraph*)pSelectedParas->Next();
             }
             delete pSelectedParas;
-            pOutl->SetUpdateMode(sal_True);
+            pOutl->SetUpdateMode(true);
             pOutlinerView->SetSelection(aEsel);
             */
-            pOutlinerView->RemoveAttribs(sal_True); // sal_True = auch Absatzattribute
+            pOutlinerView->RemoveAttribs(true); // true = auch Absatzattribute
             Cancel();
             rReq.Done();
         }
@@ -536,14 +534,15 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
 
             const SvxFieldItem* pOldFldItem = pOutlinerView->GetFieldAtSelection();
 
-            if( pOldFldItem && ( pOldFldItem->GetField()->ISA( SvxURLField ) ||
-                                pOldFldItem->GetField()->ISA( SvxDateField ) ||
-                                pOldFldItem->GetField()->ISA( SvxTimeField ) ||
-                                pOldFldItem->GetField()->ISA( SvxExtTimeField ) ||
-                                pOldFldItem->GetField()->ISA( SvxExtFileField ) ||
-                                pOldFldItem->GetField()->ISA( SvxAuthorField ) ||
-                                pOldFldItem->GetField()->ISA( SvxPageField ) ||
-                                pOldFldItem->GetField()->ISA( SvxPagesField )) )
+            if( pOldFldItem && (
+                dynamic_cast< const SvxURLField* >(pOldFldItem->GetField()) ||
+                dynamic_cast< const SvxDateField* >(pOldFldItem->GetField()) ||
+                dynamic_cast< const SvxTimeField* >(pOldFldItem->GetField()) ||
+                dynamic_cast< const SvxExtTimeField* >(pOldFldItem->GetField()) ||
+                dynamic_cast< const SvxExtFileField* >(pOldFldItem->GetField()) ||
+                dynamic_cast< const SvxAuthorField* >(pOldFldItem->GetField()) ||
+                dynamic_cast< const SvxPageField* >(pOldFldItem->GetField()) ||
+                dynamic_cast< const SvxPagesField* >(pOldFldItem->GetField())) )
             {
                 // Feld selektieren, so dass es beim Insert geloescht wird
                 ESelection aSel = pOutlinerView->GetSelection();
@@ -566,10 +565,11 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
         {
             const SvxFieldItem* pFldItem = pOutlinerView->GetFieldAtSelection();
 
-            if( pFldItem && (pFldItem->GetField()->ISA( SvxDateField ) ||
-                                pFldItem->GetField()->ISA( SvxAuthorField ) ||
-                                pFldItem->GetField()->ISA( SvxExtFileField ) ||
-                                pFldItem->GetField()->ISA( SvxExtTimeField ) ) )
+            if( pFldItem && (
+                dynamic_cast< const SvxDateField* >(pFldItem->GetField()) ||
+                dynamic_cast< const SvxAuthorField* >(pFldItem->GetField()) ||
+                dynamic_cast< const SvxExtFileField* >(pFldItem->GetField()) ||
+                dynamic_cast< const SvxExtTimeField* >(pFldItem->GetField()) ) )
             {
                 // Dialog...
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
@@ -583,10 +583,10 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
                         //pOLV->DeleteSelected(); <-- fehlt leider !
                         // Feld selektieren, so dass es beim Insert geloescht wird
                         ESelection aSel = pOutlinerView->GetSelection();
-                        sal_Bool bSel = sal_True;
+                        bool bSel = true;
                         if( aSel.nStartPos == aSel.nEndPos )
                         {
-                            bSel = sal_False;
+                            bSel = false;
                             aSel.nEndPos++;
                         }
                         pOutlinerView->SetSelection( aSel );

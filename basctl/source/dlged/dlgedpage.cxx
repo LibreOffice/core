@@ -31,42 +31,70 @@
 #include "dlgedobj.hxx"
 
 
-TYPEINIT1( DlgEdPage, SdrPage );
-
 //----------------------------------------------------------------------------
 
-DlgEdPage::DlgEdPage( DlgEdModel& rModel, FASTBOOL bMasterPage )
+DlgEdPage::DlgEdPage( DlgEdModel& rModel, bool bMasterPage )
     :SdrPage( rModel, bMasterPage )
 {
 }
 
 //----------------------------------------------------------------------------
 
-DlgEdPage::DlgEdPage( const DlgEdPage& rPage )
-    :SdrPage( rPage )
-{
-    pDlgEdForm = rPage.pDlgEdForm;
-}
+//DlgEdPage::DlgEdPage( const DlgEdPage& rPage )
+//  :SdrPage( rPage )
+//{
+//  pDlgEdForm = rPage.pDlgEdForm;
+//}
 
 //----------------------------------------------------------------------------
 
 DlgEdPage::~DlgEdPage()
 {
-    Clear();
+    if(GetObjCount())
+    {
+        getSdrModelFromSdrObjList().SetChanged();
+    }
+}
+
+void DlgEdPage::copyDataFromSdrPage(const SdrPage& rSource)
+{
+    if(this != &rSource)
+    {
+        const DlgEdPage* pSource = dynamic_cast< const DlgEdPage* >(&rSource);
+
+        if(pSource)
+{
+            // call parent
+            SdrPage::copyDataFromSdrPage(rSource);
+
+            // copy local data
+            pDlgEdForm = pSource->pDlgEdForm;
+        }
+        else
+        {
+            OSL_ENSURE(false, "copyDataFromSdrObject with ObjectType of Source different from Target (!)");
+        }
+    }
+}
+
+SdrPage* DlgEdPage::CloneSdrPage(SdrModel* pTargetModel) const
+{
+    DlgEdModel* pDlgEdModel = static_cast< DlgEdModel* >(pTargetModel ? pTargetModel : &getSdrModelFromSdrPage());
+    OSL_ENSURE(dynamic_cast< DlgEdModel* >(pDlgEdModel), "Wrong SdrModel type in DlgEdPage cloner (!)");
+    DlgEdPage* pClone = new DlgEdPage(
+        *pDlgEdModel,
+        IsMasterPage());
+    OSL_ENSURE(pClone, "CloneSdrPage error (!)");
+    pClone->copyDataFromSdrPage(*this);
+
+    return pClone;
 }
 
 //----------------------------------------------------------------------------
 
-SdrPage* DlgEdPage::Clone() const
+SdrObject* DlgEdPage::SetNavigationPosition(sal_uInt32 nOldObjNum, sal_uInt32 nNewObjNum)
 {
-    return new DlgEdPage( *this );
-}
-
-//----------------------------------------------------------------------------
-
-SdrObject* DlgEdPage::SetObjectOrdNum(sal_uLong nOldObjNum, sal_uLong nNewObjNum)
-{
-    SdrObject* pObj = SdrPage::SetObjectOrdNum( nOldObjNum, nNewObjNum );
+    SdrObject* pObj = SdrPage::SetNavigationPosition( nOldObjNum, nNewObjNum );
 
     DlgEdHint aHint( DLGED_HINT_OBJORDERCHANGED );
     if ( pDlgEdForm )

@@ -26,9 +26,3 @@
 
 
 #include <charfmt.hxx>
-
-
-TYPEINIT1( SwCharFmt, SwFmt );  //rtti fuer SwCharFmt
-
-
-

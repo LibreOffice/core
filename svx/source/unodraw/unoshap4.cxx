@@ -27,9 +27,7 @@
 #include <com/sun/star/embed/XLinkageSupport.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-
 #define _SVX_USE_UNOGLOBALS_
-
 #include <vcl/virdev.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdomedia.hxx>
@@ -42,25 +40,22 @@
 #endif
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
-
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
-
 #include <sot/storage.hxx>
 #include <sot/exchange.hxx>
 #include <svtools/FilterConfigItem.hxx>
-
 #include <svx/svdmodel.hxx>
 #include "shapeimpl.hxx"
-
 #include <svx/unoshprp.hxx>
-
-#include "svx/unoapi.hxx"
+#include <svx/unoapi.hxx>
 #include "svx/svdpagv.hxx"
 #include "svx/svdview.hxx"
-#include "svx/svdglob.hxx"
-#include "svx/svdstr.hrc"
+#include <svx/svdlegacy.hxx>
+#include <svx/globaldrawitempool.hxx>
+#include <svx/svdglob.hxx>
+#include <svx/svdstr.hrc>
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -80,7 +75,7 @@ using namespace ::com::sun::star::beans;
 
 ///////////////////////////////////////////////////////////////////////
 SvxOle2Shape::SvxOle2Shape( SdrObject* pObject ) throw()
-: SvxShapeText( pObject, aSvxMapProvider.GetMap(SVXMAP_OLE2), aSvxMapProvider.GetPropertySet(SVXMAP_OLE2, SdrObject::GetGlobalDrawObjectItemPool())  )
+: SvxShapeText( pObject, aSvxMapProvider.GetMap(SVXMAP_OLE2), aSvxMapProvider.GetPropertySet(SVXMAP_OLE2, GetGlobalDrawObjectItemPool())  )
 {
 }
 
@@ -103,152 +98,113 @@ bool SvxOle2Shape::setPropertyValueImpl( const ::rtl::OUString& rName, const Sfx
 {
     switch( pProperty->nWID )
     {
-/*
-    case OWN_ATTR_CLSID:
-    {
-        OUString aCLSID;
-        if( rValue >>= aCLSID )
+        case OWN_ATTR_OLE_VISAREA:
         {
-            // init an ole object with a global name
-            SdrOle2Obj* pOle2 = dynamic_cast< SdrOle2Obj* >( mpObj.get() );
-            if( pOle2 )
+            // TODO/LATER: seems to make no sence for iconified object
+            SdrOle2Obj* pSdrOle2Obj = dynamic_cast< SdrOle2Obj* >(mpObj.get());
+
+            if(pSdrOle2Obj)
             {
-                uno::Reference < embed::XEmbeddedObject > xObj = pOle2->GetObjRef();
-                if ( !xObj.is() )
+                awt::Rectangle aVisArea;
+
+                if(rValue >>= aVisArea)
                 {
-                    SvGlobalName aClassName;
-                    if( aClassName.MakeId( aCLSID ) )
+                    Size aTmp( aVisArea.X + aVisArea.Width, aVisArea.Y + aVisArea.Height );
+                    uno::Reference < embed::XEmbeddedObject > xObj = pSdrOle2Obj->GetObjRef();
+                    if( xObj.is() )
                     {
-                        SfxObjectShell* pPersist = mpModel->GetPersist();
-                        ::rtl::OUString aPersistName;
-                        Any aAny( getPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ) ) );
-                        aAny >>= aPersistName;
-
-                        //TODO/LATER: how to cope with creation failure?!
-                        xObj = pPersist->GetEmbeddedObjectContainer().CreateEmbeddedObject( aClassName.GetByteSequence(), aPersistName );
-                        if( xObj.is() )
+                        try
                         {
-                            aAny <<= aPersistName;
-                            setPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ), aAny );
-                            pOle2->SetObjRef( xObj );
-
-                            Rectangle aRect = pOle2->GetLogicRect();
-                            awt::Size aSz;
-                            Size aSize( pOle2->GetLogicRect().GetSize() );
-                            aSz.Width = aSize.Width();
-                            aSz.Height = aSize.Height();
-                            xObj->setVisualAreaSize( pOle2->GetAspect(), aSz );
+                            MapUnit aMapUnit( MAP_100TH_MM ); // the API handles with MAP_100TH_MM map mode
+                            MapUnit aObjUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( embed::Aspects::MSOLE_CONTENT ) );
+                            aTmp = OutputDevice::LogicToLogic( aTmp, aMapUnit, aObjUnit );
+                            xObj->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT, awt::Size( aTmp.Width(), aTmp.Height() ) );
+                        }
+                        catch( uno::Exception& )
+                        {
+                            OSL_ENSURE( sal_False, "Couldn't set the visual area for the object!\n" );
                         }
                     }
-                }
-            }
-            return true;
-        }
-        break;
-    }
-*/
-    case OWN_ATTR_OLE_VISAREA:
-    {
-        // TODO/LATER: seems to make no sence for iconified object
 
-        awt::Rectangle aVisArea;
-        if( (rValue >>= aVisArea) && mpObj->ISA(SdrOle2Obj))
-        {
-            Size aTmp( aVisArea.X + aVisArea.Width, aVisArea.Y + aVisArea.Height );
-            uno::Reference < embed::XEmbeddedObject > xObj = ((SdrOle2Obj*)mpObj.get())->GetObjRef();
-            if( xObj.is() )
-            {
-                try
-                {
-                    MapUnit aMapUnit( MAP_100TH_MM ); // the API handles with MAP_100TH_MM map mode
-                    MapUnit aObjUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( embed::Aspects::MSOLE_CONTENT ) );
-                    aTmp = OutputDevice::LogicToLogic( aTmp, aMapUnit, aObjUnit );
-                    xObj->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT, awt::Size( aTmp.Width(), aTmp.Height() ) );
-                }
-                catch( uno::Exception& )
-                {
-                    OSL_ENSURE( sal_False, "Couldn't set the visual area for the object!\n" );
-                }
-            }
-
-            return true;
-        }
-        break;
-    }
-    case OWN_ATTR_OLE_ASPECT:
-    {
-        sal_Int64 nAspect = 0;
-        if( rValue >>= nAspect )
-        {
-            static_cast<SdrOle2Obj*>(mpObj.get())->SetAspect( nAspect );
-            return true;
-        }
-        break;
-    }
-    case OWN_ATTR_CLSID:
-    {
-        OUString aCLSID;
-        if( rValue >>= aCLSID )
-        {
-            // init a ole object with a global name
-            SvGlobalName aClassName;
-            if( aClassName.MakeId( aCLSID ) )
-            {
-                if( createObject( aClassName ) )
                     return true;
+                }
             }
+            break;
         }
-        break;
-    }
-    case OWN_ATTR_THUMBNAIL:
-    {
-        OUString aURL;
-        if( rValue >>= aURL )
+        case OWN_ATTR_OLE_ASPECT:
         {
-            GraphicObject aGrafObj( GraphicObject::CreateGraphicObjectFromURL( aURL ) );
-            static_cast<SdrOle2Obj*>(mpObj.get())->SetGraphic( &aGrafObj.GetGraphic() );
-            return true;
-        }
-        break;
-    }
-    case OWN_ATTR_VALUE_GRAPHIC:
-    {
-        uno::Reference< graphic::XGraphic > xGraphic( rValue, uno::UNO_QUERY );
-        if( xGraphic.is() )
-        {
-            SdrOle2Obj* pOle = dynamic_cast< SdrOle2Obj* >( mpObj.get() );
-            if( pOle )
+            sal_Int64 nAspect = 0;
+            if( rValue >>= nAspect )
             {
-                GraphicObject aGrafObj( xGraphic );
-                const Graphic aGraphic( aGrafObj.GetGraphic() );
-                pOle->SetGraphicToObj( aGraphic, rtl::OUString() );
+                static_cast<SdrOle2Obj*>(mpObj.get())->SetAspect( nAspect );
+                return true;
             }
-            return true;
+            break;
         }
-        break;
-    }
-    case OWN_ATTR_PERSISTNAME:
-    {
-        OUString aPersistName;
-        if( rValue >>= aPersistName )
+        case OWN_ATTR_CLSID:
         {
-            static_cast<SdrOle2Obj*>(mpObj.get())->SetPersistName( aPersistName );
-            return true;
+            OUString aCLSID;
+            if( rValue >>= aCLSID )
+            {
+                // init a ole object with a global name
+                SvGlobalName aClassName;
+                if( aClassName.MakeId( aCLSID ) )
+                {
+                    if( createObject( aClassName ) )
+                        return true;
+                }
+            }
+            break;
         }
-        break;
-    }
-    case OWN_ATTR_OLE_LINKURL:
-    {
-        OUString aLinkURL;
-        if( rValue >>= aLinkURL )
+        case OWN_ATTR_THUMBNAIL:
         {
-            createLink( aLinkURL );
-            return true;
+            OUString aURL;
+            if( rValue >>= aURL )
+            {
+                GraphicObject aGrafObj( GraphicObject::CreateGraphicObjectFromURL( aURL ) );
+                static_cast<SdrOle2Obj*>(mpObj.get())->SetGraphic( &aGrafObj.GetGraphic() );
+                return true;
+            }
+            break;
         }
-        break;
-    }
-    default:
-        return SvxShapeText::setPropertyValueImpl( rName, pProperty, rValue );
+        case OWN_ATTR_VALUE_GRAPHIC:
+        {
+            uno::Reference< graphic::XGraphic > xGraphic( rValue, uno::UNO_QUERY );
+            if( xGraphic.is() )
+            {
+                SdrOle2Obj* pOle = dynamic_cast< SdrOle2Obj* >( mpObj.get() );
+                if( pOle )
+                {
+                    GraphicObject aGrafObj( xGraphic );
+                    const Graphic aGraphic( aGrafObj.GetGraphic() );
+                    pOle->SetGraphicToObj( aGraphic, rtl::OUString() );
+                }
+                return true;
+            }
+            break;
+        }
+        case OWN_ATTR_PERSISTNAME:
+        {
+            OUString aPersistName;
+            if( rValue >>= aPersistName )
+            {
+                static_cast<SdrOle2Obj*>(mpObj.get())->SetPersistName( aPersistName );
+                return true;
+            }
+            break;
+        }
+        case OWN_ATTR_OLE_LINKURL:
+        {
+            OUString aLinkURL;
+            if( rValue >>= aLinkURL )
+            {
+                createLink( aLinkURL );
+                return true;
+            }
+            break;
+        }
+        default:
+            return SvxShape::setPropertyValueImpl( rName, pProperty, rValue );
     }
 
     throw IllegalArgumentException();
@@ -258,188 +214,185 @@ bool SvxOle2Shape::getPropertyValueImpl( const ::rtl::OUString& rName, const Sfx
 {
     switch( pProperty->nWID )
     {
-    case OWN_ATTR_CLSID:
-    {
-        OUString aCLSID;
-        SvGlobalName aClassName = GetClassName_Impl(aCLSID);
-        rValue <<= aCLSID;
-        break;
-    }
-
-    case OWN_ATTR_INTERNAL_OLE:
-    {
-        rtl::OUString sCLSID;
-        rValue <<= SotExchange::IsInternal( GetClassName_Impl(sCLSID) );
-        break;
-    }
-
-    case OWN_ATTR_METAFILE:
-    {
-        SdrOle2Obj* pObj = dynamic_cast<SdrOle2Obj*>(mpObj.get());
-        if( pObj )
+        case OWN_ATTR_CLSID:
         {
-            Graphic* pGraphic = pObj->GetGraphic();
-            if( pGraphic )
+            OUString aCLSID;
+            SvGlobalName aClassName = GetClassName_Impl(aCLSID);
+            rValue <<= aCLSID;
+            break;
+        }
+
+        case OWN_ATTR_INTERNAL_OLE:
+        {
+            rtl::OUString sCLSID;
+            rValue <<= SotExchange::IsInternal( GetClassName_Impl(sCLSID) );
+            break;
+        }
+
+        case OWN_ATTR_METAFILE:
+        {
+            SdrOle2Obj* pObj = dynamic_cast<SdrOle2Obj*>(mpObj.get());
+            if( pObj )
             {
-                sal_Bool bIsWMF = sal_False;
-                if ( pGraphic->IsLink() )
+                Graphic* pGraphic = pObj->GetGraphic();
+                if( pGraphic )
                 {
-                    GfxLink aLnk = pGraphic->GetLink();
-                    if ( aLnk.GetType() == GFX_LINK_TYPE_NATIVE_WMF )
+                    sal_Bool bIsWMF = sal_False;
+                    if ( pGraphic->IsLink() )
                     {
-                        bIsWMF = sal_True;
-                        uno::Sequence<sal_Int8> aSeq((sal_Int8*)aLnk.GetData(), (sal_Int32) aLnk.GetDataSize());
+                        GfxLink aLnk = pGraphic->GetLink();
+                        if ( aLnk.GetType() == GFX_LINK_TYPE_NATIVE_WMF )
+                        {
+                            bIsWMF = sal_True;
+                            uno::Sequence<sal_Int8> aSeq((sal_Int8*)aLnk.GetData(), (sal_Int32) aLnk.GetDataSize());
+                            rValue <<= aSeq;
+                        }
+                    }
+                    if ( !bIsWMF )
+                    {
+                        // #119735# just use GetGDIMetaFile, it will create a bufferd version of contained bitmap now automatically
+                        GDIMetaFile aMtf(pObj->GetGraphic()->GetGDIMetaFile());
+                        SvMemoryStream aDestStrm( 65535, 65535 );
+                        ConvertGDIMetaFileToWMF( aMtf, aDestStrm, NULL, sal_False );
+                        const uno::Sequence<sal_Int8> aSeq(
+                            static_cast< const sal_Int8* >(aDestStrm.GetData()),
+                            aDestStrm.GetEndOfData());
                         rValue <<= aSeq;
                     }
                 }
-                if ( !bIsWMF )
-                {
-                    // #119735# just use GetGDIMetaFile, it will create a bufferd version of contained bitmap now automatically
-                    GDIMetaFile aMtf(pObj->GetGraphic()->GetGDIMetaFile());
-                    SvMemoryStream aDestStrm( 65535, 65535 );
-                    ConvertGDIMetaFileToWMF( aMtf, aDestStrm, NULL, sal_False );
-                    const uno::Sequence<sal_Int8> aSeq(
-                        static_cast< const sal_Int8* >(aDestStrm.GetData()),
-                        aDestStrm.GetEndOfData());
-                    rValue <<= aSeq;
-                }
             }
-        }
-        else
-        {
-            rValue = GetBitmap( sal_True );
-        }
-        break;
-    }
-
-    case OWN_ATTR_OLE_VISAREA:
-    {
-        awt::Rectangle aVisArea;
-        if( mpObj->ISA(SdrOle2Obj))
-        {
-            MapMode aMapMode( MAP_100TH_MM ); // the API uses this map mode
-            Size aTmp = ((SdrOle2Obj*)mpObj.get())->GetOrigObjSize( &aMapMode ); // get the size in the requested map mode
-            aVisArea = awt::Rectangle( 0, 0, aTmp.Width(), aTmp.Height() );
-        }
-
-        rValue <<= aVisArea;
-        break;
-    }
-
-    case OWN_ATTR_OLESIZE:
-    {
-        Size aTmp( static_cast<SdrOle2Obj*>(mpObj.get())->GetOrigObjSize() );
-        rValue <<= awt::Size( aTmp.Width(), aTmp.Height() );
-        break;
-    }
-
-    case OWN_ATTR_OLE_ASPECT:
-    {
-        rValue <<= static_cast<SdrOle2Obj*>(mpObj.get())->GetAspect();
-        break;
-    }
-
-    case OWN_ATTR_OLEMODEL:
-    case OWN_ATTR_OLE_EMBEDDED_OBJECT:
-    case OWN_ATTR_OLE_EMBEDDED_OBJECT_NONEWCLIENT:
-    {
-        SdrOle2Obj* pObj = dynamic_cast<SdrOle2Obj*>( mpObj.get() );
-        if( pObj )
-        {
-            uno::Reference < embed::XEmbeddedObject > xObj( pObj->GetObjRef() );
-            if ( xObj.is()
-              && ( pProperty->nWID == OWN_ATTR_OLE_EMBEDDED_OBJECT || pProperty->nWID == OWN_ATTR_OLE_EMBEDDED_OBJECT_NONEWCLIENT || svt::EmbeddedObjectRef::TryRunningState( xObj ) ) )
+            else
             {
-                // Discussed with CL fue to the before GetPaintingPageView
-                // usage. Removed it, former fallback is used now
-                if ( pProperty->nWID == OWN_ATTR_OLEMODEL || pProperty->nWID == OWN_ATTR_OLE_EMBEDDED_OBJECT )
+                rValue = GetBitmap( sal_True );
+            }
+            break;
+        }
+
+        case OWN_ATTR_OLE_VISAREA:
+        {
+            awt::Rectangle aVisArea;
+            SdrOle2Obj* pSdrOle2Obj = dynamic_cast< SdrOle2Obj* >(mpObj.get());
+
+            if( pSdrOle2Obj )
+            {
+                MapMode aMapMode( MAP_100TH_MM ); // the API uses this map mode
+                Size aTmp = pSdrOle2Obj->GetOrigObjSize( &aMapMode ); // get the size in the requested map mode
+                aVisArea = awt::Rectangle( 0, 0, aTmp.Width(), aTmp.Height() );
+            }
+
+            rValue <<= aVisArea;
+            break;
+        }
+
+        case OWN_ATTR_OLESIZE:
+        {
+            Size aTmp( static_cast<SdrOle2Obj*>(mpObj.get())->GetOrigObjSize() );
+            rValue <<= awt::Size( aTmp.Width(), aTmp.Height() );
+            break;
+        }
+
+        case OWN_ATTR_OLE_ASPECT:
+        {
+            rValue <<= static_cast<SdrOle2Obj*>(mpObj.get())->GetAspect();
+            break;
+        }
+
+        case OWN_ATTR_OLEMODEL:
+        case OWN_ATTR_OLE_EMBEDDED_OBJECT:
+        case OWN_ATTR_OLE_EMBEDDED_OBJECT_NONEWCLIENT:
+        {
+            SdrOle2Obj* pObj = dynamic_cast<SdrOle2Obj*>( mpObj.get() );
+            if( pObj )
+            {
+                uno::Reference < embed::XEmbeddedObject > xObj( pObj->GetObjRef() );
+                if ( xObj.is()
+                  && ( pProperty->nWID == OWN_ATTR_OLE_EMBEDDED_OBJECT || pProperty->nWID == OWN_ATTR_OLE_EMBEDDED_OBJECT_NONEWCLIENT || svt::EmbeddedObjectRef::TryRunningState( xObj ) ) )
                 {
+                    // Discussed with CL fue to the before GetPaintingPageView
+                    // usage. Removed it, former fallback is used now
+                    if ( pProperty->nWID == OWN_ATTR_OLEMODEL || pProperty->nWID == OWN_ATTR_OLE_EMBEDDED_OBJECT )
+                    {
 #ifdef DBG_UTIL
-                    const sal_Bool bSuccess(pObj->AddOwnLightClient());
-                    OSL_ENSURE( bSuccess, "An object without client is provided!" );
+                        const sal_Bool bSuccess(pObj->AddOwnLightClient());
+                        OSL_ENSURE( bSuccess, "An object without client is provided!" );
 #else
-                    pObj->AddOwnLightClient();
+                        pObj->AddOwnLightClient();
 #endif
+                    }
+
+                    if ( pProperty->nWID == OWN_ATTR_OLEMODEL )
+                        rValue <<= pObj->GetObjRef()->getComponent();
+                    else
+                        rValue <<= xObj;
                 }
-
-                if ( pProperty->nWID == OWN_ATTR_OLEMODEL )
-                    rValue <<= pObj->GetObjRef()->getComponent();
-                else
-                    rValue <<= xObj;
             }
+            break;
         }
-        break;
-    }
 
-    case OWN_ATTR_VALUE_GRAPHIC:
-    {
-        uno::Reference< graphic::XGraphic > xGraphic;
-        Graphic* pGraphic = static_cast<SdrOle2Obj*>( mpObj.get() )->GetGraphic();
-        if( pGraphic )
-            xGraphic = pGraphic->GetXGraphic();
-        rValue <<= xGraphic;
-        break;
-    }
-
-    case OWN_ATTR_THUMBNAIL:
-    {
-        OUString    aURL;
-        SdrOle2Obj* pOle = dynamic_cast< SdrOle2Obj* >( mpObj.get() );
-        if( pOle )
+        case OWN_ATTR_VALUE_GRAPHIC:
         {
-            Graphic* pGraphic = pOle->GetGraphic();
-
-            // if there isn't already a preview graphic set, check if we need to generate
-            // one if model says so
-            if( pGraphic == NULL && !pOle->IsEmptyPresObj() && mpModel->IsSaveOLEPreview() )
-                pGraphic = pOle->GetGraphic();
-
+            uno::Reference< graphic::XGraphic > xGraphic;
+            Graphic* pGraphic = static_cast<SdrOle2Obj*>( mpObj.get() )->GetGraphic();
             if( pGraphic )
-            {
-                GraphicObject aObj( *pGraphic );
-                aURL = OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX));
-                aURL += OUString::createFromAscii( aObj.GetUniqueID().GetBuffer() );
-            }
+                xGraphic = pGraphic->GetXGraphic();
+            rValue <<= xGraphic;
+            break;
         }
-        rValue <<= aURL;
-        break;
-    }
-    case OWN_ATTR_PERSISTNAME:
-    {
-        OUString    aPersistName;
-        SdrOle2Obj* pOle = dynamic_cast< SdrOle2Obj* >( mpObj.get() );
 
-        if( pOle )
+        case OWN_ATTR_THUMBNAIL:
         {
-            aPersistName = pOle->GetPersistName();
-            if( aPersistName.getLength() )
+            OUString    aURL;
+            SdrOle2Obj* pOle = dynamic_cast< SdrOle2Obj* >( mpObj.get() );
+            if( pOle )
             {
-                ::comphelper::IEmbeddedHelper *pPersist = mpObj->GetModel()->GetPersist();
-                if( (NULL == pPersist) || !pPersist->getEmbeddedObjectContainer().HasEmbeddedObject( pOle->GetPersistName() ) )
-                    aPersistName = OUString();
+                Graphic* pGraphic = pOle->GetGraphic();
+
+                if( pGraphic )
+                {
+                    GraphicObject aObj( *pGraphic );
+                    aURL = OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX));
+                    aURL += OUString::createFromAscii( aObj.GetUniqueID().GetBuffer() );
+                }
             }
+            rValue <<= aURL;
+            break;
         }
-
-        rValue <<= aPersistName;
-        break;
-    }
-    case OWN_ATTR_OLE_LINKURL:
-    {
-        OUString    aLinkURL;
-        SdrOle2Obj* pOle = dynamic_cast< SdrOle2Obj* >( mpObj.get() );
-
-        if( pOle )
+        case OWN_ATTR_PERSISTNAME:
         {
-            uno::Reference< embed::XLinkageSupport > xLink( pOle->GetObjRef(), uno::UNO_QUERY );
-            if ( xLink.is() && xLink->isLink() )
-                aLinkURL = xLink->getLinkURL();
-        }
+            OUString    aPersistName;
+            SdrOle2Obj* pOle = dynamic_cast< SdrOle2Obj* >( mpObj.get() );
 
-        rValue <<= aLinkURL;
-        break;
-    }
-    default:
-        return SvxShapeText::getPropertyValueImpl( rName, pProperty, rValue );
+            if( pOle )
+            {
+                aPersistName = pOle->GetPersistName();
+                if( aPersistName.getLength() )
+                {
+                    ::comphelper::IEmbeddedHelper *pPersist = mpObj->getSdrModelFromSdrObject().GetPersist();
+                    if( (NULL == pPersist) || !pPersist->getEmbeddedObjectContainer().HasEmbeddedObject( pOle->GetPersistName() ) )
+                        aPersistName = OUString();
+                }
+            }
+
+            rValue <<= aPersistName;
+            break;
+        }
+        case OWN_ATTR_OLE_LINKURL:
+        {
+            OUString    aLinkURL;
+            SdrOle2Obj* pOle = dynamic_cast< SdrOle2Obj* >( mpObj.get() );
+
+            if( pOle )
+            {
+                uno::Reference< embed::XLinkageSupport > xLink( pOle->GetObjRef(), uno::UNO_QUERY );
+                if ( xLink.is() && xLink->isLink() )
+                    aLinkURL = xLink->getLinkURL();
+            }
+
+            rValue <<= aLinkURL;
+            break;
+        }
+        default:
+            return SvxShape::getPropertyValueImpl( rName, pProperty, rValue );
     }
 
     return true;
@@ -464,7 +417,7 @@ sal_Bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
     uno::Reference < embed::XEmbeddedObject > xObj( pPersist->getEmbeddedObjectContainer().CreateEmbeddedObject( aClassName.GetByteSequence(), aPersistName ) );
     if( xObj.is() )
     {
-        Rectangle aRect = pOle2Obj->GetLogicRect();
+        Rectangle aRect = sdr::legacy::GetLogicRect(*pOle2Obj);
         if ( aRect.GetWidth() == 100 && aRect.GetHeight() == 100 )
         {
             // TODO/LATER: is it possible that this method is used to create an iconified object?
@@ -476,12 +429,12 @@ sal_Bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
             }
             catch( embed::NoVisualAreaSizeException& )
             {}
-            pOle2Obj->SetLogicRect( aRect );
+            sdr::legacy::SetLogicRect(*pOle2Obj, aRect );
         }
         else
         {
             awt::Size aSz;
-            Size aSize = pOle2Obj->GetLogicRect().GetSize();
+            Size aSize = sdr::legacy::GetLogicRect(*pOle2Obj).GetSize();
             aSz.Width = aSize.Width();
             aSz.Height = aSize.Height();
             xObj->setVisualAreaSize(  pOle2Obj->GetAspect(), aSz );
@@ -528,7 +481,7 @@ sal_Bool SvxOle2Shape::createLink( const ::rtl::OUString& aLinkURL )
 
     if( xObj.is() )
     {
-        Rectangle aRect = pOle2Obj->GetLogicRect();
+        Rectangle aRect = sdr::legacy::GetLogicRect(*pOle2Obj);
         if ( aRect.GetWidth() == 100 && aRect.GetHeight() == 100 )
         {
             // default size
@@ -539,12 +492,12 @@ sal_Bool SvxOle2Shape::createLink( const ::rtl::OUString& aLinkURL )
             }
             catch( embed::NoVisualAreaSizeException& )
             {}
-            pOle2Obj->SetLogicRect( aRect );
+            sdr::legacy::SetLogicRect(*pOle2Obj, aRect );
         }
         else
         {
             awt::Size aSz;
-            Size aSize = pOle2Obj->GetLogicRect().GetSize();
+            Size aSize = sdr::legacy::GetLogicRect(*pOle2Obj).GetSize();
             aSz.Width = aSize.Width();
             aSz.Height = aSize.Height();
             xObj->setVisualAreaSize(  pOle2Obj->GetAspect(), aSz );
@@ -619,7 +572,7 @@ const SvGlobalName SvxOle2Shape::GetClassName_Impl(rtl::OUString& rHexCLSID)
 ///////////////////////////////////////////////////////////////////////
 
 SvxAppletShape::SvxAppletShape( SdrObject* pObject ) throw()
-: SvxOle2Shape( pObject, aSvxMapProvider.GetMap(SVXMAP_APPLET), aSvxMapProvider.GetPropertySet(SVXMAP_APPLET, SdrObject::GetGlobalDrawObjectItemPool())  )
+: SvxOle2Shape( pObject, aSvxMapProvider.GetMap(SVXMAP_APPLET), aSvxMapProvider.GetPropertySet(SVXMAP_APPLET, GetGlobalDrawObjectItemPool())  )
 {
     SetShapeType( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.AppletShape" ) ) );
 }
@@ -692,7 +645,7 @@ bool SvxAppletShape::getPropertyValueImpl( const ::rtl::OUString& rName, const S
 ///////////////////////////////////////////////////////////////////////
 
 SvxPluginShape::SvxPluginShape( SdrObject* pObject ) throw()
-: SvxOle2Shape( pObject, aSvxMapProvider.GetMap(SVXMAP_PLUGIN), aSvxMapProvider.GetPropertySet(SVXMAP_PLUGIN, SdrObject::GetGlobalDrawObjectItemPool()) )
+: SvxOle2Shape( pObject, aSvxMapProvider.GetMap(SVXMAP_PLUGIN), aSvxMapProvider.GetPropertySet(SVXMAP_PLUGIN, GetGlobalDrawObjectItemPool()) )
 {
     SetShapeType( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.PluginShape" ) ) );
 }
@@ -765,7 +718,7 @@ bool SvxPluginShape::getPropertyValueImpl( const ::rtl::OUString& rName, const S
 ///////////////////////////////////////////////////////////////////////
 
 SvxFrameShape::SvxFrameShape( SdrObject* pObject ) throw()
-: SvxOle2Shape( pObject, aSvxMapProvider.GetMap(SVXMAP_FRAME), aSvxMapProvider.GetPropertySet(SVXMAP_FRAME, SdrObject::GetGlobalDrawObjectItemPool())  )
+: SvxOle2Shape( pObject, aSvxMapProvider.GetMap(SVXMAP_FRAME), aSvxMapProvider.GetPropertySet(SVXMAP_FRAME, GetGlobalDrawObjectItemPool())  )
 {
     SetShapeType( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.FrameShape" ) ) );
 }
@@ -840,7 +793,7 @@ bool SvxFrameShape::getPropertyValueImpl( const ::rtl::OUString& rName, const Sf
 ***********************************************************************/
 
 SvxMediaShape::SvxMediaShape( SdrObject* pObj ) throw()
-:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_MEDIA), aSvxMapProvider.GetPropertySet(SVXMAP_MEDIA, SdrObject::GetGlobalDrawObjectItemPool()) )
+:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_MEDIA), aSvxMapProvider.GetPropertySet(SVXMAP_MEDIA, GetGlobalDrawObjectItemPool()) )
 {
     SetShapeType( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.MediaShape" ) ) );
 }
@@ -862,67 +815,67 @@ bool SvxMediaShape::setPropertyValueImpl( const ::rtl::OUString& rName, const Sf
 
         switch( pProperty->nWID )
         {
-        case OWN_ATTR_MEDIA_URL:
-        {
-            OUString aURL;
-            if( rValue >>= aURL )
+            case OWN_ATTR_MEDIA_URL:
             {
-                bOk = true;
-                aItem.setURL( aURL );
+                OUString aURL;
+                if( rValue >>= aURL )
+                {
+                    bOk = true;
+                    aItem.setURL( aURL );
+                }
             }
-        }
-        break;
+            break;
 
-        case( OWN_ATTR_MEDIA_LOOP ):
-        {
-            sal_Bool bLoop = sal_Bool();
-
-            if( rValue >>= bLoop )
+            case( OWN_ATTR_MEDIA_LOOP ):
             {
-                bOk = true;
-                aItem.setLoop( bLoop );
+                sal_Bool bLoop = sal_Bool();
+
+                if( rValue >>= bLoop )
+                {
+                    bOk = true;
+                    aItem.setLoop( bLoop );
+                }
             }
-        }
-        break;
+            break;
 
-        case( OWN_ATTR_MEDIA_MUTE ):
-        {
-            sal_Bool bMute = sal_Bool();
-
-            if( rValue >>= bMute )
+            case( OWN_ATTR_MEDIA_MUTE ):
             {
-                bOk = true;
-                aItem.setMute( bMute );
+                sal_Bool bMute = sal_Bool();
+
+                if( rValue >>= bMute )
+                {
+                    bOk = true;
+                    aItem.setMute( bMute );
+                }
             }
-        }
-        break;
+            break;
 
-        case( OWN_ATTR_MEDIA_VOLUMEDB ):
-        {
-            sal_Int16 nVolumeDB = sal_Int16();
-
-            if( rValue >>= nVolumeDB )
+            case( OWN_ATTR_MEDIA_VOLUMEDB ):
             {
-                bOk = true;
-                aItem.setVolumeDB( nVolumeDB );
+                sal_Int16 nVolumeDB = sal_Int16();
+
+                if( rValue >>= nVolumeDB )
+                {
+                    bOk = true;
+                    aItem.setVolumeDB( nVolumeDB );
+                }
             }
-        }
-        break;
+            break;
 
-        case( OWN_ATTR_MEDIA_ZOOM ):
-        {
-            ::com::sun::star::media::ZoomLevel eLevel;
-
-            if( rValue >>= eLevel )
+            case( OWN_ATTR_MEDIA_ZOOM ):
             {
-                bOk = true;
-                aItem.setZoom( eLevel );
-            }
-        }
-        break;
+                ::com::sun::star::media::ZoomLevel eLevel;
 
-        default:
-            DBG_ERROR("SvxMediaShape::setPropertyValueImpl(), unknown argument!");
+                if( rValue >>= eLevel )
+                {
+                    bOk = true;
+                    aItem.setZoom( eLevel );
+                }
+            }
+            break;
+
+            default:
+                DBG_ERROR("SvxMediaShape::setPropertyValueImpl(), unknown argument!");
         }
 
         if( bOk )

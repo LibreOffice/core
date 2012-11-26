@@ -1679,7 +1679,7 @@ void ScInputHandler::ViewShellGone(ScTabViewShell* pViewSh)     // wird synchron
         UpdateAutoCorrFlag();
     }
 
-    pActiveViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
+    pActiveViewSh = dynamic_cast< ScTabViewShell* >( SfxViewShell::Current() );
 
     if ( pActiveViewSh && pActiveViewSh == pViewSh )
     {
@@ -1834,7 +1834,7 @@ void ScInputHandler::RemoveAdjust()
     if (bChange)
     {
         EditView* pActiveView = pTopView ? pTopView : pTableView;
-        pActiveView->ShowCursor( sal_False, sal_True );
+        pActiveView->ShowCursor( false, true );
     }
 #endif
 }
@@ -1850,7 +1850,7 @@ void ScInputHandler::RemoveRangeFinder()
     pEngine->SetUpdateMode(sal_True);
 
     EditView* pActiveView = pTopView ? pTopView : pTableView;
-    pActiveView->ShowCursor( sal_False, sal_True );
+    pActiveView->ShowCursor( false, true );
 
     DeleteRangeFinder();        // loescht die Liste und die Markierungen auf der Tabelle
 }
@@ -2218,7 +2218,7 @@ void ScInputHandler::ShowRefFrame()
     // #123169# Modifying pActiveViewSh here would interfere with the bInEnterHandler / bRepeat
     // checks in NotifyChange, and lead to keeping the wrong value in pActiveViewSh.
     // A local variable is used instead.
-    ScTabViewShell* pVisibleSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
+    ScTabViewShell* pVisibleSh = dynamic_cast< ScTabViewShell* >( SfxViewShell::Current() );
     if ( pRefViewSh && pRefViewSh != pVisibleSh )
     {
         sal_Bool bFound = sal_False;
@@ -2339,7 +2339,7 @@ void ScInputHandler::SetMode( ScInputMode eNewMode )
                 pEngine->GetView(i)->
                     SetSelection( ESelection( nPara, nLen, nPara, nLen ) );
             }
-            pEngine->GetView(i)->ShowCursor(sal_False);
+            pEngine->GetView(i)->ShowCursor(false);
         }
     }
 
@@ -3346,7 +3346,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
     if ( pSourceSh )
         pActiveViewSh = pSourceSh;
     else
-        pActiveViewSh = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
+        pActiveViewSh = dynamic_cast< ScTabViewShell* >( SfxViewShell::Current());
 
     ImplCreateEditEngine();
 

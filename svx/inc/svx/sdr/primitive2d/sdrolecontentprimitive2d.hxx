@@ -51,7 +51,7 @@ namespace drawinglayer
             sal_uInt32                                  mnGraphicVersion;
 
             // bitfield
-            unsigned                                    mbHighContrast : 1;
+            bool                                        mbHighContrast : 1;
 
         protected:
             // local decomposition.
@@ -63,9 +63,6 @@ namespace drawinglayer
                 const basegfx::B2DHomMatrix& rObjectTransform,
                 sal_uInt32 nGraphicVersion,
                 bool bHighContrast);
-
-            // compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
             // The default implementation will use getDecomposition results to create the range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;

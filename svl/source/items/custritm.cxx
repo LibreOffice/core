@@ -38,15 +38,11 @@
 DBG_NAME(CntUnencodedStringItem)
 
 //============================================================================
-TYPEINIT1_AUTOFACTORY(CntUnencodedStringItem, SfxPoolItem)
-
-//============================================================================
 // virtual
 int CntUnencodedStringItem::operator ==(const SfxPoolItem & rItem) const
 {
     DBG_CHKTHIS(CntUnencodedStringItem, 0);
-    DBG_ASSERT(rItem.ISA(CntUnencodedStringItem),
-               "CntUnencodedStringItem::operator ==(): Bad type");
+    DBG_ASSERT(dynamic_cast< const CntUnencodedStringItem* >(&rItem), "CntUnencodedStringItem::operator ==(): Bad type");
     return m_aValue
             == SAL_STATIC_CAST(const CntUnencodedStringItem *, &rItem)->
                 m_aValue;
@@ -58,8 +54,7 @@ int CntUnencodedStringItem::Compare(SfxPoolItem const & rWith) const
 {
     DBG_ERROR("CntUnencodedStringItem::Compare(): No international");
     DBG_CHKTHIS(CntUnencodedStringItem, 0);
-    DBG_ASSERT(rWith.ISA(CntUnencodedStringItem),
-                "CntUnencodedStringItem::Compare(): Bad type");
+    DBG_ASSERT(dynamic_cast< const CntUnencodedStringItem* >(&rWith), "CntUnencodedStringItem::Compare(): Bad type");
     switch (m_aValue.CompareTo(static_cast< CntUnencodedStringItem const * >(
                                        &rWith)->
                                    m_aValue))
@@ -82,8 +77,7 @@ int CntUnencodedStringItem::Compare(SfxPoolItem const & rWith,
     const
 {
     DBG_CHKTHIS(CntUnencodedStringItem, 0);
-    DBG_ASSERT(rWith.ISA(CntUnencodedStringItem),
-               "CntUnencodedStringItem::Compare(): Bad type");
+    DBG_ASSERT(dynamic_cast< const CntUnencodedStringItem* >(&rWith), "CntUnencodedStringItem::Compare(): Bad type");
     return rIntlWrapper.getCollator()->compareString( m_aValue,
         static_cast< CntUnencodedStringItem const * >(&rWith)->m_aValue );
 }

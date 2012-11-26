@@ -510,9 +510,10 @@ sal_uInt16 ScDocShell::SetPrinter( SfxPrinter* pNewPrinter, sal_uInt16 nDiffFlag
             while (pFrame)
             {
                 SfxViewShell* pSh = pFrame->GetViewShell();
-                if (pSh && pSh->ISA(ScTabViewShell))
+                ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell* >(pSh);
+
+                if (pViewSh)
                 {
-                    ScTabViewShell* pViewSh = (ScTabViewShell*)pSh;
                     ScInputHandler* pInputHdl = pScMod->GetInputHdl(pViewSh);
                     if (pInputHdl)
                         pInputHdl->UpdateRefDevice();

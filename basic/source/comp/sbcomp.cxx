@@ -550,9 +550,10 @@ void dbg_traceStep( SbModule* pModule, sal_uInt32 nPC, sal_Int32 nCallLvl )
     GnLastCallLvl = nCallLvl;
 
     SbModule* pTraceMod = pModule;
-    if( pTraceMod->ISA(SbClassModuleObject) )
+    SbClassModuleObject* pClassModuleObj = dynamic_cast< SbClassModuleObject* >((SbxBase*)pTraceMod);
+
+    if(pClassModuleObj)
     {
-        SbClassModuleObject* pClassModuleObj = (SbClassModuleObject*)(SbxBase*)pTraceMod;
         pTraceMod = pClassModuleObj->getClassModule();
     }
 
@@ -652,10 +653,10 @@ void dbg_traceNotifyCall( SbModule* pModule, SbMethod* pMethod, sal_Int32 nCallL
     GnLastCallLvl = nCallLvl;
 
     SbModule* pTraceMod = pModule;
-    SbClassModuleObject* pClassModuleObj = NULL;
-    if( pTraceMod->ISA(SbClassModuleObject) )
+    SbClassModuleObject* pClassModuleObj = dynamic_cast< SbClassModuleObject* >((SbxBase*)pTraceMod);
+
+    if( pClassModuleObj )
     {
-        pClassModuleObj = (SbClassModuleObject*)(SbxBase*)pTraceMod;
         pTraceMod = pClassModuleObj->getClassModule();
     }
 
@@ -981,7 +982,7 @@ sal_Bool SbModule::Compile()
 {
     if( pImage )
         return sal_True;
-    StarBASIC* pBasic = PTR_CAST(StarBASIC,GetParent());
+    StarBASIC* pBasic = dynamic_cast< StarBASIC* >( GetParent());
     if( !pBasic )
         return sal_False;
     SbxBase::ResetError();
@@ -1005,13 +1006,13 @@ sal_Bool SbModule::Compile()
     sal_Bool bRet = IsCompiled();
     if( bRet )
     {
-        if( !this->ISA(SbObjModule) )
+        if( !dynamic_cast< SbObjModule* >(this) )
             pBasic->ClearAllModuleVars();
         RemoveVars(); // remove 'this' Modules variables
         // clear all method statics
         for( sal_uInt16 i = 0; i < pMethods->Count(); i++ )
         {
-            SbMethod* p = PTR_CAST(SbMethod,pMethods->Get( i ) );
+            SbMethod* p = dynamic_cast< SbMethod* >( pMethods->Get( i ) );
             if( p )
                 p->ClearStatics();
         }
@@ -1021,7 +1022,7 @@ sal_Bool SbModule::Compile()
         {
             SbxObject* pParent_ = pBasic->GetParent();
             if( pParent_ )
-                pBasic = PTR_CAST(StarBASIC,pParent_);
+                pBasic = dynamic_cast< StarBASIC* >( pParent_);
             if( pBasic )
                 pBasic->ClearAllModuleVars();
         }

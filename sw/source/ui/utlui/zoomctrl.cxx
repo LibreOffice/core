@@ -60,7 +60,7 @@ SwZoomControl::~SwZoomControl()
 void SwZoomControl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState )
 {
-    if(SFX_ITEM_AVAILABLE == eState && pState->ISA( SfxStringItem ))
+    if(SFX_ITEM_AVAILABLE == eState && dynamic_cast< const SfxStringItem* >(pState))
     {
         sPreviewZoom = ((const SfxStringItem*)pState)->GetValue();
         GetStatusBar().SetItemText( GetId(), sPreviewZoom );

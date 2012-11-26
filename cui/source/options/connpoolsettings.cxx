@@ -61,8 +61,6 @@ namespace offapp
     //====================================================================
     //= DriverPoolingSettingsItem
     //====================================================================
-    TYPEINIT1( DriverPoolingSettingsItem, SfxPoolItem )
-    //--------------------------------------------------------------------
     DriverPoolingSettingsItem::DriverPoolingSettingsItem( sal_uInt16 _nId, const DriverPoolingSettings _rSettings )
         :SfxPoolItem(_nId)
         ,m_aSettings(_rSettings)
@@ -72,7 +70,7 @@ namespace offapp
     //--------------------------------------------------------------------
     int DriverPoolingSettingsItem::operator==( const SfxPoolItem& _rCompare ) const
     {
-        const DriverPoolingSettingsItem* pItem = PTR_CAST(DriverPoolingSettingsItem, &_rCompare);
+        const DriverPoolingSettingsItem* pItem = dynamic_cast< const DriverPoolingSettingsItem* >( &_rCompare);
         if (!pItem)
             return sal_False;
 

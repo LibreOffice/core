@@ -306,7 +306,7 @@ IMPL_LINK(ScrollBarManager, VerticalScrollBarHandler, ScrollBar*, pScrollBar)
         mrSlideSorter.GetContentWindow()->SetVisibleXY(-1, nRelativePosition);
         mrSlideSorter.GetController().GetVisibleAreaManager().DeactivateCurrentSlideTracking();
     }
-    return sal_True;
+    return true;
 }
 
 
@@ -325,7 +325,7 @@ IMPL_LINK(ScrollBarManager, HorizontalScrollBarHandler, ScrollBar*, pScrollBar)
         mrSlideSorter.GetContentWindow()->SetVisibleXY(nRelativePosition, -1);
         mrSlideSorter.GetController().GetVisibleAreaManager().DeactivateCurrentSlideTracking();
     }
-    return sal_True;
+    return true;
 }
 
 
@@ -339,11 +339,8 @@ void ScrollBarManager::SetWindowOrigin (
     mnVerticalPosition = nVerticalPosition;
 
     SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
-    Size aViewSize (pWindow->GetViewSize());
-    Point aOrigin (
-        (long int) (mnHorizontalPosition * aViewSize.Width()),
-        (long int) (mnVerticalPosition * aViewSize.Height()));
-
+    const basegfx::B2DVector aViewSize (pWindow->GetViewSize());
+    const basegfx::B2DPoint aOrigin (mnHorizontalPosition * aViewSize.getX(), mnVerticalPosition * aViewSize.getY());
     pWindow->SetWinViewPos (aOrigin);
     pWindow->UpdateMapMode ();
     pWindow->Invalidate ();
@@ -430,10 +427,11 @@ bool ScrollBarManager::TestScrollBarVisibilities (
 
     // Tell the view to rearrange its page objects and check whether the
     // page objects can be shown without clipping.
+    const basegfx::B2DVector& rPageScale = rModel.GetPageDescriptor(0)->GetPage()->GetPageScale();
     bool bRearrangeSuccess (mrSlideSorter.GetView().GetLayouter().Rearrange (
         mrSlideSorter.GetView().GetOrientation(),
         aBrowserSize,
-        rModel.GetPageDescriptor(0)->GetPage()->GetSize(),
+        Size(basegfx::fround(rPageScale.getX()), basegfx::fround(rPageScale.getY())),
         rModel.GetPageCount()));
 
     if (bRearrangeSuccess)

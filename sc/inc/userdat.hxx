@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 #ifndef SC_USERDAT_HXX
 #define SC_USERDAT_HXX
 
@@ -29,6 +27,8 @@
 #include "global.hxx"
 #include "address.hxx"
 
+//-------------------------------------------------------------------------
+class SdrObjFactory;
 
 //-------------------------------------------------------------------------
 
@@ -43,7 +43,9 @@
 
 class ScDrawObjFactory
 {
+private:
     DECL_LINK( MakeUserData, SdrObjFactory * );
+
 public:
     ScDrawObjFactory();
    ~ScDrawObjFactory();

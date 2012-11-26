@@ -144,9 +144,6 @@ CommandStruct SwCondCollItem::aCmds[] =
     { PARA_IN_LIST,         9 }
 };
 
-
-TYPEINIT1_AUTOFACTORY(SwCondCollItem, SfxPoolItem)
-
 /****************************************************************************
     Item fuer den Transport der Bedingungstabelle
 ****************************************************************************/

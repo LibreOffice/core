@@ -60,8 +60,6 @@ sdr::properties::BaseProperties* E3dExtrudeObj::CreateObjectSpecificProperties()
 
 //////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1(E3dExtrudeObj, E3dCompoundObject);
-
 /*************************************************************************
 |*
 |* Konstruktor, erzeugt zwei Deckelflaechen-PolyPolygone und (PointCount-1)
@@ -69,9 +67,13 @@ TYPEINIT1(E3dExtrudeObj, E3dCompoundObject);
 |*
 \************************************************************************/
 
-E3dExtrudeObj::E3dExtrudeObj(E3dDefaultAttributes& rDefault, const basegfx::B2DPolyPolygon& rPP, double fDepth)
-:   E3dCompoundObject(rDefault),
-    maExtrudePolygon(rPP)
+E3dExtrudeObj::E3dExtrudeObj(
+    SdrModel& rSdrModel,
+    const E3dDefaultAttributes& rDefault,
+    const basegfx::B2DPolyPolygon aPP,
+    double fDepth)
+:   E3dCompoundObject(rSdrModel, rDefault),
+    maExtrudePolygon(aPP)
 {
     // since the old class PolyPolygon3D did mirror the given PolyPolygons in Y, do the same here
     basegfx::B2DHomMatrix aMirrorY;
@@ -82,18 +84,46 @@ E3dExtrudeObj::E3dExtrudeObj(E3dDefaultAttributes& rDefault, const basegfx::B2DP
     SetDefaultAttributes(rDefault);
 
     // set extrude depth
-    GetProperties().SetObjectItemDirect(Svx3DDepthItem((sal_uInt32)(fDepth + 0.5)));
+    GetProperties().SetObjectItemDirect(SfxUInt32Item(SDRATTR_3DOBJ_DEPTH, (sal_uInt32)(fDepth + 0.5)));
 }
 
-E3dExtrudeObj::E3dExtrudeObj()
-:   E3dCompoundObject()
+E3dExtrudeObj::~E3dExtrudeObj()
 {
-    // Defaults setzen
-    E3dDefaultAttributes aDefault;
-    SetDefaultAttributes(aDefault);
 }
 
-void E3dExtrudeObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
+void E3dExtrudeObj::copyDataFromSdrObject(const SdrObject& rSource)
+{
+    if(this != &rSource)
+    {
+        const E3dExtrudeObj* pSource = dynamic_cast< const E3dExtrudeObj* >(&rSource);
+
+        if(pSource)
+        {
+            // call parent
+            E3dCompoundObject::copyDataFromSdrObject(rSource);
+
+            // copy local data
+            maExtrudePolygon = pSource->maExtrudePolygon;
+        }
+        else
+        {
+            OSL_ENSURE(false, "copyDataFromSdrObject with ObjectType of Source different from Target (!)");
+        }
+    }
+}
+
+SdrObject* E3dExtrudeObj::CloneSdrObject(SdrModel* pTargetModel) const
+{
+    E3dExtrudeObj* pClone = new E3dExtrudeObj(
+        pTargetModel ? *pTargetModel : getSdrModelFromSdrObject(),
+        E3dDefaultAttributes());
+    OSL_ENSURE(pClone, "CloneSdrObject error (!)");
+    pClone->copyDataFromSdrObject(*this);
+
+    return pClone;
+}
+
+void E3dExtrudeObj::SetDefaultAttributes(const E3dDefaultAttributes& rDefault)
 {
     GetProperties().SetObjectItemDirect(Svx3DSmoothNormalsItem(rDefault.GetDefaultExtrudeSmoothed()));
     GetProperties().SetObjectItemDirect(Svx3DSmoothLidsItem(rDefault.GetDefaultExtrudeSmoothFrontBack()));
@@ -115,23 +145,6 @@ void E3dExtrudeObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
 sal_uInt16 E3dExtrudeObj::GetObjIdentifier() const
 {
     return E3D_EXTRUDEOBJ_ID;
-}
-
-/*************************************************************************
-|*
-|* Zuweisungsoperator
-|*
-\************************************************************************/
-
-void E3dExtrudeObj::operator=(const SdrObject& rObj)
-{
-    // erstmal alle Childs kopieren
-    E3dCompoundObject::operator=(rObj);
-
-    // weitere Parameter kopieren
-    const E3dExtrudeObj& r3DObj = (const E3dExtrudeObj&)rObj;
-
-    maExtrudePolygon = r3DObj.maExtrudePolygon;
 }
 
 /*************************************************************************
@@ -226,9 +239,9 @@ SdrAttrObj* E3dExtrudeObj::GetBreakObj()
                 const basegfx::B3DRange aPolyPolyRange(basegfx::tools::getRange(aBackSide));
                 const basegfx::B3DPoint aCenter(aPolyPolyRange.getCenter());
 
-                aTransform.translate(-aCenter.getX(), -aCenter.getY(), -aCenter.getZ());
+                aTransform.translate(-aCenter);
                 aTransform.scale(fScaleFactor, fScaleFactor, fScaleFactor);
-                aTransform.translate(aCenter.getX(), aCenter.getY(), aCenter.getZ());
+                aTransform.translate(aCenter);
             }
 
             // translate by extrude depth
@@ -242,7 +255,9 @@ SdrAttrObj* E3dExtrudeObj::GetBreakObj()
     {
     // create PathObj
         basegfx::B2DPolyPolygon aPoly = TransformToScreenCoor(aBackSide);
-        SdrPathObj* pPathObj = new SdrPathObj(OBJ_PLIN, aPoly);
+        SdrPathObj* pPathObj = new SdrPathObj(
+            getSdrModelFromSdrObject(),
+            aPoly);
 
         if(pPathObj)
         {

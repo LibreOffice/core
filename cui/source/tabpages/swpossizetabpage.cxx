@@ -43,6 +43,7 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <svx/dialogs.hrc>
+#include <svx/svdlegacy.hxx>
 
 using namespace ::com::sun::star::text;
 #define SwFPos SvxSwFramePosString
@@ -713,11 +714,15 @@ sal_Bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
                             static_cast<long>(m_aVertByMF.Denormalize(m_aVertByMF.GetValue(FUNIT_TWIP)));
 
                 // Altes Rechteck mit CoreUnit
-                m_aRect = m_pSdrView->GetAllMarkedRect();
-                m_pSdrView->GetSdrPageView()->LogicToPagePos( m_aRect );
+                m_aRange = m_pSdrView->getMarkedObjectSnapRange();
 
-                nHoriByPos += m_aAnchorPos.X();
-                nVertByPos += m_aAnchorPos.Y();
+                if(m_pSdrView->GetSdrPageView())
+                {
+                    m_aRange.transform(basegfx::tools::createTranslateB2DHomMatrix(-m_pSdrView->GetSdrPageView()->GetPageOrigin()));
+                }
+
+                nHoriByPos += m_aAnchorPos.getX();
+                nVertByPos += m_aAnchorPos.getY();
 
                 rSet.Put( SfxInt32Item( GetWhich( SID_ATTR_TRANSFORM_POS_X ), nHoriByPos ) );
                 rSet.Put( SfxInt32Item( GetWhich( SID_ATTR_TRANSFORM_POS_Y ), nVertByPos ) );
@@ -1583,7 +1588,7 @@ void SvxSwPosSizeTabPage::InitPos(short nAnchor,
     }
     else if(m_bIsMultiSelection)
     {
-         m_aHoriByMF.SetValue( m_aHoriByMF.Normalize(m_aRect.Left()), FUNIT_TWIP );
+         m_aHoriByMF.SetValue( m_aHoriByMF.Normalize(basegfx::fround(m_aRange.getMinX())), FUNIT_TWIP );
     }
     else
     {
@@ -1602,7 +1607,7 @@ void SvxSwPosSizeTabPage::InitPos(short nAnchor,
     }
     else if(m_bIsMultiSelection)
     {
-         m_aVertByMF.SetValue( m_aVertByMF.Normalize(m_aRect.Top()), FUNIT_TWIP );
+         m_aVertByMF.SetValue( m_aVertByMF.Normalize(basegfx::fround(m_aRange.getMinY())), FUNIT_TWIP );
     }
     else
     {
@@ -1871,25 +1876,32 @@ void SvxSwPosSizeTabPage::SetView( const SdrView* pSdrView )
     }
 
     // Setzen des Rechtecks und der Workingarea
-    m_aRect = m_pSdrView->GetAllMarkedRect();
-    m_pSdrView->GetSdrPageView()->LogicToPagePos( m_aRect );
+    m_aRange = m_pSdrView->getMarkedObjectSnapRange();
+
+    if(m_pSdrView->GetSdrPageView())
+    {
+        m_aRange.transform(basegfx::tools::createTranslateB2DHomMatrix(-m_pSdrView->GetSdrPageView()->GetPageOrigin()));
+    }
 
     // get WorkArea
     m_aWorkArea = m_pSdrView->GetWorkArea();
 
     // Beruecksichtigung Ankerposition (bei Writer)
-    const SdrMarkList& rMarkList = m_pSdrView->GetMarkedObjectList();
-    if( rMarkList.GetMarkCount() >= 1 )
+    const SdrObjectVector aSelection(m_pSdrView->getSelectedSdrObjectVectorFromSdrMarkView());
+
+    if(aSelection.size())
     {
-        const SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+        const SdrObject* pObj = aSelection[0];
         m_aAnchorPos = pObj->GetAnchorPos();
 
-        if( m_aAnchorPos != Point(0,0) ) // -> Writer
+        if( !m_aAnchorPos.equalZero() ) // -> Writer
         {
-            for( sal_uInt16 i = 1; i < rMarkList.GetMarkCount(); i++ )
+            for(sal_uInt32 i(1); i < aSelection.size(); i++ )
             {
-                pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
-                if( m_aAnchorPos != pObj->GetAnchorPos() )
+                const SdrObject* pCandidate = aSelection[i];
+                const basegfx::B2DPoint aObjectAnchor(pCandidate->GetAnchorPos());
+
+                if( !m_aAnchorPos.equal(aObjectAnchor) )
                 {
                     // different anchor positions -> disable positioning
                     m_aPositionFL.Enable(sal_False);
@@ -1915,21 +1927,19 @@ void SvxSwPosSizeTabPage::SetView( const SdrView* pSdrView )
                 }
             }
         }
-        Point aPt = m_aAnchorPos * -1;
-        Point aPt2 = aPt;
 
-        aPt += m_aWorkArea.TopLeft();
-        m_aWorkArea.SetPos( aPt );
+        const basegfx::B2DHomMatrix aTranslate(basegfx::tools::createTranslateB2DHomMatrix(-m_aAnchorPos));
 
-        aPt2 += m_aRect.TopLeft();
-        m_aRect.SetPos( aPt2 );
+        m_aWorkArea.transform(aTranslate);
+        m_aRange.transform(aTranslate);
     }
 
     // this should happen via SID_ATTR_TRANSFORM_AUTOSIZE
-    if( rMarkList.GetMarkCount() == 1 )
+    if(1 == aSelection.size())
     {
-        const SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-        SdrObjKind eKind = (SdrObjKind) pObj->GetObjIdentifier();
+        const SdrObject* pObj = aSelection[0];
+        const SdrObjKind eKind = (SdrObjKind)pObj->GetObjIdentifier();
+
         if( ( pObj->GetObjInventor() == SdrInventor ) &&
             ( eKind==OBJ_TEXT || eKind==OBJ_TITLETEXT || eKind==OBJ_OUTLINETEXT) &&
             ( (SdrTextObj*) pObj )->HasText() )
@@ -1938,13 +1948,15 @@ void SvxSwPosSizeTabPage::SetView( const SdrView* pSdrView )
         }
     }
     else
+    {
         m_bIsMultiSelection = true;
+    }
 
     // use page offset and recalculate
-    Point aPt( m_pSdrView->GetSdrPageView()->GetPageOrigin() );
+//    Point aPt( m_pSdrView->GetSdrPageView()->GetPageOrigin() );
 
     // Massstab
-    Fraction aUIScale = m_pSdrView->GetModel()->GetUIScale();
+//    Fraction aUIScale = m_pSdrView->GetModel()->GetUIScale();
 
 //    lcl_ScaleRect( m_aWorkArea, aUIScale );
 //    lcl_ScaleRect( m_aRect, aUIScale );

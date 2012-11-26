@@ -75,7 +75,7 @@ private:
     CancelButton    aBtnCancel;
     DrawView*   pDrView;
 
-    sal_Bool            bCancel;
+    bool            bCancel;
 
     Timer           aTimer;
     SvdProgressInfo *pProgrInfo;

@@ -67,7 +67,7 @@ public:
         @param nZoom
             The zoom factor is given as integral percent value.
     */
-    void    SetZoomIntegral(long nZoom);
+    void    SetZoomIntegral(double fZoom);
 
     /** This internally used method performs the actual adaption of the
         window's map mode to the specified zoom factor.
@@ -80,7 +80,7 @@ public:
             forced into that interval.  Therefore the returned value is a
             valid zoom factor.
     */
-    long    SetZoomFactor(long nZoom);
+    double SetZoomFactor(double fZoom);
 
     /** This method is called when the whole page shall be displayed in the
         window.  Position and zoom factor are set so that the given
@@ -88,15 +88,15 @@ public:
         the same time maintaining the rectangle's aspect ratio and adding a
         small space at all its four sides (about 3% of width and height).
         The map mode is adapted accordingly.
-        @param rZoomRect
+        @param rZoomRange
             The rectangle is expected to be given relative to the upper left
             corner of the window in logical coordinates (100th of mm).
         @return
             The new zoom factor is returned as integral percent value.
     */
-    long SetZoomRect (const Rectangle& rZoomRect);
+    double SetZoomRange(const basegfx::B2DRange& rZoomRange);
 
-    long GetZoomForRect( const Rectangle& rZoomRect );
+    double GetZoomForRange( const basegfx::B2DRange& rZoomRange );
 
 
     void SetMinZoomAutoCalc (bool bAuto);
@@ -110,22 +110,22 @@ public:
         factor.
 
         <p>This calculation is performed only when the
-        <member>bMinZoomAutoCalc</member> is set (to <TRUE/>).</p>
+        <member>bMinZoomAutoCalc</member> is set (to <true/>).</p>
     */
     void CalcMinZoom (void);
-    void SetMinZoom (long int nMin);
-    long GetMinZoom (void) const;
-    void SetMaxZoom (long int nMax);
-    long GetMaxZoom (void) const;
+    void SetMinZoom (double fMin);
+    double GetMinZoom (void) const;
+    void SetMaxZoom (double fMax);
+    double GetMaxZoom (void) const;
 
-    long GetZoom (void) const;
+    double GetZoom (void) const;
 
-    Point GetWinViewPos (void) const;
-    Point GetViewOrigin (void) const;
-    Size GetViewSize (void) const;
-    void SetWinViewPos(const Point& rPnt);
-    void SetViewOrigin(const Point& rPnt);
-    void SetViewSize(const Size& rSize);
+    basegfx::B2DPoint GetWinViewPos (void) const;
+    basegfx::B2DPoint GetViewOrigin (void) const;
+    basegfx::B2DVector GetViewSize (void) const;
+    void SetWinViewPos(const basegfx::B2DPoint& rPnt);
+    void SetViewOrigin(const basegfx::B2DPoint& rPnt);
+    void SetViewSize(const basegfx::B2DVector& rSize);
     void SetCenterAllowed (bool bIsAllowed);
 
     /** Calculate origin of the map mode accoring to the size of the view
@@ -135,15 +135,15 @@ public:
         larger than the view or the value of aWinPos in this direction is -1
         then the window is centered in this direction.
         */
-    void UpdateMapOrigin (sal_Bool bInvalidate = sal_True);
+    void UpdateMapOrigin (bool bInvalidate = true);
 
     void UpdateMapMode (void);
 
     double  GetVisibleX();          // Interface fuer ScrollBars
     double  GetVisibleY();
     void    SetVisibleXY(double fX, double fY);
-    double  GetVisibleWidth();
-    double  GetVisibleHeight();
+    double  GetVisibleWidthRelativeToView();
+    double  GetVisibleHeightRelativeToView();
     double  GetScrlLineWidth();
     double  GetScrlLineHeight();
     double  GetScrlPageWidth();
@@ -160,22 +160,22 @@ public:
         you can control whether DropScroll() shall be used.
     */
     void SetUseDropScroll (bool bUseDropScroll);
-    void DropScroll (const Point& rMousePos);
+    void DropScroll (const basegfx::B2DPoint& rMousePos);
 protected:
     ::sd::Window* mpShareWin;
-    Point maWinPos;
-    Point maViewOrigin;
-    Size maViewSize;
-    sal_uInt16 mnMinZoom;
-    sal_uInt16 mnMaxZoom;
+    basegfx::B2DPoint maWinPos;
+    basegfx::B2DPoint maViewOrigin;
+    basegfx::B2DVector maViewSize;
+    double mfMinZoom;
+    double mfMaxZoom;
     /** This flag tells whether to re-calculate the minimal zoom factor
         depening on the current zoom factor.  According to task #105436# its
-        default value is now sal_False.
+        default value is now false.
     */
     bool mbMinZoomAutoCalc;
     bool mbCalcMinZoomByMinSide;
     bool mbCenterAllowed;
-    long mnTicks;
+    sal_uInt32 mnTicks;
     bool mbDraggedFrom;
 
     ViewShell* mpViewShell;

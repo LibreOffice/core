@@ -33,8 +33,6 @@ class XMLNotesTransformerContext : public XMLPersElemContentTContext
     ::xmloff::token::XMLTokenEnum m_eTypeToken;
 
 public:
-    TYPEINFO();
-
     XMLNotesTransformerContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName,
                               ::xmloff::token::XMLTokenEnum m_eToken,

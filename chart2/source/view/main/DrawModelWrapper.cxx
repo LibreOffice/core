@@ -35,8 +35,6 @@
 #include <svl/eitem.hxx>
 // header for define EE_PARA_HYPHENATE
 #include <editeng/eeitem.hxx>
-// header for class Svx3DPercentDiagonalItem
-#include <svx/svx3ditems.hxx>
 // header for class SvtPathOptions
 #include <unotools/pathoptions.hxx>
 // header E3dObjFactory
@@ -62,6 +60,9 @@
 #include <sfx2/objsh.hxx>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
+
+#include <svx/svddef.hxx>
+#include <svl/intitem.hxx>
 
 using namespace ::com::sun::star;
 
@@ -125,14 +126,14 @@ DrawModelWrapper::DrawModelWrapper(
 
     m_xMCF = xContext->getServiceManager();
 
-    SetScaleUnit(MAP_100TH_MM);
-    SetScaleFraction(Fraction(1, 1));
+    SetExchangeObjectUnit(MAP_100TH_MM);
+    SetExchangeObjectScale(Fraction(1, 1));
     SetDefaultFontHeight(423);     // 12pt
 
     SfxItemPool* pMasterPool = &GetItemPool();
     pMasterPool->SetDefaultMetric(SFX_MAPUNIT_100TH_MM);
     pMasterPool->SetPoolDefaultItem(SfxBoolItem(EE_PARA_HYPHENATE, sal_True) );
-    pMasterPool->SetPoolDefaultItem(Svx3DPercentDiagonalItem (5));
+    pMasterPool->SetPoolDefaultItem(SfxUInt16Item(SDRATTR_3DOBJ_PERCENT_DIAGONAL, 5));
 
     SfxItemPool* pPool = pMasterPool;
     // append chart pool to end of pool chain
@@ -181,7 +182,7 @@ DrawModelWrapper::DrawModelWrapper(
     MapMode aMapMode = m_apRefDevice->GetMapMode();
     aMapMode.SetMapUnit(MAP_100TH_MM);
     m_apRefDevice->SetMapMode(aMapMode);
-    SetRefDevice(m_apRefDevice.get());
+    SetReferenceDevice(m_apRefDevice.get());
     rOutliner.SetRefDevice(m_apRefDevice.get());
 }
 
@@ -317,13 +318,13 @@ void DrawModelWrapper::attachParentReferenceDevice( const uno::Reference< frame:
     OutputDevice * pParentRefDev( lcl_GetParentRefDevice( xChartModel ));
     if( pParentRefDev )
     {
-        SetRefDevice( pParentRefDev );
+        SetReferenceDevice( pParentRefDev );
     }
 }
 
 OutputDevice* DrawModelWrapper::getReferenceDevice() const
 {
-    return SdrModel::GetRefDevice();
+    return SdrModel::GetReferenceDevice();
 }
 
 SfxItemPool& DrawModelWrapper::GetItemPool()
@@ -378,7 +379,7 @@ SdrObject* DrawModelWrapper::getNamedSdrObject( const String& rObjectCID, SdrObj
             continue;
         if( ObjectIdentifier::areIdenticalObjects( rObjectCID, pObj->GetName() ) )
             return pObj;
-        pObj = DrawModelWrapper::getNamedSdrObject( rObjectCID, pObj->GetSubList() );
+        pObj = DrawModelWrapper::getNamedSdrObject( rObjectCID, pObj->getChildrenOfSdrObject() );
         if(pObj)
             return pObj;
     }

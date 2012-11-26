@@ -40,6 +40,7 @@
 #include <vos/mutex.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <svx/svdlegacy.hxx>
 
 //.............................................................................
 namespace chart
@@ -174,7 +175,7 @@ void Selection::applySelection( DrawViewWrapper* pDrawViewWrapper )
     }
 }
 
-void Selection::adaptSelectionToNewPos( const Point& rMousePos, DrawViewWrapper* pDrawViewWrapper
+void Selection::adaptSelectionToNewPos( const basegfx::B2DPoint& rMousePos, DrawViewWrapper* pDrawViewWrapper
                                        , bool bIsRightMouse, bool bWaitingForDoubleClick )
 {
     if( pDrawViewWrapper )
@@ -360,10 +361,10 @@ bool SelectionHelper::findNamedParent( SdrObject*& pInOutObject
 
     while( pObj && !ObjectIdentifier::isCID( aName  )  )
     {
-        SdrObjList* pObjList = pObj->GetObjList();
+        SdrObjList* pObjList = pObj->getParentOfSdrObject();
         if( !pObjList )
             return false;;
-        SdrObject* pOwner = pObjList->GetOwnerObj();
+        SdrObject* pOwner = pObjList->getSdrObjectFromSdrObjList();
         if( !pOwner )
             return false;
         pObj = pOwner;
@@ -393,7 +394,7 @@ bool SelectionHelper::findNamedParent( SdrObject*& pInOutObject
     return false;
 }
 
-bool SelectionHelper::isDragableObjectHitTwice( const Point& rMPos
+bool SelectionHelper::isDragableObjectHitTwice( const basegfx::B2DPoint& rMPos
                     , const rtl::OUString& rNameOfSelectedObject
                     , const DrawViewWrapper& rDrawViewWrapper )
 {
@@ -409,7 +410,7 @@ bool SelectionHelper::isDragableObjectHitTwice( const Point& rMPos
 }
 
 ::rtl::OUString SelectionHelper::getHitObjectCID(
-    const Point& rMPos,
+    const basegfx::B2DPoint& rMPos,
     DrawViewWrapper& rDrawViewWrapper,
     bool bGetDiagramInsteadOf_Wall )
 {
@@ -499,7 +500,7 @@ SelectionHelper::~SelectionHelper()
 bool SelectionHelper::getFrameDragSingles()
 {
     bool bFrameDragSingles = true;//true == green == surrounding handles
-    if( m_pSelectedObj && m_pSelectedObj->ISA(E3dObject) )
+    if( m_pSelectedObj && dynamic_cast< E3dObject* >(m_pSelectedObj) )
         bFrameDragSingles = false;
     return bFrameDragSingles;
 }
@@ -516,7 +517,7 @@ SdrObject* SelectionHelper::getMarkHandlesObject( SdrObject* pObj )
 
     //search for a child with name "MarkHandles" or "HandlesOnly"
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
-    SdrObjList* pSubList = pObj->GetSubList();
+    SdrObjList* pSubList = pObj->getChildrenOfSdrObject();
     if(pSubList)
     {
         SdrObjListIter aIterator(*pSubList, IM_FLAT);
@@ -541,7 +542,7 @@ SdrObject* SelectionHelper::getObjectToMark()
     if(pObj)
     {
         ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
-        SdrObjList* pSubList = pObj->GetSubList();
+        SdrObjList* pSubList = pObj->getChildrenOfSdrObject();
         if(pSubList)
         {
             SdrObjListIter aIterator(*pSubList, IM_FLAT);
@@ -572,7 +573,7 @@ E3dScene* SelectionHelper::getSceneToRotate( SdrObject* pObj )
         if( !pRotateable )
         {
             ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
-            SdrObjList* pSubList = pObj->GetSubList();
+            SdrObjList* pSubList = pObj->getChildrenOfSdrObject();
             if(pSubList)
             {
                 SdrObjListIter aIterator(*pSubList, IM_DEEPWITHGROUPS);
@@ -622,19 +623,20 @@ bool SelectionHelper::getMarkHandles( SdrHdlList& rHdlList )
     if( m_pMarkObj && m_pMarkObj != m_pSelectedObj)
     {
         rHdlList.Clear();
-        if( m_pMarkObj->ISA(SdrPathObj) )
+        SdrPathObj* pSdrPathObj = dynamic_cast< SdrPathObj* >(m_pMarkObj);
+
+        if( pSdrPathObj )
         {
             //if th object is a polygon
             //from each point a handle is generated
-            const ::basegfx::B2DPolyPolygon& rPolyPolygon = ((SdrPathObj*)m_pMarkObj)->GetPathPoly();
-            for( sal_uInt32 nN = 0L; nN < rPolyPolygon.count(); nN++)
+            const ::basegfx::B2DPolyPolygon aPolyPolygon = pSdrPathObj->getB2DPolyPolygonInObjectCoordinates();
+            for( sal_uInt32 nN = 0L; nN < aPolyPolygon.count(); nN++)
             {
-                const ::basegfx::B2DPolygon aPolygon(rPolyPolygon.getB2DPolygon(nN));
+                const ::basegfx::B2DPolygon aPolygon(aPolyPolygon.getB2DPolygon(nN));
                 for( sal_uInt32 nM = 0L; nM < aPolygon.count(); nM++)
                 {
                     const ::basegfx::B2DPoint aPoint(aPolygon.getB2DPoint(nM));
-                    SdrHdl* pHdl = new SdrHdl(Point(basegfx::fround(aPoint.getX()), basegfx::fround(aPoint.getY())), HDL_POLY);
-                    rHdlList.AddHdl(pHdl);
+                    new SdrHdl(rHdlList, pSdrPathObj, HDL_POLY, aPoint);
                 }
             }
             return true;
@@ -651,7 +653,7 @@ bool SelectionHelper::getMarkHandles( SdrHdlList& rHdlList )
     SdrObject* pObj = m_pSelectedObj;
     if(!pObj)
         return false;
-    SdrObjList* pSubList = pObj->GetSubList();
+    SdrObjList* pSubList = pObj->getChildrenOfSdrObject();
     if( !pSubList )//no group object !pObj->IsGroupObject()
         return false;
 
@@ -678,9 +680,8 @@ bool SelectionHelper::getMarkHandles( SdrHdlList& rHdlList )
                 return false;
         }
 
-        Point aPos = pSubObj->GetCurrentBoundRect().Center();
-        SdrHdl* pHdl = new SdrHdl(aPos,HDL_POLY);
-        rHdlList.AddHdl(pHdl);
+        const basegfx::B2DPoint aB2DPos(pSubObj->getObjectRange(rHdlList.GetViewFromSdrHdlList().getAsSdrView()).getCenter());
+        new SdrHdl(rHdlList, pSubObj, HDL_POLY, aB2DPos);
     }
     return true;
 }

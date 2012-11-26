@@ -35,6 +35,7 @@
 #include <svx/svdogrp.hxx>
 #include <editeng/eeitem.hxx>
 
+#include "drawdoc.hxx"
 #include "View.hxx"
 #include "ViewShell.hxx"
 #include "Window.hxx"
@@ -56,7 +57,6 @@
 namespace sd {
 
 #define  ITEMVALUE( ItemSet, Id, Cast ) ( ( (const Cast&) (ItemSet).Get( (Id) ) ).GetValue() )
-TYPEINIT1( FuMorph, FuPoor );
 
 //////////////////////////////////////////////////////////////////////////////
 // constructor
@@ -80,23 +80,23 @@ FunctionReference FuMorph::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd:
 
 void FuMorph::DoExecute( SfxRequest& )
 {
-    const SdrMarkList&  rMarkList = mpView->GetMarkedObjectList();
+    const SdrObjectVector aSelection(mpView->getSelectedSdrObjectVectorFromSdrMarkView());
 
-    if(rMarkList.GetMarkCount() == 2)
+    if(2 == aSelection.size())
     {
         // Clones erzeugen
-        SdrObject*  pObj1 = rMarkList.GetMark(0)->GetMarkedSdrObj();
-        SdrObject*  pObj2 = rMarkList.GetMark(1)->GetMarkedSdrObj();
-        SdrObject*  pCloneObj1 = pObj1->Clone();
-        SdrObject*  pCloneObj2 = pObj2->Clone();
+        SdrObject* pObj1 = aSelection[0];
+        SdrObject* pObj2 = aSelection[1];
+        SdrObject* pCloneObj1 = pObj1->CloneSdrObject();
+        SdrObject* pCloneObj2 = pObj2->CloneSdrObject();
 
         // Text am Clone loeschen, da wir sonst kein richtiges PathObj bekommen
         pCloneObj1->SetOutlinerParaObject(NULL);
         pCloneObj2->SetOutlinerParaObject(NULL);
 
         // Path-Objekte erzeugen
-        SdrObject*  pPolyObj1 = pCloneObj1->ConvertToPolyObj(sal_False, sal_False);
-        SdrObject*  pPolyObj2 = pCloneObj2->ConvertToPolyObj(sal_False, sal_False);
+        SdrObject*  pPolyObj1 = pCloneObj1->ConvertToPolyObj(false, false);
+        SdrObject*  pPolyObj2 = pCloneObj2->ConvertToPolyObj(false, false);
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
         AbstractMorphDlg* pDlg = pFact ? pFact->CreateMorphDlg( static_cast< ::Window*>(mpWindow), pObj1, pObj2 ) : 0;
         if(pPolyObj1 && pPolyObj2 && pDlg && (pDlg->Execute() == RET_OK))
@@ -115,16 +115,22 @@ void FuMorph::DoExecute( SfxRequest& )
 
             while(aIter1.IsMore())
             {
-                SdrObject* pObj = aIter1.Next();
-                if(pObj && pObj->ISA(SdrPathObj))
-                    aPolyPoly1.append(((SdrPathObj*)pObj)->GetPathPoly());
+                SdrPathObj* pSdrPathObj = dynamic_cast< SdrPathObj* >(aIter1.Next());
+
+                if(pSdrPathObj)
+                {
+                    aPolyPoly1.append(pSdrPathObj->getB2DPolyPolygonInObjectCoordinates());
+                }
             }
 
             while(aIter2.IsMore())
             {
-                SdrObject* pObj = aIter2.Next();
-                if(pObj && pObj->ISA(SdrPathObj))
-                    aPolyPoly2.append(((SdrPathObj*)pObj)->GetPathPoly());
+                SdrPathObj* pSdrPathObj = dynamic_cast< SdrPathObj* >(aIter2.Next());
+
+                if(pSdrPathObj)
+                {
+                    aPolyPoly2.append(pSdrPathObj->getB2DPolyPolygonInObjectCoordinates());
+                }
             }
 
             // Morphing durchfuehren
@@ -169,7 +175,7 @@ void FuMorph::DoExecute( SfxRequest& )
 
                 if(ImpMorphPolygons(aPolyPoly1, aPolyPoly2, pDlg->GetFadeSteps(), aPolyPolyList))
                 {
-                    String aString(mpView->GetDescriptionOfMarkedObjects());
+                    String aString(getSelectionDescription(aSelection));
 
                     aString.Append(sal_Unicode(' '));
                     aString.Append(String(SdResId(STR_UNDO_MORPHING)));
@@ -187,11 +193,11 @@ void FuMorph::DoExecute( SfxRequest& )
             }
         }
         delete pDlg;
-        SdrObject::Free( pCloneObj1 );
-        SdrObject::Free( pCloneObj2 );
+        deleteSdrObjectSafeAndClearPointer( pCloneObj1 );
+        deleteSdrObjectSafeAndClearPointer( pCloneObj2 );
 
-        SdrObject::Free( pPolyObj1 );
-        SdrObject::Free( pPolyObj2 );
+        deleteSdrObjectSafeAndClearPointer( pPolyObj1 );
+        deleteSdrObjectSafeAndClearPointer( pPolyObj2 );
     }
 }
 
@@ -327,7 +333,7 @@ void FuMorph::ImpAddPolys(::basegfx::B2DPolyPolygon& rSmaller, const ::basegfx::
 //////////////////////////////////////////////////////////////////////////////
 // create group object with morphed polygons
 //
-void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, sal_Bool bAttributeFade,
+void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, bool bAttributeFade,
     const SdrObject* pObj1, const SdrObject* pObj2)
 {
     Color               aStartFillCol;
@@ -336,15 +342,13 @@ void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, sal_Bool bAttributeFade,
     Color               aEndLineCol;
     long                nStartLineWidth = 0;
     long                nEndLineWidth = 0;
-    SdrPageView*        pPageView = mpView->GetSdrPageView();
-    SfxItemPool*        pPool = pObj1->GetObjectItemPool();
-    SfxItemSet          aSet1( *pPool,SDRATTR_START,SDRATTR_NOTPERSIST_FIRST-1,EE_ITEMS_START,EE_ITEMS_END,0 );
+    SfxItemSet          aSet1( pObj1->GetObjectItemPool(), SDRATTR_START, SDRATTR_NOTPERSIST_FIRST-1, EE_ITEMS_START, EE_ITEMS_END, 0, 0 );
     SfxItemSet          aSet2( aSet1 );
-    sal_Bool                bLineColor = sal_False;
-    sal_Bool                bFillColor = sal_False;
-    sal_Bool                bLineWidth = sal_False;
-    sal_Bool                bIgnoreLine = sal_False;
-    sal_Bool                bIgnoreFill = sal_False;
+    bool                bLineColor = false;
+    bool                bFillColor = false;
+    bool                bLineWidth = false;
+    bool                bIgnoreLine = false;
+    bool                bIgnoreFill = false;
 
     aSet1.Put(pObj1->GetMergedItemSet());
     aSet2.Put(pObj2->GetMergedItemSet());
@@ -358,7 +362,7 @@ void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, sal_Bool bAttributeFade,
     {
         if ( ( eLineStyle1 != XLINE_NONE ) && ( eLineStyle2 != XLINE_NONE ) )
         {
-            bLineWidth = bLineColor = sal_True;
+            bLineWidth = bLineColor = true;
 
             aStartLineCol = static_cast< XLineColorItem const & >(
                 aSet1.Get(XATTR_LINECOLOR)).GetColorValue();
@@ -369,72 +373,70 @@ void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, sal_Bool bAttributeFade,
             nEndLineWidth = ITEMVALUE( aSet2, XATTR_LINEWIDTH, XLineWidthItem );
         }
         else if ( ( eLineStyle1 == XLINE_NONE ) && ( eLineStyle2 == XLINE_NONE ) )
-            bIgnoreLine = sal_True;
+            bIgnoreLine = true;
 
         if ( ( eFillStyle1 == XFILL_SOLID ) && ( eFillStyle2 == XFILL_SOLID ) )
         {
-            bFillColor = sal_True;
+            bFillColor = true;
             aStartFillCol = static_cast< XFillColorItem const & >(
                 aSet1.Get(XATTR_FILLCOLOR)).GetColorValue();
             aEndFillCol = static_cast< XFillColorItem const & >(
                 aSet2.Get(XATTR_FILLCOLOR)).GetColorValue();
         }
         else if ( ( eFillStyle1 == XFILL_NONE ) && ( eFillStyle2 == XFILL_NONE ) )
-            bIgnoreFill = sal_True;
+            bIgnoreFill = true;
     }
 
-    if ( pPageView )
+    SfxItemSet      aSet( aSet1 );
+    SdrObjGroup*    pObjGroup = new SdrObjGroup(*GetDoc());
+    const sal_uInt32 nCount = rPolyPolyList3D.Count();
+    const double    fStep = 1. / ( nCount + 1 );
+    const double    fDelta = nEndLineWidth - nStartLineWidth;
+    double          fFactor = fStep;
+
+    aSet.Put( XLineStyleItem( XLINE_SOLID ) );
+    aSet.Put( XFillStyleItem( XFILL_SOLID ) );
+
+    for ( sal_uLong i = 0; i < nCount; i++, fFactor += fStep )
     {
-        SfxItemSet      aSet( aSet1 );
-        SdrObjGroup*    pObjGroup = new SdrObjGroup;
-        SdrObjList*     pObjList = pObjGroup->GetSubList();
-        const sal_uLong     nCount = rPolyPolyList3D.Count();
-        const double    fStep = 1. / ( nCount + 1 );
-        const double    fDelta = nEndLineWidth - nStartLineWidth;
-        double          fFactor = fStep;
+        const ::basegfx::B2DPolyPolygon& rPolyPoly3D = *(::basegfx::B2DPolyPolygon*)rPolyPolyList3D.GetObject(i);
+        SdrPathObj* pNewObj = new SdrPathObj(
+            *GetDoc(),
+            rPolyPoly3D);
 
-        aSet.Put( XLineStyleItem( XLINE_SOLID ) );
-        aSet.Put( XFillStyleItem( XFILL_SOLID ) );
-
-        for ( sal_uLong i = 0; i < nCount; i++, fFactor += fStep )
+        // Linienfarbe
+        if ( bLineColor )
         {
-            const ::basegfx::B2DPolyPolygon& rPolyPoly3D = *(::basegfx::B2DPolyPolygon*)rPolyPolyList3D.GetObject(i);
-            SdrPathObj* pNewObj = new SdrPathObj(OBJ_POLY, rPolyPoly3D);
-
-            // Linienfarbe
-            if ( bLineColor )
-            {
-                const basegfx::BColor aLineColor(basegfx::interpolate(aStartLineCol.getBColor(), aEndLineCol.getBColor(), fFactor));
-                aSet.Put( XLineColorItem( aEmptyStr, Color(aLineColor)));
-            }
-            else if ( bIgnoreLine )
-                aSet.Put( XLineStyleItem( XLINE_NONE ) );
-
-            // Fuellfarbe
-            if ( bFillColor )
-            {
-                const basegfx::BColor aFillColor(basegfx::interpolate(aStartFillCol.getBColor(), aEndFillCol.getBColor(), fFactor));
-                aSet.Put( XFillColorItem( aEmptyStr, Color(aFillColor)));
-            }
-            else if ( bIgnoreFill )
-                aSet.Put( XFillStyleItem( XFILL_NONE ) );
-
-            // Linienstaerke
-            if ( bLineWidth )
-                aSet.Put( XLineWidthItem( nStartLineWidth + (long) ( fFactor * fDelta + 0.5 ) ) );
-
-            pNewObj->SetMergedItemSetAndBroadcast(aSet);
-
-            pObjList->InsertObject( pNewObj, LIST_APPEND );
+            const basegfx::BColor aLineColor(basegfx::interpolate(aStartLineCol.getBColor(), aEndLineCol.getBColor(), fFactor));
+            aSet.Put( XLineColorItem( aEmptyStr, Color(aLineColor)));
         }
+        else if ( bIgnoreLine )
+            aSet.Put( XLineStyleItem( XLINE_NONE ) );
 
-        if ( nCount )
+        // Fuellfarbe
+        if ( bFillColor )
         {
-            pObjList->InsertObject( pObj1->Clone(), 0 );
-            pObjList->InsertObject( pObj2->Clone(), LIST_APPEND );
-            mpView->DeleteMarked();
-            mpView->InsertObjectAtView( pObjGroup, *pPageView, SDRINSERT_SETDEFLAYER );
+            const basegfx::BColor aFillColor(basegfx::interpolate(aStartFillCol.getBColor(), aEndFillCol.getBColor(), fFactor));
+            aSet.Put( XFillColorItem( aEmptyStr, Color(aFillColor)));
         }
+        else if ( bIgnoreFill )
+            aSet.Put( XFillStyleItem( XFILL_NONE ) );
+
+        // Linienstaerke
+        if ( bLineWidth )
+            aSet.Put( XLineWidthItem( nStartLineWidth + (long) ( fFactor * fDelta + 0.5 ) ) );
+
+        pNewObj->SetMergedItemSetAndBroadcast(aSet);
+
+        pObjGroup->InsertObjectToSdrObjList(*pNewObj);
+    }
+
+    if ( nCount )
+    {
+        pObjGroup->InsertObjectToSdrObjList(*pObj1->CloneSdrObject(), 0 );
+        pObjGroup->InsertObjectToSdrObjList(*pObj2->CloneSdrObject());
+        mpView->DeleteMarked();
+        mpView->InsertObjectAtView( *pObjGroup, SDRINSERT_SETDEFLAYER );
     }
 }
 
@@ -502,7 +504,7 @@ sal_Bool FuMorph::ImpMorphPolygons(
             rPolyPolyList3D.Insert(pNewPolyPoly2D, LIST_APPEND);
         }
     }
-    return sal_True;
+    return true;
 }
 
 

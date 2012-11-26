@@ -65,12 +65,23 @@ public:
 
 // --------------------------------------------------------------------
 
-TableEdgeHdl::TableEdgeHdl( const Point& rPnt, bool bHorizontal, sal_Int32 nMin, sal_Int32 nMax, sal_Int32 nEdges )
-: SdrHdl( rPnt, HDL_USER )
+TableEdgeHdl::TableEdgeHdl(
+    SdrHdlList& rHdlList,
+    const SdrObject& rSdrHdlObject,
+    const basegfx::B2DPoint& rPnt,
+    bool bHorizontal,
+    sal_Int32 nMin,
+    sal_Int32 nMax,
+    sal_Int32 nEdges )
+: SdrHdl( rHdlList, &rSdrHdlObject, HDL_USER, rPnt)
 , mbHorizontal( bHorizontal )
 , mnMin( nMin )
 , mnMax( nMax )
 , maEdges(nEdges)
+{
+}
+
+TableEdgeHdl::~TableEdgeHdl()
 {
 }
 
@@ -117,26 +128,39 @@ void TableEdgeHdl::getPolyPolygon(basegfx::B2DPolyPolygon& rVisible, basegfx::B2
 {
     // changed method to create visible and invisible partial polygons in one run in
     // separate PolyPolygons; both kinds are used
-    basegfx::B2DPoint aOffset(aPos.X(), aPos.Y());
+    basegfx::B2DPoint aOffset(getPosition());
     rVisible.clear();
     rInvisible.clear();
 
     if( pDrag )
     {
-        int n = mbHorizontal ? 1 : 0;
-        aOffset[n] = aOffset[n] + GetValidDragOffset( *pDrag );
+        if(mbHorizontal)
+        {
+            aOffset.setX(aOffset.getX() + GetValidDragOffset( *pDrag ));
+        }
+        else
+        {
+            aOffset.setY(aOffset.getY() + GetValidDragOffset( *pDrag ));
+        }
     }
 
     basegfx::B2DPoint aStart(aOffset), aEnd(aOffset);
-    int nPos = mbHorizontal ? 0 : 1;
     TableEdgeVector::const_iterator aIter( maEdges.begin() );
 
     while( aIter != maEdges.end() )
     {
         TableEdge aEdge(*aIter++);
 
-        aStart[nPos] = aOffset[nPos] + aEdge.mnStart;
-        aEnd[nPos] = aOffset[nPos] + aEdge.mnEnd;
+        if(mbHorizontal)
+        {
+            aStart.setX(aOffset.getX() + aEdge.mnStart);
+            aEnd.setX(aOffset.getX() + aEdge.mnEnd);
+        }
+        else
+        {
+            aStart.setY(aOffset.getY() + aEdge.mnStart);
+            aEnd.setY(aOffset.getY() + aEdge.mnEnd);
+        }
 
         basegfx::B2DPolygon aPolygon;
         aPolygon.append( aStart );
@@ -153,54 +177,32 @@ void TableEdgeHdl::getPolyPolygon(basegfx::B2DPolyPolygon& rVisible, basegfx::B2
     }
 }
 
-void TableEdgeHdl::CreateB2dIAObject()
+void TableEdgeHdl::CreateB2dIAObject(::sdr::overlay::OverlayManager& rOverlayManager)
 {
-    GetRidOfIAObject();
+    basegfx::B2DPolyPolygon aVisible;
+    basegfx::B2DPolyPolygon aInvisible;
 
-    if(pHdlList && pHdlList->GetView() && !pHdlList->GetView()->areMarkHandlesHidden())
+    // get visible and invisible parts
+    getPolyPolygon(aVisible, aInvisible, 0);
+
+    if(aVisible.count() || aInvisible.count())
     {
-        SdrMarkView* pView = pHdlList->GetView();
-        SdrPageView* pPageView = pView->GetSdrPageView();
-
-        if(pPageView)
+        if(aVisible.count())
         {
-            basegfx::B2DPolyPolygon aVisible;
-            basegfx::B2DPolyPolygon aInvisible;
+            // create overlay object for visible parts
+            sdr::overlay::OverlayObject* pOverlayObject = new OverlayTableEdge(aVisible, true);
+            rOverlayManager.add(*pOverlayObject);
+            maOverlayGroup.append(*pOverlayObject);
+        }
 
-            // get visible and invisible parts
-            getPolyPolygon(aVisible, aInvisible, 0);
-
-            if(aVisible.count() || aInvisible.count())
-            {
-                for(sal_uInt32 nWindow = 0; nWindow < pPageView->PageWindowCount(); nWindow++)
-                {
-                    const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(nWindow);
-
-                    if(rPageWindow.GetPaintWindow().OutputToWindow())
-                    {
-                        if(rPageWindow.GetOverlayManager())
-                        {
-                            if(aVisible.count())
-                            {
-                                // create overlay object for visible parts
-                                sdr::overlay::OverlayObject* pOverlayObject = new OverlayTableEdge(aVisible, true);
-                                rPageWindow.GetOverlayManager()->add(*pOverlayObject);
-                                maOverlayGroup.append(*pOverlayObject);
-                            }
-
-                            if(aInvisible.count())
-                            {
-                                // also create overlay object vor invisible parts to allow
-                                // a standard HitTest using the primitives from that overlay object
-                                // (see OverlayTableEdge implementation)
-                                sdr::overlay::OverlayObject* pOverlayObject = new OverlayTableEdge(aInvisible, false);
-                                rPageWindow.GetOverlayManager()->add(*pOverlayObject);
-                                maOverlayGroup.append(*pOverlayObject);
-                            }
-                        }
-                    }
-                }
-            }
+        if(aInvisible.count())
+        {
+            // also create overlay object vor invisible parts to allow
+            // a standard HitTest using the primitives from that overlay object
+            // (see OverlayTableEdge implementation)
+            sdr::overlay::OverlayObject* pOverlayObject = new OverlayTableEdge(aInvisible, false);
+            rOverlayManager.add(*pOverlayObject);
+            maOverlayGroup.append(*pOverlayObject);
         }
     }
 }
@@ -252,11 +254,18 @@ drawinglayer::primitive2d::Primitive2DSequence OverlayTableEdge::createOverlayOb
 
 // ====================================================================
 
-TableBorderHdl::TableBorderHdl( const Rectangle& rRect )
-: SdrHdl( rRect.TopLeft(), HDL_MOVE )
-, maRectangle( rRect )
+TableBorderHdl::TableBorderHdl(
+    SdrHdlList& rHdlList,
+    const SdrObject& rSdrHdlObject,
+    const basegfx::B2DRange& rRange )
+: SdrHdl( rHdlList, &rSdrHdlObject, HDL_MOVE, rRange.getMinimum() )
+, maRange( rRange )
 {
 
+}
+
+TableBorderHdl::~TableBorderHdl()
+{
 }
 
 Pointer TableBorderHdl::GetPointer() const
@@ -265,43 +274,22 @@ Pointer TableBorderHdl::GetPointer() const
 }
 
 // create marker for this kind
-void TableBorderHdl::CreateB2dIAObject()
+void TableBorderHdl::CreateB2dIAObject(::sdr::overlay::OverlayManager& rOverlayManager)
 {
-    GetRidOfIAObject();
+    const basegfx::B2DHomMatrix aTransformation(
+        basegfx::tools::createScaleTranslateB2DHomMatrix(
+            maRange.getRange(),
+            maRange.getMinimum()));
 
-    if(pHdlList && pHdlList->GetView() && !pHdlList->GetView()->areMarkHandlesHidden())
-    {
-        SdrMarkView* pView = pHdlList->GetView();
-        SdrPageView* pPageView = pView->GetSdrPageView();
+    sdr::overlay::OverlayObject* pOverlayObject = new sdr::overlay::OverlayHatchRect(
+        aTransformation,
+        Color(0x80, 0x80, 0x80),
+        6.0,
+        0.0,
+        45 * F_PI180);
 
-        if(pPageView)
-        {
-            for(sal_uInt32 nWindow = 0; nWindow < pPageView->PageWindowCount(); nWindow++)
-            {
-                // const SdrPageViewWinRec& rPageViewWinRec = rPageViewWinList[b];
-                const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(nWindow);
-
-                if(rPageWindow.GetPaintWindow().OutputToWindow())
-                {
-                    if(rPageWindow.GetOverlayManager())
-                    {
-                        const basegfx::B2DRange aRange(vcl::unotools::b2DRectangleFromRectangle(maRectangle));
-                        sdr::overlay::OverlayObject* pOverlayObject = new sdr::overlay::OverlayHatchRect(
-                            aRange.getMinimum(),
-                            aRange.getMaximum(),
-                            Color(0x80, 0x80, 0x80),
-                            6.0,
-                            0.0,
-                            45 * F_PI180,
-                            0.0);
-
-                        rPageWindow.GetOverlayManager()->add(*pOverlayObject);
-                        maOverlayGroup.append(*pOverlayObject);
-                    }
-                }
-            }
-        }
-    }
+    rOverlayManager.add(*pOverlayObject);
+    maOverlayGroup.append(*pOverlayObject);
 }
 
 //////////////////////////////////////////////////////////////////////////////

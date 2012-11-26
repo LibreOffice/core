@@ -212,7 +212,7 @@ TaskPaneShellManager* TreeNode::GetShellManager (void)
     ::Window* pWindow = GetWindow();
     if (pWindow != NULL)
     {
-        xAccessible = pWindow->GetAccessible(sal_False);
+        xAccessible = pWindow->GetAccessible(false);
         if ( ! xAccessible.is())
         {
             ::com::sun::star::uno::Reference<

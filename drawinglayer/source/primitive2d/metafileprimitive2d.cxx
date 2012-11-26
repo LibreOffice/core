@@ -1242,7 +1242,7 @@ namespace
                 0 != (rProperty.getLayoutMode() & TEXT_LAYOUT_BIDI_STRONG)));
 
         // add FontScaling
-        rTextTransform.scale(aFontScaling.getX(), aFontScaling.getY());
+        rTextTransform.scale(aFontScaling);
 
         // take text align into account
         if(ALIGN_BASELINE != rFont.GetAlign())
@@ -1259,7 +1259,7 @@ namespace
                 rAlignmentOffset.setY(-aTextLayouterDevice.getFontDescent());
             }
 
-            rTextTransform.translate(rAlignmentOffset.getX(), rAlignmentOffset.getY());
+            rTextTransform.translate(rAlignmentOffset);
         }
 
         // add FontRotation (if used)
@@ -1421,7 +1421,7 @@ namespace
                 // create Transform
                 basegfx::B2DHomMatrix aTextTransform;
 
-                aTextTransform.translate(aAlignmentOffset.getX(), aAlignmentOffset.getY());
+                aTextTransform.translate(aAlignmentOffset);
 
                 if(rFont.GetOrientation())
                 {
@@ -3229,29 +3229,13 @@ namespace drawinglayer
         {
         }
 
-        bool MetafilePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const MetafilePrimitive2D& rCompare = (MetafilePrimitive2D&)rPrimitive;
-
-                return (getTransform() == rCompare.getTransform()
-                    && getMetaFile() == rCompare.getMetaFile());
-            }
-
-            return false;
-        }
-
         basegfx::B2DRange MetafilePrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // use own implementation to quickly answer the getB2DRange question. The
             // MetafilePrimitive2D assumes that all geometry is inside of the shape. If
             // this is not the case (i have already seen some wrong Metafiles) it should
             // be embedded to a MaskPrimitive2D
-            basegfx::B2DRange aRetval(0.0, 0.0, 1.0, 1.0);
-            aRetval.transform(getTransform());
-
-            return aRetval;
+            return getTransform() * basegfx::B2DRange::getUnitB2DRange();
         }
 
         // provide unique ID

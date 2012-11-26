@@ -280,13 +280,13 @@ void __EXPORT SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
 
     aMtrFldLine3.SaveValue();
 
-    // SdrEdgeLineDeltaAnzItem
+    // EdgeLineDeltaAnz
     pItem = GetItem( rAttrs, SDRATTR_EDGELINEDELTAANZ );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGELINEDELTAANZ );
     if( pItem )
     {
-        sal_uInt16 nValue = ( ( const SdrEdgeLineDeltaAnzItem* )pItem )->GetValue();
+        sal_uInt16 nValue = ( ( const SfxUInt16Item* )pItem )->GetValue();
         if( nValue <= 2 )
         {
             aFtLine3.Enable( sal_False );
@@ -554,7 +554,7 @@ void SvxConnectionPage::FillTypeLB()
 }
 void SvxConnectionPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
 {
-    SFX_ITEMSET_ARG(&aSet,pOfaPtrItem,OfaPtrItem,SID_OBJECT_LIST,sal_False);
+    SFX_ITEMSET_ARG(&aSet,pOfaPtrItem,OfaPtrItem,SID_OBJECT_LIST );
     if (pOfaPtrItem)
         SetView( static_cast<SdrView *>(pOfaPtrItem->GetValue()) );
 

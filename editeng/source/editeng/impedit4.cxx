@@ -2653,7 +2653,7 @@ sal_uInt16 ImpEditEngine::StartSearchAndReplace( EditView* pEditView, const SvxS
         aCurSel.Adjust( aEditDoc );
         EditPaM aStartPaM = aTmpItem.GetSelection() ? aCurSel.Min() : aEditDoc.GetStartPaM();
         EditSelection aFoundSel( aCurSel.Max() );
-        sal_Bool bFound = ImpSearch( aTmpItem, aCurSel, aStartPaM, aFoundSel );
+        bool bFound = ImpSearch( aTmpItem, aCurSel, aStartPaM, aFoundSel );
         if ( bFound )
             UndoActionStart( EDITUNDO_REPLACEALL );
         while ( bFound )
@@ -2690,7 +2690,7 @@ sal_Bool ImpEditEngine::Search( const SvxSearchItem& rSearchItem, EditView* pEdi
         aStartPaM = aSel.Min();
 
     EditSelection aFoundSel;
-    sal_Bool bFound = ImpSearch( rSearchItem, aSel, aStartPaM, aFoundSel );
+    bool bFound = ImpSearch( rSearchItem, aSel, aStartPaM, aFoundSel );
     if ( bFound && ( aFoundSel == aSel ) )  // Bei Rueckwaetssuche
     {
         aStartPaM = aSel.Min();

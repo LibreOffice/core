@@ -304,63 +304,72 @@ void Listener::Notify (
     SfxBroadcaster& rBroadcaster,
     const SfxHint& rHint)
 {
-    if (rHint.ISA(SdrHint))
+    const SdrBaseHint* pSdrBaseHint = dynamic_cast< const SdrBaseHint* >(&rHint);
+
+    if(pSdrBaseHint)
     {
-        SdrHint& rSdrHint (*PTR_CAST(SdrHint,&rHint));
-        switch (rSdrHint.GetKind())
+        switch (pSdrBaseHint->GetSdrHintKind())
         {
             case HINT_PAGEORDERCHG:
                 if (&rBroadcaster == mrSlideSorter.GetModel().GetDocument())
-                    HandleModelChange(rSdrHint.GetPage());
+                    HandleModelChange(pSdrBaseHint->GetSdrHintPage());
                 break;
 
             default:
                 break;
         }
     }
-    else if (rHint.ISA(ViewShellHint))
+    else
     {
-        ViewShellHint& rViewShellHint (*PTR_CAST(ViewShellHint,&rHint));
-        switch (rViewShellHint.GetHintId())
+        const ViewShellHint* pViewShellHint = dynamic_cast< const ViewShellHint* >(&rHint);
+
+        if (pViewShellHint)
         {
-            case ViewShellHint::HINT_PAGE_RESIZE_START:
-                // Initiate a model change but do nothing (well, not much)
-                // until we are told that all slides have been resized.
-                mpModelChangeLock.reset(new SlideSorterController::ModelChangeLock(mrController));
-                mrController.HandleModelChange();
-                break;
+            switch (pViewShellHint->GetHintId())
+            {
+                case ViewShellHint::HINT_PAGE_RESIZE_START:
+                    // Initiate a model change but do nothing (well, not much)
+                    // until we are told that all slides have been resized.
+                    mpModelChangeLock.reset(new SlideSorterController::ModelChangeLock(mrController));
+                    mrController.HandleModelChange();
+                    break;
 
-            case ViewShellHint::HINT_PAGE_RESIZE_END:
-                // All slides have been resized.  The model has to be updated.
-                mpModelChangeLock.reset();
-                break;
+                case ViewShellHint::HINT_PAGE_RESIZE_END:
+                    // All slides have been resized.  The model has to be updated.
+                    mpModelChangeLock.reset();
+                    break;
 
-            case ViewShellHint::HINT_CHANGE_EDIT_MODE_START:
-                mrController.PrepareEditModeChange();
-                break;
+                case ViewShellHint::HINT_CHANGE_EDIT_MODE_START:
+                    mrController.PrepareEditModeChange();
+                    break;
 
-            case ViewShellHint::HINT_CHANGE_EDIT_MODE_END:
-                mrController.FinishEditModeChange();
-                break;
+                case ViewShellHint::HINT_CHANGE_EDIT_MODE_END:
+                    mrController.FinishEditModeChange();
+                    break;
 
-            case ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_START:
-                mpModelChangeLock.reset(new SlideSorterController::ModelChangeLock(mrController));
-                break;
+                case ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_START:
+                    mpModelChangeLock.reset(new SlideSorterController::ModelChangeLock(mrController));
+                    break;
 
-            case ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_END:
-                mpModelChangeLock.reset();
-                break;
+                case ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_END:
+                    mpModelChangeLock.reset();
+                    break;
+            }
         }
-    }
-    else if (rHint.ISA(SfxSimpleHint))
-    {
-        SfxSimpleHint& rSfxSimpleHint (*PTR_CAST(SfxSimpleHint,&rHint));
-        switch (rSfxSimpleHint.GetId())
+        else
         {
-            case SFX_HINT_DOCCHANGED:
-                mrController.CheckForMasterPageAssignment();
-                mrController.CheckForSlideTransitionAssignment();
-                break;
+            const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+            if (pSfxSimpleHint)
+            {
+                switch (pSfxSimpleHint->GetId())
+                {
+                    case SFX_HINT_DOCCHANGED:
+                        mrController.CheckForMasterPageAssignment();
+                        mrController.CheckForSlideTransitionAssignment();
+                        break;
+                }
+            }
         }
     }
 }
@@ -424,7 +433,7 @@ IMPL_LINK(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent
             if (pEvent->mpUserData != NULL)
             {
                 const SdrObject* pObject = static_cast<const SdrObject*>(pEvent->mpUserData);
-                HandleShapeModification(pObject->GetPage());
+                HandleShapeModification(pObject->getSdrPageFromSdrObject());
             }
             break;
 
@@ -663,7 +672,7 @@ void Listener::HandleShapeModification (const SdrPage* pPage)
     // pages that are linked to this master page.
     if (pPage->IsMasterPage())
     {
-        for (sal_uInt16 nIndex=0,nCount=pDocument->GetSdPageCount(PK_STANDARD);
+        for (sal_uInt32 nIndex=0,nCount=pDocument->GetSdPageCount(PK_STANDARD);
              nIndex<nCount;
              ++nIndex)
         {

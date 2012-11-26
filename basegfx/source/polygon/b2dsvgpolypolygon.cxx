@@ -806,8 +806,7 @@ namespace basegfx
                                                      aCenter_prime.getY());
                                 aTransform.rotate(fPhi*M_PI/180);
                                 const B2DPoint aOffset((p1+p2)/2.0);
-                                aTransform.translate(aOffset.getX(),
-                                                     aOffset.getY());
+                                aTransform.translate(aOffset);
                                 aSegment.transform(aTransform);
 
                                 // createPolygonFromEllipseSegment()

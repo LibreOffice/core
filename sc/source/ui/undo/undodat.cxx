@@ -51,26 +51,6 @@
 
 // -----------------------------------------------------------------------
 
-TYPEINIT1(ScUndoDoOutline,          ScSimpleUndo);
-TYPEINIT1(ScUndoMakeOutline,        ScSimpleUndo);
-TYPEINIT1(ScUndoOutlineLevel,       ScSimpleUndo);
-TYPEINIT1(ScUndoOutlineBlock,       ScSimpleUndo);
-TYPEINIT1(ScUndoRemoveAllOutlines,  ScSimpleUndo);
-TYPEINIT1(ScUndoAutoOutline,        ScSimpleUndo);
-TYPEINIT1(ScUndoSubTotals,          ScDBFuncUndo);
-TYPEINIT1(ScUndoSort,               ScDBFuncUndo);
-TYPEINIT1(ScUndoQuery,              ScDBFuncUndo);
-TYPEINIT1(ScUndoAutoFilter,         ScDBFuncUndo);
-TYPEINIT1(ScUndoDBData,             ScSimpleUndo);
-TYPEINIT1(ScUndoImportData,         ScSimpleUndo);
-TYPEINIT1(ScUndoRepeatDB,           ScSimpleUndo);
-//UNUSED2008-05  TYPEINIT1(ScUndoPivot,              ScSimpleUndo);
-TYPEINIT1(ScUndoDataPilot,          ScSimpleUndo);
-TYPEINIT1(ScUndoConsolidate,        ScSimpleUndo);
-TYPEINIT1(ScUndoChartData,          ScSimpleUndo);
-
-// -----------------------------------------------------------------------
-
 
 //
 //      Outline-Gruppen ein- oder ausblenden
@@ -238,9 +218,11 @@ void __EXPORT ScUndoMakeOutline::Redo()
 
 void __EXPORT ScUndoMakeOutline::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    ScTabViewTarget* pScTabViewTarget = dynamic_cast< ScTabViewTarget* >(&rTarget);
+
+    if (pScTabViewTarget)
     {
-        ScTabViewShell& rViewShell = *((ScTabViewTarget&)rTarget).GetViewShell();
+        ScTabViewShell& rViewShell = *pScTabViewTarget->GetViewShell();
 
         if (bMake)
             rViewShell.MakeOutline( bColumns, sal_True );
@@ -251,7 +233,7 @@ void __EXPORT ScUndoMakeOutline::Repeat(SfxRepeatTarget& rTarget)
 
 sal_Bool __EXPORT ScUndoMakeOutline::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return 0 != dynamic_cast< ScTabViewTarget* >(&rTarget);
 }
 
 //
@@ -335,13 +317,17 @@ void __EXPORT ScUndoOutlineLevel::Redo()
 
 void __EXPORT ScUndoOutlineLevel::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->SelectLevel( bColumns, nLevel, sal_True );
+    ScTabViewTarget* pScTabViewTarget = dynamic_cast< ScTabViewTarget* >(&rTarget);
+
+    if (pScTabViewTarget)
+    {
+        pScTabViewTarget->GetViewShell()->SelectLevel( bColumns, nLevel, sal_True );
+    }
 }
 
 sal_Bool __EXPORT ScUndoOutlineLevel::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return 0 != dynamic_cast< ScTabViewTarget* >(&rTarget);
 }
 
 //
@@ -436,9 +422,11 @@ void __EXPORT ScUndoOutlineBlock::Redo()
 
 void __EXPORT ScUndoOutlineBlock::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    ScTabViewTarget* pScTabViewTarget = dynamic_cast< ScTabViewTarget* >(&rTarget);
+
+    if (pScTabViewTarget)
     {
-        ScTabViewShell& rViewShell = *((ScTabViewTarget&)rTarget).GetViewShell();
+        ScTabViewShell& rViewShell = *pScTabViewTarget->GetViewShell();
 
         if (bShow)
             rViewShell.ShowMarkedOutlines( sal_True );
@@ -449,7 +437,7 @@ void __EXPORT ScUndoOutlineBlock::Repeat(SfxRepeatTarget& rTarget)
 
 sal_Bool __EXPORT ScUndoOutlineBlock::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return 0 != dynamic_cast< ScTabViewTarget* >(&rTarget);
 }
 
 //
@@ -534,13 +522,17 @@ void __EXPORT ScUndoRemoveAllOutlines::Redo()
 
 void __EXPORT ScUndoRemoveAllOutlines::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->RemoveAllOutlines( sal_True );
+    ScTabViewTarget* pScTabViewTarget = dynamic_cast< ScTabViewTarget* >(&rTarget);
+
+    if (pScTabViewTarget)
+    {
+        pScTabViewTarget->GetViewShell()->RemoveAllOutlines( sal_True );
+    }
 }
 
 sal_Bool __EXPORT ScUndoRemoveAllOutlines::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return 0 != dynamic_cast< ScTabViewTarget* >(&rTarget);
 }
 
 //
@@ -643,13 +635,17 @@ void __EXPORT ScUndoAutoOutline::Redo()
 
 void __EXPORT ScUndoAutoOutline::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->AutoOutline( sal_True );
+    ScTabViewTarget* pScTabViewTarget = dynamic_cast< ScTabViewTarget* >(&rTarget);
+
+    if (pScTabViewTarget)
+    {
+        pScTabViewTarget->GetViewShell()->AutoOutline( sal_True );
+    }
 }
 
 sal_Bool __EXPORT ScUndoAutoOutline::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return 0 != dynamic_cast< ScTabViewTarget* >(&rTarget);
 }
 
 //
@@ -1431,9 +1427,11 @@ void __EXPORT ScUndoImportData::Redo()
 
 void __EXPORT ScUndoImportData::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    ScTabViewTarget* pScTabViewTarget = dynamic_cast< ScTabViewTarget* >(&rTarget);
+
+    if (pScTabViewTarget)
     {
-        ScTabViewShell& rViewShell = *((ScTabViewTarget&)rTarget).GetViewShell();
+        ScTabViewShell& rViewShell = *pScTabViewTarget->GetViewShell();
 
         SCTAB nDummy;
         ScImportParam aNewParam(aImportParam);
@@ -1449,7 +1447,7 @@ sal_Bool __EXPORT ScUndoImportData::CanRepeat(SfxRepeatTarget& rTarget) const
     //  Repeat nur fuer Import per DB-Bereich, dann ist pUndoDBData gesetzt
 
     if (pUndoDBData)
-        return (rTarget.ISA(ScTabViewTarget));
+        return 0 != dynamic_cast< ScTabViewTarget* >(&rTarget);
     else
         return sal_False;       // Adressbuch
 }
@@ -1618,13 +1616,17 @@ void __EXPORT ScUndoRepeatDB::Redo()
 
 void __EXPORT ScUndoRepeatDB::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->RepeatDB( sal_True );
+    ScTabViewTarget* pScTabViewTarget = dynamic_cast< ScTabViewTarget* >(&rTarget);
+
+    if (pScTabViewTarget)
+    {
+        pScTabViewTarget->GetViewShell()->RepeatDB( sal_True );
+    }
 }
 
 sal_Bool __EXPORT ScUndoRepeatDB::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return 0 != dynamic_cast< ScTabViewTarget* >(&rTarget);
 }
 
 //UNUSED2008-05  //
@@ -1774,7 +1776,7 @@ sal_Bool __EXPORT ScUndoRepeatDB::CanRepeat(SfxRepeatTarget& rTarget) const
 //UNUSED2008-05  {
 //UNUSED2008-05      //  Wiederholen: nur loeschen
 //UNUSED2008-05
-//UNUSED2008-05      if ( pOldUndoDoc && !pNewUndoDoc && rTarget.ISA(ScTabViewTarget) )
+//UNUSED2008-05      if ( pOldUndoDoc && !pNewUndoDoc && dynamic_cast< ScTabViewTarget* >(&rTarget) )
 //UNUSED2008-05          ((ScTabViewTarget&)rTarget).GetViewShell()->DeletePivotTable();
 //UNUSED2008-05  }
 //UNUSED2008-05
@@ -1782,7 +1784,7 @@ sal_Bool __EXPORT ScUndoRepeatDB::CanRepeat(SfxRepeatTarget& rTarget) const
 //UNUSED2008-05  {
 //UNUSED2008-05      //  Wiederholen: nur loeschen
 //UNUSED2008-05
-//UNUSED2008-05      return ( pOldUndoDoc && !pNewUndoDoc && rTarget.ISA(ScTabViewTarget) );
+//UNUSED2008-05      return ( pOldUndoDoc && !pNewUndoDoc && dynamic_cast< ScTabViewTarget* >(&rTarget) );
 //UNUSED2008-05  }
 
 //

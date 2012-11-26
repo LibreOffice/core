@@ -62,12 +62,12 @@ namespace drawinglayer
             geometry::ViewInformation3D*                mpLastRLGViewInformation;
 
             /// bitfield
-            unsigned                                    mbSmoothNormals : 1; // Plane self
-            unsigned                                    mbSmoothHorizontalNormals : 1; // always
-            unsigned                                    mbSmoothLids : 1; // Front/back
-            unsigned                                    mbCharacterMode : 1;
-            unsigned                                    mbCloseFront : 1;
-            unsigned                                    mbCloseBack : 1;
+            bool                                        mbSmoothNormals : 1; // Plane self
+            bool                                        mbSmoothHorizontalNormals : 1; // always
+            bool                                        mbSmoothLids : 1; // Front/back
+            bool                                        mbCharacterMode : 1;
+            bool                                        mbCloseFront : 1;
+            bool                                        mbCloseBack : 1;
 
             /// create slices
             void impCreateSlices();
@@ -109,9 +109,6 @@ namespace drawinglayer
             bool getCharacterMode() const { return mbCharacterMode; }
             bool getCloseFront() const { return mbCloseFront; }
             bool getCloseBack() const { return mbCloseBack; }
-
-            /// compare operator
-            virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
             /// get range
             virtual basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& rViewInformation) const;

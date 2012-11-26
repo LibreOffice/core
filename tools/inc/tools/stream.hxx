@@ -30,7 +30,6 @@
 #include <tools/errinf.hxx>
 #endif
 #include <tools/ref.hxx>
-#include <tools/rtti.hxx>
 
 class FileCopier;
 class StreamData;
@@ -136,8 +135,6 @@ protected:
     void close();
 
 public:
-    TYPEINFO();
-
     SvLockBytes(): m_pStream(0), m_bOwner(sal_False), m_bSync(sal_False) {}
 
     SvLockBytes(SvStream * pTheStream, sal_Bool bTheOwner = sal_False):
@@ -177,8 +174,6 @@ SV_DECL_IMPL_REF(SvLockBytes);
 class TOOLS_DLLPUBLIC SvOpenLockBytes: public SvLockBytes
 {
 public:
-    TYPEINFO();
-
     SvOpenLockBytes(): SvLockBytes(0, sal_False) {}
 
     SvOpenLockBytes(SvStream * pStream, sal_Bool bOwner):
@@ -206,8 +201,6 @@ class SvAsyncLockBytes: public SvOpenLockBytes
     sal_Bool m_bTerminated;
 
 public:
-    TYPEINFO();
-
     SvAsyncLockBytes(SvStream * pStream, sal_Bool bOwner):
         SvOpenLockBytes(pStream, bOwner), m_nSize(0), m_bTerminated(sal_False) {}
 
@@ -853,7 +846,6 @@ public:
     /*-----------------MM 30.04.96 11:01-----------------
      mehrfaches Aufrufen von Load und Assign erlaubt
     --------------------------------------------------*/
-                    TYPEINFO();
     virtual         ~SvDataCopyStream(){}
     virtual void    Load( SvStream & ) = 0;
     virtual void    Save( SvStream & ) = 0;

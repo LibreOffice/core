@@ -339,7 +339,7 @@ void BrowseBox::ToggleSelection( sal_Bool bForce )
 
     // only highlight painted areas!
     bNotToggleSel = sal_True;
-    if ( sal_False && !getDataWindow()->bInPaint )
+    if ( false && !getDataWindow()->bInPaint )
         pDataWin->Update();
 
     // accumulate areas of rows to highlight
@@ -597,10 +597,10 @@ void BrowseBox::Resize()
         BrowseBox::StateChanged( STATE_CHANGE_INITSHOW );
     if ( !pCols->Count() )
     {
-        getDataWindow()->bResizeOnPaint = sal_True;
+        getDataWindow()->bResizeOnPaint = true;
         return;
     }
-    getDataWindow()->bResizeOnPaint = sal_False;
+    getDataWindow()->bResizeOnPaint = false;
 
     // calc the size of the scrollbars
     // (we can't ask the scrollbars for their widths cause if we're zoomed they still have to be
@@ -1189,10 +1189,10 @@ void BrowseBox::UpdateScrollbars()
     BrowserDataWin *pBDW = (BrowserDataWin*) pDataWin;
     if ( pBDW->bInUpdateScrollbars )
     {
-        pBDW->bHadRecursion = sal_True;
+        pBDW->bHadRecursion = true;
         return;
     }
-    pBDW->bInUpdateScrollbars = sal_True;
+    pBDW->bInUpdateScrollbars = true;
 
     // the size of the corner window (and the width of the VSB/height of the HSB)
     sal_uLong nCornerSize = GetSettings().GetStyleSettings().GetScrollBarSize();
@@ -1201,7 +1201,7 @@ void BrowseBox::UpdateScrollbars()
 
     // needs VScroll?
     long nMaxRows = (pDataWin->GetSizePixel().Height()) / GetDataRowHeight();
-    sal_Bool bNeedsVScroll =    getDataWindow()->bAutoVScroll
+    bool bNeedsVScroll =    getDataWindow()->bAutoVScroll
                         ?   nTopRow || ( nRowCount > nMaxRows )
                         :   !getDataWindow()->bNoVScroll;
     Size aDataWinSize = pDataWin->GetSizePixel();
@@ -1226,7 +1226,7 @@ void BrowseBox::UpdateScrollbars()
     sal_uLong nLastCol = GetColumnAtXPosPixel( aDataWinSize.Width() - 1 );
 
     sal_uInt16 nFrozenCols = FrozenColCount();
-    sal_Bool bNeedsHScroll =    getDataWindow()->bAutoHScroll
+    bool bNeedsHScroll =    getDataWindow()->bAutoHScroll
                         ?   ( nFirstCol > nFrozenCols ) || ( nLastCol <= pCols->Count() )
                         :   !getDataWindow()->bNoHScroll;
     if ( !bNeedsHScroll )
@@ -1346,10 +1346,10 @@ void BrowseBox::UpdateScrollbars()
         getDataWindow()->pHeaderBar->SetOffset( nWidth );
     }
 
-    pBDW->bInUpdateScrollbars = sal_False;
+    pBDW->bInUpdateScrollbars = false;
     if ( pBDW->bHadRecursion )
     {
-        pBDW->bHadRecursion = sal_False;
+        pBDW->bHadRecursion = false;
         UpdateScrollbars();
     }
 }
@@ -1388,7 +1388,7 @@ void BrowseBox::SetUpdateMode( sal_Bool bUpdate )
 
 //-------------------------------------------------------------------
 
-sal_Bool BrowseBox::GetUpdateMode() const
+bool BrowseBox::GetUpdateMode() const
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 

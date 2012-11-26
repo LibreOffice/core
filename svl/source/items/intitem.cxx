@@ -36,9 +36,8 @@
 //
 //============================================================================
 
-TYPEINIT1_AUTOFACTORY(SfxByteItem, CntByteItem);
+IMPL_POOLITEM_FACTORY(SfxByteItem)
 
-//============================================================================
 // virtual
 SfxPoolItem * SfxByteItem::Create(SvStream & rStream, sal_uInt16) const
 {
@@ -53,10 +52,8 @@ SfxPoolItem * SfxByteItem::Create(SvStream & rStream, sal_uInt16) const
 //
 //============================================================================
 
+IMPL_POOLITEM_FACTORY(SfxInt16Item)
 DBG_NAME(SfxInt16Item);
-
-//============================================================================
-TYPEINIT1_AUTOFACTORY(SfxInt16Item, SfxPoolItem);
 
 //============================================================================
 SfxInt16Item::SfxInt16Item(sal_uInt16 which, SvStream & rStream):
@@ -180,8 +177,7 @@ SfxFieldUnit SfxInt16Item::GetUnit() const
 //
 //============================================================================
 
-TYPEINIT1_AUTOFACTORY(SfxUInt16Item, CntUInt16Item);
-
+IMPL_POOLITEM_FACTORY(SfxUInt16Item)
 
 //============================================================================
 //
@@ -189,8 +185,7 @@ TYPEINIT1_AUTOFACTORY(SfxUInt16Item, CntUInt16Item);
 //
 //============================================================================
 
-TYPEINIT1_AUTOFACTORY(SfxInt32Item, CntInt32Item);
-
+IMPL_POOLITEM_FACTORY(SfxInt32Item)
 
 //============================================================================
 //
@@ -198,8 +193,7 @@ TYPEINIT1_AUTOFACTORY(SfxInt32Item, CntInt32Item);
 //
 //============================================================================
 
-TYPEINIT1_AUTOFACTORY(SfxUInt32Item, CntUInt32Item);
-
+IMPL_POOLITEM_FACTORY(SfxUInt32Item)
 
 //============================================================================
 //
@@ -208,9 +202,6 @@ TYPEINIT1_AUTOFACTORY(SfxUInt32Item, CntUInt32Item);
 //============================================================================
 
 DBG_NAME(SfxMetricItem);
-
-//============================================================================
-TYPEINIT1_AUTOFACTORY(SfxMetricItem, SfxInt32Item);
 
 //============================================================================
 SfxMetricItem::SfxMetricItem(sal_uInt16 which, sal_uInt32 nValue):
@@ -235,20 +226,19 @@ SfxMetricItem::SfxMetricItem(const SfxMetricItem & rItem):
 
 //============================================================================
 // virtual
-int SfxMetricItem::ScaleMetrics(long nMult, long nDiv)
+void SfxMetricItem::ScaleMetrics(long nMult, long nDiv)
 {
     BigInt aTheValue(GetValue());
     aTheValue *= nMult;
     aTheValue += nDiv / 2;
     aTheValue /= nDiv;
     SetValue(aTheValue);
-    return 1;
 }
 
 //============================================================================
 // virtual
-int SfxMetricItem::HasMetrics() const
+bool SfxMetricItem::HasMetrics() const
 {
-    return 1;
+    return true;
 }
 

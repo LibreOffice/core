@@ -130,20 +130,6 @@ namespace drawinglayer
         {
         }
 
-        bool PatternFillPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const PatternFillPrimitive2D& rCompare = static_cast< const PatternFillPrimitive2D& >(rPrimitive);
-
-                return (getMask() == rCompare.getMask()
-                    && getChildren() == rCompare.getChildren()
-                    && getReferenceRange() == rCompare.getReferenceRange());
-            }
-
-            return false;
-        }
-
         basegfx::B2DRange PatternFillPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             return getMask().getB2DRange();

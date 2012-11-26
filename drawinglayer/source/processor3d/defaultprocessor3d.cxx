@@ -385,21 +385,31 @@ namespace drawinglayer
                         const sal_uInt16 nSpecularIntensity(rPrimitive.getMaterial().getSpecularIntensity());
 
                         // solve color model for each normal vector, set colors at points. Clear normals.
-                        for(sal_uInt32 a(0L); a < aFill.count(); a++)
+                        for(sal_uInt32 a(0); a < aFill.count(); a++)
                         {
                             basegfx::B3DPolygon aPartFill(aFill.getB3DPolygon(a));
 
-                            for(sal_uInt32 b(0L); b < aPartFill.count(); b++)
+                            for(sal_uInt32 b(0); b < aPartFill.count(); b++)
                             {
                                 // solve color model. Transform normal to eye coor
                                 const basegfx::B3DVector aNormal(aPartFill.getNormal(b));
                                 const basegfx::BColor aSolvedColor(getSdrLightingAttribute().solveColorModel(aNormal, aColor, rSpecular, rEmission, nSpecularIntensity));
+
                                 aPartFill.setBColor(b, aSolvedColor);
                             }
 
                             // clear normals on this part polygon and write it back
                             aPartFill.clearNormals();
                             aFill.setB3DPolygon(a, aPartFill);
+                        }
+
+                        // if no colors are used after solving the color model for
+                        // all normals, all calculated colors were black (0.0, 0.0, 0.0).
+                        // To represent this 'unused' state, set object color to black
+                        // which will be used in this case
+                        if(!aFill.areBColorsUsed())
+                        {
+                            aObjectColor = ::basegfx::BColor::getEmptyBColor();
                         }
                         break;
                     }

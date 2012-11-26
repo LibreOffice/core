@@ -160,12 +160,12 @@ private:
 
     // bitfield
     // some boolean flags for line span interpolator usages
-    unsigned                                                mbModifyColor : 1;
-    unsigned                                                mbUseTex : 1;
-    unsigned                                                mbHasTexCoor : 1;
-    unsigned                                                mbHasInvTexCoor : 1;
-    unsigned                                                mbUseNrm : 1;
-    unsigned                                                mbUseCol : 1;
+    bool                                                    mbModifyColor : 1;
+    bool                                                    mbUseTex : 1;
+    bool                                                    mbHasTexCoor : 1;
+    bool                                                    mbHasInvTexCoor : 1;
+    bool                                                    mbUseNrm : 1;
+    bool                                                    mbUseCol : 1;
 
     void getTextureCoor(basegfx::B2DPoint& rTarget) const
     {

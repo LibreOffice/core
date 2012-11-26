@@ -77,9 +77,9 @@ public:
             This broadcaster is typically the same as the one used by the
             ConfigurationController.
         @param bBroadcastRequestEvents
-            When this is <TRUE/> then modifications to the configuration
+            When this is <true/> then modifications to the configuration
             trigger the broadcasting of "ResourceActivationRequestEvent" and
-            "ResourceDeactivationRequestEvent".  When this flag is <FALSE/>
+            "ResourceDeactivationRequestEvent".  When this flag is <false/>
             then events with type "ResourceActivationEvent" and
             "ResourceDeactivationEvent" are broadcasted.
     */

@@ -76,7 +76,8 @@ namespace drawinglayer
                 if(0.0 != getSdrLFSTAttribute().getLine().getWidth())
                 {
                     // decompose to get scale
-                    basegfx::B2DVector aScale, aTranslate;
+                    basegfx::B2DVector aScale;
+                    basegfx::B2DPoint aTranslate;
                     double fRotate, fShearX;
                     getTransform().decompose(aScale, aTranslate, fRotate, fShearX);
 
@@ -141,22 +142,8 @@ namespace drawinglayer
             maGraphicAttr(rGraphicAttr)
         {
             // reset some values from GraphicAttr which are part of transformation already
-            maGraphicAttr.SetRotation(0L);
-        }
-
-        bool SdrGrafPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const SdrGrafPrimitive2D& rCompare = (SdrGrafPrimitive2D&)rPrimitive;
-
-                return (getTransform() == rCompare.getTransform()
-                    && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute()
-                    && getGraphicObject() == rCompare.getGraphicObject()
-                    && getGraphicAttr() == rCompare.getGraphicAttr());
-            }
-
-            return false;
+            maGraphicAttr.SetRotation(0);
+            maGraphicAttr.SetMirrorFlags(0);
         }
 
         bool SdrGrafPrimitive2D::isTransparent() const

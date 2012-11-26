@@ -48,23 +48,24 @@ namespace sdr
 
         DefaultProperties::DefaultProperties(SdrObject& rObj)
         :   BaseProperties(rObj),
-            mpItemSet(0L)
+            mpItemSet(0)
         {
         }
 
         DefaultProperties::DefaultProperties(const DefaultProperties& rProps, SdrObject& rObj)
         :   BaseProperties(rObj),
-            mpItemSet(0L)
+            mpItemSet(0)
         {
             if(rProps.mpItemSet)
             {
-                mpItemSet = rProps.mpItemSet->Clone(sal_True);
+                // Clone may be to another model and thus another ItemPool
+                mpItemSet = rProps.mpItemSet->Clone(true, &rObj.getSdrModelFromSdrObject().GetItemPool());
 
-                // do not keep parent info, this may be changed by later construrtors.
+                // do not keep parent info, this may be changed by later constructors.
                 // This class just copies the ItemSet, ignore parent.
                 if(mpItemSet && mpItemSet->GetParent())
                 {
-                    mpItemSet->SetParent(0L);
+                    mpItemSet->SetParent(0);
                 }
             }
         }
@@ -79,7 +80,7 @@ namespace sdr
             if(mpItemSet)
             {
                 delete mpItemSet;
-                mpItemSet = 0L;
+                mpItemSet = 0;
             }
         }
 
@@ -87,7 +88,8 @@ namespace sdr
         {
             if(!mpItemSet)
             {
-                ((DefaultProperties*)this)->mpItemSet = &(((DefaultProperties*)this)->CreateObjectSpecificItemSet(*GetSdrObject().GetObjectItemPool()));
+                ((DefaultProperties*)this)->mpItemSet = &(((DefaultProperties*)this)->CreateObjectSpecificItemSet(
+                    GetSdrObject().GetObjectItemPool()));
                 ((DefaultProperties*)this)->ForceDefaultAttributes();
             }
 
@@ -105,7 +107,7 @@ namespace sdr
                 ItemChange(nWhichID, &rItem);
                 PostItemChange(nWhichID);
 
-                SfxItemSet aSet(*GetSdrObject().GetObjectItemPool(), nWhichID, nWhichID);
+                SfxItemSet aSet(GetSdrObject().GetObjectItemPool(), nWhichID, nWhichID);
                 aSet.Put(rItem);
                 ItemSetChanged(aSet);
             }
@@ -130,7 +132,7 @@ namespace sdr
 
                 if(nWhich)
                 {
-                    SfxItemSet aSet(*GetSdrObject().GetObjectItemPool(), nWhich, nWhich, 0, 0);
+                    SfxItemSet aSet(GetSdrObject().GetObjectItemPool(), nWhich, nWhich, 0, 0);
                     ItemSetChanged(aSet);
                 }
             }
@@ -151,7 +153,7 @@ namespace sdr
             const SfxPoolItem *pPoolItem;
             std::vector< sal_uInt16 > aPostItemChangeList;
             sal_Bool bDidChange(sal_False);
-            SfxItemSet aSet(*GetSdrObject().GetObjectItemPool(), SDRATTR_START, EE_ITEMS_END, 0, 0);
+            SfxItemSet aSet(GetSdrObject().GetObjectItemPool(), SDRATTR_START, EE_ITEMS_END, 0, 0);
 
             // give a hint to STL_Vector
             aPostItemChangeList.reserve(rSet.Count());
@@ -191,7 +193,7 @@ namespace sdr
         {
         }
 
-        sal_Bool DefaultProperties::AllowItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/) const
+        bool DefaultProperties::AllowItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/) const
         {
             return sal_True;
         }
@@ -206,7 +208,7 @@ namespace sdr
                 CleanupFillProperties(*mpItemSet);
         }
 
-        void DefaultProperties::SetStyleSheet(SfxStyleSheet* /*pNewStyleSheet*/, sal_Bool /*bDontRemoveHardAttr*/)
+        void DefaultProperties::SetStyleSheet(SfxStyleSheet* /*pNewStyleSheet*/, bool /*bDontRemoveHardAttr*/)
         {
             // no StyleSheet in DefaultProperties
         }

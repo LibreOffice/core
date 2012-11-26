@@ -312,20 +312,20 @@ sal_Bool PropBrw::Close()
 
 //----------------------------------------------------------------------------
 
-uno::Sequence< Reference<uno::XInterface> > PropBrw::CreateCompPropSet(const SdrMarkList& _rMarkList)
+uno::Sequence< Reference<uno::XInterface> > PropBrw::CreateCompPropSet(const SdrObjectVector& rSelection)
 {
-    sal_uInt32 nMarkCount = _rMarkList.GetMarkCount();
+    const sal_uInt32 nMarkCount(rSelection.size());
     ::std::vector< uno::Reference< uno::XInterface> > aSets;
     aSets.reserve(nMarkCount);
 
-    for(sal_uInt32 i=0;i<nMarkCount;++i)
+    for(sal_uInt32 i(0); i < nMarkCount; ++i)
     {
-        SdrObject* pCurrent = _rMarkList.GetMark(i)->GetMarkedSdrObj();
-
+        SdrObject* pCurrent = rSelection[i];
         ::std::auto_ptr<SdrObjListIter> pGroupIterator;
-        if (pCurrent->IsGroupObject())
+
+        if (pCurrent->getChildrenOfSdrObject())
         {
-            pGroupIterator.reset(new SdrObjListIter(*pCurrent->GetSubList()));
+            pGroupIterator.reset(new SdrObjListIter(*pCurrent->getChildrenOfSdrObject()));
             pCurrent = pGroupIterator->IsMore() ? pGroupIterator->Next() : NULL;
         }
 
@@ -509,7 +509,7 @@ void PropBrw::Update( OSectionView* pNewView )
     {
         if ( m_pView )
         {
-            EndListening( *(m_pView->GetModel()) );
+            EndListening( m_pView->getSdrModelFromSdrView() );
             m_pView = NULL;
         }
 
@@ -547,8 +547,10 @@ void PropBrw::Update( OSectionView* pNewView )
             ::boost::shared_ptr<OSectionWindow> pSectionWindow = pViews->getSectionWindow(i);
             if ( pSectionWindow )
             {
-                const SdrMarkList& rMarkList = pSectionWindow->getReportSection().getSectionView().GetMarkedObjectList();
-                aMarkedObjects = ::comphelper::concatSequences(aMarkedObjects,CreateCompPropSet( rMarkList ));
+                const SdrObjectVector aSelection(
+                    pSectionWindow->getReportSection().getSectionView().getSelectedSdrObjectVectorFromSdrMarkView());
+
+                aMarkedObjects = ::comphelper::concatSequences(aMarkedObjects,CreateCompPropSet( aSelection ));
             }
         }
 
@@ -568,7 +570,7 @@ void PropBrw::Update( OSectionView* pNewView )
             implSetNewObject( uno::Sequence< uno::Reference< uno::XInterface> >(&xTemp,1) );
         }
 
-        StartListening( *(m_pView->GetModel()) );
+        StartListening( m_pView->getSdrModelFromSdrView() );
     }
     catch ( Exception& )
     {
@@ -585,7 +587,7 @@ void PropBrw::Update( const uno::Reference< uno::XInterface>& _xReportComponent)
         {
             if ( m_pView )
             {
-                EndListening( *(m_pView->GetModel()) );
+                EndListening( m_pView->getSdrModelFromSdrView() );
                 m_pView = NULL;
             } // if ( m_pView )
 

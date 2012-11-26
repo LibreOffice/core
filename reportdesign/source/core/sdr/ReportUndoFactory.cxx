@@ -39,9 +39,9 @@ SdrUndoAction* lcl_createUndo(SdrObject& rObject,Action _eAction,sal_uInt16 _nCo
     uno::Reference< report::XGroup> xGroup = xSection->getGroup();
     SdrUndoAction* pUndo = NULL;
     if ( xGroup.is() )
-        pUndo = new OUndoGroupSectionAction(*rObject.GetModel(),_eAction,OGroupHelper::getMemberFunction(xSection),xGroup,xReportComponent,_nCommentId);
+        pUndo = new OUndoGroupSectionAction(rObject.getSdrModelFromSdrObject(),_eAction,OGroupHelper::getMemberFunction(xSection),xGroup,xReportComponent,_nCommentId);
     else
-        pUndo = new OUndoReportSectionAction(*rObject.GetModel(),_eAction,OReportHelper::getMemberFunction(xSection),xSection->getReportDefinition(),xReportComponent,_nCommentId);
+        pUndo = new OUndoReportSectionAction(rObject.getSdrModelFromSdrObject(),_eAction,OReportHelper::getMemberFunction(xSection),xSection->getReportDefinition(),xReportComponent,_nCommentId);
     return pUndo;
 }
 // -----------------------------------------------------------------------------
@@ -58,15 +58,15 @@ OReportUndoFactory::~OReportUndoFactory()
 }
 ///////////////////////////////////////////////////////////////////////
 // shapes
-SdrUndoAction* OReportUndoFactory::CreateUndoMoveObject( SdrObject& rObject )
-{
-    return m_pUndoFactory->CreateUndoMoveObject( rObject );
-}
-
-SdrUndoAction* OReportUndoFactory::CreateUndoMoveObject( SdrObject& rObject, const Size& rDist )
-{
-    return m_pUndoFactory->CreateUndoMoveObject( rObject, rDist );
-}
+//SdrUndoAction* OReportUndoFactory::CreateUndoMoveObject( SdrObject& rObject )
+//{
+//  return m_pUndoFactory->CreateUndoMoveObject( rObject );
+//}
+//
+//SdrUndoAction* OReportUndoFactory::CreateUndoMoveObject( SdrObject& rObject, const basegfx::B2DPoint& rOffset )
+//{
+//  return m_pUndoFactory->CreateUndoMoveObject( rObject, rOffset );
+//}
 
 SdrUndoAction* OReportUndoFactory::CreateUndoGeoObject( SdrObject& rObject )
 {
@@ -78,30 +78,29 @@ SdrUndoAction* OReportUndoFactory::CreateUndoAttrObject( SdrObject& rObject, boo
     return m_pUndoFactory->CreateUndoAttrObject( rObject, bStyleSheet1 ? sal_True : sal_False, bSaveText ? sal_True : sal_False );
 }
 
-SdrUndoAction* OReportUndoFactory::CreateUndoRemoveObject( SdrObject& rObject, bool bOrdNumDirect )
+SdrUndoAction* OReportUndoFactory::CreateUndoRemoveObject( SdrObject& rObject )
 {
-    return m_pUndoFactory->CreateUndoRemoveObject( rObject, bOrdNumDirect ? sal_True : sal_False );
+    return m_pUndoFactory->CreateUndoRemoveObject( rObject );
 }
 
-SdrUndoAction* OReportUndoFactory::CreateUndoInsertObject( SdrObject& rObject, bool /*bOrdNumDirect*/ )
+SdrUndoAction* OReportUndoFactory::CreateUndoInsertObject( SdrObject& rObject )
 {
     return lcl_createUndo(rObject,rptui::Inserted,RID_STR_UNDO_INSERT_CONTROL);
 }
 
-SdrUndoAction* OReportUndoFactory::CreateUndoDeleteObject( SdrObject& rObject, bool /*bOrdNumDirect*/ )
+SdrUndoAction* OReportUndoFactory::CreateUndoDeleteObject( SdrObject& rObject )
 {
     return lcl_createUndo(rObject,rptui::Removed,RID_STR_UNDO_DELETE_CONTROL);
-    //return m_pUndoFactory->CreateUndoDeleteObject( rObject, bOrdNumDirect ? sal_True : sal_False );
 }
 
-SdrUndoAction* OReportUndoFactory::CreateUndoNewObject( SdrObject& rObject, bool /*bOrdNumDirect*/ )
+SdrUndoAction* OReportUndoFactory::CreateUndoNewObject( SdrObject& rObject )
 {
     return lcl_createUndo(rObject,rptui::Inserted,RID_STR_UNDO_INSERT_CONTROL);
 }
 
-SdrUndoAction* OReportUndoFactory::CreateUndoCopyObject( SdrObject& rObject, bool bOrdNumDirect )
+SdrUndoAction* OReportUndoFactory::CreateUndoCopyObject( SdrObject& rObject )
 {
-    return m_pUndoFactory->CreateUndoCopyObject( rObject, bOrdNumDirect ? sal_True : sal_False );
+    return m_pUndoFactory->CreateUndoCopyObject( rObject );
 }
 
 SdrUndoAction* OReportUndoFactory::CreateUndoObjectOrdNum( SdrObject& rObject, sal_uInt32 nOldOrdNum1, sal_uInt32 nNewOrdNum1)
@@ -109,9 +108,9 @@ SdrUndoAction* OReportUndoFactory::CreateUndoObjectOrdNum( SdrObject& rObject, s
     return m_pUndoFactory->CreateUndoObjectOrdNum( rObject, nOldOrdNum1, nNewOrdNum1 );
 }
 
-SdrUndoAction* OReportUndoFactory::CreateUndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject, bool bOrdNumDirect )
+SdrUndoAction* OReportUndoFactory::CreateUndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject )
 {
-    return m_pUndoFactory->CreateUndoReplaceObject( rOldObject, rNewObject, bOrdNumDirect ? sal_True : sal_False );
+    return m_pUndoFactory->CreateUndoReplaceObject( rOldObject, rNewObject );
 }
 
 SdrUndoAction* OReportUndoFactory::CreateUndoObjectLayerChange( SdrObject& rObject, SdrLayerID aOldLayer, SdrLayerID aNewLayer )
@@ -135,10 +134,10 @@ SdrUndoAction* OReportUndoFactory::CreateUndoDeleteLayer(sal_uInt16 nLayerNum, S
     return m_pUndoFactory->CreateUndoDeleteLayer( nLayerNum, rNewLayerAdmin, rNewModel );
 }
 
-SdrUndoAction* OReportUndoFactory::CreateUndoMoveLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel, sal_uInt16 nNeuPos1)
-{
-    return m_pUndoFactory->CreateUndoMoveLayer( nLayerNum, rNewLayerAdmin, rNewModel, nNeuPos1 );
-}
+//SdrUndoAction* OReportUndoFactory::CreateUndoMoveLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel, sal_uInt16 nNeuPos1)
+//{
+//  return m_pUndoFactory->CreateUndoMoveLayer( nLayerNum, rNewLayerAdmin, rNewModel, nNeuPos1 );
+//}
 
 // page
 SdrUndoAction*  OReportUndoFactory::CreateUndoDeletePage(SdrPage& rPage)

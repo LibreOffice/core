@@ -145,8 +145,8 @@ private:
     Size            aFltWinSize;
     Size            aDisplaySize;
     Size            aBmpSize;
-    sal_Bool            bMovie;
-    sal_Bool            bAllObjects;
+    bool            bMovie;
+    bool            bAllObjects;
 
     SfxBindings*                pBindings;
     AnimationControllerItem*    pControllerItem;
@@ -165,7 +165,7 @@ private:
     DECL_LINK( ModifyBitmapHdl, void * );
     DECL_LINK( ModifyTimeHdl, void * );
 
-    void            UpdateControl( sal_uLong nPos, sal_Bool bDisableCtrls = sal_False );
+    void            UpdateControl( sal_uLong nPos, bool bDisableCtrls = false );
     void            ResetAttrs();
     void            WaitInEffect( sal_uLong nMilliSeconds, sal_uLong nTime,
                                         SfxProgress* pStbMgr ) const;

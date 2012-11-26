@@ -497,8 +497,7 @@ StarBASIC* GetCurrentBasic( StarBASIC* pRTBasic )
     if( pActiveModule )
     {
         SbxObject* pParent = pActiveModule->GetParent();
-        if( pParent && pParent->ISA(StarBASIC) )
-            pCurBasic = (StarBASIC*)pParent;
+        pCurBasic = dynamic_cast< StarBASIC* >(pParent);
     }
     return pCurBasic;
 }
@@ -642,7 +641,7 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
 
             SbxVariable* v = pParams->Get( i );
             // Methoden sind immer byval!
-            sal_Bool bByVal = v->IsA( TYPE(SbxMethod) );
+            sal_Bool bByVal = (0 != dynamic_cast< SbxMethod* >(v));
             SbxDataType t = v->GetType();
             bool bTargetTypeIsArray = false;
             if( p )
@@ -995,7 +994,7 @@ SbxVariableRef SbiRuntime::PopVar()
         DBG_TRACE( "" );
 #endif
     // Methods halten im 0.Parameter sich selbst, also weghauen
-    if( xVar->IsA( TYPE(SbxMethod) ) )
+    if( dynamic_cast< const SbxMethod* >(&xVar) )
         xVar->SetParameters(0);
     return xVar;
 }
@@ -1146,7 +1145,7 @@ void SbiRuntime::PushForEach()
     BasicCollection* pCollection;
     SbxDimArray* pArray;
     SbUnoObject* pUnoObj;
-    if( (pArray = PTR_CAST(SbxDimArray,pObj)) != NULL )
+    if( (pArray = dynamic_cast< SbxDimArray* >( pObj)) != NULL )
     {
         p->eForType = FOR_EACH_ARRAY;
         p->refEnd = (SbxVariable*)pArray;
@@ -1163,13 +1162,13 @@ void SbiRuntime::PushForEach()
             p->pArrayUpperBounds[i] = uBound;
         }
     }
-    else if( (pCollection = PTR_CAST(BasicCollection,pObj)) != NULL )
+    else if( (pCollection = dynamic_cast< BasicCollection* >( pObj)) != NULL )
     {
         p->eForType = FOR_EACH_COLLECTION;
         p->refEnd = pCollection;
         p->nCurCollectionIndex = 0;
     }
-    else if( (pUnoObj = PTR_CAST(SbUnoObject,pObj)) != NULL )
+    else if( (pUnoObj = dynamic_cast< SbUnoObject* >( pObj)) != NULL )
     {
         // XEnumerationAccess?
         Any aAny = pUnoObj->getUnoAny();
@@ -1247,7 +1246,7 @@ SbiForStack* SbiRuntime::FindForStackItemForCollection( class BasicCollection* p
     {
         SbxVariable* pVar = p->refEnd.Is() ? (SbxVariable*)p->refEnd : NULL;
         if( p->eForType == FOR_EACH_COLLECTION && pVar != NULL &&
-            (pCollection = PTR_CAST(BasicCollection,pVar)) == pCollection )
+            (pCollection = dynamic_cast< BasicCollection* >(pVar)) == pCollection )
         {
             pRet = p;
             break;

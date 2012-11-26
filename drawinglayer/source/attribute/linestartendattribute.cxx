@@ -45,7 +45,7 @@ namespace drawinglayer
             basegfx::B2DPolyPolygon                 maPolyPolygon;          // the StartEndGeometry PolyPolygon
 
             // bitfield
-            unsigned                                mbCentered : 1;         // use centered to ineStart/End point?
+            bool                                    mbCentered : 1;         // use centered to ineStart/End point?
 
             ImpLineStartEndAttribute(
                 double fWidth,

@@ -39,12 +39,13 @@ class OReportModel;
 
 class REPORTDESIGN_DLLPUBLIC OReportPage : public SdrPage
 {
+private:
     OReportModel&           rModel;
     ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > m_xSection;
     bool                    m_bSpecialInsertMode;
-    std::vector<SdrObject*> m_aTemporaryObjectList;
+    SdrObjectVector m_aTemporaryObjectList;
 
-    OReportPage(const OReportPage&);
+//    OReportPage(const OReportPage&);
 
     // methode to remove temporary objects, created by 'special mode'
     // (BegDragObj)
@@ -54,19 +55,20 @@ class REPORTDESIGN_DLLPUBLIC OReportPage : public SdrPage
 
 protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage();
+
+    /// method to copy all data from given source
+    virtual void copyDataFromSdrPage(const SdrPage& rSource);
+
 public:
-    TYPEINFO();
+    /// create a copy, evtl. with a different target model (if given)
+    virtual SdrPage* CloneSdrPage(SdrModel* pTargetModel = 0) const;
 
     OReportPage( OReportModel& rModel
                 ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection
-                ,FASTBOOL bMasterPage=sal_False );
+                ,bool bMasterPage = false );
 
-
-    virtual SdrPage* Clone() const;
-    using SdrPage::Clone;
-
-    virtual void NbcInsertObject(SdrObject* pObj, sal_uLong nPos, const SdrInsertReason* pReason);
-    virtual SdrObject* RemoveObject(sal_uLong nObjNum);
+    virtual void InsertObjectToSdrObjList(SdrObject& rObj, sal_uInt32 nPos = CONTAINER_APPEND);
+    virtual SdrObject* RemoveObjectFromSdrObjList(sal_uInt32 nObjNum);
 
     /** returns the index inside the object list which belongs to the report component.
         @param  _xObject    the report component

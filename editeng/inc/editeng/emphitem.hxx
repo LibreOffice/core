@@ -45,10 +45,8 @@ namespace rtl
 class EDITENG_DLLPUBLIC SvxEmphasisMarkItem : public SfxUInt16Item
 {
 public:
-    TYPEINFO();
-
-    SvxEmphasisMarkItem(  const FontEmphasisMark eVal /*= EMPHASISMARK_NONE*/,
-                          const sal_uInt16 nId  );
+    POOLITEM_FACTORY()
+    SvxEmphasisMarkItem(  const FontEmphasisMark eVal = EMPHASISMARK_NONE, const sal_uInt16 nId = 0 );
 
     // "pure virtual Methoden" vom SfxPoolItem + SfxEnumItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,

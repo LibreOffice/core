@@ -36,8 +36,6 @@ private:
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxShape;
 
 public:
-    TYPEINFO();
-
     SdXMLEventsContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx,
         const rtl::OUString& rLocalName,

@@ -191,9 +191,12 @@ namespace reportdesign
         *
         * \return
         */
-        ::boost::shared_ptr<rptui::OReportModel> getSdrModel() const;
+        ::boost::shared_ptr<rptui::OReportModel> getSharedSdrModel() const;
 
-        static ::boost::shared_ptr<rptui::OReportModel> getSdrModel(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >& _xReportDefinition);
+        /** abstract SdrModel provider */
+        virtual SdrModel* getSdrModel() const;
+
+        static ::boost::shared_ptr<rptui::OReportModel> getSharedSdrModel(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >& _xReportDefinition);
     private:
         DECLARE_XINTERFACE( )
         DECLARE_XTYPEPROVIDER( )

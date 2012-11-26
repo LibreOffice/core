@@ -74,10 +74,6 @@ void SAL_CALL OObjectListener::propertyChange( const  ::com::sun::star::beans::P
 // DlgEdHint
 //============================================================================
 
-TYPEINIT1( DlgEdHint, SfxHint );
-
-//----------------------------------------------------------------------------
-
 DlgEdHint::DlgEdHint( DlgEdHintKind eHint )
     :eHintKind( eHint )
 {

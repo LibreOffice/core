@@ -65,17 +65,14 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <algorithm>
-
 #include <cppuhelper/implbase1.hxx>
-
-#include <drawinglayer/geometry/viewinformation2d.hxx>
-#include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/unoapi.hxx>
 #include "CustomAnimationEffect.hxx"
 #include <CustomAnimationPreset.hxx>
 #include "animations.hxx"
+#include <svx/svdlegacy.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::presentation;
@@ -1694,9 +1691,10 @@ bool CustomAnimationEffect::getStopAudio() const
 
 // --------------------------------------------------------------------
 
-SdrPathObj* CustomAnimationEffect::createSdrPathObjFromPath()
+SdrPathObj* CustomAnimationEffect::createSdrPathObjFromPath(SdrModel& rTargetModel)
 {
-    SdrPathObj * pPathObj = new SdrPathObj( OBJ_PATHLINE );
+    SdrPathObj * pPathObj = new SdrPathObj(
+        rTargetModel );
     updateSdrPathObjFromPath( *pPathObj );
     return pPathObj;
 }
@@ -1711,58 +1709,41 @@ void CustomAnimationEffect::updateSdrPathObjFromPath( SdrPathObj& rPathObj )
         SdrObject* pObj = GetSdrObjectFromXShape( getTargetShape() );
         if( pObj )
         {
-            SdrPage* pPage = pObj->GetPage();
+            SdrPage* pPage = pObj->getSdrPageFromSdrObject();
             if( pPage )
             {
-                const Size aPageSize( pPage->GetSize() );
-                xPolyPoly.transform(basegfx::tools::createScaleB2DHomMatrix((double)aPageSize.Width(), (double)aPageSize.Height()));
+                xPolyPoly.transform(basegfx::tools::createScaleB2DHomMatrix(pPage->GetPageScale()));
             }
 
-            const Rectangle aBoundRect( pObj->GetCurrentBoundRect() );
-            const Point aCenter( aBoundRect.Center() );
-            xPolyPoly.transform(basegfx::tools::createTranslateB2DHomMatrix(aCenter.X(), aCenter.Y()));
+            xPolyPoly.transform(basegfx::tools::createTranslateB2DHomMatrix(pObj->getObjectRange(0).getCenter()));
         }
     }
 
-    rPathObj.SetPathPoly( xPolyPoly );
+    rPathObj.setB2DPolyPolygonInObjectCoordinates( xPolyPoly );
 }
 
 // --------------------------------------------------------------------
 
 void CustomAnimationEffect::updatePathFromSdrPathObj( const SdrPathObj& rPathObj )
 {
-    ::basegfx::B2DPolyPolygon xPolyPoly( rPathObj.GetPathPoly() );
+    basegfx::B2DPolyPolygon aPolyPolygon(rPathObj.getB2DPolyPolygonInObjectCoordinates());
+    SdrObject* pObj = GetSdrObjectFromXShape(getTargetShape());
 
-    SdrObject* pObj = GetSdrObjectFromXShape( getTargetShape() );
-    if( pObj )
+    if(pObj)
     {
-        Rectangle aBoundRect(0,0,0,0);
+        const basegfx::B2DPoint aCenter(pObj->getSdrObjectTransformation() * basegfx::B2DPoint(0.5, 0.5));
 
-        const drawinglayer::primitive2d::Primitive2DSequence xPrimitives(pObj->GetViewContact().getViewIndependentPrimitive2DSequence());
-        const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
-           const basegfx::B2DRange aRange(drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(xPrimitives, aViewInformation2D));
+        aPolyPolygon.transform(basegfx::tools::createTranslateB2DHomMatrix(-aCenter.getX(), -aCenter.getY()));
 
-        if(!aRange.isEmpty())
-        {
-            aBoundRect = Rectangle(
-                    (sal_Int32)floor(aRange.getMinX()), (sal_Int32)floor(aRange.getMinY()),
-                    (sal_Int32)ceil(aRange.getMaxX()), (sal_Int32)ceil(aRange.getMaxY()));
-        }
+        SdrPage* pPage = pObj->getSdrPageFromSdrObject();
 
-        const Point aCenter( aBoundRect.Center() );
-
-        xPolyPoly.transform(basegfx::tools::createTranslateB2DHomMatrix(-aCenter.X(), -aCenter.Y()));
-
-        SdrPage* pPage = pObj->GetPage();
         if( pPage )
         {
-            const Size aPageSize( pPage->GetSize() );
-            xPolyPoly.transform(basegfx::tools::createScaleB2DHomMatrix(
-                1.0 / (double)aPageSize.Width(), 1.0 / (double)aPageSize.Height()));
+            aPolyPolygon.transform(basegfx::tools::createScaleB2DHomMatrix(1.0 / pPage->GetPageScale()));
         }
     }
 
-    setPath( ::basegfx::tools::exportToSvgD( xPolyPoly ) );
+    setPath(::basegfx::tools::exportToSvgD(aPolyPolygon));
 }
 
 // ====================================================================

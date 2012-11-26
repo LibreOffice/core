@@ -29,18 +29,13 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/smplhint.hxx>
-
-#include <tools/rtti.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/adjitem.hxx>
 #include <editeng/tstpitem.hxx>
-
 #include <editdoc.hxx>
 #include <impedit.hxx>
 #include <editdbg.hxx>
-
 #include <editeng/numitem.hxx>
-
 #include <editeng/akrnitem.hxx>
 #include <editeng/cntritem.hxx>
 #include <editeng/colritem.hxx>
@@ -57,7 +52,6 @@
 #include <editeng/wghtitem.hxx>
 #include <editeng/wrlmitem.hxx>
 #include <editeng/charscaleitem.hxx>
-
 #include <vcl/svapp.hxx>    // Fuer AppWindow...
 
 DBG_NAME( EE_ParaPortion )
@@ -442,7 +436,7 @@ void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit
     {
         case EE_PARA_LRSPACE:
         {
-            DBG_ASSERT( rPoolItem.IsA( TYPE( SvxLRSpaceItem ) ), "ConvertItem: Ungueltiges Item!" );
+            DBG_ASSERT( dynamic_cast< const SvxLRSpaceItem* >(&rPoolItem), "ConvertItem: Ungueltiges Item!" );
             SvxLRSpaceItem& rItem = (SvxLRSpaceItem&)rPoolItem;
             rItem.SetTxtFirstLineOfst( sal::static_int_cast< short >( OutputDevice::LogicToLogic( rItem.GetTxtFirstLineOfst(), eSourceUnit, eDestUnit ) ) );
             rItem.SetTxtLeft( OutputDevice::LogicToLogic( rItem.GetTxtLeft(), eSourceUnit, eDestUnit ) );
@@ -452,7 +446,7 @@ void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit
         break;
         case EE_PARA_ULSPACE:
         {
-            DBG_ASSERT( rPoolItem.IsA( TYPE( SvxULSpaceItem ) ), "ConvertItem: Ungueltiges Item!" );
+            DBG_ASSERT( dynamic_cast< const SvxULSpaceItem* >(&rPoolItem), "ConvertItem: Ungueltiges Item!" );
             SvxULSpaceItem& rItem = (SvxULSpaceItem&)rPoolItem;
             rItem.SetUpper( sal::static_int_cast< sal_uInt16 >( OutputDevice::LogicToLogic( rItem.GetUpper(), eSourceUnit, eDestUnit ) ) );
             rItem.SetLower( sal::static_int_cast< sal_uInt16 >( OutputDevice::LogicToLogic( rItem.GetLower(), eSourceUnit, eDestUnit ) ) );
@@ -460,7 +454,7 @@ void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit
         break;
         case EE_PARA_SBL:
         {
-            DBG_ASSERT( rPoolItem.IsA( TYPE( SvxLineSpacingItem ) ), "ConvertItem: Ungueltiges Item!" );
+            DBG_ASSERT( dynamic_cast< const SvxLineSpacingItem* >(&rPoolItem), "ConvertItem: Ungueltiges Item!" );
             SvxLineSpacingItem& rItem = (SvxLineSpacingItem&)rPoolItem;
             // #96298# SetLineHeight changes also eLineSpace!
             if ( rItem.GetLineSpaceRule() == SVX_LINE_SPACE_MIN )
@@ -469,7 +463,7 @@ void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit
         break;
         case EE_PARA_TABS:
         {
-            DBG_ASSERT( rPoolItem.IsA( TYPE( SvxTabStopItem ) ), "ConvertItem: Ungueltiges Item!" );
+            DBG_ASSERT( dynamic_cast< const SvxTabStopItem* >(&rPoolItem), "ConvertItem: Ungueltiges Item!" );
             SvxTabStopItem& rItem = (SvxTabStopItem&)rPoolItem;
             SvxTabStopItem aNewItem( EE_PARA_TABS );
             for ( sal_uInt16 i = 0; i < rItem.Count(); i++ )
@@ -485,7 +479,7 @@ void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit
         case EE_CHAR_FONTHEIGHT_CJK:
         case EE_CHAR_FONTHEIGHT_CTL:
         {
-            DBG_ASSERT( rPoolItem.IsA( TYPE( SvxFontHeightItem ) ), "ConvertItem: Ungueltiges Item!" );
+            DBG_ASSERT( dynamic_cast< const SvxFontHeightItem* >(&rPoolItem), "ConvertItem: Ungueltiges Item!" );
             SvxFontHeightItem& rItem = (SvxFontHeightItem&)rPoolItem;
             rItem.SetHeight( OutputDevice::LogicToLogic( rItem.GetHeight(), eSourceUnit, eDestUnit ) );
         }

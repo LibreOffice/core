@@ -71,9 +71,6 @@ namespace drawinglayer
             TextLine getTextLine() const { return meTextLine; }
             const basegfx::BColor& getLineColor() const { return maLineColor; }
 
-            /// compare operator
-            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
-
             /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };

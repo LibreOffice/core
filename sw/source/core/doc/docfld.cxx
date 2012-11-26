@@ -524,12 +524,8 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
     if( pFldType )
     {
         SwIterator<SwFmtFld,SwFieldType> aIter( *pFldType );
-        for( SwFmtFld* pFmtFld = aIter.Last(); pFmtFld; pFmtFld = aIter.Previous() )
+        for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
         {
-                // start calculation at the end
-                // new fields are inserted at the beginning of the modify chain
-                // that gives faster calculation on import
-                // mba: do we really need this "optimization"? Is it still valid?
                 SwTblField* pFld;
                 if( !pFmtFld->GetTxtFld() || (nsSwExtendedSubType::SUB_CMD &
                     (pFld = (SwTblField*)pFmtFld->GetFld())->GetSubType() ))

@@ -56,8 +56,6 @@ class SfxFontItem: public SfxPoolItem
     unsigned m_bHasFillColor: 1;
 
 public:
-    TYPEINFO();
-
     inline SfxFontItem(sal_uInt16 nWhich);
 
     virtual int operator ==(const SfxPoolItem & rItem) const;

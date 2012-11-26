@@ -42,9 +42,6 @@
 #include "svx/xexch.hxx"
 
 
-TYPEINIT1_AUTOFACTORY( XFillExchangeData, SvDataCopyStream );
-
-
 /*************************************************************************
 |*
 |* Default-Ctor (Fuer Assign())

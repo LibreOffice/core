@@ -457,12 +457,12 @@ void SfxStatusBarControl::StateChanged
     DBG_MEMTEST();
     DBG_ASSERT( pBar != 0, "setting state to dangling StatusBar" );
 
-    const SfxStringItem* pStr = PTR_CAST( SfxStringItem, pState );
+    const SfxStringItem* pStr = dynamic_cast< const SfxStringItem* >( pState );
     if ( eState == SFX_ITEM_AVAILABLE && pStr )
         pBar->SetItemText( nSID, pStr->GetValue() );
     else
     {
-        DBG_ASSERT( eState != SFX_ITEM_AVAILABLE || pState->ISA(SfxVoidItem),
+        DBG_ASSERT( eState != SFX_ITEM_AVAILABLE || dynamic_cast< const SfxVoidItem* >(pState),
                     "wrong SfxPoolItem subclass in SfxStatusBarControl" );
         pBar->SetItemText( nSID, String() );
     }
@@ -652,8 +652,8 @@ SfxStatusBarControl* SfxStatusBarControl::CreateControl
     else
         pSlotPool = &SfxSlotPool::GetSlotPool();
 
-    TypeId aSlotType = pSlotPool->GetSlotType(nSlotID);
-    if ( aSlotType )
+    const std::type_info&aSlotType = pSlotPool->GetSlotType(nSlotID);
+    if ( aSlotType != typeid(void))
     {
         if ( pMod )
         {
@@ -662,7 +662,7 @@ SfxStatusBarControl* SfxStatusBarControl::CreateControl
             {
                 SfxStbCtrlFactArr_Impl &rFactories = *pFactories;
                 for ( sal_uInt16 nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
-                if ( rFactories[nFactory]->nTypeId == aSlotType &&
+                if ( rFactories[nFactory]->rTypeInfo == aSlotType &&
                      ( ( rFactories[nFactory]->nSlotId == 0 ) ||
                      ( rFactories[nFactory]->nSlotId == nSlotID) ) )
                     return rFactories[nFactory]->pCtor( nSlotID, nStbId, *pBar );
@@ -671,7 +671,7 @@ SfxStatusBarControl* SfxStatusBarControl::CreateControl
 
         SfxStbCtrlFactArr_Impl &rFactories = pApp->GetStbCtrlFactories_Impl();
         for ( sal_uInt16 nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
-        if ( rFactories[nFactory]->nTypeId == aSlotType &&
+        if ( rFactories[nFactory]->rTypeInfo == aSlotType &&
              ( ( rFactories[nFactory]->nSlotId == 0 ) ||
              ( rFactories[nFactory]->nSlotId == nSlotID) ) )
             return rFactories[nFactory]->pCtor( nSlotID, nStbId, *pBar );

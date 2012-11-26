@@ -46,18 +46,6 @@ namespace drawinglayer
         {
         }
 
-        bool TransformPrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
-        {
-            if(GroupPrimitive3D::operator==(rPrimitive))
-            {
-                const TransformPrimitive3D& rCompare = static_cast< const TransformPrimitive3D& >(rPrimitive);
-
-                return (getTransformation() == rCompare.getTransformation());
-            }
-
-            return false;
-        }
-
         basegfx::B3DRange TransformPrimitive3D::getB3DRange(const geometry::ViewInformation3D& rViewInformation) const
         {
             basegfx::B3DRange aRetval(getB3DRangeFromPrimitive3DSequence(getChildren(), rViewInformation));

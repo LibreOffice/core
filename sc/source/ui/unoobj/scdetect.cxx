@@ -336,7 +336,7 @@ static sal_Bool lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
 
     SfxAllItemSet *pSet = new SfxAllItemSet( SFX_APP()->GetPool() );
     TransformParameters( SID_OPENDOC, lDescriptor, *pSet );
-    SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, SID_DOC_READONLY, sal_False );
+    SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, SID_DOC_READONLY);
 
     bWasReadOnly = pItem && pItem->GetValue();
 

@@ -60,8 +60,6 @@ protected:
     void    PropHeight( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
 
 public:
-    TYPEINFO();
-
     SbStdPicture();
     virtual SbxVariable* Find( const String&, SbxClassType );
 
@@ -94,8 +92,6 @@ protected:
     void    PropName( SbxVariable* pVar, SbxArray* pPar, sal_Bool bWrite );
 
 public:
-    TYPEINFO();
-
     SbStdFont();
     virtual SbxVariable* Find( const String&, SbxClassType );
 
@@ -132,8 +128,6 @@ protected:
     void    MethSetText( SbxVariable* pVar, SbxArray* pPar_, sal_Bool bWrite );
 
 public:
-    TYPEINFO();
-
     SbStdClipboard();
     virtual SbxVariable* Find( const String&, SbxClassType );
 };

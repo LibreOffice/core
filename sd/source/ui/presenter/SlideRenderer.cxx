@@ -203,8 +203,8 @@ BitmapEx SlideRenderer::CreatePreview (
             0);
 
     // Determine the size of the current slide and its aspect ratio.
-    Size aPageSize = pPage->GetSize();
-    if (aPageSize.Height() <= 0)
+    const basegfx::B2DVector& rPageSize = pPage->GetPageScale();
+    if (basegfx::fTools::lessOrEqual(rPageSize.getY(), 0.0))
         throw lang::IllegalArgumentException(
             OUString::createFromAscii("SlideRenderer::createPreview() called with invalid size"),
             static_cast<XWeak*>(this),
@@ -215,7 +215,7 @@ BitmapEx SlideRenderer::CreatePreview (
     // a) will have the aspect ratio of the page and
     // b) will be as large as possible.
     awt::Size aPreviewSize (calculatePreviewSize(
-        double(aPageSize.Width()) / double(aPageSize.Height()),
+        rPageSize.getX() / rPageSize.getY(),
         rMaximalSize));
     if (aPreviewSize.Width <= 0 || aPreviewSize.Height <= 0)
         return BitmapEx();

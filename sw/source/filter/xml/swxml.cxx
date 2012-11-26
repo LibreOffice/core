@@ -68,6 +68,7 @@
 #include <unotextrange.hxx>
 #include <swmodule.hxx>
 #include <SwXMLSectionList.hxx>
+#include <svx/svdlegacy.hxx>
 
 #include <statstr.hrc>
 
@@ -94,6 +95,7 @@
 #define LOGFILE_AUTHOR "mb93740"
 
 #include <sfx2/DocumentMetadataAccess.hxx>
+#include <svx/fmmodel.hxx>
 
 
 using namespace ::com::sun::star;
@@ -506,7 +508,7 @@ void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SwDoc& _rDoc )
             if( pOle2Obj )
             {
                 // found an ole2 shape
-                SdrObjList* pObjList = pOle2Obj->GetObjList();
+                SdrObjList* pObjList = pOle2Obj->getParentOfSdrObject();
 
                 // get its graphic
                 Graphic aGraphic;
@@ -517,13 +519,18 @@ void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SwDoc& _rDoc )
                 pOle2Obj->Disconnect();
 
                 // create new graphic shape with the ole graphic and shape size
-                SdrGrafObj* pGraphicObj = new SdrGrafObj( aGraphic, pOle2Obj->GetCurrentBoundRect() );
+                SdrGrafObj* pGraphicObj = new SdrGrafObj(
+                    pOle2Obj->getSdrModelFromSdrObject(),
+                    aGraphic,
+                    pOle2Obj->getSdrObjectTransformation());
+
                 // apply layer of ole2 shape at graphic shape
                 pGraphicObj->SetLayer( pOle2Obj->GetLayer() );
 
                 // replace ole2 shape with the new graphic object and delete the ol2 shape
-                SdrObject* pReplaced = pObjList->ReplaceObject( pGraphicObj, pOle2Obj->GetOrdNum() );
-                SdrObject::Free( pReplaced );
+                SdrObject* pReplaced = pObjList->ReplaceObjectInSdrObjList(
+                    *pGraphicObj, pOle2Obj->GetNavigationPosition() );
+                deleteSdrObjectSafeAndClearPointer( pReplaced );
             }
         }
     }

@@ -453,7 +453,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                     nDefPage = ((SfxUInt16Item *)pItem)->GetValue();
 
                 aSet.Put(SfxFrameItem( SID_DOCFRAME, &GetView().GetViewFrame()->GetTopFrame()));
-                FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &GetView()));
+                FieldUnit eMetric = ::GetDfltMetric(0 != dynamic_cast< SwWebView* >( &GetView()));
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric) ));
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 DBG_ASSERT(pFact, "Dialogdiet fail!");
@@ -606,8 +606,9 @@ void SwFrameShell::Execute(SfxRequest &rReq)
         {
             bUpdateMgr = sal_False;
             SdrView* pSdrView = rSh.GetDrawViewWithValidMarkList();
-            if ( pSdrView &&
-                 pSdrView->GetMarkedObjectCount() == 1 )
+            const SdrObject* pSelected = pSdrView ? pSdrView->getSelectedIfSingle() : 0;
+
+            if ( pSelected )
             {
                 String aDescription(rSh.GetObjDescription());
                 String aTitle(rSh.GetObjTitle());
@@ -874,8 +875,9 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                 {
                     SwWrtShell &rWrtSh = GetShell();
                     SdrView* pSdrView = rWrtSh.GetDrawViewWithValidMarkList();
-                    if ( !pSdrView ||
-                         pSdrView->GetMarkedObjectCount() != 1 )
+                    const SdrObject* pSelected = pSdrView ? pSdrView->getSelectedIfSingle() : 0;
+
+                    if ( !pSdrView || !pSelected )
                     {
                         rSet.DisableItem( nWhich );
                     }

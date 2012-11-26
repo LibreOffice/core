@@ -39,9 +39,23 @@
 
 using namespace ::com::sun::star;
 
-TYPEINIT1(SvxSmartTagItem, SfxPoolItem);
-
 // class SvxFontItem -----------------------------------------------------
+IMPL_POOLITEM_FACTORY(SvxSmartTagItem)
+
+SvxSmartTagItem::SvxSmartTagItem() :
+    SfxPoolItem( 0 ),
+    maActionComponentsSequence( ),
+    maActionIndicesSequence( ),
+    maStringKeyMaps( ),
+    mxRange( ),
+    mxController( ),
+    maLocale( ),
+    maApplicationName( ),
+    maRangeText( )
+{
+}
+
+// -----------------------------------------------------------------------
 
 SvxSmartTagItem::SvxSmartTagItem( const sal_uInt16 nId,
                                   const com::sun::star::uno::Sequence < com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::smarttags::XSmartTagAction > > >& rActionComponentsSequence,
@@ -63,8 +77,6 @@ SvxSmartTagItem::SvxSmartTagItem( const sal_uInt16 nId,
     maRangeText( rRangeText )
 {
 }
-
-// -----------------------------------------------------------------------
 
 // -----------------------------------------------------------------------
 

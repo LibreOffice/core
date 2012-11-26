@@ -54,7 +54,7 @@ NotesDockingWindow::NotesDockingWindow (
     if (pBase != NULL)
     {
         SdDrawDocument* pDocument = pBase->GetDocument();
-        mpEditWindow = new EditWindow (this, &pDocument->GetPool());
+        mpEditWindow = new EditWindow (this, &pDocument->GetItemPool());
         mpEditWindow->Show();
         TextLogger::Instance().ConnectToEditWindow (mpEditWindow);
     }

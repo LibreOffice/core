@@ -36,8 +36,6 @@
 class SVX_DLLPUBLIC XFillBackgroundItem : public SfxBoolItem
 {
 public:
-                            TYPEINFO();
-
                             XFillBackgroundItem( sal_Bool bFill = sal_False );
                             SVX_DLLPRIVATE XFillBackgroundItem( SvStream& rIn );
 

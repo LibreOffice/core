@@ -65,14 +65,14 @@ namespace drawinglayer
             SdrTextVertAdjust                   maSdrTextVertAdjust;
 
             // bitfield
-            unsigned                            mbContour : 1;
-            unsigned                            mbFitToSize : 1;
-            unsigned                            mbHideContour : 1;
-            unsigned                            mbBlink : 1;
-            unsigned                            mbScroll : 1;
-            unsigned                            mbInEditMode : 1;
-            unsigned                            mbFixedCellHeight : 1;
-            unsigned                            mbWrongSpell : 1;
+            bool                                mbContour : 1;
+            bool                                mbFitToSize : 1;
+            bool                                mbHideContour : 1;
+            bool                                mbBlink : 1;
+            bool                                mbScroll : 1;
+            bool                                mbInEditMode : 1;
+            bool                                mbFixedCellHeight : 1;
+            bool                                mbWrongSpell : 1;
 
         public:
             ImpSdrTextAttribute(
@@ -125,7 +125,7 @@ namespace drawinglayer
                     // #i101556# init with version number to detect changes of single text
                     // attribute and/or style sheets in primitive data without having to
                     // copy that data locally (which would be better from principle)
-                    maPropertiesVersion = pSdrText->GetObject().GetProperties().getVersion();
+                    maPropertiesVersion = pSdrText->getSdrTextObj().GetProperties().getVersion();
                 }
             }
 
@@ -439,7 +439,7 @@ namespace drawinglayer
         {
             if(isBlink())
             {
-                getSdrText().GetObject().impGetBlinkTextTiming(rAnimList);
+                getSdrText().getSdrTextObj().impGetBlinkTextTiming(rAnimList);
             }
         }
 
@@ -447,7 +447,7 @@ namespace drawinglayer
         {
             if(isScroll())
             {
-                getSdrText().GetObject().impGetScrollTextTiming(rAnimList, fFrameLength, fTextLength);
+                getSdrText().getSdrTextObj().impGetScrollTextTiming(rAnimList, fFrameLength, fTextLength);
             }
         }
     } // end of namespace attribute

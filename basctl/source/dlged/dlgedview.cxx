@@ -37,14 +37,13 @@
 #include <basidesh.hxx>
 #include <iderdll.hxx>
 #include "dlgedobj.hxx"
-
-TYPEINIT1( DlgEdView, SdrView );
+#include <svx/svdlegacy.hxx>
 
 //----------------------------------------------------------------------------
 
-DlgEdView::DlgEdView( SdrModel* pModel, OutputDevice* pOut, DlgEditor* pEditor )
-    :SdrView( pModel, pOut )
-    ,pDlgEditor( pEditor )
+DlgEdView::DlgEdView( SdrModel& rModel, OutputDevice* pOut, DlgEditor& rEditor )
+:   SdrView( rModel, pOut ),
+    mrDlgEditor( rEditor )
 {
     // #114898#
     SetBufferedOutputAllowed(true);
@@ -59,21 +58,20 @@ DlgEdView::~DlgEdView()
 
 //----------------------------------------------------------------------------
 
-void DlgEdView::MarkListHasChanged()
+void DlgEdView::handleSelectionChange()
 {
-    SdrView::MarkListHasChanged();
+    // call parent
+    SdrView::handleSelectionChange();
 
+    // local reactions
     DlgEdHint aHint( DLGED_HINT_SELECTIONCHANGED );
-    if ( pDlgEditor )
-    {
-        pDlgEditor->Broadcast( aHint );
-        pDlgEditor->UpdatePropertyBrowserDelayed();
-    }
+    mrDlgEditor.Broadcast( aHint );
+    mrDlgEditor.UpdatePropertyBrowserDelayed();
 }
 
 //----------------------------------------------------------------------------
 
-void DlgEdView::MakeVisible( const Rectangle& rRect, Window& rWin )
+void DlgEdView::MakeVisibleAtView( const basegfx::B2DRange& rRange, Window& rWin )
 {
     // visible area
     MapMode aMap( rWin.GetMapMode() );
@@ -83,7 +81,8 @@ void DlgEdView::MakeVisible( const Rectangle& rRect, Window& rWin )
     Rectangle aVisRect( RectTmp );
 
     // check, if rectangle is inside visible area
-    if ( !aVisRect.IsInside( rRect ) )
+    const Rectangle aOldRange(basegfx::fround(rRange.getMinX()), basegfx::fround(rRange.getMinY()), basegfx::fround(rRange.getMaxX()), basegfx::fround(rRange.getMaxY()));
+    if ( !aVisRect.IsInside( aOldRange ) )
     {
         // calculate scroll distance; the rectangle must be inside the visible area
         sal_Int32 nScrollX = 0, nScrollY = 0;
@@ -93,25 +92,24 @@ void DlgEdView::MakeVisible( const Rectangle& rRect, Window& rWin )
         sal_Int32 nVisTop    = aVisRect.Top();
         sal_Int32 nVisBottom = aVisRect.Bottom();
 
-        sal_Int32 nDeltaX = pDlgEditor->GetHScroll()->GetLineSize();
-        sal_Int32 nDeltaY = pDlgEditor->GetVScroll()->GetLineSize();
+        sal_Int32 nDeltaX = mrDlgEditor.GetHScroll()->GetLineSize();
+        sal_Int32 nDeltaY = mrDlgEditor.GetVScroll()->GetLineSize();
 
-        while ( rRect.Right() > nVisRight + nScrollX )
+        while ( aOldRange.Right() > nVisRight + nScrollX )
             nScrollX += nDeltaX;
 
-        while ( rRect.Left() < nVisLeft + nScrollX )
+        while ( aOldRange.Left() < nVisLeft + nScrollX )
             nScrollX -= nDeltaX;
 
-        while ( rRect.Bottom() > nVisBottom + nScrollY )
+        while ( aOldRange.Bottom() > nVisBottom + nScrollY )
             nScrollY += nDeltaY;
 
-        while ( rRect.Top() < nVisTop + nScrollY )
+        while ( aOldRange.Top() < nVisTop + nScrollY )
             nScrollY -= nDeltaY;
 
         // don't scroll beyond the page size
-        Size aPageSize = pDlgEditor->GetPage()->GetSize();
-        sal_Int32 nPageWidth  = aPageSize.Width();
-        sal_Int32 nPageHeight = aPageSize.Height();
+        const sal_Int32 nPageWidth(basegfx::fround(mrDlgEditor.GetPage()->GetPageScale().getX()));
+        const sal_Int32 nPageHeight(basegfx::fround(mrDlgEditor.GetPage()->GetPageScale().getY()));
 
         if ( nVisRight + nScrollX > nPageWidth )
             nScrollX = nPageWidth - nVisRight;
@@ -134,18 +132,16 @@ void DlgEdView::MakeVisible( const Rectangle& rRect, Window& rWin )
         rWin.Invalidate();
 
         // update scroll bars
-        if ( pDlgEditor )
-            pDlgEditor->UpdateScrollBars();
+        mrDlgEditor.UpdateScrollBars();
 
         DlgEdHint aHint( DLGED_HINT_WINDOWSCROLLED );
-        if ( pDlgEditor )
-            pDlgEditor->Broadcast( aHint );
+        mrDlgEditor.Broadcast( aHint );
     }
 }
 
 //----------------------------------------------------------------------------
 
-SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, sal_uInt16 nTol)
+SdrObject* impLocalHitCorrection(SdrObject* pRetval, const basegfx::B2DPoint& rPnt, double fTol)
 {
     DlgEdObj* pDlgEdObj = dynamic_cast< DlgEdObj* >(pRetval);
 
@@ -168,22 +164,16 @@ SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, sal_uInt
         {
             // use direct model data; it's a DlgEdObj, so GetLastBoundRect()
             // will access aOutRect directly
-            const Rectangle aOuterRectangle(pDlgEdObj->GetLastBoundRect());
+            basegfx::B2DRange aOuterRange(sdr::legacy::GetSnapRange(*pDlgEdObj));
 
-            if(!aOuterRectangle.IsEmpty()
-                && RECT_EMPTY != aOuterRectangle.Right()
-                && RECT_EMPTY != aOuterRectangle.Bottom())
+            if(!aOuterRange.isEmpty())
             {
-                basegfx::B2DRange aOuterRange(
-                    aOuterRectangle.Left(), aOuterRectangle.Top(),
-                    aOuterRectangle.Right(), aOuterRectangle.Bottom());
-
-                if(nTol)
+                if(!basegfx::fTools::equalZero(fTol))
                 {
-                    aOuterRange.grow(-1.0 * nTol);
+                    aOuterRange.grow(fTol);
                 }
 
-                if(aOuterRange.isInside(basegfx::B2DPoint(rPnt.X(), rPnt.Y())))
+                if(aOuterRange.isInside(rPnt))
                 {
                     pRetval = 0;
                 }
@@ -194,15 +184,15 @@ SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, sal_uInt
     return pRetval;
 }
 
-SdrObject* DlgEdView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObject* pObj, SdrPageView* pPV, sal_uLong nOptions, const SetOfByte* pMVisLay) const
+SdrObject* DlgEdView::CheckSingleSdrObjectHit(const basegfx::B2DPoint& rPnt, double fTol, SdrObject* pObj, sal_uInt32 nOptions, const SetOfByte* pMVisLay) const
 {
     // call parent
-    SdrObject* pRetval = SdrView::CheckSingleSdrObjectHit(rPnt, nTol, pObj, pPV, nOptions, pMVisLay);
+    SdrObject* pRetval = SdrView::CheckSingleSdrObjectHit(rPnt, fTol, pObj, nOptions, pMVisLay);
 
     if(pRetval)
     {
         // check hitted object locally
-        pRetval = impLocalHitCorrection(pRetval, rPnt, nTol);
+        pRetval = impLocalHitCorrection(pRetval, rPnt, fTol);
     }
 
     return pRetval;

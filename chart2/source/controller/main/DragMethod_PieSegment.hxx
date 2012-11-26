@@ -38,7 +38,7 @@ public:
 
     virtual void TakeSdrDragComment(String& rStr) const;
     virtual bool BeginSdrDrag();
-    virtual void MoveSdrDrag(const Point& rPnt);
+    virtual void MoveSdrDrag(const basegfx::B2DPoint& rPnt);
     virtual bool EndSdrDrag(bool bCopy);
 
     virtual basegfx::B2DHomMatrix getCurrentTransformation();
@@ -47,7 +47,7 @@ protected:
     virtual void createSdrDragEntries();
 
 private:
-    ::basegfx::B2DVector    m_aStartVector;
+    ::basegfx::B2DPoint     m_aStartPoint;
     double                  m_fInitialOffset;
     double                  m_fAdditionalOffset;
     ::basegfx::B2DVector    m_aDragDirection;

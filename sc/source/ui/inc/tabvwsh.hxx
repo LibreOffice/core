@@ -168,7 +168,7 @@ private:
     sal_Bool                    bChartAreaValid;            // wenn Chart aufgezogen wird
     String                  aEditChartName;
     ScRangeListRef          aChartSource;
-    Rectangle               aChartPos;
+    basegfx::B2DRange       aChartPos;
     SCTAB                   nChartDestTab;
     sal_uInt16                  nCurRefDlgId;
 
@@ -199,7 +199,7 @@ protected:
     virtual void    Deactivate(sal_Bool bMDI);
     virtual sal_uInt16  PrepareClose( sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False );
 
-    virtual void    ShowCursor(FASTBOOL bOn);
+    virtual void    ShowCursor(bool bOn);
 
     virtual void    Move();     // Benachrichtigung
 
@@ -224,12 +224,10 @@ protected:
 
     virtual void    UIDeactivated( SfxInPlaceClient* pClient );
 
-    virtual FASTBOOL KeyInput( const KeyEvent &rKeyEvent );
+    virtual bool KeyInput( const KeyEvent &rKeyEvent );
     virtual SdrView* GetDrawView() const;
 
 public:
-                    TYPEINFO_VISIBILITY(SC_DLLPUBLIC);
-
                     SFX_DECL_INTERFACE(SCID_TABVIEW_SHELL)
                     SFX_DECL_VIEWFACTORY(ScTabViewShell);
 
@@ -347,8 +345,8 @@ public:
     void            FillFieldData( ScHeaderFieldData& rData );
 
 //UNUSED2008-05  void            ResetChartArea();
-    void            SetChartArea( const ScRangeListRef& rSource, const Rectangle& rDest );
-    sal_Bool            GetChartArea( ScRangeListRef& rSource, Rectangle& rDest, SCTAB& rTab ) const;
+    void            SetChartArea( const ScRangeListRef& rSource, const basegfx::B2DRange& rDest );
+    sal_Bool        GetChartArea( ScRangeListRef& rSource, basegfx::B2DRange& rDest, SCTAB& rTab ) const;
 
 //UNUSED2008-05  sal_Bool            IsChartDlgEdit() const;
 //UNUSED2008-05  void            SetChartDlgEdit(sal_Bool bFlag){bChartDlgIsEdit=bFlag;}
@@ -388,7 +386,7 @@ public:
     void    InsertURL( const String& rName, const String& rURL, const String& rTarget,
                             sal_uInt16 nMode );
     void    InsertURLButton( const String& rName, const String& rURL, const String& rTarget,
-                            const Point* pInsPos = NULL );
+                            const basegfx::B2DPoint* pInsPos = NULL );
     void    InsertURLField( const String& rName, const String& rURL, const String& rTarget );
 
     sal_Bool    SelectObject( const String& rName );

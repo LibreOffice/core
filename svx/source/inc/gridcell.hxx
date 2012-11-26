@@ -52,7 +52,6 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/rtti.hxx>
 
 class DbCellControl;
 class Edit;
@@ -275,7 +274,6 @@ protected:
 
 
 public:
-    TYPEINFO();
     DbCellControl(DbGridColumn& _rColumn, sal_Bool _bText = sal_True);
     virtual ~DbCellControl();
 
@@ -378,8 +376,6 @@ inline  void        DbCellControl::unlockValueProperty()
 class DbLimitedLengthField : public DbCellControl
 {
 public:
-    TYPEINFO();
-
 protected:
     DbLimitedLengthField( DbGridColumn& _rColumn );
 
@@ -407,7 +403,6 @@ protected:
     ~DbTextField( );
 
 public:
-    TYPEINFO();
     DbTextField(DbGridColumn& _rColumn);
 
     ::svt::IEditImplementation* GetEditImplementation() { return m_pEdit; }
@@ -438,7 +433,6 @@ protected:
 
 
 public:
-    TYPEINFO();
     DbFormattedField(DbGridColumn& _rColumn);
     virtual ~DbFormattedField();
 
@@ -461,7 +455,6 @@ protected:
 class DbCheckBox : public DbCellControl
 {
 public:
-    TYPEINFO();
     DbCheckBox(DbGridColumn& _rColumn);
 
     virtual void Init( Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
@@ -484,7 +477,6 @@ class DbComboBox : public DbCellControl
     sal_Int16         m_nKeyType;
 
 public:
-    TYPEINFO();
     DbComboBox(DbGridColumn& _rColumn);
 
     virtual void Init( Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
@@ -512,7 +504,6 @@ class DbListBox     :public DbCellControl
     ::com::sun::star::uno::Sequence< ::rtl::OUString > m_aValueList;
 
 public:
-    TYPEINFO();
     DbListBox(DbGridColumn& _rColumn);
 
     virtual void Init( Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
@@ -537,7 +528,6 @@ protected:
 class DbPatternField : public DbCellControl
 {
 public:
-    TYPEINFO();
     DbPatternField( DbGridColumn& _rColumn, const ::comphelper::ComponentContext& _rContext );
     virtual void Init( Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
     virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
@@ -567,8 +557,6 @@ private:
     sal_Int16   m_nStandardAlign;
 
 public:
-    TYPEINFO();
-
 protected:
     DbSpinField( DbGridColumn& _rColumn, sal_Int16 _nStandardAlign = com::sun::star::awt::TextAlign::RIGHT );
 
@@ -588,7 +576,6 @@ protected:
 class DbDateField : public DbSpinField
 {
 public:
-    TYPEINFO();
     DbDateField(DbGridColumn& _rColumn);
     virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
@@ -613,7 +600,6 @@ protected:
 class DbTimeField : public DbSpinField
 {
 public:
-    TYPEINFO();
     DbTimeField(DbGridColumn& _rColumn);
     virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
@@ -640,7 +626,6 @@ class DbCurrencyField : public DbSpinField
     sal_Int16  m_nScale;
 
 public:
-    TYPEINFO();
     DbCurrencyField(DbGridColumn& _rColumn);
     virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
@@ -667,7 +652,6 @@ protected:
 class DbNumericField : public DbSpinField
 {
 public:
-    TYPEINFO();
     DbNumericField(DbGridColumn& _rColumn);
     virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
@@ -702,7 +686,6 @@ class DbFilterField
     sal_Bool    m_bBound : 1;
 
 public:
-    TYPEINFO();
     DbFilterField(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,DbGridColumn& _rColumn);
     virtual ~DbFilterField();
 
@@ -759,7 +742,6 @@ protected:
     virtual ~FmXGridCell();
 
 public:
-    TYPEINFO();
     FmXGridCell( DbGridColumn* pColumn, DbCellControl* pControl );
     void init();
 
@@ -841,7 +823,6 @@ private:
 class FmXDataCell : public FmXGridCell
 {
 public:
-    TYPEINFO();
     FmXDataCell( DbGridColumn* pColumn, DbCellControl& _rControl )
         :FmXGridCell( pColumn, &_rControl )
     {
@@ -880,7 +861,6 @@ protected:
     sal_Bool    m_bFastPaint;
 
 public:
-    TYPEINFO();
     FmXTextCell( DbGridColumn* pColumn, DbCellControl& _rControl );
 
     virtual void PaintFieldToCell(OutputDevice& rDev,
@@ -1106,7 +1086,6 @@ class FmXFilterCell :public FmXGridCell
 protected:
     virtual ~FmXFilterCell();
 public:
-    TYPEINFO();
     FmXFilterCell(DbGridColumn* pColumn = NULL, DbCellControl* pControl = NULL);
 
 

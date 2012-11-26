@@ -451,7 +451,7 @@ namespace rptui
         *
         * \return
         */
-        ::boost::shared_ptr<rptui::OReportModel> getSdrModel() const;
+        ::boost::shared_ptr<rptui::OReportModel> getSharedSdrModel() const;
 
         inline ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >  getContext() const { return m_xContext; }
         inline sal_Int16   getZoomValue() const     { return m_nZoomValue; }

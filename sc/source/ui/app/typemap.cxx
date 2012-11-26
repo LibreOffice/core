@@ -114,14 +114,11 @@
 #include <svl/globalnameitem.hxx>
 #include <svx/chrtitem.hxx>
 #include <svx/zoomslideritem.hxx>
-
-// #i25616#
-#include <svx/sdshitm.hxx>
-
 #include <svl/aeitem.hxx>
 #include <avmedia/mediaitem.hxx>
 #include <sfx2/frame.hxx>
 #include "attrib.hxx"
+#include <svx/sdooitm.hxx>
 
 #define SvxDrawToolItem             SfxAllEnumItem
 #define SvxDrawAlignItem            SfxAllEnumItem

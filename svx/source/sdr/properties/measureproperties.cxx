@@ -29,7 +29,6 @@
 #include <svx/svddef.hxx>
 #include <editeng/eeitem.hxx>
 #include <svx/svdomeas.hxx>
-#include <svx/sxmsuitm.hxx>
 #include <svx/xlnstit.hxx>
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnedit.hxx>
@@ -93,7 +92,7 @@ namespace sdr
             rObj.SetTextDirty();
         }
 
-        void MeasureProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
+        void MeasureProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
             SdrMeasureObj& rObj = (SdrMeasureObj&)GetSdrObject();
 
@@ -115,7 +114,7 @@ namespace sdr
             //#71958# by default, the show units Bool-Item is set as hard
             // attribute to sal_True to aviod confusion when copying SdrMeasureObj's
             // from one application to another
-            mpItemSet->Put(SdrMeasureShowUnitItem(sal_True));
+            mpItemSet->Put(SdrYesNoItem(SDRATTR_MEASURESHOWUNIT, true));
 
             basegfx::B2DPolygon aNewPolygon;
             aNewPolygon.append(basegfx::B2DPoint(100.0, 0.0));

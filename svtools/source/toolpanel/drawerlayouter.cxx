@@ -246,7 +246,7 @@ namespace svt
     //------------------------------------------------------------------------------------------------------------------
     IMPL_LINK( DrawerDeckLayouter, OnWindowEvent, VclSimpleEvent*, i_pEvent )
     {
-        const VclWindowEvent* pWindowEvent = PTR_CAST( VclWindowEvent, i_pEvent );
+        const VclWindowEvent* pWindowEvent = dynamic_cast< const VclWindowEvent* >( i_pEvent );
         ENSURE_OR_RETURN( pWindowEvent, "no WindowEvent", 0L );
 
         bool bActivatePanel = false;

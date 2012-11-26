@@ -1426,18 +1426,18 @@ void SfxAcceleratorConfigPage::Reset( const SfxItemSet& rSet )
     const SfxPoolItem* pMacroItem=0;
     if( SFX_ITEM_SET == rSet.GetItemState( SID_MACROINFO, sal_True, &pMacroItem ) )
     {
-        m_pMacroInfoItem = PTR_CAST( SfxMacroInfoItem, pMacroItem );
+        m_pMacroInfoItem = dynamic_cast< const SfxMacroInfoItem* >( pMacroItem );
         pGroupLBox->SelectMacro( m_pMacroInfoItem );
     }
     else
     {
         const SfxPoolItem* pStringItem=0;
         if( SFX_ITEM_SET == rSet.GetItemState( SID_CHARMAP, sal_True, &pStringItem ) )
-            m_pStringItem = PTR_CAST( SfxStringItem, pStringItem );
+            m_pStringItem = dynamic_cast< const SfxStringItem* >( pStringItem );
 
         const SfxPoolItem* pFontItem=0;
         if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_SPECIALCHAR, sal_True, &pFontItem ) )
-            m_pFontItem = PTR_CAST( SfxStringItem, pFontItem );
+            m_pFontItem = dynamic_cast< const SfxStringItem* >( pFontItem );
     }
 }
 

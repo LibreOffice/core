@@ -48,9 +48,7 @@ class FuOutline
     : public FuPoor
 {
 public:
-    TYPEINFO();
-
-    virtual sal_Bool Command(const CommandEvent& rCEvt);
+    virtual bool Command(const CommandEvent& rCEvt);
 
     virtual void ScrollStart();
     virtual void ScrollEnd();

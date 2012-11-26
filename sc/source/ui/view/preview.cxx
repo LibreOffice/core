@@ -157,7 +157,7 @@ void ScPreview::UpdateDrawView()        // nTab muss richtig sein
     if ( pModel )
     {
         SdrPage* pPage = pModel->GetPage(nTab);
-        if ( pDrawView && ( !pDrawView->GetSdrPageView() || pDrawView->GetSdrPageView()->GetPage() != pPage ) )
+        if ( pDrawView && ( !pDrawView->GetSdrPageView() || &pDrawView->GetSdrPageView()->getSdrPageFromSdrPageView() != pPage ) )
         {
             //  die angezeigte Page der DrawView umzustellen (s.u.) funktioniert nicht ?!?
             delete pDrawView;
@@ -166,20 +166,13 @@ void ScPreview::UpdateDrawView()        // nTab muss richtig sein
 
         if ( !pDrawView )                                   // neu anlegen?
         {
-            pDrawView = new FmFormView( pModel, this );
+            pDrawView = new FmFormView( *pModel, this );
             // #55259# die DrawView uebernimmt den Design-Modus vom Model
             // (Einstellung "Im Entwurfsmodus oeffnen"), darum hier zuruecksetzen
-            pDrawView->SetDesignMode( sal_True );
-            pDrawView->SetPrintPreview( sal_True );
-            pDrawView->ShowSdrPage(pPage);
+            pDrawView->SetDesignMode( true );
+            pDrawView->SetPrintPreview(true);
+            pDrawView->ShowSdrPage(*pPage);
         }
-#if 0
-        else if ( !pDrawView->GetSdrPageView())     // angezeigte Page umstellen
-        {
-            pDrawView->HideSdrPage();
-            pDrawView->ShowSdrPage(pDrawView->GetModel()->GetPage(nTab));
-        }
-#endif
     }
     else if ( pDrawView )
     {

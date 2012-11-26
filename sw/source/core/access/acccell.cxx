@@ -65,9 +65,10 @@ sal_Bool SwAccessibleCell::IsSelected()
     DBG_ASSERT( GetMap(), "no map?" );
     const ViewShell *pVSh = GetMap()->GetShell();
     DBG_ASSERT( pVSh, "no shell?" );
-    if( pVSh->ISA( SwCrsrShell ) )
+    const SwCrsrShell *pCSh = dynamic_cast< const SwCrsrShell * >( pVSh );
+
+    if( pCSh )
     {
-        const SwCrsrShell *pCSh = static_cast< const SwCrsrShell * >( pVSh );
         if( pCSh->IsTableMode() )
         {
             const SwCellFrm *pCFrm =
@@ -88,7 +89,7 @@ void SwAccessibleCell::GetStates( ::utl::AccessibleStateSetHelper& rStateSet )
     // SELECTABLE
     const ViewShell *pVSh = GetMap()->GetShell();
     DBG_ASSERT( pVSh, "no shell?" );
-    if( pVSh->ISA( SwCrsrShell ) )
+    if( dynamic_cast< const SwCrsrShell* >(pVSh) )
         rStateSet.AddState( AccessibleStateType::SELECTABLE );
 
     // SELECTED

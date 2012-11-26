@@ -32,8 +32,6 @@ class FuParagraph
     : public FuPoor
 {
 public:
-    TYPEINFO();
-
     virtual void Activate();
     virtual void Deactivate();
 

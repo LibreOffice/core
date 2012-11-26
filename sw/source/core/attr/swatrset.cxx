@@ -86,7 +86,7 @@ SwAttrSet::SwAttrSet( const SwAttrSet& rSet )
 {
 }
 
-SfxItemSet* SwAttrSet::Clone( sal_Bool bItems, SfxItemPool *pToPool ) const
+SfxItemSet* SwAttrSet::Clone( bool bItems, SfxItemPool *pToPool ) const
 {
     if ( pToPool && pToPool != GetPool() )
     {
@@ -238,8 +238,8 @@ bool SwAttrSet::SetModifyAtAttr( const SwModify* pModify )
 void SwAttrSet::CopyToModify( SwModify& rMod ) const
 {
     // kopiere die Attribute ggfs. ueber Dokumentgrenzen
-    SwCntntNode* pCNd = PTR_CAST( SwCntntNode, &rMod );
-    SwFmt* pFmt = PTR_CAST( SwFmt, &rMod );
+    SwCntntNode* pCNd = dynamic_cast< SwCntntNode* >( &rMod );
+    SwFmt* pFmt = dynamic_cast< SwFmt* >( &rMod );
 
     if( pCNd || pFmt )
     {

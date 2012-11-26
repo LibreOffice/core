@@ -69,6 +69,12 @@ namespace sdr
             // can be visualized.
             drawinglayer::primitive2d::Primitive2DSequence  mxViewIndependentPrimitive2DSequence;
 
+            // This range defines the view independent bounding rectangle
+            basegfx::B2DRange                               maViewIndependentRange;
+
+            // This range defines the minimal geometry bounding rectangle (base for old SnapRect)
+            basegfx::B2DRange                               maSnapRange;
+
             // A new ViewObjectContact was created and shall be remembered.
             void AddViewObjectContact(ViewObjectContact& rVOContact);
 
@@ -125,6 +131,16 @@ namespace sdr
             // Check if this primitive is animated in any OC (View) which means it has
             // generated a PrimitiveAnimation in it's VOC
             bool isAnimatedInAnyViewObjectContact() const;
+
+            // get the view independent bound rectangle. Default implementation uses
+            // the range of getViewIndependentPrimitive2DSequence and buffers the result
+            // in maViewIndependentRange
+            virtual const basegfx::B2DRange& getViewIndependentRange() const;
+
+            // get the minimal geometry bounding rectangle. Default uses
+            // getViewIndependentPrimitive2DSequence and the HairlineGeometryExtractor2D
+            // processor. Result is buffered in maSnapRange
+            virtual const basegfx::B2DRange& getSnapRange() const;
 
             // Access to possible sub-hierarchy and parent. GetObjectCount() default is 0L
             // and GetViewContact default pops up an assert since it's an error if

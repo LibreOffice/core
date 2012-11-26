@@ -385,7 +385,7 @@ void LoadURL( const String& rURL, ViewShell* pVSh, sal_uInt16 nFilter,
 
     // die Shell kann auch 0 sein !!!!!
     SwWrtShell *pSh = 0;
-    if ( pVSh && pVSh->ISA(SwCrsrShell) )
+    if ( pVSh && dynamic_cast< SwCrsrShell* >(pVSh) )
     {
         //Eine CrsrShell ist auch immer eine WrtShell
         pSh = (SwWrtShell*)pVSh;

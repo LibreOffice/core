@@ -250,7 +250,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                 if ( pReqArgs &&
                      SFX_ITEM_SET == pReqArgs->GetItemState(SID_SEARCH_ITEM, sal_False, &pItem) )
                 {
-                    DBG_ASSERT( pItem->ISA(SvxSearchItem), "falsches Item" );
+                    DBG_ASSERT( dynamic_cast< const SvxSearchItem* >(pItem), "falsches Item" );
                     const SvxSearchItem* pSearchItem = (const SvxSearchItem*) pItem;
 
                     ScGlobal::SetSearchItem( *pSearchItem );
@@ -265,7 +265,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                             pReqArgs->GetItemState(SID_SEARCH_ITEM, sal_False, &pItem))
             {
                 //  Search-Item merken
-                DBG_ASSERT( pItem->ISA(SvxSearchItem), "falsches Item" );
+                DBG_ASSERT( dynamic_cast< const SvxSearchItem* >(pItem), "falsches Item" );
                 ScGlobal::SetSearchItem( *(const SvxSearchItem*) pItem );
             }
             else

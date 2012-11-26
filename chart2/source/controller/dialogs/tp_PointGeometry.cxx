@@ -29,11 +29,8 @@
 #include "ResId.hxx"
 
 #include "chartview/ChartSfxItemIds.hxx"
-
-// header for SfxInt32Item
 #include <svl/intitem.hxx>
-// header for class Svx3DHorizontalSegmentsItem
-#include <svx/svx3ditems.hxx>
+#include <svx/svddef.hxx>
 
 //.............................................................................
 namespace chart
@@ -75,7 +72,7 @@ sal_Bool SchLayoutTabPage::FillItemSet(SfxItemSet& rOutAttrs)
             nSegs=4;
 
         rOutAttrs.Put(SfxInt32Item(SCHATTR_STYLE_SHAPE,nShape));
-        rOutAttrs.Put(Svx3DHorizontalSegmentsItem(nSegs));
+        rOutAttrs.Put(SfxUInt32Item(SDRATTR_3DOBJ_HORZ_SEGS, nSegs));
     }
     return sal_True;
 }

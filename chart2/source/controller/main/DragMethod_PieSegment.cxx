@@ -42,13 +42,12 @@ namespace chart
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
-using ::basegfx::B2DVector;
 
 DragMethod_PieSegment::DragMethod_PieSegment( DrawViewWrapper& rDrawViewWrapper
                                              , const rtl::OUString& rObjectCID
                                              , const Reference< frame::XModel >& xChartModel )
     : DragMethod_Base( rDrawViewWrapper, rObjectCID, xChartModel )
-    , m_aStartVector(100.0,100.0)
+    , m_aStartPoint(100.0,100.0)
     , m_fInitialOffset(0.0)
     , m_fAdditionalOffset(0.0)
     , m_aDragDirection(1000.0,1000.0)
@@ -68,8 +67,8 @@ DragMethod_PieSegment::DragMethod_PieSegment( DrawViewWrapper& rDrawViewWrapper
         m_fInitialOffset = 0.0;
     if( m_fInitialOffset > 1.0 )
         m_fInitialOffset = 1.0;
-    B2DVector aMinVector( aMinimumPosition.X, aMinimumPosition.Y );
-    B2DVector aMaxVector( aMaximumPosition.X, aMaximumPosition.Y );
+    basegfx::B2DVector aMinVector( aMinimumPosition.X, aMinimumPosition.Y );
+    basegfx::B2DVector aMaxVector( aMaximumPosition.X, aMaximumPosition.Y );
     m_aDragDirection = aMaxVector - aMinVector;
     m_fDragRange = m_aDragDirection.scalar( m_aDragDirection );
     if( ::rtl::math::approxEqual( m_fDragRange, 0.0 ) )
@@ -85,17 +84,16 @@ void DragMethod_PieSegment::TakeSdrDragComment(String& rStr) const
 }
 bool DragMethod_PieSegment::BeginSdrDrag()
 {
-    Point aStart( DragStat().GetStart() );
-    m_aStartVector = B2DVector( aStart.X(), aStart.Y() );
+    m_aStartPoint = DragStat().GetStart();
     Show();
     return true;
 }
-void DragMethod_PieSegment::MoveSdrDrag(const Point& rPnt)
+void DragMethod_PieSegment::MoveSdrDrag(const basegfx::B2DPoint& rPnt)
 {
     if( DragStat().CheckMinMoved(rPnt) )
     {
         //calculate new offset
-        B2DVector aShiftVector(( B2DVector( rPnt.X(), rPnt.Y() ) - m_aStartVector ));
+        const basegfx::B2DVector aShiftVector(rPnt - m_aStartPoint);
         m_fAdditionalOffset = m_aDragDirection.scalar( aShiftVector )/m_fDragRange; // projection
 
         if( m_fAdditionalOffset < -m_fInitialOffset )
@@ -103,8 +101,8 @@ void DragMethod_PieSegment::MoveSdrDrag(const Point& rPnt)
         else if( m_fAdditionalOffset > (1.0-m_fInitialOffset) )
             m_fAdditionalOffset = 1.0 - m_fInitialOffset;
 
-        B2DVector aNewPosVector = m_aStartVector + (m_aDragDirection * m_fAdditionalOffset);
-        Point aNewPos = Point( (long)(aNewPosVector.getX()), (long)(aNewPosVector.getY()) );
+        const basegfx::B2DPoint aNewPos(m_aStartPoint + (m_aDragDirection * m_fAdditionalOffset));
+
         if( aNewPos != DragStat().GetNow() )
         {
             Hide();
@@ -145,7 +143,7 @@ basegfx::B2DHomMatrix DragMethod_PieSegment::getCurrentTransformation()
 }
 void DragMethod_PieSegment::createSdrDragEntries()
 {
-    SdrObject* pObj = m_rDrawViewWrapper.getSelectedObject();
+    SdrObject* pObj = m_rDrawViewWrapper.getSelectedIfSingle();
     SdrPageView* pPV = m_rDrawViewWrapper.GetPageView();
 
     if( pObj && pPV )

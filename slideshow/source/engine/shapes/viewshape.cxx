@@ -341,8 +341,7 @@ namespace slideshow
             aNonTranslationalShapeTransformation.scale( rOrigBounds.getWidth(),
                                                         rOrigBounds.getHeight() );
             ::basegfx::B2DHomMatrix aShapeTransformation( aNonTranslationalShapeTransformation );
-            aShapeTransformation.translate( rOrigBounds.getMinX(),
-                                            rOrigBounds.getMinY() );
+            aShapeTransformation.translate( rOrigBounds.getMinimum() );
 
             const ::basegfx::B2DHomMatrix& rCanvasTransform(
                 rViewLayer->getSpriteTransformation() );
@@ -669,8 +668,7 @@ namespace slideshow
                         // of the shape's bound rect in device
                         // pixel into aLinearTransform below.
                         ::basegfx::B2DHomMatrix aAdjustedCanvasTransform( aCanvasTransform );
-                        aAdjustedCanvasTransform.translate( -aTmpRect.getMinX(),
-                                                            -aTmpRect.getMinY() );
+                        aAdjustedCanvasTransform.translate( -aTmpRect.getMinimum() );
 
                         pBitmapCanvas->setTransformation( aAdjustedCanvasTransform );
 

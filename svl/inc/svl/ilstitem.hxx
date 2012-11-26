@@ -35,8 +35,7 @@ class SVL_DLLPUBLIC SfxIntegerListItem : public SfxPoolItem
     ::com::sun::star::uno::Sequence < sal_Int32 > m_aList;
 
 public:
-    TYPEINFO();
-
+    POOLITEM_FACTORY()
     SfxIntegerListItem();
     SfxIntegerListItem( sal_uInt16 nWhich, const SvULongs& rList );
     SfxIntegerListItem( const SfxIntegerListItem& rItem );

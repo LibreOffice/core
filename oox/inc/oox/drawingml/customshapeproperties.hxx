@@ -127,8 +127,10 @@ public:
     OptValue< GeomRect >&               getTextRect(){ return maTextRect; };
     std::vector< Path2D >&              getPath2DList(){ return maPath2DList; };
     std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >& getSegments(){ return maSegments; };
-    void                                setMirroredX( sal_Bool bMirroredX ) { mbMirroredX = bMirroredX; };
-    void                                setMirroredY( sal_Bool bMirroredY ) { mbMirroredY = bMirroredY; };
+
+    //  TTTT: MirrorX/Y removed
+    //void                              setMirroredX( sal_Bool bMirroredX ) { mbMirroredX = bMirroredX; };
+    //void                              setMirroredY( sal_Bool bMirroredY ) { mbMirroredY = bMirroredY; };
 
     // #119920# Add missing extra text rotation
     void setTextRotation(sal_Int32 nTextRotation) { mnTextRotation = nTextRotation; }
@@ -149,8 +151,10 @@ private:
 
     std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >
                                     maSegments;
-    sal_Bool                        mbMirroredX;
-    sal_Bool                        mbMirroredY;
+
+    //  TTTT: MirrorX/Y removed
+    //sal_Bool                      mbMirroredX;
+    //sal_Bool                      mbMirroredY;
 
     // #119920# Add missing extra text rotation
     sal_Int32                       mnTextRotation;

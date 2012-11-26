@@ -49,6 +49,7 @@
 #include <svx/sdr/table/tabledesign.hxx>
 #include <svx/svxdlg.hxx>
 #include <vcl/msgbox.hxx>
+#include <svx/svdlegacy.hxx>
 
 #include <svl/itempool.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -119,9 +120,9 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
         sal_Int32 nRows = 0;
         OUString sTableStyle;
 
-        SFX_REQUEST_ARG( rReq, pCols, SfxUInt16Item, SID_ATTR_TABLE_COLUMN, sal_False );
-        SFX_REQUEST_ARG( rReq, pRows, SfxUInt16Item, SID_ATTR_TABLE_ROW, sal_False );
-        SFX_REQUEST_ARG( rReq, pStyle, SfxStringItem, SID_TABLE_STYLE, sal_False );
+        SFX_REQUEST_ARG( rReq, pCols, SfxUInt16Item, SID_ATTR_TABLE_COLUMN );
+        SFX_REQUEST_ARG( rReq, pRows, SfxUInt16Item, SID_ATTR_TABLE_ROW );
+        SFX_REQUEST_ARG( rReq, pStyle, SfxStringItem, SID_TABLE_STYLE );
 
         if( pCols )
             nColumns = pCols->GetValue();
@@ -144,55 +145,64 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
             nRows = pDlg->getRows();
         }
 
-        Rectangle aRect;
+        basegfx::B2DHomMatrix aObjTrans;
 
         SdrObject* pPickObj = mpView->GetEmptyPresentationObject( PRESOBJ_TABLE );
         if( pPickObj )
         {
-            aRect = pPickObj->GetLogicRect();
-            aRect.setHeight( 200 );
+            aObjTrans = pPickObj->getSdrObjectTransformation();
+            const basegfx::B2DPoint aTopLeft(aObjTrans * basegfx::B2DPoint(0.0, 0.0));
+            const basegfx::B2DPoint aBottomLeft(aObjTrans * basegfx::B2DPoint(0.0, 1.0));
+            const double fLength(basegfx::B2DVector(aBottomLeft - aTopLeft).getLength());
+            const double fScaleFactor(200.0 / (basegfx::fTools::equalZero(fLength) ? 1.0 : fLength));
+
+            aObjTrans = basegfx::tools::createScaleB2DHomMatrix(1.0, fScaleFactor) * aObjTrans;
         }
         else
         {
-            Size aSize( 14100, 200 );
+            const basegfx::B2DPoint aCenter(GetActiveWindow()->GetLogicRange().getCenter());
+            const basegfx::B2DVector aScale(14100.0, 200.0);
 
-            Point aPos;
-            Rectangle aWinRect(aPos, GetActiveWindow()->GetOutputSizePixel() );
-            aPos = aWinRect.Center();
-            aPos = GetActiveWindow()->PixelToLogic(aPos);
-            aPos.X() -= aSize.Width() / 2;
-            aPos.Y() -= aSize.Height() / 2;
-            aRect = Rectangle(aPos, aSize);
+            aObjTrans = basegfx::tools::createScaleTranslateB2DHomMatrix(
+                aScale,
+                aCenter - (aScale * 0.5));
         }
 
-        ::sdr::table::SdrTableObj* pObj = new ::sdr::table::SdrTableObj( GetDoc(), aRect, nColumns, nRows );
-        pObj->NbcSetStyleSheet( GetDoc()->GetDefaultStyleSheet(), sal_True );
+        ::sdr::table::SdrTableObj* pObj = new ::sdr::table::SdrTableObj(
+            *GetDoc(),
+            aObjTrans,
+            nColumns,
+            nRows);
+
+        pObj->SetStyleSheet( GetDoc()->GetDefaultStyleSheet(), sal_True );
         apply_table_style( pObj, GetDoc(), sTableStyle );
-        SdrPageView* pPV = mpView->GetSdrPageView();
 
         // if we have a pick obj we need to make this new ole a pres obj replacing the current pick obj
         if( pPickObj )
         {
-            SdPage* pPage = static_cast< SdPage* >(pPickObj->GetPage());
+            SdPage* pPage = static_cast< SdPage* >(pPickObj->getSdrPageFromSdrObject());
             if(pPage && pPage->IsPresObj(pPickObj))
             {
-                pObj->SetUserCall( pPickObj->GetUserCall() );
+                // replace formally used 'pObj->SetUserCall(pPickObj->GetUserCall())' by
+                // new notify/listener mechanism
+                SdPage* pCurrentlyConnectedSdPage = findConnectionToSdrObject(pPickObj);
+                establishConnectionToSdrObject(pObj, pCurrentlyConnectedSdPage);
+
                 pPage->InsertPresObj( pObj, PRESOBJ_TABLE );
             }
         }
 
-        GetParentWindow()->GrabFocus();
         if( pPickObj )
-            mpView->ReplaceObjectAtView(pPickObj, *pPV, pObj, sal_True );
+        {
+            mpView->ReplaceObjectAtView(*pPickObj, *pObj, true);
+        }
         else
-            mpView->InsertObjectAtView(pObj, *pPV, SDRINSERT_SETDEFLAYER);
+        {
+            mpView->InsertObjectAtView(*pObj, SDRINSERT_SETDEFLAYER);
+        }
 
         Invalidate(SID_DRAWTBX_INSERT);
         rReq.Ignore();
-SfxViewShell* pViewShell = GetViewShell();
-        OSL_ASSERT (pViewShell!=NULL);
-        SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
-        rBindings.Invalidate( SID_INSERT_TABLE, sal_True, sal_False );
         break;
     }
     case SID_TABLEDESIGN:
@@ -244,27 +254,24 @@ void DrawViewShell::GetTableMenuState( SfxItemSet &rSet )
 
 // --------------------------------------------------------------------
 
-void CreateTableFromRTF( SvStream& rStream, SdDrawDocument* pModel )
+void CreateTableFromRTF( SvStream& rStream, SdDrawDocument& rModel )
 {
     rStream.Seek( 0 );
+    SdrPage* pPage = rModel.GetPage(0);
 
-    if( pModel )
+    if( pPage )
     {
-        SdrPage* pPage = pModel->GetPage(0);
-        if( pPage )
-        {
-            Size aSize( 200, 200 );
-            Point aPos;
-            Rectangle aRect (aPos, aSize);
-            ::sdr::table::SdrTableObj* pObj = new ::sdr::table::SdrTableObj( pModel, aRect, 1, 1 );
-            pObj->NbcSetStyleSheet( pModel->GetDefaultStyleSheet(), sal_True );
-            OUString sTableStyle;
-            apply_table_style( pObj, pModel, sTableStyle );
+        ::sdr::table::SdrTableObj* pObj = new ::sdr::table::SdrTableObj(
+            rModel,
+            basegfx::tools::createScaleB2DHomMatrix(
+                200.0, 200.0));
+        pObj->SetStyleSheet( rModel.GetDefaultStyleSheet(), sal_True );
+        OUString sTableStyle;
+        apply_table_style( pObj, &rModel, sTableStyle );
 
-            pPage->NbcInsertObject( pObj );
+        pPage->InsertObjectToSdrObjList(*pObj);
 
-            sdr::table::SdrTableObj::ImportAsRTF( rStream, *pObj );
-        }
+        sdr::table::SdrTableObj::ImportAsRTF( rStream, *pObj );
     }
 }
 

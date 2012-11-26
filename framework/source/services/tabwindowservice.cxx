@@ -360,13 +360,12 @@ css::uno::Any SAL_CALL TabWindowService::impl_getPropertyValue(const ::rtl::OUSt
 //*****************************************************************************************************************
 IMPL_LINK( TabWindowService, EventListener, VclSimpleEvent*, pEvent )
 {
+    VclWindowEvent* pWinEvt = dynamic_cast< VclWindowEvent* >(pEvent);
 
-    if ( !pEvent && !pEvent->ISA(VclWindowEvent))
+    if ( !pEvent )
         return 0;
 
-    sal_uLong           nEventId = pEvent->GetId();
-    VclWindowEvent* pWinEvt  = static_cast< VclWindowEvent* >(pEvent);
-
+    sal_uLong           nEventId = pWinEvt->GetId();
     css::uno::Reference< css::uno::XInterface > xThis ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
     css::lang::EventObject aEvent( xThis );
 

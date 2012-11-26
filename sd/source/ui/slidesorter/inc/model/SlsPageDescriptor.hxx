@@ -109,9 +109,9 @@ public:
         page it describes and determine whether a redraw to update the
         selection indicator is necessary.
         @return
-            When the two selection states were different <TRUE/> is
+            When the two selection states were different <true/> is
             returned.  When they were the same this method returns
-            <FALSE/>.
+            <false/>.
     */
     bool GetCoreSelection (void);
 

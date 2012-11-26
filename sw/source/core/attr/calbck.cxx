@@ -32,8 +32,6 @@
 
 static SwClientIter* pClientIters = 0;
 
-TYPEINIT0(SwClient);
-
 /*************************************************************************/
 SwClient::SwClient(SwModify *pToRegisterIn)
     : pLeft( 0 ), pRight( 0 ), pRegisteredIn( 0 ), mbIsAllowedToBeRemovedInModifyCall(false)
@@ -134,11 +132,11 @@ SwModify::~SwModify()
             // if document gets destroyed anyway, just tell clients to forget me
             // so that they don't try to get removed from my list later when they also get destroyed
             SwClientIter aIter( *this );
-            SwClient* p = aIter.GoStart();
+            SwClient* p = aIter.SwClientIter_First();
             while ( p )
             {
                 p->pRegisteredIn = 0;
-                p = ++aIter;
+                p = aIter.SwClientIter_Next();
             }
         }
         else
@@ -211,11 +209,11 @@ sal_Bool SwModify::GetInfo( SfxPoolItem& rInfo ) const
     if( pRoot )
     {
         SwClientIter aIter( *(SwModify*)this );
+        SwClient* pLast = aIter.SwClientIter_First();
 
-        SwClient* pLast = aIter.GoStart();
         if( pLast )
             while( 0 != ( bRet = pLast->GetInfo( rInfo )) &&
-                    0 != ( pLast = ++aIter ) )
+                    0 != ( pLast = aIter.SwClientIter_Next() ) )
                 ;
     }
 
@@ -233,7 +231,7 @@ void SwModify::Add(SwClient *pDepend)
         SwClientIter* pTmp = pClientIters;
         while( pTmp )
         {
-            ASSERT( &pTmp->GetModify() != pRoot, "Client added to active ClientIter" );
+            ASSERT( &pTmp->rRoot != pRoot, "Client added to active ClientIter" );
             pTmp = pTmp->pNxtIter;
         }
 #endif
@@ -313,12 +311,12 @@ int SwModify::GetClientCount() const
 {
     int nRet=0;
     SwClientIter aIter( *this );
-    SwClient *pLast = aIter.GoStart();
+    SwClient *pLast = aIter.SwClientIter_First();
     if( pLast )
         do
         {
             ++nRet;
-        } while( 0 != ( pLast = ++aIter ));
+        } while( 0 != ( pLast = aIter.SwClientIter_Next() ));
     return nRet;
 }
 
@@ -355,22 +353,30 @@ void SwModify::CheckCaching( const sal_uInt16 nWhich )
 void SwModify::CallSwClientNotify( const SfxHint& rHint ) const
 {
     SwClientIter aIter(*this);
-    SwClient * pClient = aIter.GoStart();
+    SwClient * pClient = aIter.SwClientIter_First();
     while (pClient)
     {
         pClient->SwClientNotify( *this, rHint );
-        pClient = ++aIter;
+        pClient = aIter.SwClientIter_Next();
     }
 }
 
-void SwModify::ModifyBroadcast( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue, TypeId nType )
+void SwModify::ModifyBroadcast(
+    const SfxPoolItem *pOldValue,
+    const SfxPoolItem *pNewValue,
+    bool (*pIsValidSwClient)(const SwClient&))
 {
     SwClientIter aIter(*this);
-    SwClient * pClient = aIter.First( nType );
+    SwClient* pClient = aIter.SwClientIter_First();
+
     while (pClient)
     {
-        pClient->Modify( pOldValue, pNewValue );
-        pClient = aIter.Next();
+        if(!pIsValidSwClient || pIsValidSwClient(*pClient))
+        {
+            pClient->Modify( pOldValue, pNewValue );
+        }
+
+        pClient = aIter.SwClientIter_Next();
     }
 }
 
@@ -428,8 +434,6 @@ SwClientIter::SwClientIter( const SwModify& rModify )
     pDelNext = pAct;
 }
 
-
-
 SwClientIter::~SwClientIter()
 {
     if( pClientIters )
@@ -451,20 +455,7 @@ SwClientIter::~SwClientIter()
     }
 }
 
-
-SwClient* SwClientIter::operator++()
-{
-    if( pDelNext == pAct )
-    {
-        pAct = pAct->pRight;
-        pDelNext = pAct;
-    }
-    else
-        pAct = pDelNext;
-    return pAct;
-}
-
-SwClient* SwClientIter::GoStart()
+SwClient* SwClientIter::SwClientIter_First()
 {
     pAct = const_cast<SwClient*>(rRoot.GetDepends());
     if( pAct )
@@ -474,87 +465,17 @@ SwClient* SwClientIter::GoStart()
     return pAct;
 }
 
-SwClient* SwClientIter::GoEnd()
+SwClient* SwClientIter::SwClientIter_Next()
 {
-    pAct = pDelNext;
-    if( !pAct )
-        pAct = const_cast<SwClient*>(rRoot.GetDepends());
-    if( pAct )
-        while( pAct->pRight )
-            pAct = pAct->pRight;
-    pDelNext = pAct;
-    return pAct;
-}
-
-SwClient* SwClientIter::First( TypeId nType )
-{
-    aSrchId = nType;
-    GoStart();
-    if( pAct )
-        do {
-            if( pAct->IsA( aSrchId ) )
-                break;
-
-            if( pDelNext == pAct )
-            {
-                pAct = pAct->pRight;
-                pDelNext = pAct;
-            }
-            else
-                pAct = pDelNext;
-
-        } while( pAct );
-    return pAct;
-}
-
-SwClient* SwClientIter::Next()
-{
-    do {
-        if( pDelNext == pAct )
-        {
-            pAct = pAct->pRight;
-            pDelNext = pAct;
-        }
-        else
-            pAct = pDelNext;
-
-        if( pAct && pAct->IsA( aSrchId ) )
-            break;
-    } while( pAct );
-    return pAct;
-}
-
-SwClient* SwClientIter::Last( TypeId nType )
-{
-    aSrchId = nType;
-    GoEnd();
-    if( pAct )
-        do {
-            if( pAct->IsA( aSrchId ) )
-                break;
-
-            if( pDelNext == pAct )
-                pAct = pAct->pLeft;
-            else
-                pAct = pDelNext->pLeft;
-            pDelNext = pAct;
-
-        } while( pAct );
-    return pAct;
-}
-
-SwClient* SwClientIter::Previous()
-{
-    do {
-        if( pDelNext == pAct )
-            pAct = pAct->pLeft;
-        else
-            pAct = pDelNext->pLeft;
+    if( pDelNext == pAct )
+    {
+        pAct = pAct->pRight;
         pDelNext = pAct;
+    }
+    else
+        pAct = pDelNext;
 
-        if( pAct && pAct->IsA( aSrchId ) )
-            break;
-    } while( pAct );
     return pAct;
 }
 
+// eof

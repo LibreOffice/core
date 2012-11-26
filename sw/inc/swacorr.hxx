@@ -44,8 +44,6 @@ protected:
                             String& );
 
 public:
-    TYPEINFO();
-
     SwAutoCorrect( const SvxAutoCorrect& rACorr );
     virtual ~SwAutoCorrect();
 };

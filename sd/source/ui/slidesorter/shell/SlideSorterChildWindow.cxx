@@ -47,7 +47,6 @@ SlideSorterChildWindow::SlideSorterChildWindow (
         pParentWindow);
     eChildAlignment = SFX_ALIGN_LEFT;
     static_cast<SfxDockingWindow*>(pWindow)->Initialize (pInfo);
-    //  SetHideNotDelete (sal_True);
 }
 
 

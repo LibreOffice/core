@@ -384,7 +384,7 @@ void TableDesignPane::updateLayout()
                 Size aSize( mxControls[nId]->GetSizePixel() );
                 aSize.Width() = aPaneSize.Width() - aOffset.X() - mxControls[nId]->GetPosPixel().X();
                 mxControls[nId]->SetSizePixel( aSize );
-                mxControls[nId]->SetPaintTransparent(sal_True);
+                mxControls[nId]->SetPaintTransparent(true);
                 mxControls[nId]->SetBackground();
             }
             aValueSetSize = Size( pValueSet->GetSizePixel().Width(), nStylesHeight - mxControls[FL_TABLE_STYLES]->GetSizePixel().Height() - mnOrgOffsetY[FL_TABLE_STYLES]  );
@@ -483,8 +483,8 @@ void TableDesignPane::updateControls()
         {
             DBG_ERROR("sd::TableDesignPane::updateControls(), exception caught!");
         }
-        static_cast< CheckBox* >( mxControls[i].get() )->Check( bUse ? sal_True : sal_False );
-        mxControls[i]->Enable(bHasTable ? sal_True : sal_False );
+        static_cast< CheckBox* >( mxControls[i].get() )->Check( bUse ? true : false );
+        mxControls[i]->Enable(bHasTable ? true : false );
     }
 
     FillDesignPreviewControl();
@@ -921,9 +921,9 @@ short TableDesignDialog::Execute()
 
         if( mpDesignPane->isOptionsChanged() )
             mpDesignPane->ApplyOptions();
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 // ====================================================================

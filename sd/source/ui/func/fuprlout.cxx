@@ -70,8 +70,6 @@ namespace sd
 SO2_DECL_REF(SvStorage)
 #endif
 
-TYPEINIT1( FuPresentationLayout, FuPoor );
-
 #define POOL_BUFFER_SIZE        (sal_uInt16)32768
 #define DOCUMENT_BUFFER_SIZE    (sal_uInt16)32768
 #define DOCUMENT_TOKEN (sal_Unicode('#'))
@@ -110,11 +108,11 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
         mpView->UnmarkAll();
     }
 
-    sal_Bool bError = sal_False;
+    bool bError = false;
 
     // die aktive Seite ermitteln
-    sal_uInt16 nSelectedPage = SDRPAGE_NOTFOUND;
-    for (sal_uInt16 nPage = 0; nPage < mpDoc->GetSdPageCount(PK_STANDARD); nPage++)
+    sal_uInt32 nSelectedPage = SDRPAGE_NOTFOUND;
+    for (sal_uInt32 nPage = 0; nPage < mpDoc->GetSdPageCount(PK_STANDARD); nPage++)
     {
         if (mpDoc->GetSdPage(nPage, PK_STANDARD)->IsSelected())
         {
@@ -131,22 +129,23 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
 
     // wenn wir auf einer Masterpage sind, gelten die Aenderungen fuer alle
     // Seiten und Notizseiten, die das betreffende Layout benutzen
-    sal_Bool bOnMaster = sal_False;
-    if( mpViewShell && mpViewShell->ISA(DrawViewShell))
+    bool bOnMaster = false;
+    DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >(mpViewShell);
+
+    if( pDrawViewShell )
     {
-        EditMode eEditMode =
-            static_cast<DrawViewShell*>(mpViewShell)->GetEditMode();
+        EditMode eEditMode = pDrawViewShell->GetEditMode();
         if (eEditMode == EM_MASTERPAGE)
-            bOnMaster = sal_True;
+            bOnMaster = true;
     }
-    sal_Bool bMasterPage = bOnMaster;
-    sal_Bool bCheckMasters = sal_False;
+    bool bMasterPage = bOnMaster;
+    bool bCheckMasters = false;
 
     // Dialog aufrufen
-    sal_Bool   bLoad = sal_False;           // tauchen neue Masterpages auf?
+    bool   bLoad = false;           // tauchen neue Masterpages auf?
     String aFile;
 
-    SfxItemSet aSet(mpDoc->GetPool(), ATTR_PRESLAYOUT_START, ATTR_PRESLAYOUT_END);
+    SfxItemSet aSet(mpDoc->GetItemPool(), ATTR_PRESLAYOUT_START, ATTR_PRESLAYOUT_END);
 
     aSet.Put( SfxBoolItem( ATTR_PRESLAYOUT_LOAD, bLoad));
     aSet.Put( SfxBoolItem( ATTR_PRESLAYOUT_MASTER_PAGE, bMasterPage ) );
@@ -192,14 +191,14 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
             break;
 
             default:
-                bError = sal_True;
+                bError = true;
         }
         delete pDlg;
     }
 
     if (!bError)
     {
-        mpDocSh->SetWaitCursor( sal_True );
+        mpDocSh->SetWaitCursor( true );
 
         // Hier werden nur Masterpages ausgewechselt, d.h. die aktuelle Seite
         // bleibt aktuell. Damit beim Ein- und Ausfuegen der Masterpages nicht
@@ -208,8 +207,10 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
         // That isn't quitely right. If the masterpageview is active and you are
         // removing a masterpage, it's possible that you are removing the
         // current masterpage. So you have to call ResetActualPage !
-        if( mpViewShell->ISA(DrawViewShell) && !bCheckMasters )
-            static_cast<DrawView*>(mpView)->BlockPageOrderChangedHint(sal_True);
+        if( pDrawViewShell && !bCheckMasters )
+        {
+            static_cast<DrawView*>(mpView)->BlockPageOrderChangedHint(true);
+        }
 
         if (bLoad)
         {
@@ -233,8 +234,10 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
         }
 
         // Blockade wieder aufheben
-        if (mpViewShell->ISA(DrawViewShell) && !bCheckMasters )
-            static_cast<DrawView*>(mpView)->BlockPageOrderChangedHint(sal_False);
+        if ( pDrawViewShell && !bCheckMasters )
+        {
+            static_cast<DrawView*>(mpView)->BlockPageOrderChangedHint(false);
+        }
 
         /*************************************************************************
         |* Falls dargestellte Masterpage sichtbar war, neu darstellen
@@ -243,17 +246,15 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
         {
             if (bOnMaster)
             {
-                if (mpViewShell->ISA(DrawViewShell))
+                if (pDrawViewShell)
                 {
-                    ::sd::View* pView =
-                          static_cast<DrawViewShell*>(mpViewShell)->GetView();
-                    sal_uInt16 nPgNum = pSelectedPage->TRG_GetMasterPage().GetPageNum();
+                    ::sd::View* pView = pDrawViewShell->GetView();
+                    sal_uInt32 nPgNum = pSelectedPage->TRG_GetMasterPage().GetPageNumber();
 
                     if (static_cast<DrawViewShell*>(mpViewShell)->GetPageKind() == PK_NOTES)
                         nPgNum++;
 
-                    pView->HideSdrPage();
-                    pView->ShowSdrPage(pView->GetModel()->GetMasterPage(nPgNum));
+                    pView->ShowSdrPage(*pView->getSdrModelFromSdrView().GetMasterPage(nPgNum));
                 }
 
                 // damit TabBar aktualisiert wird
@@ -266,17 +267,15 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
         }
 
         // fake a mode change to repaint the page tab bar
-        if( mpViewShell && mpViewShell->ISA( DrawViewShell ) )
+        if( pDrawViewShell )
         {
-            DrawViewShell* pDrawViewSh =
-                static_cast<DrawViewShell*>(mpViewShell);
-            EditMode eMode = pDrawViewSh->GetEditMode();
-            sal_Bool bLayer = pDrawViewSh->IsLayerModeActive();
-            pDrawViewSh->ChangeEditMode( eMode, !bLayer );
-            pDrawViewSh->ChangeEditMode( eMode, bLayer );
+            EditMode eMode = pDrawViewShell->GetEditMode();
+            bool bLayer = pDrawViewShell->IsLayerModeActive();
+            pDrawViewShell->ChangeEditMode( eMode, !bLayer );
+            pDrawViewShell->ChangeEditMode( eMode, bLayer );
         }
 
-        mpDocSh->SetWaitCursor( sal_False );
+        mpDocSh->SetWaitCursor( false );
     }
 }
 

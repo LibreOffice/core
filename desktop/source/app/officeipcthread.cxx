@@ -47,6 +47,7 @@
 #include "osl/file.hxx"
 #include "rtl/process.h"
 #include "tools/getprocessworkingdir.hxx"
+#include <string.h>
 
 using namespace vos;
 using namespace rtl;

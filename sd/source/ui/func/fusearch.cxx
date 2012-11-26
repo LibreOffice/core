@@ -58,8 +58,6 @@ static sal_uInt16 SidArraySpell[] = {
             SID_HANDOUTMODE,
             0 };
 
-TYPEINIT1( FuSearch, FuPoor );
-
 /*************************************************************************
 |*
 |* Konstruktor
@@ -74,7 +72,7 @@ FuSearch::FuSearch (
     SfxRequest& rReq )
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq),
       pSdOutliner(NULL),
-      bOwnOutliner(sal_False)
+      bOwnOutliner(false)
 {
 }
 
@@ -89,14 +87,14 @@ void FuSearch::DoExecute( SfxRequest& )
 {
     mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArraySpell );
 
-    if ( mpViewShell->ISA(DrawViewShell) )
+    if ( dynamic_cast< DrawViewShell* >(mpViewShell) )
     {
-        bOwnOutliner = sal_True;
+        bOwnOutliner = true;
         pSdOutliner = new ::sd::Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT );
     }
-    else if ( mpViewShell->ISA(OutlineViewShell) )
+    else if ( dynamic_cast< OutlineViewShell* >(mpViewShell) )
     {
-        bOwnOutliner = sal_False;
+        bOwnOutliner = false;
         pSdOutliner = mpDoc->GetOutliner();
     }
 
@@ -131,34 +129,34 @@ FuSearch::~FuSearch()
 
 void FuSearch::SearchAndReplace( const SvxSearchItem* pSearchItem )
 {
-    ViewShellBase* pBase = PTR_CAST(ViewShellBase, SfxViewShell::Current());
+    ViewShellBase* pBase = dynamic_cast< ViewShellBase* >(SfxViewShell::Current());
     ViewShell* pViewShell = NULL;
     if (pBase != NULL)
         pViewShell = pBase->GetMainViewShell().get();
 
     if (pViewShell != NULL)
     {
-        if ( pSdOutliner && pViewShell->ISA(DrawViewShell) && !bOwnOutliner )
+        if ( pSdOutliner && dynamic_cast< DrawViewShell* >(pViewShell) && !bOwnOutliner )
         {
             pSdOutliner->EndSpelling();
 
-            bOwnOutliner = sal_True;
+            bOwnOutliner = true;
             pSdOutliner = new ::sd::Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT );
             pSdOutliner->PrepareSpelling();
         }
-        else if ( pSdOutliner && pViewShell->ISA(OutlineViewShell) && bOwnOutliner )
+        else if ( pSdOutliner && dynamic_cast< OutlineViewShell* >(pViewShell) && bOwnOutliner )
         {
             pSdOutliner->EndSpelling();
             delete pSdOutliner;
 
-            bOwnOutliner = sal_False;
+            bOwnOutliner = false;
             pSdOutliner = mpDoc->GetOutliner();
             pSdOutliner->PrepareSpelling();
         }
 
         if (pSdOutliner)
         {
-            sal_Bool bEndSpelling = pSdOutliner->StartSearchAndReplace(pSearchItem);
+            bool bEndSpelling = pSdOutliner->StartSearchAndReplace(pSearchItem);
 
             if (bEndSpelling)
             {

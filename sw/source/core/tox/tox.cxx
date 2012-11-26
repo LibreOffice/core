@@ -68,8 +68,6 @@ sal_uInt8 SwForm::nFormAuthLen           = 5;
 
 SV_IMPL_PTRARR(SwTOXMarks, SwTOXMark*)
 
-TYPEINIT2( SwTOXMark, SfxPoolItem, SwClient );    // fuers rtti
-
 struct PatternIni
 {
     sal_uInt16 n1;

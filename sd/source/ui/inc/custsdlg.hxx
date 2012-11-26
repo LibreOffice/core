@@ -55,7 +55,7 @@ private:
     SdDrawDocument& rDoc;
     List*           pCustomShowList;
     SdCustomShow*   pCustomShow;
-    sal_Bool            bModified;
+    bool            bModified;
 
     void            CheckState();
 
@@ -66,8 +66,8 @@ public:
                 SdCustomShowDlg( Window* pWindow, SdDrawDocument& rDrawDoc );
                 ~SdCustomShowDlg();
 
-    sal_Bool        IsModified() const { return( bModified ); }
-    sal_Bool        IsCustomShow() const;
+    bool        IsModified() const { return( bModified ); }
+    bool        IsCustomShow() const;
 };
 
 
@@ -90,7 +90,7 @@ private:
 
     SdDrawDocument& rDoc;
     SdCustomShow*&  rpCustomShow;
-    sal_Bool            bModified;
+    bool            bModified;
     String          aOldName;
 
     void            CheckState();
@@ -105,7 +105,7 @@ public:
                             SdDrawDocument& rDrawDoc, SdCustomShow*& rpCS );
                     ~SdDefineCustomShowDlg();
 
-    sal_Bool            IsModified() const { return( bModified ); }
+    bool            IsModified() const { return( bModified ); }
 };
 
 #endif // _SD_CUSTSDLG_HXX

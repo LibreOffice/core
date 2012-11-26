@@ -798,8 +798,6 @@ public:
     bool IsHidden() const;
 // <--
 
-    TYPEINFO(); // fuer rtti
-
     // override SwIndexReg
     virtual void Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
                  const bool bNegative = false, const bool bDelete = false );

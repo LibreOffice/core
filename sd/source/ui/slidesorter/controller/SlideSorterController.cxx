@@ -142,7 +142,8 @@ SlideSorterController::SlideSorterController (SlideSorter& rSlideSorter)
         pWindow->SetBackground(Wallpaper());
         pWindow->SetCenterAllowed(false);
         pWindow->SetMapMode(MapMode(MAP_PIXEL));
-        pWindow->SetViewSize(mrView.GetModelArea().GetSize());
+        const Size aNewSize(mrView.GetModelArea().GetSize());
+        pWindow->SetViewSize(basegfx::B2DVector(aNewSize.Width(), aNewSize.Height()));
     }
 }
 
@@ -212,9 +213,9 @@ void SlideSorterController::Dispose (void)
 model::SharedPageDescriptor SlideSorterController::GetPageAt (
     const Point& aWindowPosition)
 {
-    sal_Int32 nHitPageIndex (mrView.GetPageIndexAtPoint(aWindowPosition));
+    sal_uInt32 nHitPageIndex (mrView.GetPageIndexAtPoint(aWindowPosition));
     model::SharedPageDescriptor pDescriptorAtPoint;
-    if (nHitPageIndex >= 0)
+    if (SDRPAGE_NOTFOUND != nHitPageIndex)
     {
         pDescriptorAtPoint = mrModel.GetPageDescriptor(nHitPageIndex);
 
@@ -584,8 +585,9 @@ void SlideSorterController::PostModelChange (void)
 
         mrView.PostModelChange ();
 
-        pWindow->SetViewOrigin (Point (0,0));
-        pWindow->SetViewSize (mrView.GetModelArea().GetSize());
+        pWindow->SetViewOrigin(basegfx::B2DPoint(0.0, 0.0));
+        const Size aOldSize(mrView.GetModelArea().GetSize());
+        pWindow->SetViewSize(basegfx::B2DVector(aOldSize.Width(), aOldSize.Height()));
 
         // The visibility of the scroll bars may have to be changed.  Then
         // the size of the view has to change, too.  Let Rearrange() handle
@@ -661,8 +663,8 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
 
                 // Update the draw mode.
                 sal_uLong nDrawMode (Application::GetSettings().GetStyleSettings().GetHighContrastMode()
-                    ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
-                    : ViewShell::OUTPUT_DRAWMODE_COLOR);
+                    ? SD_OUTPUT_DRAWMODE_CONTRAST
+                    : SD_OUTPUT_DRAWMODE_COLOR);
                 if (mrSlideSorter.GetViewShell() != NULL)
                     mrSlideSorter.GetViewShell()->GetFrameView()->SetDrawMode(nDrawMode);
                 if (pActiveWindow != NULL)
@@ -685,7 +687,7 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 
@@ -722,34 +724,30 @@ void SlideSorterController::GetCtrlState (SfxItemSet& rSet)
 
             switch (nMode)
             {
-                case ViewShell::OUTPUT_DRAWMODE_COLOR:
+                case SD_OUTPUT_DRAWMODE_COLOR:
                     nQuality = 0;
                     break;
-                case ViewShell::OUTPUT_DRAWMODE_GRAYSCALE:
+                case SD_OUTPUT_DRAWMODE_GRAYSCALE:
                     nQuality = 1;
                     break;
-                case ViewShell::OUTPUT_DRAWMODE_BLACKWHITE:
+                case SD_OUTPUT_DRAWMODE_BLACKWHITE:
                     nQuality = 2;
                     break;
-                case ViewShell::OUTPUT_DRAWMODE_CONTRAST:
+                case SD_OUTPUT_DRAWMODE_CONTRAST:
                     nQuality = 3;
                     break;
             }
 
-            rSet.Put (SfxBoolItem (SID_OUTPUT_QUALITY_COLOR,
-                    (sal_Bool)(nQuality==0)));
-            rSet.Put (SfxBoolItem (SID_OUTPUT_QUALITY_GRAYSCALE,
-                    (sal_Bool)(nQuality==1)));
-            rSet.Put (SfxBoolItem (SID_OUTPUT_QUALITY_BLACKWHITE,
-                    (sal_Bool)(nQuality==2)));
-            rSet.Put (SfxBoolItem (SID_OUTPUT_QUALITY_CONTRAST,
-                    (sal_Bool)(nQuality==3)));
+            rSet.Put (SfxBoolItem (SID_OUTPUT_QUALITY_COLOR, nQuality == 0));
+            rSet.Put (SfxBoolItem (SID_OUTPUT_QUALITY_GRAYSCALE, nQuality == 1));
+            rSet.Put (SfxBoolItem (SID_OUTPUT_QUALITY_BLACKWHITE, nQuality == 2));
+            rSet.Put (SfxBoolItem (SID_OUTPUT_QUALITY_CONTRAST, nQuality == 3));
         }
     }
 
     if (rSet.GetItemState(SID_MAIL_SCROLLBODY_PAGEDOWN) == SFX_ITEM_AVAILABLE)
     {
-        rSet.Put (SfxBoolItem( SID_MAIL_SCROLLBODY_PAGEDOWN, sal_True));
+        rSet.Put (SfxBoolItem( SID_MAIL_SCROLLBODY_PAGEDOWN, true));
     }
 }
 
@@ -917,7 +915,7 @@ void SlideSorterController::PrepareEditModeChange (void)
         // Remember the current page.
         if (mrSlideSorter.GetViewShell() != NULL)
             mnCurrentPageBeforeSwitch = (mrSlideSorter.GetViewShell()->GetViewShellBase()
-            .GetMainViewShell()->GetActualPage()->GetPageNum()-1)/2;
+            .GetMainViewShell()->GetActualPage()->GetPageNumber()-1)/2;
     }
 }
 
@@ -996,7 +994,7 @@ void SlideSorterController::PageNameHasChanged (int nPageIndex, const String& rs
             break;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-            xAccessible (pWindow->GetAccessible(sal_False));
+            xAccessible (pWindow->GetAccessible(false));
         if ( ! xAccessible.is())
             break;
 

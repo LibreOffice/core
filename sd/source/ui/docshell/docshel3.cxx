@@ -128,9 +128,11 @@ void DrawDocShell::Execute( SfxRequest& rReq )
 
                 while (pShell)
                 {
-                    if (pShell->ISA(DrawDocShell))
+                    DrawDocShell* pDrawDocShell = dynamic_cast< DrawDocShell* >(pShell);
+
+                    if (pDrawDocShell)
                     {
-                        ( (DrawDocShell*) pShell)->CancelSearching();
+                        pDrawDocShell->CancelSearching();
                     }
 
                     pShell = SfxObjectShell::GetNext(*pShell);

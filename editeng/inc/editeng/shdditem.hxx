@@ -44,10 +44,8 @@ namespace rtl
 class EDITENG_DLLPUBLIC SvxShadowedItem : public SfxBoolItem
 {
 public:
-    TYPEINFO();
-
-    SvxShadowedItem( const sal_Bool bShadowed /*= sal_False*/,
-                     const sal_uInt16 nId  );
+    POOLITEM_FACTORY()
+    SvxShadowedItem( const sal_Bool bShadowed = sal_False, const sal_uInt16 nId = 0 );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;

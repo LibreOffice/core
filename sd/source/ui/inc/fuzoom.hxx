@@ -28,6 +28,7 @@
 #include <vcl/pointr.hxx>
 #endif
 #include "fupoor.hxx"
+#include <basegfx/range/b2drange.hxx>
 
 namespace sd {
 
@@ -37,14 +38,12 @@ class FuZoom
     : public FuPoor
 {
 public:
-    TYPEINFO();
-
     static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
 
     // Mouse- & Key-Events
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
+    virtual bool MouseMove(const MouseEvent& rMEvt);
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt);
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt);
 
     virtual void Activate();        // Function aktivieren
     virtual void Deactivate();      // Function deaktivieren
@@ -52,13 +51,15 @@ public:
 protected:
     virtual ~FuZoom (void);
 
-    Point       aBeginPosPix;
-    Point       aBeginPos;
-    Point       aEndPos;
-    Rectangle   aZoomRect;
-    sal_Bool        bVisible;
-    sal_Bool        bStartDrag;
-    Pointer     aPtr;
+    basegfx::B2DPoint   maBeginPosPixel;
+    basegfx::B2DPoint   maBeginPos;
+    basegfx::B2DPoint   maEndPos;
+    basegfx::B2DRange   maZoomRange;
+    Pointer             maPtr;
+
+    /// bitfield
+    bool                mbVisible : 1;
+    bool                mbStartDrag : 1;
 
 private:
     FuZoom (

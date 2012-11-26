@@ -217,7 +217,7 @@ struct SfxToolBoxControl_Impl
 IMPL_LINK( SfxToolBoxControl_Impl, WindowEventListener, VclSimpleEvent*, pEvent )
 {
     if ( pEvent &&
-         pEvent->ISA( VclWindowEvent ) &&
+         dynamic_cast< VclWindowEvent* >(pEvent) &&
          (( pEvent->GetId() == VCLEVENT_WINDOW_MOVE ) ||
           ( pEvent->GetId() == VCLEVENT_WINDOW_ACTIVATE )))
     {
@@ -335,8 +335,8 @@ SfxToolBoxControl* SfxToolBoxControl::CreateControl( sal_uInt16 nSlotId, sal_uIn
         pSlotPool = pMod->GetSlotPool();
     else
         pSlotPool = &SfxSlotPool::GetSlotPool();
-    TypeId aSlotType = pSlotPool->GetSlotType( nSlotId );
-    if ( aSlotType )
+    const std::type_info&aSlotType = pSlotPool->GetSlotType( nSlotId );
+    if ( aSlotType != typeid(void))
     {
         if ( pMod )
         {
@@ -349,7 +349,8 @@ SfxToolBoxControl* SfxToolBoxControl::CreateControl( sal_uInt16 nSlotId, sal_uIn
 
                 // search for a factory with the given slot id
                 for( nFactory = 0; nFactory < nCount; ++nFactory )
-                    if( (rFactories[nFactory]->nTypeId == aSlotType) && (rFactories[nFactory]->nSlotId == nSlotId) )
+                    if ( rFactories[nFactory]->rTypeInfo == aSlotType &&
+                         ( ( rFactories[nFactory]->nSlotId == 0 ) || ( rFactories[nFactory]->nSlotId == nSlotId) ) )
                         break;
 
                 if( nFactory == nCount )
@@ -357,7 +358,7 @@ SfxToolBoxControl* SfxToolBoxControl::CreateControl( sal_uInt16 nSlotId, sal_uIn
                     // if no factory exists for the given slot id, see if we
                     // have a generic factory with the correct slot type and slot id == 0
                     for ( nFactory = 0; nFactory < nCount; ++nFactory )
-                        if( (rFactories[nFactory]->nTypeId == aSlotType) && (rFactories[nFactory]->nSlotId == 0) )
+                        if( (rFactories[nFactory]->rTypeInfo == aSlotType) && (rFactories[nFactory]->nSlotId == 0) )
                             break;
                 }
 
@@ -375,7 +376,7 @@ SfxToolBoxControl* SfxToolBoxControl::CreateControl( sal_uInt16 nSlotId, sal_uIn
         const sal_uInt16 nCount = rFactories.Count();
 
         for( nFactory = 0; nFactory < nCount; ++nFactory )
-            if( (rFactories[nFactory]->nTypeId == aSlotType) && (rFactories[nFactory]->nSlotId == nSlotId) )
+            if( (rFactories[nFactory]->rTypeInfo == aSlotType) && (rFactories[nFactory]->nSlotId == nSlotId) )
                 break;
 
         if( nFactory == nCount )
@@ -383,7 +384,7 @@ SfxToolBoxControl* SfxToolBoxControl::CreateControl( sal_uInt16 nSlotId, sal_uIn
             // if no factory exists for the given slot id, see if we
             // have a generic factory with the correct slot type and slot id == 0
             for( nFactory = 0; nFactory < nCount; ++nFactory )
-                if( (rFactories[nFactory]->nTypeId == aSlotType) && (rFactories[nFactory]->nSlotId == 0) )
+                if( (rFactories[nFactory]->rTypeInfo == aSlotType) && (rFactories[nFactory]->nSlotId == 0) )
                     break;
         }
 
@@ -434,7 +435,7 @@ SfxItemState SfxToolBoxControl::GetItemState(
                 ? SFX_ITEM_DISABLED
                 : IsInvalidItem(pState)
                     ? SFX_ITEM_DONTCARE
-                    : pState->ISA(SfxVoidItem) && !pState->Which()
+                    : dynamic_cast< const SfxVoidItem* >(pState) && !pState->Which()
                         ? SFX_ITEM_UNKNOWN
                         : SFX_ITEM_AVAILABLE;
 }
@@ -978,14 +979,14 @@ void SfxToolBoxControl::StateChanged
     {
         case SFX_ITEM_AVAILABLE:
         {
-            if ( pState->ISA(SfxBoolItem) )
+            if ( dynamic_cast< const SfxBoolItem* >(pState) )
             {
                 // BoolItem fuer checken
                 if ( ((const SfxBoolItem*)pState)->GetValue() )
                     eTri = STATE_CHECK;
                 nItemBits |= TIB_CHECKABLE;
             }
-            else if ( pState->ISA(SfxEnumItemInterface) &&
+            else if ( dynamic_cast< const SfxEnumItemInterface* >(pState) &&
                 ((SfxEnumItemInterface *)pState)->HasBoolValue())
             {
                 // EnumItem wie Bool behandeln
@@ -993,7 +994,7 @@ void SfxToolBoxControl::StateChanged
                     eTri = STATE_CHECK;
                 nItemBits |= TIB_CHECKABLE;
             }
-            else if ( pImpl->bShowString && pState->ISA(SfxStringItem) )
+            else if ( pImpl->bShowString && dynamic_cast< const SfxStringItem* >(pState) )
                 pImpl->pBox->SetItemText(nId, ((const SfxStringItem*)pState)->GetValue() );
             break;
         }
@@ -1670,7 +1671,7 @@ void SfxAppToolBoxControl_Impl::StateChanged
     const SfxPoolItem*  pState
 )
 {
-    if ( pState && pState->ISA(SfxStringItem) )
+    if ( pState && dynamic_cast< const SfxStringItem* >(pState) )
     {
         // Important step for following SetImage() call!
         // It needs the valid pMenu item to fullfill it's specification

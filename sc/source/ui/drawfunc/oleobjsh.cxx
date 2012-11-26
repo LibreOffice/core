@@ -62,8 +62,6 @@ SFX_IMPL_INTERFACE(ScOleObjectShell, ScDrawShell, ScResId(SCSTR_OLEOBJECTSHELL) 
     SFX_POPUPMENU_REGISTRATION( ScResId(RID_POPUP_OLE) );
 }
 
-TYPEINIT1( ScOleObjectShell, ScDrawShell );
-
 ScOleObjectShell::ScOleObjectShell(ScViewData* pData) :
     ScDrawShell(pData)
 {

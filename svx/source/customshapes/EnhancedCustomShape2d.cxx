@@ -63,15 +63,30 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/color/bcolortools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-
-// #i76201#
 #include <basegfx/polygon/b2dpolygontools.hxx>
-
+#include <svx/svdlegacy.hxx>
 #include <math.h>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand;
+
+//void old_ShearPoint(basegfx::B2DPoint& rPnt, const basegfx::B2DPoint& rRef, double tn)
+//{
+//  if (!basegfx::fTools::equal(rPnt.getY(), rRef.getY()))
+//  {
+//      rPnt.setX(rPnt.getX() - ((rPnt.getY() - rRef.getY()) * tn));
+//  }
+//}
+
+//void old_RotatePoint(basegfx::B2DPoint& rPnt, const basegfx::B2DPoint& rRef, double sn, double cs)
+//{
+//  const double fx(rPnt.getX() - rRef.getX());
+//  const double fy(rPnt.getY() - rRef.getY());
+//
+//  rPnt.setX(rRef.getX() + fx * cs + fy * sn);
+//  rPnt.setY(rRef.getY() + fy * cs - fx * sn);
+//}
 
 void EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( EnhancedCustomShapeParameter& rParameter, const sal_Int32 nValue )
 {
@@ -583,7 +598,7 @@ sal_Bool EnhancedCustomShape2d::ConvertSequenceToEnhancedCustomShape2dHandle(
 const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomShapeGeometryItem& rGeometryItem )
 {
     const sal_Int32* pDefData = NULL;
-    const mso_CustomShape* pDefCustomShape = GetCustomShapeContent( eSpType );
+    const mso_CustomShape* pDefCustomShape = GetCustomShapeContent( meSpType );
     if ( pDefCustomShape )
         pDefData = pDefCustomShape->pDefData;
 
@@ -692,7 +707,7 @@ EnhancedCustomShape2d::~EnhancedCustomShape2d()
 EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     SfxItemSet          ( pAObj->GetMergedItemSet() ),
     pCustomShapeObj     ( pAObj ),
-    eSpType             ( mso_sptNil ),
+    meSpType            ( mso_sptNil ),
     nCoordLeft          ( 0 ),
     nCoordTop           ( 0 ),
     nCoordWidth         ( 21600 ),
@@ -703,9 +718,9 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     nColorData          ( 0 ),
     bTextFlow           ( sal_False ),
     bFilled             ( ((const XFillStyleItem&)pAObj->GetMergedItem( XATTR_FILLSTYLE )).GetValue() != XFILL_NONE ),
-    bStroked            ( ((const XLineStyleItem&)pAObj->GetMergedItem( XATTR_LINESTYLE )).GetValue() != XLINE_NONE ),
-    bFlipH              ( sal_False ),
-    bFlipV              ( sal_False )
+    bStroked            ( ((const XLineStyleItem&)pAObj->GetMergedItem( XATTR_LINESTYLE )).GetValue() != XLINE_NONE )//,
+//  bFlipH              ( sal_False ),
+//  bFlipV              ( sal_False )
 {
     // bTextFlow needs to be set before clearing the TextDirection Item
 
@@ -723,37 +738,39 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     // 2D helper shape.
     ClearItem(SDRATTR_SHADOW);
 
-    Point aP( pCustomShapeObj->GetSnapRect().Center() );
-    Size aS( pCustomShapeObj->GetLogicRect().GetSize() );
-    aP.X() -= aS.Width() / 2;
-    aP.Y() -= aS.Height() / 2;
-    aLogicRect = Rectangle( aP, aS );
+    // Do not use GetSnapRect here as in the original since we are inside
+    // the geometry creation (createViewIndependentPrimitive2DSequence)
+    maLogicScale = basegfx::absolute(pCustomShapeObj->getSdrObjectScale());
 
     const rtl::OUString sType( RTL_CONSTASCII_USTRINGPARAM ( "Type" ) );
-    const rtl::OUString sMirroredX( RTL_CONSTASCII_USTRINGPARAM ( "MirroredX" ) );
-    const rtl::OUString sMirroredY( RTL_CONSTASCII_USTRINGPARAM ( "MirroredY" ) );
+    // TTTT: MirroredX/Y removed
+//  const rtl::OUString sMirroredX( RTL_CONSTASCII_USTRINGPARAM ( "MirroredX" ) );
+//  const rtl::OUString sMirroredY( RTL_CONSTASCII_USTRINGPARAM ( "MirroredY" ) );
 
     rtl::OUString sShapeType;
     SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)(const SdrCustomShapeGeometryItem&)pCustomShapeObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
     Any* pAny = rGeometryItem.GetPropertyValueByName( sType );
     if ( pAny )
         *pAny >>= sShapeType;
-    eSpType = EnhancedCustomShapeTypeNames::Get( sShapeType );
+    meSpType = EnhancedCustomShapeTypeNames::Get( sShapeType );
 
-    pAny = rGeometryItem.GetPropertyValueByName( sMirroredX );
-    if ( pAny )
-        *pAny >>= bFlipH;
-    pAny = rGeometryItem.GetPropertyValueByName( sMirroredY );
-    if ( pAny )
-        *pAny >>= bFlipV;
+// TTTT:
+//  pAny = rGeometryItem.GetPropertyValueByName( sMirroredX );
+//  if ( pAny )
+//      *pAny >>= bFlipH;
+//  pAny = rGeometryItem.GetPropertyValueByName( sMirroredY );
+//  if ( pAny )
+//      *pAny >>= bFlipV;
 
-    if ( pCustomShapeObj->ISA( SdrObjCustomShape ) )    // should always be a SdrObjCustomShape, but you don't know
-        nRotateAngle = (sal_Int32)(((SdrObjCustomShape*)pCustomShapeObj)->GetObjectRotation() * 100.0);
-    else
-         nRotateAngle = pCustomShapeObj->GetRotateAngle();
+//  SdrObjCustomShape* pSdrObjCustomShape = dynamic_cast< SdrObjCustomShape* >(pCustomShapeObj);
+//
+//  if ( pSdrObjCustomShape )   // should always be a SdrObjCustomShape, but you don't know
+//      nRotateAngle = basegfx::fround(pSdrObjCustomShape->GetObjectRotation() * 100.0);
+//  else
+//      nRotateAngle = sdr::legacy::GetRotateAngle(*pCustomShapeObj);
 
     /*const sal_Int32* pDefData =*/ ApplyShapeAttributes( rGeometryItem );
-    switch( eSpType )
+    switch( meSpType )
     {
         case mso_sptCan :                       nColorData = 0x20400000; break;
         case mso_sptCube :                      nColorData = 0x302e0000; break;
@@ -796,11 +813,11 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
         default:
             break;
     }
-     fXScale = nCoordWidth == 0 ? 0.0 : (double)aLogicRect.GetWidth() / (double)nCoordWidth;
-     fYScale = nCoordHeight == 0 ? 0.0 : (double)aLogicRect.GetHeight() / (double)nCoordHeight;
-     if ( (sal_uInt32)nXRef != 0x80000000 && aLogicRect.GetHeight() )
+     fXScale = nCoordWidth == 0 ? 0.0 : maLogicScale.getX() / (double)nCoordWidth;
+     fYScale = nCoordHeight == 0 ? 0.0 : maLogicScale.getY() / (double)nCoordHeight;
+     if ( (sal_uInt32)nXRef != 0x80000000 && !basegfx::fTools::equalZero(maLogicScale.getY()) )
     {
-        fXRatio = (double)aLogicRect.GetWidth() / (double)aLogicRect.GetHeight();
+        fXRatio = maLogicScale.getX() / maLogicScale.getY();
         if ( fXRatio > 1 )
             fXScale /= fXRatio;
         else
@@ -808,9 +825,9 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     }
     else
         fXRatio = 1.0;
-    if ( (sal_uInt32)nYRef != 0x80000000 && aLogicRect.GetWidth() )
+    if ( (sal_uInt32)nYRef != 0x80000000 && !basegfx::fTools::equalZero(maLogicScale.getX()) )
     {
-        fYRatio = (double)aLogicRect.GetHeight() / (double)aLogicRect.GetWidth();
+        fYRatio = maLogicScale.getY() / maLogicScale.getX();
         if ( fYRatio > 1 )
             fYScale /= fYRatio;
         else
@@ -853,8 +870,8 @@ double EnhancedCustomShape2d::GetEnumFunc( const EnumFunc eFunc ) const
         case ENUM_FUNC_HASFILL :    fRet = bFilled ? 1.0 : 0.0; break;
         case ENUM_FUNC_WIDTH :      fRet = nCoordWidth; break;
         case ENUM_FUNC_HEIGHT :     fRet = nCoordHeight; break;
-        case ENUM_FUNC_LOGWIDTH :   fRet = aLogicRect.GetWidth(); break;
-        case ENUM_FUNC_LOGHEIGHT :  fRet = aLogicRect.GetHeight(); break;
+        case ENUM_FUNC_LOGWIDTH :   fRet = maLogicScale.getX(); break;
+        case ENUM_FUNC_LOGHEIGHT :  fRet = maLogicScale.getY(); break;
     }
     return fRet;
 }
@@ -922,10 +939,11 @@ sal_Bool EnhancedCustomShape2d::SetAdjustValueAsDouble( const double& rValue, co
     return bRetValue;
 }
 
-Point EnhancedCustomShape2d::GetPoint( const com::sun::star::drawing::EnhancedCustomShapeParameterPair& rPair,
+basegfx::B2DPoint EnhancedCustomShape2d::GetPoint(
+    const com::sun::star::drawing::EnhancedCustomShapeParameterPair& rPair,
                                         const sal_Bool bScale, const sal_Bool bReplaceGeoSize ) const
 {
-    Point       aRetValue;
+    basegfx::B2DPoint aRetValue;
     sal_Bool    bExchange = ( nFlags & DFF_CUSTOMSHAPE_EXCH ) != 0; // x <-> y
     sal_uInt32  nPass = 0;
     do
@@ -946,9 +964,9 @@ Point EnhancedCustomShape2d::GetPoint( const com::sun::star::drawing::EnhancedCu
                 fVal *= fYScale;
 
                 if ( nFlags & DFF_CUSTOMSHAPE_FLIP_V )
-                    fVal = aLogicRect.GetHeight() - fVal;
+                    fVal = maLogicScale.getY() - fVal;
             }
-            aRetValue.Y() = (sal_Int32)fVal;
+            aRetValue.setY(fVal);
         }
         else            // width
         {
@@ -959,9 +977,9 @@ Point EnhancedCustomShape2d::GetPoint( const com::sun::star::drawing::EnhancedCu
                 fVal *= fXScale;
 
                 if ( nFlags & DFF_CUSTOMSHAPE_FLIP_H )
-                    fVal = aLogicRect.GetWidth() - fVal;
+                    fVal = maLogicScale.getX() - fVal;
             }
-            aRetValue.X() = (sal_Int32)fVal;
+            aRetValue.setX(fVal);
         }
     }
     while ( ++nPass < 2 );
@@ -1097,30 +1115,43 @@ Color EnhancedCustomShape2d::GetColorData( const Color& rFillColor, sal_uInt32 n
                   (sal_uInt8)static_cast< sal_Int32 >( basegfx::clamp(aHSVColor.getBlue(),0.0,1.0) * 255.0 + 0.5 ) );
 }
 
-Rectangle EnhancedCustomShape2d::GetTextRect() const
+basegfx::B2DRange EnhancedCustomShape2d::GetTextRange() const
 {
     sal_Int32 nIndex, nSize = seqTextFrames.getLength();
-    if ( !nSize )
-        return aLogicRect;
-    nIndex = 0;
-    if ( bTextFlow && ( nSize > 1 ) )
-        nIndex++;
-    Point aTopLeft( GetPoint( seqTextFrames[ nIndex ].TopLeft, sal_True, sal_True ) );
-    Point aBottomRight( GetPoint( seqTextFrames[ nIndex ].BottomRight, sal_True, sal_True ) );
-    if ( bFlipH )
+    basegfx::B2DRange aRetval(basegfx::B2DRange::getUnitB2DRange());
+    basegfx::B2DHomMatrix aTransform;
+
+    if ( nSize )
     {
-        aTopLeft.X() = aLogicRect.GetWidth() - aTopLeft.X();
-        aBottomRight.X() = aLogicRect.GetWidth() - aBottomRight.X();
+        nIndex = 0;
+        if ( bTextFlow && ( nSize > 1 ) )
+            nIndex++;
+        basegfx::B2DPoint aTopLeft( GetPoint( seqTextFrames[ nIndex ].TopLeft, sal_True, sal_True ) );
+        basegfx::B2DPoint aBottomRight( GetPoint( seqTextFrames[ nIndex ].BottomRight, sal_True, sal_True ) );
+//      if ( bFlipH )
+//      {
+//          aTopLeft.setX(maLogicRange.getWidth() - aTopLeft.getX());
+//          aBottomRight.setX(maLogicRange.getWidth() - aBottomRight.getX());
+//      }
+//      if ( bFlipV )
+//      {
+//          aTopLeft.setY(maLogicRange.getHeight() - aTopLeft.getY());
+//          aBottomRight.setY(maLogicRange.getHeight() - aBottomRight.getY());
+//      }
+        aRetval = basegfx::B2DRange(aTopLeft, aBottomRight);
+        aTransform.scale(
+            basegfx::fTools::equalZero(maLogicScale.getX()) ? 1.0 : 1.0 / maLogicScale.getX(),
+            basegfx::fTools::equalZero(maLogicScale.getY()) ? 1.0 : 1.0 / maLogicScale.getY());
     }
-    if ( bFlipV )
-    {
-        aTopLeft.Y() = aLogicRect.GetHeight() - aTopLeft.Y();
-        aBottomRight.Y() = aLogicRect.GetHeight() - aBottomRight.Y();
-    }
-    Rectangle aRect( aTopLeft, aBottomRight );
-    aRect.Move( aLogicRect.Left(), aLogicRect.Top() );
-    aRect.Justify();
-    return aRect;
+
+    // To keep tight to the original, ignore rotate and shear. If this
+    // is not wanted, just use getSdrObjectTransformation() instead
+    aTransform.scale(basegfx::absolute(pCustomShapeObj->getSdrObjectScale()));
+    aTransform.translate(pCustomShapeObj->getSdrObjectTranslate());
+
+    aRetval *= aTransform;
+
+    return aRetval;
 }
 
 sal_uInt32 EnhancedCustomShape2d::GetHdlCount() const
@@ -1128,7 +1159,7 @@ sal_uInt32 EnhancedCustomShape2d::GetHdlCount() const
     return seqHandles.getLength();
 }
 
-sal_Bool EnhancedCustomShape2d::GetHandlePosition( const sal_uInt32 nIndex, Point& rReturnPosition ) const
+sal_Bool EnhancedCustomShape2d::GetHandlePosition( const sal_uInt32 nIndex, basegfx::B2DPoint& rReturnPosition ) const
 {
     sal_Bool bRetValue = sal_False;
     if ( nIndex < GetHdlCount() )
@@ -1138,7 +1169,7 @@ sal_Bool EnhancedCustomShape2d::GetHandlePosition( const sal_uInt32 nIndex, Poin
         {
             if ( aHandle.nFlags & HANDLE_FLAGS_POLAR )
             {
-                Point aReferencePoint( GetPoint( aHandle.aPolar, sal_True, sal_False ) );
+                basegfx::B2DPoint aReferencePoint( GetPoint( aHandle.aPolar, sal_True, sal_False ) );
 
                 double      fAngle;
                 double      fRadius;
@@ -1150,16 +1181,17 @@ sal_Bool EnhancedCustomShape2d::GetHandlePosition( const sal_uInt32 nIndex, Poin
                 double fX = dx * cos( a );
                 double fY =-dx * sin( a );
                 rReturnPosition =
-                    Point(
-                        Round( fX + aReferencePoint.X() ),
-                        basegfx::fTools::equalZero(fXScale) ? aReferencePoint.Y() :
-                        Round( ( fY * fYScale ) / fXScale + aReferencePoint.Y() ) );
+                    basegfx::B2DPoint(
+                        fX + aReferencePoint.getX(),
+                        basegfx::fTools::equalZero(fXScale)
+                            ? aReferencePoint.getY()
+                            : ( fY * fYScale ) / fXScale + aReferencePoint.getY() );
             }
             else
             {
                 if ( aHandle.nFlags & HANDLE_FLAGS_SWITCHED )
                 {
-                    if ( aLogicRect.GetHeight() > aLogicRect.GetWidth() )
+                    if ( maLogicScale.getY() > maLogicScale.getX() )
                     {
                         com::sun::star::drawing::EnhancedCustomShapeParameter aFirst = aHandle.aPosition.First;
                         com::sun::star::drawing::EnhancedCustomShapeParameter aSecond = aHandle.aPosition.Second;
@@ -1169,24 +1201,34 @@ sal_Bool EnhancedCustomShape2d::GetHandlePosition( const sal_uInt32 nIndex, Poin
                 }
                 rReturnPosition = GetPoint( aHandle.aPosition, sal_True, sal_False );
             }
-            const GeoStat aGeoStat( ((SdrObjCustomShape*)pCustomShapeObj)->GetGeoStat() );
-            if ( aGeoStat.nShearWink )
-            {
-                double nTan = aGeoStat.nTan;
-                if ((bFlipV&&!bFlipH )||(bFlipH&&!bFlipV))
-                    nTan = -nTan;
-                ShearPoint( rReturnPosition, Point( aLogicRect.GetWidth() / 2, aLogicRect.GetHeight() / 2 ), nTan );
-            }
-            if ( nRotateAngle )
-            {
-                double a = nRotateAngle * F_PI18000;
-                RotatePoint( rReturnPosition, Point( aLogicRect.GetWidth() / 2, aLogicRect.GetHeight() / 2 ), sin( a ), cos( a ) );
-            }
-            if ( bFlipH )
-                rReturnPosition.X() = aLogicRect.GetWidth() - rReturnPosition.X();
-            if ( bFlipV )
-                rReturnPosition.Y() = aLogicRect.GetHeight() - rReturnPosition.Y();
-            rReturnPosition.Move( aLogicRect.Left(), aLogicRect.Top() );
+
+            // transform to logic coordinates using object's transformation. rReturnPosition
+            // is already scaled
+            rReturnPosition /= basegfx::absolute(pCustomShapeObj->getSdrObjectScale());
+            rReturnPosition *= pCustomShapeObj->getSdrObjectTransformation();
+
+//          const long aOldShear(sdr::legacy::GetShearAngleX(*pCustomShapeObj));
+//          if ( aOldShear )
+//          {
+//              double nTan = tan(aOldShear*nPi180);
+////                if ((bFlipV&&!bFlipH )||(bFlipH&&!bFlipV))
+////                    nTan = -nTan;
+//              old_ShearPoint( rReturnPosition, maLogicRange.getRange() * 0.5, nTan );
+//          }
+//
+//          if ( nRotateAngle )
+//          {
+//              double a = nRotateAngle * F_PI18000;
+//              old_RotatePoint( rReturnPosition, maLogicRange.getRange() * 0.5, sin( a ), cos( a ) );
+//          }
+//
+////            if ( bFlipH )
+////                rReturnPosition.setX(maLogicRange.getWidth() - rReturnPosition.getX());
+////
+////            if ( bFlipV )
+////                rReturnPosition.setY(maLogicRange.getHeight() - rReturnPosition.getY());
+//
+//          rReturnPosition += maLogicRange.getMinimum();
             bRetValue = sal_True;
         }
     }
@@ -1201,36 +1243,44 @@ sal_Bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nI
         Handle aHandle;
         if ( ConvertSequenceToEnhancedCustomShape2dHandle( seqHandles[ nIndex ], aHandle ) )
         {
-            Point aP( rPosition.X, rPosition.Y );
-            // apply the negative object rotation to the controller position
+            basegfx::B2DPoint aP( rPosition.X, rPosition.Y );
 
-            aP.Move( -aLogicRect.Left(), -aLogicRect.Top() );
-            if ( bFlipH )
-                aP.X() = aLogicRect.GetWidth() - aP.X();
-            if ( bFlipV )
-                aP.Y() = aLogicRect.GetHeight() - aP.Y();
-            if ( nRotateAngle )
-            {
-                double a = -nRotateAngle * F_PI18000;
-                RotatePoint( aP, Point( aLogicRect.GetWidth() / 2, aLogicRect.GetHeight() / 2 ), sin( a ), cos( a ) );
-            }
-            const GeoStat aGeoStat( ((SdrObjCustomShape*)pCustomShapeObj)->GetGeoStat() );
-            if ( aGeoStat.nShearWink )
-            {
-                double nTan = -aGeoStat.nTan;
-                if ((bFlipV&&!bFlipH )||(bFlipH&&!bFlipV))
-                    nTan = -nTan;
-                ShearPoint( aP, Point( aLogicRect.GetWidth() / 2, aLogicRect.GetHeight() / 2 ), nTan );
-            }
+            // transform back to just scaled
+            basegfx::B2DHomMatrix aInvSdrObj(pCustomShapeObj->getSdrObjectTransformation());
+            aInvSdrObj.invert();
+            aP *= aInvSdrObj;
+            aP *= basegfx::absolute(pCustomShapeObj->getSdrObjectScale());
 
-            double fPos1 = aP.X();  //( bFlipH ) ? aLogicRect.GetWidth() - aP.X() : aP.X();
-            double fPos2 = aP.Y();  //( bFlipV ) ? aLogicRect.GetHeight() -aP.Y() : aP.Y();
+//          // apply the negative object rotation to the controller position
+//
+//          aP -= maLogicRange.getMinimum();
+////            if ( bFlipH )
+////                aP.setX(maLogicRange.getWidth() - aP.getX());
+////            if ( bFlipV )
+////                aP.setY(maLogicRange.getHeight() - aP.getY());
+//          if ( nRotateAngle )
+//          {
+//              double a = -nRotateAngle * F_PI18000;
+//              old_RotatePoint( aP, maLogicRange.getRange() * 0.5, sin( a ), cos( a ) );
+//          }
+//
+//          const long aOldShear(sdr::legacy::GetShearAngleX(*pCustomShapeObj));
+//          if ( aOldShear )
+//          {
+//              double nTan = -tan(aOldShear*nPi180);
+////                if ((bFlipV&&!bFlipH )||(bFlipH&&!bFlipV))
+////                    nTan = -nTan;
+//              old_ShearPoint( aP, maLogicRange.getRange() * 0.5, nTan );
+//          }
+
+            double fPos1 = aP.getX();
+            double fPos2 = aP.getY();
             fPos1 /= fXScale;
             fPos2 /= fYScale;
 
             if ( aHandle.nFlags & HANDLE_FLAGS_SWITCHED )
             {
-                if ( aLogicRect.GetHeight() > aLogicRect.GetWidth() )
+                if ( maLogicScale.getY() > maLogicScale.getX() )
                 {
                     double fX = fPos1;
                     double fY = fPos2;
@@ -1361,45 +1411,28 @@ void EnhancedCustomShape2d::SwapStartAndEndArrow( SdrObject* pObj ) //#108274
     pObj->SetMergedItem( aLineEndCenter );
 }
 
-basegfx::B2DPolygon CreateArc( const Rectangle& rRect, const Point& rStart, const Point& rEnd, const sal_Bool bClockwise )
+basegfx::B2DPolygon CreateArc(
+    const basegfx::B2DRange& rRange,
+    const basegfx::B2DPoint& rStart,
+    const basegfx::B2DPoint& rEnd,
+    const sal_Bool bClockwise )
 {
-    Rectangle aRect( rRect );
-    Point aStart( rStart );
-    Point aEnd( rEnd );
+    const basegfx::B2DPoint aCenter(rRange.getCenter());
+    const basegfx::B2DVector aHalfRange(rRange.getRange() * 0.5);
+    double fStart(basegfx::snapToZeroRange(atan2(rStart.getY() - aCenter.getY(), rStart.getX() - aCenter.getX()), F_2PI));
+    double fEnd(basegfx::snapToZeroRange(atan2(rEnd.getY() - aCenter.getY(), rEnd.getX() - aCenter.getX()), F_2PI));
 
-    sal_Int32 bSwapStartEndAngle = 0;
+    basegfx::B2DPolygon aRetval(
+        basegfx::tools::createPolygonFromEllipseSegment(
+            aCenter,
+            aHalfRange.getX(),
+            aHalfRange.getY(),
+            fEnd,
+            fStart));
 
-    if ( aRect.Left() > aRect.Right() )
-        bSwapStartEndAngle ^= 0x01;
-    if ( aRect.Top() > aRect.Bottom() )
-        bSwapStartEndAngle ^= 0x11;
-    if ( bSwapStartEndAngle )
-    {
-        aRect.Justify();
-        if ( bSwapStartEndAngle & 1 )
+    if(!bClockwise)
         {
-            Point aTmp( aStart );
-            aStart = aEnd;
-            aEnd = aTmp;
-        }
-    }
-
-    Polygon aTempPoly( aRect, aStart, aEnd, POLY_ARC );
-    basegfx::B2DPolygon aRetval;
-
-    if ( bClockwise )
-    {
-        for ( sal_uInt16 j = aTempPoly.GetSize(); j--; )
-        {
-            aRetval.append(basegfx::B2DPoint(aTempPoly[ j ].X(), aTempPoly[ j ].Y()));
-        }
-    }
-    else
-    {
-        for ( sal_uInt16 j = 0; j < aTempPoly.GetSize(); j++ )
-        {
-            aRetval.append(basegfx::B2DPoint(aTempPoly[ j ].X(), aTempPoly[ j ].Y()));
-        }
+        aRetval.flip();
     }
 
     return aRetval;
@@ -1423,8 +1456,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
 
         for ( sal_Int32 nPtNum(0L); nPtNum < nCoordSize; nPtNum++ )
         {
-            const Point aTempPoint(GetPoint( *pTmp++, sal_True, sal_True ));
-            aNewB2DPolygon.append(basegfx::B2DPoint(aTempPoint.X(), aTempPoint.Y()));
+            aNewB2DPolygon.append(GetPoint( *pTmp++, sal_True, sal_True ));
         }
 
         aNewB2DPolygon.setClosed(true);
@@ -1457,8 +1489,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
 
                     if ( rSrcPt < nCoordSize )
                     {
-                        const Point aTempPoint(GetPoint( seqCoordinates[ rSrcPt++ ], sal_True, sal_True ));
-                        aNewB2DPolygon.append(basegfx::B2DPoint(aTempPoint.X(), aTempPoint.Y()));
+                        aNewB2DPolygon.append(GetPoint( seqCoordinates[ rSrcPt++ ], sal_True, sal_True ));
                     }
                 }
                 break;
@@ -1482,15 +1513,12 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                 {
                     for ( sal_uInt16 i = 0; ( i < nPntCount ) && ( ( rSrcPt + 2 ) < nCoordSize ); i++ )
                     {
-                        const Point aControlA(GetPoint( seqCoordinates[ rSrcPt++ ], sal_True, sal_True ));
-                        const Point aControlB(GetPoint( seqCoordinates[ rSrcPt++ ], sal_True, sal_True ));
-                        const Point aEnd(GetPoint( seqCoordinates[ rSrcPt++ ], sal_True, sal_True ));
+                        const basegfx::B2DPoint aControlA(GetPoint( seqCoordinates[ rSrcPt++ ], sal_True, sal_True ));
+                        const basegfx::B2DPoint aControlB(GetPoint( seqCoordinates[ rSrcPt++ ], sal_True, sal_True ));
+                        const basegfx::B2DPoint aEnd(GetPoint( seqCoordinates[ rSrcPt++ ], sal_True, sal_True ));
 
                         DBG_ASSERT(aNewB2DPolygon.count(), "EnhancedCustomShape2d::CreateSubPath: Error in adding control point (!)");
-                        aNewB2DPolygon.appendBezierSegment(
-                            basegfx::B2DPoint(aControlA.X(), aControlA.Y()),
-                            basegfx::B2DPoint(aControlB.X(), aControlB.Y()),
-                            basegfx::B2DPoint(aEnd.X(), aEnd.Y()));
+                        aNewB2DPolygon.appendBezierSegment(aControlA, aControlB, aEnd);
                     }
                 }
                 break;
@@ -1513,7 +1541,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                     for ( sal_uInt16 i = 0; ( i < nPntCount ) && ( ( rSrcPt + 2 ) < nCoordSize ); i++ )
                     {
                         // create a circle
-                        Point _aCenter;
+                        basegfx::B2DPoint _aCenter( GetPoint( seqCoordinates[ rSrcPt ], sal_True, sal_True ) );
                         double fWidth, fHeight;
                         MSO_SPT eSpType = mso_sptEllipse;
                         const mso_CustomShape* pDefCustomShape = GetCustomShapeContent( eSpType );
@@ -1523,35 +1551,48 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
 
                         if( ( nCoordWidth == pDefCustomShape->nCoordWidth )
                             && ( nCoordHeight == pDefCustomShape->nCoordHeight ) )
+                        {
                             bIsDefaultViewBox = sal_True;
+                        }
+
                         sal_Int32 j, nCount = pDefCustomShape->nVertices;//==3
                         com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair> seqCoordinates1, seqCoordinates2;
 
                         seqCoordinates1.realloc( nCount );
+
                         for ( j = 0; j < nCount; j++ )
                         {
                             seqCoordinates1[j] = seqCoordinates[ rSrcPt + j];
                         }
 
                         seqCoordinates2.realloc( nCount );
+
                         for ( j = 0; j < nCount; j++ )
                         {
                             EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( seqCoordinates2[ j ].First, pDefCustomShape->pVertices[ j ].nValA );
                             EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( seqCoordinates2[ j ].Second, pDefCustomShape->pVertices[ j ].nValB );
                         }
+
                         if(seqCoordinates1 == seqCoordinates2)
+                        {
                             bIsDefaultPath = sal_True;
+                        }
 
                         const rtl::OUString sType( RTL_CONSTASCII_USTRINGPARAM ( "Type" ) );
                         rtl::OUString sShpType;
                         SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)(const SdrCustomShapeGeometryItem&)pCustomShapeObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
                         Any* pAny = rGeometryItem.GetPropertyValueByName( sType );
+
                         if ( pAny )
+                        {
                             *pAny >>= sShpType;
-                        if( sShpType.getLength() > 3 &&
-                            sShpType.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "mso" ))){
+                        }
+
+                        if( sShpType.getLength() > 3 && sShpType.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "mso" )))
+                        {
                                 bIsMSEllipse = sal_True;
                         }
+
                         if( (! bIsDefaultPath   && ! bIsDefaultViewBox) || (bIsDefaultViewBox && bIsMSEllipse) /*&& (nGeneratorVersion == SfxObjectShell::Sym_L2)*/ )
                         {
                             _aCenter = GetPoint( seqCoordinates[ rSrcPt ], sal_True, sal_True );
@@ -1559,10 +1600,11 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                             GetParameter( fHeight,  seqCoordinates[ rSrcPt + 1 ].Second, sal_False, sal_True );
                             fWidth /= 2;
                             fHeight /= 2;
-                        }else if( bIsDefaultPath && !bIsDefaultViewBox /*&& (nGeneratorVersion == SfxObjectShell::Sym_L2)*/ )
+                        }
+                        else if( bIsDefaultPath && !bIsDefaultViewBox /*&& (nGeneratorVersion == SfxObjectShell::Sym_L2)*/ )
                         {
-                            _aCenter.X() = nCoordWidth/2 * fXScale;
-                            _aCenter.Y() = nCoordHeight/2 * fYScale;
+                            _aCenter.setX(nCoordWidth/2 * fXScale);
+                            _aCenter.setY(nCoordHeight/2 * fYScale);
                             fWidth = nCoordWidth/2;
                             fHeight = nCoordHeight/2;
 
@@ -1579,7 +1621,9 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                             aPropVal.Value <<= aViewBox;
                             rGeometryItem.SetPropertyValue( aPropVal );
                             pCustomShapeObj->SetMergedItem( rGeometryItem );
-                        }else{
+                        }
+                        else
+                        {
                             _aCenter = GetPoint( seqCoordinates[ rSrcPt ], sal_True, sal_True );
                             GetParameter( fWidth,  seqCoordinates[ rSrcPt + 1 ].First, sal_True, sal_False  );
                             GetParameter( fHeight,  seqCoordinates[ rSrcPt + 1 ].Second, sal_False, sal_True );
@@ -1587,10 +1631,11 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
 
                         fWidth *= fXScale;
                         fHeight*= fYScale;
-                        Point aP( (sal_Int32)( _aCenter.X() - fWidth ), (sal_Int32)( _aCenter.Y() - fHeight ) );
-                        Size  aS( (sal_Int32)( fWidth * 2.0 ), (sal_Int32)( fHeight * 2.0 ) );
-                        Rectangle aRect( aP, aS );
-                        if ( aRect.GetWidth() && aRect.GetHeight() )
+                        basegfx::B2DRange aRange(
+                            _aCenter.getX() - fWidth, _aCenter.getY() - fHeight,
+                            _aCenter.getX() + fWidth, _aCenter.getY() + fHeight);
+
+                        if ( !basegfx::fTools::equalZero(aRange.getWidth()) && !basegfx::fTools::equalZero(aRange.getHeight()) )
                         {
                             double fStartAngle, fEndAngle;
                             GetParameter( fStartAngle, seqCoordinates[ rSrcPt + 2 ].First,  sal_False, sal_False );
@@ -1611,13 +1656,24 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                                         fEndAngle = fTemp;
                                     }
                                 }
-                                double fCenterX = aRect.Center().X();
-                                double fCenterY = aRect.Center().Y();
+                                double fCenterX = aRange.getCenterX();
+                                double fCenterY = aRange.getCenterY();
                                 double fx1 = ( cos( fStartAngle * F_PI180 ) * 65536.0 * fXScale ) + fCenterX;
                                 double fy1 = ( -sin( fStartAngle * F_PI180 ) * 65536.0 * fYScale ) + fCenterY;
                                 double fx2 = ( cos( fEndAngle * F_PI180 ) * 65536.0 * fXScale ) + fCenterX;
                                 double fy2 = ( -sin( fEndAngle * F_PI180 ) * 65536.0 * fYScale ) + fCenterY;
-                                aNewB2DPolygon.append(CreateArc( aRect, Point( (sal_Int32)fx1, (sal_Int32)fy1 ), Point( (sal_Int32)fx2, (sal_Int32)fy2 ), sal_False));
+
+                                const bool bMirrorX(fWidth < 0.0);
+                                const bool bMirrorY(fHeight < 0.0);
+                                const bool bSwap((bMirrorX || bMirrorY) && (bMirrorX != bMirrorY));
+                                const basegfx::B2DPoint aTopLeft(fx1, fy1);
+                                const basegfx::B2DPoint aBottomRight(fx2, fy2);
+                                aNewB2DPolygon.append(
+                                    CreateArc( // TTTT: check CreateArc, completely changed from old tools polygon (!)
+                                        aRange,
+                                        bSwap ? aBottomRight : aTopLeft,
+                                        bSwap ? aTopLeft : aBottomRight,
+                                        sal_False));
                             }
                             else
                             {   /* SJ: TODO: this block should be replaced sometimes, because the current point
@@ -1625,33 +1681,33 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                                    point if ANGLEELLIPSETO was used, but the method CreateArc
                                    is at the moment not able to draw full circles (if startangle is 0
                                    and endangle 360 nothing is painted :-( */
-                                sal_Int32 nXControl = (sal_Int32)((double)aRect.GetWidth() * 0.2835 );
-                                sal_Int32 nYControl = (sal_Int32)((double)aRect.GetHeight() * 0.2835 );
-                                Point aCenter( aRect.Center() );
+                                double fXControl(aRange.getWidth() * 0.2835);
+                                double fYControl(aRange.getHeight() * 0.2835);
+                                basegfx::B2DPoint aCenter( aRange.getCenter() );
 
                                 // append start point
-                                aNewB2DPolygon.append(basegfx::B2DPoint(aCenter.X(), aRect.Top()));
+                                aNewB2DPolygon.append(basegfx::B2DPoint(aCenter.getX(), aRange.getMinY()));
 
                                 // append four bezier segments
                                 aNewB2DPolygon.appendBezierSegment(
-                                    basegfx::B2DPoint(aCenter.X() + nXControl, aRect.Top()),
-                                    basegfx::B2DPoint(aRect.Right(), aCenter.Y() - nYControl),
-                                    basegfx::B2DPoint(aRect.Right(), aCenter.Y()));
+                                    basegfx::B2DPoint(aCenter.getX() + fXControl, aRange.getMinY()),
+                                    basegfx::B2DPoint(aRange.getMaxX(), aCenter.getY() - fYControl),
+                                    basegfx::B2DPoint(aRange.getMaxX(), aCenter.getY()));
 
                                 aNewB2DPolygon.appendBezierSegment(
-                                    basegfx::B2DPoint(aRect.Right(), aCenter.Y() + nYControl),
-                                    basegfx::B2DPoint(aCenter.X() + nXControl, aRect.Bottom()),
-                                    basegfx::B2DPoint(aCenter.X(), aRect.Bottom()));
+                                    basegfx::B2DPoint(aRange.getMaxX(), aCenter.getY() + fYControl),
+                                    basegfx::B2DPoint(aCenter.getX() + fXControl, aRange.getMaxY()),
+                                    basegfx::B2DPoint(aCenter.getX(), aRange.getMaxY()));
 
                                 aNewB2DPolygon.appendBezierSegment(
-                                    basegfx::B2DPoint(aCenter.X() - nXControl, aRect.Bottom()),
-                                    basegfx::B2DPoint(aRect.Left(), aCenter.Y() + nYControl),
-                                    basegfx::B2DPoint(aRect.Left(), aCenter.Y()));
+                                    basegfx::B2DPoint(aCenter.getX() - fXControl, aRange.getMaxY()),
+                                    basegfx::B2DPoint(aRange.getMinX(), aCenter.getY() + fYControl),
+                                    basegfx::B2DPoint(aRange.getMinX(), aCenter.getY()));
 
                                 aNewB2DPolygon.appendBezierSegment(
-                                    basegfx::B2DPoint(aRect.Left(), aCenter.Y() - nYControl),
-                                    basegfx::B2DPoint(aCenter.X() - nXControl, aRect.Top()),
-                                    basegfx::B2DPoint(aCenter.X(), aRect.Top()));
+                                    basegfx::B2DPoint(aRange.getMinX(), aCenter.getY() - fYControl),
+                                    basegfx::B2DPoint(aCenter.getX() - fXControl, aRange.getMinY()),
+                                    basegfx::B2DPoint(aCenter.getX(), aRange.getMinY()));
 
                                 // close, rescue last controlpoint, remove double last point
                                 basegfx::tools::closeWithGeometryChange(aNewB2DPolygon);
@@ -1666,8 +1722,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                 {
                     for ( sal_Int32 i(0L); ( i < nPntCount ) && ( rSrcPt < nCoordSize ); i++ )
                     {
-                        const Point aTempPoint(GetPoint( seqCoordinates[ rSrcPt++ ], sal_True, sal_True ));
-                        aNewB2DPolygon.append(basegfx::B2DPoint(aTempPoint.X(), aTempPoint.Y()));
+                        aNewB2DPolygon.append(GetPoint( seqCoordinates[ rSrcPt++ ], sal_True, sal_True ));
                     }
                 }
                 break;
@@ -1691,18 +1746,29 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                     sal_uInt32 nXor = bClockwise ? 3 : 2;
                     for ( sal_uInt16 i = 0; ( i < nPntCount ) && ( ( rSrcPt + 3 ) < nCoordSize ); i++ )
                     {
-                        Rectangle aRect( GetPoint( seqCoordinates[ rSrcPt ], sal_True, sal_True ), GetPoint( seqCoordinates[ rSrcPt + 1 ], sal_True, sal_True ) );
-                        if ( aRect.GetWidth() && aRect.GetHeight() )
+                        const basegfx::B2DPoint aPointTL(GetPoint( seqCoordinates[ rSrcPt ], sal_True, sal_True ));
+                        const basegfx::B2DPoint aPointBR(GetPoint( seqCoordinates[ rSrcPt + 1 ], sal_True, sal_True ));
+                        basegfx::B2DRange aRange( aPointTL, aPointBR );
+
+                        if ( !basegfx::fTools::equalZero(aRange.getWidth()) && !basegfx::fTools::equalZero(aRange.getHeight()) )
                         {
-                            Point aCenter( aRect.Center() );
-                            Point aStart( GetPoint( seqCoordinates[ (sal_uInt16)( rSrcPt + nXor ) ], sal_True, sal_True ) );
-                            Point aEnd( GetPoint( seqCoordinates[ (sal_uInt16)( rSrcPt + ( nXor ^ 1 ) ) ], sal_True, sal_True ) );
-                            double fRatio = (double)aRect.GetHeight() / (double)aRect.GetWidth();
-                            aStart.X() = (sal_Int32)( ( (double)( aStart.X() - aCenter.X() ) ) * fRatio ) + aCenter.X();
-                            aStart.Y() = (sal_Int32)( ( (double)( aStart.Y() - aCenter.Y() ) ) ) + aCenter.Y();
-                            aEnd.X() = (sal_Int32)( ( (double)( aEnd.X() - aCenter.X() ) ) * fRatio ) + aCenter.X();
-                            aEnd.Y() = (sal_Int32)( ( (double)( aEnd.Y() - aCenter.Y() ) ) ) + aCenter.Y();
-                            aNewB2DPolygon.append(CreateArc( aRect, aStart, aEnd, bClockwise));
+                            basegfx::B2DPoint aCenter( aRange.getCenter() );
+                            basegfx::B2DPoint aStart( GetPoint( seqCoordinates[ (sal_uInt16)( rSrcPt + nXor ) ], sal_True, sal_True ) );
+                            basegfx::B2DPoint aEnd( GetPoint( seqCoordinates[ (sal_uInt16)( rSrcPt + ( nXor ^ 1 ) ) ], sal_True, sal_True ) );
+                            double fRatio = aRange.getHeight() / aRange.getWidth();
+                            aStart.setX((((aStart.getX() - aCenter.getX())) * fRatio) + aCenter.getX());
+                            aStart.setY((((aStart.getY() - aCenter.getY()))) + aCenter.getY());
+                            aEnd.setX((((aEnd.getX() - aCenter.getX())) * fRatio) + aCenter.getX());
+                            aEnd.setY((((aEnd.getY() - aCenter.getY()))) + aCenter.getY());
+                            const bool bMirrorX(aPointTL.getX() > aPointBR.getX());
+                            const bool bMirrorY(aPointTL.getY() > aPointBR.getY());
+                            const bool bSwap((bMirrorX || bMirrorY) && (bMirrorX != bMirrorY));
+                            aNewB2DPolygon.append(
+                                CreateArc( // TTTT: check CreateArc, completely changed from old tools polygon (!)
+                                    aRange,
+                                    bSwap ? aEnd : aStart,
+                                    bSwap ? aStart : aEnd,
+                                    bClockwise));
                         }
                         rSrcPt += 4;
                     }
@@ -1713,21 +1779,19 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                 case ELLIPTICALQUADRANTY :
                 {
                     bool bFirstDirection(true);
-                    basegfx::B2DPoint aControlPointA;
-                    basegfx::B2DPoint aControlPointB;
 
                     for ( sal_uInt16 i = 0; ( i < nPntCount ) && ( rSrcPt < nCoordSize ); i++ )
                     {
                         sal_uInt32 nModT = ( nCommand == ELLIPTICALQUADRANTX ) ? 1 : 0;
-                        Point aCurrent( GetPoint( seqCoordinates[ rSrcPt ], sal_True, sal_True ) );
+                        basegfx::B2DPoint aCurrent( GetPoint( seqCoordinates[ rSrcPt ], sal_True, sal_True ) );
 
                         if ( rSrcPt )   // we need a previous point
                         {
-                            Point aPrev( GetPoint( seqCoordinates[ rSrcPt - 1 ], sal_True, sal_True ) );
-                            sal_Int32 nX, nY;
-                            nX = aCurrent.X() - aPrev.X();
-                            nY = aCurrent.Y() - aPrev.Y();
-                            if ( ( nY ^ nX ) & 0x80000000 )
+                            basegfx::B2DPoint aPrev( GetPoint( seqCoordinates[ rSrcPt - 1 ], sal_True, sal_True ) );
+                            double fX(aCurrent.getX() - aPrev.getX());
+                            double fY(aCurrent.getY() - aPrev.getY());
+
+                            if((fX < 0.0 && fY > 0.0) || (fX > 0.0 && fY < 0.0))
                             {
                                 if ( !i )
                                     bFirstDirection = true;
@@ -1741,36 +1805,34 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                                 else if ( bFirstDirection )
                                     nModT ^= 1;
                             }
+
                             if ( nModT )            // get the right corner
                             {
-                                nX = aCurrent.X();
-                                nY = aPrev.Y();
+                                fX = aCurrent.getX();
+                                fY = aPrev.getY();
                             }
                             else
                             {
-                                nX = aPrev.X();
-                                nY = aCurrent.Y();
+                                fX = aPrev.getX();
+                                fY = aCurrent.getY();
                             }
-                            sal_Int32 nXVec = ( nX - aPrev.X() ) >> 1;
-                            sal_Int32 nYVec = ( nY - aPrev.Y() ) >> 1;
-                            Point aControl1( aPrev.X() + nXVec, aPrev.Y() + nYVec );
 
-                            aControlPointA = basegfx::B2DPoint(aControl1.X(), aControl1.Y());
+                            const basegfx::B2DPoint aControlPointA(
+                                aPrev.getX() + ((fX - aPrev.getX()) * 0.5),
+                                aPrev.getY() + ((fY - aPrev.getY()) * 0.5));
 
-                            nXVec = ( nX - aCurrent.X() ) >> 1;
-                            nYVec = ( nY - aCurrent.Y() ) >> 1;
-                            Point aControl2( aCurrent.X() + nXVec, aCurrent.Y() + nYVec );
-
-                            aControlPointB = basegfx::B2DPoint(aControl2.X(), aControl2.Y());
+                            const basegfx::B2DPoint aControlPointB(
+                                aCurrent.getX() + ((fX - aCurrent.getX()) * 0.5),
+                                aCurrent.getY() + ((fY - aCurrent.getY()) * 0.5));
 
                             aNewB2DPolygon.appendBezierSegment(
                                 aControlPointA,
                                 aControlPointB,
-                                basegfx::B2DPoint(aCurrent.X(), aCurrent.Y()));
+                                aCurrent);
                         }
                         else
                         {
-                            aNewB2DPolygon.append(basegfx::B2DPoint(aCurrent.X(), aCurrent.Y()));
+                            aNewB2DPolygon.append(aCurrent);
                         }
 
                         rSrcPt++;
@@ -1826,9 +1888,11 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
             {
                 basegfx::B2DPolyPolygon aClosedPolyPolygon(aNewB2DPolyPolygon);
                 aClosedPolyPolygon.setClosed(true);
-                SdrPathObj* pFill = new SdrPathObj(OBJ_POLY, aClosedPolyPolygon);
+                SdrPathObj* pFill = new SdrPathObj(
+                    pCustomShapeObj->getSdrModelFromSdrObject(),
+                    aClosedPolyPolygon);
                 SfxItemSet aTempSet(*this);
-                aTempSet.Put(SdrShadowItem(sal_False));
+                aTempSet.Put(SdrOnOffItem(SDRATTR_SHADOW, sal_False));
                 aTempSet.Put(XLineStyleItem(XLINE_NONE));
                 pFill->SetMergedItemSet(aTempSet);
                 rObjectList.push_back(pFill);
@@ -1841,10 +1905,10 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                 // to correct the polygon (here: open it) using the type, the last edge may get lost.
                 // Thus, use a type that fits the polygon
                 SdrPathObj* pStroke = new SdrPathObj(
-                    aNewB2DPolyPolygon.isClosed() ? OBJ_POLY : OBJ_PLIN,
+                    pCustomShapeObj->getSdrModelFromSdrObject(),
                     aNewB2DPolyPolygon);
                 SfxItemSet aTempSet(*this);
-                aTempSet.Put(SdrShadowItem(sal_False));
+                aTempSet.Put(SdrOnOffItem(SDRATTR_SHADOW, sal_False));
                 aTempSet.Put(XFillStyleItem(XFILL_NONE));
                 pStroke->SetMergedItemSet(aTempSet);
                 rObjectList.push_back(pStroke);
@@ -1854,20 +1918,22 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
         {
             SdrPathObj* pObj = 0;
             SfxItemSet aTempSet(*this);
-            aTempSet.Put(SdrShadowItem(sal_False));
+            aTempSet.Put(SdrOnOffItem(SDRATTR_SHADOW, sal_False));
 
             if(bNoFill)
             {
                 // see comment above about OBJ_PLIN
                 pObj = new SdrPathObj(
-                    aNewB2DPolyPolygon.isClosed() ? OBJ_POLY : OBJ_PLIN,
+                    pCustomShapeObj->getSdrModelFromSdrObject(),
                     aNewB2DPolyPolygon);
                 aTempSet.Put(XFillStyleItem(XFILL_NONE));
             }
             else
             {
                 aNewB2DPolyPolygon.setClosed(true);
-                pObj = new SdrPathObj(OBJ_POLY, aNewB2DPolyPolygon);
+                pObj = new SdrPathObj(
+                    pCustomShapeObj->getSdrModelFromSdrObject(),
+                    aNewB2DPolyPolygon);
             }
 
             if(bNoStroke)
@@ -1905,7 +1971,7 @@ void CorrectCalloutArrows( MSO_SPT eSpType, sal_uInt32 nLineObjectCount, std::ve
             for ( i = 0; i < vObjectList.size(); i++ )
             {
                 SdrPathObj* pObj( vObjectList[ i ] );
-                if(pObj->IsLine())
+                if(pObj->isLine())
                 {
                     nLine++;
                     if ( nLine == nLineObjectCount )
@@ -1929,7 +1995,7 @@ void CorrectCalloutArrows( MSO_SPT eSpType, sal_uInt32 nLineObjectCount, std::ve
             for ( i = 0; i < vObjectList.size(); i++ )
             {
                 SdrPathObj* pObj( vObjectList[ i ] );
-                if(pObj->IsLine())
+                if(pObj->isLine())
                 {
                     nLine++;
                     if ( nLine == 1 )
@@ -1956,7 +2022,7 @@ void CorrectCalloutArrows( MSO_SPT eSpType, sal_uInt32 nLineObjectCount, std::ve
             for ( i = 0; i < vObjectList.size(); i++ )
             {
                 SdrPathObj* pObj( vObjectList[ i ] );
-                if(pObj->IsLine())
+                if(pObj->isLine())
                 {
                     if ( nLine )
                     {
@@ -1977,7 +2043,7 @@ void CorrectCalloutArrows( MSO_SPT eSpType, sal_uInt32 nLineObjectCount, std::ve
 void EnhancedCustomShape2d::AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rCustomShapeSet,
                                           sal_uInt32& nColorIndex, sal_uInt32 nColorCount)
 {
-    if ( !rObj.IsLine() )
+    if ( !rObj.isLine() )
     {
         const XFillStyle eFillStyle = ((const XFillStyleItem&)rObj.GetMergedItem(XATTR_FILLSTYLE)).GetValue();
         switch( eFillStyle )
@@ -2059,7 +2125,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnl
     sal_uInt16 nSegmentInd = 0;
 
     std::vector< SdrPathObj* > vObjectList;
-    sal_Bool bSortFilledObjectsToBack = SortFilledObjectsToBackByDefault( eSpType );
+    sal_Bool bSortFilledObjectsToBack = SortFilledObjectsToBackByDefault( meSpType );
 
     while( nSegmentInd <= seqSegments.getLength() )
     {
@@ -2089,9 +2155,13 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnl
 
                 //SJ: #i40600# if bLineGeometryNeededOnly is set linystyle does not matter
                 if( !bLineGeometryNeededOnly && ( XLINE_NONE == eLineStyle ) && ( XFILL_NONE == eFillStyle ) )
-                    delete pObj;
+                {
+                    deleteSdrObjectSafeAndClearPointer(pObj);
+                }
                 else
+                {
                     vTempList.push_back(pObj);
+                }
             }
 
             vObjectList = vTempList;
@@ -2112,7 +2182,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnl
             {
                 SdrPathObj* pObj( vObjectList[ i ] );
 
-                if(pObj->IsLine())
+                if(pObj->isLine())
                 {
                     nLineObjectCount++;
                 }
@@ -2125,7 +2195,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnl
 
             // #i88870# correct line arrows for callouts
             if ( nLineObjectCount )
-                CorrectCalloutArrows( eSpType, nLineObjectCount, vObjectList );
+                CorrectCalloutArrows( meSpType, nLineObjectCount, vObjectList );
 
             // sort objects so that filled ones are in front. Necessary
             // for some strange objects
@@ -2137,7 +2207,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnl
                 {
                     SdrPathObj* pObj( vObjectList[ i ] );
 
-                    if ( !pObj->IsLine() )
+                    if ( !pObj->isLine() )
                     {
                         vTempList.push_back(pObj);
                     }
@@ -2147,7 +2217,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnl
                 {
                     SdrPathObj* pObj( vObjectList[ i ] );
 
-                    if ( pObj->IsLine() )
+                    if ( pObj->isLine() )
                     {
                         vTempList.push_back(pObj);
                     }
@@ -2164,25 +2234,18 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnl
         // copy remaining objects to pRet
         if(vObjectList.size() > 1L)
         {
-            pRet = new SdrObjGroup;
+            SdrObjGroup* pNewGroup = new SdrObjGroup(pCustomShapeObj->getSdrModelFromSdrObject());
+            pRet = pNewGroup;
 
             for (i = 0L; i < vObjectList.size(); i++)
             {
                 SdrObject* pObj(vObjectList[i]);
-                pRet->GetSubList()->NbcInsertObject(pObj);
+                pNewGroup->InsertObjectToSdrObjList(*pObj);
             }
         }
         else if(1L == vObjectList.size())
         {
             pRet = vObjectList[0L];
-        }
-
-        if(pRet)
-        {
-            // move to target position
-            Rectangle aCurRect(pRet->GetSnapRect());
-            aCurRect.Move(aLogicRect.Left(), aLogicRect.Top());
-            pRet->NbcSetSnapRect(aCurRect);
         }
     }
 
@@ -2193,11 +2256,11 @@ SdrObject* EnhancedCustomShape2d::CreateObject( sal_Bool bLineGeometryNeededOnly
 {
     SdrObject* pRet = NULL;
 
-    if ( eSpType == mso_sptRectangle )
+    if ( meSpType == mso_sptRectangle )
     {
-        pRet = new SdrRectObj( aLogicRect );
-// SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
-//      pRet->SetModel( pCustomShapeObj->GetModel() );
+        pRet = new SdrRectObj(
+            pCustomShapeObj->getSdrModelFromSdrObject(),
+            pCustomShapeObj->getSdrObjectTransformation());
         pRet->SetMergedItemSet( *this );
     }
     if ( !pRet )
@@ -2218,13 +2281,6 @@ void EnhancedCustomShape2d::ApplyGluePoints( SdrObject* pObj )
             aGluePoint.SetPos( GetPoint( seqGluePoints[ i ], sal_True, sal_True ) );
             aGluePoint.SetPercent( sal_False );
 
-//          const Point& rPoint = GetPoint( seqGluePoints[ i ], sal_True, sal_True );
-//          double fXRel = rPoint.X();
-//          double fYRel = rPoint.Y();
-//          fXRel = aLogicRect.GetWidth() == 0 ? 0.0 : fXRel / aLogicRect.GetWidth() * 10000;
-//          fYRel = aLogicRect.GetHeight() == 0 ? 0.0 : fYRel / aLogicRect.GetHeight() * 10000;
-//          aGluePoint.SetPos( Point( (sal_Int32)fXRel, (sal_Int32)fYRel ) );
-//          aGluePoint.SetPercent( sal_True );
             aGluePoint.SetAlign( SDRVERTALIGN_TOP | SDRHORZALIGN_LEFT );
             aGluePoint.SetEscDir( SDRESC_SMART );
             SdrGluePointList* pList = pObj->ForceGluePointList();

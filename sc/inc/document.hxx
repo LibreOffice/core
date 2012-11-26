@@ -142,6 +142,7 @@ class ScFormulaParserPool;
 struct ScClipParam;
 struct ScClipRangeNameData;
 class ScRowBreakIterator;
+class SdrView;
 
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -164,6 +165,8 @@ namespace com { namespace sun { namespace star {
         struct TablePageBreakData;
     }
 } } }
+
+namespace basegfx { class B2DPoint; }
 
 #include <svl/zforlist.hxx>
 /*
@@ -529,8 +532,8 @@ public:
 
     void            EnsureGraphicNames();
 
-    SdrObject*      GetObjectAtPoint( SCTAB nTab, const Point& rPos );
-    sal_Bool            HasChartAtPoint( SCTAB nTab, const Point& rPos, String* pName = NULL );
+    SdrObject*      GetObjectAtPoint( SCTAB nTab, const basegfx::B2DPoint& rPos, const SdrView* pSdrView = 0 );
+    sal_Bool        HasChartAtPoint( SCTAB nTab, const basegfx::B2DPoint& rPos, String* pName = NULL, const SdrView* pSdrView = 0 );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > GetChartByName( const String& rChartName );
     SC_DLLPUBLIC void            GetChartRanges( const String& rChartName, ::std::vector< ScRangeList >& rRanges, ScDocument* pSheetNameDoc );

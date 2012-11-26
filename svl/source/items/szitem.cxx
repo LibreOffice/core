@@ -39,10 +39,6 @@ DBG_NAME(SfxSizeItem)
 
 // -----------------------------------------------------------------------
 
-TYPEINIT1_AUTOFACTORY(SfxSizeItem, SfxPoolItem);
-
-// -----------------------------------------------------------------------
-
 SfxSizeItem::SfxSizeItem()
 {
     DBG_CTOR(SfxSizeItem, 0);

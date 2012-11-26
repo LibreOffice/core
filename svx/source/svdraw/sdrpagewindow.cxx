@@ -42,6 +42,20 @@
 #include <svx/fmview.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
+//////////////////////////////////////////////////////////////////////////////
+// clip test
+
+#ifdef CLIPPER_TEST
+#include <svx/svdopath.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <vcl/salbtype.hxx>     // FRound
+#include <basegfx/polygon/b2dpolygoncutandtouch.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolygonclipper.hxx>
+#include <algorithm>
+#endif // CLIPPER_TEST
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 using namespace ::rtl;
@@ -207,18 +221,8 @@ void SdrPageWindow::PrepareRedraw(const Region& rReg)
 
 //////////////////////////////////////////////////////////////////////////////
 // clip test
+
 #ifdef CLIPPER_TEST
-#include <svx/svdopath.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <vcl/salbtype.hxx>     // FRound
-#include <basegfx/polygon/b2dpolygoncutandtouch.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolygonclipper.hxx>
-
-// for ::std::sort
-#include <algorithm>
-
 namespace
 {
     void impPaintStrokePolygon(const basegfx::B2DPolygon& rCandidate, OutputDevice& rOutDev, Color aColor)
@@ -249,25 +253,25 @@ namespace
 
     void impTryTest(const SdrPageView& rPageView, OutputDevice& rOutDev)
     {
-        if(rPageView.GetPage() && rPageView.GetPage()->GetObjCount() >= 2L)
+        if(rPageView.GetPage() && rPageView.GetPage()->GetObjCount() >= 2)
         {
             SdrPage* pPage = rPageView.GetPage();
-            SdrObject* pObjA = pPage->GetObj(0L);
+            SdrPathObj* pObjA = dynamic_cast< SdrPathObj* >(pPage->GetObj(0));
 
-            if(pObjA && pObjA->ISA(SdrPathObj))
+            if(pObjA)
             {
-                basegfx::B2DPolyPolygon aPolyA(((SdrPathObj*)pObjA)->GetPathPoly());
+                basegfx::B2DPolyPolygon aPolyA(pObjA->getB2DPolyPolygonInObjectCoordinates());
                 aPolyA = basegfx::tools::correctOrientations(aPolyA);
 
                 basegfx::B2DPolyPolygon aPolyB;
 
                 for(sal_uInt32 a(1L); a < rPageView.GetPage()->GetObjCount(); a++)
                 {
-                    SdrObject* pObjB = pPage->GetObj(a);
+                    SdrPathObj* pObjB = dynamic_cast< SdrPathObj* >(pPage->GetObj(a));
 
-                    if(pObjB && pObjB->ISA(SdrPathObj))
+                    if(pObjB)
                     {
-                        basegfx::B2DPolyPolygon aCandidate(((SdrPathObj*)pObjB)->GetPathPoly());
+                        basegfx::B2DPolyPolygon aCandidate(pObjB->getB2DPolyPolygonInObjectCoordinates());
                         aCandidate = basegfx::tools::correctOrientations(aCandidate);
                         aPolyB.append(aCandidate);
                     }
@@ -302,7 +306,6 @@ void SdrPageWindow::RedrawAll(sdr::contact::ViewObjectContactRedirector* pRedire
 
     // set PaintingPageView
     const SdrView& rView = mrPageView.GetView();
-    SdrModel& rModel = *((SdrModel*)rView.GetModel());
 
     // get to be processed layers
     const sal_Bool bPrinter(GetPaintWindow().OutputToPrinter());
@@ -316,7 +319,7 @@ void SdrPageWindow::RedrawAll(sdr::contact::ViewObjectContactRedirector* pRedire
 
     // Draw all layers. do NOT draw form layer from CompleteRedraw, this is done separate
     // as a single layer paint
-    const SdrLayerAdmin& rLayerAdmin = rModel.GetLayerAdmin();
+    const SdrLayerAdmin& rLayerAdmin = rView.getSdrModelFromSdrView().GetModelLayerAdmin();
     const SdrLayerID nControlLayerId = rLayerAdmin.GetLayerID(rLayerAdmin.GetControlLayerName(), sal_False);
     aProcessLayers.Clear(nControlLayerId);
 
@@ -354,7 +357,6 @@ void SdrPageWindow::RedrawLayer(const SdrLayerID* pId, sdr::contact::ViewObjectC
 
     // set PaintingPageView
     const SdrView& rView = mrPageView.GetView();
-    SdrModel& rModel = *((SdrModel*)rView.GetModel());
 
     // get the layers to process
     const sal_Bool bPrinter(GetPaintWindow().OutputToPrinter());
@@ -364,7 +366,7 @@ void SdrPageWindow::RedrawLayer(const SdrLayerID* pId, sdr::contact::ViewObjectC
     if(aProcessLayers.IsSet(*pId))
     {
         // find out if we are painting the ControlLayer
-        const SdrLayerAdmin& rLayerAdmin = rModel.GetLayerAdmin();
+        const SdrLayerAdmin& rLayerAdmin = rView.getSdrModelFromSdrView().GetModelLayerAdmin();
         const SdrLayerID nControlLayerId = rLayerAdmin.GetLayerID(rLayerAdmin.GetControlLayerName(), sal_False);
         const sal_Bool bControlLayerProcessingActive(pId && nControlLayerId == *pId);
 
@@ -405,8 +407,7 @@ void SdrPageWindow::InvalidatePageWindow(const basegfx::B2DRange& rRange)
     {
         const SvtOptionsDrawinglayer aDrawinglayerOpt;
         Window& rWindow(static_cast< Window& >(GetPaintWindow().GetOutputDevice()));
-        basegfx::B2DRange aDiscreteRange(rRange);
-        aDiscreteRange.transform(rWindow.GetViewTransformation());
+        basegfx::B2DRange aDiscreteRange(rWindow.GetViewTransformation() * rRange);
 
         if(aDrawinglayerOpt.IsAntiAliasing())
         {
@@ -452,9 +453,9 @@ void SdrPageWindow::ResetObjectContact()
     }
 }
 
-void SdrPageWindow::SetDesignMode( bool _bDesignMode ) const
+void SdrPageWindow::SetDesignMode( bool _bDesignMode )
 {
-    const ::sdr::contact::ObjectContactOfPageView* pOC = dynamic_cast< const ::sdr::contact::ObjectContactOfPageView* >( &GetObjectContact() );
+    ::sdr::contact::ObjectContactOfPageView* pOC = dynamic_cast< ::sdr::contact::ObjectContactOfPageView* >( &GetObjectContact() );
     DBG_ASSERT( pOC, "SdrPageWindow::SetDesignMode: invalid object contact!" );
     if ( pOC )
         pOC->SetUNOControlsDesignMode( _bDesignMode );

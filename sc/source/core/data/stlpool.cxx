@@ -138,7 +138,7 @@ SfxStyleSheetBase* __EXPORT ScStyleSheetPool::Create(
 
 SfxStyleSheetBase* __EXPORT ScStyleSheetPool::Create( const SfxStyleSheetBase& rStyle )
 {
-    DBG_ASSERT( rStyle.ISA(ScStyleSheet), "Invalid StyleSheet-class! :-/" );
+    DBG_ASSERT( dynamic_cast< const ScStyleSheet* >(&rStyle), "Invalid StyleSheet-class! :-/" );
     return new ScStyleSheet( (const ScStyleSheet&) rStyle );
 }
 

@@ -56,12 +56,12 @@ SdInsertLayerDlg::SdInsertLayerDlg( Window* pWindow, const SfxItemSet& rInAttrs,
 
     SetText( aStr );
 
-    maEdtName.SetText( ( ( const SdAttrLayerName& ) mrOutAttrs.Get( ATTR_LAYER_NAME ) ).GetValue() );
-    maEdtTitle.SetText( ( ( const SdAttrLayerTitle& ) mrOutAttrs.Get( ATTR_LAYER_TITLE ) ).GetValue() );
-    maEdtDesc.SetText( ( ( const SdAttrLayerDesc& ) mrOutAttrs.Get( ATTR_LAYER_DESC ) ).GetValue() );
-    maCbxVisible.Check( ( ( const SdAttrLayerVisible& ) mrOutAttrs.Get( ATTR_LAYER_VISIBLE ) ).GetValue() );
-    maCbxPrintable.Check( ( ( const SdAttrLayerPrintable& ) mrOutAttrs.Get( ATTR_LAYER_PRINTABLE ) ).GetValue() );
-    maCbxLocked.Check( ( ( const SdAttrLayerLocked& ) mrOutAttrs.Get( ATTR_LAYER_LOCKED ) ).GetValue() );
+    maEdtName.SetText( ( ( const SfxStringItem& ) mrOutAttrs.Get( ATTR_LAYER_NAME ) ).GetValue() );
+    maEdtTitle.SetText( ( ( const SfxStringItem& ) mrOutAttrs.Get( ATTR_LAYER_TITLE ) ).GetValue() );
+    maEdtDesc.SetText( ( ( const SfxStringItem& ) mrOutAttrs.Get( ATTR_LAYER_DESC ) ).GetValue() );
+    maCbxVisible.Check( ( ( const SfxBoolItem& ) mrOutAttrs.Get( ATTR_LAYER_VISIBLE ) ).GetValue() );
+    maCbxPrintable.Check( ( ( const SfxBoolItem& ) mrOutAttrs.Get( ATTR_LAYER_PRINTABLE ) ).GetValue() );
+    maCbxLocked.Check( ( ( const SfxBoolItem& ) mrOutAttrs.Get( ATTR_LAYER_LOCKED ) ).GetValue() );
 
     if( !bDeletable )
     {
@@ -72,10 +72,10 @@ SdInsertLayerDlg::SdInsertLayerDlg( Window* pWindow, const SfxItemSet& rInAttrs,
 
 void SdInsertLayerDlg::GetAttr( SfxItemSet& rAttrs )
 {
-    rAttrs.Put( SdAttrLayerName( maEdtName.GetText() ) );
-    rAttrs.Put( SdAttrLayerTitle( maEdtTitle.GetText() ) );
-    rAttrs.Put( SdAttrLayerDesc( maEdtDesc.GetText() ) );
-    rAttrs.Put( SdAttrLayerVisible( maCbxVisible.IsChecked() ) );
-    rAttrs.Put( SdAttrLayerPrintable( maCbxPrintable.IsChecked() ) );
-    rAttrs.Put( SdAttrLayerLocked( maCbxLocked.IsChecked() ) );
+    rAttrs.Put( SfxStringItem( ATTR_LAYER_NAME, maEdtName.GetText() ) );
+    rAttrs.Put( SfxStringItem( ATTR_LAYER_TITLE, maEdtTitle.GetText() ) );
+    rAttrs.Put( SfxStringItem( ATTR_LAYER_DESC, maEdtDesc.GetText() ) );
+    rAttrs.Put( SfxBoolItem( ATTR_LAYER_VISIBLE, maCbxVisible.IsChecked() ) );
+    rAttrs.Put( SfxBoolItem( ATTR_LAYER_PRINTABLE, maCbxPrintable.IsChecked() ) );
+    rAttrs.Put( SfxBoolItem( ATTR_LAYER_LOCKED, maCbxLocked.IsChecked() ) );
 }

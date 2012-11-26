@@ -83,7 +83,6 @@ enum SdrTextAniKind {SDRTEXTANI_NONE,
 
 class SVX_DLLPUBLIC SdrTextAniKindItem: public SfxEnumItem {
 public:
-    TYPEINFO();
     SdrTextAniKindItem(SdrTextAniKind eKind=SDRTEXTANI_NONE): SfxEnumItem(SDRATTR_TEXT_ANIKIND,(sal_uInt16)eKind) {}
     SdrTextAniKindItem(SvStream& rIn)                       : SfxEnumItem(SDRATTR_TEXT_ANIKIND,rIn)  {}
     virtual SfxPoolItem*      Clone(SfxItemPool* pPool=NULL) const;

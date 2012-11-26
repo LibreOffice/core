@@ -229,9 +229,10 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt3
                 SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();
                 while ( pObjSh )
                 {
-                    if ( pObjSh->Type() == TYPE(ScDocShell) )
+                    ScDocShell* pDocSh = dynamic_cast< ScDocShell* >(pObjSh);
+
+                    if ( pDocSh )
                     {
-                        ScDocShell* pDocSh = ((ScDocShell*)pObjSh);
                         if ( bArrows )
                             ScDetectiveFunc( pDocSh->GetDocument(), 0 ).UpdateAllArrowColors();
                         if ( bComments )
@@ -247,9 +248,10 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt3
         SfxViewShell* pViewShell = SfxViewShell::GetFirst();
         while(pViewShell)
         {
-            if ( pViewShell->ISA(ScTabViewShell) )
+            ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell* >(pViewShell);
+
+            if ( pViewSh )
             {
-                ScTabViewShell* pViewSh = (ScTabViewShell*)pViewShell;
                 pViewSh->PaintGrid();
                 pViewSh->PaintTop();
                 pViewSh->PaintLeft();
@@ -259,12 +261,13 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt3
                 if ( pHdl )
                     pHdl->ForgetLastPattern();  // EditEngine BackgroundColor may change
             }
-            else if ( pViewShell->ISA(ScPreviewShell) )
+            else if ( dynamic_cast< ScPreviewShell* >(pViewShell) )
             {
                 Window* pWin = pViewShell->GetWindow();
                 if (pWin)
                     pWin->Invalidate();
             }
+
             pViewShell = SfxViewShell::GetNext( *pViewShell );
         }
     }
@@ -274,9 +277,10 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt3
         SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();
         while ( pObjSh )
         {
-            if ( pObjSh->Type() == TYPE(ScDocShell) )
+            ScDocShell* pDocSh = dynamic_cast< ScDocShell* >(pObjSh);
+
+            if ( pDocSh )
             {
-                ScDocShell* pDocSh = ((ScDocShell*)pObjSh);
                 OutputDevice* pPrinter = pDocSh->GetPrinter();
                 if ( pPrinter )
                     pPrinter->SetDigitLanguage( GetOptDigitLanguage() );
@@ -294,10 +298,10 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt3
         SfxViewShell* pSh = SfxViewShell::GetFirst();
         while ( pSh )
         {
-            if ( pSh->ISA( ScTabViewShell ) )
-            {
-                ScTabViewShell* pViewSh = (ScTabViewShell*)pSh;
+            ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell* >(pSh);
 
+            if ( pViewSh )
+            {
                 //  set ref-device for EditEngine (re-evaluates digit settings)
                 ScInputHandler* pHdl = GetInputHdl(pViewSh);
                 if (pHdl)
@@ -306,13 +310,16 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt3
                 pViewSh->DigitLanguageChanged();
                 pViewSh->PaintGrid();
             }
-            else if ( pSh->ISA( ScPreviewShell ) )
+            else
             {
-                ScPreviewShell* pPreviewSh = (ScPreviewShell*)pSh;
-                ScPreview* pPreview = pPreviewSh->GetPreview();
+                ScPreviewShell* pPreviewSh = dynamic_cast< ScPreviewShell* >(pSh);
 
+                if ( pPreviewSh )
+                {
+                    ScPreview* pPreview = pPreviewSh->GetPreview();
                 pPreview->SetDigitLanguage( GetOptDigitLanguage() );
                 pPreview->Invalidate();
+            }
             }
 
             pSh = SfxViewShell::GetNext( *pSh );
@@ -322,9 +329,12 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt3
 
 void ScModule::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.ISA(SfxSimpleHint) )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if ( pSfxSimpleHint )
     {
-        sal_uLong nHintId = ((SfxSimpleHint&)rHint).GetId();
+        sal_uLong nHintId = pSfxSimpleHint->GetId();
+
         if ( nHintId == SFX_HINT_DEINITIALIZING )
         {
             //  ConfigItems must be removed before ConfigManager
@@ -404,7 +414,7 @@ void ScModule::Execute( SfxRequest& rReq )
                     bSet = ((const SfxBoolItem*)pItem)->GetValue();
                 else
                 {                       //  Toggle
-                    ScDocShell* pDocSh = PTR_CAST(ScDocShell, SfxObjectShell::Current());
+                    ScDocShell* pDocSh = dynamic_cast< ScDocShell* >( SfxObjectShell::Current());
                     if ( pDocSh )
                         bSet = !pDocSh->GetDocument()->GetDocOptions().IsAutoSpell();
                     else
@@ -465,7 +475,7 @@ void ScModule::Execute( SfxRequest& rReq )
             {
                 ScAppOptions aNewOpts( GetAppOptions() );
                 sal_Bool bNew = !aNewOpts.GetDetectiveAuto();
-                SFX_REQUEST_ARG( rReq, pAuto, SfxBoolItem, SID_DETECTIVE_AUTO, sal_False );
+                SFX_REQUEST_ARG( rReq, pAuto, SfxBoolItem, SID_DETECTIVE_AUTO );
                 if ( pAuto )
                     bNew = pAuto->GetValue();
 
@@ -482,7 +492,7 @@ void ScModule::Execute( SfxRequest& rReq )
             if (pReqArgs)
             {
                 const SfxUInt16Item& rItem = (const SfxUInt16Item&)pReqArgs->Get(SID_PSZ_FUNCTION);
-                DBG_ASSERT(rItem.ISA(SfxUInt16Item),"falscher Parameter");
+                DBG_ASSERT(dynamic_cast< const SfxUInt16Item* >(&rItem),"falscher Parameter");
 
                 ScAppOptions aNewOpts( GetAppOptions() );
                 aNewOpts.SetStatusFunc( rItem.GetValue() );
@@ -507,7 +517,7 @@ void ScModule::Execute( SfxRequest& rReq )
                 const SfxPoolItem* pItem;
                 if ( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( GetPool().GetWhich(nSlot), sal_True, &pItem ) )
                 {
-                    ScDocShell* pDocSh = PTR_CAST(ScDocShell, SfxObjectShell::Current());
+                    ScDocShell* pDocSh = dynamic_cast< ScDocShell* >( SfxObjectShell::Current());
                     ScDocument* pDoc = pDocSh ? pDocSh->GetDocument() : NULL;
                     if ( pDoc )
                     {
@@ -530,7 +540,7 @@ void ScModule::Execute( SfxRequest& rReq )
                             ScInputHandler* pInputHandler = GetInputHdl();
                             if ( pInputHandler )
                                 pInputHandler->UpdateSpellSettings();   // EditEngine-Flags
-                            ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
+                            ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell* >( SfxViewShell::Current());
                             if ( pViewSh )
                                 pViewSh->UpdateDrawTextOutliner();      // EditEngine-Flags
 
@@ -599,7 +609,7 @@ void ScModule::GetState( SfxItemSet& rSet )
             case SID_AUTOSPELL_CHECK:
                 {
                     sal_Bool bAuto;
-                    ScDocShell* pDocSh = PTR_CAST(ScDocShell, SfxObjectShell::Current());
+                    ScDocShell* pDocSh = dynamic_cast< ScDocShell* >( SfxObjectShell::Current());
                     if ( pDocSh )
                         bAuto = pDocSh->GetDocument()->GetDocOptions().IsAutoSpell();
                     else
@@ -614,7 +624,7 @@ void ScModule::GetState( SfxItemSet& rSet )
             case ATTR_CJK_FONT_LANGUAGE:        // WID for SID_ATTR_CHAR_CJK_LANGUAGE
             case ATTR_CTL_FONT_LANGUAGE:        // WID for SID_ATTR_CHAR_CTL_LANGUAGE
                 {
-                    ScDocShell* pDocSh = PTR_CAST(ScDocShell, SfxObjectShell::Current());
+                    ScDocShell* pDocSh = dynamic_cast< ScDocShell* >( SfxObjectShell::Current());
                     ScDocument* pDoc = pDocSh ? pDocSh->GetDocument() : NULL;
                     if ( pDoc )
                     {
@@ -969,8 +979,8 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     SfxBindings* pBindings = pViewFrm ? &pViewFrm->GetBindings() : NULL;
 
-    ScTabViewShell*         pViewSh = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
-    ScDocShell*             pDocSh  = PTR_CAST(ScDocShell, SfxObjectShell::Current());
+    ScTabViewShell*         pViewSh = dynamic_cast< ScTabViewShell* >( SfxViewShell::Current());
+    ScDocShell*             pDocSh  = dynamic_cast< ScDocShell* >( SfxObjectShell::Current());
     ScDocument*             pDoc    = pDocSh ? pDocSh->GetDocument() : NULL;
     const SfxPoolItem*      pItem   = NULL;
     sal_Bool                    bRepaint            = sal_False;
@@ -1294,20 +1304,20 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();
         while ( pObjSh )
         {
-            if ( pObjSh->Type() == TYPE(ScDocShell) )
+            ScDocShell* pDocSh1 = dynamic_cast< ScDocShell* >(pObjSh);
+
+            if ( pDocSh1 )
             {
-                ScDocShell* pOneDocSh = ((ScDocShell*)pObjSh);
-                pOneDocSh->CalcOutputFactor();
-                SCTAB nTabCount = pOneDocSh->GetDocument()->GetTableCount();
+                pDocSh1->CalcOutputFactor();
+                SCTAB nTabCount = pDocSh1->GetDocument()->GetTableCount();
                 for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-                    pOneDocSh->AdjustRowHeight( 0, MAXROW, nTab );
+                    pDocSh1->AdjustRowHeight( 0, MAXROW, nTab );
             }
             pObjSh = SfxObjectShell::GetNext( *pObjSh );
         }
 
         //  for all (tab-) views:
-        TypeId aScType = TYPE(ScTabViewShell);
-        SfxViewShell* pSh = SfxViewShell::GetFirst( &aScType );
+        SfxViewShell* pSh = SfxViewShell::GetFirst( _IsSfxViewShell< ScTabViewShell > );
         while ( pSh )
         {
             ScTabViewShell* pOneViewSh = (ScTabViewShell*)pSh;
@@ -1326,7 +1336,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
             pOneViewSh->PaintTop();
             pOneViewSh->PaintLeft();
 
-            pSh = SfxViewShell::GetNext( *pSh, &aScType );
+            pSh = SfxViewShell::GetNext( *pSh, _IsSfxViewShell< ScTabViewShell > );
         }
     }
 }
@@ -1350,7 +1360,7 @@ ScInputHandler* ScModule::GetInputHdl( ScTabViewShell* pViewSh, sal_Bool bUseRef
         // in case a UIActive embedded object has no ViewShell ( UNO component )
         // the own calc view shell will be set as current, but no handling should happen
 
-        ScTabViewShell* pCurViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
+        ScTabViewShell* pCurViewSh = dynamic_cast< ScTabViewShell* >( SfxViewShell::Current() );
         if ( pCurViewSh && !pCurViewSh->GetUIActiveClient() )
             pViewSh = pCurViewSh;
     }
@@ -1538,8 +1548,10 @@ void ScModule::SetRefDialog( sal_uInt16 nId, sal_Bool bVis, SfxViewFrame* pViewF
         {
             //  store the dialog id also in the view shell
             SfxViewShell* pViewSh = pViewFrm->GetViewShell();
-            if ( pViewSh && pViewSh->ISA( ScTabViewShell ) )
+            if ( pViewSh && dynamic_cast< ScTabViewShell* >(pViewSh) )
+            {
                 ((ScTabViewShell*)pViewSh)->SetCurRefDlgId( nCurRefDlgId );
+            }
             else
             {
                 // no ScTabViewShell - possible for example from a Basic macro
@@ -1815,7 +1827,7 @@ void lcl_CheckNeedsRepaint( ScDocShell* pDocShell )
     while ( pFrame )
     {
         SfxViewShell* p = pFrame->GetViewShell();
-        ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,p);
+        ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell* >( p);
         if ( pViewSh )
             pViewSh->CheckNeedsRepaint();
         pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell );
@@ -1831,7 +1843,7 @@ IMPL_LINK( ScModule, IdleHandler, Timer*, EMPTYARG )
     }
 
     sal_Bool bMore = sal_False;
-    ScDocShell* pDocSh = PTR_CAST( ScDocShell, SfxObjectShell::Current() );
+    ScDocShell* pDocSh = dynamic_cast< ScDocShell* >( SfxObjectShell::Current() );
     if ( pDocSh )
     {
         ScDocument* pDoc = pDocSh->GetDocument();
@@ -1885,7 +1897,7 @@ IMPL_LINK( ScModule, SpellTimerHdl, Timer*, EMPTYARG )
         return 0;                   // dann spaeter wieder...
     }
 
-    ScDocShell* pDocSh = PTR_CAST( ScDocShell, SfxObjectShell::Current() );
+    ScDocShell* pDocSh = dynamic_cast< ScDocShell* >( SfxObjectShell::Current() );
     if ( pDocSh )
     {
         ScDocument* pDoc = pDocSh->GetDocument();
@@ -1922,14 +1934,12 @@ SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
                             SID_ATTR_DEFTABSTOP,    SID_ATTR_DEFTABSTOP,
                             0 );
 
-        ScDocShell*     pDocSh = PTR_CAST(ScDocShell,
-                                            SfxObjectShell::Current());
+        ScDocShell*     pDocSh = dynamic_cast< ScDocShell* >( SfxObjectShell::Current());
         ScDocOptions    aCalcOpt = pDocSh
                             ? pDocSh->GetDocument()->GetDocOptions()
                             : GetDocOptions();
 
-        ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,
-                                            SfxViewShell::Current());
+        ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell* >( SfxViewShell::Current());
         ScViewOptions   aViewOpt = pViewSh
                             ? pViewSh->GetViewData()->GetOptions()
                             : GetViewOptions();
@@ -2031,16 +2041,16 @@ SfxTabPage*  ScModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const Sfx
                                 break;
         case SID_SC_TP_CALC:
                                 {   //CHINA001 pRet = ScTpCalcOptions::Create(pParent, rSet);
-                                                    ::CreateTabPage ScTpCalcOptionsCreate = pFact->GetTabPageCreatorFunc( RID_SCPAGE_CALC );
-                                                    if ( ScTpCalcOptionsCreate )
-                                                        pRet = (*ScTpCalcOptionsCreate)(pParent, rSet);
+                                    ::CreateTabPage ScTpCalcOptionsCreate = pFact->GetTabPageCreatorFunc( RID_SCPAGE_CALC );
+                                    if ( ScTpCalcOptionsCreate )
+                                        pRet = (*ScTpCalcOptionsCreate)(pParent, rSet);
                                 }
                                 break;
         case SID_SC_TP_CHANGES:
                                 {           //CHINA001 pRet = ScRedlineOptionsTabPage::Create(pParent, rSet);
-                                            ::CreateTabPage ScRedlineOptionsTabPageCreate = pFact->GetTabPageCreatorFunc( RID_SCPAGE_OPREDLINE );
-                                            if ( ScRedlineOptionsTabPageCreate )
-                                                    pRet =(*ScRedlineOptionsTabPageCreate)(pParent, rSet);
+                                    ::CreateTabPage ScRedlineOptionsTabPageCreate = pFact->GetTabPageCreatorFunc( RID_SCPAGE_OPREDLINE );
+                                    if ( ScRedlineOptionsTabPageCreate )
+                                            pRet =(*ScRedlineOptionsTabPageCreate)(pParent, rSet);
                                 }
                         break;
         case RID_SC_TP_PRINT:
@@ -2077,14 +2087,14 @@ IMPL_LINK( ScModule, CalcFieldValueHdl, EditFieldInfo*, pInfo )
     {
         const SvxFieldItem& rField = pInfo->GetField();
         const SvxFieldData* pField = rField.GetField();
+        const SvxURLField* pURLField = dynamic_cast< const SvxURLField* >(pField);
 
-        if (pField && pField->ISA(SvxURLField))
+        if (pURLField)
         {
             /******************************************************************
             * URL-Field
             ******************************************************************/
 
-            const SvxURLField* pURLField = (const SvxURLField*) pField;
             String aURL = pURLField->GetURL();
 
             switch ( pURLField->GetFormat() )

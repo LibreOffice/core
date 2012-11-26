@@ -52,10 +52,10 @@ namespace sdr
 {
     namespace contact
     {
-        // internal access to SdrPage of SdrPageView
-        SdrPage* ObjectContactOfPageView::GetSdrPage() const
+        // internal access to SdrPage of SdrView
+        SdrPage& ObjectContactOfPageView::GetSdrPage() const
         {
-            return GetPageWindow().GetPageView().GetPage();
+            return GetPageWindow().GetPageView().getSdrPageFromSdrPageView();
         }
 
         ObjectContactOfPageView::ObjectContactOfPageView(SdrPageWindow& rPageWindow)
@@ -106,23 +106,26 @@ namespace sdr
             Stop();
 
             // invalidate all LazyInvalidate VOCs new situations
-            const sal_uInt32 nVOCCount(getViewObjectContactCount());
-
-            for(sal_uInt32 a(0); a < nVOCCount; a++)
+            if(!getViewObjectContacts().empty())
             {
-                ViewObjectContact* pCandidate = getViewObjectContact(a);
-                pCandidate->triggerLazyInvalidate();
+                const ViewObjectContactSet::const_iterator aEnd(getViewObjectContacts().end());
+                ViewObjectContactSet::iterator aCurrent(getViewObjectContacts().begin());
+
+                for(;aCurrent != aEnd; aCurrent++)
+                {
+                    (*aCurrent)->triggerLazyInvalidate();
+                }
             }
         }
 
         // Process the whole displaying
         void ObjectContactOfPageView::ProcessDisplay(DisplayInfo& rDisplayInfo)
         {
-            const SdrPage* pStartPage = GetSdrPage();
+            const SdrPage& rStartPage = GetSdrPage();
 
-            if(pStartPage && !rDisplayInfo.GetProcessLayers().IsEmpty())
+            if(!rDisplayInfo.GetProcessLayers().IsEmpty())
             {
-                const ViewContact& rDrawPageVC = pStartPage->GetViewContact();
+                const ViewContact& rDrawPageVC = rStartPage.GetViewContact();
 
                 if(rDrawPageVC.GetObjectCount())
                 {
@@ -150,7 +153,7 @@ namespace sdr
         {
             // visualize entered group when that feature is switched on and it's not
             // a print output. #i29129# No ghosted display for printing.
-            sal_Bool bVisualizeEnteredGroup(DoVisualizeEnteredGroup() && !isOutputToPrinter());
+            const bool bVisualizeEnteredGroup(DoVisualizeEnteredGroup() && !isOutputToPrinter());
 
             // Visualize entered groups: Set to ghosted as default
             // start. Do this only for the DrawPage, not for MasterPages
@@ -173,7 +176,7 @@ namespace sdr
             }
 
             // Get start node and process DrawPage contents
-            const ViewObjectContact& rDrawPageVOContact = GetSdrPage()->GetViewContact().GetViewObjectContact(*this);
+            const ViewObjectContact& rDrawPageVOContact = GetSdrPage().GetViewContact().GetViewObjectContact(*this);
 
             // update current ViewInformation2D at the ObjectContact
             const double fCurrentTime(getPrimitiveAnimator().GetTime());
@@ -199,8 +202,7 @@ namespace sdr
             else
             {
                 // use visible pixels, but transform to world coordinates
-                const Size aOutputSizePixel(rTargetOutDev.GetOutputSizePixel());
-                aViewRange = basegfx::B2DRange(0.0, 0.0, aOutputSizePixel.getWidth(), aOutputSizePixel.getHeight());
+                aViewRange = rTargetOutDev.GetDiscreteRange();
 
                 // if a clip region is set, use it
                 if(!rDisplayInfo.GetRedrawArea().IsEmpty())
@@ -210,8 +212,7 @@ namespace sdr
                     basegfx::B2DRange aLogicClipRange(
                         aLogicClipRectangle.Left(), aLogicClipRectangle.Top(),
                         aLogicClipRectangle.Right(), aLogicClipRectangle.Bottom());
-                    basegfx::B2DRange aDiscreteClipRange(aLogicClipRange);
-                    aDiscreteClipRange.transform(rTargetOutDev.GetViewTransformation());
+                    basegfx::B2DRange aDiscreteClipRange(rTargetOutDev.GetViewTransformation() * aLogicClipRange);
 
                     // align the discrete one to discrete boundaries (pixel bounds). Also
                     // expand X and Y max by one due to Rectangle definition source
@@ -235,7 +236,7 @@ namespace sdr
                 basegfx::B2DHomMatrix(),
                 rTargetOutDev.GetViewTransformation(),
                 aViewRange,
-                GetXDrawPageForSdrPage(GetSdrPage()),
+                GetXDrawPageForSdrPage(&GetSdrPage()),
                 fCurrentTime,
                 uno::Sequence<beans::PropertyValue>());
             updateViewInformation2D(aNewViewInformation2D);
@@ -289,25 +290,27 @@ namespace sdr
         // get active group's (the entered group) ViewContact
         const ViewContact* ObjectContactOfPageView::getActiveViewContact() const
         {
-            SdrObjList* pActiveGroupList = GetPageWindow().GetPageView().GetObjList();
+            SdrObjList* pActiveGroupList = GetPageWindow().GetPageView().GetCurrentObjectList();
 
             if(pActiveGroupList)
             {
-                if(pActiveGroupList->ISA(SdrPage))
+                SdrPage* pSdrPage = dynamic_cast< SdrPage* >(pActiveGroupList);
+
+                if(pSdrPage)
                 {
                     // It's a Page itself
-                    return &(((SdrPage*)pActiveGroupList)->GetViewContact());
+                    return &(pSdrPage->GetViewContact());
                 }
-                else if(pActiveGroupList->GetOwnerObj())
+                else if(pActiveGroupList->getSdrObjectFromSdrObjList())
                 {
                     // Group object
-                    return &(pActiveGroupList->GetOwnerObj()->GetViewContact());
+                    return &(pActiveGroupList->getSdrObjectFromSdrObjList()->GetViewContact());
                 }
             }
-            else if(GetSdrPage())
+            else
             {
-                // use page of associated SdrPageView
-                return &(GetSdrPage()->GetViewContact());
+                // use page of associated SdrView
+                return &(GetSdrPage().GetViewContact());
             }
 
             return 0;
@@ -333,10 +336,7 @@ namespace sdr
             else
             {
                 const OutputDevice& rTargetOutDev = GetPageWindow().GetPaintWindow().GetTargetOutputDevice();
-                const Size aOutputSizePixel(rTargetOutDev.GetOutputSizePixel());
-                basegfx::B2DRange aLogicViewRange(0.0, 0.0, aOutputSizePixel.getWidth(), aOutputSizePixel.getHeight());
-
-                aLogicViewRange.transform(rTargetOutDev.GetInverseViewTransformation());
+                const basegfx::B2DRange aLogicViewRange(rTargetOutDev.GetLogicRange());
 
                 if(!aLogicViewRange.isEmpty() && !aLogicViewRange.overlaps(rRange))
                 {
@@ -436,10 +436,10 @@ namespace sdr
             return (nDrawMode == (DRAWMODE_SETTINGSLINE|DRAWMODE_SETTINGSFILL|DRAWMODE_SETTINGSTEXT|DRAWMODE_SETTINGSGRADIENT));
         }
 
-        // access to SdrPageView
-        SdrPageView* ObjectContactOfPageView::TryToGetSdrPageView() const
+        // access to SdrView
+        SdrView* ObjectContactOfPageView::TryToGetSdrView() const
         {
-            return &(mrPageWindow.GetPageView());
+            return &(mrPageWindow.GetPageView().GetView());
         }
 
 
@@ -459,18 +459,21 @@ namespace sdr
         }
 
         // set all UNO controls displayed in the view to design/alive mode
-        void ObjectContactOfPageView::SetUNOControlsDesignMode( bool _bDesignMode ) const
+        void ObjectContactOfPageView::SetUNOControlsDesignMode( bool _bDesignMode )
         {
-            const sal_uInt32 nCount(getViewObjectContactCount());
-
-            for(sal_uInt32 a(0); a < nCount; a++)
+            if(!getViewObjectContacts().empty())
             {
-                const ViewObjectContact* pVOC = getViewObjectContact(a);
-                const ViewObjectContactOfUnoControl* pUnoObjectVOC = dynamic_cast< const ViewObjectContactOfUnoControl* >(pVOC);
+                const ViewObjectContactSet::const_iterator aEnd(getViewObjectContacts().end());
+                ViewObjectContactSet::iterator aCurrent(getViewObjectContacts().begin());
 
-                if(pUnoObjectVOC)
+                for(;aCurrent != aEnd; aCurrent++)
                 {
-                    pUnoObjectVOC->setControlDesignMode(_bDesignMode);
+                    const ViewObjectContactOfUnoControl* pUnoObjectVOC = dynamic_cast< const ViewObjectContactOfUnoControl* >(*aCurrent);
+
+                    if(pUnoObjectVOC)
+                    {
+                        pUnoObjectVOC->setControlDesignMode(_bDesignMode);
+                    }
                 }
             }
         }

@@ -54,7 +54,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
     {
     case FN_NUM_NUMBERING_ON:
     {
-        SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, FN_PARAM_1 , sal_False );
+        SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, FN_PARAM_1 );
         sal_Bool bMode = !GetShell().HasNumber(); // #i29560#
         if ( pItem )
             bMode = pItem->GetValue();
@@ -73,7 +73,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
     break;
     case FN_NUM_BULLET_ON:
     {
-        SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, FN_PARAM_1 , sal_False );
+        SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, FN_PARAM_1 );
         sal_Bool bMode = !GetShell().HasBullet(); // #i29560#
         if ( pItem )
             bMode = pItem->GetValue();
@@ -101,7 +101,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                 SID_ATTR_NUMBERING_RULE, SID_PARAM_CUR_NUM_LEVEL,
                 0 );
         SwDocShell* pDocSh = GetView().GetDocShell();
-        sal_Bool bHtml = 0 != PTR_CAST(SwWebDocShell, pDocSh);
+        sal_Bool bHtml = 0 != dynamic_cast< SwWebDocShell* >( pDocSh);
         const SwNumRule* pCurRule = GetShell().GetCurNumRule();
         if( pCurRule )
         {

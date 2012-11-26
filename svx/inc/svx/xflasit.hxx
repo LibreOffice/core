@@ -36,7 +36,6 @@
 class SVX_DLLPUBLIC XFillAttrSetItem : public SfxSetItem
 {
 public:
-                            TYPEINFO();
                             XFillAttrSetItem(SfxItemSet* pItemSet );
                             XFillAttrSetItem(SfxItemPool* pItemPool);
                             XFillAttrSetItem(const XFillAttrSetItem& rAttr);

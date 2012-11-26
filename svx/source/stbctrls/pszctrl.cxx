@@ -246,9 +246,11 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     {
         if ( eState == SFX_ITEM_AVAILABLE )
         {
-            pImp->bHasMenu = sal_True;
-            if ( pState && pState->ISA(SfxUInt16Item) )
+            pImp->bHasMenu = true;
+            if ( pState && dynamic_cast< const SfxUInt16Item* >(pState) )
+            {
                 pImp->nFunction = ((const SfxUInt16Item*)pState)->GetValue();
+            }
         }
         else
             pImp->bHasMenu = sal_False;
@@ -269,21 +271,21 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
             DBG_ERRORFILE("unknown slot id");
         }
     }
-    else if ( pState->ISA( SfxPointItem ) )
+    else if ( dynamic_cast< const SfxPointItem* >(pState) )
     {
         // Position anzeigen
         pImp->aPos = ( (SfxPointItem*)pState )->GetValue();
         pImp->bPos = sal_True;
         pImp->bTable = sal_False;
     }
-    else if ( pState->ISA( SvxSizeItem ) )
+    else if ( dynamic_cast< const SvxSizeItem* >(pState) )
     {
         // Groesse anzeigen
         pImp->aSize = ( (SvxSizeItem*)pState )->GetSize();
         pImp->bSize = sal_True;
         pImp->bTable = sal_False;
     }
-    else if ( pState->ISA( SfxStringItem ) )
+    else if ( dynamic_cast< const SfxStringItem* >(pState) )
     {
         // String anzeigen (Tabellen-Zelle oder anderes)
         pImp->aStr = ( (SfxStringItem*)pState )->GetValue();

@@ -363,8 +363,6 @@ protected:
     virtual void    DoScroll( ScrollBar* pCurScrollBar );
 
 public:
-                    TYPEINFO();
-
                     ModulWindow( ModulWindowLayout* pParent, const ScriptDocument& rDocument, String aLibName,
                         String aName, ::rtl::OUString& aModule );
 

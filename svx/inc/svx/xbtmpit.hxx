@@ -44,7 +44,7 @@ private:
     GraphicObject   maGraphicObject;
 
 public:
-            TYPEINFO();
+    POOLITEM_FACTORY()
             XFillBitmapItem() : NameOrIndex(XATTR_FILLBITMAP, -1 ) {}
             XFillBitmapItem(long nIndex, const GraphicObject& rGraphicObject);
             XFillBitmapItem(const String& rName, const GraphicObject& rGraphicObject);

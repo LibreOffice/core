@@ -220,7 +220,7 @@ IMPL_LINK( SfxURLToolBoxControl_Impl, WindowEventListener, VclSimpleEvent*, pEve
 {
     if ( pAccExec &&
          pEvent &&
-         pEvent->ISA( VclWindowEvent ) &&
+         dynamic_cast< VclWindowEvent* >(pEvent) &&
          ( pEvent->GetId() == VCLEVENT_WINDOW_KEYINPUT ))
     {
         VclWindowEvent* pWinEvent = static_cast< VclWindowEvent* >( pEvent );
@@ -283,7 +283,7 @@ void SfxURLToolBoxControl_Impl::StateChanged
                 }
             }
 
-            const SfxStringItem *pURL = PTR_CAST(SfxStringItem,pState);
+            const SfxStringItem *pURL = dynamic_cast< const SfxStringItem* >( pState);
             String aRep( pURL->GetValue() );
             INetURLObject aURL( aRep );
             INetProtocol eProt = aURL.GetProtocol();

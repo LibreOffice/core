@@ -53,8 +53,6 @@ class XMLIndexTableSourceContext : public XMLIndexSourceBaseContext
 
 public:
 
-    TYPEINFO();
-
     XMLIndexTableSourceContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,

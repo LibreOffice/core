@@ -63,9 +63,6 @@ DBG_NAME( IDEBaseWindow )
 
 const char* pRegName = "BasicIDETabBar";
 
-TYPEINIT0( IDEBaseWindow )
-TYPEINIT1( SbxItem, SfxPoolItem );
-
 IDEBaseWindow::IDEBaseWindow( Window* pParent, const ScriptDocument& rDocument, String aLibName, String aName )
     :Window( pParent, WinBits( WB_3DLOOK ) )
     ,m_aDocument( rDocument )
@@ -592,7 +589,7 @@ void __EXPORT BasicIDETabBar::Command( const CommandEvent& rCEvt )
                     {
                         IDEWindowTable& aIDEWindowTable = pIDEShell->GetIDEWindowTable();
                         IDEBaseWindow* pWin = aIDEWindowTable.Get( GetCurPageId() );
-                        if( pWin && pWin->ISA( ModulWindow ) )
+                        if( pWin && dynamic_cast< ModulWindow* >(pWin) )
                         {
                             SbModule* pActiveModule = (SbModule*)pBasic->FindModule( pWin->GetName() );
                             if( pActiveModule && ( pActiveModule->GetModuleType() == script::ModuleType::DOCUMENT ) )
@@ -663,11 +660,11 @@ void BasicIDETabBar::Sort()
             aTabBarSortHelper.aPageText = GetPageText( nId );
             IDEBaseWindow* pWin = aIDEWindowTable.Get( nId );
 
-            if ( pWin->IsA( TYPE( ModulWindow ) ) )
+            if ( dynamic_cast< ModulWindow* >(pWin) )
             {
                 aModuleList.push_back( aTabBarSortHelper );
             }
-            else if ( pWin->IsA( TYPE( DialogWindow ) ) )
+            else if ( dynamic_cast< DialogWindow* >(pWin) )
             {
                 aDialogList.push_back( aTabBarSortHelper );
             }
@@ -885,6 +882,8 @@ LibInfoItem* LibInfos::GetInfo( const LibInfoKey& rKey )
     return pItem;
 }
 
+IMPL_POOLITEM_FACTORY(SbxItem)
+
 SbxItem::SbxItem(sal_uInt16 nWhich_, const ScriptDocument& rDocument, const String& aLibName, const String& aName, sal_uInt16 nType )
     :SfxPoolItem( nWhich_ )
     ,m_aDocument(rDocument)
@@ -916,7 +915,7 @@ SbxItem::SbxItem(const SbxItem& rCopy)
 
 int SbxItem::operator==( const SfxPoolItem& rCmp) const
 {
-    DBG_ASSERT( rCmp.ISA( SbxItem ), "==: Kein SbxItem!" );
+    DBG_ASSERT( dynamic_cast< const SbxItem* >(&rCmp), "==: Kein SbxItem!" );
     return ( SfxPoolItem::operator==( rCmp ) && ( m_aDocument == ((const SbxItem&)rCmp).m_aDocument )
                                              && ( m_aLibName == ((const SbxItem&)rCmp).m_aLibName )
                                              && ( m_aName == ((const SbxItem&)rCmp).m_aName )

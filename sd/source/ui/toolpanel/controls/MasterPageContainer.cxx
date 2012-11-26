@@ -705,9 +705,9 @@ void MasterPageContainer::Implementation::UpdatePreviewSizePixel (void)
     for (iDescriptor=maContainer.begin(); iDescriptor!=iContainerEnd; ++iDescriptor)
         if (*iDescriptor!=NULL && (*iDescriptor)->mpMasterPage != NULL)
         {
-            Size aPageSize ((*iDescriptor)->mpMasterPage->GetSize());
-            nWidth = aPageSize.Width();
-            nHeight = aPageSize.Height();
+            const basegfx::B2DVector& rPageSize = (*iDescriptor)->mpMasterPage->GetPageScale();
+            nWidth = basegfx::fround(rPageSize.getX());
+            nHeight = basegfx::fround(rPageSize.getY());
             mbFirstPageObjectSeen = true;
             break;
         }

@@ -46,31 +46,6 @@ using namespace ::com::sun::star::sdb;
 //using namespace ::com::sun::star::beans;
 //using namespace ::com::sun::star::sdbcx;
 
-TYPEINIT0(OCode);
-TYPEINIT1(OOperand, OCode);
-TYPEINIT1(OOperandRow, OOperand);
-TYPEINIT1(OOperandAttr, OOperandRow);
-TYPEINIT1(OOperandParam, OOperandRow);
-TYPEINIT1(OOperandValue, OOperand);
-TYPEINIT1(OOperandConst, OOperandValue);
-TYPEINIT1(OOperandResult, OOperandValue);
-TYPEINIT1(OStopOperand, OOperandValue);
-
-TYPEINIT1(OOperator, OCode);
-TYPEINIT1(OBoolOperator,OOperator);
-TYPEINIT1(OOp_NOT, OBoolOperator);
-TYPEINIT1(OOp_AND, OBoolOperator);
-TYPEINIT1(OOp_OR, OBoolOperator);
-TYPEINIT1(OOp_ISNULL, OBoolOperator);
-TYPEINIT1(OOp_ISNOTNULL, OOp_ISNULL);
-TYPEINIT1(OOp_LIKE, OBoolOperator);
-TYPEINIT1(OOp_NOTLIKE, OOp_LIKE);
-TYPEINIT1(OOp_COMPARE, OBoolOperator);
-TYPEINIT1(ONumOperator, OOperator);
-TYPEINIT1(ONthOperator, OOperator);
-TYPEINIT1(OBinaryOperator, OOperator);
-TYPEINIT1(OUnaryOperator, OOperator);
-
 //------------------------------------------------------------------
 DBG_NAME(OCode )
 OCode::OCode()
@@ -231,9 +206,9 @@ void OBoolOperator::Exec(OCodeStack& rCodeStack)
     rCodeStack.pop();
 
     rCodeStack.push(new OOperandResultBOOL(operate(pLeft, pRight)));
-    if (IS_TYPE(OOperandResult,pLeft))
+    if ( typeid(OOperandResult) == typeid(*pLeft) ) // IS_TYPE(OOperandResult,pLeft))
         delete pLeft;
-    if (IS_TYPE(OOperandResult,pRight))
+    if ( typeid(OOperandResult) == typeid(*pRight) ) // IS_TYPE(OOperandResult,pRight))
         delete pRight;
 }
 //------------------------------------------------------------------
@@ -250,7 +225,7 @@ void OOp_NOT::Exec(OCodeStack& rCodeStack)
     rCodeStack.pop();
 
     rCodeStack.push(new OOperandResultBOOL(operate(pOperand)));
-    if (IS_TYPE(OOperandResult,pOperand))
+    if ( typeid(OOperandResult) == typeid(*pOperand) ) // IS_TYPE(OOperandResult,pOperand))
         delete pOperand;
 }
 //------------------------------------------------------------------
@@ -289,7 +264,7 @@ void OOp_ISNULL::Exec(OCodeStack& rCodeStack)
     rCodeStack.pop();
 
     rCodeStack.push(new OOperandResultBOOL(operate(pOperand)));
-    if (IS_TYPE(OOperandResult,pOperand))
+    if ( typeid(OOperandResult) == typeid(*pOperand) ) // IS_TYPE(OOperandResult,pOperand))
         delete pOperand;
 }
 
@@ -412,9 +387,9 @@ void ONumOperator::Exec(OCodeStack& rCodeStack)
     rCodeStack.pop();
 
     rCodeStack.push(new OOperandResultNUM(operate(pLeft->getValue(), pRight->getValue())));
-    if (IS_TYPE(OOperandResult,pLeft))
+    if ( typeid(OOperandResult) == typeid(*pLeft) ) // IS_TYPE(OOperandResult,pLeft))
         delete pLeft;
-    if (IS_TYPE(OOperandResult,pRight))
+    if ( typeid(OOperandResult) == typeid(*pRight) ) // IS_TYPE(OOperandResult,pRight))
         delete pRight;
 }
 //------------------------------------------------------------------
@@ -462,11 +437,11 @@ void ONthOperator::Exec(OCodeStack& rCodeStack)
         OSL_ENSURE(!rCodeStack.empty(),"Stack must be none empty!");
         pOperand    = rCodeStack.top();
         rCodeStack.pop();
-        if ( !IS_TYPE(OStopOperand,pOperand) )
+        if ( typeid(OStopOperand) != typeid(*pOperand) ) // !IS_TYPE(OStopOperand,pOperand) )
             aValues.push_back( pOperand->getValue() );
         aOperands.push_back( pOperand );
     }
-    while ( !IS_TYPE(OStopOperand,pOperand) );
+    while ( typeid(OStopOperand) != typeid(*pOperand) ); // IS_TYPE(OStopOperand,pOperand) );
 
     rCodeStack.push(new OOperandResult(operate(aValues)));
 
@@ -474,7 +449,7 @@ void ONthOperator::Exec(OCodeStack& rCodeStack)
     ::std::vector<OOperand*>::iterator aEnd = aOperands.end();
     for (; aIter != aEnd; ++aIter)
     {
-        if (IS_TYPE(OOperandResult,*aIter))
+        if ( typeid(OOperandResult) == typeid(**aIter) ) // IS_TYPE(OOperandResult,*aIter))
             delete *aIter;
     }
 }
@@ -487,13 +462,13 @@ void OBinaryOperator::Exec(OCodeStack& rCodeStack)
     OOperand  *pLeft    = rCodeStack.top();
     rCodeStack.pop();
 
-    if ( !rCodeStack.empty() && IS_TYPE(OStopOperand,rCodeStack.top()) )
+    if ( !rCodeStack.empty() && ( typeid(OStopOperand) == typeid(*rCodeStack.top()) ) ) // IS_TYPE(OStopOperand,rCodeStack.top()) )
         rCodeStack.pop();
 
     rCodeStack.push(new OOperandResult(operate(pLeft->getValue(),pRight->getValue())));
-    if (IS_TYPE(OOperandResult,pRight))
+    if ( typeid(OOperandResult) == typeid(*pRight) ) // IS_TYPE(OOperandResult,pRight))
         delete pRight;
-    if (IS_TYPE(OOperandResult,pLeft))
+    if ( typeid(OOperandResult) == typeid(*pLeft) ) // IS_TYPE(OOperandResult,pLeft))
         delete pLeft;
 }
 //------------------------------------------------------------------
@@ -505,7 +480,7 @@ void OUnaryOperator::Exec(OCodeStack& rCodeStack)
     rCodeStack.pop();
 
     rCodeStack.push(new OOperandResult(operate(pOperand->getValue())));
-    if (IS_TYPE(OOperandResult,pOperand))
+    if ( typeid(OOperandResult) == typeid(*pOperand) ) // IS_TYPE(OOperandResult,pOperand))
         delete pOperand;
 }
 // -----------------------------------------------------------------------------

@@ -46,8 +46,6 @@ class XMLFormPropOOoTransformerContext : public XMLTransformerContext
     sal_Bool m_bIsList;
 
 public:
-    TYPEINFO();
-
     XMLFormPropOOoTransformerContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName );
 

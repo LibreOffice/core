@@ -122,7 +122,7 @@ E3dScene* fillViewInformation3DForCompoundObject(drawinglayer::geometry::ViewInf
         if(pParentParentScene)
         {
             // pParentScene is a in-between scene
-            aInBetweenSceneMatrix = pParentScene->GetTransform() * aInBetweenSceneMatrix;
+            aInBetweenSceneMatrix = pParentScene->GetB3DTransform() * aInBetweenSceneMatrix;
         }
         else
         {
@@ -172,7 +172,7 @@ SVX_DLLPUBLIC void getAllHit3DObjectsSortedFrontToBack(
     ::std::vector< const E3dCompoundObject* >& o_rResult)
 {
     o_rResult.clear();
-    SdrObjList* pList = rScene.GetSubList();
+    SdrObjList* pList = rScene.getChildrenOfSdrObject();
 
     if(pList && pList->GetObjCount())
     {

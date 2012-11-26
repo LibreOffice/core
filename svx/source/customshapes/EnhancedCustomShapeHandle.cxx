@@ -63,11 +63,11 @@ com::sun::star::awt::Point SAL_CALL EnhancedCustomShapeHandle::getPosition()
     if ( !pSdrObjCustomShape )
         throw com::sun::star::uno::RuntimeException();
 
-    Point aPosition;
+    basegfx::B2DPoint aPosition;
     EnhancedCustomShape2d aCustomShape2d( pSdrObjCustomShape );
     if ( !aCustomShape2d.GetHandlePosition( mnIndex, aPosition ) )
         throw com::sun::star::uno::RuntimeException();
-    return com::sun::star::awt::Point( aPosition.X(), aPosition.Y() );
+    return com::sun::star::awt::Point( basegfx::fround(aPosition.getX()), basegfx::fround(aPosition.getY()) );
 }
 
 void SAL_CALL EnhancedCustomShapeHandle::setControllerPosition( const com::sun::star::awt::Point& aPnt )

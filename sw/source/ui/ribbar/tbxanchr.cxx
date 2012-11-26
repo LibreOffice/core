@@ -82,7 +82,7 @@ void  SwTbxAnchor::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState, const
 
     if( eState == SFX_ITEM_AVAILABLE )
     {
-        const SfxUInt16Item* pItem = PTR_CAST( SfxUInt16Item, pState );
+        const SfxUInt16Item* pItem = dynamic_cast< const SfxUInt16Item* >( pState );
         if(pItem)
             nActAnchorId = pItem->GetValue();
     }
@@ -123,8 +123,7 @@ void  SwTbxAnchor::Click()
     SwView* pActiveView = 0;
     if(pViewFrame)
     {
-        const TypeId aTypeId = TYPE(SwView);
-        SwView* pView = (SwView*)SfxViewShell::GetFirst(&aTypeId);
+        SwView* pView = (SwView*)SfxViewShell::GetFirst( _IsSfxViewShell< SwView > );
         while( pView )
         {
             if(pView->GetViewFrame() == pViewFrame)
@@ -132,7 +131,7 @@ void  SwTbxAnchor::Click()
                 pActiveView = pView;
                 break;
             }
-            pView = (SwView*)SfxViewShell::GetNext(*pView, &aTypeId);
+            pView = (SwView*)SfxViewShell::GetNext(*pView, _IsSfxViewShell< SwView > );
         }
     }
     if(!pActiveView)

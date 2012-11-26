@@ -40,9 +40,6 @@ using namespace com::sun::star::uno;
 
 ///////////////////////////// SbxVariable //////////////////////////////
 
-TYPEINIT1(SbxVariable,SbxValue)
-TYPEINIT1(SbxHint,SfxSimpleHint)
-
 extern sal_uInt32 nVarCreator;          // in SBXBASE.CXX, fuer LoadData()
 #ifdef DBG_UTIL
 static sal_uIntPtr nVar = 0;
@@ -365,7 +362,7 @@ void SbxVariable::SetParent( SbxObject* p )
 {
 #ifdef DBG_UTIL
     // wird der Parent eines SbxObjects gesetzt?
-    if ( p && ISA(SbxObject) )
+    if ( p && dynamic_cast< SbxObject* >(this) )
     {
         // dann mu\s dieses auch Child vom neuen Parent sein
         sal_Bool bFound = sal_False;
@@ -533,7 +530,7 @@ sal_Bool SbxVariable::StoreData( SvStream& rStrm ) const
 {
     rStrm << (sal_uInt8) 0xFF;      // Marker
     sal_Bool bValStore;
-    if( this->IsA( TYPE(SbxMethod) ) )
+    if( dynamic_cast< const SbxMethod* >(this) )
     {
         // #50200 Verhindern, dass Objekte, die zur Laufzeit als Return-Wert
         // in der Methode als Value gespeichert sind, mit gespeichert werden
@@ -629,7 +626,7 @@ void SbxAlias::Broadcast( sal_uIntPtr nHt )
 void SbxAlias::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                            const SfxHint& rHint, const TypeId& )
 {
-    const SbxHint* p = PTR_CAST(SbxHint,&rHint);
+    const SbxHint* p = dynamic_cast< const SbxHint* >( &rHint);
     if( p && p->GetId() == SBX_HINT_DYING )
     {
         xAlias.Clear();

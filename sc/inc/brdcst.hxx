@@ -25,7 +25,6 @@
 
 #include "global.hxx"
 #include "address.hxx"
-#include <tools/rtti.hxx>
 #include <svl/hint.hxx>
 #include <svl/smplhint.hxx>
 class ScBaseCell;
@@ -42,7 +41,6 @@ private:
     ScBaseCell* pCell;
 
 public:
-    TYPEINFO();
                         ScHint( sal_uLong n, const ScAddress& a, ScBaseCell* p )
                             : SfxSimpleHint( n ), aAddress( a ), pCell( p ) {}
     ScBaseCell*         GetCell() const { return pCell; }
@@ -57,7 +55,6 @@ class ScAreaChangedHint : public SfxHint
 private:
     ScRange aNewRange;
 public:
-                    TYPEINFO();
                     ScAreaChangedHint(const ScRange& rRange) : aNewRange(rRange) {}
     const ScRange&  GetRange() const { return aNewRange; }
 };

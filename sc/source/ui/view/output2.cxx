@@ -762,7 +762,7 @@ double ScOutputData::GetStretch()
 
 void lcl_DoHyperlinkResult( OutputDevice* pDev, const Rectangle& rRect, ScBaseCell* pCell )
 {
-    vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
+    vcl::PDFExtOutDevData* pPDFData = dynamic_cast< vcl::PDFExtOutDevData* >( pDev->GetExtOutDevData() );
 
     String aCellText;
     String aURL;
@@ -1333,7 +1333,7 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                 pDev->GetMapMode().GetMapUnit() == pRefDevice->GetMapMode().GetMapUnit(),
                 "DrawStrings: unterschiedliche MapUnits ?!?!" );
 
-    vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
+    vcl::PDFExtOutDevData* pPDFData = dynamic_cast< vcl::PDFExtOutDevData* >( pDev->GetExtOutDevData() );
 
     sal_Bool bWasIdleDisabled = pDoc->IsIdleDisabled();
     pDoc->DisableIdle( sal_True );
@@ -2109,7 +2109,7 @@ void ScOutputData::ShrinkEditEngine( EditEngine& rEngine, const Rectangle& rAlig
 
 void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
 {
-    vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
+    vcl::PDFExtOutDevData* pPDFData = dynamic_cast< vcl::PDFExtOutDevData* >( pDev->GetExtOutDevData() );
 
     Size aMinSize = pRefDevice->PixelToLogic(Size(0,100));      // erst darueber wird ausgegeben
 //    sal_uInt32 nMinHeight = aMinSize.Height() / 200;                // 1/2 Pixel

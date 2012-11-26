@@ -60,9 +60,6 @@ namespace drawinglayer
             const attribute::SdrLineFillShadowTextAttribute& getSdrLFSTAttribute() const { return maSdrLFSTAttribute; }
             const basegfx::B2DPolyPolygon& getUnitPolyPolygon() const { return maUnitPolyPolygon; }
 
-            // compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
-
             // provide unique ID
             DeclPrimitrive2DIDBlock()
         };

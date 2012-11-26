@@ -29,7 +29,7 @@ enum SdrFitToSizeType
     SDRTEXTFIT_RESIZEATTR
 }
 item UINT32 SvxObjectItem ;
-item BOOL SdrShadowItem ;
+item BOOL SdrOnOffItem ;
 item SdrFitToSizeType SdrTextFitToSizeTypeItem ;
 
 

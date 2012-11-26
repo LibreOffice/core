@@ -19,13 +19,12 @@
  *
  *************************************************************/
 
-
-
 #ifndef _REPORT_RPTUIFAC_HXX
 #define _REPORT_RPTUIFAC_HXX
 
-
 #include <svx/svdobj.hxx>
+
+class SdrObjFactory;
 
 namespace rptui
 {

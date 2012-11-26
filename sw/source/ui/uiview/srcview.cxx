@@ -131,8 +131,6 @@ SFX_IMPL_INTERFACE( SwSrcView, SfxViewShell, SW_RES(0) )
     SFX_CHILDWINDOW_REGISTRATION(SvxSearchDialogWrapper::GetChildWindowId());
 }
 
-TYPEINIT1(SwSrcView, SfxViewShell)
-
 /*-----------------18.11.96 08.05-------------------
 
 --------------------------------------------------*/
@@ -255,7 +253,7 @@ SwSrcView::SwSrcView(SfxViewFrame* pViewFrame, SfxViewShell*) :
 SwSrcView::~SwSrcView()
 {
     SwDocShell* pDocShell = GetDocShell();
-    DBG_ASSERT(PTR_CAST(SwWebDocShell, pDocShell), "Wieso keine WebDocShell?");
+    DBG_ASSERT(dynamic_cast< SwWebDocShell* >( pDocShell), "Wieso keine WebDocShell?");
     const TextSelection&  rSel = aEditWin.GetTextView()->GetSelection();
     ((SwWebDocShell*)pDocShell)->SetSourcePara( static_cast< sal_uInt16 >( rSel.GetStart().GetPara() ) );
 
@@ -313,7 +311,7 @@ void SwSrcView::Init()
 SwDocShell*     SwSrcView::GetDocShell()
 {
     SfxObjectShell* pObjShell = GetViewFrame()->GetObjectShell();
-    return PTR_CAST(SwDocShell, pObjShell);
+    return dynamic_cast< SwDocShell* >( pObjShell);
 }
 
 /*--------------------------------------------------------------------
@@ -835,15 +833,12 @@ sal_Int32 SwSrcView::PrintSource(
 
 void SwSrcView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if ( rHint.ISA(SfxSimpleHint) &&
-            (
-                ((SfxSimpleHint&) rHint).GetId() == SFX_HINT_MODECHANGED ||
-                (
-                    ((SfxSimpleHint&) rHint).GetId() == SFX_HINT_TITLECHANGED &&
-                    !GetDocShell()->IsReadOnly() && aEditWin.IsReadonly()
-                )
-            )
-       )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if ( pSfxSimpleHint
+        && (pSfxSimpleHint->GetId() == SFX_HINT_MODECHANGED
+        || ( pSfxSimpleHint->GetId() == SFX_HINT_TITLECHANGED
+            && !GetDocShell()->IsReadOnly() && aEditWin.IsReadonly())))
     {
         // Broadcast kommt nur einmal!
         const SwDocShell* pDocSh = GetDocShell();
@@ -941,7 +936,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
         pDocShell->SetModified();// das Flag wird zwischendurch zurueckgesetzt
     // AutoLoad abschalten
     pDocShell->SetAutoLoad(INetURLObject(), 0, sal_False);
-    DBG_ASSERT(PTR_CAST(SwWebDocShell, pDocShell), "Wieso keine WebDocShell?");
+    DBG_ASSERT(dynamic_cast< SwWebDocShell* >( pDocShell), "Wieso keine WebDocShell?");
     sal_uInt16 nLine = ((SwWebDocShell*)pDocShell)->GetSourcePara();
     aEditWin.SetStartLine(nLine);
     aEditWin.GetTextEngine()->ResetUndo();

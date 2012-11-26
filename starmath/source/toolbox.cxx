@@ -180,7 +180,7 @@ SmToolBoxWindow::~SmToolBoxWindow()
 SmViewShell * SmToolBoxWindow::GetView()
 {
     SfxViewShell *pView = GetBindings().GetDispatcher()->GetFrame()->GetViewShell();
-    return PTR_CAST(SmViewShell, pView);
+    return dynamic_cast< SmViewShell* >( pView);
 }
 
 

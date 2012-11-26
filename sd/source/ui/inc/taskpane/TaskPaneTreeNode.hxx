@@ -81,7 +81,7 @@ public:
     */
     virtual sal_Int32 GetMinimumWidth (void);
 
-    /** The default implementaion always returns <FALSE/>
+    /** The default implementaion always returns <false/>
     */
     virtual bool IsResizable (void);
 
@@ -98,22 +98,22 @@ public:
     virtual void RequestResize (void);
 
     /** The default implementation shows the window (when it exists) when
-        bExpansionState is <TRUE/>.  It hides the window otherwise.
+        bExpansionState is <true/>.  It hides the window otherwise.
         @return
-            Returns <TRUE/> when the expansion state changes.  When an
+            Returns <true/> when the expansion state changes.  When an
             expansion state is requested that is already in place then
-            <FALSE/> is returned.
+            <false/> is returned.
     */
     virtual bool Expand (bool bExpansionState);
 
     /** The default implementation returns whether the window is showing.
-        When there is no window then it returns <FALSE/>.
+        When there is no window then it returns <false/>.
     */
     virtual bool IsExpanded (void) const;
 
     /** Return whether the node can be expanded or collapsed.  The default
-        implementation always returns <TRUE/> when there is window and
-        <FALSE/> otherwise.  If <FALSE/> is returned
+        implementation always returns <true/> when there is window and
+        <false/> otherwise.  If <false/> is returned
         then Expand() may be called but it will not change the expansion
         state.
     */

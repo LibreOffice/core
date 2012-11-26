@@ -65,8 +65,12 @@ namespace basegfx
         bool operator==(const B2DPolyPolygon& rPolyPolygon) const;
         bool operator!=(const B2DPolyPolygon& rPolyPolygon) const;
 
+        /// Transform B2DPolygon by given transformation matrix.
+        B2DPolyPolygon& operator*=(const ::basegfx::B2DHomMatrix& rMatrix);
+
         // polygon interface
         sal_uInt32 count() const;
+        sal_uInt32 allPointCount() const;
 
         B2DPolygon getB2DPolygon(sal_uInt32 nIndex) const;
         void setB2DPolygon(sal_uInt32 nIndex, const B2DPolygon& rPolygon);
@@ -129,8 +133,16 @@ namespace basegfx
         B2DPolygon* end();
     };
 
-    // typedef for a vector of B2DPolyPolygons
+    //////////////////////////////////////////////////////////////////////////
+    /// global typedef for a vector of B2DPolyPolygons
+
     typedef ::std::vector< B2DPolyPolygon > B2DPolyPolygonVector;
+
+    // external operators
+    //////////////////////////////////////////////////////////////////////////
+
+    /// Transform B2DPolyPolygon by given transformation matrix (see operator*=())
+    B2DPolyPolygon operator*(const B2DHomMatrix& rMatrix, const B2DPolyPolygon& rB2DPolyPolygon);
 
 } // end of namespace basegfx
 

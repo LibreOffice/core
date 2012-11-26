@@ -41,8 +41,6 @@ class XMLAutoMarkFileContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLAutoMarkFileContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,

@@ -45,8 +45,6 @@ class SfxRequest;
 
 namespace sd {
 
-TYPEINIT1( FuLink, FuPoor );
-
 /*************************************************************************
 |*
 |* Konstruktor

@@ -36,8 +36,6 @@ using namespace ::com::sun::star::text;
 
 // class SvxWritingModeItem -------------------------------------------------
 
-TYPEINIT1_FACTORY(SvxWritingModeItem, SfxUInt16Item, new SvxWritingModeItem(com::sun::star::text::WritingMode_LR_TB, 0));
-
 SvxWritingModeItem::SvxWritingModeItem( WritingMode eValue, sal_uInt16 _nWhich )
     : SfxUInt16Item( _nWhich, (sal_uInt16)eValue )
 {

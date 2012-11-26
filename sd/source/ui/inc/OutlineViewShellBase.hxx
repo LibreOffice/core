@@ -36,7 +36,6 @@ class OutlineViewShellBase
     : public ImpressViewShellBase
 {
 public:
-    TYPEINFO();
     SFX_DECL_VIEWFACTORY(OutlineViewShellBase);
 
     /** This constructor is used by the view factory of the SFX

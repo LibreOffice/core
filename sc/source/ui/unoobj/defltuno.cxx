@@ -102,8 +102,9 @@ ScDocDefaultsObj::~ScDocDefaultsObj()
 
 void ScDocDefaultsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if ( pSfxSimpleHint && SFX_HINT_DYING == pSfxSimpleHint->GetId() )
     {
         pDocShell = NULL;       // document gone
     }

@@ -61,7 +61,6 @@ class FmFormShell;
 class SdrObject;
 class FmFormModel;
 class FmFormView;
-class SdrMarkList;
 
 //========================================================================
 class FmEntryData;
@@ -71,7 +70,6 @@ class FmNavInsertedHint : public SfxHint
     sal_uInt32 nPos;
 
 public:
-    TYPEINFO();
     FmNavInsertedHint( FmEntryData* pInsertedEntryData, sal_uInt32 nRelPos );
     virtual ~FmNavInsertedHint();
 
@@ -85,7 +83,6 @@ class FmNavModelReplacedHint : public SfxHint
     FmEntryData* pEntryData;    // die Daten des Eintrages, der ein neues Model bekommen hat
 
 public:
-    TYPEINFO();
     FmNavModelReplacedHint( FmEntryData* pAffectedEntryData );
     virtual ~FmNavModelReplacedHint();
 
@@ -98,7 +95,6 @@ class FmNavRemovedHint : public SfxHint
     FmEntryData* pEntryData;
 
 public:
-    TYPEINFO();
     FmNavRemovedHint( FmEntryData* pInsertedEntryData );
     virtual ~FmNavRemovedHint();
 
@@ -112,7 +108,6 @@ class FmNavNameChangedHint : public SfxHint
     ::rtl::OUString          aNewName;
 
 public:
-    TYPEINFO();
     FmNavNameChangedHint( FmEntryData* pData, const ::rtl::OUString& rNewName );
     virtual ~FmNavNameChangedHint();
 
@@ -124,7 +119,6 @@ public:
 class FmNavClearedHint : public SfxHint
 {
 public:
-    TYPEINFO();
     FmNavClearedHint();
     virtual ~FmNavClearedHint();
 };
@@ -134,11 +128,10 @@ class FmNavViewMarksChanged : public SfxHint
 {
     FmFormView* pView;
 public:
-    TYPEINFO();
     FmNavViewMarksChanged(FmFormView* pWhichView) { pView = pWhichView; }
     virtual ~FmNavViewMarksChanged() {}
 
-    FmFormView* GetAffectedView() { return pView; }
+    const FmFormView* GetAffectedView() const { return pView; }
 };
 
 //========================================================================
@@ -162,8 +155,6 @@ protected:
     void    newObject( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxIFace );
 
 public:
-    TYPEINFO();
-
     FmEntryData( FmEntryData* pParentData, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rIFace );
     FmEntryData( const FmEntryData& rEntryData );
     virtual ~FmEntryData();
@@ -221,7 +212,6 @@ class FmNavRequestSelectHint : public SfxHint
     FmEntryDataArray    m_arredToSelect;
     sal_Bool                m_bMixedSelection;
 public:
-    TYPEINFO();
     FmNavRequestSelectHint() { }
     virtual ~FmNavRequestSelectHint() {}
 
@@ -239,8 +229,6 @@ class FmFormData : public FmEntryData
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer > m_xContainer;
 
 public:
-    TYPEINFO();
-
     FmFormData(
         const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm,
         const ImageList& _rNormalImages,
@@ -274,8 +262,6 @@ class FmControlData : public FmEntryData
     Image GetImage(const ImageList& ilNavigatorImages) const;
 
 public:
-    TYPEINFO();
-
     FmControlData(
         const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& _rxComponent,
         const ImageList& _rNormalImages,
@@ -372,7 +358,7 @@ namespace svxform
 
         void ReplaceFormComponent(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& xOld, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& xNew);
 
-        void BroadcastMarkedObjects(const SdrMarkList& mlMarked);
+        void BroadcastMarkedObjects(const SdrObjectVector& mlMarked);
             // einen RequestSelectHint mit den aktuell markierten Objekten broadcasten
         sal_Bool InsertFormComponent(FmNavRequestSelectHint& rHint, SdrObject* pObject);
             // ist ein Helper fuer vorherige, managet das Abteigen in SdrObjGroups

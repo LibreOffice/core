@@ -119,7 +119,6 @@ protected:
                     }
 
 public:
-                    TYPEINFO();
                     // ask JP
     virtual void    Closed();
                     SvBaseLink( const String& rNm, sal_uInt16 nObjectType,

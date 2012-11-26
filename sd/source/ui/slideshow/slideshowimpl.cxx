@@ -686,7 +686,7 @@ void SAL_CALL SlideshowImpl::disposing()
         mpView->DeleteWindowFromPaintView( mpShowWindow );
 
     if( mpView )
-        mpView->SetAnimationPause( sal_False );
+        mpView->SetAnimationPause( false );
 
     if( mpViewShell )
     {
@@ -722,7 +722,7 @@ void SAL_CALL SlideshowImpl::disposing()
     }
 
     // aktuelle Fenster wieder einblenden
-    if( mpViewShell && !mpViewShell->ISA(PresentationViewShell))
+    if( mpViewShell && !dynamic_cast< PresentationViewShell* >(mpViewShell))
     {
         if( meAnimationMode == ANIMATIONMODE_SHOW )
         {
@@ -764,7 +764,7 @@ void SAL_CALL SlideshowImpl::disposing()
         // restart the custom show dialog if he started us
         if( mpViewShell->IsStartShowWithDialog() && getDispatcher() )
         {
-            mpViewShell->SetStartShowWithDialog( sal_False );
+            mpViewShell->SetStartShowWithDialog( false );
             getDispatcher()->Execute( SID_CUSTOMSHOW_DLG, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
         }
 
@@ -848,7 +848,7 @@ bool SlideshowImpl::startPreview(
         if( mpView )
         {
             mpView->AddWindowToPaintView( mpShowWindow );
-            mpView->SetAnimationPause( sal_True );
+            mpView->SetAnimationPause( true );
         }
 
         // call resize handler
@@ -955,7 +955,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
             {
                 // we are in notes page mode, so get
                 // the corresponding draw page
-                const sal_uInt16 nPgNum = ( pStartPage->GetPageNum() - 2 ) >> 1;
+                const sal_uInt32 nPgNum = ( pStartPage->GetPageNumber() - 2 ) >> 1;
                 pStartPage = mpDoc->GetSdPage( nPgNum, PK_STANDARD );
             }
         }
@@ -988,7 +988,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
 
         if( bStartWithActualSlide )
         {
-            sal_Int32 nSlideNum = ( pStartPage->GetPageNum() - 1 ) >> 1;
+            sal_Int32 nSlideNum = ( pStartPage->GetPageNumber() - 1 ) >> 1;
 
             if( !maPresSettings.mbAll && !maPresSettings.mbCustomShow )
             {
@@ -997,7 +997,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
                 sal_Int32 nSlide;
                 for( nSlide = 0; (nSlide < nSlideCount); nSlide++ )
                 {
-                    if( mpDoc->GetSdPage( (sal_uInt16) nSlide, PK_STANDARD )->GetName() == aPresSlide )
+                    if( mpDoc->GetSdPage( (sal_uInt32) nSlide, PK_STANDARD )->GetName() == aPresSlide )
                         break;
                 }
 
@@ -1011,7 +1011,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
 
         // remember Slide number from where the show was started
         if( pStartPage )
-            mnRestoreSlide = ( pStartPage->GetPageNum() - 1 ) / 2;
+            mnRestoreSlide = ( pStartPage->GetPageNumber() - 1 ) / 2;
 
         if( mpSlideController->hasSlides() )
         {
@@ -1036,7 +1036,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
             // these Slots are forbiden in other views for this document
             if( mpDocSh )
             {
-                mpDocSh->SetSlotFilter( sal_True, sizeof( pAllowed ) / sizeof( sal_uInt16 ), pAllowed );
+                mpDocSh->SetSlotFilter( true, sizeof( pAllowed ) / sizeof( sal_uInt16 ), pAllowed );
                 mpDocSh->ApplySlotFilter();
             }
 
@@ -1086,7 +1086,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
             if( mpView )
             {
                 mpView->AddWindowToPaintView( mpShowWindow );
-                mpView->SetAnimationPause( sal_True );
+                mpView->SetAnimationPause( true );
             }
 
             SfxBindings* pBindings = getBindings();
@@ -1658,7 +1658,7 @@ void SlideshowImpl::click( const Reference< XShape >& xShape, const ::com::sun::
         if( INET_PROT_FILE == aURL.GetProtocol() )
         {
             SfxStringItem aUrl( SID_FILE_NAME, aURL.GetMainURL( INetURLObject::NO_DECODE ) );
-            SfxBoolItem aBrowsing( SID_BROWSE, sal_True );
+            SfxBoolItem aBrowsing( SID_BROWSE, true );
 
             SfxViewFrame* pViewFrm = SfxViewFrame::Current();
             if (pViewFrm)
@@ -1707,7 +1707,7 @@ void SlideshowImpl::click( const Reference< XShape >& xShape, const ::com::sun::
     {
         // todo, better do it async?
         SdrObject* pObj = GetSdrObjectFromXShape( xShape );
-        SdrOle2Obj* pOleObject = PTR_CAST(SdrOle2Obj, pObj);
+        SdrOle2Obj* pOleObject = dynamic_cast< SdrOle2Obj* >(pObj);
         if (pOleObject && mpViewShell )
             mpViewShell->ActivateObject(pOleObject, pEvent->mnVerb);
     }
@@ -1721,9 +1721,9 @@ void SlideshowImpl::click( const Reference< XShape >& xShape, const ::com::sun::
 
 sal_Int32 SlideshowImpl::getSlideNumberForBookmark( const OUString& rStrBookmark )
 {
-    sal_Bool bIsMasterPage;
+    bool bIsMasterPage;
     OUString aBookmark = getUiNameFromPageApiNameImpl( rStrBookmark );
-    sal_uInt16 nPgNum = mpDoc->GetPageByName( aBookmark, bIsMasterPage );
+    sal_uInt32 nPgNum = mpDoc->GetPageByName( aBookmark, bIsMasterPage );
 
     if( nPgNum == SDRPAGE_NOTFOUND )
     {
@@ -1732,8 +1732,13 @@ sal_Int32 SlideshowImpl::getSlideNumberForBookmark( const OUString& rStrBookmark
 
         if( pObj )
         {
-            nPgNum = pObj->GetPage()->GetPageNum();
-            bIsMasterPage = (sal_Bool)pObj->GetPage()->IsMasterPage();
+            SdrPage* pOwningPage = pObj->getSdrPageFromSdrObject();
+
+            if(pOwningPage)
+            {
+                nPgNum = pOwningPage->GetPageNumber();
+                bIsMasterPage = pOwningPage->IsMasterPage();
+            }
         }
     }
 
@@ -2246,13 +2251,13 @@ IMPL_LINK( SlideshowImpl, ContextMenuHdl, void*, EMPTYARG )
         Reference< ::com::sun::star::frame::XFrame > xFrame( pViewFrame->GetFrame().GetFrameInterface() );
         if( xFrame.is() )
         {
-            pMenu->SetItemImage( CM_NEXT_SLIDE, GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:10617") ), sal_False, sal_False ) );
-            pMenu->SetItemImage( CM_PREV_SLIDE, GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:10618") ), sal_False, sal_False ) );
+            pMenu->SetItemImage( CM_NEXT_SLIDE, GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:10617") ), false, false ) );
+            pMenu->SetItemImage( CM_PREV_SLIDE, GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:10618") ), false, false ) );
 
             if( pPageMenu )
             {
-                pPageMenu->SetItemImage( CM_FIRST_SLIDE, GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:10616") ), sal_False, sal_False ) );
-                pPageMenu->SetItemImage( CM_LAST_SLIDE, GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:10619") ), sal_False, sal_False ) );
+                pPageMenu->SetItemImage( CM_FIRST_SLIDE, GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:10616") ), false, false ) );
+                pPageMenu->SetItemImage( CM_LAST_SLIDE, GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:10619") ), false, false ) );
             }
         }
     }
@@ -2263,7 +2268,7 @@ IMPL_LINK( SlideshowImpl, ContextMenuHdl, void*, EMPTYARG )
         const sal_Int32 nPageNumberCount = mpSlideController->getSlideNumberCount();
         if( nPageNumberCount <= 1 )
         {
-            pMenu->EnableItem( CM_GOTO, sal_False );
+            pMenu->EnableItem( CM_GOTO, false );
         }
         else
         {
@@ -2280,7 +2285,7 @@ IMPL_LINK( SlideshowImpl, ContextMenuHdl, void*, EMPTYARG )
             {
                 if( mpSlideController->isVisibleSlideNumber( nPageNumber ) )
                 {
-                    SdPage* pPage = mpDoc->GetSdPage((sal_uInt16)nPageNumber, PK_STANDARD);
+                    SdPage* pPage = mpDoc->GetSdPage((sal_uInt32)nPageNumber, PK_STANDARD);
                     if (pPage)
                     {
                         pPageMenu->InsertItem( (sal_uInt16)(CM_SLIDES + nPageNumber), pPage->GetName() );
@@ -2559,16 +2564,16 @@ void SlideshowImpl::createSlideList( bool bAll, bool bStartWithActualSlide, cons
                 if( rPresSlide.Len() )
                 {
                     sal_Int32 nSlide;
-                    sal_Bool bTakeNextAvailable = sal_False;
+                    bool bTakeNextAvailable = false;
 
                     for( nSlide = 0, nFirstSlide = -1; ( nSlide < nSlideCount ) && ( -1 == nFirstSlide ); nSlide++ )
                     {
-                        SdPage* pTestSlide = mpDoc->GetSdPage( (sal_uInt16)nSlide, PK_STANDARD );
+                        SdPage* pTestSlide = mpDoc->GetSdPage( (sal_uInt32)nSlide, PK_STANDARD );
 
                         if( pTestSlide->GetName() == rPresSlide )
                         {
                             if( pTestSlide->IsExcluded() )
-                                bTakeNextAvailable = sal_True;
+                                bTakeNextAvailable = true;
                             else
                                 nFirstSlide = nSlide;
                         }
@@ -2583,7 +2588,7 @@ void SlideshowImpl::createSlideList( bool bAll, bool bStartWithActualSlide, cons
 
             for( sal_Int32 i = 0; i < nSlideCount; i++ )
             {
-                bool bVisible = ( mpDoc->GetSdPage( (sal_uInt16)i, PK_STANDARD ) )->IsExcluded() ? false : true;
+                bool bVisible = ( mpDoc->GetSdPage( (sal_uInt32)i, PK_STANDARD ) )->IsExcluded() ? false : true;
                 if( bVisible || (eMode == AnimationSlideController::ALL) )
                     mpSlideController->insertSlideNumber( i, bVisible );
             }
@@ -2596,7 +2601,7 @@ void SlideshowImpl::createSlideList( bool bAll, bool bStartWithActualSlide, cons
             {
                 sal_Int32 nSlide;
                 for( nSlide = 0; nSlide < nSlideCount; nSlide++ )
-                    if( rPresSlide == mpDoc->GetSdPage( (sal_uInt16) nSlide, PK_STANDARD )->GetName() )
+                    if( rPresSlide == mpDoc->GetSdPage( (sal_uInt32) nSlide, PK_STANDARD )->GetName() )
                         break;
 
                 if( nSlide < nSlideCount )
@@ -2607,7 +2612,7 @@ void SlideshowImpl::createSlideList( bool bAll, bool bStartWithActualSlide, cons
             sal_Int32 nSlideIndex;
             for( pCustomSlide = pCustomShow->First(),nSlideIndex=0; pCustomSlide; pCustomSlide = pCustomShow->Next(), nSlideIndex++ )
             {
-                const sal_uInt16 nSdSlide = ( ( (SdPage*) pCustomSlide )->GetPageNum() - 1 ) / 2;
+                const sal_uInt32 nSdSlide = ( ( (SdPage*) pCustomSlide )->GetPageNumber() - 1 ) / 2;
 
                 if( !( mpDoc->GetSdPage( nSdSlide, PK_STANDARD ) )->IsExcluded())
                     mpSlideController->insertSlideNumber( nSdSlide );
@@ -2656,7 +2661,7 @@ void SlideshowImpl::hideChildWindows()
 
                 if( pViewFrame->GetChildWindow( nId ) )
                 {
-                    pViewFrame->SetChildWindow( nId, sal_False );
+                    pViewFrame->SetChildWindow( nId, false );
                     mnChildMask |= 1 << i;
                 }
             }
@@ -2678,7 +2683,7 @@ void SlideshowImpl::showChildWindows()
             for( sal_uLong i = 0, nCount = sizeof( aShowChilds ) / sizeof( FncGetChildWindowId ); i < nCount; i++ )
             {
                 if( mnChildMask & ( 1 << i ) )
-                    pViewFrame->SetChildWindow( ( *aShowChilds[ i ] )(), sal_True );
+                    pViewFrame->SetChildWindow( ( *aShowChilds[ i ] )(), true );
             }
         }
     }
@@ -2753,7 +2758,7 @@ void SlideshowImpl::setActiveXToolbarsVisible( sal_Bool bVisible )
     // actually it runs always in window mode in case of ActiveX control
     if ( !maPresSettings.mbFullScreen && mpDocSh && mpDocSh->GetMedium() )
     {
-        SFX_ITEMSET_ARG( mpDocSh->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_VIEWONLY, sal_False );
+        SFX_ITEMSET_ARG( mpDocSh->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_VIEWONLY );
         if ( pItem && pItem->GetValue() )
         {
             // this is a plugin/activex mode, no toolbars should be visible during slide show
@@ -2806,11 +2811,11 @@ void SAL_CALL SlideshowImpl::activate() throw (RuntimeException)
                 if( pDispatcher )
                 {
                     // filter all forbiden slots
-                    pDispatcher->SetSlotFilter( sal_True, sizeof(pAllowed) / sizeof(sal_uInt16), pAllowed );
+                    pDispatcher->SetSlotFilter( true, sizeof(pAllowed) / sizeof(sal_uInt16), pAllowed );
                 }
 
                 if( getBindings() )
-                    getBindings()->InvalidateAll(sal_True);
+                    getBindings()->InvalidateAll(true);
 
                 mpShowWindow->GrabFocus();
             }
@@ -2895,8 +2900,8 @@ void SlideshowImpl::receiveRequest(SfxRequest& rReq)
             const String aTarget( ((SfxStringItem&) pArgs->Get(SID_NAVIGATOR_OBJECT)).GetValue() );
 
             // is the bookmark a Slide?
-            sal_Bool        bIsMasterPage;
-            sal_uInt16      nPgNum = mpDoc->GetPageByName( aTarget, bIsMasterPage );
+            bool bIsMasterPage;
+            sal_uInt32 nPgNum = mpDoc->GetPageByName( aTarget, bIsMasterPage );
             SdrObject*  pObj   = NULL;
 
             if( nPgNum == SDRPAGE_NOTFOUND )
@@ -2905,7 +2910,14 @@ void SlideshowImpl::receiveRequest(SfxRequest& rReq)
                 pObj = mpDoc->GetObj( aTarget );
 
                 if( pObj )
-                    nPgNum = pObj->GetPage()->GetPageNum();
+                {
+                    SdrPage* pOwningPage = pObj->getSdrPageFromSdrObject();
+
+                    if(pOwningPage)
+                    {
+                        nPgNum = pOwningPage->GetPageNumber();
+                    }
+                }
             }
 
             if( nPgNum != SDRPAGE_NOTFOUND )

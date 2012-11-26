@@ -102,7 +102,6 @@ protected:
 
 
 public:
-
     SvxIMapDlgItem( sal_uInt16 nId, SvxIMapDlg& rIMapDlg, SfxBindings& rBindings );
 };
 

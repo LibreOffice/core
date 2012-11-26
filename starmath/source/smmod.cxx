@@ -41,7 +41,6 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/virdev.hxx>
 #include <unotools/syslocale.hxx>
-#include <tools/rtti.hxx>
 #include "smmod.hxx"
 #include "symbol.hxx"
 #include "config.hxx"
@@ -51,8 +50,6 @@
 #include "edit.hxx"
 #include "view.hxx"
 #include "starmath.hrc"
-
-TYPEINIT1( SmModule, SfxModule );
 
 #define SmModule
 #include "smslots.hxx"
@@ -268,13 +265,14 @@ void SmModule::_CreateVirtualDev() const
 void SmModule::ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg )
 {
     //invalidate all graphic and edit windows
-    const TypeId aSmViewTypeId = TYPE(SmViewShell);
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+
     while (pViewShell)
     {
-        if ((pViewShell->IsA(aSmViewTypeId)))
+        SmViewShell *pSmView = dynamic_cast< SmViewShell* >(pViewShell);
+
+        if(pSmView)
         {
-            SmViewShell *pSmView = (SmViewShell *) pViewShell;
             pSmView->GetGraphicWindow().ApplyColorConfigValues( rColorCfg );
             SmEditWindow *pEditWin = pSmView->GetEditWindow();
             if (pEditWin)

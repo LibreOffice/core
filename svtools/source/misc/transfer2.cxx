@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 #include <vos/mutex.hxx>
@@ -40,6 +38,7 @@
 #include <svtools/inetimg.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/transfer.hxx>
+#include <memory.h>
 
 // --------------
 // - Namespaces -

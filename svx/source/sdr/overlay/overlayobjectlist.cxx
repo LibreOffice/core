@@ -100,7 +100,8 @@ namespace sdr
                         aViewInformation2D,
                         rLogicPosition,
                         fLogicTolerance,
-                        false);
+                        false,
+                        0);
 
                     for(; aStart != maVector.end(); aStart++)
                     {

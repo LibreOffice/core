@@ -234,7 +234,8 @@ sal_Bool SvxJSearchOptionsPage::FillItemSet( SfxItemSet& )
 
     bModified = sal_False;
     SvtSearchOptions aOpt;
-    sal_Bool bNewVal, bChanged;
+    sal_Bool bNewVal;
+    bool bChanged;
 
     bNewVal  = aMatchCase.IsChecked();  //! treat as equal uppercase/lowercase
     bChanged = bNewVal != aMatchCase.GetSavedValue();

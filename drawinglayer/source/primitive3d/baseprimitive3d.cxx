@@ -47,11 +47,6 @@ namespace drawinglayer
         {
         }
 
-        bool BasePrimitive3D::operator==( const BasePrimitive3D& rPrimitive ) const
-        {
-            return (getPrimitive3DID() == rPrimitive.getPrimitive3DID());
-        }
-
         basegfx::B3DRange BasePrimitive3D::getB3DRange(const geometry::ViewInformation3D& rViewInformation) const
         {
             return getB3DRangeFromPrimitive3DSequence(get3DDecomposition(rViewInformation), rViewInformation);
@@ -157,69 +152,6 @@ namespace drawinglayer
             }
 
             return aRetval;
-        }
-
-        bool arePrimitive3DReferencesEqual(const Primitive3DReference& rxA, const Primitive3DReference& rxB)
-        {
-            const sal_Bool bAIs(rxA.is());
-
-            if(bAIs != rxB.is())
-            {
-                return false;
-            }
-
-            if(!bAIs)
-            {
-                return true;
-            }
-
-            const BasePrimitive3D* pA(dynamic_cast< const BasePrimitive3D* >(rxA.get()));
-            const BasePrimitive3D* pB(dynamic_cast< const BasePrimitive3D* >(rxB.get()));
-            const bool bAEqualZero(pA == 0L);
-
-            if(bAEqualZero != (pB == 0L))
-            {
-                return false;
-            }
-
-            if(bAEqualZero)
-            {
-                return false;
-            }
-
-            return (pA->operator==(*pB));
-        }
-
-        bool arePrimitive3DSequencesEqual(const Primitive3DSequence& rA, const Primitive3DSequence& rB)
-        {
-            const sal_Bool bAHasElements(rA.hasElements());
-
-            if(bAHasElements != rB.hasElements())
-            {
-                return false;
-            }
-
-            if(!bAHasElements)
-            {
-                return true;
-            }
-
-            const sal_Int32 nCount(rA.getLength());
-
-            if(nCount != rB.getLength())
-            {
-                return false;
-            }
-
-            for(sal_Int32 a(0L); a < nCount; a++)
-            {
-                if(!arePrimitive3DReferencesEqual(rA[a], rB[a]))
-                {
-                    return false;
-                }
-            }
-
-            return true;
         }
 
         // concatenate sequence

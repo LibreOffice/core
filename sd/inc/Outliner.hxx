@@ -163,7 +163,7 @@ public:
     /** Starts the text conversion (hangul/hanja or Chinese simplified/traditional)
     for the current viewshell */
     void StartConversion( sal_Int16 nSourceLanguage,  sal_Int16 nTargetLanguage,
-                const Font *pTargetFont, sal_Int32 nOptions, sal_Bool bIsInteractive );
+                const Font *pTargetFont, sal_Int32 nOptions, bool bIsInteractive );
 
     /** This is called internaly when text conversion is started.
         The position of current view mode/page/object/caret position
@@ -229,18 +229,18 @@ private:
     /// Number of objects on the current page / in the current selection.
     sal_Int32 mnObjectCount;
 
-    /** A <TRUE/> value indicates that the end of the find&replace or spell
+    /** A <true/> value indicates that the end of the find&replace or spell
         check has been reached.
     */
     bool mbEndOfSearch;
 
-    /** Set to <TRUE/> when an object has been prepared successfully for
+    /** Set to <true/> when an object has been prepared successfully for
         searching/spell checking.  This flag directs the internal iteration
         which stops when set to </sal_True>.
     */
     bool mbFoundObject;
 
-    /** When set to <TRUE/> this flag indicates that an error has occured
+    /** When set to <true/> this flag indicates that an error has occured
         that should terminate the iteration over the objects to search/spell
         check.
     */
@@ -260,7 +260,7 @@ private:
         selection.  This copy is necessary because during the search
         process the mark list is modified.
     */
-    ::std::vector<SdrObjectWeakRef> maMarkListCopy;
+    SdrObjectVector maMarkListCopy;
 
     /**  This flag inidcates that only the current view is to be used for
          searching and spelling.  Automatically switching to other view does
@@ -382,7 +382,7 @@ private:
 
     /** Detect whether the selection has changed.
         @return
-            Return <TRUE/> when the selection has been changed since the
+            Return <true/> when the selection has been changed since the
             last call to this method.
     */
     bool DetectSelectionChange (void);
@@ -437,7 +437,7 @@ private:
 
     /** Prepare to do spell checking on the current text object.  This
         includes putting it into edit mode.  Under certain conditions this
-        method sets <member>mbEndOfSearch</member> to <TRUE/>.
+        method sets <member>mbEndOfSearch</member> to <true/>.
     */
     void PrepareSpellCheck (void);
 
@@ -470,7 +470,7 @@ private:
 
     /** Switch on edit mode for the currently selected text object.
     */
-    void EnterEditMode (sal_Bool bGrabFocus=sal_True);
+    void EnterEditMode (bool bGrabFocus=true);
 
     /** Return the position at which a new search is started with respect to
         the search direction as specified by the argument.
@@ -530,9 +530,9 @@ private:
         When the outline view is active then this method is called
         after a wrap arround to continue at the beginning of the document.
         @return
-            Returns <TRUE/> to indicate that another call to this method is
+            Returns <true/> to indicate that another call to this method is
             required.  When all text objects have been processed then
-            <FALSE/> is returned.
+            <false/> is returned.
     */
     virtual sal_Bool SpellNextDocument (void);
 

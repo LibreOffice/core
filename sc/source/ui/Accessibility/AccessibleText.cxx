@@ -771,9 +771,11 @@ ScAccessibleCellTextData::~ScAccessibleCellTextData()
 
 void ScAccessibleCellTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if ( rHint.ISA( SfxSimpleHint ) )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if ( pSfxSimpleHint )
     {
-        sal_uLong nId = ((const SfxSimpleHint&)rHint).GetId();
+        sal_uLong nId = pSfxSimpleHint->GetId();
         if ( nId == SFX_HINT_DYING )
         {
             mpViewShell = NULL;                     // invalid now
@@ -1086,9 +1088,11 @@ ScAccessibleEditObjectTextData::~ScAccessibleEditObjectTextData()
 
 void ScAccessibleEditObjectTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if ( rHint.ISA( SfxSimpleHint ) )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if ( pSfxSimpleHint )
     {
-        sal_uLong nId = ((const SfxSimpleHint&)rHint).GetId();
+        sal_uLong nId = pSfxSimpleHint->GetId();
         if ( nId == SFX_HINT_DYING )
         {
             mpWindow = NULL;
@@ -1320,15 +1324,13 @@ void ScAccessibleEditLineTextData::StartEdit()
     mpEditView = NULL;
 
     // send HINT_BEGEDIT
-    SdrHint aHint(HINT_BEGEDIT);
-    GetBroadcaster().Broadcast( aHint );
+    GetBroadcaster().Broadcast(SdrBaseHint(HINT_BEGEDIT));
 }
 
 void ScAccessibleEditLineTextData::EndEdit()
 {
     // send HINT_ENDEDIT
-    SdrHint aHint(HINT_ENDEDIT);
-    GetBroadcaster().Broadcast( aHint );
+    GetBroadcaster().Broadcast(SdrBaseHint(HINT_ENDEDIT));
 
     ResetEditMode();
     mpEditView = NULL;
@@ -1357,9 +1359,11 @@ ScAccessiblePreviewCellTextData::~ScAccessiblePreviewCellTextData()
 
 void ScAccessiblePreviewCellTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if ( rHint.ISA( SfxSimpleHint ) )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if ( pSfxSimpleHint )
     {
-        sal_uLong nId = ((const SfxSimpleHint&)rHint).GetId();
+        sal_uLong nId = pSfxSimpleHint->GetId();
         if ( nId == SFX_HINT_DYING )
         {
             mpViewShell = NULL;                     // invalid now
@@ -1450,9 +1454,11 @@ ScAccessiblePreviewHeaderCellTextData::~ScAccessiblePreviewHeaderCellTextData()
 
 void ScAccessiblePreviewHeaderCellTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if ( rHint.ISA( SfxSimpleHint ) )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if ( pSfxSimpleHint )
     {
-        sal_uLong nId = ((const SfxSimpleHint&)rHint).GetId();
+        sal_uLong nId = pSfxSimpleHint->GetId();
         if ( nId == SFX_HINT_DYING )
         {
             mpViewShell = NULL;                     // invalid now
@@ -1593,9 +1599,11 @@ ScAccessibleTextData* ScAccessibleHeaderTextData::Clone() const
 
 void ScAccessibleHeaderTextData::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.ISA( SfxSimpleHint ) )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if ( pSfxSimpleHint )
     {
-        sal_uLong nId = ((const SfxSimpleHint&)rHint).GetId();
+        sal_uLong nId = pSfxSimpleHint->GetId();
         if ( nId == SFX_HINT_DYING )
         {
             mpViewShell = NULL;// invalid now
@@ -1710,9 +1718,11 @@ ScAccessibleTextData* ScAccessibleNoteTextData::Clone() const
 
 void ScAccessibleNoteTextData::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.ISA( SfxSimpleHint ) )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if ( pSfxSimpleHint )
     {
-        sal_uLong nId = ((const SfxSimpleHint&)rHint).GetId();
+        sal_uLong nId = pSfxSimpleHint->GetId();
         if ( nId == SFX_HINT_DYING )
         {
             mpViewShell = NULL;// invalid now
@@ -1857,9 +1867,11 @@ ScAccessibleCsvTextData::~ScAccessibleCsvTextData()
 
 void ScAccessibleCsvTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if ( rHint.ISA( SfxSimpleHint ) )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if ( pSfxSimpleHint )
     {
-        sal_uLong nId = ((const SfxSimpleHint&)rHint).GetId();
+        sal_uLong nId = pSfxSimpleHint->GetId();
         if( nId == SFX_HINT_DYING )
         {
             mpWindow = NULL;

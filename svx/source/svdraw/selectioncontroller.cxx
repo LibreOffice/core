@@ -29,7 +29,6 @@
 
 namespace sdr
 {
-
 bool SelectionController::onKeyInput(const KeyEvent& /*rKEvt*/, Window* /*pWin*/)
 {
     return false;
@@ -106,5 +105,4 @@ bool SelectionController::ApplyFormatPaintBrush( SfxItemSet& /*rFormatSet*/, boo
 {
     return false;
 }
-
 }

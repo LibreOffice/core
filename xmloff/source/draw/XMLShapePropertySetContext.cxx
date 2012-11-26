@@ -42,8 +42,6 @@ using namespace ::com::sun::star::uno;
 
 //////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1( XMLShapePropertySetContext, SvXMLPropertySetContext );
-
 XMLShapePropertySetContext::XMLShapePropertySetContext(
                  SvXMLImport& rImport, sal_uInt16 nPrfx,
                  const OUString& rLName,

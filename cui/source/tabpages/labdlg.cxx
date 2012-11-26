@@ -40,6 +40,7 @@
 
 #include "labdlg.hrc"
 #include "labdlg.hxx"
+#include <svx/sdangitm.hxx>
 
 // define ----------------------------------------------------------------
 
@@ -182,7 +183,7 @@ sal_Bool SvxCaptionTabPage::FillItemSet( SfxItemSet&  _rOutAttrs)
     if( aMF_ABSTAND.IsValueModified() )
     {
         eUnit = pPool->GetMetric( GetWhich( SDRATTR_CAPTIONGAP ) );
-        _rOutAttrs.Put( SdrCaptionGapItem( GetCoreValue(aMF_ABSTAND, eUnit ) ) );
+        _rOutAttrs.Put( SdrMetricItem(SDRATTR_CAPTIONGAP, GetCoreValue(aMF_ABSTAND, eUnit ) ) );
     }
 
     // Sonderbehandlung!!! XXX
@@ -198,7 +199,7 @@ sal_Bool SvxCaptionTabPage::FillItemSet( SfxItemSet&  _rOutAttrs)
     _rOutAttrs.Put( SdrCaptionEscDirItem( (SdrCaptionEscDir)nEscDir ) );
 
     bEscRel = aLB_ANSATZ_REL.IsVisible();
-    _rOutAttrs.Put( SdrCaptionEscIsRelItem( bEscRel ) );
+    _rOutAttrs.Put( SdrYesNoItem(SDRATTR_CAPTIONESCISREL, bEscRel ) );
 
     if( bEscRel )
     {
@@ -210,26 +211,26 @@ sal_Bool SvxCaptionTabPage::FillItemSet( SfxItemSet&  _rOutAttrs)
             case AT_MITTE:  nVal=5000;break;
             case AT_UNTEN:  nVal=10000;break;
         }
-        _rOutAttrs.Put( SdrCaptionEscRelItem( nVal ) );
+        _rOutAttrs.Put( SfxInt32Item(SDRATTR_CAPTIONESCREL, nVal ) );
     }
     else
     {
         if( aMF_ANSATZ.IsValueModified() )
         {
             eUnit = pPool->GetMetric( GetWhich( SDRATTR_CAPTIONESCABS ) );
-            _rOutAttrs.Put( SdrCaptionEscAbsItem( GetCoreValue(aMF_ANSATZ, eUnit ) ) );
+            _rOutAttrs.Put( SdrMetricItem(SDRATTR_CAPTIONESCABS, GetCoreValue(aMF_ANSATZ, eUnit ) ) );
         }
     }
 
     bFitLineLen = aCB_LAENGE.IsChecked();
-    _rOutAttrs.Put( SdrCaptionFitLineLenItem( bFitLineLen ) );
+    _rOutAttrs.Put( SdrYesNoItem( bFitLineLen ) );
 
     if( ! bFitLineLen )
     {
         if( aMF_LAENGE.IsValueModified() )
         {
             eUnit = pPool->GetMetric( GetWhich( SDRATTR_CAPTIONLINELEN ) );
-            _rOutAttrs.Put( SdrCaptionLineLenItem( GetCoreValue(aMF_LAENGE, eUnit ) ) );
+            _rOutAttrs.Put( SdrMetricItem(SDRATTR_CAPTIONLINELEN, GetCoreValue(aMF_LAENGE, eUnit ) ) );
         }
     }
 
@@ -268,30 +269,30 @@ void SvxCaptionTabPage::Reset( const SfxItemSet&  )
 
     //------- Winkel ----------
     nWhich = GetWhich( SDRATTR_CAPTIONANGLE );
-    nFixedAngle = ( ( const SdrCaptionAngleItem& ) rOutAttrs.Get( nWhich ) ).GetValue();
+    nFixedAngle = ( ( const SdrAngleItem& ) rOutAttrs.Get( nWhich ) ).GetValue();
 
     //------- absolute Ansatzentfernung ----------
     nWhich = GetWhich( SDRATTR_CAPTIONESCABS );
     eUnit = pPool->GetMetric( nWhich );
-    nEscAbs = ( ( const SdrCaptionEscAbsItem& ) rOutAttrs.Get( nWhich ) ).GetValue();
+    nEscAbs = ( ( const SdrMetricItem& ) rOutAttrs.Get( nWhich ) ).GetValue();
     SetMetricValue( aMF_ANSATZ, nEscAbs, eUnit );
     nEscAbs = static_cast<long>(aMF_ANSATZ.GetValue());
 
     //------- relative Ansatzentfernung ----------
     nWhich = GetWhich( SDRATTR_CAPTIONESCREL );
-    nEscRel = (long)( ( const SdrCaptionEscRelItem& ) rOutAttrs.Get( nWhich ) ).GetValue();
+    nEscRel = (long)( ( const SfxInt32Item& ) rOutAttrs.Get( nWhich ) ).GetValue();
 
     //------- Linienlaenge ----------
     nWhich = GetWhich( SDRATTR_CAPTIONLINELEN );
     eUnit = pPool->GetMetric( nWhich );
-    nLineLen = ( ( const SdrCaptionLineLenItem& ) rOutAttrs.Get( nWhich ) ).GetValue();
+    nLineLen = ( ( const SdrMetricItem& ) rOutAttrs.Get( nWhich ) ).GetValue();
     SetMetricValue( aMF_LAENGE, nLineLen, eUnit );
     nLineLen = static_cast<long>(aMF_LAENGE.GetValue());
 
     //------- Abstand zur Box ----------
     nWhich = GetWhich( SDRATTR_CAPTIONGAP );
     eUnit = pPool->GetMetric( nWhich );
-    nGap = ( ( const SdrCaptionGapItem& ) rOutAttrs.Get( nWhich ) ).GetValue();
+    nGap = ( ( const SdrMetricItem& ) rOutAttrs.Get( nWhich ) ).GetValue();
     SetMetricValue( aMF_ABSTAND, nGap, eUnit );
     nGap = static_cast<long>(aMF_ABSTAND.GetValue());
 

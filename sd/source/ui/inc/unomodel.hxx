@@ -93,7 +93,7 @@ private:
     SdDrawDocument* mpDoc;
     bool mbDisposed;
 
-    SdPage* InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate = sal_False ) throw();
+    SdPage* InsertSdPage( sal_uInt32 nPage, sal_Bool bDuplicate = sal_False ) throw();
 
     const sal_Bool mbImpressDoc;
     bool mbClipBoard;
@@ -122,6 +122,11 @@ private:
     rtl::OUString   maBuildId;
 
     void initializeDocument();
+
+protected:
+    /** abstract SdrModel provider */
+    virtual SdrModel* getSdrModel() const;
+
 public:
     SdXImpressDocument( ::sd::DrawDocShell* pShell, bool bClipBoard = false ) throw();
     SdXImpressDocument( SdDrawDocument* pDoc, bool bClipBoard = false ) throw();

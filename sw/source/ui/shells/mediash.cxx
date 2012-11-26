@@ -101,9 +101,9 @@ void SwMediaShell::ExecMedia(SfxRequest &rReq)
     {
         const SfxItemSet*   pArgs = rReq.GetArgs();
         sal_uInt16              nSlotId = rReq.GetSlot();
-        sal_Bool                bChanged = pSdrView->GetModel()->IsChanged();
+        bool bChanged = pSdrView->getSdrModelFromSdrView().IsChanged();
 
-        pSdrView->GetModel()->SetChanged( sal_False );
+        pSdrView->getSdrModelFromSdrView().SetChanged(false);
 
         switch( nSlotId )
         {
@@ -133,20 +133,18 @@ void SwMediaShell::ExecMedia(SfxRequest &rReq)
 
                     if( pItem )
                     {
-                        SdrMarkList* pMarkList = new SdrMarkList( pSdrView->GetMarkedObjectList() );
+                        const SdrObjectVector rSdrObjectVector = pSdrView->getSelectedSdrObjectVectorFromSdrMarkView();
 
-                        if( 1 == pMarkList->GetMarkCount() )
+                        if( 1 == rSdrObjectVector.size() )
                         {
-                            SdrObject* pObj = pMarkList->GetMark( 0 )->GetMarkedSdrObj();
+                            const SdrObject* pObj = rSdrObjectVector[0];
 
-                            if( pObj && pObj->ISA( SdrMediaObj ) )
+                            if( pObj && dynamic_cast< const SdrMediaObj* >(pObj) )
                             {
                                 static_cast< sdr::contact::ViewContactOfSdrMediaObj& >( pObj->GetViewContact() ).executeMediaItem(
                                     static_cast< const ::avmedia::MediaItem& >( *pItem ) );
                             }
                         }
-
-                        delete pMarkList;
                     }
                 }
             }
@@ -156,10 +154,10 @@ void SwMediaShell::ExecMedia(SfxRequest &rReq)
             break;
         }
 
-        if( pSdrView->GetModel()->IsChanged() )
+        if( pSdrView->getSdrModelFromSdrView().IsChanged() )
             GetShell().SetModified();
         else if( bChanged )
-            pSdrView->GetModel()->SetChanged(sal_True);
+            pSdrView->getSdrModelFromSdrView().SetChanged(true);
     }
 }
 
@@ -180,13 +178,13 @@ void SwMediaShell::GetMediaState(SfxItemSet &rSet)
 
             if( pView )
             {
-                SdrMarkList* pMarkList = new SdrMarkList( pView->GetMarkedObjectList() );
+                const SdrObjectVector rSdrObjectVector = pView->getSelectedSdrObjectVectorFromSdrMarkView();
 
-                if( 1 == pMarkList->GetMarkCount() )
+                if( 1 == rSdrObjectVector.size() )
                 {
-                    SdrObject* pObj = pMarkList->GetMark( 0 )->GetMarkedSdrObj();
+                    const SdrObject* pObj = rSdrObjectVector[0];
 
-                    if( pObj && pObj->ISA( SdrMediaObj ) )
+                    if( pObj && dynamic_cast< const SdrMediaObj* >(pObj) )
                     {
                         ::avmedia::MediaItem aItem( SID_AVMEDIA_TOOLBOX );
 
@@ -198,8 +196,6 @@ void SwMediaShell::GetMediaState(SfxItemSet &rSet)
 
                 if( bDisable )
                     rSet.DisableItem( SID_AVMEDIA_TOOLBOX );
-
-                delete pMarkList;
             }
         }
 

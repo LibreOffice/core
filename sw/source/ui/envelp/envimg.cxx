@@ -57,9 +57,6 @@ using namespace utl;
 using namespace rtl;
 using namespace ::com::sun::star::uno;
 
-
-TYPEINIT1_AUTOFACTORY( SwEnvItem, SfxPoolItem );
-
 // --------------------------------------------------------------------------
 SW_DLLPUBLIC String MakeSender()
 {
@@ -104,6 +101,8 @@ SW_DLLPUBLIC String MakeSender()
     return sRet;
 }
 // --------------------------------------------------------------------------
+IMPL_POOLITEM_FACTORY(SwEnvItem)
+
 SwEnvItem::SwEnvItem() :
     SfxPoolItem(FN_ENVELOP)
 {

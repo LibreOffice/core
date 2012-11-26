@@ -265,11 +265,20 @@ void DbGridColumn::impl_toggleScriptManager_nothrow( bool _bAttach )
 //------------------------------------------------------------------------------
 void DbGridColumn::UpdateFromField(const DbGridRow* pRow, const Reference< XNumberFormatter >& xFormatter)
 {
-    if (m_pCell && m_pCell->ISA(FmXFilterCell))
-        PTR_CAST(FmXFilterCell, m_pCell)->Update();
+    FmXFilterCell* pFmXFilterCell = dynamic_cast< FmXFilterCell* >(m_pCell);
+
+    if (pFmXFilterCell)
+    {
+        pFmXFilterCell->Update();
+    }
     else if (pRow && pRow->IsValid() && m_nFieldPos >= 0 && m_pCell && pRow->HasField(m_nFieldPos))
     {
-        PTR_CAST(FmXDataCell, m_pCell)->UpdateFromField( pRow->GetField( m_nFieldPos ).getColumn(), xFormatter );
+        FmXDataCell* pFmXDataCell = dynamic_cast< FmXDataCell* >(m_pCell);
+
+        if(pFmXDataCell)
+        {
+            pFmXDataCell->UpdateFromField( pRow->GetField( m_nFieldPos ).getColumn(), xFormatter );
+        }
     }
 }
 
@@ -283,7 +292,7 @@ sal_Bool DbGridColumn::Commit()
         bResult = m_pCell->Commit();
 
         // store the data into the model
-        FmXDataCell* pDataCell = PTR_CAST(FmXDataCell, m_pCell);
+        FmXDataCell* pDataCell = dynamic_cast< FmXDataCell* >(m_pCell);
         if (bResult && pDataCell)
         {
             Reference< ::com::sun::star::form::XBoundComponent >  xComp(m_xModel, UNO_QUERY);
@@ -415,7 +424,8 @@ void DbGridColumn::setLock(sal_Bool _bLock)
 String DbGridColumn::GetCellText(const DbGridRow* pRow, const Reference< XNumberFormatter >& xFormatter) const
 {
     String aText;
-    if (m_pCell && m_pCell->ISA(FmXFilterCell))
+
+    if (dynamic_cast< FmXFilterCell* >(m_pCell))
         return aText;
 
     if (!pRow || !pRow->IsValid())
@@ -433,7 +443,7 @@ String DbGridColumn::GetCellText(const Reference< ::com::sun::star::sdb::XColumn
     String aText;
     if (xField.is())
     {
-        FmXTextCell* pTextCell = PTR_CAST(FmXTextCell, m_pCell);
+        FmXTextCell* pTextCell = dynamic_cast< FmXTextCell* >(m_pCell);
         if (pTextCell)
             aText = pTextCell->GetText(xField, xFormatter);
         else if (m_bObject)
@@ -463,7 +473,7 @@ void DbGridColumn::Paint(OutputDevice& rDev,
     bool bEnabled = ( rDev.GetOutDevType() != OUTDEV_WINDOW )
                 ||  ( static_cast< Window& >( rDev ).IsEnabled() );
 
-    FmXDataCell* pDataCell = PTR_CAST(FmXDataCell, m_pCell);
+    FmXDataCell* pDataCell = dynamic_cast< FmXDataCell* >(m_pCell);
     if (pDataCell)
     {
         if (!pRow || !pRow->IsValid())
@@ -518,7 +528,7 @@ void DbGridColumn::Paint(OutputDevice& rDev,
             rDev.DrawText(rRect, OBJECTTEXT, nStyle);
         }
     }
-    else if ( m_pCell->ISA( FmXFilterCell ) )
+    else if ( dynamic_cast< FmXFilterCell* >(m_pCell) )
         static_cast< FmXFilterCell* >( m_pCell )->PaintCell( rDev, rRect );
 }
 
@@ -532,20 +542,6 @@ void DbGridColumn::ImplInitWindow( Window& rParent, const InitWindowFacet _eInit
 //==============================================================================
 //= cell controls
 //==============================================================================
-TYPEINIT0( DbCellControl )
-TYPEINIT1( DbLimitedLengthField, DbCellControl )
-TYPEINIT1( DbTextField, DbLimitedLengthField )
-TYPEINIT1( DbFormattedField, DbLimitedLengthField )
-TYPEINIT1( DbCheckBox, DbCellControl )
-TYPEINIT1( DbComboBox, DbCellControl )
-TYPEINIT1( DbListBox, DbCellControl )
-TYPEINIT1( DbPatternField, DbCellControl )
-TYPEINIT1( DbSpinField, DbCellControl )
-TYPEINIT1( DbDateField, DbSpinField )
-TYPEINIT1( DbTimeField, DbSpinField )
-TYPEINIT1( DbCurrencyField, DbSpinField )
-TYPEINIT1( DbNumericField, DbSpinField )
-TYPEINIT1( DbFilterField, DbCellControl )
 
 //------------------------------------------------------------------------------
 DbCellControl::DbCellControl( DbGridColumn& _rColumn, sal_Bool /*_bText*/ )
@@ -1256,14 +1252,11 @@ void DbTextField::implSetEffectiveMaxTextLen( sal_Int16 _nMaxLen )
 //==============================================================================
 //= DbFormattedField
 //==============================================================================
-DBG_NAME(DbFormattedField);
 //------------------------------------------------------------------------------
 DbFormattedField::DbFormattedField(DbGridColumn& _rColumn)
     :DbLimitedLengthField(_rColumn)
     ,m_nKeyType(::com::sun::star::util::NumberFormat::UNDEFINED)
 {
-    DBG_CTOR(DbFormattedField,NULL);
-
     // if our model's format key changes we want to propagate the new value to our windows
     doPropertyListening( FM_PROP_FORMATKEY );
 }
@@ -1271,7 +1264,6 @@ DbFormattedField::DbFormattedField(DbGridColumn& _rColumn)
 //------------------------------------------------------------------------------
 DbFormattedField::~DbFormattedField()
 {
-    DBG_DTOR(DbFormattedField,NULL);
 }
 
 //------------------------------------------------------------------------------
@@ -2743,7 +2735,6 @@ sal_Bool DbListBox::commitControl()
 }
 
 
-DBG_NAME(DbFilterField);
 /*************************************************************************/
 DbFilterField::DbFilterField(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,DbGridColumn& _rColumn)
               :DbCellControl(_rColumn)
@@ -2753,8 +2744,6 @@ DbFilterField::DbFilterField(const Reference< ::com::sun::star::lang::XMultiServ
               ,m_bFilterListFilled(sal_False)
               ,m_bBound(sal_False)
 {
-    DBG_CTOR(DbFilterField,NULL);
-
     setAlignedController( sal_False );
 }
 
@@ -2763,8 +2752,6 @@ DbFilterField::~DbFilterField()
 {
     if (m_nControlClass == ::com::sun::star::form::FormComponentType::CHECKBOX)
         ((CheckBoxControl*)m_pWindow)->SetClickHdl( Link() );
-
-    DBG_DTOR(DbFilterField,NULL);
 }
 
 //------------------------------------------------------------------------------
@@ -3216,10 +3203,7 @@ IMPL_LINK( DbFilterField, OnClick, void*, EMPTYARG )
 }
 
 /*************************************************************************/
-TYPEINIT0(FmXGridCell);
 
-
-DBG_NAME(FmXGridCell);
 //-----------------------------------------------------------------------------
 FmXGridCell::FmXGridCell( DbGridColumn* pColumn, DbCellControl* _pControl )
             :OComponentHelper(m_aMutex)
@@ -3231,7 +3215,6 @@ FmXGridCell::FmXGridCell( DbGridColumn* pColumn, DbCellControl* _pControl )
             ,m_aMouseListeners( m_aMutex )
             ,m_aMouseMotionListeners( m_aMutex )
 {
-    DBG_CTOR(FmXGridCell,NULL);
 }
 
 //-----------------------------------------------------------------------------
@@ -3258,8 +3241,6 @@ FmXGridCell::~FmXGridCell()
         acquire();
         dispose();
     }
-
-    DBG_DTOR(FmXGridCell,NULL);
 }
 
 //------------------------------------------------------------------
@@ -3583,7 +3564,6 @@ void FmXGridCell::onWindowEvent( const sal_uIntPtr _nEventId, const Window& _rWi
 }
 
 /*************************************************************************/
-TYPEINIT1(FmXDataCell, FmXGridCell);
 //------------------------------------------------------------------------------
 void FmXDataCell::PaintFieldToCell(OutputDevice& rDev, const Rectangle& rRect,
                         const Reference< ::com::sun::star::sdb::XColumn >& _rxField,
@@ -3601,7 +3581,6 @@ void FmXDataCell::UpdateFromColumn()
 }
 
 /*************************************************************************/
-TYPEINIT1(FmXTextCell, FmXDataCell);
 
 FmXTextCell::FmXTextCell( DbGridColumn* pColumn, DbCellControl& _rControl )
     :FmXDataCell( pColumn, _rControl )
@@ -3653,7 +3632,6 @@ void FmXTextCell::PaintFieldToCell(OutputDevice& rDev,
 
 /*************************************************************************/
 
-DBG_NAME(FmXEditCell);
 //------------------------------------------------------------------------------
 FmXEditCell::FmXEditCell( DbGridColumn* pColumn, DbCellControl& _rControl )
             :FmXTextCell( pColumn, _rControl )
@@ -3662,9 +3640,7 @@ FmXEditCell::FmXEditCell( DbGridColumn* pColumn, DbCellControl& _rControl )
             ,m_pEditImplementation( NULL )
             ,m_bOwnEditImplementation( false )
 {
-    DBG_CTOR(FmXEditCell,NULL);
-
-    DbTextField* pTextField = PTR_CAST( DbTextField, &_rControl );
+    DbTextField* pTextField = dynamic_cast< DbTextField* >(&_rControl );
     if ( pTextField )
     {
 
@@ -3687,9 +3663,6 @@ FmXEditCell::~FmXEditCell()
         acquire();
         dispose();
     }
-
-
-    DBG_DTOR(FmXEditCell,NULL);
 }
 
 // OComponentHelper
@@ -3920,7 +3893,6 @@ void FmXEditCell::onWindowEvent( const sal_uIntPtr _nEventId, const Window& _rWi
 }
 
 /*************************************************************************/
-DBG_NAME(FmXCheckBoxCell);
 //------------------------------------------------------------------------------
 FmXCheckBoxCell::FmXCheckBoxCell( DbGridColumn* pColumn, DbCellControl& _rControl )
                 :FmXDataCell( pColumn, _rControl )
@@ -3928,7 +3900,6 @@ FmXCheckBoxCell::FmXCheckBoxCell( DbGridColumn* pColumn, DbCellControl& _rContro
                 ,m_aActionListeners( m_aMutex )
                 ,m_pBox( & static_cast< CheckBoxControl& >( _rControl.GetWindow() ).GetBox() )
 {
-    DBG_CTOR(FmXCheckBoxCell,NULL);
 }
 
 //------------------------------------------------------------------
@@ -3939,8 +3910,6 @@ FmXCheckBoxCell::~FmXCheckBoxCell()
         acquire();
         dispose();
     }
-
-    DBG_DTOR(FmXCheckBoxCell,NULL);
 }
 
 // OComponentHelper
@@ -4100,7 +4069,6 @@ void FmXCheckBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const Window& 
 
 /*************************************************************************/
 
-DBG_NAME(FmXListBoxCell);
 //------------------------------------------------------------------------------
 FmXListBoxCell::FmXListBoxCell(DbGridColumn* pColumn, DbCellControl& _rControl)
                :FmXTextCell( pColumn, _rControl )
@@ -4108,8 +4076,6 @@ FmXListBoxCell::FmXListBoxCell(DbGridColumn* pColumn, DbCellControl& _rControl)
                ,m_aActionListeners(m_aMutex)
                ,m_pBox( &static_cast< ListBox& >( _rControl.GetWindow() ) )
 {
-    DBG_CTOR(FmXListBoxCell,NULL);
-
     m_pBox->SetDoubleClickHdl( LINK( this, FmXListBoxCell, OnDoubleClick ) );
 }
 
@@ -4121,8 +4087,6 @@ FmXListBoxCell::~FmXListBoxCell()
         acquire();
         dispose();
     }
-
-    DBG_DTOR(FmXListBoxCell,NULL);
 }
 
 // OComponentHelper
@@ -4443,8 +4407,6 @@ IMPL_LINK( FmXListBoxCell, OnDoubleClick, void*, EMPTYARG )
 
 /*************************************************************************/
 
-DBG_NAME( FmXComboBoxCell );
-
 //------------------------------------------------------------------------------
 FmXComboBoxCell::FmXComboBoxCell( DbGridColumn* pColumn, DbCellControl& _rControl )
     :FmXTextCell( pColumn, _rControl )
@@ -4452,7 +4414,6 @@ FmXComboBoxCell::FmXComboBoxCell( DbGridColumn* pColumn, DbCellControl& _rContro
     ,m_aActionListeners( m_aMutex )
     ,m_pComboBox( &static_cast< ComboBox& >( _rControl.GetWindow() ) )
 {
-    DBG_CTOR( FmXComboBoxCell, NULL );
 }
 
 //------------------------------------------------------------------------------
@@ -4463,8 +4424,6 @@ FmXComboBoxCell::~FmXComboBoxCell()
         acquire();
         dispose();
     }
-
-    DBG_DTOR( FmXComboBoxCell, NULL );
 }
 
 //-----------------------------------------------------------------------------
@@ -4639,7 +4598,6 @@ void FmXComboBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const Window& 
 }
 
 /*************************************************************************/
-TYPEINIT1(FmXFilterCell, FmXGridCell);
 
 //------------------------------------------------------------------------------
 Reference< XInterface >  FmXFilterCell_CreateInstance(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& /*_rxFactory*/)
@@ -4647,16 +4605,14 @@ Reference< XInterface >  FmXFilterCell_CreateInstance(const Reference< ::com::su
     return *new FmXFilterCell();
 }
 
-DBG_NAME(FmXFilterCell);
 //------------------------------------------------------------------------------
 FmXFilterCell::FmXFilterCell(DbGridColumn* pColumn, DbCellControl* pControl )
               :FmXGridCell( pColumn, pControl )
               ,m_aTextListeners(m_aMutex)
 {
-    DBG_CTOR(FmXFilterCell,NULL);
-
-    DBG_ASSERT( m_pCellControl->ISA( DbFilterField ), "FmXFilterCell::FmXFilterCell: invalid cell control!" );
-    static_cast< DbFilterField* >( m_pCellControl )->SetCommitHdl( LINK( this, FmXFilterCell, OnCommit ) );
+    DbFilterField* pDbFilterField = dynamic_cast< DbFilterField* >(m_pCellControl);
+    DBG_ASSERT( pDbFilterField, "FmXFilterCell::FmXFilterCell: invalid cell control!" );
+    pDbFilterField->SetCommitHdl( LINK( this, FmXFilterCell, OnCommit ) );
 }
 
 //------------------------------------------------------------------
@@ -4667,8 +4623,6 @@ FmXFilterCell::~FmXFilterCell()
         acquire();
         dispose();
     }
-
-    DBG_DTOR(FmXFilterCell,NULL);
 }
 
 // XUnoTunnel

@@ -57,7 +57,7 @@ namespace
             {
                 // the parent scene of rCandidate is a in-between scene, call recursively and collect
                 // the in-between scene's object transformation part in o_rInBetweenObjectTransform
-                const basegfx::B3DHomMatrix& rSceneParentTransform = pSceneParent->GetE3dScene().GetTransform();
+                const basegfx::B3DHomMatrix& rSceneParentTransform = pSceneParent->GetE3dScene().GetB3DTransform();
                 o_rInBetweenObjectTransform = rSceneParentTransform * o_rInBetweenObjectTransform;
                 return tryToFindVCOfE3DScene(*pSceneParent, o_rInBetweenObjectTransform);
             }
@@ -149,17 +149,27 @@ namespace sdr
 
         drawinglayer::primitive3d::Primitive3DSequence ViewContactOfE3d::getVIP3DSWithoutObjectTransform() const
         {
-            // local up-to-date checks. Create new list and compare.
-            drawinglayer::primitive3d::Primitive3DSequence xNew(createViewIndependentPrimitive3DSequence());
-
-            if(!drawinglayer::primitive3d::arePrimitive3DSequencesEqual(mxViewIndependentPrimitive3DSequence, xNew))
+            if(!mxViewIndependentPrimitive3DSequence.hasElements())
             {
-                // has changed, copy content
-                const_cast< ViewContactOfE3d* >(this)->mxViewIndependentPrimitive3DSequence = xNew;
+                // create primitive list on demand
+                const_cast< ViewContactOfE3d* >(this)->mxViewIndependentPrimitive3DSequence = createViewIndependentPrimitive3DSequence();
             }
 
             // return current Primitive2DSequence
             return mxViewIndependentPrimitive3DSequence;
+        }
+
+        // React on changes of the object of this ViewContact
+        void ViewContactOfE3d::ActionChanged()
+        {
+            // call parent
+            ViewContactOfSdrObj::ActionChanged();
+
+            // reset local buffered primitive sequence (always)
+            if(mxViewIndependentPrimitive3DSequence.hasElements())
+            {
+                mxViewIndependentPrimitive3DSequence.realloc(0);
+            }
         }
 
         drawinglayer::primitive3d::Primitive3DSequence ViewContactOfE3d::getViewIndependentPrimitive3DSequence() const
@@ -170,7 +180,7 @@ namespace sdr
             if(xRetval.hasElements())
             {
                 // add object transform if it's used
-                const basegfx::B3DHomMatrix& rObjectTransform(GetE3dObject().GetTransform());
+                const basegfx::B3DHomMatrix& rObjectTransform(GetE3dObject().GetB3DTransform());
 
                 if(!rObjectTransform.isIdentity())
                 {

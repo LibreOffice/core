@@ -55,7 +55,7 @@ using namespace ::com::sun::star::uno;
 
 const int SdDocPreviewWin::FRAME = 4;
 
-void SdDocPreviewWin::SetObjectShell( SfxObjectShell* pObj, sal_uInt16 nShowPage )
+void SdDocPreviewWin::SetObjectShell( SfxObjectShell* pObj, sal_uInt32 nShowPage )
 {
     mpObj = pObj;
     mnShowPage = nShowPage;
@@ -68,7 +68,7 @@ void SdDocPreviewWin::SetObjectShell( SfxObjectShell* pObj, sal_uInt16 nShowPage
 }
 
 SdDocPreviewWin::SdDocPreviewWin( Window* pParent, const ResId& rResId )
-: Control(pParent, rResId), pMetaFile( 0 ), bInEffect(sal_False), mpObj(NULL), mnShowPage(0)
+: Control(pParent, rResId), pMetaFile( 0 ), bInEffect(false), mpObj(NULL), mnShowPage(0)
 {
     SetBorderStyle( WINDOW_BORDER_MONO );
     svtools::ColorConfig aColorConfig;
@@ -141,8 +141,8 @@ void SdDocPreviewWin::Paint( const Rectangle& rRect )
         SvtAccessibilityOptions aAccOptions;
         bool bUseContrast = aAccOptions.GetIsForPagePreviews() && Application::GetSettings().GetStyleSettings().GetHighContrastMode();
         SetDrawMode( bUseContrast
-            ? ::sd::ViewShell::OUTPUT_DRAWMODE_CONTRAST
-            : ::sd::ViewShell::OUTPUT_DRAWMODE_COLOR );
+            ? SD_OUTPUT_DRAWMODE_CONTRAST
+            : SD_OUTPUT_DRAWMODE_COLOR );
 
         ImpPaint( pMetaFile, (VirtualDevice*)this );
     }
@@ -198,7 +198,7 @@ long SdDocPreviewWin::Notify( NotifyEvent& rNEvt )
 
 void SdDocPreviewWin::updateViewSettings()
 {
-    ::sd::DrawDocShell* pDocShell = PTR_CAST(::sd::DrawDocShell,mpObj);
+    ::sd::DrawDocShell* pDocShell = dynamic_cast< ::sd::DrawDocShell* >(mpObj);
     SdDrawDocument* pDoc = pDocShell?pDocShell->GetDoc():NULL;
 
     SvtAccessibilityOptions aAccOptions;
@@ -228,28 +228,26 @@ void SdDocPreviewWin::updateViewSettings()
 
             VirtualDevice       aVDev;
 
-            const Fraction      aFrac( pDoc->GetScaleFraction() );
-            const MapMode       aMap( pDoc->GetScaleUnit(), Point(), aFrac, aFrac );
+            const Fraction      aFrac( pDoc->GetExchangeObjectScale() );
+            const MapMode       aMap( pDoc->GetExchangeObjectUnit(), Point(), aFrac, aFrac );
 
             aVDev.SetMapMode( aMap );
 
             // #109058# Disable output, as we only want to record a metafile
-            aVDev.EnableOutput( sal_False );
+            aVDev.EnableOutput( false );
 
             pMtf->Record( &aVDev );
 
             ::sd::DrawView* pView = new ::sd::DrawView(pDocShell, this, NULL);
 
+            pView->SetBordVisible( false );
+            pView->SetPageVisible( false );
+            pView->ShowSdrPage( *pPage );
 
-            const Size aSize( pPage->GetSize() );
-
-            pView->SetBordVisible( sal_False );
-            pView->SetPageVisible( sal_False );
-            pView->ShowSdrPage( pPage );
-
-            const Point aNewOrg( pPage->GetLftBorder(), pPage->GetUppBorder() );
-            const Size aNewSize( aSize.Width() - pPage->GetLftBorder() - pPage->GetRgtBorder(),
-                                  aSize.Height() - pPage->GetUppBorder() - pPage->GetLwrBorder() );
+            const Point aNewOrg( pPage->GetLeftPageBorder(), pPage->GetTopPageBorder() );
+            const Size aSize(basegfx::fround(pPage->GetPageScale().getX()), basegfx::fround(pPage->GetPageScale().getY()));
+            const Size aNewSize( aSize.Width() - pPage->GetLeftPageBorder() - pPage->GetRightPageBorder(),
+                                  aSize.Height() - pPage->GetTopPageBorder() - pPage->GetBottomPageBorder() );
             const Rectangle aClipRect( aNewOrg, aNewSize );
             MapMode         aVMap( aMap );
 
@@ -285,7 +283,9 @@ void SdDocPreviewWin::updateViewSettings()
 
 void SdDocPreviewWin::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
-    if( rHint.ISA( SfxSimpleHint ) && ( (SfxSimpleHint&) rHint ).GetId() == SFX_HINT_COLORS_CHANGED )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if( pSfxSimpleHint && SFX_HINT_COLORS_CHANGED == pSfxSimpleHint->GetId() )
     {
         updateViewSettings();
     }

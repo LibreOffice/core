@@ -56,10 +56,9 @@
 #include <editeng/outlobj.hxx>
 #include <svx/svdattr.hxx>
 #include "svx/xattr.hxx"
-#include "svx/svditext.hxx"
+#include <editeng/editdata.hxx>
 #include <svx/svdetc.hxx>
 #include <editeng/bulitem.hxx>
-#include <svx/polysc3d.hxx>
 #include <svx/extrud3d.hxx>
 #include <svx/svdoashp.hxx>
 #include <editeng/tstpitem.hxx>
@@ -130,6 +129,7 @@
 #include <com/sun/star/table/XMergeableCellRange.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
 #include <vcl/virdev.hxx>
+#include <svx/svdlegacy.hxx>
 #include <algorithm>
 #include <set>
 
@@ -636,7 +636,7 @@ sal_Bool SdrEscherImport::ReadString( String& rStr ) const
         || aStrHd.nRecType == PPT_PST_TextCharsAtom
         || aStrHd.nRecType == PPT_PST_CString)
     {
-        sal_Bool bUniCode =
+        bool bUniCode =
             (aStrHd.nRecType == PPT_PST_TextCharsAtom
             || aStrHd.nRecType == PPT_PST_CString);
         bRet=sal_True;
@@ -649,7 +649,7 @@ sal_Bool SdrEscherImport::ReadString( String& rStr ) const
     return bRet;
 }
 
-FASTBOOL SdrEscherImport::GetColorFromPalette(sal_uInt16 /*nNum*/, Color& /*rColor*/) const
+bool SdrEscherImport::GetColorFromPalette(sal_uInt16 /*nNum*/, Color& /*rColor*/) const
 {
     return sal_False;
 }
@@ -705,7 +705,7 @@ void SdrEscherImport::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd,
     Scale( t );
     Scale( r );
     Scale( b );
-    rObj.aChildAnchor = Rectangle( l, t, r, b );
+    rObj.aChildAnchor = basegfx::B2DRange( l, t, r, b );
     rObj.bChildAnchor = sal_True;
     return;
 };
@@ -822,9 +822,9 @@ void SdrEscherImport::RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic
    The parameter pOriginalObj is the object as it was imported by our general escher import, it must either
    be deleted or it can be returned to be inserted into the sdr page.
 */
-SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, void* pData, Rectangle& rTextRect, SdrObject* pOriginalObj )
+SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, void* pData, basegfx::B2DRange& rTextRect, SdrObject* pOriginalObj )
 {
-    if ( pOriginalObj && pOriginalObj->ISA( SdrObjCustomShape ) )
+    if ( pOriginalObj && dynamic_cast< SdrObjCustomShape* >(pOriginalObj) )
         pOriginalObj->SetMergedItem( SdrTextFixedCellHeightItem( sal_True ) );
 
     // we are initializing our return value with the object that was imported by our escher import
@@ -867,11 +867,13 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
 
                     case PPT_PST_RecolorInfoAtom :
                     {
-                        if ( pRet && ( pRet->ISA( SdrGrafObj ) && ((SdrGrafObj*)pRet)->HasGDIMetaFile() ) )
+                        SdrGrafObj* pSdrGrafObj = dynamic_cast< SdrGrafObj* >(pRet);
+
+                        if ( pSdrGrafObj && pSdrGrafObj->HasGDIMetaFile() )
                         {
-                            Graphic aGraphic( ((SdrGrafObj*)pRet)->GetGraphic() );
+                            Graphic aGraphic( pSdrGrafObj->GetGraphic() );
                             RecolorGraphic( rSt, aClientDataHd.nRecLen, aGraphic );
-                            ((SdrGrafObj*)pRet)->SetGraphic( aGraphic );
+                            pSdrGrafObj->SetGraphic( aGraphic );
                         }
                     }
                     break;
@@ -886,8 +888,13 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 nPageNum--;
 
             // replacing the object which we will return with a SdrPageObj
-            SdrObject::Free( pRet );
-            pRet = new SdrPageObj( rObjData.aBoundRect, pSdrModel->GetPage( nPageNum - 1 ) );
+            deleteSdrObjectSafeAndClearPointer( pRet );
+            pRet = new SdrPageObj(
+                *pSdrModel,
+                basegfx::tools::createScaleTranslateB2DHomMatrix(
+                    rObjData.aBoundRect.getRange(),
+                    rObjData.aBoundRect.getMinimum()),
+                pSdrModel->GetPage( nPageNum - 1 ) );
         }
         else
         {
@@ -936,10 +943,13 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 if ( pRet )
                 {
                     sal_Bool bDeleteSource = aTextObj.GetOEPlaceHolderAtom() != 0;
-                    if ( bDeleteSource  && ( pRet->ISA( SdrGrafObj ) == sal_False )     // we are not allowed to get
-                            && ( pRet->ISA( SdrObjGroup ) == sal_False )                // grouped placeholder objects
-                                && ( pRet->ISA( SdrOle2Obj ) == sal_False ) )
-                        SdrObject::Free( pRet );
+                    if ( bDeleteSource
+                        && ( !dynamic_cast< SdrGrafObj* >(pRet) )       // we are not allowed to get
+                        && ( !dynamic_cast< SdrObjGroup* >(pRet) )              // grouped placeholder objects
+                        && ( !dynamic_cast< SdrOle2Obj* >(pRet) ) )
+                    {
+                        deleteSdrObjectSafeAndClearPointer( pRet );
+                    }
                 }
                 sal_uInt32 nTextFlags = aTextObj.GetTextFlags();
                 sal_Int32 nTextLeft = GetPropertyValue( DFF_Prop_dxTextLeft, 25 * 3600 );   // 0.25 cm (emu)
@@ -1015,7 +1025,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                         }
                         break;
                     }
-                    nMinFrameWidth = rTextRect.GetWidth() - ( nTextLeft + nTextRight );
+                    nMinFrameWidth = basegfx::fround(rTextRect.getWidth()) - ( nTextLeft + nTextRight );
                 }
                 else
                 {
@@ -1071,7 +1081,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                         }
                         break;
                     }
-                    nMinFrameHeight = rTextRect.GetHeight() - ( nTextTop + nTextBottom );
+                    nMinFrameHeight = basegfx::fround(rTextRect.getHeight()) - ( nTextTop + nTextBottom );
                 }
 
                 SdrObjKind eTextKind = OBJ_RECT;
@@ -1140,7 +1150,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 sal_Bool bWordWrap = (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) != mso_wrapNone;
                 sal_Bool bFitShapeToText = ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 ) != 0;
 
-                if ( pRet && pRet->ISA( SdrObjCustomShape ) && ( eTextKind == OBJ_RECT ) )
+                if ( pRet && dynamic_cast< SdrObjCustomShape* >(pRet) && ( eTextKind == OBJ_RECT ) )
                 {
                     bAutoGrowHeight = bFitShapeToText;
                     if ( bWordWrap )
@@ -1152,13 +1162,17 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 }
                 else
                 {
-                    if ( pRet && pRet->ISA( SdrObjCustomShape ) )
+                    if ( pRet && dynamic_cast< SdrObjCustomShape* >(pRet) )
                     {
-                        SdrObject::Free( pRet );
-                        pRet = NULL;
+                        deleteSdrObjectSafeAndClearPointer( pRet );
                     }
-                    pTObj = new SdrRectObj( eTextKind != OBJ_RECT ? eTextKind : OBJ_TEXT );
-                    pTObj->SetModel( pSdrModel );
+                    pTObj = new SdrRectObj(
+                        *pSdrModel,
+                        basegfx::B2DHomMatrix(),
+                        eTextKind != OBJ_RECT ? eTextKind : OBJ_TEXT,
+                        true);
+
+                    // pTObj->SetModel( pSdrModel );
                     SfxItemSet aSet( pSdrModel->GetItemPool() );
                     if ( !pRet )
                         ((SdrEscherImport*)this)->ApplyAttributes( rSt, aSet, rObjData );
@@ -1185,15 +1199,15 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 }
                 pTObj->SetMergedItem( SvxFrameDirectionItem( bVerticalText ? FRMDIR_VERT_TOP_RIGHT : FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR ) );
 
-            if ( !pTObj->ISA( SdrObjCustomShape ) )
+            if ( !dynamic_cast< SdrObjCustomShape* >(pTObj) )
             {
-                 pTObj->SetMergedItem( SdrTextAutoGrowWidthItem( bAutoGrowWidth ) );
-                pTObj->SetMergedItem( SdrTextAutoGrowHeightItem( bAutoGrowHeight ) );
+                 pTObj->SetMergedItem( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWWIDTH, bAutoGrowWidth ) );
+                pTObj->SetMergedItem( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT, bAutoGrowHeight ) );
             }
             else
             {
-                pTObj->SetMergedItem( SdrTextWordWrapItem( bWordWrap ) );
-                pTObj->SetMergedItem( SdrTextAutoGrowHeightItem( bFitShapeToText ) );
+                pTObj->SetMergedItem( SdrOnOffItem( SDRATTR_TEXT_WORDWRAP, bWordWrap ) );
+                pTObj->SetMergedItem( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT, bFitShapeToText ) );
             }
 
                 pTObj->SetMergedItem( SdrTextVertAdjustItem( eTVA ) );
@@ -1201,23 +1215,26 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
 
                 if ( nMinFrameHeight < 0 )
                     nMinFrameHeight = 0;
-            if ( !pTObj->ISA( SdrObjCustomShape ) )
-                pTObj->SetMergedItem( SdrTextMinFrameHeightItem( nMinFrameHeight ) );
+            if ( !dynamic_cast< SdrObjCustomShape* >(pTObj) )
+                pTObj->SetMergedItem( SdrMetricItem(SDRATTR_TEXT_MINFRAMEHEIGHT, nMinFrameHeight ) );
 
                 if ( nMinFrameWidth < 0 )
                     nMinFrameWidth = 0;
-            if ( !pTObj->ISA( SdrObjCustomShape ) )
-                pTObj->SetMergedItem( SdrTextMinFrameWidthItem( nMinFrameWidth ) );
+            if ( !dynamic_cast< SdrObjCustomShape* >(pTObj) )
+                pTObj->SetMergedItem( SdrMetricItem(SDRATTR_TEXT_MINFRAMEWIDTH, nMinFrameWidth ) );
 
                 // Abstaende an den Raendern der Textbox setzen
-                pTObj->SetMergedItem( SdrTextLeftDistItem( nTextLeft ) );
-                pTObj->SetMergedItem( SdrTextRightDistItem( nTextRight ) );
-                pTObj->SetMergedItem( SdrTextUpperDistItem( nTextTop ) );
-                pTObj->SetMergedItem( SdrTextLowerDistItem( nTextBottom ) );
+                pTObj->SetMergedItem( SdrMetricItem(SDRATTR_TEXT_LEFTDIST, nTextLeft ) );
+                pTObj->SetMergedItem( SdrMetricItem(SDRATTR_TEXT_RIGHTDIST, nTextRight ) );
+                pTObj->SetMergedItem( SdrMetricItem(SDRATTR_TEXT_UPPERDIST, nTextTop ) );
+                pTObj->SetMergedItem( SdrMetricItem(SDRATTR_TEXT_LOWERDIST, nTextBottom ) );
                 pTObj->SetMergedItem( SdrTextFixedCellHeightItem( sal_True ) );
 
-                if ( !pTObj->ISA( SdrObjCustomShape ) )
-                    pTObj->SetSnapRect( rTextRect );
+                if ( !dynamic_cast< SdrObjCustomShape* >(pTObj) )
+                {
+                    sdr::legacy::SetSnapRange(*pTObj, rTextRect );
+                }
+
                 pTObj = ReadObjText( &aTextObj, pTObj, rData.pPage );
                 if ( pTObj )
                 {
@@ -1227,9 +1244,9 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     snaprect of the object. Then we will use
                     ADJUST_CENTER instead of ADJUST_BLOCK.
                     */
-                    if ( !pTObj->ISA( SdrObjCustomShape ) && !bFitShapeToText && !bWordWrap )
+                    if ( !dynamic_cast< SdrObjCustomShape* >(pTObj) && !bFitShapeToText && !bWordWrap )
                     {
-                        SdrTextObj* pText = PTR_CAST( SdrTextObj, pTObj );
+                        SdrTextObj* pText = dynamic_cast< SdrTextObj* >( pTObj );
                         if ( pText )
                         {
                             if ( bVerticalText )
@@ -1239,7 +1256,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                                     Size aTextSize( pText->GetTextSize() );
                                     aTextSize.Width() += nTextLeft + nTextRight;
                                     aTextSize.Height() += nTextTop + nTextBottom;
-                                    if ( rTextRect.GetHeight() < aTextSize.Height() )
+                                    if ( rTextRect.getHeight() < aTextSize.Height() )
                                         pTObj->SetMergedItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
                                 }
                             }
@@ -1250,7 +1267,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                                     Size aTextSize( pText->GetTextSize() );
                                     aTextSize.Width() += nTextLeft + nTextRight;
                                     aTextSize.Height() += nTextTop + nTextBottom;
-                                    if ( rTextRect.GetWidth() < aTextSize.Width() )
+                                    if ( rTextRect.getWidth() < aTextSize.Width() )
                                         pTObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_CENTER ) );
                                 }
                             }
@@ -1260,7 +1277,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     sal_Int32 nAngle = ( rObjData.nSpFlags & SP_FFLIPV ) ? -mnFix16Angle : mnFix16Angle;    // #72116# vertical flip -> rotate by using the other way
                     nAngle += nTextRotationAngle;
 
-                    if ( pTObj->ISA( SdrObjCustomShape ) )
+                    if ( dynamic_cast< SdrObjCustomShape* >(pTObj) )
                     {
 /*
                         if ( nTextRotationAngle )
@@ -1280,22 +1297,36 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     {
                         if ( rObjData.nSpFlags & SP_FFLIPV )
                         {
-                            double a = 18000 * nPi180;
-                            pTObj->Rotate( rTextRect.Center(), 18000, sin( a ), cos( a ) );
+                            basegfx::B2DHomMatrix aTransform;
+
+                            aTransform.translate(-rTextRect.getCenter());
+                            aTransform.rotate(-F_PI);
+                            aTransform.translate(rTextRect.getCenter());
+
+                            sdr::legacy::transformSdrObject(*pTObj, aTransform);
                         }
+
                         if ( rObjData.nSpFlags & SP_FFLIPH )
+                        {
                             nAngle = 36000 - nAngle;
+                        }
+
                         if ( nAngle )
                         {
-                            double a = nAngle * nPi180;
-                            pTObj->NbcRotate( rObjData.aBoundRect.Center(), nAngle, sin( a ), cos( a ) );
+                            basegfx::B2DHomMatrix aTransform;
+
+                            aTransform.translate(-rObjData.aBoundRect.getCenter());
+                            aTransform.rotate((-nAngle * F_PI) / 18000.0);
+                            aTransform.translate(rObjData.aBoundRect.getCenter());
+
+                            sdr::legacy::transformSdrObject(*pTObj, aTransform);
                         }
                     }
                     if ( pRet )
                     {
-                        SdrObject* pGroup = new SdrObjGroup;
-                        pGroup->GetSubList()->NbcInsertObject( pRet );
-                        pGroup->GetSubList()->NbcInsertObject( pTObj );
+                        SdrObjGroup* pGroup = new SdrObjGroup(*pSdrModel);
+                        pGroup->InsertObjectToSdrObjList(*pRet);
+                        pGroup->InsertObjectToSdrObjList(*pTObj);
                         pRet = pGroup;
                     }
                     else
@@ -1335,7 +1366,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
     {
         if ( rObjData.nSpFlags & SP_FBACKGROUND )
         {
-            pRet->NbcSetSnapRect( Rectangle( Point(), ((SdrPage*)rData.pPage)->GetSize() ) );   // Groesse setzen
+            sdr::legacy::SetSnapRange(*pRet, basegfx::B2DRange( basegfx::B2DPoint(0.0, 0.0), ((SdrPage*)rData.pPage)->GetPageScale() ) );   // Groesse setzen
         }
         if ( rPersistEntry.pSolverContainer )
         {
@@ -1347,7 +1378,8 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 else
                 {
                     SdrObject* pConnectObj = pRet;
-                    if ( pOriginalObj && pRet->ISA( SdrObjGroup ) )
+
+                    if ( pOriginalObj && dynamic_cast< SdrObjGroup* >(pRet) )
                     {   /* check if the original object from the escherimport is part of the group object,
                         if this is the case, we will use the original object to connect to */
                         SdrObjListIter aIter( *pRet, IM_DEEPWITHGROUPS );
@@ -1898,8 +1930,8 @@ sal_Bool SdrPowerPointOLEDecompress( SvStream& rOutput, SvStream& rInput, sal_uI
 // --> OD 2004-12-14 #i32596# - add new parameter <_nCalledByGroup>
 SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                                            const Graphic& rGraf,
-                                           const Rectangle& rBoundRect,
-                                           const Rectangle& rVisArea,
+                                           const basegfx::B2DRange& rBoundRect,
+                                           const basegfx::B2DRange& rVisArea,
                                            const int /*_nCalledByGroup*/,
                                            sal_Int64 /*nAspect*/ ) const
 // <--
@@ -1997,7 +2029,14 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
 
                                         // TODO/LATER: need MediaType for Graphic
                                         aObj.SetGraphic( rGraf, ::rtl::OUString() );
-                                        pRet = new SdrOle2Obj( aObj, aNm, rBoundRect, sal_False );
+                                        pRet = new SdrOle2Obj(
+                                            *pSdrModel,
+                                            aObj,
+                                            aNm,
+                                            basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                                rBoundRect.getRange(),
+                                                rBoundRect.getMinimum()),
+                                            false);
                                     }
                                 }
                                 if ( !pRet && ( pOe->nType == PPT_PST_ExControl ) )
@@ -2032,8 +2071,8 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                                         {
                                             //TODO/LATER: keep on hacking?!
                                             // modifiziert wollen wir nicht werden
-                                            //xInplaceObj->EnableSetModified( sal_False );
-                                            if ( rVisArea.IsEmpty() )
+                                            //xInplaceObj->EnableSetModified( FALSE );
+                                            if ( rVisArea.isEmpty() )
                                             {
                                                 MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( pOe->nAspect ) );
                                                 Size aSize( OutputDevice::LogicToLogic( aGraphic.GetPrefSize(),
@@ -2046,7 +2085,9 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                                             }
                                             else
                                             {
-                                                awt::Size aSize( rVisArea.GetSize().Width(), rVisArea.GetSize().Height() );
+                                                awt::Size aSize(
+                                                    basegfx::fround(rVisArea.getWidth()),
+                                                    basegfx::fround(rVisArea.getHeight()));
                                                 xObj->setVisualAreaSize( pOe->nAspect, aSize );
                                             }
                                             //xInplaceObj->EnableSetModified( sal_True );
@@ -2057,7 +2098,14 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                                         // TODO/LATER: need MediaType for Graphic
                                         aObj.SetGraphic( aGraphic, ::rtl::OUString() );
 
-                                        pRet = new SdrOle2Obj( aObj, aNm, rBoundRect, sal_False );
+                                        pRet = new SdrOle2Obj(
+                                            *pSdrModel,
+                                            aObj,
+                                            aNm,
+                                            basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                                rBoundRect.getRange(),
+                                                rBoundRect.getMinimum()),
+                                            false);
                                     }
                                 }
                             }
@@ -2310,8 +2358,8 @@ sal_Bool SdrPowerPointImport::ReadFontCollection()
                         pDbgOut->Seek( STREAM_SEEK_TO_END );
 
                         Printer* pPrinter = NULL;
-                        if ( pSdrModel->GetRefDevice() && pSdrModel->GetRefDevice()->GetOutDevType() == OUTDEV_PRINTER )
-                            pPrinter = (Printer*)pSdrModel->GetRefDevice();
+                        if ( pSdrModel->GetReferenceDevice() && pSdrModel->GetReferenceDevice()->GetOutDevType() == OUTDEV_PRINTER )
+                            pPrinter = (Printer*)pSdrModel->GetReferenceDevice();
                         if ( pPrinter )
                         {
                             Font aOldFont( pPrinter->GetFont() );
@@ -2390,7 +2438,7 @@ SdrOutliner* SdrPowerPointImport::GetDrawOutliner( SdrTextObj* pSdrText ) const
 
 SdrObject* SdrPowerPointImport::ReadObjText( PPTTextObj* pTextObj, SdrObject* pSdrObj, SdPage* pPage ) const
 {
-    SdrTextObj* pText = PTR_CAST( SdrTextObj, pSdrObj );
+    SdrTextObj* pText = dynamic_cast< SdrTextObj* >( pSdrObj );
     if ( pText )
     {
         if ( !ApplyTextObj( pTextObj, pText, pPage, NULL, NULL ) )
@@ -2691,7 +2739,7 @@ Size SdrPowerPointImport::GetPageSize() const
     // vermeiden runde ich die letzte Nachkommastelle metrisch weg.
     if ( nMapMul > 2 * nMapDiv )
     {
-        MapUnit eMap = pSdrModel->GetScaleUnit();
+        MapUnit eMap = pSdrModel->GetExchangeObjectUnit();
         bool bInch = IsInch( eMap );
         long nInchMul = 1, nInchDiv = 1;
         if ( bInch )
@@ -2713,7 +2761,7 @@ Size SdrPowerPointImport::GetPageSize() const
     return aRet;
 }
 
-FASTBOOL SdrPowerPointImport::GetColorFromPalette( sal_uInt16 nNum, Color& rColor ) const
+bool SdrPowerPointImport::GetColorFromPalette( sal_uInt16 nNum, Color& rColor ) const
 {
     if ( nPageColorsNum != nAktPageNum || ePageColorsKind != eAktPageKind )
     {
@@ -2837,7 +2885,8 @@ sal_Bool SdrPowerPointImport::SeekToShape( SvStream& rSt, void* pClientData, sal
 SdrPage* SdrPowerPointImport::MakeBlancPage( sal_Bool bMaster ) const
 {
     SdrPage* pRet = pSdrModel->AllocPage( bMaster );
-    pRet->SetSize( GetPageSize() );
+    const Size aPageSize(GetPageSize());
+    pRet->SetPageScale( basegfx::B2DVector( aPageSize.Width(), aPageSize.Height() ) );
 
 /*
     SJ (21.08.00) : since bug #77576# i decided not to set a border size.
@@ -2848,14 +2897,14 @@ SdrPage* SdrPowerPointImport::MakeBlancPage( sal_Bool bMaster ) const
     if ( nHMarg > 0 )
     {
         Scale( nHMarg );
-        pRet->SetLftBorder( nHMarg / 2 );
-        pRet->SetRgtBorder( nHMarg - nHMarg / 2 );
+        pRet->SetLeftPageBorder( nHMarg / 2 );
+        pRet->SetRightPageBorder( nHMarg - nHMarg / 2 );
     }
     if ( nVMarg > 0 )
     {
         Scale( nVMarg );
-        pRet->SetUppBorder( nVMarg / 2 );
-        pRet->SetLwrBorder( nVMarg - nVMarg / 2 );
+        pRet->SetTopPageBorder( nVMarg / 2 );
+        pRet->SetBottomPageBorder( nVMarg - nVMarg / 2 );
     }
 */
     return pRet;
@@ -2997,7 +3046,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                             {
                                 case DFF_msofbtSpContainer :
                                 {
-                                    Rectangle aPageSize( Point(), pRet->GetSize() );
+                                    basegfx::B2DRange aPageSize( basegfx::B2DPoint(0.0, 0.0), pRet->GetPageScale() );
                                     if ( rSlidePersist.aSlideAtom.nFlags & 4 )          // follow master background ?
                                     {
                                         if ( HasMasterPage( nAktPageNum, eAktPageKind ) )
@@ -3068,7 +3117,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                             rStCtrl >> aShapeHd;
                                             if ( ( aShapeHd.nRecType == DFF_msofbtSpContainer ) || ( aShapeHd.nRecType == DFF_msofbtSpgrContainer ) )
                                             {
-                                                Rectangle aEmpty;
+                                                basegfx::B2DRange aEmpty;
                                                 aShapeHd.SeekToBegOfRecord( rStCtrl );
                                                 sal_Int32 nShapeId;
                                                 aProcessData.pTableRowProperties = NULL;
@@ -3078,7 +3127,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                                     if ( aProcessData.pTableRowProperties )
                                                         pObj = CreateTable( pObj, aProcessData.pTableRowProperties, aProcessData.rPersistEntry.pSolverContainer );
 
-                                                    pRet->NbcInsertObject( pObj );
+                                                    pRet->InsertObjectToSdrObjList(*pObj);
 
                                                     if( nShapeId )
                                                         insertShapeId( nShapeId, pObj );
@@ -3130,7 +3179,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                             // obsolete here, too.
                             pRet->getSdrPageProperties().ClearItem();
                             pRet->getSdrPageProperties().PutItemSet(rSlidePersist.pBObj->GetMergedItemSet());
-                            SdrObject::Free( rSlidePersist.pBObj );
+                            deleteSdrObjectSafeAndClearPointer( rSlidePersist.pBObj );
                         }
                     }
                 }
@@ -3238,7 +3287,7 @@ SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage
                         mnFix16Angle = Fix16ToAngle( GetPropertyValue( DFF_Prop_Rotation, 0 ) );
                         sal_uInt32 nColor = GetPropertyValue( DFF_Prop_fillColor, 0xffffff );
                         pSet = new SfxItemSet( pSdrModel->GetItemPool() );
-                        DffObjData aObjData( aEscherObjectHd, Rectangle( 0, 0, 28000, 21000 ), 0 );
+                        DffObjData aObjData( aEscherObjectHd, basegfx::B2DRange( 0.0, 0.0, 28000.0, 21000.0 ), 0 );
                         ApplyAttributes( rStCtrl, *pSet, aObjData );
                         Color aColor( MSO_CLR_ToColor( nColor ) );
                         pSet->Put( XFillColorItem( String(), aColor ) );
@@ -3256,12 +3305,17 @@ SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage
             pSet->Put( XFillStyleItem( XFILL_NONE ) );
         }
         pSet->Put( XLineStyleItem( XLINE_NONE ) );
-        Rectangle aRect( rPage.GetLftBorder(), rPage.GetUppBorder(), rPage.GetWdt()-rPage.GetRgtBorder(), rPage.GetHgt()-rPage.GetLwrBorder() );
-        pRet = new SdrRectObj( aRect );
-        pRet->SetModel( pSdrModel );
 
+        const basegfx::B2DRange aRect( rPage.GetInnerPageRange() );
+
+        pRet = new SdrRectObj(
+            *pSdrModel,
+            basegfx::tools::createScaleTranslateB2DHomMatrix(
+                aRect.getRange(),
+                aRect.getMinimum()));
+
+        // pRet->SetModel( pSdrModel );
         pRet->SetMergedItemSet(*pSet);
-
         pRet->SetMarkProtect( sal_True );
         pRet->SetMoveProtect( sal_True );
         pRet->SetResizeProtect( sal_True );
@@ -7254,7 +7308,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                             if ( pCurrent->mpFieldItem )
                                                             {
                                                                 pCurrent->SetColor( PPT_COLSCHEME_A_UND_HYPERLINK );
-                                                                if ( pCurrent->mpFieldItem->GetField()->ISA( SvxURLField ) )
+                                                                if ( dynamic_cast< const SvxURLField* >(pCurrent->mpFieldItem->GetField()) )
                                                                     break;
                                                                 nHyperLenLeft--;
                                                             }
@@ -7400,15 +7454,22 @@ PPTTextObj& PPTTextObj::operator=( PPTTextObj& rTextObj )
     return *this;
 }
 
-sal_Bool IsLine( const SdrObject* pObj )
+bool IsLine( const SdrObject* pObj )
 {
-    return pObj->ISA( SdrPathObj ) && ((SdrPathObj*)pObj)->IsLine() && (((SdrPathObj*)pObj)->GetPointCount() == 2 );
+    const SdrPathObj* pSdrPathObj = dynamic_cast< const SdrPathObj* >(pObj);
+
+    if(pSdrPathObj)
+    {
+        return pSdrPathObj->isLine();
+    }
+
+    return false;
 }
 
 sal_Bool GetCellPosition( const SdrObject* pObj, const std::set< sal_Int32 >& rRows, const std::set< sal_Int32 >& rColumns,
                             sal_Int32& nTableIndex, sal_Int32& nRow, sal_Int32& nRowCount, sal_Int32& nColumn, sal_Int32& nColumnCount )
 {
-    Rectangle aSnapRect( pObj->GetSnapRect() );
+    const Rectangle aSnapRect( sdr::legacy::GetSnapRect(*pObj) );
     sal_Bool bCellObject = ( aSnapRect.GetWidth() > 1 ) && ( aSnapRect.GetHeight() > 1 );
     if ( bCellObject )
     {
@@ -7492,7 +7553,7 @@ void GetColumnPositions( const Rectangle& rSnapRect, const std::set< sal_Int32 >
 void GetLinePositions( const SdrObject* pObj, const std::set< sal_Int32 >& rRows, const std::set< sal_Int32 >& rColumns,
                         std::vector< sal_Int32 >& rPositions, const Rectangle& rGroupSnap )
 {
-    Rectangle aSnapRect( pObj->GetSnapRect() );
+    const Rectangle aSnapRect( sdr::legacy::GetSnapRect(*pObj) );
     if ( aSnapRect.Left() == aSnapRect.Right() )
     {
         std::set< sal_Int32 >::const_iterator aColumn( rColumns.find( aSnapRect.Left() ) );
@@ -7537,22 +7598,27 @@ void GetLinePositions( const SdrObject* pObj, const std::set< sal_Int32 >& rRows
     }
     else
     {
-        sal_uInt32 nPosition = 0;
-        Point aPt1( ((SdrPathObj*)pObj)->GetPoint( 0 ) );
-        Point aPt2( ((SdrPathObj*)pObj)->GetPoint( 1 ) );
-        if ( aPt1.X() < aPt2.X() )
-            nPosition |= aPt1.Y() < aPt2.Y() ? LinePositionTLBR : LinePositionBLTR;
-        else
-            nPosition |= aPt1.Y() < aPt2.Y() ? LinePositionBLTR : LinePositionTLBR;
+        const SdrPathObj* pSdrPathObj = dynamic_cast< const SdrPathObj* >(pObj);
 
-        std::set< sal_Int32 >::const_iterator aRow( rRows.find( aPt1.Y() < aPt2.Y() ? aPt1.Y() : aPt2.Y() ) );
-        std::set< sal_Int32 >::const_iterator aColumn( rColumns.find( aPt1.X() < aPt2.X() ? aPt1.X() : aPt2.X() ) );
+        if(pSdrPathObj)
+        {
+        sal_uInt32 nPosition = 0;
+            const basegfx::B2DPoint aPt1( pSdrPathObj->GetObjectPoint( 0 ) );
+            const basegfx::B2DPoint aPt2( pSdrPathObj->GetObjectPoint( 1 ) );
+            if ( aPt1.getX() < aPt2.getX() )
+                nPosition |= aPt1.getY() < aPt2.getY() ? LinePositionTLBR : LinePositionBLTR;
+        else
+                nPosition |= aPt1.getY() < aPt2.getY() ? LinePositionBLTR : LinePositionTLBR;
+
+            std::set< sal_Int32 >::const_iterator aRow( rRows.find( aPt1.getY() < aPt2.getY() ? basegfx::fround(aPt1.getY()) : basegfx::fround(aPt2.getY()) ) );
+            std::set< sal_Int32 >::const_iterator aColumn( rColumns.find( aPt1.getX() < aPt2.getX() ? basegfx::fround(aPt1.getX()) : basegfx::fround(aPt2.getX()) ) );
         if ( ( aRow != rRows.end() ) && ( aColumn != rColumns.end() ) )
         {
             nPosition |= ( std::distance( rRows.begin(), aRow ) * rColumns.size() ) + std::distance( rColumns.begin(), aColumn );
             rPositions.push_back( nPosition );
         }
     }
+}
 }
 
 void CreateTableRows( Reference< XTableRows > xTableRows, const std::set< sal_Int32 >& rRows, sal_Int32 nTableBottom )
@@ -7630,10 +7696,10 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
     {
         Reference< XPropertySet > xPropSet( xCell, UNO_QUERY_THROW );
 
-        const sal_Int32 nLeftDist(((const SdrTextLeftDistItem&)pObj->GetMergedItem(SDRATTR_TEXT_LEFTDIST)).GetValue());
-        const sal_Int32 nRightDist(((const SdrTextRightDistItem&)pObj->GetMergedItem(SDRATTR_TEXT_RIGHTDIST)).GetValue());
-        const sal_Int32 nUpperDist(((const SdrTextUpperDistItem&)pObj->GetMergedItem(SDRATTR_TEXT_UPPERDIST)).GetValue());
-        const sal_Int32 nLowerDist(((const SdrTextLowerDistItem&)pObj->GetMergedItem(SDRATTR_TEXT_LOWERDIST)).GetValue());
+        const sal_Int32 nLeftDist(((const SdrMetricItem&)pObj->GetMergedItem(SDRATTR_TEXT_LEFTDIST)).GetValue());
+        const sal_Int32 nRightDist(((const SdrMetricItem&)pObj->GetMergedItem(SDRATTR_TEXT_RIGHTDIST)).GetValue());
+        const sal_Int32 nUpperDist(((const SdrMetricItem&)pObj->GetMergedItem(SDRATTR_TEXT_UPPERDIST)).GetValue());
+        const sal_Int32 nLowerDist(((const SdrMetricItem&)pObj->GetMergedItem(SDRATTR_TEXT_LOWERDIST)).GetValue());
         static const rtl::OUString  sTopBorder( RTL_CONSTASCII_USTRINGPARAM( "TextUpperDistance" ) );
         static const rtl::OUString  sBottomBorder( RTL_CONSTASCII_USTRINGPARAM( "TextLowerDistance" ) );
         static const rtl::OUString  sLeftBorder( RTL_CONSTASCII_USTRINGPARAM( "TextLeftDistance" ) );
@@ -7653,7 +7719,7 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
         xPropSet->setPropertyValue( sTextVerticalAdjust, Any( eVA ) );
 
         //set textHorizontalAdjust and TextWritingMode attr
-        const sal_Int32 eHA(((const SdrTextLeftDistItem&)pObj->GetMergedItem(SDRATTR_TEXT_HORZADJUST)).GetValue());
+        const sal_Int32 eHA(((const SdrMetricItem&)pObj->GetMergedItem(SDRATTR_TEXT_HORZADJUST)).GetValue());
         const SvxFrameDirection eDirection = (const SvxFrameDirection)((( const SvxFrameDirectionItem&)pObj->GetMergedItem(EE_PARA_WRITINGDIR)).GetValue());
         static const rtl::OUString  sHorizontalAdjust( RTL_CONSTASCII_USTRINGPARAM( "TextHorizontalAdjust" ) );
         static const rtl::OUString  sWritingMode( RTL_CONSTASCII_USTRINGPARAM("TextWritingMode") );
@@ -7811,9 +7877,9 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
 {
     SdrObject* pRet = pGroup;
     sal_uInt32 nRows = pTableArry[ 1 ];
-    if ( nRows && pGroup->ISA( SdrObjGroup ) )
+    if ( nRows && dynamic_cast< SdrObjGroup* >(pGroup) )
     {
-        SdrObjList* pSubList(((SdrObjGroup*)pGroup)->GetSubList());
+        SdrObjList* pSubList(pGroup->getChildrenOfSdrObject());
         if ( pSubList )
         {
             std::set< sal_Int32 > aRows;
@@ -7825,20 +7891,20 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
                 const SdrObject* pObj( aGroupIter.Next() );
                 if ( !IsLine( pObj ) )
                 {
-                    Rectangle aSnapRect( pObj->GetSnapRect() );
+                    const Rectangle aSnapRect( sdr::legacy::GetSnapRect(*pObj) );
                     aRows.insert( aSnapRect.Top() );
                     aColumns.insert( aSnapRect.Left() );
                 }
             }
-            ::sdr::table::SdrTableObj* pTable = new ::sdr::table::SdrTableObj( pSdrModel );
+            ::sdr::table::SdrTableObj* pTable = new ::sdr::table::SdrTableObj(*pSdrModel);
             pTable->uno_lock();
             Reference< XTable > xTable( pTable->getTable() );
             try
             {
                 Reference< XColumnRowRange > xColumnRowRange( xTable, UNO_QUERY_THROW );
-
-                CreateTableRows( xColumnRowRange->getRows(), aRows, pGroup->GetSnapRect().Bottom() );
-                CreateTableColumns( xColumnRowRange->getColumns(), aColumns, pGroup->GetSnapRect().Right() );
+                const Rectangle aGroupRectangle(sdr::legacy::GetSnapRect(*pGroup));
+                CreateTableRows( xColumnRowRange->getRows(), aRows, aGroupRectangle.Bottom() );
+                CreateTableColumns( xColumnRowRange->getColumns(), aColumns, aGroupRectangle.Right() );
 
                 sal_Int32 nCellCount = aRows.size() * aColumns.size();
                 sal_Int32 *pMergedCellIndexTable = new sal_Int32[ nCellCount ];
@@ -7851,7 +7917,6 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
                     SdrObject* pObj( aGroupIter.Next() );
                     if ( !IsLine( pObj ) )
                     {
-                        Rectangle aSnapRect( pObj->GetSnapRect() );
                         sal_Int32 nTableIndex = 0;
                         sal_Int32 nRow = 0;
                         sal_Int32 nRowCount = 0;
@@ -7894,7 +7959,7 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
                     if ( IsLine( pObj ) )
                     {
                         std::vector< sal_Int32 > vPositions;    // containing cell indexes + cell position
-                        GetLinePositions( pObj, aRows, aColumns, vPositions, pGroup->GetSnapRect() );
+                        GetLinePositions( pObj, aRows, aColumns, vPositions, aGroupRectangle );
 
                         // correcting merged cell position
                         std::vector< sal_Int32 >::iterator aIter( vPositions.begin() );
@@ -7936,7 +8001,7 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
                     }
                 }
                 pTable->uno_unlock();
-                pTable->SetSnapRect( pGroup->GetSnapRect() );
+                sdr::legacy::SetSnapRect(*pTable, aGroupRectangle );
                 pRet = pTable;
 
                 //Remove Objects from shape map
@@ -7947,13 +8012,13 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
                     removeShapeId( pPartObj );
                 }
 
-                SdrObject::Free( pGroup );
+                deleteSdrObjectSafeAndClearPointer( pGroup );
             }
             catch( Exception& )
             {
                 pTable->uno_unlock();
                 SdrObject* pObj = pTable;
-                SdrObject::Free( pObj );
+                deleteSdrObjectSafeAndClearPointer( pObj );
             }
         }
     }

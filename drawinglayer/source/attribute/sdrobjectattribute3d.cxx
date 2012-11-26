@@ -46,11 +46,11 @@ namespace drawinglayer
             MaterialAttribute3D                                 maMaterial;                 // object, specular and emissive colors, SpecularIntensity
 
             // bitfield
-            unsigned                                            mbNormalsInvert : 1;        // invert normals
-            unsigned                                            mbDoubleSided : 1;          // surfaces are double sided
-            unsigned                                            mbShadow3D : 1;             // display shadow in 3D (if on), params for that are at scene
-            unsigned                                            mbTextureFilter : 1;        // filter texture to make more smooth
-            unsigned                                            mbReducedLineGeometry : 1;  // use reduced line geometry (object specific)
+            bool                                                mbNormalsInvert : 1;        // invert normals
+            bool                                                mbDoubleSided : 1;          // surfaces are double sided
+            bool                                                mbShadow3D : 1;             // display shadow in 3D (if on), params for that are at scene
+            bool                                                mbTextureFilter : 1;        // filter texture to make more smooth
+            bool                                                mbReducedLineGeometry : 1;  // use reduced line geometry (object specific)
 
             ImpSdr3DObjectAttribute(
                 ::com::sun::star::drawing::NormalsKind  aNormalsKind,

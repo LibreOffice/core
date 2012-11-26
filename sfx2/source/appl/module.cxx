@@ -111,8 +111,6 @@ ImageList* SfxModule_Impl::GetImageList( ResMgr* pResMgr, sal_Bool bBig, sal_Boo
 
     return rpList; }
 
-TYPEINIT1(SfxModule, SfxShell);
-
 //=========================================================================
 
 SFX_IMPL_INTERFACE(SfxModule,SfxShell,SfxResId(0))
@@ -266,7 +264,7 @@ void SfxModule::RegisterToolBoxControl( SfxTbxCtrlFactory *pFact )
     for ( sal_uInt16 n=0; n<pImpl->pTbxCtrlFac->Count(); n++ )
     {
         SfxTbxCtrlFactory *pF = (*pImpl->pTbxCtrlFac)[n];
-        if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
+        if ( pF->rTypeInfo == pFact->rTypeInfo &&
             (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
         {
             DBG_WARNING("TbxController-Registrierung ist nicht eindeutig!");
@@ -288,7 +286,7 @@ void SfxModule::RegisterStatusBarControl( SfxStbCtrlFactory *pFact )
     for ( sal_uInt16 n=0; n<pImpl->pStbCtrlFac->Count(); n++ )
     {
         SfxStbCtrlFactory *pF = (*pImpl->pStbCtrlFac)[n];
-        if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
+        if ( pF->rTypeInfo == pFact->rTypeInfo &&
             (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
         {
             DBG_WARNING("StbController-Registrierung ist nicht eindeutig!");
@@ -310,7 +308,7 @@ void SfxModule::RegisterMenuControl( SfxMenuCtrlFactory *pFact )
     for ( sal_uInt16 n=0; n<pImpl->pMenuCtrlFac->Count(); n++ )
     {
         SfxMenuCtrlFactory *pF = (*pImpl->pMenuCtrlFac)[n];
-        if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
+        if ( pF->rTypeInfo == pFact->rTypeInfo &&
             (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
         {
             DBG_WARNING("MenuController-Registrierung ist nicht eindeutig!");

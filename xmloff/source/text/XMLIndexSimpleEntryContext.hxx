@@ -58,8 +58,6 @@ protected:
 
 public:
 
-    TYPEINFO();
-
     XMLIndexSimpleEntryContext(
         SvXMLImport& rImport,
         const ::rtl::OUString& rEntry,

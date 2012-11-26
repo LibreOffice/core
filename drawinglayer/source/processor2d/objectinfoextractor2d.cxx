@@ -38,7 +38,9 @@ namespace drawinglayer
 {
     namespace processor2d
     {
-        void ObjectInfoPrimitiveExtractor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
+        void ObjectInfoPrimitiveExtractor2D::processBasePrimitive2D(
+            const primitive2d::BasePrimitive2D& rCandidate,
+            const primitive2d::Primitive2DReference& /*rUnoCandidate*/)
         {
             if(!mpFound)
             {

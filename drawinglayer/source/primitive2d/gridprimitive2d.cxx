@@ -49,13 +49,17 @@ namespace drawinglayer
             if(!rViewInformation.getViewport().isEmpty() && getWidth() > 0.0 && getHeight() > 0.0)
             {
                 // decompose grid matrix to get logic size
-                basegfx::B2DVector aScale, aTranslate;
+                basegfx::B2DVector aScale;
+                basegfx::B2DPoint aTranslate;
                 double fRotate, fShearX;
                 getTransform().decompose(aScale, aTranslate, fRotate, fShearX);
 
                 // create grid matrix which transforms from scaled logic to view
-                basegfx::B2DHomMatrix aRST(basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
-                    fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
+                basegfx::B2DHomMatrix aRST(
+                    basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
+                        fShearX,
+                        fRotate,
+                        aTranslate.getX(), aTranslate.getY()));
                 aRST *= rViewInformation.getObjectToViewTransformation();
 
                 // get step widths
@@ -294,31 +298,10 @@ namespace drawinglayer
         {
         }
 
-        bool GridPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const GridPrimitive2D& rCompare = (GridPrimitive2D&)rPrimitive;
-
-                return (getTransform() == rCompare.getTransform()
-                    && getWidth() == rCompare.getWidth()
-                    && getHeight() == rCompare.getHeight()
-                    && getSmallestViewDistance() == rCompare.getSmallestViewDistance()
-                    && getSmallestSubdivisionViewDistance() == rCompare.getSmallestSubdivisionViewDistance()
-                    && getSubdivisionsX() == rCompare.getSubdivisionsX()
-                    && getSubdivisionsY() == rCompare.getSubdivisionsY()
-                    && getBColor() == rCompare.getBColor()
-                    && getCrossMarker() == rCompare.getCrossMarker());
-            }
-
-            return false;
-        }
-
         basegfx::B2DRange GridPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
             // get object's range
-            basegfx::B2DRange aUnitRange(0.0, 0.0, 1.0, 1.0);
-            aUnitRange.transform(getTransform());
+            basegfx::B2DRange aUnitRange(getTransform() * basegfx::B2DRange::getUnitB2DRange());
 
             // intersect with visible part
             aUnitRange.intersect(rViewInformation.getViewport());

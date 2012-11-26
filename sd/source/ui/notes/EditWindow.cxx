@@ -203,7 +203,7 @@ EditEngine* EditWindow::CreateEditEngine (void)
 
         pEditEngine = new EditEngine (mpEditEngineItemPool);
 
-        pEditEngine->EnableUndo (sal_True);
+        pEditEngine->EnableUndo (true);
         pEditEngine->SetDefTab (sal_uInt16(
             Application::GetDefaultDevice()->GetTextWidth(
                 UniString::CreateFromAscii("XXXX"))));
@@ -396,66 +396,6 @@ IMPL_LINK_INLINE_END( EditWindow, MenuSelectHdl, Menu *, EMPTYARG )
 
 void EditWindow::KeyInput(const KeyEvent& )
 {
-    /*  if (rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE)
-    {
-        sal_Bool bCallBase = sal_True;
-        SfxViewShell* pViewShell = SfxViewShell::Current();
-        if ( pViewShell && pViewShell->ISA(SmViewShell) )
-        {
-            SmDocShell* pDocSh = (SmDocShell*) pViewShell->GetViewFrame()->GetObjectShell();
-            if (pDocSh)
-            {
-    // fuert zum (sofortigen) Zerstoeren von this!
-                pDocSh->DoInPlaceActivate( sal_False );
-                bCallBase = sal_False;
-            }
-        }
-        if ( bCallBase )
-            Window::KeyInput( rKEvt );
-    }
-    else
-    {
-        // Timer neu starten, um den Handler (auch bei längeren Eingaben)
-        // möglichst nur einmal am Ende aufzurufen.
-        aCursorMoveTimer.Start();
-
-        DBG_ASSERT( mpEditView, "EditView missing (NULL pointer)" );
-        if (!mpEditView)
-            CreateEditView();
-        if ( !mpEditView->PostKeyEvent(rKEvt) )
-        {
-            if ( !SfxViewShell::Current()->KeyInput(rKEvt) )
-            {
-    // fuert bei F1 (Hilfe) zum Zerstoeren von this!
-                Flush();
-                if ( aModifyTimer.IsActive() )
-                    aModifyTimer.Stop();
-                Window::KeyInput(rKEvt);
-            }
-            else
-            {
-                //SFX hat evtl. Slot an der View gecallt und dabei (wg. Hack
-                //im SFX) den Focus auf die View gesetzt
-                SfxViewShell* pVShell = SfxViewShell::Current();
-                if ( pVShell && pVShell->ISA(SmViewShell) &&
-                     ((SmViewShell*)pVShell)->GetGraphicWindow().HasFocus() )
-                {
-                    GrabFocus();
-                }
-            }
-        }
-        else
-        {
-            // have doc-shell modified only for formula input/change and not
-            // cursor travelling and such things...
-            SmDocShell *pDocShell = GetDoc();
-            if (pDocShell)
-                pDocShell->SetModified( GetEditEngine()->IsModified() );
-
-            aModifyTimer.Start();
-        }
-    }
-    */
 }
 
 
@@ -499,7 +439,7 @@ void EditWindow::CreateEditView (void)
 
         mpEditView->SetSelection(eSelection);
         Update();
-        mpEditView->ShowCursor(sal_True, sal_True);
+        mpEditView->ShowCursor(true, true);
 
         pEditEngine->SetStatusEventHdl(
             LINK(this, EditWindow, EditStatusHdl));
@@ -669,9 +609,9 @@ void EditWindow::LoseFocus()
 }
 
 
-sal_Bool EditWindow::IsAllSelected() const
+bool EditWindow::IsAllSelected() const
 {
-    sal_Bool bRes = sal_False;
+    bool bRes = false;
     EditEngine *pEditEngine = ((EditWindow *) this)->GetEditEngine();
     DBG_ASSERT( mpEditView, "NULL pointer" );
     DBG_ASSERT( pEditEngine, "NULL pointer" );
@@ -787,7 +727,7 @@ void EditWindow::SelPrevMark()
     }
 }
 
-sal_Bool EditWindow::HasMark(const String& rText) const
+bool EditWindow::HasMark(const String& rText) const
     // returns true iff 'rText' contains a mark
 {
     return rText.SearchAscii("<?>", 0) != STRING_NOTFOUND;
@@ -827,15 +767,15 @@ void EditWindow::SetSelection(const ESelection &rSel)
         mpEditView->SetSelection(rSel);
 }
 
-sal_Bool EditWindow::IsEmpty() const
+bool EditWindow::IsEmpty() const
 {
     EditEngine *pEditEngine = ((EditWindow *) this)->GetEditEngine();
-    return (pEditEngine && (pEditEngine->GetTextLen() == 0)) ? sal_True : sal_False;
+    return (pEditEngine && (pEditEngine->GetTextLen() == 0)) ? true : false;
 }
 
-sal_Bool EditWindow::IsSelected() const
+bool EditWindow::IsSelected() const
 {
-    return mpEditView ? mpEditView->HasSelection() : sal_False;
+    return mpEditView ? mpEditView->HasSelection() : false;
 }
 
 void EditWindow::Cut()

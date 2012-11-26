@@ -266,9 +266,9 @@ void ShapeController::executeDispatch_FormatLine()
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
         if ( pParent && pDrawModelWrapper && pDrawViewWrapper )
         {
-            SdrObject* pSelectedObj = pDrawViewWrapper->getSelectedObject();
+            SdrObject* pSelectedObj = pDrawViewWrapper->getSelectedIfSingle();
             SfxItemSet aAttr( pDrawViewWrapper->GetDefaultAttr() );
-            sal_Bool bHasMarked = pDrawViewWrapper->AreObjectsMarked();
+            sal_Bool bHasMarked = pDrawViewWrapper->areSdrObjectsSelected();
             if ( bHasMarked )
             {
                 pDrawViewWrapper->MergeAttrFromMarked( aAttr, sal_False );
@@ -307,7 +307,7 @@ void ShapeController::executeDispatch_FormatArea()
         if ( pParent && pDrawModelWrapper && pDrawViewWrapper )
         {
             SfxItemSet aAttr( pDrawViewWrapper->GetDefaultAttr() );
-            sal_Bool bHasMarked = pDrawViewWrapper->AreObjectsMarked();
+            sal_Bool bHasMarked = pDrawViewWrapper->areSdrObjectsSelected();
             if ( bHasMarked )
             {
                 pDrawViewWrapper->MergeAttrFromMarked( aAttr, sal_False );
@@ -320,7 +320,7 @@ void ShapeController::executeDispatch_FormatArea()
                         pDrawViewWrapper ) );
                 if ( pDlg.get() )
                 {
-                    SfxItemPool& rItemPool = pDrawViewWrapper->GetModel()->GetItemPool();
+                    SfxItemPool& rItemPool = pDrawViewWrapper->getSdrModelFromSdrView().GetItemPool();
                     SfxItemSet aSet( rItemPool, rItemPool.GetFirstWhich(), rItemPool.GetLastWhich() );
                     const SvxColorTableItem* pColorItem = static_cast< const SvxColorTableItem* >( aSet.GetItem( SID_COLOR_TABLE ) );
                     if ( pColorItem && pColorItem->GetColorTable() == XColorTable::GetStdColorTable() )
@@ -355,7 +355,7 @@ void ShapeController::executeDispatch_TextAttributes()
         if ( pParent && pDrawViewWrapper )
         {
             SfxItemSet aAttr( pDrawViewWrapper->GetDefaultAttr() );
-            sal_Bool bHasMarked = pDrawViewWrapper->AreObjectsMarked();
+            sal_Bool bHasMarked = pDrawViewWrapper->areSdrObjectsSelected();
             if ( bHasMarked )
             {
                 pDrawViewWrapper->MergeAttrFromMarked( aAttr, sal_False );
@@ -391,11 +391,11 @@ void ShapeController::executeDispatch_TransformDialog()
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
         if ( pParent && pDrawViewWrapper )
         {
-            SdrObject* pSelectedObj = pDrawViewWrapper->getSelectedObject();
+            SdrObject* pSelectedObj = pDrawViewWrapper->getSelectedIfSingle();
             if ( pSelectedObj && pSelectedObj->GetObjIdentifier() == OBJ_CAPTION )
             {
                 // item set for caption
-                SfxItemSet aAttr( pDrawViewWrapper->GetModel()->GetItemPool() );
+                SfxItemSet aAttr( pDrawViewWrapper->getSdrModelFromSdrView().GetItemPool() );
                 pDrawViewWrapper->GetAttributes( aAttr );
                 // item set for position and size
                 SfxItemSet aGeoAttr( pDrawViewWrapper->GetGeoAttrFromMarked() );
@@ -445,9 +445,9 @@ void ShapeController::executeDispatch_ObjectTitleDescription()
     if ( m_pChartController )
     {
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
-        if ( pDrawViewWrapper && pDrawViewWrapper->GetMarkedObjectCount() == 1 )
+        if ( pDrawViewWrapper )
         {
-            SdrObject* pSelectedObj = pDrawViewWrapper->getSelectedObject();
+            SdrObject* pSelectedObj = pDrawViewWrapper->getSelectedIfSingle();
             if ( pSelectedObj )
             {
                 String aTitle( pSelectedObj->GetTitle() );
@@ -476,9 +476,9 @@ void ShapeController::executeDispatch_RenameObject()
     if ( m_pChartController )
     {
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
-        if ( pDrawViewWrapper && pDrawViewWrapper->GetMarkedObjectCount() == 1 )
+        if ( pDrawViewWrapper )
         {
-            SdrObject* pSelectedObj = pDrawViewWrapper->getSelectedObject();
+            SdrObject* pSelectedObj = pDrawViewWrapper->getSelectedIfSingle();
             if ( pSelectedObj )
             {
                 String aName( pSelectedObj->GetName() );
@@ -561,7 +561,7 @@ void ShapeController::executeDispatch_FontDialog()
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
         if ( pParent && pDrawModelWrapper && pDrawViewWrapper )
         {
-            SfxItemSet aAttr( pDrawViewWrapper->GetModel()->GetItemPool() );
+            SfxItemSet aAttr( pDrawViewWrapper->getSdrModelFromSdrView().GetItemPool() );
             pDrawViewWrapper->GetAttributes( aAttr );
             ViewElementListProvider aViewElementListProvider( pDrawModelWrapper );
             ::boost::scoped_ptr< ShapeFontDialog > pDlg( new ShapeFontDialog( pParent, &aAttr, &aViewElementListProvider ) );
@@ -583,7 +583,7 @@ void ShapeController::executeDispatch_ParagraphDialog()
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
         if ( pParent && pDrawViewWrapper )
         {
-            SfxItemPool& rPool = pDrawViewWrapper->GetModel()->GetItemPool();
+            SfxItemPool& rPool = pDrawViewWrapper->getSdrModelFromSdrView().GetItemPool();
             SfxItemSet aAttr( rPool );
             pDrawViewWrapper->GetAttributes( aAttr );
 
@@ -700,7 +700,7 @@ bool ShapeController::isBackwardPossible()
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
         if ( pDrawViewWrapper )
         {
-            SdrObject* pSelectedObj = pDrawViewWrapper->getSelectedObject();
+            SdrObject* pSelectedObj = pDrawViewWrapper->getSelectedIfSingle();
             SdrObject* pFirstObj = getFirstAdditionalShape();
             if ( pSelectedObj && pFirstObj && pSelectedObj != pFirstObj )
             {
@@ -719,7 +719,7 @@ bool ShapeController::isForwardPossible()
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
         if ( pDrawViewWrapper )
         {
-            SdrObject* pSelectedObj = pDrawViewWrapper->getSelectedObject();
+            SdrObject* pSelectedObj = pDrawViewWrapper->getSelectedIfSingle();
             SdrObject* pLastObj = getLastAdditionalShape();
             if ( pSelectedObj && pLastObj && pSelectedObj != pLastObj )
             {

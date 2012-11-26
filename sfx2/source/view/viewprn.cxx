@@ -61,8 +61,6 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-TYPEINIT1(SfxPrintingHint, SfxHint);
-
 // -----------------------------------------------------------------------
 class SfxPrinterController : public vcl::PrinterController, public SfxListener
 {
@@ -177,9 +175,11 @@ SfxPrinterController::SfxPrinterController( const boost::shared_ptr<Printer>& i_
 
 void SfxPrinterController::Notify( SfxBroadcaster& , const SfxHint& rHint )
 {
-    if ( rHint.IsA(TYPE(SfxSimpleHint)) )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if ( pSfxSimpleHint )
     {
-        if ( ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+        if ( SFX_HINT_DYING == pSfxSimpleHint->GetId() )
         {
             EndListening(*mpViewShell);
             EndListening(*mpObjectShell);
@@ -675,7 +675,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
     sal_Bool bIsAPI = rReq.GetArgs() && rReq.GetArgs()->Count();
     if ( bIsAPI )
     {
-        SFX_REQUEST_ARG(rReq, pSilentItem, SfxBoolItem, SID_SILENT, sal_False);
+        SFX_REQUEST_ARG(rReq, pSilentItem, SfxBoolItem, SID_SILENT );
         bSilent = pSilentItem && pSilentItem->GetValue();
     }
 
@@ -708,7 +708,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             if ( bDetectHidden && pDoc->QueryHiddenInformation( WhenPrinting, NULL ) != RET_YES )
                 break;
 
-            SFX_REQUEST_ARG(rReq, pSelectItem, SfxBoolItem, SID_SELECTION, sal_False);
+            SFX_REQUEST_ARG(rReq, pSelectItem, SfxBoolItem, SID_SELECTION );
             sal_Bool bSelection = pSelectItem && pSelectItem->GetValue();
             if( pSelectItem && rReq.GetArgs()->Count() == 1 )
                 bIsAPI = sal_False;
@@ -777,7 +777,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             SfxPrinter *pDocPrinter = GetPrinter(sal_True);
 
             // look for printer in parameters
-            SFX_REQUEST_ARG( rReq, pPrinterItem, SfxStringItem, SID_PRINTER_NAME, sal_False );
+            SFX_REQUEST_ARG( rReq, pPrinterItem, SfxStringItem, SID_PRINTER_NAME );
             if ( pPrinterItem )
             {
                 // use PrinterName parameter to create a printer

@@ -24,12 +24,12 @@
 #ifndef SD_FU_POOR_HXX
 #define SD_FU_POOR_HXX
 
-#include <tools/rtti.hxx>
 #include <vcl/timer.hxx>
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
 #include <vcl/event.hxx>
 #include <rtl/ref.hxx>
+#include <basegfx/point/b2dpoint.hxx>
 
 #ifndef _SALHELPER_SIMPLEREFERENCECOMPONENT_HXX_
 #include "helper/simplereferencecomponent.hxx"
@@ -39,6 +39,7 @@ class SdDrawDocument;
 class SfxRequest;
 class Dialog;
 class SdrObject;
+namespace basegfx { class B2DRange; }
 
 namespace sd {
 
@@ -59,8 +60,6 @@ public:
     static const int HITPIX = 2;                   // Hit-Toleranz in Pixel
     static const int DRGPIX = 2;                   // Drag MinMove in Pixel
 
-    TYPEINFO();
-
     virtual void DoExecute( SfxRequest& rReq );
 
     // #95491# see member
@@ -74,16 +73,16 @@ public:
     virtual void DoCopy();
     virtual void DoPaste();
 
-    // Mouse- & Key-Events; Returnwert=sal_True: Event wurde bearbeitet
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
-    virtual sal_Bool MouseMove(const MouseEvent& );
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
+    // Mouse- & Key-Events; Returnwert=true: Event wurde bearbeitet
+    virtual bool KeyInput(const KeyEvent& rKEvt);
+    virtual bool MouseMove(const MouseEvent& );
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt);
 
     // #95491# moved from inline to *.cxx
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt);
 
-    virtual sal_Bool Command(const CommandEvent& rCEvt);
-    virtual sal_Bool RequestHelp(const HelpEvent& rHEvt);
+    virtual bool Command(const CommandEvent& rCEvt);
+    virtual bool RequestHelp(const HelpEvent& rHEvt);
     virtual void Paint(const Rectangle&, ::sd::Window* );
     virtual void ReceiveRequest(SfxRequest& rReq);
 
@@ -94,20 +93,18 @@ public:
     virtual void ScrollEnd() {}     // ForceScroll aufgerufen
 
     void SetWindow(::sd::Window* pWin) { mpWindow = pWin; }
-
-    // #97016# II
     virtual void SelectionHasChanged();
 
     sal_uInt16  GetSlotID() const { return( nSlotId ); }
     sal_uInt16  GetSlotValue() const { return( nSlotValue ); }
 
-    void    SetNoScrollUntilInside(sal_Bool bNoScroll = sal_True)
+    void    SetNoScrollUntilInside(bool bNoScroll = true)
             { bNoScrollUntilInside = bNoScroll; }
 
     void StartDelayToScrollTimer ();
 
     // #97016#
-    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
+    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const basegfx::B2DRange& rRange);
 
     /** is called when the currenct function should be aborted. <p>
         This is used when a function gets a KEY_ESCAPE but can also
@@ -141,7 +138,7 @@ protected:
 
     DECL_LINK( DelayHdl, Timer * );
 
-    void ImpForceQuadratic(Rectangle& rRect);
+    void ImpForceQuadratic(basegfx::B2DRange& rRange);
 
     /** Switch to another layer.  The layer to switch to is specified by an
         offset relative to the active layer.  With respect to the layer bar
@@ -174,23 +171,23 @@ protected:
 
     Timer           aScrollTimer;           // fuer Autoscrolling
     DECL_LINK( ScrollHdl, Timer * );
-    void ForceScroll(const Point& aPixPos);
+    void ForceScroll(const basegfx::B2DPoint& aPixPos);
 
     Timer           aDragTimer;             // fuer Drag&Drop
     DECL_LINK( DragHdl, Timer * );
-    sal_Bool            bIsInDragMode;
-    Point           aMDPos;                 // Position von MouseButtonDown
+    bool            bIsInDragMode;
+    basegfx::B2DPoint   aMDPos;                 // Position von MouseButtonDown
 
     // Flag, um AutoScrolling zu verhindern, bis von ausserhalb in das
     // Fenster hinein gedragt wurde
-    sal_Bool            bNoScrollUntilInside;
+    bool            bNoScrollUntilInside;
 
     // Timer um das scrolling zu verzoegern, wenn aus dem fenster
     // herausgedraggt wird (ca. 1 sec.)
     Timer           aDelayToScrollTimer;    // fuer Verzoegerung bis scroll
-    sal_Bool            bScrollable;
-    sal_Bool            bDelayActive;
-    sal_Bool            bFirstMouseMove;
+    bool            bScrollable;
+    bool            bDelayActive;
+    bool            bFirstMouseMove;
 
     // #95491# member to hold state of the mouse buttons for creation
     // of own MouseEvents (like in ScrollHdl)

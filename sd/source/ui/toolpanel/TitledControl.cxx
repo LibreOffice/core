@@ -350,9 +350,10 @@ void TitledControl::UpdateStates (void)
 IMPL_LINK(TitledControl, WindowEventListener,
     VclSimpleEvent*, pEvent)
 {
-    if (pEvent!=NULL && pEvent->ISA(VclWindowEvent))
+    VclWindowEvent* pWindowEvent = dynamic_cast< VclWindowEvent* >(pEvent);
+
+    if (pWindowEvent)
     {
-        VclWindowEvent* pWindowEvent = static_cast<VclWindowEvent*>(pEvent);
         switch (pWindowEvent->GetId())
         {
             case VCLEVENT_WINDOW_MOUSEBUTTONUP:

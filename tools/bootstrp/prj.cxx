@@ -27,6 +27,7 @@
 #include <stdio.h>
 //#include "bootstrp/sstring.hxx"
 #include <vos/mutex.hxx>
+#include <string.h>
 
 #include <tools/stream.hxx>
 #include <tools/geninfo.hxx>

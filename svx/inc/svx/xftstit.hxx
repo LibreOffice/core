@@ -36,7 +36,7 @@
 class SVX_DLLPUBLIC XFormTextStartItem : public SfxMetricItem
 {
 public:
-                            TYPEINFO();
+    POOLITEM_FACTORY()
                             XFormTextStartItem(long nStart = 0);
                             XFormTextStartItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const;

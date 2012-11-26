@@ -36,7 +36,7 @@
 class FmFormModel;
 class FmFormPage;
 class E3dView;
-class E3dPolyScene;
+class E3dScene;
 class E3dObject;
 
 //////////////////////////////////////////////////////////////////////////////
@@ -52,7 +52,7 @@ protected:
     FmFormModel*            mpModel;
     FmFormPage*             mpFmPage;
     E3dView*                mp3DView;
-    E3dPolyScene*           mpScene;
+    E3dScene*               mpScene;
     E3dObject*              mp3DObj;
     sal_uInt16              mnObjectType;
 
@@ -106,8 +106,8 @@ class SVX_DLLPUBLIC Svx3DLightControl : public Svx3DPreviewControl
     double                      mfSaveActionStartRotZ;
 
     // bitfield
-    unsigned                    mbMouseMoved : 1;
-    unsigned                    mbGeometrySelected : 1;
+    bool                        mbMouseMoved : 1;
+    bool                        mbGeometrySelected : 1;
 
     void Construct2();
     void ConstructLightObjects();

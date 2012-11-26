@@ -38,8 +38,6 @@ class XMLStyleOOoTContext : public XMLPersElemContentTContext
     sal_Bool m_bPersistent;
 
 public:
-    TYPEINFO();
-
     XMLStyleOOoTContext( XMLTransformerBase& rTransformer,
                         const ::rtl::OUString& rQName,
                            XMLFamilyType eType,

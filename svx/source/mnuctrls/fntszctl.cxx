@@ -90,10 +90,9 @@ void SvxFontSizeMenuControl::StateChanged(
 
     if ( SFX_ITEM_AVAILABLE == eState )
     {
-        if ( pState->ISA(SvxFontHeightItem) )
+        if ( dynamic_cast< const SvxFontHeightItem* >(pState) )
         {
-            const SvxFontHeightItem* pItem =
-                PTR_CAST( SvxFontHeightItem, pState );
+            const SvxFontHeightItem* pItem = dynamic_cast< const SvxFontHeightItem* >( pState );
             long nVal = 0;
 
             if ( pItem )
@@ -113,9 +112,9 @@ void SvxFontSizeMenuControl::StateChanged(
             }
             pMenu->SetCurHeight( nVal );
         }
-        else if ( pState->ISA(SvxFontItem) )
+        else if ( dynamic_cast< const SvxFontItem* >(pState) )
         {
-            const SvxFontItem* pItem = PTR_CAST( SvxFontItem, pState );
+            const SvxFontItem* pItem = dynamic_cast< const SvxFontItem* >( pState );
 
             if ( pItem )
             {

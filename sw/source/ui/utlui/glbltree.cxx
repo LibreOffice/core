@@ -166,8 +166,9 @@ public:
  ---------------------------------------------------------------------------*/
 void    SwGlobalFrameListener_Impl::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    if( rHint.ISA(SfxSimpleHint) &&
-            (((SfxSimpleHint&) rHint).GetId() == SFX_HINT_DYING))
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if( pSfxSimpleHint && SFX_HINT_DYING == pSfxSimpleHint->GetId() )
         bValid = sal_False;
 }
 

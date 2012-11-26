@@ -35,6 +35,7 @@
 #include <vcl/gfxlink.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
+#include <memory.h>
 
 // -----------
 // - GfxLink -

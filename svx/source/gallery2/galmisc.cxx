@@ -99,8 +99,11 @@ BitmapEx GalleryResGetBitmapEx( sal_uInt32 nId )
 
 IMPL_LINK( SgaUserDataFactory, MakeUserData, SdrObjFactory*, pObjFactory )
 {
-    if ( pObjFactory->nInventor == IV_IMAPINFO && pObjFactory->nIdentifier == ID_IMAPINFO )
-        pObjFactory->pNewData = new SgaIMapInfo;
+    if ( IV_IMAPINFO == pObjFactory->getSdrObjectCreationInfo().getInvent()
+        && ID_IMAPINFO == pObjFactory->getSdrObjectCreationInfo().getIdent() )
+    {
+        pObjFactory->setNewSdrObjUserData(new SgaIMapInfo);
+    }
 
     return 0L;
 }
@@ -197,25 +200,29 @@ sal_Bool CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageM
     if ( rModel.GetPageCount() )
     {
         const SdrPage*      pPage = rModel.GetPage( 0 );
-        const SdrObject*    pObj = pPage->GetObj( 0 );
 
-        if ( pPage->GetObjCount() == 1 && pObj->ISA( SdrGrafObj ) )
+        if ( pPage->GetObjCount() == 1 )
         {
-            const sal_uInt16 nCount = pObj->GetUserDataCount();
+            const SdrGrafObj* pObj = dynamic_cast< SdrGrafObj* >(pPage->GetObj( 0 ));
+
+            if ( pObj )
+            {
+                const sal_uInt32 nCount(pObj->GetUserDataCount());
 
             // gibt es in den User-Daten eine IMap-Information?
-            for ( sal_uInt16 i = 0; i < nCount; i++ )
+                for ( sal_uInt32 i = 0; i < nCount; i++ )
             {
                 const SdrObjUserData* pUserData = pObj->GetUserData( i );
 
                 if ( ( pUserData->GetInventor() == IV_IMAPINFO ) && ( pUserData->GetId() == ID_IMAPINFO ) )
                 {
-                    rGraphic = ( (SdrGrafObj*) pObj )->GetGraphic();
+                        rGraphic = pObj->GetGraphic();
                     rImageMap = ( (SgaIMapInfo*) pUserData )->GetImageMap();
                     bRet = sal_True;
                     break;
                 }
             }
+        }
         }
     }
 

@@ -45,7 +45,6 @@ class SdrOle2ObjImpl;
 class SVX_DLLPUBLIC SdrOle2Obj :  public SdrRectObj
 {
 private:
-
     SVX_DLLPRIVATE void Connect_Impl();
     SVX_DLLPRIVATE void Disconnect_Impl();
     SVX_DLLPRIVATE void Reconnect_Impl();
@@ -67,10 +66,12 @@ protected:
     String                      aProgName;
 
     // wg. Kompatibilitaet erstmal am SdrTextObj
-    sal_Bool                        bFrame : 1;
-    sal_Bool                        bInDestruction : 1;
+    bool                        bFrame : 1;
+    bool                        bInDestruction : 1;
+
     // #i118524#
     bool                        mbSuppressSetVisAreaSize : 1;
+
     mutable bool                m_bTypeAsked;
     mutable bool                m_bChart;
 
@@ -78,19 +79,27 @@ protected:
 
     SvxUnoShapeModifyListener*  pModifyListener;
 
-protected:
-
     void ImpSetVisAreaSize();
     void Init();
+    virtual ~SdrOle2Obj();
+
+    /// method to copy all data from given source
+    virtual void copyDataFromSdrObject(const SdrObject& rSource);
 
 public:
-    TYPEINFO();
+    /// create a copy, evtl. with a different target model (if given)
+    virtual SdrObject* CloneSdrObject(SdrModel* pTargetModel = 0) const;
 
-    SdrOle2Obj(FASTBOOL bFrame_=sal_False);
-    SdrOle2Obj(const svt::EmbeddedObjectRef& rNewObjRef, FASTBOOL bFrame_=sal_False);
-    SdrOle2Obj(const svt::EmbeddedObjectRef& rNewObjRef, const String& rNewObjName, FASTBOOL bFrame_=sal_False);
-    SdrOle2Obj(const svt::EmbeddedObjectRef& rNewObjRef, const String& rNewObjName, const Rectangle& rNewRect, FASTBOOL bFrame_=sal_False);
-    virtual ~SdrOle2Obj();
+    // react on model/page change
+    virtual void handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage);
+    virtual bool IsClosedObj() const;
+
+    SdrOle2Obj(
+        SdrModel& rSdrModel,
+        const svt::EmbeddedObjectRef& rNewObjRef = svt::EmbeddedObjectRef(),
+        const String aNewObjName = String(),
+        const basegfx::B2DHomMatrix& rTransform = basegfx::B2DHomMatrix(),
+        bool bFrame_ = false);
 
     // access to svt::EmbeddedObjectRef
     const svt::EmbeddedObjectRef& getEmbeddedObjectRef() const { return xObjRef; }
@@ -123,7 +132,7 @@ public:
     // spaeter wieder abfragen kann (SD braucht das fuer Praesentationsobjekte).
     void SetProgName(const String& rNam) { aProgName=rNam; }
     const String& GetProgName() const { return aProgName; }
-    FASTBOOL IsEmpty() const;
+    bool IsEmpty() const;
 
     void SetObjRef(const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& rNewObjRef);
     com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetObjRef() const;
@@ -131,16 +140,6 @@ public:
     SVX_DLLPRIVATE com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetObjRef_NoInit() const;
 
     void AbandonObject();
-
-    virtual void SetPage(SdrPage* pNewPage);
-    virtual void SetModel(SdrModel* pModel);
-
-    /** Change the IsClosedObj attribute
-
-        @param bIsClosed
-        Whether the OLE object is closed, i.e. has opaque background
-     */
-    void SetClosedObj( bool bIsClosed );
 
     // FullDrag support
     virtual SdrObject* getFullDragClone() const;
@@ -150,18 +149,12 @@ public:
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
 
-    virtual void operator=(const SdrObject& rObj);
-
-    virtual void NbcMove(const Size& rSize);
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-    virtual void NbcSetSnapRect(const Rectangle& rRect);
-    virtual void NbcSetLogicRect(const Rectangle& rRect);
     virtual void SetGeoData(const SdrObjGeoData& rGeo);
 
-    static sal_Bool CanUnloadRunningObj( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject >& xObj,
+    static bool CanUnloadRunningObj( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject >& xObj,
                                          sal_Int64 nAspect );
-    static sal_Bool Unload( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject >& xObj, sal_Int64 nAspect );
-    sal_Bool Unload();
+    static bool Unload( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject >& xObj, sal_Int64 nAspect );
+    bool Unload();
     void Connect();
     void Disconnect();
     void ObjectLoaded();
@@ -169,10 +162,10 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > getXModel() const;
 
     // #109985#
-    sal_Bool IsChart() const;
-    sal_Bool IsCalc() const;
+    bool IsChart() const;
+    bool IsCalc() const;
 
-    sal_Bool UpdateLinkURL_Impl();
+    bool UpdateLinkURL_Impl();
     void BreakFileLink_Impl();
     void DisconnectFileLink_Impl();
     void CheckFileLink_Impl();
@@ -183,16 +176,17 @@ public:
                           const ::rtl::OUString& aMediaType );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetParentXModel()  const;
-    sal_Bool CalculateNewScaling( Fraction& aScaleWidth, Fraction& aScaleHeight, Size& aObjAreaSize );
-    sal_Bool AddOwnLightClient();
+    bool CalculateNewScaling( Fraction& aScaleWidth, Fraction& aScaleHeight, Size& aObjAreaSize );
+    bool AddOwnLightClient();
 
     // handy to get the empty replacement bitmap without accessing all the old stuff
     static Bitmap GetEmtyOLEReplacementBitmap();
 
     void SetWindow(const com::sun::star::uno::Reference < com::sun::star::awt::XWindow >& _xWindow);
+    virtual void setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransformation);
 
     // #i118485# missing converter added
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
+    virtual SdrObject* DoConvertToPolygonObject(bool bBezier, bool bAddText) const;
 };
 
 #endif //_SVDOOLE2_HXX

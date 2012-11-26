@@ -39,6 +39,7 @@
 #include <rtl/uuid.h>
 #include <vcl/virdev.hxx>
 #include <com/sun/star/awt/FontSlant.hpp>
+#include <svx/globaldrawitempool.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <editeng/unoipset.hxx>
@@ -93,7 +94,7 @@ const SvxItemPropertySet * lcl_GetHdFtPropertySet()
         }
         bTwipsSet = sal_True;
     }
-    static SvxItemPropertySet aHdFtPropertySet_Impl( aHdFtPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
+    static SvxItemPropertySet aHdFtPropertySet_Impl( aHdFtPropertyMap_Impl, GetGlobalDrawObjectItemPool() );
     return &aHdFtPropertySet_Impl;
 }
 
@@ -253,9 +254,11 @@ ScHeaderFooterTextData::~ScHeaderFooterTextData()
 
 void ScHeaderFooterTextData::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.ISA( ScHeaderFooterChangedHint ) )
+    const ScHeaderFooterChangedHint* pScHeaderFooterChangedHint = dynamic_cast< const ScHeaderFooterChangedHint* >(&rHint);
+
+    if ( pScHeaderFooterChangedHint )
     {
-        if ( ((const ScHeaderFooterChangedHint&)rHint).GetPart() == nPart )
+        if ( pScHeaderFooterChangedHint->GetPart() == nPart )
         {
             if (!bInUpdate)             // not for own updates
                 bDataValid = sal_False;     // text has to be fetched again
@@ -1112,13 +1115,13 @@ void ScCellTextData::UpdateData()
 
 void ScCellTextData::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.ISA( ScUpdateRefHint ) )
+    if ( dynamic_cast< const ScUpdateRefHint* >(&rHint) )
     {
 //        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
 
         //! Ref-Update
     }
-    else if ( rHint.ISA( SfxSimpleHint ) )
+    else if ( dynamic_cast< const SfxSimpleHint* >(&rHint) )
     {
         sal_uLong nId = ((const SfxSimpleHint&)rHint).GetId();
         if ( nId == SFX_HINT_DYING )

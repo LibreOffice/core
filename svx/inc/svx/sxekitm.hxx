@@ -38,7 +38,6 @@ enum SdrEdgeKind {SDREDGE_ORTHOLINES,
 //------------------------------
 class SVX_DLLPUBLIC SdrEdgeKindItem: public SfxEnumItem {
 public:
-    TYPEINFO();
     SdrEdgeKindItem(SdrEdgeKind eStyle=SDREDGE_ORTHOLINES): SfxEnumItem(SDRATTR_EDGEKIND,sal::static_int_cast< sal_uInt16 >(eStyle)) {}
     SdrEdgeKindItem(SvStream& rIn)                        : SfxEnumItem(SDRATTR_EDGEKIND,rIn)    {}
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=NULL) const;

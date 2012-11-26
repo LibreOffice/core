@@ -54,6 +54,7 @@
 #include <unotools/syslocale.hxx>
 #include <tools/gen.hxx>
 #include <tools/diagnose_ex.h>
+#include <svx/svdlegacy.hxx>
 
 #include <set>
 
@@ -135,7 +136,7 @@ namespace svxform
         return initializeControlModel(
             _eDocType,
             Reference< XPropertySet >( _rObject.GetUnoControlModel(), UNO_QUERY ),
-            _rObject.GetCurrentBoundRect()
+            _rObject.getObjectRange(0)
         );
     }
 
@@ -143,7 +144,7 @@ namespace svxform
     sal_Int16 FormControlFactory::initializeControlModel( const DocumentType _eDocType, const Reference< XPropertySet >& _rxControlModel )
     {
         return initializeControlModel(
-            _eDocType, _rxControlModel, Rectangle()
+            _eDocType, _rxControlModel, basegfx::B2DRange()
         );
     }
 
@@ -396,7 +397,7 @@ namespace svxform
 
     //--------------------------------------------------------------------
     sal_Int16 FormControlFactory::initializeControlModel( const DocumentType _eDocType, const Reference< XPropertySet >& _rxControlModel,
-        const Rectangle& _rControlBoundRect )
+        const basegfx::B2DRange& _rControlBoundRange )
     {
         sal_Int16 nClassId = FormComponentType::CONTROL;
 
@@ -418,7 +419,7 @@ namespace svxform
                 case FormComponentType::SPINBUTTON:
                 {
                     sal_Int32 eOrientation = ScrollBarOrientation::HORIZONTAL;
-                    if ( !_rControlBoundRect.IsEmpty() && ( _rControlBoundRect.GetWidth() < _rControlBoundRect.GetHeight() ) )
+                    if ( !_rControlBoundRange.isEmpty() && ( _rControlBoundRange.getWidth() < _rControlBoundRange.getHeight() ) )
                         eOrientation = ScrollBarOrientation::VERTICAL;
                     _rxControlModel->setPropertyValue( FM_PROP_ORIENTATION, makeAny( eOrientation ) );
                 }
@@ -427,7 +428,7 @@ namespace svxform
                 case FormComponentType::LISTBOX:
                 case FormComponentType::COMBOBOX:
                 {
-                    sal_Bool bDropDown = !_rControlBoundRect.IsEmpty() && ( _rControlBoundRect.GetWidth() >= 3 * _rControlBoundRect.GetHeight() );
+                    sal_Bool bDropDown = !_rControlBoundRange.isEmpty() && ( _rControlBoundRange.getWidth() >= 3.0 * _rControlBoundRange.getHeight() );
                     if ( xPSI->hasPropertyByName( FM_PROP_DROPDOWN ) )
                         _rxControlModel->setPropertyValue( FM_PROP_DROPDOWN, makeAny( (sal_Bool)bDropDown ) );
                     _rxControlModel->setPropertyValue( FM_PROP_LINECOUNT, makeAny( sal_Int16( 20 ) ) );
@@ -439,8 +440,8 @@ namespace svxform
                     initializeTextFieldLineEnds( _rxControlModel );
                     lcl_initializeCharacterAttributes( _rxControlModel );
 
-                    if  (   !_rControlBoundRect.IsEmpty()
-                        &&  !( _rControlBoundRect.GetWidth() > 4 * _rControlBoundRect.GetHeight() )
+                    if  (   !_rControlBoundRange.isEmpty()
+                        &&  !( _rControlBoundRange.getWidth() > 4.0 * _rControlBoundRange.getHeight() )
                         )
                     {
                         if ( xPSI->hasPropertyByName( FM_PROP_MULTILINE ) )

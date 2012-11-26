@@ -538,7 +538,7 @@ void SwSrcEditWindow::CreateTextEngine()
     pTextEngine->EnableUndo( sal_True );
     pTextEngine->SetUpdateMode( sal_True );
 
-    pTextView->ShowCursor( sal_True, sal_True );
+    pTextView->ShowCursor( true, true );
     InitScrollBars();
     StartListening( *pTextEngine );
 
@@ -596,14 +596,14 @@ IMPL_LINK(SwSrcEditWindow, ScrollHdl, ScrollBar*, pScroll)
     {
         long nDiff = pTextView->GetStartDocPos().Y() - pScroll->GetThumbPos();
         GetTextView()->Scroll( 0, nDiff );
-        pTextView->ShowCursor( sal_False, sal_True );
+        pTextView->ShowCursor( false, true );
         pScroll->SetThumbPos( pTextView->GetStartDocPos().Y() );
     }
     else
     {
         long nDiff = pTextView->GetStartDocPos().X() - pScroll->GetThumbPos();
         GetTextView()->Scroll( nDiff, 0 );
-        pTextView->ShowCursor( sal_False, sal_True );
+        pTextView->ShowCursor( false, true );
         pScroll->SetThumbPos( pTextView->GetStartDocPos().X() );
     }
     GetSrcView()->GetViewFrame()->GetBindings().Invalidate( SID_TABLE_CELL );
@@ -673,7 +673,7 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
         pTextEngine->SetActiveView(0);
         // pTextEngine->SetUpdateMode( sal_True );
         pTextEngine->SetActiveView(pTmp);
-        pTextView->ShowCursor(sal_False, sal_False);
+        pTextView->ShowCursor(false, false);
     */
 
     if(aSyntaxLineTable.Count() && !pTimer->IsActive())
@@ -712,7 +712,7 @@ void SwSrcEditWindow::DoSyntaxHighlight( sal_uInt16 nPara )
         pTextEngine->SetActiveView(pTmp);
         // Bug 72887 show the cursor
         pTmp->SetAutoScroll(sal_True);
-        pTmp->ShowCursor( sal_False/*pTmp->IsAutoScroll()*/ );
+        pTmp->ShowCursor( false/*pTmp->IsAutoScroll()*/ );
 
         if(!bTempModified)
             ClearModifyFlag();
@@ -810,25 +810,26 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, sal_uInt16 nLineOff
 
 void SwSrcEditWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    if ( rHint.ISA( TextHint ) )
+    const TextHint* pTextHint = dynamic_cast< const TextHint* >(&rHint);
+
+    if ( pTextHint )
     {
-        const TextHint& rTextHint = (const TextHint&)rHint;
-        if( rTextHint.GetId() == TEXT_HINT_VIEWSCROLLED )
+        if( pTextHint->GetId() == TEXT_HINT_VIEWSCROLLED )
         {
             pHScrollbar->SetThumbPos( pTextView->GetStartDocPos().X() );
             pVScrollbar->SetThumbPos( pTextView->GetStartDocPos().Y() );
         }
-        else if( rTextHint.GetId() == TEXT_HINT_TEXTHEIGHTCHANGED )
+        else if( pTextHint->GetId() == TEXT_HINT_TEXTHEIGHTCHANGED )
         {
             if ( (long)pTextEngine->GetTextHeight() < pOutWin->GetOutputSizePixel().Height() )
                 pTextView->Scroll( 0, pTextView->GetStartDocPos().Y() );
             pVScrollbar->SetThumbPos( pTextView->GetStartDocPos().Y() );
             SetScrollBarRanges();
         }
-        else if( ( rTextHint.GetId() == TEXT_HINT_PARAINSERTED ) ||
-                 ( rTextHint.GetId() == TEXT_HINT_PARACONTENTCHANGED ) )
+        else if( ( pTextHint->GetId() == TEXT_HINT_PARAINSERTED ) ||
+                 ( pTextHint->GetId() == TEXT_HINT_PARACONTENTCHANGED ) )
         {
-            DoDelayedSyntaxHighlight( (sal_uInt16)rTextHint.GetValue() );
+            DoDelayedSyntaxHighlight( (sal_uInt16)pTextHint->GetValue() );
         }
     }
 }

@@ -29,10 +29,10 @@
 //------------------------------
 // class SdrShearAngleItem
 //------------------------------
-class SdrShearAngleItem: public SdrAngleItem {
-public:
-    SdrShearAngleItem(long nAngle=0): SdrAngleItem(SDRATTR_SHEARANGLE,nAngle) {}
-    SdrShearAngleItem(SvStream& rIn): SdrAngleItem(SDRATTR_SHEARANGLE,rIn)    {}
-};
+//class SdrShearAngleItem: public SdrAngleItem {
+//public:
+//  SdrShearAngleItem(long nAngle=0): SdrAngleItem(SDRATTR_SHEARANGLE,nAngle) {}
+//  SdrShearAngleItem(SvStream& rIn): SdrAngleItem(SDRATTR_SHEARANGLE,rIn)    {}
+//};
 
 #endif

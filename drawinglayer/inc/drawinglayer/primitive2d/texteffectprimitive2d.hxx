@@ -84,9 +84,6 @@ namespace drawinglayer
             double getDirection() const { return mfDirection; }
             TextEffectStyle2D getTextEffectStyle2D() const { return meTextEffectStyle2D; }
 
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
-
             /** own get range implementation to solve more effective. Content is by definition displaced
                 by a fixed discrete unit, thus the contained geometry needs only once be asked for it's
                 own basegfx::B2DRange

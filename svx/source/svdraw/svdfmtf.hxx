@@ -48,12 +48,13 @@ class ImpSdrGDIMetaFileImport
 protected:
     ::std::vector< SdrObject* > maTmpList;
     VirtualDevice               maVD;
-    Rectangle                   maScaleRect;
-    sal_uLong                   mnMapScalingOfs; // ab hier nocht nicht mit MapScaling bearbeitet
+    const basegfx::B2DHomMatrix maObjectTransform;  // transform from the original object
+    basegfx::B2DHomMatrix       maMetaToUnit;       // transform from meta coordinates to unit coodinates
+    basegfx::B2DHomMatrix       maCurrent;          // current transform from meta to new object
     SfxItemSet*                 mpLineAttr;
     SfxItemSet*                 mpFillAttr;
     SfxItemSet*                 mpTextAttr;
-    SdrModel*                   mpModel;
+    SdrModel&                   mrModel;
     SdrLayerID                  mnLayer;
     Color                       maOldLineColor;
     sal_Int32                   mnLineWidth;
@@ -61,26 +62,19 @@ protected:
     com::sun::star::drawing::LineCap    maLineCap;
     XDash                       maDash;
 
-    bool                        mbMov;
-    bool                        mbSize;
-    Point                       maOfs;
-    double                      mfScaleX;
-    double                      mfScaleY;
-    Fraction                    maScaleX;
-    Fraction                    maScaleY;
-
-    bool                        mbFntDirty;
-
-    // fuer Optimierung von (PenNULL,Brush,DrawPoly),(Pen,BrushNULL,DrawPoly) -> aus 2 mach ein
-    bool                        mbLastObjWasPolyWithoutLine;
-    bool                        mbNoLine;
-    bool                        mbNoFill;
-
-    // fuer Optimierung mehrerer Linien zu einer Polyline
-    bool                        mbLastObjWasLine;
-
     // clipregion
     basegfx::B2DPolyPolygon     maClip;
+
+    /// bitfield
+    bool                        mbFntDirty : 1;
+
+    // fuer Optimierung von (PenNULL,Brush,DrawPoly),(Pen,BrushNULL,DrawPoly) -> aus 2 mach ein
+    bool                        mbLastObjWasPolyWithoutLine : 1;
+    bool                        mbNoLine : 1;
+    bool                        mbNoFill : 1;
+
+    // fuer Optimierung mehrerer Linien zu einer Polyline
+    bool                        mbLastObjWasLine : 1;
 
 protected:
     // ckeck for clip and evtl. fill maClip
@@ -108,7 +102,7 @@ protected:
     void DoAction(MetaBmpExAction           & rAct);
     void DoAction(MetaBmpExScaleAction      & rAct);
     void DoAction(MetaHatchAction           & rAct);
-    void DoAction(MetaLineColorAction       & rAct);
+    void DoAction(MetaLineColorAction       & rAct) { rAct.Execute(&maVD); }
     void DoAction(MetaMapModeAction         & rAct);
     void DoAction(MetaFillColorAction       & rAct) { rAct.Execute(&maVD); }
     void DoAction(MetaTextColorAction       & rAct) { rAct.Execute(&maVD); }
@@ -146,8 +140,7 @@ protected:
 
     void ImportText(const Point& rPos, const XubString& rStr, const MetaAction& rAct);
     void SetAttributes(SdrObject* pObj, bool bForceTextAttr = false);
-    void InsertObj(SdrObject* pObj, bool bScale = true);
-    void MapScaling();
+    void InsertObj(SdrObject* pObj);
 
     // #i73407# reformulation to use new B2DPolygon classes
     bool CheckLastLineMerge(const basegfx::B2DPolygon& rSrcPoly);
@@ -159,7 +152,7 @@ public:
     ImpSdrGDIMetaFileImport(
         SdrModel& rModel,
         SdrLayerID nLay,
-        const Rectangle& rRect);
+        const basegfx::B2DHomMatrix& rObjectTransform);
     ~ImpSdrGDIMetaFileImport();
 
     sal_uInt32 DoImport(

@@ -108,24 +108,13 @@ namespace drawinglayer
         TextHierarchyFieldPrimitive2D::TextHierarchyFieldPrimitive2D(
             const Primitive2DSequence& rChildren,
             const FieldType& rFieldType,
-            const rtl::OUString& rString)
+            const rtl::OUString& rStringA,
+            const rtl::OUString& rStringB)
         :   GroupPrimitive2D(rChildren),
             meType(rFieldType),
-            maString(rString)
+            maStringA(rStringA),
+            maStringB(rStringB)
         {
-        }
-
-        bool TextHierarchyFieldPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(GroupPrimitive2D::operator==(rPrimitive))
-            {
-                const TextHierarchyFieldPrimitive2D& rCompare = (TextHierarchyFieldPrimitive2D&)rPrimitive;
-
-                return (getType() == rCompare.getType()
-                    &&  getString() == rCompare.getString());
-            }
-
-            return false;
         }
 
         // provide unique ID

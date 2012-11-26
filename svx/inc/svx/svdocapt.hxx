@@ -44,7 +44,7 @@ namespace sdr { namespace properties {
 //************************************************************
 
 // #109872#
-class SdrCaptObjGeoData : public SdrTextObjGeoData
+class SdrCaptObjGeoData : public SdrObjGeoData
 {
 public:
     Polygon                     aTailPoly;
@@ -61,17 +61,11 @@ private:
     friend class sdr::properties::CaptionProperties;
     friend class                SdrTextObj; // fuer ImpRecalcTail() bei AutoGrow
 
-protected:
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
-
-private:
     Polygon                     aTailPoly;  // das ganze Polygon des Schwanzes
     sal_Bool                    mbSpecialTextBoxShadow; // for calc special shadow, default FALSE
     sal_Bool                    mbFixedTail; // for calc note box fixed tail, default FALSE
-    Point                       maFixedTailPos; // for calc note box fixed tail position.
+    basegfx::B2DPoint           maFixedTailPos; // for calc note box fixed tail position.
 
-private:
     SVX_DLLPRIVATE void ImpGetCaptParams(ImpCaptParams& rPara) const;
     SVX_DLLPRIVATE void ImpCalcTail1(const ImpCaptParams& rPara, Polygon& rPoly, Rectangle& rRect) const;
     SVX_DLLPRIVATE void ImpCalcTail2(const ImpCaptParams& rPara, Polygon& rPoly, Rectangle& rRect) const;
@@ -80,16 +74,25 @@ private:
     SVX_DLLPRIVATE void ImpCalcTail (const ImpCaptParams& rPara, Polygon& rPoly, Rectangle& rRect) const;
     SVX_DLLPRIVATE void ImpRecalcTail();
 
-public:
-    TYPEINFO();
-    SdrCaptionObj();
-    SdrCaptionObj(const Rectangle& rRect);
-    SdrCaptionObj(const Rectangle& rRect, const Point& rTail);
+protected:
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+
     virtual ~SdrCaptionObj();
+
+    /// method to copy all data from given source
+    virtual void copyDataFromSdrObject(const SdrObject& rSource);
+
+public:
+    /// create a copy, evtl. with a different target model (if given)
+    virtual SdrObject* CloneSdrObject(SdrModel* pTargetModel = 0) const;
+    SdrCaptionObj(
+        SdrModel& rSdrModel,
+        const basegfx::B2DHomMatrix& rTransform = basegfx::B2DHomMatrix(),
+        const basegfx::B2DPoint* pTail = 0);
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual sal_uInt16 GetObjIdentifier() const;
-    virtual void operator=(const SdrObject& rObj);
 
     // for calc: special shadow only for text box
     void SetSpecialTextBoxShadow() { mbSpecialTextBoxShadow = sal_True; }
@@ -102,11 +105,9 @@ public:
     virtual void TakeObjNamePlural(String& rName) const;
 
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
-    virtual void SetModel(SdrModel* pNewModel);
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
-    virtual sal_uInt32 GetHdlCount() const;
-    virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
+    virtual void AddToHdlList(SdrHdlList& rHdlList) const;
 
     // special drag methods
     virtual bool hasSpecialDrag() const;
@@ -114,30 +115,16 @@ public:
     virtual bool applySpecialDrag(SdrDragStat& rDrag);
     virtual String getSpecialDragComment(const SdrDragStat& rDrag) const;
 
-    virtual FASTBOOL BegCreate(SdrDragStat& rStat);
-    virtual FASTBOOL MovCreate(SdrDragStat& rStat);
-    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
-    virtual FASTBOOL BckCreate(SdrDragStat& rStat);
+    virtual bool BegCreate(SdrDragStat& rStat);
+    virtual bool MovCreate(SdrDragStat& rStat);
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+    virtual bool BckCreate(SdrDragStat& rStat);
     virtual void BrkCreate(SdrDragStat& rStat);
     virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;
-    virtual Pointer GetCreatePointer() const;
-
-    virtual void NbcMove(const Size& rSiz);
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-
-    virtual void NbcSetRelativePos(const Point& rPnt);
-    virtual Point GetRelativePos() const;
-    virtual void NbcSetAnchorPos(const Point& rPnt);
-    virtual const Point& GetAnchorPos() const;
-
-    virtual void RecalcSnapRect();
-    virtual const Rectangle& GetSnapRect() const;
-    virtual void NbcSetSnapRect(const Rectangle& rRect);
-    virtual const Rectangle& GetLogicRect() const;
-    virtual void NbcSetLogicRect(const Rectangle& rRect);
+    virtual Pointer GetCreatePointer(const SdrView& rSdrView) const;
 
     virtual sal_uInt32 GetSnapPointCount() const;
-    virtual Point GetSnapPoint(sal_uInt32 i) const;
+    virtual basegfx::B2DPoint GetSnapPoint(sal_uInt32 i) const;
 
 protected:
     virtual SdrObjGeoData* NewGeoData() const;
@@ -145,20 +132,16 @@ protected:
     virtual void RestGeoData(const SdrObjGeoData& rGeo);
 
 public:
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
+    virtual SdrObject* DoConvertToPolygonObject(bool bBezier, bool bAddText) const;
 
-    const Point& GetTailPos() const;
-    void SetTailPos(const Point& rPos);
-    void NbcSetTailPos(const Point& rPos);
-
-    // #i32599#
-    // Add own implementation for TRSetBaseGeometry to handle TailPos over changes
-    virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon);
-
-    inline const Point& GetFixedTailPos() const  {return maFixedTailPos;}
+    const basegfx::B2DPoint GetTailPos() const;
+    void SetTailPos(const basegfx::B2DPoint& rPos);
+    inline const basegfx::B2DPoint& GetFixedTailPos() const  {return maFixedTailPos;}
 
     // geometry access
     ::basegfx::B2DPolygon getTailPolygon() const;
+
+    virtual void setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransformation);
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

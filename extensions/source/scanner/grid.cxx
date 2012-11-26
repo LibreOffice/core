@@ -31,9 +31,8 @@
 #include <cmath>
 #undef _USE_MATH_DEFINES
 
+#include <memory.h>
 #include <grid.hxx>
-
-// for ::std::sort
 #include <algorithm>
 
 ResId SaneResId( sal_uInt32 );

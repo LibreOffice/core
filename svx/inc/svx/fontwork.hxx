@@ -41,9 +41,7 @@
 // forward ---------------------------------------------------------------
 
 class SdrView;
-class SdrPageView;
 class SdrObject;
-
 class XFormTextAdjustItem;
 class XFormTextDistanceItem;
 class XFormTextStartItem;
@@ -184,7 +182,7 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
     void SetColorTable(const XColorTable* pTable);
     void SetActive(sal_Bool bActivate = sal_True);
 
-    void CreateStdFormObj(SdrView& rView, SdrPageView& rPV,
+    void CreateStdFormObj(SdrView& rView,
                           const SfxItemSet& rAttr, SdrObject& rOldObj,
                           XFormTextStdForm eForm);
 };

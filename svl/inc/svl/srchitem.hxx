@@ -79,9 +79,8 @@ class SVL_DLLPUBLIC SvxSearchItem :
     sal_Bool        bAsianOptions;      // use asian options?
 
 public:
-    TYPEINFO();
-
-    SvxSearchItem( const sal_uInt16 nId );
+    POOLITEM_FACTORY()
+    SvxSearchItem( const sal_uInt16 nId = 0);
     SvxSearchItem( const SvxSearchItem& rItem );
     virtual ~SvxSearchItem();
 

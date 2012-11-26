@@ -89,19 +89,6 @@ namespace drawinglayer
         {
         }
 
-        bool DiscreteBitmapPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(ObjectAndViewTransformationDependentPrimitive2D::operator==(rPrimitive))
-            {
-                const DiscreteBitmapPrimitive2D& rCompare = (DiscreteBitmapPrimitive2D&)rPrimitive;
-
-                return (getBitmapEx() == rCompare.getBitmapEx()
-                    && getTopLeft() == rCompare.getTopLeft());
-            }
-
-            return false;
-        }
-
         // provide unique ID
         ImplPrimitrive2DIDBlock(DiscreteBitmapPrimitive2D, PRIMITIVE2D_ID_DISCRETEBITMAPPRIMITIVE2D)
 

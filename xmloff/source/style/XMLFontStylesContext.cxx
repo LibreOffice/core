@@ -101,8 +101,6 @@ class XMLFontStyleContext_Impl : public SvXMLStyleContext
 
 public:
 
-    TYPEINFO();
-
     XMLFontStyleContext_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const ::rtl::OUString& rLName,
             const ::com::sun::star::uno::Reference<
@@ -121,8 +119,6 @@ public:
                          sal_Int32 nCharsetIdx ) const;
 
 };
-
-TYPEINIT1( XMLFontStyleContext_Impl, SvXMLStyleContext );
 
 XMLFontStyleContext_Impl::XMLFontStyleContext_Impl( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
@@ -239,8 +235,6 @@ SvXMLStyleContext *XMLFontStylesContext::CreateStyleChildContext(
     return pStyle;
 }
 
-TYPEINIT1( XMLFontStylesContext, SvXMLStylesContext );
-
 XMLFontStylesContext::XMLFontStylesContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
@@ -273,7 +267,7 @@ sal_Bool XMLFontStylesContext::FillProperties( const OUString& rName,
                          sal_Int32 nCharsetIdx ) const
 {
     const SvXMLStyleContext* pStyle = FindStyleChildContext( XML_STYLE_FAMILY_FONT, rName, sal_True );
-    const XMLFontStyleContext_Impl *pFontStyle = PTR_CAST( XMLFontStyleContext_Impl,pStyle);// use temp var, PTR_CAST is a bad macro, FindStyleChildContext will be called twice
+    const XMLFontStyleContext_Impl *pFontStyle = dynamic_cast< const XMLFontStyleContext_Impl* >( pStyle);// use temp var, RTTI is a bad macro, FindStyleChildContext will be called twice
     if( pFontStyle )
         pFontStyle->FillProperties( rProps, nFamilyNameIdx, nStyleNameIdx,
                                     nFamilyIdx, nPitchIdx, nCharsetIdx );

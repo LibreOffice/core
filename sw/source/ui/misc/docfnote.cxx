@@ -164,7 +164,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
     SfxObjectShell * pDocSh = SfxObjectShell::Current();
     sal_uInt16 i;
 
-    if(PTR_CAST(SwWebDocShell, pDocSh))
+    if(dynamic_cast< SwWebDocShell* >( pDocSh))
     {
         aParaTemplLbl   .Hide();
         aParaTemplBox   .Hide();

@@ -40,7 +40,6 @@ class SbProperty : public SbxProperty
     virtual ~SbProperty();
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_BASICPROP,1);
-    TYPEINFO();
     SbModule* GetModule() { return pMod; }
 };
 
@@ -60,7 +59,6 @@ public:
             : SbxProperty( r, t ) // , pMod( p )
             , mbSet( false )
     {}
-    TYPEINFO();
 
     bool isSet( void )
         { return mbSet; }

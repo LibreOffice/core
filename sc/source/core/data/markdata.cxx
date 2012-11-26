@@ -29,10 +29,10 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include <tools/debug.hxx>
-
 #include "markdata.hxx"
 #include "markarr.hxx"
 #include "rangelst.hxx"
+#include <memory.h>
 
 // STATIC DATA -----------------------------------------------------------
 

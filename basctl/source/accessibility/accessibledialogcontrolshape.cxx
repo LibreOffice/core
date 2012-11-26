@@ -38,6 +38,7 @@
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
+#include <svx/svdlegacy.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -88,7 +89,7 @@ sal_Bool AccessibleDialogControlShape::IsFocused()
     if ( m_pDialogWindow )
     {
         SdrView* pSdrView = m_pDialogWindow->GetView();
-        if ( pSdrView && pSdrView->IsObjMarked( m_pDlgEdObj ) && pSdrView->GetMarkedObjectList().GetMarkCount() == 1 )
+        if ( pSdrView && pSdrView->getSelectedIfSingle() == m_pDlgEdObj )
             bFocused = sal_True;
     }
 
@@ -104,7 +105,7 @@ sal_Bool AccessibleDialogControlShape::IsSelected()
     {
         SdrView* pSdrView = m_pDialogWindow->GetView();
         if ( pSdrView )
-            bSelected = pSdrView->IsObjMarked( m_pDlgEdObj );
+            bSelected = pSdrView->IsObjMarked( *m_pDlgEdObj );
     }
 
     return bSelected;
@@ -150,7 +151,7 @@ awt::Rectangle AccessibleDialogControlShape::GetBounds()
     if ( m_pDlgEdObj )
     {
         // get the bounding box of the shape in logic units
-        Rectangle aRect = m_pDlgEdObj->GetSnapRect();
+        Rectangle aRect(sdr::legacy::GetSnapRect(*m_pDlgEdObj));
 
         if ( m_pDialogWindow )
         {

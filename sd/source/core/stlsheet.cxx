@@ -33,7 +33,6 @@
 #include <vcl/svapp.hxx>
 #include <comphelper/serviceinfohelper.hxx>
 #include <boost/bind.hpp>
-
 #include "eetext.hxx"
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
@@ -41,7 +40,6 @@
 #include <editeng/ulspitem.hxx>
 #include <svl/smplhint.hxx>
 #include <svl/itemset.hxx>
-
 #include <svx/xflbmtit.hxx>
 #include <svx/xflbstit.hxx>
 #include <editeng/bulitem.hxx>
@@ -49,6 +47,8 @@
 #include <svx/unoshprp.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/svdpool.hxx>
+#include <svx/xit.hxx>
+
 #include "stlsheet.hxx"
 #include "sdresid.hxx"
 #include "sdpage.hxx"
@@ -60,6 +60,7 @@
 #include "helpids.h"
 #include "../ui/inc/DrawViewShell.hxx"
 #include "../ui/inc/ViewShellBase.hxx"
+#include <svx/globaldrawitempool.hxx>
 #include <editeng/boxitem.hxx>
 
 using ::rtl::OUString;
@@ -103,7 +104,7 @@ static SvxItemPropertySet& GetStylePropertySet()
         {0,0,0,0,0,0}
     };
 
-    static SvxItemPropertySet aPropSet( aFullPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
+    static SvxItemPropertySet aPropSet( aFullPropertyMap_Impl, GetGlobalDrawObjectItemPool() );
     return aPropSet;
 }
 
@@ -204,7 +205,7 @@ void SdStyleSheet::Store(SvStream& rOut)
 
 sal_Bool SdStyleSheet::SetParent(const String& rParentName)
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     if (SfxStyleSheet::SetParent(rParentName))
     {
@@ -216,7 +217,7 @@ sal_Bool SdStyleSheet::SetParent(const String& rParentName)
                 SfxStyleSheetBase* pStyle = rPool.Find(rParentName, nFamily);
                 if (pStyle)
                 {
-                    bResult = sal_True;
+                    bResult = true;
                     SfxItemSet& rParentSet = pStyle->GetItemSet();
                     GetItemSet().SetParent(&rParentSet);
                     Broadcast( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
@@ -224,14 +225,14 @@ sal_Bool SdStyleSheet::SetParent(const String& rParentName)
             }
             else
             {
-                bResult = sal_True;
+                bResult = true;
                 GetItemSet().SetParent(NULL);
                 Broadcast( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
             }
         }
         else
         {
-            bResult = sal_True;
+            bResult = true;
         }
     }
     return bResult;
@@ -350,7 +351,7 @@ SfxItemSet& SdStyleSheet::GetItemSet()
 
 sal_Bool SdStyleSheet::IsUsed() const
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     sal_uInt16 nListenerCount = GetListenerCount();
     if (nListenerCount > 0)
@@ -362,14 +363,22 @@ sal_Bool SdStyleSheet::IsUsed() const
                 continue;
 
             // NULL-Pointer ist im Listener-Array erlaubt
-            if (pListener && pListener->ISA(SdrAttrObj))
+            SdrAttrObj* pSdrAttrObj = dynamic_cast< SdrAttrObj* >(pListener);
+
+            if (pSdrAttrObj)
             {
-                bResult = ((SdrAttrObj*)pListener)->IsInserted();
+                bResult = pSdrAttrObj->IsObjectInserted();
             }
-            else if (pListener && pListener->ISA(SfxStyleSheet))
+            else
             {
-                bResult = ((SfxStyleSheet*)pListener)->IsUsed();
+                SfxStyleSheet* pSfxStyleSheet = dynamic_cast< SfxStyleSheet* >(pListener);
+
+                if (pSfxStyleSheet)
+                {
+                    bResult = pSfxStyleSheet->IsUsed();
+                }
             }
+
             if (bResult)
                 break;
         }
@@ -566,7 +575,7 @@ void SdStyleSheet::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     // wenn der Stellvertreter ein Notify bezueglich geaenderter Attribute
     // bekommt, sorgt er dafuer, dass das eigentlich gemeinte StyleSheet
     // broadcastet
-    SfxSimpleHint* pSimple = PTR_CAST(SfxSimpleHint, &rHint);
+    const SfxSimpleHint* pSimple = dynamic_cast< const SfxSimpleHint* >(&rHint);
     sal_uLong nId = pSimple == NULL ? 0 : pSimple->GetId();
     if (nId == SFX_HINT_DATACHANGED && nFamily == SD_STYLE_FAMILY_PSEUDO)
     {
@@ -582,11 +591,11 @@ void SdStyleSheet::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 |* berechnet, dass das Verhaeltnis zur Fonthoehe so ist wie im StyleSheet.
 |*
 |* bOnlyMissingItems legt fest, ob lediglich nicht gesetzte Items ergaenzt
-|* (sal_True) oder explizit gesetzte Items ueberschreiben werden sollen (sal_False)
+|* (true) oder explizit gesetzte Items ueberschreiben werden sollen (false)
 |*
 \************************************************************************/
 
-void SdStyleSheet::AdjustToFontHeight(SfxItemSet& rSet, sal_Bool bOnlyMissingItems)
+void SdStyleSheet::AdjustToFontHeight(SfxItemSet& rSet, bool bOnlyMissingItems)
 {
     // Bulletbreite und Texteinzug an neue Fonthoehe
     // anpassen, wenn sie nicht explizit gesetzt wurden

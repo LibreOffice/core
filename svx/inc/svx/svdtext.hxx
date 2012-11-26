@@ -49,9 +49,7 @@ public:
     SdrText( SdrTextObj& rObject, OutlinerParaObject* pOutlinerParaObject = 0 );
     virtual ~SdrText();
 
-    virtual void SetModel(SdrModel* pNewModel);
     virtual void ForceOutlinerParaObject( sal_uInt16 nOutlMode );
-
     virtual void SetOutlinerParaObject( OutlinerParaObject* pTextObject );
     virtual OutlinerParaObject* GetOutlinerParaObject() const;
 
@@ -61,12 +59,13 @@ public:
     // default uses GetObjectItemSet, but may be overloaded to
     // return a text-specific ItemSet
     virtual const SfxItemSet& GetItemSet() const;
-
-    SdrModel* GetModel() const { return mpModel; }
-    SdrTextObj& GetObject() const { return mrObject; }
+    SdrTextObj& getSdrTextObj() const { return mrObject; }
 
     /** returns the current OutlinerParaObject and removes it from this instance */
     OutlinerParaObject* RemoveOutlinerParaObject();
+
+    // support model change, e.g. when text object is cloned to a new SdrModel
+    void ImpModelChange(SdrModel& rSourceModel, SdrModel& rTargetModel);
 
 protected:
     virtual const SfxItemSet& GetObjectItemSet();
@@ -76,8 +75,9 @@ protected:
 private:
     OutlinerParaObject* mpOutlinerParaObject;
     SdrTextObj& mrObject;
-    SdrModel* mpModel;
-    bool mbPortionInfoChecked;
+
+    /// bitfield
+    bool                    mbPortionInfoChecked : 1;
 };
 
 #endif //_SVDTEXT_HXX

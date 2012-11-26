@@ -126,7 +126,7 @@ public:
             page objects.
         @return
             The return value indicates whether the Get... methods can be
-            used to obtain valid values (<TRUE/>).
+            used to obtain valid values (<true/>).
     */
     bool Rearrange (
         const Orientation eOrientation,
@@ -157,7 +157,7 @@ public:
     */
     Fraction GetScaleFactor (void) const;
 
-    Size GetPageObjectSize (void) const;
+    const Size& GetPageObjectSize (void) const;
 
     /** Return the bounding box in window coordinates of the nIndex-th page
         object.
@@ -185,7 +185,7 @@ public:
             The position is expected to be in model coordinates relative to
             the page origin.
         @param bIncludePageBorders
-            When <TRUE/> then include the page borders into the calculation,
+            When <true/> then include the page borders into the calculation,
             i.e. when a point lies in the border of a page object but not on
             the actual page area the index of that page is returned;
             otherwise -1 would be returned to indicate that no page object

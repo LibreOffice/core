@@ -30,9 +30,6 @@
 #include <basic/sbx.hxx>
 #include "sbxres.hxx"
 
-TYPEINIT1(SbxCollection,SbxObject)
-TYPEINIT1(SbxStdCollection,SbxCollection)
-
 static const char* pCount;
 static const char* pAdd;
 static const char* pItem;
@@ -122,7 +119,7 @@ SbxVariable* SbxCollection::Find( const XubString& rName, SbxClassType t )
 void SbxCollection::SFX_NOTIFY( SfxBroadcaster& rCst, const TypeId& rId1,
                                 const SfxHint& rHint, const TypeId& rId2 )
 {
-    const SbxHint* p = PTR_CAST(SbxHint,&rHint);
+    const SbxHint* p = dynamic_cast< const SbxHint* >( &rHint);
     if( p )
     {
         sal_uIntPtr nId = p->GetId();
@@ -164,7 +161,7 @@ void SbxCollection::CollAdd( SbxArray* pPar_ )
     else
     {
         SbxBase* pObj = pPar_->Get( 1 )->GetObject();
-        if( !pObj || !( pObj->ISA(SbxObject) ) )
+        if( !pObj || !( dynamic_cast< SbxObject* >(pObj) ) )
             SetError( SbxERR_NOTIMP );
         else
             Insert( (SbxObject*) pObj );
@@ -250,7 +247,7 @@ SbxStdCollection::~SbxStdCollection()
 
 void SbxStdCollection::Insert( SbxVariable* p )
 {
-    SbxObject* pObj = PTR_CAST(SbxObject,p);
+    SbxObject* pObj = dynamic_cast< SbxObject* >( p);
     if( pObj && !pObj->IsClass( aElemClass ) )
         SetError( SbxERR_BAD_ACTION );
     else

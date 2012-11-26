@@ -35,8 +35,6 @@ private:
     XubString       _aPresentation;
 
 public:
-    TYPEINFO();
-
     CntContentTypeItem();
     CntContentTypeItem( sal_uInt16 nWhich, const XubString& rType );
     CntContentTypeItem( sal_uInt16 nWhich, const INetContentType eType );

@@ -1035,7 +1035,7 @@ void ExtrusionColorControl::StateChanged( sal_uInt16 nSID, SfxItemState eState, 
         const SvxColorItem* pItem = 0;
 
         if( SFX_ITEM_DONTCARE != eState )
-            pItem = PTR_CAST( SvxColorItem, pState );
+            pItem = dynamic_cast< const SvxColorItem* >( pState );
 
         if ( pItem )
             mpBtnUpdater->Update( pItem->GetValue());

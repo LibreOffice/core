@@ -44,8 +44,6 @@ class FuMorph
     : public FuPoor
 {
 public:
-    TYPEINFO();
-
     static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
     virtual void DoExecute( SfxRequest& rReq );
 
@@ -57,7 +55,7 @@ private:
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
 
-    void ImpInsertPolygons(List& rPolyPolyList3D, sal_Bool bAttributeFade,
+    void ImpInsertPolygons(List& rPolyPolyList3D, bool bAttributeFade,
         const SdrObject* pObj1, const SdrObject* pObj2);
     ::basegfx::B2DPolyPolygon* ImpCreateMorphedPolygon(
         const ::basegfx::B2DPolyPolygon& rPolyPolyStart,

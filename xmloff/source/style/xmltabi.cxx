@@ -75,8 +75,6 @@ private:
      style::TabStop aTabStop;
 
 public:
-    TYPEINFO();
-
     SvxXMLTabStopContext_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                const OUString& rLName,
                                const uno::Reference< xml::sax::XAttributeList > & xAttrList );
@@ -89,8 +87,6 @@ public:
 
     const style::TabStop& getTabStop() const { return aTabStop; }
 };
-
-TYPEINIT1( SvxXMLTabStopContext_Impl, SvXMLImportContext );
 
 SvxXMLTabStopContext_Impl::SvxXMLTabStopContext_Impl(
                                SvXMLImport& rImport, sal_uInt16 nPrfx,
@@ -189,8 +185,6 @@ SV_DECL_PTRARR( SvxXMLTabStopArray_Impl, SvxXMLTabStopContext_Impl_ImplPtr, 20, 
 
 
 // ---
-
-TYPEINIT1( SvxXMLTabStopImportContext, XMLElementPropertyContext );
 
 SvxXMLTabStopImportContext::SvxXMLTabStopImportContext(
                                 SvXMLImport& rImport, sal_uInt16 nPrfx,

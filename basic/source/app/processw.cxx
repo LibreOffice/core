@@ -159,7 +159,7 @@ SbxVariable* ProcessWrapper::Find( const String& rName, SbxClassType t )
 void ProcessWrapper::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCT,
                              const SfxHint& rHint, const TypeId& rHT )
 {
-    const SbxHint* pHint = PTR_CAST(SbxHint,&rHint);
+    const SbxHint* pHint = dynamic_cast< const SbxHint* >( &rHint);
     if( pHint )
     {
         SbxVariable* pVar = pHint->GetVar();

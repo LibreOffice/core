@@ -40,8 +40,6 @@ Dieses Item beschreibt das Autoren-Kuerzel eines Notizzettels.
 class SVX_DLLPUBLIC SvxPostItAuthorItem: public SfxStringItem
 {
 public:
-    TYPEINFO();
-
     SvxPostItAuthorItem( sal_uInt16 nWhich  );
 
     SvxPostItAuthorItem( const String& rAuthor, sal_uInt16 nWhich  );
@@ -72,8 +70,6 @@ Dieses Item beschreibt das Datum eines Notizzettels.
 class SVX_DLLPUBLIC SvxPostItDateItem: public SfxStringItem
 {
 public:
-    TYPEINFO();
-
     SvxPostItDateItem( sal_uInt16 nWhich  );
 
     SvxPostItDateItem( const String& rDate, sal_uInt16 nWhich  );
@@ -103,8 +99,6 @@ Dieses Item beschreibt den Text eines Notizzettels.
 class SVX_DLLPUBLIC SvxPostItTextItem: public SfxStringItem
 {
 public:
-    TYPEINFO();
-
     SvxPostItTextItem( sal_uInt16 nWhich  );
 
     SvxPostItTextItem( const String& rText, sal_uInt16 nWhich  );

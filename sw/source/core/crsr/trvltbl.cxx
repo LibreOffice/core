@@ -914,9 +914,9 @@ sal_Bool SwCrsrShell::EndAllTblBoxEdit()
     sal_Bool bRet = sal_False;
     ViewShell *pSh = this;
     do {
-        if( pSh->IsA( TYPE( SwCrsrShell ) ) )
-            bRet |= ((SwCrsrShell*)pSh)->CheckTblBoxCntnt(
-                        ((SwCrsrShell*)pSh)->pCurCrsr->GetPoint() );
+        SwCrsrShell* pSwCrsrShell = dynamic_cast< SwCrsrShell* >(pSh);
+        if( pSwCrsrShell )
+            bRet |= pSwCrsrShell->CheckTblBoxCntnt(pSwCrsrShell->pCurCrsr->GetPoint() );
 
     } while( this != (pSh = (ViewShell *)pSh->GetNext()) );
     return bRet;

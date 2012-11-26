@@ -54,7 +54,7 @@ public:
     virtual void Deactivate();         // Function deaktivieren
 
     // #98185# Create default drawing objects via keyboard
-    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
+    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const basegfx::B2DRange& rRange);
 };
 
 

@@ -65,11 +65,11 @@ namespace drawinglayer
             TextRelief                                  meTextRelief;
 
             /// bitfield
-            unsigned                                    mbUnderlineAbove : 1;
-            unsigned                                    mbWordLineMode : 1;
-            unsigned                                    mbEmphasisMarkAbove : 1;
-            unsigned                                    mbEmphasisMarkBelow : 1;
-            unsigned                                    mbShadow : 1;
+            bool                                        mbUnderlineAbove : 1;
+            bool                                        mbWordLineMode : 1;
+            bool                                        mbEmphasisMarkAbove : 1;
+            bool                                        mbEmphasisMarkBelow : 1;
+            bool                                        mbShadow : 1;
 
             /// helper methods
             void impCreateGeometryContent(
@@ -130,9 +130,6 @@ namespace drawinglayer
             /// check if this needs to be a TextDecoratedPortionPrimitive2D or
             /// if a TextSimplePortionPrimitive2D would be suficcient
             bool decoratedIsNeeded() const;
-
-            /// compare operator
-            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
 
             /// get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;

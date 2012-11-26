@@ -59,22 +59,22 @@ SvxCharacterMap::SvxCharacterMap( Window* pParent, sal_Bool bOne, const SfxItemS
     SfxModalDialog( pParent, CUI_RES( RID_SVXDLG_CHARMAP ) ),
     mpCharMapData( 0 )
 {
-    SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, FN_PARAM_1, sal_False );
+    SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, FN_PARAM_1 );
     if ( pItem )
         bOne = pItem->GetValue();
 
     mpCharMapData =  new SvxCharMapData( this, bOne, &CUI_MGR() );
 
-    SFX_ITEMSET_ARG( pSet, pCharItem, SfxInt32Item, SID_ATTR_CHAR, sal_False );
+    SFX_ITEMSET_ARG( pSet, pCharItem, SfxInt32Item, SID_ATTR_CHAR );
     if ( pCharItem )
         SetChar( pCharItem->GetValue() );
 
-    SFX_ITEMSET_ARG( pSet, pDisableItem, SfxBoolItem, FN_PARAM_2, sal_False );
+    SFX_ITEMSET_ARG( pSet, pDisableItem, SfxBoolItem, FN_PARAM_2 );
     if ( pDisableItem && pDisableItem->GetValue() )
         DisableFontSelection();
 
-    SFX_ITEMSET_ARG( pSet, pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT, sal_False );
-    SFX_ITEMSET_ARG( pSet, pFontNameItem, SfxStringItem, SID_FONT_NAME, sal_False );
+    SFX_ITEMSET_ARG( pSet, pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT );
+    SFX_ITEMSET_ARG( pSet, pFontNameItem, SfxStringItem, SID_FONT_NAME );
     if ( pFontItem )
     {
         Font aFont( pFontItem->GetFamilyName(), pFontItem->GetStyleName(), GetCharFont().GetSize() );
@@ -308,7 +308,7 @@ SvxCharMapData::SvxCharMapData( SfxModalDialog* pDialog, sal_Bool bOne_, ResMgr*
     // the font may not be in the list =>
     // try to find a font name token in list and select found font,
     // else select topmost entry
-    FASTBOOL bFound = (aFontLB.GetEntryPos( aDefStr ) == LISTBOX_ENTRY_NOTFOUND );
+    bool bFound = (aFontLB.GetEntryPos( aDefStr ) == LISTBOX_ENTRY_NOTFOUND );
     if( !bFound )
     {
         for ( xub_StrLen i = 0; i < aDefStr.GetTokenCount(); ++i )
@@ -317,7 +317,7 @@ SvxCharMapData::SvxCharMapData( SfxModalDialog* pDialog, sal_Bool bOne_, ResMgr*
             if ( aFontLB.GetEntryPos( aToken ) != LISTBOX_ENTRY_NOTFOUND )
             {
                 aDefStr = aToken;
-                bFound = sal_True;
+                bFound = true;
                 break;
             }
         }

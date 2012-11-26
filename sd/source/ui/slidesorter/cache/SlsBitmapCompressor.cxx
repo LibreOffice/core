@@ -25,11 +25,11 @@
 #include "precompiled_sd.hxx"
 
 #include "SlsBitmapCompressor.hxx"
-
 #include <tools/stream.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/pngwrite.hxx>
+#include <memory.h>
 
 namespace sd { namespace slidesorter { namespace cache {
 

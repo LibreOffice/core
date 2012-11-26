@@ -67,8 +67,7 @@ basegfx::B2DPolyPolygon createClipPolygon(
     basegfx::B2DHomMatrix aMatrix(basegfx::tools::createRotateAroundPoint(0.5, 0.5, aUpVec.angle( rDirection )));
 
     // blow up clip polygon to slide size
-    aMatrix.scale( rSlideSize.getX(),
-                   rSlideSize.getY() );
+    aMatrix.scale( rSlideSize );
 
     aClipPoly.transform( aMatrix );
 

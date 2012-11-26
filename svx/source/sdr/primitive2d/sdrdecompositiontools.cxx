@@ -180,7 +180,8 @@ namespace drawinglayer
                 {
                     // take line width into account and shrink contour polygon accordingly
                     // decompose to get scale
-                    basegfx::B2DVector aScale, aTranslate;
+                    basegfx::B2DVector aScale;
+                    basegfx::B2DPoint aTranslate;
                     double fRotate, fShearX;
                     rObjectTransform.decompose(aScale, aTranslate, fRotate, fShearX);
 
@@ -195,8 +196,8 @@ namespace drawinglayer
 
                     // scale back to unit polygon
                     aScaledUnitPolyPolygon.transform(basegfx::tools::createScaleB2DHomMatrix(
-                        0.0 != aScale.getX() ? 1.0 / aScale.getX() : 1.0,
-                        0.0 != aScale.getY() ? 1.0 / aScale.getY() : 1.0));
+                        0.0 != aScale.getX() ? 1.0 / fabs(aScale.getX()) : 1.0,
+                        0.0 != aScale.getY() ? 1.0 / fabs(aScale.getY()) : 1.0));
 
                     // create with unit polygon
                     pNew = new SdrContourTextPrimitive2D(
@@ -230,7 +231,8 @@ namespace drawinglayer
             {
                 // rObjectTransform is the whole SdrObject transformation from unit rectangle
                 // to it's size and position. Decompose to allow working with single values.
-                basegfx::B2DVector aScale, aTranslate;
+                basegfx::B2DVector aScale;
+                basegfx::B2DPoint aTranslate;
                 double fRotate, fShearX;
                 rObjectTransform.decompose(aScale, aTranslate, fRotate, fShearX);
 
@@ -265,8 +267,10 @@ namespace drawinglayer
                 aAnchorTransform.scale(bMirrorX ? -1.0 : 1.0, bMirrorY ? -1.0 : 1.0);
 
                 // apply object's other transforms
-                aAnchorTransform = basegfx::tools::createShearXRotateTranslateB2DHomMatrix(fShearX, fRotate, aTranslate)
-                    * aAnchorTransform;
+                aAnchorTransform = basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
+                    fShearX,
+                    fRotate,
+                    aTranslate) * aAnchorTransform;
 
                 if(rText.isFitToSize())
                 {
@@ -324,17 +328,21 @@ namespace drawinglayer
                 if(rText.getSdrFormTextAttribute().isDefault())
                 {
                     // get scroll direction
-                    const SdrTextAniDirection eDirection(rText.getSdrText().GetObject().GetTextAniDirection());
+                    const SdrTextAniDirection eDirection(rText.getSdrText().getSdrTextObj().GetTextAniDirection());
                     const bool bHorizontal(SDRTEXTANI_LEFT == eDirection || SDRTEXTANI_RIGHT == eDirection);
 
                     // decompose to get separated values for the scroll box
-                    basegfx::B2DVector aScale, aTranslate;
+                    basegfx::B2DVector aScale;
+                    basegfx::B2DPoint aTranslate;
                     double fRotate, fShearX;
                     aAnchorTransform.decompose(aScale, aTranslate, fRotate, fShearX);
 
                     // build transform from scaled only to full AnchorTransform and inverse
-                    const basegfx::B2DHomMatrix aSRT(basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
-                        fShearX, fRotate, aTranslate));
+                    const basegfx::B2DHomMatrix aSRT(
+                        basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
+                            fShearX,
+                            fRotate,
+                            aTranslate));
                     basegfx::B2DHomMatrix aISRT(aSRT);
                     aISRT.invert();
 

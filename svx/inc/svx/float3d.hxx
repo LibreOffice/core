@@ -58,7 +58,6 @@ class FmFormModel;
 class FmFormPage;
 class VirtualDevice;
 class E3dView;
-class SdrPageView;
 class Svx3DCtrlItem;
 class SvxConvertTo3DItem;
 

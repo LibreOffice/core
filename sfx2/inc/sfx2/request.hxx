@@ -89,10 +89,8 @@ public:
     void                AppendItem(const SfxPoolItem &);
     void                RemoveItem( sal_uInt16 nSlotId );
 
-    static const SfxPoolItem* GetItem( const SfxItemSet*, sal_uInt16 nSlotId,
-                                       bool bDeep = false,
-                                       TypeId aType = 0 );
-    const SfxPoolItem*  GetArg( sal_uInt16 nSlotId, bool bDeep = false, TypeId aType = 0 ) const;
+    static const SfxPoolItem* GetItem( const SfxItemSet*, sal_uInt16 nSlotId );
+    const SfxPoolItem*  GetArg( sal_uInt16 nSlotId ) const;
     void                ReleaseArgs();
     void                SetReturnValue(const SfxPoolItem &);
     const SfxPoolItem*  GetReturnValue() const;
@@ -125,11 +123,12 @@ private:
 
 //------------------------------------------------------------------------
 
-#define SFX_REQUEST_ARG(rReq, pItem, ItemType, nSlotId, bDeep) \
-        const ItemType *pItem = (const ItemType*) \
-                rReq.GetArg( nSlotId, bDeep, TYPE(ItemType) )
-#define SFX_ITEMSET_ARG(pArgs, pItem, ItemType, nSlotId, bDeep) \
-    const ItemType *pItem = (const ItemType*) \
-        SfxRequest::GetItem( pArgs, nSlotId, bDeep, TYPE(ItemType) )
+#define SFX_REQUEST_ARG(rReq, pItem, ItemType, nSlotId) \
+        const ItemType *pItem = dynamic_cast<const ItemType*>( \
+                rReq.GetArg( nSlotId ))
+
+#define SFX_ITEMSET_ARG(pArgs, pItem, ItemType, nSlotId) \
+    const ItemType *pItem = dynamic_cast<const ItemType*>( \
+        SfxRequest::GetItem( pArgs, nSlotId ))
 
 #endif

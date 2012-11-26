@@ -108,7 +108,7 @@ private:
 CategoryListBox::CategoryListBox( Window* pParent, const ResId& rResId )
 : ListBox( pParent, rResId )
 {
-    EnableUserDraw( sal_True );
+    EnableUserDraw( true );
     SetDoubleClickHdl( LINK( this, CategoryListBox, implDoubleClickHdl ) );
 }
 
@@ -153,7 +153,7 @@ void CategoryListBox::UserDraw( const UserDrawEvent& rUDEvt )
     }
     else
     {
-        DrawEntry( rUDEvt, sal_True, sal_True );
+        DrawEntry( rUDEvt, true, true );
     }
 }
 
@@ -341,7 +341,7 @@ IMPL_LINK( CustomAnimationCreateTabPage, implDoubleClickHdl, Control*, pControl 
     if( pControl == mpLBEffects )
     {
         if( mpLBEffects->GetSelectEntryCount() )
-            mpParent->EndDialog( sal_True );
+            mpParent->EndDialog( true );
     }
     return 0;
 }
@@ -488,7 +488,7 @@ bool CustomAnimationCreateTabPage::getIsPreview() const
 
 void CustomAnimationCreateTabPage::setIsPreview( bool bIsPreview )
 {
-    mpCBXPReview->Check( bIsPreview ? sal_True : sal_False );
+    mpCBXPReview->Check( bIsPreview ? true : false );
 }
 
 bool CustomAnimationCreateTabPage::select( const OUString& rsPresetId )

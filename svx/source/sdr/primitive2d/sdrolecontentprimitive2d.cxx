@@ -76,7 +76,8 @@ namespace drawinglayer
                 if(bScaleContent)
                 {
                     // get transformation atoms
-                    basegfx::B2DVector aScale, aTranslate;
+                    basegfx::B2DVector aScale;
+                    basegfx::B2DPoint aTranslate;
                     double fRotate, fShearX;
                     getObjectTransform().decompose(aScale, aTranslate, fRotate, fShearX);
 
@@ -99,9 +100,12 @@ namespace drawinglayer
                     {
                         // if content fits into frame, create it
                         basegfx::B2DHomMatrix aInnerObjectMatrix(basegfx::tools::createScaleTranslateB2DHomMatrix(
-                            aPrefSize.getWidth(), aPrefSize.getHeight(), fOffsetX, fOffsetY));
-                        aInnerObjectMatrix = basegfx::tools::createShearXRotateTranslateB2DHomMatrix(fShearX, fRotate, aTranslate)
-                            * aInnerObjectMatrix;
+                            aPrefSize.getWidth(), aPrefSize.getHeight(),
+                            fOffsetX, fOffsetY));
+                        aInnerObjectMatrix = basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
+                            fShearX,
+                            fRotate,
+                            aTranslate) * aInnerObjectMatrix;
 
                         const drawinglayer::primitive2d::Primitive2DReference aGraphicPrimitive(
                             new drawinglayer::primitive2d::GraphicPrimitive2D(
@@ -157,34 +161,9 @@ namespace drawinglayer
         {
         }
 
-        bool SdrOleContentPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const SdrOleContentPrimitive2D& rCompare = (SdrOleContentPrimitive2D&)rPrimitive;
-                const bool bBothNot(!mpSdrOle2Obj.is() && !rCompare.mpSdrOle2Obj.is());
-                const bool bBothAndEqual(mpSdrOle2Obj.is() && rCompare.mpSdrOle2Obj.is()
-                    && mpSdrOle2Obj.get() == rCompare.mpSdrOle2Obj.get());
-
-                return ((bBothNot || bBothAndEqual)
-                    && getObjectTransform() == rCompare.getObjectTransform()
-
-                    // #i104867# to find out if the Graphic content of the
-                    // OLE has changed, use GraphicVersion number
-                    && getGraphicVersion() == rCompare.getGraphicVersion()
-
-                    && getHighContrast() == rCompare.getHighContrast());
-            }
-
-            return false;
-        }
-
         basegfx::B2DRange SdrOleContentPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            basegfx::B2DRange aRange(0.0, 0.0, 1.0, 1.0);
-            aRange.transform(getObjectTransform());
-
-            return aRange;
+            return getObjectTransform() * basegfx::B2DRange::getUnitB2DRange();
         }
 
         // provide unique ID

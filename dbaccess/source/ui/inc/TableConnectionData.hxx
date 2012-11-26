@@ -28,9 +28,6 @@
 #endif
 #include "TableWindowData.hxx"
 #include <vector>
-#ifndef _RTTI_HXX
-#include <tools/rtti.hxx>
-#endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif

@@ -41,8 +41,6 @@ using namespace ::xmloff::token;
 
 // -----------------------------------------------------------------------------
 
-TYPEINIT1( XMLChartOASISTransformerContext, XMLTransformerContext );
-
 XMLChartOASISTransformerContext::XMLChartOASISTransformerContext(
         XMLTransformerBase& rImp,
         const OUString& rQName ) :

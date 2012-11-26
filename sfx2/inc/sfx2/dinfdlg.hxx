@@ -79,7 +79,6 @@ private:
     std::vector< CustomProperty* >      m_aCustomProperties;
 
 public:
-    TYPEINFO();
     SfxDocumentInfoItem();
     SfxDocumentInfoItem( const String &rFileName,
         const ::com::sun::star::uno::Reference<

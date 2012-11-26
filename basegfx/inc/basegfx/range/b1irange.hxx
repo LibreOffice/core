@@ -134,6 +134,11 @@ namespace basegfx
         {
             maRange.grow(nValue);
         }
+
+        sal_Int32 clamp(sal_Int32 fValue) const
+        {
+            return maRange.clamp(fValue);
+        }
     };
 } // end of namespace basegfx
 

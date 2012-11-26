@@ -48,8 +48,6 @@ using namespace ::com::sun::star::beans;
 //using namespace ::com::sun::star::text;
 
 
-TYPEINIT1( XMLTextHeaderFooterContext, SvXMLImportContext );
-
 XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                        const OUString& rLName,
                        const uno::Reference<

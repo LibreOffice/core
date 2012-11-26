@@ -52,7 +52,7 @@
 \************************************************************************/
 
 SdPresCellTemplateDlg::SdPresCellTemplateDlg( SdrModel* pModel, Window* pParent, SfxStyleSheetBase& rStyleBase )
-: SfxStyleDialog( pParent, SdResId(TAB_CELL_TEMPLATE), rStyleBase, sal_False )
+: SfxStyleDialog( pParent, SdResId(TAB_CELL_TEMPLATE), rStyleBase, false )
 , mpColorTab( pModel->GetColorTable() )
 , mpGradientList( pModel->GetGradientList() )
 , mpHatchingList( pModel->GetHatchList() )

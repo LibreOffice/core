@@ -368,7 +368,7 @@ void SfxBindings::HidePopups( bool bHide )
         pImp->pWorkWin->HidePopups_Impl( bHide, sal_True );
 }
 
-void SfxBindings::HidePopupCtrls_Impl( FASTBOOL bHide )
+void SfxBindings::HidePopupCtrls_Impl( bool bHide )
 {
     if ( bHide )
     {
@@ -1223,7 +1223,7 @@ const SfxPoolItem* SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem*
     }
 
     if ( bGlobalOnly )
-        if ( !pShell->ISA(SfxModule) && !pShell->ISA(SfxApplication) && !pShell->ISA(SfxViewFrame) )
+        if ( !dynamic_cast< SfxModule* >(pShell) && !dynamic_cast< SfxApplication* >(pShell) && !dynamic_cast< SfxViewFrame* >(pShell) )
             return NULL;
 
     SfxItemPool &rPool = pShell->GetPool();
@@ -1294,7 +1294,7 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
                    SfxItemPool::IsWhich(nWhich) &&
                    pOldItem ) )
             {
-                if ( pOldItem->ISA(SfxBoolItem) )
+                if ( dynamic_cast< const SfxBoolItem* >(pOldItem) )
                 {
                     // wir koennen Bools toggeln
                     sal_Bool bOldValue = ((const SfxBoolItem *)pOldItem)->GetValue();
@@ -1303,7 +1303,7 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
                     aReq.AppendItem( *pNewItem );
                     delete pNewItem;
                 }
-                else if ( pOldItem->ISA(SfxEnumItemInterface) &&
+                else if ( dynamic_cast< const SfxEnumItemInterface* >(pOldItem) &&
                         ((SfxEnumItemInterface *)pOldItem)->HasBoolValue())
                 {
                     // und Enums mit Bool-Interface
@@ -1324,13 +1324,13 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
                 DBG_ASSERT( pNewItem, "Toggle an Slot ohne ItemFactory" );
                 pNewItem->SetWhich( nWhich );
 
-                if ( pNewItem->ISA(SfxBoolItem) )
+                if ( dynamic_cast< const SfxBoolItem* >(pNewItem) )
                 {
                     // wir koennen Bools toggeln
                     ((SfxBoolItem*)pNewItem)->SetValue( sal_True );
                     aReq.AppendItem( *pNewItem );
                 }
-                else if ( pNewItem->ISA(SfxEnumItemInterface) &&
+                else if ( dynamic_cast< const SfxEnumItemInterface* >(pNewItem) &&
                         ((SfxEnumItemInterface *)pNewItem)->HasBoolValue())
                 {
                     // und Enums mit Bool-Interface
@@ -1601,14 +1601,13 @@ void SfxBindings::UpdateControllers_Impl
     // (Enum-Werte) des Slots updaten
     DBG_PROFSTART(SfxBindingsUpdateCtrl2);
     DBG_ASSERT( !pSlot || 0 == pSlot->GetLinkedSlot() || !pItem ||
-                pItem->ISA(SfxEnumItemInterface),
+                dynamic_cast< const SfxEnumItemInterface* >(pItem),
                 "master slot with non-enum-type found" );
     const SfxSlot *pFirstSlave = pSlot ? pSlot->GetLinkedSlot() : 0;
     if ( pIF && pFirstSlave)
     {
         // Items auf EnumItem casten
-        const SfxEnumItemInterface *pEnumItem =
-                PTR_CAST(SfxEnumItemInterface,pItem);
+        const SfxEnumItemInterface *pEnumItem = dynamic_cast< const SfxEnumItemInterface* >( pItem);
         if ( eState == SFX_ITEM_AVAILABLE && !pEnumItem )
             eState = SFX_ITEM_DONTCARE;
         else

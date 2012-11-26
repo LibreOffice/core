@@ -122,46 +122,6 @@ using namespace ::com::sun::star::text;
 
 sal_Bool SvxFontItem::bEnableStoreUnicodeNames = sal_False;
 
-// STATIC DATA -----------------------------------------------------------
-
-// -----------------------------------------------------------------------
-
-TYPEINIT1(SvxFontListItem, SfxPoolItem);
-TYPEINIT1_FACTORY(SvxFontItem, SfxPoolItem, new SvxFontItem(0));
-TYPEINIT1_FACTORY(SvxPostureItem, SfxEnumItem, new SvxPostureItem(ITALIC_NONE, 0));
-TYPEINIT1_FACTORY(SvxWeightItem, SfxEnumItem, new SvxWeightItem(WEIGHT_NORMAL, 0));
-TYPEINIT1_FACTORY(SvxFontHeightItem, SfxPoolItem, new SvxFontHeightItem(240, 100, 0));
-TYPEINIT1_FACTORY(SvxFontWidthItem, SfxPoolItem, new SvxFontWidthItem(0, 100, 0));
-TYPEINIT1_FACTORY(SvxTextLineItem, SfxEnumItem, new SvxTextLineItem(UNDERLINE_NONE, 0));
-TYPEINIT1_FACTORY(SvxUnderlineItem, SfxEnumItem, new SvxUnderlineItem(UNDERLINE_NONE, 0));
-TYPEINIT1_FACTORY(SvxOverlineItem, SfxEnumItem, new SvxOverlineItem(UNDERLINE_NONE, 0));
-TYPEINIT1_FACTORY(SvxCrossedOutItem, SfxEnumItem, new SvxCrossedOutItem(STRIKEOUT_NONE, 0));
-TYPEINIT1_FACTORY(SvxShadowedItem, SfxBoolItem, new SvxShadowedItem(sal_False, 0));
-TYPEINIT1_FACTORY(SvxAutoKernItem, SfxBoolItem, new SvxAutoKernItem(sal_False, 0));
-TYPEINIT1_FACTORY(SvxWordLineModeItem, SfxBoolItem, new SvxWordLineModeItem(sal_False, 0));
-TYPEINIT1_FACTORY(SvxContourItem, SfxBoolItem, new SvxContourItem(sal_False, 0));
-TYPEINIT1_FACTORY(SvxPropSizeItem, SfxUInt16Item, new SvxPropSizeItem(100, 0));
-TYPEINIT1_FACTORY(SvxColorItem, SfxPoolItem, new SvxColorItem(0));
-TYPEINIT1_FACTORY(SvxCharSetColorItem, SvxColorItem, new SvxCharSetColorItem(0));
-TYPEINIT1_FACTORY(SvxKerningItem, SfxInt16Item, new SvxKerningItem(0, 0));
-TYPEINIT1_FACTORY(SvxCaseMapItem, SfxEnumItem, new SvxCaseMapItem(SVX_CASEMAP_NOT_MAPPED, 0));
-TYPEINIT1_FACTORY(SvxEscapementItem, SfxPoolItem, new SvxEscapementItem(0));
-TYPEINIT1_FACTORY(SvxLanguageItem, SfxEnumItem, new SvxLanguageItem(LANGUAGE_GERMAN, 0));
-TYPEINIT1_FACTORY(SvxNoLinebreakItem, SfxBoolItem, new SvxNoLinebreakItem(sal_True, 0));
-TYPEINIT1_FACTORY(SvxNoHyphenItem, SfxBoolItem, new SvxNoHyphenItem(sal_True, 0));
-TYPEINIT1_FACTORY(SvxLineColorItem, SvxColorItem, new SvxLineColorItem(0));
-TYPEINIT1_FACTORY(SvxBlinkItem, SfxBoolItem, new SvxBlinkItem(sal_False, 0));
-TYPEINIT1_FACTORY(SvxEmphasisMarkItem, SfxUInt16Item, new SvxEmphasisMarkItem(EMPHASISMARK_NONE, 0));
-TYPEINIT1_FACTORY(SvxTwoLinesItem, SfxPoolItem, new SvxTwoLinesItem(sal_True, 0, 0, 0));
-TYPEINIT1_FACTORY(SvxScriptTypeItem, SfxUInt16Item, new SvxScriptTypeItem);
-TYPEINIT1_FACTORY(SvxCharRotateItem, SfxUInt16Item, new SvxCharRotateItem(0, sal_False, 0));
-TYPEINIT1_FACTORY(SvxCharScaleWidthItem, SfxUInt16Item, new SvxCharScaleWidthItem(100, 0));
-TYPEINIT1_FACTORY(SvxCharReliefItem, SfxEnumItem, new SvxCharReliefItem(RELIEF_NONE, 0));
-
-
-TYPEINIT1(SvxScriptSetItem, SfxSetItem );
-
-
 // class SvxFontListItem -------------------------------------------------
 
 SvxFontListItem::SvxFontListItem( const FontList* pFontLst,
@@ -226,6 +186,8 @@ SfxItemPresentation SvxFontListItem::GetPresentation
 }
 
 // class SvxFontItem -----------------------------------------------------
+
+IMPL_POOLITEM_FACTORY(SvxFontItem)
 
 SvxFontItem::SvxFontItem( const sal_uInt16 nId ) :
     SfxPoolItem( nId )
@@ -494,6 +456,8 @@ void SvxFontItem::EnableStoreUnicodeNames( sal_Bool bEnable )
 
 // class SvxPostureItem --------------------------------------------------
 
+IMPL_POOLITEM_FACTORY(SvxPostureItem)
+
 SvxPostureItem::SvxPostureItem( const FontItalic ePosture, const sal_uInt16 nId ) :
     SfxEnumItem( nId, (sal_uInt16)ePosture )
 {
@@ -647,6 +611,8 @@ void SvxPostureItem::SetBoolValue( sal_Bool bVal )
 
 // class SvxWeightItem ---------------------------------------------------
 
+IMPL_POOLITEM_FACTORY(SvxWeightItem)
+
 SvxWeightItem::SvxWeightItem( const FontWeight eWght, const sal_uInt16 nId ) :
     SfxEnumItem( nId, (sal_uInt16)eWght )
 {
@@ -788,6 +754,8 @@ sal_Bool SvxWeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 }
 
 // class SvxFontHeightItem -----------------------------------------------
+
+IMPL_POOLITEM_FACTORY(SvxFontHeightItem)
 
 SvxFontHeightItem::SvxFontHeightItem( const sal_uLong nSz,
                                       const sal_uInt16 nPrp,
@@ -1137,17 +1105,16 @@ sal_uInt16 SvxFontHeightItem::GetVersion(sal_uInt16 nFileVersion) const
 
 // -----------------------------------------------------------------------
 
-int SvxFontHeightItem::ScaleMetrics( long nMult, long nDiv )
+void SvxFontHeightItem::ScaleMetrics( long nMult, long nDiv )
 {
     nHeight = (sal_uInt32)Scale( nHeight, nMult, nDiv );
-    return 1;
 }
 
 // -----------------------------------------------------------------------
 
-int SvxFontHeightItem::HasMetrics() const
+bool SvxFontHeightItem::HasMetrics() const
 {
-    return 1;
+    return true;
 }
 
 void SvxFontHeightItem::SetHeight( sal_uInt32 nNewHeight, const sal_uInt16 nNewProp,
@@ -1218,17 +1185,16 @@ SvStream& SvxFontWidthItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/
 
 // -----------------------------------------------------------------------
 
-int SvxFontWidthItem::ScaleMetrics( long nMult, long nDiv )
+void SvxFontWidthItem::ScaleMetrics( long nMult, long nDiv )
 {
     nWidth = (sal_uInt16)Scale( nWidth, nMult, nDiv );
-    return 1;
 }
 
 // -----------------------------------------------------------------------
 
-int SvxFontWidthItem::HasMetrics() const
+bool SvxFontWidthItem::HasMetrics() const
 {
-    return 1;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -1332,6 +1298,8 @@ SfxItemPresentation SvxFontWidthItem::GetPresentation
 }
 
 // class SvxTextLineItem ------------------------------------------------
+
+IMPL_POOLITEM_FACTORY(SvxTextLineItem)
 
 SvxTextLineItem::SvxTextLineItem( const FontUnderline eSt, const sal_uInt16 nId )
     : SfxEnumItem( nId, (sal_uInt16)eSt ), mColor( COL_TRANSPARENT )
@@ -1572,6 +1540,8 @@ XubString SvxOverlineItem::GetValueTextByPos( sal_uInt16 nPos ) const
 
 // class SvxCrossedOutItem -----------------------------------------------
 
+IMPL_POOLITEM_FACTORY(SvxCrossedOutItem)
+
 SvxCrossedOutItem::SvxCrossedOutItem( const FontStrikeout eSt, const sal_uInt16 nId )
     : SfxEnumItem( nId, (sal_uInt16)eSt )
 {
@@ -1704,6 +1674,8 @@ sal_Bool SvxCrossedOutItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId 
 }
 // class SvxShadowedItem -------------------------------------------------
 
+IMPL_POOLITEM_FACTORY(SvxShadowedItem)
+
 SvxShadowedItem::SvxShadowedItem( const sal_Bool bShadowed, const sal_uInt16 nId ) :
     SfxBoolItem( nId, bShadowed )
 {
@@ -1764,6 +1736,8 @@ SfxItemPresentation SvxShadowedItem::GetPresentation
 }
 
 // class SvxAutoKernItem -------------------------------------------------
+
+IMPL_POOLITEM_FACTORY(SvxAutoKernItem)
 
 SvxAutoKernItem::SvxAutoKernItem( const sal_Bool bAutoKern, const sal_uInt16 nId ) :
     SfxBoolItem( nId, bAutoKern )
@@ -1826,6 +1800,8 @@ SfxItemPresentation SvxAutoKernItem::GetPresentation
 
 // class SvxWordLineModeItem ---------------------------------------------
 
+IMPL_POOLITEM_FACTORY(SvxWordLineModeItem)
+
 SvxWordLineModeItem::SvxWordLineModeItem( const sal_Bool bWordLineMode,
                                           const sal_uInt16 nId ) :
     SfxBoolItem( nId, bWordLineMode )
@@ -1887,6 +1863,8 @@ SfxItemPresentation SvxWordLineModeItem::GetPresentation
 }
 
 // class SvxContourItem --------------------------------------------------
+
+IMPL_POOLITEM_FACTORY(SvxContourItem)
 
 SvxContourItem::SvxContourItem( const sal_Bool bContoured, const sal_uInt16 nId ) :
     SfxBoolItem( nId, bContoured )
@@ -1993,6 +1971,8 @@ SfxItemPresentation SvxPropSizeItem::GetPresentation
 }
 
 // class SvxColorItem ----------------------------------------------------
+
+IMPL_POOLITEM_FACTORY(SvxColorItem)
 
 SvxColorItem::SvxColorItem( const sal_uInt16 nId ) :
     SfxPoolItem( nId ),
@@ -2195,6 +2175,8 @@ SfxItemPresentation SvxCharSetColorItem::GetPresentation
 
 // class SvxKerningItem --------------------------------------------------
 
+IMPL_POOLITEM_FACTORY(SvxKerningItem)
+
 SvxKerningItem::SvxKerningItem( const short nKern, const sal_uInt16 nId ) :
     SfxInt16Item( nId, nKern )
 {
@@ -2217,17 +2199,16 @@ SvStream& SvxKerningItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ )
 
 // -----------------------------------------------------------------------
 
-int SvxKerningItem::ScaleMetrics( long nMult, long nDiv )
+void SvxKerningItem::ScaleMetrics( long nMult, long nDiv )
 {
     SetValue( (sal_Int16)Scale( GetValue(), nMult, nDiv ) );
-    return 1;
 }
 
 // -----------------------------------------------------------------------
 
-int SvxKerningItem::HasMetrics() const
+bool SvxKerningItem::HasMetrics() const
 {
-    return 1;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -2304,6 +2285,7 @@ sal_Bool SvxKerningItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId)
 }
 
 // class SvxCaseMapItem --------------------------------------------------
+IMPL_POOLITEM_FACTORY(SvxCaseMapItem)
 
 SvxCaseMapItem::SvxCaseMapItem( const SvxCaseMap eMap, const sal_uInt16 nId ) :
     SfxEnumItem( nId, (sal_uInt16)eMap )
@@ -2412,6 +2394,8 @@ sal_Bool SvxCaseMapItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
 }
 
 // class SvxEscapementItem -----------------------------------------------
+
+IMPL_POOLITEM_FACTORY(SvxEscapementItem)
 
 SvxEscapementItem::SvxEscapementItem( const sal_uInt16 nId ) :
     SfxEnumItemInterface( nId ),
@@ -2625,6 +2609,8 @@ sal_Bool SvxEscapementItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId 
 }
 
 // class SvxLanguageItem -------------------------------------------------
+
+IMPL_POOLITEM_FACTORY(SvxLanguageItem)
 
 SvxLanguageItem::SvxLanguageItem( const LanguageType eLang, const sal_uInt16 nId )
     : SfxEnumItem( nId , eLang )
@@ -2881,6 +2867,11 @@ SvxLineColorItem::~SvxLineColorItem()
 
 //------------------------------------------------------------------------
 
+SfxPoolItem* SvxLineColorItem::Clone(SfxItemPool* /*pPool*/) const
+{
+    return new SvxLineColorItem(GetValue(), Which());
+}
+
 SfxItemPresentation SvxLineColorItem::GetPresentation
 (
     SfxItemPresentation ePres,
@@ -2895,7 +2886,7 @@ SfxItemPresentation SvxLineColorItem::GetPresentation
 }
 
 // class SvxBlinkItem -------------------------------------------------
-
+IMPL_POOLITEM_FACTORY(SvxBlinkItem)
 
 SvxBlinkItem::SvxBlinkItem( const sal_Bool bBlink, const sal_uInt16 nId ) :
     SfxBoolItem( nId, bBlink )
@@ -2957,6 +2948,8 @@ SfxItemPresentation SvxBlinkItem::GetPresentation
 }
 
 // class SvxEmphaisMarkItem ---------------------------------------------------
+
+IMPL_POOLITEM_FACTORY(SvxEmphasisMarkItem)
 
 SvxEmphasisMarkItem::SvxEmphasisMarkItem( const FontEmphasisMark nValue,
                                         const sal_uInt16 nId )
@@ -3255,6 +3248,7 @@ sal_uInt16 SvxTwoLinesItem::GetVersion( sal_uInt16 nFFVer ) const
 /*************************************************************************
 |*    class SvxCharRotateItem
 *************************************************************************/
+IMPL_POOLITEM_FACTORY(SvxCharRotateItem)
 
 SvxCharRotateItem::SvxCharRotateItem( sal_uInt16 nValue,
                                        sal_Bool bFitIntoLine,
@@ -3378,6 +3372,8 @@ int SvxCharRotateItem::operator==( const SfxPoolItem& rItem ) const
 |*    class SvxCharScaleItem
 *************************************************************************/
 
+IMPL_POOLITEM_FACTORY(SvxCharScaleWidthItem)
+
 SvxCharScaleWidthItem::SvxCharScaleWidthItem( sal_uInt16 nValue,
                                                const sal_uInt16 nW )
     : SfxUInt16Item( nW, nValue )
@@ -3487,6 +3483,8 @@ sal_Bool SvxCharScaleWidthItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberI
 /*************************************************************************
 |*    class SvxCharReliefItem
 *************************************************************************/
+
+IMPL_POOLITEM_FACTORY(SvxCharReliefItem)
 
 SvxCharReliefItem::SvxCharReliefItem( FontRelief eValue,
                                          const sal_uInt16 nId )

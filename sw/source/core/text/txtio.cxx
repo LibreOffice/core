@@ -170,14 +170,15 @@ void lcl_OutFrame( SvFileStream& rStr, const SwFrm* pFrm, ByteString& rSp, sal_B
                 // --> OD 2004-07-07 #i28701# - consider changed type of
                 // <SwSortedObjs> entries
                 SwAnchoredObject* pAnchoredObj = (*pSorted)[ i ];
-                if( pAnchoredObj->ISA(SwFlyFrm) )
+                SwFlyFrm* pFly = dynamic_cast< SwFlyFrm* >(pAnchoredObj);
+
+                if( pFly )
                 {
-                    SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
                     lcl_OutFrame( rStr, pFly, rSp, sal_False );
                 }
                 else
                 {
-                    aTmp = pAnchoredObj->GetDrawObj()->IsUnoObj() ? "UNO" : "Drw";
+                    aTmp = pAnchoredObj->GetDrawObj()->IsSdrUnoObj() ? "UNO" : "Drw";
                     rStr << aTmp;
                 }
                 // <--
@@ -196,14 +197,15 @@ void lcl_OutFrame( SvFileStream& rStr, const SwFrm* pFrm, ByteString& rSp, sal_B
                 // --> OD 2004-07-07 #i28701# - consider changed type of
                 // <SwSortedObjs> entries
                 SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[ i ];
-                if( pAnchoredObj->ISA(SwFlyFrm) )
+                SwFlyFrm* pFly = dynamic_cast< SwFlyFrm* >(pAnchoredObj);
+
+                if( pFly )
                 {
-                    SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
                     lcl_OutFrame( rStr, pFly, rSp, sal_False );
                 }
                 else
                 {
-                    aTmp = pAnchoredObj->GetDrawObj()->IsUnoObj() ? "UNO" : "Drw";
+                    aTmp = pAnchoredObj->GetDrawObj()->IsSdrUnoObj() ? "UNO" : "Drw";
                     rStr << aTmp;
                 }
                 if( i < nCnt - 1 )

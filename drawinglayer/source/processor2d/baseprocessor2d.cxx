@@ -36,7 +36,9 @@ namespace drawinglayer
 {
     namespace processor2d
     {
-        void BaseProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& /*rCandidate*/)
+        void BaseProcessor2D::processBasePrimitive2D(
+            const primitive2d::BasePrimitive2D& /*rCandidate*/,
+            const primitive2d::Primitive2DReference& /*rUnoCandidate*/)
         {
         }
 
@@ -58,7 +60,7 @@ namespace drawinglayer
                 for(sal_Int32 a(0L); a < nCount; a++)
                 {
                     // get reference
-                    const primitive2d::Primitive2DReference xReference(rSource[a]);
+                    const primitive2d::Primitive2DReference& xReference(rSource[a]);
 
                     if(xReference.is())
                     {
@@ -68,7 +70,7 @@ namespace drawinglayer
                         if(pBasePrimitive)
                         {
                             // it is a BasePrimitive2D implementation, use local processor
-                            processBasePrimitive2D(*pBasePrimitive);
+                            processBasePrimitive2D(*pBasePrimitive, xReference);
                         }
                         else
                         {

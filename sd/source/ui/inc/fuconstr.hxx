@@ -44,20 +44,18 @@ class FuConstruct
 public:
     static const int MIN_FREEHAND_DISTANCE = 10;
 
-    TYPEINFO();
-
     virtual void DoExecute( SfxRequest& rReq );
 
     // Mouse- & Key-Events
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
+    virtual bool KeyInput(const KeyEvent& rKEvt);
+    virtual bool MouseMove(const MouseEvent& rMEvt);
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt);
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt);
 
     virtual void Activate();           // Function aktivieren
     virtual void Deactivate();         // Function deaktivieren
 
-    virtual void SelectionHasChanged() { bSelectionChanged = sal_True; }
+    virtual void SelectionHasChanged() { bSelectionChanged = true; }
 
     // SJ: setting stylesheet, the use of a filled or unfilled style
     // is determined by the member nSlotId :

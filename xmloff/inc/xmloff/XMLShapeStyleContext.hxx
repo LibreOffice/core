@@ -46,8 +46,6 @@ protected:
                                const ::rtl::OUString& rLocalName,
                                const ::rtl::OUString& rValue );
 public:
-    TYPEINFO();
-
     XMLShapeStyleContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,

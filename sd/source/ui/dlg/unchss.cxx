@@ -29,6 +29,7 @@
 #include <svl/style.hxx>
 #include <svl/smplhint.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/globaldrawitempool.hxx>
 
 #include "unchss.hxx"
 
@@ -40,34 +41,23 @@
 #include "glob.hrc"
 
 
-TYPEINIT1(StyleSheetUndoAction, SdUndoAction);
-
-
-
 /*************************************************************************
 |*
 |* Konstruktor
 |*
 \************************************************************************/
 
-StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
-                                           SfxStyleSheet* pTheStyleSheet,
-                                           const SfxItemSet* pTheNewItemSet) :
-                      SdUndoAction(pTheDoc)
+StyleSheetUndoAction::StyleSheetUndoAction(
+    SdDrawDocument& rTheDoc,
+    SfxStyleSheet& rTheStyleSheet,
+    const SfxItemSet& rTheNewItemSet)
+:   SdUndoAction(&rTheDoc),
+    mrStyleSheet(rTheStyleSheet),
+    maNewSet(rTheNewItemSet),
+    maOldSet(mrStyleSheet.GetItemSet())
 {
-    DBG_ASSERT(pTheStyleSheet, "Undo ohne StyleSheet ???");
-    pStyleSheet = pTheStyleSheet;
-
-    // ItemSets anlegen; Vorsicht, das neue koennte aus einem anderen Pool
-    // stammen, also mitsamt seinen Items clonen
-    pNewSet = new SfxItemSet((SfxItemPool&)SdrObject::GetGlobalDrawObjectItemPool(), pTheNewItemSet->GetRanges());
-    pTheDoc->MigrateItemSet( pTheNewItemSet, pNewSet, pTheDoc );
-
-    pOldSet = new SfxItemSet((SfxItemPool&)SdrObject::GetGlobalDrawObjectItemPool(),pStyleSheet->GetItemSet().GetRanges());
-    pTheDoc->MigrateItemSet( &pStyleSheet->GetItemSet(), pOldSet, pTheDoc );
-
     aComment = String(SdResId(STR_UNDO_CHANGE_PRES_OBJECT));
-    String aName(pStyleSheet->GetName());
+    String aName(mrStyleSheet.GetName());
 
     // Layoutnamen und Separator loeschen
     String aSep( RTL_CONSTASCII_USTRINGPARAM( SD_LT_SEPARATOR ) );
@@ -122,14 +112,16 @@ StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
 
 void StyleSheetUndoAction::Undo()
 {
-    SfxItemSet aNewSet( mpDoc->GetItemPool(), pOldSet->GetRanges() );
-    mpDoc->MigrateItemSet( pOldSet, &aNewSet, mpDoc );
+    mrStyleSheet.GetItemSet().Set(maOldSet);
 
-    pStyleSheet->GetItemSet().Set(aNewSet);
-    if( pStyleSheet->GetFamily() == SD_STYLE_FAMILY_PSEUDO )
-        ( (SdStyleSheet*)pStyleSheet )->GetRealStyleSheet()->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+    if(SD_STYLE_FAMILY_PSEUDO == mrStyleSheet.GetFamily())
+    {
+        static_cast< SdStyleSheet& >(mrStyleSheet).GetRealStyleSheet()->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+    }
     else
-        pStyleSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+    {
+        mrStyleSheet.Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+    }
 }
 
 /*************************************************************************
@@ -140,14 +132,16 @@ void StyleSheetUndoAction::Undo()
 
 void StyleSheetUndoAction::Redo()
 {
-    SfxItemSet aNewSet( mpDoc->GetItemPool(), pOldSet->GetRanges() );
-    mpDoc->MigrateItemSet( pNewSet, &aNewSet, mpDoc );
+    mrStyleSheet.GetItemSet().Set(maNewSet);
 
-    pStyleSheet->GetItemSet().Set(aNewSet);
-    if( pStyleSheet->GetFamily() == SD_STYLE_FAMILY_PSEUDO )
-        ( (SdStyleSheet*)pStyleSheet )->GetRealStyleSheet()->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+    if(SD_STYLE_FAMILY_PSEUDO == mrStyleSheet.GetFamily())
+    {
+        static_cast< SdStyleSheet& >(mrStyleSheet).GetRealStyleSheet()->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+    }
     else
-        pStyleSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+    {
+        mrStyleSheet.Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+    }
 }
 
 /*************************************************************************
@@ -158,8 +152,6 @@ void StyleSheetUndoAction::Redo()
 
 StyleSheetUndoAction::~StyleSheetUndoAction()
 {
-    delete pNewSet;
-    delete pOldSet;
 }
 
 /*************************************************************************
@@ -172,3 +164,5 @@ String StyleSheetUndoAction::GetComment() const
 {
     return aComment;
 }
+
+// eof

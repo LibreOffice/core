@@ -58,8 +58,6 @@ class XMLIndexTitleTemplateContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
      XMLIndexTitleTemplateContext(
         SvXMLImport& rImport,
         ::com::sun::star::uno::Reference<

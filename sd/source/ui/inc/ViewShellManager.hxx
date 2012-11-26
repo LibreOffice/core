@@ -114,7 +114,7 @@ public:
         @param pFormShell
             The form shell.
         @param bAbove
-            When <TRUE/> then the form shell will be placed directly above
+            When <true/> then the form shell will be placed directly above
             pViewShell on the SFX shell stack.  Otherwise the form shell is
             placed directly below the view shell.
     */

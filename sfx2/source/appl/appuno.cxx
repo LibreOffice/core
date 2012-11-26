@@ -1302,7 +1302,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
         // slot is a property
         sal_uInt16 nWhich = rSet.GetPool()->GetWhich(nSlotId);
         sal_Bool bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == SFX_MAPUNIT_TWIP );
-        SFX_ITEMSET_ARG( &rSet, pItem, SfxPoolItem, nWhich, sal_False );
+        SFX_ITEMSET_ARG( &rSet, pItem, SfxPoolItem, nWhich );
         if ( pItem ) //???
         {
             sal_uInt16 nSubCount = pType->nAttribs;
@@ -1353,7 +1353,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             const SfxFormalArgument &rArg = pSlot->GetFormalArgument( nArg );
             sal_uInt16 nWhich = rSet.GetPool()->GetWhich( rArg.nSlotId );
             sal_Bool bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == SFX_MAPUNIT_TWIP );
-            SFX_ITEMSET_ARG( &rSet, pItem, SfxPoolItem, nWhich, sal_False );
+            SFX_ITEMSET_ARG( &rSet, pItem, SfxPoolItem, nWhich );
             if ( pItem ) //???
             {
                 sal_uInt16 nSubCount = rArg.pType->nAttribs;
@@ -1463,12 +1463,12 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             if ( rSet.GetItemState( SID_FILLFRAME, sal_False, &pItem ) == SFX_ITEM_SET )
             {
                 pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sFrame));
-                if ( pItem->ISA( SfxUsrAnyItem ) )
+                if ( dynamic_cast< const SfxUsrAnyItem* >(pItem) )
                 {
                     OSL_ENSURE( false, "TransformItems: transporting an XFrame via an SfxUsrAnyItem is not deprecated!" );
                     pValue[nActProp++].Value = static_cast< const SfxUsrAnyItem* >( pItem )->GetValue();
                 }
-                else if ( pItem->ISA( SfxUnoFrameItem ) )
+                else if ( dynamic_cast< const SfxUnoFrameItem* >(pItem) )
                     pValue[nActProp++].Value <<= static_cast< const SfxUnoFrameItem* >( pItem )->GetFrame();
                 else
                     OSL_ENSURE( false, "TransformItems: invalid item type for SID_FILLFRAME!" );
@@ -1878,8 +1878,8 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::
             else if ( pDoc && pDoc->GetMedium() )
             {
                 pDoc->AdjustMacroMode( String() );
-                SFX_ITEMSET_ARG( pDoc->GetMedium()->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
-                SFX_ITEMSET_ARG( pDoc->GetMedium()->GetItemSet(), pMacroExecModeItem, SfxUInt16Item, SID_MACROEXECMODE, sal_False);
+                SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE );
+                SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(), pMacroExecModeItem, SfxUInt16Item, SID_MACROEXECMODE );
                 if ( pUpdateDocItem && pMacroExecModeItem
                   && pUpdateDocItem->GetValue() == document::UpdateDocMode::NO_UPDATE
                   && pMacroExecModeItem->GetValue() == document::MacroExecMode::NEVER_EXECUTE )

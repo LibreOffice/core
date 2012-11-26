@@ -41,7 +41,7 @@ class SVX_DLLPUBLIC XLineDashItem : public NameOrIndex
     XDash   aDash;
 
 public:
-                            TYPEINFO();
+    POOLITEM_FACTORY()
                             XLineDashItem() : NameOrIndex(XATTR_LINEDASH, -1) {}
                             XLineDashItem(sal_Int32 nIndex, const XDash& rTheDash);
                             XLineDashItem(const String& rName, const XDash& rTheDash);
@@ -62,8 +62,8 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
-    virtual FASTBOOL        HasMetrics() const;
-    virtual FASTBOOL        ScaleMetrics(long nMul, long nDiv);
+    virtual bool        HasMetrics() const;
+    virtual void        ScaleMetrics(long nMul, long nDiv);
 
     const XDash&            GetDashValue(const XDashTable* pTable = 0) const; // GetValue -> GetDashValue
     void                    SetDashValue(const XDash& rNew)   { aDash = rNew; Detach(); } // SetValue -> SetDashValue

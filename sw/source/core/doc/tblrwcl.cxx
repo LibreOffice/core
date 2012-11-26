@@ -2263,7 +2263,7 @@ sal_Bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
 
     pTblNd->GetTable().SetRowsToRepeat( GetRowsToRepeat() );
 
-    if( IS_TYPE( SwDDETable, this ))
+    if( typeid(SwDDETable) == typeid(*this) ) // IS_TYPE( SwDDETable, this ))
     {
         // es wird eine DDE-Tabelle kopiert
         // ist im neuen Dokument ueberhaupt der FeldTyp vorhanden ?

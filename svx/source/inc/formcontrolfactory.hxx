@@ -44,6 +44,8 @@ namespace comphelper {
     class ComponentContext;
 }
 
+namespace basegfx { class B2DRange; }
+
 //........................................................................
 namespace svxform
 {
@@ -74,7 +76,7 @@ namespace svxform
         sal_Int16 initializeControlModel(
                     const DocumentType _eDocType,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
-                    const Rectangle& _rControlBoundRect
+                    const basegfx::B2DRange& _rControlBoundRange
                 );
 
         sal_Int16 initializeControlModel( const DocumentType _eDocType, const SdrUnoObj& _rObject );

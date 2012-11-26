@@ -2383,7 +2383,7 @@ sal_Bool SwDoc::IsUsed( const SwNumRule& rRule ) const
 //            ((SwNumRuleItem*)pItem)->GetValue().Len() &&
 //            ((SwNumRuleItem*)pItem)->GetValue() == rRule.GetName() )
 //        {
-//            if( pMod->IsA( TYPE( SwFmt )) )
+//            if( dynamic_cast< SwFmt* >(pMod) )
 //            {
 //                bUsed = !pMod->GetInfo( aGetHt );
 //                if( bUsed )

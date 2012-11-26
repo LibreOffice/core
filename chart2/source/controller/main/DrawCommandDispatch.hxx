@@ -29,6 +29,7 @@
 
 class SfxItemSet;
 class SdrObject;
+class SdrObjectCreationInfo;
 
 //.............................................................................
 namespace chart
@@ -72,7 +73,7 @@ protected:
     virtual void describeSupportedFeatures();
 
 private:
-    void setInsertObj( sal_uInt16 eObj );
+    void setInsertObj(const SdrObjectCreationInfo& rSdrObjectCreationInfo);
     SdrObject* createDefaultObject( const sal_uInt16 nID );
 
     bool parseCommandURL( const ::rtl::OUString& rCommandURL, sal_uInt16* pnFeatureId, ::rtl::OUString* pBaseCommand, ::rtl::OUString* pCustomShapeType );

@@ -51,7 +51,7 @@
 |*
 \************************************************************************/
 
-SdPageDlg::SdPageDlg( SfxObjectShell* pDocSh, Window* pParent, const SfxItemSet* pAttr, sal_Bool bAreaPage ) :
+SdPageDlg::SdPageDlg( SfxObjectShell* pDocSh, Window* pParent, const SfxItemSet* pAttr, bool bAreaPage ) :
         SfxTabDialog ( pParent, SdResId( TAB_PAGE ), pAttr ),
         mrOutAttrs          ( *pAttr ),
         mpDocShell          ( pDocSh )

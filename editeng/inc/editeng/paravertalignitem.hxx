@@ -41,10 +41,9 @@ class EDITENG_DLLPUBLIC SvxParaVertAlignItem : public SfxUInt16Item
 {
 public:
     enum { AUTOMATIC, BASELINE, TOP, CENTER, BOTTOM };
-    TYPEINFO();
-
-    SvxParaVertAlignItem( sal_uInt16 nValue /*= 0*/,
-                       const sal_uInt16 nId  );
+    POOLITEM_FACTORY()
+    SvxParaVertAlignItem( sal_uInt16 nValue = 0,
+                       const sal_uInt16 nId = 0 );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;

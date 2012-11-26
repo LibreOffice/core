@@ -47,8 +47,6 @@ class XMLAutoTextContainerEventImport : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLAutoTextContainerEventImport(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,

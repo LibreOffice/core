@@ -31,7 +31,6 @@ class SwDDETable : public SwTable
 {
     SwDepend aDepend;
 public:
-    TYPEINFO();
     // Constructor movet alle Lines/Boxen aus der SwTable zu sich.
     // Die SwTable ist danach Leer und muss geloescht werden.
     SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType,

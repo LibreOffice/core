@@ -286,7 +286,7 @@ void SvxUndoRedoControl::StateChanged(
             ToolBox& rBox = GetToolBox();
             rBox.SetQuickHelpText( GetId(), aDefaultText );
         }
-        else if ( pState && pState->ISA( SfxStringItem ) )
+        else if ( pState && dynamic_cast< const SfxStringItem* >(pState) )
         {
             SfxStringItem& rItem = *(SfxStringItem *)pState;
             ToolBox& rBox = GetToolBox();
@@ -299,7 +299,7 @@ void SvxUndoRedoControl::StateChanged(
     {
         aUndoRedoList.clear();
 
-        if ( pState && pState->ISA( SfxStringListItem ) )
+        if ( pState && dynamic_cast< const SfxStringListItem* >(pState) )
         {
             SfxStringListItem &rItem = *(SfxStringListItem *)pState;
             const List* pLst = rItem.GetList();

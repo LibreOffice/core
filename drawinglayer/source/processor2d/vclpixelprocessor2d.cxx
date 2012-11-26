@@ -99,7 +99,9 @@ namespace drawinglayer
             mpOutputDevice->SetAntialiasing(mpOutputDevice->GetAntialiasing() & ~ANTIALIASING_ENABLE_B2DDRAW);
         }
 
-        void VclPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
+        void VclPixelProcessor2D::processBasePrimitive2D(
+            const primitive2d::BasePrimitive2D& rCandidate,
+            const primitive2d::Primitive2DReference& /*rUnoCandidate*/)
         {
             switch(rCandidate.getPrimitive2DID())
             {

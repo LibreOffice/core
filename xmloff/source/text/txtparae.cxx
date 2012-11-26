@@ -2941,7 +2941,7 @@ void XMLTextParagraphExport::exportContour(
         /*const*/ PointSequence* pSequence =
                             (PointSequence*)aSourcePolyPolygon.getConstArray();
 
-        SdXMLImExPointsElement aPoints( pSequence, aViewBox, aPoint, aSize );
+        SdXMLImExPointsElement aPoints( pSequence, aViewBox, aPoint, aSize, true);
 
         // write point array
         GetExport().AddAttribute( XML_NAMESPACE_DRAW, XML_POINTS,

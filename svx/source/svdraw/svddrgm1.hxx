@@ -24,15 +24,14 @@
 #ifndef _SVDDRGM1_HXX
 #define _SVDDRGM1_HXX
 
-#include <svx/xpoly.hxx>
 #include <svx/svdhdl.hxx>
-#include <svx/svddrgv.hxx>
+#include <svx/svdview.hxx>
 #include <svx/svddrgmt.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// predeclarations
+// predefines
 
-class SdrDragView;
 class SdrDragStat;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -41,19 +40,16 @@ class SdrDragStat;
 class SdrDragMovHdl : public SdrDragMethod
 {
 private:
-    bool                    bMirrObjShown;
-
 protected:
     // define nothing, overload to do so
     virtual void createSdrDragEntries();
 
 public:
-    TYPEINFO();
-    SdrDragMovHdl(SdrDragView& rNewView);
+    SdrDragMovHdl(SdrView& rNewView);
 
     virtual void TakeSdrDragComment(String& rStr) const;
     virtual bool BeginSdrDrag();
-    virtual void MoveSdrDrag(const Point& rPnt);
+    virtual void MoveSdrDrag(const basegfx::B2DPoint& rPnt);
     virtual bool EndSdrDrag(bool bCopy);
     virtual void CancelSdrDrag();
     virtual Pointer GetSdrDragPointer() const;
@@ -65,24 +61,19 @@ public:
 class SdrDragRotate : public SdrDragMethod
 {
 private:
-    double                      nSin;
-    double                      nCos;
-    long                        nWink0;
-    long                        nWink;
-    bool                        bRight;
+    double                      mfStartRotation;
+    double                      mfDeltaRotation;
 
 public:
-    TYPEINFO();
-    SdrDragRotate(SdrDragView& rNewView);
+    SdrDragRotate(SdrView& rNewView);
 
     virtual void TakeSdrDragComment(String& rStr) const;
     virtual bool BeginSdrDrag();
-    virtual void MoveSdrDrag(const Point& rPnt);
+    virtual void MoveSdrDrag(const basegfx::B2DPoint& rPnt);
     virtual bool EndSdrDrag(bool bCopy);
     virtual Pointer GetSdrDragPointer() const;
 
     virtual basegfx::B2DHomMatrix getCurrentTransformation();
-    virtual void applyCurrentTransformationToSdrObject(SdrObject& rTarget);
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -91,27 +82,23 @@ public:
 class SdrDragShear : public SdrDragMethod
 {
 private:
-    Fraction                    aFact;
-    long                        nWink0;
-    long                        nWink;
-    double                      nTan;
-    bool                        bVertical;   // Vertikales verzerren
-    bool                        bResize;     // Shear mit Resize
-    bool                        bUpSideDown; // Beim Shear/Slant gespiegelt
-    bool                        bSlant;
+    double                      mfStartAngle;
+    double                      mfDeltaAngle;
+    double                      mfFactor;
+
+    /// bitfield
+    bool                        mbVertical : 1;   // Vertikales verzerren
 
 public:
-    TYPEINFO();
-    SdrDragShear(SdrDragView& rNewView,bool bSlant1);
+    SdrDragShear(SdrView& rNewView);
 
     virtual void TakeSdrDragComment(String& rStr) const;
     virtual bool BeginSdrDrag();
-    virtual void MoveSdrDrag(const Point& rPnt);
+    virtual void MoveSdrDrag(const basegfx::B2DPoint& rPnt);
     virtual bool EndSdrDrag(bool bCopy);
     virtual Pointer GetSdrDragPointer() const;
 
     virtual basegfx::B2DHomMatrix getCurrentTransformation();
-    virtual void applyCurrentTransformationToSdrObject(SdrObject& rTarget);
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -120,25 +107,16 @@ public:
 class SdrDragMirror : public SdrDragMethod
 {
 private:
-    Point                       aDif;
-    long                        nWink;
-    bool                        bMirrored;
-    bool                        bSide0;
-
-    bool ImpCheckSide(const Point& rPnt) const;
-
 public:
-    TYPEINFO();
-    SdrDragMirror(SdrDragView& rNewView);
+    SdrDragMirror(SdrView& rNewView);
 
     virtual void TakeSdrDragComment(String& rStr) const;
     virtual bool BeginSdrDrag();
-    virtual void MoveSdrDrag(const Point& rPnt);
+    virtual void MoveSdrDrag(const basegfx::B2DPoint& rPnt);
     virtual bool EndSdrDrag(bool bCopy);
     virtual Pointer GetSdrDragPointer() const;
 
     virtual basegfx::B2DHomMatrix getCurrentTransformation();
-    virtual void applyCurrentTransformationToSdrObject(SdrObject& rTarget);
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -151,17 +129,16 @@ private:
     SdrHdlGradient*             pIAOHandle;
 
     // is this for gradient (or for transparence) ?
-    unsigned                    bIsGradient : 1;
+    bool                        bIsGradient : 1;
 
 public:
-    TYPEINFO();
-    SdrDragGradient(SdrDragView& rNewView, bool bGrad = true);
+    SdrDragGradient(SdrView& rNewView, bool bGrad = true);
 
     bool IsGradient() const { return bIsGradient; }
 
     virtual void TakeSdrDragComment(String& rStr) const;
     virtual bool BeginSdrDrag();
-    virtual void MoveSdrDrag(const Point& rPnt);
+    virtual void MoveSdrDrag(const basegfx::B2DPoint& rPnt);
     virtual bool EndSdrDrag(bool bCopy);
     virtual Pointer GetSdrDragPointer() const;
     virtual void CancelSdrDrag();
@@ -173,45 +150,49 @@ public:
 class SdrDragCrook : public SdrDragMethod
 {
 private:
-    Rectangle                   aMarkRect;
-    Point                       aMarkCenter;
-    Point                       aCenter;
-    Point                       aStart;
-    Fraction                    aFact;
-    Point                       aRad;
-    bool                        bContortionAllowed;
-    bool                        bNoContortionAllowed;
-    bool                        bContortion;
-    bool                        bResizeAllowed;
-    bool                        bResize;
-    bool                        bRotateAllowed;
-    bool                        bRotate;
-    bool                        bVertical;
-    bool                        bValid;
-    bool                        bLft;
-    bool                        bRgt;
-    bool                        bUpr;
-    bool                        bLwr;
-    bool                        bAtCenter;
-    long                        nWink;
-    long                        nMarkSize;
-    SdrCrookMode                eMode;
+    basegfx::B2DRange       maMarkedRange;
+
+    basegfx::B2DPoint       maMarkedCenter;
+    basegfx::B2DPoint       maCenter;
+    basegfx::B2DPoint       maStart;
+    basegfx::B2DPoint       maRadius;
+
+    double                  mfFactor;
+    double                  mfAngle;
+    double                  mfMarkedSize;
+
+    SdrCrookMode            meMode;
+
+    /// bitfield
+    bool                    mbContortionAllowed : 1;
+    bool                    mbNoContortionAllowed : 1;
+    bool                    mbContortion : 1;
+    bool                    mbResizeAllowed : 1;
+    bool                    mbResize : 1;
+    bool                    mbRotateAllowed : 1;
+    bool                    mbRotate : 1;
+    bool                    mbVertical : 1;
+    bool                    mbValid : 1;
+    bool                    mbLeft : 1;
+    bool                    mbRight : 1;
+    bool                    mbTop : 1;
+    bool                    mbBottom : 1;
+    bool                    mbAtCenter : 1;
 
     // helpers for applyCurrentTransformationToPolyPolygon
     void _MovAllPoints(basegfx::B2DPolyPolygon& rTarget);
-    void _MovCrookPoint(Point& rPnt, Point* pC1, Point* pC2);
+    void _MovCrookPoint(basegfx::B2DPoint& rPnt, basegfx::B2DPoint* pC1, basegfx::B2DPoint* pC2);
 
 protected:
     // needs to add drag geometry to the default
     virtual void createSdrDragEntries();
 
 public:
-    TYPEINFO();
-    SdrDragCrook(SdrDragView& rNewView);
+    SdrDragCrook(SdrView& rNewView);
 
     virtual void TakeSdrDragComment(String& rStr) const;
     virtual bool BeginSdrDrag();
-    virtual void MoveSdrDrag(const Point& rPnt);
+    virtual void MoveSdrDrag(const basegfx::B2DPoint& rPnt);
     virtual bool EndSdrDrag(bool bCopy);
     virtual Pointer GetSdrDragPointer() const;
 
@@ -225,12 +206,14 @@ public:
 class SdrDragDistort : public SdrDragMethod
 {
 private:
-    Rectangle                   aMarkRect;
-    XPolygon                    aDistortedRect;
-    sal_uInt16                  nPolyPt;
-    bool                        bContortionAllowed;
-    bool                        bNoContortionAllowed;
-    bool                        bContortion;
+    basegfx::B2DRange       maMarkedRange;
+    basegfx::B2DPolygon     maDistortedRangePolygon;
+    sal_uInt32              mnPointIndex;
+
+    /// bitfield
+    bool                    mbContortionAllowed : 1;
+    bool                    mbNoContortionAllowed : 1;
+    bool                    mbContortion : 1;
 
     // helper for applyCurrentTransformationToPolyPolygon
     void _MovAllPoints(basegfx::B2DPolyPolygon& rTarget);
@@ -240,12 +223,11 @@ protected:
     virtual void createSdrDragEntries();
 
 public:
-    TYPEINFO();
-    SdrDragDistort(SdrDragView& rNewView);
+    SdrDragDistort(SdrView& rNewView);
 
     virtual void TakeSdrDragComment(String& rStr) const;
     virtual bool BeginSdrDrag();
-    virtual void MoveSdrDrag(const Point& rPnt);
+    virtual void MoveSdrDrag(const basegfx::B2DPoint& rPnt);
     virtual bool EndSdrDrag(bool bCopy);
     virtual Pointer GetSdrDragPointer() const;
 
@@ -259,8 +241,7 @@ public:
 class SdrDragCrop : public SdrDragResize
 {
 public:
-    TYPEINFO();
-    SdrDragCrop(SdrDragView& rNewView);
+    SdrDragCrop(SdrView& rNewView);
 
     virtual void TakeSdrDragComment(String& rStr) const;
     virtual bool EndSdrDrag(bool bCopy);

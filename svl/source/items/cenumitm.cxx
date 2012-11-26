@@ -41,9 +41,6 @@
 DBG_NAME(SfxEnumItemInterface)
 
 //============================================================================
-TYPEINIT1(SfxEnumItemInterface, SfxPoolItem)
-
-//============================================================================
 // virtual
 int SfxEnumItemInterface::operator ==(const SfxPoolItem & rItem) const
 {
@@ -155,9 +152,6 @@ CntEnumItem::CntEnumItem(sal_uInt16 which, SvStream & rStream):
 }
 
 //============================================================================
-TYPEINIT1(CntEnumItem, SfxEnumItemInterface)
-
-//============================================================================
 // virtual
 SvStream & CntEnumItem::Store(SvStream & rStream, sal_uInt16) const
 {
@@ -188,9 +182,6 @@ void CntEnumItem::SetEnumValue(sal_uInt16 nTheValue)
 DBG_NAME(CntBoolItem)
 
 //============================================================================
-TYPEINIT1_AUTOFACTORY(CntBoolItem, SfxPoolItem)
-
-//============================================================================
 CntBoolItem::CntBoolItem(sal_uInt16 which, SvStream & rStream):
     SfxPoolItem(which)
 {
@@ -202,8 +193,7 @@ CntBoolItem::CntBoolItem(sal_uInt16 which, SvStream & rStream):
 // virtual
 int CntBoolItem::operator ==(const SfxPoolItem & rItem) const
 {
-    DBG_ASSERT(rItem.ISA(CntBoolItem),
-               "CntBoolItem::operator ==(): Bad type");
+    DBG_ASSERT(dynamic_cast< const CntBoolItem* >(&rItem), "CntBoolItem::operator ==(): Bad type");
     return m_bValue == static_cast< CntBoolItem const * >(&rItem)->m_bValue;
 }
 
@@ -211,7 +201,7 @@ int CntBoolItem::operator ==(const SfxPoolItem & rItem) const
 // virtual
 int CntBoolItem::Compare(const SfxPoolItem & rWith) const
 {
-    DBG_ASSERT(rWith.ISA(CntBoolItem), "CntBoolItem::Compare(): Bad type");
+    DBG_ASSERT(dynamic_cast< const CntBoolItem* >(&rWith), "CntBoolItem::Compare(): Bad type");
     return m_bValue == static_cast< CntBoolItem const * >(&rWith)->m_bValue ?
                0 : m_bValue ? -1 : 1;
 }

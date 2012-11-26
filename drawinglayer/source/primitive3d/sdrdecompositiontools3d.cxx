@@ -132,7 +132,7 @@ namespace drawinglayer
 
             // transform texture coordinates to texture size
             basegfx::B2DHomMatrix aTexMatrix;
-            aTexMatrix.scale(rTextureSize.getX(), rTextureSize.getY());
+            aTexMatrix.scale(rTextureSize);
 
             for(a = 0; a < rFill.size(); a++)
             {

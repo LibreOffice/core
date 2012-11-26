@@ -38,7 +38,8 @@ TARGET=matrix
 SLOFILES= \
                 $(SLO)$/b2dhommatrix.obj		\
                 $(SLO)$/b2dhommatrixtools.obj	\
-                $(SLO)$/b3dhommatrix.obj
+                $(SLO)$/b3dhommatrix.obj		\
+                $(SLO)$/b3dhommatrixtools.obj
             
 # --- Targets ----------------------------------
 

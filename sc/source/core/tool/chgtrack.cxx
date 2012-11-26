@@ -28,7 +28,6 @@
 #include <tools/debug.hxx>
 #include <tools/shl.hxx>        // SHL_CALC
 #include <tools/stack.hxx>
-#include <tools/rtti.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/itemset.hxx>
 #include <svl/isethint.hxx>

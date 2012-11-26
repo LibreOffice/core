@@ -160,11 +160,19 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const AlphaMask& rAlphaMask ) :
         aMask.Scale(rBmp.GetSizePixel());
     }
 
+    if( !!aMask && aMask.GetBitCount() > 8 )
+    {
+        OSL_TRACE("BitmapEx: forced alpha to 8bit grey");
+        aMask.Convert(BMP_CONVERSION_8BIT_GREYS);
+    }
+
     // #i75531# the workaround below can go when
     // X11SalGraphics::drawAlphaBitmap()'s render acceleration
     // can handle the bitmap depth mismatch directly
     if( aBitmap.GetBitCount() < aMask.GetBitCount() )
+    {
         aBitmap.Convert( BMP_CONVERSION_24BIT );
+    }
 }
 
 // ------------------------------------------------------------------

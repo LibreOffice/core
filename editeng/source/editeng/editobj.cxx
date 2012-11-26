@@ -379,7 +379,7 @@ const SvxFieldItem* EditTextObject::GetField() const
     return 0;
 }
 
-sal_Bool EditTextObject::HasField( TypeId /*aType*/ ) const
+sal_Bool EditTextObject::HasField( const std::type_info* /*pTypeInfo*/ ) const
 {
     DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
     return sal_False;
@@ -1002,7 +1002,7 @@ const SvxFieldItem* BinTextObject::GetField() const
     return 0;
 }
 
-sal_Bool BinTextObject::HasField( TypeId aType ) const
+sal_Bool BinTextObject::HasField( const std::type_info* pTypeInfo ) const
 {
     sal_uInt16 nParagraphs = GetContents().Count();
     for ( sal_uInt16 nPara = 0; nPara < nParagraphs; nPara++ )
@@ -1014,11 +1014,11 @@ sal_Bool BinTextObject::HasField( TypeId aType ) const
             XEditAttribute* pAttr = pC->GetAttribs()[nAttr];
             if ( pAttr->GetItem()->Which() == EE_FEATURE_FIELD )
             {
-                if ( !aType )
+                if ( !pTypeInfo )
                     return sal_True;
 
                 const SvxFieldData* pFldData = ((const SvxFieldItem*)pAttr->GetItem())->GetField();
-                if ( pFldData && pFldData->IsA( aType ) )
+                if ( pFldData && ( *pTypeInfo == typeid(*pFldData) ) )
                     return sal_True;
             }
         }

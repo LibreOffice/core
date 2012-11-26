@@ -45,9 +45,8 @@ class SvxBorderLine;
 class EDITENG_DLLPUBLIC SvxLineItem : public SfxPoolItem
 {
 public:
-    TYPEINFO();
-
-    SvxLineItem( const sal_uInt16 nId );
+    POOLITEM_FACTORY()
+    SvxLineItem( const sal_uInt16 nId = 0 );
     SvxLineItem( const SvxLineItem& rCpy );
     ~SvxLineItem();
     SvxLineItem &operator=( const SvxLineItem& rLine );
@@ -63,8 +62,8 @@ public:
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const;
-    virtual int              ScaleMetrics( long nMult, long nDiv );
-    virtual int              HasMetrics() const;
+    virtual void             ScaleMetrics( long nMult, long nDiv );
+    virtual bool             HasMetrics() const;
 
     const   SvxBorderLine*  GetLine     () const { return pLine; }
     void                    SetLine     ( const SvxBorderLine *pNew );

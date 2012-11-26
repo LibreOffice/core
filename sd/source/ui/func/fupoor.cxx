@@ -74,8 +74,6 @@ using ::com::sun::star::uno::Reference;
 
 namespace sd {
 
-TYPEINIT0( FuPoor );
-
 /*************************************************************************
 |*
 |* Konstruktor
@@ -96,11 +94,11 @@ FuPoor::FuPoor (
       nSlotId( rReq.GetSlot() ),
       nSlotValue(0),
       pDialog(NULL),
-      bIsInDragMode(sal_False),
-      bNoScrollUntilInside (sal_True),
-      bScrollable (sal_False),
-      bDelayActive (sal_False),
-      bFirstMouseMove (sal_False),
+      bIsInDragMode(false),
+      bNoScrollUntilInside (true),
+      bScrollable (false),
+      bDelayActive (false),
+      bFirstMouseMove (false),
       // #95491# remember MouseButton state
       mnCode(0)
 {
@@ -158,7 +156,7 @@ void FuPoor::Deactivate()
     aScrollTimer.Stop();
     aDelayToScrollTimer.Stop ();
         bScrollable  =
-        bDelayActive = sal_False;
+        bDelayActive = false;
 
     if (pDialog)
     {
@@ -175,7 +173,7 @@ void FuPoor::Deactivate()
 |*
 \************************************************************************/
 
-void FuPoor::ForceScroll(const Point& aPixPos)
+void FuPoor::ForceScroll(const basegfx::B2DPoint& aPixPos)
 {
     aScrollTimer.Stop();
 
@@ -190,13 +188,13 @@ void FuPoor::ForceScroll(const Point& aPixPos)
         if ( aPixPos.Y() <= 0              ) dy = -1;
         if ( aPixPos.Y() >= aSize.Height() ) dy =  1;
 */
-        Point aPos = mpWindow->OutputToScreenPixel(aPixPos);
+        const Point aPos = mpWindow->OutputToScreenPixel(Point(basegfx::fround(aPixPos.getX()), basegfx::fround(aPixPos.getY())));
         const Rectangle& rRect = mpViewShell->GetAllWindowRect();
 
         if ( bNoScrollUntilInside )
         {
             if ( rRect.IsInside(aPos) )
-                bNoScrollUntilInside = sal_False;
+                bNoScrollUntilInside = false;
         }
         else
         {
@@ -213,7 +211,7 @@ void FuPoor::ForceScroll(const Point& aPixPos)
                 {
                     // Scrollaktion in abgeleiteter Klasse
                     ScrollStart();
-                    mpViewShell->ScrollLines(dx, dy);
+                    mpViewShell->ScrollLines(basegfx::B2DVector(dx, dy));
                     ScrollEnd();
                     aScrollTimer.Start();
                 }
@@ -245,16 +243,16 @@ IMPL_LINK_INLINE_END( FuPoor, ScrollHdl, Timer *, pTimer )
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
-|* sal_False.
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert true, andernfalls
+|* false.
 |*
 \************************************************************************/
 
-sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
+bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 {
     sal_uInt16          nCode = rKEvt.GetKeyCode().GetCode();
-    sal_Bool            bReturn = sal_False;
-    sal_Bool            bSlideShow = SlideShow::IsRunning( mpViewShell->GetViewShellBase() );
+    bool            bReturn = false;
+    bool            bSlideShow = SlideShow::IsRunning( mpViewShell->GetViewShellBase() );
 
     switch (nCode)
     {
@@ -263,10 +261,10 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
         {
             if(rKEvt.GetKeyCode().IsMod1())
             {
-                if(mpViewShell && mpViewShell->ISA(DrawViewShell))
+                DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >(mpViewShell);
+
+                if(pDrawViewShell)
                 {
-                    DrawViewShell* pDrawViewShell =
-                        static_cast<DrawViewShell*>(mpViewShell);
                     SdPage* pActualPage = pDrawViewShell->GetActualPage();
                     SdrTextObj* pCandidate = 0L;
 
@@ -276,17 +274,16 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                         while(aIter.IsMore() && !pCandidate)
                         {
-                            SdrObject* pObj = aIter.Next();
+                            SdrTextObj* pObj = dynamic_cast< SdrTextObj* >(aIter.Next());
 
-                            if(pObj && pObj->ISA(SdrTextObj))
+                            if(pObj)
                             {
                                 sal_uInt32 nInv(pObj->GetObjInventor());
                                 sal_uInt16 nKnd(pObj->GetObjIdentifier());
 
-                                if(SdrInventor == nInv &&
-                                    (OBJ_TITLETEXT == nKnd || OBJ_OUTLINETEXT == nKnd || OBJ_TEXT == nKnd))
+                                if(SdrInventor == nInv && (OBJ_TITLETEXT == nKnd || OBJ_OUTLINETEXT == nKnd || OBJ_TEXT == nKnd))
                                 {
-                                    pCandidate = (SdrTextObj*)pObj;
+                                    pCandidate = pObj;
                                 }
                             }
                         }
@@ -294,8 +291,8 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                     if(pCandidate)
                     {
-                        mpView->UnMarkAll();
-                        mpView->MarkObj(pCandidate, mpView->GetSdrPageView());
+                        mpView->UnmarkAllObj();
+                        mpView->MarkObj(*pCandidate);
 
                         mpViewShell->GetViewFrame()->GetDispatcher()->Execute(
                             SID_ATTR_CHAR, SFX_CALLMODE_ASYNCHRON);
@@ -308,35 +305,37 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                     }
 
                     // consumed
-                    bReturn = sal_True;
+                    bReturn = true;
                 }
             }
             else
             {
                 // #98255# activate OLE object on RETURN for selected object
                 // #98198# activate text edit on RETURN for selected object
-                const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-
-                if( !mpView->IsTextEdit() && 1 == rMarkList.GetMarkCount() )
+                if( !mpView->IsTextEdit() )
                 {
-                    SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+                    SdrOle2Obj* pSdrOle2Obj = dynamic_cast< SdrOle2Obj* >(mpView->getSelectedIfSingle());
 
-                    if( pObj && pObj->ISA( SdrOle2Obj ) && !mpDocSh->IsUIActive() )
+                    if( pSdrOle2Obj && !mpDocSh->IsUIActive() )
                     {
-                        //HMHmpView->HideMarkHdl();
-                        mpViewShell->ActivateObject( static_cast< SdrOle2Obj* >( pObj ), 0 );
-                    }
-                    else if( pObj && pObj->IsEmptyPresObj() && pObj->ISA( SdrGrafObj ) )
-                    {
-                        mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_GRAPHIC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
+                        mpViewShell->ActivateObject( pSdrOle2Obj, 0 );
                     }
                     else
                     {
-                        mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_ATTR_CHAR, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
+                        SdrGrafObj* pSdrGrafObj = dynamic_cast< SdrGrafObj* >(mpView->getSelectedIfSingle());
+
+                        if( pSdrGrafObj && pSdrGrafObj->IsEmptyPresObj() )
+                        {
+                            mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_GRAPHIC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
+                        }
+                        else
+                        {
+                            mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_ATTR_CHAR, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
+                        }
                     }
 
                     // consumed
-                    bReturn = sal_True;
+                    bReturn = true;
                 }
             }
         }
@@ -359,13 +358,15 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                 if(pHdl)
                 {
-                    Point aHdlPosition(pHdl->GetPos());
-                    Rectangle aVisRect(aHdlPosition - Point(100, 100), Size(200, 200));
-                    mpView->MakeVisible(aVisRect, *mpWindow);
+                    const basegfx::B2DRange aRange(
+                        pHdl->getPosition() - basegfx::B2DPoint(100.0, 100.0),
+                        pHdl->getPosition() + basegfx::B2DPoint(100.0, 100.0));
+
+                    mpView->MakeVisibleAtView(aRange, *mpWindow);
                 }
 
                 // consumed
-                bReturn = sal_True;
+                bReturn = true;
             }
         }
         break;
@@ -383,11 +384,14 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                 // Zoom vergroessern
                 mpViewShell->SetZoom(mpWindow->GetZoom() * 3 / 2);
 
-                if (mpViewShell->ISA(DrawViewShell))
-                    static_cast<DrawViewShell*>(mpViewShell)
-                        ->SetZoomOnPage(sal_False);
+                DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >(mpViewShell);
 
-                bReturn = sal_True;
+                if(pDrawViewShell)
+                {
+                    pDrawViewShell->SetZoomOnPage(false);
+                }
+
+                bReturn = true;
             }
         }
         break;
@@ -399,11 +403,14 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                 // Zoom verringern
                 mpViewShell->SetZoom(mpWindow->GetZoom() * 2 / 3);
 
-                if (mpViewShell->ISA(DrawViewShell))
-                    static_cast<DrawViewShell*>(mpViewShell)
-                        ->SetZoomOnPage(sal_False);
+                DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >(mpViewShell);
 
-                bReturn = sal_True;
+                if(pDrawViewShell)
+                {
+                    pDrawViewShell->SetZoomOnPage(false);
+                }
+
+                bReturn = true;
             }
         }
         break;
@@ -415,7 +422,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                 // Zoom auf Seite
                 mpViewShell->GetViewFrame()->GetDispatcher()->
                 Execute(SID_SIZE_PAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
-                bReturn = sal_True;
+                bReturn = true;
             }
         }
         break;
@@ -427,7 +434,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                 // Zoom auf selektierte Objekte
                 mpViewShell->GetViewFrame()->GetDispatcher()->
                 Execute(SID_SIZE_OPTIMAL, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
-                bReturn = sal_True;
+                bReturn = true;
             }
         }
         break;
@@ -439,8 +446,8 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
             if (!mpView->IsTextEdit() && pZoomList->IsNextPossible() && !bSlideShow && !mpDocSh->IsUIActive())
             {
                 // Naechstes ZoomRect einstellen
-                mpViewShell->SetZoomRect(pZoomList->GetNextZoomRect());
-                bReturn = sal_True;
+                mpViewShell->SetZoomRange(pZoomList->GetNextZoomRange());
+                bReturn = true;
             }
         }
         break;
@@ -452,38 +459,41 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
             if (!mpView->IsTextEdit() && pZoomList->IsPreviousPossible() && !bSlideShow && !mpDocSh->IsUIActive())
             {
                 // Vorheriges ZoomRect einstellen
-                mpViewShell->SetZoomRect(pZoomList->GetPreviousZoomRect());
-                bReturn = sal_True;
+                mpViewShell->SetZoomRange(pZoomList->GetPreviousZoomRange());
+                bReturn = true;
             }
         }
         break;
 
         case KEY_HOME:
         {
-            if (!mpView->IsTextEdit()
-                && mpViewShell->ISA(DrawViewShell)
-                && !bSlideShow)
+            if (!mpView->IsTextEdit() && !bSlideShow)
             {
-               // Sprung zu erster Seite
-               static_cast<DrawViewShell*>(mpViewShell)->SwitchPage(0);
-               bReturn = sal_True;
+                DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >(mpViewShell);
+
+                if(pDrawViewShell)
+                {
+                   // Sprung zu erster Seite
+                   pDrawViewShell->SwitchPage(0);
+                   bReturn = true;
+                }
             }
         }
         break;
 
         case KEY_END:
         {
-            if (!mpView->IsTextEdit()
-                && mpViewShell->ISA(DrawViewShell)
-                && !bSlideShow)
+            if(!mpView->IsTextEdit() && !bSlideShow)
             {
-                // Sprung zu letzter Seite
-                SdPage* pPage =
-                    static_cast<DrawViewShell*>(mpViewShell)->GetActualPage();
-                static_cast<DrawViewShell*>(mpViewShell)
-                    ->SwitchPage(mpDoc->GetSdPageCount(
-                        pPage->GetPageKind()) - 1);
-                bReturn = sal_True;
+                DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >(mpViewShell);
+
+                if(pDrawViewShell)
+                {
+                    // Sprung zu letzter Seite
+                    SdPage* pPage = pDrawViewShell->GetActualPage();
+                    pDrawViewShell->SwitchPage(mpDoc->GetSdPageCount(pPage->GetPageKind()) - 1);
+                    bReturn = true;
+                }
             }
         }
         break;
@@ -493,43 +503,46 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
             if( rKEvt.GetKeyCode().IsMod1() && rKEvt.GetKeyCode().IsMod2() )
                 break;
 
-            if(mpViewShell->ISA(DrawViewShell) && !bSlideShow)
+            if(!bSlideShow)
             {
-                // The page-up key switches layers or pages depending on the
-                // modifier key.
-                if ( ! rKEvt.GetKeyCode().GetAllModifier())
+                DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >(mpViewShell);
+
+                if(pDrawViewShell)
                 {
-                    // With no modifier pressed we move to the previous
-                    // slide.
-                    mpView->SdrEndTextEdit();
-
-                    // Previous page.
-                    bReturn = sal_True;
-                    SdPage* pPage = static_cast<DrawViewShell*>(mpViewShell)->GetActualPage();
-                    sal_uInt16 nSdPage = (pPage->GetPageNum() - 1) / 2;
-
-                    if (nSdPage > 0)
+                    // The page-up key switches layers or pages depending on the
+                    // modifier key.
+                    if ( ! rKEvt.GetKeyCode().GetAllModifier())
                     {
-                        // Switch the page and send events regarding
-                        // deactivation the old page and activating the new
-                        // one.
-                        TabControl* pPageTabControl =
-                            static_cast<DrawViewShell*>(mpViewShell)
-                            ->GetPageTabControl();
-                        if (pPageTabControl->IsReallyShown())
-                            pPageTabControl->SendDeactivatePageEvent ();
-                        static_cast<DrawViewShell*>(mpViewShell)->SwitchPage(nSdPage - 1);
-                        if (pPageTabControl->IsReallyShown())
-                            pPageTabControl->SendActivatePageEvent ();
+                        // With no modifier pressed we move to the previous
+                        // slide.
+                        mpView->SdrEndTextEdit();
+
+                        // Previous page.
+                        bReturn = true;
+                        SdPage* pPage = pDrawViewShell->GetActualPage();
+                        sal_uInt32 nSdPage = (pPage->GetPageNumber() - 1) / 2;
+
+                        if (nSdPage > 0)
+                        {
+                            // Switch the page and send events regarding
+                            // deactivation the old page and activating the new
+                            // one.
+                                TabControl* pPageTabControl = pDrawViewShell->GetPageTabControl();
+                            if (pPageTabControl->IsReallyShown())
+                                pPageTabControl->SendDeactivatePageEvent ();
+                                pDrawViewShell->SwitchPage(nSdPage - 1);
+                            if (pPageTabControl->IsReallyShown())
+                                pPageTabControl->SendActivatePageEvent ();
+                        }
                     }
-                }
-                else if (rKEvt.GetKeyCode().IsMod1())
-                {
-                    // With the CONTROL modifier we switch layers.
-                    if (static_cast<DrawViewShell*>(mpViewShell)->IsLayerModeActive())
+                    else if (rKEvt.GetKeyCode().IsMod1())
                     {
-                        // Moves to the previous layer.
-                        SwitchLayer (-1);
+                        // With the CONTROL modifier we switch layers.
+                        if (pDrawViewShell->IsLayerModeActive())
+                        {
+                            // Moves to the previous layer.
+                            SwitchLayer (-1);
+                        }
                     }
                 }
             }
@@ -540,42 +553,47 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
         {
             if( rKEvt.GetKeyCode().IsMod1() && rKEvt.GetKeyCode().IsMod2() )
                 break;
-            if(mpViewShell->ISA(DrawViewShell) && !bSlideShow)
+
+            if(!bSlideShow)
             {
-                // The page-down key switches layers or pages depending on the
-                // modifier key.
-                if ( ! rKEvt.GetKeyCode().GetAllModifier())
+                DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >(mpViewShell);
+
+                if(pDrawViewShell)
                 {
-                    // With no modifier pressed we move to the next slide.
-                    mpView->SdrEndTextEdit();
-
-                    // Next page.
-                    bReturn = sal_True;
-                    SdPage* pPage = static_cast<DrawViewShell*>(mpViewShell)->GetActualPage();
-                    sal_uInt16 nSdPage = (pPage->GetPageNum() - 1) / 2;
-
-                    if (nSdPage < mpDoc->GetSdPageCount(pPage->GetPageKind()) - 1)
+                    // The page-down key switches layers or pages depending on the
+                    // modifier key.
+                    if ( ! rKEvt.GetKeyCode().GetAllModifier())
                     {
-                        // Switch the page and send events regarding
-                        // deactivation the old page and activating the new
-                        // one.
-                        TabControl* pPageTabControl =
-                            static_cast<DrawViewShell*>(mpViewShell)->GetPageTabControl();
-                        if (pPageTabControl->IsReallyShown())
-                            pPageTabControl->SendDeactivatePageEvent ();
-                        static_cast<DrawViewShell*>(mpViewShell)->SwitchPage(nSdPage + 1);
-                        if (pPageTabControl->IsReallyShown())
-                            pPageTabControl->SendActivatePageEvent ();
+                        // With no modifier pressed we move to the next slide.
+                        mpView->SdrEndTextEdit();
+
+                        // Next page.
+                        bReturn = true;
+                        SdPage* pPage = pDrawViewShell->GetActualPage();
+                        sal_uInt32 nSdPage = (pPage->GetPageNumber() - 1) / 2;
+
+                        if (nSdPage < mpDoc->GetSdPageCount(pPage->GetPageKind()) - 1)
+                        {
+                            // Switch the page and send events regarding
+                            // deactivation the old page and activating the new
+                            // one.
+                                TabControl* pPageTabControl = pDrawViewShell->GetPageTabControl();
+                            if (pPageTabControl->IsReallyShown())
+                                pPageTabControl->SendDeactivatePageEvent ();
+                                pDrawViewShell->SwitchPage(nSdPage + 1);
+                            if (pPageTabControl->IsReallyShown())
+                                pPageTabControl->SendActivatePageEvent ();
+                        }
                     }
-                }
-                else if (rKEvt.GetKeyCode().IsMod1())
-                {
-                    // With the CONTROL modifier we switch layers.
-                    if (static_cast<DrawViewShell*>(mpViewShell)->IsLayerModeActive())
+                    else if (rKEvt.GetKeyCode().IsMod1())
                     {
-                        // With the layer mode active pressing page-down
-                        // moves to the next layer.
-                        SwitchLayer (+1);
+                        // With the CONTROL modifier we switch layers.
+                        if (pDrawViewShell->IsLayerModeActive())
+                        {
+                            // With the layer mode active pressing page-down
+                            // moves to the next layer.
+                            SwitchLayer (+1);
+                        }
                     }
                 }
             }
@@ -600,14 +618,14 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                     {
                         if(rKEvt.GetKeyCode().IsShift())
                         {
-                            mpView->UnmarkPoint(*pHdl);
+                            mpView->MarkPoint(*pHdl, true); // unmark
                         }
                     }
                     else
                     {
                         if(!rKEvt.GetKeyCode().IsShift())
                         {
-                            mpView->UnmarkAllPoints();
+                            mpView->MarkPoints(0, true); // unmarkall
                         }
 
                         mpView->MarkPoint(*pHdl);
@@ -620,7 +638,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                         for(sal_uInt32 a(0); !pNewOne && a < rHdlList.GetHdlCount(); a++)
                         {
-                            SdrHdl* pAct = rHdlList.GetHdl(a);
+                            SdrHdl* pAct = rHdlList.GetHdlByIndex(a);
 
                             if(pAct
                                 && pAct->GetKind() == HDL_POLY
@@ -637,7 +655,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                         }
                     }
 
-                    bReturn = sal_True;
+                    bReturn = true;
                 }
             }
         }
@@ -650,35 +668,30 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
         {
             if (!mpView->IsTextEdit() && !bSlideShow)
             {
-                long nX = 0;
-                long nY = 0;
+                basegfx::B2DVector aMove(0.0, 0.0);
 
                 if (nCode == KEY_UP)
                 {
                     // Scroll nach oben
-                    nX = 0;
-                    nY =-1;
+                    aMove = basegfx::B2DPoint(0.0, -1.0);
                 }
                 else if (nCode == KEY_DOWN)
                 {
                     // Scroll nach unten
-                    nX = 0;
-                    nY = 1;
+                    aMove = basegfx::B2DPoint(0.0, 1.0);
                 }
                 else if (nCode == KEY_LEFT)
                 {
                     // Scroll nach links
-                    nX =-1;
-                    nY = 0;
+                    aMove = basegfx::B2DPoint(-1.0, 0.0);
                 }
                 else if (nCode == KEY_RIGHT)
                 {
                     // Scroll nach rechts
-                    nX = 1;
-                    nY = 0;
+                    aMove = basegfx::B2DPoint(1.0, 0.0);
                 }
 
-                if (mpView->AreObjectsMarked() && !rKEvt.GetKeyCode().IsMod1() &&
+                if (mpView->areSdrObjectsSelected() && !rKEvt.GetKeyCode().IsMod1() &&
                     !mpDocSh->IsReadOnly())
                 {
                     // #97016# II
@@ -686,26 +699,25 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                     SdrHdl* pHdl = rHdlList.GetFocusHdl();
 
                     // #109007#
-                    sal_Bool bIsMoveOfConnectedHandle(sal_False);
-                    sal_Bool bOldSuppress = false;
-                    SdrEdgeObj* pEdgeObj = 0L;
+                    bool bIsMoveOfConnectedHandle(false);
+                    bool bOldSuppress(false);
+                    SdrEdgeObj* pEdgeObj = dynamic_cast< SdrEdgeObj* >(pHdl ? const_cast< SdrObject* >(pHdl->GetObj()) : 0);
 
-                    if(pHdl && pHdl->GetObj() && pHdl->GetObj()->ISA(SdrEdgeObj) && 0 == pHdl->GetPolyNum())
+                    if(pEdgeObj && 0 == pHdl->GetPolyNum())
                     {
-                        pEdgeObj = (SdrEdgeObj*)pHdl->GetObj();
-
-                        if(0L == pHdl->GetPointNum())
+                        if(0 == pHdl->GetPointNum())
                         {
-                            if(pEdgeObj->GetConnection(sal_True).GetObject())
+                            if(pEdgeObj->GetConnection(true).GetObject())
                             {
-                                bIsMoveOfConnectedHandle = sal_True;
+                                bIsMoveOfConnectedHandle = true;
                             }
                         }
-                        if(1L == pHdl->GetPointNum())
+
+                        if(1 == pHdl->GetPointNum())
                         {
-                            if(pEdgeObj->GetConnection(sal_False).GetObject())
+                            if(pEdgeObj->GetConnection(false).GetObject())
                             {
-                                bIsMoveOfConnectedHandle = sal_True;
+                                bIsMoveOfConnectedHandle = true;
                             }
                         }
                     }
@@ -721,37 +733,32 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                     // #109007#
                     if(bIsMoveOfConnectedHandle)
                     {
-                        sal_uInt16 nMarkHdSiz(mpView->GetMarkHdlSizePixel());
-                        Size aHalfConSiz(nMarkHdSiz + 1, nMarkHdSiz + 1);
-                        aHalfConSiz = mpWindow->PixelToLogic(aHalfConSiz);
+                        basegfx::B2DVector aDist(
+                            mpWindow->GetInverseViewTransformation() *
+                            basegfx::B2DVector(mpView->GetMarkHdlSizePixel(), mpView->GetMarkHdlSizePixel()));
 
-                        if(100 < aHalfConSiz.Width())
-                            nX *= aHalfConSiz.Width();
-                        else
-                            nX *= 100;
+                        aDist.setX(std::min(100.0, aDist.getX()));
+                        aDist.setY(std::min(100.0, aDist.getY()));
 
-                        if(100 < aHalfConSiz.Height())
-                            nY *= aHalfConSiz.Height();
-                        else
-                            nY *= 100;
+                        aMove *= aDist;
                     }
                     else if(rKEvt.GetKeyCode().IsMod2())
                     {
                         // #97016# move in 1 pixel distance
-                        Size aLogicSizeOnePixel = (mpWindow) ? mpWindow->PixelToLogic(Size(1,1)) : Size(100, 100);
-                        nX *= aLogicSizeOnePixel.Width();
-                        nY *= aLogicSizeOnePixel.Height();
+                        const basegfx::B2DVector aDist(mpWindow
+                            ? mpWindow->GetInverseViewTransformation() * basegfx::B2DVector(1.0, 1.0)
+                            : basegfx::B2DVector(100.0, 100.0));
+
+                        aMove *= aDist;
                     }
                     else if(rKEvt.GetKeyCode().IsShift())
                     {
-                        nX *= 1000;
-                        nY *= 1000;
+                        aMove *= 1000.0;
                     }
                     else
                     {
                         // old, fixed move distance
-                        nX *= 100;
-                        nY *= 100;
+                        aMove *= 100;
                     }
 
                     if(0L == pHdl)
@@ -760,70 +767,70 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                         if(mpView->IsMoveAllowed())
                         {
                             // #90129# restrict movement to WorkArea
-                            const Rectangle& rWorkArea = mpView->GetWorkArea();
+                            const basegfx::B2DRange& rWorkArea = mpView->GetWorkArea();
 
-                            if(!rWorkArea.IsEmpty())
+                            if(!rWorkArea.isEmpty())
                             {
-                                Rectangle aMarkRect(mpView->GetMarkedObjRect());
-                                aMarkRect.Move(nX, nY);
+                                basegfx::B2DRange aMarkRange(mpView->getMarkedObjectSnapRange());
+                                aMarkRange.transform(basegfx::tools::createTranslateB2DHomMatrix(aMove));
 
-                                if(!aMarkRect.IsInside(rWorkArea))
+                                if(!aMarkRange.isInside(rWorkArea))
                                 {
-                                    if(aMarkRect.Left() < rWorkArea.Left())
+                                    if(aMarkRange.getMinX() < rWorkArea.getMinX())
                                     {
-                                        nX += rWorkArea.Left() - aMarkRect.Left();
+                                        aMove.setX(aMove.getX() + rWorkArea.getMinX() - aMarkRange.getMinX());
                                     }
 
-                                    if(aMarkRect.Right() > rWorkArea.Right())
+                                    if(aMarkRange.getMaxX() > rWorkArea.getMaxX())
                                     {
-                                        nX -= aMarkRect.Right() - rWorkArea.Right();
+                                        aMove.setX(aMove.getX() - aMarkRange.getMaxX() - rWorkArea.getMaxX());
                                     }
 
-                                    if(aMarkRect.Top() < rWorkArea.Top())
+                                    if(aMarkRange.getMinY() < rWorkArea.getMinY())
                                     {
-                                        nY += rWorkArea.Top() - aMarkRect.Top();
+                                        aMove.setY(aMove.getY() + rWorkArea.getMinY() - aMarkRange.getMinY());
                                     }
 
-                                    if(aMarkRect.Bottom() > rWorkArea.Bottom())
+                                    if(aMarkRange.getMaxY() > rWorkArea.getMaxY())
                                     {
-                                        nY -= aMarkRect.Bottom() - rWorkArea.Bottom();
+                                        aMove.setY(aMove.getY() - aMarkRange.getMaxY() - rWorkArea.getMaxY());
                                     }
                                 }
                             }
 
                             // no handle selected
-                            if(0 != nX || 0 != nY)
+                            if(!aMove.equalZero())
                             {
-                                mpView->MoveAllMarked(Size(nX, nY));
+                                mpView->MoveMarkedObj(aMove);
 
                                 // #97016# II
-                                mpView->MakeVisible(mpView->GetAllMarkedRect(), *mpWindow);
+                                mpView->MakeVisibleAtView(mpView->getMarkedObjectSnapRange(), *mpWindow);
                             }
                         }
                     }
                     else
                     {
                         // move handle with index nHandleIndex
-                        if(pHdl && (nX || nY))
+                        if(pHdl && !aMove.equalZero())
                         {
-                            // now move the Handle (nX, nY)
-                            Point aStartPoint(pHdl->GetPos());
-                            Point aEndPoint(pHdl->GetPos() + Point(nX, nY));
+                            // now move the Handle
+                            const basegfx::B2DPoint aStartPoint(pHdl->getPosition());
+                            const basegfx::B2DPoint aEndPoint(aStartPoint + aMove);
                             const SdrDragStat& rDragStat = mpView->GetDragStat();
 
                             // start dragging
-                            mpView->BegDragObj(aStartPoint, 0, pHdl, 0);
+                            mpView->BegDragObj(aStartPoint, pHdl, 0.0);
 
                             if(mpView->IsDragObj())
                             {
-                                FASTBOOL bWasNoSnap = rDragStat.IsNoSnap();
-                                sal_Bool bWasSnapEnabled = mpView->IsSnapEnabled();
+                                const bool bWasNoSnap(rDragStat.IsNoSnap());
+                                const bool bWasSnapEnabled(mpView->IsSnapEnabled());
 
                                 // switch snapping off
                                 if(!bWasNoSnap)
-                                    ((SdrDragStat&)rDragStat).SetNoSnap(sal_True);
+                                    ((SdrDragStat&)rDragStat).SetNoSnap(true);
                                 if(bWasSnapEnabled)
-                                    mpView->SetSnapEnabled(sal_False);
+                                    mpView->SetSnapEnabled(false);
 
                                 mpView->MovAction(aEndPoint);
                                 mpView->EndDragObj();
@@ -836,8 +843,11 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                             }
 
                             // make moved handle visible
-                            Rectangle aVisRect(aEndPoint - Point(100, 100), Size(200, 200));
-                            mpView->MakeVisible(aVisRect, *mpWindow);
+                            const basegfx::B2DRange aVisRange(
+                                aEndPoint - basegfx::B2DPoint(100.0, 100.0),
+                                aEndPoint + basegfx::B2DPoint(100.0, 100.0));
+
+                            mpView->MakeVisibleAtView(aVisRange, *mpWindow);
                         }
                     }
 
@@ -852,11 +862,11 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                 {
                     // Seite scrollen
                     ScrollStart();
-                    mpViewShell->ScrollLines(nX, nY);
+                    mpViewShell->ScrollLines(aMove);
                     ScrollEnd();
                 }
 
-                bReturn = sal_True;
+                bReturn = true;
             }
         }
         break;
@@ -870,88 +880,81 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
     // #98198# when a text-editable object is selected and the
     // input character is printable, activate text edit on that object
     // and feed character to object
-    if(!bReturn && !mpDocSh->IsReadOnly())
+    if(!bReturn && !mpDocSh->IsReadOnly() && !mpView->IsTextEdit() && mpViewShell)
     {
-        if(!mpView->IsTextEdit() && mpViewShell)
+        SdrObject* pSelected = mpView->getSelectedIfSingle();
+
+        if(pSelected)
         {
-            const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-
-            if(1 == rMarkList.GetMarkCount())
+            if(dynamic_cast< SdrTextObj* >(pSelected) && pSelected->HasTextEdit() && !dynamic_cast< SdrOle2Obj* >(pSelected))
             {
-                SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+                // #98533# use common IsSimpleCharInput from
+                // the EditEngine.
+                bool bPrintable(EditEngine::IsSimpleCharInput(rKEvt));
 
-                // #i118485# allow TextInput for OLEs, too
-                if(pObj->ISA(SdrTextObj) && pObj->HasTextEdit())
+                if(bPrintable)
                 {
-                    // #98533# use common IsSimpleCharInput from
-                    // the EditEngine.
-                    sal_Bool bPrintable(EditEngine::IsSimpleCharInput(rKEvt));
+                    // try to activate textedit mode for the selected object
+                    SfxStringItem aInputString(SID_ATTR_CHAR, String(rKEvt.GetCharCode()));
 
-                    if(bPrintable)
-                    {
-                        // try to activate textedit mode for the selected object
-                        SfxStringItem aInputString(SID_ATTR_CHAR, String(rKEvt.GetCharCode()));
+                    mpViewShell->GetViewFrame()->GetDispatcher()->Execute(
+                        SID_ATTR_CHAR,
+                        SFX_CALLMODE_ASYNCHRON,
+                        &aInputString,
+                        0L);
 
-                        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(
-                            SID_ATTR_CHAR,
-                            SFX_CALLMODE_ASYNCHRON,
-                            &aInputString,
-                            0L);
-
-                        // consumed
-                        bReturn = sal_True;
-                    }
+                    // consumed
+                    bReturn = true;
                 }
             }
-            else
+        }
+        else
+        {
+            // #99039# test if there is a title object there. If yes, try to
+            // set it to edit mode and start typing...
+            DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >(mpViewShell);
+
+            if(pDrawViewShell && EditEngine::IsSimpleCharInput(rKEvt))
             {
-                // #99039# test if there is a title object there. If yes, try to
-                // set it to edit mode and start typing...
-                if(mpViewShell->ISA(DrawViewShell)
-                    && EditEngine::IsSimpleCharInput(rKEvt))
+                SdPage* pActualPage = pDrawViewShell->GetActualPage();
+                SdrTextObj* pCandidate = 0L;
+
+                if(pActualPage)
                 {
-                    DrawViewShell* pDrawViewShell =
-                        static_cast<DrawViewShell*>(mpViewShell);
-                    SdPage* pActualPage = pDrawViewShell->GetActualPage();
-                    SdrTextObj* pCandidate = 0L;
+                    SdrObjListIter aIter(*pActualPage, IM_DEEPNOGROUPS);
 
-                    if(pActualPage)
+                    while(aIter.IsMore() && !pCandidate)
                     {
-                        SdrObjListIter aIter(*pActualPage, IM_DEEPNOGROUPS);
+                        SdrTextObj* pObj = dynamic_cast< SdrTextObj* >(aIter.Next());
 
-                        while(aIter.IsMore() && !pCandidate)
+                        if(pObj)
                         {
-                            SdrObject* pObj = aIter.Next();
+                            sal_uInt32 nInv(pObj->GetObjInventor());
+                            sal_uInt16 nKnd(pObj->GetObjIdentifier());
 
-                            if(pObj && pObj->ISA(SdrTextObj))
+                            if(SdrInventor == nInv && OBJ_TITLETEXT == nKnd)
                             {
-                                sal_uInt32 nInv(pObj->GetObjInventor());
-                                sal_uInt16 nKnd(pObj->GetObjIdentifier());
-
-                                if(SdrInventor == nInv && OBJ_TITLETEXT == nKnd)
-                                {
-                                    pCandidate = (SdrTextObj*)pObj;
-                                }
+                                pCandidate = pObj;
                             }
                         }
                     }
+                }
 
-                    // when candidate found and candidate is untouched, start editing text...
-                    if(pCandidate && pCandidate->IsEmptyPresObj())
-                    {
-                        mpView->UnMarkAll();
-                        mpView->MarkObj(pCandidate, mpView->GetSdrPageView());
-                        SfxStringItem aInputString(SID_ATTR_CHAR, String(rKEvt.GetCharCode()));
+                // when candidate found and candidate is untouched, start editing text...
+                if(pCandidate && pCandidate->IsEmptyPresObj())
+                {
+                    mpView->UnmarkAllObj();
+                    mpView->MarkObj(*pCandidate);
+                    SfxStringItem aInputString(SID_ATTR_CHAR, String(rKEvt.GetCharCode()));
 
-                        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(
-                            SID_ATTR_CHAR,
-                            SFX_CALLMODE_ASYNCHRON,
-                            &aInputString,
-                            0L);
+                    mpViewShell->GetViewFrame()->GetDispatcher()->Execute(
+                        SID_ATTR_CHAR,
+                        SFX_CALLMODE_ASYNCHRON,
+                        &aInputString,
+                        0L);
 
                         // consumed
-                        bReturn = sal_True;
-                    }
+                    bReturn = true;
                 }
             }
         }
@@ -960,16 +963,16 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
     return(bReturn);
 }
 
-sal_Bool FuPoor::MouseMove(const MouseEvent& )
+bool FuPoor::MouseMove(const MouseEvent& )
 {
-    return sal_False;
+    return false;
 }
 
-// #97016# II
 void FuPoor::SelectionHasChanged()
 {
-    const SdrHdlList& rHdlList = mpView->GetHdlList();
-    ((SdrHdlList&)rHdlList).ResetFocusHdl();
+    // Not needed TTTT
+    // const SdrHdlList& rHdlList = mpView->GetHdlList();
+    // ((SdrHdlList&)rHdlList).ResetFocusHdl();
 }
 
 /*************************************************************************
@@ -1027,12 +1030,13 @@ IMPL_LINK( FuPoor, DragHdl, Timer *, EMPTYARG )
         sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
         SdrHdl* pHdl = mpView->PickHandle(aMDPos);
 
-        if ( pHdl==NULL && mpView->IsMarkedHit(aMDPos, nHitLog)
-             && !mpView->IsPresObjSelected(sal_False, sal_True) )
+        if ( pHdl==NULL && mpView->IsMarkedObjHit(aMDPos, nHitLog)
+             && !mpView->IsPresObjSelected(false, true) )
         {
             mpWindow->ReleaseMouse();
-            bIsInDragMode = sal_True;
-            mpView->StartDrag( aMDPos, mpWindow );
+            bIsInDragMode = true;
+            const Point aPoint(basegfx::fround(aMDPos.getX()), basegfx::fround(aMDPos.getY()));
+            mpView->StartDrag( aPoint, mpWindow );
         }
     }
     return 0;
@@ -1044,7 +1048,7 @@ IMPL_LINK( FuPoor, DragHdl, Timer *, EMPTYARG )
 |*
 \************************************************************************/
 
-sal_Bool FuPoor::Command(const CommandEvent& rCEvt)
+bool FuPoor::Command(const CommandEvent& rCEvt)
 {
     return( mpView->Command(rCEvt,mpWindow) );
 }
@@ -1058,7 +1062,7 @@ sal_Bool FuPoor::Command(const CommandEvent& rCEvt)
 IMPL_LINK_INLINE_START( FuPoor, DelayHdl, Timer *, EMPTYARG )
 {
     aDelayToScrollTimer.Stop ();
-    bScrollable = sal_True;
+    bScrollable = true;
 
     Point aPnt(mpWindow->GetPointerPosPixel());
 
@@ -1076,22 +1080,22 @@ IMPL_LINK_INLINE_END( FuPoor, DelayHdl, Timer *, pTimer )
 |*
 \************************************************************************/
 
-sal_Bool FuPoor::MouseButtonUp (const MouseEvent& rMEvt)
+bool FuPoor::MouseButtonUp (const MouseEvent& rMEvt)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     aDelayToScrollTimer.Stop ();
     return bScrollable  =
-        bDelayActive = sal_False;
+        bDelayActive = false;
 }
 
-sal_Bool FuPoor::MouseButtonDown(const MouseEvent& rMEvt)
+bool FuPoor::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    return sal_False;
+    return false;
 }
 
 /*************************************************************************
@@ -1102,7 +1106,7 @@ sal_Bool FuPoor::MouseButtonDown(const MouseEvent& rMEvt)
 
 void FuPoor::StartDelayToScrollTimer ()
 {
-    bDelayActive = sal_True;
+    bDelayActive = true;
     aDelayToScrollTimer.Start ();
 }
 
@@ -1112,20 +1116,17 @@ void FuPoor::StartDelayToScrollTimer ()
 |*
 \************************************************************************/
 
-sal_Bool FuPoor::RequestHelp(const HelpEvent& rHEvt)
+bool FuPoor::RequestHelp(const HelpEvent& rHEvt)
 {
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     SdrPageView* pPV = mpView->GetSdrPageView();
 
     if (pPV)
     {
-        SdPage* pPage = (SdPage*) pPV->GetPage();
+        SdPage& rPage = (SdPage&) pPV->getSdrPageFromSdrPageView();
 
-        if (pPage)
-        {
-            bReturn = pPage->RequestHelp(mpWindow, mpView, rHEvt);
-        }
+        bReturn = rPage.RequestHelp(mpWindow, mpView, rHEvt);
     }
 
     return(bReturn);
@@ -1149,11 +1150,11 @@ void FuPoor::ReceiveRequest(SfxRequest& rReq)
     {
         if( pSet->GetItemState( nSlotId ) == SFX_ITEM_SET )
         {
-            const SfxPoolItem& rItem = pSet->Get( nSlotId );
+            const SfxAllEnumItem* pItem = dynamic_cast< const SfxAllEnumItem* >(&pSet->Get( nSlotId ));
 
-            if( rItem.ISA( SfxAllEnumItem ) )
+            if( pItem )
             {
-                nSlotValue = ( ( const SfxAllEnumItem& ) rItem ).GetValue();
+                nSlotValue = pItem->GetValue();
             }
         }
     }
@@ -1165,38 +1166,34 @@ void FuPoor::ReceiveRequest(SfxRequest& rReq)
 |*
 \************************************************************************/
 
-SdrObject* FuPoor::CreateDefaultObject(const sal_uInt16, const Rectangle& )
+SdrObject* FuPoor::CreateDefaultObject(const sal_uInt16, const basegfx::B2DRange& )
 {
     // empty base implementation
     return 0L;
 }
 
-void FuPoor::ImpForceQuadratic(Rectangle& rRect)
+void FuPoor::ImpForceQuadratic(basegfx::B2DRange& rRange)
 {
-    if(rRect.GetWidth() > rRect.GetHeight())
+    basegfx::B2DPoint aNewTopLeft(0.0, 0.0);
+
+    if(rRange.getWidth() > rRange.getHeight())
     {
-        rRect = Rectangle(
-            Point(rRect.Left() + ((rRect.GetWidth() - rRect.GetHeight()) / 2), rRect.Top()),
-            Size(rRect.GetHeight(), rRect.GetHeight()));
+        aNewTopLeft = basegfx::B2DPoint(rRange.getMinX() + ((rRange.getWidth() - rRange.getHeight()) * 0.5), rRange.getMinY());
     }
     else
     {
-        rRect = Rectangle(
-            Point(rRect.Left(), rRect.Top() + ((rRect.GetHeight() - rRect.GetWidth()) / 2)),
-            Size(rRect.GetWidth(), rRect.GetWidth()));
+        aNewTopLeft = basegfx::B2DPoint(rRange.getMinX(), rRange.getMinY() + ((rRange.getHeight() - rRange.getWidth()) * 0.5));
     }
+
+    rRange = basegfx::B2DRange(aNewTopLeft, aNewTopLeft + rRange.getRange());
 }
-
-
-
 
 void FuPoor::SwitchLayer (sal_Int32 nOffset)
 {
-    if(mpViewShell && mpViewShell->ISA(DrawViewShell))
-    {
-        DrawViewShell* pDrawViewShell =
-            static_cast<DrawViewShell*>(mpViewShell);
+    DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >(mpViewShell);
 
+    if(pDrawViewShell)
+    {
         // Calculate the new index.
         sal_Int32 nIndex = pDrawViewShell->GetActiveTabLayerIndex() + nOffset;
 
@@ -1209,8 +1206,7 @@ void FuPoor::SwitchLayer (sal_Int32 nOffset)
         // Set the new active layer.
         if (nIndex != pDrawViewShell->GetActiveTabLayerIndex ())
         {
-            LayerTabBar* pLayerTabControl =
-                static_cast<DrawViewShell*>(mpViewShell)->GetLayerTabControl();
+            LayerTabBar* pLayerTabControl = pDrawViewShell->GetLayerTabControl();
             if (pLayerTabControl != NULL)
                 pLayerTabControl->SendDeactivatePageEvent ();
 
@@ -1230,7 +1226,7 @@ void FuPoor::SwitchLayer (sal_Int32 nOffset)
 */
 bool FuPoor::cancel()
 {
-    if ( !this->ISA(FuSelection) )
+    if ( !dynamic_cast< FuSelection* >(this) )
     {
         mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
         return true;

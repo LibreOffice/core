@@ -140,6 +140,15 @@ class SfxInPlaceClient;
 DECLARE_LIST( SfxInPlaceClientList, SfxInPlaceClient* )
 
 // -----------------------------------------------------------------------
+
+typedef bool (*ConvertToViewShell)( const SfxViewShell* );
+template<class T> bool _IsSfxViewShell(const SfxViewShell* pShell)
+{
+    return 0 != dynamic_cast<const T*>(pShell);
+}
+
+// -----------------------------------------------------------------------
+
 class SFX2_DLLPUBLIC SfxViewShell: public SfxShell, public SfxListener
 {
 #ifdef _SFXVIEWSH_HXX
@@ -172,15 +181,13 @@ protected:
 
 public:
     // Iteration
-    static SfxViewShell*        GetFirst( const TypeId* pType = 0, sal_Bool bOnlyVisible = sal_True );
-    static SfxViewShell*        GetNext( const SfxViewShell& rPrev,
-                                         const TypeId* pType = 0, sal_Bool bOnlyVisible = sal_True );
+    static SfxViewShell*        GetFirst( ConvertToViewShell = 0, sal_Bool bOnlyVisible = sal_True );
+    static SfxViewShell*        GetNext( const SfxViewShell& rPrev, ConvertToViewShell = 0, sal_Bool bOnlyVisible = sal_True );
     static SfxViewShell*        Current();
 
     static SfxViewShell*        Get( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController>& i_rController );
 
     // Ctoren/Dtoren Initialisierung
-                                TYPEINFO();
                                 SFX_DECL_INTERFACE(SFX_INTERFACE_SFXVIEWSH)
 
                                 SfxViewShell( SfxViewFrame *pFrame, sal_uInt16 nFlags = 0 );
@@ -220,8 +227,8 @@ public:
     // Focus, KeyInput, Cursor
     void                        GotFocus() const;
     inline void                 LostFocus() const;
-    virtual void                ShowCursor( FASTBOOL bOn = sal_True );
-    virtual FASTBOOL            KeyInput( const KeyEvent &rKeyEvent );
+    virtual void                ShowCursor( bool bOn = true );
+    virtual bool            KeyInput( const KeyEvent &rKeyEvent );
     sal_Bool                        Escape();
 
     // Viewing Interface

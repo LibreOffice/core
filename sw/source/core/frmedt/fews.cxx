@@ -64,8 +64,6 @@
 using namespace com::sun::star;
 
 
-TYPEINIT1(SwFEShell,SwEditShell)
-
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methode    :  EndAllActionAndCall()
@@ -78,7 +76,7 @@ void SwFEShell::EndAllActionAndCall()
 {
     ViewShell *pTmp = this;
     do {
-        if( pTmp->IsA( TYPE(SwCrsrShell) ) )
+        if( dynamic_cast< SwCrsrShell* >(pTmp) )
         {
             ((SwFEShell*)pTmp)->EndAction();
             ((SwFEShell*)pTmp)->CallChgLnk();
@@ -107,10 +105,7 @@ Point SwFEShell::GetCntntPos( const Point& rPoint, sal_Bool bNext ) const
 const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
                                         const uno::Reference < embed::XEmbeddedObject >& xObj ) const
 {
-    const SwFrm *pFrm = Imp()->HasDrawView()
-                ? ::GetFlyFromMarked( &Imp()->GetDrawView()->GetMarkedObjectList(),
-                                      (ViewShell*)this)
-                : 0;
+    const SwFrm *pFrm = ::GetFlyFromMarked((ViewShell*)this);
 
     if( !pFrm )
     {
@@ -187,7 +182,12 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
 }
 
 
-sal_uInt16 SwFEShell::GetPageNumber( const Point &rPoint ) const
+sal_uInt32 SwFEShell::GetPageNumber( const basegfx::B2DPoint &rPoint ) const
+{
+    return GetPageNumber(Point(basegfx::fround(rPoint.getX()), basegfx::fround(rPoint.getY())));
+}
+
+sal_uInt32 SwFEShell::GetPageNumber( const Point &rPoint ) const
 {
     const SwFrm *pPage = GetLayout()->Lower();
     while ( pPage && !pPage->Frm().IsInside( rPoint ) )
@@ -199,7 +199,7 @@ sal_uInt16 SwFEShell::GetPageNumber( const Point &rPoint ) const
 }
 
 
-sal_Bool SwFEShell::GetPageNumber( long nYPos, sal_Bool bAtCrsrPos, sal_uInt16& rPhyNum, sal_uInt16& rVirtNum, String &rDisplay) const
+bool SwFEShell::GetPageNumber( long nYPos, bool bAtCrsrPos, sal_uInt16& rPhyNum, sal_uInt16& rVirtNum, String &rDisplay) const
 {
     const SwFrm *pPage;
 
@@ -340,8 +340,7 @@ void SwFEShell::ShGetFcs( sal_Bool bUpdate )
 
     if ( HasDrawView() )
     {
-        Imp()->GetDrawView()->showMarkHandles();
-        if ( Imp()->GetDrawView()->AreObjectsMarked() )
+        if ( Imp()->GetDrawView()->areSdrObjectsSelected() )
             FrameNotify( this, FLY_DRAG_START );
     }
 }
@@ -350,9 +349,8 @@ void SwFEShell::ShLooseFcs()
 {
     SwCrsrShell::ShLooseFcs();
 
-    if ( HasDrawView() && Imp()->GetDrawView()->AreObjectsMarked() )
+    if ( HasDrawView() && Imp()->GetDrawView()->areSdrObjectsSelected() )
     {
-        Imp()->GetDrawView()->hideMarkHandles();
         FrameNotify( this, FLY_DRAG_END );
     }
 //  ::ResetShell();
@@ -513,27 +511,18 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt, const 
         case LTYPE_DRAW:
             if( Imp()->GetDrawView() )
             {
-                SwDrawView *pDView = Imp()->GetDrawView();
-                const SdrMarkList& rMrkList = pDView->GetMarkedObjectList();
                 StartUndo();
 
                 // OD 27.11.2003 #112045# - copy marked drawing objects to
                 // local list to perform the corresponding action for each object
-                std::vector<SdrObject*> aDrawObjs;
-                {
-                    for ( sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i )
-                    {
-                        SdrObject* pDrawObj = rMrkList.GetMark(i)->GetMarkedSdrObj();
-                        if( pDrawObj )
-                        aDrawObjs.push_back( pDrawObj );
-                    }
-                }
+                SdrObjectVector aDrawObjs(Imp()->GetDrawView()->getSelectedSdrObjectVectorFromSdrMarkView());
+
                 // loop on marked drawing objects
                 while ( !aDrawObjs.empty() )
                 {
                     SdrObject* pDrawObj = aDrawObjs.back();
-                    if ( !pDrawObj->ISA(SwVirtFlyDrawObj) &&
-                         !pDrawObj->ISA(SwFlyDrawObj) )
+                    if ( !dynamic_cast< SwVirtFlyDrawObj* >(pDrawObj) &&
+                         !dynamic_cast< SwFlyDrawObj* >(pDrawObj) )
                     {
                         SwFlyFrmFmt *pFmt =
                             GetDoc()->InsertDrawLabel( rTxt, rSeparator, rNumberSeparator, nId, rCharacterStyle, *pDrawObj );
@@ -1340,21 +1329,17 @@ sal_Bool SwFEShell::IsFrmVertical(const sal_Bool bEnvironment, sal_Bool& bRTL, s
 
     if ( Imp()->HasDrawView() )
     {
-        const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
-        if( rMrkList.GetMarkCount() != 1 )
-            return bVert;
+        SdrObject* pObj = Imp()->GetDrawView()->getSelectedIfSingle();
 
-        SdrObject* pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
-        // --> OD 2006-01-06 #123831# - make code robust:
+        // only continue if a single and only a single object is selected
         if ( !pObj )
         {
-            ASSERT( false,
-                    "<SwFEShell::IsFrmVertical(..)> - missing SdrObject instance in marked object list -> This is a serious situation, please inform OD" );
             return bVert;
         }
+
         // <--
         // OD 2004-03-29 #i26791#
-        SwContact* pContact = static_cast<SwContact*>(GetUserCall( pObj ));
+        SwContact* pContact = static_cast<SwContact*>(findConnectionToSdrObject( pObj ));
         // --> OD 2006-01-06 #123831# - make code robust:
         if ( !pContact )
         {
@@ -1373,7 +1358,7 @@ sal_Bool SwFEShell::IsFrmVertical(const sal_Bool bEnvironment, sal_Bool& bRTL, s
         }
         // <--
 
-        if ( pObj->ISA(SwVirtFlyDrawObj) && !bEnvironment )
+        if ( dynamic_cast< SwVirtFlyDrawObj* >(pObj) && !bEnvironment )
             pRef = static_cast<const SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();
 
         bVert = pRef->IsVertical();

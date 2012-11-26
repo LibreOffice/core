@@ -31,8 +31,6 @@
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <basegfx/polygon/b3dpolygontools.hxx>
 
-TYPEINIT1(E3dPolygonObj, E3dCompoundObject);
-
 //////////////////////////////////////////////////////////////////////////////
 // #110094# DrawContact section
 
@@ -41,82 +39,27 @@ sdr::contact::ViewContact* E3dPolygonObj::CreateObjectSpecificViewContact()
     return new sdr::contact::ViewContactOfE3dPolygon(*this);
 }
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
-
 E3dPolygonObj::E3dPolygonObj(
-    E3dDefaultAttributes& rDefault,
+    SdrModel& rSdrModel,
+    const E3dDefaultAttributes& rDefault,
     const basegfx::B3DPolyPolygon& rPolyPoly3D,
-    sal_Bool bLinOnly)
-:   E3dCompoundObject(rDefault),
-    bLineOnly(bLinOnly)
-{
-    // Geometrie setzen
-    SetPolyPolygon3D(rPolyPoly3D);
-
-    // Default-Normals erzeugen
-    CreateDefaultNormals();
-
-    // Default-Texturkoordinaten erzeugen
-    CreateDefaultTexture();
-}
-
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
-
-E3dPolygonObj::E3dPolygonObj(
-    E3dDefaultAttributes& rDefault,
-    const basegfx::B3DPolyPolygon& rPolyPoly3D,
-    const basegfx::B3DPolyPolygon& rPolyNormals3D,
-    sal_Bool bLinOnly)
-:   E3dCompoundObject(rDefault),
-    bLineOnly(bLinOnly)
-{
-    // Geometrie und Normalen setzen
-    SetPolyPolygon3D(rPolyPoly3D);
-    SetPolyNormals3D(rPolyNormals3D);
-
-    // Default-Texturkoordinaten erzeugen
-    CreateDefaultTexture();
-}
-
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
-
-E3dPolygonObj::E3dPolygonObj(
-    E3dDefaultAttributes& rDefault,
-    const basegfx::B3DPolyPolygon& rPolyPoly3D,
-    const basegfx::B3DPolyPolygon& rPolyNormals3D,
-    const basegfx::B2DPolyPolygon& rPolyTexture2D,
-    sal_Bool bLinOnly)
-:   E3dCompoundObject(rDefault),
+    const basegfx::B3DPolyPolygon* pPolyNormals3D,
+    const basegfx::B2DPolyPolygon* pPolyTexture2D,
+    bool bLinOnly)
+:   E3dCompoundObject(rSdrModel, rDefault),
     bLineOnly(bLinOnly)
 {
     SetPolyPolygon3D(rPolyPoly3D);
-    SetPolyNormals3D(rPolyNormals3D);
-    SetPolyTexture2D(rPolyTexture2D);
-}
 
-/*************************************************************************
-|*
-|* Leer-Konstruktor
-|*
-\************************************************************************/
+    if(pPolyNormals3D)
+    {
+        SetPolyNormals3D(*pPolyNormals3D);
+    }
 
-E3dPolygonObj::E3dPolygonObj()
-:   E3dCompoundObject(),
-    bLineOnly(false) // added missing initialisation
-{
-    // Keine Geometrie erzeugen
+    if(pPolyTexture2D)
+    {
+        SetPolyTexture2D(*pPolyTexture2D);
+    }
 }
 
 /*************************************************************************
@@ -255,6 +198,42 @@ E3dPolygonObj::~E3dPolygonObj()
 {
 }
 
+void E3dPolygonObj::copyDataFromSdrObject(const SdrObject& rSource)
+{
+    if(this != &rSource)
+    {
+        const E3dPolygonObj* pSource = dynamic_cast< const E3dPolygonObj* >(&rSource);
+
+        if(pSource)
+        {
+            // call parent
+            E3dCompoundObject::copyDataFromSdrObject(rSource);
+
+            // copy local data
+            aPolyPoly3D = pSource->aPolyPoly3D;
+            aPolyNormals3D = pSource->aPolyNormals3D;
+            aPolyTexture2D = pSource->aPolyTexture2D;
+            bLineOnly = pSource->bLineOnly;
+        }
+        else
+        {
+            OSL_ENSURE(false, "copyDataFromSdrObject with ObjectType of Source different from Target (!)");
+        }
+    }
+}
+
+SdrObject* E3dPolygonObj::CloneSdrObject(SdrModel* pTargetModel) const
+{
+    E3dPolygonObj* pClone = new E3dPolygonObj(
+        pTargetModel ? *pTargetModel : getSdrModelFromSdrObject(),
+        E3dDefaultAttributes(),
+        basegfx::B3DPolyPolygon());
+    OSL_ENSURE(pClone, "CloneSdrObject error (!)");
+    pClone->copyDataFromSdrObject(*this);
+
+    return pClone;
+}
+
 /*************************************************************************
 |*
 |* Identifier zurueckgeben
@@ -314,29 +293,9 @@ void E3dPolygonObj::SetPolyTexture2D(const basegfx::B2DPolyPolygon& rNewPolyText
 |*
 \************************************************************************/
 
-SdrObject *E3dPolygonObj::DoConvertToPolyObj(sal_Bool /*bBezier*/, bool /*bAddText*/) const
+SdrObject* E3dPolygonObj::DoConvertToPolygonObject(bool /*bBezier*/, bool /*bAddText*/) const
 {
-    return NULL;
-}
-
-/*************************************************************************
-|*
-|* Zuweisungsoperator
-|*
-\************************************************************************/
-
-void E3dPolygonObj::operator=(const SdrObject& rObj)
-{
-    // erstmal alle Childs kopieren
-    E3dCompoundObject::operator=(rObj);
-
-    // weitere Parameter kopieren
-    const E3dPolygonObj& r3DObj = (const E3dPolygonObj&)rObj;
-
-    aPolyPoly3D      = r3DObj.aPolyPoly3D;
-    aPolyNormals3D   = r3DObj.aPolyNormals3D;
-    aPolyTexture2D   = r3DObj.aPolyTexture2D;
-    bLineOnly        = r3DObj.bLineOnly;
+    return 0;
 }
 
 /*************************************************************************

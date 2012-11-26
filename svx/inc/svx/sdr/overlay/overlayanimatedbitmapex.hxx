@@ -51,7 +51,7 @@ namespace sdr
 
             // bitfield
             // Flag to remember which state to draw. Inited with sal_False (0)
-            unsigned                                mbOverlayState : 1;
+            bool                                    mbOverlayState : 1;
 
             // geometry creation for OverlayObject
             virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();

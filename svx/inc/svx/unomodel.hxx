@@ -59,6 +59,10 @@ private:
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > maTypeSequence;
 
+protected:
+    // SvxUnoDrawMSFactory
+    virtual SdrModel* getSdrModel() const;
+
 public:
     SvxUnoDrawingModel( SdrModel* pDoc ) throw();
     virtual ~SvxUnoDrawingModel() throw();

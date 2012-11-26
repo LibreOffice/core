@@ -93,8 +93,7 @@ SwTableHeightDlg::SwTableHeightDlg( Window *pParent, SwWrtShell &rS ) :
 {
     FreeResource();
 
-    FieldUnit eFieldUnit = SW_MOD()->GetUsrPref( 0 != PTR_CAST( SwWebDocShell,
-                                rSh.GetView().GetDocShell() ) )->GetMetric();
+    FieldUnit eFieldUnit = SW_MOD()->GetUsrPref( 0 != dynamic_cast< SwWebDocShell* >( rSh.GetView().GetDocShell() ) )->GetMetric();
     ::SetFieldUnit( aHeightEdit, eFieldUnit );
 
     aHeightEdit.SetMin(MINLAY, FUNIT_TWIP);

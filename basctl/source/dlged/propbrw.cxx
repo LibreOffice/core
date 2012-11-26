@@ -317,27 +317,25 @@ sal_Bool PropBrw::Close()
 }
 
 //----------------------------------------------------------------------------
-Sequence< Reference< XInterface > >
-    PropBrw::CreateMultiSelectionSequence( const SdrMarkList& _rMarkList )
+Sequence< Reference< XInterface > > PropBrw::CreateMultiSelectionSequence(const SdrObjectVector& rSelection)
 {
     Sequence< Reference< XInterface > > aSeq;
     InterfaceArray aInterfaces;
 
-    sal_uInt32 nMarkCount = _rMarkList.GetMarkCount();
-    for( sal_uInt32 i = 0 ; i < nMarkCount ; i++ )
+    for(sal_uInt32 a(0); a < rSelection.size(); a++)
     {
-        SdrObject* pCurrent = _rMarkList.GetMark(i)->GetMarkedSdrObj();
-
+        SdrObject* pCurrent = rSelection[a];
         SdrObjListIter* pGroupIterator = NULL;
-        if (pCurrent->IsGroupObject())
+
+        if (pCurrent->getChildrenOfSdrObject())
         {
-            pGroupIterator = new SdrObjListIter(*pCurrent->GetSubList());
+            pGroupIterator = new SdrObjListIter(*pCurrent->getChildrenOfSdrObject());
             pCurrent = pGroupIterator->IsMore() ? pGroupIterator->Next() : NULL;
         }
 
         while (pCurrent)
         {
-            DlgEdObj* pDlgEdObj = PTR_CAST(DlgEdObj, pCurrent);
+            DlgEdObj* pDlgEdObj = dynamic_cast< DlgEdObj* >( pCurrent);
             if (pDlgEdObj)
             {
                 Reference< XInterface > xControlInterface(pDlgEdObj->GetUnoControlModel(), UNO_QUERY);
@@ -561,7 +559,7 @@ void PropBrw::ImplUpdate( const Reference< XModel >& _rxContextDocument, SdrView
     {
         if ( pView )
         {
-            EndListening( *(pView->GetModel()) );
+            EndListening( pView->getSdrModelFromSdrView() );
             pView = NULL;
         }
 
@@ -578,12 +576,11 @@ void PropBrw::ImplUpdate( const Reference< XModel >& _rxContextDocument, SdrView
             m_bInitialStateChange = sal_False;
         }
 
-        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-        sal_uInt32 nMarkCount = rMarkList.GetMarkCount();
+        const SdrObjectVector aSelection(pView->getSelectedSdrObjectVectorFromSdrMarkView());
 
-        if ( nMarkCount == 0 )
+        if(!aSelection.size())
         {
-            EndListening( *(pView->GetModel()) );
+            EndListening( pView->getSdrModelFromSdrView() );
             pView = NULL;
             implSetNewObject( NULL );
             return;
@@ -591,20 +588,22 @@ void PropBrw::ImplUpdate( const Reference< XModel >& _rxContextDocument, SdrView
 
         Reference< XPropertySet > xNewObject;
         Sequence< Reference< XInterface > > aNewObjects;
-        if ( nMarkCount == 1 )
+
+        if(1 == aSelection.size())
         {
-            DlgEdObj* pDlgEdObj = PTR_CAST( DlgEdObj, rMarkList.GetMark(0)->GetMarkedSdrObj() );
+            DlgEdObj* pDlgEdObj = dynamic_cast< DlgEdObj* >(aSelection[0]);
+
             if ( pDlgEdObj )
             {
-                if ( pDlgEdObj->IsGroupObject() ) // group object
-                    aNewObjects = CreateMultiSelectionSequence( rMarkList );
+                if ( pDlgEdObj->getChildrenOfSdrObject() ) // group object
+                    aNewObjects = CreateMultiSelectionSequence(aSelection);
                 else // single selection
                     xNewObject = xNewObject.query( pDlgEdObj->GetUnoControlModel() );
             }
         }
-        else if ( nMarkCount > 1 ) // multiple selection
+        else // if ( nMarkCount > 1 ) // multiple selection
         {
-            aNewObjects = CreateMultiSelectionSequence( rMarkList );
+            aNewObjects = CreateMultiSelectionSequence(aSelection);
         }
 
         if ( aNewObjects.getLength() )
@@ -612,7 +611,7 @@ void PropBrw::ImplUpdate( const Reference< XModel >& _rxContextDocument, SdrView
         else
             implSetNewObject( xNewObject );
 
-        StartListening( *(pView->GetModel()) );
+        StartListening( pView->getSdrModelFromSdrView() );
     }
     catch ( const PropertyVetoException& ) { /* silence */ }
     catch ( const Exception& )

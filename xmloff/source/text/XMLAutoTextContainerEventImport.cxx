@@ -45,9 +45,6 @@ using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_EVENT_LISTENERS;
 
 
-TYPEINIT1(XMLAutoTextContainerEventImport, SvXMLImportContext);
-
-
 XMLAutoTextContainerEventImport::XMLAutoTextContainerEventImport(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,

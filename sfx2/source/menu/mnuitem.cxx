@@ -285,14 +285,14 @@ void SfxMenuControl::StateChanged
     //! delete pOwnMenu->GetMenu().ChangePopupMenu( GetId(), 0 );
 
     bool bCheck = false;
-    if ( pState->ISA(SfxBoolItem) )
+    if ( dynamic_cast< const SfxBoolItem* >(pState) )
     {
         // BoolItem fuer checken
         DBG_ASSERT( GetId() < SID_OBJECTMENU0 || GetId() > SID_OBJECTMENU_LAST,
                     "SfxBoolItem not allowed for SID_OBJECTMENUx" );
         bCheck = ((const SfxBoolItem*)pState)->GetValue();
     }
-    else if ( pState->ISA(SfxEnumItemInterface) &&
+    else if ( dynamic_cast< const SfxEnumItemInterface* >(pState) &&
               ((SfxEnumItemInterface *)pState)->HasBoolValue() )
     {
         // EnumItem wie Bool behandeln
@@ -300,7 +300,7 @@ void SfxMenuControl::StateChanged
                     "SfxEnumItem not allowed for SID_OBJECTMENUx" );
         bCheck = ((SfxEnumItemInterface *)pState)->GetBoolValue();
     }
-    else if ( ( b_ShowStrings || bIsObjMenu ) && pState->ISA(SfxStringItem) )
+    else if ( ( b_ShowStrings || bIsObjMenu ) && dynamic_cast< const SfxStringItem* >(pState) )
     {
         // MenuText aus SfxStringItem holen
         String aStr( ((const SfxStringItem*)pState)->GetValue() );
@@ -346,7 +346,7 @@ SfxMenuControl* SfxMenuControl::CreateImpl( sal_uInt16 /*nId*/, Menu& /*rMenu*/,
 void SfxMenuControl::RegisterControl( sal_uInt16 nSlotId, SfxModule *pMod )
 {
     RegisterMenuControl( pMod, new SfxMenuCtrlFactory(
-                SfxMenuControl::CreateImpl, TYPE(SfxStringItem), nSlotId ) );
+                SfxMenuControl::CreateImpl, typeid(SfxStringItem), nSlotId ) );
 }
 
 //--------------------------------------------------------------------
@@ -357,8 +357,8 @@ void SfxMenuControl::RegisterMenuControl(SfxModule* pMod, SfxMenuCtrlFactory* pF
 
 SfxMenuControl* SfxMenuControl::CreateControl( sal_uInt16 nId, Menu &rMenu, SfxBindings &rBindings )
 {
-    TypeId aSlotType = SFX_SLOTPOOL().GetSlotType(nId);
-    if ( aSlotType )
+    const std::type_info& aSlotType = SFX_SLOTPOOL().GetSlotType(nId);
+    if ( aSlotType != typeid(void))
     {
         SfxApplication *pApp = SFX_APP();
         SfxDispatcher *pDisp = rBindings.GetDispatcher_Impl();
@@ -370,7 +370,7 @@ SfxMenuControl* SfxMenuControl::CreateControl( sal_uInt16 nId, Menu &rMenu, SfxB
             {
                 SfxMenuCtrlFactArr_Impl &rFactories = *pFactories;
                 for ( sal_uInt16 nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
-                    if ( rFactories[nFactory]->nTypeId == aSlotType &&
+                    if ( rFactories[nFactory]->rTypeInfo == aSlotType &&
                          ( ( rFactories[nFactory]->nSlotId == 0 ) ||
                            ( rFactories[nFactory]->nSlotId == nId) ) )
                         return rFactories[nFactory]->pCtor( nId, rMenu, rBindings );
@@ -380,7 +380,7 @@ SfxMenuControl* SfxMenuControl::CreateControl( sal_uInt16 nId, Menu &rMenu, SfxB
         SfxMenuCtrlFactArr_Impl &rFactories = pApp->GetMenuCtrlFactories_Impl();
 
         for ( sal_uInt16 nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
-            if ( rFactories[nFactory]->nTypeId == aSlotType &&
+            if ( rFactories[nFactory]->rTypeInfo == aSlotType &&
                  ( ( rFactories[nFactory]->nSlotId == 0 ) ||
                    ( rFactories[nFactory]->nSlotId == nId) ) )
                 return rFactories[nFactory]->pCtor( nId, rMenu, rBindings );
@@ -390,8 +390,8 @@ SfxMenuControl* SfxMenuControl::CreateControl( sal_uInt16 nId, Menu &rMenu, SfxB
 
 sal_Bool SfxMenuControl::IsSpecialControl( sal_uInt16 nId, SfxModule* pMod  )
 {
-    TypeId aSlotType = SFX_SLOTPOOL().GetSlotType( nId );
-    if ( aSlotType )
+    const std::type_info&aSlotType = SFX_SLOTPOOL().GetSlotType( nId );
+    if ( aSlotType != typeid(void))
     {
         if ( pMod )
         {
@@ -400,7 +400,7 @@ sal_Bool SfxMenuControl::IsSpecialControl( sal_uInt16 nId, SfxModule* pMod  )
             {
                 SfxMenuCtrlFactArr_Impl &rFactories = *pFactories;
                 for ( sal_uInt16 nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
-                    if ( rFactories[nFactory]->nTypeId == aSlotType &&
+                    if ( rFactories[nFactory]->rTypeInfo == aSlotType &&
                          ( ( rFactories[nFactory]->nSlotId == 0 ) ||
                            ( rFactories[nFactory]->nSlotId == nId) ) )
                         return sal_True;
@@ -410,7 +410,7 @@ sal_Bool SfxMenuControl::IsSpecialControl( sal_uInt16 nId, SfxModule* pMod  )
         SfxMenuCtrlFactArr_Impl &rFactories = SFX_APP()->GetMenuCtrlFactories_Impl();
 
         for ( sal_uInt16 nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
-            if ( rFactories[nFactory]->nTypeId == aSlotType &&
+            if ( rFactories[nFactory]->rTypeInfo == aSlotType &&
                  ( ( rFactories[nFactory]->nSlotId == 0 ) ||
                    ( rFactories[nFactory]->nSlotId == nId) ) )
                 return sal_True;

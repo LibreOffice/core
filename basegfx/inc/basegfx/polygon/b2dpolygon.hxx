@@ -72,6 +72,9 @@ namespace basegfx
         bool operator==(const B2DPolygon& rPolygon) const;
         bool operator!=(const B2DPolygon& rPolygon) const;
 
+        /// Transform B2DPolygon by given transformation matrix.
+        B2DPolygon& operator*=(const ::basegfx::B2DHomMatrix& rMatrix);
+
         /// member count
         sal_uInt32 count() const;
 
@@ -264,8 +267,16 @@ namespace basegfx
         B2DPoint* end();
     };
 
-    // typedef for a vector of B2DPolygons
+    //////////////////////////////////////////////////////////////////////////
+    /// global typedef for a vector of B2DPolygons
+
     typedef ::std::vector< B2DPolygon > B2DPolygonVector;
+
+    // external operators
+    //////////////////////////////////////////////////////////////////////////
+
+    /// Transform B2DPolygon by given transformation matrix (see operator*=())
+    B2DPolygon operator*(const B2DHomMatrix& rMatrix, const B2DPolygon& rB2DPolygon);
 
 } // end of namespace basegfx
 

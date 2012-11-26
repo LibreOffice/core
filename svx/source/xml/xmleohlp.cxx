@@ -155,7 +155,6 @@ struct OUStringLess
 // -----------------------------
 // - SvXMLEmbeddedObjectHelper -
 // -----------------------------
-DBG_NAME(SvXMLEmbeddedObjectHelper)
 SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper() :
     WeakComponentImplHelper2< XEmbeddedObjectResolver, XNameAccess >( maMutex ),
     maReplacementGraphicsContainerStorageName( RTL_CONSTASCII_USTRINGPARAM(XML_CONTAINERSTORAGE_NAME) ),
@@ -164,7 +163,6 @@ SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper() :
     meCreateMode( EMBEDDEDOBJECTHELPER_MODE_READ ),
     mpStreamMap( 0 )
 {
-    DBG_CTOR(SvXMLEmbeddedObjectHelper,NULL);
 }
 
 SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper( ::comphelper::IEmbeddedHelper& rDocPersist, SvXMLEmbeddedObjectHelperMode eCreateMode ) :
@@ -175,7 +173,6 @@ SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper( ::comphelper::IEmbeddedHel
     meCreateMode( EMBEDDEDOBJECTHELPER_MODE_READ ),
     mpStreamMap( 0 )
 {
-    DBG_CTOR(SvXMLEmbeddedObjectHelper,NULL);
     Init( 0, rDocPersist, eCreateMode );
 }
 
@@ -184,7 +181,6 @@ SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper( ::comphelper::IEmbeddedHel
 
 SvXMLEmbeddedObjectHelper::~SvXMLEmbeddedObjectHelper()
 {
-    DBG_DTOR(SvXMLEmbeddedObjectHelper,NULL);
     if( mpStreamMap )
     {
         SvXMLEmbeddedObjectHelper_Impl::iterator aIter = mpStreamMap->begin();
@@ -304,8 +300,6 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
             if( pGraphicRepl )
                 *pGraphicRepl = sal_True;
         }
-
-
     }
     else
     {

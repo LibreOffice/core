@@ -64,8 +64,6 @@ using namespace com::sun::star;
 
 sal_Bool SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd );
 
-TYPEINIT1( SwBaseLink, ::sfx2::SvBaseLink );
-
 SV_IMPL_REF( SwServerObject )
 
 void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
@@ -79,13 +77,13 @@ void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
     SwClientIter aIter( rGrfNd );   // TODO
     for( int n = 0; n < 2; ++n )
     {
-        SwClient * pLast = aIter.GoStart();
+        SwClient * pLast = aIter.SwClientIter_First();
         if( pLast )     // konnte zum Anfang gesprungen werden ??
         {
             do {
-                if( (0 == n) ^ ( 0 != pLast->ISA( SwCntntFrm )) )
+                if( (0 == n) ^ ( 0 != dynamic_cast< SwCntntFrm* >(pLast)) )
                     pLast->ModifyNotification( &rItem, &rItem );
-            } while( 0 != ( pLast = ++aIter ));
+            } while( 0 != ( pLast = aIter.SwClientIter_Next() ));
         }
     }
     rGrfNd.UnlockModify();
@@ -250,7 +248,7 @@ void SwBaseLink::DataChanged( const String& rMimeType,
             {
                 ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
                 if( pLnk && OBJECT_CLIENT_GRF == pLnk->GetObjType() &&
-                    pLnk->ISA( SwBaseLink ) && pLnk->GetObj() == GetObj() )
+                    dynamic_cast< SwBaseLink* >(pLnk) && pLnk->GetObj() == GetObj() )
                 {
                     SwBaseLink* pBLink = (SwBaseLink*)pLnk;
                     SwGrfNode* pGrfNd = (SwGrfNode*)pBLink->pCntntNode;

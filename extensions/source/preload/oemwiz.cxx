@@ -434,10 +434,12 @@ namespace preload
     //------------------------------------------------------------------------
     void LicenceView::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     {
-        if ( rHint.IsA( TYPE(TextHint) ) )
+        const TextHint* pTextHint = dynamic_cast< const TextHint* >(&rHint);
+
+        if ( pTextHint )
         {
             sal_Bool    bLastVal = EndReached();
-            sal_uLong   nId = ((const TextHint&)rHint).GetId();
+            sal_uLong   nId = pTextHint->GetId();
 
             if ( nId == TEXT_HINT_PARAINSERTED )
             {

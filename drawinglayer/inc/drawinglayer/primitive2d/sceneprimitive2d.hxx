@@ -81,7 +81,7 @@ namespace drawinglayer
             /** flag if given 3D geometry is already cheched for shadow definitions and 2d shadows
                 are created in maShadowPrimitives
              */
-            unsigned                                            mbShadow3DChecked : 1;
+            bool                                                mbShadow3DChecked : 1;
 
             /// the last used NewDiscreteSize and NewUnitVisiblePart definitions for decomposition
             double                                              mfOldDiscreteSizeX;
@@ -139,9 +139,6 @@ namespace drawinglayer
             const attribute::SdrLightingAttribute& getSdrLightingAttribute() const { return maSdrLightingAttribute; }
             const basegfx::B2DHomMatrix& getObjectTransformation() const { return maObjectTransformation; }
             const geometry::ViewInformation3D& getViewInformation3D() const { return maViewInformation3D; }
-
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
             /// get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;

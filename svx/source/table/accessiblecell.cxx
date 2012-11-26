@@ -88,7 +88,7 @@ void AccessibleCell::Init (void)
         if( pOutlinerParaObject )
         {
             // non-empty text -> use full-fledged edit source right away
-            ::std::auto_ptr<SvxEditSource> pEditSource( new SvxTextEditSource( mxCell->GetObject(), mxCell.get(), *pView, *pWindow) );
+            ::std::auto_ptr<SvxEditSource> pEditSource( new SvxTextEditSource( mxCell->getSdrTextObj(), mxCell.get(), *pView, *pWindow) );
             mpText = new AccessibleTextHelper( pEditSource );
             mpText->SetEventSource(this);
         }
@@ -437,7 +437,7 @@ sal_Int32 SAL_CALL AccessibleCell::getBackground (void) throw (RuntimeException)
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL AccessibleCell::getFont (void) throw (::com::sun::star::uno::RuntimeException)
 {
-//todo
+    //todo
     return AccessibleComponentBase::getFont();
 }
 

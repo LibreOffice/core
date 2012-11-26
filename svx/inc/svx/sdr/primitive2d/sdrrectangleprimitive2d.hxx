@@ -70,9 +70,6 @@ namespace drawinglayer
             bool isCornerRadiusUsed() const { return (0.0 != mfCornerRadiusX || 0.0 != mfCornerRadiusY); }
             bool getForceFillForHitTest() const { return mbForceFillForHitTest; }
 
-            // compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
-
             // provide unique ID
             DeclPrimitrive2DIDBlock()
         };

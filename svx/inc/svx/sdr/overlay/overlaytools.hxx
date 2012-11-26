@@ -66,9 +66,6 @@ namespace drawinglayer
             sal_uInt16 getCenterX() const { return mnCenterX; }
             sal_uInt16 getCenterY() const { return mnCenterY; }
 
-            // compare operator
-            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
-
             DeclPrimitrive2DIDBlock()
         };
     } // end of namespace primitive2d
@@ -107,9 +104,6 @@ namespace drawinglayer
             const basegfx::BColor& getRGBColorB() const { return maRGBColorB; }
             double getDiscreteDashLength() const { return mfDiscreteDashLength; }
 
-            // compare operator
-            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
-
             DeclPrimitrive2DIDBlock()
         };
     } // end of namespace primitive2d
@@ -122,11 +116,11 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class OverlayHatchRectanglePrimitive : public DiscreteMetricDependentPrimitive2D
+        class OverlayHatchPrimitive : public DiscreteMetricDependentPrimitive2D
         {
         private:
-            // the logic rectangle definition
-            basegfx::B2DRange               maObjectRange;
+            // the logic geometric definition
+            const basegfx::B2DHomMatrix     maTransformation;
 
             // the hatch definition
             double                          mfDiscreteHatchDistance;
@@ -137,33 +131,25 @@ namespace drawinglayer
             double                          mfDiscreteGrow;
             double                          mfDiscreteShrink;
 
-            // the rotation of the primitive itself
-            double                          mfRotation;
-
         protected:
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
-            OverlayHatchRectanglePrimitive(
-                const basegfx::B2DRange& rObjectRange,
+            OverlayHatchPrimitive(
+                const basegfx::B2DHomMatrix& rTransformation,
                 double fDiscreteHatchDistance,
                 double fHatchRotation,
                 const basegfx::BColor& rHatchColor,
                 double fDiscreteGrow,
-                double fDiscreteShrink,
-                double fRotation);
+                double fDiscreteShrink);
 
             // data access
-            const basegfx::B2DRange& getObjectRange() const { return maObjectRange; }
+            const basegfx::B2DHomMatrix& getTransformation() const { return maTransformation; }
             double getDiscreteHatchDistance() const { return mfDiscreteHatchDistance; }
             double getHatchRotation() const { return mfHatchRotation; }
             const basegfx::BColor& getHatchColor() const { return maHatchColor; }
             double getDiscreteGrow() const { return mfDiscreteGrow; }
             double getDiscreteShrink() const { return mfDiscreteShrink; }
-            double getRotation() const { return mfRotation; }
-
-            // compare operator
-            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
 
             DeclPrimitrive2DIDBlock()
         };
@@ -216,9 +202,6 @@ namespace drawinglayer
             const basegfx::BColor& getRGBColorB() const { return maRGBColorB; }
             double getDiscreteDashLength() const { return mfDiscreteDashLength; }
 
-            // compare operator
-            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
-
             DeclPrimitrive2DIDBlock()
         };
     } // end of namespace primitive2d
@@ -258,9 +241,6 @@ namespace drawinglayer
             const basegfx::BColor& getRGBColorA() const { return maRGBColorA; }
             const basegfx::BColor& getRGBColorB() const { return maRGBColorB; }
             double getDiscreteDashLength() const { return mfDiscreteDashLength; }
-
-            // compare operator
-            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
 
             DeclPrimitrive2DIDBlock()
         };

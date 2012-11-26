@@ -48,8 +48,6 @@ private:
     SwFmtAutoFmt & operator= (const SwFmtAutoFmt &);
 public:
 
-    TYPEINFO();
-
     // "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;

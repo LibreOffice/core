@@ -45,7 +45,7 @@ namespace drawinglayer
 
             // create unit outline polygon
             const basegfx::B2DPolygon aUnitOutline(basegfx::tools::createPolygonFromRect(
-                basegfx::B2DRange(0.0, 0.0, 1.0, 1.0),
+                basegfx::B2DRange::getUnitB2DRange(),
                 getCornerRadiusX(),
                 getCornerRadiusY()));
 
@@ -145,22 +145,6 @@ namespace drawinglayer
                 aInverse.invert();
                 maTail.transform(aInverse);
             }
-        }
-
-        bool SdrCaptionPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const SdrCaptionPrimitive2D& rCompare = (SdrCaptionPrimitive2D&)rPrimitive;
-
-                return (getCornerRadiusX() == rCompare.getCornerRadiusX()
-                    && getCornerRadiusY() == rCompare.getCornerRadiusY()
-                    && getTail() == rCompare.getTail()
-                    && getTransform() == rCompare.getTransform()
-                    && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute());
-            }
-
-            return false;
         }
 
         // provide unique ID

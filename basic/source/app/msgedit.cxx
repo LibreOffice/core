@@ -810,8 +810,11 @@ sal_Bool TTTreeListBox::JumpToSourcecode( SvLBoxEntry *pThisEntry )
         else
             pBasicFrame->LoadFile( aFilename );
 
-        if ( pBasicFrame->pWork && pBasicFrame->pWork->ISA(AppEdit) )
-            ((AppEdit*)pBasicFrame->pWork)->Highlight( aData->nLine, aData->nCol1, aData->nCol2 );
+        AppEdit* pAppEdit = dynamic_cast< AppEdit* >(pBasicFrame->pWork);
+
+        if ( pAppEdit )
+            pAppEdit->Highlight( aData->nLine, aData->nCol1, aData->nCol2 );
+
         return sal_False;
     }
     return sal_True;

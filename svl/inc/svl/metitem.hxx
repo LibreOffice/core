@@ -33,15 +33,14 @@ DBG_NAMEEX_VISIBILITY(SfxMetricItem, SVL_DLLPUBLIC)
 class SVL_DLLPUBLIC SfxMetricItem: public SfxInt32Item
 {
 public:
-                             TYPEINFO();
                              SfxMetricItem( sal_uInt16 nWhich = 0, sal_uInt32 nValue = 0 );
                              SfxMetricItem( sal_uInt16 nWhich, SvStream & );
                              SfxMetricItem( const SfxMetricItem& );
                              ~SfxMetricItem() {
                                  DBG_DTOR(SfxMetricItem, 0); }
 
-    virtual int              ScaleMetrics( long lMult, long lDiv );
-    virtual int              HasMetrics() const;
+    virtual void             ScaleMetrics( long lMult, long lDiv );
+    virtual bool             HasMetrics() const;
 
 };
 

@@ -408,14 +408,13 @@ public:
 
     SFX_DECL_VIEWFACTORY(SwView);
     SFX_DECL_INTERFACE(SW_VIEWSHELL)
-    TYPEINFO();
 
     SfxDispatcher   &GetDispatcher();
 
     void                    GotFocus() const;
     virtual SdrView*        GetDrawView() const;
     virtual sal_Bool        HasUIFeature( sal_uInt32 nFeature );
-    virtual void            ShowCursor( FASTBOOL bOn = sal_True );
+    virtual void            ShowCursor( bool bOn = true );
     virtual ErrCode         DoVerb( long nVerb );
 
     virtual sal_uInt16          SetPrinter( SfxPrinter* pNew,
@@ -566,7 +565,7 @@ public:
     void            SetSelDrawSlot();
     inline void     FlipDrawSelMode()   { bDrawSelMode = !bDrawSelMode; }
     void            NoRotate();     // Rotate-Mode abschalten
-    sal_Bool            EnterDrawTextMode(const Point& aDocPos);
+    sal_Bool        EnterDrawTextMode(const basegfx::B2DPoint& aDocPos);
     void            LeaveDrawCreate()   { nDrawSfxId = nFormSfxId = USHRT_MAX; sDrawCustom.Erase();}
     sal_Bool            IsDrawMode()        { return (nDrawSfxId != USHRT_MAX || nFormSfxId != USHRT_MAX); }
     sal_Bool            IsFormMode() const;
@@ -574,8 +573,7 @@ public:
     sal_Bool            AreOnlyFormsSelected() const;
     sal_Bool            HasDrwObj(SdrObject *pSdrObj) const;
     sal_Bool            HasOnlyObj(SdrObject *pSdrObj, sal_uInt32 eObjInventor) const;
-    sal_Bool            BeginTextEdit(  SdrObject* pObj, SdrPageView* pPV=NULL,
-                                    Window* pWin=NULL, bool bIsNewObj=false, bool bSetSelectionToStart=false );
+    sal_Bool            BeginTextEdit(  SdrObject* pObj, Window* pWin=NULL, bool bIsNewObj=false, bool bSetSelectionToStart=false );
 
     void            StateTabWin(SfxItemSet&);
 

@@ -25,17 +25,10 @@
 #define _SVDOPAGE_HXX
 
 #include <svx/svdobj.hxx>
-#include <svx/sdrpageuser.hxx>
 #include "svx/svxdllapi.h"
 
-class SVX_DLLPUBLIC SdrPageObj : public SdrObject, public sdr::PageUser
+class SVX_DLLPUBLIC SdrPageObj : public SdrObject
 {
-public:
-    // this method is called form the destructor of the referenced page.
-    // do all necessary action to forget the page. It is not necessary to call
-    // RemovePageUser(), that is done form the destructor.
-    virtual void PageInDestruction(const SdrPage& rPage);
-
 private:
     // #111111#
     // To make things more safe, remember the page, not a number
@@ -45,22 +38,26 @@ protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
-public:
-    TYPEINFO();
-    SdrPageObj(SdrPage* pNewPage = 0L);
-    SdrPageObj(const Rectangle& rRect, SdrPage* pNewPage = 0L);
     ~SdrPageObj();
+
+    // method to copy all data from given source
+    virtual void copyDataFromSdrObject(const SdrObject& rSource);
+
+public:
+    SdrPageObj(SdrModel& rSdrModel, const basegfx::B2DHomMatrix& rTransform = basegfx::B2DHomMatrix(), SdrPage* pNewPage = 0);
+
+    /// create a copy, evtl. with a different target model (if given)
+    virtual SdrObject* CloneSdrObject(SdrModel* pTargetModel = 0) const;
+
+    // derived from SfxListener
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
     // #111111#
     SdrPage* GetReferencedPage() const;
     void SetReferencedPage(SdrPage* pNewPage);
 
-    // #i96598#
-    virtual void SetBoundRectDirty();
-
     virtual sal_uInt16 GetObjIdentifier() const;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
-    virtual void operator=(const SdrObject& rObj);
 
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;

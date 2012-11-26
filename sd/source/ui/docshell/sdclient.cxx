@@ -48,6 +48,7 @@
 #include "Window.hxx"
 #include "sdresid.hxx"
 #include <vcl/svapp.hxx>
+#include <svx/svdlegacy.hxx>
 
 using namespace com::sun::star;
 
@@ -88,79 +89,77 @@ Client::~Client()
 |*
 \************************************************************************/
 
-void Client::RequestNewObjectArea( Rectangle& aObjRect )
+void Client::RequestNewObjectArea( Rectangle& rRectangle )
 {
+    basegfx::B2DRange aNewRange(rRectangle.Left(), rRectangle.Top(), rRectangle.Right(), rRectangle.Bottom());
     ::sd::View* pView = mpViewShell->GetView();
+    const SdrObject* pSelected = pView->getSelectedIfSingle();
+    const bool bSizeProtect(pSelected ? pSelected->IsResizeProtect() : false);
+    const bool bPosProtect(pSelected ? pSelected->IsMoveProtect() : false);
+    const Rectangle aOldRectangle(GetObjArea());
+    const basegfx::B2DRange aOldRange(aOldRectangle.Left(), aOldRectangle.Top(), aOldRectangle.Right(), aOldRectangle.Bottom());
 
-    sal_Bool bSizeProtect = sal_False;
-    sal_Bool bPosProtect = sal_False;
-
-    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-    if (rMarkList.GetMarkCount() == 1)
-    {
-        SdrMark* pMark = rMarkList.GetMark(0);
-        SdrObject* pObj = pMark->GetMarkedSdrObj();
-
-        // no need to check for changes, this method is called only if the area really changed
-        bSizeProtect = pObj->IsResizeProtect();
-        bPosProtect = pObj->IsMoveProtect();
-    }
-
-    Rectangle aOldRect = GetObjArea();
     if ( bPosProtect )
-        aObjRect.SetPos( aOldRect.TopLeft() );
+    {
+        aNewRange = basegfx::B2DRange(
+            aOldRange.getMinimum(),
+            aOldRange.getMinimum() + aNewRange.getRange());
+    }
 
     if ( bSizeProtect )
-        aObjRect.SetSize( aOldRect.GetSize() );
+    {
+        aNewRange = basegfx::B2DRange(
+            aNewRange.getMinimum(),
+            aNewRange.getMinimum() + aOldRange.getRange());
+    }
 
-    Rectangle aWorkArea( pView->GetWorkArea() );
-    if ( !aWorkArea.IsInside(aObjRect) && !bPosProtect && aObjRect != aOldRect )
+    const basegfx::B2DRange& rWorkArea(pView->GetWorkArea());
+
+    if(!rWorkArea.isInside(aNewRange) && !bPosProtect && !aNewRange.equal(aOldRange) )
     {
         // correct position
-        Point aPos = aObjRect.TopLeft();
-        Size  aSize = aObjRect.GetSize();
-        Point aWorkAreaTL = aWorkArea.TopLeft();
-        Point aWorkAreaBR = aWorkArea.BottomRight();
+        const basegfx::B2DRange aClampRange(rWorkArea.getMinimum(), rWorkArea.getMaximum() - aNewRange.getRange());
+        const basegfx::B2DPoint aNewTopLeft(aClampRange.clamp(aNewRange.getMinimum()));
 
-        aPos.X() = Max(aPos.X(), aWorkAreaTL.X());
-        aPos.X() = Min(aPos.X(), aWorkAreaBR.X()-aSize.Width());
-        aPos.Y() = Max(aPos.Y(), aWorkAreaTL.Y());
-        aPos.Y() = Min(aPos.Y(), aWorkAreaBR.Y()-aSize.Height());
-
-        aObjRect.SetPos(aPos);
+        if(!aNewTopLeft.equal(aNewRange.getMinimum()))
+        {
+            aNewRange = basegfx::B2DRange(aNewTopLeft, aNewTopLeft + aNewRange.getRange());
+        }
     }
+
+    rRectangle = Rectangle(
+        basegfx::fround(aNewRange.getMinX()), basegfx::fround(aNewRange.getMinY()),
+        basegfx::fround(aNewRange.getMaxX()), basegfx::fround(aNewRange.getMaxY()));
 }
 
 void Client::ObjectAreaChanged()
 {
     ::sd::View* pView = mpViewShell->GetView();
-    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-    if (rMarkList.GetMarkCount() == 1)
+    SdrOle2Obj* pSelected = dynamic_cast< SdrOle2Obj* >(pView->getSelectedIfSingle());
+
+    if (pSelected)
     {
-        SdrMark* pMark = rMarkList.GetMark(0);
-        SdrOle2Obj* pObj = dynamic_cast< SdrOle2Obj* >(pMark->GetMarkedSdrObj());
+        // no need to check for changes, this method is called only if the area really changed
+        const Rectangle aNewRectangle(GetScaledObjArea());
+        basegfx::B2DRange aNewRange(aNewRectangle.Left(), aNewRectangle.Top(), aNewRectangle.Right(), aNewRectangle.Bottom());
 
-        if(pObj)
+        // #i118524# if sheared/rotated, center to non-rotated LogicRect
+        pSelected->setSuppressSetVisAreaSize(true);
+
+        if(pSelected->isRotatedOrSheared())
         {
-            // no need to check for changes, this method is called only if the area really changed
-            Rectangle aNewRectangle(GetScaledObjArea());
+            sdr::legacy::SetLogicRange(*pSelected, aNewRange);
 
-            // #i118524# if sheared/rotated, center to non-rotated LogicRect
-            pObj->setSuppressSetVisAreaSize(true);
+            const basegfx::B2DRange& rObjectRange = pSelected->getObjectRange(pView);
 
-            if(pObj->GetGeoStat().nDrehWink || pObj->GetGeoStat().nShearWink)
-            {
-                pObj->SetLogicRect( aNewRectangle );
-
-                const Rectangle& rBoundRect = pObj->GetCurrentBoundRect();
-                const Point aDelta(aNewRectangle.Center() - rBoundRect.Center());
-
-                aNewRectangle.Move(aDelta.X(), aDelta.Y());
-            }
-
-            pObj->SetLogicRect( aNewRectangle );
-            pObj->setSuppressSetVisAreaSize(false);
+            aNewRange.transform(
+                basegfx::tools::createTranslateB2DHomMatrix(
+                    aNewRange.getCenterX() - rObjectRange.getCenterX(),
+                    aNewRange.getCenterY() - rObjectRange.getCenterY()));
         }
+
+        sdr::legacy::SetLogicRange(*pSelected, aNewRange);
+        pSelected->setSuppressSetVisAreaSize(false);
     }
 }
 
@@ -189,14 +188,16 @@ void Client::ViewChanged()
         ::sd::View* pView = mpViewShell->GetView();
         if (pView)
         {
-            Rectangle aLogicRect( pSdrOle2Obj->GetLogicRect() );
+            const Rectangle aLogicRect( sdr::legacy::GetLogicRect(*pSdrOle2Obj) );
             Size aLogicSize( aLogicRect.GetWidth(), aLogicRect.GetHeight() );
 
             if( pSdrOle2Obj->IsChart() )
             {
+                // should not be needed; SetLogicRect should already broadcast the change as needed
+                const SdrObjectChangeBroadcaster aSdrObjectChangeBroadcaster(*pSdrOle2Obj);
+
                 //charts never should be stretched see #i84323# for example
-                pSdrOle2Obj->SetLogicRect( Rectangle( aLogicRect.TopLeft(), aLogicSize ) );
-                pSdrOle2Obj->BroadcastObjectChange();
+                sdr::legacy::SetLogicRect(*pSdrOle2Obj, Rectangle( aLogicRect.TopLeft(), aLogicSize ) );
                 return;
             }
 
@@ -218,8 +219,10 @@ void Client::ViewChanged()
                     aMap100 );
             if( aPixelDiff.Width() || aPixelDiff.Height() )
             {
-                pSdrOle2Obj->SetLogicRect( Rectangle( aLogicRect.TopLeft(), aScaledSize ) );
-                pSdrOle2Obj->BroadcastObjectChange();
+                // should not be needed; SetLogicRect should already broadcast the change as needed
+                const SdrObjectChangeBroadcaster aSdrObjectChangeBroadcaster(*pSdrOle2Obj);
+
+                sdr::legacy::SetLogicRect(*pSdrOle2Obj, Rectangle( aLogicRect.TopLeft(), aScaledSize ) );
             }
             else
                 pSdrOle2Obj->ActionChanged();
@@ -236,10 +239,12 @@ void Client::ViewChanged()
 
 void Client::MakeVisible()
 {
-    if (mpViewShell->ISA(DrawViewShell))
+    DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >(mpViewShell);
+
+    if (pDrawViewShell)
     {
-        static_cast<DrawViewShell*>(mpViewShell)->MakeVisible(
-            pSdrOle2Obj->GetLogicRect(),
+        pDrawViewShell->MakeVisibleAtView(
+            sdr::legacy::GetLogicRange(*pSdrOle2Obj),
             *mpViewShell->GetActiveWindow());
     }
 }

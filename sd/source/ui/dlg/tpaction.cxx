@@ -53,6 +53,7 @@
 #include <svl/aeitem.hxx>
 #include <editeng/colritem.hxx>
 #include <svx/svdoole2.hxx>
+#include <svx/svdograf.hxx>
 #include <sfx2/docfile.hxx>
 #include <sot/storage.hxx>
 #include <basic/sbmeth.hxx>
@@ -138,7 +139,7 @@ SdTPAction::SdTPAction( Window* pWindow, const SfxItemSet& rInAttrs ) :
         rOutAttrs       ( rInAttrs ),
         mpView          ( NULL ),
         mpDoc           ( NULL ),
-        bTreeUpdated    ( sal_False )
+        bTreeUpdated    ( false )
 {
     aEdtSound.SetAccessibleName(String(SdResId(STR_PATHNAME)));
     aBtnSeek.SetAccessibleRelationMemberOf( &aFlSeparator );
@@ -200,41 +201,13 @@ void SdTPAction::SetView( const ::sd::View* pSdView )
 void SdTPAction::Construct()
 {
     // OLE-Actionlistbox auffuellen
-    SdrOle2Obj* pOleObj = NULL;
-    SdrGrafObj* pGrafObj = NULL;
-    sal_Bool        bOLEAction = sal_False;
+    SdrOle2Obj* pOleObj = dynamic_cast< SdrOle2Obj* >(mpView->getSelectedIfSingle());
+    SdrGrafObj* pGrafObj = dynamic_cast< SdrGrafObj* >(mpView->getSelectedIfSingle());
+    bool bOLEAction = false;
 
-    if ( mpView->AreObjectsMarked() )
-    {
-        const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-        SdrObject* pObj;
-
-        if (rMarkList.GetMarkCount() == 1)
-        {
-            SdrMark* pMark = rMarkList.GetMark(0);
-            pObj = pMark->GetMarkedSdrObj();
-
-            sal_uInt32 nInv = pObj->GetObjInventor();
-            sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
-
-            if (nInv == SdrInventor && nSdrObjKind == OBJ_OLE2)
-            {
-                pOleObj = (SdrOle2Obj*) pObj;
-            }
-            else if (nInv == SdrInventor && nSdrObjKind == OBJ_GRAF)
-            {
-                pGrafObj = (SdrGrafObj*) pObj;
-            }
-//          // VCXControl ?
-//          else if( pObj->IsA( TYPE( VCSbxDrawObject ) ) )
-//          {
-//              bDisableAll = sal_True;
-//          }
-        }
-    }
     if( pGrafObj )
     {
-        bOLEAction = sal_True;
+        bOLEAction = true;
 
         aVerbVector.push_back( 0 );
         aLbOLEAction.InsertEntry( MnemonicGenerator::EraseAllMnemonicChars( String( SdResId( STR_EDIT_OBJ ) ) ) );
@@ -244,7 +217,7 @@ void SdTPAction::Construct()
         uno::Reference < embed::XEmbeddedObject > xObj = pOleObj->GetObjRef();
         if ( xObj.is() )
         {
-            bOLEAction = sal_True;
+            bOLEAction = true;
             uno::Sequence < embed::VerbDescriptor > aVerbs;
             try
             {
@@ -297,7 +270,7 @@ void SdTPAction::Construct()
 
 sal_Bool SdTPAction::FillItemSet( SfxItemSet& rAttrs )
 {
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
     presentation::ClickAction eCA = presentation::ClickAction_NONE;
 
     if( aLbAction.GetSelectEntryCount() )
@@ -306,12 +279,12 @@ sal_Bool SdTPAction::FillItemSet( SfxItemSet& rAttrs )
     if( aLbAction.GetSavedValue() != aLbAction.GetSelectEntryPos() )
     {
         rAttrs.Put( SfxAllEnumItem( ATTR_ACTION, (sal_uInt16)eCA ) );
-        bModified = sal_True;
+        bModified = true;
     }
     else
         rAttrs.InvalidateItem( ATTR_ACTION );
 
-    String aFileName = GetEditText( sal_True );
+    String aFileName = GetEditText( true );
     if( aFileName.Len() == 0 )
         rAttrs.InvalidateItem( ATTR_ACTION_FILENAME );
     else
@@ -327,7 +300,7 @@ sal_Bool SdTPAction::FillItemSet( SfxItemSet& rAttrs )
                                                         INetURLObject::DECODE_UNAMBIGUOUS );
 
             rAttrs.Put( SfxStringItem( ATTR_ACTION_FILENAME, aFileName ) );
-            bModified = sal_True;
+            bModified = true;
         }
         else
         {
@@ -367,7 +340,7 @@ void SdTPAction::Reset( const SfxItemSet& rAttrs )
         case presentation::ClickAction_BOOKMARK:
         {
             if( !aLbTree.SelectEntry( aFileName ) )
-                aLbTree.SelectAll( sal_False );
+                aLbTree.SelectAll( false );
         }
         break;
 
@@ -418,8 +391,8 @@ void SdTPAction::UpdateTree()
     if( !bTreeUpdated && mpDoc && mpDoc->GetDocSh() && mpDoc->GetDocSh()->GetMedium() )
     {
         //aLbTree.Clear();
-        aLbTree.Fill( mpDoc, sal_True, mpDoc->GetDocSh()->GetMedium()->GetName() );
-        bTreeUpdated = sal_True;
+        aLbTree.Fill( mpDoc, true, mpDoc->GetDocSh()->GetMedium()->GetName() );
+        bTreeUpdated = true;
     }
 }
 
@@ -429,11 +402,10 @@ void SdTPAction::OpenFileDialog()
 {
     // Soundpreview nur fuer Interaktionen mit Sound
     presentation::ClickAction eCA = GetActualClickAction();
-    sal_Bool bSound = ( eCA == presentation::ClickAction_SOUND );
-    sal_Bool bPage = ( eCA == presentation::ClickAction_BOOKMARK );
-    sal_Bool bDocument = ( eCA == presentation::ClickAction_DOCUMENT ||
-                       eCA == presentation::ClickAction_PROGRAM );
-    sal_Bool bMacro = ( eCA == presentation::ClickAction_MACRO );
+    bool bSound = ( eCA == presentation::ClickAction_SOUND );
+    bool bPage = ( eCA == presentation::ClickAction_BOOKMARK );
+    bool bDocument = ( eCA == presentation::ClickAction_DOCUMENT || eCA == presentation::ClickAction_PROGRAM );
+    bool bMacro = ( eCA == presentation::ClickAction_MACRO );
 
     if( bPage )
     {
@@ -708,7 +680,7 @@ IMPL_LINK( SdTPAction, CheckFileHdl, void *, EMPTYARG )
         // Ueberpruefen, ob es eine gueltige Draw-Datei ist
         SfxMedium aMedium( aFile,
                     STREAM_READ | STREAM_NOCREATE,
-                    sal_True );               // Download
+                    true );               // Download
 
         if( aMedium.IsStorage() )
         {
@@ -730,7 +702,7 @@ IMPL_LINK( SdTPAction, CheckFileHdl, void *, EMPTYARG )
                     aLastFile = aFile;
 
                     aLbTreeDocument.Clear();
-                    aLbTreeDocument.Fill( pBookmarkDoc, sal_True, aFile );
+                    aLbTreeDocument.Fill( pBookmarkDoc, true, aFile );
                     mpDoc->CloseBookmarkDoc();
                     aLbTreeDocument.Show();
                 }
@@ -834,7 +806,7 @@ void SdTPAction::SetEditText( String const & rStr )
 
 //------------------------------------------------------------------------
 
-String SdTPAction::GetEditText( sal_Bool bFullDocDestination )
+String SdTPAction::GetEditText( bool bFullDocDestination )
 {
     String aStr;
     presentation::ClickAction eCA = GetActualClickAction();

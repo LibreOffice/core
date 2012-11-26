@@ -63,6 +63,9 @@ namespace sdr
             ViewObjectContactOfE3d(ObjectContact& rObjectContact, ViewContact& rViewContact);
             virtual ~ViewObjectContactOfE3d();
 
+            // React on changes of the object of this ViewContact
+            virtual void ActionChanged();
+
             // access to the local primitive sequence. This will ensure that the list is
             // current in comparing the local list content with a fresh created incarnation
             // This method will not handle included hierarchies or visibility.

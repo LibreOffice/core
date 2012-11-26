@@ -88,6 +88,7 @@ class SwList;
 #include <memory>
 
 #include <boost/scoped_ptr.hpp>
+#include <svx/svdobj.hxx>
 #include <boost/shared_ptr.hpp>
 #include <flypos.hxx>
 
@@ -190,7 +191,6 @@ class _SetGetExpFld;
 class SwDrawContact;
 class SwLayouter;
 class SdrView;
-class SdrMarkList;
 class SwAuthEntry;
 class SwLayoutCache;
 class IStyleAccess;
@@ -327,7 +327,7 @@ class SW_DLLPUBLIC SwDoc :
 
     ViewShell       *pCurrentView;  // SwDoc should get a new member pCurrentView//swmod 071225
     boost::shared_ptr<SwRootFrm> pLayoutPtr;
-    SdrModel        *pDrawModel;        // StarView Drawing
+    FmFormModel*    pDrawModel;     // StarView Drawing
 
     SwDocUpdtFld    *pUpdtFlds;         // Struktur zum Field-Update
     SwFldTypes      *pFldTypes;         // Feldtypen
@@ -946,8 +946,8 @@ public:
 
     /** IDocumentDrawModelAccess
     */
-    virtual const SdrModel* GetDrawModel() const;
-    virtual SdrModel* GetDrawModel();
+    virtual const FmFormModel* GetDrawModel() const;
+    virtual FmFormModel* GetDrawModel();
     virtual SdrLayerID GetHeavenId() const;
     virtual SdrLayerID GetHellId() const;
     virtual SdrLayerID GetControlsId() const;
@@ -958,8 +958,8 @@ public:
     virtual bool IsVisibleLayerId( const SdrLayerID& _nLayerId ) const;
     virtual SdrLayerID GetVisibleLayerIdByInvisibleOne( const SdrLayerID& _nInvisibleLayerId );
     virtual SdrLayerID GetInvisibleLayerIdByVisibleOne( const SdrLayerID& _nVisibleLayerId );
-    virtual SdrModel* _MakeDrawModel();
-    virtual SdrModel* GetOrCreateDrawModel();
+    virtual FmFormModel* _MakeDrawModel();
+    virtual FmFormModel* GetOrCreateDrawModel();
 
     /** IDocumentLayoutAccess
     */
@@ -1934,7 +1934,7 @@ public:
 
     // -------------------- FeShell - Schnittstellen -----------------------
     // !!!!! diese gehen immer davon aus, das ein Layout existiert  !!!!
-    sal_Bool ChgAnchor( const SdrMarkList& _rMrkList,
+    sal_Bool ChgAnchor( const SdrObjectVector& rSdrObjectVector,
                         RndStdIds _eAnchorType,
                         const sal_Bool _bSameOnly,
                         const sal_Bool _bPosCorr );

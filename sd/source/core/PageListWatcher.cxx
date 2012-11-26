@@ -78,10 +78,14 @@ ImpPageListWatcher::ImpPageListWatcher(const SdrModel& rModel)
     mpHandoutPage(0L),
     mbPageListValid(sal_False)
 {
+    // register as listener at SdrModel
+    StartListening(const_cast< SdrModel& >(rModel));
 }
 
 ImpPageListWatcher::~ImpPageListWatcher()
 {
+    // unregister as listener at SdrModel
+    EndListening(const_cast< SdrModel& >(mrModel));
 }
 
 SdPage* ImpPageListWatcher::GetSdPage(PageKind ePgKind, sal_uInt32 nPgNum)
@@ -197,6 +201,19 @@ ImpDrawPageListWatcher::~ImpDrawPageListWatcher()
 {
 }
 
+void ImpDrawPageListWatcher::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
+{
+    const SdrBaseHint* pSdrBaseHint = dynamic_cast< const SdrBaseHint* >(&rHint);
+
+    if(pSdrBaseHint
+        && HINT_PAGEORDERCHG == pSdrBaseHint->GetSdrHintKind()
+        && pSdrBaseHint->GetSdrHintPage()
+        && !pSdrBaseHint->GetSdrHintPage()->IsMasterPage())
+    {
+        Invalidate();
+    }
+}
+
 //////////////////////////////////////////////////////////////////////////////
 
 sal_uInt32 ImpMasterPageListWatcher::ImpGetPageCount() const
@@ -217,3 +234,19 @@ ImpMasterPageListWatcher::ImpMasterPageListWatcher(const SdrModel& rModel)
 ImpMasterPageListWatcher::~ImpMasterPageListWatcher()
 {
 }
+
+void ImpMasterPageListWatcher::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
+{
+    const SdrBaseHint* pSdrBaseHint = dynamic_cast< const SdrBaseHint* >(&rHint);
+
+    if(pSdrBaseHint
+        && HINT_PAGEORDERCHG == pSdrBaseHint->GetSdrHintKind()
+        && pSdrBaseHint->GetSdrHintPage()
+        && pSdrBaseHint->GetSdrHintPage()->IsMasterPage())
+    {
+        Invalidate();
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// eof

@@ -142,11 +142,11 @@ IMPL_LINK( SvxNewDictionaryDialog, OKHdl_Impl, Button *, EMPTYARG )
     const Reference< XDictionary >  *pDic = aDics.getConstArray();
     sal_Int32 nCount = (sal_uInt16) aDics.getLength();
 
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     sal_uInt16 i;
     for (i = 0; !bFound && i < nCount; ++i )
         if ( sDict.EqualsIgnoreCaseAscii( String(pDic[i]->getName()) ))
-            bFound = sal_True;
+            bFound = true;
 
     if ( bFound )
     {
@@ -699,7 +699,7 @@ IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, Edit*, pEdt)
     {
         if(nWordLen>0)
         {
-            sal_Bool bFound = sal_False;
+            bool bFound = false;
             sal_Bool bTmpSelEntry=sal_False;
             CDE_RESULT eCmpRes = CDE_DIFFERENT;
 
@@ -723,7 +723,7 @@ IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, Edit*, pEdt)
                         aNewReplaceText = sModify;
                         bEnableNewReplace = sal_True;
                     }
-                    bFound= sal_True;
+                    bFound = true;
                     break;
                 }
                 else if(getNormDicEntry_Impl(aTestStr).Search(

@@ -376,7 +376,7 @@ void XMLImageMapExport::ExportPolygon(
     // export point sequence
     awt::Point aPoint(0, 0);
     awt::Size aSize(nWidth, nHeight);
-    SdXMLImExPointsElement aPoints( &aPoly, aViewBox, aPoint, aSize );
+    SdXMLImExPointsElement aPoints( &aPoly, aViewBox, aPoint, aSize, true);
     mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_POINTS,
                           aPoints.GetExportString());
 }

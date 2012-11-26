@@ -113,7 +113,7 @@ private:
     typedef ::std::vector<PageDescriptor> PageDescriptorList;
     PageDescriptorList maPageDescriptors;
 
-    Rectangle GetPageBox (sal_Int32 nPageIndex);
+    basegfx::B2DRange GetPageBox (sal_Int32 nPageIndex);
 
     void ProvideSize (sal_Int32 nPageIndex);
 
@@ -129,9 +129,9 @@ void SscdSetStatus (const SdrPage* pPage,
 {
     ::sd::toolpanel::SlideSorterCacheDisplay* pDisplay
         = ::sd::toolpanel::SlideSorterCacheDisplay::Instance(
-        dynamic_cast<SdDrawDocument*>(pPage->GetModel()));
-    if (pDisplay != NULL)
-        pDisplay->SetPageStatus((pPage->GetPageNum()-1)/2, eStatus);
+            dynamic_cast< SdDrawDocument* >(&pPage->getSdrModelFromSdrPage()));
+    if (pDisplay)
+        pDisplay->SetPageStatus((pPage->GetPageNumber()-1)/2, eStatus);
 }
 
 void SscdSetRequestClass (const SdrPage* pPage, sal_Int32 nClass)
@@ -166,9 +166,9 @@ void SscdSetUpToDate (const SdrPage* pPage, bool bUpToDate)
 {
     ::sd::toolpanel::SlideSorterCacheDisplay* pDisplay
         = ::sd::toolpanel::SlideSorterCacheDisplay::Instance(
-            dynamic_cast<const SdDrawDocument*>(pPage->GetModel()));
+            dynamic_cast< const SdDrawDocument* >(&pPage->getSdrModelFromSdrPage()));
     if (pDisplay != NULL)
-        pDisplay->SetUpToDate((pPage->GetPageNum()-1)/2, bUpToDate);
+        pDisplay->SetUpToDate((pPage->GetPageNumber()-1)/2, bUpToDate);
 }
 
 

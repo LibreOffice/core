@@ -51,6 +51,7 @@
 #include "IDocumentDrawModelAccess.hxx"
 #include <hints.hxx>
 #include <viewopt.hxx>
+#include <svx/fmmodel.hxx>
 
 SwLayVout     *SwRootFrm::pVout = 0;
 sal_Bool           SwRootFrm::bInPaint = sal_False;
@@ -354,9 +355,6 @@ SwRectFn fnRectVL2R = &aVerticalRightToLeft;
 sal_uInt32 SwFrm::mnLastFrmId=0;
 // <--
 
-TYPEINIT1(SwFrm,SwClient);      //rtti fuer SwFrm
-TYPEINIT1(SwCntntFrm,SwFrm);    //rtti fuer SwCntntFrm
-
 
 void _FrmInit()
 {
@@ -518,12 +516,8 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
     SdrModel *pMd = pFmt->getIDocumentDrawModelAccess()->GetDrawModel();
     if ( pMd )
     {
-        // Disable "multiple layout"
-        pDrawPage = pMd->GetPage(0); //pMd->AllocPage( FALSE );
-        //pMd->InsertPage( pDrawPage );
-        // end of disabling
-
-        pDrawPage->SetSize( Frm().SSize() );
+        pDrawPage = pMd->GetPage( 0 );
+        pDrawPage->SetPageScale( basegfx::B2DVector( Frm().SSize().Width(), Frm().SSize().Height() ) );
     }
 
     //Initialisierung des Layouts: Seiten erzeugen. Inhalt mit cntnt verbinden
@@ -641,8 +635,8 @@ void SwRootFrm::RemoveMasterObjs( SdrPage *pPg )
     for( sal_uLong i = pPg ? pPg->GetObjCount() : 0; i; )
     {
         SdrObject* pObj = pPg->GetObj( --i );
-        if( pObj->ISA(SwFlyDrawObj ) )
-            pPg->RemoveObject( i );
+        if( dynamic_cast< SwFlyDrawObj* >(pObj) )
+            pPg->RemoveObjectFromSdrObjList( i );
     }
 }
 

@@ -62,8 +62,6 @@ void PageStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
     }
 }
 
-TYPEINIT1( PageStyleContext, XMLPropStyleContext );
-
 PageStyleContext::PageStyleContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const rtl::OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList,

@@ -69,7 +69,7 @@ FullScreenPane::FullScreenPane (
         return;
 
     // Create a new top-leve window that is displayed full screen.
-    mpWorkWindow->ShowFullScreenMode(sal_True, nScreenNumber);
+    mpWorkWindow->ShowFullScreenMode(true, nScreenNumber);
     // For debugging (non-fullscreen) use mpWorkWindow->SetScreenNumber(nScreenNumber);
     mpWorkWindow->SetMenuBarMode(MENUBAR_MODE_HIDE);
     mpWorkWindow->SetBorderStyle(WINDOW_BORDER_REMOVEBORDER);
@@ -174,7 +174,7 @@ Reference<accessibility::XAccessible> SAL_CALL FullScreenPane::getAccessible (vo
     ThrowIfDisposed();
 
     if (mpWorkWindow != NULL)
-        return mpWorkWindow->GetAccessible(sal_False);
+        return mpWorkWindow->GetAccessible(false);
     else
         return NULL;
 }

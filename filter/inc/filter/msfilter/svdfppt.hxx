@@ -450,7 +450,7 @@ public:
 
                         SdrEscherImport( PowerPointImportParam&, const String& rBaseURL );
     virtual             ~SdrEscherImport();
-    virtual FASTBOOL    GetColorFromPalette( sal_uInt16 nNum, Color& rColor ) const;
+    virtual bool    GetColorFromPalette( sal_uInt16 nNum, Color& rColor ) const;
     virtual sal_Bool        SeekToShape( SvStream& rSt, void* pClientData, sal_uInt32 nId ) const;
     PptFontEntityAtom*  GetFontEnityAtom( sal_uInt32 nNum ) const;
     CharSet             GetCharSet( sal_uInt32 nNum ) const;
@@ -458,7 +458,7 @@ public:
     void                RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic& rGraph );
     using SvxMSDffManager::ReadObjText;
     virtual SdrObject*  ReadObjText( PPTTextObj* pTextObj, SdrObject* pObj, SdPage* pPage ) const;
-    virtual SdrObject*  ProcessObj( SvStream& rSt, DffObjData& rData, void* pData, Rectangle& rTextRect, SdrObject* pObj );
+    virtual SdrObject*  ProcessObj( SvStream& rSt, DffObjData& rData, void* pData, basegfx::B2DRange& rTextRect, SdrObject* pObj );
     virtual void        ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, void* pData, DffObjData& rObj );
     void                ImportHeaderFooterContainer( DffRecordHeader& rHeader, HeaderFooterEntry& rEntry );
 };
@@ -565,8 +565,8 @@ protected:
     // indicates, if the OLE object is imported inside a group object.
     virtual SdrObject* ImportOLE( long nOLEId,
                                   const Graphic& rGraf,
-                                  const Rectangle& rBoundRect,
-                                  const Rectangle& rVisArea,
+                                  const basegfx::B2DRange& rBoundRect,
+                                  const basegfx::B2DRange& rVisArea,
                                   const int _nCalledByGroup,
                                   sal_Int64 nAspect ) const;
     // <--
@@ -596,7 +596,7 @@ public:
     sal_uInt16      GetMasterPageIndex( sal_uInt16 nPageNum, PptPageKind ePageKind = PPT_SLIDEPAGE ) const;
 
     void        ImportPage( SdrPage* pPage, const PptSlidePersistEntry* pMasterPersist = NULL );
-    virtual FASTBOOL    GetColorFromPalette(sal_uInt16 nNum, Color& rColor) const;
+    virtual bool    GetColorFromPalette(sal_uInt16 nNum, Color& rColor) const;
     virtual sal_Bool        SeekToShape( SvStream& rSt, void* pClientData, sal_uInt32 nId ) const;
     sal_Unicode         PPTSubstitute( sal_uInt16 nFont, sal_Unicode nChar,
                                         sal_uInt32& nMappedFontId, Font& rFont, char nDefault ) const;

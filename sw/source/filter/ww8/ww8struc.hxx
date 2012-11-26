@@ -29,6 +29,7 @@
 #include <osl/endian.h>
 #include <tools/string.hxx>
 #include <sal/config.h>
+#include <memory.h>
 
 #if defined  OSL_BIGENDIAN || SAL_TYPES_ALIGNMENT4 > 2 || defined UNX
 #   define __WW8_NEEDS_COPY

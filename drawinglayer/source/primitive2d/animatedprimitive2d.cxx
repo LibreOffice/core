@@ -58,18 +58,6 @@ namespace drawinglayer
             delete mpAnimationEntry;
         }
 
-        bool AnimatedSwitchPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(GroupPrimitive2D::operator==(rPrimitive))
-            {
-                const AnimatedSwitchPrimitive2D& rCompare = static_cast< const AnimatedSwitchPrimitive2D& >(rPrimitive);
-
-                return (getAnimationEntry() == rCompare.getAnimationEntry());
-            }
-
-            return false;
-        }
-
         Primitive2DSequence AnimatedSwitchPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             if(getChildren().hasElements())
@@ -197,7 +185,10 @@ namespace drawinglayer
 
                     // build matrix for state
                     aTargetTransform = basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
-                        aScale, fShearX, fRotate, aTranslate);
+                        aScale,
+                        fShearX,
+                        fRotate,
+                        aTranslate);
                 }
 
                 // create new transform primitive reference, return new sequence

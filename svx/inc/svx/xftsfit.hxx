@@ -35,7 +35,7 @@
 class SVX_DLLPUBLIC XFormTextStdFormItem : public SfxEnumItem
 {
 public:
-                            TYPEINFO();
+    POOLITEM_FACTORY()
                             XFormTextStdFormItem(XFormTextStdForm = XFTFORM_NONE);
                             XFormTextStdFormItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const;

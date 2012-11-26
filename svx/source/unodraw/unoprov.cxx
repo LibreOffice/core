@@ -49,6 +49,8 @@
 #include <svx/dialogs.hrc>
 #include <svx/svdpool.hxx>
 #include <svx/svdobj.hxx>
+#include <hash_map>
+#include <svx/unoshape.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -829,85 +831,125 @@ comphelper::PropertyMapEntry* ImplGetAdditionalWriterDrawingDefaultsPropertyMap(
 }
 
 // ---------------------------------------------------------------------
-
 SvxUnoPropertyMapProvider aSvxMapProvider;
 
-UHashMapEntry pSdrShapeIdentifierMap[] =
-{
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.RectangleShape"),       OBJ_RECT ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.EllipseShape"),         OBJ_CIRC ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ControlShape"),         OBJ_UNO  ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ConnectorShape"),       OBJ_EDGE ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.MeasureShape"),         OBJ_MEASURE ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.LineShape"),            OBJ_LINE ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PolyPolygonShape"),     OBJ_POLY ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PolyLineShape"),        OBJ_PLIN ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.OpenBezierShape"),      OBJ_PATHLINE ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ClosedBezierShape"),    OBJ_PATHFILL ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.OpenFreeHandShape"),    OBJ_FREELINE ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ClosedFreeHandShape"),  OBJ_FREEFILL ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PolyPolygonPathShape"), OBJ_PATHPOLY ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PolyLinePathShape"),    OBJ_PATHPLIN ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GraphicObjectShape"),   OBJ_GRAF ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GroupShape"),           OBJ_GRUP ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.TextShape"),            OBJ_TEXT ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.OLE2Shape"),            OBJ_OLE2 ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PageShape"),            OBJ_PAGE ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.CaptionShape"),         OBJ_CAPTION ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.FrameShape"),           OBJ_FRAME ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PluginShape"),          OBJ_OLE2_PLUGIN ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.AppletShape"),          OBJ_OLE2_APPLET ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.CustomShape"),          OBJ_CUSTOMSHAPE ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.MediaShape"),           OBJ_MEDIA ),
-
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DSceneObject"),   E3D_POLYSCENE_ID  | E3D_INVENTOR_FLAG ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DCubeObject"),    E3D_CUBEOBJ_ID    | E3D_INVENTOR_FLAG ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DSphereObject"),  E3D_SPHEREOBJ_ID  | E3D_INVENTOR_FLAG ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DLatheObject"),   E3D_LATHEOBJ_ID   | E3D_INVENTOR_FLAG ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DExtrudeObject"), E3D_EXTRUDEOBJ_ID | E3D_INVENTOR_FLAG ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DPolygonObject"), E3D_POLYGONOBJ_ID | E3D_INVENTOR_FLAG ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM(""),  0 )
-};
-
 // ---------------------------------------------------------------------
+static rtl::OUString aComSunStarDrawing(rtl::OUString::createFromAscii("com.sun.star.drawing."));
+typedef std::hash_map< rtl::OUString, SvxShapeKind, rtl::OUStringHash > TypeNameToSvxShapeKindMapper;
+typedef std::pair< rtl::OUString, SvxShapeKind > TypeNameToSvxShapeKindType;
+static TypeNameToSvxShapeKindMapper aTypeNameToSvxShapeKindMapper;
 
-UHashMap aSdrShapeIdentifierMap( pSdrShapeIdentifierMap );
-
-/***********************************************************************
-* class UHashMap                                                       *
-***********************************************************************/
-
-UHashMap::UHashMap( UHashMapEntry* pMap )
+void initTokenMapper()
 {
-    while( pMap->aIdentifier.getLength() )
+    if(aTypeNameToSvxShapeKindMapper.empty())
     {
-        OUString aStr( pMap->aIdentifier );
-        size_t nHash = aStr.hashCode() & (HASHARRAYSIZE-1);
+        aTypeNameToSvxShapeKindMapper.insert(TypeNameToSvxShapeKindType(rtl::OUString::createFromAscii("RectangleShape"), SvxShapeKind_Rectangle));
+        aTypeNameToSvxShapeKindMapper.insert(TypeNameToSvxShapeKindType(rtl::OUString::createFromAscii("EllipseShape"), SvxShapeKind_Circle));
+        aTypeNameToSvxShapeKindMapper.insert(TypeNameToSvxShapeKindType(rtl::OUString::createFromAscii("ControlShape"), SvxShapeKind_Control));
+        aTypeNameToSvxShapeKindMapper.insert(TypeNameToSvxShapeKindType(rtl::OUString::createFromAscii("ConnectorShape"), SvxShapeKind_Connector));
+        aTypeNameToSvxShapeKindMapper.insert(TypeNameToSvxShapeKindType(rtl::OUString::createFromAscii("MeasureShape"), SvxShapeKind_Measure));
 
-        m_aHashList[nHash].Insert(pMap);
-        pMap++;
+        // all polygon shapes are handled as single path object
+        aTypeNameToSvxShapeKindMapper.insert(TypeNameToSvxShapeKindType(rtl::OUString::createFromAscii("LineShape"), SvxShapeKind_Path));
+        aTypeNameToSvxShapeKindMapper.insert(TypeNameToSvxShapeKindType(rtl::OUString::createFromAscii("PolyPolygonShape"), SvxShapeKind_Path));
+        aTypeNameToSvxShapeKindMapper.insert(TypeNameToSvxShapeKindType(rtl::OUString::createFromAscii("PolyLineShape"), SvxShapeKind_Path));
+        aTypeNameToSvxShapeKindMapper.insert(TypeNameToSvxShapeKindType(rtl::OUString::createFromAscii("OpenBezierShape"), SvxShapeKind_Path));
+        aTypeNameToSvxShapeKindMapper.insert(TypeNameToSvxShapeKindType(rtl::OUString::createFromAscii("ClosedBezierShape"), SvxShapeKind_Path));
+        aTypeNameToSvxShapeKindMapper.insert(TypeNameToSvxShapeKindType(rtl::OUString::createFromAscii("OpenFreeHandShape"), SvxShapeKind_Path)); // freehands are only created interactively, should not happen
+        aTypeNameToSvxShapeKindMapper.insert(TypeNameToSvxShapeKindType(rtl::OUString::createFromAscii("ClosedFreeHandShape"), SvxShapeKind_Path)); // freehands are only created interactively, should not happen
+        aTypeNameToSvxShapeKindMapper.insert(TypeNameToSvxShapeKindType(rtl::OUString::createFromAscii("PolyPolygonPathShape"), SvxShapeKind_Path)); // closed filled PolyPolygon, no difference to ClosedBezierShape
+        aTypeNameToSvxShapeKindMapper.insert(TypeNameToSvxShapeKindType(rtl::OUString::createFromAscii("PolyLinePathShape"), SvxShapeKind_Path)); // open PolyPolygon, no difference to OpenBezierShape
+
+        aTypeNameToSvxShapeKindMapper.insert(TypeNameToSvxShapeKindType(rtl::OUString::createFromAscii("GraphicObjectShape"), SvxShapeKind_Graphic));
+        aTypeNameToSvxShapeKindMapper.insert(TypeNameToSvxShapeKindType(rtl::OUString::createFromAscii("GroupShape"), SvxShapeKind_Group));
+        aTypeNameToSvxShapeKindMapper.insert(TypeNameToSvxShapeKindType(rtl::OUString::createFromAscii("TextShape"), SvxShapeKind_Text));
+        aTypeNameToSvxShapeKindMapper.insert(TypeNameToSvxShapeKindType(rtl::OUString::createFromAscii("OLE2Shape"), SvxShapeKind_OLE2));
+        aTypeNameToSvxShapeKindMapper.insert(TypeNameToSvxShapeKindType(rtl::OUString::createFromAscii("PageShape"), SvxShapeKind_Page));
+        aTypeNameToSvxShapeKindMapper.insert(TypeNameToSvxShapeKindType(rtl::OUString::createFromAscii("CaptionShape"), SvxShapeKind_Caption));
+        aTypeNameToSvxShapeKindMapper.insert(TypeNameToSvxShapeKindType(rtl::OUString::createFromAscii("FrameShape"), SvxShapeKind_Frame));
+        aTypeNameToSvxShapeKindMapper.insert(TypeNameToSvxShapeKindType(rtl::OUString::createFromAscii("PluginShape"), SvxShapeKind_Plugin));
+        aTypeNameToSvxShapeKindMapper.insert(TypeNameToSvxShapeKindType(rtl::OUString::createFromAscii("AppletShape"), SvxShapeKind_Applet));
+        aTypeNameToSvxShapeKindMapper.insert(TypeNameToSvxShapeKindType(rtl::OUString::createFromAscii("CustomShape"), SvxShapeKind_Customshape));
+        aTypeNameToSvxShapeKindMapper.insert(TypeNameToSvxShapeKindType(rtl::OUString::createFromAscii("MediaShape"), SvxShapeKind_Media));
+        aTypeNameToSvxShapeKindMapper.insert(TypeNameToSvxShapeKindType(rtl::OUString::createFromAscii("Shape3DSceneObject"), SvxShapeKind_3DScene));
+        aTypeNameToSvxShapeKindMapper.insert(TypeNameToSvxShapeKindType(rtl::OUString::createFromAscii("Shape3DCubeObject"), SvxShapeKind_3DCube));
+        aTypeNameToSvxShapeKindMapper.insert(TypeNameToSvxShapeKindType(rtl::OUString::createFromAscii("Shape3DSphereObject"), SvxShapeKind_3DSphere));
+        aTypeNameToSvxShapeKindMapper.insert(TypeNameToSvxShapeKindType(rtl::OUString::createFromAscii("Shape3DLatheObject"), SvxShapeKind_3DLathe));
+        aTypeNameToSvxShapeKindMapper.insert(TypeNameToSvxShapeKindType(rtl::OUString::createFromAscii("Shape3DExtrudeObject"), SvxShapeKind_3DExtrude));
+        aTypeNameToSvxShapeKindMapper.insert(TypeNameToSvxShapeKindType(rtl::OUString::createFromAscii("Shape3DPolygonObject"), SvxShapeKind_3DPolygon));
     }
 }
 
-// ---------------------------------------------------------------------
-
-sal_uInt32 UHashMap::getId( const OUString& rCompareString )
+std::vector< OUString > getAllSvxShapeTypeNames()
 {
-    size_t nHash = rCompareString.hashCode() & (HASHARRAYSIZE-1);
+    static std::vector< OUString > aRetval;
 
-    UHashMapEntryList& rList = m_aHashList[nHash];
+    initTokenMapper();
 
-    UHashMapEntry * pMap = rList.First();
-
-    while(pMap)
+    if(!aTypeNameToSvxShapeKindMapper.empty() && !aRetval.size())
     {
-        if( rCompareString == pMap->aIdentifier )
-            return pMap->nId;
+        for(TypeNameToSvxShapeKindMapper::iterator a(aTypeNameToSvxShapeKindMapper.begin()); a != aTypeNameToSvxShapeKindMapper.end(); a++)
+        {
+            OUString aNew(a->first);
 
-        pMap = rList.Next();
+            if(aNew.getLength())
+            {
+                const OUString aNewName(aComSunStarDrawing + aNew);
+
+                aRetval.push_back(aNewName);
+            }
+        }
     }
 
-    return UHASHMAP_NOTFOUND;
+    return aRetval;
+}
+
+bool getNameForSvxShapeType(rtl::OUString& rName, SvxShapeKind eSvxShapeKind)
+{
+    initTokenMapper();
+
+    if(!aTypeNameToSvxShapeKindMapper.empty())
+    {
+        for(TypeNameToSvxShapeKindMapper::iterator a(aTypeNameToSvxShapeKindMapper.begin()); a != aTypeNameToSvxShapeKindMapper.end(); a++)
+        {
+            if(a->second == eSvxShapeKind)
+            {
+                rName = aComSunStarDrawing + a->first;
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+SvxShapeKind getSvxShapeKindFromTypeName(const OUString& rTypeName)
+{
+    if(rTypeName.getLength() <= aComSunStarDrawing.getLength())
+    {
+        return SvxShapeKind_None;
+    }
+
+    const OUString aCompare(rTypeName.copy(aComSunStarDrawing.getLength()));
+
+    if(!aCompare.getLength())
+    {
+        return SvxShapeKind_None;
+    }
+
+    initTokenMapper();
+
+    if(!aTypeNameToSvxShapeKindMapper.empty())
+    {
+        const TypeNameToSvxShapeKindMapper::iterator aResult(aTypeNameToSvxShapeKindMapper.find(aCompare));
+
+        if(aResult != aTypeNameToSvxShapeKindMapper.end())
+        {
+            return aResult->second;
+        }
+    }
+
+    return SvxShapeKind_None;
 }
 
 /***********************************************************************

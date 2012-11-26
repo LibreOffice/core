@@ -52,6 +52,7 @@ namespace sdr { namespace contact {
 struct SdrUnoObjDataHolder;
 class SVX_DLLPUBLIC SdrUnoObj : public SdrRectObj
 {
+private:
     friend class                SdrPageView;
     friend class                SdrControlEventListenerImpl;
 
@@ -61,32 +62,36 @@ class SVX_DLLPUBLIC SdrUnoObj : public SdrRectObj
     String                      aUnoControlTypeName;
     sal_Bool                        bOwnUnoControlModel;
 
-protected:
-    ::com::sun::star::uno::Reference< com::sun::star::awt::XControlModel > xUnoControlModel; // kann auch von aussen gesetzt werden
-
-private:
     SVX_DLLPRIVATE void CreateUnoControlModel(const String& rModelName);
     SVX_DLLPRIVATE void CreateUnoControlModel(const String& rModelName,
         const ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac );
 
-public:
-    TYPEINFO();
+protected:
+    ::com::sun::star::uno::Reference< com::sun::star::awt::XControlModel > xUnoControlModel; // kann auch von aussen gesetzt werden
 
-    SdrUnoObj(const String& rModelName, sal_Bool bOwnsModel = sal_True);
-    SdrUnoObj(const String& rModelName,
-        const ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac,
-        sal_Bool bOwnsModel = sal_True);
     virtual ~SdrUnoObj();
 
-    virtual void SetPage(SdrPage* pNewPage);
-    virtual void SetModel(SdrModel* pModel);
+    /// method to copy all data from given source
+    virtual void copyDataFromSdrObject(const SdrObject& rSource);
 
+public:
+    /// create a copy, evtl. with a different target model (if given)
+    virtual SdrObject* CloneSdrObject(SdrModel* pTargetModel = 0) const;
+
+    SdrUnoObj(
+        SdrModel& rSdrModel,
+        const String& rModelName,
+        bool bOwnsModel = true);
+    SdrUnoObj(
+        SdrModel& rSdrModel,
+        const String& rModelName,
+        const ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac,
+        bool bOwnsModel = true);
+
+    virtual bool IsSdrUnoObj() const;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual sal_uInt16 GetObjIdentifier() const;
-
-    virtual void operator = (const SdrObject& rObj);
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-    virtual void NbcSetLayer(SdrLayerID nLayer);
+    virtual void SetLayer(SdrLayerID nLayer);
 
     // SpecialDrag support
     virtual bool hasSpecialDrag() const;

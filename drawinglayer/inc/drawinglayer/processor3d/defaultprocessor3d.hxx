@@ -103,9 +103,9 @@ namespace drawinglayer
             sal_uInt32                                          mnTransparenceCounter;
 
             /// bitfield
-            unsigned                                            mbModulate : 1;
-            unsigned                                            mbFilter : 1;
-            unsigned                                            mbSimpleTextureActive : 1;
+            bool                                                mbModulate : 1;
+            bool                                                mbFilter : 1;
+            bool                                                mbSimpleTextureActive : 1;
 
             //////////////////////////////////////////////////////////////////////////////
             // rendering support

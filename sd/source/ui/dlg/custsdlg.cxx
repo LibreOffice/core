@@ -66,7 +66,7 @@ SdCustomShowDlg::SdCustomShowDlg( Window* pWindow,
     rDoc            ( rDrawDoc ),
     pCustomShowList ( NULL ),
     pCustomShow     ( NULL ),
-    bModified       ( sal_False )
+    bModified       ( false )
 {
     FreeResource();
 
@@ -115,7 +115,7 @@ void SdCustomShowDlg::CheckState()
 {
     sal_uInt16 nPos = aLbCustomShows.GetSelectEntryPos();
 
-    sal_Bool bEnable = nPos != LISTBOX_ENTRY_NOTFOUND;
+    bool bEnable = nPos != LISTBOX_ENTRY_NOTFOUND;
     aBtnEdit.Enable( bEnable );
     aBtnRemove.Enable( bEnable );
     aBtnCopy.Enable( bEnable );
@@ -141,7 +141,7 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
             if( pCustomShow )
             {
                 if( !pCustomShowList )
-                    pCustomShowList = rDoc.GetCustomShowList( sal_True );
+                    pCustomShowList = rDoc.GetCustomShowList( true );
 
                 pCustomShowList->Insert( pCustomShow, LIST_APPEND );
                 pCustomShowList->Last();
@@ -150,7 +150,7 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
             }
 
             if( aDlg.IsModified() )
-                bModified = sal_True;
+                bModified = true;
         }
         else if( pCustomShow )
             DELETEZ( pCustomShow );
@@ -176,7 +176,7 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
                     aLbCustomShows.SelectEntryPos( nPos );
                 }
                 if( aDlg.IsModified() )
-                    bModified = sal_True;
+                    bModified = true;
             }
         }
     }
@@ -189,7 +189,7 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
             delete (SdCustomShow*) pCustomShowList->Remove( nPos );
             aLbCustomShows.RemoveEntry( nPos );
             aLbCustomShows.SelectEntryPos( nPos == 0 ? nPos : nPos - 1 );
-            bModified = sal_True;
+            bModified = true;
         }
     }
     // CustomShow kopieren
@@ -221,17 +221,17 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
             }
 
             // Name ueberpruefen...
-            sal_Bool bDifferent = sal_False;
+            bool bDifferent = false;
             //long nPosToSelect = pCustomShowList->GetCurPos();
             while( !bDifferent )
             {
-                bDifferent = sal_True;
+                bDifferent = true;
                 for( pCustomShow = (SdCustomShow*) pCustomShowList->First();
                      pCustomShow != NULL && bDifferent;
                      pCustomShow = (SdCustomShow*) pCustomShowList->Next() )
                 {
                     if( aStr == pCustomShow->GetName() )
-                        bDifferent = sal_False;
+                        bDifferent = false;
                 }
                 if( !bDifferent )
                 {
@@ -253,7 +253,7 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
             aLbCustomShows.SelectEntry( pShow->GetName() );
 
 
-            bModified = sal_True;
+            bModified = true;
         }
     }
     else if( p == &aLbCustomShows )
@@ -262,11 +262,11 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
             pCustomShowList->Seek( nPos );
 
-        bModified = sal_True;
+        bModified = true;
     }
     else if( p == &aCbxUseCustomShow )
     {
-        bModified = sal_True;
+        bModified = true;
     }
 
     CheckState();
@@ -287,7 +287,7 @@ IMPL_LINK( SdCustomShowDlg, StartShowHdl, Button *, EMPTYARG )
 /*************************************************************************
 |* CheckState
 \************************************************************************/
-sal_Bool SdCustomShowDlg::IsCustomShow() const
+bool SdCustomShowDlg::IsCustomShow() const
 {
     return( aCbxUseCustomShow.IsEnabled() && aCbxUseCustomShow.IsChecked() );
 }
@@ -322,7 +322,7 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg( Window* pWindow,
 
     rDoc            ( rDrawDoc ),
     rpCustomShow    ( rpCS ),
-    bModified       ( sal_False )
+    bModified       ( false )
 {
     FreeResource();
 
@@ -337,11 +337,11 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg( Window* pWindow,
 
     SdPage* pPage;
     // Listbox mit Seitennamen des Docs fuellen
-    for( long nPage = 0L;
+    for( sal_uInt32 nPage = 0;
          nPage < rDoc.GetSdPageCount( PK_STANDARD );
          nPage++ )
     {
-        pPage = rDoc.GetSdPage( (sal_uInt16) nPage, PK_STANDARD );
+        pPage = rDoc.GetSdPage( nPage, PK_STANDARD );
         String aStr( pPage->GetName() );
         aLbPages.InsertEntry( aStr );
     }
@@ -372,7 +372,7 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg( Window* pWindow,
     aLbCustomPages.SetDragDropMode( SV_DRAGDROP_CTRL_MOVE );
     aLbCustomPages.SetHighlightRange();
 
-    aBtnOK.Enable( sal_False );
+    aBtnOK.Enable( false );
     CheckState();
 }
 
@@ -390,10 +390,10 @@ SdDefineCustomShowDlg::~SdDefineCustomShowDlg()
 \************************************************************************/
 void SdDefineCustomShowDlg::CheckState()
 {
-    sal_Bool bPages = aLbPages.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND;
-    //sal_Bool bCSPages = aLbCustomPages.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND;
-    sal_Bool bCSPages = aLbCustomPages.FirstSelected() != NULL;
-    sal_Bool bCount = aLbCustomPages.GetEntryCount() > 0;
+    bool bPages = aLbPages.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND;
+    //bool bCSPages = aLbCustomPages.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND;
+    bool bCSPages = aLbCustomPages.FirstSelected() != NULL;
+    bool bCount = aLbCustomPages.GetEntryCount() > 0;
 
     aBtnOK.Enable( bCount );
     aBtnAdd.Enable( bPages );
@@ -419,17 +419,17 @@ IMPL_LINK( SdDefineCustomShowDlg, ClickButtonHdl, void *, p )
             {
                 String aStr = aLbPages.GetSelectEntry( i );
                 pEntry = aLbCustomPages.InsertEntry( aStr,
-                                            0, sal_False, nPosCP );
+                                            0, false, nPosCP );
 
                 aLbCustomPages.Select( pEntry );
-                SdPage* pPage = rDoc.GetSdPage( (sal_uInt16) aLbPages.
+                SdPage* pPage = rDoc.GetSdPage( aLbPages.
                                     GetSelectEntryPos( i ), PK_STANDARD );
                 pEntry->SetUserData( pPage );
 
                 if( nPosCP != LIST_APPEND )
                     nPosCP++;
             }
-            bModified = sal_True;
+            bModified = true;
         }
     }
     else if( p == &aBtnRemove )
@@ -443,14 +443,14 @@ IMPL_LINK( SdDefineCustomShowDlg, ClickButtonHdl, void *, p )
             //aLbCustomPages.RemoveEntry( nPos );
             aLbCustomPages.GetModel()->Remove( aLbCustomPages.GetModel()->GetEntryAtAbsPos( nPos ) );
 
-            bModified = sal_True;
+            bModified = true;
         }
     }
     else if( p == &aEdtName )
     {
         //rpCustomShow->SetName( aEdtName.GetText() );
 
-        bModified = sal_True;
+        bModified = true;
     }
 
     CheckState();
@@ -465,7 +465,7 @@ IMPL_LINK( SdDefineCustomShowDlg, ClickButtonHdl, void *, p )
 \************************************************************************/
 void SdDefineCustomShowDlg::CheckCustomShow()
 {
-    sal_Bool bDifferent = sal_False;
+    bool bDifferent = false;
     SdPage* pPage = NULL;
     SvLBoxEntry* pEntry = NULL;
 
@@ -473,7 +473,7 @@ void SdDefineCustomShowDlg::CheckCustomShow()
     if( rpCustomShow->Count() != aLbCustomPages.GetEntryCount() )
     {
         rpCustomShow->Clear();
-        bDifferent = sal_True;
+        bDifferent = true;
     }
 
     // Seiten-Pointer vergleichen
@@ -486,7 +486,7 @@ void SdDefineCustomShowDlg::CheckCustomShow()
             if( pPage != pEntry->GetUserData() )
             {
                 rpCustomShow->Clear();
-                bDifferent = sal_True;
+                bDifferent = true;
             }
         }
     }
@@ -501,7 +501,7 @@ void SdDefineCustomShowDlg::CheckCustomShow()
             pPage = (SdPage*) pEntry->GetUserData();
             rpCustomShow->Insert( pPage, LIST_APPEND );
         }
-        bModified = sal_True;
+        bModified = true;
     }
 
     // Name vergleichen und ggfs. setzen
@@ -509,7 +509,7 @@ void SdDefineCustomShowDlg::CheckCustomShow()
     if( rpCustomShow->GetName() != aStr )
     {
         rpCustomShow->SetName( aStr );
-        bModified = sal_True;
+        bModified = true;
     }
 }
 
@@ -519,7 +519,7 @@ void SdDefineCustomShowDlg::CheckCustomShow()
 IMPL_LINK( SdDefineCustomShowDlg, OKHdl, Button *, EMPTYARG )
 {
     // Name ueberpruefen...
-    sal_Bool bDifferent = sal_True;
+    bool bDifferent = true;
     List* pCustomShowList = rDoc.GetCustomShowList();
     if( pCustomShowList )
     {
@@ -532,7 +532,7 @@ IMPL_LINK( SdDefineCustomShowDlg, OKHdl, Button *, EMPTYARG )
              pCustomShow = (SdCustomShow*) pCustomShowList->Next() )
         {
             if( aName == pCustomShow->GetName() && aName != aOldName )
-                bDifferent = sal_False;
+                bDifferent = false;
         }
         pCustomShowList->Seek( nPosToSelect );
     }

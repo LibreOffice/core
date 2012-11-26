@@ -50,29 +50,6 @@ namespace drawinglayer
         {
         }
 
-        bool SdrOle2Primitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BasePrimitive2D::operator==(rPrimitive))
-            {
-                const SdrOle2Primitive2D& rCompare = (SdrOle2Primitive2D&)rPrimitive;
-
-                // #i108636# The standard operator== on two UNO sequences did not work as i
-                // would have expected; it just checks the .is() states and the data type
-                // of the sequence. What i need here is detection of equality of the whole
-                // sequence content, thus i need to use the arePrimitive2DSequencesEqual helper
-                // here instead of the operator== which lead to always returning false and thus
-                // always re-decompositions of the subcontent.
-                if(arePrimitive2DSequencesEqual(getOLEContent(), rCompare.getOLEContent())
-                    && getTransform() == rCompare.getTransform()
-                    && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute())
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         Primitive2DSequence SdrOle2Primitive2D::get2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
             // to take care of getSdrLFSTAttribute() later, the same as in SdrGrafPrimitive2D::create2DDecomposition
@@ -108,7 +85,8 @@ namespace drawinglayer
                 if(0.0 != getSdrLFSTAttribute().getLine().getWidth())
                 {
                     // decompose to get scale
-                    basegfx::B2DVector aScale, aTranslate;
+                    basegfx::B2DVector aScale;
+                    basegfx::B2DPoint aTranslate;
                     double fRotate, fShearX;
                     getTransform().decompose(aScale, aTranslate, fRotate, fShearX);
 

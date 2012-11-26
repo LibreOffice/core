@@ -72,8 +72,6 @@
 
 //------------------------------------------------------------------
 
-TYPEINIT1( ScDrawShell, SfxShell );
-
 SFX_IMPL_INTERFACE(ScDrawShell, SfxShell, ScResId(SCSTR_DRAWSHELL) )
 {
     SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER,
@@ -114,12 +112,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 //  SfxViewFrame*       pViewFrame  = SfxViewShell::Current()->GetViewFrame(); //!!! koennte knallen
     ScDrawView*         pView       = pViewData->GetScDrawView();
     SdrModel*           pDoc        = pViewData->GetDocument()->GetDrawLayer();
-
-    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-    sal_uLong nMarkCount = rMarkList.GetMarkCount();
-    SdrObject* pSingleSelectedObj = NULL;
-    if ( nMarkCount > 0 )
-        pSingleSelectedObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+    SdrObject* pSingleSelectedObj = pView->getSelectedIfSingle();
 
     switch ( nSlot )
     {
@@ -184,7 +177,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                     //=====
                 }
 
-                if( pView->AreObjectsMarked() )
+                if( pView->areSdrObjectsSelected() )
                     pView->SetAttrToMarked( *rReq.GetArgs(), sal_False );
                 else
                     pView->SetDefaultAttr( *rReq.GetArgs(), sal_False);
@@ -216,18 +209,22 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
             break;
 
         case SID_OPEN_HYPERLINK:
-            if ( nMarkCount == 1 )
+            if ( pSingleSelectedObj )
             {
-                SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-                if ( pObj->IsGroupObject() )
+                if ( pSingleSelectedObj->GetSubList() )
                 {
-                    SdrPageView* pPV = 0;
                     SdrObject* pHit = 0;
-                    if ( pView->PickObj( pWin->PixelToLogic( pViewData->GetMousePosPixel() ), pView->getHitTolLog(), pHit, pPV, SDRSEARCH_DEEP ) )
-                        pObj = pHit;
+                    const basegfx::B2DPoint aPixelPos(pViewData->GetMousePosPixel().X(), pViewData->GetMousePosPixel().Y())
+                    const basegfx::B2DPoint aLogicHitPos(pWin->GetInverseViewTransformation() * aPixelPos);
+
+                    if ( pView->PickObj( aLogicHitPos, pView->getHitTolLog(), pHit, SDRSEARCH_DEEP ) )
+                    {
+                        pSingleSelectedObj = pHit;
+                    }
                 }
 
-                ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj );
+                ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pSingleSelectedObj );
+
                 if ( pInfo && (pInfo->GetHlink().getLength() > 0) )
                     ScGlobal::OpenURL( pInfo->GetHlink(), String::EmptyString() );
             }
@@ -236,16 +233,17 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 
         case SID_ATTR_TRANSFORM:
             {
-                if ( pView->AreObjectsMarked() )
+                if ( pView->areSdrObjectsSelected() )
                 {
                     const SfxItemSet* pArgs = rReq.GetArgs();
 
                     if( !pArgs )
                     {
-                        // const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-                        if( rMarkList.GetMark(0) != 0 )
+                        const SdrObject* pObj = pView->getSelectedIfSingle();
+
+                        if( pObj )
                         {
-                            SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+
                             if( pObj->GetObjIdentifier() == OBJ_CAPTION )
                             {
                                 // --------- Itemset fuer Caption --------
@@ -295,11 +293,11 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                                 }
                             }
                         }
-
-
                     }
                     else
+                    {
                         pView->SetGeoAttrToMarked( *pArgs );
+                    }
                 }
             }
             break;
@@ -346,11 +344,11 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
             if ( pMacro )
                 sMacro = pMacro->GetMacName();
 
-            if ( pObj->IsGroupObject() )
+            if ( pObj->getChildrenOfSdrObject() )
             {
-                SdrObjList* pOL = pObj->GetSubList();
-                sal_uLong nObj = pOL->GetObjCount();
-                for ( sal_uLong index=0; index<nObj; ++index )
+                SdrObjList* pOL = pObj->getChildrenOfSdrObject();
+                const sal_uInt32 nObj = pOL->GetObjCount();
+                for ( sal_uInt32 index=0; index<nObj; ++index )
                 {
                     pInfo = ScDrawLayer::GetMacroInfo( pOL->GetObj(index), sal_True );
                     pInfo->SetMacro( sMacro );
@@ -369,15 +367,11 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
 void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
 {
     ScDrawView*         pView       = pViewData->GetScDrawView();
-    sal_Bool                bHasMarked  = pView->AreObjectsMarked();
-    const SdrObject*    pObj        = NULL;
-    const SdrMarkList&  rMarkList   = pView->GetMarkedObjectList();
-
-    if( rMarkList.GetMarkCount() == 1 )
-        pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+    const SdrObject*    pObj        = pView->getSelectedIfSingle();
+    sal_Bool            bHasMarked  = pView->areSdrObjectsSelected();
 
     SfxItemSet  aNewAttr( pView->GetDefaultAttr() );
-    if( bHasMarked )
+    if( pObj )
         pView->MergeAttrFromMarked( aNewAttr, sal_False );
 
 //CHINA001  SvxLineTabDialog* pDlg
@@ -394,6 +388,7 @@ void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
                 pObj,
                 bHasMarked);
         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+
     if ( nTabPage != 0xffff )
         pDlg->SetCurPageId( nTabPage );
 
@@ -414,7 +409,7 @@ void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
 void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
 {
     ScDrawView* pView       = pViewData->GetScDrawView();
-    sal_Bool        bHasMarked  = pView->AreObjectsMarked();
+    sal_Bool        bHasMarked  = pView->areSdrObjectsSelected();
 
     SfxItemSet  aNewAttr( pView->GetDefaultAttr() );
     if( bHasMarked )
@@ -461,7 +456,7 @@ void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
 void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq, sal_uInt16 /* nTabPage */ )
 {
     ScDrawView* pView       = pViewData->GetScDrawView();
-    sal_Bool        bHasMarked  = pView->AreObjectsMarked();
+    sal_Bool        bHasMarked  = pView->areSdrObjectsSelected();
     SfxItemSet  aNewAttr    ( pView->GetDefaultAttr() );
 
     if( bHasMarked )

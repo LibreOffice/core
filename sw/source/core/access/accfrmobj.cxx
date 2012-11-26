@@ -39,8 +39,8 @@
 #include <frmfmt.hxx>
 #include <fmtanchr.hxx>
 #include <dcontact.hxx>
-
 #include <vcl/window.hxx>
+#include <svx/svdlegacy.hxx>
 
 namespace css = ::com::sun::star;
 
@@ -103,18 +103,16 @@ SwAccessibleChild::SwAccessibleChild( const SwFrm* pFrm,
 void SwAccessibleChild::Init( const SdrObject* pDrawObj )
 {
     mpDrawObj = pDrawObj;
-    mpFrm = mpDrawObj && mpDrawObj->ISA(SwVirtFlyDrawObj)
-            ? static_cast < const SwVirtFlyDrawObj * >( mpDrawObj )->GetFlyFrm()
-            : 0;
+    const SwVirtFlyDrawObj* pSwVirtFlyDrawObj = dynamic_cast< const SwVirtFlyDrawObj* >(mpDrawObj);
+    mpFrm = pSwVirtFlyDrawObj ? pSwVirtFlyDrawObj->GetFlyFrm() : 0;
     mpWindow = 0;
 }
 
 void SwAccessibleChild::Init( const SwFrm* pFrm )
 {
     mpFrm = pFrm;
-    mpDrawObj = mpFrm && mpFrm->IsFlyFrm()
-                ? static_cast < const SwFlyFrm * >( mpFrm )->GetVirtDrawObj()
-                : 0;
+    const SwFlyFrm* pSwFlyFrm = dynamic_cast< const SwFlyFrm* >(mpFrm);
+    mpDrawObj = pSwFlyFrm ? pSwFlyFrm->GetVirtDrawObj() : 0;
     mpWindow = 0;
 }
 
@@ -279,7 +277,7 @@ SwRect SwAccessibleChild::GetBox( const SwAccessibleMap& rAccMap ) const
     }
     else if( mpDrawObj )
     {
-        aBox = SwRect( mpDrawObj->GetCurrentBoundRect() );
+        aBox = SwRect( sdr::legacy::GetBoundRect(*mpDrawObj) );
     }
     else if ( mpWindow )
     {
@@ -367,8 +365,8 @@ const SwFrm* SwAccessibleChild::GetParent( const sal_Bool bInPagePreview ) const
     }
     else if( mpDrawObj )
     {
-        const SwDrawContact *pContact =
-            static_cast< const SwDrawContact* >( GetUserCall( mpDrawObj ) );
+        // replace formally used 'GetUserCall()' by new notify/listener mechanism
+        const SwDrawContact* pContact = static_cast< const SwDrawContact* >(findConnectionToSdrObject(mpDrawObj));
         ASSERT( pContact, "sdr contact is missing" );
         if( pContact )
         {

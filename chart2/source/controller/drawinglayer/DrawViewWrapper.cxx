@@ -57,6 +57,7 @@
 
 #include <sfx2/objsh.hxx>
 #include <svx/helperhittest3d.hxx>
+#include <svx/svdlegacy.hxx>
 
 using namespace ::com::sun::star;
 
@@ -150,10 +151,10 @@ void lcl_initOutliner( SdrOutliner* pTargetOutliner, SdrOutliner* pSourceOutline
 }
 */
 
-DrawViewWrapper::DrawViewWrapper( SdrModel* pSdrModel, OutputDevice* pOut, bool bPaintPageForEditMode)
-            : E3dView(pSdrModel, pOut)
+DrawViewWrapper::DrawViewWrapper( SdrModel& rSdrModel, OutputDevice* pOut, bool bPaintPageForEditMode)
+            : E3dView(rSdrModel, pOut)
             , m_pMarkHandleProvider(NULL)
-            , m_apOutliner( SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, pSdrModel ) )
+            , m_apOutliner( SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, &rSdrModel ) )
             , m_bRestoreMapMode( false )
 {
     // #114898#
@@ -190,25 +191,22 @@ void DrawViewWrapper::ReInit()
     if(pOutDev)
         aOutputSize = pOutDev->GetOutputSize();
 
-    bPageVisible = false;
-    bPageBorderVisible = false;
-    bBordVisible = false;
-    bGridVisible = false;
-    bHlplVisible = false;
+    SetPageVisible(false);
+    SetPageBorderVisible(false);
+    SetBordVisible(false);
+    SetGridVisible(false);
+    SetHlplVisible(false);
 
     this->SetNoDragXorPolys(true);//for interactive 3D resize-dragging: paint only a single rectangle (not a simulated 3D object)
     //this->SetResizeAtCenter(true);//for interactive resize-dragging: keep the object center fix
 
     //a correct work area is at least necessary for correct values in the position and  size dialog
-    Rectangle aRect(Point(0,0), aOutputSize);
-    this->SetWorkArea(aRect);
-
-    this->ShowSdrPage(this->GetModel()->GetPage(0));
+    this->SetWorkArea(basegfx::B2DRange(0.0, 0.0, aOutputSize.Width(), aOutputSize.Height()));
+    this->ShowSdrPage(*this->getSdrModelFromSdrView().GetPage(0));
 }
 
 DrawViewWrapper::~DrawViewWrapper()
 {
-    aComeBackTimer.Stop();//@todo this should be done in destructor of base class
     UnmarkAllObj();//necessary to aavoid a paint call during the destructor hierarchy
 }
 
@@ -221,20 +219,18 @@ SdrPageView* DrawViewWrapper::GetPageView() const
 //virtual
 void DrawViewWrapper::SetMarkHandles()
 {
-    if( m_pMarkHandleProvider && m_pMarkHandleProvider->getMarkHandles( aHdl ) )
+    if( m_pMarkHandleProvider && m_pMarkHandleProvider->getMarkHandles( maViewHandleList ) )
         return;
     else
         SdrView::SetMarkHandles();
 }
 
-SdrObject* DrawViewWrapper::getHitObject( const Point& rPnt ) const
+SdrObject* DrawViewWrapper::getHitObject( const basegfx::B2DPoint& rPnt ) const
 {
     SdrObject* pRet = NULL;
     //sal_uLong nOptions =SDRSEARCH_DEEP|SDRSEARCH_PASS2BOUND|SDRSEARCH_PASS3NEAREST;
     sal_uLong nOptions = SDRSEARCH_DEEP | SDRSEARCH_TESTMARKABLE;
-
-    SdrPageView* pSdrPageView = this->GetPageView();
-    this->SdrView::PickObj(rPnt, lcl_getHitTolerance( this->GetFirstOutputDevice() ), pRet, pSdrPageView, nOptions);
+    this->SdrView::PickObj(rPnt, lcl_getHitTolerance( this->GetFirstOutputDevice() ), pRet, nOptions);
 
     if( pRet )
     {
@@ -256,8 +252,7 @@ SdrObject* DrawViewWrapper::getHitObject( const Point& rPnt ) const
             {
                 // prepare result vector and call helper
                 ::std::vector< const E3dCompoundObject* > aHitList;
-                const basegfx::B2DPoint aHitPoint(rPnt.X(), rPnt.Y());
-                getAllHit3DObjectsSortedFrontToBack(aHitPoint, *pScene, aHitList);
+                getAllHit3DObjectsSortedFrontToBack(rPnt, *pScene, aHitList);
 
                 if(aHitList.size())
                 {
@@ -278,9 +273,8 @@ void DrawViewWrapper::MarkObject( SdrObject* pObj )
     if( m_pMarkHandleProvider )
         bFrameDragSingles = m_pMarkHandleProvider->getFrameDragSingles();
 
-    this->SetFrameDragSingles(bFrameDragSingles);//decide wether each single object should get handles
-    this->SdrView::MarkObj( pObj, this->GetPageView() );
-    this->showMarkHandles();
+    this->SetFrameHandles(bFrameDragSingles);//decide wether each single object should get handles
+    this->SdrView::MarkObj( *pObj );
 }
 
 
@@ -297,21 +291,9 @@ void DrawViewWrapper::CompleteRedraw(OutputDevice* pOut, const Region& rReg, sdr
     this->E3dView::CompleteRedraw( pOut, rReg );
 }
 
-SdrObject* DrawViewWrapper::getSelectedObject() const
-{
-    SdrObject* pObj(NULL);
-    const SdrMarkList& rMarkList = this->GetMarkedObjectList();
-    if(rMarkList.GetMarkCount() == 1)
-    {
-        SdrMark* pMark = rMarkList.GetMark(0);
-        pObj = pMark->GetMarkedSdrObj();
-    }
-    return pObj;
-}
-
 SdrObject* DrawViewWrapper::getTextEditObject() const
 {
-    SdrObject* pObj = this->getSelectedObject();
+    SdrObject* pObj = this->getSelectedIfSingle();
     SdrObject* pTextObj = NULL;
     if( pObj && pObj->HasTextEdit())
         pTextObj = (SdrTextObj*)pObj;
@@ -336,7 +318,7 @@ SdrOutliner* DrawViewWrapper::getOutliner() const
 
 SfxItemSet DrawViewWrapper::getPositionAndSizeItemSetFromMarkedObject() const
 {
-    SfxItemSet aFullSet( GetModel()->GetItemPool(),
+    SfxItemSet aFullSet( getSdrModelFromSdrView().GetItemPool(),
                     SID_ATTR_TRANSFORM_POS_X,SID_ATTR_TRANSFORM_ANGLE,
                     SID_ATTR_TRANSFORM_PROTECT_POS,SID_ATTR_TRANSFORM_AUTOHEIGHT,
                     SDRATTR_ECKENRADIUS,SDRATTR_ECKENRADIUS,
@@ -355,17 +337,16 @@ SdrObject* DrawViewWrapper::getNamedSdrObject( const rtl::OUString& rName ) cons
     SdrPageView* pSdrPageView = this->GetPageView();
     if( pSdrPageView )
     {
-        return DrawModelWrapper::getNamedSdrObject( rName, pSdrPageView->GetObjList() );
+        return DrawModelWrapper::getNamedSdrObject( rName, pSdrPageView->GetCurrentObjectList() );
     }
     return 0;
 }
 
-bool DrawViewWrapper::IsObjectHit( SdrObject* pObj, const Point& rPnt ) const
+bool DrawViewWrapper::IsObjectHit( SdrObject* pObj, const basegfx::B2DPoint& rPnt ) const
 {
     if(pObj)
     {
-        Rectangle aRect(pObj->GetCurrentBoundRect());
-        return aRect.IsInside(rPnt);
+        return pObj->getObjectRange(this).isInside(rPnt);
     }
     return false;
 }
@@ -373,25 +354,24 @@ bool DrawViewWrapper::IsObjectHit( SdrObject* pObj, const Point& rPnt ) const
 void DrawViewWrapper::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     //prevent wrong reselection of objects
-    SdrModel* pSdrModel( this->GetModel() );
-    if( pSdrModel && pSdrModel->isLocked() )
+    if( getSdrModelFromSdrView().isLocked() )
         return;
 
-    const SdrHint* pSdrHint = dynamic_cast< const SdrHint* >( &rHint );
+    const SdrBaseHint* pSdrHint = dynamic_cast< const SdrBaseHint* >( &rHint );
 
     //#i76053# do nothing when only changes on the hidden draw page were made ( e.g. when the symbols for the dialogs are created )
     SdrPageView* pSdrPageView = this->GetPageView();
     if( pSdrHint && pSdrPageView )
     {
-        if( pSdrPageView->GetPage() != pSdrHint->GetPage() )
+        if( &pSdrPageView->getSdrPageFromSdrPageView() != pSdrHint->GetSdrHintPage() )
             return;
     }
 
     E3dView::Notify(rBC, rHint);
 
-    if( pSdrHint != 0 )
+    if( pSdrHint )
     {
-        SdrHintKind eKind = pSdrHint->GetKind();
+        SdrHintKind eKind = pSdrHint->GetSdrHintKind();
         if( eKind == HINT_BEGEDIT )
         {
             // #i79965# remember map mode

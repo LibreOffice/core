@@ -621,7 +621,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, sal_Boo
 // Pasten von FORMAT_FILE-Items
 //  wird nicht direkt aus Drop aufgerufen, sondern asynchron -> Dialoge sind erlaubt
 
-sal_Bool ScViewFunc::PasteFile( const Point& rPos, const String& rFile, sal_Bool bLink )
+sal_Bool ScViewFunc::PasteFile( const basegfx::B2DPoint& rPos, const String& rFile, sal_Bool bLink )
 {
     INetURLObject aURL;
     aURL.SetSmartURL( rFile );
@@ -691,7 +691,7 @@ sal_Bool ScViewFunc::PasteFile( const Point& rPos, const String& rFile, sal_Bool
 
     if (bLink)                      // bei bLink alles, was nicht Grafik ist, als URL
     {
-        Rectangle aRect( rPos, Size(0,0) );
+        const Rectangle aRect(Point(basegfx::fround(rPos.getX()), basegfx::fround(rPos.getY())), Size(0,0));
         ScRange aRange = GetViewData()->GetDocument()->
                             GetRange( GetViewData()->GetTabNo(), aRect );
         SCCOL nPosX = aRange.aStart.Col();
@@ -719,7 +719,6 @@ sal_Bool ScViewFunc::PasteFile( const Point& rPos, const String& rFile, sal_Bool
             return PasteObject( rPos, xObj );
 
         // #105851# If an OLE object can't be created, insert a URL button
-
         GetViewData()->GetViewShell()->InsertURLButton( aStrURL, aStrURL, EMPTY_STRING, &rPos );
         return sal_True;
     }
@@ -822,15 +821,14 @@ sal_Bool ScViewFunc::HasBookmarkAtCursor( SvxHyperlinkItem* pContent )
                 const SvxFieldItem* pFieldItem = pData->GetField();
                 if (pFieldItem)
                 {
-                    const SvxFieldData* pField = pFieldItem->GetField();
-                    if ( pField && pField->ISA(SvxURLField) )
+                    const SvxURLField* pField = dynamic_cast< const SvxURLField* >(pFieldItem->GetField());
+                    if ( pField )
                     {
                         if (pContent)
                         {
-                            const SvxURLField* pURLField = (const SvxURLField*)pField;
-                            pContent->SetName( pURLField->GetRepresentation() );
-                            pContent->SetURL( pURLField->GetURL() );
-                            pContent->SetTargetFrame( pURLField->GetTargetFrame() );
+                            pContent->SetName( pField->GetRepresentation() );
+                            pContent->SetURL( pField->GetURL() );
+                            pContent->SetTargetFrame( pField->GetTargetFrame() );
                         }
                         return sal_True;
                     }

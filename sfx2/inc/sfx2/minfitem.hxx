@@ -38,7 +38,9 @@ class SFX2_DLLPUBLIC SfxMacroInfoItem: public SfxPoolItem
     String                  aCommentText;
 
 public:
-    TYPEINFO();
+    POOLITEM_FACTORY()
+
+    SfxMacroInfoItem() : SfxPoolItem( 0 ), pBasicManager(0) {}
     SfxMacroInfoItem( sal_uInt16 nWhich,
                     const BasicManager* pMgr,
                     const String &rLibName,

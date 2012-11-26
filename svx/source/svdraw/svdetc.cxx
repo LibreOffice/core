@@ -27,12 +27,12 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <svx/svdetc.hxx>
-#include "svx/svditext.hxx"
+#include <editeng/editdata.hxx>
+#include <svx/svditext.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdtrans.hxx>
 #include "svx/svdglob.hxx"
 #include "svx/svdstr.hrc"
-#include "svx/svdviter.hxx"
 #include <svx/svdview.hxx>
 #include <svx/svdoutl.hxx>
 #include <vcl/bmpacc.hxx>
@@ -67,6 +67,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/sdrhittesthelper.hxx>
+#include <svx/svdlegacy.hxx>
 
 using namespace ::com::sun::star;
 
@@ -317,7 +318,7 @@ void UShortCont::Sort()
 
 class ImpClipMerk {
     Region aClip;
-    FASTBOOL   bClip;
+    bool   bClip;
 public:
     ImpClipMerk(const OutputDevice& rOut): aClip(rOut.GetClipRegion()),bClip(rOut.IsClipRegion()) {}
     void Restore(OutputDevice& rOut)
@@ -381,7 +382,7 @@ public:
     const Color& GetLineColor() const { return aLineColor; }
 };
 
-ImpSdrHdcMerk::ImpSdrHdcMerk(const OutputDevice& rOut, sal_uInt16 nNewMode, FASTBOOL bAutoMerk):
+ImpSdrHdcMerk::ImpSdrHdcMerk(const OutputDevice& rOut, sal_uInt16 nNewMode, bool bAutoMerk):
     pFarbMerk(NULL),
     pClipMerk(NULL),
     pLineColorMerk(NULL),
@@ -494,10 +495,10 @@ void SdrLinkList::RemoveLink(const Link& rLink)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // #98988# Re-implement GetDraftFillColor(...)
 
-FASTBOOL GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
+bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
 {
     XFillStyle eFill=((XFillStyleItem&)rSet.Get(XATTR_FILLSTYLE)).GetValue();
-    FASTBOOL bRetval(sal_False);
+    bool bRetval(sal_False);
 
     switch(eFill)
     {
@@ -690,11 +691,11 @@ String GetResourceString(sal_uInt16 nResID)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-sal_Bool SearchOutlinerItems(const SfxItemSet& rSet, sal_Bool bInklDefaults, sal_Bool* pbOnlyEE)
+bool SearchOutlinerItems(const SfxItemSet& rSet, bool bInklDefaults, bool* pbOnlyEE)
 {
-    sal_Bool bHas=sal_False;
-    sal_Bool bOnly=sal_True;
-    sal_Bool bLookOnly=pbOnlyEE!=NULL;
+    bool bHas=false;
+    bool bOnly=true;
+    bool bLookOnly=pbOnlyEE!=NULL;
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich=aIter.FirstWhich();
     while (((bLookOnly && bOnly) || !bHas) && nWhich!=0) {
@@ -703,12 +704,12 @@ sal_Bool SearchOutlinerItems(const SfxItemSet& rSet, sal_Bool bInklDefaults, sal
         // Disabled und DontCare wird als Loch im Which-Range betrachtet
         SfxItemState eState=rSet.GetItemState(nWhich);
         if ((eState==SFX_ITEM_DEFAULT && bInklDefaults) || eState==SFX_ITEM_SET) {
-            if (nWhich<EE_ITEMS_START || nWhich>EE_ITEMS_END) bOnly=sal_False;
-            else bHas=sal_True;
+            if (nWhich<EE_ITEMS_START || nWhich>EE_ITEMS_END) bOnly=false;
+            else bHas=true;
         }
         nWhich=aIter.NextWhich();
     }
-    if (!bHas) bOnly=sal_False;
+    if (!bHas) bOnly=false;
     if (pbOnlyEE!=NULL) *pbOnlyEE=bOnly;
     return bHas;
 }
@@ -861,27 +862,24 @@ namespace
 {
     bool impGetSdrObjListFillColor(
         const SdrObjList& rList,
-        const Point& rPnt,
-        const SdrPageView& rTextEditPV,
-        const SetOfByte& rVisLayers,
+        const basegfx::B2DPoint& rPnt,
+        const SdrView& rTextEditView,
         Color& rCol)
     {
-        if(!rList.GetModel())
-            return false;
-
         bool bRet(false);
-        bool bMaster(rList.GetPage() ? rList.GetPage()->IsMasterPage() : false);
+        SdrPage* pOwningPage = rList.getSdrPageFromSdrObjList();
+        bool bMaster(pOwningPage ? pOwningPage->IsMasterPage() : false);
 
         for(sal_uIntPtr no(rList.GetObjCount()); !bRet && no > 0; )
         {
             no--;
             SdrObject* pObj = rList.GetObj(no);
-            SdrObjList* pOL = pObj->GetSubList();
+            SdrObjList* pOL = pObj->getChildrenOfSdrObject();
 
             if(pOL)
             {
                 // group object
-                bRet = impGetSdrObjListFillColor(*pOL, rPnt, rTextEditPV, rVisLayers, rCol);
+                bRet = impGetSdrObjListFillColor(*pOL, rPnt, rTextEditView, rCol);
             }
             else
             {
@@ -891,9 +889,9 @@ namespace
                 if(pText
                     && pObj->IsClosedObj()
                     && (!bMaster || (!pObj->IsNotVisibleAsMaster() && 0 != no))
-                    && pObj->GetCurrentBoundRect().IsInside(rPnt)
+                    && pObj->getObjectRange(&rTextEditView).isInside(rPnt)
                     && !pText->IsHideContour()
-                    && SdrObjectPrimitiveHit(*pObj, rPnt, 0, rTextEditPV, &rVisLayers, false))
+                    && SdrObjectPrimitiveHit(*pObj, rPnt, 0.0, rTextEditView, false, 0))
                 {
                     bRet = GetDraftFillColor(pObj->GetMergedItemSet(), rCol);
                 }
@@ -905,23 +903,17 @@ namespace
 
     bool impGetSdrPageFillColor(
         const SdrPage& rPage,
-        const Point& rPnt,
-        const SdrPageView& rTextEditPV,
-        const SetOfByte& rVisLayers,
+        const basegfx::B2DPoint& rPnt,
+        const SdrView& rTextEditView,
         Color& rCol,
         bool bSkipBackgroundShape)
     {
-        if(!rPage.GetModel())
-            return false;
-
-        bool bRet(impGetSdrObjListFillColor(rPage, rPnt, rTextEditPV, rVisLayers, rCol));
+        bool bRet(impGetSdrObjListFillColor(rPage, rPnt, rTextEditView, rCol));
 
         if(!bRet && !rPage.IsMasterPage())
         {
             if(rPage.TRG_HasMasterPage())
             {
-                SetOfByte aSet(rVisLayers);
-                aSet &= rPage.TRG_GetMasterPageVisibleLayers();
                 SdrPage& rMasterPage = rPage.TRG_GetMasterPage();
 
                 // #108867# Don't fall back to background shape on
@@ -930,7 +922,7 @@ namespace
                 // the silly ordering: 1. shapes, 2. master page
                 // shapes, 3. page background, 4. master page
                 // background.
-                bRet = impGetSdrPageFillColor(rMasterPage, rPnt, rTextEditPV, aSet, rCol, true);
+                bRet = impGetSdrPageFillColor(rMasterPage, rPnt, rTextEditView, rCol, true);
             }
         }
 
@@ -945,8 +937,8 @@ namespace
     }
 
     Color impCalcBackgroundColor(
-        const Rectangle& rArea,
-        const SdrPageView& rTextEditPV,
+        const basegfx::B2DRange& rArea,
+        const SdrView& rTextEditView,
         const SdrPage& rPage)
     {
         svtools::ColorConfig aColorConfig;
@@ -956,17 +948,17 @@ namespace
         if(!rStyleSettings.GetHighContrastMode())
         {
             // search in page
-            const sal_uInt16 SPOTCOUNT(5);
-            Point aSpotPos[SPOTCOUNT];
+            const sal_uInt32 SPOTCOUNT(5);
+            basegfx::B2DPoint aSpotPos[SPOTCOUNT];
             Color aSpotColor[SPOTCOUNT];
-            sal_uIntPtr nHeight( rArea.GetSize().Height() );
-            sal_uIntPtr nWidth( rArea.GetSize().Width() );
-            sal_uIntPtr nWidth14  = nWidth / 4;
-            sal_uIntPtr nHeight14 = nHeight / 4;
-            sal_uIntPtr nWidth34  = ( 3 * nWidth ) / 4;
-            sal_uIntPtr nHeight34 = ( 3 * nHeight ) / 4;
+            const double fHeight( rArea.getHeight() );
+            const double fWidth( rArea.getWidth() );
+            const double fWidth14( fWidth / 4.0 );
+            const double fHeight14( fHeight / 4.0);
+            const double fWidth34(( 3.0 / 4.0) * fWidth );
+            const double fHeight34(( 3.0 / 4.0) * fHeight );
 
-            sal_uInt16 i;
+            sal_uInt32 i;
             for ( i = 0; i < SPOTCOUNT; i++ )
             {
                 // five spots are used
@@ -975,60 +967,52 @@ namespace
                     case 0 :
                     {
                         // Center-Spot
-                        aSpotPos[i] = rArea.Center();
+                        aSpotPos[i] = rArea.getCenter();
                     }
                     break;
 
                     case 1 :
                     {
                         // TopLeft-Spot
-                        aSpotPos[i] = rArea.TopLeft();
-                        aSpotPos[i].X() += nWidth14;
-                        aSpotPos[i].Y() += nHeight14;
+                        aSpotPos[i] = rArea.getMinimum() + basegfx::B2DPoint(fWidth14, fHeight14);
                     }
                     break;
 
                     case 2 :
                     {
                         // TopRight-Spot
-                        aSpotPos[i] = rArea.TopLeft();
-                        aSpotPos[i].X() += nWidth34;
-                        aSpotPos[i].Y() += nHeight14;
+                        aSpotPos[i] = rArea.getMinimum() + basegfx::B2DPoint(fWidth34, fHeight14);
                     }
                     break;
 
                     case 3 :
                     {
                         // BottomLeft-Spot
-                        aSpotPos[i] = rArea.TopLeft();
-                        aSpotPos[i].X() += nWidth14;
-                        aSpotPos[i].Y() += nHeight34;
+                        aSpotPos[i] = rArea.getMinimum() + basegfx::B2DPoint(fWidth14, fHeight34);
                     }
                     break;
 
                     case 4 :
                     {
                         // BottomRight-Spot
-                        aSpotPos[i] = rArea.TopLeft();
-                        aSpotPos[i].X() += nWidth34;
-                        aSpotPos[i].Y() += nHeight34;
+                        aSpotPos[i] = rArea.getMinimum() + basegfx::B2DPoint(fWidth34, fHeight34);
                     }
                     break;
 
                 }
 
                 aSpotColor[i] = Color( COL_WHITE );
-                impGetSdrPageFillColor(rPage, aSpotPos[i], rTextEditPV, rTextEditPV.GetVisibleLayers(), aSpotColor[i], false);
+                impGetSdrPageFillColor(rPage, aSpotPos[i], rTextEditView, aSpotColor[i], false);
             }
 
-            sal_uInt16 aMatch[SPOTCOUNT];
+            sal_uInt32 aMatch[SPOTCOUNT];
 
             for ( i = 0; i < SPOTCOUNT; i++ )
             {
                 // were same spot colors found?
                 aMatch[i] = 0;
 
-                for ( sal_uInt16 j = 0; j < SPOTCOUNT; j++ )
+                for ( sal_uInt32 j = 0; j < SPOTCOUNT; j++ )
                 {
                     if( j != i )
                     {
@@ -1043,7 +1027,7 @@ namespace
             // highest weight to center spot
             aBackground = aSpotColor[0];
 
-            for ( sal_uInt16 nMatchCount = SPOTCOUNT - 1; nMatchCount > 1; nMatchCount-- )
+            for ( sal_uInt32 nMatchCount = SPOTCOUNT - 1; nMatchCount > 1; nMatchCount-- )
             {
                 // which spot color was found most?
                 for ( i = 0; i < SPOTCOUNT; i++ )
@@ -1086,20 +1070,13 @@ Color GetTextEditBackgroundColor(const SdrObjEditView& rView)
 
         if(!bFound && pText)
         {
-            SdrPageView* pTextEditPV = rView.GetTextEditPageView();
-
-            if(pTextEditPV)
-            {
-                Point aPvOfs(pText->GetTextEditOffset());
-                const SdrPage* pPg = pTextEditPV->GetPage();
-
-                if(pPg)
+            if(rView.GetSdrPageView())
                 {
-                    Rectangle aSnapRect( pText->GetSnapRect() );
-                    aSnapRect.Move(aPvOfs.X(), aPvOfs.Y());
+                const SdrPage& rPg = rView.GetSdrPageView()->getSdrPageFromSdrPageView();
+                basegfx::B2DRange aSnapRange( sdr::legacy::GetSnapRange(*pText) );
 
-                    return impCalcBackgroundColor(aSnapRect, *pTextEditPV, *pPg);
-                }
+                aSnapRange.transform(basegfx::tools::createTranslateB2DHomMatrix(pText->GetTextEditOffset()));
+                return impCalcBackgroundColor(aSnapRange, (SdrView&)rView, rPg);
             }
         }
     }

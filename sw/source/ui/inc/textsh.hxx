@@ -41,7 +41,6 @@ class SwTextShell: public SwBaseShell
 
 public:
     SFX_DECL_INTERFACE(SW_TEXTSHELL)
-    TYPEINFO();
 
 //CHINA001  DECL_LINK( PostItNextHdl, Button * );
 //CHINA001  DECL_LINK( PostItPrevHdl, Button * );

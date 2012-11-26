@@ -1758,7 +1758,7 @@ sal_Bool SwDoc::InsertCol( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, sal_Bool b
         return sal_False;
 
     SwTable& rTbl = pTblNd->GetTable();
-    if( rTbl.ISA( SwDDETable ))
+    if( dynamic_cast< SwDDETable* >(&rTbl))
         return sal_False;
 
 #ifdef DEL_TABLE_REDLINES
@@ -1825,7 +1825,7 @@ sal_Bool SwDoc::InsertRow( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, sal_Bool b
         return sal_False;
 
     SwTable& rTbl = pTblNd->GetTable();
-    if( rTbl.ISA( SwDDETable ))
+    if( dynamic_cast< SwDDETable* >(&rTbl))
         return sal_False;
 
 #ifdef DEL_TABLE_REDLINES
@@ -1890,7 +1890,7 @@ sal_Bool SwDoc::DeleteRow( const SwCursor& rCursor )
     {
         SwTableNode* pTblNd = rCursor.GetNode()->FindTableNode();
 
-        if( pTblNd->GetTable().ISA( SwDDETable ))
+        if( dynamic_cast< SwDDETable* >(&pTblNd->GetTable()))
             return sal_False;
 
         // suche alle Boxen / Lines
@@ -2017,7 +2017,7 @@ sal_Bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
     if( !pTblNd )
         return sal_False;
 
-    if( pTblNd->GetTable().ISA( SwDDETable ))
+    if( dynamic_cast< SwDDETable* >(&pTblNd->GetTable()))
         return sal_False;
 
     ::ClearFEShellTabCols();
@@ -2237,7 +2237,7 @@ sal_Bool SwDoc::SplitTbl( const SwSelBoxes& rBoxes, sal_Bool bVert, sal_uInt16 n
         return sal_False;
 
     SwTable& rTbl = pTblNd->GetTable();
-    if( rTbl.ISA( SwDDETable ))
+    if( dynamic_cast< SwDDETable* >(&rTbl))
         return sal_False;
 
 #ifdef DEL_TABLE_REDLINES
@@ -2309,7 +2309,7 @@ sal_uInt16 SwDoc::MergeTbl( SwPaM& rPam )
     if( !pTblNd )
         return TBLMERGE_NOSELECTION;
     SwTable& rTable = pTblNd->GetTable();
-    if( rTable.ISA(SwDDETable) )
+    if( dynamic_cast< SwDDETable* >(&rTable) )
         return TBLMERGE_NOSELECTION;
     sal_uInt16 nRet = TBLMERGE_NOSELECTION;
     if( !rTable.IsNewModel() )
@@ -2523,7 +2523,6 @@ void SwTableNode::DelFrms()
     while ( pFrm )
     {
         sal_Bool bAgain = sal_False;
-        {
             if ( !pFrm->IsFollow() )
             {
                 while ( pFrm->HasFollow() )
@@ -2548,7 +2547,6 @@ void SwTableNode::DelFrms()
                 delete pFrm;
                 bAgain = sal_True;
             }
-        }
         pFrm = bAgain ? aIter.First() : aIter.Next();
     }
 }
@@ -3217,7 +3215,7 @@ sal_Bool SwDoc::SplitTable( const SwPosition& rPos, sal_uInt16 eHdlnMode,
     if( !pTNd || pNd->IsTableNode() )
         return 0;
 
-    if( pTNd->GetTable().ISA( SwDDETable ))
+    if( dynamic_cast< SwDDETable* >(&pTNd->GetTable()))
         return sal_False;
 
     SwTable& rTbl = pTNd->GetTable();
@@ -3581,8 +3579,8 @@ sal_Bool SwDoc::MergeTable( const SwPosition& rPos, sal_Bool bWithPrev, sal_uInt
     if( !pDelTblNd )
         return sal_False;
 
-    if( pTblNd->GetTable().ISA( SwDDETable ) ||
-        pDelTblNd->GetTable().ISA( SwDDETable ))
+    if( dynamic_cast< SwDDETable* >(&pTblNd->GetTable()) ||
+        dynamic_cast< SwDDETable* >(&pDelTblNd->GetTable()))
         return sal_False;
 
     // MIB 9.7.97: HTML-Layout loeschen
@@ -4037,7 +4035,7 @@ sal_Bool SwDoc::SetColRowWidthHeight( SwTableBox& rAktBox, sal_uInt16 eType,
     SwTableNode* pTblNd = (SwTableNode*)rAktBox.GetSttNd()->FindTableNode();
     SwUndo* pUndo = 0;
 
-    if( nsTblChgWidthHeightType::WH_FLAG_INSDEL & eType && pTblNd->GetTable().ISA( SwDDETable ))
+    if( nsTblChgWidthHeightType::WH_FLAG_INSDEL & eType && dynamic_cast< SwDDETable* >(&pTblNd->GetTable()))
         return sal_False;
 
     SwTableFmlUpdate aMsgHnt( &pTblNd->GetTable() );

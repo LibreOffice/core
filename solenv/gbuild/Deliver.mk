@@ -74,8 +74,8 @@ endef
 # deliver.log format is broken in that case anyway
 .PHONY : deliverlog showdeliverables
 deliverlog:
-    $(eval $(call gb_Deliver_setdeliverlogcommand))
-    $(call gb_Helper_abbreviate_dirs, $(COMMAND))
+	$(eval $(call gb_Deliver_setdeliverlogcommand))
+	$(call gb_Helper_abbreviate_dirs, $(COMMAND))
 
 # all : deliverlog
 
@@ -84,8 +84,8 @@ $(info $(1) $(patsubst $(OUTDIR)/%,%,$(2)))
 endef
 
 showdeliverables :
-    $(eval MAKEFLAGS := s)
-    $(foreach deliverable,$(sort $(gb_Deliver_DELIVERABLES)),\
-            $(call gb_Deliver_print_deliverable,$(REPODIR)/$(firstword $(subst :, ,$(deliverable))),$(REPODIR)/$(lastword $(subst :, ,$(deliverable)))))
-    true
+	$(eval MAKEFLAGS := s)
+	$(foreach deliverable,$(sort $(gb_Deliver_DELIVERABLES)),\
+			$(call gb_Deliver_print_deliverable,$(REPODIR)/$(firstword $(subst :, ,$(deliverable))),$(REPODIR)/$(lastword $(subst :, ,$(deliverable)))))
+	true
 # vim: set noet sw=4 ts=4:

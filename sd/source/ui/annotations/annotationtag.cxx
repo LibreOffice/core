@@ -107,18 +107,18 @@ static OUString getInitials( const OUString& rName )
 class AnnotationDragMove : public SdrDragMove
 {
 public:
-    AnnotationDragMove(SdrDragView& rNewView, const rtl::Reference <AnnotationTag >& xTag);
+    AnnotationDragMove(SdrView& rNewView, const rtl::Reference <AnnotationTag >& xTag);
     virtual bool BeginSdrDrag();
     virtual bool EndSdrDrag(bool bCopy);
-    virtual void MoveSdrDrag(const Point& rNoSnapPnt);
+    virtual void MoveSdrDrag(const basegfx::B2DPoint& rNoSnapPnt);
     virtual void CancelSdrDrag();
 
 private:
     rtl::Reference <AnnotationTag > mxTag;
-    Point maOrigin;
+    basegfx::B2DPoint maOrigin;
 };
 
-AnnotationDragMove::AnnotationDragMove(SdrDragView& rNewView, const rtl::Reference <AnnotationTag >& xTag)
+AnnotationDragMove::AnnotationDragMove(SdrView& rNewView, const rtl::Reference <AnnotationTag >& xTag)
 : SdrDragMove(rNewView)
 , mxTag( xTag )
 {
@@ -126,28 +126,28 @@ AnnotationDragMove::AnnotationDragMove(SdrDragView& rNewView, const rtl::Referen
 
 bool AnnotationDragMove::BeginSdrDrag()
 {
-    DragStat().Ref1()=GetDragHdl()->GetPos();
+    DragStat().SetRef1(GetDragHdl()->getPosition());
     DragStat().SetShown(!DragStat().IsShown());
 
-    maOrigin = GetDragHdl()->GetPos();
-    DragStat().SetActionRect(Rectangle(maOrigin,maOrigin));
+    maOrigin = GetDragHdl()->getPosition();
+    DragStat().SetActionRange(basegfx::B2DRange(maOrigin));
 
     return true;
 }
 
-void AnnotationDragMove::MoveSdrDrag(const Point& rNoSnapPnt)
+void AnnotationDragMove::MoveSdrDrag(const basegfx::B2DPoint& rNoSnapPnt)
 {
-    Point aPnt(rNoSnapPnt);
-
     if (DragStat().CheckMinMoved(rNoSnapPnt))
     {
-        if (aPnt!=DragStat().GetNow())
+        basegfx::B2DPoint aPnt(rNoSnapPnt);
+
+        if(!aPnt.equal(DragStat().GetNow()))
         {
             Hide();
             DragStat().NextMove(aPnt);
-            GetDragHdl()->SetPos( maOrigin + Point( DragStat().GetDX(), DragStat().GetDY() ) );
+            GetDragHdl()->setPosition(maOrigin + (DragStat().GetNow() - DragStat().GetPrev()));
             Show();
-            DragStat().SetActionRect(Rectangle(aPnt,aPnt));
+            DragStat().SetActionRange(basegfx::B2DRange(aPnt));
         }
     }
 }
@@ -157,7 +157,7 @@ bool AnnotationDragMove::EndSdrDrag(bool /*bCopy*/)
     Hide();
     if( mxTag.is() )
         mxTag->Move( DragStat().GetDX(), DragStat().GetDY() );
-    return sal_True;
+    return true;
 }
 
 void AnnotationDragMove::CancelSdrDrag()
@@ -170,13 +170,18 @@ void AnnotationDragMove::CancelSdrDrag()
 class AnnotationHdl : public SmartHdl
 {
 public:
-    AnnotationHdl( const SmartTagReference& xTag, const Reference< XAnnotation >& xAnnotation, const Point& rPnt );
-    virtual ~AnnotationHdl();
-    virtual void CreateB2dIAObject();
-    virtual sal_Bool IsFocusHdl() const;
+    AnnotationHdl(
+        SdrHdlList& rHdlList,
+        const SmartTagReference& xTag,
+        const Reference< XAnnotation >& xAnnotation,
+        const basegfx::B2DPoint& rPnt );
+    virtual bool IsFocusHdl() const;
     virtual Pointer GetSdrDragPointer() const;
     virtual bool isMarkable() const;
 
+protected:
+    virtual void CreateB2dIAObject(::sdr::overlay::OverlayManager& rOverlayManager);
+    virtual ~AnnotationHdl();
 
 private:
     Reference< XAnnotation > mxAnnotation;
@@ -185,8 +190,12 @@ private:
 
 // --------------------------------------------------------------------
 
-AnnotationHdl::AnnotationHdl( const SmartTagReference& xTag, const Reference< XAnnotation >& xAnnotation, const Point& rPnt )
-: SmartHdl( xTag, rPnt )
+AnnotationHdl::AnnotationHdl(
+    SdrHdlList& rHdlList,
+    const SmartTagReference& xTag,
+    const Reference< XAnnotation >& xAnnotation,
+    const basegfx::B2DPoint& rPnt )
+: SmartHdl( rHdlList, 0, xTag, HDL_SMARTTAG, rPnt )
 , mxAnnotation( xAnnotation )
 , mxTag( dynamic_cast< AnnotationTag* >( xTag.get() ) )
 {
@@ -200,78 +209,42 @@ AnnotationHdl::~AnnotationHdl()
 
 // --------------------------------------------------------------------
 
-void AnnotationHdl::CreateB2dIAObject()
+void AnnotationHdl::CreateB2dIAObject(::sdr::overlay::OverlayManager& rOverlayManager)
 {
-    // first throw away old one
-    GetRidOfIAObject();
-
     if( mxAnnotation.is() )
     {
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-
-        const Point aTagPos( GetPos() );
-        basegfx::B2DPoint aPosition( aTagPos.X(), aTagPos.Y() );
-
-        const bool bFocused = IsFocusHdl() && pHdlList && (pHdlList->GetFocusHdl() == this);
+        const bool bFocused = IsFocusHdl() && (mrHdlList.GetFocusHdl() == this);
 
         BitmapEx aBitmapEx( mxTag->CreateAnnotationBitmap(mxTag->isSelected()) );
         BitmapEx aBitmapEx2;
         if( bFocused )
             aBitmapEx2 = mxTag->CreateAnnotationBitmap(!mxTag->isSelected() );
 
-        if(pHdlList)
+        ::sdr::overlay::OverlayObject* pOverlayObject = 0;
+
+        // animate focused handles
+        if(bFocused)
         {
-            SdrMarkView* pView = pHdlList->GetView();
+            const sal_uInt32 nBlinkTime = sal::static_int_cast<sal_uInt32>(rStyleSettings.GetCursorBlinkTime());
 
-            if(pView && !pView->areMarkHandlesHidden())
-            {
-                SdrPageView* pPageView = pView->GetSdrPageView();
-
-                if(pPageView)
-                {
-                    for(sal_uInt32 b = 0; b < pPageView->PageWindowCount(); b++)
-                    {
-                        // const SdrPageViewWinRec& rPageViewWinRec = rPageViewWinList[b];
-                        const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
-
-                        SdrPaintWindow& rPaintWindow = rPageWindow.GetPaintWindow();
-                        if(rPaintWindow.OutputToWindow() && rPageWindow.GetOverlayManager() )
-                        {
-                            ::sdr::overlay::OverlayObject* pOverlayObject = 0;
-
-                            // animate focused handles
-                            if(bFocused)
-                            {
-                                const sal_uInt32 nBlinkTime = sal::static_int_cast<sal_uInt32>(rStyleSettings.GetCursorBlinkTime());
-
-                                pOverlayObject = new ::sdr::overlay::OverlayAnimatedBitmapEx(aPosition, aBitmapEx, aBitmapEx2, nBlinkTime, 0, 0, 0, 0 );
-/*
-                                    (sal_uInt16)(aBitmapEx.GetSizePixel().Width() - 1) >> 1,
-                                    (sal_uInt16)(aBitmapEx.GetSizePixel().Height() - 1) >> 1,
-                                    (sal_uInt16)(aBitmapEx2.GetSizePixel().Width() - 1) >> 1,
-                                    (sal_uInt16)(aBitmapEx2.GetSizePixel().Height() - 1) >> 1);
-*/
-                            }
-                            else
-                            {
-                                pOverlayObject = new ::sdr::overlay::OverlayBitmapEx( aPosition, aBitmapEx, 0, 0 );
-                            }
-
-                            rPageWindow.GetOverlayManager()->add(*pOverlayObject);
-                            maOverlayGroup.append(*pOverlayObject);
-                        }
-                    }
-                }
-            }
+            pOverlayObject = new ::sdr::overlay::OverlayAnimatedBitmapEx(getPosition(), aBitmapEx, aBitmapEx2, nBlinkTime, 0, 0, 0, 0 );
         }
+        else
+        {
+            pOverlayObject = new ::sdr::overlay::OverlayBitmapEx( getPosition(), aBitmapEx, 0, 0 );
+        }
+
+        rOverlayManager.add(*pOverlayObject);
+        maOverlayGroup.append(*pOverlayObject);
     }
 }
 
 // --------------------------------------------------------------------
 
-sal_Bool AnnotationHdl::IsFocusHdl() const
+bool AnnotationHdl::IsFocusHdl() const
 {
-    return sal_True;
+    return true;
 }
 
 // --------------------------------------------------------------------
@@ -350,7 +323,7 @@ bool AnnotationTag::MouseButtonDown( const MouseEvent& rMEvt, SmartHdl& /*rHdl*/
         Window* pWindow = mrView.GetViewShell()->GetActiveWindow();
         if( pWindow )
         {
-            maMouseDownPos = pWindow->PixelToLogic( rMEvt.GetPosPixel() );
+            maMouseDownPos = pWindow->GetInverseViewTransformation() * basegfx::B2DPoint(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
 
             if( mpListenWindow )
                 mpListenWindow->RemoveEventListener( LINK(this, AnnotationTag, WindowEventHandler));
@@ -464,7 +437,7 @@ void AnnotationTag::Move( int nDX, int nDY )
         if( mrManager.GetDoc()->IsUndoEnabled() )
             mrManager.GetDoc()->EndUndo();
 
-        mrView.updateHandles();
+        mrView.SetMarkHandles();
     }
 }
 
@@ -513,32 +486,30 @@ void AnnotationTag::CheckPossibilities()
 
 // --------------------------------------------------------------------
 
-sal_uLong AnnotationTag::GetMarkablePointCount() const
+sal_uInt32 AnnotationTag::GetMarkablePointCount() const
 {
     return 0;
 }
 
 // --------------------------------------------------------------------
 
-sal_uLong AnnotationTag::GetMarkedPointCount() const
+sal_uInt32 AnnotationTag::GetMarkedPointCount() const
 {
     return 0;
 }
 
 // --------------------------------------------------------------------
 
-sal_Bool AnnotationTag::MarkPoint(SdrHdl& /*rHdl*/, sal_Bool /*bUnmark*/ )
+bool AnnotationTag::MarkPoint(SdrHdl& /*rHdl*/, bool /*bUnmark*/ )
 {
-    sal_Bool bRet=sal_False;
-    return bRet;
+    return false;
 }
 
 // --------------------------------------------------------------------
 
-sal_Bool AnnotationTag::MarkPoints(const Rectangle* /*pRect*/, sal_Bool /*bUnmark*/ )
+bool AnnotationTag::MarkPoints(const basegfx::B2DRange* /*pRange*/, bool /*bUnmark*/ )
 {
-    sal_Bool bChgd=sal_False;
-    return bChgd;
+    return false;
 }
 
 // --------------------------------------------------------------------
@@ -555,16 +526,11 @@ void AnnotationTag::addCustomHandles( SdrHdlList& rHandlerList )
     if( mxAnnotation.is() )
     {
         SmartTagReference xThis( this );
-        Point aPoint;
-        AnnotationHdl* pHdl = new AnnotationHdl( xThis, mxAnnotation, aPoint );
+        const RealPoint2D aPosition( mxAnnotation->getPosition() );
+        const basegfx::B2DPoint aB2DPosition(aPosition.X * 100.0, aPosition.Y * 100.0);
+        AnnotationHdl* pHdl = new AnnotationHdl(rHandlerList, xThis, mxAnnotation, aB2DPosition);
+
         pHdl->SetObjHdlNum( SMART_TAG_HDL_NUM );
-        pHdl->SetPageView( mrView.GetSdrPageView() );
-
-        RealPoint2D aPosition( mxAnnotation->getPosition() );
-        Point aBasePos( static_cast<long>(aPosition.X * 100.0), static_cast<long>(aPosition.Y * 100.0) );
-        pHdl->SetPos( aBasePos );
-
-        rHandlerList.AddHdl( pHdl );
     }
 }
 
@@ -599,11 +565,13 @@ void AnnotationTag::select()
     Window* pWindow = mrView.GetViewShell()->GetActiveWindow();
     if( pWindow )
     {
-        RealPoint2D aPosition( mxAnnotation->getPosition() );
-        Point aPos( static_cast<long>(aPosition.X * 100.0), static_cast<long>(aPosition.Y * 100.0) );
+        const RealPoint2D aPosition( mxAnnotation->getPosition() );
+        const basegfx::B2DPoint aB2DPosition(aPosition.X * 100.0, aPosition.Y * 100.0);
+        const basegfx::B2DRange aRange(
+            aB2DPosition,
+            aB2DPosition + (pWindow->GetInverseViewTransformation() * basegfx::B2DPoint(maSize.getWidth(), maSize.getHeight())));
 
-        Rectangle aVisRect( aPos, pWindow->PixelToLogic(maSize) );
-        mrView.MakeVisible(aVisRect, *pWindow);
+        mrView.MakeVisibleAtView(aRange, *pWindow);
     }
 }
 
@@ -634,7 +602,7 @@ BitmapEx AnnotationTag::CreateAnnotationBitmap( bool bSelected )
     const int BORDER_Y = 4; // pixels
 
     maSize = Size( aVDev.GetTextWidth( sAuthor ) + 2*BORDER_X, aVDev.GetTextHeight() + 2*BORDER_Y );
-    aVDev.SetOutputSizePixel( maSize, sal_False );
+    aVDev.SetOutputSizePixel( maSize, false );
 
     Color aBorderColor( maColor );
 
@@ -756,12 +724,11 @@ IMPL_LINK(AnnotationTag, WindowEventHandler, VclWindowEvent*, pEvent)
                         if( pHdl )
                         {
                             mrView.BrkAction();
-                            const sal_uInt16 nDrgLog = (sal_uInt16)pWindow->PixelToLogic(Size(DRGPIX,0)).Width();
-
                             rtl::Reference< AnnotationTag > xTag( this );
 
                             SdrDragMethod* pDragMethod = new AnnotationDragMove( mrView, xTag );
-                            mrView.BegDragObj(maMouseDownPos, NULL, pHdl, nDrgLog, pDragMethod );
+                            const double fTolerance(basegfx::B2DVector(pWindow->GetInverseViewTransformation() * basegfx::B2DVector(DRGPIX, 0.0)).getLength());
+                            mrView.BegDragObj(maMouseDownPos, pHdl, fTolerance, pDragMethod );
                         }
                     }
                     break;
@@ -772,7 +739,7 @@ IMPL_LINK(AnnotationTag, WindowEventHandler, VclWindowEvent*, pEvent)
             }
         }
     }
-    return sal_True;
+    return true;
 }
 
 IMPL_LINK( AnnotationTag, ClosePopupHdl, void *, EMPTYARG )

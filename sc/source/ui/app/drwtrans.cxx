@@ -149,7 +149,7 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
             //  URL button
             //
 
-            SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pObject);
+            SdrUnoObj* pUnoCtrl = dynamic_cast< SdrUnoObj* >( pObject);
             if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
             {
                 uno::Reference<awt::XControlModel> xControlModel = pUnoCtrl->GetUnoControlModel();
@@ -214,11 +214,12 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
     //
 
     // #i71538# use complete SdrViews
-    // SdrExchangeView aView(pModel);
-    SdrView aView(pModel);
-    SdrPageView* pPv = aView.ShowSdrPage(aView.GetModel()->GetPage(0));
-    aView.MarkAllObj(pPv);
-    aSrcSize = aView.GetAllMarkedRect().GetSize();
+    OSL_ENSURE(pModel, "ScDrawTransferObj without SdrModel (!)");
+    SdrView aView(*pModel);
+    aView.ShowSdrPage(*aView.getSdrModelFromSdrView().GetPage(0));
+    aView.MarkAllObj();
+    const basegfx::B2DRange aAllRange(aView.getMarkedObjectSnapRange());
+    aSrcSize = Size(basegfx::fround(aAllRange.getWidth()), basegfx::fround(aAllRange.getHeight()));
 
     if ( bOleObj )              // single OLE object
     {
@@ -298,7 +299,7 @@ sal_Bool lcl_HasOnlyControls( SdrModel* pModel )
                 bOnlyControls = sal_True;   // only set if there are any objects at all
                 while ( pObj )
                 {
-                    if (!pObj->ISA(SdrUnoObj))
+                    if (!dynamic_cast< SdrUnoObj* >(pObj))
                     {
                         bOnlyControls = sal_False;
                         break;
@@ -430,10 +431,10 @@ sal_Bool ScDrawTransferObj::GetData( const ::com::sun::star::datatransfer::DataF
         {
             // #i71538# use complete SdrViews
             // SdrExchangeView aView( pModel );
-            SdrView aView( pModel );
-            SdrPageView* pPv = aView.ShowSdrPage(aView.GetModel()->GetPage(0));
-            DBG_ASSERT( pPv, "pPv not there..." );
-            aView.MarkAllObj( pPv );
+            OSL_ENSURE(pModel, "ScDrawTransferObj without SdrModel (!)");
+            SdrView aView( *pModel );
+            aView.ShowSdrPage(*aView.getSdrModelFromSdrView().GetPage(0));
+            aView.MarkAllObj();
             if ( nFormat == SOT_FORMAT_GDIMETAFILE )
                 bOK = SetGDIMetaFile( aView.GetMarkedObjMetaFile(true), rFlavor );
             else
@@ -504,7 +505,7 @@ sal_Bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
                 // SW should have no MasterPages
                 DBG_ASSERT(0L == pModel->GetMasterPageCount(), "SW with MasterPages (!)");
 
-                for(sal_uInt16 a(0); a < pModel->GetPageCount(); a++)
+                for(sal_uInt32 a(0); a < pModel->GetPageCount(); a++)
                 {
                     const SdrPage* pPage = pModel->GetPage(a);
                     SdrObjListIter aIter(*pPage, IM_DEEPNOGROUPS);
@@ -661,25 +662,19 @@ void ScDrawTransferObj::SetDrawPersist( const SfxObjectShellRef& rRef )
 
 void lcl_InitMarks( SdrMarkView& rDest, const SdrMarkView& rSource, SCTAB nTab )
 {
-    rDest.ShowSdrPage(rDest.GetModel()->GetPage(nTab));
-    SdrPageView* pDestPV = rDest.GetSdrPageView();
-    DBG_ASSERT(pDestPV,"PageView ?");
+    rDest.ShowSdrPage(*rDest.getSdrModelFromSdrView().GetPage(nTab));
+    const SdrObjectVector aSelection(rSource.getSelectedSdrObjectVectorFromSdrMarkView());
 
-    const SdrMarkList& rMarkList = rSource.GetMarkedObjectList();
-    sal_uLong nCount = rMarkList.GetMarkCount();
-    for (sal_uLong i=0; i<nCount; i++)
+    for (sal_uInt32 i(0); i < aSelection.size(); i++)
     {
-        SdrMark* pMark = rMarkList.GetMark(i);
-        SdrObject* pObj = pMark->GetMarkedSdrObj();
-
-        rDest.MarkObj(pObj, pDestPV);
+        rDest.MarkObj(*aSelection[i]);
     }
 }
 
 void ScDrawTransferObj::SetDragSource( ScDrawView* pView )
 {
     DELETEZ( pDragSourceView );
-    pDragSourceView = new SdrView( pView->GetModel() );
+    pDragSourceView = new SdrView( pView->getSdrModelFromSdrView() );
     lcl_InitMarks( *pDragSourceView, *pView, pView->GetTab() );
 
     //! add as listener with document, delete pDragSourceView if document gone
@@ -688,10 +683,10 @@ void ScDrawTransferObj::SetDragSource( ScDrawView* pView )
 void ScDrawTransferObj::SetDragSourceObj( SdrObject* pObj, SCTAB nTab )
 {
     DELETEZ( pDragSourceView );
-    pDragSourceView = new SdrView( pObj->GetModel() );
-    pDragSourceView->ShowSdrPage(pDragSourceView->GetModel()->GetPage(nTab));
-    SdrPageView* pPV = pDragSourceView->GetSdrPageView();
-    pDragSourceView->MarkObj(pObj, pPV);
+    OSL_ENSURE(pObj, "ScDrawTransferObj without SdrObject/SdrModel (!)");
+    pDragSourceView = new SdrView(pObj->getSdrModelFromSdrObject());
+    pDragSourceView->ShowSdrPage(*pDragSourceView->getSdrModelFromSdrView().GetPage(nTab));
+    pDragSourceView->MarkObj(*pObj);
 
     //! add as listener with document, delete pDragSourceView if document gone
 }
@@ -743,9 +738,10 @@ void ScDrawTransferObj::InitDocShell()
         SdrModel* pDestModel = pDestDoc->GetDrawLayer();
         // #i71538# use complete SdrViews
         // SdrExchangeView aDestView( pDestModel );
-        SdrView aDestView( pDestModel );
-        aDestView.ShowSdrPage(aDestView.GetModel()->GetPage(0));
-        aDestView.Paste( *pModel, Point( aSrcSize.Width()/2, aSrcSize.Height()/2 ) );
+        OSL_ENSURE(pDestModel, "ScDrawTransferObj without SdrModel (!)");
+        SdrView aDestView( *pDestModel );
+        aDestView.ShowSdrPage(*aDestView.getSdrModelFromSdrView().GetPage(0));
+        aDestView.Paste( *pModel, basegfx::B2DPoint( aSrcSize.Width()/2, aSrcSize.Height()/2 ) );
 
         // put objects to right layer (see ScViewFunc::PasteDataFormat for SOT_FORMATSTR_ID_DRAWING)
 
@@ -756,10 +752,10 @@ void ScDrawTransferObj::InitDocShell()
             SdrObject* pObject = aIter.Next();
             while (pObject)
             {
-                if ( pObject->ISA(SdrUnoObj) )
-                    pObject->NbcSetLayer(SC_LAYER_CONTROLS);
+                if ( dynamic_cast< SdrUnoObj* >(pObject) )
+                    pObject->SetLayer(SC_LAYER_CONTROLS);
                 else
-                    pObject->NbcSetLayer(SC_LAYER_FRONT);
+                    pObject->SetLayer(SC_LAYER_FRONT);
                 pObject = aIter.Next();
             }
         }

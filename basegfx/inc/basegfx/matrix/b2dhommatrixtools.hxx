@@ -27,6 +27,8 @@
 #include <sal/types.h>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/vector/b2dvector.hxx>
+#include <com/sun/star/drawing/HomogenMatrix3.hpp>
+#include <basegfx/point/b2dpoint.hxx>
 
 namespace rtl { class OUString; }
 
@@ -91,6 +93,21 @@ namespace basegfx
                 rTranslate.getX(), rTranslate.getY());
         }
 
+        B2DHomMatrix createScaleRotateTranslateB2DHomMatrix(
+            double fScaleX, double fScaleY,
+            double fRadiant,
+            double fTranslateX, double fTranslateY);
+        inline B2DHomMatrix createScaleRotateTranslateB2DHomMatrix(
+            const B2DTuple& rScale,
+            double fRadiant,
+            const B2DTuple& rTranslate)
+        {
+            return createScaleRotateTranslateB2DHomMatrix(
+                rScale.getX(), rScale.getY(),
+                fRadiant,
+                rTranslate.getX(), rTranslate.getY());
+        }
+
         B2DHomMatrix createShearXRotateTranslateB2DHomMatrix(
             double fShearX,
             double fRadiant,
@@ -102,6 +119,18 @@ namespace basegfx
         {
             return createShearXRotateTranslateB2DHomMatrix(
                 fShearX,
+                fRadiant,
+                rTranslate.getX(), rTranslate.getY());
+        }
+
+        B2DHomMatrix createRotateTranslateB2DHomMatrix(
+            double fRadiant,
+            double fTranslateX, double fTranslateY);
+        inline B2DHomMatrix createRotateTranslateB2DHomMatrix(
+            double fRadiant,
+            const B2DTuple& rTranslate)
+        {
+            return createRotateTranslateB2DHomMatrix(
                 fRadiant,
                 rTranslate.getX(), rTranslate.getY());
         }
@@ -131,6 +160,15 @@ namespace basegfx
                 fRadiant);
         }
 
+        /* tooling methods for converting API matrices (drawing::HomogenMatrix3)
+           to B2DHomMatrix
+         */
+        B2DHomMatrix UnoHomogenMatrix3ToB2DHomMatrix(
+            const com::sun::star::drawing::HomogenMatrix3 rMatrixIn);
+        void B2DHomMatrixToUnoHomogenMatrix3(
+            const B2DHomMatrix& rMatrixIn,
+            com::sun::star::drawing::HomogenMatrix3& rMatrixOut);
+
     } // end of namespace tools
 } // end of namespace basegfx
 
@@ -144,7 +182,7 @@ namespace basegfx
         {
         private:
             B2DVector              maScale;
-            B2DVector              maTranslate;
+            B2DPoint                maTranslate;
             double                 mfRotate;
             double                 mfShearX;
 
@@ -166,7 +204,7 @@ namespace basegfx
             }
 
             const B2DVector& getScale() const { return maScale; }
-            const B2DVector& getTranslate() const { return maTranslate; }
+            const B2DPoint& getTranslate() const { return maTranslate; }
             double getRotate() const { return mfRotate; }
             double getShearX() const { return mfShearX; }
         };
@@ -182,14 +220,15 @@ namespace basegfx
         class B2DHomMatrixBufferedOnDemandDecompose
         {
         private:
-            B2DHomMatrix           maB2DHomMatrix;
-            B2DVector              maScale;
-            B2DVector              maTranslate;
-            double                 mfRotate;
-            double                 mfShearX;
+            B2DHomMatrix            maB2DHomMatrix;
+            B2DVector               maScale;
+            B2DPoint                maTranslate;
+            double                  mfRotate;
+            double                  mfShearX;
 
             // bitfield
-            unsigned               mbDecomposed : 1;
+            bool                    mbDecomposed : 1;
+            bool                    mbCombined : 1;
 
             void impCheckDecompose()
             {
@@ -200,23 +239,151 @@ namespace basegfx
                 }
             }
 
+            void impCheckCombined()
+            {
+                if(!mbCombined)
+                {
+                    maB2DHomMatrix = createScaleShearXRotateTranslateB2DHomMatrix(maScale, mfShearX, mfRotate, maTranslate);
+                    mbCombined = true;
+                }
+            }
+
         public:
-            B2DHomMatrixBufferedOnDemandDecompose(const B2DHomMatrix& rB2DHomMatrix = B2DHomMatrix())
+            B2DHomMatrixBufferedOnDemandDecompose(const B2DHomMatrix& rB2DHomMatrix)
             :   maB2DHomMatrix(rB2DHomMatrix),
-                maScale(),
-                maTranslate(),
+                maScale(1.0, 1.0),
+                maTranslate(0.0, 0.0),
                 mfRotate(0.0),
                 mfShearX(0.0),
-                mbDecomposed(false)
+                mbDecomposed(false),
+                mbCombined(true)
             {
             }
 
-            // data access
-            const B2DHomMatrix& getB2DHomMatrix() const { return maB2DHomMatrix; }
-            const B2DVector& getScale() const { const_cast< B2DHomMatrixBufferedOnDemandDecompose* >(this)->impCheckDecompose(); return maScale; }
-            const B2DVector& getTranslate() const { const_cast< B2DHomMatrixBufferedOnDemandDecompose* >(this)->impCheckDecompose(); return maTranslate; }
-            double getRotate() const { const_cast< B2DHomMatrixBufferedOnDemandDecompose* >(this)->impCheckDecompose(); return mfRotate; }
-            double getShearX() const { const_cast< B2DHomMatrixBufferedOnDemandDecompose* >(this)->impCheckDecompose(); return mfShearX; }
+            B2DHomMatrixBufferedOnDemandDecompose()
+            :   maB2DHomMatrix(),
+                maScale(1.0, 1.0),
+                maTranslate(0.0, 0.0),
+                mfRotate(0.0),
+                mfShearX(0.0),
+                mbDecomposed(true),
+                mbCombined(true)
+            {
+            }
+
+            // data read access
+            const B2DHomMatrix& getB2DHomMatrix() const
+            {
+                const_cast< B2DHomMatrixBufferedOnDemandDecompose* >(this)->impCheckCombined();
+                return maB2DHomMatrix;
+            }
+
+            const B2DVector& getScale() const
+            {
+                const_cast< B2DHomMatrixBufferedOnDemandDecompose* >(this)->impCheckDecompose();
+                return maScale;
+            }
+
+            const B2DPoint& getTranslate() const
+            {
+                const_cast< B2DHomMatrixBufferedOnDemandDecompose* >(this)->impCheckDecompose();
+                return maTranslate;
+            }
+
+            double getRotate() const
+            {
+                const_cast< B2DHomMatrixBufferedOnDemandDecompose* >(this)->impCheckDecompose();
+                return mfRotate;
+            }
+
+            double getShearX() const
+            {
+                const_cast< B2DHomMatrixBufferedOnDemandDecompose* >(this)->impCheckDecompose();
+                return mfShearX;
+            }
+
+            // data write access
+            void reset()
+            {
+                maB2DHomMatrix.identity();
+                maScale = B2DVector(1.0, 1.0);
+                maTranslate = B2DPoint(0.0, 0.0);
+                mfRotate = 0.0;
+                mfShearX = 0.0;
+                mbDecomposed = true;
+                mbCombined = true;
+            }
+
+            void setB2DHomMatrix(const B2DHomMatrix& rNew)
+            {
+                const_cast< B2DHomMatrixBufferedOnDemandDecompose* >(this)->impCheckCombined();
+
+                if(rNew != maB2DHomMatrix)
+                {
+                    maB2DHomMatrix = rNew;
+                    mbDecomposed = false;
+                }
+            }
+
+            void setScale(const B2DVector& rNew)
+            {
+                const_cast< B2DHomMatrixBufferedOnDemandDecompose* >(this)->impCheckDecompose();
+
+                if(rNew != maScale)
+                {
+                    maScale = rNew;
+                    mbCombined = false;
+                }
+            }
+
+            void setTranslate(const B2DPoint& rNew)
+            {
+                const_cast< B2DHomMatrixBufferedOnDemandDecompose* >(this)->impCheckDecompose();
+
+                if(rNew != maTranslate)
+                {
+                    maTranslate = rNew;
+                    mbCombined = false;
+                }
+            }
+
+            void setRotate(double fNew)
+            {
+                const_cast< B2DHomMatrixBufferedOnDemandDecompose* >(this)->impCheckDecompose();
+
+                if(fNew != mfRotate)
+                {
+                    mfRotate = fNew;
+                    mbCombined = false;
+                }
+            }
+
+            void setShearX(double fNew)
+            {
+                const_cast< B2DHomMatrixBufferedOnDemandDecompose* >(this)->impCheckDecompose();
+
+                if(fNew != mfShearX)
+                {
+                    mfShearX = fNew;
+                    mbCombined = false;
+                }
+            }
+
+            // convenience bool tests
+            bool isRotated() const { return !fTools::equalZero(getRotate()); }
+            bool isSheared() const { return !fTools::equalZero(getShearX()); }
+            bool isMirroredX() const { return fTools::less(getScale().getX(), 0.0); }
+            bool isMirroredY() const { return fTools::less(getScale().getY(), 0.0); }
+            bool isTranslatedX() const { return !fTools::equalZero(getTranslate().getX()); }
+            bool isTranslatedY() const { return !fTools::equalZero(getTranslate().getX()); }
+
+            // combined convenience bool tests
+            bool isRotatedOrSheared() const { const_cast< B2DHomMatrixBufferedOnDemandDecompose* >(this)->impCheckDecompose();
+                return !(fTools::equalZero(mfRotate) && fTools::equalZero(mfShearX)); }
+            bool isMirrored() const { const_cast< B2DHomMatrixBufferedOnDemandDecompose* >(this)->impCheckDecompose();
+                return (fTools::less(maScale.getX(), 0.0) || fTools::less(maScale.getY(), 0.0)); }
+            bool isTranslated() const { const_cast< B2DHomMatrixBufferedOnDemandDecompose* >(this)->impCheckDecompose();
+                return !(fTools::equalZero(maTranslate.getX()) && fTools::equalZero(maTranslate.getY())); }
         };
     } // end of namespace tools
 

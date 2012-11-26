@@ -37,7 +37,6 @@
 #include "appedit.hxx"
 #include "brkpnts.hxx"
 
-TYPEINIT1(AppEdit,AppWin);
 AppEdit::AppEdit( BasicFrame* pParent )
 : AppWin( pParent )
 , pVScroll( NULL )

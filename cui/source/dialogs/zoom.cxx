@@ -235,13 +235,13 @@ SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet ) :
     aBookModeChk.SetAccessibleRelationMemberOf(&aColumnsBtn);
 
     const SfxPoolItem& rItem = rSet.Get( rSet.GetPool()->GetWhich( SID_ATTR_ZOOM ) );
+    const SvxZoomItem* pZoomItem = dynamic_cast< const SvxZoomItem* >(&rItem);
 
-    if ( rItem.ISA(SvxZoomItem) )
+    if ( pZoomItem )
     {
-        const SvxZoomItem& rZoomItem = (const SvxZoomItem&)rItem;
-        const sal_uInt16 nZoom = rZoomItem.GetValue();
-        const SvxZoomType eType = rZoomItem.GetType();
-        const sal_uInt16 nValSet = rZoomItem.GetValueSet();
+        const sal_uInt16 nZoom = pZoomItem->GetValue();
+        const SvxZoomType eType = pZoomItem->GetType();
+        const sal_uInt16 nValSet = pZoomItem->GetValueSet();
         sal_uInt16 nBtnId = 0;
 
         switch ( eType )

@@ -60,13 +60,11 @@ private:
     OReportModel( const OReportModel& );
     void operator=(const OReportModel& rSrcModel);
 public:
-    TYPEINFO();
-
     OReportModel(::reportdesign::OReportDefinition* _pReportDefinition);
     virtual ~OReportModel();
 
     virtual void        SetChanged(sal_Bool bFlg = sal_True);
-    virtual SdrPage*    AllocPage(FASTBOOL bMasterPage);
+    virtual SdrPage*    AllocPage(bool bMasterPage);
     virtual Window*     GetCurDocViewWin();
     virtual SdrPage*    RemovePage(sal_uInt16 nPgNum);
     /** returns the numbering type that is used to format page fields in drawing shapes */

@@ -95,9 +95,9 @@ private:
         member of that list the associated descriptor is moved to the end of
         the list to make it the most recently used entry.
         @param bMakePersistent
-            When <TRUE/> is given then the new list of recently used master
+            When <true/> is given then the new list of recently used master
             pages is written back into the configuration to make it
-            persistent.  Giving <FALSE/> to ommit this is used while loading
+            persistent.  Giving <false/> to ommit this is used while loading
             the persistent list from the configuration.
     */
     void AddMasterPage (

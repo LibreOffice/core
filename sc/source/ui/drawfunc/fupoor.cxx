@@ -299,7 +299,7 @@ IMPL_LINK( FuPoor, DragHdl, void *, EMPTYARG )
 {
     SdrHdl* pHdl = pView->PickHandle(aMDPos);
 
-    if ( pHdl==NULL && pView->IsMarkedHit(aMDPos) )
+    if ( pHdl==NULL && pView->IsMarkedObjHit(aMDPos) )
     {
         pWindow->ReleaseMouse();
         bIsInDragMode = sal_True;
@@ -312,22 +312,21 @@ IMPL_LINK( FuPoor, DragHdl, void *, EMPTYARG )
 
 //  Detektiv-Linie
 
-sal_Bool FuPoor::IsDetectiveHit( const Point& rLogicPos )
+bool FuPoor::IsDetectiveHit( const basegfx::B2DPoint& rLogicPos )
 {
-    SdrPageView* pPV = pView->GetSdrPageView();
-    if (!pPV)
-        return sal_False;
-
     sal_Bool bFound = sal_False;
-    SdrObjListIter aIter( *pPV->GetObjList(), IM_FLAT );
+
+    if(pView->GetSdrPageView())
+    {
+        SdrObjListIter aIter( *pView->GetSdrPageView()->GetCurrentObjectList(), IM_FLAT );
     SdrObject* pObject = aIter.Next();
     while (pObject && !bFound)
     {
         if (ScDetectiveFunc::IsNonAlienArrow( pObject ))
         {
-            sal_uInt16 nHitLog = (sal_uInt16) pWindow->PixelToLogic(
-                                Size(pView->GetHitTolerancePixel(),0)).Width();
-            if(SdrObjectPrimitiveHit(*pObject, rLogicPos, nHitLog, *pPV, 0, false))
+                const double fHitLog(basegfx::B2DVector(pWindow->GetInverseViewTransformation() * basegfx::B2DVector(pView->GetHitTolerancePixel(), 0.0)).getLength());
+
+                if(SdrObjectPrimitiveHit(*pObject, rLogicPos, fHitLog, *pView, false, 0))
             {
                 bFound = sal_True;
             }
@@ -335,6 +334,8 @@ sal_Bool FuPoor::IsDetectiveHit( const Point& rLogicPos )
 
         pObject = aIter.Next();
     }
+    }
+
     return bFound;
 }
 
@@ -350,26 +351,26 @@ void FuPoor::StopDragTimer()
 |*
 \************************************************************************/
 
-SdrObject* FuPoor::CreateDefaultObject(const sal_uInt16 /* nID */, const Rectangle& /* rRectangle */)
+SdrObject* FuPoor::CreateDefaultObject(const sal_uInt16 /* nID */, const basegfx::B2DRange& /* rRange */)
 {
     // empty base implementation
     return 0L;
 }
 
-void FuPoor::ImpForceQuadratic(Rectangle& rRect)
+void FuPoor::ImpForceQuadratic(basegfx::B2DRange& rRange)
 {
-    if(rRect.GetWidth() > rRect.GetHeight())
+    basegfx::B2DPoint aNewTopLeft(0.0, 0.0);
+
+    if(rRange.getWidth() > rRange.getHeight())
     {
-        rRect = Rectangle(
-            Point(rRect.Left() + ((rRect.GetWidth() - rRect.GetHeight()) / 2), rRect.Top()),
-            Size(rRect.GetHeight(), rRect.GetHeight()));
+        aNewTopLeft = basegfx::B2DPoint(rRange.getMinX() + ((rRange.getWidth() - rRange.getHeight()) * 0.5), rRange.getMinY());
     }
     else
     {
-        rRect = Rectangle(
-            Point(rRect.Left(), rRect.Top() + ((rRect.GetHeight() - rRect.GetWidth()) / 2)),
-            Size(rRect.GetWidth(), rRect.GetWidth()));
+        aNewTopLeft = basegfx::B2DPoint(rRange.getMinX(), rRange.getMinY() + ((rRange.getHeight() - rRange.getWidth()) * 0.5));
     }
+
+    rRange = basegfx::B2DRange(aNewTopLeft, aNewTopLeft + rRange.getRange());
 }
 
 // #i33136#

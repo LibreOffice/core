@@ -118,7 +118,7 @@ IMPL_LINK(TextLogger, WindowEventHandler, VclWindowEvent*, pEvent)
                 break;
         }
     }
-    return sal_True;
+    return true;
 }
 
 

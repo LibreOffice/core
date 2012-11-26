@@ -26,6 +26,7 @@
 #include <tools/debug.hxx>
 
 #include "listenerbase.hxx"
+#include <typeinfo>
 #include <svl/listeneriter.hxx>
 #include <svl/broadcast.hxx>
 #include <svl/listener.hxx>
@@ -33,7 +34,8 @@
 SvtListenerIter* SvtListenerIter::pListenerIters = 0;
 
 SvtListenerIter::SvtListenerIter( SvtBroadcaster& rBrdcst )
-    : rRoot( rBrdcst )
+:   rRoot( rBrdcst ),
+    pSrchFunction( 0 )
 {
     // hinten einketten!
     pNxtIter = 0;
@@ -132,13 +134,13 @@ SvtListener* SvtListenerIter::GoEnd()           // zum End des Baums
 
 
 
-SvtListener* SvtListenerIter::First( TypeId nType )
+SvtListener* SvtListenerIter::First( ConvertToSvtListener rConvert )
 {
-    aSrchId = nType;
+    pSrchFunction = rConvert;
     GoStart();
     if( pAkt )
         do {
-            if( pAkt->GetListener()->IsA( aSrchId ) )
+            if( pSrchFunction(pAkt->GetListener() ))
                 break;
 
             if( pDelNext == pAkt )
@@ -166,7 +168,7 @@ SvtListener* SvtListenerIter::Next()
         else
             pAkt = pDelNext;
 
-        if( pAkt && pAkt->GetListener()->IsA( aSrchId ) )
+        if( pAkt && pSrchFunction && pSrchFunction(pAkt->GetListener()))
             break;
     } while( pAkt );
     return pAkt ? pAkt->GetListener() : 0;

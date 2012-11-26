@@ -135,7 +135,7 @@ OSection::OSection(const uno::Reference< report::XReportDefinition >& _xParent
 {
     DBG_CTOR( rpt_OSection,NULL);
     init();
-    //.getSdrModel()->createNewPage(m_xSection);
+    //.getSharedSdrModel()->createNewPage(m_xSection);
 }
 //--------------------------------------------------------------------------
 // TODO: VirtualFunctionFinder: This is virtual function!
@@ -181,7 +181,7 @@ void SAL_CALL OSection::disposing()
     //m_xDrawPage.clear();
 
     /*uno::Reference< report::XReportDefinition> xReport = getReportDefinition();
-    ::boost::shared_ptr<rptui::OReportModel> pModel = OReportDefinition::getSdrModel(xReport);
+    ::boost::shared_ptr<rptui::OReportModel> pModel = OReportDefinition::getSharedSdrModel(xReport);
     osl_incrementInterlockedCount( &m_refCount );
     while( m_xDrawPage.is() && m_xDrawPage->hasElements() )
     {
@@ -197,7 +197,7 @@ void SAL_CALL OSection::disposing()
     if ( pModel )
     {
         uno::Reference< report::XSection> xSection = this;
-        pModel->DeletePage(pModel->getPage(xSection)->GetPageNum());
+        pModel->DeletePage(pModel->getPage(xSection)->GetPageNumber());
     }
     osl_decrementInterlockedCount( &m_refCount );*/
 }
@@ -227,7 +227,7 @@ sal_Bool SAL_CALL OSection::supportsService( const ::rtl::OUString& _rServiceNam
 void OSection::init()
 {
     uno::Reference< report::XReportDefinition> xReport = getReportDefinition();
-    ::boost::shared_ptr<rptui::OReportModel> pModel = OReportDefinition::getSdrModel(xReport);
+    ::boost::shared_ptr<rptui::OReportModel> pModel = OReportDefinition::getSharedSdrModel(xReport);
     OSL_ENSURE(pModel,"No odel set at the report definition!");
     if ( pModel )
     {

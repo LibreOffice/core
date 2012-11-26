@@ -27,9 +27,7 @@
 
 #include <sfx2/bindings.hxx>
 #include <svx/htmlmode.hxx>
-#include <svx/sdtacitm.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/sdtagitm.hxx>
 #include <svx/sdtakitm.hxx>
 #include <svx/sdtaditm.hxx>
 #include <svx/sdtaaitm.hxx>
@@ -70,14 +68,13 @@ sal_Bool ConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 {
     sal_Bool bReturn;
 
-    if ((bReturn = SwDrawBase::MouseButtonDown(rMEvt)) == sal_True
-                                    && m_pWin->GetSdrDrawMode() == OBJ_CAPTION)
+    if ((bReturn = SwDrawBase::MouseButtonDown(rMEvt)) == sal_True && OBJ_CAPTION == m_pWin->getSdrObjectCreationInfo().getIdent())
     {
         m_pView->NoRotate();
         if (m_pView->IsDrawSelMode())
         {
             m_pView->FlipDrawSelMode();
-            m_pSh->GetDrawView()->SetFrameDragSingles(m_pView->IsDrawSelMode());
+            m_pSh->GetDrawView()->SetFrameHandles(m_pView->IsDrawSelMode());
         }
     }
     return (bReturn);
@@ -97,10 +94,9 @@ sal_Bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
     if( bRet )
     {
         SdrView *pSdrView = m_pSh->GetDrawView();
-        const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-        SdrObject* pObj = rMarkList.GetMark(0) ? rMarkList.GetMark(0)->GetMarkedSdrObj()
-                                               : 0;
-        switch( m_pWin->GetSdrDrawMode() )
+        SdrObject* pObj = pSdrView->getSelectedIfSingle();
+
+        switch( m_pWin->getSdrObjectCreationInfo().getIdent() )
         {
         case OBJ_TEXT:
             if( bMarquee )
@@ -110,39 +106,43 @@ sal_Bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                 if( pObj )
                 {
                     // die fuer das Scrollen benoetigten Attribute setzen
-                    SfxItemSet aItemSet( pSdrView->GetModel()->GetItemPool(),
+                    SfxItemSet aItemSet( pObj->GetObjectItemPool(),
                                         SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST);
 
-                    aItemSet.Put( SdrTextAutoGrowWidthItem( sal_False ) );
-                    aItemSet.Put( SdrTextAutoGrowHeightItem( sal_False ) );
+                    aItemSet.Put( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWWIDTH, false) );
+                    aItemSet.Put( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT, false) );
                     aItemSet.Put( SdrTextAniKindItem( SDRTEXTANI_SCROLL ) );
                     aItemSet.Put( SdrTextAniDirectionItem( SDRTEXTANI_LEFT ) );
-                    aItemSet.Put( SdrTextAniCountItem( 0 ) );
+                    aItemSet.Put( SfxUInt16Item(SDRATTR_TEXT_ANICOUNT, 0 ) );
                     aItemSet.Put( SdrTextAniAmountItem(
                             (sal_Int16)m_pWin->PixelToLogic(Size(2,1)).Width()) );
 
                     pObj->SetMergedItemSetAndBroadcast(aItemSet);
                 }
             }
-            else if(mbVertical && pObj && pObj->ISA(SdrTextObj))
+            else if(mbVertical)
+            {
+                SdrTextObj* pText = dynamic_cast< SdrTextObj* >(pObj);
+
+                if(pText)
             {
                 // #93382#
-                SdrTextObj* pText = (SdrTextObj*)pObj;
-                SfxItemSet aSet(pSdrView->GetModel()->GetItemPool());
+                    SfxItemSet aSet(pText->GetObjectItemPool());
 
-                pText->SetVerticalWriting(sal_True);
+                    pText->SetVerticalWriting(true);
 
-                aSet.Put(SdrTextAutoGrowWidthItem(sal_True));
-                aSet.Put(SdrTextAutoGrowHeightItem(sal_False));
+                    aSet.Put(SdrOnOffItem(SDRATTR_TEXT_AUTOGROWWIDTH, true));
+                    aSet.Put(SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT, false));
                 aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP));
                 aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
 
                 pText->SetMergedItemSet(aSet);
             }
+            }
+
             if( pObj )
             {
-                SdrPageView* pPV = pSdrView->GetSdrPageView();
-                m_pView->BeginTextEdit( pObj, pPV, m_pWin, sal_True );
+                m_pView->BeginTextEdit( pObj, m_pWin, sal_True );
             }
             m_pView->LeaveDrawCreate();  // In Selektionsmode wechseln
             m_pSh->GetView().GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);
@@ -176,48 +176,50 @@ void ConstRectangle::Activate(const sal_uInt16 nSlotId)
 {
     bMarquee = bCapVertical = sal_False;
     mbVertical = sal_False;
+    SdrObjectCreationInfo aSdrObjectCreationInfo;
 
     switch (nSlotId)
     {
     case SID_DRAW_LINE:
-        m_pWin->SetSdrDrawMode(OBJ_LINE);
+        aSdrObjectCreationInfo.setIdent(OBJ_POLY);
+        aSdrObjectCreationInfo.setSdrPathObjType(PathType_Line);
         break;
 
     case SID_DRAW_RECT:
-        m_pWin->SetSdrDrawMode(OBJ_RECT);
+        aSdrObjectCreationInfo.setIdent(OBJ_RECT);
         break;
 
     case SID_DRAW_ELLIPSE:
-        m_pWin->SetSdrDrawMode(OBJ_CIRC);
+        aSdrObjectCreationInfo.setIdent(OBJ_CIRC);
         break;
 
     case SID_DRAW_TEXT_MARQUEE:
         bMarquee = sal_True;
-        m_pWin->SetSdrDrawMode(OBJ_TEXT);
+        aSdrObjectCreationInfo.setIdent(OBJ_TEXT);
         break;
 
     case SID_DRAW_TEXT_VERTICAL:
         // #93382#
         mbVertical = sal_True;
-        m_pWin->SetSdrDrawMode(OBJ_TEXT);
+        aSdrObjectCreationInfo.setIdent(OBJ_TEXT);
         break;
 
     case SID_DRAW_TEXT:
-        m_pWin->SetSdrDrawMode(OBJ_TEXT);
+        aSdrObjectCreationInfo.setIdent(OBJ_TEXT);
         break;
 
     case SID_DRAW_CAPTION_VERTICAL:
         bCapVertical = sal_True;
         // no break
     case SID_DRAW_CAPTION:
-        m_pWin->SetSdrDrawMode(OBJ_CAPTION);
+        aSdrObjectCreationInfo.setIdent(OBJ_CAPTION);
         break;
 
     default:
-        m_pWin->SetSdrDrawMode(OBJ_NONE);
         break;
     }
 
+    m_pWin->setSdrObjectCreationInfo(aSdrObjectCreationInfo);
     SwDrawBase::Activate(nSlotId);
 }
 

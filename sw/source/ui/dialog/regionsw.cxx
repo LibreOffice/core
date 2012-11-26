@@ -245,7 +245,7 @@ void SwBaseShell::EditRegionDialog(SfxRequest& rReq)
                 AbstractEditRegionDlg* pEditRegionDlg = pFact->CreateEditRegionDlg( MD_EDIT_REGION,
                                                         pParentWin, rWrtShell);
                 DBG_ASSERT(pEditRegionDlg, "Dialogdiet fail!");
-                if(pItem && pItem->ISA(SfxStringItem))
+                if(pItem && dynamic_cast< const SfxStringItem* >(pItem))
                 {
                     pEditRegionDlg->SelectSection(((const SfxStringItem*)pItem)->GetValue());
                 }

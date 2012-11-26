@@ -46,10 +46,8 @@ namespace rtl
 class EDITENG_DLLPUBLIC SvxFmtBreakItem : public SfxEnumItem
 {
 public:
-    TYPEINFO();
-
-    inline SvxFmtBreakItem( const SvxBreak eBrk /*= SVX_BREAK_NONE*/,
-                            const sal_uInt16 nWhich );
+    POOLITEM_FACTORY()
+    inline SvxFmtBreakItem( const SvxBreak eBrk = SVX_BREAK_NONE, const sal_uInt16 nWhich = 0);
     inline SvxFmtBreakItem( const SvxFmtBreakItem& rBreak );
     inline SvxFmtBreakItem& operator=( const SvxFmtBreakItem& rCpy );
 

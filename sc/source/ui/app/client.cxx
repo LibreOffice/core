@@ -42,6 +42,7 @@
 #include <svx/svdview.hxx>
 #include <svx/svdograf.hxx>
 #include <svtools/embedhlp.hxx>
+#include <svx/svdlegacy.hxx>
 
 #include "client.hxx"
 #include "tabvwsh.hxx"
@@ -69,8 +70,8 @@ SdrOle2Obj* ScClient::GetDrawObj()
     SdrOle2Obj* pOle2Obj = NULL;
     String aName = GetViewShell()->GetObjectShell()->GetEmbeddedObjectContainer().GetEmbeddedObjectName( xObj );
 
-    sal_uInt16 nPages = pModel->GetPageCount();
-    for (sal_uInt16 nPNr=0; nPNr<nPages && !pOle2Obj; nPNr++)
+    const sal_uInt32 nPages(pModel->GetPageCount());
+    for (sal_uInt32 nPNr=0; nPNr<nPages && !pOle2Obj; nPNr++)
     {
         SdrPage* pPage = pModel->GetPage(nPNr);
         SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
@@ -92,7 +93,7 @@ SdrOle2Obj* ScClient::GetDrawObj()
 void __EXPORT ScClient::RequestNewObjectArea( Rectangle& aLogicRect )
 {
     SfxViewShell* pSfxViewSh = GetViewShell();
-    ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
+    ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell* >( pSfxViewSh );
     if (!pViewSh)
     {
         DBG_ERROR("Wrong ViewShell");
@@ -114,39 +115,45 @@ void __EXPORT ScClient::RequestNewObjectArea( Rectangle& aLogicRect )
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(static_cast<sal_Int16>(nTab)));
     if ( pPage && aLogicRect != aOldRect )
     {
-        Point aPos;
-        Size aSize = pPage->GetSize();
-        if ( aSize.Width() < 0 )
-        {
-            aPos.X() = aSize.Width() + 1;       // negative
-            aSize.Width() = -aSize.Width();     // positive
-        }
-        Rectangle aPageRect( aPos, aSize );
+        basegfx::B2DPoint aPos(0.0, 0.0);
+        basegfx::B2DVector aSize(pPage->GetPageScale());
 
-        if (aLogicRect.Right() > aPageRect.Right())
+        if ( aSize.getX() < 0.0 )
         {
-            long nDiff = aLogicRect.Right() - aPageRect.Right();
-            aLogicRect.Left() -= nDiff;
-            aLogicRect.Right() -= nDiff;
-        }
-        if (aLogicRect.Bottom() > aPageRect.Bottom())
-        {
-            long nDiff = aLogicRect.Bottom() - aPageRect.Bottom();
-            aLogicRect.Top() -= nDiff;
-            aLogicRect.Bottom() -= nDiff;
+            aPos.setX( aSize.getX() + 1.0);     // negative
+            aSize.setX(-aSize.getX());      // positive
         }
 
-        if (aLogicRect.Left() < aPageRect.Left())
+        basegfx::B2DRange aPageRange( aPos, aPos + aSize );
+        basegfx::B2DPoint aTranslate(0.0, 0.0);
+        basegfx::B2DRange aLogicRange(aLogicRect.Left(), aLogicRect.Top(), aLogicRect.Right(), aLogicRect.Bottom());
+
+        if(aPageRange.getMaxX() < aLogicRange.getMaxX())
         {
-            long nDiff = aLogicRect.Left() - aPageRect.Left();
-            aLogicRect.Right() -= nDiff;
-            aLogicRect.Left() -= nDiff;
+            aTranslate.setX(aPageRange.getMaxX() - aLogicRange.getMaxX());
         }
-        if (aLogicRect.Top() < aPageRect.Top())
+
+        if(aPageRange.getMinX() > aLogicRange.getMinX())
         {
-            long nDiff = aLogicRect.Top() - aPageRect.Top();
-            aLogicRect.Bottom() -= nDiff;
-            aLogicRect.Top() -= nDiff;
+            aTranslate.setX(aPageRange.getMinX() - aLogicRange.getMinX());
+        }
+
+        if(aPageRange.getMaxY() < aLogicRange.getMaxY())
+        {
+            aTranslate.setY(aPageRange.getMaxY() - aLogicRange.getMaxY());
+        }
+
+        if(aPageRange.getMinY() > aLogicRange.getMinY())
+        {
+            aTranslate.setY(aPageRange.getMinY() - aLogicRange.getMinY());
+        }
+
+        if(!aTranslate.equalZero())
+        {
+            aLogicRange.transform(basegfx::tools::createTranslateB2DHomMatrix(aTranslate));
+            aLogicRect = Rectangle(
+                basegfx::fround(aLogicRange.getMinX()), basegfx::fround(aLogicRange.getMinY()),
+                basegfx::fround(aLogicRange.getMaxX()), basegfx::fround(aLogicRange.getMaxY()));
         }
     }
 }
@@ -154,7 +161,7 @@ void __EXPORT ScClient::RequestNewObjectArea( Rectangle& aLogicRect )
 void __EXPORT ScClient::ObjectAreaChanged()
 {
     SfxViewShell* pSfxViewSh = GetViewShell();
-    ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
+    ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell* >( pSfxViewSh );
     if (!pViewSh)
     {
         DBG_ERROR("Wrong ViewShell");
@@ -165,28 +172,33 @@ void __EXPORT ScClient::ObjectAreaChanged()
     SdrOle2Obj* pDrawObj = GetDrawObj();
     if (pDrawObj)
     {
-        Rectangle aNewRectangle(GetScaledObjArea());
+        const Rectangle aScaledObjArea(GetScaledObjArea());
+        basegfx::B2DRange aNewRange(aScaledObjArea.Left(), aScaledObjArea.Top(), aScaledObjArea.Right(), aScaledObjArea.Bottom());
 
         // #i118524# if sheared/rotated, center to non-rotated LogicRect
         pDrawObj->setSuppressSetVisAreaSize(true);
 
-        if(pDrawObj->GetGeoStat().nDrehWink || pDrawObj->GetGeoStat().nShearWink)
+        if(pDrawObj->isRotatedOrSheared())
         {
-            pDrawObj->SetLogicRect( aNewRectangle );
+            sdr::legacy::SetLogicRange(*pDrawObj, aNewRange);
 
-            const Rectangle& rBoundRect = pDrawObj->GetCurrentBoundRect();
-            const Point aDelta(aNewRectangle.Center() - rBoundRect.Center());
+            const SdrView* pView(pViewSh ? pViewSh->GetSdrView() : 0);
+            const basegfx::B2DRange& rBoundRange(pDrawObj->getObjectRange(pView));
+            const basegfx::B2DPoint aDelta(aNewRange.getCenter() - rBoundRange.getCenter());
 
-            aNewRectangle.Move(aDelta.X(), aDelta.Y());
+            aNewRange.transform(
+                basegfx::tools::createTranslateB2DHomMatrix(
+                    aDelta.getX(),
+                    aDelta.getY()));
         }
 
-        pDrawObj->SetLogicRect( aNewRectangle );
+        sdr::legacy::SetLogicRange(*pDrawObj, aNewRange);
         pDrawObj->setSuppressSetVisAreaSize(false);
 
         //  set document modified (SdrModel::SetChanged is not used)
         // TODO/LATER: is there a reason that this code is not executed in Draw?
 //        SfxViewShell* pSfxViewSh = GetViewShell();
-//        ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
+//        ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell* >( pSfxViewSh );
         if (pViewSh)
             pViewSh->GetViewData()->GetDocShell()->SetDrawModified();
     }
@@ -224,7 +236,7 @@ void __EXPORT ScClient::ViewChanged()
     SdrOle2Obj* pDrawObj = GetDrawObj();
     if (pDrawObj)
     {
-        Rectangle aLogicRect = pDrawObj->GetLogicRect();
+        Rectangle aLogicRect(sdr::legacy::GetLogicRect(*pDrawObj));
         Fraction aFractX = GetScaleWidth();
         Fraction aFractY = GetScaleHeight();
         aFractX *= aVisSize.Width();
@@ -238,14 +250,14 @@ void __EXPORT ScClient::ViewChanged()
         //SetObjArea( aObjArea );
 
         SfxViewShell* pSfxViewSh = GetViewShell();
-        ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
+        ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell* >( pSfxViewSh );
         if ( pViewSh )
         {
             Window* pWin = pViewSh->GetActiveWin();
             if ( pWin->LogicToPixel( aVisSize ) != pWin->LogicToPixel( aLogicRect.GetSize() ) )
             {
                 aLogicRect.SetSize( aVisSize );
-                pDrawObj->SetLogicRect( aLogicRect );
+                sdr::legacy::SetLogicRect(*pDrawObj, aLogicRect );
 
                 //  set document modified (SdrModel::SetChanged is not used)
                 pViewSh->GetViewData()->GetDocShell()->SetDrawModified();
@@ -260,7 +272,7 @@ void __EXPORT ScClient::MakeVisible()
     if (pDrawObj)
     {
         SfxViewShell* pSfxViewSh = GetViewShell();
-        ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
+        ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell* >( pSfxViewSh );
         if (pViewSh)
             pViewSh->ScrollToObject( pDrawObj );
     }

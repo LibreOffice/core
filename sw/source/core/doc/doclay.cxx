@@ -44,6 +44,7 @@
 #include <svx/svdouno.hxx>
 #include <svx/fmpage.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <svx/svdlegacy.hxx>
 
 #include <swmodule.hxx>
 #include <modcfg.hxx>
@@ -105,6 +106,7 @@
 // --> OD 2004-07-26 #i32089#
 #include <vector>
 // <--
+#include <svx/fmmodel.hxx>
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -511,8 +513,8 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
         // --> OD 2005-05-23 #i49730# - notify draw frame format
         // that position attributes are already set, if the position attributes
         // are already set at the source draw frame format.
-        if ( pDest->ISA(SwDrawFrmFmt) &&
-             rSource.ISA(SwDrawFrmFmt) &&
+        if (dynamic_cast< SwDrawFrmFmt* >(pDest) &&
+            dynamic_cast< const SwDrawFrmFmt* >(&rSource) &&
              static_cast<const SwDrawFrmFmt&>(rSource).IsPosAttrSet() )
         {
             static_cast<SwDrawFrmFmt*>(pDest)->PosAttrSet();
@@ -559,11 +561,11 @@ SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, sal_Bool bMoveWithinDoc,
     // <--
     if( !pPg )
     {
-        pPg = GetDrawModel()->AllocPage( sal_False );
+        pPg = GetDrawModel()->AllocPage( false );
         GetDrawModel()->InsertPage( pPg );
     }
 
-    SdrObject *pObj = rObj.Clone();
+    SdrObject *pObj = rObj.CloneSdrObject(GetDrawModel());
     if( bMoveWithinDoc && FmFormInventor == pObj->GetObjInventor() )
     {
         // bei Controls muss der Name erhalten bleiben
@@ -574,19 +576,19 @@ SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, sal_Bool bMoveWithinDoc,
         if( xSet.is() )
             aVal = xSet->getPropertyValue( sName );
         if( bInsInPage )
-            pPg->InsertObject( pObj );
+            pPg->InsertObjectToSdrObjList(*pObj);
         if( xSet.is() )
             xSet->setPropertyValue( sName, aVal );
     }
     else if( bInsInPage )
-        pPg->InsertObject( pObj );
+        pPg->InsertObjectToSdrObjList(*pObj);
 
     // OD 02.07.2003 #108784# - for drawing objects: set layer of cloned object
     // to invisible layer
     SdrLayerID nLayerIdForClone = rObj.GetLayer();
-    if ( !pObj->ISA(SwFlyDrawObj) &&
-         !pObj->ISA(SwVirtFlyDrawObj) &&
-         !IS_TYPE(SdrObject,pObj) )
+    if ( !dynamic_cast< SwFlyDrawObj* >(pObj) &&
+         !dynamic_cast< SwVirtFlyDrawObj* >(pObj) &&
+         typeid(*pObj) != typeid(SdrObject)) // IS_TYPE(SdrObject,pObj) )
     {
         if ( IsVisibleLayerId( nLayerIdForClone ) )
         {
@@ -981,8 +983,7 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
             aAnch.SetAnchor( rRg.GetPoint() );
             if ( FLY_AT_PAGE == eAnchorId )
             {
-                eAnchorId = rDrawObj.ISA( SdrUnoObj )
-                                    ? FLY_AS_CHAR : FLY_AT_PARA;
+                eAnchorId = dynamic_cast< SdrUnoObj* >(&rDrawObj) ? FLY_AS_CHAR : FLY_AT_PARA;
                 aAnch.SetType( eAnchorId );
             }
         }
@@ -1128,7 +1129,7 @@ SwPosFlyFrms SwDoc::GetAllFlyFmts( const SwPaM* pCmpRange, sal_Bool bDrawAlso ) 
             for( sal_uInt16 i = 0; i < rObjs.Count(); ++i)
             {
                 SwAnchoredObject* pAnchoredObj = rObjs[i];
-                if ( pAnchoredObj->ISA(SwFlyFrm) )
+                if ( dynamic_cast< SwFlyFrm* >(pAnchoredObj) )
                     pFly = &(pAnchoredObj->GetFrmFmt());
                 else if ( bDrawAlso )
                     pFly = &(pAnchoredObj->GetFrmFmt());
@@ -1679,7 +1680,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     pNewSet->Put( pOldFmt->GetAnchor() );
 
     //In der Hoehe soll der neue Varabel sein!
-     Size aSz( rSdrObj.GetCurrentBoundRect().GetSize() );
+     Size aSz( sdr::legacy::GetBoundRect(rSdrObj).GetSize() );
     SwFmtFrmSize aFrmSize( ATT_MIN_SIZE, aSz.Width(), aSz.Height() );
     pNewSet->Put( aFrmSize );
 
@@ -1840,8 +1841,8 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel(
         String const& rCharacterStyle,
         SdrObject& rSdrObj )
 {
-    SwDrawContact *const pContact =
-        static_cast<SwDrawContact*>(GetUserCall( &rSdrObj ));
+    // replace formally used 'GetUserCall()' by new notify/listener mechanism
+    const SwDrawContact* pContact = static_cast< const SwDrawContact* >(findConnectionToSdrObject(&rSdrObj));
     OSL_ENSURE( RES_DRAWFRMFMT == pContact->GetFmt()->Which(),
             "InsertDrawLabel(): not a DrawFrmFmt" );
     if (!pContact)

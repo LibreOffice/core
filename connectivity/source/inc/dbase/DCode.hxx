@@ -56,7 +56,6 @@ namespace connectivity
 
             virtual sal_Bool isIndexed() const;
             virtual file::OEvaluateSet* preProcess(file::OBoolOperator* pOp, file::OOperand* pRight = 0);
-            TYPEINFO();
         };
     }
 }

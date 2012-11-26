@@ -51,8 +51,6 @@ static sal_Bool bIsInUpdate;
     ScMatrixRef     pResult;        // Ergebnis
 
 public:
-    TYPEINFO();
-
             ScDdeLink( ScDocument* pD,
                         const String& rA, const String& rT, const String& rI,
                         sal_uInt8 nM );

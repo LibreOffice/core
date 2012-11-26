@@ -1271,7 +1271,7 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
     ::std::auto_ptr<SwTOXBase> pTOXBase;
     if (TOX_CONTENT_SECTION == GetSection().GetType())
     {
-        ASSERT( GetSection().ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
+        ASSERT( dynamic_cast< const SwTOXBaseSection* >(&GetSection()), "no TOXBaseSection!" );
         SwTOXBaseSection const& rTBS(
             dynamic_cast<SwTOXBaseSection const&>(GetSection()));
         pTOXBase.reset( new SwTOXBase(rTBS, pDoc) );

@@ -1330,13 +1330,13 @@ short MSWordExportBase::GetDefaultFrameDirection( ) const
         {
             nDir = TrueFrameDirection( *( const SwFrmFmt * ) pOutFmtNode );
         }
-        else if ( pOutFmtNode->ISA( SwCntntNode ) )    //pagagraph
+        else if ( dynamic_cast< const SwCntntNode* >(pOutFmtNode) )    //pagagraph
         {
             const SwCntntNode *pNd = ( const SwCntntNode * ) pOutFmtNode;
             SwPosition aPos( *pNd );
             nDir = pDoc->GetTextDirection( aPos );
         }
-        else if ( pOutFmtNode->ISA( SwTxtFmtColl ) )
+        else if ( dynamic_cast< const SwTxtFmtColl* >(pOutFmtNode) )
             nDir = FRMDIR_HORI_LEFT_TOP;    //what else can we do :-(
     }
 

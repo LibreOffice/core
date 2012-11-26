@@ -29,10 +29,7 @@
 #include "sfx2/minfitem.hxx"
 
 // STATIC DATA -----------------------------------------------------------
-
-TYPEINIT1(SfxMacroInfoItem, SfxPoolItem);
-
-// -----------------------------------------------------------------------
+IMPL_POOLITEM_FACTORY(SfxMacroInfoItem)
 
 SfxMacroInfoItem::SfxMacroInfoItem(
     sal_uInt16 nWhichId,        // Slot-ID

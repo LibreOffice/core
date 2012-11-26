@@ -66,8 +66,6 @@ struct AreaLink_Impl
     AreaLink_Impl() : m_pDocSh( NULL ), m_pDialog( NULL ) {}
 };
 
-TYPEINIT1(ScAreaLink,::sfx2::SvBaseLink);
-
 //------------------------------------------------------------------------
 
 ScAreaLink::ScAreaLink( SfxObjectShell* pShell, const String& rFile,
@@ -86,7 +84,7 @@ ScAreaLink::ScAreaLink( SfxObjectShell* pShell, const String& rFile,
     bInCreate       (sal_False),
     bDoInsert       (sal_True)
 {
-    DBG_ASSERT(pShell->ISA(ScDocShell), "ScAreaLink mit falscher ObjectShell");
+    DBG_ASSERT(dynamic_cast< ScDocShell* >(pShell), "ScAreaLink mit falscher ObjectShell");
     pImpl->m_pDocSh = static_cast< ScDocShell* >( pShell );
     SetRefreshHandler( LINK( this, ScAreaLink, RefreshHdl ) );
     SetRefreshControl( pImpl->m_pDocSh->GetDocument()->GetRefreshTimerControlAddress() );

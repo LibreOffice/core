@@ -144,9 +144,6 @@ inline sal_uInt32 SvDataPipe_Impl::getReadPosition() const
 //
 //============================================================================
 
-TYPEINIT1(SvOutputStreamOpenLockBytes, SvOpenLockBytes)
-
-//============================================================================
 // virtual
 ErrCode SvOutputStreamOpenLockBytes::ReadAt(sal_uLong, void *, sal_uLong, sal_uLong *)
     const

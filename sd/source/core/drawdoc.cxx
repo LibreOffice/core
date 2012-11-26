@@ -101,8 +101,6 @@ using namespace ::com::sun::star::linguistic2;
 
 //////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1( SdDrawDocument, FmFormModel );
-
 SdDrawDocument* SdDrawDocument::pDocLockedInsertingLinks = NULL;
 
 //////////////////////////////////////////////////////////////////////////////
@@ -158,15 +156,15 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 , mpCustomShowList(NULL)
 , mpDocSh(static_cast< ::sd::DrawDocShell*>(pDrDocSh))
 , mpCreatingTransferable( NULL )
-, mbHasOnlineSpellErrors(sal_False)
-, mbInitialOnlineSpellingEnabled(sal_True)
-, mbNewOrLoadCompleted(sal_False)
+, mbHasOnlineSpellErrors(false)
+, mbInitialOnlineSpellingEnabled(true)
+, mbNewOrLoadCompleted(false)
 , mbStartWithPresentation( false )
 , meLanguage( LANGUAGE_SYSTEM )
 , meLanguageCJK( LANGUAGE_SYSTEM )
 , meLanguageCTL( LANGUAGE_SYSTEM )
 , mePageNumType(SVX_ARABIC)
-, mbAllocDocSh(sal_False)
+, mbAllocDocSh(false)
 , meDocType(eType)
 , mpCharClass(NULL)
 , mpLocale(NULL)
@@ -183,7 +181,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 
     if (mpDocSh)
     {
-        SetSwapGraphics(sal_True);
+        SetSwapGraphics(true);
     }
 
     // Masseinheit (von App) und Massstab (von SdMod) setzen
@@ -193,20 +191,26 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 
     // #92067# Allow UI scale only for draw documents.
     if( eType == DOCUMENT_TYPE_DRAW )
-        SetUIUnit( (FieldUnit)pOptions->GetMetric(), Fraction( nX, nY ) );  // user-defined
+    {
+        SetUIUnit((FieldUnit)pOptions->GetMetric());    // user-defined
+        SetUIScale(Fraction(nX, nY));   // user-defined
+    }
     else
-        SetUIUnit( (FieldUnit)pOptions->GetMetric(), Fraction( 1, 1 ) );    // default
+    {
+        SetUIUnit((FieldUnit)pOptions->GetMetric());    // default
+        SetUIScale(Fraction(1, 1)); // default
+    }
 
-    SetScaleUnit(MAP_100TH_MM);
-    SetScaleFraction(Fraction(1, 1));
+    SetExchangeObjectUnit(MAP_100TH_MM);
+    SetExchangeObjectScale(Fraction(1, 1));
     SetDefaultFontHeight(847);     // 24p
 
-    pItemPool->SetDefaultMetric(SFX_MAPUNIT_100TH_MM);
-    pItemPool->FreezeIdRanges();
-    SetTextDefaults();
+    GetItemPool().SetDefaultMetric(SFX_MAPUNIT_100TH_MM);
+    GetItemPool().FreezeIdRanges();
+    SetSDTextDefaults();
 
     // die DrawingEngine muss auch wissen, wo er ist
-    FmFormModel::SetStyleSheetPool( new SdStyleSheetPool( GetPool(), this ) );
+    FmFormModel::SetStyleSheetPool( new SdStyleSheetPool( GetItemPool(), this ) );
 
     // Dem DrawOutliner den StyleSheetPool setzen, damit Textobjekte richtig
     // eingelesen werden koennen. Der Link zum StyleRequest-Handler des
@@ -247,7 +251,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     // for korean and japanese languages we have a different default for apply spacing between asian, latin and ctl text
     if( ( LANGUAGE_KOREAN  == eRealCTLLanguage ) || ( LANGUAGE_KOREAN_JOHAB == eRealCTLLanguage ) || ( LANGUAGE_JAPANESE == eRealCTLLanguage ) )
     {
-        GetPool().GetSecondaryPool()->SetPoolDefaultItem( SvxScriptSpaceItem( sal_False, EE_PARA_ASIANCJKSPACING ) );
+        GetItemPool().GetSecondaryPool()->SetPoolDefaultItem( SvxScriptSpaceItem( false, EE_PARA_ASIANCJKSPACING ) );
     }
 
     // DefTab und SpellOptions setzen
@@ -279,7 +283,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
         SetLinkManager( new sfx2::LinkManager(mpDocSh) );
     }
 
-    sal_uLong nCntrl = rOutliner.GetControlWord();
+    sal_uInt32 nCntrl = rOutliner.GetControlWord();
     nCntrl |= EE_CNTRL_ALLOWBIGOBJS;
     nCntrl |= EE_CNTRL_URLSFXEXECUTE;
 
@@ -302,43 +306,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     // Initialize the printer independent layout mode.
     SetPrinterIndependentLayout (pOptions->GetPrinterIndependentLayout());
 
-    // Dem HitTestOutliner den StyleSheetPool setzen.
-    // Der Link zum StyleRequest-Handler des
-    // Dokuments wird erst in NewOrLoadCompleted gesetzt, da erst dann alle
-    // Vorlagen existieren.
-    SfxItemSet aSet2( pHitTestOutliner->GetEmptyItemSet() );
-    pHitTestOutliner->SetStyleSheetPool( (SfxStyleSheetPool*)GetStyleSheetPool() );
-
-    SetCalcFieldValueHdl( pHitTestOutliner );
-
-    try
-    {
-        Reference< XSpellChecker1 > xSpellChecker( LinguMgr::GetSpellChecker() );
-        if ( xSpellChecker.is() )
-            pHitTestOutliner->SetSpeller( xSpellChecker );
-
-        Reference< XHyphenator > xHyphenator( LinguMgr::GetHyphenator() );
-        if( xHyphenator.is() )
-            pHitTestOutliner->SetHyphenator( xHyphenator );
-    }
-    catch(...)
-    {
-        DBG_ERROR("Can't get SpellChecker");
-    }
-
-    pHitTestOutliner->SetDefaultLanguage( Application::GetSettings().GetLanguage() );
-
-    sal_uLong nCntrl2 = pHitTestOutliner->GetControlWord();
-    nCntrl2 |= EE_CNTRL_ALLOWBIGOBJS;
-    nCntrl2 |= EE_CNTRL_URLSFXEXECUTE;
-    nCntrl2 &= ~EE_CNTRL_ONLINESPELLING;
-
-    nCntrl2 &= ~ EE_CNTRL_ULSPACESUMMATION;
-    if ( pOptions->IsSummationOfParagraphs() )
-        nCntrl2 |= EE_CNTRL_ULSPACESUMMATION;
-
-    pHitTestOutliner->SetControlWord( nCntrl2 );
-
     /**************************************************************************
     * Layer anlegen
     *
@@ -357,8 +324,8 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     **************************************************************************/
     {
         String aControlLayerName( SdResId(STR_LAYER_CONTROLS) );
+        SdrLayerAdmin& rLayerAdmin = GetModelLayerAdmin();
 
-        SdrLayerAdmin& rLayerAdmin = GetLayerAdmin();
         rLayerAdmin.NewLayer( String(SdResId(STR_LAYER_LAYOUT)) );
         rLayerAdmin.NewLayer( String(SdResId(STR_LAYER_BCKGRND)) );
         rLayerAdmin.NewLayer( String(SdResId(STR_LAYER_BCKGRNDOBJ)) );
@@ -379,7 +346,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 
 SdDrawDocument::~SdDrawDocument()
 {
-    Broadcast(SdrHint(HINT_MODELCLEARED));
+    Broadcast(SdrBaseHint(HINT_MODELCLEARED));
 
     if (mpWorkStartupTimer)
     {
@@ -395,26 +362,26 @@ SdDrawDocument::~SdDrawDocument()
     mpOnlineSearchItem = NULL;
 
     CloseBookmarkDoc();
-    SetAllocDocSh(sal_False);
+    SetAllocDocSh(false);
 
     // #116168#
-    ClearModel(sal_True);
+    ClearModel(true);
 
-    if (pLinkManager)
+    if (GetLinkManager())
     {
         // BaseLinks freigeben
-        if ( pLinkManager->GetLinks().Count() )
+        if ( GetLinkManager()->GetLinks().Count() )
         {
-            pLinkManager->Remove( 0, pLinkManager->GetLinks().Count() );
+            GetLinkManager()->Remove( 0, GetLinkManager()->GetLinks().Count() );
         }
 
-        delete pLinkManager;
-        pLinkManager = NULL;
+        delete GetLinkManager();
+        SetLinkManager(0);
     }
 
     ::sd::FrameView* pFrameView = NULL;
 
-    for (sal_uLong i = 0; i < mpFrameViewList->Count(); i++)
+    for (sal_uInt32 i = 0; i < mpFrameViewList->Count(); i++)
     {
         // Ggf. FrameViews loeschen
         pFrameView =
@@ -429,7 +396,7 @@ SdDrawDocument::~SdDrawDocument()
 
     if (mpCustomShowList)
     {
-        for (sal_uLong j = 0; j < mpCustomShowList->Count(); j++)
+        for (sal_uInt32 j = 0; j < mpCustomShowList->Count(); j++)
         {
             // Ggf. CustomShows loeschen
             SdCustomShow* pCustomShow = (SdCustomShow*) mpCustomShowList->GetObject(j);
@@ -473,10 +440,10 @@ SdrModel* SdDrawDocument::AllocModel() const
 
         if( meDocType == DOCUMENT_TYPE_IMPRESS )
             mpCreatingTransferable->SetDocShell( new ::sd::DrawDocShell(
-                SFX_CREATE_MODE_EMBEDDED, sal_True, meDocType ) );
+                SFX_CREATE_MODE_EMBEDDED, true, meDocType ) );
         else
             mpCreatingTransferable->SetDocShell( new ::sd::GraphicDocShell(
-                SFX_CREATE_MODE_EMBEDDED, sal_True, meDocType ) );
+                SFX_CREATE_MODE_EMBEDDED, true, meDocType ) );
 
         pNewDocSh = static_cast< ::sd::DrawDocShell*>( pObj = mpCreatingTransferable->GetDocShell() );
         pNewDocSh->DoInitNew( NULL );
@@ -492,7 +459,7 @@ SdrModel* SdDrawDocument::AllocModel() const
         pNewStylePool->CopyTableStyles(*pOldStylePool);
 
 
-        for (sal_uInt16 i = 0; i < GetMasterSdPageCount(PK_STANDARD); i++)
+        for (sal_uInt32 i = 0; i < GetMasterSdPageCount(PK_STANDARD); i++)
         {
             // Alle Layouts der MasterPage mitnehmen
             String aOldLayoutName(((SdDrawDocument*) this)->GetMasterSdPage(i, PK_STANDARD)->GetLayoutName());
@@ -507,9 +474,9 @@ SdrModel* SdDrawDocument::AllocModel() const
     {
         // Es wird eine DocShell erzeugt, welche mit GetAllocedDocSh() zurueckgegeben wird
         SdDrawDocument* pDoc = (SdDrawDocument*) this;
-        pDoc->SetAllocDocSh(sal_False);
+        pDoc->SetAllocDocSh(false);
         pDoc->mxAllocedDocShRef = new ::sd::DrawDocShell(
-            SFX_CREATE_MODE_EMBEDDED, sal_True, meDocType);
+            SFX_CREATE_MODE_EMBEDDED, true, meDocType);
         pDoc->mxAllocedDocShRef->DoInitNew(NULL);
         pNewModel = pDoc->mxAllocedDocShRef->GetDoc();
     }
@@ -530,9 +497,9 @@ SdrModel* SdDrawDocument::AllocModel() const
 |*
 \************************************************************************/
 
-SdrPage* SdDrawDocument::AllocPage(FASTBOOL bMasterPage)
+SdrPage* SdDrawDocument::AllocPage(bool bMasterPage)
 {
-    return new SdPage(*this, NULL, (sal_Bool)bMasterPage);
+    return new SdPage(*this, NULL, bMasterPage);
 }
 
 /*************************************************************************
@@ -541,7 +508,7 @@ SdrPage* SdDrawDocument::AllocPage(FASTBOOL bMasterPage)
 |*
 \************************************************************************/
 
-void SdDrawDocument::SetChanged(sal_Bool bFlag)
+void SdDrawDocument::SetChanged(bool bFlag)
 {
     if (mpDocSh)
     {
@@ -567,7 +534,7 @@ void SdDrawDocument::SetChanged(sal_Bool bFlag)
 |*
 \************************************************************************/
 
-void SdDrawDocument::NbcSetChanged(sal_Bool bFlag)
+void SdDrawDocument::NbcSetChanged(bool bFlag)
 {
     // #100237# forward to baseclass
     FmFormModel::SetChanged(bFlag);
@@ -592,7 +559,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         CreateLayoutTemplates();
         CreateDefaultCellStyles();
 
-        static_cast< SdStyleSheetPool* >( mxStyleSheetPool.get() )->CreatePseudosIfNecessary();
+        GetSdStyleSheetPool()->CreatePseudosIfNecessary();
     }
     else if (eMode == DOC_LOADED)
     {
@@ -601,9 +568,9 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         CheckMasterPages();
 
         if ( GetMasterSdPageCount(PK_STANDARD) > 1 )
-            RemoveUnnecessaryMasterPages( NULL, sal_True, sal_False );
+            RemoveUnnecessaryMasterPages( NULL, true, false );
 
-        for ( sal_uInt16 i = 0; i < GetPageCount(); i++ )
+        for ( sal_uInt32 i = 0; i < GetPageCount(); i++ )
         {
             // Check for correct layout names
             SdPage* pPage = (SdPage*) GetPage( i );
@@ -619,7 +586,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
             }
         }
 
-        for ( sal_uInt16 nPage = 0; nPage < GetMasterPageCount(); nPage++)
+        for ( sal_uInt32 nPage = 0; nPage < GetMasterPageCount(); nPage++)
         {
             // LayoutName and PageName must be the same
             SdPage* pPage = (SdPage*) GetMasterPage( nPage );
@@ -635,15 +602,15 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         RestoreLayerNames();
 
         // Sprachabhaengige Namen der Vorlagen setzen
-        static_cast<SdStyleSheetPool*>(mxStyleSheetPool.get())->UpdateStdNames();
+        GetSdStyleSheetPool()->UpdateStdNames();
 
         // Ggf. fehlende Vorlagen erzeugen (es gab z.B. frueher keinen Subtitle)
-        static_cast<SdStyleSheetPool*>(mxStyleSheetPool.get())->CreatePseudosIfNecessary();
+        GetSdStyleSheetPool()->CreatePseudosIfNecessary();
     }
 
     // Standardvorlage an der Drawing Engine setzen
     String aName( SdResId(STR_STANDARD_STYLESHEET_NAME));
-    SetDefaultStyleSheet(static_cast<SfxStyleSheet*>(mxStyleSheetPool->Find(aName, SD_STYLE_FAMILY_GRAPHICS)));
+    SetDefaultStyleSheet(static_cast<SfxStyleSheet*>(GetStyleSheetPool()->Find(aName, SD_STYLE_FAMILY_GRAPHICS)));
 
     // #119287# Set default StyleSheet for SdrGrafObj and SdrOle2Obj
     SetDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj(static_cast<SfxStyleSheet*>(mxStyleSheetPool->Find(String( SdResId(STR_POOLSHEET_OBJNOLINENOFILL)), SD_STYLE_FAMILY_GRAPHICS)));
@@ -653,17 +620,12 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
     // dokumentspezifisch wie StyleSheetPool und StyleRequestHandler
     ::Outliner& rDrawOutliner = GetDrawOutliner();
     rDrawOutliner.SetStyleSheetPool((SfxStyleSheetPool*)GetStyleSheetPool());
-    sal_uLong nCntrl = rDrawOutliner.GetControlWord();
+    sal_uInt32 nCntrl = rDrawOutliner.GetControlWord();
     if (mbOnlineSpell)
         nCntrl |= EE_CNTRL_ONLINESPELLING;
     else
         nCntrl &= ~EE_CNTRL_ONLINESPELLING;
     rDrawOutliner.SetControlWord(nCntrl);
-
-    // HitTest-Outliner und  Dokument Outliner initialisieren,
-    // aber nicht den globalen Outliner, den der ist ja nicht
-    // dokumentspezifisch wie StyleSheetPool und StyleRequestHandler
-    pHitTestOutliner->SetStyleSheetPool((SfxStyleSheetPool*)GetStyleSheetPool());
 
     if(mpOutliner)
     {
@@ -679,7 +641,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         // Praesentationsobjekte muessen wieder Listener der entsprechenden
         // Vorlagen werden
         SdStyleSheetPool* pSPool = (SdStyleSheetPool*) GetStyleSheetPool();
-        sal_uInt16 nPage, nPageCount;
+        sal_uInt32 nPage, nPageCount;
 
         // #96323# create missing layout style sheets for broken documents
         //         that where created with the 5.2
@@ -706,37 +668,24 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         }
     }
 
-    mbNewOrLoadCompleted = sal_True;
+    mbNewOrLoadCompleted = true;
 
     /**************************************************************************
     * Alle gelinkten Pages aktualisieren
     **************************************************************************/
-    SdPage* pPage = NULL;
-    sal_uInt16 nMaxSdPages = GetSdPageCount(PK_STANDARD);
-
-    for (sal_uInt16 nSdPage=0; nSdPage < nMaxSdPages; nSdPage++)
-    {
-        pPage = (SdPage*) GetSdPage(nSdPage, PK_STANDARD);
-
-        if (pPage && pPage->GetFileName().Len() && pPage->GetBookmarkName().Len())
-        {
-            pPage->SetModel(this);
-        }
-    }
-
     UpdateAllLinks();
 
-    SetChanged( sal_False );
+    SetChanged( false );
 }
 
 /** updates all links, only links in this document should by resolved */
 void SdDrawDocument::UpdateAllLinks()
 {
-    if ( !pDocLockedInsertingLinks && pLinkManager && pLinkManager->GetLinks().Count() )
+    if ( !pDocLockedInsertingLinks && GetLinkManager() && GetLinkManager()->GetLinks().Count() )
     {
         pDocLockedInsertingLinks = this; // lock inserting links. only links in this document should by resolved
 
-        pLinkManager->UpdateAllLinks();  // query box: update all links?
+        GetLinkManager()->UpdateAllLinks();  // query box: update all links?
 
         if( pDocLockedInsertingLinks == this )
             pDocLockedInsertingLinks = NULL;  // unlock inserting links
@@ -774,7 +723,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
         SfxStyleSheet* pTitleSheet = (SfxStyleSheet*)
                                         pSPool->GetTitleSheet(aName);
 
-        SdrObject* pObj = rPresentationShapes.getNextShape(0);
+        const SdrObject* pObj = rPresentationShapes.getNextShape(0);
 
         // jetzt nach Titel- und Gliederungstextobjekten suchen und
         // Objekte zu Listenern machen
@@ -790,39 +739,39 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
                     if( pOPO && pOPO->GetOutlinerMode() == OUTLINERMODE_DONTKNOW )
                         pOPO->SetOutlinerMode( OUTLINERMODE_TITLEOBJECT );
 
-                    // sal_True: harte Attribute dabei nicht loeschen
+                    // true: harte Attribute dabei nicht loeschen
                     if (pTitleSheet)
-                        pObj->SetStyleSheet(pTitleSheet, sal_True);
+                        const_cast< SdrObject* >(pObj)->SetStyleSheet(pTitleSheet, true);
                 }
                 else if (nId == OBJ_OUTLINETEXT)
                 {
                     if( pOPO && pOPO->GetOutlinerMode() == OUTLINERMODE_DONTKNOW )
                         pOPO->SetOutlinerMode( OUTLINERMODE_OUTLINEOBJECT );
 
-                    for (sal_uInt16 nSheet = 0; nSheet < 10; nSheet++)
+                    for (sal_uInt32 nSheet = 0; nSheet < 10; nSheet++)
                     {
                         SfxStyleSheet* pSheet = (SfxStyleSheet*)pOutlineList->GetObject(nSheet);
                         if (pSheet)
                         {
-                            pObj->StartListening(*pSheet);
+                            const_cast< SdrObject* >(pObj)->StartListening(*pSheet);
 
                             if( nSheet == 0)
                                 // Textrahmen hoert auf StyleSheet der Ebene1
-                                pObj->NbcSetStyleSheet(pSheet, sal_True);
+                                const_cast< SdrObject* >(pObj)->SetStyleSheet(pSheet, true);
                         }
                     }
                 }
 
-                if (pObj->ISA(SdrTextObj) && pObj->IsEmptyPresObj() && pPage)
+                if (dynamic_cast< const SdrTextObj* >(pObj) && pObj->IsEmptyPresObj() && pPage)
                 {
-                    PresObjKind ePresObjKind = pPage->GetPresObjKind(pObj);
-                    String aString( pPage->GetPresObjText(ePresObjKind) );
+                    const PresObjKind ePresObjKind(pPage->GetPresObjKind(pObj));
+                    const String aString( pPage->GetPresObjText(ePresObjKind) );
 
                     if (aString.Len())
                     {
-                        sd::Outliner* pInternalOutl = GetInternalOutliner(sal_True);
+                        sd::Outliner* pInternalOutl = GetInternalOutliner(true);
                         pPage->SetObjText( (SdrTextObj*) pObj, pInternalOutl, ePresObjKind, aString );
-                        pObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( ePresObjKind ), sal_True );
+                        const_cast< SdrObject* >(pObj)->SetStyleSheet( pPage->GetStyleSheetForPresObj( ePresObjKind ), true );
                         pInternalOutl->Clear();
                     }
                 }
@@ -842,7 +791,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
 |*
 \************************************************************************/
 
-::sd::Outliner* SdDrawDocument::GetOutliner(sal_Bool bCreateOutliner)
+::sd::Outliner* SdDrawDocument::GetOutliner(bool bCreateOutliner)
 {
     if (!mpOutliner && bCreateOutliner)
     {
@@ -851,7 +800,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
         if (mpDocSh)
             mpOutliner->SetRefDevice( SD_MOD()->GetRefDevice( *mpDocSh ) );
 
-        mpOutliner->SetDefTab( nDefaultTabulator );
+        mpOutliner->SetDefTab(GetDefaultTabulator());
         mpOutliner->SetStyleSheetPool((SfxStyleSheetPool*)GetStyleSheetPool());
     }
 
@@ -867,7 +816,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
 |*
 \************************************************************************/
 
-::sd::Outliner* SdDrawDocument::GetInternalOutliner(sal_Bool bCreateOutliner)
+::sd::Outliner* SdDrawDocument::GetInternalOutliner(bool bCreateOutliner)
 {
     if ( !mpInternalOutliner && bCreateOutliner )
     {
@@ -875,19 +824,19 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
         // MT:
         // Dieser Outliner wird nur fuer das Erzeugen spezieller Textobjekte
         // verwendet. Da in diesen Textobjekten keine Portion-Informationen
-        // gespeichert werden muessen, kann/soll der Update-Mode immer sal_False bleiben.
-        mpInternalOutliner->SetUpdateMode( sal_False );
-        mpInternalOutliner->EnableUndo( sal_False );
+        // gespeichert werden muessen, kann/soll der Update-Mode immer false bleiben.
+        mpInternalOutliner->SetUpdateMode( false );
+        mpInternalOutliner->EnableUndo( false );
 
         if (mpDocSh)
             mpInternalOutliner->SetRefDevice( SD_MOD()->GetRefDevice( *mpDocSh ) );
 
-        mpInternalOutliner->SetDefTab( nDefaultTabulator );
+        mpInternalOutliner->SetDefTab(GetDefaultTabulator());
         mpInternalOutliner->SetStyleSheetPool((SfxStyleSheetPool*)GetStyleSheetPool());
     }
 
-    DBG_ASSERT( !mpInternalOutliner || ( mpInternalOutliner->GetUpdateMode() == sal_False ) , "InternalOutliner: UpdateMode = sal_True !" );
-    DBG_ASSERT( !mpInternalOutliner || ( mpInternalOutliner->IsUndoEnabled() == sal_False ), "InternalOutliner: Undo = sal_True !" );
+    DBG_ASSERT( !mpInternalOutliner || ( mpInternalOutliner->GetUpdateMode() == false ) , "InternalOutliner: UpdateMode = true !" );
+    DBG_ASSERT( !mpInternalOutliner || ( mpInternalOutliner->IsUndoEnabled() == false ), "InternalOutliner: Undo = true !" );
 
     // MT: Wer ihn vollmuellt, macht ihn auch gleich wieder leer:
     // Vorteile:
@@ -904,10 +853,10 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
 |*
 \************************************************************************/
 
-void SdDrawDocument::SetOnlineSpell(sal_Bool bIn)
+void SdDrawDocument::SetOnlineSpell(bool bIn)
 {
     mbOnlineSpell = bIn;
-    sal_uLong nCntrl = 0;
+    sal_uInt32 nCntrl = 0;
 
     if(mpOutliner)
     {
@@ -1030,16 +979,16 @@ void SdDrawDocument::SetStartWithPresentation( bool bStartWithPresentation )
 }
 
 // #109538#
-void SdDrawDocument::PageListChanged()
-{
-    mpDrawPageListWatcher->Invalidate();
-}
+//void SdDrawDocument::PageListChanged()
+//{
+//  mpDrawPageListWatcher->Invalidate();
+//}
 
 // #109538#
-void SdDrawDocument::MasterPageListChanged()
-{
-    mpMasterPageListWatcher->Invalidate();
-}
+//void SdDrawDocument::MasterPageListChanged()
+//{
+//  mpMasterPageListWatcher->Invalidate();
+//}
 
 void SdDrawDocument::SetCalcFieldValueHdl(::Outliner* pOutliner)
 {

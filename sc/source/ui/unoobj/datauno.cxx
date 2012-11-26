@@ -1091,9 +1091,11 @@ ScFilterDescriptorBase::~ScFilterDescriptorBase()
 
 void ScFilterDescriptorBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.ISA( SfxSimpleHint ) )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if ( pSfxSimpleHint )
     {
-        sal_uLong nId = ((const SfxSimpleHint&)rHint).GetId();
+        sal_uLong nId = pSfxSimpleHint->GetId();
         if ( nId == SFX_HINT_DYING )
         {
             pDocSh = NULL;          // invalid
@@ -1626,17 +1628,27 @@ ScDatabaseRangeObj::~ScDatabaseRangeObj()
 
 void ScDatabaseRangeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
 
-    if ( rHint.ISA( SfxSimpleHint ) && ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
-        pDocShell = NULL;       // ungueltig geworden
-    else if ( rHint.ISA (ScDBRangeRefreshedHint) )
+    if ( pSfxSimpleHint )
     {
-        ScDBData* pDBData = GetDBData_Impl();
-        const ScDBRangeRefreshedHint& rRef = (const ScDBRangeRefreshedHint&)rHint;
-        ScImportParam aParam;
-        pDBData->GetImportParam(aParam);
-        if (aParam == rRef.GetImportParam())
-            Refreshed_Impl();
+        if(SFX_HINT_DYING == pSfxSimpleHint->GetId())
+        {
+            pDocShell = NULL;       // ungueltig geworden
+        }
+    }
+    else
+    {
+        const ScDBRangeRefreshedHint* pScDBRangeRefreshedHint = dynamic_cast< const ScDBRangeRefreshedHint* >(&rHint);
+
+        if ( pScDBRangeRefreshedHint )
+        {
+            ScDBData* pDBData = GetDBData_Impl();
+            ScImportParam aParam;
+            pDBData->GetImportParam(aParam);
+            if (aParam == pScDBRangeRefreshedHint->GetImportParam())
+                Refreshed_Impl();
+        }
     }
 }
 
@@ -2180,9 +2192,9 @@ ScDatabaseRangesObj::~ScDatabaseRangesObj()
 void ScDatabaseRangesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
 
-    if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    if ( pSfxSimpleHint && SFX_HINT_DYING == pSfxSimpleHint->GetId() )
     {
         pDocShell = NULL;       // ungueltig geworden
     }

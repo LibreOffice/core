@@ -78,7 +78,7 @@ BreakDlg::BreakDlg(
     pProgrInfo->Init( nSumActionCount*3, nObjCount );
 
     pDrView = _pDrView;
-    bCancel = sal_False;
+    bCancel = false;
 
     FreeResource();
 }
@@ -95,7 +95,7 @@ BreakDlg::~BreakDlg()
 // Control-Handler fuer den Abbruch Button
 IMPL_LINK( BreakDlg, CancelButtonHdl, void *, EMPTYARG )
 {
-  bCancel = sal_True;
+  bCancel = true;
   aBtnCancel.Disable();
   return( 0L );
 }
@@ -176,7 +176,7 @@ short BreakDlg::Execute()
 IMPL_LINK( BreakDlg, InitialUpdate, Timer*, EMPTYARG )
 {
     pDrView->DoImportMarkedMtf(pProgrInfo);
-    EndDialog(sal_True);
+    EndDialog(true);
     return 0L;
 }
 

@@ -152,8 +152,7 @@ namespace cppcanvas
                 ::basegfx::B2DHomMatrix   aTransform;
 
                 if( bOffsetting )
-                    aTransform.translate( -rOffset.getX(),
-                                          -rOffset.getY() );
+                    aTransform.translate( -rOffset );
                 if( bScaling )
                     aTransform.scale( 1.0/pScaling->getX(), 1.0/pScaling->getY() );
 
@@ -188,8 +187,7 @@ namespace cppcanvas
                     ::basegfx::B2DHomMatrix aTransform;
 
                     if( bOffsetting )
-                        aTransform.translate( -rOffset.getX(),
-                                              -rOffset.getY() );
+                        aTransform.translate( -rOffset );
                     if( bScaling )
                         aTransform.scale( 1.0/pScaling->getX(), 1.0/pScaling->getY() );
 

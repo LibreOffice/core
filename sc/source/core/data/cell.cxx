@@ -746,13 +746,9 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
     bInChangeTrack( sal_False ),
     bTableOpDirty( sal_False ),
     bNeedListening( sal_False ),
+    pValidRefToken( rCell.pValidRefToken ),
     aPos( rPos )
 {
-    if ( rCell.pValidRefToken )
-        pValidRefToken = static_cast<ScToken*>(rCell.pValidRefToken->Clone());
-    else
-        pValidRefToken = NULL;
-
     pCode = (rCell.pCode) ? rCell.pCode->Clone() : NULL;
 
     if ( nCloneFlags & SC_CLONECELL_ADJUST3DREL )
@@ -1802,7 +1798,7 @@ void __EXPORT ScFormulaCell::Notify( SvtBroadcaster&, const SfxHint& rHint)
 {
     if ( !pDocument->IsInDtorClear() && !pDocument->GetHardRecalcState() )
     {
-        const ScHint* p = PTR_CAST( ScHint, &rHint );
+        const ScHint* p = dynamic_cast< const ScHint* >( &rHint );
         sal_uLong nHint = (p ? p->GetId() : 0);
         if (nHint & (SC_HINT_DATACHANGED | SC_HINT_DYING | SC_HINT_TABLEOPDIRTY))
         {

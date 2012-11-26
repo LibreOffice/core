@@ -58,6 +58,8 @@
 #include <svl/stritem.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <vcl/svapp.hxx>
+#include <doc.hxx>
+#include <svx/fmmodel.hxx>
 
 // -> #111827#
 #include <SwRewriter.hxx>
@@ -78,7 +80,7 @@ bool SwTextShell::InsertMediaDlg( SfxRequest& rReq )
 
     if( pReqArgs )
     {
-        const SfxStringItem* pStringItem = PTR_CAST( SfxStringItem, &pReqArgs->Get( rReq.GetSlot() ) );
+        const SfxStringItem* pStringItem = dynamic_cast< const SfxStringItem* >( &pReqArgs->Get( rReq.GetSlot() ) );
 
         if( pStringItem )
         {
@@ -130,7 +132,11 @@ bool SwTextShell::InsertMediaDlg( SfxRequest& rReq )
             else
                 aSize = Size( 2835, 2835 );
 
-            SdrMediaObj* pObj = new SdrMediaObj( Rectangle( aPos, aSize ) );
+            SdrMediaObj* pObj = new SdrMediaObj(
+                *rSh.SwFEShell::GetDoc()->GetOrCreateDrawModel(),
+                basegfx::tools::createScaleTranslateB2DHomMatrix(
+                    aSize.getWidth(), aSize.getHeight(),
+                    aPos.X(), aPos.Y()));
 
             pObj->setURL( aURL );
             rSh.EnterStdMode();

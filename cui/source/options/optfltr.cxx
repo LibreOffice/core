@@ -389,7 +389,7 @@ SvButtonState OfaMSFilterTabPage2::MSFltrSimpleTable::GetCheckButtonState(
 /* -----------------------------2002/06/20 11:57------------------------------
 
  ---------------------------------------------------------------------------*/
-void OfaMSFilterTabPage2::MSFltrSimpleTable::CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, sal_Bool bChecked)
+void OfaMSFilterTabPage2::MSFltrSimpleTable::CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, bool bChecked)
 {
     if ( nPos < GetEntryCount() )
         SetCheckButtonState(

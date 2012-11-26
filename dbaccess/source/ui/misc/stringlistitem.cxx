@@ -38,8 +38,6 @@ using namespace ::com::sun::star::uno;
 //=========================================================================
 //= OStringListItem
 //=========================================================================
-TYPEINIT1(OStringListItem, SfxPoolItem);
-//-------------------------------------------------------------------------
 OStringListItem::OStringListItem(sal_Int16 _nWhich, const Sequence< ::rtl::OUString >& _rList)
     :SfxPoolItem(_nWhich)
     ,m_aList(_rList)
@@ -56,7 +54,7 @@ OStringListItem::OStringListItem(const OStringListItem& _rSource)
 //-------------------------------------------------------------------------
 int OStringListItem::operator==(const SfxPoolItem& _rItem) const
 {
-    const OStringListItem* pCompare = PTR_CAST(OStringListItem, &_rItem);
+    const OStringListItem* pCompare = dynamic_cast< const OStringListItem* >( &_rItem);
     if ((!pCompare) || (pCompare->m_aList.getLength() != m_aList.getLength()))
         return 0;
 

@@ -144,13 +144,13 @@ public:
         const SdXMLImExViewBox& rViewBox,
         const com::sun::star::awt::Point& rObjectPos,
         const com::sun::star::awt::Size& rObjectSize,
-        // #96328#
-        const bool bClosed = true);
+        const bool bClosed);
     SdXMLImExPointsElement(const rtl::OUString& rNew,
         const SdXMLImExViewBox& rViewBox,
         const com::sun::star::awt::Point& rObjectPos,
         const com::sun::star::awt::Size& rObjectSize,
-        const SvXMLUnitConverter& rConv);
+        const SvXMLUnitConverter& rConv,
+        const bool bClosed);
 
     const rtl::OUString& GetExportString() const { return msString; }
     const com::sun::star::drawing::PointSequenceSequence& GetPointSequenceSequence() const { return maPoly; }

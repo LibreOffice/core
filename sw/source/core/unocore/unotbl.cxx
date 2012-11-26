@@ -747,7 +747,6 @@ void lcl_setValue( SwXCell &rCell, double nVal )
 /******************************************************************
  * SwXCell
  ******************************************************************/
-TYPEINIT1(SwXCell, SwClient);
 
 SwXCell::SwXCell(SwFrmFmt* pTblFmt, SwTableBox* pBx, sal_uInt16 nPos ) :
     SwXText(pTblFmt->GetDoc(), CURSOR_TBLTEXT),
@@ -1273,7 +1272,6 @@ uno::Sequence< OUString > SwXTextTableRow::getSupportedServiceNames(void) throw(
     pArray[0] = C2U("com.sun.star.text.TextTableRow");
     return aRet;
 }
-TYPEINIT1(SwXTextTableRow, SwClient);
 
 SwXTextTableRow::SwXTextTableRow(SwFrmFmt* pFmt, SwTableLine* pLn) :
     SwClient(pFmt),
@@ -2094,9 +2092,6 @@ sal_Int64 SAL_CALL SwXTextTable::getSomething( const uno::Sequence< sal_Int8 >& 
     }
     return 0;
 }
-
-TYPEINIT1(SwXTextTable, SwClient)
-
 
 SwXTextTable::SwXTextTable() :
     aLstnrCntnr( (text::XTextTable*)this),
@@ -3577,8 +3572,6 @@ sal_Int64 SAL_CALL SwXCellRange::getSomething( const uno::Sequence< sal_Int8 >& 
     return 0;
 }
 
-TYPEINIT1(SwXCellRange, SwClient);
-
 OUString SwXCellRange::getImplementationName(void) throw( uno::RuntimeException )
 {
     return C2U("SwXCellRange");
@@ -4562,7 +4555,6 @@ uno::Sequence< OUString > SwXTableRows::getSupportedServiceNames(void) throw( un
     pArray[0] = C2U("com.sun.star.text.TableRows");
     return aRet;
 }
-TYPEINIT1(SwXTableRows, SwClient);
 
 SwXTableRows::SwXTableRows(SwFrmFmt& rFrmFmt) :
     SwClient(&rFrmFmt)
@@ -4779,7 +4771,6 @@ uno::Sequence< OUString > SwXTableColumns::getSupportedServiceNames(void) throw(
     pArray[0] = C2U("com.sun.star.text.TableColumns");
     return aRet;
 }
-TYPEINIT1(SwXTableColumns, SwClient);
 
 SwXTableColumns::SwXTableColumns(SwFrmFmt& rFrmFmt) :
     SwClient(&rFrmFmt)

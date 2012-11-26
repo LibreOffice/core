@@ -112,13 +112,6 @@ using ::rtl::OUString;
 
 SV_IMPL_PTRARR(SwColumns,SwColumn*)
 
-TYPEINIT1(SwFmtVertOrient, SfxPoolItem);
-TYPEINIT1(SwFmtHoriOrient, SfxPoolItem);
-TYPEINIT2(SwFmtHeader,  SfxPoolItem, SwClient );
-TYPEINIT2(SwFmtFooter,  SfxPoolItem, SwClient );
-TYPEINIT2(SwFmtPageDesc,  SfxPoolItem, SwClient );
-TYPEINIT1_AUTOFACTORY(SwFmtLineNumber, SfxPoolItem);
-
 /* -----------------19.05.98 09:26-------------------
  *  Umwandlung fuer QueryValue
  * --------------------------------------------------*/
@@ -182,12 +175,12 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
         // Klammer, weil im DTOR SwClientIter das Flag bTreeChg zurueck
         // gesetzt wird. Unguenstig, wenn das Format vorher zerstoert wird.
         SwClientIter aIter( *pFmt );        // TODO
-        SwClient *pLast = aIter.GoStart();
+        SwClient *pLast = aIter.SwClientIter_First();
         if( pLast )
             do {
-                bDel = pLast->IsA( TYPE(SwFrm) )
+                bDel = dynamic_cast< SwFrm* >(pLast)
                     || SwXHeadFootText::IsXHeadFootText(pLast);
-            } while( bDel && 0 != ( pLast = ++aIter ));
+            } while( bDel && 0 != ( pLast = aIter.SwClientIter_Next() ));
     }
 
     if ( bDel )
@@ -675,10 +668,14 @@ void SwFmtPageDesc::SwClientNotify( const SwModify&, const SfxHint& rHint )
         const SwModify* pMod = GetDefinedIn();
         if ( pMod )
         {
-            if( pMod->ISA( SwCntntNode ) )
+            if( dynamic_cast< const SwCntntNode* >(pMod) )
+            {
                 ((SwCntntNode*)pMod)->SetAttr( aDfltDesc );
-            else if( pMod->ISA( SwFmt ))
+            }
+            else if( dynamic_cast< const SwFmt* >(pMod))
+            {
                 ((SwFmt*)pMod)->SetFmtAttr( aDfltDesc );
+            }
             else
             {
                 DBG_ERROR( "What kind of SwModify is this?" );
@@ -686,9 +683,11 @@ void SwFmtPageDesc::SwClientNotify( const SwModify&, const SfxHint& rHint )
             }
         }
         else
+        {
             // there could be an Undo-copy
             RegisterToPageDesc( *pDesc );
     }
+}
 }
 
 void SwFmtPageDesc::RegisterToPageDesc( SwPageDesc& rDesc )
@@ -708,7 +707,7 @@ void SwFmtPageDesc::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                 //Der Pagedesc, bei dem ich angemeldet bin stirbt, ich trage
                 //mich also bei meinem Format aus.
                 //Dabei werden ich Deletet!!!
-            if( IS_TYPE( SwFmt, pDefinedIn ))
+            if( typeid(SwFmt) == typeid(*pDefinedIn) ) // IS_TYPE( SwFmt, pDefinedIn ))
 #ifdef DBG_UTIL
             {
                 sal_Bool bDel = ((SwFmt*)pDefinedIn)->ResetFmtAttr( RES_PAGEDESC );
@@ -717,7 +716,7 @@ void SwFmtPageDesc::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 #else
                 ((SwFmt*)pDefinedIn)->ResetFmtAttr( RES_PAGEDESC );
 #endif
-            else if( IS_TYPE( SwCntntNode, pDefinedIn ))
+            else if( typeid(SwCntntNode) == typeid(*pDefinedIn) ) // IS_TYPE( SwCntntNode, pDefinedIn ))
 #ifdef DBG_UTIL
             {
                 sal_Bool bDel = ((SwCntntNode*)pDefinedIn)->ResetAttr( RES_PAGEDESC );
@@ -1880,6 +1879,10 @@ SfxPoolItem* SwFmtNoBalancedColumns::Clone( SfxItemPool* ) const
 }
 
 // class SwFmtFtnEndAtTxtEnd
+SfxPoolItem* SwFmtFtnEndAtTxtEnd::Clone(SfxItemPool* /*pPool*/) const
+{
+    return new SwFmtFtnEndAtTxtEnd(*this);
+}
 
 sal_uInt16 SwFmtFtnEndAtTxtEnd::GetValueCount() const
 {
@@ -2101,6 +2104,7 @@ sal_Bool SwFmtChain::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 
 
 //class SwFmtLineNumber
+IMPL_POOLITEM_FACTORY(SwFmtLineNumber)
 
 SwFmtLineNumber::SwFmtLineNumber() :
     SfxPoolItem( RES_LINENUMBER )
@@ -2474,7 +2478,6 @@ SfxPoolItem* SwHeaderAndFooterEatSpacingItem::Clone( SfxItemPool* ) const
 //  class SwFrmFmt
 //  Implementierung teilweise inline im hxx
 
-TYPEINIT1( SwFrmFmt, SwFmt );
 IMPL_FIXEDMEMPOOL_NEWDEL_DLL( SwFrmFmt, 20, 20 )
 
 void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
@@ -2549,7 +2552,7 @@ SwRect SwFrmFmt::FindLayoutRect( const sal_Bool bPrtArea, const Point* pPoint,
 {
     SwRect aRet;
     SwFrm *pFrm = 0;
-    if( ISA( SwSectionFmt ) )
+    if( dynamic_cast< const SwSectionFmt* >(this) )
     {
         // dann den frame::Frame per Node2Layout besorgen
         SwSectionNode* pSectNd = ((SwSectionFmt*)this)->GetSectionNode();
@@ -2705,7 +2708,6 @@ String SwFrmFmt::GetDescription() const
 //  class SwFlyFrmFmt
 //  Implementierung teilweise inline im hxx
 
-TYPEINIT1( SwFlyFrmFmt, SwFrmFmt );
 IMPL_FIXEDMEMPOOL_NEWDEL( SwFlyFrmFmt,  10, 10 )
 
 SwFlyFrmFmt::~SwFlyFrmFmt()
@@ -2868,7 +2870,7 @@ void SwFlyFrmFmt::MakeFrms()
                     // --> OD 2004-07-01 #i28701# - consider changed type of
                     // <SwSortedObjs> entries.
                     SwAnchoredObject* pObj = rObjs[i];
-                    if( pObj->ISA(SwFlyFrm) &&
+                    if( dynamic_cast< SwFlyFrm* >(pObj) &&
                         (&pObj->GetFrmFmt()) == this )
                     {
                         bAdd = sal_False;
@@ -3148,7 +3150,6 @@ SwHandleAnchorNodeChg::~SwHandleAnchorNodeChg()
 //  class SwDrawFrmFmt
 //  Implementierung teilweise inline im hxx
 
-TYPEINIT1( SwDrawFrmFmt, SwFrmFmt );
 IMPL_FIXEDMEMPOOL_NEWDEL( SwDrawFrmFmt, 10, 10 )
 
 SwDrawFrmFmt::~SwDrawFrmFmt()
@@ -3216,7 +3217,7 @@ String SwDrawFrmFmt::GetDescription() const
     {
         if (pSdrObj != pSdrObjCached)
         {
-            SdrObject * pSdrObjCopy = pSdrObj->Clone();
+            SdrObject * pSdrObjCopy = pSdrObj->CloneSdrObject();
             SdrUndoNewObj * pSdrUndo = new SdrUndoNewObj(*pSdrObjCopy);
             sSdrObjCachedComment = pSdrUndo->GetComment();
 

@@ -66,7 +66,8 @@ namespace sdr
         {
             if(!mpEmptyItemSet)
             {
-                ((PageProperties*)this)->mpEmptyItemSet = &(((PageProperties*)this)->CreateObjectSpecificItemSet(*GetSdrObject().GetObjectItemPool()));
+                ((PageProperties*)this)->mpEmptyItemSet = &(((PageProperties*)this)->CreateObjectSpecificItemSet(
+                    GetSdrObject().GetObjectItemPool()));
             }
 
             DBG_ASSERT(mpEmptyItemSet, "Could not create an SfxItemSet(!)");

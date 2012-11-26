@@ -39,6 +39,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
 #include <tools/ref.hxx>
+#include <svx/svdlegacy.hxx>
 
 #include "tabview.hxx"
 #include "tabvwsh.hxx"
@@ -178,9 +179,6 @@ __EXPORT ScTabView::~ScTabView()
                 pDrawView->VCRemoveWin(pGridWin[i]);
                 pDrawView->DeleteWindowFromPaintView(pGridWin[i]);
             }
-
-        pDrawView->HideSdrPage();
-        delete pDrawView;
     }
 
     delete pSelEngine;
@@ -236,7 +234,7 @@ void ScTabView::MakeDrawView( sal_uInt8 nForceDesignMode )
         //  #106334# used when switching back from page preview: restore saved design mode state
         //  (otherwise, keep the default from the draw view ctor)
         if ( nForceDesignMode != SC_FORCEMODE_NONE )
-            pDrawView->SetDesignMode( (sal_Bool)nForceDesignMode );
+            pDrawView->SetDesignMode( (bool)nForceDesignMode );
 
         //  an der FormShell anmelden
         FmFormShell* pFormSh = aViewData.GetViewShell()->GetFormShell();
@@ -275,8 +273,7 @@ void ScTabView::TabChanged( bool bSameTabButMoved )
                 pDrawView->VCRemoveWin(pGridWin[i]);    // fuer alte Page
 
         SCTAB nTab = aViewData.GetTabNo();
-        pDrawView->HideSdrPage();
-        pDrawView->ShowSdrPage(pDrawView->GetModel()->GetPage(nTab));
+        pDrawView->ShowSdrPage(*pDrawView->getSdrModelFromSdrView().GetPage(nTab));
 
         UpdateLayerLocks();
 
@@ -351,7 +348,7 @@ void ScTabView::UpdateLayerLocks()
         sal_Bool bShared = aViewData.GetDocShell()->IsDocShared();
 
         SdrLayer* pLayer;
-        SdrLayerAdmin& rAdmin = pDrawView->GetModel()->GetLayerAdmin();
+        SdrLayerAdmin& rAdmin = pDrawView->getSdrModelFromSdrView().GetModelLayerAdmin();
         pLayer = rAdmin.GetLayerPerID(SC_LAYER_BACK);
         if (pLayer)
             pDrawView->SetLayerLocked( pLayer->GetName(), bProt || !bEx || bShared );
@@ -484,16 +481,12 @@ SdrView* ScTabView::GetSdrView()
     return pDrawView;
 }
 
-void ScTabView::DrawMarkListHasChanged()
-{
-    if ( pDrawView )
-        pDrawView->MarkListHasChanged();
-}
-
 void ScTabView::UpdateAnchorHandles()
 {
     if ( pDrawView )
-        pDrawView->AdjustMarkHdl();
+    {
+        pDrawView->SetMarkHandles();
+    }
 }
 
 void ScTabView::UpdateIMap( SdrObject* pObj )
@@ -502,7 +495,7 @@ void ScTabView::UpdateIMap( SdrObject* pObj )
         pDrawView->UpdateIMap( pObj );
 }
 
-void ScTabView::DrawMarkRect( const Rectangle& rRect )
+void ScTabView::DrawMarkRange( const basegfx::B2DRange& rRange )
 {
     //! store rectangle for repaint during drag
 
@@ -520,7 +513,10 @@ void ScTabView::DrawMarkRect( const Rectangle& rRect )
             pGridWin[i]->SetLineColor( COL_BLACK );
             pGridWin[i]->SetFillColor();
 
-            pGridWin[i]->DrawRect(rRect);
+            const Rectangle aOldRectangle(
+                basegfx::fround(rRange.getMinX()), basegfx::fround(rRange.getMinY()),
+                basegfx::fround(rRange.getMaxX()), basegfx::fround(rRange.getMaxY()));
+            pGridWin[i]->DrawRect(aOldRectangle);
 
             pGridWin[i]->SetRasterOp(aROp);
             if (bHasLine)
@@ -537,7 +533,6 @@ void ScTabView::DrawMarkRect( const Rectangle& rRect )
 
 void ScTabView::DrawEnableAnim(sal_Bool bSet)
 {
-    sal_uInt16 i;
     if ( pDrawView )
     {
         //  #71040# dont start animations if display of graphics is disabled
@@ -546,13 +541,18 @@ void ScTabView::DrawEnableAnim(sal_Bool bSet)
         {
             if ( !pDrawView->IsAnimationEnabled() )
             {
-                pDrawView->SetAnimationEnabled(sal_True);
+                pDrawView->SetAnimationEnabled(true);
 
                 //  Animierte GIFs muessen wieder gestartet werden:
                 ScDocument* pDoc = aViewData.GetDocument();
-                for (i=0; i<4; i++)
-                    if ( pGridWin[i] && pGridWin[i]->IsVisible() )
-                        pDoc->StartAnimations( aViewData.GetTabNo(), pGridWin[i] );
+
+                for(sal_uInt16 i(0); i < 4; i++)
+                {
+                    if(pGridWin[i] && pGridWin[i]->IsVisible())
+                    {
+                        pDoc->StartAnimations(aViewData.GetTabNo(), pGridWin[i]);
+                    }
+                }
             }
         }
         else
@@ -561,20 +561,6 @@ void ScTabView::DrawEnableAnim(sal_Bool bSet)
         }
     }
 }
-
-//HMHvoid ScTabView::DrawShowMarkHdl(sal_Bool bShow)
-//HMH{
-    //HMHif (!pDrawView)
-    //HMH   return;
-
-    //HMHif (bShow)
-    //HMH{
-    //HMH   if (!pDrawView->IsDisableHdl())
-    //HMH       pDrawView->ShowMarkHdl();
-    //HMH}
-    //HMHelse
-    //HMH   pDrawView->HideMarkHdl();
-//HMH}
 
 void ScTabView::UpdateDrawTextOutliner()
 {
@@ -598,20 +584,22 @@ void ScTabView::DigitLanguageChanged()
 
 void ScTabView::ScrollToObject( SdrObject* pDrawObj )
 {
-    if ( pDrawObj )
+    if(pDrawObj && pDrawView)
     {
         // #i118524# use the BoundRect, this defines the visible area
-        MakeVisible(pDrawObj->GetCurrentBoundRect());
+        MakeVisibleAtView(pDrawObj->getObjectRange(pDrawView));
     }
 }
 
-void ScTabView::MakeVisible( const Rectangle& rHMMRect )
+void ScTabView::MakeVisibleAtView( const basegfx::B2DRange& rRange )
 {
     Window* pWin = GetActiveWin();
     Size aWinSize = pWin->GetOutputSizePixel();
     SCTAB nTab = aViewData.GetTabNo();
 
-    Rectangle aRect = pWin->LogicToPixel( rHMMRect );
+    const Rectangle aRect(pWin->LogicToPixel(Rectangle(
+        basegfx::fround(rRange.getMinX()), basegfx::fround(rRange.getMinY()),
+        basegfx::fround(rRange.getMaxX()), basegfx::fround(rRange.getMaxY()))));
 
     long nScrollX=0, nScrollY=0;        // Pixel
 

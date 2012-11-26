@@ -33,6 +33,7 @@
 #include <basegfx/color/bcolor.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
+#include <svx/svdlegacy.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -78,14 +79,10 @@ namespace sdr
             else
             {
                 // append an invisible outline for the cases where no visible content exists
-                const Rectangle aCurrentBoundRect(GetSdrObjGroup().GetLastBoundRect());
-                const basegfx::B2DRange aCurrentRange(
-                    aCurrentBoundRect.Left(), aCurrentBoundRect.Top(),
-                    aCurrentBoundRect.Right(), aCurrentBoundRect.Bottom());
-
                 const drawinglayer::primitive2d::Primitive2DReference xReference(
                     drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
-                        false, aCurrentRange));
+                        false,
+                        GetSdrObjGroup().getSdrObjectTransformation()));
 
                 xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
             }

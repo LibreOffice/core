@@ -341,13 +341,13 @@ SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet ) :
     SetFactor( nZoom );
 #else /* !TEST_LAYOUT */
     const SfxPoolItem& rItem = rSet.Get( rSet.GetPool()->GetWhich( SID_ATTR_ZOOM ) );
+    const SvxZoomItem* pZoomItem = dynamic_cast< const SvxZoomItem *>(&rItem);
 
-    if ( rItem.ISA(SvxZoomItem) )
+    if ( pZoomItem )
     {
-        const SvxZoomItem& rZoomItem = (const SvxZoomItem&)rItem;
-        const USHORT nZoom = rZoomItem.GetValue();
-        const SvxZoomType eType = rZoomItem.GetType();
-        const USHORT nValSet = rZoomItem.GetValueSet();
+        const USHORT nZoom = pZoomItem->GetValue();
+        const SvxZoomType eType = pZoomItem->GetType();
+        const USHORT nValSet = pZoomItem->GetValueSet();
         USHORT nBtnId = 0;
 
         switch ( eType )

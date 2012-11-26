@@ -132,7 +132,7 @@ void XmlSecStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
     {
         mpImpl->mbSigned = false;
     }
-    else if( pState->ISA( SfxBoolItem ) )
+    else if( dynamic_cast< const SfxBoolItem* >(pState) )
     {
         mpImpl->mbSigned = ( ( SfxBoolItem* ) pState )->GetValue();
     }

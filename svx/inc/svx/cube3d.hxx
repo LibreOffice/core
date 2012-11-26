@@ -54,21 +54,29 @@ private:
     sal_uInt16                              nSideFlags;
 
     // BOOLeans
-    unsigned                            bPosIsCenter : 1;
+    bool                                bPosIsCenter : 1;
 
 protected:
-    void SetDefaultAttributes(E3dDefaultAttributes& rDefault);
+    void SetDefaultAttributes(const E3dDefaultAttributes& rDefault);
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
+    virtual  ~E3dCubeObj();
+
+    /// method to copy all data from given source
+    virtual void copyDataFromSdrObject(const SdrObject& rSource);
+
 public:
-    TYPEINFO();
-    E3dCubeObj(E3dDefaultAttributes& rDefault, basegfx::B3DPoint aPos, const basegfx::B3DVector& r3DSize);
-    E3dCubeObj();
+    /// create a copy, evtl. with a different target model (if given)
+    virtual SdrObject* CloneSdrObject(SdrModel* pTargetModel = 0) const;
+
+    E3dCubeObj(
+        SdrModel& rSdrModel,
+        const E3dDefaultAttributes& rDefault,
+        const basegfx::B3DPoint aPos = basegfx::B3DPoint(-0.5, -0.5, -0.5),
+        const basegfx::B3DVector a3DSize = basegfx::B3DVector(1.0, 1.0, 1.0));
 
     virtual sal_uInt16 GetObjIdentifier() const;
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
-
-    virtual void operator=(const SdrObject&);
+    virtual SdrObject* DoConvertToPolygonObject(bool bBezier, bool bAddText) const;
 
     // Lokale Parameter setzen mit Geometrieneuerzeugung
     void SetCubePos(const basegfx::B3DPoint& rNew);
@@ -77,8 +85,8 @@ public:
     void SetCubeSize(const basegfx::B3DVector& rNew);
     const basegfx::B3DVector& GetCubeSize() { return aCubeSize; }
 
-    void SetPosIsCenter(sal_Bool bNew);
-    sal_Bool GetPosIsCenter() { return (sal_Bool)bPosIsCenter; }
+    void SetPosIsCenter(bool bNew);
+    bool GetPosIsCenter() { return bPosIsCenter; }
 
     void SetSideFlags(sal_uInt16 nNew);
     sal_uInt16 GetSideFlags() { return nSideFlags; }

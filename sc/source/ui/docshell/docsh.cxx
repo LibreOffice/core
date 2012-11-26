@@ -272,8 +272,6 @@ SFX_IMPL_INTERFACE(ScDocShell,SfxObjectShell, ScResId(SCSTR_DOCSHELL))
 //  GlobalName der aktuellen Version:
 SFX_IMPL_OBJECTFACTORY( ScDocShell, SvGlobalName(SO3_SC_CLASSID), SFXOBJECTSHELL_STD_NORMAL, "scalc" )
 
-TYPEINIT1( ScDocShell, SfxObjectShell );        // SfxInPlaceObject: kein Type-Info ?
-
 //------------------------------------------------------------------
 
 void __EXPORT ScDocShell::FillClass( SvGlobalName* pClassName,
@@ -552,7 +550,7 @@ sal_Bool __EXPORT ScDocShell::Load( SfxMedium& rMedium )
     {
         if (GetMedium())
         {
-            SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
+            SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE);
             nCanUpdate = pUpdateDocItem ? pUpdateDocItem->GetValue() : com::sun::star::document::UpdateDocMode::NO_UPDATE;
         }
 
@@ -587,16 +585,17 @@ sal_Bool __EXPORT ScDocShell::Load( SfxMedium& rMedium )
 
 void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if (rHint.ISA(ScTablesHint) )
+    const ScTablesHint* pScHint = dynamic_cast< const ScTablesHint* >( &rHint );
+
+    if (pScHint )
     {
-        const ScTablesHint& rScHint = static_cast< const ScTablesHint& >( rHint );
-        if (rScHint.GetId() == SC_TAB_INSERTED)
+        if (pScHint->GetId() == SC_TAB_INSERTED)
         {
             uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = aDocument.GetVbaEventProcessor();
             if ( xVbaEvents.is() ) try
             {
                 uno::Sequence< uno::Any > aArgs( 1 );
-                aArgs[0] <<= rScHint.GetTab1();
+                aArgs[0] <<= pScHint->GetTab1();
                 xVbaEvents->processVbaEvent( script::vba::VBAEventId::WORKBOOK_NEWSHEET, aArgs );
             }
             catch( uno::Exception& )
@@ -605,9 +604,14 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         }
     }
 
-    if (rHint.ISA(SfxSimpleHint))                               // ohne Parameter
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >( &rHint );
+    const SfxStyleSheetHint* pSfxStyleSheetHint = dynamic_cast< const SfxStyleSheetHint* >( &rHint );
+    const ScAutoStyleHint* pScAutoStyleHint = dynamic_cast< const ScAutoStyleHint* >( &rHint );
+    const SfxEventHint* pSfxEventHint = dynamic_cast< const SfxEventHint* >( &rHint );
+
+    if ( pSfxSimpleHint )                               // ohne Parameter
     {
-        sal_uLong nSlot = ((const SfxSimpleHint&)rHint).GetId();
+        sal_uLong nSlot = pSfxSimpleHint->GetId();
         switch ( nSlot )
         {
             case SFX_HINT_TITLECHANGED:
@@ -617,9 +621,11 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 break;
         }
     }
-    else if (rHint.ISA(SfxStyleSheetHint))                      // Vorlagen geaendert
-        NotifyStyle((const SfxStyleSheetHint&) rHint);
-    else if (rHint.ISA(ScAutoStyleHint))
+    else if ( pSfxStyleSheetHint )                      // Vorlagen geaendert
+    {
+        NotifyStyle(*pSfxStyleSheetHint);
+    }
+    else if ( pScAutoStyleHint )
     {
         //! direct call for AutoStyles
 
@@ -627,19 +633,18 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         //  modifying the document must be asynchronous
         //  (handled by AddInitial)
 
-        ScAutoStyleHint& rStlHint = (ScAutoStyleHint&)rHint;
-        ScRange aRange = rStlHint.GetRange();
-        String aName1 = rStlHint.GetStyle1();
-        String aName2 = rStlHint.GetStyle2();
-        sal_uInt32 nTimeout = rStlHint.GetTimeout();
+        ScRange aRange = pScAutoStyleHint->GetRange();
+        String aName1 = pScAutoStyleHint->GetStyle1();
+        String aName2 = pScAutoStyleHint->GetStyle2();
+        sal_uInt32 nTimeout = pScAutoStyleHint->GetTimeout();
 
         if (!pAutoStyleList)
             pAutoStyleList = new ScAutoStyleList(this);
         pAutoStyleList->AddInitial( aRange, aName1, nTimeout, aName2 );
     }
-    else if ( rHint.ISA( SfxEventHint ) )
+    else if ( pSfxEventHint )
     {
-        sal_uLong nEventId = ((SfxEventHint&)rHint).GetEventId();
+        sal_uLong nEventId = pSfxEventHint->GetEventId();
         switch ( nEventId )
         {
             case SFX_EVENT_LOADFINISHED:
@@ -845,7 +850,7 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                             aValues[0].Name = ::rtl::OUString::createFromAscii( "FilterName" );
                                             aValues[0].Value <<= ::rtl::OUString( GetMedium()->GetFilter()->GetFilterName() );
 
-                                            SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD, sal_False);
+                                            SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD);
                                             if ( pPasswordItem && pPasswordItem->GetValue().Len() )
                                             {
                                                 aValues.realloc( 2 );
@@ -967,7 +972,7 @@ sal_Bool __EXPORT ScDocShell::LoadFrom( SfxMedium& rMedium )
 
     if (GetMedium())
     {
-        SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
+        SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE);
         nCanUpdate = pUpdateDocItem ? pUpdateDocItem->GetValue() : com::sun::star::document::UpdateDocMode::NO_UPDATE;
     }
 
@@ -1060,7 +1065,7 @@ sal_Bool __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
     //  Datei uebertragen wird.
     rMedium.GetPhysicalName();  //! CreateFileStream direkt rufen, wenn verfuegbar
 
-    SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
+    SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE);
     nCanUpdate = pUpdateDocItem ? pUpdateDocItem->GetValue() : com::sun::star::document::UpdateDocMode::NO_UPDATE;
 
     const SfxFilter* pFilter = rMedium.GetFilter();
@@ -1729,7 +1734,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
 
     String aString;
 
-    ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
+    ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell* >( SfxViewShell::Current());
     const ScViewOptions& rOpt = (pViewSh)
                                 ? pViewSh->GetViewData()->GetOptions()
                                 : aDocument.GetViewOptions();
@@ -2410,7 +2415,7 @@ sal_uInt16 __EXPORT ScDocShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsin
         if( pFrame )
         {
             SfxViewShell* p = pFrame->GetViewShell();
-            ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,p);
+            ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell* >( p);
             if(pViewSh!=NULL)
             {
                 Window *pWin=pViewSh->GetWindow();
@@ -2779,7 +2784,7 @@ SfxDocumentInfoDialog* __EXPORT ScDocShell::CreateDocumentInfoDialog(
                                          Window *pParent, const SfxItemSet &rSet )
 {
     SfxDocumentInfoDialog* pDlg   = new SfxDocumentInfoDialog( pParent, rSet );
-    ScDocShell*            pDocSh = PTR_CAST(ScDocShell,SfxObjectShell::Current());
+    ScDocShell*            pDocSh = dynamic_cast< ScDocShell* >( SfxObjectShell::Current());
 
     //nur mit Statistik, wenn dieses Doc auch angezeigt wird, nicht
     //aus dem Doc-Manager

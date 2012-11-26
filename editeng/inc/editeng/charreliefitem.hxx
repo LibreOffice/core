@@ -41,10 +41,8 @@
 class EDITENG_DLLPUBLIC SvxCharReliefItem : public SfxEnumItem
 {
 public:
-    TYPEINFO();
-
-    SvxCharReliefItem( FontRelief eValue /*= RELIEF_NONE*/,
-                       const sal_uInt16 nId );
+    POOLITEM_FACTORY()
+    SvxCharReliefItem( FontRelief eValue = RELIEF_NONE, const sal_uInt16 nId = 0 );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;

@@ -1300,20 +1300,20 @@ XclChRootData::~XclChRootData()
 {
 }
 
-void XclChRootData::InitConversion( const XclRoot& rRoot, const Reference< XChartDocument >& rxChartDoc, const Rectangle& rChartRect )
+void XclChRootData::InitConversion( const XclRoot& rRoot, const Reference< XChartDocument >& rxChartDoc, const basegfx::B2DRange& rChartRange )
 {
     // remember chart document reference and chart shape position/size
     DBG_ASSERT( rxChartDoc.is(), "XclChRootData::InitConversion - missing chart document" );
     mxChartDoc = rxChartDoc;
-    maChartRect = rChartRect;
+    maChartRange = rChartRange;
 
     // Excel excludes a border of 5 pixels in each direction from chart area
     mnBorderGapX = rRoot.GetHmmFromPixelX( 5.0 );
     mnBorderGapY = rRoot.GetHmmFromPixelY( 5.0 );
 
     // size of a chart unit in 1/100 mm
-    mfUnitSizeX = ::std::max< double >( maChartRect.GetWidth() - 2 * mnBorderGapX, mnBorderGapX ) / EXC_CHART_TOTALUNITS;
-    mfUnitSizeY = ::std::max< double >( maChartRect.GetHeight() - 2 * mnBorderGapY, mnBorderGapY ) / EXC_CHART_TOTALUNITS;
+    mfUnitSizeX = ::std::max< double >( maChartRange.getWidth() - 2 * mnBorderGapX, mnBorderGapX ) / EXC_CHART_TOTALUNITS;
+    mfUnitSizeY = ::std::max< double >( maChartRange.getHeight() - 2 * mnBorderGapY, mnBorderGapY ) / EXC_CHART_TOTALUNITS;
 
     // create object tables
     Reference< XMultiServiceFactory > xFactory( mxChartDoc, UNO_QUERY );

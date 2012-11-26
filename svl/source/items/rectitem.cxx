@@ -35,11 +35,7 @@
 // STATIC DATA -----------------------------------------------------------
 
 DBG_NAME(SfxRectangleItem)
-
-
-// -----------------------------------------------------------------------
-
-TYPEINIT1_AUTOFACTORY(SfxRectangleItem, SfxPoolItem);
+IMPL_POOLITEM_FACTORY(SfxRectangleItem)
 
 // -----------------------------------------------------------------------
 

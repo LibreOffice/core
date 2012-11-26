@@ -190,8 +190,8 @@ void MasterPageObserver::Implementation::RegisterDocument (
 {
     // Gather the names of all the master pages in the given document.
     MasterPageContainer::data_type aMasterPageSet;
-    sal_uInt16 nMasterPageCount = rDocument.GetMasterSdPageCount(PK_STANDARD);
-    for (sal_uInt16 nIndex=0; nIndex<nMasterPageCount; nIndex++)
+    sal_uInt32 nMasterPageCount = rDocument.GetMasterSdPageCount(PK_STANDARD);
+    for (sal_uInt32 nIndex=0; nIndex<nMasterPageCount; nIndex++)
     {
         SdPage* pMasterPage = rDocument.GetMasterSdPage (nIndex, PK_STANDARD);
         if (pMasterPage != NULL)
@@ -290,28 +290,30 @@ void MasterPageObserver::Implementation::Notify(
     SfxBroadcaster& rBroadcaster,
     const SfxHint& rHint)
 {
-    if (rHint.ISA(SdrHint))
+    const SdrBaseHint* pSdrHint = dynamic_cast< const SdrBaseHint* >(&rHint);
+
+    if (pSdrHint)
     {
-        SdrHint& rSdrHint (*PTR_CAST(SdrHint,&rHint));
-        switch (rSdrHint.GetKind())
+        switch (pSdrHint->GetSdrHintKind())
         {
             case HINT_PAGEORDERCHG:
+            {
                 // Process the modified set of pages only when the number of
                 // standard and notes master pages are equal.  This test
                 // filters out events that are sent in between the insertion
                 // of a new standard master page and a new notes master
                 // page.
-                if (rBroadcaster.ISA(SdDrawDocument))
+                SdDrawDocument* pSdDrawDocument = dynamic_cast< SdDrawDocument* >(&rBroadcaster);
+
+                if (pSdDrawDocument)
                 {
-                    SdDrawDocument& rDocument (
-                        static_cast<SdDrawDocument&>(rBroadcaster));
-                    if (rDocument.GetMasterSdPageCount(PK_STANDARD)
-                        == rDocument.GetMasterSdPageCount(PK_NOTES))
+                    if(pSdDrawDocument->GetMasterSdPageCount(PK_STANDARD) == pSdDrawDocument->GetMasterSdPageCount(PK_NOTES))
                     {
-                        AnalyzeUsedMasterPages (rDocument);
+                        AnalyzeUsedMasterPages (*pSdDrawDocument);
                     }
                 }
                 break;
+            }
 
             default:
                 break;
@@ -326,9 +328,9 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
     SdDrawDocument& rDocument)
 {
     // Create a set of names of the master pages used by the given document.
-    sal_uInt16 nMasterPageCount = rDocument.GetMasterSdPageCount(PK_STANDARD);
+    sal_uInt32 nMasterPageCount = rDocument.GetMasterSdPageCount(PK_STANDARD);
     ::std::set<String> aCurrentMasterPages;
-    for (sal_uInt16 nIndex=0; nIndex<nMasterPageCount; nIndex++)
+    for (sal_uInt32 nIndex=0; nIndex<nMasterPageCount; nIndex++)
     {
         SdPage* pMasterPage = rDocument.GetMasterSdPage (nIndex, PK_STANDARD);
         if (pMasterPage != NULL)

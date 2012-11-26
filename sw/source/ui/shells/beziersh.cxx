@@ -57,8 +57,6 @@ SFX_IMPL_INTERFACE(SwBezierShell, SwBaseShell, SW_RES(STR_SHELLNAME_BEZIER))
     SFX_OBJECTBAR_REGISTRATION(SFX_OBJECTBAR_OBJECT, SW_RES(RID_BEZIER_TOOLBOX));
 }
 
-TYPEINIT1(SwBezierShell,SwBaseShell)
-
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
@@ -86,8 +84,8 @@ void SwBezierShell::Execute(SfxRequest &rReq)
     SdrView*    pSdrView = pSh->GetDrawView();
     const SfxItemSet *pArgs = rReq.GetArgs();
     sal_uInt16      nSlotId = rReq.GetSlot();
-    sal_Bool        bChanged = pSdrView->GetModel()->IsChanged();
-    pSdrView->GetModel()->SetChanged(sal_False);
+    bool bChanged = pSdrView->getSdrModelFromSdrView().IsChanged();
+    pSdrView->getSdrModelFromSdrView().SetChanged(false);
     const SfxPoolItem* pItem;
     if(pArgs)
         pArgs->GetItemState(nSlotId, sal_False, &pItem);
@@ -115,7 +113,7 @@ void SwBezierShell::Execute(SfxRequest &rReq)
 
         case FN_ESCAPE:
             if (pSdrView->HasMarkedPoints())
-                pSdrView->UnmarkAllPoints();
+                pSdrView->MarkPoints(0, true); // unmarkall
             else
             {
                 if ( pSh->IsDrawCreate() )
@@ -155,9 +153,7 @@ void SwBezierShell::Execute(SfxRequest &rReq)
         case SID_BEZIER_CLOSE:
         case SID_BEZIER_ELIMINATE_POINTS:
         {
-            const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-
-            if (rMarkList.GetMark(0) && !pSdrView->IsAction())
+            if (pSdrView->areSdrObjectsSelected() && !pSdrView->IsAction())
             {
                 switch (nSlotId)
                 {
@@ -210,10 +206,13 @@ void SwBezierShell::Execute(SfxRequest &rReq)
 
                     case SID_BEZIER_CLOSE:
                     {
-                        SdrPathObj* pPathObj = (SdrPathObj*) rMarkList.GetMark(0)->GetMarkedSdrObj();
-                        pSdrView->UnmarkAllPoints();
-                        // Size aDist(GetView().GetEditWin().PixelToLogic(Size(8,8)));
-                        pPathObj->ToggleClosed(); // aDist.Width());
+                        SdrPathObj* pPathObj = dynamic_cast< SdrPathObj* >(pSdrView->getSelectedIfSingle());
+
+                        if(pPathObj)
+                        {
+                            pSdrView->MarkPoints(0, true); // unmarkall
+                            pPathObj->ToggleClosed();
+                        }
                         break;
                     }
 
@@ -229,10 +228,10 @@ void SwBezierShell::Execute(SfxRequest &rReq)
             break;
     }
 
-    if (pSdrView->GetModel()->IsChanged())
+    if (pSdrView->getSdrModelFromSdrView().IsChanged())
         GetShell().SetModified();
     else if (bChanged)
-        pSdrView->GetModel()->SetChanged(sal_True);
+        pSdrView->getSdrModelFromSdrView().SetChanged(true);
 }
 
 /*--------------------------------------------------------------------

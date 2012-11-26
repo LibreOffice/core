@@ -33,12 +33,12 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdoashp.hxx>
 #include <editeng/eeitem.hxx>
-#include <svx/sdtagitm.hxx>
 #include "fuconuno.hxx"
 #include "tabvwsh.hxx"
 #include "sc.hrc"
 #include "drawview.hxx"
 #include <editeng/adjitem.hxx>
+#include <svx/svdlegacy.hxx>
 
 #include <math.h>
 
@@ -79,9 +79,11 @@ sal_Bool __EXPORT FuConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
     sal_Bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
     if ( rMEvt.IsLeft() && !pView->IsAction() )
     {
-        Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
+        const basegfx::B2DPoint aPixelPos(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
+        const basegfx::B2DPoint aLogicPos(pWindow->GetInverseViewTransformation() * aPixelPos);
+
         pWindow->CaptureMouse();
-        pView->BegCreateObj(aPnt);
+        pView->BegCreateObj(aLogicPos);
 
         SdrObject* pObj = pView->GetCreateObj();
         if ( pObj )
@@ -127,7 +129,7 @@ sal_Bool __EXPORT FuConstCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
 
     sal_Bool bReturn = sal_False;
 
-    if ( pView->IsCreateObj() && rMEvt.IsLeft() )
+    if ( pView->GetCreateObj() && rMEvt.IsLeft() )
     {
         Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
         pView->EndCreateObj(SDRCREATE_FORCEEND);
@@ -159,13 +161,13 @@ sal_Bool __EXPORT FuConstCustomShape::KeyInput(const KeyEvent& rKEvt)
 
 void FuConstCustomShape::Activate()
 {
-    pView->SetCurrentObj( OBJ_CUSTOMSHAPE, SdrInventor );
+    pView->setSdrObjectCreationInfo(SdrObjectCreationInfo(OBJ_CUSTOMSHAPE, SdrInventor));
 
     aNewPointer = Pointer( POINTER_DRAW_RECT );
     aOldPointer = pWindow->GetPointer();
     pViewShell->SetActivePointer( aNewPointer );
 
-    SdrLayer* pLayer = pView->GetModel()->GetLayerAdmin().GetLayerPerID(SC_LAYER_CONTROLS);
+    SdrLayer* pLayer = pView->getSdrModelFromSdrView().GetModelLayerAdmin().GetLayerPerID(SC_LAYER_CONTROLS);
     if (pLayer)
         pView->SetActiveLayer( pLayer->GetName() );
 
@@ -182,7 +184,7 @@ void FuConstCustomShape::Deactivate()
 {
     FuConstruct::Deactivate();
 
-    SdrLayer* pLayer = pView->GetModel()->GetLayerAdmin().GetLayerPerID(SC_LAYER_FRONT);
+    SdrLayer* pLayer = pView->getSdrModelFromSdrView().GetModelLayerAdmin().GetLayerPerID(SC_LAYER_FRONT);
     if (pLayer)
         pView->SetActiveLayer( pLayer->GetName() );
 
@@ -190,18 +192,23 @@ void FuConstCustomShape::Deactivate()
 }
 
 // #98185# Create default drawing objects via keyboard
-SdrObject* FuConstCustomShape::CreateDefaultObject(const sal_uInt16 /* nID */, const Rectangle& rRectangle)
+SdrObject* FuConstCustomShape::CreateDefaultObject(const sal_uInt16 /* nID */, const basegfx::B2DRange& rRange)
 {
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
-        pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(),
-        0L, pDrDoc);
+        pView->getSdrModelFromSdrView(),
+        pView->getSdrObjectCreationInfo());
+
     if( pObj )
     {
-        Rectangle aRectangle( rRectangle );
+        basegfx::B2DRange aRange( rRange );
         SetAttributes( pObj );
+
         if ( SdrObjCustomShape::doConstructOrthogonal( aCustomShape ) )
-            ImpForceQuadratic( aRectangle );
-        pObj->SetLogicRect( aRectangle );
+        {
+            ImpForceQuadratic( aRange );
+        }
+
+        sdr::legacy::SetLogicRange(*pObj, aRange );
     }
     return pObj;
 }
@@ -235,7 +242,7 @@ void FuConstCustomShape::SetAttributes( SdrObject* pObj )
                         if( pSourceObj )
                         {
                             const SfxItemSet& rSource = pSourceObj->GetMergedItemSet();
-                            SfxItemSet aDest( pObj->GetModel()->GetItemPool(),              // ranges from SdrAttrObj
+                            SfxItemSet aDest( pObj->GetObjectItemPool(),                // ranges from SdrAttrObj
                             SDRATTR_START, SDRATTR_SHADOW_LAST,
                             SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
                             SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
@@ -251,11 +258,11 @@ void FuConstCustomShape::SetAttributes( SdrObject* pObj )
                             0, 0);
                             aDest.Set( rSource );
                             pObj->SetMergedItemSet( aDest );
-                            sal_Int32 nAngle = pSourceObj->GetRotateAngle();
+
+                            const sal_Int32 nAngle(sdr::legacy::GetRotateAngle(*pSourceObj));
                             if ( nAngle )
                             {
-                                double a = nAngle * F_PI18000;
-                                pObj->NbcRotate( pObj->GetSnapRect().Center(), nAngle, sin( a ), cos( a ) );
+                                sdr::legacy::RotateSdrObject(*pObj, sdr::legacy::GetSnapRect(*pObj).Center(), nAngle);
                             }
                             bAttributesAppliedFromGallery = sal_True;
                         }
@@ -270,7 +277,7 @@ void FuConstCustomShape::SetAttributes( SdrObject* pObj )
         pObj->SetMergedItem( SvxAdjustItem( SVX_ADJUST_CENTER, 0 ) );
         pObj->SetMergedItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
         pObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
-        pObj->SetMergedItem( SdrTextAutoGrowHeightItem( sal_False ) );
+        pObj->SetMergedItem( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT, sal_False ) );
         ((SdrObjCustomShape*)pObj)->MergeDefaultAttributes( &aCustomShape );
     }
 }

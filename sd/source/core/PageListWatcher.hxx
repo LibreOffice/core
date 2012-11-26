@@ -27,6 +27,7 @@
 #include "pres.hxx"
 #include <sal/types.h>
 #include <vector>
+#include <svl/lstner.hxx>
 
 class SdPage;
 class SdrModel;
@@ -34,7 +35,7 @@ class SdrModel;
 /** Maintain a map of page indices to page objects for faster access that
     remains valid during deletions and insertions of pages (#109538#).
 */
-class ImpPageListWatcher
+class ImpPageListWatcher : public SfxListener
 {
 protected:
     // typedefs for a vector of SdPages
@@ -77,6 +78,9 @@ protected:
 public:
     ImpDrawPageListWatcher(const SdrModel& rModel);
     virtual ~ImpDrawPageListWatcher();
+
+    // derived from SfxListener
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -90,6 +94,9 @@ protected:
 public:
     ImpMasterPageListWatcher(const SdrModel& rModel);
     virtual ~ImpMasterPageListWatcher();
+
+    // derived from SfxListener
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 };
 
 #endif

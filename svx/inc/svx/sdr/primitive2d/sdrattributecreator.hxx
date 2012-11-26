@@ -124,7 +124,8 @@ namespace drawinglayer
         // helpers
         void calculateRelativeCornerRadius(
             sal_Int32 nRadius,
-            const ::basegfx::B2DRange& rObjectRange,
+            const double& rfWidth,
+            const double& rfHeight,
             double& rfCornerRadiusX,
             double& rfCornerRadiusY);
 

@@ -76,13 +76,6 @@
 
 using namespace com::sun::star;
 
-TYPEINIT1( SwTable, SwClient );
-TYPEINIT1( SwTableBox, SwClient );
-TYPEINIT1( SwTableLine, SwClient );
-TYPEINIT1( SwTableFmt, SwFrmFmt );
-TYPEINIT1( SwTableBoxFmt, SwFrmFmt );
-TYPEINIT1( SwTableLineFmt, SwFrmFmt );
-
 SV_IMPL_PTRARR(SwTableLines,SwTableLine*);
 SV_IMPL_PTRARR(SwTableBoxes,SwTableBox*);
 SV_IMPL_PTRARR_SORT(SwTableSortBoxes,SwTableBoxPtr);
@@ -456,7 +449,7 @@ void lcl_RefreshHidden( SwTabCols &rToFill, sal_uInt16 nPos )
 
 void lcl_SortedTabColInsert( SwTabCols &rToFill, const SwTableBox *pBox,
                    const SwFrmFmt *pTabFmt, const sal_Bool bHidden,
-                   const FASTBOOL bRefreshHidden )
+                   const bool bRefreshHidden )
 {
     const long nWish = pTabFmt->GetFrmSize().GetWidth();
     const long nAct  = rToFill.GetRight() - rToFill.GetLeft();  // +1 why?
@@ -559,7 +552,7 @@ void lcl_SortedTabColInsert( SwTabCols &rToFill, const SwTableBox *pBox,
 }
 
 void lcl_ProcessBoxGet( const SwTableBox *pBox, SwTabCols &rToFill,
-                        const SwFrmFmt *pTabFmt, FASTBOOL bRefreshHidden )
+                        const SwFrmFmt *pTabFmt, bool bRefreshHidden )
 {
     if ( pBox->GetTabLines().Count() )
     {

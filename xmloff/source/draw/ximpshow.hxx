@@ -37,8 +37,6 @@ class SdXMLShowsContext : public SvXMLImportContext
     ShowsImpImpl*   mpImpl;
 
 public:
-    TYPEINFO();
-
     SdXMLShowsContext( SdXMLImport& rImport,
         sal_uInt16 nPrfx,
         const rtl::OUString& rLocalName,

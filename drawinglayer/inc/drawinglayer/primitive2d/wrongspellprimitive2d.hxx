@@ -79,9 +79,6 @@ namespace drawinglayer
             double getStop() const { return mfStop; }
             const basegfx::BColor& getColor() const { return maColor; }
 
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
-
             /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };

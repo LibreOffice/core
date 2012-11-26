@@ -75,7 +75,7 @@ void WrappedD3DTransformMatrixProperty::setPropertyValue( const Any& rOuterValue
                 BaseGFXHelper::HomogenMatrixToB3DHomMatrix( aHM ) ) );
 
             ::basegfx::B3DHomMatrix aMatrix;
-            aMatrix.rotate( aRotation.getX(), aRotation.getY(), aRotation.getZ() );
+            aMatrix.rotate( aRotation );
             ::basegfx::B3DHomMatrix aObjectMatrix;
             ::basegfx::B3DHomMatrix aNewMatrix = aMatrix*aObjectMatrix;
 
@@ -102,7 +102,7 @@ Any WrappedD3DTransformMatrixProperty::getPropertyValue( const Reference< beans:
                 BaseGFXHelper::HomogenMatrixToB3DHomMatrix( aHM ) ) );
 
             ::basegfx::B3DHomMatrix aMatrix;
-            aMatrix.rotate( aRotation.getX(), aRotation.getY(), aRotation.getZ() );
+            aMatrix.rotate( aRotation );
             ::basegfx::B3DHomMatrix aObjectMatrix;
             ::basegfx::B3DHomMatrix aNewMatrix = aMatrix*aObjectMatrix;
 

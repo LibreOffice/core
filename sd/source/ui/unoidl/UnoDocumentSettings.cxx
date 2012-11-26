@@ -248,11 +248,11 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
 
     SdOptionsPrintItem aOptionsPrintItem( ATTR_OPTIONS_PRINT );
 
-    SfxPrinter* pPrinter = pDocSh->GetPrinter( sal_False );
+    SfxPrinter* pPrinter = pDocSh->GetPrinter( false );
     if( pPrinter )
     {
         SdOptionsPrintItem* pPrinterOptions = NULL;
-        if(pPrinter->GetOptions().GetItemState( ATTR_OPTIONS_PRINT, sal_False, (const SfxPoolItem**) &pPrinterOptions) == SFX_ITEM_SET)
+        if(pPrinter->GetOptions().GetItemState( ATTR_OPTIONS_PRINT, false, (const SfxPoolItem**) &pPrinterOptions) == SFX_ITEM_SET)
             aOptionsPrintItem.GetOptionsPrint() = pPrinterOptions->GetOptionsPrint();
     }
     else
@@ -278,7 +278,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         aPathURL.removeSegment();
                         aPathURL.removeFinalSlash();
 
-                        XColorTable* pColTab = new XColorTable( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), (XOutdevItemPool*)&pDoc->GetPool() );
+                        XColorTable* pColTab = new XColorTable( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), (XOutdevItemPool*)&pDoc->GetItemPool() );
                         pColTab->SetName( aURL.getName() );
                         if( pColTab->Load() )
                         {
@@ -300,7 +300,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         aPathURL.removeSegment();
                         aPathURL.removeFinalSlash();
 
-                        XDashList* pDashTab = new XDashList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), (XOutdevItemPool*)&pDoc->GetPool() );
+                        XDashList* pDashTab = new XDashList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), (XOutdevItemPool*)&pDoc->GetItemPool() );
                         pDashTab->SetName( aURL.getName() );
                         if( pDashTab->Load() )
                         {
@@ -322,7 +322,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         aPathURL.removeSegment();
                         aPathURL.removeFinalSlash();
 
-                        XLineEndList* pTab = new XLineEndList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), (XOutdevItemPool*)&pDoc->GetPool() );
+                        XLineEndList* pTab = new XLineEndList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), (XOutdevItemPool*)&pDoc->GetItemPool() );
                         pTab->SetName( aURL.getName() );
                         if( pTab->Load() )
                         {
@@ -344,7 +344,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         aPathURL.removeSegment();
                         aPathURL.removeFinalSlash();
 
-                        XHatchList* pTab = new XHatchList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), (XOutdevItemPool*)&pDoc->GetPool() );
+                        XHatchList* pTab = new XHatchList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), (XOutdevItemPool*)&pDoc->GetItemPool() );
                         pTab->SetName( aURL.getName() );
                         if( pTab->Load() )
                         {
@@ -366,7 +366,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         aPathURL.removeSegment();
                         aPathURL.removeFinalSlash();
 
-                        XGradientList* pTab = new XGradientList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), (XOutdevItemPool*)&pDoc->GetPool() );
+                        XGradientList* pTab = new XGradientList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), (XOutdevItemPool*)&pDoc->GetItemPool() );
                         pTab->SetName( aURL.getName() );
                         if( pTab->Load() )
                         {
@@ -388,7 +388,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         aPathURL.removeSegment();
                         aPathURL.removeFinalSlash();
 
-                        XBitmapList* pTab = new XBitmapList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), (XOutdevItemPool*)&pDoc->GetPool() );
+                        XBitmapList* pTab = new XBitmapList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), (XOutdevItemPool*)&pDoc->GetItemPool() );
                         pTab->SetName( aURL.getName() );
                         if( pTab->Load() )
                         {
@@ -418,7 +418,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
             case HANDLE_PRINTDRAWING:
                 if( *pValues >>= bValue )
                 {
-                    if( aPrintOpts.IsDraw() != bValue )
+                    if( aPrintOpts.IsDraw() != (bool)bValue )
                     {
                         aPrintOpts.SetDraw( bValue );
                         bOptionsChanged = true;
@@ -430,7 +430,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
             case HANDLE_PRINTNOTES:
                 if( *pValues >>= bValue )
                 {
-                    if( aPrintOpts.IsNotes() != bValue )
+                    if( aPrintOpts.IsNotes() != (bool)bValue )
                     {
                         aPrintOpts.SetNotes( bValue );
                         bOptionsChanged = true;
@@ -442,7 +442,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
             case HANDLE_PRINTHANDOUT:
                 if( *pValues >>= bValue )
                 {
-                    if( aPrintOpts.IsHandout() != bValue)
+                    if( aPrintOpts.IsHandout() != (bool)bValue)
                     {
                         aPrintOpts.SetHandout( bValue );
                         bOptionsChanged = true;
@@ -454,7 +454,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
             case HANDLE_PRINTOUTLINE:
                 if( *pValues >>= bValue )
                 {
-                    if( aPrintOpts.IsOutline() != bValue)
+                    if( aPrintOpts.IsOutline() != (bool)bValue)
                     {
                         aPrintOpts.SetOutline( bValue );
                         bOptionsChanged = true;
@@ -479,7 +479,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
             case HANDLE_HANDOUTHORIZONTAL:
                 if( *pValues >>= bValue )
                 {
-                    if( aPrintOpts.IsHandoutHorizontal() != bValue )
+                    if( aPrintOpts.IsHandoutHorizontal() != (bool)bValue )
                     {
                         aPrintOpts.SetHandoutHorizontal( bValue );
                         bOptionsChanged = true;
@@ -491,7 +491,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
             case HANDLE_PRINTPAGENAME:
                 if( *pValues >>= bValue )
                 {
-                    if( aPrintOpts.IsPagename() != bValue)
+                    if( aPrintOpts.IsPagename() != (bool)bValue)
                     {
                         aPrintOpts.SetPagename( bValue );
                         bOptionsChanged = true;
@@ -502,7 +502,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
             case HANDLE_PRINTDATE:
                 if( *pValues >>= bValue )
                 {
-                    if( aPrintOpts.IsDate() != bValue)
+                    if( aPrintOpts.IsDate() != (bool)bValue)
                     {
                         aPrintOpts.SetDate( bValue );
                         bOptionsChanged = true;
@@ -513,7 +513,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
             case HANDLE_PRINTTIME:
                 if( *pValues >>= bValue )
                 {
-                    if( aPrintOpts.IsDate() != bValue)
+                    if( aPrintOpts.IsDate() != (bool)bValue)
                     {
                         aPrintOpts.SetTime( bValue );
                         bOptionsChanged = true;
@@ -524,7 +524,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
             case HANDLE_PRINTHIDENPAGES:
                 if( *pValues >>= bValue )
                 {
-                    if( aPrintOpts.IsHiddenPages() != bValue)
+                    if( aPrintOpts.IsHiddenPages() != (bool)bValue)
                     {
                         aPrintOpts.SetHiddenPages( bValue );
                         bOptionsChanged = true;
@@ -535,7 +535,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
             case HANDLE_PRINTFITPAGE:
                 if( *pValues >>= bValue )
                 {
-                    if( aPrintOpts.IsPagesize() != bValue)
+                    if( aPrintOpts.IsPagesize() != (bool)bValue)
                     {
                         aPrintOpts.SetPagesize( bValue );
                         bOptionsChanged = true;
@@ -546,7 +546,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
             case HANDLE_PRINTTILEPAGE:
                 if( *pValues >>= bValue )
                 {
-                    if( aPrintOpts.IsPagetile() != bValue)
+                    if( aPrintOpts.IsPagetile() != (bool)bValue)
                     {
                         aPrintOpts.SetPagetile( bValue );
                         bOptionsChanged = true;
@@ -557,7 +557,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
             case HANDLE_PRINTBOOKLET:
                 if( *pValues >>= bValue )
                 {
-                    if( aPrintOpts.IsBooklet() != bValue)
+                    if( aPrintOpts.IsBooklet() != (bool)bValue)
                     {
                         aPrintOpts.SetBooklet( bValue );
                         bOptionsChanged = true;
@@ -568,7 +568,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
             case HANDLE_PRINTBOOKLETFRONT:
                 if( *pValues >>= bValue )
                 {
-                    if( aPrintOpts.IsFrontPage() != bValue)
+                    if( aPrintOpts.IsFrontPage() != (bool)bValue)
                     {
                         aPrintOpts.SetFrontPage( bValue );
                         bOptionsChanged = true;
@@ -579,7 +579,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
             case HANDLE_PRINTBOOKLETBACK:
                 if( *pValues >>= bValue )
                 {
-                    if( aPrintOpts.IsBackPage() != bValue)
+                    if( aPrintOpts.IsBackPage() != (bool)bValue)
                     {
                         aPrintOpts.SetBackPage( bValue );
                         bOptionsChanged = true;
@@ -699,7 +699,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                             }
                             else
                             {
-                                pItemSet = new SfxItemSet(pDoc->GetPool(),
+                                pItemSet = new SfxItemSet(pDoc->GetItemPool(),
                                             SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
                                             SID_PRINTER_CHANGESTODOC,   SID_PRINTER_CHANGESTODOC,
                                             ATTR_OPTIONS_PRINT,         ATTR_OPTIONS_PRINT,
@@ -734,16 +734,16 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
 
                         pDoc->SetSummationOfParagraphs( bIsSummationOfParagraphs );
                         SdDrawDocument* pDocument = pDocSh->GetDoc();
-                        SdrOutliner& rOutl = pDocument->GetDrawOutliner( sal_False );
+                        SdrOutliner& rOutl = pDocument->GetDrawOutliner( false );
                         nCntrl = rOutl.GetControlWord() &~ EE_CNTRL_ULSPACESUMMATION;
                         rOutl.SetControlWord( nCntrl | nSum );
-                        ::sd::Outliner* pOutl = pDocument->GetOutliner( sal_False );
+                        ::sd::Outliner* pOutl = pDocument->GetOutliner( false );
                         if( pOutl )
                         {
                             nCntrl = pOutl->GetControlWord() &~ EE_CNTRL_ULSPACESUMMATION;
                             pOutl->SetControlWord( nCntrl | nSum );
                         }
-                        pOutl = pDocument->GetInternalOutliner( sal_False );
+                        pOutl = pDocument->GetInternalOutliner( false );
                         if( pOutl )
                         {
                             nCntrl = pOutl->GetControlWord() &~ EE_CNTRL_ULSPACESUMMATION;
@@ -763,14 +763,14 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
 
                     pDoc->SetCharCompressType( (sal_uInt16)nCharCompressType );
                     SdDrawDocument* pDocument = pDocSh->GetDoc();
-                    SdrOutliner& rOutl = pDocument->GetDrawOutliner( sal_False );
+                    SdrOutliner& rOutl = pDocument->GetDrawOutliner( false );
                     rOutl.SetAsianCompressionMode( (sal_uInt16)nCharCompressType );
-                    ::sd::Outliner* pOutl = pDocument->GetOutliner( sal_False );
+                    ::sd::Outliner* pOutl = pDocument->GetOutliner( false );
                     if( pOutl )
                     {
                         pOutl->SetAsianCompressionMode( (sal_uInt16)nCharCompressType );
                     }
-                    pOutl = pDocument->GetInternalOutliner( sal_False );
+                    pOutl = pDocument->GetInternalOutliner( false );
                     if( pOutl )
                     {
                         pOutl->SetAsianCompressionMode( (sal_uInt16)nCharCompressType );
@@ -788,14 +788,14 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
 
                     pDoc->SetKernAsianPunctuation( bAsianPunct );
                     SdDrawDocument* pDocument = pDocSh->GetDoc();
-                    SdrOutliner& rOutl = pDocument->GetDrawOutliner( sal_False );
+                    SdrOutliner& rOutl = pDocument->GetDrawOutliner( false );
                     rOutl.SetKernAsianPunctuation( bAsianPunct );
-                    ::sd::Outliner* pOutl = pDocument->GetOutliner( sal_False );
+                    ::sd::Outliner* pOutl = pDocument->GetOutliner( false );
                     if( pOutl )
                     {
                         pOutl->SetKernAsianPunctuation( bAsianPunct );
                     }
-                    pOutl = pDocument->GetInternalOutliner( sal_False );
+                    pOutl = pDocument->GetInternalOutliner( false );
                     if( pOutl )
                     {
                         pOutl->SetKernAsianPunctuation( bAsianPunct );
@@ -870,7 +870,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
     if( bOptionsChanged )
     {
         if( !pPrinter )
-            pPrinter = pDocSh->GetPrinter( sal_True );
+            pPrinter = pDocSh->GetPrinter( true );
         SfxItemSet aNewOptions( pPrinter->GetOptions() );
         aNewOptions.Put( aOptionsPrintItem );
         pPrinter->SetOptions( aNewOptions );
@@ -891,11 +891,11 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
 
     SdOptionsPrintItem aOptionsPrintItem( ATTR_OPTIONS_PRINT );
 
-    SfxPrinter* pPrinter = pDocSh->GetPrinter( sal_False );
+    SfxPrinter* pPrinter = pDocSh->GetPrinter( false );
     if( pPrinter )
     {
         SdOptionsPrintItem* pPrinterOptions = NULL;
-        if(pPrinter->GetOptions().GetItemState( ATTR_OPTIONS_PRINT, sal_False, (const SfxPoolItem**) &pPrinterOptions) == SFX_ITEM_SET)
+        if(pPrinter->GetOptions().GetItemState( ATTR_OPTIONS_PRINT, false, (const SfxPoolItem**) &pPrinterOptions) == SFX_ITEM_SET)
             aOptionsPrintItem.GetOptionsPrint() = pPrinterOptions->GetOptionsPrint();
     }
     else

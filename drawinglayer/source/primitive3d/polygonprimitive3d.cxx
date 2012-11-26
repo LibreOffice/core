@@ -50,19 +50,6 @@ namespace drawinglayer
         {
         }
 
-        bool PolygonHairlinePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
-        {
-            if(BasePrimitive3D::operator==(rPrimitive))
-            {
-                const PolygonHairlinePrimitive3D& rCompare = (PolygonHairlinePrimitive3D&)rPrimitive;
-
-                return (getB3DPolygon() == rCompare.getB3DPolygon()
-                    && getBColor() == rCompare.getBColor());
-            }
-
-            return false;
-        }
-
         basegfx::B3DRange PolygonHairlinePrimitive3D::getB3DRange(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
             return basegfx::tools::getRange(getB3DPolygon());
@@ -155,20 +142,6 @@ namespace drawinglayer
             maLineAttribute(rLineAttribute),
             maStrokeAttribute()
         {
-        }
-
-        bool PolygonStrokePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
-        {
-            if(BufferedDecompositionPrimitive3D::operator==(rPrimitive))
-            {
-                const PolygonStrokePrimitive3D& rCompare = (PolygonStrokePrimitive3D&)rPrimitive;
-
-                return (getB3DPolygon() == rCompare.getB3DPolygon()
-                    && getLineAttribute() == rCompare.getLineAttribute()
-                    && getStrokeAttribute() == rCompare.getStrokeAttribute());
-            }
-
-            return false;
         }
 
         // provide unique ID

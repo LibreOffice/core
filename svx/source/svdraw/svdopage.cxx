@@ -36,72 +36,91 @@
 #include <svtools/colorcfg.hxx>
 #include <svl/itemset.hxx>
 #include <svx/sdr/properties/pageproperties.hxx>
-
-// #111111#
 #include <svx/sdr/contact/viewcontactofpageobj.hxx>
+#include <svl/smplhint.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// BaseProperties section
 
 sdr::properties::BaseProperties* SdrPageObj::CreateObjectSpecificProperties()
 {
     return new sdr::properties::PageProperties(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// DrawContact section
-
 sdr::contact::ViewContact* SdrPageObj::CreateObjectSpecificViewContact()
 {
     return new sdr::contact::ViewContactOfPageObj(*this);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// this method is called form the destructor of the referenced page.
-// do all necessary action to forget the page. It is not necessary to call
-// RemovePageUser(), that is done form the destructor.
-void SdrPageObj::PageInDestruction(const SdrPage& rPage)
-{
-    if(mpShownPage && mpShownPage == &rPage)
-    {
-        // #i58769# Do not call ActionChanged() here, because that would
-        // lead to the construction of a view contact object for a page that
-        // is being destroyed.
-
-        mpShownPage = 0L;
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-TYPEINIT1(SdrPageObj,SdrObject);
-
-SdrPageObj::SdrPageObj(SdrPage* pNewPage)
-:   mpShownPage(pNewPage)
+SdrPageObj::SdrPageObj(SdrModel& rSdrModel, const basegfx::B2DHomMatrix& rTransform, SdrPage* pNewPage)
+:   SdrObject(rSdrModel, rTransform),
+    mpShownPage(pNewPage)
 {
     if(mpShownPage)
     {
-        mpShownPage->AddPageUser(*this);
+        mpShownPage->AddListener(*this);
     }
-}
-
-SdrPageObj::SdrPageObj(const Rectangle& rRect, SdrPage* pNewPage)
-:   mpShownPage(pNewPage)
-{
-    if(mpShownPage)
-    {
-        mpShownPage->AddPageUser(*this);
-    }
-
-    aOutRect = rRect;
 }
 
 SdrPageObj::~SdrPageObj()
 {
-    // #111111#
     if(mpShownPage)
     {
-        mpShownPage->RemovePageUser(*this);
+        mpShownPage->RemoveListener(*this);
+    }
+}
+
+void SdrPageObj::copyDataFromSdrObject(const SdrObject& rSource)
+{
+    if(this != &rSource)
+    {
+        const SdrPageObj* pSource = dynamic_cast< const SdrPageObj* >(&rSource);
+
+        if(pSource)
+        {
+            // call parent
+            SdrObject::copyDataFromSdrObject(rSource);
+
+            // copy SdrPage reference
+            SetReferencedPage(pSource->GetReferencedPage());
+        }
+        else
+        {
+            OSL_ENSURE(false, "copyDataFromSdrObject with ObjectType of Source different from Target (!)");
+        }
+    }
+}
+
+SdrObject* SdrPageObj::CloneSdrObject(SdrModel* pTargetModel) const
+{
+    SdrPageObj* pClone = new SdrPageObj(
+        pTargetModel ? *pTargetModel : getSdrModelFromSdrObject());
+    OSL_ENSURE(pClone, "CloneSdrObject error (!)");
+    pClone->copyDataFromSdrObject(*this);
+
+    return pClone;
+}
+
+// derived from SfxListener
+void SdrPageObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
+{
+    // call parent
+    SdrObject::Notify(rBC, rHint);
+
+    if(mpShownPage)
+    {
+        const SdrBaseHint* pSdrHint = dynamic_cast< const SdrBaseHint* >(&rHint);
+
+        if(pSdrHint
+            && HINT_SDRPAGEDYING == pSdrHint->GetSdrHintKind()
+            && pSdrHint->GetSdrHintPage()
+            && pSdrHint->GetSdrHintPage() == mpShownPage)
+        {
+            // #i58769# Do not call ActionChanged() here, because that would
+            // lead to the construction of a view contact object for a page that
+            // is being destroyed.
+            mpShownPage = 0;
+        }
     }
 }
 
@@ -116,28 +135,22 @@ void SdrPageObj::SetReferencedPage(SdrPage* pNewPage)
 {
     if(mpShownPage != pNewPage)
     {
+        const SdrObjectChangeBroadcaster aSdrObjectChangeBroadcaster(*this);
+
         if(mpShownPage)
         {
-            mpShownPage->RemovePageUser(*this);
+            mpShownPage->RemoveListener(*this);
         }
 
         mpShownPage = pNewPage;
 
         if(mpShownPage)
         {
-            mpShownPage->AddPageUser(*this);
+            mpShownPage->AddListener(*this);
         }
 
         SetChanged();
-        BroadcastObjectChange();
     }
-}
-
-// #i96598#
-void SdrPageObj::SetBoundRectDirty()
-{
-    // avoid resetting aOutRect which in case of this object is model data,
-    // not re-creatable view data
 }
 
 sal_uInt16 SdrPageObj::GetObjIdentifier() const
@@ -147,26 +160,20 @@ sal_uInt16 SdrPageObj::GetObjIdentifier() const
 
 void SdrPageObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    rInfo.bRotateFreeAllowed=sal_False;
-    rInfo.bRotate90Allowed  =sal_False;
-    rInfo.bMirrorFreeAllowed=sal_False;
-    rInfo.bMirror45Allowed  =sal_False;
-    rInfo.bMirror90Allowed  =sal_False;
-    rInfo.bTransparenceAllowed = sal_False;
-    rInfo.bGradientAllowed = sal_False;
-    rInfo.bShearAllowed     =sal_False;
-    rInfo.bEdgeRadiusAllowed=sal_False;
-    rInfo.bNoOrthoDesired   =sal_False;
-    rInfo.bCanConvToPath    =sal_False;
-    rInfo.bCanConvToPoly    =sal_False;
-    rInfo.bCanConvToPathLineToArea=sal_False;
-    rInfo.bCanConvToPolyLineToArea=sal_False;
-}
-
-void SdrPageObj::operator=(const SdrObject& rObj)
-{
-    SdrObject::operator=(rObj);
-    SetReferencedPage(((const SdrPageObj&)rObj).GetReferencedPage());
+    rInfo.mbRotateFreeAllowed = false;
+    rInfo.mbRotate90Allowed = false;
+    rInfo.mbMirrorFreeAllowed = false;
+    rInfo.mbMirror45Allowed = false;
+    rInfo.mbMirror90Allowed = false;
+    rInfo.mbTransparenceAllowed = false;
+    rInfo.mbGradientAllowed = false;
+    rInfo.mbShearAllowed = false;
+    rInfo.mbEdgeRadiusAllowed = false;
+    rInfo.mbNoOrthoDesired = false;
+    rInfo.mbCanConvToPath = false;
+    rInfo.mbCanConvToPoly = false;
+    rInfo.mbCanConvToPathLineToArea = false;
+    rInfo.mbCanConvToPolyLineToArea = false;
 }
 
 void SdrPageObj::TakeObjNameSingul(XubString& rName) const
@@ -188,4 +195,5 @@ void SdrPageObj::TakeObjNamePlural(XubString& rName) const
     rName=ImpGetResStr(STR_ObjNamePluralPAGE);
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // eof

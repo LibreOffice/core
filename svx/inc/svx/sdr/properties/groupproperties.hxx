@@ -39,7 +39,7 @@ namespace sdr
             virtual SfxItemSet& CreateObjectSpecificItemSet(SfxItemPool& rPool);
 
             // test changeability for a single item
-            virtual sal_Bool AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0) const;
+            virtual bool AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0) const;
 
             // Do the ItemChange, may do special handling
             virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0);
@@ -74,7 +74,7 @@ namespace sdr
             virtual const SfxItemSet& GetMergedItemSet() const;
 
             // Set merged ItemSet. Normally, this maps to SetObjectItemSet().
-            virtual void SetMergedItemSet(const SfxItemSet& rSet, sal_Bool bClearAllItems = sal_False);
+            virtual void SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems = false);
 
             // set single item
             virtual void SetObjectItem(const SfxPoolItem& rItem);
@@ -99,7 +99,7 @@ namespace sdr
             virtual void SetObjectItemSet(const SfxItemSet& rSet);
 
             // set a new StyleSheet
-            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr);
+            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr);
 
             // get the local StyleSheet
             virtual SfxStyleSheet* GetStyleSheet() const;
@@ -107,9 +107,6 @@ namespace sdr
             // force default attributes for a specific object type, called from
             // DefaultProperties::GetObjectItemSet() if a new ItemSet is created
             virtual void ForceDefaultAttributes();
-
-            // Move properties to a new ItemPool.
-            virtual void MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel = 0L);
 
             // force all attributes which come from styles to hard attributes
             // to be able to live without the style.

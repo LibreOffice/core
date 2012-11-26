@@ -63,6 +63,7 @@
 #include <fmtornt.hxx>
 
 #include <writerfilter/doctok/sprmids.hxx>
+#include <svx/fmmodel.hxx>
 
 #include <doc.hxx>
 #include "writerhelper.hxx"
@@ -154,17 +155,24 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
     {
         // bGraphicNeeded set to true is right / fixes #i51670#.
         bGraphicNeeded = true;
-        Point aTmpPoint;
-        Rectangle aRect( aTmpPoint, Size( nX, nY ) );
         Graphic aGraph(aWMF);
 
         ErrCode nErr = ERRCODE_NONE;
-        Rectangle aVisArea;
         sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
         if ( pOLENd )
             nAspect = pOLENd->GetAspect();
         SdrOle2Obj *pRet = SvxMSDffManager::CreateSdrOLEFromStorage(
-            rStorageName,xObjStg,pDoc->GetDocStorage(),aGraph,aRect,aVisArea,0,nErr,0,nAspect);
+            *pDoc->GetOrCreateDrawModel(),
+            rStorageName,
+            xObjStg,
+            pDoc->GetDocStorage(),
+            aGraph,
+            basegfx::B2DRange(0.0, 0.0, nX, nY),
+            basegfx::B2DRange(),
+            0,
+            nErr,
+            0,
+            nAspect);
 
         if (pRet)
         {
@@ -209,7 +217,7 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
                     delete pGraphicStream;
             }
 
-            delete pRet;
+            deleteSdrObjectSafeAndClearPointer(pRet);
         }
     }
     else
@@ -422,7 +430,7 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
             bool bVert = false;
             //The default for word in vertical text mode is to center,
             //otherwise a sub/super script hack is employed
-            if (pOutFmtNode && pOutFmtNode->ISA(SwCntntNode) )
+            if (pOutFmtNode && dynamic_cast< const SwCntntNode* >(pOutFmtNode) )
             {
                 const SwTxtNode* pTxtNd = (const SwTxtNode*)pOutFmtNode;
                 SwPosition aPos(*pTxtNd);

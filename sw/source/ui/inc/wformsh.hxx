@@ -32,7 +32,6 @@ public:
     virtual     ~SwWebDrawFormShell();
 
     SFX_DECL_INTERFACE(SW_WEBDRAWFORMSHELL)
-    TYPEINFO();
 };
 
 

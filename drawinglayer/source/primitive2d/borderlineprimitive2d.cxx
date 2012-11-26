@@ -198,29 +198,6 @@ namespace drawinglayer
         {
         }
 
-        bool BorderLinePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const BorderLinePrimitive2D& rCompare = (BorderLinePrimitive2D&)rPrimitive;
-
-                return (getStart() == rCompare.getStart()
-                    && getEnd() == rCompare.getEnd()
-                    && getLeftWidth() == rCompare.getLeftWidth()
-                    && getDistance() == rCompare.getDistance()
-                    && getRightWidth() == rCompare.getRightWidth()
-                    && getExtendInnerStart() == rCompare.getExtendInnerStart()
-                    && getExtendInnerEnd() == rCompare.getExtendInnerEnd()
-                    && getExtendOuterStart() == rCompare.getExtendOuterStart()
-                    && getExtendOuterEnd() == rCompare.getExtendOuterEnd()
-                    && getCreateInside() == rCompare.getCreateInside()
-                    && getCreateOutside() == rCompare.getCreateOutside()
-                    && getRGBColor() == rCompare.getRGBColor());
-            }
-
-            return false;
-        }
-
         // provide unique ID
         ImplPrimitrive2DIDBlock(BorderLinePrimitive2D, PRIMITIVE2D_ID_BORDERLINEPRIMITIVE2D)
 

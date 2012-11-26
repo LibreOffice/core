@@ -41,7 +41,6 @@
 #include <sfx2/dispatch.hxx>
 
 #include "tabvwsh.hxx"
-#include "drawattr.hxx"
 #include "drawsh.hxx"
 #include "drawview.hxx"
 #include "fupoor.hxx"
@@ -64,6 +63,8 @@
 #include <svx/svdpage.hxx>
 #include <fuconcustomshape.hxx>
 
+#define SvxDrawToolItem             SfxAllEnumItem
+
 // -----------------------------------------------------------------------
 
 SdrView* __EXPORT ScTabViewShell::GetDrawView() const
@@ -77,7 +78,7 @@ void ScTabViewShell::WindowChanged()
 
     ScDrawView* pDrView = GetScDrawView();
     if (pDrView)
-        pDrView->SetActualWin(pWin);
+        pDrView->SetActualOutDev(pWin);
 
     FuPoor* pFunc = GetDrawFuncPtr();
     if (pFunc)
@@ -97,18 +98,15 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 
     ScTabView* pTabView = GetViewData()->GetView();
     SfxBindings& rBindings = GetViewFrame()->GetBindings();
-
     Window*     pWin    = pTabView->GetActiveWin();
     ScDrawView* pView   = pTabView->GetScDrawView();
-    SdrModel*   pDoc    = pView->GetModel();
-
     const SfxItemSet *pArgs = rReq.GetArgs();
     sal_uInt16 nNewId = rReq.GetSlot();
 
     if ( nNewId == SID_DRAW_CHART )
     {
         // #i71254# directly insert a chart instead of drawing its output rectangle
-        FuInsertChart(this, pWin, pView, pDoc, rReq);
+        FuInsertChart(this, pWin, pView, &pView->getSdrModelFromSdrView(), rReq);
         return;
     }
 
@@ -121,9 +119,9 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     {
         const SfxPoolItem* pItem;
         if ( pArgs->GetItemState( SID_INSERT_DRAW, sal_True, &pItem ) == SFX_ITEM_SET &&
-             pItem->ISA( SvxDrawToolItem ) )
+             dynamic_cast< const SvxDrawToolItem* >(pItem) )
         {
-            SvxDrawToolEnum eSel = (SvxDrawToolEnum)((const SvxDrawToolItem*)pItem)->GetValue();
+            SvxDrawToolEnum eSel = (SvxDrawToolEnum)(static_cast< const SvxDrawToolItem* >(pItem))->GetValue();
             switch (eSel)
             {
                 case SVX_SNAP_DRAW_SELECT:          nNewId = SID_OBJECT_SELECT;         break;
@@ -158,16 +156,20 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     {
         const SfxPoolItem* pItem;
         if ( pArgs->GetItemState( SID_FM_CONTROL_IDENTIFIER, sal_True, &pItem ) == SFX_ITEM_SET &&
-             pItem->ISA( SfxUInt16Item ) )
+             dynamic_cast< const SfxUInt16Item* >(pItem) )
+        {
             nNewFormId = ((const SfxUInt16Item*)pItem)->GetValue();
+        }
     }
 
     String sStringItemValue;
     if ( pArgs )
     {
         const SfxPoolItem* pItem;
-        if ( pArgs->GetItemState( nNewId, sal_True, &pItem ) == SFX_ITEM_SET && pItem->ISA( SfxStringItem ) )
+        if ( pArgs->GetItemState( nNewId, sal_True, &pItem ) == SFX_ITEM_SET && dynamic_cast< const SfxStringItem* >(pItem) )
+        {
             sStringItemValue = static_cast<const SfxStringItem*>(pItem)->GetValue();
+        }
     }
     bool bSwitchCustom = ( sStringItemValue.Len() && sDrawCustom.Len() && sStringItemValue != sDrawCustom );
 
@@ -224,15 +226,17 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     if ( bSelectFirst )
     {
         //  #97016# select first draw object if none is selected yet
-        if(!pView->AreObjectsMarked())
+        if(!pView->areSdrObjectsSelected())
         {
             // select first object
             pView->UnmarkAllObj();
-            pView->MarkNextObj(sal_True);
+            pView->MarkNextObj(true);
 
             // ...and make it visible
-            if(pView->AreObjectsMarked())
-                pView->MakeVisible(pView->GetAllMarkedRect(), *pWin);
+            if(pView->areSdrObjectsSelected())
+            {
+                pView->MakeVisibleAtView(pView->getMarkedObjectSnapRange(), *pWin);
+            }
         }
     }
 
@@ -246,7 +250,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
             SetDrawTextShell( sal_True );
         else
         {
-            if ( bEx || pView->GetMarkedObjectList().GetMarkCount() != 0 )
+            if ( bEx || pView->areSdrObjectsSelected() )
                 SetDrawShellOrSub();
             else
                 SetDrawShell( sal_False );
@@ -270,20 +274,21 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     {
         case SID_OBJECT_SELECT:
             //@#70206# Nicht immer zurueckschalten
-            if(pView->GetMarkedObjectList().GetMarkCount() == 0) SetDrawShell(bEx);
-            pTabView->SetDrawFuncPtr(new FuSelection(this, pWin, pView, pDoc, aNewReq));
+            if(!pView->areSdrObjectsSelected())
+                SetDrawShell(bEx);
+            pTabView->SetDrawFuncPtr(new FuSelection(this, pWin, pView, &pView->getSdrModelFromSdrView(), aNewReq));
             break;
 
         case SID_DRAW_LINE:
         case SID_DRAW_RECT:
         case SID_DRAW_ELLIPSE:
-            pTabView->SetDrawFuncPtr(new FuConstRectangle(this, pWin, pView, pDoc, aNewReq));
+            pTabView->SetDrawFuncPtr(new FuConstRectangle(this, pWin, pView, &pView->getSdrModelFromSdrView(), aNewReq));
             break;
 
         case SID_DRAW_CAPTION:
         case SID_DRAW_CAPTION_VERTICAL:
-            pTabView->SetDrawFuncPtr(new FuConstRectangle(this, pWin, pView, pDoc, aNewReq));
-            pView->SetFrameDragSingles( sal_False );
+            pTabView->SetDrawFuncPtr(new FuConstRectangle(this, pWin, pView, &pView->getSdrModelFromSdrView(), aNewReq));
+            pView->SetFrameHandles(false);
             rBindings.Invalidate( SID_BEZIER_EDIT );
             break;
 
@@ -291,31 +296,31 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         case SID_DRAW_POLYGON_NOFILL:
         case SID_DRAW_BEZIER_NOFILL:
         case SID_DRAW_FREELINE_NOFILL:
-            pTabView->SetDrawFuncPtr(new FuConstPolygon(this, pWin, pView, pDoc, aNewReq));
+            pTabView->SetDrawFuncPtr(new FuConstPolygon(this, pWin, pView, &pView->getSdrModelFromSdrView(), aNewReq));
             break;
 
         case SID_DRAW_ARC:
         case SID_DRAW_PIE:
         case SID_DRAW_CIRCLECUT:
-            pTabView->SetDrawFuncPtr(new FuConstArc(this, pWin, pView, pDoc, aNewReq));
+            pTabView->SetDrawFuncPtr(new FuConstArc(this, pWin, pView, &pView->getSdrModelFromSdrView(), aNewReq));
             break;
 
         case SID_DRAW_TEXT:
         case SID_DRAW_TEXT_VERTICAL:
         case SID_DRAW_TEXT_MARQUEE:
         case SID_DRAW_NOTEEDIT:
-            pTabView->SetDrawFuncPtr(new FuText(this, pWin, pView, pDoc, aNewReq));
+            pTabView->SetDrawFuncPtr(new FuText(this, pWin, pView, &pView->getSdrModelFromSdrView(), aNewReq));
             break;
 
         case SID_FM_CREATE_CONTROL:
             SetDrawFormShell(sal_True);
-            pTabView->SetDrawFuncPtr(new FuConstUnoControl(this, pWin, pView, pDoc, aNewReq));
+            pTabView->SetDrawFuncPtr(new FuConstUnoControl(this, pWin, pView, &pView->getSdrModelFromSdrView(), aNewReq));
             nFormSfxId = nNewFormId;
             break;
 
         case SID_DRAW_CHART:
-//UNUSED2008-05  bChartDlgIsEdit = sal_False;
-            pTabView->SetDrawFuncPtr(new FuMarkRect(this, pWin, pView, pDoc, aNewReq));
+//UNUSED2008-05  bChartDlgIsEdit = FALSE;
+            pTabView->SetDrawFuncPtr(new FuMarkRect(this, pWin, pView, &pView->getSdrModelFromSdrView(), aNewReq));
             break;
 
         case SID_DRAWTBX_CS_BASIC :
@@ -326,10 +331,10 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         case SID_DRAWTBX_CS_STAR :
         case SID_DRAW_CS_ID :
         {
-            pTabView->SetDrawFuncPtr( new FuConstCustomShape( this, pWin, pView, pDoc, aNewReq ));
+            pTabView->SetDrawFuncPtr( new FuConstCustomShape( this, pWin, pView, &pView->getSdrModelFromSdrView(), aNewReq ));
             if ( nNewId != SID_DRAW_CS_ID )
             {
-                SFX_REQUEST_ARG( rReq, pEnumCommand, SfxStringItem, nNewId, sal_False );
+                SFX_REQUEST_ARG( rReq, pEnumCommand, SfxStringItem, nNewId );
                 if ( pEnumCommand )
                 {
                     aCurrShapeEnumCommand[ nNewId - SID_DRAWTBX_CS_BASIC ] = pEnumCommand->GetValue();
@@ -361,42 +366,36 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 
     if(pFuActual && (rReq.GetModifier() & KEY_MOD1))
     {
-        // #98185# Create default drawing objects via keyboard
-        const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
-        sal_uInt32 nDefaultObjectSizeWidth = rAppOpt.GetDefaultObjectSizeWidth();
-        sal_uInt32 nDefaultObjectSizeHeight = rAppOpt.GetDefaultObjectSizeHeight();
-
-        // calc position and size
-        Rectangle aVisArea = pWin->PixelToLogic(Rectangle(Point(0,0), pWin->GetOutputSizePixel()));
-        Point aPagePos = aVisArea.Center();
-        aPagePos.X() -= nDefaultObjectSizeWidth / 2;
-        aPagePos.Y() -= nDefaultObjectSizeHeight / 2;
-        Rectangle aNewObjectRectangle(aPagePos, Size(nDefaultObjectSizeWidth, nDefaultObjectSizeHeight));
-
         ScDrawView* pDrView = GetScDrawView();
 
         if(pDrView)
         {
-            SdrPageView* pPageView = pDrView->GetSdrPageView();
+            // #98185# Create default drawing objects via keyboard
+            const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
+            const sal_uInt32 nDefaultObjectSizeWidth(rAppOpt.GetDefaultObjectSizeWidth());
+            const sal_uInt32 nDefaultObjectSizeHeight(rAppOpt.GetDefaultObjectSizeHeight());
 
-            if(pPageView)
-            {
+            // calc position and size
+            const basegfx::B2DRange aVisArea(pWin->GetLogicRange());
+            const basegfx::B2DVector aObjectSize(nDefaultObjectSizeWidth, nDefaultObjectSizeHeight);
+            const basegfx::B2DPoint aObjectPos(aVisArea.getCenter() - (aObjectSize * 0.5));
+            const basegfx::B2DRange aNewObjectRange(aObjectPos, aObjectPos + aObjectSize);
+
                 // create the default object
-                SdrObject* pObj = pFuActual->CreateDefaultObject(nNewId, aNewObjectRectangle);
+            SdrObject* pObj = pFuActual->CreateDefaultObject(nNewId, aNewObjectRange);
 
-                if(pObj)
+            if(pObj)
+            {
+                // insert into page
+                pView->InsertObjectAtView(*pObj);
+
+                if ( nNewId == SID_DRAW_CAPTION || nNewId == SID_DRAW_CAPTION_VERTICAL )
                 {
-                    // insert into page
-                    pView->InsertObjectAtView(pObj, *pPageView);
+                    //  #105815# use KeyInput to start edit mode (FuText is created).
+                    //  For FuText objects, edit mode is handled within CreateDefaultObject.
+                    //  KEY_F2 is handled in FuDraw::KeyInput.
 
-                    if ( nNewId == SID_DRAW_CAPTION || nNewId == SID_DRAW_CAPTION_VERTICAL )
-                    {
-                        //  #105815# use KeyInput to start edit mode (FuText is created).
-                        //  For FuText objects, edit mode is handled within CreateDefaultObject.
-                        //  KEY_F2 is handled in FuDraw::KeyInput.
-
-                        pFuActual->KeyInput( KeyEvent( 0, KeyCode( KEY_F2 ) ) );
-                    }
+                    pFuActual->KeyInput( KeyEvent( 0, KeyCode( KEY_F2 ) ) );
                 }
             }
         }
@@ -468,7 +467,6 @@ sal_Bool ScTabViewShell::SelectObject( const String& rName )
         return sal_False;
 
     sal_Bool bFound = pView->SelectObject( rName );
-    // DrawShell etc. is handled in MarkListHasChanged
 
     return bFound;
 }

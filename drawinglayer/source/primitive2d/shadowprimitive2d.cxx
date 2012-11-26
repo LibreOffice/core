@@ -53,19 +53,6 @@ namespace drawinglayer
         {
         }
 
-        bool ShadowPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BasePrimitive2D::operator==(rPrimitive))
-            {
-                const ShadowPrimitive2D& rCompare = static_cast< const ShadowPrimitive2D& >(rPrimitive);
-
-                return (getShadowTransform() == rCompare.getShadowTransform()
-                    && getShadowColor() == rCompare.getShadowColor());
-            }
-
-            return false;
-        }
-
         basegfx::B2DRange ShadowPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
             basegfx::B2DRange aRetval(getB2DRangeFromPrimitive2DSequence(getChildren(), rViewInformation));

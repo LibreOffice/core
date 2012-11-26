@@ -41,8 +41,6 @@ private:
     sal_Bool bAuto;
 
 public:
-    TYPEINFO();
-
     inline SvxPageModelItem( sal_uInt16 nWh  );
     inline SvxPageModelItem( const String& rModel, sal_Bool bA /*= sal_False*/,
                              sal_uInt16 nWh  );

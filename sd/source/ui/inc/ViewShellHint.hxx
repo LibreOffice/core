@@ -49,8 +49,6 @@ public:
         HINT_COMPLEX_MODEL_CHANGE_END
     };
 
-    TYPEINFO();
-
     ViewShellHint (HintId nHintId);
 
     HintId GetHintId (void) const;

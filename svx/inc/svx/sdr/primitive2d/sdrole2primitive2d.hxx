@@ -55,9 +55,6 @@ namespace drawinglayer
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
             const attribute::SdrLineFillShadowTextAttribute& getSdrLFSTAttribute() const { return maSdrLFSTAttribute; }
 
-            // compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
-
             // local decomposition.
             virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
 

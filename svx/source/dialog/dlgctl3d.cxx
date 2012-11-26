@@ -30,7 +30,6 @@
 #include <svx/fmmodel.hxx>
 #include <svl/itempool.hxx>
 #include <svx/fmpage.hxx>
-#include <svx/polysc3d.hxx>
 #include <svx/sphere3d.hxx>
 #include <svx/cube3d.hxx>
 #include <vcl/svapp.hxx>
@@ -41,6 +40,8 @@
 #include <svx/xlnwtit.hxx>
 #include "helpid.hrc"
 #include <algorithm>
+#include <svx/svdlegacy.hxx>
+#include <svx/scene3d.hxx>
 #include <svx/dialmgr.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -99,12 +100,12 @@ void Svx3DPreviewControl::Construct()
     mpModel->InsertPage( mpFmPage, 0 );
 
     // 3D View
-    mp3DView = new E3dView( mpModel, this );
+    mp3DView = new E3dView( *mpModel, this );
     mp3DView->SetBufferedOutputAllowed(true);
     mp3DView->SetBufferedOverlayAllowed(true);
 
     // 3D Scene
-    mpScene = new E3dPolyScene(mp3DView->Get3DDefaultAttributes());
+    mpScene = new E3dScene(*mpModel, mp3DView->Get3DDefaultAttributes());
 
     // initially create object
     SetObjectType(PREVIEW_OBJECTTYPE_SPHERE);
@@ -127,17 +128,17 @@ void Svx3DPreviewControl::Construct()
     rCamera.SetDefaults(basegfx::B3DPoint(0.0, 0.0, fDefaultCamPosZ), aLookAt, fDefaultCamFocal);
 
     mpScene->SetCamera( rCamera );
-    mpFmPage->InsertObject( mpScene );
+    mpFmPage->InsertObjectToSdrObjList(*mpScene);
 
     basegfx::B3DHomMatrix aRotation;
     aRotation.rotate(DEG2RAD( 25 ), 0.0, 0.0);
     aRotation.rotate(0.0, DEG2RAD( 40 ), 0.0);
-    mpScene->SetTransform(aRotation * mpScene->GetTransform());
+    mpScene->SetB3DTransform(aRotation * mpScene->GetB3DTransform());
 
     // invalidate SnapRects of objects
-    mpScene->SetRectsDirty();
+    mpScene->ActionChanged();
 
-    SfxItemSet aSet( mpModel->GetItemPool(),
+    SfxItemSet aSet( mpScene->GetObjectItemPool(),
         XATTR_LINESTYLE, XATTR_LINESTYLE,
         XATTR_FILL_FIRST, XATTR_FILLBITMAP,
         0, 0 );
@@ -148,26 +149,20 @@ void Svx3DPreviewControl::Construct()
     mpScene->SetMergedItemSet(aSet);
 
     // PageView
-    SdrPageView* pPageView = mp3DView->ShowSdrPage( mpFmPage );
-    mp3DView->hideMarkHandles();
-
-    // mark scene
-    mp3DView->MarkObj( mpScene, pPageView );
+    mp3DView->ShowSdrPage( *mpFmPage );
 }
 
 void Svx3DPreviewControl::Resize()
 {
     // size of page
-    Size aSize( GetSizePixel() );
-    aSize = PixelToLogic( aSize );
-    mpFmPage->SetSize( aSize );
+    const basegfx::B2DVector aSize(GetInverseViewTransformation() * basegfx::B2DVector(GetSizePixel().Width(), GetSizePixel().Height()));
+    mpFmPage->SetPageScale( aSize );
 
     // set size
-    Size aObjSize( aSize.Width()*5/6, aSize.Height()*5/6 );
-    Point aObjPoint( (aSize.Width() - aObjSize.Width()) / 2,
-        (aSize.Height() - aObjSize.Height()) / 2);
-    Rectangle aRect( aObjPoint, aObjSize);
-    mpScene->SetSnapRect( aRect );
+    const basegfx::B2DVector aNewScale(aSize * (5.0 / 6.0));
+    const basegfx::B2DPoint aNewPos((aSize - aNewScale) * 0.5);
+
+    sdr::legacy::SetSnapRange(*mpScene, basegfx::B2DRange(aNewPos, aNewPos + aNewScale));
 }
 
 void Svx3DPreviewControl::Paint(const Rectangle& rRect)
@@ -202,9 +197,8 @@ void Svx3DPreviewControl::SetObjectType(sal_uInt16 nType)
         if( mp3DObj )
         {
             aSet.Put(mp3DObj->GetMergedItemSet());
-            mpScene->Remove3DObj( mp3DObj );
-            delete mp3DObj;
-            mp3DObj = NULL;
+            mpScene->Remove3DObj(*mp3DObj);
+            deleteSdrObjectSafeAndClearPointer(mp3DObj);
         }
 
         switch( nType )
@@ -212,6 +206,7 @@ void Svx3DPreviewControl::SetObjectType(sal_uInt16 nType)
             case PREVIEW_OBJECTTYPE_SPHERE:
             {
                 mp3DObj = new E3dSphereObj(
+                    *mpModel,
                     mp3DView->Get3DDefaultAttributes(),
                     basegfx::B3DPoint( 0, 0, 0 ),
                     basegfx::B3DVector( 5000, 5000, 5000 ));
@@ -221,6 +216,7 @@ void Svx3DPreviewControl::SetObjectType(sal_uInt16 nType)
             case PREVIEW_OBJECTTYPE_CUBE:
             {
                 mp3DObj = new E3dCubeObj(
+                    *mpModel,
                     mp3DView->Get3DDefaultAttributes(),
                     basegfx::B3DPoint( -2500, -2500, -2500 ),
                     basegfx::B3DVector( 5000, 5000, 5000 ));
@@ -228,7 +224,7 @@ void Svx3DPreviewControl::SetObjectType(sal_uInt16 nType)
             break;
         }
 
-        mpScene->Insert3DObj( mp3DObj );
+        mpScene->Insert3DObj(*mp3DObj);
         mp3DObj->SetMergedItemSet(aSet);
 
         Resize();
@@ -324,11 +320,12 @@ void Svx3DLightControl::Construct2()
         // create invisible expansion object
         const double fMaxExpansion(RADIUS_LAMP_BIG + RADIUS_LAMP_PREVIEW_SIZE);
         mpExpansionObject = new E3dCubeObj(
+            *mpModel,
             mp3DView->Get3DDefaultAttributes(),
             basegfx::B3DPoint(-fMaxExpansion, -fMaxExpansion, -fMaxExpansion),
             basegfx::B3DVector(2.0 * fMaxExpansion, 2.0 * fMaxExpansion, 2.0 * fMaxExpansion));
-        mpScene->Insert3DObj( mpExpansionObject );
-        SfxItemSet aSet(mpModel->GetItemPool());
+        mpScene->Insert3DObj(*mpExpansionObject);
+        SfxItemSet aSet(mpExpansionObject->GetObjectItemPool());
         aSet.Put( XLineStyleItem( XLINE_NONE ) );
         aSet.Put( XFillStyleItem( XFILL_NONE ) );
         mpExpansionObject->SetMergedItemSet(aSet);
@@ -347,10 +344,13 @@ void Svx3DLightControl::Construct2()
 
         // create object for it
         mpLampBottomObject = new E3dPolygonObj(
+            *mpModel,
             mp3DView->Get3DDefaultAttributes(),
             basegfx::B3DPolyPolygon(a3DCircle),
+            0,
+            0,
             true);
-        mpScene->Insert3DObj( mpLampBottomObject );
+        mpScene->Insert3DObj(*mpLampBottomObject);
 
         // half circle with stand
         basegfx::B2DPolygon a2DHalfCircle;
@@ -362,13 +362,16 @@ void Svx3DLightControl::Construct2()
 
         // create object for it
         mpLampShaftObject = new E3dPolygonObj(
+            *mpModel,
             mp3DView->Get3DDefaultAttributes(),
             basegfx::B3DPolyPolygon(a3DHalfCircle),
+            0,
+            0,
             true);
-        mpScene->Insert3DObj( mpLampShaftObject );
+        mpScene->Insert3DObj(*mpLampShaftObject);
 
         // initially invisible
-        SfxItemSet aSet(mpModel->GetItemPool());
+        SfxItemSet aSet(mpLampBottomObject->GetObjectItemPool());
         aSet.Put( XLineStyleItem( XLINE_NONE ) );
         aSet.Put( XFillStyleItem( XFILL_NONE ) );
 
@@ -397,11 +400,11 @@ void Svx3DLightControl::Construct2()
         mpScene->SetCamera( rCamera );
 
         basegfx::B3DHomMatrix aNeutral;
-        mpScene->SetTransform(aNeutral);
+        mpScene->SetB3DTransform(aNeutral);
     }
 
     // invalidate SnapRects of objects
-    mpScene->SetRectsDirty();
+    mpScene->ActionChanged();
 }
 
 void Svx3DLightControl::ConstructLightObjects()
@@ -411,8 +414,8 @@ void Svx3DLightControl::ConstructLightObjects()
         // get rid of evtl. existing light object
         if(maLightObjects[a])
         {
-            mpScene->Remove3DObj(maLightObjects[a]);
-            delete maLightObjects[a];
+            mpScene->Remove3DObj(*maLightObjects[a]);
+            deleteSdrObjectSafeAndClearPointer(maLightObjects[a]);
             maLightObjects[a] = 0;
         }
 
@@ -425,16 +428,17 @@ void Svx3DLightControl::ConstructLightObjects()
 
             const double fLampSize(bIsSelectedLight ? RADIUS_LAMP_BIG : RADIUS_LAMP_SMALL);
             E3dObject* pNewLight = new E3dSphereObj(
+                *mpModel,
                 mp3DView->Get3DDefaultAttributes(),
                 basegfx::B3DPoint( 0, 0, 0 ),
                 basegfx::B3DVector( fLampSize, fLampSize, fLampSize));
-            mpScene->Insert3DObj(pNewLight);
+            mpScene->Insert3DObj(*pNewLight);
 
             basegfx::B3DHomMatrix aTransform;
-            aTransform.translate(aDirection.getX(), aDirection.getY(), aDirection.getZ());
-            pNewLight->SetTransform(aTransform);
+            aTransform.translate(aDirection);
+            pNewLight->SetB3DTransform(aTransform);
 
-            SfxItemSet aSet(mpModel->GetItemPool());
+            SfxItemSet aSet(pNewLight->GetObjectItemPool());
             aSet.Put( XLineStyleItem( XLINE_NONE ) );
             aSet.Put( XFillStyleItem( XFILL_SOLID ) );
             aSet.Put( XFillColorItem(String(), GetLightColor(a)));
@@ -450,7 +454,7 @@ void Svx3DLightControl::AdaptToSelectedLight()
     if(NO_LIGHT_SELECTED == maSelectedLight)
     {
         // make mpLampBottomObject/mpLampShaftObject invisible
-        SfxItemSet aSet(mpModel->GetItemPool());
+        SfxItemSet aSet(mpLampBottomObject->GetObjectItemPool());
         aSet.Put( XLineStyleItem( XLINE_NONE ) );
         aSet.Put( XFillStyleItem( XFILL_NONE ) );
         mpLampBottomObject->SetMergedItemSet(aSet);
@@ -462,7 +466,7 @@ void Svx3DLightControl::AdaptToSelectedLight()
         aDirection.normalize();
 
         // make mpLampBottomObject/mpLampShaftObject visible (yellow hairline)
-        SfxItemSet aSet(mpModel->GetItemPool());
+        SfxItemSet aSet(mpLampBottomObject->GetObjectItemPool());
         aSet.Put( XLineStyleItem( XLINE_SOLID ) );
         aSet.Put( XLineColorItem(String(), COL_YELLOW));
         aSet.Put( XLineWidthItem(0));
@@ -480,7 +484,7 @@ void Svx3DLightControl::AdaptToSelectedLight()
         }
 
         aTransform.rotate(0.0, fRotateY, 0.0);
-        mpLampShaftObject->SetTransform(aTransform);
+        mpLampShaftObject->SetB3DTransform(aTransform);
 
         // adapt transformation of selected light
         E3dObject* pSelectedLight = maLightObjects[sal_Int32(maSelectedLight)];
@@ -492,7 +496,7 @@ void Svx3DLightControl::AdaptToSelectedLight()
                 aDirection.getX() * RADIUS_LAMP_PREVIEW_SIZE,
                 aDirection.getY() * RADIUS_LAMP_PREVIEW_SIZE,
                 aDirection.getZ() * RADIUS_LAMP_PREVIEW_SIZE);
-            pSelectedLight->SetTransform(aTransform);
+            pSelectedLight->SetB3DTransform(aTransform);
         }
     }
 }
@@ -739,11 +743,11 @@ void Svx3DLightControl::Tracking( const TrackingEvent& rTEvt )
 void Svx3DLightControl::Resize()
 {
     // set size of page
-    const Size aSize(PixelToLogic(GetSizePixel()));
-    mpFmPage->SetSize(aSize);
+    const basegfx::B2DVector aSize(GetInverseViewTransformation() * basegfx::B2DVector(GetSizePixel().Width(), GetSizePixel().Height()));
+    mpFmPage->SetPageScale(aSize);
 
     // set position and size of scene
-    mpScene->SetSnapRect(Rectangle(Point(0, 0), aSize));
+    sdr::legacy::SetSnapRange(*mpScene, basegfx::B2DRange(basegfx::B2DPoint(0.0, 0.0), aSize));
 }
 
 void Svx3DLightControl::SetObjectType(sal_uInt16 nType)
@@ -756,7 +760,7 @@ void Svx3DLightControl::SetObjectType(sal_uInt16 nType)
     {
         basegfx::B3DHomMatrix aObjectRotation;
         aObjectRotation.rotate(mfRotateX, mfRotateY, mfRotateZ);
-        mp3DObj->SetTransform(aObjectRotation);
+        mp3DObj->SetB3DTransform(aObjectRotation);
     }
 }
 
@@ -801,19 +805,19 @@ void Svx3DLightControl::SetPosition(double fHor, double fVer)
         if(!aDirection.equal(GetLightDirection(maSelectedLight)))
         {
             // set changed light direction at SdrScene
-            SfxItemSet aSet(mpModel->GetItemPool());
+            SfxItemSet aSet(mpScene->GetObjectItemPool());
 
             switch(maSelectedLight)
             {
-                case 0: aSet.Put(Svx3DLightDirection1Item(aDirection)); break;
-                case 1: aSet.Put(Svx3DLightDirection2Item(aDirection)); break;
-                case 2: aSet.Put(Svx3DLightDirection3Item(aDirection)); break;
-                case 3: aSet.Put(Svx3DLightDirection4Item(aDirection)); break;
-                case 4: aSet.Put(Svx3DLightDirection5Item(aDirection)); break;
-                case 5: aSet.Put(Svx3DLightDirection6Item(aDirection)); break;
-                case 6: aSet.Put(Svx3DLightDirection7Item(aDirection)); break;
+                case 0: aSet.Put(SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_1, aDirection)); break;
+                case 1: aSet.Put(SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_2, aDirection)); break;
+                case 2: aSet.Put(SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_3, aDirection)); break;
+                case 3: aSet.Put(SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_4, aDirection)); break;
+                case 4: aSet.Put(SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_5, aDirection)); break;
+                case 5: aSet.Put(SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_6, aDirection)); break;
+                case 6: aSet.Put(SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_7, aDirection)); break;
                 default:
-                case 7: aSet.Put(Svx3DLightDirection8Item(aDirection)); break;
+                case 7: aSet.Put(SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_8, aDirection)); break;
             }
 
             mpScene->SetMergedItemSet(aSet);
@@ -834,7 +838,7 @@ void Svx3DLightControl::SetPosition(double fHor, double fVer)
             {
                 basegfx::B3DHomMatrix aObjectRotation;
                 aObjectRotation.rotate(mfRotateX, mfRotateY, mfRotateZ);
-                mp3DObj->SetTransform(aObjectRotation);
+                mp3DObj->SetB3DTransform(aObjectRotation);
 
                 Invalidate();
             }
@@ -856,7 +860,7 @@ void Svx3DLightControl::SetRotation(double fRotX, double fRotY, double fRotZ)
             {
                 basegfx::B3DHomMatrix aObjectRotation;
                 aObjectRotation.rotate(mfRotateX, mfRotateY, mfRotateZ);
-                mp3DObj->SetTransform(aObjectRotation);
+                mp3DObj->SetB3DTransform(aObjectRotation);
 
                 Invalidate();
             }
@@ -921,14 +925,14 @@ bool Svx3DLightControl::GetLightOnOff(sal_uInt32 nNum) const
 
         switch(nNum)
         {
-            case 0 : return ((const Svx3DLightOnOff1Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_1)).GetValue();
-            case 1 : return ((const Svx3DLightOnOff2Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_2)).GetValue();
-            case 2 : return ((const Svx3DLightOnOff3Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_3)).GetValue();
-            case 3 : return ((const Svx3DLightOnOff4Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_4)).GetValue();
-            case 4 : return ((const Svx3DLightOnOff5Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_5)).GetValue();
-            case 5 : return ((const Svx3DLightOnOff6Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_6)).GetValue();
-            case 6 : return ((const Svx3DLightOnOff7Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_7)).GetValue();
-            case 7 : return ((const Svx3DLightOnOff8Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_8)).GetValue();
+            case 0 : return ((const SfxBoolItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_1)).GetValue();
+            case 1 : return ((const SfxBoolItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_2)).GetValue();
+            case 2 : return ((const SfxBoolItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_3)).GetValue();
+            case 3 : return ((const SfxBoolItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_4)).GetValue();
+            case 4 : return ((const SfxBoolItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_5)).GetValue();
+            case 5 : return ((const SfxBoolItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_6)).GetValue();
+            case 6 : return ((const SfxBoolItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_7)).GetValue();
+            case 7 : return ((const SfxBoolItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_8)).GetValue();
         }
     }
 
@@ -943,14 +947,14 @@ Color Svx3DLightControl::GetLightColor(sal_uInt32 nNum) const
 
         switch(nNum)
         {
-            case 0 : return ((const Svx3DLightcolor1Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_1)).GetValue();
-            case 1 : return ((const Svx3DLightcolor2Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_2)).GetValue();
-            case 2 : return ((const Svx3DLightcolor3Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_3)).GetValue();
-            case 3 : return ((const Svx3DLightcolor4Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_4)).GetValue();
-            case 4 : return ((const Svx3DLightcolor5Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_5)).GetValue();
-            case 5 : return ((const Svx3DLightcolor6Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_6)).GetValue();
-            case 6 : return ((const Svx3DLightcolor7Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_7)).GetValue();
-            case 7 : return ((const Svx3DLightcolor8Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_8)).GetValue();
+            case 0 : return ((const SvxColorItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_1)).GetValue();
+            case 1 : return ((const SvxColorItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_2)).GetValue();
+            case 2 : return ((const SvxColorItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_3)).GetValue();
+            case 3 : return ((const SvxColorItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_4)).GetValue();
+            case 4 : return ((const SvxColorItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_5)).GetValue();
+            case 5 : return ((const SvxColorItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_6)).GetValue();
+            case 6 : return ((const SvxColorItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_7)).GetValue();
+            case 7 : return ((const SvxColorItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_8)).GetValue();
         }
     }
 
@@ -965,14 +969,14 @@ basegfx::B3DVector Svx3DLightControl::GetLightDirection(sal_uInt32 nNum) const
 
         switch(nNum)
         {
-            case 0 : return ((const Svx3DLightDirection1Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_1)).GetValue();
-            case 1 : return ((const Svx3DLightDirection2Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_2)).GetValue();
-            case 2 : return ((const Svx3DLightDirection3Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_3)).GetValue();
-            case 3 : return ((const Svx3DLightDirection4Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_4)).GetValue();
-            case 4 : return ((const Svx3DLightDirection5Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_5)).GetValue();
-            case 5 : return ((const Svx3DLightDirection6Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_6)).GetValue();
-            case 6 : return ((const Svx3DLightDirection7Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_7)).GetValue();
-            case 7 : return ((const Svx3DLightDirection8Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_8)).GetValue();
+            case 0 : return ((const SvxB3DVectorItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_1)).GetValue();
+            case 1 : return ((const SvxB3DVectorItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_2)).GetValue();
+            case 2 : return ((const SvxB3DVectorItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_3)).GetValue();
+            case 3 : return ((const SvxB3DVectorItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_4)).GetValue();
+            case 4 : return ((const SvxB3DVectorItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_5)).GetValue();
+            case 5 : return ((const SvxB3DVectorItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_6)).GetValue();
+            case 6 : return ((const SvxB3DVectorItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_7)).GetValue();
+            case 7 : return ((const SvxB3DVectorItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_8)).GetValue();
         }
     }
 

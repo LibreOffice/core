@@ -79,8 +79,7 @@ void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eSta
             if ( !bAvailable )
                 rTemplateDlg.SetFamilyState(GetId(), 0);
             else {
-                const SfxTemplateItem *pStateItem = PTR_CAST(
-                    SfxTemplateItem, pItem);
+                const SfxTemplateItem *pStateItem = dynamic_cast< const SfxTemplateItem* >( pItem);
                 DBG_ASSERT(pStateItem != 0, "SfxTemplateItem erwartet");
                 rTemplateDlg.SetFamilyState( GetId(), pStateItem );
             }
@@ -110,7 +109,7 @@ void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eSta
                 nWaterCanState = 0xff;
             else if( eState == SFX_ITEM_AVAILABLE )
             {
-                const SfxBoolItem *pStateItem = PTR_CAST(SfxBoolItem, pItem);
+                const SfxBoolItem *pStateItem = dynamic_cast< const SfxBoolItem* >( pItem);
                 DBG_ASSERT(pStateItem != 0, "BoolItem erwartet");
                 nWaterCanState = pStateItem->GetValue() ? 1 : 0;
             }
@@ -152,7 +151,7 @@ void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eSta
         }
         case SID_STYLE_FAMILY :
         {
-            const SfxUInt16Item *pStateItem = PTR_CAST( SfxUInt16Item, pItem);
+            const SfxUInt16Item *pStateItem = dynamic_cast< const SfxUInt16Item* >( pItem);
             if (pStateItem)
                 rTemplateDlg.SetFamily( pStateItem->GetValue() );
             break;

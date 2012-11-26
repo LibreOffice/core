@@ -284,7 +284,7 @@ void SdTbxControl::StateChanged( sal_uInt16 nSId,
 
     if( eState == SFX_ITEM_AVAILABLE )
     {
-        TbxImageItem* pItem = PTR_CAST( TbxImageItem, pState );
+        const TbxImageItem* pItem = dynamic_cast< const TbxImageItem* >(pState );
         //DBG_ASSERT( pItem, "TbxImageItem erwartet!" );
         // Im StarDesktop kann jetzt auch ein anderes Item ankommen,
         // das nicht ausgewertet werden darf (#33802# und #33838#)
@@ -295,7 +295,7 @@ void SdTbxControl::StateChanged( sal_uInt16 nSId,
             if( nImage == 0 )
             {
                 if( rTbx.IsItemChecked( nSId ) )
-                    rTbx.CheckItem( nSId, sal_False );
+                    rTbx.CheckItem( nSId, false );
             }
             else
             {
@@ -319,28 +319,28 @@ void SdTbxControl::StateChanged( sal_uInt16 nSId,
                     {
                         if( nSId != SID_OBJECT_CHOOSE_MODE &&
                             rTbx.IsItemChecked( SID_OBJECT_CHOOSE_MODE ) )
-                            rTbx.CheckItem( SID_OBJECT_CHOOSE_MODE, sal_False );
+                            rTbx.CheckItem( SID_OBJECT_CHOOSE_MODE, false );
                         if( nSId != SID_DRAWTBX_TEXT &&
                             rTbx.IsItemChecked( SID_DRAWTBX_TEXT ) )
-                             rTbx.CheckItem( SID_DRAWTBX_TEXT, sal_False );
+                             rTbx.CheckItem( SID_DRAWTBX_TEXT, false );
                         if( nSId != SID_DRAWTBX_RECTANGLES &&
                             rTbx.IsItemChecked( SID_DRAWTBX_RECTANGLES ) )
-                               rTbx.CheckItem( SID_DRAWTBX_RECTANGLES, sal_False );
+                               rTbx.CheckItem( SID_DRAWTBX_RECTANGLES, false );
                         if( nSId != SID_DRAWTBX_ELLIPSES &&
                             rTbx.IsItemChecked( SID_DRAWTBX_ELLIPSES ) )
-                               rTbx.CheckItem( SID_DRAWTBX_ELLIPSES, sal_False );
+                               rTbx.CheckItem( SID_DRAWTBX_ELLIPSES, false );
                         if( nSId != SID_DRAWTBX_LINES &&
                             rTbx.IsItemChecked( SID_DRAWTBX_LINES ) )
-                            rTbx.CheckItem( SID_DRAWTBX_LINES, sal_False );
+                            rTbx.CheckItem( SID_DRAWTBX_LINES, false );
                         if( nSId != SID_DRAWTBX_ARROWS &&
                             rTbx.IsItemChecked( SID_DRAWTBX_ARROWS ) )
-                            rTbx.CheckItem( SID_DRAWTBX_ARROWS, sal_False );
+                            rTbx.CheckItem( SID_DRAWTBX_ARROWS, false );
                         if( nSId != SID_DRAWTBX_3D_OBJECTS &&
                             rTbx.IsItemChecked( SID_DRAWTBX_3D_OBJECTS ) )
-                            rTbx.CheckItem( SID_DRAWTBX_3D_OBJECTS, sal_False );
+                            rTbx.CheckItem( SID_DRAWTBX_3D_OBJECTS, false );
                         if( nSId != SID_DRAWTBX_CONNECTORS &&
                             rTbx.IsItemChecked( SID_DRAWTBX_CONNECTORS ) )
-                            rTbx.CheckItem( SID_DRAWTBX_CONNECTORS, sal_False );
+                            rTbx.CheckItem( SID_DRAWTBX_CONNECTORS, false );
                     }
                 }
             }
@@ -350,7 +350,7 @@ void SdTbxControl::StateChanged( sal_uInt16 nSId,
 
 /*-------------------------------------------------------------------------*/
 
-sal_Bool SdTbxControl::IsCheckable( sal_uInt16 nSId )
+bool SdTbxControl::IsCheckable( sal_uInt16 nSId )
 {
     switch( nSId )
     {
@@ -459,9 +459,9 @@ sal_Bool SdTbxControl::IsCheckable( sal_uInt16 nSId )
 
 
         //case SID_ZOOM_OUT:
-            return( sal_True );
+            return( true );
     }
-    return( sal_False );
+    return( false );
 }
 
 

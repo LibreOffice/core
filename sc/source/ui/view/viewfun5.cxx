@@ -51,6 +51,7 @@
 #include <svl/stritem.hxx>
 #include <svtools/transfer.hxx>
 #include <vcl/graph.hxx>
+#include <svx/svdlegacy.hxx>
 
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/processfactory.hxx>
@@ -83,14 +84,17 @@ using namespace com::sun::star;
 
 sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                     const uno::Reference<datatransfer::XTransferable>& rxTransferable,
-                    SCCOL nPosX, SCROW nPosY, Point* pLogicPos, sal_Bool bLink, sal_Bool bAllowDialogs )
+                    SCCOL nPosX, SCROW nPosY, basegfx::B2DPoint* pLogicPos, sal_Bool bLink, sal_Bool bAllowDialogs )
 {
     ScDocument* pDoc = GetViewData()->GetDocument();
     pDoc->SetPastingDrawFromOtherDoc( sal_True );
 
-    Point aPos;                     //  inserting position (1/100 mm)
+    basegfx::B2DPoint aPos(0.0, 0.0);                       //  inserting position (1/100 mm)
+
     if (pLogicPos)
+    {
         aPos = *pLogicPos;
+    }
     else
     {
         //  inserting position isn't needed for text formats
@@ -107,7 +111,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
             if (pDoc->IsNegativePage(nTab))
                 nXT = -nXT;
             sal_uLong nYT = pDoc->GetRowHeight( 0, nPosY-1, nTab);
-            aPos = Point( (long)(nXT * HMM_PER_TWIPS), (long)(nYT * HMM_PER_TWIPS) );
+            aPos = basegfx::B2DPoint( nXT * HMM_PER_TWIPS, nYT * HMM_PER_TWIPS );
         }
     }
 
@@ -200,14 +204,18 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
 #endif
 
                     // insert replacement image ( if there is one ) into the object helper
+                    const basegfx::B2DVector aScale(aObjDesc.maSize.Width(), aObjDesc.maSize.Height());
+
                     if ( nGrFormat )
                     {
                         datatransfer::DataFlavor aDataFlavor;
                         SotExchange::GetFormatDataFlavor( nGrFormat, aDataFlavor );
-                        PasteObject( aPos, xObj, &aObjDesc.maSize, &aGraphic, aDataFlavor.MimeType, aObjDesc.mnViewAspect );
+                        PasteObject( aPos, xObj, &aScale, &aGraphic, aDataFlavor.MimeType, aObjDesc.mnViewAspect );
                     }
                     else
-                        PasteObject( aPos, xObj, &aObjDesc.maSize );
+                    {
+                        PasteObject( aPos, xObj, &aScale );
+                    }
 
                     bRet = sal_True;
                 }
@@ -274,14 +282,18 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
 #endif
 
                     // insert replacement image ( if there is one ) into the object helper
+                    const basegfx::B2DVector aScale(aObjDesc.maSize.Width(), aObjDesc.maSize.Height());
+
                     if ( nGrFormat )
                     {
                         datatransfer::DataFlavor aDataFlavor;
                         SotExchange::GetFormatDataFlavor( nGrFormat, aDataFlavor );
-                        PasteObject( aPos, xObj, &aObjDesc.maSize, &aGraphic, aDataFlavor.MimeType, aObjDesc.mnViewAspect );
+                        PasteObject( aPos, xObj, &aScale, &aGraphic, aDataFlavor.MimeType, aObjDesc.mnViewAspect );
                     }
                     else
-                        PasteObject( aPos, xObj, &aObjDesc.maSize );
+                    {
+                        PasteObject( aPos, xObj, &aScale );
+                    }
 
                     // let object stay in loaded state after insertion
                     SdrOle2Obj::Unload( xObj, embed::Aspects::MSOLE_CONTENT );
@@ -421,35 +433,52 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
             SdrObject* pObj = pScDrawView->CreateFieldControl( ::svx::OColumnTransferable::extractColumnDescriptor( aDataHelper ) );
             if (pObj)
             {
-                Point aInsPos = aPos;
-                Rectangle aRect(pObj->GetLogicRect());
-                aInsPos.X() -= aRect.GetSize().Width()  / 2;
-                aInsPos.Y() -= aRect.GetSize().Height() / 2;
-                if ( aInsPos.X() < 0 ) aInsPos.X() = 0;
-                if ( aInsPos.Y() < 0 ) aInsPos.Y() = 0;
-                aRect.SetPos(aInsPos);
-                pObj->SetLogicRect(aRect);
+                basegfx::B2DRange aRange(sdr::legacy::GetLogicRange(*pObj));
+                basegfx::B2DPoint aInsPos(aPos - (aRange.getRange() * 0.5));
 
-                if ( pObj->ISA(SdrUnoObj) )
-                    pObj->NbcSetLayer(SC_LAYER_CONTROLS);
+                if(aInsPos.getX() < 0.0)
+                {
+                    aInsPos.setX(0.0);
+                }
+
+                if(aInsPos.getY() < 0.0)
+                {
+                    aInsPos.setY(0.0);
+                }
+
+                aRange.transform(basegfx::tools::createTranslateB2DHomMatrix(aInsPos - aRange.getMinimum()));
+                sdr::legacy::SetLogicRange(*pObj, aRange);
+
+                if ( dynamic_cast< SdrUnoObj* >(pObj) )
+                {
+                    pObj->SetLayer(SC_LAYER_CONTROLS);
+                }
                 else
-                    pObj->NbcSetLayer(SC_LAYER_FRONT);
-                if (pObj->ISA(SdrObjGroup))
+                {
+                    pObj->SetLayer(SC_LAYER_FRONT);
+                }
+
+                if (dynamic_cast< SdrObjGroup* >(pObj))
                 {
                     SdrObjListIter aIter( *pObj, IM_DEEPWITHGROUPS );
                     SdrObject* pSubObj = aIter.Next();
+
                     while (pSubObj)
                     {
-                        if ( pSubObj->ISA(SdrUnoObj) )
-                            pSubObj->NbcSetLayer(SC_LAYER_CONTROLS);
+                        if ( dynamic_cast< SdrUnoObj* >(pSubObj) )
+                        {
+                            pSubObj->SetLayer(SC_LAYER_CONTROLS);
+                        }
                         else
-                            pSubObj->NbcSetLayer(SC_LAYER_FRONT);
+                        {
+                            pSubObj->SetLayer(SC_LAYER_FRONT);
+                        }
+
                         pSubObj = aIter.Next();
                     }
                 }
 
-                pScDrawView->InsertObjectSafe(pObj, *pScDrawView->GetSdrPageView());
-
+                pScDrawView->InsertObjectSafe(*pObj);
                 GetViewData()->GetViewShell()->SetDrawShell( sal_True );
                 bRet = sal_True;
             }
@@ -498,19 +527,24 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
             SvxDrawingLayerImport( pModel, xInputStream );
 
             // set everything to right layer:
-            sal_uLong nObjCount = 0;
-            sal_uInt16 nPages = pModel->GetPageCount();
-            for (sal_uInt16 i=0; i<nPages; i++)
+            sal_uInt32 nObjCount = 0;
+            const sal_uInt32 nPages(pModel->GetPageCount());
+            for (sal_uInt32 i=0; i<nPages; i++)
             {
                 SdrPage* pPage = pModel->GetPage(i);
                 SdrObjListIter aIter( *pPage, IM_DEEPWITHGROUPS );
                 SdrObject* pObject = aIter.Next();
                 while (pObject)
                 {
-                    if ( pObject->ISA(SdrUnoObj) )
-                        pObject->NbcSetLayer(SC_LAYER_CONTROLS);
+                    if ( dynamic_cast< SdrUnoObj* >(pObject) )
+                    {
+                        pObject->SetLayer(SC_LAYER_CONTROLS);
+                    }
                     else
-                        pObject->NbcSetLayer(SC_LAYER_FRONT);
+                    {
+                        pObject->SetLayer(SC_LAYER_FRONT);
+                    }
+
                     pObject = aIter.Next();
                 }
 
@@ -607,16 +641,13 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                 PasteFile( aPos, aFile, bLink );
 #if 0
                 SfxStringItem aNameItem( FID_INSERT_FILE, aFile );
-                SfxPointItem aPosItem( FN_PARAM_1, aPos );
+                SfxPointItem aPosItem(FN_PARAM_1, Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())));
                 SfxDispatcher* pDisp =
                     GetViewData()->GetViewShell()->GetViewFrame()->GetDispatcher();
                 if (pDisp)
                     pDisp->Execute( FID_INSERT_FILE, SFX_CALLMODE_ASYNCHRON,
                                         &aNameItem, &aPosItem, (void*)0 );
 #endif
-
-                aPos.X() += 400;
-                aPos.Y() += 400;
             }
             bRet = sal_True;
         }

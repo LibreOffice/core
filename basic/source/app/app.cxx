@@ -395,8 +395,12 @@ void BasicApp::LoadIniFile()
 
 void BasicApp::SetFocus()
 {
-    if( pFrame->pWork && pFrame->pWork->ISA(AppEdit) )
-      ((AppEdit*)pFrame->pWork)->pDataEdit->GrabFocus();
+    AppEdit* pAppEdit = dynamic_cast< AppEdit* >(pFrame->pWork);
+
+    if( pAppEdit )
+    {
+      pAppEdit->pDataEdit->GrabFocus();
+    }
 }
 
 IMPL_LINK( BasicApp, LateInit, void *, pDummy )
@@ -515,8 +519,6 @@ IMPL_LINK(FloatingExecutionStatus, HideNow, FloatingExecutionStatus*, pFLC )
 }
 
 //////////////////////////////////////////////////////////////////////////
-
-TYPEINIT1(TTExecutionStatusHint, SfxSimpleHint);
 
 BasicFrame::BasicFrame() : WorkWindow( NULL,
     WinBits( WB_APP | WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE ) )
@@ -785,9 +787,10 @@ void BasicFrame::SetAutoRun( sal_Bool bAuto )
 
 void BasicFrame::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.ISA( TTExecutionStatusHint ) )
+    const TTExecutionStatusHint* pStatusHint = dynamic_cast< const TTExecutionStatusHint* >(&rHint);
+
+    if ( pStatusHint )
     {
-        TTExecutionStatusHint *pStatusHint = ( TTExecutionStatusHint* )&rHint;
         switch ( pStatusHint->GetType() )
         {
             case TT_EXECUTION_ENTERWAIT:
@@ -1064,7 +1067,18 @@ sal_Bool BasicFrame::CompileAll()
 {
     AppWin* p;
     for( p = pList->First(); p; p = pList->Next() )
-      if( p->ISA(AppBasEd) && !((AppBasEd*)p)->Compile() ) return sal_False;
+    {
+        AppBasEd* pAppBasEd = dynamic_cast< AppBasEd* >(p);
+
+        if(pAppBasEd)
+        {
+            if(!pAppBasEd->Compile())
+            {
+                return sal_False;
+            }
+        }
+    }
+
     return sal_True;
 }
 
@@ -1247,7 +1261,7 @@ IMPL_LINK_INLINE_START( BasicFrame, ShowLineNr, AutoTimer *, pTimer )
 {
     (void) pTimer; /* avoid warning about unused parameter */
     String aPos;
-    if ( pWork && pWork->ISA(AppBasEd))
+    if ( pWork && dynamic_cast< AppBasEd* >(pWork))
     {
         aPos = String::CreateFromInt32(pWork->GetLineNr());
     }
@@ -1388,9 +1402,12 @@ long BasicFrame::Command( short nID, sal_Bool bChecked )
             nFlags = SbDEBUG_STEPINTO;
             goto start;
         case RID_RUNTOCURSOR:
-            if ( pWork && pWork->ISA(AppBasEd) && ((AppBasEd*)pWork)->GetModule()->SetBP(pWork->GetLineNr()) )
             {
-                SbModule *pModule = ((AppBasEd*)pWork)->GetModule();
+            AppBasEd* pAppBasEd = dynamic_cast< AppBasEd* >(pWork);
+
+            if ( pAppBasEd && pAppBasEd->GetModule()->SetBP(pWork->GetLineNr()) )
+            {
+                SbModule *pModule = pAppBasEd->GetModule();
 #if OSL_DEBUG_LEVEL > 1
                 sal_uInt16 x;
                 x = pWork->GetLineNr();
@@ -1409,20 +1426,21 @@ long BasicFrame::Command( short nID, sal_Bool bChecked )
             }
             nFlags = SbDEBUG_BREAK;
             goto start;
+        }
         start: {
 //          InitMenu(GetMenuBar()->GetPopupMenu( RID_APPRUN ));
             if ( !Basic().IsRunning() || bInBreak )
             {
-                AppBasEd* p = NULL;
-                if( pWork && pWork->ISA(AppBasEd) )
+                AppBasEd* p = dynamic_cast< AppBasEd* >(pWork);
+
+                if( p )
                 {
-                    p = ((AppBasEd*)pWork);
                     p->ToTop();
                 }
                 else
                 {
                     AppWin *w = NULL;
-                    for ( w = pList->Last() ; w ? !w->ISA(AppBasEd) : sal_False ; w = pList->Prev() ) ;
+                    for ( w = pList->Last() ; w ? !dynamic_cast< AppBasEd* >(w) : sal_False ; w = pList->Prev() ) ;
                     if ( w )
                     {
                         p = ((AppBasEd*)w);
@@ -1456,13 +1474,17 @@ long BasicFrame::Command( short nID, sal_Bool bChecked )
 //          InitMenu(GetMenuBar()->GetPopupMenu( RID_APPRUN )); // after run
             break;
         case RID_RUNCOMPILE:
-            if( pWork && pWork->ISA(AppBasEd) && SaveAll() )
             {
-                ((AppBasEd*)pWork)->Compile();
+            AppBasEd* pAppBasEd = dynamic_cast< AppBasEd* >(pWork);
+
+            if( pAppBasEd && SaveAll() )
+            {
+                pAppBasEd->Compile();
                 pWork->ToTop();
                 pWork->GrabFocus();
             }
             break;
+        }
         case RID_RUNDISAS:
             bDisas = sal_Bool( !bChecked );
             break;
@@ -1664,8 +1686,12 @@ AppBasEd* BasicFrame::FindModuleWin( const String& rName )
     AppWin* p;
     for( p = pList->First(); p; p = pList->Next() )
     {
-        if( p->ISA(AppBasEd) && ((AppBasEd*)p)->GetModName() == rName )
-            return ((AppBasEd*)p);
+        AppBasEd* pAppBasEd = dynamic_cast< AppBasEd* >(p);
+
+        if( pAppBasEd && pAppBasEd->GetModName() == rName )
+        {
+            return pAppBasEd;
+        }
     }
     return NULL;
 }
@@ -1675,8 +1701,12 @@ AppError* BasicFrame::FindErrorWin( const String& rName )
     AppWin* p;
     for( p = pList->First(); p; p = pList->Next() )
     {
-        if( p->ISA(AppError) && ((AppError*)p)->GetText() == rName )
-            return ((AppError*)p);
+        AppError* pAppError = dynamic_cast< AppError* >(p);
+
+        if( pAppError && pAppError->GetText() == rName )
+        {
+            return pAppError;
+        }
     }
     return NULL;
 }
@@ -1858,7 +1888,7 @@ void BasicFrame::LoadLibrary()
         CloseAll();
         SvFileStream aStrm( s, STREAM_STD_READ );
         MyBasic* pNew = (MyBasic*) SbxBase::Load( aStrm );
-        if( pNew && pNew->ISA( MyBasic ) )
+        if( dynamic_cast< MyBasic* >(pNew) )
         {
             pBasic = pNew;
             // Show all contents if existing

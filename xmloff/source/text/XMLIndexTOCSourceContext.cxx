@@ -58,8 +58,6 @@ const sal_Char sAPI_Level[] = "Level";
 const sal_Char sAPI_CreateFromLevelParagraphStyles[] = "CreateFromLevelParagraphStyles";
 
 
-TYPEINIT1( XMLIndexTOCSourceContext, XMLIndexSourceBaseContext );
-
 XMLIndexTOCSourceContext::XMLIndexTOCSourceContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,

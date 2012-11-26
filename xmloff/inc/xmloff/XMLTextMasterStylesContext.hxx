@@ -44,8 +44,6 @@ protected:
     virtual sal_Bool InsertStyleFamily( sal_uInt16 nFamily ) const;
 
 public:
-    TYPEINFO();
-
     XMLTextMasterStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const ::rtl::OUString& rLName,
         const ::com::sun::star::uno::Reference<

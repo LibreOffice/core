@@ -32,8 +32,6 @@
 class XMLPersMixedContentTContext : public XMLPersElemContentTContext
 {
 public:
-    TYPEINFO();
-
     // mixed content persistence only
     XMLPersMixedContentTContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName );

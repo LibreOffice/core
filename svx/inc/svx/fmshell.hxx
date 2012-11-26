@@ -67,7 +67,6 @@ class SVX_DLLPUBLIC FmDesignModeChangedHint : public SfxHint
     sal_Bool m_bDesignMode;
 
 public:
-    TYPEINFO();
     FmDesignModeChangedHint( sal_Bool bDesMode );
     virtual ~FmDesignModeChangedHint();
 
@@ -105,12 +104,10 @@ class SVX_DLLPUBLIC FmFormShell : public SfxShell
     };
     friend class FormShellWaitObject;
 
-    const OutputDevice* GetCurrentViewDevice() const { return m_pFormView ? m_pFormView->GetActualOutDev() : NULL; }
+    const OutputDevice* GetCurrentViewDevice() const { return m_pFormView ? m_pFormView->GetCurrentViewDevice() : NULL; }
 
 public:
     SFX_DECL_INTERFACE(SVX_INTERFACE_FORM_SH)
-    TYPEINFO();
-
     FmFormShell(SfxViewShell* pParent, FmFormView* pView = NULL);
     virtual ~FmFormShell();
 

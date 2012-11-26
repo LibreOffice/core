@@ -155,8 +155,7 @@ TextConversion_ko::getCharConversions(const OUString& aText, sal_Int32 nStartPos
     } else if (! toHanja && getHanja2HangulIndex && getHanja2HangulData) {
         rtl_uString * newStr = x_rtl_uString_new_WithLength( nLength ); // defined in x_rtl_ustring.h
         sal_Int32 count = 0;
-        while (count < nLength)
-        {
+        while (count < nLength) {
             ch = aText[nStartPos + count];
             sal_Unicode address = getHanja2HangulIndex()[ch>>8];
             if (address != 0xFFFF)
@@ -167,12 +166,10 @@ TextConversion_ko::getCharConversions(const OUString& aText, sal_Int32 nStartPos
             else
                 break;
         }
-        if (count > 0)
-        {
+        if (count > 0) {
             output.realloc(1);
-            output[0] = OUString( newStr->buffer, count );
+            output[0] = OUString( newStr->buffer, count);
         }
-        x_rtl_uString_release( newStr );
     }
     return output;
 }

@@ -68,6 +68,15 @@ SV_DECL_REF(SfxObjectShell)
 #endif
 
 //========================================================================
+
+//typedef bool (*ConvertToViewFrame)( const SfxViewFrame* );
+//template<class T> bool _IsSfxViewFrame(const SfxViewFrame* pShell)
+//{
+//    return 0 != dynamic_cast< const T* >(pShell);
+//}
+
+//========================================================================
+
 DBG_NAMEEX(SfxViewFrame)
 class SFX2_DLLPUBLIC SfxViewFrame: public SfxShell, public SfxListener
 {
@@ -95,7 +104,6 @@ protected:
 public:
                             SfxViewFrame( SfxFrame& rFrame, SfxObjectShell *pDoc = NULL );
 
-                            TYPEINFO();
                             SFX_DECL_INTERFACE(SFX_INTERFACE_SFXVIEWFRM)
 
     static void             SetViewFrame( SfxViewFrame* );
@@ -306,7 +314,6 @@ class SFX2_DLLPUBLIC SfxViewFrameItem: public SfxPoolItem
     SfxViewFrame*           pFrame;
 
 public:
-                            TYPEINFO();
                             SfxViewFrameItem( SfxViewFrame *pViewFrame ):
                                 SfxPoolItem( 0 ),
                                 pFrame( pViewFrame)
@@ -329,7 +336,6 @@ class SfxVerbListItem : public SfxPoolItem
     com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor > aVerbs;
 
 public:
-                            TYPEINFO();
                             SfxVerbListItem( sal_uInt16 nWhichId = SID_OBJECT ) :
                                 SfxPoolItem( nWhichId )
                             {}

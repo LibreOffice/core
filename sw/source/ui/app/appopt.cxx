@@ -96,7 +96,7 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
         if(pAppView)
         {
         // wenn Text dann nicht WebView und umgekehrt
-            sal_Bool bWebView = 0 != PTR_CAST(SwWebView, pAppView);
+            sal_Bool bWebView = 0 != dynamic_cast< SwWebView* >( pAppView);
             if( (bWebView &&  !bTextDialog) ||(!bWebView &&  bTextDialog))
             {
                 aViewOpt = *pAppView->GetWrtShell().GetViewOptions();
@@ -191,7 +191,7 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
     }
     if(bTextDialog)
         pRet->Put(SwPtrItem(FN_PARAM_STDFONTS, GetStdFontConfig()));
-    if( PTR_CAST( SwPagePreView, SfxViewShell::Current())!=0)
+    if( dynamic_cast< SwPagePreView* >( SfxViewShell::Current())!=0)
     {
         SfxBoolItem aBool(SfxBoolItem(SID_PRINTPREVIEW, sal_True));
         pRet->Put(aBool);
@@ -297,7 +297,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     if(pAppView)
     {
         // the text dialog mustn't apply data to the web view and vice versa
-        sal_Bool bWebView = 0 != PTR_CAST(SwWebView, pAppView);
+        sal_Bool bWebView = 0 != dynamic_cast< SwWebView* >( pAppView);
         if( (bWebView == bTextDialog))
             pAppView = 0; //
     }
@@ -405,7 +405,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
 
         aViewOpt.SetSnap( pGridItem->GetUseGridSnap() );
         aViewOpt.SetSynchronize(pGridItem->GetSynchronize());
-        if( aViewOpt.IsGridVisible() != pGridItem->GetGridVisible() )
+        if( (bool)aViewOpt.IsGridVisible() != pGridItem->GetGridVisible() )
             aViewOpt.SetGridVisible( pGridItem->GetGridVisible());
         Size aSize = Size( pGridItem->GetFldDrawX()  ,
                             pGridItem->GetFldDrawY()  );
@@ -563,7 +563,7 @@ SfxTabPage* SwModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxI
             if(pCurrView)
             {
                 // wenn Text dann nicht WebView und umgekehrt
-                sal_Bool bWebView = 0 != PTR_CAST(SwWebView, pCurrView);
+                sal_Bool bWebView = 0 != dynamic_cast< SwWebView* >( pCurrView);
                 if( (bWebView &&  RID_SW_TP_HTML_OPTTABLE_PAGE == nId) ||
                     (!bWebView &&  RID_SW_TP_HTML_OPTTABLE_PAGE != nId) )
                 {

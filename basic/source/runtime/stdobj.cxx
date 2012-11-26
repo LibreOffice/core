@@ -734,7 +734,7 @@ void SbiStdObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                              const SfxHint& rHint, const TypeId& rHintType )
 
 {
-    const SbxHint* pHint = PTR_CAST(SbxHint,&rHint);
+    const SbxHint* pHint = dynamic_cast< const SbxHint* >( &rHint);
     if( pHint )
     {
         SbxVariable* pVar = pHint->GetVar();

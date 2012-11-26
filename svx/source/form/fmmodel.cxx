@@ -45,8 +45,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::container::XNameContainer;
 using namespace svxform;
 
-TYPEINIT1(FmFormModel, SdrModel);
-
 struct FmFormModelImplData
 {
     FmXUndoEnvironment*     pUndoEnv;
@@ -69,68 +67,8 @@ struct FmFormModelImplData
 |* Ctor
 |*
 \************************************************************************/
-FmFormModel::FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers)
-            :SdrModel(pPool, pPers, LOADREFCOUNTS)
-            ,m_pImpl(NULL)
-            ,m_pObjShell(0)
-            ,m_bOpenInDesignMode(sal_False)
-            ,m_bAutoControlFocus(sal_False)
-{
-#ifndef SVX_LIGHT
-    m_pImpl = new FmFormModelImplData;
-    m_pImpl->pUndoEnv = new FmXUndoEnvironment(*this);
-    m_pImpl->pUndoEnv->acquire();
-#endif
-}
-
-/*************************************************************************
-|*
-|* Ctor
-|*
-\************************************************************************/
-FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers)
-            :SdrModel(rPath, pPool, pPers)
-            ,m_pImpl(NULL)
-            ,m_pObjShell(0)
-            ,m_bOpenInDesignMode(sal_False)
-            ,m_bAutoControlFocus(sal_False)
-{
-#ifndef SVX_LIGHT
-    m_pImpl = new FmFormModelImplData;
-    m_pImpl->pUndoEnv = new FmXUndoEnvironment(*this);
-    m_pImpl->pUndoEnv->acquire();
-#endif
-}
-
-/*************************************************************************
-|*
-|* Ctor
-|*
-\************************************************************************/
-FmFormModel::FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers,
-                         FASTBOOL bUseExtColorTable
-                         )
-            :SdrModel(pPool, pPers, bUseExtColorTable, LOADREFCOUNTS)
-            ,m_pImpl(NULL)
-            ,m_pObjShell(0)
-            ,m_bOpenInDesignMode(sal_False)
-            ,m_bAutoControlFocus(sal_False)
-{
-#ifndef SVX_LIGHT
-    m_pImpl = new FmFormModelImplData;
-    m_pImpl->pUndoEnv = new FmXUndoEnvironment(*this);
-    m_pImpl->pUndoEnv->acquire();
-#endif
-}
-
-/*************************************************************************
-|*
-|* Ctor
-|*
-\************************************************************************/
-FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers,
-                         FASTBOOL bUseExtColorTable)
-            :SdrModel(rPath, pPool, pPers, bUseExtColorTable, LOADREFCOUNTS)
+FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers, bool bUseExtColorTable)
+:   SdrModel(rPath, pPool, pPers, bUseExtColorTable)
             ,m_pImpl( NULL )
             ,m_pObjShell(0)
             ,m_bOpenInDesignMode(sal_False)
@@ -169,7 +107,7 @@ FmFormModel::~FmFormModel()
 |* Erzeugt eine neue Seite
 |*
 \************************************************************************/
-SdrPage* FmFormModel::AllocPage(FASTBOOL bMasterPage)
+SdrPage* FmFormModel::AllocPage(bool bMasterPage)
 {
     return new FmFormPage(*this, NULL, bMasterPage);
 }
@@ -179,7 +117,7 @@ SdrPage* FmFormModel::AllocPage(FASTBOOL bMasterPage)
 |* InsertPage
 |*
 \************************************************************************/
-void FmFormModel::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
+void FmFormModel::InsertPage(SdrPage* pPage, sal_uInt32 nPos)
 {
 #ifndef SVX_LIGHT
     // hack solange Methode intern
@@ -195,7 +133,7 @@ void FmFormModel::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
 |* MovePage
 |*
 \************************************************************************/
-void FmFormModel::MovePage( sal_uInt16 nPgNum, sal_uInt16 nNewPos )
+void FmFormModel::MovePage( sal_uInt32 nPgNum, sal_uInt32 nNewPos )
 {
 #ifndef SVX_LIGHT
     m_pImpl->bMovingPage = sal_True;
@@ -214,7 +152,7 @@ void FmFormModel::MovePage( sal_uInt16 nPgNum, sal_uInt16 nNewPos )
 |* RemovePage
 |*
 \************************************************************************/
-SdrPage* FmFormModel::RemovePage(sal_uInt16 nPgNum)
+SdrPage* FmFormModel::RemovePage(sal_uInt32 nPgNum)
 {
     FmFormPage* pToBeRemovedPage = dynamic_cast< FmFormPage* >( GetPage( nPgNum ) );
     OSL_ENSURE( pToBeRemovedPage, "FmFormModel::RemovePage: *which page*?" );
@@ -238,7 +176,7 @@ SdrPage* FmFormModel::RemovePage(sal_uInt16 nPgNum)
 |* InsertMasterPage
 |*
 \************************************************************************/
-void FmFormModel::InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos)
+void FmFormModel::InsertMasterPage(SdrPage* pPage, sal_uInt32 nPos)
 {
 #ifndef SVX_LIGHT
     // hack solange Methode intern
@@ -254,7 +192,7 @@ void FmFormModel::InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos)
 |* RemoveMasterPage
 |*
 \************************************************************************/
-SdrPage* FmFormModel::RemoveMasterPage(sal_uInt16 nPgNum)
+SdrPage* FmFormModel::RemoveMasterPage(sal_uInt32 nPgNum)
 {
     FmFormPage* pPage = (FmFormPage*)SdrModel::RemoveMasterPage(nPgNum);
 

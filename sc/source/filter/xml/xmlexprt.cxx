@@ -2673,7 +2673,7 @@ void ScXMLExport::CollectInternalShape( uno::Reference< drawing::XShape > xShape
         if( SdrObject* pObject = pShapeImp->GetSdrObject() )
         {
             // collect note caption objects from all layers (internal or hidden)
-            if( ScDrawObjData* pCaptData = ScDrawLayer::GetNoteCaptionData( pObject, static_cast< SCTAB >( nCurrentTable ) ) )
+            if( ScDrawObjData* pCaptData = ScDrawLayer::GetNoteCaptionData( *pObject, static_cast< SCTAB >( nCurrentTable ) ) )
             {
                 pSharedData->AddNoteObj( xShape, pCaptData->maStart );
 

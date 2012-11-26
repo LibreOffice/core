@@ -26,10 +26,9 @@
 
 #include "vcl/jobdata.hxx"
 #include "vcl/printerinfomanager.hxx"
-
 #include "tools/stream.hxx"
-
 #include "sal/alloca.h"
+#include <memory.h>
 
 using namespace psp;
 using namespace rtl;

@@ -50,8 +50,6 @@ class SdXMLPageMasterStyleContext: public SvXMLStyleContext
     SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }
 
 public:
-    TYPEINFO();
-
     SdXMLPageMasterStyleContext(
         SdXMLImport& rImport,
         sal_uInt16 nPrfx,
@@ -80,8 +78,6 @@ class SdXMLPageMasterContext: public SvXMLStyleContext
     SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }
 
 public:
-    TYPEINFO();
-
     SdXMLPageMasterContext(
         SdXMLImport& rImport,
         sal_uInt16 nPrfx,
@@ -108,8 +104,6 @@ class SdXMLMasterPageContext: public SdXMLGenericPageContext
     rtl::OUString               msStyleName;
 
 public:
-    TYPEINFO();
-
     SdXMLMasterPageContext(
         SdXMLImport& rImport,
         sal_uInt16 nPrfx,
@@ -174,8 +168,6 @@ class SdXMLPresentationPageLayoutContext: public SvXMLStyleContext
     SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }
 
 public:
-    TYPEINFO();
-
     SdXMLPresentationPageLayoutContext(
         SdXMLImport& rImport,
         sal_uInt16 nPrfx,
@@ -227,8 +219,6 @@ protected:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 public:
-    TYPEINFO();
-
     SdXMLStylesContext(
         SdXMLImport& rImport,
         sal_uInt16 nPrfx,
@@ -257,8 +247,6 @@ class SdXMLMasterStylesContext : public SvXMLImportContext
     SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }
 
 public:
-    TYPEINFO();
-
     SdXMLMasterStylesContext(
         SdXMLImport& rImport,
         sal_uInt16 nPrfx,

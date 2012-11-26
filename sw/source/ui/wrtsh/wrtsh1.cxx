@@ -1355,7 +1355,7 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
                                      : 0;
         GetDoc()->RemoveLeadingWhiteSpace( *GetCrsr()->GetPoint() );
 
-        const bool bHtml = 0 != PTR_CAST(SwWebDocShell, pDocSh);
+        const bool bHtml = 0 != dynamic_cast< SwWebDocShell* >( pDocSh);
         const bool bRightToLeft = IsInRightToLeftText();
         for( sal_uInt8 nLvl = 0; nLvl < MAXLEVEL; ++nLvl )
         {

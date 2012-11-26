@@ -67,8 +67,8 @@ SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
                  pD->GetDocShell(), sal_True ),
     pDoc( pD )
 {
-    SetScaleUnit( MAP_TWIP );
-    SetSwapGraphics( sal_True );
+    SetExchangeObjectUnit( MAP_TWIP );
+    SetSwapGraphics( true );
 
     SwDocShell* pDocSh = pDoc->GetDocShell();
     if ( pDocSh )
@@ -139,11 +139,10 @@ SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
 
 SwDrawDocument::~SwDrawDocument()
 {
-    Broadcast(SdrHint(HINT_MODELCLEARED));
+    Broadcast(SdrBaseHint(HINT_MODELCLEARED));
 
     // #116168#
-    ClearModel(sal_True);
-    //Clear();
+    ClearModel(true);
 }
 
 /*************************************************************************
@@ -156,7 +155,7 @@ SwDrawDocument::~SwDrawDocument()
 \************************************************************************/
 
 
-SdrPage* SwDrawDocument::AllocPage(FASTBOOL bMasterPage)
+SdrPage* SwDrawDocument::AllocPage(bool bMasterPage)
 {
     SwDPage* pPage = new SwDPage(*this, 0 != bMasterPage);
     pPage->SetName( String::CreateFromAscii(
@@ -192,7 +191,7 @@ SvStream* SwDrawDocument::GetDocumentStream( SdrDocumentStreamInfo& rInfo ) cons
                     pRet = utl::UcbStreamHelper::CreateStream( xStream );
                     if( pRet )
                     {
-                        rInfo.mbDeleteAfterUse = sal_True;
+                        rInfo.mbDeleteAfterUse = true;
                         rInfo.mxStorageRef = xPictureStorage;
                     }
                 }
@@ -231,6 +230,11 @@ uno::Reference< uno::XInterface > SwDrawDocument::createUnoModel()
     }
 
     return xModel;
+}
+
+bool SwDrawDocument::IsWriter() const
+{
+    return true;
 }
 
 // <--

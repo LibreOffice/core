@@ -31,7 +31,6 @@
 #include <tools/solar.h>
 #include <tools/ref.hxx>
 #include <rtl/ustring.hxx>
-#include <tools/rtti.hxx>
 
 class SvXMLNamespaceMap;
 class SvXMLImport;
@@ -57,8 +56,6 @@ protected:
     const SvXMLImport& GetImport() const { return mrImport; }
 
 public:
-    TYPEINFO();
-
     sal_uInt16 GetPrefix() const { return mnPrefix; }
     const ::rtl::OUString& GetLocalName() const { return maLocalName; }
 

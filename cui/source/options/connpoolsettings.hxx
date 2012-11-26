@@ -84,8 +84,6 @@ namespace offapp
         DriverPoolingSettings   m_aSettings;
 
     public:
-        TYPEINFO();
-
         DriverPoolingSettingsItem( sal_uInt16 _nId, const DriverPoolingSettings _rSettings );
 
         virtual int              operator==( const SfxPoolItem& ) const;

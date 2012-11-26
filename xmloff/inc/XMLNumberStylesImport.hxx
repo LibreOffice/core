@@ -53,8 +53,6 @@ protected:
     void add( rtl::OUString& rNumberStyle, sal_Bool bLong, sal_Bool bTextual, sal_Bool  bDecimal02, rtl::OUString& rText );
 
 public:
-    TYPEINFO();
-
     SdXMLNumberFormatImportContext( SdXMLImport& rImport,
         sal_uInt16 nPrfx,
         const rtl::OUString& rLocalName,

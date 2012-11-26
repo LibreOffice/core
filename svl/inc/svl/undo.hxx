@@ -24,7 +24,6 @@
 #define _UNDO_HXX
 
 #include "svl/svldllapi.h"
-#include <tools/rtti.hxx>
 #include <tools/string.hxx>
 #include <svl/svarray.hxx>
 
@@ -38,7 +37,6 @@
 class SVL_DLLPUBLIC SfxRepeatTarget
 {
 public:
-                        TYPEINFO();
     virtual             ~SfxRepeatTarget() = 0;
 };
 
@@ -56,7 +54,6 @@ class SVL_DLLPUBLIC SfxUndoAction
 {
     sal_Bool bLinked;
 public:
-                            TYPEINFO();
                             SfxUndoAction();
     virtual                 ~SfxUndoAction();
 
@@ -165,8 +162,6 @@ class SVL_DLLPUBLIC SfxListUndoAction : public SfxUndoAction, public SfxUndoArra
 */
 {
     public:
-                            TYPEINFO();
-
                             SfxListUndoAction( const UniString &rComment,
                                 const UniString rRepeatComment, sal_uInt16 Id, SfxUndoArray *pFather);
     virtual void            Undo();
@@ -449,7 +444,6 @@ class SVL_DLLPUBLIC SfxLinkUndoAction : public SfxUndoAction
 
 {
 public:
-                            TYPEINFO();
                             SfxLinkUndoAction(::svl::IUndoManager *pManager);
                             ~SfxLinkUndoAction();
 

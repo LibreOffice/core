@@ -50,9 +50,8 @@ private:
     Color                   mColor;
 
 public:
-    TYPEINFO();
-
-    SvxColorItem( const sal_uInt16 nId );
+    POOLITEM_FACTORY()
+    SvxColorItem( const sal_uInt16 nId = 0 );
     SvxColorItem( const Color& aColor, const sal_uInt16 nId  );
     SvxColorItem( SvStream& rStrm, const sal_uInt16 nId  );
     SvxColorItem( const SvxColorItem& rCopy );

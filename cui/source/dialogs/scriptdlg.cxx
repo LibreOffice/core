@@ -955,7 +955,7 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
         {
             aNewName = aNewStdName;
             aNewName += String::CreateFromInt32( i );
-            sal_Bool bFound = sal_False;
+            bool bFound = false;
             if(childNodes.getLength() > 0 )
             {
                 ::rtl::OUString nodeName = childNodes[0]->getName();
@@ -967,7 +967,7 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
             {
                 if ( (aNewName+extn).equals( childNodes[index]->getName() ) )
                 {
-                    bFound = sal_True;
+                    bFound = true;
                     break;
                 }
             }

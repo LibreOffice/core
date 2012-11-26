@@ -43,7 +43,6 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/eitem.hxx>
-#include <tools/rtti.hxx>
 #include <svl/lstner.hxx>
 #include <sfx2/sfxhelp.hxx>
 #include <basic/sbstar.hxx>
@@ -207,8 +206,6 @@ void SAL_CALL SfxModelListener_Impl::disposing( const com::sun::star::lang::Even
         // GCC stuerzt ab, wenn schon im dtor, also vorher Flag abfragen
         mpDoc->DoClose();
 }
-
-TYPEINIT1(SfxObjectShell, SfxShell);
 
 //--------------------------------------------------------------------
 SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
@@ -491,7 +488,7 @@ sal_Bool SfxObjectShell::Close()
 
 SfxObjectShell* SfxObjectShell::GetFirst
 (
-    const TypeId* pType ,
+    ConvertToObjectShell    aConvert,
     sal_Bool            bOnlyVisible
 )
 {
@@ -504,7 +501,7 @@ SfxObjectShell* SfxObjectShell::GetFirst
         if ( bOnlyVisible && pSh->IsPreview() && pSh->IsReadOnly() )
             continue;
 
-        if ( ( !pType || pSh->IsA(*pType) ) &&
+        if ( ( !aConvert || aConvert(pSh) ) &&
              ( !bOnlyVisible || SfxViewFrame::GetFirst( pSh, sal_True )))
             return pSh;
     }
@@ -518,7 +515,7 @@ SfxObjectShell* SfxObjectShell::GetFirst
 SfxObjectShell* SfxObjectShell::GetNext
 (
     const SfxObjectShell&   rPrev,
-    const TypeId*           pType,
+    ConvertToObjectShell    aConvert,
     sal_Bool                    bOnlyVisible
 )
 {
@@ -537,7 +534,7 @@ SfxObjectShell* SfxObjectShell::GetNext
         if ( bOnlyVisible && pSh->IsPreview() && pSh->IsReadOnly() )
             continue;
 
-        if ( ( !pType || pSh->IsA(*pType) ) &&
+        if ( ( !aConvert || aConvert(pSh) ) &&
              ( !bOnlyVisible || SfxViewFrame::GetFirst( pSh, sal_True )))
             return pSh;
     }
@@ -660,7 +657,7 @@ sal_uInt16 SfxObjectShell::PrepareClose
                 pPoolItem = pFrame->GetBindings().ExecuteSynchron( SID_SAVEDOC, ppArgs );
             }
 
-            if ( !pPoolItem || pPoolItem->ISA(SfxVoidItem) || ( pPoolItem->ISA(SfxBoolItem) && !( (const SfxBoolItem*) pPoolItem )->GetValue() ) )
+            if ( !pPoolItem || dynamic_cast< const SfxVoidItem* >(pPoolItem) || ( dynamic_cast< const SfxBoolItem* >(pPoolItem) && !( (const SfxBoolItem*) pPoolItem )->GetValue() ) )
                 return sal_False;
             else
                 bClose = sal_True;
@@ -1084,8 +1081,8 @@ SfxObjectShell* SfxObjectShell::CreateAndLoadObject( const SfxItemSet& rSet, Sfx
 {
     uno::Sequence < beans::PropertyValue > aProps;
     TransformItems( SID_OPENDOC, rSet, aProps );
-    SFX_ITEMSET_ARG(&rSet, pFileNameItem, SfxStringItem, SID_FILE_NAME, sal_False);
-    SFX_ITEMSET_ARG(&rSet, pTargetItem, SfxStringItem, SID_TARGETNAME, sal_False);
+    SFX_ITEMSET_ARG(&rSet, pFileNameItem, SfxStringItem, SID_FILE_NAME );
+    SFX_ITEMSET_ARG(&rSet, pTargetItem, SfxStringItem, SID_TARGETNAME );
     ::rtl::OUString aURL;
     ::rtl::OUString aTarget = rtl::OUString::createFromAscii("_blank");
     if ( pFileNameItem )

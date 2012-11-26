@@ -64,10 +64,14 @@ service EnhancedCustomShapeGeometry
     [optional, property] ::com::sun::star::awt::Rectangle ViewBox;
 
     /** This property specifies if the orientation of the shape is horizontal mirrored.
+        @deprecated : This property is now part of the shape geometry (negative scale in X)
+        It will always return sal_False now.
     */
     [optional, property] boolean MirroredX;
 
     /** This property specifies if the orientation of the shape is vertical mirrored.
+        @deprecated : This property is now part of the shape geometry (negative scale in Y)
+        It will always return sal_False now.
     */
     [optional, property] boolean MirroredY;
 

@@ -101,7 +101,8 @@ namespace drawinglayer
                 if(xControlWindow.is())
                 {
                     // get decomposition to get size
-                    basegfx::B2DVector aScale, aTranslate;
+                    basegfx::B2DVector aScale;
+                    basegfx::B2DPoint aTranslate;
                     double fRotate, fShearX;
                     getTransform().decompose(aScale, aTranslate, fRotate, fShearX);
 
@@ -219,8 +220,12 @@ namespace drawinglayer
                                 }
 
                                 // short form for scale and translate transformation
-                                const basegfx::B2DHomMatrix aBitmapTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(
-                                    aBitmapSizeLogic.getX(), aBitmapSizeLogic.getY(), aTranslate.getX(), aTranslate.getY()));
+                                const basegfx::B2DHomMatrix aBitmapTransform(
+                                    basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                                        aBitmapSizeLogic,
+                                        fShearX,
+                                        fRotate,
+                                        aTranslate));
 
                                 // create primitive
                                 xRetval = new BitmapPrimitive2D(BitmapEx(aContent), aBitmapTransform);
@@ -240,9 +245,7 @@ namespace drawinglayer
         Primitive2DReference ControlPrimitive2D::createPlaceholderDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // create a gray placeholder hairline polygon in object size
-            basegfx::B2DRange aObjectRange(0.0, 0.0, 1.0, 1.0);
-            aObjectRange.transform(getTransform());
-            const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aObjectRange));
+            const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(getTransform() * basegfx::B2DRange::getUnitB2DRange()));
             const basegfx::BColor aGrayTone(0xc0 / 255.0, 0xc0 / 255.0, 0xc0 / 255.0);
 
             // The replacement object may also get a text like 'empty group' here later
@@ -298,49 +301,10 @@ namespace drawinglayer
             return mxXControl;
         }
 
-        bool ControlPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            // use base class compare operator
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const ControlPrimitive2D& rCompare = (ControlPrimitive2D&)rPrimitive;
-
-                if(getTransform() == rCompare.getTransform())
-                {
-                    // check if ControlModel references both are/are not
-                    bool bRetval(getControlModel().is() == rCompare.getControlModel().is());
-
-                    if(bRetval && getControlModel().is())
-                    {
-                        // both exist, check for equality
-                        bRetval = (getControlModel() == rCompare.getControlModel());
-                    }
-
-                    if(bRetval)
-                    {
-                        // check if XControl references both are/are not
-                        bRetval = (getXControl().is() == rCompare.getXControl().is());
-                    }
-
-                    if(bRetval && getXControl().is())
-                    {
-                        // both exist, check for equality
-                        bRetval = (getXControl() == rCompare.getXControl());
-                    }
-
-                    return bRetval;
-                }
-            }
-
-            return false;
-        }
-
         basegfx::B2DRange ControlPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // simply derivate from unit range
-            basegfx::B2DRange aRetval(0.0, 0.0, 1.0, 1.0);
-            aRetval.transform(getTransform());
-            return aRetval;
+            return getTransform() * basegfx::B2DRange::getUnitB2DRange();
         }
 
         Primitive2DSequence ControlPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const

@@ -52,9 +52,6 @@
 
 using namespace ::com::sun::star;
 
-TYPEINIT1_AUTOFACTORY(SwCropGrf, SfxPoolItem)
-TYPEINIT1_AUTOFACTORY(SwGammaGrf, SfxPoolItem)
-
 /******************************************************************************
  *  Implementierung     class SwMirrorGrf
  ******************************************************************************/
@@ -294,7 +291,7 @@ SfxPoolItem* SwTransparencyGrf::Clone( SfxItemPool * ) const
 sal_Bool SwTransparencyGrf::QueryValue( uno::Any& rVal,
                                         sal_uInt8 ) const
 {
-    DBG_ASSERT(ISA(SfxByteItem),"Put/QueryValue should be removed!");
+    DBG_ASSERT(dynamic_cast< const SfxByteItem* >(this),"Put/QueryValue should be removed!");
     sal_Int16 nRet = GetValue();
     DBG_ASSERT( 0 <= nRet && nRet <= 100, "value out of range" );
     rVal <<= nRet;
@@ -305,7 +302,7 @@ sal_Bool SwTransparencyGrf::PutValue( const uno::Any& rVal,
                                         sal_uInt8 )
 {
     //temporary conversion until this is a SfxInt16Item!
-    DBG_ASSERT(ISA(SfxByteItem),"Put/QueryValue should be removed!");
+    DBG_ASSERT(dynamic_cast< SfxByteItem* >(this),"Put/QueryValue should be removed!");
     sal_Int16 nVal = 0;
     if(!(rVal >>= nVal) || nVal < -100 || nVal > 100)
         return sal_False;

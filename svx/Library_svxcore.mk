@@ -108,7 +108,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/engine3d/obj3d \
     svx/source/engine3d/objfac3d \
     svx/source/engine3d/polygn3d \
-    svx/source/engine3d/polysc3d \
     svx/source/engine3d/scene3d \
     svx/source/engine3d/sphere3d \
     svx/source/engine3d/svx3ditems \
@@ -227,7 +226,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/sdr/contact/sdrmediawindow \
     svx/source/sdr/contact/viewobjectcontactofsdrmediaobj \
     svx/source/sdr/contact/viewcontactofsdrcaptionobj \
-    svx/source/sdr/contact/viewcontactofvirtobj \
     svx/source/sdr/contact/viewcontactofe3dsphere \
     svx/source/sdr/contact/viewcontactofe3dpolygon \
     svx/source/sdr/contact/viewcontactofsdredgeobj \
@@ -285,7 +283,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/sdr/properties/properties \
     svx/source/sdr/properties/e3dlatheproperties \
     svx/source/sdr/properties/graphicproperties \
-    svx/source/sdr/properties/circleproperties \
     svx/source/sdr/properties/emptyproperties \
     svx/source/sdr/properties/e3dsphereproperties \
     svx/source/sdr/properties/defaultproperties \
@@ -323,13 +320,13 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/svdraw/svdibrow \
     svx/source/svdraw/svditer \
     svx/source/svdraw/svdlayer \
-    svx/source/svdraw/svdmark \
     svx/source/svdraw/svdmodel \
     svx/source/svdraw/svdmrkv \
     svx/source/svdraw/svdmrkv1 \
     svx/source/svdraw/svdoashp \
     svx/source/svdraw/svdoattr \
     svx/source/svdraw/svdobj \
+    svx/source/svdraw/sdrobjectfactory \
     svx/source/svdraw/svdocapt \
     svx/source/svdraw/svdocirc \
     svx/source/svdraw/svdoedge \
@@ -342,6 +339,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/svdraw/svdopath \
     svx/source/svdraw/svdorect \
     svx/source/svdraw/svdotext \
+    svx/source/svdraw/sdrtexthelpers \
     svx/source/svdraw/svdotextdecomposition \
     svx/source/svdraw/svdotextpathdecomposition \
     svx/source/svdraw/svdotxat \
@@ -353,7 +351,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/svdraw/svdouno \
     svx/source/svdraw/svdoutl \
     svx/source/svdraw/svdoutlinercache \
-    svx/source/svdraw/svdovirt \
     svx/source/svdraw/svdpage \
     svx/source/svdraw/svdpagv \
     svx/source/svdraw/svdpntv \
@@ -363,9 +360,14 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/svdraw/svdtrans \
     svx/source/svdraw/svdundo \
     svx/source/svdraw/svdview \
-    svx/source/svdraw/svdviter \
     svx/source/svdraw/svdxcgv \
+    svx/source/svdraw/svdlegacy \
+    svx/source/svdraw/globaldrawitempool \
+    svx/source/svdraw/gluepoint \
+    svx/source/svdraw/svdsob \
+    svx/source/svdraw/sdrselection \
     svx/source/table/cell \
+    svx/source/table/celleditsource \
     svx/source/table/cellcursor \
     svx/source/table/cellrange \
     svx/source/table/propertyset \

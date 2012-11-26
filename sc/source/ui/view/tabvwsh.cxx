@@ -46,14 +46,13 @@
 #include "scresid.hxx"
 #include "dwfunctr.hxx"
 #include "sc.hrc"       // -> SID_TOOL_xxx
-#include "drawattr.hxx" // -> SvxDrawToolItem
 #include "spelldialog.hxx"
 
 
 #define ScTabViewShell
 #include "scslots.hxx"
 
-TYPEINIT2(ScTabViewShell,SfxViewShell,SfxListener);
+#define SearchSettings
 
 SFX_IMPL_INTERFACE(ScTabViewShell,SfxViewShell,ScResId(SCSTR_TABVIEWSHELL))
 {

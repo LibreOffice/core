@@ -100,7 +100,8 @@ namespace drawinglayer
             if(getTextLength())
             {
                 // decompose object transformation to single values
-                basegfx::B2DVector aScale, aTranslate;
+                basegfx::B2DVector aScale;
+                basegfx::B2DPoint aTranslate;
                 double fRotate, fShearX;
 
                 // if decomposition returns false, create no geometry since e.g. scaling may
@@ -129,13 +130,15 @@ namespace drawinglayer
                         aFontScale.getY(),
                         getLocale());
 
-                    // When getting outlines from stretched text (aScale.getX() != 1.0) it
+                    // When getting outlines from stretched text (fabs(aScale.getX()) != 1.0) it
                     // is necessary to inverse-scale the DXArray (if used) to not get the
                     // outlines already aligned to given, but wrong DXArray
-                    if(getDXArray().size() && !basegfx::fTools::equal(aScale.getX(), 1.0))
+                    const double fAbsScaleX(fabs(aScale.getX()));
+
+                    if(getDXArray().size() && !basegfx::fTools::equal(fAbsScaleX, 1.0))
                     {
                         ::std::vector< double > aScaledDXArray = getDXArray();
-                        const double fDXArrayScale(1.0 / aScale.getX());
+                        const double fDXArrayScale(1.0 / fAbsScaleX);
 
                         for(sal_uInt32 a(0); a < aScaledDXArray.size(); a++)
                         {
@@ -168,7 +171,10 @@ namespace drawinglayer
                     {
                         // prepare object transformation for polygons
                         rTransformation = basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
-                            aScale, fShearX, fRotate, aTranslate);
+                            aScale,
+                            fShearX,
+                            fRotate,
+                            aTranslate);
                     }
                 }
             }
@@ -206,7 +212,8 @@ namespace drawinglayer
                     if(getFontAttribute().getOutline())
                     {
                         // decompose polygon transformation to single values
-                        basegfx::B2DVector aScale, aTranslate;
+                        basegfx::B2DVector aScale;
+                        basegfx::B2DPoint aTranslate;
                         double fRotate, fShearX;
                         aPolygonTransform.decompose(aScale, aTranslate, fRotate, fShearX);
 
@@ -259,32 +266,14 @@ namespace drawinglayer
                 && rA.Variant == rB.Variant);
         }
 
-        bool TextSimplePortionPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const TextSimplePortionPrimitive2D& rCompare = (TextSimplePortionPrimitive2D&)rPrimitive;
-
-                return (getTextTransform() == rCompare.getTextTransform()
-                    && getText() == rCompare.getText()
-                    && getTextPosition() == rCompare.getTextPosition()
-                    && getTextLength() == rCompare.getTextLength()
-                    && getDXArray() == rCompare.getDXArray()
-                    && getFontAttribute() == rCompare.getFontAttribute()
-                    && LocalesAreEqual(getLocale(), rCompare.getLocale())
-                    && getFontColor() == rCompare.getFontColor());
-            }
-
-            return false;
-        }
-
         basegfx::B2DRange TextSimplePortionPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             if(maB2DRange.isEmpty() && getTextLength())
             {
                 // get TextBoundRect as base size
                 // decompose object transformation to single values
-                basegfx::B2DVector aScale, aTranslate;
+                basegfx::B2DVector aScale;
+                basegfx::B2DPoint aTranslate;
                 double fRotate, fShearX;
 
                 if(getTextTransform().decompose(aScale, aTranslate, fRotate, fShearX))
@@ -310,8 +299,12 @@ namespace drawinglayer
                     if(!aNewRange.isEmpty())
                     {
                         // prepare object transformation for range
-                        const basegfx::B2DHomMatrix aRangeTransformation(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
-                            aScale, fShearX, fRotate, aTranslate));
+                        const basegfx::B2DHomMatrix aRangeTransformation(
+                            basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                                aScale,
+                                fShearX,
+                                fRotate,
+                                aTranslate));
 
                         // apply range transformation to it
                         aNewRange.transform(aRangeTransformation);

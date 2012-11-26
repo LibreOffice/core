@@ -45,16 +45,16 @@ namespace drawinglayer
             basegfx::B2DHomMatrix                       maTextBox;
 
             // bitfield
-            // defines if SdrTextWordWrapItem was set at SdrObjCustomShape which means
+            // defines if TextWordWrap was set at SdrObjCustomShape which means
             // that the text needs to be block formatted
-            unsigned                                    mbWordWrap : 1;
+            bool                                        mbWordWrap : 1;
 
             // defines that the object contains/is a 3D AutoShape. Needed for
             // making exceptions with shadow generation
-            unsigned                                    mb3DShape : 1;
+            bool                                        mb3DShape : 1;
 
             // #SJ# Allow text clipping against TextBox in special cases (used for SC)
-            unsigned                                    mbForceTextClipToTextRange : 1;
+            bool                                        mbForceTextClipToTextRange : 1;
 
         protected:
             // local decomposition.
@@ -76,9 +76,6 @@ namespace drawinglayer
             bool getWordWrap() const { return mbWordWrap; }
             bool get3DShape() const { return mb3DShape; }
             bool isForceTextClipToTextRange() const { return mbForceTextClipToTextRange; }
-
-            // compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
             // provide unique ID
             DeclPrimitrive2DIDBlock()

@@ -38,6 +38,8 @@
 #include <editeng/outliner.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/numitem.hxx>
+#include <svx/svdlegacy.hxx>
+#include <svx/svdetc.hxx>
 
 using ::rtl::OUString;
 
@@ -304,7 +306,7 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
                             if( pSvxDrawPage )
                             {
                                 mpDefaultSdrPage = pSvxDrawPage->GetSdrPage();
-                                mpSdrModel = mpDefaultSdrPage->GetModel();
+                                mpSdrModel = &mpDefaultSdrPage->getSdrModelFromSdrPage();
 
                                 if( mpSdrModel )
                                 {
@@ -969,24 +971,27 @@ sal_Bool SVGFilter::implCreateObjectsFromShape( const Reference< XShape >& rxSha
 
         if( pObj )
         {
-            Graphic aGraphic( SdrExchangeView::GetObjGraphic( pObj->GetModel(), pObj ) );
+            const Graphic aGraphic(GetObjGraphic(*pObj));
 
-            if( aGraphic.GetType() != GRAPHIC_NONE )
+            if(GRAPHIC_NONE != aGraphic.GetType())
             {
-                if( aGraphic.GetType() == GRAPHIC_BITMAP )
+                if(GRAPHIC_BITMAP == aGraphic.GetType())
                 {
                     GDIMetaFile aMtf;
-                    const Point aNullPt;
-                    const Size  aSize( pObj->GetCurrentBoundRect().GetSize() );
+                    const basegfx::B2DRange& rRange = pObj->getObjectRange(0);
+                    const basegfx::B2DVector aSize(rRange.getRange());
+                    const Size aOldSize(basegfx::fround(aSize.getX()), basegfx::fround(aSize.getY()));
 
-                    aMtf.AddAction( new MetaBmpExScaleAction( aNullPt, aSize, aGraphic.GetBitmapEx() ) );
-                    aMtf.SetPrefSize( aSize );
+                    aMtf.AddAction(new MetaBmpExScaleAction(Point(), aOldSize, aGraphic.GetBitmapEx()));
+                    aMtf.SetPrefSize(aOldSize);
                     aMtf.SetPrefMapMode( MAP_100TH_MM );
 
                     (*mpObjects)[ rxShape ] = ObjectRepresentation( rxShape, aMtf );
                 }
                 else
+                {
                     (*mpObjects)[ rxShape ] = ObjectRepresentation( rxShape, aGraphic.GetGDIMetaFile() );
+                }
 
                 bRet = sal_True;
             }
@@ -1138,25 +1143,25 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
             const SvxFieldData* pField = pInfo->GetField().GetField();
             Any                 aProperty;
 
-            if( pField->ISA( SvxHeaderField ) &&
+            if( dynamic_cast< const SvxHeaderField* >(pField) &&
                 xDefaultPagePropSetInfo->hasPropertyByName( aHeaderText ) )
             {
                 xDefaultPagePropertySet->getPropertyValue( aHeaderText ) >>= aRepresentation;
                 bFieldProcessed = sal_True;
             }
-            else if( pField->ISA( SvxFooterField ) &&
+            else if( dynamic_cast< const SvxFooterField* >(pField) &&
                      xDefaultPagePropSetInfo->hasPropertyByName( aFooterText ) )
             {
                 xDefaultPagePropertySet->getPropertyValue( aFooterText ) >>= aRepresentation;
                 bFieldProcessed = sal_True;
             }
-            else if( pField->ISA( SvxDateTimeField ) &&
+            else if( dynamic_cast< const SvxDateTimeField* >(pField) &&
                      xDefaultPagePropSetInfo->hasPropertyByName( aDateTimeText ) )
             {
                 xDefaultPagePropertySet->getPropertyValue( aDateTimeText ) >>= aRepresentation;
                 bFieldProcessed = sal_True;
             }
-            else if( pField->ISA( SvxPageField ) &&
+            else if( dynamic_cast< const SvxPageField* >(pField) &&
                      xDefaultPagePropSetInfo->hasPropertyByName( aPageNumberText ) )
             {
                 String     aPageNumValue;

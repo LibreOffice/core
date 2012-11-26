@@ -410,7 +410,7 @@ INetMessageOStream::~INetMessageOStream (void)
     if (pTargetMsg)
     {
         SvOpenLockBytes *pLB =
-            PTR_CAST (SvOpenLockBytes, pTargetMsg->GetDocumentLB());
+            dynamic_cast< SvOpenLockBytes* >( pTargetMsg->GetDocumentLB());
         if (pLB)
         {
             pLB->Flush();
@@ -555,7 +555,7 @@ int INetMessageOStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
     else
     {
         SvOpenLockBytes *pLB =
-            PTR_CAST(SvOpenLockBytes, pTargetMsg->GetDocumentLB());
+            dynamic_cast< SvOpenLockBytes* >( pTargetMsg->GetDocumentLB());
         if (pLB == NULL)
             return INETSTREAM_STATUS_WOULDBLOCK;
 
@@ -866,7 +866,7 @@ int INetMessageDecodeQPStream_Impl::PutMsgLine (
     INetMessage *pMsg = GetTargetMessage();
     if (pMsg == NULL) return INETSTREAM_STATUS_ERROR;
 
-    SvOpenLockBytes * pLB = PTR_CAST(SvOpenLockBytes, pMsg->GetDocumentLB());
+    SvOpenLockBytes * pLB = dynamic_cast< SvOpenLockBytes* >( pMsg->GetDocumentLB());
     if (pLB == NULL) return INETSTREAM_STATUS_WOULDBLOCK;
 
     const sal_Char *pStop = pData + nSize;
@@ -1196,7 +1196,7 @@ int INetMessageDecode64Stream_Impl::PutMsgLine (
     INetMessage *pMsg = GetTargetMessage ();
     if (pMsg == NULL) return INETSTREAM_STATUS_ERROR;
 
-    SvOpenLockBytes * pLB = PTR_CAST(SvOpenLockBytes, pMsg->GetDocumentLB());
+    SvOpenLockBytes * pLB = dynamic_cast< SvOpenLockBytes* >( pMsg->GetDocumentLB());
     if (pLB == NULL) return INETSTREAM_STATUS_WOULDBLOCK;
 
     const sal_Char *pStop = (pData + nSize);

@@ -82,7 +82,7 @@ public:
         previous page descriptor list is replaced by a new one which
         has to be repainted.
         @return
-            A return value of <TRUE/> indicates that the edit mode has
+            A return value of <true/> indicates that the edit mode has
             changed and thus the page descriptor list has been set up
             to reflect that change.  A repaint is necessary.
     */
@@ -99,7 +99,7 @@ public:
         The number of slides depends on the set of slides available through
         the XIndexAccess given to SetDocumentSlides().
     */
-    sal_Int32 GetPageCount (void) const;
+    sal_uInt32 GetPageCount (void) const;
 
     /** Return a page descriptor for the page with the specified index.
         Page descriptors are created on demand.  The page descriptor is
@@ -108,8 +108,8 @@ public:
             The index of the requested slide.  The valid values
             are 0 to GetPageCount()-1.
         @param bCreate
-            When <TRUE/> and the requested page descriptor is missing then
-            it is created.  When <FALSE/> then an empty reference is
+            When <true/> and the requested page descriptor is missing then
+            it is created.  When <false/> then an empty reference is
             returned for missing descriptors.
         @return
             When the given index is not valid, i.e. lower then zero or
@@ -118,7 +118,7 @@ public:
             between calls to GetPageCount() and GetPageDescriptor().
     */
     SharedPageDescriptor GetPageDescriptor (
-        const sal_Int32 nPageIndex,
+        const sal_uInt32 nPageIndex,
         const bool bCreate = true) const;
 
     /** Return a page descriptor for the given XDrawPage.  Page descriptors

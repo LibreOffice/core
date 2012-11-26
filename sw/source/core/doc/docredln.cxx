@@ -51,8 +51,6 @@
 
 using namespace com::sun::star;
 
-TYPEINIT1(SwRedlineHint, SfxHint);
-
 #ifndef DBG_UTIL
 
     #define _CHECK_REDLINE( pDoc )

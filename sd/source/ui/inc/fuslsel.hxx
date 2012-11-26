@@ -38,8 +38,8 @@ class Window;
 
 struct FSS_IsShowingEffectInfo
 {
-    sal_Bool bIsShowingEffect;          // sal_True while we show a fade effect one the slide view
-    sal_Bool bDisposed;                 // sal_True if the FuSlideSelection was deleted during fade effect
+    bool bIsShowingEffect;          // true while we show a fade effect one the slide view
+    bool bDisposed;                 // true if the FuSlideSelection was deleted during fade effect
 };
 
 
@@ -47,16 +47,14 @@ class FuSlideSelection
     : public FuSlide
 {
 public:
-    TYPEINFO();
-
     static FunctionReference Create( SlideViewShell* pViewSh, ::sd::Window* pWin, SlideView* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
     virtual void DoExecute( SfxRequest& rReq );
 
     // Mouse- & Key-Events
-    virtual sal_Bool                KeyInput(const KeyEvent& rKEvt);
-    virtual sal_Bool                MouseMove(const MouseEvent& rMEvt);
-    virtual sal_Bool                MouseButtonUp(const MouseEvent& rMEvt);
-    virtual sal_Bool                MouseButtonDown(const MouseEvent& rMEvt);
+    virtual bool KeyInput(const KeyEvent& rKEvt);
+    virtual bool MouseMove(const MouseEvent& rMEvt);
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt);
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt);
     virtual void                Paint(const Rectangle& rRect, ::sd::Window* pWin);
 
     virtual void                Activate();        // Function aktivieren
@@ -65,7 +63,7 @@ public:
     virtual void                ScrollStart();
     virtual void                ScrollEnd();
 
-    sal_Bool                        IsShowingEffect() const { return pIsShowingEffectInfo && pIsShowingEffectInfo->bIsShowingEffect; }
+    bool                        IsShowingEffect() const { return pIsShowingEffectInfo && pIsShowingEffectInfo->bIsShowingEffect; }
 
     /** is called when the currenct function should be aborted. <p>
         This is used when a function gets a KEY_ESCAPE but can also
@@ -85,17 +83,17 @@ protected:
     virtual ~FuSlideSelection (void);
 
 private:
-    sal_Bool                        bSubstShown;
-    sal_Bool                        bPageHit;
+    bool                        bSubstShown;
+    bool                        bPageHit;
     List                        aSubstList;       // Liste mit Ertsatzdarstellungen
     Point                       aDragPos;             // hier wird die Seite angefasst
-    sal_Bool                        bDragSelection;
+    bool                        bDragSelection;
     Point                       aDragSelRectAnchor;  // fester Punkt des Selektionsrechtecks
     Rectangle                   aDragSelRect;
     Point                       aPosOfInsertMarker;
     FSS_IsShowingEffectInfo*    pIsShowingEffectInfo;
 
-    void                        DrawInsertMarker(sal_Bool bShow);
+    void                        DrawInsertMarker(bool bShow);
     Point                       CalcPosOfInsertMarker(const Point& rPoint);
 
     sal_uInt16                      GetTargetPage(const Point& rPoint) const;

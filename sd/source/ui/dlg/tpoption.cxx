@@ -96,9 +96,6 @@ sal_Bool SdTpOptionsSnap::FillItemSet( SfxItemSet& rAttrs )
 {
     SvxGridTabPage::FillItemSet(rAttrs);
     SdOptionsSnapItem* pOptsItem = NULL;
-//    if(SFX_ITEM_SET != rAttrs.GetItemState( ATTR_OPTIONS_SNAP, sal_False, (const SfxPoolItem**)&pOptsItem ))
-//        pExampleSet->GetItemState( ATTR_OPTIONS_SNAP, sal_False, (const SfxPoolItem**)&pOptsItem );
-
     SdOptionsSnapItem aOptsItem( ATTR_OPTIONS_SNAP );
 
     aOptsItem.GetOptionsSnap().SetSnapHelplines( aCbxSnapHelplines.IsChecked() );
@@ -117,7 +114,7 @@ sal_Bool SdTpOptionsSnap::FillItemSet( SfxItemSet& rAttrs )
 
     // Evtl. vorhandenes GridItem wird geholt, um nicht versehentlich
     // irgendwelche Standardwerte einzustellen
-    return( sal_True );
+    return( true );
 }
 
 // -----------------------------------------------------------------------
@@ -178,7 +175,7 @@ SdTpOptionsContents::~SdTpOptionsContents()
 
 sal_Bool SdTpOptionsContents::FillItemSet( SfxItemSet& rAttrs )
 {
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
 
     if( aCbxRuler.GetSavedValue()           != aCbxRuler.IsChecked() ||
         aCbxMoveOutline.GetSavedValue()     != aCbxMoveOutline.IsChecked() ||
@@ -195,7 +192,7 @@ sal_Bool SdTpOptionsContents::FillItemSet( SfxItemSet& rAttrs )
         //aOptsItem.GetOptionsLayout().SetHelplines( aCbxHelplines.IsChecked() );
 
         rAttrs.Put( aOptsItem );
-        bModified = sal_True;
+        bModified = true;
     }
     return( bModified );
 }
@@ -353,8 +350,7 @@ void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
     // Metrik ggfs. aendern (da TabPage im Dialog liegt,
     // wo die Metrik eingestellt werden kann
     const SfxPoolItem* pAttr = NULL;
-    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_METRIC , sal_False,
-                                    (const SfxPoolItem**)&pAttr ))
+    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_METRIC , false, (const SfxPoolItem**)&pAttr ))
     {
         const SfxUInt16Item* pItem = (SfxUInt16Item*) pAttr;
 
@@ -364,11 +360,11 @@ void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
         {
             // Metriken einstellen
             sal_Int64 nVal = aMtrFldOriginalWidth.Denormalize( aMtrFldOriginalWidth.GetValue( FUNIT_TWIP ) );
-            SetFieldUnit( aMtrFldOriginalWidth, eFUnit, sal_True );
+            SetFieldUnit( aMtrFldOriginalWidth, eFUnit, true );
             aMtrFldOriginalWidth.SetValue( aMtrFldOriginalWidth.Normalize( nVal ), FUNIT_TWIP );
 
             nVal = aMtrFldOriginalHeight.Denormalize( aMtrFldOriginalHeight.GetValue( FUNIT_TWIP ) );
-            SetFieldUnit( aMtrFldOriginalHeight, eFUnit, sal_True );
+            SetFieldUnit( aMtrFldOriginalHeight, eFUnit, true );
             aMtrFldOriginalHeight.SetValue( aMtrFldOriginalHeight.Normalize( nVal ), FUNIT_TWIP );
 
 
@@ -417,7 +413,7 @@ int SdTpOptionsMisc::DeactivatePage( SfxItemSet* pActiveSet )
 
 sal_Bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
 {
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
 
     if( aCbxStartWithTemplate.GetSavedValue()   != aCbxStartWithTemplate.IsChecked() ||
         aCbxMarkedHitMovesAlways.GetSavedValue()!= aCbxMarkedHitMovesAlways.IsChecked() ||
@@ -447,7 +443,7 @@ sal_Bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
             : ::com::sun::star::document::PrinterIndependentLayout::ENABLED);
         rAttrs.Put( aOptsItem );
 
-        bModified = sal_True;
+        bModified = true;
     }
 
     // Metrik
@@ -455,9 +451,8 @@ sal_Bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
     if ( nMPos != aLbMetric.GetSavedValue() )
     {
         sal_uInt16 nFieldUnit = (sal_uInt16)(long)aLbMetric.GetEntryData( nMPos );
-        rAttrs.Put( SfxUInt16Item( GetWhich( SID_ATTR_METRIC ),
-                                     (sal_uInt16)nFieldUnit ) );
-        bModified |= sal_True;
+        rAttrs.Put( SfxUInt16Item( GetWhich( SID_ATTR_METRIC ), (sal_uInt16)nFieldUnit ) );
+        bModified = true;
     }
 
     // Tabulatorabstand
@@ -467,7 +462,7 @@ sal_Bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
         SfxMapUnit eUnit = rAttrs.GetPool()->GetMetric( nWh );
         SfxUInt16Item aDef( nWh,(sal_uInt16)GetCoreValue( aMtrFldTabstop, eUnit ) );
         rAttrs.Put( aDef );
-        bModified |= sal_True;
+        bModified = true;
     }
 
     sal_Int32 nX, nY;
@@ -476,7 +471,7 @@ sal_Bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
         rAttrs.Put( SfxInt32Item( ATTR_OPTIONS_SCALE_X, nX ) );
         rAttrs.Put( SfxInt32Item( ATTR_OPTIONS_SCALE_Y, nY ) );
 
-        bModified = sal_True;
+        bModified = true;
     }
 
     return( bModified );
@@ -756,28 +751,28 @@ String SdTpOptionsMisc::GetScale( sal_Int32 nX, sal_Int32 nY )
 
 // -----------------------------------------------------------------------
 
-sal_Bool SdTpOptionsMisc::SetScale( const String& aScale, sal_Int32& rX, sal_Int32& rY )
+bool SdTpOptionsMisc::SetScale( const String& aScale, sal_Int32& rX, sal_Int32& rY )
 {
     if( aScale.GetTokenCount( TOKEN ) != 2 )
-        return( sal_False );
+        return( false );
 
     ByteString aTmp( aScale.GetToken( 0, TOKEN ), RTL_TEXTENCODING_ASCII_US );
     if( !aTmp.IsNumericAscii() )
-        return( sal_False );
+        return( false );
 
     rX = (long) aTmp.ToInt32();
     if( rX == 0 )
-        return( sal_False );
+        return( false );
 
     aTmp = ByteString( aScale.GetToken( 1, TOKEN ), RTL_TEXTENCODING_ASCII_US );
     if( !aTmp.IsNumericAscii() )
-        return( sal_False );
+        return( false );
 
     rY = (long) aTmp.ToInt32();
     if( rY == 0 )
-        return( sal_False );
+        return( false );
 
-    return( sal_True );
+    return( true );
 }
 
 
@@ -841,7 +836,7 @@ void SdTpOptionsMisc::UpdateCompatibilityControls (void)
 
 void SdTpOptionsMisc::PageCreated (SfxAllItemSet aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_SDMODE_FLAG,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_SDMODE_FLAG);
     if (pFlagItem)
     {
         sal_uInt32 nFlags=pFlagItem->GetValue();

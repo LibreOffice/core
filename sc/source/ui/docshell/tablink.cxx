@@ -68,8 +68,6 @@ struct TableLink_Impl
     TableLink_Impl() : m_pDocSh( NULL ), m_pOldParent( NULL ) {}
 };
 
-TYPEINIT1(ScTableLink, ::sfx2::SvBaseLink);
-
 //------------------------------------------------------------------------
 
 ScTableLink::ScTableLink(ScDocShell* pDocSh, const String& rFile,
@@ -466,8 +464,7 @@ sal_Bool ScDocumentLoader::GetFilterName( const String& rFileName,
                                     String& rFilter, String& rOptions,
                                     sal_Bool bWithContent, sal_Bool bWithInteraction )  // static
 {
-    TypeId aScType = TYPE(ScDocShell);
-    SfxObjectShell* pDocSh = SfxObjectShell::GetFirst( &aScType );
+    SfxObjectShell* pDocSh = SfxObjectShell::GetFirst(_IsObjectShell< ScDocShell >);
     while ( pDocSh )
     {
         if ( pDocSh->HasName() )
@@ -480,7 +477,7 @@ sal_Bool ScDocumentLoader::GetFilterName( const String& rFileName,
                 return sal_True;
             }
         }
-        pDocSh = SfxObjectShell::GetNext( *pDocSh, &aScType );
+        pDocSh = SfxObjectShell::GetNext( *pDocSh, _IsObjectShell< ScDocShell > );
     }
 
     INetURLObject aUrl( rFileName );

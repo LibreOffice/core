@@ -35,7 +35,6 @@
 class SVX_DLLPUBLIC XLineJointItem : public SfxEnumItem
 {
 public:
-                            TYPEINFO();
                             XLineJointItem( XLineJoint eLineJoint = XLINEJOINT_ROUND );
                             XLineJointItem( SvStream& rIn );
 

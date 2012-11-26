@@ -40,8 +40,6 @@
 class EDITENG_DLLPUBLIC SvxNoLinebreakItem : public SfxBoolItem
 {
 public:
-    TYPEINFO();
-
     SvxNoLinebreakItem( const sal_Bool bBreak /*= sal_True*/,
                         const sal_uInt16 nId  );
 

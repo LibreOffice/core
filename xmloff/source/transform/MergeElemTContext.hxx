@@ -42,8 +42,6 @@ class XMLMergeElemTransformerContext : public XMLTransformerContext
     void ExportStartElement();
 
 public:
-    TYPEINFO();
-
     XMLMergeElemTransformerContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName,
                               sal_uInt16 nActionMap );

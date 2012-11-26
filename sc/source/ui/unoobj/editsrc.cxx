@@ -49,8 +49,6 @@
 
 //------------------------------------------------------------------------
 
-TYPEINIT1( ScHeaderFooterChangedHint, SfxHint );
-
 ScHeaderFooterChangedHint::ScHeaderFooterChangedHint(sal_uInt16 nP) :
     nPart( nP )
 {
@@ -262,7 +260,7 @@ void ScAnnotationEditSource::UpdateData()
             OutlinerParaObject* pOPO = new OutlinerParaObject( *pEditObj );
             delete pEditObj;
             pOPO->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
-            pObj->NbcSetOutlinerParaObject( pOPO );
+            pObj->SetOutlinerParaObject( pOPO );
             pObj->ActionChanged();
         }
 
@@ -276,13 +274,13 @@ void ScAnnotationEditSource::UpdateData()
 
 void ScAnnotationEditSource::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.ISA( ScUpdateRefHint ) )
+    if ( dynamic_cast< const ScUpdateRefHint* >(&rHint) )
     {
 //        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
 
         //! Ref-Update
     }
-    else if ( rHint.ISA( SfxSimpleHint ) )
+    else if ( dynamic_cast< const SfxSimpleHint* >(&rHint) )
     {
         sal_uLong nId = ((const SfxSimpleHint&)rHint).GetId();
         if ( nId == SFX_HINT_DYING )

@@ -589,7 +589,7 @@ sal_uLong SvMetaAttribute::MakeSlotValue( SvIdlDataBase & rBase, sal_Bool bVar )
         n = n << 20;
         n += rBase.aStructSlotId.GetValue();
     }
-    if( PTR_CAST( SvMetaSlot, this ) )
+    if( dynamic_cast< const SvMetaSlot* >( this ) )
         n |= 0x20000;
     if( !bVar )
         n += 0x10000;
@@ -1405,7 +1405,7 @@ sal_Bool SvMetaType::SetName( const ByteString & rName, SvIdlDataBase * pBase )
 /*
 void SvMetaType::FillSbxObject( SbxVariable * pObj, sal_Bool bVariable )
 {
-    if( PTR_CAST( SbxMethod, pObj ) )
+    if( dynamic_cast< SbxMethod* >( pObj ) )
     {
         if( GetType() == TYPE_METHOD )
         {
@@ -1923,11 +1923,19 @@ void SvMetaType::WriteSfxItem(
             << aVarName.GetBuffer() << ';' << endl;
 
     // Den Implementationsteil schreiben
-    rOutStm << "#ifdef SFX_TYPEMAP" << endl
-            << aTypeName.GetBuffer() << aVarName.GetBuffer()
+//  rOutStm << "#ifdef SFX_TYPEMAP" << endl
+//            << aTypeName.GetBuffer() << aVarName.GetBuffer()
+    rOutStm << "#ifdef SFX_TYPEMAP" << endl;
+    rOutStm << "bool To" << rItemName.GetBuffer()
+            << "_Impl( const SfxPoolItem* pItem ) { return 0 != dynamic_cast< const " << rItemName.GetBuffer() << "* >(pItem); }"
+            << endl;
+    rOutStm << aTypeName.GetBuffer() << aVarName.GetBuffer()
             << " = " << endl;
+//  rOutStm << '{' << endl
+//            << "\tTYPE(" << rItemName.GetBuffer() << "), "
     rOutStm << '{' << endl
-            << "\tTYPE(" << rItemName.GetBuffer() << "), "
+            << "\t" << rItemName.GetBuffer() << "::Create, To" << rItemName.GetBuffer() << "_Impl ,"
+            << " &typeid(" << rItemName.GetBuffer() << "), "
             << aAttrCount.GetBuffer();
     if( nAttrCount )
     {

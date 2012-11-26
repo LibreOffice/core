@@ -268,10 +268,10 @@ Color XclImpChRoot::GetSeriesFillAutoColor( sal_uInt16 nFormatIdx ) const
     return ScfTools::GetMixedColor( aColor, rPal.GetColor( EXC_COLOR_CHWINDOWBACK ), nTrans );
 }
 
-void XclImpChRoot::InitConversion( Reference< XChartDocument > xChartDoc, const Rectangle& rChartRect ) const
+void XclImpChRoot::InitConversion( Reference< XChartDocument > xChartDoc, const basegfx::B2DRange& rChartRange ) const
 {
     // create formatting object tables
-    mxChData->InitConversion( GetRoot(), xChartDoc, rChartRect );
+    mxChData->InitConversion( GetRoot(), xChartDoc, rChartRange );
 
     // lock the model to suppress any internal updates
     Reference< XModel > xModel( xChartDoc, UNO_QUERY );
@@ -337,12 +337,12 @@ sal_Int32 XclImpChRoot::CalcHmmFromChartY( sal_Int32 nPosY ) const
 
 double XclImpChRoot::CalcRelativeFromHmmX( sal_Int32 nPosX ) const
 {
-    return static_cast< double >( nPosX ) / mxChData->maChartRect.GetWidth();
+    return static_cast< double >( nPosX ) / mxChData->maChartRange.getWidth();
 }
 
 double XclImpChRoot::CalcRelativeFromHmmY( sal_Int32 nPosY ) const
 {
-    return static_cast< double >( nPosY ) / mxChData->maChartRect.GetHeight();
+    return static_cast< double >( nPosY ) / mxChData->maChartRange.getHeight();
 }
 
 double XclImpChRoot::CalcRelativeFromChartX( sal_Int32 nPosX ) const
@@ -352,7 +352,7 @@ double XclImpChRoot::CalcRelativeFromChartX( sal_Int32 nPosX ) const
 
 double XclImpChRoot::CalcRelativeFromChartY( sal_Int32 nPosY ) const
 {
-    return CalcRelativeFromHmmY( CalcHmmFromChartY( nPosY ) );
+    return static_cast< double >( CalcHmmFromChartY( nPosY ) ) / mxChData->maChartRange.getHeight();
 }
 
 void XclImpChRoot::ConvertLineFormat( ScfPropertySet& rPropSet,
@@ -3829,10 +3829,10 @@ bool XclImpChChart::IsManualPlotArea() const
 }
 
 void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc,
-        XclImpDffConverter& rDffConv, const OUString& rObjName, const Rectangle& rChartRect ) const
+        XclImpDffConverter& rDffConv, const OUString& rObjName, const basegfx::B2DRange& rChartRange ) const
 {
     // initialize conversion (locks the model to suppress any internal updates)
-    InitConversion( xChartDoc, rChartRect );
+    InitConversion( xChartDoc, rChartRange );
 
     // chart frame formatting
     if( mxFrame.is() )
@@ -4093,9 +4093,9 @@ XclImpChartDrawing::XclImpChartDrawing( const XclImpRoot& rRoot, bool bOwnTab ) 
 }
 
 void XclImpChartDrawing::ConvertObjects( XclImpDffConverter& rDffConv,
-        const Reference< XModel >& rxModel, const Rectangle& rChartRect )
+        const Reference< XModel >& rxModel, const basegfx::B2DRange& rChartRange )
 {
-    maChartRect = rChartRect;   // needed in CalcAnchorRect() callback
+    maChartRange = rChartRange;   // needed in CalcAnchorRect() callback
 
     SdrModel* pSdrModel = 0;
     SdrPage* pSdrPage = 0;
@@ -4113,7 +4113,7 @@ void XclImpChartDrawing::ConvertObjects( XclImpDffConverter& rDffConv,
             Reference< XDrawPageSupplier > xDrawPageSupp( rxModel, UNO_QUERY_THROW );
             Reference< XDrawPage > xDrawPage( xDrawPageSupp->getDrawPage(), UNO_SET_THROW );
             pSdrPage = ::GetSdrPageFromXDrawPage( xDrawPage );
-            pSdrModel = pSdrPage ? pSdrPage->GetModel() : 0;
+            pSdrModel = pSdrPage ? &pSdrPage->getSdrModelFromSdrPage() : 0;
         }
         catch( Exception& )
         {
@@ -4124,21 +4124,24 @@ void XclImpChartDrawing::ConvertObjects( XclImpDffConverter& rDffConv,
         ImplConvertObjects( rDffConv, *pSdrModel, *pSdrPage );
 }
 
-Rectangle XclImpChartDrawing::CalcAnchorRect( const XclObjAnchor& rAnchor, bool bDffAnchor ) const
+basegfx::B2DRange XclImpChartDrawing::CalcAnchorRange( const XclObjAnchor& rAnchor, bool bDffAnchor ) const
 {
     /*  In objects with DFF client anchor, the position of the shape is stored
         in the cell address components of the client anchor. In old BIFF3-BIFF5
         objects, the position is stored in the offset components of the anchor. */
-    Rectangle aRect(
-        static_cast< long >( static_cast< double >( bDffAnchor ? rAnchor.maFirst.mnCol : rAnchor.mnLX ) / EXC_CHART_TOTALUNITS * maChartRect.GetWidth()  + 0.5 ),
-        static_cast< long >( static_cast< double >( bDffAnchor ? rAnchor.maFirst.mnRow : rAnchor.mnTY ) / EXC_CHART_TOTALUNITS * maChartRect.GetHeight() + 0.5 ),
-        static_cast< long >( static_cast< double >( bDffAnchor ? rAnchor.maLast.mnCol  : rAnchor.mnRX ) / EXC_CHART_TOTALUNITS * maChartRect.GetWidth()  + 0.5 ),
-        static_cast< long >( static_cast< double >( bDffAnchor ? rAnchor.maLast.mnRow  : rAnchor.mnBY ) / EXC_CHART_TOTALUNITS * maChartRect.GetHeight() + 0.5 ) );
-    aRect.Justify();
+    basegfx::B2DRange aRange(
+        static_cast< double >( bDffAnchor ? rAnchor.maFirst.mnCol : rAnchor.mnLX ) / EXC_CHART_TOTALUNITS * maChartRange.getWidth()  + 0.5,
+        static_cast< double >( bDffAnchor ? rAnchor.maFirst.mnRow : rAnchor.mnTY ) / EXC_CHART_TOTALUNITS * maChartRange.getHeight() + 0.5,
+        static_cast< double >( bDffAnchor ? rAnchor.maLast.mnCol  : rAnchor.mnRX ) / EXC_CHART_TOTALUNITS * maChartRange.getWidth()  + 0.5,
+        static_cast< double >( bDffAnchor ? rAnchor.maLast.mnRow  : rAnchor.mnBY ) / EXC_CHART_TOTALUNITS * maChartRange.getHeight() + 0.5 );
+
     // move shapes into chart area for sheet charts
     if( mbOwnTab )
-        aRect.Move( maChartRect.Left(), maChartRect.Top() );
-    return aRect;
+    {
+        aRange.transform(basegfx::tools::createTranslateB2DHomMatrix(maChartRange.getMinimum()));
+    }
+
+    return aRange;
 }
 
 void XclImpChartDrawing::OnObjectInserted( const XclImpDrawObjBase& )
@@ -4251,15 +4254,15 @@ sal_Size XclImpChart::GetProgressSize() const
         (mxChartDrawing.is() ? mxChartDrawing->GetProgressSize() : 0);
 }
 
-void XclImpChart::Convert( Reference< XModel > xModel, XclImpDffConverter& rDffConv, const OUString& rObjName, const Rectangle& rChartRect ) const
+void XclImpChart::Convert( Reference< XModel > xModel, XclImpDffConverter& rDffConv, const OUString& rObjName, const basegfx::B2DRange& rChartRange ) const
 {
     Reference< XChartDocument > xChartDoc( xModel, UNO_QUERY );
     if( xChartDoc.is() )
     {
         if( mxChartData.is() )
-            mxChartData->Convert( xChartDoc, rDffConv, rObjName, rChartRect );
+            mxChartData->Convert( xChartDoc, rDffConv, rObjName, rChartRange );
         if( mxChartDrawing.is() )
-            mxChartDrawing->ConvertObjects( rDffConv, xModel, rChartRect );
+            mxChartDrawing->ConvertObjects( rDffConv, xModel, rChartRange );
     }
 }
 

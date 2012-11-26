@@ -28,7 +28,6 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <svx/svdmark.hxx>
 #include <svx/svdview.hxx>
 #include <svx/galbrws.hxx>
 #include <svx/gallery.hxx>
@@ -127,7 +126,7 @@ void ScTabViewShell::ExecGallery( SfxRequest& rReq )
                 MakeDrawLayer();
 
                 Graphic aGraphic = GalleryGetGraphic();
-                Point   aPos     = GetInsertPos();
+                const basegfx::B2DPoint aPos(GetInsertPos());
 
                 String aPath, aFilter;
                 if ( GalleryIsLinkage() )           // als Link einfuegen?
@@ -192,9 +191,10 @@ void ScTabViewShell::ExecImageMap( SfxRequest& rReq )
                     SdrView* pDrView = GetSdrView();
                     if ( pDrView )
                     {
-                        const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
-                        if ( rMarkList.GetMarkCount() == 1 )
-                            UpdateIMap( rMarkList.GetMark( 0 )->GetMarkedSdrObj() );
+                        SdrObject* pSelected = pDrView->getSelectedIfSingle();
+
+                        if ( pSelected )
+                            UpdateIMap( pSelected );
                     }
                 }
             }
@@ -206,20 +206,19 @@ void ScTabViewShell::ExecImageMap( SfxRequest& rReq )
         case SID_IMAP_EXEC:
         {
             SdrView* pDrView = GetSdrView();
-            SdrMark* pMark = pDrView ? pDrView->GetMarkedObjectList().GetMark(0) : 0;
+            SdrObject* pSelected = pDrView ? pDrView->getSelectedIfSingle() : 0;
 
-            if ( pMark )
+            if ( pSelected )
             {
-                SdrObject*  pSdrObj = pMark->GetMarkedSdrObj();
                 SvxIMapDlg* pDlg = ScGetIMapDlg();
 
-                if ( ScIMapDlgGetObj(pDlg) == (void*) pSdrObj )
+                if ( ScIMapDlgGetObj(pDlg) == (void*) pSelected )
                 {
                     const ImageMap& rImageMap = ScIMapDlgGetMap(pDlg);
-                    ScIMapInfo*     pIMapInfo = ScDrawLayer::GetIMapInfo( pSdrObj );
+                    ScIMapInfo*     pIMapInfo = ScDrawLayer::GetIMapInfo( pSelected );
 
                     if ( !pIMapInfo )
-                        pSdrObj->InsertUserData( new ScIMapInfo( rImageMap ) );
+                        pSelected->InsertUserData( new ScIMapInfo( rImageMap ) );
                     else
                         pIMapInfo->SetImageMap( rImageMap );
 
@@ -266,14 +265,12 @@ void ScTabViewShell::GetImageMapState( SfxItemSet& rSet )
             case SID_IMAP_EXEC:
                 {
                     sal_Bool bDisable = sal_True;
-
                     SdrView* pDrView = GetSdrView();
-                    if ( pDrView )
+                    SdrObject* pSelected = pDrView ? pDrView->getSelectedIfSingle() : 0;
+
+                    if ( pSelected )
                     {
-                        const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
-                        if ( rMarkList.GetMarkCount() == 1 )
-                            if ( ScIMapDlgGetObj(ScGetIMapDlg()) ==
-                                        (void*) rMarkList.GetMark(0)->GetMarkedSdrObj() )
+                        if ( ScIMapDlgGetObj(ScGetIMapDlg()) == (void*) pSelected )
                                 bDisable = sal_False;
                     }
 

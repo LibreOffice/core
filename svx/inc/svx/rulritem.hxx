@@ -55,7 +55,7 @@ private:
     SVX_DLLPRIVATE const SvxLongLRSpaceItem& operator=(const SvxLongLRSpaceItem &); // n.i.
 
 public:
-    TYPEINFO();
+    POOLITEM_FACTORY()
     SvxLongLRSpaceItem(long lLeft, long lRight, sal_uInt16 nId);
     SvxLongLRSpaceItem(const SvxLongLRSpaceItem &);
     SvxLongLRSpaceItem();
@@ -91,7 +91,7 @@ private:
     SVX_DLLPRIVATE const SvxLongULSpaceItem& operator=(const SvxLongULSpaceItem &); // n.i.
 
 public:
-    TYPEINFO();
+    POOLITEM_FACTORY()
     SvxLongULSpaceItem(long lUpper, long lLower, sal_uInt16 nId);
     SvxLongULSpaceItem(const SvxLongULSpaceItem &);
     SvxLongULSpaceItem();
@@ -125,7 +125,7 @@ protected:
 private:
     SVX_DLLPRIVATE const SvxPagePosSizeItem& operator=(const SvxPagePosSizeItem &); // n.i.
 public:
-    TYPEINFO();
+    POOLITEM_FACTORY()
     SvxPagePosSizeItem(const Point &rPos, long lWidth, long lHeight);
     SvxPagePosSizeItem(const SvxPagePosSizeItem &);
     SvxPagePosSizeItem();
@@ -209,7 +209,7 @@ protected:
     virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 public:
-    TYPEINFO();
+    POOLITEM_FACTORY()
     // rechter Rand des umgebenden Rahmens
     // nLeft, nRight jeweils der Abstand zum umgebenden Rahmen
     SvxColumnItem(sal_uInt16 nAct = 0); // Spalten
@@ -275,9 +275,9 @@ protected:
 private:
     SVX_DLLPRIVATE const SvxObjectItem &operator=(const SvxObjectItem &); // n.i.
 public:
-    TYPEINFO();
-    SvxObjectItem(long nStartX, long nEndX,
-                  long nStartY, long nEndY,
+    POOLITEM_FACTORY()
+    SvxObjectItem(long nStartX = 0, long nEndX = 0,
+                  long nStartY = 0, long nEndY = 0,
                   sal_Bool bLimits = sal_False);
     SvxObjectItem(const SvxObjectItem &);
 

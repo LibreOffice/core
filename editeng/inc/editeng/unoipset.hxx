@@ -30,7 +30,6 @@
 #include <svl/itemprop.hxx>
 
 class SvxIDPropertyCombineList;
-class SdrItemPool;
 class SfxItemSet;
 class SvxShape;
 

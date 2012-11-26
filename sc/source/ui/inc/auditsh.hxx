@@ -38,7 +38,6 @@ private:
     sal_uInt16      nFunction;
 
 public:
-    TYPEINFO();
     SFX_DECL_INTERFACE(SCID_AUDITING_SHELL)
 
                     ScAuditingShell(ScViewData* pData);

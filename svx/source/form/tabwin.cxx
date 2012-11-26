@@ -130,13 +130,11 @@ void lcl_addToList( SvTreeListBox& _rListBox, const uno::Reference< container::X
 //==================================================================
 // class FmFieldWinListBox
 //==================================================================
-DBG_NAME(FmFieldWinListBox)
 //------------------------------------------------------------------------------
 FmFieldWinListBox::FmFieldWinListBox( FmFieldWin* pParent )
     :SvTreeListBox( pParent, WB_HASBUTTONS|WB_BORDER )
     ,pTabWin( pParent )
 {
-    DBG_CTOR(FmFieldWinListBox,NULL);
     SetHelpId( HID_FIELD_SEL );
 
     SetHighlightRange( );
@@ -145,7 +143,6 @@ FmFieldWinListBox::FmFieldWinListBox( FmFieldWin* pParent )
 //------------------------------------------------------------------------------
 FmFieldWinListBox::~FmFieldWinListBox()
 {
-    DBG_DTOR(FmFieldWinListBox,NULL);
 }
 
 //------------------------------------------------------------------------------
@@ -199,23 +196,19 @@ void FmFieldWinListBox::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPi
 //========================================================================
 // class FmFieldWinData
 //========================================================================
-DBG_NAME(FmFieldWinData);
 //-----------------------------------------------------------------------
 FmFieldWinData::FmFieldWinData()
 {
-    DBG_CTOR(FmFieldWinData,NULL);
 }
 
 //-----------------------------------------------------------------------
 FmFieldWinData::~FmFieldWinData()
 {
-    DBG_DTOR(FmFieldWinData,NULL);
 }
 
 //========================================================================
 // class FmFieldWin
 //========================================================================
-DBG_NAME(FmFieldWin);
 //-----------------------------------------------------------------------
 FmFieldWin::FmFieldWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr, Window* _pParent)
             :SfxFloatingWindow(_pBindings, _pMgr, _pParent, WinBits(WB_STDMODELESS|WB_SIZEABLE))
@@ -225,7 +218,6 @@ FmFieldWin::FmFieldWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr, Window* _
             ,m_nObjectType(0)
             ,m_pChangeListener(NULL)
 {
-    DBG_CTOR(FmFieldWin,NULL);
     SetHelpId( HID_FIELD_SEL_WIN );
 
     SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor()) );
@@ -246,7 +238,6 @@ FmFieldWin::~FmFieldWin()
     }
     delete pListBox;
     delete pData;
-    DBG_DTOR(FmFieldWin,NULL);
 }
 
 //-----------------------------------------------------------------------
@@ -326,7 +317,7 @@ void FmFieldWin::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoo
 
     if (eState >= SFX_ITEM_AVAILABLE)
     {
-        FmFormShell* pShell = PTR_CAST(FmFormShell,((SfxObjectItem*)pState)->GetShell());
+        FmFormShell* pShell = dynamic_cast< FmFormShell* >( ((SfxObjectItem*)pState)->GetShell());
         UpdateContent(pShell);
     }
     else

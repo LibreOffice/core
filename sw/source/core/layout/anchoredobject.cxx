@@ -62,7 +62,7 @@ SwObjPositioningInProgress::SwObjPositioningInProgress( SdrObject& _rSdrObj ) :
     mbOldObjPositioningInProgress( false )
     // <--
 {
-    mpAnchoredObj = ::GetUserCall( &_rSdrObj )->GetAnchoredObj( &_rSdrObj );
+    mpAnchoredObj = ::findConnectionToSdrObject( &_rSdrObj )->GetAnchoredObj( &_rSdrObj );
     // --> OD 2005-08-09 #i52904#
     mbOldObjPositioningInProgress = mpAnchoredObj->IsPositioningInProgress();
     // <--
@@ -91,8 +91,6 @@ SwObjPositioningInProgress::~SwObjPositioningInProgress()
 }
 
 // ============================================================================
-
-TYPEINIT0(SwAnchoredObject);
 
 SwAnchoredObject::SwAnchoredObject() :
     mpDrawObj( 0L ),

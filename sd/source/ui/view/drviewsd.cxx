@@ -120,7 +120,7 @@ void DrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
                     case PAGE_NEXT:
                     {
                         // Sprung zu naechster Seite
-                        sal_uInt16 nSdPage = (mpActualPage->GetPageNum() - 1) / 2;
+                        sal_uInt32 nSdPage = (mpActualPage->GetPageNumber() - 1) / 2;
 
                         if (nSdPage < GetDoc()->GetSdPageCount(mpActualPage->GetPageKind()) - 1)
                         {
@@ -132,7 +132,7 @@ void DrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
                     case PAGE_PREVIOUS:
                     {
                         // Sprung zu vorheriger Seite
-                        sal_uInt16 nSdPage = (mpActualPage->GetPageNum() - 1) / 2;
+                        sal_uInt32 nSdPage = (mpActualPage->GetPageNumber() - 1) / 2;
 
                         if (nSdPage > 0)
                         {
@@ -157,7 +157,7 @@ void DrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
                 SfxStringItem aReferer(SID_REFERER, GetDocSh()->GetMedium()->GetName());
                 SfxViewFrame* pFrame = GetViewFrame();
                 SfxFrameItem aFrameItem(SID_DOCFRAME, pFrame);
-                SfxBoolItem aBrowseItem(SID_BROWSE, sal_True);
+                SfxBoolItem aBrowseItem(SID_BROWSE, true);
                 pFrame->GetDispatcher()->
                 Execute(SID_OPENDOC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
                             &aStrItem, &aFrameItem, &aBrowseItem, &aReferer, 0L);
@@ -183,10 +183,10 @@ void DrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
 void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
 {
     sal_uInt32 nState = NAVSTATE_NONE;
-    sal_uInt16 nCurrentPage = 0;
-    sal_uInt16 nFirstPage = 0;
-    sal_uInt16 nLastPage;
-    sal_Bool   bEndless = sal_False;
+    sal_uInt32 nCurrentPage = 0;
+    sal_uInt32 nFirstPage = 0;
+    sal_uInt32 nLastPage;
+    bool   bEndless = false;
     String aPageName;
 
     rtl::Reference< SlideShow > xSlideshow( SlideShow::GetSlideShow( GetViewShellBase() ) );
@@ -195,9 +195,9 @@ void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
         // pen activated?
         nState |= xSlideshow->isDrawingPossible() ? NAVBTN_PEN_CHECKED : NAVBTN_PEN_UNCHECKED;
 
-        nCurrentPage = (sal_uInt16)xSlideshow->getCurrentPageNumber();
-        nFirstPage = (sal_uInt16)xSlideshow->getFirstPageNumber();
-        nLastPage = (sal_uInt16)xSlideshow->getLastPageNumber();
+        nCurrentPage = xSlideshow->getCurrentPageNumber();
+        nFirstPage = xSlideshow->getFirstPageNumber();
+        nLastPage = xSlideshow->getLastPageNumber();
         bEndless = xSlideshow->isEndless();
 
         // Get the page for the current page number.
@@ -214,7 +214,7 @@ void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
 
         if (mpActualPage != NULL)
         {
-            nCurrentPage = ( mpActualPage->GetPageNum() - 1 ) / 2;
+            nCurrentPage = ( mpActualPage->GetPageNumber() - 1 ) / 2;
             aPageName = mpActualPage->GetName();
         }
         nLastPage = GetDoc()->GetSdPageCount( mePageKind ) - 1;

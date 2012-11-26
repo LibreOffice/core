@@ -58,6 +58,7 @@
 #include <breakit.hxx>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/ScriptType.hdl>
+#include <svx/svdlegacy.hxx>
 #include <editeng/lrspitem.hxx>
 #include <switerator.hxx>
 
@@ -509,7 +510,7 @@ sal_Bool lcl_MinMaxNode( const SwFrmFmtPtr& rpNd, void* pArgs )
             {
                 const SdrObject* pSObj = rpNd->FindSdrObject();
                 if( pSObj )
-                    nMin = pSObj->GetCurrentBoundRect().GetWidth();
+                    nMin = sdr::legacy::GetBoundRect(*pSObj).GetWidth();
                 else
                 nMin = 0;
 
@@ -728,7 +729,7 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
                         {
                             const SdrObject* pSObj = pFrmFmt->FindSdrObject();
                             if( pSObj )
-                                nAktWidth = pSObj->GetCurrentBoundRect().GetWidth();
+                                nAktWidth = sdr::legacy::GetBoundRect(*pSObj).GetWidth();
                             else
                                 nAktWidth = 0;
                         }

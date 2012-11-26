@@ -338,8 +338,7 @@ namespace drawinglayer
 
                 if(maDiscreteViewport.isEmpty() && !maViewport.isEmpty())
                 {
-                    basegfx::B2DRange aDiscreteViewport(maViewport);
-                    aDiscreteViewport.transform(getViewTransformation());
+                    const basegfx::B2DRange aDiscreteViewport(getViewTransformation() * maViewport);
                     const_cast< ImpViewInformation2D* >(this)->maDiscreteViewport = aDiscreteViewport;
                 }
 
@@ -353,7 +352,7 @@ namespace drawinglayer
                 if(maObjectToViewTransformation.isIdentity() &&
                     (!maObjectTransformation.isIdentity() || !maViewTransformation.isIdentity()))
                 {
-                    basegfx::B2DHomMatrix aObjectToView(maViewTransformation * maObjectTransformation);
+                    const basegfx::B2DHomMatrix aObjectToView(maViewTransformation * maObjectTransformation);
                     const_cast< ImpViewInformation2D* >(this)->maObjectToViewTransformation = aObjectToView;
                 }
 

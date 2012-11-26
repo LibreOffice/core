@@ -323,7 +323,7 @@ sal_Bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
             bModified |= sal_True;
         }
     }
-    FASTBOOL bNullTab = sal_False;
+    bool bNullTab = false;
 
     if ( aLeftIndent.IsValueModified() ||
          aFLineIndent.IsValueModified() ||
@@ -370,7 +370,7 @@ sal_Bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
         }
         aMargin.SetAutoFirst(aAutoCB.IsChecked());
         if ( aMargin.GetTxtFirstLineOfst() < 0 )
-            bNullTab = sal_True;
+            bNullTab = true;
         eState = GetItemSet().GetItemState( nWhich );
 
         if ( !pOld || !( *(const SvxLRSpaceItem*)pOld == aMargin ) ||
@@ -987,9 +987,9 @@ void    SvxStdParagraphTabPage::PageCreated(SfxAllItemSet aSet)
 
 
             */
-    SFX_ITEMSET_ARG (&aSet,pPageWidthItem,SfxUInt16Item,SID_SVXSTDPARAGRAPHTABPAGE_PAGEWIDTH,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pFlagSetItem,SfxUInt32Item,SID_SVXSTDPARAGRAPHTABPAGE_FLAGSET,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pLineDistItem,SfxUInt32Item,SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pPageWidthItem,SfxUInt16Item,SID_SVXSTDPARAGRAPHTABPAGE_PAGEWIDTH );
+    SFX_ITEMSET_ARG (&aSet,pFlagSetItem,SfxUInt32Item,SID_SVXSTDPARAGRAPHTABPAGE_FLAGSET );
+    SFX_ITEMSET_ARG (&aSet,pLineDistItem,SfxUInt32Item,SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST );
 
     if (pPageWidthItem)
         SetPageWidth(pPageWidthItem->GetValue());
@@ -1139,26 +1139,27 @@ sal_Bool SvxParaAlignTabPage::FillItemSet( SfxItemSet& rOutSet )
 {
     sal_Bool bModified = sal_False;
 
-    FASTBOOL bAdj = sal_False, bChecked = sal_False;
+    bool bAdj = false;
+    bool bChecked = false;
     SvxAdjust eAdjust = SVX_ADJUST_LEFT;
 
     if ( aLeft.IsChecked() )
     {
         eAdjust = SVX_ADJUST_LEFT;
         bAdj = !aLeft.GetSavedValue();
-        bChecked = sal_True;
+        bChecked = true;
     }
     else if ( aRight.IsChecked() )
     {
         eAdjust = SVX_ADJUST_RIGHT;
         bAdj = !aRight.GetSavedValue();
-        bChecked = sal_True;
+        bChecked = true;
     }
     else if ( aCenter.IsChecked() )
     {
         eAdjust = SVX_ADJUST_CENTER;
         bAdj = !aCenter.GetSavedValue();
-        bChecked = sal_True;
+        bChecked = true;
     }
     else if ( aJustify.IsChecked() )
     {
@@ -1166,7 +1167,7 @@ sal_Bool SvxParaAlignTabPage::FillItemSet( SfxItemSet& rOutSet )
         bAdj = !aJustify.GetSavedValue() ||
             aExpandCB.IsChecked() != aExpandCB.GetSavedValue() ||
             aLastLineLB.GetSelectEntryPos() != aLastLineLB.GetSavedValue();
-        bChecked = sal_True;
+        bChecked = true;
     }
     sal_uInt16 _nWhich = GetWhich( SID_ATTR_PARA_ADJUST );
 
@@ -1184,7 +1185,7 @@ sal_Bool SvxParaAlignTabPage::FillItemSet( SfxItemSet& rOutSet )
         else if ( 2 == nLBPos )
             eLastBlock = SVX_ADJUST_BLOCK;
 
-        FASTBOOL bNothingWasChecked =
+        bool bNothingWasChecked =
             !aLeft.GetSavedValue() && !aRight.GetSavedValue() &&
             !aCenter.GetSavedValue() && !aJustify.GetSavedValue();
 
@@ -1405,7 +1406,7 @@ void SvxParaAlignTabPage::EnableJustifyExt()
 //add CHINA001 begin
 void SvxParaAlignTabPage::PageCreated (SfxAllItemSet aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pBoolItem,SfxBoolItem,SID_SVXPARAALIGNTABPAGE_ENABLEJUSTIFYEXT,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pBoolItem,SfxBoolItem,SID_SVXPARAALIGNTABPAGE_ENABLEJUSTIFYEXT );
     if (pBoolItem)
         if(pBoolItem->GetValue())
             EnableJustifyExt();
@@ -1470,7 +1471,7 @@ sal_Bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
     // Seitenumbruch
 
     TriState eState = aApplyCollBtn.GetState();
-    FASTBOOL bIsPageModel = sal_False;
+    bool bIsPageModel = false;
 
     _nWhich = GetWhich( SID_ATTR_PARA_MODEL );
     String sPage;
@@ -1491,10 +1492,10 @@ sal_Bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
             bModified |= sal_True;
         }
         else
-            bIsPageModel = sal_False;
+            bIsPageModel = false;
     }
     else if(STATE_CHECK == eState && aApplyCollBtn.IsEnabled())
-        bIsPageModel = sal_True;
+        bIsPageModel = true;
     else
         rOutSet.Put( SvxPageModelItem( sPage, sal_False, _nWhich ) );
 
@@ -1673,7 +1674,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet& rSet )
     {
         // zuerst PageModel behandeln
         _nWhich = GetWhich( SID_ATTR_PARA_MODEL );
-        sal_Bool bIsPageModel = sal_False;
+        bool bIsPageModel = false;
         eItemState = rSet.GetItemState( _nWhich );
 
         if ( eItemState >= SFX_ITEM_SET )
@@ -1689,7 +1690,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet& rSet )
             {
                 aApplyCollBox.SelectEntry( aStr );
                 aApplyCollBtn.SetState( STATE_CHECK );
-                bIsPageModel = sal_True;
+                bIsPageModel = true;
 
                 aPageBreakBox.Enable();
                 aPageBreakBox.EnableTriState( sal_False );
@@ -2237,15 +2238,11 @@ IMPL_LINK( SvxExtParagraphTabPage, PageBreakTypeHdl_Impl, ListBox *, pListBox )
 //Add CHINA001 begin
 void SvxExtParagraphTabPage::PageCreated(SfxAllItemSet aSet)
 {
-
-
-    SFX_ITEMSET_ARG (&aSet,pDisablePageBreakItem,SfxBoolItem,SID_DISABLE_SVXEXTPARAGRAPHTABPAGE_PAGEBREAK,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pDisablePageBreakItem,SfxBoolItem,SID_DISABLE_SVXEXTPARAGRAPHTABPAGE_PAGEBREAK );
 
     if (pDisablePageBreakItem)
         if ( pDisablePageBreakItem->GetValue())
                     DisablePageBreak();
-
-
 }
 //end of Add CHINA001
 /*-- 29.11.00 11:36:24---------------------------------------------------

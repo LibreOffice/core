@@ -45,18 +45,6 @@ namespace drawinglayer
         {
         }
 
-        bool ModifiedColorPrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
-        {
-            if(GroupPrimitive3D::operator==(rPrimitive))
-            {
-                const ModifiedColorPrimitive3D& rCompare = (ModifiedColorPrimitive3D&)rPrimitive;
-
-                return (maColorModifier == rCompare.maColorModifier);
-            }
-
-            return false;
-        }
-
         // provide unique ID
         ImplPrimitrive3DIDBlock(ModifiedColorPrimitive3D, PRIMITIVE3D_ID_MODIFIEDCOLORPRIMITIVE3D)
 

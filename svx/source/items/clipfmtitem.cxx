@@ -43,8 +43,6 @@ struct SvxClipboardFmtItem_Impl
 
 String SvxClipboardFmtItem_Impl::sEmptyStr;
 
-TYPEINIT1_FACTORY( SvxClipboardFmtItem, SfxPoolItem , new  SvxClipboardFmtItem(0));
-
 SvxClipboardFmtItem_Impl::SvxClipboardFmtItem_Impl(
                             const SvxClipboardFmtItem_Impl& rCpy )
 {
@@ -58,6 +56,7 @@ SvxClipboardFmtItem_Impl::SvxClipboardFmtItem_Impl(
     }
 }
 
+IMPL_POOLITEM_FACTORY(SvxClipboardFmtItem)
 SvxClipboardFmtItem::SvxClipboardFmtItem( sal_uInt16 nId )
     : SfxPoolItem( nId ), pImpl( new SvxClipboardFmtItem_Impl )
 {

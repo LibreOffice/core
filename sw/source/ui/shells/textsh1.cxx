@@ -131,7 +131,7 @@ using namespace ::com::sun::star;
 
 void lcl_CharDialog( SwWrtShell &rWrtSh, sal_Bool bUseDialog, sal_uInt16 nSlot,const SfxItemSet *pArgs, SfxRequest *pReq )
 {
-    FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &rWrtSh.GetView()));
+    FieldUnit eMetric = ::GetDfltMetric(0 != dynamic_cast< SwWebView* >( &rWrtSh.GetView()));
     SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
     SfxItemSet aCoreSet( rWrtSh.GetView().GetPool(),
                         RES_CHRATR_BEGIN,      RES_CHRATR_END-1,
@@ -298,7 +298,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             // get the language
             String aNewLangTxt;
-            SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_LANGUAGE_STATUS , sal_False );
+            SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_LANGUAGE_STATUS );
             if (pItem2)
                 aNewLangTxt = pItem2->GetValue();
 
@@ -402,7 +402,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             // replace word/selection with text from selected sub menu entry
             String aReplaceText;
-            SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES , sal_False );
+            SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES );
             if (pItem2)
                 aReplaceText = pItem2->GetValue();
             if (aReplaceText.Len() > 0)
@@ -424,9 +424,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_INSERT_ENDNOTE:
         {
             String aStr;
-            SFX_REQUEST_ARG( rReq, pFont, SfxStringItem, FN_PARAM_1 , sal_False );
-//            SFX_REQUEST_ARG( rReq, pCharset, SfxInt16Item, FN_PARAM_2 , sal_False );
-            SFX_REQUEST_ARG( rReq, pNameItem, SfxStringItem, nSlot , sal_False );
+            SFX_REQUEST_ARG( rReq, pFont, SfxStringItem, FN_PARAM_1 );
+//            SFX_REQUEST_ARG( rReq, pCharset, SfxInt16Item, FN_PARAM_2 );
+            SFX_REQUEST_ARG( rReq, pNameItem, SfxStringItem, nSlot );
             if ( pNameItem )
                 aStr = pNameItem->GetValue();
             sal_Bool bFont = pFont && pFont->GetValue().Len();
@@ -532,8 +532,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if ( pItem )
             {
                 nKind = ((SfxInt16Item*)pItem)->GetValue();
-                SFX_REQUEST_ARG( rReq, pTemplate, SfxStringItem, FN_PARAM_1 , sal_False );
-                SFX_REQUEST_ARG( rReq, pNumber, SfxUInt16Item, FN_PARAM_2 , sal_False );
+                SFX_REQUEST_ARG( rReq, pTemplate, SfxStringItem, FN_PARAM_1 );
+                SFX_REQUEST_ARG( rReq, pNumber, SfxUInt16Item, FN_PARAM_2 );
                 if ( pTemplate )
                     aTemplateName = pTemplate->GetValue();
                 if ( pNumber )
@@ -871,7 +871,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
         case SID_PARA_DLG:
         {
-            FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &GetView()));
+            FieldUnit eMetric = ::GetDfltMetric(0 != dynamic_cast< SwWebView* >( &GetView()));
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
             SfxItemSet aCoreSet( GetPool(),
                             RES_PARATR_BEGIN,           RES_PARATR_END - 1,

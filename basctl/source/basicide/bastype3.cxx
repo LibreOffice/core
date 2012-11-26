@@ -226,7 +226,7 @@ SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
                 break;
                 case OBJ_TYPE_MODULE:
                 {
-                    DBG_ASSERT( pVar && pVar->IsA( TYPE(StarBASIC) ), "FindVariable: Ungueltiges Basic" );
+                    DBG_ASSERT( pVar && dynamic_cast< StarBASIC* >(pVar), "FindVariable: Ungueltiges Basic" );
                     // extract the module name from the string like "Sheet1 (Example1)"
                     if( bDocumentObjects )
                     {
@@ -238,7 +238,7 @@ SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
                 break;
                 case OBJ_TYPE_METHOD:
                 {
-                    DBG_ASSERT( pVar && ( (pVar->IsA( TYPE(SbModule) )) || (pVar->IsA( TYPE(SbxObject) )) ), "FindVariable: Ungueltiges Modul/Objekt" );
+                    DBG_ASSERT( pVar && ( (dynamic_cast< SbModule* >(pVar)) || (dynamic_cast< SbxObject* >(pVar)) ), "FindVariable: Ungueltiges Modul/Objekt" );
                     pVar = ((SbxObject*)pVar)->GetMethods()->Find( aName, SbxCLASS_METHOD );
                 }
                 break;
@@ -470,7 +470,7 @@ bool BasicTreeListBox::IsValidEntry( SvLBoxEntry* pEntry )
 SbModule* BasicTreeListBox::FindModule( SvLBoxEntry* pEntry )
 {
     SbxVariable* pVar = FindVariable( pEntry );
-    if ( pVar && pVar->IsA( TYPE(SbModule ) ) )
+    if ( pVar && dynamic_cast< SbModule* >(pVar) )
         return (SbModule*)pVar;
     return 0;
 }

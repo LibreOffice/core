@@ -131,7 +131,6 @@ public:
     // public Data - used for internal Clipboard / Drag & Drop / XSelection
     SwTransferable  *pDragDrop, *pXSelection;
 
-    TYPEINFO();
     SFX_DECL_INTERFACE(SW_INTERFACE_MODULE)
 
     // dieser Ctor nur fuer SW-Dll

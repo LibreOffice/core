@@ -32,7 +32,6 @@
 // (ausgehend von der MapUnit des Models). Diese Einheit wird dann ggf. auch angezeigt.
 class SVX_DLLPUBLIC SdrMeasureUnitItem: public SfxEnumItem {
 public:
-    TYPEINFO();
     SdrMeasureUnitItem(FieldUnit eUnit=FUNIT_NONE): SfxEnumItem(SDRATTR_MEASUREUNIT,sal::static_int_cast< sal_uInt16 >(eUnit)) {}
     SdrMeasureUnitItem(SvStream& rIn)             : SfxEnumItem(SDRATTR_MEASUREUNIT,rIn)   {}
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=NULL) const;

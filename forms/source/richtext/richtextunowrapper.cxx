@@ -34,6 +34,7 @@
 #include <svx/svdpool.hxx>
 #include <svx/svdobj.hxx>
 #include <editeng/unoprnms.hxx>
+#include <svx/globaldrawitempool.hxx>
 
 //........................................................................
 namespace frm
@@ -60,7 +61,7 @@ namespace frm
                 { MAP_CHAR_LEN("ParaUserDefinedAttributes"), EE_PARA_XMLATTRIBS, &::getCppuType( static_cast< const Reference< XNameContainer >* >( NULL ) ), 0, 0 },
                 { NULL, 0, 0, NULL, 0, 0 }
             };
-            static SvxItemPropertySet aTextEnginePropertySet( aTextEnginePropertyMap, SdrObject::GetGlobalDrawObjectItemPool() );
+            static SvxItemPropertySet aTextEnginePropertySet( aTextEnginePropertyMap, GetGlobalDrawObjectItemPool() );
             return &aTextEnginePropertySet;
         }
     }

@@ -56,9 +56,6 @@ namespace drawinglayer
             /// data read access
             const basegfx::BColorModifier& getColorModifier() const { return maColorModifier; }
 
-            /// compare operator
-            virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
-
             /// provide unique ID
             DeclPrimitrive3DIDBlock()
         };

@@ -839,7 +839,7 @@ void TableLayouter::LayoutTableHeight( Rectangle& rArea, bool bFit )
 
 /** try to fit the table into the given rectangle.
     If the rectangle is to small, it will be grown to fit the table. */
-void TableLayouter::LayoutTable( Rectangle& rRectangle, bool bFitWidth, bool bFitHeight )
+void TableLayouter::LayoutTable( basegfx::B2DRange& o_aArea, bool bFitWidth, bool bFitHeight )
 {
     if( !mxTable.is() )
         return;
@@ -863,8 +863,19 @@ void TableLayouter::LayoutTable( Rectangle& rRectangle, bool bFitWidth, bool bFi
             maColumns[nCol].clear();
     }
 
-    LayoutTableWidth( rRectangle, bFitWidth );
-    LayoutTableHeight( rRectangle, bFitHeight );
+    // here TableLayout could be changed to double precision,
+    // but for now this will not be needed
+    Rectangle aTableArea(
+        basegfx::fround(o_aArea.getMinX()), basegfx::fround(o_aArea.getMinY()),
+        basegfx::fround(o_aArea.getMaxX()), basegfx::fround(o_aArea.getMaxY()));
+
+    // layout with integer
+    LayoutTableWidth( aTableArea, bFitWidth );
+    LayoutTableHeight( aTableArea, bFitHeight );
+
+    // copy back evtl. changed area
+    o_aArea = basegfx::B2DRange(aTableArea.Left(), aTableArea.Top(), aTableArea.Right(), aTableArea.Bottom());
+
     UpdateBorderLayout();
 }
 
@@ -1109,7 +1120,7 @@ void TableLayouter::SetLayoutToModel()
 */
 // -----------------------------------------------------------------------------
 
-void TableLayouter::DistributeColumns( ::Rectangle& rArea, sal_Int32 nFirstCol, sal_Int32 nLastCol )
+void TableLayouter::DistributeColumns( basegfx::B2DRange& o_aArea, sal_Int32 nFirstCol, sal_Int32 nLastCol )
 {
     if( mxTable.is() ) try
     {
@@ -1137,7 +1148,7 @@ void TableLayouter::DistributeColumns( ::Rectangle& rArea, sal_Int32 nFirstCol, 
             nAllWidth -= nWidth;
         }
 
-        LayoutTable( rArea, true, false );
+        LayoutTable( o_aArea, true, false );
     }
     catch( Exception& e )
     {
@@ -1148,7 +1159,7 @@ void TableLayouter::DistributeColumns( ::Rectangle& rArea, sal_Int32 nFirstCol, 
 
 // -----------------------------------------------------------------------------
 
-void TableLayouter::DistributeRows( ::Rectangle& rArea, sal_Int32 nFirstRow, sal_Int32 nLastRow )
+void TableLayouter::DistributeRows( basegfx::B2DRange& o_aArea, sal_Int32 nFirstRow, sal_Int32 nLastRow )
 {
     if( mxTable.is() ) try
     {
@@ -1172,7 +1183,13 @@ void TableLayouter::DistributeRows( ::Rectangle& rArea, sal_Int32 nFirstRow, sal
         if( nHeight < nMinHeight )
         {
             sal_Int32 nNeededHeight = nRows * nMinHeight;
-            rArea.nBottom += nNeededHeight - nAllHeight;
+
+            o_aArea = basegfx::B2DRange(
+                o_aArea.getMinX(),
+                o_aArea.getMinY(),
+                o_aArea.getMaxX(),
+                o_aArea.getMinY() + (nNeededHeight - nAllHeight));
+
             nHeight = nMinHeight;
             nAllHeight = nRows * nMinHeight;
         }
@@ -1189,7 +1206,7 @@ void TableLayouter::DistributeRows( ::Rectangle& rArea, sal_Int32 nFirstRow, sal
             nAllHeight -= nHeight;
         }
 
-        LayoutTable( rArea, false, true );
+        LayoutTable( o_aArea, false, true );
     }
     catch( Exception& e )
     {

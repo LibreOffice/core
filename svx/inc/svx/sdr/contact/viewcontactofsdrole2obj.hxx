@@ -53,9 +53,6 @@ namespace sdr
                 return (SdrOle2Obj&)GetSdrObject();
             }
 
-            /// helper to create transformation from SdrObject
-            basegfx::B2DHomMatrix createObjectTransform() const;
-
             // basic constructor, used from SdrObject.
             ViewContactOfSdrOle2Obj(SdrOle2Obj& rOle2Obj);
             virtual ~ViewContactOfSdrOle2Obj();

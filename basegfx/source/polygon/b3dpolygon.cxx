@@ -794,10 +794,10 @@ class ImplB3DPolygon
 
     // bitfield
     // flag which decides if this polygon is opened or closed
-    unsigned                                        mbIsClosed : 1;
+    bool                                            mbIsClosed : 1;
 
     // flag which says if maPlaneNormal is up-to-date
-    unsigned                                        mbPlaneNormalValid : 1;
+    bool                                            mbPlaneNormalValid : 1;
 
 protected:
     void invalidatePlaneNormal()

@@ -60,8 +60,6 @@ using namespace ::rtl;
 
 #define USERITEM_NAME           OUString::createFromAscii( "UserItem" )
 
-TYPEINIT1(LAYOUT_NS_SFX_TABDIALOG SfxTabDialogItem,SfxSetItem);
-
 struct TabPageImpl
 {
     sal_Bool                        mbStandard;
@@ -165,7 +163,7 @@ IMPL_LINK( SfxTabDialogController, Execute_Impl, void*, pVoid )
 
 void SfxTabDialogController::StateChanged( sal_uInt16 /*nSID*/, SfxItemState /*eState*/, const SfxPoolItem* pState )
 {
-    const SfxSetItem* pSetItem = PTR_CAST( SfxSetItem, pState );
+    const SfxSetItem* pSetItem = dynamic_cast< const SfxSetItem* >( pState );
     if ( pSetItem )
     {
         pSet = pDialog->pSet = pSetItem->GetItemSet().Clone();

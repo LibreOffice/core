@@ -257,6 +257,47 @@ namespace basegfx
             }
         }
 
+        B2DHomMatrix createScaleRotateTranslateB2DHomMatrix(
+            double fScaleX, double fScaleY,
+            double fRadiant,
+            double fTranslateX, double fTranslateY)
+        {
+            const double fOne(1.0);
+
+            if(fTools::equal(fScaleX, fOne) && fTools::equal(fScaleY, fOne))
+            {
+                /// no scale, take shortcut
+                return createRotateTranslateB2DHomMatrix(fRadiant, fTranslateX, fTranslateY);
+            }
+            else
+            {
+                /// scale used
+                if(fTools::equalZero(fRadiant))
+                {
+                    /// no rotate, take shortcut
+                    return createScaleTranslateB2DHomMatrix(fScaleX, fScaleY, fTranslateX, fTranslateY);
+                }
+                else
+                {
+                    /// rotate and scale used
+                    double fSin(0.0);
+                    double fCos(1.0);
+
+                    createSinCosOrthogonal(fSin, fCos, fRadiant);
+
+                    B2DHomMatrix aRetval(
+                        /* Row 0, Column 0 */ fCos * fScaleX,
+                        /* Row 0, Column 1 */ fScaleY * -fSin,
+                        /* Row 0, Column 2 */ fTranslateX,
+                        /* Row 1, Column 0 */ fSin * fScaleX,
+                        /* Row 1, Column 1 */ fScaleY * fCos,
+                        /* Row 1, Column 2 */ fTranslateY);
+
+                    return aRetval;
+                }
+            }
+        }
+
         B2DHomMatrix createShearXRotateTranslateB2DHomMatrix(
             double fShearX,
             double fRadiant,
@@ -326,6 +367,35 @@ namespace basegfx
             }
         }
 
+        B2DHomMatrix createRotateTranslateB2DHomMatrix(
+            double fRadiant,
+            double fTranslateX, double fTranslateY)
+        {
+            if(fTools::equalZero(fRadiant))
+            {
+                /// no shear, no rotate, take shortcut
+                return createTranslateB2DHomMatrix(fTranslateX, fTranslateY);
+            }
+            else
+            {
+                /// no shear, but rotate used
+                double fSin(0.0);
+                double fCos(1.0);
+
+                createSinCosOrthogonal(fSin, fCos, fRadiant);
+
+                B2DHomMatrix aRetval(
+                    /* Row 0, Column 0 */ fCos,
+                    /* Row 0, Column 1 */ -fSin,
+                    /* Row 0, Column 2 */ fTranslateX,
+                    /* Row 1, Column 0 */ fSin,
+                    /* Row 1, Column 1 */ fCos,
+                    /* Row 1, Column 2 */ fTranslateY);
+
+                return aRetval;
+            }
+        }
+
         B2DHomMatrix createScaleTranslateB2DHomMatrix(
             double fScaleX, double fScaleY,
             double fTranslateX, double fTranslateY)
@@ -390,6 +460,43 @@ namespace basegfx
 
             return aRetval;
         }
+
+        /* tooling methods for converting API matrices (drawing::HomogenMatrix3)
+           to B2DHomMatrix
+         */
+        B2DHomMatrix UnoHomogenMatrix3ToB2DHomMatrix(
+            const com::sun::star::drawing::HomogenMatrix3 rMatrixIn)
+        {
+            B2DHomMatrix aRetval;
+
+            aRetval.set(0, 0, rMatrixIn.Line1.Column1);
+            aRetval.set(0, 1, rMatrixIn.Line1.Column2);
+            aRetval.set(0, 2, rMatrixIn.Line1.Column3);
+            aRetval.set(1, 0, rMatrixIn.Line2.Column1);
+            aRetval.set(1, 1, rMatrixIn.Line2.Column2);
+            aRetval.set(1, 2, rMatrixIn.Line2.Column3);
+            aRetval.set(2, 0, rMatrixIn.Line3.Column1);
+            aRetval.set(2, 1, rMatrixIn.Line3.Column2);
+            aRetval.set(2, 2, rMatrixIn.Line3.Column3);
+
+            return aRetval;
+        }
+
+        void B2DHomMatrixToUnoHomogenMatrix3(
+            const B2DHomMatrix& rMatrixIn,
+            com::sun::star::drawing::HomogenMatrix3& rMatrixOut)
+        {
+            rMatrixOut.Line1.Column1 = rMatrixIn.get(0, 0);
+            rMatrixOut.Line1.Column2 = rMatrixIn.get(0, 1);
+            rMatrixOut.Line1.Column3 = rMatrixIn.get(0, 2);
+            rMatrixOut.Line2.Column1 = rMatrixIn.get(1, 0);
+            rMatrixOut.Line2.Column2 = rMatrixIn.get(1, 1);
+            rMatrixOut.Line2.Column3 = rMatrixIn.get(1, 2);
+            rMatrixOut.Line3.Column1 = rMatrixIn.get(2, 0);
+            rMatrixOut.Line3.Column2 = rMatrixIn.get(2, 1);
+            rMatrixOut.Line3.Column3 = rMatrixIn.get(2, 2);
+        }
+
     } // end of namespace tools
 } // end of namespace basegfx
 

@@ -61,6 +61,7 @@ class FontList;
 #include <vos/ref.hxx>
 #include <vector>
 #include <com/sun/star/uno/Reference.h>
+#include <typeinfo>
 
 namespace com { namespace sun { namespace star {
   namespace linguistic2 {
@@ -89,9 +90,6 @@ namespace basegfx { class B2DPolyPolygon; }
 #endif
 #include <i18npool/lang.h>
 #include "editeng/editengdllapi.h"
-
-#include <tools/rtti.hxx>   // wegen typedef TypeId
-
 #include <editeng/eedata.hxx>
 class SvxFieldData;
 
@@ -405,7 +403,7 @@ public:
     virtual sal_Bool    ConvertNextDocument();
 
     sal_Bool            UpdateFields();
-    void            RemoveFields( sal_Bool bKeepFieldText, TypeId aType = NULL );
+    void            RemoveFields( sal_Bool bKeepFieldText, const std::type_info* pTypeInfo = 0 );
 
     sal_uInt16          GetFieldCount( sal_uInt16 nPara ) const;
     EFieldInfo      GetFieldInfo( sal_uInt16 nPara, sal_uInt16 nField ) const;

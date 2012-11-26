@@ -91,6 +91,7 @@
 #include "sdresid.hxx"
 #include "buttonset.hxx"
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <svx/svdlegacy.hxx>
 
 using ::rtl::OUString;
 using ::rtl::OString;
@@ -436,7 +437,7 @@ HtmlExport::~HtmlExport()
     // ------------------------------------------------------------------
     if(mpImageFiles && mpHTMLFiles && mpPageNames && mpTextFiles)
     {
-        for ( sal_uInt16 nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
+        for ( sal_uInt32 nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
         {
             delete mpImageFiles[nSdPage];
             delete mpHTMLFiles[nSdPage];
@@ -648,8 +649,7 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
 
     // calculate image sizes
     SdPage* pPage = mpDoc->GetSdPage(0, PK_STANDARD);
-    Size aTmpSize( pPage->GetSize() );
-    double dRatio=((double)aTmpSize.Width())/aTmpSize.Height();
+    const double dRatio(pPage->GetPageScale().getX() / pPage->GetPageScale().getY());
 
 /*
     switch( mnWidthPixel )
@@ -678,8 +678,7 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
     maIndex = aINetURLObj.GetLastName();
 
     mnSdPageCount = mpDoc->GetSdPageCount( PK_STANDARD );
-//    sal_uInt16 nHiddenSlides = 0;
-    for( sal_uInt16 nPage = 0; nPage < mnSdPageCount; nPage++ )
+    for( sal_uInt32 nPage = 0; nPage < mnSdPageCount; nPage++ )
     {
         pPage = mpDoc->GetSdPage( nPage, PK_STANDARD );
 
@@ -730,7 +729,7 @@ void HtmlExport::ExportHtml()
 
     //////
 
-    sal_uInt16 nProgrCount = mnSdPageCount;
+    sal_uInt32 nProgrCount = mnSdPageCount;
     nProgrCount += mbImpress?mnSdPageCount:0;
     nProgrCount += mbContentsPage?1:0;
     nProgrCount += (mbFrames && mbNotes)?mnSdPageCount:0;
@@ -885,7 +884,7 @@ void HtmlExport::ExportWebCast()
     mnPagesWritten = 0;
     InitProgress( mnSdPageCount + 9 );
 
-    mpDocSh->SetWaitCursor( sal_True );
+    mpDocSh->SetWaitCursor( true );
 
     CreateFileNames();
 
@@ -1027,7 +1026,7 @@ bool HtmlExport::CreateImagesForPresPages()
         aDescriptor[2].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("FilterData") );
         aDescriptor[2].Value <<= aFilterData;
 
-        for (sal_uInt16 nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
+        for (sal_uInt32 nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
         {
             SdPage* pPage = maPages[ nSdPage ];
 
@@ -1097,7 +1096,7 @@ bool HtmlExport::CreateHtmlTextForPresPages()
 
     SdrOutliner* pOutliner = mpDoc->GetInternalOutliner();
 
-    for(sal_uInt16 nSdPage = 0; nSdPage < mnSdPageCount && bOk; nSdPage++)
+    for(sal_uInt32 nSdPage = 0; nSdPage < mnSdPageCount && bOk; nSdPage++)
     {
         SdPage* pPage = maPages[ nSdPage ];
 
@@ -1360,7 +1359,7 @@ String HtmlExport::ParagraphToHTMLString( SdrOutliner* pOutliner, sal_uLong nPar
     // TODO: MALTE!!!
     EditEngine& rEditEngine = *(EditEngine*)&pOutliner->GetEditEngine();
     bool bOldUpdateMode = rEditEngine.GetUpdateMode();
-    rEditEngine.SetUpdateMode(sal_True);
+    rEditEngine.SetUpdateMode(true);
 
     Paragraph* pPara = pOutliner->GetParagraph(nPara);
     if(NULL == pPara)
@@ -1410,7 +1409,7 @@ String HtmlExport::TextAttribToHTMLString( SfxItemSet* pSet, HtmlState* pState, 
         SvxFieldItem* pItem = (SvxFieldItem*)pSet->GetItem( EE_FEATURE_FIELD );
         if(pItem)
         {
-            SvxURLField* pURL = PTR_CAST(SvxURLField, pItem->GetField());
+            const SvxURLField* pURL = dynamic_cast< const SvxURLField* >(pItem->GetField());
             if(pURL)
             {
                 aLink = pURL->GetURL();
@@ -1493,7 +1492,7 @@ bool HtmlExport::CreateHtmlForPresPages()
 
     List aClickableObjects;
 
-    for(sal_uInt16 nSdPage = 0; nSdPage < mnSdPageCount && bOk; nSdPage++)
+    for(sal_uInt32 nSdPage = 0; nSdPage < mnSdPageCount && bOk; nSdPage++)
     {
         // Klickbare Objekte finden (auch auf der Masterpage) und
         // in Liste stellen. In umgekehrter Zeichenreihenfolge in
@@ -1577,7 +1576,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                     aStr += String::CreateFromInt32(nSecs);
                     aStr.AppendAscii( "; URL=" );
 
-                    int nPage = nSdPage + 1;
+                    sal_uInt32 nPage = nSdPage + 1;
                     if( nPage == mnSdPageCount )
                         nPage = 0;
 
@@ -1640,16 +1639,15 @@ bool HtmlExport::CreateHtmlForPresPages()
                 SdAnimationInfo* pInfo     = mpDoc->GetAnimationInfo(pObject);
                 SdIMapInfo*      pIMapInfo = mpDoc->GetIMapInfo(pObject);
 
-                Rectangle aRect(pObject->GetCurrentBoundRect());
+                Rectangle aRect(sdr::legacy::GetBoundRect(*pObject));
                 Point     aLogPos(aRect.TopLeft());
                 bool      bIsSquare = aRect.GetWidth() == aRect.GetHeight();
 
-                sal_uLong nPageWidth = pPage->GetSize().Width() - pPage->GetLftBorder() -
-                                   pPage->GetRgtBorder();
+                sal_uLong nPageWidth = pPage->GetPageScale().getX() - pPage->GetLeftPageBorder() - pPage->GetRightPageBorder();
 
                 // das BoundRect bezieht sich auf den physikalischen
                 // Seitenursprung, nicht auf den Koordinatenursprung
-                aRect.Move(-pPage->GetLftBorder(), -pPage->GetUppBorder());
+                aRect.Move(-pPage->GetLeftPageBorder(), -pPage->GetTopPageBorder());
 
                 double fLogicToPixel = ((double)mnWidthPixel) / nPageWidth;
                 aRect.Left()   = (long)(aRect.Left() * fLogicToPixel);
@@ -1675,8 +1673,8 @@ bool HtmlExport::CreateHtmlForPresPages()
 
                         // ggfs. Seiten- oder Objektnamen umwandeln in den
                         // Namen der entsprechenden HTML-Datei
-                        sal_Bool        bIsMasterPage;
-                        sal_uInt16      nPgNum = mpDoc->GetPageByName( aURL, bIsMasterPage );
+                        bool bIsMasterPage;
+                        sal_uInt32 nPgNum = mpDoc->GetPageByName( aURL, bIsMasterPage );
                         SdrObject*  pObj = NULL;
 
                         if (nPgNum == SDRPAGE_NOTFOUND)
@@ -1684,7 +1682,14 @@ bool HtmlExport::CreateHtmlForPresPages()
                             // Ist das Bookmark ein Objekt?
                             pObj = mpDoc->GetObj( aURL );
                             if (pObj)
-                                nPgNum = pObj->GetPage()->GetPageNum();
+                            {
+                                SdrPage* pOwningPage = pObj->getSdrPageFromSdrObject();
+
+                                if(pOwningPage)
+                                {
+                                    nPgNum = pOwningPage->GetPageNumber();
+                                }
+                            }
                         }
                         if (nPgNum != SDRPAGE_NOTFOUND)
                         {
@@ -1700,8 +1705,8 @@ bool HtmlExport::CreateHtmlForPresPages()
                                                  GetRectangle(false));
 
                                 // Umrechnung in Pixelkoordinaten
-                                aArea.Move(aLogPos.X() - pPage->GetLftBorder(),
-                                           aLogPos.Y() - pPage->GetUppBorder());
+                                aArea.Move(aLogPos.X() - pPage->GetLeftPageBorder(),
+                                           aLogPos.Y() - pPage->GetTopPageBorder());
                                 aArea.Left()   = (long)(aArea.Left() * fLogicToPixel);
                                 aArea.Top()    = (long)(aArea.Top() * fLogicToPixel);
                                 aArea.Right()  = (long)(aArea.Right() * fLogicToPixel);
@@ -1715,8 +1720,8 @@ bool HtmlExport::CreateHtmlForPresPages()
                             {
                                 Point aCenter(((IMapCircleObject*)pArea)->
                                                  GetCenter(false));
-                                aCenter += Point(aLogPos.X() - pPage->GetLftBorder(),
-                                                 aLogPos.Y() - pPage->GetUppBorder());
+                                aCenter += Point(aLogPos.X() - pPage->GetLeftPageBorder(),
+                                                 aLogPos.Y() - pPage->GetTopPageBorder());
                                 aCenter.X() = (long)(aCenter.X() * fLogicToPixel);
                                 aCenter.Y() = (long)(aCenter.Y() * fLogicToPixel);
 
@@ -1732,7 +1737,8 @@ bool HtmlExport::CreateHtmlForPresPages()
                             case IMAP_OBJ_POLYGON:
                             {
                                 Polygon aArea(((IMapPolygonObject*)pArea)->GetPolygon(false));
-                                aStr += CreateHTMLPolygonArea(::basegfx::B2DPolyPolygon(aArea.getB2DPolygon()), Size(aLogPos.X() - pPage->GetLftBorder(), aLogPos.Y() - pPage->GetUppBorder()), fLogicToPixel, aURL);
+                                const basegfx::B2DPolyPolygon aPolyPolygon(aArea.getB2DPolygon());
+                                aStr += CreateHTMLPolygonArea(aPolyPolygon, Size(aLogPos.X() - pPage->GetLeftPageBorder(), aLogPos.Y() - pPage->GetTopPageBorder()), fLogicToPixel, aURL);
                             }
                             break;
 
@@ -1760,8 +1766,8 @@ bool HtmlExport::CreateHtmlForPresPages()
                     {
                         case presentation::ClickAction_BOOKMARK:
                         {
-                            sal_Bool        bIsMasterPage;
-                            sal_uInt16      nPgNum = mpDoc->GetPageByName( pInfo->GetBookmark(), bIsMasterPage );
+                            bool bIsMasterPage;
+                            sal_uInt32 nPgNum = mpDoc->GetPageByName( pInfo->GetBookmark(), bIsMasterPage );
                             SdrObject*  pObj = NULL;
 
                             if( nPgNum == SDRPAGE_NOTFOUND )
@@ -1769,7 +1775,14 @@ bool HtmlExport::CreateHtmlForPresPages()
                                 // Ist das Bookmark ein Objekt?
                                 pObj = mpDoc->GetObj(pInfo->GetBookmark());
                                 if (pObj)
-                                    nPgNum = pObj->GetPage()->GetPageNum();
+                                {
+                                    SdrPage* pOwningPage = pObj->getSdrPageFromSdrObject();
+
+                                    if(pOwningPage)
+                                    {
+                                        nPgNum = pOwningPage->GetPageNumber();
+                                    }
+                                }
                             }
 
                             if( SDRPAGE_NOTFOUND != nPgNum )
@@ -1789,7 +1802,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                             else
                                 nPage = nSdPage - 1;
 
-                            aHRef = CreatePageURL( (sal_uInt16) nPage);
+                            aHRef = CreatePageURL(nPage);
                         }
                         break;
 
@@ -1801,7 +1814,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                             else
                                 nPage = nSdPage + 1;
 
-                            aHRef = CreatePageURL( (sal_uInt16) nPage);
+                            aHRef = CreatePageURL(nPage);
                         }
                         break;
 
@@ -1820,23 +1833,20 @@ bool HtmlExport::CreateHtmlForPresPages()
                     // jetzt die Areas
                     if( aHRef.Len() )
                     {
-                        // ein Kreis?
-                        if (pObject->GetObjInventor() == SdrInventor &&
-                            pObject->GetObjIdentifier() == OBJ_CIRC  &&
-                            bIsSquare )
+                        // a circle?
+                        if(bIsSquare && dynamic_cast< SdrCircObj* >(pObject))
                         {
                             aStr += CreateHTMLCircleArea(aRect.GetWidth() / 2,
                                                     aRect.Left() + nRadius,
                                                     aRect.Top() + nRadius,
                                                     aHRef);
                         }
-                        // ein Polygon?
-                        else if (pObject->GetObjInventor() == SdrInventor &&
-                                 (pObject->GetObjIdentifier() == OBJ_PATHLINE ||
-                                  pObject->GetObjIdentifier() == OBJ_PLIN ||
-                                  pObject->GetObjIdentifier() == OBJ_POLY))
+                        // a Polygon?
+                        else if(dynamic_cast< SdrPathObj* >(pObject))
                         {
-                            aStr += CreateHTMLPolygonArea(((SdrPathObj*)pObject)->GetPathPoly(), Size(-pPage->GetLftBorder(), -pPage->GetUppBorder()), fLogicToPixel, aHRef);
+                            const basegfx::B2DPolyPolygon aPolyPolygon(static_cast< SdrPathObj* >(pObject)->getB2DPolyPolygonInObjectCoordinates());
+
+                            aStr += CreateHTMLPolygonArea(aPolyPolygon, Size(-pPage->GetLeftPageBorder(), -pPage->GetTopPageBorder()), fLogicToPixel, aHRef);
                         }
                         // was anderes: das BoundRect nehmen
                         else
@@ -1912,7 +1922,7 @@ bool HtmlExport::CreateContentPage()
     aStr += RESTOHTML(STR_HTMLEXP_CONTENTS);
     aStr.AppendAscii( "</h3>" );
 
-    for(sal_uInt16 nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
+    for(sal_uInt32 nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
     {
         String aPageName = *mpPageNames[nSdPage];
         aStr.AppendAscii( "<div align=\"left\">" );
@@ -1996,7 +2006,7 @@ bool HtmlExport::CreateNotesPages()
     bool bOk = true;
 
     SdrOutliner* pOutliner = mpDoc->GetInternalOutliner();
-    for( sal_uInt16 nSdPage = 0; bOk && nSdPage < mnSdPageCount; nSdPage++ )
+    for( sal_uInt32 nSdPage = 0; bOk && nSdPage < mnSdPageCount; nSdPage++ )
     {
         SdPage* pPage = maNotesPages[nSdPage];
         if( mbDocColors )
@@ -2052,7 +2062,7 @@ bool HtmlExport::CreateOutlinePages()
         aStr += CreateBodyTag();
 
         SdrOutliner* pOutliner = mpDoc->GetInternalOutliner();
-        for(sal_uInt16 nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
+        for(sal_uInt32 nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
         {
             SdPage* pPage = maPages[ nSdPage ];
 
@@ -2105,7 +2115,7 @@ void HtmlExport::CreateFileNames()
 
     mbHeader = false;   // Ueberschrift auf Uebersichtsseite?
 
-    for (sal_uInt16 nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
+    for (sal_uInt32 nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
     {
         String* pName;
         if(nSdPage == 0 && !mbContentsPage && !mbFrames )
@@ -2573,7 +2583,7 @@ bool HtmlExport::CreateNavBarFrames()
 // ====================================================================
 // Buttonleiste fuer Standard ausgeben
 // ====================================================================
-String HtmlExport::CreateNavBar( sal_uInt16 nSdPage, bool bIsText ) const
+String HtmlExport::CreateNavBar( sal_uInt32 nSdPage, bool bIsText ) const
 {
     // Navigationsleiste vorbereiten
     String aStrNavFirst( SdResId(STR_HTMLEXP_FIRSTPAGE) );
@@ -2905,7 +2915,7 @@ String HtmlExport::StringToHTMLString( const String& rString )
 // =====================================================================
 // Erzeugt die URL einer bestimmten Seite
 // =====================================================================
-String HtmlExport::CreatePageURL( sal_uInt16 nPgNum )
+String HtmlExport::CreatePageURL( sal_uInt32 nPgNum )
 {
     if(mbFrames)
     {

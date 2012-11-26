@@ -53,9 +53,10 @@ sal_Bool SwAccessibleFrameBase::IsSelected()
     DBG_ASSERT( GetMap(), "no map?" );
     const ViewShell *pVSh = GetMap()->GetShell();
     DBG_ASSERT( pVSh, "no shell?" );
-    if( pVSh->ISA( SwFEShell ) )
+    const SwFEShell *pFESh = dynamic_cast< const SwFEShell * >( pVSh );
+
+    if( pFESh )
     {
-        const SwFEShell *pFESh = static_cast< const SwFEShell * >( pVSh );
         const SwFrm *pFlyFrm = pFESh->GetCurrFlyFrm();
         if( pFlyFrm == GetFrm() )
             bRet = sal_True;
@@ -71,7 +72,7 @@ void SwAccessibleFrameBase::GetStates(
 
     const ViewShell *pVSh = GetMap()->GetShell();
     DBG_ASSERT( pVSh, "no shell?" );
-    sal_Bool bSelectable =  pVSh->ISA( SwFEShell );
+    const bool bSelectable(dynamic_cast< const SwFEShell* >(pVSh));
 
     // SELECTABLE
     if( bSelectable )

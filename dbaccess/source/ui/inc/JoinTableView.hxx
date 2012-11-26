@@ -32,9 +32,6 @@
 #ifndef _SV_SCRBAR_HXX
 #include <vcl/scrbar.hxx>
 #endif
-#ifndef _RTTI_HXX
-#include <tools/rtti.hxx>
-#endif
 #ifndef _TRANSFER_HXX
 #include <svtools/transfer.hxx>
 #endif

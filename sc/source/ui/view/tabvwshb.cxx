@@ -44,7 +44,6 @@
 #include <svx/dataaccessdescriptor.hxx>
 #include <svx/pfiledlg.hxx>
 #include <svx/svditer.hxx>
-#include <svx/svdmark.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdoole2.hxx>
@@ -61,6 +60,7 @@
 #include <svl/whiter.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <sot/exchange.hxx>
+#include <svx/svdlegacy.hxx>
 #include <tools/diagnose_ex.h>
 
 #include "tabvwsh.hxx"
@@ -91,8 +91,8 @@ void ScTabViewShell::ConnectObject( SdrOle2Obj* pObj )
     SfxInPlaceClient* pClient = FindIPClient( xObj, pWin );
     if ( !pClient )
     {
-        pClient = new ScClient( this, pWin, GetSdrView()->GetModel(), pObj );
-        Rectangle aRect = pObj->GetLogicRect();
+        pClient = new ScClient( this, pWin, &GetSdrView()->getSdrModelFromSdrView(), pObj );
+        Rectangle aRect(sdr::legacy::GetLogicRect(*pObj));
         Size aDrawSize = aRect.GetSize();
 
         Size aOleSize = pObj->GetOrigObjSize();
@@ -129,21 +129,22 @@ sal_Bool ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
     {
         SfxInPlaceClient* pClient = FindIPClient( xObj, pWin );
         if ( !pClient )
-            pClient = new ScClient( this, pWin, GetSdrView()->GetModel(), pObj );
+            pClient = new ScClient( this, pWin, &GetSdrView()->getSdrModelFromSdrView(), pObj );
 
         if ( !(nErr & ERRCODE_ERROR_MASK) && xObj.is() )
         {
-            Rectangle aRect = pObj->GetLogicRect();
+            Rectangle aRect(sdr::legacy::GetLogicRect(*pObj));
+            Size aDrawSize = aRect.GetSize();
 
             {
                 // #i118485# center on BoundRect for activation,
                 // OLE may be sheared/rotated now
-                const Rectangle& rBoundRect = pObj->GetCurrentBoundRect();
-                const Point aDelta(rBoundRect.Center() - aRect.Center());
-                aRect.Move(aDelta.X(), aDelta.Y());
-            }
+                const basegfx::B2DRange& rObjectRange = pObj->getObjectRange(GetSdrView());
 
-            Size aDrawSize = aRect.GetSize();
+                aRect.Move(
+                    basegfx::fround(rObjectRange.getCenterX()) - aRect.Center().X(),
+                    basegfx::fround(rObjectRange.getCenterY()) - aRect.Center().Y());
+            }
 
             MapMode aMapMode( MAP_100TH_MM );
             Size aOleSize = pObj->GetOrigObjSize( &aMapMode );
@@ -224,7 +225,7 @@ sal_Bool ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
     // #i118524# refresh handles to suppress for activated OLE
     if(GetSdrView())
     {
-        GetSdrView()->AdjustMarkHdl();
+        GetSdrView()->forceSelectionChange();
     }
     //! SetDocumentName sollte schon im Sfx passieren ???
     //TODO/LATER: how "SetDocumentName"?
@@ -240,20 +241,12 @@ ErrCode __EXPORT ScTabViewShell::DoVerb(long nVerb)
         return ERRCODE_SO_NOTIMPL;          // soll nicht sein
 
     SdrOle2Obj* pOle2Obj = NULL;
-    SdrGrafObj* pGrafObj = NULL;
-    SdrObject* pObj = NULL;
-    ErrCode nErr = ERRCODE_NONE;
+    SdrObject* pSelected = pView->getSelectedIfSingle();
 
-    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-    if (rMarkList.GetMarkCount() == 1)
+    if (pSelected)
     {
-        pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-        if (pObj->GetObjIdentifier() == OBJ_OLE2)
-            pOle2Obj = (SdrOle2Obj*) pObj;
-        else if (pObj->GetObjIdentifier() == OBJ_GRAF)
-        {
-            pGrafObj = (SdrGrafObj*) pObj;
-        }
+        if (pSelected->GetObjIdentifier() == OBJ_OLE2)
+            pOle2Obj = (SdrOle2Obj*) pSelected;
     }
 
     if (pOle2Obj)
@@ -265,7 +258,7 @@ ErrCode __EXPORT ScTabViewShell::DoVerb(long nVerb)
         DBG_ERROR("kein Objekt fuer Verb gefunden");
     }
 
-    return nErr;
+    return ERRCODE_NONE;
 }
 
 void ScTabViewShell::DeactivateOle()
@@ -302,23 +295,19 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
     ScDrawView*  pView     = pTabView->GetScDrawView();
     ScDocShell*  pDocSh    = GetViewData()->GetDocShell();
     ScDocument*  pDoc      = pDocSh->GetDocument();
-//  SdrModel*    pDrModel  = pDocSh->MakeDrawLayer();
-    SdrModel*    pDrModel  = pView->GetModel();
 
     switch ( nSlot )
     {
         case SID_INSERT_GRAPHIC:
-            FuInsertGraphic(this, pWin, pView, pDrModel, rReq);
-            // shell is set in MarkListHasChanged
+            FuInsertGraphic(this, pWin, pView, &pView->getSdrModelFromSdrView(), rReq);
             break;
 
         case SID_INSERT_AVMEDIA:
-            FuInsertMedia(this, pWin, pView, pDrModel, rReq);
-            // shell is set in MarkListHasChanged
+            FuInsertMedia(this, pWin, pView, &pView->getSdrModelFromSdrView(), rReq);
             break;
 
         case SID_INSERT_DIAGRAM:
-            FuInsertChart(this, pWin, pView, pDrModel, rReq);
+            FuInsertChart(this, pWin, pView, &pView->getSdrModelFromSdrView(), rReq);
 //?         SC_MOD()->SetFunctionDlg( NULL );//XXX
             break;
 
@@ -328,7 +317,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
         case SID_INSERT_VIDEO:
         case SID_INSERT_SMATH:
         case SID_INSERT_FLOATINGFRAME:
-            FuInsertOLE(this, pWin, pView, pDrModel, rReq);
+            FuInsertOLE(this, pWin, pView, &pView->getSdrModelFromSdrView(), rReq);
             break;
 
         case SID_OBJECTRESIZE:
@@ -339,28 +328,15 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 
                 if ( pClient && pClient->IsObjectInPlaceActive() )
                 {
-                    const SfxRectangleItem& rRect =
-                        (SfxRectangleItem&)rReq.GetArgs()->Get(SID_OBJECTRESIZE);
+                    const SfxRectangleItem& rRect = (SfxRectangleItem&)rReq.GetArgs()->Get(SID_OBJECTRESIZE);
                     Rectangle aRect( pWin->PixelToLogic( rRect.GetValue() ) );
+                    SdrOle2Obj* pSelected = dynamic_cast< SdrOle2Obj* >(pView->getSelectedIfSingle());
 
-                    if ( pView->AreObjectsMarked() )
+                    if ( pSelected )
                     {
-                        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-
-                        if (rMarkList.GetMarkCount() == 1)
+                        if ( pSelected->GetObjRef().is() )
                         {
-                            SdrMark* pMark = rMarkList.GetMark(0);
-                            SdrObject* pObj = pMark->GetMarkedSdrObj();
-
-                            sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
-
-                            if (nSdrObjKind == OBJ_OLE2)
-                            {
-                                if ( ( (SdrOle2Obj*) pObj)->GetObjRef().is() )
-                                {
-                                    pObj->SetLogicRect(aRect);
-                                }
-                            }
+                            sdr::legacy::SetLogicRect(*pSelected, aRect);
                         }
                     }
                 }
@@ -384,7 +360,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
         // #98721#
         case SID_FM_CREATE_FIELDCONTROL:
             {
-                SFX_REQUEST_ARG( rReq, pDescriptorItem, SfxUnoAnyItem, SID_FM_DATACCESS_DESCRIPTOR, sal_False );
+                SFX_REQUEST_ARG( rReq, pDescriptorItem, SfxUnoAnyItem, SID_FM_DATACCESS_DESCRIPTOR );
                 DBG_ASSERT( pDescriptorItem, "SID_FM_CREATE_FIELDCONTROL: invalid request args!" );
 
                 if(pDescriptorItem)
@@ -392,44 +368,52 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                     //! merge with ScViewFunc::PasteDataFormat (SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE)?
 
                     ScDrawView* pDrView = GetScDrawView();
-                    SdrPageView* pPageView = pDrView ? pDrView->GetSdrPageView() : NULL;
-                    if(pPageView)
-                    {
                         ::svx::ODataAccessDescriptor aDescriptor(pDescriptorItem->GetValue());
                         SdrObject* pNewDBField = pDrView->CreateFieldControl(aDescriptor);
 
                         if(pNewDBField)
                         {
-                            Rectangle aVisArea = pWin->PixelToLogic(Rectangle(Point(0,0), pWin->GetOutputSizePixel()));
-                            Point aObjPos(aVisArea.Center());
-                            Size aObjSize(pNewDBField->GetLogicRect().GetSize());
-                            aObjPos.X() -= aObjSize.Width() / 2;
-                            aObjPos.Y() -= aObjSize.Height() / 2;
-                            Rectangle aNewObjectRectangle(aObjPos, aObjSize);
+                            const basegfx::B2DPoint aOldCenter(pNewDBField->getSdrObjectTransformation() * basegfx::B2DPoint(0.5, 0.5));
+                            const basegfx::B2DPoint aNewCenter(pWin->GetLogicRange().getCenter());
 
-                            pNewDBField->SetLogicRect(aNewObjectRectangle);
+                            if(!aOldCenter.equal(aNewCenter))
+                            {
+                                sdr::legacy::transformSdrObject(
+                                    *pNewDBField,
+                                    basegfx::tools::createTranslateB2DHomMatrix(aNewCenter - aOldCenter));
+                            }
 
                             // controls must be on control layer, groups on front layer
-                            if ( pNewDBField->ISA(SdrUnoObj) )
-                                pNewDBField->NbcSetLayer(SC_LAYER_CONTROLS);
-                            else
-                                pNewDBField->NbcSetLayer(SC_LAYER_FRONT);
-                            if (pNewDBField->ISA(SdrObjGroup))
+                            if ( dynamic_cast< SdrUnoObj* >(pNewDBField) )
+                            {
+                                pNewDBField->SetLayer(SC_LAYER_CONTROLS);
+                            }
+                                else
+                            {
+                                pNewDBField->SetLayer(SC_LAYER_FRONT);
+                            }
+
+                            if (dynamic_cast< SdrObjGroup* >(pNewDBField))
                             {
                                 SdrObjListIter aIter( *pNewDBField, IM_DEEPWITHGROUPS );
                                 SdrObject* pSubObj = aIter.Next();
+
                                 while (pSubObj)
                                 {
-                                    if ( pSubObj->ISA(SdrUnoObj) )
-                                        pSubObj->NbcSetLayer(SC_LAYER_CONTROLS);
+                                    if ( dynamic_cast< SdrUnoObj* >(pSubObj) )
+                                    {
+                                        pSubObj->SetLayer(SC_LAYER_CONTROLS);
+                                    }
                                     else
-                                        pSubObj->NbcSetLayer(SC_LAYER_FRONT);
+                                    {
+                                        pSubObj->SetLayer(SC_LAYER_FRONT);
+                                    }
+
                                     pSubObj = aIter.Next();
                                 }
                             }
 
-                            pView->InsertObjectAtView(pNewDBField, *pPageView);
-                        }
+                        pView->InsertObjectAtView(*pNewDBField);
                     }
                 }
                 rReq.Done();

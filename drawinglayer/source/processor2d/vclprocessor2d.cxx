@@ -136,7 +136,8 @@ namespace drawinglayer
         {
             // decompose matrix to have position and size of text
             basegfx::B2DHomMatrix aLocalTransform(maCurrentTransformation * rTextCandidate.getTextTransform());
-            basegfx::B2DVector aFontScaling, aTranslate;
+            basegfx::B2DVector aFontScaling;
+            basegfx::B2DPoint aTranslate;
             double fRotate, fShearX;
             aLocalTransform.decompose(aFontScaling, aTranslate, fRotate, fShearX);
             bool bPrimitiveAccepted(false);
@@ -420,7 +421,8 @@ namespace drawinglayer
                 static bool bUseGraphicManager(true);
 
                 // decompose matrix to check for shear, rotate and mirroring
-                basegfx::B2DVector aScale, aTranslate;
+                basegfx::B2DVector aScale;
+                basegfx::B2DPoint aTranslate;
                 double fRotate, fShearX;
                 aLocalTransform.decompose(aScale, aTranslate, fRotate, fShearX);
 
@@ -894,7 +896,8 @@ namespace drawinglayer
         {
             // decompose matrix to check for shear, rotate and mirroring
             basegfx::B2DHomMatrix aLocalTransform(maCurrentTransformation * rMetaCandidate.getTransform());
-            basegfx::B2DVector aScale, aTranslate;
+            basegfx::B2DVector aScale;
+            basegfx::B2DPoint aTranslate;
             double fRotate, fShearX;
             aLocalTransform.decompose(aScale, aTranslate, fRotate, fShearX);
 
@@ -1467,7 +1470,7 @@ namespace drawinglayer
             // since DrawEPS will not be able e.g. to rotate the replacement. To be able
             // to do that, i added a boolean return to OutputDevice::DrawEPS(..)
             // to know when EPS was handled directly already.
-            basegfx::B2DRange aRange(0.0, 0.0, 1.0, 1.0);
+            basegfx::B2DRange aRange(basegfx::B2DRange::getUnitB2DRange());
             aRange.transform(maCurrentTransformation * rEpsPrimitive2D.getEpsTransform());
 
             if(!aRange.isEmpty())

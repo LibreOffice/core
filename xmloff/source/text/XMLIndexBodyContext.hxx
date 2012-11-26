@@ -46,8 +46,6 @@ class XMLIndexBodyContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLIndexBodyContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,

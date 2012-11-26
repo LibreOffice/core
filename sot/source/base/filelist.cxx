@@ -27,12 +27,9 @@
 #include<tools/list.hxx>
 #include<tools/stream.hxx>
 #include<tools/string.hxx>
-#include<tools/rtti.hxx>
 #include<sot/exchange.hxx>
 #include<sot/filelist.hxx>
 #include <osl/thread.h>
-
-TYPEINIT1_AUTOFACTORY( FileList, SvDataCopyStream );
 
 // String-Liste zum Speichern der Namen deklarieren
 DECLARE_LIST( FileStringList, String* )

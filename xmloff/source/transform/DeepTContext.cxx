@@ -39,8 +39,6 @@ using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-TYPEINIT1( XMLPersElemContentTContext, XMLPersAttrListTContext );
-
 void XMLPersElemContentTContext::AddContent( XMLTransformerContext *pContext )
 {
     OSL_ENSURE( pContext && pContext->IsPersistent(),

@@ -787,7 +787,7 @@ void IMPL_PrintListener_DataContainer::Notify( SfxBroadcaster& rBC, const SfxHin
 {
     if ( &rBC == m_pObjectShell )
     {
-        SfxPrintingHint* pPrintHint = PTR_CAST( SfxPrintingHint, &rHint );
+        const SfxPrintingHint* pPrintHint = dynamic_cast< const SfxPrintingHint* >( &rHint );
         if ( pPrintHint )
         {
             if ( pPrintHint->GetWhich() == com::sun::star::view::PrintableState_JOB_STARTED )

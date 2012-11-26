@@ -55,8 +55,6 @@ class XMLTextListBlockContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     // --> OD 2008-05-07 #refactorlists#
     // add optional parameter <bRestartNumberingAtSubList>
     XMLTextListBlockContext(

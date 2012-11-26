@@ -29,8 +29,6 @@
 #include <editeng/editrids.hrc>
 #include <editeng/eerdll.hxx>
 
-TYPEINIT1_FACTORY(SvxCharHiddenItem, SfxBoolItem, new SvxCharHiddenItem(sal_False, 0));
-
 /*-- 16.12.2003 15:24:25---------------------------------------------------
 
   -----------------------------------------------------------------------*/

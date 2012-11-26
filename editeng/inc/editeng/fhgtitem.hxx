@@ -52,10 +52,8 @@ class EDITENG_DLLPUBLIC SvxFontHeightItem : public SfxPoolItem
     sal_uInt16  nProp;              // default 100%
     SfxMapUnit ePropUnit;       // Percent, Twip, ...
 public:
-    TYPEINFO();
-
-    SvxFontHeightItem( const sal_uLong nSz /*= 240*/, const sal_uInt16 nPropHeight /*= 100*/,
-                       const sal_uInt16 nId  );
+    POOLITEM_FACTORY()
+    SvxFontHeightItem( const sal_uLong nSz = 240, const sal_uInt16 nPropHeight = 100, const sal_uInt16 nId = 0 );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
@@ -70,9 +68,9 @@ public:
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const;
-    virtual sal_uInt16           GetVersion( sal_uInt16 nItemVersion) const;
-    virtual int              ScaleMetrics( long nMult, long nDiv );
-    virtual int              HasMetrics() const;
+    virtual sal_uInt16       GetVersion( sal_uInt16 nItemVersion) const;
+    virtual void             ScaleMetrics( long nMult, long nDiv );
+    virtual bool             HasMetrics() const;
 
     inline SvxFontHeightItem& operator=(const SvxFontHeightItem& rSize)
         {

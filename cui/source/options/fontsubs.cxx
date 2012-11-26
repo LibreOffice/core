@@ -514,7 +514,7 @@ void    SvxFontSubstCheckListBox::KeyInput( const KeyEvent& rKEvt )
 /*                                                                   */
 /*********************************************************************/
 
-void SvxFontSubstCheckListBox::CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, sal_Bool bChecked)
+void SvxFontSubstCheckListBox::CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, bool bChecked)
 {
     if ( nPos < GetEntryCount() )
         SetCheckButtonState(
@@ -528,7 +528,7 @@ void SvxFontSubstCheckListBox::CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, sa
 /*                                                                   */
 /*********************************************************************/
 
-void SvxFontSubstCheckListBox::CheckEntry(SvLBoxEntry* pEntry, sal_uInt16 nCol, sal_Bool bChecked)
+void SvxFontSubstCheckListBox::CheckEntry(SvLBoxEntry* pEntry, sal_uInt16 nCol, bool bChecked)
 {
     if ( pEntry )
         SetCheckButtonState(

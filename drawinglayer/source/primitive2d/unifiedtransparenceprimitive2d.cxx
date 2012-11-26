@@ -49,18 +49,6 @@ namespace drawinglayer
         {
         }
 
-        bool UnifiedTransparencePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(GroupPrimitive2D::operator==(rPrimitive))
-            {
-                const UnifiedTransparencePrimitive2D& rCompare = (UnifiedTransparencePrimitive2D&)rPrimitive;
-
-                return (getTransparence() == rCompare.getTransparence());
-            }
-
-            return false;
-        }
-
         basegfx::B2DRange UnifiedTransparencePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
             // do not use the fallback to decomposition here since for a correct BoundRect we also

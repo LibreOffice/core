@@ -138,8 +138,8 @@ Reference<drawing::XLayer> SdUnoDrawView::getActiveLayer (void) throw ()
             break;
 
         // From the model get the current SdrLayer object via the layer admin.
-        SdrLayerAdmin& rLayerAdmin = pSdModel->GetLayerAdmin ();
-        SdrLayer* pLayer = rLayerAdmin.GetLayer (mrView.GetActiveLayer(), sal_True);
+        SdrLayerAdmin& rLayerAdmin = pSdModel->GetModelLayerAdmin();
+        SdrLayer* pLayer = rLayerAdmin.GetLayer (mrView.GetActiveLayer(), true);
         if (pLayer == NULL)
             break;
 
@@ -192,7 +192,7 @@ sal_Bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
 {
     bool bOk = true;
 
-    ::std::vector<SdrObject*> aObjects;
+    SdrObjectVector aObjects;
 
     SdrPage* pSdrPage = NULL;
 
@@ -205,7 +205,7 @@ sal_Bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
         if( pShape && (pShape->GetSdrObject() != NULL) )
         {
             SdrObject* pObj = pShape->GetSdrObject();
-            pSdrPage = pObj->GetPage();
+            pSdrPage = pObj->getSdrPageFromSdrObject();
             aObjects.push_back( pObj );
         }
         else
@@ -236,9 +236,9 @@ sal_Bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
 
                     if( pSdrPage == NULL )
                     {
-                        pSdrPage = pObj->GetPage();
+                        pSdrPage = pObj->getSdrPageFromSdrObject();
                     }
-                    else if( pSdrPage != pObj->GetPage() )
+                    else if( pSdrPage != pObj->getSdrPageFromSdrObject() )
                     {
                         bOk = false;
                         break;
@@ -255,28 +255,19 @@ sal_Bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
         if( pSdrPage )
         {
             setMasterPageMode( pSdrPage->IsMasterPage() );
-            mrDrawViewShell.SwitchPage( (pSdrPage->GetPageNum() - 1) >> 1 );
+            mrDrawViewShell.SwitchPage( (pSdrPage->GetPageNumber() - 1) >> 1 );
             mrDrawViewShell.WriteFrameViewData();
         }
 
-        SdrPageView *pPV = mrView.GetSdrPageView();
-
-        if(pPV)
-        {
             // first deselect all
-            mrView.UnmarkAllObj( pPV );
+        mrView.UnmarkAllObj();
 
-            ::std::vector<SdrObject*>::iterator aIter( aObjects.begin() );
-            const ::std::vector<SdrObject*>::iterator aEnd( aObjects.end() );
+        SdrObjectVector::iterator aIter( aObjects.begin() );
+        const SdrObjectVector::iterator aEnd( aObjects.end() );
             while( aIter != aEnd )
             {
                 SdrObject* pObj = (*aIter++);
-                mrView.MarkObj( pObj, pPV );
-            }
-        }
-        else
-        {
-            bOk = false;
+            mrView.MarkObj( *pObj );
         }
     }
 
@@ -296,29 +287,27 @@ Any SAL_CALL SdUnoDrawView::getSelection()
 
     if( !aAny.hasValue() )
     {
-        const SdrMarkList& rMarkList = mrView.GetMarkedObjectList();
-        sal_uInt32 nCount = rMarkList.GetMarkCount();
-        if( nCount )
+        const SdrObjectVector aSelection(mrView.getSelectedSdrObjectVectorFromSdrMarkView());
+
+        if( aSelection.size() )
         {
             Reference< drawing::XShapes > xShapes( SvxShapeCollection_NewInstance(), UNO_QUERY );
-            for( sal_uInt32 nNum = 0; nNum < nCount; nNum++)
+
+            for( sal_uInt32 nNum(0); nNum < aSelection.size(); nNum++)
             {
-                SdrMark *pMark = rMarkList.GetMark(nNum);
-                if(pMark==NULL)
+                SdrObject* pObj = aSelection[nNum];
+
+                if(!pObj->getSdrPageFromSdrObject())
                     continue;
 
-                SdrObject *pObj = pMark->GetMarkedSdrObj();
-                if(pObj==NULL || pObj->GetPage() == NULL)
-                    continue;
-
-                Reference< drawing::XDrawPage > xPage( pObj->GetPage()->getUnoPage(), UNO_QUERY);
+                Reference< drawing::XDrawPage > xPage( pObj->getSdrPageFromSdrObject()->getUnoPage(), UNO_QUERY);
 
                 if(!xPage.is())
                     continue;
 
                 SvxDrawPage* pDrawPage = SvxDrawPage::getImplementation( xPage );
 
-                if(pDrawPage==NULL)
+                if(!pDrawPage)
                     continue;
 
                 Reference< drawing::XShape > xShape( pObj->getUnoShape(), UNO_QUERY );
@@ -492,7 +481,7 @@ void SAL_CALL SdUnoDrawView::setCurrentPage (
         mrDrawViewShell.GetView()->SdrEndTextEdit();
 
         setMasterPageMode( pSdrPage->IsMasterPage() );
-        mrDrawViewShell.SwitchPage( (pSdrPage->GetPageNum() - 1) >> 1 );
+        mrDrawViewShell.SwitchPage( (pSdrPage->GetPageNumber() - 1) >> 1 );
         mrDrawViewShell.WriteFrameViewData();
     }
 }
@@ -505,7 +494,7 @@ Reference< drawing::XDrawPage > SAL_CALL SdUnoDrawView::getCurrentPage()
     Reference< drawing::XDrawPage >  xPage;
 
     SdrPageView *pPV = mrView.GetSdrPageView();
-    SdrPage* pPage = pPV ? pPV->GetPage() : NULL;
+    SdrPage* pPage = pPV ? &pPV->getSdrPageFromSdrPageView() : NULL;
 
     if(pPage)
         xPage = Reference< drawing::XDrawPage >::query( pPage->getUnoPage() );
@@ -544,19 +533,19 @@ void SdUnoDrawView::SetZoom( sal_Int16 nZoom )
 
 void SdUnoDrawView::SetViewOffset(const awt::Point& rWinPos )
 {
-    Point aWinPos( rWinPos.X, rWinPos.Y );
+    basegfx::B2DPoint aWinPos( rWinPos.X, rWinPos.Y );
     aWinPos += mrDrawViewShell.GetViewOrigin();
     mrDrawViewShell.SetWinViewPos( aWinPos, true );
 }
 
 awt::Point SdUnoDrawView::GetViewOffset() const
 {
-    Point aRet;
+    basegfx::B2DPoint aRet;
 
     aRet = mrDrawViewShell.GetWinViewPos();
     aRet -= mrDrawViewShell.GetViewOrigin();
 
-    return awt::Point( aRet.X(), aRet.Y() );
+    return awt::Point( basegfx::fround(aRet.getX()), basegfx::fround(aRet.getY()) );
 }
 
 void SdUnoDrawView::SetZoomType ( sal_Int16 nType )

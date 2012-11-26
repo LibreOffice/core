@@ -98,7 +98,7 @@ ScTabControl::~ScTabControl()
 
 sal_uInt16 ScTabControl::GetMaxId() const
 {
-    sal_uInt16 nVisCnt = GetPageCount();
+    const sal_uInt16 nVisCnt(static_cast<sal_uInt16>(GetPageCount()));
     if (nVisCnt)
         return GetPageId(nVisCnt-1);
 
@@ -224,8 +224,10 @@ void ScTabControl::Select()
     sal_uInt16 nPage = nCurId - 1;
 
     // OLE-inplace deaktivieren
-    if ( nPage != static_cast<sal_uInt16>(pViewData->GetTabNo()) )
-        pViewData->GetView()->DrawMarkListHasChanged();
+    // TTTT: this was in no case a inplace activate; maybe a rebuild of selection visualisation
+    // (now handleSelectionChange())
+//  if ( nPage != static_cast<sal_uInt16>(pViewData->GetTabNo()) )
+//      pViewData->GetView()->DrawMarkListHasChanged();
 
     //  InputEnterHandler nur wenn nicht Referenzeingabe
 
@@ -486,9 +488,11 @@ sal_uInt16 lcl_DocShellNr( ScDocument* pDoc )
     SfxObjectShell* pShell = SfxObjectShell::GetFirst();
     while ( pShell )
     {
-        if ( pShell->Type() == TYPE(ScDocShell) )
+        ScDocShell* pScDocShell = dynamic_cast< ScDocShell* >(pShell);
+
+        if ( pScDocShell )
         {
-            if ( ((ScDocShell*)pShell)->GetDocument() == pDoc )
+            if ( pScDocShell->GetDocument() == pDoc )
                 return nShellCnt;
 
             ++nShellCnt;

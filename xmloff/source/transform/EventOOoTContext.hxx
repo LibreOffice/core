@@ -33,8 +33,6 @@ class XMLEventOOoTransformerContext : public XMLPersElemContentTContext
     sal_Bool m_bPersistent;
 
 public:
-    TYPEINFO();
-
     XMLEventOOoTransformerContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName,
                               sal_Bool bPersistent = sal_False  );

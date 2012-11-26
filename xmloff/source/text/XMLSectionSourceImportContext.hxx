@@ -40,8 +40,6 @@ class XMLSectionSourceImportContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLSectionSourceImportContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,

@@ -52,8 +52,8 @@ public:
 
     void            SaveSettings() const;
     sal_uInt16          GetFadeSteps() const { return (sal_uInt16) aMtfSteps.GetValue(); }
-    sal_Bool            IsAttributeFade() const { return aCbxAttributes.IsChecked(); }
-    sal_Bool            IsOrientationFade() const { return aCbxOrientation.IsChecked(); }
+    bool            IsAttributeFade() const { return aCbxAttributes.IsChecked(); }
+    bool            IsOrientationFade() const { return aCbxOrientation.IsChecked(); }
 
 private:
     FixedLine       aGrpPreset;

@@ -40,6 +40,11 @@
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
 
+#ifdef DBG_UTIL
+#include <svx/svdobj.hxx>
+#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 using namespace com::sun::star;
@@ -65,14 +70,16 @@ namespace
 
         // bitfield
         // text animation allowed?
-        unsigned                                        mbTextAnimationAllowed : 1;
+        bool                                            mbTextAnimationAllowed : 1;
 
         // graphic animation allowed?
-        unsigned                                        mbGraphicAnimationAllowed : 1;
+        bool                                            mbGraphicAnimationAllowed : 1;
 
         // as tooling, the process() implementation takes over API handling and calls this
         // virtual render method when the primitive implementation is BasePrimitive2D-based.
-        virtual void processBasePrimitive2D(const drawinglayer::primitive2d::BasePrimitive2D& rCandidate);
+        virtual void processBasePrimitive2D(
+            const drawinglayer::primitive2d::BasePrimitive2D& rCandidate,
+            const drawinglayer::primitive2d::Primitive2DReference& rUnoCandidate);
 
     public:
         AnimatedExtractingProcessor2D(
@@ -102,7 +109,9 @@ namespace
     {
     }
 
-    void AnimatedExtractingProcessor2D::processBasePrimitive2D(const drawinglayer::primitive2d::BasePrimitive2D& rCandidate)
+    void AnimatedExtractingProcessor2D::processBasePrimitive2D(
+        const drawinglayer::primitive2d::BasePrimitive2D& rCandidate,
+        const drawinglayer::primitive2d::Primitive2DReference& /*rUnoCandidate*/)
     {
         // known implementation, access directly
         switch(rCandidate.getPrimitive2DID())
@@ -171,7 +180,7 @@ namespace sdr
         ViewObjectContact::ViewObjectContact(ObjectContact& rObjectContact, ViewContact& rViewContact)
         :   mrObjectContact(rObjectContact),
             mrViewContact(rViewContact),
-            maObjectRange(),
+            maViewDependentRange(),
             mxPrimitive2DSequence(),
             mpPrimitiveAnimation(0),
             mbLazyInvalidate(false)
@@ -186,9 +195,9 @@ namespace sdr
         ViewObjectContact::~ViewObjectContact()
         {
             // invalidate in view
-            if(!maObjectRange.isEmpty())
+            if(!maViewDependentRange.isEmpty())
             {
-                GetObjectContact().InvalidatePartOfView(maObjectRange);
+                GetObjectContact().InvalidatePartOfView(maViewDependentRange);
             }
 
             // delete PrimitiveAnimation
@@ -210,9 +219,9 @@ namespace sdr
             GetViewContact().RemoveViewObjectContact(*this);
         }
 
-        const basegfx::B2DRange& ViewObjectContact::getObjectRange() const
+        const basegfx::B2DRange& ViewObjectContact::getViewDependentRange() const
         {
-            if(maObjectRange.isEmpty())
+            if(maViewDependentRange.isEmpty())
             {
                 // if range is not computed (new or LazyInvalidate objects), force it
                 const DisplayInfo aDisplayInfo;
@@ -221,12 +230,12 @@ namespace sdr
                 if(xSequence.hasElements())
                 {
                     const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-                    const_cast< ViewObjectContact* >(this)->maObjectRange =
+                    const_cast< ViewObjectContact* >(this)->maViewDependentRange =
                         drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(xSequence, rViewInformation2D);
                 }
             }
 
-            return maObjectRange;
+            return maViewDependentRange;
         }
 
         void ViewObjectContact::ActionChanged()
@@ -237,20 +246,28 @@ namespace sdr
                 mbLazyInvalidate = true;
 
                 // force ObjectRange
-                getObjectRange();
+                getViewDependentRange();
 
-                if(!maObjectRange.isEmpty())
+                if(!maViewDependentRange.isEmpty())
                 {
                     // invalidate current valid range
-                    GetObjectContact().InvalidatePartOfView(maObjectRange);
-
-                    // reset ObjectRange, it needs to be recalculated
-                    maObjectRange.reset();
+                    GetObjectContact().InvalidatePartOfView(maViewDependentRange);
                 }
 
                 // register at OC for lazy invalidate
                 GetObjectContact().setLazyInvalidate(*this);
             }
+
+            // reset local buffered primitive sequence. Do this always, there are
+            // cases where in-between ActionChanged calls someone requests the
+            // primitives again. Leaving them would mean to miss evtl. valid changes
+            if(mxPrimitive2DSequence.hasElements())
+            {
+                mxPrimitive2DSequence.realloc(0);
+            }
+
+            // reset ObjectRange (always, see above)
+            maViewDependentRange.reset();
         }
 
         void ViewObjectContact::triggerLazyInvalidate()
@@ -261,12 +278,12 @@ namespace sdr
                 mbLazyInvalidate = false;
 
                 // force ObjectRange
-                getObjectRange();
+                getViewDependentRange();
 
-                if(!maObjectRange.isEmpty())
+                if(!maViewDependentRange.isEmpty())
                 {
                     // invalidate current valid range
-                    GetObjectContact().InvalidatePartOfView(maObjectRange);
+                    GetObjectContact().InvalidatePartOfView(maViewDependentRange);
                 }
             }
         }
@@ -277,10 +294,6 @@ namespace sdr
             // force creation of the new VOC and trigger it's refresh, so it
             // will take part in LazyInvalidate immediately
             rChild.GetViewObjectContact(GetObjectContact()).ActionChanged();
-
-            // forward action to ObjectContact
-            // const ViewObjectContact& rChildVOC = rChild.GetViewObjectContact(GetObjectContact());
-            // GetObjectContact().InvalidatePartOfView(rChildVOC.getObjectRange());
         }
 
         void ViewObjectContact::checkForPrimitive2DAnimations()
@@ -318,6 +331,10 @@ namespace sdr
             // get the view-independent Primitive from the viewContact
             drawinglayer::primitive2d::Primitive2DSequence xRetval(GetViewContact().getViewIndependentPrimitive2DSequence());
 
+#ifdef DBG_UTIL
+            static bool bShowCoordinateSystem(true);
+#endif
+
             if(xRetval.hasElements())
             {
                 // handle GluePoint
@@ -330,6 +347,41 @@ namespace sdr
                         drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xRetval, xGlue);
                     }
                 }
+
+#ifdef DBG_UTIL
+                // for transformation test purposes, add a debug possibility to optically
+                // show the coordiante system axes x in red and y in green
+                if(bShowCoordinateSystem && !GetObjectContact().isOutputToPrinter())
+                {
+                    SdrObject* pObj = GetViewContact().TryToGetSdrObject();
+
+                    if(pObj)
+                    {
+                        const basegfx::B2DHomMatrix& rMatrix = pObj->getSdrObjectTransformation();
+                        const basegfx::B2DPoint aTopLeft(rMatrix * basegfx::B2DPoint(0.0, 0.0));
+                        const basegfx::B2DPoint aTopRight(rMatrix * basegfx::B2DPoint(1.0, 0.0));
+                        const basegfx::B2DPoint aBottomLeft(rMatrix * basegfx::B2DPoint(0.0, 1.0));
+                        basegfx::B2DPolygon aXAxis, aYAxis;
+
+                        aXAxis.append(aTopLeft);
+                        aXAxis.append(aTopRight);
+
+                        aYAxis.append(aTopLeft);
+                        aYAxis.append(aBottomLeft);
+
+                        drawinglayer::primitive2d::Primitive2DSequence aCoordinate(2);
+
+                        aCoordinate[0] = new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+                            aXAxis,
+                            basegfx::BColor(1.0, 0.0, 0.0));
+                        aCoordinate[1] = new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+                            aYAxis,
+                            basegfx::BColor(0.0, 1.0, 0.0));
+
+                        drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xRetval, aCoordinate);
+                    }
+                }
+#endif
 
                 // handle ghosted
                 if(isPrimitiveGhosted(rDisplayInfo))
@@ -346,32 +398,27 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DSequence ViewObjectContact::getPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
         {
-            drawinglayer::primitive2d::Primitive2DSequence xNewPrimitiveSequence;
-
-            // take care of redirectors and create new list
-            ViewObjectContactRedirector* pRedirector = GetObjectContact().GetViewObjectContactRedirector();
-
-            if(pRedirector)
+            if(!mxPrimitive2DSequence.hasElements())
             {
-                xNewPrimitiveSequence = pRedirector->createRedirectedPrimitive2DSequence(*this, rDisplayInfo);
-            }
-            else
-            {
-                xNewPrimitiveSequence = createPrimitive2DSequence(rDisplayInfo);
-            }
+                // take care of redirectors and create new list
+                ViewObjectContactRedirector* pRedirector = GetObjectContact().GetViewObjectContactRedirector();
 
-            // local up-to-date checks. New list different from local one?
-            if(!drawinglayer::primitive2d::arePrimitive2DSequencesEqual(mxPrimitive2DSequence, xNewPrimitiveSequence))
-            {
-                // has changed, copy content
-                const_cast< ViewObjectContact* >(this)->mxPrimitive2DSequence = xNewPrimitiveSequence;
+                // create primitive list on demand
+                if(pRedirector)
+                {
+                    const_cast< ViewObjectContact* >(this)->mxPrimitive2DSequence = pRedirector->createRedirectedPrimitive2DSequence(*this, rDisplayInfo);
+                }
+                else
+                {
+                    const_cast< ViewObjectContact* >(this)->mxPrimitive2DSequence = createPrimitive2DSequence(rDisplayInfo);
+                }
 
                 // check for animated stuff
                 const_cast< ViewObjectContact* >(this)->checkForPrimitive2DAnimations();
 
                 // always update object range when PrimitiveSequence changes
                 const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-                const_cast< ViewObjectContact* >(this)->maObjectRange =
+                const_cast< ViewObjectContact* >(this)->maViewDependentRange =
                     drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(mxPrimitive2DSequence, rViewInformation2D);
             }
 

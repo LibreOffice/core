@@ -90,7 +90,7 @@ namespace sd { namespace toolpanel
     Reference< XAccessible > SAL_CALL ToolPanel::createAccessible( const Reference< XAccessible >& i_rParentAccessible ) throw (RuntimeException)
     {
         ToolPanelGuard aGuard( *this );
-        Reference< XAccessible > xAccessible( m_pControl->GetWindow()->GetAccessible( sal_False ) );
+        Reference< XAccessible > xAccessible( m_pControl->GetWindow()->GetAccessible( false ) );
         if ( !xAccessible.is() )
         {
             xAccessible.set( m_pControl->CreateAccessibleObject( i_rParentAccessible ) );

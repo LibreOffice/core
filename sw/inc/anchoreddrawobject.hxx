@@ -40,8 +40,7 @@ class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
         bool mbValidPos;
 
         // rectangle, keeping the last object rectangle after the postioning
-        // --> OD 2004-09-29 #i34748# - change <maLastObjRect> to a pointer
-        Rectangle* mpLastObjRect;
+        Rectangle maLastObjRect;
 
         // boolean, indicating that anchored drawing object hasn't been attached
         // to a anchor frame yet. Once, it is attached to a anchor frame the
@@ -137,8 +136,6 @@ class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
         virtual const SwRect GetObjBoundRect() const;
         // <--
     public:
-        TYPEINFO();
-
         SwAnchoredDrawObject();
         virtual ~SwAnchoredDrawObject();
 
@@ -156,13 +153,8 @@ class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
 
         // accessors to the object area and its position
         virtual const SwRect GetObjRect() const;
-        // --> OD 2004-09-29 #i34748# - change return type to a pointer.
-        // Return value can be NULL.
-        const Rectangle* GetLastObjRect() const;
-        // <--
-        // --> OD 2004-09-29 #i34748# - change method
-        void SetLastObjRect( const Rectangle& _rNewObjRect );
-        // <--
+        const Rectangle& GetLastObjRect() const;
+        void SetLastObjRect(const Rectangle& _rNewObjRect);
 
         /** adjust positioning and alignment attributes for new anchor frame
 

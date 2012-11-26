@@ -200,7 +200,7 @@ void ImpSvMEdit::ImpUpdateSrollBarVis( WinBits nWinStyle )
           sal_Bool bNeedVScroll = ( nWinStyle & WB_VSCROLL ) == WB_VSCROLL;
     const sal_Bool bNeedHScroll = ( nWinStyle & WB_HSCROLL ) == WB_HSCROLL;
 
-    const sal_Bool bAutoVScroll = ( nWinStyle & WB_AUTOVSCROLL ) == WB_AUTOVSCROLL;
+    const bool bAutoVScroll = ( nWinStyle & WB_AUTOVSCROLL ) == WB_AUTOVSCROLL;
     if ( !bNeedVScroll && bAutoVScroll )
     {
         TextEngine& rEngine( *mpTextWindow->GetTextEngine() );
@@ -563,17 +563,18 @@ String ImpSvMEdit::GetTextLines( LineEnd aSeparator ) const
 
 void ImpSvMEdit::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.ISA( TextHint ) )
+    const TextHint* pTextHint = dynamic_cast< const TextHint* >(&rHint);
+
+    if ( pTextHint )
     {
-        const TextHint& rTextHint = (const TextHint&)rHint;
-        if( rTextHint.GetId() == TEXT_HINT_VIEWSCROLLED )
+        if( pTextHint->GetId() == TEXT_HINT_VIEWSCROLLED )
         {
             if ( mpHScrollBar )
                 ImpSetHScrollBarThumbPos();
             if ( mpVScrollBar )
                 mpVScrollBar->SetThumbPos( mpTextWindow->GetTextView()->GetStartDocPos().Y() );
         }
-        else if( rTextHint.GetId() == TEXT_HINT_TEXTHEIGHTCHANGED )
+        else if( pTextHint->GetId() == TEXT_HINT_TEXTHEIGHTCHANGED )
         {
             if ( mpTextWindow->GetTextView()->GetStartDocPos().Y() )
             {
@@ -585,7 +586,7 @@ void ImpSvMEdit::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
             ImpSetScrollBarRanges();
         }
-        else if( rTextHint.GetId() == TEXT_HINT_TEXTFORMATTED )
+        else if( pTextHint->GetId() == TEXT_HINT_TEXTFORMATTED )
         {
             if ( mpHScrollBar )
             {
@@ -598,7 +599,7 @@ void ImpSvMEdit::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 }
             }
         }
-        else if( rTextHint.GetId() == TEXT_HINT_MODIFIED )
+        else if( pTextHint->GetId() == TEXT_HINT_MODIFIED )
         {
             pSvMultiLineEdit->Modify();
         }

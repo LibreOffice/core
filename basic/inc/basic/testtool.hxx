@@ -133,7 +133,6 @@ private:
     String maAdditionalExecutionStatus;
 
 public:
-            TYPEINFO();
             TTExecutionStatusHint( sal_uInt16 nType, sal_Char *pExecutionStatus, const sal_Char *pAdditionalExecutionStatus = "" )
                 : SfxSimpleHint(SBX_HINT_EXECUTION_STATUS_INFORMATION)
                 , mnType( nType )
@@ -150,7 +149,7 @@ public:
 
     const String& GetExecutionStatus() const { return maExecutionStatus; }
     const String& GetAdditionalExecutionStatus() const { return maAdditionalExecutionStatus; }
-    sal_uInt16 GetType(){ return mnType; }
+    sal_uInt16 GetType() const { return mnType; }
 };
 
 #endif // _BASIC_TESTTOOL_HXX_

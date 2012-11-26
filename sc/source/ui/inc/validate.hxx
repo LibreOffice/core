@@ -255,7 +255,6 @@ private:
     void            RefInputDonePostHdl();
     ScValidationDlg * GetValidationDlg();
 
-    //TYPEINFO();
     void            TidyListBoxes();
 public:
     sal_uInt16          GetAllowEntryPos();

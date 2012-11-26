@@ -484,8 +484,6 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
             this->EndTextEdit();
         if( m_pDrawViewWrapper )
         {
-            m_pDrawViewWrapper->UnmarkAll();
-            //m_pDrawViewWrapper->hideMarkHandles(); todo??
             m_pDrawViewWrapper->HideSdrPage();
         }
     }
@@ -737,7 +735,7 @@ void ChartController::impl_createDrawViewController()
     {
         if( m_pDrawModelWrapper )
         {
-            m_pDrawViewWrapper = new DrawViewWrapper(&m_pDrawModelWrapper->getSdrModel(),m_pChartWindow,true);
+            m_pDrawViewWrapper = new DrawViewWrapper(m_pDrawModelWrapper->getSdrModel(),m_pChartWindow,true);
             m_pDrawViewWrapper->attachParentReferenceDevice( getModel() );
         }
     }

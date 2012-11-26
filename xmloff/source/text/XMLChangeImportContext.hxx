@@ -52,8 +52,6 @@ class XMLChangeImportContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     /**
      * import a change mark
      * (<text:change>, <text:change-start>, <text:change-end>)

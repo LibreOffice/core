@@ -37,6 +37,7 @@ class SdrPage;
 class SfxItemSet;
 class ScDocument;
 struct ScCaptionInitData;
+namespace basegfx { class B2DRange; }
 
 // ============================================================================
 
@@ -227,9 +228,12 @@ public:
             otherwise. The Calc document is the owner of the note object.
      */
     static ScPostIt*    CreateNoteFromObjectData(
-                            ScDocument& rDoc, const ScAddress& rPos,
-                            SfxItemSet* pItemSet, OutlinerParaObject* pOutlinerObj,
-                            const Rectangle& rCaptionRect, bool bShown,
+        ScDocument& rDoc,
+        const ScAddress& rPos,
+        SfxItemSet* pItemSet,
+        OutlinerParaObject* pOutlinerObj,
+        const basegfx::B2DRange& rCaptionRange,
+        bool bShown,
                             bool bAlwaysCreateCaption );
 
     /** Creates a cell note based on the passed string and inserts it into the

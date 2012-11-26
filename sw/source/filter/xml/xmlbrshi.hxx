@@ -49,8 +49,6 @@ private:
                const SvXMLUnitConverter& rUnitConv );
 
 public:
-    TYPEINFO();
-
     SwXMLBrushItemImportContext(
             SvXMLImport& rImport,
             sal_uInt16 nPrfx,

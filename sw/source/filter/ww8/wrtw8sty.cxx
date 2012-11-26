@@ -2016,8 +2016,10 @@ bool WW8_WrPlcSubDoc::WriteGenericTxt( WW8Export& rWrt, sal_uInt8 nTTyp,
                     rWrt.GetOCXExp().ExportControl(rWrt,&rObj);
                     rWrt.nTxtTyp = nOldTyp;
                 }
-                else if( rObj.ISA( SdrTextObj ) )
+                else if( dynamic_cast< const SdrTextObj* >(&rObj) )
+                {
                     rWrt.WriteSdrTextObj(rObj, nTTyp);
+                }
                 else
                 {
                     const SwFrmFmt* pFmt = ::FindFrmFmt( &rObj );
@@ -2200,7 +2202,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                     // is it an writer or sdr - textbox?
                     const SdrObject* pObj = (SdrObject*)aCntnt[ i ];
                     sal_Int32 nCnt = 1;
-                    if (pObj && !pObj->ISA( SdrTextObj ) )
+                    if ( pObj && !dynamic_cast< const SdrTextObj* >(pObj) )
                     {
                         // find the "highest" SdrObject of this
                         const SwFrmFmt& rFmt = *::FindFrmFmt( pObj );

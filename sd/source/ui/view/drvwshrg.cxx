@@ -92,9 +92,6 @@ SFX_IMPL_INTERFACE(DrawViewShell, SfxShell, SdResId(STR_DRAWVIEWSHELL))
 }
 
 
-TYPEINIT1( DrawViewShell, ViewShell );
-
-
 // SdGraphicViewShell
 
 
@@ -116,8 +113,6 @@ SFX_IMPL_INTERFACE(GraphicViewShell, SfxShell, SdResId(STR_DRAWVIEWSHELL)) //SOH
     SFX_CHILDWINDOW_REGISTRATION( SID_SEARCH_DLG );
     SFX_CHILDWINDOW_REGISTRATION( ::avmedia::MediaPlayer::GetChildWindowId() );
 }
-
-TYPEINIT1( GraphicViewShell, DrawViewShell );
 
 
 } // end of namespace sd

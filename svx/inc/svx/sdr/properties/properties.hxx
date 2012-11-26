@@ -26,6 +26,7 @@
 
 #include <sal/types.h>
 #include "svx/svxdllapi.h"
+#include <boost/utility.hpp>
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
@@ -53,12 +54,14 @@ namespace sdr
     namespace properties
     {
         class SVX_DLLPUBLIC BaseProperties
+        :   private boost::noncopyable
         {
-        protected:
+        private:
             // the owner of this Properties. Set from constructor and not
             // to be changed in any way.
             SdrObject&                                      mrObject;
 
+        protected:
             // create a new object specific itemset with object specific ranges.
             virtual SfxItemSet& CreateObjectSpecificItemSet(SfxItemPool& pPool) = 0;
 
@@ -70,7 +73,7 @@ namespace sdr
 
             // Test changeability for a single item. If a implementation wants to prevent
             // changing an item this method may be overloaded.
-            virtual sal_Bool AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0) const = 0;
+            virtual bool AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0) const = 0;
 
             // Do the internal ItemChange. If only nWhich is given, the item needs to be cleared.
             // Also needs to handle if nWhich and pNewItem is 0, which means to clear all items.
@@ -114,7 +117,7 @@ namespace sdr
             virtual void SetObjectItemSet(const SfxItemSet& rSet) = 0;
 
             // Set merged ItemSet. Normally, this maps to SetObjectItemSet().
-            virtual void SetMergedItemSet(const SfxItemSet& rSet, sal_Bool bClearAllItems = sal_False);
+            virtual void SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems = false);
 
             // Set single item at the local ItemSet. Uses AllowItemChange(),
             // ItemChange(), PostItemChange() and ItemSetChanged() calls.
@@ -143,7 +146,7 @@ namespace sdr
 
             // Set a new StyleSheet. Registers as listener at the StyleSheet to get knowledge
             // of StyleSheet changes.
-            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr) = 0;
+            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr) = 0;
 
             // Get the installed StyleSheet.
             virtual SfxStyleSheet* GetStyleSheet() const = 0;
@@ -151,13 +154,6 @@ namespace sdr
             // Scale the local ItemSet as far as it contains metric items. This needs to be
             // overloaded to do it for hierarchical objects like e.g. groups.
             virtual void Scale(const Fraction& rScale);
-
-            // Move local items to a new ItemPool. This needs to be
-            // overloaded to do it for hierarchical objects like e.g. groups.
-            virtual void MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel = 0L);
-
-            // Set new model.
-            virtual void SetModel(SdrModel* pOldModel, SdrModel* pNewModel);
 
             // force all attributes which come from styles to hard attributes
             // to be able to live without the style.
@@ -168,15 +164,10 @@ namespace sdr
             // will be changed these broadcasts will no longer be needed.
             //void SetItemAndBroadcast(const SfxPoolItem& rItem);
             //void ClearItemAndBroadcast(const sal_uInt16 nWhich = 0);
-            void SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, sal_Bool bClearAllItems = sal_False);
+            void SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, bool bClearAllItems = false);
 
             // Just a convenient shortcut for GetObjectItemSet().Get(nWhich).
             const SfxPoolItem& GetItem(const sal_uInt16 nWhich) const;
-
-            // support for convenient broadcasting. Used from SetMergedItemAndBroadcast(),
-            // ClearItemAndBroadcast() and SetItemSetAndBroadcast(), see above.
-            // But also from inside SdrObjects.
-            void BroadcastItemChange(const ItemChangeBroadcaster& rChange);
 
             // #i101556# add versioning mechanism; used from e.g. text attribute set to
             // allow detection of e.g. style sheet or single text attribute changes. The

@@ -203,9 +203,11 @@ XubString __EXPORT MyEditEngine::CalcFieldValue( const SvxFieldItem& rField, USH
     if ( !pField )
         return String( RTL_CONSTASCII_USTRINGPARAM( "<Empty>" ) );
 
-    if ( pField->ISA( SvxDateField ) )
+    if ( dynamic_cast< SvxDateField* >(pField) )
+    {
         return ((const SvxDateField*)pField)->GetFormatted( LANGUAGE_SYSTEM, LANGUAGE_SYSTEM );
-    else if ( pField->ISA( SvxURLField ) )
+    }
+    else if ( dynamic_cast< SvxURLField* >(pField) )
     {
         const SvxURLField* pURL = (const SvxURLField*)pField;
         if ( !bURLClicked )
@@ -234,7 +236,7 @@ void __EXPORT MyEditEngine::FieldClicked( const SvxFieldItem& rField, USHORT nPa
     if ( !pField )
         return;
 
-    if ( pField->ISA( SvxURLField ) )
+    if ( dynamic_cast< SvxURLField* >(pField) )
     {
         bURLClicked = TRUE;
         UpdateFields();
@@ -799,7 +801,7 @@ IMPL_LINK( EditMainWindow, TBSelect, ToolBox *, p )
         case TB_IDLE:   pEditEngine->EnableIdleFormatter( !pEditEngine->IsIdleFormatterEnabled() );
                         break;
         case TB_INSFLD: {
-                        static BYTE nFld = 0;
+                        static sal_uInt8 nFld = 0;
                         if ( nFld > 2 )
                             nFld = 0;
                         if ( nFld == 0 )

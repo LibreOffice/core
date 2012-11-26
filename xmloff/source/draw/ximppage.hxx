@@ -29,7 +29,6 @@
 #include <xmloff/nmspmap.hxx>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/office/XAnnotationAccess.hpp>
-#include <tools/rtti.hxx>
 #include "ximpshap.hxx"
 
 //////////////////////////////////////////////////////////////////////////////
@@ -66,11 +65,9 @@ protected:
     /** sets the properties from a page master style with the given name on this contexts page */
     void SetPageMaster( rtl::OUString& rsPageMasterName );
 
-    void SetNavigationOrder();
+    void SetUserNavigationOrder();
 
 public:
-    TYPEINFO();
-
     SdXMLGenericPageContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);

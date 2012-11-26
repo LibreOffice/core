@@ -44,7 +44,6 @@
 #include "basicmod.hxx"
 #include "unomodel.hxx"
 
-TYPEINIT1(BasicDocShell, SfxObjectShell);
 DBG_NAME(BasicDocShell);
 
 SFX_IMPL_OBJECTFACTORY( BasicDocShell, SvGlobalName(), SFXOBJECTSHELL_STD_NORMAL, "sbasic" )

@@ -23,7 +23,6 @@
 #ifndef _SVX_FMVWIMP_HXX
 #define _SVX_FMVWIMP_HXX
 
-#include "svx/svdmark.hxx"
 #include "fmdocumentclassification.hxx"
 
 /** === begin UNO includes === **/
@@ -48,12 +47,9 @@
 #include <comphelper/uno3.hxx>
 #include <comphelper/componentcontext.hxx>
 #include <rtl/ref.hxx>
+#include <svx/svdobj.hxx>
 
-//class SdrPageViewWinRec;
 class SdrPageWindow;
-
-class SdrPageView;
-class SdrObject;
 class FmFormObj;
 class FmFormModel;
 class FmFormView;
@@ -98,7 +94,6 @@ protected:
 public:
     FormViewPageWindowAdapter(  const ::comphelper::ComponentContext& _rContext,
         const SdrPageWindow&, FmXFormView* pView);
-        //const SdrPageViewWinRec*, FmXFormView* pView);
 
     // XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType() throw(::com::sun::star::uno::RuntimeException);
@@ -172,7 +167,7 @@ class FmXFormView : public ::cppu::WeakImplHelper3<
                     m_aNeedTabOrderUpdate;
 
     // Liste der markierten Object, dient zur Restauration beim Umschalten von Alive in DesignMode
-    SdrMarkList             m_aMark;
+    SdrObjectVector m_aMark;
     ObjectRemoveListener*   m_pWatchStoredList;
 
     bool            m_bFirstActivation;
@@ -187,7 +182,7 @@ protected:
     ~FmXFormView();
 
     void    saveMarkList( sal_Bool _bSmartUnmark = sal_True );
-    void    restoreMarkList( SdrMarkList& _rRestoredMarkList );
+    void    restoreMarkList( SdrObjectVector& _rRestoredSelection );
     void    stopMarkListWatching();
     void    startMarkListWatching();
 
@@ -244,7 +239,6 @@ public:
             );
 
 private:
-    //void addWindow(const SdrPageViewWinRec*);
     void addWindow(const SdrPageWindow&);
     void removeWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _rxCC );
     void Activate(sal_Bool bSync = sal_False);

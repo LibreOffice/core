@@ -53,8 +53,6 @@ using ::xmloff::token::XML_PARAGRAPH_PROPERTIES;
 
 //////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1( XMLShapeStyleContext, XMLPropStyleContext );
-
 XMLShapeStyleContext::XMLShapeStyleContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,

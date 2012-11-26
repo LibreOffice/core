@@ -25,7 +25,6 @@
 
 #include "svl/svldllapi.h"
 #include <tools/solar.h>
-#include <tools/rtti.hxx>
 #include <tools/globname.hxx>
 #include <svl/poolitem.hxx>
 
@@ -36,7 +35,7 @@ class SVL_DLLPUBLIC SfxGlobalNameItem: public SfxPoolItem
     SvGlobalName            m_aName;
 
 public:
-                            TYPEINFO();
+    POOLITEM_FACTORY()
                             SfxGlobalNameItem();
                             SfxGlobalNameItem( sal_uInt16 nWhich, const SvGlobalName& );
                             ~SfxGlobalNameItem();

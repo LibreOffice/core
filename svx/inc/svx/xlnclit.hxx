@@ -33,7 +33,7 @@
 class SVX_DLLPUBLIC XLineColorItem : public XColorItem
 {
 public:
-            TYPEINFO();
+    POOLITEM_FACTORY()
             XLineColorItem() {}
             XLineColorItem(sal_Int32 nIndex, const Color& rTheColor);
             XLineColorItem(const String& rName, const Color& rTheColor);

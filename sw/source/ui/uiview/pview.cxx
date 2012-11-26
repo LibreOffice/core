@@ -104,8 +104,6 @@ SFX_IMPL_INTERFACE(SwPagePreView, SfxViewShell, SW_RES(RID_PVIEW_TOOLBOX))
 }
 
 
-TYPEINIT1(SwPagePreView,SfxViewShell)
-
 #define SWVIEWFLAGS ( SFX_VIEW_CAN_PRINT|SFX_VIEW_HAS_PRINTOPTIONS )
 
 #define MIN_PREVIEW_ZOOM 25
@@ -1326,11 +1324,11 @@ SwPagePreView::SwPagePreView(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
 
     ViewShell *pVS, *pNew;
 
-    if( pOldSh && pOldSh->IsA( TYPE( SwPagePreView ) ) )
+    if( pOldSh && dynamic_cast< SwPagePreView* >(pOldSh) )
         pVS = ((SwPagePreView*)pOldSh)->GetViewShell();
     else
     {
-        if( pOldSh && pOldSh->IsA( TYPE( SwView ) ) )
+        if( pOldSh && dynamic_cast< SwView* >(pOldSh) )
         {
             pVS = ((SwView*)pOldSh)->GetWrtShellPtr();
             // save the current ViewData of the previous SwView
@@ -1404,7 +1402,7 @@ SwPagePreView::SwPagePreView(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
 
 SwDocShell* SwPagePreView::GetDocShell()
 {
-    return PTR_CAST(SwDocShell, GetViewFrame()->GetObjectShell());
+    return dynamic_cast< SwDocShell* >( GetViewFrame()->GetObjectShell());
 }
 
 /*--------------------------------------------------------------------
@@ -1979,30 +1977,6 @@ Size  SwPagePreView::GetOptimalSizePixel() const
 {
     ASSERT( false, "overloaded virtual method <SwPagePreView::GetOptimalSizePixel()> needed ??" )
     return Size( -1, -1 );
-/*
-    //JP 09.06.99: was wird hier errechnet ?????
-// ALT:
-//   SfxApplicationWindow* pWin = SFX_APPWINDOW ;
-//   Rectangle aRect = pWin->GetClientAreaPixel();
-
-    Window& rWin = GetViewFrame()->GetWindow();
-    Rectangle aRect( Point(0, 0), rWin.GetOutputSizePixel() );
-    Size aMaxSize( aRect.GetWidth(), aRect.GetHeight() );
-    Size aInSize = rWin.GetOutputSizePixel();
-    Size aOutSize = rWin.GetSizePixel();
-    sal_uInt16 nXBorder = sal_uInt16(aOutSize.Width() - aInSize.Width());
-    sal_uInt16 nYBorder = sal_uInt16(aOutSize.Height() - aInSize.Height());
-    aMaxSize.Width() -= nXBorder;
-    //'auf Verdacht' etwas vom Border abziehen (Menue)
-    nYBorder -= (nYBorder - nXBorder) / 2;
-    aMaxSize.Height() -= nYBorder;
-    //mit der max. moeglichen Outputsize guenstigstes Verhaeltnis ausrechnen
-    aViewWin.GetOptimalSize(aMaxSize);
-    // Border wieder dazuzaehlen
-    aMaxSize.Height() += nYBorder;
-    aMaxSize.Width() += nXBorder;
-    return aMaxSize;
-*/
 }
 
 /*--------------------------------------------------------------------

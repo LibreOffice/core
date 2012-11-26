@@ -52,11 +52,13 @@ public:
 
     /** Called from SVX DFF converter.
         @param rRect  The object anchor rectangle to be exported (in twips). */
-    virtual void        WriteData( EscherEx& rEscherEx, const Rectangle& rRect );
+    virtual void        WriteData(
+                            EscherEx& rEscherEx,
+                            const basegfx::B2DRange& rObjectRange);
 
 private:
     virtual void        ImplSetFlags( const SdrObject& rSdrObj );
-    virtual void        ImplCalcAnchorRect( const Rectangle& rRect, MapUnit eMapUnit );
+    virtual void        ImplCalcAnchorRange( const basegfx::B2DRange& rObjectRange, MapUnit eMapUnit );
 
 protected:  // for access in derived classes
     XclObjAnchor        maAnchor;       /// The client anchor data.
@@ -73,7 +75,7 @@ public:
 
 private:
     virtual void        ImplSetFlags( const SdrObject& rSdrObj );
-    virtual void        ImplCalcAnchorRect( const Rectangle& rRect, MapUnit eMapUnit );
+    virtual void        ImplCalcAnchorRange( const basegfx::B2DRange& rObjectRange, MapUnit eMapUnit );
 
 private:
     SCTAB               mnScTab;        /// Calc sheet index.
@@ -86,16 +88,16 @@ class XclExpDffEmbeddedAnchor : public XclExpDffAnchorBase
 {
 public:
     explicit            XclExpDffEmbeddedAnchor( const XclExpRoot& rRoot,
-                            const Size& rPageSize, sal_Int32 nScaleX, sal_Int32 nScaleY );
+                            const basegfx::B2DVector& rPageScale, double fScaleX, double fScaleY );
 
 private:
     virtual void        ImplSetFlags( const SdrObject& rSdrObj );
-    virtual void        ImplCalcAnchorRect( const Rectangle& rRect, MapUnit eMapUnit );
+    virtual void        ImplCalcAnchorRange( const basegfx::B2DRange& rObjectRange, MapUnit eMapUnit );
 
 private:
-    Size                maPageSize;
-    sal_Int32           mnScaleX;
-    sal_Int32           mnScaleY;
+    basegfx::B2DVector  maPageScale;
+    double              mfScaleX;
+    double              mfScaleY;
 };
 
 // ----------------------------------------------------------------------------
@@ -104,7 +106,7 @@ private:
 class XclExpDffNoteAnchor : public XclExpDffAnchorBase
 {
 public:
-    explicit            XclExpDffNoteAnchor( const XclExpRoot& rRoot, const Rectangle& rRect );
+    explicit            XclExpDffNoteAnchor( const XclExpRoot& rRoot, const basegfx::B2DRange& rObjectRange );
 };
 
 // ----------------------------------------------------------------------------
@@ -215,7 +217,7 @@ public:
     explicit            XclExpOcxControlObj(
                             XclExpObjectManager& rObjMgr,
                             ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape,
-                            const Rectangle* pChildAnchor,
+                            const basegfx::B2DRange* pObjectRange,
                             const String& rClassName,
                             sal_uInt32 nStrmStart, sal_uInt32 nStrmSize );
 
@@ -237,7 +239,7 @@ public:
     explicit            XclExpTbxControlObj(
                             XclExpObjectManager& rObjMgr,
                             ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape,
-                            const Rectangle* pChildAnchor );
+                            const basegfx::B2DRange* pObjectRange);
 
     /** Sets the name of a macro attached to this control.
         @return  true = The passed event descriptor was valid, macro name has been found. */
@@ -285,7 +287,7 @@ public:
     explicit            XclExpChartObj(
                             XclExpObjectManager& rObjMgr,
                             ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape,
-                            const Rectangle* pChildAnchor );
+                            const basegfx::B2DRange* pObjectRange);
     virtual             ~XclExpChartObj();
 
     /** Writes the OBJ record and the entire chart substream. */
@@ -413,17 +415,18 @@ class XclExpEmbeddedObjectManager : public XclExpObjectManager
 public:
     explicit            XclExpEmbeddedObjectManager(
                             const XclExpObjectManager& rParent,
-                            const Size& rPageSize,
-                            sal_Int32 nScaleX, sal_Int32 nScaleY );
+                            const basegfx::B2DVector& rPageScale,
+                            double fScaleX,
+                            double fScaleY );
 
     /** Creates a new DFF client anchor object for embedded objects according
         to the scaling data passed to the constructor. Caller takes ownership! */
     virtual XclExpDffAnchorBase* CreateDffAnchor() const;
 
 private:
-    Size                maPageSize;
-    sal_Int32           mnScaleX;
-    sal_Int32           mnScaleY;
+    basegfx::B2DVector  maPageScale;
+    double              mfScaleX;
+    double              mfScaleY;
 };
 
 // ============================================================================

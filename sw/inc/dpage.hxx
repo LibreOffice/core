@@ -32,21 +32,26 @@ class SdrPageGridFrameList;
 class SwDrawDocument;
 class SwDoc;
 
-class SwDPage : public FmFormPage, public SdrObjUserCall
+class SwDPage : public FmFormPage
 {
+private:
     SdrPageGridFrameList*   pGridLst;
     SwDoc&                  rDoc;
 
+protected:
+    /// method to copy all data from given source
+    virtual void copyDataFromSdrPage(const SdrPage& rSource);
+
 public:
-    SwDPage(SwDrawDocument& rNewModel, sal_Bool bMasterPage=sal_False);
+    /// create a copy, evtl. with a different target model (if given)
+    virtual SdrPage* CloneSdrPage(SdrModel* pTargetModel = 0) const;
+
+    SwDPage(SwDrawDocument& rNewModel, bool bMasterPage = false);
     ~SwDPage();
 
-    // #i3694#
-    // This GetOffset() method is not needed anymore, it even leads to errors.
-    // virtual Point GetOffset() const;
-    virtual SdrObject* ReplaceObject( SdrObject* pNewObj, sal_uLong nObjNum );
+    virtual SdrObject* ReplaceObjectInSdrObjList( SdrObject& rNewObj, sal_uInt32 nObjNum );
 
-    virtual const SdrPageGridFrameList* GetGridFrameList(const SdrPageView* pPV,
+    virtual const SdrPageGridFrameList* GetGridFrameList(const SdrView& rSdrView,
                                     const Rectangle *pRect) const;
 
     sal_Bool RequestHelp( Window* pWindow, SdrView* pView, const HelpEvent& rEvt );

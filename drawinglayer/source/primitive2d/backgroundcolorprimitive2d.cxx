@@ -64,18 +64,6 @@ namespace drawinglayer
         {
         }
 
-        bool BackgroundColorPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const BackgroundColorPrimitive2D& rCompare = (BackgroundColorPrimitive2D&)rPrimitive;
-
-                return (getBColor() == rCompare.getBColor());
-            }
-
-            return false;
-        }
-
         basegfx::B2DRange BackgroundColorPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
             // always as big as the view

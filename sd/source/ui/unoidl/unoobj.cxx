@@ -78,6 +78,7 @@
 #include "unolayer.hxx"
 #include "imapinfo.hxx"
 #include "EffectMigration.hxx"
+#include <svx/globaldrawitempool.hxx>
 
 #ifndef SEQTYPE
  #if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)
@@ -109,7 +110,7 @@ DECLARE_STL_STDKEY_MAP(sal_uIntPtr, SfxExtItemPropertySetInfo*, SdExtPropertySet
 static SdExtPropertySetInfoCache gImplImpressPropertySetInfoCache;
 static SdExtPropertySetInfoCache gImplDrawPropertySetInfoCache;
 
-DECLARE_STL_STDKEY_MAP(sal_uInt32, uno::Sequence< uno::Type >*, SdTypesCache);
+DECLARE_STL_STDKEY_MAP(SvxShapeKind, uno::Sequence< uno::Type >*, SdTypesCache);
 static SdTypesCache gImplTypesCache;
 
 ///////////////////////////////////////////////////////////////////////
@@ -144,141 +145,141 @@ static SdTypesCache gImplTypesCache;
 
 
 
-        #define IMPRESS_MAP_ENTRIES \
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_ANIMATIONPATH), WID_ANIMPATH,        &ITYPE(drawing::XShape),                                   0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_BOOKMARK),      WID_BOOKMARK,        &::getCppuType((const OUString*)0),                        0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_DIMCOLOR),      WID_DIMCOLOR,        &::getCppuType((const sal_Int32*)0),                       0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_DIMHIDE),       WID_DIMHIDE,         &::getBooleanCppuType(),                                   0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_DIMPREV),       WID_DIMPREV,         &::getBooleanCppuType(),                                   0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_EFFECT),        WID_EFFECT,          &::getCppuType((const presentation::AnimationEffect*)0),   0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_ISEMPTYPRESOBJ),WID_ISEMPTYPRESOBJ,  &::getBooleanCppuType(),                                   0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_ISPRESOBJ),     WID_ISPRESOBJ,       &::getBooleanCppuType(),                                   ::com::sun::star::beans::PropertyAttribute::READONLY, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_MASTERDEPENDENT),WID_MASTERDEPEND,   &::getBooleanCppuType(),                                   0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_CLICKACTION),   WID_CLICKACTION,     &::getCppuType((const presentation::ClickAction*)0),       0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_PLAYFULL),      WID_PLAYFULL,        &::getBooleanCppuType(),                                   0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_PRESORDER),     WID_PRESORDER,       &::getCppuType((const sal_Int32*)0),                       0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_STYLE),         WID_STYLE,           &ITYPE( style::XStyle),                                    ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_SOUNDFILE),     WID_SOUNDFILE,       &::getCppuType((const OUString*)0),                        0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_SOUNDON),       WID_SOUNDON,         &::getBooleanCppuType(),                                   0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_SPEED),         WID_SPEED,           &::getCppuType((const presentation::AnimationSpeed*)0),    0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_TEXTEFFECT),    WID_TEXTEFFECT,      &::getCppuType((const presentation::AnimationEffect*)0),   0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_BLUESCREEN),    WID_BLUESCREEN,      &::getCppuType((const sal_Int32*)0),                       0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_VERB),          WID_VERB,            &::getCppuType((const sal_Int32*)0),                       0, 0},\
-        { MAP_CHAR_LEN("IsAnimation"),              WID_ISANIMATION,     &::getBooleanCppuType(),                                   0, 0},\
-        { MAP_CHAR_LEN("NavigationOrder"),          WID_NAVORDER,        &::getCppuType((const sal_Int32*)0),                       0, 0},\
-        { 0,0,0,0,0,0}
+#define IMPRESS_MAP_ENTRIES \
+    { MAP_CHAR_LEN(UNO_NAME_OBJ_ANIMATIONPATH), WID_ANIMPATH,        &ITYPE(drawing::XShape),                                   0, 0},\
+    { MAP_CHAR_LEN(UNO_NAME_OBJ_BOOKMARK),      WID_BOOKMARK,        &::getCppuType((const OUString*)0),                        0, 0},\
+    { MAP_CHAR_LEN(UNO_NAME_OBJ_DIMCOLOR),      WID_DIMCOLOR,        &::getCppuType((const sal_Int32*)0),                       0, 0},\
+    { MAP_CHAR_LEN(UNO_NAME_OBJ_DIMHIDE),       WID_DIMHIDE,         &::getBooleanCppuType(),                                   0, 0},\
+    { MAP_CHAR_LEN(UNO_NAME_OBJ_DIMPREV),       WID_DIMPREV,         &::getBooleanCppuType(),                                   0, 0},\
+    { MAP_CHAR_LEN(UNO_NAME_OBJ_EFFECT),        WID_EFFECT,          &::getCppuType((const presentation::AnimationEffect*)0),   0, 0},\
+    { MAP_CHAR_LEN(UNO_NAME_OBJ_ISEMPTYPRESOBJ),WID_ISEMPTYPRESOBJ,  &::getBooleanCppuType(),                                   0, 0},\
+    { MAP_CHAR_LEN(UNO_NAME_OBJ_ISPRESOBJ),     WID_ISPRESOBJ,       &::getBooleanCppuType(),                                   ::com::sun::star::beans::PropertyAttribute::READONLY, 0},\
+    { MAP_CHAR_LEN(UNO_NAME_OBJ_MASTERDEPENDENT),WID_MASTERDEPEND,   &::getBooleanCppuType(),                                   0, 0},\
+    { MAP_CHAR_LEN(UNO_NAME_OBJ_CLICKACTION),   WID_CLICKACTION,     &::getCppuType((const presentation::ClickAction*)0),       0, 0},\
+    { MAP_CHAR_LEN(UNO_NAME_OBJ_PLAYFULL),      WID_PLAYFULL,        &::getBooleanCppuType(),                                   0, 0},\
+    { MAP_CHAR_LEN(UNO_NAME_OBJ_PRESORDER),     WID_PRESORDER,       &::getCppuType((const sal_Int32*)0),                       0, 0},\
+    { MAP_CHAR_LEN(UNO_NAME_OBJ_STYLE),         WID_STYLE,           &ITYPE( style::XStyle),                                    ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},\
+    { MAP_CHAR_LEN(UNO_NAME_OBJ_SOUNDFILE),     WID_SOUNDFILE,       &::getCppuType((const OUString*)0),                        0, 0},\
+    { MAP_CHAR_LEN(UNO_NAME_OBJ_SOUNDON),       WID_SOUNDON,         &::getBooleanCppuType(),                                   0, 0},\
+    { MAP_CHAR_LEN(UNO_NAME_OBJ_SPEED),         WID_SPEED,           &::getCppuType((const presentation::AnimationSpeed*)0),    0, 0},\
+    { MAP_CHAR_LEN(UNO_NAME_OBJ_TEXTEFFECT),    WID_TEXTEFFECT,      &::getCppuType((const presentation::AnimationEffect*)0),   0, 0},\
+    { MAP_CHAR_LEN(UNO_NAME_OBJ_BLUESCREEN),    WID_BLUESCREEN,      &::getCppuType((const sal_Int32*)0),                       0, 0},\
+    { MAP_CHAR_LEN(UNO_NAME_OBJ_VERB),          WID_VERB,            &::getCppuType((const sal_Int32*)0),                       0, 0},\
+    { MAP_CHAR_LEN("IsAnimation"),              WID_ISANIMATION,     &::getBooleanCppuType(),                                   0, 0},\
+    { MAP_CHAR_LEN("NavigationOrder"),          WID_NAVORDER,        &::getCppuType((const sal_Int32*)0),                       0, 0},\
+    { 0,0,0,0,0,0}
 
 
-    const SfxItemPropertyMapEntry* lcl_GetImpress_SdXShapePropertyGraphicMap_Impl()
+const SfxItemPropertyMapEntry* lcl_GetImpress_SdXShapePropertyGraphicMap_Impl()
+{
+
+    static const SfxItemPropertyMapEntry aImpress_SdXShapePropertyGraphicMap_Impl[] =
     {
+        { MAP_CHAR_LEN("ImageMap"),             WID_IMAGEMAP,        &::getCppuType((const uno::Reference< container::XIndexContainer >*)0),    0, 0 },
+        IMPRESS_MAP_ENTRIES
+    };
+    return aImpress_SdXShapePropertyGraphicMap_Impl;
+}
 
-        static const SfxItemPropertyMapEntry aImpress_SdXShapePropertyGraphicMap_Impl[] =
-        {
-            { MAP_CHAR_LEN("ImageMap"),             WID_IMAGEMAP,        &::getCppuType((const uno::Reference< container::XIndexContainer >*)0),    0, 0 },
-            IMPRESS_MAP_ENTRIES
-        };
-        return aImpress_SdXShapePropertyGraphicMap_Impl;
+const SfxItemPropertyMapEntry* lcl_GetImpress_SdXShapePropertySimpleMap_Impl()
+{
+
+    static const SfxItemPropertyMapEntry aImpress_SdXShapePropertySimpleMap_Impl[] =
+    {
+        IMPRESS_MAP_ENTRIES
+    };
+    return aImpress_SdXShapePropertySimpleMap_Impl;
+}
+
+#define DRAW_MAP_ENTRIES\
+    { MAP_CHAR_LEN(UNO_NAME_OBJ_BOOKMARK),      WID_BOOKMARK,       &::getCppuType((const OUString*)0),                 0, 0},\
+    { MAP_CHAR_LEN(UNO_NAME_OBJ_CLICKACTION),   WID_CLICKACTION,    &::getCppuType((const presentation::ClickAction*)0),0, 0},\
+    { MAP_CHAR_LEN(UNO_NAME_OBJ_STYLE),         WID_STYLE,          &ITYPE(style::XStyle),                              ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},\
+    { MAP_CHAR_LEN("NavigationOrder"),          WID_NAVORDER,        &::getCppuType((const sal_Int32*)0),                       0, 0},\
+    { 0,0,0,0,0,0}
+
+const SfxItemPropertyMapEntry* lcl_GetDraw_SdXShapePropertySimpleMap_Impl()
+{
+    static const SfxItemPropertyMapEntry aDraw_SdXShapePropertyMap_Impl[] =
+    {
+        DRAW_MAP_ENTRIES
+    };
+    return aDraw_SdXShapePropertyMap_Impl;
+}
+const SfxItemPropertyMapEntry* lcl_GetDraw_SdXShapePropertyGraphicMap_Impl()
+{
+    static const SfxItemPropertyMapEntry aDraw_SdXShapePropertyGraphicMap_Impl[] =
+    {
+        { MAP_CHAR_LEN("ImageMap"),             WID_IMAGEMAP,        &::getCppuType((const uno::Reference< container::XIndexContainer >*)0),    0, 0 },
+        DRAW_MAP_ENTRIES
+    };
+    return aDraw_SdXShapePropertyGraphicMap_Impl;
+}
+const SfxItemPropertyMapEntry* lcl_ImplGetShapePropertyMap( sal_Bool bImpress, sal_Bool bGraphicObj )
+{
+    const SfxItemPropertyMapEntry* pRet = 0;
+    if( bImpress )
+    {
+        if( bGraphicObj )
+            pRet = lcl_GetImpress_SdXShapePropertyGraphicMap_Impl();
+        else
+            pRet = lcl_GetImpress_SdXShapePropertySimpleMap_Impl();
     }
-
-    const SfxItemPropertyMapEntry* lcl_GetImpress_SdXShapePropertySimpleMap_Impl()
+    else
     {
-
-        static const SfxItemPropertyMapEntry aImpress_SdXShapePropertySimpleMap_Impl[] =
-        {
-            IMPRESS_MAP_ENTRIES
-        };
-        return aImpress_SdXShapePropertySimpleMap_Impl;
+        if( bGraphicObj )
+            pRet = lcl_GetDraw_SdXShapePropertyGraphicMap_Impl();
+        else
+            pRet = lcl_GetDraw_SdXShapePropertySimpleMap_Impl();
     }
+    return pRet;
 
-    #define DRAW_MAP_ENTRIES\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_BOOKMARK),      WID_BOOKMARK,       &::getCppuType((const OUString*)0),                 0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_CLICKACTION),   WID_CLICKACTION,    &::getCppuType((const presentation::ClickAction*)0),0, 0},\
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_STYLE),         WID_STYLE,          &ITYPE(style::XStyle),                              ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},\
-        { MAP_CHAR_LEN("NavigationOrder"),          WID_NAVORDER,        &::getCppuType((const sal_Int32*)0),                       0, 0},\
-        { 0,0,0,0,0,0}
-
-    const SfxItemPropertyMapEntry* lcl_GetDraw_SdXShapePropertySimpleMap_Impl()
+}
+const SvxItemPropertySet* lcl_ImplGetShapePropertySet( sal_Bool bImpress, sal_Bool bGraphicObj )
+{
+    const SvxItemPropertySet* pRet = 0;
+    if( bImpress )
     {
-        static const SfxItemPropertyMapEntry aDraw_SdXShapePropertyMap_Impl[] =
+        if( bGraphicObj )
         {
-            DRAW_MAP_ENTRIES
-        };
-        return aDraw_SdXShapePropertyMap_Impl;
-    }
-    const SfxItemPropertyMapEntry* lcl_GetDraw_SdXShapePropertyGraphicMap_Impl()
-    {
-        static const SfxItemPropertyMapEntry aDraw_SdXShapePropertyGraphicMap_Impl[] =
-        {
-            { MAP_CHAR_LEN("ImageMap"),             WID_IMAGEMAP,        &::getCppuType((const uno::Reference< container::XIndexContainer >*)0),    0, 0 },
-            DRAW_MAP_ENTRIES
-        };
-        return aDraw_SdXShapePropertyGraphicMap_Impl;
-    }
-    const SfxItemPropertyMapEntry* lcl_ImplGetShapePropertyMap( sal_Bool bImpress, sal_Bool bGraphicObj )
-    {
-        const SfxItemPropertyMapEntry* pRet = 0;
-        if( bImpress )
-        {
-            if( bGraphicObj )
-                pRet = lcl_GetImpress_SdXShapePropertyGraphicMap_Impl();
-            else
-                pRet = lcl_GetImpress_SdXShapePropertySimpleMap_Impl();
+            static SvxItemPropertySet aImpress_SdXShapePropertyGraphicSet_Impl( lcl_GetImpress_SdXShapePropertyGraphicMap_Impl(), GetGlobalDrawObjectItemPool());
+            pRet = &aImpress_SdXShapePropertyGraphicSet_Impl;
         }
         else
         {
-            if( bGraphicObj )
-                pRet = lcl_GetDraw_SdXShapePropertyGraphicMap_Impl();
-            else
-                pRet = lcl_GetDraw_SdXShapePropertySimpleMap_Impl();
+            static SvxItemPropertySet aImpress_SdXShapePropertySet_Impl(lcl_GetImpress_SdXShapePropertySimpleMap_Impl(), GetGlobalDrawObjectItemPool());
+            pRet = &aImpress_SdXShapePropertySet_Impl;
         }
-        return pRet;
-
     }
-    const SvxItemPropertySet* lcl_ImplGetShapePropertySet( sal_Bool bImpress, sal_Bool bGraphicObj )
+    else
     {
-        const SvxItemPropertySet* pRet = 0;
-        if( bImpress )
+        if( bGraphicObj )
         {
-            if( bGraphicObj )
-            {
-                static SvxItemPropertySet aImpress_SdXShapePropertyGraphicSet_Impl( lcl_GetImpress_SdXShapePropertyGraphicMap_Impl(), SdrObject::GetGlobalDrawObjectItemPool());
-                pRet = &aImpress_SdXShapePropertyGraphicSet_Impl;
-            }
-            else
-            {
-                static SvxItemPropertySet aImpress_SdXShapePropertySet_Impl(lcl_GetImpress_SdXShapePropertySimpleMap_Impl(), SdrObject::GetGlobalDrawObjectItemPool());
-                pRet = &aImpress_SdXShapePropertySet_Impl;
-            }
+            static SvxItemPropertySet aDraw_SdXShapePropertyGraphicSet_Impl(lcl_GetDraw_SdXShapePropertyGraphicMap_Impl(), GetGlobalDrawObjectItemPool());
+            pRet = &aDraw_SdXShapePropertyGraphicSet_Impl;
         }
         else
         {
-            if( bGraphicObj )
-            {
-                static SvxItemPropertySet aDraw_SdXShapePropertyGraphicSet_Impl(lcl_GetDraw_SdXShapePropertyGraphicMap_Impl(), SdrObject::GetGlobalDrawObjectItemPool());
-                pRet = &aDraw_SdXShapePropertyGraphicSet_Impl;
-            }
-            else
-            {
-                static SvxItemPropertySet aDraw_SdXShapePropertySet_Impl( lcl_GetDraw_SdXShapePropertySimpleMap_Impl(), SdrObject::GetGlobalDrawObjectItemPool());
-                pRet = &aDraw_SdXShapePropertySet_Impl;
-            }
+            static SvxItemPropertySet aDraw_SdXShapePropertySet_Impl( lcl_GetDraw_SdXShapePropertySimpleMap_Impl(), GetGlobalDrawObjectItemPool());
+            pRet = &aDraw_SdXShapePropertySet_Impl;
         }
-        return pRet;
     }
-    const SfxItemPropertyMapEntry* lcl_GetEmpty_SdXShapePropertyMap_Impl()
+    return pRet;
+}
+const SfxItemPropertyMapEntry* lcl_GetEmpty_SdXShapePropertyMap_Impl()
+{
+    static SfxItemPropertyMapEntry aEmpty_SdXShapePropertyMap_Impl[] =
     {
-        static SfxItemPropertyMapEntry aEmpty_SdXShapePropertyMap_Impl[] =
-        {
-            { 0,0,0,0,0,0}
-        };
-        return aEmpty_SdXShapePropertyMap_Impl;
-    }
+        { 0,0,0,0,0,0}
+    };
+    return aEmpty_SdXShapePropertyMap_Impl;
+}
 
-    static const SvxItemPropertySet* lcl_GetEmpty_SdXShapePropertySet_Impl()
-    {
-        static SvxItemPropertySet aEmptyPropSet( lcl_GetEmpty_SdXShapePropertyMap_Impl(), SdrObject::GetGlobalDrawObjectItemPool() );
-        return &aEmptyPropSet;
-    }
+static const SvxItemPropertySet* lcl_GetEmpty_SdXShapePropertySet_Impl()
+{
+    static SvxItemPropertySet aEmptyPropSet( lcl_GetEmpty_SdXShapePropertyMap_Impl(), GetGlobalDrawObjectItemPool() );
+    return &aEmptyPropSet;
+}
 const SvEventDescription* ImplGetSupportedMacroItems()
 {
     static const SvEventDescription aMacroDescriptionsImpl[] =
@@ -310,10 +311,10 @@ extern "C" int __LOADONCALLAPI SortFunc( const void* p1, const void* p2 );
 SdXShape::SdXShape( SvxShape* pShape, SdXImpressDocument* pModel) throw()
 :   mpShape( pShape ),
     mpPropSet( pModel?
-                    lcl_ImplGetShapePropertySet(pModel->IsImpressDocument(), pShape->getShapeKind() == OBJ_GRAF )
+                    lcl_ImplGetShapePropertySet(pModel->IsImpressDocument(), SvxShapeKind_Graphic == pShape->getSvxShapeKind() )
                 :   lcl_GetEmpty_SdXShapePropertySet_Impl() ),
     mpMap( pModel?
-                    lcl_ImplGetShapePropertyMap(pModel->IsImpressDocument(), pShape->getShapeKind() == OBJ_GRAF )
+                    lcl_ImplGetShapePropertyMap(pModel->IsImpressDocument(), SvxShapeKind_Graphic == pShape->getSvxShapeKind() )
                 :   lcl_GetEmpty_SdXShapePropertyMap_Impl() ),
     mpModel(pModel),
     mpImplementationId( NULL )
@@ -379,9 +380,9 @@ uno::Sequence< uno::Type > SAL_CALL SdXShape::getTypes()
     }
     else
     {
-        const sal_uInt32 nObjId = mpShape->getShapeKind();
+        const SvxShapeKind eSvxShapeKind(mpShape->getSvxShapeKind());
         uno::Sequence< uno::Type >* pTypes;
-        SdTypesCache::iterator aIter( gImplTypesCache.find( nObjId ) );
+        SdTypesCache::iterator aIter( gImplTypesCache.find( eSvxShapeKind ) );
         if( aIter == gImplTypesCache.end() )
         {
             pTypes = new uno::Sequence< uno::Type >( mpShape->_getTypes() );
@@ -389,7 +390,7 @@ uno::Sequence< uno::Type > SAL_CALL SdXShape::getTypes()
             pTypes->realloc( nCount+1 );
             (*pTypes)[nCount] = ::getCppuType((const uno::Reference< lang::XTypeProvider>*)0);
 
-            gImplTypesCache[ nObjId ] = pTypes;
+            gImplTypesCache[ eSvxShapeKind ] = pTypes;
         }
         else
         {
@@ -412,8 +413,19 @@ beans::PropertyState SAL_CALL SdXShape::getPropertyState( const OUString& Proper
     else
     {
         SdrObject* pObj = mpShape->GetSdrObject();
-        if( pObj == NULL || ( pObj->GetPage()->IsMasterPage() && pObj->IsEmptyPresObj() ) )
+
+        if( !pObj )
+        {
             return beans::PropertyState_DEFAULT_VALUE;
+        }
+
+        if( pObj->IsEmptyPresObj() )
+        {
+            if( pObj->getSdrPageFromSdrObject() && pObj->getSdrPageFromSdrObject()->IsMasterPage() )
+            {
+                return beans::PropertyState_DEFAULT_VALUE;
+            }
+        }
 
         return mpShape->_getPropertyState( PropertyName );
     }
@@ -509,9 +521,9 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                     if(!(aValue >>= nNavOrder))
                         throw lang::IllegalArgumentException();
 
-                    SdrObjList* pObjList = pObj->GetObjList();
+                    SdrObjList* pObjList = pObj->getParentOfSdrObject();
                     if( pObjList )
-                        pObjList->SetObjectNavigationPosition( *pObj, (nNavOrder < 0) ? SAL_MAX_UINT32 : static_cast< sal_uInt32 >( nNavOrder ) );
+                        pObjList->SetUserNavigationPosition( *pObj, (nNavOrder < 0) ? SAL_MAX_UINT32 : static_cast< sal_uInt32 >( nNavOrder ) );
                     break;
                 }
 
@@ -654,17 +666,36 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                 case WID_MASTERDEPEND:
                     SetMasterDepend( ::cppu::any2bool(aValue) );
                     break;
+/* todo
                 case WID_ANIMPATH:
                 {
-                    uno::Reference< drawing::XShape > xShape( aValue, uno::UNO_QUERY );
-                    SdrPathObj* pObj2 = xShape.is() ? dynamic_cast< SdrPathObj* >( GetSdrObjectFromXShape( xShape ) ) : NULL;
+                    uno::Reference< drawing::XShape > xShape;
+                    aValue >>= xShape;
 
-                    if( pObj2 == NULL )
+                    SdrObject* pObj = NULL;
+                    if(xShape.is())
+                        pObj = GetSdrObjectFromXShape( xShape );
+
+                    if( pObj == NULL || !dynamic_cast< SdrPathObj* >(pObj) )
                         throw lang::IllegalArgumentException();
 
-                    EffectMigration::SetAnimationPath( mpShape, pObj2 );
+                    pInfo->mpPathObj = (SdrPathObj*)pObj;
+
+                    SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():NULL;
+                    if( pDoc )
+                    {
+                        pInfo = pDoc->GetAnimationInfo(pObj);
+                        if( pInfo == NULL )
+                        {
+                            pInfo = new SdAnimationInfo(pDoc);
+                            pObj->InsertUserData( pInfo );
+                        }
+                        pInfo->mbInvisibleInPresentation = sal_True;
+                    }
+
                     break;
                 }
+*/
                 case WID_IMAGEMAP:
                 {
                     SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():NULL;
@@ -763,7 +794,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
             {
                 SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():NULL;
                 // is the bookmark a page?
-                sal_Bool bIsMasterPage;
+                bool bIsMasterPage;
                 if(pDoc->GetPageByName( pInfo->GetBookmark(), bIsMasterPage ) != SDRPAGE_NOTFOUND)
                 {
                     aString = SdDrawPage::getPageApiNameFromUiName( pInfo->GetBookmark() );
@@ -911,7 +942,7 @@ sal_Bool SdXShape::IsPresObj() const throw()
     SdrObject* pObj = mpShape->GetSdrObject();
     if(pObj)
     {
-        SdPage* pPage = PTR_CAST(SdPage,pObj->GetPage());
+        SdPage* pPage = dynamic_cast< SdPage* >(pObj->getSdrPageFromSdrObject());
         if(pPage)
             return pPage->GetPresObjKind(pObj) != PRESOBJ_NONE;
     }
@@ -956,7 +987,7 @@ void SdXShape::SetEmptyPresObj( sal_Bool bEmpty ) throw()
     if( pObj == NULL )
         return;
 
-    if( pObj->IsEmptyPresObj() != bEmpty )
+    if( pObj->IsEmptyPresObj() != (bool)bEmpty )
     {
         if(!bEmpty)
         {
@@ -964,11 +995,11 @@ void SdXShape::SetEmptyPresObj( sal_Bool bEmpty ) throw()
             const sal_Bool bVertical = pOutlinerParaObject ? pOutlinerParaObject->IsVertical() : sal_False;
 
             // really delete SdrOutlinerObj at pObj
-            pObj->NbcSetOutlinerParaObject(0L);
-            if( bVertical && PTR_CAST( SdrTextObj, pObj ) )
+            pObj->SetOutlinerParaObject(0L);
+            if( bVertical && dynamic_cast< SdrTextObj* >(pObj ) )
                 ((SdrTextObj*)pObj)->SetVerticalWriting( sal_True );
 
-            SdrGrafObj* pGraphicObj = PTR_CAST( SdrGrafObj, pObj );
+            SdrGrafObj* pGraphicObj = dynamic_cast< SdrGrafObj* >(pObj );
             if( pGraphicObj )
             {
                 Graphic aEmpty;
@@ -976,7 +1007,7 @@ void SdXShape::SetEmptyPresObj( sal_Bool bEmpty ) throw()
             }
             else
             {
-                SdrOle2Obj* pOleObj = PTR_CAST( SdrOle2Obj, pObj );
+                SdrOle2Obj* pOleObj = dynamic_cast< SdrOle2Obj* >(pObj );
                 if( pOleObj )
                 {
                     pOleObj->SetGraphic( NULL );
@@ -1000,7 +1031,7 @@ void SdXShape::SetEmptyPresObj( sal_Bool bEmpty ) throw()
                 if( pOutliner == NULL )
                     break;
 
-                SdPage* pPage = PTR_CAST(SdPage,pObj->GetPage());
+                SdPage* pPage = dynamic_cast< SdPage* >(pObj->getSdrPageFromSdrObject());
                 DBG_ASSERT( pPage, "no page?" );
                 if( pPage == NULL )
                     break;
@@ -1027,7 +1058,7 @@ void SdXShape::SetEmptyPresObj( sal_Bool bEmpty ) throw()
 sal_Bool SdXShape::IsMasterDepend() const throw()
 {
     SdrObject* pObj = mpShape->GetSdrObject();
-    return pObj && pObj->GetUserCall() != NULL;
+    return pObj && findConnectionToSdrObject(pObj) != NULL;
 }
 
 void SdXShape::SetMasterDepend( sal_Bool bDepend ) throw()
@@ -1039,12 +1070,12 @@ void SdXShape::SetMasterDepend( sal_Bool bDepend ) throw()
         {
             if( bDepend )
             {
-                SdPage* pPage = PTR_CAST(SdPage,pObj->GetPage());
-                pObj->SetUserCall( pPage );
+                SdPage* pPage = dynamic_cast< SdPage* >(pObj->getSdrPageFromSdrObject());
+                establishConnectionToSdrObject(pObj, pPage);
             }
             else
             {
-                pObj->SetUserCall( NULL );
+                resetConnectionToSdrObject(pObj);
             }
         }
     }

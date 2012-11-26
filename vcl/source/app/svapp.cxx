@@ -2076,10 +2076,6 @@ sal_Bool InitAccessBridge( sal_Bool bShowCancel, sal_Bool &rCancelled )
 // MT: AppProperty, AppEvent was in oldsv.cxx, but is still needed...
 // ------------------------------------------------------------------------
 
-TYPEINIT0(ApplicationProperty)
-
-// ------------------------------------------------------------------------
-
 static PropertyHandler* pHandler=NULL;
 
 void Application::Property( ApplicationProperty& rProp )

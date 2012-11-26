@@ -111,7 +111,6 @@ void DecryptBlockName_Imp( String& rName );
 
 
 _SV_IMPL_SORTAR_ALG( SvxAutocorrWordList, SvxAutocorrWordPtr )
-TYPEINIT0(SvxAutoCorrect)
 
 typedef SvxAutoCorrectLanguageLists* SvxAutoCorrectLanguageListsPtr;
 DECLARE_TABLE( SvxAutoCorrLanguageTable_Impl,  SvxAutoCorrectLanguageListsPtr)

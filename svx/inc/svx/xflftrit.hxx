@@ -40,8 +40,6 @@ private:
     sal_Bool                    bEnabled;
 
 public:
-                            TYPEINFO();
-
                             XFillFloatTransparenceItem();
                             XFillFloatTransparenceItem( sal_Int32 nIndex, const XGradient& rGradient, sal_Bool bEnable = sal_True );
                             XFillFloatTransparenceItem(const String& rName, const XGradient& rGradient, sal_Bool bEnable = sal_True );

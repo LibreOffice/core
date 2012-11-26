@@ -83,6 +83,7 @@
 #include <vos/mutex.hxx>
 #include <vcl/salbtype.hxx>     // FRound
 #include <vcl/svapp.hxx>
+#include "drawdoc.hxx"
 
 namespace sd {
 
@@ -208,7 +209,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
 
         case SID_COPYOBJECTS:
         {
-            if ( mpDrawView->IsPresObjSelected(sal_False, sal_True) )
+            if ( mpDrawView->IsPresObjSelected(false, true) )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
                 InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
@@ -251,7 +252,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
         case SID_ZOOM_OUT:
         case SID_ZOOM_PANNING:
         {
-            mbZoomOnPage = sal_False;
+            mbZoomOnPage = false;
             SetCurrentFunction( FuZoom::Create(this, GetActiveWindow(), mpDrawView, GetDoc(), rReq) );
             // Beendet sich selbst, kein Cancel() notwendig!
             Invalidate( SID_ZOOM_TOOLBOX );
@@ -293,8 +294,10 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
         break;
 
         case SID_CAPTUREPOINT:
+        {
             // negative Werte um Aufruf aus Menue zu signalisieren
-            maMousePos = Point(-1,-1);
+            maMousePos = basegfx::B2DPoint(-1.0, -1.0);
+        }
         case SID_SET_SNAPITEM:
         {
             SetCurrentFunction( FuSnapLine::Create(this, GetActiveWindow(), mpDrawView, GetDoc(), rReq) );
@@ -345,7 +348,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
         case SID_CONNECTION_NEW_ROUTING:
         {
             SfxItemSet aDefAttr( GetPool(), SDRATTR_EDGELINE1DELTA, SDRATTR_EDGELINE3DELTA );
-            GetView()->SetAttributes( aDefAttr, sal_True ); // (ReplaceAll)
+            GetView()->SetAttributes( aDefAttr, true ); // (ReplaceAll)
 
             Cancel();
             rReq.Done();
@@ -354,7 +357,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
 
         case SID_TWAIN_SELECT:
         {
-            sal_Bool bDone = sal_False;
+            bool bDone = false;
 
             if( mxScannerManager.is() )
             {
@@ -381,7 +384,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
 
         case SID_TWAIN_TRANSFER:
         {
-            sal_Bool bDone = sal_False;
+            bool bDone = false;
 
             if( mxScannerManager.is() )
             {
@@ -392,7 +395,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
                     if( aContexts.getLength() )
                     {
                         mxScannerManager->startScan( aContexts.getConstArray()[ 0 ], mxScannerListener );
-                        bDone = sal_True;
+                        bDone = true;
                     }
                 }
                 catch( ... )
@@ -469,11 +472,12 @@ void DrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& )
             {
                 const BitmapEx aScanBmp( VCLUnoHelper::GetBitmap( xBitmap ) );
 
-                if( !!aScanBmp )
+                if( !!aScanBmp && mpDrawView->GetSdrPageView() )
                 {
                     const ::vos::OGuard aGuard( Application::GetSolarMutex() );
-                    SdrPage*            pPage = mpDrawView->GetSdrPageView()->GetPage();
-                    Size                aBmpSize( aScanBmp.GetPrefSize() ), aPageSize( pPage->GetSize() );
+                    SdrPage& rPage = mpDrawView->GetSdrPageView()->getSdrPageFromSdrPageView();
+                    Size                aBmpSize( aScanBmp.GetPrefSize() );
+                    Size aPageSize(basegfx::fround(rPage.GetPageScale().getX()), basegfx::fround(rPage.GetPageScale().getY()));
                     const MapMode       aMap100( MAP_100TH_MM );
 
                     if( !aBmpSize.Width() || !aBmpSize.Height() )
@@ -484,8 +488,8 @@ void DrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& )
                     else
                         aBmpSize = OutputDevice::LogicToLogic( aBmpSize, aScanBmp.GetPrefMapMode(), aMap100 );
 
-                    aPageSize.Width() -= pPage->GetLftBorder() + pPage->GetRgtBorder();
-                    aPageSize.Height() -= pPage->GetUppBorder() + pPage->GetLwrBorder();
+                    aPageSize.Width() -= rPage.GetLeftPageBorder() + rPage.GetRightPageBorder();
+                    aPageSize.Height() -= rPage.GetTopPageBorder() + rPage.GetBottomPageBorder();
 
                     if( ( ( aBmpSize.Height() > aPageSize.Height() ) || ( aBmpSize.Width() > aPageSize.Width() ) ) && aBmpSize.Height() && aPageSize.Height() )
                     {
@@ -505,40 +509,28 @@ void DrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& )
                     }
 
                     Point aPnt ( ( aPageSize.Width() - aBmpSize.Width() ) >> 1, ( aPageSize.Height() - aBmpSize.Height() ) >> 1 );
-                    aPnt += Point( pPage->GetLftBorder(), pPage->GetUppBorder() );
-                    Rectangle   aRect( aPnt, aBmpSize );
+                    aPnt += Point( rPage.GetLeftPageBorder(), rPage.GetTopPageBorder() );
                     SdrGrafObj* pGrafObj = NULL;
-                    sal_Bool        bInsertNewObject = sal_True;
+                    bool bInsertNewObject = true;
+                    SdrGrafObj* pTargetObj = dynamic_cast< SdrGrafObj* >(GetView()->getSelectedIfSingle());
 
-                    if( GetView()->AreObjectsMarked() )
-                    {
-                        const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
-
-                        if( rMarkList.GetMarkCount() == 1 )
-                        {
-                            SdrMark*    pMark = rMarkList.GetMark(0);
-                            SdrObject*  pObj = pMark->GetMarkedSdrObj();
-
-                            if( pObj->ISA( SdrGrafObj ) )
+                    if(pTargetObj && pTargetObj->IsEmptyPresObj() )
                             {
-                                pGrafObj = static_cast< SdrGrafObj* >( pObj );
-
-                                if( pGrafObj->IsEmptyPresObj() )
-                                {
-                                    bInsertNewObject = sal_False;
-                                    pGrafObj->SetEmptyPresObj(sal_False);
-                                    pGrafObj->SetOutlinerParaObject(NULL);
-                                    pGrafObj->SetGraphic( Graphic( aScanBmp ) );
-                                }
-                            }
-                        }
+                        bInsertNewObject = false;
+                        pTargetObj->SetEmptyPresObj(false);
+                        pTargetObj->SetOutlinerParaObject(NULL);
+                        pTargetObj->SetGraphic( Graphic( aScanBmp ) );
                     }
 
                     if( bInsertNewObject )
                     {
-                        pGrafObj = new SdrGrafObj( Graphic( aScanBmp ), aRect );
-                        SdrPageView* pPV = GetView()->GetSdrPageView();
-                        GetView()->InsertObjectAtView( pGrafObj, *pPV, SDRINSERT_SETDEFLAYER );
+                        pGrafObj = new SdrGrafObj(
+                            *GetDoc(),
+                            Graphic( aScanBmp ),
+                            basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                aBmpSize.getWidth(), aBmpSize.getHeight(),
+                                aPnt.X(), aPnt.Y()));
+                        GetView()->InsertObjectAtView( *pGrafObj, SDRINSERT_SETDEFLAYER );
                     }
                 }
             }

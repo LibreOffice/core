@@ -261,7 +261,7 @@ protected:
     void ShowDDCursor( const Rectangle& rRect );
     void HideDDCursor();
 
-    void ImplDrawHighlightRect( OutputDevice* _pTarget, const Point& rDocPosTopLeft, const Point& rDocPosBottomRight, PolyPolygon* pPolyPoly );
+    void ImplDrawHighlightRect( OutputDevice* pOutWin, const Point& rDocPosTopLeft, const Point& rDocPosBottomRight, PolyPolygon* pPolyPoly );
 
 public:
                     ImpEditView( EditView* pView, EditEngine* pEng, Window* pWindow );
@@ -748,7 +748,7 @@ public:
     void                    FormatDoc();
     void                    FormatFullDoc();
     void                    UpdateViews( EditView* pCurView = 0 );
-    void                    Paint( ImpEditView* pView, const Rectangle& rRect, OutputDevice* pTargetDevice = 0, sal_Bool bUseVirtDev = sal_False );
+    void                    Paint( ImpEditView* pView, const Rectangle& rRect, OutputDevice* pTargetDevice = 0, bool bUseVirtDev = false );
     void                    Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aStartPos, sal_Bool bStripOnly = sal_False, short nOrientation = 0 );
 
     sal_Bool                MouseButtonUp( const MouseEvent& rMouseEvent, EditView* pView );

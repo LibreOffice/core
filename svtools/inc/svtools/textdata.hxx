@@ -132,7 +132,6 @@ private:
     sal_uLong   mnValue;
 
 public:
-            TYPEINFO();
             TextHint( sal_uLong nId );
             TextHint( sal_uLong nId, sal_uLong nValue );
 

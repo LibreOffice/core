@@ -28,8 +28,6 @@
 #include "sdundogr.hxx"
 
 
-TYPEINIT1(SdUndoGroup, SdUndoAction);
-
 /*************************************************************************
 |*
 |* Destruktor
@@ -54,16 +52,17 @@ SdUndoGroup::~SdUndoGroup()
 
 sal_Bool SdUndoGroup::Merge( SfxUndoAction* pNextAction )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
+    SdUndoAction* pSdUndoAction = dynamic_cast< SdUndoAction* >(pNextAction);
 
-    if( pNextAction && pNextAction->ISA( SdUndoAction ) )
+    if( pSdUndoAction )
     {
-        SdUndoAction* pClone = static_cast< SdUndoAction* >( pNextAction )->Clone();
+        SdUndoAction* pClone = pSdUndoAction->Clone();
 
         if( pClone )
         {
             AddAction( pClone );
-            bRet = sal_True;
+            bRet = true;
         }
     }
 

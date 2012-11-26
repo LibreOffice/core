@@ -63,10 +63,9 @@ public:
     sal_Int32       lShiftRight;     // Verschiebung nach rechts       (twips)
     sal_Int32       lShiftDown;      // Verschiebung nach unten        (twips)
 
+    POOLITEM_FACTORY()
     SwEnvItem();
     SwEnvItem(const SwEnvItem& rItem);
-
-    TYPEINFO();
 
     SwEnvItem& operator =(const SwEnvItem& rItem);
 

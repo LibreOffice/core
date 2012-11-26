@@ -77,7 +77,8 @@ namespace sdr
         {
             if(!mpEmptyItemSet)
             {
-                ((EmptyProperties*)this)->mpEmptyItemSet = &(((EmptyProperties*)this)->CreateObjectSpecificItemSet(*GetSdrObject().GetObjectItemPool()));
+                ((EmptyProperties*)this)->mpEmptyItemSet = &(((EmptyProperties*)this)->CreateObjectSpecificItemSet(
+                    GetSdrObject().GetObjectItemPool()));
             }
 
             DBG_ASSERT(mpEmptyItemSet, "Could not create an SfxItemSet(!)");
@@ -116,7 +117,7 @@ namespace sdr
             DBG_ASSERT(sal_False, "EmptyProperties::ItemSetChanged() should never be called (!)");
         }
 
-        sal_Bool EmptyProperties::AllowItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/) const
+        bool EmptyProperties::AllowItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/) const
         {
             DBG_ASSERT(sal_False, "EmptyProperties::AllowItemChange() should never be called (!)");
             return sal_True;
@@ -132,7 +133,7 @@ namespace sdr
             DBG_ASSERT(sal_False, "EmptyProperties::PostItemChange() should never be called (!)");
         }
 
-        void EmptyProperties::SetStyleSheet(SfxStyleSheet* /*pNewStyleSheet*/, sal_Bool /*bDontRemoveHardAttr*/)
+        void EmptyProperties::SetStyleSheet(SfxStyleSheet* /*pNewStyleSheet*/, bool /*bDontRemoveHardAttr*/)
         {
             DBG_ASSERT(sal_False, "EmptyProperties::SetStyleSheet() should never be called (!)");
         }

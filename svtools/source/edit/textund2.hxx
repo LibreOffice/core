@@ -34,7 +34,6 @@ private:
     TextNode*       mpNode; // Zeigt auf das gueltige, nicht zerstoerte Objekt!
 
 public:
-                    TYPEINFO();
                     TextUndoDelPara( TextEngine* pTextEngine, TextNode* pNode, sal_uLong nPara );
                     ~TextUndoDelPara();
 
@@ -50,7 +49,6 @@ private:
     sal_uInt16          mnSepPos;
 
 public:
-                    TYPEINFO();
                     TextUndoConnectParas( TextEngine* pTextEngine, sal_uLong nPara, sal_uInt16 nSepPos );
                     ~TextUndoConnectParas();
 
@@ -66,7 +64,6 @@ private:
     sal_uInt16          mnSepPos;
 
 public:
-                    TYPEINFO();
                     TextUndoSplitPara( TextEngine* pTextEngine, sal_uLong nPara, sal_uInt16 nSepPos );
                     ~TextUndoSplitPara();
 
@@ -82,7 +79,6 @@ private:
     String          maText;
 
 public:
-                    TYPEINFO();
                     TextUndoInsertChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, const String& rStr );
 
 //  const TextPaM&  GetTextPaM() { return aTextPaM; }
@@ -102,7 +98,6 @@ private:
     String          maText;
 
 public:
-                    TYPEINFO();
                     TextUndoRemoveChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, const String& rStr );
 
 //  const TextPaM&      GetTextPaM() { return aTextPaM; }
@@ -127,7 +122,6 @@ private:
 
 
 public:
-                        TYPEINFO();
                         TextUndoSetAttribs( TextEngine* pTextEngine, const TextSelection& rESel );
                         ~TextUndoSetAttribs();
 

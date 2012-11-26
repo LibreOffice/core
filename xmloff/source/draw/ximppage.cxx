@@ -206,8 +206,6 @@ void DrawAnnotationContext::EndElement()
 
 //////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1( SdXMLGenericPageContext, SvXMLImportContext );
-
 SdXMLGenericPageContext::SdXMLGenericPageContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx, const OUString& rLocalName,
@@ -335,8 +333,11 @@ void SdXMLGenericPageContext::EndElement()
                     else if( aDateTimeFormat.getLength() )
                     {
                         const SdXMLStylesContext* pStyles = dynamic_cast< const SdXMLStylesContext* >( GetSdImport().GetShapeImport()->GetStylesContext() );
+
                         if( !pStyles )
+                        {
                             pStyles = dynamic_cast< const SdXMLStylesContext* >( GetSdImport().GetShapeImport()->GetAutoStylesContext() );
+                        }
 
                         if( pStyles )
                         {
@@ -360,7 +361,7 @@ void SdXMLGenericPageContext::EndElement()
         }
     }
 
-    SetNavigationOrder();
+    SetUserNavigationOrder();
 }
 
 void SdXMLGenericPageContext::SetStyle( rtl::OUString& rStyleName )
@@ -370,52 +371,47 @@ void SdXMLGenericPageContext::SetStyle( rtl::OUString& rStyleName )
     {
         try
         {
-            const SvXMLImportContext* pContext = GetSdImport().GetShapeImport()->GetAutoStylesContext();
+            const SdXMLStylesContext* pStyles = dynamic_cast< const SdXMLStylesContext*>(
+                GetSdImport().GetShapeImport()->GetAutoStylesContext());
 
-            if( pContext && pContext->ISA( SvXMLStyleContext ) )
+            if(pStyles)
             {
-                const SdXMLStylesContext* pStyles = (SdXMLStylesContext*)pContext;
-                if(pStyles)
+                const XMLPropStyleContext* pPropStyle = dynamic_cast< const XMLPropStyleContext* >(
+                    pStyles->FindStyleChildContext(XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID, rStyleName));
+
+                if(pPropStyle)
                 {
-                    const SvXMLStyleContext* pStyle = pStyles->FindStyleChildContext(
-                        XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID, rStyleName);
-
-                    if(pStyle && pStyle->ISA(XMLPropStyleContext))
+                    Reference <beans::XPropertySet> xPropSet1(mxShapes, uno::UNO_QUERY);
+                    if(xPropSet1.is())
                     {
-                        XMLPropStyleContext* pPropStyle = (XMLPropStyleContext*)pStyle;
+                        Reference< beans::XPropertySet > xPropSet( xPropSet1 );
+                        Reference< beans::XPropertySet > xBackgroundSet;
 
-                        Reference <beans::XPropertySet> xPropSet1(mxShapes, uno::UNO_QUERY);
-                        if(xPropSet1.is())
+                        const OUString aBackground(RTL_CONSTASCII_USTRINGPARAM("Background"));
+                        if( xPropSet1->getPropertySetInfo()->hasPropertyByName( aBackground ) )
                         {
-                            Reference< beans::XPropertySet > xPropSet( xPropSet1 );
-                            Reference< beans::XPropertySet > xBackgroundSet;
-
-                            const OUString aBackground(RTL_CONSTASCII_USTRINGPARAM("Background"));
-                            if( xPropSet1->getPropertySetInfo()->hasPropertyByName( aBackground ) )
+                            Reference< beans::XPropertySetInfo > xInfo( xPropSet1->getPropertySetInfo() );
+                            if( xInfo.is() && xInfo->hasPropertyByName( aBackground ) )
                             {
-                                Reference< beans::XPropertySetInfo > xInfo( xPropSet1->getPropertySetInfo() );
-                                if( xInfo.is() && xInfo->hasPropertyByName( aBackground ) )
+                                Reference< lang::XMultiServiceFactory > xServiceFact(GetSdImport().GetModel(), uno::UNO_QUERY);
+                                if(xServiceFact.is())
                                 {
-                                    Reference< lang::XMultiServiceFactory > xServiceFact(GetSdImport().GetModel(), uno::UNO_QUERY);
-                                    if(xServiceFact.is())
-                                    {
-                                        xBackgroundSet = Reference< beans::XPropertySet >::query(
-                                            xServiceFact->createInstance(
-                                            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Background"))));
-                                    }
+                                    xBackgroundSet = Reference< beans::XPropertySet >::query(
+                                        xServiceFact->createInstance(
+                                        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Background"))));
                                 }
-
-                                if( xBackgroundSet.is() )
-                                    xPropSet = PropertySetMerger_CreateInstance( xPropSet1, xBackgroundSet );
                             }
 
-                            if(xPropSet.is())
-                            {
-                                pPropStyle->FillPropertySet(xPropSet);
+                            if( xBackgroundSet.is() )
+                                xPropSet = PropertySetMerger_CreateInstance( xPropSet1, xBackgroundSet );
+                        }
 
-                                if( xBackgroundSet.is() )
-                                    xPropSet1->setPropertyValue( aBackground, uno::makeAny( xBackgroundSet ) );
-                            }
+                        if(xPropSet.is())
+                        {
+                            const_cast< XMLPropStyleContext* >(pPropStyle)->FillPropertySet(xPropSet);
+
+                            if( xBackgroundSet.is() )
+                                xPropSet1->setPropertyValue( aBackground, uno::makeAny( xBackgroundSet ) );
                         }
                     }
                 }
@@ -437,21 +433,23 @@ void SdXMLGenericPageContext::SetLayout()
 
         const SvXMLImportContext* pContext = GetSdImport().GetShapeImport()->GetStylesContext();
 
-        if( pContext && pContext->ISA( SvXMLStyleContext ) )
+        if(pContext)
         {
-            const SdXMLStylesContext* pStyles = (SdXMLStylesContext*)pContext;
+            const SdXMLStylesContext* pStyles = dynamic_cast< const SdXMLStylesContext*>(pContext);
+
             if(pStyles)
             {
-                const SvXMLStyleContext* pStyle = pStyles->FindStyleChildContext( XML_STYLE_FAMILY_SD_PRESENTATIONPAGELAYOUT_ID, maPageLayoutName);
+                const SdXMLPresentationPageLayoutContext* pLayout = dynamic_cast< const SdXMLPresentationPageLayoutContext* >(
+                    pStyles->FindStyleChildContext( XML_STYLE_FAMILY_SD_PRESENTATIONPAGELAYOUT_ID, maPageLayoutName));
 
-                if(pStyle && pStyle->ISA(SdXMLPresentationPageLayoutContext))
+                if(pLayout)
                 {
-                    SdXMLPresentationPageLayoutContext* pLayout = (SdXMLPresentationPageLayoutContext*)pStyle;
                     nType = pLayout->GetTypeId();
                 }
             }
 
         }
+
         if( -1 == nType )
         {
             Reference< container::XNameAccess > xPageLayouts( GetSdImport().getPageLayouts() );
@@ -503,12 +501,11 @@ void SdXMLGenericPageContext::SetPageMaster( OUString& rsPageMasterName )
 
         // #80012# GetStylesContext() replaced with GetAutoStylesContext()
         const SvXMLStylesContext* pAutoStyles = GetSdImport().GetShapeImport()->GetAutoStylesContext();
+        const SdXMLPageMasterContext* pPageMaster = dynamic_cast< const SdXMLPageMasterContext* >(
+            pAutoStyles ? pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_SD_PAGEMASTERCONEXT_ID, rsPageMasterName) : 0);
 
-        const SvXMLStyleContext* pStyle = pAutoStyles ? pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_SD_PAGEMASTERCONEXT_ID, rsPageMasterName) : NULL;
-
-        if(pStyle && pStyle->ISA(SdXMLPageMasterContext))
+        if(pPageMaster)
         {
-            const SdXMLPageMasterContext* pPageMaster = (SdXMLPageMasterContext*)pStyle;
             const SdXMLPageMasterStyleContext* pPageMasterContext = pPageMaster->GetPageMasterStyle();
 
             if(pPageMasterContext)
@@ -604,7 +601,7 @@ sal_Bool SAL_CALL NavigationOrderAccess::hasElements(  ) throw (RuntimeException
     return maShapes.empty() ? sal_False : sal_True;
 }
 
-void SdXMLGenericPageContext::SetNavigationOrder()
+void SdXMLGenericPageContext::SetUserNavigationOrder()
 {
     if( msNavOrder.getLength() != 0 ) try
     {
@@ -627,7 +624,7 @@ void SdXMLGenericPageContext::SetNavigationOrder()
         {
             if( !aShapes[nIndex].is() )
             {
-                DBG_ERROR("xmloff::SdXMLGenericPageContext::SetNavigationOrder(), draw:nav-order attribute incomplete!");
+                DBG_ERROR("xmloff::SdXMLGenericPageContext::SetUserNavigationOrder(), draw:nav-order attribute incomplete!");
                 // todo: warning?
                 return;
             }
@@ -638,6 +635,6 @@ void SdXMLGenericPageContext::SetNavigationOrder()
     }
     catch( uno::Exception& )
     {
-        DBG_ERROR("xmloff::SdXMLGenericPageContext::SetNavigationOrder(), unexpected exception cought while importing shape navigation order!");
+        DBG_ERROR("xmloff::SdXMLGenericPageContext::SetUserNavigationOrder(), unexpected exception cought while importing shape navigation order!");
     }
 }

@@ -388,7 +388,6 @@ sal_uInt16 lcl_GetPropertyMapOfService( sal_uInt16 nServiceId )
 /******************************************************************
  * SwXFieldMaster
  ******************************************************************/
-TYPEINIT1(SwXFieldMaster, SwClient);
 
 const uno::Sequence< sal_Int8 > & SwXFieldMaster::getUnoTunnelId()
 {
@@ -1065,8 +1064,6 @@ struct SwFieldProperties_Impl
         {delete pDateTime;}
 
 };
-
-TYPEINIT1(SwXTextField, SwClient);
 
 const uno::Sequence< sal_Int8 > & SwXTextField::getUnoTunnelId()
 {
@@ -2730,6 +2727,7 @@ SwXFieldEnumeration::SwXFieldEnumeration(SwDoc* pDc) :
     for(sal_uInt16 nType = 0;  nType < nCount;  ++nType)
     {
         const SwFieldType *pCurType = pFldTypes->GetObject(nType);
+
         SwIterator<SwFmtFld,SwFieldType> aIter( *pCurType );
         const SwFmtFld* pCurFldFmt = aIter.First();
         while (pCurFldFmt)

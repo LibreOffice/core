@@ -82,8 +82,6 @@ class XMLTextMarkImportContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLTextMarkImportContext(
         SvXMLImport& rImport,
         XMLTextImportHelper& rHlp,

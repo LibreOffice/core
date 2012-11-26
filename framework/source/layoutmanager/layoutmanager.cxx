@@ -1442,7 +1442,7 @@ IMPL_LINK( LayoutManager, WindowEventListener, VclSimpleEvent*, pEvent )
 {
     long nResult( 1 );
 
-    if ( pEvent && pEvent->ISA( VclWindowEvent ))
+    if ( pEvent && dynamic_cast< VclWindowEvent* >( pEvent))
     {
         Window* pWindow = static_cast< VclWindowEvent* >(pEvent)->GetWindow();
         if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )

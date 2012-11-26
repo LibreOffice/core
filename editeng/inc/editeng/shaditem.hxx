@@ -53,9 +53,8 @@ class EDITENG_DLLPUBLIC SvxShadowItem : public SfxEnumItemInterface
     sal_uInt16              nWidth;
     SvxShadowLocation   eLocation;
 public:
-    TYPEINFO();
-
-    SvxShadowItem( const sal_uInt16 nId ,
+    POOLITEM_FACTORY()
+    SvxShadowItem( const sal_uInt16 nId = 0,
                  const Color *pColor = 0, const sal_uInt16 nWidth = 100 /*5pt*/,
                  const SvxShadowLocation eLoc = SVX_SHADOW_NONE );
 
@@ -74,8 +73,8 @@ public:
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const;
-    virtual int              ScaleMetrics( long nMult, long nDiv );
-    virtual int              HasMetrics() const;
+    virtual void             ScaleMetrics( long nMult, long nDiv );
+    virtual bool             HasMetrics() const;
 
     const Color& GetColor() const { return aShadowColor;}
     void SetColor( const Color &rNew ) { aShadowColor = rNew; }

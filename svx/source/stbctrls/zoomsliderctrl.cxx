@@ -198,14 +198,14 @@ SvxZoomSliderControl::~SvxZoomSliderControl()
 
 void SvxZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
-    if ( (SFX_ITEM_AVAILABLE != eState) || pState->ISA( SfxVoidItem ) )
+    if ( (SFX_ITEM_AVAILABLE != eState) || dynamic_cast< const SfxVoidItem* >(pState) )
     {
         GetStatusBar().SetItemText( GetId(), String() );
         mpImpl->mbValuesSet   = false;
     }
     else
     {
-        OSL_ENSURE( pState->ISA( SvxZoomSliderItem ), "invalid item type: should be a SvxZoomSliderItem" );
+        OSL_ENSURE( dynamic_cast< const SvxZoomSliderItem* >(pState), "invalid item type: should be a SvxZoomSliderItem" );
         mpImpl->mnCurrentZoom = static_cast<const SvxZoomSliderItem*>( pState )->GetValue();
         mpImpl->mnMinZoom     = static_cast<const SvxZoomSliderItem*>( pState )->GetMinZoom();
         mpImpl->mnMaxZoom     = static_cast<const SvxZoomSliderItem*>( pState )->GetMaxZoom();

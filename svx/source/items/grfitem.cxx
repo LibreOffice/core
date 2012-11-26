@@ -34,7 +34,6 @@ using namespace ::com::sun::star;
 
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
-//TYPEINIT1_FACTORY( SvxGrfCrop, SfxPoolItem , new  SvxGrfCrop(0))
 
 /******************************************************************************
  *  Implementierung     class SwCropGrf
@@ -53,6 +52,11 @@ SvxGrfCrop::SvxGrfCrop( sal_Int32 nL, sal_Int32 nR,
 
 SvxGrfCrop::~SvxGrfCrop()
 {
+}
+
+SfxPoolItem* SvxGrfCrop::Clone(SfxItemPool* /*pPool*/) const
+{
+    return new SvxGrfCrop(nLeft, nRight, nTop, nBottom, Which());
 }
 
 int SvxGrfCrop::operator==( const SfxPoolItem& rAttr ) const

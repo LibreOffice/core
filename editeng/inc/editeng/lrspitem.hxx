@@ -72,9 +72,8 @@ class EDITENG_DLLPUBLIC SvxLRSpaceItem : public SfxPoolItem
     void   AdjustLeft();        // nLeftMargin und nTxtLeft werden angepasst.
 
 public:
-    TYPEINFO();
-
-    SvxLRSpaceItem( const sal_uInt16 nId  );
+    POOLITEM_FACTORY()
+    SvxLRSpaceItem( const sal_uInt16 nId = 0 );
     SvxLRSpaceItem( const long nLeft, const long nRight,
                     const long nTLeft /*= 0*/, const short nOfset /*= 0*/,
                     const sal_uInt16 nId  );
@@ -94,9 +93,9 @@ public:
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const;
-    virtual sal_uInt16           GetVersion( sal_uInt16 nFileVersion ) const;
-    virtual int              ScaleMetrics( long nMult, long nDiv );
-    virtual int              HasMetrics() const;
+    virtual sal_uInt16       GetVersion( sal_uInt16 nFileVersion ) const;
+    virtual void             ScaleMetrics( long nMult, long nDiv );
+    virtual bool             HasMetrics() const;
 
     // Die "Layout-Schnittstelle":
     inline void   SetLeft ( const long nL, const sal_uInt16 nProp = 100 );

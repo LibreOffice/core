@@ -125,7 +125,6 @@ class SbxHint : public SfxSimpleHint
 {
     SbxVariable* pVar;
 public:
-    TYPEINFO();
     SbxHint( sal_uIntPtr n, SbxVariable* v ) : SfxSimpleHint( n ), pVar( v ) {}
     SbxVariable* GetVar() const { return pVar; }
 };
@@ -182,7 +181,6 @@ protected:
 
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_ARRAY,1);
-    TYPEINFO();
     SbxArray( SbxDataType=SbxVARIANT );
     SbxArray( const SbxArray& );
     SbxArray& operator=( const SbxArray& );
@@ -239,7 +237,6 @@ protected:
     virtual ~SbxDimArray();
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_DIMARRAY,1);
-    TYPEINFO();
     SbxDimArray( SbxDataType=SbxVARIANT );
     SbxDimArray( const SbxDimArray& );
     SbxDimArray& operator=( const SbxDimArray& );
@@ -292,7 +289,6 @@ protected:
 
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_COLLECTION,1);
-    TYPEINFO();
     SbxCollection( const String& rClassname );
     SbxCollection( const SbxCollection& );
     SbxCollection& operator=( const SbxCollection& );
@@ -318,7 +314,6 @@ protected:
     virtual void CollRemove( SbxArray* pPar );
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_FIXCOLLECTION,1);
-    TYPEINFO();
     SbxStdCollection
         ( const String& rClassname, const String& rElemClass, sal_Bool=sal_True );
     SbxStdCollection( const SbxStdCollection& );

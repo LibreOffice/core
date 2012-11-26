@@ -44,7 +44,7 @@ class SvxGraphCtrlAccessibleContext;
 #define WB_SDRMODE      ((WinBits)0x0080)
 #define WB_ANIMATION    ((WinBits)0x0100)
 
-class SVX_DLLPUBLIC GraphCtrl : public Control
+class SVX_DLLPUBLIC GraphCtrl : public Control, public SfxListener
 {
     friend class GraphCtrlView;
     friend class GraphCtrlUserCall;
@@ -58,9 +58,8 @@ class SVX_DLLPUBLIC GraphCtrl : public Control
     MapMode             aMap100;
     Size                aGraphSize;
     Point               aMousePos;
-    GraphCtrlUserCall*  pUserCall;
     WinBits             nWinStyle;
-    SdrObjKind          eObjKind;
+    SdrObjectCreationInfo   maSdrObjectCreationInfo;
     sal_uInt16              nPolyEdit;
     sal_Bool                bEditMode;
     sal_Bool                bSdrMode;
@@ -86,11 +85,16 @@ protected:
 
     virtual void        SdrObjCreated( const SdrObject& rObj );
     virtual void        SdrObjChanged( const SdrObject& rObj );
-    virtual void        MarkListHasChanged();
-
-    SdrObjUserCall*     GetSdrUserCall() { return (SdrObjUserCall*) pUserCall; }
+    virtual void selectionChange();
 
 public:
+    // from SfxListener
+    using Control::Notify;
+    using SfxListener::Notify;
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
+    // establich connection to given SDrObject to get Notify-calls
+    void                ConnectToSdrObject(SdrObject* pObject);
 
                         GraphCtrl( Window* pParent, const WinBits nWinBits = 0 );
                         GraphCtrl( Window* pParent, const ResId& rResId );
@@ -111,8 +115,8 @@ public:
     void                SetPolyEditMode( const sal_uInt16 nPolyEdit );
     sal_uInt16              GetPolyEditMode() const { return nPolyEdit; }
 
-    void                SetObjKind( const SdrObjKind eObjKind );
-    SdrObjKind          GetObjKind() const { return eObjKind; }
+    void setSdrObjectCreationInfo( const SdrObjectCreationInfo& rSdrObjectCreationInfo );
+    const SdrObjectCreationInfo& getSdrObjectCreationInfo() const { return maSdrObjectCreationInfo; }
 
     SdrModel*           GetSdrModel() const { return pModel; }
     SdrView*            GetSdrView() const { return pView; }
@@ -144,40 +148,18 @@ public:
 |*
 \************************************************************************/
 
-class GraphCtrlUserCall : public SdrObjUserCall
-{
-    GraphCtrl&      rWin;
-
-public:
-
-                    GraphCtrlUserCall( GraphCtrl& rGraphWin ) : rWin( rGraphWin ) {};
-    virtual         ~GraphCtrlUserCall() {};
-
-    virtual void    Changed( const SdrObject& rObj, SdrUserCallType eType, const Rectangle& rOldBoundRect );
-};
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 class GraphCtrlView : public SdrView
 {
     GraphCtrl&      rGraphCtrl;
 
 protected:
 
-    virtual void    MarkListHasChanged()
-                    {
-                        SdrView::MarkListHasChanged();
-                        rGraphCtrl.MarkListHasChanged();
-                    }
+    virtual void handleSelectionChange();
 
 public:
 
-                    GraphCtrlView( SdrModel* pModel, GraphCtrl* pWindow) :
-                            SdrView     ( pModel, pWindow ),
+                    GraphCtrlView( SdrModel& rModel, GraphCtrl* pWindow) :
+                            SdrView     ( rModel, pWindow ),
                             rGraphCtrl  ( *pWindow ) {};
 
     virtual         ~GraphCtrlView() {};

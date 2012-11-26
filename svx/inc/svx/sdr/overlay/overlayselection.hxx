@@ -57,7 +57,7 @@ namespace sdr
             sal_uInt16                          mnLastTransparence;
 
             // bitfield
-            unsigned                            mbBorder : 1;
+            bool                                mbBorder : 1;
 
             // geometry creation for OverlayObject, can use local *Last* values
             virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();

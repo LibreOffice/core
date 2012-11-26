@@ -23,84 +23,64 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include "svx/svditer.hxx"
+
+#include <svx/svditer.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/svdmark.hxx>
-
-// #99190#
 #include <svx/scene3d.hxx>
 
-SdrObjListIter::SdrObjListIter(const SdrObjList& rObjList, SdrIterMode eMode, sal_Bool bReverse)
-:   maObjList(1024, 64, 64),
-    mnIndex(0L),
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+SdrObjListIter::SdrObjListIter(const SdrObjList& rObjList, SdrIterMode eMode, bool bReverse)
+:   maObjList(),
+    mnIndex(0),
     mbReverse(bReverse)
 {
-    ImpProcessObjectList(rObjList, eMode, sal_True);
+    ImpProcessObjectList(rObjList, eMode);
     Reset();
 }
 
-SdrObjListIter::SdrObjListIter(const SdrObjList& rObjList, sal_Bool bUseZOrder, SdrIterMode eMode, sal_Bool bReverse)
-:   maObjList(1024, 64, 64),
-    mnIndex(0L),
+SdrObjListIter::SdrObjListIter(const SdrObject& rObj, SdrIterMode eMode, bool bReverse)
+:   maObjList(),
+    mnIndex(0),
     mbReverse(bReverse)
 {
-    ImpProcessObjectList(rObjList, eMode, bUseZOrder);
+    ImpProcessObj(rObj, eMode); // , true);
     Reset();
 }
 
-SdrObjListIter::SdrObjListIter( const SdrObject& rObj, SdrIterMode eMode, sal_Bool bReverse )
-:   maObjList(1024, 64, 64),
-    mnIndex(0L),
-    mbReverse(bReverse)
+void SdrObjListIter::ImpProcessObjectList(const SdrObjList& rObjList, SdrIterMode eMode)
 {
-    if ( rObj.ISA( SdrObjGroup ) )
-        ImpProcessObjectList(*rObj.GetSubList(), eMode, sal_True);
-    else
-        maObjList.Insert( (void*)&rObj, LIST_APPEND );
-    Reset();
-}
-
-SdrObjListIter::SdrObjListIter( const SdrMarkList& rMarkList, SdrIterMode eMode, sal_Bool bReverse )
-:   maObjList(1024, 64, 64),
-    mnIndex(0L),
-    mbReverse(bReverse)
-{
-    ImpProcessMarkList(rMarkList, eMode);
-    Reset();
-}
-
-void SdrObjListIter::ImpProcessObjectList(const SdrObjList& rObjList, SdrIterMode eMode, sal_Bool bUseZOrder)
-{
-    for( sal_uIntPtr nIdx = 0, nCount = rObjList.GetObjCount(); nIdx < nCount; ++nIdx )
+    for(sal_uInt32 nIdx(0), nCount(rObjList.GetObjCount()); nIdx < nCount; nIdx++)
     {
-        SdrObject* pObj = bUseZOrder ?
-            rObjList.GetObj( nIdx ) : rObjList.GetObjectForNavigationPosition( nIdx );
-        OSL_ASSERT( pObj != 0 );
-        if( pObj )
-            ImpProcessObj( pObj, eMode, bUseZOrder );
+        SdrObject* pObj = rObjList.GetObj(nIdx);
+
+        if(pObj)
+        {
+            ImpProcessObj(*pObj, eMode);
+        }
+        else
+        {
+            OSL_ENSURE(false, "SdrObjListIter: corrupted SdrObjList (!)");
+        }
     }
 }
 
-void SdrObjListIter::ImpProcessMarkList( const SdrMarkList& rMarkList, SdrIterMode eMode )
+void SdrObjListIter::ImpProcessObj(const SdrObject& rObj, SdrIterMode eMode)
 {
-    for( sal_uIntPtr nIdx = 0, nCount = rMarkList.GetMarkCount(); nIdx < nCount; ++nIdx )
-        if( SdrObject* pObj = rMarkList.GetMark( nIdx )->GetMarkedSdrObj() )
-            ImpProcessObj( pObj, eMode, sal_False );
+    const bool bIsGroup(rObj.getChildrenOfSdrObject());
+
+    if(!bIsGroup || (IM_DEEPNOGROUPS != eMode))
+    {
+        maObjList.push_back(const_cast< SdrObject* >(&rObj));
+    }
+
+    if(bIsGroup && (IM_FLAT != eMode))
+    {
+        ImpProcessObjectList(*rObj.getChildrenOfSdrObject(), eMode);
+    }
 }
 
-void SdrObjListIter::ImpProcessObj(SdrObject* pObj, SdrIterMode eMode, sal_Bool bUseZOrder)
-{
-    bool bIsGroup = pObj->IsGroupObject();
-    // #99190# 3D objects are no group objects, IsGroupObject()
-    // only tests if pSub is not null ptr :-(
-    if( bIsGroup && pObj->ISA( E3dObject ) && !pObj->ISA( E3dScene ) )
-        bIsGroup = false;
-
-    if( !bIsGroup || (eMode != IM_DEEPNOGROUPS) )
-        maObjList.Insert( pObj, LIST_APPEND );
-
-    if( bIsGroup && (eMode != IM_FLAT) )
-        ImpProcessObjectList( *pObj->GetSubList(), eMode, bUseZOrder );
-}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// eof

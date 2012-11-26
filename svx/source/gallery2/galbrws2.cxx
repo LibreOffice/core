@@ -115,20 +115,20 @@ void GalleryBackgroundPopup::StateChanged( sal_uInt16 nSID, SfxItemState eState,
 {
     if ( ( nSID == SID_GALLERY_BG_BRUSH ) && pItem && ( eState != SFX_ITEM_DISABLED ) )
     {
-        SfxStringListItem*  pStrLstItem;
-        SfxStringItem*      pStrItem;
+        const SfxStringListItem*    pStrLstItem;
+        const SfxStringItem*        pStrItem;
 
         PopupMenu::Clear();
 
-        if( ( pStrLstItem = PTR_CAST( SfxStringListItem, pItem ) ) != NULL )
+        if( ( pStrLstItem = dynamic_cast< const SfxStringListItem* >( pItem ) ) != NULL )
         {
-            List* pList = pStrLstItem->GetList();
+            const List* pList = pStrLstItem->GetList();
 
             if( pList )
                 for ( sal_uIntPtr i = 0, nCount = pList->Count(); i < nCount; i++ )
                     InsertItem( (sal_uInt16) i + 1, *(String*) pList->GetObject( i ) );
         }
-        else if( ( pStrItem = PTR_CAST( SfxStringItem, pItem ) ) != NULL )
+        else if( ( pStrItem = dynamic_cast< const SfxStringItem* >( pItem ) ) != NULL )
             InsertItem( 1, pStrItem->GetValue() );
         else
         {
@@ -273,7 +273,7 @@ void GalleryThemePopup::StateChanged( sal_uInt16 nSID, SfxItemState eState, cons
 {
     if( ( nSID == SID_GALLERY_ENABLE_ADDCOPY ) && pItem && ( eState != SFX_ITEM_DISABLED ) )
     {
-        SfxBoolItem*        pBoolItem = PTR_CAST( SfxBoolItem, pItem );
+        const SfxBoolItem* pBoolItem = dynamic_cast< const SfxBoolItem* >( pItem );
         const SgaObjKind    eObjKind = mpTheme->GetObjectKind( mnObjectPos );
 
         DBG_ASSERT( pBoolItem || pBoolItem == 0, "SfxBoolItem erwartet!");

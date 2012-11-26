@@ -109,6 +109,8 @@
 #include <vcl/salbtype.hxx>     // FRound
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <svx/svdlegacy.hxx>
+#include <svx/fmmodel.hxx>
 
 
 using namespace ::com::sun::star;
@@ -1236,18 +1238,13 @@ void SwRTFParser::ReadDrawingObject()
         }
     }
     SkipToken(-1);
-    /*
-    const Point aPointC1( 0, 0 );
-    const Point aPointC2( 100, 200 );
-    const Point aPointC3( 300, 400 );
-    XPolygon aPolygonC(3);
-    aPolygonC[0] = aPointC1;
-    aPolygonC[1] = aPointC2;
-    aPolygonC[2] = aPointC3;
-    */
+
     if(bPolygonActive && aPolygon.count())
     {
-        SdrPathObj* pStroke = new SdrPathObj(OBJ_PLIN, ::basegfx::B2DPolyPolygon(aPolygon));
+        SdrModel* pDrawModel  = pDoc->GetOrCreateDrawModel();
+        SdrPathObj* pStroke = new SdrPathObj(
+            *pDrawModel,
+            ::basegfx::B2DPolyPolygon(aPolygon));
         SfxItemSet aFlySet(pDoc->GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1);
         SwFmtSurround aSur( SURROUND_PARALLEL );
         aSur.SetContour( false );
@@ -1304,12 +1301,10 @@ void SwRTFParser::ReadDrawingObject()
         SwFmtVertOrient aVert( 0, text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME );
         aFlySet.Put( aVert );
 
-        pDoc->GetOrCreateDrawModel();
-        SdrModel* pDrawModel  = pDoc->GetDrawModel();
         SdrPage* pDrawPg = pDrawModel->GetPage(0);
-        pDrawPg->InsertObject(pStroke, 0);
+        pDrawPg->InsertObjectToSdrObjList(*pStroke, 0);
 
-        pStroke->SetSnapRect(aRect);
+        sdr::legacy::SetSnapRect(*pStroke, aRect);
 
         /* SwFrmFmt* pRetFrmFmt = */pDoc->Insert(*pPam, *pStroke, &aFlySet, NULL);
     }
@@ -1341,8 +1336,8 @@ void SwRTFParser::InsertShpObject(SdrObject* pStroke, int _nZOrder)
         pDoc->GetOrCreateDrawModel();
         SdrModel* pDrawModel  = pDoc->GetDrawModel();
         SdrPage* pDrawPg = pDrawModel->GetPage(0);
-        pDrawPg->InsertObject(pStroke);
-        pDrawPg->SetObjectOrdNum(pStroke->GetOrdNum(), _nZOrder);
+        pDrawPg->InsertObjectToSdrObjList(*pStroke);
+        pDrawPg->SetNavigationPosition(pStroke->GetNavigationPosition(), _nZOrder);
         /* SwFrmFmt* pRetFrmFmt = */pDoc->Insert(*pPam, *pStroke, &aFlySet, NULL);
 }
 
@@ -1480,11 +1475,13 @@ void SwRTFParser::ReadShapeObject()
             aRange.expand(b);
           }
 
-            const Rectangle aRect(FRound(aRange.getMinX()), FRound(aRange.getMinY()), FRound(aRange.getMaxX()), FRound(aRange.getMaxY()));
-            SdrRectObj* pStroke = new SdrRectObj(aRect);
+            SdrRectObj* pStroke = new SdrRectObj(
+                *pDoc->GetOrCreateDrawModel(),
+                basegfx::tools::createScaleTranslateB2DHomMatrix(
+                    aRange.getRange(),
+                    aRange.getMinimum()));
+
             pSdrObject = pStroke;
-            pStroke->SetSnapRect(aRect);
-            pDoc->GetOrCreateDrawModel(); // create model
             InsertShpObject(pStroke, this->nZOrder++);
             SfxItemSet aSet(pStroke->GetMergedItemSet());
             if (fFilled)
@@ -1510,14 +1507,13 @@ void SwRTFParser::ReadShapeObject()
               SvMemoryStream aStream((sal_Char*)bs.GetBuffer(), bs.Len(), STREAM_READ);
               rOutliner.Read(aStream, String::CreateFromAscii(""), EE_FORMAT_RTF);
               OutlinerParaObject* pParaObject=rOutliner.CreateParaObject();
-              pStroke->NbcSetOutlinerParaObject(pParaObject);
+              pStroke->SetOutlinerParaObject(pParaObject);
               //delete pParaObject;
               rOutliner.Clear();
             }
             if (txflTextFlow==2) {
               long nAngle = 90;
-              double a = nAngle*100*nPi180;
-              pStroke->Rotate(pStroke->GetCurrentBoundRect().Center(), nAngle*100, sin(a), cos(a) );
+              sdr::legacy::RotateSdrObject(*pStroke, sdr::legacy::GetBoundRect(*pStroke).Center(), nAngle*100 );
 
             }
 
@@ -1529,9 +1525,10 @@ void SwRTFParser::ReadShapeObject()
             aLine.append(aPointLeftTop);
             aLine.append(aPointRightBottom);
 
-            SdrPathObj* pStroke = new SdrPathObj(OBJ_PLIN, ::basegfx::B2DPolyPolygon(aLine));
+            SdrPathObj* pStroke = new SdrPathObj(
+                *pDoc->GetOrCreateDrawModel(),
+                ::basegfx::B2DPolyPolygon(aLine));
             pSdrObject = pStroke;
-            //pStroke->SetSnapRect(aRect);
 
             InsertShpObject(pStroke, this->nZOrder++);
             SfxItemSet aSet(pStroke->GetMergedItemSet());
@@ -1550,9 +1547,11 @@ void SwRTFParser::ReadShapeObject()
             aRange.expand(aPointRightBottom);
             const Rectangle aRect(FRound(aRange.getMinX()), FRound(aRange.getMinY()), FRound(aRange.getMaxX()), FRound(aRange.getMaxY()));
 
-            SdrRectObj* pStroke = new SdrGrafObj(aGrf);
+            SdrRectObj* pStroke = new SdrGrafObj(
+                *pDoc->GetOrCreateDrawModel(),
+                aGrf);
+            sdr::legacy::SetSnapRect(*pStroke, aRect);
             pSdrObject = pStroke;
-            pStroke->SetSnapRect(aRect);
 
             InsertShpObject(pStroke, this->nZOrder++);
         }

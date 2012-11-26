@@ -85,8 +85,6 @@ class EDITENG_DLLPUBLIC SvxBulletItem : public SfxPoolItem
 #endif
 
 public:
-    TYPEINFO();
-
     SvxBulletItem( sal_uInt16 nWhich = 0 );
     SvxBulletItem( sal_uInt8 nStyle, const Font& rFont, sal_uInt16 nStart = 0, sal_uInt16 nWhich = 0 );
     SvxBulletItem( const Font& rFont, sal_Unicode cSymbol, sal_uInt16 nWhich=0 );

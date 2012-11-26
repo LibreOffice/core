@@ -45,8 +45,6 @@
 
 namespace sd {
 
-TYPEINIT1( FuChar, FuPoor );
-
 /*************************************************************************
 |*
 |* Konstruktor
@@ -76,12 +74,12 @@ void FuChar::DoExecute( SfxRequest& rReq )
 
     if( !pArgs )
     {
-        SfxItemSet aEditAttr( mpDoc->GetPool() );
+        SfxItemSet aEditAttr( mpDoc->GetItemPool() );
         mpView->GetAttributes( aEditAttr );
 
         SfxItemSet aNewAttr( mpViewShell->GetPool(),
                                 EE_ITEMS_START, EE_ITEMS_END );
-        aNewAttr.Put( aEditAttr, sal_False );
+        aNewAttr.Put( aEditAttr, false );
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
         SfxAbstractTabDialog* pDlg = pFact ? pFact->CreateSdTabCharDialog( NULL, &aNewAttr, mpDoc->GetDocSh() ) : 0;
@@ -122,9 +120,9 @@ void FuChar::DoExecute( SfxRequest& rReq )
     if( mpDoc->GetOnlineSpell() )
     {
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == pArgs->GetItemState(EE_CHAR_LANGUAGE, sal_False, &pItem ) ||
-            SFX_ITEM_SET == pArgs->GetItemState(EE_CHAR_LANGUAGE_CJK, sal_False, &pItem ) ||
-            SFX_ITEM_SET == pArgs->GetItemState(EE_CHAR_LANGUAGE_CTL, sal_False, &pItem ) )
+        if( SFX_ITEM_SET == pArgs->GetItemState(EE_CHAR_LANGUAGE, false, &pItem ) ||
+            SFX_ITEM_SET == pArgs->GetItemState(EE_CHAR_LANGUAGE_CJK, false, &pItem ) ||
+            SFX_ITEM_SET == pArgs->GetItemState(EE_CHAR_LANGUAGE_CTL, false, &pItem ) )
         {
             mpDoc->StopOnlineSpelling();
             mpDoc->StartOnlineSpelling();

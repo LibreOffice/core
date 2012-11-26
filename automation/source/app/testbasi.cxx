@@ -49,8 +49,6 @@
 //#include "comm_bas.hxx"
 //#include "processw.hxx"
 
-TYPEINIT1(TTBasic,MyBasic)
-
 /*class MyFactory : public SbxFactory
 {
 public:

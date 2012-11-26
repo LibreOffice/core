@@ -265,7 +265,7 @@ public:
 
     virtual sal_Bool            IsFieldObject() const;
     virtual const SvxFieldItem* GetField() const;
-    virtual sal_Bool            HasField( TypeId Type = NULL ) const;
+    virtual sal_Bool            HasField( const std::type_info* pTypeInfo = 0 ) const;
 
     SfxItemSet              GetParaAttribs( sal_uInt16 nPara ) const;
     void                    SetParaAttribs( sal_uInt16 nPara, const SfxItemSet& rAttribs );

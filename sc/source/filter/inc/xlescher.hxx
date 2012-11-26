@@ -29,6 +29,7 @@
 #include "fapihelper.hxx"
 #include "xladdress.hxx"
 #include "xlstyle.hxx"
+#include <basegfx/range/b2drange.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace drawing { class XShape; }
@@ -317,13 +318,13 @@ struct XclObjAnchor : public XclRange
     explicit            XclObjAnchor();
 
     /** Calculates a rectangle from the contained coordinates. */
-    Rectangle           GetRect( const XclRoot& rRoot, SCTAB nScTab, MapUnit eMapUnit ) const;
+    basegfx::B2DRange   GetRangeFromAnchor( const XclRoot& rRoot, SCTAB nScTab, MapUnit eMapUnit ) const;
     /** Initializes the anchor coordinates for a sheet. */
-    void                SetRect( const XclRoot& rRoot, SCTAB nScTab, const Rectangle& rRect, MapUnit eMapUnit );
+    void                SetRangeAtAnchor( const XclRoot& rRoot, SCTAB nScTab, const basegfx::B2DRange& rObjectRange, MapUnit eMapUnit );
 
     /** Initializes the anchor coordinates for an embedded draw page. */
-    void                SetRect( const Size& rPageSize, sal_Int32 nScaleX, sal_Int32 nScaleY,
-                            const Rectangle& rRect, MapUnit eMapUnit, bool bDffAnchor );
+    void                SetRangeAtAnchor( const basegfx::B2DVector& rPageScale, double fScaleX, double fScaleY,
+                            const basegfx::B2DRange& rObjectRange, MapUnit eMapUnit, bool bDffAnchor );
 };
 
 template< typename StreamType >

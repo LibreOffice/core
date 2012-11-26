@@ -29,8 +29,6 @@
 class XMLChartOOoTransformerContext : public XMLTransformerContext
 {
 public:
-    TYPEINFO();
-
     XMLChartOOoTransformerContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName    );
     virtual ~XMLChartOOoTransformerContext();

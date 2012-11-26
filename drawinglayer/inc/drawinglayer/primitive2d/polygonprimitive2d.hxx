@@ -67,9 +67,6 @@ namespace drawinglayer
             const basegfx::B2DPolygon& getB2DPolygon() const { return maPolygon; }
             const basegfx::BColor& getBColor() const { return maBColor; }
 
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
-
             /// get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 
@@ -129,9 +126,6 @@ namespace drawinglayer
             const basegfx::BColor& getRGBColorB() const { return maRGBColorB; }
             double getDiscreteDashLength() const { return mfDiscreteDashLength; }
 
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
-
             /// get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 
@@ -190,9 +184,6 @@ namespace drawinglayer
             const attribute::LineAttribute& getLineAttribute() const { return maLineAttribute; }
             const attribute::StrokeAttribute& getStrokeAttribute() const { return maStrokeAttribute; }
 
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
-
             /// get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 
@@ -244,9 +235,6 @@ namespace drawinglayer
             /// data read access
             double getWaveWidth() const { return mfWaveWidth; }
             double getWaveHeight() const { return mfWaveHeight; }
-
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
             /// get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
@@ -300,9 +288,6 @@ namespace drawinglayer
             /// data read access
             const attribute::LineStartEndAttribute& getStart() const { return maStart; }
             const attribute::LineStartEndAttribute& getEnd() const { return maEnd; }
-
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
             /// get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;

@@ -35,7 +35,6 @@ class SdLayerModifyUndoAction : public SdUndoAction
 {
 
 public:
-    TYPEINFO();
     SdLayerModifyUndoAction( SdDrawDocument* _pDoc, SdrLayer* pLayer,
     const String& rOldLayerName, const String& rOldLayerTitle, const String& rOldLayerDesc, bool bOldIsVisible, bool bOldIsLocked, bool bOldIsPrintable,
     const String& rNewLayerName, const String& rNewLayerTitle, const String& rNewLayerDesc, bool bNewIsVisible, bool bNewIsLocked, bool bNewIsPrintable );

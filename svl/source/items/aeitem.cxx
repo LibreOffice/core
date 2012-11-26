@@ -36,8 +36,7 @@
 // STATIC DATA -----------------------------------------------------------
 
 DBG_NAME(SfxAllEnumItem)
-
-TYPEINIT1_AUTOFACTORY(SfxAllEnumItem, SfxEnumItem)
+IMPL_POOLITEM_FACTORY(SfxAllEnumItem)
 
 // -----------------------------------------------------------------------
 

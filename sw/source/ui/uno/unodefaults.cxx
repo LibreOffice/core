@@ -29,6 +29,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/unoprov.hxx>
 #include <doc.hxx>
+#include <svx/fmmodel.hxx>
 
 /* -----------------------------13.03.01 14:16--------------------------------
 

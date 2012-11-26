@@ -31,19 +31,17 @@
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/dialogs.hrc>
-
 #define _SVX_TABLINE_CXX
 #include <cuires.hrc>
 #include "tabline.hrc"
-//#include "dlgname.hrc"
-
-#include "cuitabarea.hxx"
-#include "cuitabline.hxx"
-#include "dlgname.hxx"
+#include <cuitabarea.hxx>
+#include <cuitabline.hxx>
+#include <dlgname.hxx>
 #include <dialmgr.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/xtable.hxx>
-#include "svx/drawitem.hxx"
+#include <svx/drawitem.hxx>
+#include <svx/svdopath.hxx>
 
 #define DLGWIN this->GetParent()->GetParent()
 
@@ -96,13 +94,27 @@ SvxLineTabDialog::SvxLineTabDialog
     {
         switch( pObj->GetObjIdentifier() )
         {
-        case OBJ_LINE:
-        case OBJ_PLIN:
-        case OBJ_PATHLINE:
-        case OBJ_FREELINE:
         case OBJ_MEASURE:
         case OBJ_EDGE:
             bLineOnly = true;
+            break;
+
+        case OBJ_POLY:
+        {
+            const SdrPathObj* pSdrPathObj = dynamic_cast< const SdrPathObj* >(pObj);
+            if(pSdrPathObj)
+            {
+                switch(pSdrPathObj->getSdrPathObjType())
+                {
+                    case PathType_Line:
+                    case PathType_OpenPolygon:
+                    case PathType_OpenBezier:
+                        bLineOnly = true;
+                        break;
+                }
+            }
+            break;
+        }
 
         default:
             break;

@@ -66,7 +66,7 @@ private:
 
     void AddTemplate (const TemplateEntry& rEntry);
 
-    /** This filter returns <TRUE/> when the master page specified by the
+    /** This filter returns <true/> when the master page specified by the
         given file name belongs to the set of Impress master pages.
     */
     bool FileFilter (const String& sFileName);

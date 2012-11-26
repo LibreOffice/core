@@ -140,12 +140,6 @@ SFX_IMPL_INTERFACE(SwTextShell, SwBaseShell, SW_RES(STR_SHELLNAME_TEXT))
     SFX_CHILDWINDOW_REGISTRATION(SID_RUBY_DIALOG);
 }
 
-
-
-TYPEINIT1(SwTextShell,SwBaseShell)
-
-
-
 void SwTextShell::ExecInsert(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
@@ -270,7 +264,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     case SID_INSERT_OBJECT:
     case SID_INSERT_PLUGIN:
     {
-        SFX_REQUEST_ARG( rReq, pNameItem, SfxGlobalNameItem, SID_INSERT_OBJECT, sal_False );
+        SFX_REQUEST_ARG( rReq, pNameItem, SfxGlobalNameItem, SID_INSERT_OBJECT );
         SvGlobalName *pName = NULL;
         SvGlobalName aName;
         if ( pNameItem )
@@ -279,8 +273,8 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             pName = &aName;
         }
 
-        SFX_REQUEST_ARG( rReq, pClassLocationItem,  SfxStringItem, FN_PARAM_2, sal_False );
-        SFX_REQUEST_ARG( rReq, pCommandsItem,       SfxStringItem, FN_PARAM_3, sal_False );
+        SFX_REQUEST_ARG( rReq, pClassLocationItem,  SfxStringItem, FN_PARAM_2 );
+        SFX_REQUEST_ARG( rReq, pCommandsItem,       SfxStringItem, FN_PARAM_3 );
         //TODO/LATER: recording currently not working, need code for Commandlist
         svt::EmbeddedObjectRef xObj;
         if( nSlot == SID_INSERT_PLUGIN && ( pClassLocationItem || pCommandsItem ) )
@@ -341,11 +335,11 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     case SID_INSERT_FLOATINGFRAME:
     {
         svt::EmbeddedObjectRef xObj;
-        SFX_REQUEST_ARG( rReq, pNameItem,   SfxStringItem, FN_PARAM_1, sal_False );
-        SFX_REQUEST_ARG( rReq, pURLItem,    SfxStringItem, FN_PARAM_2, sal_False );
-        SFX_REQUEST_ARG( rReq, pMarginItem, SvxSizeItem, FN_PARAM_3, sal_False );
-        SFX_REQUEST_ARG( rReq, pScrollingItem, SfxByteItem, FN_PARAM_4, sal_False );
-        SFX_REQUEST_ARG( rReq, pBorderItem, SfxBoolItem, FN_PARAM_5, sal_False );
+        SFX_REQUEST_ARG( rReq, pNameItem,   SfxStringItem, FN_PARAM_1 );
+        SFX_REQUEST_ARG( rReq, pURLItem,    SfxStringItem, FN_PARAM_2 );
+        SFX_REQUEST_ARG( rReq, pMarginItem, SvxSizeItem, FN_PARAM_3 );
+        SFX_REQUEST_ARG( rReq, pScrollingItem, SfxByteItem, FN_PARAM_4 );
+        SFX_REQUEST_ARG( rReq, pBorderItem, SfxBoolItem, FN_PARAM_5 );
 
         if(pURLItem) // URL is a _must_
         {
@@ -605,7 +599,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             aBoxInfo.SetDefDist(rBox.GetDistance(BOX_LINE_LEFT));
             aSet.Put(aBoxInfo);
 
-            FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebDocShell, GetView().GetDocShell()));
+            FieldUnit eMetric = ::GetDfltMetric(0 != dynamic_cast< SwWebDocShell* >( GetView().GetDocShell()));
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialogdiet fail!");
@@ -667,7 +661,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         if ( pItem )
         {
             sPath = ((SfxStringItem*)pItem)->GetValue();
-            SFX_REQUEST_ARG( rReq, pSimple, SfxBoolItem, FN_PARAM_1 , sal_False );
+            SFX_REQUEST_ARG( rReq, pSimple, SfxBoolItem, FN_PARAM_1 );
             if ( pSimple )
                 bSimpleLine = pSimple->GetValue();
         }
@@ -1054,7 +1048,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
         aChars = ((const SfxStringItem*)pItem)->GetValue();
         const SfxPoolItem* pFtItem = NULL;
         pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), sal_False, &pFtItem);
-        const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
+        const SfxStringItem* pFontItem = dynamic_cast< const SfxStringItem* >( pFtItem );
         if ( pFontItem )
             aFontName = pFontItem->GetValue();
     }
@@ -1101,8 +1095,8 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
             GetView().GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP );
         if( RET_OK == pDlg->Execute() )
         {
-            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pCItem, SfxStringItem, SID_CHARMAP, sal_False );
-            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT, sal_False );
+            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pCItem, SfxStringItem, SID_CHARMAP );
+            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT );
             if ( pFontItem )
             {
                 aNewFont.SetName( pFontItem->GetFamilyName() );

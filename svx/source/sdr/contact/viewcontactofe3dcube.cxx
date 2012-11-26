@@ -73,8 +73,8 @@ namespace sdr
 
             // add scale and translate to world transformation
             const basegfx::B3DVector abjectRange(aCubeRange.getRange());
-            aWorldTransform.scale(abjectRange.getX(), abjectRange.getY(), abjectRange.getZ());
-            aWorldTransform.translate(aCubeRange.getMinX(), aCubeRange.getMinY(), aCubeRange.getMinZ());
+            aWorldTransform.scale(abjectRange);
+            aWorldTransform.translate(aCubeRange.getMinimum());
 
             // get 3D Object Attributes
             drawinglayer::attribute::Sdr3DObjectAttribute* pSdr3DObjectAttribute = drawinglayer::primitive2d::createNewSdr3DObjectAttribute(rItemSet);

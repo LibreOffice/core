@@ -38,8 +38,6 @@ private:
     rtl::OUString               maStrName;
 
 public:
-    TYPEINFO();
-
     XMLGradientStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const rtl::OUString& rLName,
                            const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual ~XMLGradientStyleContext();
@@ -59,8 +57,6 @@ private:
     rtl::OUString               maStrName;
 
 public:
-    TYPEINFO();
-
     XMLHatchStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const rtl::OUString& rLName,
                            const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual ~XMLHatchStyleContext();
@@ -81,8 +77,6 @@ private:
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > mxBase64Stream;
 
 public:
-    TYPEINFO();
-
     XMLBitmapStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const rtl::OUString& rLName,
                            const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual ~XMLBitmapStyleContext();
@@ -107,8 +101,6 @@ private:
     rtl::OUString               maStrName;
 
 public:
-    TYPEINFO();
-
     XMLTransGradientStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const rtl::OUString& rLName,
                            const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual ~XMLTransGradientStyleContext();
@@ -128,8 +120,6 @@ private:
     rtl::OUString               maStrName;
 
 public:
-    TYPEINFO();
-
     XMLMarkerStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const rtl::OUString& rLName,
                            const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual ~XMLMarkerStyleContext();
@@ -149,8 +139,6 @@ private:
     rtl::OUString               maStrName;
 
 public:
-    TYPEINFO();
-
     XMLDashStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const rtl::OUString& rLName,
                            const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual ~XMLDashStyleContext();

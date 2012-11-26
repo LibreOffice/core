@@ -86,7 +86,7 @@ class PresLayoutPreview : public Control
 private:
     SdPage* mpMaster;
     HeaderFooterSettings maSettings;
-    Size maPageSize;
+    basegfx::B2DVector maPageSize;
     Rectangle maOutRect;
 
 private:
@@ -216,12 +216,12 @@ HeaderFooterDialog::HeaderFooterDialog( ViewShell* pViewShell, ::Window* pParent
     if( pCurrentPage->GetPageKind() == PK_STANDARD )
     {
         pSlide = pCurrentPage;
-        pNotes = (SdPage*)pDoc->GetPage( pCurrentPage->GetPageNum() + 1 );
+        pNotes = (SdPage*)pDoc->GetPage( pCurrentPage->GetPageNumber() + 1 );
     }
     else if( pCurrentPage->GetPageKind() == PK_NOTES )
     {
         pNotes = pCurrentPage;
-        pSlide = (SdPage*)pDoc->GetPage( pCurrentPage->GetPageNum() -1 );
+        pSlide = (SdPage*)pDoc->GetPage( pCurrentPage->GetPageNumber() -1 );
         mpCurrentPage = pSlide;
     }
     else
@@ -300,7 +300,7 @@ IMPL_LINK( HeaderFooterDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 
 IMPL_LINK( HeaderFooterDialog, DeactivatePageHdl, TabControl *, EMPTYARG )
 {
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -358,11 +358,11 @@ void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
         // apply to all slides
         if( bToAll )
         {
-            int nPageCount = mpDoc->GetSdPageCount( PK_STANDARD );
-            int nPage;
+            sal_uInt32 nPageCount = mpDoc->GetSdPageCount( PK_STANDARD );
+            sal_uInt32 nPage;
             for( nPage = 0; nPage < nPageCount; nPage++ )
             {
-                SdPage* pPage = mpDoc->GetSdPage( (sal_uInt16)nPage, PK_STANDARD );
+                SdPage* pPage = mpDoc->GetSdPage( nPage, PK_STANDARD );
                 change( pUndoGroup, pPage, aNewSettings );
             }
         }
@@ -399,11 +399,11 @@ void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
     if( !bForceSlides || !(aNewSettings == maNotesHandoutSettings) )
     {
         // first set to all notes pages
-        int nPageCount = mpDoc->GetSdPageCount( PK_NOTES );
-        int nPage;
+        sal_uInt32 nPageCount = mpDoc->GetSdPageCount( PK_NOTES );
+        sal_uInt32 nPage;
         for( nPage = 0; nPage < nPageCount; nPage++ )
         {
-            SdPage* pPage = mpDoc->GetSdPage( (sal_uInt16)nPage, PK_NOTES );
+            SdPage* pPage = mpDoc->GetSdPage( nPage, PK_NOTES );
 
             change( pUndoGroup, pPage, aNewSettings );
         }
@@ -720,8 +720,8 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
         // if set, set it on all notes master pages
         if( bSet )
         {
-            sal_uInt16 nPageCount = mpDoc->GetMasterSdPageCount( PK_NOTES );
-            sal_uInt16 nPage;
+            sal_uInt32 nPageCount = mpDoc->GetMasterSdPageCount( PK_NOTES );
+            sal_uInt32 nPage;
             for( nPage = 0; nPage < nPageCount; nPage++ )
             {
                 GetOrSetDateTimeLanguage( rLanguage, bSet, mpDoc->GetMasterSdPage( nPage, PK_NOTES ) );
@@ -736,8 +736,8 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
     {
         // get the language from the first master page
         // or set it to all master pages
-        sal_uInt16 nPageCount = bSet ? mpDoc->GetMasterSdPageCount( PK_NOTES ) : 1;
-        sal_uInt16 nPage;
+        sal_uInt32 nPageCount = bSet ? mpDoc->GetMasterSdPageCount( PK_NOTES ) : 1;
+        sal_uInt32 nPage;
         for( nPage = 0; nPage < nPageCount; nPage++ )
         {
             GetOrSetDateTimeLanguage( rLanguage, bSet, mpDoc->GetMasterSdPage( nPage, PK_STANDARD ) );
@@ -779,8 +779,12 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
                     if( aFieldInfo.pFieldItem )
                     {
                         const SvxFieldData* pFieldData = aFieldInfo.pFieldItem->GetField();
-// bug119985 2012.06.14
-                        if( pFieldData && (pFieldData->ISA( SvxDateTimeField ) || pFieldData->ISA( SvxDateField )) )
+
+                        // bug119985 2012.06.14
+                        if(pFieldData && (dynamic_cast< const SvxDateTimeField* >(pFieldData) || dynamic_cast< const SvxDateField* >(pFieldData)))
+                        {
+                            break;
+                        }
                         {
                             break;
                         }
@@ -826,7 +830,9 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
 ///////////////////////////////////////////////////////////////////////
 
 PresLayoutPreview::PresLayoutPreview( ::Window* pParent, const ResId& rResId, SdPage* pMaster )
-:Control( pParent, rResId ), mpMaster( pMaster ), maPageSize( pMaster->GetSize() )
+:   Control( pParent, rResId ),
+    mpMaster( pMaster ),
+    maPageSize( pMaster->GetPageScale() )
 {
 }
 
@@ -849,14 +855,12 @@ void PresLayoutPreview::update( HeaderFooterSettings& rSettings )
 void PresLayoutPreview::Paint( OutputDevice& aOut, SdrTextObj* pObj, bool bVisible, bool bDotted /* = false*/ )
 {
     // get object transformation
-    basegfx::B2DHomMatrix aObjectTransform;
-    basegfx::B2DPolyPolygon aObjectPolyPolygon;
-    pObj->TRGetBaseGeometry(aObjectTransform, aObjectPolyPolygon);
+    basegfx::B2DHomMatrix aObjectTransform(pObj->getSdrObjectTransformation());
 
     // build complete transformation by adding view transformation from
     // logic page coordinates to local pixel coordinates
-    const double fScaleX((double)maOutRect.getWidth() / (double)maPageSize.Width());
-    const double fScaleY((double)maOutRect.getHeight() / (double)maPageSize.Height());
+    const double fScaleX((double)maOutRect.getWidth() / maPageSize.getX());
+    const double fScaleY((double)maOutRect.getHeight() / maPageSize.getY());
     aObjectTransform.scale(fScaleX, fScaleY);
     aObjectTransform.translate(maOutRect.TopLeft().X(), maOutRect.TopLeft().Y());
 
@@ -904,15 +908,15 @@ void PresLayoutPreview::Paint( const Rectangle& )
 
     // calculate page size with correct aspect ratio
     int nWidth, nHeight;
-    if( maPageSize.Width() > maPageSize.Height() )
+    if( basegfx::fTools::more(maPageSize.getX(), maPageSize.getY()) )
     {
         nWidth = maOutRect.GetWidth();
-        nHeight = long( (double)(nWidth * maPageSize.Height()) / (double)maPageSize.Width() );
+        nHeight = long( (nWidth * maPageSize.getY()) / maPageSize.getX() );
     }
     else
     {
         nHeight = maOutRect.GetHeight();
-        nWidth = long( (double)(nHeight * maPageSize.Width()) / (double)maPageSize.Height() );
+        nWidth = long( (nHeight * maPageSize.getX()) / maPageSize.getY() );
     }
 
     maOutRect.nLeft += (maOutRect.GetWidth() - nWidth) >> 1;

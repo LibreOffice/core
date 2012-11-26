@@ -236,20 +236,6 @@ namespace drawinglayer
         {
         }
 
-        bool WallpaperBitmapPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(ViewTransformationDependentPrimitive2D::operator==(rPrimitive))
-            {
-                const WallpaperBitmapPrimitive2D& rCompare = (WallpaperBitmapPrimitive2D&)rPrimitive;
-
-                return (getLocalObjectRange() == rCompare.getLocalObjectRange()
-                    && getBitmapEx() == rCompare.getBitmapEx()
-                    && getWallpaperStyle() == rCompare.getWallpaperStyle());
-            }
-
-            return false;
-        }
-
         basegfx::B2DRange WallpaperBitmapPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             return getLocalObjectRange();

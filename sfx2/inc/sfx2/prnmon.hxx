@@ -53,7 +53,7 @@ private:
 //#endif
 public:
                             SfxPrintProgress( SfxViewShell* pViewSh,
-                                              FASTBOOL bShow = sal_True );
+                                              bool bShow = sal_True );
     virtual                 ~SfxPrintProgress();
 
     virtual void            SetText( const String &rText );

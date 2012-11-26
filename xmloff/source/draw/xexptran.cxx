@@ -33,6 +33,7 @@
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <tools/string.hxx>
+#include <basegfx/matrix/b3dhommatrixtools.hxx>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -673,23 +674,25 @@ void SdXMLImExTransform2D::GetFullTransform(::basegfx::B2DHomMatrix& rFullTrans)
             case IMP_SDXMLEXP_TRANSOBJ2D_SCALE      :
             {
                 const ::basegfx::B2DTuple& rScale = ((ImpSdXMLExpTransObj2DScale*)pObj)->maScale;
-                rFullTrans.scale(rScale.getX(), rScale.getY());
+                rFullTrans.scale(rScale);
                 break;
             }
             case IMP_SDXMLEXP_TRANSOBJ2D_TRANSLATE  :
             {
                 const ::basegfx::B2DTuple& rTranslate = ((ImpSdXMLExpTransObj2DTranslate*)pObj)->maTranslate;
-                rFullTrans.translate(rTranslate.getX(), rTranslate.getY());
+                rFullTrans.translate(rTranslate);
                 break;
             }
             case IMP_SDXMLEXP_TRANSOBJ2D_SKEWX      :
             {
-                rFullTrans.shearX(tan(((ImpSdXMLExpTransObj2DSkewX*)pObj)->mfSkewX));
+                // correct shear by mirroring; ODF 1.3 uses mirrored values
+                rFullTrans.shearX(tan(((ImpSdXMLExpTransObj2DSkewX*)pObj)->mfSkewX * -1.0));
                 break;
             }
             case IMP_SDXMLEXP_TRANSOBJ2D_SKEWY      :
             {
-                rFullTrans.shearY(tan(((ImpSdXMLExpTransObj2DSkewY*)pObj)->mfSkewY));
+                // correct shear by mirroring; ODF 1.3 uses mirrored values
+                rFullTrans.shearY(tan(((ImpSdXMLExpTransObj2DSkewY*)pObj)->mfSkewY * -1.0));
                 break;
             }
             case IMP_SDXMLEXP_TRANSOBJ2D_MATRIX     :
@@ -862,22 +865,7 @@ void SdXMLImExTransform3D::AddMatrix(const ::basegfx::B3DHomMatrix& rNew)
 
 void SdXMLImExTransform3D::AddHomogenMatrix(const drawing::HomogenMatrix& xHomMat)
 {
-    ::basegfx::B3DHomMatrix aExportMatrix;
-
-    aExportMatrix.set(0, 0, xHomMat.Line1.Column1);
-    aExportMatrix.set(0, 1, xHomMat.Line1.Column2);
-    aExportMatrix.set(0, 2, xHomMat.Line1.Column3);
-    aExportMatrix.set(0, 3, xHomMat.Line1.Column4);
-    aExportMatrix.set(1, 0, xHomMat.Line2.Column1);
-    aExportMatrix.set(1, 1, xHomMat.Line2.Column2);
-    aExportMatrix.set(1, 2, xHomMat.Line2.Column3);
-    aExportMatrix.set(1, 3, xHomMat.Line2.Column4);
-    aExportMatrix.set(2, 0, xHomMat.Line3.Column1);
-    aExportMatrix.set(2, 1, xHomMat.Line3.Column2);
-    aExportMatrix.set(2, 2, xHomMat.Line3.Column3);
-    aExportMatrix.set(2, 3, xHomMat.Line3.Column4);
-
-    AddMatrix(aExportMatrix);
+    AddMatrix(basegfx::tools::UnoHomogenMatrixToB3DHomMatrix(xHomMat));
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1188,31 +1176,12 @@ void SdXMLImExTransform3D::SetString(const OUString& rNew, const SvXMLUnitConver
 
 bool SdXMLImExTransform3D::GetFullHomogenTransform(com::sun::star::drawing::HomogenMatrix& xHomMat)
 {
-    ::basegfx::B3DHomMatrix aFullTransform;
+    basegfx::B3DHomMatrix aFullTransform;
     GetFullTransform(aFullTransform);
 
     if(!aFullTransform.isIdentity())
     {
-        xHomMat.Line1.Column1 = aFullTransform.get(0, 0);
-        xHomMat.Line1.Column2 = aFullTransform.get(0, 1);
-        xHomMat.Line1.Column3 = aFullTransform.get(0, 2);
-        xHomMat.Line1.Column4 = aFullTransform.get(0, 3);
-
-        xHomMat.Line2.Column1 = aFullTransform.get(1, 0);
-        xHomMat.Line2.Column2 = aFullTransform.get(1, 1);
-        xHomMat.Line2.Column3 = aFullTransform.get(1, 2);
-        xHomMat.Line2.Column4 = aFullTransform.get(1, 3);
-
-        xHomMat.Line3.Column1 = aFullTransform.get(2, 0);
-        xHomMat.Line3.Column2 = aFullTransform.get(2, 1);
-        xHomMat.Line3.Column3 = aFullTransform.get(2, 2);
-        xHomMat.Line3.Column4 = aFullTransform.get(2, 3);
-
-        xHomMat.Line4.Column1 = aFullTransform.get(3, 0);
-        xHomMat.Line4.Column2 = aFullTransform.get(3, 1);
-        xHomMat.Line4.Column3 = aFullTransform.get(3, 2);
-        xHomMat.Line4.Column4 = aFullTransform.get(3, 3);
-
+        basegfx::tools::B3DHomMatrixToUnoHomogenMatrix(aFullTransform, xHomMat);
         return true;
     }
 
@@ -1247,13 +1216,13 @@ void SdXMLImExTransform3D::GetFullTransform(::basegfx::B3DHomMatrix& rFullTrans)
             case IMP_SDXMLEXP_TRANSOBJ3D_SCALE      :
             {
                 const ::basegfx::B3DTuple& rScale = ((ImpSdXMLExpTransObj3DScale*)pObj)->maScale;
-                rFullTrans.scale(rScale.getX(), rScale.getY(), rScale.getZ());
+                rFullTrans.scale(rScale);
                 break;
             }
             case IMP_SDXMLEXP_TRANSOBJ3D_TRANSLATE  :
             {
                 const ::basegfx::B3DTuple& rTranslate = ((ImpSdXMLExpTransObj3DTranslate*)pObj)->maTranslate;
-                rFullTrans.translate(rTranslate.getX(), rTranslate.getY(), rTranslate.getZ());
+                rFullTrans.translate(rTranslate);
                 break;
             }
             case IMP_SDXMLEXP_TRANSOBJ3D_MATRIX     :
@@ -1350,7 +1319,6 @@ SdXMLImExPointsElement::SdXMLImExPointsElement(drawing::PointSequence* pPoints,
     const SdXMLImExViewBox& rViewBox,
     const awt::Point& rObjectPos,
     const awt::Size& rObjectSize,
-    // #96328#
     const bool bClosed)
 :   maPoly( 0L )
 {
@@ -1416,7 +1384,8 @@ SdXMLImExPointsElement::SdXMLImExPointsElement(const OUString& rNew,
     const SdXMLImExViewBox& rViewBox,
     const awt::Point& rObjectPos,
     const awt::Size& rObjectSize,
-    const SvXMLUnitConverter& rConv)
+    const SvXMLUnitConverter& rConv,
+    const bool bClosed)
 :   msString( rNew ),
     maPoly( 0L )
 {
@@ -1454,7 +1423,7 @@ SdXMLImExPointsElement::SdXMLImExPointsElement(const OUString& rNew,
         nPos = 0;
         maPoly.realloc(1);
         drawing::PointSequence* pOuterSequence = maPoly.getArray();
-        pOuterSequence->realloc(nNumPoints);
+        pOuterSequence->realloc(nNumPoints + (bClosed ? 1 : 0));
         awt::Point* pInnerSequence = pOuterSequence->getArray();
 
         // object size and ViewBox size different?
@@ -1502,6 +1471,11 @@ SdXMLImExPointsElement::SdXMLImExPointsElement(const OUString& rNew,
             // add new point
             *pInnerSequence = awt::Point( nX, nY );
             pInnerSequence++;
+        }
+
+        if(bClosed)
+        {
+            *pInnerSequence = *pOuterSequence->getArray();
         }
     }
 }

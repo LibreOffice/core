@@ -268,23 +268,23 @@ namespace
 
 IDocumentMarkAccess::MarkType IDocumentMarkAccess::GetType(const IMark& rBkmk)
 {
-    const std::type_info* const pMarkTypeInfo = &typeid(rBkmk);
+    const std::type_info& rMarkTypeInfo = typeid(rBkmk);
     // not using dynamic_cast<> here for performance
-    if(*pMarkTypeInfo == typeid(UnoMark))
+    if(rMarkTypeInfo == typeid(UnoMark))
         return UNO_BOOKMARK;
-    else if(*pMarkTypeInfo == typeid(DdeBookmark))
+    else if(rMarkTypeInfo == typeid(DdeBookmark))
         return DDE_BOOKMARK;
-    else if(*pMarkTypeInfo == typeid(Bookmark))
+    else if(rMarkTypeInfo == typeid(Bookmark))
         return BOOKMARK;
-    else if(*pMarkTypeInfo == typeid(CrossRefHeadingBookmark))
+    else if(rMarkTypeInfo == typeid(CrossRefHeadingBookmark))
         return CROSSREF_HEADING_BOOKMARK;
-    else if(*pMarkTypeInfo == typeid(CrossRefNumItemBookmark))
+    else if(rMarkTypeInfo == typeid(CrossRefNumItemBookmark))
         return CROSSREF_NUMITEM_BOOKMARK;
-    else if(*pMarkTypeInfo == typeid(TextFieldmark))
+    else if(rMarkTypeInfo == typeid(TextFieldmark))
         return TEXT_FIELDMARK;
-    else if(*pMarkTypeInfo == typeid(CheckboxFieldmark))
+    else if(rMarkTypeInfo == typeid(CheckboxFieldmark))
         return CHECKBOX_FIELDMARK;
-    else if(*pMarkTypeInfo == typeid(NavigatorReminder))
+    else if(rMarkTypeInfo == typeid(NavigatorReminder))
         return NAVIGATOR_REMINDER;
     else
     {
@@ -293,26 +293,6 @@ IDocumentMarkAccess::MarkType IDocumentMarkAccess::GetType(const IMark& rBkmk)
             " - unknown MarkType. This needs to be fixed!");
         return UNO_BOOKMARK;
     }
-}
-
-const ::rtl::OUString& IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix()
-{
-    static const ::rtl::OUString CrossRefHeadingBookmarkNamePrefix = ::rtl::OUString::createFromAscii("__RefHeading__");
-
-    return CrossRefHeadingBookmarkNamePrefix;
-}
-
-const bool SAL_DLLPUBLIC_EXPORT IDocumentMarkAccess::IsLegalPaMForCrossRefHeadingBookmark( const SwPaM& rPaM )
-{
-    bool bRet( false );
-
-    bRet = rPaM.Start()->nNode.GetNode().IsTxtNode() &&
-           rPaM.Start()->nContent.GetIndex() == 0 &&
-           ( !rPaM.HasMark() ||
-             ( rPaM.GetMark()->nNode == rPaM.GetPoint()->nNode &&
-               rPaM.End()->nContent.GetIndex() == rPaM.End()->nNode.GetNode().GetTxtNode()->Len() ) );
-
-    return bRet;
 }
 
 namespace sw { namespace mark
@@ -870,7 +850,8 @@ namespace sw { namespace mark
     {\
         ViewShell *_pStartShell = pEShell; \
         do { \
-            if( _pStartShell->IsA( TYPE( SwCrsrShell )) ) \
+            SwCrsrShell* pSwCrsrShell = dynamic_cast< SwCrsrShell* >(_pStartShell); \
+            if( pSwCrsrShell ) \
             {
 
 #define FOREACHSHELL_END( pEShell ) \

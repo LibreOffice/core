@@ -43,8 +43,6 @@ protected:
 
 
 public:
-    TYPEINFO();     //Bereits in Basisklasse Client drin.
-
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableFmt)
 };
 
@@ -63,8 +61,6 @@ protected:
     {}
 
 public:
-    TYPEINFO();     //Bereits in Basisklasse Client drin.
-
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableLineFmt)
 };
 
@@ -86,7 +82,6 @@ protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue );
 
 public:
-    TYPEINFO();     //Bereits in Basisklasse Client drin.
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableBoxFmt)
 };

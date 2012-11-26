@@ -60,7 +60,7 @@
 #include <sfx2/objsh.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/fmpage.hxx>
-#include "svx/svditer.hxx"
+#include <svx/svditer.hxx>
 #include "fmobj.hxx"
 
 #ifndef _SVX_SVXIDS_HRC
@@ -100,17 +100,17 @@
 #define HANDLE_SQL_ERRORS( action, successflag, context, message )          \
     try                                                                     \
     {                                                                       \
-        successflag = sal_False;                                                \
+        successflag = sal_False;                                            \
         action;                                                             \
-        successflag = sal_True;                                                 \
+        successflag = sal_True;                                             \
     }                                                                       \
-    catch(::com::sun::star::sdbc::SQLException& e)                                                  \
+    catch(::com::sun::star::sdbc::SQLException& e)                          \
     {                                                                       \
-        ::com::sun::star::sdb::SQLContext eExtendedInfo =                                           \
+        ::com::sun::star::sdb::SQLContext eExtendedInfo =                   \
         GetImpl()->prependContextInfo(e, Reference< XInterface > (), context, ::rtl::OUString());              \
         displayException(eExtendedInfo);                                    \
     }                                                                       \
-    catch(Exception&)                                                           \
+    catch(Exception&)                                                       \
     {                                                                       \
         DBG_ERROR(message);                                                 \
     }                                                                       \
@@ -185,8 +185,6 @@ using namespace ::svxform;
 //========================================================================
 // class FmDesignModeChangedHint
 //========================================================================
-TYPEINIT1( FmDesignModeChangedHint, SfxHint );
-
 //------------------------------------------------------------------------
 FmDesignModeChangedHint::FmDesignModeChangedHint( sal_Bool bDesMode )
     :m_bDesignMode( bDesMode )
@@ -245,8 +243,6 @@ SFX_IMPL_INTERFACE(FmFormShell, SfxShell, SVX_RES(RID_STR_FORMSHELL))
 }
 
 //========================================================================
-TYPEINIT1(FmFormShell,SfxShell)
-
 //------------------------------------------------------------------------
 FmFormShell::FmFormShell( SfxViewShell* _pParent, FmFormView* pView )
             :SfxShell(_pParent)
@@ -294,13 +290,13 @@ sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool /*bForBrowsing*/)
     sal_Bool bResult = sal_True;
     // Save the data records, not in DesignMode and FilterMode
     if (!m_bDesignMode && !GetImpl()->isInFilterMode() &&
-        m_pFormView && m_pFormView->GetActualOutDev() &&
-        m_pFormView->GetActualOutDev()->GetOutDevType() == OUTDEV_WINDOW)
+        m_pFormView && m_pFormView->GetCurrentViewDevice() &&
+        m_pFormView->GetCurrentViewDevice()->GetOutDevType() == OUTDEV_WINDOW)
     {
         SdrPageView* pCurPageView = m_pFormView->GetSdrPageView();
 
-        // sal_uInt16 nPos = pCurPageView ? pCurPageView->GetWinList().Find((OutputDevice*)m_pFormView->GetActualOutDev()) : SDRPAGEVIEWWIN_NOTFOUND;
-        SdrPageWindow* pWindow = pCurPageView ? pCurPageView->FindPageWindow(*((OutputDevice*)m_pFormView->GetActualOutDev())) : 0L;
+        // sal_uInt16 nPos = pCurPageView ? pCurPageView->GetWinList().Find((OutputDevice*)m_pFormView->GetCurrentViewDevice()) : SDRPAGEVIEWWIN_NOTFOUND;
+        SdrPageWindow* pWindow = pCurPageView ? pCurPageView->FindPageWindow(*((OutputDevice*)m_pFormView->GetCurrentViewDevice())) : 0L;
 
         if(pWindow)
         {
@@ -330,8 +326,8 @@ sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool /*bForBrowsing*/)
                                 return RET_NEWTASK;
                         }
 
-                            if ( bModified )
-                                bResult = rController->commitCurrentRecord( );
+                        if ( bModified )
+                            bResult = rController->commitCurrentRecord( );
                     }
                 }
             }
@@ -539,7 +535,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_SCROLLBAR:
         case SID_FM_SPINBUTTON:
         {
-            SFX_REQUEST_ARG( rReq, pGrabFocusItem, SfxBoolItem, SID_FM_TOGGLECONTROLFOCUS, sal_False );
+            SFX_REQUEST_ARG( rReq, pGrabFocusItem, SfxBoolItem, SID_FM_TOGGLECONTROLFOCUS );
             if ( pGrabFocusItem && pGrabFocusItem->GetValue() )
             {   // see below
                 SfxViewShell* pShell = GetViewShell();
@@ -640,7 +636,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             GetImpl()->executeControlConversionSlot( nSlot );
             // nach dem Konvertieren die Selektion neu bestimmern, da sich ja das selektierte Objekt
             // geaendert hat
-            GetImpl()->SetSelection(GetFormView()->GetMarkedObjectList());
+            GetImpl()->SetSelection(GetFormView()->getSelectedSdrObjectVectorFromSdrMarkView());
             break;
         case SID_FM_LEAVE_CREATE:
             m_nLastSlot = 0;
@@ -649,7 +645,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             break;
         case SID_FM_SHOW_PROPERTY_BROWSER:
         {
-            SFX_REQUEST_ARG( rReq, pShowItem, SfxBoolItem, SID_FM_SHOW_PROPERTIES, sal_False );
+            SFX_REQUEST_ARG( rReq, pShowItem, SfxBoolItem, SID_FM_SHOW_PROPERTIES );
             sal_Bool bShow = sal_True;
             if ( pShowItem )
                 bShow = pShowItem->GetValue();
@@ -661,7 +657,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_PROPERTIES:
         {
             // PropertyBrowser anzeigen
-            SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSlot, sal_False);
+            SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSlot );
             sal_Bool bShow = pShowItem ? pShowItem->GetValue() : sal_True;
 
             InterfaceBag aOnlyTheForm;
@@ -675,7 +671,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
 
         case SID_FM_CTL_PROPERTIES:
         {
-            SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSlot, sal_False);
+            SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSlot );
             sal_Bool bShow = pShowItem ? pShowItem->GetValue() : sal_True;
 
             OSL_ENSURE( GetImpl()->onlyControlsAreMarked(), "FmFormShell::Execute: ControlProperties should be disabled!" );
@@ -712,7 +708,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
 
         case SID_FM_DESIGN_MODE:
         {
-            SFX_REQUEST_ARG(rReq, pDesignItem, SfxBoolItem, nSlot, sal_False);
+            SFX_REQUEST_ARG(rReq, pDesignItem, SfxBoolItem, nSlot );
             sal_Bool bDesignMode = pDesignItem ? pDesignItem->GetValue() : !m_bDesignMode;
             SetDesignMode( bDesignMode );
             if ( m_bDesignMode == bDesignMode )
@@ -789,7 +785,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 const SfxPoolItem* pItem;
                 if ( ( pArgs->GetItemState( FN_PARAM_1, sal_True, &pItem ) ) == SFX_ITEM_SET )
                 {
-                    const SfxInt32Item* pTypedItem = PTR_CAST( SfxInt32Item, pItem );
+                    const SfxInt32Item* pTypedItem = dynamic_cast< const SfxInt32Item* >( pItem );
                     if ( pTypedItem )
                         nRecord = Max( pTypedItem->GetValue(), sal_Int32(0) );
                 }
@@ -1232,7 +1228,7 @@ FmFormPage* FmFormShell::GetCurPage() const
 {
     FmFormPage* pP = NULL;
     if (m_pFormView && m_pFormView->GetSdrPageView())
-        pP = PTR_CAST(FmFormPage,m_pFormView->GetSdrPageView()->GetPage());
+        pP = dynamic_cast< FmFormPage* >(&m_pFormView->GetSdrPageView()->getSdrPageFromSdrPageView());
     return pP;
 }
 
@@ -1254,7 +1250,7 @@ void FmFormShell::SetView( FmFormView* _pView )
 
     m_pFormView = _pView;
     m_pFormView->SetFormShell( this, FmFormView::FormShellAccess() );
-    m_pFormModel = (FmFormModel*)m_pFormView->GetModel();
+    m_pFormModel = (FmFormModel*)&m_pFormView->getSdrModelFromSdrView();
 
     impl_setDesignMode( m_pFormView->IsDesignMode() );
 
@@ -1348,7 +1344,7 @@ namespace
         while ( aIter.IsMore() )
         {
             SdrObject* pObject = aIter.Next();
-            SdrUnoObj* pUnoObject = pObject ? PTR_CAST( SdrUnoObj, pObject ) : NULL;
+            SdrUnoObj* pUnoObject = pObject ? dynamic_cast< SdrUnoObj* >( pObject ) : NULL;
             if ( !pUnoObject )
                 continue;
 
@@ -1443,7 +1439,7 @@ SdrUnoObj* FmFormShell::GetFormControl( const Reference< XControlModel >& _rxMod
 
     // we can only retrieve controls for SdrObjects which belong to page which is actually displayed in the given view
     SdrPageView* pPageView = _rView.GetSdrPageView();
-    SdrPage* pPage = pPageView ? pPageView->GetPage() : NULL;
+    SdrPage* pPage = pPageView ? &pPageView->getSdrPageFromSdrPageView() : NULL;
     OSL_ENSURE( pPage, "FmFormShell::GetFormControl: no page displayed in the given view!" );
     if ( !pPage )
         return NULL;
@@ -1510,3 +1506,15 @@ void FmFormShell::SetDesignMode( sal_Bool _bDesignMode )
     if ( pModel )
         pModel->GetUndoEnv().UnLock();
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+namespace svx
+{
+    ISdrObjectFilter::~ISdrObjectFilter()
+    {
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// eof

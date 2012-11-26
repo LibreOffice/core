@@ -25,7 +25,6 @@
 #define _MySVXACORR_HXX
 
 #include <com/sun/star/embed/XStorage.hpp>
-#include <tools/rtti.hxx>
 #include <svl/svarray.hxx>
 #include <i18npool/lang.h>
 #include <tools/time.hxx>
@@ -236,8 +235,6 @@ public:
     sal_Unicode GetQuote( sal_Unicode cInsChar, sal_Bool bSttQuote,
                             LanguageType eLang ) const;
     virtual sal_Bool GetLongText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const String& rFileName, const String& rShort, String& rLong );
-
-    TYPEINFO();
 
     SvxAutoCorrect( const String& rShareAutocorrFile,
                     const String& rUserAutocorrFile );

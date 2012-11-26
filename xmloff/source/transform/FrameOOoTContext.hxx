@@ -31,8 +31,6 @@ class XMLFrameOOoTransformerContext : public XMLPersElemContentTContext
     ::rtl::OUString m_aElemQName;
 
 public:
-    TYPEINFO();
-
     XMLFrameOOoTransformerContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName );
 

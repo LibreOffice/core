@@ -182,8 +182,8 @@ public:
     ~impXLineEndList()
     {
         delete mpVirtualDevice;
-        SdrObject::Free(mpBackgroundObject);
-        SdrObject::Free(mpLineObject);
+        deleteSdrObjectSafeAndClearPointer(mpBackgroundObject);
+        deleteSdrObjectSafeAndClearPointer(mpLineObject);
         delete mpSdrModel;
     }
 
@@ -196,7 +196,6 @@ void XLineEndList::impCreate()
 {
     if(!mpData)
     {
-        const Point aZero(0, 0);
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
         VirtualDevice* pVirDev = new VirtualDevice;
@@ -212,10 +211,11 @@ void XLineEndList::impCreate()
         OSL_ENSURE(0 != pSdrModel, "XLineEndList: no SdrModel created!" );
         pSdrModel->GetItemPool().FreezeIdRanges();
 
-        const Rectangle aBackgroundSize(aZero, aSize);
-        SdrObject* pBackgroundObject = new SdrRectObj(aBackgroundSize);
+        SdrObject* pBackgroundObject = new SdrRectObj(
+            *pSdrModel,
+            basegfx::tools::createScaleB2DHomMatrix(aSize.getWidth(), aSize.getHeight()));
         OSL_ENSURE(0 != pBackgroundObject, "XLineEndList: no BackgroundObject created!" );
-        pBackgroundObject->SetModel(pSdrModel);
+        //pBackgroundObject->SetModel(pSdrModel);
         pBackgroundObject->SetMergedItem(XFillStyleItem(XFILL_SOLID));
         pBackgroundObject->SetMergedItem(XLineStyleItem(XLINE_NONE));
         pBackgroundObject->SetMergedItem(XFillColorItem(String(), rStyleSettings.GetFieldColor()));
@@ -225,9 +225,11 @@ void XLineEndList::impCreate()
         basegfx::B2DPolygon aPolygon;
         aPolygon.append(aStart);
         aPolygon.append(aEnd);
-        SdrObject* pLineObject = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aPolygon));
+        SdrObject* pLineObject = new SdrPathObj(
+            *pSdrModel,
+            basegfx::B2DPolyPolygon(aPolygon));
         OSL_ENSURE(0 != pLineObject, "XLineEndList: no LineObject created!" );
-        pLineObject->SetModel(pSdrModel);
+        //pLineObject->SetModel(pSdrModel);
         pLineObject->SetMergedItem(XLineStartWidthItem(aSize.Height()));
         pLineObject->SetMergedItem(XLineEndWidthItem(aSize.Height()));
         pLineObject->SetMergedItem(XLineColorItem(String(), rStyleSettings.GetFieldTextColor()));
@@ -368,7 +370,7 @@ Bitmap* XLineEndList::CreateBitmapForUI( long nIndex, sal_Bool bDelete )
     pLine->SetMergedItem(XLineStartItem(String(), GetLineEnd(nIndex)->GetLineEnd()));
     pLine->SetMergedItem(XLineEndItem(String(), GetLineEnd(nIndex)->GetLineEnd()));
 
-    sdr::contact::SdrObjectVector aObjectVector;
+    SdrObjectVector aObjectVector;
     aObjectVector.push_back(mpData->getBackgroundObject());
     aObjectVector.push_back(pLine);
     sdr::contact::ObjectContactOfObjListPainter aPainter(*pVD, aObjectVector, 0);

@@ -42,14 +42,6 @@
 #include "queryparam.hxx"
 #include "globstr.hrc"
 
-// STATIC DATA -----------------------------------------------------------
-
-TYPEINIT1(ScSimpleUndo,     SfxUndoAction);
-TYPEINIT1(ScBlockUndo,      ScSimpleUndo);
-TYPEINIT1(ScMoveUndo,       ScSimpleUndo);
-TYPEINIT1(ScDBFuncUndo,     ScSimpleUndo);
-TYPEINIT1(ScUndoWrapper,    SfxUndoAction);
-
 // -----------------------------------------------------------------------
 
 ScSimpleUndo::ScSimpleUndo( ScDocShell* pDocSh ) :
@@ -83,14 +75,14 @@ sal_Bool __EXPORT ScSimpleUndo::Merge( SfxUndoAction *pNextAction )
     //  DetectiveRefresh kommt immer hinterher, die SdrUndoGroup ist in
     //  eine ScUndoDraw Action verpackt.
     //  Nur beim automatischen Aktualisieren wird AddUndoAction mit
-    //  bTryMerg=sal_True gerufen.
+    //  bTryMerg=TRUE gerufen.
+    ScUndoDraw* pCalcUndo = dynamic_cast< ScUndoDraw* >(pNextAction);
 
-    if ( !pDetectiveUndo && pNextAction->ISA(ScUndoDraw) )
+    if ( !pDetectiveUndo && pCalcUndo )
     {
         //  SdrUndoAction aus der ScUndoDraw Action uebernehmen,
         //  ScUndoDraw wird dann vom UndoManager geloescht
 
-        ScUndoDraw* pCalcUndo = (ScUndoDraw*)pNextAction;
         pDetectiveUndo = pCalcUndo->GetDrawUndo();
         pCalcUndo->ForgetDrawUndo();
         return sal_True;

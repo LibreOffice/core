@@ -32,8 +32,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-TYPEINIT1(SwFmtWrapInfluenceOnObjPos, SfxPoolItem);
-
 SwFmtWrapInfluenceOnObjPos::SwFmtWrapInfluenceOnObjPos(
                                             sal_Int16 _nWrapInfluenceOnPosition )
     : SfxPoolItem( RES_WRAP_INFLUENCE_ON_OBJPOS ),

@@ -33,9 +33,9 @@
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::accessibility::XAccessible;
 
-TYPEINIT0(VclSimpleEvent);
-TYPEINIT1(VclWindowEvent, VclSimpleEvent);
-TYPEINIT1(VclMenuEvent, VclSimpleEvent);
+VclSimpleEvent::~VclSimpleEvent() {}
+VclWindowEvent::~VclWindowEvent() {}
+VclMenuEvent::~VclMenuEvent() {}
 
 VclAccessibleEvent::VclAccessibleEvent( sal_uLong n, const Reference<XAccessible>& rxAccessible ) :
     VclSimpleEvent(n),
@@ -57,7 +57,7 @@ void VclEventListeners::Call( VclSimpleEvent* pEvent ) const
     // Copy the list, because this can be destroyed when calling a Link...
     std::list<Link> aCopy( *this );
     std::list<Link>::iterator aIter( aCopy.begin() );
-    if( pEvent->IsA( VclWindowEvent::StaticType() ) )
+    if( dynamic_cast< VclWindowEvent* >(pEvent) )
     {
         VclWindowEvent* pWinEvent = static_cast<VclWindowEvent*>(pEvent);
         ImplDelData aDel( pWinEvent->GetWindow() );

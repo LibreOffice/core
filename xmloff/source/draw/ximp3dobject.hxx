@@ -28,7 +28,6 @@
 #include "sdxmlimp_impl.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <com/sun/star/drawing/XShapes.hpp>
-#include <tools/rtti.hxx>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
@@ -50,8 +49,6 @@ protected:
     void AddShape(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape);
 */
 public:
-    TYPEINFO();
-
     SdXML3DObjectContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx,
         const rtl::OUString& rLocalName,
@@ -75,8 +72,6 @@ class SdXML3DCubeObjectShapeContext : public SdXML3DObjectContext
     sal_Bool                    mbMaxEdgeUsed;
 
 public:
-    TYPEINFO();
-
     SdXML3DCubeObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -99,8 +94,6 @@ class SdXML3DSphereObjectShapeContext : public SdXML3DObjectContext
     sal_Bool                    mbSizeUsed;
 
 public:
-    TYPEINFO();
-
     SdXML3DSphereObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -121,8 +114,6 @@ class SdXML3DPolygonBasedShapeContext : public SdXML3DObjectContext
     rtl::OUString               maViewBox;
 
 public:
-    TYPEINFO();
-
     SdXML3DPolygonBasedShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -140,8 +131,6 @@ public:
 class SdXML3DLatheObjectShapeContext : public SdXML3DPolygonBasedShapeContext
 {
 public:
-    TYPEINFO();
-
     SdXML3DLatheObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -159,8 +148,6 @@ public:
 class SdXML3DExtrudeObjectShapeContext : public SdXML3DPolygonBasedShapeContext
 {
 public:
-    TYPEINFO();
-
     SdXML3DExtrudeObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,

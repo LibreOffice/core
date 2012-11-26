@@ -829,7 +829,7 @@ void SwUndoReRead::SetAndSave(::sw::UndoRedoContext & rContext)
     if( RES_MIRROR_GRAPH_DONT != nOldMirr )
         pGrfNd->SetAttr( SwMirrorGrf() );
 
-    rContext.SetSelections(pGrfNd->GetFlyFmt(), 0);
+    rContext.SetSelections(pGrfNd->GetFlyFmt());
 }
 
 

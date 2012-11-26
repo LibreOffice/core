@@ -127,8 +127,6 @@ public:
         const uno::Reference<xml::sax::XAttributeList>& xAttrList);
     virtual ~SdXMLDocContext_Impl();
 
-    TYPEINFO();
-
     virtual SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const uno::Reference<xml::sax::XAttributeList>& xAttrList);
@@ -150,8 +148,6 @@ SdXMLDocContext_Impl::SdXMLDocContext_Impl(
 SdXMLDocContext_Impl::~SdXMLDocContext_Impl()
 {
 }
-
-TYPEINIT1( SdXMLDocContext_Impl, SvXMLImportContext );
 
 //////////////////////////////////////////////////////////////////////////////
 

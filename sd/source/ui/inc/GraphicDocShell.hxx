@@ -43,8 +43,6 @@ class GraphicDocShell
     : public DrawDocShell
 {
 public:
-    TYPEINFO();
-
     SFX_DECL_INTERFACE(SD_IF_SDGRAPHICDOCSHELL)
     SFX_DECL_OBJECTFACTORY();
 
@@ -52,12 +50,12 @@ public:
 
     GraphicDocShell (
         SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED,
-        sal_Bool bSdDataObj=sal_False,
+        bool bSdDataObj=false,
         DocumentType=DOCUMENT_TYPE_DRAW);
 
     GraphicDocShell (
         const sal_uInt64 nModelCreationFlags,
-        sal_Bool bSdDataObj=sal_False,
+        bool bSdDataObj=false,
         DocumentType=DOCUMENT_TYPE_DRAW);
 
     virtual ~GraphicDocShell (void);

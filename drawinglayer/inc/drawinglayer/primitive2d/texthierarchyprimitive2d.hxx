@@ -131,21 +131,6 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        /** FieldType definition */
-        enum FieldType
-        {
-            /** unspecified. If more info is needed for a FieldType,
-                create a new type and it's handling
-             */
-            FIELD_TYPE_COMMON,
-
-            /** uses "FIELD_SEQ_BEGIN;PageField" -> special handling */
-            FIELD_TYPE_PAGE,
-
-            /** uses URL as string -> special handling */
-            FIELD_TYPE_URL
-        };
-
         /** TextHierarchyFieldPrimitive2D class
 
             This primitive encapsulates text fields.
@@ -155,23 +140,48 @@ namespace drawinglayer
          */
         class DRAWINGLAYER_DLLPUBLIC TextHierarchyFieldPrimitive2D : public GroupPrimitive2D
         {
+        public:
+        /** FieldType definition */
+        enum FieldType
+        {
+            /** unspecified. If more info is needed for a FieldType,
+                create a new type and it's handling
+
+                    maStringA and maStringB unused
+             */
+            FIELD_TYPE_COMMON,
+
+                /** uses "FIELD_SEQ_BEGIN;PageField" -> special handling
+
+                    maStringA and maStringB unused
+                */
+            FIELD_TYPE_PAGE,
+
+                /** uses URL as string -> special handling
+
+                    In maStringA: URL
+                    In maStringB: TargetFrame
+                */
+            FIELD_TYPE_URL
+        };
+
         private:
             FieldType                               meType;
-            rtl::OUString                           maString;
+            rtl::OUString                           maStringA;
+            rtl::OUString                           maStringB;
 
         public:
             /// constructor
             TextHierarchyFieldPrimitive2D(
                 const Primitive2DSequence& rChildren,
                 const FieldType& rFieldType,
-                const rtl::OUString& rString);
+                const rtl::OUString& rStringA = rtl::OUString(),
+                const rtl::OUString& rStringB = rtl::OUString());
 
             /// data read access
             FieldType getType() const { return meType; }
-            const rtl::OUString& getString() const { return maString; }
-
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
+            const rtl::OUString& getStringA() const { return maStringA; }
+            const rtl::OUString& getStringB() const { return maStringB; }
 
             /// provide unique ID
             DeclPrimitrive2DIDBlock()

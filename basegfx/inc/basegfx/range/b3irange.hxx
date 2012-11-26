@@ -252,6 +252,14 @@ namespace basegfx
             maRangeY.grow(nValue);
             maRangeZ.grow(nValue);
         }
+
+        B3ITuple clamp(const B3ITuple& rTuple) const
+        {
+            return B3ITuple(
+                maRangeX.clamp(rTuple.getX()),
+                maRangeY.clamp(rTuple.getY()),
+                maRangeZ.clamp(rTuple.getZ()));
+        }
     };
 } // end of namespace basegfx
 

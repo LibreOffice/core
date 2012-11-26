@@ -69,13 +69,13 @@ ToolbarMenuAcc::~ToolbarMenuAcc()
 
 IMPL_LINK( ToolbarMenuAcc, WindowEventListener, VclSimpleEvent*, pEvent )
 {
-    DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
+    DBG_ASSERT( pEvent && dynamic_cast< VclWindowEvent* >(pEvent), "Unknown WindowEvent!" );
 
     /* Ignore VCLEVENT_WINDOW_ENDPOPUPMODE, because the UNO accessibility wrapper
      * might have been destroyed by the previous VCLEventListener (if no AT tool
      * is running), e.g. sub-toolbars in impress.
      */
-    if ( mpParent && pEvent && pEvent->ISA( VclWindowEvent ) && (pEvent->GetId() != VCLEVENT_WINDOW_ENDPOPUPMODE) )
+    if ( mpParent && pEvent && dynamic_cast< VclWindowEvent* >(pEvent) && (pEvent->GetId() != VCLEVENT_WINDOW_ENDPOPUPMODE) )
     {
         DBG_ASSERT( ((VclWindowEvent*)pEvent)->GetWindow(), "Window???" );
         if( !((VclWindowEvent*)pEvent)->GetWindow()->IsAccessibilityEventsSuppressed() || ( pEvent->GetId() == VCLEVENT_OBJECT_DYING ) )

@@ -41,48 +41,32 @@ namespace sdr
     {
         drawinglayer::primitive2d::Primitive2DSequence OverlayHatchRect::createOverlayObjectPrimitive2DSequence()
         {
-            const basegfx::B2DRange aHatchRange(getBasePosition(), getSecondPosition());
             const drawinglayer::primitive2d::Primitive2DReference aReference(
-                new drawinglayer::primitive2d::OverlayHatchRectanglePrimitive(
-                    aHatchRange,
+                new drawinglayer::primitive2d::OverlayHatchPrimitive(
+                    getTransformation(),
                     3.0,
                     getHatchRotation(),
                     getBaseColor().getBColor(),
                     getDiscreteGrow(),
-                    getDiscreteShrink(),
-                    getRotation()));
+                    getDiscreteShrink()));
 
             return drawinglayer::primitive2d::Primitive2DSequence(&aReference, 1);
         }
 
         OverlayHatchRect::OverlayHatchRect(
-            const basegfx::B2DPoint& rBasePosition,
-            const basegfx::B2DPoint& rSecondPosition,
+            const basegfx::B2DHomMatrix& rTransformation,
             const Color& rHatchColor,
             double fDiscreteGrow,
             double fDiscreteShrink,
-            double fHatchRotation,
-            double fRotation)
-        :   OverlayObjectWithBasePosition(rBasePosition, rHatchColor),
-            maSecondPosition(rSecondPosition),
+            double fHatchRotation)
+        :   OverlayObject(rHatchColor),
+            maTransformation(rTransformation),
             mfDiscreteGrow(fDiscreteGrow),
             mfDiscreteShrink(fDiscreteShrink),
-            mfHatchRotation(fHatchRotation),
-            mfRotation(fRotation)
+            mfHatchRotation(fHatchRotation)
         {
         }
 
-        void OverlayHatchRect::setSecondPosition(const basegfx::B2DPoint& rNew)
-        {
-            if(rNew != maSecondPosition)
-            {
-                // remember new value
-                maSecondPosition = rNew;
-
-                // register change (after change)
-                objectChange();
-            }
-        }
     } // end of namespace overlay
 } // end of namespace sdr
 

@@ -48,6 +48,7 @@
 #include <vcl/svapp.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/charclass.hxx>
+#include <svx/svdlegacy.hxx>
 
 #include "eeimport.hxx"
 #include "global.hxx"
@@ -66,7 +67,7 @@
 #include "globstr.hrc"
 
 // in fuins1.cxx
-extern void ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage );
+extern void ScLimitSizeOnDrawPage(basegfx::B2DVector& rSize, basegfx::B2DPoint& rPos, const basegfx::B2DVector& rPageScale);
 
 //------------------------------------------------------------------------
 
@@ -534,52 +535,49 @@ void ScEEImport::InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
     SdrPage* pPage = pModel->GetPage( static_cast<sal_uInt16>(nTab) );
     OutputDevice* pDefaultDev = Application::GetDefaultDevice();
 
-    Point aCellInsertPos(
-        (long)((double) mpDoc->GetColOffset( nCol, nTab ) * HMM_PER_TWIPS),
-        (long)((double) mpDoc->GetRowOffset( nRow, nTab ) * HMM_PER_TWIPS) );
+    const basegfx::B2DPoint aCellInsertPos(
+        (double)mpDoc->GetColOffset( nCol, nTab ) * HMM_PER_TWIPS,
+        (double)mpDoc->GetRowOffset( nRow, nTab ) * HMM_PER_TWIPS);
 
-    Point aInsertPos( aCellInsertPos );
-    Point aSpace;
-    Size aLogicSize;
+    basegfx::B2DPoint aInsertPos(aCellInsertPos);
     sal_Char nDir = nHorizontal;
+
     for ( ScHTMLImage* pI = pIL->First(); pI; pI = pIL->Next() )
     {
         if ( nDir & nHorizontal )
         {   // horizontal
-            aInsertPos.X() += aLogicSize.Width();
-            aInsertPos.X() += aSpace.X();
-            aInsertPos.Y() = aCellInsertPos.Y();
+            aInsertPos.setX(aInsertPos.getX());
+            aInsertPos.setY(aCellInsertPos.getY());
         }
         else
         {   // vertikal
-            aInsertPos.X() = aCellInsertPos.X();
-            aInsertPos.Y() += aLogicSize.Height();
-            aInsertPos.Y() += aSpace.Y();
+            aInsertPos.setX(aCellInsertPos.getX());
+            aInsertPos.setY(aInsertPos.getY());
         }
-        // Offset des Spacings drauf
-        aSpace = pDefaultDev->PixelToLogic( pI->aSpace, MapMode( MAP_100TH_MM ) );
-        aInsertPos += aSpace;
 
-        Size aSizePix = pI->aSize;
-        aLogicSize = pDefaultDev->PixelToLogic( aSizePix, MapMode( MAP_100TH_MM ) );
+        // Offset des Spacings drauf
+        const basegfx::B2DHomMatrix aDiscreteToLogic100thmm(pDefaultDev->GetInverseViewTransformation(MapMode(MAP_100TH_MM)));
+        aInsertPos += aDiscreteToLogic100thmm * basegfx::B2DPoint(pI->aSpace.X(), pI->aSpace.Y());
+        basegfx::B2DVector aLogicSize(aDiscreteToLogic100thmm * basegfx::B2DVector(pI->aSize.Width(), pI->aSize.Height()));
+
         //  Groesse begrenzen
-        ::ScLimitSizeOnDrawPage( aLogicSize, aInsertPos, pPage->GetSize() );
+        ::ScLimitSizeOnDrawPage( aLogicSize, aInsertPos, pPage->GetPageScale() );
 
         if ( pI->pGraphic )
         {
-            Rectangle aRect ( aInsertPos, aLogicSize );
-            SdrGrafObj* pObj = new SdrGrafObj( *pI->pGraphic, aRect );
+            SdrGrafObj* pObj = new SdrGrafObj(
+                *pModel,
+                *pI->pGraphic,
+                basegfx::tools::createScaleTranslateB2DHomMatrix(aLogicSize, aInsertPos));
+
             // #118522# calling SetGraphicLink here doesn't work
             pObj->SetName( pI->aURL );
-
-            pPage->InsertObject( pObj );
+            pPage->InsertObjectToSdrObjList(*pObj);
 
             // #118522# SetGraphicLink has to be used after inserting the object,
             // otherwise an empty graphic is swapped in and the contact stuff crashes.
             // See #i37444#.
             pObj->SetGraphicLink( pI->aURL, pI->aFilterName );
-
-            pObj->SetLogicRect( aRect );        // erst nach InsertObject !!!
         }
         nDir = pI->nDir;
     }

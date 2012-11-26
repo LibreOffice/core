@@ -449,32 +449,28 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
         XFillStyle eXFS = (XFillStyle) pStyleItem->GetValue();
 
         // Die Listen haben sich geaendert ?
-        if( pState->ISA( SvxColorTableItem ) &&
-            eXFS == XFILL_SOLID )
+        if( dynamic_cast< const SvxColorTableItem* >(pState) && eXFS == XFILL_SOLID )
         {
             ::Color aTmpColor( pFillAttrLB->GetSelectEntryColor() );
             pFillAttrLB->Clear();
             pFillAttrLB->Fill( ( (SvxColorTableItem*)pState )->GetColorTable() );
             pFillAttrLB->SelectEntry( aTmpColor );
         }
-        if( pState->ISA( SvxGradientListItem ) &&
-            eXFS == XFILL_GRADIENT )
+        if( dynamic_cast< const SvxGradientListItem* >(pState) && eXFS == XFILL_GRADIENT )
         {
             String aString( pFillAttrLB->GetSelectEntry() );
             pFillAttrLB->Clear();
             pFillAttrLB->Fill( ( (SvxGradientListItem*)pState )->GetGradientList() );
             pFillAttrLB->SelectEntry( aString );
         }
-        if( pState->ISA( SvxHatchListItem ) &&
-            eXFS == XFILL_HATCH )
+        if( dynamic_cast< const SvxHatchListItem* >(pState) && eXFS == XFILL_HATCH )
         {
             String aString( pFillAttrLB->GetSelectEntry() );
             pFillAttrLB->Clear();
             pFillAttrLB->Fill( ( (SvxHatchListItem*)pState )->GetHatchList() );
             pFillAttrLB->SelectEntry( aString );
         }
-        if( pState->ISA( SvxBitmapListItem ) &&
-            eXFS == XFILL_BITMAP )
+        if( dynamic_cast< const SvxBitmapListItem* >(pState) && eXFS == XFILL_BITMAP )
         {
             String aString( pFillAttrLB->GetSelectEntry() );
             pFillAttrLB->Clear();

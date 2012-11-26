@@ -27,6 +27,8 @@
 #include <uno/mapping.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include "memory.h"
+
 // ----------------
 // - FILTERTRACER -
 // ----------------

@@ -36,8 +36,6 @@ class XMLAxisContextVector :
 class XMLChartPlotAreaOOoTContext  : public XMLProcAttrTransformerContext
 {
 public:
-    TYPEINFO();
-
     explicit XMLChartPlotAreaOOoTContext(
         XMLTransformerBase & rTransformer, const ::rtl::OUString & rQName );
     virtual ~XMLChartPlotAreaOOoTContext();

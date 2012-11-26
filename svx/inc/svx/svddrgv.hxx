@@ -27,91 +27,59 @@
 #include "svx/svxdllapi.h"
 #include <svx/svdxcgv.hxx>
 
-//************************************************************
-//   Vorausdeklarationen
-//************************************************************
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// predefines
 
 class SdrUndoGeoObj;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  @@@@@  @@@@@   @@@@   @@@@   @@ @@ @@ @@@@@ @@   @@
-//  @@  @@ @@  @@ @@  @@ @@  @@  @@ @@ @@ @@    @@   @@
-//  @@  @@ @@  @@ @@  @@ @@      @@ @@ @@ @@    @@ @ @@
-//  @@  @@ @@@@@  @@@@@@ @@ @@@  @@@@@ @@ @@@@  @@@@@@@
-//  @@  @@ @@  @@ @@  @@ @@  @@   @@@  @@ @@    @@@@@@@
-//  @@  @@ @@  @@ @@  @@ @@  @@   @@@  @@ @@    @@@ @@@
-//  @@@@@  @@  @@ @@  @@  @@@@@    @   @@ @@@@@ @@   @@
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class ImpSdrDragViewExtraData;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class SVX_DLLPUBLIC SdrDragView: public SdrExchangeView
 {
-    friend class                SdrPageView;
-    friend class                SdrDragMethod;
-
-protected:
-    SdrHdl*                     pDragHdl;
-    SdrDragMethod*              mpCurrentSdrDragMethod;
-    SdrUndoGeoObj*              pInsPointUndo;
-    Rectangle                   aDragLimit;
-    XubString                   aInsPointUndoStr;
-    SdrMarkList                 aFollowingEdges; // Wenn Knoten gedraggd werden, sollen alle Kanten als Xor folgen
-    SdrHdlKind                  eDragHdl;
-
-    sal_uIntPtr                     nDragXorPolyLimit;
-    sal_uIntPtr                     nDragXorPointLimit;
-    sal_uInt16                      nRubberEdgeDraggingLimit;
-    sal_uInt16                      nDetailedEdgeDraggingLimit;
-
-    unsigned                    bFramDrag : 1;        // z.Zt. FrameDrag
-    unsigned                    bDragSpecial : 1;     // z.Zt. Special Obj-Dragging
-    unsigned                    bMarkedHitMovesAlways : 1; // Persistent
-    unsigned                    bDragLimit : 1;      // Limit auf SnapRect statt BoundRect
-    unsigned                    bDragHdl : 1;        // TRUE: RefPt wird verschoben
-    unsigned                    bDragStripes : 1;    // Persistent
-    unsigned                    bMirrRefDragObj : 1; // Persistent - Waehrend des Draggens der Spiegelachse die gespiegelten Objekte als Xor zeigen
-    unsigned                    mbSolidDragging : 1;  // allow solid create/drag of objects
-    unsigned                    bMouseHideWhileDraggingPoints : 1;
-    unsigned                    bResizeAtCenter : 1;
-    unsigned                    bCrookAtCenter : 1;
-    unsigned                    bDragWithCopy : 1;
-    unsigned                    bInsGluePoint : 1;
-    unsigned                    bInsObjPointMode : 1;
-    unsigned                    bInsGluePointMode : 1;
-    unsigned                    bNoDragXorPolys : 1;
-    unsigned                    bAutoVertexCon : 1;  // Automatische Konnektorgenerierung an den Scheitelpunkten
-    unsigned                    bAutoCornerCon : 1;  // Automatische Konnektorgenerierung an den Eckpunkten
-    unsigned                    bRubberEdgeDragging : 1;
-    unsigned                    bDetailedEdgeDragging : 1;
-
 private:
-    SVX_DLLPRIVATE void ImpClearVars();
-    SVX_DLLPRIVATE void ImpMakeDragAttr();
-    SVX_DLLPRIVATE void ImpDelDragAttr();
-
 protected:
-    virtual void SetMarkHandles();
-    void ShowDragObj();
-    void HideDragObj();
-    sal_Bool ImpBegInsObjPoint(sal_Bool bIdxZwang, sal_uInt32 nIdx, const Point& rPnt, sal_Bool bNewObj, OutputDevice* pOut);
+    SdrHdl*                     mpDragHdl;
+    SdrDragMethod*              mpCurrentSdrDragMethod;
+    SdrUndoGeoObj*              mpInsPointUndo;
+    basegfx::B2DRange           maDragLimit;
+    XubString                   maInsPointUndoStr;
+    SdrHdlKind                  meDragHdl;
 
-protected:
+    /// bitfield
+    bool                        mbFrameDrag : 1;        // z.Zt. FrameDrag
+    bool                        mbDragSpecial : 1;     // z.Zt. Special Obj-Dragging
+    bool                        mbMarkedHitMovesAlways : 1; // Persistent
+    bool                        mbDragLimit : 1;
+    bool                        mbDragHdl : 1;        // true: RefPt wird verschoben
+    bool                        mbDragStripes : 1;    // Persistent
+    bool                        mbSolidDragging : 1;  // allow solid create/drag of objects
+    bool                        mbResizeAtCenter : 1;
+    bool                        mbCrookAtCenter : 1;
+    bool                        mbDragWithCopy : 1;
+    bool                        mbInsGluePoint : 1;
+    bool                        mbInsObjPointMode : 1;
+    bool                        mbInsGluePointMode : 1;
+    bool                        mbNoDragXorPolys : 1;
+
+    bool ImpBegInsObjPoint(bool bIdxZwang, sal_uInt32 nIdx, const basegfx::B2DPoint& rPnt, bool bNewObj);
+
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
-    SdrDragView(SdrModel* pModel1, OutputDevice* pOut = 0L);
+    SdrDragView(SdrModel& rModel1, OutputDevice* pOut = 0);
     virtual ~SdrDragView();
 
 public:
-    virtual sal_Bool IsAction() const;
-    virtual void MovAction(const Point& rPnt);
+    virtual void SetMarkHandles();
+
+    virtual bool IsAction() const;
+    virtual void MovAction(const basegfx::B2DPoint& rPnt);
     virtual void EndAction();
     virtual void BckAction();
     virtual void BrkAction();
-    virtual void TakeActionRect(Rectangle& rRect) const;
+    virtual basegfx::B2DRange TakeActionRange() const;
+
+    void ShowDragObj();
+    void HideDragObj();
 
     // Spezialimplementation fuer den Writer:
     // TakeDragObjAnchorPos() liefert die Position an der ein Objekt
@@ -120,72 +88,66 @@ public:
     // In der Regel ist das die linke obere Ecke des zu erwartenden neuen
     // SnapRects. Ausnahme: CaptionObj. Dort ist es die Position des
     // "Schwanzendes".
-    // Bei Returncode sal_False konnte ich die Position nicht bestimmen
+    // Bei Returncode false konnte ich die Position nicht bestimmen
     // (z.B. Punktverschiebung, Mehrfachselektion, Schieben der
     // Spiegelschse, ...)
-    sal_Bool TakeDragObjAnchorPos(Point& rPos, sal_Bool bTopRight = sal_False ) const;
+    bool TakeDragObjAnchorPos(basegfx::B2DPoint& rPos, bool bTopRight = false ) const;
+
+    void SetInsertGluePoint(bool bOn) { if(mbInsGluePoint != bOn) mbInsGluePoint = bOn; }
+    bool IsInsertGluePoint() const { return mbInsGluePoint; }
 
     // Wird pForcedMeth uebergeben, so wird pHdl, ... nicht ausgewerten, sondern diese
     // Drag-Methode verwendet. Die Instanz geht dabei ins Eigentum der View ueber und
     // wird zum Ende des Draggings destruiert.
-    virtual sal_Bool BegDragObj(const Point& rPnt, OutputDevice* pOut=NULL, SdrHdl* pHdl=NULL, short nMinMov=-3, SdrDragMethod* pForcedMeth=NULL);
-    void MovDragObj(const Point& rPnt);
-    sal_Bool EndDragObj(sal_Bool bCopy=sal_False);
+    virtual bool BegDragObj(const basegfx::B2DPoint& rPnt, const SdrHdl* pHdl = 0, double fMinMovLogic = 3.0,
+        SdrDragMethod* pForcedMeth = 0);
+    void MovDragObj(const basegfx::B2DPoint& rPnt);
+    bool EndDragObj(bool bCopy = false);
     void BrkDragObj();
-    sal_Bool IsDragObj() const { return mpCurrentSdrDragMethod && !bInsPolyPoint && !bInsGluePoint; }
-    SdrHdl* GetDragHdl() const { return pDragHdl; }
+    bool IsDragObj() const { return mpCurrentSdrDragMethod && !mbInsPolyPoint && !IsInsertGluePoint(); }
+    SdrHdl* GetDragHdl() const { return mpDragHdl; }
     SdrDragMethod* GetDragMethod() const { return mpCurrentSdrDragMethod; }
-    sal_Bool IsDraggingPoints() const { return eDragHdl==HDL_POLY; }
-    sal_Bool IsDraggingGluePoints() const { return eDragHdl==HDL_GLUE; }
+    bool IsDraggingPoints() const { return HDL_POLY == meDragHdl; }
+    bool IsDraggingGluePoints() const { return HDL_GLUE == meDragHdl; }
+
+    SdrHdlKind GetDragHdlKind() const { return meDragHdl; }
+    bool IsDragLimit() const { return mbDragLimit; }
+    const basegfx::B2DRange& GetDragLimit() const { return maDragLimit; }
 
     // Wer das beim BegDrag oder mittendrin schon festlegen will.
-    // (Wird bei jedem BegDrag auf sal_False zurueckgesetzt, also nach
+    // (Wird bei jedem BegDrag auf false zurueckgesetzt, also nach
     // BegDrag setzen.)
-    void SetDragWithCopy(sal_Bool bOn) { bDragWithCopy = bOn; }
-    sal_Bool IsDragWithCopy() const { return bDragWithCopy; }
-
-    void SetInsertGluePoint(sal_Bool bOn) { bInsGluePoint = bOn; }
-    sal_Bool IsInsertGluePoint() const { return bInsGluePoint; }
+    void SetDragWithCopy(bool bOn) { if(mbDragWithCopy != bOn) mbDragWithCopy = bOn; }
+    bool IsDragWithCopy() const { return mbDragWithCopy; }
 
     // Interaktives einfuegen eines neuen Punktes. nIdx=0 => vor dem ersten Punkt.
-    sal_Bool IsInsObjPointPossible() const;
-    sal_Bool IsInsPointPossible() const { return IsInsObjPointPossible(); }
-    sal_Bool BegInsObjPoint(const Point& rPnt, sal_Bool bNewObj) { return ImpBegInsObjPoint(sal_False, 0L, rPnt, bNewObj, 0L); }
-    void MovInsObjPoint(const Point& rPnt) { MovDragObj(rPnt); }
-    sal_Bool EndInsObjPoint(SdrCreateCmd eCmd);
+    bool IsInsObjPointPossible() const;
+    bool IsInsPointPossible() const { return IsInsObjPointPossible(); }
+    bool BegInsObjPoint(const basegfx::B2DPoint& rPnt, bool bNewObj) { return ImpBegInsObjPoint(false, 0, rPnt, bNewObj); }
+    void MovInsObjPoint(const basegfx::B2DPoint& rPnt) { MovDragObj(rPnt); }
+    bool EndInsObjPoint(SdrCreateCmd eCmd);
     void BrkInsObjPoint() { BrkDragObj(); }
-    sal_Bool IsInsObjPoint() const { return mpCurrentSdrDragMethod && bInsPolyPoint; }
+    bool IsInsObjPoint() const { return mpCurrentSdrDragMethod && mbInsPolyPoint; }
 
     // Fuer die App zum Verwalten des Status. GetPreferedPointer() wird
     // spaeter vielleicht einen passenden Pointer dafuer liefern
-    void SetInsObjPointMode(sal_Bool bOn) { bInsObjPointMode = bOn; }
-    sal_Bool IsInsObjPointMode() const { return bInsObjPointMode; }
+    void SetInsObjPointMode(bool bOn) { if(mbInsObjPointMode != bOn) mbInsObjPointMode = bOn; }
+    bool IsInsObjPointMode() const { return mbInsObjPointMode; }
 
-    sal_Bool IsInsGluePointPossible() const;
-    sal_Bool BegInsGluePoint(const Point& rPnt);
-    void MovInsGluePoint(const Point& rPnt) { MovDragObj(rPnt); }
-    sal_Bool EndInsGluePoint() { return EndDragObj(); }
+    bool IsInsGluePointPossible() const;
+    bool BegInsGluePoint(const basegfx::B2DPoint& rPnt);
+    void MovInsGluePoint(const basegfx::B2DPoint& rPnt) { MovDragObj(rPnt); }
+    bool EndInsGluePoint() { return EndDragObj(); }
     void BrkInsGluePoint() { BrkDragObj(); }
-    sal_Bool IsInsGluePoint() const { return mpCurrentSdrDragMethod && bInsGluePoint; }
 
     // Fuer die App zum Verwalten des Status. GetPreferedPointer() wird
     // spaeter vielleicht einen passenden Pointer dafuer liefern
-    void SetInsGluePointMode(sal_Bool bOn) { bInsGluePointMode = bOn; }
-    sal_Bool IsInsGluePointMode() const { return bInsGluePointMode; }
+    void SetInsGluePointMode(bool bOn) { if(mbInsGluePointMode != bOn) mbInsGluePointMode = bOn; }
+    bool IsInsGluePointMode() const { return mbInsGluePointMode; }
 
     // Begrenzungslinien ueber's gesamte Win waehrend des Draggens
-    // Persistent. Default=FALSE.
-    void SetDragStripes(sal_Bool bOn);
-    sal_Bool IsDragStripes() const { return bDragStripes; }
-
-    // Handles waehrend des Draggens verstecken
-    //HMHvoid SetDragHdlHide(sal_Bool bOn);
-    //HMHBOOL IsDragHdlHide() const { return bNoDragHdl; }
-
-    // Beim Draggen von Polygonpunkten und Klebepunkten
-    // die Maus verstecken. Default=FALSE
-    void SetMouseHideWhileDraggingPoints(sal_Bool bOn) { bMouseHideWhileDraggingPoints = bOn; }
-    sal_Bool IsMouseHideWhileDraggingPoints() const { return bMouseHideWhileDraggingPoints; }
+    void SetDragStripes(bool bOn);
+    bool IsDragStripes() const { return mbDragStripes; }
 
     // Beim Draggen werden i.d.R. die Konturen der markierten Objekte
     // als Xor-Polygone dargestellt. Wird dieses Flag hier gesetzt,
@@ -194,114 +156,36 @@ public:
     // hat diese Einstellung keine Auswirkung.
     // Auch waerend des Draggens umschaltbar.
     // Default=Off
-    void SetNoDragXorPolys(sal_Bool bOn);
-    sal_Bool IsNoDragXorPolys() const { return bNoDragXorPolys; }
+    void SetNoDragXorPolys(bool bOn);
+    bool IsNoDragXorPolys() const { return mbNoDragXorPolys; }
 
-    // Uebersteigt die Anzahl der markierten Objekte den hier eingestellten
-    // Wert, wird implizit (temporaer) auf NoDragPolys geschaltet.
-    // PolyPolygone etc werden entsprechend als mehrere Objekte gewertet.
-    // Default=100
-    void  SetDragXorPolyLimit(sal_uIntPtr nObjAnz) { nDragXorPolyLimit=nObjAnz; }
-    sal_uIntPtr GetDragXorPolyLimit() const { return nDragXorPolyLimit; }
-
-    // Wie DragXorPolyLimit, jedoch bezogen auf die Gesamtpunktanzahl
-    // aller Polygone. Default=500.
-    // Auf NoDragPolys wird (temporaer) geschaltet, wenn eins der Limits
-    // ueberstiegen wird.
-    void  SetDragXorPointLimit(sal_uIntPtr nPntAnz) { nDragXorPointLimit=nPntAnz; }
-    sal_uIntPtr GetDragXorPointLimit() const { return nDragXorPointLimit; }
-
-    void SetSolidDragging(bool bOn);
+    void SetSolidDragging(bool bOn) { if(mbSolidDragging != bOn) mbSolidDragging = bOn; }
     bool IsSolidDragging() const;
-
-    // Dragging/Creating von Verbindern:
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Verbinder an Objektscheitelpunkte ankleben
-    // Default=sal_True=Ja
-    void SetAutoVertexConnectors(sal_Bool bOn) { bAutoVertexCon = bOn; }
-    sal_Bool IsAutoVertexConnectors() const { return bAutoVertexCon; }
-
-    // Verbinder an Objektecken ankleben
-    // Default=sal_False=Nein
-    void SetAutoCornerConnectors(sal_Bool bOn) { bAutoCornerCon = bOn; }
-    sal_Bool IsAutoCornerConnectors() const { return bAutoCornerCon; }
-
-    // Dragging von verbundenen Objekten (Nodes):
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // DetailedEdgeDraggingLimit: Wie RubberEdgeDraggingLimit, jedoch bezieht
-    // sich dieses Limit auf die detalierte Darstellung, d.h. nicht nur
-    // Gummibaender sondern komplette Neuberechnunen sind beim Draggen sichtbar.
-    // Diese detalierte Darstellung ist eh nur beim MoveDrag moeglich.
-    // Defaultwert ist 10
-    void SetDetailedEdgeDragging(sal_Bool bOn); // Default an
-    sal_Bool IsDetailedEdgeDragging() const { return bDetailedEdgeDragging; }
-
-    void SetDetailedEdgeDraggingLimit(sal_uInt16 nEdgeObjAnz);
-    sal_uInt16 GetDetailedEdgeDraggingLimit() const { return nDetailedEdgeDraggingLimit; }
-
-    // EdgeDraggingLimit: Sind mehr als nEdgeObjAnz Kanten betroffen, werden
-    // diese beim interaktiven Draggen nicht mit angezeigt.
-    // Gemeint sind hier die "Gummibaender", die weniger Rechenzeit benoetigen
-    // als die kompletten Neuberechnungen beim DetailedEdgeDragging.
-    // Defaultwert ist 100
-    void SetRubberEdgeDragging(sal_Bool bOn);  // Default an
-    sal_Bool IsRubberEdgeDragging() const { return bRubberEdgeDragging; }
-
-    void SetRubberEdgeDraggingLimit(sal_uInt16 nEdgeObjAnz);
-    sal_uInt16 GetRubberEdgeDraggingLimit() const { return nRubberEdgeDraggingLimit; }
-
-    // Verbinderhandling also zu deutsch wie folgt (bei Defaulteinstellungen):
-    // - Sind bis max 10 Verbinder betroffen werden diese bei jedem
-    //   MouseMove neu berechnet
-    // - Sind zwischen 11 und 100 Verbinder betroffen werden die
-    //   Verbindungen beim Draggen als gerade Linien dargestellt.
-    // - Bei mehr als 100 betroffenen Verbindern wird beim Draggen nichts
-    //   mehr gezeichnet was auf Verbinder hinweist.
 
     // Ist ein spezieller Dragmode eingeschaltet, wie Rotate, Mirror oder Crook,
     // dann leitet ein Hit auf das markierte Objekt genau dieses Dragging ein.
-    // Setzt man MarkedHitMovesAlways auf sal_True, so leitet ein Hit auf das
+    // Setzt man MarkedHitMovesAlways auf true, so leitet ein Hit auf das
     // markierte Objekt immer ein Moven ein, unabhaengig vom gesetzten DragMode.
     // Dieses Flag ist persistent und sollte von der App fuer den Anwender
     // konfigurierbar sein!
-    void SetMarkedHitMovesAlways(sal_Bool bOn) { bMarkedHitMovesAlways = bOn; }
-    sal_Bool IsMarkedHitMovesAlways() const { return bMarkedHitMovesAlways; }
+    void SetMarkedHitMovesAlways(bool bOn) { if(mbMarkedHitMovesAlways != bOn) mbMarkedHitMovesAlways = bOn; }
+    bool IsMarkedHitMovesAlways() const { return mbMarkedHitMovesAlways; }
 
-    // Beim Draggen der Spiegelachse das Spiegelbild der markierten Objekte
-    // als Xor darstellen? Persistent. Noch nicht implementiert. Default TRUE.
-    void SetMirrRefDragObj(sal_Bool bOn) { bMirrRefDragObj = bOn; }
-    sal_Bool IsMirrRefDragObj() const { return bMirrRefDragObj; }
-
-    sal_Bool IsOrthoDesired() const;
+    bool IsOrthoDesired() const;
 
     // Beim Resize die Mitte als Referenz
-    // Default=FALSE.
-    sal_Bool IsResizeAtCenter() const { return bResizeAtCenter; }
-    void SetResizeAtCenter(sal_Bool bOn) { bResizeAtCenter = bOn; }
+    // Default=false.
+    bool IsResizeAtCenter() const { return mbResizeAtCenter; }
+    void SetResizeAtCenter(bool bOn) { if(mbResizeAtCenter != bOn) mbResizeAtCenter = bOn; }
 
     // Symmetrisches Crook
-    // Default=FALSE.
-    sal_Bool IsCrookAtCenter() const { return bCrookAtCenter; }
-    void SetCrookAtCenter(sal_Bool bOn) { bCrookAtCenter = bOn; }
-
-    // Begrenzung des Arbeitsbereichs. Die Begrenzung bezieht sich auf die
-    // View, nicht auf die einzelnen PageViews. Von der View wird diese
-    // Begrenzung nur bei Interaktionen wie Dragging und Create ausgewertet.
-    // Bei von der App algorithmisch oder UI-gesteuerte Aktionen (SetGeoAttr,
-    // MoveMarkedObj, ...) muss die App dieses Limit selbst beruecksichtigen.
-    // Ferner ist dieses Limit als Grob-Limit zu sehen. U.U. koennen Objekte
-    // (z.B. beim Drehen) nicht exakt bis an dieses Limit herangedraggt werden,
-    // koennen Objekte durch Rundungsfehler doch etwas ueberstehen, ... .
-    // Default=EmptyRect=keine Begrenzung.
-    // erst z.T. impl.
-    // (besser in die DragView?)
-    void SetWorkArea(const Rectangle& rRect) { aMaxWorkArea=rRect; }
-    const Rectangle& GetWorkArea() const { return aMaxWorkArea; }
-
+    // Default=false.
+    bool IsCrookAtCenter() const { return mbCrookAtCenter; }
+    void SetCrookAtCenter(bool bOn) { if(mbCrookAtCenter != bOn) mbCrookAtCenter = bOn; }
 
     // Das DragLimit ist bezogen auf die Page des Objekts.
     // (Oder auf die View??? Muss ich mal^^^^recherchieren. Joe.)
-    // sal_False=Kein Limit.
+    // false=Kein Limit.
     // Das Rueckgabe-Rect muss absolute Koordinaten enthalten. Der Maximale
     // Dragbereich wird von der View dann so gewaehlt, dass das SnapRect des
     // Objekts bis Maximal auf die Kante des LimitRects gemoved bzw. gesized
@@ -310,8 +194,10 @@ public:
     // Rundungsfehler auftreten koennen, wodurch das LimitRect minnimal
     // ueberschritten werden koennte...
     // Implementiert fuer Move und Resize.
-    virtual sal_Bool TakeDragLimit(SdrDragMode eMode, Rectangle& rRect) const;
+    virtual bool TakeDragLimit(SdrDragMode eMode, basegfx::B2DRange& rRange) const;
 };
 
 #endif //_SVDDRGV_HXX
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// eof

@@ -54,7 +54,7 @@ namespace sdr
             SdrPageWindow& GetPageWindow() const { return mrPageWindow; }
 
             // access to SdrPage of PageView
-            SdrPage* GetSdrPage() const;
+            SdrPage& GetSdrPage() const;
 
             // basic constructor, used from SdrPageView.
             ObjectContactOfPageView(SdrPageWindow& rPageWindow);
@@ -128,8 +128,8 @@ namespace sdr
             // high contrast display mode
             virtual bool isDrawModeHighContrast() const;
 
-            // overloaded access to SdrPageView
-            virtual SdrPageView* TryToGetSdrPageView() const;
+            // overloaded access to SdrView
+            virtual SdrView* TryToGetSdrView() const;
 
             // access to OutputDevice. May return 0L like the default implementations do. Needs to be overloaded as needed.
             virtual OutputDevice* TryToGetOutputDevice() const;
@@ -137,7 +137,7 @@ namespace sdr
             /** sets all UNO controls which are associated with this ObjectContact to
                 design or alive mode.
             */
-            void    SetUNOControlsDesignMode( bool _bDesignMode ) const;
+            void SetUNOControlsDesignMode( bool _bDesignMode );
         };
     } // end of namespace contact
 } // end of namespace sdr

@@ -399,7 +399,7 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine (void)
 
         pEditEngine = new EditEngine (mpEditEngineItemPool);
 
-        pEditEngine->EnableUndo (sal_True);
+        pEditEngine->EnableUndo (true);
         pEditEngine->SetDefTab (sal_uInt16(
             Application::GetDefaultDevice()->GetTextWidth(
                 UniString::CreateFromAscii("XXXX"))));
@@ -454,8 +454,8 @@ void PresenterTextView::Implementation::SetBackgroundColor (const Color aColor)
     DBG_ASSERT(mpEditEngine!=NULL, "EditEngine missing");
     DBG_ASSERT(mpEditEngineItemPool!=NULL, "EditEngineItemPool missing");
     mpEditEngine->SetBackgroundColor(aColor);
-    mpEditEngine->EnableAutoColor(sal_False);
-    mpEditEngine->ForceAutoColor(sal_False);
+    mpEditEngine->EnableAutoColor(false);
+    mpEditEngine->ForceAutoColor(false);
 }
 
 
@@ -572,7 +572,7 @@ Reference<rendering::XBitmap> PresenterTextView::Implementation::GetBitmap (void
             delete mpOutputDevice;
         mpOutputDevice = new VirtualDevice(*Application::GetDefaultDevice(), 0, 0);
         mpOutputDevice->SetMapMode(MAP_PIXEL);
-        mpOutputDevice->SetOutputSizePixel(maSize, sal_True);
+        mpOutputDevice->SetOutputSizePixel(maSize, true);
         mpOutputDevice->SetLineColor();
         mpOutputDevice->SetFillColor();
         mpOutputDevice->SetBackground(Wallpaper());

@@ -53,9 +53,6 @@
 #include "sdabstdlg.hxx"
 namespace sd {
 
-TYPEINIT1( FuPresentationObjects, FuPoor );
-
-
 /*************************************************************************
 |*
 |* Konstruktor
@@ -93,7 +90,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
     String aLayoutName = (((SfxStringItem&)aSet.Get(SID_STATUS_LAYOUT)).GetValue());
     DBG_ASSERT(aLayoutName.Len(), "Layout unbestimmt");
 
-    sal_Bool    bUnique = sal_False;
+    bool    bUnique = false;
     sal_Int16   nDepth, nTmp;
     OutlineView* pOlView = static_cast<OutlineView*>(pOutlineViewShell->GetView());
     OutlinerView* pOutlinerView = pOlView->GetViewByWindow( (Window*) mpWindow );
@@ -109,16 +106,16 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
 
         if( nDepth != nTmp )
         {
-            bUnique = sal_False;
+            bUnique = false;
             break;
         }
 
         if( pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE ) != bPage )
         {
-            bUnique = sal_False;
+            bUnique = false;
             break;
         }
-        bUnique = sal_True;
+        bUnique = true;
 
         pPara = (Paragraph*) pList->Next();
     }
@@ -146,26 +143,22 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
         }
 
         SfxStyleSheetBasePool* pStyleSheetPool = mpDocSh->GetStyleSheetPool();
-        SfxStyleSheetBase* pStyleSheet = pStyleSheetPool->Find( aStyleName, SD_STYLE_FAMILY_MASTERPAGE );
-        DBG_ASSERT(pStyleSheet, "StyleSheet nicht gefunden");
+        SfxStyleSheet* pStyleSheet = dynamic_cast< SfxStyleSheet* >(pStyleSheetPool->Find(aStyleName, SD_STYLE_FAMILY_MASTERPAGE));
+        OSL_ENSURE(pStyleSheet, "StyleSheet not found or not based on SfxStyleSheet");
 
         if( pStyleSheet )
         {
-            SfxStyleSheetBase& rStyleSheet = *pStyleSheet;
-
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            SfxAbstractTabDialog* pDlg = pFact ? pFact->CreateSdPresLayoutTemplateDlg( mpDocSh, NULL, SdResId( nDlgId ), rStyleSheet, ePO, pStyleSheetPool ) : 0;
+            SfxAbstractTabDialog* pDlg = pFact ? pFact->CreateSdPresLayoutTemplateDlg( mpDocSh, NULL, SdResId( nDlgId ), *pStyleSheet, ePO, pStyleSheetPool ) : 0;
             if( pDlg && (pDlg->Execute() == RET_OK) )
             {
                 const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
                 // Undo-Action
-                StyleSheetUndoAction* pAction = new StyleSheetUndoAction
-                                                (mpDoc, (SfxStyleSheet*)pStyleSheet,
-                                                    pOutSet);
-                mpDocSh->GetUndoManager()->AddUndoAction(pAction);
+                StyleSheetUndoAction* pAction = new StyleSheetUndoAction(*mpDoc, *pStyleSheet, *pOutSet);
 
+                mpDocSh->GetUndoManager()->AddUndoAction(pAction);
                 pStyleSheet->GetItemSet().Put( *pOutSet );
-                ( (SfxStyleSheet*) pStyleSheet )->Broadcast( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
+                pStyleSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
             }
             delete( pDlg );
         }

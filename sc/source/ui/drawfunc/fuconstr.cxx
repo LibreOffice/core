@@ -94,7 +94,7 @@ sal_Bool __EXPORT FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 
     aDragTimer.Start();
 
-    aMDPos = pWindow->PixelToLogic( rMEvt.GetPosPixel() );
+    aMDPos = pWindow->GetInverseViewTransformation() * basegfx::B2DPoint(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
 
     if ( rMEvt.IsLeft() )
     {
@@ -102,12 +102,13 @@ sal_Bool __EXPORT FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 
         SdrHdl* pHdl = pView->PickHandle(aMDPos);
 
-        if ( pHdl != NULL || pView->IsMarkedHit(aMDPos) )
+        if ( pHdl != NULL || pView->IsMarkedObjHit(aMDPos) )
         {
-            pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, 1);
+            const double fTolerance(basegfx::B2DVector(pWindow->GetInverseViewTransformation() * basegfx::B2DVector(1.0, 0.0)).getLength());
+            pView->BegDragObj(aMDPos, pHdl, fTolerance);
             bReturn = sal_True;
         }
-        else if ( pView->AreObjectsMarked() )
+        else if ( pView->areSdrObjectsSelected() )
         {
             pView->UnmarkAll();
             bReturn = sal_True;
@@ -131,30 +132,31 @@ sal_Bool __EXPORT FuConstruct::MouseMove(const MouseEvent& rMEvt)
 
     if (aDragTimer.IsActive() )
     {
-        Point aOldPixel = pWindow->LogicToPixel( aMDPos );
-        Point aNewPixel = rMEvt.GetPosPixel();
-        if ( Abs( aOldPixel.X() - aNewPixel.X() ) > SC_MAXDRAGMOVE ||
-             Abs( aOldPixel.Y() - aNewPixel.Y() ) > SC_MAXDRAGMOVE )
+        const basegfx::B2DPoint aOldPixel(pWindow->GetViewTransformation() * aMDPos);
+        const basegfx::B2DPoint aNewPixel(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
+
+        if ( fabs( aOldPixel.getX() - aNewPixel.getX() ) > SC_MAXDRAGMOVE ||
+             fabs( aOldPixel.getY() - aNewPixel.getY() ) > SC_MAXDRAGMOVE )
             aDragTimer.Stop();
     }
 
-    Point aPix(rMEvt.GetPosPixel());
-    Point aPnt( pWindow->PixelToLogic(aPix) );
+    const Point aPix(rMEvt.GetPosPixel());
+    const basegfx::B2DPoint aLogicPos(pWindow->GetInverseViewTransformation() * basegfx::B2DPoint(aPix.X(), aPix.Y()));
 
     if ( pView->IsAction() )
     {
         ForceScroll(aPix);
-        pView->MovAction(aPnt);
+        pView->MovAction(aLogicPos);
     }
     else
     {
-        SdrHdl* pHdl=pView->PickHandle(aPnt);
+        SdrHdl* pHdl = pView->PickHandle(aLogicPos);
 
-        if ( pHdl != NULL )
+        if ( pHdl )
         {
             pViewShell->SetActivePointer(pHdl->GetPointer());
         }
-        else if ( pView->IsMarkedHit(aPnt) )
+        else if ( pView->IsMarkedObjHit(aLogicPos) )
         {
             pViewShell->SetActivePointer(Pointer(POINTER_MOVE));
         }
@@ -184,18 +186,16 @@ sal_Bool __EXPORT FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
     sal_uInt16 nClicks = rMEvt.GetClicks();
     if ( nClicks == 2 && rMEvt.IsLeft() )
     {
-        if ( pView->AreObjectsMarked() )
-        {
-            const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-            if (rMarkList.GetMarkCount() == 1)
+        if ( pView->areSdrObjectsSelected() )
             {
-                SdrMark* pMark = rMarkList.GetMark(0);
-                SdrObject* pObj = pMark->GetMarkedSdrObj();
+            SdrObject* pSelected = pView->getSelectedIfSingle();
 
+            if (pSelected)
+            {
                 //  #49458# bei Uno-Controls nicht in Textmodus
-                if ( pObj->ISA(SdrTextObj) && !pObj->ISA(SdrUnoObj) )
+                if ( dynamic_cast< SdrTextObj* >(pSelected) && !dynamic_cast< SdrUnoObj* >(pSelected) )
                 {
-                    OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
+                    OutlinerParaObject* pOPO = pSelected->GetOutlinerParaObject();
                     sal_Bool bVertical = ( pOPO && pOPO->IsVertical() );
                     sal_uInt16 nTextSlotId = bVertical ? SID_DRAW_TEXT_VERTICAL : SID_DRAW_TEXT;
 
@@ -208,7 +208,7 @@ sal_Bool __EXPORT FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
                     {
                         FuText* pText = (FuText*)pPoor;
                         Point aMousePixel = rMEvt.GetPosPixel();
-                        pText->SetInEditMode( pObj, &aMousePixel );
+                        pText->SetInEditMode( pSelected, &aMousePixel );
                     }
                     bReturn = sal_True;
                 }
@@ -232,7 +232,8 @@ sal_Bool FuConstruct::SimpleMouseButtonUp(const MouseEvent& rMEvt)
         aDragTimer.Stop();
     }
 
-    Point   aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
+    const basegfx::B2DPoint aPixelPos(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
+    const basegfx::B2DPoint aPnt(pWindow->GetInverseViewTransformation() * aPixelPos);
 
     if ( pView->IsDragObj() )
          pView->EndDragObj( rMEvt.IsMod1() );
@@ -246,12 +247,12 @@ sal_Bool FuConstruct::SimpleMouseButtonUp(const MouseEvent& rMEvt)
     {
         pWindow->ReleaseMouse();
 
-        if ( !pView->AreObjectsMarked() && rMEvt.GetClicks() < 2 )
+        if ( !pView->areSdrObjectsSelected() && rMEvt.GetClicks() < 2 )
         {
-            pView->MarkObj(aPnt, -2, sal_False, rMEvt.IsMod1());
+            pView->MarkObj(aPnt, 2.0, false, rMEvt.IsMod1());
 
             SfxDispatcher& rDisp = pViewShell->GetViewData()->GetDispatcher();
-            if ( pView->AreObjectsMarked() )
+            if ( pView->areSdrObjectsSelected() )
                 rDisp.Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
             else
                 rDisp.Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);

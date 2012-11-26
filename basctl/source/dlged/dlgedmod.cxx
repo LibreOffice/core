@@ -32,12 +32,10 @@
 
 DBG_NAME(DlgEdModel)
 
-TYPEINIT1(DlgEdModel,SdrModel);
-
 //----------------------------------------------------------------------------
 
 DlgEdModel::DlgEdModel()
-    :SdrModel(NULL, NULL)
+:   SdrModel()
 {
     DBG_CTOR(DlgEdModel,0);
 }
@@ -51,7 +49,7 @@ DlgEdModel::~DlgEdModel()
 
 //----------------------------------------------------------------------------
 
-SdrPage* DlgEdModel::AllocPage(FASTBOOL bMasterPage)
+SdrPage* DlgEdModel::AllocPage(bool bMasterPage)
 {
     DBG_CHKTHIS(DlgEdModel, 0);
     return new DlgEdPage(*this, bMasterPage);
@@ -59,7 +57,7 @@ SdrPage* DlgEdModel::AllocPage(FASTBOOL bMasterPage)
 
 //----------------------------------------------------------------------------
 
-void DlgEdModel::DlgEdModelChanged( FASTBOOL bChanged )
+void DlgEdModel::DlgEdModelChanged( bool bChanged )
 {
     SetChanged( static_cast< sal_Bool > ( bChanged ) );
 }

@@ -37,7 +37,6 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdundo.hxx>
-#include <svx/svdmark.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdpagv.hxx>
 #include "svx/svdstr.hrc"   // Namen aus der Resource
@@ -63,7 +62,7 @@
 #include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
-#include "svx/svditer.hxx"
+#include <svx/svditer.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/polypolygoneditor.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
@@ -72,12 +71,12 @@
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/svdovirt.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/sdr/primitive2d/sdrprimitivetools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
 #include <drawinglayer/attribute/sdrlinestartendattribute.hxx>
+#include <svx/svdlegacy.hxx>
 #include <map>
 #include <vector>
 
@@ -150,7 +149,7 @@ SdrDragEntrySdrObject::~SdrDragEntrySdrObject()
 {
     if(mpClone)
     {
-        SdrObject::Free(mpClone);
+        deleteSdrObjectSafeAndClearPointer(mpClone);
     }
 }
 
@@ -159,16 +158,9 @@ void SdrDragEntrySdrObject::prepareCurrentState(SdrDragMethod& rDragMethod)
     // for the moment, i need to re-create the clone in all cases. I need to figure
     // out when clone and original have the same class, so that i can use operator=
     // in those cases
-
-    //        // copy all other needed stuff
-    //        basegfx::B2DHomMatrix aMatrix;
-    //        basegfx::B2DPolyPolygon aPolyPolygon;
-    //      pOleObject->TRGetBaseGeometry(aMatrix, aPolyPolygon);
-    //        pClone->TRSetBaseGeometry(aMatrix, aPolyPolygon);
-
     if(mpClone)
     {
-        SdrObject::Free(mpClone);
+        deleteSdrObjectSafeAndClearPointer(mpClone);
         mpClone = 0;
     }
 
@@ -250,7 +242,7 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragEntryPointGlueDrag::create
 {
     drawinglayer::primitive2d::Primitive2DSequence aRetval;
 
-    if(!maPositions.empty())
+    if(maPositions.size())
     {
         basegfx::B2DPolygon aPolygon;
         sal_uInt32 a(0);
@@ -307,7 +299,20 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragEntryPointGlueDrag::create
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT0(SdrDragMethod);
+const basegfx::B2DRange& SdrDragMethod::GetMarkedRange() const
+{
+    if(HDL_POLY == getSdrView().GetDragHdlKind())
+    {
+        return getSdrView().getMarkedPointRange();
+    }
+
+    if(HDL_GLUE == getSdrView().GetDragHdlKind())
+    {
+        return getSdrView().getMarkedGluePointRange();
+    }
+
+    return getSdrView().getMarkedObjectSnapRange();
+}
 
 void SdrDragMethod::resetSdrDragEntries()
 {
@@ -340,13 +345,13 @@ void SdrDragMethod::addSdrDragEntry(SdrDragEntry* pNew)
 
 void SdrDragMethod::createSdrDragEntries()
 {
-    if(getSdrDragView().GetSdrPageView() && getSdrDragView().GetSdrPageView()->HasMarkedObjPageView())
+    if(getSdrView().GetSdrPageView())
     {
-        if(getSdrDragView().IsDraggingPoints())
+        if(getSdrView().IsDraggingPoints())
         {
             createSdrDragEntries_PointDrag();
         }
-        else if(getSdrDragView().IsDraggingGluePoints())
+        else if(getSdrView().IsDraggingGluePoints())
         {
             createSdrDragEntries_GlueDrag();
         }
@@ -373,57 +378,46 @@ void SdrDragMethod::createSdrDragEntryForSdrObject(const SdrObject& rOriginal, s
 
 void SdrDragMethod::createSdrDragEntries_SolidDrag()
 {
-    const sal_uInt32 nMarkAnz(getSdrDragView().GetMarkedObjectCount());
-    SdrPageView* pPV = getSdrDragView().GetSdrPageView();
+    SdrPageView* pPV = getSdrView().GetSdrPageView();
 
-    if(pPV)
+    if(pPV && pPV->PageWindowCount())
     {
-        for(sal_uInt32 a(0); a < nMarkAnz; a++)
+        sdr::contact::ObjectContact& rOC = pPV->GetPageWindow(0)->GetObjectContact();
+        const SdrObjectVector aSelection(getSdrView().getSelectedSdrObjectVectorFromSdrMarkView());
+
+        for(sal_uInt32 a(0); a < aSelection.size(); a++)
         {
-            SdrMark* pM = getSdrDragView().GetSdrMarkByIndex(a);
+            const SdrObject* pObject = aSelection[a];
+            SdrObjListIter aIter(*pObject);
 
-            if(pM->GetPageView() == pPV)
+            while(aIter.IsMore())
             {
-                const SdrObject* pObject = pM->GetMarkedSdrObj();
+                SdrObject* pCandidate = aIter.Next();
 
-                if(pObject)
+                if(pCandidate)
                 {
-                    if(pPV->PageWindowCount())
+                    const bool bSuppressFullDrag(!pCandidate->supportsFullDrag());
+                    bool bAddWireframe(bSuppressFullDrag);
+
+                    if(!bAddWireframe && !pCandidate->HasLineStyle())
                     {
-                        sdr::contact::ObjectContact& rOC = pPV->GetPageWindow(0)->GetObjectContact();
-                        SdrObjListIter aIter(*pObject);
+                        // add wireframe for objects without outline
+                        bAddWireframe = true;
+                    }
 
-                        while(aIter.IsMore())
-                        {
-                            SdrObject* pCandidate = aIter.Next();
+                    if(!bSuppressFullDrag)
+                    {
+                        // add full obejct drag; Clone() at the object has to work
+                        // for this
+                        createSdrDragEntryForSdrObject(*pCandidate, rOC, true);
+                    }
 
-                            if(pCandidate)
-                            {
-                                const bool bSuppressFullDrag(!pCandidate->supportsFullDrag());
-                                bool bAddWireframe(bSuppressFullDrag);
-
-                                if(!bAddWireframe && !pCandidate->HasLineStyle())
-                                {
-                                    // add wireframe for objects without outline
-                                    bAddWireframe = true;
-                                }
-
-                                if(!bSuppressFullDrag)
-                                {
-                                    // add full obejct drag; Clone() at the object has to work
-                                    // for this
-                                    createSdrDragEntryForSdrObject(*pCandidate, rOC, true);
-                                }
-
-                                if(bAddWireframe)
-                                {
-                                    // when dragging a 50% transparent copy of a filled or not filled object without
-                                    // outline, this is normally hard to see. Add extra wireframe in that case. This
-                                    // works nice e.g. with thext frames etc.
-                                    addSdrDragEntry(new SdrDragEntryPolyPolygon(pCandidate->TakeXorPoly()));
-                                }
-                            }
-                        }
+                    if(bAddWireframe)
+                    {
+                        // when dragging a 50% transparent copy of a filled or not filled object without
+                        // outline, this is normally hard to see. Add extra wireframe in that case. This
+                        // works nice e.g. with thext frames etc.
+                        addSdrDragEntry(new SdrDragEntryPolyPolygon(pCandidate->TakeXorPoly()));
                     }
                 }
             }
@@ -433,41 +427,35 @@ void SdrDragMethod::createSdrDragEntries_SolidDrag()
 
 void SdrDragMethod::createSdrDragEntries_PolygonDrag()
 {
-    const sal_uInt32 nMarkAnz(getSdrDragView().GetMarkedObjectCount());
-    bool bNoPolygons(getSdrDragView().IsNoDragXorPolys() || nMarkAnz > getSdrDragView().GetDragXorPolyLimit());
+    const SdrObjectVector aSelection(getSdrView().getSelectedSdrObjectVectorFromSdrMarkView());
+    bool bNoPolygons(getSdrView().IsNoDragXorPolys() || aSelection.size() > 1200); // DragXorPolyLimit, was at 100
     basegfx::B2DPolyPolygon aResult;
     sal_uInt32 nPointCount(0);
 
-    for(sal_uInt32 a(0); !bNoPolygons && a < nMarkAnz; a++)
+    for(sal_uInt32 a(0); !bNoPolygons && a < aSelection.size(); a++)
     {
-        SdrMark* pM = getSdrDragView().GetSdrMarkByIndex(a);
+        const basegfx::B2DPolyPolygon aNewPolyPolygon(aSelection[a]->TakeXorPoly());
 
-        if(pM->GetPageView() == getSdrDragView().GetSdrPageView())
+        for(sal_uInt32 b(0); b < aNewPolyPolygon.count(); b++)
         {
-            const basegfx::B2DPolyPolygon aNewPolyPolygon(pM->GetMarkedSdrObj()->TakeXorPoly());
+            nPointCount += aNewPolyPolygon.getB2DPolygon(b).count();
+        }
 
-            for(sal_uInt32 b(0); b < aNewPolyPolygon.count(); b++)
-            {
-                nPointCount += aNewPolyPolygon.getB2DPolygon(b).count();
-            }
+        if(nPointCount > 50000) // old DragXorPointLimit, was at 500
+        {
+            bNoPolygons = true;
+        }
 
-            if(nPointCount > getSdrDragView().GetDragXorPointLimit())
-            {
-                bNoPolygons = true;
-            }
-
-            if(!bNoPolygons)
-            {
-                aResult.append(aNewPolyPolygon);
-            }
+        if(!bNoPolygons)
+        {
+            aResult.append(aNewPolyPolygon);
         }
     }
 
     if(bNoPolygons)
     {
-        const Rectangle aR(getSdrDragView().GetSdrPageView()->MarkSnap());
-        const basegfx::B2DRange aNewRectangle(aR.Left(), aR.Top(), aR.Right(), aR.Bottom());
-        basegfx::B2DPolygon aNewPolygon(basegfx::tools::createPolygonFromRect(aNewRectangle));
+        const basegfx::B2DRange aNewRange(sdr::legacy::GetAllObjBoundRange(aSelection));
+        basegfx::B2DPolygon aNewPolygon(basegfx::tools::createPolygonFromRect(aNewRange));
 
         aResult = basegfx::B2DPolyPolygon(basegfx::tools::expandToCurve(aNewPolygon));
     }
@@ -480,36 +468,31 @@ void SdrDragMethod::createSdrDragEntries_PolygonDrag()
 
 void SdrDragMethod::createSdrDragEntries_PointDrag()
 {
-    const sal_uInt32 nMarkAnz(getSdrDragView().GetMarkedObjectCount());
-    std::vector< basegfx::B2DPoint > aPositions;
-
-    for(sal_uInt32 nm(0); nm < nMarkAnz; nm++)
+    if(getSdrView().areSdrObjectsSelected())
     {
-        SdrMark* pM = getSdrDragView().GetSdrMarkByIndex(nm);
+        const SdrObjectVector aSelection(getSdrView().getSelectedSdrObjectVectorFromSdrMarkView());
+        std::vector< basegfx::B2DPoint > aPositions;
 
-        if(pM->GetPageView() == getSdrDragView().GetSdrPageView())
+        for(sal_uInt32 nm(0); nm < aSelection.size(); nm++)
         {
-            const SdrUShortCont* pPts = pM->GetMarkedPoints();
+            const SdrPathObj* pPath = dynamic_cast< const SdrPathObj* >(aSelection[nm]);
 
-            if(pPts && pPts->GetCount())
+            if(pPath)
             {
-                const SdrObject* pObj = pM->GetMarkedSdrObj();
-                const SdrPathObj* pPath = dynamic_cast< const SdrPathObj* >(pObj);
+                const sdr::selection::Indices aMarkedPoints(getSdrView().getSelectedPointsForSelectedSdrObject(*pPath));
 
-                if(pPath)
+                if(aMarkedPoints.size())
                 {
-                    const basegfx::B2DPolyPolygon aPathXPP = pPath->GetPathPoly();
+                    const basegfx::B2DPolyPolygon aPathXPP(pPath->getB2DPolyPolygonInObjectCoordinates());
 
                     if(aPathXPP.count())
                     {
-                        const sal_uInt32 nPtAnz(pPts->GetCount());
-
-                        for(sal_uInt32 nPtNum(0); nPtNum < nPtAnz; nPtNum++)
+                        for(sdr::selection::Indices::const_iterator aMarkedPoint(aMarkedPoints.begin());
+                            aMarkedPoint != aMarkedPoints.end(); aMarkedPoint++)
                         {
                             sal_uInt32 nPolyNum, nPointNum;
-                            const sal_uInt16 nObjPt(pPts->GetObject(nPtNum));
 
-                            if(sdr::PolyPolygonEditor::GetRelativePolyPoint(aPathXPP, nObjPt, nPolyNum, nPointNum))
+                            if(sdr::PolyPolygonEditor::GetRelativePolyPoint(aPathXPP, *aMarkedPoint, nPolyNum, nPointNum))
                             {
                                 aPositions.push_back(aPathXPP.getB2DPolygon(nPolyNum).getB2DPoint(nPointNum));
                             }
@@ -518,129 +501,92 @@ void SdrDragMethod::createSdrDragEntries_PointDrag()
                 }
             }
         }
-    }
 
-    if(!aPositions.empty())
-    {
-        addSdrDragEntry(new SdrDragEntryPointGlueDrag(aPositions, true));
+        if(aPositions.size())
+        {
+            addSdrDragEntry(new SdrDragEntryPointGlueDrag(aPositions, true));
+        }
     }
 }
 
 void SdrDragMethod::createSdrDragEntries_GlueDrag()
 {
-    const sal_uInt32 nMarkAnz(getSdrDragView().GetMarkedObjectCount());
-    std::vector< basegfx::B2DPoint > aPositions;
-
-    for(sal_uInt32 nm(0); nm < nMarkAnz; nm++)
+    if(getSdrView().areSdrObjectsSelected())
     {
-        SdrMark* pM = getSdrDragView().GetSdrMarkByIndex(nm);
+        const SdrObjectVector aSelection(getSdrView().getSelectedSdrObjectVectorFromSdrMarkView());
+        std::vector< basegfx::B2DPoint > aPositions;
 
-        if(pM->GetPageView() == getSdrDragView().GetSdrPageView())
+        for(sal_uInt32 nm(0); nm < aSelection.size(); nm++)
         {
-            const SdrUShortCont* pPts = pM->GetMarkedGluePoints();
+            const sdr::selection::Indices aMarkedGluePoints(getSdrView().getSelectedGluesForSelectedSdrObject(*aSelection[nm]));
 
-            if(pPts && pPts->GetCount())
+            if(aMarkedGluePoints.size())
             {
-                const SdrObject* pObj = pM->GetMarkedSdrObj();
-                const SdrGluePointList* pGPL = pObj->GetGluePointList();
+                const SdrGluePointList* pGPL = aSelection[nm]->GetGluePointList();
 
                 if(pGPL)
                 {
-                    const sal_uInt32 nPtAnz(pPts->GetCount());
+                    const basegfx::B2DRange aSnapRange(sdr::legacy::GetSnapRange(*aSelection[nm]));
 
-                    for(sal_uInt32 nPtNum(0); nPtNum < nPtAnz; nPtNum++)
+                    for(sdr::selection::Indices::const_iterator aCurrent(aMarkedGluePoints.begin());
+                        aCurrent != aMarkedGluePoints.end(); aCurrent++)
                     {
-                        const sal_uInt16 nObjPt(pPts->GetObject(nPtNum));
-                        const sal_uInt16 nGlueNum(pGPL->FindGluePoint(nObjPt));
+                        const sal_uInt32 nObjPt(*aCurrent);
+                        const sal_uInt32 nGlueNum(pGPL->FindGluePoint(nObjPt));
 
                         if(SDRGLUEPOINT_NOTFOUND != nGlueNum)
                         {
-                            const Point aPoint((*pGPL)[nGlueNum].GetAbsolutePos(*pObj));
-                            aPositions.push_back(basegfx::B2DPoint(aPoint.X(), aPoint.Y()));
+                            aPositions.push_back((*pGPL)[nGlueNum].GetAbsolutePos(aSnapRange));
                         }
                     }
                 }
             }
         }
-    }
 
-    if(!aPositions.empty())
-    {
-        addSdrDragEntry(new SdrDragEntryPointGlueDrag(aPositions, false));
+        if(aPositions.size())
+        {
+            addSdrDragEntry(new SdrDragEntryPointGlueDrag(aPositions, false));
+        }
     }
 }
 
-void SdrDragMethod::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, XubString& rStr, sal_uInt16 nVal) const
+void SdrDragMethod::TakeMarkedDescriptionString(sal_uInt16 nStrCacheID, XubString& rStr, sal_uInt16 nVal) const
 {
-    sal_uInt16 nOpt=0;
-    if (IsDraggingPoints()) {
-        nOpt=IMPSDR_POINTSDESCRIPTION;
-    } else if (IsDraggingGluePoints()) {
-        nOpt=IMPSDR_GLUEPOINTSDESCRIPTION;
+    sal_uInt16 nOpt(0);
+
+    if(IsDraggingPoints())
+    {
+        nOpt = IMPSDR_POINTSDESCRIPTION;
     }
-    getSdrDragView().ImpTakeDescriptionStr(nStrCacheID,rStr,nVal,nOpt);
+    else if(IsDraggingGluePoints())
+    {
+        nOpt = IMPSDR_GLUEPOINTSDESCRIPTION;
+    }
+
+    getSdrView().TakeMarkedDescriptionString(nStrCacheID, rStr, nVal, nOpt);
 }
 
 SdrObject* SdrDragMethod::GetDragObj() const
 {
-    SdrObject* pObj=NULL;
-    if (getSdrDragView().pDragHdl!=NULL) pObj=getSdrDragView().pDragHdl->GetObj();
-    if (pObj==NULL) pObj=getSdrDragView().pMarkedObj;
-    return pObj;
-}
+    SdrObject* pObj = 0;
 
-SdrPageView* SdrDragMethod::GetDragPV() const
-{
-    SdrPageView* pPV=NULL;
-    if (getSdrDragView().pDragHdl!=NULL) pPV=getSdrDragView().pDragHdl->GetPageView();
-    if (pPV==NULL) pPV=getSdrDragView().pMarkedPV;
-    return pPV;
+    if(getSdrView().GetDragHdl())
+    {
+        pObj = const_cast< SdrObject*>(getSdrView().GetDragHdl()->GetObj());
+    }
+
+    if(!pObj)
+    {
+        pObj = getSdrView().getSelectedIfSingle();
+    }
+
+    return pObj;
 }
 
 void SdrDragMethod::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
 {
-    // the original applies the transformation using TRGetBaseGeometry/TRSetBaseGeometry.
-    // Later this should be the only needed one for linear transforms (not for SdrDragCrook and
-    // SdrDragDistort, those are NOT linear). Currently, this can not yet be used since the
-    // special handling of rotate/mirror due to the not-being-able to handle it in the old
-    // drawinglayer stuff. Text would currently not correctly be mirrored in the preview.
-    basegfx::B2DHomMatrix aObjectTransform;
-    basegfx::B2DPolyPolygon aObjectPolyPolygon;
-    bool bPolyUsed(rTarget.TRGetBaseGeometry(aObjectTransform, aObjectPolyPolygon));
-
-    // apply transform to object transform
-    aObjectTransform *= getCurrentTransformation();
-
-    if(bPolyUsed)
-    {
-        // do something special since the object size is in the polygon
-        // break up matrix to get the scale
-        basegfx::B2DTuple aScale;
-        basegfx::B2DTuple aTranslate;
-        double fRotate, fShearX;
-        aObjectTransform.decompose(aScale, aTranslate, fRotate, fShearX);
-
-        // get polygon's pos and size
-        const basegfx::B2DRange aPolyRange(aObjectPolyPolygon.getB2DRange());
-
-        // get the scaling factors (do not mirror, this is in the object transformation)
-        const double fScaleX(fabs(aScale.getX()) / (basegfx::fTools::equalZero(aPolyRange.getWidth()) ? 1.0 : aPolyRange.getWidth()));
-        const double fScaleY(fabs(aScale.getY()) / (basegfx::fTools::equalZero(aPolyRange.getHeight()) ? 1.0 : aPolyRange.getHeight()));
-
-        // prepare transform matrix for polygon
-        basegfx::B2DHomMatrix aPolyTransform(basegfx::tools::createTranslateB2DHomMatrix(
-            -aPolyRange.getMinX(), -aPolyRange.getMinY()));
-        aPolyTransform.scale(fScaleX, fScaleY);
-
-        // normally the poly should be moved back, but the translation is in the object
-        // transformation and thus does not need to be done
-        // aPolyTransform.translate(-aPolyRange.getMinX(), -aPolyRange.getMinY());
-
-        // transform the polygon
-        aObjectPolyPolygon.transform(aPolyTransform);
-    }
-
-    rTarget.TRSetBaseGeometry(getCurrentTransformation() * aObjectTransform, aObjectPolyPolygon);
+    // use get/setSdrObjectTransformation now. This will also work when object has a path
+    rTarget.setSdrObjectTransformation(getCurrentTransformation() * rTarget.getSdrObjectTransformation());
 }
 
 void SdrDragMethod::applyCurrentTransformationToPolyPolygon(basegfx::B2DPolyPolygon& rTarget)
@@ -649,12 +595,12 @@ void SdrDragMethod::applyCurrentTransformationToPolyPolygon(basegfx::B2DPolyPoly
     rTarget.transform(getCurrentTransformation());
 }
 
-SdrDragMethod::SdrDragMethod(SdrDragView& rNewView)
+SdrDragMethod::SdrDragMethod(SdrView& rNewView)
 :   maSdrDragEntries(),
     maOverlayObjectList(),
-    mrSdrDragView(rNewView),
+    mrSdrView(rNewView),
     mbMoveOnly(false),
-    mbSolidDraggingActive(getSdrDragView().IsSolidDragging())
+    mbSolidDraggingActive(getSdrView().IsSolidDragging())
 {
     if(mbSolidDraggingActive && Application::GetSettings().GetStyleSettings().GetHighContrastMode())
     {
@@ -670,12 +616,12 @@ SdrDragMethod::~SdrDragMethod()
 
 void SdrDragMethod::Show()
 {
-    getSdrDragView().ShowDragObj();
+    getSdrView().ShowDragObj();
 }
 
 void SdrDragMethod::Hide()
 {
-    getSdrDragView().HideDragObj();
+    getSdrView().HideDragObj();
 }
 
 basegfx::B2DHomMatrix SdrDragMethod::getCurrentTransformation()
@@ -701,14 +647,14 @@ typedef std::map< const SdrObject*, SdrObject*, compareConstSdrObjectRefs> SdrOb
 void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlayManager)
 {
     // create SdrDragEntries on demand
-    if(maSdrDragEntries.empty())
+    if(!maSdrDragEntries.size())
     {
         createSdrDragEntries();
     }
 
     // if there are entries, derive OverlayObjects from the entries, including
     // modification from current interactive state
-    if(!maSdrDragEntries.empty())
+    if(maSdrDragEntries.size())
     {
         // #54102# SdrDragEntrySdrObject creates clones of SdrObjects as base for creating the needed
         // primitives, holding the original and the clone. If connectors (Edges) are involved,
@@ -832,15 +778,15 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
     }
 
     // evtl add DragStripes (help lines cross the page when dragging)
-    if(getSdrDragView().IsDragStripes())
+    if(getSdrView().IsDragStripes())
     {
-        Rectangle aActionRectangle;
-        getSdrDragView().TakeActionRect(aActionRectangle);
-
-        const basegfx::B2DPoint aTopLeft(aActionRectangle.Left(), aActionRectangle.Top());
-        const basegfx::B2DPoint aBottomRight(aActionRectangle.Right(), aActionRectangle.Bottom());
-        sdr::overlay::OverlayRollingRectangleStriped* pNew = new sdr::overlay::OverlayRollingRectangleStriped(
-            aTopLeft, aBottomRight, true, false);
+        const basegfx::B2DRange aActionRange(getSdrView().TakeActionRange());
+        sdr::overlay::OverlayRollingRectangleStriped* pNew =
+            new sdr::overlay::OverlayRollingRectangleStriped(
+                aActionRange.getMinimum(),
+                aActionRange.getMaximum(),
+                true,
+                false);
 
         rOverlayManager.add(*pNew);
         addToOverlayObjectList(*pNew);
@@ -854,42 +800,35 @@ void SdrDragMethod::destroyOverlayGeometry()
 
 bool SdrDragMethod::DoAddConnectorOverlays()
 {
-    // these conditions are translated from SdrDragView::ImpDrawEdgeXor
-    const SdrMarkList& rMarkedNodes = getSdrDragView().GetEdgesOfMarkedNodes();
-
-    if(!rMarkedNodes.GetMarkCount())
+    if(getSdrView().areSdrObjectsSelected())
     {
-        return false;
-    }
+        if(!getMoveOnly() && !(
+            dynamic_cast< SdrDragMove* >(this) ||
+            dynamic_cast< SdrDragResize* >(this) ||
+            dynamic_cast< SdrDragRotate* >(this) ||
+            dynamic_cast< SdrDragMirror* >(this)))
+        {
+            return false;
+        }
 
-    if(!getSdrDragView().IsRubberEdgeDragging() && !getSdrDragView().IsDetailedEdgeDragging())
-    {
-        return false;
-    }
+        if(getSdrView().IsDraggingPoints() || getSdrView().IsDraggingGluePoints())
+        {
+            return false;
+        }
 
-    if(getSdrDragView().IsDraggingPoints() || getSdrDragView().IsDraggingGluePoints())
-    {
-        return false;
-    }
+        if(dynamic_cast< SdrDragObjOwn* >(this) || dynamic_cast< SdrDragMovHdl* >(this))
+        {
+            return false;
+        }
 
-    if(!getMoveOnly() && !(
-        IS_TYPE(SdrDragMove, this) || IS_TYPE(SdrDragResize, this) ||
-        IS_TYPE(SdrDragRotate,this) || IS_TYPE(SdrDragMirror,this)))
-    {
-        return false;
-    }
+        /// get all SdrEdgeObj which are connected to selected SdrObjects, but not selected themselves
+        const SdrObjectVector aSelection(getSdrView().getSelectedSdrObjectVectorFromSdrMarkView());
+        const ::std::vector< SdrEdgeObj* > aConnectedSdrEdgeObjs(getAllSdrEdgeObjConnectedToSdrObjectVector(aSelection, false));
 
-    const bool bDetail(getSdrDragView().IsDetailedEdgeDragging() && getMoveOnly());
-
-    if(!bDetail && !getSdrDragView().IsRubberEdgeDragging())
-    {
-        return false;
-    }
-
-    // one more migrated from SdrEdgeObj::NspToggleEdgeXor
-    if(IS_TYPE(SdrDragObjOwn, this) || IS_TYPE(SdrDragMovHdl, this))
-    {
-        return false;
+        if(!aConnectedSdrEdgeObjs.size())
+        {
+            return false;
+        }
     }
 
     return true;
@@ -898,76 +837,77 @@ bool SdrDragMethod::DoAddConnectorOverlays()
 drawinglayer::primitive2d::Primitive2DSequence SdrDragMethod::AddConnectorOverlays()
 {
     drawinglayer::primitive2d::Primitive2DSequence aRetval;
-    const bool bDetail(getSdrDragView().IsDetailedEdgeDragging() && getMoveOnly());
-    const SdrMarkList& rMarkedNodes = getSdrDragView().GetEdgesOfMarkedNodes();
+    const bool bDetail(getMoveOnly());
 
-    for(sal_uInt16 a(0); a < rMarkedNodes.GetMarkCount(); a++)
+    if(getSdrView().areSdrObjectsSelected())
     {
-        SdrMark* pEM = rMarkedNodes.GetMark(a);
+        /// get all SdrEdgeObj which are connected to selected SdrObjects, but not selected themselves
+        const SdrObjectVector aSelection(getSdrView().getSelectedSdrObjectVectorFromSdrMarkView());
+        const ::std::vector< SdrEdgeObj* > aConnectedSdrEdgeObjs(getAllSdrEdgeObjConnectedToSdrObjectVector(aSelection, false));
 
-        if(pEM && pEM->GetMarkedSdrObj())
+        for(sal_uInt32 a(0); a < aConnectedSdrEdgeObjs.size(); a++)
         {
-            SdrEdgeObj* pEdge = dynamic_cast< SdrEdgeObj* >(pEM->GetMarkedSdrObj());
+            const SdrEdgeObj* pEdge = aConnectedSdrEdgeObjs[a];
+            const SdrObject* pCon1(pEdge->GetConnectedNode(true));
+            const SdrObject* pCon2(pEdge->GetConnectedNode(false));
+            const bool bCon1(pCon1 && getSdrView().isSdrObjectSelected(*pCon1));
+            const bool bCon2(pCon2 && getSdrView().isSdrObjectSelected(*pCon2));
+            const basegfx::B2DPolygon aEdgePolygon(pEdge->ImplAddConnectorOverlay(*this, bCon1, bCon2, bDetail));
 
-            if(pEdge)
+            if(aEdgePolygon.count())
             {
-                const basegfx::B2DPolygon aEdgePolygon(pEdge->ImplAddConnectorOverlay(*this, pEM->IsCon1(), pEM->IsCon2(), bDetail));
+                // this polygon is a temporary calculated connector path, so it is not possible to fetch
+                // the needed primitives directly from the pEdge object which does not get changed. If full
+                // drag is on, use the SdrObjects ItemSet to create a adequate representation
+                bool bUseSolidDragging(getSolidDraggingActive());
 
-                if(aEdgePolygon.count())
+                if(bUseSolidDragging)
                 {
-                    // this polygon is a temporary calculated connector path, so it is not possible to fetch
-                    // the needed primitives directly from the pEdge object which does not get changed. If full
-                    // drag is on, use the SdrObjects ItemSet to create a adequate representation
-                    bool bUseSolidDragging(getSolidDraggingActive());
-
-                    if(bUseSolidDragging)
+                    // switch off solid dragging if connector is not visible
+                    if(!pEdge->HasLineStyle())
                     {
-                        // switch off solid dragging if connector is not visible
-                        if(!pEdge->HasLineStyle())
-                        {
-                            bUseSolidDragging = false;
-                        }
+                        bUseSolidDragging = false;
+                    }
+                }
+
+                if(bUseSolidDragging)
+                {
+                    const SfxItemSet& rItemSet = pEdge->GetMergedItemSet();
+                    const drawinglayer::attribute::SdrLineAttribute aLine(
+                        drawinglayer::primitive2d::createNewSdrLineAttribute(rItemSet));
+
+                    if(!aLine.isDefault())
+                    {
+                        const drawinglayer::attribute::SdrLineStartEndAttribute aLineStartEnd(
+                            drawinglayer::primitive2d::createNewSdrLineStartEndAttribute(
+                                rItemSet,
+                                aLine.getWidth()));
+
+                        drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(
+                            aRetval, drawinglayer::primitive2d::createPolygonLinePrimitive(
+                                aEdgePolygon,
+                                basegfx::B2DHomMatrix(),
+                                aLine,
+                                aLineStartEnd));
+                    }
+                }
+                else
+                {
+                    const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
+                    basegfx::BColor aColA(aSvtOptionsDrawinglayer.GetStripeColorA().getBColor());
+                    basegfx::BColor aColB(aSvtOptionsDrawinglayer.GetStripeColorB().getBColor());
+                    const double fStripeLength(aSvtOptionsDrawinglayer.GetStripeLength());
+
+                    if(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
+                    {
+                        aColA = aColB = Application::GetSettings().GetStyleSettings().GetHighlightColor().getBColor();
+                        aColB.invert();
                     }
 
-                    if(bUseSolidDragging)
-                    {
-                        const SfxItemSet& rItemSet = pEdge->GetMergedItemSet();
-                        const drawinglayer::attribute::SdrLineAttribute aLine(
-                            drawinglayer::primitive2d::createNewSdrLineAttribute(rItemSet));
-
-                        if(!aLine.isDefault())
-                        {
-                            const drawinglayer::attribute::SdrLineStartEndAttribute aLineStartEnd(
-                                drawinglayer::primitive2d::createNewSdrLineStartEndAttribute(
-                                    rItemSet,
-                                    aLine.getWidth()));
-
-                            drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(
-                                aRetval, drawinglayer::primitive2d::createPolygonLinePrimitive(
-                                    aEdgePolygon,
-                                    basegfx::B2DHomMatrix(),
-                                    aLine,
-                                    aLineStartEnd));
-                        }
-                    }
-                    else
-                    {
-                        const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-                        basegfx::BColor aColA(aSvtOptionsDrawinglayer.GetStripeColorA().getBColor());
-                        basegfx::BColor aColB(aSvtOptionsDrawinglayer.GetStripeColorB().getBColor());
-                        const double fStripeLength(aSvtOptionsDrawinglayer.GetStripeLength());
-
-                        if(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
-                        {
-                            aColA = aColB = Application::GetSettings().GetStyleSettings().GetHighlightColor().getBColor();
-                            aColB.invert();
-                        }
-
-                        drawinglayer::primitive2d::Primitive2DReference aPolyPolygonMarkerPrimitive2D(
-                            new drawinglayer::primitive2d::PolyPolygonMarkerPrimitive2D(
-                                basegfx::B2DPolyPolygon(aEdgePolygon), aColA, aColB, fStripeLength));
-                        drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, aPolyPolygonMarkerPrimitive2D);
-                    }
+                    drawinglayer::primitive2d::Primitive2DReference aPolyPolygonMarkerPrimitive2D(
+                        new drawinglayer::primitive2d::PolyPolygonMarkerPrimitive2D(
+                            basegfx::B2DPolyPolygon(aEdgePolygon), aColA, aColB, fStripeLength));
+                    drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, aPolyPolygonMarkerPrimitive2D);
                 }
             }
         }
@@ -978,11 +918,8 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragMethod::AddConnectorOverla
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1(SdrDragMovHdl,SdrDragMethod);
-
-SdrDragMovHdl::SdrDragMovHdl(SdrDragView& rNewView)
-:   SdrDragMethod(rNewView),
-    bMirrObjShown(false)
+SdrDragMovHdl::SdrDragMovHdl(SdrView& rNewView)
+:   SdrDragMethod(rNewView)
 {
 }
 
@@ -995,7 +932,7 @@ void SdrDragMovHdl::createSdrDragEntries()
 void SdrDragMovHdl::TakeSdrDragComment(XubString& rStr) const
 {
     rStr=ImpGetResStr(STR_DragMethMovHdl);
-    if (getSdrDragView().IsDragWithCopy()) rStr+=ImpGetResStr(STR_EditWithCopy);
+    if (getSdrView().IsDragWithCopy()) rStr+=ImpGetResStr(STR_EditWithCopy);
 }
 
 bool SdrDragMovHdl::BeginSdrDrag()
@@ -1003,139 +940,170 @@ bool SdrDragMovHdl::BeginSdrDrag()
     if( !GetDragHdl() )
         return false;
 
-    DragStat().Ref1()=GetDragHdl()->GetPos();
+    DragStat().SetRef1(GetDragHdl()->getPosition());
     DragStat().SetShown(!DragStat().IsShown());
-    SdrHdlKind eKind=GetDragHdl()->GetKind();
-    SdrHdl* pH1=GetHdlList().GetHdl(HDL_REF1);
-    SdrHdl* pH2=GetHdlList().GetHdl(HDL_REF2);
 
-    if (eKind==HDL_MIRX)
+    const SdrHdlKind eKind(GetDragHdl()->GetKind());
+    SdrHdl* pH1 = GetHdlList().GetHdlByKind(HDL_REF1);
+    SdrHdl* pH2 = GetHdlList().GetHdlByKind(HDL_REF2);
+
+    if(HDL_MIRX == eKind)
     {
-        if (pH1==NULL || pH2==NULL)
+        if(!pH1 || !pH2)
         {
             DBG_ERROR("SdrDragMovHdl::BeginSdrDrag(): Verschieben der Spiegelachse: Referenzhandles nicht gefunden");
             return false;
         }
 
-        DragStat().SetActionRect(Rectangle(pH1->GetPos(),pH2->GetPos()));
+        DragStat().SetActionRange(basegfx::B2DRange(pH1->getPosition(), pH2->getPosition()));
     }
     else
     {
-        Point aPt(GetDragHdl()->GetPos());
-        DragStat().SetActionRect(Rectangle(aPt,aPt));
+        const basegfx::B2DPoint aPt(GetDragHdl()->getPosition());
+
+        DragStat().SetActionRange(basegfx::B2DRange(aPt,aPt));
     }
 
     return true;
 }
 
-void SdrDragMovHdl::MoveSdrDrag(const Point& rNoSnapPnt)
+void SdrDragMovHdl::MoveSdrDrag(const basegfx::B2DPoint& rNoSnapPnt)
 {
-    Point aPnt(rNoSnapPnt);
-
-    if ( GetDragHdl() && DragStat().CheckMinMoved(rNoSnapPnt))
+    if(GetDragHdl() && DragStat().CheckMinMoved(rNoSnapPnt))
     {
-        if (GetDragHdl()->GetKind()==HDL_MIRX)
+        basegfx::B2DPoint aPnt(rNoSnapPnt);
+
+        if(HDL_MIRX == GetDragHdl()->GetKind())
         {
-            SdrHdl* pH1=GetHdlList().GetHdl(HDL_REF1);
-            SdrHdl* pH2=GetHdlList().GetHdl(HDL_REF2);
+            SdrHdl* pH1 = GetHdlList().GetHdlByKind(HDL_REF1);
+            SdrHdl* pH2 = GetHdlList().GetHdlByKind(HDL_REF2);
 
-            if (pH1==NULL || pH2==NULL)
-                return;
-
-            if (!DragStat().IsNoSnap())
+            if(!pH1 || !pH2)
             {
-                long nBestXSnap=0;
-                long nBestYSnap=0;
-                bool bXSnapped=false;
-                bool bYSnapped=false;
-                Point aDif(aPnt-DragStat().GetStart());
-                getSdrDragView().CheckSnap(Ref1()+aDif,NULL,nBestXSnap,nBestYSnap,bXSnapped,bYSnapped);
-                getSdrDragView().CheckSnap(Ref2()+aDif,NULL,nBestXSnap,nBestYSnap,bXSnapped,bYSnapped);
-                aPnt.X()+=nBestXSnap;
-                aPnt.Y()+=nBestYSnap;
+                return;
             }
 
-            if (aPnt!=DragStat().GetNow())
+            if(!DragStat().IsNoSnap())
+            {
+                const basegfx::B2DVector aOffset(aPnt - DragStat().GetStart());
+                const basegfx::B2DPoint aPossibleRef1(GetRef1() + aOffset);
+                const basegfx::B2DPoint aPossibleRef2(GetRef2() + aOffset);
+                const basegfx::B2DVector aSnap1(aPossibleRef1 - getSdrView().GetSnapPos(aPossibleRef1));
+                const basegfx::B2DVector aSnap2(aPossibleRef2 - getSdrView().GetSnapPos(aPossibleRef2));
+
+                if(basegfx::fTools::less(aSnap1.getLength(), aSnap2.getLength()))
+                {
+                    aPnt += aSnap1;
+                }
+                else
+                {
+                    aPnt += aSnap2;
+                }
+            }
+
+            if(!aPnt.equal(DragStat().GetNow()))
             {
                 Hide();
                 DragStat().NextMove(aPnt);
-                Point aDif(DragStat().GetNow()-DragStat().GetStart());
-                pH1->SetPos(Ref1()+aDif);
-                pH2->SetPos(Ref2()+aDif);
 
-                SdrHdl* pHM = GetHdlList().GetHdl(HDL_MIRX);
+                const basegfx::B2DVector aDif(DragStat().GetNow() - DragStat().GetStart());
+
+                pH1->setPosition(GetRef1() + aDif);
+                pH2->setPosition(GetRef2() + aDif);
+
+                SdrHdl* pHM = GetHdlList().GetHdlByKind(HDL_MIRX);
 
                 if(pHM)
+                {
                     pHM->Touch();
+                }
 
                 Show();
-                DragStat().SetActionRect(Rectangle(pH1->GetPos(),pH2->GetPos()));
+                DragStat().SetActionRange(basegfx::B2DRange(pH1->getPosition(), pH2->getPosition()));
             }
         }
         else
         {
-            if (!DragStat().IsNoSnap()) SnapPos(aPnt);
-            long nSA=0;
-
-            if (getSdrDragView().IsAngleSnapEnabled())
-                nSA=getSdrDragView().GetSnapAngle();
-
-            if (getSdrDragView().IsMirrorAllowed(true,true))
-            { // eingeschraenkt
-                if (!getSdrDragView().IsMirrorAllowed(false,false)) nSA=4500;
-                if (!getSdrDragView().IsMirrorAllowed(true,false)) nSA=9000;
+            if(!DragStat().IsNoSnap())
+            {
+                aPnt = getSdrView().GetSnapPos(aPnt);
             }
 
-            if (getSdrDragView().IsOrtho() && nSA!=9000)
-                nSA=4500;
+            double fSnapAngle(0.0);
 
-            if (nSA!=0)
-            { // Winkelfang
-                SdrHdlKind eRef=HDL_REF1;
+            if(getSdrView().IsAngleSnapEnabled())
+            {
+                fSnapAngle = ((getSdrView().GetSnapAngle() % 36000) * F_PI) / 18000.0;
+            }
 
-                if (GetDragHdl()->GetKind()==HDL_REF1)
-                    eRef=HDL_REF2;
-
-                SdrHdl* pH=GetHdlList().GetHdl(eRef);
-
-                if (pH!=NULL)
+            if(getSdrView().IsMirrorAllowed(true, true))
+            {
+                // eingeschraenkt
+                if(!getSdrView().IsMirrorAllowed(false, false))
                 {
-                    Point aRef(pH->GetPos());
-                    long nWink=NormAngle360(GetAngle(aPnt-aRef));
-                    long nNeuWink=nWink;
-                    nNeuWink+=nSA/2;
-                    nNeuWink/=nSA;
-                    nNeuWink*=nSA;
-                    nNeuWink=NormAngle360(nNeuWink);
-                    double a=(nNeuWink-nWink)*nPi180;
-                    double nSin=sin(a);
-                    double nCos=cos(a);
-                    RotatePoint(aPnt,aRef,nSin,nCos);
+                    fSnapAngle = F_PI4; // 4500;
+                }
 
-                    // Bei bestimmten Werten Rundungsfehler ausschliessen:
-                    if (nSA==9000)
-                    {
-                        if (nNeuWink==0    || nNeuWink==18000) aPnt.Y()=aRef.Y();
-                        if (nNeuWink==9000 || nNeuWink==27000) aPnt.X()=aRef.X();
-                    }
-
-                    if (nSA==4500)
-                        OrthoDistance8(aRef,aPnt,true);
+                if(!getSdrView().IsMirrorAllowed(true, false))
+                {
+                    fSnapAngle = F_PI2; // 9000;
                 }
             }
 
-            if (aPnt!=DragStat().GetNow())
+            if(getSdrView().IsOrthogonal() && !basegfx::fTools::equal(fSnapAngle, F_PI2))
+            {
+                fSnapAngle = F_PI4; // 4500;
+            }
+
+            if(!basegfx::fTools::equalZero(fSnapAngle))
+            {
+                // Winkelfang
+                SdrHdlKind eRef = HDL_REF1;
+
+                if(HDL_REF1 == GetDragHdl()->GetKind())
+                {
+                    eRef = HDL_REF2;
+                }
+
+                SdrHdl* pH = GetHdlList().GetHdlByKind(eRef);
+
+                if(pH)
+                {
+                    const basegfx::B2DPoint aFixPoint(pH->getPosition());
+
+                    if(!aFixPoint.equal(aPnt))
+                    {
+                        const basegfx::B2DVector aDelta(aPnt - aFixPoint);
+                        const double fCurrentAngle(atan2(aDelta.getY(), aDelta.getX()));
+                        double fNewAngle(basegfx::snapToNearestMultiple(fCurrentAngle, fSnapAngle));
+
+                        if(!basegfx::fTools::equal(fCurrentAngle, fNewAngle))
+                        {
+                            aPnt += basegfx::B2DPoint(cos(fNewAngle), sin(fNewAngle));
+
+                            if(basegfx::fTools::equal(fSnapAngle, F_PI4)) // 4500 == fSnapAngle
+                            {
+                                aPnt = OrthoDistance8(aFixPoint, aPnt, true);
+                            }
+                        }
+                    }
+                }
+            }
+
+            if(!aPnt.equal(DragStat().GetNow()))
             {
                 Hide();
                 DragStat().NextMove(aPnt);
-                GetDragHdl()->SetPos(DragStat().GetNow());
-                SdrHdl* pHM = GetHdlList().GetHdl(HDL_MIRX);
+                GetDragHdl()->setPosition(DragStat().GetNow());
+                SdrHdl* pHM = GetHdlList().GetHdlByKind(HDL_MIRX);
 
                 if(pHM)
+                {
                     pHM->Touch();
+                }
 
                 Show();
-                DragStat().SetActionRect(Rectangle(aPnt,aPnt));
+                DragStat().SetActionRange(basegfx::B2DRange(aPnt));
             }
         }
     }
@@ -1148,19 +1116,20 @@ bool SdrDragMovHdl::EndSdrDrag(bool /*bCopy*/)
         switch (GetDragHdl()->GetKind())
         {
             case HDL_REF1:
-                Ref1()=DragStat().GetNow();
+                SetRef1(DragStat().GetNow());
                 break;
 
             case HDL_REF2:
-                Ref2()=DragStat().GetNow();
+                SetRef2(DragStat().GetNow());
                 break;
 
             case HDL_MIRX:
-                Ref1()+=DragStat().GetNow()-DragStat().GetStart();
-                Ref2()+=DragStat().GetNow()-DragStat().GetStart();
+                SetRef1(GetRef1()+DragStat().GetNow()-DragStat().GetStart());
+                SetRef2(GetRef2()+DragStat().GetNow()-DragStat().GetStart());
                 break;
 
-            default: break;
+            default:
+                break;
         }
     }
 
@@ -1171,21 +1140,24 @@ void SdrDragMovHdl::CancelSdrDrag()
 {
     Hide();
 
-    SdrHdl* pHdl = GetDragHdl();
-    if( pHdl )
-        pHdl->SetPos(DragStat().GetRef1());
+    if(GetDragHdl())
+    {
+        GetDragHdl()->setPosition(DragStat().GetRef1());
 
-    SdrHdl* pHM = GetHdlList().GetHdl(HDL_MIRX);
+        SdrHdl* pHM = GetHdlList().GetHdlByKind(HDL_MIRX);
 
-    if(pHM)
-        pHM->Touch();
+        if(pHM)
+        {
+            pHM->Touch();
+        }
+    }
 }
 
 Pointer SdrDragMovHdl::GetSdrDragPointer() const
 {
     const SdrHdl* pHdl = GetDragHdl();
 
-    if (pHdl!=NULL)
+    if (pHdl)
     {
         return pHdl->GetPointer();
     }
@@ -1195,9 +1167,7 @@ Pointer SdrDragMovHdl::GetSdrDragPointer() const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1(SdrDragObjOwn,SdrDragMethod);
-
-SdrDragObjOwn::SdrDragObjOwn(SdrDragView& rNewView)
+SdrDragObjOwn::SdrDragObjOwn(SdrView& rNewView)
 :   SdrDragMethod(rNewView),
     mpClone(0)
 {
@@ -1214,7 +1184,7 @@ SdrDragObjOwn::~SdrDragObjOwn()
 {
     if(mpClone)
     {
-        SdrObject::Free(mpClone);
+        deleteSdrObjectSafeAndClearPointer(mpClone);
     }
 }
 
@@ -1227,7 +1197,7 @@ void SdrDragObjOwn::createSdrDragEntries()
 
         if(getSolidDraggingActive())
         {
-            SdrPageView* pPV = getSdrDragView().GetSdrPageView();
+            SdrPageView* pPV = getSdrView().GetSdrPageView();
 
             if(pPV && pPV->PageWindowCount())
             {
@@ -1311,31 +1281,32 @@ bool SdrDragObjOwn::BeginSdrDrag()
     return false;
 }
 
-void SdrDragObjOwn::MoveSdrDrag(const Point& rNoSnapPnt)
+void SdrDragObjOwn::MoveSdrDrag(const basegfx::B2DPoint& rNoSnapPnt)
 {
     const SdrObject* pObj = GetDragObj();
 
     if(pObj)
     {
-        Point aPnt(rNoSnapPnt);
-        SdrPageView* pPV = GetDragPV();
+        SdrPageView* pPV = getSdrView().GetSdrPageView();
 
         if(pPV)
         {
+            basegfx::B2DPoint aPnt(rNoSnapPnt);
+
             if(!DragStat().IsNoSnap())
             {
-                SnapPos(aPnt);
+                aPnt = getSdrView().GetSnapPos(aPnt);
             }
 
-            if(getSdrDragView().IsOrtho())
+            if(getSdrView().IsOrthogonal())
             {
                 if (DragStat().IsOrtho8Possible())
                 {
-                    OrthoDistance8(DragStat().GetStart(),aPnt,getSdrDragView().IsBigOrtho());
+                    aPnt = OrthoDistance8(DragStat().GetStart(), aPnt, getSdrView().IsBigOrthogonal());
                 }
                 else if (DragStat().IsOrtho4Possible())
                 {
-                    OrthoDistance4(DragStat().GetStart(),aPnt,getSdrDragView().IsBigOrtho());
+                    aPnt = OrthoDistance4(DragStat().GetStart(), aPnt, getSdrView().IsBigOrthogonal());
                 }
             }
 
@@ -1355,7 +1326,7 @@ void SdrDragObjOwn::MoveSdrDrag(const Point& rNoSnapPnt)
                     // delete current clone (after the last reference to it is deleted above)
                     if(mpClone)
                     {
-                        SdrObject::Free(mpClone);
+                        deleteSdrObjectSafeAndClearPointer(mpClone);
                         mpClone = 0;
                     }
 
@@ -1370,12 +1341,12 @@ void SdrDragObjOwn::MoveSdrDrag(const Point& rNoSnapPnt)
                         // also this (pretty indirect) property change is possible. If it gets
                         // changed, it needs to be copied to the original since nothing will
                         // happen when it only changes in the drag clone
-                        const bool bOldAutoGrowWidth(((SdrTextAutoGrowWidthItem&)pObj->GetMergedItem(SDRATTR_TEXT_AUTOGROWWIDTH)).GetValue());
-                        const bool bNewAutoGrowWidth(((SdrTextAutoGrowWidthItem&)mpClone->GetMergedItem(SDRATTR_TEXT_AUTOGROWWIDTH)).GetValue());
+                        const bool bOldAutoGrowWidth(((SdrOnOffItem&)pObj->GetMergedItem(SDRATTR_TEXT_AUTOGROWWIDTH)).GetValue());
+                        const bool bNewAutoGrowWidth(((SdrOnOffItem&)mpClone->GetMergedItem(SDRATTR_TEXT_AUTOGROWWIDTH)).GetValue());
 
                         if(bOldAutoGrowWidth != bNewAutoGrowWidth)
                         {
-                            GetDragObj()->SetMergedItem(SdrTextAutoGrowWidthItem(bNewAutoGrowWidth));
+                            GetDragObj()->SetMergedItem(SdrOnOffItem(SDRATTR_TEXT_AUTOGROWWIDTH, bNewAutoGrowWidth));
                         }
                     }
 
@@ -1389,44 +1360,44 @@ void SdrDragObjOwn::MoveSdrDrag(const Point& rNoSnapPnt)
 bool SdrDragObjOwn::EndSdrDrag(bool /*bCopy*/)
 {
     Hide();
-    SdrUndoAction* pUndo = NULL;
-    SdrUndoAction* pUndo2 = NULL;
+    SdrUndoAction* pUndo = 0;
+    SdrUndoAction* pUndo2 = 0;
     std::vector< SdrUndoAction* > vConnectorUndoActions;
     bool bRet = false;
     SdrObject* pObj = GetDragObj();
 
     if(pObj)
     {
-        const bool bUndo = getSdrDragView().IsUndoEnabled();
+        const bool bUndo = getSdrView().IsUndoEnabled();
 
         if( bUndo )
         {
-            if(!getSdrDragView().IsInsObjPoint() && pObj->IsInserted() )
+            if(!getSdrView().IsInsObjPoint() && pObj->IsObjectInserted() )
             {
                 if (DragStat().IsEndDragChangesAttributes())
                 {
-                    pUndo=getSdrDragView().GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj);
+                    pUndo = getSdrView().getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoAttrObject(*pObj);
 
                     if (DragStat().IsEndDragChangesGeoAndAttributes())
                     {
-                        vConnectorUndoActions = getSdrDragView().CreateConnectorUndo( *pObj );
-                        pUndo2 = getSdrDragView().GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj);
+                        vConnectorUndoActions = getSdrView().CreateConnectorUndo( *pObj );
+                        pUndo2 = getSdrView().getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoGeoObject(*pObj);
                     }
                 }
                 else
                 {
-                    vConnectorUndoActions = getSdrDragView().CreateConnectorUndo( *pObj );
-                    pUndo= getSdrDragView().GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj);
+                    vConnectorUndoActions = getSdrView().CreateConnectorUndo( *pObj );
+                    pUndo = getSdrView().getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoGeoObject(*pObj);
                 }
             }
 
             if( pUndo )
             {
-                getSdrDragView().BegUndo( pUndo->GetComment() );
+                getSdrView().BegUndo( pUndo->GetComment() );
             }
             else
             {
-                getSdrDragView().BegUndo();
+                getSdrView().BegUndo();
             }
         }
 
@@ -1436,36 +1407,28 @@ bool SdrDragObjOwn::EndSdrDrag(bool /*bCopy*/)
         // in it's SdrTableObj::endSpecialDrag, so currently not possible. OTOH it uses
         // a CreateUndoGeoObject() so maybe setting SetEndDragChangesAttributes is okay. I
         // will test this now
-        Rectangle aBoundRect0;
-
-        if(pObj->GetUserCall())
-        {
-            aBoundRect0 = pObj->GetLastBoundRect();
-        }
-
+        const SdrObjectChangeBroadcaster aSdrObjectChangeBroadcaster(*pObj, HINT_OBJCHG_RESIZE);
         bRet = pObj->applySpecialDrag(DragStat());
 
         if(bRet)
         {
             pObj->SetChanged();
-            pObj->BroadcastObjectChange();
-            pObj->SendUserCall( SDRUSERCALL_RESIZE, aBoundRect0 );
         }
 
         if(bRet)
         {
             if( bUndo )
             {
-                getSdrDragView().AddUndoActions( vConnectorUndoActions );
+                getSdrView().AddUndoActions( vConnectorUndoActions );
 
                 if ( pUndo )
                 {
-                    getSdrDragView().AddUndo(pUndo);
+                    getSdrView().AddUndo(pUndo);
                 }
 
                 if ( pUndo2 )
                 {
-                    getSdrDragView().AddUndo(pUndo2);
+                    getSdrView().AddUndo(pUndo2);
                 }
             }
         }
@@ -1486,7 +1449,7 @@ bool SdrDragObjOwn::EndSdrDrag(bool /*bCopy*/)
         }
 
         if( bUndo )
-            getSdrDragView().EndUndo();
+            getSdrView().EndUndo();
     }
 
     return bRet;
@@ -1506,8 +1469,6 @@ Pointer SdrDragObjOwn::GetSdrDragPointer() const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1(SdrDragMove,SdrDragMethod);
-
 void SdrDragMove::createSdrDragEntryForSdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact, bool /*bModify*/)
 {
     // for SdrDragMove, use current Primitive2DSequence of SdrObject visualisation
@@ -1523,13 +1484,11 @@ void SdrDragMove::createSdrDragEntryForSdrObject(const SdrObject& rOriginal, sdr
     addSdrDragEntry(new SdrDragEntryPrimitive2DSequence(rVOC.getPrimitive2DSequenceHierarchy(aDisplayInfo), true));
 }
 
-void SdrDragMove::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
-{
-    rTarget.Move(Size(DragStat().GetDX(), DragStat().GetDY()));
-}
-
-SdrDragMove::SdrDragMove(SdrDragView& rNewView)
-:   SdrDragMethod(rNewView)
+SdrDragMove::SdrDragMove(SdrView& rNewView)
+:   SdrDragMethod(rNewView),
+    maBestSnap(0.0, 0.0),
+    mbXSnapped(false),
+    mbYSnapped(false)
 {
     setMoveOnly(true);
 }
@@ -1538,18 +1497,18 @@ void SdrDragMove::TakeSdrDragComment(XubString& rStr) const
 {
     XubString aStr;
 
-    ImpTakeDescriptionStr(STR_DragMethMove, rStr);
+    TakeMarkedDescriptionString(STR_DragMethMove, rStr);
     rStr.AppendAscii(" (x=");
-    getSdrDragView().GetModel()->TakeMetricStr(DragStat().GetDX(), aStr);
+    getSdrView().getSdrModelFromSdrView().TakeMetricStr(DragStat().GetDX(), aStr);
     rStr += aStr;
     rStr.AppendAscii(" y=");
-    getSdrDragView().GetModel()->TakeMetricStr(DragStat().GetDY(), aStr);
+    getSdrView().getSdrModelFromSdrView().TakeMetricStr(DragStat().GetDY(), aStr);
     rStr += aStr;
     rStr += sal_Unicode(')');
 
-    if(getSdrDragView().IsDragWithCopy())
+    if(getSdrView().IsDragWithCopy())
     {
-        if(!getSdrDragView().IsInsObjPoint() && !getSdrDragView().IsInsGluePoint())
+        if(!getSdrView().IsInsObjPoint() && !(getSdrView().GetDragMethod() && getSdrView().IsInsertGluePoint()))
         {
             rStr += ImpGetResStr(STR_EditWithCopy);
         }
@@ -1558,7 +1517,7 @@ void SdrDragMove::TakeSdrDragComment(XubString& rStr) const
 
 bool SdrDragMove::BeginSdrDrag()
 {
-    DragStat().SetActionRect(GetMarkedRect());
+    DragStat().SetActionRange(GetMarkedRange());
     Show();
 
     return true;
@@ -1566,181 +1525,200 @@ bool SdrDragMove::BeginSdrDrag()
 
 basegfx::B2DHomMatrix SdrDragMove::getCurrentTransformation()
 {
-    return basegfx::tools::createTranslateB2DHomMatrix(DragStat().GetDX(), DragStat().GetDY());
+    return basegfx::tools::createTranslateB2DHomMatrix(DragStat().GetNow() - DragStat().GetPrev());
 }
 
-void SdrDragMove::ImpCheckSnap(const Point& rPt)
+void SdrDragMove::ImpCheckSnap(const basegfx::B2DPoint& rPt)
 {
-    Point aPt(rPt);
-    sal_uInt16 nRet=SnapPos(aPt);
-    aPt-=rPt;
+    sal_uInt16 nWhichOrientationSnapped(0);
+    const basegfx::B2DPoint aSnappedPoint(getSdrView().GetSnapPos(rPt, &nWhichOrientationSnapped));
+    const basegfx::B2DVector aSnapVector(aSnappedPoint - rPt);
 
-    if ((nRet & SDRSNAP_XSNAPPED) !=0)
+    if(nWhichOrientationSnapped & SDRSNAP_XSNAPPED)
     {
-        if (bXSnapped)
+        if(mbXSnapped)
         {
-            if (Abs(aPt.X())<Abs(nBestXSnap))
-            {
-                nBestXSnap=aPt.X();
-            }
+            maBestSnap.setX(fabs(aSnapVector.getX()) < fabs(maBestSnap.getX())
+                ? aSnapVector.getX()
+                : maBestSnap.getX());
         }
         else
         {
-            nBestXSnap=aPt.X();
-            bXSnapped=true;
+            maBestSnap.setX(aSnapVector.getX());
+            mbXSnapped = true;
         }
     }
 
-    if ((nRet & SDRSNAP_YSNAPPED) !=0)
+    if(nWhichOrientationSnapped & SDRSNAP_YSNAPPED)
     {
-        if (bYSnapped)
+        if(mbYSnapped)
         {
-            if (Abs(aPt.Y())<Abs(nBestYSnap))
-            {
-                nBestYSnap=aPt.Y();
-            }
+            maBestSnap.setY(fabs(aSnapVector.getY()) < fabs(maBestSnap.getY())
+                ? aSnapVector.getY()
+                : maBestSnap.getY());
         }
         else
         {
-            nBestYSnap=aPt.Y();
-            bYSnapped=true;
+            maBestSnap.setY(aSnapVector.getY());
+            mbYSnapped = true;
         }
     }
 }
 
-void SdrDragMove::MoveSdrDrag(const Point& rNoSnapPnt_)
+void SdrDragMove::MoveSdrDrag(const basegfx::B2DPoint& rPoint)
 {
-    nBestXSnap=0;
-    nBestYSnap=0;
-    bXSnapped=false;
-    bYSnapped=false;
-    Point aNoSnapPnt(rNoSnapPnt_);
-    const Rectangle& aSR=GetMarkedRect();
-    long nMovedx=aNoSnapPnt.X()-DragStat().GetStart().X();
-    long nMovedy=aNoSnapPnt.Y()-DragStat().GetStart().Y();
-    Point aLO(aSR.TopLeft());      aLO.X()+=nMovedx; aLO.Y()+=nMovedy;
-    Point aRU(aSR.BottomRight());  aRU.X()+=nMovedx; aRU.Y()+=nMovedy;
-    Point aLU(aLO.X(),aRU.Y());
-    Point aRO(aRU.X(),aLO.Y());
-    ImpCheckSnap(aLO);
-
-    if (!getSdrDragView().IsMoveSnapOnlyTopLeft())
+    if(DragStat().CheckMinMoved(rPoint))
     {
-        ImpCheckSnap(aRO);
-        ImpCheckSnap(aLU);
-        ImpCheckSnap(aRU);
-    }
+        maBestSnap.setX(0.0);
+        maBestSnap.setY(0.0);
+        mbXSnapped = mbYSnapped = false;
 
-    Point aPnt(aNoSnapPnt.X()+nBestXSnap,aNoSnapPnt.Y()+nBestYSnap);
-    bool bOrtho=getSdrDragView().IsOrtho();
+        const basegfx::B2DRange& rFixSnapRange(GetMarkedRange());
+        basegfx::B2DRange aSnapRange(rFixSnapRange);
+        aSnapRange.transform(basegfx::tools::createTranslateB2DHomMatrix(rPoint - DragStat().GetStart()));
 
-    if (bOrtho)
-        OrthoDistance8(DragStat().GetStart(),aPnt,getSdrDragView().IsBigOrtho());
+        ImpCheckSnap(aSnapRange.getMinimum());
 
-    if (DragStat().CheckMinMoved(aNoSnapPnt))
-    {
-        Point aPt1(aPnt);
-        Rectangle aLR(getSdrDragView().GetWorkArea());
-        bool bWorkArea=!aLR.IsEmpty();
-        bool bDragLimit=IsDragLimit();
-
-        if (bDragLimit || bWorkArea)
+        if(!getSdrView().IsMoveSnapOnlyTopLeft())
         {
-            Rectangle aSR2(GetMarkedRect());
-            Point aD(aPt1-DragStat().GetStart());
+            ImpCheckSnap(basegfx::B2DPoint(aSnapRange.getMaxX(), aSnapRange.getMinY()));
+            ImpCheckSnap(basegfx::B2DPoint(aSnapRange.getMinX(), aSnapRange.getMaxY()));
+            ImpCheckSnap(aSnapRange.getMaximum());
+        }
 
-            if (bDragLimit)
+        basegfx::B2DPoint aNewPos(rPoint + maBestSnap);
+
+        if(getSdrView().IsOrthogonal())
+        {
+            aNewPos = OrthoDistance8(DragStat().GetStart(), aNewPos, getSdrView().IsBigOrthogonal());
+        }
+
+        basegfx::B2DRange aWorkArea(getSdrView().GetWorkArea());
+        const bool bWorkArea(!aWorkArea.isEmpty());
+        const bool bDragLimit(IsDragLimit());
+
+        if(bDragLimit || bWorkArea)
+        {
+            basegfx::B2DRange aSnapRange2(rFixSnapRange);
+            const basegfx::B2DVector aDelta(aNewPos - DragStat().GetStart());
+
+            if(bDragLimit)
             {
-                Rectangle aR2(GetDragLimitRect());
+                const basegfx::B2DRange aDragLimit(getSdrView().GetDragLimit());
 
-                if (bWorkArea)
-                    aLR.Intersection(aR2);
+                if(bWorkArea)
+                {
+                    aWorkArea.intersect(aDragLimit);
+                }
                 else
-                    aLR=aR2;
-            }
-
-            if (aSR2.Left()>aLR.Left() || aSR2.Right()<aLR.Right())
-            { // ist ueberhaupt Platz zum verschieben?
-                aSR2.Move(aD.X(),0);
-
-                if (aSR2.Left()<aLR.Left())
                 {
-                    aPt1.X()-=aSR2.Left()-aLR.Left();
-                }
-                else if (aSR2.Right()>aLR.Right())
-                {
-                    aPt1.X()-=aSR2.Right()-aLR.Right();
+                    aWorkArea = aDragLimit;
                 }
             }
-            else
-                aPt1.X()=DragStat().GetStart().X(); // kein Platz zum verschieben
 
-            if (aSR2.Top()>aLR.Top() || aSR2.Bottom()<aLR.Bottom())
-            { // ist ueberhaupt Platz zum verschieben?
-                aSR2.Move(0,aD.Y());
+            if(aSnapRange2.getMinX() > aWorkArea.getMinX() || aSnapRange2.getMaxX() < aWorkArea.getMaxX())
+            {
+                // ist ueberhaupt Platz zum verschieben?
+                aSnapRange2.transform(basegfx::tools::createTranslateB2DHomMatrix(aDelta.getX(), 0.0));
 
-                if (aSR2.Top()<aLR.Top())
+                if(aSnapRange2.getMinX() < aWorkArea.getMinX())
                 {
-                    aPt1.Y()-=aSR2.Top()-aLR.Top();
+                    aNewPos.setX(aNewPos.getX() - (aSnapRange2.getMinX() - aWorkArea.getMinX()));
                 }
-                else if (aSR2.Bottom()>aLR.Bottom())
+                else if(aSnapRange2.getMaxX() > aWorkArea.getMaxX())
                 {
-                    aPt1.Y()-=aSR2.Bottom()-aLR.Bottom();
+                    aNewPos.setX(aNewPos.getX() - (aSnapRange2.getMaxX() - aWorkArea.getMaxX()));
                 }
             }
             else
-                aPt1.Y()=DragStat().GetStart().Y(); // kein Platz zum verschieben
+            {
+                // kein Platz zum verschieben
+                aNewPos.setX(DragStat().GetStart().getX());
+            }
+
+            if(aSnapRange2.getMinY() > aWorkArea.getMinY() || aSnapRange2.getMaxY() < aWorkArea.getMaxY())
+            {
+                // ist ueberhaupt Platz zum verschieben?
+                aSnapRange2.transform(basegfx::tools::createTranslateB2DHomMatrix(0.0, aDelta.getY()));
+
+                if(aSnapRange2.getMinY() < aWorkArea.getMinY())
+                {
+                    aNewPos.setY(aNewPos.getY() - (aSnapRange2.getMinY() - aWorkArea.getMinY()));
+                }
+                else if(aSnapRange2.getMaxY() > aWorkArea.getMaxY())
+                {
+                    aNewPos.setY(aNewPos.getY() - (aSnapRange2.getMaxY() - aWorkArea.getMaxY()));
+                }
+            }
+            else
+            {
+                // kein Platz zum verschieben
+                aNewPos.setY(DragStat().GetStart().getY());
+            }
         }
 
-        if (getSdrDragView().IsDraggingGluePoints())
-        { // Klebepunkte aufs BoundRect des Obj limitieren
-            aPt1-=DragStat().GetStart();
-            const SdrMarkList& rML=GetMarkedObjectList();
-            sal_uLong nMarkAnz=rML.GetMarkCount();
+        if(getSdrView().IsDraggingGluePoints() && getSdrView().areSdrObjectsSelected())
+        {
+            // Klebepunkte aufs BoundRect des Obj limitieren
+            aNewPos -= DragStat().GetStart();
+            const SdrObjectVector aSelection(getSdrView().getSelectedSdrObjectVectorFromSdrMarkView());
 
-            for (sal_uLong nMarkNum=0; nMarkNum<nMarkAnz; nMarkNum++)
+            for(sal_uInt32 nMarkNum(0); nMarkNum < aSelection.size(); nMarkNum++)
             {
-                const SdrMark* pM=rML.GetMark(nMarkNum);
-                const SdrUShortCont* pPts=pM->GetMarkedGluePoints();
-                sal_uLong nPtAnz=pPts==NULL ? 0 : pPts->GetCount();
+                const SdrObject* pObj = aSelection[nMarkNum];
+                const sdr::selection::Indices rMarkedGluePoints = getSdrView().getSelectedGluesForSelectedSdrObject(*pObj);
 
-                if (nPtAnz!=0)
+                if(rMarkedGluePoints.size())
                 {
-                    const SdrObject* pObj=pM->GetMarkedSdrObj();
-                    const SdrGluePointList* pGPL=pObj->GetGluePointList();
-                    Rectangle aBound(pObj->GetCurrentBoundRect());
+                    const SdrGluePointList* pGPL = pObj->GetGluePointList();
+                    const basegfx::B2DRange& rObjectRange(pObj->getObjectRange(&getSdrView()));
+                    const basegfx::B2DRange aObjectSnapRange(sdr::legacy::GetSnapRange(*pObj));
 
-                    for (sal_uLong nPtNum=0; nPtNum<nPtAnz; nPtNum++)
+                    for(sdr::selection::Indices::const_iterator aCurrent(rMarkedGluePoints.begin()); aCurrent != rMarkedGluePoints.end(); aCurrent++)
                     {
-                        sal_uInt16 nId=pPts->GetObject(nPtNum);
-                        sal_uInt16 nGlueNum=pGPL->FindGluePoint(nId);
+                        const sal_uInt32 nId(*aCurrent);
+                        const sal_uInt32 nGlueNum(pGPL->FindGluePoint(nId));
 
-                        if (nGlueNum!=SDRGLUEPOINT_NOTFOUND)
+                        if(SDRGLUEPOINT_NOTFOUND != nGlueNum)
                         {
-                            Point aPt((*pGPL)[nGlueNum].GetAbsolutePos(*pObj));
-                            aPt+=aPt1; // soviel soll verschoben werden
-                            if (aPt.X()<aBound.Left()  ) aPt1.X()-=aPt.X()-aBound.Left()  ;
-                            if (aPt.X()>aBound.Right() ) aPt1.X()-=aPt.X()-aBound.Right() ;
-                            if (aPt.Y()<aBound.Top()   ) aPt1.Y()-=aPt.Y()-aBound.Top()   ;
-                            if (aPt.Y()>aBound.Bottom()) aPt1.Y()-=aPt.Y()-aBound.Bottom();
+                            basegfx::B2DPoint aPt((*pGPL)[nGlueNum].GetAbsolutePos(aObjectSnapRange) + aNewPos);
+
+                            if(aPt.getX() < rObjectRange.getMinX())
+                            {
+                                aNewPos.setX(aNewPos.getX() - (aPt.getX() - rObjectRange.getMinX()));
+                            }
+                            if(aPt.getX() > rObjectRange.getMaxX())
+                            {
+                                aNewPos.setX(aNewPos.getX() - (aPt.getX() - rObjectRange.getMaxX()));
+                            }
+                            if(aPt.getY() < rObjectRange.getMinY())
+                            {
+                                aNewPos.setY(aNewPos.getY() - (aPt.getY() - rObjectRange.getMinY()));
+                            }
+                            if(aPt.getY() > rObjectRange.getMaxY())
+                            {
+                                aNewPos.setY(aNewPos.getY() - (aPt.getY() - rObjectRange.getMaxY()));
+                            }
                         }
                     }
                 }
             }
 
-            aPt1+=DragStat().GetStart();
+            aNewPos += DragStat().GetStart();
         }
 
-        if (bOrtho)
-            OrthoDistance8(DragStat().GetStart(),aPt1,false);
+        if(getSdrView().IsOrthogonal())
+        {
+            aNewPos = OrthoDistance8(DragStat().GetStart(), aNewPos, false);
+        }
 
-        if (aPt1!=DragStat().GetNow())
+        if(!aNewPos.equal(DragStat().GetNow()))
         {
             Hide();
-            DragStat().NextMove(aPt1);
-            Rectangle aAction(GetMarkedRect());
-            aAction.Move(DragStat().GetDX(),DragStat().GetDY());
-            DragStat().SetActionRect(aAction);
+            DragStat().NextMove(aNewPos);
+            basegfx::B2DRange aActionRange(GetMarkedRange());
+            aActionRange.transform(basegfx::tools::createTranslateB2DHomMatrix(DragStat().GetNow() - DragStat().GetPrev()));
+            DragStat().SetActionRange(aActionRange);
             Show();
         }
     }
@@ -1750,20 +1728,25 @@ bool SdrDragMove::EndSdrDrag(bool bCopy)
 {
     Hide();
 
-    if (getSdrDragView().IsInsObjPoint() || getSdrDragView().IsInsGluePoint())
-        bCopy=false;
-
-    if (IsDraggingPoints())
+    if(getSdrView().IsInsObjPoint() || (getSdrView().GetDragMethod() && getSdrView().IsInsertGluePoint()))
     {
-        getSdrDragView().MoveMarkedPoints(Size(DragStat().GetDX(),DragStat().GetDY()),bCopy);
+        bCopy = false;
+    }
+
+    if(IsDraggingPoints())
+    {
+        getSdrView().TransformMarkedPoints(
+            basegfx::tools::createTranslateB2DHomMatrix(DragStat().GetNow() - DragStat().GetPrev()),
+            SDRREPFUNC_OBJ_MOVE,
+            bCopy);
     }
     else if (IsDraggingGluePoints())
     {
-        getSdrDragView().MoveMarkedGluePoints(Size(DragStat().GetDX(),DragStat().GetDY()),bCopy);
+        getSdrView().MoveMarkedGluePoints(DragStat().GetNow() - DragStat().GetPrev(), bCopy);
     }
     else
     {
-        getSdrDragView().MoveMarkedObj(Size(DragStat().GetDX(),DragStat().GetDY()),bCopy);
+        getSdrView().MoveMarkedObj(DragStat().GetNow() - DragStat().GetPrev(), bCopy);
     }
 
     return true;
@@ -1771,7 +1754,7 @@ bool SdrDragMove::EndSdrDrag(bool bCopy)
 
 Pointer SdrDragMove::GetSdrDragPointer() const
 {
-    if (IsDraggingPoints() || IsDraggingGluePoints())
+    if(IsDraggingPoints() || IsDraggingGluePoints())
     {
         return Pointer(POINTER_MOVEPOINT);
     }
@@ -1783,73 +1766,64 @@ Pointer SdrDragMove::GetSdrDragPointer() const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1(SdrDragResize,SdrDragMethod);
-
-SdrDragResize::SdrDragResize(SdrDragView& rNewView)
+SdrDragResize::SdrDragResize(SdrView& rNewView)
 :   SdrDragMethod(rNewView),
-    aXFact(1,1),
-    aYFact(1,1)
+    maScale(1.0, 1.0)
 {
 }
 
 void SdrDragResize::TakeSdrDragComment(XubString& rStr) const
 {
-    ImpTakeDescriptionStr(STR_DragMethResize, rStr);
-    bool bEqual(aXFact == aYFact);
-    Fraction aFact1(1,1);
-    Point aStart(DragStat().GetStart());
-    Point aRef(DragStat().GetRef1());
-    sal_Int32 nXDiv(aStart.X() - aRef.X());
-
-    if(!nXDiv)
-        nXDiv = 1;
-
-    sal_Int32 nYDiv(aStart.Y() - aRef.Y());
-
-    if(!nYDiv)
-        nYDiv = 1;
-
-    bool bX(aXFact != aFact1 && Abs(nXDiv) > 1);
-    bool bY(aYFact != aFact1 && Abs(nYDiv) > 1);
+    TakeMarkedDescriptionString(STR_DragMethResize, rStr);
+    const basegfx::B2DVector aDelta(absolute(DragStat().GetStart() - DragStat().GetRef1()));
+    bool bX(!basegfx::fTools::equal(maScale.getX(), 1.0) && aDelta.getX() > 1.0);
+    bool bY(!basegfx::fTools::equal(maScale.getY(), 1.0) && aDelta.getY() > 1.0);
 
     if(bX || bY)
     {
         XubString aStr;
+        bool bEqual(basegfx::fTools::equal(maScale.getX(), maScale.getY()));
 
         rStr.AppendAscii(" (");
 
         if(bX)
         {
             if(!bEqual)
+            {
                 rStr.AppendAscii("x=");
+            }
 
-            getSdrDragView().GetModel()->TakePercentStr(aXFact, aStr);
+            getSdrView().getSdrModelFromSdrView().TakePercentStr(maScale.getX(), aStr);
             rStr += aStr;
         }
 
         if(bY && !bEqual)
         {
             if(bX)
+            {
                 rStr += sal_Unicode(' ');
+            }
 
             rStr.AppendAscii("y=");
-            getSdrDragView().GetModel()->TakePercentStr(aYFact, aStr);
+            getSdrView().getSdrModelFromSdrView().TakePercentStr(maScale.getY(), aStr);
             rStr += aStr;
         }
 
         rStr += sal_Unicode(')');
     }
 
-    if(getSdrDragView().IsDragWithCopy())
+    if(getSdrView().IsDragWithCopy())
+    {
         rStr += ImpGetResStr(STR_EditWithCopy);
+    }
 }
 
 bool SdrDragResize::BeginSdrDrag()
 {
-    SdrHdlKind eRefHdl=HDL_MOVE;
-    SdrHdl* pRefHdl=NULL;
+    SdrHdlKind eRefHdl(HDL_MOVE);
+    SdrHdl* pRefHdl = 0;
 
-    switch (GetDragHdlKind())
+    switch(GetDragHdlKind())
     {
         case HDL_UPLFT: eRefHdl=HDL_LWRGT; break;
         case HDL_UPPER: eRefHdl=HDL_LOWER; DragStat().SetHorFixed(true); break;
@@ -1862,25 +1836,29 @@ bool SdrDragResize::BeginSdrDrag()
         default: break;
     }
 
-    if (eRefHdl!=HDL_MOVE)
-        pRefHdl=GetHdlList().GetHdl(eRefHdl);
-
-    if (pRefHdl!=NULL && !getSdrDragView().IsResizeAtCenter())
+    if(HDL_MOVE != eRefHdl)
     {
-        DragStat().Ref1()=pRefHdl->GetPos();
+        pRefHdl = GetHdlList().GetHdlByKind(eRefHdl);
+    }
+
+    if(pRefHdl && !getSdrView().IsResizeAtCenter())
+    {
+        DragStat().SetRef1(pRefHdl->getPosition());
     }
     else
     {
-        SdrHdl* pRef1=GetHdlList().GetHdl(HDL_UPLFT);
-        SdrHdl* pRef2=GetHdlList().GetHdl(HDL_LWRGT);
+        SdrHdl* pRef1 = GetHdlList().GetHdlByKind(HDL_UPLFT);
+        SdrHdl* pRef2 = GetHdlList().GetHdlByKind(HDL_LWRGT);
 
-        if (pRef1!=NULL && pRef2!=NULL)
+        if(pRef1 && pRef2)
         {
-            DragStat().Ref1()=Rectangle(pRef1->GetPos(),pRef2->GetPos()).Center();
+            const basegfx::B2DRange aRefRange(pRef1->getPosition(), pRef2->getPosition());
+
+            DragStat().SetRef1(aRefRange.getCenter());
         }
         else
         {
-            DragStat().Ref1()=GetMarkedRect().Center();
+            DragStat().SetRef1(GetMarkedRange().getCenter());
         }
     }
 
@@ -1891,215 +1869,179 @@ bool SdrDragResize::BeginSdrDrag()
 
 basegfx::B2DHomMatrix SdrDragResize::getCurrentTransformation()
 {
-    basegfx::B2DHomMatrix aRetval(basegfx::tools::createTranslateB2DHomMatrix(
-        -DragStat().Ref1().X(), -DragStat().Ref1().Y()));
-    aRetval.scale(aXFact, aYFact);
-    aRetval.translate(DragStat().Ref1().X(), DragStat().Ref1().Y());
+    basegfx::B2DHomMatrix aRetval;
+
+    aRetval.translate(-DragStat().GetRef1());
+    aRetval.scale(maScale);
+    aRetval.translate(DragStat().GetRef1());
 
     return aRetval;
 }
 
-void SdrDragResize::MoveSdrDrag(const Point& rNoSnapPnt)
+void SdrDragResize::MoveSdrDrag(const basegfx::B2DPoint& rNoSnapPnt)
 {
-    Point aPnt(GetSnapPos(rNoSnapPnt));
-    Point aStart(DragStat().GetStart());
-    Point aRef(DragStat().GetRef1());
-    Fraction aMaxFact(0x7FFFFFFF,1);
-    Rectangle aLR(getSdrDragView().GetWorkArea());
-    bool bWorkArea=!aLR.IsEmpty();
-    bool bDragLimit=IsDragLimit();
+    basegfx::B2DPoint aNewPos(getSdrView().GetSnapPos(rNoSnapPnt));
+    double fMaximumLimit(DBL_MAX);
+    const basegfx::B2DPoint& rRef1(DragStat().GetRef1());
+    basegfx::B2DRange aWorkArea(getSdrView().GetWorkArea());
+    const bool bWorkArea(!aWorkArea.isEmpty());
+    const bool bDragLimit(IsDragLimit());
+    const bool bOrtho(getSdrView().IsOrthogonal() || !getSdrView().IsResizeAllowed(false));
 
-    if (bDragLimit || bWorkArea)
+    if(bDragLimit || bWorkArea)
     {
-        Rectangle aSR(GetMarkedRect());
+        const basegfx::B2DRange aSnapRange(GetMarkedRange());
 
-        if (bDragLimit)
+        if(bDragLimit)
         {
-            Rectangle aR2(GetDragLimitRect());
+            const basegfx::B2DRange aDragLimit(getSdrView().GetDragLimit());
 
-            if (bWorkArea)
-                aLR.Intersection(aR2);
-            else
-                aLR=aR2;
-        }
-
-        if (aPnt.X()<aLR.Left())
-            aPnt.X()=aLR.Left();
-        else if (aPnt.X()>aLR.Right())
-            aPnt.X()=aLR.Right();
-
-        if (aPnt.Y()<aLR.Top())
-            aPnt.Y()=aLR.Top();
-        else if (aPnt.Y()>aLR.Bottom())
-            aPnt.Y()=aLR.Bottom();
-
-        if (aRef.X()>aSR.Left())
-        {
-            Fraction aMax(aRef.X()-aLR.Left(),aRef.X()-aSR.Left());
-
-            if (aMax<aMaxFact)
-                aMaxFact=aMax;
-        }
-
-        if (aRef.X()<aSR.Right())
-        {
-            Fraction aMax(aLR.Right()-aRef.X(),aSR.Right()-aRef.X());
-
-            if (aMax<aMaxFact)
-                aMaxFact=aMax;
-        }
-
-        if (aRef.Y()>aSR.Top())
-        {
-            Fraction aMax(aRef.Y()-aLR.Top(),aRef.Y()-aSR.Top());
-
-            if (aMax<aMaxFact)
-                aMaxFact=aMax;
-        }
-
-        if (aRef.Y()<aSR.Bottom())
-        {
-            Fraction aMax(aLR.Bottom()-aRef.Y(),aSR.Bottom()-aRef.Y());
-
-            if (aMax<aMaxFact)
-                aMaxFact=aMax;
-        }
-    }
-
-    long nXDiv=aStart.X()-aRef.X(); if (nXDiv==0) nXDiv=1;
-    long nYDiv=aStart.Y()-aRef.Y(); if (nYDiv==0) nYDiv=1;
-    long nXMul=aPnt.X()-aRef.X();
-    long nYMul=aPnt.Y()-aRef.Y();
-
-    if (nXDiv<0)
-    {
-        nXDiv=-nXDiv;
-        nXMul=-nXMul;
-    }
-
-    if (nYDiv<0)
-    {
-        nYDiv=-nYDiv;
-        nYMul=-nYMul;
-    }
-
-    bool bXNeg=nXMul<0; if (bXNeg) nXMul=-nXMul;
-    bool bYNeg=nYMul<0; if (bYNeg) nYMul=-nYMul;
-    bool bOrtho=getSdrDragView().IsOrtho() || !getSdrDragView().IsResizeAllowed(false);
-
-    if (!DragStat().IsHorFixed() && !DragStat().IsVerFixed())
-    {
-        if (Abs(nXDiv)<=1 || Abs(nYDiv)<=1)
-            bOrtho=false;
-
-        if (bOrtho)
-        {
-            if ((Fraction(nXMul,nXDiv)>Fraction(nYMul,nYDiv)) !=getSdrDragView().IsBigOrtho())
+            if(bWorkArea)
             {
-                nXMul=nYMul;
-                nXDiv=nYDiv;
+                aWorkArea.intersect(aDragLimit);
             }
             else
             {
-                nYMul=nXMul;
-                nYDiv=nXDiv;
+                aWorkArea = aDragLimit;
+            }
+        }
+
+        aNewPos = aWorkArea.clamp(aNewPos);
+
+        if(bOrtho)
+        {
+            if(rRef1.getX() > aSnapRange.getMinX())
+            {
+                const double fDividend(rRef1.getX() - aWorkArea.getMinX());
+                const double fDivisor(rRef1.getX() - aSnapRange.getMinX());
+                const double fMax(fDividend / (basegfx::fTools::equalZero(fDivisor) ? 1.0 : fDivisor));
+
+                fMaximumLimit = std::min(fMax, fabs(fMaximumLimit));
+            }
+
+            if (rRef1.getX()<aSnapRange.getMaxX())
+            {
+                const double fDividend(aWorkArea.getMaxX() - rRef1.getX());
+                const double fDivisor(aSnapRange.getMaxX() - rRef1.getX());
+                const double fMax(fDividend / (basegfx::fTools::equalZero(fDivisor) ? 1.0 : fDivisor));
+
+                fMaximumLimit = std::min(fMax, fabs(fMaximumLimit));
+            }
+
+            if (rRef1.getY()>aSnapRange.getMinY())
+            {
+                const double fDividend(rRef1.getY() - aWorkArea.getMinY());
+                const double fDivisor(rRef1.getY() - aSnapRange.getMinY());
+                const double fMax(fDividend / (basegfx::fTools::equalZero(fDivisor) ? 1.0 : fDivisor));
+
+                fMaximumLimit = std::min(fMax, fabs(fMaximumLimit));
+            }
+
+            if (rRef1.getY()<aSnapRange.getMaxY())
+            {
+                const double fDividend(aWorkArea.getMaxY() - rRef1.getY());
+                const double fDivisor(aSnapRange.getMaxY() - rRef1.getY());
+                const double fMax(fDividend / (basegfx::fTools::equalZero(fDivisor) ? 1.0 : fDivisor));
+
+                fMaximumLimit = std::min(fMax, fabs(fMaximumLimit));
+            }
+        }
+    }
+
+    const basegfx::B2DPoint aOldDelta(DragStat().GetStart() - rRef1);
+    const basegfx::B2DPoint aNewDelta(aNewPos - rRef1);
+    double fXFactor(aNewDelta.getX() / (basegfx::fTools::equalZero(aOldDelta.getX()) ? 1.0 : aOldDelta.getX()));
+    double fYFactor(aNewDelta.getY() / (basegfx::fTools::equalZero(aOldDelta.getY()) ? 1.0 : aOldDelta.getY()));
+
+    if(!DragStat().IsHorFixed() && !DragStat().IsVerFixed())
+    {
+        if(bOrtho)
+        {
+            if(basegfx::fTools::more(fabs(fXFactor), fabs(fYFactor)) != getSdrView().IsBigOrthogonal())
+            {
+                fXFactor = basegfx::copySign(fYFactor, fXFactor);
+            }
+            else
+            {
+                fYFactor = basegfx::copySign(fXFactor, fYFactor);
             }
         }
     }
     else
     {
-        if (bOrtho)
+        if(bOrtho)
         {
-            if (DragStat().IsHorFixed())
+            if(DragStat().IsHorFixed())
             {
-                bXNeg=false;
-                nXMul=nYMul;
-                nXDiv=nYDiv;
+                fXFactor = fabs(fYFactor);
             }
 
-            if (DragStat().IsVerFixed())
+            if(DragStat().IsVerFixed())
             {
-                bYNeg=false;
-                nYMul=nXMul;
-                nYDiv=nXDiv;
+                fYFactor = fabs(fXFactor);
             }
         }
         else
         {
-            if (DragStat().IsHorFixed())
+            if(DragStat().IsHorFixed())
             {
-                bXNeg=false;
-                nXMul=1;
-                nXDiv=1;
+                fXFactor = 1.0;
             }
 
             if (DragStat().IsVerFixed())
             {
-                bYNeg=false;
-                nYMul=1;
-                nYDiv=1;
+                fYFactor = 1.0;
             }
         }
     }
 
-    Fraction aNeuXFact(nXMul,nXDiv);
-    Fraction aNeuYFact(nYMul,nYDiv);
-
-    if (bOrtho)
+    if(bOrtho)
     {
-        if (aNeuXFact>aMaxFact)
+        if(fabs(fXFactor) > fMaximumLimit || fabs(fYFactor) > fMaximumLimit)
         {
-            aNeuXFact=aMaxFact;
-            aNeuYFact=aMaxFact;
-        }
-
-        if (aNeuYFact>aMaxFact)
-        {
-            aNeuXFact=aMaxFact;
-            aNeuYFact=aMaxFact;
+            fXFactor = (fXFactor > 0.0) ? fMaximumLimit : -fMaximumLimit;
+            fYFactor = (fYFactor > 0.0) ? fMaximumLimit : -fMaximumLimit;
         }
     }
 
-    if (bXNeg)
-        aNeuXFact=Fraction(-aNeuXFact.GetNumerator(),aNeuXFact.GetDenominator());
-
-    if (bYNeg)
-        aNeuYFact=Fraction(-aNeuYFact.GetNumerator(),aNeuYFact.GetDenominator());
-
-    if (DragStat().CheckMinMoved(aPnt))
+    if(DragStat().CheckMinMoved(aNewPos))
     {
-        if ((!DragStat().IsHorFixed() && aPnt.X()!=DragStat().GetNow().X()) ||
-            (!DragStat().IsVerFixed() && aPnt.Y()!=DragStat().GetNow().Y()))
+        if((!DragStat().IsHorFixed() && !basegfx::fTools::equal(aNewPos.getX(), DragStat().GetNow().getX())) ||
+            (!DragStat().IsVerFixed() && !basegfx::fTools::equal(aNewPos.getY(), DragStat().GetNow().getY())))
         {
             Hide();
-            DragStat().NextMove(aPnt);
-            aXFact=aNeuXFact;
-            aYFact=aNeuYFact;
+            DragStat().NextMove(aNewPos);
+            maScale.setX(fXFactor);
+            maScale.setY(fYFactor);
             Show();
         }
     }
-}
-
-void SdrDragResize::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
-{
-    rTarget.Resize(DragStat().Ref1(),aXFact,aYFact);
 }
 
 bool SdrDragResize::EndSdrDrag(bool bCopy)
 {
     Hide();
 
-    if (IsDraggingPoints())
+    if(IsDraggingPoints())
     {
-        getSdrDragView().ResizeMarkedPoints(DragStat().Ref1(),aXFact,aYFact,bCopy);
+        basegfx::B2DHomMatrix aTransform;
+
+        aTransform.translate(-DragStat().GetRef1());
+        aTransform.scale(maScale);
+        aTransform.translate(DragStat().GetRef1());
+
+        getSdrView().TransformMarkedPoints(
+            aTransform,
+            SDRREPFUNC_OBJ_RESIZE,
+            bCopy);
     }
     else if (IsDraggingGluePoints())
     {
-        getSdrDragView().ResizeMarkedGluePoints(DragStat().Ref1(),aXFact,aYFact,bCopy);
+        getSdrView().ResizeMarkedGluePoints(DragStat().GetRef1(), maScale, bCopy);
     }
     else
     {
-        getSdrDragView().ResizeMarkedObj(DragStat().Ref1(),aXFact,aYFact,bCopy);
+        getSdrView().ResizeMarkedObj(DragStat().GetRef1(), maScale, bCopy);
     }
 
     return true;
@@ -2107,9 +2049,9 @@ bool SdrDragResize::EndSdrDrag(bool bCopy)
 
 Pointer SdrDragResize::GetSdrDragPointer() const
 {
-    const SdrHdl* pHdl=GetDragHdl();
+    const SdrHdl* pHdl = GetDragHdl();
 
-    if (pHdl!=NULL)
+    if(pHdl)
     {
         return pHdl->GetPointer();
     }
@@ -2119,52 +2061,41 @@ Pointer SdrDragResize::GetSdrDragPointer() const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1(SdrDragRotate,SdrDragMethod);
-
-void SdrDragRotate::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
-{
-    rTarget.Rotate(DragStat().GetRef1(), nWink, sin(nWink*nPi180), cos(nWink*nPi180));
-}
-
-SdrDragRotate::SdrDragRotate(SdrDragView& rNewView)
+SdrDragRotate::SdrDragRotate(SdrView& rNewView)
 :   SdrDragMethod(rNewView),
-    nSin(0.0),
-    nCos(1.0),
-    nWink0(0),
-    nWink(0),
-    bRight(false)
+    mfStartRotation(0.0),
+    mfDeltaRotation(0.0)
 {
 }
 
 void SdrDragRotate::TakeSdrDragComment(XubString& rStr) const
 {
-    ImpTakeDescriptionStr(STR_DragMethRotate, rStr);
+    TakeMarkedDescriptionString(STR_DragMethRotate, rStr);
     rStr.AppendAscii(" (");
     XubString aStr;
-    sal_Int32 nTmpWink(NormAngle360(nWink));
+    const double fSnappedDelta(basegfx::snapToRange(mfDeltaRotation, -F_2PI, F_2PI));
+    sal_Int32 nOldAngle(basegfx::fround((fSnappedDelta * -18000.0) / F_PI) % 36000);
 
-    if(bRight && nWink)
-    {
-        nTmpWink -= 36000;
-    }
-
-    getSdrDragView().GetModel()->TakeWinkStr(nTmpWink, aStr);
+    getSdrView().getSdrModelFromSdrView().TakeWinkStr(nOldAngle, aStr);
     rStr += aStr;
     rStr += sal_Unicode(')');
 
-    if(getSdrDragView().IsDragWithCopy())
+    if(getSdrView().IsDragWithCopy())
+    {
         rStr += ImpGetResStr(STR_EditWithCopy);
+    }
 }
 
 bool SdrDragRotate::BeginSdrDrag()
 {
-    SdrHdl* pH=GetHdlList().GetHdl(HDL_REF1);
+    SdrHdl* pH = GetHdlList().GetHdlByKind(HDL_REF1);
 
-    if (pH!=NULL)
+    if(pH)
     {
         Show();
-        DragStat().Ref1()=pH->GetPos();
-        nWink0=GetAngle(DragStat().GetStart()-DragStat().GetRef1());
+        DragStat().SetRef1(pH->getPosition());
+        const basegfx::B2DVector aDirection(DragStat().GetStart() - DragStat().GetRef1());
+        mfStartRotation = atan2(aDirection.getY(), aDirection.getX());
         return true;
     }
     else
@@ -2176,54 +2107,43 @@ bool SdrDragRotate::BeginSdrDrag()
 
 basegfx::B2DHomMatrix SdrDragRotate::getCurrentTransformation()
 {
-    return basegfx::tools::createRotateAroundPoint(
-        DragStat().GetRef1().X(), DragStat().GetRef1().Y(),
-        -atan2(nSin, nCos));
+    return basegfx::tools::createRotateAroundPoint(DragStat().GetRef1(), mfDeltaRotation);
 }
 
-void SdrDragRotate::MoveSdrDrag(const Point& rPnt_)
+void SdrDragRotate::MoveSdrDrag(const basegfx::B2DPoint& rPoint)
 {
-    Point aPnt(rPnt_);
-    if (DragStat().CheckMinMoved(aPnt))
+    if(DragStat().CheckMinMoved(rPoint))
     {
-        long nNeuWink=NormAngle360(GetAngle(aPnt-DragStat().GetRef1())-nWink0);
-        long nSA=0;
+        const basegfx::B2DVector aDirection(rPoint - DragStat().GetRef1());
+        double fNewDeltaRotation(atan2(aDirection.getY(), aDirection.getX()) - mfStartRotation);
 
-        if (getSdrDragView().IsAngleSnapEnabled())
-            nSA=getSdrDragView().GetSnapAngle();
-
-        if (!getSdrDragView().IsRotateAllowed(false))
-            nSA=9000;
-
-        if (nSA!=0)
-        { // Winkelfang
-            nNeuWink+=nSA/2;
-            nNeuWink/=nSA;
-            nNeuWink*=nSA;
-        }
-
-        nNeuWink=NormAngle180(nNeuWink);
-
-        if (nWink!=nNeuWink)
+        if(!basegfx::fTools::equalZero(fNewDeltaRotation))
         {
-            sal_uInt16 nSekt0=GetAngleSector(nWink);
-            sal_uInt16 nSekt1=GetAngleSector(nNeuWink);
+            double fSnapAngle(0.0);
 
-            if (nSekt0==0 && nSekt1==3)
-                bRight=true;
+            if(getSdrView().IsAngleSnapEnabled())
+            {
+                fSnapAngle = ((getSdrView().GetSnapAngle() % 36000) * F_PI) / 18000.0;
+            }
 
-            if (nSekt0==3 && nSekt1==0)
-                bRight=false;
+            if(!getSdrView().IsRotateAllowed(false))
+            {
+                fSnapAngle = F_PI2;
+            }
 
-            nWink=nNeuWink;
-            double a=nWink*nPi180;
-            double nSin1=sin(a); // schonmal berechnen, damit mgl. wenig Zeit
-            double nCos1=cos(a); // zwischen Hide() und Show() vergeht
-            Hide();
-            nSin=nSin1;
-            nCos=nCos1;
-            DragStat().NextMove(aPnt);
-            Show();
+            if(!basegfx::fTools::equalZero(fSnapAngle))
+            {
+                fNewDeltaRotation = basegfx::snapToNearestMultiple(fNewDeltaRotation, fSnapAngle);
+            }
+
+            if(!basegfx::fTools::equal(fNewDeltaRotation, mfDeltaRotation))
+            {
+                mfDeltaRotation = fNewDeltaRotation;
+
+                Hide();
+                DragStat().NextMove(rPoint);
+                Show();
+            }
         }
     }
 }
@@ -2232,19 +2152,22 @@ bool SdrDragRotate::EndSdrDrag(bool bCopy)
 {
     Hide();
 
-    if (nWink!=0)
+    if(!basegfx::fTools::equalZero(mfDeltaRotation))
     {
-        if (IsDraggingPoints())
+        if(IsDraggingPoints())
         {
-            getSdrDragView().RotateMarkedPoints(DragStat().GetRef1(),nWink,bCopy);
+            getSdrView().TransformMarkedPoints(
+                basegfx::tools::createRotateAroundPoint(DragStat().GetRef1(), mfDeltaRotation),
+                SDRREPFUNC_OBJ_ROTATE,
+                bCopy);
         }
-        else if (IsDraggingGluePoints())
+        else if(IsDraggingGluePoints())
         {
-            getSdrDragView().RotateMarkedGluePoints(DragStat().GetRef1(),nWink,bCopy);
+            getSdrView().RotateMarkedGluePoints(DragStat().GetRef1(), mfDeltaRotation, bCopy);
         }
         else
         {
-            getSdrDragView().RotateMarkedObj(DragStat().GetRef1(),nWink,bCopy);
+            getSdrView().RotateMarkedObj(DragStat().GetRef1(), mfDeltaRotation, bCopy);
         }
     }
     return true;
@@ -2257,230 +2180,152 @@ Pointer SdrDragRotate::GetSdrDragPointer() const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1(SdrDragShear,SdrDragMethod);
-
-SdrDragShear::SdrDragShear(SdrDragView& rNewView, bool bSlant1)
+SdrDragShear::SdrDragShear(SdrView& rNewView)
 :   SdrDragMethod(rNewView),
-    aFact(1,1),
-    nWink0(0),
-    nWink(0),
-    nTan(0.0),
-    bVertical(false),
-    bResize(false),
-    bUpSideDown(false),
-    bSlant(bSlant1)
+    mfStartAngle(0.0),
+    mfDeltaAngle(0.0),
+    mfFactor(1.0),
+    mbVertical(false)
 {
 }
 
 void SdrDragShear::TakeSdrDragComment(XubString& rStr) const
 {
-    ImpTakeDescriptionStr(STR_DragMethShear, rStr);
-    rStr.AppendAscii(" (");
-
-    sal_Int32 nTmpWink(nWink);
-
-    if(bUpSideDown)
-        nTmpWink += 18000;
-
-    nTmpWink = NormAngle180(nTmpWink);
-
+    TakeMarkedDescriptionString(STR_DragMethShear, rStr);
+    sal_Int32 nOldAngle(basegfx::fround((mfDeltaAngle * -18000.0) / F_PI) % 36000);
     XubString aStr;
 
-    getSdrDragView().GetModel()->TakeWinkStr(nTmpWink, aStr);
+    if(nOldAngle > 18000)
+    {
+        nOldAngle = 36000 - nOldAngle;
+    }
+
+    rStr.AppendAscii(" (");
+    getSdrView().getSdrModelFromSdrView().TakeWinkStr(nOldAngle, aStr);
     rStr += aStr;
     rStr += sal_Unicode(')');
 
-    if(getSdrDragView().IsDragWithCopy())
+    if(getSdrView().IsDragWithCopy())
+    {
         rStr += ImpGetResStr(STR_EditWithCopy);
+    }
 }
 
 bool SdrDragShear::BeginSdrDrag()
 {
-    SdrHdlKind eRefHdl=HDL_MOVE;
-    SdrHdl* pRefHdl=NULL;
+    SdrHdlKind eRefHdl(HDL_MOVE);
+    SdrHdl* pRefHdl = 0;
 
-    switch (GetDragHdlKind())
+    switch(GetDragHdlKind())
     {
-        case HDL_UPPER: eRefHdl=HDL_LOWER; break;
-        case HDL_LOWER: eRefHdl=HDL_UPPER; break;
-        case HDL_LEFT : eRefHdl=HDL_RIGHT; bVertical=true; break;
-        case HDL_RIGHT: eRefHdl=HDL_LEFT ; bVertical=true; break;
+        case HDL_UPPER: eRefHdl = HDL_LOWER; break;
+        case HDL_LOWER: eRefHdl = HDL_UPPER; break;
+        case HDL_LEFT : eRefHdl = HDL_RIGHT; mbVertical = true; break;
+        case HDL_RIGHT: eRefHdl = HDL_LEFT; mbVertical = true; break;
         default: break;
     }
 
-    if (eRefHdl!=HDL_MOVE)
-        pRefHdl=GetHdlList().GetHdl(eRefHdl);
-
-    if (pRefHdl!=NULL)
+    if(HDL_MOVE != eRefHdl)
     {
-        DragStat().Ref1()=pRefHdl->GetPos();
-        nWink0=GetAngle(DragStat().GetStart()-DragStat().GetRef1());
+        pRefHdl = GetHdlList().GetHdlByKind(eRefHdl);
+    }
+
+    if(pRefHdl)
+    {
+        DragStat().SetRef1(pRefHdl->getPosition());
+
+        const basegfx::B2DVector aDirection(DragStat().GetStart() - DragStat().GetRef1());
+        mfStartAngle = atan2(aDirection.getY(), aDirection.getX());
     }
     else
     {
         DBG_ERROR("SdrDragShear::BeginSdrDrag(): Kein Referenzpunkt-Handle fuer Shear gefunden");
+
         return false;
     }
 
     Show();
+
     return true;
 }
 
 basegfx::B2DHomMatrix SdrDragShear::getCurrentTransformation()
 {
-    basegfx::B2DHomMatrix aRetval(basegfx::tools::createTranslateB2DHomMatrix(
-        -DragStat().GetRef1().X(), -DragStat().GetRef1().Y()));
+    basegfx::B2DHomMatrix aRetval;
+    const bool bResizeUsed(!basegfx::fTools::equal(mfFactor, 1.0));
+    const bool bShearUsed(!basegfx::fTools::equalZero(mfDeltaAngle));
 
-    if (bResize)
+    if(bResizeUsed || bShearUsed)
     {
-        if (bVertical)
-        {
-            aRetval.scale(aFact, 1.0);
-            aRetval.shearY(-nTan);
-        }
-        else
-        {
-            aRetval.scale(1.0, aFact);
-            aRetval.shearX(-nTan);
-        }
-    }
+        aRetval.translate(-DragStat().GetRef1());
 
-    aRetval.translate(DragStat().GetRef1().X(), DragStat().GetRef1().Y());
+        if(bResizeUsed)
+        {
+            if(mbVertical)
+            {
+                aRetval.scale(mfFactor, 1.0);
+            }
+            else
+            {
+                aRetval.scale(1.0, mfFactor);
+            }
+        }
+
+        if(bShearUsed)
+        {
+            if(mbVertical)
+            {
+                aRetval.shearY(tan(mfDeltaAngle));
+            }
+            else
+            {
+                aRetval.shearX(tan(mfDeltaAngle));
+            }
+        }
+
+        aRetval.translate(DragStat().GetRef1());
+    }
 
     return aRetval;
 }
 
-void SdrDragShear::MoveSdrDrag(const Point& rPnt)
+void SdrDragShear::MoveSdrDrag(const basegfx::B2DPoint& rPnt)
 {
-    if (DragStat().CheckMinMoved(rPnt))
+    if(DragStat().CheckMinMoved(rPnt))
     {
-        bResize=!getSdrDragView().IsOrtho();
-        long nSA=0;
+        const basegfx::B2DVector aDirection(rPnt - DragStat().GetRef1());
+        double fNewDeltaAngle(0.0);
 
-        if (getSdrDragView().IsAngleSnapEnabled())
-            nSA=getSdrDragView().GetSnapAngle();
-
-        Point aP0(DragStat().GetStart());
-        Point aPnt(rPnt);
-        Fraction aNeuFact(1,1);
-
-        // Wenn kein Winkelfang, dann ggf. Rasterfang (ausser bei Slant)
-        if (nSA==0 && !bSlant)
-            aPnt=GetSnapPos(aPnt);
-
-        if (!bSlant && !bResize)
-        { // Shear ohne Resize
-            if (bVertical)
-                aPnt.X()=aP0.X();
-            else
-                aPnt.Y()=aP0.Y();
-        }
-
-        Point aRef(DragStat().GetRef1());
-        Point aDif(aPnt-aRef);
-
-        long nNeuWink=0;
-
-        if (bSlant)
+        if(mbVertical)
         {
-            nNeuWink=NormAngle180(-(GetAngle(aDif)-nWink0));
-
-            if (bVertical)
-                nNeuWink=NormAngle180(-nNeuWink);
+            fNewDeltaAngle = atan2(aDirection.getY(), aDirection.getX()) - mfStartAngle;
         }
         else
         {
-            if (bVertical)
-                nNeuWink=NormAngle180(GetAngle(aDif));
-            else
-                nNeuWink=NormAngle180(-(GetAngle(aDif)-9000));
-
-            if (nNeuWink<-9000 || nNeuWink>9000)
-                nNeuWink=NormAngle180(nNeuWink+18000);
-
-            if (bResize)
-            {
-                Point aPt2(aPnt);
-
-                if (nSA!=0)
-                    aPt2=GetSnapPos(aPnt); // den also in jedem Falle fangen
-
-                if (bVertical)
-                {
-                    aNeuFact=Fraction(aPt2.X()-aRef.X(),aP0.X()-aRef.X());
-                }
-                else
-                {
-                    aNeuFact=Fraction(aPt2.Y()-aRef.Y(),aP0.Y()-aRef.Y());
-                }
-            }
+            fNewDeltaAngle = mfStartAngle - atan2(aDirection.getY(), aDirection.getX());
         }
 
-        bool bNeg=nNeuWink<0;
+        fNewDeltaAngle = basegfx::snapToRange(fNewDeltaAngle, -F_PI, F_PI);
 
-        if (bNeg)
-            nNeuWink=-nNeuWink;
-
-        if (nSA!=0)
-        { // Winkelfang
-            nNeuWink+=nSA/2;
-            nNeuWink/=nSA;
-            nNeuWink*=nSA;
-        }
-
-        nNeuWink=NormAngle360(nNeuWink);
-        bUpSideDown=nNeuWink>9000 && nNeuWink<27000;
-
-        if (bSlant)
-        { // Resize fuer Slant berechnen
-            // Mit Winkelfang jedoch ohne 89deg Begrenzung
-            long nTmpWink=nNeuWink;
-            if (bUpSideDown) nNeuWink-=18000;
-            if (bNeg) nTmpWink=-nTmpWink;
-            bResize=true;
-            double nCos=cos(nTmpWink*nPi180);
-            aNeuFact=nCos;
-            Kuerzen(aFact,10); // 3 Dezimalstellen sollten reichen
-        }
-
-        if (nNeuWink>8900)
-            nNeuWink=8900;
-
-        if (bNeg)
-            nNeuWink=-nNeuWink;
-
-        if (nWink!=nNeuWink || aFact!=aNeuFact)
+        if(getSdrView().IsAngleSnapEnabled())
         {
-            nWink=nNeuWink;
-            aFact=aNeuFact;
-            double a=nWink*nPi180;
-            double nTan1=0.0;
-            nTan1=tan(a); // schonmal berechnen, damit mgl. wenig Zeit zwischen Hide() und Show() vergeht
+            const double fSnapAngle(((getSdrView().GetSnapAngle() % 36000) * F_PI) / 18000.0);
+
+            fNewDeltaAngle = basegfx::snapToNearestMultiple(fNewDeltaAngle, fSnapAngle);
+        }
+
+        // calc resize for slant
+        double fNewFactor(cos(fNewDeltaAngle));
+
+        if(!basegfx::fTools::equal(mfDeltaAngle, fNewDeltaAngle) || !basegfx::fTools::equal(mfFactor, fNewFactor))
+        {
+            mfDeltaAngle = fNewDeltaAngle;
+            mfFactor = fNewFactor;
+
             Hide();
-            nTan=nTan1;
             DragStat().NextMove(rPnt);
             Show();
         }
-    }
-}
-
-void SdrDragShear::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
-{
-    if (bResize)
-    {
-        if (bVertical)
-        {
-            rTarget.Resize(DragStat().GetRef1(),aFact,Fraction(1,1));
-        }
-        else
-        {
-            rTarget.Resize(DragStat().GetRef1(),Fraction(1,1),aFact);
-        }
-    }
-
-    if (nWink!=0)
-    {
-        rTarget.Shear(DragStat().GetRef1(),nWink,tan(nWink*nPi180),bVertical);
     }
 }
 
@@ -2488,43 +2333,41 @@ bool SdrDragShear::EndSdrDrag(bool bCopy)
 {
     Hide();
 
-    if (bResize && aFact==Fraction(1,1))
-        bResize=false;
+    const bool bResizeUsed(!basegfx::fTools::equal(mfFactor, 1.0));
+    const bool bShearUsed(!basegfx::fTools::equalZero(mfDeltaAngle));
 
-    if (nWink!=0 || bResize)
+    if(bResizeUsed || bShearUsed)
     {
-        if (nWink!=0 && bResize)
+        XubString aStr;
+        TakeMarkedDescriptionString(STR_EditShear, aStr);
+
+        if(bCopy)
         {
-            XubString aStr;
-            ImpTakeDescriptionStr(STR_EditShear,aStr);
-
-            if (bCopy)
-                aStr+=ImpGetResStr(STR_EditWithCopy);
-
-            getSdrDragView().BegUndo(aStr);
+            aStr += ImpGetResStr(STR_EditWithCopy);
         }
 
-        if (bResize)
+        getSdrView().BegUndo(aStr);
+
+        if(bResizeUsed)
         {
-            if (bVertical)
+            if(mbVertical)
             {
-                getSdrDragView().ResizeMarkedObj(DragStat().GetRef1(),aFact,Fraction(1,1),bCopy);
+                getSdrView().ResizeMarkedObj(DragStat().GetRef1(), basegfx::B2DVector(mfFactor, 1.0), bCopy);
             }
             else
             {
-                getSdrDragView().ResizeMarkedObj(DragStat().GetRef1(),Fraction(1,1),aFact,bCopy);
+                getSdrView().ResizeMarkedObj(DragStat().GetRef1(), basegfx::B2DVector(1.0, mfFactor), bCopy);
             }
 
-            bCopy=false;
+            bCopy = false;
         }
 
-        if (nWink!=0)
+        if(bShearUsed)
         {
-            getSdrDragView().ShearMarkedObj(DragStat().GetRef1(),nWink,bVertical,bCopy);
+            getSdrView().ShearMarkedObj(DragStat().GetRef1(), mfDeltaAngle, mbVertical, bCopy);
         }
 
-        if (nWink!=0 && bResize)
-            getSdrDragView().EndUndo();
+        getSdrView().EndUndo();
 
         return true;
     }
@@ -2534,85 +2377,98 @@ bool SdrDragShear::EndSdrDrag(bool bCopy)
 
 Pointer SdrDragShear::GetSdrDragPointer() const
 {
-    if (bVertical)
+    if(mbVertical)
+    {
         return Pointer(POINTER_VSHEAR);
+    }
     else
+    {
         return Pointer(POINTER_HSHEAR);
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1(SdrDragMirror,SdrDragMethod);
-
-void SdrDragMirror::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
+SdrDragMirror::SdrDragMirror(SdrView& rNewView)
+:   SdrDragMethod(rNewView)
 {
-    if(bMirrored)
-    {
-        rTarget.Mirror(DragStat().GetRef1(), DragStat().GetRef2());
-    }
-}
-
-SdrDragMirror::SdrDragMirror(SdrDragView& rNewView)
-:   SdrDragMethod(rNewView),
-    nWink(0),
-    bMirrored(false),
-    bSide0(false)
-{
-}
-
-bool SdrDragMirror::ImpCheckSide(const Point& rPnt) const
-{
-    long nWink1=GetAngle(rPnt-DragStat().GetRef1());
-    nWink1-=nWink;
-    nWink1=NormAngle360(nWink1);
-
-    return nWink1<18000;
 }
 
 void SdrDragMirror::TakeSdrDragComment(XubString& rStr) const
 {
-    if (aDif.X()==0)
-        ImpTakeDescriptionStr(STR_DragMethMirrorHori,rStr);
-    else if (aDif.Y()==0)
-        ImpTakeDescriptionStr(STR_DragMethMirrorVert,rStr);
-    else if (Abs(aDif.X())==Abs(aDif.Y()))
-        ImpTakeDescriptionStr(STR_DragMethMirrorDiag,rStr);
-    else
-        ImpTakeDescriptionStr(STR_DragMethMirrorFree,rStr);
+    SdrHdl* pH1 = GetHdlList().GetHdlByKind(HDL_REF1);
+    SdrHdl* pH2 = GetHdlList().GetHdlByKind(HDL_REF2);
 
-    if (getSdrDragView().IsDragWithCopy())
-        rStr+=ImpGetResStr(STR_EditWithCopy);
+    if(pH1 && pH2)
+    {
+        const basegfx::B2DVector aDelta(pH2->getPosition() - pH1->getPosition());
+        const bool bHorizontal(basegfx::fTools::equalZero(aDelta.getX()));
+        const bool bVertical(basegfx::fTools::equalZero(aDelta.getY()));
+        const bool b90(bHorizontal || bVertical);
+        const bool b45(b90 || basegfx::fTools::equal(fabs(aDelta.getX()), fabs(aDelta.getY())));
+
+        if(bHorizontal)
+        {
+            TakeMarkedDescriptionString(STR_DragMethMirrorHori, rStr);
+        }
+        else if(bVertical)
+        {
+            TakeMarkedDescriptionString(STR_DragMethMirrorVert, rStr);
+        }
+        else if(b45)
+        {
+            TakeMarkedDescriptionString(STR_DragMethMirrorDiag, rStr);
+        }
+        else
+        {
+            TakeMarkedDescriptionString(STR_DragMethMirrorFree, rStr);
+        }
+
+        if(getSdrView().IsDragWithCopy())
+        {
+            rStr += ImpGetResStr(STR_EditWithCopy);
+        }
+    }
 }
 
 bool SdrDragMirror::BeginSdrDrag()
 {
-    SdrHdl* pH1=GetHdlList().GetHdl(HDL_REF1);
-    SdrHdl* pH2=GetHdlList().GetHdl(HDL_REF2);
+    SdrHdl* pH1 = GetHdlList().GetHdlByKind(HDL_REF1);
+    SdrHdl* pH2 = GetHdlList().GetHdlByKind(HDL_REF2);
 
-    if (pH1!=NULL && pH2!=NULL)
+    if(pH1 && pH2)
     {
-        DragStat().Ref1()=pH1->GetPos();
-        DragStat().Ref2()=pH2->GetPos();
-        Ref1()=pH1->GetPos();
-        Ref2()=pH2->GetPos();
-        aDif=pH2->GetPos()-pH1->GetPos();
-        bool b90=(aDif.X()==0) || aDif.Y()==0;
-        bool b45=b90 || (Abs(aDif.X())==Abs(aDif.Y()));
-        nWink=NormAngle360(GetAngle(aDif));
+        DragStat().SetRef1(pH1->getPosition());
+        DragStat().SetRef2(pH2->getPosition());
+        SetRef1(pH1->getPosition());
+        SetRef2(pH2->getPosition());
 
-        if (!getSdrDragView().IsMirrorAllowed(false,false) && !b45)
-            return false; // freier Achsenwinkel nicht erlaubt
+        const basegfx::B2DVector aDelta(pH2->getPosition() - pH1->getPosition());
+        const bool bHorizontal(basegfx::fTools::equalZero(aDelta.getX()));
+        const bool bVertical(basegfx::fTools::equalZero(aDelta.getY()));
+        const bool b90(bHorizontal || bVertical);
+        const bool b45(b90 || basegfx::fTools::equal(fabs(aDelta.getX()), fabs(aDelta.getY())));
 
-        if (!getSdrDragView().IsMirrorAllowed(true,false) && !b90)
-            return false;  // 45deg auch nicht erlaubt
+        if(!getSdrView().IsMirrorAllowed(false, false) && !b45)
+        {
+            // freier Achsenwinkel nicht erlaubt
+            return false;
+        }
 
-        bSide0=ImpCheckSide(DragStat().GetStart());
+        if(!getSdrView().IsMirrorAllowed(true, false) && !b90)
+        {
+            // 45deg auch nicht erlaubt
+            return false;
+        }
+
         Show();
+
         return true;
     }
     else
     {
         DBG_ERROR("SdrDragMirror::BeginSdrDrag(): Spiegelachse nicht gefunden");
+
         return false;
     }
 }
@@ -2620,34 +2476,33 @@ bool SdrDragMirror::BeginSdrDrag()
 basegfx::B2DHomMatrix SdrDragMirror::getCurrentTransformation()
 {
     basegfx::B2DHomMatrix aRetval;
+    const bool bMirrored(!basegfx::tools::arePointsOnSameSideOfLine(GetRef1(), GetRef2(), DragStat().GetStart(), DragStat().GetNow()));
 
-    if (bMirrored)
+    if(bMirrored)
     {
-        const double fDeltaX(DragStat().GetRef2().X() - DragStat().GetRef1().X());
-        const double fDeltaY(DragStat().GetRef2().Y() - DragStat().GetRef1().Y());
-        const double fRotation(atan2(fDeltaY, fDeltaX));
+        const basegfx::B2DVector aDelta(DragStat().GetRef2() - DragStat().GetRef1());
+        const double fRotation(atan2(aDelta.getY(), aDelta.getX()));
 
-        aRetval = basegfx::tools::createTranslateB2DHomMatrix(-DragStat().GetRef1().X(), -DragStat().GetRef1().Y());
+        aRetval.translate(-DragStat().GetRef1());
         aRetval.rotate(-fRotation);
         aRetval.scale(1.0, -1.0);
         aRetval.rotate(fRotation);
-        aRetval.translate(DragStat().GetRef1().X(), DragStat().GetRef1().Y());
+        aRetval.translate(DragStat().GetRef1());
     }
 
     return aRetval;
 }
 
-void SdrDragMirror::MoveSdrDrag(const Point& rPnt)
+void SdrDragMirror::MoveSdrDrag(const basegfx::B2DPoint& rPnt)
 {
-    if (DragStat().CheckMinMoved(rPnt))
+    if(DragStat().CheckMinMoved(rPnt))
     {
-        bool bNeuSide=ImpCheckSide(rPnt);
-        bool bNeuMirr=bSide0!=bNeuSide;
+        const bool bMirroredOld(!basegfx::tools::arePointsOnSameSideOfLine(GetRef1(), GetRef2(), DragStat().GetStart(), DragStat().GetNow()));
+        const bool bMirroredNew(!basegfx::tools::arePointsOnSameSideOfLine(GetRef1(), GetRef2(), DragStat().GetStart(), rPnt));
 
-        if (bMirrored!=bNeuMirr)
+        if(bMirroredOld != bMirroredNew)
         {
             Hide();
-            bMirrored=bNeuMirr;
             DragStat().NextMove(rPnt);
             Show();
         }
@@ -2658,9 +2513,11 @@ bool SdrDragMirror::EndSdrDrag(bool bCopy)
 {
     Hide();
 
-    if (bMirrored)
+    const bool bMirrored(!basegfx::tools::arePointsOnSameSideOfLine(GetRef1(), GetRef2(), DragStat().GetStart(), DragStat().GetNow()));
+
+    if(bMirrored)
     {
-        getSdrDragView().MirrorMarkedObj(DragStat().GetRef1(),DragStat().GetRef2(),bCopy);
+        getSdrView().MirrorMarkedObj(DragStat().GetRef1(), DragStat().GetRef2(), bCopy);
     }
 
     return true;
@@ -2673,11 +2530,9 @@ Pointer SdrDragMirror::GetSdrDragPointer() const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1(SdrDragGradient, SdrDragMethod);
-
-SdrDragGradient::SdrDragGradient(SdrDragView& rNewView, bool bGrad)
+SdrDragGradient::SdrDragGradient(SdrView& rNewView, bool bGrad)
 :   SdrDragMethod(rNewView),
-    pIAOHandle(NULL),
+    pIAOHandle(0),
     bIsGradient(bGrad)
 {
 }
@@ -2685,67 +2540,52 @@ SdrDragGradient::SdrDragGradient(SdrDragView& rNewView, bool bGrad)
 void SdrDragGradient::TakeSdrDragComment(XubString& rStr) const
 {
     if(IsGradient())
-        ImpTakeDescriptionStr(STR_DragMethGradient, rStr);
+    {
+        TakeMarkedDescriptionString(STR_DragMethGradient, rStr);
+    }
     else
-        ImpTakeDescriptionStr(STR_DragMethTransparence, rStr);
+    {
+        TakeMarkedDescriptionString(STR_DragMethTransparence, rStr);
+    }
 }
 
 bool SdrDragGradient::BeginSdrDrag()
 {
     bool bRetval(false);
-
-    pIAOHandle = (SdrHdlGradient*)GetHdlList().GetHdl(IsGradient() ? HDL_GRAD : HDL_TRNS);
+    pIAOHandle = dynamic_cast< SdrHdlGradient* >(GetHdlList().GetHdlByKind(IsGradient() ? HDL_GRAD : HDL_TRNS));
 
     if(pIAOHandle)
     {
         // save old values
-        DragStat().Ref1() = pIAOHandle->GetPos();
-        DragStat().Ref2() = pIAOHandle->Get2ndPos();
+        DragStat().SetRef1(pIAOHandle->getPosition());
+        DragStat().SetRef2(pIAOHandle->get2ndPosition());
 
         // what was hit?
         bool bHit(false);
-        SdrHdlColor* pColHdl = pIAOHandle->GetColorHdl1();
 
         // init handling flags
         pIAOHandle->SetMoveSingleHandle(false);
         pIAOHandle->SetMoveFirstHandle(false);
 
         // test first color handle
-        if(pColHdl)
+        if(pIAOHandle->getColHdl1().getOverlayObjectList().isHitLogic(DragStat().GetStart()))
         {
-            basegfx::B2DPoint aPosition(DragStat().GetStart().X(), DragStat().GetStart().Y());
-
-            if(pColHdl->getOverlayObjectList().isHitLogic(aPosition))
-            {
-                bHit = true;
-                pIAOHandle->SetMoveSingleHandle(true);
-                pIAOHandle->SetMoveFirstHandle(true);
-            }
+            bHit = true;
+            pIAOHandle->SetMoveSingleHandle(true);
+            pIAOHandle->SetMoveFirstHandle(true);
         }
 
         // test second color handle
-        pColHdl = pIAOHandle->GetColorHdl2();
-
-        if(!bHit && pColHdl)
+        if(!bHit && pIAOHandle->getColHdl2().getOverlayObjectList().isHitLogic(DragStat().GetStart()))
         {
-            basegfx::B2DPoint aPosition(DragStat().GetStart().X(), DragStat().GetStart().Y());
-
-            if(pColHdl->getOverlayObjectList().isHitLogic(aPosition))
-            {
-                bHit = true;
-                pIAOHandle->SetMoveSingleHandle(true);
-            }
+            bHit = true;
+            pIAOHandle->SetMoveSingleHandle(true);
         }
 
         // test gradient handle itself
-        if(!bHit)
+        if(!bHit && pIAOHandle->getOverlayObjectList().isHitLogic(DragStat().GetStart()))
         {
-            basegfx::B2DPoint aPosition(DragStat().GetStart().X(), DragStat().GetStart().Y());
-
-            if(pIAOHandle->getOverlayObjectList().isHitLogic(aPosition))
-            {
-                bHit = true;
-            }
+            bHit = true;
         }
 
         // everything up and running :o}
@@ -2759,55 +2599,43 @@ bool SdrDragGradient::BeginSdrDrag()
     return bRetval;
 }
 
-void SdrDragGradient::MoveSdrDrag(const Point& rPnt)
+void SdrDragGradient::MoveSdrDrag(const basegfx::B2DPoint& rPnt)
 {
     if(pIAOHandle && DragStat().CheckMinMoved(rPnt))
     {
         DragStat().NextMove(rPnt);
-
-        // Do the Move here!!! DragStat().GetStart()
-        Point aMoveDiff = rPnt - DragStat().GetStart();
+        const basegfx::B2DVector aMoveDiff(rPnt - DragStat().GetStart());
 
         if(pIAOHandle->IsMoveSingleHandle())
         {
             if(pIAOHandle->IsMoveFirstHandle())
             {
-                pIAOHandle->SetPos(DragStat().Ref1() + aMoveDiff);
-                if(pIAOHandle->GetColorHdl1())
-                    pIAOHandle->GetColorHdl1()->SetPos(DragStat().Ref1() + aMoveDiff);
+                pIAOHandle->setPosition(DragStat().GetRef1() + aMoveDiff);
             }
             else
             {
-                pIAOHandle->Set2ndPos(DragStat().Ref2() + aMoveDiff);
-                if(pIAOHandle->GetColorHdl2())
-                    pIAOHandle->GetColorHdl2()->SetPos(DragStat().Ref2() + aMoveDiff);
+                pIAOHandle->set2ndPosition(DragStat().GetRef2() + aMoveDiff);
             }
         }
         else
         {
-            pIAOHandle->SetPos(DragStat().Ref1() + aMoveDiff);
-            pIAOHandle->Set2ndPos(DragStat().Ref2() + aMoveDiff);
-
-            if(pIAOHandle->GetColorHdl1())
-                pIAOHandle->GetColorHdl1()->SetPos(DragStat().Ref1() + aMoveDiff);
-
-            if(pIAOHandle->GetColorHdl2())
-                pIAOHandle->GetColorHdl2()->SetPos(DragStat().Ref2() + aMoveDiff);
+            pIAOHandle->setPosition(DragStat().GetRef1() + aMoveDiff);
+            pIAOHandle->set2ndPosition(DragStat().GetRef2() + aMoveDiff);
         }
 
         // new state
-        pIAOHandle->FromIAOToItem(getSdrDragView().GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj(), false, false);
+        pIAOHandle->FromIAOToItem(false, false);
     }
 }
 
 bool SdrDragGradient::EndSdrDrag(bool /*bCopy*/)
 {
     // here the result is clear, do something with the values
-    Ref1() = pIAOHandle->GetPos();
-    Ref2() = pIAOHandle->Get2ndPos();
+    SetRef1(pIAOHandle->getColHdl1().getPosition());
+    SetRef2(pIAOHandle->getColHdl2().getPosition());
 
     // new state
-    pIAOHandle->FromIAOToItem(getSdrDragView().GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj(), true, true);
+    pIAOHandle->FromIAOToItem(true, true);
 
     return true;
 }
@@ -2815,17 +2643,11 @@ bool SdrDragGradient::EndSdrDrag(bool /*bCopy*/)
 void SdrDragGradient::CancelSdrDrag()
 {
     // restore old values
-    pIAOHandle->SetPos(DragStat().Ref1());
-    pIAOHandle->Set2ndPos(DragStat().Ref2());
-
-    if(pIAOHandle->GetColorHdl1())
-        pIAOHandle->GetColorHdl1()->SetPos(DragStat().Ref1());
-
-    if(pIAOHandle->GetColorHdl2())
-        pIAOHandle->GetColorHdl2()->SetPos(DragStat().Ref2());
+    pIAOHandle->setPosition(DragStat().GetRef1());
+    pIAOHandle->set2ndPosition(DragStat().GetRef2());
 
     // new state
-    pIAOHandle->FromIAOToItem(getSdrDragView().GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj(), true, false);
+    pIAOHandle->FromIAOToItem(true, false);
 }
 
 Pointer SdrDragGradient::GetSdrDragPointer() const
@@ -2835,52 +2657,62 @@ Pointer SdrDragGradient::GetSdrDragPointer() const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1(SdrDragCrook,SdrDragMethod);
-
-SdrDragCrook::SdrDragCrook(SdrDragView& rNewView)
+SdrDragCrook::SdrDragCrook(SdrView& rNewView)
 :   SdrDragMethod(rNewView),
-    aFact(1,1),
-    bContortionAllowed(false),
-    bNoContortionAllowed(false),
-    bContortion(false),
-    bResizeAllowed(false),
-    bResize(false),
-    bRotateAllowed(false),
-    bRotate(false),
-    bVertical(false),
-    bValid(false),
-    bLft(false),
-    bRgt(false),
-    bUpr(false),
-    bLwr(false),
-    bAtCenter(false),
-    nWink(0),
-    nMarkSize(0),
-    eMode(SDRCROOK_ROTATE)
+    maMarkedRange(),
+    maMarkedCenter(0.0, 0.0),
+    maCenter(0.0, 0.0),
+    maStart(0.0, 0.0),
+    maRadius(0.0, 0.0),
+    mfFactor(1.0),
+    mfAngle(0.0),
+    mfMarkedSize(0.0),
+    meMode(SDRCROOK_ROTATE),
+    mbContortionAllowed(false),
+    mbNoContortionAllowed(false),
+    mbContortion(false),
+    mbResizeAllowed(false),
+    mbResize(false),
+    mbRotateAllowed(false),
+    mbRotate(false),
+    mbVertical(false),
+    mbValid(false),
+    mbLeft(false),
+    mbRight(false),
+    mbTop(false),
+    mbBottom(false),
+    mbAtCenter(false)
 {
 }
 
 void SdrDragCrook::TakeSdrDragComment(XubString& rStr) const
 {
-    ImpTakeDescriptionStr(!bContortion ? STR_DragMethCrook : STR_DragMethCrookContortion, rStr);
+    TakeMarkedDescriptionString(!mbContortion ? STR_DragMethCrook : STR_DragMethCrookContortion, rStr);
 
-    if(bValid)
+    if(mbValid)
     {
         rStr.AppendAscii(" (");
 
         XubString aStr;
-        sal_Int32 nVal(nWink);
+        sal_Int32 nVal(basegfx::fround(mfAngle * (18000.0 / F_PI)) % 36000);
 
-        if(bAtCenter)
+        if(nVal < 0)
+        {
+            nVal += 36000.0;
+        }
+
+        if(mbAtCenter)
+        {
             nVal *= 2;
+        }
 
         nVal = Abs(nVal);
-        getSdrDragView().GetModel()->TakeWinkStr(nVal, aStr);
+        getSdrView().getSdrModelFromSdrView().TakeWinkStr(nVal, aStr);
         rStr += aStr;
         rStr += sal_Unicode(')');
     }
 
-    if(getSdrDragView().IsDragWithCopy())
+    if(getSdrView().IsDragWithCopy())
         rStr += ImpGetResStr(STR_EditWithCopy);
 }
 
@@ -2890,30 +2722,40 @@ void SdrDragCrook::TakeSdrDragComment(XubString& rStr) const
 #define DRAG_CROOK_RASTER_MAXIMUM   (15)
 #define DRAG_CROOK_RASTER_DISTANCE  (30)
 
-basegfx::B2DPolyPolygon impCreateDragRaster(SdrPageView& rPageView, const Rectangle& rMarkRect)
+basegfx::B2DPolyPolygon impCreateDragRaster(SdrPageView& rPageView, const basegfx::B2DRange& rMarkRange)
 {
     basegfx::B2DPolyPolygon aRetval;
 
     if(rPageView.PageWindowCount())
     {
         OutputDevice& rOut = (rPageView.GetPageWindow(0)->GetPaintWindow().GetOutputDevice());
-        Rectangle aPixelSize = rOut.LogicToPixel(rMarkRect);
-        sal_uInt32 nHorDiv(aPixelSize.GetWidth() / DRAG_CROOK_RASTER_DISTANCE);
-        sal_uInt32 nVerDiv(aPixelSize.GetHeight() / DRAG_CROOK_RASTER_DISTANCE);
+        const basegfx::B2DRange aDiscreteRange(rOut.GetViewTransformation() * rMarkRange);
+        sal_uInt32 nHorDiv(basegfx::fround(aDiscreteRange.getWidth() / DRAG_CROOK_RASTER_DISTANCE));
+        sal_uInt32 nVerDiv(basegfx::fround(aDiscreteRange.getHeight() / DRAG_CROOK_RASTER_DISTANCE));
 
         if(nHorDiv > DRAG_CROOK_RASTER_MAXIMUM)
+        {
             nHorDiv = DRAG_CROOK_RASTER_MAXIMUM;
+        }
+
         if(nHorDiv < DRAG_CROOK_RASTER_MINIMUM)
+        {
             nHorDiv = DRAG_CROOK_RASTER_MINIMUM;
+        }
 
         if(nVerDiv > DRAG_CROOK_RASTER_MAXIMUM)
+        {
             nVerDiv = DRAG_CROOK_RASTER_MAXIMUM;
-        if(nVerDiv < DRAG_CROOK_RASTER_MINIMUM)
-            nVerDiv = DRAG_CROOK_RASTER_MINIMUM;
+        }
 
-        const double fXLen(rMarkRect.GetWidth() / (double)nHorDiv);
-        const double fYLen(rMarkRect.GetHeight() / (double)nVerDiv);
-        double fYPos(rMarkRect.Top());
+        if(nVerDiv < DRAG_CROOK_RASTER_MINIMUM)
+        {
+            nVerDiv = DRAG_CROOK_RASTER_MINIMUM;
+        }
+
+        const double fXLen(rMarkRange.getWidth() / (double)nHorDiv);
+        const double fYLen(rMarkRange.getHeight() / (double)nVerDiv);
+        double fYPos(rMarkRange.getMinY());
         sal_uInt32 a, b;
 
         for(a = 0; a <= nVerDiv; a++)
@@ -2923,7 +2765,7 @@ basegfx::B2DPolyPolygon impCreateDragRaster(SdrPageView& rPageView, const Rectan
             {
                 basegfx::B2DPolygon aHorLineSegment;
 
-                const double fNewX(rMarkRect.Left() + (b * fXLen));
+                const double fNewX(rMarkRange.getMinX() + (b * fXLen));
                 aHorLineSegment.append(basegfx::B2DPoint(fNewX, fYPos));
                 aHorLineSegment.appendBezierSegment(
                     basegfx::B2DPoint(fNewX + (fXLen * (1.0 / 3.0)), fYPos),
@@ -2936,7 +2778,7 @@ basegfx::B2DPolyPolygon impCreateDragRaster(SdrPageView& rPageView, const Rectan
             fYPos += fYLen;
         }
 
-        double fXPos(rMarkRect.Left());
+        double fXPos(rMarkRange.getMinX());
 
         for(a = 0; a <= nHorDiv; a++)
         {
@@ -2945,7 +2787,7 @@ basegfx::B2DPolyPolygon impCreateDragRaster(SdrPageView& rPageView, const Rectan
             {
                 basegfx::B2DPolygon aVerLineSegment;
 
-                const double fNewY(rMarkRect.Top() + (b * fYLen));
+                const double fNewY(rMarkRange.getMinY() + (b * fYLen));
                 aVerLineSegment.append(basegfx::B2DPoint(fXPos, fNewY));
                 aVerLineSegment.appendBezierSegment(
                     basegfx::B2DPoint(fXPos, fNewY + (fYLen * (1.0 / 3.0))),
@@ -2965,9 +2807,9 @@ basegfx::B2DPolyPolygon impCreateDragRaster(SdrPageView& rPageView, const Rectan
 void SdrDragCrook::createSdrDragEntries()
 {
     // Add extended frame raster first, so it will be behind objects
-    if(getSdrDragView().GetSdrPageView())
+    if(getSdrView().GetSdrPageView())
     {
-        const basegfx::B2DPolyPolygon aDragRaster(impCreateDragRaster(*getSdrDragView().GetSdrPageView(), GetMarkedRect()));
+        const basegfx::B2DPolyPolygon aDragRaster(impCreateDragRaster(*getSdrView().GetSdrPageView(), GetMarkedRange()));
 
         if(aDragRaster.count())
         {
@@ -2981,20 +2823,21 @@ void SdrDragCrook::createSdrDragEntries()
 
 bool SdrDragCrook::BeginSdrDrag()
 {
-    bContortionAllowed=getSdrDragView().IsCrookAllowed(false);
-    bNoContortionAllowed=getSdrDragView().IsCrookAllowed(true);
-    bResizeAllowed=getSdrDragView().IsResizeAllowed(false);
-    bRotateAllowed=getSdrDragView().IsRotateAllowed(false);
+    mbContortionAllowed = getSdrView().IsCrookAllowed(false);
+    mbNoContortionAllowed = getSdrView().IsCrookAllowed(true);
+    mbResizeAllowed = getSdrView().IsResizeAllowed(false);
+    mbRotateAllowed = getSdrView().IsRotateAllowed(false);
 
-    if (bContortionAllowed || bNoContortionAllowed)
+    if(mbContortionAllowed || mbNoContortionAllowed)
     {
-        bVertical=(GetDragHdlKind()==HDL_LOWER || GetDragHdlKind()==HDL_UPPER);
-        aMarkRect=GetMarkedRect();
-        aMarkCenter=aMarkRect.Center();
-        nMarkSize=bVertical ? (aMarkRect.GetHeight()-1) : (aMarkRect.GetWidth()-1);
-        aCenter=aMarkCenter;
-        aStart=DragStat().GetStart();
+        mbVertical = (HDL_LOWER == GetDragHdlKind() || HDL_UPPER == GetDragHdlKind());
+        maMarkedRange = GetMarkedRange();
+        maMarkedCenter = maMarkedRange.getCenter();
+        mfMarkedSize = mbVertical ? maMarkedRange.getHeight() : maMarkedRange.getWidth();
+        maCenter = maMarkedCenter;
+        maStart = DragStat().GetStart();
         Show();
+
         return true;
     }
     else
@@ -3005,361 +2848,385 @@ bool SdrDragCrook::BeginSdrDrag()
 
 void SdrDragCrook::_MovAllPoints(basegfx::B2DPolyPolygon& rTarget)
 {
-    SdrPageView* pPV = getSdrDragView().GetSdrPageView();
+    const sal_uInt32 nPolyAnz(rTarget.count());
 
-    if(pPV)
+    if(!mbContortion && !getSdrView().IsNoDragXorPolys())
     {
-        XPolyPolygon aTempPolyPoly(rTarget);
+        sal_uInt32 n1st(0);
+        sal_uInt32 nLast(0);
+        basegfx::B2DPoint aCenter(maCenter);
 
-        if (pPV->HasMarkedObjPageView())
+        while(n1st < nPolyAnz)
         {
-            sal_uInt16 nPolyAnz=aTempPolyPoly.Count();
+            nLast = n1st;
 
-            if (!bContortion && !getSdrDragView().IsNoDragXorPolys())
+            while(nLast < nPolyAnz && rTarget.getB2DPolygon(nLast).count())
             {
-                sal_uInt16 n1st=0,nLast=0;
-                Point aC(aCenter);
+                nLast++;
+            }
 
-                while (n1st<nPolyAnz)
+            basegfx::B2DRange aBound;
+            sal_uInt32 i(0);
+
+            for(i = n1st; i < nLast; i++)
+            {
+                aBound.expand(rTarget.getB2DPolygon(i).getB2DRange());
+            }
+
+            basegfx::B2DPoint aCtr0(aBound.getCenter());
+            basegfx::B2DPoint aCtr1(aCtr0);
+
+            if(mbResize)
+            {
+                Fraction aFact1(1,1);
+
+                if (mbVertical)
                 {
-                    nLast=n1st;
-                    while (nLast<nPolyAnz && aTempPolyPoly[nLast].GetPointCount()!=0) nLast++;
-                    Rectangle aBound(aTempPolyPoly[n1st].GetBoundRect());
-                    sal_uInt16 i;
-
-                    for (i=n1st+1; i<nLast; i++)
-                    {
-                        aBound.Union(aTempPolyPoly[n1st].GetBoundRect());
-                    }
-
-                    Point aCtr0(aBound.Center());
-                    Point aCtr1(aCtr0);
-
-                    if (bResize)
-                    {
-                        Fraction aFact1(1,1);
-
-                        if (bVertical)
-                        {
-                            ResizePoint(aCtr1,aC,aFact1,aFact);
-                        }
-                        else
-                        {
-                            ResizePoint(aCtr1,aC,aFact,aFact1);
-                        }
-                    }
-
-                    bool bRotOk=false;
-                    double nSin=0,nCos=0;
-
-                    if (aRad.X()!=0 && aRad.Y()!=0)
-                    {
-                        bRotOk=bRotate;
-
-                        switch (eMode)
-                        {
-                            case SDRCROOK_ROTATE : CrookRotateXPoint (aCtr1,NULL,NULL,aC,aRad,nSin,nCos,bVertical);           break;
-                            case SDRCROOK_SLANT  : CrookSlantXPoint  (aCtr1,NULL,NULL,aC,aRad,nSin,nCos,bVertical);           break;
-                            case SDRCROOK_STRETCH: CrookStretchXPoint(aCtr1,NULL,NULL,aC,aRad,nSin,nCos,bVertical,aMarkRect); break;
-                        } // switch
-                    }
-
-                    aCtr1-=aCtr0;
-
-                    for (i=n1st; i<nLast; i++)
-                    {
-                        if (bRotOk)
-                        {
-                            RotateXPoly(aTempPolyPoly[i],aCtr0,nSin,nCos);
-                        }
-
-                        aTempPolyPoly[i].Move(aCtr1.X(),aCtr1.Y());
-                    }
-
-                    n1st=nLast+1;
-                }
-            }
-            else
-            {
-                sal_uInt16 i,j;
-
-                for (j=0; j<nPolyAnz; j++)
-                {
-                    XPolygon& aPol=aTempPolyPoly[j];
-                    sal_uInt16 nPtAnz=aPol.GetPointCount();
-                    i=0;
-
-                    while (i<nPtAnz)
-                    {
-                        Point* pPnt=&aPol[i];
-                        Point* pC1=NULL;
-                        Point* pC2=NULL;
-
-                        if (i+1<nPtAnz && aPol.IsControl(i))
-                        { // Kontrollpunkt links
-                            pC1=pPnt;
-                            i++;
-                            pPnt=&aPol[i];
-                        }
-
-                        i++;
-
-                        if (i<nPtAnz && aPol.IsControl(i))
-                        { // Kontrollpunkt rechts
-                            pC2=&aPol[i];
-                            i++;
-                        }
-
-                        _MovCrookPoint(*pPnt,pC1,pC2);
-                    }
-                }
-            }
-        }
-
-        rTarget = aTempPolyPoly.getB2DPolyPolygon();
-    }
-}
-
-void SdrDragCrook::_MovCrookPoint(Point& rPnt, Point* pC1, Point* pC2)
-{
-    bool bVert=bVertical;
-    bool bC1=pC1!=NULL;
-    bool bC2=pC2!=NULL;
-    Point aC(aCenter);
-
-    if (bResize)
-    {
-        Fraction aFact1(1,1);
-
-        if (bVert)
-        {
-            ResizePoint(rPnt,aC,aFact1,aFact);
-
-            if (bC1)
-                ResizePoint(*pC1,aC,aFact1,aFact);
-
-            if (bC2)
-                ResizePoint(*pC2,aC,aFact1,aFact);
-        }
-        else
-        {
-            ResizePoint(rPnt,aC,aFact,aFact1);
-
-            if (bC1)
-                ResizePoint(*pC1,aC,aFact,aFact1);
-
-            if (bC2)
-                ResizePoint(*pC2,aC,aFact,aFact1);
-        }
-    }
-
-    if (aRad.X()!=0 && aRad.Y()!=0)
-    {
-        double nSin,nCos;
-
-        switch (eMode)
-        {
-            case SDRCROOK_ROTATE : CrookRotateXPoint (rPnt,pC1,pC2,aC,aRad,nSin,nCos,bVert);           break;
-            case SDRCROOK_SLANT  : CrookSlantXPoint  (rPnt,pC1,pC2,aC,aRad,nSin,nCos,bVert);           break;
-            case SDRCROOK_STRETCH: CrookStretchXPoint(rPnt,pC1,pC2,aC,aRad,nSin,nCos,bVert,aMarkRect); break;
-        } // switch
-    }
-}
-
-void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
-{
-    if (DragStat().CheckMinMoved(rPnt))
-    {
-        Point aPnt(rPnt);
-        bool bNeuMoveOnly=getSdrDragView().IsMoveOnlyDragging();
-        bAtCenter=false;
-        SdrCrookMode eNeuMode=getSdrDragView().GetCrookMode();
-        bool bNeuContortion=!bNeuMoveOnly && ((bContortionAllowed && !getSdrDragView().IsCrookNoContortion()) || !bNoContortionAllowed);
-        bResize=!getSdrDragView().IsOrtho() && bResizeAllowed && !bNeuMoveOnly;
-        bool bNeuRotate=bRotateAllowed && !bNeuContortion && !bNeuMoveOnly && eNeuMode==SDRCROOK_ROTATE;
-        long nSA=0;
-
-        if (nSA==0)
-            aPnt=GetSnapPos(aPnt);
-
-        Point aNeuCenter(aMarkCenter.X(),aStart.Y());
-
-        if (bVertical)
-        {
-            aNeuCenter.X()=aStart.X();
-            aNeuCenter.Y()=aMarkCenter.Y();
-        }
-
-        if (!getSdrDragView().IsCrookAtCenter())
-        {
-            switch (GetDragHdlKind())
-            {
-                case HDL_UPLFT: aNeuCenter.X()=aMarkRect.Right();  bLft=true; break;
-                case HDL_UPPER: aNeuCenter.Y()=aMarkRect.Bottom(); bUpr=true; break;
-                case HDL_UPRGT: aNeuCenter.X()=aMarkRect.Left();   bRgt=true; break;
-                case HDL_LEFT : aNeuCenter.X()=aMarkRect.Right();  bLft=true; break;
-                case HDL_RIGHT: aNeuCenter.X()=aMarkRect.Left();   bRgt=true; break;
-                case HDL_LWLFT: aNeuCenter.X()=aMarkRect.Right();  bLft=true; break;
-                case HDL_LOWER: aNeuCenter.Y()=aMarkRect.Top();    bLwr=true; break;
-                case HDL_LWRGT: aNeuCenter.X()=aMarkRect.Left();   bRgt=true; break;
-                default: bAtCenter=true;
-            }
-        }
-        else
-            bAtCenter=true;
-
-        Fraction aNeuFact(1,1);
-        long dx1=aPnt.X()-aNeuCenter.X();
-        long dy1=aPnt.Y()-aNeuCenter.Y();
-        bValid=bVertical ? dx1!=0 : dy1!=0;
-
-        if (bValid)
-        {
-            if (bVertical)
-                bValid=Abs(dx1)*100>Abs(dy1);
-            else
-                bValid=Abs(dy1)*100>Abs(dx1);
-        }
-
-        long nNeuRad=0;
-        nWink=0;
-
-        if (bValid)
-        {
-            double a=0; // Steigung des Radius
-            long nPntWink=0;
-
-            if (bVertical)
-            {
-                a=((double)dy1)/((double)dx1); // Steigung des Radius
-                nNeuRad=((long)(dy1*a)+dx1) /2;
-                aNeuCenter.X()+=nNeuRad;
-                nPntWink=GetAngle(aPnt-aNeuCenter);
-            }
-            else
-            {
-                a=((double)dx1)/((double)dy1); // Steigung des Radius
-                nNeuRad=((long)(dx1*a)+dy1) /2;
-                aNeuCenter.Y()+=nNeuRad;
-                nPntWink=GetAngle(aPnt-aNeuCenter)-9000;
-            }
-
-            if (!bAtCenter)
-            {
-                if (nNeuRad<0)
-                {
-                    if (bRgt) nPntWink+=18000;
-                    if (bLft) nPntWink=18000-nPntWink;
-                    if (bLwr) nPntWink=-nPntWink;
+                    aCtr1.setY(aCenter.getY() + ((aCtr1.getY() - aCenter.getY()) * mfFactor));
                 }
                 else
                 {
-                    if (bRgt) nPntWink=-nPntWink;
-                    if (bUpr) nPntWink=18000-nPntWink;
-                    if (bLwr) nPntWink+=18000;
-                }
-
-                nPntWink=NormAngle360(nPntWink);
-            }
-            else
-            {
-                if (nNeuRad<0) nPntWink+=18000;
-                if (bVertical) nPntWink=18000-nPntWink;
-                nPntWink=NormAngle180(nPntWink);
-                nPntWink=Abs(nPntWink);
-            }
-
-            double nUmfang=2*Abs(nNeuRad)*nPi;
-
-            if (bResize)
-            {
-                if (nSA!=0)
-                { // Winkelfang
-                    long nWink0=nPntWink;
-                    nPntWink+=nSA/2;
-                    nPntWink/=nSA;
-                    nPntWink*=nSA;
-                    BigInt a2(nNeuRad);
-                    a2*=BigInt(nWink);
-                    a2/=BigInt(nWink0);
-                    nNeuRad=long(a2);
-
-                    if (bVertical)
-                        aNeuCenter.X()=aStart.X()+nNeuRad;
-                    else
-                        aNeuCenter.Y()=aStart.Y()+nNeuRad;
-                }
-
-                long nMul=(long)(nUmfang*NormAngle360(nPntWink)/36000);
-
-                if (bAtCenter)
-                    nMul*=2;
-
-                aNeuFact=Fraction(nMul,nMarkSize);
-                nWink=nPntWink;
-            }
-            else
-            {
-                nWink=(long)((nMarkSize*360/nUmfang)*100)/2;
-
-                if (nWink==0)
-                    bValid=false;
-
-                if (bValid && nSA!=0)
-                { // Winkelfang
-                    long nWink0=nWink;
-                    nWink+=nSA/2;
-                    nWink/=nSA;
-                    nWink*=nSA;
-                    BigInt a2(nNeuRad);
-                    a2*=BigInt(nWink);
-                    a2/=BigInt(nWink0);
-                    nNeuRad=long(a2);
-
-                    if (bVertical)
-                        aNeuCenter.X()=aStart.X()+nNeuRad;
-                    else
-                        aNeuCenter.Y()=aStart.Y()+nNeuRad;
+                    aCtr1.setX(aCenter.getX() + ((aCtr1.getX() - aCenter.getX()) * mfFactor));
                 }
             }
+
+            bool bRotOk(false);
+            double fSinus(0.0), fCosinus(0.0);
+
+            if(!maRadius.equalZero())
+            {
+                bRotOk = mbRotate;
+
+                switch(meMode)
+                {
+                    case SDRCROOK_ROTATE : CrookRotateXPoint(aCtr1, 0, 0, aCenter, maRadius, fSinus, fCosinus, mbVertical); break;
+                    case SDRCROOK_SLANT : CrookSlantXPoint(aCtr1, 0, 0, aCenter, maRadius, fSinus, fCosinus, mbVertical); break;
+                    case SDRCROOK_STRETCH: CrookStretchXPoint(aCtr1, 0, 0, aCenter, maRadius, fSinus, fCosinus, mbVertical, maMarkedRange); break;
+                }
+            }
+
+            aCtr1 -= aCtr0;
+
+            for(i = n1st; i < nLast; i++)
+            {
+                basegfx::B2DHomMatrix aTransform;
+
+                if(bRotOk)
+                {
+                    aTransform.translate(-aCtr0);
+                    aTransform.rotate(atan2(fSinus, fCosinus));
+                    aTransform.translate(aCtr0);
+                }
+
+                aTransform.translate(aCtr1);
+
+                basegfx::B2DPolygon aPartialTarget(rTarget.getB2DPolygon(i));
+
+                aPartialTarget.transform(aTransform);
+                rTarget.setB2DPolygon(i, aPartialTarget);
+            }
+
+            n1st = nLast + 1;
         }
-
-        if (nWink==0 || nNeuRad==0)
-            bValid=false;
-
-        if (!bValid)
-            nNeuRad=0;
-
-        if (!bValid && bResize)
+    }
+    else
+    {
+        for(sal_uInt32 j(0); j < nPolyAnz; j++)
         {
-            long nMul=bVertical ? dy1 : dx1;
+            basegfx::B2DPolygon aPol(rTarget.getB2DPolygon(j));
+            const sal_uInt32 nPtAnz(aPol.count());
+            const bool bIsCurve(aPol.areControlPointsUsed());
 
-            if (bLft || bUpr)
-                nMul=-nMul;
-
-            long nDiv=nMarkSize;
-
-            if (bAtCenter)
+            for(sal_uInt32 i(0); i < nPtAnz; i++)
             {
-                nMul*=2;
-                nMul=Abs(nMul);
+                basegfx::B2DPoint aPnt(aPol.getB2DPoint(i));
+
+                if(bIsCurve && (aPol.isNextControlPointUsed(i) || aPol.isPrevControlPointUsed(i)))
+                {
+                    basegfx::B2DPoint aPrev(aPol.getPrevControlPoint(i));
+                    basegfx::B2DPoint aNext(aPol.getNextControlPoint(i));
+
+                    _MovCrookPoint(aPnt, &aPrev, &aNext);
+
+                    aPol.setB2DPoint(i, aPnt);
+                    aPol.setControlPoints(i, aPrev, aNext);
+                }
+                else
+                {
+                    _MovCrookPoint(aPnt, 0, 0);
+                    aPol.setB2DPoint(i, aPnt);
+                }
             }
 
-            aNeuFact=Fraction(nMul,nDiv);
+            rTarget.setB2DPolygon(j, aPol);
+        }
+    }
+}
+
+void SdrDragCrook::_MovCrookPoint(basegfx::B2DPoint& rPnt, basegfx::B2DPoint* pC1, basegfx::B2DPoint* pC2)
+{
+    bool bVert(mbVertical);
+    basegfx::B2DPoint aCenter(maCenter);
+
+    if(mbResize)
+    {
+        if(bVert)
+        {
+            rPnt.setY(aCenter.getY() + (rPnt.getY() - aCenter.getY()) * mfFactor);
+
+            if(pC1)
+            {
+                pC1->setY(aCenter.getY() + (pC1->getY() - aCenter.getY()) * mfFactor);
+            }
+
+            if(pC2)
+            {
+                pC2->setY(aCenter.getY() + (pC2->getY() - aCenter.getY()) * mfFactor);
+            }
+        }
+        else
+        {
+            rPnt.setX(aCenter.getX() + (rPnt.getX() - aCenter.getX()) * mfFactor);
+
+            if(pC1)
+            {
+                pC1->setX(aCenter.getX() + (pC1->getX() - aCenter.getX()) * mfFactor);
+            }
+
+            if(pC2)
+            {
+                pC2->setX(aCenter.getX() + (pC2->getX() - aCenter.getX()) * mfFactor);
+            }
+        }
+    }
+
+    if(!maRadius.equalZero())
+    {
+        double nSin, nCos;
+
+        switch(meMode)
+        {
+            case SDRCROOK_ROTATE : CrookRotateXPoint(rPnt, pC1, pC2, aCenter, maRadius, nSin, nCos, bVert); break;
+            case SDRCROOK_SLANT : CrookSlantXPoint(rPnt, pC1, pC2, aCenter, maRadius, nSin, nCos, bVert); break;
+            case SDRCROOK_STRETCH : CrookStretchXPoint(rPnt, pC1, pC2, aCenter, maRadius, nSin, nCos, bVert, maMarkedRange); break;
+        }
+    }
+}
+
+void SdrDragCrook::MoveSdrDrag(const basegfx::B2DPoint& rPnt)
+{
+    if(DragStat().CheckMinMoved(rPnt))
+    {
+        basegfx::B2DPoint aPnt(rPnt);
+        const bool bNeuMoveOnly(getSdrView().IsMoveOnlyDragging());
+        mbAtCenter = false;
+        SdrCrookMode eNeuMode(getSdrView().GetCrookMode());
+        const bool bNeuContortion(!bNeuMoveOnly && ((mbContortionAllowed && !getSdrView().IsCrookNoContortion()) || !mbNoContortionAllowed));
+        mbResize = !getSdrView().IsOrthogonal() && mbResizeAllowed && !bNeuMoveOnly;
+        const bool bNeuRotate(mbRotateAllowed && !bNeuContortion && !bNeuMoveOnly && SDRCROOK_ROTATE == eNeuMode);
+
+        aPnt = getSdrView().GetSnapPos(aPnt);
+        basegfx::B2DPoint aNeuCenter(maMarkedCenter.getX(), maStart.getY());
+
+        if(mbVertical)
+        {
+            aNeuCenter.setX(maStart.getX());
+            aNeuCenter.setY(maMarkedCenter.getY());
         }
 
-        if (aNeuCenter!=aCenter || bNeuContortion!=bContortion || aNeuFact!=aFact ||
-            bNeuMoveOnly != getMoveOnly() || bNeuRotate!=bRotate || eNeuMode!=eMode)
+        if(!getSdrView().IsCrookAtCenter())
+        {
+            switch(GetDragHdlKind())
+            {
+                case HDL_UPLFT: aNeuCenter.setX(maMarkedRange.getMaxX()); mbLeft = true; break;
+                case HDL_UPPER: aNeuCenter.setY(maMarkedRange.getMaxY()); mbTop = true; break;
+                case HDL_UPRGT: aNeuCenter.setX(maMarkedRange.getMinX()); mbRight = true; break;
+                case HDL_LEFT:  aNeuCenter.setX(maMarkedRange.getMaxX()); mbLeft = true; break;
+                case HDL_RIGHT: aNeuCenter.setX(maMarkedRange.getMinX()); mbRight = true; break;
+                case HDL_LWLFT: aNeuCenter.setX(maMarkedRange.getMaxX()); mbLeft = true; break;
+                case HDL_LOWER: aNeuCenter.setY(maMarkedRange.getMinY()); mbBottom = true; break;
+                case HDL_LWRGT: aNeuCenter.setX(maMarkedRange.getMinX()); mbRight = true; break;
+                default: mbAtCenter = true;
+            }
+        }
+        else
+        {
+            mbAtCenter = true;
+        }
+
+        double fNewFactor(1.0);
+        const basegfx::B2DVector aDelta(aPnt - aNeuCenter);
+        mbValid = !basegfx::fTools::equalZero(mbVertical ? aDelta.getX() : aDelta.getY());
+
+        if(mbValid)
+        {
+            if(mbVertical)
+            {
+                mbValid = fabs(aDelta.getX()) * 100.0 > fabs(aDelta.getY());
+            }
+            else
+            {
+                mbValid = fabs(aDelta.getY()) * 100.0 > fabs(aDelta.getX());
+            }
+        }
+
+        double fNewRadius(0.0);
+        mfAngle = 0.0;
+
+        if(mbValid)
+        {
+            double a(0.0); // Steigung des Radius
+            double fAngleWithPnt(0.0);
+
+            if(mbVertical)
+            {
+                a = aDelta.getY() / aDelta.getX(); // Steigung des Radius
+                fNewRadius = ((aDelta.getY() * a) + aDelta.getX()) * 0.5;
+                aNeuCenter.setX(aNeuCenter.getX() + fNewRadius);
+
+                const basegfx::B2DVector aVector(aPnt - aNeuCenter);
+                // keep fAngleWithPnt in old angle to not change below
+                // calculations using it in a hardly comprehensible way;
+                // at least double precision will be used now.
+                fAngleWithPnt = atan2(-aVector.getY(), aVector.getX())/ (F_PI / 18000.0);
+            }
+            else
+            {
+                a = aDelta.getX() / aDelta.getY(); // Steigung des Radius
+                fNewRadius = ((aDelta.getX() * a) + aDelta.getY()) * 0.5;
+                aNeuCenter.setY(aNeuCenter.getY() + fNewRadius);
+
+                const basegfx::B2DVector aVector(aPnt - aNeuCenter);
+                // keep fAngleWithPnt in old angle to not change below
+                // calculations using it in a hardly comprehensible way;
+                // at least double precision will be used now.
+                fAngleWithPnt = atan2(-aVector.getY(), aVector.getX()) / (F_PI / 18000.0);
+                fAngleWithPnt = fAngleWithPnt - 9000.0;
+            }
+
+            if(!mbAtCenter)
+            {
+                if(fNewRadius < 0.0)
+                {
+                    if(mbRight)
+                    {
+                        fAngleWithPnt += 18000.0;
+                    }
+
+                    if(mbLeft)
+                    {
+                        fAngleWithPnt = 18000.0 - fAngleWithPnt;
+                    }
+
+                    if(mbBottom)
+                    {
+                        fAngleWithPnt = -fAngleWithPnt;
+                    }
+                }
+                else
+                {
+                    if(mbRight)
+                    {
+                        fAngleWithPnt = -fAngleWithPnt;
+                    }
+
+                    if(mbTop)
+                    {
+                        fAngleWithPnt = 18000.0 - fAngleWithPnt;
+                    }
+
+                    if(mbBottom)
+                    {
+                        fAngleWithPnt += 18000;
+                    }
+                }
+
+                fAngleWithPnt = basegfx::snapToZeroRange(fAngleWithPnt, 36000.0);
+            }
+            else
+            {
+                if(fNewRadius < 0.0)
+                {
+                    fAngleWithPnt += 18000.0;
+                }
+
+                if(mbVertical)
+                {
+                    fAngleWithPnt = 18000.0 - fAngleWithPnt;
+                }
+
+                fAngleWithPnt = fabs(basegfx::snapToRange(fAngleWithPnt, -18000.0, 18000.0));
+            }
+
+            double fPerimeter(2.0 * fabs(fNewRadius) * F_PI);
+
+            if(mbResize)
+            {
+                double fMultiplicator(fPerimeter * basegfx::snapToZeroRange(fAngleWithPnt, 36000.0) / 36000.0);
+
+                if(mbAtCenter)
+                {
+                    fMultiplicator *= 2.0;
+                }
+
+                fNewFactor = fMultiplicator / mfMarkedSize;
+                mfAngle = fAngleWithPnt * (F_PI / 18000.0);
+            }
+            else
+            {
+                mfAngle = (mfMarkedSize * 360.0 / fPerimeter) * 50.0;
+                mfAngle = mfAngle * (F_PI / 18000.0);
+
+                if(basegfx::fTools::equalZero(mfAngle))
+                {
+                    mbValid = false;
+                }
+            }
+        }
+
+        if(basegfx::fTools::equalZero(mfAngle) || basegfx::fTools::equalZero(fNewRadius))
+        {
+            mbValid = false;
+        }
+
+        if(!mbValid)
+        {
+            fNewRadius = 0.0;
+        }
+
+        if(!mbValid && mbResize)
+        {
+            double fMultiplicator(mbVertical ? aDelta.getY() : aDelta.getX());
+
+            if(mbLeft || mbTop)
+            {
+                fMultiplicator = -fMultiplicator;
+            }
+
+            if(mbAtCenter)
+            {
+                fMultiplicator = fabs(fMultiplicator * 2.0);
+            }
+
+            fNewFactor = fMultiplicator / mfMarkedSize;
+        }
+
+        if(!aNeuCenter.equal(maCenter)
+            || bNeuContortion != mbContortion
+            || !basegfx::fTools::equal(fNewFactor, mfFactor)
+            || bNeuMoveOnly != getMoveOnly()
+            || bNeuRotate != mbRotate
+            || eNeuMode != meMode)
         {
             Hide();
             setMoveOnly(bNeuMoveOnly);
-            bRotate=bNeuRotate;
-            eMode=eNeuMode;
-            bContortion=bNeuContortion;
-            aCenter=aNeuCenter;
-            aFact=aNeuFact;
-            aRad=Point(nNeuRad,nNeuRad);
-            bResize=aFact!=Fraction(1,1) && aFact.GetDenominator()!=0 && aFact.IsValid();
+            mbRotate = bNeuRotate;
+            meMode = eNeuMode;
+            mbContortion = bNeuContortion;
+            maCenter = aNeuCenter;
+            mfFactor = fNewFactor;
+            maRadius = basegfx::B2DPoint(fNewRadius, fNewRadius);
+            mbResize = !basegfx::fTools::equal(mfFactor, 1.0);
             DragStat().NextMove(aPnt);
             Show();
         }
@@ -3368,52 +3235,47 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
 
 void SdrDragCrook::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
 {
-    const bool bDoResize(aFact!=Fraction(1,1));
-    const bool bDoCrook(aCenter!=aMarkCenter && aRad.X()!=0 && aRad.Y()!=0);
+    const bool bDoResize(!basegfx::fTools::equal(mfFactor, 1.0));
+    const bool bDoCrook(!maCenter.equal(maMarkedCenter) && !maRadius.equalZero());
 
-    if (bDoCrook || bDoResize)
+    if(bDoCrook || bDoResize)
     {
-        if (bDoResize)
+        if(bDoResize)
         {
-            Fraction aFact1(1,1);
-
-            if (bContortion)
+            if(mbContortion)
             {
-                if (bVertical)
-                {
-                    rTarget.Resize(aCenter,aFact1,aFact);
-                }
-                else
-                {
-                    rTarget.Resize(aCenter,aFact,aFact1);
-                }
+                basegfx::B2DHomMatrix aTransform;
+
+                aTransform.translate(-maCenter);
+                aTransform.scale(mbVertical ? 1.0 : mfFactor, mbVertical ? mfFactor : 1.0);
+                aTransform.translate(maCenter);
+
+                sdr::legacy::transformSdrObject(rTarget, aTransform);
             }
             else
             {
-                Point aCtr0(rTarget.GetSnapRect().Center());
-                Point aCtr1(aCtr0);
+                const basegfx::B2DPoint aCtr0(sdr::legacy::GetSnapRange(rTarget).getCenter());
+                basegfx::B2DPoint aCtr1(aCtr0);
 
-                if (bVertical)
+                if(mbVertical)
                 {
-                    ResizePoint(aCtr1,aCenter,aFact1,aFact);
+                    aCtr1.setY(maCenter.getY() + ((aCtr1.getY() - maCenter.getY()) * mfFactor));
                 }
                 else
                 {
-                    ResizePoint(aCtr1,aCenter,aFact,aFact1);
+                    aCtr1.setX(maCenter.getX() + ((aCtr1.getX() - maCenter.getX()) * mfFactor));
                 }
 
-                Size aSiz(aCtr1.X()-aCtr0.X(),aCtr1.Y()-aCtr0.Y());
-
-                rTarget.Move(aSiz);
+                sdr::legacy::transformSdrObject(rTarget, basegfx::tools::createTranslateB2DHomMatrix(aCtr1 - aCtr0));
             }
         }
 
-        if (bDoCrook)
+        if(bDoCrook)
         {
-            const Rectangle aLocalMarkRect(getSdrDragView().GetMarkedObjRect());
-            const bool bLocalRotate(!bContortion && eMode == SDRCROOK_ROTATE && getSdrDragView().IsRotateAllowed(false));
+            const basegfx::B2DRange aLocalMarkRange(getSdrView().getMarkedObjectSnapRange());
+            const bool bLocalRotate(!mbContortion && SDRCROOK_ROTATE == meMode && getSdrView().IsRotateAllowed(false));
 
-            getSdrDragView().ImpCrookObj(&rTarget,aCenter,aRad,eMode,bVertical,!bContortion,bLocalRotate,aLocalMarkRect);
+            getSdrView().ImpCrookObj(rTarget, maCenter, maRadius, meMode, mbVertical, !mbContortion, bLocalRotate, aLocalMarkRange);
         }
     }
 }
@@ -3428,74 +3290,91 @@ bool SdrDragCrook::EndSdrDrag(bool bCopy)
 {
     Hide();
 
-    if (bResize && aFact==Fraction(1,1))
-        bResize=false;
-
-    const bool bUndo = getSdrDragView().IsUndoEnabled();
-
-    bool bDoCrook=aCenter!=aMarkCenter && aRad.X()!=0 && aRad.Y()!=0;
-
-    if (bDoCrook || bResize)
+    if(mbResize && basegfx::fTools::equal(mfFactor, 1.0))
     {
-        if (bResize && bUndo)
+        mbResize = false;
+    }
+
+    const bool bUndo(getSdrView().IsUndoEnabled());
+    const bool bDoCrook(!maCenter.equal(maMarkedCenter) && !maRadius.equalZero());
+
+    if(bDoCrook || mbResize)
+    {
+        if(mbResize && bUndo)
         {
             XubString aStr;
-            ImpTakeDescriptionStr(!bContortion?STR_EditCrook:STR_EditCrookContortion,aStr);
+            TakeMarkedDescriptionString(!mbContortion ? STR_EditCrook : STR_EditCrookContortion, aStr);
 
-            if (bCopy)
-                aStr+=ImpGetResStr(STR_EditWithCopy);
+            if(bCopy)
+            {
+                aStr += ImpGetResStr(STR_EditWithCopy);
+            }
 
-            getSdrDragView().BegUndo(aStr);
+            getSdrView().BegUndo(aStr);
         }
 
-        if (bResize)
+        if(mbResize)
         {
-            Fraction aFact1(1,1);
-
-            if (bContortion)
+            if(mbContortion)
             {
-                if (bVertical)
-                    getSdrDragView().ResizeMarkedObj(aCenter,aFact1,aFact,bCopy);
+                if(mbVertical)
+                {
+                    getSdrView().ResizeMarkedObj(maCenter, basegfx::B2DVector(1.0, mfFactor), bCopy);
+                }
                 else
-                    getSdrDragView().ResizeMarkedObj(aCenter,aFact,aFact1,bCopy);
+                {
+                    getSdrView().ResizeMarkedObj(maCenter, basegfx::B2DVector(mfFactor, 1.0), bCopy);
+                }
             }
             else
             {
-                if (bCopy)
-                    getSdrDragView().CopyMarkedObj();
-
-                sal_uLong nMarkAnz=getSdrDragView().GetMarkedObjectList().GetMarkCount();
-
-                for (sal_uLong nm=0; nm<nMarkAnz; nm++)
+                if(bCopy)
                 {
-                    SdrMark* pM=getSdrDragView().GetMarkedObjectList().GetMark(nm);
-                    SdrObject* pO=pM->GetMarkedSdrObj();
-                    Point aCtr0(pO->GetSnapRect().Center());
-                    Point aCtr1(aCtr0);
+                    getSdrView().CopyMarkedObj();
+                }
 
-                    if (bVertical)
-                        ResizePoint(aCtr1,aCenter,aFact1,aFact);
-                    else
-                        ResizePoint(aCtr1,aCenter,aFact,aFact1);
+                if(getSdrView().areSdrObjectsSelected())
+                {
+                    const SdrObjectVector aSelection(getSdrView().getSelectedSdrObjectVectorFromSdrMarkView());
 
-                    Size aSiz(aCtr1.X()-aCtr0.X(),aCtr1.Y()-aCtr0.Y());
-                    if( bUndo )
-                        AddUndo(getSdrDragView().GetModel()->GetSdrUndoFactory().CreateUndoMoveObject(*pO,aSiz));
-                    pO->Move(aSiz);
+                    for(sal_uInt32 nm(0); nm < aSelection.size(); nm++)
+                    {
+                        SdrObject* pO = aSelection[nm];
+                        const basegfx::B2DPoint aCtr0(sdr::legacy::GetSnapRange(*pO).getCenter());
+                        basegfx::B2DPoint aCtr1(aCtr0);
+
+                        if(mbVertical)
+                        {
+                            aCtr1.setY(maCenter.getY() + ((aCtr1.getY() - maCenter.getY()) * mfFactor));
+                        }
+                        else
+                        {
+                            aCtr1.setX(maCenter.getX() + ((aCtr1.getX() - maCenter.getX()) * mfFactor));
+                        }
+
+                        if(bUndo)
+                        {
+                            AddUndo(getSdrView().getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoGeoObject(*pO));
+                        }
+
+                        sdr::legacy::transformSdrObject(*pO, basegfx::tools::createTranslateB2DHomMatrix(aCtr1 - aCtr0));
+                    }
                 }
             }
 
-            bCopy=false;
+            bCopy = false;
         }
 
-        if (bDoCrook)
+        if(bDoCrook)
         {
-            getSdrDragView().CrookMarkedObj(aCenter,aRad,eMode,bVertical,!bContortion,bCopy);
-            getSdrDragView().SetLastCrookCenter(aCenter);
+            getSdrView().CrookMarkedObj(maCenter, maRadius, meMode, mbVertical, !mbContortion, bCopy);
+            getSdrView().SetLastCrookCenter(maCenter);
         }
 
-        if (bResize && bUndo)
-            getSdrDragView().EndUndo();
+        if(mbResize && bUndo)
+        {
+            getSdrView().EndUndo();
+        }
 
         return true;
     }
@@ -3510,41 +3389,42 @@ Pointer SdrDragCrook::GetSdrDragPointer() const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1(SdrDragDistort,SdrDragMethod);
-
-SdrDragDistort::SdrDragDistort(SdrDragView& rNewView)
+SdrDragDistort::SdrDragDistort(SdrView& rNewView)
 :   SdrDragMethod(rNewView),
-    nPolyPt(0),
-    bContortionAllowed(false),
-    bNoContortionAllowed(false),
-    bContortion(false)
+    maMarkedRange(),
+    maDistortedRangePolygon(),
+    mnPointIndex(0),
+    mbContortionAllowed(false),
+    mbNoContortionAllowed(false),
+    mbContortion(false)
 {
 }
 
 void SdrDragDistort::TakeSdrDragComment(XubString& rStr) const
 {
-    ImpTakeDescriptionStr(STR_DragMethDistort, rStr);
-
+    TakeMarkedDescriptionString(STR_DragMethDistort, rStr);
     XubString aStr;
 
     rStr.AppendAscii(" (x=");
-    getSdrDragView().GetModel()->TakeMetricStr(DragStat().GetDX(), aStr);
+    getSdrView().getSdrModelFromSdrView().TakeMetricStr(DragStat().GetDX(), aStr);
     rStr += aStr;
     rStr.AppendAscii(" y=");
-    getSdrDragView().GetModel()->TakeMetricStr(DragStat().GetDY(), aStr);
+    getSdrView().getSdrModelFromSdrView().TakeMetricStr(DragStat().GetDY(), aStr);
     rStr += aStr;
     rStr += sal_Unicode(')');
 
-    if(getSdrDragView().IsDragWithCopy())
+    if(getSdrView().IsDragWithCopy())
+    {
         rStr += ImpGetResStr(STR_EditWithCopy);
+    }
 }
 
 void SdrDragDistort::createSdrDragEntries()
 {
     // Add extended frame raster first, so it will be behind objects
-    if(getSdrDragView().GetSdrPageView())
+    if(getSdrView().GetSdrPageView())
     {
-        const basegfx::B2DPolyPolygon aDragRaster(impCreateDragRaster(*getSdrDragView().GetSdrPageView(), GetMarkedRect()));
+        const basegfx::B2DPolyPolygon aDragRaster(impCreateDragRaster(*getSdrView().GetSdrPageView(), GetMarkedRange()));
 
         if(aDragRaster.count())
         {
@@ -3558,22 +3438,26 @@ void SdrDragDistort::createSdrDragEntries()
 
 bool SdrDragDistort::BeginSdrDrag()
 {
-    bContortionAllowed=getSdrDragView().IsDistortAllowed(false);
-    bNoContortionAllowed=getSdrDragView().IsDistortAllowed(true);
+    mbContortionAllowed = getSdrView().IsDistortAllowed(false);
+    mbNoContortionAllowed = getSdrView().IsDistortAllowed(true);
 
-    if (bContortionAllowed || bNoContortionAllowed)
+    if(mbContortionAllowed || mbNoContortionAllowed)
     {
-        SdrHdlKind eKind=GetDragHdlKind();
-        nPolyPt=0xFFFF;
+        SdrHdlKind eKind(GetDragHdlKind());
+        mnPointIndex = 4;
 
-        if (eKind==HDL_UPLFT) nPolyPt=0;
-        if (eKind==HDL_UPRGT) nPolyPt=1;
-        if (eKind==HDL_LWRGT) nPolyPt=2;
-        if (eKind==HDL_LWLFT) nPolyPt=3;
-        if (nPolyPt>3) return false;
+        if(HDL_UPLFT == eKind) mnPointIndex = 0;
+        if(HDL_UPRGT == eKind) mnPointIndex = 1;
+        if(HDL_LWRGT == eKind) mnPointIndex = 2;
+        if(HDL_LWLFT == eKind) mnPointIndex = 3;
 
-        aMarkRect=GetMarkedRect();
-        aDistortedRect=XPolygon(aMarkRect);
+        if(mnPointIndex > 3)
+        {
+            return false;
+        }
+
+        maMarkedRange = GetMarkedRange();
+        maDistortedRangePolygon = basegfx::tools::createPolygonFromRect(maMarkedRange);
         Show();
         return true;
     }
@@ -3585,44 +3469,39 @@ bool SdrDragDistort::BeginSdrDrag()
 
 void SdrDragDistort::_MovAllPoints(basegfx::B2DPolyPolygon& rTarget)
 {
-    if (bContortion)
+    if(mbContortion)
     {
-        SdrPageView* pPV = getSdrDragView().GetSdrPageView();
-
-        if(pPV)
+        if(maDistortedRangePolygon.count() > 3)
         {
-            if (pPV->HasMarkedObjPageView())
-            {
-                basegfx::B2DPolyPolygon aDragPolygon(rTarget);
-                const basegfx::B2DRange aOriginalRange(aMarkRect.Left(), aMarkRect.Top(), aMarkRect.Right(), aMarkRect.Bottom());
-                const basegfx::B2DPoint aTopLeft(aDistortedRect[0].X(), aDistortedRect[0].Y());
-                const basegfx::B2DPoint aTopRight(aDistortedRect[1].X(), aDistortedRect[1].Y());
-                const basegfx::B2DPoint aBottomLeft(aDistortedRect[3].X(), aDistortedRect[3].Y());
-                const basegfx::B2DPoint aBottomRight(aDistortedRect[2].X(), aDistortedRect[2].Y());
-
-                aDragPolygon = basegfx::tools::distort(aDragPolygon, aOriginalRange, aTopLeft, aTopRight, aBottomLeft, aBottomRight);
-                rTarget = aDragPolygon;
-            }
+            rTarget = basegfx::tools::distort(
+                rTarget,
+                maMarkedRange,
+                maDistortedRangePolygon.getB2DPoint(0),  // TopLeft
+                maDistortedRangePolygon.getB2DPoint(1),  // rTopRight
+                maDistortedRangePolygon.getB2DPoint(3),  // rBottomLeft
+                maDistortedRangePolygon.getB2DPoint(2)); // rBottomRight
         }
     }
 }
 
-void SdrDragDistort::MoveSdrDrag(const Point& rPnt)
+void SdrDragDistort::MoveSdrDrag(const basegfx::B2DPoint& rPnt)
 {
-    if (DragStat().CheckMinMoved(rPnt))
+    if(DragStat().CheckMinMoved(rPnt))
     {
-        Point aPnt(GetSnapPos(rPnt));
+        basegfx::B2DPoint aPnt(getSdrView().GetSnapPos(rPnt));
 
-        if (getSdrDragView().IsOrtho())
-            OrthoDistance8(DragStat().GetStart(),aPnt,getSdrDragView().IsBigOrtho());
+        if(getSdrView().IsOrthogonal())
+        {
+            aPnt = OrthoDistance8(DragStat().GetStart(), aPnt, getSdrView().IsBigOrthogonal());
+        }
 
-        bool bNeuContortion=(bContortionAllowed && !getSdrDragView().IsCrookNoContortion()) || !bNoContortionAllowed;
+        bool bNeuContortion((mbContortionAllowed && !getSdrView().IsCrookNoContortion()) || !mbNoContortionAllowed);
 
-        if (bNeuContortion!=bContortion || aDistortedRect[nPolyPt]!=aPnt)
+        if(bNeuContortion != mbContortion || !aPnt.equal(maDistortedRangePolygon.getB2DPoint(mnPointIndex)))
         {
             Hide();
-            aDistortedRect[nPolyPt]=aPnt;
-            bContortion=bNeuContortion;
+            maDistortedRangePolygon.setB2DPoint(mnPointIndex, aPnt);
+            mbContortion = bNeuContortion;
             DragStat().NextMove(aPnt);
             Show();
         }
@@ -3632,11 +3511,13 @@ void SdrDragDistort::MoveSdrDrag(const Point& rPnt)
 bool SdrDragDistort::EndSdrDrag(bool bCopy)
 {
     Hide();
-    bool bDoDistort=DragStat().GetDX()!=0 || DragStat().GetDY()!=0;
+    const basegfx::B2DVector aDelta(DragStat().GetNow() - DragStat().GetPrev());
+    bool bDoDistort(!aDelta.equalZero());
 
-    if (bDoDistort)
+    if(bDoDistort)
     {
-        getSdrDragView().DistortMarkedObj(aMarkRect,aDistortedRect,!bContortion,bCopy);
+        getSdrView().DistortMarkedObj(maMarkedRange, maDistortedRangePolygon, !mbContortion, bCopy);
+
         return true;
     }
 
@@ -3650,11 +3531,12 @@ Pointer SdrDragDistort::GetSdrDragPointer() const
 
 void SdrDragDistort::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
 {
-    const bool bDoDistort(DragStat().GetDX()!=0 || DragStat().GetDY()!=0);
+    const basegfx::B2DVector aDelta(DragStat().GetNow() - DragStat().GetPrev());
+    bool bDoDistort(!aDelta.equalZero());
 
-    if (bDoDistort)
+    if(bDoDistort)
     {
-        getSdrDragView().ImpDistortObj(&rTarget, aMarkRect, aDistortedRect, !bContortion);
+        getSdrView().ImpDistortObj(rTarget, maMarkedRange, maDistortedRangePolygon, !mbContortion);
     }
 }
 
@@ -3666,9 +3548,7 @@ void SdrDragDistort::applyCurrentTransformationToPolyPolygon(basegfx::B2DPolyPol
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1(SdrDragCrop,SdrDragResize);
-
-SdrDragCrop::SdrDragCrop(SdrDragView& rNewView)
+SdrDragCrop::SdrDragCrop(SdrView& rNewView)
 :   SdrDragResize(rNewView)
 {
     // switch off solid dragging for crop; it just makes no sense since showing
@@ -3678,19 +3558,19 @@ SdrDragCrop::SdrDragCrop(SdrDragView& rNewView)
 
 void SdrDragCrop::TakeSdrDragComment(XubString& rStr) const
 {
-    ImpTakeDescriptionStr(STR_DragMethCrop, rStr);
+    TakeMarkedDescriptionString(STR_DragMethCrop, rStr);
 
     XubString aStr;
 
     rStr.AppendAscii(" (x=");
-    getSdrDragView().GetModel()->TakeMetricStr(DragStat().GetDX(), aStr);
+    getSdrView().getSdrModelFromSdrView().TakeMetricStr(DragStat().GetDX(), aStr);
     rStr += aStr;
     rStr.AppendAscii(" y=");
-    getSdrDragView().GetModel()->TakeMetricStr(DragStat().GetDY(), aStr);
+    getSdrView().getSdrModelFromSdrView().TakeMetricStr(DragStat().GetDY(), aStr);
     rStr += aStr;
     rStr += sal_Unicode(')');
 
-    if(getSdrDragView().IsDragWithCopy())
+    if(getSdrView().IsDragWithCopy())
         rStr += ImpGetResStr(STR_EditWithCopy);
 }
 
@@ -3701,12 +3581,7 @@ bool SdrDragCrop::EndSdrDrag(bool bCopy)
     if( DragStat().GetDX()==0 && DragStat().GetDY()==0 )
         return false;
 
-    const SdrMarkList& rMarkList = getSdrDragView().GetMarkedObjectList();
-
-    if( rMarkList.GetMarkCount() != 1 )
-        return false;
-
-    SdrGrafObj* pObj = dynamic_cast<SdrGrafObj*>( rMarkList.GetMark( 0 )->GetMarkedSdrObj() );
+    SdrGrafObj* pObj = dynamic_cast< SdrGrafObj* >(getSdrView().getSelectedIfSingle());
 
     if( !pObj || (pObj->GetGraphicType() == GRAPHIC_NONE) || (pObj->GetGraphicType() == GRAPHIC_DEFAULT) )
         return false;
@@ -3725,30 +3600,33 @@ bool SdrDragCrop::EndSdrDrag(bool bCopy)
 
     const SdrGrafCropItem& rOldCrop = (const SdrGrafCropItem&)pObj->GetMergedItem(SDRATTR_GRAFCROP);
 
-    const bool bUndo = getSdrDragView().IsUndoEnabled();
+    const bool bUndo = getSdrView().IsUndoEnabled();
 
     if( bUndo )
     {
         String aUndoStr;
-        ImpTakeDescriptionStr(STR_DragMethCrop, aUndoStr);
+        TakeMarkedDescriptionString(STR_DragMethCrop, aUndoStr);
 
-        getSdrDragView().BegUndo( aUndoStr );
-        getSdrDragView().AddUndo( getSdrDragView().GetModel()->GetSdrUndoFactory().CreateUndoGeoObject( *pObj ) );
+        getSdrView().BegUndo( aUndoStr );
+        getSdrView().AddUndo( getSdrView().getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoGeoObject( *pObj ) );
     }
 
-    Rectangle aOldRect( pObj->GetLogicRect() );
-    getSdrDragView().ResizeMarkedObj(DragStat().Ref1(),aXFact,aYFact,bCopy);
-    Rectangle aNewRect( pObj->GetLogicRect() );
+    Rectangle aOldRect( sdr::legacy::GetLogicRect(*pObj) );
+    getSdrView().ResizeMarkedObj(DragStat().GetRef1(), maScale, bCopy);
+    Rectangle aNewRect( sdr::legacy::GetLogicRect(*pObj) );
 
     double fScaleX = ( aGraphicSize.Width() - rOldCrop.GetLeft() - rOldCrop.GetRight() ) / (double)aOldRect.GetWidth();
     double fScaleY = ( aGraphicSize.Height() - rOldCrop.GetTop() - rOldCrop.GetBottom() ) / (double)aOldRect.GetHeight();
 
+    // aw080: need to check here
     // to correct the never working combination of cropped images and mirroring
     // I have to correct the rectangles the calculation is based on here. In the current
     // core geometry stuff a vertical mirror is expressed as 180 degree rotation. All
     // this can be removed again when aw080 will have cleaned up the old
     // (non-)transformation mess in the core.
-    if(18000 == pObj->GetGeoStat().nDrehWink)
+    const long nOldRotAngle(sdr::legacy::GetRotateAngle(*pObj));
+
+    if(18000 == nOldRotAngle)
     {
         // old notation of vertical mirror, need to correct diffs since both rects
         // are rotated by 180 degrees
@@ -3766,13 +3644,13 @@ bool SdrDragCrop::EndSdrDrag(bool bCopy)
     sal_Int32 nRightCrop = static_cast<sal_Int32>( rOldCrop.GetRight() - nDiffRight * fScaleX );
     sal_Int32 nBottomCrop = static_cast<sal_Int32>( rOldCrop.GetBottom() - nDiffBottom * fScaleY );
 
-    SfxItemPool& rPool = getSdrDragView().GetModel()->GetItemPool();
+    SfxItemPool& rPool = getSdrView().getSdrModelFromSdrView().GetItemPool();
     SfxItemSet aSet( rPool, SDRATTR_GRAFCROP, SDRATTR_GRAFCROP );
     aSet.Put( SdrGrafCropItem( nLeftCrop, nTopCrop, nRightCrop, nBottomCrop ) );
-    getSdrDragView().SetAttributes( aSet, false );
+    getSdrView().SetAttributes( aSet, false );
 
     if( bUndo )
-        getSdrDragView().EndUndo();
+        getSdrView().EndUndo();
 
     return true;
 }

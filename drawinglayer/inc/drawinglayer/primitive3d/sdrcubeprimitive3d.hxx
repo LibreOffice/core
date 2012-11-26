@@ -53,9 +53,6 @@ namespace drawinglayer
                 const attribute::SdrLineFillShadowAttribute3D& rSdrLFSAttribute,
                 const attribute::Sdr3DObjectAttribute& rSdr3DObjectAttribute);
 
-            /// compare operator
-            virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
-
             /// get range
             virtual basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& rViewInformation) const;
 

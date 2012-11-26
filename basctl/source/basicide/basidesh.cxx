@@ -149,8 +149,6 @@ public:
 
 };
 
-TYPEINIT1( BasicIDEShell, SfxViewShell );
-
 SFX_IMPL_NAMED_VIEWFACTORY( BasicIDEShell, "Default" )
 {
     SFX_VIEW_REGISTRATION( BasicDocShell );
@@ -610,9 +608,11 @@ void __EXPORT BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
 {
     if ( IDE_DLL()->GetShell() )
     {
-        if ( rHint.IsA( TYPE( SfxSimpleHint ) ) )
+        const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+        if ( pSfxSimpleHint )
         {
-            switch ( ((SfxSimpleHint&)rHint).GetId() )
+            switch ( pSfxSimpleHint->GetId() )
             {
                 case SFX_HINT_DYING:
                 {
@@ -623,10 +623,11 @@ void __EXPORT BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
                 break;
             }
 
-            if ( rHint.IsA( TYPE( SbxHint ) ) )
+            const SbxHint* pSbxHint = dynamic_cast< const SbxHint* >(&rHint);
+
+            if ( pSbxHint )
             {
-                SbxHint& rSbxHint = (SbxHint&)rHint;
-                sal_uLong nHintId = rSbxHint.GetId();
+                sal_uLong nHintId = pSbxHint->GetId();
                 if (    ( nHintId == SBX_HINT_BASICSTART ) ||
                         ( nHintId == SBX_HINT_BASICSTOP ) )
                 {

@@ -150,14 +150,6 @@ namespace drawinglayer
             BasePrimitive2D();
             virtual ~BasePrimitive2D();
 
-            /** the ==operator is mainly needed to allow testing newly-created primitives against their last
-                incarnation which buffers/holds the made decompositions. The default implementation
-                uses getPrimitive2DID()-calls to test if it's the same ID at last. Overloaded implementation are then
-                based on this implementation
-             */
-            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
-            bool operator!=( const BasePrimitive2D& rPrimitive ) const { return !operator==(rPrimitive); }
-
             /// The default implementation will use getDecomposition results to create the range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 
@@ -274,14 +266,6 @@ namespace drawinglayer
 
         /// get B2DRange from a given Primitive2DSequence
         basegfx::B2DRange DRAWINGLAYER_DLLPUBLIC getB2DRangeFromPrimitive2DSequence(const Primitive2DSequence& rCandidate, const geometry::ViewInformation2D& aViewInformation);
-
-        /** compare two Primitive2DReferences for equality, including trying to get implementations (BasePrimitive2D)
-            and using compare operator
-         */
-        bool DRAWINGLAYER_DLLPUBLIC arePrimitive2DReferencesEqual(const Primitive2DReference& rA, const Primitive2DReference& rB);
-
-        /// compare two Primitive2DReferences for equality, uses arePrimitive2DReferencesEqual internally
-        bool DRAWINGLAYER_DLLPUBLIC arePrimitive2DSequencesEqual(const Primitive2DSequence& rA, const Primitive2DSequence& rB);
 
         /// concatenate sequence
         void DRAWINGLAYER_DLLPUBLIC appendPrimitive2DSequenceToPrimitive2DSequence(Primitive2DSequence& rDest, const Primitive2DSequence& rSource);

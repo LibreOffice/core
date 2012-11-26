@@ -34,7 +34,6 @@ class ScTabViewShell;
 class ScPageBreakShell : public SfxShell
 {
 public:
-    TYPEINFO();
     SFX_DECL_INTERFACE(SCID_PAGEBREAK_SHELL)
 
                     ScPageBreakShell( ScTabViewShell* pView );

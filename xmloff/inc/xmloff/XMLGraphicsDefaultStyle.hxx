@@ -36,8 +36,6 @@ namespace com { namespace sun { namespace star { namespace container
 class XMLOFF_DLLPUBLIC XMLGraphicsDefaultStyle : public XMLPropStyleContext
 {
 public:
-    TYPEINFO();
-
     XMLGraphicsDefaultStyle( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const ::rtl::OUString& rLName,
         const ::com::sun::star::uno::Reference<

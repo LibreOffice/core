@@ -156,14 +156,8 @@
 #define SDRATTR_MEASUREDECIMALPLACES     (SDRATTR_MEASURE_FIRST+20) /*   1167 */ /* Pool V4 */
 #define SDRATTR_MEASURE_LAST             (SDRATTR_MEASUREDECIMALPLACES) /* 1170   */ /* Pool V4 */
 
-#define SDRATTR_CIRC_FIRST              (SDRATTR_MEASURE_LAST+ 1)    /* 1172   */ /* Pool V4+ */
-#define SDRATTR_CIRCKIND                (SDRATTR_CIRC_FIRST+ 0)    /*   1172 */ /* Pool V4+ */
-#define SDRATTR_CIRCSTARTANGLE          (SDRATTR_CIRC_FIRST+ 1)    /*   1173 */ /* Pool V4+ */
-#define SDRATTR_CIRCENDANGLE            (SDRATTR_CIRC_FIRST+ 2)    /*   1174 */ /* Pool V4+ */
-#define SDRATTR_CIRC_LAST               (SDRATTR_CIRCENDANGLE)     /*   1178 */ /* Pool V4+ */
-
 // Nur fuer Interfaceing, not implemented yet.                     /*  V4+   */
-#define SDRATTR_NOTPERSIST_FIRST    (SDRATTR_CIRC_LAST + 1)          /* 1180   */ /* 1172   */ /* 1127   */ /* 1110   */ /* Pool V1: 1058 */
+#define SDRATTR_NOTPERSIST_FIRST    (SDRATTR_MEASURE_LAST + 1)          /* 1180   */ /* 1172   */ /* 1127   */ /* 1110   */ /* Pool V1: 1058 */
 #define SDRATTR_OBJMOVEPROTECT      (SDRATTR_NOTPERSIST_FIRST+ 0)  /*   1180  sal_Bool,   def=sal_False */
 #define SDRATTR_OBJSIZEPROTECT      (SDRATTR_NOTPERSIST_FIRST+ 1)  /*   1181  sal_Bool,   def=sal_False */
 #define SDRATTR_OBJPRINTABLE        (SDRATTR_NOTPERSIST_FIRST+ 2)  /*   1182  sal_Bool,   def=sal_True  */

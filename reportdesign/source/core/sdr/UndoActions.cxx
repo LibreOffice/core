@@ -89,9 +89,7 @@ namespace rptui
 }
 
 //------------------------------------------------------------------------------
-TYPEINIT1( OCommentUndoAction,          SdrUndoAction );
 DBG_NAME(rpt_OCommentUndoAction)
-//----------------------------------------------------------------------------
 OCommentUndoAction::OCommentUndoAction(SdrModel& _rMod,sal_uInt16 nCommentID)
     :SdrUndoAction(_rMod)
 {
@@ -141,13 +139,13 @@ OUndoContainerAction::~OUndoContainerAction()
         Reference< XChild >  xChild( m_xOwnElement, UNO_QUERY );
         if ( xChild.is() && !xChild->getParent().is() )
         {
-            OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
+            OXUndoEnvironment& rEnv = static_cast< OReportModel& >( mrModel ).GetUndoEnv();
             rEnv.RemoveElement( m_xOwnElement );
 
 #if OSL_DEBUG_LEVEL > 0
             SvxShape* pShape = SvxShape::getImplementation( xChild );
             SdrObject* pObject = pShape ? pShape->GetSdrObject() : NULL;
-            OSL_ENSURE( pObject ? pShape->HasSdrObjectOwnership() && !pObject->IsInserted() : true ,
+            OSL_ENSURE( pObject ? pShape->HasSdrObjectOwnership() && !pObject->IsObjectInserted() : true ,
                 "OUndoContainerAction::~OUndoContainerAction: inconsistency in the shape/object ownership!" );
 #endif
             // -> dispose it
@@ -178,7 +176,7 @@ void OUndoContainerAction::implReInsert( ) SAL_THROW( ( Exception ) )
 //------------------------------------------------------------------------------
 void OUndoContainerAction::implReRemove( ) SAL_THROW( ( Exception ) )
 {
-    OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
+    OXUndoEnvironment& rEnv = static_cast< OReportModel& >( mrModel ).GetUndoEnv();
     try
     {
         OXUndoEnvironment::OUndoEnvLock aLock(rEnv);
@@ -273,7 +271,7 @@ OUndoGroupSectionAction::OUndoGroupSectionAction(SdrModel& _rMod
 //------------------------------------------------------------------------------
 void OUndoGroupSectionAction::implReInsert( ) SAL_THROW( ( Exception ) )
 {
-    OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
+    OXUndoEnvironment& rEnv = static_cast< OReportModel& >( mrModel ).GetUndoEnv();
     try
     {
         OXUndoEnvironment::OUndoEnvLock aLock(rEnv);
@@ -290,7 +288,7 @@ void OUndoGroupSectionAction::implReInsert( ) SAL_THROW( ( Exception ) )
 //------------------------------------------------------------------------------
 void OUndoGroupSectionAction::implReRemove( ) SAL_THROW( ( Exception ) )
 {
-        OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
+        OXUndoEnvironment& rEnv = static_cast< OReportModel& >( mrModel ).GetUndoEnv();
     try
     {
         OXUndoEnvironment::OUndoEnvLock aLock(rEnv);
@@ -319,7 +317,7 @@ OUndoReportSectionAction::OUndoReportSectionAction(SdrModel& _rMod
 //------------------------------------------------------------------------------
 void OUndoReportSectionAction::implReInsert( ) SAL_THROW( ( Exception ) )
 {
-    OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
+    OXUndoEnvironment& rEnv = static_cast< OReportModel& >( mrModel ).GetUndoEnv();
     try
     {
         OXUndoEnvironment::OUndoEnvLock aLock(rEnv);
@@ -342,7 +340,7 @@ void OUndoReportSectionAction::implReInsert( ) SAL_THROW( ( Exception ) )
 //------------------------------------------------------------------------------
 void OUndoReportSectionAction::implReRemove( ) SAL_THROW( ( Exception ) )
 {
-    OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
+    OXUndoEnvironment& rEnv = static_cast< OReportModel& >( mrModel ).GetUndoEnv();
     try
     {
         OXUndoEnvironment::OUndoEnvLock aLock(rEnv);

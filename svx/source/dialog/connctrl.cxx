@@ -24,25 +24,18 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-// include ---------------------------------------------------------------
-
 #include <svx/svdoedge.hxx>
 #include <svx/svdattrx.hxx>
-#include <svx/svdmark.hxx>
 #include <svx/svdview.hxx>
-
 #include <svx/svdpage.hxx> // SdrObjList
-
-#include "svx/connctrl.hxx"
+#include <svx/connctrl.hxx>
 #include <svx/dialmgr.hxx>
-#include "svx/dlgutil.hxx"
+#include <svx/dlgutil.hxx>
 
-// #110094#
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
-
-// #110094#
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <vcl/svapp.hxx>
+#include <svx/svdlegacy.hxx>
 
 /*************************************************************************
 |*
@@ -55,7 +48,7 @@ SvxXConnectionPreview::SvxXConnectionPreview( Window* pParent, const ResId& rRes
                             Control ( pParent, rResId ),
                             rAttrs  ( rInAttrs ),
                             pEdgeObj( NULL ),
-                            pObjList( NULL ),
+                            maSdrObjectVector(),
                             pView   ( NULL )
 {
     SetMapMode( MAP_100TH_MM );
@@ -70,7 +63,10 @@ SvxXConnectionPreview::SvxXConnectionPreview( Window* pParent, const ResId& rRes
 
 SvxXConnectionPreview::~SvxXConnectionPreview()
 {
-    delete pObjList;
+    for(sal_uInt32 a(0); a < maSdrObjectVector.size(); a++)
+    {
+        SdrObject::deleteSafe(const_cast< SdrObject* >(maSdrObjectVector[a]));
+    }
 }
 
 /*************************************************************************
@@ -83,68 +79,60 @@ void SvxXConnectionPreview::Construct()
 {
     DBG_ASSERT( pView, "Keine gueltige View Uebergeben!" );
 
-    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-    sal_uIntPtr nMarkCount = rMarkList.GetMarkCount();
-
-    if( nMarkCount >= 1 )
+    if(pView->areSdrObjectsSelected())
     {
-        sal_Bool bFound = sal_False;
-        const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+        bool bFound = false;
+        const SdrObjectVector aSelection(pView->getSelectedSdrObjectVectorFromSdrMarkView());
 
-
-        for( sal_uInt16 i = 0; i < nMarkCount && !bFound; i++ )
+        for(sal_uInt32 i(0); i < aSelection.size() && !bFound; i++)
         {
-            pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
-            sal_uInt32 nInv = pObj->GetObjInventor();
-            sal_uInt16 nId = pObj->GetObjIdentifier();
-            if( nInv == SdrInventor && nId == OBJ_EDGE )
+            const SdrEdgeObj* pTmpEdgeObj = dynamic_cast< const SdrEdgeObj* >(aSelection[i]);
+
+            if(pTmpEdgeObj)
             {
-                bFound = sal_True;
-                SdrEdgeObj* pTmpEdgeObj = (SdrEdgeObj*) pObj;
-                pEdgeObj = (SdrEdgeObj*) pTmpEdgeObj->Clone();
+                bFound = true;
+                pEdgeObj = (SdrEdgeObj*) pTmpEdgeObj->CloneSdrObject();
 
-                SdrObjConnection& rConn1 = (SdrObjConnection&)pEdgeObj->GetConnection( sal_True );
-                SdrObjConnection& rConn2 = (SdrObjConnection&)pEdgeObj->GetConnection( sal_False );
+                SdrObjConnection& rConn1 = (SdrObjConnection&)pEdgeObj->GetConnection(true);
+                SdrObjConnection& rConn2 = (SdrObjConnection&)pEdgeObj->GetConnection(false);
 
-                rConn1 = pTmpEdgeObj->GetConnection( sal_True );
-                rConn2 = pTmpEdgeObj->GetConnection( sal_False );
+                rConn1 = pTmpEdgeObj->GetConnection(true);
+                rConn2 = pTmpEdgeObj->GetConnection(false);
 
-                SdrObject* pTmpObj1 = pTmpEdgeObj->GetConnectedNode( sal_True );
-                SdrObject* pTmpObj2 = pTmpEdgeObj->GetConnectedNode( sal_False );
-
-                // #110094#
-                // potential memory leak here (!). Create SdrObjList only when there is
-                // not yet one.
-                if(!pObjList)
-                {
-                    pObjList = new SdrObjList( pView->GetModel(), NULL );
-                }
+                SdrObject* pTmpObj1 = pTmpEdgeObj->GetConnectedNode(true);
+                SdrObject* pTmpObj2 = pTmpEdgeObj->GetConnectedNode(false);
 
                 if( pTmpObj1 )
                 {
-                    SdrObject* pObj1 = pTmpObj1->Clone();
-                    pObjList->InsertObject( pObj1 );
-                    pEdgeObj->ConnectToNode( sal_True, pObj1 );
+                    SdrObject* pObj1 = pTmpObj1->CloneSdrObject();
+
+                    maSdrObjectVector.push_back(pObj1);
+                    pEdgeObj->ConnectToNode(true, pObj1);
                 }
+
                 if( pTmpObj2 )
                 {
-                    SdrObject* pObj2 = pTmpObj2->Clone();
-                    pObjList->InsertObject( pObj2 );
-                    pEdgeObj->ConnectToNode( sal_False, pObj2 );
+                    SdrObject* pObj2 = pTmpObj2->CloneSdrObject();
+
+                    maSdrObjectVector.push_back(pObj2);
+                    pEdgeObj->ConnectToNode(false, pObj2);
                 }
-                pObjList->InsertObject( pEdgeObj );
+
+                maSdrObjectVector.push_back(pEdgeObj);
             }
         }
     }
 
     if( !pEdgeObj )
-        pEdgeObj = new SdrEdgeObj();
+    {
+        pEdgeObj = new SdrEdgeObj(pView->getSdrModelFromSdrView());
+    }
 
     // Groesse anpassen
-    if( pObjList )
+    if( maSdrObjectVector.size() )
     {
         OutputDevice* pOD = pView->GetFirstOutputDevice(); // GetWin( 0 );
-        Rectangle aRect = pObjList->GetAllObjBoundRect();
+        Rectangle aRect(sdr::legacy::GetAllObjBoundRect(maSdrObjectVector));
 
         MapMode aMapMode = GetMapMode();
         aMapMode.SetMapUnit( pOD->GetMapMode().GetMapUnit() );
@@ -196,44 +184,6 @@ void SvxXConnectionPreview::Construct()
         Point aPos;
         MouseEvent aMEvt( aPos, 1, 0, MOUSE_RIGHT );
         MouseButtonDown( aMEvt );
-        /*
-        Point aPt( -aRect.TopLeft().X(), -aRect.TopLeft().Y() );
-        aMapMode.SetOrigin( aPt );
-
-        // Skalierung
-        Size aSize = GetOutputSize();
-        Fraction aFrac1( aSize.Width(), aRect.GetWidth() );
-        Fraction aFrac2( aSize.Height(), aRect.GetHeight() );
-        Fraction aMaxFrac( aFrac1 > aFrac2 ? aFrac1 : aFrac2 );
-        Fraction aMinFrac( aFrac1 <= aFrac2 ? aFrac1 : aFrac2 );
-        sal_Bool bChange = (sal_Bool) ( (double)aMinFrac > 1.0 );
-        aMapMode.SetScaleX( aMinFrac );
-        aMapMode.SetScaleY( aMinFrac );
-
-        // zentrieren
-        long nXXL = aSize.Width() > aRect.GetWidth() ? aSize.Width() : aRect.GetWidth();
-        long nXS = aSize.Width() <= aRect.GetWidth() ? aSize.Width() : aRect.GetWidth();
-        if( bChange )
-        {
-            long nTmp = nXXL; nXXL = nXS; nXS = nTmp;
-        }
-        long nX = (long) ( (double)aMinFrac * (double)nXXL );
-        nX = (long) ( (double)labs( nXS - nX ) / (double)aMinFrac / 2.0 );
-
-        long nYXL = aSize.Height() > aRect.GetHeight() ? aSize.Height() : aRect.GetHeight();
-        long nYS = aSize.Height() <= aRect.GetHeight() ? aSize.Height() : aRect.GetHeight();
-        if( bChange )
-        {
-            long nTmp = nXXL; nXXL = nXS; nXS = nTmp;
-        }
-        long nY = (long) ( (double)aMinFrac * (double)nYXL );
-        nY = (long) ( (double)labs( nYS - nY ) / (double)aMinFrac / 2.0 );
-
-        aPt += Point( nX, nY );
-        aMapMode.SetOrigin( aPt );
-
-        SetMapMode( aMapMode );
-        */
     }
 }
 
@@ -245,7 +195,7 @@ void SvxXConnectionPreview::Construct()
 
 void SvxXConnectionPreview::Paint( const Rectangle& )
 {
-    if( pObjList )
+    if( maSdrObjectVector.size() )
     {
         // #110094#
         // This will not work anymore. To not start at Adam and Eve, i will
@@ -255,17 +205,7 @@ void SvxXConnectionPreview::Paint( const Rectangle& )
         // mechanism.
 
         // New stuff: Use a ObjectContactOfObjListPainter.
-        sdr::contact::SdrObjectVector aObjectVector;
-
-        for(sal_uInt32 a(0L); a < pObjList->GetObjCount(); a++)
-        {
-            SdrObject* pObject = pObjList->GetObj(a);
-            DBG_ASSERT(pObject,
-                "SvxXConnectionPreview::Paint: Corrupt ObjectList (!)");
-            aObjectVector.push_back(pObject);
-        }
-
-        sdr::contact::ObjectContactOfObjListPainter aPainter(*this, aObjectVector, 0);
+        sdr::contact::ObjectContactOfObjListPainter aPainter(*this, maSdrObjectVector, 0);
         sdr::contact::DisplayInfo aDisplayInfo;
 
         // do processing
@@ -299,7 +239,7 @@ sal_uInt16 SvxXConnectionPreview::GetLineDeltaAnz()
     sal_uInt16 nCount(0);
 
     if(SFX_ITEM_DONTCARE != rSet.GetItemState(SDRATTR_EDGELINEDELTAANZ))
-        nCount = ((const SdrEdgeLineDeltaAnzItem&)rSet.Get(SDRATTR_EDGELINEDELTAANZ)).GetValue();
+        nCount = ((const SfxUInt16Item&)rSet.Get(SDRATTR_EDGELINEDELTAANZ)).GetValue();
 
     return nCount;
 }

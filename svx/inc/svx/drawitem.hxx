@@ -41,7 +41,7 @@ class SVX_DLLPUBLIC SvxColorTableItem: public SfxPoolItem
     XColorTable*            pColorTable;
 
 public:
-                            TYPEINFO();
+    POOLITEM_FACTORY()
                             SvxColorTableItem();
                             SvxColorTableItem( XColorTable* pTable,
                                     sal_uInt16 nWhich  );
@@ -75,7 +75,7 @@ class SVX_DLLPUBLIC SvxGradientListItem: public SfxPoolItem
     XGradientList*              pGradientList;
 
 public:
-                            TYPEINFO();
+    POOLITEM_FACTORY()
                             SvxGradientListItem();
                             SvxGradientListItem( XGradientList* pList,
                                     sal_uInt16 nWhich  );
@@ -110,7 +110,7 @@ class SVX_DLLPUBLIC SvxHatchListItem: public SfxPoolItem
     XHatchList*             pHatchList;
 
 public:
-                            TYPEINFO();
+    POOLITEM_FACTORY()
                             SvxHatchListItem();
                             SvxHatchListItem( XHatchList* pList,
                                     sal_uInt16 nWhich  );
@@ -145,7 +145,7 @@ class SVX_DLLPUBLIC SvxBitmapListItem: public SfxPoolItem
     XBitmapList*                pBitmapList;
 
 public:
-                            TYPEINFO();
+    POOLITEM_FACTORY()
                             SvxBitmapListItem();
                             SvxBitmapListItem( XBitmapList* pBL,
                                     sal_uInt16 nWhich  );
@@ -180,7 +180,7 @@ class SVX_DLLPUBLIC SvxDashListItem: public SfxPoolItem
     XDashList*              pDashList;
 
 public:
-                            TYPEINFO();
+    POOLITEM_FACTORY()
                             SvxDashListItem();
                             SvxDashListItem( XDashList* pList,
                                     sal_uInt16 nWhich  );
@@ -214,7 +214,7 @@ class SVX_DLLPUBLIC SvxLineEndListItem: public SfxPoolItem
     XLineEndList*           pLineEndList;
 
 public:
-                            TYPEINFO();
+    POOLITEM_FACTORY()
                             SvxLineEndListItem();
                             SvxLineEndListItem( XLineEndList* pList,
                                     sal_uInt16 nWhich  );

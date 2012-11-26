@@ -32,23 +32,6 @@
 #include "uiitems.hxx"
 #include "dpsave.hxx"
 
-// STATIC DATA -----------------------------------------------------------
-
-TYPEINIT1(ScInputStatusItem,    SfxPoolItem);
-TYPEINIT1(ScSortItem,           SfxPoolItem);
-TYPEINIT1(ScQueryItem,          SfxPoolItem);
-TYPEINIT1(ScSubTotalItem,       SfxPoolItem);
-TYPEINIT1(ScUserListItem,       SfxPoolItem);
-TYPEINIT1(ScConsolidateItem,    SfxPoolItem);
-TYPEINIT1(ScPivotItem,          SfxPoolItem);
-TYPEINIT1(ScSolveItem,          SfxPoolItem);
-TYPEINIT1(ScTabOpItem,          SfxPoolItem);
-TYPEINIT1(ScCondFrmtItem,       SfxPoolItem);
-
-TYPEINIT1(ScTablesHint,         SfxHint);
-TYPEINIT1(ScEditViewHint,       SfxHint);
-TYPEINIT1(ScIndexHint,          SfxHint);
-
 // -----------------------------------------------------------------------
 //      ScInputStatusItem - Status-Update fuer Eingabezeile
 // -----------------------------------------------------------------------

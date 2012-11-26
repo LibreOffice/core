@@ -68,6 +68,7 @@
 #include <fmturl.hxx>
 #include "txtfrm.hxx"
 #include <wrong.hxx>
+#include <svx/svdlegacy.hxx>
 #include <switerator.hxx>
 #include <vcl/window.hxx>
 #include <docufld.hxx> // OD 2008-06-19 #i90516#
@@ -415,8 +416,8 @@ sal_Bool SwCrsrShell::GotoTOXMarkBase()
 
         for( SwTOXBase* pTOX = aIter.First(); pTOX; pTOX = aIter.Next() )
         {
-            if( pTOX->ISA( SwTOXBaseSection ) &&
-                0 != ( pSectFmt = ((SwTOXBaseSection*)pTOX)->GetFmt() ) &&
+            if( dynamic_cast< SwTOXBaseSection* >(pTOX) &&
+                0 != ( pSectFmt = static_cast< SwTOXBaseSection* >(pTOX)->GetFmt() ) &&
                 0 != ( pSectNd = pSectFmt->GetSectionNode() ))
             {
                 SwNodeIndex aIdx( *pSectNd, 1 );
@@ -1616,6 +1617,7 @@ bool SwContentAtPos::IsInRTLText()const
                     bRet = pTmpFrm->IsRightToLeft();
                     break;
                 }
+
             pTmpFrm = aIter.Next();
         }
     }
@@ -2188,7 +2190,7 @@ sal_Bool SwCrsrShell::SelectNxtPrvHyperlink( sal_Bool bNext )
         else if( RES_DRAWFRMFMT == pFndFmt->Which() )
         {
             const SdrObject* pSObj = pFndFmt->FindSdrObject();
-            ((SwFEShell*)this)->SelectObj( pSObj->GetCurrentBoundRect().Center() );
+            ((SwFEShell*)this)->SelectObj(pSObj->getObjectRange(0).getCenter() );
             MakeSelVisible();
             bRet = sal_True;
         }

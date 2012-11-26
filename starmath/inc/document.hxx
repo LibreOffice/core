@@ -163,7 +163,6 @@ class SmDocShell : public SfxObjectShell, public SfxListener
     virtual sal_Bool        ConvertFrom(SfxMedium &rMedium);
 
 public:
-    TYPEINFO();
     SFX_DECL_INTERFACE(SFX_INTERFACE_SMA_START+1)
     using SotObject::GetInterface;
     SFX_DECL_OBJECTFACTORY();

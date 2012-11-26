@@ -67,7 +67,6 @@ class LayoutMenu
       public DropTargetHelper
 {
 public:
-    TYPEINFO();
     SFX_DECL_INTERFACE(SD_IF_SDLAYOUTMENU)
 
     /** Create a new layout menu.  Depending on the given flag it

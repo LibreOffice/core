@@ -32,7 +32,6 @@ class SD_DLLPUBLIC SdUndoGroup : public SdUndoAction
 {
     Container      aCtn;
 public:
-    TYPEINFO();
                    SdUndoGroup(SdDrawDocument* pSdDrawDocument)
                               : SdUndoAction(pSdDrawDocument),
                                 aCtn(16, 16, 16) {}

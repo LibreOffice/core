@@ -63,6 +63,7 @@
 #include <com/sun/star/i18n/CharacterIteratorMode.hdl>
 #endif
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <svx/svdlegacy.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -169,7 +170,7 @@ void CalculateHorizontalScalingFactor( const SdrObject* pCustomShape,
 
     Font aFont;
     SvxFontItem& rFontItem = (SvxFontItem&)pCustomShape->GetMergedItem( EE_CHAR_FONTINFO );
-    aFont.SetHeight( pCustomShape->GetLogicRect().GetHeight() / rFWData.nMaxParagraphsPerTextArea );
+    aFont.SetHeight( sdr::legacy::GetLogicRect(*pCustomShape).GetHeight() / rFWData.nMaxParagraphsPerTextArea );
     aFont.SetAlign( ALIGN_TOP );
     aFont.SetName( rFontItem.GetFamilyName() );
     aFont.SetFamily( rFontItem.GetFamily() );
@@ -454,7 +455,7 @@ void GetFontWorkOutline( FWData& rFWData, const SdrObject* pCustomShape )
     std::vector< FWTextArea >::iterator aTextAreaIter = rFWData.vTextAreas.begin();
     std::vector< FWTextArea >::iterator aTextAreaIEnd = rFWData.vTextAreas.end();
 
-    rFWData.nSingleLineHeight = (sal_Int32)( ( (double)pCustomShape->GetLogicRect().GetHeight()
+    rFWData.nSingleLineHeight = (sal_Int32)( ( (double)sdr::legacy::GetLogicRect(*pCustomShape).GetHeight()
                                                 / rFWData.nMaxParagraphsPerTextArea ) * rFWData.fHorizontalTextScaling );
 
     sal_Bool bSameLetterHeights = sal_False;
@@ -548,10 +549,10 @@ basegfx::B2DPolyPolygon GetOutlinesFromShape2d( const SdrObject* pShape2d )
     SdrObjListIter aObjListIter( *pShape2d, IM_DEEPWITHGROUPS );
     while( aObjListIter.IsMore() )
     {
-        SdrObject* pPartObj = aObjListIter.Next();
-        if ( pPartObj->ISA( SdrPathObj ) )
+        SdrPathObj* pPartObj = dynamic_cast< SdrPathObj* >(aObjListIter.Next());
+        if ( pPartObj )
         {
-            basegfx::B2DPolyPolygon aCandidate(((SdrPathObj*)pPartObj)->GetPathPoly());
+            basegfx::B2DPolyPolygon aCandidate(pPartObj->getB2DPolyPolygonInObjectCoordinates());
             if(aCandidate.areControlPointsUsed())
             {
                 aCandidate = basegfx::tools::adaptiveSubdivideByAngle(aCandidate);
@@ -681,7 +682,7 @@ void FitTextOutlinesToShapeOutlines( const PolyPolygon& aOutlines2d, FWData& rFW
                 std::vector< double > vDistances;
                 vDistances.reserve( nPointCount );
                 CalcDistances( rOutlinePoly, vDistances );
-                if ( !vDistances.empty() )
+                if ( vDistances.size() )
                 {
                     std::vector< FWParagraphData >::iterator aParagraphIter( aTextAreaIter->vParagraphs.begin() );
                     std::vector< FWParagraphData >::iterator aParagraphIEnd( aTextAreaIter->vParagraphs.end() );
@@ -811,12 +812,11 @@ void FitTextOutlinesToShapeOutlines( const PolyPolygon& aOutlines2d, FWData& rFW
 
 SdrObject* CreateSdrObjectFromParagraphOutlines( const FWData& rFWData, const SdrObject* pCustomShape )
 {
-    SdrObject* pRet = NULL;
-    if ( !rFWData.vTextAreas.empty() )
+    SdrObjGroup* pRet = 0;
+
+    if ( rFWData.vTextAreas.size() )
     {
-        pRet = new SdrObjGroup();
-// SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
-//      pRet->SetModel( pCustomShape->GetModel() );
+        pRet = new SdrObjGroup(pCustomShape->getSdrModelFromSdrObject());
         std::vector< FWTextArea >::const_iterator aTextAreaIter = rFWData.vTextAreas.begin();
         std::vector< FWTextArea >::const_iterator aTextAreaIEnd = rFWData.vTextAreas.end();
         while ( aTextAreaIter != aTextAreaIEnd )
@@ -833,10 +833,10 @@ SdrObject* CreateSdrObjectFromParagraphOutlines( const FWData& rFWData, const Sd
                     std::vector< PolyPolygon >::const_iterator aOutlineIEnd = aCharacterIter->vOutlines.end();
                     while( aOutlineIter != aOutlineIEnd )
                     {
-                        SdrObject* pPathObj = new SdrPathObj( OBJ_POLY, aOutlineIter->getB2DPolyPolygon() );
-    // SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
-    //                  pPathObj->SetModel( pCustomShape->GetModel() );
-                        ((SdrObjGroup*)pRet)->GetSubList()->NbcInsertObject( pPathObj );
+                        SdrObject* pPathObj = new SdrPathObj(
+                            pCustomShape->getSdrModelFromSdrObject(),
+                            aOutlineIter->getB2DPolyPolygon() );
+                        pRet->InsertObjectToSdrObjList(*pPathObj);
                         aOutlineIter++;
                     }
                     aCharacterIter++;
@@ -846,15 +846,9 @@ SdrObject* CreateSdrObjectFromParagraphOutlines( const FWData& rFWData, const Sd
             aTextAreaIter++;
         }
 
-        Point aP( pCustomShape->GetSnapRect().Center() );
-        Size aS( pCustomShape->GetLogicRect().GetSize() );
-        aP.X() -= aS.Width() / 2;
-        aP.Y() -= aS.Height() / 2;
-        Rectangle aLogicRect( aP, aS );
-
         SfxItemSet aSet( pCustomShape->GetMergedItemSet() );
         aSet.ClearItem( SDRATTR_TEXTDIRECTION );    //SJ: vertical writing is not required, by removing this item no outliner is created
-        aSet.Put(SdrShadowItem(sal_False)); // #i37011# NO shadow for FontWork geometry
+        aSet.Put(SdrOnOffItem(SDRATTR_SHADOW, sal_False)); // #i37011# NO shadow for FontWork geometry
         pRet->SetMergedItemSet( aSet );             // * otherwise we would crash, because the outliner tries to create a Paraobject, but there is no model
     }
     return pRet;
@@ -881,7 +875,7 @@ SdrObject* EnhancedCustomShapeFontWork::CreateFontWork( const SdrObject* pShape2
 {
     SdrObject* pRet = NULL;
 
-    Rectangle aLogicRect( pCustomShape->GetLogicRect() );
+    Rectangle aLogicRect( sdr::legacy::GetLogicRect(*pCustomShape) );
     PolyPolygon aOutlines2d( GetOutlinesFromShape2d( pShape2d ) );
     sal_uInt16 nOutlinesCount2d = aOutlines2d.Count();
     if ( nOutlinesCount2d )

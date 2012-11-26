@@ -46,7 +46,6 @@ class ScHeaderFooterChangedHint : public SfxHint
     sal_uInt16 nPart;
 
 public:
-                    TYPEINFO();
                     ScHeaderFooterChangedHint(sal_uInt16 nP);
                     ~ScHeaderFooterChangedHint();
 

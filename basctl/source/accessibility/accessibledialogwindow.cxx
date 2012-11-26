@@ -40,6 +40,7 @@
 #include <toolkit/helper/externallock.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <vcl/svapp.hxx>
+#include <svx/svdlegacy.hxx>
 
 #include <vector>
 #include <algorithm>
@@ -104,7 +105,7 @@ bool AccessibleDialogWindow::ChildDescriptor::operator==( const ChildDescriptor&
 bool AccessibleDialogWindow::ChildDescriptor::operator<( const ChildDescriptor& rDesc ) const
 {
     bool bRet = false;
-    if ( pDlgEdObj && rDesc.pDlgEdObj && pDlgEdObj->GetOrdNum() < rDesc.pDlgEdObj->GetOrdNum() )
+    if ( pDlgEdObj && rDesc.pDlgEdObj && pDlgEdObj->GetNavigationPosition() < rDesc.pDlgEdObj->GetNavigationPosition() )
         bRet = true;
 
     return bRet;
@@ -131,7 +132,7 @@ AccessibleDialogWindow::AccessibleDialogWindow( DialogWindow* pDialogWindow )
             for ( sal_uLong i = 0; i < nCount; ++i )
             {
                 SdrObject* pObj = pSdrPage->GetObj( i );
-                DlgEdObj* pDlgEdObj = PTR_CAST( DlgEdObj, pObj );
+                DlgEdObj* pDlgEdObj = dynamic_cast< DlgEdObj* >( pObj );
                 if ( pDlgEdObj )
                 {
                     ChildDescriptor aDesc( pDlgEdObj );
@@ -233,7 +234,7 @@ sal_Bool AccessibleDialogWindow::IsChildVisible( const ChildDescriptor& rDesc )
         SdrModel* pSdrModel = m_pDialogWindow->GetModel();
         if ( pSdrModel )
         {
-            SdrLayerAdmin& rLayerAdmin = pSdrModel->GetLayerAdmin();
+            SdrLayerAdmin& rLayerAdmin = pSdrModel->GetModelLayerAdmin();
             DlgEdObj* pDlgEdObj = rDesc.pDlgEdObj;
             if ( pDlgEdObj )
             {
@@ -246,7 +247,7 @@ sal_Bool AccessibleDialogWindow::IsChildVisible( const ChildDescriptor& rDesc )
                     if ( pSdrView && pSdrView->IsLayerVisible( aLayerName ) )
                     {
                         // get the bounding box of the shape in logic units
-                        Rectangle aRect = pDlgEdObj->GetSnapRect();
+                        Rectangle aRect(sdr::legacy::GetSnapRect(*pDlgEdObj));
 
                         // transform coordinates relative to the parent
                         MapMode aMap = m_pDialogWindow->GetMapMode();
@@ -356,7 +357,7 @@ void AccessibleDialogWindow::UpdateChildren()
             for ( sal_uLong i = 0, nCount = pSdrPage->GetObjCount(); i < nCount; ++i )
             {
                 SdrObject* pObj = pSdrPage->GetObj( i );
-                DlgEdObj* pDlgEdObj = PTR_CAST( DlgEdObj, pObj );
+                DlgEdObj* pDlgEdObj = dynamic_cast< DlgEdObj* >( pObj );
                 if ( pDlgEdObj )
                     UpdateChild( ChildDescriptor( pDlgEdObj ) );
             }
@@ -376,15 +377,16 @@ void AccessibleDialogWindow::SortChildren()
 
 IMPL_LINK( AccessibleDialogWindow, WindowEventListener, VclSimpleEvent*, pEvent )
 {
+    VclWindowEvent* pVclWindowEvent = dynamic_cast< VclWindowEvent* >(pEvent);
     DBG_CHKTHIS( AccessibleDialogWindow, 0 );
-    DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "AccessibleDialogWindow::WindowEventListener: unknown window event!" );
+    DBG_ASSERT( pVclWindowEvent, "AccessibleDialogWindow::WindowEventListener: unknown window event!" );
 
-    if ( pEvent && pEvent->ISA( VclWindowEvent ) )
+    if ( pVclWindowEvent )
     {
-        DBG_ASSERT( ((VclWindowEvent*)pEvent)->GetWindow(), "AccessibleDialogWindow::WindowEventListener: no window!" );
-        if ( !((VclWindowEvent*)pEvent)->GetWindow()->IsAccessibilityEventsSuppressed() || ( pEvent->GetId() == VCLEVENT_OBJECT_DYING ) )
+        DBG_ASSERT( pVclWindowEvent->GetWindow(), "AccessibleDialogWindow::WindowEventListener: no window!" );
+        if ( !pVclWindowEvent->GetWindow()->IsAccessibilityEventsSuppressed() || ( pEvent->GetId() == VCLEVENT_OBJECT_DYING ) )
         {
-            ProcessWindowEvent( *(VclWindowEvent*)pEvent );
+            ProcessWindowEvent( *pVclWindowEvent );
         }
     }
 
@@ -531,15 +533,16 @@ awt::Rectangle AccessibleDialogWindow::implGetBounds() throw (RuntimeException)
 
 void AccessibleDialogWindow::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.ISA( SdrHint ) )
+    const SdrBaseHint* pSdrHint = dynamic_cast< const SdrBaseHint* >(&rHint);
+
+    if ( pSdrHint )
     {
-        SdrHint* pSdrHint = (SdrHint*)&rHint;
-        switch ( pSdrHint->GetKind() )
+        switch ( pSdrHint->GetSdrHintKind() )
         {
             case HINT_OBJINSERTED:
             {
-                SdrObject* pObj = (SdrObject*)pSdrHint->GetObject();
-                DlgEdObj* pDlgEdObj = PTR_CAST( DlgEdObj, pObj );
+                SdrObject* pObj = (SdrObject*)pSdrHint->GetSdrHintObject();
+                DlgEdObj* pDlgEdObj = dynamic_cast< DlgEdObj* >( pObj );
                 if ( pDlgEdObj )
                 {
                     ChildDescriptor aDesc( pDlgEdObj );
@@ -550,8 +553,8 @@ void AccessibleDialogWindow::Notify( SfxBroadcaster&, const SfxHint& rHint )
             break;
             case HINT_OBJREMOVED:
             {
-                SdrObject* pObj = (SdrObject*)pSdrHint->GetObject();
-                DlgEdObj* pDlgEdObj = PTR_CAST( DlgEdObj, pObj );
+                SdrObject* pObj = (SdrObject*)pSdrHint->GetSdrHintObject();
+                DlgEdObj* pDlgEdObj = dynamic_cast< DlgEdObj* >( pObj );
                 if ( pDlgEdObj )
                     RemoveChild( ChildDescriptor( pDlgEdObj ) );
             }
@@ -559,9 +562,12 @@ void AccessibleDialogWindow::Notify( SfxBroadcaster&, const SfxHint& rHint )
             default: ;
         }
     }
-    else if ( rHint.ISA( DlgEdHint ) )
+    else
     {
-        DlgEdHint* pDlgEdHint = (DlgEdHint*)&rHint;
+        const DlgEdHint* pDlgEdHint = dynamic_cast< const DlgEdHint* >(&rHint);
+
+        if ( pDlgEdHint )
+    {
         switch ( pDlgEdHint->GetKind() )
         {
             case DLGED_HINT_WINDOWSCROLLED:
@@ -591,6 +597,7 @@ void AccessibleDialogWindow::Notify( SfxBroadcaster&, const SfxHint& rHint )
             default: ;
         }
     }
+}
 }
 
 // -----------------------------------------------------------------------------
@@ -991,9 +998,7 @@ void AccessibleDialogWindow::selectAccessibleChild( sal_Int32 nChildIndex ) thro
             SdrView* pSdrView = m_pDialogWindow->GetView();
             if ( pSdrView )
             {
-                SdrPageView* pPgView = pSdrView->GetSdrPageView();
-                if ( pPgView )
-                    pSdrView->MarkObj( pDlgEdObj, pPgView );
+                pSdrView->MarkObj( *pDlgEdObj );
             }
         }
     }
@@ -1016,7 +1021,7 @@ sal_Bool AccessibleDialogWindow::isAccessibleChildSelected( sal_Int32 nChildInde
         {
             SdrView* pSdrView = m_pDialogWindow->GetView();
             if ( pSdrView )
-                bSelected = pSdrView->IsObjMarked( pDlgEdObj );
+                bSelected = pSdrView->IsObjMarked( *pDlgEdObj );
         }
     }
 
@@ -1108,9 +1113,7 @@ void AccessibleDialogWindow::deselectAccessibleChild( sal_Int32 nChildIndex ) th
             SdrView* pSdrView = m_pDialogWindow->GetView();
             if ( pSdrView )
             {
-                SdrPageView* pPgView = pSdrView->GetSdrPageView();
-                if ( pPgView )
-                    pSdrView->MarkObj( pDlgEdObj, pPgView, sal_True );
+                pSdrView->MarkObj( *pDlgEdObj, true);
             }
         }
     }

@@ -36,8 +36,6 @@ using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 
 
-TYPEINIT1( XMLFormsContext, SvXMLImportContext );
-
 XMLFormsContext::XMLFormsContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName )
 : SvXMLImportContext(rImport, nPrfx, rLocalName)
 {

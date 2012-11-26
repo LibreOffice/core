@@ -32,7 +32,6 @@ class SW_DLLPUBLIC SwWrtShellItem: public SfxPoolItem
     SwWrtShell*         pWrtSh;
 
 public:
-                            TYPEINFO();
                             SwWrtShellItem();
                             SwWrtShellItem( sal_uInt16 nWhich , SwWrtShell* pWrtSh);
                             SwWrtShellItem( const SwWrtShellItem& );

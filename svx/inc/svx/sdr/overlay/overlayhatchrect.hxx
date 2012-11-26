@@ -25,8 +25,8 @@
 #define _SDR_OVERLAY_OVERLAYHATCHRECT_HXX
 
 #include <svx/sdr/overlay/overlayobject.hxx>
-#include <vcl/hatch.hxx>
 #include <tools/gen.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -36,36 +36,30 @@ namespace sdr
 {
     namespace overlay
     {
-        class OverlayHatchRect : public OverlayObjectWithBasePosition
+        class OverlayHatchRect : public OverlayObject
         {
             // geometric definitions
-            basegfx::B2DPoint               maSecondPosition;
+            const basegfx::B2DHomMatrix     maTransformation;
             const double                    mfDiscreteGrow;
             const double                    mfDiscreteShrink;
             const double                    mfHatchRotation;
-            const double                    mfRotation;
 
             // geometry creation for OverlayObject
             virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
 
         public:
             OverlayHatchRect(
-                const basegfx::B2DPoint& rBasePosition,
-                const basegfx::B2DPoint& rSecondPosition,
+                const basegfx::B2DHomMatrix& rTransformation,
                 const Color& rHatchColor,
                 double fDiscreteGrow,
                 double fDiscreteShrink,
-                double fHatchRotation,
-                double fRotation);
-
-            const basegfx::B2DPoint& getSecondPosition() const { return maSecondPosition; }
-            void setSecondPosition(const basegfx::B2DPoint&);
+                double fHatchRotation);
 
             // data read access
+            const basegfx::B2DHomMatrix& getTransformation() const { return maTransformation; }
             double getDiscreteGrow() const { return mfDiscreteGrow; }
             double getDiscreteShrink() const { return mfDiscreteShrink; }
             double getHatchRotation() const { return mfHatchRotation; }
-            double getRotation() const { return mfRotation; }
         };
     } // end of namespace overlay
 } // end of namespace sdr

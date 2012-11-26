@@ -39,7 +39,6 @@
 #include <unotools/moduleoptions.hxx>
 #include <sot/clsids.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <svx/charthelper.hxx>
 
 #include "chartuno.hxx"
 #include "miscuno.hxx"
@@ -115,9 +114,9 @@ ScChartsObj::~ScChartsObj()
 void ScChartsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //! Referenz-Update
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
 
-    if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    if ( pSfxSimpleHint && SFX_HINT_DYING == pSfxSimpleHint->GetId() )
     {
         pDocShell = NULL;       // ungueltig geworden
     }
@@ -221,87 +220,88 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
         xObj = pDocShell->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID ).GetByteSequence(), aTmp );
     if ( xObj.is() )
     {
-            String aObjName = aTmp;       // wirklich eingefuegter Name...
+        String aObjName = aTmp;       // wirklich eingefuegter Name...
 
-            //  Rechteck anpassen
-            //! Fehler/Exception, wenn leer/ungueltig ???
-            Point aRectPos( aRect.X, aRect.Y );
-            bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
-            if ( ( aRectPos.X() < 0 && !bLayoutRTL ) || ( aRectPos.X() > 0 && bLayoutRTL ) ) aRectPos.X() = 0;
-            if (aRectPos.Y() < 0) aRectPos.Y() = 0;
-            Size aRectSize( aRect.Width, aRect.Height );
-            if (aRectSize.Width() <= 0) aRectSize.Width() = 5000;   // Default-Groesse
-            if (aRectSize.Height() <= 0) aRectSize.Height() = 5000;
-            Rectangle aInsRect( aRectPos, aRectSize );
+        //  Rechteck anpassen
+        //! Fehler/Exception, wenn leer/ungueltig ???
+        Point aRectPos( aRect.X, aRect.Y );
+        bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+        if ( ( aRectPos.X() < 0 && !bLayoutRTL ) || ( aRectPos.X() > 0 && bLayoutRTL ) ) aRectPos.X() = 0;
+        if (aRectPos.Y() < 0) aRectPos.Y() = 0;
+        Size aRectSize( aRect.Width, aRect.Height );
+        if (aRectSize.Width() <= 0) aRectSize.Width() = 5000;   // Default-Groesse
+        if (aRectSize.Height() <= 0) aRectSize.Height() = 5000;
 
-            sal_Int64 nAspect(embed::Aspects::MSOLE_CONTENT);
-            MapUnit aMapUnit(VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) ));
-            Size aSize(aInsRect.GetSize());
-            aSize = Window::LogicToLogic( aSize, MapMode( MAP_100TH_MM ), MapMode( aMapUnit ) );
-            awt::Size aSz;
-            aSz.Width = aSize.Width();
-            aSz.Height = aSize.Height();
+        sal_Int64 nAspect(embed::Aspects::MSOLE_CONTENT);
+        MapUnit aMapUnit(VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) ));
+        Size aSize(aRectSize);
+        aSize = Window::LogicToLogic( aSize, MapMode( MAP_100TH_MM ), MapMode( aMapUnit ) );
+        awt::Size aSz;
+        aSz.Width = aSize.Width();
+        aSz.Height = aSize.Height();
 
-            // Calc -> DataProvider
-            uno::Reference< chart2::data::XDataProvider > xDataProvider = new
-                ScChart2DataProvider( pDoc );
-            // Chart -> DataReceiver
-            uno::Reference< chart2::data::XDataReceiver > xReceiver;
-            uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
-            if( xCompSupp.is())
-                xReceiver.set( xCompSupp->getComponent(), uno::UNO_QUERY );
-            if( xReceiver.is())
-            {
-                String sRangeStr;
-                xNewRanges->Format(sRangeStr, SCR_ABS_3D, pDoc);
+        // Calc -> DataProvider
+        uno::Reference< chart2::data::XDataProvider > xDataProvider = new
+            ScChart2DataProvider( pDoc );
+        // Chart -> DataReceiver
+        uno::Reference< chart2::data::XDataReceiver > xReceiver;
+        uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
+        if( xCompSupp.is())
+            xReceiver.set( xCompSupp->getComponent(), uno::UNO_QUERY );
+        if( xReceiver.is())
+        {
+            String sRangeStr;
+            xNewRanges->Format(sRangeStr, SCR_ABS_3D, pDoc);
 
-                // connect
-                if( sRangeStr.Len() )
-                    xReceiver->attachDataProvider( xDataProvider );
-                else
-                    sRangeStr = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( "all" ) );
+            // connect
+            if( sRangeStr.Len() )
+                xReceiver->attachDataProvider( xDataProvider );
+            else
+                sRangeStr = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( "all" ) );
 
-                uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( pDocShell->GetModel(), uno::UNO_QUERY );
-                xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
+            uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( pDocShell->GetModel(), uno::UNO_QUERY );
+            xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
 
-                // set arguments
-                uno::Sequence< beans::PropertyValue > aArgs( 4 );
-                aArgs[0] = beans::PropertyValue(
-                    ::rtl::OUString::createFromAscii("CellRangeRepresentation"), -1,
-                    uno::makeAny( ::rtl::OUString( sRangeStr )), beans::PropertyState_DIRECT_VALUE );
-                aArgs[1] = beans::PropertyValue(
-                    ::rtl::OUString::createFromAscii("HasCategories"), -1,
-                    uno::makeAny( bRowHeaders ), beans::PropertyState_DIRECT_VALUE );
-                aArgs[2] = beans::PropertyValue(
-                    ::rtl::OUString::createFromAscii("FirstCellAsLabel"), -1,
-                    uno::makeAny( bColumnHeaders ), beans::PropertyState_DIRECT_VALUE );
-                aArgs[3] = beans::PropertyValue(
-                    ::rtl::OUString::createFromAscii("DataRowSource"), -1,
-                    uno::makeAny( chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE );
-                xReceiver->setArguments( aArgs );
-            }
+            // set arguments
+            uno::Sequence< beans::PropertyValue > aArgs( 4 );
+            aArgs[0] = beans::PropertyValue(
+                ::rtl::OUString::createFromAscii("CellRangeRepresentation"), -1,
+                uno::makeAny( ::rtl::OUString( sRangeStr )), beans::PropertyState_DIRECT_VALUE );
+            aArgs[1] = beans::PropertyValue(
+                ::rtl::OUString::createFromAscii("HasCategories"), -1,
+                uno::makeAny( bRowHeaders ), beans::PropertyState_DIRECT_VALUE );
+            aArgs[2] = beans::PropertyValue(
+                ::rtl::OUString::createFromAscii("FirstCellAsLabel"), -1,
+                uno::makeAny( bColumnHeaders ), beans::PropertyState_DIRECT_VALUE );
+            aArgs[3] = beans::PropertyValue(
+                ::rtl::OUString::createFromAscii("DataRowSource"), -1,
+                uno::makeAny( chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE );
+            xReceiver->setArguments( aArgs );
+        }
 
-            ScChartListener* pChartListener =
-                new ScChartListener( aObjName, pDoc, xNewRanges );
-            pDoc->GetChartListenerCollection()->Insert( pChartListener );
-            pChartListener->StartListeningTo();
+        ScChartListener* pChartListener =
+            new ScChartListener( aObjName, pDoc, xNewRanges );
+        pDoc->GetChartListenerCollection()->Insert( pChartListener );
+        pChartListener->StartListeningTo();
 
-            SdrOle2Obj* pObj = new SdrOle2Obj( ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), aObjName, aInsRect );
+        SdrOle2Obj* pObj = new SdrOle2Obj(
+            *pModel,
+            ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ),
+            aObjName,
+            basegfx::tools::createScaleTranslateB2DHomMatrix(
+                aRectSize.getWidth(), aRectSize.getHeight(),
+                aRectPos.X(), aRectPos.Y()));
 
-            // set VisArea
-            if( xObj.is())
-                xObj->setVisualAreaSize( nAspect, aSz );
+        // set VisArea
+        if( xObj.is())
+            xObj->setVisualAreaSize( nAspect, aSz );
 
-            // #121334# This call will change the chart's default background fill from white to transparent.
-            // Add here again if this is wanted (see task description for details)
-            // ChartHelper::AdaptDefaultsForChart( xObj );
+        pPage->InsertObjectToSdrObjList(*pObj);
+        pModel->AddUndo( new SdrUndoNewObj( *pObj ) );
 
-            pPage->InsertObject( pObj );
-            pModel->AddUndo( new SdrUndoNewObj( *pObj ) );
-
-            // Dies veranlaesst Chart zum sofortigen Update
-            //SvData aEmpty;
-            //aIPObj->SendDataChanged( aEmpty );
+        // Dies veranlaesst Chart zum sofortigen Update
+        //SvData aEmpty;
+        //aIPObj->SendDataChanged( aEmpty );
     }
 }
 
@@ -318,7 +318,7 @@ void SAL_CALL ScChartsObj::removeByName( const rtl::OUString& aName )
         SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));    // ist nicht 0
 
         pModel->AddUndo( new SdrUndoDelObj( *pObj ) );
-        pPage->RemoveObject( pObj->GetOrdNum() );
+        pPage->RemoveObjectFromSdrObjList( pObj->GetNavigationPosition() );
 
         //! Notify etc.???
     }
@@ -481,9 +481,9 @@ ScChartObj::~ScChartObj()
 void ScChartObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //! Referenz-Update
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
 
-    if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    if ( pSfxSimpleHint && SFX_HINT_DYING == pSfxSimpleHint->GetId() )
     {
         pDocShell = NULL;       // ungueltig geworden
     }

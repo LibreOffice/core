@@ -22,7 +22,8 @@
 
 #ifndef _DFLYOBJ_HXX
 #define _DFLYOBJ_HXX
-#include <svx/svdovirt.hxx>
+
+#include <svx/svdobj.hxx>
 
 class SwFlyFrm;
 class SwFrmFmt;
@@ -45,14 +46,19 @@ private:
 
 protected:
     // #i95264# SwFlyDrawObj needs an own VC since createViewIndependentPrimitive2DSequence()
-    // is called when RecalcBoundRect() is used
+    // is called when the view independent range of the object is used
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
-public:
-    TYPEINFO();
-
-    SwFlyDrawObj();
     ~SwFlyDrawObj();
+
+    /// method to copy all data from given source
+    virtual void copyDataFromSdrObject(const SdrObject& rSource);
+
+public:
+    SwFlyDrawObj(SdrModel& rSdrModel);
+
+    /// create a copy, evtl. with a different target model (if given)
+    virtual SdrObject* CloneSdrObject(SdrModel* pTargetModel = 0) const;
 
     //Damit eine Instanz dieser Klasse beim laden erzeugt werden kann
     //(per Factory).
@@ -66,16 +72,30 @@ public:
 //Flys werden immer mit virtuellen Objekten angezeigt. Nur so koennen sie
 //ggf. mehrfach angezeigt werden (Kopf-/Fusszeilen).
 
-class SwVirtFlyDrawObj : public SdrVirtObj
+class SwVirtFlyDrawObj : public SdrObject
 {
 private:
     SwFlyFrm *pFlyFrm;
+
+    //////////////////////////////////////////////////////////////////////////
+    // members which were missing from SdrVirtObj
+    SdrObject&                  rRefObj;
 
 protected:
     // AW: Need own sdr::contact::ViewContact since AnchorPos from parent is
     // not used but something own (top left of new SnapRect minus top left
     // of original SnapRect)
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+
+    // original Notify from SdrVirtObj
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
+
+    void impReactOnGeometryChange();
+
+    /// method to copy all data from given source
+    virtual void copyDataFromSdrObject(const SdrObject& rSource);
+
+    ~SwVirtFlyDrawObj();
 
 public:
     // for paints triggered form ExecutePrimitive
@@ -85,33 +105,16 @@ public:
     basegfx::B2DRange getOuterBound() const;
     basegfx::B2DRange getInnerBound() const;
 
-public:
-    TYPEINFO();
-
     SwVirtFlyDrawObj(SdrObject& rNew, SwFlyFrm* pFly);
-    ~SwVirtFlyDrawObj();
 
-    //Ueberladene Methoden der Basisklasse SdrVirtObj
+    /// create a copy, evtl. with a different target model (if given)
+    virtual SdrObject* CloneSdrObject(SdrModel* pTargetModel = 0) const;
+
+    virtual bool IsClosedObj() const;
+
     virtual void     TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const;
-
-    //Wir nehemen die Groessenbehandlung vollstaendig selbst in die Hand.
-    virtual const Rectangle& GetCurrentBoundRect() const;
-    virtual const Rectangle& GetLastBoundRect() const;
-    virtual       void       RecalcBoundRect();
-    virtual       void       RecalcSnapRect();
-    virtual const Rectangle& GetSnapRect()  const;
-    virtual       void       SetSnapRect(const Rectangle& rRect);
-    virtual       void       NbcSetSnapRect(const Rectangle& rRect);
-    virtual const Rectangle& GetLogicRect() const;
-    virtual       void       SetLogicRect(const Rectangle& rRect);
-    virtual       void       NbcSetLogicRect(const Rectangle& rRect);
+//  virtual       void       recalculateObjectRange();
     virtual ::basegfx::B2DPolyPolygon TakeXorPoly() const;
-    virtual       void       NbcMove  (const Size& rSiz);
-    virtual       void       NbcResize(const Point& rRef, const Fraction& xFact,
-                                       const Fraction& yFact);
-    virtual       void       Move  (const Size& rSiz);
-    virtual       void       Resize(const Point& rRef, const Fraction& xFact,
-                                    const Fraction& yFact);
 
     const SwFrmFmt *GetFmt() const;
           SwFrmFmt *GetFmt();
@@ -123,13 +126,58 @@ public:
     void SetRect() const;
 
     // ist eine URL an einer Grafik gesetzt, dann ist das ein Makro-Object
-    virtual FASTBOOL HasMacro() const;
+    virtual bool HasMacro() const;
     virtual SdrObject* CheckMacroHit       (const SdrObjMacroHitRec& rRec) const;
     virtual Pointer    GetMacroPointer     (const SdrObjMacroHitRec& rRec) const;
 
     // FullDrag support
     virtual bool supportsFullDrag() const;
     virtual SdrObject* getFullDragClone() const;
+
+    //////////////////////////////////////////////////////////////////////////
+    // methods which were missing from SdrVirtObj which do something
+    SdrObject& ReferencedObj();
+    const SdrObject& GetReferencedObj() const;
+
+    virtual sdr::properties::BaseProperties& GetProperties() const;
+    //virtual void SetModel(SdrModel* pNewModel);
+    virtual sal_uInt32 GetObjInventor() const;
+    virtual sal_uInt16 GetObjIdentifier() const;
+    virtual SdrObjList* getChildrenOfSdrObject() const;
+    //virtual SdrObjList* GetSubList() const;
+    virtual void SetChanged();
+    virtual void TakeObjNameSingul(String& rName) const;
+    virtual void TakeObjNamePlural(String& rName) const;
+    virtual sal_uInt32 GetPlusHdlCount(const SdrHdl& rHdl) const;
+    virtual void GetPlusHdl(SdrHdlList& rHdlList, SdrObject& rSdrObject, const SdrHdl& rHdl, sal_uInt32 nPlNum) const;
+    virtual void AddToHdlList(SdrHdlList& rHdlList) const;
+    virtual bool hasSpecialDrag() const;
+    virtual bool beginSpecialDrag(SdrDragStat& rDrag) const;
+    virtual bool applySpecialDrag(SdrDragStat& rDrag);
+    virtual String getSpecialDragComment(const SdrDragStat& rDrag) const;
+    virtual basegfx::B2DPolyPolygon getSpecialDragPoly(const SdrDragStat& rDrag) const;
+    virtual bool BegCreate(SdrDragStat& rStat);
+    virtual bool MovCreate(SdrDragStat& rStat);
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+    virtual bool BckCreate(SdrDragStat& rStat);
+    virtual void BrkCreate(SdrDragStat& rStat);
+    virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;
+    virtual sal_uInt32 GetSnapPointCount() const;
+    virtual basegfx::B2DPoint GetSnapPoint(sal_uInt32 i) const;
+    virtual bool IsPolygonObject() const;
+    virtual sal_uInt32 GetObjectPointCount() const;
+    virtual basegfx::B2DPoint GetObjectPoint(sal_uInt32 i) const;
+    virtual void SetObjectPoint(const basegfx::B2DPoint& rPnt, sal_uInt32 i);
+    virtual SdrObjGeoData* GetGeoData() const;
+    virtual void SetGeoData(const SdrObjGeoData& rGeo);
+    //virtual void NbcReformatText();
+    virtual void ReformatText();
+    virtual void PaintMacro (OutputDevice& rOut, const SdrObjMacroHitRec& rRec) const;
+    virtual bool DoMacro (const SdrObjMacroHitRec& rRec);
+    virtual XubString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const;
+    virtual const Point GetOffset() const;
+
+    virtual void setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransformation);
 };
 
 

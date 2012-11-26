@@ -35,19 +35,13 @@
 using namespace ::com::sun::star;
 
 // -----------------------------------------------------------------------
-
-TYPEINIT1_FACTORY( SvxColorTableItem, SfxPoolItem , new  SvxColorTableItem);
-TYPEINIT1_FACTORY( SvxGradientListItem, SfxPoolItem , new  SvxGradientListItem);
-TYPEINIT1_FACTORY( SvxHatchListItem, SfxPoolItem , new  SvxHatchListItem);
-TYPEINIT1_FACTORY( SvxBitmapListItem, SfxPoolItem , new  SvxBitmapListItem);
-TYPEINIT1_FACTORY( SvxDashListItem, SfxPoolItem , new  SvxDashListItem);
-TYPEINIT1_FACTORY( SvxLineEndListItem, SfxPoolItem , new  SvxLineEndListItem);
-
 //==================================================================
 //
 //  SvxColorTableItem
 //
 //==================================================================
+
+IMPL_POOLITEM_FACTORY(SvxColorTableItem)
 
 SvxColorTableItem::SvxColorTableItem()
 {
@@ -133,6 +127,8 @@ sal_Bool SvxColorTableItem::PutValue( const com::sun::star::uno::Any& rVal, sal_
 //
 //==================================================================
 
+IMPL_POOLITEM_FACTORY(SvxGradientListItem)
+
 SvxGradientListItem::SvxGradientListItem()
 {
 }
@@ -216,6 +212,8 @@ sal_Bool SvxGradientListItem::PutValue( const com::sun::star::uno::Any& rVal, sa
 //  SvxHatchListItem
 //
 //==================================================================
+
+IMPL_POOLITEM_FACTORY(SvxHatchListItem)
 
 SvxHatchListItem::SvxHatchListItem()
 {
@@ -301,6 +299,8 @@ sal_Bool SvxHatchListItem::PutValue( const com::sun::star::uno::Any& rVal, sal_u
 //
 //==================================================================
 
+IMPL_POOLITEM_FACTORY(SvxBitmapListItem)
+
 SvxBitmapListItem::SvxBitmapListItem()
 {
 }
@@ -385,6 +385,8 @@ sal_Bool SvxBitmapListItem::PutValue( const com::sun::star::uno::Any& rVal, sal_
 //  SvxDashListItem
 //
 //==================================================================
+
+IMPL_POOLITEM_FACTORY(SvxDashListItem)
 
 SvxDashListItem::SvxDashListItem() :
     pDashList( 0 )
@@ -475,6 +477,8 @@ void SvxDashListItem::SetDashList( XDashList* pList )
 //  SvxLineEndListItem
 //
 //==================================================================
+
+IMPL_POOLITEM_FACTORY(SvxLineEndListItem)
 
 SvxLineEndListItem::SvxLineEndListItem()
 {

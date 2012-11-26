@@ -651,10 +651,12 @@ void Ppt97Animation::UpdateCacheData() const
 
 void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
 {
-
     if( !this->HasEffect() )
         return;
-    if( !pObj || !pObj->GetPage() )
+
+    SdrPage* pOwningPage = pObj ? pObj->getSdrPageFromSdrObject() : 0;
+
+    if( !pObj || !pOwningPage )
     {
         DBG_ERROR("no valid SdrObject or page found for ppt import");
         return;
@@ -666,7 +668,7 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
         DBG_ERROR("no XShape interface found for ppt import");
         return;
     }
-    ::sd::MainSequencePtr pMainSequence = static_cast<SdPage*>(pObj->GetPage())->getMainSequence();
+    ::sd::MainSequencePtr pMainSequence = static_cast< SdPage* >(pOwningPage)->getMainSequence();
     if( !pMainSequence.get() )
     {
         DBG_ERROR("no MainSequence found for ppt import");

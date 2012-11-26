@@ -471,14 +471,14 @@ void SvxHlinkDlgMarkWnd::ClearTree()
 
 SvLBoxEntry* SvxHlinkDlgMarkWnd::FindEntry ( String aStrName )
 {
-    sal_Bool bFound=sal_False;
+    bool bFound=false;
     SvLBoxEntry* pEntry = maLbTree.First();
 
     while ( pEntry && !bFound )
     {
         TargetData* pUserData = ( TargetData * ) pEntry->GetUserData ();
         if ( aStrName == String( pUserData->aUStrLinkname ) )
-            bFound = sal_True;
+            bFound = true;
         else
             pEntry = maLbTree.Next( pEntry );
     }

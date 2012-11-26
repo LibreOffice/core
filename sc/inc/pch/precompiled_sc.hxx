@@ -160,12 +160,10 @@
 #include <svx/fmglob.hxx>
 #include <editeng/outlobj.hxx>
 #include <svx/sdangitm.hxx>
-#include <svx/sderitm.hxx>
 #include <svx/sdmetitm.hxx>
 #include <svx/sdooitm.hxx>
 #include <svx/sdprcitm.hxx>
 #include <svx/sdrmasterpagedescriptor.hxx>
-#include <svx/sdrpageuser.hxx>
 #include <svx/sdtaitm.hxx>
 #include <svx/svdglue.hxx>
 #include <svx/svdlayer.hxx>
@@ -192,7 +190,6 @@
 #include <tools/globname.hxx>
 #include <tools/list.hxx>
 #include <tools/rc.hxx>
-#include <tools/rtti.hxx>
 #include <tools/solar.h>
 #include <tools/string.hxx>
 #include <tools/toolsdllapi.h>

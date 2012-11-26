@@ -70,7 +70,6 @@ class SW_DLLPUBLIC SwDocDisplayItem : public SfxPoolItem
 
 
 public:
-                                TYPEINFO();
                                 SwDocDisplayItem( sal_uInt16 nWhich = FN_PARAM_DOCDISP );
                                 SwDocDisplayItem(
                                     const SwDocDisplayItem& rSwDocDisplayItem );
@@ -110,7 +109,6 @@ class SW_DLLPUBLIC SwElemItem : public SfxPoolItem
     friend class SwContentOptPage;
 
 public:
-                            TYPEINFO();
                             SwElemItem( sal_uInt16 nWhich = FN_PARAM_ELEM );
                             SwElemItem(const SwElemItem& rElemItem);
                             SwElemItem(const SwViewOption& rVOpt, sal_uInt16 nWhich);
@@ -134,7 +132,6 @@ class SW_DLLPUBLIC SwAddPrinterItem : public SfxPoolItem, public SwPrintData
     using  SwPrintData::operator ==;
 
 public:
-    TYPEINFO();
     SwAddPrinterItem( sal_uInt16 nWhich = FN_PARAM_ADDPRINTER );
     SwAddPrinterItem( sal_uInt16 nWhich, const SwPrintData& rPrtData );
     SwAddPrinterItem( const SwAddPrinterItem& rAddPrinterItem);
@@ -181,7 +178,6 @@ class SW_DLLPUBLIC SwShadowCursorItem : public SfxPoolItem
     sal_uInt8 eMode;
     sal_Bool bOn;
 public:
-    TYPEINFO();
     SwShadowCursorItem( sal_uInt16 nWhich = FN_PARAM_SHADOWCURSOR );
     SwShadowCursorItem( const SwShadowCursorItem& rElemItem );
     SwShadowCursorItem( const SwViewOption& rVOpt, sal_uInt16 nWhich );

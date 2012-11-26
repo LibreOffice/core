@@ -106,7 +106,7 @@ namespace { ScTabViewShell * lcl_GetTabViewShell( SfxBindings *pBindings ); }
         ScTabViewShell* pViewShell = lcl_GetTabViewShell( p );      \
         /*//-->Added by PengYunQuan for Validity Cell Range Picker*/\
         if (!pViewShell)                                            \
-            pViewShell = PTR_CAST( ScTabViewShell, SfxViewShell::Current() ); \
+            pViewShell = dynamic_cast< ScTabViewShell* >( SfxViewShell::Current() ); \
         DBG_ASSERT( pViewShell, "missing view shell :-(" );         \
         pWindow = pViewShell ?                                      \
             pViewShell->CreateRefDialog( p, this, pInfo, pParentP, sid ) : NULL;    \
@@ -214,7 +214,7 @@ ScSimpleRefDlgWrapper::ScSimpleRefDlgWrapper( Window* pParentP,
         : SfxChildWindow(pParentP, nId)
 {
 //  ScTabViewShell* pViewShell =
-//      PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
+//      dynamic_cast< ScTabViewShell* >( SfxViewShell::Current() );
 
     ScTabViewShell* pViewShell = NULL;
     SfxDispatcher* pDisp = p->GetDispatcher();
@@ -222,7 +222,7 @@ ScSimpleRefDlgWrapper::ScSimpleRefDlgWrapper( Window* pParentP,
     {
         SfxViewFrame* pViewFrm = pDisp->GetFrame();
         if ( pViewFrm )
-            pViewShell = PTR_CAST( ScTabViewShell, pViewFrm->GetViewShell() );
+            pViewShell = dynamic_cast< ScTabViewShell* >( pViewFrm->GetViewShell() );
     }
 
     DBG_ASSERT( pViewShell, "missing view shell :-(" );
@@ -326,8 +326,7 @@ ScAcceptChgDlgWrapper::ScAcceptChgDlgWrapper(   Window* pParentP,
                                             SfxChildWinInfo* pInfo ) :
                                             SfxChildWindow( pParentP, nId )
 {
-        ScTabViewShell* pViewShell =
-            PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
+        ScTabViewShell* pViewShell = dynamic_cast< ScTabViewShell* >( SfxViewShell::Current() );
         DBG_ASSERT( pViewShell, "missing view shell :-(" );
         pWindow = pViewShell ?
             new ScAcceptChgDlg( pBindings, this, pParentP, pViewShell->GetViewData() ) :
@@ -342,8 +341,7 @@ ScAcceptChgDlgWrapper::ScAcceptChgDlgWrapper(   Window* pParentP,
 
 void ScAcceptChgDlgWrapper::ReInitDlg()
 {
-    ScTabViewShell* pViewShell =
-        PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
+    ScTabViewShell* pViewShell = dynamic_cast< ScTabViewShell* >( SfxViewShell::Current() );
     DBG_ASSERT( pViewShell, "missing view shell :-(" );
 
     if(pWindow!=NULL && pViewShell)
@@ -410,11 +408,11 @@ ScValidityRefChildWin::ScValidityRefChildWin( Window*               pParentP,   
             NULL != ( pWindow =  ScValidationDlg::Find1AliveObject( pParentP ) ) ? static_cast<ScValidationDlg*>(pWindow)->GetTabViewShell() :
             lcl_GetTabViewShell( p );
         if (!pViewShell)
-            pViewShell = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
+            pViewShell = dynamic_cast< ScTabViewShell* >( SfxViewShell::Current() );
         DBG_ASSERT( pViewShell, "missing view shell :-(" );         \
         if (pViewShell && !pWindow)                                             \
             pViewShell->GetViewFrame()->SetChildWindow( nId, sal_False );           \
-        else if( pWindow /*&& pWindow->ISA(ScValidationDlg)*/ )
+        else if( pWindow /*&& dynamic_cast< ScValidationDlg* >(pWindow)*/ )
         {}//pWindow = new Window( pParentP, WB_HIDE );
 
     if( pWindow ) m_pSavedWndParent = pWindow->GetParent();

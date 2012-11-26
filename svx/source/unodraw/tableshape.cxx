@@ -28,11 +28,11 @@
 #include "svx/unoshprp.hxx"
 #include "svx/svdotable.hxx"
 #include <svx/svdpool.hxx>
+#include <svx/globaldrawitempool.hxx>
 
 ///////////////////////////////////////////////////////////////////////
 
 using ::rtl::OUString;
-
 using namespace ::osl;
 using namespace ::cppu;
 using namespace ::sdr::table;
@@ -43,7 +43,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 
 SvxTableShape::SvxTableShape( SdrObject* pObj ) throw()
-:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_TABLE), aSvxMapProvider.GetPropertySet(SVXMAP_TABLE, SdrObject::GetGlobalDrawObjectItemPool()) )
+:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_TABLE), aSvxMapProvider.GetPropertySet(SVXMAP_TABLE, GetGlobalDrawObjectItemPool()) )
 {
     SetShapeType( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.TableShape" ) ) );
 }
@@ -63,48 +63,48 @@ bool SvxTableShape::setPropertyValueImpl(
 {
     switch( pProperty->nWID )
     {
-    case OWN_ATTR_TABLETEMPLATE:
-    {
-        Reference< XIndexAccess > xTemplate;
-
-        if( !(rValue >>= xTemplate) )
-            throw IllegalArgumentException();
-
-        if( mpObj.is() )
-            static_cast< sdr::table::SdrTableObj* >( mpObj.get() )->setTableStyle(xTemplate);
-
-        return true;
-    }
-    case OWN_ATTR_TABLETEMPLATE_FIRSTROW:
-    case OWN_ATTR_TABLETEMPLATE_LASTROW:
-    case OWN_ATTR_TABLETEMPLATE_FIRSTCOLUMN:
-    case OWN_ATTR_TABLETEMPLATE_LASTCOLUMN:
-    case OWN_ATTR_TABLETEMPLATE_BANDINGROWS:
-    case OWN_ATTR_TABLETEMPLATE_BANDINGCOULUMNS:
-    {
-        if( mpObj.is() )
+        case OWN_ATTR_TABLETEMPLATE:
         {
-            TableStyleSettings aSettings( static_cast< sdr::table::SdrTableObj* >( mpObj.get() )->getTableStyleSettings() );
+            Reference< XIndexAccess > xTemplate;
 
-            switch( pProperty->nWID )
+            if( !(rValue >>= xTemplate) )
+                throw IllegalArgumentException();
+
+            if( mpObj.is() )
+                static_cast< sdr::table::SdrTableObj* >( mpObj.get() )->setTableStyle(xTemplate);
+
+            return true;
+        }
+        case OWN_ATTR_TABLETEMPLATE_FIRSTROW:
+        case OWN_ATTR_TABLETEMPLATE_LASTROW:
+        case OWN_ATTR_TABLETEMPLATE_FIRSTCOLUMN:
+        case OWN_ATTR_TABLETEMPLATE_LASTCOLUMN:
+        case OWN_ATTR_TABLETEMPLATE_BANDINGROWS:
+        case OWN_ATTR_TABLETEMPLATE_BANDINGCOULUMNS:
+        {
+            if( mpObj.is() )
             {
-            case OWN_ATTR_TABLETEMPLATE_FIRSTROW:           rValue >>= aSettings.mbUseFirstRow; break;
-            case OWN_ATTR_TABLETEMPLATE_LASTROW:            rValue >>= aSettings.mbUseLastRow; break;
-            case OWN_ATTR_TABLETEMPLATE_FIRSTCOLUMN:        rValue >>= aSettings.mbUseFirstColumn; break;
-            case OWN_ATTR_TABLETEMPLATE_LASTCOLUMN:         rValue >>= aSettings.mbUseLastColumn; break;
-            case OWN_ATTR_TABLETEMPLATE_BANDINGROWS:        rValue >>= aSettings.mbUseRowBanding; break;
-            case OWN_ATTR_TABLETEMPLATE_BANDINGCOULUMNS:    rValue >>= aSettings.mbUseColumnBanding; break;
+                TableStyleSettings aSettings( static_cast< sdr::table::SdrTableObj* >( mpObj.get() )->getTableStyleSettings() );
+
+                switch( pProperty->nWID )
+                {
+                case OWN_ATTR_TABLETEMPLATE_FIRSTROW:           rValue >>= aSettings.mbUseFirstRow; break;
+                case OWN_ATTR_TABLETEMPLATE_LASTROW:            rValue >>= aSettings.mbUseLastRow; break;
+                case OWN_ATTR_TABLETEMPLATE_FIRSTCOLUMN:        rValue >>= aSettings.mbUseFirstColumn; break;
+                case OWN_ATTR_TABLETEMPLATE_LASTCOLUMN:         rValue >>= aSettings.mbUseLastColumn; break;
+                case OWN_ATTR_TABLETEMPLATE_BANDINGROWS:        rValue >>= aSettings.mbUseRowBanding; break;
+                case OWN_ATTR_TABLETEMPLATE_BANDINGCOULUMNS:    rValue >>= aSettings.mbUseColumnBanding; break;
+                }
+
+                static_cast< sdr::table::SdrTableObj* >( mpObj.get() )->setTableStyleSettings(aSettings);
             }
 
-            static_cast< sdr::table::SdrTableObj* >( mpObj.get() )->setTableStyleSettings(aSettings);
+            return true;
         }
-
-        return true;
-    }
-    default:
-    {
-        return SvxShape::setPropertyValueImpl( rName, pProperty, rValue );
-    }
+        default:
+        {
+            return SvxShape::setPropertyValueImpl( rName, pProperty, rValue );
+        }
     }
 }
 
@@ -118,59 +118,59 @@ bool SvxTableShape::getPropertyValueImpl(
 {
     switch( pProperty->nWID )
     {
-    case OWN_ATTR_OLEMODEL:
-    {
-        if( mpObj.is() )
+        case OWN_ATTR_OLEMODEL:
         {
-            rValue <<= static_cast< sdr::table::SdrTableObj* >( mpObj.get() )->getTable();
-        }
-        return true;
-    }
-    case OWN_ATTR_TABLETEMPLATE:
-    {
-        if( mpObj.is() )
-        {
-            rValue <<= static_cast< sdr::table::SdrTableObj* >( mpObj.get() )->getTableStyle();
-        }
-        return true;
-    }
-    case OWN_ATTR_BITMAP:
-    {
-        if( mpObj.is() )
-        {
-            Graphic aGraphic( SvxGetGraphicForShape( *mpObj.get(), true ) );
-            rValue <<= aGraphic.GetXGraphic();
-        }
-        return true;
-    }
-    case OWN_ATTR_TABLETEMPLATE_FIRSTROW:
-    case OWN_ATTR_TABLETEMPLATE_LASTROW:
-    case OWN_ATTR_TABLETEMPLATE_FIRSTCOLUMN:
-    case OWN_ATTR_TABLETEMPLATE_LASTCOLUMN:
-    case OWN_ATTR_TABLETEMPLATE_BANDINGROWS:
-    case OWN_ATTR_TABLETEMPLATE_BANDINGCOULUMNS:
-    {
-        if( mpObj.is() )
-        {
-            TableStyleSettings aSettings( static_cast< sdr::table::SdrTableObj* >( mpObj.get() )->getTableStyleSettings() );
-
-            switch( pProperty->nWID )
+            if( mpObj.is() )
             {
-            case OWN_ATTR_TABLETEMPLATE_FIRSTROW:           rValue <<= aSettings.mbUseFirstRow; break;
-            case OWN_ATTR_TABLETEMPLATE_LASTROW:            rValue <<= aSettings.mbUseLastRow; break;
-            case OWN_ATTR_TABLETEMPLATE_FIRSTCOLUMN:        rValue <<= aSettings.mbUseFirstColumn; break;
-            case OWN_ATTR_TABLETEMPLATE_LASTCOLUMN:         rValue <<= aSettings.mbUseLastColumn; break;
-            case OWN_ATTR_TABLETEMPLATE_BANDINGROWS:        rValue <<= aSettings.mbUseRowBanding; break;
-            case OWN_ATTR_TABLETEMPLATE_BANDINGCOULUMNS:    rValue <<= aSettings.mbUseColumnBanding; break;
+                rValue <<= static_cast< sdr::table::SdrTableObj* >( mpObj.get() )->getTable();
             }
+            return true;
         }
+        case OWN_ATTR_TABLETEMPLATE:
+        {
+            if( mpObj.is() )
+            {
+                rValue <<= static_cast< sdr::table::SdrTableObj* >( mpObj.get() )->getTableStyle();
+            }
+            return true;
+        }
+        case OWN_ATTR_BITMAP:
+        {
+            if( mpObj.is() )
+            {
+                Graphic aGraphic( SvxGetGraphicForShape( *mpObj.get(), true ) );
+                rValue <<= aGraphic.GetXGraphic();
+            }
+            return true;
+        }
+        case OWN_ATTR_TABLETEMPLATE_FIRSTROW:
+        case OWN_ATTR_TABLETEMPLATE_LASTROW:
+        case OWN_ATTR_TABLETEMPLATE_FIRSTCOLUMN:
+        case OWN_ATTR_TABLETEMPLATE_LASTCOLUMN:
+        case OWN_ATTR_TABLETEMPLATE_BANDINGROWS:
+        case OWN_ATTR_TABLETEMPLATE_BANDINGCOULUMNS:
+        {
+            if( mpObj.is() )
+            {
+                TableStyleSettings aSettings( static_cast< sdr::table::SdrTableObj* >( mpObj.get() )->getTableStyleSettings() );
 
-        return true;
-    }
-    default:
-    {
-        return SvxShape::getPropertyValueImpl( rName, pProperty, rValue );
-    }
+                switch( pProperty->nWID )
+                {
+                case OWN_ATTR_TABLETEMPLATE_FIRSTROW:           rValue <<= aSettings.mbUseFirstRow; break;
+                case OWN_ATTR_TABLETEMPLATE_LASTROW:            rValue <<= aSettings.mbUseLastRow; break;
+                case OWN_ATTR_TABLETEMPLATE_FIRSTCOLUMN:        rValue <<= aSettings.mbUseFirstColumn; break;
+                case OWN_ATTR_TABLETEMPLATE_LASTCOLUMN:         rValue <<= aSettings.mbUseLastColumn; break;
+                case OWN_ATTR_TABLETEMPLATE_BANDINGROWS:        rValue <<= aSettings.mbUseRowBanding; break;
+                case OWN_ATTR_TABLETEMPLATE_BANDINGCOULUMNS:    rValue <<= aSettings.mbUseColumnBanding; break;
+                }
+            }
+
+            return true;
+        }
+        default:
+        {
+            return SvxShape::getPropertyValueImpl( rName, pProperty, rValue );
+        }
     }
 }
 

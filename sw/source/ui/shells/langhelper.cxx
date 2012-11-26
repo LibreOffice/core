@@ -118,7 +118,7 @@ namespace SwLangHelper
         // get the language
         String aNewLangTxt;
 
-        SFX_REQUEST_ARG( rReq, pItem, SfxStringItem, SID_LANGUAGE_STATUS , sal_False );
+        SFX_REQUEST_ARG( rReq, pItem, SfxStringItem, SID_LANGUAGE_STATUS );
         if (pItem)
             aNewLangTxt = pItem->GetValue();
 

@@ -36,8 +36,6 @@ namespace svx
     //====================================================================
     //= DatabaseMapItem
     //====================================================================
-    TYPEINIT1( DatabaseMapItem, SfxPoolItem )
-    //--------------------------------------------------------------------
     DatabaseMapItem::DatabaseMapItem( sal_uInt16 _nId, const DatabaseRegistrations& _rRegistrations )
         :SfxPoolItem( _nId )
         ,m_aRegistrations( _rRegistrations )
@@ -47,7 +45,7 @@ namespace svx
     //--------------------------------------------------------------------
     int DatabaseMapItem::operator==( const SfxPoolItem& _rCompare ) const
     {
-        const DatabaseMapItem* pItem = PTR_CAST(DatabaseMapItem, &_rCompare);
+        const DatabaseMapItem* pItem = dynamic_cast< const DatabaseMapItem* >( &_rCompare);
         if ( !pItem )
             return sal_False;
 

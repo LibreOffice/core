@@ -30,6 +30,7 @@
 #include <tools/debug.hxx>
 #include "drwlayer.hxx"
 #include "rechead.hxx"
+#include <svx/sdrobjectfactory.hxx>
 
 // -----------------------------------------------------------------------
 
@@ -45,14 +46,20 @@ ScDrawObjFactory::~ScDrawObjFactory()
 
 IMPL_LINK_INLINE_START( ScDrawObjFactory, MakeUserData, SdrObjFactory *, pObjFactory )
 {
-    if ( pObjFactory->nInventor == SC_DRAWLAYER )
+    if ( SC_DRAWLAYER == pObjFactory->getSdrObjectCreationInfo().getInvent() )
     {
-        if ( pObjFactory->nIdentifier == SC_UD_OBJDATA )
-            pObjFactory->pNewData = new ScDrawObjData;
-        else if ( pObjFactory->nIdentifier == SC_UD_IMAPDATA )
-            pObjFactory->pNewData = new ScIMapInfo;
-        else if ( pObjFactory->nIdentifier == SC_UD_MACRODATA )
-            pObjFactory->pNewData = new ScMacroInfo;
+        if ( pObjFactory->getSdrObjectCreationInfo().getIdent() == SC_UD_OBJDATA )
+        {
+            pObjFactory->setNewSdrObjUserData(new ScDrawObjData);
+        }
+        else if ( pObjFactory->getSdrObjectCreationInfo().getIdent() == SC_UD_IMAPDATA )
+        {
+            pObjFactory->setNewSdrObjUserData(new ScIMapInfo);
+        }
+        else if ( pObjFactory->getSdrObjectCreationInfo().getIdent() == SC_UD_MACRODATA )
+        {
+            pObjFactory->setNewSdrObjUserData(new ScMacroInfo);
+        }
         else
         {
             DBG_ERROR("MakeUserData: falsche ID");
@@ -65,7 +72,7 @@ IMPL_LINK_INLINE_END( ScDrawObjFactory, MakeUserData, SdrObjFactory *, pObjFacto
 //------------------------------------------------------------------------
 
 ScDrawObjData::ScDrawObjData() :
-    SdrObjUserData( SC_DRAWLAYER, SC_UD_OBJDATA, 0 ),
+    SdrObjUserData( SC_DRAWLAYER, SC_UD_OBJDATA ),
     maStart( ScAddress::INITIALIZE_INVALID ),
     maEnd( ScAddress::INITIALIZE_INVALID ),
     mbNote( false )
@@ -80,12 +87,12 @@ ScDrawObjData* ScDrawObjData::Clone( SdrObject* ) const
 //------------------------------------------------------------------------
 
 ScIMapInfo::ScIMapInfo() :
-    SdrObjUserData( SC_DRAWLAYER, SC_UD_IMAPDATA, 0 )
+    SdrObjUserData( SC_DRAWLAYER, SC_UD_IMAPDATA )
 {
 }
 
 ScIMapInfo::ScIMapInfo( const ImageMap& rImageMap ) :
-    SdrObjUserData( SC_DRAWLAYER, SC_UD_IMAPDATA, 0 ),
+    SdrObjUserData( SC_DRAWLAYER, SC_UD_IMAPDATA ),
     aImageMap( rImageMap )
 {
 }
@@ -108,7 +115,7 @@ SdrObjUserData* ScIMapInfo::Clone( SdrObject* ) const
 //------------------------------------------------------------------------
 
 ScMacroInfo::ScMacroInfo() :
-    SdrObjUserData( SC_DRAWLAYER, SC_UD_MACRODATA, 0 )
+    SdrObjUserData( SC_DRAWLAYER, SC_UD_MACRODATA )
 {
 }
 

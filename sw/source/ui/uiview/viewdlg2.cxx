@@ -105,7 +105,7 @@ void SwView::AutoCaption(const sal_uInt16 nType, const SvGlobalName *pOleId)
 {
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
 
-    sal_Bool bWeb = 0 != PTR_CAST(SwWebView, this);
+    sal_Bool bWeb = 0 != dynamic_cast< SwWebView* >( this);
     if (pModOpt->IsInsWithCaption(bWeb))
     {
         const InsCaptionOpt *pOpt = pModOpt->GetCapOption(bWeb, (SwCapObjType)nType, pOleId);

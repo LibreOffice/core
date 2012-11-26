@@ -1060,8 +1060,6 @@ class SwXMLDDETableContext_Impl : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     SwXMLDDETableContext_Impl(
         SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName);
 
@@ -1076,8 +1074,6 @@ public:
     OUString& GetDDETopic()         { return sDDETopic; }
     sal_Bool GetIsAutomaticUpdate() { return bIsAutomaticUpdate; }
 };
-
-TYPEINIT1( SwXMLDDETableContext_Impl, SvXMLImportContext );
 
 SwXMLDDETableContext_Impl::SwXMLDDETableContext_Impl(
     SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName) :
@@ -1281,8 +1277,6 @@ SwXMLTableCell_Impl *SwXMLTableContext::GetCell( sal_uInt32 nRow,
 {
     return (*pRows)[(sal_uInt16)nRow]->GetCell( (sal_uInt16)nCol );
 }
-
-TYPEINIT1( SwXMLTableContext, XMLTextTableContext );
 
 SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
         sal_uInt16 nPrfx,

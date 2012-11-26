@@ -396,8 +396,6 @@ protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
 public:
-    TYPEINFO();     //Bereits in Basisklasse Client drin.
-
     // MakeFrm will be called for a certain layout
     // pSib is another SwFrm of the same layout (e.g. the SwRootFrm itself, a sibling, the parent)
     virtual SwCntntFrm *MakeFrm( SwFrm* pSib ) = 0;

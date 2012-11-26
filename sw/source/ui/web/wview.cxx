@@ -97,8 +97,6 @@ SFX_IMPL_INTERFACE( SwWebView, SwView, SW_RES(RID_WEBTOOLS_TOOLBOX) )
                                 SW_RES(RID_WEBTOOLS_TOOLBOX) );
 }
 
-TYPEINIT1(SwWebView,SwView)
-
 /*-----------------22.01.97 14.27-------------------
 
 --------------------------------------------------*/
@@ -167,8 +165,8 @@ void SwWebView::SelectShell()
             for ( i = 0; sal_True; ++i )
             {
                 pSfxShell = rDispatcher.GetShell( i );
-                if ( !( pSfxShell->ISA( SwBaseShell ) ||
-                    pSfxShell->ISA( SwDrawTextShell ) || pSfxShell->ISA( SwAnnotationShell ) ) )
+                if ( !( dynamic_cast< SwBaseShell* >(pSfxShell) ||
+                    dynamic_cast< SwDrawTextShell* >(pSfxShell) || dynamic_cast< SwAnnotationShell* >(pSfxShell) ) )
                     break;
             }
             pSfxShell = rDispatcher.GetShell( --i );
@@ -305,8 +303,7 @@ void SwWebView::SelectShell()
         GetEditWin().UpdatePointer(aPnt);
 
         if ( bInitFormShell && GetWrtShell().GetDrawView() )
-            GetFormShell()->SetView( PTR_CAST( FmFormView,
-                                                GetWrtShell().GetDrawView()));
+            GetFormShell()->SetView( dynamic_cast< FmFormView* >( GetWrtShell().GetDrawView()));
 
 
     }

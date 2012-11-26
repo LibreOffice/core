@@ -26,12 +26,9 @@
 
 #include "fuconrec.hxx"
 #include <svx/svdpagv.hxx>
-
-
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
-
 #include "app.hrc"
 #include <svl/aeitem.hxx>
 #include <svx/xlnstwit.hxx>
@@ -40,9 +37,7 @@
 #include <svx/xlnstit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svx/sdtmfitm.hxx>
 #include <svx/sxekitm.hxx>
-#include <svx/sderitm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdocirc.hxx>
@@ -50,19 +45,15 @@
 #include <sfx2/request.hxx>
 #include <editeng/adjitem.hxx>
 #include <svx/xtable.hxx>
-
-// #88751#
 #include <svx/svdocapt.hxx>
-
-// #97016#
 #include <svx/svdomeas.hxx>
 #include "ViewShell.hxx"
 #include "ViewShellBase.hxx"
 #include "ToolBarManager.hxx"
-// #109583#
 #include <editeng/writingmodeitem.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <svx/svdlegacy.hxx>
 
 #include "sdresid.hxx"
 #include "View.hxx"
@@ -74,8 +65,6 @@
 #include "glob.hrc"
 
 namespace sd {
-
-TYPEINIT1( FuConstructRectangle, FuConstruct );
 
 /*************************************************************************
 |*
@@ -118,37 +107,44 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
         {
             case SID_DRAW_ELLIPSE :
             {
-                SFX_REQUEST_ARG (rReq, pCenterX, SfxUInt32Item, ID_VAL_CENTER_X, sal_False);
-                SFX_REQUEST_ARG (rReq, pCenterY, SfxUInt32Item, ID_VAL_CENTER_Y, sal_False);
-                SFX_REQUEST_ARG (rReq, pAxisX, SfxUInt32Item, ID_VAL_AXIS_X, sal_False);
-                SFX_REQUEST_ARG (rReq, pAxisY, SfxUInt32Item, ID_VAL_AXIS_Y, sal_False);
+                SFX_REQUEST_ARG (rReq, pCenterX, SfxUInt32Item, ID_VAL_CENTER_X );
+                SFX_REQUEST_ARG (rReq, pCenterY, SfxUInt32Item, ID_VAL_CENTER_Y );
+                SFX_REQUEST_ARG (rReq, pAxisX, SfxUInt32Item, ID_VAL_AXIS_X );
+                SFX_REQUEST_ARG (rReq, pAxisY, SfxUInt32Item, ID_VAL_AXIS_Y );
 
-                Rectangle   aNewRectangle (pCenterX->GetValue () - pAxisX->GetValue () / 2,
-                                           pCenterY->GetValue () - pAxisY->GetValue () / 2,
-                                           pCenterX->GetValue () + pAxisX->GetValue () / 2,
-                                           pCenterY->GetValue () + pAxisY->GetValue () / 2);
-                SdrCircObj  *pNewCircle = new SdrCircObj (OBJ_CIRC, aNewRectangle);
-                SdrPageView *pPV = mpView->GetSdrPageView();
+                const sal_Int32 nWidth(pAxisX->GetValue());
+                const sal_Int32 nHeight(pAxisY->GetValue());
+                const basegfx::B2DHomMatrix aObjTrans(
+                    basegfx::tools::createScaleTranslateB2DHomMatrix(
+                        nWidth, nHeight,
+                        pCenterX->GetValue() - (nWidth / 2), pCenterY->GetValue() - (nHeight / 2)));
+                SdrCircObj* pNewCircle = new SdrCircObj(
+                    *GetDoc(),
+                    CircleType_Circle,
+                    aObjTrans);
 
-                mpView->InsertObjectAtView(pNewCircle, *pPV, SDRINSERT_SETDEFLAYER | SDRINSERT_SETDEFATTR);
+                mpView->InsertObjectAtView(*pNewCircle, SDRINSERT_SETDEFLAYER | SDRINSERT_SETDEFATTR);
             }
             break;
 
             case SID_DRAW_RECT :
             {
-                SFX_REQUEST_ARG (rReq, pMouseStartX, SfxUInt32Item, ID_VAL_MOUSESTART_X, sal_False);
-                SFX_REQUEST_ARG (rReq, pMouseStartY, SfxUInt32Item, ID_VAL_MOUSESTART_Y, sal_False);
-                SFX_REQUEST_ARG (rReq, pMouseEndX, SfxUInt32Item, ID_VAL_MOUSEEND_X, sal_False);
-                SFX_REQUEST_ARG (rReq, pMouseEndY, SfxUInt32Item, ID_VAL_MOUSEEND_Y, sal_False);
+                SFX_REQUEST_ARG (rReq, pMouseStartX, SfxUInt32Item, ID_VAL_MOUSESTART_X );
+                SFX_REQUEST_ARG (rReq, pMouseStartY, SfxUInt32Item, ID_VAL_MOUSESTART_Y );
+                SFX_REQUEST_ARG (rReq, pMouseEndX, SfxUInt32Item, ID_VAL_MOUSEEND_X );
+                SFX_REQUEST_ARG (rReq, pMouseEndY, SfxUInt32Item, ID_VAL_MOUSEEND_Y );
 
-                Rectangle   aNewRectangle (pMouseStartX->GetValue (),
-                                           pMouseStartY->GetValue (),
-                                           pMouseEndX->GetValue (),
-                                           pMouseEndY->GetValue ());
-                SdrRectObj  *pNewRect = new SdrRectObj (aNewRectangle);
-                SdrPageView *pPV = mpView->GetSdrPageView();
+                const sal_Int32 nLeft(pMouseStartX->GetValue());
+                const sal_Int32 nTop(pMouseStartY->GetValue());
+                const basegfx::B2DHomMatrix aObjTrans(
+                    basegfx::tools::createScaleTranslateB2DHomMatrix(
+                        pMouseEndX->GetValue() - nLeft, pMouseEndY->GetValue() - nTop,
+                        nLeft, nTop));
+                SdrRectObj  *pNewRect = new SdrRectObj(
+                    *GetDoc(),
+                    aObjTrans);
 
-                mpView->InsertObjectAtView(pNewRect, *pPV, SDRINSERT_SETDEFLAYER | SDRINSERT_SETDEFATTR);
+                mpView->InsertObjectAtView(*pNewRect, SDRINSERT_SETDEFLAYER | SDRINSERT_SETDEFATTR);
             }
             break;
         }
@@ -200,40 +196,44 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
 |*
 \************************************************************************/
 
-sal_Bool FuConstructRectangle::MouseButtonDown(const MouseEvent& rMEvt)
+bool FuConstructRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
+    bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
 
     if ( rMEvt.IsLeft() && !mpView->IsAction() )
     {
-        Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
+        const basegfx::B2DPoint aPixelPos(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
+        const basegfx::B2DPoint aLogicPos(mpWindow->GetInverseViewTransformation() * aPixelPos);
 
         mpWindow->CaptureMouse();
         sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
 
-        if (mpView->GetCurrentObjIdentifier() == OBJ_CAPTION)
+        if(OBJ_CAPTION == mpView->getSdrObjectCreationInfo().getIdent())
         {
-            Size aCaptionSize(846, 846);    // (4x2)cm
-            bReturn = mpView->BegCreateCaptionObj(aPnt, aCaptionSize,
-                                                (OutputDevice*) NULL, nDrgLog);
+            bReturn = mpView->BegCreateCaptionObj(
+                aLogicPos,
+                basegfx::B2DVector(846.0, 846.0), // (4x2)cm
+                nDrgLog);
         }
         else
         {
-            mpView->BegCreateObj(aPnt, (OutputDevice*) NULL, nDrgLog);
+            mpView->BegCreateObj(
+                aLogicPos,
+                nDrgLog);
         }
 
         SdrObject* pObj = mpView->GetCreateObj();
 
         if (pObj)
         {
-            SfxItemSet aAttr(mpDoc->GetPool());
+            SfxItemSet aAttr(pObj->GetObjectItemPool());
             SetStyleSheet(aAttr, pObj);
             SetAttributes(aAttr, pObj);
             SetLineEnds(aAttr, pObj);
             pObj->SetMergedItemSet(aAttr);
 
             if( nSlotId == SID_DRAW_CAPTION_VERTICAL )
-                ( (SdrTextObj*) pObj)->SetVerticalWriting( sal_True );
+                ( (SdrTextObj*) pObj)->SetVerticalWriting( true );
         }
     }
     return bReturn;
@@ -245,7 +245,7 @@ sal_Bool FuConstructRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuConstructRectangle::MouseMove(const MouseEvent& rMEvt)
+bool FuConstructRectangle::MouseMove(const MouseEvent& rMEvt)
 {
     return FuConstruct::MouseMove(rMEvt);
 }
@@ -256,11 +256,11 @@ sal_Bool FuConstructRectangle::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
+bool FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn(sal_False);
+    bool bReturn(false);
 
-    if(mpView->IsCreateObj() && rMEvt.IsLeft())
+    if(mpView->GetCreateObj() && rMEvt.IsLeft())
     {
         SdrObject* pObj = mpView->GetCreateObj();
 
@@ -268,13 +268,13 @@ sal_Bool FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
         {
             if(SID_DRAW_MEASURELINE == nSlotId)
             {
-                SdrLayerAdmin& rAdmin = mpDoc->GetLayerAdmin();
+                SdrLayerAdmin& rAdmin = mpDoc->GetModelLayerAdmin();
                 String aStr(SdResId(STR_LAYER_MEASURELINES));
-                pObj->SetLayer(rAdmin.GetLayerID(aStr, sal_False));
+                pObj->SetLayer(rAdmin.GetLayerID(aStr, false));
             }
 
             // #88751# init text position when vertica caption object is created
-            if(pObj->ISA(SdrCaptionObj) && SID_DRAW_CAPTION_VERTICAL == nSlotId)
+            if(SID_DRAW_CAPTION_VERTICAL == nSlotId && dynamic_cast< SdrCaptionObj* >(pObj))
             {
                 // draw text object, needs to be initialized when vertical text is used
                 SfxItemSet aSet(pObj->GetMergedItemSet());
@@ -291,7 +291,7 @@ sal_Bool FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                 pObj->SetMergedItemSet(aSet);
             }
 
-            bReturn = sal_True;
+            bReturn = true;
         }
     }
 
@@ -307,14 +307,14 @@ sal_Bool FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
-|* sal_False.
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert true, andernfalls
+|* false.
 |*
 \************************************************************************/
 
-sal_Bool FuConstructRectangle::KeyInput(const KeyEvent& rKEvt)
+bool FuConstructRectangle::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
+    bool bReturn = FuConstruct::KeyInput(rKEvt);
     return(bReturn);
 }
 
@@ -326,7 +326,8 @@ sal_Bool FuConstructRectangle::KeyInput(const KeyEvent& rKEvt)
 
 void FuConstructRectangle::Activate()
 {
-    SdrObjKind aObjKind;
+    SdrObjKind aObjKind(OBJ_NONE);
+    SdrPathObjType aSdrPathObjType(PathType_Line);
 
     switch (nSlotId)
     {
@@ -341,7 +342,8 @@ void FuConstructRectangle::Activate()
             // keine break !
         case SID_DRAW_LINE :
         case SID_DRAW_XLINE:
-            aObjKind = OBJ_LINE;
+            aObjKind = OBJ_POLY;
+            aSdrPathObjType = PathType_Line;
             break;
 
         case SID_DRAW_MEASURELINE:
@@ -420,7 +422,10 @@ void FuConstructRectangle::Activate()
         break;
     }
 
-    mpView->SetCurrentObj((sal_uInt16)aObjKind);
+    SdrObjectCreationInfo aSdrObjectCreationInfo(static_cast< sal_uInt16 >(aObjKind));
+
+    aSdrObjectCreationInfo.setSdrPathObjType(aSdrPathObjType);
+    mpView->setSdrObjectCreationInfo(aSdrObjectCreationInfo);
 
     FuConstruct::Activate();
 }
@@ -469,7 +474,7 @@ void FuConstructRectangle::Deactivate()
         nSlotId == SID_LINE_ARROW_SQUARE            ||
         nSlotId == SID_LINE_SQUARE_ARROW )
     {
-        mpView->SetGlueVisible( sal_False );
+        mpView->SetGlueVisible( false );
     }
     FuConstruct::Deactivate();
 }
@@ -491,7 +496,7 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
         /**********************************************************************
         * Abgerundete Ecken
         **********************************************************************/
-        rAttr.Put(SdrEckenradiusItem(500));
+        rAttr.Put(SdrMetricItem(SDRATTR_ECKENRADIUS, 500));
     }
     else if (nSlotId == SID_CONNECTOR_LINE              ||
              nSlotId == SID_CONNECTOR_LINE_ARROW_START  ||
@@ -537,11 +542,11 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
         /**********************************************************************
         * Legendenobjekt
         **********************************************************************/
-        Size aSize(pObj->GetLogicRect().GetSize());
-        rAttr.Put( SdrTextMinFrameHeightItem( aSize.Height() ) );
-        rAttr.Put( SdrTextMinFrameWidthItem( aSize.Width() ) );
-        rAttr.Put( SdrTextAutoGrowHeightItem( sal_True ) );
-        rAttr.Put( SdrTextAutoGrowWidthItem( sal_True ) );
+        const Size aSize(sdr::legacy::GetLogicRect(*pObj).GetSize());
+        rAttr.Put( SdrMetricItem(SDRATTR_TEXT_MINFRAMEHEIGHT, aSize.Height() ) );
+        rAttr.Put( SdrMetricItem(SDRATTR_TEXT_MINFRAMEWIDTH, aSize.Width() ) );
+        rAttr.Put( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT, true ) );
+        rAttr.Put( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWWIDTH, true ) );
 
         // #103516# Support full with for vertical caption objects, too
         if(SID_DRAW_CAPTION == nSlotId)
@@ -550,31 +555,34 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
             rAttr.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_BLOCK ) );
 
         rAttr.Put( SvxAdjustItem( SVX_ADJUST_CENTER, EE_PARA_JUST ) );
-        rAttr.Put( SdrTextLeftDistItem( 100 ) );
-        rAttr.Put( SdrTextRightDistItem( 100 ) );
-        rAttr.Put( SdrTextUpperDistItem( 100 ) );
-        rAttr.Put( SdrTextLowerDistItem( 100 ) );
+        rAttr.Put( SdrMetricItem(SDRATTR_TEXT_LEFTDIST, 100 ) );
+        rAttr.Put( SdrMetricItem(SDRATTR_TEXT_RIGHTDIST, 100 ) );
+        rAttr.Put( SdrMetricItem(SDRATTR_TEXT_UPPERDIST, 100 ) );
+        rAttr.Put( SdrMetricItem(SDRATTR_TEXT_LOWERDIST, 100 ) );
     }
     else if (nSlotId == SID_DRAW_MEASURELINE)
     {
         /**********************************************************************
         * Masslinie
         **********************************************************************/
-        SdPage* pPage = (SdPage*) mpView->GetSdrPageView()->GetPage();
+        SdrPageView* pPV = mpView->GetSdrPageView();
+
+        if(pPV)
+        {
+            SdPage& rPage = (SdPage&) pPV->getSdrPageFromSdrPageView();
         String aName(SdResId(STR_POOLSHEET_MEASURE));
-        SfxStyleSheet* pSheet = (SfxStyleSheet*) pPage->GetModel()->
-                                     GetStyleSheetPool()->
-                                     Find(aName, SD_STYLE_FAMILY_GRAPHICS);
+            SfxStyleSheet* pSheet = (SfxStyleSheet*)rPage.getSdrModelFromSdrPage().GetStyleSheetPool()->Find(aName, SD_STYLE_FAMILY_GRAPHICS);
         DBG_ASSERT(pSheet, "Objektvorlage nicht gefunden");
 
         if (pSheet)
         {
-            pObj->SetStyleSheet(pSheet, sal_False);
+                pObj->SetStyleSheet(pSheet, false);
         }
 
-        SdrLayerAdmin& rAdmin = mpDoc->GetLayerAdmin();
+            SdrLayerAdmin& rAdmin = mpDoc->GetModelLayerAdmin();
         String aStr(SdResId(STR_LAYER_MEASURELINES));
-        pObj->SetLayer(rAdmin.GetLayerID(aStr, sal_False));
+            pObj->SetLayer(rAdmin.GetLayerID(aStr, false));
+        }
     }
     else if (nSlotId == OBJ_CUSTOMSHAPE )
     {
@@ -666,7 +674,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
             aSquare.append(aNewSquare);
         }
 
-        SfxItemSet aSet( mpDoc->GetPool() );
+        SfxItemSet aSet( mpDoc->GetItemPool() );
         mpView->GetAttributes( aSet );
 
         // #i3908# Here, the default Line Start/End width for arrow construction is
@@ -801,70 +809,17 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
 }
 
 // #97016#
-SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
+SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const basegfx::B2DRange& rRange)
 {
     DBG_ASSERT( (nID != SID_DRAW_FONTWORK) && (nID != SID_DRAW_FONTWORK_VERTICAL ), "FuConstRectangle::CreateDefaultObject can not create Fontwork shapes!" );
 
-    // case SID_DRAW_LINE:
-    // case SID_DRAW_XLINE:
-    // case SID_DRAW_MEASURELINE:
-    // case SID_LINE_ARROW_START:
-    // case SID_LINE_ARROW_END:
-    // case SID_LINE_ARROWS:
-    // case SID_LINE_ARROW_CIRCLE:
-    // case SID_LINE_CIRCLE_ARROW:
-    // case SID_LINE_ARROW_SQUARE:
-    // case SID_LINE_SQUARE_ARROW:
-    // case SID_DRAW_RECT:
-    // case SID_DRAW_RECT_NOFILL:
-    // case SID_DRAW_RECT_ROUND:
-    // case SID_DRAW_RECT_ROUND_NOFILL:
-    // case SID_DRAW_SQUARE:
-    // case SID_DRAW_SQUARE_NOFILL:
-    // case SID_DRAW_SQUARE_ROUND:
-    // case SID_DRAW_SQUARE_ROUND_NOFILL:
-    // case SID_DRAW_ELLIPSE:
-    // case SID_DRAW_ELLIPSE_NOFILL:
-    // case SID_DRAW_CIRCLE:
-    // case SID_DRAW_CIRCLE_NOFILL:
-    // case SID_DRAW_CAPTION:
-    // case SID_DRAW_CAPTION_VERTICAL:
-    // case SID_TOOL_CONNECTOR:
-    // case SID_CONNECTOR_ARROW_START:
-    // case SID_CONNECTOR_ARROW_END:
-    // case SID_CONNECTOR_ARROWS:
-    // case SID_CONNECTOR_CIRCLE_START:
-    // case SID_CONNECTOR_CIRCLE_END:
-    // case SID_CONNECTOR_CIRCLES:
-    // case SID_CONNECTOR_LINE:
-    // case SID_CONNECTOR_LINE_ARROW_START:
-    // case SID_CONNECTOR_LINE_ARROW_END:
-    // case SID_CONNECTOR_LINE_ARROWS:
-    // case SID_CONNECTOR_LINE_CIRCLE_START:
-    // case SID_CONNECTOR_LINE_CIRCLE_END:
-    // case SID_CONNECTOR_LINE_CIRCLES:
-    // case SID_CONNECTOR_CURVE:
-    // case SID_CONNECTOR_CURVE_ARROW_START:
-    // case SID_CONNECTOR_CURVE_ARROW_END:
-    // case SID_CONNECTOR_CURVE_ARROWS:
-    // case SID_CONNECTOR_CURVE_CIRCLE_START:
-    // case SID_CONNECTOR_CURVE_CIRCLE_END:
-    // case SID_CONNECTOR_CURVE_CIRCLES:
-    // case SID_CONNECTOR_LINES:
-    // case SID_CONNECTOR_LINES_ARROW_START:
-    // case SID_CONNECTOR_LINES_ARROW_END:
-    // case SID_CONNECTOR_LINES_ARROWS:
-    // case SID_CONNECTOR_LINES_CIRCLE_START:
-    // case SID_CONNECTOR_LINES_CIRCLE_END:
-    // case SID_CONNECTOR_LINES_CIRCLES:
-
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
-        mpView->GetCurrentObjInventor(), mpView->GetCurrentObjIdentifier(),
-        0L, mpDoc);
+        mpView->getSdrModelFromSdrView(),
+        mpView->getSdrObjectCreationInfo());
 
     if(pObj)
     {
-        Rectangle aRect(rRectangle);
+        basegfx::B2DRange aRange(rRange);
 
         if(SID_DRAW_SQUARE == nID ||
             SID_DRAW_SQUARE_NOFILL == nID ||
@@ -874,11 +829,11 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
             SID_DRAW_CIRCLE_NOFILL == nID)
         {
             // force quadratic
-            ImpForceQuadratic(aRect);
+            ImpForceQuadratic(aRange);
         }
 
-        Point aStart = aRect.TopLeft();
-        Point aEnd = aRect.BottomRight();
+        const basegfx::B2DPoint aStart(aRange.getMinimum());
+        const basegfx::B2DPoint aEnd(aRange.getMaximum());
 
         switch(nID)
         {
@@ -892,14 +847,16 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
             case SID_LINE_ARROW_SQUARE:
             case SID_LINE_SQUARE_ARROW:
             {
-                if(pObj->ISA(SdrPathObj))
+                SdrPathObj* pSdrPathObj = dynamic_cast< SdrPathObj* >(pObj);
+
+                if(pSdrPathObj)
                 {
-                    sal_Int32 nYMiddle((aRect.Top() + aRect.Bottom()) / 2);
+                    const double fYMiddle((aRange.getMinY() + aRange.getMaxY()) * 0.5);
 
                     ::basegfx::B2DPolygon aB2DPolygon;
-                    aB2DPolygon.append(::basegfx::B2DPoint(aStart.X(), nYMiddle));
-                    aB2DPolygon.append(::basegfx::B2DPoint(aEnd.X(), nYMiddle));
-                    ((SdrPathObj*)pObj)->SetPathPoly(::basegfx::B2DPolyPolygon(aB2DPolygon));
+                    aB2DPolygon.append(::basegfx::B2DPoint(aStart.getX(), fYMiddle));
+                    aB2DPolygon.append(::basegfx::B2DPoint(aEnd.getX(), fYMiddle));
+                    pSdrPathObj->setB2DPolyPolygonInObjectCoordinates(::basegfx::B2DPolyPolygon(aB2DPolygon));
                 }
                 else
                 {
@@ -911,11 +868,14 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
 
             case SID_DRAW_MEASURELINE:
             {
-                if(pObj->ISA(SdrMeasureObj))
+                SdrMeasureObj* pSdrMeasureObj = dynamic_cast< SdrMeasureObj* >(pObj);
+
+                if(pSdrMeasureObj)
                 {
-                    sal_Int32 nYMiddle((aRect.Top() + aRect.Bottom()) / 2);
-                    ((SdrMeasureObj*)pObj)->SetPoint(Point(aStart.X(), nYMiddle), 0);
-                    ((SdrMeasureObj*)pObj)->SetPoint(Point(aEnd.X(), nYMiddle), 1);
+                    const double fYMiddle((aRange.getMinY() + aRange.getMaxY()) * 0.5);
+
+                    pSdrMeasureObj->SetObjectPoint(basegfx::B2DPoint(aStart.getX(), fYMiddle), 0);
+                    pSdrMeasureObj->SetObjectPoint(basegfx::B2DPoint(aEnd.getX(), fYMiddle), 1);
                 }
                 else
                 {
@@ -954,10 +914,12 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
             case SID_CONNECTOR_LINES_CIRCLE_END:
             case SID_CONNECTOR_LINES_CIRCLES:
             {
-                if(pObj->ISA(SdrEdgeObj))
+                SdrEdgeObj* pSdrEdgeObj = dynamic_cast< SdrEdgeObj* >(pObj);
+
+                if(pSdrEdgeObj)
                 {
-                    ((SdrEdgeObj*)pObj)->SetTailPoint(sal_False, aStart);
-                    ((SdrEdgeObj*)pObj)->SetTailPoint(sal_True, aEnd);
+                    pSdrEdgeObj->SetTailPoint(false, aStart);
+                    pSdrEdgeObj->SetTailPoint(true, aEnd);
                 }
                 else
                 {
@@ -969,11 +931,13 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
             case SID_DRAW_CAPTION:
             case SID_DRAW_CAPTION_VERTICAL:
             {
-                if(pObj->ISA(SdrCaptionObj))
+                SdrCaptionObj* pSdrCaptionObj = dynamic_cast< SdrCaptionObj* >(pObj);
+
+                if(pSdrCaptionObj)
                 {
                     sal_Bool bIsVertical(SID_DRAW_CAPTION_VERTICAL == nID);
 
-                    ((SdrTextObj*)pObj)->SetVerticalWriting(bIsVertical);
+                    static_cast< SdrTextObj* >(pObj)->SetVerticalWriting(bIsVertical);
 
                     if(bIsVertical)
                     {
@@ -985,11 +949,10 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
 
                     // For task #105815# the default text is not inserted anymore.
                     //  String aText(SdResId(STR_POOLSHEET_TEXT));
-                    //  ((SdrCaptionObj*)pObj)->SetText(aText);
+                    //  pSdrCaptionObj->SetText(aText);
 
-                    ((SdrCaptionObj*)pObj)->SetLogicRect(aRect);
-                    ((SdrCaptionObj*)pObj)->SetTailPos(
-                        aRect.TopLeft() - Point(aRect.GetWidth() / 2, aRect.GetHeight() / 2));
+                    sdr::legacy::SetLogicRange(*pSdrCaptionObj, aRange);
+                    pSdrCaptionObj->SetTailPos(aRange.getMinimum() - (aRange.getRange() * 0.5));
                 }
                 else
                 {
@@ -1001,13 +964,13 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
 
             default:
             {
-                pObj->SetLogicRect(aRect);
+                sdr::legacy::SetLogicRange(*pObj, aRange);
 
                 break;
             }
         }
 
-        SfxItemSet aAttr(mpDoc->GetPool());
+        SfxItemSet aAttr(pObj->GetObjectItemPool());
         SetStyleSheet(aAttr, pObj);
         SetAttributes(aAttr, pObj);
         SetLineEnds(aAttr, pObj);

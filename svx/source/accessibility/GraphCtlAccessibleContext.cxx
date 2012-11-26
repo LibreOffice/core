@@ -218,14 +218,12 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleAt
 
     if( mpControl )
     {
-        Point aPnt( rPoint.X, rPoint.Y );
-        mpControl->PixelToLogic( aPnt );
-
+        const basegfx::B2DPoint aPnt(mpControl->GetInverseViewTransformation() * basegfx::B2DPoint(rPoint.X, rPoint.Y));
         SdrObject* pObj = 0;
 
         if(mpView && mpView->GetSdrPageView())
         {
-            pObj = SdrObjListPrimitiveHit(*mpPage, aPnt, 1, *mpView->GetSdrPageView(), 0, false);
+            pObj = SdrObjListPrimitiveHit(*mpPage, aPnt, 1.0, *mpView, false, 0);
         }
 
         if( pObj )
@@ -635,7 +633,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::selectAccessibleChild( sal_Int32 nI
     SdrObject* pObj = getSdrObject( nIndex );
 
     if( pObj )
-        mpView->MarkObj( pObj, mpView->GetSdrPageView());
+        mpView->MarkObj( *pObj );
 }
 
 //-----------------------------------------------------------------------------
@@ -647,7 +645,7 @@ sal_Bool SAL_CALL SvxGraphCtrlAccessibleContext::isAccessibleChildSelected( sal_
     if( NULL == mpView )
         throw DisposedException();
 
-    return mpView->IsObjMarked( getSdrObject( nIndex ) );
+    return mpView->IsObjMarked( *getSdrObject( nIndex ) );
 }
 
 //-----------------------------------------------------------------------------
@@ -683,8 +681,7 @@ sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getSelectedAccessibleChildCoun
     if( NULL == mpView )
         throw DisposedException();
 
-    const SdrMarkList& rList = mpView->GetMarkedObjectList();
-    return rList.GetMarkCount();
+    return mpView->getSelectedSdrObjectCount();
 }
 
 //-----------------------------------------------------------------------------
@@ -698,8 +695,8 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getSelectedAcce
 
     Reference< XAccessible > xAccessible;
 
-    const SdrMarkList& rList = mpView->GetMarkedObjectList();
-    SdrObject* pObj = rList.GetMark(nIndex)->GetMarkedSdrObj();
+    const SdrObjectVector aSelection(mpView->getSelectedSdrObjectVectorFromSdrMarkView());
+    SdrObject* pObj = aSelection[nIndex];
     if( pObj )
         xAccessible = getAccessible( pObj );
 
@@ -716,23 +713,10 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::deselectAccessibleChild( sal_Int32 
 
     if( mpView )
     {
-        const SdrMarkList& rList = mpView->GetMarkedObjectList();
-
         SdrObject* pObj = getSdrObject( nIndex );
         if( pObj )
         {
-            SdrMarkList aRefList( rList );
-
-            SdrPageView* pPV = mpView->GetSdrPageView();
-            mpView->UnmarkAllObj( pPV );
-
-            sal_uInt32 nCount = aRefList.GetMarkCount();
-            sal_uInt32 nMark;
-            for( nMark = 0; nMark < nCount; nMark++ )
-            {
-                if( aRefList.GetMark(nMark)->GetMarkedSdrObj() != pObj )
-                    mpView->MarkObj( aRefList.GetMark(nMark)->GetMarkedSdrObj(), pPV );
-            }
+            mpView->removeSdrObjectFromSelection(*pObj);
         }
     }
 }
@@ -909,15 +893,17 @@ Sequence< sal_Int8 > SvxGraphCtrlAccessibleContext::getUniqueId( void )
 
 void SvxGraphCtrlAccessibleContext::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
+    const SdrBaseHint* pSdrHint = dynamic_cast< const SdrBaseHint* >(&rHint);
 
     if( pSdrHint )
     {
-        switch( pSdrHint->GetKind() )
+        switch( pSdrHint->GetSdrHintKind() )
         {
-            case HINT_OBJCHG:
+            case HINT_OBJCHG_MOVE:
+            case HINT_OBJCHG_RESIZE:
+            case HINT_OBJCHG_ATTR:
                 {
-                    ShapesMapType::iterator iter = mxShapes.find( pSdrHint->GetObject() );
+                    ShapesMapType::iterator iter = mxShapes.find( pSdrHint->GetSdrHintObject() );
 
                     if( iter != mxShapes.end() )
                     {
@@ -931,10 +917,10 @@ void SvxGraphCtrlAccessibleContext::Notify( SfxBroadcaster& /*rBC*/, const SfxHi
                 break;
 
             case HINT_OBJINSERTED:
-                CommitChange( AccessibleEventId::CHILD, makeAny( getAccessible( pSdrHint->GetObject() ) ) , uno::Any());
+                CommitChange( AccessibleEventId::CHILD, makeAny( getAccessible( pSdrHint->GetSdrHintObject() ) ) , uno::Any());
                 break;
             case HINT_OBJREMOVED:
-                CommitChange( AccessibleEventId::CHILD, uno::Any(), makeAny( getAccessible( pSdrHint->GetObject() ) )  );
+                CommitChange( AccessibleEventId::CHILD, uno::Any(), makeAny( getAccessible( pSdrHint->GetSdrHintObject() ) )  );
                 break;
             case HINT_MODELCLEARED:
                 dispose();
@@ -945,7 +931,7 @@ void SvxGraphCtrlAccessibleContext::Notify( SfxBroadcaster& /*rBC*/, const SfxHi
     }
     else
     {
-        const SfxSimpleHint* pSfxHint = PTR_CAST(SfxSimpleHint, &rHint );
+        const SfxSimpleHint* pSfxHint = dynamic_cast< const SfxSimpleHint* >( &rHint );
 
         // ist unser SdDrawDocument gerade gestorben?
         if(pSfxHint && pSfxHint->GetId() == SFX_HINT_DYING)

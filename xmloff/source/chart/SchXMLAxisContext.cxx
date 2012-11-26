@@ -250,7 +250,7 @@ void SchXMLAxisContext::CreateGrid( OUString sAutoStyleName, bool bIsMajor )
                 const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
                     m_rImportHelper.GetChartFamilyID(), sAutoStyleName );
 
-                if( pStyle && pStyle->ISA( XMLPropStyleContext ))
+                if( pStyle && dynamic_cast< const XMLPropStyleContext* >(pStyle))
                     (( XMLPropStyleContext* )pStyle )->FillPropertySet( xGridProp );
             }
         }
@@ -498,7 +498,7 @@ void SchXMLAxisContext::CreateAxis()
                 const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
                     m_rImportHelper.GetChartFamilyID(), m_aAutoStyleName );
 
-                if( pStyle && pStyle->ISA( XMLPropStyleContext ))
+                if( pStyle && dynamic_cast< const XMLPropStyleContext* >(pStyle))
                 {
                     // note: SvXMLStyleContext::FillPropertySet is not const
                     XMLPropStyleContext * pPropStyleContext = const_cast< XMLPropStyleContext * >( dynamic_cast< const XMLPropStyleContext * >( pStyle ));

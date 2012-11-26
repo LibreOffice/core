@@ -46,8 +46,6 @@ using namespace com::sun::star::uno;
 
 //------------------------------------------------------------------
 
-TYPEINIT1(ScTpViewItem, SfxPoolItem);
-
 #define SC_VERSION ((sal_uInt16)302)
 
 
@@ -65,37 +63,38 @@ void ScGridOptions::SetDefaults()
 
     if ( ScOptionsUtil::IsMetricSystem() )
     {
-        nFldDrawX = 1000;   // 1cm
-        nFldDrawY = 1000;
-        nFldSnapX = 1000;
-        nFldSnapY = 1000;
+        mnFldDrawX = 1000;  // 1cm
+        mnFldDrawY = 1000;
+        mnFldSnapX = 1000;
+        mnFldSnapY = 1000;
     }
     else
     {
-        nFldDrawX = 1270;   // 0,5"
-        nFldDrawY = 1270;
-        nFldSnapX = 1270;
-        nFldSnapY = 1270;
+        mnFldDrawX = 1270;  // 0,5"
+        mnFldDrawY = 1270;
+        mnFldSnapX = 1270;
+        mnFldSnapY = 1270;
     }
-    nFldDivisionX = 1;
-    nFldDivisionY = 1;
+
+    mnFldDivisionX = 1;
+    mnFldDivisionY = 1;
 }
 
 //------------------------------------------------------------------------
 
 const ScGridOptions& ScGridOptions::operator=( const ScGridOptions& rCpy )
 {
-    nFldDrawX       = rCpy.nFldDrawX;       // UINT32
-    nFldDrawX       = rCpy.nFldDrawX;
-    nFldDivisionX   = rCpy.nFldDivisionX;
-    nFldDrawY       = rCpy.nFldDrawY;
-    nFldDivisionY   = rCpy.nFldDivisionY;
-    nFldSnapX       = rCpy.nFldSnapX;
-    nFldSnapY       = rCpy.nFldSnapY;
-    bUseGridsnap    = rCpy.bUseGridsnap;    // BitBool
-    bSynchronize    = rCpy.bSynchronize;
-    bGridVisible    = rCpy.bGridVisible;
-    bEqualGrid      = rCpy.bEqualGrid;
+    mnFldDrawX      = rCpy.mnFldDrawX;      // UINT32
+    mnFldDrawX      = rCpy.mnFldDrawX;
+    mnFldDivisionX  = rCpy.mnFldDivisionX;
+    mnFldDrawY      = rCpy.mnFldDrawY;
+    mnFldDivisionY  = rCpy.mnFldDivisionY;
+    mnFldSnapX      = rCpy.mnFldSnapX;
+    mnFldSnapY      = rCpy.mnFldSnapY;
+    mbUseGridsnap   = rCpy.mbUseGridsnap;   // BitBool
+    mbSynchronize   = rCpy.mbSynchronize;
+    mbGridVisible   = rCpy.mbGridVisible;
+    mbEqualGrid     = rCpy.mbEqualGrid;
 
     return *this;
 }
@@ -104,17 +103,17 @@ const ScGridOptions& ScGridOptions::operator=( const ScGridOptions& rCpy )
 
 int ScGridOptions::operator==( const ScGridOptions& rCpy ) const
 {
-    return (   nFldDrawX        == rCpy.nFldDrawX
-            && nFldDrawX        == rCpy.nFldDrawX
-            && nFldDivisionX    == rCpy.nFldDivisionX
-            && nFldDrawY        == rCpy.nFldDrawY
-            && nFldDivisionY    == rCpy.nFldDivisionY
-            && nFldSnapX        == rCpy.nFldSnapX
-            && nFldSnapY        == rCpy.nFldSnapY
-            && bUseGridsnap     == rCpy.bUseGridsnap
-            && bSynchronize     == rCpy.bSynchronize
-            && bGridVisible     == rCpy.bGridVisible
-            && bEqualGrid       == rCpy.bEqualGrid );
+    return (   mnFldDrawX       == rCpy.mnFldDrawX
+            && mnFldDrawX       == rCpy.mnFldDrawX
+            && mnFldDivisionX   == rCpy.mnFldDivisionX
+            && mnFldDrawY       == rCpy.mnFldDrawY
+            && mnFldDivisionY   == rCpy.mnFldDivisionY
+            && mnFldSnapX       == rCpy.mnFldSnapX
+            && mnFldSnapY       == rCpy.mnFldSnapY
+            && mbUseGridsnap    == rCpy.mbUseGridsnap
+            && mbSynchronize    == rCpy.mbSynchronize
+            && mbGridVisible    == rCpy.mbGridVisible
+            && mbEqualGrid      == rCpy.mbEqualGrid );
 }
 
 

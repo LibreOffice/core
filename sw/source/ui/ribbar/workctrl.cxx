@@ -129,7 +129,7 @@ void SwTbxInsertCtrl::StateChanged( sal_uInt16 /*nSID*/,
 
     if( eState == SFX_ITEM_AVAILABLE )
     {
-        const SfxImageItem* pItem = PTR_CAST( SfxImageItem, pState );
+        const SfxImageItem* pItem = dynamic_cast< const SfxImageItem* >( pState );
         if(pItem)
         {
             nLastSlotId = pItem->GetValue();

@@ -36,8 +36,6 @@ class FmInterfaceItem : public SfxPoolItem
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xInterface;
 
 public:
-    TYPEINFO();
-
     FmInterfaceItem( const sal_uInt16 nId, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxInterface )
         :SfxPoolItem( nId )
         ,xInterface( rxInterface )

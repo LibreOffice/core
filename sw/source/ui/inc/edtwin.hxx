@@ -29,9 +29,9 @@
 #include <vcl/window.hxx>
 #include <svtools/transfer.hxx>
 #include <swevent.hxx>
-
 #define _SVSTDARR_STRINGSISORTDTOR
 #include <svl/svstdarr.hxx>
+#include <svx/sdrobjectfactory.hxx>
 
 class   SwWrtShell;
 class   SwView;
@@ -115,7 +115,7 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
 
     sal_uInt16          eBezierMode;
     sal_uInt16          nInsFrmColCount; //Spaltenzahl fuer interaktiven Rahmen
-    SdrObjKind      eDrawMode;
+    SdrObjectCreationInfo meSdrObjectCreationInfo;
     sal_Bool            bLinkRemoved    : 1,
                     bMBPressed      : 1,
                     bInsDraw        : 1,
@@ -222,14 +222,14 @@ public:
     void            SetObjectSelect( sal_Bool bVal )    { bObjectSelect = bVal; }
     sal_Bool            IsObjectSelect() const          { return bObjectSelect; }
 
-    inline SdrObjKind   GetSdrDrawMode(/*sal_Bool bBuf = sal_False*/) const { return eDrawMode; }
-    inline void         SetSdrDrawMode( SdrObjKind eSdrObjectKind ) { eDrawMode = eSdrObjectKind; SetObjectSelect( sal_False ); }
+    inline const SdrObjectCreationInfo& getSdrObjectCreationInfo() const { return meSdrObjectCreationInfo; }
+    inline void setSdrObjectCreationInfo(const SdrObjectCreationInfo& eSdrObjectCreationInfo) { meSdrObjectCreationInfo = eSdrObjectCreationInfo; SetObjectSelect( sal_False ); }
     void                StdDrawMode( SdrObjKind eSdrObjectKind, sal_Bool bObjSelect );
 
     sal_Bool            IsFrmAction()                   { return (bInsFrm); }
     inline sal_uInt16   GetBezierMode()                 { return eBezierMode; }
     void            SetBezierMode(sal_uInt16 eBezMode)  { eBezierMode = eBezMode; }
-    void            EnterDrawTextMode(const Point& aDocPos); // DrawTextEditMode einschalten
+    void            EnterDrawTextMode(const basegfx::B2DPoint& aDocPos); // DrawTextEditMode einschalten
     void            InsFrm(sal_uInt16 nCols);
     void            StopInsFrm();
     sal_uInt16          GetFrmColCount() const {return nInsFrmColCount;} //Spaltenzahl fuer interaktiven Rahmen

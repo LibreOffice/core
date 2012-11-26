@@ -98,8 +98,6 @@ class SfxMsgReceiverListItem : public SfxPoolItem
 protected:
     SfxMsgReceiverList_Impl* pImp;
 public:
-                            TYPEINFO();
-
                             SfxMsgReceiverListItem();
                             SfxMsgReceiverListItem( sal_uInt16 nWhich );
                             SfxMsgReceiverListItem( sal_uInt16 nWhich, SvStream& rStream );
@@ -151,8 +149,6 @@ protected:
     SfxMsgAttachFileList_Impl* pImp;
     void                    Disconnect();
 public:
-                            TYPEINFO();
-
                             SfxMsgAttachFileListItem();
                             SfxMsgAttachFileListItem( sal_uInt16 nWhich );
                             SfxMsgAttachFileListItem( sal_uInt16 nWhich, SvStream& rStream );
@@ -190,8 +186,6 @@ enum SfxMsgPriority
 class SfxMsgPriorityItem : public SfxEnumItem
 {
 public:
-    TYPEINFO();
-
     SfxMsgPriorityItem( sal_uInt16 nWhich, SfxMsgPriority = MSG_PRIORITY_NORMAL);
 
     virtual SfxPoolItem*        Clone( SfxItemPool* pPool=0 ) const;

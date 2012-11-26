@@ -57,8 +57,6 @@ class FuDraw : public FuPoor
     virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
     virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
     virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
-
-    // #97016# II
     virtual void SelectionHasChanged();
 
     sal_Bool IsSizingOrMovingNote( const MouseEvent& rMEvt ) const;

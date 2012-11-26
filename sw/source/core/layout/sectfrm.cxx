@@ -846,7 +846,7 @@ const SwSectionFmt* SwSectionFrm::_GetEndSectFmt() const
     const SwSectionFmt *pFmt = pSection->GetFmt();
     while( !pFmt->GetEndAtTxtEnd().IsAtEnd() )
     {
-        if( pFmt->GetRegisteredIn()->ISA( SwSectionFmt ) )
+        if( dynamic_cast< const SwSectionFmt* >(pFmt->GetRegisteredIn()) )
             pFmt = (SwSectionFmt*)pFmt->GetRegisteredIn();
         else
             return NULL;
@@ -2379,7 +2379,7 @@ sal_Bool SwSectionFrm::IsDescendantFrom( const SwSectionFmt* pFmt ) const
     const SwSectionFmt *pMyFmt = pSection->GetFmt();
     while( pFmt != pMyFmt )
     {
-        if( pMyFmt->GetRegisteredIn()->ISA( SwSectionFmt ) )
+        if( dynamic_cast< const SwSectionFmt* >(pMyFmt->GetRegisteredIn()) )
             pMyFmt = (SwSectionFmt*)pMyFmt->GetRegisteredIn();
         else
             return sal_False;
@@ -2396,7 +2396,7 @@ void SwSectionFrm::CalcFtnAtEndFlag()
                  FTNEND_ATTXTEND_OWNNUMANDFMT == nVal;
     while( !bFtnAtEnd && !bOwnFtnNum )
     {
-        if( pFmt->GetRegisteredIn()->ISA( SwSectionFmt ) )
+        if( dynamic_cast< const SwSectionFmt * >(pFmt->GetRegisteredIn()) )
             pFmt = (SwSectionFmt*)pFmt->GetRegisteredIn();
         else
             break;
@@ -2421,7 +2421,7 @@ void SwSectionFrm::CalcEndAtEndFlag()
     bEndnAtEnd = pFmt->GetEndAtTxtEnd( sal_False ).IsAtEnd();
     while( !bEndnAtEnd )
     {
-        if( pFmt->GetRegisteredIn()->ISA( SwSectionFmt ) )
+        if( dynamic_cast< const SwSectionFmt* >(pFmt->GetRegisteredIn()) )
             pFmt = (SwSectionFmt*)pFmt->GetRegisteredIn();
         else
             break;

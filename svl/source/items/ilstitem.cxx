@@ -33,7 +33,7 @@
 #define _SVSTDARR_ULONGS
 #include <svl/svstdarr.hxx>
 
-TYPEINIT1_AUTOFACTORY(SfxIntegerListItem, SfxPoolItem);
+IMPL_POOLITEM_FACTORY(SfxIntegerListItem)
 
 SfxIntegerListItem::SfxIntegerListItem()
 {
@@ -59,7 +59,7 @@ SfxIntegerListItem::~SfxIntegerListItem()
 
 int SfxIntegerListItem::operator==( const SfxPoolItem& rPoolItem ) const
 {
-    if ( !rPoolItem.ISA( SfxIntegerListItem ) )
+    if ( !dynamic_cast< const SfxIntegerListItem* >(&rPoolItem) )
         return sal_False;
 
     const SfxIntegerListItem rItem = (const SfxIntegerListItem&) rPoolItem;

@@ -578,7 +578,7 @@ void PDFIProcessor::setupImage(ImageId nImage)
 
         // try to create a Transformation that corrects for the wrong rotation
         aTrans.identity();
-        aTrans.scale( aScale.getX(), aScale.getY() );
+        aTrans.scale( aScale );
         aTrans.rotate( -fRotate );
 
         basegfx::B2DRange aRect( 0, 0, 1, 1 );
@@ -602,8 +602,7 @@ void PDFIProcessor::setupImage(ImageId nImage)
         if( nQuadrant == 3 )
             aTranslation.setX( aTranslation.getX() - aRect.getHeight() );
 
-        aTrans.translate( aTranslation.getX(),
-                          aTranslation.getY() );
+        aTrans.translate( aTranslation );
     }
 
     bool bMirrorVertical = aScale.getY() > 0;
@@ -1008,40 +1007,40 @@ void PDFIProcessor::sortElements( Element* pEle, bool bDeep )
 ::basegfx::B2DRange& PDFIProcessor::calcTransformedRectBounds( ::basegfx::B2DRange&         outRect,
                                                         const ::basegfx::B2DRange&      inRect,
                                                         const ::basegfx::B2DHomMatrix&  transformation )
-        {
-            outRect.reset();
+{
+    outRect.reset();
 
-            if( inRect.isEmpty() )
-                return outRect;
+    if( inRect.isEmpty() )
+        return outRect;
 
-            // transform all four extremal points of the rectangle,
-            // take bounding rect of those.
+    // transform all four extremal points of the rectangle,
+    // take bounding rect of those.
 
-            // transform left-top point
-            outRect.expand( transformation * inRect.getMinimum() );
+    // transform left-top point
+    outRect.expand( transformation * inRect.getMinimum() );
 
-            // transform bottom-right point
-            outRect.expand( transformation * inRect.getMaximum() );
+    // transform bottom-right point
+    outRect.expand( transformation * inRect.getMaximum() );
 
-            ::basegfx::B2DPoint aPoint;
+    ::basegfx::B2DPoint aPoint;
 
-            // transform top-right point
-            aPoint.setX( inRect.getMaxX() );
-            aPoint.setY( inRect.getMinY() );
+    // transform top-right point
+    aPoint.setX( inRect.getMaxX() );
+    aPoint.setY( inRect.getMinY() );
 
-            aPoint *= transformation;
-            outRect.expand( aPoint );
+    aPoint *= transformation;
+    outRect.expand( aPoint );
 
-            // transform bottom-left point
-            aPoint.setX( inRect.getMinX() );
-            aPoint.setY( inRect.getMaxY() );
+    // transform bottom-left point
+    aPoint.setX( inRect.getMinX() );
+    aPoint.setY( inRect.getMaxY() );
 
-            aPoint *= transformation;
-            outRect.expand( aPoint );
+    aPoint *= transformation;
+    outRect.expand( aPoint );
 
-            // over and out.
-            return outRect;
-        }
+    // over and out.
+    return outRect;
+}
 
 // helper method: get a mirrored string
 rtl::OUString PDFIProcessor::mirrorString( const rtl::OUString& i_rString )

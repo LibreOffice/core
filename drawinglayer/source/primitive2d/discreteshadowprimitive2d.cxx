@@ -288,19 +288,6 @@ namespace drawinglayer
         {
         }
 
-        bool DiscreteShadowPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(DiscreteMetricDependentPrimitive2D::operator==(rPrimitive))
-            {
-                const DiscreteShadowPrimitive2D& rCompare = (DiscreteShadowPrimitive2D&)rPrimitive;
-
-                return (getTransform() == rCompare.getTransform()
-                    && getDiscreteShadow() == rCompare.getDiscreteShadow());
-            }
-
-            return false;
-        }
-
         basegfx::B2DRange DiscreteShadowPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
             if(getDiscreteShadow().getBitmapEx().IsEmpty())

@@ -31,9 +31,8 @@
 //
 //============================================================================
 
-TYPEINIT1_AUTOFACTORY(SfxStringItem, CntUnencodedStringItem)
+IMPL_POOLITEM_FACTORY(SfxStringItem)
 
-//============================================================================
 // virtual
 SfxStringItem::SfxStringItem(sal_uInt16 which, SvStream & rStream):
     CntUnencodedStringItem(which)

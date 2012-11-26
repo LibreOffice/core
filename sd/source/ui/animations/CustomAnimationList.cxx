@@ -363,7 +363,7 @@ class CustomAnimationTriggerEntryItem : public SvLBoxString
 public:
                     CustomAnimationTriggerEntryItem( SvLBoxEntry*,sal_uInt16 nFlags, OUString aDescription, CustomAnimationList* pParent  );
     virtual         ~CustomAnimationTriggerEntryItem();
-    virtual sal_uInt16  IsA();
+
     void            InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
     void            Paint( const Point&, SvLBox& rDev, sal_uInt16 nFlags,SvLBoxEntry* );
     SvLBoxItem*     Create() const;
@@ -385,13 +385,6 @@ CustomAnimationTriggerEntryItem::CustomAnimationTriggerEntryItem( SvLBoxEntry* p
 
 CustomAnimationTriggerEntryItem::~CustomAnimationTriggerEntryItem()
 {
-}
-
-// --------------------------------------------------------------------
-
-sal_uInt16 CustomAnimationTriggerEntryItem::IsA()
-{
-    return (sal_uInt16)-1;
 }
 
 // --------------------------------------------------------------------
@@ -815,7 +808,7 @@ void CustomAnimationList::onSelectionChanged( Any aSelection )
 {
     try
     {
-        SelectAll(sal_False);
+        SelectAll(false);
 
         if( aSelection.hasValue() )
         {

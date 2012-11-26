@@ -116,7 +116,7 @@ void CurrentSlideManager::ReleaseCurrentSlide (void)
 
 bool CurrentSlideManager::IsCurrentSlideIsValid (void)
 {
-    return mnCurrentSlideIndex >= 0 && mnCurrentSlideIndex<mrSlideSorter.GetModel().GetPageCount();
+    return mnCurrentSlideIndex >= 0 && mnCurrentSlideIndex < (sal_Int32)mrSlideSorter.GetModel().GetPageCount();
 }
 
 
@@ -157,7 +157,7 @@ void CurrentSlideManager::SwitchCurrentSlide (
     if (rpDescriptor.get() != NULL && mpCurrentSlide!=rpDescriptor)
     {
         ReleaseCurrentSlide();
-        AcquireCurrentSlide((rpDescriptor->GetPage()->GetPageNum()-1)/2);
+        AcquireCurrentSlide((rpDescriptor->GetPage()->GetPageNumber()-1)/2);
 
         ViewShell* pViewShell = mrSlideSorter.GetViewShell();
         if (pViewShell != NULL && pViewShell->IsMainViewShell())
@@ -165,7 +165,7 @@ void CurrentSlideManager::SwitchCurrentSlide (
             // The slide sorter is the main view.
             FrameView* pFrameView = pViewShell->GetFrameView();
             if (pFrameView != NULL)
-                pFrameView->SetSelectedPage(sal::static_int_cast<sal_uInt16>(mnCurrentSlideIndex));
+                pFrameView->SetSelectedPage(sal::static_int_cast< sal_uInt32 >(mnCurrentSlideIndex));
             mrSlideSorter.GetController().GetPageSelector().SetCoreSelection();
         }
 
@@ -208,7 +208,7 @@ void CurrentSlideManager::SetCurrentSlideAtViewShellBase (const SharedPageDescri
             pBase->GetMainViewShell().get());
         if (pDrawViewShell != NULL)
         {
-            sal_uInt16 nPageNumber = (rpDescriptor->GetPage()->GetPageNum()-1)/2;
+            sal_uInt32 nPageNumber = (rpDescriptor->GetPage()->GetPageNumber()-1)/2;
             pDrawViewShell->SwitchPage(nPageNumber);
             pDrawViewShell->GetPageTabControl()->SetCurPageId(nPageNumber+1);
         }
@@ -229,8 +229,8 @@ void CurrentSlideManager::SetCurrentSlideAtTabControl (const SharedPageDescripto
             ::boost::dynamic_pointer_cast<DrawViewShell>(pBase->GetMainViewShell()));
         if (pDrawViewShell)
         {
-            sal_uInt16 nPageNumber = (rpDescriptor->GetPage()->GetPageNum()-1)/2;
-            pDrawViewShell->GetPageTabControl()->SetCurPageId(nPageNumber+1);
+            sal_uInt32 nPageNumber = (rpDescriptor->GetPage()->GetPageNumber()-1)/2;
+            pDrawViewShell->GetPageTabControl()->SetCurPageId(sal_uInt16(nPageNumber+1));
         }
     }
 }

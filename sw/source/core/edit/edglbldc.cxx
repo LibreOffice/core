@@ -82,7 +82,7 @@ sal_uInt16 SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
             {
             case TOX_HEADER_SECTION:    break;      // ignore
             case TOX_CONTENT_SECTION:
-                ASSERT( pSect->ISA( SwTOXBaseSection ), "keine TOXBaseSection!" );
+                ASSERT( dynamic_cast< const SwTOXBaseSection* >(pSect), "keine TOXBaseSection!" );
                 pNew = new SwGlblDocContent( (SwTOXBaseSection*)pSect );
                 break;
 

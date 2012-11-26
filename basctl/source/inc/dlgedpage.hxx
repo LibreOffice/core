@@ -38,20 +38,21 @@ class DlgEdPage : public SdrPage
 private:
     DlgEdForm*      pDlgEdForm;
 
+protected:
+    /// method to copy all data from given source
+    virtual void copyDataFromSdrPage(const SdrPage& rSource);
+
 public:
-    TYPEINFO();
+    /// create a copy, evtl. with a different target model (if given)
+    virtual SdrPage* CloneSdrPage(SdrModel* pTargetModel = 0) const;
 
-    DlgEdPage( DlgEdModel& rModel, FASTBOOL bMasterPage=sal_False );
-    DlgEdPage( const DlgEdPage& );
+    DlgEdPage( DlgEdModel& rModel, bool bMasterPage = false );
     virtual ~DlgEdPage();
-
-    using SdrPage::Clone;
-    virtual SdrPage* Clone() const;
 
     void            SetDlgEdForm( DlgEdForm* pForm ) { pDlgEdForm = pForm; }
     DlgEdForm*      GetDlgEdForm() const { return pDlgEdForm; }
 
-    virtual SdrObject* SetObjectOrdNum(sal_uLong nOldObjNum, sal_uLong nNewObjNum);
+    virtual SdrObject* SetNavigationPosition(sal_uInt32 nOldObjNum, sal_uInt32 nNewObjNum);
 };
 
 #endif //_BASCTL_DLGEDPAGE_HXX

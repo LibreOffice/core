@@ -130,10 +130,10 @@ rtl::OString MacroRecorder::GetParentID( Window* pThis )
 IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
 {
     sal_Bool bSendData = sal_False;
+    VclWindowEvent* pWinEvent = dynamic_cast< VclWindowEvent* >(pEvent);
 
-    if ( pEvent->ISA( VclWindowEvent ) )
+    if ( pWinEvent )
     {
-        VclWindowEvent* pWinEvent = ( VclWindowEvent* ) pEvent;
         Window* pWin = pWinEvent->GetWindow();
         sal_uLong nEventID = pWinEvent->GetId();
 #if OSL_DEBUG_LEVEL > 1
@@ -1035,12 +1035,16 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
 
         pLastWin = pWin;
 
-    }  // if
-    else if ( pEvent->ISA( VclMenuEvent ) )
+    }
+    else
+    {
+        VclMenuEvent* pVclMenuEvent = dynamic_cast< VclMenuEvent* >(pEvent);
+
+        if ( pVclMenuEvent )
     {
 //        VclMenuEvent* pMenuEvent = ( VclMenuEvent* ) pEvent;
     }
-
+    }
 
     if ( bSendData )
         new StatementFlow( NULL, F_EndCommandBlock );   // Kommando zum Senden erzeugen und in que eintragen

@@ -97,19 +97,6 @@ namespace drawinglayer
         {
         }
 
-        bool SdrConnectorPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const SdrConnectorPrimitive2D& rCompare = (SdrConnectorPrimitive2D&)rPrimitive;
-
-                return (getUnitPolygon() == rCompare.getUnitPolygon()
-                    && getSdrLSTAttribute() == rCompare.getSdrLSTAttribute());
-            }
-
-            return false;
-        }
-
         // provide unique ID
         ImplPrimitrive2DIDBlock(SdrConnectorPrimitive2D, PRIMITIVE2D_ID_SDRCONNECTORPRIMITIVE2D)
 

@@ -338,7 +338,7 @@ sal_uInt8 SwFlowFrm::BwdMoveNecessary( const SwPageFrm *pPage, const SwRect &rRe
                 if( rThis.IsLayoutFrm() && //Fly Lower von This?
                     Is_Lower_Of( &rThis, pObj->GetDrawObj() ) )
                     continue;
-                if( pObj->ISA(SwFlyFrm) )
+                if( dynamic_cast< SwFlyFrm* >(pObj) )
                 {
                     const SwFlyFrm *pFly = static_cast<const SwFlyFrm*>(pObj);
                     if ( pFly->IsAnLower( &rThis ) )//This Lower vom Fly?
@@ -2531,7 +2531,7 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
                 }
                 pIndNext = pIndNext->GetIndNext();
             }
-            ASSERT( !pIndNext || pIndNext->ISA(SwTxtFrm),
+            ASSERT( !pIndNext || dynamic_cast< SwTxtFrm* >(pIndNext),
                     "<SwFlowFrm::MovedBwd(..)> - incorrect next found." );
             if ( pIndNext && pIndNext->IsFlowFrm() &&
                  SwFlowFrm::CastFlowFrm(pIndNext)->IsJoinLocked() )

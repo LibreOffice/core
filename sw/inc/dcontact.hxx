@@ -24,7 +24,6 @@
 #define _DCONTACT_HXX
 
 #include <svx/svdobj.hxx>
-#include <svx/svdovirt.hxx>
 #include <swtypes.hxx>
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
@@ -70,15 +69,19 @@ void ClrContourCache( const SdrObject *pObj );
 SwRect GetBoundRectOfAnchoredObj( const SdrObject* pObj );
 // <--
 
-//Liefert den UserCall ggf. vom Gruppenobjekt
-// OD 2004-03-31 #i26791# - change return type
-SwContact* GetUserCall( const SdrObject* );
+// try to find the SwContact connected to the SdrObject
+SwContact* findConnectionToSdrObjectDirect(const SdrObject* pSdrObject);
+SwContact* findConnectionToSdrObject(const SdrObject* pSdrObject);
+
+// set/reset connection between SdrObject and SwContact
+void establishConnectionToSdrObject(SdrObject* pSdrObject, SwContact* pSwContact);
+void resetConnectionToSdrObject(SdrObject* pSdrObject);
 
 // liefert sal_True falls das SrdObject ein Marquee-Object (Lauftext) ist
 sal_Bool IsMarqueeTextObj( const SdrObject& rObj );
 
 //Basisklasse fuer die folgenden KontaktObjekte (Rahmen+Zeichenobjekte)
-class SwContact : public SdrObjUserCall, public SwClient
+class SwContact : public SfxListener, public SwClient
 {
     // OD 05.09.2003 #112039# - boolean, indicating destruction of contact object
     // important note: boolean has to be set at the beginning of each destructor
@@ -95,7 +98,7 @@ class SwContact : public SdrObjUserCall, public SwClient
         For group object the members are individually moved to the corresponding
         layer, because <SdrObjGroup::GetLayer()> does return 0, if members
         aren't on the same layer as the group object, and
-        <SdrObjGroup::SetLayer(..)|NbcSetLayer(..)> sets also the layer of
+        <SdrObjGroup::SetLayer(..)> sets also the layer of
         the members.
         OD 2004-01-15 #110582# - moved from subclass <SwDrawContact>
 
@@ -117,8 +120,6 @@ protected:
     void SetInDTOR();
 
 public:
-    TYPEINFO();
-
     //Fuer den Reader, es wir nur die Verbindung hergestellt.
     SwContact( SwFrmFmt *pToRegisterIn );
     virtual ~SwContact();
@@ -222,7 +223,7 @@ public:
 };
 
 //KontactObjekt fuer die Verbindung zwischen Rahmen bzw. deren Formaten
-//im StarWriter (SwClient) und den Zeichenobjekten des Drawing (SdrObjUserCall)
+//im StarWriter (SwClient) und den Zeichenobjekten des Drawing (SfxBroadcaster/Listener/Notify)
 
 class SW_DLLPUBLIC SwFlyDrawContact : public SwContact
 {
@@ -235,10 +236,8 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
 
 public:
-    TYPEINFO();
-
     //Legt das DrawObjekt an und meldet es beim Model an.
-    SwFlyDrawContact( SwFlyFrmFmt* pToRegisterIn, SdrModel* pMod );
+    SwFlyDrawContact( SwFlyFrmFmt* pToRegisterIn, SdrModel& rTargetModel );
     virtual ~SwFlyDrawContact();
 
     // OD 2004-03-29 #i26791#
@@ -267,103 +266,122 @@ public:
 
 // OD 16.05.2003 #108784# - new class for re-direct methods calls at a 'virtual'
 //      drawing object to its referenced object.
-class SwDrawVirtObj : public SdrVirtObj
+class SwDrawVirtObj : public SdrObject
 {
-    private:
-        // data for connection to writer layout
-        // OD 2004-03-25 #i26791# - anchored drawing object instance for the
-        // 'virtual' drawing object
-        SwAnchoredDrawObject maAnchoredDrawObj;
+private:
+    // data for connection to writer layout
+    // OD 2004-03-25 #i26791# - anchored drawing object instance for the
+    // 'virtual' drawing object
+    SwAnchoredDrawObject maAnchoredDrawObj;
 
-        // writer-drawing contact object the 'virtual' drawing object is controlled by.
-        // This object is also the <UserCall> of the drawing object, if it's
-        // inserted into the drawing layer.
-        SwDrawContact&  mrDrawContact;
+    // writer-drawing contact object the 'virtual' drawing object is controlled by.
+    // This object is also the <UserCall> of the drawing object, if it's
+    // inserted into the drawing layer.
+    SwDrawContact&  mrDrawContact;
 
-        using SdrVirtObj::GetPlusHdl;
+protected:
+    // AW: Need own sdr::contact::ViewContact since AnchorPos from parent is
+    // not used but something own (top left of new SnapRect minus top left
+    // of original SnapRect)
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
-   protected:
-        // AW: Need own sdr::contact::ViewContact since AnchorPos from parent is
-        // not used but something own (top left of new SnapRect minus top left
-        // of original SnapRect)
-        virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+    // original Notify from SdrVirtObj
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
-   public:
-        TYPEINFO();
+    // members which were missing from SdrVirtObj
+    SdrObject&                  rRefObj;
+    Rectangle                   aSnapRect;
 
-        SwDrawVirtObj( SdrObject&       _rNewObj,
-                       SwDrawContact&   _rDrawContact );
-        virtual ~SwDrawVirtObj();
+    virtual ~SwDrawVirtObj();
 
-        // access to offset
-        // OD 30.06.2003 #108784# - virtual!!!
-        virtual const Point GetOffset() const;
+    /// method to copy all data from given source
+    virtual void copyDataFromSdrObject(const SdrObject& rSource);
 
-        virtual SdrObject* Clone() const;
-        virtual void operator=( const SdrObject& rObj );
+public:
+    SwDrawVirtObj(SdrObject& _rNewObj, SwDrawContact& _rDrawContact);
 
-        // connection to writer layout
-        // OD 2004-03-29 #i26791#
-        const SwAnchoredObject* GetAnchoredObj() const;
-        SwAnchoredObject* AnchoredObj();
-        const SwFrm* GetAnchorFrm() const;
-        SwFrm* AnchorFrm();
-        void RemoveFromWriterLayout();
+    /// create a copy, evtl. with a different target model (if given)
+    virtual SdrObject* CloneSdrObject(SdrModel* pTargetModel = 0) const;
 
-        // connection to drawing layer
-        void AddToDrawingPage();
-        void RemoveFromDrawingPage();
+    virtual bool IsClosedObj() const;
 
-        // is 'virtual' drawing object connected to writer layout and
-        // to drawing layer.
-        bool IsConnected() const;
+    // access to offset
+    // OD 30.06.2003 #108784# - virtual!!!
+    virtual const basegfx::B2DPoint GetOffset() const;
 
-        virtual void NbcSetAnchorPos(const Point& rPnt);
+    // connection to writer layout
+    // OD 2004-03-29 #i26791#
+    const SwAnchoredObject* GetAnchoredObj() const;
+    SwAnchoredObject* AnchoredObj();
+    const SwFrm* GetAnchorFrm() const;
+    SwFrm* AnchorFrm();
+    void RemoveFromWriterLayout();
 
-        // #108784#
-        // All overloaded methods which need to use the offset
-        virtual void RecalcBoundRect();
-        virtual ::basegfx::B2DPolyPolygon TakeXorPoly() const;
-        virtual ::basegfx::B2DPolyPolygon TakeContour() const;
-        virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
-        virtual SdrHdl* GetPlusHdl(const SdrHdl& rHdl, sal_uInt16 nPlNum) const;
-        virtual void NbcMove(const Size& rSiz);
-        virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-        virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs);
-        virtual void NbcMirror(const Point& rRef1, const Point& rRef2);
-        virtual void NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear);
-        virtual void Move(const Size& rSiz);
-        virtual void Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-        virtual void Rotate(const Point& rRef, long nWink, double sn, double cs);
-        virtual void Mirror(const Point& rRef1, const Point& rRef2);
-        virtual void Shear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear);
-        virtual void RecalcSnapRect();
-        virtual const Rectangle& GetSnapRect() const;
-        virtual void SetSnapRect(const Rectangle& rRect);
-        virtual void NbcSetSnapRect(const Rectangle& rRect);
-        virtual const Rectangle& GetLogicRect() const;
-        virtual void SetLogicRect(const Rectangle& rRect);
-        virtual void NbcSetLogicRect(const Rectangle& rRect);
-        virtual Point GetSnapPoint(sal_uInt32 i) const;
-        virtual Point GetPoint(sal_uInt32 i) const;
-        virtual void NbcSetPoint(const Point& rPnt, sal_uInt32 i);
+    // connection to drawing layer
+    void AddToDrawingPage();
+    void RemoveFromDrawingPage();
+
+    // is 'virtual' drawing object connected to writer layout and
+    // to drawing layer.
+    bool IsConnected() const;
+
+    // #108784#
+    // All overloaded methods which need to use the offset
+    virtual ::basegfx::B2DPolyPolygon TakeXorPoly() const;
+    virtual void AddToHdlList(SdrHdlList& rHdlList) const;
+    virtual void GetPlusHdl(SdrHdlList& rHdlList, SdrObject& rSdrObject, const SdrHdl& rHdl, sal_uInt32 nPlNum) const;
+    virtual basegfx::B2DPoint GetSnapPoint(sal_uInt32 i) const;
+    virtual basegfx::B2DPoint GetObjectPoint(sal_uInt32 i) const;
+    virtual void SetObjectPoint(const basegfx::B2DPoint& rPnt, sal_uInt32 i);
 
         // #108784#
-        virtual FASTBOOL HasTextEdit() const;
+    virtual bool HasTextEdit() const;
 
-        // OD 17.06.2003 #108784# - overload 'layer' methods
-        virtual SdrLayerID GetLayer() const;
-        virtual void NbcSetLayer(SdrLayerID nLayer);
-        virtual void SetLayer(SdrLayerID nLayer);
+    // OD 17.06.2003 #108784# - overload 'layer' methods
+    virtual SdrLayerID GetLayer() const;
+    //virtual void NbcSetLayer(SdrLayerID nLayer);
+    virtual void SetLayer(SdrLayerID nLayer);
 
-        // FullDrag support
-        virtual bool supportsFullDrag() const;
-        virtual SdrObject* getFullDragClone() const;
+    // FullDrag support
+    virtual bool supportsFullDrag() const;
+    virtual SdrObject* getFullDragClone() const;
 
-        // #i97197#
-        virtual void SetBoundRectDirty();
-        virtual const Rectangle& GetCurrentBoundRect() const;
-        virtual const Rectangle& GetLastBoundRect() const;
+    //////////////////////////////////////////////////////////////////////////
+    // methods which were missing from SdrVirtObj which do something
+    SdrObject& ReferencedObj();
+    const SdrObject& GetReferencedObj() const;
+
+    virtual sdr::properties::BaseProperties& GetProperties() const;
+    virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
+    virtual sal_uInt32 GetObjInventor() const;
+    virtual sal_uInt16 GetObjIdentifier() const;
+    virtual SdrObjList* getChildrenOfSdrObject() const;
+    virtual void TakeObjNameSingul(String& rName) const;
+    virtual void TakeObjNamePlural(String& rName) const;
+    virtual sal_uInt32 GetPlusHdlCount(const SdrHdl& rHdl) const;
+    virtual bool hasSpecialDrag() const;
+    virtual bool beginSpecialDrag(SdrDragStat& rDrag) const;
+    virtual bool applySpecialDrag(SdrDragStat& rDrag);
+    virtual String getSpecialDragComment(const SdrDragStat& rDrag) const;
+    virtual basegfx::B2DPolyPolygon getSpecialDragPoly(const SdrDragStat& rDrag) const;
+    virtual bool BegCreate(SdrDragStat& rStat);
+    virtual bool MovCreate(SdrDragStat& rStat);
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+    virtual bool BckCreate(SdrDragStat& rStat);
+    virtual void BrkCreate(SdrDragStat& rStat);
+    virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;
+    virtual sal_uInt32 GetSnapPointCount() const;
+    virtual bool IsPolygonObject() const;
+    virtual sal_uInt32 GetObjectPointCount() const;
+    virtual SdrObjGeoData* GetGeoData() const;
+    virtual void SetGeoData(const SdrObjGeoData& rGeo);
+    virtual void ReformatText();
+    virtual bool HasMacro() const;
+    virtual SdrObject* CheckMacroHit (const SdrObjMacroHitRec& rRec) const;
+    virtual Pointer GetMacroPointer (const SdrObjMacroHitRec& rRec) const;
+    virtual void PaintMacro (OutputDevice& rOut, const SdrObjMacroHitRec& rRec) const;
+    virtual bool DoMacro (const SdrObjMacroHitRec& rRec);
+    virtual XubString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const;
 };
 
 // OD 26.06.2003 #108784#
@@ -371,7 +389,7 @@ bool CheckControlLayer( const SdrObject *pObj );
 
 //KontactObjekt fuer die Verbindung von Formaten als Repraesentanten der
 //Zeichenobjekte im StarWriter (SwClient) und den Objekten selbst im Drawing
-//(SdrObjUserCall).
+//(SfxBroadcaster/Listener/Notify).
 
 // --> OD 2006-01-18 #129959#
 class NestedUserCallHdl;
@@ -397,12 +415,13 @@ class SwDrawContact : public SwContact
         bool mbDisconnectInProgress : 1;
 
         // --> OD 2006-01-18 #129959#
-        // Needed data for handling of nested <SdrObjUserCall> events in
+        // Needed data for handling of nested <SfxBroadcaster/Listener/Notify> events in
         // method <_Changed(..)>
-        bool mbUserCallActive : 1;
+        bool mbNotifyActive : 1;
+
         // event type, which is handled for <mpSdrObjHandledByCurrentUserCall>.
-        // Note: value only valid, if <mbUserCallActive> is sal_True.
-        SdrUserCallType meEventTypeOfCurrentUserCall;
+        // Note: value only valid, if <mbNotifyActive> is true.
+        SdrHintKind meEventTypeOfCurrentUserCall;
 
         friend class NestedUserCallHdl;
         // <--
@@ -454,8 +473,6 @@ class SwDrawContact : public SwContact
         virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
 
     public:
-        TYPEINFO();
-
         SwDrawContact( SwFrmFmt *pToRegisterIn, SdrObject *pObj );
         virtual ~SwDrawContact();
 
@@ -515,12 +532,18 @@ class SwDrawContact : public SwContact
         // by frame.
         SdrObject* GetDrawObjectByAnchorFrm( const SwFrm& _rAnchorFrm );
 
-        // virtuelle Methoden von SdrObjUserCall
-        virtual void Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectangle& rOldBoundRect);
+        // new central SdrObject change handler, called from Notify
+        void HandleChanged(const SdrObject& rObj, SdrHintKind eHint);
 
-        // wird von Changed() und auch vom UndoDraw benutzt, uebernimmt
+        // virtual method from SfxListener
+        virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
+
+        // wird von Notify() und auch vom UndoDraw benutzt, uebernimmt
         // das Notifien von Absaetzen, die ausweichen muessen
-        void _Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectangle* pOldBoundRect);
+        void _Changed(
+            const SdrObject& rObj,
+            SdrHintKind eHint,
+            bool bGroupHierarchy);
 
         //Moved alle SW-Verbindungen zu dem neuen Master.
         void ChangeMasterObject( SdrObject *pNewMaster );

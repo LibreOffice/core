@@ -33,23 +33,12 @@ using namespace ::com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
 
-DBG_NAMEEX(SvxB3DVectorItem)
-DBG_NAME(SvxB3DVectorItem)
-
-// -----------------------------------------------------------------------
-
-TYPEINIT1_FACTORY(SvxB3DVectorItem, SfxPoolItem, new SvxB3DVectorItem);
-
-// -----------------------------------------------------------------------
-
 SvxB3DVectorItem::SvxB3DVectorItem()
 {
-    DBG_CTOR(SvxB3DVectorItem, 0);
 }
 
 SvxB3DVectorItem::~SvxB3DVectorItem()
 {
-    DBG_DTOR(SvxB3DVectorItem, 0);
 }
 
 // -----------------------------------------------------------------------
@@ -58,7 +47,6 @@ SvxB3DVectorItem::SvxB3DVectorItem( sal_uInt16 _nWhich, const basegfx::B3DVector
     SfxPoolItem( _nWhich ),
     aVal( rVal )
 {
-    DBG_CTOR(SvxB3DVectorItem, 0);
 }
 
 // -----------------------------------------------------------------------
@@ -66,7 +54,6 @@ SvxB3DVectorItem::SvxB3DVectorItem( sal_uInt16 _nWhich, const basegfx::B3DVector
 SvxB3DVectorItem::SvxB3DVectorItem( sal_uInt16 _nWhich, SvStream& rStream ) :
     SfxPoolItem( _nWhich )
 {
-    DBG_CTOR(SvxB3DVectorItem, 0);
     double fValue;
     rStream >> fValue; aVal.setX(fValue);
     rStream >> fValue; aVal.setY(fValue);
@@ -79,14 +66,12 @@ SvxB3DVectorItem::SvxB3DVectorItem( const SvxB3DVectorItem& rItem ) :
     SfxPoolItem( rItem ),
     aVal( rItem.aVal )
 {
-    DBG_CTOR(SvxB3DVectorItem, 0);
 }
 
 // -----------------------------------------------------------------------
 
 int SvxB3DVectorItem::operator==( const SfxPoolItem &rItem ) const
 {
-    DBG_CHKTHIS(SvxB3DVectorItem, 0);
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
     return ((SvxB3DVectorItem&)rItem).aVal == aVal;
 }
@@ -95,7 +80,6 @@ int SvxB3DVectorItem::operator==( const SfxPoolItem &rItem ) const
 
 SfxPoolItem* SvxB3DVectorItem::Clone( SfxItemPool* /*pPool*/ ) const
 {
-    DBG_CHKTHIS(SvxB3DVectorItem, 0);
     return new SvxB3DVectorItem( *this );
 }
 
@@ -103,7 +87,6 @@ SfxPoolItem* SvxB3DVectorItem::Clone( SfxItemPool* /*pPool*/ ) const
 
 SfxPoolItem* SvxB3DVectorItem::Create(SvStream &rStream, sal_uInt16 /*nVersion*/) const
 {
-    DBG_CHKTHIS(SvxB3DVectorItem, 0);
     basegfx::B3DVector aStr;
     double fValue;
     rStream >> fValue; aStr.setX(fValue);
@@ -116,8 +99,6 @@ SfxPoolItem* SvxB3DVectorItem::Create(SvStream &rStream, sal_uInt16 /*nVersion*/
 
 SvStream& SvxB3DVectorItem::Store(SvStream &rStream, sal_uInt16 /*nItemVersion*/) const
 {
-    DBG_CHKTHIS(SvxB3DVectorItem, 0);
-
     // ## if (nItemVersion)
     double fValue;
     fValue = aVal.getX(); rStream << fValue;

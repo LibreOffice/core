@@ -44,7 +44,6 @@ namespace dbaui
         String                  m_strComment; // undo, redo comment
 
     public:
-        TYPEINFO();
         OCommentUndoAction(sal_uInt16 nCommentID) { m_strComment = String(ModuleRes(nCommentID)); }
 
         virtual UniString   GetComment() const { return m_strComment; }

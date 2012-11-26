@@ -84,7 +84,7 @@ namespace sdr
                 return false;
             }
 
-            if(!GetObjectContact().TryToGetSdrPageView())
+            if(!GetObjectContact().TryToGetSdrView())
             {
                 return false;
             }
@@ -136,21 +136,20 @@ namespace sdr
             // Initialize background. Dependent of IsPageVisible, use ApplicationBackgroundColor or ApplicationDocumentColor. Most
             // old renderers for export (html, pdf, gallery, ...) set the page to not visible (SetPageVisible(false)). They expect the
             // given OutputDevice to be initialized with the ApplicationDocumentColor then.
-            const SdrPageView* pPageView = GetObjectContact().TryToGetSdrPageView();
+            const SdrView* pSdrView = GetObjectContact().TryToGetSdrView();
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
 
-            if(pPageView)
+            if(pSdrView && pSdrView->GetSdrPageView())
             {
-                const SdrView& rView = pPageView->GetView();
                 Color aInitColor;
 
-                if(rView.IsPageVisible())
+                if(pSdrView->IsPageVisible())
                 {
-                    aInitColor = pPageView->GetApplicationBackgroundColor();
+                    aInitColor = pSdrView->GetSdrPageView()->GetApplicationBackgroundColor();
                 }
                 else
                 {
-                    aInitColor = pPageView->GetApplicationDocumentColor();
+                    aInitColor = pSdrView->GetSdrPageView()->GetApplicationDocumentColor();
 
                     if(Color(COL_AUTO) == aInitColor)
                     {
@@ -227,14 +226,14 @@ namespace sdr
                 return false;
             }
 
-            SdrPageView* pSdrPageView = GetObjectContact().TryToGetSdrPageView();
+            SdrView* pSdrView = GetObjectContact().TryToGetSdrView();
 
-            if(!pSdrPageView)
+            if(!pSdrView || !pSdrView->GetSdrPageView())
             {
                 return false;
             }
 
-            if(!pSdrPageView->GetView().IsPageVisible())
+            if(!pSdrView->IsPageVisible())
             {
                 return false;
             }
@@ -244,20 +243,19 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfPageFill::createPrimitive2DSequence(const DisplayInfo& /*rDisplayInfo*/) const
         {
-            const SdrPageView* pPageView = GetObjectContact().TryToGetSdrPageView();
+            const SdrView* pSdrView = GetObjectContact().TryToGetSdrView();
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
 
-            if(pPageView)
+            if(pSdrView && pSdrView->GetSdrPageView())
             {
                 const SdrPage& rPage = getPage();
-
-                const basegfx::B2DRange aPageFillRange(0.0, 0.0, (double)rPage.GetWdt(), (double)rPage.GetHgt());
+                const basegfx::B2DRange aPageFillRange(basegfx::B2DPoint(0.0, 0.0), rPage.GetPageScale());
                 const basegfx::B2DPolygon aPageFillPolygon(basegfx::tools::createPolygonFromRect(aPageFillRange));
                 Color aPageFillColor;
 
-                if(pPageView->GetApplicationDocumentColor() != COL_AUTO)
+                if(pSdrView->GetSdrPageView()->GetApplicationDocumentColor() != COL_AUTO)
                 {
-                    aPageFillColor = pPageView->GetApplicationDocumentColor();
+                    aPageFillColor = pSdrView->GetSdrPageView()->GetApplicationDocumentColor();
                 }
                 else
                 {
@@ -298,14 +296,14 @@ namespace sdr
                 return false;
             }
 
-            SdrPageView* pSdrPageView = GetObjectContact().TryToGetSdrPageView();
+            SdrView* pSdrView = GetObjectContact().TryToGetSdrView();
 
-            if(!pSdrPageView)
+            if(!pSdrView)
             {
                 return false;
             }
 
-            if(!pSdrPageView->GetView().IsPageVisible())
+            if(!pSdrView->IsPageVisible())
             {
                 return false;
             }
@@ -349,16 +347,19 @@ namespace sdr
                 return false;
             }
 
-            SdrPageView* pSdrPageView = GetObjectContact().TryToGetSdrPageView();
+            SdrView* pSdrView = GetObjectContact().TryToGetSdrView();
 
-            if(!pSdrPageView)
+            if(!pSdrView)
             {
                 return false;
             }
 
-            const SdrView& rView = pSdrPageView->GetView();
+            if(!pSdrView->IsPageVisible() && pSdrView->IsPageBorderVisible())
+            {
+                return false;
+            }
 
-            if(!rView.IsPageVisible() && rView.IsPageBorderVisible())
+            if(!pSdrView->GetSdrPageView())
             {
                 return false;
             }
@@ -390,21 +391,21 @@ namespace sdr
                 return false;
             }
 
-            SdrPageView* pSdrPageView = GetObjectContact().TryToGetSdrPageView();
+            SdrView* pSdrView = GetObjectContact().TryToGetSdrView();
 
-            if(!pSdrPageView)
+            if(!pSdrView)
             {
                 return false;
             }
 
-            if(!pSdrPageView->GetView().IsBordVisible())
+            if(!pSdrView->IsBordVisible())
             {
                 return false;
             }
 
             const SdrPage& rPage = getPage();
 
-            if(!rPage.GetLftBorder() && !rPage.GetUppBorder() && !rPage.GetRgtBorder() && !rPage.GetLwrBorder())
+            if(!rPage.GetLeftPageBorder() && !rPage.GetTopPageBorder() && !rPage.GetRightPageBorder() && !rPage.GetBottomPageBorder())
             {
                 return false;
             }
@@ -489,16 +490,14 @@ namespace sdr
                 return false;
             }
 
-            SdrPageView* pSdrPageView = GetObjectContact().TryToGetSdrPageView();
+            SdrView* pSdrView = GetObjectContact().TryToGetSdrView();
 
-            if(!pSdrPageView)
+            if(!pSdrView)
             {
                 return false;
             }
 
-            const SdrView& rView = pSdrPageView->GetView();
-
-            if(!rView.IsGridVisible())
+            if(!pSdrView->IsGridVisible())
             {
                 return false;
             }
@@ -509,7 +508,7 @@ namespace sdr
                 return false;
             }
 
-            if(static_cast< ViewContactOfGrid& >(GetViewContact()).getFront() != (bool)rView.IsGridFront())
+            if(static_cast< ViewContactOfGrid& >(GetViewContact()).getFront() != pSdrView->IsGridFront())
             {
                 return false;
             }
@@ -519,24 +518,25 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfPageGrid::createPrimitive2DSequence(const DisplayInfo& /*rDisplayInfo*/) const
         {
-            const SdrPageView* pPageView = GetObjectContact().TryToGetSdrPageView();
+            const SdrView* pSdrView = GetObjectContact().TryToGetSdrView();
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
 
-            if(pPageView)
+            if(pSdrView)
             {
-                const SdrView& rView = pPageView->GetView();
                 const SdrPage& rPage = getPage();
-                const Color aGridColor(rView.GetGridColor());
+                const Color aGridColor(pSdrView->GetGridColor());
                 const basegfx::BColor aRGBGridColor(aGridColor.getBColor());
 
+                const basegfx::B2DRange aInnerRange(rPage.GetInnerPageRange());
                 basegfx::B2DHomMatrix aGridMatrix;
-                aGridMatrix.set(0, 0, (double)(rPage.GetWdt() - (rPage.GetRgtBorder() + rPage.GetLftBorder())));
-                aGridMatrix.set(1, 1, (double)(rPage.GetHgt() - (rPage.GetLwrBorder() + rPage.GetUppBorder())));
-                aGridMatrix.set(0, 2, (double)rPage.GetLftBorder());
-                aGridMatrix.set(1, 2, (double)rPage.GetUppBorder());
 
-                const Size aRaw(rView.GetGridCoarse());
-                const Size aFine(rView.GetGridFine());
+                aGridMatrix.set(0, 0, aInnerRange.getWidth());
+                aGridMatrix.set(1, 1, aInnerRange.getHeight());
+                aGridMatrix.set(0, 2, aInnerRange.getMinX());
+                aGridMatrix.set(1, 2, aInnerRange.getMinY());
+
+                const Size aRaw(pSdrView->GetGridCoarse());
+                const Size aFine(pSdrView->GetGridFine());
                 const double fWidthX(aRaw.getWidth());
                 const double fWidthY(aRaw.getHeight());
                 const sal_uInt32 nSubdivisionsX(aFine.getWidth() ? aRaw.getWidth() / aFine.getWidth() : 0L);
@@ -575,16 +575,14 @@ namespace sdr
                 return false;
             }
 
-            SdrPageView* pSdrPageView = GetObjectContact().TryToGetSdrPageView();
+            SdrView* pSdrView = GetObjectContact().TryToGetSdrView();
 
-            if(!pSdrPageView)
+            if(!pSdrView || !pSdrView->GetSdrPageView())
             {
                 return false;
             }
 
-            const SdrView& rView = pSdrPageView->GetView();
-
-            if(!rView.IsHlplVisible())
+            if(!pSdrView->IsHlplVisible())
             {
                 return false;
             }
@@ -595,7 +593,7 @@ namespace sdr
                 return false;
             }
 
-            if(static_cast< ViewContactOfHelplines& >(GetViewContact()).getFront() != (bool)rView.IsHlplFront())
+            if(static_cast< ViewContactOfHelplines& >(GetViewContact()).getFront() != pSdrView->IsHlplFront())
             {
                 return false;
             }
@@ -606,11 +604,11 @@ namespace sdr
         drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfPageHelplines::createPrimitive2DSequence(const DisplayInfo& /*rDisplayInfo*/) const
         {
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
-            const SdrPageView* pPageView = GetObjectContact().TryToGetSdrPageView();
+            const SdrView* pSdrView = GetObjectContact().TryToGetSdrView();
 
-            if(pPageView)
+            if(pSdrView && pSdrView->GetSdrPageView())
             {
-                const SdrHelpLineList& rHelpLineList = pPageView->GetHelpLines();
+                const SdrHelpLineList& rHelpLineList = pSdrView->GetSdrPageView()->GetHelpLines();
                 const sal_uInt32 nCount(rHelpLineList.GetCount());
 
                 if(nCount)
@@ -622,30 +620,44 @@ namespace sdr
                     for(sal_uInt32 a(0L); a < nCount; a++)
                     {
                         const SdrHelpLine& rHelpLine = rHelpLineList[(sal_uInt16)a];
-                        const basegfx::B2DPoint aPosition((double)rHelpLine.GetPos().X(), (double)rHelpLine.GetPos().Y());
                         const double fDiscreteDashLength(4.0);
 
                         switch(rHelpLine.GetKind())
                         {
                             default : // SDRHELPLINE_POINT
                             {
-                                xRetval[a] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::HelplinePrimitive2D(
-                                    aPosition, basegfx::B2DVector(1.0, 0.0), drawinglayer::primitive2d::HELPLINESTYLE2D_POINT,
-                                    aRGBColorA, aRGBColorB, fDiscreteDashLength));
+                                xRetval[a] = drawinglayer::primitive2d::Primitive2DReference(
+                                    new drawinglayer::primitive2d::HelplinePrimitive2D(
+                                        rHelpLine.GetPos(),
+                                        basegfx::B2DVector(1.0, 0.0),
+                                        drawinglayer::primitive2d::HELPLINESTYLE2D_POINT,
+                                        aRGBColorA,
+                                        aRGBColorB,
+                                        fDiscreteDashLength));
                                 break;
                             }
                             case SDRHELPLINE_VERTICAL :
                             {
-                                xRetval[a] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::HelplinePrimitive2D(
-                                    aPosition, basegfx::B2DVector(0.0, 1.0), drawinglayer::primitive2d::HELPLINESTYLE2D_LINE,
-                                    aRGBColorA, aRGBColorB, fDiscreteDashLength));
+                                xRetval[a] = drawinglayer::primitive2d::Primitive2DReference(
+                                    new drawinglayer::primitive2d::HelplinePrimitive2D(
+                                        rHelpLine.GetPos(),
+                                        basegfx::B2DVector(0.0, 1.0),
+                                        drawinglayer::primitive2d::HELPLINESTYLE2D_LINE,
+                                        aRGBColorA,
+                                        aRGBColorB,
+                                        fDiscreteDashLength));
                                 break;
                             }
                             case SDRHELPLINE_HORIZONTAL :
                             {
-                                xRetval[a] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::HelplinePrimitive2D(
-                                    aPosition, basegfx::B2DVector(1.0, 0.0), drawinglayer::primitive2d::HELPLINESTYLE2D_LINE,
-                                    aRGBColorA, aRGBColorB, fDiscreteDashLength));
+                                xRetval[a] = drawinglayer::primitive2d::Primitive2DReference(
+                                    new drawinglayer::primitive2d::HelplinePrimitive2D(
+                                        rHelpLine.GetPos(),
+                                        basegfx::B2DVector(1.0, 0.0),
+                                        drawinglayer::primitive2d::HELPLINESTYLE2D_LINE,
+                                        aRGBColorA,
+                                        aRGBColorB,
+                                        fDiscreteDashLength));
                                 break;
                             }
                         }

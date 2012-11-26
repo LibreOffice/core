@@ -86,7 +86,9 @@
  #endif
 #endif
 
-#define OWN_ATTR_VALUE_START_TEXT               (OWN_ATTR_VALUE_START+0)    // the next 10 entries are reserved for text
+#define OWN_ATTR_VALUE_START_TEXT               (OWN_ATTR_VALUE_START+0)
+// the next 10 entries are reserved for text, see editeng\inc\editeng\unotext.hxx
+// where text items are made members of this range
 #define OWN_ATTR_VALUE_POLYGONKIND              (OWN_ATTR_VALUE_START+10)
 #define OWN_ATTR_VALUE_POLYPOLYGON              (OWN_ATTR_VALUE_START+11)
 #define OWN_ATTR_VALUE_POLYPOLYGONBEZIER        (OWN_ATTR_VALUE_START+12)
@@ -186,7 +188,13 @@
 
 #define OWN_ATTR_STYLE                          (OWN_ATTR_VALUE_START+87)
 
-#define OWN_ATTR_EDGE_POLYPOLYGONBEZIER         (OWN_ATTR_VALUE_START+88)   // maximum is OWN_ATTR_VALUE_START+88, see svl/inc/svl/solar.hrc
+#define OWN_ATTR_EDGE_POLYPOLYGONBEZIER         (OWN_ATTR_VALUE_START+88)
+
+#define OWN_ATTR_CIRCENDANGLE                   (OWN_ATTR_VALUE_START+89)
+#define OWN_ATTR_CIRCKIND                       (OWN_ATTR_VALUE_START+90)
+#define OWN_ATTR_CIRCSTARTANGLE                 (OWN_ATTR_VALUE_START+91)
+
+// maximum is OWN_ATTR_VALUE_START+188, see svl/inc/svl/solar.hrc
 
 // #FontWork#
 #define FONTWORK_PROPERTIES \
@@ -394,9 +402,9 @@
     { MAP_CHAR_LEN("EndPosition"),                      OWN_ATTR_MEASURE_END_POS,           &::getCppuType((const ::com::sun::star::awt::Point*)0),     0,   0},
 
 #define SPECIAL_CIRCLE_PROPERTIES \
-    { MAP_CHAR_LEN(UNO_NAME_CIRCENDANGLE),  SDRATTR_CIRCENDANGLE,   &::getCppuType((const sal_Int32*)0),        0,  0}, \
-    { MAP_CHAR_LEN(UNO_NAME_CIRCKIND),      SDRATTR_CIRCKIND,       &::getCppuType((const ::com::sun::star::drawing::CircleKind*)0),    0,  0}, \
-    { MAP_CHAR_LEN(UNO_NAME_CIRCSTARTANGLE),SDRATTR_CIRCSTARTANGLE, &::getCppuType((const sal_Int32*)0),        0,  0},
+    { MAP_CHAR_LEN(UNO_NAME_CIRCENDANGLE),  OWN_ATTR_CIRCENDANGLE,  &::getCppuType((const sal_Int32*)0),        0,  0}, \
+    { MAP_CHAR_LEN(UNO_NAME_CIRCKIND),      OWN_ATTR_CIRCKIND,      &::getCppuType((const ::com::sun::star::drawing::CircleKind*)0),    0,  0}, \
+    { MAP_CHAR_LEN(UNO_NAME_CIRCSTARTANGLE),OWN_ATTR_CIRCSTARTANGLE,    &::getCppuType((const sal_Int32*)0),        0,  0},
 
 #define SPECIAL_POLYGON_PROPERTIES \
     { MAP_CHAR_LEN(UNO_NAME_POLYGONKIND),   OWN_ATTR_VALUE_POLYGONKIND, &::getCppuType((const ::com::sun::star::drawing::PolygonKind*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},

@@ -45,10 +45,8 @@ namespace rtl
 class EDITENG_DLLPUBLIC SvxWeightItem : public SfxEnumItem
 {
 public:
-    TYPEINFO();
-
-    SvxWeightItem(  const FontWeight eWght /*= WEIGHT_NORMAL*/,
-                    const sal_uInt16 nId  );
+    POOLITEM_FACTORY()
+    SvxWeightItem(  const FontWeight eWght = WEIGHT_NORMAL, const sal_uInt16 nId = 0 );
 
     // "pure virtual Methoden" vom SfxPoolItem + SfxEnumItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,

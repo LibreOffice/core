@@ -247,7 +247,7 @@ void FocusManager::SetFocusedPage (const model::SharedPageDescriptor& rpDescript
     if (rpDescriptor.get() != NULL)
     {
         FocusHider aFocusHider (*this);
-        mnPageIndex = (rpDescriptor->GetPage()->GetPageNum()-1)/2;
+        mnPageIndex = (rpDescriptor->GetPage()->GetPageNumber()-1)/2;
     }
 }
 

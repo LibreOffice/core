@@ -111,17 +111,17 @@ void SdPresLayoutDlg::Reset()
     long nName;
 
     // MasterPage austauschen
-    if( mrOutAttrs.GetItemState( ATTR_PRESLAYOUT_MASTER_PAGE, sal_False, &pPoolItem ) == SFX_ITEM_SET )
+    if( mrOutAttrs.GetItemState( ATTR_PRESLAYOUT_MASTER_PAGE, false, &pPoolItem ) == SFX_ITEM_SET )
     {
-        sal_Bool bMasterPage = ( (const SfxBoolItem*) pPoolItem)->GetValue();
+        bool bMasterPage = ( (const SfxBoolItem*) pPoolItem)->GetValue();
         maCbxMasterPage.Enable( !bMasterPage );
         maCbxMasterPage.Check( bMasterPage );
     }
 
     // Nicht verwendete MasterPages entfernen
-    maCbxCheckMasters.Check(sal_False);
+    maCbxCheckMasters.Check(false);
 
-    if(mrOutAttrs.GetItemState(ATTR_PRESLAYOUT_NAME, sal_True, &pPoolItem) == SFX_ITEM_SET)
+    if(mrOutAttrs.GetItemState(ATTR_PRESLAYOUT_NAME, true, &pPoolItem) == SFX_ITEM_SET)
         maName = ((const SfxStringItem*)pPoolItem)->GetValue();
     else
         maName.Erase();
@@ -149,7 +149,7 @@ void SdPresLayoutDlg::Reset()
 void SdPresLayoutDlg::GetAttr(SfxItemSet& rOutAttrs)
 {
     short nId = maVS.GetSelectItemId();
-    sal_Bool bLoad = nId > mnLayoutCount;
+    bool bLoad = nId > mnLayoutCount;
     rOutAttrs.Put( SfxBoolItem( ATTR_PRESLAYOUT_LOAD, bLoad ) );
 
     String aLayoutName;
@@ -244,7 +244,7 @@ IMPL_LINK(SdPresLayoutDlg, ClickLoadHdl, void *, EMPTYARG)
     Update();
 
     String aFile;
-    sal_Bool   bCancel = sal_False;
+    bool   bCancel = false;
 
     switch (nResult)
     {
@@ -263,7 +263,7 @@ IMPL_LINK(SdPresLayoutDlg, ClickLoadHdl, void *, EMPTYARG)
         break;
 
         default:
-            bCancel = sal_True;
+            bCancel = true;
     }
     delete pDlg;
 
@@ -273,7 +273,7 @@ IMPL_LINK(SdPresLayoutDlg, ClickLoadHdl, void *, EMPTYARG)
     if( !bCancel )
     {
         // Pruefen, ob Vorlage schon vorhanden
-        sal_Bool bExists = sal_False;
+        bool bExists = false;
         String* pName = (String*)mpLayoutNames->First();
         String aCompareStr( maName );
         if( maName.Len() == 0 )
@@ -283,7 +283,7 @@ IMPL_LINK(SdPresLayoutDlg, ClickLoadHdl, void *, EMPTYARG)
         {
             if( aCompareStr == *pName )
             {
-                bExists = sal_True;
+                bExists = true;
                 // Vorlage selektieren
                 sal_uInt16 nId = (sal_uInt16) mpLayoutNames->GetCurPos() + 1;
                 maVS.SelectItem( nId );
@@ -328,7 +328,7 @@ IMPL_LINK(SdPresLayoutDlg, ClickLoadHdl, void *, EMPTYARG)
                 }
                 else
                 {
-                    bCancel = sal_True;
+                    bCancel = true;
                 }
 
                 pDoc->CloseBookmarkDoc();

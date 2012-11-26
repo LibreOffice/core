@@ -45,7 +45,6 @@
 #include <svx/dialogs.hrc>
 
 namespace sd {
-TYPEINIT1( FuArea, FuPoor );
 
 /*************************************************************************
 |*
@@ -71,7 +70,7 @@ void FuArea::DoExecute( SfxRequest& rReq )
 
     if( !pArgs )
     {
-        SfxItemSet aNewAttr( mpDoc->GetPool() );
+        SfxItemSet aNewAttr( mpDoc->GetItemPool() );
         mpView->GetAttributes( aNewAttr );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();

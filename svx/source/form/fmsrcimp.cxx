@@ -100,12 +100,9 @@ void FmSearchThread::onTerminated()
 
 //  SMART_UNO_IMPLEMENTATION(FmRecordCountListener, UsrObject);
 
-DBG_NAME(FmRecordCountListener);
 //------------------------------------------------------------------------
 FmRecordCountListener::FmRecordCountListener(const Reference< ::com::sun::star::sdbc::XResultSet > & dbcCursor)
 {
-    DBG_CTOR(FmRecordCountListener,NULL);
-
     m_xListening = Reference< ::com::sun::star::beans::XPropertySet > (dbcCursor, UNO_QUERY);
     if (!m_xListening.is())
         return;
@@ -135,8 +132,6 @@ Link FmRecordCountListener::SetPropChangeHandler(const Link& lnk)
 //------------------------------------------------------------------------
 FmRecordCountListener::~FmRecordCountListener()
 {
-
-    DBG_DTOR(FmRecordCountListener,NULL);
 }
 
 //------------------------------------------------------------------------
@@ -677,7 +672,6 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const ::rtl::O
 }
 
 
-DBG_NAME(FmSearchEngine);
 //------------------------------------------------------------------------
 FmSearchEngine::FmSearchEngine(const Reference< XMultiServiceFactory >& _rxORB,
             const Reference< XResultSet > & xCursor, const ::rtl::OUString& sVisibleFields,
@@ -706,8 +700,6 @@ FmSearchEngine::FmSearchEngine(const Reference< XMultiServiceFactory >& _rxORB,
     ,m_nPosition(MATCHING_ANYWHERE)
     ,m_nTransliterationFlags(0)
 {
-    DBG_CTOR(FmSearchEngine,NULL);
-
     m_xFormatter = Reference< ::com::sun::star::util::XNumberFormatter > (::comphelper::getProcessServiceFactory()
                     ->createInstance(FM_NUMBER_FORMATTER), UNO_QUERY);
     if (m_xFormatter.is())
@@ -745,8 +737,6 @@ FmSearchEngine::FmSearchEngine(const Reference< XMultiServiceFactory >& _rxORB,
     ,m_nPosition(MATCHING_ANYWHERE)
     ,m_nTransliterationFlags(0)
 {
-    DBG_CTOR(FmSearchEngine,NULL);
-
     fillControlTexts(arrFields);
     Init(sVisibleFields);
 }
@@ -755,8 +745,6 @@ FmSearchEngine::FmSearchEngine(const Reference< XMultiServiceFactory >& _rxORB,
 FmSearchEngine::~FmSearchEngine()
 {
     clearControlTexts();
-
-    DBG_DTOR(FmSearchEngine,NULL);
 }
 
 //------------------------------------------------------------------------

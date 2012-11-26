@@ -27,94 +27,71 @@
 #include <svx/svdorect.hxx>
 #include "svx/svxdllapi.h"
 
-//************************************************************
-//   Vorausdeklarationen
-//************************************************************
+//////////////////////////////////////////////////////////////////////////////
+// defines for circle type
 
-namespace sdr { namespace properties {
-    class CircleProperties;
-}}
-
-//************************************************************
-//   Hilfsklasse SdrCircObjGeoData
-//************************************************************
-
-// #109872#
-class SdrCircObjGeoData : public SdrTextObjGeoData
+enum SdrCircleObjType
 {
-public:
-    long                        nStartWink;
-    long                        nEndWink;
+    /// basic types the circle may have
+    CircleType_Circle = 0,          // old OBJ_CIRC
+    CircleType_Sector,              // old OBJ_SECT
+    CircleType_Arc,                 // old OBJ_CARC
+    CircleType_Segment,             // old OBJ_CCUT
 };
 
-//************************************************************
+//////////////////////////////////////////////////////////////////////////////
 //   SdrCircObj
-//************************************************************
 
 class SVX_DLLPUBLIC SdrCircObj : public SdrRectObj
 {
-private:
-    // to allow sdr::properties::CircleProperties access to ImpSetAttrToCircInfo()
-    friend class sdr::properties::CircleProperties;
-
-    // only for SdrCircleAttributes
-    SdrObjKind GetCircleKind() const { return meCircleKind; }
-
 protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
-    SdrObjKind                  meCircleKind;
-    long                        nStartWink;
-    long                        nEndWink;
+    // type of object
+    SdrCircleObjType            meSdrCircleObjType;
 
-    // bitfield
-    unsigned                    mbPolygonIsLine : 1;
+    // [0.0 .. F_2PI], default is 0.0 for start and F_2PI for end
+    double                      mfStartAngle;
+    double                      mfEndAngle;
 
-private:
-     SVX_DLLPRIVATE basegfx::B2DPolygon ImpCalcXPolyCirc(const SdrObjKind eKind, const Rectangle& rRect1, long nStart, long nEnd) const;
-    SVX_DLLPRIVATE void ImpSetCreateParams(SdrDragStat& rStat) const;
-    SVX_DLLPRIVATE void ImpSetAttrToCircInfo(); // Werte vom Pool kopieren
-    SVX_DLLPRIVATE void ImpSetCircInfoToAttr(); // Werte in den Pool kopieren
+    virtual ~SdrCircObj();
 
-    // Liefert sal_True, wenn das Painten ein XPolygon erfordert.
-    SVX_DLLPRIVATE FASTBOOL PaintNeedsXPolyCirc() const; // PaintNeedsXPoly-> PaintNeedsXPolyCirc
-    SVX_DLLPRIVATE virtual void RecalcXPoly();
-
-protected:
-    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
+    /// method to copy all data from given source
+    virtual void copyDataFromSdrObject(const SdrObject& rSource);
 
 public:
-    TYPEINFO();
-    SdrCircObj(SdrObjKind eNewKind); // Circ, CArc, Sect oder CCut
-    SdrCircObj(SdrObjKind eNewKind, const Rectangle& rRect);
+    /// create a copy, evtl. with a different target model (if given)
+    virtual SdrObject* CloneSdrObject(SdrModel* pTargetModel = 0) const;
 
-    // 0=0.00Deg=3h 9000=90.00Deg=12h 18000=180.00Deg=9h 27000=270.00Deg=6h
-    // Der Verlauf des Kreises von StartWink nach EndWink ist immer entgegen
-    // dem Uhrzeigersinn.
-    // Wenn nNewStartWink==nNewEndWink hat der Kreisbogen einen Verlaufswinkel
-    // von 0 Grad. Bei nNewStartWink+36000==nNewEndWink ist der Verlaufswinkel
-    // 360.00 Grad.
-    SdrCircObj(SdrObjKind eNewKind, const Rectangle& rRect, long nNewStartWink, long nNewEndWink);
-    virtual ~SdrCircObj();
+    SdrCircObj(
+        SdrModel& rSdrModel,
+        SdrCircleObjType eSdrCircleObjType = CircleType_Circle,
+        const basegfx::B2DHomMatrix& rTransform = basegfx::B2DHomMatrix(),
+        double fNewStartWink = 0.0,
+        double fNewEndWink = F_2PI);
+
+    virtual bool IsClosedObj() const;
+    double GetStartAngle() const;
+    double GetEndAngle() const;
+
+    SdrCircleObjType GetSdrCircleObjType() const;
+    void SetSdrCircleObjType(SdrCircleObjType eNew);
+
+    void SetStartAngle(double fNew);
+    void SetEndAngle(double fNew);
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual sal_uInt16 GetObjIdentifier() const;
-    virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const;
 
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
 
-    virtual void operator=(const SdrObject& rObj);
-    virtual void RecalcSnapRect();
-    virtual void NbcSetSnapRect(const Rectangle& rRect);
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
 
     virtual sal_uInt32 GetSnapPointCount() const;
-    virtual Point GetSnapPoint(sal_uInt32 i) const;
+    virtual basegfx::B2DPoint GetSnapPoint(sal_uInt32 i) const;
 
-    virtual sal_uInt32 GetHdlCount() const;
-    virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
+    virtual void AddToHdlList(SdrHdlList& rHdlList) const;
 
     // special drag methods
     virtual bool hasSpecialDrag() const;
@@ -122,28 +99,23 @@ public:
     virtual bool applySpecialDrag(SdrDragStat& rDrag);
     virtual String getSpecialDragComment(const SdrDragStat& rDrag) const;
 
-    virtual FASTBOOL BegCreate(SdrDragStat& rStat);
-    virtual FASTBOOL MovCreate(SdrDragStat& rStat);
-    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
-    virtual FASTBOOL BckCreate(SdrDragStat& rStat);
-    virtual void BrkCreate(SdrDragStat& rStat);
+    virtual bool MovCreate(SdrDragStat& rStat);
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+    virtual bool BckCreate(SdrDragStat& rStat);
+
     virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;
-    virtual Pointer GetCreatePointer() const;
-    virtual void NbcMove(const Size& aSiz);
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-    virtual void NbcMirror(const Point& rRef1, const Point& rRef2);
-    virtual void NbcShear (const Point& rRef, long nWink, double tn, FASTBOOL bVShear);
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
+    virtual Pointer GetCreatePointer(const SdrView& rSdrView) const;
+    virtual SdrObject* DoConvertToPolygonObject(bool bBezier, bool bAddText) const;
 
 protected:
     virtual SdrObjGeoData* NewGeoData() const;
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const;
     virtual void RestGeoData(const SdrObjGeoData& rGeo);
-public:
-    long GetStartWink() const { return nStartWink; }
-    long GetEndWink() const { return nEndWink; }
-
 };
+
+//////////////////////////////////////////////////////////////////////////////
 
 #endif //_SVDOCIRC_HXX
 
+//////////////////////////////////////////////////////////////////////////////
+// eof

@@ -176,6 +176,7 @@
 #include <tools/urlobj.hxx>
 #include <sot/exchange.hxx>
 #include <memory>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include "attrib.hxx"
 #include "patattr.hxx"
@@ -570,12 +571,15 @@ void ScViewFunc::PasteDraw()
     SCCOL nPosX = pViewData->GetCurX();
     SCROW nPosY = pViewData->GetCurY();
     Window* pWin = GetActiveWin();
-    Point aPos = pWin->PixelToLogic( pViewData->GetScrPos( nPosX, nPosY,
-                                     pViewData->GetActivePart() ) );
     ScDrawTransferObj* pDrawClip = ScDrawTransferObj::GetOwnClipboard( pWin );
+
     if (pDrawClip)
-        PasteDraw( aPos, pDrawClip->GetModel(), sal_False,
-            pDrawClip->GetSourceDocID() == pViewData->GetDocument()->GetDocumentID() );
+    {
+        const Point aOldPoint(pViewData->GetScrPos(nPosX, nPosY, pViewData->GetActivePart()));
+        const basegfx::B2DPoint aLogicPos(pWin->GetInverseViewTransformation() * basegfx::B2DPoint(aOldPoint.X(), aOldPoint.Y()));
+
+        PasteDraw(aLogicPos, pDrawClip->GetModel(), sal_False, pDrawClip->GetSourceDocID() == pViewData->GetDocument()->GetDocumentID());
+    }
 }
 
 void ScViewFunc::PasteFromSystem()
@@ -711,8 +715,10 @@ void ScViewFunc::PasteFromTransferable( const uno::Reference<datatransfer::XTran
         SCCOL nPosX = pViewData->GetCurX();
         SCROW nPosY = pViewData->GetCurY();
         Window* pWin = GetActiveWin();
-        Point aPos = pWin->PixelToLogic( pViewData->GetScrPos( nPosX, nPosY, pViewData->GetActivePart() ) );
-        PasteDraw( aPos, pDrawClip->GetModel(), sal_False, pDrawClip->GetSourceDocID() == pViewData->GetDocument()->GetDocumentID() );
+        const Point aOldPoint(pViewData->GetScrPos(nPosX, nPosY, pViewData->GetActivePart()));
+        const basegfx::B2DPoint aLogicPos(pWin->GetInverseViewTransformation() * basegfx::B2DPoint(aOldPoint.X(), aOldPoint.Y()));
+
+        PasteDraw(aLogicPos, pDrawClip->GetModel(), sal_False, pDrawClip->GetSourceDocID() == pViewData->GetDocument()->GetDocumentID());
     }
     else
     {
@@ -1393,8 +1399,8 @@ sal_Bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
     if ( nFlags & IDF_OBJECTS )
     {
         ScDrawView* pScDrawView = GetScDrawView();
-        SdrModel* pModel = ( pScDrawView ? pScDrawView->GetModel() : NULL );
-        pPage = ( pModel ? pModel->GetPage( static_cast< sal_uInt16 >( nStartTab ) ) : NULL );
+        SdrModel* pModel = ( pScDrawView ? &pScDrawView->getSdrModelFromSdrView() : NULL );
+        pPage = ( pModel ? pModel->GetPage( static_cast< sal_uInt32 >( nStartTab ) ) : NULL );
         if ( pPage )
         {
             ScChartHelper::GetChartNames( aExcludedChartNames, pPage );

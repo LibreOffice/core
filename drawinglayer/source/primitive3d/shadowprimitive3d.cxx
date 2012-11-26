@@ -51,21 +51,6 @@ namespace drawinglayer
         {
         }
 
-        bool ShadowPrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
-        {
-            if(GroupPrimitive3D::operator==(rPrimitive))
-            {
-                const ShadowPrimitive3D& rCompare = (ShadowPrimitive3D&)rPrimitive;
-
-                return (getShadowTransform() == rCompare.getShadowTransform()
-                    && getShadowColor() == rCompare.getShadowColor()
-                    && getShadowTransparence() == rCompare.getShadowTransparence()
-                    && getShadow3D() == rCompare.getShadow3D());
-            }
-
-            return false;
-        }
-
         // provide unique ID
         ImplPrimitrive3DIDBlock(ShadowPrimitive3D, PRIMITIVE3D_ID_SHADOWPRIMITIVE3D)
 

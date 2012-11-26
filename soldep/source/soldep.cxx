@@ -126,9 +126,11 @@ void SolDep::Init( ByteString &rVersion, GenericInformationList *pVersionList )
 IMPL_LINK( SolDep, ChildWindowEventListener, VclSimpleEvent*, pEvent )
 /*****************************************************************************/
 {
-    if ( pEvent && pEvent->ISA( VclWindowEvent ) )
+    VclWindowEvent* pVclWindowEvent = dynamic_cast< VclWindowEvent* >(pEvent);
+
+    if ( pVclWindowEvent )
     {
-        ProcessChildWindowEvent( *static_cast< VclWindowEvent* >( pEvent ) );
+        ProcessChildWindowEvent( *pVclWindowEvent );
     }
     return 0;
 }

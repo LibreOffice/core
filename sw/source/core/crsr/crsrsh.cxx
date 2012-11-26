@@ -71,9 +71,6 @@
 using namespace com::sun::star;
 using namespace util;
 
-TYPEINIT2(SwCrsrShell,ViewShell,SwModify);
-
-
 // Funktion loescht, alle ueberlappenden Cursor aus einem Cursor-Ring
 void CheckRange( SwCursor* );
 
@@ -1549,8 +1546,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
              ( !pDoc->GetDocShell() ||
                !pDoc->GetDocShell()->IsReadOnly() || bAllProtect )) ) )
         {
-            if( !FindValidCntntNode( !HasDrawView() ||
-                    0 == Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount()))
+            if( !FindValidCntntNode( !HasDrawView() || !Imp()->GetDrawView()->areSdrObjectsSelected()))
             {
                 // alles ist geschuetzt / versteckt -> besonderer Mode
                 if( bAllProtect && !IsReadOnlyAvailable() &&
@@ -1648,14 +1644,13 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
             // im geschuetzten Fly? aber bei Rahmenselektion ignorieren
             if( !IsReadOnlyAvailable() && pFrm->IsProtected() &&
                 ( !Imp()->GetDrawView() ||
-                  !Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() ) &&
+                  !Imp()->GetDrawView()->areSdrObjectsSelected() ) &&
                 (!pDoc->GetDocShell() ||
                  !pDoc->GetDocShell()->IsReadOnly() || bAllProtect ) )
             {
                 // dann suche eine gueltige Position
                 sal_Bool bChgState = sal_True;
-                if( !FindValidCntntNode(!HasDrawView() ||
-                    0 == Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount()))
+                if( !FindValidCntntNode(!HasDrawView() || !Imp()->GetDrawView()->areSdrObjectsSelected()))
                 {
                     // alles ist geschuetzt / versteckt -> besonderer Mode
                     if( bAllProtect )
@@ -2545,9 +2540,9 @@ void SwCrsrShell::ParkCrsr( const SwNodeIndex &rIdx )
     //Alle Shells wollen etwas davon haben.
     ViewShell *pTmp = this;
     do {
-        if( pTmp->IsA( TYPE( SwCrsrShell )))
+        SwCrsrShell* pSh = dynamic_cast< SwCrsrShell* >(pTmp);
+        if( pSh )
         {
-            SwCrsrShell* pSh = (SwCrsrShell*)pTmp;
             if( pSh->pCrsrStk )
                 pSh->_ParkPams( pNew, &pSh->pCrsrStk );
 
@@ -2704,7 +2699,7 @@ sal_Bool SwCrsrShell::ShouldWait() const
     if ( IsTableMode() || GetCrsrCnt() > 1 )
         return sal_True;
 
-    if( HasDrawView() && GetDrawView()->GetMarkedObjectList().GetMarkCount() )
+    if( HasDrawView() && GetDrawView()->areSdrObjectsSelected() )
         return sal_True;
 
     SwPaM* pPam = GetCrsr();
@@ -2961,7 +2956,7 @@ sal_Bool SwCrsrShell::IsCrsrReadonly() const
              (pFly = pFrm->FindFlyFrm())->GetFmt()->GetEditInReadonly().GetValue() &&
              pFly->Lower() &&
              !pFly->Lower()->IsNoTxtFrm() &&
-             !GetDrawView()->GetMarkedObjectList().GetMarkCount() )
+             !GetDrawView()->areSdrObjectsSelected() )
         {
             return sal_False;
         }
@@ -2985,7 +2980,7 @@ void SwCrsrShell::SetReadOnlyAvailable( sal_Bool bFlag )
 {
     // im GlobalDoc darf NIE umgeschaltet werden
     if( (!GetDoc()->GetDocShell() ||
-         !GetDoc()->GetDocShell()->IsA( SwGlobalDocShell::StaticType() )) &&
+         !dynamic_cast< SwGlobalDocShell* >(GetDoc()->GetDocShell())) &&
         bFlag != bSetCrsrInReadOnly )
     {
         // wenn das Flag ausgeschaltet wird, dann muessen erstmal alle

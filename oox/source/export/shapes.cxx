@@ -455,8 +455,7 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
     sal_Bool bIsDefaultObject = EscherPropertyContainer::IsDefaultObject( pShape );
     sal_Bool bPredefinedHandlesUsed = TRUE;
     OUString sShapeType;
-    sal_uInt32 nMirrorFlags = 0;
-    MSO_SPT eShapeType = EscherPropertyContainer::GetCustomShapeType( xShape, nMirrorFlags, sShapeType );
+    MSO_SPT eShapeType = EscherPropertyContainer::GetCustomShapeType( xShape, sShapeType );
     const char* sPresetShape = lcl_GetPresetGeometry( USS( sShapeType ) );
     DBG(printf("custom shape type: %s ==> %s\n", USS( sShapeType ), sPresetShape));
     Sequence< PropertyValue > aGeometrySeq;
@@ -498,7 +497,10 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
+
+    // TTTT: Will this take mirrorings into account...?
     WriteShapeTransformation( xShape );
+
     if( nAdjustmentValuesIndex != -1 )
         WritePresetShape( sPresetShape, eShapeType, bPredefinedHandlesUsed, nAdjustmentsWhichNeedsToBeConverted, aGeometrySeq[ nAdjustmentValuesIndex ] );
     else

@@ -152,7 +152,7 @@ SvxTableController::SvxTableController( SdrObjEditView* pView, const SdrObject* 
 , mnUpdateEvent( 0 )
 {
     if( pObj )
-        mpModel = pObj->GetModel();
+        mpModel = &pObj->getSdrModelFromSdrObject();
 
     if( mxTableObj.is() )
     {
@@ -258,7 +258,8 @@ bool SvxTableController::onMouseButtonDown(const MouseEvent& rMEvt, Window* pWin
     if( !rMEvt.IsRight() && mpView->PickAnything(rMEvt,SDRMOUSEBUTTONDOWN, aVEvt) == SDRHIT_HANDLE )
         return false;
 
-    TableHitKind eHit = static_cast< SdrTableObj* >(mxTableObj.get())->CheckTableHit( pWindow->PixelToLogic(rMEvt.GetPosPixel()), maMouseDownPos.mnCol, maMouseDownPos.mnRow, 0 );
+    const basegfx::B2DPoint aLogicPos(pWindow->GetInverseViewTransformation() * basegfx::B2DPoint(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y()));
+    TableHitKind eHit = static_cast< SdrTableObj* >(mxTableObj.get())->CheckTableHit( aLogicPos, maMouseDownPos.mnCol, maMouseDownPos.mnRow, 0 );
 
     mbLeftButtonDown = (rMEvt.GetClicks() == 1) && rMEvt.IsLeft();
 
@@ -276,10 +277,8 @@ bool SvxTableController::onMouseButtonDown(const MouseEvent& rMEvt, Window* pWin
     {
         RemoveSelection();
 
-        Point aPnt(rMEvt.GetPosPixel());
-        if (pWindow!=NULL)
-            aPnt=pWindow->PixelToLogic(aPnt);
-
+        const basegfx::B2DPoint aPixelPos(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
+        const basegfx::B2DPoint aPnt(pWindow ? pWindow->GetInverseViewTransformation() * aPixelPos : aPixelPos);
         SdrHdl* pHdl = mpView->PickHandle(aPnt);
 
         if( pHdl )
@@ -330,7 +329,9 @@ bool SvxTableController::onMouseMove(const MouseEvent& rMEvt, Window* pWindow )
 
     SdrTableObj* pTableObj = dynamic_cast< SdrTableObj* >( mxTableObj.get() );
     CellPos aPos;
-    if( mbLeftButtonDown && pTableObj && pTableObj->CheckTableHit( pWindow->PixelToLogic(rMEvt.GetPosPixel()), aPos.mnCol, aPos.mnRow, 0 ) != SDRTABLEHIT_NONE )
+    const basegfx::B2DPoint aLogicPos(pWindow->GetInverseViewTransformation() * basegfx::B2DPoint(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y()));
+
+    if( mbLeftButtonDown && pTableObj && pTableObj->CheckTableHit( aLogicPos, aPos.mnCol, aPos.mnRow, 0 ) != SDRTABLEHIT_NONE )
     {
         if(aPos != maMouseDownPos)
         {
@@ -358,8 +359,8 @@ bool SvxTableController::onMouseMove(const MouseEvent& rMEvt, Window* pWindow )
 void SvxTableController::onSelectionHasChanged()
 {
     bool bSelected = false;
-
     SdrTableObj* pTableObj = dynamic_cast< SdrTableObj* >( mxTableObj.get() );
+
     if( pTableObj && pTableObj->IsTextEditActive() )
     {
         pTableObj->getActiveCellPos( maCursorFirstPos );
@@ -368,9 +369,7 @@ void SvxTableController::onSelectionHasChanged()
     }
     else
     {
-        const SdrMarkList& rMarkList= mpView->GetMarkedObjectList();
-        if( rMarkList.GetMarkCount() == 1 )
-            bSelected = mxTableObj.get() == rMarkList.GetMark(0)->GetMarkedSdrObj();
+        bSelected = (mxTableObj.get() == dynamic_cast< SdrTableObj* >(mpView->getSelectedIfSingle()));
     }
 
     if( bSelected )
@@ -387,7 +386,7 @@ void SvxTableController::onSelectionHasChanged()
 
 void SvxTableController::GetState( SfxItemSet& rSet )
 {
-    if( !mxTable.is() || !mxTableObj.is() || !mxTableObj->GetModel() )
+    if( !mxTable.is() || !mxTableObj.is() )
         return;
 
     SfxItemSet* pSet = 0;
@@ -405,7 +404,7 @@ void SvxTableController::GetState( SfxItemSet& rSet )
             case SID_TABLE_VERT_CENTER:
             case SID_TABLE_VERT_NONE:
                 {
-                    if( !mxTable.is() || !mxTableObj->GetModel() )
+                    if( !mxTable.is() )
                     {
                         rSet.DisableItem(nWhich);
                     }
@@ -413,7 +412,7 @@ void SvxTableController::GetState( SfxItemSet& rSet )
                     {
                         if( !pSet )
                         {
-                            pSet = new SfxItemSet( mxTableObj->GetModel()->GetItemPool() );
+                            pSet = new SfxItemSet( mxTableObj->getSdrModelFromSdrObject().GetItemPool() );
                             MergeAttrFromSelectedCells(*pSet, sal_False);
                         }
 
@@ -715,21 +714,21 @@ void SvxTableController::onFormatTable( SfxRequest& rReq )
 
     const SfxItemSet* pArgs = rReq.GetArgs();
 
-    if( !pArgs && pTableObj->GetModel() )
+    if( !pArgs )
     {
-        SfxItemSet aNewAttr( pTableObj->GetModel()->GetItemPool() );
+        SfxItemSet aNewAttr( pTableObj->getSdrModelFromSdrObject().GetItemPool() );
         MergeAttrFromSelectedCells(aNewAttr, sal_False);
 
         // merge drawing layer text distance items into SvxBoxItem used by the dialog
         SvxBoxItem aBoxItem( static_cast< const SvxBoxItem& >( aNewAttr.Get( SDRATTR_TABLE_BORDER ) ) );
-        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( ((SdrTextLeftDistItem&)(aNewAttr.Get(SDRATTR_TEXT_LEFTDIST))).GetValue()), BOX_LINE_LEFT );
-        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( ((SdrTextRightDistItem&)(aNewAttr.Get(SDRATTR_TEXT_RIGHTDIST))).GetValue()), BOX_LINE_RIGHT );
-        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( ((SdrTextUpperDistItem&)(aNewAttr.Get(SDRATTR_TEXT_UPPERDIST))).GetValue()), BOX_LINE_TOP );
-        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( ((SdrTextLowerDistItem&)(aNewAttr.Get(SDRATTR_TEXT_LOWERDIST))).GetValue()), BOX_LINE_BOTTOM );
+        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( ((SdrMetricItem&)(aNewAttr.Get(SDRATTR_TEXT_LEFTDIST))).GetValue()), BOX_LINE_LEFT );
+        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( ((SdrMetricItem&)(aNewAttr.Get(SDRATTR_TEXT_RIGHTDIST))).GetValue()), BOX_LINE_RIGHT );
+        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( ((SdrMetricItem&)(aNewAttr.Get(SDRATTR_TEXT_UPPERDIST))).GetValue()), BOX_LINE_TOP );
+        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( ((SdrMetricItem&)(aNewAttr.Get(SDRATTR_TEXT_LOWERDIST))).GetValue()), BOX_LINE_BOTTOM );
         aNewAttr.Put( aBoxItem );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        std::auto_ptr< SfxAbstractTabDialog > pDlg( pFact ? pFact->CreateSvxFormatCellsDialog( NULL, &aNewAttr, pTableObj->GetModel(), pTableObj) : 0 );
+        std::auto_ptr< SfxAbstractTabDialog > pDlg( pFact ? pFact->CreateSvxFormatCellsDialog( NULL, &aNewAttr, &pTableObj->getSdrModelFromSdrObject(), pTableObj) : 0 );
         if( pDlg.get() && pDlg->Execute() )
         {
             SfxItemSet aNewSet( *(pDlg->GetOutputItemSet ()) );
@@ -737,16 +736,16 @@ void SvxTableController::onFormatTable( SfxRequest& rReq )
             SvxBoxItem aNewBoxItem( static_cast< const SvxBoxItem& >( aNewSet.Get( SDRATTR_TABLE_BORDER ) ) );
 
             if( aNewBoxItem.GetDistance( BOX_LINE_LEFT ) != aBoxItem.GetDistance( BOX_LINE_LEFT ) )
-                aNewSet.Put(SdrTextLeftDistItem( aNewBoxItem.GetDistance( BOX_LINE_LEFT ) ) );
+                aNewSet.Put(SdrMetricItem(SDRATTR_TEXT_LEFTDIST, aNewBoxItem.GetDistance( BOX_LINE_LEFT ) ) );
 
             if( aNewBoxItem.GetDistance( BOX_LINE_RIGHT ) != aBoxItem.GetDistance( BOX_LINE_RIGHT ) )
-                aNewSet.Put(SdrTextRightDistItem( aNewBoxItem.GetDistance( BOX_LINE_RIGHT ) ) );
+                aNewSet.Put(SdrMetricItem(SDRATTR_TEXT_RIGHTDIST, aNewBoxItem.GetDistance( BOX_LINE_RIGHT ) ) );
 
             if( aNewBoxItem.GetDistance( BOX_LINE_TOP ) != aBoxItem.GetDistance( BOX_LINE_TOP ) )
-                aNewSet.Put(SdrTextUpperDistItem( aNewBoxItem.GetDistance( BOX_LINE_TOP ) ) );
+                aNewSet.Put(SdrMetricItem(SDRATTR_TEXT_UPPERDIST, aNewBoxItem.GetDistance( BOX_LINE_TOP ) ) );
 
             if( aNewBoxItem.GetDistance( BOX_LINE_BOTTOM ) != aBoxItem.GetDistance( BOX_LINE_BOTTOM ) )
-                aNewSet.Put(SdrTextLowerDistItem( aNewBoxItem.GetDistance( BOX_LINE_BOTTOM ) ) );
+                aNewSet.Put(SdrMetricItem(SDRATTR_TEXT_LOWERDIST, aNewBoxItem.GetDistance( BOX_LINE_BOTTOM ) ) );
 
             SetAttrToSelectedCells(aNewSet, sal_False);
         }
@@ -837,7 +836,7 @@ void SvxTableController::Execute( SfxRequest& rReq )
 void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
 {
     SdrTableObj* pTableObj = dynamic_cast< ::sdr::table::SdrTableObj* >( mxTableObj.get() );
-    SdrModel* pModel = pTableObj ? pTableObj->GetModel() : 0;
+    SdrModel* pModel = pTableObj ? &pTableObj->getSdrModelFromSdrObject() : 0;
 
     if( !pTableObj || !pModel || !pArgs || (SFX_ITEM_SET != pArgs->GetItemState(SID_TABLE_STYLE, sal_False)) )
         return;
@@ -917,7 +916,7 @@ void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
 void SvxTableController::SetTableStyleSettings( const SfxItemSet* pArgs )
 {
     SdrTableObj* pTableObj = dynamic_cast< ::sdr::table::SdrTableObj* >( mxTableObj.get() );
-    SdrModel* pModel = pTableObj ? pTableObj->GetModel() : 0;
+    SdrModel* pModel = pTableObj ? &pTableObj->getSdrModelFromSdrObject() : 0;
 
     if( !pTableObj || !pModel )
         return;
@@ -1664,9 +1663,9 @@ void SvxTableController::findMergeOrigin( CellPos& rPos )
 void SvxTableController::EditCell( const CellPos& rPos, ::Window* pWindow, const awt::MouseEvent* pMouseEvent /*= 0*/, sal_uInt16 nAction /*= ACTION_NONE */ )
 {
     SdrPageView* pPV = mpView->GetSdrPageView();
-
     ::sdr::table::SdrTableObj* pTableObj = dynamic_cast< ::sdr::table::SdrTableObj* >( mxTableObj.get() );
-    if( pTableObj && pTableObj->GetPage() == pPV->GetPage() )
+
+    if( pTableObj && pPV && pTableObj->getSdrPageFromSdrObject() == &pPV->getSdrPageFromSdrPageView() )
     {
         bool bEmptyOutliner = false;
 
@@ -1701,7 +1700,7 @@ void SvxTableController::EditCell( const CellPos& rPos, ::Window* pWindow, const
             if( pTableObj->IsVerticalWriting() )
                 pOutl->SetVertical( sal_True );
 
-            if(mpView->SdrBeginTextEdit(pTableObj, pPV, pWindow, sal_True, pOutl))
+            if(mpView->SdrBeginTextEdit(pTableObj, pWindow, sal_True, pOutl))
             {
                 maCursorLastPos = maCursorFirstPos = rPos;
 
@@ -1759,8 +1758,8 @@ bool SvxTableController::StopTextEdit()
     if(mpView->IsTextEdit())
     {
         mpView->SdrEndTextEdit();
-        mpView->SetCurrentObj(OBJ_TABLE);
-        mpView->SetEditMode(SDREDITMODE_EDIT);
+        mpView->setSdrObjectCreationInfo(SdrObjectCreationInfo(static_cast< sal_uInt16 >(OBJ_TABLE)));
+        mpView->SetViewEditMode(SDREDITMODE_EDIT);
         return true;
     }
     else
@@ -1867,7 +1866,6 @@ void SvxTableController::StartSelection( const CellPos& rPos )
     StopTextEdit();
     mbCellSelectionMode = true;
     maCursorLastPos = maCursorFirstPos = rPos;
-    mpView->MarkListHasChanged();
 }
 
 // --------------------------------------------------------------------
@@ -1885,7 +1883,6 @@ void SvxTableController::setSelectedCells( const CellPos& rStart, const CellPos&
 void SvxTableController::UpdateSelection( const CellPos& rPos )
 {
     maCursorLastPos = rPos;
-    mpView->MarkListHasChanged();
 }
 
 // --------------------------------------------------------------------
@@ -1916,7 +1913,6 @@ void SvxTableController::RemoveSelection()
     if( mbCellSelectionMode )
     {
         mbCellSelectionMode = false;
-        mpView->MarkListHasChanged();
     }
 }
 
@@ -2301,8 +2297,8 @@ void SvxTableController::UpdateTableShape()
     SdrObject* pTableObj = mxTableObj.get();
     if( pTableObj )
     {
+        const SdrObjectChangeBroadcaster aSdrObjectChangeBroadcaster(*pTableObj);
         pTableObj->ActionChanged();
-        pTableObj->BroadcastObjectChange();
     }
     updateSelectionOverlay();
 }
@@ -2415,11 +2411,7 @@ bool SvxTableController::GetMarkedObjModel( SdrPage* pNewPage )
 
         SdrTableObj* pNewTableObj = rTableObj.CloneRange( aStart, aEnd );
 
-        pNewTableObj->SetPage( pNewPage );
-        pNewTableObj->SetModel( pNewPage->GetModel() );
-
-        SdrInsertReason aReason(SDRREASON_VIEWCALL);
-        pNewPage->InsertObject(pNewTableObj,CONTAINER_APPEND,&aReason);
+        pNewPage->InsertObjectToSdrObjList(*pNewTableObj);
 
         return true;
     }

@@ -108,7 +108,7 @@ void LayerTabBar::Select()
 
 void LayerTabBar::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    sal_Bool bSetPageID=sal_False;
+    bool bSetPageID=false;
 
     if (rMEvt.IsLeft() && !rMEvt.IsMod1() && !rMEvt.IsMod2())
     {
@@ -120,16 +120,20 @@ void LayerTabBar::MouseButtonDown(const MouseEvent& rMEvt)
             SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
             pDispatcher->Execute(SID_INSERTLAYER, SFX_CALLMODE_SYNCHRON);
 
-            bSetPageID=sal_True;
+            bSetPageID=true;
         }
         else if (rMEvt.IsShift())
         {
             // Toggle zw. Layer sichtbar / unsichtbar
             String aName(GetPageText(aLayerId));
             SdrPageView* pPV = pDrViewSh->GetView()->GetSdrPageView();
-            sal_Bool bVisible = pPV->IsLayerVisible(aName);
-            pPV->SetLayerVisible(aName, !bVisible);
-            pDrViewSh->ResetActualLayer();
+
+            if(pPV)
+            {
+                bool bVisible = pPV->IsLayerVisible(aName);
+                pPV->SetLayerVisible(aName, !bVisible);
+                pDrViewSh->ResetActualLayer();
+            }
         }
     }
 
@@ -168,11 +172,11 @@ sal_Int8 LayerTabBar::AcceptDrop( const AcceptDropEvent& rEvt )
 
     if( !pDrViewSh->GetDocSh()->IsReadOnly() )
     {
-        sal_uInt16          nPageId = SDRPAGE_NOTFOUND;
-        Point           aPos( PixelToLogic( rEvt.maPosPixel ) );
-        sal_uInt16          nLayerId = pDrViewSh->GetView()->GetDoc()->GetLayerAdmin().GetLayerID( GetPageText( GetPageId( aPos ) ), sal_False );
+        const sal_uInt32 nPageId(SDRPAGE_NOTFOUND);
+        const Point aPos( PixelToLogic( rEvt.maPosPixel ) );
+        const SdrLayerID aLayerId(pDrViewSh->GetView()->GetDoc()->GetModelLayerAdmin().GetLayerID( GetPageText( GetPageId( aPos ) ), false ));
 
-        nRet = pDrViewSh->AcceptDrop( rEvt, *this, NULL, nPageId, nLayerId );
+        nRet = pDrViewSh->AcceptDrop( rEvt, *this, NULL, nPageId, aLayerId );
 
         SwitchPage( aPos );
     }
@@ -188,9 +192,9 @@ sal_Int8 LayerTabBar::AcceptDrop( const AcceptDropEvent& rEvt )
 
 sal_Int8 LayerTabBar::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
-    sal_uInt16          nPageId = SDRPAGE_NOTFOUND;
-    sal_uInt16          nLayerId = pDrViewSh->GetView()->GetDoc()->GetLayerAdmin().GetLayerID( GetPageText( GetPageId( PixelToLogic( rEvt.maPosPixel ) ) ), sal_False );
-    sal_Int8        nRet = pDrViewSh->ExecuteDrop( rEvt, *this, NULL, nPageId, nLayerId );
+    const sal_uInt32 nPageId(SDRPAGE_NOTFOUND);
+    const SdrLayerID aLayerId(pDrViewSh->GetView()->GetDoc()->GetModelLayerAdmin().GetLayerID( GetPageText( GetPageId( PixelToLogic( rEvt.maPosPixel ) ) ), false ));
+    sal_Int8 nRet = pDrViewSh->ExecuteDrop( rEvt, *this, NULL, nPageId, aLayerId );
 
     EndSwitchPage();
 
@@ -217,7 +221,7 @@ void  LayerTabBar::Command(const CommandEvent& rCEvt)
 \************************************************************************/
 long LayerTabBar::StartRenaming()
 {
-    sal_Bool bOK = sal_True;
+    bool bOK = true;
     String aLayerName = GetPageText( GetEditPageId() );
     String aLayoutLayer ( SdResId(STR_LAYER_LAYOUT) );
     String aControlsLayer ( SdResId(STR_LAYER_CONTROLS) );
@@ -230,7 +234,7 @@ long LayerTabBar::StartRenaming()
          aLayerName == aBackgroundLayer   || aLayerName == aBackgroundObjLayer )
     {
         // Diese Namen duerfen nicht veraendert werden
-        bOK = sal_False;
+        bOK = false;
     }
     else
     {
@@ -251,23 +255,23 @@ long LayerTabBar::StartRenaming()
 
 long LayerTabBar::AllowRenaming()
 {
-    sal_Bool bOK = sal_True;
+    bool bOK = true;
 
     // Ueberpruefung auf schon vorhandene Namen
     ::sd::View* pView = pDrViewSh->GetView();
     SdDrawDocument* pDoc = pView->GetDoc();
     String aLayerName = pView->GetActiveLayer();
-    SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
+    SdrLayerAdmin& rLayerAdmin = pDoc->GetModelLayerAdmin();
     String aNewName( GetEditText() );
 
     if ( aNewName.Len() == 0 ||
-        (rLayerAdmin.GetLayer( aNewName, sal_False ) && aLayerName != aNewName) )
+        (rLayerAdmin.GetLayer( aNewName, false ) && aLayerName != aNewName) )
     {
         // Name ist schon vorhanden
         WarningBox aWarningBox( &pDrViewSh->GetViewFrame()->GetWindow(), WinBits( WB_OK ),
                                 String(SdResId( STR_WARN_NAME_DUPLICATE ) ) );
         aWarningBox.Execute();
-        bOK = sal_False;
+        bOK = false;
     }
 
     if (bOK)
@@ -283,7 +287,7 @@ long LayerTabBar::AllowRenaming()
              aNewName == aBackgroundLayer   || aNewName == aBackgroundObjLayer )
         {
             // Diese Namen duerfen nicht vergeben werden
-            bOK = sal_False;
+            bOK = false;
         }
     }
 
@@ -299,12 +303,12 @@ void LayerTabBar::EndRenaming()
     if( !IsEditModeCanceled() )
     {
         ::sd::View* pView = pDrViewSh->GetView();
-        DrawView* pDrView = PTR_CAST( DrawView, pView );
+        DrawView* pDrView = dynamic_cast< DrawView* >(pView );
 
         SdDrawDocument* pDoc = pView->GetDoc();
         String aLayerName = pView->GetActiveLayer();
-        SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
-        SdrLayer* pLayer = rLayerAdmin.GetLayer(aLayerName, sal_False);
+        SdrLayerAdmin& rLayerAdmin = pDoc->GetModelLayerAdmin();
+        SdrLayer* pLayer = rLayerAdmin.GetLayer(aLayerName, false);
 
         if (pLayer)
         {
@@ -338,7 +342,7 @@ void LayerTabBar::EndRenaming()
             // schon bekannt sein muss.
             pView->SetActiveLayer(aNewName);
             pLayer->SetName(aNewName);
-            pDoc->SetChanged(sal_True);
+            pDoc->SetChanged(true);
         }
     }
 }

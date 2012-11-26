@@ -279,8 +279,7 @@ SwTaggedPDFHelper::SwTaggedPDFHelper( const Num_Info* pNumInfo,
     mpFrmInfo( pFrmInfo ),
     mpPorInfo( pPorInfo )
 {
-    mpPDFExtOutDevData =
-        PTR_CAST( vcl::PDFExtOutDevData, rOut.GetExtOutDevData() );
+    mpPDFExtOutDevData = dynamic_cast< vcl::PDFExtOutDevData* >( rOut.GetExtOutDevData() );
 
     if ( mpPDFExtOutDevData && mpPDFExtOutDevData->GetIsExportTaggedPDF() )
     {
@@ -1494,7 +1493,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
  */
  bool SwTaggedPDFHelper::IsExportTaggedPDF( const OutputDevice& rOut )
  {
-    vcl::PDFExtOutDevData* pPDFExtOutDevData = PTR_CAST( vcl::PDFExtOutDevData, rOut.GetExtOutDevData() );
+    vcl::PDFExtOutDevData* pPDFExtOutDevData = dynamic_cast< vcl::PDFExtOutDevData* >( rOut.GetExtOutDevData() );
     return pPDFExtOutDevData && pPDFExtOutDevData->GetIsExportTaggedPDF();
  }
 
@@ -1548,8 +1547,7 @@ SwEnhancedPDFExportHelper::~SwEnhancedPDFExportHelper()
  */
 void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 {
-    vcl::PDFExtOutDevData* pPDFExtOutDevData =
-        PTR_CAST( vcl::PDFExtOutDevData, mrOut.GetExtOutDevData() );
+    vcl::PDFExtOutDevData* pPDFExtOutDevData = dynamic_cast< vcl::PDFExtOutDevData* >( mrOut.GetExtOutDevData() );
 
     if ( !pPDFExtOutDevData )
         return;

@@ -36,8 +36,6 @@ class FuSearch
     : public FuPoor
 {
 public:
-    TYPEINFO();
-
     static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
     virtual void DoExecute( SfxRequest& rReq );
 
@@ -49,7 +47,7 @@ protected:
     virtual ~FuSearch (void);
 
     ::sd::Outliner* pSdOutliner;
-    sal_Bool bOwnOutliner;
+    bool bOwnOutliner;
 
 private:
     FuSearch (

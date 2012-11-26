@@ -117,9 +117,8 @@ class EDITENG_DLLPUBLIC SvxTabStopItem : public SfxPoolItem, private SvxTabStopA
 //friend class SvxTabStopObject_Impl;
 
 public:
-    TYPEINFO();
-
-    SvxTabStopItem( sal_uInt16 nWhich  );
+    POOLITEM_FACTORY()
+    SvxTabStopItem( sal_uInt16 nWhich = 0 );
     SvxTabStopItem( const sal_uInt16 nTabs,
                     const sal_uInt16 nDist,
                     const SvxTabAdjust eAdjst /*= SVX_TAB_ADJUST_DEFAULT*/,

@@ -45,8 +45,6 @@ const sal_Char sAPI_Title[] = "Title";
 const sal_Char sAPI_ParaStyleHeading[] = "ParaStyleHeading";
 
 
-TYPEINIT1( XMLIndexTitleTemplateContext, SvXMLImportContext );
-
 XMLIndexTitleTemplateContext::XMLIndexTitleTemplateContext(
     SvXMLImport& rImport,
     Reference<XPropertySet> & rPropSet,

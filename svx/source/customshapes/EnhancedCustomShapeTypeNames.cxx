@@ -26,6 +26,7 @@
 #include "svx/EnhancedCustomShapeTypeNames.hxx"
 #include <osl/mutex.hxx>
 #include <hash_map>
+#include <string.h>
 
 struct TCheck
 {

@@ -48,10 +48,6 @@ DBG_NAME(SfxDateTimeItem)
 
 // -----------------------------------------------------------------------
 
-TYPEINIT1(SfxDateTimeItem, SfxPoolItem);
-
-// -----------------------------------------------------------------------
-
 SfxDateTimeItem::SfxDateTimeItem( sal_uInt16 which ) :
     SfxPoolItem( which )
 {
@@ -209,11 +205,6 @@ sal_Bool SfxDateTimeItem::QueryValue( com::sun::star::uno::Any& rVal,
 }
 
 // -----------------------------------------------------------------------
-// -----------------------------------------------------------------------
-// -----------------------------------------------------------------------
-
-TYPEINIT1(SfxColumnDateTimeItem, SfxDateTimeItem);
-
 
 SfxColumnDateTimeItem::SfxColumnDateTimeItem( sal_uInt16 which ) :
     SfxDateTimeItem( which )

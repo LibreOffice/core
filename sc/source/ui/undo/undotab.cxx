@@ -58,26 +58,6 @@ using namespace com::sun::star;
 using ::com::sun::star::uno::Sequence;
 using ::std::auto_ptr;
 
-// STATIC DATA -----------------------------------------------------------
-
-TYPEINIT1(ScUndoInsertTab,      SfxUndoAction);
-TYPEINIT1(ScUndoInsertTables,   SfxUndoAction);
-TYPEINIT1(ScUndoDeleteTab,      SfxUndoAction);
-TYPEINIT1(ScUndoRenameTab,      SfxUndoAction);
-TYPEINIT1(ScUndoMoveTab,        SfxUndoAction);
-TYPEINIT1(ScUndoCopyTab,        SfxUndoAction);
-TYPEINIT1(ScUndoMakeScenario,   SfxUndoAction);
-TYPEINIT1(ScUndoImportTab,      SfxUndoAction);
-TYPEINIT1(ScUndoRemoveLink,     SfxUndoAction);
-TYPEINIT1(ScUndoShowHideTab,    SfxUndoAction);
-TYPEINIT1(ScUndoPrintRange,     SfxUndoAction);
-TYPEINIT1(ScUndoScenarioFlags,  SfxUndoAction);
-TYPEINIT1(ScUndoRenameObject,   SfxUndoAction);
-TYPEINIT1(ScUndoLayoutRTL,      SfxUndoAction);
-//UNUSED2009-05 TYPEINIT1(ScUndoSetGrammar,     SfxUndoAction);
-TYPEINIT1(ScUndoTabColor,  SfxUndoAction);
-
-
 // -----------------------------------------------------------------------
 //
 //      Tabelle einfuegen
@@ -167,14 +147,16 @@ void ScUndoInsertTab::Redo()
 
 void ScUndoInsertTab::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->GetViewData()->GetDispatcher().
+    ScTabViewTarget* pScTabViewTarget = dynamic_cast< ScTabViewTarget* >(&rTarget);
+
+    if (pScTabViewTarget)
+        pScTabViewTarget->GetViewShell()->GetViewData()->GetDispatcher().
             Execute(FID_INS_TABLE, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
 }
 
 sal_Bool ScUndoInsertTab::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return 0 != dynamic_cast< ScTabViewTarget* >(&rTarget);
 }
 
 // -----------------------------------------------------------------------
@@ -286,14 +268,16 @@ void ScUndoInsertTables::Redo()
 
 void ScUndoInsertTables::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->GetViewData()->GetDispatcher().
+    ScTabViewTarget* pScTabViewTarget = dynamic_cast< ScTabViewTarget* >(&rTarget);
+
+    if (pScTabViewTarget)
+        pScTabViewTarget->GetViewShell()->GetViewData()->GetDispatcher().
             Execute(FID_INS_TABLE, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
 }
 
 sal_Bool ScUndoInsertTables::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return 0 != dynamic_cast< ScTabViewTarget* >(&rTarget);
 }
 
 
@@ -457,16 +441,18 @@ void ScUndoDeleteTab::Redo()
 
 void ScUndoDeleteTab::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    ScTabViewTarget* pScTabViewTarget = dynamic_cast< ScTabViewTarget* >(&rTarget);
+
+    if (pScTabViewTarget)
     {
-        ScTabViewShell* pViewShell = ((ScTabViewTarget&)rTarget).GetViewShell();
+        ScTabViewShell* pViewShell = pScTabViewTarget->GetViewShell();
         pViewShell->DeleteTable( pViewShell->GetViewData()->GetTabNo(), sal_True );
     }
 }
 
 sal_Bool ScUndoDeleteTab::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return 0 != dynamic_cast< ScTabViewTarget* >(&rTarget);
 }
 
 
@@ -908,15 +894,17 @@ void ScUndoMakeScenario::Redo()
 
 void ScUndoMakeScenario::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    ScTabViewTarget* pScTabViewTarget = dynamic_cast< ScTabViewTarget* >(&rTarget);
+
+    if (pScTabViewTarget)
     {
-        ((ScTabViewTarget&)rTarget).GetViewShell()->MakeScenario( aName, aComment, aColor, nFlags );
+        pScTabViewTarget->GetViewShell()->MakeScenario( aName, aComment, aColor, nFlags );
     }
 }
 
 sal_Bool ScUndoMakeScenario::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return 0 != dynamic_cast< ScTabViewTarget* >(&rTarget);
 }
 
 
@@ -1072,14 +1060,16 @@ void ScUndoImportTab::Redo()
 
 void ScUndoImportTab::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->GetViewData()->GetDispatcher().
+    ScTabViewTarget* pScTabViewTarget = dynamic_cast< ScTabViewTarget* >(&rTarget);
+
+    if (pScTabViewTarget)
+        pScTabViewTarget->GetViewShell()->GetViewData()->GetDispatcher().
             Execute(FID_INS_TABLE, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
 }
 
 sal_Bool ScUndoImportTab::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return 0 != dynamic_cast< ScTabViewTarget* >(&rTarget);
 }
 
 
@@ -1211,15 +1201,17 @@ void ScUndoShowHideTab::Redo()
 
 void ScUndoShowHideTab::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->GetViewData()->GetDispatcher().
+    ScTabViewTarget* pScTabViewTarget = dynamic_cast< ScTabViewTarget* >(&rTarget);
+
+    if (pScTabViewTarget)
+        pScTabViewTarget->GetViewShell()->GetViewData()->GetDispatcher().
             Execute( bShow ? FID_TABLE_SHOW : FID_TABLE_HIDE,
                                 SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
 }
 
 sal_Bool ScUndoShowHideTab::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return 0 != dynamic_cast< ScTabViewTarget* >(&rTarget);
 }
 
 String ScUndoShowHideTab::GetComment() const
@@ -1542,8 +1534,8 @@ SdrObject* ScUndoRenameObject::GetObject()
     ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
     if ( pDrawLayer )
     {
-        sal_uInt16 nCount = pDrawLayer->GetPageCount();
-        for (sal_uInt16 nTab=0; nTab<nCount; nTab++)
+        const sal_uInt32 nCount(pDrawLayer->GetPageCount());
+        for (sal_uInt32 nTab=0; nTab<nCount; nTab++)
         {
             SdrPage* pPage = pDrawLayer->GetPage(nTab);
             DBG_ASSERT(pPage,"Page ?");
@@ -1637,14 +1629,16 @@ void ScUndoLayoutRTL::Redo()
 
 void ScUndoLayoutRTL::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->GetViewData()->GetDispatcher().
+    ScTabViewTarget* pScTabViewTarget = dynamic_cast< ScTabViewTarget* >(&rTarget);
+
+    if (pScTabViewTarget)
+        pScTabViewTarget->GetViewShell()->GetViewData()->GetDispatcher().
             Execute( FID_TAB_RTL, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
 }
 
 sal_Bool ScUndoLayoutRTL::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return 0 != dynamic_cast< ScTabViewTarget* >(&rTarget);
 }
 
 String ScUndoLayoutRTL::GetComment() const
@@ -1694,7 +1688,7 @@ String ScUndoLayoutRTL::GetComment() const
 //UNUSED2009-05 {
 //UNUSED2009-05 #if 0
 //UNUSED2009-05 // erAck: 2006-09-07T23:00+0200  commented out in CWS scr1c1
-//UNUSED2009-05     if (rTarget.ISA(ScTabViewTarget))
+//UNUSED2009-05     if (dynamic_cast< ScTabViewTarget* >(&rTarget))
 //UNUSED2009-05         ((ScTabViewTarget&)rTarget).GetViewShell()->GetViewData()->GetDispatcher().
 //UNUSED2009-05             Execute( FID_TAB_USE_R1C1, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
 //UNUSED2009-05 #endif
@@ -1702,7 +1696,7 @@ String ScUndoLayoutRTL::GetComment() const
 //UNUSED2009-05
 //UNUSED2009-05 sal_Bool __EXPORT ScUndoSetGrammar::CanRepeat(SfxRepeatTarget& rTarget) const
 //UNUSED2009-05 {
-//UNUSED2009-05     return (rTarget.ISA(ScTabViewTarget));
+//UNUSED2009-05     return dynamic_cast< ScTabViewTarget* >(&rTarget);
 //UNUSED2009-05 }
 //UNUSED2009-05
 //UNUSED2009-05 String __EXPORT ScUndoSetGrammar::GetComment() const

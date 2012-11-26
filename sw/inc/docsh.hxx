@@ -141,7 +141,6 @@ public:
     // aber selbst implementieren
     SFX_DECL_INTERFACE(SW_DOCSHELL)
     SFX_DECL_OBJECTFACTORY()
-    TYPEINFO();
 
     static SfxInterface *_GetInterface() { return GetStaticInterface(); }
 

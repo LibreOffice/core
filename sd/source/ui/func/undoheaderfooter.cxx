@@ -33,8 +33,6 @@
 #include "drawview.hxx"
 #include "undoheaderfooter.hxx"
 
-TYPEINIT1(SdHeaderFooterUndoAction, SdUndoAction);
-
 SdHeaderFooterUndoAction::SdHeaderFooterUndoAction( SdDrawDocument* pDoc, SdPage* pPage, const sd::HeaderFooterSettings& rNewSettings )
 :   SdUndoAction(pDoc),
     mpPage(pPage),

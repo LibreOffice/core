@@ -382,7 +382,7 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
             const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
                 mrImportHelper.GetChartFamilyID(), sAutoStyleName );
 
-            if( pStyle && pStyle->ISA( XMLPropStyleContext ))
+            if( pStyle && dynamic_cast< const XMLPropStyleContext* >(pStyle))
                 (( XMLPropStyleContext* )pStyle )->FillPropertySet( xProp );
         }
     }
@@ -1229,7 +1229,7 @@ void SchXMLTitleContext::StartElement( const uno::Reference< xml::sax::XAttribut
                 const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
                     mrImportHelper.GetChartFamilyID(), msAutoStyleName );
 
-                if( pStyle && pStyle->ISA( XMLPropStyleContext ))
+                if( pStyle && dynamic_cast< const XMLPropStyleContext* >(pStyle))
                     (( XMLPropStyleContext* )pStyle )->FillPropertySet( xProp );
             }
         }

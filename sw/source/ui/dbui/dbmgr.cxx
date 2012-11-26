@@ -3060,8 +3060,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                 (bSynchronizedDoc && (nStartRow != nEndRow)? ExistsNextRecord() : ToNextMergeRecord()));
 
         //deselect all, go out of the frame and go to the beginning of the document
-        Point aPt(LONG_MIN, LONG_MIN);
-        pTargetShell->SelectObj(aPt, SW_LEAVE_FRAME);
+        pTargetShell->SelectObj(basegfx::B2DPoint(LONG_MIN, LONG_MIN), SW_LEAVE_FRAME);
         if (pTargetShell->IsSelFrmMode())
         {
             pTargetShell->UnSelectFrm();

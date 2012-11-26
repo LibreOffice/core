@@ -28,8 +28,6 @@
 class XMLLabelSeparatorContext : public XMLElementPropertyContext
 {
 public:
-    TYPEINFO();
-
     XMLLabelSeparatorContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                            const ::rtl::OUString& rLName,
                            const XMLPropertyState& rProp,

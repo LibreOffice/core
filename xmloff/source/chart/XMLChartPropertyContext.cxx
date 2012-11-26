@@ -29,8 +29,6 @@
 #include "XMLSymbolImageContext.hxx"
 #include "XMLLabelSeparatorContext.hxx"
 
-TYPEINIT1( XMLChartPropertyContext, SvXMLImportContext );
-
 using namespace ::com::sun::star;
 
 XMLChartPropertyContext::XMLChartPropertyContext(

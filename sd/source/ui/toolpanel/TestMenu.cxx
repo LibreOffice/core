@@ -169,14 +169,11 @@ bool ColorMenu::IsResizable (void)
 void ColorMenu::Resize (void)
 {
     ::Window::Resize();
-    Size aWindowSize = GetOutputSizePixel();
+    const Size aWindowSize(GetOutputSizePixel());
     maSet.SetPosSizePixel (Point(0,0), aWindowSize);
+
     if (IsVisible() && aWindowSize.Width() > 0)
     {
-        //        maSet.SetPosSizePixel (
-        //            Point (0,0),
-        //            aWindowSize);
-
         // Calculate the number of rows and columns.
         if (maSet.GetItemCount() > 0)
         {

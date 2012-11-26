@@ -41,7 +41,6 @@ class SD_DLLPUBLIC SdHeaderFooterUndoAction : public SdUndoAction
     const sd::HeaderFooterSettings  maNewSettings;
 
 public:
-    TYPEINFO();
     SdHeaderFooterUndoAction( SdDrawDocument* pDoc, SdPage* pPage, const sd::HeaderFooterSettings& rNewSettings );
     virtual ~SdHeaderFooterUndoAction();
 

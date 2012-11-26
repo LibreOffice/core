@@ -37,10 +37,9 @@ class SW_DLLPUBLIC SwFmtLineNumber: public SfxPoolItem
     sal_uLong bCountLines   :1;  //Zeilen des Absatzes sollen mitgezaehlt werden.
 
 public:
+    POOLITEM_FACTORY()
     SwFmtLineNumber();
     ~SwFmtLineNumber();
-
-    TYPEINFO();
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;

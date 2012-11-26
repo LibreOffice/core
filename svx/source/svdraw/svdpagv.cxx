@@ -23,6 +23,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
+
 #include <svx/svdpagv.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
@@ -32,7 +33,6 @@
 #include <svx/svdouno.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
-
 #include <svx/svdedxv.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdoutl.hxx>
@@ -43,30 +43,23 @@
 #include <svx/svdouno.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
-#include "svx/svditer.hxx"
+#include <svx/svditer.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdtypes.hxx>
 #include <svx/svdoole2.hxx>
-
-// #110094#
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
 #include <svx/fmview.hxx>
-
-// for search on vector
+#include <svx/sdrpagewindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
+#include <svx/svdlegacy.hxx>
 #include <algorithm>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
-#include <svx/sdrpagewindow.hxx>
-#include <svx/sdrpaintwindow.hxx>
-
-TYPEINIT1(SdrPageView, SfxListener);
-DBG_NAME(SdrPageView);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// interface to SdrPageWindow
 
 SdrPageWindow* SdrPageView::FindPageWindow(SdrPaintWindow& rPaintWindow) const
 {
@@ -78,25 +71,23 @@ SdrPageWindow* SdrPageView::FindPageWindow(SdrPaintWindow& rPaintWindow) const
         }
     }
 
-    return 0L;
+    return 0;
 }
 
 const SdrPageWindow* SdrPageView::FindPatchedPageWindow( const OutputDevice& _rOutDev ) const
 {
-    for (   SdrPageWindowVector::const_iterator loop = maPageWindows.begin();
-            loop != maPageWindows.end();
-            ++loop
-        )
+    for(SdrPageWindowVector::const_iterator loop = maPageWindows.begin(); loop != maPageWindows.end(); ++loop)
     {
         const SdrPageWindow& rPageWindow( *(*loop) );
         const SdrPaintWindow& rPaintWindow( rPageWindow.GetOriginalPaintWindow() ? *rPageWindow.GetOriginalPaintWindow() : rPageWindow.GetPaintWindow() );
+
         if ( &rPaintWindow.GetOutputDevice() == &_rOutDev )
         {
             return &rPageWindow;
         }
     }
 
-    return NULL;
+    return 0;
 }
 
 SdrPageWindow* SdrPageView::FindPageWindow(const OutputDevice& rOutDev) const
@@ -109,23 +100,21 @@ SdrPageWindow* SdrPageView::FindPageWindow(const OutputDevice& rOutDev) const
         }
     }
 
-    return 0L;
+    return 0;
 }
 
 SdrPageWindow* SdrPageView::GetPageWindow(sal_uInt32 nIndex) const
 {
-    // #126416#
     if(nIndex < maPageWindows.size())
     {
         return maPageWindows[nIndex];
     }
 
-    return 0L;
+    return 0;
 }
 
 void SdrPageView::ClearPageWindows()
 {
-    // #126416#
     for(SdrPageWindowVector::const_iterator a = maPageWindows.begin(); a != maPageWindows.end(); a++)
     {
         delete *a;
@@ -141,62 +130,62 @@ void SdrPageView::AppendPageWindow(SdrPageWindow& rNew)
 
 SdrPageWindow* SdrPageView::RemovePageWindow(sal_uInt32 nPos)
 {
+    SdrPageWindow* pRetval = 0;
+
     if(nPos < maPageWindows.size())
     {
-        SdrPageWindowVector::iterator aAccess = maPageWindows.begin() + nPos;
-        // #114376# remember return value
-        SdrPageWindow* pErasedSdrPageWindow = *aAccess;
-        maPageWindows.erase(aAccess);
-        return pErasedSdrPageWindow;
+        const SdrPageWindowVector::iterator aCandidate(maPageWindows.begin() + nPos);
+
+        pRetval = *aCandidate;
+        maPageWindows.erase(aCandidate);
+    }
+    else
+    {
+        OSL_ENSURE(false, "SdrPageView::RemovePageWindow with wrong index (!)");
     }
 
-    return 0L;
+    return 0;
 }
 
 SdrPageWindow* SdrPageView::RemovePageWindow(SdrPageWindow& rOld)
 {
     const SdrPageWindowVector::iterator aFindResult = ::std::find(maPageWindows.begin(), maPageWindows.end(), &rOld);
+    SdrPageWindow* pRetval = 0;
 
     if(aFindResult != maPageWindows.end())
     {
-        // #114376# remember return value
-        SdrPageWindow* pSdrPageWindow = *aFindResult;
+        pRetval = *aFindResult;
         maPageWindows.erase(aFindResult);
-        return pSdrPageWindow;
     }
 
-    return 0L;
+    return pRetval;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
-SdrPageView::SdrPageView(SdrPage* pPage1, SdrView& rNewView)
+SdrPageView::SdrPageView(SdrPage& rSdrPageOfSdrPageView, SdrView& rNewView)
 :   mrView(rNewView),
-    // #103911# col_auto color lets the view takes the default SvxColorConfig entry
-    maDocumentColor( COL_AUTO ),
+    mrSdrPageOfSdrPageView(rSdrPageOfSdrPageView),
+    maPageOrigin(0.0, 0.0),
+    maVisibleLayerSet(),
+    maLockedLayerSet(),
+    maPrintableLayerSet(),
+    mpCurrentList(0),
+    mpCurrentGroup(0),
+    maHelpLines(),
+    maDocumentColor( COL_AUTO ), // #103911# col_auto color lets the view takes the default SvxColorConfig entry
     maBackgroundColor(COL_AUTO ), // #i48367# also react on autocolor
-    mpPreparedPageWindow(0) // #i72752#
+    maPageWindows(),
+    mpPreparedPageWindow(0), // #i72752#
+    mbVisible(false)
 {
-    DBG_CTOR(SdrPageView,NULL);
-    mpPage = pPage1;
+    maPageOrigin.setX(mrSdrPageOfSdrPageView.GetLeftPageBorder());
+    maPageOrigin.setY(mrSdrPageOfSdrPageView.GetTopPageBorder());
 
-    if(mpPage)
-    {
-        aPgOrg.X()=mpPage->GetLftBorder();
-        aPgOrg.Y()=mpPage->GetUppBorder();
-    }
-    mbHasMarked = sal_False;
-    aLayerVisi.SetAll();
-    aLayerPrn.SetAll();
+    maVisibleLayerSet.SetAll();
+    maPrintableLayerSet.SetAll();
 
-    mbVisible = sal_False;
-    pAktList = NULL;
-    pAktGroup = NULL;
-    SetAktGroupAndList(NULL, mpPage);
+    SetCurrentGroupAndObjectList(0, &mrSdrPageOfSdrPageView);
 
-    StartListening(*rNewView.GetModel());
-
-    for(sal_uInt32 a(0L); a < rNewView.PaintWindowCount(); a++)
+    for(sal_uInt32 a(0); a < rNewView.PaintWindowCount(); a++)
     {
         AddPaintWindowToPageView(*rNewView.GetPaintWindow(a));
     }
@@ -204,18 +193,12 @@ SdrPageView::SdrPageView(SdrPage* pPage1, SdrView& rNewView)
 
 SdrPageView::~SdrPageView()
 {
-    DBG_DTOR(SdrPageView,NULL);
-
     // cleanup window vector
     ClearPageWindows();
 }
 
 SdrPageWindow& SdrPageView::CreateNewPageWindowEntry(SdrPaintWindow& rPaintWindow)
 {
-    // MIB 3.7.08: Das WinRec muss sofort in die Liste eingetragen werden,
-    // weil sich das InsertControlContainer darauf verlaesst
-    //SdrPageViewWinRec* pRec = new SdrPageViewWinRec( *this, pOut );
-    //pWinList->Insert(pRec);
     SdrPageWindow& rWindow = *(new SdrPageWindow(*this, rPaintWindow));
     AppendPageWindow(rWindow);
 
@@ -256,29 +239,27 @@ void SdrPageView::RemovePaintWindowFromPageView(SdrPaintWindow& rPaintWindow)
     return xReturn;
 }
 
-void __EXPORT SdrPageView::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& /*rHint*/)
+void SdrPageView::LazyReactOnObjectChanges()
 {
-    // not really interested in
+    if(GetCurrentGroup())
+    {
+        CheckAktGroup();
+    }
 }
 
-void SdrPageView::ModelHasChanged()
+bool SdrPageView::IsReadOnly() const
 {
-    if (GetAktGroup()!=NULL) CheckAktGroup();
-}
-
-sal_Bool SdrPageView::IsReadOnly() const
-{
-    return (0L == GetPage() || GetView().GetModel()->IsReadOnly() || GetPage()->IsReadOnly() || GetObjList()->IsReadOnly());
+    return GetView().getSdrModelFromSdrView().IsReadOnly();
 }
 
 void SdrPageView::Show()
 {
     if(!IsVisible())
     {
-        mbVisible = sal_True;
+        mbVisible = true;
         InvalidateAllWin();
 
-        for(sal_uInt32 a(0L); a < GetView().PaintWindowCount(); a++)
+        for(sal_uInt32 a(0); a < GetView().PaintWindowCount(); a++)
         {
             AddPaintWindowToPageView(*GetView().GetPaintWindow(a));
         }
@@ -290,32 +271,37 @@ void SdrPageView::Hide()
     if(IsVisible())
     {
         InvalidateAllWin();
-        mbVisible = sal_False;
+        mbVisible = false;
         ClearPageWindows();
     }
 }
 
-Rectangle SdrPageView::GetPageRect() const
+basegfx::B2DRange SdrPageView::GetPageRange() const
 {
-    if (GetPage()==NULL) return Rectangle();
-    return Rectangle(Point(),Size(GetPage()->GetWdt()+1,GetPage()->GetHgt()+1));
+    basegfx::B2DRange aRetval;
+
+    aRetval.expand(basegfx::B2DPoint(0.0, 0.0));
+    aRetval.expand(getSdrPageFromSdrPageView().GetPageScale());
+
+    return aRetval;
 }
 
 void SdrPageView::InvalidateAllWin()
 {
-    if(IsVisible() && GetPage())
+    if(IsVisible())
     {
-        Rectangle aRect(Point(0,0),Size(GetPage()->GetWdt()+1,GetPage()->GetHgt()+1));
-        aRect.Union(GetPage()->GetAllObjBoundRect());
-        GetView().InvalidateAllWin(aRect);
+        basegfx::B2DRange aAllRange(GetPageRange());
+
+        aAllRange.expand(sdr::legacy::GetAllObjBoundRange(getSdrPageFromSdrPageView().getSdrObjectVector()));
+        GetView().InvalidateAllWin(aAllRange);
     }
 }
 
-void SdrPageView::InvalidateAllWin(const Rectangle& rRect, sal_Bool bPlus1Pix)
+void SdrPageView::InvalidateAllWin(const basegfx::B2DRange& rRange, bool bPlus1Pix)
 {
     if(IsVisible())
     {
-        GetView().InvalidateAllWin(rRect, bPlus1Pix);
+        GetView().InvalidateAllWin(rRange, bPlus1Pix);
     }
 }
 
@@ -353,28 +339,25 @@ void SdrPageView::PostPaint()
 
 void SdrPageView::CompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector) const
 {
-    if(GetPage())
+    SdrPageWindow* pPageWindow = FindPageWindow(rPaintWindow);
+    bool bIsTempTarget(false);
+
+    if(!pPageWindow)
     {
-        SdrPageWindow* pPageWindow = FindPageWindow(rPaintWindow);
-        sal_Bool bIsTempTarget(sal_False);
+        // create temp PageWindow
+        pPageWindow = new SdrPageWindow(*((SdrPageView*)this), rPaintWindow);
+        bIsTempTarget = true;
+    }
 
-        if(!pPageWindow)
-        {
-            // create temp PageWindow
-            pPageWindow = new SdrPageWindow(*((SdrPageView*)this), rPaintWindow);
-            bIsTempTarget = sal_True;
-        }
+    // do the redraw
+    pPageWindow->PrepareRedraw(rReg);
+    pPageWindow->RedrawAll(pRedirector);
 
-        // do the redraw
-        pPageWindow->PrepareRedraw(rReg);
-        pPageWindow->RedrawAll(pRedirector);
-
-        // get rid of temp PageWindow
-        if(bIsTempTarget)
-        {
-            delete pPageWindow;
-            pPageWindow = 0L;
-        }
+    // get rid of temp PageWindow
+    if(bIsTempTarget)
+    {
+        delete pPageWindow;
+        pPageWindow = 0L;
     }
 }
 
@@ -389,104 +372,94 @@ void SdrPageView::setPreparedPageWindow(SdrPageWindow* pKnownTarget)
 
 void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget, sdr::contact::ViewObjectContactRedirector* pRedirector) const
 {
-    if(GetPage())
+    if(pGivenTarget)
     {
-        if(pGivenTarget)
+        const SdrPageWindow* pKnownTarget = FindPageWindow(*pGivenTarget);
+
+        if(pKnownTarget)
         {
-            const SdrPageWindow* pKnownTarget = FindPageWindow(*pGivenTarget);
-
-            if(pKnownTarget)
-            {
-                // paint known target
-                pKnownTarget->RedrawLayer(&nID, pRedirector);
-            }
-            else
-            {
-                // #i72752# DrawLayer() uses a OutputDevice different from BeginDrawLayer. This happens
-                // e.g. when SW paints a single text line in text edit mode. Try to use it
-                SdrPageWindow* pPreparedTarget = mpPreparedPageWindow;
-
-                if(pPreparedTarget)
-                {
-                    // if we have a prepared target, do not use a new SdrPageWindow since this
-                    // works but is expensive. Just use a temporary PaintWindow
-                    SdrPaintWindow aTemporaryPaintWindow(mrView, *pGivenTarget);
-
-                    // Copy existing paint region to use the same as prepared in BeginDrawLayer
-                    SdrPaintWindow& rExistingPaintWindow = pPreparedTarget->GetPaintWindow();
-                    const Region& rExistingRegion = rExistingPaintWindow.GetRedrawRegion();
-                    aTemporaryPaintWindow.SetRedrawRegion(rExistingRegion);
-
-                    // patch the ExistingPageWindow
-                    pPreparedTarget->patchPaintWindow(aTemporaryPaintWindow);
-
-                    // redraw the layer
-                    pPreparedTarget->RedrawLayer(&nID, pRedirector);
-
-                    // restore the ExistingPageWindow
-                    pPreparedTarget->unpatchPaintWindow();
-                }
-                else
-                {
-                    OSL_ENSURE(false, "SdrPageView::DrawLayer: Creating temporary SdrPageWindow (ObjectContact), this should never be needed (!)");
-
-                    // None of the known OutputDevices is the target of this paint, use
-                    // a temporary SdrPageWindow for this Redraw.
-                    SdrPaintWindow aTemporaryPaintWindow(mrView, *pGivenTarget);
-                    SdrPageWindow aTemporaryPageWindow(*((SdrPageView*)this), aTemporaryPaintWindow);
-
-                    // #i72752#
-                    // Copy existing paint region if other PageWindows exist, this was created by
-                    // PrepareRedraw() from BeginDrawLayer(). Needs to be used e.g. when suddenly SW
-                    // paints into an unknown device other than the view was created for (e.g. VirtualDevice)
-                    if(PageWindowCount())
-                    {
-                        SdrPageWindow* pExistingPageWindow = GetPageWindow(0L);
-                        SdrPaintWindow& rExistingPaintWindow = pExistingPageWindow->GetPaintWindow();
-                        const Region& rExistingRegion = rExistingPaintWindow.GetRedrawRegion();
-                        aTemporaryPaintWindow.SetRedrawRegion(rExistingRegion);
-                    }
-
-                    aTemporaryPageWindow.RedrawLayer(&nID, pRedirector);
-                }
-            }
+            // paint known target
+            pKnownTarget->RedrawLayer(&nID, pRedirector);
         }
         else
         {
-            // paint in all known windows
-            for(sal_uInt32 a(0L); a < PageWindowCount(); a++)
+            // #i72752# DrawLayer() uses a OutputDevice different from BeginDrawLayer. This happens
+            // e.g. when SW paints a single text line in text edit mode. Try to use it
+            SdrPageWindow* pPreparedTarget = mpPreparedPageWindow;
+
+            if(pPreparedTarget)
             {
-                SdrPageWindow* pTarget = GetPageWindow(a);
-                pTarget->RedrawLayer(&nID, pRedirector);
+                // if we have a prepared target, do not use a new SdrPageWindow since this
+                // works but is expensive. Just use a temporary PaintWindow
+                SdrPaintWindow aTemporaryPaintWindow(mrView, *pGivenTarget);
+
+                // Copy existing paint region to use the same as prepared in BeginDrawLayer
+                SdrPaintWindow& rExistingPaintWindow = pPreparedTarget->GetPaintWindow();
+                const Region& rExistingRegion = rExistingPaintWindow.GetRedrawRegion();
+                aTemporaryPaintWindow.SetRedrawRegion(rExistingRegion);
+
+                // patch the ExistingPageWindow
+                pPreparedTarget->patchPaintWindow(aTemporaryPaintWindow);
+
+                // redraw the layer
+                pPreparedTarget->RedrawLayer(&nID, pRedirector);
+
+                // restore the ExistingPageWindow
+                pPreparedTarget->unpatchPaintWindow();
             }
+            else
+            {
+                OSL_ENSURE(false, "SdrPageView::DrawLayer: Creating temporary SdrPageWindow (ObjectContact), this should never be needed (!)");
+
+                // None of the known OutputDevices is the target of this paint, use
+                // a temporary SdrPageWindow for this Redraw.
+                SdrPaintWindow aTemporaryPaintWindow(mrView, *pGivenTarget);
+                SdrPageWindow aTemporaryPageWindow(*((SdrPageView*)this), aTemporaryPaintWindow);
+
+                // #i72752#
+                // Copy existing paint region if other PageWindows exist, this was created by
+                // PrepareRedraw() from BeginDrawLayer(). Needs to be used e.g. when suddenly SW
+                // paints into an unknown device other than the view was created for (e.g. VirtualDevice)
+                if(PageWindowCount())
+                {
+                    SdrPageWindow* pExistingPageWindow = GetPageWindow(0L);
+                    SdrPaintWindow& rExistingPaintWindow = pExistingPageWindow->GetPaintWindow();
+                    const Region& rExistingRegion = rExistingPaintWindow.GetRedrawRegion();
+                    aTemporaryPaintWindow.SetRedrawRegion(rExistingRegion);
+                }
+
+                aTemporaryPageWindow.RedrawLayer(&nID, pRedirector);
+            }
+        }
+    }
+    else
+    {
+        // paint in all known windows
+        for(sal_uInt32 a(0L); a < PageWindowCount(); a++)
+        {
+            SdrPageWindow* pTarget = GetPageWindow(a);
+            pTarget->RedrawLayer(&nID, pRedirector);
         }
     }
 }
 
-void SdrPageView::SetDesignMode( bool _bDesignMode ) const
+void SdrPageView::SetDesignMode( bool _bDesignMode )
 {
     for ( sal_uInt32 i = 0L; i < PageWindowCount(); ++i )
     {
-        const SdrPageWindow& rPageViewWindow = *GetPageWindow(i);
+        SdrPageWindow& rPageViewWindow = *GetPageWindow(i);
         rPageViewWindow.SetDesignMode( _bDesignMode );
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifdef OS2
-#define RGBCOLOR(r,g,b) ((sal_uIntPtr)(((sal_uInt8)(b) | ((sal_uInt16)(g)<<8)) | (((sal_uIntPtr)(sal_uInt8)(r))<<16)))
-#endif
-
-void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, Color aColor)
+void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const basegfx::B2DRange& rRange, Color aColor)
 {
-    if (GetPage()==NULL)
-        return;
-
-    long nx1=GetView().aGridBig.Width();
-    long nx2=GetView().aGridFin.Width();
-    long ny1=GetView().aGridBig.Height();
-    long ny2=GetView().aGridFin.Height();
+    long nx1=GetView().GetGridCoarse().Width();
+    long nx2=GetView().GetGridFine().Width();
+    long ny1=GetView().GetGridCoarse().Height();
+    long ny2=GetView().GetGridFine().Height();
 
     if (nx1==0) nx1=nx2;
     if (nx2==0) nx2=nx1;
@@ -528,8 +501,8 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, C
         Size aMinDotDist(rOut.PixelToLogic(Size(nMinDotPix,nMinDotPix)));
         //Size a3PixSiz(rOut.PixelToLogic(Size(2,2)));
         Size aMinLinDist(rOut.PixelToLogic(Size(nMinLinPix,nMinLinPix)));
-        FASTBOOL bHoriSolid=nx2<aMinDotDist.Width();
-        FASTBOOL bVertSolid=ny2<aMinDotDist.Height();
+        bool bHoriSolid=nx2<aMinDotDist.Width();
+        bool bVertSolid=ny2<aMinDotDist.Height();
         // Linienabstand vergroessern (mind. 4 Pixel)
         // Vergroesserung: *2 *5 *10 *20 *50 *100 ...
         int nTgl=0;
@@ -564,62 +537,73 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, C
         //if (nx2<a2PixSiz.Width()) nx2=nx1;
         //if (ny2<a2PixSiz.Height()) ny2=ny1;
 
-        FASTBOOL bHoriFine=nx2<nx1;
-        FASTBOOL bVertFine=ny2<ny1;
-        FASTBOOL bHoriLines=bHoriSolid || bHoriFine || !bVertFine;
-        FASTBOOL bVertLines=bVertSolid || bVertFine;
+        bool bHoriFine=nx2<nx1;
+        bool bVertFine=ny2<ny1;
+        bool bHoriLines=bHoriSolid || bHoriFine || !bVertFine;
+        bool bVertLines=bVertSolid || bVertFine;
 
         Color aColorMerk( rOut.GetLineColor() );
         rOut.SetLineColor( aColor );
 
         bool bMap0=rOut.IsMapModeEnabled();
 
-        long nWrX=0;//aWriterPageOffset.X();
-        long nWrY=0;//aWriterPageOffset.Y();
-        Point aOrg(aPgOrg);
-        long x1=GetPage()->GetLftBorder()+1+nWrX;
-        long x2=GetPage()->GetWdt()-GetPage()->GetRgtBorder()-1+nWrY;
-        long y1=GetPage()->GetUppBorder()+1+nWrX;
-        long y2=GetPage()->GetHgt()-GetPage()->GetLwrBorder()-1+nWrY;
-        const SdrPageGridFrameList* pFrames=GetPage()->GetGridFrameList(this,NULL);
-        //sal_uInt16 nBufSiz=1024; // 4k Buffer = max. 512 Punkte
-        // #90353# long* pBuf = NULL;
-        sal_uInt16 nGridPaintAnz=1;
-        if (pFrames!=NULL) nGridPaintAnz=pFrames->GetCount();
-        for (sal_uInt16 nGridPaintNum=0; nGridPaintNum<nGridPaintAnz; nGridPaintNum++) {
-            if (pFrames!=NULL) {
+        double fWrX(0.0);
+        double fWrY(0.0);
+        basegfx::B2DPoint aOrg(maPageOrigin);
+        const basegfx::B2DRange& rInnerPageRange(getSdrPageFromSdrPageView().GetInnerPageRange());
+        double x1(rInnerPageRange.getMinX());
+        double x2(rInnerPageRange.getMaxX());
+        double y1(rInnerPageRange.getMinY());
+        double y2(rInnerPageRange.getMaxY());
+        const SdrPageGridFrameList* pFrames = getSdrPageFromSdrPageView().GetGridFrameList(GetView(), 0);
+        sal_uInt32 nGridPaintAnz(1);
+
+        if(pFrames)
+        {
+            nGridPaintAnz = pFrames->GetCount();
+        }
+
+        for(sal_uInt32 nGridPaintNum(0); nGridPaintNum < nGridPaintAnz; nGridPaintNum++)
+        {
+            if(pFrames)
+            {
                 const SdrPageGridFrame& rGF=(*pFrames)[nGridPaintNum];
-                nWrX=rGF.GetPaperRect().Left();
-                nWrY=rGF.GetPaperRect().Top();
-                x1=rGF.GetUserArea().Left();
-                x2=rGF.GetUserArea().Right();
-                y1=rGF.GetUserArea().Top();
-                y2=rGF.GetUserArea().Bottom();
-                aOrg=rGF.GetUserArea().TopLeft();
-                aOrg-=rGF.GetPaperRect().TopLeft();
+                fWrX = rGF.GetPaperRect().getMinX();
+                fWrY = rGF.GetPaperRect().getMinY();
+                x1 = rGF.GetUserArea().getMinX();
+                x2 = rGF.GetUserArea().getMaxX();
+                y1 = rGF.GetUserArea().getMinY();
+                y2 = rGF.GetUserArea().getMaxY();
+
+                aOrg.setX(rGF.GetUserArea().getMinX() - rGF.GetPaperRect().getMinX());
+                aOrg.setY(rGF.GetUserArea().getMinY() - rGF.GetPaperRect().getMinY());
             }
-            if (!rRect.IsEmpty()) {
+
+            if(!rRange.isEmpty())
+            {
                 Size a1PixSiz(rOut.PixelToLogic(Size(1,1)));
                 long nX1Pix=a1PixSiz.Width();  // 1 Pixel Toleranz drauf
                 long nY1Pix=a1PixSiz.Height();
-                if (x1<rRect.Left()  -nX1Pix) x1=rRect.Left()  -nX1Pix;
-                if (x2>rRect.Right() +nX1Pix) x2=rRect.Right() +nX1Pix;
-                if (y1<rRect.Top()   -nY1Pix) y1=rRect.Top()   -nY1Pix;
-                if (y2>rRect.Bottom()+nY1Pix) y2=rRect.Bottom()+nY1Pix;
-            }
-            Point aPnt;
 
-            long xBigOrg=aOrg.X()+nWrX;
+                if(x1 < rRange.getMinX() - nX1Pix) x1 = rRange.getMinX() - nX1Pix;
+                if(x2 > rRange.getMaxX() + nX1Pix) x2 = rRange.getMaxX() + nX1Pix;
+                if(y1 < rRange.getMinY() - nY1Pix) y1 = rRange.getMinY() - nY1Pix;
+                if(y2 > rRange.getMaxY() + nY1Pix) y2 = rRange.getMaxY() + nY1Pix;
+            }
+
+            double xBigOrg(aOrg.getX() + fWrX);
             while (xBigOrg>=x1) xBigOrg-=nx1;
             while (xBigOrg<x1) xBigOrg+=nx1;
-            long xFinOrg=xBigOrg;
+
+            double xFinOrg(xBigOrg);
             while (xFinOrg>=x1) xFinOrg-=nx2;
             while (xFinOrg<x1) xFinOrg+=nx2;
 
-            long yBigOrg=aOrg.Y()+nWrY;
+            double yBigOrg(aOrg.getY() + fWrY);
             while (yBigOrg>=y1) yBigOrg-=ny1;
             while (yBigOrg<y1) yBigOrg+=ny1;
-            long yFinOrg=yBigOrg;
+
+            double yFinOrg(yBigOrg);
             while (yFinOrg>=y1) yFinOrg-=ny2;
             while (yFinOrg<y1) yFinOrg+=ny2;
 
@@ -627,21 +611,27 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, C
             {
                 if( bHoriLines )
                 {
-                    sal_uIntPtr nGridFlags = ( bHoriSolid ? GRID_HORZLINES : GRID_DOTS );
+                    sal_uInt32 nGridFlags = ( bHoriSolid ? GRID_HORZLINES : GRID_DOTS );
                     sal_uInt16 nSteps = sal_uInt16(nx1 / nx2);
                     sal_uInt32 nRestPerStepMul1000 = nSteps ? ( ((nx1 * 1000L)/ nSteps) - (nx2 * 1000L) ) : 0;
                     sal_uInt32 nStepOffset = 0;
                     sal_uInt16 nPointOffset = 0;
 
-                    for(sal_uInt16 a=0;a<nSteps;a++)
+                    for(sal_uInt16 a(0); a < nSteps; a++)
                     {
                         // Zeichnen
                         rOut.DrawGrid(
-                            Rectangle( xFinOrg + (a * nx2) + nPointOffset, yBigOrg, x2, y2 ),
-                            Size( nx1, ny1 ), nGridFlags );
+                            Rectangle(
+                                basegfx::fround(xFinOrg) + (a * nx2) + nPointOffset,
+                                basegfx::fround(yBigOrg),
+                                basegfx::fround(x2),
+                                basegfx::fround(y2)),
+                            Size(nx1, ny1),
+                            nGridFlags);
 
                         // Schritt machen
                         nStepOffset += nRestPerStepMul1000;
+
                         while(nStepOffset >= 1000)
                         {
                             nStepOffset -= 1000;
@@ -652,29 +642,33 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, C
 
                 if( bVertLines )
                 {
-                    sal_uIntPtr nGridFlags = ( bVertSolid ? GRID_VERTLINES : GRID_DOTS );
+                    sal_uInt32 nGridFlags = ( bVertSolid ? GRID_VERTLINES : GRID_DOTS );
                     sal_uInt16 nSteps = sal_uInt16(ny1 / ny2);
                     sal_uInt32 nRestPerStepMul1000 = nSteps ? ( ((ny1 * 1000L)/ nSteps) - (ny2 * 1000L) ) : 0;
                     sal_uInt32 nStepOffset = 0;
                     sal_uInt16 nPointOffset = 0;
 
-                    for(sal_uInt16 a=0;a<nSteps;a++)
+                    for(sal_uInt16 a(0); a < nSteps; a++)
                     {
                         // Zeichnen
                         rOut.DrawGrid(
-                            Rectangle( xBigOrg, yFinOrg + (a * ny2) + nPointOffset, x2, y2 ),
-                            Size( nx1, ny1 ), nGridFlags );
+                            Rectangle(
+                                basegfx::fround(xBigOrg),
+                                basegfx::fround(yFinOrg) + (a * ny2) + nPointOffset,
+                                basegfx::fround(x2),
+                                basegfx::fround(y2)),
+                            Size(nx1, ny1),
+                            nGridFlags);
 
                         // Schritt machen
                         nStepOffset += nRestPerStepMul1000;
+
                         while(nStepOffset >= 1000)
                         {
                             nStepOffset -= 1000;
                             nPointOffset++;
                         }
                     }
-
-                    // rOut.DrawGrid( Rectangle( xo + xBigOrg, yo + yFinOrg, x2, y2 ), Size( nx1, ny2 ), nGridFlags );
                 }
             }
         }
@@ -686,30 +680,24 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, C
 
 void SdrPageView::AdjHdl()
 {
-    GetView().AdjustMarkHdl();
+    GetView().SetMarkHandles();
 }
 
-void SdrPageView::SetLayer(const XubString& rName, SetOfByte& rBS, sal_Bool bJa)
+void SdrPageView::SetLayer(const XubString& rName, SetOfByte& rBS, bool bJa)
 {
-    if(!GetPage())
-        return;
-
-    SdrLayerID nID = GetPage()->GetLayerAdmin().GetLayerID(rName, sal_True);
+    SdrLayerID nID = getSdrPageFromSdrPageView().GetPageLayerAdmin().GetLayerID(rName, true);
 
     if(SDRLAYER_NOTFOUND != nID)
         rBS.Set(nID, bJa);
 }
 
-sal_Bool SdrPageView::IsLayer(const XubString& rName, const SetOfByte& rBS) const
+bool SdrPageView::IsLayer(const XubString& rName, const SetOfByte& rBS) const
 {
-    if(!GetPage())
-        return sal_False;
-
-    sal_Bool bRet(sal_False);
+    bool bRet(false);
 
     if(rName.Len())
     {
-        SdrLayerID nId = GetPage()->GetLayerAdmin().GetLayerID(rName, sal_True);
+        SdrLayerID nId = getSdrPageFromSdrPageView().GetPageLayerAdmin().GetLayerID(rName, true);
 
         if(SDRLAYER_NOTFOUND != nId)
         {
@@ -720,7 +708,7 @@ sal_Bool SdrPageView::IsLayer(const XubString& rName, const SetOfByte& rBS) cons
     return bRet;
 }
 
-void SdrPageView::SetAllLayers(SetOfByte& rB, sal_Bool bJa)
+void SdrPageView::SetAllLayers(SetOfByte& rB, bool bJa)
 {
     if(bJa)
     {
@@ -733,69 +721,69 @@ void SdrPageView::SetAllLayers(SetOfByte& rB, sal_Bool bJa)
     }
 }
 
-sal_Bool SdrPageView::IsObjMarkable(SdrObject* pObj) const
+bool SdrPageView::IsObjMarkable(const SdrObject& rObj) const
 {
-    if(pObj)
+    // Vom Markieren ausgeschlossen?
+    if(rObj.IsMarkProtect())
     {
-        // Vom Markieren ausgeschlossen?
-        if(pObj->IsMarkProtect())
-        {
-            return sal_False;
-        }
+        return false;
+    }
 
         // only visible are markable
-        if( !pObj->IsVisible() )
-        {
-            return sal_False;
-        }
+    if( !rObj.IsVisible() )
+    {
+        return false;
+    }
 
         // #112440#
-        if(pObj->ISA(SdrObjGroup))
+    if(dynamic_cast< const SdrObjGroup* >(&rObj))
+    {
+        // If object is a Group object, visibility depends evtl. on
+        // multiple layers. If one object is markable, Group is markable.
+        SdrObjList* pObjList = rObj.getChildrenOfSdrObject();
+
+        if(pObjList && pObjList->GetObjCount())
         {
-            // If object is a Group object, visibility depends evtl. on
-            // multiple layers. If one object is markable, Group is markable.
-            SdrObjList* pObjList = ((SdrObjGroup*)pObj)->GetSubList();
+            bool bGroupIsMarkable(false);
 
-            if(pObjList && pObjList->GetObjCount())
+            for(sal_uInt32 a(0); !bGroupIsMarkable && a < pObjList->GetObjCount(); a++)
             {
-                sal_Bool bGroupIsMarkable(sal_False);
+                SdrObject* pCandidate = pObjList->GetObj(a);
 
-                for(sal_uInt32 a(0L); !bGroupIsMarkable && a < pObjList->GetObjCount(); a++)
+                // call recursively
+                if(IsObjMarkable(*pCandidate))
                 {
-                    SdrObject* pCandidate = pObjList->GetObj(a);
-
-                    // call recursively
-                    if(IsObjMarkable(pCandidate))
-                    {
-                        bGroupIsMarkable = sal_True;
-                    }
+                    bGroupIsMarkable = true;
                 }
+            }
 
-                return bGroupIsMarkable;
-            }
-            else
-            {
-                // #i43302#
-                // Allow empty groups to be selected to be able to delete them
-                return sal_True;
-            }
+            return bGroupIsMarkable;
         }
         else
         {
-            // Der Layer muss sichtbar und darf nicht gesperrt sein
-            SdrLayerID nL = pObj->GetLayer();
-            return (aLayerVisi.IsSet(sal_uInt8(nL)) && !aLayerLock.IsSet(sal_uInt8(nL)));
+            // #i43302#
+            // Allow empty groups to be selected to be able to delete them
+            return true;
         }
     }
+    else
+    {
+        // Der Layer muss sichtbar und darf nicht gesperrt sein
+        SdrLayerID nL = rObj.GetLayer();
+        return (maVisibleLayerSet.IsSet(sal_uInt8(nL)) && !maLockedLayerSet.IsSet(sal_uInt8(nL)));
+    }
 
-    return sal_False;
+    return false;
 }
 
-void SdrPageView::SetPageOrigin(const Point& rOrg)
+void SdrPageView::SetPageOrigin(const basegfx::B2DPoint& rOrg)
 {
-    if (rOrg!=aPgOrg) {
-        aPgOrg=rOrg;
-        if (GetView().IsGridVisible()) {
+    if(rOrg != GetPageOrigin())
+    {
+        maPageOrigin = rOrg;
+
+        if(GetView().IsGridVisible())
+        {
             InvalidateAllWin();
         }
     }
@@ -803,23 +791,48 @@ void SdrPageView::SetPageOrigin(const Point& rOrg)
 
 void SdrPageView::ImpInvalidateHelpLineArea(sal_uInt16 nNum) const
 {
-    if (GetView().IsHlplVisible() && nNum<aHelpLines.GetCount()) {
-        const SdrHelpLine& rHL=aHelpLines[nNum];
+    if(GetView().IsHlplVisible() && nNum < maHelpLines.GetCount())
+    {
+        const SdrHelpLine& rHelpLine = maHelpLines[nNum];
 
-        for(sal_uInt32 a(0L); a < GetView().PaintWindowCount(); a++)
+        for(sal_uInt32 a(0); a < GetView().PaintWindowCount(); a++)
         {
             SdrPaintWindow* pCandidate = GetView().GetPaintWindow(a);
 
             if(pCandidate->OutputToWindow())
             {
                 OutputDevice& rOutDev = pCandidate->GetOutputDevice();
-                Rectangle aR(rHL.GetBoundRect(rOutDev));
-                Size aSiz(rOutDev.PixelToLogic(Size(1,1)));
-                aR.Left() -= aSiz.Width();
-                aR.Right() += aSiz.Width();
-                aR.Top() -= aSiz.Height();
-                aR.Bottom() += aSiz.Height();
-                ((SdrView&)GetView()).InvalidateOneWin((Window&)rOutDev, aR);
+                const basegfx::B2DRange aViewRange(rOutDev.GetLogicRange());
+                const basegfx::B2DVector aLogicPixel(rOutDev.GetInverseViewTransformation() * basegfx::B2DVector(1.0, 1.0));
+                basegfx::B2DRange aRange;
+
+                switch(rHelpLine.GetKind())
+                {
+                    case SDRHELPLINE_VERTICAL  :
+                    {
+                        aRange.expand(basegfx::B2DPoint(rHelpLine.GetPos().getX(), aViewRange.getMinY()));
+                        aRange.expand(basegfx::B2DPoint(rHelpLine.GetPos().getX(), aViewRange.getMaxY()));
+                        break;
+                    }
+                    case SDRHELPLINE_HORIZONTAL:
+                    {
+                        aRange.expand(basegfx::B2DPoint(aViewRange.getMinX(), rHelpLine.GetPos().getY()));
+                        aRange.expand(basegfx::B2DPoint(aViewRange.getMaxX(), rHelpLine.GetPos().getY()));
+                        break;
+                    }
+                    default: //case SDRHELPLINE_POINT     :
+                    {
+                        const double fViewFixValue(15.0);
+                        const basegfx::B2DVector aGrow(aLogicPixel * fViewFixValue);
+                        aRange.expand(rHelpLine.GetPos() - aGrow);
+                        aRange.expand(rHelpLine.GetPos() + aGrow);
+                        break;
+                    }
+                }
+
+                aRange.grow((aLogicPixel.getX() + aLogicPixel.getY()) * 0.5);
+
+                ((SdrView&)GetView()).InvalidateOneWin((Window&)rOutDev, aRange);
             }
         }
     }
@@ -827,69 +840,99 @@ void SdrPageView::ImpInvalidateHelpLineArea(sal_uInt16 nNum) const
 
 void SdrPageView::SetHelpLines(const SdrHelpLineList& rHLL)
 {
-    aHelpLines=rHLL;
+    maHelpLines = rHLL;
     InvalidateAllWin();
 }
 
-void SdrPageView::SetHelpLine(sal_uInt16 nNum, const SdrHelpLine& rNewHelpLine)
+void SdrPageView::SetHelpLine(sal_uInt32 nNum, const SdrHelpLine& rNewHelpLine)
 {
-    if (nNum<aHelpLines.GetCount() && aHelpLines[nNum]!=rNewHelpLine) {
-        FASTBOOL bNeedRedraw=sal_True;
-        if (aHelpLines[nNum].GetKind()==rNewHelpLine.GetKind()) {
-            switch (rNewHelpLine.GetKind()) {
-                case SDRHELPLINE_VERTICAL  : if (aHelpLines[nNum].GetPos().X()==rNewHelpLine.GetPos().X()) bNeedRedraw=sal_False; break;
-                case SDRHELPLINE_HORIZONTAL: if (aHelpLines[nNum].GetPos().Y()==rNewHelpLine.GetPos().Y()) bNeedRedraw=sal_False; break;
-                default: break;
-            } // switch
+    if(nNum < GetHelpLines().GetCount() && GetHelpLines()[nNum] != rNewHelpLine)
+    {
+        bool bNeedRedraw(true);
+
+        if(GetHelpLines()[nNum].GetKind() == rNewHelpLine.GetKind())
+        {
+            switch(rNewHelpLine.GetKind())
+            {
+                case SDRHELPLINE_VERTICAL  :
+                {
+                    if(basegfx::fTools::equal(GetHelpLines()[nNum].GetPos().getX(), rNewHelpLine.GetPos().getX()))
+                    {
+                        bNeedRedraw = false;
+                    }
+
+                    break;
+                }
+                case SDRHELPLINE_HORIZONTAL:
+                {
+                    if(basegfx::fTools::equal(GetHelpLines()[nNum].GetPos().getY(), rNewHelpLine.GetPos().getY()))
+                    {
+                        bNeedRedraw = false;
+                    }
+
+                    break;
+                }
+                default:
+                {
+                    break;
+                }
+            }
         }
-        if (bNeedRedraw) ImpInvalidateHelpLineArea(nNum);
-        aHelpLines[nNum]=rNewHelpLine;
-        if (bNeedRedraw) ImpInvalidateHelpLineArea(nNum);
+
+        if(bNeedRedraw)
+        {
+            ImpInvalidateHelpLineArea(nNum);
+        }
+
+        maHelpLines[nNum] = rNewHelpLine;
+
+        if(bNeedRedraw)
+        {
+            ImpInvalidateHelpLineArea(nNum);
+        }
     }
 }
 
-void SdrPageView::DeleteHelpLine(sal_uInt16 nNum)
+void SdrPageView::DeleteHelpLine(sal_uInt32 nNum)
 {
-    if (nNum<aHelpLines.GetCount()) {
+    if(nNum < maHelpLines.GetCount())
+    {
         ImpInvalidateHelpLineArea(nNum);
-        aHelpLines.Delete(nNum);
+        maHelpLines.Delete(nNum);
     }
 }
 
-void SdrPageView::InsertHelpLine(const SdrHelpLine& rHL, sal_uInt16 nNum)
+void SdrPageView::InsertHelpLine(const SdrHelpLine& rHL)
 {
-    if (nNum>aHelpLines.GetCount()) nNum=aHelpLines.GetCount();
-    aHelpLines.Insert(rHL,nNum);
-    if (GetView().IsHlplVisible()) {
-        if (GetView().IsHlplFront()) {
-            // Hier optimieren ...
-            ImpInvalidateHelpLineArea(nNum);
-         } else {
-            ImpInvalidateHelpLineArea(nNum);
-        }
+    maHelpLines.Insert(rHL);
+
+    if(GetView().IsHlplVisible() && GetHelpLines().GetCount())
+    {
+        ImpInvalidateHelpLineArea(GetHelpLines().GetCount() - 1);
     }
 }
 
 // Betretene Gruppe und Liste setzen
-void SdrPageView::SetAktGroupAndList(SdrObject* pNewGroup, SdrObjList* pNewList)
+void SdrPageView::SetCurrentGroupAndObjectList(SdrObject* pNewGroup, SdrObjList* pNewList)
 {
-    if(pAktGroup != pNewGroup)
+    if(mpCurrentGroup != pNewGroup)
     {
-        pAktGroup = pNewGroup;
+        mpCurrentGroup = pNewGroup;
     }
-    if(pAktList != pNewList)
+
+    if(mpCurrentList != pNewList)
     {
-        pAktList = pNewList;
+        mpCurrentList = pNewList;
     }
 }
 
-sal_Bool SdrPageView::EnterGroup(SdrObject* pObj)
+bool SdrPageView::EnterGroup(SdrObject* pObj)
 {
-    sal_Bool bRet(sal_False);
+    bool bRet(false);
 
-    if(pObj && pObj->IsGroupObject())
+    if(pObj && pObj->getChildrenOfSdrObject())
     {
-        sal_Bool bGlueInvalidate(GetView().ImpIsGlueVisible());
+        bool bGlueInvalidate(GetView().ImpIsGlueVisible());
 
         if(bGlueInvalidate)
         {
@@ -900,23 +943,23 @@ sal_Bool SdrPageView::EnterGroup(SdrObject* pObj)
         GetView().UnmarkAll();
 
         // set current group and list
-        SdrObjList* pNewObjList = pObj->GetSubList();
-        SetAktGroupAndList(pObj, pNewObjList);
+        SdrObjList* pNewObjList = pObj->getChildrenOfSdrObject();
+        SetCurrentGroupAndObjectList(pObj, pNewObjList);
 
         // select contained object if only one object is contained,
         // else select nothing and let the user decide what to do next
         if(pNewObjList && pNewObjList->GetObjCount() == 1)
         {
-            SdrObject* pFirstObject = pNewObjList->GetObj(0L);
+            SdrObject* pFirstObject = pNewObjList->GetObj(0);
 
             if(GetView().GetSdrPageView())
             {
-                GetView().MarkObj(pFirstObject, GetView().GetSdrPageView());
+                GetView().MarkObj(*pFirstObject);
             }
         }
 
         // build new handles
-        GetView().AdjustMarkHdl();
+        GetView().SetMarkHandles();
 
         // invalidate only when view wants to visualize group entering
         if(GetView().DoVisualizeEnteredGroup())
@@ -929,7 +972,7 @@ sal_Bool SdrPageView::EnterGroup(SdrObject* pObj)
             GetView().GlueInvalidate();
         }
 
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;
@@ -937,129 +980,164 @@ sal_Bool SdrPageView::EnterGroup(SdrObject* pObj)
 
 void SdrPageView::LeaveOneGroup()
 {
-    if(GetAktGroup())
+    if(GetCurrentGroup())
     {
-        sal_Bool bGlueInvalidate = (GetView().ImpIsGlueVisible());
+        bool bGlueInvalidate(GetView().ImpIsGlueVisible());
 
         if(bGlueInvalidate)
+        {
             GetView().GlueInvalidate();
+        }
 
-        SdrObject* pLastGroup = GetAktGroup();
-        SdrObject* pParentGroup = GetAktGroup()->GetUpGroup();
-        SdrObjList* pParentList = GetPage();
+        SdrObject* pLastGroup = GetCurrentGroup();
+        SdrObject* pParentGroup = GetCurrentGroup()->GetParentSdrObject();
+        SdrObjList* pParentList = &getSdrPageFromSdrPageView();
 
         if(pParentGroup)
-            pParentList = pParentGroup->GetSubList();
+        {
+            pParentList = pParentGroup->getChildrenOfSdrObject();
+        }
 
         // Alles deselektieren
         GetView().UnmarkAll();
 
-        // Zuweisungen, pAktGroup und pAktList muessen gesetzt sein
-        SetAktGroupAndList(pParentGroup, pParentList);
+        // Zuweisungen, mpCurrentGroup und mpCurrentList muessen gesetzt sein
+        SetCurrentGroupAndObjectList(pParentGroup, pParentList);
 
         // gerade verlassene Gruppe selektieren
         if(pLastGroup)
+        {
             if(GetView().GetSdrPageView())
-                GetView().MarkObj(pLastGroup, GetView().GetSdrPageView());
+            {
+                GetView().MarkObj(*pLastGroup);
+            }
+        }
 
-        GetView().AdjustMarkHdl();
+        GetView().SetMarkHandles();
 
         // invalidate only when view wants to visualize group entering
         if(GetView().DoVisualizeEnteredGroup())
+        {
             InvalidateAllWin();
+        }
 
         if(bGlueInvalidate)
+        {
             GetView().GlueInvalidate();
+        }
     }
 }
 
 void SdrPageView::LeaveAllGroup()
 {
-    if(GetAktGroup())
+    if(GetCurrentGroup())
     {
-        sal_Bool bGlueInvalidate = (GetView().ImpIsGlueVisible());
+        bool bGlueInvalidate(GetView().ImpIsGlueVisible());
 
         if(bGlueInvalidate)
+        {
             GetView().GlueInvalidate();
+        }
 
-        SdrObject* pLastGroup = GetAktGroup();
+        SdrObject* pLastGroup = GetCurrentGroup();
 
         // Alles deselektieren
         GetView().UnmarkAll();
 
-        // Zuweisungen, pAktGroup und pAktList muessen gesetzt sein
-        SetAktGroupAndList(NULL, GetPage());
+        // Zuweisungen, mpCurrentGroup und mpCurrentList muessen gesetzt sein
+        SetCurrentGroupAndObjectList(0, &getSdrPageFromSdrPageView());
 
         // Oberste letzte Gruppe finden und selektieren
         if(pLastGroup)
         {
-            while(pLastGroup->GetUpGroup())
-                pLastGroup = pLastGroup->GetUpGroup();
+            while(pLastGroup->GetParentSdrObject())
+            {
+                pLastGroup = pLastGroup->GetParentSdrObject();
+            }
 
             if(GetView().GetSdrPageView())
-                GetView().MarkObj(pLastGroup, GetView().GetSdrPageView());
+            {
+                GetView().MarkObj(*pLastGroup);
+            }
         }
 
-        GetView().AdjustMarkHdl();
+        GetView().SetMarkHandles();
 
         // invalidate only when view wants to visualize group entering
         if(GetView().DoVisualizeEnteredGroup())
+        {
             InvalidateAllWin();
+        }
 
         if(bGlueInvalidate)
+        {
             GetView().GlueInvalidate();
+        }
     }
 }
 
-sal_uInt16 SdrPageView::GetEnteredLevel() const
+sal_uInt32 SdrPageView::GetEnteredLevel() const
 {
-    sal_uInt16 nAnz=0;
-    SdrObject* pGrp=GetAktGroup();
-    while (pGrp!=NULL) {
+    sal_uInt32 nAnz(0);
+    SdrObject* pGrp = GetCurrentGroup();
+
+    while(pGrp)
+    {
         nAnz++;
-        pGrp=pGrp->GetUpGroup();
+        pGrp = pGrp->GetParentSdrObject();
     }
+
     return nAnz;
 }
 
 XubString SdrPageView::GetActualGroupName() const
 {
-    if(GetAktGroup())
+    if(GetCurrentGroup())
     {
-        XubString aStr(GetAktGroup()->GetName());
+        XubString aStr(GetCurrentGroup()->GetName());
 
         if(!aStr.Len())
+        {
             aStr += sal_Unicode('?');
+        }
 
         return aStr;
     }
     else
+    {
         return String();
+    }
 }
 
 XubString SdrPageView::GetActualPathName(sal_Unicode cSep) const
 {
     XubString aStr;
-    sal_Bool bNamFnd(sal_False);
-    SdrObject* pGrp = GetAktGroup();
+    bool bNamFnd(false);
+    SdrObject* pGrp = GetCurrentGroup();
 
     while(pGrp)
     {
         XubString aStr1(pGrp->GetName());
 
         if(!aStr1.Len())
+        {
             aStr1 += sal_Unicode('?');
+        }
         else
-            bNamFnd = sal_True;
+        {
+            bNamFnd = true;
+        }
 
         aStr += aStr1;
-        pGrp = pGrp->GetUpGroup();
+        pGrp = pGrp->GetParentSdrObject();
 
         if(pGrp)
+        {
             aStr += cSep;
+        }
     }
 
-    if(!bNamFnd && GetAktGroup())
+    if(!bNamFnd && GetCurrentGroup())
     {
         aStr = String();
         aStr += sal_Unicode('(');
@@ -1072,15 +1150,24 @@ XubString SdrPageView::GetActualPathName(sal_Unicode cSep) const
 
 void SdrPageView::CheckAktGroup()
 {
-    SdrObject* pGrp=GetAktGroup();
-    while (pGrp!=NULL &&
-           (!pGrp->IsInserted() || pGrp->GetObjList()==NULL ||
-            pGrp->GetPage()==NULL || pGrp->GetModel()==NULL)) { // irgendwas daneben?
-        pGrp=pGrp->GetUpGroup();
+    SdrObject* pGrp = GetCurrentGroup();
+
+    while(pGrp && (!pGrp->IsObjectInserted() || !pGrp->getParentOfSdrObject() || !pGrp->getSdrPageFromSdrObject() ))
+    {
+        // irgendwas daneben?
+        pGrp = pGrp->GetParentSdrObject();
     }
-    if (pGrp!=GetAktGroup()) {
-        if (pGrp!=NULL) EnterGroup(pGrp);
-        else LeaveAllGroup();
+
+    if(pGrp != GetCurrentGroup())
+    {
+        if(pGrp)
+        {
+            EnterGroup(pGrp);
+        }
+        else
+        {
+            LeaveAllGroup();
+        }
     }
 }
 
@@ -1090,7 +1177,6 @@ void SdrPageView::SetApplicationBackgroundColor(Color aBackgroundColor)
     maBackgroundColor = aBackgroundColor;
 }
 
-// #109585#
 Color SdrPageView::GetApplicationBackgroundColor() const
 {
     return maBackgroundColor;

@@ -27,111 +27,17 @@
 #include <svx/svdtrans.hxx>
 #include <math.h>
 #include <svx/xpoly.hxx>
-
 #include <vcl/virdev.hxx>
 #include <tools/bigint.hxx>
 #include <tools/debug.hxx>
 #include <unotools/syslocale.hxx>
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void MoveXPoly(XPolygon& rPoly, const Size& S)
-{
-    rPoly.Move(S.Width(),S.Height());
-}
-
-void MoveXPoly(XPolyPolygon& rPoly, const Size& S)
-{
-    rPoly.Move(S.Width(),S.Height());
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void ResizeRect(Rectangle& rRect, const Point& rRef, const Fraction& rxFact, const Fraction& ryFact, FASTBOOL bNoJustify)
-{
-    Fraction xFact(rxFact);
-    Fraction yFact(ryFact);
-    //long nHgt=rRect.Bottom()-rRect.Top();
-
-    {
-        if (xFact.GetDenominator()==0) {
-            long nWdt=rRect.Right()-rRect.Left();
-            if (xFact.GetNumerator()>=0) { // DivZero abfangen
-                xFact=Fraction(xFact.GetNumerator(),1);
-                if (nWdt==0) rRect.Right()++;
-            } else {
-                xFact=Fraction(xFact.GetNumerator(),-1);
-                if (nWdt==0) rRect.Left()--;
-            }
-        }
-        rRect.Left()  =rRef.X()+Round(((double)(rRect.Left()  -rRef.X())*xFact.GetNumerator())/xFact.GetDenominator());
-        rRect.Right() =rRef.X()+Round(((double)(rRect.Right() -rRef.X())*xFact.GetNumerator())/xFact.GetDenominator());
-    }
-    {
-        if (yFact.GetDenominator()==0) {
-            long nHgt=rRect.Bottom()-rRect.Top();
-            if (yFact.GetNumerator()>=0) { // DivZero abfangen
-                yFact=Fraction(yFact.GetNumerator(),1);
-                if (nHgt==0) rRect.Bottom()++;
-            } else {
-                yFact=Fraction(yFact.GetNumerator(),-1);
-                if (nHgt==0) rRect.Top()--;
-            }
-
-            yFact=Fraction(yFact.GetNumerator(),1); // DivZero abfangen
-        }
-        rRect.Top()   =rRef.Y()+Round(((double)(rRect.Top()   -rRef.Y())*yFact.GetNumerator())/yFact.GetDenominator());
-        rRect.Bottom()=rRef.Y()+Round(((double)(rRect.Bottom()-rRef.Y())*yFact.GetNumerator())/yFact.GetDenominator());
-    }
-    if (!bNoJustify) rRect.Justify();
-}
-
-
-void ResizePoly(Polygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact)
-{
-    sal_uInt16 nAnz=rPoly.GetSize();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
-        ResizePoint(rPoly[i],rRef,xFact,yFact);
-    }
-}
-
-void ResizeXPoly(XPolygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact)
-{
-    sal_uInt16 nAnz=rPoly.GetPointCount();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
-        ResizePoint(rPoly[i],rRef,xFact,yFact);
-    }
-}
-
-void ResizePoly(PolyPolygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact)
-{
-    sal_uInt16 nAnz=rPoly.Count();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
-        ResizePoly(rPoly[i],rRef,xFact,yFact);
-    }
-}
-
-void ResizeXPoly(XPolyPolygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact)
-{
-    sal_uInt16 nAnz=rPoly.Count();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
-        ResizeXPoly(rPoly[i],rRef,xFact,yFact);
-    }
-}
+#include <basegfx/polygon/b2dpolygon.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void RotatePoly(Polygon& rPoly, const Point& rRef, double sn, double cs)
 {
     sal_uInt16 nAnz=rPoly.GetSize();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
-        RotatePoint(rPoly[i],rRef,sn,cs);
-    }
-}
-
-void RotateXPoly(XPolygon& rPoly, const Point& rRef, double sn, double cs)
-{
-    sal_uInt16 nAnz=rPoly.GetPointCount();
     for (sal_uInt16 i=0; i<nAnz; i++) {
         RotatePoint(rPoly[i],rRef,sn,cs);
     }
@@ -145,21 +51,7 @@ void RotatePoly(PolyPolygon& rPoly, const Point& rRef, double sn, double cs)
     }
 }
 
-void RotateXPoly(XPolyPolygon& rPoly, const Point& rRef, double sn, double cs)
-{
-    sal_uInt16 nAnz=rPoly.Count();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
-        RotateXPoly(rPoly[i],rRef,sn,cs);
-    }
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void MirrorRect(Rectangle& rRect, const Point& /*rRef1*/, const Point& /*rRef2*/, FASTBOOL bNoJustify)
-{
-    // !!! fehlende Implementation !!!
-    if (!bNoJustify) rRect.Justify();
-}
 
 void MirrorPoint(Point& rPnt, const Point& rRef1, const Point& rRef2)
 {
@@ -189,48 +81,16 @@ void MirrorPoint(Point& rPnt, const Point& rRef1, const Point& rRef2)
         long nPntWink=GetAngle(rPnt);
         long nWink=2*(nRefWink-nPntWink);
         double a=nWink*nPi180;
-        double nSin=sin(a);
-        double nCos=cos(a);
-        RotatePoint(rPnt,Point(),nSin,nCos);
+        double fSin=sin(a);
+        double fCos=cos(a);
+        RotatePoint(rPnt,Point(),fSin,fCos);
         rPnt+=rRef1;
-    }
-}
-
-void MirrorPoly(Polygon& rPoly, const Point& rRef1, const Point& rRef2)
-{
-    sal_uInt16 nAnz=rPoly.GetSize();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
-        MirrorPoint(rPoly[i],rRef1,rRef2);
-    }
-}
-
-void MirrorXPoly(XPolygon& rPoly, const Point& rRef1, const Point& rRef2)
-{
-    sal_uInt16 nAnz=rPoly.GetPointCount();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
-        MirrorPoint(rPoly[i],rRef1,rRef2);
-    }
-}
-
-void MirrorPoly(PolyPolygon& rPoly, const Point& rRef1, const Point& rRef2)
-{
-    sal_uInt16 nAnz=rPoly.Count();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
-        MirrorPoly(rPoly[i],rRef1,rRef2);
-    }
-}
-
-void MirrorXPoly(XPolyPolygon& rPoly, const Point& rRef1, const Point& rRef2)
-{
-    sal_uInt16 nAnz=rPoly.Count();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
-        MirrorXPoly(rPoly[i],rRef1,rRef2);
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void ShearPoly(Polygon& rPoly, const Point& rRef, double tn, FASTBOOL bVShear)
+void ShearPoly(Polygon& rPoly, const Point& rRef, double tn, bool bVShear)
 {
     sal_uInt16 nAnz=rPoly.GetSize();
     for (sal_uInt16 i=0; i<nAnz; i++) {
@@ -238,15 +98,7 @@ void ShearPoly(Polygon& rPoly, const Point& rRef, double tn, FASTBOOL bVShear)
     }
 }
 
-void ShearXPoly(XPolygon& rPoly, const Point& rRef, double tn, FASTBOOL bVShear)
-{
-    sal_uInt16 nAnz=rPoly.GetPointCount();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
-        ShearPoint(rPoly[i],rRef,tn,bVShear);
-    }
-}
-
-void ShearPoly(PolyPolygon& rPoly, const Point& rRef, double tn, FASTBOOL bVShear)
+void ShearPoly(PolyPolygon& rPoly, const Point& rRef, double tn, bool bVShear)
 {
     sal_uInt16 nAnz=rPoly.Count();
     for (sal_uInt16 i=0; i<nAnz; i++) {
@@ -254,252 +106,325 @@ void ShearPoly(PolyPolygon& rPoly, const Point& rRef, double tn, FASTBOOL bVShea
     }
 }
 
-void ShearXPoly(XPolyPolygon& rPoly, const Point& rRef, double tn, FASTBOOL bVShear)
-{
-    sal_uInt16 nAnz=rPoly.Count();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
-        ShearXPoly(rPoly[i],rRef,tn,bVShear);
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//   @@@@  @@@@@   @@@@   @@@@  @@  @@
-//  @@  @@ @@  @@ @@  @@ @@  @@ @@  @@
-//  @@     @@  @@ @@  @@ @@  @@ @@ @@
-//  @@     @@@@@  @@  @@ @@  @@ @@@@
-//  @@     @@  @@ @@  @@ @@  @@ @@ @@
-//  @@  @@ @@  @@ @@  @@ @@  @@ @@  @@
-//   @@@@  @@  @@  @@@@   @@@@  @@  @@
-//
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-double CrookRotateXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCenter,
-                         const Point& rRad, double& rSin, double& rCos, FASTBOOL bVert)
+double CrookRotateXPoint(basegfx::B2DPoint& rPnt, basegfx::B2DPoint* pC1, basegfx::B2DPoint* pC2, const basegfx::B2DPoint& rCenter,
+    const basegfx::B2DPoint& rRad, double& rSin, double& rCos, bool bVert)
 {
-    FASTBOOL bC1=pC1!=NULL;
-    FASTBOOL bC2=pC2!=NULL;
-    long x0=rPnt.X();
-    long y0=rPnt.Y();
-    long cx=rCenter.X();
-    long cy=rCenter.Y();
-    double nWink=GetCrookAngle(rPnt,rCenter,rRad,bVert);
-    double sn=sin(nWink);
-    double cs=cos(nWink);
-    RotatePoint(rPnt,rCenter,sn,cs);
-    if (bC1) {
-        if (bVert) {
+    basegfx::B2DPoint aPoint(rPnt);
+    basegfx::B2DPoint aCenter(rCenter);
+    double nWink(GetCrookAngle(rPnt, rCenter, rRad, bVert));
+    double sn(sin(nWink));
+    double cs(cos(nWink));
+
+    RotateB2DPointAroundRef(rPnt, rCenter, sn, cs);
+
+    if(pC1)
+    {
+        if(bVert)
+        {
             // Richtung Zentrum verschieben, als Ausgangsposition fuer Rotate
-            pC1->Y()-=y0;
+            pC1->setY(pC1->getY() - aPoint.getY());
+
             // Resize, entsprechend der Entfernung vom Zentrum
-            pC1->Y()=Round(((double)pC1->Y()) /rRad.X()*(cx-pC1->X()));
-            pC1->Y()+=cy;
-        } else {
-            // Richtung Zentrum verschieben, als Ausgangsposition fuer Rotate
-            pC1->X()-=x0;
-            // Resize, entsprechend der Entfernung vom Zentrum
-            long nPntRad=cy-pC1->Y();
-            double nFact=(double)nPntRad/(double)rRad.Y();
-            pC1->X()=Round((double)pC1->X()*nFact);
-            pC1->X()+=cx;
+            pC1->setY((pC1->getY() / rRad.getX() * (aCenter.getX() - pC1->getX())) + aCenter.getY());
         }
-        RotatePoint(*pC1,rCenter,sn,cs);
-    }
-    if (bC2) {
-        if (bVert) {
+        else
+        {
             // Richtung Zentrum verschieben, als Ausgangsposition fuer Rotate
-            pC2->Y()-=y0;
+            pC1->setX(pC1->getX() - aPoint.getX());
+
             // Resize, entsprechend der Entfernung vom Zentrum
-            pC2->Y()=Round(((double)pC2->Y()) /rRad.X()*(rCenter.X()-pC2->X()));
-            pC2->Y()+=cy;
-        } else {
-            // Richtung Zentrum verschieben, als Ausgangsposition fuer Rotate
-            pC2->X()-=x0;
-            // Resize, entsprechend der Entfernung vom Zentrum
-            long nPntRad=rCenter.Y()-pC2->Y();
-            double nFact=(double)nPntRad/(double)rRad.Y();
-            pC2->X()=Round((double)pC2->X()*nFact);
-            pC2->X()+=cx;
+            const double fPntRad(aCenter.getY() - pC1->getY());
+            const double fFact(fPntRad / rRad.getY());
+
+            pC1->setX((pC1->getX() * fFact) + aCenter.getX());
         }
-        RotatePoint(*pC2,rCenter,sn,cs);
+
+        RotateB2DPointAroundRef(*pC1, rCenter, sn, cs);
     }
-    rSin=sn;
-    rCos=cs;
+
+    if(pC2)
+    {
+        if(bVert)
+        {
+            // Richtung Zentrum verschieben, als Ausgangsposition fuer Rotate
+            pC2->setY(pC2->getY() - aPoint.getY());
+
+            // Resize, entsprechend der Entfernung vom Zentrum
+            pC2->setY((pC2->getY() / rRad.getX() * (rCenter.getX() - pC2->getX())) + aCenter.getY());
+        }
+        else
+        {
+            // Richtung Zentrum verschieben, als Ausgangsposition fuer Rotate
+            pC2->setX(pC2->getX() - aPoint.getX());
+
+            // Resize, entsprechend der Entfernung vom Zentrum
+            const double fPntRad(rCenter.getY() - pC2->getY());
+            const double fFact(fPntRad / rRad.getY());
+
+            pC2->setX((pC2->getX() * fFact) + aCenter.getX());
+        }
+
+        RotateB2DPointAroundRef(*pC2, rCenter, sn, cs);
+    }
+
+    rSin = sn;
+    rCos = cs;
+
     return nWink;
 }
 
-double CrookSlantXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCenter,
-                        const Point& rRad, double& rSin, double& rCos, FASTBOOL bVert)
+double CrookSlantXPoint(basegfx::B2DPoint& rPnt, basegfx::B2DPoint* pC1, basegfx::B2DPoint* pC2, const basegfx::B2DPoint& rCenter,
+    const basegfx::B2DPoint& rRad, double& rSin, double& rCos, bool bVert)
 {
-    FASTBOOL bC1=pC1!=NULL;
-    FASTBOOL bC2=pC2!=NULL;
-    long x0=rPnt.X();
-    long y0=rPnt.Y();
-    long dx1=0,dy1=0;
-    long dxC1=0,dyC1=0;
-    long dxC2=0,dyC2=0;
-    if (bVert) {
-        long nStart=rCenter.X()-rRad.X();
-        dx1=rPnt.X()-nStart;
-        rPnt.X()=nStart;
-        if (bC1) {
-            dxC1=pC1->X()-nStart;
-            pC1->X()=nStart;
+    basegfx::B2DPoint aPoint(rPnt);
+    basegfx::B2DPoint aDelta1(0.0, 0.0);
+    basegfx::B2DPoint aDeltaC1(0.0, 0.0);
+    basegfx::B2DPoint aDeltaC2(0.0, 0.0);
+
+    if(bVert)
+    {
+        const double fStart(rCenter.getX() - rRad.getX());
+
+        aDelta1.setX(rPnt.getX() - fStart);
+        rPnt.setX(fStart);
+
+        if(pC1)
+        {
+            aDeltaC1.setX(pC1->getX() - fStart);
+            pC1->setX(fStart);
         }
-        if (bC2) {
-            dxC2=pC2->X()-nStart;
-            pC2->X()=nStart;
-        }
-    } else {
-        long nStart=rCenter.Y()-rRad.Y();
-        dy1=rPnt.Y()-nStart;
-        rPnt.Y()=nStart;
-        if (bC1) {
-            dyC1=pC1->Y()-nStart;
-            pC1->Y()=nStart;
-        }
-        if (bC2) {
-            dyC2=pC2->Y()-nStart;
-            pC2->Y()=nStart;
+
+        if(pC2)
+        {
+            aDeltaC2.setX(pC2->getX() - fStart);
+            pC2->setX(fStart);
         }
     }
-    double nWink=GetCrookAngle(rPnt,rCenter,rRad,bVert);
-    double sn=sin(nWink);
-    double cs=cos(nWink);
-    RotatePoint(rPnt,rCenter,sn,cs);
-    if (bC1) { if (bVert) pC1->Y()-=y0-rCenter.Y(); else pC1->X()-=x0-rCenter.X(); RotatePoint(*pC1,rCenter,sn,cs); }
-    if (bC2) { if (bVert) pC2->Y()-=y0-rCenter.Y(); else pC2->X()-=x0-rCenter.X(); RotatePoint(*pC2,rCenter,sn,cs); }
-    if (bVert) {
-        rPnt.X()+=dx1;
-        if (bC1) pC1->X()+=dxC1;
-        if (bC2) pC2->X()+=dxC2;
-    } else {
-        rPnt.Y()+=dy1;
-        if (bC1) pC1->Y()+=dyC1;
-        if (bC2) pC2->Y()+=dyC2;
+    else
+    {
+        const double fStart(rCenter.getY() - rRad.getY());
+
+        aDelta1.setY(rPnt.getY() - fStart);
+        rPnt.setY(fStart);
+
+        if(pC1)
+        {
+            aDeltaC1.setY(pC1->getY() - fStart);
+            pC1->setY(fStart);
+        }
+
+        if(pC2)
+        {
+            aDeltaC2.setY(pC2->getY() - fStart);
+            pC2->setY(fStart);
+        }
     }
+
+    double nWink(GetCrookAngle(rPnt, rCenter, rRad, bVert));
+    double sn(sin(nWink));
+    double cs(cos(nWink));
+
+    RotateB2DPointAroundRef(rPnt, rCenter, sn, cs);
+
+    if(pC1)
+    {
+        if(bVert)
+        {
+            pC1->setY(pC1->getY() - (aPoint.getY() - rCenter.getY()));
+        }
+        else
+        {
+            pC1->setX(pC1->getX() - (aPoint.getX() - rCenter.getX()));
+        }
+
+        RotateB2DPointAroundRef(*pC1, rCenter, sn, cs);
+    }
+
+    if(pC2)
+    {
+        if(bVert)
+        {
+            pC2->setY(pC2->getY() - (aPoint.getY() - rCenter.getY()));
+        }
+        else
+        {
+            pC2->setX(pC2->getX() - (aPoint.getX() - rCenter.getX()));
+        }
+
+        RotateB2DPointAroundRef(*pC2, rCenter, sn, cs);
+    }
+
+    if(bVert)
+    {
+        rPnt.setX(rPnt.getX() + aDelta1.getX());
+
+        if(pC1)
+        {
+            pC1->setX(pC1->getX() + aDeltaC1.getX());
+        }
+
+        if(pC2)
+        {
+            pC2->setX(pC2->getX() + aDeltaC2.getX());
+        }
+    }
+    else
+    {
+        rPnt.setY(rPnt.getY() + aDelta1.getY());
+
+        if(pC1)
+        {
+            pC1->setY(pC1->getY() + aDeltaC1.getY());
+        }
+
+        if(pC2)
+        {
+            pC2->setY(pC2->getY() + aDeltaC2.getY());
+        }
+    }
+
     rSin=sn;
     rCos=cs;
+
     return nWink;
 }
 
-double CrookStretchXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCenter,
-                          const Point& rRad, double& rSin, double& rCos, FASTBOOL bVert,
-                          const Rectangle rRefRect)
+double CrookStretchXPoint(basegfx::B2DPoint& rPnt, basegfx::B2DPoint* pC1, basegfx::B2DPoint* pC2, const basegfx::B2DPoint& rCenter,
+                          const basegfx::B2DPoint& rRad, double& rSin, double& rCos, bool bVert,
+                          const basegfx::B2DRange& rRefRange)
 {
-    //FASTBOOL bC1=pC1!=NULL;
-    //FASTBOOL bC2=pC2!=NULL;
-    //long x0=rPnt.X();
-    long y0=rPnt.Y();
+    const double y0(rPnt.getY());
+
     CrookSlantXPoint(rPnt,pC1,pC2,rCenter,rRad,rSin,rCos,bVert);
-    if (bVert) {
-    } else {
-        //long nBase=rCenter.Y()-rRad.Y();
-        long nTop=rRefRect.Top();
-        long nBtm=rRefRect.Bottom();
-        long nHgt=nBtm-nTop;
-        long dy=rPnt.Y()-y0;
-        //FASTBOOL bOben=rRad.Y()<0;
-        double a=((double)(y0-nTop))/nHgt;
-        a*=dy;
-        rPnt.Y()=y0+Round(a);
-    } return 0.0;
+
+    if(!bVert)
+    {
+        const double fTop(rRefRange.getMinY());
+        const double fBtm(rRefRange.getMaxY());
+        const double fHgt(fBtm - fTop);
+        const double dy(rPnt.getY() - y0);
+        const double a(((y0 - fTop) / fHgt) * dy);
+
+        rPnt.setY(y0 + a);
+    }
+
+    return 0.0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CrookRotatePoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, FASTBOOL bVert)
+void CrookRotatePoly(basegfx::B2DPolygon& rPoly, const basegfx::B2DPoint& rCenter, const basegfx::B2DPoint& rRad, bool bVert)
 {
-    double nSin,nCos;
-    sal_uInt16 nPointAnz=rPoly.GetPointCount();
-    sal_uInt16 i=0;
-    while (i<nPointAnz) {
-        Point* pPnt=&rPoly[i];
-        Point* pC1=NULL;
-        Point* pC2=NULL;
-        if (i+1<nPointAnz && rPoly.IsControl(i)) { // Kontrollpunkt links
-            pC1=pPnt;
-            i++;
-            pPnt=&rPoly[i];
+    double fSin(0.0);
+    double fCos(0.0);
+
+    for(sal_uInt32 a(0); a < rPoly.count(); a++)
+    {
+        basegfx::B2DPoint aPoint(rPoly.getB2DPoint(a));
+
+        if(rPoly.areControlPointsUsed() && (rPoly.isPrevControlPointUsed(a) || rPoly.isNextControlPointUsed(a)))
+        {
+            basegfx::B2DPoint aPrev(rPoly.getPrevControlPoint(a));
+            basegfx::B2DPoint aNext(rPoly.getNextControlPoint(a));
+
+            CrookRotateXPoint(aPoint, &aPrev, &aNext, rCenter, rRad, fSin, fCos, bVert);
+            rPoly.setB2DPoint(a, aPoint);
+            rPoly.setControlPoints(a, aPrev, aNext);
         }
-        i++;
-        if (i<nPointAnz && rPoly.IsControl(i)) { // Kontrollpunkt rechts
-            pC2=&rPoly[i];
-            i++;
+        else
+        {
+            CrookRotateXPoint(aPoint, 0, 0, rCenter, rRad, fSin, fCos, bVert);
+            rPoly.setB2DPoint(a, aPoint);
         }
-        CrookRotateXPoint(*pPnt,pC1,pC2,rCenter,rRad,nSin,nCos,bVert);
     }
 }
 
-void CrookSlantPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, FASTBOOL bVert)
+void CrookSlantPoly(basegfx::B2DPolygon& rPoly, const basegfx::B2DPoint& rCenter, const basegfx::B2DPoint& rRad, bool bVert)
 {
-    double nSin,nCos;
-    sal_uInt16 nPointAnz=rPoly.GetPointCount();
-    sal_uInt16 i=0;
-    while (i<nPointAnz) {
-        Point* pPnt=&rPoly[i];
-        Point* pC1=NULL;
-        Point* pC2=NULL;
-        if (i+1<nPointAnz && rPoly.IsControl(i)) { // Kontrollpunkt links
-            pC1=pPnt;
-            i++;
-            pPnt=&rPoly[i];
+    double fSin(0.0);
+    double fCos(0.0);
+
+    for(sal_uInt32 a(0); a < rPoly.count(); a++)
+    {
+        basegfx::B2DPoint aPoint(rPoly.getB2DPoint(a));
+
+        if(rPoly.areControlPointsUsed() && (rPoly.isPrevControlPointUsed(a) || rPoly.isNextControlPointUsed(a)))
+        {
+            basegfx::B2DPoint aPrev(rPoly.getPrevControlPoint(a));
+            basegfx::B2DPoint aNext(rPoly.getNextControlPoint(a));
+
+            CrookSlantXPoint(aPoint, &aPrev, &aNext, rCenter, rRad, fSin, fCos, bVert);
+            rPoly.setB2DPoint(a, aPoint);
+            rPoly.setControlPoints(a, aPrev, aNext);
         }
-        i++;
-        if (i<nPointAnz && rPoly.IsControl(i)) { // Kontrollpunkt rechts
-            pC2=&rPoly[i];
-            i++;
+        else
+        {
+            CrookSlantXPoint(aPoint, 0, 0, rCenter, rRad, fSin, fCos, bVert);
+            rPoly.setB2DPoint(a, aPoint);
         }
-        CrookSlantXPoint(*pPnt,pC1,pC2,rCenter,rRad,nSin,nCos,bVert);
     }
 }
 
-void CrookStretchPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, FASTBOOL bVert, const Rectangle rRefRect)
+void CrookStretchPoly(basegfx::B2DPolygon& rPoly, const basegfx::B2DPoint& rCenter, const basegfx::B2DPoint& rRad, bool bVert, const basegfx::B2DRange& rRefRange)
 {
-    double nSin,nCos;
-    sal_uInt16 nPointAnz=rPoly.GetPointCount();
-    sal_uInt16 i=0;
-    while (i<nPointAnz) {
-        Point* pPnt=&rPoly[i];
-        Point* pC1=NULL;
-        Point* pC2=NULL;
-        if (i+1<nPointAnz && rPoly.IsControl(i)) { // Kontrollpunkt links
-            pC1=pPnt;
-            i++;
-            pPnt=&rPoly[i];
+    double fSin(0.0);
+    double fCos(0.0);
+
+    for(sal_uInt32 a(0); a < rPoly.count(); a++)
+    {
+        basegfx::B2DPoint aPoint(rPoly.getB2DPoint(a));
+
+        if(rPoly.areControlPointsUsed() && (rPoly.isPrevControlPointUsed(a) || rPoly.isNextControlPointUsed(a)))
+        {
+            basegfx::B2DPoint aPrev(rPoly.getPrevControlPoint(a));
+            basegfx::B2DPoint aNext(rPoly.getNextControlPoint(a));
+
+            CrookStretchXPoint(aPoint, &aPrev, &aNext, rCenter, rRad, fSin, fCos, bVert, rRefRange);
+            rPoly.setB2DPoint(a, aPoint);
+            rPoly.setControlPoints(a, aPrev, aNext);
         }
-        i++;
-        if (i<nPointAnz && rPoly.IsControl(i)) { // Kontrollpunkt rechts
-            pC2=&rPoly[i];
-            i++;
+        else
+        {
+            CrookStretchXPoint(aPoint, 0, 0, rCenter, rRad, fSin, fCos, bVert, rRefRange);
+            rPoly.setB2DPoint(a, aPoint);
         }
-        CrookStretchXPoint(*pPnt,pC1,pC2,rCenter,rRad,nSin,nCos,bVert,rRefRect);
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CrookRotatePoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, FASTBOOL bVert)
+void CrookRotatePoly(basegfx::B2DPolyPolygon& rPoly, const basegfx::B2DPoint& rCenter, const basegfx::B2DPoint& rRad, bool bVert)
 {
-    sal_uInt16 nPolyAnz=rPoly.Count();
-    for (sal_uInt16 nPolyNum=0; nPolyNum<nPolyAnz; nPolyNum++) {
-        CrookRotatePoly(rPoly[nPolyNum],rCenter,rRad,bVert);
+    for(sal_uInt32 a(0); a < rPoly.count(); a++)
+    {
+        basegfx::B2DPolygon aCandidate(rPoly.getB2DPolygon(a));
+
+        CrookRotatePoly(aCandidate, rCenter, rRad, bVert);
+        rPoly.setB2DPolygon(a, aCandidate);
     }
 }
 
-void CrookSlantPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, FASTBOOL bVert)
+void CrookSlantPoly(basegfx::B2DPolyPolygon& rPoly, const basegfx::B2DPoint& rCenter, const basegfx::B2DPoint& rRad, bool bVert)
 {
-    sal_uInt16 nPolyAnz=rPoly.Count();
-    for (sal_uInt16 nPolyNum=0; nPolyNum<nPolyAnz; nPolyNum++) {
-        CrookSlantPoly(rPoly[nPolyNum],rCenter,rRad,bVert);
+    for(sal_uInt32 a(0); a < rPoly.count(); a++)
+    {
+        basegfx::B2DPolygon aCandidate(rPoly.getB2DPolygon(a));
+
+        CrookSlantPoly(aCandidate, rCenter, rRad, bVert);
+        rPoly.setB2DPolygon(a, aCandidate);
     }
 }
 
-void CrookStretchPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, FASTBOOL bVert, const Rectangle rRefRect)
+void CrookStretchPoly(basegfx::B2DPolyPolygon& rPoly, const basegfx::B2DPoint& rCenter, const basegfx::B2DPoint& rRad, bool bVert, const basegfx::B2DRange& rRefRange)
 {
-    sal_uInt16 nPolyAnz=rPoly.Count();
-    for (sal_uInt16 nPolyNum=0; nPolyNum<nPolyAnz; nPolyNum++) {
-        CrookStretchPoly(rPoly[nPolyNum],rCenter,rRad,bVert,rRefRect);
+    for(sal_uInt32 a(0); a < rPoly.count(); a++)
+    {
+        basegfx::B2DPolygon aCandidate(rPoly.getB2DPolygon(a));
+
+        CrookStretchPoly(aCandidate, rCenter, rRad, bVert, rRefRange);
+        rPoly.setB2DPolygon(a, aCandidate);
     }
 }
 
@@ -570,129 +495,6 @@ long GetLen(const Point& rPnt)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GeoStat::RecalcSinCos()
-{
-    if (nDrehWink==0) {
-        nSin=0.0;
-        nCos=1.0;
-    } else {
-        double a=nDrehWink*nPi180;
-        nSin=sin(a);
-        nCos=cos(a);
-    }
-}
-
-void GeoStat::RecalcTan()
-{
-    if (nShearWink==0) {
-        nTan=0.0;
-    } else {
-        double a=nShearWink*nPi180;
-        nTan=tan(a);
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-Polygon Rect2Poly(const Rectangle& rRect, const GeoStat& rGeo)
-{
-    Polygon aPol(5);
-    aPol[0]=rRect.TopLeft();
-    aPol[1]=rRect.TopRight();
-    aPol[2]=rRect.BottomRight();
-    aPol[3]=rRect.BottomLeft();
-    aPol[4]=rRect.TopLeft();
-    if (rGeo.nShearWink!=0) ShearPoly(aPol,rRect.TopLeft(),rGeo.nTan);
-    if (rGeo.nDrehWink!=0) RotatePoly(aPol,rRect.TopLeft(),rGeo.nSin,rGeo.nCos);
-    return aPol;
-}
-
-void Poly2Rect(const Polygon& rPol, Rectangle& rRect, GeoStat& rGeo)
-{
-    rGeo.nDrehWink=GetAngle(rPol[1]-rPol[0]);
-    rGeo.nDrehWink=NormAngle360(rGeo.nDrehWink);
-    // Drehung ist damit im Kasten
-    rGeo.RecalcSinCos();
-
-    Point aPt1(rPol[1]-rPol[0]);
-    if (rGeo.nDrehWink!=0) RotatePoint(aPt1,Point(0,0),-rGeo.nSin,rGeo.nCos); // -Sin fuer Rueckdrehung
-    long nWdt=aPt1.X();
-
-    Point aPt0(rPol[0]);
-    Point aPt3(rPol[3]-rPol[0]);
-    if (rGeo.nDrehWink!=0) RotatePoint(aPt3,Point(0,0),-rGeo.nSin,rGeo.nCos); // -Sin fuer Rueckdrehung
-    long nHgt=aPt3.Y();
-
-    if(aPt3.X())
-    {
-        // #i74358# the axes are not orthogonal, so for getting the correct height,
-        // calculate the length of aPt3
-
-        // #i74358# this change was wrong, in the field of the old geometry stuff
-        // it is not an error. The new height always is the same as before; shear
-        // does not change object height at all. This is different from the interactions,
-        // but obviously wanted in the old versions.
-        //
-        // nHgt = static_cast< long >(sqrt(static_cast< double >(aPt3.X() * aPt3.X() + aPt3.Y() * aPt3.Y())));
-    }
-
-    long nShW=GetAngle(aPt3);
-    nShW-=27000; // ShearWink wird zur Senkrechten gemessen
-    nShW=-nShW;  // Negieren, denn '+' ist Rechtskursivierung
-
-    FASTBOOL bMirr=aPt3.Y()<0;
-    if (bMirr) { // "Punktetausch" bei Spiegelung
-        nHgt=-nHgt;
-        nShW+=18000;
-        aPt0=rPol[3];
-    }
-    nShW=NormAngle180(nShW);
-    if (nShW<-9000 || nShW>9000) {
-        nShW=NormAngle180(nShW+18000);
-    }
-    if (nShW<-SDRMAXSHEAR) nShW=-SDRMAXSHEAR; // ShearWinkel begrenzen auf +/- 89.00 deg
-    if (nShW>SDRMAXSHEAR)  nShW=SDRMAXSHEAR;
-    rGeo.nShearWink=nShW;
-    rGeo.RecalcTan();
-    Point aRU(aPt0);
-    aRU.X()+=nWdt;
-    aRU.Y()+=nHgt;
-    rRect=Rectangle(aPt0,aRU);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void OrthoDistance8(const Point& rPt0, Point& rPt, FASTBOOL bBigOrtho)
-{
-    long dx=rPt.X()-rPt0.X();
-    long dy=rPt.Y()-rPt0.Y();
-    long dxa=Abs(dx);
-    long dya=Abs(dy);
-    if (dx==0 || dy==0 || dxa==dya) return;
-    if (dxa>=dya*2) { rPt.Y()=rPt0.Y(); return; }
-    if (dya>=dxa*2) { rPt.X()=rPt0.X(); return; }
-    if ((dxa<dya) != bBigOrtho) {
-        rPt.Y()=rPt0.Y()+(dxa* (dy>=0 ? 1 : -1) );
-    } else {
-        rPt.X()=rPt0.X()+(dya* (dx>=0 ? 1 : -1) );
-    }
-}
-
-void OrthoDistance4(const Point& rPt0, Point& rPt, FASTBOOL bBigOrtho)
-{
-    long dx=rPt.X()-rPt0.X();
-    long dy=rPt.Y()-rPt0.Y();
-    long dxa=Abs(dx);
-    long dya=Abs(dy);
-    if ((dxa<dya) != bBigOrtho) {
-        rPt.Y()=rPt0.Y()+(dxa* (dy>=0 ? 1 : -1) );
-    } else {
-        rPt.X()=rPt0.X()+(dya* (dx>=0 ? 1 : -1) );
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 long BigMulDiv(long nVal, long nMul, long nDiv)
 {
     BigInt aVal(nVal);
@@ -714,7 +516,7 @@ void Kuerzen(Fraction& rF, unsigned nDigits)
 {
     sal_Int32 nMul=rF.GetNumerator();
     sal_Int32 nDiv=rF.GetDenominator();
-    FASTBOOL bNeg=sal_False;
+    bool bNeg=sal_False;
     if (nMul<0) { nMul=-nMul; bNeg=!bNeg; }
     if (nDiv<0) { nDiv=-nDiv; bNeg=!bNeg; }
     if (nMul==0 || nDiv==0) return;
@@ -805,8 +607,8 @@ FrPair GetMapFactor(MapUnit eS, MapUnit eD)
     if (eS==eD) return FrPair(1,1,1,1);
     FrPair aS(GetInchOrMM(eS));
     FrPair aD(GetInchOrMM(eD));
-    FASTBOOL bSInch=IsInch(eS);
-    FASTBOOL bDInch=IsInch(eD);
+    bool bSInch=IsInch(eS);
+    bool bDInch=IsInch(eD);
     FrPair aRet(aD.X()/aS.X(),aD.Y()/aS.Y());
     if (bSInch && !bDInch) { aRet.X()*=Fraction(127,5); aRet.Y()*=Fraction(127,5); }
     if (!bSInch && bDInch) { aRet.X()*=Fraction(5,127); aRet.Y()*=Fraction(5,127); }
@@ -817,8 +619,8 @@ FrPair GetMapFactor(MapUnit eS, FieldUnit eD)
 {
     FrPair aS(GetInchOrMM(eS));
     FrPair aD(GetInchOrMM(eD));
-    FASTBOOL bSInch=IsInch(eS);
-    FASTBOOL bDInch=IsInch(eD);
+    bool bSInch=IsInch(eS);
+    bool bDInch=IsInch(eD);
     FrPair aRet(aD.X()/aS.X(),aD.Y()/aS.Y());
     if (bSInch && !bDInch) { aRet.X()*=Fraction(127,5); aRet.Y()*=Fraction(127,5); }
     if (!bSInch && bDInch) { aRet.X()*=Fraction(5,127); aRet.Y()*=Fraction(5,127); }
@@ -829,8 +631,8 @@ FrPair GetMapFactor(FieldUnit eS, MapUnit eD)
 {
     FrPair aS(GetInchOrMM(eS));
     FrPair aD(GetInchOrMM(eD));
-    FASTBOOL bSInch=IsInch(eS);
-    FASTBOOL bDInch=IsInch(eD);
+    bool bSInch=IsInch(eS);
+    bool bDInch=IsInch(eD);
     FrPair aRet(aD.X()/aS.X(),aD.Y()/aS.Y());
     if (bSInch && !bDInch) { aRet.X()*=Fraction(127,5); aRet.Y()*=Fraction(127,5); }
     if (!bSInch && bDInch) { aRet.X()*=Fraction(5,127); aRet.Y()*=Fraction(5,127); }
@@ -842,8 +644,8 @@ FrPair GetMapFactor(FieldUnit eS, FieldUnit eD)
     if (eS==eD) return FrPair(1,1,1,1);
     FrPair aS(GetInchOrMM(eS));
     FrPair aD(GetInchOrMM(eD));
-    FASTBOOL bSInch=IsInch(eS);
-    FASTBOOL bDInch=IsInch(eD);
+    bool bSInch=IsInch(eS);
+    bool bDInch=IsInch(eD);
     FrPair aRet(aD.X()/aS.X(),aD.Y()/aS.Y());
     if (bSInch && !bDInch) { aRet.X()*=Fraction(127,5); aRet.Y()*=Fraction(127,5); }
     if (!bSInch && bDInch) { aRet.X()*=Fraction(5,127); aRet.Y()*=Fraction(5,127); }
@@ -859,24 +661,24 @@ FrPair GetMapFactor(FieldUnit eS, FieldUnit eD)
     // 1 yd      =  3 ft      =     36" =       914,4mm
     // 1 ft      = 12 "       =      1" =       304,8mm
 
-void GetMeterOrInch(MapUnit eMU, short& rnKomma, long& rnMul, long& rnDiv, int& rbMetr, int& rbInch)
+void GetMeterOrInch(MapUnit eMU, short& rnKomma, long& rnMul, long& rnDiv, bool& rbMetr, bool& rbInch)
 {
     rnMul=1; rnDiv=1;
     short nKomma=0;
-    FASTBOOL bMetr=sal_False,bInch=sal_False;
+    bool bMetr=false,bInch=false;
     switch (eMU) {
         // Metrisch
-        case MAP_100TH_MM   : bMetr=sal_True; nKomma=5; break;
-        case MAP_10TH_MM    : bMetr=sal_True; nKomma=4; break;
-        case MAP_MM         : bMetr=sal_True; nKomma=3; break;
-        case MAP_CM         : bMetr=sal_True; nKomma=2; break;
+        case MAP_100TH_MM   : bMetr=true; nKomma=5; break;
+        case MAP_10TH_MM    : bMetr=true; nKomma=4; break;
+        case MAP_MM         : bMetr=true; nKomma=3; break;
+        case MAP_CM         : bMetr=true; nKomma=2; break;
         // Inch
-        case MAP_1000TH_INCH: bInch=sal_True; nKomma=3; break;
-        case MAP_100TH_INCH : bInch=sal_True; nKomma=2; break;
-        case MAP_10TH_INCH  : bInch=sal_True; nKomma=1; break;
-        case MAP_INCH       : bInch=sal_True; nKomma=0; break;
-        case MAP_POINT      : bInch=sal_True; rnDiv=72;  break;          // 1Pt   = 1/72"
-        case MAP_TWIP       : bInch=sal_True; rnDiv=144; nKomma=1; break; // 1Twip = 1/1440"
+        case MAP_1000TH_INCH: bInch=true; nKomma=3; break;
+        case MAP_100TH_INCH : bInch=true; nKomma=2; break;
+        case MAP_10TH_INCH  : bInch=true; nKomma=1; break;
+        case MAP_INCH       : bInch=true; nKomma=0; break;
+        case MAP_POINT      : bInch=true; rnDiv=72;  break;          // 1Pt   = 1/72"
+        case MAP_TWIP       : bInch=true; rnDiv=144; nKomma=1; break; // 1Twip = 1/1440"
         // Sonstiges
         case MAP_PIXEL      : break;
         case MAP_SYSFONT    : break;
@@ -889,26 +691,26 @@ void GetMeterOrInch(MapUnit eMU, short& rnKomma, long& rnMul, long& rnDiv, int& 
     rbInch=bInch;
 }
 
-void GetMeterOrInch(FieldUnit eFU, short& rnKomma, long& rnMul, long& rnDiv, int& rbMetr, int& rbInch)
+void GetMeterOrInch(FieldUnit eFU, short& rnKomma, long& rnMul, long& rnDiv, bool& rbMetr, bool& rbInch)
 {
     rnMul=1; rnDiv=1;
     short nKomma=0;
-    FASTBOOL bMetr=sal_False,bInch=sal_False;
+    bool bMetr=false,bInch=false;
     switch (eFU) {
         case FUNIT_NONE     : break;
         // Metrisch
-        case FUNIT_100TH_MM : bMetr=sal_True; nKomma=5; break;
-        case FUNIT_MM       : bMetr=sal_True; nKomma=3; break;
-        case FUNIT_CM       : bMetr=sal_True; nKomma=2; break;
-        case FUNIT_M        : bMetr=sal_True; nKomma=0; break;
-        case FUNIT_KM       : bMetr=sal_True; nKomma=-3; break;
+        case FUNIT_100TH_MM : bMetr=true; nKomma=5; break;
+        case FUNIT_MM       : bMetr=true; nKomma=3; break;
+        case FUNIT_CM       : bMetr=true; nKomma=2; break;
+        case FUNIT_M        : bMetr=true; nKomma=0; break;
+        case FUNIT_KM       : bMetr=true; nKomma=-3; break;
         // Inch
-        case FUNIT_TWIP     : bInch=sal_True; rnDiv=144; nKomma=1; break;  // 1Twip = 1/1440"
-        case FUNIT_POINT    : bInch=sal_True; rnDiv=72; break;   // 1Pt   = 1/72"
-        case FUNIT_PICA     : bInch=sal_True; rnDiv=6; break;    // 1Pica = 1/6"  ?
-        case FUNIT_INCH     : bInch=sal_True; break;             // 1"    = 1"
-        case FUNIT_FOOT     : bInch=sal_True; rnMul=12; break;   // 1Ft   = 12"
-        case FUNIT_MILE     : bInch=sal_True; rnMul=6336; nKomma=-1; break; // 1mile = 63360"
+        case FUNIT_TWIP     : bInch=true; rnDiv=144; nKomma=1; break;  // 1Twip = 1/1440"
+        case FUNIT_POINT    : bInch=true; rnDiv=72; break;   // 1Pt   = 1/72"
+        case FUNIT_PICA     : bInch=true; rnDiv=6; break;    // 1Pica = 1/6"  ?
+        case FUNIT_INCH     : bInch=true; break;             // 1"    = 1"
+        case FUNIT_FOOT     : bInch=true; rnMul=12; break;   // 1Ft   = 12"
+        case FUNIT_MILE     : bInch=true; rnMul=6336; nKomma=-1; break; // 1mile = 63360"
         // sonstiges
         case FUNIT_CUSTOM   : break;
         case FUNIT_PERCENT  : nKomma=2; break;
@@ -921,20 +723,29 @@ void GetMeterOrInch(FieldUnit eFU, short& rnKomma, long& rnMul, long& rnDiv, int
 void SdrFormatter::Undirty()
 {
     if (aScale.GetNumerator()==0 || aScale.GetDenominator()==0) aScale=Fraction(1,1);
-    FASTBOOL bSrcMetr,bSrcInch,bDstMetr,bDstInch;
+    bool bSrcMetr,bSrcInch,bDstMetr,bDstInch;
     long nMul1,nDiv1,nMul2,nDiv2;
     short nKomma1,nKomma2;
+
     // Zunaechst normalisieren auf m bzw. "
-    if (!bSrcFU) {
+    if (!bSrcFU)
+    {
         GetMeterOrInch(eSrcMU,nKomma1,nMul1,nDiv1,bSrcMetr,bSrcInch);
-    } else {
+    }
+    else
+    {
         GetMeterOrInch(eSrcFU,nKomma1,nMul1,nDiv1,bSrcMetr,bSrcInch);
     }
-    if (!bDstFU) {
+
+    if (!bDstFU)
+    {
         GetMeterOrInch(eDstMU,nKomma2,nMul2,nDiv2,bDstMetr,bDstInch);
-    } else {
+    }
+    else
+    {
         GetMeterOrInch(eDstFU,nKomma2,nMul2,nDiv2,bDstMetr,bDstInch);
     }
+
     nMul1*=nDiv2;
     nDiv1*=nMul2;
     nKomma1=nKomma1-nKomma2;
@@ -1138,5 +949,4 @@ void SdrFormatter::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
+// eof

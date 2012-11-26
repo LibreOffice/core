@@ -53,7 +53,7 @@ namespace drawinglayer
             attribute::MaterialAttribute3D              maMaterial;
 
             /// bitfield
-            unsigned                                    mbDoubleSided : 1;
+            bool                                        mbDoubleSided : 1;
 
         public:
             /// constructor
@@ -66,9 +66,6 @@ namespace drawinglayer
             const basegfx::B3DPolyPolygon& getB3DPolyPolygon() const { return maPolyPolygon; }
             const attribute::MaterialAttribute3D& getMaterial() const { return maMaterial; }
             bool getDoubleSided() const { return mbDoubleSided; }
-
-            /// compare operator
-            virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
             /// get range
             virtual basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& rViewInformation) const;

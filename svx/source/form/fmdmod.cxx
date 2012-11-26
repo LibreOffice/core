@@ -42,7 +42,9 @@ using namespace ::svxform;
     }
     else if ( ServiceSpecifier == ::rtl::OUString( ::rtl::OUString::createFromAscii("com.sun.star.drawing.ControlShape") ) )
     {
-        SdrObject* pObj = new FmFormObj(OBJ_FM_CONTROL);
+        SdrModel* pTargetModel = getSdrModel();
+        OSL_ENSURE(pTargetModel, "Got no SdrModel for SdrShape construction (!)");
+        SdrObject* pObj = new FmFormObj(*pTargetModel, ::rtl::OUString(), OBJ_FM_CONTROL);
         xRet = *new SvxShapeControl(pObj);
     }
     if (!xRet.is())

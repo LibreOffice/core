@@ -25,53 +25,45 @@
 #include "precompiled_svx.hxx"
 
 #include <svx/svdotext.hxx>
-#include "svx/svditext.hxx"
-#include <svx/svdmodel.hxx> // fuer GetMaxObjSize
+#include <editeng/editdata.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/svditext.hxx>
 #include <svx/svdoutl.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/editstat.hxx>
 #include <svl/itemset.hxx>
 #include <editeng/eeitem.hxx>
 #include <svx/sdtfchim.hxx>
+#include <svx/svdlegacy.hxx>
+#include <svx/svdtrans.hxx>
+#include <svx/sdrtexthelpers.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  @@@@@@ @@@@@ @@   @@ @@@@@@  @@@@  @@@@@  @@@@@@
-//    @@   @@    @@@ @@@   @@   @@  @@ @@  @@     @@
-//    @@   @@     @@@@@    @@   @@  @@ @@  @@     @@
-//    @@   @@@@    @@@     @@   @@  @@ @@@@@      @@
-//    @@   @@     @@@@@    @@   @@  @@ @@  @@     @@
-//    @@   @@    @@@ @@@   @@   @@  @@ @@  @@ @@  @@
-//    @@   @@@@@ @@   @@   @@    @@@@  @@@@@   @@@@
-//
-//  TextEdit
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
-FASTBOOL SdrTextObj::HasTextEdit() const
+bool SdrTextObj::HasTextEdit() const
 {
     // lt. Anweisung von MB duerfen gelinkte Textobjekte nun doch
     // geaendert werden (kein automatisches Reload)
-    return sal_True;
+    return true;
 }
 
-sal_Bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
+bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
 {
-    if (pEdtOutl!=NULL) return sal_False; // Textedit laeuft evtl. schon an einer anderen View!
+    if (pEdtOutl!=0) return sal_False; // Textedit laeuft evtl. schon an einer anderen View!
     pEdtOutl=&rOutl;
 
     // #101684#
-    mbInEditMode = sal_True;
+    mbInEditMode = true;
 
     sal_uInt16 nOutlinerMode = OUTLINERMODE_OUTLINEOBJECT;
     if ( !IsOutlText() )
         nOutlinerMode = OUTLINERMODE_TEXTOBJECT;
     rOutl.Init( nOutlinerMode );
-    rOutl.SetRefDevice( pModel->GetRefDevice() );
+    rOutl.SetRefDevice( getSdrModelFromSdrObject().GetReferenceDevice() );
 
     SdrFitToSizeType eFit=GetFitToSize();
-    FASTBOOL bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
-    FASTBOOL bContourFrame=IsContourTextFrame();
+    bool bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
+    bool bContourFrame=IsContourTextFrame();
     ImpSetTextEditParams();
 
     if (!bContourFrame) {
@@ -82,7 +74,7 @@ sal_Bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     }
 
     OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
-    if(pOutlinerParaObject!=NULL)
+    if(pOutlinerParaObject!=0)
     {
         rOutl.SetText(*GetOutlinerParaObject());
         rOutl.SetFixedCellHeight(((const SdrTextFixedCellHeightItem&)GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
@@ -110,27 +102,18 @@ sal_Bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     }
     if (bFitToSize)
     {
-        Rectangle aAnchorRect;
-        Rectangle aTextRect;
-        TakeTextRect(rOutl, aTextRect, sal_False,
-            &aAnchorRect/* #97097# give sal_True here, not sal_False */);
-        Fraction aFitXKorreg(1,1);
-        ImpSetCharStretching(rOutl,aTextRect,aAnchorRect,aFitXKorreg);
+        basegfx::B2DRange aAnchorRange;
+        basegfx::B2DRange aTextRange;
+
+        TakeTextRange(rOutl, aTextRange, aAnchorRange);
+        ImpSetCharStretching(rOutl, aTextRange, aAnchorRange);
     }
 
     if(pOutlinerParaObject)
     {
-        // #78476# also repaint when animated text is put to edit mode
-        // to not make appear the text double
-        // #111096# should now repaint automatically.
-        // sal_Bool bIsAnimated(pPlusData && pPlusData->pAnimator);
-
-        if(aGeo.nDrehWink || IsFontwork() /*|| bIsAnimated*/)
+        if(IsFontwork() || sdr::legacy::GetRotateAngle(*this))
         {
-            // only repaint here, no real objectchange
-
-//          ActionChanged();
-            BroadcastObjectChange();
+            const SdrObjectChangeBroadcaster aSdrObjectChangeBroadcaster(*this);
         }
     }
 
@@ -140,28 +123,28 @@ sal_Bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     return sal_True;
 }
 
-void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const
+void SdrTextObj::TakeTextEditArea(basegfx::B2DVector* pPaperMin, basegfx::B2DVector* pPaperMax, basegfx::B2DRange* pViewInit, basegfx::B2DRange* pViewMin) const
 {
-    SdrFitToSizeType eFit=GetFitToSize();
-    FASTBOOL bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
-    Size aPaperMin,aPaperMax;
-    Rectangle aViewInit;
-    TakeTextAnchorRect(aViewInit);
-    if (aGeo.nDrehWink!=0) {
-        Point aCenter(aViewInit.Center());
-        aCenter-=aViewInit.TopLeft();
-        Point aCenter0(aCenter);
-        RotatePoint(aCenter,Point(),aGeo.nSin,aGeo.nCos);
-        aCenter-=aCenter0;
-        aViewInit.Move(aCenter.X(),aCenter.Y());
+    const SdrFitToSizeType eFit(GetFitToSize());
+    const bool bFitToSize(SDRTEXTFIT_PROPORTIONAL == eFit || SDRTEXTFIT_ALLLINES == eFit);
+    basegfx::B2DVector aPaperMin;
+    basegfx::B2DVector aPaperMax;
+
+    // get TextRange without shear, rotate and mirror, just scaled
+    // and centered in logic coordinates
+    basegfx::B2DRange aViewInit(getScaledCenteredTextRange(*this));
+
+    basegfx::B2DVector aAnkSiz(aViewInit.getRange());
+    basegfx::B2DVector aMaxSiz(1000000.0, 1000000.0);
+
+    if(!basegfx::fTools::equalZero(getSdrModelFromSdrObject().GetMaxObjectScale().getX()))
+    {
+        aMaxSiz.setX(getSdrModelFromSdrObject().GetMaxObjectScale().getX());
     }
-    Size aAnkSiz(aViewInit.GetSize());
-    aAnkSiz.Width()--; aAnkSiz.Height()--; // weil GetSize() ein draufaddiert
-    Size aMaxSiz(1000000,1000000);
-    if (pModel!=NULL) {
-        Size aTmpSiz(pModel->GetMaxObjSize());
-        if (aTmpSiz.Width()!=0) aMaxSiz.Width()=aTmpSiz.Width();
-        if (aTmpSiz.Height()!=0) aMaxSiz.Height()=aTmpSiz.Height();
+
+    if(!basegfx::fTools::equalZero(getSdrModelFromSdrObject().GetMaxObjectScale().getY()))
+    {
+        aMaxSiz.setY(getSdrModelFromSdrObject().GetMaxObjectScale().getY());
     }
 
     // #106879#
@@ -171,60 +154,74 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
 
     if(IsTextFrame())
     {
-        long nMinWdt=GetMinTextFrameWidth();
-        long nMinHgt=GetMinTextFrameHeight();
-        long nMaxWdt=GetMaxTextFrameWidth();
-        long nMaxHgt=GetMaxTextFrameHeight();
-        if (nMinWdt<1) nMinWdt=1;
-        if (nMinHgt<1) nMinHgt=1;
-        if (!bFitToSize) {
-            if (nMaxWdt==0 || nMaxWdt>aMaxSiz.Width())  nMaxWdt=aMaxSiz.Width();
-            if (nMaxHgt==0 || nMaxHgt>aMaxSiz.Height()) nMaxHgt=aMaxSiz.Height();
+        double fMinWdt(std::max(1.0, (double)GetMinTextFrameWidth()));
+        double fMinHgt(std::max(1.0, (double)GetMinTextFrameHeight()));
+        double fMaxWdt(GetMaxTextFrameWidth());
+        double fMaxHgt(GetMaxTextFrameHeight());
 
-            if (!IsAutoGrowWidth() )
+        if(!bFitToSize)
+        {
+            if(basegfx::fTools::equalZero(fMaxWdt) || basegfx::fTools::more(fMaxWdt, aMaxSiz.getX()))
             {
-                nMinWdt = aAnkSiz.Width();
-                nMaxWdt = nMinWdt;
+                fMaxWdt = aMaxSiz.getX();
             }
 
-            if (!IsAutoGrowHeight())
+            if(basegfx::fTools::equalZero(fMaxHgt) || basegfx::fTools::more(fMaxHgt, aMaxSiz.getY()))
             {
-                nMinHgt = aAnkSiz.Height();
-                nMaxHgt = nMinHgt;
+                fMaxHgt = aMaxSiz.getY();
             }
 
-            SdrTextAniKind      eAniKind=GetTextAniKind();
-            SdrTextAniDirection eAniDirection=GetTextAniDirection();
+            if(!IsAutoGrowWidth())
+            {
+                fMaxWdt = aAnkSiz.getX();
+                fMinWdt = fMaxWdt;
+            }
 
+            if(!IsAutoGrowHeight())
+            {
+                fMaxHgt = aAnkSiz.getY();
+                fMinHgt = fMaxHgt;
+            }
+
+            const SdrTextAniKind eAniKind(GetTextAniKind());
             // #101684#
-            sal_Bool bInEditMode = IsInEditMode();
+            bool bInEditMode = IsInEditMode();
 
-            if (!bInEditMode && (eAniKind==SDRTEXTANI_SCROLL || eAniKind==SDRTEXTANI_ALTERNATE || eAniKind==SDRTEXTANI_SLIDE))
+            if(!bInEditMode && (SDRTEXTANI_SCROLL == eAniKind || SDRTEXTANI_ALTERNATE == eAniKind || SDRTEXTANI_SLIDE == eAniKind))
             {
+                const SdrTextAniDirection eAniDirection(GetTextAniDirection());
+
                 // Grenzenlose Papiergroesse fuer Laufschrift
-                if (eAniDirection==SDRTEXTANI_LEFT || eAniDirection==SDRTEXTANI_RIGHT) nMaxWdt=1000000;
-                if (eAniDirection==SDRTEXTANI_UP || eAniDirection==SDRTEXTANI_DOWN) nMaxHgt=1000000;
+                if(SDRTEXTANI_LEFT == eAniDirection || SDRTEXTANI_RIGHT == eAniDirection)
+                {
+                    fMaxWdt = 1000000.0;
+                }
+                else if(SDRTEXTANI_UP == eAniDirection || SDRTEXTANI_DOWN == eAniDirection)
+                {
+                    fMaxHgt = 1000000.0;
+                }
             }
 
             // #119885# Do not limit/force height to geometrical frame (vice versa for vertical writing)
             if(IsVerticalWriting())
             {
-                nMaxWdt = 1000000;
+                fMaxWdt = 1000000.0;
             }
             else
             {
-                nMaxHgt = 1000000;
+                fMaxHgt = 1000000.0;
             }
 
-            aPaperMax.Width()=nMaxWdt;
-            aPaperMax.Height()=nMaxHgt;
+            aPaperMax.setX(fMaxWdt);
+            aPaperMax.setY(fMaxHgt);
         }
         else
         {
             aPaperMax=aMaxSiz;
         }
-        aPaperMin.Width()=nMinWdt;
-        aPaperMin.Height()=nMinHgt;
+
+        aPaperMin.setX(fMinWdt);
+        aPaperMin.setY(fMinHgt);
     }
     else
     {
@@ -240,47 +237,111 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
         aPaperMax=aMaxSiz;
     }
 
-    if (pViewMin!=NULL) {
+    if(pViewMin)
+    {
         *pViewMin=aViewInit;
+        const double fXFree(aAnkSiz.getX() - aPaperMin.getX());
 
-        long nXFree=aAnkSiz.Width()-aPaperMin.Width();
-        if (eHAdj==SDRTEXTHORZADJUST_LEFT) pViewMin->Right()-=nXFree;
-        else if (eHAdj==SDRTEXTHORZADJUST_RIGHT) pViewMin->Left()+=nXFree;
-        else { pViewMin->Left()+=nXFree/2; pViewMin->Right()=pViewMin->Left()+aPaperMin.Width(); }
+        if(SDRTEXTHORZADJUST_LEFT == eHAdj)
+        {
+            *pViewMin = basegfx::B2DRange(
+                pViewMin->getMinX(),
+                pViewMin->getMinY(),
+                pViewMin->getMaxX() - fXFree,
+                pViewMin->getMaxY());
+        }
+        else if(SDRTEXTHORZADJUST_RIGHT == eHAdj)
+        {
+            *pViewMin = basegfx::B2DRange(
+                pViewMin->getMinX() + fXFree,
+                pViewMin->getMinY(),
+                pViewMin->getMaxX(),
+                pViewMin->getMaxY());
+        }
+        else
+        {
+            const double fNewMinX(pViewMin->getMinX() + (fXFree * 0.5));
+            *pViewMin = basegfx::B2DRange(
+                fNewMinX,
+                pViewMin->getMinY(),
+                fNewMinX + aPaperMin.getX(),
+                pViewMin->getMaxY());
+        }
 
-        long nYFree=aAnkSiz.Height()-aPaperMin.Height();
-        if (eVAdj==SDRTEXTVERTADJUST_TOP) pViewMin->Bottom()-=nYFree;
-        else if (eVAdj==SDRTEXTVERTADJUST_BOTTOM) pViewMin->Top()+=nYFree;
-        else { pViewMin->Top()+=nYFree/2; pViewMin->Bottom()=pViewMin->Top()+aPaperMin.Height(); }
+        const double fYFree(aAnkSiz.getY() - aPaperMin.getY());
+
+        if(SDRTEXTVERTADJUST_TOP == eVAdj)
+        {
+            *pViewMin = basegfx::B2DRange(
+                pViewMin->getMinX(),
+                pViewMin->getMinY(),
+                pViewMin->getMaxX(),
+                pViewMin->getMaxY() - fYFree);
+        }
+        else if(SDRTEXTVERTADJUST_BOTTOM == eVAdj)
+        {
+            *pViewMin = basegfx::B2DRange(
+                pViewMin->getMinX(),
+                pViewMin->getMinY() + fYFree,
+                pViewMin->getMaxX(),
+                pViewMin->getMaxY());
+        }
+        else
+        {
+            const double fNewMinY(pViewMin->getMinY() + (fYFree * 0.5));
+            *pViewMin = basegfx::B2DRange(
+                pViewMin->getMinX(),
+                fNewMinY,
+                pViewMin->getMaxX(),
+                fNewMinY + aPaperMin.getY());
+        }
     }
 
     // Die PaperSize soll in den meisten Faellen von selbst wachsen
     // #89459#
     if(IsVerticalWriting())
-        aPaperMin.Width() = 0;
+    {
+        aPaperMin.setX(0.0);
+    }
     else
-        aPaperMin.Height() = 0; // #33102#
+    {
+        // #33102#
+        aPaperMin.setY(0.0);
+    }
 
-    if(eHAdj!=SDRTEXTHORZADJUST_BLOCK || bFitToSize) {
-        aPaperMin.Width()=0;
+    if(SDRTEXTHORZADJUST_BLOCK != eHAdj || bFitToSize)
+    {
+        aPaperMin.setX(0.0);
     }
 
     // #103516# For complete ver adjust support, set paper min height to 0, here.
     if(SDRTEXTVERTADJUST_BLOCK != eVAdj || bFitToSize)
     {
-        aPaperMin.Height() = 0;
+        aPaperMin.setY(0.0);
     }
 
-    if (pPaperMin!=NULL) *pPaperMin=aPaperMin;
-    if (pPaperMax!=NULL) *pPaperMax=aPaperMax;
-    if (pViewInit!=NULL) *pViewInit=aViewInit;
+    if(pPaperMin)
+    {
+        *pPaperMin = aPaperMin;
+    }
+
+    if(pPaperMax)
+    {
+        *pPaperMax = aPaperMax;
+    }
+
+    if(pViewInit)
+    {
+        *pViewInit = aViewInit;
+    }
+
 }
 
 void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
 {
     if(rOutl.IsModified())
     {
-        OutlinerParaObject* pNewText = NULL;
+        OutlinerParaObject* pNewText = 0;
 
         if(HasTextImpl( &rOutl ) )
         {
@@ -292,20 +353,20 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
         }
 
         // need to end edit mode early since SetOutlinerParaObject already
-        // uses GetCurrentBoundRect() which needs to take the text into account
+        // uses getObjectRange() which needs to take the text into account
         // to work correct
-        mbInEditMode = sal_False;
+        mbInEditMode = false;
         SetOutlinerParaObject(pNewText);
     }
 
-    pEdtOutl = NULL;
+    pEdtOutl = 0;
     rOutl.Clear();
     sal_uInt32 nStat = rOutl.GetControlWord();
     nStat &= ~EE_CNTRL_AUTOPAGESIZE;
     rOutl.SetControlWord(nStat);
 
     // #101684#
-    mbInEditMode = sal_False;
+    mbInEditMode = false;
 }
 
 sal_uInt16 SdrTextObj::GetOutlinerViewAnchorMode() const
@@ -344,27 +405,42 @@ sal_uInt16 SdrTextObj::GetOutlinerViewAnchorMode() const
 
 void SdrTextObj::ImpSetTextEditParams() const
 {
-    if (pEdtOutl!=NULL) {
-        FASTBOOL bUpdMerk=pEdtOutl->GetUpdateMode();
-        if (bUpdMerk) pEdtOutl->SetUpdateMode(sal_False);
-        Size aPaperMin;
-        Size aPaperMax;
-        Rectangle aEditArea;
-        TakeTextEditArea(&aPaperMin,&aPaperMax,&aEditArea,NULL);
-        //SdrFitToSizeType eFit=GetFitToSize();
-        //FASTBOOL bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
-        FASTBOOL bContourFrame=IsContourTextFrame();
-        //EVAnchorMode eAM=(EVAnchorMode)GetOutlinerViewAnchorMode();
-        //sal_uIntPtr nViewAnz=pEdtOutl->GetViewCount();
-        pEdtOutl->SetMinAutoPaperSize(aPaperMin);
-        pEdtOutl->SetMaxAutoPaperSize(aPaperMax);
-        pEdtOutl->SetPaperSize(Size());
-        if (bContourFrame) {
-            Rectangle aAnchorRect;
-            TakeTextAnchorRect(aAnchorRect);
-            ImpSetContourPolygon(*pEdtOutl,aAnchorRect, sal_True);
+    if(pEdtOutl)
+    {
+        bool bUpdMerk(pEdtOutl->GetUpdateMode());
+
+        if(bUpdMerk)
+        {
+            pEdtOutl->SetUpdateMode(false);
         }
-        if (bUpdMerk) pEdtOutl->SetUpdateMode(sal_True);
+
+        basegfx::B2DVector aPaperMin;
+        basegfx::B2DVector aPaperMax;
+//      basegfx::B2DRange aEditArea; // TTTT: aEditArea not used, check if calculation changes when leaving out
+
+//      TakeTextEditArea(&aPaperMin, &aPaperMax, &aEditArea, 0);
+        TakeTextEditArea(&aPaperMin, &aPaperMax, 0, 0);
+
+        const Size aOldPaperMin(basegfx::fround(aPaperMin.getX()), basegfx::fround(aPaperMin.getY()));
+        const Size aOldPaperMax(basegfx::fround(aPaperMax.getX()), basegfx::fround(aPaperMax.getY()));
+
+        pEdtOutl->SetMinAutoPaperSize(aOldPaperMin);
+        pEdtOutl->SetMaxAutoPaperSize(aOldPaperMax);
+        pEdtOutl->SetPaperSize(Size());
+
+        if(IsContourTextFrame())
+        {
+            basegfx::B2DPolyPolygon aContourOutline(getAlignedTextContourPolyPolygon(*this));
+            aContourOutline.transform(basegfx::tools::createTranslateB2DHomMatrix(-aContourOutline.getB2DRange().getMinimum()));
+            pEdtOutl->SetPolygon(aContourOutline);
+        }
+
+        if(bUpdMerk)
+        {
+            pEdtOutl->ClearPolygon();
+            pEdtOutl->SetUpdateMode(true);
+        }
     }
 }
 
+// eof

@@ -105,8 +105,9 @@ void SwEditShell::StartAllAction()
 {
     ViewShell *pSh = this;
     do {
-        if( pSh->IsA( TYPE( SwEditShell ) ) )
-            ((SwEditShell*)pSh)->StartAction();
+        SwEditShell* pSwEditShell = dynamic_cast< SwEditShell* >(pSh);
+        if( pSwEditShell )
+            pSwEditShell->StartAction();
         else
             pSh->StartAction();
         pSh = (ViewShell *)pSh->GetNext();
@@ -121,8 +122,9 @@ void SwEditShell::EndAllAction()
 {
     ViewShell *pSh = this;
     do {
-        if( pSh->IsA( TYPE( SwEditShell ) ) )
-            ((SwEditShell*)pSh)->EndAction();
+        SwEditShell* pSwEditShell = dynamic_cast< SwEditShell* >(pSh);
+        if( pSwEditShell )
+            pSwEditShell->EndAction();
         else
             pSh->EndAction();
         pSh = (ViewShell *)pSh->GetNext();

@@ -55,7 +55,7 @@ void ScrollMDI( ViewShell* pVwSh, const SwRect &rRect,
                 sal_uInt16 nRangeX, sal_uInt16 nRangeY)
 {
     SfxViewShell *pSfxVwSh = pVwSh->GetSfxViewShell();
-    if (pSfxVwSh && pSfxVwSh->ISA(SwView))
+    if (pSfxVwSh && dynamic_cast< SwView* >(pSfxVwSh))
         ((SwView *)pSfxVwSh)->Scroll( rRect.SVRect(), nRangeX, nRangeY );
 }
 
@@ -68,7 +68,7 @@ void ScrollMDI( ViewShell* pVwSh, const SwRect &rRect,
 sal_Bool IsScrollMDI( ViewShell* pVwSh, const SwRect &rRect )
 {
     SfxViewShell *pSfxVwSh = pVwSh->GetSfxViewShell();
-    if (pSfxVwSh && pSfxVwSh->ISA(SwView))
+    if (pSfxVwSh && dynamic_cast< SwView* >(pSfxVwSh))
         return (((SwView *)pSfxVwSh)->IsScroll(rRect.SVRect()));
     return sal_False;
 }
@@ -84,9 +84,9 @@ void SizeNotify(ViewShell* pVwSh, const Size &rSize)
     SfxViewShell *pSfxVwSh = pVwSh->GetSfxViewShell();
     if (pSfxVwSh)
     {
-        if (pSfxVwSh->ISA(SwView))
+        if (dynamic_cast< SwView* >(pSfxVwSh))
             ((SwView *)pSfxVwSh)->DocSzChgd(rSize);
-        else if (pSfxVwSh->ISA(SwPagePreView))
+        else if (dynamic_cast< SwPagePreView* >(pSfxVwSh))
             ((SwPagePreView *)pSfxVwSh)->DocSzChgd( rSize );
     }
 }
@@ -101,7 +101,7 @@ void PageNumNotify( ViewShell* pVwSh, sal_uInt16 nPhyNum, sal_uInt16 nVirtNum,
                                                     const String& rPgStr)
 {
     SfxViewShell *pSfxVwSh = pVwSh->GetSfxViewShell();
-    if ( pSfxVwSh && pSfxVwSh->ISA(SwView) &&
+    if ( pSfxVwSh && dynamic_cast< SwView* >(pSfxVwSh) &&
          ((SwView*)pSfxVwSh)->GetCurShell() )
             ((SwView *)pSfxVwSh)->UpdatePageNums(nPhyNum, nVirtNum, rPgStr);
 }
@@ -117,7 +117,7 @@ void PageNumNotify( ViewShell* pVwSh, sal_uInt16 nPhyNum, sal_uInt16 nVirtNum,
 
 void FrameNotify( ViewShell* pVwSh, FlyMode eMode )
 {
-    if ( pVwSh->ISA(SwCrsrShell) )
+    if ( dynamic_cast< SwCrsrShell* >(pVwSh) )
         SwBaseShell::SetFrmMode( eMode, (SwWrtShell*)pVwSh );
 }
 
@@ -157,14 +157,14 @@ TblChgMode GetTblChgDefaultMode()
 void RepaintPagePreview( ViewShell* pVwSh, const SwRect& rRect )
 {
     SfxViewShell *pSfxVwSh = pVwSh->GetSfxViewShell();
-    if (pSfxVwSh && pSfxVwSh->ISA( SwPagePreView ))
+    if (pSfxVwSh && dynamic_cast< SwPagePreView* >(pSfxVwSh))
         ((SwPagePreView *)pSfxVwSh)->RepaintCoreRect( rRect );
 }
 
 sal_Bool JumpToSwMark( ViewShell* pVwSh, const String& rMark )
 {
     SfxViewShell *pSfxVwSh = pVwSh->GetSfxViewShell();
-    if( pSfxVwSh && pSfxVwSh->ISA( SwView ) )
+    if( pSfxVwSh && dynamic_cast< SwView* >(pSfxVwSh) )
         return ((SwView *)pSfxVwSh)->JumpToSwMark( rMark );
     return sal_False;
 }

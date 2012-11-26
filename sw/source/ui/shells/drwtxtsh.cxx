@@ -106,8 +106,6 @@ SFX_IMPL_INTERFACE(SwDrawTextShell, SfxShell, SW_RES(STR_SHELLNAME_DRAW_TEXT))
     SFX_CHILDWINDOW_REGISTRATION(SvxFontWorkChildWindow::GetChildWindowId());
 }
 
-TYPEINIT1(SwDrawTextShell,SfxShell)
-
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
@@ -249,7 +247,7 @@ sal_Bool SwDrawTextShell::IsTextEdit()
 void SwDrawTextShell::ExecFontWork(SfxRequest& rReq)
 {
     SwWrtShell &rSh = GetShell();
-    FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &rSh.GetView()));
+    FieldUnit eMetric = ::GetDfltMetric(0 != dynamic_cast< SwWebView* >( &rSh.GetView()));
     SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)) );
     SfxViewFrame* pVFrame = GetView().GetViewFrame();
     if ( rReq.GetArgs() )
@@ -288,10 +286,9 @@ void SwDrawTextShell::ExecFormText(SfxRequest& rReq)
 {
     SwWrtShell &rSh = GetShell();
     SdrView* pDrView = rSh.GetDrawView();
+    SdrObject* pSingleSelected = pDrView->getSelectedIfSingle();
 
-    const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
-
-    if ( rMarkList.GetMarkCount() == 1 && rReq.GetArgs() )
+    if ( pSingleSelected && rReq.GetArgs() )
     {
         const SfxItemSet& rSet = *rReq.GetArgs();
         const SfxPoolItem* pItem;
@@ -317,8 +314,8 @@ void SwDrawTextShell::ExecFormText(SfxRequest& rReq)
             SvxFontWorkDialog* pDlg = (SvxFontWorkDialog*)(
                     pVFrame->GetChildWindow(nId)->GetWindow());
 
-            pDlg->CreateStdFormObj(*pDrView, *pDrView->GetSdrPageView(),
-                                    rSet, *rMarkList.GetMark(0)->GetMarkedSdrObj(),
+            pDlg->CreateStdFormObj(*pDrView,
+                                    rSet, *pSingleSelected,
                                    ((const XFormTextStdFormItem*) pItem)->
                                    GetValue());
         }
@@ -340,8 +337,7 @@ void SwDrawTextShell::GetFormTextState(SfxItemSet& rSet)
 {
     SwWrtShell &rSh = GetShell();
     SdrView* pDrView = rSh.GetDrawView();
-    const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
-    const SdrObject* pObj = NULL;
+    const SdrObject* pObj = pDrView->getSelectedIfSingle();
     SvxFontWorkDialog* pDlg = NULL;
 
     const sal_uInt16 nId = SvxFontWorkChildWindow::GetChildWindowId();
@@ -350,10 +346,7 @@ void SwDrawTextShell::GetFormTextState(SfxItemSet& rSet)
     if ( pVFrame->HasChildWindow(nId) )
         pDlg = (SvxFontWorkDialog*)(pVFrame->GetChildWindow(nId)->GetWindow());
 
-    if ( rMarkList.GetMarkCount() == 1 )
-        pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-
-    if ( pObj == NULL || !pObj->ISA(SdrTextObj) ||
+    if ( pObj == NULL || !dynamic_cast< const SdrTextObj* >(pObj) ||
         !((SdrTextObj*) pObj)->HasText() )
     {
 #define XATTR_ANZ 12
@@ -385,7 +378,7 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
     OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
-    if( rSh.GetDrawView()->GetMarkedObjectList().GetMarkCount() )
+    if( rSh.GetDrawView()->areSdrObjectsSelected() )
     {
         switch(rReq.GetSlot())
         {
@@ -560,7 +553,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
             break;
         case FN_DRAWTEXT_ATTR_DLG:
             {
-                SfxItemSet aNewAttr( pSdrView->GetModel()->GetItemPool() );
+                SfxItemSet aNewAttr( pSdrView->getSdrModelFromSdrView().GetItemPool() );
                 pSdrView->GetAttributes( aNewAttr );
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if ( pFact )
@@ -572,7 +565,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
 
                     if (nResult == RET_OK)
                     {
-                        if (pSdrView->AreObjectsMarked())
+                        if (pSdrView->areSdrObjectsSelected())
                         {
                             pSdrView->SetAttributes(*pDlg->GetOutputItemSet());
                             rReq.Done(*(pDlg->GetOutputItemSet()));
@@ -777,7 +770,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
         sSym = ((const SfxStringItem*)pItem)->GetValue();
         const SfxPoolItem* pFtItem = NULL;
         pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), sal_False, &pFtItem);
-        const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
+        const SfxStringItem* pFontItem = dynamic_cast< const SfxStringItem* >( pFtItem );
         if ( pFontItem )
             sFontName = pFontItem->GetValue();
     }
@@ -819,8 +812,8 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
         sal_uInt16 nResult = pDlg->Execute();
         if( nResult == RET_OK )
         {
-            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pCItem, SfxStringItem, SID_CHARMAP, sal_False );
-            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT, sal_False );
+            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pCItem, SfxStringItem, SID_CHARMAP );
+            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT );
             if ( pFontItem )
             {
                 aFont.SetName( pFontItem->GetFamilyName() );

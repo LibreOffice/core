@@ -41,8 +41,6 @@ class XMLOFF_DLLPUBLIC XMLTextTableContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLTextTableContext( SvXMLImport& rImport,
             sal_uInt16 nPrfx,
             const ::rtl::OUString& rLName );

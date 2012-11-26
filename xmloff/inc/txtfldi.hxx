@@ -146,8 +146,6 @@ protected:
 
 public:
 
-    TYPEINFO();
-
     XMLTextFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
@@ -229,8 +227,6 @@ protected:
 
 public:
 
-    TYPEINFO();
-
     XMLSenderFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
@@ -268,8 +264,6 @@ class XMLAuthorFieldImportContext : public XMLSenderFieldImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLAuthorFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
@@ -306,8 +300,6 @@ class XMLPlaceholderFieldImportContext : public XMLTextFieldImportContext
     sal_Int16 nPlaceholderType;
 
 public:
-
-    TYPEINFO();
 
     XMLPlaceholderFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
@@ -352,8 +344,6 @@ protected:
 
 public:
 
-    TYPEINFO();
-
     XMLTimeFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
@@ -377,8 +367,6 @@ class XMLDateFieldImportContext : public XMLTimeFieldImportContext
 {
 
 public:
-
-    TYPEINFO();
 
     XMLDateFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
@@ -405,8 +393,6 @@ class XMLPageContinuationImportContext : public XMLTextFieldImportContext
     sal_Bool sStringOK;                 /// continuation string encountered?
 
 public:
-
-    TYPEINFO();
 
     XMLPageContinuationImportContext(
         SvXMLImport& rImport,                   /// XML Import
@@ -441,8 +427,6 @@ class XMLPageNumberImportContext : public XMLTextFieldImportContext
     sal_Bool sNumberFormatOK;
 
 public:
-
-    TYPEINFO();
 
     XMLPageNumberImportContext(
         SvXMLImport& rImport,                   /// XML Import
@@ -498,8 +482,6 @@ protected:
 
 public:
 
-TYPEINFO();
-
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const ::rtl::OUString& sAttrValue );
@@ -521,8 +503,6 @@ TYPEINFO();
 class XMLDatabaseNameImportContext : public XMLDatabaseFieldImportContext
 {
 public:
-
-    TYPEINFO();
 
     XMLDatabaseNameImportContext(SvXMLImport& rImport,
                                  XMLTextImportHelper& rHlp,
@@ -554,8 +534,6 @@ protected:
 
 public:
 
-    TYPEINFO();
-
     XMLDatabaseNextImportContext(SvXMLImport& rImport,
                                  XMLTextImportHelper& rHlp,
                                  sal_uInt16 nPrfx,
@@ -581,8 +559,6 @@ class XMLDatabaseSelectImportContext : public XMLDatabaseNextImportContext
     sal_Bool bNumberOK;
 
 public:
-
-    TYPEINFO();
 
     XMLDatabaseSelectImportContext(SvXMLImport& rImport,
                                    XMLTextImportHelper& rHlp,
@@ -611,8 +587,6 @@ class XMLDatabaseNumberImportContext : public XMLDatabaseFieldImportContext
     sal_Bool bValueOK;
 
 public:
-
-    TYPEINFO();
 
     XMLDatabaseNumberImportContext(SvXMLImport& rImport,
                                    XMLTextImportHelper& rHlp,
@@ -644,8 +618,6 @@ protected:
     sal_Bool bHasContent;
 
 public:
-
-    TYPEINFO();
 
     XMLSimpleDocInfoImportContext(SvXMLImport& rImport,
                                   XMLTextImportHelper& rHlp,
@@ -686,8 +658,6 @@ class XMLDateTimeDocInfoImportContext : public XMLSimpleDocInfoImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLDateTimeDocInfoImportContext(SvXMLImport& rImport,
                                     XMLTextImportHelper& rHlp,
                                     sal_uInt16 nPrfx,
@@ -714,8 +684,6 @@ class XMLRevisionDocInfoImportContext : public XMLSimpleDocInfoImportContext
     const ::rtl::OUString sPropertyRevision;
 
 public:
-
-    TYPEINFO();
 
     XMLRevisionDocInfoImportContext(SvXMLImport& rImport,
                                     XMLTextImportHelper& rHlp,
@@ -746,8 +714,6 @@ class XMLUserDocInfoImportContext : public XMLSimpleDocInfoImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLUserDocInfoImportContext(SvXMLImport& rImport,
                                 XMLTextImportHelper& rHlp,
                                 sal_uInt16 nPrfx,
@@ -776,8 +742,6 @@ class XMLHiddenParagraphImportContext : public XMLTextFieldImportContext
     sal_Bool bIsHidden;
 
 public:
-
-    TYPEINFO();
 
     XMLHiddenParagraphImportContext(SvXMLImport& rImport,
                                     XMLTextImportHelper& rHlp,
@@ -818,8 +782,6 @@ class XMLConditionalTextImportContext : public XMLTextFieldImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLConditionalTextImportContext(SvXMLImport& rImport,
                                     XMLTextImportHelper& rHlp,
                                     sal_uInt16 nPrfx,
@@ -855,8 +817,6 @@ class XMLHiddenTextImportContext : public XMLTextFieldImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLHiddenTextImportContext(SvXMLImport& rImport,
                                XMLTextImportHelper& rHlp,
                                sal_uInt16 nPrfx,
@@ -888,8 +848,6 @@ class XMLFileNameImportContext : public XMLTextFieldImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLFileNameImportContext(SvXMLImport& rImport,
                              XMLTextImportHelper& rHlp,
                              sal_uInt16 nPrfx,
@@ -917,8 +875,6 @@ class XMLTemplateNameImportContext : public XMLTextFieldImportContext
     sal_Int16 nFormat;
 
 public:
-
-    TYPEINFO();
 
     XMLTemplateNameImportContext(SvXMLImport& rImport,
                                  XMLTextImportHelper& rHlp,
@@ -948,8 +904,6 @@ class XMLChapterImportContext : public XMLTextFieldImportContext
     sal_Int8 nLevel;
 
 public:
-
-    TYPEINFO();
 
     XMLChapterImportContext(SvXMLImport& rImport,
                             XMLTextImportHelper& rHlp,
@@ -981,8 +935,6 @@ class XMLCountFieldImportContext : public XMLTextFieldImportContext
     sal_Bool bNumberFormatOK;
 
 public:
-
-    TYPEINFO();
 
     XMLCountFieldImportContext(SvXMLImport& rImport,
                                XMLTextImportHelper& rHlp,
@@ -1017,8 +969,6 @@ class XMLPageVarGetFieldImportContext : public XMLTextFieldImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLPageVarGetFieldImportContext(SvXMLImport& rImport,
                                     XMLTextImportHelper& rHlp,
                                     sal_uInt16 nPrfx,
@@ -1047,8 +997,6 @@ class XMLPageVarSetFieldImportContext : public XMLTextFieldImportContext
     sal_Bool bActive;
 
 public:
-
-    TYPEINFO();
 
     XMLPageVarSetFieldImportContext(SvXMLImport& rImport,
                                     XMLTextImportHelper& rHlp,
@@ -1086,8 +1034,6 @@ class XMLMacroFieldImportContext : public XMLTextFieldImportContext
     sal_Bool bDescriptionOK;
 
 public:
-
-    TYPEINFO();
 
     XMLMacroFieldImportContext(SvXMLImport& rImport,
                                XMLTextImportHelper& rHlp,
@@ -1135,8 +1081,6 @@ class XMLReferenceFieldImportContext : public XMLTextFieldImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLReferenceFieldImportContext(SvXMLImport& rImport,
                                    XMLTextImportHelper& rHlp,
                                    sal_uInt16 nToken,
@@ -1170,8 +1114,6 @@ class XMLDdeFieldDeclsImportContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLDdeFieldDeclsImportContext(SvXMLImport& rImport,
                                   sal_uInt16 nPrfx,
                                   const ::rtl::OUString& sLocalName);
@@ -1200,8 +1142,6 @@ class XMLDdeFieldDeclImportContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLDdeFieldDeclImportContext(SvXMLImport& rImport,
                                  sal_uInt16 nPrfx,
                                  const ::rtl::OUString& sLocalName,
@@ -1221,8 +1161,6 @@ class XMLDdeFieldImportContext : public XMLTextFieldImportContext
     ::rtl::OUString sName;
     ::rtl::OUString sPropertyContent;
 public:
-
-    TYPEINFO();
 
     XMLDdeFieldImportContext(SvXMLImport& rImport,
                              XMLTextImportHelper& rHlp,
@@ -1251,8 +1189,6 @@ class XMLSheetNameImportContext : public XMLTextFieldImportContext
 {
 
 public:
-
-    TYPEINFO();
 
     XMLSheetNameImportContext(SvXMLImport& rImport,
                               XMLTextImportHelper& rHlp,
@@ -1285,8 +1221,6 @@ class XMLUrlFieldImportContext : public XMLTextFieldImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLUrlFieldImportContext(SvXMLImport& rImport,
                              XMLTextImportHelper& rHlp,
                              sal_uInt16 nPrfx,
@@ -1313,8 +1247,6 @@ class XMLBibliographyFieldImportContext : public XMLTextFieldImportContext
     ::std::vector< ::com::sun::star::beans::PropertyValue> aValues;
 
 public:
-
-    TYPEINFO();
 
     XMLBibliographyFieldImportContext(SvXMLImport& rImport,
                                       XMLTextImportHelper& rHlp,
@@ -1360,8 +1292,6 @@ class XMLAnnotationImportContext : public XMLTextFieldImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLAnnotationImportContext(SvXMLImport& rImport,
                                XMLTextImportHelper& rHlp,
                                sal_uInt16 nPrfx,
@@ -1403,8 +1333,6 @@ class XMLScriptImportContext : public XMLTextFieldImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLScriptImportContext(SvXMLImport& rImport,
                            XMLTextImportHelper& rHlp,
                            sal_uInt16 nPrfx,
@@ -1427,8 +1355,6 @@ class XMLMeasureFieldImportContext : public XMLTextFieldImportContext
 {
     sal_Int16 mnKind;
 public:
-
-    TYPEINFO();
 
     XMLMeasureFieldImportContext(SvXMLImport& rImport,
                                     XMLTextImportHelper& rHlp,
@@ -1467,8 +1393,6 @@ class XMLDropDownFieldImportContext : public XMLTextFieldImportContext
     const rtl::OUString sPropertyToolTip;
 
 public:
-    TYPEINFO();
-
     XMLDropDownFieldImportContext(SvXMLImport& rImport,
                                     XMLTextImportHelper& rHlp,
                                     sal_uInt16 nPrfx,
@@ -1495,8 +1419,6 @@ protected:
 class XMLHeaderFieldImportContext : public XMLTextFieldImportContext
 {
 public:
-    TYPEINFO();
-
     XMLHeaderFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
@@ -1517,8 +1439,6 @@ public:
 class XMLFooterFieldImportContext : public XMLTextFieldImportContext
 {
 public:
-    TYPEINFO();
-
     XMLFooterFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
@@ -1539,8 +1459,6 @@ public:
 class XMLDateTimeFieldImportContext : public XMLTextFieldImportContext
 {
 public:
-    TYPEINFO();
-
     XMLDateTimeFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
@@ -1565,8 +1483,6 @@ class XMLCustomPropertyFieldImportContext : public XMLTextFieldImportContext
     const ::rtl::OUString sPropertyValue;
 
 public:
-
-    TYPEINFO();
 
     XMLCustomPropertyFieldImportContext (SvXMLImport& rImport,
                                     XMLTextImportHelper& rHlp,

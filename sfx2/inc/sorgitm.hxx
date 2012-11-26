@@ -33,7 +33,6 @@ private:
     String                  aLanguage;
 
 public:
-    TYPEINFO();
     SfxScriptOrganizerItem();
     SfxScriptOrganizerItem( const String &rLanguage );
     SfxScriptOrganizerItem( const SfxScriptOrganizerItem& );

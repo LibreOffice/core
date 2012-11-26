@@ -29,36 +29,15 @@
 #endif
 #include <tools/solar.h>
 #include <svx/sdangitm.hxx>
-#include <svx/sderitm.hxx>
 #include <svx/sdmetitm.hxx>
 #include <svx/sdooitm.hxx>
 #include <svx/sdprcitm.hxx>
-#include <svx/sdshcitm.hxx>
-#include <svx/sdshitm.hxx>
-#include <svx/sdshtitm.hxx>
-#include <svx/sdsxyitm.hxx>
 #include <svx/sdtaaitm.hxx>
-#ifndef _SDTACITM_HXX
-#include <svx/sdtacitm.hxx>
-#endif
-#ifndef _SDTACITM_HXX
 #include <svx/sdtaditm.hxx>
-#endif
-#include <svx/sdtagitm.hxx>
-#include <svx/sdtaiitm.hxx>
 #include <svx/sdtaitm.hxx>
-#ifndef _SDTAKITM_HXX
 #include <svx/sdtakitm.hxx>
-#endif
 #include <svx/sdtayitm.hxx>
-#ifndef SDTCFITM_HXX
-#include <svx/sdtcfitm.hxx>
-#endif
-#ifndef _SDTDITM_HXX
-#include <svx/sdtditm.hxx>
-#endif
 #include <svx/sdtfsitm.hxx>
-#include <svx/sdtmfitm.hxx>
 #include <svx/sdynitm.hxx>
 #include <svx/sdgluitm.hxx>
 #include <svx/sdginitm.hxx>

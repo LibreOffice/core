@@ -54,12 +54,12 @@ ChartTransferable::ChartTransferable( SdrModel* pDrawModel, SdrObject* pSelected
     :m_pMarkedObjModel( NULL )
     ,m_bDrawing( bDrawing )
 {
-    SdrExchangeView * pExchgView( new SdrView( pDrawModel ));
-    SdrPageView* pPv = pExchgView->ShowSdrPage( pDrawModel->GetPage( 0 ));
+    OSL_ENSURE(pDrawModel, "ChartTransferable without SDrModel constructed (!)");
+    SdrExchangeView * pExchgView( new SdrView( *pDrawModel ));
     if( pSelectedObj )
-        pExchgView->MarkObj( pSelectedObj, pPv );
+        pExchgView->MarkObj( *pSelectedObj );
     else
-        pExchgView->MarkAllObj( pPv );
+        pExchgView->MarkAllObj();
     Graphic aGraphic( pExchgView->GetMarkedObjMetaFile(true));
     m_xMetaFileGraphic.set( aGraphic.GetXGraphic());
     if ( m_bDrawing )

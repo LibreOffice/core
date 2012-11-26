@@ -81,46 +81,45 @@ SdSnapLineDlg::SdSnapLineDlg(
 
     aBtnDelete.SetClickHdl(LINK(this, SdSnapLineDlg, ClickHdl));
 
-    SetFieldUnit( aMtrFldX, eUIUnit, sal_True );
-    SetFieldUnit( aMtrFldY, eUIUnit, sal_True );
-
-    // WorkArea holen
-    Rectangle aWorkArea = pView->GetWorkArea();
+    SetFieldUnit( aMtrFldX, eUIUnit, true );
+    SetFieldUnit( aMtrFldY, eUIUnit, true );
 
     // PoolUnit ermitteln
     SfxItemPool* pPool = rInAttrs.GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool?" );
     SfxMapUnit ePoolUnit = pPool->GetMetric( SID_ATTR_FILL_HATCH );
 
-    // #i48497# Consider page origin
+    // get WorkArea, consider page origin
+    basegfx::B2DRange aWorkArea(pView->GetWorkArea());
     SdrPageView* pPV = pView->GetSdrPageView();
-    Point aLeftTop(aWorkArea.Left()+1, aWorkArea.Top()+1);
-    pPV->LogicToPagePos(aLeftTop);
-    Point aRightBottom(aWorkArea.Right()-2, aWorkArea.Bottom()-2);
-    pPV->LogicToPagePos(aRightBottom);
+
+    if(pPV)
+    {
+        aWorkArea.transform(basegfx::tools::createTranslateB2DHomMatrix(pPV->GetPageOrigin()));
+    }
 
     // Hier werden die Max- und MinWerte in Abhaengigkeit von der
     // WorkArea, PoolUnit und der FieldUnit:
-    SetMetricValue( aMtrFldX, aLeftTop.X(), ePoolUnit );
+    SetMetricValue( aMtrFldX, basegfx::fround(aWorkArea.getMinX()), ePoolUnit );
 
     long nValue = static_cast<long>(aMtrFldX.GetValue());
     nValue = Fraction( nValue ) / aUIScale;
     aMtrFldX.SetMin( nValue );
     aMtrFldX.SetFirst( nValue );
 
-    SetMetricValue( aMtrFldX, aRightBottom.X(), ePoolUnit );
+    SetMetricValue( aMtrFldX, basegfx::fround(aWorkArea.getMaxX()), ePoolUnit );
     nValue = static_cast<long>(aMtrFldX.GetValue());
     nValue = Fraction( nValue ) / aUIScale;
     aMtrFldX.SetMax( nValue );
     aMtrFldX.SetLast( nValue );
 
-    SetMetricValue( aMtrFldY, aLeftTop.Y(), ePoolUnit );
+    SetMetricValue( aMtrFldY, basegfx::fround(aWorkArea.getMinY()), ePoolUnit );
     nValue = static_cast<long>(aMtrFldY.GetValue());
     nValue = Fraction( nValue ) / aUIScale;
     aMtrFldY.SetMin( nValue );
     aMtrFldY.SetFirst( nValue );
 
-    SetMetricValue( aMtrFldY, aRightBottom.Y(), ePoolUnit );
+    SetMetricValue( aMtrFldY, basegfx::fround(aWorkArea.getMaxY()), ePoolUnit );
     nValue = static_cast<long>(aMtrFldY.GetValue());
     nValue = Fraction( nValue ) / aUIScale;
     aMtrFldY.SetMax( nValue );
@@ -145,9 +144,9 @@ SdSnapLineDlg::SdSnapLineDlg(
 
 IMPL_LINK( SdSnapLineDlg, ClickHdl, Button *, pBtn )
 {
-    if ( pBtn == &aRbPoint )        SetInputFields(sal_True, sal_True);
-    else if ( pBtn == &aRbHorz )    SetInputFields(sal_False, sal_True);
-    else if ( pBtn == &aRbVert )    SetInputFields(sal_True, sal_False);
+    if ( pBtn == &aRbPoint )        SetInputFields(true, true);
+    else if ( pBtn == &aRbHorz )    SetInputFields(false, true);
+    else if ( pBtn == &aRbVert )    SetInputFields(true, false);
     else if ( pBtn == &aBtnDelete ) EndDialog(RET_SNAP_DELETE);
 
     return 0;
@@ -195,7 +194,7 @@ void SdSnapLineDlg::HideRadioGroup()
 |*
 \************************************************************************/
 
-void SdSnapLineDlg::SetInputFields(sal_Bool bEnableX, sal_Bool bEnableY)
+void SdSnapLineDlg::SetInputFields(bool bEnableX, bool bEnableY)
 {
     if ( bEnableX )
     {

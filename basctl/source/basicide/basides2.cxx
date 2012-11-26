@@ -68,7 +68,7 @@ IMPL_LINK( BasicIDEShell, ObjectDialogInsertHdl, ObjectCatalog *, pObjCat )
     if ( !pCurWin )
         return 0;
 
-    if ( pCurWin->IsA( TYPE( ModulWindow ) ) )
+    if ( dynamic_cast< ModulWindow* >(pCurWin) )
     {
         ModulWindow* pEditWin = (ModulWindow*)pCurWin;
         pEditWin->InsertFromObjectCatalog( pObjCat );
@@ -104,9 +104,11 @@ sal_uInt16 __EXPORT BasicIDEShell::Print( SfxProgress &rProgress, sal_Bool bIsAP
 sal_Bool BasicIDEShell::HasSelection( sal_Bool /* bText */ ) const
 {
     sal_Bool bSel = sal_False;
-    if ( pCurWin && pCurWin->ISA( ModulWindow ) )
+    ModulWindow* pModulWindow = dynamic_cast< ModulWindow* >(pCurWin);
+
+    if ( pModulWindow )
     {
-        TextView* pEditView = ((ModulWindow*)pCurWin)->GetEditView();
+        TextView* pEditView = pModulWindow->GetEditView();
         if ( pEditView && pEditView->HasSelection() )
             bSel = sal_True;
     }
@@ -116,9 +118,11 @@ sal_Bool BasicIDEShell::HasSelection( sal_Bool /* bText */ ) const
 String BasicIDEShell::GetSelectionText( sal_Bool bWholeWord )
 {
     String aText;
-    if ( pCurWin && pCurWin->ISA( ModulWindow ) )
+    ModulWindow* pModulWindow = dynamic_cast< ModulWindow* >(pCurWin);
+
+    if ( pModulWindow )
     {
-        TextView* pEditView = ((ModulWindow*)pCurWin)->GetEditView();
+        TextView* pEditView = pModulWindow->GetEditView();
         if ( pEditView )
         {
             if ( bWholeWord && !pEditView->HasSelection() )
@@ -141,7 +145,7 @@ String BasicIDEShell::GetSelectionText( sal_Bool bWholeWord )
 
 SfxPrinter* __EXPORT BasicIDEShell::GetPrinter( sal_Bool bCreate )
 {
-    if ( pCurWin ) // && pCurWin->ISA( ModulWindow ) )
+    if ( pCurWin ) // && dynamic_cast< ModulWindow* >(pCurWin) )
     {
         BasicDocShell* pDocShell = (BasicDocShell*)GetViewFrame()->GetObjectShell();
         DBG_ASSERT( pDocShell, "DocShell ?!" );
@@ -303,7 +307,7 @@ ModulWindow* BasicIDEShell::FindBasWin( const ScriptDocument& rDocument, const S
     IDEBaseWindow* pWin = aIDEWindowTable.First();
     while ( pWin && !pModWin )
     {
-        if ( ( !pWin->IsSuspended() || bFindSuspended ) && pWin->IsA( TYPE( ModulWindow ) ) )
+        if ( ( !pWin->IsSuspended() || bFindSuspended ) && dynamic_cast< ModulWindow* >(pWin) )
         {
             if ( !rLibName.Len() )  // nur irgendeins finden...
                 pModWin = (ModulWindow*)pWin;
@@ -320,14 +324,18 @@ ModulWindow* BasicIDEShell::FindBasWin( const ScriptDocument& rDocument, const S
 
 void __EXPORT BasicIDEShell::Move()
 {
-    if ( pCurWin && pCurWin->ISA( ModulWindow ) )
-        ((ModulWindow*)pCurWin)->FrameWindowMoved();
+    ModulWindow* pModulWindow = dynamic_cast< ModulWindow* >(pCurWin);
+
+    if ( pModulWindow )
+        pModulWindow->FrameWindowMoved();
 }
 
-void __EXPORT BasicIDEShell::ShowCursor( FASTBOOL bOn )
+void __EXPORT BasicIDEShell::ShowCursor( bool bOn )
 {
-    if ( pCurWin && pCurWin->ISA( ModulWindow ) )
-        ((ModulWindow*)pCurWin)->ShowCursor( (sal_Bool)bOn );
+    ModulWindow* pModulWindow = dynamic_cast< ModulWindow* >(pCurWin);
+
+    if ( pModulWindow )
+        pModulWindow->ShowCursor( (sal_Bool)bOn );
 }
 
 // Hack for #101048
@@ -336,7 +344,7 @@ sal_Int32 getBasicIDEShellCount( void );
 // Nur wenn Basicfenster oben:
 void __EXPORT BasicIDEShell::ExecuteBasic( SfxRequest& rReq )
 {
-    if ( !pCurWin || !pCurWin->IsA( TYPE( ModulWindow ) ) )
+    if ( !pCurWin || !dynamic_cast< ModulWindow* >(pCurWin) )
         return;
 
     pCurWin->ExecuteCommand( rReq );

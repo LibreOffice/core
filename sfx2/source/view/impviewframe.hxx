@@ -37,7 +37,6 @@ struct SfxViewFrame_Impl
     Size                aMargin;
     Size                aSize;
     String              aFrameTitle;
-    TypeId              aLastType;
     String              aActualURL;
     SfxFrame&           rFrame;
     svtools::AsynchronLink* pReloader;

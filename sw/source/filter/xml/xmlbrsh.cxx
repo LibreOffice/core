@@ -76,8 +76,6 @@ static __FAR_DATA SvXMLTokenMapEntry aBGImgAttributesAttrTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-TYPEINIT1( SwXMLBrushItemImportContext, SvXMLImportContext );
-
 void SwXMLBrushItemImportContext::ProcessAttrs(
     const uno::Reference< xml::sax::XAttributeList >& xAttrList,
         const SvXMLUnitConverter& rUnitConv )

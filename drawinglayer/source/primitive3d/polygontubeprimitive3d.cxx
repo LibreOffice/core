@@ -697,22 +697,6 @@ namespace drawinglayer
         {
         }
 
-        bool PolygonTubePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
-        {
-            if(PolygonHairlinePrimitive3D::operator==(rPrimitive))
-            {
-                const PolygonTubePrimitive3D& rCompare = (PolygonTubePrimitive3D&)rPrimitive;
-
-                return (getRadius() == rCompare.getRadius()
-                    && getDegreeStepWidth() == rCompare.getDegreeStepWidth()
-                    && getMiterMinimumAngle() == rCompare.getMiterMinimumAngle()
-                    && getLineJoin() == rCompare.getLineJoin()
-                    && getLineCap() == rCompare.getLineCap());
-            }
-
-            return false;
-        }
-
         Primitive3DSequence PolygonTubePrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );

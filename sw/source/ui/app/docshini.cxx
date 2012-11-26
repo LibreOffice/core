@@ -122,10 +122,10 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     {
         AddLink();      // pDoc / pIo ggf. anlegen
 
-        sal_Bool bWeb = ISA( SwWebDocShell );
+        const bool bWeb(dynamic_cast< SwWebDocShell* >(this));
         if ( bWeb )
             bHTMLTemplSet = SetHTMLTemplate( *GetDoc() );//Styles aus HTML.vor
-        else if( ISA( SwGlobalDocShell ) )
+        else if( dynamic_cast< SwGlobalDocShell* >(this) )
             GetDoc()->set(IDocumentSettingAccess::GLOBAL_DOCUMENT, true);       // Globaldokument
 
 
@@ -477,7 +477,7 @@ void SwDocShell::AddLink()
         SwDocFac aFactory;
         pDoc = aFactory.GetDoc();
         pDoc->acquire();
-        pDoc->set(IDocumentSettingAccess::HTML_MODE, ISA(SwWebDocShell) );
+        pDoc->set(IDocumentSettingAccess::HTML_MODE, dynamic_cast< SwWebDocShell* >(this) );
     }
     else
         pDoc->acquire();
@@ -574,7 +574,7 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
             mxBasePool = new SwDocStyleSheetPool( *pDoc, SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
             if(GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
             {
-                SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
+                SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE );
                 nUpdateDocMode = pUpdateDocItem ? pUpdateDocItem->GetValue() : document::UpdateDocMode::NO_UPDATE;
             }
 
@@ -624,12 +624,12 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
                     // If a XML document is loaded, the global doc/web doc
                     // flags have to be set, because they aren't loaded
                     // by this formats.
-                    if( ISA( SwWebDocShell ) )
+                    if( dynamic_cast< SwWebDocShell* >(this) )
                     {
                         if( !pDoc->get(IDocumentSettingAccess::HTML_MODE) )
                             pDoc->set(IDocumentSettingAccess::HTML_MODE, true);
                     }
-                    if( ISA( SwGlobalDocShell ) )
+                    if( dynamic_cast< SwGlobalDocShell* >(this) )
                     {
                         if( !pDoc->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
                             pDoc->set(IDocumentSettingAccess::GLOBAL_DOCUMENT, true);
@@ -752,7 +752,7 @@ void SwDocShell::SubInitNew()
     pDoc->setLinkUpdateMode( GLOBALSETTING );
     pDoc->setFieldUpdateFlags( AUTOUPD_GLOBALSETTING );
 
-    sal_Bool bWeb = ISA(SwWebDocShell);
+    const bool bWeb(dynamic_cast< SwWebDocShell* >(this));
 
     sal_uInt16 nRange[] =   {
         RES_PARATR_ADJUST, RES_PARATR_ADJUST,

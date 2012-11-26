@@ -33,10 +33,10 @@
 #ifdef DBG_UTIL
 #include <svdibrow.hxx>
 #endif
+
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 #include <svl/smplhint.hxx>
-
 #include <svx/svdpntv.hxx>
 #include <editeng/editdata.hxx>
 #include <svx/svdmrkv.hxx>
@@ -50,7 +50,7 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdattrx.hxx>
 #include "svdibrow.hxx"
-#include "svx/svditer.hxx"
+#include <svx/svditer.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/sdr/overlay/overlayobjectlist.hxx>
 #include <svx/sdr/overlay/overlayrollingrectangle.hxx>
@@ -58,7 +58,6 @@
 #include <svx/svdglue.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdview.hxx>
-#include <svx/sxlayitm.hxx>
 #include <svl/itemiter.hxx>
 #include <editeng/eeitem.hxx>
 #include <svl/whiter.hxx>
@@ -72,6 +71,8 @@
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/sdr/animation/objectanimator.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
+#include <svx/svdlegacy.hxx>
+#include <basegfx/numeric/ftools.hxx>
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
@@ -79,65 +80,143 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// #114409#-3 Migrate Encirclement
-class ImplEncirclementOverlay
+// tooling
+
+basegfx::B2DPoint OrthoDistance8(const basegfx::B2DPoint& rReference, const basegfx::B2DPoint& rCandidate, bool bBigOrtho)
 {
-    // The OverlayObjects
-    ::sdr::overlay::OverlayObjectList               maObjects;
+    const double fDeltaX(rCandidate.getX() - rReference.getX());
 
-    // The remembered second position in logical coodinates
-    basegfx::B2DPoint                               maSecondPosition;
-
-public:
-    ImplEncirclementOverlay(const SdrPaintView& rView, const basegfx::B2DPoint& rStartPos);
-    ~ImplEncirclementOverlay();
-
-    void SetSecondPosition(const basegfx::B2DPoint& rNewPosition);
-};
-
-ImplEncirclementOverlay::ImplEncirclementOverlay(const SdrPaintView& rView, const basegfx::B2DPoint& rStartPos)
-:   maSecondPosition(rStartPos)
-{
-    for(sal_uInt32 a(0L); a < rView.PaintWindowCount(); a++)
+    if(basegfx::fTools::equalZero(fDeltaX))
     {
-        SdrPaintWindow* pCandidate = rView.GetPaintWindow(a);
-        ::sdr::overlay::OverlayManager* pTargetOverlay = pCandidate->GetOverlayManager();
+        return rCandidate;
+    }
 
-        if(pTargetOverlay)
-        {
-            ::sdr::overlay::OverlayRollingRectangleStriped* aNew = new ::sdr::overlay::OverlayRollingRectangleStriped(
-                rStartPos, rStartPos, false);
-            pTargetOverlay->add(*aNew);
-            maObjects.append(*aNew);
-        }
+    const double fDeltaY(rCandidate.getY() - rReference.getY());
+
+    if(basegfx::fTools::equalZero(fDeltaY))
+    {
+        return rCandidate;
+    }
+
+    const double fAbsDeltaX(fabs(fDeltaX));
+    const double fAbsDeltaY(fabs(fDeltaY));
+
+    if(basegfx::fTools::equal(fAbsDeltaX, fAbsDeltaY))
+    {
+        return rCandidate;
+    }
+
+    if(basegfx::fTools::moreOrEqual(fAbsDeltaX, fAbsDeltaY * 2.0))
+    {
+        return basegfx::B2DPoint(rCandidate.getX(), rReference.getY());
+    }
+
+    if(basegfx::fTools::moreOrEqual(fAbsDeltaY, fAbsDeltaX * 2.0))
+    {
+        return basegfx::B2DPoint(rReference.getX(), rCandidate.getY());
+    }
+
+    if(basegfx::fTools::less(fAbsDeltaX, fAbsDeltaY) != bBigOrtho)
+    {
+        return basegfx::B2DPoint(rCandidate.getX(), rReference.getY() + basegfx::copySign(fAbsDeltaX, fDeltaY));
+    }
+    else
+    {
+        return basegfx::B2DPoint(rReference.getX() + basegfx::copySign(fAbsDeltaY, fDeltaX), rCandidate.getY());
     }
 }
 
-ImplEncirclementOverlay::~ImplEncirclementOverlay()
+basegfx::B2DPoint OrthoDistance4(const basegfx::B2DPoint& rReference, const basegfx::B2DPoint& rCandidate, bool bBigOrtho)
 {
-    // The OverlayObjects are cleared using the destructor of OverlayObjectList.
-    // That destructor calls clear() at the list which removes all objects from the
-    // OverlayManager and deletes them.
-}
+    const basegfx::B2DVector aDelta(rCandidate - rReference);
+    const basegfx::B2DVector aAbsDelta(absolute(aDelta));
 
-void ImplEncirclementOverlay::SetSecondPosition(const basegfx::B2DPoint& rNewPosition)
-{
-    if(rNewPosition != maSecondPosition)
+    if(basegfx::fTools::less(aAbsDelta.getX(), aAbsDelta.getY()) != bBigOrtho)
     {
-        // apply to OverlayObjects
-        for(sal_uInt32 a(0L); a < maObjects.count(); a++)
-        {
-            ::sdr::overlay::OverlayRollingRectangleStriped& rCandidate = (::sdr::overlay::OverlayRollingRectangleStriped&)maObjects.getOverlayObject(a);
-            rCandidate.setSecondPosition(rNewPosition);
-        }
-
-        // remember new position
-        maSecondPosition = rNewPosition;
+        return basegfx::B2DPoint(rCandidate.getX(), rReference.getY() + basegfx::copySign(aAbsDelta.getX(), aDelta.getY()));
+    }
+    else
+    {
+        return basegfx::B2DPoint(rReference.getX() + basegfx::copySign(aAbsDelta.getY(), aDelta.getX()), rCandidate.getY());
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// interface to SdrPaintWindow
+
+SvxViewHint::SvxViewHint(HintType eHintType)
+:   meHintType(eHintType)
+{
+}
+
+SvxViewHint::HintType SvxViewHint::GetHintType (void) const
+{
+    return meHintType;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class LazyObjectChangeReactor : public Timer
+{
+private:
+    // the SdrPaintView this incarnation belongs to
+    SdrPaintView&           mrSdrPaintView;
+
+    // derived from Timer
+    virtual void Timeout()
+    {
+        mrSdrPaintView.LazyReactOnObjectChanges();
+    }
+
+public:
+    LazyObjectChangeReactor(SdrPaintView& rSdrPaintView)
+    :   Timer(),
+        mrSdrPaintView(rSdrPaintView)
+    {}
+
+    void delay()
+    {
+        // trigger a delayed call
+        SetTimeout(1);
+        Start();
+    }
+
+    void force()
+    {
+        if(IsActive())
+        {
+            Stop();
+            Timeout();
+        }
+    }
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+BitmapEx convertMetafileToBitmapEx(
+    const GDIMetaFile& rMtf,
+    const basegfx::B2DRange& rTargetRange,
+    const sal_uInt32 nMaximumQuadraticPixels)
+{
+    BitmapEx aBitmapEx;
+
+    if(rMtf.GetActionCount())
+    {
+        const drawinglayer::primitive2d::Primitive2DReference aMtf(
+            new drawinglayer::primitive2d::MetafilePrimitive2D(
+                basegfx::tools::createScaleTranslateB2DHomMatrix(
+                    rTargetRange.getRange(),
+                    rTargetRange.getMinimum()),
+                rMtf));
+        aBitmapEx = convertPrimitive2DSequenceToBitmapEx(
+            drawinglayer::primitive2d::Primitive2DSequence(&aMtf, 1),
+            rTargetRange,
+            nMaximumQuadraticPixels);
+    }
+
+    return aBitmapEx;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrPaintWindow* SdrPaintView::FindPaintWindow(const OutputDevice& rOut) const
 {
@@ -192,122 +271,63 @@ OutputDevice* SdrPaintView::GetFirstOutputDevice() const
     return 0L;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-TYPEINIT1( SvxViewHint, SfxHint );
-
-SvxViewHint::SvxViewHint (HintType eHintType)
-    : meHintType(eHintType)
-{
-}
-
-SvxViewHint::HintType SvxViewHint::GetHintType (void) const
-{
-    return meHintType;
-}
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-BitmapEx convertMetafileToBitmapEx(
-    const GDIMetaFile& rMtf,
-    const basegfx::B2DRange& rTargetRange,
-    const sal_uInt32 nMaximumQuadraticPixels)
-{
-    BitmapEx aBitmapEx;
-
-    if(rMtf.GetActionCount())
-    {
-        const drawinglayer::primitive2d::Primitive2DReference aMtf(
-            new drawinglayer::primitive2d::MetafilePrimitive2D(
-                basegfx::tools::createScaleTranslateB2DHomMatrix(
-                    rTargetRange.getRange(),
-                    rTargetRange.getMinimum()),
-                rMtf));
-        aBitmapEx = convertPrimitive2DSequenceToBitmapEx(
-            drawinglayer::primitive2d::Primitive2DSequence(&aMtf, 1),
-            rTargetRange,
-            nMaximumQuadraticPixels);
-    }
-
-    return aBitmapEx;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-TYPEINIT2(SdrPaintView,SfxListener,SfxRepeatTarget);
-
-DBG_NAME(SdrPaintView);
-
-void SdrPaintView::ImpClearVars()
-{
+SdrPaintView::SdrPaintView(SdrModel& rModel1, OutputDevice* pOut)
+:   SfxListener(),
+    SfxRepeatTarget(),
+    SfxBroadcaster(),
+    ::utl::ConfigurationListener(),
+    mpLazyObjectChangeReactor(new LazyObjectChangeReactor(*this)),
+    mrModelFromSdrView(rModel1),
 #ifdef DBG_UTIL
-    pItemBrowser=NULL;
+    mpItemBrowser(0),
 #endif
-    bPageVisible=sal_True;
-    bPageBorderVisible=sal_True;
-    bBordVisible=sal_True;
-    bGridVisible=sal_True;
-    bGridFront  =sal_False;
-    bHlplVisible=sal_True;
-    bHlplFront  =sal_True;
-    bGlueVisible=sal_False;
-    bGlueVisible2=sal_False;
-    bGlueVisible3=sal_False;
-    bGlueVisible4=sal_False;
-    bSwapAsynchron=sal_False;
-    bPrintPreview=sal_False;
-    mbPreviewRenderer=sal_False;
-
-    eAnimationMode = SDR_ANIMATION_ANIMATE;
-    bAnimationPause = sal_False;
-
-    nHitTolPix=2;
-    nMinMovPix=3;
-    nHitTolLog=0;
-    nMinMovLog=0;
-    pActualOutDev=NULL;
-    pDragWin=NULL;
-    bRestoreColors=sal_True;
-    pDefaultStyleSheet=NULL;
-    bSomeObjChgdFlag=sal_False;
-    nGraphicManagerDrawMode = GRFMGR_DRAW_STANDARD;
-    aComeBackTimer.SetTimeout(1);
-    aComeBackTimer.SetTimeoutHdl(LINK(this,SdrPaintView,ImpComeBackHdl));
-    String aNam;    // System::GetUserName() just return an empty string
-
-    if (pMod)
-        SetDefaultStyleSheet(pMod->GetDefaultStyleSheet(), sal_True);
-
-    aNam.ToUpperAscii();
-
-    maGridColor = Color( COL_BLACK );
-    BrkEncirclement();
-}
-
-SdrPaintView::SdrPaintView(SdrModel* pModel1, OutputDevice* pOut)
-:   mpEncirclementOverlay(0L),
-    mpPageView(0L),
-    aDefaultAttr(pModel1->GetItemPool()),
+    mpActualOutDev(0),
+    mpDefaultStyleSheet(0),
+    maAktLayer(),
+    maMeasureLayer(),
+    mpPageView(0),
+    maPaintWindows(),
+    maGridBig(),
+    maGridFin(),
+    maDragStat(*getAsSdrView()),
+    maMaxWorkArea(),
+    maDefaultAttr(rModel1.GetItemPool()),
+    meAnimationMode(SDR_ANIMATION_ANIMATE),
+    mfHitTolPix(2.0),
+    mfMinMovPix(3.0),
+    maDrawinglayerOpt(),
+    mbPageVisible(true),
+    mbPageBorderVisible(true),
+    mbBordVisible(true),
+    mbGridVisible(true),
+    mbGridFront(false),
+    mbHlplVisible(true),
+    mbHlplFront(true),
+    mbGlueVisible(false),
+    mbGlueVisible2(false),
+    mbGlueVisible3(false),
+    mbGlueVisible4(false),
+    mbSwapAsynchron(false),
+    mbPrintPreview(false),
+    mbVisualizeEnteredGroup(true),
+    mbAnimationPause(false),
     mbBufferedOutputAllowed(false),
     mbBufferedOverlayAllowed(false),
     mbPagePaintingAllowed(true),
+    mbPreviewRenderer(false),
     mbHideOle(false),
     mbHideChart(false),
     mbHideDraw(false),
-    mbHideFormControl(false)
+    mbHideFormControl(false),
+    maColorConfig(),
+    maGridColor(COL_BLACK)
 {
-    DBG_CTOR(SdrPaintView,NULL);
-    pMod=pModel1;
-    ImpClearVars();
+    SetDefaultStyleSheet(getSdrModelFromSdrView().GetDefaultStyleSheet(), true);
 
     if(pOut)
     {
         AddWindowToPaintView(pOut);
     }
-
-    // Flag zur Visualisierung von Gruppen
-    bVisualizeEnteredGroup = sal_True;
 
     maColorConfig.AddListener(this);
     onChangeColorConfig();
@@ -315,17 +335,26 @@ SdrPaintView::SdrPaintView(SdrModel* pModel1, OutputDevice* pOut)
 
 SdrPaintView::~SdrPaintView()
 {
-    DBG_DTOR(SdrPaintView,NULL);
-    if (pDefaultStyleSheet)
-        EndListening(*pDefaultStyleSheet);
+    if(mpLazyObjectChangeReactor)
+    {
+        delete mpLazyObjectChangeReactor;
+    }
+
+    if (GetDefaultStyleSheet())
+    {
+        EndListening(*GetDefaultStyleSheet());
+    }
 
     maColorConfig.RemoveListener(this);
-    ClearPageView();
+
+    // HideSdrPage() gets called in derived destructors (e.g. in SdrView::~SdrView) to have it executed
+    // when the SDrView is still fully valid
+    OSL_ENSURE(!mpPageView, "SdrView destruction: Call HideSdrPage() before deleting SdrView (!)");
 
 #ifdef DBG_UTIL
-    if(pItemBrowser)
+    if(GetItemBrowser())
     {
-        delete pItemBrowser;
+        delete mpItemBrowser;
     }
 #endif
 
@@ -335,9 +364,6 @@ SdrPaintView::~SdrPaintView()
         delete maPaintWindows.back();
         maPaintWindows.pop_back();
     }
-
-    // #114409#-3 Migrate HelpLine
-    BrkEncirclement();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -345,33 +371,42 @@ SdrPaintView::~SdrPaintView()
 void __EXPORT SdrPaintView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     //If the stylesheet has been destroyed
-    if (&rBC == pDefaultStyleSheet)
+    if (&rBC == GetDefaultStyleSheet())
     {
-        if (rHint.ISA(SfxSimpleHint) && ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING)
-            pDefaultStyleSheet = NULL;
+        const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+        if(pSfxSimpleHint && SFX_HINT_DYING == pSfxSimpleHint->GetId())
+        {
+            mpDefaultStyleSheet = 0;
+        }
+
         return;
     }
 
-    sal_Bool bObjChg=!bSomeObjChgdFlag; // sal_True= auswerten fuer ComeBack-Timer
-    if (bObjChg) {
-        SdrHint* pSdrHint=PTR_CAST(SdrHint,&rHint);
-        if (pSdrHint!=NULL) {
-            SdrHintKind eKind=pSdrHint->GetKind();
-            if (eKind==HINT_OBJCHG || eKind==HINT_OBJINSERTED || eKind==HINT_OBJREMOVED) {
-                if (bObjChg) {
-                    bSomeObjChgdFlag=sal_True;
-                    aComeBackTimer.Start();
-                }
-            }
-            if (eKind==HINT_PAGEORDERCHG) {
-                const SdrPage* pPg=pSdrHint->GetPage();
+    const SdrBaseHint* pSdrHint = dynamic_cast< const SdrBaseHint* >(&rHint);
 
-                if(pPg && !pPg->IsInserted())
+    if(pSdrHint)
+    {
+        const SdrHintKind eKind(pSdrHint->GetSdrHintKind());
+
+        if(HINT_OBJCHG_MOVE == eKind
+            || HINT_OBJCHG_RESIZE == eKind
+            || HINT_OBJCHG_ATTR == eKind
+            || HINT_OBJINSERTED == eKind
+            || HINT_OBJREMOVED == eKind)
+        {
+            mpLazyObjectChangeReactor->delay();
+        }
+
+        if(HINT_PAGEORDERCHG == eKind)
+        {
+            const SdrPage* pPg = pSdrHint->GetSdrHintPage();
+
+            if(pPg && !pPg->IsInserted())
+            {
+                if(mpPageView && &mpPageView->getSdrPageFromSdrPageView() == pPg)
                 {
-                    if(mpPageView && mpPageView->GetPage() == pPg)
-                    {
-                        HideSdrPage();
-                    }
+                    HideSdrPage();
                 }
             }
         }
@@ -386,29 +421,15 @@ void SdrPaintView::ConfigurationChanged( ::utl::ConfigurationBroadcaster* , sal_
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-IMPL_LINK_INLINE_START(SdrPaintView,ImpComeBackHdl,Timer*,EMPTYARG)
+void SdrPaintView::ForceLazyReactOnObjectChanges() const
 {
-    if (bSomeObjChgdFlag) {
-        bSomeObjChgdFlag=sal_False;
-        ModelHasChanged();
-    }
-    return 0;
-}
-IMPL_LINK_INLINE_END(SdrPaintView,ImpComeBackHdl,Timer*,pTimer)
-
-void SdrPaintView::FlushComeBackTimer() const
-{
-    if (bSomeObjChgdFlag) {
-        // casting auf nonconst
-        ((SdrPaintView*)this)->ImpComeBackHdl(&((SdrPaintView*)this)->aComeBackTimer);
-        ((SdrPaintView*)this)->aComeBackTimer.Stop();
-    }
+    mpLazyObjectChangeReactor->force();
 }
 
-void SdrPaintView::ModelHasChanged()
+void SdrPaintView::LazyReactOnObjectChanges()
 {
     // Auch alle PageViews benachrichtigen
-    if(mpPageView && !mpPageView->GetPage()->IsInserted())
+    if(mpPageView && !mpPageView->getSdrPageFromSdrPageView().IsInserted())
     {
         HideSdrPage();
     }
@@ -416,213 +437,50 @@ void SdrPaintView::ModelHasChanged()
     // test mpPageView here again, HideSdrPage() may have invalidated it.
     if(mpPageView)
     {
-        mpPageView->ModelHasChanged();
+        mpPageView->LazyReactOnObjectChanges();
     }
 
 #ifdef DBG_UTIL
-    if(pItemBrowser)
+    if(GetItemBrowser())
     {
-        pItemBrowser->SetDirty();
+        mpItemBrowser->SetDirty();
     }
 #endif
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-sal_Bool SdrPaintView::IsAction() const
-{
-    return IsEncirclement();
-}
-
-void SdrPaintView::MovAction(const Point& rPnt)
-{
-    if (IsEncirclement())
-    {
-        MovEncirclement(rPnt);
-    }
-}
-
-void SdrPaintView::EndAction()
-{
-    if(IsEncirclement())
-    {
-        EndEncirclement();
-    }
-}
-
-void SdrPaintView::BckAction()
-{
-    BrkEncirclement();
-}
-
-void SdrPaintView::BrkAction()
-{
-    BrkEncirclement();
-}
-
-void SdrPaintView::TakeActionRect(Rectangle& rRect) const
-{
-    if(IsEncirclement())
-    {
-        rRect = Rectangle(aDragStat.GetStart(),aDragStat.GetNow());
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// info about TextEdit. Default is sal_False.
+// info about TextEdit. Default is false.
 bool SdrPaintView::IsTextEdit() const
 {
     return false;
 }
 
-// info about TextEditPageView. Default is 0L.
-SdrPageView* SdrPaintView::GetTextEditPageView() const
-{
-    return 0L;
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-sal_uInt16 SdrPaintView::ImpGetMinMovLogic(short nMinMov, const OutputDevice* pOut) const
-{
-    if (nMinMov>=0) return sal_uInt16(nMinMov);
-    if (pOut==NULL)
-    {
-        pOut = GetFirstOutputDevice();
-    }
-    if (pOut!=NULL) {
-        return short(-pOut->PixelToLogic(Size(nMinMov,0)).Width());
-    } else {
-        return 0;
-    }
-}
-
-sal_uInt16 SdrPaintView::ImpGetHitTolLogic(short nHitTol, const OutputDevice* pOut) const
-{
-    if (nHitTol>=0) return sal_uInt16(nHitTol);
-    if (pOut==NULL)
-    {
-        pOut = GetFirstOutputDevice();
-    }
-    if (pOut!=NULL) {
-        return short(-pOut->PixelToLogic(Size(nHitTol,0)).Width());
-    } else {
-        return 0;
-    }
-}
-
-void SdrPaintView::TheresNewMapMode()
-{
-    if (pActualOutDev!=NULL) {
-        nHitTolLog=(sal_uInt16)((OutputDevice*)pActualOutDev)->PixelToLogic(Size(nHitTolPix,0)).Width();
-        nMinMovLog=(sal_uInt16)((OutputDevice*)pActualOutDev)->PixelToLogic(Size(nMinMovPix,0)).Width();
-    }
-}
-
-void SdrPaintView::SetActualWin(const OutputDevice* pWin)
-{
-    pActualOutDev=pWin;
-    TheresNewMapMode();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void SdrPaintView::BegEncirclement(const Point& rPnt)
-{
-    BrkAction();
-
-    DBG_ASSERT(0L == mpEncirclementOverlay, "SdrSnapView::BegSetPageOrg: There exists a ImplPageOriginOverlay (!)");
-    basegfx::B2DPoint aStartPos(rPnt.X(), rPnt.Y());
-    mpEncirclementOverlay = new ImplEncirclementOverlay(*this, aStartPos);
-
-    aDragStat.Reset(rPnt);
-    aDragStat.SetMinMove(ImpGetMinMovLogic(-2,0L));
-    aDragStat.NextPoint();
-}
-
-void SdrPaintView::MovEncirclement(const Point& rPnt)
-{
-    if(IsEncirclement() && aDragStat.CheckMinMoved(rPnt))
-    {
-        aDragStat.NextMove(rPnt);
-
-        DBG_ASSERT(mpEncirclementOverlay, "SdrSnapView::MovSetPageOrg: no ImplPageOriginOverlay (!)");
-        basegfx::B2DPoint aNewPos(rPnt.X(), rPnt.Y());
-        mpEncirclementOverlay->SetSecondPosition(aNewPos);
-    }
-}
-
-Rectangle SdrPaintView::EndEncirclement(sal_Bool bNoJustify)
-{
-    Rectangle aRetval;
-
-    if(IsEncirclement())
-    {
-        if(aDragStat.IsMinMoved())
-        {
-            aRetval = Rectangle(aDragStat.GetStart(), aDragStat.GetNow());
-
-            if(!bNoJustify)
-            {
-                aRetval.Justify();
-            }
-        }
-
-        // cleanup
-        BrkEncirclement();
-    }
-
-    return aRetval;
-}
-
-void SdrPaintView::BrkEncirclement()
-{
-    if(IsEncirclement())
-    {
-        DBG_ASSERT(mpEncirclementOverlay, "SdrSnapView::MovSetPageOrg: no ImplPageOriginOverlay (!)");
-        delete mpEncirclementOverlay;
-        mpEncirclementOverlay = 0L;
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void SdrPaintView::ClearPageView()
-{
-    BrkAction();
-
-    if(mpPageView)
-    {
-        InvalidateAllWin();
-        delete mpPageView;
-        mpPageView = 0L;
-    }
-}
-
-SdrPageView* SdrPaintView::ShowSdrPage(SdrPage* pPage)
-{
-    if(pPage && (!mpPageView || mpPageView->GetPage() != pPage))
-    {
-        if(mpPageView)
-        {
-            InvalidateAllWin();
-            delete mpPageView;
-        }
-
-        mpPageView = new SdrPageView(pPage, *((SdrView*)this));
-        mpPageView->Show();
-    }
-
-    return mpPageView;
-}
 
 void SdrPaintView::HideSdrPage()
 {
     if(mpPageView)
     {
-        mpPageView->Hide();
+        // deselect all
+        getAsSdrView()->clearSdrObjectSelection();
+
+        // initiate repaint
+        InvalidateAllWin();
+
+        // delete SdrPageView
         delete mpPageView;
-        mpPageView = 0L;
+        mpPageView = 0;
+    }
+}
+
+void SdrPaintView::ShowSdrPage(SdrPage& rPage)
+{
+    if(!mpPageView || &mpPageView->getSdrPageFromSdrPageView() != &rPage)
+    {
+        HideSdrPage();
+
+        mpPageView = new SdrPageView(rPage, *getAsSdrView());
+        mpPageView->Show();
     }
 }
 
@@ -638,8 +496,10 @@ void SdrPaintView::AddWindowToPaintView(OutputDevice* pNewWin)
     }
 
 #ifdef DBG_UTIL
-    if (pItemBrowser!=NULL)
-        pItemBrowser->ForceParent();
+    if (GetItemBrowser())
+    {
+        mpItemBrowser->ForceParent();
+    }
 #endif
 }
 
@@ -660,12 +520,14 @@ void SdrPaintView::DeleteWindowFromPaintView(OutputDevice* pOldWin)
     }
 
 #ifdef DBG_UTIL
-    if (pItemBrowser!=NULL)
-        pItemBrowser->ForceParent();
+    if (GetItemBrowser())
+    {
+        mpItemBrowser->ForceParent();
+    }
 #endif
 }
 
-void SdrPaintView::SetLayerVisible(const XubString& rName, sal_Bool bShow)
+void SdrPaintView::SetLayerVisible(const XubString& rName, bool bShow)
 {
     if(mpPageView)
     {
@@ -685,7 +547,7 @@ bool SdrPaintView::IsLayerVisible(const XubString& rName) const
     return false;
 }
 
-void SdrPaintView::SetAllLayersVisible(sal_Bool bShow)
+void SdrPaintView::SetAllLayersVisible(bool bShow)
 {
     if(mpPageView)
     {
@@ -695,7 +557,7 @@ void SdrPaintView::SetAllLayersVisible(sal_Bool bShow)
     InvalidateAllWin();
 }
 
-void SdrPaintView::SetLayerLocked(const XubString& rName, sal_Bool bLock)
+void SdrPaintView::SetLayerLocked(const XubString& rName, bool bLock)
 {
     if(mpPageView)
     {
@@ -713,7 +575,7 @@ bool SdrPaintView::IsLayerLocked(const XubString& rName) const
     return false;
 }
 
-void SdrPaintView::SetAllLayersLocked(sal_Bool bLock)
+void SdrPaintView::SetAllLayersLocked(bool bLock)
 {
     if(mpPageView)
     {
@@ -721,7 +583,7 @@ void SdrPaintView::SetAllLayersLocked(sal_Bool bLock)
     }
 }
 
-void SdrPaintView::SetLayerPrintable(const XubString& rName, sal_Bool bPrn)
+void SdrPaintView::SetLayerPrintable(const XubString& rName, bool bPrn)
 {
     if(mpPageView)
     {
@@ -739,7 +601,7 @@ bool SdrPaintView::IsLayerPrintable(const XubString& rName) const
     return false;
 }
 
-void SdrPaintView::SetAllLayersPrintable(sal_Bool bPrn)
+void SdrPaintView::SetAllLayersPrintable(bool bPrn)
 {
     if(mpPageView)
     {
@@ -1064,9 +926,8 @@ void SdrPaintView::ImpFormLayerDrawing(SdrPaintWindow& rPaintWindow) const
 
         if(pKnownTarget)
         {
-            const SdrModel& rModel = *(GetModel());
-            const SdrLayerAdmin& rLayerAdmin = rModel.GetLayerAdmin();
-            const SdrLayerID nControlLayerId = rLayerAdmin.GetLayerID(rLayerAdmin.GetControlLayerName(), sal_False);
+            const SdrLayerAdmin& rLayerAdmin = getSdrModelFromSdrView().GetModelLayerAdmin();
+            const SdrLayerID nControlLayerId = rLayerAdmin.GetLayerID(rLayerAdmin.GetControlLayerName(), false);
 
             // BUFFERED use GetTargetOutputDevice() now, it may be targeted to VDevs, too
             // need to set PreparedPageWindow to make DrawLayer use the correct ObjectContact
@@ -1079,32 +940,46 @@ void SdrPaintView::ImpFormLayerDrawing(SdrPaintWindow& rPaintWindow) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-sal_Bool SdrPaintView::KeyInput(const KeyEvent& /*rKEvt*/, Window* /*pWin*/)
+bool SdrPaintView::KeyInput(const KeyEvent& /*rKEvt*/, Window* /*pWin*/)
 {
-    return sal_False;
+    return false;
 }
 
 void SdrPaintView::GlueInvalidate() const
 {
     const sal_uInt32 nWindowCount(PaintWindowCount());
 
-    for(sal_uInt32 nWinNum(0L); nWinNum < nWindowCount; nWinNum++)
+    for(sal_uInt32 nWinNum(0); nWinNum < nWindowCount; nWinNum++)
     {
         SdrPaintWindow* pPaintWindow = GetPaintWindow(nWinNum);
 
         if(pPaintWindow->OutputToWindow())
         {
             OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
+            const basegfx::B2DVector aLogicHalfSevenPix(rOutDev.GetInverseViewTransformation() * basegfx::B2DVector(3.5, 3.5));
 
             if(mpPageView)
             {
-                const SdrObjList* pOL=mpPageView->GetObjList();
-                sal_uIntPtr nObjAnz=pOL->GetObjCount();
-                for (sal_uIntPtr nObjNum=0; nObjNum<nObjAnz; nObjNum++) {
+                const SdrObjList* pOL = mpPageView->GetCurrentObjectList();
+                const sal_uInt32 nObjAnz(pOL->GetObjCount());
+
+                for(sal_uInt32 nObjNum(0); nObjNum < nObjAnz; nObjNum++)
+                {
                     const SdrObject* pObj=pOL->GetObj(nObjNum);
                     const SdrGluePointList* pGPL=pObj->GetGluePointList();
-                    if (pGPL!=NULL && pGPL->GetCount()!=0) {
-                        pGPL->Invalidate((Window&)rOutDev, pObj);
+
+                    if(pGPL && pGPL->GetCount())
+                    {
+                        const basegfx::B2DRange aObjectRange(sdr::legacy::GetSnapRange(*pObj));
+
+                        for(sal_uInt32 a(0); a < pGPL->GetCount(); a++)
+                        {
+                            const SdrGluePoint& rCandidate = (*pGPL)[a];
+                            const basegfx::B2DPoint aPos(rCandidate.GetAbsolutePos(aObjectRange));
+                            const basegfx::B2DRange aRange(aPos - aLogicHalfSevenPix, aPos + aLogicHalfSevenPix);
+
+                            InvalidateOneWin((Window&)rOutDev, aRange);
+                        }
                     }
                 }
             }
@@ -1112,11 +987,11 @@ void SdrPaintView::GlueInvalidate() const
     }
 }
 
-void SdrPaintView::InvalidateAllWin()
+void SdrPaintView::InvalidateAllWin() const
 {
     const sal_uInt32 nWindowCount(PaintWindowCount());
 
-    for(sal_uInt32 a(0L); a < nWindowCount; a++)
+    for(sal_uInt32 a(0); a < nWindowCount; a++)
     {
         SdrPaintWindow* pPaintWindow = GetPaintWindow(a);
 
@@ -1127,53 +1002,51 @@ void SdrPaintView::InvalidateAllWin()
     }
 }
 
-void SdrPaintView::InvalidateAllWin(const Rectangle& rRect, sal_Bool bPlus1Pix)
+void SdrPaintView::InvalidateAllWin(const basegfx::B2DRange& rRange, bool bPlus1Pix) const
 {
     const sal_uInt32 nWindowCount(PaintWindowCount());
 
-    for(sal_uInt32 a(0L); a < nWindowCount; a++)
+    for(sal_uInt32 a(0); a < nWindowCount; a++)
     {
         SdrPaintWindow* pPaintWindow = GetPaintWindow(a);
 
         if(pPaintWindow->OutputToWindow())
         {
             OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
-            Rectangle aRect(rRect);
+            basegfx::B2DRange aRange(rRange);
 
             if(bPlus1Pix)
             {
-                Size aPixSiz(1,1);
-                Size aSiz(rOutDev.PixelToLogic(aPixSiz));
-                aRect.Left  ()-=aSiz.Width();
-                aRect.Top   ()-=aSiz.Height();
-                aRect.Right ()+=aSiz.Width();
-                aRect.Bottom()+=aSiz.Height();
+                const basegfx::B2DVector aLogicPixel(rOutDev.GetInverseViewTransformation() * basegfx::B2DVector(1.0, 1.0));
+
+                aRange.grow((aLogicPixel.getX() + aLogicPixel.getY()) * 0.5);
             }
 
-            Point aOrg(rOutDev.GetMapMode().GetOrigin());
-            aOrg.X()=-aOrg.X(); aOrg.Y()=-aOrg.Y();
-            Rectangle aOutRect(aOrg, rOutDev.GetOutputSize());
+            const basegfx::B2DRange aViewRange(rOutDev.GetLogicRange());
 
-            if (aRect.IsOver(aOutRect))
+            if(aRange.overlaps(aViewRange))
             {
-                InvalidateOneWin((Window&)rOutDev, aRect);
+                InvalidateOneWin((Window&)rOutDev, aRange);
             }
         }
     }
 }
 
-void SdrPaintView::InvalidateOneWin(Window& rWin)
+void SdrPaintView::InvalidateOneWin(Window& rWin) const
 {
     // #111096#
     // do not erase background, that causes flicker (!)
     rWin.Invalidate(INVALIDATE_NOERASE);
 }
 
-void SdrPaintView::InvalidateOneWin(Window& rWin, const Rectangle& rRect)
+void SdrPaintView::InvalidateOneWin(Window& rWin, const basegfx::B2DRange& rRange) const
 {
-    // #111096#
+    const Rectangle aRectangle(
+        (sal_Int32)floor(rRange.getMinX()), (sal_Int32)floor(rRange.getMinY()),
+        (sal_Int32)ceil(rRange.getMaxX()), (sal_Int32)ceil(rRange.getMaxY()));
+
     // do not erase background, that causes flicker (!)
-    rWin.Invalidate(rRect, INVALIDATE_NOERASE);
+    rWin.Invalidate(aRectangle, INVALIDATE_NOERASE);
 }
 
 void SdrPaintView::LeaveOneGroup()
@@ -1196,54 +1069,75 @@ bool SdrPaintView::IsGroupEntered() const
 {
     if(mpPageView)
     {
-        return (mpPageView->GetEnteredLevel() != 0);
+        return (0 != mpPageView->GetEnteredLevel());
     }
 
     return false;
 }
 
-void SdrPaintView::SetNotPersistDefaultAttr(const SfxItemSet& rAttr, sal_Bool /*bReplaceAll*/)
+void SdrPaintView::SetNotPersistDefaultAttr(const SfxItemSet& rAttr, bool /*bReplaceAll*/)
 {
     // bReplaceAll hat hier keinerlei Wirkung
-    sal_Bool bMeasure=ISA(SdrView) && ((SdrView*)this)->IsMeasureTool();
-    const SfxPoolItem *pPoolItem=NULL;
-    if (rAttr.GetItemState(SDRATTR_LAYERID,sal_True,&pPoolItem)==SFX_ITEM_SET) {
-        SdrLayerID nLayerId=((const SdrLayerIdItem*)pPoolItem)->GetValue();
-        const SdrLayer* pLayer=pMod->GetLayerAdmin().GetLayerPerID(nLayerId);
-        if (pLayer!=NULL) {
-            if (bMeasure) aMeasureLayer=pLayer->GetName();
-            else aAktLayer=pLayer->GetName();
+    const bool bMeasure(static_cast< SdrView* >(this)->IsMeasureTool());
+    const SfxPoolItem *pPoolItem = 0;
+
+    if(SFX_ITEM_SET == rAttr.GetItemState(SDRATTR_LAYERID, true, &pPoolItem))
+    {
+        const SdrLayerID nLayerId = SdrLayerID(((const SfxUInt16Item*)pPoolItem)->GetValue());
+        const SdrLayer* pLayer = getSdrModelFromSdrView().GetModelLayerAdmin().GetLayerPerID(nLayerId);
+
+        if(pLayer)
+        {
+            if(bMeasure)
+            {
+                maMeasureLayer = pLayer->GetName();
+            }
+            else
+            {
+                SetActiveLayer(pLayer->GetName());
+            }
         }
     }
-    if (rAttr.GetItemState(SDRATTR_LAYERNAME,sal_True,&pPoolItem)==SFX_ITEM_SET) {
-        if (bMeasure) aMeasureLayer=((const SdrLayerNameItem*)pPoolItem)->GetValue();
-        else aAktLayer=((const SdrLayerNameItem*)pPoolItem)->GetValue();
+
+    if(SFX_ITEM_SET == rAttr.GetItemState(SDRATTR_LAYERNAME, true, &pPoolItem))
+    {
+        if(bMeasure)
+        {
+            maMeasureLayer = ((const SfxStringItem*)pPoolItem)->GetValue();
+        }
+        else
+        {
+            SetActiveLayer(((const SfxStringItem*)pPoolItem)->GetValue());
+        }
     }
 }
 
-void SdrPaintView::MergeNotPersistDefaultAttr(SfxItemSet& rAttr, sal_Bool /*bOnlyHardAttr*/) const
+void SdrPaintView::MergeNotPersistDefaultAttr(SfxItemSet& rAttr, bool /*bOnlyHardAttr*/) const
 {
     // bOnlyHardAttr hat hier keinerlei Wirkung
-    sal_Bool bMeasure=ISA(SdrView) && ((SdrView*)this)->IsMeasureTool();
-    const XubString& aNam=bMeasure?aMeasureLayer:aAktLayer;
-    rAttr.Put(SdrLayerNameItem(aNam));
-    SdrLayerID nLayer=pMod->GetLayerAdmin().GetLayerID(aNam,sal_True);
-    if (nLayer!=SDRLAYER_NOTFOUND) {
-        rAttr.Put(SdrLayerIdItem(nLayer));
+    const bool bMeasure(static_cast< const SdrView* >(this)->IsMeasureTool());
+    const XubString& aNam = bMeasure ? maMeasureLayer : GetActiveLayer();
+
+    rAttr.Put(SfxStringItem(SDRATTR_LAYERNAME, aNam));
+    const SdrLayerID nLayer(getSdrModelFromSdrView().GetModelLayerAdmin().GetLayerID(aNam, true));
+
+    if(SDRLAYER_NOTFOUND != nLayer)
+    {
+        rAttr.Put(SfxUInt16Item(SDRATTR_LAYERID, nLayer));
     }
 }
 
-void SdrPaintView::SetDefaultAttr(const SfxItemSet& rAttr, sal_Bool bReplaceAll)
+void SdrPaintView::SetDefaultAttr(const SfxItemSet& rAttr, bool bReplaceAll)
 {
 #ifdef DBG_UTIL
     {
-        sal_Bool bHasEEFeatureItems=sal_False;
+        bool bHasEEFeatureItems=false;
         SfxItemIter aIter(rAttr);
         const SfxPoolItem* pItem=aIter.FirstItem();
         while (!bHasEEFeatureItems && pItem!=NULL) {
             if (!IsInvalidItem(pItem)) {
                 sal_uInt16 nW=pItem->Which();
-                if (nW>=EE_FEATURE_START && nW<=EE_FEATURE_END) bHasEEFeatureItems=sal_True;
+                if (nW>=EE_FEATURE_START && nW<=EE_FEATURE_END) bHasEEFeatureItems=true;
             }
             pItem=aIter.NextItem();
         }
@@ -1256,108 +1150,142 @@ void SdrPaintView::SetDefaultAttr(const SfxItemSet& rAttr, sal_Bool bReplaceAll)
         }
     }
 #endif
-    if (bReplaceAll) aDefaultAttr.Set(rAttr);
-    else aDefaultAttr.Put(rAttr,sal_False); // FALSE= InvalidItems nicht als Default, sondern als "Loecher" betrachten
+    if(bReplaceAll)
+    {
+        maDefaultAttr.Set(rAttr);
+    }
+    else
+    {
+        maDefaultAttr.Put(rAttr, false); // false= InvalidItems nicht als Default, sondern als "Loecher" betrachten
+    }
+
     SetNotPersistDefaultAttr(rAttr,bReplaceAll);
+
 #ifdef DBG_UTIL
-    if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
+    if (GetItemBrowser())
+    {
+        mpItemBrowser->SetDirty();
+    }
 #endif
 }
 
-void SdrPaintView::SetDefaultStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr)
+void SdrPaintView::SetDefaultStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr)
 {
-    if (pDefaultStyleSheet)
-        EndListening(*pDefaultStyleSheet);
-    pDefaultStyleSheet=pStyleSheet;
-    if (pDefaultStyleSheet)
-        StartListening(*pDefaultStyleSheet);
+    if (GetDefaultStyleSheet())
+    {
+        EndListening(*GetDefaultStyleSheet());
+    }
 
-    if (pStyleSheet!=NULL && !bDontRemoveHardAttr) {
+    mpDefaultStyleSheet = pStyleSheet;
+
+    if (GetDefaultStyleSheet())
+    {
+        StartListening(*GetDefaultStyleSheet());
+    }
+
+    if(pStyleSheet && !bDontRemoveHardAttr)
+    {
         SfxWhichIter aIter(pStyleSheet->GetItemSet());
         sal_uInt16 nWhich=aIter.FirstWhich();
-        while (nWhich!=0) {
-            if (pStyleSheet->GetItemSet().GetItemState(nWhich,sal_True)==SFX_ITEM_SET) {
-                aDefaultAttr.ClearItem(nWhich);
+
+        while(nWhich)
+        {
+            if(SFX_ITEM_SET == pStyleSheet->GetItemSet().GetItemState(nWhich, true))
+            {
+                maDefaultAttr.ClearItem(nWhich);
             }
+
             nWhich=aIter.NextWhich();
         }
     }
+
 #ifdef DBG_UTIL
-    if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
+    if(GetItemBrowser())
+    {
+        mpItemBrowser->SetDirty();
+    }
 #endif
 }
 
 /* new interface src537 */
-sal_Bool SdrPaintView::GetAttributes(SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr) const
+bool SdrPaintView::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const
 {
-    if(bOnlyHardAttr || !pDefaultStyleSheet)
+    if(bOnlyHardAttr || !GetDefaultStyleSheet())
     {
-        rTargetSet.Put(aDefaultAttr, sal_False);
+        rTargetSet.Put(GetDefaultAttr(), false);
     }
     else
     {
         // sonst DefStyleSheet dazumergen
-        rTargetSet.Put(pDefaultStyleSheet->GetItemSet(), sal_False);
-        rTargetSet.Put(aDefaultAttr, sal_False);
+        rTargetSet.Put(GetDefaultStyleSheet()->GetItemSet(), false);
+        rTargetSet.Put(GetDefaultAttr(), false);
     }
+
     MergeNotPersistDefaultAttr(rTargetSet, bOnlyHardAttr);
-    return sal_True;
+
+    return true;
 }
 
-sal_Bool SdrPaintView::SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll)
+bool SdrPaintView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
 {
     SetDefaultAttr(rSet,bReplaceAll);
-    return sal_True;
+
+    return true;
 }
 
-SfxStyleSheet* SdrPaintView::GetStyleSheet() const // SfxStyleSheet* SdrPaintView::GetStyleSheet(sal_Bool& rOk) const
+SfxStyleSheet* SdrPaintView::GetStyleSheet() const // SfxStyleSheet* SdrPaintView::GetStyleSheet(bool& rOk) const
 {
-    //rOk=sal_True;
     return GetDefaultStyleSheet();
 }
 
-sal_Bool SdrPaintView::SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr)
+bool SdrPaintView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr)
 {
     SetDefaultStyleSheet(pStyleSheet,bDontRemoveHardAttr);
-    return sal_True;
+
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #ifdef DBG_UTIL
-void SdrPaintView::ShowItemBrowser(sal_Bool bShow)
+void SdrPaintView::ShowItemBrowser(bool bShow)
 {
     if (bShow) {
-        if (pItemBrowser==NULL) {
-            pItemBrowser=new SdrItemBrowser(*(SdrView*)this);
-            pItemBrowser->SetFloatingMode(sal_True);
+        if (!GetItemBrowser()) {
+            mpItemBrowser = new SdrItemBrowser(*getAsSdrView());
+            mpItemBrowser->SetFloatingMode(true);
         }
-        pItemBrowser->Show();
-        pItemBrowser->GrabFocus();
+        mpItemBrowser->Show();
+        mpItemBrowser->GrabFocus();
     } else {
-        if (pItemBrowser!=NULL) {
-            pItemBrowser->Hide();
-            delete pItemBrowser;
-            pItemBrowser=NULL;
+        if (GetItemBrowser()) {
+            mpItemBrowser->Hide();
+            delete mpItemBrowser;
+            mpItemBrowser = 0;
         }
     }
 }
 #endif
 
-void SdrPaintView::MakeVisible(const Rectangle& rRect, Window& rWin)
+void SdrPaintView::MakeVisibleAtView(const basegfx::B2DRange& rRange, Window& rWin)
 {
-    MapMode aMap(rWin.GetMapMode());
     Size aActualSize(rWin.GetOutputSize());
 
     if( aActualSize.Height() > 0 && aActualSize.Width() > 0 )
     {
-        Size aNewSize(rRect.GetSize());
-        sal_Bool bNewScale=sal_False;
-        sal_Bool bNeedMoreX=aNewSize.Width()>aActualSize.Width();
-        sal_Bool bNeedMoreY=aNewSize.Height()>aActualSize.Height();
-        if (bNeedMoreX || bNeedMoreY)
+        const Rectangle aRect(
+                (sal_Int32)floor(rRange.getMinX()), (sal_Int32)floor(rRange.getMinY()),
+                (sal_Int32)ceil(rRange.getMaxX()), (sal_Int32)ceil(rRange.getMaxY()));
+
+        Size aNewSize(aRect.GetSize());
+        MapMode aMap(rWin.GetMapMode());
+
+        const bool bNeedMoreX(aNewSize.Width() > aActualSize.Width());
+        const bool bNeedMoreY(aNewSize.Height() > aActualSize.Height());
+        const bool bNewScale(bNeedMoreX || bNeedMoreY);
+
+        if(bNewScale)
         {
-            bNewScale=sal_True;
             // Neuen MapMode (Size+Org) setzen und dabei alles invalidieren
             Fraction aXFact(aNewSize.Width(),aActualSize.Width());
             Fraction aYFact(aNewSize.Height(),aActualSize.Height());
@@ -1369,24 +1297,32 @@ void SdrPaintView::MakeVisible(const Rectangle& rRect, Window& rWin)
             rWin.SetMapMode(aMap);
             aActualSize=rWin.GetOutputSize();
         }
+
         Point aOrg(aMap.GetOrigin());
         long dx=0,dy=0;
         long l=-aOrg.X();
         long r=-aOrg.X()+aActualSize.Width()-1;
         long o=-aOrg.Y();
         long u=-aOrg.Y()+aActualSize.Height()-1;
-        if (l>rRect.Left()) dx=rRect.Left()-l;
-        else if (r<rRect.Right()) dx=rRect.Right()-r;
-        if (o>rRect.Top()) dy=rRect.Top()-o;
-        else if (u<rRect.Bottom()) dy=rRect.Bottom()-u;
+
+        if (l>aRect.Left()) dx=aRect.Left()-l;
+        else if (r<aRect.Right()) dx=aRect.Right()-r;
+        if (o>aRect.Top()) dy=aRect.Top()-o;
+        else if (u<aRect.Bottom()) dy=aRect.Bottom()-u;
+
         aMap.SetOrigin(Point(aOrg.X()-dx,aOrg.Y()-dy));
-        if (!bNewScale) {
-            if (dx!=0 || dy!=0) {
+
+        if (!bNewScale)
+        {
+            if (dx!=0 || dy!=0)
+            {
                 rWin.Scroll(-dx,-dy);
                 rWin.SetMapMode(aMap);
                 rWin.Update();
             }
-        } else {
+        }
+        else
+        {
             rWin.SetMapMode(aMap);
             InvalidateOneWin(rWin);
         }
@@ -1397,16 +1333,16 @@ void SdrPaintView::DoConnect(SdrOle2Obj* /*pOleObj*/)
 {
 }
 
-void SdrPaintView::SetAnimationEnabled( sal_Bool bEnable )
+void SdrPaintView::SetAnimationEnabled( bool bEnable )
 {
     SetAnimationMode( bEnable ? SDR_ANIMATION_ANIMATE : SDR_ANIMATION_DISABLE );
 }
 
 void SdrPaintView::SetAnimationPause( bool bSet )
 {
-    if((bool)bAnimationPause != bSet)
+    if(mbAnimationPause != bSet)
     {
-        bAnimationPause = bSet;
+        mbAnimationPause = bSet;
 
         if(mpPageView)
         {
@@ -1427,7 +1363,10 @@ void SdrPaintView::SetAnimationPause( bool bSet )
 
 void SdrPaintView::SetAnimationMode( const SdrAnimationMode eMode )
 {
-    eAnimationMode = eMode;
+    if(meAnimationMode != eMode)
+    {
+        meAnimationMode = eMode;
+    }
 }
 
 void SdrPaintView::VisAreaChanged(const OutputDevice* pOut)
@@ -1440,23 +1379,17 @@ void SdrPaintView::VisAreaChanged(const OutputDevice* pOut)
 
             if(pWindow)
             {
-                VisAreaChanged(*pWindow);
+                Broadcast(SvxViewHint(SvxViewHint::SVX_HINT_VIEWCHANGED));
             }
         }
         else
         {
-            for(sal_uInt32 a(0L); a < mpPageView->PageWindowCount(); a++)
+            if(mpPageView->PageWindowCount())
             {
-                VisAreaChanged(*mpPageView->GetPageWindow(a));
+                Broadcast(SvxViewHint(SvxViewHint::SVX_HINT_VIEWCHANGED));
             }
         }
     }
-}
-
-void SdrPaintView::VisAreaChanged(const SdrPageWindow& /*rWindow*/)
-{
-    // notify SfxListener
-    Broadcast(SvxViewHint(SvxViewHint::SVX_HINT_VIEWCHANGED));
 }
 
 const svtools::ColorConfig& SdrPaintView::getColorConfig() const
@@ -1506,7 +1439,7 @@ bool SdrPaintView::IsBufferedOutputAllowed() const
 // #114898#
 void SdrPaintView::SetBufferedOutputAllowed(bool bNew)
 {
-    if(bNew != (bool)mbBufferedOutputAllowed)
+    if(bNew != mbBufferedOutputAllowed)
     {
         mbBufferedOutputAllowed = bNew;
     }
@@ -1519,20 +1452,20 @@ bool SdrPaintView::IsBufferedOverlayAllowed() const
 
 void SdrPaintView::SetBufferedOverlayAllowed(bool bNew)
 {
-    if(bNew != (bool)mbBufferedOverlayAllowed)
+    if(bNew != mbBufferedOverlayAllowed)
     {
         mbBufferedOverlayAllowed = bNew;
     }
 }
 
-sal_Bool SdrPaintView::IsPagePaintingAllowed() const
+bool SdrPaintView::IsPagePaintingAllowed() const
 {
     return mbPagePaintingAllowed;
 }
 
 void SdrPaintView::SetPagePaintingAllowed(bool bNew)
 {
-    if(bNew != (bool)mbPagePaintingAllowed)
+    if(bNew != mbPagePaintingAllowed)
     {
         mbPagePaintingAllowed = bNew;
     }
@@ -1543,15 +1476,42 @@ void SdrPaintView::SetAnimationTimer(sal_uInt32 nTime)
 {
     if(mpPageView)
     {
-        // first, reset all timers at all windows to 0L
-        for(sal_uInt32 a(0L); a < mpPageView->PageWindowCount(); a++)
+        // first, reset all timers at all windows to 0
+        for(sal_uInt32 a(0); a < mpPageView->PageWindowCount(); a++)
         {
             const SdrPageWindow& rPageWindow = *mpPageView->GetPageWindow(a);
             sdr::contact::ObjectContact& rObjectContact = rPageWindow.GetObjectContact();
             sdr::animation::primitiveAnimator& rAnimator = rObjectContact.getPrimitiveAnimator();
+
             rAnimator.SetTime(nTime);
         }
     }
 }
 
+double SdrPaintView::getHitTolLog() const
+{
+    if(GetActualOutDev())
+    {
+        return basegfx::B2DVector(GetActualOutDev()->GetInverseViewTransformation() * basegfx::B2DVector(mfHitTolPix, 0.0)).getLength();
+    }
+
+    return 0.0;
+}
+
+double SdrPaintView::getMinMovLog() const
+{
+    if(GetActualOutDev())
+    {
+        return basegfx::B2DVector(GetActualOutDev()->GetInverseViewTransformation() * basegfx::B2DVector(mfMinMovPix, 0.0)).getLength();
+    }
+
+    return 0.0;
+}
+
+void SdrPaintView::handleSelectionChange()
+{
+    // nothing to do in base class
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // eof

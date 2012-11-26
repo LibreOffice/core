@@ -76,7 +76,6 @@ class SwViewImp
                                 //Rueckwaertsverkettung.
 
     SwDrawView  *pDrawView;     //Unsere DrawView
-    SdrPageView *pSdrPageView;  //Genau eine Seite fuer unsere DrawView
 
     SwPageFrm     *pFirstVisPage;//Zeigt immer auf die erste sichtbare Seite.
     SwRegionRects *pRegion;      //Sammler fuer Paintrects aus der LayAction.
@@ -92,10 +91,6 @@ class SwViewImp
     mutable String sSdrObjCachedComment;
 
     sal_Bool bFirstPageInvalid  :1; //Pointer auf erste Seite ungueltig?
-
-    //sal_Bool bResetXorVisibility:1; //StartAction/EndAction
-    //HMHBOOL bShowHdlPaint     :1; //LockPaint/UnlockPaint
-    sal_Bool bResetHdlHiddenPaint:1;//  -- "" --
 
     sal_Bool bSmoothUpdate      :1; //Meber fuer SmoothScroll
     sal_Bool bStopSmooth        :1;
@@ -203,8 +198,6 @@ public:
     inline sal_Bool HasDrawView()       const { return 0 != pDrawView; }
           SwDrawView* GetDrawView()       { return pDrawView; }
     const SwDrawView* GetDrawView() const { return pDrawView; }
-          SdrPageView*GetPageView()       { return pSdrPageView; }
-    const SdrPageView*GetPageView() const { return pSdrPageView; }
     void MakeDrawView();
 
     // OD 29.08.2002 #102450#

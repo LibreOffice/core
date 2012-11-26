@@ -245,7 +245,7 @@ private:
     sal_Int8        AcceptPrivateDrop( const AcceptDropEvent& rEvt );
     sal_Int8        ExecutePrivateDrop( const ExecuteDropEvent& rEvt );
     sal_Int8        DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPosX, SCROW nDestPosY,
-                                    const Point& rLogicPos, sal_Int8 nDndAction );
+                                    const basegfx::B2DPoint& rLogicPos, sal_Int8 nDndAction );
 
     void            HandleMouseButtonDown( const MouseEvent& rMEvt );
 

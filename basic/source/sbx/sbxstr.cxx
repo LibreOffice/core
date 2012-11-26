@@ -87,14 +87,14 @@ using namespace rtl;
             break;
         case SbxOBJECT:
         {
-            SbxValue* pVal = PTR_CAST(SbxValue,p->pObj);
+            SbxValue* pVal = dynamic_cast< SbxValue* >( p->pObj);
             if( pVal )
                 aRes = pVal->GetString();
             else if( p->pObj && p->pObj->IsFixed()
                     && (p->pObj->GetType() == (SbxARRAY | SbxBYTE )) )
             {
                 // convert byte array to string
-                SbxArray* pArr = PTR_CAST(SbxArray, p->pObj);
+                SbxArray* pArr = dynamic_cast< SbxArray* >( p->pObj);
                 if( pArr )
                     aRes = ByteArrayToString( pArr );
             }
@@ -216,7 +216,7 @@ void ImpPutString( SbxValues* p, const ::rtl::OUString* n )
             break;
         case SbxOBJECT:
         {
-            SbxValue* pVal = PTR_CAST(SbxValue,p->pObj);
+            SbxValue* pVal = dynamic_cast< SbxValue* >( p->pObj);
             if( pVal )
                 pVal->PutString( *n );
             else

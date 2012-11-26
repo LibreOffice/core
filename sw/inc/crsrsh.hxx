@@ -27,8 +27,6 @@
 
 #include <tools/string.hxx>
 #include <tools/link.hxx>
-#include <tools/rtti.hxx>
-
 #include <IShellCursorSupplier.hxx>
 #include "swdllapi.h"
 #include <swtypes.hxx>          // fuer SWPOSDOC
@@ -327,7 +325,6 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
 public:
-    TYPEINFO();
     SwCrsrShell( SwDoc& rDoc, Window *pWin, const SwViewOption *pOpt = 0 );
     // verkleideter Copy-Constructor
     SwCrsrShell( SwCrsrShell& rShell, Window *pWin );
@@ -673,7 +670,7 @@ public:
     const SwShellCrsr* getShellCrsr( bool bBlock ) const
         { return (const_cast<SwCrsrShell*>(this))->getShellCrsr( bBlock ); }
 
-    FASTBOOL IsBlockMode() const { return 0 != pBlockCrsr; }
+    bool IsBlockMode() const { return 0 != pBlockCrsr; }
     const IBlockCursor* GetBlockCrsr() const { return pBlockCrsr; }
     IBlockCursor* GetBlockCrsr() { return pBlockCrsr; }
 

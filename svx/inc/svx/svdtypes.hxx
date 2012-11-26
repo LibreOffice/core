@@ -27,14 +27,6 @@
 #include <tools/solar.h>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-//  @@@@  @@@@@  @@@@@    @@@@  @@@@@  @@@@@@ @@@@@  @@@@  @@@@@@
-// @@  @@ @@  @@ @@  @@  @@  @@ @@  @@     @@ @@    @@  @@   @@
-// @@     @@  @@ @@  @@  @@  @@ @@  @@     @@ @@    @@       @@
-//  @@@@  @@  @@ @@@@@   @@  @@ @@@@@      @@ @@@@  @@       @@
-//     @@ @@  @@ @@  @@  @@  @@ @@  @@     @@ @@    @@       @@
-// @@  @@ @@  @@ @@  @@  @@  @@ @@  @@ @@  @@ @@    @@  @@   @@
-//  @@@@  @@@@@  @@  @@   @@@@  @@@@@   @@@@  @@@@@  @@@@    @@
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 const sal_uInt32 SdrInventor=sal_uInt32('S')*0x00000001+
                          sal_uInt32('V')*0x00000100+
@@ -71,59 +63,17 @@ enum SdrConvertType {SDRCONVERT_POLY,   // reines Polygon erzeugen
                      SDRCONVERT_MIXED}; // Gemischtes Objekt (optimal)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-//  @@     @@@@  @@  @@ @@@@@ @@@@@
-//  @@    @@  @@ @@  @@ @@    @@  @@
-//  @@    @@  @@ @@  @@ @@    @@  @@
-//  @@    @@@@@@  @@@@  @@@@  @@@@@
-//  @@    @@  @@   @@   @@    @@  @@
-//  @@    @@  @@   @@   @@    @@  @@
-//  @@@@@ @@  @@   @@   @@@@@ @@  @@
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 // Bei der Identifikation eines Layer kann es vorkommen, das dieser nicht
 // vorhanden ist. SdrLayerAdmin::GetLayerID(const String&) liefert
 // dann diesen Wert:
-#define SDRLAYER_NOTFOUND 0xFF
+#define SDRLAYER_NOTFOUND 0x000000ff
+
 // Man kann diesen Wert jodoch ohne Bedenken den Methoden des SdrLayerSet
 // zuwerfen, bekommt dann jedoch immer sal_False, bzw. tut die Methode nix.
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Typdeklaration fuer Layer-IDs
 typedef sal_uInt8 SdrLayerID;
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// @@@@@   @@@@   @@@@  @@@@@         @@@@  @@@@@  @@@@@@ @@    @@  @@@@  @@@@@@
-// @@  @@ @@  @@ @@  @@ @@           @@  @@ @@  @@     @@ @@    @@ @@  @@   @@
-// @@  @@ @@  @@ @@     @@      @@   @@  @@ @@  @@     @@ @@    @@ @@       @@
-// @@@@@  @@@@@@ @@ @@@ @@@@   @@@@  @@  @@ @@@@@      @@ @@    @@  @@@@    @@
-// @@     @@  @@ @@  @@ @@      @@   @@  @@ @@  @@     @@ @@    @@     @@   @@
-// @@     @@  @@ @@  @@ @@           @@  @@ @@  @@ @@  @@ @@    @@ @@  @@   @@
-// @@     @@  @@  @@@@@ @@@@@         @@@@  @@@@@   @@@@  @@@@@ @@  @@@@    @@
-////////////////////////////////////////////////////////////////////////////////////////////////////
-enum SdrObjListKind {SDROBJLIST_UNKNOWN    =0x00,    // Unbekannt
-                     // reine Objektlisten:
-                     SDROBJLIST_GROUPOBJ   =0x01,    // Objektliste eines Gruppenobjekts
-                     SDROBJLIST_VIRTOBJECTS=0x02,    // Liste ist die Liste der virtuellen Objekte
-                     SDROBJLIST_SYMBOLTABLE=0x03,    // Liste ist die Symboltabelle
-                     // Hier haben zur Not noch 12 weitere Listentypen Platz
-                     // Pages:
-                     SDROBJLIST_DRAWPAGE   =0x10,    // Liste ist eine Zeichenseite
-                     SDROBJLIST_MASTERPAGE =0x11    // Liste ist eine Masterpage
-                     // Hier haben zur Not noch 8 weitere Pagetypen Platz
-};   // fuer die Surrogate reserviert
-
-inline FASTBOOL SdrIsPageKind(SdrObjListKind eK) { return eK>=SDROBJLIST_DRAWPAGE && eK<=0x1A; }
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//  @@@@@  @@@@@ @@@@@  @@@@@  @@@@  @@@@@@
-//  @@  @@ @@    @@  @@ @@    @@  @@   @@
-//  @@  @@ @@    @@  @@ @@    @@  @@   @@
-//  @@@@@  @@@@  @@@@@  @@@@  @@@@@@   @@
-//  @@  @@ @@    @@     @@    @@  @@   @@
-//  @@  @@ @@    @@     @@    @@  @@   @@
-//  @@  @@ @@@@@ @@     @@@@@ @@  @@   @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 enum SdrRepeatFunc {SDRREPFUNC_OBJ_NONE,

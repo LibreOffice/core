@@ -57,9 +57,8 @@ class EDITENG_DLLPUBLIC SvxBoxItem : public SfxPoolItem
                     nRightDist;
 
 public:
-    TYPEINFO();
-
-    SvxBoxItem( const sal_uInt16 nId );
+    POOLITEM_FACTORY()
+    SvxBoxItem( const sal_uInt16 nId = 0 );
     SvxBoxItem( const SvxBoxItem &rCpy );
     ~SvxBoxItem();
     SvxBoxItem &operator=( const SvxBoxItem& rBox );
@@ -79,8 +78,8 @@ public:
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const;
     virtual sal_uInt16           GetVersion( sal_uInt16 nFileVersion ) const;
 
-    virtual int              ScaleMetrics( long nMult, long nDiv );
-    virtual int              HasMetrics() const;
+    virtual void             ScaleMetrics( long nMult, long nDiv );
+    virtual bool             HasMetrics() const;
 
     const   SvxBorderLine* GetTop()    const { return pTop; }
     const   SvxBorderLine* GetBottom() const { return pBottom; }
@@ -168,9 +167,8 @@ class EDITENG_DLLPUBLIC SvxBoxInfoItem : public SfxPoolItem
     sal_uInt16  nDefDist;       // Der Default- bzw. Minimalabstand.
 
 public:
-    TYPEINFO();
-
-    SvxBoxInfoItem( const sal_uInt16 nId );
+    POOLITEM_FACTORY()
+    SvxBoxInfoItem( const sal_uInt16 nId = 0 );
     SvxBoxInfoItem( const SvxBoxInfoItem &rCpy );
     ~SvxBoxInfoItem();
     SvxBoxInfoItem &operator=( const SvxBoxInfoItem &rCpy );
@@ -187,8 +185,8 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
     virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion ) const;
-    virtual int              ScaleMetrics( long nMult, long nDiv );
-    virtual int              HasMetrics() const;
+    virtual void            ScaleMetrics( long nMult, long nDiv );
+    virtual bool            HasMetrics() const;
 
     const SvxBorderLine*    GetHori() const { return pHori; }
     const SvxBorderLine*    GetVert() const { return pVert; }

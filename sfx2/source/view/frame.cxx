@@ -93,11 +93,6 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
 
-TYPEINIT1(SfxFrame, SfxListener);
-TYPEINIT1_AUTOFACTORY(SfxFrameItem, SfxPoolItem);
-TYPEINIT1(SfxUsrAnyItem, SfxPoolItem);
-TYPEINIT1_AUTOFACTORY(SfxUnoFrameItem, SfxPoolItem);
-
 SvCompatWeakHdl* SfxFrame::GetHdl()
 {
     return pImp->GetHdl();
@@ -421,7 +416,7 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
     const SfxMedium *pMed = pDoc->GetMedium();
     GetDescriptor()->SetActualURL( pMed->GetOrigURL() );
 
-    SFX_ITEMSET_ARG( pMed->GetItemSet(), pItem, SfxBoolItem, SID_EDITDOC, sal_False );
+    SFX_ITEMSET_ARG( pMed->GetItemSet(), pItem, SfxBoolItem, SID_EDITDOC );
     sal_Bool bEditable = ( !pItem || pItem->GetValue() );
 
     GetDescriptor()->SetEditable( bEditable );
@@ -435,9 +430,9 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
     if ( pFilter )
         aFilter = pFilter->GetFilterName();
 
-    SFX_ITEMSET_ARG( pItemSet, pRefererItem, SfxStringItem, SID_REFERER, sal_False);
-    SFX_ITEMSET_ARG( pItemSet, pOptionsItem, SfxStringItem, SID_FILE_FILTEROPTIONS, sal_False);
-    SFX_ITEMSET_ARG( pItemSet, pTitle1Item, SfxStringItem, SID_DOCINFO_TITLE, sal_False);
+    SFX_ITEMSET_ARG( pItemSet, pRefererItem, SfxStringItem, SID_REFERER );
+    SFX_ITEMSET_ARG( pItemSet, pOptionsItem, SfxStringItem, SID_FILE_FILTEROPTIONS );
+    SFX_ITEMSET_ARG( pItemSet, pTitle1Item, SfxStringItem, SID_DOCINFO_TITLE );
 
     SfxItemSet *pSet = GetDescriptor()->GetArgs();
 
@@ -621,6 +616,7 @@ sal_Bool SfxFrameItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8
     return sal_False;
 }
 
+IMPL_POOLITEM_FACTORY(SfxUsrAnyItem)
 
 SfxUsrAnyItem::SfxUsrAnyItem( sal_uInt16 nWhichId, const ::com::sun::star::uno::Any& rAny )
     : SfxPoolItem( nWhichId )
@@ -630,7 +626,7 @@ SfxUsrAnyItem::SfxUsrAnyItem( sal_uInt16 nWhichId, const ::com::sun::star::uno::
 
 int SfxUsrAnyItem::operator==( const SfxPoolItem& /*rItem*/ ) const
 {
-//   return rItem.ISA( SfxUsrAnyItem ) && ((SfxUsrAnyItem&)rItem).aValue == aValue;
+//   return dynamic_cast< const SfxUsrAnyItem* >(&rItem) && ((SfxUsrAnyItem&)rItem).aValue == aValue;
     return sal_False;
 }
 
@@ -651,6 +647,8 @@ sal_Bool SfxUsrAnyItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt
     return sal_True;
 }
 
+IMPL_POOLITEM_FACTORY(SfxUnoFrameItem)
+
 SfxUnoFrameItem::SfxUnoFrameItem()
     : SfxPoolItem()
     , m_xFrame()
@@ -665,7 +663,7 @@ SfxUnoFrameItem::SfxUnoFrameItem( sal_uInt16 nWhichId, const ::com::sun::star::u
 
 int SfxUnoFrameItem::operator==( const SfxPoolItem& i_rItem ) const
 {
-    return i_rItem.ISA( SfxUnoFrameItem ) && static_cast< const SfxUnoFrameItem& >( i_rItem ).m_xFrame == m_xFrame;
+    return dynamic_cast< const SfxUnoFrameItem* >(&i_rItem) && static_cast< const SfxUnoFrameItem& >( i_rItem ).m_xFrame == m_xFrame;
 }
 
 SfxPoolItem* SfxUnoFrameItem::Clone( SfxItemPool* ) const

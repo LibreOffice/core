@@ -488,7 +488,7 @@ SmEditController::~SmEditController()
 
 void SmEditController::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState)
 {
-    const SfxStringItem *pItem = PTR_CAST(SfxStringItem, pState);
+    const SfxStringItem *pItem = dynamic_cast< const SfxStringItem* >( pState);
 
     if ((pItem != NULL) && (rEdit.GetText() != pItem->GetValue()))
         rEdit.SetText(pItem->GetValue());
@@ -522,7 +522,7 @@ SmCmdBoxWindow::~SmCmdBoxWindow ()
 SmViewShell * SmCmdBoxWindow::GetView()
 {
     SfxViewShell *pView = GetBindings().GetDispatcher()->GetFrame()->GetViewShell();
-    return PTR_CAST(SmViewShell, pView);
+    return dynamic_cast< SmViewShell* >( pView);
 }
 
 void SmCmdBoxWindow::Resize()
@@ -773,8 +773,6 @@ struct SmViewShell_Impl
         delete pRequest;
     }
 };
-
-TYPEINIT1( SmViewShell, SfxViewShell );
 
 SFX_IMPL_INTERFACE(SmViewShell, SfxViewShell, SmResId(0))
 {
@@ -1919,9 +1917,11 @@ IMPL_LINK( SmViewShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
 
 void SmViewShell::Notify( SfxBroadcaster& , const SfxHint& rHint )
 {
-    if ( rHint.IsA(TYPE(SfxSimpleHint)) )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if ( pSfxSimpleHint )
     {
-        switch( ( (SfxSimpleHint&) rHint ).GetId() )
+        switch( pSfxSimpleHint->GetId() )
         {
             case SFX_HINT_MODECHANGED:
             case SFX_HINT_DOCCHANGED:

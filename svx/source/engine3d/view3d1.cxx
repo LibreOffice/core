@@ -25,7 +25,7 @@
 #include "precompiled_svx.hxx"
 
 #include <tools/shl.hxx>
-#include "svx/svditer.hxx"
+#include <svx/svditer.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svxids.hrc>
@@ -35,7 +35,6 @@
 #include <svx/dialmgr.hxx>
 #include "svx/globl3d.hxx"
 #include <svx/obj3d.hxx>
-#include <svx/polysc3d.hxx>
 #include <svx/e3ditem.hxx>
 #include <editeng/colritem.hxx>
 #include <svx/lathe3d.hxx>
@@ -54,25 +53,21 @@
 |*
 \************************************************************************/
 
-void E3dView::ConvertMarkedToPolyObj(sal_Bool bLineToArea)
+void E3dView::ConvertMarkedToPolyObj(bool bLineToArea)
 {
     SdrObject* pNewObj = NULL;
+    E3dScene* pObj = dynamic_cast< E3dScene* >(getSelectedIfSingle());
 
-    if (GetMarkedObjectCount() == 1)
+    if (pObj)
     {
-        SdrObject* pObj = GetMarkedObjectByIndex(0);
+        bool bBezier(false);
+        pNewObj = pObj->ConvertToPolyObj(bBezier, bLineToArea);
 
-        if (pObj && pObj->ISA(E3dPolyScene))
+        if (pNewObj)
         {
-            sal_Bool bBezier = sal_False;
-            pNewObj = ((E3dPolyScene*) pObj)->ConvertToPolyObj(bBezier, bLineToArea);
-
-            if (pNewObj)
-            {
-                BegUndo(SVX_RESSTR(RID_SVX_3D_UNDO_EXTRUDE));
-                ReplaceObjectAtView(pObj, *GetSdrPageView(), pNewObj);
-                EndUndo();
-            }
+            BegUndo(SVX_RESSTR(RID_SVX_3D_UNDO_EXTRUDE));
+            ReplaceObjectAtView(*pObj, *pNewObj);
+            EndUndo();
         }
     }
 
@@ -90,35 +85,38 @@ void E3dView::ConvertMarkedToPolyObj(sal_Bool bLineToArea)
 
 void Imp_E3dView_InorderRun3DObjects(const SdrObject* pObj, sal_uInt32& rMask)
 {
-    if(pObj->ISA(E3dLatheObj))
+    if(dynamic_cast< const E3dLatheObj* >(pObj))
     {
         rMask |= 0x0001;
     }
-    else if(pObj->ISA(E3dExtrudeObj))
+    else if(dynamic_cast< const E3dExtrudeObj* >(pObj))
     {
         rMask |= 0x0002;
     }
-    else if(pObj->ISA(E3dSphereObj))
+    else if(dynamic_cast< const E3dSphereObj* >(pObj))
     {
         rMask |= 0x0004;
     }
-    else if(pObj->ISA(E3dCubeObj))
+    else if(dynamic_cast< const E3dCubeObj* >(pObj))
     {
         rMask |= 0x0008;
     }
-    else if(pObj->IsGroupObject())
+    else if(pObj->getChildrenOfSdrObject())
     {
-        SdrObjList* pList = pObj->GetSubList();
+        SdrObjList* pList = pObj->getChildrenOfSdrObject();
+
         for(sal_uInt32 a(0); a < pList->GetObjCount(); a++)
+        {
             Imp_E3dView_InorderRun3DObjects(pList->GetObj(a), rMask);
     }
 }
+}
 
-SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, sal_Bool /*bOnly3DAttr*/) const
+SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene) const
 {
     // ItemSet mit entspr. Bereich anlegen
     SfxItemSet aSet(
-        pMod->GetItemPool(),
+        getSdrModelFromSdrView().GetItemPool(),
         SDRATTR_START,      SDRATTR_END,
         SID_ATTR_3D_INTERN, SID_ATTR_3D_INTERN,
         0, 0);
@@ -130,19 +128,17 @@ SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, sal_Bool /*bOnly3DAttr*/
         // special scene
         aSet.Put(pInScene->GetMergedItemSet());
     }
-    else
+    else if(areSdrObjectsSelected())
     {
         // get attributes from all selected objects
         MergeAttrFromMarked(aSet, sal_False);
 
         // calc flags for SID_ATTR_3D_INTERN
-        const SdrMarkList& rMarkList = GetMarkedObjectList();
-        sal_uInt32 nMarkCnt(rMarkList.GetMarkCount());
+        const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
 
-        for(sal_uInt32 a(0); a < nMarkCnt; a++)
+        for(sal_uInt32 a(0); a < aSelection.size(); a++)
         {
-            SdrObject* pObj = GetMarkedObjectByIndex(a);
-            Imp_E3dView_InorderRun3DObjects(pObj, nSelectedItems);
+            Imp_E3dView_InorderRun3DObjects(aSelection[a], nSelectedItems);
         }
     }
 
@@ -153,7 +149,7 @@ SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, sal_Bool /*bOnly3DAttr*/
     if(!nSelectedItems  && !pInScene)
     {
         // Defaults holen und hinzufuegen
-        SfxItemSet aDefaultSet(pMod->GetItemPool(), SDRATTR_3D_FIRST, SDRATTR_3D_LAST);
+        SfxItemSet aDefaultSet(getSdrModelFromSdrView().GetItemPool(), SDRATTR_3D_FIRST, SDRATTR_3D_LAST);
         GetAttributes(aDefaultSet);
         aSet.Put(aDefaultSet);
 
@@ -161,8 +157,8 @@ SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, sal_Bool /*bOnly3DAttr*/
         aSet.Put(XLineStyleItem (XLINE_NONE));
 
         // #84061# new defaults for distance and focal length
-        aSet.Put(Svx3DDistanceItem(100));
-        aSet.Put(Svx3DFocalLengthItem(10000));
+        aSet.Put(SfxUInt32Item(SDRATTR_3DSCENE_DISTANCE, 100));
+        aSet.Put(SfxUInt32Item(SDRATTR_3DSCENE_FOCAL_LENGTH, 10000));
     }
 
     // ItemSet zurueckgeben
@@ -175,16 +171,16 @@ SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, sal_Bool /*bOnly3DAttr*/
 |*
 \************************************************************************/
 
-void E3dView::Set3DAttributes( const SfxItemSet& rAttr, E3dScene* pInScene, sal_Bool bReplaceAll)
+void E3dView::Set3DAttributes( const SfxItemSet& rAttr, E3dScene* pInScene, bool bReplaceAll)
 {
-    sal_uInt32 nSelectedItems(0L);
+    sal_uInt32 nSelectedItems(0);
 
     if(pInScene)
     {
         //pInScene->SetItemSetAndBroadcast(rAttr, bReplaceAll);
         pInScene->SetMergedItemSetAndBroadcast(rAttr, bReplaceAll);
     }
-    else
+    else if(areSdrObjectsSelected())
     {
         // #i94832# removed usage of E3DModifySceneSnapRectUpdater here.
         // They are not needed here, they are already handled in SetAttrToMarked
@@ -193,13 +189,11 @@ void E3dView::Set3DAttributes( const SfxItemSet& rAttr, E3dScene* pInScene, sal_
         SetAttrToMarked(rAttr, bReplaceAll);
 
         // old run
-        const SdrMarkList& rMarkList = GetMarkedObjectList();
-        const sal_uInt32 nMarkCnt(rMarkList.GetMarkCount());
+        const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
 
-        for(sal_uInt32 a(0); a < nMarkCnt; a++)
+        for(sal_uInt32 a(0); a < aSelection.size(); a++)
         {
-            SdrObject* pObj = GetMarkedObjectByIndex(a);
-            Imp_E3dView_InorderRun3DObjects(pObj, nSelectedItems);
+            Imp_E3dView_InorderRun3DObjects(aSelection[a], nSelectedItems);
         }
     }
 
@@ -207,20 +201,19 @@ void E3dView::Set3DAttributes( const SfxItemSet& rAttr, E3dScene* pInScene, sal_
     if(!nSelectedItems && !pInScene)
     {
         // Defaults setzen
-        SfxItemSet aDefaultSet(pMod->GetItemPool(), SDRATTR_3D_FIRST, SDRATTR_3D_LAST);
+        SfxItemSet aDefaultSet(getSdrModelFromSdrView().GetItemPool(), SDRATTR_3D_FIRST, SDRATTR_3D_LAST);
         aDefaultSet.Put(rAttr);
         SetAttributes(aDefaultSet);
-
     }
 }
 
 double E3dView::GetDefaultCamPosZ()
 {
-    return (double)((const SfxUInt32Item&)pMod->GetItemPool().GetDefaultItem(SDRATTR_3DSCENE_DISTANCE)).GetValue();
+    return (double)((const SfxUInt32Item&)getSdrModelFromSdrView().GetItemPool().GetDefaultItem(SDRATTR_3DSCENE_DISTANCE)).GetValue();
 }
 
 double E3dView::GetDefaultCamFocal()
 {
-    return (double)((const SfxUInt32Item&)pMod->GetItemPool().GetDefaultItem(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue();
+    return (double)((const SfxUInt32Item&)getSdrModelFromSdrView().GetItemPool().GetDefaultItem(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue();
 }
 

@@ -85,7 +85,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
     {
         case SID_GROUP:  // BASIC
         {
-            if ( mpDrawView->IsPresObjSelected( sal_True, sal_True, sal_True ) )
+            if ( mpDrawView->IsPresObjSelected( true, true, true ) )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
                 InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
@@ -111,11 +111,11 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
         {
             // only allow for single object selection since the name of an object needs
             // to be unique
-            if(1L == mpDrawView->GetMarkedObjectCount())
+            SdrObject* pSelected = mpDrawView->getSelectedIfSingle();
+
+            if(pSelected)
             {
                 // #i68101#
-                SdrObject* pSelected = mpDrawView->GetMarkedObjectByIndex(0L);
-                OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
                 String aName(pSelected->GetName());
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -135,7 +135,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
             }
 
             SfxBindings& rBindings = GetViewFrame()->GetBindings();
-            rBindings.Invalidate( SID_NAVIGATOR_STATE, sal_True, sal_False );
+            rBindings.Invalidate( SID_NAVIGATOR_STATE, true, false );
             rBindings.Invalidate( SID_CONTEXT );
 
             Cancel();
@@ -146,10 +146,10 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
         // #i68101#
         case SID_OBJECT_TITLE_DESCRIPTION:
         {
-            if(1L == mpDrawView->GetMarkedObjectCount())
+            SdrObject* pSelected = mpDrawView->getSelectedIfSingle();
+
+            if(pSelected)
             {
-                SdrObject* pSelected = mpDrawView->GetMarkedObjectByIndex(0L);
-                OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
                 String aTitle(pSelected->GetTitle());
                 String aDescription(pSelected->GetDescription());
 
@@ -170,7 +170,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
             }
 
             SfxBindings& rBindings = GetViewFrame()->GetBindings();
-            rBindings.Invalidate( SID_NAVIGATOR_STATE, sal_True, sal_False );
+            rBindings.Invalidate( SID_NAVIGATOR_STATE, true, false );
             rBindings.Invalidate( SID_CONTEXT );
 
             Cancel();
@@ -304,10 +304,10 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 
         case SID_DISMANTLE:  // BASIC
         {
-            if ( mpDrawView->IsDismantlePossible(sal_False) )
+            if ( mpDrawView->IsDismantlePossible(false) )
             {
                 WaitObject aWait( (Window*)GetActiveWindow() );
-                mpDrawView->DismantleMarkedObjects(sal_False);
+                mpDrawView->DismantleMarkedObjects(false);
             }
             Cancel();
             rReq.Done ();
@@ -343,26 +343,23 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
                 WaitObject aWait( (Window*)GetActiveWindow() );
                 mpDrawView->Break3DObj();
             }
-            else if ( mpDrawView->IsDismantlePossible(sal_True) )
+            else if ( mpDrawView->IsDismantlePossible(true) )
             {
                 WaitObject aWait( (Window*)GetActiveWindow() );
-                mpDrawView->DismantleMarkedObjects(sal_True);
+                mpDrawView->DismantleMarkedObjects(true);
             }
             else if ( mpDrawView->IsImportMtfPossible() )
             {
-
-                WaitObject aWait( (Window*)GetActiveWindow() );
-                const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
-                sal_uLong nAnz=rMarkList.GetMarkCount();
-
                 // Summe der Metaobjekte aller sel. Metafiles erm.
+                WaitObject aWait( (Window*)GetActiveWindow() );
+                const SdrObjectVector aSelection(mpDrawView->getSelectedSdrObjectVectorFromSdrMarkView());
                 sal_uLong nCount = 0;
-                for(sal_uLong nm=0; nm<nAnz; nm++)
+
+                for(sal_uInt32 nm = 0; nm < aSelection.size(); nm++)
                 {
-                    SdrMark*     pM=rMarkList.GetMark(nm);
-                    SdrObject*   pObj=pM->GetMarkedSdrObj();
-                    SdrGrafObj*  pGraf=PTR_CAST(SdrGrafObj,pObj);
-                    SdrOle2Obj*  pOle2=PTR_CAST(SdrOle2Obj,pObj);
+                    SdrObject* pObj = aSelection[nm];
+                    SdrGrafObj* pGraf = dynamic_cast< SdrGrafObj* >(pObj);
+                    SdrOle2Obj* pOle2 = dynamic_cast< SdrOle2Obj* >(pObj);
 
                     if(pGraf)
                     {
@@ -394,7 +391,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
                     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
                     if( pFact )
                     {
-                        VclAbstractDialog* pDlg = pFact->CreateBreakDlg(GetActiveWindow(), mpDrawView, GetDocSh(), nCount, nAnz );
+                        VclAbstractDialog* pDlg = pFact->CreateBreakDlg(GetActiveWindow(), mpDrawView, GetDocSh(), nCount, aSelection.size());
                         if( pDlg )
                         {
                             pDlg->Execute();
@@ -426,7 +423,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
                     }
 
                     WaitObject aWait( (Window*)GetActiveWindow() );
-                    mpDrawView->ConvertMarkedObjTo3D(sal_True);
+                    mpDrawView->ConvertMarkedObjTo3D(true);
                 }
             }
 
@@ -473,7 +470,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 
         case SID_HORIZONTAL:  // BASIC
         {
-            mpDrawView->MirrorAllMarkedHorizontal();
+            mpDrawView->MirrorMarkedObjHorizontal();
             Cancel();
             rReq.Done ();
         }
@@ -481,7 +478,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 
         case SID_VERTICAL:  // BASIC
         {
-            mpDrawView->MirrorAllMarkedVertical();
+            mpDrawView->MirrorMarkedObjVertical();
             Cancel();
             rReq.Done ();
         }
@@ -538,10 +535,10 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
         case SID_SELECTALL:  // BASIC
         {
             if( (dynamic_cast<FuSelection*>( GetOldFunction().get() ) != 0) &&
-                !GetView()->IsFrameDragSingles() && GetView()->HasMarkablePoints())
+                !GetView()->IsFrameHandles() && GetView()->HasMarkablePoints())
             {
                 if ( !mpDrawView->IsAction() )
-                    mpDrawView->MarkAllPoints();
+                    mpDrawView->MarkPoints(0, false); // markall
             }
             else
                 mpDrawView->SelectAll();
@@ -581,7 +578,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
                     break;
                 }
 
-                SfxAllItemSet aSet(GetDoc()->GetPool());
+                SfxAllItemSet aSet(GetDoc()->GetItemPool());
 
                 SfxStringItem aStyleNameItem( SID_STYLE_EDIT, pStyleSheet->GetName() );
                 aSet.Put(aStyleNameItem);
@@ -616,10 +613,12 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
             if ( GetViewFrame()->HasChildWindow( nId )
                 && ( ( pDlg = ViewShell::Implementation::GetImageMapDialog() ) != NULL ) )
             {
-                const SdrMarkList&  rMarkList = mpDrawView->GetMarkedObjectList();
+                SdrObject* pSelected = mpDrawView->getSelectedIfSingle();
 
-                if ( rMarkList.GetMarkCount() == 1 )
-                    UpdateIMapDlg( rMarkList.GetMark( 0 )->GetMarkedSdrObj() );
+                if(pSelected)
+                {
+                    UpdateIMapDlg( pSelected );
+                }
             }
 
             Cancel();
@@ -873,7 +872,7 @@ void DrawViewShell::MapSlot( sal_uInt16 nSId )
 |*
 \************************************************************************/
 
-void DrawViewShell::UpdateToolboxImages( SfxItemSet &rSet, sal_Bool bPermanent )
+void DrawViewShell::UpdateToolboxImages( SfxItemSet &rSet, bool bPermanent )
 {
     if( !bPermanent )
     {
@@ -947,7 +946,10 @@ sal_uInt16 DrawViewShell::GetArrayId( sal_uInt16 nSId )
 
 void DrawViewShell::UpdateIMapDlg( SdrObject* pObj )
 {
-    if( ( pObj->ISA( SdrGrafObj ) || pObj->ISA( SdrOle2Obj ) ) && !mpDrawView->IsTextEdit() &&
+    SdrGrafObj* pGrafObj = dynamic_cast< SdrGrafObj* >( pObj );
+    SdrOle2Obj* pOle2Obj = dynamic_cast< SdrOle2Obj* >( pObj );
+
+    if( ( pGrafObj || pOle2Obj ) && !mpDrawView->IsTextEdit() &&
          GetViewFrame()->HasChildWindow( SvxIMapDlgChildWindow::GetChildWindowId() ) )
     {
         Graphic     aGraphic;
@@ -956,7 +958,6 @@ void DrawViewShell::UpdateIMapDlg( SdrObject* pObj )
         SdIMapInfo* pIMapInfo = GetDoc()->GetIMapInfo( pObj );
 
         // get graphic from shape
-        SdrGrafObj* pGrafObj = dynamic_cast< SdrGrafObj* >( pObj );
         if( pGrafObj )
             aGraphic = pGrafObj->GetGraphic();
 

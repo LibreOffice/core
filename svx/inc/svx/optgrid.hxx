@@ -39,42 +39,45 @@ class SvxGridTabPage;
 class SVX_DLLPUBLIC SvxOptionsGrid
 {
 protected:
-    sal_uInt32  nFldDrawX;
-    sal_uInt32  nFldDivisionX;
-    sal_uInt32  nFldDrawY;
-    sal_uInt32  nFldDivisionY;
-    sal_uInt32  nFldSnapX;
-    sal_uInt32  nFldSnapY;
-    sal_Bool    bUseGridsnap:1;
-    sal_Bool    bSynchronize:1;
-    sal_Bool    bGridVisible:1;
-    sal_Bool    bEqualGrid:  1;
+    sal_uInt32          mnFldDrawX;
+    sal_uInt32          mnFldDivisionX;
+    sal_uInt32          mnFldDrawY;
+    sal_uInt32          mnFldDivisionY;
+    sal_uInt32          mnFldSnapX;
+    sal_uInt32          mnFldSnapY;
+
+    bool                mbUseGridsnap : 1;
+    bool                mbSynchronize : 1;
+    bool                mbGridVisible : 1;
+    bool                mbEqualGrid : 1;
 
 public:
     SvxOptionsGrid();
     ~SvxOptionsGrid();
 
-    void    SetFldDrawX(    sal_uInt32 nSet){nFldDrawX      = nSet;}
-    void    SetFldDivisionX(sal_uInt32 nSet){nFldDivisionX  = nSet;}
-    void    SetFldDrawY   ( sal_uInt32 nSet){nFldDrawY      = nSet;}
-    void    SetFldDivisionY(sal_uInt32 nSet){nFldDivisionY  = nSet;}
-    void    SetFldSnapX(    sal_uInt32 nSet){nFldSnapX      = nSet;}
-    void    SetFldSnapY   ( sal_uInt32 nSet){nFldSnapY      = nSet;}
-    void    SetUseGridSnap( sal_Bool bSet ) {bUseGridsnap   = bSet;}
-    void    SetSynchronize( sal_Bool bSet ) {bSynchronize   = bSet;}
-    void    SetGridVisible( sal_Bool bSet ) {bGridVisible   = bSet;}
-    void    SetEqualGrid( sal_Bool bSet )   {bEqualGrid     = bSet;}
+    void SetFldDrawX(sal_uInt32 nSet) { mnFldDrawX = nSet; }
+    void SetFldDivisionX(sal_uInt32 nSet) { mnFldDivisionX = nSet; }
+    void SetFldDrawY(sal_uInt32 nSet) { mnFldDrawY = nSet; }
+    void SetFldDivisionY(sal_uInt32 nSet) { mnFldDivisionY = nSet; }
+    void SetFldSnapX(sal_uInt32 nSet) { mnFldSnapX = nSet; }
+    void SetFldSnapY(sal_uInt32 nSet) { mnFldSnapY = nSet; }
 
-    sal_uInt32  GetFldDrawX(    ) const {  return nFldDrawX;    }
-    sal_uInt32  GetFldDivisionX() const {  return nFldDivisionX;}
-    sal_uInt32  GetFldDrawY   ( ) const {  return nFldDrawY;    }
-    sal_uInt32  GetFldDivisionY() const {  return nFldDivisionY;}
-    sal_uInt32  GetFldSnapX(    ) const {  return nFldSnapX;    }
-    sal_uInt32  GetFldSnapY   ( ) const {  return nFldSnapY;    }
-    sal_Bool    GetUseGridSnap( ) const {  return bUseGridsnap; }
-    sal_Bool    GetSynchronize( ) const {  return bSynchronize; }
-    sal_Bool    GetGridVisible( ) const {  return bGridVisible; }
-    sal_Bool    GetEqualGrid()    const {  return bEqualGrid;   }
+    void SetUseGridSnap(bool bSet) { mbUseGridsnap = bSet; }
+    void SetSynchronize(bool bSet) { mbSynchronize = bSet; }
+    void SetGridVisible(bool bSet) { mbGridVisible = bSet; }
+    void SetEqualGrid(bool bSet) { mbEqualGrid = bSet; }
+
+    sal_uInt32 GetFldDrawX() const { return mnFldDrawX; }
+    sal_uInt32 GetFldDivisionX() const { return mnFldDivisionX; }
+    sal_uInt32 GetFldDrawY() const { return mnFldDrawY; }
+    sal_uInt32 GetFldDivisionY() const { return mnFldDivisionY; }
+    sal_uInt32 GetFldSnapX() const { return mnFldSnapX; }
+    sal_uInt32 GetFldSnapY() const { return mnFldSnapY; }
+
+    bool GetUseGridSnap() const { return mbUseGridsnap; }
+    bool GetSynchronize() const { return mbSynchronize; }
+    bool GetGridVisible() const { return mbGridVisible; }
+    bool GetEqualGrid() const { return mbEqualGrid; }
 };
 
 // class SvxGridItem -----------------------------------------------------
@@ -159,8 +162,7 @@ protected:
     MetricField     aMtrFldBezAngle;
 
 private:
-    sal_Bool                bAttrModified;
-//  sal_Bool                bEqualGrid; // Neu
+    bool                mbAttrModified;
 
 #ifdef _SVX_OPTGRID_CXX
     DECL_LINK( ClickRotateHdl_Impl, void * );

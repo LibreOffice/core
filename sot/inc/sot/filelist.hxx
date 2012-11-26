@@ -45,7 +45,6 @@ protected:
 
 public:
 
-    TYPEINFO();
                         FileList();
                         ~FileList();
 

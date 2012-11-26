@@ -62,12 +62,11 @@ class Imp3DDepthRemapper;
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC E3dScene : public E3dObject
+class SVX_DLLPUBLIC E3dScene
+:   public E3dObject,
+    public SdrObjList
 {
 private:
-    // to allow sdr::properties::E3dSceneProperties access to StructureChanged()
-    friend class sdr::properties::E3dSceneProperties;
-
 protected:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
@@ -80,31 +79,52 @@ protected:
     Imp3DDepthRemapper*         mp3DDepthRemapper;
 
     // Flag to determine if only selected objects should be drawn
-    unsigned                    bDrawOnlySelected       : 1;
+    bool                        bDrawOnlySelected : 1;
 
-    virtual void NewObjectInserted(const E3dObject* p3DObj);
-    virtual void StructureChanged();
+    virtual void NewObjectInserted(const E3dObject& r3DObj);
 
     void RebuildLists();
 
     virtual void Notify(SfxBroadcaster &rBC, const SfxHint  &rHint);
 
-protected:
-    void SetDefaultAttributes(E3dDefaultAttributes& rDefault);
-
-    // #110988#
+    void SetDefaultAttributes(const E3dDefaultAttributes& rDefault);
     void ImpCleanup3DDepthMapper();
+    virtual basegfx::B3DRange RecalcBoundVolume() const;
 
-public:
-    TYPEINFO();
-    E3dScene();
-    E3dScene(E3dDefaultAttributes& rDefault);
     virtual ~E3dScene();
 
-    virtual void SetBoundRectDirty();
+    /// method to copy all data from given source
+    virtual void copyDataFromSdrObject(const SdrObject& rSource);
 
-    // access to cleanup of depth mapper
-    void Cleanup3DDepthMapper() { ImpCleanup3DDepthMapper(); }
+public:
+    /// create a copy, evtl. with a different target model (if given)
+    virtual SdrObject* CloneSdrObject(SdrModel* pTargetModel = 0) const;
+
+    E3dScene(
+        SdrModel& rSdrModel,
+        const E3dDefaultAttributes& rDefault);
+
+    // derived from SdrObjList
+    virtual SdrPage* getSdrPageFromSdrObjList() const;
+    virtual SdrObject* getSdrObjectFromSdrObjList() const;
+    virtual SdrModel& getSdrModelFromSdrObjList() const;
+    virtual void handleContentChange(const SfxHint& rHint);
+
+    // derived from SdrObject
+    virtual SdrObjList* getChildrenOfSdrObject() const;
+
+    // react on model change
+    virtual void handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage);
+
+    virtual void StructureChanged();
+    virtual void SetBoundVolInvalid();
+
+    virtual void SetLayer(SdrLayerID nLayer);
+    virtual void SetTransformChanged();
+
+    // 3D-Objekt in die Gruppe einfuegen; Eigentumsuebergang!
+    virtual void Insert3DObj(E3dObject& r3DObj);
+    void Remove3DObj(E3dObject& r3DObj);
 
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
 
@@ -117,77 +137,77 @@ public:
 
     // Distance:
     double GetDistance() const
-        { return (double)((const Svx3DDistanceItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_DISTANCE)).GetValue(); }
+        { return (double)((const SfxUInt32Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_DISTANCE)).GetValue(); }
 
     // Focal length: before cm, now 1/10th mm (*100)
     double GetFocalLength() const
-        { return ((const Svx3DFocalLengthItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue(); }
+        { return ((const SfxUInt32Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue(); }
 
     // Two sided lighting:
-    sal_Bool GetTwoSidedLighting() const
-        { return ((const Svx3DTwoSidedLightingItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING)).GetValue(); }
+    bool GetTwoSidedLighting() const
+        { return ((const SfxBoolItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING)).GetValue(); }
 
     // Lightcolor:
     Color GetLightColor1() const
-        { return ((const Svx3DLightcolor1Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_1)).GetValue(); }
+        { return ((const SvxColorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_1)).GetValue(); }
     Color GetLightColor2() const
-        { return ((const Svx3DLightcolor2Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_2)).GetValue(); }
+        { return ((const SvxColorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_2)).GetValue(); }
     Color GetLightColor3() const
-        { return ((const Svx3DLightcolor3Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_3)).GetValue(); }
+        { return ((const SvxColorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_3)).GetValue(); }
     Color GetLightColor4() const
-        { return ((const Svx3DLightcolor4Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_4)).GetValue(); }
+        { return ((const SvxColorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_4)).GetValue(); }
     Color GetLightColor5() const
-        { return ((const Svx3DLightcolor5Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_5)).GetValue(); }
+        { return ((const SvxColorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_5)).GetValue(); }
     Color GetLightColor6() const
-        { return ((const Svx3DLightcolor6Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_6)).GetValue(); }
+        { return ((const SvxColorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_6)).GetValue(); }
     Color GetLightColor7() const
-        { return ((const Svx3DLightcolor7Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_7)).GetValue(); }
+        { return ((const SvxColorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_7)).GetValue(); }
     Color GetLightColor8() const
-        { return ((const Svx3DLightcolor8Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_8)).GetValue(); }
+        { return ((const SvxColorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_8)).GetValue(); }
 
     // Ambient color:
     Color GetGlobalAmbientColor() const
-        { return ((const Svx3DAmbientcolorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_AMBIENTCOLOR)).GetValue(); }
+        { return ((const SvxColorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_AMBIENTCOLOR)).GetValue(); }
 
     // Light on/off:
-    sal_Bool GetLightOnOff1() const
-        { return ((const Svx3DLightOnOff1Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_1)).GetValue(); }
-    sal_Bool GetLightOnOff2() const
-        { return ((const Svx3DLightOnOff2Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_2)).GetValue(); }
-    sal_Bool GetLightOnOff3() const
-        { return ((const Svx3DLightOnOff3Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_3)).GetValue(); }
-    sal_Bool GetLightOnOff4() const
-        { return ((const Svx3DLightOnOff4Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_4)).GetValue(); }
-    sal_Bool GetLightOnOff5() const
-        { return ((const Svx3DLightOnOff5Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_5)).GetValue(); }
-    sal_Bool GetLightOnOff6() const
-        { return ((const Svx3DLightOnOff6Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_6)).GetValue(); }
-    sal_Bool GetLightOnOff7() const
-        { return ((const Svx3DLightOnOff7Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_7)).GetValue(); }
-    sal_Bool GetLightOnOff8() const
-        { return ((const Svx3DLightOnOff8Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_8)).GetValue(); }
+    bool GetLightOnOff1() const
+        { return ((const SfxBoolItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_1)).GetValue(); }
+    bool GetLightOnOff2() const
+        { return ((const SfxBoolItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_2)).GetValue(); }
+    bool GetLightOnOff3() const
+        { return ((const SfxBoolItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_3)).GetValue(); }
+    bool GetLightOnOff4() const
+        { return ((const SfxBoolItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_4)).GetValue(); }
+    bool GetLightOnOff5() const
+        { return ((const SfxBoolItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_5)).GetValue(); }
+    bool GetLightOnOff6() const
+        { return ((const SfxBoolItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_6)).GetValue(); }
+    bool GetLightOnOff7() const
+        { return ((const SfxBoolItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_7)).GetValue(); }
+    bool GetLightOnOff8() const
+        { return ((const SfxBoolItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_8)).GetValue(); }
 
     // Light direction:
     basegfx::B3DVector GetLightDirection1() const
-        { return ((const Svx3DLightDirection1Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_1)).GetValue(); }
+        { return ((const SvxB3DVectorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_1)).GetValue(); }
     basegfx::B3DVector GetLightDirection2() const
-        { return ((const Svx3DLightDirection2Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_2)).GetValue(); }
+        { return ((const SvxB3DVectorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_2)).GetValue(); }
     basegfx::B3DVector GetLightDirection3() const
-        { return ((const Svx3DLightDirection3Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_3)).GetValue(); }
+        { return ((const SvxB3DVectorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_3)).GetValue(); }
     basegfx::B3DVector GetLightDirection4() const
-        { return ((const Svx3DLightDirection4Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_4)).GetValue(); }
+        { return ((const SvxB3DVectorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_4)).GetValue(); }
     basegfx::B3DVector GetLightDirection5() const
-        { return ((const Svx3DLightDirection5Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_5)).GetValue(); }
+        { return ((const SvxB3DVectorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_5)).GetValue(); }
     basegfx::B3DVector GetLightDirection6() const
-        { return ((const Svx3DLightDirection6Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_6)).GetValue(); }
+        { return ((const SvxB3DVectorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_6)).GetValue(); }
     basegfx::B3DVector GetLightDirection7() const
-        { return ((const Svx3DLightDirection7Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_7)).GetValue(); }
+        { return ((const SvxB3DVectorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_7)).GetValue(); }
     basegfx::B3DVector GetLightDirection8() const
-        { return ((const Svx3DLightDirection8Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_8)).GetValue(); }
+        { return ((const SvxB3DVectorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_8)).GetValue(); }
 
     // ShadowSlant:
     sal_uInt16 GetShadowSlant() const
-        { return ((const Svx3DShadowSlantItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_SHADOW_SLANT)).GetValue(); }
+        { return ((const SfxUInt16Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_SHADOW_SLANT)).GetValue(); }
 
     // ShadeMode: 0 == FLAT, 1 == PHONG, 2 == SMOOTH, 3 == ForceDraft
     sal_uInt16 GetShadeMode() const
@@ -198,27 +218,18 @@ public:
     bool GetDrawOnlySelected() const { return bDrawOnlySelected; }
     virtual sal_uInt16 GetObjIdentifier() const;
 
-    virtual void    NbcSetSnapRect(const Rectangle& rRect);
-    virtual void    NbcMove(const Size& rSize);
-    virtual void    NbcResize(const Point& rRef, const Fraction& rXFact,
-                                                 const Fraction& rYFact);
-    virtual void    RecalcSnapRect();
-
     virtual E3dScene* GetScene() const;
     void SetCamera(const Camera3D& rNewCamera);
     const Camera3D& GetCamera() const { return aCamera; }
     void removeAllNonSelectedObjects();
 
-    virtual void operator=(const SdrObject&);
-
     virtual SdrObjGeoData *NewGeoData() const;
     virtual void          SaveGeoData(SdrObjGeoData& rGeo) const;
     virtual void          RestGeoData(const SdrObjGeoData& rGeo);
 
-    virtual void NbcSetTransform(const basegfx::B3DHomMatrix& rMatrix);
-    virtual void SetTransform(const basegfx::B3DHomMatrix& rMatrix);
+    virtual void SetB3DTransform(const basegfx::B3DHomMatrix& rMatrix);
+    // virtual void SetTransform(const basegfx::B3DHomMatrix& rMatrix);
 
-    virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs);
     void RotateScene(const Point& rRef, long nWink, double sn, double cs);
 
     // TakeObjName...() ist fuer die Anzeige in der UI, z.B. "3 Rahmen selektiert".
@@ -238,11 +249,17 @@ public:
     virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;
 
     // create moves
-    virtual FASTBOOL BegCreate(SdrDragStat& rStat);
-    virtual FASTBOOL MovCreate(SdrDragStat& rStat); // sal_True=Xor muss repainted werden
-    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
-    virtual FASTBOOL BckCreate(SdrDragStat& rStat);
+    virtual bool MovCreate(SdrDragStat& rStat);
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+    virtual bool BckCreate(SdrDragStat& rStat);
     virtual void BrkCreate(SdrDragStat& rStat);
+
+    // Selektion Setzen/Lesen
+    virtual void SetSelected(bool bNew);
+
+    // get/setSdrObjectTransformation
+    virtual const basegfx::B2DHomMatrix& getSdrObjectTransformation() const;
+    virtual void setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransformation);
 };
 
 #endif          // _E3D_SCENE3D_HXX

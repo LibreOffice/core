@@ -47,19 +47,6 @@ namespace drawinglayer
         {
         }
 
-        bool PointArrayPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BasePrimitive2D::operator==(rPrimitive))
-            {
-                const PointArrayPrimitive2D& rCompare = (PointArrayPrimitive2D&)rPrimitive;
-
-                return (getPositions() == rCompare.getPositions()
-                    && getRGBColor() == rCompare.getRGBColor());
-            }
-
-            return false;
-        }
-
         basegfx::B2DRange PointArrayPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             if(maB2DRange.isEmpty())

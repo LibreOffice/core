@@ -122,10 +122,9 @@ SfxMacroStatement::SfxMacroStatement
         return;
 /*
     // Objekt-Typ bestimmen
-    bool bIsApp = rShell.ISA(SfxApplication);
-    bool bIsDoc = rShell.ISA(SfxObjectShell);
-    bool bIsWin = !bIsApp && !bIsDoc &&
-                      ( rShell.ISA(SfxViewShell) || rShell.ISA(SfxViewFrame) );
+    bool bIsApp = dynamic_cast< SfxApplication* >(&rShell);
+    bool bIsDoc = dynamic_cast< SfxObjectShell* >(&rShell);
+    bool bIsWin = !bIsApp && !bIsDoc && ( dynamic_cast< SfxViewShell* >(&rShell) || dynamic_cast< SfxViewFrame* >(&rShell) );
     bool bIsSel = !bIsApp && !bIsDoc && !bIsWin;
 
     // Objekt nicht schon im Slot-Namen enthalten?
@@ -135,20 +134,20 @@ SfxMacroStatement::SfxMacroStatement
         if ( rSlot.IsMode( SFX_SLOT_RECORDABSOLUTE ) )
         {
             // an der Applikation oder am Modul
-            if ( rShell.ISA(SfxApplication) || rShell.ISA(SfxModule) )
+            if ( dynamic_cast< SfxApplication* >(&rShell) || dynamic_cast< SfxModule* >(&rShell) )
                 aStatement = rTarget;
 
             // am Dokument?
             // '[' = 5Bh
             // ']' = 5Dh
-            else if ( rShell.ISA(SfxObjectShell) )
+            else if ( dynamic_cast< SfxObjectShell* >(&rShell) )
             {
                 aStatement = 0x005B;
                 aStatement += rTarget;
                 aStatement += 0x005D;
             }
 
-            else if ( rShell.ISA(SfxViewFrame) )
+            else if ( dynamic_cast< SfxViewFrame* >(&rShell) )
             {
                 aStatement = 0x005B;
                 aStatement += String::CreateFromAscii("ViewFrame");//rShell.GetSbxObject()->GetName();
@@ -162,7 +161,7 @@ SfxMacroStatement::SfxMacroStatement
                 aStatement = 0x005B;
                 aStatement += String::CreateFromAscii("ViewShell");//pViewShell->GetViewFrame()->GetSbxObject()->GetName();
                 aStatement += 0x005D;
-                if ( !rShell.ISA(SfxViewFrame) )
+                if ( !dynamic_cast< SfxViewFrame* >(&rShell) )
                     // an einer Sub-Shell zus"atlich ".Selection" anh"angen
                     aStatement += DEFINE_CONST_UNICODE(".Selection");
             }
@@ -170,19 +169,19 @@ SfxMacroStatement::SfxMacroStatement
         else // relatives Aufzeichnen
         {
             // an der Application?
-            if ( rShell.ISA(SfxApplication) )
+            if ( dynamic_cast< SfxApplication* >(&rShell) )
                 aStatement = DEFINE_CONST_UNICODE("Application");
 
             // am Modul?
-            else if ( rShell.ISA(SfxModule) )
+            else if ( dynamic_cast< SfxModule* >(&rShell) )
                 aStatement = DEFINE_CONST_UNICODE("ActiveModule");
 
             // am Dokument
-            else if ( rShell.ISA(SfxObjectShell) )
+            else if ( dynamic_cast< SfxObjectShell* >(&rShell) )
                 aStatement = DEFINE_CONST_UNICODE("ActiveDocument");
 
             // am Window
-            else if ( rShell.ISA(SfxViewShell) || rShell.ISA(SfxViewFrame) )
+            else if ( dynamic_cast< SfxViewShell* >(&rShell) || dynamic_cast< SfxViewFrame* >(&rShell) )
                 aStatement = DEFINE_CONST_UNICODE("ActiveWindow");
 
             else
@@ -201,7 +200,7 @@ SfxMacroStatement::SfxMacroStatement
             const SfxShellObject *pParentObj =
                         (const SfxShellObject*) pShObj->GetParent();
             SfxShell *pParentSh = pParentObj->GetShell();
-            DBG_ASSERT( pParentSh->ISA(SfxViewFrame),
+            DBG_ASSERT( dynamic_cast< SfxViewFrame* >(pParentSh),
                         "parent of SubShell must be a Frame" );
             if ( rSlot.pName[0] == '.' )
             {

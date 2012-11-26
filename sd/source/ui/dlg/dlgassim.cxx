@@ -169,10 +169,10 @@ void SdPageListControl::Fill( SdDrawDocument* pDoc )
     pOutliner->Clear();
 }
 
-sal_uInt16 SdPageListControl::GetSelectedPage()
+sal_uInt32 SdPageListControl::GetSelectedPage()
 {
     SvLBoxEntry* pSelEntry = GetCurEntry();
-    sal_uInt16 nPage = 0;
+    sal_uInt32 nPage = 0;
 
     if ( pSelEntry )
     {
@@ -192,10 +192,10 @@ sal_uInt16 SdPageListControl::GetSelectedPage()
     return nPage;
 }
 
-sal_Bool SdPageListControl::IsPageChecked( sal_uInt16 nPage )
+bool SdPageListControl::IsPageChecked( sal_uInt32 nPage )
 {
     SvLBoxEntry* pEntry = GetModel()->GetEntry(nPage);
-    return pEntry?(sal_Bool)(GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED): sal_False;
+    return pEntry ? (GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED) : false;
 }
 
 void SdPageListControl::DataChanged( const DataChangedEvent& rDCEvt )

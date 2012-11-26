@@ -106,7 +106,6 @@
 #include <editeng/colritem.hxx>
 #include <svx/sxekitm.hxx>
 #include <editeng/bulitem.hxx>
-#include <svx/polysc3d.hxx>
 #include <svx/extrud3d.hxx>
 #include "svx/svditer.hxx"
 #include <svx/xpoly.hxx>
@@ -140,6 +139,8 @@ using namespace vos;
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include "svx/EnhancedCustomShape2d.hxx"
+#include <svx/svdlegacy.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 
 using namespace ::com::sun::star    ;
 using namespace ::com::sun::star::drawing;
@@ -488,9 +489,6 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                             case OBJ_RECT :
                             case OBJ_TEXT :
                             case OBJ_PAGE :
-                            case OBJ_TEXTEXT :
-                            case OBJ_wegFITTEXT :
-                            case OBJ_wegFITALLTEXT :
                             case OBJ_TITLETEXT :
                             case OBJ_OUTLINETEXT :
                             {
@@ -524,16 +522,6 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                             }
                             break;
                             case OBJ_POLY :
-                            case OBJ_PLIN :
-                            case OBJ_LINE :
-                            case OBJ_PATHLINE :
-                            case OBJ_PATHFILL :
-                            case OBJ_FREELINE :
-                            case OBJ_FREEFILL :
-                            case OBJ_SPLNLINE :
-                            case OBJ_SPLNFILL :
-                            case OBJ_PATHPOLY :
-                            case OBJ_PATHPLIN :
                             {
                                 if ( pList && ( pList->GetCount() > nC ) )
                                 {
@@ -575,8 +563,8 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                                             fXRel *= 10000;
                                                             fYRel /= (double)nHeight;
                                                             fYRel *= 10000;
-                                                            aGluePoint.SetPos( Point( (sal_Int32)fXRel, (sal_Int32)fYRel ) );
-                                                            aGluePoint.SetPercent( sal_True );
+                                                            aGluePoint.SetPos( basegfx::B2DPoint( fXRel, fYRel ) );
+                                                            aGluePoint.SetPercent( true );
                                                             aGluePoint.SetAlign( SDRVERTALIGN_TOP | SDRHORZALIGN_LEFT );
                                                             aGluePoint.SetEscDir( SDRESC_SMART );
                                                             nId = (sal_Int32)((*pList)[ pList->Insert( aGluePoint ) ].GetId() + 3 );
@@ -744,7 +732,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                                 bValidGluePoint = sal_True;
                                                 ((SdrObjCustomShape*)pO)->SetMergedItem( aGeometryItem );
                                                 SdrGluePointList* pLst = pO->ForceGluePointList();
-                                                if ( pLst->GetCount() > nGluePoints )
+                                                if ( (sal_Int32)pLst->GetCount() > nGluePoints )
                                                     nId = (sal_Int32)((*pLst)[ (sal_uInt16)nGluePoints ].GetId() + 3 );
                                             }
                                         }
@@ -758,6 +746,8 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                             Reference< XPropertySet > xPropSet( aXConnector, UNO_QUERY );
                             if ( xPropSet.is() )
                             {
+                                const SdrObjectChangeBroadcaster aSdrObjectChangeBroadcaster(*pO);
+
                                 if ( nN )
                                 {
                                     String aPropName( RTL_CONSTASCII_USTRINGPARAM( "EndShape" ) );
@@ -779,8 +769,10 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
 
                                 // Not sure what this is good for, repaint or broadcast of object change.
                                 //( Thus i am adding repaint here
+                                // AW: Should not be needed at all; SetPropValue should trigger all needed actions
+                                // when called and do the needed broadcasts for changes at the model (SdrObject).
+                                // Still keeping this to not change behaviour
                                 pO->SetChanged();
-                                pO->BroadcastObjectChange();
                             }
                         }
                     }
@@ -889,9 +881,11 @@ static basegfx::B2DPolygon GetLineArrow( const sal_Int32 nLineWidth, const MSO_L
         break;
         case mso_lineArrowOvalEnd :
         {
-            aRetval = XPolygon( Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), 0 ),
-                                (sal_Int32)( fWidthMul * fLineWidth * 0.50 ),
-                                    (sal_Int32)( fLenghtMul * fLineWidth * 0.50 ), 0, 3600 ).getB2DPolygon();
+            const double fRadX(fWidthMul * fLineWidth * 0.5);
+            const double fRadY(fLenghtMul * fLineWidth * 0.5);
+            const basegfx::B2DPoint aCenter(fRadX, 0.0);
+
+            aRetval = basegfx::tools::createPolygonFromEllipse(aCenter, fRadX, fRadY);
             rbArrowCenter = sal_True;
             rsArrowName = String( RTL_CONSTASCII_STRINGPARAM( "msArrowOvalEnd " ), RTL_TEXTENCODING_UTF8 );
         }
@@ -1032,7 +1026,7 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
 
         if ( nLineFlags & 0x10 )
         {
-            sal_Bool bScaleArrows = rManager.pSdrModel->GetScaleUnit() == MAP_TWIP;
+            sal_Bool bScaleArrows = rManager.pSdrModel->GetExchangeObjectUnit() == MAP_TWIP;
             ///////////////
             // LineStart //
             ///////////////
@@ -1142,8 +1136,8 @@ struct QuantErr
 
 void ApplyRectangularGradientAsBitmap( const SvxMSDffManager& rManager, SvStream& rIn, SfxItemSet& rSet, const std::vector< ShadeColor >& rShadeColors, const DffObjData& rObjData, sal_Int32 nFix16Angle )
 {
-    Size aBitmapSizePixel( static_cast< sal_Int32 >( ( rObjData.aBoundRect.GetWidth() / 2540.0 ) * 90.0 ),      // we will create a bitmap with 90 dpi
-                           static_cast< sal_Int32 >( ( rObjData.aBoundRect.GetHeight() / 2540.0 ) * 90.0 ) );
+    Size aBitmapSizePixel( static_cast< sal_Int32 >( ( rObjData.aBoundRect.getWidth() / 2540.0 ) * 90.0 ),      // we will create a bitmap with 90 dpi
+                           static_cast< sal_Int32 >( ( rObjData.aBoundRect.getHeight() / 2540.0 ) * 90.0 ) );
     if ( aBitmapSizePixel.Width() && aBitmapSizePixel.Height() && ( aBitmapSizePixel.Width() <= 1024 ) && ( aBitmapSizePixel.Height() <= 1024 ) )
     {
 //      std::vector< QuantErr > aQuantErrCurrScan( aBitmapSizePixel.Width() + 1 );
@@ -1351,7 +1345,7 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
                 //If it is imported as a bitmap, it will not work well with transparecy especially 100
                 //But the gradient look well comparing with imported as gradient. And rotate with shape
                 //also works better. So here just keep it.
-                if ( rObjData.aBoundRect.IsEmpty() )// size of object needed to be able
+                if ( rObjData.aBoundRect.isEmpty() )// size of object needed to be able
                     eXFill = XFILL_GRADIENT;        // to create a bitmap substitution
                 else
                     eXFill = XFILL_BITMAP;
@@ -1561,16 +1555,16 @@ void DffPropertyReader::ApplyCustomShapeTextAttributes( SfxItemSet& rSet ) const
     rSet.Put( SdrTextVertAdjustItem( eTVA ) );
     rSet.Put( SdrTextHorzAdjustItem( eTHA ) );
 
-    rSet.Put( SdrTextLeftDistItem( nTextLeft ) );
-    rSet.Put( SdrTextRightDistItem( nTextRight ) );
-    rSet.Put( SdrTextUpperDistItem( nTextTop ) );
-    rSet.Put( SdrTextLowerDistItem( nTextBottom ) );
+    rSet.Put( SdrMetricItem(SDRATTR_TEXT_LEFTDIST, nTextLeft ) );
+    rSet.Put( SdrMetricItem(SDRATTR_TEXT_RIGHTDIST, nTextRight ) );
+    rSet.Put( SdrMetricItem(SDRATTR_TEXT_UPPERDIST, nTextTop ) );
+    rSet.Put( SdrMetricItem(SDRATTR_TEXT_LOWERDIST, nTextBottom ) );
 
-    rSet.Put( SdrTextWordWrapItem( (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) != mso_wrapNone ? sal_True : sal_False ) );
-    rSet.Put( SdrTextAutoGrowHeightItem( ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 ) != 0 ) );
+    rSet.Put( SdrOnOffItem( SDRATTR_TEXT_WORDWRAP, (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) != mso_wrapNone ? sal_True : sal_False ) );
+    rSet.Put( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT, ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 ) != 0 ) );
 
-//  rSet.Put( SdrTextAutoGrowWidthItem( (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) != mso_wrapNone ? sal_False : sal_True ) );
-//  rSet.Put( SdrTextAutoGrowHeightItem( ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 ) != 0 ) );
+//  rSet.Put( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWWIDTH, (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) != mso_wrapNone ? sal_False : sal_True ) );
+//  rSet.Put( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT, ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 ) != 0 ) );
 }
 
 void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxItemSet& rSet, const DffObjData& rObjData ) const
@@ -2634,7 +2628,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
 
 void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet ) const
 {
-    Rectangle aEmptyRect;
+    basegfx::B2DRange aEmptyRect;
     DffRecordHeader aHdTemp;
     DffObjData aDffObjTemp( aHdTemp, aEmptyRect, 0 );
     ApplyAttributes( rIn, rSet, aDffObjTemp );
@@ -2661,25 +2655,35 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
     if ( IsProperty( DFF_Prop_fillColor ) )
         rSet.Put( XFillColorItem( String(), rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_fillColor ), DFF_Prop_fillColor ) ) );
     if ( IsProperty( DFF_Prop_shadowColor ) )
-        rSet.Put( SdrShadowColorItem( String(), rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_shadowColor ), DFF_Prop_shadowColor ) ) );
+        rSet.Put( XColorItem( SDRATTR_SHADOWCOLOR, String(), rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_shadowColor ), DFF_Prop_shadowColor ) ) );
     else
     {
         //The default value for this property is 0x00808080
-        rSet.Put( SdrShadowColorItem( String(),  rManager.MSO_CLR_ToColor( 0x00808080, DFF_Prop_shadowColor ) ) );
+        rSet.Put( XColorItem( SDRATTR_SHADOWCOLOR, String(),  rManager.MSO_CLR_ToColor( 0x00808080, DFF_Prop_shadowColor ) ) );
     }
     if ( IsProperty( DFF_Prop_shadowOpacity ) )
-        rSet.Put( SdrShadowTransparenceItem( (sal_uInt16)( ( 0x10000 - GetPropertyValue( DFF_Prop_shadowOpacity ) ) / 655 ) ) );
+    {
+        rSet.Put( SdrPercentItem( SDRATTR_SHADOWTRANSPARENCE, (sal_uInt16)( ( 0x10000 - GetPropertyValue( DFF_Prop_shadowOpacity ) ) / 655 ) ) );
+    }
     if ( IsProperty( DFF_Prop_shadowOffsetX ) )
     {
         sal_Int32 nVal = static_cast< sal_Int32 >( GetPropertyValue( DFF_Prop_shadowOffsetX ) );
         rManager.ScaleEmu( nVal );
-        rSet.Put( SdrShadowXDistItem( nVal ) );
+
+        if(nVal)
+        {
+            rSet.Put( SdrMetricItem( SDRATTR_SHADOWXDIST, nVal ) );
+        }
     }
     if ( IsProperty( DFF_Prop_shadowOffsetY ) )
     {
         sal_Int32 nVal = static_cast< sal_Int32 >( GetPropertyValue( DFF_Prop_shadowOffsetY ) );
         rManager.ScaleEmu( nVal );
-        rSet.Put( SdrShadowYDistItem( nVal ) );
+
+        if(nVal)
+        {
+            rSet.Put( SdrMetricItem( SDRATTR_SHADOWYDIST, nVal ) );
+        }
     }
     if ( IsProperty( DFF_Prop_fshadowObscured ) )
     {
@@ -2687,9 +2691,9 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
         if ( bHasShadow )
         {
             if ( !IsProperty( DFF_Prop_shadowOffsetX ) )
-                rSet.Put( SdrShadowXDistItem( 35 ) );
+                rSet.Put( SdrMetricItem( SDRATTR_SHADOWXDIST, 35 ) );
             if ( !IsProperty( DFF_Prop_shadowOffsetY ) )
-                rSet.Put( SdrShadowYDistItem( 35 ) );
+                rSet.Put( SdrMetricItem( SDRATTR_SHADOWYDIST, 35 ) );
         }
     }
     if ( IsProperty( DFF_Prop_shadowType ) )
@@ -2698,9 +2702,9 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
         if( eShadowType != mso_shadowOffset )
         {
             //0.12'' == 173 twip == 302 100mm
-            sal_uInt32 nDist = rManager.pSdrModel->GetScaleUnit() == MAP_TWIP ? 173: 302;
-            rSet.Put( SdrShadowXDistItem( nDist ) );
-            rSet.Put( SdrShadowYDistItem( nDist ) );
+            const sal_uInt32 nDist(MAP_TWIP == rManager.pSdrModel->GetExchangeObjectUnit() ? 173: 302);
+            rSet.Put( SdrMetricItem( SDRATTR_SHADOWXDIST, nDist ) );
+            rSet.Put( SdrMetricItem( SDRATTR_SHADOWYDIST, nDist ) );
         }
     }
     if ( bHasShadow )
@@ -2739,7 +2743,7 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
             bHasShadow = sal_False;                                             // we are turning shadow off.
 
         if ( bHasShadow )
-            rSet.Put( SdrShadowItem( bHasShadow ) );
+            rSet.Put( SdrOnOffItem(SDRATTR_SHADOW, bHasShadow ) );
     }
     ApplyLineAttributes( rSet, rObjData.eShapeType ); // #i28269#
     ApplyFillAttributes( rIn, rSet, rObjData );
@@ -3229,7 +3233,7 @@ void SvxMSDffManager::ScaleEmu( sal_Int32& rVal ) const
 
 sal_uInt32 SvxMSDffManager::ScalePt( sal_uInt32 nVal ) const
 {
-    MapUnit eMap = pSdrModel->GetScaleUnit();
+    MapUnit eMap = pSdrModel->GetExchangeObjectUnit();
     Fraction aFact( GetMapFactor( MAP_POINT, eMap ).X() );
     long aMul = aFact.GetNumerator();
     long aDiv = aFact.GetDenominator() * 65536;
@@ -3249,7 +3253,7 @@ void SvxMSDffManager::SetModel(SdrModel* pModel, long nApplicationScale)
     {
         // PPT arbeitet nur mit Einheiten zu 576DPI
         // WW hingegen verwendet twips, dh. 1440DPI.
-        MapUnit eMap = pSdrModel->GetScaleUnit();
+        MapUnit eMap = pSdrModel->GetExchangeObjectUnit();
         Fraction aFact( GetMapFactor(MAP_INCH, eMap).X() );
         long nMul=aFact.GetNumerator();
         long nDiv=aFact.GetDenominator()*nApplicationScale;
@@ -3280,7 +3284,7 @@ void SvxMSDffManager::SetModel(SdrModel* pModel, long nApplicationScale)
     {
         pModel = 0;
         nMapMul = nMapDiv = nMapXOfs = nMapYOfs = nEmuMul = nEmuDiv = nPntMul = nPntDiv = 0;
-        bNeedMap = sal_False;
+        bNeedMap = false;
     }
 }
 
@@ -3330,9 +3334,9 @@ sal_Bool SvxMSDffManager::SeekToShape( SvStream& rSt, void* /* pClientData */, s
     return bRet;
 }
 
-FASTBOOL SvxMSDffManager::SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMaxFilePos, DffRecordHeader* pRecHd, sal_uLong nSkipCount ) const
+bool SvxMSDffManager::SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMaxFilePos, DffRecordHeader* pRecHd, sal_uLong nSkipCount ) const
 {
-    FASTBOOL bRet = sal_False;
+    bool bRet = false;
     sal_uLong nFPosMerk = rSt.Tell(); // store FilePos to restore it later if necessary
     DffRecordHeader aHd;
     do
@@ -3353,7 +3357,7 @@ FASTBOOL SvxMSDffManager::SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong
                 nSkipCount--;
             else
             {
-                bRet = sal_True;
+                bRet = true;
                 if ( pRecHd != NULL )
                     *pRecHd = aHd;
                 else
@@ -3369,9 +3373,9 @@ FASTBOOL SvxMSDffManager::SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong
     return bRet;
 }
 
-FASTBOOL SvxMSDffManager::SeekToRec2( sal_uInt16 nRecId1, sal_uInt16 nRecId2, sal_uLong nMaxFilePos, DffRecordHeader* pRecHd, sal_uLong nSkipCount ) const
+bool SvxMSDffManager::SeekToRec2( sal_uInt16 nRecId1, sal_uInt16 nRecId2, sal_uLong nMaxFilePos, DffRecordHeader* pRecHd, sal_uLong nSkipCount ) const
 {
-    FASTBOOL bRet = sal_False;
+    bool bRet = false;
     sal_uLong nFPosMerk = rStCtrl.Tell();   // FilePos merken fuer ggf. spaetere Restauration
     DffRecordHeader aHd;
     do
@@ -3383,7 +3387,7 @@ FASTBOOL SvxMSDffManager::SeekToRec2( sal_uInt16 nRecId1, sal_uInt16 nRecId2, sa
                 nSkipCount--;
             else
             {
-                bRet = sal_True;
+                bRet = true;
                 if ( pRecHd )
                     *pRecHd = aHd;
                 else
@@ -3400,7 +3404,7 @@ FASTBOOL SvxMSDffManager::SeekToRec2( sal_uInt16 nRecId1, sal_uInt16 nRecId2, sa
 }
 
 
-FASTBOOL SvxMSDffManager::GetColorFromPalette( sal_uInt16 /* nNum */, Color& rColor ) const
+bool SvxMSDffManager::GetColorFromPalette( sal_uInt16 /* nNum */, Color& rColor ) const
 {
     // diese Methode ist in der zum Excel-Import
     // abgeleiteten Klasse zu ueberschreiben...
@@ -3663,7 +3667,7 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
 // our outliner is too complicate to be used properly,
 void SvxMSDffManager::ReadObjText( const String& rText, SdrObject* pObj ) const
 {
-    SdrTextObj* pText = PTR_CAST( SdrTextObj, pObj );
+    SdrTextObj* pText = dynamic_cast< SdrTextObj* >( pObj );
     if ( pText )
     {
         SdrOutliner& rOutliner = pText->ImpGetDrawOutliner();
@@ -3723,7 +3727,7 @@ void SvxMSDffManager::ReadObjText( const String& rText, SdrObject* pObj ) const
 
 //static
 void SvxMSDffManager::MSDFFReadZString( SvStream& rIn, String& rStr,
-                                    sal_uLong nRecLen, FASTBOOL bUniCode )
+                                    sal_uLong nRecLen, bool bUniCode )
 {
     sal_uInt16 nLen = (sal_uInt16)nRecLen;
     if( nLen )
@@ -3759,7 +3763,7 @@ void SvxMSDffManager::MSDFFReadZString( SvStream& rIn, String& rStr,
         rStr.Erase();
 }
 
-SdrObject* SvxMSDffManager::ImportFontWork( SvStream& rStCt, SfxItemSet& rSet, Rectangle& rBoundRect ) const
+SdrObject* SvxMSDffManager::ImportFontWork( SvStream& rStCt, SfxItemSet& rSet, basegfx::B2DRange& rBoundRect ) const
 {
     SdrObject*  pRet = NULL;
     String      aObjectText;
@@ -3774,13 +3778,13 @@ SdrObject* SvxMSDffManager::ImportFontWork( SvStream& rStCt, SfxItemSet& rSet, R
     if ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x2000 )
     {
         // Text ist senkrecht formatiert, Box Kippen
-        sal_Int32 nHalfWidth = ( rBoundRect.GetWidth() + 1) >> 1;
-        sal_Int32 nHalfHeight = ( rBoundRect.GetHeight() + 1) >> 1;
-        Point aTopLeft( rBoundRect.Left() + nHalfWidth - nHalfHeight,
-                rBoundRect.Top() + nHalfHeight - nHalfWidth);
-        Size aNewSize( rBoundRect.GetHeight(), rBoundRect.GetWidth() );
-        Rectangle aNewRect( aTopLeft, aNewSize );
-        rBoundRect = aNewRect;
+        const basegfx::B2DVector aHalfSize(rBoundRect.getRange() * 0.5);
+        const basegfx::B2DPoint aTopLeft(
+            rBoundRect.getMinX() + aHalfSize.getX() - aHalfSize.getY(),
+            rBoundRect.getMinY() + aHalfSize.getY() - aHalfSize.getX());
+        const basegfx::B2DVector aNewSize(rBoundRect.getHeight(), rBoundRect.getWidth());
+
+        rBoundRect = basegfx::B2DRange(aTopLeft, aTopLeft + aNewSize);
 
         String aSrcText( aObjectText );
         aObjectText.Erase();
@@ -3794,15 +3798,22 @@ SdrObject* SvxMSDffManager::ImportFontWork( SvStream& rStCt, SfxItemSet& rSet, R
     }
     if ( aObjectText.Len() )
     {   // FontWork-Objekt Mit dem Text in aObjectText erzeugen
-        SdrObject* pNewObj = new SdrRectObj( OBJ_TEXT, rBoundRect );
+        SdrObject* pNewObj = new SdrRectObj(
+            *GetModel(),
+            basegfx::tools::createScaleTranslateB2DHomMatrix(
+                rBoundRect.getRange(),
+                rBoundRect.getMinimum()),
+            OBJ_TEXT,
+            true);
+
         if( pNewObj )
         {
-            pNewObj->SetModel( pSdrModel );
+            //pNewObj->SetModel( pSdrModel );
             ((SdrRectObj*)pNewObj)->SetText( aObjectText );
             SdrFitToSizeType eFTS = SDRTEXTFIT_PROPORTIONAL;
             rSet.Put( SdrTextFitToSizeTypeItem( eFTS ) );
-            rSet.Put( SdrTextAutoGrowHeightItem( sal_False ) );
-            rSet.Put( SdrTextAutoGrowWidthItem( sal_False ) );
+            rSet.Put( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT, sal_False ) );
+            rSet.Put( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWWIDTH, sal_False ) );
             rSet.Put( SvxFontItem( FAMILY_DONTKNOW, aFontName, String(),
                             PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, EE_CHAR_FONTINFO ));
 
@@ -3813,13 +3824,18 @@ SdrObject* SvxMSDffManager::ImportFontWork( SvStream& rStCt, SfxItemSet& rSet, R
                 pRet = pNewObj;
             else
             {
-                pRet->NbcSetSnapRect( rBoundRect );
-                SdrObject::Free( pNewObj );
+                sdr::legacy::SetSnapRange(*pRet, rBoundRect );
+                deleteSdrObjectSafeAndClearPointer( pNewObj );
             }
             if( bTextRotate )
             {
-                double a = 9000 * nPi180;
-                pRet->NbcRotate( rBoundRect.Center(), 9000, sin( a ), cos( a ) );
+                basegfx::B2DHomMatrix aTransform;
+
+                aTransform.translate(-rBoundRect.getCenter());
+                aTransform.rotate(-F_PI2);
+                aTransform.translate(rBoundRect.getCenter());
+
+                sdr::legacy::transformSdrObject(*pRet, aTransform);
             }
         }
     }
@@ -3904,7 +3920,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
     SdrObject*  pRet = NULL;
     String      aFileName;
     String      aLinkFileName, aLinkFilterName;
-    Rectangle   aVisArea;
+    basegfx::B2DRange aVisArea;
 
     MSO_BlipFlags eFlags = (MSO_BlipFlags)GetPropertyValue( DFF_Prop_pibFlags, mso_blipflagDefault );
     sal_uInt32 nBlipId = GetPropertyValue( DFF_Prop_pib, 0 );
@@ -4085,7 +4101,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
         }
         if( !pRet )
         {
-            pRet = new SdrGrafObj;
+            pRet = new SdrGrafObj(*GetModel(), Graphic());
             if( bGrfRead )
                 ((SdrGrafObj*)pRet)->SetGraphic( aGraf );
 
@@ -4111,8 +4127,8 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
         }
 
         // set the size from BLIP if there is one
-        if ( pRet && bGrfRead && !aVisArea.IsEmpty() )
-            pRet->SetBLIPSizeRectangle( aVisArea );
+        if ( pRet && bGrfRead && !aVisArea.isEmpty() )
+            pRet->SetBLIPSizeRange( aVisArea );
 
         if ( !pRet->GetName().Len() )                   // SJ 22.02.00 : PPT OLE IMPORT:
         {                                               // name is already set in ImportOLE !!
@@ -4127,21 +4143,22 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                 pRet->SetName( aFileName );
         }
     }
-    pRet->SetModel( pSdrModel ); // fuer GraphicLink erforderlich
-    pRet->SetLogicRect( rObjData.aBoundRect );
+    //pRet->SetModel( pSdrModel ); // fuer GraphicLink erforderlich
+    sdr::legacy::SetLogicRange(*pRet, rObjData.aBoundRect );
+    SdrGrafObj* pSdrGrafObj = dynamic_cast< SdrGrafObj* >(pRet);
 
-    if ( pRet->ISA( SdrGrafObj ) )
+    if ( pSdrGrafObj )
     {
         if( aLinkFileName.Len() )
-            ((SdrGrafObj*)pRet)->SetGraphicLink( aLinkFileName, aLinkFilterName );
+            pSdrGrafObj->SetGraphicLink( aLinkFileName, aLinkFilterName );
 
         if ( bLinkGrf && !bGrfRead )
         {
-            ((SdrGrafObj*)pRet)->ForceSwapIn();
-            Graphic aGraf(((SdrGrafObj*)pRet)->GetGraphic());
+            pSdrGrafObj->ForceSwapIn();
+            Graphic aGraf(pSdrGrafObj->GetGraphic());
             lcl_ApplyCropping( *this, &rSet, aGraf );
         }
-        ((SdrGrafObj*)pRet)->ForceSwapOut();
+        pSdrGrafObj->ForceSwapOut();
     }
 
     return pRet;
@@ -4149,25 +4166,57 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
 
 // PptSlidePersistEntry& rPersistEntry, SdPage* pPage
 SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
-    Rectangle& rClientRect, const Rectangle& rGlobalChildRect, int nCalledByGroup, sal_Int32* pShapeId )
+    basegfx::B2DRange& rClientRange, const basegfx::B2DRange& rGlobalChildRange, int nCalledByGroup, sal_Int32* pShapeId )
 {
     SdrObject* pRet = NULL;
     DffRecordHeader aObjHd;
     rSt >> aObjHd;
     if ( aObjHd.nRecType == DFF_msofbtSpgrContainer )
     {
-        pRet = ImportGroup( aObjHd, rSt, pClientData, rClientRect, rGlobalChildRect, nCalledByGroup, pShapeId );
+        pRet = ImportGroup( aObjHd, rSt, pClientData, rClientRange, rGlobalChildRange, nCalledByGroup, pShapeId );
     }
     else if ( aObjHd.nRecType == DFF_msofbtSpContainer )
     {
-        pRet = ImportShape( aObjHd, rSt, pClientData, rClientRect, rGlobalChildRect, nCalledByGroup, pShapeId );
+        pRet = ImportShape( aObjHd, rSt, pClientData, rClientRange, rGlobalChildRange, nCalledByGroup, pShapeId );
     }
     aObjHd.SeekToBegOfRecord( rSt );    // FilePos restaurieren
     return pRet;
 }
 
+void SvxMSDffManager::ApplyRotationAndMirror(
+    SdrObject& rTarget,
+    const basegfx::B2DPoint& rCenter,
+    sal_Int32 nAngle, // in old DrawingLayer notation
+    bool bFlipHorizontal,
+    bool bFlipVertical)
+{
+    if(nAngle || bFlipHorizontal || bFlipVertical)
+    {
+        basegfx::B2DHomMatrix aTransform;
+        aTransform.translate(-rCenter);
+
+        if(nAngle)
+        {
+            aTransform.rotate((-nAngle * F_PI) / 18000.0);
+        }
+
+        if(bFlipHorizontal)
+        {
+            aTransform.scale(-1.0, 1.0);
+        }
+
+        if(bFlipVertical)
+        {
+            aTransform.scale(1.0, -1.0);
+        }
+
+        aTransform.translate(rCenter);
+        sdr::legacy::transformSdrObject(rTarget, aTransform);
+    }
+}
+
 SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& rSt, void* pClientData,
-                                            Rectangle& rClientRect, const Rectangle& rGlobalChildRect,
+    basegfx::B2DRange& rClientRange, const basegfx::B2DRange& rGlobalChildRange,
                                                 int nCalledByGroup, sal_Int32* pShapeId )
 {
     SdrObject* pRet = NULL;
@@ -4184,30 +4233,30 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
         sal_Int32 nSpFlags = 0;
         mnFix16Angle = 0;
         aRecHd.SeekToBegOfRecord( rSt );
-        pRet = ImportObj( rSt, pClientData, rClientRect, rGlobalChildRect, nCalledByGroup + 1, pShapeId );
+        pRet = ImportObj( rSt, pClientData, rClientRange, rGlobalChildRange, nCalledByGroup + 1, pShapeId );
         if ( pRet )
         {
             nSpFlags = nGroupShapeFlags;
             nGroupRotateAngle = mnFix16Angle;
 
-            Rectangle aClientRect( rClientRect );
+            basegfx::B2DRange aClientRange( rClientRange );
+            basegfx::B2DRange aGlobalChildRect;
 
-            Rectangle aGlobalChildRect;
-            if ( !nCalledByGroup || rGlobalChildRect.IsEmpty() )
-                aGlobalChildRect = GetGlobalChildAnchor( rHd, rSt, aClientRect );
+            if ( !nCalledByGroup || rGlobalChildRange.isEmpty() )
+                aGlobalChildRect = GetGlobalChildAnchor( rHd, rSt, aClientRange );
             else
-                aGlobalChildRect = rGlobalChildRect;
+                aGlobalChildRect = rGlobalChildRange;
 
             if ( ( nGroupRotateAngle > 4500 && nGroupRotateAngle <= 13500 )
                 || ( nGroupRotateAngle > 22500 && nGroupRotateAngle <= 31500 ) )
             {
-                sal_Int32 nHalfWidth = ( aClientRect.GetWidth() + 1 ) >> 1;
-                sal_Int32 nHalfHeight = ( aClientRect.GetHeight() + 1 ) >> 1;
-                Point aTopLeft( aClientRect.Left() + nHalfWidth - nHalfHeight,
-                                aClientRect.Top() + nHalfHeight - nHalfWidth );
-                Size aNewSize( aClientRect.GetHeight(), aClientRect.GetWidth() );
-                Rectangle aNewRect( aTopLeft, aNewSize );
-                aClientRect = aNewRect;
+                const basegfx::B2DVector aHalfSize(aClientRange.getRange() * 0.5);
+                const basegfx::B2DPoint aTopLeft(
+                    aClientRange.getMinX() + aHalfSize.getX() - aHalfSize.getY(),
+                    aClientRange.getMinY() + aHalfSize.getY() - aHalfSize.getX());
+                const basegfx::B2DVector aNewSize(aClientRange.getHeight(), aClientRange.getWidth());
+
+                aClientRange = basegfx::B2DRange(aTopLeft, aTopLeft + aNewSize);
             }
 
             // now importing the inner objects of the group
@@ -4218,14 +4267,14 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                 rSt >> aRecHd2;
                 if ( aRecHd2.nRecType == DFF_msofbtSpgrContainer )
                 {
-                    Rectangle aGroupClientAnchor, aGroupChildAnchor;
-                    GetGroupAnchors( aRecHd2, rSt, aGroupClientAnchor, aGroupChildAnchor, aClientRect, aGlobalChildRect );
+                    basegfx::B2DRange aGroupClientAnchor, aGroupChildAnchor;
+                    GetGroupAnchors( aRecHd2, rSt, aGroupClientAnchor, aGroupChildAnchor, aClientRange, aGlobalChildRect );
                     aRecHd2.SeekToBegOfRecord( rSt );
                     sal_Int32 nShapeId;
                     SdrObject* pTmp = ImportGroup( aRecHd2, rSt, pClientData, aGroupClientAnchor, aGroupChildAnchor, nCalledByGroup + 1, &nShapeId );
-                    if ( pTmp )
+                    if ( pTmp && pRet->getChildrenOfSdrObject() )
                     {
-                        ((SdrObjGroup*)pRet)->GetSubList()->NbcInsertObject( pTmp );
+                        pRet->getChildrenOfSdrObject()->InsertObjectToSdrObjList(*pTmp);
                         if( nShapeId )
                             insertShapeId( nShapeId, pTmp );
                     }
@@ -4234,10 +4283,10 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                 {
                     aRecHd2.SeekToBegOfRecord( rSt );
                     sal_Int32 nShapeId;
-                    SdrObject* pTmp = ImportShape( aRecHd2, rSt, pClientData, aClientRect, aGlobalChildRect, nCalledByGroup + 1, &nShapeId );
-                    if ( pTmp )
+                    SdrObject* pTmp = ImportShape( aRecHd2, rSt, pClientData, aClientRange, aGlobalChildRect, nCalledByGroup + 1, &nShapeId );
+                    if ( pTmp && pRet->getChildrenOfSdrObject() )
                     {
-                        ((SdrObjGroup*)pRet)->GetSubList()->NbcInsertObject( pTmp );
+                        pRet->getChildrenOfSdrObject()->InsertObjectToSdrObjList(*pTmp);
                         if( nShapeId )
                             insertShapeId( nShapeId, pTmp );
                     }
@@ -4245,31 +4294,21 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                 aRecHd2.SeekToEndOfRecord( rSt );
             }
 
-    //      pRet->NbcSetSnapRect( aGroupBound );
-            if ( nGroupRotateAngle )
-            {
-                double a = nGroupRotateAngle * nPi180;
-                pRet->NbcRotate( aClientRect.Center(), nGroupRotateAngle, sin( a ), cos( a ) );
-            }
-            if ( nSpFlags & SP_FFLIPV )     // Vertikal gespiegelt?
-            {   // BoundRect in aBoundRect
-                Point aLeft( aClientRect.Left(), ( aClientRect.Top() + aClientRect.Bottom() ) >> 1 );
-                Point aRight( aLeft.X() + 1000, aLeft.Y() );
-                pRet->NbcMirror( aLeft, aRight );
-            }
-            if ( nSpFlags & SP_FFLIPH )     // Horizontal gespiegelt?
-            {   // BoundRect in aBoundRect
-                Point aTop( ( aClientRect.Left() + aClientRect.Right() ) >> 1, aClientRect.Top() );
-                Point aBottom( aTop.X(), aTop.Y() + 1000 );
-                pRet->NbcMirror( aTop, aBottom );
-            }
+            const basegfx::B2DPoint aCenter(aClientRange.getCenter());
+
+            ApplyRotationAndMirror(
+                *pRet,
+                aCenter,
+                nGroupRotateAngle,
+                nSpFlags & SP_FFLIPH,
+                nSpFlags & SP_FFLIPV);
         }
     }
     return pRet;
 }
 
 SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& rSt, void* pClientData,
-                                            Rectangle& rClientRect, const Rectangle& rGlobalChildRect,
+    basegfx::B2DRange& rClientRange, const basegfx::B2DRange& rGlobalChildRange,
                                             int nCalledByGroup, sal_Int32* pShapeId )
 {
     SdrObject* pRet = NULL;
@@ -4278,7 +4317,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
         *pShapeId = 0;
 
     rHd.SeekToBegOfRecord( rSt );
-    DffObjData aObjData( rHd, rClientRect, nCalledByGroup );
+    DffObjData aObjData( rHd, rClientRange, nCalledByGroup );
     aObjData.bRotateTextWithShape = ( GetSvxMSDffSettings() & SVXMSDFF_SETTINGS_IMPORT_EXCEL ) == 0;
     maShapeRecords.Consume( rSt, sal_False );
     if( maShapeRecords.SeekToContent( rSt,
@@ -4358,20 +4397,22 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
         Scale( o );
         Scale( r );
         Scale( u );
-        aObjData.aChildAnchor = Rectangle( l, o, r, u );
-        if ( !rGlobalChildRect.IsEmpty() && !rClientRect.IsEmpty() && rGlobalChildRect.GetWidth() && rGlobalChildRect.GetHeight() )
+        aObjData.aChildAnchor = basegfx::B2DRange( l, o, r, u );
+
+        if ( !rGlobalChildRange.isEmpty() && !rClientRange.isEmpty() && !rGlobalChildRange.getRange().equalZero() )
         {
             double fl = l;
             double fo = o;
             double fWidth = r - l;
             double fHeight= u - o;
-            double fXScale = (double)rClientRect.GetWidth() / (double)rGlobalChildRect.GetWidth();
-            double fYScale = (double)rClientRect.GetHeight() / (double)rGlobalChildRect.GetHeight();
-            fl = ( ( l - rGlobalChildRect.Left() ) * fXScale ) + rClientRect.Left();
-            fo = ( ( o - rGlobalChildRect.Top()  ) * fYScale ) + rClientRect.Top();
+            double fXScale = rClientRange.getWidth() / rGlobalChildRange.getWidth();
+            double fYScale = rClientRange.getHeight() / rGlobalChildRange.getHeight();
+            fl = ( ( l - rGlobalChildRange.getMinX() ) * fXScale ) + rClientRange.getMinX();
+            fo = ( ( o - rGlobalChildRange.getMinY() ) * fYScale ) + rClientRange.getMinY();
             fWidth *= fXScale;
             fHeight *= fYScale;
-            aObjData.aChildAnchor = Rectangle( Point( (sal_Int32)fl, (sal_Int32)fo ), Size( (sal_Int32)( fWidth + 1 ), (sal_Int32)( fHeight + 1 ) ) );
+
+            aObjData.aChildAnchor = basegfx::B2DRange(fl, fo, fl + fWidth, fo + fHeight);
         }
     }
 
@@ -4383,39 +4424,39 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
         aObjData.aBoundRect = aObjData.aChildAnchor;
 
     if ( aObjData.nSpFlags & SP_FBACKGROUND )
-        aObjData.aBoundRect = Rectangle( Point(), Size( 1, 1 ) );
+        aObjData.aBoundRect = basegfx::B2DRange::getUnitB2DRange();
 
-    Rectangle aTextRect;
-    if ( !aObjData.aBoundRect.IsEmpty() )
+    basegfx::B2DRange aTextRect;
+    if ( !aObjData.aBoundRect.isEmpty() )
     {   // Rotation auf BoundingBox anwenden, BEVOR ien Objekt generiert wurde
         if( mnFix16Angle )
         {
             long nAngle = mnFix16Angle;
             if ( ( nAngle > 4500 && nAngle <= 13500 ) || ( nAngle > 22500 && nAngle <= 31500 ) )
             {
-                sal_Int32 nHalfWidth = ( aObjData.aBoundRect.GetWidth() + 1 ) >> 1;
-                sal_Int32 nHalfHeight = ( aObjData.aBoundRect.GetHeight() + 1 ) >> 1;
-                Point aTopLeft( aObjData.aBoundRect.Left() + nHalfWidth - nHalfHeight,
-                                aObjData.aBoundRect.Top() + nHalfHeight - nHalfWidth );
-                Size aNewSize( aObjData.aBoundRect.GetHeight(), aObjData.aBoundRect.GetWidth() );
-                Rectangle aNewRect( aTopLeft, aNewSize );
-                aObjData.aBoundRect = aNewRect;
+                const basegfx::B2DVector aHalfSize(aObjData.aBoundRect.getRange() * 0.5);
+                const basegfx::B2DPoint aTopLeft(
+                    aObjData.aBoundRect.getMinX() + aHalfSize.getX() - aHalfSize.getY(),
+                    aObjData.aBoundRect.getMinY() + aHalfSize.getY() - aHalfSize.getX());
+                const basegfx::B2DVector aNewSize(aObjData.aBoundRect.getHeight(), aObjData.aBoundRect.getWidth());
+
+                aObjData.aBoundRect = basegfx::B2DRange(aTopLeft, aTopLeft + aNewSize);
             }
         }
         aTextRect = aObjData.aBoundRect;
-        FASTBOOL bGraphic = IsProperty( DFF_Prop_pib ) ||
+        bool bGraphic = IsProperty( DFF_Prop_pib ) ||
                             IsProperty( DFF_Prop_pibName ) ||
                             IsProperty( DFF_Prop_pibFlags );
 
         if ( aObjData.nSpFlags & SP_FGROUP )
         {
-            pRet = new SdrObjGroup;
+            pRet = new SdrObjGroup(*GetModel());
             /*  After CWS aw033 has been integrated, an empty group object
                 cannot store its resulting bounding rectangle anymore. We have
-                to return this rectangle via rClientRect now, but only, if
+                to return this rectangle via rClientRange now, but only, if
                 caller has not passed an own bounding ractangle. */
-            if ( rClientRect.IsEmpty() )
-                 rClientRect = aObjData.aBoundRect;
+            if ( rClientRange.isEmpty() )
+                 rClientRange = aObjData.aBoundRect;
             nGroupShapeFlags = aObjData.nSpFlags;       // #73013#
         }
         else if ( ( aObjData.eShapeType != mso_sptNil ) || IsProperty( DFF_Prop_pVertices ) || bGraphic )
@@ -4436,10 +4477,12 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
             else if ( aObjData.eShapeType == mso_sptLine && !( GetPropertyValue( DFF_Prop_fc3DLightFace ) & 8 ) )
             {
                 basegfx::B2DPolygon aPoly;
-                aPoly.append(basegfx::B2DPoint(aObjData.aBoundRect.Left(), aObjData.aBoundRect.Top()));
-                aPoly.append(basegfx::B2DPoint(aObjData.aBoundRect.Right(), aObjData.aBoundRect.Bottom()));
-                pRet = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aPoly));
-                pRet->SetModel( pSdrModel );
+                aPoly.append(aObjData.aBoundRect.getMinimum());
+                aPoly.append(aObjData.aBoundRect.getMaximum());
+                pRet = new SdrPathObj(
+                    *GetModel(),
+                    basegfx::B2DPolyPolygon(aPoly));
+                //pRet->SetModel( pSdrModel );
                 ApplyAttributes( rSt, aSet, aObjData );
                 pRet->SetMergedItemSet(aSet);
             }
@@ -4451,9 +4494,9 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                     ApplyAttributes( rSt, aSet, aObjData );
 
 // the com.sun.star.drawing.EnhancedCustomShapeEngine is default, so we do not need to set a hard attribute
-//                      aSet.Put( SdrCustomShapeEngineItem( String::CreateFromAscii( "com.sun.star.drawing.EnhancedCustomShapeEngine" ) ) );
-                    pRet = new SdrObjCustomShape();
-                    pRet->SetModel( pSdrModel );
+//                      aSet.Put( SfxStringItem( SDRATTR_CUSTOMSHAPE_ENGINE, String::CreateFromAscii( "com.sun.star.drawing.EnhancedCustomShapeEngine" ) ) );
+                    pRet = new SdrObjCustomShape(*GetModel());
+                    //pRet->SetModel( pSdrModel );
 
                     sal_Bool bIsFontwork = ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x4000 ) != 0;
 
@@ -4527,8 +4570,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             aSet.Put( SvxKerningItem( 1, EE_CHAR_KERNING ) );
 
                         // #119496# the resize autoshape to fit text attr of word art in MS PPT is always false
-                        aSet.Put( SdrTextAutoGrowHeightItem( sal_False ) );
-                        aSet.Put( SdrTextAutoGrowWidthItem( sal_False ) );
+                        aSet.Put( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT, sal_False ) );
+                        aSet.Put( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWWIDTH, sal_False ) );
                     }
                     pRet->SetMergedItemSet( aSet );
 
@@ -4541,10 +4584,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         if ( pParaObj )
                         {
                             SdrOutliner& rOutliner = ((SdrObjCustomShape*)pRet)->ImpGetDrawOutliner();
-                            sal_Bool bOldUpdateMode = rOutliner.GetUpdateMode();
-                            SdrModel* pModel = pRet->GetModel();
-                            if ( pModel )
-                                rOutliner.SetStyleSheetPool( (SfxStyleSheetPool*)pModel->GetStyleSheetPool() );
+                            const sal_Bool bOldUpdateMode = rOutliner.GetUpdateMode();
+                            rOutliner.SetStyleSheetPool( (SfxStyleSheetPool*)pRet->getSdrModelFromSdrObject().GetStyleSheetPool() );
                             rOutliner.SetUpdateMode( sal_False );
                             rOutliner.SetText( *pParaObj );
                             VirtualDevice aVirDev( 1 );
@@ -4568,7 +4609,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                 {
                                     OutlinerParaObject* pNewText = rOutliner.CreateParaObject();
                                     rOutliner.Init( OUTLINERMODE_TEXTOBJECT );
-                                    ((SdrObjCustomShape*)pRet)->NbcSetOutlinerParaObject( pNewText );
+                                    ((SdrObjCustomShape*)pRet)->SetOutlinerParaObject( pNewText );
                                 }
                             }
                             rOutliner.Clear();
@@ -4595,32 +4636,53 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
 
                         // before clearing the GeometryItem we have to store the current Coordinates
                         const uno::Any* pAny = ((SdrCustomShapeGeometryItem&)aGeometryItem).GetPropertyValueByName( sPath, sCoordinates );
-                        Rectangle aPolyBoundRect;
-                        Point aStartPt( 0,0 );
+                        basegfx::B2DRange aPolyBoundRect;
+
+                        basegfx::B2DPoint aStartPt(0.0, 0.0);
                         if ( pAny && ( *pAny >>= seqCoordinates ) && ( seqCoordinates.getLength() >= 4 ) )
                         {
                             sal_Int32 nPtNum, nNumElemVert = seqCoordinates.getLength();
-                            XPolygon aXP( (sal_uInt16)nNumElemVert );
-//                              const EnhancedCustomShapeParameterPair* pTmp = seqCoordinates.getArray();
+
                             for ( nPtNum = 0; nPtNum < nNumElemVert; nPtNum++ )
                             {
-                                Point aP;
                                 sal_Int32 nX = 0, nY = 0;
                                 seqCoordinates[ nPtNum ].First.Value >>= nX;
                                 seqCoordinates[ nPtNum ].Second.Value >>= nY;
-                                aP.X() = nX;
-                                aP.Y() = nY;
-                                aXP[ (sal_uInt16)nPtNum ] = aP;
+
+                                aPolyBoundRect.expand(basegfx::B2DPoint(nX, nY));
+
+                                if(nNumElemVert >= 3 && nPtNum == 2)
+                                {
+                                    aStartPt.setX(nX);
+                                    aStartPt.setY(nY);
+                                }
                             }
-                            aPolyBoundRect = Rectangle( aXP.GetBoundRect() );
-                            if ( nNumElemVert >= 3 )
-                            { // arc first command is always wr -- clockwise arc
-                                // the parameters are : (left,top),(right,bottom),start(x,y),end(x,y)
-                                aStartPt = aXP[2];
-                            }
+
+// TTTT check before removal
+//                          XPolygon aXP( (sal_uInt16)nNumElemVert );
+//                              const EnhancedCustomShapeParameterPair* pTmp = seqCoordinates.getArray();
+//                          for ( nPtNum = 0; nPtNum < nNumElemVert; nPtNum++ )
+//                          {
+//                              Point aP;
+//                              sal_Int32 nX = 0, nY = 0;
+//                              seqCoordinates[ nPtNum ].First.Value >>= nX;
+//                              seqCoordinates[ nPtNum ].Second.Value >>= nY;
+//                              aP.X() = nX;
+//                              aP.Y() = nY;
+//                              aXP[ (sal_uInt16)nPtNum ] = aP;
+//                          }
+//                          const Rectangle aOldBound(aXP.GetBoundRect());
+//                          aPolyBoundRect = basegfx::B2DRange(aOldBound.Left(), aOldBound.Top(), aOldBound.Right(), aOldBound.Bottom());
+//                          if ( nNumElemVert >= 3 )
+//                          { // arc first command is always wr -- clockwise arc
+//                              // the parameters are : (left,top),(right,bottom),start(x,y),end(x,y)
+//                              aStartPt = aXP[2];
+//                          }
                         }
                         else
-                            aPolyBoundRect = Rectangle( -21600, 0, 21600, 43200 );  // defaulting
+                        {
+                            aPolyBoundRect = basegfx::B2DRange(-21600.0, 0.0, 21600.0, 43200.0);    // defaulting
+                        }
 
                         // clearing items, so MergeDefaultAttributes will set the corresponding defaults from EnhancedCustomShapeGeometry
                         aGeometryItem.ClearPropertyValue( sHandles );
@@ -4642,18 +4704,25 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             else
                             {
                                 fNumber = 270.0;
+                                // TTTT: Another angle to check...
                                 //normal situation:if endAngle != 90,there will be a direct_value,but for damaged curve,the endAngle need to recalculate.
-                                Point cent = aPolyBoundRect.Center();
-                                if ( aStartPt.Y() == cent.Y() )
-                                    fNumber = ( aStartPt.X() >= cent.X() ) ? 0:180.0;
-                                else if ( aStartPt.X() == cent.X() )
-                                    fNumber = ( aStartPt.Y() >= cent.Y() ) ? 90.0: 270.0;
+                                const basegfx::B2DPoint cent(aPolyBoundRect.getCenter());
+
+                                if(basegfx::fTools::equal(aStartPt.getY(), cent.getY()))
+                                {
+                                    fNumber = basegfx::fTools::moreOrEqual(aStartPt.getX(), cent.getX()) ? 0:180.0;
+                                }
+                                else if(basegfx::fTools::equal(aStartPt.getX(), cent.getX()))
+                                {
+                                    fNumber = basegfx::fTools::moreOrEqual(aStartPt.getY(), cent.getY()) ? 90.0: 270.0;
+                                }
                                 else
                                 {
-                                    fNumber = atan2( double( aStartPt.X() - cent.X() ),double( aStartPt.Y() - cent.Y() ) )+ F_PI; // 0..2PI
+                                    fNumber = atan2(double(aStartPt.getX() - cent.getX()), double(aStartPt.getY() - cent.getY())) + F_PI; // 0..2PI
                                     fNumber /= F_PI180; // 0..360.0
                                 }
-                                nEndAngle = NormAngle360( - (sal_Int32)fNumber * 100 );
+
+                                nEndAngle = NormAngle360((sal_Int32)-fNumber * 100);
                                 seqAdjustmentValues[ 0 ].Value <<= fNumber;
                                 seqAdjustmentValues[ 0 ].State = com::sun::star::beans::PropertyState_DIRECT_VALUE;     // so this value will properly be stored
                             }
@@ -4677,52 +4746,76 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         }
                         if ( nStartAngle != nEndAngle )
                         {
-                            XPolygon aXPoly( aPolyBoundRect.Center(), aPolyBoundRect.GetWidth() / 2, aPolyBoundRect.GetHeight() / 2,
-                                (sal_uInt16)nStartAngle / 10, (sal_uInt16)nEndAngle / 10, sal_True );
-                            Rectangle aPolyPieRect( aXPoly.GetBoundRect() );
+                            basegfx::B2DRange aPolyPieRect;
+
+                            {
+                                // create the pie segment temporary for BoundRange calculation
+                                double fStart((-nStartAngle * F_PI) / 18000.0);
+                                double fEnd((-nEndAngle * F_PI) / 18000.0);
+
+                                fStart = basegfx::snapToZeroRange(fStart, F_2PI);
+                                fEnd = basegfx::snapToZeroRange(fEnd, F_2PI);
+
+                                const basegfx::B2DPolygon aTempPie(
+                                    basegfx::tools::createPolygonFromEllipseSegment(
+                                        aPolyBoundRect.getCenter(),
+                                        aPolyBoundRect.getWidth() * 0.5,
+                                        aPolyBoundRect.getHeight() * 0.5,
+                                        fEnd,
+                                        fStart));
+
+                                aPolyPieRect = aTempPie.getB2DRange();
+                            }
+
+// TTTT check before removal
+//                          { // use old XPoly consructor for BoundRange calculation; needs to be removed once
+//                              const Point aCenter(basegfx::fround(aPolyBoundRect.getCenterX()), basegfx::fround(aPolyBoundRect.getCenterY()));
+//                              const long nWidth(basegfx::fround(aPolyBoundRect.getWidth() * 0.5));
+//                              const long nHeight(basegfx::fround(aPolyBoundRect.getHeight() * 0.5));
+//
+//
+//                              const XPolygon aXPoly(aCenter, nWidth, nHeight, (USHORT)nStartAngle / 10, (USHORT)nEndAngle / 10, TRUE);
+//                              const Rectangle aXPolyRect(aXPoly.GetBoundRect());
+//
+//                              aPolyPieRect = basegfx::B2DRange(aXPolyRect.Left(), aXPolyRect.Top(), aXPolyRect.Right(), aXPolyRect.Bottom());
+//                          }
 
                             double  fYScale, fXScale;
-                            double  fYOfs, fXOfs;
+                            double  fYOfs(0.0), fXOfs(0.0);
 
-                            Point aP( aObjData.aBoundRect.Center() );
-                            Size aS( aObjData.aBoundRect.GetSize() );
-                            aP.X() -= aS.Width() / 2;
-                            aP.Y() -= aS.Height() / 2;
-                            Rectangle aLogicRect( aP, aS );
-
-                            fYOfs = fXOfs = 0.0;
-
-                            if ( aPolyBoundRect.GetWidth() && aPolyPieRect.GetWidth() )
+                            if ( aPolyBoundRect.getWidth() && aPolyPieRect.getWidth() )
                             {
-                                fXScale = (double)aLogicRect.GetWidth() / (double)aPolyPieRect.GetWidth();
+                                fXScale = aObjData.aBoundRect.getWidth() / aPolyPieRect.getWidth();
                                 if ( nSpFlags & SP_FFLIPH )
-                                    fXOfs = ( (double)aPolyPieRect.Right() - (double)aPolyBoundRect.Right() ) * fXScale;
+                                    fXOfs = ( aPolyPieRect.getMaxX() - aPolyBoundRect.getMaxX() ) * fXScale;
                                 else
-                                    fXOfs = ( (double)aPolyBoundRect.Left() - (double)aPolyPieRect.Left() ) * fXScale;
+                                    fXOfs = ( aPolyBoundRect.getMinX() - aPolyPieRect.getMinX() ) * fXScale;
                             }
-                            if ( aPolyBoundRect.GetHeight() && aPolyPieRect.GetHeight() )
+
+                            if ( aPolyBoundRect.getHeight() && aPolyPieRect.getHeight() )
                             {
-                                fYScale = (double)aLogicRect.GetHeight() / (double)aPolyPieRect.GetHeight();
+                                fYScale = aObjData.aBoundRect.getHeight() / aPolyPieRect.getHeight();
                                 if ( nSpFlags & SP_FFLIPV )
-                                    fYOfs = ( (double)aPolyPieRect.Bottom() - (double)aPolyBoundRect.Bottom() ) * fYScale;
+                                    fYOfs = ( aPolyPieRect.getMaxY() - aPolyBoundRect.getMaxY() ) * fYScale;
                                 else
-                                    fYOfs = ((double)aPolyBoundRect.Top() - (double)aPolyPieRect.Top() ) * fYScale;
+                                    fYOfs = (aPolyBoundRect.getMinY() - aPolyPieRect.getMinY() ) * fYScale;
                             }
 
-                            fXScale = (double)aPolyBoundRect.GetWidth() / (double)aPolyPieRect.GetWidth();
-                            fYScale = (double)aPolyBoundRect.GetHeight() / (double)aPolyPieRect.GetHeight();
+                            fXScale = aPolyBoundRect.getWidth() / aPolyPieRect.getWidth();
+                            fYScale = aPolyBoundRect.getHeight() / aPolyPieRect.getHeight();
 
-                            Rectangle aOldBoundRect( aObjData.aBoundRect );
-                            aObjData.aBoundRect = Rectangle( Point( aLogicRect.Left() + (sal_Int32)fXOfs, aLogicRect.Top() + (sal_Int32)fYOfs ),
-                                 Size( (sal_Int32)( aLogicRect.GetWidth() * fXScale ), (sal_Int32)( aLogicRect.GetHeight() * fYScale ) ) );
+                            const basegfx::B2DRange aOldBoundRect( aObjData.aBoundRect );
+                            const basegfx::B2DPoint aNewTopLeft(aObjData.aBoundRect.getMinX() + fXOfs, aObjData.aBoundRect.getMinY() + fYOfs);
+                            const basegfx::B2DVector aNewScale(aObjData.aBoundRect.getWidth() * fXScale, aObjData.aBoundRect.getHeight() * fYScale);
+                            aObjData.aBoundRect = basegfx::B2DRange(aNewTopLeft, aNewTopLeft + aNewScale);
 
                             // creating the text frame -> scaling into (0,0),(21600,21600) destination coordinate system
-                            double fTextFrameScaleX = (double)21600 / (double)aPolyBoundRect.GetWidth();
-                            double fTextFrameScaleY = (double)21600 / (double)aPolyBoundRect.GetHeight();
-                            sal_Int32 nLeft  = (sal_Int32)(( aPolyPieRect.Left()  - aPolyBoundRect.Left() ) * fTextFrameScaleX );
-                            sal_Int32 nTop   = (sal_Int32)(( aPolyPieRect.Top()   - aPolyBoundRect.Top() )  * fTextFrameScaleY );
-                            sal_Int32 nRight = (sal_Int32)(( aPolyPieRect.Right() - aPolyBoundRect.Left() ) * fTextFrameScaleX );
-                            sal_Int32 nBottom= (sal_Int32)(( aPolyPieRect.Bottom()- aPolyBoundRect.Top() )  * fTextFrameScaleY );
+                            double fTextFrameScaleX = 21600.0 / aPolyBoundRect.getWidth();
+                            double fTextFrameScaleY = 21600.0 / aPolyBoundRect.getHeight();
+                            sal_Int32 nLeft  = (sal_Int32)(( aPolyPieRect.getMinX() - aPolyBoundRect.getMinX() ) * fTextFrameScaleX );
+                            sal_Int32 nTop   = (sal_Int32)(( aPolyPieRect.getMinY() - aPolyBoundRect.getMinY() ) * fTextFrameScaleY );
+                            sal_Int32 nRight = (sal_Int32)(( aPolyPieRect.getMaxX() - aPolyBoundRect.getMinX() ) * fTextFrameScaleX );
+                            sal_Int32 nBottom= (sal_Int32)(( aPolyPieRect.getMaxY() - aPolyBoundRect.getMinY() ) * fTextFrameScaleY );
                             com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeTextFrame > aTextFrame( 1 );
                             EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aTextFrame[ 0 ].TopLeft.First,     nLeft );
                             EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aTextFrame[ 0 ].TopLeft.Second,    nTop );
@@ -4744,13 +4837,14 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                 double a = nAngle * F_PI18000;
                                 double ss = sin( a );
                                 double cc = cos( a );
-                                Point aP1( aOldBoundRect.TopLeft() );
-                                Point aC1( aObjData.aBoundRect.Center() );
-                                Point aP2( aOldBoundRect.TopLeft() );
-                                Point aC2( aOldBoundRect.Center() );
+                                Point aP1( basegfx::fround(aOldBoundRect.getMinX()), basegfx::fround(aOldBoundRect.getMinY()) );
+                                const Point aC1( basegfx::fround(aObjData.aBoundRect.getCenterX()), basegfx::fround(aObjData.aBoundRect.getCenterY()) );
+                                Point aP2( basegfx::fround(aOldBoundRect.getMinX()), basegfx::fround(aOldBoundRect.getMinY()) );
+                                const Point aC2( basegfx::fround(aOldBoundRect.getCenterX()), basegfx::fround(aOldBoundRect.getCenterY()) );
                                 RotatePoint( aP1, aC1, ss, cc );
                                 RotatePoint( aP2, aC2, ss, cc );
-                                aObjData.aBoundRect.Move( aP2.X() - aP1.X(), aP2.Y() - aP1.Y() );
+
+                                aObjData.aBoundRect.transform(basegfx::tools::createTranslateB2DHomMatrix(aP2.X() - aP1.X(), aP2.Y() - aP1.Y()));
                             }
                         }
                         ((SdrObjCustomShape*)pRet)->SetMergedItem( aGeometryItem );
@@ -4769,57 +4863,54 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                     else
                         ((SdrObjCustomShape*)pRet)->MergeDefaultAttributes();
 
-                    pRet->SetSnapRect( aObjData.aBoundRect );
+                    sdr::legacy::SetSnapRange(*pRet, aObjData.aBoundRect );
                     EnhancedCustomShape2d aCustomShape2d( pRet );
-                    aTextRect = aCustomShape2d.GetTextRect();
+                    aTextRect = aCustomShape2d.GetTextRange();
 
                     bIsCustomShape = sal_True;
 
                     if( bIsConnector )
                     {
-                        if( nObjectRotation )
-                        {
-                            double a = nObjectRotation * nPi180;
-                            pRet->NbcRotate( aObjData.aBoundRect.Center(), nObjectRotation, sin( a ), cos( a ) );
-                        }
-                        // Horizontal gespiegelt?
-                        if ( nSpFlags & SP_FFLIPH )
-                        {
-                            Rectangle aBndRect( pRet->GetSnapRect() );
-                            Point aTop( ( aBndRect.Left() + aBndRect.Right() ) >> 1, aBndRect.Top() );
-                            Point aBottom( aTop.X(), aTop.Y() + 1000 );
-                            pRet->NbcMirror( aTop, aBottom );
-                        }
-                        // Vertikal gespiegelt?
-                        if ( nSpFlags & SP_FFLIPV )
-                        {
-                            Rectangle aBndRect( pRet->GetSnapRect() );
-                            Point aLeft( aBndRect.Left(), ( aBndRect.Top() + aBndRect.Bottom() ) >> 1 );
-                            Point aRight( aLeft.X() + 1000, aLeft.Y() );
-                            pRet->NbcMirror( aLeft, aRight );
-                        }
-                        basegfx::B2DPolyPolygon aPoly( SdrObjCustomShape::GetLineGeometry( (SdrObjCustomShape*)pRet, sal_True ) );
-                        SdrObject::Free( pRet );
+                        const basegfx::B2DPoint aCenter(aObjData.aBoundRect.getCenter());
 
-                        pRet = new SdrEdgeObj();
+                        ApplyRotationAndMirror(
+                            *pRet,
+                            aCenter,
+                            nObjectRotation,
+                            nSpFlags & SP_FFLIPH,
+                            nSpFlags & SP_FFLIPV);
+                        // #120437# reset rotation, it is part of the path and shall not be applied again
+                        nObjectRotation = 0;
+
+                        // #120437# reset hor filp
+                        nSpFlags &= ~SP_FFLIPH;
+
+                        // #120437# reset ver filp
+                        nSpFlags &= ~SP_FFLIPV;
+
+                        const basegfx::B2DPolyPolygon aPoly( SdrObjCustomShape::GetLineGeometry( (SdrObjCustomShape*)pRet, sal_True ) );
+                        deleteSdrObjectSafeAndClearPointer( pRet );
+
+                        SdrEdgeObj* pSdrEdgeObj = new SdrEdgeObj(*GetModel());
+                        pRet = pSdrEdgeObj;
                         ApplyAttributes( rSt, aSet, aObjData );
-                        pRet->SetLogicRect( aObjData.aBoundRect );
-                        pRet->SetMergedItemSet(aSet);
+                        sdr::legacy::SetLogicRange(*pSdrEdgeObj, aObjData.aBoundRect );
+                        pSdrEdgeObj->SetMergedItemSet(aSet);
 
                         // Konnektoren
                         MSO_ConnectorStyle eConnectorStyle = (MSO_ConnectorStyle)GetPropertyValue( DFF_Prop_cxstyle, mso_cxstyleStraight );
 
-                        ((SdrEdgeObj*)pRet)->ConnectToNode(sal_True, NULL);
-                        ((SdrEdgeObj*)pRet)->ConnectToNode(sal_False, NULL);
+                        pSdrEdgeObj->ConnectToNode(sal_True, NULL);
+                        pSdrEdgeObj->ConnectToNode(sal_False, NULL);
 
-                        Point aPoint1( aObjData.aBoundRect.TopLeft() );
-                        Point aPoint2( aObjData.aBoundRect.BottomRight() );
+                        Point aPoint1( basegfx::fround(aObjData.aBoundRect.getMinX()), basegfx::fround(aObjData.aBoundRect.getMinY()) );
+                        Point aPoint2( basegfx::fround(aObjData.aBoundRect.getMaxX()), basegfx::fround(aObjData.aBoundRect.getMaxY()) );
 
                         // Rotationen beachten
                         if ( nObjectRotation )
                         {
                             double a = nObjectRotation * nPi180;
-                            Point aCenter( aObjData.aBoundRect.Center() );
+                            Point aCenter( basegfx::fround(aObjData.aBoundRect.getCenterX()), basegfx::fround(aObjData.aBoundRect.getCenterY()) );
                             double ss = sin(a);
                             double cc = cos(a);
 
@@ -4850,8 +4941,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             nSpFlags &= ~SP_FFLIPV;
                         }
 
-                        pRet->NbcSetPoint(aPoint1, 0L); // Startpunkt
-                        pRet->NbcSetPoint(aPoint2, 1L); // Endpunkt
+                        pSdrEdgeObj->SetObjectPoint(basegfx::B2DPoint(aPoint1.X(), aPoint1.Y()), 0L);   // Startpunkt
+                        pSdrEdgeObj->SetObjectPoint(basegfx::B2DPoint(aPoint2.X(), aPoint2.Y()), 1L);   // Endpunkt
 
                         sal_Int32 n1HorzDist, n1VertDist, n2HorzDist, n2VertDist;
                         n1HorzDist = n1VertDist = n2HorzDist = n2VertDist = 0;
@@ -4875,8 +4966,13 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         aSet.Put( SdrEdgeNode2HorzDistItem( n2HorzDist ) );
                         aSet.Put( SdrEdgeNode2VertDistItem( n2VertDist ) );
 
-                        ((SdrEdgeObj*)pRet)->SetEdgeTrackPath( aPoly );
-                        pRet->SetMergedItemSet( aSet );
+                        if(aPoly.count())
+                        {
+                            OSL_ENSURE(1 == aPoly.count(), "Connectors support only single polygon, taking first one (!)");
+                            pSdrEdgeObj->SetEdgeTrackPath( aPoly.getB2DPolygon(0) );
+                        }
+
+                        pSdrEdgeObj->SetMergedItemSet( aSet );
                     }
                     if ( aObjData.eShapeType == mso_sptLine )
                     {
@@ -4886,29 +4982,16 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                 }
             }
 
-            if ( pRet )
+            if(pRet && (nObjectRotation || nSpFlags & (SP_FFLIPH|SP_FFLIPV)))
             {
-                if( nObjectRotation )
-                {
-                    double a = nObjectRotation * nPi180;
-                    pRet->NbcRotate( aObjData.aBoundRect.Center(), nObjectRotation, sin( a ), cos( a ) );
-                }
-                // Horizontal gespiegelt?
-                if ( nSpFlags & SP_FFLIPH )
-                {
-                    Rectangle aBndRect( pRet->GetSnapRect() );
-                    Point aTop( ( aBndRect.Left() + aBndRect.Right() ) >> 1, aBndRect.Top() );
-                    Point aBottom( aTop.X(), aTop.Y() + 1000 );
-                    pRet->NbcMirror( aTop, aBottom );
-                }
-                // Vertikal gespiegelt?
-                if ( nSpFlags & SP_FFLIPV )
-                {
-                    Rectangle aBndRect( pRet->GetSnapRect() );
-                    Point aLeft( aBndRect.Left(), ( aBndRect.Top() + aBndRect.Bottom() ) >> 1 );
-                    Point aRight( aLeft.X() + 1000, aLeft.Y() );
-                    pRet->NbcMirror( aLeft, aRight );
-                }
+                const basegfx::B2DPoint aCenter(aObjData.aBoundRect.getCenter());
+
+                ApplyRotationAndMirror(
+                    *pRet,
+                    aCenter,
+                    nObjectRotation,
+                    nSpFlags & SP_FFLIPH,
+                    nSpFlags & SP_FFLIPV);
             }
         }
     }
@@ -4921,8 +5004,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
             pRet->SetName( aObjName );
     }
 
-    pRet =
-        ProcessObj( rSt, aObjData, pClientData, aTextRect, pRet);
+    pRet = ProcessObj( rSt, aObjData, pClientData, aTextRect, pRet);
 
     if ( pRet )
     {
@@ -4946,9 +5028,9 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
     return pRet;
 }
 
-Rectangle SvxMSDffManager::GetGlobalChildAnchor( const DffRecordHeader& rHd, SvStream& rSt, Rectangle& aClientRect )
+basegfx::B2DRange SvxMSDffManager::GetGlobalChildAnchor(const DffRecordHeader& rHd, SvStream& rSt, basegfx::B2DRange& aClientRange)
 {
-    Rectangle aChildAnchor;
+    basegfx::B2DRange aChildAnchor;
     rHd.SeekToContent( rSt );
     sal_Bool bIsClientRectRead = sal_False;
     while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < rHd.GetRecEndFilePos() ) )
@@ -4987,12 +5069,12 @@ Rectangle SvxMSDffManager::GetGlobalChildAnchor( const DffRecordHeader& rHd, SvS
                         Scale( b );
                         if ( bIsClientRectRead )
                         {
-                            Rectangle aChild( l, t, r, b );
-                            aChildAnchor.Union( aChild );
+                            basegfx::B2DRange aChild( l, t, r, b );
+                            aChildAnchor.expand( aChild );
                         }
                         else
                         {
-                            aClientRect = Rectangle( l, t, r, b );
+                            aClientRange = basegfx::B2DRange( l, t, r, b );
                             bIsClientRectRead = sal_True;
                         }
                     }
@@ -5006,8 +5088,7 @@ Rectangle SvxMSDffManager::GetGlobalChildAnchor( const DffRecordHeader& rHd, SvS
                     Scale( o );
                     Scale( r );
                     Scale( u );
-                    Rectangle aChild( l, o, r, u );
-                    aChildAnchor.Union( aChild );
+                    aChildAnchor.expand(basegfx::B2DRange(l, o, r, u));
                     break;
                 }
                 aShapeAtom.SeekToEndOfRecord( rSt );
@@ -5019,8 +5100,8 @@ Rectangle SvxMSDffManager::GetGlobalChildAnchor( const DffRecordHeader& rHd, SvS
 }
 
 void SvxMSDffManager::GetGroupAnchors( const DffRecordHeader& rHd, SvStream& rSt,
-                            Rectangle& rGroupClientAnchor, Rectangle& rGroupChildAnchor,
-                                const Rectangle& rClientRect, const Rectangle& rGlobalChildRect )
+    basegfx::B2DRange& rGroupClientAnchor, basegfx::B2DRange& rGroupChildAnchor,
+    const basegfx::B2DRange& rClientRange, const basegfx::B2DRange& rGlobalChildRange )
 {
     sal_Bool bFirst = sal_True;
     rHd.SeekToContent( rSt );
@@ -5046,28 +5127,30 @@ void SvxMSDffManager::GetGroupAnchors( const DffRecordHeader& rHd, SvStream& rSt
                     Scale( o );
                     Scale( r );
                     Scale( u );
-                    Rectangle aChild( l, o, r, u );
+                    basegfx::B2DRange aChild( l, o, r, u );
 
                     if ( bFirst )
                     {
-                        if ( !rGlobalChildRect.IsEmpty() && !rClientRect.IsEmpty() && rGlobalChildRect.GetWidth() && rGlobalChildRect.GetHeight() )
+                        if ( !rGlobalChildRange.isEmpty() && !rClientRange.isEmpty() && !rGlobalChildRange.getRange().equalZero() )
                         {
                             double fl = l;
                             double fo = o;
                             double fWidth = r - l;
                             double fHeight= u - o;
-                            double fXScale = (double)rClientRect.GetWidth() / (double)rGlobalChildRect.GetWidth();
-                            double fYScale = (double)rClientRect.GetHeight() / (double)rGlobalChildRect.GetHeight();
-                            fl = ( ( l - rGlobalChildRect.Left() ) * fXScale ) + rClientRect.Left();
-                            fo = ( ( o - rGlobalChildRect.Top()  ) * fYScale ) + rClientRect.Top();
+                            double fXScale = rClientRange.getWidth() / rGlobalChildRange.getWidth();
+                            double fYScale = rClientRange.getHeight() / rGlobalChildRange.getHeight();
+                            fl = ( ( l - rGlobalChildRange.getMinX() ) * fXScale ) + rClientRange.getMinX();
+                            fo = ( ( o - rGlobalChildRange.getMinY() ) * fYScale ) + rClientRange.getMinY();
                             fWidth *= fXScale;
                             fHeight *= fYScale;
-                            rGroupClientAnchor = Rectangle( Point( (sal_Int32)fl, (sal_Int32)fo ), Size( (sal_Int32)( fWidth + 1 ), (sal_Int32)( fHeight + 1 ) ) );
+                            rGroupClientAnchor = basegfx::B2DRange(fl, fo, fl + fWidth, fo + fHeight);
                         }
                         bFirst = sal_False;
                     }
                     else
-                        rGroupChildAnchor.Union( aChild );
+                    {
+                        rGroupChildAnchor.expand( aChild );
+                    }
                     break;
                 }
                 aShapeAtom.SeekToEndOfRecord( rSt );
@@ -5077,14 +5160,14 @@ void SvxMSDffManager::GetGroupAnchors( const DffRecordHeader& rHd, SvStream& rSt
     }
 }
 
-SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
+SdrObject* SvxMSDffManager::ProcessObj(
+    SvStream& rSt,
                                        DffObjData& rObjData,
                                        void* pData,
-                                       Rectangle& rTextRect,
-                                       SdrObject* pObj
-                                       )
+    basegfx::B2DRange& rTextRect,
+    SdrObject* pObj)
 {
-    if( !rTextRect.IsEmpty() )
+    if( !rTextRect.isEmpty() )
     {
         SvxMSDffImportData& rImportData = *(SvxMSDffImportData*)pData;
         SvxMSDffImportRec* pImpRec = new SvxMSDffImportRec;
@@ -5156,7 +5239,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             //textbox, this was changed for #88277# to be created as a simple
             //rect to keep impress happy. For the rest of us we'd like to turn
             //it back into a textbox again.
-            FASTBOOL bTextFrame = (pImpRec->eShapeType == mso_sptTextBox);
+            bool bTextFrame = (pImpRec->eShapeType == mso_sptTextBox);
             if (!bTextFrame)
             {
                 //Either
@@ -5175,8 +5258,8 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
 
             if (bTextFrame)
             {
-                SdrObject::Free( pObj );
-                pObj = pOrgObj = 0;
+                deleteSdrObjectSafeAndClearPointer( pObj );
+                pOrgObj = 0;
             }
 
             // Distance of Textbox to it's surrounding Customshape
@@ -5225,9 +5308,9 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                 {
                     case 9000:
                         {
-                            long nWidth = rTextRect.GetWidth();
-                            rTextRect.Right() = rTextRect.Left() + rTextRect.GetHeight();
-                            rTextRect.Bottom() = rTextRect.Top() + nWidth;
+                            rTextRect = basegfx::B2DRange(
+                                rTextRect.getMinX(), rTextRect.getMinY(),
+                                rTextRect.getMinX() + rTextRect.getHeight(), rTextRect.getMinY() + rTextRect.getWidth());
 
                             sal_Int32 nOldTextLeft = nTextLeft;
                             sal_Int32 nOldTextRight = nTextRight;
@@ -5242,9 +5325,9 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                         break;
                     case 27000:
                         {
-                            long nWidth = rTextRect.GetWidth();
-                            rTextRect.Right() = rTextRect.Left() + rTextRect.GetHeight();
-                            rTextRect.Bottom() = rTextRect.Top() + nWidth;
+                            rTextRect = basegfx::B2DRange(
+                                rTextRect.getMinX(), rTextRect.getMinY(),
+                                rTextRect.getMinX() + rTextRect.getHeight(), rTextRect.getMinY() + rTextRect. getWidth());
 
                             sal_Int32 nOldTextLeft = nTextLeft;
                             sal_Int32 nOldTextRight = nTextRight;
@@ -5262,14 +5345,14 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                 }
             }
 
-            pTextObj = new SdrRectObj(OBJ_TEXT, rTextRect);
+            pTextObj = new SdrRectObj(
+                *GetModel(),
+                basegfx::tools::createScaleTranslateB2DHomMatrix(
+                    rTextRect.getRange(),
+                    rTextRect.getMinimum()),
+                OBJ_TEXT,
+                true);
             pTextImpRec = new SvxMSDffImportRec(*pImpRec);
-
-            // Die vertikalen Absatzeinrueckungen sind im BoundRect mit drin,
-            // hier rausrechnen
-            Rectangle aNewRect(rTextRect);
-            aNewRect.Bottom() -= nTextTop + nTextBottom;
-            aNewRect.Right() -= nTextLeft + nTextRight;
 
             // Nur falls es eine einfache Textbox ist, darf der Writer
             // das Objekt durch einen Rahmen ersetzen, ansonsten
@@ -5293,24 +5376,28 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             bool bFitText = false;
             if (GetPropertyValue(DFF_Prop_FitTextToShape) & 2)
             {
-                aSet.Put( SdrTextAutoGrowHeightItem( sal_True ) );
-                aSet.Put( SdrTextMinFrameHeightItem(
-                    aNewRect.Bottom() - aNewRect.Top() ) );
-                aSet.Put( SdrTextMinFrameWidthItem(
-                    aNewRect.Right() - aNewRect.Left() ) );
+                // Die vertikalen Absatzeinrueckungen sind im BoundRect mit drin,
+                // hier rausrechnen
+                const basegfx::B2DRange aNewRect(
+                    rTextRect.getMinX(), rTextRect.getMinY(),
+                    rTextRect.getMaxX() - (nTextLeft + nTextRight), rTextRect.getMaxY() - (nTextTop + nTextBottom));
+
+                aSet.Put( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT, sal_True ) );
+                aSet.Put( SdrMetricItem(SDRATTR_TEXT_MINFRAMEHEIGHT, basegfx::fround( aNewRect.getHeight() ) ) );
+                aSet.Put( SdrMetricItem(SDRATTR_TEXT_MINFRAMEWIDTH, basegfx::fround( aNewRect.getWidth() ) ) );
                 bFitText = true;
             }
             else
             {
-                aSet.Put( SdrTextAutoGrowHeightItem( sal_False ) );
-                aSet.Put( SdrTextAutoGrowWidthItem( sal_False ) );
+                aSet.Put( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT, sal_False ) );
+                aSet.Put( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWWIDTH, sal_False ) );
             }
 
             switch ( (MSO_WrapMode)
                 GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) )
             {
                 case mso_wrapNone :
-                    aSet.Put( SdrTextAutoGrowWidthItem( sal_True ) );
+                    aSet.Put( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWWIDTH, sal_True ) );
                     if (bFitText)
                     {
                         //can't do autowidth in flys #i107184#
@@ -5318,16 +5405,16 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                     }
                 break;
                 case mso_wrapByPoints :
-                    aSet.Put( SdrTextContourFrameItem( sal_True ) );
+                    aSet.Put( SdrOnOffItem(SDRATTR_TEXT_CONTOURFRAME, sal_True ) );
                 break;
                 default: break;
             }
 
             // Abstaende an den Raendern der Textbox setzen
-            aSet.Put( SdrTextLeftDistItem( nTextLeft ) );
-            aSet.Put( SdrTextRightDistItem( nTextRight ) );
-            aSet.Put( SdrTextUpperDistItem( nTextTop ) );
-            aSet.Put( SdrTextLowerDistItem( nTextBottom ) );
+            aSet.Put( SdrMetricItem(SDRATTR_TEXT_LEFTDIST, nTextLeft ) );
+            aSet.Put( SdrMetricItem(SDRATTR_TEXT_RIGHTDIST, nTextRight ) );
+            aSet.Put( SdrMetricItem(SDRATTR_TEXT_UPPERDIST, nTextTop ) );
+            aSet.Put( SdrMetricItem(SDRATTR_TEXT_LOWERDIST, nTextBottom ) );
             pTextImpRec->nDxTextLeft    = nTextLeft;
             pTextImpRec->nDyTextTop     = nTextTop;
             pTextImpRec->nDxTextRight   = nTextRight;
@@ -5399,29 +5486,34 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             }
 
             pTextObj->SetMergedItemSet(aSet);
-            pTextObj->SetModel(pSdrModel);
+            // pTextObj->SetModel(pSdrModel);
 
             if (bVerticalText)
                 pTextObj->SetVerticalWriting(sal_True);
 
             if (nTextRotationAngle)
             {
-                long nMinWH = rTextRect.GetWidth() < rTextRect.GetHeight() ?
-                    rTextRect.GetWidth() : rTextRect.GetHeight();
-                nMinWH /= 2;
-                Point aPivot(rTextRect.TopLeft());
-                aPivot.X() += nMinWH;
-                aPivot.Y() += nMinWH;
-                double a = nTextRotationAngle * nPi180;
-                pTextObj->NbcRotate(aPivot, nTextRotationAngle, sin(a), cos(a));
+                const double fMinWH(std::min(rTextRect.getWidth(), rTextRect.getHeight()) * 0.5);
+                const basegfx::B2DPoint aPivot(rTextRect.getMinimum() + basegfx::B2DPoint(fMinWH, fMinWH));
+                basegfx::B2DHomMatrix aTransform;
+
+                aTransform.translate(-aPivot);
+                aTransform.rotate((-nTextRotationAngle * F_PI) / 18000.0);
+                aTransform.translate(aPivot);
+
+                sdr::legacy::transformSdrObject(*pTextObj, aTransform);
             }
 
             // rotate text with shape ?
             if ( mnFix16Angle )
             {
-                double a = mnFix16Angle * nPi180;
-                pTextObj->NbcRotate( rObjData.aBoundRect.Center(), mnFix16Angle,
-                    sin( a ), cos( a ) );
+                basegfx::B2DHomMatrix aTransform;
+
+                aTransform.translate(-rObjData.aBoundRect.getCenter());
+                aTransform.rotate((-mnFix16Angle * F_PI) / 18000.0);
+                aTransform.translate(rObjData.aBoundRect.getCenter());
+
+                sdr::legacy::transformSdrObject(*pTextObj, aTransform);
             }
 
             if( !pObj )
@@ -5432,9 +5524,9 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             {
                 if( pTextObj != pObj )
                 {
-                    SdrObject* pGroup = new SdrObjGroup;
-                    pGroup->GetSubList()->NbcInsertObject( pObj );
-                    pGroup->GetSubList()->NbcInsertObject( pTextObj );
+                    SdrObjGroup* pGroup = new SdrObjGroup(*GetModel());
+                    pGroup->InsertObjectToSdrObjList(*pObj);
+                    pGroup->InsertObjectToSdrObjList(*pTextObj);
                     if (pOrgObj == pObj)
                         pOrgObj = pGroup;
                     else
@@ -5448,9 +5540,14 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             // simple rectangular objects are ignored by ImportObj()  :-(
             // this is OK for Draw but not for Calc and Writer
             // cause here these objects have a default border
-            pObj = new SdrRectObj(rTextRect);
+            pObj = new SdrRectObj(
+                *GetModel(),
+                basegfx::tools::createScaleTranslateB2DHomMatrix(
+                    rTextRect.getRange(),
+                    rTextRect.getMinimum()));
+
             pOrgObj = pObj;
-            pObj->SetModel( pSdrModel );
+            // pObj->SetModel( pSdrModel );
             SfxItemSet aSet( pSdrModel->GetItemPool() );
             ApplyAttributes( rSt, aSet, rObjData );
 
@@ -6437,7 +6534,7 @@ sal_Bool SvxMSDffManager::GetShape(sal_uLong nId, SdrObject*&         rpShape,
 /*      Zugriff auf ein BLIP zur Laufzeit (bei bereits bekannter Blip-Nr)
     ---------------------------------
 ******************************************************************************/
-sal_Bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rData, Rectangle* pVisArea ) const
+sal_Bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rData, basegfx::B2DRange* pVisArea ) const
 {
     sal_Bool bOk = sal_False;       // Ergebnisvariable initialisieren
     if ( pStData )
@@ -6527,7 +6624,7 @@ sal_Bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rData, Rectangle* p
 /*      Zugriff auf ein BLIP zur Laufzeit (mit korrekt positioniertem Stream)
     ---------------------------------
 ******************************************************************************/
-sal_Bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, Rectangle* pVisArea ) const
+sal_Bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, basegfx::B2DRange* pVisArea ) const
 {
     sal_uLong nOldPos = rBLIPStream.Tell();
 
@@ -6560,7 +6657,7 @@ sal_Bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, 
                 aMtfSize100.Width() /= 360, aMtfSize100.Height() /= 360;
 
                 if ( pVisArea )     // seem that we currently are skipping the visarea position
-                    *pVisArea = Rectangle( Point(), aMtfSize100 );
+                    *pVisArea = basegfx::B2DRange( 0.0, 0.0, aMtfSize100.Width(), aMtfSize100.Height() );
 
                 // skip rest of header
                 nSkip = 6;
@@ -6778,8 +6875,8 @@ sal_Bool SvxMSDffManager::ShapeHasText( sal_uLong /* nShapeId */, sal_uLong /* n
 // --> OD 2004-12-14 #i32596# - add new parameter <_nCalledByGroup>
 SdrObject* SvxMSDffManager::ImportOLE( long nOLEId,
                                        const Graphic& rGrf,
-                                       const Rectangle& rBoundRect,
-                                       const Rectangle& rVisArea,
+                                       const basegfx::B2DRange& rBoundRect,
+                                       const basegfx::B2DRange& rVisArea,
                                        const int /* _nCalledByGroup */,
                                        sal_Int64 nAspect ) const
 // <--
@@ -6790,9 +6887,18 @@ SdrObject* SvxMSDffManager::ImportOLE( long nOLEId,
     ErrCode nError = ERRCODE_NONE;
     uno::Reference < embed::XStorage > xDstStg;
     if( GetOLEStorageName( nOLEId, sStorageName, xSrcStg, xDstStg ))
-        pRet = CreateSdrOLEFromStorage( sStorageName, xSrcStg, xDstStg,
-                                        rGrf, rBoundRect, rVisArea, pStData, nError,
-                                        nSvxMSDffOLEConvFlags, nAspect );
+        pRet = CreateSdrOLEFromStorage(
+            *GetModel(),
+            sStorageName,
+            xSrcStg,
+            xDstStg,
+            rGrf,
+            rBoundRect,
+            rVisArea,
+            pStData,
+            nError,
+            nSvxMSDffOLEConvFlags,
+            nAspect );
     return pRet;
 }
 
@@ -7115,7 +7221,7 @@ const char* GetInternalServerName_Impl( const SvGlobalName& aGlobName )
 com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >  SvxMSDffManager::CheckForConvertToSOObj( sal_uInt32 nConvertFlags,
                         SotStorage& rSrcStg, const uno::Reference < embed::XStorage >& rDestStorage,
                         const Graphic& rGrf,
-                        const Rectangle& rVisArea )
+                        const basegfx::B2DRange& rVisArea )
 {
     uno::Reference < embed::XEmbeddedObject > xObj;
     SvGlobalName aStgNm = rSrcStg.GetClassName();
@@ -7262,11 +7368,11 @@ com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >  SvxMS
             {
                 MapMode aMapMode( VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nViewAspect ) ) );
                 Size aSz;
-                if ( rVisArea.IsEmpty() )
+                if ( rVisArea.isEmpty() )
                     aSz = lcl_GetPrefSize(rGrf, aMapMode );
                 else
                 {
-                    aSz = rVisArea.GetSize();
+                    aSz = Size(basegfx::fround(rVisArea.getWidth()), basegfx::fround(rVisArea.getHeight()));
                     aSz = OutputDevice::LogicToLogic( aSz, MapMode( MAP_100TH_MM ), aMapMode );
                 }
 
@@ -7292,12 +7398,13 @@ com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >  SvxMS
 
 // TODO/MBA: code review and testing!
 SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
+    SdrModel& rTargetModel,
                 const String& rStorageName,
                 SotStorageRef& rSrcStorage,
                 const uno::Reference < embed::XStorage >& xDestStorage,
                 const Graphic& rGrf,
-                const Rectangle& rBoundRect,
-                const Rectangle& rVisArea,
+    const basegfx::B2DRange& rBoundRect,
+    const basegfx::B2DRange& rVisArea,
                 SvStream* pDataStrm,
                 ErrCode& rError,
                 sal_uInt32 nConvertFlags,
@@ -7371,7 +7478,14 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                         aObj.SetGraphic( rGrf, ::rtl::OUString() );
 
                         // TODO/MBA: check setting of PersistName
-                        pRet = new SdrOle2Obj( aObj, String(), rBoundRect, false);
+                        pRet = new SdrOle2Obj(
+                            rTargetModel,
+                            aObj,
+                            String(),
+                            basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                rBoundRect.getRange(),
+                                rBoundRect.getMinimum()),
+                            false);
                         // we have the Object, don't create another
                         bValidStorage = false;
                     }
@@ -7436,7 +7550,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                     try
                     {
                         // the provided visual area should be used, if there is any
-                        if ( rVisArea.IsEmpty() )
+                        if ( rVisArea.isEmpty() )
                         {
                             MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
                             Size aSz(lcl_GetPrefSize(rGrf, MapMode(aMapUnit)));
@@ -7445,8 +7559,8 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                         }
                         else
                         {
-                            aAwtSz.Width = rVisArea.GetWidth();
-                            aAwtSz.Height = rVisArea.GetHeight();
+                            aAwtSz.Width = basegfx::fround(rVisArea.getWidth());
+                            aAwtSz.Height = basegfx::fround(rVisArea.getHeight());
                         }
                         //xInplaceObj->EnableSetModified( sal_False );
                         xObj->setVisualAreaSize( nAspect, aAwtSz );
@@ -7463,7 +7577,14 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                 // TODO/LATER: need MediaType
                 aObj.SetGraphic( rGrf, ::rtl::OUString() );
 
-                pRet = new SdrOle2Obj( aObj, aDstStgName, rBoundRect, false);
+                pRet = new SdrOle2Obj(
+                    rTargetModel,
+                    aObj,
+                    aDstStgName,
+                    basegfx::tools::createScaleTranslateB2DHomMatrix(
+                        rBoundRect.getRange(),
+                        rBoundRect.getMinimum()),
+                    false);
             }
         }
     }
@@ -7477,7 +7598,7 @@ SdrObject* SvxMSDffManager::GetAutoForm( MSO_SPT eTyp ) const
 
     if(120 >= sal_uInt16(eTyp))
     {
-        pRet = new SdrRectObj();
+        pRet = new SdrRectObj(*GetModel());
     }
 
     DBG_ASSERT(pRet, "SvxMSDffManager::GetAutoForm -> UNKNOWN AUTOFORM");

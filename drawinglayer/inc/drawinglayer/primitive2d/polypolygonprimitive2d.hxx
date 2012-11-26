@@ -69,9 +69,6 @@ namespace drawinglayer
             const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
             const basegfx::BColor& getBColor() const { return maBColor; }
 
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
-
             /// get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 
@@ -124,9 +121,6 @@ namespace drawinglayer
             const basegfx::BColor& getRGBColorA() const { return maRGBColorA; }
             const basegfx::BColor& getRGBColorB() const { return maRGBColorB; }
             double getDiscreteDashLength() const { return mfDiscreteDashLength; }
-
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
             /// get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
@@ -183,9 +177,6 @@ namespace drawinglayer
             const attribute::LineAttribute& getLineAttribute() const { return maLineAttribute; }
             const attribute::StrokeAttribute& getStrokeAttribute() const { return maStrokeAttribute; }
 
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
-
             /// get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 
@@ -239,9 +230,6 @@ namespace drawinglayer
             const attribute::LineStartEndAttribute& getStart() const { return maStart; }
             const attribute::LineStartEndAttribute& getEnd() const { return maEnd; }
 
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
-
             /// get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 
@@ -282,9 +270,6 @@ namespace drawinglayer
             /// data read access
             const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
             const basegfx::BColor& getBColor() const { return maBColor; }
-
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
             /// get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
@@ -330,9 +315,6 @@ namespace drawinglayer
             /// data read access
             const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
             const attribute::FillGradientAttribute& getFillGradient() const { return maFillGradient; }
-
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
             /// provide unique ID
             DeclPrimitrive2DIDBlock()
@@ -381,9 +363,6 @@ namespace drawinglayer
             const basegfx::BColor& getBackgroundColor() const { return maBackgroundColor; }
             const attribute::FillHatchAttribute& getFillHatch() const { return maFillHatch; }
 
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
-
             /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };
@@ -425,9 +404,6 @@ namespace drawinglayer
             /// data read access
             const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
             const attribute::FillGraphicAttribute& getFillGraphic() const { return maFillGraphic; }
-
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
             /// provide unique ID
             DeclPrimitrive2DIDBlock()

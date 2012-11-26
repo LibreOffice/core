@@ -1116,21 +1116,24 @@ void SwNavigationPI::Notify( SfxBroadcaster& rBrdc, const SfxHint& rHint )
 {
     if(&rBrdc == pCreateView)
     {
-        if(rHint.ISA(SfxSimpleHint) && ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING)
+        const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+        if(pSfxSimpleHint && SFX_HINT_DYING == pSfxSimpleHint->GetId() )
         {
             pCreateView = 0;
         }
     }
     else
     {
-        if(rHint.ISA(SfxEventHint))
+        const SfxEventHint* pSfxEventHint = dynamic_cast< const SfxEventHint* >(&rHint);
+
+        if(pSfxEventHint)
         {
-            if( pxObjectShell &&
-                        ((SfxEventHint&) rHint).GetEventId() == SFX_EVENT_CLOSEAPP)
+            if( pxObjectShell && SFX_EVENT_CLOSEAPP == pSfxEventHint->GetEventId() )
             {
                 DELETEZ(pxObjectShell);
             }
-            else if(((SfxEventHint&) rHint).GetEventId() == SFX_EVENT_OPENDOC)
+            else if( SFX_EVENT_OPENDOC == pSfxEventHint->GetEventId() )
             {
 
                 SwView *pActView = GetCreateView();
@@ -1255,14 +1258,14 @@ void SwNavigationPI::UpdateListBox()
 
 IMPL_LINK(SwNavigationPI, DoneLink, SfxPoolItem *, pItem)
 {
-    const SfxViewFrameItem* pFrameItem = PTR_CAST(SfxViewFrameItem, pItem );
+    const SfxViewFrameItem* pFrameItem = dynamic_cast< const SfxViewFrameItem* >( pItem );
     if( pFrameItem )
     {
         SfxViewFrame* pFrame =  pFrameItem->GetFrame();
         if(pFrame)
         {
             aContentTree.Clear();
-            pContentView = PTR_CAST(SwView, pFrame->GetViewShell());
+            pContentView = dynamic_cast< SwView* >( pFrame->GetViewShell());
             DBG_ASSERT(pContentView, "keine SwView");
             if(pContentView)
                 pContentWrtShell = pContentView->GetWrtShellPtr();

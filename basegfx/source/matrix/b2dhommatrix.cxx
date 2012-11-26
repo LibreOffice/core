@@ -123,6 +123,12 @@ namespace basegfx
 
     bool B2DHomMatrix::invert()
     {
+        if(isIdentity())
+        {
+            return true;
+        }
+        else
+        {
         Impl2DHomMatrix aWork(*mpImpl);
         sal_uInt16* pIndex = new sal_uInt16[mpImpl->getEdgeLength()];
         sal_Int16 nParity;
@@ -134,9 +140,12 @@ namespace basegfx
 
             return true;
         }
-
+            else
+            {
         delete[] pIndex;
         return false;
+    }
+        }
     }
 
     bool B2DHomMatrix::isNormalized() const
@@ -250,6 +259,11 @@ namespace basegfx
         }
     }
 
+    void B2DHomMatrix::translate(const B2DTuple& rTuple)
+    {
+        translate(rTuple.getX(), rTuple.getY());
+    }
+
     void B2DHomMatrix::scale(double fX, double fY)
     {
         const double fOne(1.0);
@@ -263,6 +277,11 @@ namespace basegfx
 
             mpImpl->doMulMatrix(aScaleMat);
         }
+    }
+
+    void B2DHomMatrix::scale(const B2DTuple& rTuple)
+    {
+        scale(rTuple.getX(), rTuple.getY());
     }
 
     void B2DHomMatrix::shearX(double fSx)

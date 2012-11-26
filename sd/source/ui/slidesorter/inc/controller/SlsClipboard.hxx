@@ -40,7 +40,7 @@ class Window;
 struct AcceptDropEvent;
 class DropTargetHelper;
 struct ExecuteDropEvent;
-class Point;
+class basegfx::B2DPoint;
 class SdPage;
 class Window;
 
@@ -93,15 +93,15 @@ public:
         const AcceptDropEvent& rEvt,
         DropTargetHelper& rTargetHelper,
         ::sd::Window* pTargetWindow = NULL,
-        sal_uInt16 nPage = SDRPAGE_NOTFOUND,
-        sal_uInt16 nLayer = SDRPAGE_NOTFOUND );
+        sal_uInt32 nPage = SDRPAGE_NOTFOUND,
+        SdrLayerID aLayer = SDRLAYER_NOTFOUND);
 
     sal_Int8 ExecuteDrop (
         const ExecuteDropEvent& rEvt,
         DropTargetHelper& rTargetHelper,
         ::sd::Window* pTargetWindow = NULL,
-        sal_uInt16 nPage = SDRPAGE_NOTFOUND,
-        sal_uInt16 nLayer = SDRPAGE_NOTFOUND);
+        sal_uInt32 nPage = SDRPAGE_NOTFOUND,
+        SdrLayerID aLayer = SDRLAYER_NOTFOUND);
 
     void Abort (void);
 
@@ -132,7 +132,7 @@ private:
 
     /** When pages are moved or copied then the selection of the slide
         sorter has to be updated.  This flag is used to remember whether the
-        selection has to be updated or can stay as it is (sal_False).
+        selection has to be updated or can stay as it is (false).
     */
     bool mbUpdateSelectionPending;
 
@@ -185,7 +185,7 @@ private:
     */
     void SelectPageRange (sal_Int32 nFirstIndex, sal_Int32 nPageCount);
 
-    /** Return <TRUE/> when the current transferable in the current state of
+    /** Return <true/> when the current transferable in the current state of
         the slidesorter is acceptable to be pasted.  For this the
         transferable has to
         a) exist,
@@ -220,12 +220,12 @@ private:
     enum DropCommand { DC_ACCEPT, DC_EXECUTE };
     sal_Int8 ExecuteOrAcceptShapeDrop (
         DropCommand eCommand,
-        const Point& rPosition,
+        const basegfx::B2DPoint& rPosition,
         const void* pDropEvent ,
         DropTargetHelper& rTargetHelper,
         ::sd::Window* pTargetWindow,
-        sal_uInt16 nPage,
-        sal_uInt16 nLayer);
+        sal_uInt32 nPage,
+        SdrLayerID aLayer);
 
     /** Return whether the insertion defined by the transferable is
         trivial, ie would not change either source nor target document.

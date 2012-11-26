@@ -48,8 +48,6 @@
 
 namespace sd {
 
-TYPEINIT1( FuSummaryPage, FuPoor );
-
 /*************************************************************************
 |*
 |* Konstruktor
@@ -76,10 +74,10 @@ void FuSummaryPage::DoExecute( SfxRequest& )
 {
     ::sd::Outliner* pOutl = NULL;
     SdPage* pSummaryPage = NULL;
-    sal_uInt16 i = 0;
-    sal_uInt16 nFirstPage = SDRPAGE_NOTFOUND;
-    sal_uInt16 nSelectedPages = 0;
-    sal_uInt16 nCount = mpDoc->GetSdPageCount(PK_STANDARD);
+    sal_uInt32 i = 0;
+    sal_uInt32 nFirstPage = SDRPAGE_NOTFOUND;
+    sal_uInt32 nSelectedPages = 0;
+    sal_uInt32 nCount = mpDoc->GetSdPageCount(PK_STANDARD);
 
     while (i < nCount && nSelectedPages <= 1)
     {
@@ -134,12 +132,12 @@ void FuSummaryPage::DoExecute( SfxRequest& )
                     SetOfByte aVisibleLayers = pActualPage->TRG_GetMasterPageVisibleLayers();
 
                     // Seite mit Titel & Gliederung!
-                    pSummaryPage = (SdPage*) mpDoc->AllocPage(sal_False);
-                    pSummaryPage->SetSize(pActualPage->GetSize() );
-                    pSummaryPage->SetBorder(pActualPage->GetLftBorder(),
-                                     pActualPage->GetUppBorder(),
-                                     pActualPage->GetRgtBorder(),
-                                     pActualPage->GetLwrBorder() );
+                    pSummaryPage = (SdPage*) mpDoc->AllocPage(false);
+                    pSummaryPage->SetPageScale(pActualPage->GetPageScale() );
+                    pSummaryPage->SetPageBorder(pActualPage->GetLeftPageBorder(),
+                                     pActualPage->GetTopPageBorder(),
+                                     pActualPage->GetRightPageBorder(),
+                                     pActualPage->GetBottomPageBorder() );
 
                     // Seite hinten einfuegen
                     mpDoc->InsertPage(pSummaryPage, nCount * 2 + 1);
@@ -149,17 +147,17 @@ void FuSummaryPage::DoExecute( SfxRequest& )
                     // MasterPage der aktuellen Seite verwenden
                     pSummaryPage->TRG_SetMasterPage(pActualPage->TRG_GetMasterPage());
                     pSummaryPage->SetLayoutName(pActualPage->GetLayoutName());
-                    pSummaryPage->SetAutoLayout(AUTOLAYOUT_ENUM, sal_True);
+                    pSummaryPage->SetAutoLayout(AUTOLAYOUT_ENUM, true);
                     pSummaryPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
                     pSummaryPage->setHeaderFooterSettings(pActualPage->getHeaderFooterSettings());
 
                     // Notiz-Seite
-                    SdPage* pNotesPage = (SdPage*) mpDoc->AllocPage(sal_False);
-                    pNotesPage->SetSize(pActualNotesPage->GetSize());
-                    pNotesPage->SetBorder(pActualNotesPage->GetLftBorder(),
-                                          pActualNotesPage->GetUppBorder(),
-                                          pActualNotesPage->GetRgtBorder(),
-                                          pActualNotesPage->GetLwrBorder() );
+                    SdPage* pNotesPage = (SdPage*) mpDoc->AllocPage(false);
+                    pNotesPage->SetPageScale(pActualNotesPage->GetPageScale());
+                    pNotesPage->SetPageBorder(pActualNotesPage->GetLeftPageBorder(),
+                                          pActualNotesPage->GetTopPageBorder(),
+                                          pActualNotesPage->GetRightPageBorder(),
+                                          pActualNotesPage->GetBottomPageBorder() );
                     pNotesPage->SetPageKind(PK_NOTES);
 
                     // Seite hinten einfuegen
@@ -171,13 +169,13 @@ void FuSummaryPage::DoExecute( SfxRequest& )
                     // MasterPage der aktuellen Seite verwenden
                     pNotesPage->TRG_SetMasterPage(pActualNotesPage->TRG_GetMasterPage());
                     pNotesPage->SetLayoutName(pActualNotesPage->GetLayoutName());
-                    pNotesPage->SetAutoLayout(pActualNotesPage->GetAutoLayout(), sal_True);
+                    pNotesPage->SetAutoLayout(pActualNotesPage->GetAutoLayout(), true);
                     pNotesPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
                     pNotesPage->setHeaderFooterSettings(pActualNotesPage->getHeaderFooterSettings());
 
                     pOutl = new ::sd::Outliner( mpDoc, OUTLINERMODE_OUTLINEOBJECT );
-                    pOutl->SetUpdateMode(sal_False);
-                    pOutl->EnableUndo(sal_False);
+                    pOutl->SetUpdateMode(false);
+                    pOutl->EnableUndo(false);
 
                     if (mpDocSh)
                         pOutl->SetRefDevice(SD_MOD()->GetRefDevice( *mpDocSh ));
@@ -207,7 +205,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
         SdrTextObj* pTextObj = (SdrTextObj*) pSummaryPage->GetPresObj(PRESOBJ_OUTLINE);
 
         // Harte Absatz- und Zeichenattribute entfernen
-        SfxItemSet aEmptyEEAttr(mpDoc->GetPool(), EE_ITEMS_START, EE_ITEMS_END);
+        SfxItemSet aEmptyEEAttr(mpDoc->GetItemPool(), EE_ITEMS_START, EE_ITEMS_END);
         sal_uLong nParaCount = pOutl->GetParagraphCount();
 
         for (sal_uInt16 nPara = 0; nPara < nParaCount; nPara++)
@@ -219,10 +217,10 @@ void FuSummaryPage::DoExecute( SfxRequest& )
         }
 
         pTextObj->SetOutlinerParaObject( pOutl->CreateParaObject() );
-        pTextObj->SetEmptyPresObj(sal_False);
+        pTextObj->SetEmptyPresObj(false);
 
-        // Harte Attribute entfernen (Flag auf sal_True)
-        SfxItemSet aAttr(mpDoc->GetPool());
+        // Harte Attribute entfernen (Flag auf true)
+        SfxItemSet aAttr(pTextObj->GetObjectItemPool());
         aAttr.Put(XLineStyleItem(XLINE_NONE));
         aAttr.Put(XFillStyleItem(XFILL_NONE));
         pTextObj->SetMergedItemSet(aAttr);
@@ -234,7 +232,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
         DrawViewShell* pDrawViewShell= dynamic_cast< DrawViewShell* >( mpViewShell );
         if(pDrawViewShell)
         {
-            pDrawViewShell->SwitchPage( (pSummaryPage->GetPageNum() - 1) / 2);
+            pDrawViewShell->SwitchPage( (pSummaryPage->GetPageNumber() - 1) / 2);
         }
     }
 }

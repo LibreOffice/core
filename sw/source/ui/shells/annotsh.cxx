@@ -144,8 +144,6 @@ SFX_IMPL_INTERFACE(SwAnnotationShell, SfxShell, SW_RES(STR_SHELLNAME_DRAW_TEXT))
     SFX_POPUPMENU_REGISTRATION(SW_RES(MN_ANNOTATION_POPUPMENU));
 }
 
-TYPEINIT1(SwAnnotationShell,SfxShell)
-
 SwAnnotationShell::SwAnnotationShell( SwView& r )
 : rView(r)
 {
@@ -314,7 +312,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
 
                 const SvxFieldItem* pFieldItem = pOLV->GetFieldAtSelection();
 
-                if (pFieldItem && pFieldItem->GetField()->ISA(SvxURLField))
+                if (pFieldItem && dynamic_cast< const SvxURLField* >(pFieldItem->GetField()))
                 {
                     // Feld selektieren, so dass es beim Insert geloescht wird
                     ESelection aSel = pOLV->GetSelection();
@@ -434,7 +432,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
             {
                 /* mod
                 SwView* pView = &GetView();
-                FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, pView));
+                FieldUnit eMetric = ::GetDfltMetric(0 != dynamic_cast< SwWebView* >( pView));
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
                 */
                 SfxItemSet aDlgAttr(GetPool(), EE_ITEMS_START, EE_ITEMS_END);
@@ -472,7 +470,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
             {
                 /* mod todo ???
                 SwView* pView = &GetView();
-                FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, pView));
+                FieldUnit eMetric = ::GetDfltMetric(0 != dynamic_cast< SwWebView* >( pView));
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
                 */
                 SfxItemSet aDlgAttr(GetPool(),
@@ -838,7 +836,7 @@ void SwAnnotationShell::ExecClpbrd(SfxRequest &rReq)
             sal_uLong nFormat = 0;
             const SfxPoolItem* pItem;
             if ( rReq.GetArgs() && rReq.GetArgs()->GetItemState(nSlot, sal_True, &pItem) == SFX_ITEM_SET &&
-                                    pItem->ISA(SfxUInt32Item) )
+                                    dynamic_cast< const SfxUInt32Item* >(pItem) )
             {
                 nFormat = ((const SfxUInt32Item*)pItem)->GetValue();
             }
@@ -960,13 +958,13 @@ void SwAnnotationShell::StateInsert(SfxItemSet &rSet)
 
                     if (pFieldItem)
                     {
-                        const SvxFieldData* pField = pFieldItem->GetField();
+                        const SvxURLField* pField = dynamic_cast< const SvxURLField* >(pFieldItem->GetField());
 
-                        if (pField->ISA(SvxURLField))
+                        if (pField)
                         {
-                            aHLinkItem.SetName(((const SvxURLField*) pField)->GetRepresentation());
-                            aHLinkItem.SetURL(((const SvxURLField*) pField)->GetURL());
-                            aHLinkItem.SetTargetFrame(((const SvxURLField*) pField)->GetTargetFrame());
+                            aHLinkItem.SetName(pField->GetRepresentation());
+                            aHLinkItem.SetURL(pField->GetURL());
+                            aHLinkItem.SetTargetFrame(pField->GetTargetFrame());
                         }
                     }
                     else
@@ -1014,7 +1012,7 @@ void SwAnnotationShell::NoteExec(SfxRequest &rReq)
             break;
         case FN_DELETE_NOTE_AUTHOR:
         {
-            SFX_REQUEST_ARG( rReq, pItem, SfxStringItem, nSlot, sal_False);
+            SFX_REQUEST_ARG( rReq, pItem, SfxStringItem, nSlot );
             if ( pItem )
                 pPostItMgr->Delete( pItem->GetValue() );
             break;
@@ -1035,7 +1033,7 @@ void SwAnnotationShell::NoteExec(SfxRequest &rReq)
             break;
         case FN_HIDE_NOTE_AUTHOR:
         {
-            SFX_REQUEST_ARG( rReq, pItem, SfxStringItem, nSlot, sal_False);
+            SFX_REQUEST_ARG( rReq, pItem, SfxStringItem, nSlot );
             if ( pItem )
                 pPostItMgr->Hide( pItem->GetValue() );
         }
@@ -1131,7 +1129,7 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
         case SID_THES:
         {
             String aReplaceText;
-            SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES, sal_False );
+            SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES );
             if (pItem2)
                 aReplaceText = pItem2->GetValue();
             if (aReplaceText.Len() > 0)
@@ -1559,7 +1557,7 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
         sSym = ((const SfxStringItem*)pItem)->GetValue();
         const SfxPoolItem* pFtItem = NULL;
         pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), sal_False, &pFtItem);
-        const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
+        const SfxStringItem* pFontItem = dynamic_cast< const SfxStringItem* >( pFtItem );
         if ( pFontItem )
             sFontName = pFontItem->GetValue();
     }
@@ -1603,8 +1601,8 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
         sal_uInt16 nResult = pDlg->Execute();
         if( nResult == RET_OK )
         {
-            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pCItem, SfxStringItem, SID_CHARMAP, sal_False );
-            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT, sal_False );
+            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pCItem, SfxStringItem, SID_CHARMAP );
+            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT );
             if ( pFontItem )
             {
                 aFont.SetName( pFontItem->GetFamilyName() );

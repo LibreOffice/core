@@ -30,10 +30,6 @@
 #include "sbxres.hxx"
 #include <svl/brdcst.hxx>
 
-TYPEINIT1(SbxMethod,SbxVariable)
-TYPEINIT1(SbxProperty,SbxVariable)
-TYPEINIT2(SbxObject,SbxVariable,SfxListener)
-
 static const char* pNameProp;               // Name-Property
 static const char* pParentProp;             // Parent-Property
 
@@ -141,7 +137,7 @@ void SbxObject::Clear()
 void SbxObject::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                             const SfxHint& rHint, const TypeId& )
 {
-    const SbxHint* p = PTR_CAST(SbxHint,&rHint);
+    const SbxHint* p = dynamic_cast< const SbxHint* >( &rHint);
     if( p )
     {
         sal_uIntPtr nId = p->GetId();
@@ -292,7 +288,7 @@ SbxVariable* SbxObject::Find( const XubString& rName, SbxClassType t )
 sal_Bool SbxObject::Call( const XubString& rName, SbxArray* pParam )
 {
     SbxVariable* pMeth = FindQualified( rName, SbxCLASS_DONTCARE);
-    if( pMeth && pMeth->ISA(SbxMethod) )
+    if( pMeth && dynamic_cast< SbxMethod* >(pMeth) )
     {
         // FindQualified() koennte schon zugeschlagen haben!
         if( pParam )
@@ -392,7 +388,7 @@ SbxVariable* SbxObject::Make( const XubString& rName, SbxClassType ct, SbxDataTy
     if( !pArray )
         return NULL;
     // Collections duerfen gleichnamige Objekte enthalten
-    if( !( ct == SbxCLASS_OBJECT && ISA(SbxCollection) ) )
+    if( !( ct == SbxCLASS_OBJECT && dynamic_cast< SbxCollection* >(this) ) )
     {
         SbxVariable* pRes = pArray->Find( rName, ct );
         if( pRes )
@@ -441,7 +437,7 @@ SbxVariable* SbxObject::Make( const XubString& rName, SbxClassType ct, SbxDataTy
 SbxObject* SbxObject::MakeObject( const XubString& rName, const XubString& rClass )
 {
     // Ist das Objekt bereits vorhanden?
-    if( !ISA(SbxCollection) )
+    if( !dynamic_cast< SbxCollection* >(this) )
     {
         SbxVariable* pRes = pObjs->Find( rName, SbxCLASS_OBJECT );
         if( pRes )
@@ -460,7 +456,7 @@ SbxObject* SbxObject::MakeObject( const XubString& rName, const XubString& rClas
             }
 #endif
 */
-            return PTR_CAST(SbxObject,pRes);
+            return dynamic_cast< SbxObject* >( pRes);
         }
     }
     SbxObject* pVar = CreateObject( rClass );
@@ -488,8 +484,10 @@ void SbxObject::Insert( SbxVariable* pVar )
         {
             // dann gibt es dieses Element bereits
             // Bei Collections duerfen gleichnamige Objekte hinein
-            if( pArray == pObjs && ISA(SbxCollection) )
+            if( pArray == pObjs && dynamic_cast< SbxCollection* >(this) )
+            {
                 nIdx = pArray->Count();
+            }
             else
             {
                 SbxVariable* pOld = pArray->Get( nIdx );
@@ -529,8 +527,8 @@ void SbxObject::Insert( SbxVariable* pVar )
     static const char* pCls[] =
     { "DontCare","Array","Value","Variable","Method","Property","Object" };
     XubString aVarName( pVar->GetName() );
-    if ( !aVarName.Len() && pVar->ISA(SbxObject) )
-        aVarName = PTR_CAST(SbxObject,pVar)->GetClassName();
+    if ( !aVarName.Len() && dynamic_cast< const SbxObject* >(pVar) )
+        aVarName = dynamic_cast< SbxObject* >( pVar)->GetClassName();
     ByteString aNameStr1( (const UniString&)aVarName, RTL_TEXTENCODING_ASCII_US );
     ByteString aNameStr2( (const UniString&)SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US );
     DbgOutf( "SBX: Insert %s %s in %s",
@@ -569,8 +567,8 @@ void SbxObject::QuickInsert( SbxVariable* pVar )
     static const char* pCls[] =
     { "DontCare","Array","Value","Variable","Method","Property","Object" };
     XubString aVarName( pVar->GetName() );
-    if ( !aVarName.Len() && pVar->ISA(SbxObject) )
-        aVarName = PTR_CAST(SbxObject,pVar)->GetClassName();
+    if ( !aVarName.Len() && dynamic_cast< SbxObject* >(pVar) )
+        aVarName = dynamic_cast< SbxObject* >( pVar)->GetClassName();
     ByteString aNameStr1( (const UniString&)aVarName, RTL_TEXTENCODING_ASCII_US );
     ByteString aNameStr2( (const UniString&)SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US );
     DbgOutf( "SBX: Insert %s %s in %s",
@@ -621,8 +619,8 @@ void SbxObject::Remove( SbxVariable* pVar )
     {
 #ifdef DBG_UTIL
     XubString aVarName( pVar->GetName() );
-    if ( !aVarName.Len() && pVar->ISA(SbxObject) )
-        aVarName = PTR_CAST(SbxObject,pVar)->GetClassName();
+    if ( !aVarName.Len() && dynamic_cast< SbxObject* >(pVar) )
+        aVarName = dynamic_cast< SbxObject* >( pVar)->GetClassName();
     ByteString aNameStr1( (const UniString&)aVarName, RTL_TEXTENCODING_ASCII_US );
     ByteString aNameStr2( (const UniString&)SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US );
 #endif
@@ -949,7 +947,7 @@ void SbxObject::Dump( SvStream& rStrm, sal_Bool bFill )
             XubString aAttrs2;
             if( CollectAttrs( pVar, aAttrs2 ) )
                 aLine += aAttrs2;
-            if( !pVar->IsA( TYPE(SbxMethod) ) )
+            if( !dynamic_cast< SbxMethod* >(pVar) )
                 aLine.AppendAscii( "  !! Not a Method !!" );
             rStrm.WriteByteString( aLine, RTL_TEXTENCODING_ASCII_US );
 
@@ -982,7 +980,7 @@ void SbxObject::Dump( SvStream& rStrm, sal_Bool bFill )
                 XubString aAttrs3;
                 if( CollectAttrs( pVar, aAttrs3 ) )
                     aLine += aAttrs3;
-                if( !pVar->IsA( TYPE(SbxProperty) ) )
+                if( !dynamic_cast< SbxProperty* >(pVar) )
                     aLine.AppendAscii( "  !! Not a Property !!" );
                 rStrm.WriteByteString( aLine, RTL_TEXTENCODING_ASCII_US );
 
@@ -1011,9 +1009,9 @@ void SbxObject::Dump( SvStream& rStrm, sal_Bool bFill )
             if ( pVar )
             {
                 rStrm << aIndentNameStr.GetBuffer() << "  - Sub";
-                if ( pVar->ISA(SbxObject) )
+                if ( dynamic_cast< SbxObject* >(pVar) )
                     ((SbxObject*) pVar)->Dump( rStrm, bFill );
-                else if ( pVar->ISA(SbxVariable) )
+                else if ( dynamic_cast< SbxVariable* >(pVar) )
                     ((SbxVariable*) pVar)->Dump( rStrm, bFill );
             }
         }
@@ -1079,7 +1077,7 @@ void SbxObject::GarbageCollection( sal_uIntPtr nObjects )
     while ( pObj && 0 != nObjects-- )
     {
         // hat der Parent nur noch 1 Ref-Count?
-        SbxObject *pParent = PTR_CAST( SbxObject, pObj->GetParent() );
+        SbxObject *pParent = dynamic_cast< SbxObject* >( pObj->GetParent() );
         if ( pParent && 1 == pParent->GetRefCount() )
         {
             // dann alle Properies des Objects durchsuchen
@@ -1126,12 +1124,12 @@ void SbxObject::GarbageCollection( sal_uIntPtr nObjects )
         for ( sal_uIntPtr n = 0; n < rVars.Count(); ++n )
         {
             SbxVariable *pVar = rVars.GetObject(n);
-            SbxObject *pObj = PTR_CAST(SbxObject, pVar);
+            SbxObject *pObj = dynamic_cast< SbxObject* >( pVar);
             sal_uInt16 nFlags = pVar->GetFlags();
             pVar->SetFlag(SBX_NO_BROADCAST);
             if ( pObj )
                 pObj->Dump(aStream);
-            else if ( !pVar->GetParent() || !pVar->GetParent()->ISA(SbxObject) )
+            else if ( !pVar->GetParent() || !dynamic_cast< SbxObject* >(pVar->GetParent()) )
                 pVar->Dump(aStream);
             pVar->SetFlags(nFlags);
         }

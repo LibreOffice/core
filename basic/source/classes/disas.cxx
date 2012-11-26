@@ -276,7 +276,7 @@ SbiDisas::SbiDisas( SbModule* p, const SbiImage* q ) : rImg( *q ), pMod( p )
     // Add the publics
     for( sal_uInt16 i = 0; i < pMod->GetMethods()->Count(); i++ )
     {
-        SbMethod* pMeth = PTR_CAST(SbMethod,pMod->GetMethods()->Get( i ));
+        SbMethod* pMeth = dynamic_cast< SbMethod* >( pMod->GetMethods()->Get( i ));
         if( pMeth )
         {
             sal_uInt16 nPos = (sal_uInt16) (pMeth->GetId());
@@ -410,7 +410,7 @@ sal_Bool SbiDisas::DisasLine( String& rText )
         ByteString aByteMethName;
         for( sal_uInt16 i = 0; i < pMod->GetMethods()->Count(); i++ )
         {
-            SbMethod* pMeth = PTR_CAST(SbMethod,pMod->GetMethods()->Get( i ));
+            SbMethod* pMeth = dynamic_cast< SbMethod* >( pMod->GetMethods()->Get( i ));
             if( pMeth )
             {
                 aByteMethName = ByteString( pMeth->GetName(), gsl_getSystemTextEncoding() );

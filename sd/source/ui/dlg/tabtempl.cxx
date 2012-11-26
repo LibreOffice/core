@@ -66,7 +66,7 @@ SdTabTemplateDlg::SdTabTemplateDlg( Window* pParent,
                                 SfxStyleSheetBase& rStyleBase,
                                 SdrModel* pModel,
                                 SdrView* pView ) :
-        SfxStyleDialog      ( pParent, SdResId( TAB_TEMPLATE ), rStyleBase, sal_False ),
+        SfxStyleDialog      ( pParent, SdResId( TAB_TEMPLATE ), rStyleBase, false ),
         rDocShell           ( *pDocShell ),
         pSdrView            ( pView ),
         pColorTab           ( pModel->GetColorTable() ),

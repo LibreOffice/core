@@ -52,6 +52,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <svl/stritem.hxx>
 #include <editeng/fontitem.hxx>
+#include <svx/svdlegacy.hxx>
 
 //.............................................................................
 namespace chart
@@ -95,7 +96,6 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
         xChartViewProps->setPropertyValue( C2U("SdrViewIsInEditMode"), uno::makeAny(sal_True) );
 
     sal_Bool bEdit = m_pDrawViewWrapper->SdrBeginTextEdit( pTextObj
-                    , m_pDrawViewWrapper->GetPageView()
                     , m_pChartWindow
                     , sal_False //bIsNewObj
                     , pOutliner
@@ -111,7 +111,7 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
             pViewSh->GetViewFrame()->GetDispatcher()->GetShell( 0 )->
                 SetUndoManager(&pOutliner->GetUndoManager());
         */
-        m_pDrawViewWrapper->SetEditMode();
+        m_pDrawViewWrapper->SetViewEditMode(SDREDITMODE_EDIT);
 
         // #i12587# support for shapes in chart
         if ( pMousePixel )
@@ -127,7 +127,9 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
 
         //we invalidate the outliner region because the outliner has some
         //paint problems (some characters are painted twice a little bit shifted)
-        m_pChartWindow->Invalidate( m_pDrawViewWrapper->GetMarkedObjBoundRect() );
+        m_pChartWindow->Invalidate(
+            sdr::legacy::GetAllObjBoundRect(
+                m_pDrawViewWrapper->getSelectedSdrObjectVectorFromSdrMarkView()));
     }
 }
 
@@ -204,9 +206,8 @@ void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
         const SfxItemSet* pSet = pDlg->GetOutputItemSet();
         const SfxPoolItem* pItem=0;
         String aString;
-        if ( pSet && pSet->GetItemState( SID_CHARMAP, sal_True, &pItem) == SFX_ITEM_SET &&
-             pItem->ISA(SfxStringItem) )
-                aString = dynamic_cast<const SfxStringItem*>(pItem)->GetValue();
+        if ( pSet && pSet->GetItemState( SID_CHARMAP, sal_True, &pItem) == SFX_ITEM_SET && dynamic_cast< const SfxStringItem* >(pItem) )
+                aString = static_cast< const SfxStringItem* >(pItem)->GetValue();
 
         OutlinerView* pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
         SdrOutliner*  pOutliner = m_pDrawViewWrapper->getOutliner();

@@ -84,15 +84,14 @@ namespace sdr
             }
 
             // Test for Calc object hiding (for OLE and Graphic it's extra, see there)
-            const SdrPageView* pSdrPageView = GetObjectContact().TryToGetSdrPageView();
+            const SdrView* pSdrView = GetObjectContact().TryToGetSdrView();
 
-            if(pSdrPageView)
+            if(pSdrView)
             {
-                const SdrView& rSdrView = pSdrPageView->GetView();
-                const bool bHideOle(rSdrView.getHideOle());
-                const bool bHideChart(rSdrView.getHideChart());
-                const bool bHideDraw(rSdrView.getHideDraw());
-                const bool bHideFormControl(rSdrView.getHideFormControl());
+                const bool bHideOle(pSdrView->getHideOle());
+                const bool bHideChart(pSdrView->getHideChart());
+                const bool bHideDraw(pSdrView->getHideDraw());
+                const bool bHideFormControl(pSdrView->getHideFormControl());
 
                 if(bHideOle || bHideChart || bHideDraw || bHideFormControl)
                 {

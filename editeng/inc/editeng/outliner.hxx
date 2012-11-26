@@ -26,9 +26,7 @@
 #include <tools/gen.hxx>
 #include <tools/string.hxx>
 #include <tools/debug.hxx>
-
 #include <svl/brdcst.hxx>
-
 #include <editeng/editdata.hxx>
 #include <i18npool/lang.h>
 #include <tools/color.hxx>
@@ -37,11 +35,10 @@
 #include <tools/link.hxx>
 #include <rsc/rscsfx.hxx>
 #include "editeng/editengdllapi.h"
-
 #include <svtools/grfmgr.hxx>
-
-#include <tools/rtti.hxx>   // wegen typedef TypeId
+#include <editeng/pathtextportion.hxx>
 #include <vector>
+#include <typeinfo>
 
 class OutlinerEditEng;
 class Outliner;
@@ -80,11 +77,11 @@ namespace svl
 }
 
 #include <com/sun/star/uno/Reference.h>
-
 #include <vos/ref.hxx>
 #include <editeng/svxfont.hxx>
 #include <editeng/eedata.hxx>
 #include <editeng/paragraphdata.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
 class SvxFieldData;
 //////////////////////////////////////////////////////////////////////////////
@@ -259,7 +256,15 @@ public:
 
     void        Scroll( long nHorzScroll, long nVertScroll );
 
-    void        Paint( const Rectangle& rRect, OutputDevice* pTargetDevice = 0 );
+    void Paint(const Rectangle& rRect, OutputDevice* pTargetDevice = 0);
+    void Paint(const basegfx::B2DRange& rRange, OutputDevice* pTargetDevice = 0)
+    {
+        Paint(
+            Rectangle(
+                (sal_Int32)floor(rRange.getMinX()), (sal_Int32)floor(rRange.getMinY()),
+                (sal_Int32)ceil(rRange.getMaxX()), (sal_Int32)ceil(rRange.getMaxY())),
+            pTargetDevice);
+    }
     sal_Bool        PostKeyEvent( const KeyEvent& rKEvt );
     sal_Bool        MouseButtonDown( const MouseEvent& );
     sal_Bool        MouseButtonUp( const MouseEvent& );
@@ -278,7 +283,19 @@ public:
     sal_Bool        IsReadOnly() const;
 
     void        SetOutputArea( const Rectangle& rRect );
+    void SetOutputArea(const basegfx::B2DRange& rRange)
+    {
+        SetOutputArea(
+            Rectangle(
+                (sal_Int32)floor(rRange.getMinX()), (sal_Int32)floor(rRange.getMinY()),
+                (sal_Int32)ceil(rRange.getMaxX()), (sal_Int32)ceil(rRange.getMaxY())));
+    }
     Rectangle   GetOutputArea() const;
+    basegfx::B2DRange GetOutputAreaRange() const
+    {
+        const Rectangle aTemp(GetOutputArea());
+        return basegfx::B2DRange(aTemp.Left(), aTemp.Top(), aTemp.Right(), aTemp.Bottom());
+    }
 
     Rectangle   GetVisArea() const;
 
@@ -953,7 +970,7 @@ public:
     void            QuickFormatDoc( sal_Bool bFull = sal_False );
 
     sal_Bool            UpdateFields();
-    void            RemoveFields( sal_Bool bKeepFieldText, TypeId aType = NULL );
+    void            RemoveFields( sal_Bool bKeepFieldText, const std::type_info* pTypeInfo = 0);
 
     virtual void    FieldClicked( const SvxFieldItem& rField, sal_uInt16 nPara, xub_StrLen nPos );
     virtual void    FieldSelected( const SvxFieldItem& rField, sal_uInt16 nPara, xub_StrLen nPos );
@@ -1049,6 +1066,15 @@ public:
 
     virtual sal_Bool IsParaIsNumberingRestart( sal_uInt16 nPara );
     virtual void SetParaIsNumberingRestart( sal_uInt16 nPara, sal_Bool bParaIsNumberingRestart );
+
+    /// get primitive version of layouted text
+    void getPrimitive2DSequence(
+        drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+        const basegfx::B2DVector* pContourScale = 0,
+        const basegfx::B2DRange* pClipRange = 0);
+
+    /// get path thext portions of text for text on curve functionality
+    void getPathTextPortions(::std::vector< PathTextPortion >& rTarget);
 };
 
 #endif

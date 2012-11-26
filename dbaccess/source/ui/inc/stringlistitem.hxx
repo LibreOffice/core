@@ -50,7 +50,6 @@ class OStringListItem : public SfxPoolItem
     ::com::sun::star::uno::Sequence< ::rtl::OUString >      m_aList;
 
 public:
-    TYPEINFO();
     OStringListItem(sal_Int16 nWhich, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rList);
     OStringListItem(const OStringListItem& _rSource);
 

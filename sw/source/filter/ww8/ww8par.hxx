@@ -313,8 +313,14 @@ private:
     Position& operator=(const Position&);
 };
 
-namespace SwWW8
+class SwWW8FltRefStack : public SwFltEndStack
 {
+public:
+    SwWW8FltRefStack(SwDoc* pDo, sal_uLong nFieldFl)
+        : SwFltEndStack( pDo, nFieldFl )
+    {}
+    bool IsFtnEdnBkmField(const SwFmtFld& rFmtFld, sal_uInt16& rBkmNo);
+
     struct ltstr
     {
         bool operator()(const String &r1, const String &r2) const
@@ -322,37 +328,10 @@ namespace SwWW8
             return r1.CompareIgnoreCaseToAscii(r2) == COMPARE_LESS;
         }
     };
-};
-
-class SwWW8ReferencedFltEndStack : public SwFltEndStack
-{
-public:
-    SwWW8ReferencedFltEndStack( SwDoc* pDo, sal_uLong nFieldFl )
-        : SwFltEndStack( pDo, nFieldFl )
-        , aReferencedTOCBookmarks()
-    {}
-
-    // Keep track of referenced TOC bookmarks in order to suppress the import
-    // of unreferenced ones.
-    std::set<String, SwWW8::ltstr> aReferencedTOCBookmarks;
-protected:
-    virtual void SetAttrInDoc( const SwPosition& rTmpPos,
-                               SwFltStackEntry* pEntry );
-};
-
-class SwWW8FltRefStack : public SwFltEndStack
-{
-public:
-    SwWW8FltRefStack(SwDoc* pDo, sal_uLong nFieldFl)
-        : SwFltEndStack( pDo, nFieldFl )
-        , aFieldVarNames()
-    {}
-    bool IsFtnEdnBkmField(const SwFmtFld& rFmtFld, sal_uInt16& rBkmNo);
-
     //Keep track of variable names created with fields, and the bookmark
     //mapped to their position, hopefully the same, but very possibly
     //an additional pseudo bookmark
-    std::map<String, String, SwWW8::ltstr> aFieldVarNames;
+    std::map<String, String, ltstr> aFieldVarNames;
 protected:
     SwFltStackEntry *RefToVar(const SwField* pFld,SwFltStackEntry *pEntry);
     virtual void SetAttrInDoc(const SwPosition& rTmpPos,
@@ -598,8 +577,8 @@ private:
     // indicates, if the OLE object is imported inside a group object
     virtual SdrObject* ImportOLE( long nOLEId,
                                   const Graphic& rGrf,
-                                  const Rectangle& rBoundRect,
-                                  const Rectangle& rVisArea,
+                                  const basegfx::B2DRange& rBoundRect,
+                                  const basegfx::B2DRange& rVisArea,
                                   const int _nCalledByGroup,
                                   sal_Int64 nAspect ) const;
     // <--
@@ -615,7 +594,7 @@ public:
     void DisableFallbackStream();
     void EnableFallbackStream();
 protected:
-    virtual SdrObject* ProcessObj( SvStream& rSt, DffObjData& rObjData, void* pData, Rectangle& rTextRect, SdrObject* pObj );
+    virtual SdrObject* ProcessObj( SvStream& rSt, DffObjData& rObjData, void* pData, basegfx::B2DRange& rTextRect, SdrObject* pObj );
 };
 
 
@@ -864,11 +843,11 @@ private:
     sw::util::RedlineStack *mpRedlineStack;
 
     /*
-    This stack is for fields that get referenced later, e.g. BookMarks and TOX.
+    This stack is for fields that get referneced later, e.g. BookMarks and TOX.
     They get inserted at the end of the document, it is the same stack for
     headers/footers/main text/textboxes/tables etc...
     */
-    SwWW8ReferencedFltEndStack *pReffedStck;
+    SwFltEndStack *pReffedStck;
 
     /*
     This stack is for fields whose true conversion cannot be determined until
@@ -1288,10 +1267,10 @@ private:
     SwFrmFmt* ImportGraf(SdrTextObj* pTextObj = 0, SwFrmFmt* pFlyFmt = 0);
 
     SdrObject* ImportOleBase( Graphic& rGraph, const Graphic* pGrf=0,
-        const SfxItemSet* pFlySet=0, const Rectangle& aVisArea = Rectangle() );
+        const SfxItemSet* pFlySet=0, const basegfx::B2DRange& aVisArea = basegfx::B2DRange() );
 
     SwFrmFmt* ImportOle( const Graphic* = 0, const SfxItemSet* pFlySet = 0,
-        const SfxItemSet* pGrfSet = 0, const Rectangle& aVisArea = Rectangle() );
+        const SfxItemSet* pGrfSet = 0, const basegfx::B2DRange& aVisArea = basegfx::B2DRange() );
     SwFlyFrmFmt* InsertOle(SdrOle2Obj &rObject, const SfxItemSet &rFlySet,
         const SfxItemSet &rGrfSet);
 

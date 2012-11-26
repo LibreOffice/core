@@ -44,13 +44,14 @@
 #include <svl/style.hxx>
 #include <svl/smplhint.hxx>
 #include <editeng/eeitem.hxx>
-#include "svdoimp.hxx"
 #include <svx/sdr/properties/connectorproperties.hxx>
 #include <svx/sdr/contact/viewcontactofsdredgeobj.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <svx/svdlegacy.hxx>
 #include <svx/sdrhittesthelper.hxx>
+#include <svx/svdobj.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -60,50 +61,56 @@ SdrObjConnection::~SdrObjConnection()
 
 void SdrObjConnection::ResetVars()
 {
-    pObj=NULL;
-    nConId=0;
-    nXDist=0;
-    nYDist=0;
-    bBestConn=sal_True;
-    bBestVertex=sal_True;
-    bXDistOvr=sal_False;
-    bYDistOvr=sal_False;
-    bAutoVertex=sal_False;
-    bAutoCorner=sal_False;
+    mpConnectedSdrObject = 0;
+    mnConnectorId = 0;
+    mbBestConnection = true;
+    mbBestVertex = true;
+    mbAutoVertex = false;
 }
 
-FASTBOOL SdrObjConnection::TakeGluePoint(SdrGluePoint& rGP, FASTBOOL bSetAbsPos) const
+bool SdrObjConnection::TakeGluePoint(SdrGluePoint& rGP, bool bSetAbsPos) const
 {
-    FASTBOOL bRet=sal_False;
-    if (pObj!=NULL) { // Ein Obj muss schon angedockt sein!
-        if (bAutoVertex) {
-            rGP=pObj->GetVertexGluePoint(nConId);
-            bRet=sal_True;
-        } else if (bAutoCorner) {
-            rGP=pObj->GetCornerGluePoint(nConId);
-            bRet=sal_True;
-        } else {
-            const SdrGluePointList* pGPL=pObj->GetGluePointList();
-            if (pGPL!=NULL) {
-                sal_uInt16 nNum=pGPL->FindGluePoint(nConId);
-                if (nNum!=SDRGLUEPOINT_NOTFOUND) {
+    bool bRet=false;
+
+    if(mpConnectedSdrObject)
+    {
+        // Ein Obj muss schon angedockt sein!
+        if(mbAutoVertex)
+        {
+            rGP = mpConnectedSdrObject->GetVertexGluePoint(mnConnectorId);
+            bRet = true;
+        }
+        else
+        {
+            const SdrGluePointList* pGPL = mpConnectedSdrObject->GetGluePointList();
+
+            if(pGPL)
+            {
+                const sal_uInt32 nNum(pGPL->FindGluePoint(mnConnectorId));
+
+                if(SDRGLUEPOINT_NOTFOUND != nNum)
+                {
                     rGP=(*pGPL)[nNum];
-                    bRet=sal_True;
+                    bRet = true;
                 }
             }
         }
     }
-    if (bRet && bSetAbsPos) {
-        Point aPt(rGP.GetAbsolutePos(*pObj));
-        aPt+=aObjOfs;
-        rGP.SetPos(aPt);
+
+    if(bRet && bSetAbsPos)
+    {
+        const basegfx::B2DPoint aPt(rGP.GetAbsolutePos(sdr::legacy::GetSnapRange(*mpConnectedSdrObject)));
+
+        rGP.SetPos(aPt + maObjOfs);
     }
+
     return bRet;
 }
 
-Point& SdrEdgeInfoRec::ImpGetLineVersatzPoint(SdrEdgeLineCode eLineCode)
+basegfx::B2DPoint& SdrEdgeInfoRec::ImpGetLineVersatzPoint(SdrEdgeLineCode eLineCode)
 {
-    switch (eLineCode) {
+    switch (eLineCode)
+    {
         case OBJ1LINE2 : return aObj1Line2;
         case OBJ1LINE3 : return aObj1Line3;
         case OBJ2LINE2 : return aObj2Line2;
@@ -113,42 +120,64 @@ Point& SdrEdgeInfoRec::ImpGetLineVersatzPoint(SdrEdgeLineCode eLineCode)
     return aMiddleLine;
 }
 
-sal_uInt16 SdrEdgeInfoRec::ImpGetPolyIdx(SdrEdgeLineCode eLineCode, const XPolygon& rXP) const
+sal_uInt16 SdrEdgeInfoRec::ImpGetPolyIdx(SdrEdgeLineCode eLineCode, sal_uInt32 nPointCount) const
 {
-    switch (eLineCode) {
+    switch (eLineCode)
+    {
         case OBJ1LINE2 : return 1;
         case OBJ1LINE3 : return 2;
-        case OBJ2LINE2 : return rXP.GetPointCount()-3;
-        case OBJ2LINE3 : return rXP.GetPointCount()-4;
+        case OBJ2LINE2 : return nPointCount - 3;
+        case OBJ2LINE3 : return nPointCount - 4;
         case MIDDLELINE: return nMiddleLine;
     } // switch
     return 0;
 }
 
-FASTBOOL SdrEdgeInfoRec::ImpIsHorzLine(SdrEdgeLineCode eLineCode, const XPolygon& rXP) const
+bool SdrEdgeInfoRec::ImpIsHorzLine(SdrEdgeLineCode eLineCode, sal_uInt32 nPointCount) const
 {
-    sal_uInt16 nIdx=ImpGetPolyIdx(eLineCode,rXP);
-    FASTBOOL bHorz=nAngle1==0 || nAngle1==18000;
-    if (eLineCode==OBJ2LINE2 || eLineCode==OBJ2LINE3) {
-        nIdx=rXP.GetPointCount()-nIdx; // #36314#
-        bHorz=nAngle2==0 || nAngle2==18000; // #52000#
+    sal_uInt16 nIdx(ImpGetPolyIdx(eLineCode, nPointCount));
+    bool bHorz(0 == nAngle1 || 18000 == nAngle1);
+
+    if(OBJ2LINE2 == eLineCode || OBJ2LINE3 == eLineCode)
+    {
+        nIdx = nPointCount - nIdx;
+        bHorz = (0 == nAngle2 || 18000 == nAngle2);
     }
-    if ((nIdx & 1)==1) bHorz=!bHorz;
+
+    if(1 == (nIdx & 1))
+    {
+        bHorz = !bHorz;
+    }
+
     return bHorz;
 }
 
-void SdrEdgeInfoRec::ImpSetLineVersatz(SdrEdgeLineCode eLineCode, const XPolygon& rXP, long nVal)
+void SdrEdgeInfoRec::ImpSetLineVersatz(SdrEdgeLineCode eLineCode, sal_uInt32 nPointCount, long nVal)
 {
-    Point& rPt=ImpGetLineVersatzPoint(eLineCode);
-    if (ImpIsHorzLine(eLineCode,rXP)) rPt.Y()=nVal;
-    else rPt.X()=nVal;
+    basegfx::B2DPoint& rPt=ImpGetLineVersatzPoint(eLineCode);
+
+    if(ImpIsHorzLine(eLineCode, nPointCount))
+    {
+        rPt.setY(nVal);
+    }
+    else
+    {
+        rPt.setX(nVal);
+    }
 }
 
-long SdrEdgeInfoRec::ImpGetLineVersatz(SdrEdgeLineCode eLineCode, const XPolygon& rXP) const
+long SdrEdgeInfoRec::ImpGetLineVersatz(SdrEdgeLineCode eLineCode, sal_uInt32 nPointCount) const
 {
-    const Point& rPt=ImpGetLineVersatzPoint(eLineCode);
-    if (ImpIsHorzLine(eLineCode,rXP)) return rPt.Y();
-    else return rPt.X();
+    const basegfx::B2DPoint& rPt = ImpGetLineVersatzPoint(eLineCode);
+
+    if(ImpIsHorzLine(eLineCode, nPointCount))
+    {
+        return rPt.getY();
+    }
+    else
+    {
+        return rPt.getX();
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -169,29 +198,72 @@ sdr::contact::ViewContact* SdrEdgeObj::CreateObjectSpecificViewContact()
 
 //////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1(SdrEdgeObj,SdrTextObj);
-
-SdrEdgeObj::SdrEdgeObj()
-:   SdrTextObj(),
-    nNotifyingCount(0),
-    bEdgeTrackDirty(sal_False),
-    bEdgeTrackUserDefined(sal_False),
-    // #109007# Default is to allow default connects
-    mbSuppressDefaultConnect(sal_False),
-    // #110649#
-    mbBoundRectCalculationRunning(sal_False)
+SdrEdgeObj::SdrEdgeObj(SdrModel& rSdrModel)
+:   SdrTextObj(rSdrModel),
+    maCon1(),
+    maCon2(),
+    maEdgeTrack(),
+    maEdgeInfo(),
+    mbEdgeTrackDirty(false),
+    mbEdgeTrackUserDefined(false),
+    mbSuppressDefaultConnect(false)
 {
-    bClosedObj=sal_False;
-    bIsEdge=sal_True;
-    pEdgeTrack=new XPolygon;
-
+    // default connector
+    maEdgeTrack.append(basegfx::B2DPoint(0.0, 0.0));
+    maEdgeTrack.append(basegfx::B2DPoint(0.0, 100.0));
 }
 
 SdrEdgeObj::~SdrEdgeObj()
 {
-    DisconnectFromNode(sal_True);
-    DisconnectFromNode(sal_False);
-    delete pEdgeTrack;
+    DisconnectFromNode(true);
+    DisconnectFromNode(false);
+}
+
+void SdrEdgeObj::copyDataFromSdrObject(const SdrObject& rSource)
+{
+    if(this != &rSource)
+    {
+        const SdrEdgeObj* pSource = dynamic_cast< const SdrEdgeObj* >(&rSource);
+
+        if(pSource)
+        {
+            // call parent
+            SdrTextObj::copyDataFromSdrObject(rSource);
+
+            // copy local data
+            maEdgeTrack = pSource->maEdgeTrack;
+            mbEdgeTrackDirty = pSource->mbEdgeTrackDirty;
+            maCon1 = pSource->maCon1;
+            maCon2 = pSource->maCon2;
+            maCon1.mpConnectedSdrObject = 0;
+            maCon2.mpConnectedSdrObject = 0;
+            maEdgeInfo = pSource->maEdgeInfo;
+        }
+        else
+        {
+            OSL_ENSURE(false, "copyDataFromSdrObject with ObjectType of Source different from Target (!)");
+        }
+    }
+}
+
+SdrObject* SdrEdgeObj::CloneSdrObject(SdrModel* pTargetModel) const
+{
+    SdrEdgeObj* pClone = new SdrEdgeObj(
+        pTargetModel ? *pTargetModel : getSdrModelFromSdrObject());
+    OSL_ENSURE(pClone, "CloneSdrObject error (!)");
+    pClone->copyDataFromSdrObject(*this);
+
+    return pClone;
+}
+
+bool SdrEdgeObj::IsClosedObj() const
+{
+    return false;
+}
+
+bool SdrEdgeObj::IsSdrEdgeObj() const
+{
+    return true;
 }
 
 void SdrEdgeObj::ImpSetAttrToEdgeInfo()
@@ -207,57 +279,57 @@ void SdrEdgeObj::ImpSetAttrToEdgeInfo()
         sal_Int32 nVals[3] = { nVal1, nVal2, nVal3 };
         sal_uInt16 n = 0;
 
-        if(aEdgeInfo.nObj1Lines >= 2 && n < 3)
+        if(maEdgeInfo.nObj1Lines >= 2 && n < 3)
         {
-            aEdgeInfo.ImpSetLineVersatz(OBJ1LINE2, *pEdgeTrack, nVals[n]);
+            maEdgeInfo.ImpSetLineVersatz(OBJ1LINE2, maEdgeTrack.count(), nVals[n]);
             n++;
         }
 
-        if(aEdgeInfo.nObj1Lines >= 3 && n < 3)
+        if(maEdgeInfo.nObj1Lines >= 3 && n < 3)
         {
-            aEdgeInfo.ImpSetLineVersatz(OBJ1LINE3, *pEdgeTrack, nVals[n]);
+            maEdgeInfo.ImpSetLineVersatz(OBJ1LINE3, maEdgeTrack.count(), nVals[n]);
             n++;
         }
 
-        if(aEdgeInfo.nMiddleLine != 0xFFFF && n < 3)
+        if(maEdgeInfo.nMiddleLine != 0xFFFF && n < 3)
         {
-            aEdgeInfo.ImpSetLineVersatz(MIDDLELINE, *pEdgeTrack, nVals[n]);
+            maEdgeInfo.ImpSetLineVersatz(MIDDLELINE, maEdgeTrack.count(), nVals[n]);
             n++;
         }
 
-        if(aEdgeInfo.nObj2Lines >= 3 && n < 3)
+        if(maEdgeInfo.nObj2Lines >= 3 && n < 3)
         {
-            aEdgeInfo.ImpSetLineVersatz(OBJ2LINE3, *pEdgeTrack, nVals[n]);
+            maEdgeInfo.ImpSetLineVersatz(OBJ2LINE3, maEdgeTrack.count(), nVals[n]);
             n++;
         }
 
-        if(aEdgeInfo.nObj2Lines >= 2 && n < 3)
+        if(maEdgeInfo.nObj2Lines >= 2 && n < 3)
         {
-            aEdgeInfo.ImpSetLineVersatz(OBJ2LINE2, *pEdgeTrack, nVals[n]);
+            maEdgeInfo.ImpSetLineVersatz(OBJ2LINE2, maEdgeTrack.count(), nVals[n]);
             n++;
         }
     }
     else if(eKind == SDREDGE_THREELINES)
     {
-        sal_Bool bHor1 = aEdgeInfo.nAngle1 == 0 || aEdgeInfo.nAngle1 == 18000;
-        sal_Bool bHor2 = aEdgeInfo.nAngle2 == 0 || aEdgeInfo.nAngle2 == 18000;
+        bool bHor1 = maEdgeInfo.nAngle1 == 0 || maEdgeInfo.nAngle1 == 18000;
+        bool bHor2 = maEdgeInfo.nAngle2 == 0 || maEdgeInfo.nAngle2 == 18000;
 
         if(bHor1)
         {
-            aEdgeInfo.aObj1Line2.X() = nVal1;
+            maEdgeInfo.aObj1Line2.setX(nVal1);
         }
         else
         {
-            aEdgeInfo.aObj1Line2.Y() = nVal1;
+            maEdgeInfo.aObj1Line2.setY(nVal1);
         }
 
         if(bHor2)
         {
-            aEdgeInfo.aObj2Line2.X() = nVal2;
+            maEdgeInfo.aObj2Line2.setX(nVal2);
         }
         else
         {
-            aEdgeInfo.aObj2Line2.Y() = nVal2;
+            maEdgeInfo.aObj2Line2.setY(nVal2);
         }
     }
 
@@ -269,7 +341,7 @@ void SdrEdgeObj::ImpSetEdgeInfoToAttr()
 {
     const SfxItemSet& rSet = GetObjectItemSet();
     SdrEdgeKind eKind = ((SdrEdgeKindItem&)(rSet.Get(SDRATTR_EDGEKIND))).GetValue();
-    sal_Int32 nValAnz = ((SdrEdgeLineDeltaAnzItem&)rSet.Get(SDRATTR_EDGELINEDELTAANZ)).GetValue();
+    sal_Int32 nValAnz = ((SfxUInt16Item&)rSet.Get(SDRATTR_EDGELINEDELTAANZ)).GetValue();
     sal_Int32 nVal1 = ((SdrEdgeLine1DeltaItem&)rSet.Get(SDRATTR_EDGELINE1DELTA)).GetValue();
     sal_Int32 nVal2 = ((SdrEdgeLine2DeltaItem&)rSet.Get(SDRATTR_EDGELINE2DELTA)).GetValue();
     sal_Int32 nVal3 = ((SdrEdgeLine3DeltaItem&)rSet.Get(SDRATTR_EDGELINE3DELTA)).GetValue();
@@ -278,44 +350,44 @@ void SdrEdgeObj::ImpSetEdgeInfoToAttr()
 
     if(eKind == SDREDGE_ORTHOLINES || eKind == SDREDGE_BEZIER)
     {
-        if(aEdgeInfo.nObj1Lines >= 2 && n < 3)
+        if(maEdgeInfo.nObj1Lines >= 2 && n < 3)
         {
-            nVals[n] = aEdgeInfo.ImpGetLineVersatz(OBJ1LINE2, *pEdgeTrack);
+            nVals[n] = maEdgeInfo.ImpGetLineVersatz(OBJ1LINE2, maEdgeTrack.count());
             n++;
         }
 
-        if(aEdgeInfo.nObj1Lines >= 3 && n < 3)
+        if(maEdgeInfo.nObj1Lines >= 3 && n < 3)
         {
-            nVals[n] = aEdgeInfo.ImpGetLineVersatz(OBJ1LINE3, *pEdgeTrack);
+            nVals[n] = maEdgeInfo.ImpGetLineVersatz(OBJ1LINE3, maEdgeTrack.count());
             n++;
         }
 
-        if(aEdgeInfo.nMiddleLine != 0xFFFF && n < 3)
+        if(maEdgeInfo.nMiddleLine != 0xFFFF && n < 3)
         {
-            nVals[n] = aEdgeInfo.ImpGetLineVersatz(MIDDLELINE, *pEdgeTrack);
+            nVals[n] = maEdgeInfo.ImpGetLineVersatz(MIDDLELINE, maEdgeTrack.count());
             n++;
         }
 
-        if(aEdgeInfo.nObj2Lines >= 3 && n < 3)
+        if(maEdgeInfo.nObj2Lines >= 3 && n < 3)
         {
-            nVals[n] = aEdgeInfo.ImpGetLineVersatz(OBJ2LINE3, *pEdgeTrack);
+            nVals[n] = maEdgeInfo.ImpGetLineVersatz(OBJ2LINE3, maEdgeTrack.count());
             n++;
         }
 
-        if(aEdgeInfo.nObj2Lines >= 2 && n < 3)
+        if(maEdgeInfo.nObj2Lines >= 2 && n < 3)
         {
-            nVals[n] = aEdgeInfo.ImpGetLineVersatz(OBJ2LINE2, *pEdgeTrack);
+            nVals[n] = maEdgeInfo.ImpGetLineVersatz(OBJ2LINE2, maEdgeTrack.count());
             n++;
         }
     }
     else if(eKind == SDREDGE_THREELINES)
     {
-        sal_Bool bHor1 = aEdgeInfo.nAngle1 == 0 || aEdgeInfo.nAngle1 == 18000;
-        sal_Bool bHor2 = aEdgeInfo.nAngle2 == 0 || aEdgeInfo.nAngle2 == 18000;
+        bool bHor1 = maEdgeInfo.nAngle1 == 0 || maEdgeInfo.nAngle1 == 18000;
+        bool bHor2 = maEdgeInfo.nAngle2 == 0 || maEdgeInfo.nAngle2 == 18000;
 
         n = 2;
-        nVals[0] = bHor1 ? aEdgeInfo.aObj1Line2.X() : aEdgeInfo.aObj1Line2.Y();
-        nVals[1] = bHor2 ? aEdgeInfo.aObj2Line2.X() : aEdgeInfo.aObj2Line2.Y();
+        nVals[0] = bHor1 ? maEdgeInfo.aObj1Line2.getX() : maEdgeInfo.aObj1Line2.getY();
+        nVals[1] = bHor2 ? maEdgeInfo.aObj2Line2.getX() : maEdgeInfo.aObj2Line2.getY();
     }
 
     if(n != nValAnz || nVals[0] != nVal1 || nVals[1] != nVal2 || nVals[2] != nVal3)
@@ -323,7 +395,7 @@ void SdrEdgeObj::ImpSetEdgeInfoToAttr()
         // #75371# Here no more notifying is necessary, just local changes are OK.
         if(n != nValAnz)
         {
-            GetProperties().SetObjectItemDirect(SdrEdgeLineDeltaAnzItem(n));
+            GetProperties().SetObjectItemDirect(SfxUInt16Item(SDRATTR_EDGELINEDELTAANZ, n));
         }
 
         if(nVals[0] != nVal1)
@@ -361,19 +433,19 @@ void SdrEdgeObj::ImpSetEdgeInfoToAttr()
 void SdrEdgeObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
     // #54102# allow rotation, mirror and shear
-    rInfo.bRotateFreeAllowed = true;
-    rInfo.bRotate90Allowed = true;
-    rInfo.bMirrorFreeAllowed = true;
-    rInfo.bMirror45Allowed = true;
-    rInfo.bMirror90Allowed = true;
-    rInfo.bTransparenceAllowed = sal_False;
-    rInfo.bGradientAllowed = sal_False;
-    rInfo.bShearAllowed = true;
-    rInfo.bEdgeRadiusAllowed = sal_False;
-    FASTBOOL bCanConv=!HasText() || ImpCanConvTextToCurve();
-    rInfo.bCanConvToPath=bCanConv;
-    rInfo.bCanConvToPoly=bCanConv;
-    rInfo.bCanConvToContour = (rInfo.bCanConvToPoly || LineGeometryUsageIsNecessary());
+    rInfo.mbRotateFreeAllowed = true;
+    rInfo.mbRotate90Allowed = true;
+    rInfo.mbMirrorFreeAllowed = true;
+    rInfo.mbMirror45Allowed = true;
+    rInfo.mbMirror90Allowed = true;
+    rInfo.mbTransparenceAllowed = false;
+    rInfo.mbGradientAllowed = false;
+    rInfo.mbShearAllowed = true;
+    rInfo.mbEdgeRadiusAllowed = false;
+    const bool bCanConv(!HasText() || ImpCanConvTextToCurve());
+    rInfo.mbCanConvToPath = bCanConv;
+    rInfo.mbCanConvToPoly = bCanConv;
+    rInfo.mbCanConvToContour = (rInfo.mbCanConvToPoly || LineGeometryUsageIsNecessary());
 }
 
 sal_uInt16 SdrEdgeObj::GetObjIdentifier() const
@@ -381,72 +453,41 @@ sal_uInt16 SdrEdgeObj::GetObjIdentifier() const
     return sal_uInt16(OBJ_EDGE);
 }
 
-const Rectangle& SdrEdgeObj::GetCurrentBoundRect() const
+SdrGluePoint SdrEdgeObj::GetVertexGluePoint(sal_uInt32 nNum) const
 {
-    if(bEdgeTrackDirty)
+    basegfx::B2DPoint aPoint(0.0, 0.0);
+    const sal_uInt32 nPntAnz(maEdgeTrack.count());
+    basegfx::B2DPoint aOldPoint;
+
+    if(nPntAnz)
     {
-        ((SdrEdgeObj*)this)->ImpRecalcEdgeTrack();
-    }
-
-    return SdrTextObj::GetCurrentBoundRect();
-}
-
-const Rectangle& SdrEdgeObj::GetSnapRect() const
-{
-    if(bEdgeTrackDirty)
-    {
-        ((SdrEdgeObj*)this)->ImpRecalcEdgeTrack();
-    }
-
-    return SdrTextObj::GetSnapRect();
-}
-
-void SdrEdgeObj::RecalcSnapRect()
-{
-    maSnapRect=pEdgeTrack->GetBoundRect();
-}
-
-void SdrEdgeObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
-{
-    rRect=GetSnapRect();
-}
-
-FASTBOOL SdrEdgeObj::IsNode() const
-{
-    return sal_True;
-}
-
-SdrGluePoint SdrEdgeObj::GetVertexGluePoint(sal_uInt16 nNum) const
-{
-    Point aPt;
-    sal_uInt16 nPntAnz=pEdgeTrack->GetPointCount();
-    if (nPntAnz>0)
-    {
-        Point aOfs = GetSnapRect().Center();
-        if (nNum==2 && GetConnectedNode(sal_True)==NULL) aPt=(*pEdgeTrack)[0];
-        else if (nNum==3 && GetConnectedNode(sal_False)==NULL) aPt=(*pEdgeTrack)[nPntAnz-1];
-        else {
-            if ((nPntAnz & 1) ==1) {
-                aPt=(*pEdgeTrack)[nPntAnz/2];
-            } else {
-                Point aPt1((*pEdgeTrack)[nPntAnz/2-1]);
-                Point aPt2((*pEdgeTrack)[nPntAnz/2]);
-                aPt1+=aPt2;
-                aPt1.X()/=2;
-                aPt1.Y()/=2;
-                aPt=aPt1;
+        if(2 == nNum && !GetConnectedNode(true))
+        {
+            aOldPoint = maEdgeTrack.getB2DPoint(0);
+        }
+        else if(3 == nNum && !GetConnectedNode(false))
+        {
+            aOldPoint = maEdgeTrack.getB2DPoint(nPntAnz - 1);
+        }
+        else
+        {
+            if(1 == (nPntAnz & 1))
+            {
+                aOldPoint = maEdgeTrack.getB2DPoint(nPntAnz / 2);
+            }
+            else
+            {
+                aOldPoint = (maEdgeTrack.getB2DPoint((nPntAnz/2) - 1) + maEdgeTrack.getB2DPoint(nPntAnz/2)) * 0.5;
             }
         }
-        aPt-=aOfs;
-    }
-    SdrGluePoint aGP(aPt);
-    aGP.SetPercent(sal_False);
-    return aGP;
-}
 
-SdrGluePoint SdrEdgeObj::GetCornerGluePoint(sal_uInt16 nNum) const
-{
-    return GetVertexGluePoint(nNum);
+        aOldPoint -= sdr::legacy::GetSnapRange(*this).getCenter();
+    }
+
+    SdrGluePoint aGP(aOldPoint);
+    aGP.SetPercent(false);
+
+    return aGP;
 }
 
 const SdrGluePointList* SdrEdgeObj::GetGluePointList() const
@@ -459,161 +500,190 @@ SdrGluePointList* SdrEdgeObj::ForceGluePointList()
     return NULL; // Keine benutzerdefinierten Klebepunkte fuer Verbinder #31671#
 }
 
-FASTBOOL SdrEdgeObj::IsEdge() const
-{
-    return sal_True;
-}
-
-void SdrEdgeObj::ConnectToNode(FASTBOOL bTail1, SdrObject* pObj)
+void SdrEdgeObj::ConnectToNode(bool bTail1, SdrObject* pObj)
 {
     SdrObjConnection& rCon=GetConnection(bTail1);
     DisconnectFromNode(bTail1);
-    if (pObj!=NULL) {
-        pObj->AddListener(*this);
-        rCon.pObj=pObj;
+
+    if(pObj)
+    {
+        StartListening(*pObj);
+        rCon.mpConnectedSdrObject = pObj;
 
         // #120437# If connection is set, reset bEdgeTrackUserDefined
-        bEdgeTrackUserDefined = false;
+        mbEdgeTrackUserDefined = false;
 
         ImpDirtyEdgeTrack();
     }
 }
 
-void SdrEdgeObj::DisconnectFromNode(FASTBOOL bTail1)
+void SdrEdgeObj::DisconnectFromNode(bool bTail1)
 {
     SdrObjConnection& rCon=GetConnection(bTail1);
-    if (rCon.pObj!=NULL) {
-        rCon.pObj->RemoveListener(*this);
-        rCon.pObj=NULL;
+
+    if(rCon.mpConnectedSdrObject)
+    {
+        EndListening(*rCon.mpConnectedSdrObject);
+        rCon.mpConnectedSdrObject = 0;
     }
 }
 
-SdrObject* SdrEdgeObj::GetConnectedNode(FASTBOOL bTail1) const
+SdrObject* SdrEdgeObj::GetConnectedNode(bool bTail1) const
 {
-    SdrObject* pObj=GetConnection(bTail1).pObj;
-    if (pObj!=NULL && (pObj->GetPage()!=pPage || !pObj->IsInserted())) pObj=NULL;
+    SdrObject* pObj = GetConnection(bTail1).mpConnectedSdrObject;
+
+    if(pObj && (pObj->getSdrPageFromSdrObject() != getSdrPageFromSdrObject() || !pObj->IsObjectInserted()))
+    {
+        pObj = 0;
+    }
+
     return pObj;
 }
 
-FASTBOOL SdrEdgeObj::CheckNodeConnection(FASTBOOL bTail1) const
+bool SdrEdgeObj::CheckNodeConnection(bool bTail1) const
 {
-    FASTBOOL bRet=sal_False;
-    const SdrObjConnection& rCon=GetConnection(bTail1);
-    sal_uInt16 nPtAnz=pEdgeTrack->GetPointCount();
-    if (rCon.pObj!=NULL && rCon.pObj->GetPage()==pPage && nPtAnz!=0) {
-        const SdrGluePointList* pGPL=rCon.pObj->GetGluePointList();
-        sal_uInt16 nConAnz=pGPL==NULL ? 0 : pGPL->GetCount();
-        sal_uInt16 nGesAnz=nConAnz+8;
-        Point aTail(bTail1 ? (*pEdgeTrack)[0] : (*pEdgeTrack)[sal_uInt16(nPtAnz-1)]);
-        for (sal_uInt16 i=0; i<nGesAnz && !bRet; i++) {
-            if (i<nConAnz) { // UserDefined
-                bRet=aTail==(*pGPL)[i].GetAbsolutePos(*rCon.pObj);
-            } else if (i<nConAnz+4) { // Vertex
-                SdrGluePoint aPt(rCon.pObj->GetVertexGluePoint(i-nConAnz));
-                bRet=aTail==aPt.GetAbsolutePos(*rCon.pObj);
-            } else {                  // Corner
-                SdrGluePoint aPt(rCon.pObj->GetCornerGluePoint(i-nConAnz-4));
-                bRet=aTail==aPt.GetAbsolutePos(*rCon.pObj);
+    bool bRet(false);
+    const SdrObjConnection& rCon = GetConnection(bTail1);
+    const sal_uInt32 nPtAnz(maEdgeTrack.count());
+
+    if(rCon.mpConnectedSdrObject && rCon.mpConnectedSdrObject->getSdrPageFromSdrObject() == getSdrPageFromSdrObject() && nPtAnz)
+    {
+        const SdrGluePointList* pGPL = rCon.mpConnectedSdrObject->GetGluePointList();
+        const sal_uInt32 nConAnz(pGPL ? pGPL->GetCount() : 0);
+        const sal_uInt32 nGesAnz(nConAnz + 4);
+        const basegfx::B2DPoint aTail(bTail1 ? maEdgeTrack.getB2DPoint(0) : maEdgeTrack.getB2DPoint(nPtAnz - 1));
+
+        for(sal_uInt32 i(0); i < nGesAnz && !bRet; i++)
+        {
+            if(i < nConAnz)
+            {
+                // UserDefined
+                const basegfx::B2DPoint aGluePos((*pGPL)[i].GetAbsolutePos(sdr::legacy::GetSnapRange(*rCon.mpConnectedSdrObject)));
+
+                bRet = (aTail == aGluePos);
+            }
+            else //if (i<nConAnz+4)
+            {
+                // Vertex
+                const SdrGluePoint aPt(rCon.mpConnectedSdrObject->GetVertexGluePoint(i - nConAnz));
+                const basegfx::B2DPoint aGluePos(aPt.GetAbsolutePos(sdr::legacy::GetSnapRange(*rCon.mpConnectedSdrObject)));
+
+                bRet = (aTail == aGluePos);
             }
         }
     }
+
     return bRet;
 }
 
-void SdrEdgeObj::ImpSetTailPoint(FASTBOOL bTail1, const Point& rPt)
+void SdrEdgeObj::ImpSetTailPoint(bool bTail1, const basegfx::B2DPoint& rPt)
 {
-    sal_uInt16 nPtAnz=pEdgeTrack->GetPointCount();
-    if (nPtAnz==0) {
-        (*pEdgeTrack)[0]=rPt;
-        (*pEdgeTrack)[1]=rPt;
-    } else if (nPtAnz==1) {
-        if (!bTail1) (*pEdgeTrack)[1]=rPt;
-        else { (*pEdgeTrack)[1]=(*pEdgeTrack)[0]; (*pEdgeTrack)[0]=rPt; }
-    } else {
-        if (!bTail1) (*pEdgeTrack)[sal_uInt16(nPtAnz-1)]=rPt;
-        else (*pEdgeTrack)[0]=rPt;
+    const sal_uInt32 nPtAnz(maEdgeTrack.count());
+
+    if(nPtAnz)
+    {
+        if(!bTail1)
+        {
+            maEdgeTrack.setB2DPoint(nPtAnz - 1, rPt);
+        }
+        else
+        {
+            maEdgeTrack.setB2DPoint(0, rPt);
+        }
+
+        ImpRecalcEdgeTrack();
+        ActionChanged/*formallyinvalidateobjectrange*/();
     }
-    ImpRecalcEdgeTrack();
-    SetRectsDirty();
 }
 
 void SdrEdgeObj::ImpDirtyEdgeTrack()
 {
-    if ( !bEdgeTrackUserDefined || !(GetModel() && GetModel()->isLocked()) )
-        bEdgeTrackDirty = sal_True;
+    if ( !mbEdgeTrackUserDefined )
+    {
+        mbEdgeTrackDirty = true;
+    }
+    else
+    {
+        if ( !(getSdrModelFromSdrObject().isLocked()) )
+        {
+            mbEdgeTrackDirty = true;
+        }
+    }
 }
 
 void SdrEdgeObj::ImpUndirtyEdgeTrack()
 {
-    if (bEdgeTrackDirty && (GetModel() && GetModel()->isLocked()) ) {
-        ImpRecalcEdgeTrack();
+    if (mbEdgeTrackDirty )
+    {
+        if (getSdrModelFromSdrObject().isLocked())
+        {
+            ImpRecalcEdgeTrack();
+        }
     }
 }
 
 void SdrEdgeObj::ImpRecalcEdgeTrack()
 {
     // #120437# if bEdgeTrackUserDefined, do not recalculate. Also not when model locked
-    if(bEdgeTrackUserDefined || !GetModel() || GetModel()->isLocked())
+    if(mbEdgeTrackUserDefined || getSdrModelFromSdrObject().isLocked())
     {
         return;
     }
 
-    // #110649#
-    if(IsBoundRectCalculationRunning())
+    static bool mbBoundRectCalculationRunning = false;
+
+    if(mbBoundRectCalculationRunning)
     {
         // this object is involved into another ImpRecalcEdgeTrack() call
         // from another SdrEdgeObj. Do not calculate again to avoid loop.
-        // Also, do not change bEdgeTrackDirty so that it gets recalculated
+        // Also, do not change mbEdgeTrackDirty so that it gets recalculated
         // later at the first non-looping call.
     }
-    // #i43068#
-    else if(GetModel() && GetModel()->isLocked())
+    else if(getSdrModelFromSdrObject().isLocked())
     {
         // avoid re-layout during imports/API call sequences
         // #i45294# but calc EdgeTrack and secure properties there
-        mbBoundRectCalculationRunning = sal_True;
-        *pEdgeTrack=ImpCalcEdgeTrack(*pEdgeTrack,aCon1,aCon2,&aEdgeInfo);
+        mbBoundRectCalculationRunning = true;
+        maEdgeTrack = ImpCalcEdgeTrack(maCon1, maCon2, &maEdgeInfo);
         ImpSetAttrToEdgeInfo();
-        bEdgeTrackDirty=sal_False;
-        mbBoundRectCalculationRunning = sal_False;
+        mbEdgeTrackDirty = false;
+        mbBoundRectCalculationRunning = false;
     }
     else
     {
         // To not run in a depth loop, use a coloring algorythm on
         // SdrEdgeObj BoundRect calculations
-        mbBoundRectCalculationRunning = sal_True;
+        mbBoundRectCalculationRunning = true;
 
-        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetCurrentBoundRect();
-        SetRectsDirty();
-        // #110094#-14 if (!bEdgeTrackDirty) SendRepaintBroadcast();
-        *pEdgeTrack=ImpCalcEdgeTrack(*pEdgeTrack,aCon1,aCon2,&aEdgeInfo);
-        ImpSetEdgeInfoToAttr(); // Die Werte aus aEdgeInfo in den Pool kopieren
-        bEdgeTrackDirty=sal_False;
+        {   // use local scope to trigger locally
+            const SdrObjectChangeBroadcaster aSdrObjectChangeBroadcaster(*this);
 
-        // Only redraw here, no object change
-        ActionChanged();
-        // BroadcastObjectChange();
+            maEdgeTrack = ImpCalcEdgeTrack(maCon1, maCon2, &maEdgeInfo);
+            ImpSetEdgeInfoToAttr(); // Die Werte aus maEdgeInfo in den Pool kopieren
+            mbEdgeTrackDirty = false;
 
-        SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+            // Only redraw here, no object change
+            ActionChanged();
+        }
 
         // #110649#
-        mbBoundRectCalculationRunning = sal_False;
+        mbBoundRectCalculationRunning = false;
     }
 }
 
-sal_uInt16 SdrEdgeObj::ImpCalcEscAngle(SdrObject* pObj, const Point& rPt) const
+sal_uInt16 SdrEdgeObj::ImpCalcEscAngle(SdrObject* pObj, const basegfx::B2DPoint& rPt) const
 {
     if (pObj==NULL) return SDRESC_ALL;
-    Rectangle aR(pObj->GetSnapRect());
-    long dxl=rPt.X()-aR.Left();
-    long dyo=rPt.Y()-aR.Top();
-    long dxr=aR.Right()-rPt.X();
-    long dyu=aR.Bottom()-rPt.Y();
-    FASTBOOL bxMitt=Abs(dxl-dxr)<2;
-    FASTBOOL byMitt=Abs(dyo-dyu)<2;
+    const basegfx::B2DRange aR(sdr::legacy::GetSnapRange(*pObj));
+    long dxl(basegfx::fround(rPt.getX() - aR.getMinX()));
+    long dyo(basegfx::fround(rPt.getY() - aR.getMinY()));
+    long dxr(basegfx::fround(aR.getMaxX() - rPt.getX()));
+    long dyu(basegfx::fround(aR.getMaxY() - rPt.getY()));
+    bool bxMitt=Abs(dxl-dxr)<2;
+    bool byMitt=Abs(dyo-dyu)<2;
     long dx=Min(dxl,dxr);
     long dy=Min(dyo,dyu);
-    FASTBOOL bDiag=Abs(dx-dy)<2;
+    bool bDiag=Abs(dx-dy)<2;
     if (bxMitt && byMitt) return SDRESC_ALL; // In der Mitte
     if (bDiag) {  // diagonal
         sal_uInt16 nRet=0;
@@ -639,20 +709,14 @@ sal_uInt16 SdrEdgeObj::ImpCalcEscAngle(SdrObject* pObj, const Point& rPt) const
     }
 }
 
-FASTBOOL SdrEdgeObj::ImpStripPolyPoints(XPolygon& /*rXP*/) const
-{
-    // fehlende Implementation !!!
-    return sal_False;
-}
-
-XPolygon SdrEdgeObj::ImpCalcObjToCenter(const Point& rStPt, long nEscAngle, const Rectangle& rRect, const Point& rMeeting) const
+XPolygon ImpCalcObjToCenter(const Point& rStPt, long nEscAngle, const Rectangle& rRect, const Point& rMeeting)
 {
     XPolygon aXP;
     aXP.Insert(XPOLY_APPEND,rStPt,XPOLY_NORMAL);
-    FASTBOOL bRts=nEscAngle==0;
-    FASTBOOL bObn=nEscAngle==9000;
-    FASTBOOL bLks=nEscAngle==18000;
-    FASTBOOL bUnt=nEscAngle==27000;
+    bool bRts=nEscAngle==0;
+    bool bObn=nEscAngle==9000;
+    bool bLks=nEscAngle==18000;
+    bool bUnt=nEscAngle==27000;
 
     Point aP1(rStPt); // erstmal den Pflichtabstand
     if (bLks) aP1.X()=rRect.Left();
@@ -660,7 +724,7 @@ XPolygon SdrEdgeObj::ImpCalcObjToCenter(const Point& rStPt, long nEscAngle, cons
     if (bObn) aP1.Y()=rRect.Top();
     if (bUnt) aP1.Y()=rRect.Bottom();
 
-    FASTBOOL bFinish=sal_False;
+    bool bFinish=false;
     if (!bFinish) {
         Point aP2(aP1); // Und nun den Pflichtabstand ggf. bis auf Meetinghoehe erweitern
         if (bLks && rMeeting.X()<=aP2.X()) aP2.X()=rMeeting.X();
@@ -707,151 +771,241 @@ XPolygon SdrEdgeObj::ImpCalcObjToCenter(const Point& rStPt, long nEscAngle, cons
     return aXP;
 }
 
-XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection& rCon1, SdrObjConnection& rCon2, SdrEdgeInfoRec* pInfo) const
+// predeclaration
+basegfx::B2DPolygon ImpOldCalcEdgeTrack(
+    const Point& rPt1, long nAngle1, const Rectangle& rBoundRect1, const Rectangle& rBewareRect1,
+    const Point& rPt2, long nAngle2, const Rectangle& rBoundRect2, const Rectangle& rBewareRect2,
+    SdrEdgeKind eKind,
+    sal_uInt32* pnQuality, SdrEdgeInfoRec* pInfo);
+
+basegfx::B2DPolygon SdrEdgeObj::ImpCalcEdgeTrack(
+    SdrObjConnection& rCon1,
+    SdrObjConnection& rCon2,
+    SdrEdgeInfoRec* pInfo) const
 {
-    Point aPt1,aPt2;
-    SdrGluePoint aGP1,aGP2;
-    sal_uInt16 nEsc1=SDRESC_ALL,nEsc2=SDRESC_ALL;
-    Rectangle aBoundRect1;
-    Rectangle aBoundRect2;
-    Rectangle aBewareRect1;
-    Rectangle aBewareRect2;
-    // Erstmal die alten Endpunkte wiederholen
-    if (rTrack0.GetPointCount()!=0) {
-        aPt1=rTrack0[0];
-        sal_uInt16 nSiz=rTrack0.GetPointCount();
-        nSiz--;
-        aPt2=rTrack0[nSiz];
-    } else {
-        if (!aOutRect.IsEmpty()) {
-            aPt1=aOutRect.TopLeft();
-            aPt2=aOutRect.BottomRight();
-        }
-    }
+    const sal_uInt32 nCount(maEdgeTrack.count());
+    basegfx::B2DPolygon aRetval;
 
-    // #54102# To allow interactive preview, do also if not inserted
-    FASTBOOL bCon1=rCon1.pObj!=NULL && rCon1.pObj->GetPage()==pPage; // && rCon1.pObj->IsInserted();
-    FASTBOOL bCon2=rCon2.pObj!=NULL && rCon2.pObj->GetPage()==pPage; // && rCon2.pObj->IsInserted();
-    const SfxItemSet& rSet = GetObjectItemSet();
+    if(nCount)
+    {
+        // get old start/end points
+        basegfx::B2DPoint aPt1(maEdgeTrack.getB2DPoint(0));
+        basegfx::B2DPoint aPt2(maEdgeTrack.getB2DPoint(nCount - 1));
+        const basegfx::B2DRange aBaseRange(aPt1, aPt2);
+        SdrGluePoint aGP1,aGP2;
+        sal_uInt16 nEsc1(SDRESC_ALL);
+        sal_uInt16 nEsc2(SDRESC_ALL);
+        basegfx::B2DRange aBoundRange1;
+        basegfx::B2DRange aBoundRange2;
+        basegfx::B2DRange aBewareRange1;
+        basegfx::B2DRange aBewareRange2;
+        SdrPage* pOwningPage = getSdrPageFromSdrObject();
+        bool bCon1(rCon1.mpConnectedSdrObject && rCon1.mpConnectedSdrObject->getSdrPageFromSdrObject() == pOwningPage);
+        bool bCon2(rCon2.mpConnectedSdrObject && rCon2.mpConnectedSdrObject->getSdrPageFromSdrObject() == pOwningPage);
+        const SfxItemSet& rSet = GetObjectItemSet();
 
-    if (bCon1) {
-        if (rCon1.pObj==(SdrObject*)this)
+        if(bCon1)
         {
-            // sicherheitshalber Abfragen #44515#
-            aBoundRect1=aOutRect;
-        }
-        else
-        {
-            aBoundRect1 = rCon1.pObj->GetCurrentBoundRect();
-        }
-        aBoundRect1.Move(rCon1.aObjOfs.X(),rCon1.aObjOfs.Y());
-        aBewareRect1=aBoundRect1;
-
-        sal_Int32 nH = ((SdrEdgeNode1HorzDistItem&)rSet.Get(SDRATTR_EDGENODE1HORZDIST)).GetValue();
-        sal_Int32 nV = ((SdrEdgeNode1VertDistItem&)rSet.Get(SDRATTR_EDGENODE1VERTDIST)).GetValue();
-
-        aBewareRect1.Left()-=nH;
-        aBewareRect1.Right()+=nH;
-        aBewareRect1.Top()-=nV;
-        aBewareRect1.Bottom()+=nV;
-    } else {
-        aBoundRect1=Rectangle(aPt1,aPt1);
-        aBoundRect1.Move(rCon1.aObjOfs.X(),rCon1.aObjOfs.Y());
-        aBewareRect1=aBoundRect1;
-    }
-    if (bCon2) {
-        if (rCon2.pObj==(SdrObject*)this) { // sicherheitshalber Abfragen #44515#
-            aBoundRect2=aOutRect;
-        }
-        else
-        {
-            aBoundRect2 = rCon2.pObj->GetCurrentBoundRect();
-        }
-        aBoundRect2.Move(rCon2.aObjOfs.X(),rCon2.aObjOfs.Y());
-        aBewareRect2=aBoundRect2;
-
-        sal_Int32 nH = ((SdrEdgeNode2HorzDistItem&)rSet.Get(SDRATTR_EDGENODE2HORZDIST)).GetValue();
-        sal_Int32 nV = ((SdrEdgeNode2VertDistItem&)rSet.Get(SDRATTR_EDGENODE2VERTDIST)).GetValue();
-
-        aBewareRect2.Left()-=nH;
-        aBewareRect2.Right()+=nH;
-        aBewareRect2.Top()-=nV;
-        aBewareRect2.Bottom()+=nV;
-    } else {
-        aBoundRect2=Rectangle(aPt2,aPt2);
-        aBoundRect2.Move(rCon2.aObjOfs.X(),rCon2.aObjOfs.Y());
-        aBewareRect2=aBoundRect2;
-    }
-    XPolygon aBestXP;
-    sal_uIntPtr nBestQual=0xFFFFFFFF;
-    SdrEdgeInfoRec aBestInfo;
-    FASTBOOL bAuto1=bCon1 && rCon1.bBestVertex;
-    FASTBOOL bAuto2=bCon2 && rCon2.bBestVertex;
-    if (bAuto1) rCon1.bAutoVertex=sal_True;
-    if (bAuto2) rCon2.bAutoVertex=sal_True;
-    sal_uInt16 nBestAuto1=0;
-    sal_uInt16 nBestAuto2=0;
-    sal_uInt16 nAnz1=bAuto1 ? 4 : 1;
-    sal_uInt16 nAnz2=bAuto2 ? 4 : 1;
-    for (sal_uInt16 nNum1=0; nNum1<nAnz1; nNum1++) {
-        if (bAuto1) rCon1.nConId=nNum1;
-        if (bCon1 && rCon1.TakeGluePoint(aGP1,sal_True)) {
-            aPt1=aGP1.GetPos();
-            nEsc1=aGP1.GetEscDir();
-            if (nEsc1==SDRESC_SMART) nEsc1=ImpCalcEscAngle(rCon1.pObj,aPt1-rCon1.aObjOfs);
-        }
-        for (sal_uInt16 nNum2=0; nNum2<nAnz2; nNum2++) {
-            if (bAuto2) rCon2.nConId=nNum2;
-            if (bCon2 && rCon2.TakeGluePoint(aGP2,sal_True)) {
-                aPt2=aGP2.GetPos();
-                nEsc2=aGP2.GetEscDir();
-                if (nEsc2==SDRESC_SMART) nEsc2=ImpCalcEscAngle(rCon2.pObj,aPt2-rCon2.aObjOfs);
+            if(rCon1.mpConnectedSdrObject == this)
+            {
+                aBoundRange1 = aBaseRange;
             }
-            for (long nA1=0; nA1<36000; nA1+=9000) {
-                sal_uInt16 nE1=nA1==0 ? SDRESC_RIGHT : nA1==9000 ? SDRESC_TOP : nA1==18000 ? SDRESC_LEFT : nA1==27000 ? SDRESC_BOTTOM : 0;
-                for (long nA2=0; nA2<36000; nA2+=9000) {
-                    sal_uInt16 nE2=nA2==0 ? SDRESC_RIGHT : nA2==9000 ? SDRESC_TOP : nA2==18000 ? SDRESC_LEFT : nA2==27000 ? SDRESC_BOTTOM : 0;
-                    if ((nEsc1&nE1)!=0 && (nEsc2&nE2)!=0) {
-                        sal_uIntPtr nQual=0;
-                        SdrEdgeInfoRec aInfo;
-                        if (pInfo!=NULL) aInfo=*pInfo;
-                        XPolygon aXP(ImpCalcEdgeTrack(aPt1,nA1,aBoundRect1,aBewareRect1,aPt2,nA2,aBoundRect2,aBewareRect2,&nQual,&aInfo));
-                        if (nQual<nBestQual) {
-                            aBestXP=aXP;
-                            nBestQual=nQual;
-                            aBestInfo=aInfo;
-                            nBestAuto1=nNum1;
-                            nBestAuto2=nNum2;
+            else
+            {
+                aBoundRange1 = rCon1.mpConnectedSdrObject->getObjectRange(0);
+            }
+
+            aBoundRange1.transform(basegfx::tools::createTranslateB2DHomMatrix(rCon1.maObjOfs));
+
+            const sal_Int32 nH(((SdrEdgeNode1HorzDistItem&)rSet.Get(SDRATTR_EDGENODE1HORZDIST)).GetValue());
+            const sal_Int32 nV(((SdrEdgeNode1VertDistItem&)rSet.Get(SDRATTR_EDGENODE1VERTDIST)).GetValue());
+
+            aBewareRange1 = basegfx::B2DRange(
+                aBoundRange1.getMinX() - nH, aBoundRange1.getMinY() - nV,
+                aBoundRange1.getMaxX() + nH, aBoundRange1.getMaxY() + nV);
+        }
+        else
+        {
+            aBewareRange1 = aBoundRange1 = basegfx::B2DRange(aPt1 + rCon1.maObjOfs);
+        }
+
+        if(bCon2)
+        {
+            if(rCon2.mpConnectedSdrObject == this)
+            {
+                aBoundRange2 = aBaseRange;
+            }
+            else
+            {
+                aBoundRange2 = rCon2.mpConnectedSdrObject->getObjectRange(0);
+            }
+
+            aBoundRange2.transform(basegfx::tools::createTranslateB2DHomMatrix(rCon2.maObjOfs));
+
+            const sal_Int32 nH(((SdrEdgeNode2HorzDistItem&)rSet.Get(SDRATTR_EDGENODE2HORZDIST)).GetValue());
+            const sal_Int32 nV(((SdrEdgeNode2VertDistItem&)rSet.Get(SDRATTR_EDGENODE2VERTDIST)).GetValue());
+
+            aBewareRange2 = basegfx::B2DRange(
+                aBoundRange2.getMinX() - nH, aBoundRange2.getMinY() - nV,
+                aBoundRange2.getMaxX() + nH, aBoundRange2.getMaxY() + nV);
+        }
+        else
+        {
+            aBewareRange2 = aBoundRange2 = basegfx::B2DRange(aPt2 + rCon2.maObjOfs);
+        }
+
+        sal_uInt32 nBestQual=0xFFFFFFFF;
+        SdrEdgeInfoRec aBestInfo;
+        const bool bAuto1(bCon1 && rCon1.mbBestVertex);
+        const bool bAuto2(bCon2 && rCon2.mbBestVertex);
+
+        if(bAuto1)
+        {
+            rCon1.mbAutoVertex = true;
+        }
+
+        if(bAuto2)
+        {
+            rCon2.mbAutoVertex = true;
+        }
+
+        sal_uInt16 nBestAuto1(0);
+        sal_uInt16 nBestAuto2(0);
+        sal_uInt16 nAnz1(bAuto1 ? 4 : 1);
+        sal_uInt16 nAnz2(bAuto2 ? 4 : 1);
+
+        // prepare vars for old interface stuff
+        const Point aPoint1(basegfx::fround(aPt1.getX()), basegfx::fround(aPt1.getY()));
+        const Point aPoint2(basegfx::fround(aPt2.getX()), basegfx::fround(aPt2.getY()));
+        const Rectangle aBoundRect1(
+            basegfx::fround(aBoundRange1.getMinX()), basegfx::fround(aBoundRange1.getMinY()),
+            basegfx::fround(aBoundRange1.getMaxX()), basegfx::fround(aBoundRange1.getMaxY()));
+        const Rectangle aBoundRect2(
+            basegfx::fround(aBoundRange2.getMinX()), basegfx::fround(aBoundRange2.getMinY()),
+            basegfx::fround(aBoundRange2.getMaxX()), basegfx::fround(aBoundRange2.getMaxY()));
+        const Rectangle aBewareRect1(
+            basegfx::fround(aBewareRange1.getMinX()), basegfx::fround(aBewareRange1.getMinY()),
+            basegfx::fround(aBewareRange1.getMaxX()), basegfx::fround(aBewareRange1.getMaxY()));
+        const Rectangle aBewareRect2(
+            basegfx::fround(aBewareRange2.getMinX()), basegfx::fround(aBewareRange2.getMinY()),
+            basegfx::fround(aBewareRange2.getMaxX()), basegfx::fround(aBewareRange2.getMaxY()));
+
+        for(sal_uInt16 nNum1(0); nNum1 < nAnz1; nNum1++)
+        {
+            if(bAuto1)
+            {
+                rCon1.mnConnectorId = nNum1;
+            }
+
+            if(bCon1 && rCon1.TakeGluePoint(aGP1, true))
+            {
+                aPt1 = aGP1.GetPos();
+                nEsc1 = aGP1.GetEscDir();
+
+                if(SDRESC_SMART == nEsc1)
+                {
+                    nEsc1 = ImpCalcEscAngle(rCon1.mpConnectedSdrObject, aPt1 - rCon1.maObjOfs);
+                }
+            }
+
+            for(sal_uInt16 nNum2(0); nNum2 < nAnz2; nNum2++)
+            {
+                if(bAuto2)
+                {
+                    rCon2.mnConnectorId = nNum2;
+                }
+
+                if(bCon2 && rCon2.TakeGluePoint(aGP2, true))
+                {
+                    aPt2 = aGP2.GetPos();
+                    nEsc2 = aGP2.GetEscDir();
+
+                    if(SDRESC_SMART == nEsc2)
+                    {
+                        nEsc2 = ImpCalcEscAngle(rCon2.mpConnectedSdrObject, aPt2 - rCon2.maObjOfs);
+                    }
+                }
+
+                for(long nA1(0); nA1 < 36000; nA1 += 9000)
+                {
+                    const sal_uInt16 nE1(!nA1 ? SDRESC_RIGHT : 9000 == nA1 ? SDRESC_TOP : 18000 == nA1 ? SDRESC_LEFT : 27000 == nA1 ? SDRESC_BOTTOM : 0);
+
+                    for(long nA2(0); nA2 < 36000; nA2 += 9000)
+                    {
+                        const sal_uInt16 nE2(!nA2 ? SDRESC_RIGHT : 9000 == nA2 ? SDRESC_TOP : 18000 == nA2 ? SDRESC_LEFT : 27000 == nA2 ? SDRESC_BOTTOM : 0);
+
+                        if((nEsc1 & nE1) && (nEsc2 & nE2))
+                        {
+                            sal_uInt32 nQual(0);
+                            SdrEdgeInfoRec aInfo;
+
+                            if(pInfo)
+                            {
+                                aInfo = *pInfo;
+                            }
+
+                            const basegfx::B2DPolygon aXP(
+                                ImpOldCalcEdgeTrack(
+                                    aPoint1, nA1, aBoundRect1, aBewareRect1,
+                                    aPoint2, nA2, aBoundRect2, aBewareRect2,
+                                    ((SdrEdgeKindItem&)(GetObjectItem(SDRATTR_EDGEKIND))).GetValue(),
+                                    &nQual,
+                                    &aInfo));
+
+                            if(nQual < nBestQual)
+                            {
+                                aRetval = aXP;
+                                nBestQual = nQual;
+                                aBestInfo = aInfo;
+                                nBestAuto1 = nNum1;
+                                nBestAuto2 = nNum2;
+                            }
                         }
                     }
                 }
             }
         }
+
+        if(bAuto1)
+        {
+            rCon1.mnConnectorId = nBestAuto1;
+        }
+
+        if(bAuto2)
+        {
+            rCon2.mnConnectorId = nBestAuto2;
+        }
+
+        if(pInfo)
+        {
+            *pInfo = aBestInfo;
+        }
+
+        return aRetval;
     }
-    if (bAuto1) rCon1.nConId=nBestAuto1;
-    if (bAuto2) rCon2.nConId=nBestAuto2;
-    if (pInfo!=NULL) *pInfo=aBestInfo;
-    return aBestXP;
+
+    return aRetval;
 }
 
-XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rectangle& rBoundRect1, const Rectangle& rBewareRect1,
+basegfx::B2DPolygon ImpOldCalcEdgeTrack(
+    const Point& rPt1, long nAngle1, const Rectangle& rBoundRect1, const Rectangle& rBewareRect1,
     const Point& rPt2, long nAngle2, const Rectangle& rBoundRect2, const Rectangle& rBewareRect2,
-    sal_uIntPtr* pnQuality, SdrEdgeInfoRec* pInfo) const
+    SdrEdgeKind eKind,
+    sal_uInt32* pnQuality, SdrEdgeInfoRec* pInfo)
 {
-    SdrEdgeKind eKind=((SdrEdgeKindItem&)(GetObjectItem(SDRATTR_EDGEKIND))).GetValue();
-    FASTBOOL bRts1=nAngle1==0;
-    FASTBOOL bObn1=nAngle1==9000;
-    FASTBOOL bLks1=nAngle1==18000;
-    FASTBOOL bUnt1=nAngle1==27000;
-    FASTBOOL bHor1=bLks1 || bRts1;
-    FASTBOOL bVer1=bObn1 || bUnt1;
-    FASTBOOL bRts2=nAngle2==0;
-    FASTBOOL bObn2=nAngle2==9000;
-    FASTBOOL bLks2=nAngle2==18000;
-    FASTBOOL bUnt2=nAngle2==27000;
-    FASTBOOL bHor2=bLks2 || bRts2;
-    FASTBOOL bVer2=bObn2 || bUnt2;
-    FASTBOOL bInfo=pInfo!=NULL;
+    bool bRts1=nAngle1==0;
+    bool bObn1=nAngle1==9000;
+    bool bLks1=nAngle1==18000;
+    bool bUnt1=nAngle1==27000;
+    bool bHor1=bLks1 || bRts1;
+    bool bVer1=bObn1 || bUnt1;
+    bool bRts2=nAngle2==0;
+    bool bObn2=nAngle2==9000;
+    bool bLks2=nAngle2==18000;
+    bool bUnt2=nAngle2==27000;
+    bool bHor2=bLks2 || bRts2;
+    bool bVer2=bObn2 || bUnt2;
+    bool bInfo=pInfo!=NULL;
     if (bInfo) {
         pInfo->cOrthoForm=0;
         pInfo->nAngle1=nAngle1;
@@ -867,8 +1021,8 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
     Rectangle aBewareRect1(rBewareRect1);
     Rectangle aBewareRect2(rBewareRect2);
     Point aMeeting((aPt1.X()+aPt2.X()+1)/2,(aPt1.Y()+aPt2.Y()+1)/2);
-    FASTBOOL bMeetingXMid=sal_True;
-    FASTBOOL bMeetingYMid=sal_True;
+    bool bMeetingXMid=true;
+    bool bMeetingYMid=true;
     if (eKind==SDREDGE_ONELINE) {
         XPolygon aXP(2);
         aXP[0]=rPt1;
@@ -876,7 +1030,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         if (pnQuality!=NULL) {
             *pnQuality=Abs(rPt1.X()-rPt2.X())+Abs(rPt1.Y()-rPt2.Y());
         }
-        return aXP;
+        return aXP.getB2DPolygon();
     } else if (eKind==SDREDGE_THREELINES) {
         XPolygon aXP(4);
         aXP[0]=rPt1;
@@ -901,20 +1055,20 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
             pInfo->nObj1Lines=2;
             pInfo->nObj2Lines=2;
             if (bHor1) {
-                aXP[1].X()+=pInfo->aObj1Line2.X();
+                aXP[1].X()+=pInfo->aObj1Line2.getX();
             } else {
-                aXP[1].Y()+=pInfo->aObj1Line2.Y();
+                aXP[1].Y()+=pInfo->aObj1Line2.getY();
             }
             if (bHor2) {
-                aXP[2].X()+=pInfo->aObj2Line2.X();
+                aXP[2].X()+=pInfo->aObj2Line2.getX();
             } else {
-                aXP[2].Y()+=pInfo->aObj2Line2.Y();
+                aXP[2].Y()+=pInfo->aObj2Line2.getY();
             }
         }
-        return aXP;
+        return aXP.getB2DPolygon();
     }
     sal_uInt16 nIntersections=0;
-    FASTBOOL bForceMeeting=sal_False; // Muss die Linie durch den MeetingPoint laufen?
+    bool bForceMeeting=false; // Muss die Linie durch den MeetingPoint laufen?
     {
         Point aC1(aBewareRect1.Center());
         Point aC2(aBewareRect2.Center());
@@ -952,9 +1106,9 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         long nXMax=Max(aBewareRect1.Right(),aBewareRect2.Right());
         long nYMin=Min(aBewareRect1.Top(),aBewareRect2.Top());
         long nYMax=Max(aBewareRect1.Bottom(),aBewareRect2.Bottom());
-        //int bBoundOverlap=aBoundRect1.Right()>aBoundRect2.Left() && aBoundRect1.Left()<aBoundRect2.Right() &&
-                               aBoundRect1.Bottom()>aBoundRect2.Top() && aBoundRect1.Top()<aBoundRect2.Bottom();
-        FASTBOOL bBewareOverlap=aBewareRect1.Right()>aBewareRect2.Left() && aBewareRect1.Left()<aBewareRect2.Right() &&
+        //bool bBoundOverlap=aBoundRect1.Right()>aBoundRect2.Left() && aBoundRect1.Left()<aBoundRect2.Right() &&
+        //                     aBoundRect1.Bottom()>aBoundRect2.Top() && aBoundRect1.Top()<aBoundRect2.Bottom();
+        bool bBewareOverlap=aBewareRect1.Right()>aBewareRect2.Left() && aBewareRect1.Left()<aBewareRect2.Right() &&
                                 aBewareRect1.Bottom()>aBewareRect2.Top() && aBewareRect1.Top()<aBewareRect2.Bottom();
         unsigned nMainCase=3;
         if (nAngle1==nAngle2) nMainCase=1;
@@ -963,29 +1117,29 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
             if (bVer1) aMeeting.X()=(aPt1.X()+aPt2.X()+1)/2; // ist hier besser, als der
             if (bHor1) aMeeting.Y()=(aPt1.Y()+aPt2.Y()+1)/2; // Mittelpunkt des Freiraums
             // bX1Ok bedeutet, dass die Vertikale, die aus Obj1 austritt, keinen Konflikt mit Obj2 bildet, ...
-            FASTBOOL bX1Ok=aPt1.X()<=aBewareRect2.Left() || aPt1.X()>=aBewareRect2.Right();
-            FASTBOOL bX2Ok=aPt2.X()<=aBewareRect1.Left() || aPt2.X()>=aBewareRect1.Right();
-            FASTBOOL bY1Ok=aPt1.Y()<=aBewareRect2.Top() || aPt1.Y()>=aBewareRect2.Bottom();
-            FASTBOOL bY2Ok=aPt2.Y()<=aBewareRect1.Top() || aPt2.Y()>=aBewareRect1.Bottom();
+            bool bX1Ok=aPt1.X()<=aBewareRect2.Left() || aPt1.X()>=aBewareRect2.Right();
+            bool bX2Ok=aPt2.X()<=aBewareRect1.Left() || aPt2.X()>=aBewareRect1.Right();
+            bool bY1Ok=aPt1.Y()<=aBewareRect2.Top() || aPt1.Y()>=aBewareRect2.Bottom();
+            bool bY2Ok=aPt2.Y()<=aBewareRect1.Top() || aPt2.Y()>=aBewareRect1.Bottom();
             if (bLks1 && (bY1Ok || aBewareRect1.Left()<aBewareRect2.Right()) && (bY2Ok || aBewareRect2.Left()<aBewareRect1.Right())) {
                 aMeeting.X()=nXMin;
-                bMeetingXMid=sal_False;
+                bMeetingXMid=false;
             }
             if (bRts1 && (bY1Ok || aBewareRect1.Right()>aBewareRect2.Left()) && (bY2Ok || aBewareRect2.Right()>aBewareRect1.Left())) {
                 aMeeting.X()=nXMax;
-                bMeetingXMid=sal_False;
+                bMeetingXMid=false;
             }
             if (bObn1 && (bX1Ok || aBewareRect1.Top()<aBewareRect2.Bottom()) && (bX2Ok || aBewareRect2.Top()<aBewareRect1.Bottom())) {
                 aMeeting.Y()=nYMin;
-                bMeetingYMid=sal_False;
+                bMeetingYMid=false;
             }
             if (bUnt1 && (bX1Ok || aBewareRect1.Bottom()>aBewareRect2.Top()) && (bX2Ok || aBewareRect2.Bottom()>aBewareRect1.Top())) {
                 aMeeting.Y()=nYMax;
-                bMeetingYMid=sal_False;
+                bMeetingYMid=false;
             }
         } else if (nMainCase==2) {
             // Fall 2:
-            bForceMeeting=sal_True;
+            bForceMeeting=true;
             if (bHor1) { // beide waagerecht
                 /* 9 Moeglichkeiten:                   ù ù ù                    */
                 /*   2.1 Gegenueber, Ueberschneidung   Ã ´ ù                    */
@@ -1020,27 +1174,27 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                     // Ueberschneidung auf der Y-Achse. Faelle 2.1, 2.8, 2.9
                     if (aBewR1.Right()>aBewR2.Left()) {
                         // Faelle 2.8, 2.9
-                        // Fall 2.8 ist immer Aussenrumlauf (bDirect=sal_False).
+                        // Fall 2.8 ist immer Aussenrumlauf (bDirect=false).
                         // Fall 2.9 kann auch Direktverbindung sein (bei geringer
                         // Ueberschneidung der BewareRects ohne Ueberschneidung der
                         // Boundrects wenn die Linienaustritte sonst das BewareRect
                         // des jeweils anderen Objekts verletzen wuerden.
-                        FASTBOOL bCase29Direct=sal_False;
-                        FASTBOOL bCase29=aBewR1.Right()>aBewR2.Left();
+                        bool bCase29Direct=false;
+                        bool bCase29=aBewR1.Right()>aBewR2.Left();
                         if (aBndR1.Right()<=aBndR2.Left()) { // Fall 2.9 und keine Boundrectueberschneidung
                             if ((aPt1.Y()>aBewareRect2.Top() && aPt1.Y()<aBewareRect2.Bottom()) ||
                                 (aPt2.Y()>aBewareRect1.Top() && aPt2.Y()<aBewareRect1.Bottom())) {
-                               bCase29Direct=sal_True;
+                               bCase29Direct=true;
                             }
                         }
                         if (!bCase29Direct) {
-                            FASTBOOL bObenLang=Abs(nYMin-aMeeting.Y())<=Abs(nYMax-aMeeting.Y());
+                            bool bObenLang=Abs(nYMin-aMeeting.Y())<=Abs(nYMax-aMeeting.Y());
                             if (bObenLang) {
                                 aMeeting.Y()=nYMin;
                             } else {
                                 aMeeting.Y()=nYMax;
                             }
-                            bMeetingYMid=sal_False;
+                            bMeetingYMid=false;
                             if (bCase29) {
                                 // und nun noch dafuer sorgen, dass das
                                 // umzingelte Obj nicht durchquert wird
@@ -1049,7 +1203,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                                 } else {
                                     aMeeting.X()=aBewR1.Left();
                                 }
-                                bMeetingXMid=sal_False;
+                                bMeetingXMid=false;
                             }
                         } else {
                             // Direkte Verbindung (3-Linien Z-Verbindung), da
@@ -1080,27 +1234,27 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                     // Ueberschneidung auf der Y-Achse. Faelle 2.1, 2.8, 2.9
                     if (aBewR1.Bottom()>aBewR2.Top()) {
                         // Faelle 2.8, 2.9
-                        // Fall 2.8 ist immer Aussenrumlauf (bDirect=sal_False).
+                        // Fall 2.8 ist immer Aussenrumlauf (bDirect=false).
                         // Fall 2.9 kann auch Direktverbindung sein (bei geringer
                         // Ueberschneidung der BewareRects ohne Ueberschneidung der
                         // Boundrects wenn die Linienaustritte sonst das BewareRect
                         // des jeweils anderen Objekts verletzen wuerden.
-                        FASTBOOL bCase29Direct=sal_False;
-                        FASTBOOL bCase29=aBewR1.Bottom()>aBewR2.Top();
+                        bool bCase29Direct=false;
+                        bool bCase29=aBewR1.Bottom()>aBewR2.Top();
                         if (aBndR1.Bottom()<=aBndR2.Top()) { // Fall 2.9 und keine Boundrectueberschneidung
                             if ((aPt1.X()>aBewareRect2.Left() && aPt1.X()<aBewareRect2.Right()) ||
                                 (aPt2.X()>aBewareRect1.Left() && aPt2.X()<aBewareRect1.Right())) {
-                               bCase29Direct=sal_True;
+                               bCase29Direct=true;
                             }
                         }
                         if (!bCase29Direct) {
-                            FASTBOOL bLinksLang=Abs(nXMin-aMeeting.X())<=Abs(nXMax-aMeeting.X());
+                            bool bLinksLang=Abs(nXMin-aMeeting.X())<=Abs(nXMax-aMeeting.X());
                             if (bLinksLang) {
                                 aMeeting.X()=nXMin;
                             } else {
                                 aMeeting.X()=nXMax;
                             }
-                            bMeetingXMid=sal_False;
+                            bMeetingXMid=false;
                             if (bCase29) {
                                 // und nun noch dafuer sorgen, dass das
                                 // umzingelte Obj nicht durchquert wird
@@ -1109,7 +1263,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                                 } else {
                                     aMeeting.Y()=aBewR1.Top();
                                 }
-                                bMeetingYMid=sal_False;
+                                bMeetingYMid=false;
                             }
                         } else {
                             // Direkte Verbindung (3-Linien Z-Verbindung), da
@@ -1180,9 +1334,9 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                 (((bRts2 && aTmpR2.Right ()<=aPt1.X()) || (bLks2 && aTmpR2.Left()>=aPt1.X())) &&
                  ((bUnt1 && aTmpR1.Bottom()<=aPt2.Y()) || (bObn1 && aTmpR1.Top ()>=aPt2.Y())))) {
                 // Fall 3.2 trifft zu: Verbindung mit lediglich 2 Linien
-                bForceMeeting=sal_True;
-                bMeetingXMid=sal_False;
-                bMeetingYMid=sal_False;
+                bForceMeeting=true;
+                bMeetingXMid=false;
+                bMeetingYMid=false;
                 if (bHor1) {
                     aMeeting.X()=aPt2.X();
                     aMeeting.Y()=aPt1.Y();
@@ -1202,11 +1356,11 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                         ((bUnt1 && aBewareRect1.Bottom()>aBewareRect2.Top   ()) ||
                          (bObn1 && aBewareRect1.Top   ()<aBewareRect2.Bottom())))) {
                 // Fall 3.3
-                bForceMeeting=sal_True;
-                if (bRts1 || bRts2) { aMeeting.X()=nXMax; bMeetingXMid=sal_False; }
-                if (bLks1 || bLks2) { aMeeting.X()=nXMin; bMeetingXMid=sal_False; }
-                if (bUnt1 || bUnt2) { aMeeting.Y()=nYMax; bMeetingYMid=sal_False; }
-                if (bObn1 || bObn2) { aMeeting.Y()=nYMin; bMeetingYMid=sal_False; }
+                bForceMeeting=true;
+                if (bRts1 || bRts2) { aMeeting.X()=nXMax; bMeetingXMid=false; }
+                if (bLks1 || bLks2) { aMeeting.X()=nXMin; bMeetingXMid=false; }
+                if (bUnt1 || bUnt2) { aMeeting.Y()=nYMax; bMeetingYMid=false; }
+                if (bObn1 || bObn2) { aMeeting.Y()=nYMin; bMeetingYMid=false; }
             }
         }
     }
@@ -1221,15 +1375,15 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
     }
     Point aEP1(aXP1[nXP1Anz-1]);
     Point aEP2(aXP2[nXP2Anz-1]);
-    FASTBOOL bInsMeetingPoint=aEP1.X()!=aEP2.X() && aEP1.Y()!=aEP2.Y();
-    FASTBOOL bHorzE1=aEP1.Y()==aXP1[nXP1Anz-2].Y(); // letzte Linie von XP1 horizontal?
-    FASTBOOL bHorzE2=aEP2.Y()==aXP2[nXP2Anz-2].Y(); // letzte Linie von XP2 horizontal?
+    bool bInsMeetingPoint=aEP1.X()!=aEP2.X() && aEP1.Y()!=aEP2.Y();
+    bool bHorzE1=aEP1.Y()==aXP1[nXP1Anz-2].Y(); // letzte Linie von XP1 horizontal?
+    bool bHorzE2=aEP2.Y()==aXP2[nXP2Anz-2].Y(); // letzte Linie von XP2 horizontal?
     if (aEP1==aEP2 && (bHorzE1 && bHorzE2 && aEP1.Y()==aEP2.Y()) || (!bHorzE1 && !bHorzE2 && aEP1.X()==aEP2.X())) {
         // Sonderbehandlung fuer 'I'-Verbinder
         nXP1Anz--; aXP1.Remove(nXP1Anz,1);
         nXP2Anz--; aXP2.Remove(nXP2Anz,1);
-        bMeetingXMid=sal_False;
-        bMeetingYMid=sal_False;
+        bMeetingXMid=false;
+        bMeetingYMid=false;
     }
     if (bInsMeetingPoint) {
         aXP1.Insert(XPOLY_APPEND,aMeeting,XPOLY_NORMAL);
@@ -1307,14 +1461,14 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         }
     }
     if (pnQuality!=NULL) {
-        sal_uIntPtr nQual=0;
-        sal_uIntPtr nQual0=nQual; // Ueberlaeufe vorbeugen
-        FASTBOOL bOverflow=sal_False;
+        sal_uInt32 nQual=0;
+        sal_uInt32 nQual0=nQual; // Ueberlaeufe vorbeugen
+        bool bOverflow=false;
         Point aPt0(aXP1[0]);
         for (sal_uInt16 nPntNum=1; nPntNum<nPntAnz; nPntNum++) {
             Point aPt1b(aXP1[nPntNum]);
             nQual+=Abs(aPt1b.X()-aPt0.X())+Abs(aPt1b.Y()-aPt0.Y());
-            if (nQual<nQual0) bOverflow=sal_True;
+            if (nQual<nQual0) bOverflow=true;
             nQual0=nQual;
             aPt0=aPt1b;
         }
@@ -1322,11 +1476,11 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         sal_uInt16 nTmp=nPntAnz;
         if (cForm=='Z') {
             nTmp=2; // Z-Form hat gute Qualitaet (nTmp=2 statt 4)
-            sal_uIntPtr n1=Abs(aXP1[1].X()-aXP1[0].X())+Abs(aXP1[1].Y()-aXP1[0].Y());
-            sal_uIntPtr n2=Abs(aXP1[2].X()-aXP1[1].X())+Abs(aXP1[2].Y()-aXP1[1].Y());
-            sal_uIntPtr n3=Abs(aXP1[3].X()-aXP1[2].X())+Abs(aXP1[3].Y()-aXP1[2].Y());
+            sal_uInt32 n1=Abs(aXP1[1].X()-aXP1[0].X())+Abs(aXP1[1].Y()-aXP1[0].Y());
+            sal_uInt32 n2=Abs(aXP1[2].X()-aXP1[1].X())+Abs(aXP1[2].Y()-aXP1[1].Y());
+            sal_uInt32 n3=Abs(aXP1[3].X()-aXP1[2].X())+Abs(aXP1[3].Y()-aXP1[2].Y());
             // fuer moeglichst gleichlange Linien sorgen
-            sal_uIntPtr nBesser=0;
+            sal_uInt32 nBesser=0;
             n1+=n3;
             n3=n2/4;
             if (n1>=n2) nBesser=6;
@@ -1337,8 +1491,8 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         }
         if (nTmp>=3) {
             nQual0=nQual;
-            nQual+=(sal_uIntPtr)nTmp*0x01000000;
-            if (nQual<nQual0 || nTmp>15) bOverflow=sal_True;
+            nQual+=(sal_uInt32)nTmp*0x01000000;
+            if (nQual<nQual0 || nTmp>15) bOverflow=true;
         }
         if (nPntAnz>=2) { // Austrittswinkel nochmal pruefen
             Point aP1(aXP1[1]); aP1-=aXP1[0];
@@ -1359,9 +1513,9 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
 
         for (sal_uInt16 i=0; i<nPntAnz; i++) {
             Point aPt1b(aXP1[i]);
-            FASTBOOL b1=aPt1b.X()>aBewareRect1.Left() && aPt1b.X()<aBewareRect1.Right() &&
+            bool b1=aPt1b.X()>aBewareRect1.Left() && aPt1b.X()<aBewareRect1.Right() &&
                         aPt1b.Y()>aBewareRect1.Top() && aPt1b.Y()<aBewareRect1.Bottom();
-            FASTBOOL b2=aPt1b.X()>aBewareRect2.Left() && aPt1b.X()<aBewareRect2.Right() &&
+            bool b2=aPt1b.X()>aBewareRect2.Left() && aPt1b.X()<aBewareRect2.Right() &&
                         aPt1b.Y()>aBewareRect2.Top() && aPt1b.Y()<aBewareRect2.Bottom();
             sal_uInt16 nInt0=nIntersections;
             if (i==0 || i==nPntAnz-1) {
@@ -1392,61 +1546,61 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         }
         if (nPntAnz<=1) nIntersections++;
         nQual0=nQual;
-        nQual+=(sal_uIntPtr)nIntersections*0x10000000;
-        if (nQual<nQual0 || nIntersections>15) bOverflow=sal_True;
+        nQual+=(sal_uInt32)nIntersections*0x10000000;
+        if (nQual<nQual0 || nIntersections>15) bOverflow=true;
 
         if (bOverflow || nQual==0xFFFFFFFF) nQual=0xFFFFFFFE;
         *pnQuality=nQual;
     }
     if (bInfo) { // nun die Linienversaetze auf aXP1 anwenden
         if (pInfo->nMiddleLine!=0xFFFF) {
-            sal_uInt16 nIdx=pInfo->ImpGetPolyIdx(MIDDLELINE,aXP1);
-            if (pInfo->ImpIsHorzLine(MIDDLELINE,aXP1)) {
-                aXP1[nIdx].Y()+=pInfo->aMiddleLine.Y();
-                aXP1[nIdx+1].Y()+=pInfo->aMiddleLine.Y();
+            sal_uInt16 nIdx=pInfo->ImpGetPolyIdx(MIDDLELINE,aXP1.GetPointCount());
+            if (pInfo->ImpIsHorzLine(MIDDLELINE,aXP1.GetPointCount())) {
+                aXP1[nIdx].Y()+=pInfo->aMiddleLine.getY();
+                aXP1[nIdx+1].Y()+=pInfo->aMiddleLine.getY();
             } else {
-                aXP1[nIdx].X()+=pInfo->aMiddleLine.X();
-                aXP1[nIdx+1].X()+=pInfo->aMiddleLine.X();
+                aXP1[nIdx].X()+=pInfo->aMiddleLine.getX();
+                aXP1[nIdx+1].X()+=pInfo->aMiddleLine.getX();
             }
         }
         if (pInfo->nObj1Lines>=2) {
-            sal_uInt16 nIdx=pInfo->ImpGetPolyIdx(OBJ1LINE2,aXP1);
-            if (pInfo->ImpIsHorzLine(OBJ1LINE2,aXP1)) {
-                aXP1[nIdx].Y()+=pInfo->aObj1Line2.Y();
-                aXP1[nIdx+1].Y()+=pInfo->aObj1Line2.Y();
+            sal_uInt16 nIdx=pInfo->ImpGetPolyIdx(OBJ1LINE2,aXP1.GetPointCount());
+            if (pInfo->ImpIsHorzLine(OBJ1LINE2,aXP1.GetPointCount())) {
+                aXP1[nIdx].Y()+=pInfo->aObj1Line2.getY();
+                aXP1[nIdx+1].Y()+=pInfo->aObj1Line2.getY();
             } else {
-                aXP1[nIdx].X()+=pInfo->aObj1Line2.X();
-                aXP1[nIdx+1].X()+=pInfo->aObj1Line2.X();
+                aXP1[nIdx].X()+=pInfo->aObj1Line2.getX();
+                aXP1[nIdx+1].X()+=pInfo->aObj1Line2.getX();
             }
         }
         if (pInfo->nObj1Lines>=3) {
-            sal_uInt16 nIdx=pInfo->ImpGetPolyIdx(OBJ1LINE3,aXP1);
-            if (pInfo->ImpIsHorzLine(OBJ1LINE3,aXP1)) {
-                aXP1[nIdx].Y()+=pInfo->aObj1Line3.Y();
-                aXP1[nIdx+1].Y()+=pInfo->aObj1Line3.Y();
+            sal_uInt16 nIdx=pInfo->ImpGetPolyIdx(OBJ1LINE3,aXP1.GetPointCount());
+            if (pInfo->ImpIsHorzLine(OBJ1LINE3,aXP1.GetPointCount())) {
+                aXP1[nIdx].Y()+=pInfo->aObj1Line3.getY();
+                aXP1[nIdx+1].Y()+=pInfo->aObj1Line3.getY();
             } else {
-                aXP1[nIdx].X()+=pInfo->aObj1Line3.X();
-                aXP1[nIdx+1].X()+=pInfo->aObj1Line3.X();
+                aXP1[nIdx].X()+=pInfo->aObj1Line3.getX();
+                aXP1[nIdx+1].X()+=pInfo->aObj1Line3.getX();
             }
         }
         if (pInfo->nObj2Lines>=2) {
-            sal_uInt16 nIdx=pInfo->ImpGetPolyIdx(OBJ2LINE2,aXP1);
-            if (pInfo->ImpIsHorzLine(OBJ2LINE2,aXP1)) {
-                aXP1[nIdx].Y()+=pInfo->aObj2Line2.Y();
-                aXP1[nIdx+1].Y()+=pInfo->aObj2Line2.Y();
+            sal_uInt16 nIdx=pInfo->ImpGetPolyIdx(OBJ2LINE2,aXP1.GetPointCount());
+            if (pInfo->ImpIsHorzLine(OBJ2LINE2,aXP1.GetPointCount())) {
+                aXP1[nIdx].Y()+=pInfo->aObj2Line2.getY();
+                aXP1[nIdx+1].Y()+=pInfo->aObj2Line2.getY();
             } else {
-                aXP1[nIdx].X()+=pInfo->aObj2Line2.X();
-                aXP1[nIdx+1].X()+=pInfo->aObj2Line2.X();
+                aXP1[nIdx].X()+=pInfo->aObj2Line2.getX();
+                aXP1[nIdx+1].X()+=pInfo->aObj2Line2.getX();
             }
         }
         if (pInfo->nObj2Lines>=3) {
-            sal_uInt16 nIdx=pInfo->ImpGetPolyIdx(OBJ2LINE3,aXP1);
-            if (pInfo->ImpIsHorzLine(OBJ2LINE3,aXP1)) {
-                aXP1[nIdx].Y()+=pInfo->aObj2Line3.Y();
-                aXP1[nIdx+1].Y()+=pInfo->aObj2Line3.Y();
+            sal_uInt16 nIdx=pInfo->ImpGetPolyIdx(OBJ2LINE3,aXP1.GetPointCount());
+            if (pInfo->ImpIsHorzLine(OBJ2LINE3,aXP1.GetPointCount())) {
+                aXP1[nIdx].Y()+=pInfo->aObj2Line3.getY();
+                aXP1[nIdx+1].Y()+=pInfo->aObj2Line3.getY();
             } else {
-                aXP1[nIdx].X()+=pInfo->aObj2Line3.X();
-                aXP1[nIdx+1].X()+=pInfo->aObj2Line3.X();
+                aXP1[nIdx].X()+=pInfo->aObj2Line3.getX();
+                aXP1[nIdx+1].X()+=pInfo->aObj2Line3.getX();
             }
         }
     }
@@ -1518,7 +1672,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
             }
         }
     }
-    return aXP1;
+    return aXP1.getB2DPolygon();
 }
 
 /*
@@ -1557,47 +1711,50 @@ je Objekt variiert von 0-3:
 
 void __EXPORT SdrEdgeObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
-    SfxSimpleHint* pSimple=PTR_CAST(SfxSimpleHint,&rHint);
-    sal_uIntPtr nId=pSimple==0 ? 0 : pSimple->GetId();
-    FASTBOOL bDataChg=nId==SFX_HINT_DATACHANGED;
-    FASTBOOL bDying=nId==SFX_HINT_DYING;
-    FASTBOOL bObj1=aCon1.pObj!=NULL && aCon1.pObj->GetBroadcaster()==&rBC;
-    FASTBOOL bObj2=aCon2.pObj!=NULL && aCon2.pObj->GetBroadcaster()==&rBC;
+    const SfxSimpleHint* pSimple=dynamic_cast< const SfxSimpleHint* >( &rHint);
+    sal_uInt32 nId=pSimple==0 ? 0 : pSimple->GetId();
+    bool bDataChg=nId==SFX_HINT_DATACHANGED;
+    bool bDying=nId==SFX_HINT_DYING;
+    bool bObj1 = maCon1.mpConnectedSdrObject && maCon1.mpConnectedSdrObject == &rBC;
+    bool bObj2 = maCon2.mpConnectedSdrObject && maCon2.mpConnectedSdrObject == &rBC;
+
     if (bDying && (bObj1 || bObj2)) {
         // #35605# Dying vorher abfangen, damit AttrObj nicht
         // wg. vermeintlicher Vorlagenaenderung rumbroadcastet
-        if (bObj1) aCon1.pObj=NULL;
-        if (bObj2) aCon2.pObj=NULL;
+        if (bObj1) maCon1.mpConnectedSdrObject = 0;
+        if (bObj2) maCon2.mpConnectedSdrObject = 0;
         return; // Und mehr braucht hier nicht getan werden.
     }
     if ( bObj1 || bObj2 )
     {
-        bEdgeTrackUserDefined = sal_False;
+        mbEdgeTrackUserDefined = false;
     }
     SdrTextObj::Notify(rBC,rHint);
-    if (nNotifyingCount==0) { // Hier nun auch ein VerriegelungsFlag
-        ((SdrEdgeObj*)this)->nNotifyingCount++;
-        SdrHint* pSdrHint=PTR_CAST(SdrHint,&rHint);
+    static sal_uInt16 nNotifyingCount = 0;
+
+    if(!nNotifyingCount)
+    {
+        // Hier nun auch ein VerriegelungsFlag
+        nNotifyingCount++;
+        const SdrBaseHint* pSdrHint = dynamic_cast< const SdrBaseHint* >(&rHint);
+
         if (bDataChg) { // StyleSheet geaendert
-            ImpSetAttrToEdgeInfo(); // Werte bei Vorlagenaenderung vom Pool nach aEdgeInfo kopieren
+            ImpSetAttrToEdgeInfo(); // Werte bei Vorlagenaenderung vom Pool nach maEdgeInfo kopieren
         }
+        SdrPage* pOwningPage = getSdrPageFromSdrObject();
         if (bDataChg                                ||
-            (bObj1 && aCon1.pObj->GetPage()==pPage) ||
-            (bObj2 && aCon2.pObj->GetPage()==pPage) ||
-            (pSdrHint && pSdrHint->GetKind()==HINT_OBJREMOVED))
+            (bObj1 && maCon1.mpConnectedSdrObject->getSdrPageFromSdrObject() == pOwningPage) ||
+            (bObj2 && maCon2.mpConnectedSdrObject->getSdrPageFromSdrObject() == pOwningPage) ||
+            (pSdrHint && pSdrHint->GetSdrHintKind()==HINT_OBJREMOVED))
         {
             // Broadcasting nur, wenn auf der selben Page
-            Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetCurrentBoundRect();
-            // #110094#-14 if (!bEdgeTrackDirty) SendRepaintBroadcast();
+            const SdrObjectChangeBroadcaster aSdrObjectChangeBroadcaster(*this);
+
             ImpDirtyEdgeTrack();
-
-            // only redraw here, no objectchange
             ActionChanged();
-            // BroadcastObjectChange();
-
-            SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
         }
-        ((SdrEdgeObj*)this)->nNotifyingCount--;
+
+        nNotifyingCount--;
     }
 }
 
@@ -1605,31 +1762,19 @@ void __EXPORT SdrEdgeObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     as if the connected objects send a repaint broadcast
     #103122#
 */
-void SdrEdgeObj::Reformat()
+void SdrEdgeObj::ReformatEdge()
 {
-    if( NULL != aCon1.pObj )
+    if(maCon1.mpConnectedSdrObject)
     {
         SfxSimpleHint aHint( SFX_HINT_DATACHANGED );
-        Notify( *const_cast<SfxBroadcaster*>(aCon1.pObj->GetBroadcaster()), aHint );
+        Notify( *maCon1.mpConnectedSdrObject, aHint );
     }
 
-    if( NULL != aCon2.pObj )
+    if(maCon2.mpConnectedSdrObject)
     {
         SfxSimpleHint aHint( SFX_HINT_DATACHANGED );
-        Notify( *const_cast<SfxBroadcaster*>(aCon2.pObj->GetBroadcaster()), aHint );
+        Notify( *maCon2.mpConnectedSdrObject, aHint );
     }
-}
-
-void SdrEdgeObj::operator=(const SdrObject& rObj)
-{
-    SdrTextObj::operator=(rObj);
-    *pEdgeTrack    =*((SdrEdgeObj&)rObj).pEdgeTrack;
-    bEdgeTrackDirty=((SdrEdgeObj&)rObj).bEdgeTrackDirty;
-    aCon1          =((SdrEdgeObj&)rObj).aCon1;
-    aCon2          =((SdrEdgeObj&)rObj).aCon2;
-    aCon1.pObj=NULL;
-    aCon2.pObj=NULL;
-    aEdgeInfo=((SdrEdgeObj&)rObj).aEdgeInfo;
 }
 
 void SdrEdgeObj::TakeObjNameSingul(XubString& rName) const
@@ -1653,144 +1798,203 @@ void SdrEdgeObj::TakeObjNamePlural(XubString& rName) const
 
 basegfx::B2DPolyPolygon SdrEdgeObj::TakeXorPoly() const
 {
-    basegfx::B2DPolyPolygon aPolyPolygon;
-
-    if (bEdgeTrackDirty)
-    {
-        ((SdrEdgeObj*)this)->ImpRecalcEdgeTrack();
-    }
-
-    if(pEdgeTrack)
-    {
-        aPolyPolygon.append(pEdgeTrack->getB2DPolygon());
-    }
-
-    return aPolyPolygon;
+    return basegfx::B2DPolyPolygon(GetEdgeTrackPath());
 }
 
-void SdrEdgeObj::SetEdgeTrackPath( const basegfx::B2DPolyPolygon& rPoly )
+void SdrEdgeObj::SetEdgeTrackPath(const basegfx::B2DPolygon& rPoly)
 {
-    if ( !rPoly.count() )
+    if(rPoly.count() > 1)
     {
-        bEdgeTrackDirty = sal_True;
-        bEdgeTrackUserDefined = sal_False;
+        maEdgeTrack = rPoly;
+        mbEdgeTrackDirty = false;
+        mbEdgeTrackUserDefined = true;
+
+        // #i110629# also set aRect and maSnapeRect dependent from maEdgeTrack
+        const basegfx::B2DRange aPolygonBounds(maEdgeTrack.getB2DRange());
+        sdr::legacy::SetSnapRange(*this, aPolygonBounds);
     }
     else
     {
-        *pEdgeTrack = XPolygon( rPoly.getB2DPolygon( 0 ) );
-        bEdgeTrackDirty = sal_False;
-        bEdgeTrackUserDefined = sal_True;
-
-        // #i110629# also set aRect and maSnapeRect dependent from pEdgeTrack
-        const Rectangle aPolygonBounds(pEdgeTrack->GetBoundRect());
-        aRect = aPolygonBounds;
-        maSnapRect = aPolygonBounds;
+        mbEdgeTrackDirty = true;
+        mbEdgeTrackUserDefined = false;
     }
 }
 
-basegfx::B2DPolyPolygon SdrEdgeObj::GetEdgeTrackPath() const
+basegfx::B2DPolygon SdrEdgeObj::GetEdgeTrackPath() const
 {
-    basegfx::B2DPolyPolygon aPolyPolygon;
+    if(mbEdgeTrackDirty)
+    {
+        const_cast< SdrEdgeObj* >(this)->ImpRecalcEdgeTrack();
+    }
 
-    if (bEdgeTrackDirty)
-        ((SdrEdgeObj*)this)->ImpRecalcEdgeTrack();
-
-    aPolyPolygon.append( pEdgeTrack->getB2DPolygon() );
-
-    return aPolyPolygon;
+    return maEdgeTrack;
 }
 
-sal_uInt32 SdrEdgeObj::GetHdlCount() const
+void SdrEdgeObj::AddToHdlList(SdrHdlList& rHdlList) const
 {
-    SdrEdgeKind eKind=((SdrEdgeKindItem&)(GetObjectItem(SDRATTR_EDGEKIND))).GetValue();
-    sal_uInt32 nHdlAnz(0L);
-    sal_uInt32 nPntAnz(pEdgeTrack->GetPointCount());
+    // due to old object re-use ol methods
+    const sal_uInt32 nCount(impOldGetHdlCount());
+
+    for(sal_uInt32 a(0); a < nCount; a++)
+    {
+        impOldGetHdl(rHdlList, a);
+    }
+}
+
+sal_uInt32 SdrEdgeObj::impOldGetHdlCount() const
+{
+    const SdrEdgeKind eKind(((SdrEdgeKindItem&)(GetObjectItem(SDRATTR_EDGEKIND))).GetValue());
+    const sal_uInt32 nPntAnz(maEdgeTrack.count());
+    sal_uInt32 nHdlAnz(0);
 
     if(nPntAnz)
     {
-        nHdlAnz = 2L;
+        nHdlAnz = 2;
 
-        if ((eKind==SDREDGE_ORTHOLINES || eKind==SDREDGE_BEZIER) && nPntAnz >= 4L)
+        if((SDREDGE_ORTHOLINES == eKind || SDREDGE_BEZIER == eKind) &&  4 <= nPntAnz)
         {
-            sal_uInt32 nO1(aEdgeInfo.nObj1Lines > 0L ? aEdgeInfo.nObj1Lines - 1L : 0L);
-            sal_uInt32 nO2(aEdgeInfo.nObj2Lines > 0L ? aEdgeInfo.nObj2Lines - 1L : 0L);
-            sal_uInt32 nM(aEdgeInfo.nMiddleLine != 0xFFFF ? 1L : 0L);
+            const sal_uInt32 nO1(maEdgeInfo.nObj1Lines > 0 ? maEdgeInfo.nObj1Lines - 1 : 0);
+            const sal_uInt32 nO2(maEdgeInfo.nObj2Lines > 0 ? maEdgeInfo.nObj2Lines - 1 : 0);
+            const sal_uInt32 nM(maEdgeInfo.nMiddleLine != 0xFFFF ? 1 : 0);
+
             nHdlAnz += nO1 + nO2 + nM;
         }
-        else if (eKind==SDREDGE_THREELINES && nPntAnz == 4L)
+        else if(SDREDGE_THREELINES == eKind && 4 == nPntAnz)
         {
-            if(GetConnectedNode(sal_True))
+            if(GetConnectedNode(true))
+            {
                 nHdlAnz++;
+            }
 
-            if(GetConnectedNode(sal_False))
+            if(GetConnectedNode(false))
+            {
                 nHdlAnz++;
+            }
         }
     }
 
     return nHdlAnz;
 }
 
-SdrHdl* SdrEdgeObj::GetHdl(sal_uInt32 nHdlNum) const
+SdrHdl* SdrEdgeObj::impOldGetHdl(SdrHdlList& rHdlList, sal_uInt32 nHdlNum) const
 {
-    SdrHdl* pHdl=NULL;
-    sal_uInt32 nPntAnz(pEdgeTrack->GetPointCount());
-    if (nPntAnz!=0) {
-        if (nHdlNum==0) {
-            pHdl=new ImpEdgeHdl((*pEdgeTrack)[0],HDL_POLY);
-            if (aCon1.pObj!=NULL && aCon1.bBestVertex) pHdl->Set1PixMore(sal_True);
-        } else if (nHdlNum==1) {
-            pHdl=new ImpEdgeHdl((*pEdgeTrack)[sal_uInt16(nPntAnz-1)],HDL_POLY);
-            if (aCon2.pObj!=NULL && aCon2.bBestVertex) pHdl->Set1PixMore(sal_True);
-        } else {
-            SdrEdgeKind eKind=((SdrEdgeKindItem&)(GetObjectItem(SDRATTR_EDGEKIND))).GetValue();
-            if (eKind==SDREDGE_ORTHOLINES || eKind==SDREDGE_BEZIER) {
-                sal_uInt32 nO1(aEdgeInfo.nObj1Lines > 0L ? aEdgeInfo.nObj1Lines - 1L : 0L);
-                sal_uInt32 nO2(aEdgeInfo.nObj2Lines > 0L ? aEdgeInfo.nObj2Lines - 1L : 0L);
-                sal_uInt32 nM(aEdgeInfo.nMiddleLine != 0xFFFF ? 1L : 0L);
-                sal_uInt32 nNum(nHdlNum - 2L);
-                sal_Int32 nPt(0L);
-                pHdl=new ImpEdgeHdl(Point(),HDL_POLY);
-                if (nNum<nO1) {
-                    nPt=nNum+1L;
-                    if (nNum==0) ((ImpEdgeHdl*)pHdl)->SetLineCode(OBJ1LINE2);
-                    if (nNum==1) ((ImpEdgeHdl*)pHdl)->SetLineCode(OBJ1LINE3);
-                } else {
-                    nNum=nNum-nO1;
-                    if (nNum<nO2) {
-                        nPt=nPntAnz-3-nNum;
-                        if (nNum==0) ((ImpEdgeHdl*)pHdl)->SetLineCode(OBJ2LINE2);
-                        if (nNum==1) ((ImpEdgeHdl*)pHdl)->SetLineCode(OBJ2LINE3);
-                    } else {
-                        nNum=nNum-nO2;
-                        if (nNum<nM) {
-                            nPt=aEdgeInfo.nMiddleLine;
-                            ((ImpEdgeHdl*)pHdl)->SetLineCode(MIDDLELINE);
+    SdrHdl* pHdl = 0;
+    const sal_uInt32 nPntAnz(maEdgeTrack.count());
+
+    if(nPntAnz)
+    {
+        if(!nHdlNum)
+        {
+            pHdl = new ImpEdgeHdl(rHdlList, *this, HDL_POLY, maEdgeTrack.getB2DPoint(0));
+
+            if(maCon1.mpConnectedSdrObject && maCon1.mbBestVertex)
+            {
+                pHdl->Set1PixMore(true);
+            }
+        }
+        else if(1 == nHdlNum)
+        {
+            pHdl = new ImpEdgeHdl(rHdlList, *this, HDL_POLY, maEdgeTrack.getB2DPoint(nPntAnz - 1));
+
+            if(maCon2.mpConnectedSdrObject && maCon2.mbBestVertex)
+            {
+                pHdl->Set1PixMore(true);
+            }
+        }
+        else
+        {
+            const SdrEdgeKind eKind(((SdrEdgeKindItem&)(GetObjectItem(SDRATTR_EDGEKIND))).GetValue());
+
+            if(SDREDGE_ORTHOLINES == eKind || SDREDGE_BEZIER == eKind)
+            {
+                const sal_uInt32 nO1(maEdgeInfo.nObj1Lines > 0 ? maEdgeInfo.nObj1Lines - 1 : 0);
+                const sal_uInt32 nO2(maEdgeInfo.nObj2Lines > 0 ? maEdgeInfo.nObj2Lines - 1 : 0);
+                const sal_uInt32 nM(maEdgeInfo.nMiddleLine != 0xFFFF ? 1 : 0);
+                sal_uInt32 nNum(nHdlNum - 2);
+                sal_Int32 nPt(0);
+                SdrEdgeLineCode aSdrEdgeLineCode(OBJ1LINE2);
+
+                if(nNum < nO1)
+                {
+                    nPt = nNum + 1;
+
+                    if(0 == nNum)
+                    {
+                        aSdrEdgeLineCode = OBJ1LINE2;
+                    }
+
+                    if(1 == nNum)
+                    {
+                        aSdrEdgeLineCode = OBJ1LINE3;
+                    }
+                }
+                else
+                {
+                    nNum = nNum - nO1;
+
+                    if(nNum < nO2)
+                    {
+                        nPt = nPntAnz - 3 - nNum;
+
+                        if(0 == nNum)
+                        {
+                            aSdrEdgeLineCode = OBJ2LINE2;
+                        }
+
+                        if(1 == nNum)
+                        {
+                            aSdrEdgeLineCode = OBJ2LINE3;
+                        }
+                    }
+                    else
+                    {
+                        nNum = nNum - nO2;
+
+                        if(nNum < nM)
+                        {
+                            nPt = maEdgeInfo.nMiddleLine;
+                            aSdrEdgeLineCode = MIDDLELINE;
                         }
                     }
                 }
-                if (nPt>0) {
-                    Point aPos((*pEdgeTrack)[(sal_uInt16)nPt]);
-                    aPos+=(*pEdgeTrack)[(sal_uInt16)nPt+1];
-                    aPos.X()/=2;
-                    aPos.Y()/=2;
-                    pHdl->SetPos(aPos);
-                } else {
-                    delete pHdl;
-                    pHdl=NULL;
+
+                if(nPt > 0)
+                {
+                    ImpEdgeHdl* pImpEdgeHdl = new ImpEdgeHdl(rHdlList, *this, HDL_POLY, (maEdgeTrack.getB2DPoint(nPt) + maEdgeTrack.getB2DPoint(nPt + 1)) * 0.5);
+                    pHdl = pImpEdgeHdl;
+                    pImpEdgeHdl->SetLineCode(aSdrEdgeLineCode);
                 }
-            } else if (eKind==SDREDGE_THREELINES) {
+            }
+            else if(SDREDGE_THREELINES == eKind)
+            {
                 sal_uInt32 nNum(nHdlNum);
-                if (GetConnectedNode(sal_True)==NULL) nNum++;
-                Point aPos((*pEdgeTrack)[(sal_uInt16)nNum-1]);
-                pHdl=new ImpEdgeHdl(aPos,HDL_POLY);
-                if (nNum==2) ((ImpEdgeHdl*)pHdl)->SetLineCode(OBJ1LINE2);
-                if (nNum==3) ((ImpEdgeHdl*)pHdl)->SetLineCode(OBJ2LINE2);
+
+                if(!GetConnectedNode(true))
+                {
+                    nNum++;
+                }
+
+                ImpEdgeHdl* pImpEdgeHdl = new ImpEdgeHdl(rHdlList, *this, HDL_POLY, maEdgeTrack.getB2DPoint(nNum - 1));
+                pHdl = pImpEdgeHdl;
+
+                if(2 == nNum)
+                {
+                    pImpEdgeHdl->SetLineCode(OBJ1LINE2);
+                }
+
+                if(3 == nNum)
+                {
+                    pImpEdgeHdl->SetLineCode(OBJ2LINE2);
+                }
             }
         }
-        if (pHdl!=NULL) {
+
+        if(pHdl)
+        {
             pHdl->SetPointNum(nHdlNum);
         }
     }
+
     return pHdl;
 }
 
@@ -1804,7 +2008,7 @@ bool SdrEdgeObj::hasSpecialDrag() const
 SdrObject* SdrEdgeObj::getFullDragClone() const
 {
     // use Clone operator
-    SdrEdgeObj* pRetval = (SdrEdgeObj*)Clone();
+    SdrEdgeObj* pRetval = static_cast< SdrEdgeObj* >(CloneSdrObject());
 
     // copy connections for clone, SdrEdgeObj::operator= does not do this
     pRetval->ConnectToNode(true, GetConnectedNode(true));
@@ -1815,12 +2019,12 @@ SdrObject* SdrEdgeObj::getFullDragClone() const
 
 bool SdrEdgeObj::beginSpecialDrag(SdrDragStat& rDrag) const
 {
-    if(!rDrag.GetHdl())
+    if(!rDrag.GetActiveHdl())
         return false;
 
     rDrag.SetEndDragChangesAttributes(true);
 
-    if(rDrag.GetHdl()->GetPointNum() < 2)
+    if(rDrag.GetActiveHdl()->GetPointNum() < 2)
     {
         rDrag.SetNoSnap(true);
     }
@@ -1830,7 +2034,7 @@ bool SdrEdgeObj::beginSpecialDrag(SdrDragStat& rDrag) const
 
 bool SdrEdgeObj::applySpecialDrag(SdrDragStat& rDragStat)
 {
-    SdrEdgeObj* pOriginalEdge = dynamic_cast< SdrEdgeObj* >(rDragStat.GetHdl()->GetObj());
+    const SdrEdgeObj* pOriginalEdge = dynamic_cast< const SdrEdgeObj* >(rDragStat.GetActiveHdl()->GetObj());
     const bool bOriginalEdgeModified(pOriginalEdge == this);
 
     if(!bOriginalEdgeModified && pOriginalEdge)
@@ -1843,86 +2047,82 @@ bool SdrEdgeObj::applySpecialDrag(SdrDragStat& rDragStat)
         ConnectToNode(false, pOriginalEdge->GetConnection(false).GetObject());
     }
 
-    if(rDragStat.GetHdl()->GetPointNum() < 2)
+    if(rDragStat.GetActiveHdl()->GetPointNum() < 2)
     {
         // start or end point connector drag
-        const bool bDragA(0 == rDragStat.GetHdl()->GetPointNum());
-        const Point aPointNow(rDragStat.GetNow());
+        const bool bDragA(0 == rDragStat.GetActiveHdl()->GetPointNum());
+        const basegfx::B2DPoint aPointNow(rDragStat.GetNow());
+        SdrView& rSdrView = rDragStat.GetSdrViewFromSdrDragStat();
 
-        if(rDragStat.GetPageView())
+        if(rSdrView.GetSdrPageView())
         {
-            SdrObjConnection* pDraggedOne(bDragA ? &aCon1 : &aCon2);
+            SdrObjConnection* pDraggedOne(bDragA ? &maCon1 : &maCon2);
 
             // clear connection
             DisconnectFromNode(bDragA);
 
             // look for new connection
-            ImpFindConnector(aPointNow, *rDragStat.GetPageView(), *pDraggedOne, pOriginalEdge);
+            FindConnector(aPointNow, rSdrView, *pDraggedOne, pOriginalEdge);
 
-            if(pDraggedOne->pObj)
+            if(pDraggedOne->mpConnectedSdrObject)
             {
-                // if found, officially connect to it; ImpFindConnector only
-                // sets pObj hard
-                SdrObject* pNewConnection = pDraggedOne->pObj;
-                pDraggedOne->pObj = 0;
+                // if found, officially connect to it; FindConnector only
+                // sets mpConnectedSdrObject hard
+                SdrObject* pNewConnection = pDraggedOne->mpConnectedSdrObject;
+                pDraggedOne->mpConnectedSdrObject = 0;
                 ConnectToNode(bDragA, pNewConnection);
             }
 
-            if(rDragStat.GetView() && !bOriginalEdgeModified)
+            if(!bOriginalEdgeModified)
             {
                 // show IA helper, but only do this during IA, so not when the original
                 // Edge gets modified in the last call
-                rDragStat.GetView()->SetConnectMarker(*pDraggedOne, *rDragStat.GetPageView());
+                rDragStat.GetSdrViewFromSdrDragStat().SetConnectMarker(*pDraggedOne);
             }
         }
 
-        if(pEdgeTrack)
+        // change maEdgeTrack to modified position
+        if(bDragA)
         {
-            // change pEdgeTrack to modified position
-            if(bDragA)
-            {
-                (*pEdgeTrack)[0] = aPointNow;
-            }
-            else
-            {
-                (*pEdgeTrack)[sal_uInt16(pEdgeTrack->GetPointCount()-1)] = aPointNow;
-            }
+            maEdgeTrack.setB2DPoint(0, aPointNow);
+        }
+        else
+        {
+            maEdgeTrack.setB2DPoint(maEdgeTrack.count() - 1, aPointNow);
         }
 
         // reset edge info's offsets, this is a end point drag
-        aEdgeInfo.aObj1Line2 = Point();
-        aEdgeInfo.aObj1Line3 = Point();
-        aEdgeInfo.aObj2Line2 = Point();
-        aEdgeInfo.aObj2Line3 = Point();
-        aEdgeInfo.aMiddleLine = Point();
+        maEdgeInfo.aObj1Line2 = maEdgeInfo.aObj1Line3 = maEdgeInfo.aObj2Line2 = maEdgeInfo.aObj2Line3 = maEdgeInfo.aMiddleLine = basegfx::B2DPoint();
     }
     else
     {
         // control point connector drag
-        const ImpEdgeHdl* pEdgeHdl = (ImpEdgeHdl*)rDragStat.GetHdl();
-        const SdrEdgeLineCode eLineCode = pEdgeHdl->GetLineCode();
-        const Point aDist(rDragStat.GetNow() - rDragStat.GetStart());
-        sal_Int32 nDist(pEdgeHdl->IsHorzDrag() ? aDist.X() : aDist.Y());
+        const ImpEdgeHdl* pEdgeHdl = dynamic_cast< const ImpEdgeHdl* >(rDragStat.GetActiveHdl());
 
-        nDist += aEdgeInfo.ImpGetLineVersatz(eLineCode, *pEdgeTrack);
-        aEdgeInfo.ImpSetLineVersatz(eLineCode, *pEdgeTrack, nDist);
+        if(pEdgeHdl)
+        {
+            const SdrEdgeLineCode eLineCode = pEdgeHdl->GetLineCode();
+            const basegfx::B2DPoint aDist(rDragStat.GetNow() - rDragStat.GetStart());
+            sal_Int32 nDist(basegfx::fround(pEdgeHdl->IsHorzDrag() ? aDist.getX() : aDist.getY()));
+
+            nDist += maEdgeInfo.ImpGetLineVersatz(eLineCode, maEdgeTrack.count());
+            maEdgeInfo.ImpSetLineVersatz(eLineCode, maEdgeTrack.count(), nDist);
+        }
     }
 
     // force recalc EdgeTrack
-    *pEdgeTrack = ImpCalcEdgeTrack(*pEdgeTrack, aCon1, aCon2, &aEdgeInfo);
-    bEdgeTrackDirty=sal_False;
+    maEdgeTrack = ImpCalcEdgeTrack(maCon1, maCon2, &maEdgeInfo);
+    mbEdgeTrackDirty = false;
 
     // save EdgeInfos and mark object as user modified
     ImpSetEdgeInfoToAttr();
-    bEdgeTrackUserDefined = false;
-    SetRectsDirty();
-    //SetChanged();
+    mbEdgeTrackUserDefined = false;
 
-    if(bOriginalEdgeModified && rDragStat.GetView())
+    if(bOriginalEdgeModified)
     {
         // hide connect marker helper again when original gets changed.
         // This happens at the end of the interaction
-        rDragStat.GetView()->HideConnectMarker();
+        rDragStat.GetSdrViewFromSdrDragStat().HideConnectMarker();
     }
 
        return true;
@@ -1930,7 +2130,7 @@ bool SdrEdgeObj::applySpecialDrag(SdrDragStat& rDragStat)
 
 String SdrEdgeObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 {
-    const bool bCreateComment(rDrag.GetView() && this == rDrag.GetView()->GetCreateObj());
+    const bool bCreateComment(this == rDrag.GetSdrViewFromSdrDragStat().GetCreateObj());
 
     if(bCreateComment)
     {
@@ -1939,7 +2139,7 @@ String SdrEdgeObj::getSpecialDragComment(const SdrDragStat& rDrag) const
     else
     {
         XubString aStr;
-        ImpTakeDescriptionStr(STR_DragEdgeTail, aStr);
+        TakeMarkedDescriptionString(STR_DragEdgeTail, aStr);
 
         return aStr;
     }
@@ -1953,418 +2153,343 @@ basegfx::B2DPolygon SdrEdgeObj::ImplAddConnectorOverlay(SdrDragMethod& rDragMeth
 
     if(bDetail)
     {
-        SdrObjConnection aMyCon1(aCon1);
-        SdrObjConnection aMyCon2(aCon2);
+        SdrObjConnection aMyCon1(maCon1);
+        SdrObjConnection aMyCon2(maCon2);
 
         if (bTail1)
         {
-            const basegfx::B2DPoint aTemp(rDragMethod.getCurrentTransformation() * basegfx::B2DPoint(aMyCon1.aObjOfs.X(), aMyCon1.aObjOfs.Y()));
-            aMyCon1.aObjOfs.X() = basegfx::fround(aTemp.getX());
-            aMyCon1.aObjOfs.Y() = basegfx::fround(aTemp.getY());
+            aMyCon1.maObjOfs *= rDragMethod.getCurrentTransformation();
         }
 
         if (bTail2)
         {
-            const basegfx::B2DPoint aTemp(rDragMethod.getCurrentTransformation() * basegfx::B2DPoint(aMyCon2.aObjOfs.X(), aMyCon2.aObjOfs.Y()));
-            aMyCon2.aObjOfs.X() = basegfx::fround(aTemp.getX());
-            aMyCon2.aObjOfs.Y() = basegfx::fround(aTemp.getY());
+            aMyCon2.maObjOfs *= rDragMethod.getCurrentTransformation();
         }
 
-        SdrEdgeInfoRec aInfo(aEdgeInfo);
-        XPolygon aXP(ImpCalcEdgeTrack(*pEdgeTrack, aMyCon1, aMyCon2, &aInfo));
-
-        if(aXP.GetPointCount())
-        {
-            aResult = aXP.getB2DPolygon();
-        }
+        SdrEdgeInfoRec aInfo(maEdgeInfo);
+        aResult = ImpCalcEdgeTrack(aMyCon1, aMyCon2, &aInfo);
     }
     else
     {
-        Point aPt1((*pEdgeTrack)[0]);
-        Point aPt2((*pEdgeTrack)[sal_uInt16(pEdgeTrack->GetPointCount() - 1)]);
+        basegfx::B2DPoint aPt1(maEdgeTrack.getB2DPoint(0));
+        basegfx::B2DPoint aPt2(maEdgeTrack.getB2DPoint(maEdgeTrack.count() - 1));
 
-        if (aCon1.pObj && (aCon1.bBestConn || aCon1.bBestVertex))
-            aPt1 = aCon1.pObj->GetSnapRect().Center();
+        if (maCon1.mpConnectedSdrObject && (maCon1.mbBestConnection || maCon1.mbBestVertex))
+        {
+            aPt1 = sdr::legacy::GetSnapRange(*maCon1.mpConnectedSdrObject).getCenter();
+        }
 
-        if (aCon2.pObj && (aCon2.bBestConn || aCon2.bBestVertex))
-            aPt2 = aCon2.pObj->GetSnapRect().Center();
+        if (maCon2.mpConnectedSdrObject && (maCon2.mbBestConnection || maCon2.mbBestVertex))
+        {
+            aPt2 = sdr::legacy::GetSnapRange(*maCon2.mpConnectedSdrObject).getCenter();
+        }
 
         if (bTail1)
         {
-            const basegfx::B2DPoint aTemp(rDragMethod.getCurrentTransformation() * basegfx::B2DPoint(aPt1.X(), aPt1.Y()));
-            aPt1.X() = basegfx::fround(aTemp.getX());
-            aPt1.Y() = basegfx::fround(aTemp.getY());
+            aPt1 *= rDragMethod.getCurrentTransformation();
         }
 
         if (bTail2)
         {
-            const basegfx::B2DPoint aTemp(rDragMethod.getCurrentTransformation() * basegfx::B2DPoint(aPt2.X(), aPt2.Y()));
-            aPt2.X() = basegfx::fround(aTemp.getX());
-            aPt2.Y() = basegfx::fround(aTemp.getY());
+            aPt2 *= rDragMethod.getCurrentTransformation();
         }
 
-        aResult.append(basegfx::B2DPoint(aPt1.X(), aPt1.Y()));
-        aResult.append(basegfx::B2DPoint(aPt2.X(), aPt2.Y()));
+        aResult.append(aPt1);
+        aResult.append(aPt2);
     }
 
     return aResult;
 }
 
-FASTBOOL SdrEdgeObj::BegCreate(SdrDragStat& rDragStat)
+bool SdrEdgeObj::BegCreate(SdrDragStat& rDragStat)
 {
-    rDragStat.SetNoSnap(sal_True);
-    pEdgeTrack->SetPointCount(2);
-    (*pEdgeTrack)[0]=rDragStat.GetStart();
-    (*pEdgeTrack)[1]=rDragStat.GetNow();
-    if (rDragStat.GetPageView()!=NULL) {
-        ImpFindConnector(rDragStat.GetStart(),*rDragStat.GetPageView(),aCon1,this);
-        ConnectToNode(sal_True,aCon1.pObj);
+    rDragStat.SetNoSnap(true);
+    maEdgeTrack.clear();
+    maEdgeTrack.append(rDragStat.GetStart());
+    maEdgeTrack.append(rDragStat.GetNow());
+
+    SdrView& rSdrView = rDragStat.GetSdrViewFromSdrDragStat();
+
+    if(rSdrView.GetSdrPageView())
+    {
+        FindConnector(rDragStat.GetStart(), rSdrView, maCon1, this);
+        ConnectToNode(true, maCon1.mpConnectedSdrObject);
     }
-    *pEdgeTrack=ImpCalcEdgeTrack(*pEdgeTrack,aCon1,aCon2,&aEdgeInfo);
-    return sal_True;
+
+    maEdgeTrack = ImpCalcEdgeTrack(maCon1, maCon2, &maEdgeInfo);
+
+    return true;
 }
 
-FASTBOOL SdrEdgeObj::MovCreate(SdrDragStat& rDragStat)
+bool SdrEdgeObj::MovCreate(SdrDragStat& rDragStat)
 {
-    sal_uInt16 nMax=pEdgeTrack->GetPointCount();
-    (*pEdgeTrack)[nMax-1]=rDragStat.GetNow();
-    if (rDragStat.GetPageView()!=NULL) {
-        ImpFindConnector(rDragStat.GetNow(),*rDragStat.GetPageView(),aCon2,this);
-        rDragStat.GetView()->SetConnectMarker(aCon2,*rDragStat.GetPageView());
+    maEdgeTrack.setB2DPoint(maEdgeTrack.count() - 1, rDragStat.GetNow());
+
+    SdrView& rSdrView = rDragStat.GetSdrViewFromSdrDragStat();
+
+    if(rSdrView.GetSdrPageView())
+    {
+        FindConnector(rDragStat.GetNow(), rSdrView, maCon2, this);
+        rDragStat.GetSdrViewFromSdrDragStat().SetConnectMarker(maCon2);
+
     }
-    SetBoundRectDirty();
-    bSnapRectDirty=sal_True;
-    ConnectToNode(sal_False,aCon2.pObj);
-    *pEdgeTrack=ImpCalcEdgeTrack(*pEdgeTrack,aCon1,aCon2,&aEdgeInfo);
-    bEdgeTrackDirty=sal_False;
-    return sal_True;
+
+    ActionChanged();
+    ConnectToNode(false, maCon2.mpConnectedSdrObject);
+    maEdgeTrack = ImpCalcEdgeTrack(maCon1, maCon2, &maEdgeInfo);
+    mbEdgeTrackDirty = false;
+
+    return true;
 }
 
-FASTBOOL SdrEdgeObj::EndCreate(SdrDragStat& rDragStat, SdrCreateCmd eCmd)
+bool SdrEdgeObj::EndCreate(SdrDragStat& rDragStat, SdrCreateCmd eCmd)
 {
-    FASTBOOL bOk=(eCmd==SDRCREATE_FORCEEND || rDragStat.GetPointAnz()>=2);
-    if (bOk) {
-        ConnectToNode(sal_True,aCon1.pObj);
-        ConnectToNode(sal_False,aCon2.pObj);
-        if (rDragStat.GetView()!=NULL) {
-            rDragStat.GetView()->HideConnectMarker();
-        }
-        ImpSetEdgeInfoToAttr(); // Die Werte aus aEdgeInfo in den Pool kopieren
+    const bool bOk(SDRCREATE_FORCEEND == eCmd || rDragStat.GetPointAnz() >= 2);
+
+    if(bOk)
+    {
+        ConnectToNode(true, maCon1.mpConnectedSdrObject);
+        ConnectToNode(false, maCon2.mpConnectedSdrObject);
+        rDragStat.GetSdrViewFromSdrDragStat().HideConnectMarker();
+        ImpSetEdgeInfoToAttr(); // Die Werte aus maEdgeInfo in den Pool kopieren
     }
-    SetRectsDirty();
+
+    ActionChanged();
+
     return bOk;
 }
 
-FASTBOOL SdrEdgeObj::BckCreate(SdrDragStat& rDragStat)
+bool SdrEdgeObj::BckCreate(SdrDragStat& rDragStat)
 {
-    if (rDragStat.GetView()!=NULL) {
-        rDragStat.GetView()->HideConnectMarker();
-    }
-    return sal_False;
+    rDragStat.GetSdrViewFromSdrDragStat().HideConnectMarker();
+
+    return false;
 }
 
 void SdrEdgeObj::BrkCreate(SdrDragStat& rDragStat)
 {
-    if (rDragStat.GetView()!=NULL) {
-        rDragStat.GetView()->HideConnectMarker();
-    }
+    rDragStat.GetSdrViewFromSdrDragStat().HideConnectMarker();
 }
 
 basegfx::B2DPolyPolygon SdrEdgeObj::TakeCreatePoly(const SdrDragStat& /*rStatDrag*/) const
 {
-    basegfx::B2DPolyPolygon aRetval;
-    aRetval.append(pEdgeTrack->getB2DPolygon());
-    return aRetval;
+    return basegfx::B2DPolyPolygon(maEdgeTrack);
 }
 
-Pointer SdrEdgeObj::GetCreatePointer() const
+Pointer SdrEdgeObj::GetCreatePointer(const SdrView& /*rSdrView*/) const
 {
     return Pointer(POINTER_DRAW_CONNECT);
 }
 
-FASTBOOL SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrObjConnection& rCon, const SdrEdgeObj* pThis, OutputDevice* pOut)
+void SdrEdgeObj::FindConnector(
+    const basegfx::B2DPoint& rPt,
+    const SdrView& rSdrView,
+    SdrObjConnection& rCon,
+    const SdrEdgeObj* pThis,
+    OutputDevice* pOut)
 {
     rCon.ResetVars();
-    if (pOut==NULL) pOut=rPV.GetView().GetFirstOutputDevice(); // GetWin(0);
-    if (pOut==NULL) return sal_False;
-    SdrObjList* pOL=rPV.GetObjList();
-    const SetOfByte& rVisLayer=rPV.GetVisibleLayers();
-    // Sensitiver Bereich der Konnektoren ist doppelt so gross wie die Handles:
-    sal_uInt16 nMarkHdSiz=rPV.GetView().GetMarkHdlSizePixel();
-    Size aHalfConSiz(nMarkHdSiz,nMarkHdSiz);
-    aHalfConSiz=pOut->PixelToLogic(aHalfConSiz);
-    Size aHalfCenterSiz(2*aHalfConSiz.Width(),2*aHalfConSiz.Height());
-    Rectangle aMouseRect(rPt,rPt);
-    aMouseRect.Left()  -=aHalfConSiz.Width();
-    aMouseRect.Top()   -=aHalfConSiz.Height();
-    aMouseRect.Right() +=aHalfConSiz.Width();
-    aMouseRect.Bottom()+=aHalfConSiz.Height();
-    sal_uInt16 nBoundHitTol=(sal_uInt16)aHalfConSiz.Width()/2; if (nBoundHitTol==0) nBoundHitTol=1;
-    sal_uIntPtr no=pOL->GetObjCount();
-    FASTBOOL bFnd=sal_False;
-    SdrObjConnection aTestCon;
-    SdrObjConnection aBestCon;
-    FASTBOOL bTestBoundHit=sal_False;
-    //int bBestBoundHit=sal_False;
 
-    while (no>0 && !bFnd) {
-        // Problem: Gruppenobjekt mit verschiedenen Layern liefert LayerID 0 !!!!
-        no--;
-        SdrObject* pObj=pOL->GetObj(no);
-        if (rVisLayer.IsSet(pObj->GetLayer()) && pObj->IsVisible() &&      // only visible objects
-            (pThis==NULL || pObj!=(SdrObject*)pThis) && // nicht an mich selbst connecten
-            pObj->IsNode())
+    if(rSdrView.GetSdrPageView())
+    {
+        if(!pOut)
+            pOut = rSdrView.GetFirstOutputDevice(); // GetWin(0);
+
+        if (!pOut)
+            return;
+
+        const Point aPt(basegfx::fround(rPt.getX()), basegfx::fround(rPt.getY()));
+        SdrObjList* pOL = rSdrView.GetSdrPageView()->GetCurrentObjectList();
+        const SetOfByte& rVisLayer = rSdrView.GetSdrPageView()->GetVisibleLayers();
+        // Sensitiver Bereich der Konnektoren ist doppelt so gross wie die Handles:
+        sal_uInt16 nMarkHdSiz = rSdrView.GetMarkHdlSizePixel();
+        Size aHalfConSiz(nMarkHdSiz,nMarkHdSiz);
+        aHalfConSiz=pOut->PixelToLogic(aHalfConSiz);
+        Size aHalfCenterSiz(2*aHalfConSiz.Width(),2*aHalfConSiz.Height());
+        Rectangle aMouseRect(aPt,aPt);
+        aMouseRect.Left()  -=aHalfConSiz.Width();
+        aMouseRect.Top()   -=aHalfConSiz.Height();
+        aMouseRect.Right() +=aHalfConSiz.Width();
+        aMouseRect.Bottom()+=aHalfConSiz.Height();
+        sal_uInt16 nBoundHitTol=(sal_uInt16)aHalfConSiz.Width()/2; if (nBoundHitTol==0) nBoundHitTol=1;
+        sal_uInt32 no=pOL->GetObjCount();
+        bool bFnd=false;
+        SdrObjConnection aTestCon;
+        SdrObjConnection aBestCon;
+        bool bTestBoundHit=false;
+        //bool bBestBoundHit=false;
+
+        while (no>0 && !bFnd)
         {
-            Rectangle aObjBound(pObj->GetCurrentBoundRect());
-            if (aObjBound.IsOver(aMouseRect)) {
-                aTestCon.ResetVars();
-                bTestBoundHit=sal_False;
-                FASTBOOL bEdge=HAS_BASE(SdrEdgeObj,pObj); // kein BestCon fuer Edge
-                // Die Userdefined Konnektoren haben absolute Prioritaet.
-                // Danach kommt Vertex, Corner und Mitte(Best) gleich priorisiert.
-                // Zum Schluss kommt noch ein HitTest aufs Obj.
-                const SdrGluePointList* pGPL=pObj->GetGluePointList();
-                sal_uInt16 nConAnz=pGPL==NULL ? 0 : pGPL->GetCount();
-                sal_uInt16 nGesAnz=nConAnz+9;
-                FASTBOOL bUserFnd=sal_False;
-                sal_uIntPtr nBestDist=0xFFFFFFFF;
-                for (sal_uInt16 i=0; i<nGesAnz; i++)
+            // Problem: Gruppenobjekt mit verschiedenen Layern liefert LayerID 0 !!!!
+            no--;
+            SdrObject* pObj = pOL->GetObj(no);
+            if (rVisLayer.IsSet(pObj->GetLayer()) && pObj->IsVisible() &&      // only visible objects
+                    (pThis==NULL || pObj != pThis))  // nicht an mich selbst connecten
+            {
+                Rectangle aObjBound(sdr::legacy::GetBoundRect(*pObj));
+                if (aObjBound.IsOver(aMouseRect))
                 {
-                    FASTBOOL bUser=i<nConAnz;
-                    FASTBOOL bVertex=i>=nConAnz+0 && i<nConAnz+4;
-                    FASTBOOL bCorner=i>=nConAnz+4 && i<nConAnz+8;
-                    FASTBOOL bCenter=i==nConAnz+8;
-                    FASTBOOL bOk=sal_False;
-                    Point aConPos;
-                    sal_uInt16 nConNum=i;
-                    if (bUser) {
-                        const SdrGluePoint& rGP=(*pGPL)[nConNum];
-                        aConPos=rGP.GetAbsolutePos(*pObj);
-                        nConNum=rGP.GetId();
-                        bOk=sal_True;
-                    } else if (bVertex && !bUserFnd) {
-                        nConNum=nConNum-nConAnz;
-                        if (rPV.GetView().IsAutoVertexConnectors()) {
-                            SdrGluePoint aPt(pObj->GetVertexGluePoint(nConNum));
-                            aConPos=aPt.GetAbsolutePos(*pObj);
-                            bOk=sal_True;
-                        } else i+=3;
-                    } else if (bCorner && !bUserFnd) {
-                        nConNum-=nConAnz+4;
-                        if (rPV.GetView().IsAutoCornerConnectors()) {
-                            SdrGluePoint aPt(pObj->GetCornerGluePoint(nConNum));
-                            aConPos=aPt.GetAbsolutePos(*pObj);
-                            bOk=sal_True;
-                        } else i+=3;
+                    aTestCon.ResetVars();
+                    bTestBoundHit=false;
+                    const bool bEdge(pObj->IsSdrEdgeObj()); // kein BestCon fuer Edge
+                    // Die Userdefined Konnektoren haben absolute Prioritaet.
+                    // Danach kommt Vertex, Corner und Mitte(Best) gleich priorisiert.
+                    // Zum Schluss kommt noch ein HitTest aufs Obj.
+                    const SdrGluePointList* pGPL = pObj->GetGluePointList();
+                    sal_uInt32 nConAnz=pGPL==NULL ? 0 : pGPL->GetCount();
+                    sal_uInt32 nGesAnz=nConAnz+9;
+                    bool bUserFnd=false;
+                    sal_uInt32 nBestDist=0xFFFFFFFF;
+                    for (sal_uInt32 i=0; i<nGesAnz; i++)
+                    {
+                        bool bUser=i<nConAnz;
+                        bool bVertex=i>=nConAnz+0 && i<nConAnz+4;
+                        bool bCenter=i==nConAnz+4;
+                        bool bOk=false;
+                        Point aConPos;
+                        sal_uInt32 nConNum=i;
+
+                        if(bUser)
+                        {
+                            const SdrGluePoint& rGP=(*pGPL)[nConNum];
+                            const basegfx::B2DPoint aPoint(rGP.GetAbsolutePos(sdr::legacy::GetSnapRange(*pObj)));
+                            aConPos=Point(basegfx::fround(aPoint.getX()), basegfx::fround(aPoint.getY()));
+                            nConNum=rGP.GetId();
+                            bOk=true;
+                        }
+                        else if (bVertex && !bUserFnd)
+                        {
+                            nConNum=nConNum-nConAnz;
+                            SdrGluePoint aLocalPt(pObj->GetVertexGluePoint(nConNum));
+                            const basegfx::B2DPoint aPoint(aLocalPt.GetAbsolutePos(sdr::legacy::GetSnapRange(*pObj)));
+                            aConPos=Point(basegfx::fround(aPoint.getX()), basegfx::fround(aPoint.getY()));
+                            bOk=true;
+                        }
+                        else if (bCenter && !bUserFnd && !bEdge)
+                        {
+                            // #109007#
+                            // Suppress default connect at object center
+                            if(!pThis || !pThis->GetSuppressDefaultConnect())
+                            {
+                                // Edges nicht!
+                                nConNum=0;
+                                aConPos=aObjBound.Center();
+                                bOk=true;
+                            }
+                        }
+                        if (bOk && aMouseRect.IsInside(aConPos))
+                        {
+                            if (bUser) bUserFnd=true;
+                            bFnd=true;
+                            sal_uInt32 nDist=(sal_uInt32)Abs(aConPos.X()-aPt.X())+(sal_uInt32)Abs(aConPos.Y()-aPt.Y());
+
+                            if (nDist<nBestDist)
+                            {
+                                nBestDist = nDist;
+                                aTestCon.mpConnectedSdrObject = pObj;
+                                aTestCon.mnConnectorId = nConNum;
+                                aTestCon.mbAutoVertex = bVertex;
+                                aTestCon.mbBestConnection = false; // bCenter;
+                                aTestCon.mbBestVertex = bCenter;
+                            }
+                        }
                     }
-                    else if (bCenter && !bUserFnd && !bEdge)
+                    // Falls kein Konnektor getroffen wird nochmal
+                    // HitTest versucht fuer BestConnector (=bCenter)
+                    const basegfx::B2DPoint aHitTestPos(aPt.X(), aPt.Y());
+                    if(!bFnd &&
+                        !bEdge &&
+                        SdrObjectPrimitiveHit(*pObj, aHitTestPos, nBoundHitTol, rSdrView, false, 0))
                     {
                         // #109007#
-                        // Suppress default connect at object center
+                        // Suppress default connect at object inside bound
                         if(!pThis || !pThis->GetSuppressDefaultConnect())
                         {
-                            // Edges nicht!
-                            nConNum=0;
-                            aConPos=aObjBound.Center();
-                            bOk=sal_True;
+                            bFnd = true;
+                            aTestCon.mpConnectedSdrObject = pObj;
+                            aTestCon.mbBestConnection = true;
                         }
                     }
-                    if (bOk && aMouseRect.IsInside(aConPos)) {
-                        if (bUser) bUserFnd=sal_True;
-                        bFnd=sal_True;
-                        sal_uIntPtr nDist=(sal_uIntPtr)Abs(aConPos.X()-rPt.X())+(sal_uIntPtr)Abs(aConPos.Y()-rPt.Y());
-                        if (nDist<nBestDist) {
-                            nBestDist=nDist;
-                            aTestCon.pObj=pObj;
-                            aTestCon.nConId=nConNum;
-                            aTestCon.bAutoCorner=bCorner;
-                            aTestCon.bAutoVertex=bVertex;
-                            aTestCon.bBestConn=sal_False; // bCenter;
-                            aTestCon.bBestVertex=bCenter;
-                        }
-                    }
-                }
-                // Falls kein Konnektor getroffen wird nochmal
-                // HitTest versucht fuer BestConnector (=bCenter)
-                if(!bFnd &&
-                    !bEdge &&
-                    SdrObjectPrimitiveHit(*pObj, rPt, nBoundHitTol, rPV, &rVisLayer, false))
-                {
-                    // #109007#
-                    // Suppress default connect at object inside bound
-                    if(!pThis || !pThis->GetSuppressDefaultConnect())
+                    if (bFnd)
                     {
-                        bFnd=sal_True;
-                        aTestCon.pObj=pObj;
-                        aTestCon.bBestConn=sal_True;
+                        Rectangle aMouseRect2(aPt,aPt);
+                        aMouseRect.Left()  -=nBoundHitTol;
+                        aMouseRect.Top()   -=nBoundHitTol;
+                        aMouseRect.Right() +=nBoundHitTol;
+                        aMouseRect.Bottom()+=nBoundHitTol;
+                        bTestBoundHit=aObjBound.IsOver(aMouseRect2);
                     }
                 }
-                if (bFnd) {
-                    Rectangle aMouseRect2(rPt,rPt);
-                    aMouseRect.Left()  -=nBoundHitTol;
-                    aMouseRect.Top()   -=nBoundHitTol;
-                    aMouseRect.Right() +=nBoundHitTol;
-                    aMouseRect.Bottom()+=nBoundHitTol;
-                    bTestBoundHit=aObjBound.IsOver(aMouseRect2);
-                }
-
             }
         }
+
+        rCon=aTestCon;
     }
-    rCon=aTestCon;
-    return bFnd;
 }
 
-void SdrEdgeObj::NbcSetSnapRect(const Rectangle& rRect)
+const basegfx::B2DHomMatrix& SdrEdgeObj::getSdrObjectTransformation() const
 {
-    const Rectangle aOld(GetSnapRect());
+    return SdrTextObj::getSdrObjectTransformation();
+}
 
-    if(aOld != rRect)
+void SdrEdgeObj::setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransformation)
+{
+    // #54102# handle start and end point if not connected
+    const bool bCon1(maCon1.mpConnectedSdrObject && maCon1.mpConnectedSdrObject->getSdrPageFromSdrObject() == getSdrPageFromSdrObject());
+    const bool bCon2(maCon2.mpConnectedSdrObject && maCon2.mpConnectedSdrObject->getSdrPageFromSdrObject() == getSdrPageFromSdrObject());
+    const sal_uInt32 nCount(maEdgeTrack.count());
+    const bool bApplyTransform(nCount && (!bCon1 || !bCon2 || mbEdgeTrackUserDefined));
+    basegfx::B2DHomMatrix aCompleteTransform;
+
+    if(bApplyTransform)
     {
-        if(aRect.IsEmpty() && 0 == pEdgeTrack->GetPointCount())
+        // get old transform and invert
+        aCompleteTransform = getSdrObjectTransformation();
+        aCompleteTransform.invert();
+    }
+
+    // call parent, set new transform
+    SdrTextObj::setSdrObjectTransformation(rTransformation);
+
+    if(bApplyTransform)
+    {
+        // multiply current transform (after change) to get full change
+        aCompleteTransform = getSdrObjectTransformation() * aCompleteTransform;
+
+        if(mbEdgeTrackUserDefined)
         {
-            // #i110629# When initializing, do not scale on empty Rectangle; this
-            // will mirror the underlying text object (!)
-            aRect = rRect;
-            maSnapRect = rRect;
+            // #120437# special handling when track is user defined
+            maEdgeTrack.transform(aCompleteTransform);
         }
         else
         {
-            long nMulX = rRect.Right()  - rRect.Left();
-            long nDivX = aOld.Right()   - aOld.Left();
-            long nMulY = rRect.Bottom() - rRect.Top();
-            long nDivY = aOld.Bottom()  - aOld.Top();
-            if ( nDivX == 0 ) { nMulX = 1; nDivX = 1; }
-            if ( nDivY == 0 ) { nMulY = 1; nDivY = 1; }
-            Fraction aX(nMulX, nDivX);
-            Fraction aY(nMulY, nDivY);
-            NbcResize(aOld.TopLeft(), aX, aY);
-            NbcMove(Size(rRect.Left() - aOld.Left(), rRect.Top() - aOld.Top()));
+            if(!bCon1)
+            {
+                // transform first point
+                maEdgeTrack.setB2DPoint(0, aCompleteTransform * maEdgeTrack.getB2DPoint(0));
+                ImpDirtyEdgeTrack();
+            }
+
+            if(!bCon2)
+            {
+                // transform last point
+                maEdgeTrack.setB2DPoint(nCount - 1, aCompleteTransform * maEdgeTrack.getB2DPoint(nCount - 1));
+                ImpDirtyEdgeTrack();
+            }
         }
+    }
+
+    // if resize is not from paste, forget user distances
+    if(!IsPasteResize())
+    {
+        maEdgeInfo.aObj1Line2 = maEdgeInfo.aObj1Line3 = maEdgeInfo.aObj2Line2 = maEdgeInfo.aObj2Line3 = maEdgeInfo.aMiddleLine = basegfx::B2DPoint();
     }
 }
 
-void SdrEdgeObj::NbcMove(const Size& rSiz)
+SdrObject* SdrEdgeObj::DoConvertToPolygonObject(bool bBezier, bool bAddText) const
 {
-    SdrTextObj::NbcMove(rSiz);
-    MoveXPoly(*pEdgeTrack,rSiz);
-}
-
-void SdrEdgeObj::NbcResize(const Point& rRefPnt, const Fraction& aXFact, const Fraction& aYFact)
-{
-    SdrTextObj::NbcResize(rRefPnt,aXFact,aXFact);
-    ResizeXPoly(*pEdgeTrack,rRefPnt,aXFact,aYFact);
-
-    // #75371# if resize is not from paste, forget user distances
-    if(!GetModel()->IsPasteResize())
-    {
-        // #75735#
-        aEdgeInfo.aObj1Line2 = Point();
-        aEdgeInfo.aObj1Line3 = Point();
-        aEdgeInfo.aObj2Line2 = Point();
-        aEdgeInfo.aObj2Line3 = Point();
-        aEdgeInfo.aMiddleLine = Point();
-    }
-}
-
-// #54102# added rotation support
-void SdrEdgeObj::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
-{
-    if(bEdgeTrackUserDefined)
-    {
-        // #120437# special handling when track is imported, apply
-        // transformation directly to imported track.
-        SdrTextObj::NbcRotate(rRef, nWink, sn, cs);
-        RotateXPoly(*pEdgeTrack, rRef, sn, cs);
-    }
-    else
-    {
-        // handle start and end point if not connected
-        FASTBOOL bCon1=aCon1.pObj!=NULL && aCon1.pObj->GetPage()==pPage;
-        FASTBOOL bCon2=aCon2.pObj!=NULL && aCon2.pObj->GetPage()==pPage;
-
-        if(!bCon1 && pEdgeTrack)
-        {
-            RotatePoint((*pEdgeTrack)[0],rRef,sn,cs);
-            ImpDirtyEdgeTrack();
-        }
-
-        if(!bCon2 && pEdgeTrack)
-        {
-            sal_uInt16 nPntAnz = pEdgeTrack->GetPointCount();
-            RotatePoint((*pEdgeTrack)[sal_uInt16(nPntAnz-1)],rRef,sn,cs);
-            ImpDirtyEdgeTrack();
-        }
-    }
-}
-
-// #54102# added mirror support
-void SdrEdgeObj::NbcMirror(const Point& rRef1, const Point& rRef2)
-{
-    if(bEdgeTrackUserDefined)
-    {
-        // #120437# special handling when track is imported, apply
-        // transformation directly to imported track.
-        SdrTextObj::NbcMirror(rRef1, rRef2);
-        MirrorXPoly(*pEdgeTrack, rRef1, rRef2);
-    }
-    else
-    {
-        // handle start and end point if not connected
-        FASTBOOL bCon1=aCon1.pObj!=NULL && aCon1.pObj->GetPage()==pPage;
-        FASTBOOL bCon2=aCon2.pObj!=NULL && aCon2.pObj->GetPage()==pPage;
-
-        if(!bCon1 && pEdgeTrack)
-        {
-            MirrorPoint((*pEdgeTrack)[0],rRef1,rRef2);
-            ImpDirtyEdgeTrack();
-        }
-
-        if(!bCon2 && pEdgeTrack)
-        {
-            sal_uInt16 nPntAnz = pEdgeTrack->GetPointCount();
-            MirrorPoint((*pEdgeTrack)[sal_uInt16(nPntAnz-1)],rRef1,rRef2);
-            ImpDirtyEdgeTrack();
-        }
-    }
-}
-
-// #54102# added shear support
-void SdrEdgeObj::NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear)
-{
-    if(bEdgeTrackUserDefined)
-    {
-        // #120437# special handling when track is imported, apply
-        // transformation directly to imported track.
-        SdrTextObj::NbcShear(rRef, nWink, tn, bVShear);
-        ShearXPoly(*pEdgeTrack, rRef, tn, bVShear);
-    }
-    else
-    {
-        // handle start and end point if not connected
-        FASTBOOL bCon1=aCon1.pObj!=NULL && aCon1.pObj->GetPage()==pPage;
-        FASTBOOL bCon2=aCon2.pObj!=NULL && aCon2.pObj->GetPage()==pPage;
-
-        if(!bCon1 && pEdgeTrack)
-        {
-            ShearPoint((*pEdgeTrack)[0],rRef,tn,bVShear);
-            ImpDirtyEdgeTrack();
-        }
-
-        if(!bCon2 && pEdgeTrack)
-        {
-            sal_uInt16 nPntAnz = pEdgeTrack->GetPointCount();
-            ShearPoint((*pEdgeTrack)[sal_uInt16(nPntAnz-1)],rRef,tn,bVShear);
-            ImpDirtyEdgeTrack();
-        }
-    }
-}
-
-SdrObject* SdrEdgeObj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const
-{
-    basegfx::B2DPolyPolygon aPolyPolygon;
-    aPolyPolygon.append(pEdgeTrack->getB2DPolygon());
-    SdrObject* pRet = ImpConvertMakeObj(aPolyPolygon, sal_False, bBezier);
+    SdrObject* pRet = ImpConvertMakeObj(basegfx::B2DPolyPolygon(maEdgeTrack), false, bBezier);
 
     if(bAddText)
     {
@@ -2376,58 +2501,97 @@ SdrObject* SdrEdgeObj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const
 
 sal_uInt32 SdrEdgeObj::GetSnapPointCount() const
 {
-    return 2L;
+    return 2;
 }
 
-Point SdrEdgeObj::GetSnapPoint(sal_uInt32 i) const
+basegfx::B2DPoint SdrEdgeObj::GetSnapPoint(sal_uInt32 i) const
 {
-    ((SdrEdgeObj*)this)->ImpUndirtyEdgeTrack();
-    sal_uInt16 nAnz=pEdgeTrack->GetPointCount();
-    if (i==0) return (*pEdgeTrack)[0];
-    else return (*pEdgeTrack)[nAnz-1];
-}
+    const_cast< SdrEdgeObj* >(this)->ImpUndirtyEdgeTrack();
 
-sal_Bool SdrEdgeObj::IsPolyObj() const
-{
-    return sal_False;
-}
-
-sal_uInt32 SdrEdgeObj::GetPointCount() const
-{
-    return 0L;
-}
-
-Point SdrEdgeObj::GetPoint(sal_uInt32 i) const
-{
-    ((SdrEdgeObj*)this)->ImpUndirtyEdgeTrack();
-    sal_uInt16 nAnz=pEdgeTrack->GetPointCount();
-    if (0L == i)
-        return (*pEdgeTrack)[0];
+    if(!i)
+    {
+        return maEdgeTrack.getB2DPoint(0);
+    }
     else
-        return (*pEdgeTrack)[nAnz-1];
+    {
+        const sal_uInt32 nAnz(maEdgeTrack.count());
+
+        if(nAnz)
+        {
+            return maEdgeTrack.getB2DPoint(nAnz - 1);
+        }
+
+    }
+
+    return basegfx::B2DPoint();
 }
 
-void SdrEdgeObj::NbcSetPoint(const Point& rPnt, sal_uInt32 i)
+bool SdrEdgeObj::IsPolygonObject() const
 {
-    // ToDo: Umconnekten fehlt noch
+    return false;
+}
+
+sal_uInt32 SdrEdgeObj::GetObjectPointCount() const
+{
+    return 0;
+}
+
+basegfx::B2DPoint SdrEdgeObj::GetObjectPoint(sal_uInt32 i) const
+{
+    const_cast< SdrEdgeObj* >(this)->ImpUndirtyEdgeTrack();
+
+    if(!i)
+    {
+        return maEdgeTrack.getB2DPoint(0);
+    }
+    else
+    {
+        const sal_uInt32 nAnz(maEdgeTrack.count());
+
+        if(nAnz)
+        {
+            return maEdgeTrack.getB2DPoint(nAnz - 1);
+        }
+    }
+
+    return basegfx::B2DPoint();
+}
+
+void SdrEdgeObj::SetObjectPoint(const basegfx::B2DPoint& rPnt, sal_uInt32 i)
+{
     ImpUndirtyEdgeTrack();
-    sal_uInt16 nAnz=pEdgeTrack->GetPointCount();
-    if (0L == i)
-        (*pEdgeTrack)[0]=rPnt;
-    if (1L == i)
-        (*pEdgeTrack)[nAnz-1]=rPnt;
+
+    if(!i)
+    {
+        maEdgeTrack.setB2DPoint(0, rPnt);
+    }
+    else
+    {
+        const sal_uInt32 nAnz(maEdgeTrack.count());
+
+        if(nAnz)
+        {
+            maEdgeTrack.setB2DPoint(nAnz - 1, rPnt);
+        }
+        else
+        {
+            OSL_ENSURE(false, "SetObjectPoint out of bound (!)");
+        }
+    }
+
     SetEdgeTrackDirty();
-    SetRectsDirty();
+    ActionChanged();
 }
 
 SdrEdgeObjGeoData::SdrEdgeObjGeoData()
 {
-    pEdgeTrack=new XPolygon;
+    // default connector
+    maEdgeTrack.append(basegfx::B2DPoint(0.0, 0.0));
+    maEdgeTrack.append(basegfx::B2DPoint(0.0, 100.0));
 }
 
 SdrEdgeObjGeoData::~SdrEdgeObjGeoData()
 {
-    delete pEdgeTrack;
 }
 
 SdrObjGeoData* SdrEdgeObj::NewGeoData() const
@@ -2438,61 +2602,80 @@ SdrObjGeoData* SdrEdgeObj::NewGeoData() const
 void SdrEdgeObj::SaveGeoData(SdrObjGeoData& rGeo) const
 {
     SdrTextObj::SaveGeoData(rGeo);
-    SdrEdgeObjGeoData& rEGeo=(SdrEdgeObjGeoData&)rGeo;
-    rEGeo.aCon1          =aCon1;
-    rEGeo.aCon2          =aCon2;
-    *rEGeo.pEdgeTrack    =*pEdgeTrack;
-    rEGeo.bEdgeTrackDirty=bEdgeTrackDirty;
-    rEGeo.bEdgeTrackUserDefined=bEdgeTrackUserDefined;
-    rEGeo.aEdgeInfo      =aEdgeInfo;
+
+    SdrEdgeObjGeoData& rEGeo = dynamic_cast< SdrEdgeObjGeoData& >(rGeo);
+    rEGeo.maCon1 = maCon1;
+    rEGeo.maCon2 = maCon2;
+    rEGeo.maEdgeTrack = maEdgeTrack;
+    rEGeo.mbEdgeTrackDirty = mbEdgeTrackDirty;
+    rEGeo.mbEdgeTrackUserDefined = mbEdgeTrackUserDefined;
+    rEGeo.maEdgeInfo = maEdgeInfo;
 }
 
 void SdrEdgeObj::RestGeoData(const SdrObjGeoData& rGeo)
 {
     SdrTextObj::RestGeoData(rGeo);
-    SdrEdgeObjGeoData& rEGeo=(SdrEdgeObjGeoData&)rGeo;
-    if (aCon1.pObj!=rEGeo.aCon1.pObj) {
-        if (aCon1.pObj!=NULL) aCon1.pObj->RemoveListener(*this);
-        aCon1=rEGeo.aCon1;
-        if (aCon1.pObj!=NULL) aCon1.pObj->AddListener(*this);
+    const SdrEdgeObjGeoData& rEGeo = dynamic_cast< const SdrEdgeObjGeoData& >(rGeo);
+
+    if(maCon1.mpConnectedSdrObject != rEGeo.maCon1.mpConnectedSdrObject)
+    {
+        if(maCon1.mpConnectedSdrObject)
+        {
+            EndListening(*maCon1.mpConnectedSdrObject);
+        }
+
+        maCon1 = rEGeo.maCon1;
+
+        if(maCon1.mpConnectedSdrObject)
+        {
+            StartListening(*maCon1.mpConnectedSdrObject);
+        }
     }
-    if (aCon2.pObj!=rEGeo.aCon2.pObj) {
-        if (aCon2.pObj!=NULL) aCon2.pObj->RemoveListener(*this);
-        aCon2=rEGeo.aCon2;
-        if (aCon2.pObj!=NULL) aCon2.pObj->AddListener(*this);
+
+    if(maCon2.mpConnectedSdrObject != rEGeo.maCon2.mpConnectedSdrObject)
+    {
+        if(maCon2.mpConnectedSdrObject)
+        {
+            EndListening(*maCon2.mpConnectedSdrObject);
+        }
+
+        maCon2 = rEGeo.maCon2;
+
+        if(maCon2.mpConnectedSdrObject)
+        {
+            StartListening(*maCon2.mpConnectedSdrObject);
+        }
     }
-    *pEdgeTrack    =*rEGeo.pEdgeTrack;
-    bEdgeTrackDirty=rEGeo.bEdgeTrackDirty;
-    bEdgeTrackUserDefined=rEGeo.bEdgeTrackUserDefined;
-    aEdgeInfo      =rEGeo.aEdgeInfo;
+
+    maEdgeTrack = rEGeo.maEdgeTrack;
+    mbEdgeTrackDirty = rEGeo.mbEdgeTrackDirty;
+    mbEdgeTrackUserDefined = rEGeo.mbEdgeTrackUserDefined;
+    maEdgeInfo = rEGeo.maEdgeInfo;
 }
 
-Point SdrEdgeObj::GetTailPoint( sal_Bool bTail ) const
+basegfx::B2DPoint SdrEdgeObj::GetTailPoint( bool bTail ) const
 {
-    if( pEdgeTrack && pEdgeTrack->GetPointCount()!=0)
+    if(maEdgeTrack.count())
     {
-        const XPolygon& rTrack0 = *pEdgeTrack;
         if(bTail)
         {
-            return rTrack0[0];
+            return maEdgeTrack.getB2DPoint(0);
         }
         else
         {
-            const sal_uInt16 nSiz = rTrack0.GetPointCount() - 1;
-            return rTrack0[nSiz];
+            const sal_uInt32 nAnz(maEdgeTrack.count());
+
+            if(nAnz)
+            {
+                return maEdgeTrack.getB2DPoint(nAnz - 1);
+            }
         }
-    }
-    else
-    {
-        if(bTail)
-            return aOutRect.TopLeft();
-        else
-            return aOutRect.BottomRight();
     }
 
+    return basegfx::B2DPoint();
 }
 
-void SdrEdgeObj::SetTailPoint( sal_Bool bTail, const Point& rPt )
+void SdrEdgeObj::SetTailPoint( bool bTail, const basegfx::B2DPoint& rPt )
 {
     ImpSetTailPoint( bTail, rPt );
     SetChanged();
@@ -2503,25 +2686,21 @@ void SdrEdgeObj::SetTailPoint( sal_Bool bTail, const Point& rPt )
     0 <= nId <= 3 : One of the default points is choosen
     nId >= 4 :      A user defined glue point is choosen
 */
-void SdrEdgeObj::setGluePointIndex( sal_Bool bTail, sal_Int32 nIndex /* = -1 */ )
+void SdrEdgeObj::setGluePointIndex(bool bTail, sal_Int32 nIndex /* = -1 */ )
 {
-    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetCurrentBoundRect();
-    // #110094#-14 BroadcastObjectChange();
-
     SdrObjConnection& rConn1 = GetConnection( bTail );
-
     rConn1.SetAutoVertex( nIndex >= 0 && nIndex <= 3 );
     rConn1.SetBestConnection( nIndex < 0 );
     rConn1.SetBestVertex( nIndex < 0 );
 
     if( nIndex > 3 )
     {
-//      nIndex -= 4;
         nIndex -= 3;        // SJ: the start api index is 0, whereas the implementation in svx starts from 1
 
         // for user defined glue points we have
         // to get the id for this index first
         const SdrGluePointList* pList = rConn1.GetObject() ? rConn1.GetObject()->GetGluePointList() : NULL;
+
         if( pList == NULL || SDRGLUEPOINT_NOTFOUND == pList->FindGluePoint((sal_uInt16)nIndex) )
             return;
     }
@@ -2533,14 +2712,12 @@ void SdrEdgeObj::setGluePointIndex( sal_Bool bTail, sal_Int32 nIndex /* = -1 */ 
     rConn1.SetConnectorId( (sal_uInt16)nIndex );
 
     SetChanged();
-    SetRectsDirty();
     ImpRecalcEdgeTrack();
-    // bEdgeTrackDirty=sal_True;
 }
 
 /** this method is used by the api to return a glue point id for a connection.
     See setGluePointId for possible return values */
-sal_Int32 SdrEdgeObj::getGluePointIndex( sal_Bool bTail )
+sal_Int32 SdrEdgeObj::getGluePointIndex( bool bTail )
 {
     SdrObjConnection& rConn1 = GetConnection( bTail );
     sal_Int32 nId = -1;
@@ -2548,53 +2725,23 @@ sal_Int32 SdrEdgeObj::getGluePointIndex( sal_Bool bTail )
     {
         nId = rConn1.GetConnectorId();
         if( !rConn1.IsAutoVertex() )
-//          nId += 4;
             nId += 3;       // SJ: the start api index is 0, whereas the implementation in svx starts from 1
     }
     return nId;
 }
 
-// #102344# Implementation was missing; edge track needs to be invalidated additionally.
-void SdrEdgeObj::NbcSetAnchorPos(const Point& rPnt)
-{
-    // call parent functionality
-    SdrTextObj::NbcSetAnchorPos(rPnt);
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// for geometry access -> GetEdgeTrackPath()
 
-    // Additionally, invalidate edge track
-    ImpDirtyEdgeTrack();
-}
-
-sal_Bool SdrEdgeObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const
-{
-    // use base method from SdrObject, it's not rotatable and
-    // a call to GetSnapRect() is used. That's what we need for Connector.
-    return SdrObject::TRGetBaseGeometry(rMatrix, rPolyPolygon);
-}
-
-void SdrEdgeObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon)
-{
-    // evtl. take care for existing connections. For now, just use the
-    // implementation from SdrObject.
-    SdrObject::TRSetBaseGeometry(rMatrix, rPolyPolygon);
-}
-
-// for geometry access
-::basegfx::B2DPolygon SdrEdgeObj::getEdgeTrack() const
-{
-    if(bEdgeTrackDirty)
-    {
-        const_cast< SdrEdgeObj* >(this)->ImpRecalcEdgeTrack();
-    }
-
-    if(pEdgeTrack)
-    {
-        return pEdgeTrack->getB2DPolygon();
-    }
-    else
-    {
-        return ::basegfx::B2DPolygon();
-    }
-}
+//::basegfx::B2DPolygon SdrEdgeObj::getEdgeTrack() const
+//{
+//  if(mbEdgeTrackDirty)
+//  {
+//      const_cast< SdrEdgeObj* >(this)->ImpRecalcEdgeTrack();
+//  }
+//
+//  return maEdgeTrack;
+//}
 
 //////////////////////////////////////////////////////////////////////////////
 // eof

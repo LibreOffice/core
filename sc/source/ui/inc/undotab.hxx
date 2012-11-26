@@ -61,7 +61,6 @@ class ScTableProtection;
 class ScUndoInsertTab : public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
                     ScUndoInsertTab(
                             ScDocShell* pNewDocShell,
                             SCTAB nTabNum,
@@ -89,7 +88,6 @@ private:
 class ScUndoInsertTables : public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
                     ScUndoInsertTables(
                             ScDocShell* pNewDocShell,
                             SCTAB nTabNum,
@@ -120,7 +118,6 @@ private:
 class ScUndoDeleteTab: public ScMoveUndo    // Draw vom Move fuer geloeschte Tabelle
 {
 public:
-                    TYPEINFO();
                     ScUndoDeleteTab(
                             ScDocShell* pNewDocShell,
                             const SvShorts &theTabs,        //SCTAB nNewTab,
@@ -147,7 +144,6 @@ private:
 class ScUndoRenameTab: public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
                     ScUndoRenameTab(
                             ScDocShell* pNewDocShell,
                             SCTAB nT,
@@ -174,7 +170,6 @@ private:
 class ScUndoMoveTab: public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
                     ScUndoMoveTab( ScDocShell* pNewDocShell,
                                   const SvShorts &aOldTab,
                                   const SvShorts &aNewTab);
@@ -198,7 +193,6 @@ private:
 class ScUndoCopyTab: public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
                     ScUndoCopyTab(ScDocShell* pNewDocShell,
                                   const SvShorts &aOldTab,
                                   const SvShorts &aNewTab);
@@ -223,7 +217,6 @@ private:
 class ScUndoTabColor: public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
                     ScUndoTabColor(
                             ScDocShell* pNewDocShell,
                             SCTAB nT,
@@ -251,7 +244,6 @@ private:
 class ScUndoMakeScenario: public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
                     ScUndoMakeScenario(
                             ScDocShell* pNewDocShell,
                             SCTAB nSrc, SCTAB nDest,
@@ -282,7 +274,6 @@ private:
 class ScUndoImportTab : public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
                     ScUndoImportTab(
                             ScDocShell* pShell,
                             SCTAB nNewTab, SCTAB nNewCount,
@@ -310,7 +301,6 @@ private:
 class ScUndoRemoveLink : public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
                     ScUndoRemoveLink(               // vor dem Loeschen aufrufen!
                             ScDocShell* pShell,
                             const String& rDoc );
@@ -340,7 +330,6 @@ private:
 class ScUndoShowHideTab : public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
                     ScUndoShowHideTab(
                             ScDocShell* pShell,
                             SCTAB nNewTab, sal_Bool bNewShow );
@@ -412,7 +401,6 @@ private:
 class ScUndoPrintRange : public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
                     ScUndoPrintRange( ScDocShell* pShell, SCTAB nNewTab,
                                         ScPrintRangeSaver* pOld, ScPrintRangeSaver* pNew );
     virtual         ~ScUndoPrintRange();
@@ -436,7 +424,6 @@ private:
 class ScUndoScenarioFlags: public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
                     ScUndoScenarioFlags(
                             ScDocShell* pNewDocShell, SCTAB nT,
                             const String& rON, const String& rNN,
@@ -469,7 +456,6 @@ private:
 class ScUndoRenameObject: public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
                     ScUndoRenameObject(
                             ScDocShell* pNewDocShell, const String& rPN,
                             const String& rON, const String& rNN );
@@ -495,7 +481,6 @@ private:
 class ScUndoLayoutRTL : public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
                     ScUndoLayoutRTL( ScDocShell* pShell, SCTAB nNewTab, sal_Bool bNewRTL );
     virtual         ~ScUndoLayoutRTL();
 
@@ -517,7 +502,6 @@ private:
 //UNUSED2009-05 class ScUndoSetGrammar : public ScSimpleUndo
 //UNUSED2009-05 {
 //UNUSED2009-05 public:
-//UNUSED2009-05                     TYPEINFO();
 //UNUSED2009-05                     ScUndoSetGrammar( ScDocShell* pShell,
 //UNUSED2009-05                                       formula::FormulaGrammar::Grammar eGrammar );
 //UNUSED2009-05     virtual         ~ScUndoSetGrammar();

@@ -93,6 +93,7 @@
 #include "swabstdlg.hxx"
 #include "globals.hrc"
 #include <unomid.h>
+#include <svx/fmmodel.hxx>
 
 
 #define CTYPE_CNT   0
@@ -410,7 +411,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
             {
                 for(SwPostItMgr::const_iterator i = aMgr->begin(); i != aMgr->end(); ++i)
                 {
-                    if ( (*i)->GetBroadCaster()->ISA(SwFmtFld)) // SwPostit
+                    if ( dynamic_cast< SwFmtFld* >((*i)->GetBroadCaster())) // SwPostit
                     {
                         SwFmtFld* aFmtFld = static_cast<SwFmtFld*>((*i)->GetBroadCaster());
                         if (aFmtFld->GetTxtFld() && aFmtFld->IsFldInDoc() &&
@@ -467,7 +468,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
                 {
                     SdrObject* pTemp = pPage->GetObj(i);
                     // --> OD 2006-03-09 #i51726# - all drawing objects can be named now
-//                    if(pTemp->ISA(SdrObjGroup) && pTemp->GetName().Len())
+//                    if(dynamic_cast< SdrObjGroup* >(pTemp) && pTemp->GetName().Len())
                     if ( pTemp->GetName().Len() )
                     // <--
                         nMemberCount++;
@@ -777,7 +778,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
             {
                 for(SwPostItMgr::const_iterator i = aMgr->begin(); i != aMgr->end(); ++i)
                 {
-                    if ( (*i)->GetBroadCaster()->ISA(SwFmtFld)) // SwPostit
+                    if ( dynamic_cast< SwFmtFld* >((*i)->GetBroadCaster())) // SwPostit
                     {
                         SwFmtFld* aFmtFld = static_cast<SwFmtFld*>((*i)->GetBroadCaster());
                         if (aFmtFld->GetTxtFld() && aFmtFld->IsFldInDoc() &&
@@ -835,11 +836,11 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
                 {
                     SdrObject* pTemp = pPage->GetObj(i);
                     // --> OD 2006-03-09 #i51726# - all drawing objects can be named now
-//                    if(pTemp->ISA(SdrObjGroup) && pTemp->GetName().Len())
+//                    if(dynamic_cast< SdrObjGroup* >(pTemp) && pTemp->GetName().Len())
                     if ( pTemp->GetName().Len() )
                     // <--
                     {
-                        SwContact* pContact = (SwContact*)pTemp->GetUserCall();
+                        SwContact* pContact = findConnectionToSdrObjectDirect(pTemp);
                         long nYPos = 0;
                         const Point aNullPt;
                         if(pContact && pContact->GetFmt())
@@ -3099,15 +3100,11 @@ void SwContentTree::GotoContent(SwContent* pCnt)
                 {
                     SdrObject* pTemp = pPage->GetObj(i);
                     // --> OD 2006-03-09 #i51726# - all drawing objects can be named now
-//                    if(pTemp->ISA(SdrObjGroup) && pTemp->GetName() == pCnt->GetName())
+//                    if(dynamic_cast< SdrObjGroup* >(pTemp) && pTemp->GetName() == pCnt->GetName())
                     if ( pTemp->GetName() == pCnt->GetName() )
                     // <--
                     {
-                        SdrPageView* pPV = pDrawView->GetSdrPageView();
-                        if( pPV )
-                        {
-                            pDrawView->MarkObj( pTemp, pPV );
-                        }
+                        pDrawView->MarkObj( *pTemp );
                     }
                 }
             }

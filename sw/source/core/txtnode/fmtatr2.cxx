@@ -60,9 +60,6 @@
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
-TYPEINIT1_AUTOFACTORY(SwFmtINetFmt, SfxPoolItem);
-TYPEINIT1_AUTOFACTORY(SwFmtAutoFmt, SfxPoolItem);
-
 /*************************************************************************
 |*
 |*    class SwFmtCharFmt
@@ -192,6 +189,7 @@ sal_Bool SwFmtAutoFmt::PutValue( const uno::Any& , sal_uInt8 )
 |*    Letzte Aenderung  AMA 02.08.96
 |*
 *************************************************************************/
+IMPL_POOLITEM_FACTORY(SwFmtINetFmt)
 
 SwFmtINetFmt::SwFmtINetFmt()
     : SfxPoolItem( RES_TXTATR_INETFMT ),

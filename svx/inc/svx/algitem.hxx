@@ -40,9 +40,8 @@ class SvStream;
 class SVX_DLLPUBLIC SvxHorJustifyItem: public SfxEnumItem
 {
 public:
-    TYPEINFO();
-
-    SvxHorJustifyItem( const sal_uInt16 nId );
+    POOLITEM_FACTORY()
+    SvxHorJustifyItem( const sal_uInt16 nId = 0);
 
     SvxHorJustifyItem(
         const SvxCellHorJustify eJustify /*= SVX_HOR_JUSTIFY_STANDARD*/,
@@ -75,9 +74,8 @@ public:
 class SVX_DLLPUBLIC SvxVerJustifyItem: public SfxEnumItem
 {
 public:
-    TYPEINFO();
-
-    SvxVerJustifyItem( const sal_uInt16 nId  );
+    POOLITEM_FACTORY()
+    SvxVerJustifyItem( const sal_uInt16 nId = 0 );
 
     SvxVerJustifyItem(
         const SvxCellVerJustify eJustify /*= SVX_VER_JUSTIFY_STANDARD*/,
@@ -109,8 +107,6 @@ public:
 class SVX_DLLPUBLIC SvxOrientationItem: public SfxEnumItem
 {
 public:
-    TYPEINFO();
-
     SvxOrientationItem(
         const SvxCellOrientation eOrientation /*= SVX_ORIENTATION_STANDARD*/,
         const sal_uInt16 nId );
@@ -155,8 +151,8 @@ class SVX_DLLPUBLIC SvxMarginItem: public SfxPoolItem
     sal_Int16       nRightMargin;
     sal_Int16       nBottomMargin;
 public:
-    TYPEINFO();
-    SvxMarginItem( const sal_uInt16 nId  );
+    POOLITEM_FACTORY()
+    SvxMarginItem( const sal_uInt16 nId = 0 );
     SvxMarginItem( sal_Int16 nLeft, sal_Int16 nTop /*= 0*/,
                    sal_Int16 nRight /*= 0*/, sal_Int16 nBottom /*= 0*/,
                    const sal_uInt16 nId  );

@@ -102,6 +102,8 @@
 #include <ndtxt.hxx>
 // <--
 #include "WW8FFData.hxx"
+#include <svx/svdlegacy.hxx>
+#include <svx/fmmodel.hxx>
 #include <editeng/shaditem.hxx>
 
 using namespace com::sun::star;
@@ -119,7 +121,7 @@ bool WW8Export::MiserableFormFieldExportHack(const SwFrmFmt& rFrmFmt)
     const SdrObject *pObject = rFrmFmt.FindRealSdrObject();
     if (pObject && pObject->GetObjInventor() == FmFormInventor)
     {
-        if (SdrUnoObj *pFormObj = PTR_CAST(SdrUnoObj,pObject))
+        if (const SdrUnoObj *pFormObj = dynamic_cast< const SdrUnoObj* >( pObject))
         {
             uno::Reference< awt::XControlModel > xControlModel =
                 pFormObj->GetUnoControlModel();
@@ -517,7 +519,7 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
                 ASSERT(pObj, "wo ist das SDR-Object?");
                 if (pObj)
                 {
-                    aRect = pObj->GetSnapRect();
+                    aRect = sdr::legacy::GetSnapRect(*pObj);
                 }
             }
 
@@ -759,7 +761,7 @@ sal_uInt32 WW8Export::GetSdrOrdNum( const SwFrmFmt& rFmt ) const
     sal_uInt32 nOrdNum;
     const SdrObject* pObj = rFmt.FindRealSdrObject();
     if( pObj )
-        nOrdNum = pObj->GetOrdNum();
+        nOrdNum = pObj->GetNavigationPosition();
     else
     {
         // no Layout for this format, then recalc the ordnum
@@ -931,15 +933,15 @@ void MSWord_SdrAttrIter::SetCharSet(const EECharAttrib& rAttr, bool bStart)
 void MSWord_SdrAttrIter::OutEEField(const SfxPoolItem& rHt)
 {
     const SvxFieldItem &rField = (const SvxFieldItem &)rHt;
-    const SvxFieldData *pFld = rField.GetField();
-    if (pFld && pFld->ISA(SvxURLField))
+    const SvxURLField* pFld = dynamic_cast< const SvxURLField* >(rField.GetField());
+
+    if (pFld)
     {
         sal_uInt8 nOldTxtTyp = m_rExport.nTxtTyp;
         m_rExport.nTxtTyp = mnTyp;
-        const SvxURLField *pURL = (const SvxURLField *)pFld;
-        m_rExport.AttrOutput().StartURL( pURL->GetURL(), pURL->GetTargetFrame() );
+        m_rExport.AttrOutput().StartURL( pFld->GetURL(), pFld->GetTargetFrame() );
 
-        const String &rStr = pURL->GetRepresentation();
+        const String &rStr = pFld->GetRepresentation();
         m_rExport.AttrOutput().RawText( rStr, true, GetNodeCharSet() ); // FIXME kendy: is the 'true' actually correct here?  It was here before, but... ;-)
 
         m_rExport.AttrOutput().EndURL();
@@ -1106,7 +1108,7 @@ void MSWord_SdrAttrIter::OutParaAttr(bool bCharAttr)
 
 void WW8Export::WriteSdrTextObj(const SdrObject& rObj, sal_uInt8 nTyp)
 {
-    const SdrTextObj* pTxtObj = PTR_CAST(SdrTextObj, &rObj);
+    const SdrTextObj* pTxtObj = dynamic_cast< const SdrTextObj* >( &rObj);
     ASSERT(pTxtObj, "That is no SdrTextObj!");
     if (!pTxtObj)
         return;
@@ -1267,6 +1269,13 @@ void WW8Export::WriteEscher()
     }
 }
 
+EscherExHostAppData* SwEscherEx::StartShape(
+    const com::sun::star::uno::Reference< com::sun::star::drawing::XShape > &,
+    const basegfx::B2DRange* /*pObjectRange*/)
+{
+    return &aHostData;
+}
+
 void SwEscherEx::WritePictures()
 {
     if( SvStream* pPicStrm = static_cast< SwEscherExGlobal& >( *mxGlobal ).GetPictureStream() )
@@ -1398,25 +1407,26 @@ sal_Int32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrmFmt& rFmt, sal_uInt32 nSh
 
         if ( aUniqueId.Len() )
         {
-            const   MapMode aMap100mm( MAP_100TH_MM );
-            Size    aSize( aGraphic.GetPrefSize() );
+            basegfx::B2DVector aScale(aGraphic.GetPrefSize().Width(), aGraphic.GetPrefSize().Height());
 
             if ( MAP_PIXEL == aGraphic.GetPrefMapMode().GetMapUnit() )
             {
-                aSize = Application::GetDefaultDevice()->PixelToLogic(
-                    aSize, aMap100mm );
+                aScale = Application::GetDefaultDevice()->GetInverseViewTransformation(MapMode(MAP_100TH_MM)) * aScale;
             }
             else
             {
-                aSize = OutputDevice::LogicToLogic( aSize,
-                    aGraphic.GetPrefMapMode(), aMap100mm );
+                aScale *= OutputDevice::GetFactorLogicToLogic(aGraphic.GetPrefMapMode().GetMapUnit(), MAP_100TH_MM);
             }
 
-            Point aEmptyPoint = Point();
-            Rectangle aRect( aEmptyPoint, aSize );
+            const basegfx::B2DRange aRange(0.0, 0.0, aScale.getX(), aScale.getY());
 
-            sal_uInt32 nBlibId = mxGlobal->GetBlibID( *QueryPictureStream(),
-                aUniqueId, aRect, NULL, 0 );
+            sal_uInt32 nBlibId = mxGlobal->GetBlibID(
+                *QueryPictureStream(),
+                aUniqueId,
+                aRange,
+                NULL,
+                0 );
+
             if (nBlibId)
                 aPropOpt.AddOpt(ESCHER_Prop_pib, nBlibId, sal_True);
         }
@@ -1608,24 +1618,26 @@ void SwBasicEscherEx::WriteBrushAttr(const SvxBrushItem &rBrush,
         if (aUniqueId.Len())
         {
             const Graphic &rGraphic = pGraphicObject->GetGraphic();
-            Size aSize(rGraphic.GetPrefSize());
-            const MapMode aMap100mm(MAP_100TH_MM);
+            basegfx::B2DVector aScale(rGraphic.GetPrefSize().Width(), rGraphic.GetPrefSize().Height());
+
             if (MAP_PIXEL == rGraphic.GetPrefMapMode().GetMapUnit())
             {
-                aSize = Application::GetDefaultDevice()->PixelToLogic(
-                    aSize, aMap100mm);
+                aScale = Application::GetDefaultDevice()->GetInverseViewTransformation(MapMode(MAP_100TH_MM)) * aScale;
             }
             else
             {
-                aSize = OutputDevice::LogicToLogic(aSize,
-                    rGraphic.GetPrefMapMode(), aMap100mm);
+                aScale *= OutputDevice::GetFactorLogicToLogic(rGraphic.GetPrefMapMode().GetMapUnit(), MAP_100TH_MM);
             }
 
-            Point aEmptyPoint = Point();
-            Rectangle aRect(aEmptyPoint, aSize);
+            const basegfx::B2DRange aRange(0.0, 0.0, aScale.getX(), aScale.getY());
 
-            sal_uInt32 nBlibId = mxGlobal->GetBlibID( *QueryPictureStream(),
-                aUniqueId, aRect, NULL, 0);
+            sal_uInt32 nBlibId = mxGlobal->GetBlibID(
+                *QueryPictureStream(),
+                aUniqueId,
+                aRange,
+                NULL,
+                0);
+
             if (nBlibId)
                 rPropOpt.AddOpt(ESCHER_Prop_fillBlip,nBlibId,sal_True);
         }
@@ -1895,7 +1907,7 @@ void SwBasicEscherEx::Init()
     {
         // PPT arbeitet nur mit Einheiten zu 576DPI
         // WW hingegen verwendet twips, dh. 1440DPI.
-        eMap = pModel->GetScaleUnit();
+        eMap = pModel->GetExchangeObjectUnit();
     }
 
     // MS-DFF-Properties sind grossteils in EMU (English Metric Units) angegeben
@@ -2011,23 +2023,23 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
                     const SdrObject* pSdrObj = rFmt.FindRealSdrObject();
                     if (pSdrObj)
                     {
-                        bool bSwapInPage = false;
-                        if (!pSdrObj->GetPage())
-                        {
-                            if (SdrModel* pModel = rWrt.pDoc->GetDrawModel())
-                            {
-                                if (SdrPage *pPage = pModel->GetPage(0))
-                                {
-                                    bSwapInPage = true;
-                                    (const_cast<SdrObject*>(pSdrObj))->SetPage(pPage);
-                                }
-                            }
-                        }
+//                        bool bSwapInPage = false;
+//                        if (!pSdrObj->getSdrPageFromSdrObject())
+//                        {
+//                            if (SdrModel* pModel = rWrt.pDoc->GetDrawModel())
+//                            {
+//                                if (SdrPage *pPage = pModel->GetPage(0))
+//                                {
+//                                    bSwapInPage = true;
+//                                    (const_cast<SdrObject*>(pSdrObj))->SetPage(pPage);
+//                                }
+//                            }
+//                        }
 
                         nShapeId = AddSdrObject(*pSdrObj);
 
-                        if (bSwapInPage)
-                            (const_cast<SdrObject*>(pSdrObj))->SetPage(0);
+  //                      if (bSwapInPage)
+  //                          (const_cast<SdrObject*>(pSdrObj))->SetPage(0);
                     }
 #ifdef DBG_UTIL
                     else
@@ -2745,12 +2757,18 @@ void SwBasicEscherEx::WriteOLEPicture(EscherPropertyContainer &rPropOpt,
     ByteString aId = aGraphicObject.GetUniqueID();
     if (aId.Len())
     {
-        Rectangle aRect = rObj.GetLogicRect();
-        aRect.SetPos(Point(0,0));
-        aRect.Right() = DrawModelToEmu(aRect.Right());
-        aRect.Bottom() = DrawModelToEmu(aRect.Bottom());
-        sal_uInt32 nBlibId = mxGlobal->GetBlibID( *QueryPictureStream(),
-            aId, aRect, pVisArea, 0);    // SJ: the fourth parameter (VisArea) should be set..
+        const basegfx::B2DRange aRange(
+            0.0, 0.0,
+            DrawModelToEmu(basegfx::fround(fabs(rObj.getSdrObjectScale().getX()))),
+            DrawModelToEmu(basegfx::fround(fabs(rObj.getSdrObjectScale().getY()))));
+
+        sal_uInt32 nBlibId = mxGlobal->GetBlibID(
+            *QueryPictureStream(),
+            aId,
+            aRange,
+            pVisArea,
+            0);    // SJ: the fifth parameter (VisArea) should be set..
+
         if (nBlibId)
             rPropOpt.AddOpt(ESCHER_Prop_pib, nBlibId, sal_True);
     }
@@ -2764,16 +2782,7 @@ void SwEscherEx::WriteOCXControl( const SwFrmFmt& rFmt, sal_uInt32 nShapeId )
     if (const SdrObject* pSdrObj = rFmt.FindRealSdrObject())
     {
         OpenContainer( ESCHER_SpContainer );
-
-        SdrModel *pModel = rWrt.pDoc->GetDrawModel();
-        OutputDevice *pDevice = Application::GetDefaultDevice();
-        ASSERT(pModel && pDevice, "no model or device");
-
-        // #i71538# use complete SdrViews
-        // SdrExchangeView aExchange(pModel, pDevice);
-        SdrView aExchange(pModel, pDevice);
-
-        Graphic aGraphic(aExchange.GetObjGraphic(pModel, pSdrObj));
+        Graphic aGraphic(GetObjGraphic(*pSdrObj));
 
         EscherPropertyContainer aPropOpt;
         WriteOLEPicture(aPropOpt, 0xa00 | SHAPEFLAG_OLESHAPE, aGraphic,
@@ -2864,7 +2873,7 @@ bool SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrObject *pOb
     if (!rWW8Wrt.bWrtWW8)
         return false;
 
-    SdrUnoObj *pFormObj = PTR_CAST(SdrUnoObj,pObj);
+    const SdrUnoObj *pFormObj = dynamic_cast< const SdrUnoObj* >( pObj);
     uno::Reference< awt::XControlModel > xControlModel =
     pFormObj->GetUnoControlModel();
 
@@ -2872,7 +2881,7 @@ bool SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrObject *pOb
     //I think I painted myself into a little bit of a
     //corner by trying to use the uno interface for
     //controls export
-    Rectangle aRect = pFormObj->GetLogicRect();
+    Rectangle aRect(sdr::legacy::GetLogicRect(*pFormObj));
     aRect.SetPos(Point(0,0));
     awt::Size aSize;
     aSize.Width = TWIPS_TO_MM(aRect.Right());

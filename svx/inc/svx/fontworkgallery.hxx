@@ -95,17 +95,16 @@ class SVX_DLLPUBLIC FontWorkGalleryDialog : public ModalDialog
 
     sal_uInt16          mnThemeId;
 
-    SdrView*            mpSdrView;
-    FmFormModel*        mpModel;
+    SdrView&            mrSdrView;
+    FmFormModel&        mrModel;
 
     String              maStrClickToAddText;
+    SdrObject**         mppSdrObject;
 
     DECL_LINK( DoubleClickFavoriteHdl, void * );
     DECL_LINK( ClickOKHdl, void * );
     DECL_LINK( ClickTextDirectionHdl, ImageButton * );
 
-    SdrObject**         mppSdrObject;
-    SdrModel*           mpDestModel;
 
     void            initfavorites(sal_uInt16 nThemeId, std::vector< Bitmap * >& rFavorites);
     void            insertSelectedFontwork();
@@ -115,11 +114,11 @@ class SVX_DLLPUBLIC FontWorkGalleryDialog : public ModalDialog
     std::vector< Bitmap * > maFavoritesHorizontal;
 
 public:
-    FontWorkGalleryDialog( SdrView* pView, Window* pParent, sal_uInt16 nSID );
+    // if ppSdrObject is given the object is not inserted to the current page of the given view, but
+    // set at that pointer for further usage (ownership change). The SDrObject is always created
+    // for the SdrModel of the given SDrView.
+    FontWorkGalleryDialog( SdrView& rView, Window* pParent, SdrObject** ppSdrObject = 0 );
     ~FontWorkGalleryDialog();
-
-    // SJ: if the SdrObject** is set, the SdrObject is not inserted into the page when executing the dialog
-    void SetSdrObjectRef( SdrObject**, SdrModel* pModel );
 };
 
 }

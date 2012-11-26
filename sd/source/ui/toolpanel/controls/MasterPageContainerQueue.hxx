@@ -62,12 +62,12 @@ public:
     */
     bool RequestPreview (const SharedMasterPageDescriptor& rDescriptor);
 
-    /** Return <TRUE/> when there is a request currently in the queue for
+    /** Return <true/> when there is a request currently in the queue for
         the given token.
     */
     bool HasRequest (MasterPageContainer::Token aToken) const;
 
-    /** Return <TRUE/> when there is at least one request in the queue.
+    /** Return <true/> when there is at least one request in the queue.
     */
     bool IsEmpty (void) const;
 

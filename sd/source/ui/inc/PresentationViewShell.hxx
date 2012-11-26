@@ -36,8 +36,6 @@ namespace sd {
 class PresentationViewShell : public DrawViewShell
 {
 public:
-    TYPEINFO();
-
     SFX_DECL_VIEWFACTORY(PresViewShell);
     SFX_DECL_INTERFACE( SD_IF_SDPRESVIEWSHELL )
 
@@ -56,13 +54,13 @@ public:
     virtual void Resize (void);
 
 protected:
-    virtual SvxRuler* CreateHRuler(::sd::Window* pWin, sal_Bool bIsFirst);
+    virtual SvxRuler* CreateHRuler(::sd::Window* pWin, bool bIsFirst);
     virtual SvxRuler* CreateVRuler(::sd::Window* pWin);
 
 private:
     Rectangle       maOldVisArea;
 
-    virtual void Activate (sal_Bool bIsMDIActivate);
+    virtual void Activate (bool bIsMDIActivate);
     virtual void Paint (const Rectangle& rRect, ::sd::Window* pWin);
 };
 

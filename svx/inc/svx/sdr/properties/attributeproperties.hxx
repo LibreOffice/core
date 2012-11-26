@@ -36,16 +36,23 @@ namespace sdr
     {
         class SVX_DLLPUBLIC AttributeProperties : public DefaultProperties, public SfxListener
         {
+        private:
+            // core to set parent at SfxItemSet and to execute the hard attribute computations
+            void ImpSetParentAtSfxItemSet(bool bDontRemoveHardAttr);
+
             // add style sheet, do all the necessary handling
-            void ImpAddStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr);
+            void ImpAddStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr);
 
             // remove StyleSheet, do all the necessary handling
             void ImpRemoveStyleSheet();
 
-        protected:
+            // do needed changes when cloning to a new model
+            void ImpModelChange(SdrModel& rSourceModel, SdrModel& rTargetModel);
+
             // the SytleSheet of this object
             SfxStyleSheet*                                  mpStyleSheet;
 
+        protected:
             // create a new itemset
             virtual SfxItemSet& CreateObjectSpecificItemSet(SfxItemPool& pPool);
 
@@ -62,23 +69,21 @@ namespace sdr
             // constructor for copying, but using new object
             AttributeProperties(const AttributeProperties& rProps, SdrObject& rObj);
 
-            // Clone() operator, normally just calls the local copy constructor
-            virtual BaseProperties& Clone(SdrObject& rObj) const;
-
             // destructor
             virtual ~AttributeProperties();
 
+            // Clone() operator, normally just calls the local copy constructor
+            virtual BaseProperties& Clone(SdrObject& rObj) const;
+
+            // Get the local ItemSet. This directly returns the local ItemSet of the object. No
+            // merging of ItemSets is done for e.g. Group objects.
+            virtual const SfxItemSet& GetObjectItemSet() const;
+
             // set a new StyleSheet and broadcast
-            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr);
+            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr);
 
             // get the installed StyleSheet
             virtual SfxStyleSheet* GetStyleSheet() const;
-
-            // Move properties to a new ItemPool.
-            virtual void MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel = 0L);
-
-            // Set new model.
-            virtual void SetModel(SdrModel* pOldModel, SdrModel* pNewModel);
 
             // force all attributes which come from styles to hard attributes
             // to be able to live without the style.

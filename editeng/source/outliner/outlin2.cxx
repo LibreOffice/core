@@ -196,10 +196,10 @@ sal_Bool Outliner::UpdateFields()
     return pEditEngine->UpdateFields();
 }
 
-void Outliner::RemoveFields( sal_Bool bKeepFieldText, TypeId aType )
+void Outliner::RemoveFields( sal_Bool bKeepFieldText, const std::type_info* pTypeInfo )
 {
     DBG_CHKTHIS(Outliner,0);
-    pEditEngine->RemoveFields( bKeepFieldText, aType );
+    pEditEngine->RemoveFields( bKeepFieldText, pTypeInfo );
 }
 
 void Outliner::SetWordDelimiters( const String& rDelimiters )

@@ -49,8 +49,6 @@ class ScInputStatusItem : public SfxPoolItem
     EditTextObject*     pEditData;
 
 public:
-                            TYPEINFO();
-//UNUSED2008-05             ScInputStatusItem( sal_uInt16 nWhich,
 //UNUSED2008-05                                SCTAB nTab,
 //UNUSED2008-05                                SCCOL nCol, SCROW nRow,
 //UNUSED2008-05                                SCCOL nStartCol, SCROW nStartRow,
@@ -101,7 +99,6 @@ class ScTablesHint : public SfxHint
     SCTAB nTab2;
 
 public:
-                    TYPEINFO();
                     ScTablesHint(sal_uInt16 nNewId, SCTAB nTable1, SCTAB nTable2=0);
                     ~ScTablesHint();
 
@@ -116,7 +113,6 @@ class ScEditViewHint : public SfxHint
     ScAddress                   aCursorPos;
 
 public:
-                    TYPEINFO();
                     ScEditViewHint( ScEditEngineDefaulter* pEngine, const ScAddress& rCurPos );
                     ~ScEditViewHint();
 
@@ -135,7 +131,6 @@ class ScIndexHint : public SfxHint
     sal_uInt16 nIndex;
 
 public:
-                    TYPEINFO();
                     ScIndexHint(sal_uInt16 nNewId, sal_uInt16 nIdx);
                     ~ScIndexHint();
 
@@ -149,7 +144,6 @@ public:
 class SC_DLLPUBLIC ScSortItem : public SfxPoolItem
 {
 public:
-                            TYPEINFO();
                             ScSortItem( sal_uInt16              nWhich,
                                         ScViewData*         ptrViewData,
                                         const ScSortParam*  pSortData );
@@ -177,7 +171,6 @@ private:
 class SC_DLLPUBLIC ScQueryItem : public SfxPoolItem
 {
 public:
-                            TYPEINFO();
                             ScQueryItem( sal_uInt16                 nWhich,
                                          ScViewData*            ptrViewData,
                                          const ScQueryParam*    pQueryData );
@@ -209,7 +202,6 @@ private:
 class SC_DLLPUBLIC ScSubTotalItem : public SfxPoolItem
 {
 public:
-                TYPEINFO();
                 ScSubTotalItem( sal_uInt16                  nWhich,
                                 ScViewData*             ptrViewData,
                                 const ScSubTotalParam*  pSubTotalData );
@@ -237,7 +229,6 @@ private:
 class SC_DLLPUBLIC ScUserListItem : public SfxPoolItem
 {
 public:
-                TYPEINFO();
                 ScUserListItem( sal_uInt16 nWhich );
                 ScUserListItem( const ScUserListItem& rItem );
                 ~ScUserListItem();
@@ -259,7 +250,6 @@ private:
 class ScConsolidateItem : public SfxPoolItem
 {
 public:
-                TYPEINFO();
                 ScConsolidateItem( sal_uInt16                    nWhich,
                                    const ScConsolidateParam* pParam );
                 ScConsolidateItem( const ScConsolidateItem& rItem );
@@ -281,7 +271,6 @@ private:
 class ScPivotItem : public SfxPoolItem
 {
 public:
-                TYPEINFO();
                 ScPivotItem( sal_uInt16 nWhich, const ScDPSaveData* pData,
                              const ScRange* pRange, sal_Bool bNew );
                 ScPivotItem( const ScPivotItem& rItem );
@@ -307,7 +296,6 @@ private:
 class ScSolveItem : public SfxPoolItem
 {
 public:
-                TYPEINFO();
                 ScSolveItem( sal_uInt16              nWhich,
                              const ScSolveParam* pParam );
                 ScSolveItem( const ScSolveItem& rItem );
@@ -329,7 +317,6 @@ private:
 class ScTabOpItem : public SfxPoolItem
 {
 public:
-                TYPEINFO();
                 ScTabOpItem( sal_uInt16              nWhich,
                              const ScTabOpParam* pParam );
                 ScTabOpItem( const ScTabOpItem& rItem );
@@ -351,7 +338,6 @@ private:
 class ScCondFrmtItem : public SfxPoolItem
 {
 public:
-                TYPEINFO();
                 ScCondFrmtItem( sal_uInt16 nWhich,
 //!                             const ScConditionalFormat* pCondFrmt );
                                 const ScConditionalFormat& rCondFrmt );

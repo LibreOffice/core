@@ -125,8 +125,6 @@ SFX_IMPL_INTERFACE( SwView, SfxViewShell, SW_RES(RID_TOOLS_TOOLBOX) )
                                 SW_RES(RID_TOOLS_TOOLBOX) );
 }
 
-TYPEINIT1(SwView,SfxViewShell)
-
 /*-----------------13.12.97 11:06-------------------
 
 --------------------------------------------------*/

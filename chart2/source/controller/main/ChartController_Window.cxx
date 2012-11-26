@@ -83,6 +83,7 @@
 
 #include <rtl/math.hxx>
 #include <svtools/acceleratorexecute.hxx>
+#include <svx/svdlegacy.hxx>
 
 #define DRGPIX    2     // Drag MinMove in Pixel
 
@@ -281,8 +282,7 @@ const short HITPIX=2; //hit-tolerance in pixel
             //a correct work area is at least necessary for correct values in the position and  size dialog and for dragging area
             if(m_pDrawViewWrapper)
             {
-                Rectangle aRect(Point(0,0), m_pChartWindow->GetOutputSize());
-                m_pDrawViewWrapper->SetWorkArea( aRect );
+                m_pDrawViewWrapper->SetWorkArea(basegfx::B2DRange(0.0, 0.0, m_pChartWindow->GetOutputSize().Width(), m_pChartWindow->GetOutputSize().Height()));
             }
         }
         else
@@ -617,7 +617,8 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
     if(!m_pChartWindow || !pDrawViewWrapper )
         return;
 
-    Point   aMPos   = m_pChartWindow->PixelToLogic(rMEvt.GetPosPixel());
+    const basegfx::B2DPoint aPixelPos(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
+    const basegfx::B2DPoint aLogicPos(m_pChartWindow->GetInverseViewTransformation() * aPixelPos);
 
     if ( MOUSE_LEFT == rMEvt.GetButtons() )
     {
@@ -628,7 +629,7 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
     if( pDrawViewWrapper->IsTextEdit() )
     {
         SdrViewEvent aVEvt;
-        if ( pDrawViewWrapper->IsTextEditHit( aMPos, HITPIX ) ||
+        if ( pDrawViewWrapper->IsTextEditHit( aLogicPos, HITPIX ) ||
              // #i12587# support for shapes in chart
              ( rMEvt.IsRight() && pDrawViewWrapper->PickAnything( rMEvt, SDRMOUSEBUTTONDOWN, aVEvt ) == SDRHIT_MARKEDOBJECT ) )
         {
@@ -655,13 +656,13 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
     SdrHdl* pHitSelectionHdl = 0;
     //switch from move to resize if handle is hit on a resizeable object
     if( m_aSelection.isResizeableObjectSelected() )
-        pHitSelectionHdl = pDrawViewWrapper->PickHandle( aMPos );
+        pHitSelectionHdl = pDrawViewWrapper->PickHandle( aLogicPos );
     //only change selection if no selection handles are hit
     if( !pHitSelectionHdl )
     {
         // #i12587# support for shapes in chart
         if ( m_eDrawMode == CHARTDRAW_INSERT &&
-             ( !pDrawViewWrapper->IsMarkedHit( aMPos ) || !m_aSelection.isDragableObjectSelected() ) )
+             ( !pDrawViewWrapper->IsMarkedObjHit( aLogicPos ) || !m_aSelection.isDragableObjectSelected() ) )
         {
             if ( m_aSelection.hasSelection() )
             {
@@ -669,14 +670,13 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
             }
             if ( !pDrawViewWrapper->IsAction() )
             {
-                if ( pDrawViewWrapper->GetCurrentObjIdentifier() == OBJ_CAPTION )
+                if ( pDrawViewWrapper->getSdrObjectCreationInfo().getIdent() == OBJ_CAPTION )
                 {
-                    Size aCaptionSize( 2268, 1134 );
-                    pDrawViewWrapper->BegCreateCaptionObj( aMPos, aCaptionSize );
+                    pDrawViewWrapper->BegCreateCaptionObj( aLogicPos, basegfx::B2DVector(2268.0, 1134.0) );
                 }
                 else
                 {
-                    pDrawViewWrapper->BegCreateObj( aMPos);
+                    pDrawViewWrapper->BegCreateObj( aLogicPos );
                 }
                 SdrObject* pObj = pDrawViewWrapper->GetCreateObj();
                 DrawCommandDispatch* pDrawCommandDispatch = m_aDispatchContainer.getDrawCommandDispatch();
@@ -692,7 +692,7 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
             return;
         }
 
-        m_aSelection.adaptSelectionToNewPos( aMPos, pDrawViewWrapper
+        m_aSelection.adaptSelectionToNewPos( aLogicPos, pDrawViewWrapper
             , rMEvt.IsRight(), m_bWaitingForDoubleClick );
 
         if( !m_aSelection.isRotateableObjectSelected( getModel() ) )
@@ -707,11 +707,12 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
          && !rMEvt.IsRight() )
     {
         //start drag
-        sal_uInt16  nDrgLog = (sal_uInt16)m_pChartWindow->PixelToLogic(Size(DRGPIX,0)).Width();
+        const double fTolerance(basegfx::B2DVector(m_pChartWindow->GetInverseViewTransformation() *
+            basegfx::B2DVector(DRGPIX, 0.0)).getLength());
         SdrDragMethod* pDragMethod = NULL;
 
         //change selection to 3D scene if rotate mode
-        SdrDragMode eDragMode = pDrawViewWrapper->GetDragMode();
+        const SdrDragMode eDragMode(pDrawViewWrapper->GetDragMode());
         if( SDRDRAG_ROTATE==eDragMode )
         {
             E3dScene* pScene = SelectionHelper::getSceneToRotate( pDrawViewWrapper->getNamedSdrObject( m_aSelection.getSelectedCID() ) );
@@ -737,7 +738,7 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
             if( aDragMethodServiceName.equals( ObjectIdentifier::getPieSegmentDragMethodServiceName() ) )
                 pDragMethod = new DragMethod_PieSegment( *pDrawViewWrapper, m_aSelection.getSelectedCID(), getModel() );
         }
-        pDrawViewWrapper->SdrView::BegDragObj(aMPos, NULL, pHitSelectionHdl, nDrgLog, pDragMethod);
+        pDrawViewWrapper->SdrView::BegDragObj(aLogicPos, pHitSelectionHdl, fTolerance, pDragMethod);
     }
 
     impl_SetMousePointer( rMEvt );
@@ -759,10 +760,10 @@ void ChartController::execute_MouseMove( const MouseEvent& rMEvt )
 
     if(pDrawViewWrapper->IsAction())
     {
-        pDrawViewWrapper->MovAction( m_pChartWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
+        const basegfx::B2DPoint aPixelPos(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
+        const basegfx::B2DPoint aLogicPos(m_pChartWindow->GetInverseViewTransformation() * aPixelPos);
+        pDrawViewWrapper->MovAction(aLogicPos);
     }
-
-    //??    pDrawViewWrapper->GetPageView()->DragPoly();
 
     impl_SetMousePointer( rMEvt );
 }
@@ -785,7 +786,8 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
         if(!m_pChartWindow || !pDrawViewWrapper)
             return;
 
-        Point   aMPos   = m_pChartWindow->PixelToLogic(rMEvt.GetPosPixel());
+        const basegfx::B2DPoint aPixelPos(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
+        const basegfx::B2DPoint aMPos(m_pChartWindow->GetInverseViewTransformation() * aPixelPos);
 
         if(pDrawViewWrapper->IsTextEdit())
         {
@@ -794,7 +796,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
         }
 
         // #i12587# support for shapes in chart
-        if ( m_eDrawMode == CHARTDRAW_INSERT && pDrawViewWrapper->IsCreateObj() )
+        if ( m_eDrawMode == CHARTDRAW_INSERT && pDrawViewWrapper->GetCreateObj() )
         {
             pDrawViewWrapper->EndCreateObj( SDRCREATE_FORCEEND );
             {
@@ -802,15 +804,15 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                     // don't want the positioning Undo action to appear in the UI
                 impl_switchDiagramPositioningToExcludingPositioning();
             }
-            if ( pDrawViewWrapper->AreObjectsMarked() )
+            if ( pDrawViewWrapper->areSdrObjectsSelected() )
             {
-                if ( pDrawViewWrapper->GetCurrentObjIdentifier() == OBJ_TEXT )
+                if ( pDrawViewWrapper->getSdrObjectCreationInfo().getIdent() == OBJ_TEXT )
                 {
                     executeDispatch_EditText();
                 }
                 else
                 {
-                    SdrObject* pObj = pDrawViewWrapper->getSelectedObject();
+                    SdrObject* pObj = pDrawViewWrapper->getSelectedIfSingle();
                     if ( pObj )
                     {
                         uno::Reference< drawing::XShape > xShape( pObj->getUnoShape(), uno::UNO_QUERY );
@@ -852,16 +854,16 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                 try
                 {
                     //end move or size
-                    SdrObject* pObj = pDrawViewWrapper->getSelectedObject();
+                    SdrObject* pObj = pDrawViewWrapper->getSelectedIfSingle();
                     if( pObj )
                     {
-                        Rectangle aObjectRect = pObj->GetSnapRect();
+                        Rectangle aObjectRect(sdr::legacy::GetSnapRect(*pObj));
                         awt::Size aPageSize( ChartModelHelper::getPageSize( getModel() ) );
                         Rectangle aPageRect( 0,0,aPageSize.Width,aPageSize.Height );
 
                         const E3dObject* pE3dObject = dynamic_cast< const E3dObject*>( pObj );
                         if( pE3dObject )
-                            aObjectRect = pE3dObject->GetScene()->GetSnapRect();
+                            aObjectRect = sdr::legacy::GetSnapRect(*pE3dObject->GetScene());
 
                         ActionDescriptionProvider::ActionType eActionType(ActionDescriptionProvider::MOVE);
                         if( !bIsMoveOnly && m_aSelection.isResizeableObjectSelected() )
@@ -955,7 +957,7 @@ void ChartController::execute_DoubleClick( const Point* pMousePixel )
         {
             // #i12587# support for shapes in chart
             SdrObject* pObj = DrawViewWrapper::getSdrObject( m_aSelection.getSelectedAdditionalShape() );
-            if ( pObj && pObj->ISA( SdrTextObj ) )
+            if ( pObj && dynamic_cast< SdrTextObj* >(pObj) )
             {
                 bEditText = true;
             }
@@ -1607,7 +1609,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
 }
 
 bool ChartController::requestQuickHelp(
-    ::Point aAtLogicPosition,
+    basegfx::B2DPoint aAtLogicPosition,
     bool bIsBalloonHelp,
     ::rtl::OUString & rOutQuickHelpText,
     awt::Rectangle & rOutEqualRect )
@@ -1903,7 +1905,8 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
     ::vos::OGuard aGuard( Application::GetSolarMutex());
     if( m_pDrawViewWrapper && m_pChartWindow )
     {
-        Point aMousePos( m_pChartWindow->PixelToLogic( rEvent.GetPosPixel()));
+        const basegfx::B2DPoint aPixelPos(rEvent.GetPosPixel().X(), rEvent.GetPosPixel().Y());
+        const basegfx::B2DPoint aMousePos(m_pChartWindow->GetInverseViewTransformation() * aPixelPos);
         sal_uInt16 nModifier = rEvent.GetModifier();
         sal_Bool bLeftDown = rEvent.IsLeft();
 
@@ -1970,15 +1973,19 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
         {
             // #i12587# support for shapes in chart
             if ( m_eDrawMode == CHARTDRAW_INSERT &&
-                 ( !m_pDrawViewWrapper->IsMarkedHit( aMousePos ) || !m_aSelection.isDragableObjectSelected() ) )
+                 ( !m_pDrawViewWrapper->IsMarkedObjHit( aMousePos ) || !m_aSelection.isDragableObjectSelected() ) )
             {
                 PointerStyle ePointerStyle = POINTER_DRAW_RECT;
-                SdrObjKind eKind = static_cast< SdrObjKind >( m_pDrawViewWrapper->GetCurrentObjIdentifier() );
+                SdrObjKind eKind = static_cast< SdrObjKind >( m_pDrawViewWrapper->getSdrObjectCreationInfo().getIdent() );
                 switch ( eKind )
                 {
-                    case OBJ_LINE:
+                    case OBJ_POLY:
                         {
-                            ePointerStyle = POINTER_DRAW_LINE;
+                            switch(m_pDrawViewWrapper->getSdrObjectCreationInfo().getSdrPathObjType())
+                            {
+                                case PathType_Line: ePointerStyle = POINTER_DRAW_LINE; break;
+                                default: ePointerStyle = POINTER_DRAW_POLYGON; break;
+                            }
                         }
                         break;
                     case OBJ_RECT:
@@ -1990,11 +1997,6 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
                     case OBJ_CIRC:
                         {
                             ePointerStyle = POINTER_DRAW_ELLIPSE;
-                        }
-                        break;
-                    case OBJ_FREELINE:
-                        {
-                            ePointerStyle = POINTER_DRAW_POLYGON;
                         }
                         break;
                     case OBJ_TEXT:

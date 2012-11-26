@@ -35,8 +35,16 @@ class ScDrawLayer;
 
 class ScDrawPage: public FmFormPage
 {
+private:
+protected:
+    /// method to copy all data from given source
+    virtual void copyDataFromSdrPage(const SdrPage& rSource);
+
 public:
-    ScDrawPage(ScDrawLayer& rNewModel, StarBASIC* pBasic, sal_Bool bMasterPage=sal_False);
+    /// create a copy, evtl. with a different target model (if given)
+    virtual SdrPage* CloneSdrPage(SdrModel* pTargetModel = 0) const;
+
+    ScDrawPage(ScDrawLayer& rNewModel, StarBASIC* pBasic, bool bMasterPage = false);
     ~ScDrawPage();
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage();

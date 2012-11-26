@@ -36,9 +36,6 @@
 DBG_NAME(CntByteItem)
 
 //============================================================================
-TYPEINIT1_AUTOFACTORY(CntByteItem, SfxPoolItem);
-
-//============================================================================
 CntByteItem::CntByteItem(sal_uInt16 which, SvStream & rStream):
     SfxPoolItem(which)
 {
@@ -51,8 +48,7 @@ CntByteItem::CntByteItem(sal_uInt16 which, SvStream & rStream):
 int CntByteItem::operator ==(const SfxPoolItem & rItem) const
 {
     DBG_CHKTHIS(CntByteItem, 0);
-    DBG_ASSERT(rItem.ISA(CntByteItem),
-               "CntByteItem::operator ==(): Bad type");
+    DBG_ASSERT(dynamic_cast< const CntByteItem* >(&rItem), "CntByteItem::operator ==(): Bad type");
     return m_nValue == SAL_STATIC_CAST(const CntByteItem *, &rItem)->m_nValue;
 }
 
@@ -61,7 +57,7 @@ int CntByteItem::operator ==(const SfxPoolItem & rItem) const
 int CntByteItem::Compare(const SfxPoolItem & rWith) const
 {
     DBG_CHKTHIS(CntByteItem, 0);
-    DBG_ASSERT(rWith.ISA(CntByteItem), "CntByteItem::Compare(): Bad type");
+    DBG_ASSERT(dynamic_cast< const CntByteItem* >(&rWith), "CntByteItem::Compare(): Bad type");
     return SAL_STATIC_CAST(const CntByteItem *, &rWith)->m_nValue < m_nValue ?
             -1 :
            SAL_STATIC_CAST(const CntByteItem *, &rWith)->m_nValue
@@ -165,9 +161,6 @@ SfxFieldUnit CntByteItem::GetUnit() const
 DBG_NAME(CntUInt16Item);
 
 //============================================================================
-TYPEINIT1_AUTOFACTORY(CntUInt16Item, SfxPoolItem);
-
-//============================================================================
 CntUInt16Item::CntUInt16Item(sal_uInt16 which, SvStream & rStream) :
     SfxPoolItem(which)
 {
@@ -182,8 +175,7 @@ CntUInt16Item::CntUInt16Item(sal_uInt16 which, SvStream & rStream) :
 int CntUInt16Item::operator ==(const SfxPoolItem & rItem) const
 {
     DBG_CHKTHIS(CntUInt16Item, 0);
-    DBG_ASSERT(rItem.ISA(CntUInt16Item),
-               "CntUInt16Item::operator ==(): Bad type");
+    DBG_ASSERT(dynamic_cast< const CntUInt16Item* >(&rItem), "CntUInt16Item::operator ==(): Bad type");
     return m_nValue == SAL_STATIC_CAST(const CntUInt16Item *, &rItem)->
                         m_nValue;
 }
@@ -193,8 +185,7 @@ int CntUInt16Item::operator ==(const SfxPoolItem & rItem) const
 int CntUInt16Item::Compare(const SfxPoolItem & rWith) const
 {
     DBG_CHKTHIS(CntUInt16Item, 0);
-    DBG_ASSERT(rWith.ISA(CntUInt16Item),
-               "CntUInt16Item::Compare(): Bad type");
+    DBG_ASSERT(dynamic_cast< const CntUInt16Item* >(&rWith), "CntUInt16Item::Compare(): Bad type");
     return SAL_STATIC_CAST(const CntUInt16Item *, &rWith)->m_nValue
              < m_nValue ?
             -1 :
@@ -299,9 +290,6 @@ SfxFieldUnit CntUInt16Item::GetUnit() const
 DBG_NAME(CntInt32Item);
 
 //============================================================================
-TYPEINIT1_AUTOFACTORY(CntInt32Item, SfxPoolItem);
-
-//============================================================================
 CntInt32Item::CntInt32Item(sal_uInt16 which, SvStream & rStream) :
     SfxPoolItem(which)
 {
@@ -316,8 +304,7 @@ CntInt32Item::CntInt32Item(sal_uInt16 which, SvStream & rStream) :
 int CntInt32Item::operator ==(const SfxPoolItem & rItem) const
 {
     DBG_CHKTHIS(CntInt32Item, 0);
-    DBG_ASSERT(rItem.ISA(CntInt32Item),
-               "CntInt32Item::operator ==(): Bad type");
+    DBG_ASSERT(dynamic_cast< const CntInt32Item* >(&rItem), "CntInt32Item::operator ==(): Bad type");
     return m_nValue == SAL_STATIC_CAST(const CntInt32Item *, &rItem)->
                         m_nValue;
 }
@@ -327,7 +314,7 @@ int CntInt32Item::operator ==(const SfxPoolItem & rItem) const
 int CntInt32Item::Compare(const SfxPoolItem & rWith) const
 {
     DBG_CHKTHIS(CntInt32Item, 0);
-    DBG_ASSERT(rWith.ISA(CntInt32Item), "CntInt32Item::Compare(): Bad type");
+    DBG_ASSERT(dynamic_cast< const CntInt32Item* >(&rWith), "CntInt32Item::Compare(): Bad type");
     return SAL_STATIC_CAST(const CntInt32Item *, &rWith)->m_nValue
              < m_nValue ?
             -1 :
@@ -430,9 +417,6 @@ SfxFieldUnit CntInt32Item::GetUnit() const
 DBG_NAME(CntUInt32Item);
 
 //============================================================================
-TYPEINIT1_AUTOFACTORY(CntUInt32Item, SfxPoolItem);
-
-//============================================================================
 CntUInt32Item::CntUInt32Item(sal_uInt16 which, SvStream & rStream) :
     SfxPoolItem(which)
 {
@@ -447,8 +431,7 @@ CntUInt32Item::CntUInt32Item(sal_uInt16 which, SvStream & rStream) :
 int CntUInt32Item::operator ==(const SfxPoolItem & rItem) const
 {
     DBG_CHKTHIS(CntUInt32Item, 0);
-    DBG_ASSERT(rItem.ISA(CntUInt32Item),
-               "CntUInt32Item::operator ==(): Bad type");
+    DBG_ASSERT(dynamic_cast< const CntUInt32Item* >(&rItem), "CntUInt32Item::operator ==(): Bad type");
     return m_nValue == SAL_STATIC_CAST(const CntUInt32Item *, &rItem)->
                         m_nValue;
 }
@@ -458,8 +441,7 @@ int CntUInt32Item::operator ==(const SfxPoolItem & rItem) const
 int CntUInt32Item::Compare(const SfxPoolItem & rWith) const
 {
     DBG_CHKTHIS(CntUInt32Item, 0);
-    DBG_ASSERT(rWith.ISA(CntUInt32Item),
-               "CntUInt32Item::operator ==(): Bad type");
+    DBG_ASSERT(dynamic_cast< const CntUInt32Item* >(&rWith), "CntUInt32Item::operator ==(): Bad type");
     return SAL_STATIC_CAST(const CntUInt32Item *, &rWith)->m_nValue
              < m_nValue ?
             -1 :

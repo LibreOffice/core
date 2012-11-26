@@ -156,8 +156,8 @@ SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
     aCbxChangePage.Check( ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_CHANGE_PAGE ) ).GetValue() );
     aCbxAlwaysOnTop.Check( ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_ALWAYS_ON_TOP ) ).GetValue() );
 
-    const sal_Bool  bEndless = ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_ENDLESS ) ).GetValue();
-    const sal_Bool  bWindow = !( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_FULLSCREEN ) ).GetValue();
+    const bool  bEndless = ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_ENDLESS ) ).GetValue();
+    const bool  bWindow = !( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_FULLSCREEN ) ).GetValue();
     const long  nPause = ( ( const SfxUInt32Item& ) rOutAttrs.Get( ATTR_PRESENT_PAUSE_TIMEOUT ) ).GetValue();
 
     aTmfPause.SetTime( Time( 0, 0, nPause ) );
@@ -169,11 +169,11 @@ SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
     aCbxAutoLogo.Check( ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_SHOW_PAUSELOGO ) ).GetValue() );
 
     if( bWindow )
-        aRbtWindow.Check( sal_True );
+        aRbtWindow.Check( true );
     else if( bEndless )
-        aRbtAuto.Check( sal_True );
+        aRbtAuto.Check( true );
     else
-        aRbtStandard.Check( sal_True );
+        aRbtStandard.Check( true );
 
     InitMonitorSettings();
 
@@ -324,8 +324,8 @@ IMPL_LINK( SdStartPresentationDlg, ClickWindowPresentationHdl, void *, EMPTYARG 
 
     if( bWindow )
     {
-        aCbxAlwaysOnTop.Enable( sal_False );
-        aCbxAlwaysOnTop.Check( sal_False );
+        aCbxAlwaysOnTop.Enable( false );
+        aCbxAlwaysOnTop.Check( false );
     }
     else
         aCbxAlwaysOnTop.Enable();

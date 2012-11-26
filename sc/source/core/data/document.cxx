@@ -600,7 +600,7 @@ void ScDocument::SetLayoutRTL( SCTAB nTab, sal_Bool bRTL )
                 {
                     //  objects with ScDrawObjData are re-positioned in SetPageSize,
                     //  don't mirror again
-                    ScDrawObjData* pData = ScDrawLayer::GetObjData( pObject );
+                    ScDrawObjData* pData = ScDrawLayer::GetObjData( *pObject );
                     if ( !pData )
                         pDrawLayer->MirrorRTL( pObject );
 
@@ -4106,7 +4106,7 @@ sal_Bool ScDocument::IsStyleSheetUsed( const ScStyleSheet& rStyle, sal_Bool bGat
             for ( const SfxStyleSheetBase* pStyle = aIter.First(); pStyle;
                                            pStyle = aIter.Next() )
             {
-                const ScStyleSheet* pScStyle = PTR_CAST( ScStyleSheet, pStyle );
+                const ScStyleSheet* pScStyle = dynamic_cast< const ScStyleSheet* >( pStyle );
                 if ( pScStyle )
                     pScStyle->SetUsage( ScStyleSheet::NOTUSED );
             }

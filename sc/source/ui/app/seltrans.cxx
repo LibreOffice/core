@@ -37,6 +37,7 @@
 #include <svx/fmglob.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdouno.hxx>
+#include <svx/svdoole2.hxx>
 
 #include "seltrans.hxx"
 #include "transobj.hxx"
@@ -55,7 +56,7 @@ sal_Bool lcl_IsURLButton( SdrObject* pObject )
 {
     sal_Bool bRet = sal_False;
 
-    SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pObject);
+    SdrUnoObj* pUnoCtrl = dynamic_cast< SdrUnoObj* >( pObject);
     if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
        {
         uno::Reference<awt::XControlModel> xControlModel = pUnoCtrl->GetUnoControlModel();
@@ -93,26 +94,33 @@ ScSelectionTransferObj* ScSelectionTransferObj::CreateFromView( ScTabView* pView
         if ( pSdrView )
         {
             //  handle selection on drawing layer
-            const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-            sal_uLong nMarkCount = rMarkList.GetMarkCount();
-            if ( nMarkCount )
-            {
-                if ( nMarkCount == 1 )
-                {
-                    SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                    sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
+            const SdrObjectVector aSelection(pSdrView->getSelectedSdrObjectVectorFromSdrMarkView());
 
-                    if ( nSdrObjKind == OBJ_GRAF )
+            if(aSelection.size())
+            {
+                if(1 == aSelection.size())
+                {
+                    SdrGrafObj* pSdrGrafObj = dynamic_cast< SdrGrafObj* >(aSelection[0]);
+
+                    if ( pSdrGrafObj )
                     {
-                        if ( ((SdrGrafObj*)pObj)->GetGraphic().GetType() == GRAPHIC_BITMAP )
+                        if ( GRAPHIC_BITMAP == pSdrGrafObj->GetGraphic().GetType() )
+                    {
                             eMode = SC_SELTRANS_DRAW_BITMAP;
+                        }
                         else
+                        {
                             eMode = SC_SELTRANS_DRAW_GRAPHIC;
                     }
-                    else if ( nSdrObjKind == OBJ_OLE2 )
+                    }
+                    else if ( dynamic_cast< SdrOle2Obj* >(aSelection[0]) )
+                    {
                         eMode = SC_SELTRANS_DRAW_OLE;
-                    else if ( lcl_IsURLButton( pObj ) )
+                    }
+                    else if ( lcl_IsURLButton( aSelection[0] ) )
+                    {
                         eMode = SC_SELTRANS_DRAW_BOOKMARK;
+                }
                 }
 
                 if ( eMode == SC_SELTRANS_INVALID )
@@ -328,7 +336,7 @@ void ScSelectionTransferObj::CreateCellData()
 }
 
 //! make static member of ScDrawView
-extern void lcl_CheckOle( const SdrMarkList& rMarkList, sal_Bool& rAnyOle, sal_Bool& rOneOle );
+extern void lcl_CheckOle( const SdrObjectVector& rSelection, sal_Bool& rAnyOle, sal_Bool& rOneOle );
 
 void ScSelectionTransferObj::CreateDrawData()
 {
@@ -341,8 +349,8 @@ void ScSelectionTransferObj::CreateDrawData()
         if ( pDrawView )
         {
             sal_Bool bAnyOle, bOneOle;
-            const SdrMarkList& rMarkList = pDrawView->GetMarkedObjectList();
-            lcl_CheckOle( rMarkList, bAnyOle, bOneOle );
+            const SdrObjectVector aSelection(pDrawView->getSelectedSdrObjectVectorFromSdrMarkView());
+            lcl_CheckOle( aSelection, bAnyOle, bOneOle );
 
             //---------------------------------------------------------
             ScDocShellRef aDragShellRef;

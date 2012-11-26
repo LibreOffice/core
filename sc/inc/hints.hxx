@@ -39,7 +39,6 @@ class ScPaintHint : public SfxHint
     ScPaintHint(); // disabled
 
 public:
-                    TYPEINFO();
                     ScPaintHint( const ScRange& rRng, sal_uInt16 nPaint = PAINT_ALL );
                     ~ScPaintHint();
 
@@ -66,8 +65,6 @@ class ScUpdateRefHint : public SfxHint
     SCsTAB          nDz;
 
 public:
-                    TYPEINFO();
-
                     ScUpdateRefHint( UpdateRefMode eMode, const ScRange& rR,
                                         SCsCOL nX, SCsROW nY, SCsTAB nZ );
                     ~ScUpdateRefHint();
@@ -87,8 +84,6 @@ class ScPointerChangedHint : public SfxHint
     sal_uInt16          nFlags;
 
 public:
-                    TYPEINFO();
-
 //UNUSED2008-05     ScPointerChangedHint( sal_uInt16 nF );
                     ~ScPointerChangedHint();
 
@@ -115,7 +110,6 @@ class ScLinkRefreshedHint : public SfxHint
                             //! also use source data for area links?
 
 public:
-                    TYPEINFO();
                     ScLinkRefreshedHint();
                     ~ScLinkRefreshedHint();
 
@@ -143,7 +137,6 @@ class ScAutoStyleHint : public SfxHint
     sal_uLong       nTimeout;
 
 public:
-                    TYPEINFO();
                     ScAutoStyleHint( const ScRange& rR, const String& rSt1,
                                         sal_uLong nT, const String& rSt2 );
                     ~ScAutoStyleHint();
@@ -159,7 +152,6 @@ class ScDBRangeRefreshedHint : public SfxHint
     ScImportParam   aParam;
 
 public:
-                    TYPEINFO();
                     ScDBRangeRefreshedHint( const ScImportParam& rP );
                     ~ScDBRangeRefreshedHint();
 
@@ -171,7 +163,6 @@ class ScDataPilotModifiedHint : public SfxHint
     String          maName;
 
 public:
-                    TYPEINFO();
                     ScDataPilotModifiedHint( const String& rName );
                     ~ScDataPilotModifiedHint();
 

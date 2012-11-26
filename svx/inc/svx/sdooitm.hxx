@@ -34,7 +34,7 @@
 //------------------------------------------------------------
 class SVX_DLLPUBLIC SdrOnOffItem: public SfxBoolItem {
 public:
-    TYPEINFO();
+    POOLITEM_FACTORY()
     SdrOnOffItem(): SfxBoolItem() {}
     SdrOnOffItem(sal_uInt16 nId, sal_Bool bOn=sal_False): SfxBoolItem(nId,bOn) {}
     SdrOnOffItem(sal_uInt16 nId, SvStream& rIn):  SfxBoolItem(nId,rIn) {}

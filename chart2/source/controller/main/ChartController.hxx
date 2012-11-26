@@ -125,7 +125,7 @@ public:
         @return </sal_True>, if a quick help should be shown.
      */
     virtual bool requestQuickHelp(
-        ::Point aAtLogicPosition, bool bIsBalloonHelp,
+        basegfx::B2DPoint aAtLogicPosition, bool bIsBalloonHelp,
         ::rtl::OUString & rOutQuickHelpText, ::com::sun::star::awt::Rectangle & rOutEqualRect ) = 0;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() = 0;
@@ -457,7 +457,7 @@ public:
     virtual bool execute_KeyInput( const KeyEvent& rKEvt );
 
     virtual bool requestQuickHelp(
-        ::Point aAtLogicPosition, bool bIsBalloonHelp,
+        basegfx::B2DPoint aAtLogicPosition, bool bIsBalloonHelp,
         ::rtl::OUString & rOutQuickHelpText, ::com::sun::star::awt::Rectangle & rOutEqualRect );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();

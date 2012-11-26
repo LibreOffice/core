@@ -93,8 +93,6 @@ using namespace com::sun::star;
 #define ScPreviewShell
 #include "scslots.hxx"
 
-TYPEINIT1( ScPreviewShell, SfxViewShell );
-
 SFX_IMPL_INTERFACE( ScPreviewShell, SfxViewShell, ScResId(SCSTR_PREVIEWSHELL) )
 {
     SFX_OBJECTBAR_REGISTRATION(SFX_OBJECTBAR_OBJECT|SFX_VISIBILITY_STANDARD|
@@ -151,13 +149,14 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
 {
     Construct( &pViewFrame->GetWindow() );
 
-    if ( pOldSh && pOldSh->ISA( ScTabViewShell ) )
+    ScTabViewShell* pTabViewShell = dynamic_cast< ScTabViewShell* >(pOldSh);
+
+    if ( pTabViewShell )
     {
         //  store view settings, show table from TabView
         //! store live ScViewData instead, and update on ScTablesHint?
         //! or completely forget aSourceData on ScTablesHint?
 
-        ScTabViewShell* pTabViewShell = ((ScTabViewShell*)pOldSh);
         ScViewData* pData = pTabViewShell->GetViewData();
         pData->WriteUserDataSequence( aSourceData );
         InitStartTable( pData->GetTabNo() );

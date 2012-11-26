@@ -48,8 +48,6 @@ class XMLTrackedChangesImportContext : public SvXMLImportContext
 {
 public:
 
-    TYPEINFO();
-
     XMLTrackedChangesImportContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,

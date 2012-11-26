@@ -1676,9 +1676,10 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
             for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
             {
                 SwAnchoredObject* pAnchoredObj = rObjs[i];
-                if ( pAnchoredObj->ISA(SwFlyFrm) )
+                SwFlyFrm* pFly = dynamic_cast< SwFlyFrm* >(pAnchoredObj);
+
+                if ( pFly )
                 {
-                    SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
                     ASSERT( !pFly->IsFlyInCntFrm(), "FlyInCnt at Page?" );
                     const SwFmtVertOrient &rVert =
                                         pFly->GetFmt()->GetVertOrient();
@@ -1859,7 +1860,7 @@ void SwFrm::ValidateThisAndAllLowers( const sal_uInt16 nStage )
     const bool bOnlyObject = 1 == nStage;
     const bool bIncludeObjects = 1 <= nStage;
 
-    if ( !bOnlyObject || ISA(SwFlyFrm) )
+    if ( !bOnlyObject || dynamic_cast< SwFlyFrm* >(this) )
     {
         bValidSize = sal_True;
         bValidPrtArea = sal_True;
@@ -1875,9 +1876,9 @@ void SwFrm::ValidateThisAndAllLowers( const sal_uInt16 nStage )
             for ( sal_uInt32 i = 0; i < nCnt; ++i )
             {
                 SwAnchoredObject* pAnchObj = (*pObjs)[i];
-                if ( pAnchObj->ISA(SwFlyFrm) )
+                if ( dynamic_cast< SwFlyFrm* >(pAnchObj) )
                     static_cast<SwFlyFrm*>(pAnchObj)->ValidateThisAndAllLowers( 2 );
-                else if ( pAnchObj->ISA(SwAnchoredDrawObject) )
+                else if ( dynamic_cast< SwAnchoredDrawObject* >(pAnchObj) )
                     static_cast<SwAnchoredDrawObject*>(pAnchObj)->ValidateThis();
             }
         }
@@ -2382,9 +2383,6 @@ SwLayoutFrm::SwLayoutFrm( SwFrmFmt* pFmt, SwFrm* pSib ):
         bFixSize = sal_True;
 }
 
-// --> OD 2004-06-29 #i28701#
-TYPEINIT1(SwLayoutFrm,SwFrm);
-// <--
 /*-----------------10.06.99 09:42-------------------
  * SwLayoutFrm::InnerHeight()
  * --------------------------------------------------*/
@@ -3288,9 +3286,10 @@ static void InvaPercentFlys( SwFrm *pFrm, SwTwips nDiff )
     for ( sal_uInt16 i = 0; i < pFrm->GetDrawObjs()->Count(); ++i )
     {
         SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[i];
-        if ( pAnchoredObj->ISA(SwFlyFrm) )
+        SwFlyFrm* pFly = dynamic_cast< SwFlyFrm* >(pAnchoredObj);
+
+        if ( pFly )
         {
-            SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
             const SwFmtFrmSize &rSz = pFly->GetFmt()->GetFrmSize();
             if ( rSz.GetWidthPercent() || rSz.GetHeightPercent() )
             {
@@ -3427,9 +3426,10 @@ sal_Bool lcl_IsFlyHeightClipped( SwLayoutFrm *pLay )
             for ( sal_uInt16 i = 0; i < nCnt; ++i )
             {
                 SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[i];
-                if ( pAnchoredObj->ISA(SwFlyFrm) )
+                SwFlyFrm* pFly = dynamic_cast< SwFlyFrm* >(pAnchoredObj);
+
+                if ( pFly )
                 {
-                    SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
                     if ( pFly->IsHeightClipped() &&
                          ( !pFly->IsFlyFreeFrm() || pFly->GetPageFrm() ) )
                         return sal_True;
@@ -3932,9 +3932,10 @@ void lcl_InvalidateAllCntnt( SwCntntFrm *pCnt, sal_uInt8 nInv )
     for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
     {
         SwAnchoredObject* pAnchoredObj = rObjs[i];
-        if ( pAnchoredObj->ISA(SwFlyFrm) )
+        SwFlyFrm *pFly = dynamic_cast< SwFlyFrm* >(pAnchoredObj);
+
+        if ( pFly )
         {
-            SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
             if ( pFly->IsFlyInCntFrm() )
             {
                 ::lcl_InvalidateCntnt( pFly->ContainsCntnt(), nInv );
@@ -3964,9 +3965,10 @@ void SwRootFrm::InvalidateAllCntnt( sal_uInt8 nInv )
             for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
             {
                 SwAnchoredObject* pAnchoredObj = rObjs[i];
-                if ( pAnchoredObj->ISA(SwFlyFrm) )
+                SwFlyFrm* pFly = dynamic_cast< SwFlyFrm* >(pAnchoredObj);
+
+                if ( pFly )
                 {
-                    SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
                     ::lcl_InvalidateCntnt( pFly->ContainsCntnt(), nInv );
                     if ( nInv & INV_DIRECTION )
                         pFly->CheckDirChange();

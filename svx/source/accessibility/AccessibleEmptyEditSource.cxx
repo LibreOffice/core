@@ -44,6 +44,7 @@
 
 #include "AccessibleEmptyEditSource.hxx"
 #include <svx/unoshtxt.hxx>
+#include <svx/globaldrawitempool.hxx>
 
 namespace accessibility
 {
@@ -109,7 +110,7 @@ namespace accessibility
             // AW: Very dangerous: The former implementation used a SfxItemPool created on the
             // fly which of course was deleted again ASAP. Thus, the returned SfxItemSet was using
             // a deleted Pool by design.
-            return SfxItemSet(SdrObject::GetGlobalDrawObjectItemPool());
+            return SfxItemSet(GetGlobalDrawObjectItemPool());
         }
         SfxItemSet      GetParaAttribs( sal_uInt16 /*nPara*/ ) const { return GetAttribs(ESelection()); }
         void            SetParaAttribs( sal_uInt16 /*nPara*/, const SfxItemSet& /*rSet*/ ) {}
@@ -238,8 +239,7 @@ namespace accessibility
         mrViewWindow(rViewWindow),
         mbEditSourceEmpty( true )
     {
-        if( mrObj.GetModel() )
-            StartListening( *mrObj.GetModel() );
+        StartListening( mrObj.getSdrModelFromSdrObject() );
     }
 
     AccessibleEmptyEditSource::~AccessibleEmptyEditSource()
@@ -252,8 +252,7 @@ namespace accessibility
         }
         else
         {
-            if( mrObj.GetModel() )
-                EndListening( *mrObj.GetModel() );
+            EndListening( mrObj.getSdrModelFromSdrObject() );
         }
     }
 
@@ -276,8 +275,7 @@ namespace accessibility
     void AccessibleEmptyEditSource::Switch2ProxyEditSource()
     {
         // deregister EmptyEditSource model listener
-        if( mrObj.GetModel() )
-            EndListening( *mrObj.GetModel() );
+        EndListening( mrObj.getSdrModelFromSdrObject() );
 
         ::std::auto_ptr< SvxEditSource > pProxySource( new AccessibleProxyEditSource_Impl(mrObj, mrView, mrViewWindow) );
         ::std::auto_ptr< SvxEditSource > tmp = mpEditSource;
@@ -324,10 +322,10 @@ namespace accessibility
 
     void AccessibleEmptyEditSource::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     {
-        const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
+        const SdrBaseHint* pSdrHint = dynamic_cast< const SdrBaseHint* >(&rHint);
 
-        if( pSdrHint && pSdrHint->GetKind() == HINT_BEGEDIT &&
-            &mrObj == pSdrHint->GetObject() && mpEditSource.get() )
+        if( pSdrHint && pSdrHint->GetSdrHintKind() == HINT_BEGEDIT &&
+            &mrObj == pSdrHint->GetSdrHintObject() && mpEditSource.get() )
         {
             // switch edit source, if not yet done. This is necessary
             // to become a full-fledged EditSource the first time a
@@ -335,11 +333,11 @@ namespace accessibility
             if( mbEditSourceEmpty )
                 Switch2ProxyEditSource();
         }
-        else if (pSdrHint && pSdrHint->GetObject()!=NULL)
+        else if (pSdrHint && pSdrHint->GetSdrHintObject()!=NULL)
         {
             // When the SdrObject just got a para outliner object then
             // switch the edit source.
-            if (pSdrHint->GetObject()->GetOutlinerParaObject() != NULL)
+            if (pSdrHint->GetSdrHintObject()->GetOutlinerParaObject() != NULL)
                 Switch2ProxyEditSource();
         }
 

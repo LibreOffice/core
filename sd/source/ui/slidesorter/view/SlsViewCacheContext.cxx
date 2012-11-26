@@ -129,7 +129,7 @@ const SdrPage* ViewCacheContext::GetPage (cache::CacheKey aKey)
 
 sal_Int32 ViewCacheContext::GetPriority (cache::CacheKey aKey)
 {
-    return - (static_cast<const SdrPage*>(aKey)->GetPageNum()-1) / 2;
+    return - (static_cast<const SdrPage*>(aKey)->GetPageNumber()-1) / 2;
 }
 
 
@@ -137,7 +137,7 @@ sal_Int32 ViewCacheContext::GetPriority (cache::CacheKey aKey)
 
 model::SharedPageDescriptor ViewCacheContext::GetDescriptor (cache::CacheKey aKey)
 {
-    sal_uInt16 nPageIndex ((static_cast<const SdrPage*>(aKey)->GetPageNum() - 1) / 2);
+    sal_uInt16 nPageIndex ((static_cast<const SdrPage*>(aKey)->GetPageNumber() - 1) / 2);
     return mrModel.GetPageDescriptor(nPageIndex);
 }
 

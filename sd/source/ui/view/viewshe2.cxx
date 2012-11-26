@@ -83,7 +83,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svtools/soerr.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <svx/charthelper.hxx>
+#include <svx/svdlegacy.hxx>
 
 #ifdef _MSC_VER
 #pragma optimize ( "", off )
@@ -105,7 +105,7 @@ void ViewShell::UpdateScrollBars()
 {
     if (mpHorizontalScrollBar.get() != NULL)
     {
-        long nW = (long)(mpContentWindow->GetVisibleWidth() * 32000);
+        long nW = (long)(mpContentWindow->GetVisibleWidthRelativeToView() * 32000);
         long nX = (long)(mpContentWindow->GetVisibleX() * 32000);
         mpHorizontalScrollBar->SetVisibleSize(nW);
         mpHorizontalScrollBar->SetThumbPos(nX);
@@ -118,14 +118,14 @@ void ViewShell::UpdateScrollBars()
 
     if (mpVerticalScrollBar.get() != NULL)
     {
-        long nH = (long)(mpContentWindow->GetVisibleHeight() * 32000);
+        long nH = (long)(mpContentWindow->GetVisibleHeightRelativeToView() * 32000);
         long nY = (long)(mpContentWindow->GetVisibleY() * 32000);
 
         if(IsPageFlipMode()) // ie in zoom mode where no panning
         {
             SdPage* pPage = static_cast<DrawViewShell*>(this)->GetActualPage();
-            sal_uInt16 nCurPage = (pPage->GetPageNum() - 1) / 2;
-            sal_uInt16 nTotalPages = GetDoc()->GetSdPageCount(pPage->GetPageKind());
+            sal_uInt32 nCurPage = (pPage->GetPageNumber() - 1) / 2;
+            sal_uInt32 nTotalPages = GetDoc()->GetSdPageCount(pPage->GetPageKind());
             mpVerticalScrollBar->SetRange(Range(0,256*nTotalPages));
             mpVerticalScrollBar->SetVisibleSize(256);
             mpVerticalScrollBar->SetThumbPos(256*nCurPage);
@@ -194,10 +194,7 @@ long ViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
         Point aVisAreaPos = GetActiveWindow()->PixelToLogic( Point(0,0) );
         aVisArea.SetPos(aVisAreaPos);
         GetDocSh()->SetVisArea(aVisArea);
-
-        Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
-        Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
-        VisAreaChanged(aVisAreaWin);
+        UpdateVisAreaChanged();
 
         if (pView)
         {
@@ -238,8 +235,8 @@ long ViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
     if(IsPageFlipMode())
     {
         SdPage* pPage = static_cast<DrawViewShell*>(this)->GetActualPage();
-        sal_uInt16 nCurPage = (pPage->GetPageNum() - 1) >> 1;
-        sal_uInt16 nNewPage = (sal_uInt16)pVScroll->GetThumbPos()/256;
+        sal_uInt32 nCurPage = (pPage->GetPageNumber() - 1) >> 1;
+        sal_uInt32 nNewPage = pVScroll->GetThumbPos()/256;
         if( nCurPage != nNewPage )
             static_cast<DrawViewShell*>(this)->SwitchPage(nNewPage);
     }
@@ -262,10 +259,7 @@ long ViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
         Point aVisAreaPos = GetActiveWindow()->PixelToLogic( Point(0,0) );
         aVisArea.SetPos(aVisAreaPos);
         GetDocSh()->SetVisArea(aVisArea);
-
-        Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
-        Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
-        VisAreaChanged(aVisAreaWin);
+        UpdateVisAreaChanged();
 
         if (pView)
         {
@@ -283,7 +277,7 @@ long ViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
     return 0;
 }
 
-SvxRuler* ViewShell::CreateHRuler(::sd::Window* , sal_Bool )
+SvxRuler* ViewShell::CreateHRuler(::sd::Window* , bool )
 {
     return NULL;
 }
@@ -313,18 +307,25 @@ long ViewShell::GetHCtrlWidth()
 |*
 \************************************************************************/
 
-void ViewShell::ScrollLines(long nLinesX, long nLinesY)
+void ViewShell::ScrollLines(const basegfx::B2DVector& rDelta)
 {
-    if ( nLinesX )
+    if(!rDelta.equalZero())
     {
-        nLinesX *= mpHorizontalScrollBar->GetLineSize();
-    }
-    if ( nLinesY )
-    {
-        nLinesY *= mpVerticalScrollBar->GetLineSize();
-    }
+        sal_Int32 nLinesX(basegfx::fround(rDelta.getX()));
+        sal_Int32 nLinesY(basegfx::fround(rDelta.getY()));
 
-    Scroll(nLinesX, nLinesY);
+        if ( nLinesX )
+        {
+            nLinesX *= mpHorizontalScrollBar->GetLineSize();
+        }
+
+        if ( nLinesY )
+        {
+            nLinesY *= mpVerticalScrollBar->GetLineSize();
+        }
+
+        Scroll(nLinesX, nLinesY);
+    }
 }
 
 /*************************************************************************
@@ -356,10 +357,7 @@ void ViewShell::Scroll(long nScrollX, long nScrollY)
     Point aVisAreaPos = GetActiveWindow()->PixelToLogic( Point(0,0) );
     aVisArea.SetPos(aVisAreaPos);
     GetDocSh()->SetVisArea(aVisArea);
-
-    Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
-    Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
-    VisAreaChanged(aVisAreaWin);
+    UpdateVisAreaChanged();
 
     ::sd::View* pView = GetView();
     if (pView)
@@ -402,9 +400,7 @@ void ViewShell::SetZoom(long nZoom)
         mpContentWindow->Invalidate(INVALIDATE_CHILDREN);
     }
 
-    Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
-    Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
-    VisAreaChanged(aVisAreaWin);
+    UpdateVisAreaChanged();
 
     ::sd::View* pView = GetView();
     if (pView)
@@ -422,36 +418,34 @@ void ViewShell::SetZoom(long nZoom)
 |*
 \************************************************************************/
 
-void ViewShell::SetZoomRect(const Rectangle& rZoomRect)
+void ViewShell::SetZoomRange(const basegfx::B2DRange& rZoomRange)
 {
-    long nZoom = GetActiveWindow()->SetZoomRect(rZoomRect);
-    Fraction aUIScale(nZoom, 100);
-    aUIScale *= GetDoc()->GetUIScale();
+    double fZoom(GetActiveWindow()->SetZoomRange(rZoomRange));
 
-    Point aPos = GetActiveWindow()->GetWinViewPos();
-
-    if (mpHorizontalRuler.get() != NULL)
-        mpHorizontalRuler->SetZoom(aUIScale);
-
-    if (mpVerticalRuler.get() != NULL)
-        mpVerticalRuler->SetZoom(aUIScale);
-
-    if (mpContentWindow.get() != NULL)
+    if(mpHorizontalRuler.get())
     {
-        Point aNewPos = mpContentWindow->GetWinViewPos();
-        aNewPos.X() = aPos.X();
-        aNewPos.Y() = aPos.Y();
-        mpContentWindow->SetZoomIntegral(nZoom);
-        mpContentWindow->SetWinViewPos(aNewPos);
+        mpHorizontalRuler->SetZoom(Fraction(fZoom * 0.01 * double(GetDoc()->GetUIScale())));
+    }
+
+    if(mpVerticalRuler.get())
+    {
+        mpVerticalRuler->SetZoom(Fraction(fZoom * 0.01 * double(GetDoc()->GetUIScale())));
+    }
+
+    if(mpContentWindow.get())
+    {
+//TTTT      // WinViewPos is rescued over the SetZoomIntegral call indirectly in the
+//      // old code, doing the same here
+//        const basegfx::B2DPoint aWinViewPos(mpContentWindow->GetWinViewPos());
+        mpContentWindow->SetZoomIntegral(fZoom);
+//        mpContentWindow->SetWinViewPos(aWinViewPos);
         mpContentWindow->UpdateMapOrigin();
 
         // #i74769# see above
         mpContentWindow->Invalidate(INVALIDATE_CHILDREN);
     }
 
-    Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
-    Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
-    VisAreaChanged(aVisAreaWin);
+    UpdateVisAreaChanged();
 
     ::sd::View* pView = GetView();
     if (pView)
@@ -468,8 +462,7 @@ void ViewShell::SetZoomRect(const Rectangle& rZoomRect)
 |*
 \************************************************************************/
 
-void ViewShell::InitWindows(const Point& rViewOrigin, const Size& rViewSize,
-                              const Point& rWinPos, sal_Bool bUpdate)
+void ViewShell::InitWindows(const basegfx::B2DPoint& rViewOrigin, const basegfx::B2DVector& rViewSize, const basegfx::B2DPoint& rWinPos, bool bUpdate)
 {
     if (mpContentWindow.get() != NULL)
     {
@@ -484,9 +477,7 @@ void ViewShell::InitWindows(const Point& rViewOrigin, const Size& rViewSize,
         }
     }
 
-    Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
-    Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
-    VisAreaChanged(aVisAreaWin);
+    UpdateVisAreaChanged();
 
     ::sd::View* pView = GetView();
     if (pView)
@@ -515,11 +506,15 @@ void ViewShell::InvalidateWindows()
 |*
 \************************************************************************/
 
-void ViewShell::DrawMarkRect(const Rectangle& rRect) const
+void ViewShell::DrawMarkRange(const basegfx::B2DRange& rRange) const
 {
     if (mpContentWindow.get() != NULL)
     {
-        mpContentWindow->InvertTracking(rRect, SHOWTRACK_OBJECT | SHOWTRACK_WINDOW);
+        const Rectangle aRectangle(
+            basegfx::fround(rRange.getMinX()), basegfx::fround(rRange.getMinY()),
+            basegfx::fround(rRange.getMaxX()), basegfx::fround(rRange.getMaxY()));
+
+        mpContentWindow->InvertTracking(aRectangle, SHOWTRACK_OBJECT | SHOWTRACK_WINDOW);
     }
 }
 
@@ -529,11 +524,12 @@ void ViewShell::DrawMarkRect(const Rectangle& rRect) const
 |*
 \************************************************************************/
 
-void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
-                                       long nLeft, long nRight,
-                                       long nUpper, long nLower, sal_Bool bScaleAll,
+void ViewShell::SetPageSizeAndBorder(
+    PageKind ePageKind, const basegfx::B2DVector& rNewSize,
+    double fLeft, double fRight,
+    double fTop, double fBottom, bool bScaleAll,
                                        Orientation eOrientation, sal_uInt16 nPaperBin,
-                                       sal_Bool bBackgroundFullSize)
+    bool bBackgroundFullSize)
 {
     SdPage* pPage = 0;
     SdUndoGroup* pUndoGroup = NULL;
@@ -542,9 +538,7 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
     pUndoGroup->SetComment(aString);
     SfxViewShell* pViewShell = GetViewShell();
     OSL_ASSERT (pViewShell!=NULL);
-
-    sal_uInt16 i, nPageCnt = GetDoc()->GetMasterSdPageCount(ePageKind);
-
+    sal_uInt32 i, nPageCnt = GetDoc()->GetMasterSdPageCount(ePageKind);
     Broadcast (ViewShellHint(ViewShellHint::HINT_PAGE_RESIZE_START));
 
     for (i = 0; i < nPageCnt; i++)
@@ -555,35 +549,37 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
         pPage = GetDoc()->GetMasterSdPage(i, ePageKind);
 
         SdUndoAction* pUndo = new SdPageFormatUndoAction(GetDoc(), pPage,
-                            pPage->GetSize(),
-                            pPage->GetLftBorder(), pPage->GetRgtBorder(),
-                            pPage->GetUppBorder(), pPage->GetLwrBorder(),
+                            pPage->GetPageScale(),
+                            pPage->GetLeftPageBorder(),
+                            pPage->GetRightPageBorder(),
+                            pPage->GetTopPageBorder(),
+                            pPage->GetBottomPageBorder(),
                             pPage->IsScaleObjects(),
                             pPage->GetOrientation(),
                             pPage->GetPaperBin(),
                             pPage->IsBackgroundFullSize(),
                             rNewSize,
-                            nLeft, nRight,
-                            nUpper, nLower,
+                            fLeft,
+                            fRight,
+                            fTop,
+                            fBottom,
                             bScaleAll,
                             eOrientation,
                             nPaperBin,
                             bBackgroundFullSize);
         pUndoGroup->AddAction(pUndo);
 
-        if (rNewSize.Width() > 0 ||
-            nLeft  >= 0 || nRight >= 0 || nUpper >= 0 || nLower >= 0)
+        if (rNewSize.getX() > 0.0 || fLeft  >= 0.0 || fRight >= 0.0 || fTop >= 0.0 || fBottom >= 0.0)
         {
-            Rectangle aNewBorderRect(nLeft, nUpper, nRight, nLower);
-            pPage->ScaleObjects(rNewSize, aNewBorderRect, bScaleAll);
+            pPage->ScaleObjects(rNewSize, fLeft, fTop, fRight, fBottom, bScaleAll);
 
-            if (rNewSize.Width() > 0)
-                pPage->SetSize(rNewSize);
+            if (rNewSize.getX() > 0.0)
+                pPage->SetPageScale(rNewSize);
         }
 
-        if( nLeft  >= 0 || nRight >= 0 || nUpper >= 0 || nLower >= 0 )
+        if( fLeft  >= 0.0 || fRight >= 0.0 || fTop >= 0.0 || fBottom >= 0.0 )
         {
-            pPage->SetBorder(nLeft, nUpper, nRight, nLower);
+            pPage->SetPageBorder(fLeft, fTop, fRight, fBottom);
         }
 
         pPage->SetOrientation(eOrientation);
@@ -606,35 +602,37 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
         pPage = GetDoc()->GetSdPage(i, ePageKind);
 
         SdUndoAction* pUndo = new SdPageFormatUndoAction(GetDoc(), pPage,
-                                pPage->GetSize(),
-                                pPage->GetLftBorder(), pPage->GetRgtBorder(),
-                                pPage->GetUppBorder(), pPage->GetLwrBorder(),
+                                pPage->GetPageScale(),
+                                pPage->GetLeftPageBorder(),
+                                pPage->GetRightPageBorder(),
+                                pPage->GetTopPageBorder(),
+                                pPage->GetBottomPageBorder(),
                                 pPage->IsScaleObjects(),
                                 pPage->GetOrientation(),
                                 pPage->GetPaperBin(),
                                 pPage->IsBackgroundFullSize(),
                                 rNewSize,
-                                nLeft, nRight,
-                                nUpper, nLower,
+                                fLeft,
+                                fRight,
+                                fTop,
+                                fBottom,
                                 bScaleAll,
                                 eOrientation,
                                 nPaperBin,
                                 bBackgroundFullSize);
         pUndoGroup->AddAction(pUndo);
 
-        if (rNewSize.Width() > 0 ||
-            nLeft  >= 0 || nRight >= 0 || nUpper >= 0 || nLower >= 0)
+        if (rNewSize.getX() > 0.0 || fLeft  >= 0.0 || fRight >= 0.0 || fTop >= 0.0 || fBottom >= 0.0)
         {
-            Rectangle aNewBorderRect(nLeft, nUpper, nRight, nLower);
-            pPage->ScaleObjects(rNewSize, aNewBorderRect, bScaleAll);
+            pPage->ScaleObjects(rNewSize, fLeft, fTop, fRight, fBottom, bScaleAll);
 
-            if (rNewSize.Width() > 0)
-                pPage->SetSize(rNewSize);
+            if (rNewSize.getX() > 0.0)
+                pPage->SetPageScale(rNewSize);
         }
 
-        if( nLeft  >= 0 || nRight >= 0 || nUpper >= 0 || nLower >= 0 )
+        if( fLeft  >= 0.0 || fRight >= 0.0 || fTop >= 0.0 || fBottom >= 0.0 )
         {
-            pPage->SetBorder(nLeft, nUpper, nRight, nLower);
+            pPage->SetPageBorder(fLeft, fTop, fRight, fBottom);
         }
 
         pPage->SetOrientation(eOrientation);
@@ -652,39 +650,40 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
 
     // Handoutseite an neues Format der Standardseiten anpassen
     if( (ePageKind == PK_STANDARD) || (ePageKind == PK_HANDOUT) )
-        GetDoc()->GetSdPage(0, PK_HANDOUT)->CreateTitleAndLayout(sal_True);
+        GetDoc()->GetSdPage(0, PK_HANDOUT)->CreateTitleAndLayout(true);
 
     // Undo Gruppe dem Undo Manager uebergeben
     pViewShell->GetViewFrame()->GetObjectShell()
         ->GetUndoManager()->AddUndoAction(pUndoGroup);
 
-    long nWidth = pPage->GetSize().Width();
-    long nHeight = pPage->GetSize().Height();
+    const basegfx::B2DPoint aPageOrg(pPage->GetPageScale().getX(), pPage->GetPageScale().getY() * 0.5);
+    const basegfx::B2DVector aViewSize(pPage->GetPageScale().getX() * 3.0, pPage->GetPageScale().getY() * 2.0);
+    basegfx::B2DPoint aVisAreaPos(0.0, 0.0);
 
-    Point aPageOrg = Point(nWidth, nHeight / 2);
-    Size aViewSize = Size(nWidth * 3, nHeight * 2);
-
-    InitWindows(aPageOrg, aViewSize, Point(-1, -1), sal_True);
-
-    Point aVisAreaPos;
+    InitWindows(aPageOrg, aViewSize, basegfx::B2DPoint(-1.0, -1.0), true);
 
     if ( GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
     {
-        aVisAreaPos = GetDocSh()->GetVisArea(ASPECT_CONTENT).TopLeft();
+        const Point aOldTopLeft(GetDocSh()->GetVisArea(ASPECT_CONTENT).TopLeft());
+
+        aVisAreaPos = basegfx::B2DPoint(aOldTopLeft.X(), aOldTopLeft.Y());
     }
 
     ::sd::View* pView = GetView();
+
     if (pView)
     {
-        pView->SetWorkArea(Rectangle(Point() - aVisAreaPos - aPageOrg, aViewSize));
+        const basegfx::B2DPoint aTopLeft(-aVisAreaPos.getX() - aPageOrg.getX(), -aVisAreaPos.getY() - aPageOrg.getY());
+        const basegfx::B2DRange aRange(aTopLeft, aTopLeft + aViewSize);
+
+        pView->SetWorkArea(aRange);
     }
 
     UpdateScrollBars();
 
-    Point aNewOrigin(pPage->GetLftBorder(), pPage->GetUppBorder());
-
-    if (pView)
+    if (pView && pView->GetSdrPageView() )
     {
+        const basegfx::B2DPoint aNewOrigin(pPage->GetLeftPageBorder(), pPage->GetTopPageBorder());
         pView->GetSdrPageView()->SetPageOrigin(aNewOrigin);
     }
 
@@ -742,7 +741,7 @@ void ViewShell::SetActiveWindow (::sd::Window* pWin)
     ::sd::View* pView = GetView();
     if (pView)
     {
-        pView->SetActualWin(pWin);
+        pView->SetActualOutDev(pWin);
     }
     if(HasCurrentFunction())
     {
@@ -758,9 +757,9 @@ void ViewShell::SetActiveWindow (::sd::Window* pWin)
 |*
 \************************************************************************/
 
-sal_Bool ViewShell::RequestHelp(const HelpEvent& rHEvt, ::sd::Window*)
+bool ViewShell::RequestHelp(const HelpEvent& rHEvt, ::sd::Window*)
 {
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     if (rHEvt.GetMode())
     {
@@ -824,13 +823,13 @@ void ViewShell::WriteFrameViewData()
 |*
 \************************************************************************/
 
-sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
+bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 {
     ErrCode aErrCode = 0;
 
     SfxErrorContext aEC(ERRCTX_SO_DOVERB, GetActiveWindow(), RID_SO_ERRCTX);
-    sal_Bool bAbort = sal_False;
-    GetDocSh()->SetWaitCursor( sal_True );
+    bool bAbort = false;
+    GetDocSh()->SetWaitCursor( true );
     SfxViewShell* pViewShell = GetViewShell();
     OSL_ASSERT (pViewShell!=NULL);
     bool bChangeDefaultsForChart = false;
@@ -872,16 +871,16 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
             aName = String();
 
             // Dialog "OLE-Objekt einfuegen" aufrufen
-            GetDocSh()->SetWaitCursor( sal_False );
+            GetDocSh()->SetWaitCursor( false );
             pViewShell->GetViewFrame()->GetDispatcher()->Execute(
                 SID_INSERT_OBJECT,
                 SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
             xObj = pObj->GetObjRef();
-            GetDocSh()->SetWaitCursor( sal_True );
+            GetDocSh()->SetWaitCursor( true );
 
             if (!xObj.is())
             {
-                bAbort = sal_True;
+                bAbort = true;
             }
         }
 
@@ -890,7 +889,7 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
             /******************************************************
             * OLE-Objekt ist nicht mehr leer
             ******************************************************/
-            pObj->SetEmptyPresObj(sal_False);
+            pObj->SetEmptyPresObj(false);
             pObj->SetOutlinerParaObject(NULL);
             pObj->SetGraphic(NULL);
 
@@ -909,7 +908,7 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
                 pObj->SetObjRef(xObj);
             }
 
-            Rectangle aRect = pObj->GetLogicRect();
+            const Rectangle aRect(sdr::legacy::GetLogicRect(*pObj));
 
             if ( pObj->GetAspect() != embed::Aspects::MSOLE_ICON )
             {
@@ -947,19 +946,21 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
             pSdClient = new Client(pObj, this, GetActiveWindow());
         }
 
-        Rectangle aRect = pObj->GetLogicRect();
+        Rectangle aRect(sdr::legacy::GetLogicRect(*pObj));
 
         {
             // #i118485# center on BoundRect for activation,
             // OLE may be sheared/rotated now
-            const Rectangle& rBoundRect = pObj->GetCurrentBoundRect();
-            const Point aDelta(rBoundRect.Center() - aRect.Center());
-            aRect.Move(aDelta.X(), aDelta.Y());
+            const basegfx::B2DRange& rObjectRange = pObj->getObjectRange(GetView());
+
+            aRect.Move(
+                basegfx::fround(rObjectRange.getCenterX()) - aRect.Center().X(),
+                basegfx::fround(rObjectRange.getCenterY()) - aRect.Center().Y());
         }
 
         Size aDrawSize = aRect.GetSize();
 
-        MapMode aMapMode( GetDoc()->GetScaleUnit() );
+        MapMode aMapMode( GetDoc()->GetExchangeObjectUnit() );
         Size aObjAreaSize = pObj->GetOrigObjSize( &aMapMode );
         if( pObj->IsChart() ) //charts never should be stretched see #i84323# for example
             aObjAreaSize = aDrawSize;
@@ -977,15 +978,15 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 
         if( bChangeDefaultsForChart && xObj.is())
         {
-            ChartHelper::AdaptDefaultsForChart( xObj );
+            AdaptDefaultsForChart( xObj );
         }
 
         pSdClient->DoVerb(nVerb);   // ErrCode wird ggf. vom Sfx ausgegeben
         pViewShell->GetViewFrame()->GetBindings().Invalidate(
-            SID_NAVIGATOR_STATE, sal_True, sal_False);
+            SID_NAVIGATOR_STATE, true, false);
     }
 
-    GetDocSh()->SetWaitCursor( sal_False );
+    GetDocSh()->SetWaitCursor( false );
 
     if (aErrCode != 0 && !bAbort)
     {
@@ -1039,7 +1040,7 @@ void ViewShell::WriteUserData(String&)
 |*
 \************************************************************************/
 
-void ViewShell::SetRuler(sal_Bool bRuler)
+void ViewShell::SetRuler(bool bRuler)
 {
     mbHasRulers = ( bRuler && !GetDocSh()->IsPreview() ); // no rulers on preview mode
 
@@ -1082,11 +1083,11 @@ sal_Int8 ViewShell::AcceptDrop (
     const AcceptDropEvent& rEvt,
     DropTargetHelper& rTargetHelper,
     ::sd::Window* pTargetWindow,
-    sal_uInt16 nPage,
-    sal_uInt16 nLayer)
+    sal_uInt32 nPage,
+    SdrLayerID aLayer)
 {
     ::sd::View* pView = GetView();
-    return( pView ? pView->AcceptDrop( rEvt, rTargetHelper, pTargetWindow, nPage, nLayer ) : DND_ACTION_NONE );
+    return( pView ? pView->AcceptDrop( rEvt, rTargetHelper, pTargetWindow, nPage, aLayer ) : DND_ACTION_NONE );
 }
 
 /*************************************************************************
@@ -1099,11 +1100,11 @@ sal_Int8 ViewShell::ExecuteDrop (
     const ExecuteDropEvent& rEvt,
     DropTargetHelper& rTargetHelper,
     ::sd::Window* pTargetWindow,
-    sal_uInt16 nPage,
-    sal_uInt16 nLayer)
+    sal_uInt32 nPage,
+    SdrLayerID aLayer)
 {
     ::sd::View* pView = GetView();
-    return( pView ? pView->ExecuteDrop( rEvt, rTargetHelper, pTargetWindow, nPage, nLayer ) : DND_ACTION_NONE );
+    return( pView ? pView->ExecuteDrop( rEvt, rTargetHelper, pTargetWindow, nPage, aLayer ) : DND_ACTION_NONE );
 }
 
 #ifdef _MSC_VER
@@ -1145,7 +1146,7 @@ void ViewShell::VisAreaChanged(const Rectangle& rRect)
     GetViewShell()->VisAreaChanged(rRect);
 }
 
-void ViewShell::SetWinViewPos(const Point& rWinPos, bool bUpdate)
+void ViewShell::SetWinViewPos(const basegfx::B2DPoint& rWinPos, bool bUpdate)
 {
     if (mpContentWindow.get() != NULL)
     {
@@ -1165,10 +1166,7 @@ void ViewShell::SetWinViewPos(const Point& rWinPos, bool bUpdate)
     }
 
     UpdateScrollBars();
-
-    Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
-    Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
-    VisAreaChanged(aVisAreaWin);
+    UpdateVisAreaChanged();
 
     ::sd::View* pView = GetView();
     if (pView)
@@ -1177,14 +1175,50 @@ void ViewShell::SetWinViewPos(const Point& rWinPos, bool bUpdate)
     }
 }
 
-Point ViewShell::GetWinViewPos() const
+basegfx::B2DPoint ViewShell::GetWinViewPos() const
 {
     return mpContentWindow->GetWinViewPos();
 }
 
-Point ViewShell::GetViewOrigin() const
+basegfx::B2DPoint ViewShell::GetViewOrigin() const
 {
     return mpContentWindow->GetViewOrigin();
+}
+
+void ViewShell::AdaptDefaultsForChart(
+    const uno::Reference < embed::XEmbeddedObject > & xEmbObj )
+{
+    if( xEmbObj.is())
+    {
+        uno::Reference< chart2::XChartDocument > xChartDoc( xEmbObj->getComponent(), uno::UNO_QUERY );
+        OSL_ENSURE( xChartDoc.is(), "Trying to set chart property to non-chart OLE" );
+        if( !xChartDoc.is())
+            return;
+
+        try
+        {
+            // set background to transparent (none)
+            uno::Reference< beans::XPropertySet > xPageProp( xChartDoc->getPageBackground());
+            if( xPageProp.is())
+                xPageProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FillStyle")),
+                                             uno::makeAny( drawing::FillStyle_NONE ));
+            // set no border
+            if( xPageProp.is())
+                xPageProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("LineStyle")),
+                                             uno::makeAny( drawing::LineStyle_NONE ));
+        }
+        catch( const uno::Exception & )
+        {
+            OSL_ENSURE( false, "Exception caught in AdaptDefaultsForChart" );
+        }
+    }
+}
+
+void ViewShell::UpdateVisAreaChanged()
+{
+    Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
+    Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
+    VisAreaChanged(aVisAreaWin);
 }
 
 } // end of namespace sd

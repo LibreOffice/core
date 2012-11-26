@@ -38,10 +38,8 @@
 class EDITENG_DLLPUBLIC SvxContourItem : public SfxBoolItem
 {
 public:
-    TYPEINFO();
-
-    SvxContourItem( const sal_Bool bContoured /*= sal_False*/,
-                    const sal_uInt16 nId );
+    POOLITEM_FACTORY()
+    SvxContourItem( const sal_Bool bContoured = sal_False, const sal_uInt16 nId = 0 );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;

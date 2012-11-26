@@ -577,8 +577,8 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
                 const long          nHeight = aSize.Height();
                 const long          nHeight2 = nHeight - 2L;
                 const long          lThres2 = (long) cThreshold * cThreshold;
-                const sal_uInt8 nWhitePalIdx = pWriteAcc->GetBestPaletteIndex( Color( COL_WHITE ) );
-                const sal_uInt8 nBlackPalIdx = pWriteAcc->GetBestPaletteIndex( Color( COL_BLACK ) );
+                const sal_uInt8 nWhitePalIdx = static_cast< sal_uInt8 >(pWriteAcc->GetBestPaletteIndex( Color( COL_WHITE ) ));
+                const sal_uInt8 nBlackPalIdx = static_cast< sal_uInt8 >(pWriteAcc->GetBestPaletteIndex( Color( COL_BLACK ) ));
                 long                nSum1;
                 long                nSum2;
                 long                lGray;

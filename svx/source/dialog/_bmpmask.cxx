@@ -40,6 +40,7 @@
 #include <svx/svxids.hrc>
 
 //-------------------------------------------------------------------------
+// TTTT: needed?
 
 #define BMP_RESID(nId)  ResId(nId, DIALOG_MGR())
 #define TRANSP_STRING   "Transparent"
@@ -377,7 +378,7 @@ void SvxBmpMaskSelectItem::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*
 {
     if ( ( nSID == SID_BMPMASK_EXEC ) && pItem )
     {
-        const SfxBoolItem* pStateItem = PTR_CAST( SfxBoolItem, pItem );
+        const SfxBoolItem* pStateItem = dynamic_cast< const SfxBoolItem* >( pItem );
 
         DBG_ASSERT( pStateItem || pItem == 0, "SfxBoolItem erwartet");
 

@@ -155,7 +155,7 @@ void SwModule::StateOther(SfxItemSet &rSet)
     sal_uInt16 nWhich = aIter.FirstWhich();
 
     SwView* pActView = ::GetActiveView();
-    sal_Bool bWebView = 0 != PTR_CAST(SwWebView, pActView);
+    sal_Bool bWebView = 0 != dynamic_cast< SwWebView* >( pActView);
 
     while(nWhich)
     {
@@ -167,7 +167,7 @@ void SwModule::StateOther(SfxItemSet &rSet)
             {
                 sal_Bool bDisable = sal_False;
                 SfxViewShell* pCurrView = SfxViewShell::Current();
-                if( !pCurrView || (pCurrView && !pCurrView->ISA(SwView)) )
+                if( !pCurrView || (pCurrView && !dynamic_cast< SwView* >(pCurrView)) )
                     bDisable = sal_True;
                 SwDocShell *pDocSh = (SwDocShell*) SfxObjectShell::Current();
                 if ( bDisable ||
@@ -230,9 +230,9 @@ SwView* lcl_LoadDoc(SwView* pView, const String& rURL)
             SfxViewShell* pViewShell = pShell->GetViewShell();
             if(pViewShell)
             {
-                if( pViewShell->ISA(SwView) )
+                pNewView = dynamic_cast< SwView* >(pViewShell);
+                if( pNewView )
                 {
-                    pNewView = PTR_CAST(SwView,pViewShell);
                     pNewView->GetViewFrame()->GetFrame().Appear();
                 }
                 else
@@ -250,7 +250,7 @@ SwView* lcl_LoadDoc(SwView* pView, const String& rURL)
                                 SFX_CALLMODE_SYNCHRON, &aFactory, 0L);
         SfxFrame* pFrm = pItem ? pItem->GetFrame() : 0;
         SfxViewFrame* pFrame = pFrm ? pFrm->GetCurrentViewFrame() : 0;
-        pNewView = pFrame ? PTR_CAST(SwView, pFrame->GetViewShell()) : 0;
+        pNewView = pFrame ? dynamic_cast< SwView* >( pFrame->GetViewShell()) : 0;
     }
 
     return pNewView;
@@ -645,7 +645,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
                 case FUNIT_POINT:
                 {
                     SwView* pActView = ::GetActiveView();
-                    sal_Bool bWebView = 0 != PTR_CAST(SwWebView, pActView);
+                    sal_Bool bWebView = 0 != dynamic_cast< SwWebView* >( pActView);
                     ::SetDfltMetric(eUnit, bWebView);
                 }
                 break;
@@ -656,7 +656,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
 
         case FN_SET_MODOPT_TBLNUMFMT:
             {
-                sal_Bool bWebView = 0 != PTR_CAST(SwWebView, ::GetActiveView() ),
+                sal_Bool bWebView = 0 != dynamic_cast< SwWebView* >( ::GetActiveView() ),
                      bSet;
 
                 if( pArgs && SFX_ITEM_SET == pArgs->GetItemState(
@@ -685,14 +685,16 @@ void SwModule::ExecOther(SfxRequest& rReq)
     // Hint abfangen fuer DocInfo
 void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    if( rHint.ISA( SfxEventHint ) )
+    const SfxEventHint* pSfxEventHint = dynamic_cast< const SfxEventHint* >(&rHint);
+
+    if( pSfxEventHint )
     {
-        SfxEventHint& rEvHint = (SfxEventHint&) rHint;
-        SwDocShell* pDocSh = PTR_CAST( SwDocShell, rEvHint.GetObjShell() );
+        SwDocShell* pDocSh = dynamic_cast< SwDocShell* >(pSfxEventHint->GetObjShell());
+
         if( pDocSh )
         {
             SwWrtShell* pWrtSh = pDocSh ? pDocSh->GetWrtShell() : 0;
-            switch( rEvHint.GetEventId() )
+            switch( pSfxEventHint->GetEventId() )
             {
             case SFX_EVENT_LOADFINISHED:
                 OSL_ASSERT(!pWrtSh);
@@ -700,9 +702,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 // update fixed fields
                 if (pDocSh->GetMedium())
                 {
-                    SFX_ITEMSET_ARG( pDocSh->GetMedium()->GetItemSet(),
-                        pTemplateItem, SfxBoolItem,
-                        SID_TEMPLATE, sal_False);
+                    SFX_ITEMSET_ARG( pDocSh->GetMedium()->GetItemSet(), pTemplateItem, SfxBoolItem, SID_TEMPLATE);
                     if (pTemplateItem && pTemplateItem->GetValue())
                     {
                         pDocSh->GetDoc()->SetFixFields(false, 0);
@@ -712,7 +712,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             case SFX_EVENT_CREATEDOC:
                 if( pWrtSh )
                 {
-                    SFX_ITEMSET_ARG( pDocSh->GetMedium()->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
+                    SFX_ITEMSET_ARG( pDocSh->GetMedium()->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE );
                     sal_Bool bUpdateFields = sal_True;
                     if( pUpdateDocItem &&  pUpdateDocItem->GetValue() == document::UpdateDocMode::NO_UPDATE)
                         bUpdateFields = sal_False;
@@ -736,9 +736,13 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             }
         }
     }
-    else if(rHint.ISA(SfxItemSetHint))
+    else
     {
-        if( SFX_ITEM_SET == ((SfxItemSetHint&)rHint).GetItemSet().GetItemState(SID_ATTR_PATHNAME))
+        const SfxItemSetHint* pSfxItemSetHint = dynamic_cast< const SfxItemSetHint* >(&rHint);
+
+        if(pSfxItemSetHint)
+    {
+            if( SFX_ITEM_SET == pSfxItemSetHint->GetItemSet().GetItemState(SID_ATTR_PATHNAME))
         {
             ::GetGlossaries()->UpdateGlosPath( sal_False );
             SwGlossaryList* pList = ::GetGlossaryList();
@@ -746,9 +750,13 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 pList->Update();
         }
     }
-    else if(rHint.ISA(SfxSimpleHint))
+        else
+        {
+            const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+            if(pSfxSimpleHint)
     {
-        sal_uInt16 nHintId = ((SfxSimpleHint&)rHint).GetId();
+                sal_uInt16 nHintId = pSfxSimpleHint->GetId();
         if(SFX_HINT_DEINITIALIZING == nHintId)
         {
             DELETEZ(pWebUsrPref);
@@ -791,6 +799,8 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         }
     }
 }
+    }
+}
 
 void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal_uInt32 )
 {
@@ -803,14 +813,11 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal
         sal_Int32 const nNew = GetUndoOptions().GetUndoCount();
         bool const bUndo = (nNew != 0);
         // switch Undo for all DocShells
-        TypeId aType(TYPE(SwDocShell));
-        SwDocShell * pDocShell =
-            static_cast<SwDocShell *>(SfxObjectShell::GetFirst(&aType));
+        SwDocShell * pDocShell = static_cast< SwDocShell* >(SfxObjectShell::GetFirst(_IsObjectShell< SwDocShell >));
         while (pDocShell)
         {
             pDocShell->GetDoc()->GetIDocumentUndoRedo().DoUndo(bUndo);
-            pDocShell = static_cast<SwDocShell *>(
-                    SfxObjectShell::GetNext(*pDocShell, &aType));
+            pDocShell = static_cast< SwDocShell* >(SfxObjectShell::GetNext(*pDocShell, _IsObjectShell< SwDocShell >));
         }
     }
     else if ( pBrdCst == pColorConfig || pBrdCst == pAccessibilityOptions )
@@ -822,24 +829,22 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal
             bAccessibility = sal_True;
 
         //invalidate all edit windows
-        const TypeId aSwViewTypeId = TYPE(SwView);
-        const TypeId aSwPreViewTypeId = TYPE(SwPagePreView);
-        const TypeId aSwSrcViewTypeId = TYPE(SwSrcView);
         SfxViewShell* pViewShell = SfxViewShell::GetFirst();
         while(pViewShell)
         {
             if(pViewShell->GetWindow())
             {
-                if((pViewShell->IsA(aSwViewTypeId) ||
-                    pViewShell->IsA(aSwPreViewTypeId) ||
-                    pViewShell->IsA(aSwSrcViewTypeId)))
+                SwView* pSwView = dynamic_cast< SwView* >(this);
+                SwPagePreView* pSwPagePreView = dynamic_cast< SwPagePreView* >(this);
+
+                if(pSwView || pSwPagePreView || dynamic_cast< SwSrcView* >(this))
                 {
                     if(bAccessibility)
                     {
-                        if(pViewShell->IsA(aSwViewTypeId))
-                            ((SwView*)pViewShell)->ApplyAccessiblityOptions(*pAccessibilityOptions);
-                        else if(pViewShell->IsA(aSwPreViewTypeId))
-                            ((SwPagePreView*)pViewShell)->ApplyAccessiblityOptions(*pAccessibilityOptions);
+                        if(pSwView)
+                            pSwView->ApplyAccessiblityOptions(*pAccessibilityOptions);
+                        else if(pSwPagePreView)
+                            pSwPagePreView->ApplyAccessiblityOptions(*pAccessibilityOptions);
                     }
                     pViewShell->GetWindow()->Invalidate();
                 }
@@ -852,7 +857,7 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal
         const SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();
         while( pObjSh )
         {
-            if( pObjSh->IsA(TYPE(SwDocShell)) )
+            if( dynamic_cast< const SwDocShell* >(pObjSh) )
             {
                 const SwDoc* pDoc = ((SwDocShell*)pObjSh)->GetDoc();
                 ViewShell* pVSh = 0;

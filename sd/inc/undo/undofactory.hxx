@@ -32,10 +32,10 @@ namespace sd
 class UndoFactory : public SdrUndoFactory
 {
 public:
-    virtual SdrUndoAction* CreateUndoRemoveObject( SdrObject& rObject, bool bOrdNumDirect = false);
-    virtual SdrUndoAction* CreateUndoDeleteObject( SdrObject& rObject, bool bOrdNumDirect = false);
+    virtual SdrUndoAction* CreateUndoRemoveObject( SdrObject& rObject );
+    virtual SdrUndoAction* CreateUndoDeleteObject( SdrObject& rObject );
     virtual SdrUndoAction* CreateUndoObjectSetText( SdrObject& rNewObj, sal_Int32 nText );
-    virtual SdrUndoAction* CreateUndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject, bool bOrdNumDirect = false );
+    virtual SdrUndoAction* CreateUndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject );
     virtual SdrUndoAction* CreateUndoGeoObject( SdrObject& rObject );
     virtual SdrUndoAction* CreateUndoAttrObject( SdrObject& rObject, bool bStyleSheet1 = false, bool bSaveText = false );
 };

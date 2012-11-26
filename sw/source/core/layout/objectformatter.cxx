@@ -287,7 +287,7 @@ void SwObjectFormatter::_FormatLayout( SwLayoutFrm& _rLayoutFrm )
 */
 void SwObjectFormatter::_FormatObjCntnt( SwAnchoredObject& _rAnchoredObj )
 {
-    if ( !_rAnchoredObj.ISA(SwFlyFrm) )
+    if ( !dynamic_cast< SwFlyFrm* >(&_rAnchoredObj) )
     {
         // only Writer fly frames have content
         return;
@@ -342,13 +342,14 @@ void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
         mpPgNumAndTypeOfAnchors->Collect( _rAnchoredObj );
     }
 
-    if ( _rAnchoredObj.ISA(SwFlyFrm) )
+    SwFlyFrm* pFlyFrm = dynamic_cast< SwFlyFrm* >(&_rAnchoredObj);
+
+    if ( pFlyFrm )
     {
-        SwFlyFrm& rFlyFrm = static_cast<SwFlyFrm&>(_rAnchoredObj);
         // --> OD 2004-11-15 #i34753# - reset flag, which prevents a positioning
-        if ( rFlyFrm.IsFlyLayFrm() )
+        if ( pFlyFrm->IsFlyLayFrm() )
         {
-            static_cast<SwFlyLayFrm&>(rFlyFrm).SetNoMakePos( false );
+            static_cast<SwFlyLayFrm*>(pFlyFrm)->SetNoMakePos( false );
         }
         // <--
 
@@ -359,7 +360,7 @@ void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
         do {
             if ( mpLayAction )
             {
-                mpLayAction->FormatLayoutFly( &rFlyFrm );
+                mpLayAction->FormatLayoutFly( pFlyFrm );
                 // --> OD 2005-07-13 #124218# - consider, if the layout action
                 // has to be restarted due to a delete of a page frame.
                 if ( mpLayAction->IsAgain() )
@@ -370,24 +371,24 @@ void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
             }
             else
             {
-                _FormatLayout( rFlyFrm );
+                _FormatLayout( *pFlyFrm );
             }
             // --> OD 2004-11-15 #i34753# - prevent further positioning, if
             // to-page|to-fly anchored Writer fly frame is already clipped.
-            if ( rFlyFrm.IsFlyLayFrm() && rFlyFrm.IsClipped() )
+            if ( pFlyFrm->IsFlyLayFrm() && pFlyFrm->IsClipped() )
             {
-                static_cast<SwFlyLayFrm&>(rFlyFrm).SetNoMakePos( true );
+                static_cast<SwFlyLayFrm*>(pFlyFrm)->SetNoMakePos( true );
             }
             // <--
             // --> OD 2004-11-02 #i23129#, #i36347# - pass correct page frame
             // to the object formatter
-            SwObjectFormatter::FormatObjsAtFrm( rFlyFrm,
-                                                *(rFlyFrm.FindPageFrm()),
+            SwObjectFormatter::FormatObjsAtFrm( *pFlyFrm,
+                                                *(pFlyFrm->FindPageFrm()),
                                                 mpLayAction );
             // <--
             if ( mpLayAction )
             {
-                mpLayAction->_FormatFlyCntnt( &rFlyFrm );
+                mpLayAction->_FormatFlyCntnt( pFlyFrm );
                 // --> OD 2005-07-13 #124218# - consider, if the layout action
                 // has to be restarted due to a delete of a page frame.
                 if ( mpLayAction->IsAgain() )
@@ -398,7 +399,7 @@ void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
             }
             else
             {
-                _FormatObjCntnt( rFlyFrm );
+                _FormatObjCntnt( *pFlyFrm );
             }
 
             if ( ++nLoopControlRuns >= nLoopControlMax )
@@ -406,18 +407,18 @@ void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
 #if OSL_DEBUG_LEVEL > 1
                 ASSERT( false, "LoopControl in SwObjectFormatter::_FormatObj: Stage 3!!!" );
 #endif
-                rFlyFrm.ValidateThisAndAllLowers( 2 );
+                pFlyFrm->ValidateThisAndAllLowers( 2 );
                 nLoopControlRuns = 0;
             }
 
         // --> OD 2006-02-02 #i57917#
         // stop formatting of anchored object, if restart of layout process is requested.
-        } while ( !rFlyFrm.IsValid() &&
+        } while ( !pFlyFrm->IsValid() &&
                   !_rAnchoredObj.RestartLayoutProcess() &&
-                  rFlyFrm.GetAnchorFrm() == &GetAnchorFrm() );
+                  pFlyFrm->GetAnchorFrm() == &GetAnchorFrm() );
         // <--
     }
-    else if ( _rAnchoredObj.ISA(SwAnchoredDrawObject) )
+    else if ( dynamic_cast< SwAnchoredDrawObject* >(&_rAnchoredObj) )
     {
         _rAnchoredObj.MakeObjPos();
     }

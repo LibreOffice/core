@@ -34,9 +34,6 @@
 
 namespace sd { namespace slidesorter { namespace controller {
 
-TYPEINIT1(SlideFunction, FuPoor);
-
-
 SlideFunction::SlideFunction (
     SlideSorter& rSlideSorter,
     SfxRequest& rRequest)
@@ -57,20 +54,19 @@ void SlideFunction::ScrollEnd (void)
 {
 }
 
-sal_Bool SlideFunction::MouseMove(const MouseEvent& )
+bool SlideFunction::MouseMove(const MouseEvent& )
 {
-    return sal_False;
+    return false;
 }
 
-sal_Bool SlideFunction::MouseButtonUp(const MouseEvent& )
+bool SlideFunction::MouseButtonUp(const MouseEvent& )
 {
-    return sal_False;
-
+    return false;
 }
 
-sal_Bool SlideFunction::MouseButtonDown(const MouseEvent& )
+bool SlideFunction::MouseButtonDown(const MouseEvent& )
 {
-    return sal_False;
+    return false;
 }
 
 } } } // end of namespace ::sd::slidesorter::controller

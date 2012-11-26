@@ -70,7 +70,6 @@
 
 #define _SDR_NOUNDO             // Undo-Objekte
 #define _SDR_NOPAGEOBJ          // SdrPageObj
-#define _SDR_NOVIRTOBJ          // SdrVirtObj
 #define _SDR_NOGROUPOBJ         // SdrGroupObj
 #define _SDR_NOTEXTOBJ          // SdrTextObj
 #define _SDR_NOPATHOBJ          // SdrPathObj
@@ -99,11 +98,6 @@
 #ifdef _SDR_NOPAGEOBJ
     #undef _SDR_NOPAGEOBJ
     #define _SVDOPAGE_HXX
-#endif
-
-#ifdef _SDR_NOVIRTOBJ
-    #undef _SDR_NOVIRTOBJ
-    #define _SVDOVIRT_HXX
 #endif
 
 #ifdef _SDR_NOGROUPOBJ
@@ -1938,7 +1932,7 @@ void ScTabView::DoVSplit(long nSplitPos)
     }
 }
 
-Point ScTabView::GetInsertPos()
+basegfx::B2DPoint ScTabView::GetInsertPos()
 {
     ScDocument* pDoc = aViewData.GetDocument();
     SCCOL nCol = aViewData.GetCurX();
@@ -1952,15 +1946,15 @@ Point ScTabView::GetInsertPos()
         nPosX = -nPosX;
     long nPosY = (long) pDoc->GetRowHeight( 0, nRow-1, nTab);
     nPosY = (long)(nPosY * HMM_PER_TWIPS);
-    return Point(nPosX,nPosY);
+
+    return basegfx::B2DPoint(nPosX, nPosY);
 }
 
-Point ScTabView::GetChartInsertPos( const Size& rSize, const ScRange& rCellRange )
+basegfx::B2DPoint ScTabView::GetChartInsertPos( const basegfx::B2DVector& rScale, const ScRange& rCellRange )
 {
-    Point aInsertPos;
-    const long nBorder = 100;   // leave 1mm for border
-    long nNeededWidth = rSize.Width() + 2 * nBorder;
-    long nNeededHeight = rSize.Height() + 2 * nBorder;
+    basegfx::B2DPoint aInsertPos(0.0, 0.0);
+    const double fBorder(100.0);   // leave 1mm for border
+    const basegfx::B2DVector aNeededScale(rScale.getX() + (2.0 * fBorder), rScale.getY() + (2.0 * fBorder));
 
     // use the active window, or lower/right if frozen (as in CalcZoom)
     ScSplitPos eUsedPart = aViewData.GetActivePart();
@@ -1976,107 +1970,118 @@ Point ScTabView::GetChartInsertPos( const Size& rSize, const ScRange& rCellRange
         ActivatePart( eUsedPart );
 
         //  get the visible rectangle in logic units
-
-        MapMode aDrawMode = pWin->GetDrawMapMode();
-        Rectangle aVisible( pWin->PixelToLogic( Rectangle( Point(0,0), pWin->GetOutputSizePixel() ), aDrawMode ) );
+        const MapMode aDrawMode(pWin->GetDrawMapMode());
+        basegfx::B2DRange aVisible(pWin->GetViewTransformation(aDrawMode) * pWin->GetDiscreteRange());
 
         ScDocument* pDoc = aViewData.GetDocument();
         SCTAB nTab = aViewData.GetTabNo();
-        sal_Bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
-        long nLayoutSign = bLayoutRTL ? -1 : 1;
+        const bool bLayoutRTL(pDoc->IsLayoutRTL( nTab ));
+        const double fLayoutSign(bLayoutRTL ? -1.0 : 1.0);
+        const double fDocX(pDoc->GetColOffset( MAXCOL + 1, nTab ) * HMM_PER_TWIPS * fLayoutSign);
+        const double fDocY(pDoc->GetRowOffset( MAXROW + 1, nTab ) * HMM_PER_TWIPS);
 
-        long nDocX = (long)( (double) pDoc->GetColOffset( MAXCOL + 1, nTab ) * HMM_PER_TWIPS ) * nLayoutSign;
-        long nDocY = (long)( (double) pDoc->GetRowOffset( MAXROW + 1, nTab ) * HMM_PER_TWIPS );
+        if ( aVisible.getMinX() * fLayoutSign > fDocX * fLayoutSign )
+        {
+            aVisible = basegfx::B2DRange(fDocX, aVisible.getMinY(), aVisible.getMaxX(), aVisible.getMaxY());
+        }
 
-        if ( aVisible.Left() * nLayoutSign > nDocX * nLayoutSign )
-            aVisible.Left() = nDocX;
-        if ( aVisible.Right() * nLayoutSign > nDocX * nLayoutSign )
-            aVisible.Right() = nDocX;
-        if ( aVisible.Top() > nDocY )
-            aVisible.Top() = nDocY;
-        if ( aVisible.Bottom() > nDocY )
-            aVisible.Bottom() = nDocY;
+        if ( aVisible.getMaxX() * fLayoutSign > fDocX * fLayoutSign )
+        {
+            aVisible = basegfx::B2DRange(aVisible.getMinX(), aVisible.getMinY(), fDocX, aVisible.getMaxY());
+        }
+
+        if ( aVisible.getMinY() > fDocY )
+        {
+            aVisible = basegfx::B2DRange(aVisible.getMinX(), fDocY, aVisible.getMaxX(), aVisible.getMaxY());
+        }
+
+        if ( aVisible.getMaxY() > fDocY )
+        {
+            aVisible = basegfx::B2DRange(aVisible.getMinX(), aVisible.getMinY(), aVisible.getMaxX(), fDocY);
+        }
 
         //  get the logic position of the selection
 
-        Rectangle aSelection = pDoc->GetMMRect( rCellRange.aStart.Col(), rCellRange.aStart.Row(),
-                                                rCellRange.aEnd.Col(), rCellRange.aEnd.Row(), nTab );
-
-        long nLeftSpace = aSelection.Left() - aVisible.Left();
-        long nRightSpace = aVisible.Right() - aSelection.Right();
-        long nTopSpace = aSelection.Top() - aVisible.Top();
-        long nBottomSpace = aVisible.Bottom() - aSelection.Bottom();
-
-        bool bFitLeft = ( nLeftSpace >= nNeededWidth );
-        bool bFitRight = ( nRightSpace >= nNeededWidth );
+        const Rectangle aMMRectangle(pDoc->GetMMRect(rCellRange.aStart.Col(), rCellRange.aStart.Row(), rCellRange.aEnd.Col(), rCellRange.aEnd.Row(), nTab));
+        const basegfx::B2DRange aSelection(aMMRectangle.Left(), aMMRectangle.Top(), aMMRectangle.Right(), aMMRectangle.Bottom());
+        const double fLeftSpace(aSelection.getMinX() - aVisible.getMinX());
+        const double fRightSpace(aVisible.getMaxX() - aSelection.getMaxX());
+        const double fTopSpace(aSelection.getMinY() - aVisible.getMinY());
+        const double fBottomSpace(aVisible.getMaxY() - aSelection.getMaxY());
+        const bool bFitLeft(fLeftSpace >= aNeededScale.getX());
+        const bool bFitRight(fRightSpace >= aNeededScale.getX());
 
         if ( bFitLeft || bFitRight )
         {
             // first preference: completely left or right of the selection
 
             // if both fit, prefer left in RTL mode, right otherwise
-            bool bPutLeft = bFitLeft && ( bLayoutRTL || !bFitRight );
+            const bool bPutLeft(bFitLeft && ( bLayoutRTL || !bFitRight ));
 
             if ( bPutLeft )
-                aInsertPos.X() = aSelection.Left() - nNeededWidth;
+                aInsertPos.setX(aSelection.getMinX() - aNeededScale.getX());
             else
-                aInsertPos.X() = aSelection.Right() + 1;
+                aInsertPos.setX(aSelection.getMaxX());
 
             // align with top of selection (is moved again if it doesn't fit)
-            aInsertPos.Y() = std::max( aSelection.Top(), aVisible.Top() );
+            aInsertPos.setY(std::max( aSelection.getMinY(), aVisible.getMinY() ));
         }
-        else if ( nTopSpace >= nNeededHeight || nBottomSpace >= nNeededHeight )
+        else if ( fTopSpace >= aNeededScale.getY() || fBottomSpace >= aNeededScale.getY() )
         {
             // second preference: completely above or below the selection
 
-            if ( nBottomSpace > nNeededHeight )             // bottom is preferred
-                aInsertPos.Y() = aSelection.Bottom() + 1;
+            if ( fBottomSpace > aNeededScale.getY() )             // bottom is preferred
+                aInsertPos.setY(aSelection.getMaxY());
             else
-                aInsertPos.Y() = aSelection.Top() - nNeededHeight;
+                aInsertPos.setY(aSelection.getMinY() - aNeededScale.getY());
 
             // align with (logic) left edge of selection (moved again if it doesn't fit)
             if ( bLayoutRTL )
-                aInsertPos.X() = std::min( aSelection.Right(), aVisible.Right() ) - nNeededWidth + 1;
+                aInsertPos.setX(std::min( aSelection.getMaxX(), aVisible.getMaxX() ) - aNeededScale.getX());
             else
-                aInsertPos.X() = std::max( aSelection.Left(), aVisible.Left() );
+                aInsertPos.setX(std::max( aSelection.getMinX(), aVisible.getMinX() ));
         }
         else
         {
             // place to the (logic) right of the selection and move so it fits
 
             if ( bLayoutRTL )
-                aInsertPos.X() = aSelection.Left() - nNeededWidth;
+                aInsertPos.setX(aSelection.getMinX() - aNeededScale.getX());
             else
-                aInsertPos.X() = aSelection.Right() + 1;
-            aInsertPos.Y() = std::max( aSelection.Top(), aVisible.Top() );
+                aInsertPos.setX(aSelection.getMaxX());
+
+            aInsertPos.setY(std::max( aSelection.getMinY(), aVisible.getMinY() ));
         }
 
         // move the position if the object doesn't fit in the screen
+        const basegfx::B2DRange aCompareRange(aInsertPos, aInsertPos + aNeededScale);
 
-        Rectangle aCompareRect( aInsertPos, Size( nNeededWidth, nNeededHeight ) );
-        if ( aCompareRect.Right() > aVisible.Right() )
-            aInsertPos.X() -= aCompareRect.Right() - aVisible.Right();
-        if ( aCompareRect.Bottom() > aVisible.Bottom() )
-            aInsertPos.Y() -= aCompareRect.Bottom() - aVisible.Bottom();
+        if ( aCompareRange.getMaxX() > aVisible.getMaxX() )
+            aInsertPos.setX(aInsertPos.getX() - (aCompareRange.getMaxX() - aVisible.getMaxX()));
+        if ( aCompareRange.getMaxY() > aVisible.getMaxY() )
+            aInsertPos.setY(aInsertPos.getY() - (aCompareRange.getMaxY() - aVisible.getMaxY()));
 
-        if ( aInsertPos.X() < aVisible.Left() )
-            aInsertPos.X() = aVisible.Left();
-        if ( aInsertPos.Y() < aVisible.Top() )
-            aInsertPos.Y() = aVisible.Top();
+        if ( aInsertPos.getX() < aVisible.getMinX() )
+            aInsertPos.setX(aVisible.getMinX());
+        if ( aInsertPos.getY() < aVisible.getMinY() )
+            aInsertPos.setY(aVisible.getMinY());
 
-        // nNeededWidth / nNeededHeight includes all borders - move aInsertPos to the
+        // aNeededScale.getX() / aNeededScale.getY() includes all borders - move aInsertPos to the
         // object position, inside the border
-
-        aInsertPos.X() += nBorder;
-        aInsertPos.Y() += nBorder;
+        aInsertPos += basegfx::B2DPoint(fBorder, fBorder);
     }
+
     return aInsertPos;
 }
 
-Point ScTabView::GetChartDialogPos( const Size& rDialogSize, const Rectangle& rLogicChart )
+basegfx::B2DPoint ScTabView::GetChartDialogPos( const basegfx::B2DVector& rDialogSize, const basegfx::B2DRange& rLogicChart )
 {
-    // rDialogSize must be in pixels, rLogicChart in 1/100 mm. Return value is in pixels.
+    const Size aDialogSize(basegfx::fround(rDialogSize.getX()), basegfx::fround(rDialogSize.getY()));
+    const Rectangle aLogicChart(
+        basegfx::fround(rLogicChart.getMinX()), basegfx::fround(rLogicChart.getMinY()),
+        basegfx::fround(rLogicChart.getMaxX()), basegfx::fround(rLogicChart.getMaxY()));
 
+    // aDialogSize must be in pixels, aLogicChart in 1/100 mm. Return value is in pixels.
     Point aRet;
 
     // use the active window, or lower/right if frozen (as in CalcZoom)
@@ -2091,7 +2096,7 @@ Point ScTabView::GetChartDialogPos( const Size& rDialogSize, const Rectangle& rL
     if (pWin)
     {
         MapMode aDrawMode = pWin->GetDrawMapMode();
-        Rectangle aObjPixel = pWin->LogicToPixel( rLogicChart, aDrawMode );
+        Rectangle aObjPixel = pWin->LogicToPixel( aLogicChart, aDrawMode );
         Rectangle aObjAbs( pWin->OutputToAbsoluteScreenPixel( aObjPixel.TopLeft() ),
                            pWin->OutputToAbsoluteScreenPixel( aObjPixel.BottomRight() ) );
 
@@ -2104,24 +2109,24 @@ Point ScTabView::GetChartDialogPos( const Size& rDialogSize, const Rectangle& rL
 
         bool bCenterHor = false;
 
-        if ( aDesktop.Bottom() - aObjAbs.Bottom() >= rDialogSize.Height() + aSpace.Height() )
+        if ( aDesktop.Bottom() - aObjAbs.Bottom() >= aDialogSize.Height() + aSpace.Height() )
         {
             // first preference: below the chart
 
             aRet.Y() = aObjAbs.Bottom() + aSpace.Height();
             bCenterHor = true;
         }
-        else if ( aObjAbs.Top() - aDesktop.Top() >= rDialogSize.Height() + aSpace.Height() )
+        else if ( aObjAbs.Top() - aDesktop.Top() >= aDialogSize.Height() + aSpace.Height() )
         {
             // second preference: above the chart
 
-            aRet.Y() = aObjAbs.Top() - rDialogSize.Height() - aSpace.Height();
+            aRet.Y() = aObjAbs.Top() - aDialogSize.Height() - aSpace.Height();
             bCenterHor = true;
         }
         else
         {
-            bool bFitLeft = ( aObjAbs.Left() - aDesktop.Left() >= rDialogSize.Width() + aSpace.Width() );
-            bool bFitRight = ( aDesktop.Right() - aObjAbs.Right() >= rDialogSize.Width() + aSpace.Width() );
+            bool bFitLeft = ( aObjAbs.Left() - aDesktop.Left() >= aDialogSize.Width() + aSpace.Width() );
+            bool bFitRight = ( aDesktop.Right() - aObjAbs.Right() >= aDialogSize.Width() + aSpace.Width() );
 
             if ( bFitLeft || bFitRight )
             {
@@ -2130,33 +2135,33 @@ Point ScTabView::GetChartDialogPos( const Size& rDialogSize, const Rectangle& rL
                 if ( bPutRight )
                     aRet.X() = aObjAbs.Right() + aSpace.Width();
                 else
-                    aRet.X() = aObjAbs.Left() - rDialogSize.Width() - aSpace.Width();
+                    aRet.X() = aObjAbs.Left() - aDialogSize.Width() - aSpace.Width();
 
                 // center vertically
-                aRet.Y() = aObjAbs.Top() + ( aObjAbs.GetHeight() - rDialogSize.Height() ) / 2;
+                aRet.Y() = aObjAbs.Top() + ( aObjAbs.GetHeight() - aDialogSize.Height() ) / 2;
             }
             else
             {
                 // doesn't fit on any edge - put at the bottom of the screen
-                aRet.Y() = aDesktop.Bottom() - rDialogSize.Height();
+                aRet.Y() = aDesktop.Bottom() - aDialogSize.Height();
                 bCenterHor = true;
             }
         }
         if ( bCenterHor )
-            aRet.X() = aObjAbs.Left() + ( aObjAbs.GetWidth() - rDialogSize.Width() ) / 2;
+            aRet.X() = aObjAbs.Left() + ( aObjAbs.GetWidth() - aDialogSize.Width() ) / 2;
 
         // limit to screen (centering might lead to invalid positions)
-        if ( aRet.X() + rDialogSize.Width() - 1 > aDesktop.Right() )
-            aRet.X() = aDesktop.Right() - rDialogSize.Width() + 1;
+        if ( aRet.X() + aDialogSize.Width() - 1 > aDesktop.Right() )
+            aRet.X() = aDesktop.Right() - aDialogSize.Width() + 1;
         if ( aRet.X() < aDesktop.Left() )
             aRet.X() = aDesktop.Left();
-        if ( aRet.Y() + rDialogSize.Height() - 1 > aDesktop.Bottom() )
-            aRet.Y() = aDesktop.Bottom() - rDialogSize.Height() + 1;
+        if ( aRet.Y() + aDialogSize.Height() - 1 > aDesktop.Bottom() )
+            aRet.Y() = aDesktop.Bottom() - aDialogSize.Height() + 1;
         if ( aRet.Y() < aDesktop.Top() )
             aRet.Y() = aDesktop.Top();
     }
 
-    return aRet;
+    return basegfx::B2DPoint(aRet.X(), aRet.Y());
 }
 
 void ScTabView::LockModifiers( sal_uInt16 nModifiers )

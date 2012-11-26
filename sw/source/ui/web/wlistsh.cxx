@@ -47,8 +47,6 @@ SFX_IMPL_INTERFACE(SwWebListShell, SwListShell, SW_RES(STR_SHELLNAME_LIST))
     SFX_OBJECTBAR_REGISTRATION(SFX_OBJECTBAR_OBJECT, SW_RES(RID_NUM_TOOLBOX));
 }
 
-TYPEINIT1(SwWebListShell,SwListShell)
-
 SwWebListShell::SwWebListShell(SwView &_rView) :
     SwListShell(_rView)
 {

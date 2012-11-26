@@ -106,7 +106,7 @@ enum SylkVersion
 
 
 ScImportExport::ScImportExport( ScDocument* p )
-    : pDocSh( PTR_CAST(ScDocShell,p->GetDocumentShell()) ), pDoc( p ),
+    : pDocSh( dynamic_cast< ScDocShell* >( p->GetDocumentShell()) ), pDoc( p ),
       nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
       bFormulas( sal_False ), bIncludeFiltered( sal_True ),
       bAll( sal_True ), bSingle( sal_True ), bUndo( sal_False ),
@@ -120,7 +120,7 @@ ScImportExport::ScImportExport( ScDocument* p )
 
 
 ScImportExport::ScImportExport( ScDocument* p, const ScAddress& rPt )
-    : pDocSh( PTR_CAST(ScDocShell,p->GetDocumentShell()) ), pDoc( p ),
+    : pDocSh( dynamic_cast< ScDocShell* >( p->GetDocumentShell()) ), pDoc( p ),
       aRange( rPt ),
       nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
       bFormulas( sal_False ), bIncludeFiltered( sal_True ),
@@ -136,7 +136,7 @@ ScImportExport::ScImportExport( ScDocument* p, const ScAddress& rPt )
 //! ctor with a string (and bSingle=sal_True) is also used for DdeSetData
 
 ScImportExport::ScImportExport( ScDocument* p, const ScRange& r )
-    : pDocSh( PTR_CAST(ScDocShell,p->GetDocumentShell()) ), pDoc( p ),
+    : pDocSh( dynamic_cast< ScDocShell* >( p->GetDocumentShell()) ), pDoc( p ),
       aRange( r ),
       nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
       bFormulas( sal_False ), bIncludeFiltered( sal_True ),
@@ -154,7 +154,7 @@ ScImportExport::ScImportExport( ScDocument* p, const ScRange& r )
 
 
 ScImportExport::ScImportExport( ScDocument* p, const String& rPos )
-    : pDocSh( PTR_CAST(ScDocShell,p->GetDocumentShell()) ), pDoc( p ),
+    : pDocSh( dynamic_cast< ScDocShell* >( p->GetDocumentShell()) ), pDoc( p ),
       nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
       bFormulas( sal_False ), bIncludeFiltered( sal_True ),
       bAll( sal_False ), bSingle( sal_True ), bUndo( sal_Bool( pDocSh != NULL ) ),

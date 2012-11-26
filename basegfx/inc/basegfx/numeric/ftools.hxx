@@ -224,6 +224,7 @@ namespace basegfx
             return (rfValA > rfValB || equal(rfValA, rfValB));
         }
     };
+
 } // end of namespace basegfx
 
 #endif /* _BGFX_NUMERIC_FTOOLS_HXX */

@@ -929,9 +929,11 @@ void SwXAutoTextEntry::Notify( SfxBroadcaster& _rBC, const SfxHint& _rHint )
 {
     if ( &_rBC == &xDocSh )
     {   // it's our document
-        if ( _rHint.ISA( SfxSimpleHint ) )
+        const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&_rHint);
+
+        if ( pSfxSimpleHint )
         {
-            if ( SFX_HINT_DEINITIALIZING == static_cast< const SfxSimpleHint& >( _rHint ).GetId() )
+            if ( SFX_HINT_DEINITIALIZING == pSfxSimpleHint->GetId() )
             {
                 // our document is dying (possibly because we're shuting down, and the document was notified
                 // earlier than we are?)
@@ -941,9 +943,13 @@ void SwXAutoTextEntry::Notify( SfxBroadcaster& _rBC, const SfxHint& _rHint )
                 xDocSh.Clear();
             }
         }
-        else if(_rHint.ISA(SfxEventHint))
+        else
         {
-            if(SFX_EVENT_PREPARECLOSEDOC == static_cast< const SfxEventHint& >( _rHint ).GetEventId())
+            const SfxEventHint* pSfxEventHint = dynamic_cast< const SfxEventHint* >(&_rHint);
+
+            if(pSfxEventHint)
+        {
+                if(SFX_EVENT_PREPARECLOSEDOC == pSfxEventHint->GetEventId())
             {
                 implFlushDocument( sal_False );
                 xBodyText = 0;
@@ -951,6 +957,7 @@ void SwXAutoTextEntry::Notify( SfxBroadcaster& _rBC, const SfxHint& _rHint )
             }
         }
     }
+}
 }
 
 void SwXAutoTextEntry::GetBodyText ()

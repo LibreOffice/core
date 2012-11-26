@@ -90,6 +90,7 @@
 
 // #i74769#
 #include <svx/sdrpaintwindow.hxx>
+#include <svx/fmmodel.hxx>
 
 sal_Bool ViewShell::bLstAct = sal_False;
 ShellResource *ViewShell::pShellRes = 0;
@@ -100,8 +101,6 @@ BitmapEx* ViewShell::pReplaceBmp = NULL;
 sal_Bool bInSizeNotify = sal_False;
 
 DBG_NAME(LayoutIdle)
-
-TYPEINIT0(ViewShell);
 
 using namespace ::com::sun::star;
 
@@ -208,7 +207,7 @@ void ViewShell::ImplEndAction( const sal_Bool bIdleEnd )
     const bool bIsShellForCheckViewLayout = ( this == GetLayout()->GetCurrShell() );
 
     SET_CURR_SHELL( this );
-    if ( Imp()->HasDrawView() && !Imp()->GetDrawView()->areMarkHandlesHidden() )
+    if ( Imp()->HasDrawView() )
         Imp()->StartAction();
 
     if ( Imp()->GetRegion() && Imp()->GetRegion()->GetOrigin() != VisArea() )
@@ -258,7 +257,7 @@ void ViewShell::ImplEndAction( const sal_Bool bIdleEnd )
             // Mitte eine Selektion und mit einem anderen Cursor an linken
             // rechten Rand springen. Ohne ShowCrsr verschwindet die
             // Selektion
-            sal_Bool bShowCrsr = pRegion && IsA( TYPE(SwCrsrShell) );
+            sal_Bool bShowCrsr = pRegion && dynamic_cast< SwCrsrShell* >(this);
             if( bShowCrsr )
                 ((SwCrsrShell*)this)->HideCrsrs();
 
@@ -574,6 +573,15 @@ void ViewShell::InvalidateWindows( const SwRect &rRect )
 |*
 ******************************************************************************/
 
+void ViewShell::MakeVisible( const basegfx::B2DRange& rRange )
+{
+    const Rectangle aRect(
+            (sal_Int32)floor(rRange.getMinX()), (sal_Int32)floor(rRange.getMinY()),
+            (sal_Int32)ceil(rRange.getMaxX()), (sal_Int32)ceil(rRange.getMaxY()));
+
+    MakeVisible( SwRect( aRect ) );
+}
+
 void ViewShell::MakeVisible( const SwRect &rRect )
 {
     if ( !VisArea().IsInside( rRect ) || IsScrollMDI( this, rRect ) || GetCareWin(*this) )
@@ -678,7 +686,7 @@ void ViewShell::UpdateFlds(sal_Bool bCloseDB)
 {
     SET_CURR_SHELL( this );
 
-    sal_Bool bCrsr = ISA(SwCrsrShell);
+    sal_Bool bCrsr = (0 != dynamic_cast< SwCrsrShell* >(this));
     if ( bCrsr )
         ((SwCrsrShell*)this)->StartAction();
     else
@@ -780,7 +788,7 @@ void ViewShell::LayoutIdle()
 
 void lcl_InvalidateAllCntnt( ViewShell& rSh, sal_uInt8 nInv )
 {
-    sal_Bool bCrsr = rSh.ISA(SwCrsrShell);
+    sal_Bool bCrsr = (0 != dynamic_cast< SwCrsrShell* >(&rSh));
     if ( bCrsr )
         ((SwCrsrShell&)rSh).StartAction();
     else
@@ -804,7 +812,7 @@ void lcl_InvalidateAllCntnt( ViewShell& rSh, sal_uInt8 nInv )
 */
 void lcl_InvalidateAllObjPos( ViewShell &_rSh )
 {
-    const bool bIsCrsrShell = _rSh.ISA(SwCrsrShell);
+    const bool bIsCrsrShell = dynamic_cast< SwCrsrShell* >(&_rSh);
     if ( bIsCrsrShell )
         static_cast<SwCrsrShell&>(_rSh).StartAction();
     else
@@ -1098,7 +1106,7 @@ void ViewShell::SizeChgNotify()
     {
         bDocSizeChgd = sal_True;
 
-        if ( !Imp()->IsCalcLayoutProgress() && ISA( SwCrsrShell ) )
+        if ( !Imp()->IsCalcLayoutProgress() && dynamic_cast< SwCrsrShell* >(this) )
         {
             const SwFrm *pCnt = ((SwCrsrShell*)this)->GetCurrFrm( sal_False );
             const SwPageFrm *pPage;
@@ -1294,7 +1302,7 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
     if ( HasDrawView() )
     {
         Imp()->GetDrawView()->VisAreaChanged( GetWin() );
-        Imp()->GetDrawView()->SetActualWin( GetWin() );
+        Imp()->GetDrawView()->SetActualOutDev( GetWin() );
     }
     GetWin()->Update();
 
@@ -1356,7 +1364,7 @@ sal_Bool ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRe
     const bool bSmoothScrollAllowed(bOnlyYScroll && bEnableSmooth && GetViewOptions()->IsSmoothScroll() &&  bAllowedWithChildWindows);
 #endif
 // <-
-    const bool bIAmCursorShell(ISA(SwCrsrShell));
+    const bool bIAmCursorShell(dynamic_cast< SwCrsrShell* >(this));
     (void) bIAmCursorShell;
 
     // #i75172# with selection on overlay, smooth scroll should be allowed with it
@@ -2325,13 +2333,13 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
             MakeDrawView();
 
         SwDrawView *pDView = Imp()->GetDrawView();
-        if ( pDView->IsDragStripes() != rOpt.IsCrossHair() )
+        if ( pDView->IsDragStripes() != (bool)rOpt.IsCrossHair() )
             pDView->SetDragStripes( rOpt.IsCrossHair() );
 
-        if ( pDView->IsGridSnap() != rOpt.IsSnap() )
+        if ( pDView->IsGridSnap() != (bool)rOpt.IsSnap() )
             pDView->SetGridSnap( rOpt.IsSnap() );
 
-        if ( pDView->IsGridVisible() != rOpt.IsGridVisible() )
+        if ( pDView->IsGridVisible() != (bool)rOpt.IsGridVisible() )
             pDView->SetGridVisible( rOpt.IsGridVisible() );
 
         const Size &rSz = rOpt.GetSnapSize();
@@ -2341,9 +2349,9 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
             ( rSz.Width() ? rSz.Width() / (rOpt.GetDivisionX()+1) : 0,
               rSz.Height()? rSz.Height()/ (rOpt.GetDivisionY()+1) : 0);
         pDView->SetGridFine( aFSize );
-        Fraction aSnGrWdtX(rSz.Width(), rOpt.GetDivisionX() + 1);
-        Fraction aSnGrWdtY(rSz.Height(), rOpt.GetDivisionY() + 1);
-        pDView->SetSnapGridWidth( aSnGrWdtX, aSnGrWdtY );
+        const Fraction aSnGrWdtX(rSz.Width(), rOpt.GetDivisionX() + 1);
+        const Fraction aSnGrWdtY(rSz.Height(), rOpt.GetDivisionY() + 1);
+        pDView->SetSnapGridWidth( double(aSnGrWdtX), double(aSnGrWdtY) );
 
         if ( pOpt->IsSolidMarkHdl() != rOpt.IsSolidMarkHdl() )
             pDView->SetSolidMarkHdl( rOpt.IsSolidMarkHdl() );

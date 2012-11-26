@@ -371,19 +371,21 @@ void ScChildrenShapes::SetDrawBroadcaster()
 
 void ScChildrenShapes::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
-    if ( rHint.ISA( SdrHint ) )
-    {
-        const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
+    const SdrBaseHint* pSdrHint = dynamic_cast< const SdrBaseHint* >(&rHint);
+
         if (pSdrHint)
         {
-            SdrObject* pObj = const_cast<SdrObject*>(pSdrHint->GetObject());
-            if (pObj && /*(pObj->GetLayer() != SC_LAYER_INTERN) && */(pObj->GetPage() == GetDrawPage()) &&
-                (pObj->GetPage() == pObj->GetObjList()) ) //#108480# only do something if the object lies direct on the page
+        SdrObject* pObj = const_cast<SdrObject*>(pSdrHint->GetSdrHintObject());
+        if (pObj && /*(pObj->GetLayer() != SC_LAYER_INTERN) && */(pObj->getSdrPageFromSdrObject() == GetDrawPage()) &&
+            (pObj->getSdrPageFromSdrObject() == pObj->getParentOfSdrObject()) ) //#108480# only do something if the object lies direct on the page
             {
-                switch (pSdrHint->GetKind())
+            switch (pSdrHint->GetSdrHintKind())
                 {
-                    case HINT_OBJCHG :         // Objekt geaendert
+                case HINT_OBJCHG_MOVE :
+                case HINT_OBJCHG_RESIZE :
+                case HINT_OBJCHG_ATTR :
                     {
+                    // Objekt geaendert
                         uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
                         if (xShape.is())
                         {
@@ -416,7 +418,6 @@ void ScChildrenShapes::Notify(SfxBroadcaster&, const SfxHint& rHint)
             }
         }
     }
-}
 
 sal_Bool ScChildrenShapes::ReplaceChild (::accessibility::AccessibleShape* pCurrentChild,
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rxShape,
@@ -820,8 +821,8 @@ SdrPage* ScChildrenShapes::GetDrawPage() const
         if (pDoc && pDoc->GetDrawLayer())
         {
             ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
-            if (pDrawLayer->HasObjects() && (pDrawLayer->GetPageCount() > nTab))
-                pDrawPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(static_cast<sal_Int16>(nTab)));
+            if (pDrawLayer->HasObjects() && (pDrawLayer->GetPageCount() > static_cast< sal_uInt32 >(nTab)))
+                pDrawPage = pDrawLayer->GetPage(static_cast< sal_uInt32 >(nTab));
         }
     }
     return pDrawPage;
@@ -1307,10 +1308,11 @@ void SAL_CALL ScAccessibleDocument::disposing( const lang::EventObject& /* Sourc
 
 IMPL_LINK( ScAccessibleDocument, WindowChildEventListener, VclSimpleEvent*, pEvent )
 {
-    DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
-    if ( pEvent && pEvent->ISA( VclWindowEvent ) )
+    VclWindowEvent *pVclEvent = dynamic_cast< VclWindowEvent * >( pEvent );
+    DBG_ASSERT( pVclEvent, "Unknown WindowEvent!" );
+
+    if ( pVclEvent )
     {
-        VclWindowEvent *pVclEvent = static_cast< VclWindowEvent * >( pEvent );
         DBG_ASSERT( pVclEvent->GetWindow(), "Window???" );
         switch ( pVclEvent->GetId() )
         {
@@ -1339,10 +1341,11 @@ IMPL_LINK( ScAccessibleDocument, WindowChildEventListener, VclSimpleEvent*, pEve
 
 void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if (rHint.ISA( ScAccGridWinFocusLostHint ) )
+    const ScAccGridWinFocusLostHint* pScAccGridWinFocusLostHint = dynamic_cast< const ScAccGridWinFocusLostHint* >(&rHint);
+
+    if(pScAccGridWinFocusLostHint)
     {
-        const ScAccGridWinFocusLostHint& rRef = (const ScAccGridWinFocusLostHint&)rHint;
-        if (rRef.GetOldGridWin() == meSplitPos)
+        if (pScAccGridWinFocusLostHint->GetOldGridWin() == meSplitPos)
         {
             if (mxTempAcc.is() && mpTempAccEdit)
                 mpTempAccEdit->LostFocus();
@@ -1352,10 +1355,13 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 CommitFocusLost();
         }
     }
-    else if (rHint.ISA( ScAccGridWinFocusGotHint ) )
+    else
     {
-        const ScAccGridWinFocusGotHint& rRef = (const ScAccGridWinFocusGotHint&)rHint;
-        if (rRef.GetNewGridWin() == meSplitPos)
+        const ScAccGridWinFocusGotHint* rScAccGridWinFocusGotHint = dynamic_cast< const ScAccGridWinFocusGotHint* >(&rHint);
+
+        if (rScAccGridWinFocusGotHint )
+        {
+            if (rScAccGridWinFocusGotHint->GetNewGridWin() == meSplitPos)
         {
             if (mxTempAcc.is() && mpTempAccEdit)
                 mpTempAccEdit->GotFocus();
@@ -1365,11 +1371,14 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 CommitFocusGained();
         }
     }
-    else if (rHint.ISA( SfxSimpleHint ))
+        else
+        {
+            const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+            if(pSfxSimpleHint)
     {
-        const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
         // only notify if child exist, otherwise it is not necessary
-        if ((rRef.GetId() == SC_HINT_ACC_TABLECHANGED) &&
+                if ((pSfxSimpleHint->GetId() == SC_HINT_ACC_TABLECHANGED) &&
             mpAccessibleSpreadsheet)
         {
             FreeAccessibleSpreadsheet();
@@ -1387,12 +1396,12 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             aEvent.Source = uno::Reference< XAccessibleContext >(this);
             CommitChange(aEvent); // all childs changed
         }
-        else if (rRef.GetId() == SC_HINT_ACC_MAKEDRAWLAYER)
+                else if (pSfxSimpleHint->GetId() == SC_HINT_ACC_MAKEDRAWLAYER)
         {
             if (mpChildrenShapes)
                 mpChildrenShapes->SetDrawBroadcaster();
         }
-        else if ((rRef.GetId() == SC_HINT_ACC_ENTEREDITMODE)) // this event comes only on creating edit field of a cell
+                else if ((pSfxSimpleHint->GetId() == SC_HINT_ACC_ENTEREDITMODE)) // this event comes only on creating edit field of a cell
         {
             if (mpViewShell && mpViewShell->GetViewData()->HasEditView(meSplitPos))
             {
@@ -1411,7 +1420,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 mpTempAccEdit->GotFocus();
             }
         }
-        else if (rRef.GetId() == SC_HINT_ACC_LEAVEEDITMODE)
+                else if (pSfxSimpleHint->GetId() == SC_HINT_ACC_LEAVEEDITMODE)
         {
             if (mxTempAcc.is())
             {
@@ -1427,7 +1436,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     CommitFocusGained();
             }
         }
-        else if ((rRef.GetId() == SC_HINT_ACC_VISAREACHANGED) || (rRef.GetId() == SC_HINT_ACC_WINDOWRESIZED))
+                else if ((pSfxSimpleHint->GetId() == SC_HINT_ACC_VISAREACHANGED) || (pSfxSimpleHint->GetId() == SC_HINT_ACC_WINDOWRESIZED))
         {
             Rectangle aOldVisArea(maVisArea);
             maVisArea = GetVisibleArea_Impl();
@@ -1452,6 +1461,8 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 if (mpChildrenShapes)
                     mpChildrenShapes->VisAreaChanged();
             }
+        }
+    }
         }
     }
 

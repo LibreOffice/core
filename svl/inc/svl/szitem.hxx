@@ -40,7 +40,6 @@ private:
     Size                     aVal;
 
 public:
-                             TYPEINFO();
                              SfxSizeItem();
                              SfxSizeItem( sal_uInt16 nWhich, const Size& rVal );
                              SfxSizeItem( sal_uInt16 nWhich, SvStream & );

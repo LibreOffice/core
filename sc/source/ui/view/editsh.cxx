@@ -95,8 +95,6 @@
 using namespace ::com::sun::star;
 
 
-TYPEINIT1( ScEditShell, SfxShell );
-
 SFX_IMPL_INTERFACE(ScEditShell, SfxShell, ScResId(SCSTR_EDITSHELL))
 {
     SFX_POPUPMENU_REGISTRATION( ScResId(RID_POPUP_EDIT) );
@@ -221,7 +219,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
         case SID_THES:
             {
                 String aReplaceText;
-                SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES , sal_False );
+                SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES );
                 if (pItem2)
                     aReplaceText = pItem2->GetValue();
                 if (aReplaceText.Len() > 0)
@@ -264,7 +262,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 const SfxPoolItem* pItem;
                 if ( pReqArgs &&
                      pReqArgs->GetItemState(nSlot, sal_True, &pItem) == SFX_ITEM_SET &&
-                     pItem->ISA(SfxUInt32Item) )
+                     dynamic_cast< const SfxUInt32Item* >(pItem) )
                 {
                     nFormat = ((const SfxUInt32Item*)pItem)->GetValue();
                 }
@@ -358,7 +356,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     aString = ((const SfxStringItem*)pItem)->GetValue();
                     const SfxPoolItem* pFtItem = NULL;
                     pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), sal_False, &pFtItem);
-                    const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
+                    const SfxStringItem* pFontItem = dynamic_cast< const SfxStringItem* >( pFtItem );
                     if ( pFontItem )
                     {
                         String aFontName(pFontItem->GetValue());
@@ -728,9 +726,7 @@ const SvxURLField* ScEditShell::GetURLField()
         const SvxFieldItem* pFieldItem = pActiveView->GetFieldAtSelection();
         if (pFieldItem)
         {
-            const SvxFieldData* pField = pFieldItem->GetField();
-            if ( pField && pField->ISA(SvxURLField) )
-                return (const SvxURLField*)pField;
+            return dynamic_cast< const SvxURLField* >(pFieldItem->GetField());
         }
     }
 

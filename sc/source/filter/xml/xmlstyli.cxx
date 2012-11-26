@@ -457,8 +457,6 @@ struct ScXMLMapContent
     rtl::OUString sBaseCell;
 };
 
-TYPEINIT1( XMLTableStyleContext, XMLPropStyleContext );
-
 XMLTableStyleContext::XMLTableStyleContext( ScXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const uno::Reference< XAttributeList > & xAttrList,
@@ -902,7 +900,6 @@ sal_Int32 XMLTableStylesContext::GetIndex(const sal_Int16 nContextID)
 }
 
 // ---------------------------------------------------------------------------
-TYPEINIT1( ScXMLMasterStylesContext, SvXMLStylesContext );
 
 sal_Bool ScXMLMasterStylesContext::InsertStyleFamily( sal_uInt16 ) const
 {
@@ -953,8 +950,6 @@ void ScXMLMasterStylesContext::EndElement()
 {
     FinishStyles(sal_True);
 }
-
-TYPEINIT1( ScMasterPageContext, XMLTextMasterPageContext );
 
 ScMasterPageContext::ScMasterPageContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,

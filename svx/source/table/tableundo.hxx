@@ -43,7 +43,7 @@ class OutlinerParaObject;
 
 namespace sdr { namespace table {
 
-class CellUndo : public SdrUndoAction, public sdr::ObjectUser
+class CellUndo : public SdrUndoAction, public SfxListener
 {
 public:
     CellUndo( const SdrObjectWeakRef& xObjRef, const CellRef& xCell );
@@ -54,7 +54,9 @@ public:
     virtual sal_Bool            Merge( SfxUndoAction *pNextAction );
 
     void dispose();
-    virtual void ObjectInDestruction(const SdrObject& rObject);
+
+    // derived from SfxListener
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
 private:
     struct Data

@@ -225,7 +225,7 @@ SbxVariable* SbiRuntime::FindElement
         // Ein bestimmter Call-Type wurde gewuenscht, daher muessen
         // wir hier den Typ setzen und das Ding anfassen, um den
         // korrekten Returnwert zu erhalten!
-        if( pElem->IsA( TYPE(SbxMethod) ) )
+        if( dynamic_cast< SbxMethod* >(pElem) )
         {
             // Soll der Typ konvertiert werden?
             SbxDataType t2 = pElem->GetType();
@@ -266,7 +266,7 @@ SbxVariable* SbiRuntime::FindElement
         // definitely we want this for VBA where properties are often
         // collections ( which need index access ), but lets only do
         // this if we actually have params following
-        else if( bVBAEnabled && pElem->ISA(SbUnoProperty) && pElem->GetParameters() )
+        else if( bVBAEnabled && dynamic_cast< SbUnoProperty* >(pElem) && pElem->GetParameters() )
         {
             // pElem auf eine Ref zuweisen, um ggf. eine Temp-Var zu loeschen
             SbxVariableRef refTemp = pElem;
@@ -377,11 +377,11 @@ void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
             {
                 bool bError_ = true;
 
-                SbUnoMethod* pUnoMethod = PTR_CAST(SbUnoMethod,p);
-                SbUnoProperty* pUnoProperty = PTR_CAST(SbUnoProperty,p);
+                SbUnoMethod* pUnoMethod = dynamic_cast< SbUnoMethod* >(p);
+                SbUnoProperty* pUnoProperty = dynamic_cast< SbUnoProperty* >(p);
                 if( pUnoMethod || pUnoProperty )
                 {
-                    SbUnoObject* pParentUnoObj = PTR_CAST( SbUnoObject,p->GetParent() );
+                    SbUnoObject* pParentUnoObj = dynamic_cast< SbUnoObject* >( p->GetParent() );
                     if( pParentUnoObj )
                     {
                         Any aUnoAny = pParentUnoObj->getUnoAny();
@@ -407,11 +407,11 @@ void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
                         }
                     }
                 }
-                else if( bVBAEnabled && p->GetType() == SbxOBJECT && (!p->ISA(SbxMethod) || !p->IsBroadcaster()) )
+                else if( bVBAEnabled && p->GetType() == SbxOBJECT && (!dynamic_cast< SbxMethod* >(p) || !p->IsBroadcaster()) )
                 {
                     // Check for default method with named parameters
                     SbxBaseRef pObj = (SbxBase*)p->GetObject();
-                    if( pObj && pObj->ISA(SbUnoObject) )
+                    if( pObj && dynamic_cast< SbUnoObject* >((SbxBase*)pObj) )
                     {
                         SbUnoObject* pUnoObj = (SbUnoObject*)(SbxBase*)pObj;
                         Any aAny = pUnoObj->getUnoAny();
@@ -488,7 +488,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
     if( pElem->GetType() & SbxARRAY )
     {
         SbxBase* pElemObj = pElem->GetObject();
-        SbxDimArray* pDimArray = PTR_CAST(SbxDimArray,pElemObj);
+        SbxDimArray* pDimArray = dynamic_cast< SbxDimArray* >( pElemObj);
         pPar = pElem->GetParameters();
         if( pDimArray )
         {
@@ -499,7 +499,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
         }
         else
         {
-            SbxArray* pArray = PTR_CAST(SbxArray,pElemObj);
+            SbxArray* pArray = dynamic_cast< SbxArray* >( pElemObj);
             if( pArray )
             {
                 if( !pPar )
@@ -517,7 +517,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
             pPar->Put( NULL, 0 );
     }
     // Index-Access bei UnoObjekten beruecksichtigen
-    else if( pElem->GetType() == SbxOBJECT && (!pElem->ISA(SbxMethod) || (bVBAEnabled && !pElem->IsBroadcaster()) ) )
+    else if( pElem->GetType() == SbxOBJECT && (!dynamic_cast< SbxMethod* >(pElem) || (bVBAEnabled && !pElem->IsBroadcaster())))
     {
         pPar = pElem->GetParameters();
         if ( pPar )
@@ -526,9 +526,10 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
             SbxBaseRef pObj = (SbxBase*)pElem->GetObject();
             if( pObj )
             {
-                if( pObj->ISA(SbUnoObject) )
+                SbUnoObject* pUnoObj = dynamic_cast< SbUnoObject* >((SbxBase*)pObj);
+
+                if( pUnoObj )
                 {
-                    SbUnoObject* pUnoObj = (SbUnoObject*)(SbxBase*)pObj;
                     Any aAny = pUnoObj->getUnoAny();
 
                     if( aAny.getValueType().getTypeClass() == TypeClass_INTERFACE )
@@ -609,13 +610,17 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                     // #42940, 0.Parameter zu NULL setzen, damit sich Var nicht selbst haelt
                     pPar->Put( NULL, 0 );
                 }
-                else if( pObj->ISA(BasicCollection) )
+                else
                 {
-                    BasicCollection* pCol = (BasicCollection*)(SbxBase*)pObj;
+                    BasicCollection* pCol = dynamic_cast< BasicCollection* >((SbxBase*)pObj);
+
+                    if( pCol )
+                {
                     pElem = new SbxVariable( SbxVARIANT );
                     pPar->Put( pElem, 0 );
                     pCol->CollItem( pPar );
                 }
+            }
             }
             else if( bVBAEnabled )  // !pObj
             {
@@ -654,7 +659,7 @@ void SbiRuntime::StepFIND( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 void SbiRuntime::StepFIND_CM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
 
-    SbClassModuleObject* pClassModuleObject = PTR_CAST(SbClassModuleObject,pMod);
+    SbClassModuleObject* pClassModuleObject = dynamic_cast< SbClassModuleObject* >( pMod);
     if( pClassModuleObject )
         pMod->SetFlag( SBX_GBLSEARCH );
 
@@ -677,11 +682,11 @@ void SbiRuntime::StepELEM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     // Liegt auf dem TOS ein Objekt?
     SbxVariableRef pObjVar = PopVar();
 
-    SbxObject* pObj = PTR_CAST(SbxObject,(SbxVariable*) pObjVar);
+    SbxObject* pObj = dynamic_cast< SbxObject* >( (SbxVariable*) pObjVar);
     if( !pObj )
     {
         SbxBase* pObjVarObj = pObjVar->GetObject();
-        pObj = PTR_CAST(SbxObject,pObjVarObj);
+        pObj = dynamic_cast< SbxObject* >( pObjVarObj);
     }
 
     // #56368 Bei StepElem Referenz sichern, sonst koennen Objekte
@@ -1004,12 +1009,10 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
         return;
     }
 
-    SbxDimArray* pArray = 0;
-    if( xObj->ISA(SbxDimArray) )
-    {
-        SbxBase* pObj = (SbxBase*)xObj;
-        pArray = (SbxDimArray*)pObj;
+    SbxDimArray* pArray = dynamic_cast< SbxDimArray* >((SbxBase*)xObj);
 
+    if( pArray )
+    {
         // Dimensionen auswerten
         short nDims = pArray->GetDims();
         sal_Int32 nTotalSize = 0;

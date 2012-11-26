@@ -168,7 +168,7 @@ public:
     ~impXGradientList()
     {
         delete mpVirtualDevice;
-        SdrObject::Free(mpBackgroundObject);
+        deleteSdrObjectSafeAndClearPointer(mpBackgroundObject);
         delete mpSdrModel;
     }
 
@@ -180,7 +180,6 @@ void XGradientList::impCreate()
 {
     if(!mpData)
     {
-        const Point aZero(0, 0);
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
         VirtualDevice* pVirDev = new VirtualDevice;
@@ -196,11 +195,10 @@ void XGradientList::impCreate()
         OSL_ENSURE(0 != pSdrModel, "XGradientList: no SdrModel created!" );
         pSdrModel->GetItemPool().FreezeIdRanges();
 
-        const Size aSinglePixel(pVirDev->PixelToLogic(Size(1, 1)));
-        const Rectangle aBackgroundSize(aZero, Size(aSize.getWidth() - aSinglePixel.getWidth(), aSize.getHeight() - aSinglePixel.getHeight()));
-        SdrObject* pBackgroundObject = new SdrRectObj(aBackgroundSize);
+        SdrObject* pBackgroundObject = new SdrRectObj(
+            *pSdrModel,
+            basegfx::tools::createScaleB2DHomMatrix(aSize.getWidth(), aSize.getHeight()));
         OSL_ENSURE(0 != pBackgroundObject, "XGradientList: no BackgroundObject created!" );
-        pBackgroundObject->SetModel(pSdrModel);
         pBackgroundObject->SetMergedItem(XFillStyleItem(XFILL_GRADIENT));
         pBackgroundObject->SetMergedItem(XLineStyleItem(XLINE_SOLID));
         pBackgroundObject->SetMergedItem(XLineColorItem(String(), Color(COL_BLACK)));
@@ -346,7 +344,7 @@ Bitmap* XGradientList::CreateBitmapForUI( long nIndex, sal_Bool bDelete )
     pBackgroundObject->SetMergedItem(XFillStyleItem(XFILL_GRADIENT));
     pBackgroundObject->SetMergedItem(XFillGradientItem(rItemSet.GetPool(), GetGradient(nIndex)->GetGradient()));
 
-    sdr::contact::SdrObjectVector aObjectVector;
+    SdrObjectVector aObjectVector;
     aObjectVector.push_back(pBackgroundObject);
     sdr::contact::ObjectContactOfObjListPainter aPainter(*pVD, aObjectVector, 0);
     sdr::contact::DisplayInfo aDisplayInfo;

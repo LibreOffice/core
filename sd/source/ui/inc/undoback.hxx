@@ -45,8 +45,6 @@ private:
 
 public:
 
-                            TYPEINFO();
-
                             SdBackgroundObjUndoAction(
                                 SdDrawDocument& rDoc,
                                 SdPage& rPage,

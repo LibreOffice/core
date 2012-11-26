@@ -184,7 +184,6 @@ protected:
     virtual void    DoScroll( ScrollBar* pCurScrollBar );
 
 public:
-                    TYPEINFO();
                     IDEBaseWindow( Window* pParent, const ScriptDocument& rDocument, String aLibName, String aName );
     virtual         ~IDEBaseWindow();
 

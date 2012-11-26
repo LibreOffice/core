@@ -368,7 +368,7 @@ void ViewShell::CalcPagesForPrint( sal_uInt16 nMax )
 
 SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
 {
-    ASSERT( this->IsA( TYPE(SwFEShell) ),"ViewShell::Prt for FEShell only");
+    ASSERT( dynamic_cast< SwFEShell* >(this),"ViewShell::Prt for FEShell only");
     SwFEShell* pFESh = (SwFEShell*)this;
     // Wir bauen uns ein neues Dokument
 //    SwDoc *pPrtDoc = new SwDoc;

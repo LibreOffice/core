@@ -36,6 +36,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <svx/EnhancedCustomShapeFunctionParser.hxx>
+#include <basegfx/range/b2drange.hxx>
 
 #include <boost/shared_ptr.hpp>
 #include <vector>
@@ -76,14 +77,15 @@ class SdrPathObj;
 
 class EnhancedCustomShape2d : public SfxItemSet
 {
+private:
         SdrObject*                  pCustomShapeObj;
-        MSO_SPT                     eSpType;
+        MSO_SPT                     meSpType;
 
         sal_Int32                   nCoordLeft;
         sal_Int32                   nCoordTop;
         sal_Int32                   nCoordWidth;
         sal_Int32                   nCoordHeight;
-        Rectangle                   aLogicRect;
+        basegfx::B2DVector          maLogicScale;
 
         double                      fXScale;
         double                      fYScale;
@@ -113,9 +115,9 @@ class EnhancedCustomShape2d : public SfxItemSet
         sal_Bool                    bFilled         : 1;
         sal_Bool                    bStroked        : 1;
 
-        sal_Bool                    bFlipH;
-        sal_Bool                    bFlipV;
-        sal_Int32                   nRotateAngle;
+//      sal_Bool                    bFlipH;
+//      sal_Bool                    bFlipV;
+//      sal_Int32                   nRotateAngle;
 
         sal_Bool                    SetAdjustValueAsDouble( const double& rValue, const sal_Int32 nIndex );
         sal_Int32                   GetLuminanceChange( sal_uInt32 nIndex ) const;
@@ -124,7 +126,8 @@ class EnhancedCustomShape2d : public SfxItemSet
                                                   sal_uInt32& nColorIndex, sal_uInt32 nColorCount);
         sal_Bool                    GetParameter( double& rParameterReturnValue,  const com::sun::star::drawing::EnhancedCustomShapeParameter&,
                                                     const sal_Bool bReplaceGeoWidth, const sal_Bool bReplaceGeoHeight ) const;
-        Point                       GetPoint( const com::sun::star::drawing::EnhancedCustomShapeParameterPair&,
+        basegfx::B2DPoint GetPoint(
+            const com::sun::star::drawing::EnhancedCustomShapeParameterPair&,
                                                     const sal_Bool bScale = sal_True, const sal_Bool bReplaceGeoSize = sal_False ) const;
 
         void                        CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegmentInd, std::vector< SdrPathObj* >& rObjectList,
@@ -161,17 +164,17 @@ class EnhancedCustomShape2d : public SfxItemSet
                 nRefX( -1 ), nRefY( -1 ), nRefAngle( -1 ), nRefR( -1 ) {};
         };
 
-        sal_Bool                    IsFlipVert() { return bFlipV; };
-        sal_Bool                    IsFlipHorz() { return bFlipH; };
-        sal_Int32                   GetRotateAngle() { return nRotateAngle; };
+//      sal_Bool                    IsFlipVert() { return bFlipV; };
+//      sal_Bool                    IsFlipHorz() { return bFlipH; };
+//      sal_Int32                   GetRotateAngle() { return nRotateAngle; };
 
         SVX_DLLPUBLIC SdrObject*                    CreateLineGeometry();
         SVX_DLLPUBLIC SdrObject*                    CreateObject( sal_Bool bLineGeometryNeededOnly );
         SVX_DLLPUBLIC void                      ApplyGluePoints( SdrObject* pObj );
-        SVX_DLLPUBLIC Rectangle                 GetTextRect() const;
+        SVX_DLLPUBLIC basegfx::B2DRange GetTextRange() const;
 
         SVX_DLLPUBLIC sal_uInt32                    GetHdlCount() const;
-        SVX_DLLPUBLIC sal_Bool                  GetHandlePosition( const sal_uInt32 nIndex, Point& rReturnPosition ) const;
+        SVX_DLLPUBLIC sal_Bool GetHandlePosition( const sal_uInt32 nIndex, basegfx::B2DPoint& rReturnPosition ) const;
         SVX_DLLPUBLIC sal_Bool                  SetHandleControllerPosition( const sal_uInt32 nIndex, const com::sun::star::awt::Point& rPosition );
 
         SVX_DLLPUBLIC EnhancedCustomShape2d( SdrObject* pSdrObjCustomShape );

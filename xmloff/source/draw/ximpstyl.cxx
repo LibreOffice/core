@@ -67,8 +67,6 @@ class SdXMLDrawingPagePropertySetContext : public SvXMLPropertySetContext
 {
 public:
 
-    TYPEINFO();
-
     SdXMLDrawingPagePropertySetContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                 const ::rtl::OUString& rLName,
                  const ::com::sun::star::uno::Reference<
@@ -85,8 +83,6 @@ public:
                                    ::std::vector< XMLPropertyState > &rProperties,
                                    const XMLPropertyState& rProp);
 };
-
-TYPEINIT1( SdXMLDrawingPagePropertySetContext, SvXMLPropertySetContext );
 
 SdXMLDrawingPagePropertySetContext::SdXMLDrawingPagePropertySetContext(
                  SvXMLImport& rImport, sal_uInt16 nPrfx,
@@ -146,8 +142,6 @@ SvXMLImportContext *SdXMLDrawingPagePropertySetContext::CreateChildContext(
 class SdXMLDrawingPageStyleContext : public XMLPropStyleContext
 {
 public:
-    TYPEINFO();
-
     SdXMLDrawingPageStyleContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
@@ -169,8 +163,6 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet > & rPropSet );
 };
-
-TYPEINIT1( SdXMLDrawingPageStyleContext, XMLPropStyleContext );
 
 SdXMLDrawingPageStyleContext::SdXMLDrawingPageStyleContext(
     SvXMLImport& rImport,
@@ -238,8 +230,9 @@ void SdXMLDrawingPageStyleContext::Finish( sal_Bool bOverwrite )
                 sal_Int32 nStyle = 0;
 
                 SdXMLNumberFormatImportContext* pSdNumStyle =
-                    PTR_CAST( SdXMLNumberFormatImportContext,
-                        GetStyles()->FindStyleChildContext( XML_STYLE_FAMILY_DATA_STYLE, sStyleName, sal_True ) );
+                    dynamic_cast< SdXMLNumberFormatImportContext* >(
+                        const_cast< SvXMLStyleContext* >(
+                            GetStyles()->FindStyleChildContext( XML_STYLE_FAMILY_DATA_STYLE, sStyleName, sal_True )));
 
                 if( pSdNumStyle )
                     nStyle = pSdNumStyle->GetDrawKey();
@@ -314,8 +307,6 @@ void SdXMLDrawingPageStyleContext::FillPropertySet(
 }
 
 //////////////////////////////////////////////////////////////////////////////
-
-TYPEINIT1( SdXMLPageMasterStyleContext, SvXMLStyleContext );
 
 SdXMLPageMasterStyleContext::SdXMLPageMasterStyleContext(
     SdXMLImport& rImport,
@@ -396,8 +387,6 @@ SdXMLPageMasterStyleContext::~SdXMLPageMasterStyleContext()
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1( SdXMLPageMasterContext, SvXMLStyleContext );
-
 SdXMLPageMasterContext::SdXMLPageMasterContext(
     SdXMLImport& rImport,
     sal_uInt16 nPrfx,
@@ -472,8 +461,6 @@ SvXMLImportContext *SdXMLPageMasterContext::CreateChildContext(
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
-
-TYPEINIT1( SdXMLPresentationPageLayoutContext, SvXMLStyleContext );
 
 SdXMLPresentationPageLayoutContext::SdXMLPresentationPageLayoutContext(
     SdXMLImport& rImport,
@@ -821,8 +808,6 @@ SdXMLPresentationPlaceholderContext::~SdXMLPresentationPlaceholderContext()
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1( SdXMLMasterPageContext, SdXMLGenericPageContext );
-
 SdXMLMasterPageContext::SdXMLMasterPageContext(
     SdXMLImport& rImport,
     sal_uInt16 nPrfx,
@@ -926,11 +911,14 @@ SdXMLMasterPageContext::~SdXMLMasterPageContext()
 void SdXMLMasterPageContext::EndElement()
 {
     // set styles on master-page
-    if(msName.getLength() && GetSdImport().GetShapeImport()->GetStylesContext())
+    if(msName.getLength())
     {
-        SvXMLImportContext* pContext = GetSdImport().GetShapeImport()->GetStylesContext();
-        if( pContext && pContext->ISA( SvXMLStyleContext ) )
-            ((SdXMLStylesContext*)pContext)->SetMasterPageStyles(*this);
+        SdXMLStylesContext* pContext = dynamic_cast< SdXMLStylesContext* >(GetSdImport().GetShapeImport()->GetStylesContext());
+
+        if( pContext )
+        {
+            pContext->SetMasterPageStyles(*this);
+        }
     }
 
     SdXMLGenericPageContext::EndElement();
@@ -1001,8 +989,6 @@ SvXMLImportContext* SdXMLMasterPageContext::CreateChildContext(
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
-
-TYPEINIT1( SdXMLStylesContext, SvXMLStyleContext );
 
 SdXMLStylesContext::SdXMLStylesContext(
     SdXMLImport& rImport,
@@ -1255,23 +1241,23 @@ void SdXMLStylesContext::EndElement()
         // associate AutoStyles with styles in preparation to setting Styles on shapes
         for(sal_uInt32 a(0L); a < GetStyleCount(); a++)
         {
-            const SvXMLStyleContext* pStyle = GetStyle(a);
-            if(pStyle && pStyle->ISA(XMLShapeStyleContext))
-            {
-                XMLShapeStyleContext* pDocStyle = (XMLShapeStyleContext*)pStyle;
-//              pDocStyle->Filter();
+            const XMLShapeStyleContext* pDocStyle = dynamic_cast< const XMLShapeStyleContext* >(GetStyle(a));
 
-                SvXMLStylesContext* pStylesContext = GetSdImport().GetShapeImport()->GetStylesContext();
+            if(pDocStyle)
+            {
+//              pDocStyle->Filter();
+                const SvXMLStylesContext* pStylesContext = GetSdImport().GetShapeImport()->GetStylesContext();
+
                 if( pStylesContext )
                 {
-                    pStyle = pStylesContext->FindStyleChildContext(pStyle->GetFamily(), pStyle->GetParentName());
+                    const XMLShapeStyleContext* pParentStyle = dynamic_cast< const XMLShapeStyleContext* >(
+                        pStylesContext->FindStyleChildContext(pDocStyle->GetFamily(), pDocStyle->GetParentName()));
 
-                    if(pStyle && pStyle->ISA(XMLShapeStyleContext))
+                    if(pParentStyle)
                     {
-                        XMLShapeStyleContext* pParentStyle = (XMLShapeStyleContext*)pStyle;
                         if(pParentStyle->GetStyle().is())
                         {
-                            pDocStyle->SetStyle(pParentStyle->GetStyle());
+                            const_cast< XMLShapeStyleContext* >(pDocStyle)->SetStyle(pParentStyle->GetStyle());
                         }
                     }
                 }
@@ -1521,11 +1507,11 @@ uno::Reference< container::XNameAccess > SdXMLStylesContext::getPageLayouts() co
 
     for(sal_uInt32 a(0L); a < GetStyleCount(); a++)
     {
-        const SvXMLStyleContext* pStyle = GetStyle(a);
-        if(pStyle && pStyle->ISA(SdXMLPresentationPageLayoutContext))
+        const SdXMLPresentationPageLayoutContext* pStyle = dynamic_cast< const SdXMLPresentationPageLayoutContext* >(GetStyle(a));
+
+        if(pStyle)
         {
-            xLayouts->insertByName( pStyle->GetName(), uno::makeAny(
-            (sal_Int32)((SdXMLPresentationPageLayoutContext*)pStyle)->GetTypeId() ) );
+            xLayouts->insertByName( pStyle->GetName(), uno::makeAny( (sal_Int32)pStyle->GetTypeId() ) );
         }
     }
 
@@ -1535,8 +1521,6 @@ uno::Reference< container::XNameAccess > SdXMLStylesContext::getPageLayouts() co
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 //
-TYPEINIT1( SdXMLMasterStylesContext, SvXMLImportContext );
-
 SdXMLMasterStylesContext::SdXMLMasterStylesContext(
     SdXMLImport& rImport,
     sal_uInt16 nPrfx,
@@ -1667,6 +1651,7 @@ sal_Bool SdXMLHeaderFooterDeclContext::IsTransient() const
 void SdXMLHeaderFooterDeclContext::EndElement()
 {
     SdXMLImport& rImport = *dynamic_cast< SdXMLImport* >( &GetImport() );
+
     if( IsXMLToken( GetLocalName(), XML_HEADER_DECL ) )
     {
         rImport.AddHeaderDecl( maStrName, maStrText );

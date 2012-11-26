@@ -36,7 +36,6 @@
 class SVX_DLLPUBLIC XFillBmpStretchItem : public SfxBoolItem
 {
 public:
-                            TYPEINFO();
                             XFillBmpStretchItem( sal_Bool bStretch = sal_True );
                             XFillBmpStretchItem( SvStream& rIn );
 

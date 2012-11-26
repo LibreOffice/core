@@ -1675,7 +1675,7 @@ SfxAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( Window* pParent,
         case RID_SVXPAGE_IMPROVEMENT :
         {
             String help_url;
-            SFX_ITEMSET_ARG( &rAttr, pItem, SfxStringItem, SID_CURRENT_URL, sal_False );
+            SFX_ITEMSET_ARG( &rAttr, pItem, SfxStringItem, SID_CURRENT_URL );
             if ( pItem )
                 help_url = pItem->GetValue();
             pDlg = new SvxImprovementDialog( pParent, help_url);

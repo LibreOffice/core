@@ -31,61 +31,43 @@
 #include <svx/svdsob.hxx>
 #include <svx/svdtypes.hxx>
 #include "svx/svxdllapi.h"
-
 #include <cppuhelper/implbase3.hxx>
 #include <vector>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+// predefines
 
 class Region;
 class SdrObjList;
 class SdrObject;
 class SdrPage;
-class SdrUnoObj;
 class SdrPaintWindow;
 class SdrView;
-class SdrPageObj;
-class B2dIAOManager;
-class SdrPageView;
-
-// #110094#
-namespace sdr
-{
-    namespace contact
-    {
-        class ViewObjectContactRedirector;
-        class DisplayInfo;
-        class ViewObjectContactRedirector;
-    } // end of namespace contact
-} // end of namespace sdr
-
-// typedefs for a list of SdrPageWindow
 class SdrPageWindow;
-typedef ::std::vector< SdrPageWindow* > SdrPageWindowVector;
+class OutputDevice;
+namespace sdr { namespace contact { class ViewObjectContactRedirector; }}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class SVX_DLLPUBLIC SdrPageView : public SfxListener
+class SVX_DLLPUBLIC SdrPageView
 {
+private:
+    SVX_DLLPRIVATE SdrPageWindow& CreateNewPageWindowEntry(SdrPaintWindow& rPaintWindow);
+
 protected:
     SdrView&                                                        mrView;
-    SdrPage*                                                        mpPage;
-    Point         aPgOrg;   // Nullpunkt der Page
+    SdrPage&                    mrSdrPageOfSdrPageView;
+    basegfx::B2DPoint           maPageOrigin;   // Nullpunkt der Page
 
-    Rectangle     aMarkBound; // wird
-    Rectangle     aMarkSnap;  // von
-    sal_Bool                                                        mbHasMarked;
-    sal_Bool                                                        mbVisible;
+    SetOfByte                   maVisibleLayerSet;   // Menge der sichtbaren Layer
+    SetOfByte                   maLockedLayerSet;   // Menge der nicht editierbaren Layer
+    SetOfByte                   maPrintableLayerSet;    // Menge der druckbaren Layer
 
-    SetOfByte    aLayerVisi;   // Menge der sichtbaren Layer
-    SetOfByte    aLayerLock;   // Menge der nicht editierbaren Layer
-    SetOfByte    aLayerPrn;    // Menge der druckbaren Layer
+    SdrObjList*                 mpCurrentList;     // Aktuelle Liste, in der Regel die Page.
+    SdrObject*                  mpCurrentGroup;    // Aktuelle Gruppe. NULL=Keine.
 
-    SdrObjList*  pAktList;     // Aktuelle Liste, in der Regel die Page.
-    SdrObject*   pAktGroup;    // Aktuelle Gruppe. NULL=Keine.
-
-    SdrHelpLineList aHelpLines; // Hilfslinien und -punkte
+    SdrHelpLineList             maHelpLines; // Hilfslinien und -punkte
 
     // #103911# Use one reserved slot (bReserveBool2) for the document color
     Color         maDocumentColor;
@@ -93,19 +75,36 @@ protected:
     // #103834# Use one reserved slot (bReserveBool1) for the background color
     Color         maBackgroundColor;
 
+    typedef ::std::vector< SdrPageWindow* > SdrPageWindowVector;
     SdrPageWindowVector                                         maPageWindows;
 
     // #i72752# member to remember with which SdrPageWindow the BeginDrawLayer
     // was done
     SdrPageWindow*                                              mpPreparedPageWindow;
 
+    /// bitfield
+    bool                        mbVisible : 1;
+
     // interface to SdrPageWindow
-protected:
     void ClearPageWindows();
     void AppendPageWindow(SdrPageWindow& rNew);
     SdrPageWindow* RemovePageWindow(sal_uInt32 nPos);
     SdrPageWindow* RemovePageWindow(SdrPageWindow& rOld);
+
+    void ImpInvalidateHelpLineArea(sal_uInt16 nNum) const;
+
+    void SetLayer(const String& rName, SetOfByte& rBS, bool bJa);
+    bool IsLayer(const String& rName, const SetOfByte& rBS) const;
+    void SetAllLayers(SetOfByte& rB, bool bJa);
+
+    // Nachsehen, ob AktGroup noch Inserted ist.
+    void CheckAktGroup();
+    void AdjHdl();
+
 public:
+    SdrPageView(SdrPage& rSdrPageOfSdrPageView, SdrView& rNewView);
+    ~SdrPageView();
+
     sal_uInt32 PageWindowCount() const { return maPageWindows.size(); }
     SdrPageWindow* FindPageWindow( SdrPaintWindow& rPaintWindow ) const;
     SdrPageWindow* FindPageWindow( const OutputDevice& rOutDev ) const;
@@ -119,31 +118,8 @@ public:
     */
     const SdrPageWindow* FindPatchedPageWindow( const OutputDevice& rOutDev ) const;
 
-private:
-    SVX_DLLPRIVATE SdrPageWindow& CreateNewPageWindowEntry(SdrPaintWindow& rPaintWindow);
-
-protected:
-    void ImpInvalidateHelpLineArea(sal_uInt16 nNum) const;
-
-protected:
-    void SetLayer(const String& rName, SetOfByte& rBS, sal_Bool bJa);
-    sal_Bool IsLayer(const String& rName, const SetOfByte& rBS) const;
-    void SetAllLayers(SetOfByte& rB, sal_Bool bJa);
-
-    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
-
-    // Nachsehen, ob AktGroup noch Inserted ist.
-    void CheckAktGroup();
-
-    void AdjHdl();
-
-public:
-    TYPEINFO();
-    SdrPageView(SdrPage* pPage1, SdrView& rNewView);
-    ~SdrPageView();
-
     // Wird von der PaintView gerufen, wenn Modelaenderungen abgeschlossen sind
-    void ModelHasChanged();
+    void LazyReactOnObjectChanges();
 
     void Show();
     void Hide();
@@ -166,15 +142,15 @@ public:
 
     /** sets all elements in the view which support a design and a alive mode into the given mode
     */
-    void    SetDesignMode( bool _bDesignMode ) const;
+    void SetDesignMode( bool _bDesignMode );
 
-    sal_Bool IsVisible() const { return mbVisible; }
+    bool IsVisible() const { return mbVisible; }
 
     // Invalidiert den gesamten Bereich der Page
     void InvalidateAllWin();
 
     // rRect bezieht sich auf die Page
-    void InvalidateAllWin(const Rectangle& rRect, sal_Bool bPlus1Pix=sal_False);
+    void InvalidateAllWin(const basegfx::B2DRange& rRange, bool bPlus1Pix = false);
 
     // PrePaint call forwarded from app windows
     void PrePaint();
@@ -183,83 +159,65 @@ public:
     void PostPaint();
 
     // rReg bezieht sich auf's OutDev, nicht auf die Page
-    void CompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) const;
+    void CompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0) const;
 
     // write access to mpPreparedPageWindow
     void setPreparedPageWindow(SdrPageWindow* pKnownTarget);
 
-    void DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget = 0, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) const;
-    void DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, Color aColor = Color( COL_BLACK ) );
+    void DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget = 0, sdr::contact::ViewObjectContactRedirector* pRedirector = 0) const;
+    void DrawPageViewGrid(OutputDevice& rOut, const basegfx::B2DRange& rRect, Color aColor = Color( COL_BLACK ) );
 
-    Rectangle GetPageRect() const;
-    SdrPage* GetPage() const { return mpPage; }
+    basegfx::B2DRange GetPageRange() const;
+    SdrPage& getSdrPageFromSdrPageView() const { return mrSdrPageOfSdrPageView; }
 
-    // Betretene Liste rausreichen
-    SdrObjList* GetObjList() const { return pAktList; }
+    // get/set entered List/Group
+    SdrObjList* GetCurrentObjectList() const { return mpCurrentList; }
+    SdrObject* GetCurrentGroup() const { return mpCurrentGroup; }
+    void SetCurrentGroupAndObjectList(SdrObject* pNewGroup, SdrObjList* pNewList);
 
-    // Betretene Gruppe rausreichen
-    SdrObject* GetAktGroup() const { return pAktGroup; }
+    void SetLayerVisible(const String& rName, bool bShow = true) { SetLayer(rName, maVisibleLayerSet, bShow); if(!bShow) AdjHdl(); InvalidateAllWin(); }
+    bool IsLayerVisible(const String& rName) const { return IsLayer(rName, maVisibleLayerSet); }
+    void SetAllLayersVisible(bool bShow = true) { SetAllLayers(maVisibleLayerSet, bShow); if(!bShow) AdjHdl(); InvalidateAllWin(); }
 
-    // Betretene Gruppe und Liste setzen
-    void SetAktGroupAndList(SdrObject* pNewGroup, SdrObjList* pNewList);
+    void SetLayerLocked(const String& rName, bool bLock = true) { SetLayer(rName, maLockedLayerSet, bLock); if(bLock) AdjHdl(); }
+    bool IsLayerLocked(const String& rName) const { return IsLayer(rName,maLockedLayerSet); }
+    void SetAllLayersLocked(bool bLock = true) { SetAllLayers(maLockedLayerSet, bLock); if(bLock) AdjHdl(); }
 
-    sal_Bool HasMarkedObjPageView() const { return mbHasMarked; }
-    void SetHasMarkedObj(sal_Bool bOn) { mbHasMarked = bOn; }
-
-    const Rectangle& MarkBound() const { return aMarkBound; }
-    const Rectangle& MarkSnap() const { return aMarkSnap; }
-    Rectangle& MarkBound() { return aMarkBound; }
-    Rectangle& MarkSnap() { return aMarkSnap; }
-
-    void SetLayerVisible(const String& rName, sal_Bool bShow = sal_True) { SetLayer(rName, aLayerVisi, bShow); if(!bShow) AdjHdl(); InvalidateAllWin(); }
-    sal_Bool IsLayerVisible(const String& rName) const { return IsLayer(rName, aLayerVisi); }
-    void SetAllLayersVisible(sal_Bool bShow = sal_True) { SetAllLayers(aLayerVisi, bShow); if(!bShow) AdjHdl(); InvalidateAllWin(); }
-
-    void SetLayerLocked(const String& rName, sal_Bool bLock = sal_True) { SetLayer(rName, aLayerLock, bLock); if(bLock) AdjHdl(); }
-    sal_Bool IsLayerLocked(const String& rName) const { return IsLayer(rName,aLayerLock); }
-    void SetAllLayersLocked(sal_Bool bLock = sal_True) { SetAllLayers(aLayerLock, bLock); if(bLock) AdjHdl(); }
-
-    void SetLayerPrintable(const String& rName, sal_Bool bPrn = sal_True) { SetLayer(rName, aLayerPrn, bPrn); }
-    sal_Bool IsLayerPrintable(const String& rName) const { return IsLayer(rName, aLayerPrn); }
-    void SetAllLayersPrintable(sal_Bool bPrn = sal_True) { SetAllLayers(aLayerPrn, bPrn); }
+    void SetLayerPrintable(const String& rName, bool bPrn = true) { SetLayer(rName, maPrintableLayerSet, bPrn); }
+    bool IsLayerPrintable(const String& rName) const { return IsLayer(rName, maPrintableLayerSet); }
+    void SetAllLayersPrintable(bool bPrn = true) { SetAllLayers(maPrintableLayerSet, bPrn); }
 
     // PV stellt eine RefPage oder eine SubList eines RefObj dar oder Model ist ReadOnly
-    sal_Bool IsReadOnly() const;
+    bool IsReadOnly() const;
 
     // der Origin bezieht sich immer auf die obere linke Ecke der Page
-    const Point& GetPageOrigin() const { return aPgOrg; }
-    void SetPageOrigin(const Point& rOrg);
+    const basegfx::B2DPoint& GetPageOrigin() const { return maPageOrigin; }
+    void SetPageOrigin(const basegfx::B2DPoint& rOrg);
 
-    void LogicToPagePos(Point& rPnt) const { rPnt-=aPgOrg; }
-    void LogicToPagePos(Rectangle& rRect) const { rRect.Move(-aPgOrg.X(),-aPgOrg.Y()); }
-    void PagePosToLogic(Point& rPnt) const { rPnt+=aPgOrg; }
-    void PagePosToLogic(Rectangle& rRect) const { rRect.Move(aPgOrg.X(),aPgOrg.Y()); }
+    void SetVisibleLayers(const SetOfByte& rSet) { maVisibleLayerSet = rSet; InvalidateAllWin(); }
+    const SetOfByte& GetVisibleLayers() const { return maVisibleLayerSet; }
+    void SetPrintableLayers(const SetOfByte& rSet) { maPrintableLayerSet = rSet; }
+    const SetOfByte& GetPrintableLayers() const { return maPrintableLayerSet;  }
+    void SetLockedLayers(const SetOfByte& rSet) { maLockedLayerSet = rSet; }
+    const SetOfByte& GetLockedLayers() const { return maLockedLayerSet; }
 
-    void SetVisibleLayers(const SetOfByte& rSet) { aLayerVisi=rSet; InvalidateAllWin(); }
-    const SetOfByte& GetVisibleLayers() const { return aLayerVisi; }
-    void SetPrintableLayers(const SetOfByte& rSet) { aLayerPrn=rSet; }
-    const SetOfByte& GetPrintableLayers() const { return aLayerPrn;  }
-    void SetLockedLayers(const SetOfByte& rSet) { aLayerLock=rSet; }
-    const SetOfByte& GetLockedLayers() const { return aLayerLock; }
-
-    const SdrHelpLineList& GetHelpLines() const { return aHelpLines; }
+    const SdrHelpLineList& GetHelpLines() const { return maHelpLines; }
     void SetHelpLines(const SdrHelpLineList& rHLL);
     //void SetHelpLinePos(sal_uInt16 nNum, const Point& rNewPos);
-    void SetHelpLine(sal_uInt16 nNum, const SdrHelpLine& rNewHelpLine);
-    void DeleteHelpLine(sal_uInt16 nNum);
-    void InsertHelpLine(const SdrHelpLine& rHL, sal_uInt16 nNum=0xFFFF);
-    void MoveHelpLine(sal_uInt16 nNum, sal_uInt16 nNewNum) { aHelpLines.Move(nNum,nNewNum); }
+    void SetHelpLine(sal_uInt32 nNum, const SdrHelpLine& rNewHelpLine);
+    void DeleteHelpLine(sal_uInt32 nNum);
+    void InsertHelpLine(const SdrHelpLine& rHL);
 
     // Liefert sal_True, wenn Layer des Obj sichtbar und nicht gesperrt.
     // Beim Gruppenobjekt muss wenigstens ein Member sichtbar sein,
     // gesperrt sein darf keiner.
-    sal_Bool IsObjMarkable(SdrObject* pObj) const;
+    bool IsObjMarkable(const SdrObject& rObj) const;
 
     // Betreten (Editieren) einer Objektgruppe. Anschliessend liegen alle
     // Memberobjekte der Gruppe im direkten Zugriff. Alle anderen Objekte
     // koennen waerendessen nicht bearbeitet werden (bis zum naechsten
     // LeaveGroup()). (wie MsDos chdir bla).
-    sal_Bool EnterGroup(SdrObject* pObj);
+    bool EnterGroup(SdrObject* pObj);
 
     // Verlassen einer betretenen Objektgruppe. (wie MsDos chdir ..)
     void LeaveOneGroup();
@@ -268,7 +226,7 @@ public:
     void LeaveAllGroup();
 
     // Feststellen, wie weit hinabgestiegen wurde (0=Root(Page))
-    sal_uInt16 GetEnteredLevel() const;
+    sal_uInt32 GetEnteredLevel() const;
 
     // Name der aktuellen Objektgruppe
     String GetActualGroupName() const;
@@ -290,3 +248,6 @@ public:
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #endif //_SVDPAGV_HXX
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// eof

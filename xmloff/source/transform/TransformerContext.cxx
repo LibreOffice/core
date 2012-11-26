@@ -42,8 +42,6 @@ using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-TYPEINIT0( XMLTransformerContext );
-
 sal_Bool XMLTransformerContext::HasQName( sal_uInt16 nPrefix,
                        ::xmloff::token::XMLTokenEnum eToken ) const
 {

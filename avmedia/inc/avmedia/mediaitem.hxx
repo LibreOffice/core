@@ -24,10 +24,7 @@
 #ifndef _AVMEDIA_MEDIAITEM_HXX
 #define _AVMEDIA_MEDIAITEM_HXX
 
-#include <tools/rtti.hxx>
-#ifndef _POOLITEM_HXX
 #include <svl/poolitem.hxx>
-#endif
 #include <com/sun/star/media/ZoomLevel.hpp>
 
 #define AVMEDIA_SETMASK_NONE        ((sal_uInt32)(0x00000000))
@@ -65,8 +62,7 @@ enum MediaState
 class MediaItem : public SfxPoolItem
 {
 public:
-                            TYPEINFO();
-
+    POOLITEM_FACTORY()
                             MediaItem( sal_uInt16 nWhich = 0, sal_uInt32 nMaskSet = AVMEDIA_SETMASK_NONE );
                             MediaItem( const MediaItem& rMediaItem );
     virtual                 ~MediaItem();

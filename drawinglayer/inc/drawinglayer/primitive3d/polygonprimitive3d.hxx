@@ -64,9 +64,6 @@ namespace drawinglayer
             const basegfx::B3DPolygon& getB3DPolygon() const { return maPolygon; }
             const basegfx::BColor& getBColor() const { return maBColor; }
 
-            /// compare operator
-            virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
-
             /// get range
             virtual basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& rViewInformation) const;
 
@@ -120,9 +117,6 @@ namespace drawinglayer
             basegfx::B3DPolygon getB3DPolygon() const { return maPolygon; }
             const attribute::LineAttribute& getLineAttribute() const { return maLineAttribute; }
             const attribute::StrokeAttribute& getStrokeAttribute() const { return maStrokeAttribute; }
-
-            /// compare operator
-            virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
             /// provide unique ID
             DeclPrimitrive3DIDBlock()

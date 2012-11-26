@@ -76,7 +76,7 @@ namespace {
                     nIndex,
                     pDescriptor->GetPageIndex(),
                     pDescriptor->GetVisualState().mnPageId,
-                    FromCoreIndex(pDescriptor->GetPage()->GetPageNum()),
+                    FromCoreIndex(pDescriptor->GetPage()->GetPageNumber()),
                     pDescriptor->GetPage());
             }
             else
@@ -198,7 +198,7 @@ PageKind SlideSorterModel::GetPageType (void) const
 
 
 
-sal_Int32 SlideSorterModel::GetPageCount (void) const
+sal_uInt32 SlideSorterModel::GetPageCount (void) const
 {
     return maPageDescriptors.size();
 }
@@ -207,14 +207,14 @@ sal_Int32 SlideSorterModel::GetPageCount (void) const
 
 
 SharedPageDescriptor SlideSorterModel::GetPageDescriptor (
-    const sal_Int32 nPageIndex,
+    const sal_uInt32 nPageIndex,
     const bool bCreate) const
 {
     ::osl::MutexGuard aGuard (maMutex);
 
     SharedPageDescriptor pDescriptor;
 
-    if (nPageIndex>=0 && nPageIndex<GetPageCount())
+    if (SDRPAGE_NOTFOUND != nPageIndex && nPageIndex < GetPageCount())
     {
         pDescriptor = maPageDescriptors[nPageIndex];
         if (pDescriptor == NULL && bCreate && mxSlides.is())
@@ -294,7 +294,7 @@ sal_Int32 SlideSorterModel::GetIndex (const SdrPage* pPage) const
     ::osl::MutexGuard aGuard (maMutex);
 
     // First try to guess the right index.
-    sal_Int16 nNumber ((pPage->GetPageNum()-1)/2);
+    sal_Int16 nNumber ((pPage->GetPageNumber()-1)/2);
     SharedPageDescriptor pDescriptor (GetPageDescriptor(nNumber, false));
     if (pDescriptor.get() != NULL
         && pDescriptor->GetPage() == pPage)
@@ -331,7 +331,7 @@ sal_uInt16 SlideSorterModel::GetCoreIndex (const sal_Int32 nIndex) const
 {
     SharedPageDescriptor pDescriptor (GetPageDescriptor(nIndex));
     if (pDescriptor)
-        return pDescriptor->GetPage()->GetPageNum();
+        return pDescriptor->GetPage()->GetPageNumber();
     else
         return mxSlides->getCount()*2+1;
 }
@@ -642,7 +642,7 @@ bool SlideSorterModel::NotifyPageEvent (const SdrPage* pSdrPage)
 void SlideSorterModel::InsertSlide (SdPage* pPage)
 {
     // Find the index at which to insert the given page.
-    sal_uInt16 nCoreIndex (pPage->GetPageNum());
+    sal_uInt32 nCoreIndex (pPage->GetPageNumber());
     sal_Int32 nIndex (FromCoreIndex(nCoreIndex));
     if (pPage != GetPage(nIndex))
         return;
@@ -687,7 +687,7 @@ void SlideSorterModel::DeleteSlide (const SdPage* pPage)
     else
     {
         // if not inserted, search for page
-        for(; nIndex < static_cast<sal_Int32>(maPageDescriptors.size()); nIndex++)
+        for(; nIndex < maPageDescriptors.size(); nIndex++)
         {
             if(maPageDescriptors[nIndex]->GetPage() == pPage)
             {
@@ -696,7 +696,7 @@ void SlideSorterModel::DeleteSlide (const SdPage* pPage)
         }
     }
 
-    if(nIndex >= 0 && nIndex < static_cast<sal_Int32>(maPageDescriptors.size()))
+    if(nIndex >= 0 && nIndex < maPageDescriptors.size())
     {
         if (maPageDescriptors[nIndex])
             if (maPageDescriptors[nIndex]->GetPage() != pPage)
@@ -744,9 +744,9 @@ SdPage* SlideSorterModel::GetPage (const sal_Int32 nSdIndex) const
     if (pModel != NULL)
     {
         if (meEditMode == EM_PAGE)
-            return pModel->GetSdPage ((sal_uInt16)nSdIndex, mePageKind);
+            return pModel->GetSdPage ((sal_uInt32)nSdIndex, mePageKind);
         else
-            return pModel->GetMasterSdPage ((sal_uInt16)nSdIndex, mePageKind);
+            return pModel->GetMasterSdPage ((sal_uInt32)nSdIndex, mePageKind);
     }
     else
         return NULL;

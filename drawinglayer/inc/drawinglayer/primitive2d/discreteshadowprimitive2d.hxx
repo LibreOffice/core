@@ -62,12 +62,6 @@ namespace drawinglayer
             /// data read access
             const BitmapEx& getBitmapEx() const { return maBitmapEx; }
 
-            /// compare operator
-            bool operator==(const DiscreteShadow& rCompare) const
-            {
-                return getBitmapEx() == rCompare.getBitmapEx();
-            }
-
             /// helper accesses which create on-demand needed segments
             const BitmapEx& getTopLeft() const;
             const BitmapEx& getTop() const;
@@ -104,9 +98,6 @@ namespace drawinglayer
             /// data read access
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
             const DiscreteShadow& getDiscreteShadow() const { return maDiscreteShadow; }
-
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
             /// get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;

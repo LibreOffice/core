@@ -228,7 +228,7 @@ sal_Bool SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwCntntFrm *p
     for ( i = 0; i < rObjs.Count() && aTmp.Count(); ++i )
     {
         SdrObject *pO = rObjs[i]->DrawObj();
-        if ( !pO->ISA(SwVirtFlyDrawObj) )
+        if ( !dynamic_cast< SwVirtFlyDrawObj* >(pO) )
             continue;
 
         // OD 2004-01-15 #110582# - do not consider invisible objects
@@ -254,7 +254,7 @@ sal_Bool SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwCntntFrm *p
             const SdrObject *pTmp = pSelfFly->GetVirtDrawObj();
             if ( pO->GetLayer() == pTmp->GetLayer() )
             {
-                if ( pO->GetOrdNumDirect() < pTmp->GetOrdNumDirect() )
+                if ( pO->GetNavigationPosition() < pTmp->GetNavigationPosition() )
                     //Im gleichen Layer werden nur obenliegende beachtet.
                     continue;
             }
@@ -1123,9 +1123,10 @@ static const SwFrm *lcl_FindFirstInvaCntnt( const SwLayoutFrm *pLay, long nBotto
             for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
             {
                 const SwAnchoredObject* pObj = rObjs[i];
-                if ( pObj->ISA(SwFlyFrm) )
+                const SwFlyFrm* pFly = dynamic_cast< const SwFlyFrm* >(pObj);
+
+                if ( pFly )
                 {
-                    const SwFlyFrm* pFly = static_cast<const SwFlyFrm*>(pObj);
                     if ( pFly->IsFlyInCntFrm() )
                     {
                         if ( ((SwFlyInCntFrm*)pFly)->IsInvalid() ||
@@ -1159,9 +1160,10 @@ static const SwAnchoredObject* lcl_FindFirstInvaObj( const SwPageFrm* _pPage,
     for ( sal_uInt16 i = 0; i < _pPage->GetSortedObjs()->Count(); ++i )
     {
         const SwAnchoredObject* pObj = (*_pPage->GetSortedObjs())[i];
-        if ( pObj->ISA(SwFlyFrm) )
+        const SwFlyFrm* pFly = dynamic_cast< const SwFlyFrm* >(pObj);
+
+        if ( pFly )
         {
-            const SwFlyFrm* pFly = static_cast<const SwFlyFrm*>(pObj);
             if ( pFly->Frm().Top() <= _nBottom )
             {
                 if ( pFly->IsInvalid() || pFly->IsCompletePaint() )
@@ -1173,7 +1175,7 @@ static const SwAnchoredObject* lcl_FindFirstInvaObj( const SwPageFrm* _pPage,
                     return pFly;
             }
         }
-        else if ( pObj->ISA(SwAnchoredDrawObject) )
+        else if ( dynamic_cast< const SwAnchoredDrawObject* >(pObj) )
         {
             if ( !static_cast<const SwAnchoredDrawObject*>(pObj)->IsValidPos() )
             {
@@ -2177,7 +2179,7 @@ sal_Bool SwLayIdle::_DoIdleJob( const SwCntntFrm *pCnt, IdleJobType eJob )
         if( STRING_LEN == nTxtPos )
         {
             --nTxtPos;
-            if( pSh->ISA(SwCrsrShell) && !((SwCrsrShell*)pSh)->IsTableMode() )
+            if( dynamic_cast< SwCrsrShell* >(pSh) && !((SwCrsrShell*)pSh)->IsTableMode() )
             {
                 SwPaM *pCrsr = ((SwCrsrShell*)pSh)->GetCrsr();
                 if( !pCrsr->HasMark() && pCrsr == pCrsr->GetNext() )
@@ -2238,9 +2240,10 @@ sal_Bool SwLayIdle::_DoIdleJob( const SwCntntFrm *pCnt, IdleJobType eJob )
         for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
         {
             SwAnchoredObject* pObj = rObjs[i];
-            if ( pObj->ISA(SwFlyFrm) )
+            SwFlyFrm* pFly = dynamic_cast< SwFlyFrm* >(pObj);
+
+            if ( pFly )
             {
-                SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pObj);
                 if ( pFly->IsFlyInCntFrm() )
                 {
                     const SwCntntFrm *pC = pFly->ContainsCntnt();
@@ -2317,9 +2320,10 @@ sal_Bool SwLayIdle::DoIdleJob( IdleJobType eJob, sal_Bool bVisAreaOnly )
                                 i < pPage->GetSortedObjs()->Count(); ++i )
             {
                 const SwAnchoredObject* pObj = (*pPage->GetSortedObjs())[i];
-                if ( pObj->ISA(SwFlyFrm) )
+                const SwFlyFrm* pFly = dynamic_cast< const SwFlyFrm* >(pObj);
+
+                if ( pFly )
                 {
-                    const SwFlyFrm *pFly = static_cast<const SwFlyFrm*>(pObj);
                     const SwCntntFrm *pC = pFly->ContainsCntnt();
                     while( pC )
                     {
@@ -2431,7 +2435,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
         do
         {   ++pSh->nStartAction;
             sal_Bool bVis = sal_False;
-            if ( pSh->ISA(SwCrsrShell) )
+            if ( dynamic_cast< SwCrsrShell* >(pSh) )
             {
 #ifdef SW_CRSR_TIMER
                 ((SwCrsrShell*)pSh)->ChgCrsrTimerFlag( sal_False );
@@ -2471,7 +2475,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
                 // aBools[ i ] is true, if the i-th shell is a cursor shell (!!!)
                 // and the cursor is visible.
                 bActions |= aTmp != pSh->VisArea();
-                if ( aTmp == pSh->VisArea() && pSh->ISA(SwCrsrShell) )
+                if ( aTmp == pSh->VisArea() && dynamic_cast< SwCrsrShell* >(pSh) )
                 {
                     bActions |= aBools[nBoolIdx] !=
                                 static_cast<SwCrsrShell*>(pSh)->GetCharRect().IsOver( pSh->VisArea() );
@@ -2489,10 +2493,10 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
             nBoolIdx = 0;
             do
             {
-                sal_Bool bCrsrShell = pSh->IsA( TYPE(SwCrsrShell) );
+                SwCrsrShell* pSwCrsrShell = dynamic_cast< SwCrsrShell* >(pSh);
 
-                if ( bCrsrShell )
-                    ((SwCrsrShell*)pSh)->SttCrsrMove();
+                if ( pSwCrsrShell )
+                    pSwCrsrShell->SttCrsrMove();
 //              else
 //                  pSh->StartAction();
 
@@ -2511,24 +2515,24 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
                     bUnlock = sal_True;
                 }
 
-                if ( bCrsrShell )
+                if ( pSwCrsrShell )
                     //Wenn der Crsr sichbar war wieder sichbar machen, sonst
                     //EndCrsrMove mit sal_True fuer IdleEnd.
-                    ((SwCrsrShell*)pSh)->EndCrsrMove( sal_True^aBools[nBoolIdx] );
+                    pSwCrsrShell->EndCrsrMove( sal_True^aBools[nBoolIdx] );
 //              else
 //                  pSh->EndAction();
                 if( bUnlock )
                 {
-                    if( bCrsrShell )
+                    if( pSwCrsrShell )
                     {
                         // UnlockPaint overwrite the selection from the
                         // CrsrShell and calls the virtual method paint
                         // to fill the virtual device. This fill dont have
                         // paint the selection! -> Set the focus flag at
                         // CrsrShell and it dont paint the selection.
-                        ((SwCrsrShell*)pSh)->ShLooseFcs();
+                        pSwCrsrShell->ShLooseFcs();
                         pSh->UnlockPaint( sal_True );
-                        ((SwCrsrShell*)pSh)->ShGetFcs( sal_False );
+                        pSwCrsrShell->ShGetFcs( sal_False );
                     }
                     else
                         pSh->UnlockPaint( sal_True );

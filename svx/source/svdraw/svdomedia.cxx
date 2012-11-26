@@ -31,23 +31,18 @@
 #include "svx/svdstr.hrc"
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
 #include <avmedia/mediawindow.hxx>
+#include <svx/svdlegacy.hxx>
 
 // ---------------
 // - SdrMediaObj -
 // ---------------
 
-TYPEINIT1( SdrMediaObj, SdrRectObj );
-
-// ------------------------------------------------------------------------------
-
-SdrMediaObj::SdrMediaObj()
-{
-}
-
-// ------------------------------------------------------------------------------
-
-SdrMediaObj::SdrMediaObj( const Rectangle& rRect ) :
-    SdrRectObj( rRect )
+SdrMediaObj::SdrMediaObj(
+    SdrModel& rSdrModel,
+    const basegfx::B2DHomMatrix& rTransform)
+:   SdrRectObj(
+        rSdrModel,
+        rTransform)
 {
 }
 
@@ -57,11 +52,43 @@ SdrMediaObj::~SdrMediaObj()
 {
 }
 
+void SdrMediaObj::copyDataFromSdrObject(const SdrObject& rSource)
+{
+    if(this != &rSource)
+    {
+        const SdrMediaObj* pSource = dynamic_cast< const SdrMediaObj* >(&rSource);
+
+        if(pSource)
+{
+            // call parent
+            SdrRectObj::copyDataFromSdrObject(rSource);
+
+            // copy local data
+            setMediaProperties(pSource->getMediaProperties());
+            setGraphic(pSource->mapGraphic.get());
+        }
+        else
+        {
+            OSL_ENSURE(false, "copyDataFromSdrObject with ObjectType of Source different from Target (!)");
+        }
+    }
+}
+
+SdrObject* SdrMediaObj::CloneSdrObject(SdrModel* pTargetModel) const
+{
+    SdrMediaObj* pClone = new SdrMediaObj(
+        pTargetModel ? *pTargetModel : getSdrModelFromSdrObject());
+    OSL_ENSURE(pClone, "CloneSdrObject error (!)");
+    pClone->copyDataFromSdrObject(*this);
+
+    return pClone;
+}
+
 // ------------------------------------------------------------------------------
 
-FASTBOOL SdrMediaObj::HasTextEdit() const
+bool SdrMediaObj::HasTextEdit() const
 {
-    return sal_False;
+    return false;
 }
 
 // ------------------------------------------------------------------------------
@@ -75,26 +102,26 @@ sdr::contact::ViewContact* SdrMediaObj::CreateObjectSpecificViewContact()
 
 void SdrMediaObj::TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const
 {
-    rInfo.bSelectAllowed = true;
-    rInfo.bMoveAllowed = true;
-    rInfo.bResizeFreeAllowed = true;
-    rInfo.bResizePropAllowed = true;
-    rInfo.bRotateFreeAllowed = false;
-    rInfo.bRotate90Allowed = false;
-    rInfo.bMirrorFreeAllowed = false;
-    rInfo.bMirror45Allowed = false;
-    rInfo.bMirror90Allowed = false;
-    rInfo.bTransparenceAllowed = false;
-    rInfo.bGradientAllowed = false;
-    rInfo.bShearAllowed = false;
-    rInfo.bEdgeRadiusAllowed = false;
-    rInfo.bNoOrthoDesired = false;
-    rInfo.bNoContortion = false;
-    rInfo.bCanConvToPath = false;
-    rInfo.bCanConvToPoly = false;
-    rInfo.bCanConvToContour = false;
-    rInfo.bCanConvToPathLineToArea = false;
-    rInfo.bCanConvToPolyLineToArea = false;
+    rInfo.mbSelectAllowed = true;
+    rInfo.mbMoveAllowed = true;
+    rInfo.mbResizeFreeAllowed = true;
+    rInfo.mbResizePropAllowed = true;
+    rInfo.mbRotateFreeAllowed = false;
+    rInfo.mbRotate90Allowed = false;
+    rInfo.mbMirrorFreeAllowed = false;
+    rInfo.mbMirror45Allowed = false;
+    rInfo.mbMirror90Allowed = false;
+    rInfo.mbTransparenceAllowed = false;
+    rInfo.mbGradientAllowed = false;
+    rInfo.mbShearAllowed = false;
+    rInfo.mbEdgeRadiusAllowed = false;
+    rInfo.mbNoOrthoDesired = false;
+    rInfo.mbNoContortion = false;
+    rInfo.mbCanConvToPath = false;
+    rInfo.mbCanConvToPoly = false;
+    rInfo.mbCanConvToContour = false;
+    rInfo.mbCanConvToPathLineToArea = false;
+    rInfo.mbCanConvToPolyLineToArea = false;
 }
 
 // ------------------------------------------------------------------------------
@@ -130,63 +157,48 @@ void SdrMediaObj::TakeObjNamePlural(XubString& rName) const
 
 // ------------------------------------------------------------------------------
 
-void SdrMediaObj::operator=(const SdrObject& rObj)
+void SdrMediaObj::AdjustToMaxRange( const basegfx::B2DRange& rMaxRange, bool bShrinkOnly /* = false */ )
 {
-    SdrRectObj::operator=( rObj );
+    const Size aLogicSize(Application::GetDefaultDevice()->PixelToLogic(getPreferredSize(), MAP_100TH_MM));
+    basegfx::B2DVector aSize(aLogicSize.Width(), aLogicSize.Height());
+    const basegfx::B2DVector aMaxSize(rMaxRange.getRange());
 
-    if( rObj.ISA( SdrMediaObj ) )
+    if(!aSize.equalZero())
     {
-        const SdrMediaObj& rMediaObj = static_cast< const SdrMediaObj& >( rObj );
+        basegfx::B2DPoint aPos(rMaxRange.getMinimum());
 
-        setMediaProperties( rMediaObj.getMediaProperties() );
-        setGraphic( rMediaObj.mapGraphic.get() );
-    }
-}
-
-// ------------------------------------------------------------------------------
-
-void SdrMediaObj::AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly /* = false */ )
-{
-    Size aSize( Application::GetDefaultDevice()->PixelToLogic( getPreferredSize(), MAP_100TH_MM ) );
-    Size aMaxSize( rMaxRect.GetSize() );
-
-    if( aSize.Height() != 0 && aSize.Width() != 0 )
-    {
-        Point aPos( rMaxRect.TopLeft() );
-
-        // Falls Grafik zu gross, wird die Grafik
-        // in die Seite eingepasst
-        if ( (!bShrinkOnly                          ||
-             ( aSize.Height() > aMaxSize.Height() ) ||
-             ( aSize.Width()  > aMaxSize.Width()  ) )&&
-             aSize.Height() && aMaxSize.Height() )
+        if(!bShrinkOnly
+            || basegfx::fTools::more(aSize.getY(), aMaxSize.getY())
+            || basegfx::fTools::more(aSize.getX(), aMaxSize.getX()))
         {
-            float fGrfWH =  (float)aSize.Width() /
-                            (float)aSize.Height();
-            float fWinWH =  (float)aMaxSize.Width() /
-                            (float)aMaxSize.Height();
-
-            // Grafik an Pagesize anpassen (skaliert)
-            if ( fGrfWH < fWinWH )
+             if(!basegfx::fTools::equalZero(aSize.getX()) && !basegfx::fTools::equalZero(aMaxSize.getY()))
             {
-                aSize.Width() = (long)(aMaxSize.Height() * fGrfWH);
-                aSize.Height()= aMaxSize.Height();
-            }
-            else if ( fGrfWH > 0.F )
-            {
-                aSize.Width() = aMaxSize.Width();
-                aSize.Height()= (long)(aMaxSize.Width() / fGrfWH);
-            }
+                const double fScaleGraphic(aSize.getX() / aSize.getY());
+                const double fScaleLimit(aMaxSize.getX() / aMaxSize.getY());
 
-            aPos = rMaxRect.Center();
+                if(basegfx::fTools::less(fScaleGraphic, fScaleLimit))
+                {
+                    aSize.setX(aMaxSize.getY() * fScaleGraphic);
+                    aSize.setY(aMaxSize.getY());
+                }
+                else if(basegfx::fTools::more(fScaleGraphic, 0.0))
+                {
+                    aSize.setX(aMaxSize.getX());
+                    aSize.setY(aMaxSize.getX() / fScaleGraphic);
+                }
+
+                aPos = rMaxRange.getCenter();
+            }
         }
 
         if( bShrinkOnly )
-            aPos = aRect.TopLeft();
+        {
+            aPos = getSdrObjectTranslate();
+        }
 
-        aPos.X() -= aSize.Width() / 2;
-        aPos.Y() -= aSize.Height() / 2;
-        SetLogicRect( Rectangle( aPos, aSize ) );
+        aPos -= aSize * 0.5;
+
+        sdr::legacy::SetLogicRange(*this, basegfx::B2DRange(aPos, aPos + aSize));
     }
 }
 
@@ -279,3 +291,5 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
     if( AVMEDIA_SETMASK_ZOOM & nMaskSet )
         maMediaProperties.setZoom( rNewProperties.getZoom() );
 }
+
+// eof

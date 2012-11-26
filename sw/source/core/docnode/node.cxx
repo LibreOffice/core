@@ -71,8 +71,6 @@
 
 using namespace ::com::sun::star::i18n;
 
-TYPEINIT2( SwCntntNode, SwModify, SwIndexReg )
-
 /*
  * Some local helper functions for the attribute set handle of a content node.
  * Since the attribute set of a content node may not be modified directly,
@@ -737,9 +735,9 @@ const SwPageDesc* SwNode::FindPageDesc( sal_Bool bCalcLay,
                     ((SwFmtPageDesc*)pItem)->GetDefinedIn() )
                 {
                     const SwModify* pMod = ((SwFmtPageDesc*)pItem)->GetDefinedIn();
-                    if( pMod->ISA( SwCntntNode ) )
+                    if( dynamic_cast< const SwCntntNode* >(pMod) )
                         aInfo.CheckNode( *(SwCntntNode*)pMod );
-                    else if( pMod->ISA( SwFmt ))
+                    else if( dynamic_cast< const SwFmt* >(pMod))
                         ((SwFmt*)pMod)->GetInfo( aInfo );
                 }
 

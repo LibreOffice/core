@@ -206,11 +206,12 @@ void ScAccessibleSpreadsheet::VisAreaChanged()
 
 void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if (rHint.ISA( SfxSimpleHint ) )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if (pSfxSimpleHint)
     {
-        const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
         // only notify if child exist, otherwise it is not necessary
-        if ((rRef.GetId() == SC_HINT_ACC_CURSORCHANGED))
+        if ((pSfxSimpleHint->GetId() == SC_HINT_ACC_CURSORCHANGED))
         {
             if (mpViewShell)
             {
@@ -264,7 +265,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 }
             }
         }
-        else if ((rRef.GetId() == SC_HINT_DATACHANGED))
+        else if ((pSfxSimpleHint->GetId() == SC_HINT_DATACHANGED))
         {
             if (!mbDelIns)
                 CommitTableModelChange(maRange.aStart.Row(), maRange.aStart.Col(), maRange.aEnd.Row(), maRange.aEnd.Col(), AccessibleTableModelChangeType::UPDATE);
@@ -272,7 +273,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 mbDelIns = sal_False;
         }
         // no longer needed, because the document calls the VisAreaChanged method
-/*      else if (rRef.GetId() == SC_HINT_ACC_VISAREACHANGED)
+/*      else if (pSfxSimpleHint->GetId() == SC_HINT_ACC_VISAREACHANGED)
         {
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::VISIBLE_DATA_CHANGED;
@@ -298,7 +299,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
             }
         }*/
         // no longer needed, because the document calls the BoundingBoxChanged method
-/*        else if (rRef.GetId() == SC_HINT_ACC_WINDOWRESIZED)
+/*        else if (pSfxSimpleHint->GetId() == SC_HINT_ACC_WINDOWRESIZED)
         {
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::BOUNDRECT_CHANGED;
@@ -307,23 +308,26 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
             CommitChange(aEvent);
         }*/
     }
-    else if (rHint.ISA( ScUpdateRefHint ))
+    else
     {
-        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
-        if (rRef.GetMode() == URM_INSDEL && rRef.GetDz() == 0) //#107250# test whether table is inserted or deleted
+        const ScUpdateRefHint* pScUpdateRefHint = dynamic_cast< const ScUpdateRefHint* >(&rHint);
+
+        if (pScUpdateRefHint)
         {
-            if (((rRef.GetRange().aStart.Col() == maRange.aStart.Col()) &&
-                (rRef.GetRange().aEnd.Col() == maRange.aEnd.Col())) ||
-                ((rRef.GetRange().aStart.Row() == maRange.aStart.Row()) &&
-                (rRef.GetRange().aEnd.Row() == maRange.aEnd.Row())))
+            if (pScUpdateRefHint->GetMode() == URM_INSDEL && pScUpdateRefHint->GetDz() == 0) //#107250# test whether table is inserted or deleted
+            {
+                if (((pScUpdateRefHint->GetRange().aStart.Col() == maRange.aStart.Col()) &&
+                    (pScUpdateRefHint->GetRange().aEnd.Col() == maRange.aEnd.Col())) ||
+                    ((pScUpdateRefHint->GetRange().aStart.Row() == maRange.aStart.Row()) &&
+                    (pScUpdateRefHint->GetRange().aEnd.Row() == maRange.aEnd.Row())))
             {
                 // ignore next SC_HINT_DATACHANGED notification
                 mbDelIns = sal_True;
 
                 sal_Int16 nId(0);
-                SCsCOL nX(rRef.GetDx());
-                SCsROW nY(rRef.GetDy());
-                ScRange aRange(rRef.GetRange());
+                    SCsCOL nX(pScUpdateRefHint->GetDx());
+                    SCsROW nY(pScUpdateRefHint->GetDy());
+                    ScRange aRange(pScUpdateRefHint->GetRange());
                 if ((nX < 0) || (nY < 0))
                 {
                     DBG_ASSERT(!((nX < 0) && (nY < 0)), "should not be possible to remove row and column at the same time");
@@ -353,10 +357,10 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                     DBG_ERROR("is it a deletion or a insertion?");
                 }
 
-                CommitTableModelChange(rRef.GetRange().aStart.Row(),
-                    rRef.GetRange().aStart.Col(),
-                    rRef.GetRange().aStart.Row() + nY,
-                    rRef.GetRange().aStart.Col() + nX, nId);
+                    CommitTableModelChange(pScUpdateRefHint->GetRange().aStart.Row(),
+                        pScUpdateRefHint->GetRange().aStart.Col(),
+                        pScUpdateRefHint->GetRange().aStart.Row() + nY,
+                        pScUpdateRefHint->GetRange().aStart.Col() + nX, nId);
 
                 AccessibleEventObject aEvent;
                 aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
@@ -367,6 +371,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 CommitChange(aEvent);
             }
         }
+    }
     }
 
     ScAccessibleTableBase::Notify(rBC, rHint);

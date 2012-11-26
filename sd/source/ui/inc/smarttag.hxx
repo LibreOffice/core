@@ -72,11 +72,11 @@ public:
     ::sd::View& getView() const { return mrView; }
 
 protected:
-    virtual sal_uLong GetMarkablePointCount() const;
-    virtual sal_uLong GetMarkedPointCount() const;
-    virtual sal_Bool MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark=sal_False);
+    virtual sal_uInt32 GetMarkablePointCount() const;
+    virtual sal_uInt32 GetMarkedPointCount() const;
+    virtual bool MarkPoint(SdrHdl& rHdl, bool bUnmark = false);
     virtual void CheckPossibilities();
-    virtual sal_Bool MarkPoints(const Rectangle* pRect, sal_Bool bUnmark);
+    virtual bool MarkPoints(const basegfx::B2DRange* pRange, bool bUnmark);
 
     virtual void addCustomHandles( SdrHdlList& rHandlerList );
     virtual void select();
@@ -135,13 +135,13 @@ public:
     bool getContext( SdrViewContext& rContext ) const;
 
     // support point editing
-    sal_Bool HasMarkablePoints() const;
-    sal_uLong GetMarkablePointCount() const;
-    sal_Bool HasMarkedPoints() const;
-    sal_uLong GetMarkedPointCount() const;
-    sal_Bool IsPointMarkable(const SdrHdl& rHdl) const;
-    sal_Bool MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark=sal_False);
-    sal_Bool MarkPoints(const Rectangle* pRect, sal_Bool bUnmark);
+    bool HasMarkablePoints() const;
+    sal_uInt32 GetMarkablePointCount() const;
+    bool HasMarkedPoints() const;
+    sal_uInt32 GetMarkedPointCount() const;
+    bool IsPointMarkable(const SdrHdl& rHdl) const;
+    bool MarkPoint(SdrHdl& rHdl, bool bUnmark = false);
+    bool MarkPoints(const basegfx::B2DRange* pRange, bool bUnmark);
 
     void CheckPossibilities();
 
@@ -168,13 +168,28 @@ private:
 class SmartHdl : public SdrHdl
 {
 public:
-    SmartHdl( const SmartTagReference& xTag, SdrObject* pObject, const Point& rPnt, SdrHdlKind eNewKind=HDL_SMARTTAG );
-    SmartHdl( const SmartTagReference& xTag, const Point& rPnt, SdrHdlKind eNewKind=HDL_SMARTTAG );
+    SmartHdl(
+        SdrHdlList& rHdlList,
+        const SdrObject* pSdrHdlObject,
+        const SmartTagReference& xTag,
+        SdrHdlKind eNewKind, // HDL_SMARTTAG
+        const basegfx::B2DPoint& rPnt);
+
+    // for handle copying support in MotionPathTag::addCustomHandles
+    SmartHdl(
+        SdrHdlList& rHdlList,
+        const SdrObject* pSdrHdlObject,
+        const SmartTagReference& xTag,
+        sal_uInt32 nObjHandleNum,
+        SdrHdl& rSource);
 
     const SmartTagReference& getTag() const { return mxTag; }
 
     virtual bool isMarkable() const;
+
 protected:
+    virtual ~SmartHdl();
+
     SmartTagReference mxTag;
 };
 

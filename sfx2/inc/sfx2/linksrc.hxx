@@ -29,7 +29,6 @@
 #ifndef _TOOLS_REF_HXX
 #include <tools/ref.hxx>
 #endif
-#include <tools/rtti.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 
 #ifndef _SAL_CONFIG_H
@@ -65,8 +64,6 @@ private:
     SvLinkSource_Impl*  pImpl; // compatible area
 
 public:
-                        TYPEINFO();
-
                         SvLinkSource();
     virtual             ~SvLinkSource();
 

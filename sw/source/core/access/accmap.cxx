@@ -69,6 +69,7 @@
 #include <ndtxt.hxx>
 #include <dflyobj.hxx>
 #include <prevwpage.hxx>
+#include <svx/fmmodel.hxx>
 #include <switerator.hxx>
 
 using namespace ::com::sun::star;
@@ -155,12 +156,13 @@ void SwDrawModellListener_Impl::Notify( SfxBroadcaster& /*rBC*/,
     // notifications for writer fly frames.
     // OD 01.07.2003 #110554# - do not broadcast notifications for plane
     // <SdrObject>objects
-    const SdrHint *pSdrHint = PTR_CAST( SdrHint, &rHint );
+    const SdrBaseHint* pSdrHint = dynamic_cast< const SdrBaseHint* >(&rHint);
+
     if ( !pSdrHint ||
-         ( pSdrHint->GetObject() &&
-           ( pSdrHint->GetObject()->ISA(SwFlyDrawObj) ||
-             pSdrHint->GetObject()->ISA(SwVirtFlyDrawObj) ||
-             IS_TYPE(SdrObject,pSdrHint->GetObject()) ) ) )
+         ( pSdrHint->GetSdrHintObject() &&
+           ( dynamic_cast< const SwFlyDrawObj* >(pSdrHint->GetSdrHintObject()) ||
+             dynamic_cast< const SwVirtFlyDrawObj* >(pSdrHint->GetSdrHintObject()) ||
+             typeid(*pSdrHint->GetSdrHintObject()) == typeid(SdrObject)))) // IS_TYPE(SdrObject,pSdrHint->GetSdrHintObject()) ) ) )
     {
         return;
     }
@@ -261,7 +263,7 @@ SwAccessibleObjShape_Impl
     SwAccessibleObjShape_Impl *pShapes = 0;
     SwAccessibleObjShape_Impl *pSelShape = 0;
 
-    sal_uInt16 nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
+    sal_uInt32 nSelShapes = pFESh ? pFESh->GetNumberOfSelectedObjects() : 0;
     rSize = size();
 
     if( rSize > 0 )
@@ -1050,9 +1052,8 @@ void SwAccessibleMap::DoInvalidateShapeSelection()
     size_t nShapes = 0;
 
     const ViewShell *pVSh = GetShell();
-    const SwFEShell *pFESh = pVSh->ISA( SwFEShell ) ?
-                            static_cast< const SwFEShell * >( pVSh ) : 0;
-    sal_uInt16 nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
+    const SwFEShell *pFESh = dynamic_cast< const SwFEShell * >( pVSh );
+    sal_uInt32 nSelShapes = pFESh ? pFESh->GetNumberOfSelectedObjects() : 0;
 
     {
         vos::OGuard aGuard( maMutex );
@@ -1137,9 +1138,8 @@ void SwAccessibleMap::DoInvalidateShapeSelection()
 void SwAccessibleMap::DoInvalidateShapeFocus()
 {
     const ViewShell *pVSh = GetShell();
-    const SwFEShell *pFESh = pVSh->ISA( SwFEShell ) ?
-                            static_cast< const SwFEShell * >( pVSh ) : 0;
-    sal_uInt16 nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
+    const SwFEShell *pFESh = dynamic_cast< const SwFEShell * >( pVSh );
+    sal_uInt32 nSelShapes = pFESh ? pFESh->GetNumberOfSelectedObjects() : 0;
 
     if( nSelShapes != 1 )
         return;
@@ -1967,18 +1967,21 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
     SwAccessibleChild aFrmOrObj( pFrm );
     sal_Bool bShapeSelected = sal_False;
     const ViewShell *pVSh = GetShell();
-    if( pVSh->ISA( SwCrsrShell ) )
+    const SwCrsrShell *pCSh = dynamic_cast< const SwCrsrShell * >( pVSh );
+
+    if( pCSh )
     {
-        const SwCrsrShell *pCSh = static_cast< const SwCrsrShell * >( pVSh );
         if( pCSh->IsTableMode() )
         {
             while( aFrmOrObj.GetSwFrm() && !aFrmOrObj.GetSwFrm()->IsCellFrm() )
                 aFrmOrObj = aFrmOrObj.GetSwFrm()->GetUpper();
         }
-        else if( pVSh->ISA( SwFEShell ) )
+        else
         {
-            sal_uInt16 nObjCount;
-            const SwFEShell *pFESh = static_cast< const SwFEShell * >( pVSh );
+            const SwFEShell *pFESh = dynamic_cast< const SwFEShell * >( pVSh );
+
+            if( pFESh )
+        {
             const SwFrm *pFlyFrm = pFESh->GetCurrFlyFrm();
             if( pFlyFrm )
             {
@@ -1986,12 +1989,13 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
                         "cursor is not contained in fly frame" );
                 aFrmOrObj = pFlyFrm;
             }
-            else if( (nObjCount = pFESh->IsObjSelected()) > 0 )
+                else if( pFESh->IsObjSelected() )
             {
                 bShapeSelected = sal_True;
                 aFrmOrObj = static_cast<const SwFrm *>( 0 );
             }
         }
+    }
     }
 
     ASSERT( bShapeSelected || aFrmOrObj.IsAccessible(GetShell()->IsPreView()),
@@ -2681,7 +2685,7 @@ SwAccessibleSelectedParas_Impl* SwAccessibleMap::_BuildSelectedParas()
             SwFEShell* pFEShell = dynamic_cast<SwFEShell*>(pCrsrShell);
             if ( !pFEShell ||
                  ( !pFEShell->IsFrmSelected() &&
-                   pFEShell->IsObjSelected() == 0 ) )
+                   !pFEShell->IsObjSelected() ) )
             {
                 // get cursor without updating an existing table cursor.
                 pCrsr = pCrsrShell->GetCrsr( sal_False );

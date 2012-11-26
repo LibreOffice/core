@@ -33,7 +33,6 @@ namespace avmedia
 // - MediaItem -
 // -------------
 
-TYPEINIT1_AUTOFACTORY( MediaItem, ::SfxPoolItem );
     ::rtl::OUString         maURL;
     sal_uInt32              mnMaskSet;
     MediaState              meState;
@@ -45,6 +44,8 @@ TYPEINIT1_AUTOFACTORY( MediaItem, ::SfxPoolItem );
     ::com::sun::star::media::ZoomLevel meZoom;
 
 // ------------------------------------------------------------------------------
+
+IMPL_POOLITEM_FACTORY(MediaItem)
 
 MediaItem::MediaItem( sal_uInt16 _nWhich, sal_uInt32 nMaskSet ) :
     SfxPoolItem( _nWhich ),

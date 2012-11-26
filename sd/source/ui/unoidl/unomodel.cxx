@@ -109,10 +109,10 @@
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 
-using ::rtl::OUString;
-
 #include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
+#include <svx/globaldrawitempool.hxx>
 
+using ::rtl::OUString;
 using namespace ::osl;
 using namespace ::vos;
 using namespace ::cppu;
@@ -158,11 +158,11 @@ SdUnoForbiddenCharsTable::~SdUnoForbiddenCharsTable()
 
 void SdUnoForbiddenCharsTable::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
 {
-    const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
+    const SdrBaseHint* pSdrHint = dynamic_cast< const SdrBaseHint* >(&rHint);
 
     if( pSdrHint )
     {
-        if( HINT_MODELCLEARED == pSdrHint->GetKind() )
+        if( HINT_MODELCLEARED == pSdrHint->GetSdrHintKind() )
         {
             mpModel = NULL;
         }
@@ -203,7 +203,7 @@ const SvxItemPropertySet* ImplGetDrawModelPropertySet()
         { MAP_CHAR_LEN(sUNO_Prop_HasValidSignatures),   WID_MODEL_HASVALIDSIGNATURES, &::getCppuType(static_cast< const sal_Bool * >(0)), beans::PropertyAttribute::READONLY, 0 },
         { 0,0,0,0,0,0 }
     };
-    static SvxItemPropertySet aDrawModelPropertySet_Impl( aDrawModelPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
+    static SvxItemPropertySet aDrawModelPropertySet_Impl( aDrawModelPropertyMap_Impl, GetGlobalDrawObjectItemPool() );
     return &aDrawModelPropertySet_Impl;
 }
 
@@ -445,7 +445,7 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     if( mpDoc )
     {
-        const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
+        const SdrBaseHint* pSdrHint = dynamic_cast< const SdrBaseHint* >(&rHint);
 
         if( pSdrHint )
         {
@@ -456,7 +456,7 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     notifyEvent( aEvent );
             }
 
-            if( pSdrHint->GetKind() == HINT_MODELCLEARED )
+            if( pSdrHint->GetSdrHintKind() == HINT_MODELCLEARED )
             {
                 if( mpDoc )
                     EndListening( *mpDoc );
@@ -466,7 +466,7 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         }
         else
         {
-            const SfxSimpleHint* pSfxHint = PTR_CAST(SfxSimpleHint, &rHint );
+            const SfxSimpleHint* pSfxHint = dynamic_cast< const SfxSimpleHint* >(&rHint );
 
             // ist unser SdDrawDocument gerade gestorben?
             if(pSfxHint && pSfxHint->GetId() == SFX_HINT_DYING)
@@ -493,12 +493,12 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 /******************************************************************************
 *                                                                             *
 ******************************************************************************/
-SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate ) throw()
+SdPage* SdXImpressDocument::InsertSdPage( sal_uInt32 nPage, sal_Bool bDuplicate ) throw()
 {
-    sal_uInt16 nPageCount = mpDoc->GetSdPageCount( PK_STANDARD );
-    SdrLayerAdmin& rLayerAdmin = mpDoc->GetLayerAdmin();
-    sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False);
-    sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False);
+    sal_uInt32 nPageCount = mpDoc->GetSdPageCount( PK_STANDARD );
+    SdrLayerAdmin& rLayerAdmin = mpDoc->GetModelLayerAdmin();
+    sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), false);
+    sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), false);
 
     SdPage* pStandardPage = NULL;
 
@@ -507,14 +507,14 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
         // this is only used for clipboard where we only have one page
         pStandardPage = (SdPage*) mpDoc->AllocPage(sal_False);
 
-        Size aDefSize(21000, 29700);   // A4-Hochformat
-        pStandardPage->SetSize( aDefSize );
+        basegfx::B2DVector aDefSize(21000.0, 29700.0);   // A4-Hochformat
+        pStandardPage->SetPageScale( aDefSize );
         mpDoc->InsertPage(pStandardPage, 0);
     }
     else
     {
         // Hier wird die Seite ermittelt, hinter der eingefuegt werden soll
-        SdPage* pPreviousStandardPage = mpDoc->GetSdPage( Min( (sal_uInt16)(nPageCount - 1), nPage ), PK_STANDARD );
+        SdPage* pPreviousStandardPage = mpDoc->GetSdPage( Min( (nPageCount - 1), nPage ), PK_STANDARD );
         SetOfByte aVisibleLayers = pPreviousStandardPage->TRG_GetMasterPageVisibleLayers();
         sal_Bool bIsPageBack = aVisibleLayers.IsSet( aBckgrnd );
         sal_Bool bIsPageObj = aVisibleLayers.IsSet( aBckgrndObj );
@@ -528,9 +528,9 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
         * Standardseite stets die zugehoerige Notizseite folgt.
         **************************************************************/
 
-        sal_uInt16 nStandardPageNum = pPreviousStandardPage->GetPageNum() + 2;
+        sal_uInt32 nStandardPageNum = pPreviousStandardPage->GetPageNumber() + 2;
         SdPage* pPreviousNotesPage = (SdPage*) mpDoc->GetPage( nStandardPageNum - 1 );
-        sal_uInt16 nNotesPageNum = nStandardPageNum + 1;
+        sal_uInt32 nNotesPageNum = nStandardPageNum + 1;
         String aStandardPageName;
         String aNotesPageName;
 
@@ -538,15 +538,15 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
         * Standardseite
         **************************************************************/
         if( bDuplicate )
-            pStandardPage = (SdPage*) pPreviousStandardPage->Clone();
+            pStandardPage = (SdPage*) pPreviousStandardPage->CloneSdrPage();
         else
             pStandardPage = (SdPage*) mpDoc->AllocPage(sal_False);
 
-        pStandardPage->SetSize( pPreviousStandardPage->GetSize() );
-        pStandardPage->SetBorder( pPreviousStandardPage->GetLftBorder(),
-                                    pPreviousStandardPage->GetUppBorder(),
-                                    pPreviousStandardPage->GetRgtBorder(),
-                                    pPreviousStandardPage->GetLwrBorder() );
+        pStandardPage->SetPageScale( pPreviousStandardPage->GetPageScale() );
+        pStandardPage->SetPageBorder( pPreviousStandardPage->GetLeftPageBorder(),
+                                    pPreviousStandardPage->GetTopPageBorder(),
+                                    pPreviousStandardPage->GetRightPageBorder(),
+                                    pPreviousStandardPage->GetBottomPageBorder() );
         pStandardPage->SetOrientation( pPreviousStandardPage->GetOrientation() );
         pStandardPage->SetName(aStandardPageName);
 
@@ -573,15 +573,15 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
         SdPage* pNotesPage = NULL;
 
         if( bDuplicate )
-            pNotesPage = (SdPage*) pPreviousNotesPage->Clone();
+            pNotesPage = (SdPage*) pPreviousNotesPage->CloneSdrPage();
         else
             pNotesPage = (SdPage*) mpDoc->AllocPage(sal_False);
 
-        pNotesPage->SetSize( pPreviousNotesPage->GetSize() );
-        pNotesPage->SetBorder( pPreviousNotesPage->GetLftBorder(),
-                                pPreviousNotesPage->GetUppBorder(),
-                                pPreviousNotesPage->GetRgtBorder(),
-                                pPreviousNotesPage->GetLwrBorder() );
+        pNotesPage->SetPageScale( pPreviousNotesPage->GetPageScale() );
+        pNotesPage->SetPageBorder( pPreviousNotesPage->GetLeftPageBorder(),
+                                pPreviousNotesPage->GetTopPageBorder(),
+                                pPreviousNotesPage->GetRightPageBorder(),
+                                pPreviousNotesPage->GetBottomPageBorder() );
         pNotesPage->SetOrientation( pPreviousNotesPage->GetOrientation() );
         pNotesPage->SetName(aNotesPageName);
         pNotesPage->SetPageKind(PK_NOTES);
@@ -731,7 +731,7 @@ void SAL_CALL SdXImpressDocument::setViewData( const uno::Reference < container:
             {
                 if( xData->getByIndex( nIndex ) >>= aSeq )
                 {
-                    pFrameView = new ::sd::FrameView( mpDoc );
+                    pFrameView = new ::sd::FrameView( *mpDoc );
                     pFrameView->ReadUserDataSequence( aSeq );
                     pFrameViewList->Insert( pFrameView );
                 }
@@ -754,7 +754,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdXImpressDocument::duplicate( con
     if( pSvxPage )
     {
         SdPage* pPage = (SdPage*) pSvxPage->GetSdrPage();
-        sal_uInt16 nPos = pPage->GetPageNum();
+        sal_uInt32 nPos = pPage->GetPageNumber();
         nPos = ( nPos - 1 ) / 2;
         pPage = InsertSdPage( nPos, sal_True );
         if( pPage )
@@ -1037,76 +1037,76 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
     if( aType.EqualsAscii( "com.sun.star.presentation.", 0, 26 ) )
     {
         SvxShape* pShape = NULL;
+        SvxShapeKind aSvxShapeKind(SvxShapeKind_Text);
 
-        sal_uInt16 nType = OBJ_TEXT;
         // create a shape wrapper
         if( aType.EqualsAscii( "TitleTextShape", 26, 14 ) )
         {
-            nType = OBJ_TEXT;
+            aSvxShapeKind = SvxShapeKind_Text;
         }
         else if( aType.EqualsAscii( "OutlinerShape", 26, 13 ) )
         {
-            nType = OBJ_TEXT;
+            aSvxShapeKind = SvxShapeKind_Text;
         }
         else if( aType.EqualsAscii( "SubtitleShape", 26, 13 ) )
         {
-            nType = OBJ_TEXT;
+            aSvxShapeKind = SvxShapeKind_Text;
         }
         else if( aType.EqualsAscii( "GraphicObjectShape", 26, 18 ) )
         {
-            nType = OBJ_GRAF;
+            aSvxShapeKind = SvxShapeKind_Graphic;
         }
         else if( aType.EqualsAscii( "PageShape", 26, 9 ) )
         {
-            nType = OBJ_PAGE;
+            aSvxShapeKind = SvxShapeKind_Page;
         }
         else if( aType.EqualsAscii( "OLE2Shape", 26, 9 ) )
         {
-            nType = OBJ_OLE2;
+            aSvxShapeKind = SvxShapeKind_OLE2;
         }
         else if( aType.EqualsAscii( "ChartShape", 26, 10 ) )
         {
-            nType = OBJ_OLE2;
+            aSvxShapeKind = SvxShapeKind_OLE2;
         }
         else if( aType.EqualsAscii( "CalcShape", 26, 9 ) )
         {
-            nType = OBJ_OLE2;
+            aSvxShapeKind = SvxShapeKind_OLE2;
         }
         else if( aType.EqualsAscii( "TableShape", 26, 10 ) )
         {
-            nType = OBJ_TABLE;
+            aSvxShapeKind = SvxShapeKind_Table;
         }
         else if( aType.EqualsAscii( "OrgChartShape", 26, 13 ) )
         {
-            nType = OBJ_OLE2;
+            aSvxShapeKind = SvxShapeKind_OLE2;
         }
         else if( aType.EqualsAscii( "NotesShape", 26, 13 ) )
         {
-            nType = OBJ_TEXT;
+            aSvxShapeKind = SvxShapeKind_Text;
         }
         else if( aType.EqualsAscii( "HandoutShape", 26, 13 ) )
         {
-            nType = OBJ_PAGE;
+            aSvxShapeKind = SvxShapeKind_Page;
         }
         else if( aType.EqualsAscii( "FooterShape", 26, 12 ) )
         {
-            nType = OBJ_TEXT;
+            aSvxShapeKind = SvxShapeKind_Text;
         }
         else if( aType.EqualsAscii( "HeaderShape", 26, 12 ) )
         {
-            nType = OBJ_TEXT;
+            aSvxShapeKind = SvxShapeKind_Text;
         }
         else if( aType.EqualsAscii( "SlideNumberShape", 26, 17 ) )
         {
-            nType = OBJ_TEXT;
+            aSvxShapeKind = SvxShapeKind_Text;
         }
         else if( aType.EqualsAscii( "DateTimeShape", 26, 17 ) )
         {
-            nType = OBJ_TEXT;
+            aSvxShapeKind = SvxShapeKind_Text;
         }
         else if( aType.EqualsAscii( "MediaShape", 26, 10 ) )
         {
-            nType = OBJ_MEDIA;
+            aSvxShapeKind = SvxShapeKind_Media;
         }
         else
         {
@@ -1114,19 +1114,24 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
         }
 
         // create the API wrapper
-        pShape = CreateSvxShapeByTypeAndInventor( nType, SdrInventor );
+        pShape = SvxDrawPage::CreateShapeBySvxShapeKind(aSvxShapeKind);
 
         // set shape type
         if( pShape && !mbClipBoard )
+        {
             pShape->SetShapeType(aServiceSpecifier);
+        }
 
         xRet = (uno::XWeak*)pShape;
     }
     else if( aServiceSpecifier.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.TableShape") ) )
     {
-        SvxShape* pShape = CreateSvxShapeByTypeAndInventor( OBJ_TABLE, SdrInventor );
+        SvxShape* pShape = SvxDrawPage::CreateShapeBySvxShapeKind(SvxShapeKind_Table);
+
         if( pShape && !mbClipBoard )
+        {
             pShape->SetShapeType(aServiceSpecifier);
+        }
 
         xRet = (uno::XWeak*)pShape;
     }
@@ -1514,8 +1519,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SdXImpressDocument::getRenderer( 
         awt::Size aPageSize;
         if ( bExportNotesPages )
         {
-            Size aNotesPageSize = mpDoc->GetSdPage( 0, PK_NOTES )->GetSize();
-            aPageSize = awt::Size( aNotesPageSize.Width(), aNotesPageSize.Height() );
+            const basegfx::B2DVector& rNotesPageScale = mpDoc->GetSdPage( 0, PK_NOTES )->GetPageScale();
+            aPageSize = awt::Size(basegfx::fround(rNotesPageScale.getX()), basegfx::fround(rNotesPageScale.getY()));
         }
         else
         {
@@ -1577,8 +1582,8 @@ sal_Int32 ImplPDFGetBookmarkPage( const String& rBookmark, SdDrawDocument& rDoc 
         aBookmark = rBookmark.Copy( 1 );
 
     // is the bookmark a page ?
-    sal_Bool        bIsMasterPage;
-    sal_uInt16      nPgNum = rDoc.GetPageByName( aBookmark, bIsMasterPage );
+    bool bIsMasterPage;
+    sal_uInt32 nPgNum = rDoc.GetPageByName( aBookmark, bIsMasterPage );
     SdrObject*  pObj = NULL;
 
     if ( nPgNum == SDRPAGE_NOTFOUND )
@@ -1586,7 +1591,14 @@ sal_Int32 ImplPDFGetBookmarkPage( const String& rBookmark, SdDrawDocument& rDoc 
         // is the bookmark a object ?
         pObj = rDoc.GetObj( aBookmark );
         if (pObj)
-            nPgNum = pObj->GetPage()->GetPageNum();
+        {
+            SdrPage* pOwningPage = pObj->getSdrPageFromSdrObject();
+
+            if(pOwningPage)
+            {
+                nPgNum = pOwningPage->GetPageNumber();
+            }
+        }
     }
     if ( nPgNum != SDRPAGE_NOTFOUND )
         nPage = ( nPgNum - 1 ) / 2;
@@ -1654,13 +1666,11 @@ void ImplPDFExportShapeInteraction( uno::Reference< drawing::XShape > xShape, Sd
         uno::Reference< beans::XPropertySet > xShapePropSet( xShape, uno::UNO_QUERY );
         if( xShapePropSet.is() )
         {
-            Size        aPageSize( rDoc.GetSdPage( 0, PK_STANDARD )->GetSize() );
-            Point aPoint( 0, 0 );
-            Rectangle   aPageRect( aPoint, aPageSize );
-
-            awt::Point  aShapePos( xShape->getPosition() );
-            awt::Size   aShapeSize( xShape->getSize() );
-            Rectangle   aLinkRect( Point( aShapePos.X, aShapePos.Y ), Size( aShapeSize.Width, aShapeSize.Height ) );
+            const basegfx::B2DVector& rPageSize = rDoc.GetSdPage( 0, PK_STANDARD )->GetPageScale();
+            const Rectangle aPageRect(0, 0, basegfx::fround(rPageSize.getX()), basegfx::fround(rPageSize.getY()));
+            const awt::Point aShapePos( xShape->getPosition() );
+            const awt::Size aShapeSize( xShape->getSize() );
+            const Rectangle aLinkRect( Point( aShapePos.X, aShapePos.Y ), Size( aShapeSize.Width, aShapeSize.Height ) );
 
             presentation::ClickAction eCa;
             uno::Any aAny( xShapePropSet->getPropertyValue( sOnClick ) );
@@ -1762,7 +1772,7 @@ vcl::PDFWriter::StructElement ImplRenderPaintProc::ImplBegStructureTag( SdrObjec
     {
         sal_uInt32 nInventor   = rObject.GetObjInventor();
         sal_uInt16 nIdentifier = rObject.GetObjIdentifier();
-        sal_Bool   bIsTextObj  = rObject.ISA( SdrTextObj );
+        SdrTextObj* pSdrTextObj = dynamic_cast< SdrTextObj* >(&rObject);
 
         if ( nInventor == SdrInventor )
         {
@@ -1772,7 +1782,7 @@ vcl::PDFWriter::StructElement ImplRenderPaintProc::ImplBegStructureTag( SdrObjec
                 eElement = vcl::PDFWriter::Heading;
             else if ( nIdentifier == OBJ_OUTLINETEXT )
                 eElement = vcl::PDFWriter::Division;
-            else if ( !bIsTextObj || !((SdrTextObj&)rObject).HasText() )
+            else if ( !pSdrTextObj || !pSdrTextObj->HasText() )
                 eElement = vcl::PDFWriter::Figure;
         }
     }
@@ -1790,9 +1800,9 @@ drawinglayer::primitive2d::Primitive2DSequence ImplRenderPaintProc::createRedire
     {
         drawinglayer::primitive2d::Primitive2DSequence xRetval;
 
-        if(pObject->GetPage())
+        if(pObject->getSdrPageFromSdrObject())
         {
-            if(pObject->GetPage()->checkVisibility(rOriginal, rDisplayInfo, false))
+            if(pObject->getSdrPageFromSdrObject()->checkVisibility(rOriginal, rDisplayInfo, false))
             {
                 if(IsVisible(pObject) && IsPrintable(pObject))
                 {
@@ -1880,17 +1890,17 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
             }
         }
 
-        if( xRenderDevice.is() && nPageNumber && ( nPageNumber <= mpDoc->GetSdPageCount( ePageKind ) ) )
+        if( xRenderDevice.is() && nPageNumber && ( nPageNumber <= (sal_Int32)mpDoc->GetSdPageCount( ePageKind ) ) )
         {
             VCLXDevice*     pDevice = VCLXDevice::GetImplementation( xRenderDevice );
             OutputDevice*   pOut = pDevice ? pDevice->GetOutputDevice() : NULL;
 
             if( pOut )
             {
-                vcl::PDFExtOutDevData* pPDFExtOutDevData = PTR_CAST( vcl::PDFExtOutDevData, pOut->GetExtOutDevData() );
-
+                vcl::PDFExtOutDevData* pPDFExtOutDevData = dynamic_cast< vcl::PDFExtOutDevData* >(pOut->GetExtOutDevData() );
                 ::sd::ClientView* pView = new ::sd::ClientView( mpDocShell, pOut, NULL );
-                Rectangle               aVisArea = Rectangle( Point(), mpDoc->GetSdPage( (sal_uInt16)nPageNumber - 1, ePageKind )->GetSize() );
+                const basegfx::B2DVector& rPageScale = mpDoc->GetSdPage( nPageNumber - 1, ePageKind )->GetPageScale();
+                const Rectangle aVisArea(0, 0, basegfx::fround(rPageScale.getX()), basegfx::fround(rPageScale.getY()));
                 Region                  aRegion( aVisArea );
                 Point                   aOrigin;
 
@@ -1916,7 +1926,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
 
                 if( xModel == mpDocShell->GetModel() )
                 {
-                    pView->ShowSdrPage( mpDoc->GetSdPage( (sal_uInt16)nPageNumber - 1, ePageKind ));
+                    pView->ShowSdrPage( *mpDoc->GetSdPage( nPageNumber - 1, ePageKind ));
                     SdrPageView* pPV = pView->GetSdrPageView();
 
                     if( pOldSdView )
@@ -1929,13 +1939,11 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                         }
                     }
 
-                    ImplRenderPaintProc aImplRenderPaintProc( mpDoc->GetLayerAdmin(),
+                    ImplRenderPaintProc aImplRenderPaintProc( mpDoc->GetModelLayerAdmin(),
                         pPV, pPDFExtOutDevData );
 
                     // background color for outliner :o
-                    SdPage* pPage = (SdPage*)pPV->GetPage();
-                    if( pPage )
-                    {
+                    SdPage& rPage = (SdPage&)pPV->getSdrPageFromSdrPageView();
                         SdrOutliner& rOutl = mpDoc->GetDrawOutliner( NULL );
                         bool bScreenDisplay(true);
 
@@ -1955,8 +1963,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
 
                         // #i75566# Name change GetBackgroundColor -> GetPageBackgroundColor and
                         // hint value if screen display. Only then the AutoColor mechanisms shall be applied
-                        rOutl.SetBackgroundColor( pPage->GetPageBackgroundColor( pPV, bScreenDisplay ) );
-                    }
+                    rOutl.SetBackgroundColor( rPage.GetPageBackgroundColor( pPV, bScreenDisplay ) );
                     pView->SdrPaintView::CompleteRedraw( pOut, aRegion, &aImplRenderPaintProc );
 
                     if ( pPDFExtOutDevData )
@@ -1964,7 +1971,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                         try
                         {
                             uno::Any aAny;
-                            uno::Reference< drawing::XDrawPage > xPage( uno::Reference< drawing::XDrawPage >::query( pPage->getUnoPage() ) );
+                            uno::Reference< drawing::XDrawPage > xPage( uno::Reference< drawing::XDrawPage >::query( rPage.getUnoPage() ) );
                             if ( xPage.is() )
                             {
                                 if ( pPDFExtOutDevData->GetIsExportNotes() )
@@ -2095,9 +2102,9 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                     }
                                 }
                             }
-                            Size        aPageSize( mpDoc->GetSdPage( 0, PK_STANDARD )->GetSize() );
-                            Point aPoint( 0, 0 );
-                            Rectangle   aPageRect( aPoint, aPageSize );
+
+                            const basegfx::B2DVector& rPageScale1 = mpDoc->GetSdPage( 0, PK_STANDARD )->GetPageScale();
+                            const Rectangle aPageRect(0, 0, basegfx::fround(rPageScale1.getX()), basegfx::fround(rPageScale1.getY()));
 
                             // resolving links found in this page by the method ImpEditEngine::Paint
                             std::vector< vcl::PDFExtOutDevBookmarkEntry >& rBookmarks = pPDFExtOutDevData->GetBookmarks();
@@ -2155,9 +2162,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
 
                     if( xShapes.is() && xShapes->getCount() )
                     {
-                       SdrPageView* pPV = NULL;
-
-                       ImplRenderPaintProc  aImplRenderPaintProc( mpDoc->GetLayerAdmin(),
+                       ImplRenderPaintProc  aImplRenderPaintProc( mpDoc->GetModelLayerAdmin(),
                                         pOldSdView ? pOldSdView->GetSdrPageView() : NULL, pPDFExtOutDevData );
 
                         for( sal_uInt32 i = 0, nCount = xShapes->getCount(); i < nCount; i++ )
@@ -2172,15 +2177,16 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                 if( pShape )
                                 {
                                     SdrObject* pObj = pShape->GetSdrObject();
-                                    if( pObj && pObj->GetPage()
+                                    if( pObj && pObj->getSdrPageFromSdrObject()
                                         && aImplRenderPaintProc.IsVisible( pObj )
                                             && aImplRenderPaintProc.IsPrintable( pObj ) )
                                     {
-                                        if( !pPV )
-                                            pPV = pView->ShowSdrPage( pObj->GetPage() );
+                                        if( !pView->GetSdrPageView() )
+                                        {
+                                            pView->ShowSdrPage( *pObj->getSdrPageFromSdrObject() );
+                                        }
 
-                                        if( pPV )
-                                            pView->MarkObj( pObj, pPV );
+                                        pView->MarkObj( *pObj );
                                     }
                                 }
                             }
@@ -2225,6 +2231,11 @@ void SdXImpressDocument::initializeDocument()
         }
         }
     }
+}
+
+SdrModel* SdXImpressDocument::getSdrModel() const
+{
+    return GetDoc();
 }
 
 void SAL_CALL SdXImpressDocument::dispose() throw (::com::sun::star::uno::RuntimeException)
@@ -2364,10 +2375,10 @@ uno::Any SAL_CALL SdDrawPagesAccess::getByIndex( sal_Int32 Index )
 
     uno::Any aAny;
 
-    if( (Index < 0) || (Index >= mpModel->mpDoc->GetSdPageCount( PK_STANDARD ) ) )
+    if( (Index < 0) || (Index >= (sal_Int32)mpModel->mpDoc->GetSdPageCount( PK_STANDARD ) ) )
         throw lang::IndexOutOfBoundsException();
 
-    SdPage* pPage = mpModel->mpDoc->GetSdPage( (sal_uInt16)Index, PK_STANDARD );
+    SdPage* pPage = mpModel->mpDoc->GetSdPage( (sal_uInt32)Index, PK_STANDARD );
     if( pPage )
     {
         uno::Reference< drawing::XDrawPage >  xDrawPage( pPage->getUnoPage(), uno::UNO_QUERY );
@@ -2387,8 +2398,8 @@ uno::Any SAL_CALL SdDrawPagesAccess::getByName( const OUString& aName ) throw(co
 
     if( aName.getLength() != 0 )
     {
-        const sal_uInt16 nCount = mpModel->mpDoc->GetSdPageCount( PK_STANDARD );
-        sal_uInt16 nPage;
+        const sal_uInt32 nCount = mpModel->mpDoc->GetSdPageCount( PK_STANDARD );
+        sal_uInt32 nPage;
         for( nPage = 0; nPage < nCount; nPage++ )
         {
             SdPage* pPage = mpModel->mpDoc->GetSdPage( nPage, PK_STANDARD );
@@ -2415,11 +2426,11 @@ uno::Sequence< OUString > SAL_CALL SdDrawPagesAccess::getElementNames() throw(un
     if( NULL == mpModel )
         throw lang::DisposedException();
 
-    const sal_uInt16 nCount = mpModel->mpDoc->GetSdPageCount( PK_STANDARD );
+    const sal_uInt32 nCount = mpModel->mpDoc->GetSdPageCount( PK_STANDARD );
     uno::Sequence< OUString > aNames( nCount );
     OUString* pNames = aNames.getArray();
 
-    sal_uInt16 nPage;
+    sal_uInt32 nPage;
     for( nPage = 0; nPage < nCount; nPage++ )
     {
         SdPage* pPage = mpModel->mpDoc->GetSdPage( nPage, PK_STANDARD );
@@ -2436,8 +2447,8 @@ sal_Bool SAL_CALL SdDrawPagesAccess::hasByName( const OUString& aName ) throw(un
     if( NULL == mpModel )
         throw lang::DisposedException();
 
-    const sal_uInt16 nCount = mpModel->mpDoc->GetSdPageCount( PK_STANDARD );
-    sal_uInt16 nPage;
+    const sal_uInt32 nCount = mpModel->mpDoc->GetSdPageCount( PK_STANDARD );
+    sal_uInt32 nPage;
     for( nPage = 0; nPage < nCount; nPage++ )
     {
         SdPage* pPage = mpModel->mpDoc->GetSdPage( nPage, PK_STANDARD );
@@ -2480,7 +2491,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdDrawPagesAccess::insertNewByInde
 
     if( mpModel->mpDoc )
     {
-        SdPage* pPage = mpModel->InsertSdPage( (sal_uInt16)nIndex );
+        SdPage* pPage = mpModel->InsertSdPage( (sal_uInt32)nIndex );
         if( pPage )
         {
             uno::Reference< drawing::XDrawPage > xDrawPage( pPage->getUnoPage(), uno::UNO_QUERY );
@@ -2516,7 +2527,7 @@ void SAL_CALL SdDrawPagesAccess::remove( const uno::Reference< drawing::XDrawPag
             SdPage* pPage = (SdPage*) pSvxPage->GetSdrPage();
             if(pPage && ( pPage->GetPageKind() == PK_STANDARD ) )
             {
-                sal_uInt16 nPage = pPage->GetPageNum();
+                sal_uInt32 nPage = pPage->GetPageNumber();
 
                 SdPage* pNotesPage = static_cast< SdPage* >( rDoc.GetPage( nPage+1 ) );
 
@@ -2640,10 +2651,10 @@ uno::Any SAL_CALL SdMasterPagesAccess::getByIndex( sal_Int32 Index )
 
     uno::Any aAny;
 
-    if( (Index < 0) || (Index >= mpModel->mpDoc->GetMasterSdPageCount( PK_STANDARD ) ) )
+    if( (Index < 0) || (Index >= (sal_Int32)mpModel->mpDoc->GetMasterSdPageCount( PK_STANDARD ) ) )
         throw lang::IndexOutOfBoundsException();
 
-    SdPage* pPage = mpModel->mpDoc->GetMasterSdPage( (sal_uInt16)Index, PK_STANDARD );
+    SdPage* pPage = mpModel->mpDoc->GetMasterSdPage( (sal_uInt32)Index, PK_STANDARD );
     if( pPage )
     {
         uno::Reference< drawing::XDrawPage >  xDrawPage( pPage->getUnoPage(), uno::UNO_QUERY );
@@ -2723,18 +2734,18 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
         ((SdStyleSheetPool*)mpDoc->GetStyleSheetPool())->CreateLayoutStyleSheets( aPrefix );
 
         // get the first page for initial size and border settings
-        SdPage* pPage = mpModel->mpDoc->GetSdPage( (sal_uInt16)0, PK_STANDARD );
-        SdPage* pRefNotesPage = mpModel->mpDoc->GetSdPage( (sal_uInt16)0, PK_NOTES);
+        SdPage* pPage = mpModel->mpDoc->GetSdPage( 0, PK_STANDARD );
+        SdPage* pRefNotesPage = mpModel->mpDoc->GetSdPage( 0, PK_NOTES);
 
         // create and instert new draw masterpage
         SdPage* pMPage = (SdPage*)mpModel->mpDoc->AllocPage(sal_True);
-        pMPage->SetSize( pPage->GetSize() );
-        pMPage->SetBorder( pPage->GetLftBorder(),
-                           pPage->GetUppBorder(),
-                           pPage->GetRgtBorder(),
-                           pPage->GetLwrBorder() );
+        pMPage->SetPageScale( pPage->GetPageScale() );
+        pMPage->SetPageBorder( pPage->GetLeftPageBorder(),
+                           pPage->GetTopPageBorder(),
+                           pPage->GetRightPageBorder(),
+                           pPage->GetBottomPageBorder() );
         pMPage->SetLayoutName( aLayoutName );
-        mpDoc->InsertMasterPage(pMPage,  (sal_uInt16)nInsertPos);
+        mpDoc->InsertMasterPage(pMPage,  nInsertPos);
 
         {
             // ensure default MasterPage fill
@@ -2745,15 +2756,15 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
 
         // create and instert new notes masterpage
         SdPage* pMNotesPage = (SdPage*)mpModel->mpDoc->AllocPage(sal_True);
-        pMNotesPage->SetSize( pRefNotesPage->GetSize() );
+        pMNotesPage->SetPageScale( pRefNotesPage->GetPageScale() );
         pMNotesPage->SetPageKind(PK_NOTES);
-        pMNotesPage->SetBorder( pRefNotesPage->GetLftBorder(),
-                                pRefNotesPage->GetUppBorder(),
-                                pRefNotesPage->GetRgtBorder(),
-                                pRefNotesPage->GetLwrBorder() );
+        pMNotesPage->SetPageBorder( pRefNotesPage->GetLeftPageBorder(),
+                                pRefNotesPage->GetTopPageBorder(),
+                                pRefNotesPage->GetRightPageBorder(),
+                                pRefNotesPage->GetBottomPageBorder() );
         pMNotesPage->SetLayoutName( aLayoutName );
-        mpDoc->InsertMasterPage(pMNotesPage,  (sal_uInt16)nInsertPos + 1);
-//      pMNotesPage->InsertMasterPage( pMPage->GetPageNum() );
+        mpDoc->InsertMasterPage(pMNotesPage,  nInsertPos + 1);
+//      pMNotesPage->InsertMasterPage( pMPage->GetPageNumber() );
         pMNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, sal_True, sal_True);
         mpModel->SetModified();
     }
@@ -2790,7 +2801,7 @@ void SAL_CALL SdMasterPagesAccess::remove( const uno::Reference< drawing::XDrawP
     // only standard pages can be removed directly
     if( pPage->GetPageKind() == PK_STANDARD )
     {
-        sal_uInt16 nPage = pPage->GetPageNum();
+        sal_uInt32 nPage = pPage->GetPageNumber();
 
         SdPage* pNotesPage = static_cast< SdPage* >( rDoc.GetMasterPage( nPage+1 ) );
 
@@ -2908,13 +2919,13 @@ uno::Sequence< OUString > SAL_CALL SdDocLinkTargets::getElementNames()
 
     if( mpDoc->GetDocumentType() == DOCUMENT_TYPE_DRAW )
     {
-        const sal_uInt16 nMaxPages = mpDoc->GetSdPageCount( PK_STANDARD );
-        const sal_uInt16 nMaxMasterPages = mpDoc->GetMasterSdPageCount( PK_STANDARD );
+        const sal_uInt32 nMaxPages = mpDoc->GetSdPageCount( PK_STANDARD );
+        const sal_uInt32 nMaxMasterPages = mpDoc->GetMasterSdPageCount( PK_STANDARD );
 
         uno::Sequence< OUString > aSeq( nMaxPages + nMaxMasterPages );
         OUString* pStr = aSeq.getArray();
 
-        sal_uInt16 nPage;
+        sal_uInt32 nPage;
         // standard pages
         for( nPage = 0; nPage < nMaxPages; nPage++ )
             *pStr++ = mpDoc->GetSdPage( nPage, PK_STANDARD )->GetName();
@@ -2926,13 +2937,13 @@ uno::Sequence< OUString > SAL_CALL SdDocLinkTargets::getElementNames()
     }
     else
     {
-        const sal_uInt16 nMaxPages = mpDoc->GetPageCount();
-        const sal_uInt16 nMaxMasterPages = mpDoc->GetMasterPageCount();
+        const sal_uInt32 nMaxPages = mpDoc->GetPageCount();
+        const sal_uInt32 nMaxMasterPages = mpDoc->GetMasterPageCount();
 
         uno::Sequence< OUString > aSeq( nMaxPages + nMaxMasterPages );
         OUString* pStr = aSeq.getArray();
 
-        sal_uInt16 nPage;
+        sal_uInt32 nPage;
         // standard pages
         for( nPage = 0; nPage < nMaxPages; nPage++ )
             *pStr++ = ((SdPage*)mpDoc->GetPage( nPage ))->GetName();

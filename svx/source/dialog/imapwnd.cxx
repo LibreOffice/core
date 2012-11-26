@@ -32,7 +32,6 @@
 #include <svtools/imapcirc.hxx>
 #include <svtools/imappoly.hxx>
 #include <svl/urlbmk.hxx>
-
 #include <svx/xoutbmp.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
@@ -49,13 +48,13 @@
 #include <svx/xfillit.hxx>
 #include <svx/xlineit.hxx>
 #include <sfx2/evntconf.hxx>
-
 #include <sot/formats.hxx>
-
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <svx/svdlegacy.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 
 using ::com::sun::star::frame::XFrame;
 using ::com::sun::star::uno::Reference;
@@ -126,10 +125,11 @@ void IMapWindow::ReplaceImageMap( const ImageMap& rImageMap, sal_Bool /*bScaleTo
         pPage = GetSdrModel()->GetPage(0L);
     }
 
-    if(pPage)
+    if(pPage && pPage->GetObjCount())
     {
         // clear all draw objects
-        pPage->Clear();
+        pPage->ClearSdrObjList();
+        pPage->getSdrModelFromSdrObjList().SetChanged();
     }
 
     if(GetSdrView())
@@ -147,7 +147,7 @@ void IMapWindow::ReplaceImageMap( const ImageMap& rImageMap, sal_Bool /*bScaleTo
 
         if ( pNewObj )
         {
-            pPage->InsertObject( pNewObj );
+            pPage->InsertObjectToSdrObjList(*pNewObj);
         }
     }
 }
@@ -241,6 +241,7 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
     Rectangle   aClipRect( aPoint, GetGraphicSize() );
     SdrObject*  pSdrObj = NULL;
     IMapObjectPtr pCloneIMapObj;
+    OSL_ENSURE(GetSdrModel(), "IMapWindow without SdrModel (!)");
 
     switch( pIMapObj->GetType() )
     {
@@ -252,7 +253,11 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
             // auf Zeichenflaeche clippen
             aDrawRect.Intersection( aClipRect );
 
-            pSdrObj = (SdrObject*) new SdrRectObj( aDrawRect );
+            pSdrObj = new SdrRectObj(
+                *GetSdrModel(),
+                basegfx::tools::createScaleTranslateB2DHomMatrix(
+                    aDrawRect.getWidth(), aDrawRect.getHeight(),
+                    aDrawRect.Left(), aDrawRect.Top()));
             pCloneIMapObj.reset((IMapObject*) new IMapRectangleObject( *pIMapRectObj ));
         }
         break;
@@ -268,7 +273,10 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
             // auf Zeichenflaeche begrenzen
             aCircle.Intersection( aClipRect );
 
-            pSdrObj = (SdrObject*) new SdrCircObj( OBJ_CIRC, aCircle, 0, 36000 );
+            pSdrObj = new SdrCircObj(
+                *GetSdrModel(),
+                CircleType_Circle,
+                basegfx::tools::createScaleTranslateB2DHomMatrix(aCircle.getWidth(), aCircle.getHeight(), aCircle.Left(), aCircle.Top()));
             pCloneIMapObj.reset((IMapObject*) new IMapCircleObject( *pIMapCircleObj ));
         }
         break;
@@ -286,7 +294,10 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
                 // auf Zeichenflaeche clippen
                 aDrawRect.Intersection( aClipRect );
 
-                pSdrObj = (SdrObject*) new SdrCircObj( OBJ_CIRC, aDrawRect, 0, 36000 );
+                pSdrObj = new SdrCircObj(
+                    *GetSdrModel(),
+                    CircleType_Circle,
+                    basegfx::tools::createScaleTranslateB2DHomMatrix(aDrawRect.getWidth(), aDrawRect.getHeight(), aDrawRect.Left(), aDrawRect.Top()));
             }
             else
             {
@@ -298,7 +309,9 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
 
                 basegfx::B2DPolygon aPolygon;
                 aPolygon.append(aDrawPoly.getB2DPolygon());
-                pSdrObj = (SdrObject*)new SdrPathObj(OBJ_POLY, basegfx::B2DPolyPolygon(aPolygon));
+                pSdrObj = new SdrPathObj(
+                    *GetSdrModel(),
+                    basegfx::B2DPolyPolygon(aPolygon));
             }
 
             pCloneIMapObj.reset((IMapObject*) new IMapPolygonObject( *pIMapPolyObj ));
@@ -311,7 +324,7 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
 
     if ( pSdrObj )
     {
-        SfxItemSet aSet( pModel->GetItemPool() );
+        SfxItemSet aSet( pSdrObj->GetObjectItemPool() );
 
         aSet.Put( XFillStyleItem( XFILL_SOLID ) );
         aSet.Put( XFillColorItem( String(), TRANSCOL ) );
@@ -331,7 +344,7 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
         pSdrObj->SetMergedItemSetAndBroadcast(aSet);
 
         pSdrObj->InsertUserData( new IMapUserData( pCloneIMapObj ) );
-        pSdrObj->SetUserCall( GetSdrUserCall() );
+        ConnectToSdrObject(pSdrObj);
     }
 
     return pSdrObj;
@@ -352,7 +365,7 @@ void IMapWindow::InitSdrModel()
     aSet.Put( XFillColorItem( String(), TRANSCOL ) );
     aSet.Put( XFillTransparenceItem( 50 ) );
     pView->SetAttributes( aSet );
-    pView->SetFrameDragSingles( sal_True );
+    pView->SetFrameHandles(true);
 }
 
 /*************************************************************************
@@ -368,8 +381,8 @@ void IMapWindow::SdrObjCreated( const SdrObject& rObj )
         case( OBJ_RECT ):
         {
             SdrRectObj*          pRectObj = (SdrRectObj*) &rObj;
-            IMapRectangleObject* pObj = new IMapRectangleObject( pRectObj->GetLogicRect(),
-                String(), String(), String(), String(), String(), sal_True, sal_False );
+            IMapRectangleObject* pObj = new IMapRectangleObject( sdr::legacy::GetLogicRect(*pRectObj),
+                String(), String(), String(), String(), String(), true, false);
 
             pRectObj->InsertUserData( new IMapUserData( IMapObjectPtr(pObj) ) );
         }
@@ -378,9 +391,9 @@ void IMapWindow::SdrObjCreated( const SdrObject& rObj )
         case( OBJ_CIRC ):
         {
             SdrCircObj* pCircObj = (SdrCircObj*) &rObj;
-            SdrPathObj* pPathObj = (SdrPathObj*) pCircObj->ConvertToPolyObj( sal_False, sal_False );
-            Polygon aPoly(pPathObj->GetPathPoly().getB2DPolygon(0L));
-            delete pPathObj;
+            SdrPathObj* pPathObj = (SdrPathObj*) pCircObj->ConvertToPolyObj(false, false);
+            Polygon aPoly(pPathObj->getB2DPolyPolygonInObjectCoordinates().getB2DPolygon(0L));
+            deleteSdrObjectSafeAndClearPointer(pPathObj);
 
             IMapPolygonObject* pObj = new IMapPolygonObject( Polygon(aPoly), String(), String(), String(), String(), String(),  sal_True, sal_False );
             pObj->SetExtraEllipse( aPoly.GetBoundRect() );
@@ -389,16 +402,13 @@ void IMapWindow::SdrObjCreated( const SdrObject& rObj )
         break;
 
         case( OBJ_POLY ):
-        case( OBJ_FREEFILL ):
-        case( OBJ_PATHPOLY ):
-        case( OBJ_PATHFILL ):
         {
             SdrPathObj* pPathObj = (SdrPathObj*) &rObj;
-            const basegfx::B2DPolyPolygon& rXPolyPoly = pPathObj->GetPathPoly();
+            const basegfx::B2DPolyPolygon aXPolyPoly = pPathObj->getB2DPolyPolygonInObjectCoordinates();
 
-            if ( rXPolyPoly.count() )
+            if ( aXPolyPoly.count() )
             {
-                Polygon aPoly(rXPolyPoly.getB2DPolygon(0L));
+                Polygon aPoly(aXPolyPoly.getB2DPolygon(0L));
                 IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, String(), String(), String(), String(), String(),  sal_True, sal_False );
                 pPathObj->InsertUserData( new IMapUserData( IMapObjectPtr(pObj) ) );
             }
@@ -442,38 +452,35 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
         {
             case( OBJ_RECT ):
             {
-                pUserData->ReplaceObject( IMapObjectPtr(new IMapRectangleObject( ( (const SdrRectObj&) rObj ).GetLogicRect(),
-                          aURL, aAltText, aDesc, aTarget, String(), bActive, sal_False ) ) );
+                pUserData->ReplaceObject( IMapObjectPtr(new IMapRectangleObject( sdr::legacy::GetLogicRect( (const SdrRectObj&) rObj ),
+                          aURL, aAltText, aDesc, aTarget, String(), bActive, false) ) );
             }
             break;
 
             case( OBJ_CIRC ):
             {
                 const SdrCircObj& rCircObj = (const SdrCircObj&) rObj;
-                SdrPathObj* pPathObj = (SdrPathObj*) rCircObj.ConvertToPolyObj( sal_False, sal_False );
-                Polygon aPoly(pPathObj->GetPathPoly().getB2DPolygon(0L));
+                SdrPathObj* pPathObj = (SdrPathObj*) rCircObj.ConvertToPolyObj(false, false);
+                Polygon aPoly(pPathObj->getB2DPolyPolygonInObjectCoordinates().getB2DPolygon(0L));
 
-                IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, aURL, aAltText, aDesc, aTarget, String(), bActive, sal_False );
+                IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, aURL, aAltText, aDesc, aTarget, String(), bActive, false);
                 pObj->SetExtraEllipse( aPoly.GetBoundRect() );
 
                 // wurde von uns nur temporaer angelegt
-                delete pPathObj;
+                deleteSdrObjectSafeAndClearPointer(pPathObj);
                 pUserData->ReplaceObject( IMapObjectPtr(pObj) );
             }
             break;
 
             case( OBJ_POLY ):
-            case( OBJ_FREEFILL ):
-            case( OBJ_PATHPOLY ):
-            case( OBJ_PATHFILL ):
             {
                 const SdrPathObj& rPathObj = (const SdrPathObj&) rObj;
-                const basegfx::B2DPolyPolygon& rXPolyPoly = rPathObj.GetPathPoly();
+                const basegfx::B2DPolyPolygon aXPolyPoly = rPathObj.getB2DPolyPolygonInObjectCoordinates();
 
-                if ( rXPolyPoly.count() )
+                if ( aXPolyPoly.count() )
                 {
-                    Polygon aPoly(rPathObj.GetPathPoly().getB2DPolygon(0L));
-                    IMapPolygonObject*  pObj = new IMapPolygonObject( aPoly, aURL, aAltText, aDesc, aTarget, String(), bActive, sal_False );
+                    Polygon aPoly(aXPolyPoly.getB2DPolygon(0L));
+                    IMapPolygonObject*  pObj = new IMapPolygonObject( aPoly, aURL, aAltText, aDesc, aTarget, String(), bActive, false);
                     pUserData->ReplaceObject( IMapObjectPtr(pObj) );
                 }
             }
@@ -503,9 +510,12 @@ void IMapWindow::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-void IMapWindow::MarkListHasChanged()
+void IMapWindow::selectionChange()
 {
-    GraphCtrl::MarkListHasChanged();
+    // call parent
+    GraphCtrl::selectionChange();
+
+    // local reactions
     UpdateInfo( sal_False );
 }
 
@@ -607,15 +617,13 @@ void IMapWindow::Command(const CommandEvent& rCEvt)
     if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
     {
         PopupMenu           aMenu( SVX_RES( RID_SVXMN_IMAP ) );
-        const SdrMarkList&  rMarkList = pView->GetMarkedObjectList();
-        sal_uIntPtr             nMarked = rMarkList.GetMarkCount();
 
         aMenu.EnableItem( MN_URL, sal_False );
         aMenu.EnableItem( MN_ACTIVATE, sal_False );
         aMenu.EnableItem( MN_MACRO, sal_False );
-        aMenu.EnableItem( MN_MARK_ALL, pModel->GetPage( 0 )->GetObjCount() != pView->GetMarkedObjectCount() );
+        aMenu.EnableItem( MN_MARK_ALL, pModel->GetPage( 0 )->GetObjCount() != pView->getSelectedSdrObjectCount() );
 
-        if ( !nMarked )
+        if ( !pView->areSdrObjectsSelected() )
         {
             aMenu.EnableItem( MN_POSITION, sal_False );
             aMenu.EnableItem( MN_FRAME_TO_TOP, sal_False );
@@ -626,7 +634,9 @@ void IMapWindow::Command(const CommandEvent& rCEvt)
         }
         else
         {
-            if ( nMarked == 1 )
+            const SdrObject* pSingleSelected = pView->getSelectedIfSingle();
+
+            if(pSingleSelected)
             {
                 SdrObject*  pSdrObj = GetSelectedSdrObject();
 
@@ -686,7 +696,7 @@ sal_Int8 IMapWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
             pIMapObj->SetAltText( aBookMark.GetDescription() );
             pModel->SetChanged( sal_True );
             pView->UnmarkAll();
-            pView->MarkObj( pSdrObj, pView->GetSdrPageView() );
+            pView->MarkObj( *pSdrObj );
             UpdateInfo( sal_True );
             nRet =  rEvt.mnAction;
         }
@@ -704,12 +714,13 @@ sal_Int8 IMapWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 void IMapWindow::RequestHelp( const HelpEvent& rHEvt )
 {
     SdrObject*          pSdrObj = NULL;
-    SdrPageView*        pPageView = NULL;
-    Point               aPos = PixelToLogic( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ) );
 
     if ( Help::IsBalloonHelpEnabled() || Help::IsQuickHelpEnabled() )
     {
-        if ( pView->PickObj( aPos, pView->getHitTolLog(), pSdrObj, pPageView ) )
+        const Point aOutputPixel(ScreenToOutputPixel(rHEvt.GetMousePosPixel()));
+        const basegfx::B2DPoint aPos(GetInverseViewTransformation() * basegfx::B2DPoint(aOutputPixel.X(), aOutputPixel.Y()));
+
+        if ( pView->PickObj( aPos, pView->getHitTolLog(), pSdrObj ) )
         {
             const IMapObject*   pIMapObj = GetIMapObj( pSdrObj );
             String              aStr;
@@ -947,54 +958,61 @@ IMPL_LINK( IMapWindow, MenuSelectHdl, Menu*, pMenu )
 
 void IMapWindow::CreateDefaultObject()
 {
-    SdrPageView* pPageView = pView->GetSdrPageView();
-
-    if(pPageView)
+    if(pView->GetSdrPageView())
     {
         // calc position and size
-        Point aPagePos(0, 0); // = pPageView->GetOffset();
-        Size aPageSize = pPageView->GetPage()->GetSize();
-        sal_uInt32 nDefaultObjectSizeWidth = aPageSize.Width() / 4;
-        sal_uInt32 nDefaultObjectSizeHeight = aPageSize.Height() / 4;
-        aPagePos.X() += (aPageSize.Width() / 2) - (nDefaultObjectSizeWidth / 2);
-        aPagePos.Y() += (aPageSize.Height() / 2) - (nDefaultObjectSizeHeight / 2);
-        Rectangle aNewObjectRectangle(aPagePos, Size(nDefaultObjectSizeWidth, nDefaultObjectSizeHeight));
+        const basegfx::B2DVector& rPageScale = pView->GetSdrPageView()->getSdrPageFromSdrPageView().GetPageScale();
+        const basegfx::B2DVector aDefaultObjectScale(rPageScale * 0.25);
+        const basegfx::B2DPoint aPagePos((rPageScale - aDefaultObjectScale) * 0.5);
+        const basegfx::B2DRange aNewObjectRange(aPagePos, aPagePos + aDefaultObjectScale);
+        SdrObject* pObj = SdrObjFactory::MakeNewObject(
+            pView->getSdrModelFromSdrView(),
+            pView->getSdrObjectCreationInfo());
 
-        SdrObject* pObj = SdrObjFactory::MakeNewObject( pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(), 0L, pModel);
-        pObj->SetLogicRect(aNewObjectRectangle);
+        sdr::legacy::SetLogicRange(*pObj, aNewObjectRange);
 
-        switch( pObj->GetObjIdentifier() )
+        if(OBJ_POLY == pView->getSdrObjectCreationInfo().getIdent())
         {
-        case OBJ_POLY:
-        case OBJ_PATHPOLY:
-            {
-                basegfx::B2DPolygon aInnerPoly;
-                aInnerPoly.append(basegfx::B2DPoint(aNewObjectRectangle.BottomLeft().X(), aNewObjectRectangle.BottomLeft().Y()));
-                aInnerPoly.append(basegfx::B2DPoint(aNewObjectRectangle.TopLeft().X(), aNewObjectRectangle.TopLeft().Y()));
-                aInnerPoly.append(basegfx::B2DPoint(aNewObjectRectangle.TopCenter().X(), aNewObjectRectangle.TopCenter().Y()));
-                aInnerPoly.append(basegfx::B2DPoint(aNewObjectRectangle.Center().X(), aNewObjectRectangle.Center().Y()));
-                aInnerPoly.append(basegfx::B2DPoint(aNewObjectRectangle.RightCenter().X(), aNewObjectRectangle.RightCenter().Y()));
-                aInnerPoly.append(basegfx::B2DPoint(aNewObjectRectangle.BottomRight().X(), aNewObjectRectangle.BottomRight().Y()));
-                aInnerPoly.setClosed(true);
-                ((SdrPathObj*)pObj)->SetPathPoly(basegfx::B2DPolyPolygon(aInnerPoly));
-                break;
-            }
-        case OBJ_FREEFILL:
-        case OBJ_PATHFILL:
-            {
-                sal_Int32 nWdt(aNewObjectRectangle.GetWidth() / 2);
-                sal_Int32 nHgt(aNewObjectRectangle.GetHeight() / 2);
-                basegfx::B2DPolygon aInnerPoly(XPolygon(aNewObjectRectangle.Center(), nWdt, nHgt).getB2DPolygon());
-                ((SdrPathObj*)pObj)->SetPathPoly(basegfx::B2DPolyPolygon(aInnerPoly));
-                break;
-            }
+            SdrPathObj* pSdrPathObj = dynamic_cast< SdrPathObj* >(pObj);
 
+            if(pSdrPathObj)
+            {
+                switch(pSdrPathObj->getSdrPathObjType())
+                {
+                    case PathType_ClosedPolygon:
+                    {
+                        basegfx::B2DPolygon aInnerPoly;
+
+                        aInnerPoly.append(basegfx::B2DPoint(aNewObjectRange.getMinX(), aNewObjectRange.getMaxY()));
+                        aInnerPoly.append(aNewObjectRange.getMinimum());
+                        aInnerPoly.append(basegfx::B2DPoint(aNewObjectRange.getCenterX(), aNewObjectRange.getMinY()));
+                        aInnerPoly.append(aNewObjectRange.getCenter());
+                        aInnerPoly.append(basegfx::B2DPoint(aNewObjectRange.getMaxX(), aNewObjectRange.getCenterY()));
+                        aInnerPoly.append(aNewObjectRange.getMaximum());
+                        aInnerPoly.setClosed(true);
+
+                        pSdrPathObj->setB2DPolyPolygonInObjectCoordinates(basegfx::B2DPolyPolygon(aInnerPoly));
+                        break;
+                    }
+                    case PathType_ClosedBezier:
+                    {
+                        const basegfx::B2DPolygon aInnerPoly(
+                            basegfx::tools::createPolygonFromEllipse(
+                                aNewObjectRange.getCenter(),
+                                aNewObjectRange.getWidth() * 0.5,
+                                aNewObjectRange.getHeight() * 0.5));
+
+                        pSdrPathObj->setB2DPolyPolygonInObjectCoordinates(basegfx::B2DPolyPolygon(aInnerPoly));
+                        break;
+                    }
+                }
+            }
         }
 
-        pView->InsertObjectAtView(pObj, *pPageView);
+        pView->InsertObjectAtView(*pObj);
         SdrObjCreated( *pObj );
         SetCurrentObjState( true );
-        pView->MarkObj( pObj, pPageView );
+        pView->MarkObj( *pObj );
     }
 }
 
@@ -1012,7 +1030,7 @@ void IMapWindow::KeyInput( const KeyEvent& rKEvt )
                 pView->BrkAction();
                 return;
             }
-            else if ( pView->AreObjectsMarked() )
+            else if ( pView->areSdrObjectsSelected() )
             {
                 const SdrHdlList& rHdlList = pView->GetHdlList();
                 SdrHdl* pHdl = rHdlList.GetFocusHdl();
@@ -1044,7 +1062,7 @@ void IMapWindow::SelectFirstObject()
     {
         GrabFocus();
         pView->UnmarkAllObj();
-        pView->MarkNextObj(sal_True);
+        pView->MarkNextObj(true);
     }
 }
 
@@ -1052,8 +1070,8 @@ void IMapWindow::StartPolyEdit()
 {
     GrabFocus();
 
-    if( !pView->AreObjectsMarked() )
-        pView->MarkNextObj(sal_True);
+    if( !pView->areSdrObjectsSelected() )
+        pView->MarkNextObj(true);
 
     const SdrHdlList& rHdlList = pView->GetHdlList();
     SdrHdl* pHdl = rHdlList.GetFocusHdl();

@@ -32,7 +32,6 @@
 #include <editeng/outliner.hxx>
 #include <svx/fmdpage.hxx>
 #include <svx/svditer.hxx>
-#include <svx/svdmark.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
@@ -149,8 +148,9 @@ ScViewPaneBase::~ScViewPaneBase()
 
 void ScViewPaneBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if ( pSfxSimpleHint && SFX_HINT_DYING == pSfxSimpleHint->GetId() )
         pViewShell = NULL;
 }
 
@@ -684,11 +684,10 @@ void lcl_ShowObject( ScTabViewShell& rViewSh, ScDrawView& rDrawView, SdrObject* 
     sal_Bool bFound = sal_False;
     SCTAB nObjectTab = 0;
 
-    SdrModel* pModel = rDrawView.GetModel();
-    sal_uInt16 nPageCount = pModel->GetPageCount();
-    for (sal_uInt16 i=0; i<nPageCount && !bFound; i++)
+    const sal_uInt32 nPageCount(rDrawView.getSdrModelFromSdrView().GetPageCount());
+    for (sal_uInt32 i=0; i<nPageCount && !bFound; i++)
     {
-        SdrPage* pPage = pModel->GetPage(i);
+        SdrPage* pPage = rDrawView.getSdrModelFromSdrView().GetPage(i);
         if (pPage)
         {
             SdrObjListIter aIter( *pPage, IM_DEEPWITHGROUPS );
@@ -760,7 +759,6 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
         if ( pViewData->GetDocShell() == pRangesImp->GetDocShell() )
         {
             //  Zuerst evtl. Drawing-Selektion aufheben
-            //  (MarkListHasChanged hebt Tabellen-Selektion auf)
 
             ScDrawView* pDrawView = pViewSh->GetScDrawView();
             if (pDrawView)
@@ -827,9 +825,9 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
                 {
                     lcl_ShowObject( *pViewSh, *pDrawView, pObj );
                     SdrPageView* pPV = pDrawView->GetSdrPageView();
-                    if ( pPV && pObj->GetPage() == pPV->GetPage() )
+                    if ( pPV && pObj->getSdrPageFromSdrObject() == &pPV->getSdrPageFromSdrPageView() )
                     {
-                        pDrawView->MarkObj( pObj, pPV );
+                        pDrawView->MarkObj( *pObj );
                         bRet = sal_True;
                     }
                 }
@@ -867,10 +865,10 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
                                         lcl_ShowObject( *pViewSh, *pDrawView, pObj );
                                         pPV = pDrawView->GetSdrPageView();
                                     }
-                                    if ( pPV && pObj->GetPage() == pPV->GetPage() )
+                                    if ( pPV && pObj->getSdrPageFromSdrObject() == &pPV->getSdrPageFromSdrPageView() )
                                     {
-                                        if (pDrawView->IsObjMarkable( pObj, pPV ))
-                                            pDrawView->MarkObj( pObj, pPV );
+                                        if (pDrawView->IsObjMarkable( *pObj ))
+                                            pDrawView->MarkObj( *pObj );
                                         else
                                             bAllMarked = sal_False;
                                     }
@@ -908,26 +906,22 @@ uno::Any SAL_CALL ScTabViewObj::getSelection() throw(uno::RuntimeException)
         SdrView* pDrawView = pViewSh->GetSdrView();
         if (pDrawView)
         {
-            const SdrMarkList& rMarkList = pDrawView->GetMarkedObjectList();
-            sal_uLong nMarkCount = rMarkList.GetMarkCount();
-            if (nMarkCount)
+            const SdrObjectVector aSelection(pDrawView->getSelectedSdrObjectVectorFromSdrMarkView());
+
+            if (aSelection.size())
             {
                 //  ShapeCollection erzeugen (wie in SdXImpressView::getSelection im Draw)
                 //  Zurueckgegeben wird XInterfaceRef, das muss das UsrObject-XInterface sein
-
                 SvxShapeCollection* pShapes = new SvxShapeCollection();
                 uno::Reference<uno::XInterface> xRet(static_cast<cppu::OWeakObject*>(pShapes));
 
-                for (sal_uLong i=0; i<nMarkCount; i++)
-                {
-                    SdrObject* pDrawObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-                    if (pDrawObj)
+                for (sal_uInt32 i(0); i < aSelection.size(); i++)
                     {
+                    SdrObject* pDrawObj = aSelection[i];
                         uno::Reference<drawing::XShape> xShape( pDrawObj->getUnoShape(), uno::UNO_QUERY );
                         if (xShape.is())
                             pShapes->add(xShape);
                     }
-                }
                 return uno::makeAny(xRet);
             }
         }
@@ -1223,26 +1217,23 @@ uno::Reference< uno::XInterface > ScTabViewObj::GetClickedObject(const Point& rP
         {
             SdrPage* pDrawPage = NULL;
             ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
-            if (pDrawLayer->HasObjects() && (pDrawLayer->GetPageCount() > nTab))
-                pDrawPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
+            if (pDrawLayer->HasObjects() && (pDrawLayer->GetPageCount() > static_cast< sal_uInt32 >(nTab)))
+                pDrawPage = pDrawLayer->GetPage(static_cast< sal_uInt32 >(nTab));
 
             SdrView* pDrawView = GetViewShell()->GetSdrView();
 
             if (pDrawPage && pDrawView && pDrawView->GetSdrPageView())
             {
                 Window* pActiveWin = pData->GetActiveWin();
-                Point aPos = pActiveWin->PixelToLogic(rPoint);
-
-                sal_uInt16 nHitLog = (sal_uInt16) pActiveWin->PixelToLogic(
-                                 Size(pDrawView->GetHitTolerancePixel(),0)).Width();
-
+                const basegfx::B2DPoint aPos(pActiveWin->GetInverseViewTransformation() * basegfx::B2DPoint(rPoint.X(), rPoint.Y()));
+                const double fHitLog(basegfx::B2DVector(pActiveWin->GetInverseViewTransformation() * basegfx::B2DVector(pDrawView->GetHitTolerancePixel(), 0.0)).getLength());
                 sal_uInt32 nCount(pDrawPage->GetObjCount());
                 sal_Bool bFound(sal_False);
                 sal_uInt32 i(0);
                 while (i < nCount && !bFound)
                 {
                     SdrObject* pObj = pDrawPage->GetObj(i);
-                    if (pObj && SdrObjectPrimitiveHit(*pObj, aPos, nHitLog, *pDrawView->GetSdrPageView(), 0, false))
+                    if (pObj && SdrObjectPrimitiveHit(*pObj, aPos, fHitLog, *pDrawView, false, 0))
                     {
                         xTarget.set(pObj->getUnoShape(), uno::UNO_QUERY);
                         bFound = sal_True;
@@ -2317,11 +2308,11 @@ ScTabViewObj* ScTabViewObj::getImplementation( const uno::Reference<uno::XInterf
 ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL ScTabViewObj::getTransferable(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    ScEditShell* pShell = PTR_CAST( ScEditShell, GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) );
+    ScEditShell* pShell = dynamic_cast< ScEditShell* >( GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) );
     if (pShell)
         return pShell->GetEditView()->GetTransferable();
 
-    ScDrawTextObjectBar* pTextShell = PTR_CAST( ScDrawTextObjectBar, GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) );
+    ScDrawTextObjectBar* pTextShell = dynamic_cast< ScDrawTextObjectBar* >( GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) );
     if (pTextShell)
     {
         ScViewData* pViewData = GetViewShell()->GetViewData();
@@ -2331,7 +2322,7 @@ ScTabViewObj* ScTabViewObj::getImplementation( const uno::Reference<uno::XInterf
             return pOutView->GetEditView().GetTransferable();
     }
 
-    ScDrawShell* pDrawShell = PTR_CAST( ScDrawShell, GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) );
+    ScDrawShell* pDrawShell = dynamic_cast< ScDrawShell* >( GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) );
     if (pDrawShell)
         return pDrawShell->GetDrawView()->CopyToTransferable();
 
@@ -2343,12 +2334,12 @@ ScTabViewObj* ScTabViewObj::getImplementation( const uno::Reference<uno::XInterf
 void SAL_CALL ScTabViewObj::insertTransferable( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTrans ) throw (::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    ScEditShell* pShell = PTR_CAST( ScEditShell, GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) );
+    ScEditShell* pShell = dynamic_cast< ScEditShell* >( GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) );
     if (pShell)
         pShell->GetEditView()->InsertText( xTrans, ::rtl::OUString(), sal_False );
     else
     {
-        ScDrawTextObjectBar* pTextShell = PTR_CAST( ScDrawTextObjectBar, GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) );
+        ScDrawTextObjectBar* pTextShell = dynamic_cast< ScDrawTextObjectBar* >( GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) );
         if (pTextShell)
         {
             ScViewData* pViewData = GetViewShell()->GetViewData();

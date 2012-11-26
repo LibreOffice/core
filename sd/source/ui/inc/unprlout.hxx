@@ -36,18 +36,17 @@ class SdPresentationLayoutUndoAction : public SdUndoAction
     String          aNewLayoutName;
     AutoLayout      eOldAutoLayout;
     AutoLayout      eNewAutoLayout;
-    sal_Bool            bSetAutoLayout;     // sal_True: AutoLayout aendern
+    bool            bSetAutoLayout;     // true: AutoLayout aendern
     SdPage*         pPage;
     String          aComment;
 
 public:
-    TYPEINFO();
     SdPresentationLayoutUndoAction(SdDrawDocument* pTheDoc,
                          String          aTheOldLayoutName,
                          String          aTheNewLayoutName,
                          AutoLayout      eTheOldAutoLayout,
                          AutoLayout      eTheNewAutoLayout,
-                         sal_Bool            bSet,
+                         bool            bSet,
                          SdPage*         pThePage);
 
     virtual ~SdPresentationLayoutUndoAction();

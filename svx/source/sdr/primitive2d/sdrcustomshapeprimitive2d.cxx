@@ -99,23 +99,6 @@ namespace drawinglayer
         {
         }
 
-        bool SdrCustomShapePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const SdrCustomShapePrimitive2D& rCompare = (SdrCustomShapePrimitive2D&)rPrimitive;
-
-                return (getSdrSTAttribute() == rCompare.getSdrSTAttribute()
-                    && getSubPrimitives() == rCompare.getSubPrimitives()
-                    && getTextBox() == rCompare.getTextBox()
-                    && getWordWrap() == rCompare.getWordWrap()
-                    && get3DShape() == rCompare.get3DShape()
-                    && isForceTextClipToTextRange() == rCompare.isForceTextClipToTextRange());
-            }
-
-            return false;
-        }
-
         // provide unique ID
         ImplPrimitrive2DIDBlock(SdrCustomShapePrimitive2D, PRIMITIVE2D_ID_SDRCUSTOMSHAPEPRIMITIVE2D)
 

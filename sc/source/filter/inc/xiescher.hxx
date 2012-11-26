@@ -107,7 +107,7 @@ public:
     /** Returns the object anchor if existing, null otherwise. */
     const XclObjAnchor* GetAnchor() const;
     /** Returns true, if the passed size is valid for this object. */
-    bool                IsValidSize( const Rectangle& rAnchorRect ) const;
+    bool                IsValidSize( const basegfx::B2DRange& rAnchorRange ) const;
     /** Returns the range in the sheet covered by this object. */
     ScRange             GetUsedArea( SCTAB nScTab ) const;
 
@@ -119,7 +119,7 @@ public:
     /** Returns the needed size on the progress bar (calls virtual DoGetProgressSize() function). */
     sal_Size            GetProgressSize() const;
     /** Creates and returns an SdrObject from the contained data. Caller takes ownership! */
-    SdrObject*          CreateSdrObject( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect, bool bIsDff ) const;
+    SdrObject*          CreateSdrObject( XclImpDffConverter& rDffConv, const basegfx::B2DRange& rAnchorRange, bool bIsDff ) const;
     /** Additional processing for the passed SdrObject before insertion into
         the drawing page (calls virtual DoPreProcessSdrObj() function). */
     void                PreProcessSdrObject( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
@@ -163,7 +163,7 @@ protected:
     /** Derived classes may return a progress bar size different from 1. */
     virtual sal_Size    DoGetProgressSize() const;
     /** Derived classes create and return a new SdrObject from the contained data. Caller takes ownership! */
-    virtual SdrObject*  DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const;
+    virtual SdrObject*  DoCreateSdrObj( XclImpDffConverter& rDffConv, const basegfx::B2DRange& rAnchorRange ) const;
     /** Derived classes may perform additional processing for the passed SdrObject before insertion. */
     virtual void        DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
     /** Derived classes may perform additional processing for the passed SdrObject after insertion. */
@@ -244,7 +244,7 @@ protected:
     /** Returns a progress bar size that takes all group children into account. */
     virtual sal_Size    DoGetProgressSize() const;
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
-    virtual SdrObject*  DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const;
+    virtual SdrObject*  DoCreateSdrObj( XclImpDffConverter& rDffConv, const basegfx::B2DRange& rAnchorRange ) const;
 
 protected:
     XclImpDrawObjVector maChildren;         /// Grouped objects.
@@ -267,7 +267,7 @@ protected:
     /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
     virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize );
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
-    virtual SdrObject*  DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const;
+    virtual SdrObject*  DoCreateSdrObj( XclImpDffConverter& rDffConv, const basegfx::B2DRange& rAnchorRange ) const;
 
 protected:
     XclObjLineData      maLineData;     /// BIFF5 line formatting.
@@ -297,7 +297,7 @@ protected:
     /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
     virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize );
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
-    virtual SdrObject*  DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const;
+    virtual SdrObject*  DoCreateSdrObj( XclImpDffConverter& rDffConv, const basegfx::B2DRange& rAnchorRange ) const;
 
 protected:
     XclObjFillData      maFillData;     /// BIFF5 fill formatting.
@@ -315,7 +315,7 @@ public:
 
 protected:
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
-    virtual SdrObject*  DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const;
+    virtual SdrObject*  DoCreateSdrObj( XclImpDffConverter& rDffConv, const basegfx::B2DRange& rAnchorRange ) const;
 };
 
 // ----------------------------------------------------------------------------
@@ -334,7 +334,7 @@ protected:
     /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
     virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize );
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
-    virtual SdrObject*  DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const;
+    virtual SdrObject*  DoCreateSdrObj( XclImpDffConverter& rDffConv, const basegfx::B2DRange& rAnchorRange ) const;
 
 protected:
     XclObjFillData      maFillData;     /// BIFF5 fill formatting.
@@ -359,10 +359,10 @@ protected:
     /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
     virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize );
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
-    virtual SdrObject*  DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const;
+    virtual SdrObject*  DoCreateSdrObj( XclImpDffConverter& rDffConv, const basegfx::B2DRange& rAnchorRange ) const;
 
 protected:
-    typedef ::std::vector< Point > PointVector;
+    typedef ::std::vector< basegfx::B2DPoint > PointVector;
     PointVector         maCoords;       /// Coordinates relative to bounding rectangle.
     sal_uInt16          mnPolyFlags;    /// Additional flags.
     sal_uInt16          mnPointCount;   /// Polygon point count.
@@ -400,7 +400,7 @@ protected:
     /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
     virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize );
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
-    virtual SdrObject*  DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const;
+    virtual SdrObject*  DoCreateSdrObj( XclImpDffConverter& rDffConv, const basegfx::B2DRange& rAnchorRange ) const;
     /** Inserts the contained text data at the passed object. */
     virtual void        DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
 
@@ -432,7 +432,7 @@ protected:
     /** Returns the needed size on the progress bar. */
     virtual sal_Size    DoGetProgressSize() const;
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
-    virtual SdrObject*  DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const;
+    virtual SdrObject*  DoCreateSdrObj( XclImpDffConverter& rDffConv, const basegfx::B2DRange& rAnchorRange ) const;
     /** Converts the chart document. */
     virtual void        DoPostProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
 
@@ -484,7 +484,7 @@ public:
     /** Returns the SdrObject from the passed control shape and sets the bounding rectangle. */
     SdrObject*          CreateSdrObjectFromShape(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
-                            const Rectangle& rAnchorRect ) const;
+                            const basegfx::B2DRange& rAnchorRange ) const;
 
     /** Sets additional properties to the form control model, calls virtual DoProcessControl(). */
     void                ProcessControl( const XclImpDrawObjBase& rDrawObj ) const;
@@ -537,7 +537,7 @@ protected:
     void                ConvertLabel( ScfPropertySet& rPropSet ) const;
 
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
-    virtual SdrObject*  DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const;
+    virtual SdrObject*  DoCreateSdrObj( XclImpDffConverter& rDffConv, const basegfx::B2DRange& rAnchorRange ) const;
     /** Additional processing on the SdrObject, calls new virtual function DoProcessControl(). */
     virtual void        DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
 
@@ -862,7 +862,7 @@ public:
     /** Returns the graphic imported from the IMGDATA record. */
     inline const Graphic& GetGraphic() const { return maGraphic; }
     /** Returns the visible area of the imported graphic. */
-    inline const Rectangle& GetVisArea() const { return maVisArea; }
+    inline const basegfx::B2DRange& GetVisArea() const { return maVisArea; }
 
     /** Returns true, if the OLE object will be shown as symbol. */
     inline bool         IsSymbol() const { return mbSymbol; }
@@ -886,7 +886,7 @@ protected:
     /** Reads the contents of the specified subrecord of a BIFF8 OBJ record from stream. */
     virtual void        DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize );
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
-    virtual SdrObject*  DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const;
+    virtual SdrObject*  DoCreateSdrObj( XclImpDffConverter& rDffConv, const basegfx::B2DRange& rAnchorRange ) const;
     /** Overloaded to do additional processing on the SdrObject. */
     virtual void        DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
 
@@ -900,7 +900,7 @@ private:
 
 private:
     Graphic             maGraphic;      /// Picture or OLE placeholder graphic.
-    Rectangle           maVisArea;      /// Size of graphic.
+    basegfx::B2DRange   maVisArea;      /// Size of graphic.
     String              maClassName;    /// Class name of embedded OLE object.
     sal_uInt32          mnStorageId;    /// Identifier of the storage for this object.
     sal_Size            mnCtlsStrmPos;  /// Position in 'Ctls' stream for this control.
@@ -969,7 +969,7 @@ public:
 
 protected:
     /** Returns a color from the Excel color palette. */
-    virtual FASTBOOL    GetColorFromPalette( sal_uInt16 nIndex, Color& rColor ) const;
+    virtual bool    GetColorFromPalette( sal_uInt16 nIndex, Color& rColor ) const;
 };
 
 // ----------------------------------------------------------------------------
@@ -1004,14 +1004,16 @@ public:
     void                FinalizeDrawing();
 
     /** Creates the SdrObject for the passed Excel TBX form control object. */
-    SdrObject*          CreateSdrObject( const XclImpTbxObjBase& rTbxObj, const Rectangle& rAnchorRect );
+    SdrObject*          CreateSdrObject( const XclImpTbxObjBase& rTbxObj, const basegfx::B2DRange& rAnchorRange );
     /** Creates the SdrObject for the passed Excel OLE object or OCX form control object. */
-    SdrObject*          CreateSdrObject( const XclImpPictureObj& rPicObj, const Rectangle& rAnchorRect );
+    SdrObject*          CreateSdrObject( const XclImpPictureObj& rPicObj, const basegfx::B2DRange& rAnchorRange );
 
     /** Returns true, if the conversion of OLE objects is supported. */
     bool                SupportsOleObjects() const;
     /** Returns the default text margin in drawing layer units. */
     inline sal_Int32    GetDefaultTextMargin() const { return mnDefTextMargin; }
+    /** Access to DrawingLayer target model */
+    SdrModel& GetTargetSdrModel() const { return GetConvData().mrSdrModel; }
 
 private:
     // virtual functions of SvxMSDffManager
@@ -1027,7 +1029,7 @@ private:
                             SvStream& rDffStrm,
                             DffObjData& rDffObjData,
                             void* pClientData,
-                            Rectangle& rTextRect,
+                            basegfx::B2DRange& rTextRect,
                             SdrObject* pOldSdrObj = 0 );
     /** Returns the BLIP stream position, based on the passed DFF stream position. */
     virtual sal_uLong       Calc_nBLIPPos( sal_uLong nOrgVal, sal_uLong nStreamPos ) const;
@@ -1128,7 +1130,7 @@ public:
     sal_Size            GetProgressSize() const;
 
     /** Derived classes calculate the resulting rectangle of the passed anchor. */
-    virtual Rectangle   CalcAnchorRect( const XclObjAnchor& rAnchor, bool bDffAnchor ) const = 0;
+    virtual basegfx::B2DRange CalcAnchorRange( const XclObjAnchor& rAnchor, bool bDffAnchor ) const = 0;
     /** Called whenever an object has been inserted into the draw page. */
     virtual void        OnObjectInserted( const XclImpDrawObjBase& rDrawObj ) = 0;
 
@@ -1186,7 +1188,7 @@ public:
     void                ConvertObjects( XclImpDffConverter& rDffConv );
 
     /** Calculate the resulting rectangle of the passed anchor. */
-    virtual Rectangle   CalcAnchorRect( const XclObjAnchor& rAnchor, bool bDffAnchor ) const;
+    virtual basegfx::B2DRange CalcAnchorRange( const XclObjAnchor& rAnchor, bool bDffAnchor ) const;
     /** On call, updates the used area of the sheet. */
     virtual void        OnObjectInserted( const XclImpDrawObjBase& rDrawObj );
 

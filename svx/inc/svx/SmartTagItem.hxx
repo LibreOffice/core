@@ -57,8 +57,8 @@ class SVX_DLLPUBLIC SvxSmartTagItem : public SfxPoolItem
     const rtl::OUString maRangeText;
 
 public:
-    TYPEINFO();
-
+    POOLITEM_FACTORY()
+    SvxSmartTagItem();
     SvxSmartTagItem( const sal_uInt16 nId,
                      const com::sun::star::uno::Sequence < com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::smarttags::XSmartTagAction > > >& rActionComponentsSequence,
                      const com::sun::star::uno::Sequence < com::sun::star::uno::Sequence< sal_Int32 > >& rActionIndicesSequence,

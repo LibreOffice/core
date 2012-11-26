@@ -42,9 +42,6 @@
 #include <fieldhint.hxx>
 #include <svl/smplhint.hxx>
 
-TYPEINIT3( SwFmtFld, SfxPoolItem, SwClient,SfxBroadcaster)
-TYPEINIT1(SwFmtFldHint, SfxHint);
-
 /****************************************************************************
  *
  *  class SwFmtFld

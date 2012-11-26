@@ -1170,8 +1170,6 @@ class XMLTableTransformerContext_Impl : public XMLTransformerContext
     ::rtl::OUString m_aElemQName;
 
 public:
-    TYPEINFO();
-
     XMLTableTransformerContext_Impl( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName );
 
@@ -1180,8 +1178,6 @@ public:
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void EndElement();
 };
-
-TYPEINIT1( XMLTableTransformerContext_Impl, XMLTransformerContext );
 
 XMLTableTransformerContext_Impl::XMLTableTransformerContext_Impl(
         XMLTransformerBase& rImp,
@@ -1277,8 +1273,6 @@ class XMLBodyOASISTransformerContext_Impl : public XMLTransformerContext
     sal_Bool m_bFirstChild;
 
 public:
-    TYPEINFO();
-
     XMLBodyOASISTransformerContext_Impl( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName );
 
@@ -1292,8 +1286,6 @@ public:
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void EndElement();
 };
-
-TYPEINIT1( XMLBodyOASISTransformerContext_Impl, XMLTransformerContext );
 
 XMLBodyOASISTransformerContext_Impl::XMLBodyOASISTransformerContext_Impl(
         XMLTransformerBase& rImp,
@@ -1339,8 +1331,6 @@ void XMLBodyOASISTransformerContext_Impl::EndElement()
 class XMLTabStopOASISTContext_Impl : public XMLPersElemContentTContext
 {
 public:
-    TYPEINFO();
-
     XMLTabStopOASISTContext_Impl( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName );
 
@@ -1348,8 +1338,6 @@ public:
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
-
-TYPEINIT1( XMLTabStopOASISTContext_Impl, XMLPersElemContentTContext );
 
 XMLTabStopOASISTContext_Impl::XMLTabStopOASISTContext_Impl(
         XMLTransformerBase& rImp,
@@ -1476,8 +1464,6 @@ class XMLConfigItemTContext_Impl : public XMLTransformerContext
 
 public:
 
-    TYPEINFO();
-
     XMLConfigItemTContext_Impl( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName );
 
@@ -1488,8 +1474,6 @@ public:
 
     virtual void Characters( const ::rtl::OUString& rChars );
 };
-
-TYPEINIT1( XMLConfigItemTContext_Impl, XMLTransformerContext );
 
 XMLConfigItemTContext_Impl::XMLConfigItemTContext_Impl(
         XMLTransformerBase& rImp,
@@ -1593,8 +1577,6 @@ class XMLTrackedChangesOASISTContext_Impl : public XMLTransformerContext
 
 public:
 
-    TYPEINFO();
-
     XMLTrackedChangesOASISTContext_Impl( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName,
                                sal_uInt16 nPrefix,
@@ -1604,8 +1586,6 @@ public:
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
-
-TYPEINIT1( XMLTrackedChangesOASISTContext_Impl, XMLTransformerContext );
 
 XMLTrackedChangesOASISTContext_Impl::XMLTrackedChangesOASISTContext_Impl(
         XMLTransformerBase& rImp,

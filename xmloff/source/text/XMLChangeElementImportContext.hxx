@@ -52,8 +52,6 @@ class XMLChangeElementImportContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLChangeElementImportContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,

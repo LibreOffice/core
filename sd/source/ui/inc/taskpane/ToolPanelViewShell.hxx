@@ -64,7 +64,6 @@ class ToolPanelViewShell
     : public ViewShell
 {
 public:
-    TYPEINFO();
     SFX_DECL_INTERFACE(SD_IF_SDTOOLPANELSHELL)
 
     ToolPanelViewShell (
@@ -119,7 +118,7 @@ public:
     */
     virtual bool RelocateToParentWindow (::Window* pParentWindow);
 
-    /// returns <TRUE/> if and only if the given window is the panel anchor window of our ToolPanelDeck
+    /// returns <true/> if and only if the given window is the panel anchor window of our ToolPanelDeck
     bool    IsPanelAnchorWindow( const ::Window& i_rWindow ) const;
 
     /** creates an XUIElement for the given standard panel
@@ -151,7 +150,7 @@ private:
 
 
     /** Initialize the task pane view shell if that has not yet been done
-        before.  If mbIsInitialized is already set to <TRUE/> then this
+        before.  If mbIsInitialized is already set to <true/> then this
         method returns immediately.
     */
     void Initialize (void);

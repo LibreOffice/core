@@ -45,7 +45,6 @@ public:
     virtual     ~SwDrawBaseShell();
 
     SFX_DECL_INTERFACE(SW_DRAWBASESHELL)
-    TYPEINFO();
 
     void        Execute(SfxRequest &);
     void        GetState(SfxItemSet &);

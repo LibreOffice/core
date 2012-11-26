@@ -150,7 +150,7 @@ SwAccessibleChildMap::SwAccessibleChildMap( const SwRect& rVisArea,
                     : ( (nControlsId == nLayer)
                         ? SwAccessibleChildMapKey::CONTROLS
                         : SwAccessibleChildMapKey::HEAVEN );
-    SwAccessibleChildMapKey aKey( eLayerId, pObj->GetOrdNum() );
+    SwAccessibleChildMapKey aKey( eLayerId, pObj->GetNavigationPosition() );
     value_type aEntry( aKey, rLower );
     return _SwAccessibleChildMap::insert( aEntry );
 }

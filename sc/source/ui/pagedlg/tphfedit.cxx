@@ -382,10 +382,21 @@ void lcl_GetFieldData( ScHeaderFieldData& rData )
     SfxViewShell* pShell = SfxViewShell::Current();
     if (pShell)
     {
-        if (pShell->ISA(ScTabViewShell))
-            ((ScTabViewShell*)pShell)->FillFieldData(rData);
-        else if (pShell->ISA(ScPreviewShell))
-            ((ScPreviewShell*)pShell)->FillFieldData(rData);
+        ScTabViewShell* pScTabViewShell = dynamic_cast< ScTabViewShell* >(pShell);
+
+        if (pScTabViewShell)
+        {
+            pScTabViewShell->FillFieldData(rData);
+        }
+        else
+        {
+            ScPreviewShell* pScPreviewShell = dynamic_cast< ScPreviewShell* >(pShell);
+
+            if (pScPreviewShell)
+            {
+                pScPreviewShell->FillFieldData(rData);
+            }
+        }
     }
 }
 
@@ -507,7 +518,7 @@ void ScEditWindow::SetCharAttriutes()
 
     SfxViewShell*       pViewSh = SfxViewShell::Current();
 
-    ScTabViewShell* pTabViewSh = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
+    ScTabViewShell* pTabViewSh = dynamic_cast< ScTabViewShell* >( SfxViewShell::Current());
 
 
     DBG_ASSERT( pDocSh,  "Current DocShell not found" );

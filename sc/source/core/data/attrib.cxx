@@ -55,17 +55,6 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------------
 
-TYPEINIT1(ScMergeAttr,          SfxPoolItem);
-TYPEINIT1_AUTOFACTORY(ScProtectionAttr,     SfxPoolItem);
-TYPEINIT1(ScRangeItem,          SfxPoolItem);
-TYPEINIT1(ScTableListItem,      SfxPoolItem);
-TYPEINIT1(ScPageHFItem,         SfxPoolItem);
-TYPEINIT1(ScViewObjectModeItem, SfxEnumItem);
-TYPEINIT1(ScDoubleItem,         SfxPoolItem);
-TYPEINIT1(ScPageScaleToItem,    SfxPoolItem);
-
-//------------------------------------------------------------------------
-
 //
 //      allgemeine Hilfsfunktionen
 //
@@ -151,7 +140,7 @@ String ScMergeAttr::GetValueText() const
 
 int ScMergeAttr::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( Which() != rItem.Which() || Type() == rItem.Type(), "which ==, type !=" );
+    DBG_ASSERT( Which() != rItem.Which() || typeid(*this) == typeid(rItem), "which ==, type !=" );
     return (Which() == rItem.Which())
              && (nColMerge == ((ScMergeAttr&)rItem).nColMerge)
              && (nRowMerge == ((ScMergeAttr&)rItem).nRowMerge);
@@ -195,9 +184,15 @@ ScMergeFlagAttr::~ScMergeFlagAttr()
 {
 }
 
+SfxPoolItem* ScMergeFlagAttr::Clone(SfxItemPool* /*pPool*/) const
+{
+    return new ScMergeFlagAttr(*this);
+}
+
 //------------------------------------------------------------------------
 // Protection
 //------------------------------------------------------------------------
+IMPL_POOLITEM_FACTORY(ScProtectionAttr)
 
 ScProtectionAttr::ScProtectionAttr():
     SfxPoolItem(ATTR_PROTECTION),
@@ -374,7 +369,7 @@ SfxItemPresentation ScProtectionAttr::GetPresentation
 
 int ScProtectionAttr::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT( Which() != rItem.Which() || Type() == rItem.Type(), "which ==, type !=" );
+    DBG_ASSERT( Which() != rItem.Which() || typeid(*this) == typeid(rItem), "which ==, type !=" );
     return (Which() == rItem.Which())
              && (bProtection == ((ScProtectionAttr&)rItem).bProtection)
              && (bHideFormula == ((ScProtectionAttr&)rItem).bHideFormula)
@@ -1150,6 +1145,7 @@ SfxPoolItem* ScViewObjectModeItem::Create(
 // -----------------------------------------------------------------------
 //      double
 // -----------------------------------------------------------------------
+IMPL_POOLITEM_FACTORY(ScDoubleItem)
 
 ScDoubleItem::ScDoubleItem( sal_uInt16 nWhichP, double nVal )
     :   SfxPoolItem ( nWhichP ),

@@ -52,9 +52,6 @@ SvCreateInstancePersist SvClassManager::Get( sal_uInt16 nClassId )
     return i == aAssocTable.end() ? 0 : i->second;
 }
 
-/****************** SvRttiBase *******************************************/
-TYPEINIT0( SvRttiBase );
-
 /****************** SvPersistBaseMemberList ******************************/
 
 SvPersistBaseMemberList::SvPersistBaseMemberList(){}

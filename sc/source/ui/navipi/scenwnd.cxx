@@ -263,7 +263,7 @@ void ScScenarioWindow::NotifyState( const SfxPoolItem* pState )
     {
         aLbScenario.Enable();
 
-        if ( pState->ISA(SfxStringItem) )
+        if ( dynamic_cast< const SfxStringItem* >(pState) )
         {
             String aNewEntry( ((const SfxStringItem*)pState)->GetValue() );
 
@@ -272,7 +272,7 @@ void ScScenarioWindow::NotifyState( const SfxPoolItem* pState )
             else
                 aLbScenario.SetNoSelection();
         }
-        else if ( pState->ISA(SfxStringListItem) )
+        else if ( dynamic_cast< const SfxStringListItem* >(pState) )
         {
             aLbScenario.UpdateEntries( ((SfxStringListItem*)pState)->GetList() );
         }

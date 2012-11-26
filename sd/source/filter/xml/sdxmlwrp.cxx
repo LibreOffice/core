@@ -854,7 +854,7 @@ sal_Bool SdXMLFilter::Export()
     if( !mxModel.is() )
     {
         DBG_ERROR("Got NO Model in XMLExport");
-        return sal_False;
+        return false;
     }
 
     sal_Bool bLocked = mxModel->hasControllersLocked();
@@ -868,7 +868,7 @@ sal_Bool SdXMLFilter::Export()
         if( !xServiceInfo.is() || !xServiceInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GenericDrawingDocument" ) ) ) )
         {
             DBG_ERROR( "Model is no DrawingDocument in XMLExport" );
-            return sal_False;
+            return false;
         }
 
         uno::Reference< lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
@@ -876,7 +876,7 @@ sal_Bool SdXMLFilter::Export()
         if( !xServiceFactory.is() )
         {
             DBG_ERROR( "got no service manager" );
-            return sal_False;
+            return false;
         }
 
         uno::Reference< uno::XInterface > xWriter( xServiceFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" ) ) ) );
@@ -884,7 +884,7 @@ sal_Bool SdXMLFilter::Export()
         if( !xWriter.is() )
         {
             DBG_ERROR( "com.sun.star.xml.sax.Writer service missing" );
-            return sal_False;
+            return false;
         }
         uno::Reference<xml::sax::XDocumentHandler>  xHandler( xWriter, uno::UNO_QUERY );
 
@@ -971,7 +971,7 @@ sal_Bool SdXMLFilter::Export()
                 pObjectHelper = SvXMLEmbeddedObjectHelper::Create( xStorage, *mrDocShell.GetDoc()->GetPersist(), EMBEDDEDOBJECTHELPER_MODE_WRITE, sal_False );
                 xObjectResolver = pObjectHelper;
 
-                pGraphicHelper = SvXMLGraphicHelper::Create( xStorage, GRAPHICHELPER_MODE_WRITE, sal_False );
+                pGraphicHelper = SvXMLGraphicHelper::Create( xStorage, GRAPHICHELPER_MODE_WRITE, false );
                 xGrfResolver = pGraphicHelper;
             }
 

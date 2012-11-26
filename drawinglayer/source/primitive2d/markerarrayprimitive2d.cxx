@@ -94,19 +94,6 @@ namespace drawinglayer
         {
         }
 
-        bool MarkerArrayPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const MarkerArrayPrimitive2D& rCompare = (MarkerArrayPrimitive2D&)rPrimitive;
-
-                return (getPositions() == rCompare.getPositions()
-                    && getMarker() == rCompare.getMarker());
-            }
-
-            return false;
-        }
-
         basegfx::B2DRange MarkerArrayPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
             basegfx::B2DRange aRetval;

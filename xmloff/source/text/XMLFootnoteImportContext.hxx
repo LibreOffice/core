@@ -63,8 +63,6 @@ class XMLFootnoteImportContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLFootnoteImportContext(
         SvXMLImport& rImport,
         XMLTextImportHelper& rHlp,

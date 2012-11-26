@@ -48,19 +48,6 @@ namespace drawinglayer
             mbFilter(bFilter)
         {
         }
-
-        bool TexturePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
-        {
-            if(GroupPrimitive3D::operator==(rPrimitive))
-            {
-                const TexturePrimitive3D& rCompare = (TexturePrimitive3D&)rPrimitive;
-
-                return (getModulate() == rCompare.getModulate()
-                    && getFilter() == rCompare.getFilter());
-            }
-
-            return false;
-        }
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
@@ -76,18 +63,6 @@ namespace drawinglayer
         :   TexturePrimitive3D(rChildren, basegfx::B2DVector(), false, false),
             mfTransparence(fTransparence)
         {
-        }
-
-        bool UnifiedTransparenceTexturePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
-        {
-            if(TexturePrimitive3D::operator==(rPrimitive))
-            {
-                const UnifiedTransparenceTexturePrimitive3D& rCompare = (UnifiedTransparenceTexturePrimitive3D&)rPrimitive;
-
-                return (getTransparence() == rCompare.getTransparence());
-            }
-
-            return false;
         }
 
         basegfx::B3DRange UnifiedTransparenceTexturePrimitive3D::getB3DRange(const geometry::ViewInformation3D& rViewInformation) const
@@ -142,18 +117,6 @@ namespace drawinglayer
         {
         }
 
-        bool GradientTexturePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
-        {
-            if(TexturePrimitive3D::operator==(rPrimitive))
-            {
-                const GradientTexturePrimitive3D& rCompare = (GradientTexturePrimitive3D&)rPrimitive;
-
-                return (getGradient() == rCompare.getGradient());
-            }
-
-            return false;
-        }
-
         // provide unique ID
         ImplPrimitrive3DIDBlock(GradientTexturePrimitive3D, PRIMITIVE3D_ID_GRADIENTTEXTUREPRIMITIVE3D)
 
@@ -176,18 +139,6 @@ namespace drawinglayer
         {
         }
 
-        bool BitmapTexturePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
-        {
-            if(TexturePrimitive3D::operator==(rPrimitive))
-            {
-                const BitmapTexturePrimitive3D& rCompare = (BitmapTexturePrimitive3D&)rPrimitive;
-
-                return (getFillGraphicAttribute() == rCompare.getFillGraphicAttribute());
-            }
-
-            return false;
-        }
-
         // provide unique ID
         ImplPrimitrive3DIDBlock(BitmapTexturePrimitive3D, PRIMITIVE3D_ID_BITMAPTEXTUREPRIMITIVE3D)
 
@@ -206,11 +157,6 @@ namespace drawinglayer
             const basegfx::B2DVector& rTextureSize)
         :   GradientTexturePrimitive3D(rGradient, rChildren, rTextureSize, false, false)
         {
-        }
-
-        bool TransparenceTexturePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
-        {
-            return (GradientTexturePrimitive3D::operator==(rPrimitive));
         }
 
         // provide unique ID

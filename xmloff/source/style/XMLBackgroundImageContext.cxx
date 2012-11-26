@@ -169,8 +169,6 @@ void lcl_xmlbic_MergeVertPos( GraphicLocation& ePos,
     }
 }
 
-TYPEINIT1( XMLBackgroundImageContext, XMLElementPropertyContext );
-
 void XMLBackgroundImageContext::ProcessAttrs(
         const Reference< xml::sax::XAttributeList >& xAttrList )
 {

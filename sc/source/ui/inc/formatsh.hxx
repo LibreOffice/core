@@ -27,7 +27,6 @@
 #include <sfx2/shell.hxx>
 #include "shellids.hxx"
 #include <sfx2/module.hxx>
-#include <svx/svdmark.hxx>
 
 class ScViewData;
 
@@ -42,7 +41,6 @@ protected:
 
 public:
 
-    TYPEINFO();
     SFX_DECL_INTERFACE(SCID_FORMAT_SHELL)
 
                 ScFormatShell(ScViewData* pData);

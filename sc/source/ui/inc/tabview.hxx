@@ -209,7 +209,6 @@ protected:
     void            ResetDrawDragMode();
     sal_Bool            IsDrawTextEdit() const;
     void            DrawEnableAnim(sal_Bool bSet);
-    //HMHvoid           DrawShowMarkHdl(sal_Bool bShow);
 
     void            MakeDrawView( sal_uInt8 nForceDesignMode = SC_FORCEMODE_NONE );
 
@@ -261,7 +260,7 @@ public:
     FuPoor*         GetDrawFuncOldPtr()                 { return pDrawOld; }
 
     void            DrawDeselectAll();
-    void            DrawMarkListHasChanged();
+//  void            DrawMarkListHasChanged();
     void            UpdateAnchorHandles();
 //UNUSED2008-05  String          GetSelectedChartName() const;
 
@@ -270,7 +269,7 @@ public:
 
     void            UpdatePageBreakData( sal_Bool bForcePaint = sal_False );
 
-    void            DrawMarkRect( const Rectangle& rRect );
+    void            DrawMarkRange( const basegfx::B2DRange& rRange );
 
     ScViewData*         GetViewData()       { return &aViewData; }
     const ScViewData*   GetViewData() const { return &aViewData; }
@@ -335,10 +334,10 @@ public:
     void            InvertHorizontal( ScVSplitPos eWhich, long nDragPos );
     void            InvertVertical( ScHSplitPos eWhich, long nDragPos );
 
-    Point           GetInsertPos();
+    basegfx::B2DPoint GetInsertPos();
 
-    Point           GetChartInsertPos( const Size& rSize, const ScRange& rCellRange );
-    Point           GetChartDialogPos( const Size& rDialogSize, const Rectangle& rLogicChart );
+    basegfx::B2DPoint GetChartInsertPos( const basegfx::B2DVector& rScale, const ScRange& rCellRange );
+    basegfx::B2DPoint GetChartDialogPos( const basegfx::B2DVector& rScale, const basegfx::B2DRange& rLogicChart );
 
     void            UpdateAutoFillMark();
 
@@ -404,7 +403,7 @@ public:
     sal_Bool            ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos );
 
     void            ScrollToObject( SdrObject* pDrawObj );
-    void            MakeVisible( const Rectangle& rHMMRect );
+    void            MakeVisibleAtView( const basegfx::B2DRange& rRange );
 
                                     // Zeichnen
 

@@ -106,8 +106,8 @@ sal_Bool SdParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
         maNewStartNF.GetText() != maNewStartNF.GetSavedValue())
     {
         mbModified = true;
-        sal_Bool bNewStartChecked = STATE_CHECK == maNewStartCB.GetState();
-        sal_Bool bNumberNewStartChecked = STATE_CHECK == maNewStartNumberCB.GetState();
+        bool bNewStartChecked = STATE_CHECK == maNewStartCB.GetState();
+        bool bNumberNewStartChecked = STATE_CHECK == maNewStartNumberCB.GetState();
         rSet.Put(SfxBoolItem(ATTR_NUMBER_NEWSTART, bNewStartChecked));
 
         const sal_Int16 nStartAt = (sal_Int16)maNewStartNF.GetValue();
@@ -124,7 +124,7 @@ void SdParagraphNumTabPage::Reset( const SfxItemSet& rSet )
     {
         const SfxBoolItem& rStart = (const SfxBoolItem&)rSet.Get(ATTR_NUMBER_NEWSTART);
         maNewStartCB.SetState( rStart.GetValue() ? STATE_CHECK : STATE_NOCHECK );
-        maNewStartCB.EnableTriState(sal_False);
+        maNewStartCB.EnableTriState(false);
     }
     else
     {
@@ -142,7 +142,7 @@ void SdParagraphNumTabPage::Reset( const SfxItemSet& rSet )
             nNewStart = 1;
 
         maNewStartNF.SetValue(nNewStart);
-        maNewStartNumberCB.EnableTriState(sal_False);
+        maNewStartNumberCB.EnableTriState(false);
     }
     else
     {
@@ -151,12 +151,12 @@ void SdParagraphNumTabPage::Reset( const SfxItemSet& rSet )
     ImplNewStartHdl(&maNewStartCB);
     maNewStartNF.SaveValue();
     maNewStartNumberCB.SaveValue();
-    mbModified = sal_False;
+    mbModified = false;
 }
 
 IMPL_LINK( SdParagraphNumTabPage, ImplNewStartHdl, CheckBox*, EMPTYARG )
 {
-    sal_Bool bEnable = maNewStartCB.IsChecked();
+    bool bEnable = maNewStartCB.IsChecked();
     maNewStartNumberCB.Enable(bEnable);
     maNewStartNF.Enable(bEnable && maNewStartNumberCB.IsChecked());
     return 0;
@@ -178,7 +178,7 @@ SdParagraphDlg::SdParagraphDlg( Window* pParent, const SfxItemSet* pAttr )
 
     AddTabPage( RID_SVXPAGE_ALIGN_PARAGRAPH );
 
-    static const sal_Bool bShowParaNumbering = ( getenv( "SD_SHOW_NUMBERING_PAGE" ) != NULL );
+    static const bool bShowParaNumbering = ( getenv( "SD_SHOW_NUMBERING_PAGE" ) != NULL );
     if( bShowParaNumbering )
         AddTabPage( RID_TABPAGE_PARA_NUMBERING, SdParagraphNumTabPage::Create, SdParagraphNumTabPage::GetRanges );
     else

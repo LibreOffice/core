@@ -37,7 +37,6 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
-TYPEINIT1(OFILEOperandAttr, OOperandAttr);
 // -----------------------------------------------------------------------------
 OOperandAttr* OFILEAnalyzer::createOperandAttr(sal_Int32 _nPos,
                                                const Reference< XPropertySet>& _xCol,

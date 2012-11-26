@@ -36,7 +36,6 @@
 class SVX_DLLPUBLIC XFillBmpSizeXItem : public SfxMetricItem
 {
 public:
-                            TYPEINFO();
                             XFillBmpSizeXItem( long nSizeX = 0 );
                             SVX_DLLPRIVATE XFillBmpSizeXItem( SvStream& rIn );
 
@@ -51,7 +50,7 @@ public:
     // Dieses Item nimmt sowohl metrische als auch
     // Prozentwerte ( sind negativ ) auf; das muessen
     // wir hier beruecksichtigen
-    SVX_DLLPRIVATE virtual FASTBOOL     HasMetrics() const;
+    SVX_DLLPRIVATE virtual bool     HasMetrics() const;
 };
 
 /*************************************************************************
@@ -63,7 +62,6 @@ public:
 class SVX_DLLPUBLIC XFillBmpSizeYItem : public SfxMetricItem
 {
 public:
-                            TYPEINFO();
                             XFillBmpSizeYItem( long nSizeY = 0 );
                             SVX_DLLPRIVATE XFillBmpSizeYItem( SvStream& rIn );
 
@@ -78,7 +76,7 @@ public:
     // Dieses Item nimmt sowohl metrische als auch
     // Prozentwerte ( sind negativ ) auf; das muessen
     // wir hier beruecksichtigen
-    SVX_DLLPRIVATE virtual FASTBOOL     HasMetrics() const;
+    SVX_DLLPRIVATE virtual bool     HasMetrics() const;
 };
 
 #endif

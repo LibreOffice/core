@@ -305,7 +305,7 @@ void ImpEditEngine::UpdateViews( EditView* pCurView )
             aClipRec = pView->pImpEditView->GetWindowPos( aClipRec );
 
             if ( ( pView == pCurView )  )
-                Paint( pView->pImpEditView, aClipRec, 0, sal_True );
+                Paint( pView->pImpEditView, aClipRec, 0, true );
             else
                 pView->GetWindow()->Invalidate( aClipRec );
         }
@@ -2375,7 +2375,7 @@ void ImpEditEngine::CreateTextPortions( ParaPortion* pParaPortion, sal_uInt16& r
 
     sal_uInt16 nInvPos;
 #ifdef DBG_UTIL
-    sal_Bool bFound =
+    bool bFound =
 #endif
                         aPositions.Seek_Entry( nPortionStart, &nInvPos );
 
@@ -2872,7 +2872,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
     DBG_ASSERT( GetParaPortions().Count(), "Keine ParaPortion?!" );
     SvxFont aTmpFont( GetParaPortions()[0]->GetNode()->GetCharAttribs().GetDefFont() );
     Font aOldFont( pOutDev->GetFont() );
-    vcl::PDFExtOutDevData* pPDFExtOutDevData = PTR_CAST( vcl::PDFExtOutDevData, pOutDev->GetExtOutDevData() );
+    vcl::PDFExtOutDevData* pPDFExtOutDevData = dynamic_cast< vcl::PDFExtOutDevData* >( pOutDev->GetExtOutDevData() );
 
     // Bei gedrehtem Text wird aStartPos als TopLeft angesehen, da andere
     // Informationen fehlen, und sowieso das ganze Object ungescrollt
@@ -3167,7 +3167,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                 {
                                     EditCharAttrib* pAttr = pPortion->GetNode()->GetCharAttribs().FindFeature( nIndex );
                                     DBG_ASSERT( pAttr, "Feld nicht gefunden" );
-                                    DBG_ASSERT( pAttr && pAttr->GetItem()->ISA( SvxFieldItem ), "Feld vom falschen Typ!" );
+                                    DBG_ASSERT( pAttr && dynamic_cast< const SvxFieldItem* >(pAttr->GetItem()), "Feld vom falschen Typ!" );
                                     aText = ((EditCharAttribField*)pAttr)->GetFieldValue();
                                     nTextStart = 0;
                                     nTextLen = aText.Len();
@@ -3183,7 +3183,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     // add a meta file comment if we record to a metafile
                                     if( bMetafileValid )
                                     {
-                                        SvxFieldItem* pFieldItem = PTR_CAST( SvxFieldItem, pAttr->GetItem() );
+                                        const SvxFieldItem* pFieldItem = dynamic_cast< const SvxFieldItem* >( pAttr->GetItem() );
                                         if( pFieldItem )
                                         {
                                             const SvxFieldData* pFieldData = pFieldItem->GetField();
@@ -3293,7 +3293,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     if(PORTIONKIND_FIELD == pTextPortion->GetKind())
                                     {
                                         EditCharAttrib* pAttr = pPortion->GetNode()->GetCharAttribs().FindFeature(nIndex);
-                                        SvxFieldItem* pFieldItem = PTR_CAST(SvxFieldItem, pAttr->GetItem());
+                                        const SvxFieldItem* pFieldItem = dynamic_cast< const SvxFieldItem* >( pAttr->GetItem());
 
                                         if(pFieldItem)
                                         {
@@ -3447,11 +3447,11 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                             if ( pTextPortion->GetKind() == PORTIONKIND_FIELD )
                                             {
                                                 EditCharAttrib* pAttr = pPortion->GetNode()->GetCharAttribs().FindFeature( nIndex );
-                                                SvxFieldItem* pFieldItem = PTR_CAST( SvxFieldItem, pAttr->GetItem() );
+                                                const SvxFieldItem* pFieldItem = dynamic_cast< const SvxFieldItem* >( pAttr->GetItem() );
                                                 if( pFieldItem )
                                                 {
                                                     const SvxFieldData* pFieldData = pFieldItem->GetField();
-                                                    if ( pFieldData->ISA( SvxURLField ) )
+                                                    if ( dynamic_cast< const SvxURLField* >(pFieldData) )
                                                     {
                                                         Point aTopLeft( aTmpPos );
                                                         aTopLeft.Y() -= pLine->GetMaxAscent();
@@ -3519,12 +3519,12 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                 {
                                     EditCharAttrib* pAttr = pPortion->GetNode()->GetCharAttribs().FindFeature( nIndex );
                                     DBG_ASSERT( pAttr, "Feld nicht gefunden" );
-                                    DBG_ASSERT( pAttr && pAttr->GetItem()->ISA( SvxFieldItem ), "Feld vom falschen Typ!" );
+                                    DBG_ASSERT( pAttr && dynamic_cast< const SvxFieldItem* >(pAttr->GetItem()), "Feld vom falschen Typ!" );
 
                                     // add a meta file comment if we record to a metafile
                                     if( bMetafileValid )
                                     {
-                                        SvxFieldItem* pFieldItem = PTR_CAST( SvxFieldItem, pAttr->GetItem() );
+                                        const SvxFieldItem* pFieldItem = dynamic_cast< const SvxFieldItem* >( pAttr->GetItem() );
 
                                         if( pFieldItem )
                                         {
@@ -3634,7 +3634,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
         pOutDev->SetFont( aOldFont );
 }
 
-void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRec, OutputDevice* pTargetDevice, sal_Bool bUseVirtDev )
+void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRec, OutputDevice* pTargetDevice, bool bUseVirtDev )
 {
     DBG_ASSERT( pView, "Keine View - Kein Paint!" );
     DBG_CHKOBJ( GetEditEnginePtr(), EditEngine, 0 );

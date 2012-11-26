@@ -58,29 +58,27 @@ class SlideView
     : public ::sd::View
 {
 public:
-    TYPEINFO();
-
     SlideView (
         SdDrawDocument* pDoc,
         ::Window* pWindow,
         SlideViewShell* pSlideVShell);
     virtual ~SlideView (void);
 
-    void                Select( sal_uInt16 nSdPageNum, sal_Bool bSelect );
-    void                SelectAllSlides( sal_Bool bSelect );
+    void                Select( sal_uInt16 nSdPageNum, bool bSelect );
+    void                SelectAllSlides( bool bSelect );
 
     void                MoveFocus( SlideViewFocusMove eMove );
     sal_uInt16              GetFocusPage() const;
-    sal_Bool                HasFocus() const;
+    bool                HasFocus() const;
 
     sal_uInt16              ChangePagesPerRow( sal_uInt16 nNum );
     sal_uInt16              GetPagesPerRow() const { return nPagesPerRow; }
 
     virtual void        InvalidateOneWin( ::Window& rWin );
-    virtual void        InvalidateOneWin( ::Window& rWin, const Rectangle& rRect );
+    virtual void        InvalidateOneWin( ::Window& rWin, const basegfx::B2DRange& rRange );
 
-    void                SetAllowInvalidate( sal_Bool bFlag );
-    sal_Bool                IsInvalidateAllowed() const;
+    void                SetAllowInvalidate( bool bFlag );
+    bool                IsInvalidateAllowed() const;
 
     void                Paint(const Rectangle& rRect, OutputDevice* pOut);
     void                DrawSelectionRect(sal_uInt16 nPage);
@@ -110,12 +108,12 @@ public:
 
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTargetHelper,
                                     ::sd::Window* pTargetWindow = NULL,
-                                    sal_uInt16 nPage = SDRPAGE_NOTFOUND,
-                                    sal_uInt16 nLayer = SDRPAGE_NOTFOUND );
+                                    sal_uInt32 nPage = SDRPAGE_NOTFOUND,
+                                    SdrLayerID aLayer = SDRLAYER_NOTFOUND);
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTargetHelper,
                                      ::sd::Window* pTargetWindow = NULL,
-                                     sal_uInt16 nPage = SDRPAGE_NOTFOUND,
-                                     sal_uInt16 nLayer = SDRPAGE_NOTFOUND );
+                                     sal_uInt32 nPage = SDRPAGE_NOTFOUND,
+                                     SdrLayerID aLayer = SDRLAYER_NOTFOUND);
 
     void                UpdateAllPages();
 
@@ -128,11 +126,11 @@ private:
     sal_uInt16              nAllowInvalidateSmph;
     sal_uInt16              nPagesPerRow;
     sal_uInt16              nFocusPage;
-    sal_Bool                bInPaint;
-    sal_Bool                bInDelayedPaint;
+    bool                bInPaint;
+    bool                bInDelayedPaint;
 
                         DECL_LINK( PaintDelayed, Timer * );
-    void CreateSlideTransferable (::Window* pWindow, sal_Bool bDrag);
+    void CreateSlideTransferable (::Window* pWindow, bool bDrag);
 };
 
 } // end of namespace sd

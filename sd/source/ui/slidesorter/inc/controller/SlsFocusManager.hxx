@@ -81,7 +81,7 @@ public:
 
     /** Show the focus indicator of the current slide.
         @param bScrollToFocus
-            When <TRUE/> (the default) then the view is scrolled so that the
+            When <true/> (the default) then the view is scrolled so that the
             focus rectangle lies inside its visible area.
     */
     void ShowFocus (const bool bScrollToFocus = true);
@@ -135,7 +135,7 @@ public:
 
     /** Return <TRUE/> when the focus inidcator is currently shown.  A
         prerequisite is that the window managed by this focus manager has
-        the input focus as indicated by a <TRUE/> return value of
+        the input focus as indicated by a <true/> return value of
         HasFocus().  It is not necessary that the focus indicator is
         visible.  It may have been scrolled outside the visible area.
     */
@@ -210,7 +210,7 @@ private:
         @param pDescriptor
             When NULL is given then the call is ignored.
         @param bScrollToFocus
-            When <TRUE/> (the default) then the view is scrolled so that the
+            When <true/> (the default) then the view is scrolled so that the
             focus rectangle lies inside its visible area.
     */
     void ShowFocusIndicator (

@@ -3676,13 +3676,17 @@ void __EXPORT SvxRuler::Notify(SfxBroadcaster&, const SfxHint& rHint)
 
 {
     // Aktualisierung anstossen
-    if(bActive &&
-        rHint.Type() == TYPE(SfxSimpleHint) &&
-     ((SfxSimpleHint&) rHint ).GetId() == SFX_HINT_UPDATEDONE ) {
+    if(bActive)
+    {
+        const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+        if(pSfxSimpleHint && SFX_HINT_UPDATEDONE == pSfxSimpleHint->GetId())
+        {
         Update();
         EndListening(*pBindings);
-        bValid = sal_True;
-        bListening = sal_False;
+            bValid = true;
+            bListening = false;
+        }
     }
 }
 

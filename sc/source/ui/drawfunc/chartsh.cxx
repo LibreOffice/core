@@ -62,8 +62,6 @@ SFX_IMPL_INTERFACE(ScChartShell, ScDrawShell, ScResId(SCSTR_CHARTSHELL) )
     //SFX_OBJECTMENU_REGISTRATION( SID_OBJECTMENU0, ScResId(RID_OBJECTMENU_DRAW) );
 }
 
-TYPEINIT1( ScChartShell, ScDrawShell );
-
 ScChartShell::ScChartShell(ScViewData* pData) :
     ScDrawShell(pData)
 {

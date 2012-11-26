@@ -26,7 +26,7 @@
 
 // defines ------------------------------------------------------------------
 
-#define OWN_ATTR_VALUE_START                    3900
+#define OWN_ATTR_VALUE_START                    3800
 #define OWN_ATTR_VALUE_END                      3988
 
 #define CREATERESMGR_NAME( Name )   #Name

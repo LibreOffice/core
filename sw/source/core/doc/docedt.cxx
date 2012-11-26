@@ -761,6 +761,11 @@ void SwDoc::SetModified(SwPaM &rPaM)
  *                SwDoc::Overwrite()
  ************************************************************************/
 
+namespace
+{
+    bool ImpCheck(const SwClient& rClient) { return 0 != dynamic_cast< const SwCrsrShell* >(&rClient); }
+}
+
 bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
 {
     SwPosition& rPt = *(SwPosition*)rRg.GetPoint();
@@ -842,7 +847,8 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
     if( nOldAttrCnt != nNewAttrCnt )
     {
         SwUpdateAttr aHint( 0, 0, 0 );
-        pNode->ModifyBroadcast( 0, &aHint, TYPE( SwCrsrShell ) );
+
+        pNode->ModifyBroadcast( 0, &aHint, &ImpCheck);
     }
 
     if (!GetIDocumentUndoRedo().DoesUndo() &&

@@ -26,7 +26,6 @@
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 #include "sal/types.h"
-#include <tools/rtti.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 
@@ -77,8 +76,6 @@ class SFX2_DLLPUBLIC SfxEventNamesItem : public SfxPoolItem
     SfxEventNamesList aEventsList;
 
 public:
-    TYPEINFO();
-
     SfxEventNamesItem ( const sal_uInt16 nId ) : SfxPoolItem( nId ) {}
 
     virtual int             operator==( const SfxPoolItem& ) const;

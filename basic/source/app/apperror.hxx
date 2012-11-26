@@ -29,7 +29,6 @@ class AppError : public AppWin
 protected:
     DECL_LINK( EditChange, MsgEdit * );
 public:
-    TYPEINFO();
     AppError( BasicFrame*, String );
     ~AppError();
 //  long Command( short nID );

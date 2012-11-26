@@ -45,14 +45,12 @@ private:
     void operator=(const DlgEdModel& rSrcModel);    // not implemented
 
 public:
-    TYPEINFO();
-
     DlgEdModel();
     virtual ~DlgEdModel();
 
-    virtual void DlgEdModelChanged( FASTBOOL bChanged = sal_True );
+    virtual void DlgEdModelChanged( bool bChanged = sal_True );
 
-    virtual SdrPage*  AllocPage(FASTBOOL bMasterPage);
+    virtual SdrPage*  AllocPage(bool bMasterPage);
 
     virtual Window* GetCurDocViewWin();
 };

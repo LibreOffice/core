@@ -37,22 +37,21 @@ class ModifyPageUndoAction : public SdUndoAction
     String          maNewName;
     AutoLayout      meOldAutoLayout;
     AutoLayout      meNewAutoLayout;
-    sal_Bool            mbOldBckgrndVisible;
-    sal_Bool            mbNewBckgrndVisible;
-    sal_Bool            mbOldBckgrndObjsVisible;
-    sal_Bool            mbNewBckgrndObjsVisible;
+    bool            mbOldBckgrndVisible;
+    bool            mbNewBckgrndVisible;
+    bool            mbOldBckgrndObjsVisible;
+    bool            mbNewBckgrndObjsVisible;
 
     String          maComment;
 
 public:
-    TYPEINFO();
     ModifyPageUndoAction(
         SdDrawDocument*         pTheDoc,
         SdPage*                 pThePage,
         String                  aTheNewName,
         AutoLayout              eTheNewAutoLayout,
-        sal_Bool                    bTheNewBckgrndVisible,
-        sal_Bool                    bTheNewBckgrndObjsVisible);
+        bool                    bTheNewBckgrndVisible,
+        bool                    bTheNewBckgrndObjsVisible);
 
     virtual ~ModifyPageUndoAction();
     virtual void Undo();

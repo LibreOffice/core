@@ -225,7 +225,7 @@ PageEnumerationImpl::~PageEnumerationImpl (void)
 
 bool PageEnumerationImpl::HasMoreElements (void) const
 {
-    return (mnIndex < mrModel.GetPageCount());
+    return (mnIndex < (sal_Int32)mrModel.GetPageCount());
 }
 
 
@@ -258,7 +258,7 @@ void PageEnumerationImpl::Rewind (void)
 
 void PageEnumerationImpl::AdvanceToNextValidElement (void)
 {
-    while (mnIndex < mrModel.GetPageCount())
+    while (mnIndex < (sal_Int32)mrModel.GetPageCount())
     {
         SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(mnIndex));
 

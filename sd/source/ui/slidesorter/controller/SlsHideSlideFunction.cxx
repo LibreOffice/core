@@ -42,8 +42,6 @@
 
 namespace sd { namespace slidesorter { namespace controller {
 
-TYPEINIT1(HideSlideFunction, SlideFunction);
-
 HideSlideFunction::HideSlideFunction (
     SlideSorter& rSlideSorter,
     SfxRequest& rRequest)
@@ -127,7 +125,7 @@ HideSlideFunction::ExclusionState HideSlideFunction::GetExclusionState (
     model::PageEnumeration& rPageSet)
 {
     ExclusionState eState (UNDEFINED);
-    sal_Bool bState;
+    bool bState;
 
     // Get toggle state of the selected pages.
     while (rPageSet.HasMoreElements() && eState!=MIXED)

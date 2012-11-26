@@ -154,9 +154,9 @@ sal_Bool SdPrintOptions::FillItemSet( SfxItemSet& rAttrs )
 
         rAttrs.Put( aOptions );
 
-        return( sal_True );
+        return( true );
     }
-    return( sal_False );
+    return( false );
 }
 
 // -----------------------------------------------------------------------
@@ -164,8 +164,7 @@ sal_Bool SdPrintOptions::FillItemSet( SfxItemSet& rAttrs )
 void SdPrintOptions::Reset( const SfxItemSet& rAttrs )
 {
     const SdOptionsPrintItem* pPrintOpts = NULL;
-    if( SFX_ITEM_SET == rAttrs.GetItemState( ATTR_OPTIONS_PRINT, sal_False,
-                            (const SfxPoolItem**) &pPrintOpts ) )
+    if( SFX_ITEM_SET == rAttrs.GetItemState( ATTR_OPTIONS_PRINT, false, (const SfxPoolItem**) &pPrintOpts ) )
     {
         aCbxDraw.Check(              pPrintOpts->GetOptionsPrint().IsDraw() );
         aCbxNotes.Check(             pPrintOpts->GetOptionsPrint().IsNotes() );
@@ -296,7 +295,7 @@ void SdPrintOptions::PageCreated (SfxAllItemSet
                                   )
 {
 #ifdef QUARTZ
-    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_SDMODE_FLAG,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_SDMODE_FLAG);
     if (pFlagItem)
     {
         sal_uInt32 nFlags=pFlagItem->GetValue();

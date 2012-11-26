@@ -725,10 +725,11 @@ void EventMultiplexer::Implementation::Notify (
     SfxBroadcaster&,
     const SfxHint& rHint)
 {
-    if (rHint.ISA(SdrHint))
+    const SdrBaseHint* pSdrHint = dynamic_cast< const SdrBaseHint* >(&rHint);
+
+    if (pSdrHint)
     {
-        SdrHint& rSdrHint (*PTR_CAST(SdrHint,&rHint));
-        switch (rSdrHint.GetKind())
+        switch (pSdrHint->GetSdrHintKind())
         {
             case HINT_MODELCLEARED:
             case HINT_PAGEORDERCHG:
@@ -739,30 +740,36 @@ void EventMultiplexer::Implementation::Notify (
                 CallListeners (EventMultiplexerEvent::EID_CURRENT_PAGE);
                 break;
 
-            case HINT_OBJCHG:
+            case HINT_OBJCHG_MOVE:
+            case HINT_OBJCHG_RESIZE:
+            case HINT_OBJCHG_ATTR:
                 CallListeners(EventMultiplexerEvent::EID_SHAPE_CHANGED,
-                    const_cast<void*>(static_cast<const void*>(rSdrHint.GetPage())));
+                    const_cast<void*>(static_cast<const void*>(pSdrHint->GetSdrHintPage())));
                 break;
 
             case HINT_OBJINSERTED:
                 CallListeners(EventMultiplexerEvent::EID_SHAPE_INSERTED,
-                    const_cast<void*>(static_cast<const void*>(rSdrHint.GetPage())));
+                    const_cast<void*>(static_cast<const void*>(pSdrHint->GetSdrHintPage())));
                 break;
 
             case HINT_OBJREMOVED:
                 CallListeners(EventMultiplexerEvent::EID_SHAPE_REMOVED,
-                    const_cast<void*>(static_cast<const void*>(rSdrHint.GetPage())));
+                    const_cast<void*>(static_cast<const void*>(pSdrHint->GetSdrHintPage())));
                 break;
             default:
                 break;
         }
     }
-    else if (rHint.ISA(SfxSimpleHint))
+    else
     {
-        SfxSimpleHint& rSimpleHint (*PTR_CAST(SfxSimpleHint, &rHint));
-        if (rSimpleHint.GetId() == SFX_HINT_DYING)
+        const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+        if (pSfxSimpleHint)
+    {
+            if (SFX_HINT_DYING == pSfxSimpleHint->GetId() )
             mpDocument = NULL;
     }
+}
 }
 
 

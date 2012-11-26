@@ -107,7 +107,6 @@ struct FrameSelectorImpl : public Resource
     Color               maMarkCol;      /// Selection marker color.
     Color               maHCLineCol;    /// High contrast line color.
     Point               maVirDevPos;    /// Position of virtual device in the control.
-    Point               maMousePos;     /// Last mouse pointer position.
 
     FrameBorder         maLeft;         /// All data of left frame border.
     FrameBorder         maRight;        /// All data of right frame border.

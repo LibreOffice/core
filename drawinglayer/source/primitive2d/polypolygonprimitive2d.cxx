@@ -76,19 +76,6 @@ namespace drawinglayer
         {
         }
 
-        bool PolyPolygonHairlinePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const PolyPolygonHairlinePrimitive2D& rCompare = (PolyPolygonHairlinePrimitive2D&)rPrimitive;
-
-                return (getB2DPolyPolygon() == rCompare.getB2DPolyPolygon()
-                    && getBColor() == rCompare.getBColor());
-            }
-
-            return false;
-        }
-
         basegfx::B2DRange PolyPolygonHairlinePrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // return range
@@ -140,21 +127,6 @@ namespace drawinglayer
             maRGBColorB(rRGBColorB),
             mfDiscreteDashLength(fDiscreteDashLength)
         {
-        }
-
-        bool PolyPolygonMarkerPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const PolyPolygonMarkerPrimitive2D& rCompare = (PolyPolygonMarkerPrimitive2D&)rPrimitive;
-
-                return (getB2DPolyPolygon() == rCompare.getB2DPolyPolygon()
-                    && getRGBColorA() == rCompare.getRGBColorA()
-                    && getRGBColorB() == rCompare.getRGBColorB()
-                    && getDiscreteDashLength() == rCompare.getDiscreteDashLength());
-            }
-
-            return false;
         }
 
         basegfx::B2DRange PolyPolygonMarkerPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
@@ -218,20 +190,6 @@ namespace drawinglayer
             maLineAttribute(rLineAttribute),
             maStrokeAttribute()
         {
-        }
-
-        bool PolyPolygonStrokePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const PolyPolygonStrokePrimitive2D& rCompare = (PolyPolygonStrokePrimitive2D&)rPrimitive;
-
-                return (getB2DPolyPolygon() == rCompare.getB2DPolyPolygon()
-                    && getLineAttribute() == rCompare.getLineAttribute()
-                    && getStrokeAttribute() == rCompare.getStrokeAttribute());
-            }
-
-            return false;
         }
 
         basegfx::B2DRange PolyPolygonStrokePrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
@@ -318,19 +276,6 @@ namespace drawinglayer
         {
         }
 
-        bool PolyPolygonStrokeArrowPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(PolyPolygonStrokePrimitive2D::operator==(rPrimitive))
-            {
-                const PolyPolygonStrokeArrowPrimitive2D& rCompare = (PolyPolygonStrokeArrowPrimitive2D&)rPrimitive;
-
-                return (getStart() == rCompare.getStart()
-                    && getEnd() == rCompare.getEnd());
-            }
-
-            return false;
-        }
-
         basegfx::B2DRange PolyPolygonStrokeArrowPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
             basegfx::B2DRange aRetval;
@@ -366,19 +311,6 @@ namespace drawinglayer
             maPolyPolygon(rPolyPolygon),
             maBColor(rBColor)
         {
-        }
-
-        bool PolyPolygonColorPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BasePrimitive2D::operator==(rPrimitive))
-            {
-                const PolyPolygonColorPrimitive2D& rCompare = (PolyPolygonColorPrimitive2D&)rPrimitive;
-
-                return (getB2DPolyPolygon() == rCompare.getB2DPolyPolygon()
-                    && getBColor() == rCompare.getBColor());
-            }
-
-            return false;
         }
 
         basegfx::B2DRange PolyPolygonColorPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
@@ -430,18 +362,6 @@ namespace drawinglayer
         {
         }
 
-        bool PolyPolygonGradientPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const PolyPolygonGradientPrimitive2D& rCompare = (PolyPolygonGradientPrimitive2D&)rPrimitive;
-
-                return (getFillGradient() == rCompare.getFillGradient());
-            }
-
-            return false;
-        }
-
         // provide unique ID
         ImplPrimitrive2DIDBlock(PolyPolygonGradientPrimitive2D, PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D)
 
@@ -485,19 +405,6 @@ namespace drawinglayer
             maBackgroundColor(rBackgroundColor),
             maFillHatch(rFillHatch)
         {
-        }
-
-        bool PolyPolygonHatchPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const PolyPolygonHatchPrimitive2D& rCompare = (PolyPolygonHatchPrimitive2D&)rPrimitive;
-
-                return (getBackgroundColor() == rCompare.getBackgroundColor()
-                    && getFillHatch() == rCompare.getFillHatch());
-            }
-
-            return false;
         }
 
         // provide unique ID
@@ -559,18 +466,6 @@ namespace drawinglayer
             maPolyPolygon(rPolyPolygon),
             maFillGraphic(rFillGraphic)
         {
-        }
-
-        bool PolyPolygonGraphicPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const PolyPolygonGraphicPrimitive2D& rCompare = (PolyPolygonGraphicPrimitive2D&)rPrimitive;
-
-                return (getFillGraphic() == rCompare.getFillGraphic());
-            }
-
-            return false;
         }
 
         // provide unique ID

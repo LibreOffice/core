@@ -780,7 +780,7 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( sal_False ).nNode.GetIndex() )
                         pCNd->EndOfSectionIndex() && !bHasFlysOrMarks )
                     {
                         ViewShell *pVSh = CheckActionViewShell();
-                        SwCrsrShell *pCrsrSh = pVSh && pVSh->ISA(SwCrsrShell)
+                        SwCrsrShell *pCrsrSh = pVSh && dynamic_cast< SwCrsrShell* >(pVSh)
                                         ? static_cast < SwCrsrShell * >( pVSh )
                                         : 0;
                         if( pCrsrSh &&
@@ -2481,7 +2481,7 @@ ViewShell *SwHTMLParser::CallStartAction( ViewShell *pVSh, sal_Bool bChkPtr )
 
     if( pActionViewShell )
     {
-        if( pActionViewShell->ISA( SwEditShell ) )
+        if( dynamic_cast< SwEditShell* >(pActionViewShell) )
             ((SwEditShell*)pActionViewShell)->StartAction();
         else
             pActionViewShell->StartAction();
@@ -2514,14 +2514,15 @@ ViewShell *SwHTMLParser::CallEndAction( sal_Bool bChkAction, sal_Bool bChkPtr )
         // an allen CrsrEditShells die Cursor auf den Doc-Anfang setzen
         ViewShell *pSh = pActionViewShell;
         do {
-            if( pSh->IsA( TYPE( SwCrsrShell ) ) )
-                ((SwCrsrShell*)pSh)->SttEndDoc(sal_True);
+            SwCrsrShell* pSwCrsrShell = dynamic_cast< SwCrsrShell* >(pSh);
+            if( pSwCrsrShell )
+                pSwCrsrShell->SttEndDoc(sal_True);
             pSh = (ViewShell *)pSh->GetNext();
         } while( pSh != pActionViewShell );
 
         bSetCrsr = sal_False;
     }
-    if( pActionViewShell->ISA( SwEditShell ) )
+    if( dynamic_cast< SwEditShell* >(pActionViewShell) )
     {
         //Schon gescrollt?, dann dafuer sorgen, dass die View sich nicht bewegt!
         const sal_Bool bOldLock = pActionViewShell->IsViewLocked();

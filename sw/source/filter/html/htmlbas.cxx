@@ -294,7 +294,7 @@ void SwHTMLWriter::OutBasic()
         SbxArray *pModules = pBasic->GetModules();
         for( sal_uInt16 j=0; j<pModules->Count(); j++ )
         {
-            const SbModule *pModule = PTR_CAST( SbModule, pModules->Get(j) );
+            const SbModule *pModule = dynamic_cast< const SbModule* >( pModules->Get(j) );
             ASSERT( pModule, "Wo ist das Modul?" );
 
             String sLang(

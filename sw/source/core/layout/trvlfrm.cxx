@@ -255,9 +255,11 @@ bool SwPageFrm::FillSelection( SwSelectionList& rList, const SwRect& rRect ) con
             for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
             {
                 const SwAnchoredObject* pAnchoredObj = rObjs[i];
-                if( !pAnchoredObj->ISA(SwFlyFrm) )
+                const SwFlyFrm* pFly = dynamic_cast< const SwFlyFrm* >(pAnchoredObj);
+
+                if( !pFly )
                     continue;
-                const SwFlyFrm* pFly = static_cast<const SwFlyFrm*>(pAnchoredObj);
+
                 if( pFly->FillSelection( rList, rRect ) )
                     bRet = true;
             }
@@ -2600,9 +2602,11 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
             for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
             {
                 SwAnchoredObject* pAnchoredObj = rObjs[i];
-                if ( !pAnchoredObj->ISA(SwFlyFrm) )
+                const SwFlyFrm* pFly = dynamic_cast< const SwFlyFrm* >(pAnchoredObj);
+
+                if ( !pFly )
                     continue;
-                const SwFlyFrm* pFly = static_cast<const SwFlyFrm*>(pAnchoredObj);
+
                 const SwVirtFlyDrawObj* pObj = pFly->GetVirtDrawObj();
                 const SwFmtSurround &rSur = pFly->GetFmt()->GetSurround();
                 if ( !pFly->IsAnLower( pStartFrm ) &&
@@ -2613,14 +2617,14 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
                         continue;
 
                     sal_Bool bSub = sal_True;
-                    const sal_uInt32 nPos = pObj->GetOrdNum();
+                    const sal_uInt32 nPos = pObj->GetNavigationPosition();
                     for ( sal_uInt16 k = 0; bSub && k < aSortObjs.Count(); ++k )
                     {
-                        ASSERT( aSortObjs[k]->ISA(SwFlyFrm),
+                        ASSERT( dynamic_cast< SwFlyFrm* >(aSortObjs[k]),
                                 "<SwRootFrm::CalcFrmRects(..)> - object in <aSortObjs> of unexcepted type" );
                         const SwFlyFrm* pTmp = static_cast<SwFlyFrm*>(aSortObjs[k]);
                         do
-                        {   if ( nPos < pTmp->GetVirtDrawObj()->GetOrdNumDirect() )
+                        {   if ( nPos < pTmp->GetVirtDrawObj()->GetNavigationPosition() )
                                 bSub = sal_False;
                             else
                                 pTmp = pTmp->GetAnchorFrm()->FindFlyFrm();

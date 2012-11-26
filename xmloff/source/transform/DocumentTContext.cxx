@@ -48,8 +48,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::beans;
 
-TYPEINIT1( XMLDocumentTransformerContext, XMLTransformerContext );
-
 XMLDocumentTransformerContext::XMLDocumentTransformerContext( XMLTransformerBase& rImp,
                                                 const OUString& rQName ) :
     XMLTransformerContext( rImp, rQName )

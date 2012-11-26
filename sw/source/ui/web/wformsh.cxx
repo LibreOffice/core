@@ -53,8 +53,6 @@ SFX_IMPL_INTERFACE(SwWebDrawFormShell, SwDrawFormShell, SW_RES(0))
     SFX_OBJECTBAR_REGISTRATION(SFX_OBJECTBAR_OBJECT, SW_RES(RID_TEXT_TOOLBOX));
 }
 
-TYPEINIT1(SwWebDrawFormShell, SwDrawFormShell)
-
 SwWebDrawFormShell::SwWebDrawFormShell(SwView& rVw) :
     SwDrawFormShell(rVw)
 {

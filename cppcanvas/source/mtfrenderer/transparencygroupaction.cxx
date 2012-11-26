@@ -174,8 +174,7 @@ namespace cppcanvas
             {
                 ::basegfx::B2DHomMatrix aLocalTransformation;
 
-                aLocalTransformation.translate( rDstPoint.getX(),
-                                                rDstPoint.getY() );
+                aLocalTransformation.translate( rDstPoint );
                 ::canvas::tools::appendToRenderState( rRenderState,
                                                       aLocalTransformation );
             }

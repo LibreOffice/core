@@ -362,18 +362,18 @@ geometry::AffineMatrix2D SAL_CALL SlideShowView::getTransformation(  ) throw (Ru
     }
 
     SdPage* pP = mpDoc->GetSdPage( 0, PK_STANDARD );
-    Size aPageSize( pP->GetSize() );
+    const basegfx::B2DVector& rPageSize = pP->GetPageScale();
 
-    const double page_ratio = (double)aPageSize.Width() / (double)aPageSize.Height();
+    const double page_ratio = rPageSize.getX() / rPageSize.getY();
     const double output_ratio = (double)aOutputSize.Width() / (double)aOutputSize.Height();
 
     if( page_ratio > output_ratio )
     {
-        aOutputSize.Height() = ( aOutputSize.Width() * aPageSize.Height() ) / aPageSize.Width();
+        aOutputSize.Height() = basegfx::fround(( aOutputSize.Width() * rPageSize.getY() ) / rPageSize.getX());
     }
     else if( page_ratio < output_ratio )
     {
-        aOutputSize.Width() = ( aOutputSize.Height() * aPageSize.Width() ) / aPageSize.Height();
+        aOutputSize.Width() = basegfx::fround(( aOutputSize.Height() * rPageSize.getX() ) / rPageSize.getY());
     }
 
     Point aOutputOffset( ( aWindowSize.Width() - aOutputSize.Width() ) >> 1,

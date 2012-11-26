@@ -61,8 +61,6 @@ protected:
         ::com::sun::star::style::XStyle > GetStyle() { return xStyle; }
 public:
 
-    TYPEINFO();
-
     XMLTextMasterPageContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const ::rtl::OUString& rLName,
             const ::com::sun::star::uno::Reference<

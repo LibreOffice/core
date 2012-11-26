@@ -34,8 +34,6 @@ class XMLProcAddAttrTransformerContext : public XMLProcAttrTransformerContext
     ::rtl::OUString m_aAttrValue;
 
 public:
-    TYPEINFO();
-
     XMLProcAddAttrTransformerContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName,
                               sal_uInt16 nPrefix,

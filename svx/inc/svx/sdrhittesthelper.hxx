@@ -27,12 +27,13 @@
 #include "svx/svxdllapi.h"
 #include <tools/string.hxx>
 #include <tools/gen.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
 /////////////////////////////////////////////////////////////////////
 // #i101872# new Object HitTest as View-tooling
 
 class SdrObject;
-class SdrPageView;
+class SdrView;
 class SetOfByte;
 class SdrObjList;
 namespace sdr { namespace contact { class ViewObjectContact; }}
@@ -43,19 +44,19 @@ namespace basegfx { class B2DPoint; }
 
 SVX_DLLPUBLIC SdrObject* SdrObjectPrimitiveHit(
     const SdrObject& rObject,
-    const Point& rPnt,
-    sal_uInt16 nTol,
-    const SdrPageView& rSdrPageView,
-    const SetOfByte* pVisiLayer,
-    bool bTextOnly);
+    const basegfx::B2DPoint& rPnt,
+    double fTol,
+    const SdrView& rSdrView,
+    bool bTextOnly,
+    drawinglayer::primitive2d::Primitive2DSequence* pRecordFields);
 
 SVX_DLLPUBLIC SdrObject* SdrObjListPrimitiveHit(
     const SdrObjList& rList,
-    const Point& rPnt,
-    sal_uInt16 nTol,
-    const SdrPageView& rSdrPageView,
-    const SetOfByte* pVisiLayer,
-    bool bTextOnly);
+    const basegfx::B2DPoint& rPnt,
+    double fTol,
+    const SdrView& rSdrView,
+    bool bTextOnly,
+    drawinglayer::primitive2d::Primitive2DSequence* pRecordFields);
 
 /////////////////////////////////////////////////////////////////////
 // the pure HitTest based on a VOC
@@ -64,7 +65,8 @@ SVX_DLLPUBLIC bool ViewObjectContactPrimitiveHit(
     const sdr::contact::ViewObjectContact& rVOC,
     const basegfx::B2DPoint& rHitPosition,
     double fLogicHitTolerance,
-    bool bTextOnly);
+    bool bTextOnly,
+    drawinglayer::primitive2d::Primitive2DSequence* pRecordFields);
 
 /////////////////////////////////////////////////////////////////////
 

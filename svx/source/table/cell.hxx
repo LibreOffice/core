@@ -82,10 +82,10 @@ public:
     SVX_DLLPRIVATE virtual SfxStyleSheet* GetStyleSheet() const;
     SfxStyleSheetPool* GetStyleSheetPool() const;
     SVX_DLLPRIVATE virtual const Rectangle& GetCurrentBoundRect() const;
-    SVX_DLLPRIVATE virtual void TakeTextAnchorRect(Rectangle& rAnchorRect) const;
+    SVX_DLLPRIVATE void TakeCellsTextAnchorRect(Rectangle& rAnchorRect) const;
 
     SVX_DLLPRIVATE virtual const SfxItemSet& GetItemSet() const;
-    SVX_DLLPRIVATE void SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, sal_Bool bClearAllItems);
+    SVX_DLLPRIVATE void SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, bool bClearAllItems);
     void SetMergedItem(const SfxPoolItem& rItem);
 
     SVX_DLLPRIVATE sal_Int32 getMinimumWidth();
@@ -98,8 +98,6 @@ public:
 
     SVX_DLLPRIVATE SdrTextVertAdjust GetTextVerticalAdjust() const;
     SdrTextHorzAdjust GetTextHorizontalAdjust() const;
-
-    SVX_DLLPRIVATE virtual void SetModel(SdrModel* pNewModel);
 
     SVX_DLLPRIVATE void merge( sal_Int32 nColumnSpan, sal_Int32 nRowSpan );
     SVX_DLLPRIVATE void mergeContent( const CellRef& xSourceCell );

@@ -667,7 +667,7 @@ namespace drawinglayer
 
             XTEXT_SCROLLRECT, XTEXT_PAINTRECT
             Currently used to get extra MetaFile infos using GraphicExporter which again uses
-            SdrTextObj::GetTextScrollMetaFileAndRectangle(). ATM works with primitives since
+            SdrTextObj::GetTextScrollMetaFileAndRange(). ATM works with primitives since
             the rectangle data is added directly by the GraphicsExporter as comment. Does not need
             to be adapted at once.
             When adapting later, the only user - the diashow - should directly use the provided
@@ -735,7 +735,9 @@ namespace drawinglayer
 
         ****************************************************************************************************/
 
-        void VclMetafileProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
+        void VclMetafileProcessor2D::processBasePrimitive2D(
+            const primitive2d::BasePrimitive2D& rCandidate,
+            const primitive2d::Primitive2DReference& /*rUnoCandidate*/)
         {
             switch(rCandidate.getPrimitive2DID())
             {
@@ -749,7 +751,8 @@ namespace drawinglayer
                 {
                     const primitive2d::GraphicPrimitive2D& rGraphicPrimitive = static_cast< const primitive2d::GraphicPrimitive2D& >(rCandidate);
                     bool bUsingPDFExtOutDevData(false);
-                    basegfx::B2DVector aTranslate, aScale;
+                    basegfx::B2DVector aScale;
+                    basegfx::B2DPoint aTranslate;
                     static bool bSuppressPDFExtOutDevDataSupport(false);
 
                     if(mpPDFExtOutDevData && !bSuppressPDFExtOutDevDataSupport)
@@ -962,19 +965,19 @@ namespace drawinglayer
 
                     switch(rFieldPrimitive.getType())
                     {
-                        default : // case drawinglayer::primitive2d::FIELD_TYPE_COMMON :
+                        default : // case drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D::FIELD_TYPE_COMMON :
                         {
                             mpMetaFile->AddAction(new MetaCommentAction(aCommentStringCommon));
                             break;
                         }
-                        case drawinglayer::primitive2d::FIELD_TYPE_PAGE :
+                        case drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D::FIELD_TYPE_PAGE :
                         {
                             mpMetaFile->AddAction(new MetaCommentAction(aCommentStringPage));
                             break;
                         }
-                        case drawinglayer::primitive2d::FIELD_TYPE_URL :
+                        case drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D::FIELD_TYPE_URL :
                         {
-                            const rtl::OUString& rURL = rFieldPrimitive.getString();
+                            const rtl::OUString& rURL = rFieldPrimitive.getStringA();
                             const String aOldString(rURL);
                             mpMetaFile->AddAction(new MetaCommentAction(aCommentStringCommon, 0, reinterpret_cast< const sal_uInt8* >(aOldString.GetBuffer()), 2 * aOldString.Len()));
                             break;
@@ -988,7 +991,8 @@ namespace drawinglayer
                     // for the end comment the type is not relevant yet, they are all the same. Just add.
                     mpMetaFile->AddAction(new MetaCommentAction(aCommentStringEnd));
 
-                    if(mpPDFExtOutDevData && drawinglayer::primitive2d::FIELD_TYPE_URL == rFieldPrimitive.getType())
+                    if(mpPDFExtOutDevData
+                        && drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D::FIELD_TYPE_URL == rFieldPrimitive.getType())
                     {
                         // emulate data handling from ImpEditEngine::Paint
                         const basegfx::B2DRange aViewRange(primitive2d::getB2DRangeFromPrimitive2DSequence(rContent, getViewInformation2D()));
@@ -997,7 +1001,7 @@ namespace drawinglayer
                             (sal_Int32)ceil(aViewRange.getMaxX()), (sal_Int32)ceil(aViewRange.getMaxY()));
                         vcl::PDFExtOutDevBookmarkEntry aBookmark;
                         aBookmark.nLinkId = mpPDFExtOutDevData->CreateLink(aRectLogic);
-                        aBookmark.aBookmark = rFieldPrimitive.getString();
+                        aBookmark.aBookmark = rFieldPrimitive.getStringA();
                         std::vector< vcl::PDFExtOutDevBookmarkEntry >& rBookmarks = mpPDFExtOutDevData->GetBookmarks();
                         rBookmarks.push_back( aBookmark );
                     }
@@ -1143,12 +1147,16 @@ namespace drawinglayer
                         // #i112245# Metafiles use tools Polygon and are not able to have more than 65535 points
                         // per polygon. If there are more, split the polygon in half and call recursively
                         basegfx::B2DPolygon aLeft, aRight;
-                        splitLinePolygon(rBasePolygon, aLeft, aRight);
-                        const primitive2d::PolygonHairlinePrimitive2D aPLeft(aLeft, rHairlinePrimitive.getBColor());
-                        const primitive2d::PolygonHairlinePrimitive2D aPRight(aRight, rHairlinePrimitive.getBColor());
 
-                        processBasePrimitive2D(aPLeft);
-                        processBasePrimitive2D(aPRight);
+                        splitLinePolygon(rBasePolygon, aLeft, aRight);
+
+                        primitive2d::PolygonHairlinePrimitive2D* pPLeft = new primitive2d::PolygonHairlinePrimitive2D(aLeft, rHairlinePrimitive.getBColor());
+                        primitive2d::PolygonHairlinePrimitive2D* pPRight = new primitive2d::PolygonHairlinePrimitive2D(aRight, rHairlinePrimitive.getBColor());
+                        const primitive2d::Primitive2DReference aRefLeft(pPLeft);
+                        const primitive2d::Primitive2DReference aRefRight(pPRight);
+
+                        processBasePrimitive2D(*pPLeft, aRefLeft);
+                        processBasePrimitive2D(*pPRight, aRefRight);
                     }
                     else
                     {
@@ -1191,14 +1199,18 @@ namespace drawinglayer
                         // #i112245# Metafiles use tools Polygon and are not able to have more than 65535 points
                         // per polygon. If there are more, split the polygon in half and call recursively
                         basegfx::B2DPolygon aLeft, aRight;
-                        splitLinePolygon(rBasePolygon, aLeft, aRight);
-                        const primitive2d::PolygonStrokePrimitive2D aPLeft(
-                            aLeft, rStrokePrimitive.getLineAttribute(), rStrokePrimitive.getStrokeAttribute());
-                        const primitive2d::PolygonStrokePrimitive2D aPRight(
-                            aRight, rStrokePrimitive.getLineAttribute(), rStrokePrimitive.getStrokeAttribute());
 
-                        processBasePrimitive2D(aPLeft);
-                        processBasePrimitive2D(aPRight);
+                        splitLinePolygon(rBasePolygon, aLeft, aRight);
+
+                        primitive2d::PolygonStrokePrimitive2D* pPLeft = new primitive2d::PolygonStrokePrimitive2D(
+                            aLeft, rStrokePrimitive.getLineAttribute(), rStrokePrimitive.getStrokeAttribute());
+                        primitive2d::PolygonStrokePrimitive2D* pPRight = new primitive2d::PolygonStrokePrimitive2D(
+                            aRight, rStrokePrimitive.getLineAttribute(), rStrokePrimitive.getStrokeAttribute());
+                        const primitive2d::Primitive2DReference aRefLeft(pPLeft);
+                        const primitive2d::Primitive2DReference aRefRight(pPRight);
+
+                        processBasePrimitive2D(*pPLeft, aRefLeft);
+                        processBasePrimitive2D(*pPRight, aRefRight);
                     }
                     else
                     {
@@ -1274,23 +1286,29 @@ namespace drawinglayer
                         // #i112245# Metafiles use tools Polygon and are not able to have more than 65535 points
                         // per polygon. If there are more, split the polygon in half and call recursively
                         basegfx::B2DPolygon aLeft, aRight;
+
                         splitLinePolygon(rBasePolygon, aLeft, aRight);
+
                         const attribute::LineStartEndAttribute aEmpty;
-                        const primitive2d::PolygonStrokeArrowPrimitive2D aPLeft(
+                        primitive2d::PolygonStrokeArrowPrimitive2D* pPLeft =
+                            new primitive2d::PolygonStrokeArrowPrimitive2D(
                             aLeft,
                             rStrokeArrowPrimitive.getLineAttribute(),
                             rStrokeArrowPrimitive.getStrokeAttribute(),
                             rStrokeArrowPrimitive.getStart(),
                             aEmpty);
-                        const primitive2d::PolygonStrokeArrowPrimitive2D aPRight(
+                        primitive2d::PolygonStrokeArrowPrimitive2D* pPRight =
+                            new primitive2d::PolygonStrokeArrowPrimitive2D(
                             aRight,
                             rStrokeArrowPrimitive.getLineAttribute(),
                             rStrokeArrowPrimitive.getStrokeAttribute(),
                             aEmpty,
                             rStrokeArrowPrimitive.getEnd());
+                        const primitive2d::Primitive2DReference aRefLeft(pPLeft);
+                        const primitive2d::Primitive2DReference aRefRight(pPRight);
 
-                        processBasePrimitive2D(aPLeft);
-                        processBasePrimitive2D(aPRight);
+                        processBasePrimitive2D(*pPLeft, aRefLeft);
+                        processBasePrimitive2D(*pPRight, aRefRight);
                     }
                     else
                     {
@@ -1351,11 +1369,13 @@ namespace drawinglayer
                     {
                         // #i112245# Metafiles use tools Polygon and are not able to have more than 65535 points
                         // per polygon. If there are more use the splitted polygon and call recursively
-                        const primitive2d::PolyPolygonGraphicPrimitive2D aSplitted(
+                        primitive2d::PolyPolygonGraphicPrimitive2D* pSplitted =
+                            new primitive2d::PolyPolygonGraphicPrimitive2D(
                             aLocalPolyPolygon,
                             rBitmapCandidate.getFillGraphic());
+                        const primitive2d::Primitive2DReference aRefSplitted(pSplitted);
 
-                        processBasePrimitive2D(aSplitted);
+                        processBasePrimitive2D(*pSplitted, aRefSplitted);
                     }
                     else
                     {

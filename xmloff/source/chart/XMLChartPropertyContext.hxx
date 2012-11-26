@@ -28,8 +28,6 @@
 class XMLChartPropertyContext : public SvXMLPropertySetContext
 {
 public:
-    TYPEINFO();
-
     XMLChartPropertyContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                              const ::rtl::OUString& rLName,
                              const ::com::sun::star::uno::Reference<

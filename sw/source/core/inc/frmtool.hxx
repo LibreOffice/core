@@ -39,7 +39,6 @@ class SwAttrSet;
 class SdrObject;
 class BigInt;
 class SvxBrushItem;
-class SdrMarkList;
 class SwNodeIndex;
 class OutputDevice;
 class SwPageDesc;
@@ -78,7 +77,7 @@ void SwAlignGrfRect( SwRect *pGrfRect, const OutputDevice &rOut );
 //Fly besorgen, wenn keine List hineingereicht wird, wir die der aktuellen
 //Shell benutzt.
 //Implementierung in feshview.cxx
-SwFlyFrm *GetFlyFromMarked( const SdrMarkList *pLst, ViewShell *pSh );
+SwFlyFrm *GetFlyFromMarked( ViewShell *pSh );
 
 //Nicht gleich die math.lib anziehen.
 sal_uLong MA_FASTCALL SqRt( BigInt nX );

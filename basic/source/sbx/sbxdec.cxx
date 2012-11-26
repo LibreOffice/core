@@ -527,7 +527,7 @@ start:
             pnDecRes->setString( p->pOUString ); break;
         case SbxOBJECT:
         {
-            SbxValue* pVal = PTR_CAST(SbxValue,p->pObj);
+            SbxValue* pVal = dynamic_cast< SbxValue* >( p->pObj);
             if( pVal )
                 pnDecRes->setDecimal( pVal->GetDecimal() );
             else
@@ -673,7 +673,7 @@ start:
             break;
         case SbxOBJECT:
         {
-            SbxValue* pVal = PTR_CAST(SbxValue,p->pObj);
+            SbxValue* pVal = dynamic_cast< SbxValue* >( p->pObj);
             if( pVal )
                 pVal->PutDecimal( pDec );
             else

@@ -107,7 +107,7 @@ void SvxFontMenuControl::StateChanged(
     {
         if ( !pMenu->GetItemCount() )
             FillMenu();
-        const SvxFontItem* pFontItem = PTR_CAST( SvxFontItem, pState );
+        const SvxFontItem* pFontItem = dynamic_cast< const SvxFontItem* >( pState );
         String aFont;
 
         if ( pFontItem )
@@ -127,8 +127,9 @@ void SvxFontMenuControl::StateChanged(
 
 void SvxFontMenuControl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.Type() != TYPE(SfxSimpleHint) &&
-         ( (SfxSimpleHint&)rHint ).GetId() == SFX_HINT_DOCCHANGED )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if(pSfxSimpleHint && SFX_HINT_DOCCHANGED == pSfxSimpleHint->GetId())
         FillMenu();
 }
 

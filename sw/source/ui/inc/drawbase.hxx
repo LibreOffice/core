@@ -45,8 +45,8 @@ protected:
     SwView*         m_pView;
     SwWrtShell*     m_pSh;
     SwEditWin*      m_pWin;
-    Point           m_aStartPos;                 // Position von BeginCreate
-    Point           m_aMDPos;                // Position von MouseButtonDown
+    basegfx::B2DPoint   m_aStartPos;                 // Position von BeginCreate
+    basegfx::B2DPoint   m_aMDPos;                // Position von MouseButtonDown
     sal_uInt16          m_nSlotId;
     sal_Bool            m_bCreateObj  :1;
     sal_Bool            m_bInsForm   :1;

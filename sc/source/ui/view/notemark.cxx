@@ -32,6 +32,7 @@
 #include <unotools/pathoptions.hxx>
 #include <svl/itempool.hxx>
 #include <vcl/svapp.hxx>
+#include <svx/svdlegacy.hxx>
 
 #include "notemark.hxx"
 #include "document.hxx"
@@ -86,7 +87,7 @@ IMPL_LINK( ScNoteMarker, TimeHdl, Timer*, EMPTYARG )
         SvtPathOptions aPathOpt;
         String aPath = aPathOpt.GetPalettePath();
         pModel = new SdrModel(aPath);
-        pModel->SetScaleUnit(MAP_100TH_MM);
+        pModel->SetExchangeObjectUnit(MAP_100TH_MM);
         SfxItemPool& rPool = pModel->GetItemPool();
         rPool.SetDefaultMetric(SFX_MAPUNIT_100TH_MM);
         rPool.FreezeIdRanges();
@@ -104,7 +105,7 @@ IMPL_LINK( ScNoteMarker, TimeHdl, Timer*, EMPTYARG )
         {
             pObject = ScNoteUtil::CreateTempCaption( *pDoc, aDocPos, *pPage, aUserText, aVisRect, bLeft );
             if( pObject )
-                aRect = pObject->GetCurrentBoundRect();
+                aRect = sdr::legacy::GetBoundRect(*pObject);
 
             // #39351# Page einfuegen damit das Model sie kennt und auch deleted
             pModel->InsertPage( pPage );

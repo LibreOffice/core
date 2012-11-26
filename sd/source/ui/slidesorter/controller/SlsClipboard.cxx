@@ -266,7 +266,7 @@ void Clipboard::DoDelete (::Window* )
 
 void Clipboard::DoCopy (::Window* pWindow )
 {
-    CreateSlideTransferable( pWindow, sal_False );
+    CreateSlideTransferable( pWindow, false );
 }
 
 
@@ -354,14 +354,14 @@ sal_Int32 Clipboard::PasteTransferable (sal_Int32 nInsertPosition)
         rModel.GetDocument()->InsertBookmarkAsPage(
             const_cast<List*>(&rBookmarkList),
             NULL,
-            sal_False,
-            sal_False,
+            false,
+            false,
             nInsertIndex,
-            sal_False,
+            false,
             pClipTransferable->GetPageDocShell(),
-            sal_True,
+            true,
             bMergeMasterPages,
-            sal_False);
+            false);
     }
     else
     {
@@ -379,14 +379,14 @@ sal_Int32 Clipboard::PasteTransferable (sal_Int32 nInsertPosition)
             rModel.GetDocument()->InsertBookmarkAsPage(
                 NULL,
                 NULL,
-                sal_False,
-                sal_False,
+                false,
+                false,
                 nInsertIndex,
-                sal_False,
+                false,
                 pDataDocSh,
-                sal_True,
+                true,
                 bMergeMasterPages,
-                sal_False);
+                false);
         }
     }
     mrController.HandleModelChange();
@@ -497,8 +497,9 @@ void Clipboard::CreateSlideTransferable (
                 pActionWindow = pViewShell->GetActiveWindow();
         }
 
-        pTransferable->SetStartPos (pActionWindow->PixelToLogic(
-            pActionWindow->GetPointerPosPixel()));
+        const basegfx::B2DPoint aPointerPosPixel(pActionWindow->GetPointerPosPixel().X(), pActionWindow->GetPointerPosPixel().Y());
+
+        pTransferable->SetStartPos(pActionWindow->GetInverseViewTransformation() * aPointerPosPixel);
         pTransferable->SetObjectDescriptor (aObjDesc);
 
         {
@@ -565,7 +566,7 @@ void Clipboard::CreateSlideTransferable (
         SdDrawDocument* pTransferableDocument = rSlideSorter.GetModel().GetDocument();
         if (pTransferableDocument == NULL)
             break;
-        sal_Bool bIsMasterPage = sal_False;
+        bool bIsMasterPage(false);
         const sal_uInt16 nPageIndex (pTransferableDocument->GetPageByName(sBookmark, bIsMasterPage));
         if (nPageIndex == SDRPAGE_NOTFOUND)
             break;
@@ -709,8 +710,8 @@ sal_Int8 Clipboard::AcceptDrop (
     const AcceptDropEvent& rEvent,
     DropTargetHelper& rTargetHelper,
     ::sd::Window* pTargetWindow,
-    sal_uInt16 nPage,
-    sal_uInt16 nLayer)
+    sal_uInt32 nPage,
+    SdrLayerID aLayer)
 {
     sal_Int8 nAction (DND_ACTION_NONE);
 
@@ -756,12 +757,12 @@ sal_Int8 Clipboard::AcceptDrop (
         case DT_SHAPE:
             nAction = ExecuteOrAcceptShapeDrop(
                 DC_ACCEPT,
-                rEvent.maPosPixel,
+                basegfx::B2DPoint(rEvent.maPosPixel.X(), rEvent.maPosPixel.Y()),
                 &rEvent,
                 rTargetHelper,
                 pTargetWindow,
                 nPage,
-                nLayer);
+                aLayer);
             break;
 
         default:
@@ -780,8 +781,8 @@ sal_Int8 Clipboard::ExecuteDrop (
     const ExecuteDropEvent& rEvent,
     DropTargetHelper& rTargetHelper,
     ::sd::Window* pTargetWindow,
-    sal_uInt16 nPage,
-    sal_uInt16 nLayer)
+    sal_uInt32 nPage,
+    SdrLayerID aLayer)
 {
     sal_Int8 nResult = DND_ACTION_NONE;
     mpUndoContext.reset();
@@ -795,9 +796,9 @@ sal_Int8 Clipboard::ExecuteDrop (
             SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
             const Point aEventModelPosition (
                 pTargetWindow->PixelToLogic (rEvent.maPosPixel));
-            const sal_Int32 nXOffset (labs (pDragTransferable->GetStartPos().X()
+            const sal_Int32 nXOffset (labs (basegfx::fround(pDragTransferable->GetStartPos().getX())
                 - aEventModelPosition.X()));
-            const sal_Int32 nYOffset (labs (pDragTransferable->GetStartPos().Y()
+            const sal_Int32 nYOffset (labs (basegfx::fround(pDragTransferable->GetStartPos().getY())
                 - aEventModelPosition.Y()));
             bool bContinue =
                 ( pDragTransferable->GetView() != &mrSlideSorter.GetView() )
@@ -865,12 +866,12 @@ sal_Int8 Clipboard::ExecuteDrop (
         case DT_SHAPE:
             nResult = ExecuteOrAcceptShapeDrop(
                 DC_EXECUTE,
-                rEvent.maPosPixel,
+                basegfx::B2DPoint(rEvent.maPosPixel.X(), rEvent.maPosPixel.Y()),
                 &rEvent,
                 rTargetHelper,
                 pTargetWindow,
                 nPage,
-                nLayer);
+                aLayer);
             break;
 
         default:
@@ -981,12 +982,12 @@ Clipboard::DropType Clipboard::IsDropAccepted (DropTargetHelper&) const
 
 sal_Int8 Clipboard::ExecuteOrAcceptShapeDrop (
     DropCommand eCommand,
-    const Point& rPosition,
+    const basegfx::B2DPoint& rPosition,
     const void* pDropEvent,
     DropTargetHelper& rTargetHelper,
     ::sd::Window* pTargetWindow,
-    sal_uInt16 nPage,
-    sal_uInt16 nLayer)
+    sal_uInt32 nPage,
+    SdrLayerID aLayer)
 {
     sal_Int8 nResult = 0;
 
@@ -1008,9 +1009,10 @@ sal_Int8 Clipboard::ExecuteOrAcceptShapeDrop (
         // number of the page under the mouse.
         if (nPage == SDRPAGE_NOTFOUND)
         {
+            const Point aOldPoint(basegfx::fround(rPosition.getX()), basegfx::fround(rPosition.getY()));
             model::SharedPageDescriptor pDescriptor (
                 mrSlideSorter.GetModel().GetPageDescriptor(
-                    mrSlideSorter.GetView().GetPageIndexAtPoint(rPosition)));
+                    mrSlideSorter.GetView().GetPageIndexAtPoint(aOldPoint)));
             if (pDescriptor)
                 nPage = pDescriptor->GetPageIndex();
         }
@@ -1027,7 +1029,7 @@ sal_Int8 Clipboard::ExecuteOrAcceptShapeDrop (
                         rTargetHelper,
                         pTargetWindow,
                         nPage,
-                        nLayer);
+                        aLayer);
                     break;
 
                 case DC_EXECUTE:
@@ -1036,7 +1038,7 @@ sal_Int8 Clipboard::ExecuteOrAcceptShapeDrop (
                         rTargetHelper,
                         pTargetWindow,
                         nPage,
-                        nLayer);
+                        aLayer);
                     break;
             }
     }

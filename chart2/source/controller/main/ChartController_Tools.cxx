@@ -440,12 +440,9 @@ void ChartController::impl_PasteShapes( SdrModel* pModel )
                 while ( aIter.IsMore() )
                 {
                     SdrObject* pObj = aIter.Next();
-                    SdrObject* pNewObj = ( pObj ? pObj->Clone() : NULL );
+                    SdrObject* pNewObj = ( pObj ? pObj->CloneSdrObject() : NULL );
                     if ( pNewObj )
                     {
-                        pNewObj->SetModel( &pDrawModelWrapper->getSdrModel() );
-                        pNewObj->SetPage( pDestPage );
-
                         // set position
                         Reference< drawing::XShape > xShape( pNewObj->getUnoShape(), uno::UNO_QUERY );
                         if ( xShape.is() )
@@ -453,7 +450,7 @@ void ChartController::impl_PasteShapes( SdrModel* pModel )
                             xShape->setPosition( awt::Point( 0, 0 ) );
                         }
 
-                        pDestPage->InsertObject( pNewObj );
+                        pDestPage->InsertObjectToSdrObjList(*pNewObj);
                         m_pDrawViewWrapper->AddUndo( new SdrUndoInsertObj( *pNewObj ) );
                         xSelShape = xShape;
                     }
@@ -612,8 +609,8 @@ bool ChartController::isObjectDeleteable( const uno::Any& rSelection )
 bool ChartController::isShapeContext() const
 {
     if ( m_aSelection.isAdditionalShapeSelected() ||
-         ( m_pDrawViewWrapper && m_pDrawViewWrapper->AreObjectsMarked() &&
-           ( m_pDrawViewWrapper->GetCurrentObjIdentifier() == OBJ_TEXT ) ) )
+         ( m_pDrawViewWrapper && m_pDrawViewWrapper->areSdrObjectsSelected() &&
+           ( m_pDrawViewWrapper->getSdrObjectCreationInfo().getIdent() == OBJ_TEXT ) ) )
     {
         return true;
     }

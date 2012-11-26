@@ -70,7 +70,7 @@ public:
 
     /** Return whether the ViewShellBase object is locked.  When locking is
         disabled, i.e. Disable() has been called before, then this method
-        always returns <FALSE/>.
+        always returns <false/>.
     */
     bool IsLocked (void) const;
 

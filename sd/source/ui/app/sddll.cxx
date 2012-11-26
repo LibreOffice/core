@@ -19,19 +19,15 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 #include <editeng/eeitem.hxx>
-
 #include <editeng/editeng.hxx>
 #include <svx/svdobj.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svx/fmobjfac.hxx>
 #include <svx/svdfield.hxx>
 #include <svx/objfac3d.hxx>
-
 #include "sddll.hxx"
 #include "DrawDocShell.hxx"
 #include "GraphicDocShell.hxx"
@@ -40,7 +36,6 @@
 #include "cfgids.hxx"
 #include "strmname.h"
 #include "SdShapeTypes.hxx"
-
 #include <svx/SvxShapeTypes.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
@@ -49,6 +44,7 @@
 #include <svtools/FilterConfigItem.hxx>
 #include <com/sun/star/util/XArchiver.hpp>
 #include <comphelper/processfactory.hxx>
+#include <svx/sdrobjectfactory.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;

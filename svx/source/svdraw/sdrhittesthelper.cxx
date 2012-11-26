@@ -34,29 +34,33 @@
 #include <drawinglayer/processor2d/hittestprocessor2d.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
+#include <svx/svdview.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // #i101872# new Object HitTest as View-tooling
 
 SdrObject* SdrObjectPrimitiveHit(
     const SdrObject& rObject,
-    const Point& rPnt,
-    sal_uInt16 nTol,
-    const SdrPageView& rSdrPageView,
-    const SetOfByte* pVisiLayer,
-    bool bTextOnly)
+    const basegfx::B2DPoint& rPnt,
+    double fTol,
+    const SdrView& rSdrView,
+    bool bTextOnly,
+    drawinglayer::primitive2d::Primitive2DSequence* pRecordFields)
 {
     SdrObject* pResult = 0;
 
-    if(rObject.GetSubList() && rObject.GetSubList()->GetObjCount())
+    if(rObject.getChildrenOfSdrObject() && rObject.getChildrenOfSdrObject()->GetObjCount())
     {
         // group or scene with content. Single 3D objects also have a
         // true == rObject.GetSubList(), but no content
-        pResult = SdrObjListPrimitiveHit(*rObject.GetSubList(), rPnt, nTol, rSdrPageView, pVisiLayer, bTextOnly);
+        pResult = SdrObjListPrimitiveHit(*rObject.getChildrenOfSdrObject(), rPnt, fTol, rSdrView, bTextOnly, pRecordFields);
     }
     else
     {
-        if( rObject.IsVisible() && (!pVisiLayer || pVisiLayer->IsSet(rObject.GetLayer())))
+        const SdrPageView* pSdrPageView = rSdrView.GetSdrPageView();
+        const SetOfByte* pVisiLayer = pSdrPageView ? &pSdrPageView->GetVisibleLayers() : 0;
+
+        if( pSdrPageView && rObject.IsVisible() && (!pVisiLayer || pVisiLayer->IsSet(rObject.GetLayer())))
         {
             // single object, 3d object, empty scene or empty group. Check if
             // it's a single 3D object
@@ -64,9 +68,7 @@ SdrObject* SdrObjectPrimitiveHit(
 
             if(pE3dCompoundObject)
             {
-                const basegfx::B2DPoint aHitPosition(rPnt.X(), rPnt.Y());
-
-                if(checkHitSingle3DObject(aHitPosition, *pE3dCompoundObject))
+                if(checkHitSingle3DObject(rPnt, *pE3dCompoundObject))
                 {
                     pResult = const_cast< E3dCompoundObject* >(pE3dCompoundObject);
                 }
@@ -75,14 +77,13 @@ SdrObject* SdrObjectPrimitiveHit(
             {
                 // not a single 3D object; Check in first PageWindow using prmitives (only SC
                 // with split views uses multiple PageWindows nowadays)
-                if(rSdrPageView.PageWindowCount())
+                if(rSdrView.GetSdrPageView() && rSdrView.GetSdrPageView()->PageWindowCount())
                 {
-                    const double fLogicTolerance(nTol);
-                    const basegfx::B2DPoint aHitPosition(rPnt.X(), rPnt.Y());
                     const sdr::contact::ViewObjectContact& rVOC = rObject.GetViewContact().GetViewObjectContact(
-                        rSdrPageView.GetPageWindow(0)->GetObjectContact());
+                        rSdrView.GetSdrPageView()->GetPageWindow(0)->GetObjectContact());
 
-                    if(ViewObjectContactPrimitiveHit(rVOC, aHitPosition, fLogicTolerance, bTextOnly))
+                    if(ViewObjectContactPrimitiveHit(
+                        rVOC, rPnt, fTol, bTextOnly, pRecordFields))
                     {
                           pResult = const_cast< SdrObject* >(&rObject);
                     }
@@ -98,11 +99,11 @@ SdrObject* SdrObjectPrimitiveHit(
 
 SdrObject* SdrObjListPrimitiveHit(
     const SdrObjList& rList,
-    const Point& rPnt,
-    sal_uInt16 nTol,
-    const SdrPageView& rSdrPageView,
-    const SetOfByte* pVisiLayer,
-    bool bTextOnly)
+    const basegfx::B2DPoint& rPnt,
+    double fTol,
+    const SdrView& rSdrView,
+    bool bTextOnly,
+    drawinglayer::primitive2d::Primitive2DSequence* pRecordFields)
 {
     sal_uInt32 nObjNum(rList.GetObjCount());
     SdrObject* pRetval = 0;
@@ -111,8 +112,7 @@ SdrObject* SdrObjListPrimitiveHit(
     {
         nObjNum--;
         SdrObject* pObj = rList.GetObj(nObjNum);
-
-        pRetval = SdrObjectPrimitiveHit(*pObj, rPnt, nTol, rSdrPageView, pVisiLayer, bTextOnly);
+        pRetval = SdrObjectPrimitiveHit(*pObj, rPnt, fTol, rSdrView, bTextOnly, pRecordFields);
     }
 
     return pRetval;
@@ -124,9 +124,10 @@ bool ViewObjectContactPrimitiveHit(
     const sdr::contact::ViewObjectContact& rVOC,
     const basegfx::B2DPoint& rHitPosition,
     double fLogicHitTolerance,
-    bool bTextOnly)
+    bool bTextOnly,
+    drawinglayer::primitive2d::Primitive2DSequence* pRecordFields)
 {
-    basegfx::B2DRange aObjectRange(rVOC.getObjectRange());
+    basegfx::B2DRange aObjectRange(rVOC.getViewDependentRange());
 
     if(!aObjectRange.isEmpty())
     {
@@ -151,7 +152,8 @@ bool ViewObjectContactPrimitiveHit(
                     rViewInformation2D,
                     rHitPosition,
                     fLogicHitTolerance,
-                    bTextOnly);
+                    bTextOnly,
+                    pRecordFields);
 
                 // feed it with the primitives
                 aHitTestProcessor2D.process(rSequence);

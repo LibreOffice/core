@@ -203,10 +203,6 @@ static void ImplDrawDefault( OutputDevice* pOutDev, const UniString* pText,
 // - Graphic -
 // -----------
 
-TYPEINIT1_AUTOFACTORY( Graphic, SvDataCopyStream );
-
-// ------------------------------------------------------------------------
-
 Graphic::Graphic()
 {
     mpImpGraphic = new ImpGraphic;

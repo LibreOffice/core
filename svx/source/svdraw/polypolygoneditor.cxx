@@ -26,161 +26,160 @@
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-
 #include "svx/polypolygoneditor.hxx"
 
-namespace sdr {
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
-PolyPolygonEditor::PolyPolygonEditor( const basegfx::B2DPolyPolygon& rPolyPolygon, bool bClosed )
-: maPolyPolygon( rPolyPolygon )
-, mbIsClosed( bClosed )
+namespace sdr
 {
-}
-
-bool PolyPolygonEditor::DeletePoints( const std::set< sal_uInt16 >& rAbsPoints )
-{
-    bool bPolyPolyChanged = false;
-
-    std::set< sal_uInt16 >::const_reverse_iterator aIter;( rAbsPoints.rbegin() );
-    for( aIter = rAbsPoints.rbegin(); aIter != rAbsPoints.rend(); aIter++ )
+    namespace PolyPolygonEditor
     {
-        sal_uInt32 nPoly, nPnt;
-        if( GetRelativePolyPoint(maPolyPolygon,(*aIter), nPoly, nPnt) )
+        bool DeletePoints(basegfx::B2DPolyPolygon& o_rCandidate, const sdr::selection::Indices& rAbsPoints)
         {
-            // remove point
-            basegfx::B2DPolygon aCandidate(maPolyPolygon.getB2DPolygon(nPoly));
+            bool bPolyPolyChanged(false);
 
-            aCandidate.remove(nPnt);
-
-            if( ( mbIsClosed && aCandidate.count() < 3L) || (aCandidate.count() < 2L) )
+            for(sdr::selection::Indices::const_reverse_iterator aIter(rAbsPoints.rbegin()); aIter != rAbsPoints.rend(); aIter++)
             {
-                maPolyPolygon.remove(nPoly);
-            }
-            else
-            {
-                maPolyPolygon.setB2DPolygon(nPoly, aCandidate);
-            }
+                sal_uInt32 nPoly, nPnt;
 
-            bPolyPolyChanged = true;
-        }
-    }
-
-    return bPolyPolyChanged;
-}
-
-bool PolyPolygonEditor::SetSegmentsKind(SdrPathSegmentKind eKind, const std::set< sal_uInt16 >& rAbsPoints )
-{
-    bool bPolyPolyChanged = false;
-
-    std::set< sal_uInt16 >::const_reverse_iterator aIter;( rAbsPoints.rbegin() );
-    for( aIter = rAbsPoints.rbegin(); aIter != rAbsPoints.rend(); aIter++ )
-    {
-        sal_uInt32 nPolyNum, nPntNum;
-
-        if(PolyPolygonEditor::GetRelativePolyPoint(maPolyPolygon, (*aIter), nPolyNum, nPntNum))
-        {
-            // do change at aNewPolyPolygon. Take a look at edge.
-            basegfx::B2DPolygon aCandidate(maPolyPolygon.getB2DPolygon(nPolyNum));
-            bool bCandidateChanged(false);
-            const sal_uInt32 nCount(aCandidate.count());
-
-            if(nCount && (nPntNum + 1 < nCount || aCandidate.isClosed()))
-            {
-                // it's a valid edge, check control point usage
-                const sal_uInt32 nNextIndex((nPntNum + 1) % nCount);
-                const bool bContolUsed(aCandidate.areControlPointsUsed()
-                    && (aCandidate.isNextControlPointUsed(nPntNum) || aCandidate.isPrevControlPointUsed(nNextIndex)));
-
-                if(bContolUsed)
+                if(GetRelativePolyPoint(o_rCandidate, (*aIter), nPoly, nPnt))
                 {
-                    if(SDRPATHSEGMENT_TOGGLE == eKind || SDRPATHSEGMENT_LINE == eKind)
+                    // remove point
+                    basegfx::B2DPolygon aCandidate(o_rCandidate.getB2DPolygon(nPoly));
+
+                    aCandidate.remove(nPnt);
+
+                    if((aCandidate.isClosed() && aCandidate.count() < 3) || (aCandidate.count() < 2))
                     {
-                        // remove control
-                        aCandidate.resetNextControlPoint(nPntNum);
-                        aCandidate.resetPrevControlPoint(nNextIndex);
-                        bCandidateChanged = true;
+                        o_rCandidate.remove(nPoly);
                     }
-                }
-                else
-                {
-                    if(SDRPATHSEGMENT_TOGGLE == eKind || SDRPATHSEGMENT_CURVE == eKind)
+                    else
                     {
-                        // add control
-                        const basegfx::B2DPoint aStart(aCandidate.getB2DPoint(nPntNum));
-                        const basegfx::B2DPoint aEnd(aCandidate.getB2DPoint(nNextIndex));
-
-                        aCandidate.setNextControlPoint(nPntNum, interpolate(aStart, aEnd, (1.0 / 3.0)));
-                        aCandidate.setPrevControlPoint(nNextIndex, interpolate(aStart, aEnd, (2.0 / 3.0)));
-                        bCandidateChanged = true;
+                        o_rCandidate.setB2DPolygon(nPoly, aCandidate);
                     }
-                }
 
-                if(bCandidateChanged)
-                {
-                    maPolyPolygon.setB2DPolygon(nPolyNum, aCandidate);
                     bPolyPolyChanged = true;
                 }
             }
+
+            return bPolyPolyChanged;
         }
-    }
 
-    return bPolyPolyChanged;
-}
-
-bool PolyPolygonEditor::SetPointsSmooth( basegfx::B2VectorContinuity eFlags, const std::set< sal_uInt16 >& rAbsPoints)
-{
-    bool bPolyPolygonChanged(false);
-
-    std::set< sal_uInt16 >::const_reverse_iterator aIter;( rAbsPoints.rbegin() );
-    for( aIter = rAbsPoints.rbegin(); aIter != rAbsPoints.rend(); aIter++ )
-    {
-        sal_uInt32 nPolyNum, nPntNum;
-
-        if(PolyPolygonEditor::GetRelativePolyPoint(maPolyPolygon, (*aIter), nPolyNum, nPntNum))
+        bool SetSegmentsKind(basegfx::B2DPolyPolygon& o_rCandidate, SdrPathSegmentKind eKind, const sdr::selection::Indices& rAbsPoints)
         {
-            // do change at aNewPolyPolygon...
-            basegfx::B2DPolygon aCandidate(maPolyPolygon.getB2DPolygon(nPolyNum));
+            bool bPolyPolyChanged(false);
 
-            // set continuity in point, make sure there is a curve
-            bool bPolygonChanged(false);
-            bPolygonChanged = basegfx::tools::expandToCurveInPoint(aCandidate, nPntNum);
-            bPolygonChanged |= basegfx::tools::setContinuityInPoint(aCandidate, nPntNum, eFlags);
-
-            if(bPolygonChanged)
+            for(sdr::selection::Indices::const_reverse_iterator aIter(rAbsPoints.rbegin()); aIter != rAbsPoints.rend(); aIter++)
             {
-                maPolyPolygon.setB2DPolygon(nPolyNum, aCandidate);
-                bPolyPolygonChanged = true;
+                sal_uInt32 nPolyNum, nPntNum;
+
+                if(GetRelativePolyPoint(o_rCandidate, (*aIter), nPolyNum, nPntNum))
+                {
+                    // do change at aNewPolyPolygon. Take a look at edge.
+                    basegfx::B2DPolygon aCandidate(o_rCandidate.getB2DPolygon(nPolyNum));
+                    bool bCandidateChanged(false);
+                    const sal_uInt32 nCount(aCandidate.count());
+
+                    if(nCount && (nPntNum + 1 < nCount || aCandidate.isClosed()))
+                    {
+                        // it's a valid edge, check control point usage
+                        const sal_uInt32 nNextIndex((nPntNum + 1) % nCount);
+                        const bool bContolUsed(aCandidate.areControlPointsUsed()
+                            && (aCandidate.isNextControlPointUsed(nPntNum) || aCandidate.isPrevControlPointUsed(nNextIndex)));
+
+                        if(bContolUsed)
+                        {
+                            if(SDRPATHSEGMENT_TOGGLE == eKind || SDRPATHSEGMENT_LINE == eKind)
+                            {
+                                // remove control
+                                aCandidate.resetNextControlPoint(nPntNum);
+                                aCandidate.resetPrevControlPoint(nNextIndex);
+                                bCandidateChanged = true;
+                            }
+                        }
+                        else
+                        {
+                            if(SDRPATHSEGMENT_TOGGLE == eKind || SDRPATHSEGMENT_CURVE == eKind)
+                            {
+                                // add control
+                                const basegfx::B2DPoint aStart(aCandidate.getB2DPoint(nPntNum));
+                                const basegfx::B2DPoint aEnd(aCandidate.getB2DPoint(nNextIndex));
+
+                                aCandidate.setNextControlPoint(nPntNum, interpolate(aStart, aEnd, (1.0 / 3.0)));
+                                aCandidate.setPrevControlPoint(nNextIndex, interpolate(aStart, aEnd, (2.0 / 3.0)));
+                                bCandidateChanged = true;
+                            }
+                        }
+
+                        if(bCandidateChanged)
+                        {
+                            o_rCandidate.setB2DPolygon(nPolyNum, aCandidate);
+                            bPolyPolyChanged = true;
+                        }
+                    }
+                }
             }
+
+            return bPolyPolyChanged;
         }
-    }
 
-    return bPolyPolygonChanged;
-}
-
-bool PolyPolygonEditor::GetRelativePolyPoint( const basegfx::B2DPolyPolygon& rPoly, sal_uInt32 nAbsPnt, sal_uInt32& rPolyNum, sal_uInt32& rPointNum )
-{
-    const sal_uInt32 nPolyCount(rPoly.count());
-    sal_uInt32 nPolyNum(0L);
-
-    while(nPolyNum < nPolyCount)
-    {
-        const sal_uInt32 nPointCount(rPoly.getB2DPolygon(nPolyNum).count());
-
-        if(nAbsPnt < nPointCount)
+        bool SetPointsSmooth(basegfx::B2DPolyPolygon& o_rCandidate, basegfx::B2VectorContinuity eFlags, const sdr::selection::Indices& rAbsPoints)
         {
-            rPolyNum = nPolyNum;
-            rPointNum = nAbsPnt;
+            bool bPolyPolygonChanged(false);
+            sdr::selection::Indices::const_reverse_iterator aIter;
 
-            return true;
+            for( aIter = rAbsPoints.rbegin(); aIter != rAbsPoints.rend(); aIter++ )
+            {
+                sal_uInt32 nPolyNum, nPntNum;
+
+                if(GetRelativePolyPoint(o_rCandidate, (*aIter), nPolyNum, nPntNum))
+                {
+                    // do change at aNewPolyPolygon...
+                    basegfx::B2DPolygon aCandidate(o_rCandidate.getB2DPolygon(nPolyNum));
+
+                    // set continuity in point, make sure there is a curve
+                    bool bPolygonChanged(false);
+                    bPolygonChanged = basegfx::tools::expandToCurveInPoint(aCandidate, nPntNum);
+                    bPolygonChanged |= basegfx::tools::setContinuityInPoint(aCandidate, nPntNum, eFlags);
+
+                    if(bPolygonChanged)
+                    {
+                                o_rCandidate.setB2DPolygon(nPolyNum, aCandidate);
+                        bPolyPolygonChanged = true;
+                    }
+                }
+            }
+
+            return bPolyPolygonChanged;
         }
-        else
+
+        bool GetRelativePolyPoint(const basegfx::B2DPolyPolygon& rPoly, sal_uInt32 nAbsPnt, sal_uInt32& rPolyNum, sal_uInt32& rPointNum)
         {
-            nPolyNum++;
-            nAbsPnt -= nPointCount;
+            const sal_uInt32 nPolyCount(rPoly.count());
+            sal_uInt32 nPolyNum(0);
+
+            while(nPolyNum < nPolyCount)
+            {
+                const sal_uInt32 nPointCount(rPoly.getB2DPolygon(nPolyNum).count());
+
+                if(nAbsPnt < nPointCount)
+                {
+                    rPolyNum = nPolyNum;
+                    rPointNum = nAbsPnt;
+
+                    return true;
+                }
+                else
+                {
+                    nPolyNum++;
+                    nAbsPnt -= nPointCount;
+                }
+            }
+
+            return false;
         }
-    }
-
-    return false;
-}
-
+    } // end of namespace PolyPolygonEditor
 } // end of namespace sdr
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// eof

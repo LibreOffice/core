@@ -59,9 +59,6 @@ namespace drawinglayer
                 double fCornerRadiusX = 0.0,
                 double fCornerRadiusY = 0.0);
 
-            // compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
-
             // data access
             const ::basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
             const attribute::SdrLineFillShadowTextAttribute& getSdrLFSTAttribute() const { return maSdrLFSTAttribute; }

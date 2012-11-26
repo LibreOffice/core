@@ -97,7 +97,8 @@ public:
     void                            setPosition( com::sun::star::awt::Point nPosition ){ maPosition = nPosition; }
     void                            setSize( com::sun::star::awt::Size aSize ){ maSize = aSize; }
     void                            setRotation( sal_Int32 nRotation ) { mnRotation = nRotation; }
-    void                            setFlip( sal_Bool bFlipH, sal_Bool bFlipV ) { mbFlipH = bFlipH; mbFlipV = bFlipV; }
+    //  TTTT: MirrorX/Y removed
+    //void                            setFlip( sal_Bool bFlipH, sal_Bool bFlipV ) { mbFlipH = bFlipH; mbFlipV = bFlipV; }
     void                            addChild( const ShapePtr pChildPtr ) { maChildren.push_back( pChildPtr ); }
     std::vector< ShapePtr >&        getChildren() { return maChildren; }
 
@@ -211,8 +212,9 @@ private:
     ChartShapeInfoRef   mxChartShapeInfo;   /// Additional data for chart shapes.
 
     sal_Int32                       mnRotation;
-    sal_Bool                        mbFlipH;
-    sal_Bool                        mbFlipV;
+    //  TTTT: MirrorX/Y removed
+    //sal_Bool                        mbFlipH;
+    //sal_Bool                        mbFlipV;
     sal_Bool                        mbHidden;
 };
 

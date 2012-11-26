@@ -28,7 +28,7 @@
 
 #include <svl/smplhint.hxx>
 #include <editeng/unotext.hxx>
-#include <svx/svdpool.hxx>
+#include <svx/globaldrawitempool.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/svdocapt.hxx>
@@ -53,7 +53,7 @@ const SvxItemPropertySet* lcl_GetAnnotationPropertySet()
     {
         {0,0,0,0,0,0}
     };
-    static SvxItemPropertySet aAnnotationPropertySet_Impl( aAnnotationPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
+    static SvxItemPropertySet aAnnotationPropertySet_Impl( aAnnotationPropertyMap_Impl, GetGlobalDrawObjectItemPool() );
     return &aAnnotationPropertySet_Impl;
 }
 
@@ -86,16 +86,22 @@ ScAnnotationObj::~ScAnnotationObj()
 
 void ScAnnotationObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.ISA( ScUpdateRefHint ) )
+    const ScUpdateRefHint* pScUpdateRefHint = dynamic_cast< const ScUpdateRefHint* >(&rHint);
+
+    if ( pScUpdateRefHint )
     {
 //        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
 
         //! Ref-Update
     }
-    else if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    else
     {
-        pDocShell = NULL;       // ungueltig geworden
+        const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+        if ( pSfxSimpleHint && SFX_HINT_DYING == pSfxSimpleHint->GetId() )
+        {
+            pDocShell = NULL;       // ungueltig geworden
+        }
     }
 }
 

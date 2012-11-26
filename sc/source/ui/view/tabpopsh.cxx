@@ -36,8 +36,6 @@ SFX_SLOTMAP(ScTabPopShell)
 };
 
 
-TYPEINIT1(ScTabPopShell,SfxShell);
-
 //SFX_IMPL_IDL_INTERFACE(ScTabPopShell, SfxShell, 0)
 SFX_IMPL_INTERFACE(ScTabPopShell, SfxShell, ResId( 0, NULL))
 {

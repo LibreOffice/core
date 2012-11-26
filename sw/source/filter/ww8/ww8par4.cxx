@@ -27,7 +27,6 @@
 #include <doc.hxx>
 #include "writerhelper.hxx"
 #include <com/sun/star/embed/XClassifiedObject.hpp>
-
 #include <algorithm>
 #include <functional>
 #include <osl/endian.h>
@@ -38,7 +37,6 @@
 #include <filter/msfilter/msdffimp.hxx>
 #include <svx/unoapi.hxx>
 #include <filter/msfilter/msocximex.hxx>
-
 #include <sot/exchange.hxx>
 #include <swtypes.hxx>
 #include <fmtanchr.hxx>
@@ -51,11 +49,11 @@
 #include <mdiexp.hxx>           // Progress
 #include <redline.hxx>
 #include <fltshell.hxx>
-#include <unodraw.hxx>
 #include <shellio.hxx>
 #include <ndole.hxx>
-
 #include <svtools/filter.hxx>
+#include <svx/svdlegacy.hxx>
+#include <svx/fmmodel.hxx>
 
 #include "ww8scan.hxx"
 #include "ww8par.hxx"
@@ -260,7 +258,7 @@ SwFlyFrmFmt* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
 }
 
 SwFrmFmt* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
-    const SfxItemSet* pFlySet, const SfxItemSet *pGrfSet, const Rectangle& aVisArea )
+    const SfxItemSet* pFlySet, const SfxItemSet *pGrfSet, const basegfx::B2DRange& aVisArea )
 {
     ::SetProgressState(nProgress, mpDocShell);     // Update
     SwFrmFmt* pFmt = 0;
@@ -304,10 +302,10 @@ SwFrmFmt* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
 
     if (pRet)       // Ole-Object wurde eingefuegt
     {
-        if (pRet->ISA(SdrOle2Obj))
+        if (dynamic_cast< SdrOle2Obj* >(pRet))
         {
             pFmt = InsertOle(*((SdrOle2Obj*)pRet), *pFlySet, *pGrfSet);
-            SdrObject::Free( pRet );        // das brauchen wir nicht mehr
+            deleteSdrObjectSafeAndClearPointer( pRet );        // das brauchen wir nicht mehr
         }
         else
             pFmt = rDoc.Insert(*pPaM, *pRet, pFlySet, NULL);
@@ -350,7 +348,7 @@ bool SwWW8ImplReader::ImportOleWMF(SvStorageRef xSrc1,GDIMetaFile &rWMF,
 }
 
 SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
-    const Graphic* pGrf, const SfxItemSet* pFlySet, const Rectangle& aVisArea )
+    const Graphic* pGrf, const SfxItemSet* pFlySet, const basegfx::B2DRange& aVisArea )
 {
     SdrObject* pRet = 0;
     ASSERT( pStg, "ohne storage geht hier fast gar nichts!" );
@@ -396,14 +394,16 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
     }       // StorageStreams wieder zu
 
 
-    Rectangle aRect(0, 0, nX, nY);
+    basegfx::B2DRange aRange(0.0, 0.0, nX, nY);
 
     if (pFlySet)
     {
         if (const SwFmtFrmSize* pSize =
             (const SwFmtFrmSize*)pFlySet->GetItem(RES_FRM_SIZE, false))
         {
-            aRect.SetSize(pSize->GetSize());
+            aRange = basegfx::B2DRange(
+                aRange.getMinX(), aRange.getMinY(),
+                aRange.getMinX() + pSize->GetSize().Width(), aRange.getMinY() + pSize->GetSize().Height());
         }
     }
 
@@ -417,7 +417,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
             pRet = GetSdrObjectFromXShape(xRef);
             ASSERT(pRet, "Impossible");
             if (pRet)
-                pRet->SetLogicRect(aRect);
+                sdr::legacy::SetLogicRange(*pRet, aRange);
             return pRet;
         }
     }
@@ -454,8 +454,17 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
 
             ErrCode nError = ERRCODE_NONE;
             pRet = SvxMSDffManager::CreateSdrOLEFromStorage(
-                aSrcStgName, xSrc0, mpDocShell->GetStorage(), rGraph, aRect, aVisArea, pTmpData, nError,
-                SwMSDffManager::GetFilterFlags(), nAspect );
+                *rDoc.GetOrCreateDrawModel(),
+                aSrcStgName,
+                xSrc0,
+                mpDocShell->GetStorage(),
+                rGraph,
+                aRange,
+                aVisArea,
+                pTmpData,
+                nError,
+                SwMSDffManager::GetFilterFlags(),
+                nAspect );
             pDataStream->Seek( nOldPos );
         }
     }

@@ -286,7 +286,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
                 else
                 {
                     SbxVariable* pVar = xLibSearchBasic->GetObjects()->Get( nObj );
-                    pBasic = PTR_CAST(StarBASIC,pVar);
+                    pBasic = dynamic_cast< StarBASIC* >( pVar);
                 }
                 if( pBasic )
                 {
@@ -305,10 +305,10 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
         }
 
         // Default: Be tolerant and search everywhere
-        if( (!pMethVar || !pMethVar->ISA(SbMethod)) && maBasicRef.Is() )
+        if( (!pMethVar || !dynamic_cast< SbMethod* >(pMethVar)) && maBasicRef.Is() )
             pMethVar = maBasicRef->FindQualified( aMacro, SbxCLASS_DONTCARE );
 
-        SbMethod* pMeth = PTR_CAST(SbMethod,pMethVar);
+        SbMethod* pMeth = dynamic_cast< SbMethod* >( pMethVar);
         if( !pMeth )
             return;
 
@@ -337,12 +337,11 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
             *pRet = sbxToUnoValue( xValue );
         pMeth->SetParameters( NULL );
     }
-        else // scripting framework script
-        {
-            //callBasic via scripting framework
-            SFURL_firing_impl( aScriptEvent, pRet, m_xModel );
-
-        }
+    else // scripting framework script
+    {
+        //callBasic via scripting framework
+        SFURL_firing_impl( aScriptEvent, pRet, m_xModel );
+    }
 }
 
 Any implFindDialogLibForDialog( const Any& rDlgAny, SbxObject* pBasic )
@@ -351,7 +350,7 @@ Any implFindDialogLibForDialog( const Any& rDlgAny, SbxObject* pBasic )
 
     SbxVariable* pDlgLibContVar = pBasic->Find
         (  String::CreateFromAscii("DialogLibraries"), SbxCLASS_OBJECT );
-    if( pDlgLibContVar && pDlgLibContVar->ISA(SbUnoObject) )
+    if( pDlgLibContVar && dynamic_cast< SbUnoObject* >(pDlgLibContVar) )
     {
         SbUnoObject* pDlgLibContUnoObj = (SbUnoObject*)(SbxBase*)pDlgLibContVar;
         Any aDlgLibContAny = pDlgLibContUnoObj->getUnoAny();
@@ -459,7 +458,7 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
 
     // Get dialog
     SbxBaseRef pObj = (SbxBase*)rPar.Get( 1 )->GetObject();
-    if( !(pObj && pObj->ISA(SbUnoObject)) )
+    if( !(pObj && dynamic_cast< SbUnoObject* >((SbxBase*)pObj)) )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
@@ -518,43 +517,44 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
     StarBASIC* pFoundBasic = NULL;
     OSL_TRACE("About to try get a hold of ThisComponent");
     Reference< frame::XModel > xModel = StarBASIC::GetModelFromBasic( pINST->GetBasic() ) ;
-        aDlgLibAny = implFindDialogLibForDialogBasic( aAnyISP, pINST->GetBasic(), pFoundBasic );
-        // If we found the dialog then it belongs to the Search basic
-        if ( !pFoundBasic )
+    aDlgLibAny = implFindDialogLibForDialogBasic( aAnyISP, pINST->GetBasic(), pFoundBasic );
+    // If we found the dialog then it belongs to the Search basic
+    if ( !pFoundBasic )
     {
-            Reference< frame::XDesktop > xDesktop( xMSF->createInstance
-        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) ) ),
+        Reference< frame::XDesktop > xDesktop( xMSF->createInstance
+            ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) ) ),
             UNO_QUERY );
             Reference< container::XEnumeration > xModels;
-            if ( xDesktop.is() )
-    {
-                Reference< container::XEnumerationAccess > xComponents( xDesktop->getComponents(), UNO_QUERY );
-                if ( xComponents.is() )
-                    xModels.set( xComponents->createEnumeration(), UNO_QUERY );
-                if ( xModels.is() )
+        if ( xDesktop.is() )
+        {
+            Reference< container::XEnumerationAccess > xComponents( xDesktop->getComponents(), UNO_QUERY );
+            if ( xComponents.is() )
+                xModels.set( xComponents->createEnumeration(), UNO_QUERY );
+            if ( xModels.is() )
+            {
+                while ( xModels->hasMoreElements() )
                 {
-                    while ( xModels->hasMoreElements() )
+                    Reference< frame::XModel > xNextModel( xModels->nextElement(), UNO_QUERY );
+                    if ( xNextModel.is() )
                     {
-                        Reference< frame::XModel > xNextModel( xModels->nextElement(), UNO_QUERY );
-                        if ( xNextModel.is() )
+                        BasicManager* pMgr = basic::BasicManagerRepository::getDocumentBasicManager( xNextModel );
+                        if ( pMgr )
+                            aDlgLibAny = implFindDialogLibForDialogBasic( aAnyISP, pMgr->GetLib(0), pFoundBasic );
+                        if ( aDlgLibAny.hasValue() )
                         {
-                            BasicManager* pMgr = basic::BasicManagerRepository::getDocumentBasicManager( xNextModel );
-                            if ( pMgr )
-                                aDlgLibAny = implFindDialogLibForDialogBasic( aAnyISP, pMgr->GetLib(0), pFoundBasic );
-                            if ( aDlgLibAny.hasValue() )
-    {
-                                bDocDialog = true;
-                                xModel = xNextModel;
-                                break;
-    }
+                            bDocDialog = true;
+                            xModel = xNextModel;
+                            break;
                         }
                     }
                 }
             }
         }
+    }
+
     if ( pFoundBasic )
         bDocDialog = pFoundBasic->IsDocBasic();
-       Reference< XScriptListener > xScriptListener = new BasicScriptListener_Impl( pINST->GetBasic(), xModel );
+    Reference< XScriptListener > xScriptListener = new BasicScriptListener_Impl( pINST->GetBasic(), xModel );
 
     Sequence< Any > aArgs( 4 );
     if( bDocDialog )

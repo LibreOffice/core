@@ -334,10 +334,10 @@ void AnnotationWindow::InitControls()
 
     mpOutliner = new ::Outliner(GetAnnotationPool(),OUTLINERMODE_TEXTOBJECT);
     Doc()->SetCalcFieldValueHdl( mpOutliner );
-    mpOutliner->SetUpdateMode( sal_True );
+    mpOutliner->SetUpdateMode( true );
     Rescale();
 
-    OutputDevice* pDev = Doc()->GetRefDevice();
+    OutputDevice* pDev = Doc()->GetReferenceDevice();
     if( pDev )
     {
         mpOutliner->SetRefDevice( pDev );
@@ -377,14 +377,14 @@ void AnnotationWindow::InitControls()
         nCntrl &= ~EE_CNTRL_ONLINESPELLING;
 */
     mpOutliner->SetControlWord(nCntrl);
-//  mpOutliner->SetFlatMode( sal_True );
+//  mpOutliner->SetFlatMode( true );
 
     Engine()->SetModifyHdl( Link() );
-    Engine()->EnableUndo( sal_False );
+    Engine()->EnableUndo( false );
 
     Engine()->ClearModifyFlag();
     Engine()->GetUndoManager().Clear();
-    Engine()->EnableUndo( sal_True );
+    Engine()->EnableUndo( true );
     Engine()->SetModifyHdl( LINK( this, AnnotationWindow, ModifyHdl ) );
 
     Invalidate();

@@ -319,8 +319,6 @@ SFX_IMPL_INTERFACE(SfxViewShell,SfxShell,SfxResId(0))
         SFX_CHILDWINDOW_REGISTRATION( SID_MAIL_CHILDWIN );
 }
 
-TYPEINIT2(SfxViewShell,SfxShell,SfxListener);
-
 //--------------------------------------------------------------------
 /** search for a filter name dependent on type and module
  */
@@ -435,32 +433,32 @@ enum ETypeFamily
 
 void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
 {
-        const sal_uInt16 nId = rReq.GetSlot();
-        switch( nId )
+    const sal_uInt16 nId = rReq.GetSlot();
+    switch( nId )
+    {
+        case SID_STYLE_FAMILY :
         {
-                case SID_STYLE_FAMILY :
-                {
-                        SFX_REQUEST_ARG(rReq, pItem, SfxUInt16Item, nId, sal_False);
-                        if (pItem)
+            SFX_REQUEST_ARG(rReq, pItem, SfxUInt16Item, nId);
+            if (pItem)
             {
                 pImp->m_nFamily = pItem->GetValue();
             }
-                        break;
-                }
+            break;
+        }
 
-                case SID_STYLE_CATALOG:
-                {
-                        SfxTemplateCatalog aCatalog(
-                                SFX_APP()->GetTopWindow(), &GetViewFrame()->GetBindings());
-                        aCatalog.Execute();
+        case SID_STYLE_CATALOG:
+        {
+            SfxTemplateCatalog aCatalog(
+                    SFX_APP()->GetTopWindow(), &GetViewFrame()->GetBindings());
+            aCatalog.Execute();
             rReq.Ignore();
-                        break;
-                }
+            break;
+        }
         case SID_ACTIVATE_STYLE_APPLY:
         {
             com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xFrame(
-                    GetViewFrame()->GetFrame().GetFrameInterface(),
-                    com::sun::star::uno::UNO_QUERY);
+                GetViewFrame()->GetFrame().GetFrameInterface(),
+                com::sun::star::uno::UNO_QUERY);
 
             Reference< com::sun::star::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
             Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
@@ -513,87 +511,87 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 }
             }
             rReq.Done();
+            break;
         }
-        break;
-                // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-                case SID_MAIL_SENDDOCASMS:
-                case SID_MAIL_SENDDOCASOOO:
-                case SID_MAIL_SENDDOCASPDF:
-                case SID_MAIL_SENDDOC:
+        case SID_MAIL_SENDDOCASMS:
+        case SID_MAIL_SENDDOCASOOO:
+        case SID_MAIL_SENDDOCASPDF:
+        case SID_MAIL_SENDDOC:
         case SID_MAIL_SENDDOCASFORMAT:
-                {
-                        SfxObjectShell* pDoc = GetObjectShell();
-                        if ( pDoc && pDoc->QueryHiddenInformation(
-                                                        WhenSaving, &GetViewFrame()->GetWindow() ) != RET_YES )
-                                break;
+        {
+            SfxObjectShell* pDoc = GetObjectShell();
+            if ( pDoc && pDoc->QueryHiddenInformation(
+                WhenSaving, &GetViewFrame()->GetWindow() ) != RET_YES )
+                    break;
 
-                        if ( SvtInternalOptions().MailUIEnabled() )
+            if ( SvtInternalOptions().MailUIEnabled() )
             {
                 GetViewFrame()->SetChildWindow( SID_MAIL_CHILDWIN, sal_True );
             }
             else
             {
-                                SfxMailModel  aModel;
+                SfxMailModel  aModel;
                 rtl::OUString aDocType;
 
-                                SFX_REQUEST_ARG(rReq, pMailSubject, SfxStringItem, SID_MAIL_SUBJECT, sal_False );
-                                if ( pMailSubject )
-                                        aModel.SetSubject( pMailSubject->GetValue() );
+                SFX_REQUEST_ARG(rReq, pMailSubject, SfxStringItem, SID_MAIL_SUBJECT );
+                if ( pMailSubject )
+                    aModel.SetSubject( pMailSubject->GetValue() );
 
-                                SFX_REQUEST_ARG(rReq, pMailRecipient, SfxStringItem, SID_MAIL_RECIPIENT, sal_False );
-                                if ( pMailRecipient )
-                                {
-                                        String aRecipient( pMailRecipient->GetValue() );
-                                        String aMailToStr( String::CreateFromAscii( "mailto:" ));
+                SFX_REQUEST_ARG(rReq, pMailRecipient, SfxStringItem, SID_MAIL_RECIPIENT );
+                if ( pMailRecipient )
+                {
+                    String aRecipient( pMailRecipient->GetValue() );
+                    String aMailToStr( String::CreateFromAscii( "mailto:" ));
 
-                                        if ( aRecipient.Search( aMailToStr ) == 0 )
-                                                aRecipient = aRecipient.Erase( 0, aMailToStr.Len() );
-                                        aModel.AddAddress( aRecipient, SfxMailModel::ROLE_TO );
-                                }
-                SFX_REQUEST_ARG(rReq, pMailDocType, SfxStringItem, SID_TYPE_NAME, sal_False );
+                    if ( aRecipient.Search( aMailToStr ) == 0 )
+                        aRecipient = aRecipient.Erase( 0, aMailToStr.Len() );
+                    aModel.AddAddress( aRecipient, SfxMailModel::ROLE_TO );
+                }
+                SFX_REQUEST_ARG(rReq, pMailDocType, SfxStringItem, SID_TYPE_NAME );
                 if ( pMailDocType )
                     aDocType = pMailDocType->GetValue();
 
                 uno::Reference < frame::XFrame > xFrame( pFrame->GetFrame().GetFrameInterface() );
-                                SfxMailModel::SendMailResult eResult = SfxMailModel::SEND_MAIL_ERROR;
+                SfxMailModel::SendMailResult eResult = SfxMailModel::SEND_MAIL_ERROR;
 
                 if ( nId == SID_MAIL_SENDDOC )
-                                        eResult = aModel.SaveAndSend( xFrame, rtl::OUString() );
-                                else
-                                if ( nId == SID_MAIL_SENDDOCASPDF )
-                    eResult = aModel.SaveAndSend( xFrame, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "pdf_Portable_Document_Format" )));
+                    eResult = aModel.SaveAndSend( xFrame, rtl::OUString() );
                 else
-                                if ( nId == SID_MAIL_SENDDOCASMS )
-                {
-                    aDocType = impl_searchFormatTypeForApp(xFrame, E_MS_DOC);
-                    if (aDocType.getLength() > 0)
-                        eResult = aModel.SaveAndSend( xFrame, aDocType );
-                }
-                else
-                                if ( nId == SID_MAIL_SENDDOCASOOO )
-                {
-                    aDocType = impl_searchFormatTypeForApp(xFrame, E_OOO_DOC);
-                    if (aDocType.getLength() > 0)
-                        eResult = aModel.SaveAndSend( xFrame, aDocType );
-                }
-
-                                if ( eResult == SfxMailModel::SEND_MAIL_ERROR )
-                                {
-                                        InfoBox aBox( SFX_APP()->GetTopWindow(), SfxResId( MSG_ERROR_SEND_MAIL ));
-                                        aBox.Execute();
-                    rReq.Ignore();
-                                }
-                else
-                    rReq.Done();
+                    if ( nId == SID_MAIL_SENDDOCASPDF )
+                        eResult = aModel.SaveAndSend( xFrame, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "pdf_Portable_Document_Format" )));
+                    else
+                        if ( nId == SID_MAIL_SENDDOCASMS )
+                        {
+                            aDocType = impl_searchFormatTypeForApp(xFrame, E_MS_DOC);
+                            if (aDocType.getLength() > 0)
+                                eResult = aModel.SaveAndSend( xFrame, aDocType );
                         }
+                        else
+                            if ( nId == SID_MAIL_SENDDOCASOOO )
+                            {
+                                aDocType = impl_searchFormatTypeForApp(xFrame, E_OOO_DOC);
+                                if (aDocType.getLength() > 0)
+                                    eResult = aModel.SaveAndSend( xFrame, aDocType );
+                            }
 
-                        break;
-                }
+                            if ( eResult == SfxMailModel::SEND_MAIL_ERROR )
+                            {
+                                InfoBox aBox( SFX_APP()->GetTopWindow(), SfxResId( MSG_ERROR_SEND_MAIL ));
+                                aBox.Execute();
+                                rReq.Ignore();
+                            }
+                            else
+                                rReq.Done();
+            }
 
-                // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-                case SID_WEBHTML:
-                {
+            break;
+        }
+
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        case SID_WEBHTML:
+        {
             static const char HTML_DOCUMENT_TYPE[] = "writer_web_HTML";
             static const char HTML_GRAPHIC_TYPE[]  = "graphic_HTML";
             const sal_Int32   FILTERFLAG_EXPORT    = 0x00000002;
@@ -613,7 +611,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             rtl::OUString aModule;
             try
             {
-                 aModule = xModuleManager->identify( xFrame );
+                    aModule = xModuleManager->identify( xFrame );
             }
             catch ( css::uno::RuntimeException& )
             {
@@ -731,7 +729,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 }
 
                 rReq.Done(bRet);
-                            break;
+                break;
             }
             else
             {
@@ -741,97 +739,97 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
         }
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-                case SID_PLUGINS_ACTIVE:
-                {
-                        SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nId, sal_False);
+        case SID_PLUGINS_ACTIVE:
+        {
+            SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nId);
             bool const bActive = (pShowItem)
                 ? pShowItem->GetValue()
                 : !pImp->m_bPlugInsActive;
-                        // ggf. recorden
-                        if ( !rReq.IsAPI() )
-                                rReq.AppendItem( SfxBoolItem( nId, bActive ) );
+            // ggf. recorden
+            if ( !rReq.IsAPI() )
+                rReq.AppendItem( SfxBoolItem( nId, bActive ) );
 
-                        // Jetzt schon DONE aufrufen, da die Argumente evtl. einen Pool
-                        // benutzen, der demn"achst weg ist
-                        rReq.Done(sal_True);
+            // Jetzt schon DONE aufrufen, da die Argumente evtl. einen Pool
+            // benutzen, der demn"achst weg ist
+            rReq.Done(sal_True);
 
-                        // ausfuehren
+            // ausfuehren
             if (!pShowItem || (bActive != pImp->m_bPlugInsActive))
-                        {
-                                SfxFrame* pTopFrame = &GetFrame()->GetTopFrame();
-                                if ( pTopFrame != &GetFrame()->GetFrame() )
-                                {
-                                        // FramesetDocument
-                                        SfxViewShell *pShell = pTopFrame->GetCurrentViewFrame()->GetViewShell();
-                                        if ( pShell->GetInterface()->GetSlot( nId ) )
-                                                pShell->ExecuteSlot( rReq );
-                                        break;
-                                }
+            {
+                SfxFrame* pTopFrame = &GetFrame()->GetTopFrame();
+                if ( pTopFrame != &GetFrame()->GetFrame() )
+                {
+                    // FramesetDocument
+                    SfxViewShell *pShell = pTopFrame->GetCurrentViewFrame()->GetViewShell();
+                    if ( pShell->GetInterface()->GetSlot( nId ) )
+                            pShell->ExecuteSlot( rReq );
+                    break;
+                }
 
-                                SfxFrameIterator aIter( *pTopFrame );
-                                while ( pTopFrame )
-                                {
-                                        if ( pTopFrame->GetCurrentViewFrame() )
-                                        {
-                                                SfxViewShell *pView = pTopFrame->GetCurrentViewFrame()->GetViewShell();
-                                                if ( pView )
-                                                {
+                SfxFrameIterator aIter( *pTopFrame );
+                while ( pTopFrame )
+                {
+                    if ( pTopFrame->GetCurrentViewFrame() )
+                    {
+                        SfxViewShell *pView = pTopFrame->GetCurrentViewFrame()->GetViewShell();
+                        if ( pView )
+                        {
                             pView->pImp->m_bPlugInsActive = bActive;
                             Rectangle aVisArea = GetObjectShell()->GetVisArea();
                             VisAreaChanged(aVisArea);
 
-                                                        // the plugins might need change in their state
-                                                        SfxInPlaceClientList *pClients = pView->GetIPClientList_Impl(sal_False);
-                                                        if ( pClients )
-                                                        {
-                                                                for (sal_uInt16 n=0; n < pClients->Count(); n++)
-                                                                {
-                                                                        SfxInPlaceClient* pIPClient = pClients->GetObject(n);
-                                                                        if ( pIPClient )
-                                                                                pView->CheckIPClient_Impl( pIPClient, aVisArea );
-                                                                }
-                                                        }
-                                                }
-                                        }
-
-                                        if ( !pTopFrame->GetParentFrame() )
-                                                pTopFrame = aIter.FirstFrame();
-                                        else
-                                                pTopFrame = aIter.NextFrame( *pTopFrame );
+                            // the plugins might need change in their state
+                            SfxInPlaceClientList *pClients = pView->GetIPClientList_Impl(sal_False);
+                            if ( pClients )
+                            {
+                                for (sal_uInt16 n=0; n < pClients->Count(); n++)
+                                {
+                                    SfxInPlaceClient* pIPClient = pClients->GetObject(n);
+                                    if ( pIPClient )
+                                        pView->CheckIPClient_Impl( pIPClient, aVisArea );
                                 }
+                            }
                         }
+                    }
 
-                        break;
+                    if ( !pTopFrame->GetParentFrame() )
+                        pTopFrame = aIter.FirstFrame();
+                    else
+                        pTopFrame = aIter.NextFrame( *pTopFrame );
                 }
+            }
+
+            break;
         }
+    }
 }
 
 //--------------------------------------------------------------------
 
 void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
 {
-        DBG_CHKTHIS(SfxViewShell, 0);
+    DBG_CHKTHIS(SfxViewShell, 0);
 
-        SfxWhichIter aIter( rSet );
-        for ( sal_uInt16 nSID = aIter.FirstWhich(); nSID; nSID = aIter.NextWhich() )
+    SfxWhichIter aIter( rSet );
+    for ( sal_uInt16 nSID = aIter.FirstWhich(); nSID; nSID = aIter.NextWhich() )
+    {
+        switch ( nSID )
         {
-                switch ( nSID )
-                {
-                        case SID_STYLE_CATALOG:
-                        {
+            case SID_STYLE_CATALOG:
+            {
                 if ( !GetViewFrame()->KnowsChildWindow( SID_STYLE_DESIGNER ) )
-                                        rSet.DisableItem( nSID );
-                                break;
-                        }
+                    rSet.DisableItem( nSID );
+                break;
+            }
 
-                        // Printer-Funktionen
-                        case SID_PRINTDOC:
-                        case SID_PRINTDOCDIRECT:
-                        case SID_SETUPPRINTER:
-                        case SID_PRINTER_NAME:
-                        {
+            // Printer-Funktionen
+            case SID_PRINTDOC:
+            case SID_PRINTDOCDIRECT:
+            case SID_SETUPPRINTER:
+            case SID_PRINTER_NAME:
+            {
                 bool bEnabled = pImp->m_bCanPrint && !pImp->m_nPrinterLocks;
-                                bEnabled = bEnabled  && !Application::GetSettings().GetMiscSettings().GetDisablePrinting();
+                bEnabled = bEnabled  && !Application::GetSettings().GetMiscSettings().GetDisablePrinting();
                 if ( bEnabled )
                 {
                     SfxPrinter *pPrinter = GetPrinter(sal_False);
@@ -860,68 +858,66 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
                     }
                     bEnabled = !pPrinter || !pPrinter->IsPrinting();
                 }
-                                if ( !bEnabled )
-                                {
-                                        // will now be handled by requeing the request
-                                /*      rSet.DisableItem( SID_PRINTDOC );
-                                        rSet.DisableItem( SID_PRINTDOCDIRECT );
-                                        rSet.DisableItem( SID_SETUPPRINTER ); */
-                                }
-                                break;
-                        }
-
-                        // Mail-Funktionen
-                        case SID_MAIL_SENDDOCASPDF:
-                        case SID_MAIL_SENDDOC:
-            case SID_MAIL_SENDDOCASFORMAT:
-                        {
-                sal_Bool bEnable = !GetViewFrame()->HasChildWindow( SID_MAIL_CHILDWIN );
-                                if ( !bEnable )
-                                        rSet.DisableItem( nSID );
-                                break;
-                        }
-
-                        // PlugIns running
-                        case SID_PLUGINS_ACTIVE:
-                        {
-                rSet.Put( SfxBoolItem( SID_PLUGINS_ACTIVE,
-                                        !pImp->m_bPlugInsActive) );
-                                break;
-                        }
-/*
-                        // SelectionText
-                        case SID_SELECTION_TEXT:
-                        {
-                                rSet.Put( SfxStringItem( SID_SELECTION_TEXT, GetSelectionText() ) );
-                                break;
-                        }
-
-                        // SelectionTextExt
-                        case SID_SELECTION_TEXT_EXT:
-                        {
-                                rSet.Put( SfxStringItem( SID_SELECTION_TEXT_EXT, GetSelectionText(sal_True) ) );
-                                break;
-                        }
-*/
-                        case SID_STYLE_FAMILY :
-                        {
-                rSet.Put( SfxUInt16Item( SID_STYLE_FAMILY, pImp->m_nFamily ) );
-                                break;
-                        }
+                if ( !bEnabled )
+                {
+                        // will now be handled by requeing the request
+                /*      rSet.DisableItem( SID_PRINTDOC );
+                        rSet.DisableItem( SID_PRINTDOCDIRECT );
+                        rSet.DisableItem( SID_SETUPPRINTER ); */
                 }
+                break;
+            }
+
+            // Mail-Funktionen
+            case SID_MAIL_SENDDOCASPDF:
+            case SID_MAIL_SENDDOC:
+            case SID_MAIL_SENDDOCASFORMAT:
+            {
+                sal_Bool bEnable = !GetViewFrame()->HasChildWindow( SID_MAIL_CHILDWIN );
+                if ( !bEnable )
+                    rSet.DisableItem( nSID );
+                break;
+            }
+
+            // PlugIns running
+            case SID_PLUGINS_ACTIVE:
+            {
+                rSet.Put( SfxBoolItem( SID_PLUGINS_ACTIVE, !pImp->m_bPlugInsActive) );
+                break;
+            }
+/*
+            // SelectionText
+            case SID_SELECTION_TEXT:
+            {
+                rSet.Put( SfxStringItem( SID_SELECTION_TEXT, GetSelectionText() ) );
+                break;
+            }
+
+            // SelectionTextExt
+            case SID_SELECTION_TEXT_EXT:
+            {
+                rSet.Put( SfxStringItem( SID_SELECTION_TEXT_EXT, GetSelectionText(sal_True) ) );
+                break;
+            }
+*/
+            case SID_STYLE_FAMILY :
+            {
+                rSet.Put( SfxUInt16Item( SID_STYLE_FAMILY, pImp->m_nFamily ) );
+                break;
+            }
         }
+    }
 }
 
 //--------------------------------------------------------------------
 
-void SfxViewShell::SetZoomFactor( const Fraction &rZoomX,
-                                                                  const Fraction &rZoomY )
+void SfxViewShell::SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY )
 {
-        DBG_ASSERT( GetWindow(), "no window" );
-        MapMode aMap( GetWindow()->GetMapMode() );
-        aMap.SetScaleX( rZoomX );
-        aMap.SetScaleY( rZoomY );
-        GetWindow()->SetMapMode( aMap );
+    DBG_ASSERT( GetWindow(), "no window" );
+    MapMode aMap( GetWindow()->GetMapMode() );
+    aMap.SetScaleX( rZoomX );
+    aMap.SetScaleY( rZoomY );
+    GetWindow()->SetMapMode( aMap );
 }
 
 //--------------------------------------------------------------------
@@ -936,30 +932,30 @@ ErrCode SfxViewShell::DoVerb(long /*nVerb*/)
 */
 
 {
-        return ERRCODE_SO_NOVERBS;
+    return ERRCODE_SO_NOVERBS;
 }
 
 //--------------------------------------------------------------------
 
 void SfxViewShell::OutplaceActivated( sal_Bool bActive, SfxInPlaceClient* /*pClient*/ )
 {
-        if ( !bActive )
-                GetFrame()->GetFrame().Appear();
+    if ( !bActive )
+        GetFrame()->GetFrame().Appear();
 }
 
 //--------------------------------------------------------------------
 
 void SfxViewShell::InplaceActivating( SfxInPlaceClient* /*pClient*/ )
 {
-        // TODO/LATER: painting of the bitmap can be stopped, it is required if CLIPCHILDREN problem #i25788# is not solved,
-        // but may be the bug will not affect the real office vcl windows, then it is not required
+    // TODO/LATER: painting of the bitmap can be stopped, it is required if CLIPCHILDREN problem #i25788# is not solved,
+    // but may be the bug will not affect the real office vcl windows, then it is not required
 }
 
 //--------------------------------------------------------------------
 
 void SfxViewShell::InplaceDeactivated( SfxInPlaceClient* /*pClient*/ )
 {
-        // TODO/LATER: paint the replacement image in normal way if the painting was stopped
+    // TODO/LATER: paint the replacement image in normal way if the painting was stopped
 }
 
 //--------------------------------------------------------------------
@@ -999,26 +995,26 @@ SfxInPlaceClient* SfxViewShell::FindIPClient
 )   const
 {
     SfxInPlaceClientList *pClients = GetIPClientList_Impl(sal_False);
-        if ( !pClients )
-                return 0;
-
-        if( !pObjParentWin )
-                pObjParentWin = GetWindow();
-        for (sal_uInt16 n=0; n < pClients->Count(); n++)
-        {
-                SfxInPlaceClient *pIPClient = (SfxInPlaceClient*) pClients->GetObject(n);
-        if ( pIPClient->GetObject() == xObj && pIPClient->GetEditWin() == pObjParentWin )
-                        return pIPClient;
-        }
-
+    if ( !pClients )
         return 0;
+
+    if( !pObjParentWin )
+        pObjParentWin = GetWindow();
+    for (sal_uInt16 n=0; n < pClients->Count(); n++)
+    {
+        SfxInPlaceClient *pIPClient = (SfxInPlaceClient*) pClients->GetObject(n);
+        if ( pIPClient->GetObject() == xObj && pIPClient->GetEditWin() == pObjParentWin )
+            return pIPClient;
+    }
+
+    return 0;
 }
 
 //--------------------------------------------------------------------
 
 SfxInPlaceClient* SfxViewShell::GetIPClient() const
 {
-        return GetUIActiveClient();
+    return GetUIActiveClient();
 }
 
 //--------------------------------------------------------------------
@@ -1027,15 +1023,15 @@ SfxInPlaceClient* SfxViewShell::GetUIActiveIPClient_Impl() const
 {
     // this method is needed as long as SFX still manages the border space for ChildWindows (see SfxFrame::Resize)
     SfxInPlaceClientList *pClients = GetIPClientList_Impl(sal_False);
-        if ( !pClients )
-                return 0;
+    if ( !pClients )
+        return 0;
 
-        for (sal_uInt16 n=0; n < pClients->Count(); n++)
-        {
+    for (sal_uInt16 n=0; n < pClients->Count(); n++)
+    {
         SfxInPlaceClient* pIPClient = pClients->GetObject(n);
         if ( pIPClient->IsUIActive() )
             return pIPClient;
-        }
+    }
 
     return NULL;
 }
@@ -1043,15 +1039,15 @@ SfxInPlaceClient* SfxViewShell::GetUIActiveIPClient_Impl() const
 SfxInPlaceClient* SfxViewShell::GetUIActiveClient() const
 {
     SfxInPlaceClientList *pClients = GetIPClientList_Impl(sal_False);
-        if ( !pClients )
-                return 0;
+    if ( !pClients )
+        return 0;
 
-        for (sal_uInt16 n=0; n < pClients->Count(); n++)
-        {
+    for (sal_uInt16 n=0; n < pClients->Count(); n++)
+    {
         SfxInPlaceClient* pIPClient = pClients->GetObject(n);
         if ( pIPClient->IsObjectUIActive() )
             return pIPClient;
-        }
+    }
 
     return NULL;
 }
@@ -1060,34 +1056,34 @@ SfxInPlaceClient* SfxViewShell::GetUIActiveClient() const
 
 void SfxViewShell::Activate( sal_Bool bMDI )
 {
-        DBG_CHKTHIS(SfxViewShell, 0);
-        if ( bMDI )
-        {
-                SfxObjectShell *pSh = GetViewFrame()->GetObjectShell();
-                if ( pSh->GetModel().is() )
-                        pSh->GetModel()->setCurrentController( GetViewFrame()->GetFrame().GetController() );
+    DBG_CHKTHIS(SfxViewShell, 0);
+    if ( bMDI )
+    {
+        SfxObjectShell *pSh = GetViewFrame()->GetObjectShell();
+        if ( pSh->GetModel().is() )
+            pSh->GetModel()->setCurrentController( GetViewFrame()->GetFrame().GetController() );
 
         SetCurrentDocument();
-        }
+    }
 }
 
 //--------------------------------------------------------------------
 
 void SfxViewShell::Deactivate(sal_Bool /*bMDI*/)
 {
-        DBG_CHKTHIS(SfxViewShell, 0);
+    DBG_CHKTHIS(SfxViewShell, 0);
 }
 
 //--------------------------------------------------------------------
 
 void SfxViewShell::AdjustPosSizePixel
 (
-        const Point&    /*rToolOffset*/,// linke obere Ecke der Tools im Frame-Window
-        const Size&     /*rSize*/       // gesamte zur Verf"ugung stehende Gr"o\se
+    const Point&    /*rToolOffset*/,// linke obere Ecke der Tools im Frame-Window
+    const Size&     /*rSize*/       // gesamte zur Verf"ugung stehende Gr"o\se
 )
 
 {
-        DBG_CHKTHIS(SfxViewShell, 0);
+    DBG_CHKTHIS(SfxViewShell, 0);
 }
 
 //--------------------------------------------------------------------
@@ -1117,8 +1113,8 @@ void SfxViewShell::Move()
 
 void SfxViewShell::OuterResizePixel
 (
-        const Point&    /*rToolOffset*/,// linke obere Ecke der Tools im Frame-Window
-        const Size&     /*rSize*/       // gesamte zur Verf"ugung stehende Gr"o\se
+    const Point&    /*rToolOffset*/,// linke obere Ecke der Tools im Frame-Window
+    const Size&     /*rSize*/       // gesamte zur Verf"ugung stehende Gr"o\se
 )
 
 /*  [Beschreibung]
@@ -1164,16 +1160,16 @@ void SfxViewShell::OuterResizePixel
 */
 
 {
-        DBG_CHKTHIS(SfxViewShell, 0);
-        SetBorderPixel( SvBorder() );
+    DBG_CHKTHIS(SfxViewShell, 0);
+    SetBorderPixel( SvBorder() );
 }
 
 //--------------------------------------------------------------------
 
 void SfxViewShell::InnerResizePixel
 (
-        const Point&    /*rToolOffset*/,// linke obere Ecke der Tools im Frame-Window
-        const Size&     /*rSize*/       // dem Edit-Win zur Verf"ugung stehende Gr"o\se
+    const Point&    /*rToolOffset*/,// linke obere Ecke der Tools im Frame-Window
+    const Size&     /*rSize*/       // dem Edit-Win zur Verf"ugung stehende Gr"o\se
 )
 
 /*  [Beschreibung]
@@ -1623,7 +1619,7 @@ void SfxViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::c
 
 SfxViewShell* SfxViewShell::GetFirst
 (
-    const TypeId* pType,
+    ConvertToViewShell rConvert,
     sal_Bool          bOnlyVisible
 )
 {
@@ -1644,7 +1640,7 @@ SfxViewShell* SfxViewShell::GetFirst
                 if ( pFrame == pShell->GetViewFrame() )
                 {
                     // only ViewShells with a valid ViewFrame will be returned
-                    if ( ( !bOnlyVisible || pFrame->IsVisible() ) && ( !pType || pShell->IsA(*pType) ) )
+                    if ( ( !bOnlyVisible || pFrame->IsVisible() ) && ( !rConvert || rConvert(pShell) ) )
                         return pShell;
                     break;
                 }
@@ -1661,7 +1657,7 @@ SfxViewShell* SfxViewShell::GetFirst
 SfxViewShell* SfxViewShell::GetNext
 (
     const SfxViewShell& rPrev,
-    const TypeId*       pType,
+    ConvertToViewShell rConvert,
     sal_Bool                bOnlyVisible
 )
 {
@@ -1686,7 +1682,7 @@ SfxViewShell* SfxViewShell::GetNext
                 if ( pFrame == pShell->GetViewFrame() )
                 {
                     // only ViewShells with a valid ViewFrame will be returned
-                    if ( ( !bOnlyVisible || pFrame->IsVisible() ) && ( !pType || pShell->IsA(*pType) ) )
+                    if ( ( !bOnlyVisible || pFrame->IsVisible() ) && ( !rConvert || rConvert(pShell) ) )
                         return pShell;
                     break;
                 }
@@ -1699,12 +1695,13 @@ SfxViewShell* SfxViewShell::GetNext
 
 //--------------------------------------------------------------------
 
-void SfxViewShell::Notify( SfxBroadcaster& rBC,
-                            const SfxHint& rHint )
+void SfxViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if ( rHint.IsA(TYPE(SfxEventHint)) )
+    const SfxEventHint* pSfxEventHint = dynamic_cast< const SfxEventHint* >(&rHint);
+
+    if ( pSfxEventHint )
     {
-        switch ( ((SfxEventHint&)rHint).GetEventId() )
+        switch ( pSfxEventHint->GetEventId() )
         {
             case SFX_EVENT_LOADFINISHED:
             {
@@ -1718,7 +1715,7 @@ void SfxViewShell::Notify( SfxBroadcaster& rBC,
                         if ( frame == GetViewFrame() && &rBC == GetObjectShell() )
                         {
                             SfxItemSet* pSet = GetObjectShell()->GetMedium()->GetItemSet();
-                            SFX_ITEMSET_ARG( pSet, pItem, SfxUnoAnyItem, SID_VIEW_DATA, sal_False );
+                            SFX_ITEMSET_ARG( pSet, pItem, SfxUnoAnyItem, SID_VIEW_DATA );
                             if ( pItem )
                             {
                                 pImp->m_pController->restoreViewData(
@@ -1754,7 +1751,7 @@ sal_Bool SfxViewShell::ExecKey_Impl(const KeyEvent& aKey)
 
 //--------------------------------------------------------------------
 
-FASTBOOL SfxViewShell::KeyInput( const KeyEvent &rKeyEvent )
+bool SfxViewShell::KeyInput( const KeyEvent &rKeyEvent )
 
 /*  [Beschreibung]
 
@@ -1765,7 +1762,7 @@ FASTBOOL SfxViewShell::KeyInput( const KeyEvent &rKeyEvent )
 
         [R"uckgabewert]
 
-        FASTBOOL                sal_True
+        bool                true
                                                         die Taste ist konfiguriert, der betreffende
                                                         Handler wurde gerufen
 
@@ -1788,7 +1785,7 @@ bool SfxViewShell::GlobalKeyInput_Impl( const KeyEvent &rKeyEvent )
 
 //--------------------------------------------------------------------
 
-void SfxViewShell::ShowCursor( FASTBOOL /*bOn*/ )
+void SfxViewShell::ShowCursor( bool /*bOn*/ )
 
 /*  [Beschreibung]
 

@@ -117,6 +117,7 @@
 #include <fmtfollowtextflow.hxx>
 #include <fmtwrapinfluenceonobjpos.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <svx/fmmodel.hxx>
 #include <switerator.hxx>
 
 // from fefly1.cxx
@@ -754,8 +755,6 @@ sal_Int64 SAL_CALL SwXFrame::getSomething( const :: uno::Sequence< sal_Int8 >& r
     return 0;
 }
 
-TYPEINIT1(SwXFrame, SwClient);
-
 OUString SwXFrame::getImplementationName(void) throw( uno::RuntimeException )
 {
     return C2U("SwXFrame");
@@ -930,8 +929,7 @@ SdrObject *SwXFrame::GetOrCreateSdrObject( SwFlyFrmFmt *pFmt )
         // --> OD 2005-08-08 #i52858# - method name changed
         SdrModel *pDrawModel = pDoc->GetOrCreateDrawModel();
         // <--
-        SwFlyDrawContact* pContactObject
-                    = new SwFlyDrawContact( pFmt, pDrawModel );
+        SwFlyDrawContact* pContactObject = new SwFlyDrawContact( pFmt, *pDrawModel );
         pObject = pContactObject->GetMaster();
 
         const :: SwFmtSurround& rSurround = pFmt->GetSurround();
@@ -940,7 +938,7 @@ SdrObject *SwXFrame::GetOrCreateSdrObject( SwFlyFrmFmt *pFmt )
               !pFmt->GetOpaque().GetValue() ) ? pDoc->GetHellId()
                                              : pDoc->GetHeavenId() );
 
-        pDrawModel->GetPage(0)->InsertObject( pObject );
+        pDrawModel->GetPage(0)->InsertObjectToSdrObjList(*pObject);
     }
 
     return pObject;
@@ -1104,7 +1102,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                     SwFlyFrm *pFly = 0;
                     {
                         const :: SwFrmFmt* pFmtXX = pFmt;
-                        if (PTR_CAST(SwFlyFrmFmt, pFmtXX))
+                        if (dynamic_cast< const SwFlyFrmFmt* >( pFmtXX))
                             pFly = ((SwFlyFrmFmt*)pFmtXX)->GetFrm();
                     }
                     if ( pFly )
@@ -1303,7 +1301,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                     GetOrCreateSdrObject( (SwFlyFrmFmt*)pFmt );
                 SdrModel *pDrawModel = pDoc->GetDrawModel();
                 pDrawModel->GetPage(0)->
-                            SetObjectOrdNum(pObject->GetOrdNum(), nZOrder);
+                            SetNavigationPosition(pObject->GetNavigationPosition(), nZOrder);
             }
         }
         else if(RES_ANCHOR == pEntry->nWID && MID_ANCHOR_ANCHORFRAME == pEntry->nMemberId)
@@ -1382,7 +1380,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                 {
                     // see SwFEShell::SetFlyFrmAttr( SfxItemSet& rSet )
                     SwFlyFrm *pFly = 0;
-                    if (PTR_CAST(SwFlyFrmFmt, pFmt))
+                    if (dynamic_cast< SwFlyFrmFmt* >( pFmt))
                         pFly = ((SwFlyFrmFmt*)pFmt)->GetFrm();
                     if (pFly)
                     {
@@ -1652,7 +1650,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             const SdrObject* pObj = pFmt->FindRealSdrObject();
             if( pObj )
             {
-                aAny <<= (sal_Int32)pObj->GetOrdNum();
+                aAny <<= (sal_Int32)pObj->GetNavigationPosition();
             }
         }
         else if(FN_UNO_CLSID == pEntry->nWID || FN_UNO_MODEL == pEntry->nWID||
@@ -2004,9 +2002,9 @@ void SwXFrame::dispose(void) throw( uno::RuntimeException )
         // format/anchor sign, not only if the object is inserted, but also
         // if a contact object is registered, which isn't in the destruction.
         if ( pObj &&
-             ( pObj->IsInserted() ||
-               ( pObj->GetUserCall() &&
-                 !static_cast<SwContact*>(pObj->GetUserCall())->IsInDTOR() ) ) )
+             ( pObj->IsObjectInserted() ||
+               ( findConnectionToSdrObjectDirect(pObj) &&
+                 !findConnectionToSdrObjectDirect(pObj)->IsInDTOR() ) ) )
         {
             if (pFmt->GetAnchor().GetAnchorId() == FLY_AS_CHAR)
             {
@@ -3172,7 +3170,6 @@ uno::Reference<container::XNameReplace> SAL_CALL
 /******************************************************************
  *
  ******************************************************************/
-TYPEINIT1(SwXOLEListener, SwClient);
 
 SwXOLEListener::SwXOLEListener( SwFmt& rOLEFmt, uno::Reference< XModel > xOLE) :
     SwClient(&rOLEFmt),

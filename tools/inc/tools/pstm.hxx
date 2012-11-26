@@ -34,7 +34,6 @@
 #include <tools/unqidx.hxx>
 #endif
 #include <tools/ref.hxx>
-#include <tools/rtti.hxx>
 #include <tools/stream.hxx>
 
 #define ERRCODE_IO_NOFACTORY ERRCODE_IO_WRONGFORMAT
@@ -60,13 +59,11 @@ public:
 class TOOLS_DLLPUBLIC SvRttiBase : public SvRefBase
 {
 public:
-            TYPEINFO();
 };
 SV_DECL_IMPL_REF(SvRttiBase)
 
 /*************************************************************************/
 #define SV_DECL_PERSIST( Class, CLASS_ID )                          \
-    TYPEINFO();                                                     \
     static  sal_uInt16  StaticClassId() { return CLASS_ID; }            \
     static  void *  CreateInstance( SvPersistBase ** ppBase );      \
     friend SvPersistStream& operator >> ( SvPersistStream & rStm,   \
@@ -91,16 +88,14 @@ SV_DECL_IMPL_REF(SvRttiBase)
                     {                                               \
                         SvPersistBase * pObj;                       \
                         rStm >> pObj;                               \
-                        rpObj = PTR_CAST( Class, pObj );            \
+                        rpObj = dynamic_cast< Class* >( pObj );            \
                         return rStm;                                \
                     }
 
 #define SV_IMPL_PERSIST( Class )                                    \
-    TYPEINIT0( Class )                                              \
     PRV_SV_IMPL_PERSIST( Class )
 
 #define SV_IMPL_PERSIST1( Class, Super1 )                           \
-    TYPEINIT1( Class, Super1 )                                      \
     PRV_SV_IMPL_PERSIST( Class )
 
 /*************************************************************************/

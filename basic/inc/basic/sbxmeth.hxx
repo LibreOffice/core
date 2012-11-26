@@ -34,7 +34,6 @@ class SbxMethod : public SbxVariable
 
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_METHOD,1);
-    TYPEINFO();
     SbxMethod( const String& r, SbxDataType t )
     : SbxVariable( t ) { SetName( r ); }
     SbxMethod( const SbxMethod& r ) : SvRefBase( r ), SbxVariable( r ) {}

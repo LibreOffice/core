@@ -24,11 +24,19 @@
 #define _SVT_LISTENERITER_HXX
 
 #include "svl/svldllapi.h"
-#include <tools/rtti.hxx>
+#include <typeinfo>
 
 class SvtListener;
 class SvtListenerBase;
 class SvtBroadcaster;
+
+//-------------------------------------------------------------------------
+
+typedef bool (*ConvertToSvtListener)( const SvtListener* );
+template<class T> bool _IsSvtListener(const SvtListener* pListener)
+{
+    return 0 != dynamic_cast<const T*>(pListener);
+}
 
 //-------------------------------------------------------------------------
 
@@ -43,7 +51,7 @@ class SVL_DLLPUBLIC SvtListenerIter
     // at the same time.
     static SvtListenerIter *pListenerIters;
     SvtListenerIter *pNxtIter;
-    TypeId aSrchId;             // fuer First/Next - suche diesen Type
+    ConvertToSvtListener pSrchFunction;           // fuer First/Next - suche diesen Type
 
     SVL_DLLPRIVATE static void RemoveListener( SvtListenerBase& rDel,
                                                SvtListenerBase* pNext );
@@ -66,7 +74,7 @@ public:
 
     int IsChanged() const       { return pDelNext != pAkt; }
 
-    SvtListener* First( TypeId nType );
+    SvtListener* First( ConvertToSvtListener rConvert );
     SvtListener* Next();
 };
 

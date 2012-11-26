@@ -108,7 +108,7 @@ void SelectionObserver::NotifyPageEvent (const SdrPage* pSdrPage)
         if (iPage != maInsertedPages.end())
             maInsertedPages.erase(iPage);
 
-        maDeletedPages.push_back(pPage->GetPageNum());
+        maDeletedPages.push_back(pPage->GetPageNumber());
     }
 }
 

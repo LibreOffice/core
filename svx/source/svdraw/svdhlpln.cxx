@@ -26,120 +26,188 @@
 
 #include <svx/svdhlpln.hxx>
 #include <tools/color.hxx>
-
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
 #include <tools/poly.hxx>
 #include <vcl/lineinfo.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+SdrHelpLine::SdrHelpLine(SdrHelpLineKind eNewKind)
+:   maPos(),
+    meKind(eNewKind)
+{
+}
+
+SdrHelpLine::SdrHelpLine(SdrHelpLineKind eNewKind, const basegfx::B2DPoint& rNewPos)
+:   maPos(rNewPos),
+    meKind(eNewKind)
+{
+}
+
+bool SdrHelpLine::operator==(const SdrHelpLine& rCmp) const
+{
+    return GetPos() == rCmp.GetPos() && GetKind() == rCmp.GetKind();
+}
+
 Pointer SdrHelpLine::GetPointer() const
 {
-    switch (eKind) {
+    switch(GetKind())
+    {
         case SDRHELPLINE_VERTICAL  : return Pointer(POINTER_ESIZE);
         case SDRHELPLINE_HORIZONTAL: return Pointer(POINTER_SSIZE);
         default                    : return Pointer(POINTER_MOVE);
-    } // switch
+    }
 }
 
-FASTBOOL SdrHelpLine::IsHit(const Point& rPnt, sal_uInt16 nTolLog, const OutputDevice& rOut) const
+bool SdrHelpLine::IsHit(const basegfx::B2DPoint& rPnt, double fTolLog) const
 {
-    Size a1Pix(rOut.PixelToLogic(Size(1,1)));
-    FASTBOOL bXHit=rPnt.X()>=aPos.X()-nTolLog && rPnt.X()<=aPos.X()+nTolLog+a1Pix.Width();
-    FASTBOOL bYHit=rPnt.Y()>=aPos.Y()-nTolLog && rPnt.Y()<=aPos.Y()+nTolLog+a1Pix.Height();
-    switch (eKind) {
-        case SDRHELPLINE_VERTICAL  : return bXHit;
-        case SDRHELPLINE_HORIZONTAL: return bYHit;
-        case SDRHELPLINE_POINT: {
-            if (bXHit || bYHit) {
-                Size aRad(rOut.PixelToLogic(Size(SDRHELPLINE_POINT_PIXELSIZE,SDRHELPLINE_POINT_PIXELSIZE)));
-                return rPnt.X()>=aPos.X()-aRad.Width() && rPnt.X()<=aPos.X()+aRad.Width()+a1Pix.Width() &&
-                       rPnt.Y()>=aPos.Y()-aRad.Height() && rPnt.Y()<=aPos.Y()+aRad.Height()+a1Pix.Height();
-            }
-        } break;
-    } // switch
-    return sal_False;
-}
+    basegfx::B2DPoint aTestPoint(GetPos());
 
-Rectangle SdrHelpLine::GetBoundRect(const OutputDevice& rOut) const
-{
-    Rectangle aRet(aPos,aPos);
-    Point aOfs(rOut.GetMapMode().GetOrigin());
-    Size aSiz(rOut.GetOutputSize());
-    switch (eKind) {
-        case SDRHELPLINE_VERTICAL  : aRet.Top()=-aOfs.Y(); aRet.Bottom()=-aOfs.Y()+aSiz.Height(); break;
-        case SDRHELPLINE_HORIZONTAL: aRet.Left()=-aOfs.X(); aRet.Right()=-aOfs.X()+aSiz.Width();  break;
-        case SDRHELPLINE_POINT     : {
-            Size aRad(rOut.PixelToLogic(Size(SDRHELPLINE_POINT_PIXELSIZE,SDRHELPLINE_POINT_PIXELSIZE)));
-            aRet.Left()  -=aRad.Width();
-            aRet.Right() +=aRad.Width();
-            aRet.Top()   -=aRad.Height();
-            aRet.Bottom()+=aRad.Height();
-        } break;
-    } // switch
-    return aRet;
-}
-
-bool SdrHelpLine::IsVisibleEqual( const SdrHelpLine& rHelpLine, const OutputDevice& rOut ) const
-{
-    if( eKind == rHelpLine.eKind)
+    switch(GetKind())
     {
-        Point aPt1(rOut.LogicToPixel(aPos)), aPt2(rOut.LogicToPixel(rHelpLine.aPos));
-        switch( eKind )
+        case SDRHELPLINE_VERTICAL:
         {
-            case SDRHELPLINE_POINT:
-                return aPt1 == aPt2;
-            case SDRHELPLINE_VERTICAL:
-                return aPt1.X() == aPt2.X();
-            case SDRHELPLINE_HORIZONTAL:
-                return aPt1.Y() == aPt2.Y();
+            aTestPoint.setY(rPnt.getY());
+            break;
+        }
+        case SDRHELPLINE_HORIZONTAL:
+        {
+            aTestPoint.setX(rPnt.getX());
+            break;
+        }
+        default: // case SDRHELPLINE_POINT:
+        {
+            // get multiple precision for point, e.g. 3.0 gets the needed
+            // 15x15 size. All in all the HitTest should be moved to use primitives
+            fTolLog *= 5.0;
+            break;
         }
     }
-    return false;
+
+    const double fDistance(basegfx::B2DVector(aTestPoint - rPnt).getLength());
+
+    return basegfx::fTools::lessOrEqual(fDistance, fTolLog);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+SdrHelpLineList::SdrHelpLineList()
+:   maList()
+{
+}
+
+SdrHelpLineList::SdrHelpLineList(const SdrHelpLineList& rSrcList)
+:   maList()
+{
+    *this = rSrcList;
+}
+
+SdrHelpLineList::~SdrHelpLineList()
+{
+    Clear();
+}
+
+SdrHelpLine* SdrHelpLineList::GetObject(sal_uInt32 i) const
+{
+    if(i < maList.size())
+    {
+        return *(maList.begin() + i);
+    }
+    else
+    {
+        OSL_ENSURE(false, "SdrHelpLineList::GetObject access out of range (!)");
+        return 0;
+    }
 }
 
 void SdrHelpLineList::Clear()
 {
-    sal_uInt16 nAnz=GetCount();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
+    const sal_uInt32 nAnz(GetCount());
+
+    for(sal_uInt32 i(0); i < nAnz; i++)
+    {
         delete GetObject(i);
     }
-    aList.Clear();
+
+    maList.clear();
 }
 
 void SdrHelpLineList::operator=(const SdrHelpLineList& rSrcList)
 {
     Clear();
-    sal_uInt16 nAnz=rSrcList.GetCount();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
+    const sal_uInt32 nAnz(rSrcList.GetCount());
+
+    for(sal_uInt32 i(0); i < nAnz; i++)
+    {
         Insert(rSrcList[i]);
     }
 }
 
 bool SdrHelpLineList::operator==(const SdrHelpLineList& rSrcList) const
 {
-    FASTBOOL bEqual=sal_False;
-    sal_uInt16 nAnz=GetCount();
-    if (nAnz==rSrcList.GetCount()) {
-        bEqual=sal_True;
-        for (sal_uInt16 i=0; i<nAnz && bEqual; i++) {
-            if (*GetObject(i)!=*rSrcList.GetObject(i)) {
-                bEqual=sal_False;
+    bool bEqual(false);
+    const sal_uInt32 nAnz(GetCount());
+
+    if(nAnz == rSrcList.GetCount())
+    {
+        bEqual = true;
+
+        for(sal_uInt32 i(0); i < nAnz && bEqual; i++)
+        {
+            if(*GetObject(i) != *rSrcList.GetObject(i))
+            {
+                bEqual = false;
             }
         }
     }
+
     return bEqual;
 }
 
-sal_uInt16 SdrHelpLineList::HitTest(const Point& rPnt, sal_uInt16 nTolLog, const OutputDevice& rOut) const
+void SdrHelpLineList::Insert(const SdrHelpLine& rHL, sal_uInt32 nPos)
 {
-    sal_uInt16 nAnz=GetCount();
-    for (sal_uInt16 i=nAnz; i>0;) {
-        i--;
-        if (GetObject(i)->IsHit(rPnt,nTolLog,rOut)) return i;
+    if(0xffffffff == nPos)
+    {
+        maList.push_back(new SdrHelpLine(rHL));
     }
+    else
+    {
+        maList.insert(maList.begin() + nPos, new SdrHelpLine(rHL));
+    }
+}
+
+void SdrHelpLineList::Delete(sal_uInt32 nPos)
+{
+    if(nPos < maList.size())
+    {
+        SdrHelpLineContainerType::iterator a(maList.begin() + nPos);
+        delete *a;
+        maList.erase(a);
+    }
+    else
+    {
+        OSL_ENSURE(false, "SdrHelpLineList::Delete out of range (!)");
+    }
+}
+
+sal_uInt32 SdrHelpLineList::HLHitTest(const basegfx::B2DPoint& rPnt, double fTolLog) const
+{
+    const sal_uInt32 nAnz(GetCount());
+
+    for(sal_uInt32 i(nAnz); i > 0;)
+    {
+        i--;
+
+        if(GetObject(i)->IsHit(rPnt, fTolLog))
+        {
+            return i;
+        }
+    }
+
     return SDRHELPLINE_NOTFOUND;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // eof

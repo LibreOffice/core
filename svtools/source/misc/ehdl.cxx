@@ -192,7 +192,7 @@ sal_Bool SfxErrorHandler::CreateString(
     sal_uLong nErrCode = pErr->GetErrorCode() & ERRCODE_ERROR_MASK;
     if( nErrCode>=lEnd || nErrCode<=lStart )
         return sal_False;
-    MessageInfo *pMsgInfo=PTR_CAST(MessageInfo,pErr);
+    const MessageInfo* pMsgInfo = dynamic_cast< const MessageInfo* >( pErr);
     if(pMsgInfo)
     {
         if(GetMessageString(nErrCode, rStr, nFlags))
@@ -210,7 +210,7 @@ sal_Bool SfxErrorHandler::CreateString(
     }
     else if(GetErrorString(nErrCode, rStr, nFlags))
     {
-        StringErrorInfo *pStringInfo=PTR_CAST(StringErrorInfo,pErr);
+        const StringErrorInfo* pStringInfo = dynamic_cast< const StringErrorInfo* >( pErr);
         if(pStringInfo)
             for (xub_StrLen i = 0; i < rStr.Len();)
             {
@@ -222,8 +222,7 @@ sal_Bool SfxErrorHandler::CreateString(
             }
         else
         {
-            TwoStringErrorInfo * pTwoStringInfo = PTR_CAST(TwoStringErrorInfo,
-                                                           pErr);
+            const TwoStringErrorInfo* pTwoStringInfo = dynamic_cast< const TwoStringErrorInfo* >( pErr);
             if (pTwoStringInfo)
                 for (sal_uInt16 i = 0; i < rStr.Len();)
                 {

@@ -318,29 +318,6 @@ namespace drawinglayer
             }
         }
 
-        bool SdrLathePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
-        {
-            if(SdrPrimitive3D::operator==(rPrimitive))
-            {
-                const SdrLathePrimitive3D& rCompare = static_cast< const SdrLathePrimitive3D& >(rPrimitive);
-
-                return (getPolyPolygon() == rCompare.getPolyPolygon()
-                    && getHorizontalSegments() == rCompare.getHorizontalSegments()
-                    && getVerticalSegments() == rCompare.getVerticalSegments()
-                    && getDiagonal() == rCompare.getDiagonal()
-                    && getBackScale() == rCompare.getBackScale()
-                    && getRotation() == rCompare.getRotation()
-                    && getSmoothNormals() == rCompare.getSmoothNormals()
-                    && getSmoothHorizontalNormals() == rCompare.getSmoothHorizontalNormals()
-                    && getSmoothLids() == rCompare.getSmoothLids()
-                    && getCharacterMode() == rCompare.getCharacterMode()
-                    && getCloseFront() == rCompare.getCloseFront()
-                    && getCloseBack() == rCompare.getCloseBack());
-            }
-
-            return false;
-        }
-
         basegfx::B3DRange SdrLathePrimitive3D::getB3DRange(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
             // use defaut from sdrPrimitive3D which uses transformation expanded by line width/2

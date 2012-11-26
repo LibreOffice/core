@@ -51,8 +51,6 @@ using ::xmloff::token::XML_STYLE_NAME;
 const sal_Char sAPI_TokenType[] = "TokenType";
 const sal_Char sAPI_CharacterStyleName[] = "CharacterStyleName";
 
-TYPEINIT1( XMLIndexSimpleEntryContext, SvXMLImportContext);
-
 XMLIndexSimpleEntryContext::XMLIndexSimpleEntryContext(
     SvXMLImport& rImport,
     const OUString& rEntry,

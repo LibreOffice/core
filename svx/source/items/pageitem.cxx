@@ -40,15 +40,20 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-// STATIC DATA -----------------------------------------------------------
-
-TYPEINIT1_FACTORY( SvxPageItem, SfxPoolItem , new  SvxPageItem(0));
-
 /*--------------------------------------------------------------------
     Beschreibung: Konstruktor
  --------------------------------------------------------------------*/
+IMPL_POOLITEM_FACTORY(SvxPageItem)
 
-SvxPageItem::SvxPageItem( const sal_uInt16 nId ) : SfxPoolItem( nId ),
+SvxPageItem::SvxPageItem() : SfxPoolItem( 0 ),
+
+    eNumType    ( SVX_ARABIC ),
+    bLandscape  ( sal_False ),
+    eUse        ( SVX_PAGE_ALL )
+{
+}
+
+SvxPageItem::SvxPageItem( sal_uInt16 nId ) : SfxPoolItem( nId ),
 
     eNumType    ( SVX_ARABIC ),
     bLandscape  ( sal_False ),

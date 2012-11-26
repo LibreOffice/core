@@ -43,9 +43,9 @@ using namespace ::com::sun::star::drawing;
 namespace oox { namespace drawingml {
 
 CustomShapeProperties::CustomShapeProperties()
-: mbMirroredX   ( sal_False )
+: /*mbMirroredX ( sal_False )  //  TTTT: MirrorX/Y removed
 , mbMirroredY   ( sal_False )
-, mnTextRotation(0) // #119920# Add missing extra text rotation
+, */mnTextRotation(0) // #119920# Add missing extra text rotation
 {
 }
 CustomShapeProperties::~CustomShapeProperties()
@@ -97,8 +97,9 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
 
         PropertyMap aPropertyMap;
 
-        aPropertyMap[ PROP_MirroredX ] <<= Any( mbMirroredX );
-        aPropertyMap[ PROP_MirroredY ] <<= Any( mbMirroredY );
+        //  TTTT: MirrorX/Y removed
+        //aPropertyMap[ PROP_MirroredX ] <<= Any( mbMirroredX );
+        //aPropertyMap[ PROP_MirroredY ] <<= Any( mbMirroredY );
 
         if(mnTextRotation)
         {
@@ -161,8 +162,10 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         sal_uInt32 i;
         PropertyMap aPropertyMap;
         aPropertyMap[ PROP_Type ] <<= CREATE_OUSTRING( "non-primitive" );
-        aPropertyMap[ PROP_MirroredX ] <<= Any( mbMirroredX );
-        aPropertyMap[ PROP_MirroredY ] <<= Any( mbMirroredY );
+
+        //  TTTT: MirrorX/Y removed
+        //aPropertyMap[ PROP_MirroredX ] <<= Any( mbMirroredX );
+        //aPropertyMap[ PROP_MirroredY ] <<= Any( mbMirroredY );
 
         if(mnTextRotation)
         {

@@ -264,9 +264,6 @@ long ShapeTypeHandler::GetSlotId (const uno::Reference<drawing::XShape>& rxShape
         case DRAWING_CLOSED_BEZIER:
             nResourceId = STR_ObjNameSingulPATHFILL;
             break;
-        case DRAWING_CLOSED_FREEHAND:
-            nResourceId = STR_ObjNameSingulFREEFILL;
-            break;
         case DRAWING_CONNECTOR:
             nResourceId = STR_ObjNameSingulEDGE;
             break;
@@ -287,9 +284,6 @@ long ShapeTypeHandler::GetSlotId (const uno::Reference<drawing::XShape>& rxShape
             break;
         case DRAWING_OPEN_BEZIER:
             nResourceId = STR_ObjNameSingulPATHLINE;
-            break;
-        case DRAWING_OPEN_FREEHAND:
-            nResourceId = STR_ObjNameSingulFREELINE;
             break;
         case DRAWING_PAGE:
             nResourceId = STR_ObjNameSingulPAGE;

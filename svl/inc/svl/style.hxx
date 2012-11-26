@@ -104,8 +104,6 @@ protected:
     virtual void Store( SvStream& );
 
 public:
-    TYPEINFO();
-
     // returns the internal name of this style
     virtual const UniString& GetName() const;
 
@@ -279,8 +277,6 @@ class SVL_DLLPUBLIC SfxStyleSheet: public SfxStyleSheetBase,
                      public SfxListener, public SfxBroadcaster
 {
 public:
-                        TYPEINFO();
-
                         SfxStyleSheet( const UniString&, const SfxStyleSheetBasePool&, SfxStyleFamily, sal_uInt16 );
                         SfxStyleSheet( const SfxStyleSheet& );
 
@@ -327,8 +323,6 @@ class SVL_DLLPUBLIC SfxStyleSheetPoolHint : public SfxHint
     sal_uInt16 nHint;
 
 public:
-    TYPEINFO();
-
                         SfxStyleSheetPoolHint(sal_uInt16 nArgHint) :  nHint(nArgHint){}
     sal_uInt16              GetHint() const
                         { return nHint; }
@@ -342,8 +336,6 @@ class SVL_DLLPUBLIC SfxStyleSheetHint: public SfxHint
     sal_uInt16              nHint;
 
 public:
-                        TYPEINFO();
-
                         SfxStyleSheetHint( sal_uInt16 );
                         SfxStyleSheetHint( sal_uInt16, SfxStyleSheetBase& );
     SfxStyleSheetBase*  GetStyleSheet() const
@@ -357,14 +349,12 @@ class SVL_DLLPUBLIC SfxStyleSheetHintExtended: public SfxStyleSheetHint
     String              aName;
 
 public:
-                        TYPEINFO();
-
                         SfxStyleSheetHintExtended(
                             sal_uInt16, const String& rOld );
                         SfxStyleSheetHintExtended(
                             sal_uInt16, const String& rOld,
                             SfxStyleSheetBase& );
-    const String&       GetOldName() { return aName; }
+    const String&       GetOldName() const { return aName; }
 };
 
 class SVL_DLLPUBLIC SfxUnoStyleSheet : public ::cppu::ImplInheritanceHelper2< SfxStyleSheet, ::com::sun::star::style::XStyle, ::com::sun::star::lang::XUnoTunnel >

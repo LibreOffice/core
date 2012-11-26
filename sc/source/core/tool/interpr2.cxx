@@ -2100,9 +2100,10 @@ ScDdeLink* lcl_GetDdeLink( sfx2::LinkManager* pLinkMgr,
     for (sal_uInt16 i=0; i<nCount; i++ )
     {
         ::sfx2::SvBaseLink* pBase = *pLinkMgr->GetLinks()[i];
-        if (pBase->ISA(ScDdeLink))
+        ScDdeLink* pLink = dynamic_cast< ScDdeLink* >(pBase);
+
+        if (pLink)
         {
-            ScDdeLink* pLink = (ScDdeLink*)pBase;
             if ( pLink->GetAppl() == rA &&
                  pLink->GetTopic() == rT &&
                  pLink->GetItem() == rI &&

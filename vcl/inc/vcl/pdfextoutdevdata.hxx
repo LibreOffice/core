@@ -30,7 +30,6 @@
 #include <vcl/extoutdevdata.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/mapmod.hxx>
-#include <tools/rtti.hxx>
 #include <vector>
 #include <deque>
 
@@ -98,8 +97,6 @@ class VCL_DLLPUBLIC PDFExtOutDevData : public ExtOutDevData
     std::vector< PDFExtOutDevBookmarkEntry > maBookmarks;
 
 public :
-
-    TYPEINFO();
     PDFExtOutDevData( const OutputDevice& rOutDev );
     virtual ~PDFExtOutDevData();
 

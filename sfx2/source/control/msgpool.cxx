@@ -54,10 +54,10 @@ struct SfxSIDRegistration_Impl
 struct SfxSlotType_Impl
 {
     sal_uInt16  nId;
-    TypeId  nType;
+    const std::type_info&  rType;
 
-    SfxSlotType_Impl( sal_uInt16 nTheId, TypeId nTheType ):
-        nId(nTheId), nType(nTheType)
+    SfxSlotType_Impl( sal_uInt16 nTheId, const std::type_info& rTheType ):
+        nId(nTheId), rType(rTheType)
     {}
 };
 
@@ -170,10 +170,10 @@ void SfxSlotPool::RegisterInterface( SfxInterface& rInterface )
 
 //====================================================================
 
-TypeId SfxSlotPool::GetSlotType( sal_uInt16 nId ) const
+const std::type_info& SfxSlotPool::GetSlotType( sal_uInt16 nId ) const
 {
     const SfxSlot* pSlot = (const_cast <SfxSlotPool*> (this))->GetSlot( nId );
-    return pSlot ? pSlot->GetType()->Type() : 0;
+    return pSlot ? pSlot->GetType()->Type() : typeid(void);
 /*
     for ( sal_uInt16 nPos = 0; nPos < _pTypes->Count(); ++nPos )
     {

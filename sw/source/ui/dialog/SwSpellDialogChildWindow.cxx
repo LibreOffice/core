@@ -54,7 +54,8 @@
 #include <unotextrange.hxx>
 #include <dialog.hrc>
 #include <cmdid.h>
-
+#include <svx/svdlegacy.hxx>
+#include <svx/fmmodel.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -148,9 +149,8 @@ void lcl_LeaveDrawText(SwWrtShell& rSh)
     if(rSh.GetDrawView())
     {
         rSh.GetDrawView()->SdrEndTextEdit( sal_True );
-        Point aPt(LONG_MIN, LONG_MIN);
         //go out of the frame
-        rSh.SelectObj(aPt, SW_LEAVE_FRAME);
+        rSh.SelectObj(basegfx::B2DPoint(LONG_MIN, LONG_MIN), SW_LEAVE_FRAME);
         rSh.EnterStdMode();
         rSh.GetView().AttrChangedNotify(&rSh);
     }
@@ -271,7 +271,7 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence(bool bRecheck)
             {
                 SdrView* pSdrView = pWrtShell->GetDrawView();
                 m_pSpellState->m_SpellStartPosition = SPELL_START_DRAWTEXT;
-                m_pSpellState->m_pStartDrawing = pSdrView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+                m_pSpellState->m_pStartDrawing = pSdrView->getSelectedIfSingle();
                 OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
                 // start checking at the top of the drawing object
                 pOLV->SetSelection( ESelection() );
@@ -688,11 +688,14 @@ SwWrtShell* SwSpellDialogChildWindow::GetWrtShell_Impl()
         sal_uInt16 nShellIdx = 0;
         SfxShell* pShell;
         while(0 != (pShell = pDispatch->GetShell(nShellIdx++)))
-            if(pShell->ISA(SwView))
             {
-                pView = static_cast<SwView* >(pShell);
+            pView = dynamic_cast< SwView* >(pShell);
+
+            if(pView)
+            {
                 break;
             }
+    }
     }
     return pView ? pView->GetWrtShellPtr(): 0;
 }
@@ -743,7 +746,7 @@ bool SwSpellDialogChildWindow::MakeTextSelection_Impl(SwWrtShell& rShell, ShellM
             else if ( rShell.HasSelection() || rView.IsDrawMode() )
             {
                 SdrView *pSdrView = rShell.GetDrawView();
-                if(pSdrView && pSdrView->AreObjectsMarked() &&
+                if(pSdrView && pSdrView->areSdrObjectsSelected() &&
                     pSdrView->GetHdlList().GetFocusHdl())
                 {
                     ((SdrHdlList&)pSdrView->GetHdlList()).ResetFocusHdl();
@@ -751,9 +754,8 @@ bool SwSpellDialogChildWindow::MakeTextSelection_Impl(SwWrtShell& rShell, ShellM
                 else
                 {
                     rView.LeaveDrawCreate();
-                    Point aPt(LONG_MIN, LONG_MIN);
                     //go out of the frame
-                    rShell.SelectObj(aPt, SW_LEAVE_FRAME);
+                    rShell.SelectObj(basegfx::B2DPoint(LONG_MIN, LONG_MIN), SW_LEAVE_FRAME);
                     SfxBindings& rBind = rView.GetViewFrame()->GetBindings();
                     rBind.Invalidate( SID_ATTR_SIZE );
                     rShell.EnterStdMode();
@@ -777,15 +779,10 @@ bool SwSpellDialogChildWindow::FindNextDrawTextError_Impl(SwWrtShell& rSh)
         return bNextDoc;
     SwView& rView = rSh.GetView();
     SwDoc* pDoc = rView.GetDocShell()->GetDoc();
-    const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
+
     //start at the current draw object - if there is any selected
-    SdrTextObj* pCurrentTextObj = 0;
-    if ( rMarkList.GetMarkCount() == 1 )
-    {
-        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-        if( pObj && pObj->ISA(SdrTextObj) )
-            pCurrentTextObj = static_cast<SdrTextObj*>(pObj);
-    }
+    SdrTextObj* pCurrentTextObj = dynamic_cast< SdrTextObj* >(pDrView->getSelectedIfSingle());
+
     //at first fill the list of drawing objects
     if(!m_pSpellState->m_bTextObjectsCollected )
     {
@@ -819,7 +816,7 @@ bool SwSpellDialogChildWindow::FindNextDrawTextError_Impl(SwWrtShell& rSh)
                     aTmpOutliner.SetRefDevice( pDoc->getPrinter( false ) );
                     MapMode aMapMode (MAP_TWIP);
                     aTmpOutliner.SetRefMapMode(aMapMode);
-                    aTmpOutliner.SetPaperSize( pTextObj->GetLogicRect().GetSize() );
+                    aTmpOutliner.SetPaperSize( sdr::legacy::GetLogicRect(*pTextObj).GetSize() );
                     aTmpOutliner.SetSpeller( xSpell );
 
                     OutlinerView* pOutlView = new OutlinerView( &aTmpOutliner, &(rView.GetEditWin()) );
@@ -841,11 +838,10 @@ bool SwSpellDialogChildWindow::FindNextDrawTextError_Impl(SwWrtShell& rSh)
                     if(pCurrentTextObj)
                         pDrView->SdrEndTextEdit( sal_True );
                     //and the found one should be activated
-                    rSh.MakeVisible(pTextObj->GetLogicRect());
+                    rSh.MakeVisible(sdr::legacy::GetLogicRect(*pTextObj));
                     Point aTmp( 0,0 );
                     rSh.SelectObj( aTmp, 0, pTextObj );
-                    SdrPageView* pPV = pDrView->GetSdrPageView();
-                    rView.BeginTextEdit( pTextObj, pPV, &rView.GetEditWin(), sal_False, sal_True );
+                    rView.BeginTextEdit( pTextObj, &rView.GetEditWin(), sal_False, sal_True );
                     rView.AttrChangedNotify(&rSh);
                     bNextDoc = true;
                 }

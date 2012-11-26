@@ -25,7 +25,6 @@
 #include "precompiled_sd.hxx"
 
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-
 #include "DrawViewShell.hxx"
 #include <vcl/msgbox.hxx>
 #include <svl/urlbmk.hxx>
@@ -33,27 +32,18 @@
 #include <svx/svdundo.hxx>
 #include <svx/fmglob.hxx>
 #include <editeng/eeitem.hxx>
-#ifndef _FLDITEM_HXX
 #include <editeng/flditem.hxx>
-#endif
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svx/ruler.hxx>
-#ifndef _GLOBL3D_HXX
 #include <svx/globl3d.hxx>
-#endif
 #include <editeng/outliner.hxx>
-#ifndef _SFX_CLIENTSH_HXX
 #include <sfx2/ipclient.hxx>
-#endif
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdopath.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <editeng/editview.hxx>
 #include <vcl/cursor.hxx>
-
 
 #include "app.hrc"
 #include "glob.hrc"
@@ -75,8 +65,7 @@
 #include "drawview.hxx"
 #include <svx/bmpmask.hxx>
 #include "LayerTabBar.hxx"
-
-// #97016# IV
+#include <svx/svdlegacy.hxx>
 #include <svx/svditer.hxx>
 
 namespace sd {
@@ -123,7 +112,7 @@ void DrawViewShell::DeleteActualPage()
 
 void DrawViewShell::DeleteActualLayer()
 {
-    SdrLayerAdmin& rAdmin = GetDoc()->GetLayerAdmin();
+    SdrLayerAdmin& rAdmin = GetDoc()->GetModelLayerAdmin();
     const String&  rName  = GetLayerTabControl()->GetPageText(GetLayerTabControl()->GetCurPageId());
     String         aString(SdResId(STR_ASK_DELETE_LAYER));
 
@@ -134,7 +123,7 @@ void DrawViewShell::DeleteActualLayer()
 
     if (QueryBox(GetActiveWindow(), WB_YES_NO, aString).Execute() == RET_YES)
     {
-        const SdrLayer* pLayer = rAdmin.GetLayer(rName, sal_False);
+        const SdrLayer* pLayer = rAdmin.GetLayer(rName, false);
         mpDrawView->DeleteLayer( pLayer->GetName() );
 
         // damit TabBar und Window neu gezeichnet werden;
@@ -154,9 +143,9 @@ void DrawViewShell::DeleteActualLayer()
 |*
 \************************************************************************/
 
-sal_Bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
+bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if ( !IsInputLocked() || ( rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE ) )
     {
@@ -167,28 +156,23 @@ sal_Bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
         {
             // this should be used for cursor travelling.
             SdPage* pActualPage = GetActualPage();
-            const SdrMarkList& rMarkList = GetView()->GetMarkedObjectList();
             SdrTextObj* pCandidate = 0L;
+            SdrObject* pSelected = GetView()->getSelectedIfSingle();
 
-            if(pActualPage && 1 == rMarkList.GetMarkCount())
+            if(pActualPage && pSelected)
             {
-                SdrMark* pMark = rMarkList.GetMark(0);
-
-                // remember which object was the text in edit mode
-                SdrObject* pOldObj = pMark->GetMarkedSdrObj();
-
                 // end text edit now
                 GetView()->SdrEndTextEdit();
 
-                // look for a new candidate, a successor of pOldObj
+                // look for a new candidate, a successor of pSelected
                 SdrObjListIter aIter(*pActualPage, IM_DEEPNOGROUPS);
-                sal_Bool bDidVisitOldObject(sal_False);
+                bool bDidVisitOldObject(false);
 
                 while(aIter.IsMore() && !pCandidate)
                 {
-                    SdrObject* pObj = aIter.Next();
+                    SdrTextObj* pObj = dynamic_cast< SdrTextObj* >(aIter.Next());
 
-                    if(pObj && pObj->ISA(SdrTextObj))
+                    if(pObj)
                     {
                         sal_uInt32 nInv(pObj->GetObjInventor());
                         sal_uInt16 nKnd(pObj->GetObjIdentifier());
@@ -197,12 +181,12 @@ sal_Bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
                             (OBJ_TITLETEXT == nKnd || OBJ_OUTLINETEXT == nKnd || OBJ_TEXT == nKnd)
                             && bDidVisitOldObject)
                         {
-                            pCandidate = (SdrTextObj*)pObj;
+                            pCandidate = pObj;
                         }
 
-                        if(pObj == pOldObj)
+                        if(pObj == pSelected)
                         {
-                            bDidVisitOldObject = sal_True;
+                            bDidVisitOldObject = true;
                         }
                     }
                 }
@@ -211,8 +195,8 @@ sal_Bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
             if(pCandidate)
             {
                 // set the new candidate to text edit mode
-                GetView()->UnMarkAll();
-                GetView()->MarkObj(pCandidate, GetView()->GetSdrPageView());
+                GetView()->UnmarkAllObj();
+                GetView()->MarkObj(*pCandidate);
 
                 GetViewFrame()->GetDispatcher()->Execute(
                     SID_ATTR_CHAR, SFX_CALLMODE_ASYNCHRON);
@@ -245,18 +229,19 @@ void DrawViewShell::StartRulerDrag (
 {
     GetActiveWindow()->CaptureMouse();
 
-    Point aWPos = GetActiveWindow()->PixelToLogic(GetActiveWindow()->GetPointerPosPixel());
+    const basegfx::B2DPoint aWPos(GetActiveWindow()->GetInverseViewTransformation() *
+        basegfx::B2DPoint(GetActiveWindow()->GetPointerPosPixel().X(), GetActiveWindow()->GetPointerPosPixel().Y()));
 
     if ( rRuler.GetExtraRect().IsInside(rMEvt.GetPosPixel()) )
     {
         mpDrawView->BegSetPageOrg(aWPos);
-        mbIsRulerDrag = sal_True;
+        mbIsRulerDrag = true;
     }
     else
     {
         // #i34536# if no guide-lines are visible yet, that show them
         if( ! mpDrawView->IsHlplVisible())
-            mpDrawView->SetHlplVisible( sal_True );
+            mpDrawView->SetHlplVisible( true );
 
         SdrHelpLineKind eKind;
 
@@ -268,7 +253,7 @@ void DrawViewShell::StartRulerDrag (
             eKind = SDRHELPLINE_VERTICAL;
 
         mpDrawView->BegDragHelpLine(aWPos, eKind);
-        mbIsRulerDrag = sal_True;
+        mbIsRulerDrag = true;
     }
 }
 
@@ -289,7 +274,7 @@ void DrawViewShell::MouseButtonDown(const MouseEvent& rMEvt,
     // would work on deleted objects or the context menu has no parent anymore)
     // See #126086# and #128122#
     SfxInPlaceClient* pIPClient = GetViewShell()->GetIPClient();
-    sal_Bool bIsOleActive = ( pIPClient && pIPClient->IsObjectInPlaceActive() );
+    bool bIsOleActive = ( pIPClient && pIPClient->IsObjectInPlaceActive() );
 
     if ( bIsOleActive && PopupMenu::IsInExecute() )
         return;
@@ -320,7 +305,7 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
 
             if ( !aOutputArea.IsInside(rMEvt.GetPosPixel()) )
             {
-                sal_Bool bInsideOtherWindow = sal_False;
+                bool bInsideOtherWindow = false;
 
                 if (mpContentWindow.get() != NULL)
                 {
@@ -329,7 +314,7 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
 
                     Point aPos = mpContentWindow->GetPointerPosPixel();
                     if ( aOutputArea.IsInside(aPos) )
-                        bInsideOtherWindow = sal_True;
+                        bInsideOtherWindow = true;
                 }
 
                 if (! GetActiveWindow()->HasFocus ())
@@ -372,34 +357,35 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
         ViewShell::MouseMove(rMEvt, pWin);
 
         if( !mbMousePosFreezed )
-            maMousePos = rMEvt.GetPosPixel();
-
-        Rectangle aRect;
+        {
+            maMousePos = basegfx::B2DPoint(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
+        }
 
         if ( mbIsRulerDrag )
         {
-            Point aLogPos = GetActiveWindow()->PixelToLogic(maMousePos);
-            mpDrawView->MovAction(aLogPos);
+            const basegfx::B2DPoint aLogicPos(GetActiveWindow()->GetInverseViewTransformation() * maMousePos);
+            mpDrawView->MovAction(aLogicPos);
         }
+
+        basegfx::B2DRange aRange;
 
         if ( mpDrawView->IsAction() )
         {
-            mpDrawView->TakeActionRect(aRect);
-            aRect = GetActiveWindow()->LogicToPixel(aRect);
+            aRange = GetActiveWindow()->GetViewTransformation() * mpDrawView->TakeActionRange();
         }
         else
         {
-            aRect = Rectangle(maMousePos, maMousePos);
+            aRange = basegfx::B2DRange(maMousePos);
         }
 
-        ShowMousePosInfo(aRect, pWin);
+        ShowMousePosInfo(aRange, pWin);
 
         if ( mbPipette && GetViewFrame()->HasChildWindow( SvxBmpMaskChildWindow::GetChildWindowId() ) )
         {
-            const long      nStartX = maMousePos.X() - PIPETTE_RANGE;
-            const long      nEndX = maMousePos.X() + PIPETTE_RANGE;
-            const long      nStartY = maMousePos.Y() - PIPETTE_RANGE;
-            const long      nEndY = maMousePos.Y() + PIPETTE_RANGE;
+            const long      nStartX = basegfx::fround(maMousePos.getX()) - PIPETTE_RANGE;
+            const long      nEndX = basegfx::fround(maMousePos.getX()) + PIPETTE_RANGE;
+            const long      nStartY = basegfx::fround(maMousePos.getY()) - PIPETTE_RANGE;
+            const long      nEndY = basegfx::fround(maMousePos.getY()) + PIPETTE_RANGE;
             long            nRed = 0;
             long            nGreen = 0;
             long            nBlue = 0;
@@ -436,7 +422,7 @@ void DrawViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
 {
     if ( !IsInputLocked() )
     {
-        FASTBOOL bIsSetPageOrg = mpDrawView->IsSetPageOrg();
+        bool bIsSetPageOrg = mpDrawView->IsSetPageOrg();
 
         if (mbIsRulerDrag)
         {
@@ -452,9 +438,14 @@ void DrawViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
             else if (rMEvt.IsLeft() && bIsSetPageOrg)
             {
                 mpDrawView->BrkAction();
-                SdPage* pPage = (SdPage*) mpDrawView->GetSdrPageView()->GetPage();
-                Point aOrg(pPage->GetLftBorder(), pPage->GetUppBorder());
-                mpDrawView->GetSdrPageView()->SetPageOrigin(aOrg);
+
+                if(mpDrawView->GetSdrPageView())
+                {
+                    SdPage& rPage = (SdPage&) mpDrawView->GetSdrPageView()->getSdrPageFromSdrPageView();
+                    const basegfx::B2DPoint aOrg(rPage.GetLeftPageBorder(), rPage.GetTopPageBorder());
+                    mpDrawView->GetSdrPageView()->SetPageOrigin(aOrg);
+                }
+
                 GetViewFrame()->GetBindings().Invalidate(SID_RULER_NULL_OFFSET);
             }
             else
@@ -463,7 +454,7 @@ void DrawViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
             }
 
             GetActiveWindow()->ReleaseMouse();
-            mbIsRulerDrag = sal_False;
+            mbIsRulerDrag = false;
         }
         else
             ViewShell::MouseButtonUp(rMEvt, pWin);
@@ -484,7 +475,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
     // windows and code on the stack.
     // For more information, see #126086# and #128122#
     SfxInPlaceClient* pIPClient = GetViewShell()->GetIPClient();
-    sal_Bool bIsOleActive = ( pIPClient && pIPClient->IsObjectInPlaceActive() );
+    bool bIsOleActive = ( pIPClient && pIPClient->IsObjectInPlaceActive() );
     if ( bIsOleActive && ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU ))
     {
         // Deactivate OLE object
@@ -506,13 +497,15 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 
             if( aDataHelper.GetTransferable().is() )
             {
-                Point       aPos;
+                basegfx::B2DPoint aPos(0.0, 0.0);
                 sal_Int8    nDnDAction = DND_ACTION_COPY;
 
                 if( GetActiveWindow() )
-                    aPos = GetActiveWindow()->PixelToLogic( rCEvt.GetMousePosPixel() );
+                {
+                    aPos = GetActiveWindow()->GetInverseViewTransformation() * basegfx::B2DPoint(rCEvt.GetMousePosPixel().X(), rCEvt.GetMousePosPixel().Y());
+                }
 
-                if( !mpDrawView->InsertData( aDataHelper, aPos, nDnDAction, sal_False ) )
+                if( !mpDrawView->InsertData( aDataHelper, aPos, nDnDAction, false ) )
                 {
                     INetBookmark    aINetBookmark( aEmptyStr, aEmptyStr );
 
@@ -523,7 +516,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                         ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ) &&
                           aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
                     {
-                        InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), aEmptyStr, NULL );
+                        InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), aEmptyStr, 0);
                     }
                 }
             }
@@ -532,17 +525,15 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                  pWin != NULL && !mpDrawView->IsAction() && !SD_MOD()->GetWaterCan() )
         {
             sal_uInt16 nSdResId = 0;          // ResourceID fuer Popup-Menue
-            sal_Bool bGraphicShell = this->ISA(GraphicViewShell);
+            bool bGraphicShell = dynamic_cast< GraphicViewShell* >(this);
 
             // Ist ein Fangobjekt unter dem Mauszeiger?
-            SdrPageView* pPV;
-            Point   aMPos = pWin->PixelToLogic( maMousePos );
-            sal_uInt16  nHitLog = (sal_uInt16) GetActiveWindow()->PixelToLogic(
-                Size(FuPoor::HITPIX, 0 ) ).Width();
-            sal_uInt16  nHelpLine;
+            basegfx::B2DPoint aMPos(pWin->GetInverseViewTransformation() * maMousePos);
+            const double fHitLog(basegfx::B2DVector(GetActiveWindow()->GetInverseViewTransformation() * basegfx::B2DVector(FuPoor::HITPIX, 0.0)).getLength());
+            sal_uInt32 nHelpLine;
             // fuer Klebepunkt
             SdrObject*  pObj = NULL;
-            sal_uInt16      nPickId = 0;
+            sal_uInt32 nPickId = 0;
             // fuer Feldbefehl
             OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
             const SvxFieldItem* pFldItem = NULL;
@@ -551,23 +542,26 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                 //pFldItem = pOLV->GetFieldUnderMousePointer();
 
             // Hilfslinie
-            if ( mpDrawView->PickHelpLine( aMPos, nHitLog, *GetActiveWindow(), nHelpLine, pPV) )
+            if ( mpDrawView->PickHelpLine( aMPos, fHitLog, nHelpLine) )
             {
-                nSdResId = RID_DRAW_SNAPOBJECT_POPUP;
-                ShowSnapLineContextMenu(*pPV, nHelpLine, rCEvt.GetMousePosPixel());
-                return;
+                if(mpDrawView->GetSdrPageView())
+                {
+                    nSdResId = RID_DRAW_SNAPOBJECT_POPUP;
+                    ShowSnapLineContextMenu(*mpDrawView->GetSdrPageView(), nHelpLine, rCEvt.GetMousePosPixel());
+                    return;
+                }
             }
             // Klebepunkt unter dem Mauszeiger markiert?
-            else if( mpDrawView->PickGluePoint( aMPos, pObj, nPickId, pPV ) &&
-                     mpDrawView->IsGluePointMarked( pObj, nPickId ) )
+            else if( mpDrawView->PickGluePoint( aMPos, pObj, nPickId ) && mpDrawView->IsGluePointMarked( *pObj, nPickId ) )
             {
                 nSdResId = RID_DRAW_GLUEPOINT_POPUP;
             }
             // Feldbefehl ?
-            else if( pFldItem && (pFldItem->GetField()->ISA( SvxDateField ) ||
-                                 pFldItem->GetField()->ISA( SvxExtTimeField ) ||
-                                 pFldItem->GetField()->ISA( SvxExtFileField ) ||
-                                 pFldItem->GetField()->ISA( SvxAuthorField ) ) )
+            else if( pFldItem && (
+                dynamic_cast< const SvxDateField* >(pFldItem->GetField()) ||
+                dynamic_cast< const SvxExtTimeField* >(pFldItem->GetField()) ||
+                dynamic_cast< const SvxExtFileField* >(pFldItem->GetField()) ||
+                dynamic_cast< const SvxAuthorField* >(pFldItem->GetField()) ) )
             {
                 LanguageType eLanguage( LANGUAGE_SYSTEM );
 
@@ -581,10 +575,15 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                 SdFieldPopup aFieldPopup( pFldItem->GetField(), eLanguage );
 
                 if ( rCEvt.IsMouseEvent() )
-                    aMPos = rCEvt.GetMousePosPixel();
+                {
+                    aMPos = basegfx::B2DPoint(rCEvt.GetMousePosPixel().X(), rCEvt.GetMousePosPixel().Y());
+                }
                 else
-                    aMPos = Point( 20, 20 );
-                aFieldPopup.Execute( pWin, aMPos );
+                {
+                    aMPos = basegfx::B2DPoint( 20.0, 20.0 );
+                }
+
+                aFieldPopup.Execute( pWin, Point(basegfx::fround(aMPos.getX()), basegfx::fround(aMPos.getY())) );
 
                 SvxFieldData* pField = aFieldPopup.GetField();
                 if( pField )
@@ -593,10 +592,10 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                     //pOLV->DeleteSelected(); <-- fehlt leider !
                     // Feld selektieren, so dass es beim Insert geloescht wird
                     ESelection aSel = pOLV->GetSelection();
-                    sal_Bool bSel = sal_True;
+                    bool bSel = true;
                     if( aSel.nStartPos == aSel.nEndPos )
                     {
-                        bSel = sal_False;
+                        bSel = false;
                         aSel.nEndPos++;
                     }
                     pOLV->SetSelection( aSel );
@@ -614,10 +613,10 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             else
             {
                 // ist etwas selektiert?
-                if (mpDrawView->AreObjectsMarked() &&
-                    mpDrawView->GetMarkedObjectList().GetMarkCount() == 1 )
+                pObj = mpDrawView->getSelectedIfSingle();
+
+                if(pObj)
                 {
-                    pObj = mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
                     if( HasCurrentFunction(SID_BEZIER_EDIT) && (dynamic_cast< SdrPathObj * >( pObj ) != 0 ) )
                     {
                         nSdResId = RID_BEZIER_POPUP;
@@ -683,21 +682,46 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                                                     RID_DRAW_TEXTOBJ_POPUP;
                                         break;
 
-                                    case OBJ_PATHLINE:
-                                    case OBJ_PLIN:
-                                        nSdResId = bGraphicShell ? RID_GRAPHIC_POLYLINEOBJ_POPUP :
-                                                                    RID_DRAW_POLYLINEOBJ_POPUP;
-                                        break;
+                                    case OBJ_POLY:
+                                    {
+                                        SdrPathObj* pSdrPathObj = dynamic_cast< SdrPathObj* >(pObj);
 
-                                    case OBJ_FREELINE:
+                                        if(pSdrPathObj)
+                                        {
+                                            switch(pSdrPathObj->getSdrPathObjType())
+                                            {
+                                                case PathType_Line:
+                                                {
+                                                    nSdResId = bGraphicShell ? RID_GRAPHIC_LINEOBJ_POPUP :
+                                                                                RID_DRAW_LINEOBJ_POPUP;
+                                                    break;
+                                                }
+                                                case PathType_OpenPolygon:
+                                                case PathType_OpenBezier:
+                                                {
+                                                    nSdResId = bGraphicShell ? RID_GRAPHIC_POLYLINEOBJ_POPUP :
+                                                                                RID_DRAW_POLYLINEOBJ_POPUP;
+                                                    break;
+                                                }
+                                                case PathType_ClosedPolygon:
+                                                case PathType_ClosedBezier:
+                                                {
+                                                    nSdResId = bGraphicShell ? RID_GRAPHIC_GEOMOBJ_POPUP :
+                                                                                RID_DRAW_GEOMOBJ_POPUP;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            OSL_ENSURE(false, "OOps, SdrObjKind and dynamic_cast do not fit (!)");
+                                        }
+                                        break;
+                                    }
+
                                     case OBJ_EDGE:      // Connector
                                         nSdResId = bGraphicShell ? RID_GRAPHIC_EDGEOBJ_POPUP :
                                                                     RID_DRAW_EDGEOBJ_POPUP;
-                                        break;
-
-                                    case OBJ_LINE:
-                                        nSdResId = bGraphicShell ? RID_GRAPHIC_LINEOBJ_POPUP :
-                                                                    RID_DRAW_LINEOBJ_POPUP;
                                         break;
 
                                     case OBJ_MEASURE:
@@ -707,12 +731,6 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 
                                     case OBJ_RECT:
                                     case OBJ_CIRC:
-                                    case OBJ_FREEFILL:
-                                    case OBJ_PATHFILL:
-                                    case OBJ_POLY:
-                                    case OBJ_SECT:
-                                    case OBJ_CARC:
-                                    case OBJ_CCUT:
                                         nSdResId = bGraphicShell ? RID_GRAPHIC_GEOMOBJ_POPUP :
                                                                     RID_DRAW_GEOMOBJ_POPUP;
                                         break;
@@ -746,9 +764,9 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                         break;
                                 }
                             }
-                            else if( nInv == E3dInventor /*&& nId == E3D_POLYSCENE_ID*/)
+                            else if( nInv == E3dInventor )
                             {
-                                if( nId == E3D_POLYSCENE_ID || nId == E3D_SCENE_ID )
+                                if( nId == E3D_SCENE_ID )
                                 {
                                     if( !mpDrawView->IsGroupEntered() )
                                         nSdResId = bGraphicShell ? RID_GRAPHIC_3DSCENE_POPUP :
@@ -768,18 +786,15 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                         }
                     }
                 }
-
-                // Mehrfachselektion
-                else if (mpDrawView->AreObjectsMarked() &&
-                    mpDrawView->GetMarkedObjectList().GetMarkCount() > 1 )
+                else if (mpDrawView->getSelectedSdrObjectCount() > 1 )
                 {
+                    // Mehrfachselektion
                     nSdResId = bGraphicShell ? RID_GRAPHIC_MULTISELECTION_POPUP :
                                                 RID_DRAW_MULTISELECTION_POPUP;
                 }
-
-                // nichts selektiert
                 else
                 {
+                    // nichts selektiert
                     nSdResId = bGraphicShell ? RID_GRAPHIC_NOSEL_POPUP :
                                                 RID_DRAW_NOSEL_POPUP;
                 }
@@ -790,37 +805,54 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                 GetActiveWindow()->ReleaseMouse();
 
                 if(rCEvt.IsMouseEvent())
+                {
                     GetViewFrame()->GetDispatcher()->ExecutePopup(SdResId(nSdResId));
+                }
                 else
                 {
                     //#106326# don't open contextmenu at mouse position if not opened via mouse
 
                     //middle of the window if nothing is marked
-                    Point aMenuPos(GetActiveWindow()->GetSizePixel().Width()/2
-                            ,GetActiveWindow()->GetSizePixel().Height()/2);
+                    basegfx::B2DPoint aMenuPos(
+                        GetActiveWindow()->GetSizePixel().Width()/2,
+                        GetActiveWindow()->GetSizePixel().Height()/2);
 
                     //middle of the bounding rect if something is marked
-                    if( mpDrawView->AreObjectsMarked() && mpDrawView->GetMarkedObjectList().GetMarkCount() >= 1 )
+                    if( mpDrawView->areSdrObjectsSelected() )
                     {
-                        Rectangle aMarkRect;
-                        mpDrawView->GetMarkedObjectList().TakeBoundRect(NULL,aMarkRect);
-                        aMenuPos = GetActiveWindow()->LogicToPixel( aMarkRect.Center() );
+                        const SdrObjectVector aSelection(mpDrawView->getSelectedSdrObjectVectorFromSdrMarkView());
+                        const basegfx::B2DRange aMarkRange(sdr::legacy::GetAllObjBoundRange(aSelection));
+
+                        aMenuPos = GetActiveWindow()->GetViewTransformation() * aMarkRange.getCenter();
 
                         //move the point into the visible window area
-                        if( aMenuPos.X() < 0 )
-                            aMenuPos.X() = 0;
-                        if( aMenuPos.Y() < 0 )
-                            aMenuPos.Y() = 0;
-                        if( aMenuPos.X() > GetActiveWindow()->GetSizePixel().Width() )
-                            aMenuPos.X() = GetActiveWindow()->GetSizePixel().Width();
-                        if( aMenuPos.Y() > GetActiveWindow()->GetSizePixel().Height() )
-                            aMenuPos.Y() = GetActiveWindow()->GetSizePixel().Height();
+                        if( aMenuPos.getX() < 0 )
+                        {
+                            aMenuPos.setX(0.0);
+                        }
+
+                        if( aMenuPos.getY() < 0 )
+                        {
+                            aMenuPos.setY(0.0);
+                        }
+
+                        if( aMenuPos.getX() > GetActiveWindow()->GetSizePixel().Width() )
+                        {
+                            aMenuPos.setX(GetActiveWindow()->GetSizePixel().Width());
+                        }
+
+                        if( aMenuPos.getY() > GetActiveWindow()->GetSizePixel().Height() )
+                        {
+                            aMenuPos.setY(GetActiveWindow()->GetSizePixel().Height());
+                        }
                     }
 
                     //open context menu at that point
-                    GetViewFrame()->GetDispatcher()->ExecutePopup(SdResId(nSdResId),GetActiveWindow(),&aMenuPos);
+                    const Point aOldMenuPos(basegfx::fround(aMenuPos.getX()), basegfx::fround(aMenuPos.getY()));
+                    GetViewFrame()->GetDispatcher()->ExecutePopup(SdResId(nSdResId),GetActiveWindow(),&aOldMenuPos);
                 }
-                mbMousePosFreezed = sal_False;
+
+                mbMousePosFreezed = false;
             }
         }
         else
@@ -836,7 +868,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 |*
 \************************************************************************/
 
-void DrawViewShell::ShowMousePosInfo(const Rectangle& rRect,
+void DrawViewShell::ShowMousePosInfo(const basegfx::B2DRange& rRange,
     ::sd::Window* pWin)
 {
     if (mbHasRulers && pWin )
@@ -866,15 +898,15 @@ void DrawViewShell::ShowMousePosInfo(const Rectangle& rRect,
         }
 
         nCnt = 1;
-        pHLines[0].nPos = rRect.Left() - nHOffs;
-        pVLines[0].nPos = rRect.Top()  - nVOffs;
+        pHLines[0].nPos = basegfx::fround(rRange.getMinX()) - nHOffs;
+        pVLines[0].nPos = basegfx::fround(rRange.getMinY()) - nVOffs;
         pHLines[0].nStyle = 0;
         pVLines[0].nStyle = 0;
 
-        if ( rRect.Right() != rRect.Left() || rRect.Bottom() != rRect.Top() )
+        if(!basegfx::fTools::equal(rRange.getMaxX(), rRange.getMinX()) || !basegfx::fTools::equal(rRange.getMaxY(), rRange.getMinY()))
         {
-            pHLines[1].nPos = rRect.Right()  - nHOffs;
-            pVLines[1].nPos = rRect.Bottom() - nVOffs;
+            pHLines[1].nPos = basegfx::fround(rRange.getMaxX()) - nHOffs;
+            pVLines[1].nPos = basegfx::fround(rRange.getMaxY()) - nVOffs;
             pHLines[1].nStyle = 0;
             pVLines[1].nStyle = 0;
             nCnt++;
@@ -936,7 +968,7 @@ void DrawViewShell::UnlockInput()
 
 void DrawViewShell::ShowSnapLineContextMenu (
     SdrPageView& rPageView,
-    const sal_uInt16 nSnapLineIndex,
+    const sal_uInt32 nSnapLineIndex,
     const Point& rMouseLocation)
 {
     const SdrHelpLine& rHelpLine (rPageView.GetHelpLines()[nSnapLineIndex]);
@@ -963,7 +995,7 @@ void DrawViewShell::ShowSnapLineContextMenu (
             String(SdResId(STR_POPUP_DELETE_SNAPLINE)));
     }
 
-    pMenu->RemoveDisabledEntries(sal_False, sal_False);
+    pMenu->RemoveDisabledEntries(false, false);
 
     const sal_uInt16 nResult = pMenu->Execute(
         GetActiveWindow(),

@@ -313,7 +313,7 @@ uno::Reference< util::XCloneable > SAL_CALL OShape::createClone(  ) throw (uno::
             SdrObject* pObject = pShape->GetSdrObject();
             if ( pObject )
             {
-                SdrObject* pClone = pObject->Clone();
+                SdrObject* pClone = pObject->CloneSdrObject();
                 if ( pClone )
                 {
                     xSet.set(pClone->getUnoShape(),uno::UNO_QUERY_THROW );

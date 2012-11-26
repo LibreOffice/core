@@ -34,7 +34,8 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
 #include <svx/sdrpagewindow.hxx>
-#include "svx/sdrpaintwindow.hxx"
+#include <svx/sdrpaintwindow.hxx>
+#include <svx/svdlegacy.hxx>
 
 /** === begin UNO includes === **/
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -377,7 +378,8 @@ namespace sdr { namespace contact {
 
         // determine the scale from the current view transformation, and the normalization matrix
         ::basegfx::B2DHomMatrix aObtainResolutionDependentScale( _rViewTransformation * _rZoomLevelNormalization );
-        ::basegfx::B2DVector aScale, aTranslate;
+        ::basegfx::B2DVector aScale;
+        ::basegfx::B2DPoint aTranslate;
         double fRotate, fShearX;
         aObtainResolutionDependentScale.decompose( aScale, aTranslate, fRotate, fShearX );
         _rControl.setZoom( aScale );
@@ -922,8 +924,6 @@ namespace sdr { namespace contact {
             getTransformation( m_pVOCImpl->getViewContact(), m_aTransformation );
         }
 
-        virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
-
         // declare unique ID for this primitive class
         DeclPrimitrive2DIDBlock()
 
@@ -948,7 +948,6 @@ namespace sdr { namespace contact {
     //====================================================================
     //= ViewObjectContactOfUnoControl_Impl
     //====================================================================
-    DBG_NAME( ViewObjectContactOfUnoControl_Impl )
     //--------------------------------------------------------------------
     ViewObjectContactOfUnoControl_Impl::ViewObjectContactOfUnoControl_Impl( ViewObjectContactOfUnoControl* _pAntiImpl )
         :m_pAntiImpl( _pAntiImpl )
@@ -959,14 +958,14 @@ namespace sdr { namespace contact {
         ,m_eControlDesignMode( eUnknown )
         ,m_aZoomLevelNormalization()
     {
-        DBG_CTOR( ViewObjectContactOfUnoControl_Impl, NULL );
         DBG_ASSERT( m_pAntiImpl, "ViewObjectContactOfUnoControl_Impl::ViewObjectContactOfUnoControl_Impl: invalid AntiImpl!" );
 
         const OutputDevice& rPageViewDevice( impl_getOutputDevice_throw() );
         m_aZoomLevelNormalization = rPageViewDevice.GetInverseViewTransformation();
 
     #if OSL_DEBUG_LEVEL > 1
-        ::basegfx::B2DVector aScale, aTranslate;
+        ::basegfx::B2DVector aScale;
+        ::basegfx::B2DPoint aTranslate;
         double fRotate, fShearX;
         m_aZoomLevelNormalization.decompose( aScale, aTranslate, fRotate, fShearX );
     #endif
@@ -990,8 +989,6 @@ namespace sdr { namespace contact {
             acquire();
             dispose();
         }
-
-        DBG_DTOR( ViewObjectContactOfUnoControl_Impl, NULL );
     }
 
     //--------------------------------------------------------------------
@@ -1052,7 +1049,7 @@ namespace sdr { namespace contact {
             SdrUnoObj* pUnoObject( NULL );
             if ( getUnoObject( pUnoObject ) )
             {
-                UnoControlContactHelper::adjustControlGeometry_throw( m_aControl, pUnoObject->GetLogicRect(), _rViewTransformation, m_aZoomLevelNormalization );
+                UnoControlContactHelper::adjustControlGeometry_throw( m_aControl, sdr::legacy::GetLogicRect(*pUnoObject), _rViewTransformation, m_aZoomLevelNormalization );
             }
             else
                 OSL_ENSURE( false, "ViewObjectContactOfUnoControl_Impl::positionAndZoomControl: no SdrUnoObj!" );
@@ -1234,7 +1231,7 @@ namespace sdr { namespace contact {
             // proper geometry
             UnoControlContactHelper::adjustControlGeometry_throw(
                 _out_rControl,
-                _rUnoObject.GetLogicRect(),
+                sdr::legacy::GetLogicRect(_rUnoObject),
                 _rInitialViewTransformation,
                 _rInitialZoomNormalization
             );
@@ -1611,58 +1608,23 @@ namespace sdr { namespace contact {
     //= LazyControlCreationPrimitive2D
     //====================================================================
     //--------------------------------------------------------------------
-    bool LazyControlCreationPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-    {
-        if ( !BufferedDecompositionPrimitive2D::operator==( rPrimitive ) )
-            return false;
-
-        const LazyControlCreationPrimitive2D* pRHS = dynamic_cast< const LazyControlCreationPrimitive2D* >( &rPrimitive );
-        if ( !pRHS )
-            return false;
-
-        if ( m_pVOCImpl != pRHS->m_pVOCImpl )
-            return false;
-
-        if ( m_aTransformation != pRHS->m_aTransformation )
-            return false;
-
-        return true;
-    }
-
-    //--------------------------------------------------------------------
     void LazyControlCreationPrimitive2D::getTransformation( const ViewContactOfUnoControl& _rVOC, ::basegfx::B2DHomMatrix& _out_Transformation )
     {
-        // Do use model data directly to create the correct geometry. Do NOT
-        // use getBoundRect()/getSnapRect() here; tese will use the sequence of
-        // primitives themselves in the long run.
-        const Rectangle aSdrGeoData( _rVOC.GetSdrUnoObj().GetGeoRect() );
-        const basegfx::B2DRange aRange(
-            aSdrGeoData.Left(),
-            aSdrGeoData.Top(),
-            aSdrGeoData.Right(),
-            aSdrGeoData.Bottom()
-        );
-
-        _out_Transformation.identity();
-        _out_Transformation.set( 0, 0, aRange.getWidth() );
-        _out_Transformation.set( 1, 1, aRange.getHeight() );
-        _out_Transformation.set( 0, 2, aRange.getMinX() );
-        _out_Transformation.set( 1, 2, aRange.getMinY() );
+        _out_Transformation = _rVOC.GetSdrUnoObj().getSdrObjectTransformation();
     }
 
     //--------------------------------------------------------------------
     ::basegfx::B2DRange LazyControlCreationPrimitive2D::getB2DRange( const ::drawinglayer::geometry::ViewInformation2D& /*rViewInformation*/ ) const
     {
-        ::basegfx::B2DRange aRange( 0.0, 0.0, 1.0, 1.0 );
-        aRange.transform( m_aTransformation );
-        return aRange;
+        return m_aTransformation * basegfx::B2DRange::getUnitB2DRange();
     }
 
     //--------------------------------------------------------------------
     ::drawinglayer::primitive2d::Primitive2DSequence LazyControlCreationPrimitive2D::get2DDecomposition( const ::drawinglayer::geometry::ViewInformation2D& _rViewInformation ) const
     {
     #if OSL_DEBUG_LEVEL > 1
-        ::basegfx::B2DVector aScale, aTranslate;
+        ::basegfx::B2DVector aScale;
+        ::basegfx::B2DPoint aTranslate;
         double fRotate, fShearX;
         _rViewInformation.getObjectToViewTransformation().decompose( aScale, aTranslate, fRotate, fShearX );
     #endif
@@ -1675,7 +1637,8 @@ namespace sdr { namespace contact {
     ::drawinglayer::primitive2d::Primitive2DSequence LazyControlCreationPrimitive2D::create2DDecomposition( const ::drawinglayer::geometry::ViewInformation2D& _rViewInformation ) const
     {
     #if OSL_DEBUG_LEVEL > 1
-        ::basegfx::B2DVector aScale, aTranslate;
+        ::basegfx::B2DVector aScale;
+        ::basegfx::B2DPoint aTranslate;
         double fRotate, fShearX;
         _rViewInformation.getObjectToViewTransformation().decompose( aScale, aTranslate, fRotate, fShearX );
     #endif
@@ -1718,13 +1681,11 @@ namespace sdr { namespace contact {
     //====================================================================
     //= ViewObjectContactOfUnoControl
     //====================================================================
-    DBG_NAME( ViewObjectContactOfUnoControl )
     //--------------------------------------------------------------------
     ViewObjectContactOfUnoControl::ViewObjectContactOfUnoControl( ObjectContact& _rObjectContact, ViewContactOfUnoControl& _rViewContact )
         :ViewObjectContactOfSdrObj( _rObjectContact, _rViewContact )
         ,m_pImpl( new ViewObjectContactOfUnoControl_Impl( this ) )
     {
-        DBG_CTOR( ViewObjectContactOfUnoControl, NULL );
     }
 
     //--------------------------------------------------------------------
@@ -1732,8 +1693,6 @@ namespace sdr { namespace contact {
     {
         m_pImpl->dispose();
         m_pImpl = NULL;
-
-        DBG_DTOR( ViewObjectContactOfUnoControl, NULL );
     }
 
     //--------------------------------------------------------------------
@@ -1842,7 +1801,8 @@ namespace sdr { namespace contact {
         {
             const ::drawinglayer::geometry::ViewInformation2D& rViewInformation( GetObjectContact().getViewInformation2D() );
         #if OSL_DEBUG_LEVEL > 1
-            ::basegfx::B2DVector aScale, aTranslate;
+            ::basegfx::B2DVector aScale;
+            ::basegfx::B2DPoint aTranslate;
             double fRotate, fShearX;
             rViewInformation.getObjectToViewTransformation().decompose( aScale, aTranslate, fRotate, fShearX );
         #endif
@@ -1871,12 +1831,12 @@ namespace sdr { namespace contact {
         {
             // #i93180# if layer visibility has changed and control is in live mode, it is necessary
             // to correct visibility to make those control vanish on SdrObject LayerID changes
-            const SdrPageView* pSdrPageView = GetObjectContact().TryToGetSdrPageView();
+            const SdrView* pSdrView = GetObjectContact().TryToGetSdrView();
 
-            if(pSdrPageView)
+            if(pSdrView && pSdrView->GetSdrPageView())
             {
                 const SdrObject& rObject = getSdrObject();
-                const bool bIsLayerVisible( rObject.IsVisible() && pSdrPageView->GetVisibleLayers().IsSet(rObject.GetLayer()));
+                const bool bIsLayerVisible( rObject.IsVisible() && pSdrView->GetSdrPageView()->GetVisibleLayers().IsSet(rObject.GetLayer()));
 
                 if(rControl.isVisible() != bIsLayerVisible)
                 {
@@ -1894,26 +1854,22 @@ namespace sdr { namespace contact {
 
         // #i93318# flush Primitive2DSequence to force recreation with updated XControlModel
         // since e.g. background color has changed and existing decompositions are possibly no
-        // longer valid. Unfortunately this is not detected from ControlPrimitive2D::operator==
-        // since it only has a uno reference to the XControlModel
+        // longer valid
         flushPrimitive2DSequence();
     }
 
     //====================================================================
     //= UnoControlPrintOrPreviewContact
     //====================================================================
-    DBG_NAME( UnoControlPrintOrPreviewContact )
     //--------------------------------------------------------------------
     UnoControlPrintOrPreviewContact::UnoControlPrintOrPreviewContact( ObjectContactOfPageView& _rObjectContact, ViewContactOfUnoControl& _rViewContact )
         :ViewObjectContactOfUnoControl( _rObjectContact, _rViewContact )
     {
-        DBG_CTOR( UnoControlPrintOrPreviewContact, NULL );
     }
 
     //--------------------------------------------------------------------
     UnoControlPrintOrPreviewContact::~UnoControlPrintOrPreviewContact()
     {
-        DBG_DTOR( UnoControlPrintOrPreviewContact, NULL );
     }
 
     //--------------------------------------------------------------------

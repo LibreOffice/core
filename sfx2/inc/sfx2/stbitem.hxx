@@ -27,6 +27,7 @@
 #include "sfx2/dllapi.h"
 #include <svl/poolitem.hxx>
 #include <svtools/statusbarcontroller.hxx>
+#include <typeinfo>
 
 //------------------------------------------------------------------
 
@@ -45,13 +46,13 @@ typedef SfxStatusBarControl* (*SfxStatusBarControlCtor)( sal_uInt16 nSlotId, sal
 struct SfxStbCtrlFactory
 {
     SfxStatusBarControlCtor pCtor;
-    TypeId                  nTypeId;
+    const std::type_info&   rTypeInfo;
     sal_uInt16                  nSlotId;
 
     SfxStbCtrlFactory( SfxStatusBarControlCtor pTheCtor,
-            TypeId nTheTypeId, sal_uInt16 nTheSlotId ):
+            const std::type_info& rTheType, sal_uInt16 nTheSlotId ):
         pCtor(pTheCtor),
-        nTypeId(nTheTypeId),
+        rTypeInfo(rTheType),
         nSlotId(nTheSlotId)
     {}
 };
@@ -133,12 +134,12 @@ public:
         static SfxStatusBarControl* CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar &rStb ); \
         static void RegisterControl(sal_uInt16 nSlotId = 0, SfxModule *pMod=NULL)
 
-#define SFX_IMPL_STATUSBAR_CONTROL(Class, nItemClass) \
+#define SFX_IMPL_STATUSBAR_CONTROL(Class, ItemClass) \
         SfxStatusBarControl* __EXPORT Class::CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar &rStb ) \
                { return new Class( nSlotId, nId, rStb ); } \
         void Class::RegisterControl(sal_uInt16 nSlotId, SfxModule *pMod) \
                { SfxStatusBarControl::RegisterStatusBarControl( pMod, new SfxStbCtrlFactory( \
-                    Class::CreateImpl, TYPE(nItemClass), nSlotId ) ); }
+                    Class::CreateImpl, typeid(ItemClass), nSlotId ) ); }
 
 
 #endif

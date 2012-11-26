@@ -62,10 +62,10 @@ public:
     void    SetInEditMode( SdrObject* pObj = NULL, const Point* pMousePixel = NULL,
                             sal_Bool bCursorToEnd = sal_False, const KeyEvent* pInitialKey = NULL );
     void    StopEditMode(sal_Bool bTextDirection = sal_False);
-    void    StopDragMode(SdrObject* pObject);
+    void    StopDragMode(const SdrObject& rObject);
 
     // #98185# Create default drawing objects via keyboard
-    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
+    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const basegfx::B2DRange& rRange);
 
 private:
     SdrOutliner* MakeOutliner();

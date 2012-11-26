@@ -83,6 +83,7 @@
 #include <pagedesc.hxx>
 #include <mvsave.hxx>
 #include <vcl/virdev.hxx>
+#include <svx/svdlegacy.hxx>
 
 
 using namespace ::com::sun::star;
@@ -193,13 +194,14 @@ sal_Bool SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
     else if ( IsObjSelected() )
     {
         SwPosition aPos( aSttIdx, SwIndex( pTxtNd, 0 ));
-        const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
-        for ( sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i )
+        const SdrObjectVector aSelection(Imp()->GetDrawView()->getSelectedSdrObjectVectorFromSdrMarkView());
+
+        for ( sal_uInt32 i(0); i < aSelection.size(); ++i )
         {
-            SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
+            SdrObject *pObj = aSelection[i];
 
             if( Imp()->GetDrawView()->IsGroupEntered() ||
-                ( !pObj->GetUserCall() && pObj->GetUpGroup()) )
+                ( !findConnectionToSdrObjectDirect(pObj) && pObj->GetParentSdrObject()) )
             {
                 SfxItemSet aSet( pClpDoc->GetAttrPool(), aFrmFmtSetRange );
 
@@ -215,7 +217,7 @@ sal_Bool SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
             }
             else
             {
-                SwDrawContact *pContact = (SwDrawContact*)GetUserCall( pObj );
+                SwDrawContact *pContact = (SwDrawContact*)findConnectionToSdrObject( pObj );
                 SwFrmFmt *pFmt = pContact->GetFmt();
                 SwFmtAnchor aAnchor( pFmt->GetAnchor() );
                 if ((FLY_AT_PARA == aAnchor.GetAnchorId()) ||
@@ -297,28 +299,28 @@ sal_Bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
 {
     sal_Bool bRet = sal_True;
 
+    if(Imp()->GetDrawView()->areSdrObjectsSelected())
+    {
     //Die Liste muss kopiert werden, weil unten die neuen Objekte
     //selektiert werden.
-    const SdrMarkList aMrkList( Imp()->GetDrawView()->GetMarkedObjectList() );
-    sal_uLong nMarkCount = aMrkList.GetMarkCount();
+        const SdrObjectVector aSelection(Imp()->GetDrawView()->getSelectedSdrObjectVectorFromSdrMarkView());
+
     if( !pDestShell->Imp()->GetDrawView() )
         // sollte mal eine erzeugt werden
         pDestShell->MakeDrawView();
     else if( bSelectInsert )
         pDestShell->Imp()->GetDrawView()->UnmarkAll();
 
-    SdrPageView *pDestPgView = pDestShell->Imp()->GetPageView(),
-                *pSrcPgView = Imp()->GetPageView();
     SwDrawView *pDestDrwView = pDestShell->Imp()->GetDrawView(),
                 *pSrcDrwView = Imp()->GetDrawView();
     SwDoc* pDestDoc = pDestShell->GetDoc();
-
     Size aSiz( rInsPt.X() - rSttPt.X(), rInsPt.Y() - rSttPt.Y() );
-    for( sal_uInt16 i = 0; i < nMarkCount; ++i )
-    {
-        SdrObject *pObj = aMrkList.GetMark( i )->GetMarkedSdrObj();
 
-        SwDrawContact *pContact = (SwDrawContact*)GetUserCall( pObj );
+        for( sal_uInt32 i(0); i < aSelection.size(); ++i )
+    {
+            SdrObject *pObj = aSelection[i];
+
+            SwDrawContact *pContact = (SwDrawContact*)findConnectionToSdrObject( pObj );
         SwFrmFmt *pFmt = pContact->GetFmt();
         const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
 
@@ -332,10 +334,9 @@ sal_Bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                 (FLY_AS_CHAR != rAnchor.GetAnchorId()) )
 
             {
-                SdrObject* pNew = pDestDoc->CloneSdrObj( *pObj, bIsMove &&
-                                        GetDoc() == pDestDoc, sal_False );
-                pNew->NbcMove( aSiz );
-                pDestDrwView->InsertObjectAtView( pNew, *pDestPgView );
+                    SdrObject* pNew = pDestDoc->CloneSdrObj( *pObj, bIsMove && GetDoc() == pDestDoc, false);
+                    sdr::legacy::transformSdrObject(*pNew, basegfx::tools::createTranslateB2DHomMatrix(aSiz.Width(), aSiz.Height()));
+                    pDestDrwView->InsertObjectAtView( *pNew );
                 bInsWithFmt = sal_False;
             }
         }
@@ -356,7 +357,7 @@ sal_Bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                     //uebergebenen DokumentPosition
                     SwPosition aPos( *GetCrsr()->GetPoint() );
                     Point aPt( rInsPt );
-                    aPt -= rSttPt - pObj->GetSnapRect().TopLeft();
+                        aPt -= rSttPt - sdr::legacy::GetSnapRect(*pObj).TopLeft();
                     SwCrsrMoveState aState( MV_SETONLYTEXT );
                     GetLayout()->GetCrsrOfst( &aPos, aPt, &aState );
                     const SwNode *pNd;
@@ -390,7 +391,7 @@ sal_Bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
             if( bRet )
             {
                 if( pSrcDrwView->IsGroupEntered() ||
-                    ( !pObj->GetUserCall() && pObj->GetUpGroup()) )
+                        ( !findConnectionToSdrObjectDirect(pObj) && pObj->GetParentSdrObject()) )
                 {
                     SfxItemSet aSet( pDestDoc->GetAttrPool(),aFrmFmtSetRange);
                     aSet.Put( aAnchor );
@@ -410,21 +411,21 @@ sal_Bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                     {
                         Point aPos( rInsPt );
                         aPos -= aNewAnch;
-                        aPos -= rSttPt - pObj->GetSnapRect().TopLeft();
+                            aPos -= rSttPt - sdr::legacy::GetSnapRect(*pObj).TopLeft();
                         // OD 2004-04-05 #i26791# - change attributes instead of
                         // direct positioning
                         pFmt->SetFmtAttr( SwFmtHoriOrient( aPos.X(), text::HoriOrientation::NONE, text::RelOrientation::FRAME ) );
                         pFmt->SetFmtAttr( SwFmtVertOrient( aPos.Y(), text::VertOrientation::NONE, text::RelOrientation::FRAME ) );
                         // --> OD 2005-04-15 #i47455# - notify draw frame format
                         // that position attributes are already set.
-                        if ( pFmt->ISA(SwDrawFrmFmt) )
+                            if ( dynamic_cast< SwDrawFrmFmt* >(pFmt) )
                         {
                             static_cast<SwDrawFrmFmt*>(pFmt)->PosAttrSet();
                         }
                         // <--
                     }
                     if( bSelectInsert )
-                        pDestDrwView->MarkObj( pNew, pDestPgView );
+                            pDestDrwView->MarkObj( *pNew );
                 }
             }
         }
@@ -434,26 +435,30 @@ sal_Bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
     {
         if( pDestShell == this )
         {
-            const SdrMarkList aList( pSrcDrwView->GetMarkedObjectList() );
+                const SdrObjectVector aList(pSrcDrwView->getSelectedSdrObjectVectorFromSdrMarkView());
+                sal_uInt32 i(0);
+
             pSrcDrwView->UnmarkAll();
 
-            sal_uLong nMrkCnt = aMrkList.GetMarkCount();
-            sal_uInt16 i;
-            for ( i = 0; i < nMrkCnt; ++i )
+                for ( i = 0; i < aSelection.size(); ++i )
             {
-                SdrObject *pObj = aMrkList.GetMark( i )->GetMarkedSdrObj();
-                pSrcDrwView->MarkObj( pObj, pSrcPgView );
+                    SdrObject *pObj = aSelection[i];
+                    pSrcDrwView->MarkObj( *pObj );
             }
+
             DelSelectedObj();
-            nMrkCnt = aList.GetMarkCount();
-            for ( i = 0; i < nMrkCnt; ++i )
+
+                for ( i = 0; i < aList.size(); ++i )
             {
-                SdrObject *pObj = aList.GetMark( i )->GetMarkedSdrObj();
-                pSrcDrwView->MarkObj( pObj, pSrcPgView );
+                    SdrObject *pObj = aList[i];
+                    pSrcDrwView->MarkObj( *pObj );
             }
         }
         else
+            {
             DelSelectedObj();
+    }
+        }
     }
 
     return bRet;
@@ -580,9 +585,6 @@ sal_Bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
                     pDestShell->SelectFlyFrm( *pFlyFrm, sal_True );
                 }
             }
-
-            if( this != pDestShell && !pDestShell->HasShFcs() )
-                pDestShell->Imp()->GetDrawView()->hideMarkHandles();
         }
     }
     else if ( IsObjSelected() )
@@ -933,34 +935,41 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
                         // Therefore we calculate the absolute position here
                         // and after the insert the anchor of the object
                         // is set to the anchor of the group object.
-                        Rectangle aSnapRect = pNew->GetSnapRect();
-                        if( pNew->GetAnchorPos().X() || pNew->GetAnchorPos().Y() )
+                        Rectangle aSnapRect(sdr::legacy::GetSnapRect(*pNew));
+                        if( !pNew->GetAnchorPos().equalZero() )
                         {
-                            const Point aPoint( 0, 0 );
                             // OD 2004-04-05 #i26791# - direct drawing object
                             // positioning for group members
-                            pNew->NbcSetAnchorPos( aPoint );
-                            pNew->NbcSetSnapRect( aSnapRect );
+                            pNew->SetAnchorPos( basegfx::B2DPoint() );
+                            sdr::legacy::SetSnapRect(*pNew, aSnapRect);
                         }
 
-                        Imp()->GetDrawView()->InsertObjectAtView( pNew, *Imp()->GetPageView() );
+                        Imp()->GetDrawView()->InsertObjectAtView( *pNew );
 
-                        Point aGrpAnchor( 0, 0 );
-                        SdrObjList* pList = pNew->GetObjList();
+                        basegfx::B2DPoint aGrpAnchor( 0.0, 0.0 );
+                        SdrObjList* pList = pNew->getParentOfSdrObject();
                         if ( pList )
                         {
-                            SdrObject* pOwner = pList->GetOwnerObj();
+                            SdrObject* pOwner = pList->getSdrObjectFromSdrObjList();
                             if ( pOwner )
                             {
-                                SdrObjGroup* pThisGroup = PTR_CAST(SdrObjGroup, pOwner);
+                                SdrObjGroup* pThisGroup = dynamic_cast< SdrObjGroup* >( pOwner);
+
+                                if(pThisGroup)
+                                {
                                 aGrpAnchor = pThisGroup->GetAnchorPos();
+                            }
+                                else
+                                {
+                                    OSL_ENSURE(false, "Not only SdrObjGroup can be parent of SdrObject(s)");
+                                }
                             }
                         }
 
                         // OD 2004-04-05 #i26791# - direct drawing object
                         // positioning for group members
-                        pNew->NbcSetAnchorPos( aGrpAnchor );
-                        pNew->SetSnapRect( aSnapRect );
+                        pNew->SetAnchorPos(aGrpAnchor);
+                        sdr::legacy::SetSnapRect(*pNew, aSnapRect);
 
                         bInsWithFmt = sal_False;
                     }
@@ -1021,10 +1030,10 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
                             // <--
                             SdrObject *pObj = pNew->FindSdrObject();
                             SwDrawView  *pDV = Imp()->GetDrawView();
-                            pDV->MarkObj( pObj, pDV->GetSdrPageView() );
+                            pDV->MarkObj( *pObj );
                             // --> OD 2005-04-15 #i47455# - notify draw frame format
                             // that position attributes are already set.
-                            if ( pNew->ISA(SwDrawFrmFmt) )
+                            if ( dynamic_cast< SwDrawFrmFmt* >(pNew) )
                             {
                                 static_cast<SwDrawFrmFmt*>(pNew)->PosAttrSet();
                             }
@@ -1223,12 +1232,13 @@ sal_Bool SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_u
 sal_Bool SwFEShell::GetDrawObjGraphic( sal_uLong nFmt, Graphic& rGrf ) const
 {
     ASSERT( Imp()->HasDrawView(), "GetDrawObjGraphic without DrawView?" );
-    const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
     sal_Bool bConvert = sal_True;
-    if( rMrkList.GetMarkCount() )
+
+    if(Imp()->GetDrawView()->areSdrObjectsSelected())
     {
-        if( rMrkList.GetMarkCount() == 1 &&
-            rMrkList.GetMark( 0 )->GetMarkedSdrObj()->ISA(SwVirtFlyDrawObj) )
+        const SwVirtFlyDrawObj* pSingleSelected = dynamic_cast< SwVirtFlyDrawObj* >(Imp()->GetDrawView()->getSelectedIfSingle());
+
+        if(pSingleSelected)
         {
             // Rahmen selektiert
             if( CNT_GRF == GetCntType() )
@@ -1298,10 +1308,15 @@ sal_Bool SwFEShell::GetDrawObjGraphic( sal_uLong nFmt, Graphic& rGrf ) const
             }
         }
         else if( SOT_FORMAT_GDIMETAFILE == nFmt )
+        {
             rGrf = Imp()->GetDrawView()->GetMarkedObjMetaFile();
+        }
         else if( SOT_FORMAT_BITMAP == nFmt )
+        {
             rGrf = Imp()->GetDrawView()->GetMarkedObjBitmapEx();
+        }
     }
+
     return bConvert;
 }
 
@@ -1321,7 +1336,7 @@ void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SdrModel* _pModel )
             if( pOle2Obj )
             {
                 // found an ole2 shape
-                SdrObjList* pObjList = pOle2Obj->GetObjList();
+                SdrObjList* pObjList = pOle2Obj->getParentOfSdrObject();
 
                 // get its graphic
                 Graphic aGraphic;
@@ -1332,13 +1347,18 @@ void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SdrModel* _pModel )
                 pOle2Obj->Disconnect();
 
                 // create new graphic shape with the ole graphic and shape size
-                SdrGrafObj* pGraphicObj = new SdrGrafObj( aGraphic, pOle2Obj->GetCurrentBoundRect() );
+                SdrGrafObj* pGraphicObj = new SdrGrafObj(
+                    *_pModel,
+                    aGraphic,
+                    pOle2Obj->getSdrObjectTransformation());
+
                 // apply layer of ole2 shape at graphic shape
                 pGraphicObj->SetLayer( pOle2Obj->GetLayer() );
 
                 // replace ole2 shape with the new graphic object and delete the ol2 shape
-                SdrObject* pRemovedObject = pObjList->ReplaceObject( pGraphicObj, pOle2Obj->GetOrdNum() );
-                SdrObject::Free( pRemovedObject );
+                SdrObject* pRemovedObject = pObjList->ReplaceObjectInSdrObjList(
+                    *pGraphicObj, pOle2Obj->GetNavigationPosition() );
+                deleteSdrObjectSafeAndClearPointer( pRemovedObject );
             }
         }
     }
@@ -1367,18 +1387,17 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
     SdrView *pView = Imp()->GetDrawView();
 
     //Drop auf bestehendes Objekt: Objekt ersetzen oder neu Attributieren.
+    SdrObject* pOldObj = pView->getSelectedIfSingle();
     if( pModel->GetPageCount() > 0 &&
         1 == pModel->GetPage(0)->GetObjCount() &&
-        1 == pView->GetMarkedObjectList().GetMarkCount() )
+        pOldObj )
     {
         // OD 10.07.2003 #110742# - replace a marked 'virtual' drawing object
         // by its corresponding 'master' drawing object in the mark list.
         SwDrawView::ReplaceMarkedDrawVirtObjs( *pView );
-
         SdrObject* pClpObj = pModel->GetPage(0)->GetObj(0);
-        SdrObject* pOldObj = pView->GetMarkedObjectList().GetMark( 0 )->GetMarkedSdrObj();
 
-        if( SW_PASTESDR_SETATTR == nAction && pOldObj->ISA(SwVirtFlyDrawObj) )
+        if( SW_PASTESDR_SETATTR == nAction && dynamic_cast< SwVirtFlyDrawObj* >(pOldObj) )
             nAction = SW_PASTESDR_REPLACE;
 
         switch( nAction )
@@ -1387,7 +1406,7 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
             {
                 const SwFrmFmt* pFmt(0);
                 const SwFrm* pAnchor(0);
-                if( pOldObj->ISA(SwVirtFlyDrawObj) )
+                if( dynamic_cast< SwVirtFlyDrawObj* >(pOldObj) )
                 {
                     pFmt = FindFrmFmt( pOldObj );
 
@@ -1404,34 +1423,31 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
                     }
                 }
 
-                SdrObject* pNewObj = pClpObj->Clone();
-                Rectangle aOldObjRect( pOldObj->GetCurrentBoundRect() );
-                Size aOldObjSize( aOldObjRect.GetSize() );
-                Rectangle aNewRect( pNewObj->GetCurrentBoundRect() );
-                Size aNewSize( aNewRect.GetSize() );
+                SdrObject* pNewObj = pClpObj->CloneSdrObject(&pView->getSdrModelFromSdrView());
 
-                Fraction aScaleWidth( aOldObjSize.Width(), aNewSize.Width() );
-                Fraction aScaleHeight( aOldObjSize.Height(), aNewSize.Height());
-                pNewObj->NbcResize( aNewRect.TopLeft(), aScaleWidth, aScaleHeight);
+                // copy transformation
+                pNewObj->setSdrObjectTransformation(pOldObj->getSdrObjectTransformation());
 
-                Point aVec = aOldObjRect.TopLeft() - aNewRect.TopLeft();
-                pNewObj->NbcMove(Size(aVec.X(), aVec.Y()));
-
-                if( pNewObj->ISA( SdrUnoObj ) )
+                if( dynamic_cast< SdrUnoObj* >(pNewObj) )
+                {
                     pNewObj->SetLayer( GetDoc()->GetControlsId() );
-                else if( pOldObj->ISA( SdrUnoObj ) )
+                }
+                else if( dynamic_cast< SdrUnoObj* >(pOldObj) )
+                {
                     pNewObj->SetLayer( GetDoc()->GetHeavenId() );
+                }
                 else
+                {
                     pNewObj->SetLayer( pOldObj->GetLayer() );
+                }
 
-                if( pOldObj->ISA(SwVirtFlyDrawObj) )
+                if( dynamic_cast< SwVirtFlyDrawObj* >(pOldObj) )
                 {
                     // Attribute sichern und dam SdrObject setzen
                     SfxItemSet aFrmSet( pDoc->GetAttrPool(),
                                             RES_SURROUND, RES_ANCHOR );
                     aFrmSet.Set( pFmt->GetAttrSet() );
 
-                    Point aNullPt;
                     if( pAnchor->IsTxtFrm() && ((SwTxtFrm*)pAnchor)->IsFollow() )
                     {
                         const SwTxtFrm* pTmp = (SwTxtFrm*)pAnchor;
@@ -1441,25 +1457,21 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
                         } while( pTmp->IsFollow() );
                         pAnchor = pTmp;
                     }
-                    if( pOldObj->ISA( SdrCaptionObj ))
-                        aNullPt = ((SdrCaptionObj*)pOldObj)->GetTailPos();
-                    else
-                        aNullPt = aOldObjRect.TopLeft();
 
-                    Point aNewAnchor = pAnchor->GetFrmAnchorPos( ::HasWrap( pOldObj ) );
+                    const Point aNewAnchor = pAnchor->GetFrmAnchorPos( ::HasWrap( pOldObj ) );
                     // OD 2004-04-05 #i26791# - direct positioning of Writer
                     // fly frame object for <SwDoc::Insert(..)>
-                    pNewObj->NbcSetRelativePos( aNullPt - aNewAnchor );
-                    pNewObj->NbcSetAnchorPos( aNewAnchor );
 
-                    pOldObj->GetOrdNum();
-
+                    // #i108739#
+                    pNewObj->SetAnchorPos( basegfx::B2DPoint( aNewAnchor.X(), aNewAnchor.Y() ) );
                     DelSelectedObj();
 
                     pFmt = GetDoc()->Insert( *GetCrsr(), *pNewObj, &aFrmSet, NULL );
                 }
                 else
-                    pView->ReplaceObjectAtView( pOldObj, *Imp()->GetPageView(), pNewObj, sal_True );
+                {
+                    pView->ReplaceObjectAtView( *pOldObj, *pNewObj, true);
+                }
             }
             break;
 
@@ -1483,44 +1495,44 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
     {
         ::sw::DrawUndoGuard drawUndoGuard(GetDoc()->GetIDocumentUndoRedo());
 
-        sal_Bool bDesignMode = pView->IsDesignMode();
+        bool bDesignMode = pView->IsDesignMode();
         if( !bDesignMode )
-            pView->SetDesignMode( sal_True );
+            pView->SetDesignMode( true );
 
         // --> OD 2005-08-03 #i50824#
         // --> OD 2006-03-01 #b6382898#
         // method <lcl_RemoveOleObjsFromSdrModel> replaced by <lcl_ConvertSdrOle2ObjsToSdrGrafObjs>
         lcl_ConvertSdrOle2ObjsToSdrGrafObjs( pModel );
         // <--
-        pView->Paste( *pModel, aPos );
+        pView->Paste( *pModel, basegfx::B2DPoint(aPos.X(),aPos.Y()) );
 
-        sal_uLong nCnt = pView->GetMarkedObjectList().GetMarkCount();
-        if( nCnt )
+        if( pView->areSdrObjectsSelected() )
         {
-            const Point aNull( 0, 0 );
-            for( sal_uLong i=0; i < nCnt; ++i )
+            const SdrObjectVector aSelection(pView->getSelectedSdrObjectVectorFromSdrMarkView());
+
+            for( sal_uInt32 i=0; i < aSelection.size(); ++i )
             {
-                SdrObject *pObj = pView->GetMarkedObjectList().GetMark(i)->GetMarkedSdrObj();
-                pObj->ImpSetAnchorPos( aNull );
+                SdrObject *pObj = aSelection[i];
+                pObj->SetAnchorPos( basegfx::B2DPoint() );
             }
 
-            pView->SetCurrentObj( OBJ_GRUP, SdrInventor );
-            if ( nCnt > 1 )
+            pView->setSdrObjectCreationInfo(SdrObjectCreationInfo(OBJ_GRUP));
+
+            if ( aSelection.size() > 1 )
                 pView->GroupMarked();
-            SdrObject *pObj = pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
-            if( pObj->ISA( SdrUnoObj ) )
+            SdrObject *pObj = aSelection[0];
+            if( dynamic_cast< SdrUnoObj* >(pObj) )
             {
                 pObj->SetLayer( GetDoc()->GetControlsId() );
-                bDesignMode = sal_True;
+                bDesignMode = true;
             }
             else
                 pObj->SetLayer( GetDoc()->GetHeavenId() );
-            const Rectangle &rSnap = pObj->GetSnapRect();
-            const Size aDiff( rSnap.GetWidth()/2, rSnap.GetHeight()/2 );
-            pView->MoveMarkedObj( aDiff );
+            const basegfx::B2DRange aSnapRange(sdr::legacy::GetSnapRange(*pObj));
+            pView->MoveMarkedObj(aSnapRange.getRange() * 0.5);
             ImpEndCreate();
             if( !bDesignMode )
-                pView->SetDesignMode( sal_False );
+                pView->SetDesignMode( false );
         }
     }
     EndUndo();
@@ -1531,12 +1543,12 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
 sal_Bool SwFEShell::Paste( const Graphic &rGrf )
 {
     SET_CURR_SHELL( this );
-    SdrObject* pObj;
     SdrView *pView = Imp()->GetDrawView();
+    SdrObject* pSingleSelected = pView->getSelectedIfSingle();
 
-    sal_Bool bRet = 1 == pView->GetMarkedObjectList().GetMarkCount() &&
-        (pObj = pView->GetMarkedObjectList().GetMark( 0 )->GetMarkedSdrObj())->IsClosedObj() &&
-        !pObj->ISA( SdrOle2Obj );
+    sal_Bool bRet = pSingleSelected &&
+        pSingleSelected->IsClosedObj() &&
+        !dynamic_cast< SdrOle2Obj* >(pSingleSelected);
 
     if( bRet )
     {

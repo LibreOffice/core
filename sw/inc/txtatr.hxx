@@ -98,7 +98,6 @@ protected:
 public:
     SwTxtRuby( SwFmtRuby& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
     virtual ~SwTxtRuby();
-    TYPEINFO();
 
     virtual sal_Bool GetInfo( SfxPoolItem& rInfo ) const;
 

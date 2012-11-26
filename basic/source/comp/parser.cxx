@@ -166,7 +166,7 @@ SbiSymDef* SbiParser::CheckRTLForSym( const String& rSym, SbxDataType eType )
     SbiSymDef* pDef = NULL;
     if( pVar )
     {
-        if( pVar->IsA( TYPE(SbxMethod) ) )
+        if( dynamic_cast< SbxMethod* >(pVar) )
         {
             SbiProcDef* pProc_ = aRtlSyms.AddProc( rSym );
             pProc_->SetType( pVar->GetType() );

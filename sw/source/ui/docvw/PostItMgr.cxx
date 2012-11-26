@@ -114,7 +114,7 @@ bool comp_pos(const SwSidebarItem* a, const SwSidebarItem* b)
 //// if two notes are at the same position, sort by logical node position
 //    return (a->maLayoutInfo.mPosition.Bottom() == b->maLayoutInfo.mPosition.Bottom())
 //            ? ( ( (a->maLayoutInfo.mPosition.Left() == b->maLayoutInfo.mPosition.Left()) &&
-//                  (a->GetBroadCaster()->ISA(SwFmtFld) && b->GetBroadCaster()->ISA(SwFmtFld)) )
+//                  (dynamic_cast< SwFmtFld* >(a->GetBroadCaster()) && dynamic_cast< SwFmtFld* >(b->GetBroadCaster())) )
 //                ? *(static_cast<SwFmtFld*>(a->GetBroadCaster())->GetTxtFld()->GetStart()) <
 //                    *(static_cast<SwFmtFld*>(b->GetBroadCaster())->GetTxtFld()->GetStart())
 //                : a->maLayoutInfo.mPosition.Left() < b->maLayoutInfo.mPosition.Left() )
@@ -225,14 +225,14 @@ void SwPostItMgr::InsertItem(SfxBroadcaster* pItem, bool bCheckExistance, bool b
         }
     }
     mbLayout = bFocus;
-    if (pItem->ISA(SwFmtFld))
+    if (dynamic_cast< SwFmtFld* >(pItem))
         mvPostItFlds.push_back(new SwAnnotationItem(static_cast<SwFmtFld*>(pItem), true, bFocus) );
     /*
     else
-    if (pItem->ISA(SwRedline))
+    if (dynamic_cast< SwRedline* >(pItem))
         mvPostItFlds.push_back(new SwRedCommentItem( static_cast<SwRedline*>(pItem), true, bFocus)) ;
     */
-    DBG_ASSERT(pItem->ISA(SwFmtFld) /*|| pItem->ISA(SwRedline)*/,"Mgr::InsertItem: seems like new stuff was added");
+    DBG_ASSERT(dynamic_cast< SwFmtFld* >(pItem) /*|| dynamic_cast< SwRedline* >(pItem)*/,"Mgr::InsertItem: seems like new stuff was added");
     StartListening(*pItem);
 }
 
@@ -258,9 +258,11 @@ void SwPostItMgr::RemoveItem( SfxBroadcaster* pBroadcast )
 
 void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if ( rHint.IsA(TYPE(SfxEventHint) ) )
+    const SfxEventHint* pSfxEventHint = dynamic_cast< const SfxEventHint* >(&rHint);
+
+    if ( pSfxEventHint )
     {
-        sal_uInt32 nId = ((SfxEventHint&)rHint).GetEventId();
+        sal_uInt32 nId = pSfxEventHint->GetEventId();
         if ( nId == SW_EVENT_LAYOUT_FINISHED )
         {
             if ( !mbWaitingForCalcRects && !mvPostItFlds.empty())
@@ -270,9 +272,13 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
         }
     }
-    else if ( rHint.IsA(TYPE(SfxSimpleHint) ) )
+    else
     {
-        sal_uInt32 nId = ((SfxSimpleHint&)rHint).GetId();
+        const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+        if ( pSfxSimpleHint )
+        {
+            sal_uInt32 nId = pSfxSimpleHint->GetId();
         switch ( nId )
         {
             case SFX_HINT_MODECHANGED:
@@ -344,11 +350,14 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         }
     }
     */
-    else if ( rHint.IsA(TYPE(SwFmtFldHint) ) )
+        else
     {
-        const SwFmtFldHint& rFmtHint = static_cast<const SwFmtFldHint&>(rHint);
-        SwFmtFld* pFld = const_cast <SwFmtFld*>( rFmtHint.GetField() );
-        switch ( rFmtHint.Which() )
+            const SwFmtFldHint* pSwFmtFldHint = dynamic_cast< const SwFmtFldHint* >(&rHint);
+
+            if ( pSwFmtFldHint )
+            {
+                SwFmtFld* pFld = const_cast <SwFmtFld*>( pSwFmtFldHint->GetField() );
+                switch ( pSwFmtFldHint->Which() )
         {
             case SWFMTFLD_INSERTED :
             {
@@ -386,7 +395,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
             case SWFMTFLD_FOCUS:
             {
-                       if (rFmtHint.GetView()== mpView)
+                               if (pSwFmtFldHint->GetView()== mpView)
                     Focus(rBC);
                 break;
             }
@@ -432,6 +441,8 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 }
                 break;
             }
+        }
+    }
         }
     }
 }

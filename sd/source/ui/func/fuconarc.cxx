@@ -33,9 +33,8 @@
 #include <sfx2/dispatch.hxx>
 #include <svx/svdobj.hxx>
 #include <sfx2/viewfrm.hxx>
-
-
 #include <svx/svxids.hrc>
+#include <svx/svdlegacy.hxx>
 #include <math.h>
 
 #include "app.hrc"
@@ -47,12 +46,7 @@
 #include "ViewShellBase.hxx"
 #include "ToolBarManager.hxx"
 
-// #97016#
-#include <svx/sxciaitm.hxx>
-
 namespace sd {
-
-TYPEINIT1( FuConstructArc, FuConstruct );
 
 /*************************************************************************
 |*
@@ -91,27 +85,35 @@ void FuConstructArc::DoExecute( SfxRequest& rReq )
 
     if (pArgs)
     {
-        SFX_REQUEST_ARG (rReq, pCenterX, SfxUInt32Item, ID_VAL_CENTER_X, sal_False);
-        SFX_REQUEST_ARG (rReq, pCenterY, SfxUInt32Item, ID_VAL_CENTER_Y, sal_False);
-        SFX_REQUEST_ARG (rReq, pAxisX, SfxUInt32Item, ID_VAL_AXIS_X, sal_False);
-        SFX_REQUEST_ARG (rReq, pAxisY, SfxUInt32Item, ID_VAL_AXIS_Y, sal_False);
-        SFX_REQUEST_ARG (rReq, pPhiStart, SfxUInt32Item, ID_VAL_ANGLESTART, sal_False);
-        SFX_REQUEST_ARG (rReq, pPhiEnd, SfxUInt32Item, ID_VAL_ANGLEEND, sal_False);
+        SFX_REQUEST_ARG (rReq, pCenterX, SfxUInt32Item, ID_VAL_CENTER_X );
+        SFX_REQUEST_ARG (rReq, pCenterY, SfxUInt32Item, ID_VAL_CENTER_Y );
+        SFX_REQUEST_ARG (rReq, pAxisX, SfxUInt32Item, ID_VAL_AXIS_X );
+        SFX_REQUEST_ARG (rReq, pAxisY, SfxUInt32Item, ID_VAL_AXIS_Y );
+        SFX_REQUEST_ARG (rReq, pPhiStart, SfxUInt32Item, ID_VAL_ANGLESTART );
+        SFX_REQUEST_ARG (rReq, pPhiEnd, SfxUInt32Item, ID_VAL_ANGLEEND );
 
-        Rectangle   aNewRectangle (pCenterX->GetValue () - pAxisX->GetValue () / 2,
-                                   pCenterY->GetValue () - pAxisY->GetValue () / 2,
-                                   pCenterX->GetValue () + pAxisX->GetValue () / 2,
-                                   pCenterY->GetValue () + pAxisY->GetValue () / 2);
+        const sal_Int32 nWidth(pAxisX->GetValue());
+        const sal_Int32 nHeight(pAxisY->GetValue());
+        const basegfx::B2DHomMatrix aObjTrans(
+            basegfx::tools::createScaleTranslateB2DHomMatrix(
+                nWidth, nHeight,
+                pCenterX->GetValue() - (nWidth / 2), pCenterY->GetValue() - (nHeight / 2)));
 
-        Activate();  // Setzt aObjKind
-        SdrCircObj* pNewCircle =
-        new SdrCircObj((SdrObjKind) mpView->GetCurrentObjIdentifier(),
-                       aNewRectangle,
-                       (long) (pPhiStart->GetValue () * 10.0),
-                       (long) (pPhiEnd->GetValue () * 10.0));
-        SdrPageView *pPV = mpView->GetSdrPageView();
+        // could not check, found to case to trigger this
+        const double fStart((1800 - pPhiStart->GetValue()) * F_PI1800);
+        const double fEnd((1800 - pPhiEnd->GetValue()) * F_PI1800);
 
-        mpView->InsertObjectAtView(pNewCircle, *pPV, SDRINSERT_SETDEFLAYER);
+        // sets aObjKind
+        Activate();
+
+        SdrCircObj* pNewCircle = new SdrCircObj(
+            *GetDoc(),
+            mpView->getSdrObjectCreationInfo().getSdrCircleObjType(),
+            aObjTrans,
+            fStart,
+            fEnd);
+
+        mpView->InsertObjectAtView(*pNewCircle, SDRINSERT_SETDEFLAYER);
     }
 }
 
@@ -121,29 +123,30 @@ void FuConstructArc::DoExecute( SfxRequest& rReq )
 |*
 \************************************************************************/
 
-sal_Bool FuConstructArc::MouseButtonDown( const MouseEvent& rMEvt )
+bool FuConstructArc::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    sal_Bool bReturn = FuConstruct::MouseButtonDown( rMEvt );
+    bool bReturn = FuConstruct::MouseButtonDown( rMEvt );
 
     if ( rMEvt.IsLeft() && !mpView->IsAction() )
     {
-        Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
+        const basegfx::B2DPoint aPixelPos(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
+        const basegfx::B2DPoint aLogicPos(mpWindow->GetInverseViewTransformation() * aPixelPos);
+
         mpWindow->CaptureMouse();
-        sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
-        mpView->BegCreateObj(aPnt, (OutputDevice*) NULL, nDrgLog);
+        const double fTolerance(basegfx::B2DVector(mpWindow->GetInverseViewTransformation() * basegfx::B2DVector(DRGPIX, 0.0)).getLength());
+        mpView->BegCreateObj(aLogicPos, fTolerance);
 
         SdrObject* pObj = mpView->GetCreateObj();
 
         if (pObj)
         {
-            SfxItemSet aAttr(mpDoc->GetPool());
+            SfxItemSet aAttr(mpDoc->GetItemPool());
             SetStyleSheet(aAttr, pObj);
 
-//-/            pObj->NbcSetAttributes(aAttr, sal_False);
             pObj->SetMergedItemSet(aAttr);
         }
 
-        bReturn = sal_True;
+        bReturn = true;
     }
     return bReturn;
 }
@@ -154,7 +157,7 @@ sal_Bool FuConstructArc::MouseButtonDown( const MouseEvent& rMEvt )
 |*
 \************************************************************************/
 
-sal_Bool FuConstructArc::MouseMove( const MouseEvent& rMEvt )
+bool FuConstructArc::MouseMove( const MouseEvent& rMEvt )
 {
     return FuConstruct::MouseMove(rMEvt);
 }
@@ -165,26 +168,25 @@ sal_Bool FuConstructArc::MouseMove( const MouseEvent& rMEvt )
 |*
 \************************************************************************/
 
-sal_Bool FuConstructArc::MouseButtonUp( const MouseEvent& rMEvt )
+bool FuConstructArc::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    sal_Bool bReturn = sal_False;
-    sal_Bool bCreated = sal_False;
+    bool bReturn = false;
+    bool bCreated = false;
 
-    if ( mpView->IsCreateObj() && rMEvt.IsLeft() )
+    if(mpView->GetCreateObj() && rMEvt.IsLeft() && mpView->GetSdrPageView())
     {
         Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
-
-        sal_uLong nCount = mpView->GetSdrPageView()->GetObjList()->GetObjCount();
+        sal_uInt32 nCount = mpView->GetSdrPageView()->GetCurrentObjectList()->GetObjCount();
 
         if (mpView->EndCreateObj(SDRCREATE_NEXTPOINT) )
         {
-            if (nCount != mpView->GetSdrPageView()->GetObjList()->GetObjCount())
+            if (nCount != mpView->GetSdrPageView()->GetCurrentObjectList()->GetObjCount())
             {
-                bCreated = sal_True;
+                bCreated = true;
             }
         }
 
-        bReturn = sal_True;
+        bReturn = true;
     }
 
     bReturn = FuConstruct::MouseButtonUp (rMEvt) || bReturn;
@@ -199,14 +201,14 @@ sal_Bool FuConstructArc::MouseButtonUp( const MouseEvent& rMEvt )
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
-|* sal_False.
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert true, andernfalls
+|* false.
 |*
 \************************************************************************/
 
-sal_Bool FuConstructArc::KeyInput(const KeyEvent& rKEvt)
+bool FuConstructArc::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
+    bool bReturn = FuConstruct::KeyInput(rKEvt);
     return(bReturn);
 }
 
@@ -218,14 +220,14 @@ sal_Bool FuConstructArc::KeyInput(const KeyEvent& rKEvt)
 
 void FuConstructArc::Activate()
 {
-    SdrObjKind aObjKind;
+    SdrCircleObjType aSdrCircleObjType(CircleType_Circle);
 
     switch( nSlotId )
     {
         case SID_DRAW_ARC      :
         case SID_DRAW_CIRCLEARC:
         {
-            aObjKind = OBJ_CARC;
+            aSdrCircleObjType = CircleType_Arc;
         }
         break;
 
@@ -234,7 +236,7 @@ void FuConstructArc::Activate()
         case SID_DRAW_CIRCLEPIE       :
         case SID_DRAW_CIRCLEPIE_NOFILL:
         {
-            aObjKind = OBJ_SECT;
+            aSdrCircleObjType = CircleType_Sector;
         }
         break;
 
@@ -243,21 +245,23 @@ void FuConstructArc::Activate()
         case SID_DRAW_CIRCLECUT        :
         case SID_DRAW_CIRCLECUT_NOFILL :
         {
-            aObjKind = OBJ_CCUT;
+            aSdrCircleObjType = CircleType_Segment;
         }
         break;
 
         default:
         {
-            aObjKind = OBJ_CARC;
+            aSdrCircleObjType = CircleType_Arc;
         }
         break;
     }
 
-    mpView->SetCurrentObj((sal_uInt16)aObjKind);
+    SdrObjectCreationInfo aSdrObjectCreationInfo(static_cast< sal_uInt16 >(OBJ_CIRC));
+
+    aSdrObjectCreationInfo.setSdrCircleObjType(aSdrCircleObjType);
+    mpView->setSdrObjectCreationInfo(aSdrObjectCreationInfo);
 
     FuConstruct::Activate();
-//  FuDraw::Activate();
 }
 
 /*************************************************************************
@@ -273,7 +277,7 @@ void FuConstructArc::Deactivate()
 }
 
 // #97016#
-SdrObject* FuConstructArc::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
+SdrObject* FuConstructArc::CreateDefaultObject(const sal_uInt16 nID, const basegfx::B2DRange& rRange)
 {
     // case SID_DRAW_ARC:
     // case SID_DRAW_CIRCLEARC:
@@ -287,14 +291,16 @@ SdrObject* FuConstructArc::CreateDefaultObject(const sal_uInt16 nID, const Recta
     // case SID_DRAW_CIRCLECUT_NOFILL:
 
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
-        mpView->GetCurrentObjInventor(), mpView->GetCurrentObjIdentifier(),
-        0L, mpDoc);
+        mpView->getSdrModelFromSdrView(),
+        mpView->getSdrObjectCreationInfo());
 
     if(pObj)
     {
-        if(pObj->ISA(SdrCircObj))
+        SdrCircObj* pSdrCircObj = dynamic_cast< SdrCircObj* >(pObj);
+
+        if(pSdrCircObj)
         {
-            Rectangle aRect(rRectangle);
+            basegfx::B2DRange aRange(rRange);
 
             if(SID_DRAW_ARC == nID ||
                 SID_DRAW_CIRCLEARC == nID ||
@@ -304,24 +310,25 @@ SdrObject* FuConstructArc::CreateDefaultObject(const sal_uInt16 nID, const Recta
                 SID_DRAW_CIRCLECUT_NOFILL == nID)
             {
                 // force quadratic
-                ImpForceQuadratic(aRect);
+                ImpForceQuadratic(aRange);
             }
 
-            pObj->SetLogicRect(aRect);
+            sdr::legacy::SetLogicRange(*pSdrCircObj, aRange);
 
-            SfxItemSet aAttr(mpDoc->GetPool());
-            aAttr.Put(SdrCircStartAngleItem(9000));
-            aAttr.Put(SdrCircEndAngleItem(0));
+            if(SID_DRAW_ARC != nID || SID_DRAW_CIRCLEARC != nID)
+            {
+                // no full circle, set angles to gat a 3/4 circle
+                pSdrCircObj->SetStartAngle(M_PI + M_PI_2); // was: 9000
+                pSdrCircObj->SetEndAngle(0.0); // was: 0
+            }
 
             if(SID_DRAW_PIE_NOFILL == nID ||
                 SID_DRAW_CIRCLEPIE_NOFILL == nID ||
                 SID_DRAW_ELLIPSECUT_NOFILL == nID ||
                 SID_DRAW_CIRCLECUT_NOFILL == nID)
             {
-                aAttr.Put(XFillStyleItem(XFILL_NONE));
+                pSdrCircObj->SetMergedItem(XFillStyleItem(XFILL_NONE));
             }
-
-            pObj->SetMergedItemSet(aAttr);
         }
         else
         {

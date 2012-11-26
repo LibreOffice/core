@@ -33,8 +33,6 @@ class XMLShapePropertySetContext : public SvXMLPropertySetContext
 
 public:
 
-    TYPEINFO();
-
     XMLShapePropertySetContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                 const ::rtl::OUString& rLName,
                  const ::com::sun::star::uno::Reference<

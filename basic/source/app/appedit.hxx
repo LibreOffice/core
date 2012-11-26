@@ -46,7 +46,6 @@ private:
 protected:
     DECL_LINK( Scroll, ScrollBar* );
 public:
-    TYPEINFO();
     AppEdit( BasicFrame* );
     ~AppEdit();
     sal_uInt16 GetLineNr();                                 // Current line number

@@ -51,23 +51,15 @@ private:
     SVX_DLLPRIVATE void operator=(const FmFormModel& rSrcModel);   // never implemented
 
 public:
-    TYPEINFO();
-
-    FmFormModel(SfxItemPool* pPool=NULL, SfxObjectShell* pPers=NULL );
-    FmFormModel(const XubString& rPath, SfxItemPool* pPool=NULL,
-                SfxObjectShell* pPers=NULL );
-    FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers, FASTBOOL bUseExtColorTable);
-    FmFormModel(const XubString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers,
-                FASTBOOL bUseExtColorTable);
-
+    FmFormModel(const XubString& rPath = XubString(), SfxItemPool* pPool = 0, SfxObjectShell* pPers = 0, bool bUseExtColorTable = 0);
     virtual ~FmFormModel();
 
-    virtual SdrPage* AllocPage(FASTBOOL bMasterPage);
-    virtual void     InsertPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF);
-    virtual SdrPage* RemovePage(sal_uInt16 nPgNum);
-    virtual void     MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos);
-    virtual void     InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF);
-    virtual SdrPage* RemoveMasterPage(sal_uInt16 nPgNum);
+    virtual SdrPage* AllocPage(bool bMasterPage);
+    virtual void     InsertPage(SdrPage* pPage, sal_uInt32 nPos=0xffffffff);
+    virtual SdrPage* RemovePage(sal_uInt32 nPgNum);
+    virtual void     MovePage(sal_uInt32 nPgNum, sal_uInt32 nNewPos);
+    virtual void     InsertMasterPage(SdrPage* pPage, sal_uInt32 nPos=0xffffffff);
+    virtual SdrPage* RemoveMasterPage(sal_uInt32 nPgNum);
 
     virtual SdrLayerID      GetControlExportLayerId( const SdrObject& rObj ) const;
     SfxObjectShell*         GetObjectShell() const { return m_pObjShell; }

@@ -37,8 +37,6 @@
 
 namespace sd {
 
-TYPEINIT1( FuTextAttrDlg, FuPoor );
-
 /*************************************************************************
 |*
 |* Konstruktor
@@ -64,7 +62,7 @@ FunctionReference FuTextAttrDlg::Create( ViewShell* pViewSh, ::sd::Window* pWin,
 
 void FuTextAttrDlg::DoExecute( SfxRequest& rReq )
 {
-    SfxItemSet aNewAttr( mpDoc->GetPool() );
+    SfxItemSet aNewAttr( mpDoc->GetItemPool() );
     mpView->GetAttributes( aNewAttr );
 
     const SfxItemSet* pArgs = rReq.GetArgs();

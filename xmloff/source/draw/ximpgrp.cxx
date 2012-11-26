@@ -38,8 +38,6 @@ using namespace ::xmloff::token;
 
 //////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1( SdXMLGroupShapeContext, SvXMLImportContext );
-
 SdXMLGroupShapeContext::SdXMLGroupShapeContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx, const OUString& rLocalName,

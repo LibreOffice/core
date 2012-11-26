@@ -262,7 +262,7 @@ protected:
         @param nHandle
             The handle of the proberty.
         @return
-            <TRUE/> if the value is converted successfully.
+            <true/> if the value is converted successfully.
         @throws IllegalArgumentException
      */
     virtual sal_Bool SAL_CALL convertFastPropertyValue(

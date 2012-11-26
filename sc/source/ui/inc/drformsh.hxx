@@ -27,7 +27,6 @@
 #include <sfx2/shell.hxx>
 #include "shellids.hxx"
 #include <sfx2/module.hxx>
-#include <svx/svdmark.hxx>
 
 class ScViewData;
 
@@ -38,7 +37,6 @@ class ScDrawFormShell: public ScDrawShell
 {
 public:
 
-    TYPEINFO();
     SFX_DECL_INTERFACE(SCID_FORM_SHELL)
 
                 ScDrawFormShell(ScViewData* pData);

@@ -85,9 +85,9 @@ class SvxSwPosSizeTabPage : public SfxTabPage
     //'string provider'
     SvxSwFramePosString m_aFramePosString;
 
-    Rectangle           m_aRect; //size of all selected objects
-    Rectangle           m_aWorkArea;
-    Point               m_aAnchorPos;
+    basegfx::B2DRange   m_aRange; //size of all selected objects
+    basegfx::B2DRange   m_aWorkArea;
+    basegfx::B2DPoint   m_aAnchorPos;
 
     FrmMap* m_pVMap;
     FrmMap* m_pHMap;

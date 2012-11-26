@@ -26,8 +26,8 @@
 
 #include <tools/gen.hxx>
 #include <vcl/prntypes.hxx>
-
 #include "sdundo.hxx"
+#include <basegfx/vector/b2dvector.hxx>
 
 class SdDrawDocument;
 class SdPage;
@@ -38,74 +38,74 @@ class SdPageFormatUndoAction : public SdUndoAction
 {
     SdPage*     mpPage;
 
-    Size        maOldSize;
-    sal_Int32       mnOldLeft;
-    sal_Int32       mnOldRight;
-    sal_Int32       mnOldUpper;
-    sal_Int32       mnOldLower;
-    sal_Bool        mbOldScale;
+    basegfx::B2DVector  maOldSize;
+    double              mfOldLeft;
+    double              mfOldRight;
+    double              mfOldTop;
+    double              mfOldBottom;
+    bool                mbOldScale;
     Orientation meOldOrientation;
     sal_uInt16      mnOldPaperBin;
-    sal_Bool        mbOldFullSize;
+    bool                mbOldFullSize;
 
-    Size        maNewSize;
-    sal_Int32       mnNewLeft;
-    sal_Int32       mnNewRight;
-    sal_Int32       mnNewUpper;
-    sal_Int32       mnNewLower;
-    sal_Bool        mbNewScale;
+    basegfx::B2DVector  maNewSize;
+    double              mfNewLeft;
+    double              mfNewRight;
+    double              mfNewTop;
+    double              mfNewBottom;
+    bool                mbNewScale;
     Orientation meNewOrientation;
     sal_uInt16      mnNewPaperBin;
-    sal_Bool        mbNewFullSize;
+    bool                mbNewFullSize;
 
 public:
-    TYPEINFO();
-    SdPageFormatUndoAction( SdDrawDocument* pDoc,
+    SdPageFormatUndoAction(
+        SdDrawDocument* pDoc,
                             SdPage*         pThePage,
-                            const Size&     rOldSz,
-                            sal_Int32           nOldLft,
-                            sal_Int32           nOldRgt,
-                            sal_Int32           nOldUpr,
-                            sal_Int32           nOldLwr,
-                            sal_Bool            bOldScl,
+        const basegfx::B2DVector& rOldSz,
+        double fOldLeft,
+        double fOldRight,
+        double fOldTop,
+        double fOldBottom,
+        bool bOldScl,
                             Orientation     eOldOrient,
                             sal_uInt16          nOPaperBin,
-                            sal_Bool            bOFullSize,
+        bool bOFullSize,
 
-                            const Size&     rNewSz,
-                            sal_Int32           nNewLft,
-                            sal_Int32           nNewRgt,
-                            sal_Int32           nNewUpr,
-                            sal_Int32           nNewLwr,
-                            sal_Bool            bNewScl,
+        const basegfx::B2DVector& rNewSz,
+        double fNewLeft,
+        double fNewRight,
+        double fNewTop,
+        double fNewBottom,
+        bool bNewScl,
                             Orientation     eNewOrient,
                             sal_uInt16          nNPaperBin,
-                            sal_Bool            bNFullSize
-                            ) :
-        SdUndoAction(pDoc),
+        bool bNFullSize)
+
+    :   SdUndoAction(pDoc),
         mpPage      (pThePage),
         maOldSize   (rOldSz),
-        mnOldLeft   (nOldLft),
-        mnOldRight  (nOldRgt),
-        mnOldUpper  (nOldUpr),
-        mnOldLower  (nOldLwr),
+        mfOldLeft(fOldLeft),
+        mfOldRight(fOldRight),
+        mfOldTop(fOldTop),
+        mfOldBottom(fOldBottom),
         mbOldScale   (bOldScl),
         meOldOrientation(eOldOrient),
         mnOldPaperBin (nOPaperBin),
         mbOldFullSize (bOFullSize),
 
-
         maNewSize   (rNewSz),
-        mnNewLeft   (nNewLft),
-        mnNewRight  (nNewRgt),
-        mnNewUpper  (nNewUpr),
-        mnNewLower   (nNewLwr),
+        mfNewLeft(fNewLeft),
+        mfNewRight(fNewRight),
+        mfNewTop(fNewTop),
+        mfNewBottom(fNewBottom),
         mbNewScale   (bNewScl),
         meNewOrientation(eNewOrient),
         mnNewPaperBin (nNPaperBin),
         mbNewFullSize (bNFullSize)
+    {
+    }
 
-        {}
     virtual ~SdPageFormatUndoAction();
 
     virtual void Undo();
@@ -118,23 +118,28 @@ class SdPageLRUndoAction : public SdUndoAction
 {
     SdPage* mpPage;
 
-    sal_Int32   mnOldLeft;
-    sal_Int32   mnOldRight;
-    sal_Int32   mnNewLeft;
-    sal_Int32   mnNewRight;
+    double  mfOldLeft;
+    double  mfOldRight;
+    double  mfNewLeft;
+    double  mfNewRight;
 
 public:
-    TYPEINFO();
-    SdPageLRUndoAction( SdDrawDocument* pDoc, SdPage* pThePage,
-                        sal_Int32 nOldLft, sal_Int32 nOldRgt,
-                        sal_Int32 nNewLft, sal_Int32 nNewRgt ) :
-        SdUndoAction(pDoc),
+    SdPageLRUndoAction(
+        SdDrawDocument* pDoc,
+        SdPage* pThePage,
+        double fOldLeft,
+        double fOldRight,
+        double fNewLeft,
+        double fNewRight )
+    :   SdUndoAction(pDoc),
         mpPage      (pThePage),
-        mnOldLeft   (nOldLft),
-        mnOldRight  (nOldRgt),
-        mnNewLeft   (nNewLft),
-        mnNewRight  (nNewRgt)
-        {}
+        mfOldLeft   (fOldLeft),
+        mfOldRight  (fOldRight),
+        mfNewLeft   (fNewLeft),
+        mfNewRight  (fNewRight)
+    {
+    }
+
     virtual ~SdPageLRUndoAction();
 
     virtual void Undo();
@@ -147,23 +152,28 @@ class SdPageULUndoAction : public SdUndoAction
 {
     SdPage* mpPage;
 
-    sal_Int32   mnOldUpper;
-    sal_Int32   mnOldLower;
-    sal_Int32   mnNewUpper;
-    sal_Int32   mnNewLower;
+    double  mfOldTop;
+    double  mfOldBottom;
+    double  mfNewTop;
+    double  mfNewBottom;
 
 public:
-    TYPEINFO();
-    SdPageULUndoAction( SdDrawDocument* pDoc, SdPage* pThePage,
-                        sal_Int32 nOldUpr, sal_Int32 nOldLwr,
-                        sal_Int32 nNewUpr, sal_Int32 nNewLwr ) :
-        SdUndoAction(pDoc),
+    SdPageULUndoAction(
+        SdDrawDocument* pDoc,
+        SdPage* pThePage,
+        double fOldTop,
+        double fOldBottom,
+        double fNewTop,
+        double fNewBottom )
+    :   SdUndoAction(pDoc),
         mpPage      (pThePage),
-        mnOldUpper  (nOldUpr),
-        mnOldLower  (nOldLwr),
-        mnNewUpper  (nNewUpr),
-        mnNewLower  (nNewLwr)
-        {}
+        mfOldTop    (fOldTop),
+        mfOldBottom (fOldBottom),
+        mfNewTop    (fNewTop),
+        mfNewBottom (fNewBottom)
+    {
+    }
+
     virtual ~SdPageULUndoAction();
 
     virtual void Undo();

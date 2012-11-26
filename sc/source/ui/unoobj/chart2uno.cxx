@@ -1013,8 +1013,9 @@ ScChart2DataProvider::~ScChart2DataProvider()
 
 void ScChart2DataProvider::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
-    if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if ( pSfxSimpleHint && SFX_HINT_DYING == pSfxSimpleHint->GetId() )
     {
         m_pDocument = NULL;
     }
@@ -2281,8 +2282,9 @@ ScChart2DataSource::~ScChart2DataSource()
 
 void ScChart2DataSource::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
-    if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if ( pSfxSimpleHint && SFX_HINT_DYING == pSfxSimpleHint->GetId() )
     {
         m_pDocument = NULL;
     }
@@ -2382,7 +2384,6 @@ void ScChart2DataSource::AddLabeledSequence(const uno::Reference < chart2::data:
 {
     m_aLabeledSequences.push_back(xNew);
 }
-
 
 // DataSequence ==============================================================
 
@@ -2786,9 +2787,11 @@ void ScChart2DataSequence::CopyData(const ScChart2DataSequence& r)
 
 void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
-    if ( rHint.ISA( SfxSimpleHint ) )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if ( pSfxSimpleHint )
     {
-        sal_uLong nId = static_cast<const SfxSimpleHint&>(rHint).GetId();
+        sal_uLong nId = pSfxSimpleHint->GetId();
         if ( nId ==SFX_HINT_DYING )
         {
             m_pDocument = NULL;
@@ -2821,7 +2824,11 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
                 m_bGotDataChangedHint = true;
         }
     }
-    else if ( rHint.ISA( ScUpdateRefHint ) )
+    else
+    {
+        const ScUpdateRefHint* pScUpdateRefHint = dynamic_cast< const ScUpdateRefHint* >(&rHint);
+
+        if ( pScUpdateRefHint )
     {
         // Create a range list from the token list, have the range list
         // updated, and bring the change back to the token list.
@@ -2848,60 +2855,69 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
         if ( m_pDocument->HasUnoRefUndo() )
             pUndoRanges.reset(new ScRangeList(aRanges));
 
-        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
         bool bChanged = aRanges.UpdateReference(
-            rRef.GetMode(), m_pDocument, rRef.GetRange(), rRef.GetDx(), rRef.GetDy(), rRef.GetDz());
+                pScUpdateRefHint->GetMode(),
+                m_pDocument,
+                pScUpdateRefHint->GetRange(),
+                pScUpdateRefHint->GetDx(),
+                pScUpdateRefHint->GetDy(),
+                pScUpdateRefHint->GetDz());
 
-        if (bChanged)
-        {
-            DBG_ASSERT(m_pRangeIndices->size() == static_cast<size_t>(aRanges.Count()),
-                       "range list and range index list have different sizes after the reference update.");
-
-            // Bring the change back from the range list to the token list.
-            UpdateTokensFromRanges(aRanges);
-
-            if (pUndoRanges.get())
-                m_pDocument->AddUnoRefChange(m_nObjectId, *pUndoRanges);
-        }
-    }
-    else if ( rHint.ISA( ScUnoRefUndoHint ) )
-    {
-        const ScUnoRefUndoHint& rUndoHint = static_cast<const ScUnoRefUndoHint&>(rHint);
-
-        do
-        {
-            if (rUndoHint.GetObjectId() != m_nObjectId)
-                break;
-
-            // The hint object provides the old ranges.  Restore the old state
-            // from these ranges.
-
-            if (!m_pRangeIndices.get() || m_pRangeIndices->empty())
+            if (bChanged)
             {
-                DBG_ERROR(" faulty range indices");
-                break;
+                DBG_ASSERT(m_pRangeIndices->size() == static_cast<size_t>(aRanges.Count()),
+                           "range list and range index list have different sizes after the reference update.");
+
+                // Bring the change back from the range list to the token list.
+                UpdateTokensFromRanges(aRanges);
+
+                if (pUndoRanges.get())
+                    m_pDocument->AddUnoRefChange(m_nObjectId, *pUndoRanges);
             }
-
-            const ScRangeList& rRanges = rUndoHint.GetRanges();
-
-            sal_uInt32 nCount = rRanges.Count();
-            if (nCount != m_pRangeIndices->size())
-            {
-                DBG_ERROR("range count and range index count differ.");
-                break;
-            }
-
-            UpdateTokensFromRanges(rRanges);
         }
-        while (false);
+        else
+        {
+            const ScUnoRefUndoHint* pScUnoRefUndoHint = dynamic_cast< const ScUnoRefUndoHint* >(&rHint);
+
+            if ( pScUnoRefUndoHint )
+            {
+                do
+                {
+                    if (pScUnoRefUndoHint->GetObjectId() != m_nObjectId)
+                        break;
+
+                    // The hint object provides the old ranges.  Restore the old state
+                    // from these ranges.
+
+                    if (!m_pRangeIndices.get() || m_pRangeIndices->empty())
+                    {
+                        DBG_ERROR(" faulty range indices");
+                        break;
+                    }
+
+                    const ScRangeList& rRanges = pScUnoRefUndoHint->GetRanges();
+
+                    sal_uInt32 nCount = rRanges.Count();
+                    if (nCount != m_pRangeIndices->size())
+                    {
+                        DBG_ERROR("range count and range index count differ.");
+                        break;
+                    }
+
+                    UpdateTokensFromRanges(rRanges);
+                }
+                while (false);
+            }
+        }
     }
 }
 
 
 IMPL_LINK( ScChart2DataSequence, ValueListenerHdl, SfxHint*, pHint )
 {
-    if ( m_pDocument && pHint && pHint->ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint*)pHint)->GetId() & (SC_HINT_DATACHANGED | SC_HINT_DYING) )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(pHint);
+
+    if ( m_pDocument && pSfxSimpleHint && (pSfxSimpleHint->GetId() & (SC_HINT_DATACHANGED | SC_HINT_DYING)))
     {
         //  This may be called several times for a single change, if several formulas
         //  in the range are notified. So only a flag is set that is checked when
@@ -3626,8 +3642,9 @@ ScChart2EmptyDataSequence::~ScChart2EmptyDataSequence()
 
 void ScChart2EmptyDataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
-    if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if ( pSfxSimpleHint && SFX_HINT_DYING == pSfxSimpleHint->GetId() )
     {
         m_pDocument = NULL;
     }

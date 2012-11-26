@@ -25,36 +25,26 @@
 #define _SVDHDL_HXX
 
 #include <tools/gen.hxx>
-
-#ifndef _POINTR_HXX //autogen
 #include <vcl/pointr.hxx>
-#endif
 #include <tools/contnr.hxx>
-
-#ifndef _SOLAR_HRC
 #include <svl/solar.hrc>
-#endif
-
 #include <svx/xpoly.hxx>
 #include <svx/svdoedge.hxx>
 #include <svx/sdr/overlay/overlayobjectlist.hxx>
 #include "svx/svxdllapi.h"
-
 #include <svx/xpoly.hxx>
 #include <svx/svdoedge.hxx>
 
-class VirtualDevice;
-class OutputDevice;
-class Region;
-class Window;
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// predefines
+
 class SdrHdlList;
 class SdrMarkView;
 class SdrObject;
-class SdrPageView;
+//class SdrPageView;
 class MouseEvent;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
 // Jedes Objekt muss in der Lage seine Handles zu erzeugen. Diese werden dann
 // bei einer Selektion abgeholt, bei der View angemeldet und sichtbar gemacht.
 // Wird ein Handle von der Maus beruehrt (IsHit()), so wird von der View der
@@ -142,103 +132,124 @@ enum BitmapMarkerKind
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//  SdrHdl
+//      SmartHdl
+//          SdPathHdl
+//          AnnotationHdl
+//          ImageButtonHdl
+//      SdrHdlColor
+//      SdrHdlGradient
+//      SdrHdlLine
+//      SdrHdlBezWgt
+//      E3dVolumeMarker
+//      ImpEdgeHdl
+//      ImpMeasureHdl
+//      ImpTextframeHdl
+//      SdrCropHdl
+//      TableEdgeHdl
+//      TableBorderHdl
+//      SwSdrHdl
+//
 
-class SVX_DLLPUBLIC SdrHdl
+class SVX_DLLPUBLIC SdrHdl : private boost::noncopyable
 {
-    friend class                SdrMarkView; // fuer den Zugriff auf nObjHdlNum
-    friend class                SdrHdlList;
-
+private:
     // #101928#
-    BitmapEx ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd, sal_Bool bFine, sal_Bool bIsHighContrast);
+    BitmapEx ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd, bool bFine, bool bIsHighContrast);
 
 protected:
-    SdrObject*                  pObj;      // Gehoert das Handle zu einem Objekt?
-    SdrPageView*                pPV;       // Gehoert das Handle zu einem Objekt in einer bestimmten PageView?
-    SdrHdlList*                 pHdlList;  // Zum Feststelen der Handlegroesse
+    SdrHdlList&                 mrHdlList;
+    const SdrObject*            mpSdrHdlObject;
+    SdrHdlKind                  meKind;
+    basegfx::B2DPoint           maPosition;
 
     // OVERLAYMANAGER
     ::sdr::overlay::OverlayObjectList           maOverlayGroup;
 
-    Point                       aPos;
+    sal_uInt32                  mnObjHdlNum;    // incremental count without XPOLY_CONTROL based on old XPolygon
+    sal_uInt32                  mnPolyNum;      // polygon index based old XPolygon
+    sal_uInt32                  mnPPntNum;      // point index for !XPOLY_CONTROL based old XPolygon
+    sal_uInt32                  mnSourceHdlNum; // incremental count including XPOLY_CONTROL based on old XPolygon
 
-    SdrHdlKind                  eKind;
+    bool                        mbSelect : 1;   // selected polygon/control point
+    bool                        mb1PixMore : 1; // bigger polygon start handles
+    bool                        mbPlusHdl : 1;  // XPOLY_CONTROL
 
-    long                        nDrehWink; // Handles bzw. Mauszeiger drehen
-    sal_uInt32                  nObjHdlNum; // wird von der MarkView benoetigt
-    sal_uInt32                  nPolyNum;  // Polygonpunktes
-    sal_uInt32                  nPPntNum;  // Punktnummer des Polygons
-    sal_uInt32                  nSourceHdlNum; // ist noch vollstaendig zu implementieren
+    // Means green handle. This was implicitely decided in old version by late setting the mnObjHdlNum
+    bool                        mbIsFrameHandle : 1;
 
-    unsigned                    bSelect : 1;   // Ein selektierter Polygonpunkt?
-    unsigned                    b1PixMore : 1; // True=Handle wird 1 Pixel groesser dargestellt
-    unsigned                    bPlusHdl : 1;  // u.a. fuer Hld-Paint Optimierung bei MarkPoint/UnmarkPoint, ...
+    bool                        mbMoveOutside : 1; // forces this handle to be moved outside of the selection rectangle
+    bool                        mbMouseOver : 1;    // is true if the mouse is over this handle
 
-    bool                        mbMoveOutside; // forces this handle to be moved outside of the selection rectangle
+    // create all markers for all SdrPageWindows
+    void CreateB2dIAObject();
 
-    // create marker for this kind
-    virtual void CreateB2dIAObject();
+    // create single marker of this kind
+    virtual void CreateB2dIAObject(::sdr::overlay::OverlayManager& rOverlayManager);
 
     // cleanup marker if one exists
     void GetRidOfIAObject();
 
-private:
-    bool                        mbMouseOver;    // is true if the mouse is over this handle
-
-protected:
     ::sdr::overlay::OverlayObject* CreateOverlayObject(
         const basegfx::B2DPoint& rPos,
-        BitmapColorIndex eColIndex, BitmapMarkerKind eKindOfMarker, Point aMoveOutsideOffset = Point());
+        BitmapColorIndex eColIndex,
+        BitmapMarkerKind eKindOfMarker,
+        sal_Int16 nMoveOutsideX,
+        sal_Int16 nMoveOutsideY);
     BitmapMarkerKind GetNextBigger(BitmapMarkerKind eKnd) const;
 
 public:
-    SdrHdl();
-    SdrHdl(const Point& rPnt, SdrHdlKind eNewKind=HDL_MOVE);
+    SdrHdl(
+        SdrHdlList& rHdlList,
+        const SdrObject* pSdrHdlObject = 0,
+        SdrHdlKind eNewKind = HDL_MOVE,
+        const basegfx::B2DPoint& rPosition = basegfx::B2DPoint(),
+        bool bIsFrameHandle = false);
+
+protected:
+    friend class SdrHdlList;
     virtual ~SdrHdl();
 
+public:
     const ::sdr::overlay::OverlayObjectList& getOverlayObjectList() const { return maOverlayGroup; }
 
-    void SetHdlList(SdrHdlList* pList);
-    SdrHdlKind GetKind() const { return eKind; }
+    SdrHdlKind GetKind() const { return meKind; }
     void Touch();
 
-    const Point& GetPos() const { return aPos; }
-    void SetPos(const Point& rPnt);
+    virtual const basegfx::B2DPoint& getPosition() const;
+    virtual void setPosition(const basegfx::B2DPoint& rNew);
 
-    SdrPageView* GetPageView() const { return pPV; }
-    void SetPageView(SdrPageView* pNewPV) { pPV=pNewPV; }
+    const SdrObject* GetObj() const { return mpSdrHdlObject;  }
 
-    SdrObject* GetObj() const { return pObj;  }
-    void SetObj(SdrObject* pNewObj);
+    bool IsSelected() const { return mbSelect; }
+    void SetSelected(bool bJa = true);
 
-    sal_Bool IsSelected() const { return bSelect; }
-    void SetSelected(sal_Bool bJa=sal_True);
+    void Set1PixMore(bool bJa = true);
 
-    void Set1PixMore(sal_Bool bJa=sal_True);
-    void SetDrehWink(long n);
+    bool IsCornerHdl() const { return meKind==HDL_UPLFT || meKind==HDL_UPRGT || meKind==HDL_LWLFT || meKind==HDL_LWRGT; }
+    bool IsVertexHdl() const { return meKind==HDL_UPPER || meKind==HDL_LOWER || meKind==HDL_LEFT  || meKind==HDL_RIGHT; }
 
-    sal_Bool IsCornerHdl() const { return eKind==HDL_UPLFT || eKind==HDL_UPRGT || eKind==HDL_LWLFT || eKind==HDL_LWRGT; }
-    sal_Bool IsVertexHdl() const { return eKind==HDL_UPPER || eKind==HDL_LOWER || eKind==HDL_LEFT  || eKind==HDL_RIGHT; }
+    void SetObjHdlNum(sal_uInt32 nNum) { mnObjHdlNum=nNum; }
+    sal_uInt32 GetObjHdlNum() const { return mnObjHdlNum; }
 
-    void SetObjHdlNum(sal_uInt32 nNum) { nObjHdlNum=nNum; }
-    sal_uInt32 GetObjHdlNum() const { return nObjHdlNum; }
+    void SetPolyNum(sal_uInt32 nNum) { mnPolyNum=nNum; }
+    sal_uInt32 GetPolyNum() const { return mnPolyNum; }
 
-    void SetPolyNum(sal_uInt32 nNum) { nPolyNum=nNum; }
-    sal_uInt32 GetPolyNum() const { return nPolyNum; }
+    void SetPointNum(sal_uInt32 nNum) { mnPPntNum=nNum; }
+    sal_uInt32 GetPointNum() const { return mnPPntNum; }
 
-    void SetPointNum(sal_uInt32 nNum) { nPPntNum=nNum; }
-    sal_uInt32 GetPointNum() const { return nPPntNum; }
+    bool IsPlusHdl() const { return mbPlusHdl; }
+    bool IsFrameHandle() const { return mbIsFrameHandle; }
 
-    void SetPlusHdl(sal_Bool bOn) { bPlusHdl=bOn; }
-    sal_Bool IsPlusHdl() const { return bPlusHdl; }
-
-    void SetSourceHdlNum(sal_uInt32 nNum) { nSourceHdlNum=nNum; }
-    sal_uInt32 GetSourceHdlNum() const { return nSourceHdlNum; }
+    void SetSourceHdlNum(sal_uInt32 nNum) { mnSourceHdlNum=nNum; }
+    sal_uInt32 GetSourceHdlNum() const { return mnSourceHdlNum; }
 
     virtual Pointer GetPointer() const;
-    bool IsHdlHit(const Point& rPnt) const;
+    bool IsHdlHit(const basegfx::B2DPoint& rPosition) const;
 
     // #97016# II
-    virtual sal_Bool IsFocusHdl() const;
+    virtual bool IsFocusHdl() const;
 
     void SetMoveOutside( bool bMoveOutside );
 
@@ -251,6 +262,80 @@ public:
     virtual void onMouseLeave();
 
     bool isMouseOver() const;
+    void setMouseOver(bool bNew);
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class SVX_DLLPUBLIC SdrHdlList : private boost::noncopyable, public Timer
+{
+private:
+    typedef ::std::vector< SdrHdl* > SdrHdlContainerType;
+    friend class SdrHdl;
+
+    SVX_DLLPRIVATE bool operator==(const SdrHdlList&);
+    SVX_DLLPRIVATE bool operator!=(const SdrHdlList&);
+
+    // derived from Timer; starts timer to call a delayed Timeout
+    // which then calls CreateB2dIAObject for each handle. Only to be called
+    // from SdrHdl itself
+    virtual void Timeout();
+    void SdrHdlVisualisationChanged();
+
+protected:
+    sal_uInt32              mnFocusIndex;
+    SdrMarkView&            mrView;
+    SdrHdlContainerType     maList;
+    sal_uInt16              mnHdlSize;
+
+    /// bitfield
+    bool                    mbRotateShear : 1;
+    bool                    mbDistortShear : 1;
+    bool                    mbMoveOutside : 1;      // Handles nach aussen ruecken (fuer TextEdit)
+    bool                    mbFineHandles : 1;
+
+public:
+    SdrHdlList(SdrMarkView& rV);
+    ~SdrHdlList();
+
+    void Clear();
+
+    // #97016# II
+    void TravelFocusHdl(bool bForward);
+    SdrHdl* GetFocusHdl() const;
+    void SetFocusHdl(SdrHdl* pNew);
+    void ResetFocusHdl();
+
+    // Access to View
+    SdrMarkView& GetViewFromSdrHdlList() const { return mrView; }
+
+    // Sortierung: 1.Level Erst Refpunkt-Handles, dann normale Handles, dann Glue, dann User, dann Plushandles
+    //             2.Level PageView (Pointer)
+    //             3.Level Position (x+y)
+    void Sort();
+    sal_uInt32 GetHdlCount() const { return maList.size(); }
+    SdrHdl* GetHdlByIndex(sal_uInt32 nNum) const;
+    sal_uInt32 GetHdlNum(const SdrHdl* pHdl) const;
+
+    void SetHdlSize(sal_uInt16 nSiz);
+    sal_uInt16 GetHdlSize() const { return mnHdlSize; }
+
+    void SetMoveOutside(bool bOn);
+    bool IsMoveOutside() const { return mbMoveOutside; }
+
+    void SetRotateShear(bool bOn) { mbRotateShear = bOn; }
+    bool IsRotateShear() const { return mbRotateShear; }
+
+    void SetDistortShear(bool bOn) { mbDistortShear = bOn; }
+    bool IsDistortShear() const { return mbDistortShear; }
+
+    void SetFineHdl(bool bOn);
+    bool IsFineHdl() const { return mbFineHandles; }
+
+    // Zuletzt eingefuegte Handles werden am ehesten getroffen
+    // (wenn Handles uebereinander liegen).
+    SdrHdl* IsHdlListHit(const basegfx::B2DPoint& rPosition, SdrHdl* pHdl0 = 0) const;
+    SdrHdl* GetHdlByKind(SdrHdlKind eKind1) const;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -271,24 +356,32 @@ private:
     Link                        aColorChangeHdl;
 
     // use luminance values only
-    unsigned                    bUseLuminance : 1;
-
-    // create marker for this kind
-    SVX_DLLPRIVATE virtual void CreateB2dIAObject();
+    bool                        bUseLuminance : 1;
 
     // help functions
     SVX_DLLPRIVATE Bitmap CreateColorDropper(Color aCol);
     SVX_DLLPRIVATE Color GetLuminance(const Color& rCol);
     SVX_DLLPRIVATE void CallColorChangeLink();
 
-public:
-    SdrHdlColor(const Point& rRef, Color aCol = Color(COL_BLACK), const Size& rSize = Size(11, 11), sal_Bool bLum = sal_False);
+protected:
+    // create marker for this kind
+    virtual void CreateB2dIAObject(::sdr::overlay::OverlayManager& rOverlayManager);
+
     virtual ~SdrHdlColor();
 
-    sal_Bool IsUseLuminance() const { return bUseLuminance; }
+public:
+    SdrHdlColor(
+        SdrHdlList& rHdlList,
+        const SdrObject& rSdrHdlObject,
+        const basegfx::B2DPoint& rRef,
+        Color aCol = Color(COL_BLACK),
+        const Size& rSize = Size(11, 11),
+        bool bLum = false);
+
+    bool IsUseLuminance() const { return bUseLuminance; }
 
     Color GetColor() const { return aMarkerColor; }
-    void SetColor(Color aNew, sal_Bool bCallLink = sal_False);
+    void SetColor(Color aNew, bool bCallLink = false);
 
     const Size& GetSize() const { return aMarkerSize; }
     void SetSize(const Size& rNew);
@@ -303,47 +396,52 @@ class SdrHdlGradient : public SdrHdl
 {
 private:
     // pointer to used color handles
-    SdrHdlColor*                pColHdl1;
-    SdrHdlColor*                pColHdl2;
-
-    // 2nd position
-    Point                       a2ndPos;
+    SdrHdlColor&                mrColHdl1;
+    SdrHdlColor&                mrColHdl2;
 
     // is this a gradient or a transparence
-    unsigned                    bGradient : 1;
+    bool                        bGradient : 1;
 
     // select which handle to move
-    unsigned                    bMoveSingleHandle : 1;
-    unsigned                    bMoveFirstHandle : 1;
+    bool                        bMoveSingleHandle : 1;
+    bool                        bMoveFirstHandle : 1;
 
+protected:
     // create marker for this kind
-    virtual void CreateB2dIAObject();
+    virtual void CreateB2dIAObject(::sdr::overlay::OverlayManager& rOverlayManager);
 
-public:
-    SdrHdlGradient(const Point& rRef1, const Point& rRef2, sal_Bool bGrad = sal_True);
     virtual ~SdrHdlGradient();
 
-    sal_Bool IsGradient() const { return bGradient; }
+public:
+    SdrHdlGradient(
+        SdrHdlList& rHdlList,
+        const SdrObject& rSdrHdlObject,
+        SdrHdlColor& rSdrHdlColor1,
+        SdrHdlColor& rSdrHdlColor2,
+        bool bGrad = false);
 
-    // set the associated color handles
-    void SetColorHandles(SdrHdlColor* pL1, SdrHdlColor* pL2) { pColHdl1 = pL1; pColHdl2 = pL2; }
-    SdrHdlColor* GetColorHdl1() const { return pColHdl1; }
-    SdrHdlColor* GetColorHdl2() const { return pColHdl2; }
+    bool IsGradient() const { return bGradient; }
 
-    const Point& Get2ndPos() const { return a2ndPos; }
-    void Set2ndPos(const Point& rPnt);
+    virtual const basegfx::B2DPoint& getPosition() const;
+    virtual void setPosition(const basegfx::B2DPoint& rNew);
+
+    virtual const basegfx::B2DPoint& get2ndPosition() const;
+    virtual void set2ndPosition(const basegfx::B2DPoint& rNew);
+
+    SdrHdlColor& getColHdl1() { return mrColHdl1; }
+    SdrHdlColor& getColHdl2() { return mrColHdl2; }
 
     // the link called by the color handles
     DECL_LINK(ColorChangeHdl, SdrHdl*);
 
     // transformation call, create gradient from this handle
-    void FromIAOToItem(SdrObject* pObj, sal_Bool bSetItemOnObject, sal_Bool bUndo);
+    void FromIAOToItem(bool bSetItemOnObject, bool bUndo);
 
     // selection flags for interaction
-    sal_Bool IsMoveSingleHandle() const { return bMoveSingleHandle; }
-    void SetMoveSingleHandle(sal_Bool bNew) { bMoveSingleHandle = bNew; }
-    sal_Bool IsMoveFirstHandle() const { return bMoveFirstHandle; }
-    void SetMoveFirstHandle(sal_Bool bNew) { bMoveFirstHandle = bNew; }
+    bool IsMoveSingleHandle() const { return bMoveSingleHandle; }
+    void SetMoveSingleHandle(bool bNew) { bMoveSingleHandle = bNew; }
+    bool IsMoveFirstHandle() const { return bMoveFirstHandle; }
+    void SetMoveFirstHandle(bool bNew) { bMoveFirstHandle = bNew; }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -351,18 +449,28 @@ public:
 // Spiegelachse
 class SdrHdlLine: public SdrHdl
 {
-    // create marker for this kind
-    virtual void CreateB2dIAObject();
-
+private:
 protected:
+    // create marker for this kind
+    virtual void CreateB2dIAObject(::sdr::overlay::OverlayManager& rOverlayManager);
+
+    virtual ~SdrHdlLine();
+
     SdrHdl*                     pHdl1;
     SdrHdl*                     pHdl2;
 
 public:
-    SdrHdlLine(SdrHdl& rHdl1, SdrHdl& rHdl2, SdrHdlKind eNewKind=HDL_MIRX) { eKind=eNewKind; pHdl1=&rHdl1; pHdl2=&rHdl2; }
-    virtual ~SdrHdlLine();
+    SdrHdlLine(
+        SdrHdlList& rHdlList,
+        SdrHdlKind eNewKind = HDL_MIRX)
+    :   SdrHdl(rHdlList, 0, eNewKind),
+        pHdl1(0),
+        pHdl2(0)
+    {
+    }
 
     virtual Pointer GetPointer() const;
+    void SetHandles(SdrHdl* p1, SdrHdl* p2) { pHdl1 = p1; pHdl2 = p2; }
 };
 
 // Ein SdrHdlBezWgt hat Kenntnis von seinem "BasisHandle". Seine Draw-Methode
@@ -370,47 +478,76 @@ public:
 // BasisHandles.
 class SdrHdlBezWgt: public SdrHdl
 {
-    // create marker for this kind
-    virtual void CreateB2dIAObject();
-
+private:
 protected:
+    // create marker for this kind
+    virtual void CreateB2dIAObject(::sdr::overlay::OverlayManager& rOverlayManager);
+
+    virtual ~SdrHdlBezWgt();
+
     const SdrHdl* pHdl1;
 
 public:
     // das ist kein Copy-Ctor!!!
-    SdrHdlBezWgt(const SdrHdl* pRefHdl1, SdrHdlKind eNewKind=HDL_BWGT) { eKind=eNewKind; pHdl1=pRefHdl1; }
-    virtual ~SdrHdlBezWgt();
+    SdrHdlBezWgt(
+        SdrHdlList& rHdlList,
+        const SdrObject& rSdrHdlObject,
+        const SdrHdl& rRefHdl1,
+        SdrHdlKind eNewKind = HDL_BWGT)
+    :   SdrHdl(rHdlList, &rSdrHdlObject, eNewKind),
+        pHdl1(&rRefHdl1)
+    {
+        mbPlusHdl = true;
+    }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class E3dVolumeMarker : public SdrHdl
 {
+private:
     basegfx::B2DPolyPolygon             aWireframePoly;
 
+protected:
     // create marker for this kind
-    virtual void CreateB2dIAObject();
+    virtual void CreateB2dIAObject(::sdr::overlay::OverlayManager& rOverlayManager);
+
+    virtual ~E3dVolumeMarker();
 
 public:
-    E3dVolumeMarker(const basegfx::B2DPolyPolygon& rWireframePoly);
+    E3dVolumeMarker(
+        SdrHdlList& rHdlList,
+        const SdrObject* pSdrHdlObject,
+        const basegfx::B2DPolyPolygon& rWireframePoly);
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class ImpEdgeHdl: public SdrHdl
 {
+private:
     SdrEdgeLineCode eLineCode;
 
+protected:
     // create marker for this kind
-    virtual void CreateB2dIAObject();
+    virtual void CreateB2dIAObject(::sdr::overlay::OverlayManager& rOverlayManager);
+
+    virtual ~ImpEdgeHdl();
 
 public:
-    ImpEdgeHdl(const Point& rPnt, SdrHdlKind eNewKind): SdrHdl(rPnt,eNewKind),eLineCode(MIDDLELINE) {}
-    virtual ~ImpEdgeHdl();
+    ImpEdgeHdl(
+        SdrHdlList& rHdlList,
+        const SdrObject& rSdrHdlObject,
+        SdrHdlKind eNewKind,
+        const basegfx::B2DPoint& rPnt)
+    :   SdrHdl(rHdlList, &rSdrHdlObject, eNewKind, rPnt),
+        eLineCode(MIDDLELINE)
+    {
+    }
 
     void SetLineCode(SdrEdgeLineCode eCode);
     SdrEdgeLineCode GetLineCode() const     { return eLineCode; }
-    sal_Bool IsHorzDrag() const;
+    bool IsHorzDrag() const;
     virtual Pointer GetPointer() const;
 };
 
@@ -418,12 +555,22 @@ public:
 
 class ImpMeasureHdl: public SdrHdl
 {
+private:
+protected:
     // create marker for this kind
-    virtual void CreateB2dIAObject();
+    virtual void CreateB2dIAObject(::sdr::overlay::OverlayManager& rOverlayManager);
+
+    virtual ~ImpMeasureHdl();
 
 public:
-    ImpMeasureHdl(const Point& rPnt, SdrHdlKind eNewKind): SdrHdl(rPnt,eNewKind) {}
-    virtual ~ImpMeasureHdl();
+    ImpMeasureHdl(
+        SdrHdlList& rHdlList,
+        const SdrObject& rSdrHdlObject,
+        SdrHdlKind eNewKind,
+        const basegfx::B2DPoint& rPnt)
+    :   SdrHdl(rHdlList, &rSdrHdlObject, eNewKind, rPnt)
+    {
+    }
 
     virtual Pointer GetPointer() const;
 };
@@ -432,82 +579,20 @@ public:
 
 class ImpTextframeHdl: public SdrHdl
 {
-    const Rectangle maRect;
-
-    // create marker for this kind
-    virtual void CreateB2dIAObject();
-
-public:
-    explicit ImpTextframeHdl(const Rectangle& rRect);
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// #97016# II
-class ImplHdlListData;
-
-class SVX_DLLPUBLIC SdrHdlList
-{
-protected:
-    sal_uIntPtr                 mnFocusIndex;
-    SdrMarkView*                pView;
-    Container                   aList;
-    sal_uInt16                      nHdlSize;
-
-    unsigned                    bRotateShear : 1;
-    unsigned                    bDistortShear : 1;
-    unsigned                    bMoveOutside : 1;      // Handles nach aussen ruecken (fuer TextEdit)
-    unsigned                    bFineHandles : 1;
-
 private:
-    SVX_DLLPRIVATE SdrHdlList(const SdrHdlList&): aList(1024,64,64)  {}
-    SVX_DLLPRIVATE void operator=(const SdrHdlList&)                 {}
-    SVX_DLLPRIVATE sal_Bool operator==(const SdrHdlList&) const      { return sal_False; }
-    SVX_DLLPRIVATE sal_Bool operator!=(const SdrHdlList&) const      { return sal_False; }
+    const basegfx::B2DHomMatrix     maTransformation;
+
+protected:
+    // create marker for this kind
+    virtual void CreateB2dIAObject(::sdr::overlay::OverlayManager& rOverlayManager);
+
+    virtual ~ImpTextframeHdl();
 
 public:
-    SdrHdlList(SdrMarkView* pV);
-    ~SdrHdlList();
-    void Clear();
-
-    // #97016# II
-    void TravelFocusHdl(sal_Bool bForward);
-    SdrHdl* GetFocusHdl() const;
-    void SetFocusHdl(SdrHdl* pNew);
-    void ResetFocusHdl();
-
-    // Access to View
-    SdrMarkView* GetView() const;
-
-    // Sortierung: 1.Level Erst Refpunkt-Handles, dann normale Handles, dann Glue, dann User, dann Plushandles
-    //             2.Level PageView (Pointer)
-    //             3.Level Position (x+y)
-    void     Sort();
-    sal_uIntPtr    GetHdlCount() const                       { return aList.Count(); }
-    SdrHdl*  GetHdl(sal_uIntPtr nNum) const                  { return (SdrHdl*)(aList.GetObject(nNum)); }
-    sal_uIntPtr    GetHdlNum(const SdrHdl* pHdl) const;
-    void     SetHdlSize(sal_uInt16 nSiz);
-    sal_uInt16   GetHdlSize() const                        { return nHdlSize; }
-    void     SetMoveOutside(sal_Bool bOn);
-    sal_Bool IsMoveOutside() const                     { return bMoveOutside; }
-    void     SetRotateShear(sal_Bool bOn);
-    sal_Bool IsRotateShear() const                     { return bRotateShear; }
-    void     SetDistortShear(sal_Bool bOn);
-    sal_Bool IsDistortShear() const                    { return bDistortShear; }
-    void     SetFineHdl(sal_Bool bOn);
-    sal_Bool IsFineHdl() const                        { return bFineHandles; }
-
-    // AddHdl uebernimmt das Handle in sein Eigentum. Es muss
-    // also auf dem Heap stehen, da Clear() ein delete macht.
-    void    AddHdl(SdrHdl* pHdl, sal_Bool bAtBegin=sal_False);
-    SdrHdl* RemoveHdl(sal_uIntPtr nNum);
-
-    // Zuletzt eingefuegte Handles werden am ehesten getroffen
-    // (wenn Handles uebereinander liegen).
-    SdrHdl* IsHdlListHit(const Point& rPnt, sal_Bool bBack=sal_False, sal_Bool bNext=sal_False, SdrHdl* pHdl0=NULL) const;
-    SdrHdl* GetHdl(SdrHdlKind eKind1) const;
+    explicit ImpTextframeHdl(
+        SdrHdlList& rHdlList,
+        const SdrObject& rSdrHdlObject,
+        const basegfx::B2DHomMatrix& rTransformation);
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -515,16 +600,26 @@ public:
 class SVX_DLLPUBLIC SdrCropHdl : public SdrHdl
 {
 public:
-    SdrCropHdl(const Point& rPnt, SdrHdlKind eNewKind);
+    SdrCropHdl(
+        SdrHdlList& rHdlList,
+        const SdrObject& rSdrHdlObject,
+        SdrHdlKind eNewKind,
+        const basegfx::B2DPoint& rPnt);
 
 protected:
-    // create marker for this kind
-    virtual void CreateB2dIAObject();
+    virtual ~SdrCropHdl();
 
-    BitmapEx GetBitmapForHandle( const BitmapEx& rBitmap, int nSize );
+    // create marker for this kind
+    virtual void CreateB2dIAObject(::sdr::overlay::OverlayManager& rOverlayManager);
+
+    BitmapEx GetBitmapForHandle( const BitmapEx& rBitmap, sal_uInt16 nSize );
 
     static BitmapEx GetHandlesBitmap( bool bIsFineHdl, bool bIsHighContrast );
 };
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 #endif //_SVDHDL_HXX
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//eof

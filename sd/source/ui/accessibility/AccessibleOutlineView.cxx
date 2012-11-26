@@ -85,19 +85,17 @@ AccessibleOutlineView::AccessibleOutlineView (
     // depths of the core.  Necessary for making the edit engine accessible.
     if( pViewShell && pSdWindow )
     {
-        ::sd::View* pView = pViewShell->GetView();
+        ::sd::OutlineView* pSdOutlineView = dynamic_cast< ::sd::OutlineView* >(pViewShell->GetView());
 
-        if (pView && pView->ISA(::sd::OutlineView))
+        if (pSdOutlineView)
         {
-            OutlinerView* pOutlineView = static_cast< ::sd::OutlineView*>(
-                pView)->GetViewByWindow( pSdWindow );
-            SdrOutliner* pOutliner =
-                static_cast< ::sd::OutlineView*>(pView)->GetOutliner();
+            OutlinerView* pOutlineView = pSdOutlineView->GetViewByWindow( pSdWindow );
+            SdrOutliner* pOutliner = pSdOutlineView->GetOutliner();
 
             if( pOutlineView && pOutliner )
             {
                 maTextHelper.SetEditSource( ::std::auto_ptr< SvxEditSource >( new AccessibleOutlineEditSource(
-                                                                                  *pOutliner, *pView, *pOutlineView, *pSdWindow ) ) );
+                    *pOutliner, *pViewShell->GetView(), *pOutlineView, *pSdWindow ) ) );
             }
         }
     }

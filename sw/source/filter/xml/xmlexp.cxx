@@ -246,8 +246,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
             {
                 if( 0 != (pItem = rPool.GetItem2( nWhichId , i ) ) )
                 {
-                    const SvXMLAttrContainerItem *pUnknown =
-                                PTR_CAST( SvXMLAttrContainerItem, pItem );
+                    const SvXMLAttrContainerItem *pUnknown = dynamic_cast< const SvXMLAttrContainerItem* >( pItem );
                     ASSERT( pUnknown, "illegal attribute container item" );
                     if( pUnknown && (pUnknown->GetAttrCount() > 0) )
                     {
@@ -324,14 +323,6 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
             pProgress->SetReference( nRef );
             pProgress->SetValue( 0 );
         }
-    }
-
-    if( (getExportFlags() & (EXPORT_MASTERSTYLES|EXPORT_CONTENT)) != 0 )
-    {
-        //Auf die Korrektheit der OrdNums sind wir schon angewiesen.
-        SdrModel* pModel = pDoc->GetDrawModel();
-        if( pModel )
-            pModel->GetPage( 0 )->RecalcObjOrdNums();
     }
 
     // adjust document class (eClass)

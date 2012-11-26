@@ -129,10 +129,9 @@ struct TransitionEffect
         mfDuration = 2.0;
         mnTime = 0;
         mePresChange = PRESCHANGE_MANUAL;
-        mbSoundOn = sal_False;
-        mbLoopSound = sal_False;
-        mbStopSound = sal_False;
-
+        mbSoundOn = false;
+        mbLoopSound = false;
+        mbStopSound = false;
         mbEffectAmbiguous = false;
         mbDurationAmbiguous = false;
         mbTimeAmbiguous = false;
@@ -180,12 +179,12 @@ struct TransitionEffect
         {
             if( mbStopSound )
             {
-                rOutPage.SetStopSound( sal_True );
-                rOutPage.SetSound( sal_False );
+                rOutPage.SetStopSound( true );
+                rOutPage.SetSound( false );
             }
             else
             {
-                rOutPage.SetStopSound( sal_False );
+                rOutPage.SetStopSound( false );
                 rOutPage.SetSound( mbSoundOn );
                 rOutPage.SetSoundFile( maSound );
             }
@@ -221,7 +220,7 @@ struct TransitionEffect
     double      mfDuration;
     sal_uLong       mnTime;
     PresChange  mePresChange;
-    sal_Bool        mbSoundOn;
+    bool        mbSoundOn;
     String      maSound;
     bool        mbLoopSound;
     bool        mbStopSound;
@@ -856,8 +855,8 @@ void SlideTransitionPane::updateControls()
 
     if( aEffect.mbPresChangeAmbiguous )
     {
-        maRB_ADVANCE_ON_MOUSE.Check( sal_False );
-        maRB_ADVANCE_AUTO.Check( sal_False );
+        maRB_ADVANCE_ON_MOUSE.Check( false );
+        maRB_ADVANCE_AUTO.Check( false );
     }
     else
     {
@@ -960,7 +959,7 @@ void SlideTransitionPane::openSoundFileDialog()
                 String aStr( sal_Unicode( '%' ));
                 aStrWarning.SearchAndReplace( aStr , aFile );
                 WarningBox aWarningBox( NULL, WB_3DLOOK | WB_RETRY_CANCEL, aStrWarning );
-                aWarningBox.SetModalInputMode (sal_True);
+                aWarningBox.SetModalInputMode (true);
                 bQuitLoop = (aWarningBox.Execute() != RET_RETRY);
 
                 bValidSoundFile = false;
@@ -1186,7 +1185,7 @@ IMPL_LINK( SlideTransitionPane, ApplyToAllButtonClicked, void *, EMPTYARG )
 
     sal_uInt16 nPageCount = mpDrawDoc->GetSdPageCount( PK_STANDARD );
     pPages->reserve( nPageCount );
-    for( sal_uInt16 i=0; i<nPageCount; ++i )
+    for( sal_uInt32 i=0; i<nPageCount; ++i )
     {
         SdPage * pPage = mpDrawDoc->GetSdPage( i, PK_STANDARD );
         if( pPage )

@@ -46,7 +46,6 @@ class SlideSorterViewShell
     friend class controller::SlotManager;
 
 public:
-    TYPEINFO();
     SFX_DECL_INTERFACE(SD_IF_SDSLIDESORTERVIEWSHELL)
 
     static ::boost::shared_ptr<SlideSorterViewShell> Create(
@@ -101,7 +100,7 @@ public:
             factor.
         */
     virtual void SetZoom (long int nZoom);
-    virtual void SetZoomRect (const Rectangle& rZoomRect);
+    virtual void SetZoomRange(const basegfx::B2DRange& rZoomRange);
 
     /** This is a callback method used by the active window to delegate its
         Paint() call to.  This view shell itself delegates it to the view.
@@ -119,7 +118,7 @@ public:
     //===== Drag and Drop =====================================================
 
     virtual void StartDrag (
-        const Point& rDragPt,
+        const basegfx::B2DPoint& rDragPt,
         ::Window* pWindow );
     virtual void DragFinished (
         sal_Int8 nDropAction);
@@ -127,14 +126,14 @@ public:
         const AcceptDropEvent& rEvt,
         DropTargetHelper& rTargetHelper,
         ::sd::Window* pTargetWindow = NULL,
-        sal_uInt16 nPage = SDRPAGE_NOTFOUND,
-        sal_uInt16 nLayer = SDRPAGE_NOTFOUND );
+        sal_uInt32 nPage = SDRPAGE_NOTFOUND,
+        SdrLayerID aLayer = SDRLAYER_NOTFOUND);
     virtual sal_Int8 ExecuteDrop (
         const ExecuteDropEvent& rEvt,
         DropTargetHelper& rTargetHelper,
         ::sd::Window* pTargetWindow = NULL,
-        sal_uInt16 nPage = SDRPAGE_NOTFOUND,
-        sal_uInt16 nLayer = SDRPAGE_NOTFOUND);
+        sal_uInt32 nPage = SDRPAGE_NOTFOUND,
+        SdrLayerID aLayer = SDRLAYER_NOTFOUND);
 
     typedef ::std::vector<SdPage*> PageSelection;
 

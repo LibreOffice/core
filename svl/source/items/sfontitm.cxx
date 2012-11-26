@@ -33,13 +33,10 @@
 //
 //============================================================================
 
-TYPEINIT1(SfxFontItem, SfxPoolItem);
-
-//============================================================================
 // virtual
 int SfxFontItem::operator ==(const SfxPoolItem & rItem) const
 {
-    const SfxFontItem * pFontItem = PTR_CAST(SfxFontItem, &rItem);
+    const SfxFontItem * pFontItem = dynamic_cast< const SfxFontItem* >( &rItem);
     return pFontItem && m_bHasFont == pFontItem->m_bHasFont
            && m_bHasColor == pFontItem->m_bHasColor
            && m_bHasFillColor == pFontItem->m_bHasFillColor

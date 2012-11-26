@@ -50,22 +50,22 @@ public:
     ::com::sun::star::presentation::AnimationEffect         meEffect;       // Animationseffekt
     ::com::sun::star::presentation::AnimationEffect         meTextEffect;   // Animationseffekt fuer Textinhalt
     ::com::sun::star::presentation::AnimationSpeed          meSpeed;            // Geschwindigkeit der Animation
-    sal_Bool                    mbActive;       // eingeschaltet ?
-    sal_Bool                    mbDimPrevious;  // Objekt abblenden
-    sal_Bool                    mbIsMovie;      // wenn Gruppenobjekt, dann Sequenz aus den
-    sal_Bool                    mbDimHide;      // verstecken statt abblenden
+    bool                    mbActive;       // eingeschaltet ?
+    bool                    mbDimPrevious;  // Objekt abblenden
+    bool                    mbIsMovie;      // wenn Gruppenobjekt, dann Sequenz aus den
+    bool                    mbDimHide;      // verstecken statt abblenden
     Color                   maBlueScreen;   // identifiziert "Hintergrundpixel"
     Color                   maDimColor;     // zum Abblenden des Objekts
     String                  maSoundFile;        // Pfad zum Soundfile in MSDOS-Notation
-    sal_Bool                    mbSoundOn;      // Sound ein/aus
-    sal_Bool                    mbPlayFull;     // Sound ganz abspielen
+    bool                    mbSoundOn;      // Sound ein/aus
+    bool                    mbPlayFull;     // Sound ganz abspielen
     SdrPathObj*             mpPathObj;      // das Pfadobjekt
     ::com::sun::star::presentation::ClickAction             meClickAction;  // Aktion bei Mausklick
     ::com::sun::star::presentation::AnimationEffect         meSecondEffect; // fuer Objekt ausblenden
     ::com::sun::star::presentation::AnimationSpeed          meSecondSpeed;  // fuer Objekt ausblenden
     String                  maSecondSoundFile; // fuer Objekt ausblenden
-    sal_Bool                    mbSecondSoundOn;    // fuer Objekt ausblenden
-    sal_Bool                    mbSecondPlayFull;// fuer Objekt ausblenden
+    bool                    mbSecondSoundOn;    // fuer Objekt ausblenden
+    bool                    mbSecondPlayFull;// fuer Objekt ausblenden
 //  String                  maBookmark;     // Sprung zu Objekt/Seite
     sal_uInt16                  mnVerb;         // fuer OLE-Objekt
     sal_uLong                   mnPresOrder;

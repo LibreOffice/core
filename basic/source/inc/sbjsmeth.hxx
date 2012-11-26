@@ -38,7 +38,6 @@ public:
     virtual ~SbJScriptMethod();
 
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_JSCRIPTMETH,2);
-    TYPEINFO();
 };
 
 #ifndef __SB_SBJSCRIPTMETHODREF_HXX

@@ -30,14 +30,14 @@
 
 using namespace sd;
 
-SdrUndoAction* UndoFactory::CreateUndoRemoveObject( SdrObject& rObject, bool bOrdNumDirect )
+SdrUndoAction* UndoFactory::CreateUndoRemoveObject( SdrObject& rObject )
 {
-    return new UndoRemoveObject( rObject, bOrdNumDirect );
+    return new UndoRemoveObject( rObject );
 }
 
-SdrUndoAction* UndoFactory::CreateUndoDeleteObject( SdrObject& rObject, bool bOrdNumDirect )
+SdrUndoAction* UndoFactory::CreateUndoDeleteObject( SdrObject& rObject )
 {
-    return new UndoDeleteObject( rObject, bOrdNumDirect );
+    return new UndoDeleteObject( rObject );
 }
 
 SdrUndoAction* UndoFactory::CreateUndoObjectSetText( SdrObject& rNewObj, sal_Int32 nText )
@@ -45,9 +45,9 @@ SdrUndoAction* UndoFactory::CreateUndoObjectSetText( SdrObject& rNewObj, sal_Int
     return new UndoObjectSetText( rNewObj, nText );
 }
 
-SdrUndoAction* UndoFactory::CreateUndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject, bool bOrdNumDirect )
+SdrUndoAction* UndoFactory::CreateUndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject )
 {
-    return new UndoReplaceObject( rOldObject, rNewObject, bOrdNumDirect );
+    return new UndoReplaceObject( rOldObject, rNewObject );
 }
 
 SdrUndoAction* UndoFactory::CreateUndoGeoObject( SdrObject& rObject )

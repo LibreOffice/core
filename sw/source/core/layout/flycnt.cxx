@@ -87,9 +87,6 @@ SwFlyAtCntFrm::SwFlyAtCntFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
     bAutoPosition = (FLY_AT_CHAR == pFmt->GetAnchor().GetAnchorId());
 }
 
-// --> OD 2004-06-29 #i28701#
-TYPEINIT1(SwFlyAtCntFrm,SwFlyFreeFrm);
-// <--
 /*************************************************************************
 |*
 |*  SwFlyAtCntFrm::Modify()

@@ -119,8 +119,6 @@ public:
     SwXCell(SwFrmFmt* pTblFmt, const SwStartNode& rStartNode); // XML import interface
 
 
-    TYPEINFO();
-
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
     //XUnoTunnel
@@ -196,8 +194,6 @@ protected:
 public:
     SwXTextTableRow(SwFrmFmt* pFmt, SwTableLine* pLine);
 
-
-    TYPEINFO();
 
     //XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -338,8 +334,6 @@ public:
     //XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
-    TYPEINFO();
-
     //XTextTable
     virtual void SAL_CALL initialize( sal_Int32 nRows, sal_Int32 nColumns ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::table::XTableRows > SAL_CALL getRows(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -449,8 +443,6 @@ public:
     SwXCellRange(SwUnoCrsr* pCrsr, SwFrmFmt& rFrmFmt, SwRangeDescriptor& rDesc);
     ~SwXCellRange();
 
-    TYPEINFO();
-
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
     //XUnoTunnel
@@ -533,8 +525,6 @@ public:
     SwXTableRows(SwFrmFmt& rFrmFmt);
 
 
-    TYPEINFO();
-
 // automatisch auskommentiert - [getIdlClass or queryInterface] - Bitte XTypeProvider benutzen!
 //  virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >  > getIdlClasses(void) throw( ::com::sun::star::uno::RuntimeException );
 
@@ -582,7 +572,6 @@ public:
     SwXTableColumns(SwFrmFmt& rFrmFmt);
 
 
-    TYPEINFO();
 // automatisch auskommentiert - [getIdlClass or queryInterface] - Bitte XTypeProvider benutzen!
 //  virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >  > getIdlClasses(void) throw( ::com::sun::star::uno::RuntimeException );
 

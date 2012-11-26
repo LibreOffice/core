@@ -111,8 +111,6 @@ bool operator==(const util::DateTime &i_rLeft, const util::DateTime &i_rRight)
 
 // STATIC DATA -----------------------------------------------------------
 
-TYPEINIT1_AUTOFACTORY(SfxDocumentInfoItem, SfxStringItem);
-
 const sal_uInt16 HI_NAME = 1;
 const sal_uInt16 HI_TYPE = 2;
 const sal_uInt16 HI_VALUE = 3;
@@ -340,32 +338,32 @@ SfxPoolItem* SfxDocumentInfoItem::Clone( SfxItemPool * ) const
 
 int SfxDocumentInfoItem::operator==( const SfxPoolItem& rItem) const
 {
-    if (!(rItem.Type() == Type() && SfxStringItem::operator==(rItem))) {
+    const SfxDocumentInfoItem* pSfxDocumentInfoItem = dynamic_cast< const SfxDocumentInfoItem* >(&rItem);
+
+    if(!pSfxDocumentInfoItem || !SfxStringItem::operator==(rItem))
+    {
         return false;
     }
-    const SfxDocumentInfoItem& rInfoItem(
-        static_cast<const SfxDocumentInfoItem&>(rItem));
 
     return
-         m_AutoloadDelay        == rInfoItem.m_AutoloadDelay     &&
-         m_AutoloadURL          == rInfoItem.m_AutoloadURL       &&
-         m_isAutoloadEnabled    == rInfoItem.m_isAutoloadEnabled &&
-         m_DefaultTarget        == rInfoItem.m_DefaultTarget     &&
-         m_Author               == rInfoItem.m_Author            &&
-         m_CreationDate         == rInfoItem.m_CreationDate      &&
-         m_ModifiedBy           == rInfoItem.m_ModifiedBy        &&
-         m_ModificationDate     == rInfoItem.m_ModificationDate  &&
-         m_PrintedBy            == rInfoItem.m_PrintedBy         &&
-         m_PrintDate            == rInfoItem.m_PrintDate         &&
-         m_EditingCycles        == rInfoItem.m_EditingCycles     &&
-         m_EditingDuration      == rInfoItem.m_EditingDuration   &&
-         m_Description          == rInfoItem.m_Description       &&
-         m_Keywords             == rInfoItem.m_Keywords          &&
-         m_Subject              == rInfoItem.m_Subject           &&
-         m_Title                == rInfoItem.m_Title             &&
-         m_aCustomProperties.size() == rInfoItem.m_aCustomProperties.size() &&
-         std::equal(m_aCustomProperties.begin(), m_aCustomProperties.end(),
-            rInfoItem.m_aCustomProperties.begin());
+         m_AutoloadDelay        == pSfxDocumentInfoItem->m_AutoloadDelay     &&
+         m_AutoloadURL          == pSfxDocumentInfoItem->m_AutoloadURL       &&
+         m_isAutoloadEnabled    == pSfxDocumentInfoItem->m_isAutoloadEnabled &&
+         m_DefaultTarget        == pSfxDocumentInfoItem->m_DefaultTarget     &&
+         m_Author               == pSfxDocumentInfoItem->m_Author            &&
+         m_CreationDate         == pSfxDocumentInfoItem->m_CreationDate      &&
+         m_ModifiedBy           == pSfxDocumentInfoItem->m_ModifiedBy        &&
+         m_ModificationDate     == pSfxDocumentInfoItem->m_ModificationDate  &&
+         m_PrintedBy            == pSfxDocumentInfoItem->m_PrintedBy         &&
+         m_PrintDate            == pSfxDocumentInfoItem->m_PrintDate         &&
+         m_EditingCycles        == pSfxDocumentInfoItem->m_EditingCycles     &&
+         m_EditingDuration      == pSfxDocumentInfoItem->m_EditingDuration   &&
+         m_Description          == pSfxDocumentInfoItem->m_Description       &&
+         m_Keywords             == pSfxDocumentInfoItem->m_Keywords          &&
+         m_Subject              == pSfxDocumentInfoItem->m_Subject           &&
+         m_Title                == pSfxDocumentInfoItem->m_Title             &&
+         m_aCustomProperties.size() == pSfxDocumentInfoItem->m_aCustomProperties.size() &&
+         std::equal(m_aCustomProperties.begin(), m_aCustomProperties.end(), pSfxDocumentInfoItem->m_aCustomProperties.begin());
 }
 
 //------------------------------------------------------------------------
@@ -734,7 +732,7 @@ void SfxDocumentDescPage::Reset(const SfxItemSet &rSet)
      aKeywordsEd.SetText( pInfoItem->getKeywords() );
      aCommentEd.SetText( pInfoItem->getDescription() );
 
-     SFX_ITEMSET_ARG( &rSet, pROItem, SfxBoolItem, SID_DOC_READONLY, sal_False );
+     SFX_ITEMSET_ARG( &rSet, pROItem, SfxBoolItem, SID_DOC_READONLY );
      if ( pROItem && pROItem->GetValue() )
      {
         aTitleEd.SetReadOnly( sal_True );
@@ -1072,7 +1070,7 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
     }
     else
     {
-        DBG_ASSERT( pItem->IsA( TYPE( SfxStringItem ) ), "SfxDocumentPage:<SfxStringItem> erwartet" );
+        DBG_ASSERT( dynamic_cast< const SfxStringItem* >(pItem), "SfxDocumentPage:<SfxStringItem> erwartet" );
         aName = ( ( SfxStringItem* ) pItem )->GetValue();
     }
     aNameED.SetText( aName );
@@ -1432,7 +1430,7 @@ SfxTabPage *SfxInternetPage::Create( Window* pParent, const SfxItemSet& rItemSet
 void SfxInternetPage::Reset( const SfxItemSet& rSet )
 {
     pInfoItem = &( SfxDocumentInfoItem& ) rSet.Get( SID_DOCINFO );
-    SFX_ITEMSET_ARG( &rSet, pURLItem, SfxStringItem, SID_BASEURL, sal_False );
+    SFX_ITEMSET_ARG( &rSet, pURLItem, SfxStringItem, SID_BASEURL );
     DBG_ASSERT( pURLItem, "No BaseURL provided for InternetTabPage!" );
     if ( pURLItem )
         aBaseURL = pURLItem->GetValue();
@@ -1460,7 +1458,7 @@ void SfxInternetPage::Reset( const SfxItemSet& rSet )
     ChangeState( eNewState );
 
     // #102907# ------------------------
-    SFX_ITEMSET_ARG( &rSet, pROItem, SfxBoolItem, SID_DOC_READONLY, sal_False );
+    SFX_ITEMSET_ARG( &rSet, pROItem, SfxBoolItem, SID_DOC_READONLY );
     if ( pROItem && pROItem->GetValue() )
     {
         aRBNoAutoUpdate.Disable();
@@ -1511,7 +1509,7 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( Window* pParent,
         &(const SfxDocumentInfoItem &)rItemSet.Get( SID_DOCINFO );
 
 #ifdef DBG_UTIL
-    SFX_ITEMSET_ARG( &rItemSet, pURLItem, SfxStringItem, SID_BASEURL, sal_False );
+    SFX_ITEMSET_ARG( &rItemSet, pURLItem, SfxStringItem, SID_BASEURL );
     DBG_ASSERT( pURLItem, "No BaseURL provided for InternetTabPage!" );
 #endif
 
@@ -1540,8 +1538,7 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( Window* pParent,
     }
     else
     {
-        DBG_ASSERT( pItem->IsA( TYPE( SfxStringItem ) ),
-                    "SfxDocumentInfoDialog:<SfxStringItem> erwartet" );
+        DBG_ASSERT( dynamic_cast< const SfxStringItem* >(pItem), "SfxDocumentInfoDialog:<SfxStringItem> erwartet" );
         aTitle += ( ( SfxStringItem* ) pItem )->GetValue();
     }
     SetText( aTitle );

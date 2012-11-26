@@ -220,8 +220,7 @@ namespace slideshow
             }
             else
             {
-                aMatrix.scale( rTargetSize.getX(),
-                               rTargetSize.getY() );
+                aMatrix.scale( rTargetSize );
             }
 
             // apply cumulative transformation to clip polygon

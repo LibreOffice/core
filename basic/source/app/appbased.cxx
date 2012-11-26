@@ -45,7 +45,6 @@
 #include "basrid.hxx"
 
 
-TYPEINIT1(AppBasEd,AppEdit);
 AppBasEd::AppBasEd( BasicFrame* pParent, SbModule* p )
 : AppEdit( pParent )
 , pBreakpoints( NULL )
@@ -103,7 +102,7 @@ AppBasEd::~AppBasEd()
 
 void AppBasEd::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    const SfxSimpleHint* p = PTR_CAST(SfxSimpleHint,&rHint);
+    const SfxSimpleHint* p = dynamic_cast< const SfxSimpleHint* >( &rHint);
     if( p )
     {
         sal_uIntPtr nHintId = p->GetId();

@@ -25,7 +25,6 @@
 
 #include "svl/svldllapi.h"
 #include <tools/solar.h>
-#include <tools/rtti.hxx>
 #include <svl/poolitem.hxx>
 
 class SvStream;
@@ -41,8 +40,6 @@ class SVL_DLLPUBLIC SfxFlagItem: public SfxPoolItem
     sal_uInt16                   nVal;
 
 public:
-                             TYPEINFO();
-
                              SfxFlagItem( sal_uInt16 nWhich = 0, sal_uInt16 nValue = 0 );
                              SfxFlagItem( sal_uInt16 nWhich, SvStream & );
                              SfxFlagItem( const SfxFlagItem& );

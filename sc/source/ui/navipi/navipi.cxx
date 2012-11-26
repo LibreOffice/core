@@ -906,9 +906,11 @@ void ScNavigatorDlg::DoResize()
 
 void __EXPORT ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.ISA(SfxSimpleHint) )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if ( pSfxSimpleHint )
     {
-        sal_uLong nHintId = ((SfxSimpleHint&)rHint).GetId();
+        sal_uLong nHintId = pSfxSimpleHint->GetId();
 
         if ( nHintId == SC_HINT_DOCNAME_CHANGED )
         {
@@ -960,15 +962,21 @@ void __EXPORT ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
             }
         }
     }
-    else if ( rHint.ISA(SfxEventHint) )
+    else
     {
-        sal_uLong nEventId = ((SfxEventHint&)rHint).GetEventId();
+        const SfxEventHint* pSfxEventHint = dynamic_cast< const SfxEventHint* >(&rHint);
+
+        if ( pSfxEventHint )
+    {
+            sal_uLong nEventId = pSfxEventHint->GetEventId();
+
         if ( nEventId == SFX_EVENT_ACTIVATEDOC )
         {
             aLbEntries.ActiveDocChanged();
             UpdateAll();
         }
     }
+}
 }
 
 //------------------------------------------------------------------------
@@ -1099,7 +1107,7 @@ void ScNavigatorDlg::SetCurrentDoc( const String& rDocName )        // aktiviere
 
 ScTabViewShell* ScNavigatorDlg::GetTabViewShell() const
 {
-    return PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
+    return dynamic_cast< ScTabViewShell* >( SfxViewShell::Current() );
 }
 
 //------------------------------------------------------------------------
@@ -1334,13 +1342,13 @@ void ScNavigatorDlg::GetDocNames( const String* pManualSel )
     aLbDocuments.Clear();
     aLbDocuments.SetUpdateMode( sal_False );
 
-    ScDocShell* pCurrentSh = PTR_CAST( ScDocShell, SfxObjectShell::Current() );
+    ScDocShell* pCurrentSh = dynamic_cast< ScDocShell* >( SfxObjectShell::Current() );
 
     String aSelEntry;
     SfxObjectShell* pSh = SfxObjectShell::GetFirst();
     while ( pSh )
     {
-        if ( pSh->ISA(ScDocShell) )
+        if ( dynamic_cast< ScDocShell* >(pSh) )
         {
             String aName = pSh->GetTitle();
             String aEntry = aName;

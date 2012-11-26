@@ -36,8 +36,6 @@
 
 namespace sd {
 
-TYPEINIT1( FuOutline, FuPoor );
-
 /*************************************************************************
 |*
 |* Konstruktor
@@ -62,9 +60,9 @@ FuOutline::FuOutline (
 |*
 \************************************************************************/
 
-sal_Bool FuOutline::Command(const CommandEvent& rCEvt)
+bool FuOutline::Command(const CommandEvent& rCEvt)
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     OutlinerView* pOlView =
         static_cast<OutlineView*>(mpView)->GetViewByWindow(mpWindow);
@@ -73,7 +71,7 @@ sal_Bool FuOutline::Command(const CommandEvent& rCEvt)
     if (pOlView)
     {
         pOlView->Command(rCEvt);        // liefert leider keinen Returnwert
-        bResult = sal_True;
+        bResult = true;
     }
     return bResult;
 }

@@ -37,9 +37,6 @@ int SwIndex::nSerial = 0;
 #endif
 
 
-TYPEINIT0(SwIndexReg);  // rtti
-
-
 #ifdef CHK
 
 #define IDX_CHK_ARRAY       pArray->ChhkArr();

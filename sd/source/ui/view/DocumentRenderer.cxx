@@ -214,7 +214,7 @@ namespace {
 
         /** When the value of the property with name pName is a boolean then
             return its value. When the property is unknown then
-            bDefaultValue is returned.  Otherwise <FALSE/> is returned.
+            bDefaultValue is returned.  Otherwise <false/> is returned.
         */
         bool GetBoolValue (
             const sal_Char* pName,
@@ -224,9 +224,9 @@ namespace {
             return bValue;
         }
 
-        /** Return <TRUE/> when the value of the property with name pName is
+        /** Return <true/> when the value of the property with name pName is
             a string and its value equals pValue. When the property is
-            unknown then bDefaultValue is returned.  Otherwise <FALSE/> is
+            unknown then bDefaultValue is returned.  Otherwise <false/> is
             returned.
         */
         bool GetBoolValue (
@@ -241,8 +241,8 @@ namespace {
                 return bDefaultValue;
         }
 
-        /** Return <TRUE/> when the value of the property with name pName is
-            an integer and its value is nTriggerValue. Otherwise <FALSE/> is
+        /** Return <true/> when the value of the property with name pName is
+            an integer and its value is nTriggerValue. Otherwise <false/> is
             returned.
         */
         bool GetBoolValue (
@@ -266,7 +266,7 @@ namespace {
         Selection (const OUString& rsSelection, const SdPage* pCurrentPage)
             : mbAreAllPagesSelected(rsSelection.equalsAscii("all")),
               mbIsShapeSelection(rsSelection.equalsAscii("selection")),
-              mnCurrentPageIndex(pCurrentPage!=NULL ? (pCurrentPage->GetPageNum()-1)/2 : -1),
+              mnCurrentPageIndex(pCurrentPage!=NULL ? (pCurrentPage->GetPageNumber()-1)/2 : -1),
               mpSelectedPages()
         {
             if ( ! (mbAreAllPagesSelected || mbIsShapeSelection))
@@ -348,20 +348,30 @@ namespace {
         const SetOfByte& rVisibleLayers,
         const SetOfByte& rPrintableLayers)
     {
-        rPrintView.ShowSdrPage(&rPage);
+        rPrintView.ShowSdrPage(rPage);
 
         const MapMode aOriginalMapMode (rPrinter.GetMapMode());
 
         // Set the visible layers
         SdrPageView* pPageView = rPrintView.GetSdrPageView();
         OSL_ASSERT(pPageView!=NULL);
-        pPageView->SetVisibleLayers(rVisibleLayers);
-        pPageView->SetPrintableLayers(rPrintableLayers);
+
+        if(pPageView)
+        {
+            pPageView->SetVisibleLayers(rVisibleLayers);
+            pPageView->SetPrintableLayers(rPrintableLayers);
+        }
 
         if (pView!=NULL && bPrintMarkedOnly)
+        {
             pView->DrawMarkedObj(rPrinter);
+        }
         else
-            rPrintView.CompleteRedraw(&rPrinter, Rectangle(Point(0,0), rPage.GetSize()));
+        {
+            const Region aRegion(Rectangle(0, 0, basegfx::fround(rPage.GetPageScale().getX()), basegfx::fround(rPage.GetPageScale().getY())));
+
+            rPrintView.CompleteRedraw(&rPrinter, aRegion);
+        }
 
         rPrinter.SetMapMode(aOriginalMapMode);
 
@@ -865,13 +875,13 @@ namespace {
                 return;
             MapMode aMap (rPrinter.GetMapMode());
 
-            const Size aPageSize (pPageToPrint->GetSize());
-            const Size aPrintSize (rPrinter.GetOutputSize());
+            const Size aPageSize(basegfx::fround(pPageToPrint->GetPageScale().getX()), basegfx::fround(pPageToPrint->GetPageScale().getY()));
+            const Size aPrintSize(rPrinter.GetOutputSize());
 
             const sal_Int32 nPageWidth (aPageSize.Width() + mnGap
-                - pPageToPrint->GetLftBorder() - pPageToPrint->GetRgtBorder());
+                - pPageToPrint->GetLeftPageBorder() - pPageToPrint->GetRightPageBorder());
             const sal_Int32 nPageHeight (aPageSize.Height() + mnGap
-                - pPageToPrint->GetUppBorder() - pPageToPrint->GetLwrBorder());
+                - pPageToPrint->GetTopPageBorder() - pPageToPrint->GetBottomPageBorder());
             if (nPageWidth<=0 || nPageHeight<=0)
                 return;
 
@@ -979,8 +989,8 @@ namespace {
         }
 
     private:
-        const sal_uInt16 mnFirstPageIndex;
-        const sal_uInt16 mnSecondPageIndex;
+        const sal_uInt32 mnFirstPageIndex;
+        const sal_uInt32 mnSecondPageIndex;
         const Point maFirstOffset;
         const Point maSecondOffset;
     };
@@ -994,8 +1004,8 @@ namespace {
     {
     public:
         HandoutPrinterPage (
-            const sal_uInt16 nHandoutPageIndex,
-            const ::std::vector<sal_uInt16>& rPageIndices,
+            const sal_uInt32 nHandoutPageIndex,
+            const ::std::vector< sal_uInt32 >& rPageIndices,
             const MapMode& rMapMode,
             const ::rtl::OUString& rsPageString,
             const Point& rPageStringOffset,
@@ -1037,7 +1047,7 @@ namespace {
 
             // Connect page objects with pages.
             std::vector<SdrPageObj*>::iterator aPageObjIter (aHandoutPageObjects.begin());
-            for (std::vector<sal_uInt16>::const_iterator
+            for (std::vector< sal_uInt32 >::const_iterator
                      iPageIndex(maPageIndices.begin()),
                      iEnd(maPageIndices.end());
                  iPageIndex!=iEnd && aPageObjIter!=aHandoutPageObjects.end();
@@ -1126,8 +1136,8 @@ namespace {
        }
 
     private:
-        const sal_uInt16 mnHandoutPageIndex;
-        const ::std::vector<sal_uInt16> maPageIndices;
+        const sal_uInt32 mnHandoutPageIndex;
+        const ::std::vector< sal_uInt32 > maPageIndices;
     };
 
 
@@ -1180,12 +1190,12 @@ namespace {
             const Rectangle aOutRect (rPrinter.GetPageOffset(), rPrinter.GetOutputSize());
             Outliner* pOutliner = rDocument.GetInternalOutliner();
             const sal_uInt16 nSavedOutlMode (pOutliner->GetMode());
-            const sal_Bool bSavedUpdateMode (pOutliner->GetUpdateMode());
+            const bool bSavedUpdateMode (pOutliner->GetUpdateMode());
             const Size aSavedPaperSize (pOutliner->GetPaperSize());
 
             pOutliner->Init(OUTLINERMODE_OUTLINEVIEW);
             pOutliner->SetPaperSize(aOutRect.GetSize());
-            pOutliner->SetUpdateMode(sal_True);
+            pOutliner->SetUpdateMode(true);
             pOutliner->Clear();
             pOutliner->SetText(*mpParaObject);
 
@@ -1507,8 +1517,10 @@ private:
             rOutliner.SetControlWord( nCntrl );
 
             // When in outline view then apply all pending changes to the model.
-            if (pShell->ISA(OutlineViewShell))
-                static_cast<OutlineViewShell*>(pShell)->PrepareClose (sal_False, sal_False);
+            OutlineViewShell* pOutlineViewShell = dynamic_cast< OutlineViewShell* >(pShell);
+
+            if (pOutlineViewShell)
+                pOutlineViewShell->PrepareClose (false, false);
 
             // Collect some frequently used data.
             if (mpOptions->IsDate())
@@ -1518,7 +1530,7 @@ private:
             }
 
             if (mpOptions->IsTime())
-                aInfo.msTimeDate += GetSdrGlobalData().GetLocaleData()->getTime( Time(), sal_False, sal_False );
+                aInfo.msTimeDate += GetSdrGlobalData().GetLocaleData()->getTime( Time(), false, false );
             aInfo.maPrintSize = aInfo.mpPrinter->GetOutputSize();
             maPrintSize = awt::Size(
                 aInfo.mpPrinter->GetPaperSize().Width(),
@@ -1541,13 +1553,6 @@ private:
                 default:
                     aInfo.mnDrawMode = DRAWMODE_DEFAULT;
             }
-
-            // check if selected range of pages contains transparent objects
-            /*
-            const bool bPrintPages (bPrintNotes || bPrintDraw || bPrintHandout);
-            const bool bContainsTransparency (bPrintPages && ContainsTransparency());
-            if (pPrinter->InitJob (mrBase.GetWindow(), !bIsAPI && bContainsTransparency))
-            */
 
             if (mpOptions->IsDraw())
                 PrepareStdOrNotes(PK_STANDARD, aInfo);
@@ -1604,75 +1609,52 @@ private:
         // delete all previous shapes from handout page
         while( pHandout->GetObjCount() )
         {
-            SdrObject* pObj = pHandout->NbcRemoveObject(0);
+            SdrObject* pObj = pHandout->RemoveObjectFromSdrObjList(pHandout->GetObjCount() - 1);
             if( pObj )
-                SdrObject::Free( pObj  );
+            {
+                deleteSdrObjectSafeAndClearPointer( pObj  );
+            }
         }
 
         const bool bDrawLines (eLayout == AUTOLAYOUT_HANDOUT3);
 
-        std::vector< Rectangle > aAreas;
+        std::vector< basegfx::B2DRange > aAreas;
         SdPage::CalculateHandoutAreas( rModel, eLayout, bHandoutHorizontal, aAreas );
 
-        std::vector< Rectangle >::iterator iter( aAreas.begin() );
+        std::vector< basegfx::B2DRange >::iterator iter( aAreas.begin() );
         while( iter != aAreas.end() )
         {
-            pHandout->NbcInsertObject( new SdrPageObj((*iter++)) );
+            basegfx::B2DRange aRange(*iter++);
+            SdrPageObj* pNewSdrPageObj = new SdrPageObj(
+                rModel,
+                basegfx::tools::createScaleTranslateB2DHomMatrix(aRange.getRange(), aRange.getMinimum()));
+            pHandout->InsertObjectToSdrObjList(*pNewSdrPageObj);
 
             if( bDrawLines && (iter != aAreas.end())  )
             {
-                Rectangle aRect( (*iter++) );
-
+                aRange = *iter++;
                 basegfx::B2DPolygon aPoly;
-                aPoly.insert(0, basegfx::B2DPoint( aRect.Left(), aRect.Top() ) );
-                aPoly.insert(1, basegfx::B2DPoint( aRect.Right(), aRect.Top() ) );
+                aPoly.append( aRange.getMinimum() );
+                aPoly.append( basegfx::B2DPoint( aRange.getMaxX(), aRange.getMinY() ) );
 
-                basegfx::B2DHomMatrix aMatrix;
-                aMatrix.translate( 0.0, static_cast< double >( aRect.GetHeight() / 7 ) );
-
+                const basegfx::B2DHomMatrix aMatrix(basegfx::tools::createTranslateB2DHomMatrix( 0.0, aRange.getHeight() / 7.0));
                 basegfx::B2DPolyPolygon aPathPoly;
+
                 for( sal_uInt16 nLine = 0; nLine < 7; nLine++ )
                 {
                     aPoly.transform( aMatrix );
                     aPathPoly.append( aPoly );
                 }
 
-                SdrPathObj* pPathObj = new SdrPathObj(OBJ_PATHLINE, aPathPoly );
+                SdrPathObj* pPathObj = new SdrPathObj(
+                    rModel,
+                    aPathPoly );
+
                 pPathObj->SetMergedItem(XLineStyleItem(XLINE_SOLID));
                 pPathObj->SetMergedItem(XLineColorItem(String(), Color(COL_BLACK)));
-
-                pHandout->NbcInsertObject( pPathObj );
+                pHandout->InsertObjectToSdrObjList(*pPathObj);
             }
         }
-    }
-
-
-
-
-    /** Detect whether any of the slides that are to be printed contains
-        partially transparent or translucent shapes.
-    */
-    bool ContainsTransparency (const PrintInfo& rInfo) const
-    {
-        // const bool bPrintExcluded (mpOptions->IsPrintExcluded());
-        bool bContainsTransparency = false;
-
-        for (sal_uInt16
-                 nIndex=0,
-                 nCount=mrBase.GetDocument()->GetSdPageCount(PK_STANDARD);
-             nIndex < nCount && !bContainsTransparency;
-             ++nIndex)
-        {
-            SdPage* pPage = GetFilteredPage(nIndex, PK_STANDARD, rInfo);
-            if (pPage == NULL)
-                continue;
-
-            bContainsTransparency = pPage->HasTransparentObjects();
-            if ( ! bContainsTransparency && pPage->TRG_HasMasterPage())
-                bContainsTransparency = pPage->TRG_GetMasterPage().HasTransparentObjects();
-        }
-
-        return bContainsTransparency;
     }
 
 
@@ -1693,7 +1675,7 @@ private:
         if ( ! rInfo.maSelection.IsSelected(nPageIndex))
             return NULL;
         SdPage* pPage = mrBase.GetDocument()->GetSdPage(
-            sal::static_int_cast<sal_uInt16>(nPageIndex),
+            sal::static_int_cast< sal_uInt32 >(nPageIndex),
             ePageKind);
         if (pPage == NULL)
             return NULL;
@@ -1735,11 +1717,11 @@ private:
         Outliner* pOutliner = mrBase.GetDocument()->GetInternalOutliner();
         pOutliner->Init(OUTLINERMODE_OUTLINEVIEW);
         const sal_uInt16 nSavedOutlMode (pOutliner->GetMode());
-        const sal_Bool bSavedUpdateMode (pOutliner->GetUpdateMode());
+        const bool bSavedUpdateMode (pOutliner->GetUpdateMode());
         const Size aSavedPaperSize (pOutliner->GetPaperSize());
         const MapMode aSavedMapMode (pOutliner->GetRefMapMode());
         pOutliner->SetPaperSize(aOutRect.GetSize());
-        pOutliner->SetUpdateMode(sal_True);
+        pOutliner->SetUpdateMode(true);
 
         long nPageH = aOutRect.GetHeight();
 
@@ -1908,7 +1890,7 @@ private:
 
         if ( bScalePage )
         {
-            const Size aPageSize (rHandoutPage.GetSize());
+            const Size aPageSize(basegfx::fround(rHandoutPage.GetPageScale().getX()), basegfx::fround(rHandoutPage.GetPageScale().getY()));
             const Size aPrintSize (rInfo.mpPrinter->GetOutputSize());
 
             const double fHorz = (double) aPrintSize.Width()    / aPageSize.Width();
@@ -1944,8 +1926,9 @@ private:
         mrBase.GetDocument()->setHandoutPageCount( nHandoutPageCount );
 
         // Distribute pages to handout pages.
-        ::std::vector<sal_uInt16> aPageIndices;
-        for (sal_uInt16
+        ::std::vector< sal_uInt32 > aPageIndices;
+        std::vector<SdPage*> aPagesVector;
+        for (sal_uInt32
                  nIndex=0,
                  nCount= nPageCount,
                  nHandoutPageIndex=0;
@@ -1961,7 +1944,8 @@ private:
 
             // Create a printer page when we have found one page for each
             // placeholder or when this is the last (and special) loop.
-            if (!aPageIndices.empty() && (aPageIndices.size() == nShapeCount || nIndex==nCount))
+            if (aPageIndices.size() == nShapeCount
+                || nIndex==nCount)
             {
                 maPrinterPages.push_back(
                     ::boost::shared_ptr<PrinterPage>(
@@ -1995,7 +1979,7 @@ private:
         if (pDocument->GetSdPageCount(ePageKind) == 0)
             return;
         SdPage* pRefPage = pDocument->GetSdPage(0, ePageKind);
-        rInfo.maPageSize = pRefPage->GetSize();
+        rInfo.maPageSize = Size(basegfx::fround(pRefPage->GetPageScale().getX()), basegfx::fround(pRefPage->GetPageScale().getY()));
 
         if ( ! SetupPaperOrientation(ePageKind, rInfo))
             return;
@@ -2036,7 +2020,7 @@ private:
 
             MapMode aMap (rInfo.maMap);
             // Kann sich die Seitengroesse geaendert haben?
-            const Size aPageSize = pPage->GetSize();
+            const Size aPageSize(basegfx::fround(pPage->GetPageScale().getX()), basegfx::fround(pPage->GetPageScale().getY()));
 
             if (mpOptions->IsPageSize())
             {
@@ -2063,18 +2047,18 @@ private:
                 rInfo.msPageString = ::rtl::OUString();
             rInfo.msPageString += rInfo.msTimeDate;
 
-            long aPageWidth   = aPageSize.Width() - pPage->GetLftBorder() - pPage->GetRgtBorder();
-            long aPageHeight  = aPageSize.Height() - pPage->GetUppBorder() - pPage->GetLwrBorder();
+            long aPageWidth   = aPageSize.Width() - pPage->GetLeftPageBorder() - pPage->GetRightPageBorder();
+            long aPageHeight  = aPageSize.Height() - pPage->GetTopPageBorder() - pPage->GetBottomPageBorder();
             // Bugfix zu 44530:
             // Falls implizit umgestellt wurde (Landscape/Portrait)
             // wird dies beim Kacheln, bzw. aufteilen (Poster) beruecksichtigt
-            sal_Bool bSwitchPageSize = sal_False;
+            bool bSwitchPageSize = false;
             if( ( rInfo.maPrintSize.Width() > rInfo.maPrintSize.Height()
                     && aPageWidth < aPageHeight )
                 || ( rInfo.maPrintSize.Width() < rInfo.maPrintSize.Height()
                     && aPageWidth > aPageHeight ) )
             {
-                bSwitchPageSize = sal_True;
+                bSwitchPageSize = true;
                 const sal_Int32 nTmp (rInfo.maPrintSize.Width());
                 rInfo.maPrintSize.Width() = rInfo.maPrintSize.Height();
                 rInfo.maPrintSize.Height() = nTmp;
@@ -2312,9 +2296,9 @@ private:
             // keep the page content at its position if it fits, otherwise
             // move it to the printable area
             const long nPageWidth (
-                rInfo.maPageSize.Width() - rPage.GetLftBorder() - rPage.GetRgtBorder());
+                rInfo.maPageSize.Width() - rPage.GetLeftPageBorder() - rPage.GetRightPageBorder());
             const long nPageHeight (
-                rInfo.maPageSize.Height() - rPage.GetUppBorder() - rPage.GetLwrBorder());
+                rInfo.maPageSize.Height() - rPage.GetTopPageBorder() - rPage.GetBottomPageBorder());
             #if 0
             Point aOrigin (
                 nPageWidth < rInfo.maPrintSize.Width() ? -aPageOffset.X() : 0,

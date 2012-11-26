@@ -35,6 +35,7 @@
 #include <editeng/boxitem.hxx>
 #include <sfx2/printer.hxx>
 #include <editeng/lspcitem.hxx>
+#include <svx/svdlegacy.hxx>
 
 #include <fmtornt.hxx>
 #include <fmtanchr.hxx>
@@ -79,6 +80,8 @@
 #include <paratr.hxx>
 #include <sortedobjs.hxx>
 #include <objectformatter.hxx>
+// <--
+#include <svx/fmmodel.hxx>
 #include <switerator.hxx>
 
 // ftnfrm.cxx:
@@ -267,7 +270,7 @@ SwFrmNotify::~SwFrmNotify()
                 bool bNotify = false;
                 bool bNotifySize = false;
                 SwAnchoredObject* pObj = rObjs[i];
-                SwContact* pContact = ::GetUserCall( pObj->GetDrawObj() );
+                SwContact* pContact = ::findConnectionToSdrObject( pObj->GetDrawObj() );
                 // --> OD 2004-12-08 #115759#
                 const bool bAnchoredAsChar = pContact->ObjAnchoredAsChar();
                 if ( !bAnchoredAsChar )
@@ -286,11 +289,13 @@ SwFrmNotify::~SwFrmNotify()
                         // assure that to-fly anchored Writer fly frames are
                         // registered at the correct page frame, if frame
                         // position has changed.
-                        if ( bAbsP && pContact->ObjAnchoredAtFly() &&
-                             pObj->ISA(SwFlyFrm) )
+                        if ( bAbsP && pContact->ObjAnchoredAtFly())
                         {
                             // determine to-fly anchored Writer fly frame
-                            SwFlyFrm* pFlyFrm = static_cast<SwFlyFrm*>(pObj);
+                            SwFlyFrm* pFlyFrm = dynamic_cast< SwFlyFrm* >(pObj);
+
+                            if( pFlyFrm )
+                            {
                             // determine page frame of to-fly anchored
                             // Writer fly frame
                             SwPageFrm* pFlyPageFrm = pFlyFrm->FindPageFrm();
@@ -308,6 +313,7 @@ SwFrmNotify::~SwFrmNotify()
                                     pPageFrm->AppendFlyToPage( pFlyFrm );
                             }
                         }
+                    }
                     }
                     // otherwise the objects are notified in dependence to
                     // its positioning and alignment
@@ -347,9 +353,10 @@ SwFrmNotify::~SwFrmNotify()
                 // perform notification via the corresponding invalidations
                 if ( bNotify )
                 {
-                    if ( pObj->ISA(SwFlyFrm) )
+                    SwFlyFrm* pFlyFrm = dynamic_cast< SwFlyFrm* >(pObj);
+
+                    if ( pFlyFrm )
                     {
-                        SwFlyFrm* pFlyFrm = static_cast<SwFlyFrm*>(pObj);
                         if ( bNotifySize )
                             pFlyFrm->_InvalidateSize();
                         // --> OD 2004-12-08 #115759# - no invalidation of
@@ -361,7 +368,7 @@ SwFrmNotify::~SwFrmNotify()
                         // <--
                         pFlyFrm->_Invalidate();
                     }
-                    else if ( pObj->ISA(SwAnchoredDrawObject) )
+                    else if ( dynamic_cast< SwAnchoredDrawObject* >(pObj) )
                     {
                         // --> OD 2004-12-08 #115759# - no invalidation of
                         // position for as-character anchored objects.
@@ -416,7 +423,7 @@ SwFrmNotify::~SwFrmNotify()
                 // --> OD 2005-07-29 #i50668#, #i50998# - invalidation of position
                 // of as-character anchored fly frames not needed and can cause
                 // layout loops
-                if ( !pFly->ISA(SwFlyInCntFrm) )
+                if ( !dynamic_cast< SwFlyInCntFrm* >(pFly) )
                 {
                     pFly->InvalidatePos();
                 }
@@ -733,7 +740,7 @@ SwFlyNotify::~SwFlyNotify()
     // --> OD 2005-03-21 #i45180# - no adjustment of layout process flags and
     // further notifications/invalidations, if format is called by grow/shrink
     if ( pFly->ConsiderObjWrapInfluenceOnObjPos() &&
-         ( !pFly->ISA(SwFlyFreeFrm) ||
+         ( !dynamic_cast< SwFlyFreeFrm* >(pFly) ||
            !static_cast<SwFlyFreeFrm*>(pFly)->IsNoMoveOnCheckClip() ) )
     // <--
     {
@@ -897,7 +904,7 @@ SwCntntNotify::~SwCntntNotify()
                 SwFEShell *pFESh = 0;
                 ViewShell *pTmp = pSh;
                 do
-                {   if ( pTmp->ISA( SwCrsrShell ) )
+                {   if ( dynamic_cast< SwCrsrShell* >(pTmp) )
                     {
                         pFESh = (SwFEShell*)pTmp;
                         // #108369#: Here used to be the condition if (!bFirst).
@@ -1073,14 +1080,14 @@ void AppendObjs( const SwSpzFrmFmts *pTbl, sal_uLong nIndex,
                 }
                 if ( pSdrObj )
                 {
-                    if ( !pSdrObj->GetPage() )
+                    if ( !pSdrObj->getSdrPageFromSdrObject() )
                     {
                         pFmt->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage(0)->
-                                InsertObject(pSdrObj, pSdrObj->GetOrdNumDirect());
+                            InsertObjectToSdrObjList(*pSdrObj, pSdrObj->GetNavigationPosition());
                     }
 
                     SwDrawContact* pNew =
-                        static_cast<SwDrawContact*>(GetUserCall( pSdrObj ));
+                        static_cast<SwDrawContact*>(findConnectionToSdrObject( pSdrObj ));
                     if ( !pNew->GetAnchorFrm() )
                     {
                         pFrm->AppendDrawObj( *(pNew->GetAnchoredObj( 0L )) );
@@ -2261,13 +2268,12 @@ const SdrObject *SwOrderIter::Top()
         const SwSortedObjs *pObjs = pPage->GetSortedObjs();
         if ( pObjs->Count() )
         {
-            (*pObjs)[0]->GetDrawObj()->GetOrdNum();  //Aktualisieren erzwingen!
             for ( sal_uInt16 i = 0; i < pObjs->Count(); ++i )
             {
                 const SdrObject* pObj = (*pObjs)[i]->GetDrawObj();
-                if ( bFlysOnly && !pObj->ISA(SwVirtFlyDrawObj) )
+                if ( bFlysOnly && !dynamic_cast< const SwVirtFlyDrawObj* >(pObj) )
                     continue;
-                sal_uInt32 nTmp = pObj->GetOrdNumDirect();
+                sal_uInt32 nTmp = pObj->GetNavigationPosition();
                 if ( nTmp >= nTopOrd )
                 {
                     nTopOrd = nTmp;
@@ -2290,13 +2296,12 @@ const SdrObject *SwOrderIter::Bottom()
         const SwSortedObjs *pObjs = pPage->GetSortedObjs();
         if ( pObjs->Count() )
         {
-            (*pObjs)[0]->GetDrawObj()->GetOrdNum();  //Aktualisieren erzwingen!
             for ( sal_uInt16 i = 0; i < pObjs->Count(); ++i )
             {
                 const SdrObject* pObj = (*pObjs)[i]->GetDrawObj();
-                if ( bFlysOnly && !pObj->ISA(SwVirtFlyDrawObj) )
+                if ( bFlysOnly && !dynamic_cast< const SwVirtFlyDrawObj* >(pObj) )
                     continue;
-                sal_uInt32 nTmp = pObj->GetOrdNumDirect();
+                sal_uInt32 nTmp = pObj->GetNavigationPosition();
                 if ( nTmp < nBotOrd )
                 {
                     nBotOrd = nTmp;
@@ -2312,7 +2317,7 @@ const SdrObject *SwOrderIter::Bottom()
 
 const SdrObject *SwOrderIter::Next()
 {
-    const sal_uInt32 nCurOrd = pCurrent ? pCurrent->GetOrdNumDirect() : 0;
+    const sal_uInt32 nCurOrd = pCurrent ? pCurrent->GetNavigationPosition() : 0;
     pCurrent = 0;
     if ( pPage->GetSortedObjs() )
     {
@@ -2320,13 +2325,12 @@ const SdrObject *SwOrderIter::Next()
         const SwSortedObjs *pObjs = pPage->GetSortedObjs();
         if ( pObjs->Count() )
         {
-            (*pObjs)[0]->GetDrawObj()->GetOrdNum();  //Aktualisieren erzwingen!
             for ( sal_uInt16 i = 0; i < pObjs->Count(); ++i )
             {
                 const SdrObject* pObj = (*pObjs)[i]->GetDrawObj();
-                if ( bFlysOnly && !pObj->ISA(SwVirtFlyDrawObj) )
+                if ( bFlysOnly && !dynamic_cast< const SwVirtFlyDrawObj* >(pObj) )
                     continue;
-                sal_uInt32 nTmp = pObj->GetOrdNumDirect();
+                sal_uInt32 nTmp = pObj->GetNavigationPosition();
                 if ( nTmp > nCurOrd && nTmp < nOrd )
                 {
                     nOrd = nTmp;
@@ -2342,7 +2346,7 @@ const SdrObject *SwOrderIter::Next()
 
 const SdrObject *SwOrderIter::Prev()
 {
-    const sal_uInt32 nCurOrd = pCurrent ? pCurrent->GetOrdNumDirect() : 0;
+    const sal_uInt32 nCurOrd = pCurrent ? pCurrent->GetNavigationPosition() : 0;
     pCurrent = 0;
     if ( pPage->GetSortedObjs() )
     {
@@ -2350,13 +2354,12 @@ const SdrObject *SwOrderIter::Prev()
         const SwSortedObjs *pObjs = pPage->GetSortedObjs();
         if ( pObjs->Count() )
         {
-            (*pObjs)[0]->GetDrawObj()->GetOrdNum();  //Aktualisieren erzwingen!
             for ( sal_uInt16 i = 0; i < pObjs->Count(); ++i )
             {
                 const SdrObject* pObj = (*pObjs)[i]->GetDrawObj();
-                if ( bFlysOnly && !pObj->ISA(SwVirtFlyDrawObj) )
+                if ( bFlysOnly && !dynamic_cast< const SwVirtFlyDrawObj* >(pObj) )
                     continue;
-                sal_uInt32 nTmp = pObj->GetOrdNumDirect();
+                sal_uInt32 nTmp = pObj->GetNavigationPosition();
                 if ( nTmp < nCurOrd && nTmp >= nOrd )
                 {
                     nOrd = nTmp;
@@ -2401,10 +2404,10 @@ void MA_FASTCALL lcl_RemoveObjsFromPage( SwFrm* _pFrm )
         // <--
         // --> OD 2004-11-29 #115759# - remove also lower objects of as-character
         // anchored Writer fly frames from page
-        if ( pObj->ISA(SwFlyFrm) )
-        {
-            SwFlyFrm* pFlyFrm = static_cast<SwFlyFrm*>(pObj);
+        SwFlyFrm* pFlyFrm = dynamic_cast< SwFlyFrm* >(pObj);
 
+        if ( pFlyFrm )
+        {
             // --> OD 2004-11-29 #115759# - remove also direct lowers of Writer
             // fly frame from page
             if ( pFlyFrm->GetDrawObjs() )
@@ -2428,7 +2431,7 @@ void MA_FASTCALL lcl_RemoveObjsFromPage( SwFrm* _pFrm )
         }
         // <--
         // --> OD 2004-11-29 #115759# - remove also drawing objects from page
-        else if ( pObj->ISA(SwAnchoredDrawObject) )
+        else if ( dynamic_cast< SwAnchoredDrawObject* >(pObj) )
         {
             if (pObj->GetFrmFmt().GetAnchor().GetAnchorId() != FLY_AS_CHAR)
             {
@@ -2567,10 +2570,11 @@ void MA_FASTCALL lcl_AddObjsToPage( SwFrm* _pFrm, SwPageFrm* _pPage )
         // <--
         // --> OD 2004-11-29 #115759# - add also lower objects of as-character
         // anchored Writer fly frames from page
-        if ( pObj->ISA(SwFlyFrm) )
+        SwFlyFrm* pFlyFrm = dynamic_cast< SwFlyFrm* >(pObj);
+
+        if ( pFlyFrm )
         {
-            SwFlyFrm* pFlyFrm = static_cast<SwFlyFrm*>(pObj);
-            if ( pObj->ISA(SwFlyFreeFrm) )
+            if ( dynamic_cast< SwFlyFreeFrm* >(pObj) )
             {
                 _pPage->AppendFlyToPage( pFlyFrm );
             }
@@ -2596,7 +2600,7 @@ void MA_FASTCALL lcl_AddObjsToPage( SwFrm* _pFrm, SwPageFrm* _pPage )
         }
         // <--
         // --> OD 2004-11-29 #115759# - remove also drawing objects from page
-        else if ( pObj->ISA(SwAnchoredDrawObject) )
+        else if ( dynamic_cast< SwAnchoredDrawObject* >(pObj) )
         {
             if (pObj->GetFrmFmt().GetAnchor().GetAnchorId() != FLY_AS_CHAR)
             {
@@ -2770,20 +2774,21 @@ void MA_FASTCALL lcl_Regist( SwPageFrm *pPage, const SwFrm *pAnch )
     for ( sal_uInt16 i = 0; i < pObjs->Count(); ++i )
     {
         SwAnchoredObject* pObj = (*pObjs)[i];
-        if ( pObj->ISA(SwFlyFrm) )
+        SwFlyFrm *pSwFlyFrm = dynamic_cast< SwFlyFrm* >(pObj);
+
+        if ( pSwFlyFrm )
         {
-            SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pObj);
             //Ggf. ummelden, nicht anmelden wenn bereits bekannt.
             // --> OD 2004-06-30 #i28701# - use new method <GetPageFrm()>
-            SwPageFrm *pPg = pFly->IsFlyFreeFrm()
-                             ? pFly->GetPageFrm() : pFly->FindPageFrm();
+            SwPageFrm *pPg = pSwFlyFrm->IsFlyFreeFrm()
+                             ? pSwFlyFrm->GetPageFrm() : pSwFlyFrm->FindPageFrm();
             if ( pPg != pPage )
             {
                 if ( pPg )
-                    pPg->RemoveFlyFromPage( pFly );
-                pPage->AppendFlyToPage( pFly );
+                    pPg->RemoveFlyFromPage( pSwFlyFrm );
+                pPage->AppendFlyToPage( pSwFlyFrm );
             }
-            ::RegistFlys( pPage, pFly );
+            ::RegistFlys( pPage, pSwFlyFrm );
         }
         else
         {
@@ -2801,12 +2806,13 @@ void MA_FASTCALL lcl_Regist( SwPageFrm *pPage, const SwFrm *pAnch )
 
         const SwFlyFrm* pFly = pAnch->FindFlyFrm();
         if ( pFly &&
-             pObj->GetDrawObj()->GetOrdNum() < pFly->GetVirtDrawObj()->GetOrdNum() &&
-             pObj->GetDrawObj()->GetPage() )
+             pObj->GetDrawObj()->GetNavigationPosition() < pFly->GetVirtDrawObj()->GetNavigationPosition() &&
+             pObj->GetDrawObj()->getSdrPageFromSdrObject() )
         {
             //#i119945# set pFly's OrdNum to pObj's. So when pFly is removed by Undo, the original OrdNum will not be changed.
-            pObj->DrawObj()->GetPage()->SetObjectOrdNum( pFly->GetVirtDrawObj()->GetOrdNumDirect(),
-                                                         pObj->GetDrawObj()->GetOrdNumDirect() );
+            pObj->DrawObj()->getSdrPageFromSdrObject()->SetNavigationPosition(
+                                pFly->GetVirtDrawObj()->GetNavigationPosition(),
+                                pObj->GetDrawObj()->GetNavigationPosition() );
         }
     }
 }
@@ -2961,9 +2967,10 @@ void MA_FASTCALL lcl_NotifyCntnt( const SdrObject *pThis, SwCntntFrm *pCnt,
             for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
             {
                 SwAnchoredObject* pObj = rObjs[i];
-                if ( pObj->ISA(SwFlyFrm) )
+                SwFlyFrm* pFly = dynamic_cast< SwFlyFrm* >(pObj);
+
+                if ( pFly )
                 {
-                    SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pObj);
                     if ( pFly->IsFlyInCntFrm() )
                     {
                         SwCntntFrm *pCntnt = pFly->ContainsCntnt();
@@ -2994,7 +3001,7 @@ void Notify_Background( const SdrObject* pObj,
     SwLayoutFrm* pArea;
     SwFlyFrm *pFlyFrm = 0;
     SwFrm* pAnchor;
-    if( pObj->ISA(SwVirtFlyDrawObj) )
+    if( dynamic_cast< const SwVirtFlyDrawObj* >(pObj) )
     {
         pFlyFrm = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
         pAnchor = pFlyFrm->AnchorFrm();
@@ -3003,7 +3010,7 @@ void Notify_Background( const SdrObject* pObj,
     {
         pFlyFrm = NULL;
         pAnchor = const_cast<SwFrm*>(
-                    GetUserCall(pObj)->GetAnchoredObj( pObj )->GetAnchorFrm() );
+                    findConnectionToSdrObject(pObj)->GetAnchoredObj( pObj )->GetAnchorFrm() );
     }
     if( PREP_FLY_LEAVE != eHint && pAnchor->IsInFly() )
         pArea = pAnchor->FindFlyFrm();
@@ -3040,13 +3047,7 @@ void Notify_Background( const SdrObject* pObj,
         if ( pCnt->IsInTab() )
         {
             SwLayoutFrm* pCell = pCnt->GetUpper();
-            // --> OD 2005-01-14 #i40606# - use <GetLastBoundRect()>
-            // instead of <GetCurrentBoundRect()>, because a recalculation
-            // of the bounding rectangle isn't intended here.
-            if ( pCell->IsCellFrm() &&
-                 ( pCell->Frm().IsOver( pObj->GetLastBoundRect() ) ||
-                   pCell->Frm().IsOver( rRect ) ) )
-            // <--
+            if ( pCell->IsCellFrm() && ( pCell->Frm().IsOver( sdr::legacy::GetBoundRect(*pObj) ) || pCell->Frm().IsOver( rRect ) ) )
             {
                 const SwFmtVertOrient &rOri = pCell->GetFmt()->GetVertOrient();
                 if ( text::VertOrientation::NONE != rOri.GetVertOrient() )
@@ -3056,12 +3057,7 @@ void Notify_Background( const SdrObject* pObj,
             if ( pTab != pLastTab )
             {
                 pLastTab = pTab;
-                // --> OD 2005-01-14 #i40606# - use <GetLastBoundRect()>
-                // instead of <GetCurrentBoundRect()>, because a recalculation
-                // of the bounding rectangle isn't intended here.
-                if ( pTab->Frm().IsOver( pObj->GetLastBoundRect() ) ||
-                     pTab->Frm().IsOver( rRect ) )
-                // <--
+                if ( pTab->Frm().IsOver( sdr::legacy::GetBoundRect(*pObj) ) || pTab->Frm().IsOver( rRect ) )
                 {
                     if ( !pFlyFrm || !pFlyFrm->IsLowerOf( pTab ) )
                         pTab->InvalidatePrt();
@@ -3086,12 +3082,11 @@ void Notify_Background( const SdrObject* pObj,
     if ( pPage && pPage->GetSortedObjs() )
     // <--
     {
-        pObj->GetOrdNum();
         const SwSortedObjs &rObjs = *pPage->GetSortedObjs();
         for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
         {
             SwAnchoredObject* pAnchoredObj = rObjs[i];
-            if ( pAnchoredObj->ISA(SwFlyFrm) )
+            if ( dynamic_cast< SwFlyFrm* >(pAnchoredObj) )
             {
                 if( pAnchoredObj->GetDrawObj() == pObj )
                     continue;
@@ -3101,7 +3096,7 @@ void Notify_Background( const SdrObject* pObj,
 
                 if ( !pFlyFrm ||
                         (!pFly->IsLowerOf( pFlyFrm ) &&
-                        pFly->GetVirtDrawObj()->GetOrdNumDirect() < pObj->GetOrdNumDirect()))
+                        pFly->GetVirtDrawObj()->GetNavigationPosition() < pObj->GetNavigationPosition()))
                 {
                     pCnt = pFly->ContainsCntnt();
                     while ( pCnt )
@@ -3127,8 +3122,8 @@ void Notify_Background( const SdrObject* pObj,
                 //gerade geaendert haben kann und eben deshalb
                 //umformatiert wurde.
                 else if ( pFly->IsFlyAtCntFrm() &&
-                        pObj->GetOrdNumDirect() <
-                        pFly->GetVirtDrawObj()->GetOrdNumDirect() &&
+                        pObj->GetNavigationPosition() <
+                        pFly->GetVirtDrawObj()->GetNavigationPosition() &&
                         pFlyFrm && !pFly->IsLowerOf( pFlyFrm ) )
                 {
                     const SwFmtHoriOrient &rH = pFly->GetFmt()->GetHoriOrient();
@@ -3201,7 +3196,7 @@ sal_Bool Is_Lower_Of( const SwFrm *pCurrFrm, const SdrObject* pObj )
 {
     Point aPos;
     const SwFrm* pFrm;
-    if( pObj->ISA(SwVirtFlyDrawObj) )
+    if( dynamic_cast< const SwVirtFlyDrawObj* >(pObj) )
     {
         const SwFlyFrm* pFly = ( (SwVirtFlyDrawObj*)pObj )->GetFlyFrm();
         pFrm = pFly->GetAnchorFrm();
@@ -3209,8 +3204,11 @@ sal_Bool Is_Lower_Of( const SwFrm *pCurrFrm, const SdrObject* pObj )
     }
     else
     {
-        pFrm = ( (SwDrawContact*)GetUserCall(pObj) )->GetAnchorFrm(pObj);
-        aPos = pObj->GetCurrentBoundRect().TopLeft();
+        // replace formally used 'GetUserCall()' by new notify/listener mechanism
+        const SwDrawContact* pContact = static_cast< const SwDrawContact* >(findConnectionToSdrObject(pObj));
+        pFrm = pContact ? pContact->GetAnchorFrm(pObj) : 0;
+        const basegfx::B2DPoint& rTopLeft = pObj->getSdrObjectTranslate();
+        aPos = Point(basegfx::fround(rTopLeft.getX()), basegfx::fround(rTopLeft.getY()));
     }
     ASSERT( pFrm, "8-( Fly is lost in Space." );
     pFrm = GetVirtualUpper( pFrm, aPos );
@@ -3374,11 +3372,15 @@ void SwFrmHolder::Reset()
 
 void SwFrmHolder::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if ( rHint.IsA(TYPE(SfxSimpleHint)) )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if ( pSfxSimpleHint )
     {
-        if ( ( (SfxSimpleHint&) rHint ).GetId() == SFX_HINT_DYING && &rBC == pFrm )
+        if ( SFX_HINT_DYING == pSfxSimpleHint->GetId() && &rBC == pFrm )
+    {
             pFrm = 0;
     }
+}
 }
 
 SwFrm* GetFrmOfModify( const SwRootFrm* pLayout, SwModify const& rMod, sal_uInt16 const nFrmType,

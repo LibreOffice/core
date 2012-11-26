@@ -24,7 +24,6 @@
 #define _SFXLSTNER_HXX
 
 #include "svl/svldllapi.h"
-#include <tools/rtti.hxx>
 #include <svl/svarray.hxx>
 
 class SfxBroadcaster;
@@ -47,8 +46,6 @@ private:
     const SfxListener&  operator=(const SfxListener &); // n.i., ist verboten
 
 public:
-    TYPEINFO();
-
                         SfxListener();
                         SfxListener( const SfxListener &rCopy );
     virtual             ~SfxListener();

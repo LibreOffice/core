@@ -78,9 +78,7 @@ namespace sdr
 
             // used range (retval) is fixed here, it's the MasterPage fill range
             const SdrPage& rOwnerPage = rDescriptor.GetOwnerPage();
-            const basegfx::B2DRange aPageFillRange(
-                rOwnerPage.GetLftBorder(), rOwnerPage.GetUppBorder(),
-                rOwnerPage.GetWdt() - rOwnerPage.GetRgtBorder(), rOwnerPage.GetHgt() - rOwnerPage.GetLwrBorder());
+            const basegfx::B2DRange aPageFillRange(rOwnerPage.GetInnerPageRange());
 
             // Modify DisplayInfo for MasterPageContent collection; remember original layers and
             // set combined LayerSet; set MasterPagePaint flag

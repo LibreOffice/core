@@ -45,34 +45,33 @@ class SlideShow;
 class DrawView : public ::sd::View
 {
 public:
-    TYPEINFO();
-
     DrawView (
         DrawDocShell* pDocSh,
         OutputDevice* pOutDev,
         DrawViewShell* pShell);
     virtual ~DrawView (void);
 
-    virtual void MarkListHasChanged();
+    virtual void handleSelectionChange();
     void CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L);
 
-    virtual sal_Bool SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll = sal_False);
+    virtual bool SetAttributes(const SfxItemSet& rSet, bool bReplaceAll = false);
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
-    void    BlockPageOrderChangedHint(sal_Bool bBlock);
+    void    BlockPageOrderChangedHint(bool bBlock);
 
-    sal_Bool    SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr = sal_False);
-    virtual sal_Bool IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const;
+    bool    SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr = false);
+    virtual bool IsObjMarkable(const SdrObject& rObj) const;
 
-    virtual void MakeVisible(const Rectangle& rRect, ::Window& rWin);
-    virtual void HideSdrPage(); // SdrPageView* pPV);
+    virtual void MakeVisibleAtView(const basegfx::B2DRange& rRange, ::Window& rWin);
+    virtual void HideSdrPage();
 
     void    PresPaint(const Region& rRegion);
 
     virtual void DeleteMarked(); // from SdrView
+
 protected:
-    virtual void ModelHasChanged();
+    virtual void LazyReactOnObjectChanges();
 
 private:
     friend class DrawViewRedirector;

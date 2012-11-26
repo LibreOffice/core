@@ -49,8 +49,6 @@
 
 namespace sd {
 
-TYPEINIT1( FuLine, FuPoor );
-
 /*************************************************************************
 |*
 |* Konstruktor
@@ -76,18 +74,13 @@ FunctionReference FuLine::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::
 
 void FuLine::DoExecute( SfxRequest& rReq )
 {
-    sal_Bool        bHasMarked = mpView->AreObjectsMarked();
-
+    bool        bHasMarked = mpView->areSdrObjectsSelected();
     const SfxItemSet* pArgs = rReq.GetArgs();
 
     if( !pArgs )
     {
-        const SdrObject* pObj = NULL;
-        const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-        if( rMarkList.GetMarkCount() == 1 )
-            pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-
-        SfxItemSet* pNewAttr = new SfxItemSet( mpDoc->GetPool() );
+        const SdrObject* pObj = mpView->getSelectedIfSingle();
+        SfxItemSet* pNewAttr = new SfxItemSet( mpDoc->GetItemPool() );
         mpView->GetAttributes( *pNewAttr );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();

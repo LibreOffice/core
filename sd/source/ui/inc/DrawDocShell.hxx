@@ -60,24 +60,23 @@ class ViewShell;
 class SD_DLLPUBLIC DrawDocShell : public SfxObjectShell
 {
 public:
-    TYPEINFO();
     SFX_DECL_INTERFACE(SD_IF_SDDRAWDOCSHELL)
     SFX_DECL_OBJECTFACTORY();
 
     DrawDocShell (
         SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED,
-        sal_Bool bSdDataObj=sal_False,
+        bool bSdDataObj=false,
         DocumentType=DOCUMENT_TYPE_IMPRESS);
 
     DrawDocShell (
         const sal_uInt64 nModelCreationFlags,
-        sal_Bool bSdDataObj=sal_False,
+        bool bSdDataObj=false,
         DocumentType=DOCUMENT_TYPE_IMPRESS);
 
     DrawDocShell (
         SdDrawDocument* pDoc,
         SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED,
-        sal_Bool bSdDataObj=sal_False,
+        bool bSdDataObj=false,
         DocumentType=DOCUMENT_TYPE_IMPRESS);
     virtual ~DrawDocShell();
 
@@ -105,7 +104,7 @@ public:
     virtual void            SetOrganizerSearchMask(SfxStyleSheetBasePool* pBasePool) const;
     virtual Size            GetFirstPageSize();
     virtual void            FillClass(SvGlobalName* pClassName, sal_uInt32*  pFormat, String* pAppName, String* pFullTypeName, String* pShortTypeName, sal_Int32 nFileFormat, sal_Bool bTemplate = sal_False ) const;
-    virtual void            SetModified( sal_Bool = sal_True );
+    virtual void            SetModified( sal_Bool = true );
 
     using SotObject::GetInterface;
     using SfxObjectShell::GetVisArea;
@@ -119,11 +118,11 @@ public:
     SdDrawDocument*         GetDoc();
     DocumentType            GetDocumentType() const { return meDocType; }
 
-    SfxPrinter*             GetPrinter(sal_Bool bCreate);
+    SfxPrinter*             GetPrinter(bool bCreate);
     void                    SetPrinter(SfxPrinter *pNewPrinter);
     void                    UpdateFontList();
 
-    sal_Bool                    IsInDestruction() const { return mbInDestruction; }
+    bool                    IsInDestruction() const { return mbInDestruction; }
 
     void                    CancelSearching();
 
@@ -134,7 +133,7 @@ public:
     void                    Disconnect(sd::ViewShell* pViewSh);
     void                    UpdateTablePointers();
 
-    sal_Bool                    GotoBookmark(const String& rBookmark);
+    bool                    GotoBookmark(const String& rBookmark);
 
     Bitmap                  GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixel);
 
@@ -149,13 +148,13 @@ public:
         @param rName the new name that is to be set for a slide.  This string
                      may be set to an empty string (see below).
 
-        @return sal_True, if the new name is unique.  Note that if the user entered
+        @return true, if the new name is unique.  Note that if the user entered
                 a default name of a not-yet-existing slide (e.g. 'Slide 17'),
-                sal_True is returned, but rName is set to an empty string.
+                true is returned, but rName is set to an empty string.
      */
-    sal_Bool                    CheckPageName(::Window* pWin, String& rName );
+    bool                    CheckPageName(::Window* pWin, String& rName );
 
-    void                    SetSlotFilter(sal_Bool bEnable = sal_False, sal_uInt16 nCount = 0, const sal_uInt16* pSIDs = NULL) { mbFilterEnable = bEnable; mnFilterCount = nCount; mpFilterSIDs = pSIDs; }
+    void                    SetSlotFilter(bool bEnable = false, sal_uInt16 nCount = 0, const sal_uInt16* pSIDs = NULL) { mbFilterEnable = bEnable; mnFilterCount = nCount; mpFilterSIDs = pSIDs; }
     void                    ApplySlotFilter() const;
 
     sal_uInt16                  GetStyleFamily() const { return mnStyleFamily; }
@@ -216,11 +215,11 @@ protected:
     sal_uInt16                  mnStyleFamily;
     const sal_uInt16*           mpFilterSIDs;
     sal_uInt16                  mnFilterCount;
-    sal_Bool                    mbFilterEnable;
-    sal_Bool                    mbSdDataObj;
-    sal_Bool                    mbInDestruction;
-    sal_Bool                    mbOwnPrinter;
-    sal_Bool                    mbNewDocument;
+    bool                    mbFilterEnable;
+    bool                    mbSdDataObj;
+    bool                    mbInDestruction;
+    bool                    mbOwnPrinter;
+    bool                    mbNewDocument;
 
     bool                    mbOwnDocument;          // if true, we own mpDoc and will delete it in our d'tor
     void                    Construct(bool bClipboard);

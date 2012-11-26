@@ -1026,7 +1026,7 @@ IMPL_LINK( SvxSearchTabPage, SearchModifyHdl_Impl, SvxNoSpaceEdit*, pEdit )
     if ( pEdit == &aSearchNameED )
     {
         sal_Bool bTextLen = ( 0 != pEdit->GetText().Len() );
-        sal_Bool bFound = sal_False;
+        bool bFound = false;
         if ( bTextLen )
         {
             sal_uInt16 nEntryPos = aSearchLB.GetEntryPos( pEdit->GetText() );

@@ -65,9 +65,9 @@ namespace drawinglayer
             double                                      mfRightDelta;
 
             // bitfield
-            unsigned                                    mbBelow : 1;
-            unsigned                                    mbTextRotation : 1;
-            unsigned                                    mbTextAutoAngle : 1;
+            bool                                        mbBelow : 1;
+            bool                                        mbTextRotation : 1;
+            bool                                        mbTextAutoAngle : 1;
 
             // internal decomposition helper
             Primitive2DReference impCreatePart(
@@ -112,9 +112,6 @@ namespace drawinglayer
             bool getBelow() const { return mbBelow; }
             bool getTextRotation() const { return mbTextRotation; }
             bool getTextAutoAngle() const { return mbTextAutoAngle; }
-
-            // compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
             // provide unique ID
             DeclPrimitrive2DIDBlock()

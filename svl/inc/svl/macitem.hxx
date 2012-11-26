@@ -27,7 +27,6 @@
 
 #include "svl/svldllapi.h"
 #include <svl/poolitem.hxx>
-#include <tools/rtti.hxx>
 #include <tools/debug.hxx>
 #include <tools/string.hxx>
 
@@ -148,8 +147,6 @@ Dieses Item beschreibt eine Makro-Tabelle.
 class SVL_DLLPUBLIC SvxMacroItem: public SfxPoolItem
 {
 public:
-    TYPEINFO();
-
     inline SvxMacroItem ( const sal_uInt16 nId /*= ITEMID_MACRO*/ );
 
     // "pure virtual Methoden" vom SfxPoolItem

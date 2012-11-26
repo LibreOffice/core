@@ -55,7 +55,7 @@ ShowWindow::ShowWindow( const ::rtl::Reference< SlideshowImpl >& xController, ::
 , mnPauseTimeout( SLIDE_NO_TIMEOUT )
 , mnRestartPageIndex( PAGE_NO_END )
 , meShowWindowMode(SHOWWINDOWMODE_NORMAL)
-, mbShowNavigatorAfterSpecialMode( sal_False )
+, mbShowNavigatorAfterSpecialMode( false )
 , mbMouseAutoHide(true)
 , mbMouseCursorHidden(false)
 , mnFirstMouseMove(0)
@@ -65,7 +65,7 @@ ShowWindow::ShowWindow( const ::rtl::Reference< SlideshowImpl >& xController, ::
 
     // Do never mirror the preview window.  This explicitly includes right
     // to left writing environments.
-    EnableRTL (sal_False);
+    EnableRTL (false);
 
     MapMode aMap(GetMapMode());
     aMap.SetMapUnit(MAP_100TH_MM);
@@ -101,7 +101,7 @@ ShowWindow::~ShowWindow(void)
 
 void ShowWindow::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     if( SHOWWINDOWMODE_PREVIEW == meShowWindowMode )
     {
@@ -218,7 +218,7 @@ void ShowWindow::MouseMove(const MouseEvent& /*rMEvt*/)
                 sal_uLong nTime = Time::GetSystemTicks();
                 if( (nTime - mnFirstMouseMove) >= SHOW_MOUSE_TIMEOUT )
                 {
-                    ShowPointer( sal_True );
+                    ShowPointer( true );
                     mnFirstMouseMove = 0;
                     mbMouseCursorHidden = false;
                     maMouseTimer.SetTimeout( HIDE_MOUSE_TIMEOUT );
@@ -314,7 +314,7 @@ void ShowWindow::Paint(const Rectangle& rRect)
         }
         else if( SHOWWINDOWMODE_PAUSE == meShowWindowMode )
         {
-            DrawPauseScene( sal_False );
+            DrawPauseScene( false );
         }
         else if( SHOWWINDOWMODE_BLANK == meShowWindowMode )
         {
@@ -331,18 +331,7 @@ void ShowWindow::Paint(const Rectangle& rRect)
 
 long ShowWindow::Notify(NotifyEvent& rNEvt)
 {
-    long nOK = sal_False;
-/*
-    if( mpViewShell && rNEvt.GetType() == EVENT_GETFOCUS )
-    {
-        NotifyEvent aNEvt(EVENT_GETFOCUS, this);
-        nOK = mpViewShell->GetViewFrame()->GetWindow().Notify(aNEvt);
-    }
-*/
-    if (!nOK)
-        nOK = Window::Notify(rNEvt);
-
-    return nOK;
+    return Window::Notify(rNEvt);
 }
 
 
@@ -387,7 +376,7 @@ void ShowWindow::Move()
 
 // -----------------------------------------------------------------------------
 
-sal_Bool ShowWindow::SetEndMode()
+bool ShowWindow::SetEndMode()
 {
     if( ( SHOWWINDOWMODE_NORMAL == meShowWindowMode ) && mpViewShell && mpViewShell->GetView() )
     {
@@ -400,8 +389,8 @@ sal_Bool ShowWindow::SetEndMode()
         // hide navigator if it is visible
         if( mpViewShell->GetViewFrame()->GetChildWindow( SID_NAVIGATOR ) )
         {
-            mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, sal_False );
-            mbShowNavigatorAfterSpecialMode = sal_True;
+            mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, false );
+            mbShowNavigatorAfterSpecialMode = true;
         }
 
         Invalidate();
@@ -412,7 +401,7 @@ sal_Bool ShowWindow::SetEndMode()
 
 // -----------------------------------------------------------------------------
 
-sal_Bool ShowWindow::SetPauseMode( sal_Int32 nPageIndexToRestart, sal_Int32 nTimeout, Graphic* pLogo )
+bool ShowWindow::SetPauseMode( sal_Int32 nPageIndexToRestart, sal_Int32 nTimeout, Graphic* pLogo )
 {
     rtl::Reference< SlideShow > xSlideShow;
 
@@ -436,8 +425,8 @@ sal_Bool ShowWindow::SetPauseMode( sal_Int32 nPageIndexToRestart, sal_Int32 nTim
         // hide navigator if it is visible
         if( mpViewShell->GetViewFrame()->GetChildWindow( SID_NAVIGATOR ) )
         {
-            mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, sal_False );
-            mbShowNavigatorAfterSpecialMode = sal_True;
+            mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, false );
+            mbShowNavigatorAfterSpecialMode = true;
         }
 
         if( pLogo )
@@ -454,7 +443,7 @@ sal_Bool ShowWindow::SetPauseMode( sal_Int32 nPageIndexToRestart, sal_Int32 nTim
 
 // -----------------------------------------------------------------------------
 
-sal_Bool ShowWindow::SetBlankMode( sal_Int32 nPageIndexToRestart, const Color& rBlankColor )
+bool ShowWindow::SetBlankMode( sal_Int32 nPageIndexToRestart, const Color& rBlankColor )
 {
     if( ( SHOWWINDOWMODE_NORMAL == meShowWindowMode ) && mpViewShell && mpViewShell->GetView() )
     {
@@ -468,8 +457,8 @@ sal_Bool ShowWindow::SetBlankMode( sal_Int32 nPageIndexToRestart, const Color& r
         // hide navigator if it is visible
         if( mpViewShell->GetViewFrame()->GetChildWindow( SID_NAVIGATOR ) )
         {
-            mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, sal_False );
-            mbShowNavigatorAfterSpecialMode = sal_True;
+            mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, false );
+            mbShowNavigatorAfterSpecialMode = true;
         }
 
         Invalidate();
@@ -503,8 +492,8 @@ void ShowWindow::TerminateShow()
         // show navigator?
         if( mbShowNavigatorAfterSpecialMode )
         {
-            mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, sal_True );
-            mbShowNavigatorAfterSpecialMode = sal_False;
+            mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, true );
+            mbShowNavigatorAfterSpecialMode = false;
         }
     }
 
@@ -561,14 +550,14 @@ void ShowWindow::RestartShow( sal_Int32 nPageIndexToRestart )
     // show navigator?
     if( mbShowNavigatorAfterSpecialMode )
     {
-        mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, sal_True );
-        mbShowNavigatorAfterSpecialMode = sal_False;
+        mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, true );
+        mbShowNavigatorAfterSpecialMode = false;
     }
 }
 
 // -----------------------------------------------------------------------------
 
-void ShowWindow::DrawPauseScene( sal_Bool bTimeoutOnly )
+void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
 {
     const MapMode&  rMap = GetMapMode();
     const Point     aOutOrg( PixelToLogic( Point() ) );
@@ -576,7 +565,7 @@ void ShowWindow::DrawPauseScene( sal_Bool bTimeoutOnly )
     const Size      aTextSize( LogicToLogic( Size( 0, 14 ), MAP_POINT, rMap ) );
     const Size      aOffset( LogicToLogic( Size( 1000, 1000 ), MAP_100TH_MM, rMap ) );
     String          aText( SdResId( STR_PRES_PAUSE ) );
-    sal_Bool            bDrawn = sal_False;
+    bool            bDrawn = false;
 
     Font            aFont( GetSettings().GetStyleSettings().GetMenuFont() );
     const Font      aOldFont( GetFont() );
@@ -629,7 +618,7 @@ void ShowWindow::DrawPauseScene( sal_Bool bTimeoutOnly )
             aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " )" ));
             aVDev.DrawText( Point( aOffset.Width(), 0 ), aText );
             DrawOutDev( Point( aOutOrg.X(), aOffset.Height() ), aVDevSize, Point(), aVDevSize, aVDev );
-            bDrawn = sal_True;
+            bDrawn = true;
         }
     }
 
@@ -676,7 +665,7 @@ IMPL_LINK( ShowWindow, PauseTimeoutHdl, Timer*, pTimer )
         RestartShow();
     else
     {
-        DrawPauseScene( sal_True );
+        DrawPauseScene( true );
         pTimer->Start();
     }
 
@@ -694,7 +683,7 @@ IMPL_LINK( ShowWindow, MouseTimeoutHdl, Timer*, EMPTYARG )
     else
     {
         // mouse has been idle to long, hide pointer
-        ShowPointer( sal_False );
+        ShowPointer( false );
         mbMouseCursorHidden = true;
     }
     return 0L;
@@ -725,7 +714,7 @@ void ShowWindow::DeleteWindowFromPaintView()
 
     sal_uInt16 nChild = GetChildCount();
     while( nChild-- )
-        GetChild( nChild )->Show( sal_False );
+        GetChild( nChild )->Show( false );
 }
 
 void ShowWindow::AddWindowToPaintView()
@@ -735,7 +724,7 @@ void ShowWindow::AddWindowToPaintView()
 
     sal_uInt16 nChild = GetChildCount();
     while( nChild-- )
-        GetChild( nChild )->Show( sal_True );
+        GetChild( nChild )->Show( true );
 }
 
 } // end of namespace sd

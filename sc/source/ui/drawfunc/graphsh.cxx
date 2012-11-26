@@ -55,8 +55,6 @@ SFX_IMPL_INTERFACE(ScGraphicShell, ScDrawShell, ScResId(SCSTR_GRAPHICSHELL) )
     SFX_POPUPMENU_REGISTRATION( ScResId(RID_POPUP_GRAPHIC) );
 }
 
-TYPEINIT1( ScGraphicShell, ScDrawShell );
-
 ScGraphicShell::ScGraphicShell(ScViewData* pData) :
     ScDrawShell(pData)
 {
@@ -90,16 +88,8 @@ void ScGraphicShell::Execute( SfxRequest& rReq )
 void ScGraphicShell::GetFilterState( SfxItemSet& rSet )
 {
     ScDrawView* pView = GetViewData()->GetScDrawView();
-    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-    sal_Bool bEnable = sal_False;
-
-    if( rMarkList.GetMarkCount() == 1 )
-    {
-        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-
-        if( pObj && pObj->ISA( SdrGrafObj ) && ( ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP ) )
-            bEnable = sal_True;
-    }
+    const SdrGrafObj* pSelected = dynamic_cast< SdrGrafObj* >(pView->getSelectedIfSingle());
+    const sal_Bool bEnable( pSelected && GRAPHIC_BITMAP == pSelected->GetGraphicType() );
 
     if( !bEnable )
         SvxGraphicFilter::DisableGraphicFilterSlots( rSet );
@@ -108,34 +98,25 @@ void ScGraphicShell::GetFilterState( SfxItemSet& rSet )
 void ScGraphicShell::ExecuteFilter( SfxRequest& rReq )
 {
     ScDrawView* pView = GetViewData()->GetScDrawView();
-    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+    SdrGrafObj* pSelected = dynamic_cast< SdrGrafObj* >(pView->getSelectedIfSingle());
 
-    if( rMarkList.GetMarkCount() == 1 )
+    if( pSelected && GRAPHIC_BITMAP == pSelected->GetGraphicType() )
     {
-        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+        GraphicObject aFilterObj( pSelected->GetGraphicObject() );
 
-        if( pObj && pObj->ISA( SdrGrafObj ) && ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP )
+        if( SVX_GRAPHICFILTER_ERRCODE_NONE ==
+            SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, aFilterObj ) )
         {
-            GraphicObject aFilterObj( ( (SdrGrafObj*) pObj )->GetGraphicObject() );
+            SdrGrafObj* pFilteredObj = static_cast< SdrGrafObj* >(pSelected->CloneSdrObject());
+            String      aStr;
 
-            if( SVX_GRAPHICFILTER_ERRCODE_NONE ==
-                SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, aFilterObj ) )
-            {
-                SdrPageView* pPageView = pView->GetSdrPageView();
-
-                if( pPageView )
-                {
-                    SdrGrafObj* pFilteredObj = (SdrGrafObj*) pObj->Clone();
-                    String      aStr( pView->GetDescriptionOfMarkedObjects() );
-
-                    aStr.Append( sal_Unicode(' ') );
-                    aStr.Append( String( ScResId( SCSTR_UNDO_GRAFFILTER ) ) );
-                    pView->BegUndo( aStr );
-                    pFilteredObj->SetGraphicObject( aFilterObj );
-                    pView->ReplaceObjectAtView( pObj, *pPageView, pFilteredObj );
-                    pView->EndUndo();
-                }
-            }
+            pSelected->TakeObjNameSingul(aStr);
+            aStr.Append( sal_Unicode(' ') );
+            aStr.Append( String( ScResId( SCSTR_UNDO_GRAFFILTER ) ) );
+            pView->BegUndo( aStr );
+            pFilteredObj->SetGraphicObject( aFilterObj );
+            pView->ReplaceObjectAtView( *pSelected, *pFilteredObj );
+            pView->EndUndo();
         }
     }
 

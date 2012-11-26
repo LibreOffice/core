@@ -70,11 +70,11 @@ SV_IMPL_VARARR( SfxUINT32s, sal_uInt32 );
 
 sal_uInt32 SfxMiniRecordWriter::Close
 (
-    FASTBOOL    bSeekToEndOfRec     /*  sal_True (default)
+    bool    bSeekToEndOfRec     /*  true (default)
                                         Der Stream wird an das Ende des Records
                                         positioniert.
 
-                                        sal_False
+                                        false
                                         Der Stream wird an den Anfang des
                                         Contents (also hinter den Header)
                                         positioniert.
@@ -114,7 +114,7 @@ sal_uInt32 SfxMiniRecordWriter::Close
             _pStream->Seek( nEndPos );
 
         // Header wurde JETZT geschrieben
-        _bHeaderOk = sal_True;
+        _bHeaderOk = true;
         return nEndPos;
     }
 #ifdef DBG_UTIL
@@ -256,7 +256,7 @@ sal_uInt16 SfxMiniRecordReader::ScanRecordType
 
 //-------------------------------------------------------------------------
 
-FASTBOOL SfxMiniRecordReader::SetHeader_Impl( sal_uInt32 nHeader )
+bool SfxMiniRecordReader::SetHeader_Impl( sal_uInt32 nHeader )
 
 /*  [Beschreibung]
 
@@ -268,7 +268,7 @@ FASTBOOL SfxMiniRecordReader::SetHeader_Impl( sal_uInt32 nHeader )
 */
 
 {
-    FASTBOOL bRet = sal_True;
+    bool bRet = true;
 
     // Record-Ende und Pre-Tag aus dem Header ermitteln
     _nEofRec = _pStream->Tell() + SFX_REC_OFS(nHeader);
@@ -278,7 +278,7 @@ FASTBOOL SfxMiniRecordReader::SetHeader_Impl( sal_uInt32 nHeader )
     if ( _nPreTag == SFX_REC_PRETAG_EOR )
     {
         _pStream->SetError( ERRCODE_IO_WRONGFORMAT );
-        bRet = sal_False;
+        bRet = false;
     }
     return bRet;
 }
@@ -305,7 +305,7 @@ SfxMiniRecordReader::SfxMiniRecordReader
 */
 
 :   _pStream( pStream ),
-    _bSkipped( sal_False )
+    _bSkipped( false )
 {
     // Header einlesen
     sal_uInt32 nStartPos = pStream->Tell(); // um im Fehlerfall zur"uck zu-seeken
@@ -483,7 +483,7 @@ SfxSingleRecordWriter::SfxSingleRecordWriter
 
 //=========================================================================
 
-inline FASTBOOL SfxSingleRecordReader::ReadHeader_Impl( sal_uInt16 nTypes )
+inline bool SfxSingleRecordReader::ReadHeader_Impl( sal_uInt16 nTypes )
 
 /*  [Beschreibung]
 
@@ -494,13 +494,13 @@ inline FASTBOOL SfxSingleRecordReader::ReadHeader_Impl( sal_uInt16 nTypes )
 */
 
 {
-    FASTBOOL bRet;
+    bool bRet;
 
     // Basisklassen-Header einlesen
     sal_uInt32 nHeader=0;
     *_pStream >> nHeader;
     if ( !SetHeader_Impl( nHeader ) )
-        bRet = sal_False;
+        bRet = false;
     else
     {
         // eigenen Header einlesen
@@ -557,7 +557,7 @@ SfxSingleRecordReader::SfxSingleRecordReader( SvStream *pStream, sal_uInt16 nTag
 
 //-------------------------------------------------------------------------
 
-FASTBOOL SfxSingleRecordReader::FindHeader_Impl
+bool SfxSingleRecordReader::FindHeader_Impl
 (
     sal_uInt16      nTypes,     // arithm. Veroderung erlaubter Record-Typen
     sal_uInt16      nTag        // zu findende Record-Art-Kennung
@@ -603,7 +603,7 @@ FASTBOOL SfxSingleRecordReader::FindHeader_Impl
                     SFX_REC_TYP(nHeader));
                 if ( nTypes & _nRecordType )
                     // ==> gefunden
-                    return sal_True;
+                    return true;
 
                 // error => Such-Schleife abbrechen
                 break;
@@ -618,7 +618,7 @@ FASTBOOL SfxSingleRecordReader::FindHeader_Impl
     // Fehler setzen und zur"uck-seeken
     _pStream->SetError( ERRCODE_IO_WRONGFORMAT );
     _pStream->Seek( nStartPos );
-    return sal_False;
+    return false;
 }
 
 //=========================================================================
@@ -670,7 +670,7 @@ SfxMultiFixRecordWriter::SfxMultiFixRecordWriter
 
 //------------------------------------------------------------------------
 
-sal_uInt32 SfxMultiFixRecordWriter::Close( FASTBOOL bSeekToEndOfRec )
+sal_uInt32 SfxMultiFixRecordWriter::Close( bool bSeekToEndOfRec )
 
 //  siehe <SfxMiniRecordWriter>
 
@@ -795,7 +795,7 @@ void SfxMultiVarRecordWriter::NewContent()
 
 //-------------------------------------------------------------------------
 
-sal_uInt32 SfxMultiVarRecordWriter::Close( FASTBOOL bSeekToEndOfRec )
+sal_uInt32 SfxMultiVarRecordWriter::Close( bool bSeekToEndOfRec )
 
 // siehe <SfxMiniRecordWriter>
 
@@ -868,7 +868,7 @@ void SfxMultiMixRecordWriter::NewContent
 
 //=========================================================================
 
-FASTBOOL SfxMultiRecordReader::ReadHeader_Impl()
+bool SfxMultiRecordReader::ReadHeader_Impl()
 
 /*  [Beschreibung]
 
@@ -963,7 +963,7 @@ SfxMultiRecordReader::~SfxMultiRecordReader()
 
 //-------------------------------------------------------------------------
 
-FASTBOOL SfxMultiRecordReader::GetContent()
+bool SfxMultiRecordReader::GetContent()
 
 /*  [Beschreibung]
 
@@ -1007,10 +1007,10 @@ FASTBOOL SfxMultiRecordReader::GetContent()
 
         // ContentNo weiterz"ahlen
         ++_nContentNo;
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 

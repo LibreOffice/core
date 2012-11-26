@@ -285,8 +285,8 @@ const String& SfxProgress::GetStateText_Impl() const
 IMPL_STATIC_LINK( SfxProgress, SetStateHdl, PlugInLoadStatus*, pStatus )
 {
     INetRequest* pReq = 0;
-    const INetHint *pHint = PTR_CAST( INetHint, pStatus->pHint );
-    pReq = PTR_CAST( INetRequest, pStatus->pBC );
+    const INetHint *pHint = dynamic_cast< const INetHint* >( pStatus->pHint );
+    pReq = dynamic_cast< INetRequest* >( pStatus->pBC );
 
     String aString;
     if( pReq )
@@ -393,7 +393,7 @@ sal_Bool SfxProgress::SetState
             {
                 // don't show status indicator for hidden documents (only valid while loading)
                 SfxMedium* pMedium = pObjSh->GetMedium();
-                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False );
+                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN );
                 if ( !pHiddenItem || !pHiddenItem->GetValue() )
                 {
                     // not in a view, perhaps it's just loading
@@ -405,7 +405,7 @@ sal_Bool SfxProgress::SetState
                     //}
                     //else
                     {
-                        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pIndicatorItem, SfxUnoAnyItem, SID_PROGRESS_STATUSBAR_CONTROL, sal_False );
+                        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pIndicatorItem, SfxUnoAnyItem, SID_PROGRESS_STATUSBAR_CONTROL );
                         Reference< XStatusIndicator > xInd;
                         if ( pIndicatorItem && (pIndicatorItem->GetValue()>>=xInd) )
                             pImp->xStatusInd = xInd;
@@ -731,7 +731,7 @@ void SfxProgress::LeaveLock()
 
 // -----------------------------------------------------------------------
 
-FASTBOOL SfxProgress::StatusBarManagerGone_Impl
+bool SfxProgress::StatusBarManagerGone_Impl
 (
     SfxStatusBarManager *   // dieser <SfxStatusBarManager> wird zerst"ort
 )

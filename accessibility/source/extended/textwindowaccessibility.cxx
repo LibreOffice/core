@@ -1497,11 +1497,11 @@ void SAL_CALL Document::disposing()
 // virtual
 void Document::Notify(::SfxBroadcaster &, ::SfxHint const & rHint)
 {
-    if (rHint.ISA(::TextHint))
+    const ::TextHint* pTextHint = dynamic_cast< const ::TextHint* >(&rHint);
+
+    if (pTextHint)
     {
-        ::TextHint const & rTextHint
-              = static_cast< ::TextHint const & >(rHint);
-        switch (rTextHint.GetId())
+        switch (pTextHint->GetId())
         {
         case TEXT_HINT_PARAINSERTED:
         case TEXT_HINT_PARAREMOVED:
@@ -1525,7 +1525,7 @@ void Document::Notify(::SfxBroadcaster &, ::SfxHint const & rHint)
                 if (!isAlive())
                     break;
 
-                m_aParagraphNotifications.push(rTextHint);
+                m_aParagraphNotifications.push(*pTextHint);
                 break;
             }
         case TEXT_HINT_TEXTFORMATTED:

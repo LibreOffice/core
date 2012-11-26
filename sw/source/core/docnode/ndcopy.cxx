@@ -467,7 +467,7 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     rTbl.SetTableModel( GetTable().IsNewModel() );
 
     SwDDEFieldType* pDDEType = 0;
-    if( IS_TYPE( SwDDETable, &GetTable() ))
+    if( typeid(SwDDETable) == typeid(GetTable()) ) // IS_TYPE( SwDDETable, &GetTable() ))
     {
         // es wird eine DDE-Tabelle kopiert
         // ist im neuen Dokument ueberhaupt der FeldTyp vorhanden ?

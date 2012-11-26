@@ -593,7 +593,7 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
                  aList.Insert( new XubString(rCharFmtLB.GetEntry(j)), LIST_APPEND );
             }
             aSet.Put( SfxStringListItem( SID_CHAR_FMT_LIST_BOX,&aList ) ) ;
-            FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebDocShell, pDocShell));
+            FieldUnit eMetric = ::GetDfltMetric(0 != dynamic_cast< SwWebDocShell* >( pDocShell));
             aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric)));
             rPage.PageCreated(aSet);
             for( sal_uInt16 i = (sal_uInt16)aList.Count(); i; --i )
@@ -604,7 +604,7 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         case RID_SVXPAGE_NUM_POSITION:
         {
             SwDocShell* pDocShell = ::GetActiveWrtShell()->GetView().GetDocShell();
-            FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebDocShell, pDocShell));
+            FieldUnit eMetric = ::GetDfltMetric(0 != dynamic_cast< SwWebDocShell* >( pDocShell));
 
             aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric)));
             rPage.PageCreated(aSet);

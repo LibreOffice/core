@@ -28,6 +28,7 @@
 #include <svx/svdobj.hxx>
 #include <com/sun/star/form/FormComponentType.hpp>
 
+// TTTT: Needed at all? SdrObjKind == OBJ_UNO for all these anyways
 const sal_uInt32 FmFormInventor = sal_uInt32('F')*0x00000001+
                               sal_uInt32('M')*0x00000100+
                               sal_uInt32('0')*0x00010000+

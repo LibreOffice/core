@@ -599,7 +599,6 @@
 #include "tools/ref.hxx"
 #include "tools/resary.hxx"
 #include "tools/resid.hxx"
-#include "tools/rtti.hxx"
 #include "tools/shl.hxx"
 #include "tools/simplerm.hxx"
 #include "tools/solar.h"

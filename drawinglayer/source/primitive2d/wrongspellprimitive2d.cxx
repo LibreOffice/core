@@ -50,7 +50,8 @@ namespace drawinglayer
             // direct WrongSpellPrimitive2D support, You may want to do the described change here.
 
             // get the font height (part of scale), so decompose the matrix
-            basegfx::B2DVector aScale, aTranslate;
+            basegfx::B2DVector aScale;
+            basegfx::B2DPoint aTranslate;
             double fRotate, fShearX;
             getTransformation().decompose(aScale, aTranslate, fRotate, fShearX);
 
@@ -91,21 +92,6 @@ namespace drawinglayer
             mfStop(fStop),
             maColor(rColor)
         {
-        }
-
-        bool WrongSpellPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const WrongSpellPrimitive2D& rCompare = (WrongSpellPrimitive2D&)rPrimitive;
-
-                return (getTransformation() == rCompare.getTransformation()
-                    && getStart() == rCompare.getStart()
-                    && getStop() == rCompare.getStop()
-                    && getColor() == rCompare.getColor());
-            }
-
-            return false;
         }
 
         // provide unique ID

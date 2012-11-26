@@ -58,8 +58,6 @@
 #include <svx/xlnwtit.hxx>
 #include <svx/svdoattr.hxx>
 #include <svx/xlnstwit.hxx>
-#include <svx/sdtmfitm.hxx>
-#include <svx/sdtagitm.hxx>
 #include <svx/xlnedwit.hxx>
 #include <svx/fontworkbar.hxx>
 
@@ -91,6 +89,7 @@
 #include "sdabstdlg.hxx"
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
+#include <svx/svdlegacy.hxx>
 
 #include <strings.hrc>
 
@@ -146,29 +145,27 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             if( rReq.GetArgs() )
             {
-                sal_Bool bMergeUndo = sal_False;
+                bool bMergeUndo = false;
                 ::svl::IUndoManager* pUndoManager = GetDocSh()->GetUndoManager();
 
                 // Anpassungen Start/EndWidth #63083#
                 if(nSId == SID_ATTR_LINE_WIDTH)
                 {
-                    SdrObject* pObj = NULL;
-                    const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
-                    sal_uLong nCount = rMarkList.GetMarkCount();
+                    const SdrObjectVector aSelection(mpDrawView->getSelectedSdrObjectVectorFromSdrMarkView());
                     const sal_Int32 nNewLineWidth(((const XLineWidthItem&)rReq.GetArgs()->Get(XATTR_LINEWIDTH)).GetValue());
                     const bool bUndo(mpDrawView->IsUndoEnabled());
 
-                    for (sal_uLong i=0; i<nCount; i++)
+                    for (sal_uInt32 i(0); i < aSelection.size(); i++)
                     {
-                        SfxItemSet aAttr(GetDoc()->GetPool());
-                        pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
+                        SfxItemSet aAttr(GetDoc()->GetItemPool());
+                        SdrObject* pObj = aSelection[i];
                         aAttr.Put(pObj->GetMergedItemSet());
 
                         sal_Int32 nActLineWidth = ((const XLineWidthItem&)aAttr.Get(XATTR_LINEWIDTH)).GetValue();
 
                         if(nActLineWidth != nNewLineWidth)
                         {
-                            sal_Bool bSetItemSet(sal_False);
+                            bool bSetItemSet(false);
 
                             // #86265# do this for SFX_ITEM_DEFAULT and for SFX_ITEM_SET
                             if(SFX_ITEM_DONTCARE != aAttr.GetItemState(XATTR_LINESTARTWIDTH))
@@ -177,7 +174,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                                 sal_Int32 nValNew = nValAct + (((nNewLineWidth - nActLineWidth) * 15) / 10);
                                 if(nValNew < 0)
                                     nValNew = 0;
-                                bSetItemSet = sal_True;
+                                bSetItemSet = true;
                                 aAttr.Put(XLineStartWidthItem(nValNew));
                             }
 
@@ -188,7 +185,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                                 sal_Int32 nValNew = nValAct + (((nNewLineWidth - nActLineWidth) * 15) / 10);
                                 if(nValNew < 0)
                                     nValNew = 0;
-                                bSetItemSet = sal_True;
+                                bSetItemSet = true;
                                 aAttr.Put(XLineEndWidthItem(nValNew));
                             }
 
@@ -220,18 +217,16 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 if (nSId == SID_ATTR_FILL_SHADOW)
                 {
                     // Ggf. werden transparente Objekte wei?gefuellt
-                    SdrObject* pObj = NULL;
-                    const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
-                    sal_uLong nCount = rMarkList.GetMarkCount();
+                    const SdrObjectVector aSelection(mpDrawView->getSelectedSdrObjectVectorFromSdrMarkView());
                     const bool bUndo = mpDrawView->IsUndoEnabled();
 
-                    for (sal_uLong i=0; i<nCount; i++)
+                    for (sal_uInt32 i(0); i < aSelection.size(); i++)
                     {
-                        SfxItemSet aAttr(GetDoc()->GetPool());
-                        pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
+                        SfxItemSet aAttr(GetDoc()->GetItemPool());
+                        SdrObject* pObj = aSelection[i];
 
                         // #i25616#
-                        if(!pObj->ISA(SdrGrafObj))
+                        if(!static_cast< SdrGrafObj* >(pObj))
                         {
                             aAttr.Put(pObj->GetMergedItemSet());
 
@@ -246,7 +241,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                                     // daher hart attributieren: Fuellung setzen
                                     if (!bMergeUndo)
                                     {
-                                        bMergeUndo = sal_True;
+                                        bMergeUndo = true;
                                         pUndoManager->EnterListAction( String(), String() );
                                         mpDrawView->BegUndo();
                                     }
@@ -308,12 +303,12 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             // const SfxPoolItem* pItem = rReq.GetArg( SID_HYPHENATION );
             //  ^-- Soll so nicht benutzt werden (Defaults sind falsch) !
-            SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, SID_HYPHENATION, sal_False);
+            SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, SID_HYPHENATION );
 
             if( pItem )
             {
                 SfxItemSet aSet( GetPool(), EE_PARA_HYPHENATE, EE_PARA_HYPHENATE );
-                sal_Bool bValue = ( (const SfxBoolItem*) pItem)->GetValue();
+                bool bValue = ( (const SfxBoolItem*) pItem)->GetValue();
                 aSet.Put( SfxBoolItem( EE_PARA_HYPHENATE, bValue ) );
                 mpDrawView->SetAttributes( aSet );
             }
@@ -321,7 +316,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             {
                 DBG_ERROR(" Kein Wert fuer Silbentrennung!");
                 SfxItemSet aSet( GetPool(), EE_PARA_HYPHENATE, EE_PARA_HYPHENATE );
-                sal_Bool bValue = sal_True;
+                bool bValue = true;
                 aSet.Put( SfxBoolItem( EE_PARA_HYPHENATE, bValue ) );
                 mpDrawView->SetAttributes( aSet );
             }
@@ -339,7 +334,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if(HasCurrentFunction(SID_BEZIER_EDIT) )
                 GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
             if (pNewPage != NULL)
-                SwitchPage((pNewPage->GetPageNum()-1)/2);
+                SwitchPage((pNewPage->GetPageNumber()-1)/2);
             rReq.Done ();
         }
         break;
@@ -355,13 +350,13 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     xMasterPagesSupplier->getMasterPages());
                 if (xMasterPages.is())
                 {
-                    sal_uInt16 nIndex = GetCurPageId();
+                    sal_uInt32 nIndex = GetCurPageId();
                     xMasterPages->insertNewByIndex (nIndex);
 
                     // Create shapes for the default layout.
                     SdPage* pMasterPage = GetDoc()->GetMasterSdPage(
                         nIndex, PK_STANDARD);
-                    pMasterPage->CreateTitleAndLayout (sal_True,sal_True);
+                    pMasterPage->CreateTitleAndLayout (true,true);
                 }
             }
 
@@ -382,7 +377,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 {
                     mpDrawView->SdrEndTextEdit();
                 }
-                sal_uInt16 nPage = maTabControl.GetCurPageId() - 1;
+                sal_uInt32 nPage = maTabControl.GetCurPageId() - 1;
                 mpActualPage = GetDoc()->GetSdPage(nPage, mePageKind);
                 ::sd::ViewShell::mpImpl->ProcessModifyPageSlot (
                     rReq,
@@ -419,7 +414,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     mpDrawView->SdrEndTextEdit();
                 }
 
-                sal_uInt16 nPageId = maTabControl.GetCurPageId();
+                sal_uInt32 nPageId = maTabControl.GetCurPageId();
                 SdPage* pCurrentPage = ( GetEditMode() == EM_PAGE )
                     ? GetDoc()->GetSdPage( nPageId - 1, GetPageKind() )
                     : GetDoc()->GetMasterSdPage( nPageId - 1, GetPageKind() );
@@ -481,13 +476,13 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if (pArgs)
                 if (pArgs->Count () == 3)
                 {
-                    SFX_REQUEST_ARG (rReq, pWidth, SfxUInt32Item, ID_VAL_PAGEWIDTH, sal_False);
-                    SFX_REQUEST_ARG (rReq, pHeight, SfxUInt32Item, ID_VAL_PAGEHEIGHT, sal_False);
-                    SFX_REQUEST_ARG (rReq, pScaleAll, SfxBoolItem, ID_VAL_SCALEOBJECTS, sal_False);
+                    SFX_REQUEST_ARG (rReq, pWidth, SfxUInt32Item, ID_VAL_PAGEWIDTH );
+                    SFX_REQUEST_ARG (rReq, pHeight, SfxUInt32Item, ID_VAL_PAGEHEIGHT );
+                    SFX_REQUEST_ARG (rReq, pScaleAll, SfxBoolItem, ID_VAL_SCALEOBJECTS );
 
-                    Size aSize (pWidth->GetValue (), pHeight->GetValue ());
+                    const basegfx::B2DVector aSize (pWidth->GetValue (), pHeight->GetValue ());
 
-                    SetupPage (aSize, 0, 0, 0, 0, sal_True, sal_False, pScaleAll->GetValue ());
+                    SetupPage (aSize, 0, 0, 0, 0, true, false, pScaleAll->GetValue ());
                     rReq.Ignore ();
                     break;
                 }
@@ -504,17 +499,17 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if (pArgs)
                 if (pArgs->Count () == 5)
                 {
-                    SFX_REQUEST_ARG (rReq, pLeft, SfxUInt32Item, ID_VAL_PAGELEFT, sal_False);
-                    SFX_REQUEST_ARG (rReq, pRight, SfxUInt32Item, ID_VAL_PAGERIGHT, sal_False);
-                    SFX_REQUEST_ARG (rReq, pUpper, SfxUInt32Item, ID_VAL_PAGETOP, sal_False);
-                    SFX_REQUEST_ARG (rReq, pLower, SfxUInt32Item, ID_VAL_PAGEBOTTOM, sal_False);
-                    SFX_REQUEST_ARG (rReq, pScaleAll, SfxBoolItem, ID_VAL_SCALEOBJECTS, sal_False);
+                    SFX_REQUEST_ARG (rReq, pLeft, SfxUInt32Item, ID_VAL_PAGELEFT );
+                    SFX_REQUEST_ARG (rReq, pRight, SfxUInt32Item, ID_VAL_PAGERIGHT );
+                    SFX_REQUEST_ARG (rReq, pUpper, SfxUInt32Item, ID_VAL_PAGETOP );
+                    SFX_REQUEST_ARG (rReq, pLower, SfxUInt32Item, ID_VAL_PAGEBOTTOM );
+                    SFX_REQUEST_ARG (rReq, pScaleAll, SfxBoolItem, ID_VAL_SCALEOBJECTS );
 
-                    Size aEmptySize (0, 0);
+                    const basegfx::B2DVector aEmptySize (0.0, 0.0);
 
                     SetupPage (aEmptySize, pLeft->GetValue (), pRight->GetValue (),
                                pUpper->GetValue (), pLower->GetValue (),
-                               sal_False, sal_True, pScaleAll->GetValue ());
+                               false, true, pScaleAll->GetValue ());
                     rReq.Ignore ();
                     break;
                 }
@@ -530,7 +525,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             if (pArgs && pArgs->Count () == 1 )
             {
-                SFX_REQUEST_ARG (rReq, pScale, SfxUInt16Item, SID_ATTR_ZOOMSLIDER, sal_False);
+                SFX_REQUEST_ARG (rReq, pScale, SfxUInt16Item, SID_ATTR_ZOOMSLIDER );
                 if (CHECK_RANGE (5, pScale->GetValue (), 3000))
                 {
                     SetZoom (pScale->GetValue ());
@@ -555,7 +550,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if (pArgs)
                 if (pArgs->Count () == 1)
                 {
-                    SFX_REQUEST_ARG (rReq, pScale, SfxUInt32Item, ID_VAL_ZOOM, sal_False);
+                    SFX_REQUEST_ARG (rReq, pScale, SfxUInt32Item, ID_VAL_ZOOM );
                     if (CHECK_RANGE (10, pScale->GetValue (), 1000))
                     {
                         SetZoom (pScale->GetValue ());
@@ -580,7 +575,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_ATTR_ZOOM:
         {
             const SfxItemSet* pArgs = rReq.GetArgs();
-            mbZoomOnPage = sal_False;
+            mbZoomOnPage = false;
 
             if ( pArgs )
             {
@@ -640,7 +635,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 if( rReq.GetSlot() == SID_CHANGEBEZIER )
                 {
                     WaitObject aWait( (Window*)GetActiveWindow() );
-                    mpDrawView->ConvertMarkedToPathObj(sal_False);
+                    mpDrawView->ConvertMarkedToPathObj(false);
                 }
                 else
                 {
@@ -651,7 +646,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     else
                     {
                         WaitObject aWait( (Window*)GetActiveWindow() );
-                        mpDrawView->ConvertMarkedToPolyObj(sal_False);
+                        mpDrawView->ConvertMarkedToPolyObj(false);
                     }
                 }
 
@@ -683,7 +678,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             else
             {
                 WaitObject aWait( (Window*)GetActiveWindow() );
-                mpDrawView->ConvertMarkedToPathObj(sal_True);
+                mpDrawView->ConvertMarkedToPathObj(true);
 
                 Invalidate(SID_CONVERT_TO_CONTOUR);
             }
@@ -731,6 +726,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     {
                         bool bDone(false);
 
+                        // aw080: Take a look at AAed graphic creation
                         // I have to get the image here directly since GetMarkedObjBitmapEx works
                         // based on Bitmaps, but not on BitmapEx, thus throwing away the alpha
                         // channel. Argh! GetMarkedObjBitmapEx itself is too widely used to safely
@@ -738,15 +734,12 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         // exception to get good results for Svgs. This is how the code gets more
                         // and more crowded, at last I made a remark for myself to change this
                         // as one of the next tasks.
-                        if(1 == mpDrawView->GetMarkedObjectCount())
-                        {
-                            const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(mpDrawView->GetMarkedObjectByIndex(0));
+                        const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(mpDrawView->getSelectedIfSingle());
 
-                            if(pSdrGrafObj && pSdrGrafObj->isEmbeddedSvg())
-                            {
-                                aGraphic = Graphic(pSdrGrafObj->GetGraphic().getSvgData()->getReplacement());
-                                bDone = true;
-                            }
+                        if(pSdrGrafObj && pSdrGrafObj->isEmbeddedSvg())
+                        {
+                            aGraphic = Graphic(pSdrGrafObj->GetGraphic().getSvgData()->getReplacement());
+                            bDone = true;
                         }
 
                         if(!bDone)
@@ -758,37 +751,34 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 }
 
                 // create new object
-                SdrGrafObj* pGraphicObj = new SdrGrafObj (aGraphic);
+                SdrGrafObj* pGraphicObj = new SdrGrafObj(
+                    *GetDoc(),
+                    aGraphic);
 
                 // get some necessary info and ensure it
-                const SdrMarkList& rMarkList(mpDrawView->GetMarkedObjectList());
-                const sal_uInt32 nMarkCount(rMarkList.GetMarkCount());
-                SdrPageView* pPageView = mpDrawView->GetSdrPageView();
-                OSL_ENSURE(nMarkCount, "DrawViewShell::FuTemporary: SID_CONVERT_TO_BITMAP with empty selection (!)");
-                OSL_ENSURE(pPageView, "DrawViewShell::FuTemporary: SID_CONVERT_TO_BITMAP without SdrPageView (!)");
+                const SdrObjectVector aSelection(mpDrawView->getSelectedSdrObjectVectorFromSdrMarkView());
+                OSL_ENSURE(aSelection.size(), "DrawViewShell::FuTemporary: SID_CONVERT_TO_BITMAP with empty selection (!)");
 
                 // fit rectangle of new graphic object to selection's mark rect
-                Rectangle aAllMarkedRect;
-                rMarkList.TakeBoundRect(pPageView, aAllMarkedRect);
-                pGraphicObj->SetLogicRect(aAllMarkedRect);
+                const basegfx::B2DRange aAllMarkedRange(sdr::legacy::GetAllObjBoundRange(aSelection));
+                sdr::legacy::SetLogicRange(*pGraphicObj, aAllMarkedRange);
 
                 // #i71540# to keep the order, it is necessary to replace the lowest object
                 // of the selection with the new object. This also means that with multi
                 // selection, all other objects need to be deleted first
-                SdrMark* pFirstMark = rMarkList.GetMark(0L);
-                SdrObject* pReplacementCandidate = pFirstMark->GetMarkedSdrObj();
+                SdrObject* pReplacementCandidate = aSelection[0];
 
-                if(nMarkCount > 1L)
+                if(aSelection.size() > 1)
                 {
                     // take first object out of selection
-                    mpDrawView->MarkObj(pReplacementCandidate, pPageView, true, true);
+                    mpDrawView->MarkObj(*pReplacementCandidate, true );
 
                     // clear remaining selection
                     mpDrawView->DeleteMarkedObj();
                 }
 
                 // now replace lowest object with new one
-                mpDrawView->ReplaceObjectAtView(pReplacementCandidate, *pPageView, pGraphicObj);
+                mpDrawView->ReplaceObjectAtView(*pReplacementCandidate, *pGraphicObj);
 
                 // switch off undo
                 mpDrawView->EndUndo();
@@ -809,95 +799,96 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 ::Outliner* pOutl = mpDrawView->GetTextEditOutliner();
                 if (pOutl)
                 {
-                    pOutl->RemoveFields(sal_True, (TypeId) SvxURLField::StaticType());
+                    pOutl->RemoveFields(true, &typeid(SvxURLField));
                 }
 
                 pSet = new SfxItemSet( GetPool(), EE_ITEMS_START, EE_ITEMS_END );
-                mpDrawView->SetAttributes( *pSet, sal_True );
+                mpDrawView->SetAttributes( *pSet, true );
             }
             else
             {
-                const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
-                sal_uLong nCount = rMarkList.GetMarkCount();
-
-                // In diese Liste werden fuer jedes Praesentationsobjekt ein SfxItemSet
-                // der harten Attribute sowie der UserCall eingetragen, da diese beim nachfolgenden
-                // mpDrawView->SetAttributes( *pSet, sal_True ) verloren gehen und spaeter restauriert
-                // werden muessen
-                List* pAttrList = new List();
-                SdPage* pPresPage = (SdPage*) mpDrawView->GetSdrPageView()->GetPage();
-                sal_uLong i;
-
-                for ( i = 0; i < nCount; i++ )
+                if(mpDrawView->GetSdrPageView())
                 {
-                    SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
+                    // In diese Liste werden fuer jedes Praesentationsobjekt ein SfxItemSet
+                    // der harten Attribute sowie die connection zum SdrObject eingetragen, da diese beim nachfolgenden
+                    // mpDrawView->SetAttributes( *pSet, true ) verloren gehen und spaeter restauriert
+                    // werden muessen
+                    const SdrObjectVector aSelection(mpDrawView->getSelectedSdrObjectVectorFromSdrMarkView());
+                    ::std::vector< SfxItemSet* > aAttrVector;
+                    ::std::vector< SdrPage* > aPageVector;
+                    SdPage& rPresPage = (SdPage&) mpDrawView->GetSdrPageView()->getSdrPageFromSdrPageView();
+                    sal_uInt32 i;
 
-                    if( pPresPage->IsPresObj( pObj ) )
+                    for ( i = 0; i < aSelection.size(); i++ )
                     {
-                        SfxItemSet* pNewSet = new SfxItemSet( GetDoc()->GetPool(), SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT, 0 );
-                        pNewSet->Put(pObj->GetMergedItemSet());
-                        pAttrList->Insert( pNewSet, LIST_APPEND );
-                        pAttrList->Insert( pObj->GetUserCall(), LIST_APPEND );
-                    }
-                }
+                        SdrObject* pObj = aSelection[i];
 
-                pSet = new SfxItemSet( GetPool() );
-                mpDrawView->SetAttributes( *pSet, sal_True );
-
-                sal_uLong j = 0;
-
-                for ( i = 0; i < nCount; i++ )
-                {
-                    SfxStyleSheet* pSheet = NULL;
-                    SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-
-                    if (pObj->GetObjIdentifier() == OBJ_TITLETEXT)
-                    {
-                        pSheet = mpActualPage->GetStyleSheetForPresObj(PRESOBJ_TITLE);
-                        if (pSheet)
-                            pObj->SetStyleSheet(pSheet, sal_False);
-                    }
-                    else if(pObj->GetObjIdentifier() == OBJ_OUTLINETEXT)
-                    {
-                        for (sal_uInt16 nLevel = 1; nLevel < 10; nLevel++)
+                        if( rPresPage.IsPresObj( pObj ) )
                         {
-                            pSheet = mpActualPage->GetStyleSheetForPresObj( PRESOBJ_OUTLINE );
-                            DBG_ASSERT(pSheet, "Vorlage fuer Gliederungsobjekt nicht gefunden");
+                            SfxItemSet* pNewSet = new SfxItemSet( GetDoc()->GetItemPool(), SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT, 0 );
+                            pNewSet->Put(pObj->GetMergedItemSet());
+                            aAttrVector.push_back( pNewSet );
+                            aPageVector.push_back( findConnectionToSdrObject(pObj) );
+                        }
+                    }
+
+                    pSet = new SfxItemSet( GetPool() );
+                    mpDrawView->SetAttributes( *pSet, true );
+                    sal_uInt32 j = 0;
+
+                    for ( i = 0; i < aSelection.size(); i++ )
+                    {
+                        SfxStyleSheet* pSheet = NULL;
+                        SdrObject* pObj = aSelection[i];
+
+                        if (pObj->GetObjIdentifier() == OBJ_TITLETEXT)
+                        {
+                            pSheet = mpActualPage->GetStyleSheetForPresObj(PRESOBJ_TITLE);
                             if (pSheet)
+                                pObj->SetStyleSheet(pSheet, false);
+                        }
+                        else if(pObj->GetObjIdentifier() == OBJ_OUTLINETEXT)
+                        {
+                            for (sal_uInt16 nLevel = 1; nLevel < 10; nLevel++)
                             {
-                                pObj->StartListening(*pSheet);
+                                pSheet = mpActualPage->GetStyleSheetForPresObj( PRESOBJ_OUTLINE );
+                                DBG_ASSERT(pSheet, "Vorlage fuer Gliederungsobjekt nicht gefunden");
+                                if (pSheet)
+                                {
+                                    pObj->StartListening(*pSheet);
 
-                                if( nLevel == 1 )
+                                    if( nLevel == 1 )
                                     // Textrahmen hoert auf StyleSheet der Ebene1
-                                    pObj->NbcSetStyleSheet(pSheet, sal_False);
-
+                                        pObj->SetStyleSheet(pSheet, false);
+                                }
                             }
                         }
-                    }
 
-                    if( pPresPage->IsPresObj( pObj ) )
-                    {
-                        SfxItemSet* pNewSet = (SfxItemSet*) pAttrList->GetObject(j++);
-                        SdrObjUserCall* pUserCall = (SdrObjUserCall*) pAttrList->GetObject(j++);
-
-                        if ( pNewSet && pNewSet->GetItemState( SDRATTR_TEXT_MINFRAMEHEIGHT ) == SFX_ITEM_ON )
+                        if( rPresPage.IsPresObj( pObj ) )
                         {
-                            pObj->SetMergedItem(pNewSet->Get(SDRATTR_TEXT_MINFRAMEHEIGHT));
+                            SfxItemSet* pNewSet = aAttrVector[j];
+
+                            if ( pNewSet && pNewSet->GetItemState( SDRATTR_TEXT_MINFRAMEHEIGHT ) == SFX_ITEM_ON )
+                            {
+                                pObj->SetMergedItem(pNewSet->Get(SDRATTR_TEXT_MINFRAMEHEIGHT));
+                            }
+
+                            if ( pNewSet && pNewSet->GetItemState( SDRATTR_TEXT_AUTOGROWHEIGHT ) == SFX_ITEM_ON )
+                            {
+                                pObj->SetMergedItem(pNewSet->Get(SDRATTR_TEXT_AUTOGROWHEIGHT));
+                            }
+
+                            SdPage* pConnectionToSdrObject = dynamic_cast< SdPage* >(aPageVector[j++]);
+
+                            if( pConnectionToSdrObject )
+                            {
+                                establishConnectionToSdrObject(pObj, pConnectionToSdrObject);
+                            }
+
+                            delete pNewSet;
                         }
-
-                        if ( pNewSet && pNewSet->GetItemState( SDRATTR_TEXT_AUTOGROWHEIGHT ) == SFX_ITEM_ON )
-                        {
-                            pObj->SetMergedItem(pNewSet->Get(SDRATTR_TEXT_AUTOGROWHEIGHT));
-                        }
-
-                        if( pUserCall )
-                            pObj->SetUserCall( pUserCall );
-
-                        delete pNewSet;
                     }
                 }
-
-                delete pAttrList;
             }
 
             delete pSet;
@@ -907,18 +898,19 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_DELETE_SNAPITEM:
         {
-            SdrPageView* pPV;
-            Point   aMPos = GetActiveWindow()->PixelToLogic( maMousePos );
-            sal_uInt16  nHitLog = (sal_uInt16) GetActiveWindow()->PixelToLogic( Size(
-                FuPoor::HITPIX, 0 ) ).Width();
-            sal_uInt16  nHelpLine;
+            const basegfx::B2DPoint aMPos(GetActiveWindow()->GetInverseViewTransformation() * maMousePos);
+            const double fHitLog(basegfx::B2DVector(GetActiveWindow()->GetInverseViewTransformation() * basegfx::B2DVector(FuPoor::HITPIX, 0.0)).getLength());
+            sal_uInt32 nHelpLine;
+            mbMousePosFreezed = false;
 
-            mbMousePosFreezed = sal_False;
-
-            if( mpDrawView->PickHelpLine( aMPos, nHitLog, *GetActiveWindow(), nHelpLine, pPV) )
+            if( mpDrawView->PickHelpLine( aMPos, fHitLog, nHelpLine) )
             {
-                pPV->DeleteHelpLine( nHelpLine );
+                if(mpDrawView->GetSdrPageView())
+                {
+                    mpDrawView->GetSdrPageView()->DeleteHelpLine( nHelpLine );
+                }
             }
+
             Cancel();
             rReq.Ignore ();
         }
@@ -954,16 +946,14 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_SAVEGRAPHIC:
         {
-            const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
-            if( rMarkList.GetMarkCount() == 1 )
+            SdrGrafObj* pGrafObj = dynamic_cast< SdrGrafObj* >(mpDrawView->getSelectedIfSingle());
+
+            if(pGrafObj )
             {
-                SdrGrafObj *pGrafObj = dynamic_cast< SdrGrafObj* >( rMarkList.GetMark( 0 )->GetMarkedSdrObj() );
-                if(pGrafObj )
-                {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape( pGrafObj->getUnoShape(), com::sun::star::uno::UNO_QUERY );
-                    SdGRFFilter::SaveGraphic( xShape );
-                }
+                ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape( pGrafObj->getUnoShape(), com::sun::star::uno::UNO_QUERY );
+                SdGRFFilter::SaveGraphic( xShape );
             }
+
             Cancel();
             rReq.Ignore();
         }

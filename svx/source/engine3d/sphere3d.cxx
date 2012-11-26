@@ -56,51 +56,65 @@ sdr::properties::BaseProperties* E3dSphereObj::CreateObjectSpecificProperties()
 
 //////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1(E3dSphereObj, E3dCompoundObject);
-
 /*************************************************************************
 |*
 |* Kugel aus Polygonfacetten nach Laengen und Breitengrad aufbauen
 |*
 \************************************************************************/
 
-E3dSphereObj::E3dSphereObj(E3dDefaultAttributes& rDefault, const basegfx::B3DPoint& rCenter, const basegfx::B3DVector& r3DSize)
-:   E3dCompoundObject(rDefault)
+E3dSphereObj::E3dSphereObj(
+    SdrModel& rSdrModel,
+    const E3dDefaultAttributes& rDefault,
+    const basegfx::B3DPoint _aCenter,
+    const basegfx::B3DVector a3DSize)
+:   E3dCompoundObject(rSdrModel, rDefault)
 {
     // Defaults setzen
     SetDefaultAttributes(rDefault);
 
     // Uebergebene drueberbuegeln
-    aCenter = rCenter;
-    aSize = r3DSize;
+    aCenter = _aCenter;
+    aSize = a3DSize;
 }
 
-E3dSphereObj::E3dSphereObj()
-:   E3dCompoundObject()
+E3dSphereObj::~E3dSphereObj()
 {
-    // Defaults setzen
-    E3dDefaultAttributes aDefault;
-    SetDefaultAttributes(aDefault);
 }
 
-/*************************************************************************
-|*
-|* Kugel erzeugen ohne die Polygone darin zu erzeugen
-|*
-\************************************************************************/
+void E3dSphereObj::copyDataFromSdrObject(const SdrObject& rSource)
+{
+    if(this != &rSource)
+    {
+        const E3dSphereObj* pSource = dynamic_cast< const E3dSphereObj* >(&rSource);
 
-// FG: Dieser Aufruf erfolgt von der 3D-Object Factory (objfac3d.cxx) und zwar ausschliesslich beim
-//     laden von Dokumenten. Hier braucht man keinen CreateSphere-Aufruf, denn die wirkliche
-//     Anzahl Segmente ist ja noch nicht bekannt. Dies war bis zum 10.2.97 ein (kleines)
-//     Speicherleck.
-E3dSphereObj::E3dSphereObj(int /*dummy*/) // den Parameter braucht es um unterscheiden zu koennen, welcher
-{                                     // der beiden Konstruktoren gemeint ist. Der obige halt per Default
-    // Defaults setzen
-    E3dDefaultAttributes aDefault;
-    SetDefaultAttributes(aDefault);
+        if(pSource)
+        {
+            // call parent
+            E3dCompoundObject::copyDataFromSdrObject(rSource);
+
+            // copy local data
+            aCenter = pSource->aCenter;
+            aSize = pSource->aSize;
+        }
+        else
+        {
+            OSL_ENSURE(false, "copyDataFromSdrObject with ObjectType of Source different from Target (!)");
+        }
+    }
 }
 
-void E3dSphereObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
+SdrObject* E3dSphereObj::CloneSdrObject(SdrModel* pTargetModel) const
+{
+    E3dSphereObj* pClone = new E3dSphereObj(
+        pTargetModel ? *pTargetModel : getSdrModelFromSdrObject(),
+        E3dDefaultAttributes());
+    OSL_ENSURE(pClone, "CloneSdrObject error (!)");
+    pClone->copyDataFromSdrObject(*this);
+
+    return pClone;
+}
+
+void E3dSphereObj::SetDefaultAttributes(const E3dDefaultAttributes& rDefault)
 {
     // Defaults setzen
     aCenter = rDefault.GetDefaultSphereCenter();
@@ -124,7 +138,7 @@ sal_uInt16 E3dSphereObj::GetObjIdentifier() const
 |*
 \************************************************************************/
 
-SdrObject *E3dSphereObj::DoConvertToPolyObj(sal_Bool /*bBezier*/, bool /*bAddText*/) const
+SdrObject *E3dSphereObj::DoConvertToPolygonObject(bool /*bBezier*/, bool /*bAddText*/) const
 {
     return NULL;
 }
@@ -139,29 +153,11 @@ void E3dSphereObj::ReSegment(sal_uInt32 nHSegs, sal_uInt32 nVSegs)
 {
     if((nHSegs != GetHorizontalSegments() || nVSegs != GetVerticalSegments()) && (nHSegs != 0 || nVSegs != 0))
     {
-        GetProperties().SetObjectItemDirect(Svx3DHorizontalSegmentsItem(nHSegs));
-        GetProperties().SetObjectItemDirect(Svx3DVerticalSegmentsItem(nVSegs));
+        GetProperties().SetObjectItemDirect(SfxUInt32Item(SDRATTR_3DOBJ_HORZ_SEGS, nHSegs));
+        GetProperties().SetObjectItemDirect(SfxUInt32Item(SDRATTR_3DOBJ_VERT_SEGS, nVSegs));
 
         ActionChanged();
     }
-}
-
-/*************************************************************************
-|*
-|* Zuweisungsoperator
-|*
-\************************************************************************/
-
-void E3dSphereObj::operator=(const SdrObject& rObj)
-{
-    // erstmal alle Childs kopieren
-    E3dCompoundObject::operator=(rObj);
-
-    // weitere Parameter kopieren
-    const E3dSphereObj& r3DObj = (const E3dSphereObj&) rObj;
-
-    aCenter       = r3DObj.aCenter;
-    aSize         = r3DObj.aSize;
 }
 
 /*************************************************************************

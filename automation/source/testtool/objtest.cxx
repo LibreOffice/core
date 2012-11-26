@@ -596,7 +596,7 @@ void TestToolObj::InitTestToolObj()
 // overwrite standard "wait" method, cause we can do better than that!!
 // Insert Object into SbiStdObject but change listening.
     SbxVariable* pRTL = pImpl->pMyBasic->Find( CUniString(RTLNAME), SbxCLASS_DONTCARE );
-    SbxObject* pRTLObject = PTR_CAST( SbxObject, pRTL );
+    SbxObject* pRTLObject = dynamic_cast< SbxObject* >( pRTL );
     if ( pRTLObject )
     {
         SbxVariableRef pWait;
@@ -1360,7 +1360,7 @@ void TestToolObj::SendViaSocket()
     {
         // first try to run basic sub "startTheOffice" see i86540
         SbxVariable* pMeth = pImpl->pMyBasic->Find( CUniString( "startTheOffice" ), SbxCLASS_DONTCARE);
-        if( !pImpl->bIsStart && pMeth && pMeth->ISA(SbxMethod) )
+        if( !pImpl->bIsStart && pMeth && dynamic_cast< SbxMethod* >(pMeth) )
         {
             pImpl->pMyBasic->Call( CUniString( "startTheOffice" ) );
         }
@@ -1655,7 +1655,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
 {
     static CNames *pUIds = NULL;    // Halten der hid.lst
 
-    const SbxHint* p = PTR_CAST(SbxHint,&rHint);
+    const SbxHint* p = dynamic_cast< const SbxHint* >( &rHint);
     if( p )
     {
         SbxVariable* pVar = p->GetVar();
@@ -2266,7 +2266,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                 case ID_Control:
                 case ID_StringControl:
                     // if only the object is given in the script we don't have to do anything (object stands for itself)
-                    if ( !pVar->ISA( SbxObject ) )
+                    if ( !dynamic_cast< SbxObject* >(pVar) )
                     {
                         if ( SingleCommandBlock )
                             BeginBlock();
@@ -4274,7 +4274,7 @@ SbTextType TestToolObj::GetSymbolType( const String &rSymbol, sal_Bool bWasContr
 
     // Wenns sonst nix war, dann vielleicht ein Lokales Kommando
     SbxVariable *pVar = SbxObject::Find( rSymbol, SbxCLASS_DONTCARE );
-    if ( pVar && ( pVar->ISA(SbxMethod) || pVar->ISA(SbxProperty) ) )
+    if ( pVar && ( dynamic_cast< SbxMethod* >(pVar) || dynamic_cast< SbxProperty* >(pVar) ) )
     {
         return TT_LOCALCMD;
     }

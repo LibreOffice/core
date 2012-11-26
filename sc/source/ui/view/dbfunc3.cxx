@@ -704,7 +704,7 @@ sal_uLong RefreshDPObject( ScDPObject *pDPObj, ScDocument *pDoc, ScDocShell *pDo
     if( !pDoc  )
         return static_cast<sal_uLong>(-1);
 
-    if( !pDocSh && ( pDocSh = PTR_CAST( ScDocShell, pDoc->GetDocumentShell() ) ) == NULL )
+    if( !pDocSh && ( pDocSh = dynamic_cast< ScDocShell* >( pDoc->GetDocumentShell() ) ) == NULL )
         return static_cast<sal_uLong>(-1);
 
     if( sal_uLong nErrId = pDPObj->RefreshCache() )

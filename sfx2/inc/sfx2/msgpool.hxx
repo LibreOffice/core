@@ -73,7 +73,8 @@ public:
     const SfxSlot*      GetSlot( sal_uInt16 nId );
     const SfxSlot*      GetUnoSlot( sal_uInt16 nId );
     const SfxSlot*      GetUnoSlot( const String& rUnoName );
-    TypeId              GetSlotType( sal_uInt16 nSlotId ) const;
+
+    const std::type_info& GetSlotType( sal_uInt16 nSlotId ) const;
 };
 
 //--------------------------------------------------------------------

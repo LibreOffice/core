@@ -132,11 +132,12 @@ void SAL_CALL ScAccessiblePageHeader::disposing()
 
 void ScAccessiblePageHeader::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if (rHint.ISA( SfxSimpleHint ) )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if (pSfxSimpleHint)
     {
-        const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
         // only notify if child exist, otherwise it is not necessary
-        if ((rRef.GetId() == SC_HINT_DATACHANGED))
+        if ((pSfxSimpleHint->GetId() == SC_HINT_DATACHANGED))
         {
             ScHFAreas aOldAreas(maAreas);
             std::for_each(aOldAreas.begin(), aOldAreas.end(), Acquire());
@@ -170,7 +171,7 @@ void ScAccessiblePageHeader::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
             std::for_each(aOldAreas.begin(), aOldAreas.end(), Release());
         }
-        else if (rRef.GetId() == SC_HINT_ACC_VISAREACHANGED)
+        else if (pSfxSimpleHint->GetId() == SC_HINT_ACC_VISAREACHANGED)
         {
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::VISIBLE_DATA_CHANGED;

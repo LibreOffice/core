@@ -66,6 +66,7 @@
 #include <svtools/soerr.hxx>
 
 #include <sfx2/ipclient.hxx>
+#include <svx/svdlegacy.hxx>
 #include "glob.hrc"
 
 using namespace com::sun::star;
@@ -87,7 +88,7 @@ namespace sd {
 \************************************************************************/
 
 SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
-                                   const Point& rPos, SdrObject* pObj, ImageMap* pImageMap )
+    const basegfx::B2DPoint& rPos, SdrObject* pObj, ImageMap* pImageMap )
 {
     SdrEndTextEdit();
     mnAction = rAction;
@@ -96,66 +97,73 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
     SdrGrafObj*     pNewGrafObj = NULL;
     SdrPageView*    pPV = GetSdrPageView();
     SdrObject*      pPickObj = pObj;
-    const bool bOnMaster = pPV && pPV->GetPage() && pPV->GetPage()->IsMasterPage();
+    const bool bOnMaster = pPV && pPV->getSdrPageFromSdrPageView().IsMasterPage();
 
-    if(pPV && this->ISA(::sd::slidesorter::view::SlideSorterView))
+    if(pPV && dynamic_cast< ::sd::slidesorter::view::SlideSorterView* >(this))
     {
-        if(!pPV->GetPageRect().IsInside(rPos))
-            pPV = 0L;
+        const basegfx::B2DRange aPageRange(pPV->GetPageRange());
+
+        if(!aPageRange.isInside(rPos))
+        {
+            pPV = 0;
+        }
     }
 
     if( !pPickObj && pPV )
     {
-        SdrPageView* pPageView = pPV;
-        PickObj(rPos, getHitTolLog(), pPickObj, pPageView);
+        PickObj(rPos, getHitTolLog(), pPickObj );
     }
 
     if( mnAction == DND_ACTION_LINK && pPickObj && pPV )
     {
-        const bool bIsGraphic = pPickObj->ISA( SdrGrafObj );
-        if( bIsGraphic || (pObj->IsEmptyPresObj() && !bOnMaster) )
+        SdrGrafObj* pSdrGrafObj = dynamic_cast< SdrGrafObj* >(pPickObj);
+
+        if( pSdrGrafObj || (pObj->IsEmptyPresObj() && !bOnMaster))
         {
             if( IsUndoEnabled() )
                 BegUndo(String(SdResId(STR_INSERTGRAPHIC)));
 
-            SdPage* pPage = (SdPage*) pPickObj->GetPage();
+            SdPage* pPage = (SdPage*) pPickObj->getSdrPageFromSdrObject();
 
-            if( bIsGraphic )
+            if( pSdrGrafObj )
             {
                 // Das Objekt wird mit der Bitmap gefuellt
-                pNewGrafObj = (SdrGrafObj*) pPickObj->Clone();
+                pNewGrafObj = static_cast< SdrGrafObj* >(pSdrGrafObj->CloneSdrObject());
                 pNewGrafObj->SetGraphic(rGraphic);
             }
             else
             {
-                pNewGrafObj = new SdrGrafObj( rGraphic, pPickObj->GetLogicRect() );
-                pNewGrafObj->SetEmptyPresObj(sal_True);
+                pNewGrafObj = new SdrGrafObj(
+                    getSdrModelFromSdrView(),
+                    Graphic(),
+                    pPickObj->getSdrObjectTransformation());
+                pNewGrafObj->SetEmptyPresObj(true);
             }
 
             if ( pNewGrafObj->IsEmptyPresObj() )
             {
-                Rectangle aRect( pNewGrafObj->GetLogicRect() );
-                pNewGrafObj->AdjustToMaxRect( aRect, sal_False );
+                const basegfx::B2DRange aRange( sdr::legacy::GetLogicRange(*pNewGrafObj) );
+                pNewGrafObj->AdjustToMaxRange( aRange, false );
                 pNewGrafObj->SetOutlinerParaObject(NULL);
-                pNewGrafObj->SetEmptyPresObj(sal_False);
+                pNewGrafObj->SetEmptyPresObj(false);
             }
 
             if (pPage && pPage->IsPresObj(pPickObj))
             {
                 // Neues PresObj in die Liste eintragen
                 pPage->InsertPresObj( pNewGrafObj, PRESOBJ_GRAPHIC );
-                pNewGrafObj->SetUserCall(pPickObj->GetUserCall());
+                establishConnectionToSdrObject(pNewGrafObj, findConnectionToSdrObject(pPickObj));
             }
 
             if (pImageMap)
                 pNewGrafObj->InsertUserData(new SdIMapInfo(*pImageMap));
 
-            ReplaceObjectAtView(pPickObj, *pPV, pNewGrafObj); // maybe ReplaceObjectAtView
+            ReplaceObjectAtView(*pPickObj, *pNewGrafObj); // maybe ReplaceObjectAtView
 
             if( IsUndoEnabled() )
                 EndUndo();
         }
-        else if (pPickObj->IsClosedObj() && !pPickObj->ISA(SdrOle2Obj))
+        else if (pPickObj->IsClosedObj() && !dynamic_cast< SdrOle2Obj* >(pPickObj))
         {
             /******************************************************************
             * Das Objekt wird mit der Graphik gefuellt
@@ -163,7 +171,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
             if( IsUndoEnabled() )
             {
                 BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pPickObj));
+                AddUndo(getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoAttrObject(*pPickObj));
                 EndUndo();
             }
 
@@ -197,27 +205,33 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
                                                 MapMode( MAP_100TH_MM ) );
         }
 
-        pNewGrafObj = new SdrGrafObj( rGraphic, Rectangle( rPos, aSize ) );
-        SdrPage* pPage = pPV->GetPage();
-        Size aPageSize( pPage->GetSize() );
-        aPageSize.Width()  -= pPage->GetLftBorder() + pPage->GetRgtBorder();
-        aPageSize.Height() -= pPage->GetUppBorder() + pPage->GetLwrBorder();
-        pNewGrafObj->AdjustToMaxRect( Rectangle( Point(), aPageSize ), sal_True );
-//      pNewGrafObj->AdjustToMaxRect( Rectangle( pPV->GetOffset(), aPageSize ), sal_True );
+        pNewGrafObj = new SdrGrafObj(
+            getSdrModelFromSdrView(),
+            rGraphic,
+            basegfx::tools::createScaleTranslateB2DHomMatrix(
+                aSize.getWidth(), aSize.getHeight(),
+                rPos.getX(), rPos.getY()));
 
-        sal_uLong   nOptions = SDRINSERT_SETDEFLAYER;
-        sal_Bool    bIsPresTarget = sal_False;
+        const SdrPage& rPage = pPV->getSdrPageFromSdrPageView();
+        const basegfx::B2DVector aPageSize(rPage.GetInnerPageScale());
+        const basegfx::B2DPoint aPageTopLeft(rPage.GetLeftPageBorder(), rPage.GetTopPageBorder());
+        const basegfx::B2DRange aPageRange(aPageTopLeft, aPageTopLeft + aPageSize);
+
+        pNewGrafObj->AdjustToMaxRange(aPageRange, true);
+
+        sal_uInt32  nOptions = SDRINSERT_SETDEFLAYER;
+        bool    bIsPresTarget = false;
 
         if ((mpViewSh
                 && mpViewSh->GetViewShell()!=NULL
                 && mpViewSh->GetViewShell()->GetIPClient()
                 && mpViewSh->GetViewShell()->GetIPClient()->IsObjectInPlaceActive())
-            || this->ISA(::sd::slidesorter::view::SlideSorterView))
+            || dynamic_cast< ::sd::slidesorter::view::SlideSorterView* >(this))
             nOptions |= SDRINSERT_DONTMARK;
 
-        if( ( mnAction & DND_ACTION_MOVE ) && pPickObj && (pPickObj->IsEmptyPresObj() || pPickObj->GetUserCall()) )
+        if( ( mnAction & DND_ACTION_MOVE ) && pPickObj && (pPickObj->IsEmptyPresObj() || findConnectionToSdrObject(pPickObj)) )
         {
-            SdPage* pP = static_cast< SdPage* >( pPickObj->GetPage() );
+            SdPage* pP = static_cast< SdPage* >( pPickObj->getSdrPageFromSdrObject() );
 
             if ( pP && pP->IsMasterPage() )
                 bIsPresTarget = pP->IsPresObj(pPickObj);
@@ -229,31 +243,25 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
             if (pImageMap)
                 pNewGrafObj->InsertUserData(new SdIMapInfo(*pImageMap));
 
-            Rectangle aPickObjRect(pPickObj->GetCurrentBoundRect());
-            Size aPickObjSize(aPickObjRect.GetSize());
-            Rectangle aObjRect(pNewGrafObj->GetCurrentBoundRect());
-            Size aObjSize(aObjRect.GetSize());
-
-            Fraction aScaleWidth(aPickObjSize.Width(), aObjSize.Width());
-            Fraction aScaleHeight(aPickObjSize.Height(), aObjSize.Height());
-            pNewGrafObj->NbcResize(aObjRect.TopLeft(), aScaleWidth, aScaleHeight);
-
-            Point aVec = aPickObjRect.TopLeft() - aObjRect.TopLeft();
-            pNewGrafObj->NbcMove(Size(aVec.X(), aVec.Y()));
+            // copy transformation and layer
+            pNewGrafObj->setSdrObjectTransformation(pPickObj->getSdrObjectTransformation());
+            pNewGrafObj->SetLayer(pPickObj->GetLayer());
 
             const bool bUndo = IsUndoEnabled();
 
             if( bUndo )
                 BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
-            pNewGrafObj->NbcSetLayer(pPickObj->GetLayer());
-            SdrPage* pP = pPV->GetPage();
-            pP->InsertObject(pNewGrafObj);
+
+            SdrPage& rP = pPV->getSdrPageFromSdrPageView();
+            rP.InsertObjectToSdrObjList(*pNewGrafObj);
+
             if( bUndo )
             {
                 AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoNewObject(*pNewGrafObj));
                 AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoDeleteObject(*pPickObj));
             }
-            pP->RemoveObject(pPickObj->GetOrdNum());
+
+            rP.RemoveObjectFromSdrObjList(pPickObj->GetNavigationPosition());
 
             if( bUndo )
             {
@@ -261,13 +269,14 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
             }
             else
             {
-                SdrObject::Free(pPickObj);
+                deleteSdrObjectSafeAndClearPointer(pPickObj);
             }
+
             mnAction = DND_ACTION_COPY;
         }
         else
         {
-            InsertObjectAtView(pNewGrafObj, *pPV, nOptions);
+            InsertObjectAtView(*pNewGrafObj, nOptions);
 
             if( pImageMap )
                 pNewGrafObj->InsertUserData(new SdIMapInfo(*pImageMap));
@@ -282,7 +291,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
 // -----------------------------------------------------------------------------
 
 SdrMediaObj* View::InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAction,
-                                   const Point& rPos, const Size& rSize )
+    const basegfx::B2DPoint& rPos, const basegfx::B2DVector& rSize )
 {
     SdrEndTextEdit();
     mnAction = rAction;
@@ -291,40 +300,53 @@ SdrMediaObj* View::InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAc
     SdrPageView*    pPV = GetSdrPageView();
     SdrObject*      pPickObj = GetEmptyPresentationObject( PRESOBJ_MEDIA );
 
-    if(pPV && this->ISA(::sd::slidesorter::view::SlideSorterView ))
+    if(pPV && dynamic_cast< ::sd::slidesorter::view::SlideSorterView* >(this))
     {
-        if(!pPV->GetPageRect().IsInside(rPos))
-            pPV = 0L;
+        const basegfx::B2DRange aPageRange(pPV->GetPageRange());
+
+        if(!aPageRange.isInside(rPos))
+    {
+            pPV = 0;
+        }
     }
 
     if( !pPickObj && pPV )
     {
-        SdrPageView* pPageView = pPV;
-        PickObj(rPos, getHitTolLog(), pPickObj, pPageView);
+        PickObj(rPos, getHitTolLog(), pPickObj );
     }
 
-    if( mnAction == DND_ACTION_LINK && pPickObj && pPV && pPickObj->ISA( SdrMediaObj ) )
+    if( mnAction == DND_ACTION_LINK && pPickObj && pPV && dynamic_cast< SdrMediaObj* >(pPickObj) )
     {
-        pNewMediaObj = static_cast< SdrMediaObj* >( pPickObj->Clone() );
+        pNewMediaObj = static_cast< SdrMediaObj* >( pPickObj->CloneSdrObject() );
         pNewMediaObj->setURL( rMediaURL );
 
         BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
-        ReplaceObjectAtView(pPickObj, *pPV, pNewMediaObj);
+        ReplaceObjectAtView(*pPickObj, *pNewMediaObj);
         EndUndo();
     }
     else if( pPV )
     {
-        Rectangle aRect( rPos, rSize );
-        if( pPickObj )
-            aRect = pPickObj->GetLogicRect();
+        basegfx::B2DHomMatrix aObjTrans;
 
+        if(pPickObj)
+        {
+            aObjTrans = pPickObj->getSdrObjectTransformation();
+        }
+        else
+        {
+            aObjTrans = basegfx::tools::createScaleTranslateB2DHomMatrix(
+                rSize,
+                rPos);
+        }
 
-        pNewMediaObj = new SdrMediaObj( aRect );
+        pNewMediaObj = new SdrMediaObj(
+            getSdrModelFromSdrView(),
+            aObjTrans);
 
         bool bIsPres = false;
         if( pPickObj )
         {
-            SdPage* pPage = static_cast< SdPage* >(pPickObj->GetPage());
+            SdPage* pPage = static_cast< SdPage* >(pPickObj->getSdrPageFromSdrObject());
             bIsPres = pPage && pPage->IsPresObj(pPickObj);
             if( bIsPres )
             {
@@ -333,17 +355,27 @@ SdrMediaObj* View::InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAc
         }
 
         if( pPickObj )
-            ReplaceObjectAtView(pPickObj, *pPV, pNewMediaObj);
+        {
+            ReplaceObjectAtView(*pPickObj, *pNewMediaObj);
+        }
         else
-            InsertObjectAtView( pNewMediaObj, *pPV, SDRINSERT_SETDEFLAYER );
+        {
+            InsertObjectAtView( *pNewMediaObj, SDRINSERT_SETDEFLAYER );
+        }
 
         pNewMediaObj->setURL( rMediaURL );
 
         if( pPickObj )
         {
-            pNewMediaObj->AdjustToMaxRect( pPickObj->GetLogicRect() );
+            pNewMediaObj->AdjustToMaxRange( sdr::legacy::GetLogicRange(*pPickObj) );
+
             if( bIsPres )
-                pNewMediaObj->SetUserCall(pPickObj->GetUserCall());
+            {
+                // replace formally used 'pNewMediaObj->SetUserCall(pPickObj->GetUserCall())' by
+                // new notify/listener mechanism
+                SdPage* pCurrentlyConnectedSdPage = findConnectionToSdrObject(pPickObj);
+                establishConnectionToSdrObject(pNewMediaObj, pCurrentlyConnectedSdPage);
+            }
         }
     }
 
@@ -373,7 +405,7 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, EMPTYARG )
     {
         String          aCurrentDropFile( *aIter );
         INetURLObject   aURL( aCurrentDropFile );
-        sal_Bool            bOK = sal_False;
+        bool            bOK = false;
 
         if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
         {
@@ -404,12 +436,12 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, EMPTYARG )
                 if( aIter == maDropFileVector.begin() )
                     mnAction = nTempAction;
 
-                bOK = sal_True;
+                bOK = true;
             }
             if( !bOK )
             {
                 const SfxFilter*        pFoundFilter = NULL;
-                SfxMedium               aSfxMedium( aCurrentDropFile, STREAM_READ | STREAM_SHARE_DENYNONE, sal_False );
+                SfxMedium               aSfxMedium( aCurrentDropFile, STREAM_READ | STREAM_SHARE_DENYNONE, false );
                 ErrCode                 nErr = SFX_APP()->GetFilterMatcher().GuessFilter(  aSfxMedium, &pFoundFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
 
                 if( pFoundFilter && !nErr )
@@ -440,7 +472,7 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, EMPTYARG )
                         aReq.AppendItem( aItem1 );
                         aReq.AppendItem( aItem2 );
                         FuInsertFile::Create( mpViewSh, pWin, this, mpDoc, aReq );
-                        bOK = sal_True;
+                        bOK = true;
                     }
                 }
             }
@@ -465,7 +497,7 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, EMPTYARG )
                 else
                     aPrefSize  = Size( 5000, 5000 );
 
-                InsertMediaURL( aCurrentDropFile, mnAction, maDropPos, aPrefSize ) ;
+                InsertMediaURL( aCurrentDropFile, mnAction, maDropPos, basegfx::B2DVector(aPrefSize.getWidth(), aPrefSize.getHeight()) ) ;
             }
             else if( mnAction & DND_ACTION_LINK )
                 static_cast< DrawViewShell* >( mpViewSh )->InsertURLButton( aCurrentDropFile, aCurrentDropFile, String(), &maDropPos );
@@ -503,7 +535,6 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, EMPTYARG )
                             }
 
                             Size        aSize( aSz.Width, aSz.Height );
-                            Rectangle   aRect;
 
                             if (!aSize.Width() || !aSize.Height())
                             {
@@ -511,10 +542,17 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, EMPTYARG )
                                 aSize.Height()  = 1000;
                             }
 
-                            aRect = Rectangle( maDropPos, aSize );
+                            const basegfx::B2DHomMatrix aObjTrans(
+                                basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                    aSize.getWidth(), aSize.getHeight(),
+                                    maDropPos.getX(), maDropPos.getY()));
 
-                            SdrOle2Obj* pOleObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect );
-                            sal_uLong       nOptions = SDRINSERT_SETDEFLAYER;
+                            SdrOle2Obj* pOleObj = new SdrOle2Obj(
+                                getSdrModelFromSdrView(),
+                                svt::EmbeddedObjectRef( xObj, nAspect ),
+                                aName,
+                                aObjTrans);
+                            sal_uInt32 nOptions = SDRINSERT_SETDEFLAYER;
 
                             if (mpViewSh != NULL)
                             {
@@ -525,10 +563,13 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, EMPTYARG )
                                     nOptions |= SDRINSERT_DONTMARK;
                             }
 
-                            InsertObjectAtView( pOleObj, *GetSdrPageView(), nOptions );
-                            pOleObj->SetLogicRect( aRect );
-                            aSz.Width = aRect.GetWidth();
-                            aSz.Height = aRect.GetHeight();
+                            InsertObjectAtView( *pOleObj, nOptions );
+                            pOleObj->setSdrObjectTransformation(aObjTrans);
+
+                            const basegfx::B2DVector& rScale = pOleObj->getSdrObjectScale();
+
+                            aSz.Width = basegfx::fround(fabs(rScale.getX()));
+                            aSz.Height = basegfx::fround(fabs(rScale.getY()));
                             xObj->setVisualAreaSize( nAspect,aSz );
                         }
                     }
@@ -572,7 +613,7 @@ IMPL_LINK( View, DropErrorHdl, Timer*, EMPTYARG )
 |*
 \************************************************************************/
 
-void View::LockRedraw(sal_Bool bLock)
+void View::LockRedraw(bool bLock)
 {
     if (bLock)
     {

@@ -142,9 +142,11 @@ sal_Bool ScAreaLinkSaveCollection::IsEqual( const ScDocument* pDoc ) const
         for (sal_uInt16 i=0; i<nLinkCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = *rLinks[i];
-            if (pBase->ISA(ScAreaLink))
+            ScAreaLink* pScAreaLink = dynamic_cast< ScAreaLink* >(pBase);
+
+            if (pScAreaLink)
             {
-                if ( nPos >= GetCount() || !(*this)[nPos]->IsEqual( *(ScAreaLink*)pBase ) )
+                if ( nPos >= GetCount() || !(*this)[nPos]->IsEqual( *pScAreaLink ) )
                     return sal_False;
 
                 ++nPos;
@@ -163,10 +165,11 @@ ScAreaLink* lcl_FindLink( const ::sfx2::SvBaseLinks& rLinks, const ScAreaLinkSav
     for (sal_uInt16 i=0; i<nLinkCount; i++)
     {
         ::sfx2::SvBaseLink* pBase = *rLinks[i];
-        if ( pBase->ISA(ScAreaLink) &&
-             rSaver.IsEqualSource( *static_cast<ScAreaLink*>(pBase) ) )
+        ScAreaLink* pScAreaLink = dynamic_cast< ScAreaLink* >(pBase);
+
+        if ( pScAreaLink && rSaver.IsEqualSource( *pScAreaLink ) )
         {
-            return static_cast<ScAreaLink*>(pBase);     // found
+            return pScAreaLink;     // found
         }
     }
     return NULL;    // not found
@@ -209,12 +212,14 @@ ScAreaLinkSaveCollection* ScAreaLinkSaveCollection::CreateFromDoc( const ScDocum
         for (sal_uInt16 i=0; i<nLinkCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = *rLinks[i];
-            if (pBase->ISA(ScAreaLink))
+            ScAreaLink* pScAreaLink = dynamic_cast< ScAreaLink* >(pBase);
+
+            if (pScAreaLink)
             {
                 if (!pColl)
                     pColl = new ScAreaLinkSaveCollection;
 
-                ScAreaLinkSaver* pSaver = new ScAreaLinkSaver( *(ScAreaLink*)pBase );
+                ScAreaLinkSaver* pSaver = new ScAreaLinkSaver( *pScAreaLink );
                 if (!pColl->Insert(pSaver))
                     delete pSaver;
             }

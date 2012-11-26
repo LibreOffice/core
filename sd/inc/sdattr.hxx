@@ -44,75 +44,9 @@
 //  Layer-Attribute
 //==================================================================
 
-class SdAttrLayerName : public SfxStringItem
-{
-public:
-    SdAttrLayerName() :
-        SfxStringItem( ATTR_LAYER_NAME, String( RTL_CONSTASCII_USTRINGPARAM( "neue Ebene" ))) {}
-    SdAttrLayerName( const String& aStr ) :
-        SfxStringItem( ATTR_LAYER_NAME, aStr ) {}
-};
-
-//------------------------------------------------------------------
-
-class SdAttrLayerTitle : public SfxStringItem
-{
-public:
-    SdAttrLayerTitle() : SfxStringItem( ATTR_LAYER_TITLE, XubString()) {}
-    SdAttrLayerTitle( const String& aStr ) : SfxStringItem( ATTR_LAYER_TITLE, aStr ) {}
-};
-
-//------------------------------------------------------------------
-
-class SdAttrLayerDesc : public SfxStringItem
-{
-public:
-    SdAttrLayerDesc() : SfxStringItem( ATTR_LAYER_DESC, XubString()) {}
-    SdAttrLayerDesc( const String& aStr ) : SfxStringItem( ATTR_LAYER_DESC, aStr ) {}
-};
-
-//------------------------------------------------------------------
-
-class SdAttrLayerVisible : public SfxBoolItem
-{
-public:
-    SdAttrLayerVisible( sal_Bool bValue = sal_True ) :
-        SfxBoolItem( ATTR_LAYER_VISIBLE, bValue ) {}
-};
-
-//------------------------------------------------------------------
-
-class SdAttrLayerPrintable : public SfxBoolItem
-{
-public:
-    SdAttrLayerPrintable( sal_Bool bValue = sal_True ) :
-        SfxBoolItem( ATTR_LAYER_PRINTABLE, bValue ) {}
-};
-
-//------------------------------------------------------------------
-
-class SdAttrLayerLocked : public SfxBoolItem
-{
-public:
-    SdAttrLayerLocked( sal_Bool bValue = sal_False ) :
-        SfxBoolItem( ATTR_LAYER_LOCKED, bValue ) {}
-};
-
-//------------------------------------------------------------------
-
-class SdAttrLayerThisPage : public SfxBoolItem
-{
-public:
-    SdAttrLayerThisPage( sal_Bool bValue = sal_False ) :
-        SfxBoolItem( ATTR_LAYER_THISPAGE, bValue ) {}
-};
-
-//------------------------------------------------------------------
-
 class DiaEffectItem : public SfxEnumItem
 {
 public:
-            TYPEINFO();
             DiaEffectItem( ::com::sun::star::presentation::FadeEffect eFade = com::sun::star::presentation::FadeEffect_NONE );
             DiaEffectItem( SvStream& rIn );
 
@@ -128,7 +62,6 @@ public:
 class DiaSpeedItem : public SfxEnumItem
 {
 public:
-            TYPEINFO();
             DiaSpeedItem( FadeSpeed = FADE_SPEED_MEDIUM );
             DiaSpeedItem( SvStream& rIn );
 
@@ -144,7 +77,6 @@ public:
 class DiaAutoItem : public SfxEnumItem
 {
 public:
-            TYPEINFO();
             DiaAutoItem( PresChange = PRESCHANGE_MANUAL );
             DiaAutoItem( SvStream& rIn );
 
@@ -159,7 +91,6 @@ public:
 class DiaTimeItem : public SfxUInt32Item
 {
 public:
-            TYPEINFO();
             DiaTimeItem( sal_uInt32 nValue = 0L );
 
     virtual SfxPoolItem* Clone( SfxItemPool* pPool = 0 ) const;

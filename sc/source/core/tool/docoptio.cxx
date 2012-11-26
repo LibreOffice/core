@@ -47,8 +47,6 @@ using namespace com::sun::star::uno;
 
 #define SC_VERSION ((sal_uInt16)251)
 
-TYPEINIT1(ScTpCalcItem, SfxPoolItem);
-
 //------------------------------------------------------------------------
 
 //! these functions should be moved to some header file

@@ -65,6 +65,7 @@
 
 #include <ucbhelper/contentbroker.hxx>
 #include <ucbhelper/content.hxx>
+#include <memory.h>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;

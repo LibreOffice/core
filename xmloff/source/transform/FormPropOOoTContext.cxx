@@ -50,8 +50,6 @@ class XMLFormPropValueTContext_Impl : public XMLTransformerContext
     sal_Bool m_bIsVoid;
 
 public:
-    TYPEINFO();
-
     // element content persistence only
     XMLFormPropValueTContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
@@ -73,8 +71,6 @@ public:
     sal_Bool IsVoid() const { return m_bIsVoid; }
     const ::rtl::OUString& GetTextContent() const { return m_aCharacters; }
 };
-
-TYPEINIT1( XMLFormPropValueTContext_Impl, XMLTransformerContext );
 
 XMLFormPropValueTContext_Impl::XMLFormPropValueTContext_Impl(
         XMLTransformerBase& rTransformer,
@@ -150,8 +146,6 @@ sal_Bool XMLFormPropValueTContext_Impl::IsPersistent() const
 }
 
 //------------------------------------------------------------------------------
-
-TYPEINIT1( XMLFormPropOOoTransformerContext, XMLTransformerContext );
 
 XMLFormPropOOoTransformerContext::XMLFormPropOOoTransformerContext(
         XMLTransformerBase& rImp,

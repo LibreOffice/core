@@ -28,10 +28,6 @@
 #include <svx/svdomeas.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <svl/itemset.hxx>
-#include <svx/sxmbritm.hxx>
-#include <svx/sxmlhitm.hxx>
-#include <svx/sxmtritm.hxx>
-#include <svx/sxmtaitm.hxx>
 #include <svx/sdr/primitive2d/sdrmeasureprimitive2d.hxx>
 #include <svx/sxmtpitm.hxx>
 
@@ -59,16 +55,16 @@ namespace sdr
                     GetMeasureObj().getText(0)));
 
             // take properties which are the model data.
-            const ::basegfx::B2DPoint aStart(GetMeasureObj().GetPoint(0).X(), GetMeasureObj().GetPoint(0).Y());
-            const ::basegfx::B2DPoint aEnd(GetMeasureObj().GetPoint(1).X(), GetMeasureObj().GetPoint(1).Y());
-            const double fDistance(((SdrMeasureLineDistItem&)rItemSet.Get(SDRATTR_MEASURELINEDIST)).GetValue());
-            const double fUpperDistance(((SdrMeasureHelplineOverhangItem&)rItemSet.Get(SDRATTR_MEASUREHELPLINEOVERHANG)).GetValue());
-            const double fLowerDistance(((SdrMeasureHelplineDistItem&)rItemSet.Get(SDRATTR_MEASUREHELPLINEDIST)).GetValue());
-            const double fLeftDelta(((SdrMeasureHelpline1LenItem&)rItemSet.Get(SDRATTR_MEASUREHELPLINE1LEN)).GetValue());
-            const double fRightDelta(((SdrMeasureHelpline2LenItem&)rItemSet.Get(SDRATTR_MEASUREHELPLINE2LEN)).GetValue());
-            const bool bBelow(((SdrMeasureBelowRefEdgeItem&)rItemSet.Get(SDRATTR_MEASUREBELOWREFEDGE)).GetValue());
-            const bool bTextRotation(((SdrMeasureTextRota90Item&)rItemSet.Get(SDRATTR_MEASURETEXTROTA90)).GetValue());
-            const bool bTextAutoAngle(((SdrMeasureTextAutoAngleItem&)rItemSet.Get(SDRATTR_MEASURETEXTAUTOANGLE)).GetValue());
+            const ::basegfx::B2DPoint aStart(GetMeasureObj().GetObjectPoint(0));
+            const ::basegfx::B2DPoint aEnd(GetMeasureObj().GetObjectPoint(1));
+            const double fDistance(((SdrMetricItem&)rItemSet.Get(SDRATTR_MEASURELINEDIST)).GetValue());
+            const double fUpperDistance(((SdrMetricItem&)rItemSet.Get(SDRATTR_MEASUREHELPLINEOVERHANG)).GetValue());
+            const double fLowerDistance(((SdrMetricItem&)rItemSet.Get(SDRATTR_MEASUREHELPLINEDIST)).GetValue());
+            const double fLeftDelta(((SdrMetricItem&)rItemSet.Get(SDRATTR_MEASUREHELPLINE1LEN)).GetValue());
+            const double fRightDelta(((SdrMetricItem&)rItemSet.Get(SDRATTR_MEASUREHELPLINE2LEN)).GetValue());
+            const bool bBelow(((SdrYesNoItem&)rItemSet.Get(SDRATTR_MEASUREBELOWREFEDGE)).GetValue());
+            const bool bTextRotation(((SdrYesNoItem&)rItemSet.Get(SDRATTR_MEASURETEXTROTA90)).GetValue());
+            const bool bTextAutoAngle(((SdrYesNoItem&)rItemSet.Get(SDRATTR_MEASURETEXTAUTOANGLE)).GetValue());
             drawinglayer::primitive2d::MeasureTextPosition aMTPHor(drawinglayer::primitive2d::MEASURETEXTPOSITION_AUTOMATIC);
             drawinglayer::primitive2d::MeasureTextPosition aMTPVer(drawinglayer::primitive2d::MEASURETEXTPOSITION_AUTOMATIC);
 

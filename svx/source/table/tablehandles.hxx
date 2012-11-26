@@ -48,7 +48,14 @@ typedef std::vector< TableEdge > TableEdgeVector;
 class TableEdgeHdl : public SdrHdl
 {
 public:
-    TableEdgeHdl( const Point& rPnt, bool bHorizontal, sal_Int32 nMin, sal_Int32 nMax, sal_Int32 nEdges );
+    TableEdgeHdl(
+        SdrHdlList& rHdlList,
+        const SdrObject& rSdrHdlObject,
+        const basegfx::B2DPoint& rPnt,
+        bool bHorizontal,
+        sal_Int32 nMin,
+        sal_Int32 nMax,
+        sal_Int32 nEdges );
 
     sal_Int32 GetValidDragOffset( const SdrDragStat& rDrag ) const;
 
@@ -63,7 +70,9 @@ public:
 
 protected:
     // create marker for this kind
-    virtual void CreateB2dIAObject();
+    virtual void CreateB2dIAObject(::sdr::overlay::OverlayManager& rOverlayManager);
+
+    virtual ~TableEdgeHdl();
 
 private:
     bool mbHorizontal;
@@ -74,16 +83,21 @@ private:
 class TableBorderHdl : public SdrHdl
 {
 public:
-    TableBorderHdl( const Rectangle& rRect );
+    TableBorderHdl(
+        SdrHdlList& rHdlList,
+        const SdrObject& rSdrHdlObject,
+        const basegfx::B2DRange& rRange );
 
     virtual Pointer GetPointer() const;
 
 protected:
     // create marker for this kind
-    virtual void CreateB2dIAObject();
+    virtual void CreateB2dIAObject(::sdr::overlay::OverlayManager& rOverlayManager);
+
+    virtual ~TableBorderHdl();
 
 private:
-    Rectangle maRectangle;
+    basegfx::B2DRange maRange;
 };
 
 } // end of namespace table

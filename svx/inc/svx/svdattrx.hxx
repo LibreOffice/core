@@ -24,58 +24,15 @@
 #ifndef _SVDATTRX_HXX
 #define _SVDATTRX_HXX
 
-#include <svx/sxmlhitm.hxx>
-#include <svx/sxallitm.hxx>
-#include <svx/sxcaitm.hxx>
 #include <svx/sxcecitm.hxx>
-
-#ifndef _SXCGIITM_HXX
-#include <svx/sxcgitm.hxx>
-#endif
-#include <svx/sxciaitm.hxx>
-#include <svx/sxcikitm.hxx>
-#include <svx/sxcllitm.hxx>
 #include <svx/sxctitm.hxx>
 #include <svx/sxekitm.hxx>
 #include <svx/sxelditm.hxx>
 #include <svx/sxenditm.hxx>
-
-#ifndef _SXFIITM_HXX
 #include <svx/sxfiitm.hxx>
-#endif
-
-#ifndef _SXLAYITM_HXX
-#include <svx/sxlayitm.hxx>
-#endif
-#include <svx/sxlogitm.hxx>
-#include <svx/sxmbritm.hxx>
-#include <svx/sxmfsitm.hxx>
 #include <svx/sxmkitm.hxx>
-#include <svx/sxmoitm.hxx>
-#include <svx/sxmovitm.hxx>
-
-#ifndef _SXMSIITM_HXX
-#include <svx/sxmsitm.hxx>
-#endif
-#include <svx/sxmspitm.hxx>
-#include <svx/sxmsuitm.hxx>
-#include <svx/sxmtaitm.hxx>
-#include <svx/sxmtfitm.hxx>
 #include <svx/sxmtpitm.hxx>
-#include <svx/sxmtritm.hxx>
 #include <svx/sxmuitm.hxx>
-#include <svx/sxoneitm.hxx>
-#include <svx/sxonitm.hxx>
-#include <svx/sxopitm.hxx>
-#include <svx/sxraitm.hxx>
-#include <svx/sxreaitm.hxx>
-#include <svx/sxreoitm.hxx>
-#include <svx/sxroaitm.hxx>
-#include <svx/sxrooitm.hxx>
-#include <svx/sxsaitm.hxx>
-#include <svx/sxsalitm.hxx>
 #include <svx/sxsiitm.hxx>
-#include <svx/sxsoitm.hxx>
-#include <svx/sxtraitm.hxx>
 
 #endif  //_SVDATTRX_HXX

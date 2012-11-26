@@ -47,9 +47,6 @@ namespace sd {
 
 #define ITEMVALUE(ItemSet,Id,Cast) ((const Cast&)(ItemSet).Get(Id)).GetValue()
 
-TYPEINIT1( FuSlideShowDlg, FuPoor );
-
-
 /*************************************************************************
 |*
 |* Konstruktor
@@ -77,23 +74,23 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
 {
     PresentationSettings& rPresentationSettings = mpDoc->getPresentationSettings();
 
-    SfxItemSet      aDlgSet( mpDoc->GetPool(), ATTR_PRESENT_START, ATTR_PRESENT_END );
+    SfxItemSet      aDlgSet( mpDoc->GetItemPool(), ATTR_PRESENT_START, ATTR_PRESENT_END );
     List            aPageNameList;
     const String&   rPresPage = rPresentationSettings.maPresPage;
     String          aFirstPage;
     String          aStandardName( SdResId( STR_PAGE ) );
     SdPage*         pPage = NULL;
-    long            nPage;
+    sal_uInt32 nPage(0);
 
-    for( nPage = mpDoc->GetSdPageCount( PK_STANDARD ) - 1L; nPage >= 0L; nPage-- )
+    for( nPage = mpDoc->GetSdPageCount( PK_STANDARD ); nPage > 0; nPage-- )
     {
-        pPage = mpDoc->GetSdPage( (sal_uInt16) nPage, PK_STANDARD );
+        pPage = mpDoc->GetSdPage( nPage - 1, PK_STANDARD );
         String* pStr = new String( pPage->GetName() );
 
         if ( !pStr->Len() )
         {
             *pStr = String( SdResId( STR_PAGE ) );
-            (*pStr).Append( UniString::CreateFromInt32( nPage + 1 ) );
+            (*pStr).Append( UniString::CreateFromInt32( nPage ) );
         }
 
         aPageNameList.Insert( pStr, (sal_uLong) 0 );
@@ -106,7 +103,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
     }
     List* pCustomShowList = mpDoc->GetCustomShowList(); // No Create
 
-    sal_Bool bStartWithActualPage = SD_MOD()->GetSdOptions( mpDoc->GetDocumentType() )->IsStartWithActualPage();
+    bool bStartWithActualPage = SD_MOD()->GetSdOptions( mpDoc->GetDocumentType() )->IsStartWithActualPage();
 /* #109180# change in behaviour, even when always start with current page is enabled, range settings are
             still used
     if( bStartWithActualPage )
@@ -144,7 +141,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
         rtl::OUString aPage;
         long    nValue32;
         sal_Bool bValue;
-        bool    bValuesChanged = sal_False;
+        bool    bValuesChanged = false;
 
         pDlg->GetAttr( aDlgSet );
 
@@ -250,7 +247,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
 
         // wenn sich etwas geaendert hat, setzen wir das Modified-Flag,
         if ( bValuesChanged )
-            mpDoc->SetChanged( sal_True );
+            mpDoc->SetChanged( true );
     }
     delete pDlg;
     // Strings aus Liste loeschen

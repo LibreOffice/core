@@ -69,7 +69,6 @@ class FmFilterData
     ::rtl::OUString         m_aText;
 
 public:
-    TYPEINFO();
     FmFilterData(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,FmParentData* pParent = NULL, const ::rtl::OUString& rText = ::rtl::OUString())
         :m_xORB( _rxFactory )
         ,m_pParent( pParent )
@@ -91,7 +90,6 @@ protected:
     ::std::vector< FmFilterData* >  m_aChildren;
 
 public:
-    TYPEINFO();
     FmParentData(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,FmParentData* pParent, const ::rtl::OUString& rText)
         : FmFilterData(_rxFactory,pParent, rText)
     {}
@@ -108,8 +106,6 @@ class FmFormItem : public FmParentData
     ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFilterController >  m_xFilterController;
 
 public:
-    TYPEINFO();
-
     FmFormItem(  const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,FmParentData* _pParent,
                  const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > & _xController,
                  const ::rtl::OUString& _rText)
@@ -132,7 +128,6 @@ public:
 class FmFilterItems : public FmParentData
 {
 public:
-    TYPEINFO();
     FmFilterItems(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory):FmParentData(_rxFactory,NULL, ::rtl::OUString()){}
     FmFilterItems(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,FmFormItem* pParent, const ::rtl::OUString& rText ):FmParentData(_rxFactory,pParent, rText){}
 
@@ -147,7 +142,6 @@ class FmFilterItem : public FmFilterData
     const sal_Int32     m_nComponentIndex;
 
 public:
-    TYPEINFO();
     FmFilterItem(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,
         FmFilterItems* pParent,
@@ -176,7 +170,6 @@ class FmFilterModel : public FmParentData
     FmFilterItems*          m_pCurrentItems;
 
 public:
-    TYPEINFO();
     FmFilterModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
     virtual ~FmFilterModel();
 

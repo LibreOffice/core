@@ -49,13 +49,16 @@ namespace sdr
     } // end of namespace properties
 } // end of namespace sdr
 
-class SdrAShapeObjGeoData : public SdrTextObjGeoData
+class SdrAShapeObjGeoData : public SdrObjGeoData
 {
     public:
 
-    sal_Bool    bMirroredX;
-    sal_Bool    bMirroredY;
-    double      fObjectRotation;
+    // TTTT: MirrorX/Y removed, is part of object transformation now
+//  bool    bMirroredX;
+//  bool    bMirroredY;
+
+    // TTTT: Should be obsolete
+    // double       fObjectRotation; // TTTT: Is this needed? Check, may remove some extra handling
 
     com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue >
                 aAdjustmentSeq;
@@ -83,7 +86,8 @@ class SVX_DLLPUBLIC SdrObjCustomShape : public SdrTextObj
 {
 private:
     // fObjectRotation is containing the object rotation in degrees.
-    double fObjectRotation;
+    // TTTT: SHould be obsolete
+    // double fObjectRotation;
 
 protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
@@ -101,17 +105,9 @@ public:
 
     static com::sun::star::uno::Reference< com::sun::star::drawing::XCustomShapeEngine > GetCustomShapeEngine( const SdrObjCustomShape* pCustomShape );
 
-//  SVX_DLLPRIVATE com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::drawing::XCustomShapeHandle > >
-//      SdrObjCustomShape::GetInteraction( const SdrObjCustomShape* pCustomShape ) const;
-// #i47293#
-//  SVX_DLLPRIVATE std::vector< com::sun::star::uno::Reference< com::sun::star::drawing::XCustomShapeHandle > > GetFixedInteractionHandle() const;
-
     SVX_DLLPRIVATE std::vector< SdrCustomShapeInteraction > GetInteractionHandles( const SdrObjCustomShape* pCustomShape ) const;
-
     SVX_DLLPRIVATE void DragCreateObject( SdrDragStat& rDrag );
-
-    SVX_DLLPRIVATE void DragResizeCustomShape( const Rectangle& rNewRect, SdrObjCustomShape* pObj ) const;
-    SVX_DLLPRIVATE void DragMoveCustomShapeHdl( const Point aDestination, const sal_uInt16 nCustomShapeHdlNum, SdrObjCustomShape* pObj ) const;
+    SVX_DLLPRIVATE void DragMoveCustomShapeHdl( const basegfx::B2DPoint& rDestination, const sal_uInt32 nCustomShapeHdlNum, SdrObjCustomShape* pObj ) const;
 
     // #i37011# centralize throw-away of render geometry
     void InvalidateRenderGeometry();
@@ -119,35 +115,45 @@ public:
     // #i38892#
     void ImpCheckCustomGluePointsAreAdded();
 
-    // returns the new text rect that corresponds to the current logic rect, the return value can be empty if nothing changed.
-    Rectangle ImpCalculateTextFrame( const FASTBOOL bHgt, const FASTBOOL bWdt );
+    // returns the new text range that corresponds to the current logic range. The return value can be empty if nothing changed.
+    basegfx::B2DRange ImpCalculateTextFrame(const bool bHgt, const bool bWdt);
 
 public:
     // #i37011#
     const SdrObject* GetSdrObjectFromCustomShape() const;
     const SdrObject* GetSdrObjectShadowFromCustomShape() const;
-    sal_Bool GetTextBounds( Rectangle& rTextBound ) const;
-    sal_Bool IsTextPath() const;
-    static basegfx::B2DPolyPolygon GetLineGeometry( const SdrObjCustomShape* pCustomShape, const sal_Bool bBezierAllowed );
+    basegfx::B2DRange getRawUnifiedTextRange() const;
+    bool IsTextPath() const;
+    static basegfx::B2DPolyPolygon GetLineGeometry( const SdrObjCustomShape* pCustomShape, const bool bBezierAllowed );
 
 protected:
 
     String      aName;
 
+    virtual ~SdrObjCustomShape();
+
+    /// method to copy all data from given source
+    virtual void copyDataFromSdrObject(const SdrObject& rSource);
+
 public:
-    sal_Bool UseNoFillStyle() const;
+    /// create a copy, evtl. with a different target model (if given)
+    virtual SdrObject* CloneSdrObject(SdrModel* pTargetModel = 0) const;
 
-    sal_Bool IsMirroredX() const;
-    sal_Bool IsMirroredY() const;
-    void SetMirroredX( const sal_Bool bMirroredX );
-    void SetMirroredY( const sal_Bool bMirroredY );
+    // react on model/page change
+    virtual void handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage);
 
-    double GetObjectRotation() const;
+    bool UseNoFillStyle() const;
+
+    // TTTT: MirroredX/Y removed
+    //bool IsMirroredX() const;
+    //bool IsMirroredY() const;
+    //void SetMirroredX( const bool bMirroredX );
+    //void SetMirroredY( const bool bMirroredY );
+
+    //double GetObjectRotation() const;
     double GetExtraTextRotation() const;
 
-    TYPEINFO();
-    SdrObjCustomShape();
-    virtual ~SdrObjCustomShape();
+    SdrObjCustomShape(SdrModel& rSdrModel);
 
     /* is merging default attributes from type-shype into the SdrCustomShapeGeometryItem. If pType
     is NULL then the type is being taken from the "Type" property of the SdrCustomShapeGeometryItem.
@@ -167,59 +173,31 @@ public:
         DEFAULT_HANDLES,
         DEFAULT_TEXTFRAMES
     };
-    sal_Bool IsDefaultGeometry( const DefaultType eDefaultType ) const;
+    bool IsDefaultGeometry( const DefaultType eDefaultType ) const;
 
     virtual sal_uInt16 GetObjIdentifier() const;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
-
-    virtual void SetModel(SdrModel* pNewModel);
-
-    virtual void RecalcSnapRect();
-
-    virtual const Rectangle& GetSnapRect()  const;
-    virtual const Rectangle& GetCurrentBoundRect() const;
-    virtual const Rectangle& GetLogicRect() const;
-
-    virtual void Move(const Size& rSiz);
-    virtual void Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-    virtual void Shear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear);
-    virtual void SetSnapRect(const Rectangle& rRect);
-    virtual void SetLogicRect(const Rectangle& rRect);
-
-    virtual void NbcMove(const Size& rSiz);
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-    virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs);
-    virtual void NbcMirror(const Point& rRef1, const Point& rRef2);
-    virtual void NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear);
-    virtual void NbcSetSnapRect(const Rectangle& rRect);
-    virtual void NbcSetLogicRect(const Rectangle& rRect);
-
-    virtual SdrGluePoint GetVertexGluePoint(sal_uInt16 nNum) const;
-
-    virtual void NbcSetStyleSheet( SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr );
+    virtual void SetStyleSheet( SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr );
 
     // special drag methods
     virtual bool hasSpecialDrag() const;
     virtual bool beginSpecialDrag(SdrDragStat& rDrag) const;
     virtual bool applySpecialDrag(SdrDragStat& rDrag);
 
-    virtual FASTBOOL BegCreate( SdrDragStat& rStat );
-    virtual FASTBOOL MovCreate(SdrDragStat& rStat); // #i37448#
-    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+    virtual bool MovCreate(SdrDragStat& rStat); // #i37448#
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
 
-    virtual FASTBOOL AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt=sal_True, FASTBOOL bWdt=sal_True) const;
-    virtual FASTBOOL NbcAdjustTextFrameWidthAndHeight(FASTBOOL bHgt=sal_True, FASTBOOL bWdt=sal_True);
-    virtual FASTBOOL AdjustTextFrameWidthAndHeight(FASTBOOL bHgt=sal_True, FASTBOOL bWdt=sal_True);
-    virtual FASTBOOL IsAutoGrowHeight() const;
-    virtual FASTBOOL IsAutoGrowWidth() const;
-    virtual void SetVerticalWriting( sal_Bool bVertical );
-    virtual sal_Bool BegTextEdit( SdrOutliner& rOutl );
-    virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const;
+    virtual basegfx::B2DRange AdjustTextFrameWidthAndHeight(const basegfx::B2DRange& rRange, bool bHgt = true, bool bWdt = true) const;
+    virtual bool AdjustTextFrameWidthAndHeight(bool bHgt = true, bool bWdt = true);
+    virtual bool IsAutoGrowHeight() const;
+    virtual bool IsAutoGrowWidth() const;
+    virtual void SetVerticalWriting( bool bVertical );
+    virtual bool BegTextEdit( SdrOutliner& rOutl );
+    virtual void TakeTextEditArea(basegfx::B2DVector* pPaperMin, basegfx::B2DVector* pPaperMax, basegfx::B2DRange* pViewInit, basegfx::B2DRange* pViewMin) const;
     virtual void EndTextEdit( SdrOutliner& rOutl );
-    virtual void TakeTextAnchorRect( Rectangle& rAnchorRect ) const;
-    virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FASTBOOL bNoEditText=sal_False,
-        Rectangle* pAnchorRect=NULL, sal_Bool bLineWidth=sal_True ) const;
-    virtual void operator=(const SdrObject& rObj);
+    virtual basegfx::B2DRange getUnifiedTextRange() const;
+    virtual void TakeTextRange(SdrOutliner& rOutliner, basegfx::B2DRange& rTextRange, basegfx::B2DRange& rAnchorRange) const;
+    virtual void SetChanged();
 
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
@@ -227,33 +205,21 @@ public:
     virtual basegfx::B2DPolyPolygon TakeCreatePoly( const SdrDragStat& rDrag) const;
 
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
-    virtual basegfx::B2DPolyPolygon TakeContour() const;
-
-    virtual void NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject);
-
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
-
-    virtual void SetPage( SdrPage* pNewPage );
+    virtual SdrObject* DoConvertToPolygonObject(bool bBezier, bool bAddText) const;
 
     virtual SdrObjGeoData *NewGeoData() const;
     virtual void          SaveGeoData(SdrObjGeoData &rGeo) const;
     virtual void          RestGeoData(const SdrObjGeoData &rGeo);
 
-    // need to take fObjectRotation instead of aGeo.nWink, replace it temporary
-    virtual sal_Bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const;
-    virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon);
-
     virtual const SdrGluePointList* GetGluePointList() const;
-    //virtual SdrGluePointList* GetGluePointList();
     virtual SdrGluePointList* ForceGluePointList();
 
-    virtual sal_uInt32 GetHdlCount() const;
-    virtual SdrHdl* GetHdl( sal_uInt32 nHdlNum ) const;
+    virtual void AddToHdlList(SdrHdlList& rHdlList) const;
 
     // #i33136#
     static bool doConstructOrthogonal(const ::rtl::OUString& rName);
 
-    using SdrTextObj::NbcSetOutlinerParaObject;
+    virtual void setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransformation);
 };
 
 #endif //_SVDOASHP_HXX

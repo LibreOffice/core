@@ -24,7 +24,6 @@
 #define _SVT_LISTENER_HXX
 
 #include "svl/svldllapi.h"
-#include <tools/rtti.hxx>
 
 class SvtBroadcaster;
 class SfxHint;
@@ -40,8 +39,6 @@ class SVL_DLLPUBLIC SvtListener
     const SvtListener&  operator=(const SvtListener &); // n.i., ist verboten
 
 public:
-    TYPEINFO();
-
                         SvtListener();
                         SvtListener( const SvtListener &rCopy );
     virtual             ~SvtListener();

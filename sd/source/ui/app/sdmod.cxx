@@ -64,9 +64,6 @@
 #include "res_bmp.hrc"
 #include "cfgids.hxx"
 #include "tools/SdGlobalResourceContainer.hxx"
-
-TYPEINIT1( SdModule, SfxModule );
-
 #define SdModule
 #include "sdslots.hxx"
 
@@ -83,7 +80,7 @@ SFX_IMPL_INTERFACE(SdModule, SfxModule, SdResId(STR_APPLICATIONOBJECTBAR))
 \************************************************************************/
 
 SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
-:   SfxModule( SfxApplication::CreateResManager("sd"), sal_False,
+:   SfxModule( SfxApplication::CreateResManager("sd"), false,
                   pFact1, pFact2, NULL ),
     pTransferClip(NULL),
     pTransferDrag(NULL),
@@ -92,7 +89,7 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
     pDrawOptions(NULL),
     pSearchItem(NULL),
     pNumberFormatter( NULL ),
-    bWaterCan(sal_False),
+    bWaterCan(false),
     mpResourceContainer(new ::sd::SdGlobalResourceContainer())
 {
     SetName( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "StarDraw" ) ) );  // Nicht uebersetzen!
@@ -129,7 +126,7 @@ SdModule::~SdModule()
     if( pNumberFormatter )
     delete pNumberFormatter;
 
-    ::sd::DrawDocShell* pDocShell = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
+    ::sd::DrawDocShell* pDocShell = dynamic_cast< ::sd::DrawDocShell* >(SfxObjectShell::Current());
     if( pDocShell )
     {
         ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
@@ -160,8 +157,9 @@ SdModule::~SdModule()
 
 void SdModule::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if( rHint.ISA( SfxSimpleHint ) &&
-        ( (SfxSimpleHint&) rHint ).GetId() == SFX_HINT_DEINITIALIZING )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if(pSfxSimpleHint && SFX_HINT_DEINITIALIZING == pSfxSimpleHint->GetId())
     {
         delete pImpressOptions, pImpressOptions = NULL;
         delete pDrawOptions, pDrawOptions = NULL;
@@ -196,7 +194,7 @@ SdOptions* SdModule::GetSdOptions(DocumentType eDocType)
     {
         sal_uInt16 nMetric = pOptions->GetMetric();
 
-        ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current() );
+        ::sd::DrawDocShell* pDocSh = dynamic_cast< ::sd::DrawDocShell* >(SfxObjectShell::Current() );
         SdDrawDocument* pDoc = NULL;
         if (pDocSh)
             pDoc = pDocSh->GetDoc();
@@ -219,7 +217,7 @@ SdOptions* SdModule::GetSdOptions(DocumentType eDocType)
 SvStorageStreamRef SdModule::GetOptionStream( const String& rOptionName,
                                               SdOptionStreamMode eMode )
 {
-    ::sd::DrawDocShell*     pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current() );
+    ::sd::DrawDocShell*     pDocSh = dynamic_cast< ::sd::DrawDocShell* >(SfxObjectShell::Current() );
     SvStorageStreamRef  xStm;
 
     if( pDocSh )
@@ -236,7 +234,7 @@ SvStorageStreamRef SdModule::GetOptionStream( const String& rOptionName,
             SvStream* pStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READWRITE );
 
             if( pStm )
-                xOptionStorage = new SvStorage( pStm, sal_True );
+                xOptionStorage = new SvStorage( pStm, true );
         }
 
         if( DOCUMENT_TYPE_DRAW == eType )

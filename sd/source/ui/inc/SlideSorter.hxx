@@ -84,7 +84,7 @@ public:
     virtual ~SlideSorter (void);
 
     /** Return whether the called SlideSorter object is valid and calling
-        its Get(Model,View,Controller) methods is safe.  When <FALSE/> is
+        its Get(Model,View,Controller) methods is safe.  When <false/> is
         called then no other methods should be called.
         Calling this method should be necessary only during startup and
         shutdown (when that can be detected).
@@ -238,7 +238,7 @@ private:
     ::boost::shared_ptr<ScrollBar> mpVerticalScrollBar;
     ::boost::shared_ptr<ScrollBarBox> mpScrollBarBox;
 
-    /** Set this flag to <TRUE/> to force a layout before the next paint.
+    /** Set this flag to <true/> to force a layout before the next paint.
     */
     bool mbLayoutPending;
 

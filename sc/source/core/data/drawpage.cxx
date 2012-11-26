@@ -39,16 +39,50 @@
 
 // -----------------------------------------------------------------------
 
-ScDrawPage::ScDrawPage(ScDrawLayer& rNewModel, StarBASIC* pBasic, sal_Bool bMasterPage) :
-    FmFormPage(rNewModel, pBasic, bMasterPage)
+ScDrawPage::ScDrawPage(ScDrawLayer& rNewModel, StarBASIC* pBasic, bool bMasterPage)
+:   FmFormPage(rNewModel, pBasic, bMasterPage)
 {
-    SetSize( Size( LONG_MAX, LONG_MAX ) );
+    SetPageScale( basegfx::B2DVector( LONG_MAX, LONG_MAX ) );
 }
 
 // -----------------------------------------------------------------------
 
 __EXPORT ScDrawPage::~ScDrawPage()
 {
+}
+
+void ScDrawPage::copyDataFromSdrPage(const SdrPage& rSource)
+{
+    if(this != &rSource)
+    {
+        const ScDrawPage* pSource = dynamic_cast< const ScDrawPage* >(&rSource);
+
+        if(pSource)
+        {
+            // call parent
+            FmFormPage::copyDataFromSdrPage(rSource);
+
+            // no local data to copy
+        }
+        else
+        {
+            OSL_ENSURE(false, "copyDataFromSdrObject with ObjectType of Source different from Target (!)");
+        }
+    }
+}
+
+SdrPage* ScDrawPage::CloneSdrPage(SdrModel* pTargetModel) const
+{
+    ScDrawLayer* pScDrawLayer = static_cast< ScDrawLayer* >(pTargetModel ? pTargetModel : &getSdrModelFromSdrPage());
+    OSL_ENSURE(dynamic_cast< ScDrawLayer* >(pScDrawLayer), "Wrong SdrModel type in ScDrawPage clone (!)");
+    ScDrawPage* pClone = new ScDrawPage(
+        *pScDrawLayer,
+        GetBasic(),
+        IsMasterPage());
+    OSL_ENSURE(pClone, "CloneSdrPage error (!)");
+    pClone->copyDataFromSdrPage(*this);
+
+    return pClone;
 }
 
 // -----------------------------------------------------------------------

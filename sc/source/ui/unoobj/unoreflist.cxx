@@ -56,8 +56,6 @@ void ScUnoRefList::Undo( ScDocument* pDoc )
 
 //------------------------------------------------------------------------
 
-TYPEINIT1(ScUnoRefUndoHint, SfxHint);
-
 ScUnoRefUndoHint::ScUnoRefUndoHint( const ScUnoRefEntry& rRefEntry ) :
     aEntry( rRefEntry )
 {

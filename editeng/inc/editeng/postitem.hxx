@@ -45,10 +45,8 @@ namespace rtl
 class EDITENG_DLLPUBLIC SvxPostureItem : public SfxEnumItem
 {
 public:
-    TYPEINFO();
-
-    SvxPostureItem( const FontItalic ePost /*= ITALIC_NONE*/,
-                    const sal_uInt16 nId  );
+    POOLITEM_FACTORY()
+    SvxPostureItem( const FontItalic ePost = ITALIC_NONE, const sal_uInt16 nId = 0 );
 
     // "pure virtual Methoden" vom SfxPoolItem + SwEnumItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,

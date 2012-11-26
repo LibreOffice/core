@@ -56,11 +56,11 @@ public:
     virtual bool Command( const CommandEvent& rCEvt );
 
     // callbacks from sdr view
-    virtual sal_uLong GetMarkablePointCount() const;
-    virtual sal_uLong GetMarkedPointCount() const;
-    virtual sal_Bool MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark=sal_False);
+    virtual sal_uInt32 GetMarkablePointCount() const;
+    virtual sal_uInt32 GetMarkedPointCount() const;
+    virtual bool MarkPoint(SdrHdl& rHdl, bool bUnmark = false);
     virtual void CheckPossibilities();
-    virtual sal_Bool MarkPoints(const Rectangle* pRect, sal_Bool bUnmark);
+    virtual bool MarkPoints(const basegfx::B2DRange* pRange, bool bUnmark);
 
     void Move( int nDX, int nDY );
     bool OnMove( const KeyEvent& rKEvt );
@@ -94,7 +94,7 @@ private:
     Size                                            maSize;
     sal_uLong                                           mnClosePopupEvent;
     ::Window*                                       mpListenWindow;
-    Point                                           maMouseDownPos;
+    basegfx::B2DPoint                               maMouseDownPos;
 };
 
 } // end of namespace sd

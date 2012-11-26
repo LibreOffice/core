@@ -29,10 +29,10 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include <tools/debug.hxx>
-
 #include "markarr.hxx"
 #include "global.hxx"
 #include "address.hxx"
+#include <memory.h>
 
 // STATIC DATA -----------------------------------------------------------
 

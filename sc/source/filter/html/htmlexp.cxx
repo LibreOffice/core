@@ -1197,10 +1197,11 @@ sal_Bool ScHTMLExport::WriteFieldText( const ScEditCell* pCell )
                     if ( aSet.GetItemState( EE_FEATURE_FIELD, sal_False, &pItem ) == SFX_ITEM_ON )
                     {
                         const SvxFieldData* pField = ((const SvxFieldItem*)pItem)->GetField();
-                        if ( pField && pField->ISA(SvxURLField) )
+                        const SvxURLField*  pURLField = dynamic_cast< const SvxURLField* >(pField);
+
+                        if ( pURLField )
                         {
                             bUrl = sal_True;
-                            const SvxURLField*  pURLField = (const SvxURLField*)pField;
 //                          String              aFieldText = rEngine.GetText( aSel );
                             rStrm << '<' << OOO_STRING_SVTOOLS_HTML_anchor << ' ' << OOO_STRING_SVTOOLS_HTML_O_href << "=\"";
                             OUT_STR( pURLField->GetURL() );

@@ -163,11 +163,6 @@ SFX_IMPL_INTERFACE(SfxViewFrame,SfxShell,SfxResId(0))
     SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_APPLICATION | SFX_VISIBILITY_STANDARD, SfxResId(RID_ENVTOOLBOX) );
 }
 
-TYPEINIT2(SfxViewFrame,SfxShell,SfxListener);
-TYPEINIT1(SfxViewFrameItem, SfxPoolItem);
-
-//=========================================================================
-
 //-------------------------------------------------------------------------
 namespace
 {
@@ -261,9 +256,11 @@ public:
 //-------------------------------------------------------------------------
 void SfxViewNotificatedFrameList_Impl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if ( rHint.IsA(TYPE(SfxSimpleHint)) )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if ( pSfxSimpleHint )
     {
-        switch( ( (SfxSimpleHint&) rHint ).GetId() )
+        switch( pSfxSimpleHint->GetId() )
         {
             case SFX_HINT_DYING:
                 SfxViewFrame* pFrame = (SfxViewFrame*) &rBC;
@@ -372,7 +369,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
             SfxMedium* pMed = pSh->GetMedium();
 
-            SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_VIEWONLY, sal_False );
+            SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_VIEWONLY );
             if ( pItem && pItem->GetValue() )
             {
                 SfxApplication* pApp = SFX_APP();
@@ -380,17 +377,17 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 aSet.Put( SfxStringItem( SID_FILE_NAME, pMed->GetURLObject().GetMainURL(INetURLObject::NO_DECODE) ) );
                 aSet.Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
                 aSet.Put( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii("_blank") ) );
-                SFX_ITEMSET_ARG( pMed->GetItemSet(), pReferer, SfxStringItem, SID_REFERER, sal_False );
+                SFX_ITEMSET_ARG( pMed->GetItemSet(), pReferer, SfxStringItem, SID_REFERER );
                 if ( pReferer )
                     aSet.Put( *pReferer );
-                SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(), pVersionItem, SfxInt16Item, SID_VERSION, sal_False );
+                SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(), pVersionItem, SfxInt16Item, SID_VERSION );
                 if ( pVersionItem )
                     aSet.Put( *pVersionItem );
 
                 if( pMed->GetFilter() )
                 {
                     aSet.Put( SfxStringItem( SID_FILTER_NAME, pMed->GetFilter()->GetFilterName() ) );
-                    SFX_ITEMSET_ARG( pMed->GetItemSet(), pOptions, SfxStringItem, SID_FILE_FILTEROPTIONS, sal_False );
+                    SFX_ITEMSET_ARG( pMed->GetItemSet(), pOptions, SfxStringItem, SID_FILE_FILTEROPTIONS );
                     if ( pOptions )
                         aSet.Put( *pOptions );
                 }
@@ -451,7 +448,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             if ( rReq.IsAPI() )
             {
                 // per API steuern ob r/w oder r/o
-                SFX_REQUEST_ARG(rReq, pEditItem, SfxBoolItem, SID_EDITDOC, sal_False);
+                SFX_REQUEST_ARG(rReq, pEditItem, SfxBoolItem, SID_EDITDOC );
                 if ( pEditItem )
                     nOpenMode = pEditItem->GetValue() ? SFX_STREAM_READWRITE : SFX_STREAM_READONLY;
             }
@@ -461,8 +458,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             String aTemp;
             utl::LocalFileHelper::ConvertPhysicalNameToURL( pMed->GetPhysicalName(), aTemp );
             INetURLObject aPhysObj( aTemp );
-            SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(),
-                             pVersionItem, SfxInt16Item, SID_VERSION, sal_False );
+            SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(), pVersionItem, SfxInt16Item, SID_VERSION );
 
             INetURLObject aMedObj( pMed->GetName() );
 
@@ -526,7 +522,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                             SfxApplication* pApp = SFX_APP();
                             SfxAllItemSet aSet( pApp->GetPool() );
                             aSet.Put( SfxStringItem( SID_FILE_NAME, pMed->GetName() ) );
-                            SFX_ITEMSET_ARG( pMed->GetItemSet(), pReferer, SfxStringItem, SID_REFERER, sal_False );
+                            SFX_ITEMSET_ARG( pMed->GetItemSet(), pReferer, SfxStringItem, SID_REFERER );
                             if ( pReferer )
                                 aSet.Put( *pReferer );
                             aSet.Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
@@ -536,8 +532,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                             if( pMed->GetFilter() )
                             {
                                 aSet.Put( SfxStringItem( SID_FILTER_NAME, pMed->GetFilter()->GetFilterName() ) );
-                                SFX_ITEMSET_ARG( pMed->GetItemSet(), pOptions,
-                                                 SfxStringItem, SID_FILE_FILTEROPTIONS, sal_False );
+                                SFX_ITEMSET_ARG( pMed->GetItemSet(), pOptions, SfxStringItem, SID_FILE_FILTEROPTIONS );
                                 if ( pOptions )
                                     aSet.Put( *pOptions );
                             }
@@ -578,8 +573,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             if ( !pSh || !pSh->CanReload_Impl() )
                 break;
             SfxApplication* pApp = SFX_APP();
-            SFX_REQUEST_ARG(rReq, pForceReloadItem, SfxBoolItem,
-                            SID_FORCERELOAD, sal_False);
+            SFX_REQUEST_ARG(rReq, pForceReloadItem, SfxBoolItem, SID_FORCERELOAD );
             if(  pForceReloadItem && !pForceReloadItem->GetValue() &&
                 !pSh->GetMedium()->IsExpired() )
                 return;
@@ -587,15 +581,14 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 return;
 
             // AutoLoad ist ggf. verboten
-            SFX_REQUEST_ARG(rReq, pAutoLoadItem, SfxBoolItem, SID_AUTOLOAD, sal_False);
+            SFX_REQUEST_ARG(rReq, pAutoLoadItem, SfxBoolItem, SID_AUTOLOAD );
             if ( pAutoLoadItem && pAutoLoadItem->GetValue() &&
                  GetFrame().IsAutoLoadLocked_Impl() )
                 return;
 
             SfxObjectShellLock xOldObj( pSh );
             pImp->bReloading = sal_True;
-            SFX_REQUEST_ARG(rReq, pURLItem, SfxStringItem,
-                            SID_FILE_NAME, sal_False);
+            SFX_REQUEST_ARG(rReq, pURLItem, SfxStringItem, SID_FILE_NAME );
             // editierbar "offnen?
             sal_Bool bForEdit = !pSh->IsReadOnly();
             if ( rReq.GetSlot() == SID_EDITDOC )
@@ -603,7 +596,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
             // ggf. beim User nachfragen
             sal_Bool bDo = ( GetViewShell()->PrepareClose() != sal_False );
-            SFX_REQUEST_ARG(rReq, pSilentItem, SfxBoolItem, SID_SILENT, sal_False);
+            SFX_REQUEST_ARG(rReq, pSilentItem, SfxBoolItem, SID_SILENT );
             if ( bDo && GetFrame().DocIsModified_Impl() &&
                  !rReq.IsAPI() && ( !pSilentItem || !pSilentItem->GetValue() ) )
             {
@@ -679,7 +672,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 // Falls eine salvagede Datei vorliegt, nicht nochmals die
                 // OrigURL mitschicken, denn die Tempdate ist nach Reload
                 // ungueltig
-                SFX_ITEMSET_ARG( pNewSet, pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False);
+                SFX_ITEMSET_ARG( pNewSet, pSalvageItem, SfxStringItem, SID_DOC_SALVAGE );
                 if( pSalvageItem )
                 {
                     aURL = pSalvageItem->GetValue();
@@ -706,9 +699,9 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 if ( pSilentItem && pSilentItem->GetValue() )
                     pNewSet->Put( SfxBoolItem( SID_SILENT, sal_True ) );
 
-                SFX_ITEMSET_ARG(pNewSet, pInteractionItem, SfxUnoAnyItem, SID_INTERACTIONHANDLER, sal_False);
-                SFX_ITEMSET_ARG(pNewSet, pMacroExecItem  , SfxUInt16Item, SID_MACROEXECMODE     , sal_False);
-                SFX_ITEMSET_ARG(pNewSet, pDocTemplateItem, SfxUInt16Item, SID_UPDATEDOCMODE     , sal_False);
+                SFX_ITEMSET_ARG(pNewSet, pInteractionItem, SfxUnoAnyItem, SID_INTERACTIONHANDLER );
+                SFX_ITEMSET_ARG(pNewSet, pMacroExecItem  , SfxUInt16Item, SID_MACROEXECMODE );
+                SFX_ITEMSET_ARG(pNewSet, pDocTemplateItem, SfxUInt16Item, SID_UPDATEDOCMODE );
 
                 if (!pInteractionItem)
                 {
@@ -726,8 +719,8 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 // Altes Dok nicht cachen! Gilt nicht, wenn anderes
                 // Doc geladen wird.
 
-                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSavedOptions, SfxStringItem, SID_FILE_FILTEROPTIONS, sal_False);
-                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSavedReferer, SfxStringItem, SID_REFERER, sal_False);
+                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSavedOptions, SfxStringItem, SID_FILE_FILTEROPTIONS );
+                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSavedReferer, SfxStringItem, SID_REFERER );
 
                 sal_Bool bHasStorage = pMedium->HasStorage_Impl();
                 if( bHandsOff )
@@ -899,7 +892,7 @@ void SfxViewFrame::StateReload_Impl( SfxItemSet& rSet )
                     rSet.DisableItem( SID_EDITDOC );
                 else
                 {
-                    SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_EDITDOC, sal_False );
+                    SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_EDITDOC );
                     if ( pItem && !pItem->GetValue() )
                         rSet.DisableItem( SID_EDITDOC );
                     else
@@ -1115,7 +1108,6 @@ void SfxViewFrame::ReleaseObjectShell_Impl()
 
     if ( xObjSh.Is() )
     {
-         pImp->aLastType = xObjSh->Type();
         pDispatcher->Pop( *xObjSh );
         SfxModule* pModule = xObjSh->GetModule();
         if( pModule )
@@ -1183,9 +1175,7 @@ void SfxViewFrame::DoActivate( sal_Bool bUI, SfxViewFrame* pOldFrame )
         SfxMedium* pMed = GetObjectShell() ? GetObjectShell()->GetMedium() : NULL;
         if( pMed )
         {
-            SFX_ITEMSET_ARG(
-                pMed->GetItemSet(), pInterceptorItem, SfxSlotInterceptorItem,
-                SID_INTERCEPTOR, sal_False );
+            SFX_ITEMSET_ARG( pMed->GetItemSet(), pInterceptorItem, SfxSlotInterceptorItem, SID_INTERCEPTOR );
             if( pInterceptorItem )
             {
                 SfxSlotInterceptor* pInter = pInterceptorItem->GetValue();
@@ -1222,9 +1212,7 @@ void SfxViewFrame::DoDeactivate(sal_Bool bUI, SfxViewFrame* pNewFrame )
         SfxMedium* pMed = GetObjectShell() ? GetObjectShell()->GetMedium() : NULL;
         if( pMed )
         {
-            SFX_ITEMSET_ARG(
-                pMed->GetItemSet(), pInterceptorItem, SfxSlotInterceptorItem,
-                SID_INTERCEPTOR, sal_False );
+            SFX_ITEMSET_ARG( pMed->GetItemSet(), pInterceptorItem, SfxSlotInterceptorItem, SID_INTERCEPTOR );
             if( pInterceptorItem )
                 pInterceptorItem->GetValue()->Activate( sal_False );
         }
@@ -1326,9 +1314,11 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         return;
 
     // we know only SimpleHints
-    if ( rHint.IsA(TYPE(SfxSimpleHint)) )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if ( pSfxSimpleHint )
     {
-        switch( ( (SfxSimpleHint&) rHint ).GetId() )
+        switch( pSfxSimpleHint->GetId() )
         {
             case SFX_HINT_MODECHANGED:
             {
@@ -1391,12 +1381,16 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
         }
     }
-    else if ( rHint.IsA(TYPE(SfxEventHint)) )
+    else
+    {
+        const SfxEventHint* pSfxEventHint = dynamic_cast< const SfxEventHint* >(&rHint);
+
+        if ( pSfxEventHint )
     {
         // Wenn das Document asynchron geladen wurde, wurde der Dispatcher
         // auf ReadOnly gesetzt, was zur"?ckgenommen werden mu\s, wenn
         // das Document selbst nicht ReadOnly ist und das Laden fertig ist.
-        switch ( ((SfxEventHint&)rHint).GetEventId() )
+            switch ( pSfxEventHint->GetEventId() )
         {
             case SFX_EVENT_MODIFYCHANGED:
             {
@@ -1443,6 +1437,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             }
         }
     }
+}
 }
 
 //------------------------------------------------------------------------
@@ -1754,7 +1749,7 @@ void SfxViewFrame::DoAdjustPosSizePixel //! teilen in Inner.../Outer...
 
 int SfxViewFrameItem::operator==( const SfxPoolItem &rItem ) const
 {
-     return PTR_CAST(SfxViewFrameItem, &rItem)->pFrame== pFrame;
+     return dynamic_cast< const SfxViewFrameItem* >( &rItem)->pFrame== pFrame;
 }
 
 //--------------------------------------------------------------------
@@ -1872,7 +1867,7 @@ void SfxViewFrame::Enable( sal_Bool bEnable )
         {
             // hide cursor
             if ( pViewSh )
-                pViewSh->ShowCursor(sal_False);
+                pViewSh->ShowCursor(false);
         }
 /*
         if ( !bEnable )
@@ -2054,8 +2049,7 @@ SfxViewFrame* SfxViewFrame::GetActiveChildFrame_Impl() const
         // Wenn es keinen aktiven ChildFrame gibt, irgendeinen nehmen
         for ( sal_uInt16 n=0; n<GetChildFrameCount(); n++ )
         {
-            pViewFrame =
-                PTR_CAST( SfxViewFrame, GetChildFrame(n)->GetChildFrame(0) );
+            pViewFrame = dynamic_cast< SfxViewFrame* >( GetChildFrame(n)->GetChildFrame(0) );
             if ( pViewFrame )
                 break;
         }
@@ -2200,8 +2194,8 @@ SfxViewFrame* SfxViewFrame::LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const
 //--------------------------------------------------------------------
 SfxViewFrame* SfxViewFrame::DisplayNewDocument( SfxObjectShell& i_rDoc, const SfxRequest& i_rCreateDocRequest, const sal_uInt16 i_nViewId )
 {
-    SFX_REQUEST_ARG( i_rCreateDocRequest, pFrameItem, SfxUnoFrameItem, SID_FILLFRAME, sal_False );
-    SFX_REQUEST_ARG( i_rCreateDocRequest, pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False );
+    SFX_REQUEST_ARG( i_rCreateDocRequest, pFrameItem, SfxUnoFrameItem, SID_FILLFRAME );
+    SFX_REQUEST_ARG( i_rCreateDocRequest, pHiddenItem, SfxBoolItem, SID_HIDDEN );
 
     return LoadViewIntoFrame_Impl_NoThrow(
         i_rDoc,
@@ -2492,12 +2486,12 @@ void SfxViewFrame::ExecView_Impl
             pMed->GetItemSet()->ClearItem( SID_HIDDEN );
 
             // the view ID (optional arg. TODO: this is currently not supported in the slot definition ...)
-            SFX_REQUEST_ARG( rReq, pViewIdItem, SfxUInt16Item, SID_VIEW_ID, sal_False );
+            SFX_REQUEST_ARG( rReq, pViewIdItem, SfxUInt16Item, SID_VIEW_ID );
             const sal_uInt16 nViewId = pViewIdItem ? pViewIdItem->GetValue() : GetCurViewId();
 
             Reference < XFrame > xFrame;
             // the frame (optional arg. TODO: this is currently not supported in the slot definition ...)
-            SFX_REQUEST_ARG( rReq, pFrameItem, SfxUnoFrameItem, SID_FILLFRAME, sal_False );
+            SFX_REQUEST_ARG( rReq, pFrameItem, SfxUnoFrameItem, SID_FILLFRAME );
             if ( pFrameItem )
                 xFrame = pFrameItem->GetFrame();
 
@@ -2509,7 +2503,7 @@ void SfxViewFrame::ExecView_Impl
 
         case SID_OBJECT:
         {
-            SFX_REQUEST_ARG( rReq, pItem, SfxUInt16Item, SID_OBJECT, sal_False );
+            SFX_REQUEST_ARG( rReq, pItem, SfxUInt16Item, SID_OBJECT );
 
             SfxViewShell *pViewShell = GetViewShell();
             if ( pViewShell && pItem )
@@ -3034,7 +3028,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                 xRecorder = xSupplier->getDispatchRecorder();
 
             sal_Bool bIsRecording = xRecorder.is();
-            SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, SID_RECORDMACRO, sal_False);
+            SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, SID_RECORDMACRO );
             if ( pItem && pItem->GetValue() == bIsRecording )
                 return;
 
@@ -3044,7 +3038,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                 aProp <<= com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorderSupplier >();
                 xSet->setPropertyValue(sProperty,aProp);
 
-                SFX_REQUEST_ARG( rReq, pRecordItem, SfxBoolItem, FN_PARAM_1, sal_False);
+                SFX_REQUEST_ARG( rReq, pRecordItem, SfxBoolItem, FN_PARAM_1 );
                 if ( !pRecordItem || !pRecordItem->GetValue() )
                     // insert script into basic library container of application
                     AddDispatchMacroToBasic_Impl(xRecorder->getRecordedMacro());
@@ -3108,7 +3102,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
             {
                 rtl::OUString aStatusbarResString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/statusbar/statusbar" ));
                 // Parameter auswerten
-                SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, rReq.GetSlot(), sal_False);
+                SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, rReq.GetSlot() );
                 sal_Bool bShow( sal_True );
                 if ( !pShowItem )
                     bShow = xLayoutManager->isElementVisible( aStatusbarResString );
@@ -3133,7 +3127,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_WIN_FULLSCREEN:
         {
-            SFX_REQUEST_ARG(rReq, pItem, SfxBoolItem, rReq.GetSlot(), sal_False);
+            SFX_REQUEST_ARG(rReq, pItem, SfxBoolItem, rReq.GetSlot() );
             SfxViewFrame *pTop = GetTopViewFrame();
             if ( pTop )
             {
@@ -3329,7 +3323,7 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
     // Parameter auswerten
     sal_uInt16 nSID = rReq.GetSlot();
 
-    SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSID, sal_False);
+    SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSID );
     if ( nSID == SID_VIEW_DATA_SOURCE_BROWSER )
     {
         if (!SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SDATABASE))

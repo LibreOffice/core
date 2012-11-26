@@ -40,7 +40,6 @@ namespace sd { namespace ui { namespace table {
 class TableObjectBar  : public SfxShell
 {
 public:
-    TYPEINFO();
     SFX_DECL_INTERFACE( SD_IF_SDDRAWTABLEOBJECTBAR )
 
     TableObjectBar( ::sd::ViewShell* pSdViewShell, ::sd::View* pSdView);

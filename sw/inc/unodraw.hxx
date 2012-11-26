@@ -29,6 +29,8 @@
 #include <com/sun/star/text/XTextContent.hpp>
 // --> OD 2009-01-13 #i59051#
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
+#include <com/sun/star/drawing/PointSequenceSequence.hpp>
+#include <com/sun/star/drawing/PointSequence.hpp>
 // <--
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -43,15 +45,14 @@
 // <--
 #include <svl/itemprop.hxx>
 
-class SdrMarkList;
 class SdrView;
 class SwDoc;
+
 /******************************************************************************
  *
  ******************************************************************************/
 class SwFmDrawPage : public SvxFmDrawPage
 {
-    SdrPageView*        pPageView;
 protected:
 
     // Erzeugen eines SdrObjects anhand einer Description. Kann von
@@ -63,13 +64,11 @@ public:
     SwFmDrawPage( SdrPage* pPage );
     virtual ~SwFmDrawPage() throw ();
 
-    const SdrMarkList&  PreGroup(const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > & xShapes);
+    const SdrObjectVector PreGroup(const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > & xShapes);
     void                PreUnGroup(const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapeGroup >   xShapeGroup);
 //  void                PostGroup(); ?? wird es noch gebraucht ??
 
     SdrView*            GetDrawView() {return mpView;}
-    SdrPageView*        GetPageView();
-    void                RemovePageView();
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >       GetInterface( SdrObject* pObj );
 
     // Die folgende Methode wird gerufen, wenn ein SvxShape-Objekt angelegt
@@ -240,6 +239,12 @@ class SwXShape : public SwXShapeBaseClass,
     ::com::sun::star::drawing::PolyPolygonBezierCoords _ConvertPolyPolygonBezierToLayoutDir(
                     const ::com::sun::star::drawing::PolyPolygonBezierCoords& aPath );
 
+    ::com::sun::star::drawing::PointSequenceSequence _ConvertPointSequenceSequenceToLayoutDir(
+        const ::com::sun::star::drawing::PointSequenceSequence& aPath);
+
+    ::com::sun::star::drawing::PointSequence _ConvertPointSequenceToLayoutDir(
+        const ::com::sun::star::drawing::PointSequence& aPath);
+
     /** method to get property from aggregation object
 
         OD 2004-10-28 #i36248#
@@ -260,7 +265,6 @@ public:
     SwXShape(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & xShape);
 
 
-    TYPEINFO();
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);

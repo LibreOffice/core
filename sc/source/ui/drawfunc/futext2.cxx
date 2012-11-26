@@ -288,7 +288,7 @@ SdrOutliner* FuText::MakeOutliner()
 
     //  #i10426# The ref device isn't set to the EditEngine before SdrBeginTextEdit now,
     //  so the device must be taken from the model here.
-    OutputDevice* pRef = pDrDoc->GetRefDevice();
+    OutputDevice* pRef = pDrDoc->GetReferenceDevice();
     if (pRef && pRef != pWindow)
         pRef->SetMapMode( MapMode(MAP_100TH_MM) );
 

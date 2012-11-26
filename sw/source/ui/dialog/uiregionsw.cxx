@@ -401,7 +401,7 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
 {
     FreeResource();
 
-    bWeb = 0 != PTR_CAST( SwWebDocShell, rSh.GetView().GetDocShell() );
+    bWeb = 0 != dynamic_cast< SwWebDocShell* >( rSh.GetView().GetDocShell() );
 
     aTree.SetSelectHdl      ( LINK( this, SwEditRegionDlg, GetFirstEntryHdl));
     aTree.SetDeselectHdl    ( LINK( this, SwEditRegionDlg, DeselectHdl));
@@ -1595,7 +1595,7 @@ SwInsertSectionTabDialog::SwInsertSectionTabDialog(
     SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
     long nHtmlMode = pHtmlOpt->GetExportMode();
 
-    sal_Bool bWeb = 0 != PTR_CAST( SwWebDocShell, rSh.GetView().GetDocShell() );
+    sal_Bool bWeb = 0 != dynamic_cast< SwWebDocShell* >( rSh.GetView().GetDocShell() );
     if(bWeb)
     {
         RemoveTabPage(TP_SECTION_FTNENDNOTES);
@@ -1751,7 +1751,7 @@ void    SwInsertSectionTabPage::SetWrtShell(SwWrtShell& rSh)
 {
     m_pWrtSh = &rSh;
 
-    sal_Bool bWeb = 0 != PTR_CAST(SwWebDocShell, m_pWrtSh->GetView().GetDocShell());
+    sal_Bool bWeb = 0 != dynamic_cast< SwWebDocShell* >( m_pWrtSh->GetView().GetDocShell());
     if(bWeb)
     {
         aHideCB         .Hide();
@@ -2330,7 +2330,7 @@ SwSectionPropertyTabDialog::SwSectionPropertyTabDialog(
 
     SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
     long nHtmlMode = pHtmlOpt->GetExportMode();
-    sal_Bool bWeb = 0 != PTR_CAST( SwWebDocShell, rSh.GetView().GetDocShell() );
+    sal_Bool bWeb = 0 != dynamic_cast< SwWebDocShell* >( rSh.GetView().GetDocShell() );
     if(bWeb)
     {
         RemoveTabPage(TP_SECTION_FTNENDNOTES);

@@ -32,7 +32,6 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdotext.hxx>
-#include <svx/sderitm.hxx>
 #include <svx/dialogs.hrc>
 #include <cuires.hrc>
 #include "transfrm.hrc"
@@ -267,19 +266,21 @@ void SvxAngleTabPage::Construct()
         aMtrPosY.SetDecimalDigits( 3 );
     }
 
-    { // #i75273#
-        Rectangle aTempRect(pView->GetAllMarkedRect());
-        pView->GetSdrPageView()->LogicToPagePos(aTempRect);
-        maRange = basegfx::B2DRange(aTempRect.Left(), aTempRect.Top(), aTempRect.Right(), aTempRect.Bottom());
+    {
+        maRange = pView->getMarkedObjectSnapRange();
+
+        if(pView->GetSdrPageView())
+        {
+            maRange.transform(basegfx::tools::createTranslateB2DHomMatrix(-pView->GetSdrPageView()->GetPageOrigin()));
+        }
     }
 
     // Take anchor into account (Writer)
-    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+    const SdrObject* pSelected = pView->getSelectedIfSingle();
 
-    if(rMarkList.GetMarkCount())
+    if(pSelected)
     {
-        const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-        maAnchor = basegfx::B2DPoint(pObj->GetAnchorPos().X(), pObj->GetAnchorPos().Y());
+        maAnchor = pSelected->GetAnchorPos();
 
         if(!maAnchor.equalZero()) // -> Writer
         {
@@ -288,7 +289,7 @@ void SvxAngleTabPage::Construct()
     }
 
     // take scale into account
-    const Fraction aUIScale(pView->GetModel()->GetUIScale());
+    const Fraction aUIScale(pView->getSdrModelFromSdrView().GetUIScale());
     lcl_ScaleRect(maRange, aUIScale);
 
     // take UI units into account
@@ -320,7 +321,7 @@ sal_Bool SvxAngleTabPage::FillItemSet(SfxItemSet& rSet)
 
     if(aMtrAngle.IsValueModified() || aMtrPosX.IsValueModified() || aMtrPosY.IsValueModified())
     {
-        const double fUIScale(double(pView->GetModel()->GetUIScale()));
+        const double fUIScale(double(pView->getSdrModelFromSdrView().GetUIScale()));
         const double fTmpX((GetCoreValue(aMtrPosX, ePoolUnit) + maAnchor.getX()) * fUIScale);
         const double fTmpY((GetCoreValue(aMtrPosY, ePoolUnit) + maAnchor.getY()) * fUIScale);
 
@@ -338,7 +339,7 @@ sal_Bool SvxAngleTabPage::FillItemSet(SfxItemSet& rSet)
 
 void SvxAngleTabPage::Reset(const SfxItemSet& rAttrs)
 {
-    const double fUIScale(double(pView->GetModel()->GetUIScale()));
+    const double fUIScale(double(pView->getSdrModelFromSdrView().GetUIScale()));
 
     const SfxPoolItem* pItem = GetItem( rAttrs, SID_ATTR_TRANSFORM_ROT_X );
     if(pItem)
@@ -546,10 +547,13 @@ void SvxSlantTabPage::Construct()
     eDlgUnit = GetModuleFieldUnit(GetItemSet());
     SetFieldUnit(aMtrRadius, eDlgUnit, sal_True);
 
-    { // #i75273#
-        Rectangle aTempRect(pView->GetAllMarkedRect());
-        pView->GetSdrPageView()->LogicToPagePos(aTempRect);
-        maRange = basegfx::B2DRange(aTempRect.Left(), aTempRect.Top(), aTempRect.Right(), aTempRect.Bottom());
+    {
+        maRange = pView->getMarkedObjectSnapRange();
+
+        if(pView->GetSdrPageView())
+        {
+            maRange.transform(basegfx::tools::createTranslateB2DHomMatrix(-pView->GetSdrPageView()->GetPageOrigin()));
+        }
     }
 }
 
@@ -563,11 +567,11 @@ sal_Bool SvxSlantTabPage::FillItemSet(SfxItemSet& rAttrs)
 
     if( aStr != aMtrRadius.GetSavedValue() )
     {
-        Fraction aUIScale = pView->GetModel()->GetUIScale();
+        Fraction aUIScale = pView->getSdrModelFromSdrView().GetUIScale();
         long nTmp = GetCoreValue( aMtrRadius, ePoolUnit );
         nTmp = Fraction( nTmp ) * aUIScale;
 
-        rAttrs.Put( SdrEckenradiusItem( nTmp ) );
+        rAttrs.Put( SdrMetricItem(SDRATTR_ECKENRADIUS, nTmp ) );
         bModified = sal_True;
     }
 
@@ -584,12 +588,17 @@ sal_Bool SvxSlantTabPage::FillItemSet(SfxItemSet& rAttrs)
     {
         // Referenzpunkt setzen
         // #75897#
-        Rectangle aObjectRect(pView->GetAllMarkedRect());
-        pView->GetSdrPageView()->LogicToPagePos(aObjectRect);
-        Point aPt = aObjectRect.Center();
+        basegfx::B2DRange aObjectRange(pView->getMarkedObjectSnapRange());
 
-        rAttrs.Put(SfxInt32Item(SID_ATTR_TRANSFORM_SHEAR_X, aPt.X()));
-        rAttrs.Put(SfxInt32Item(SID_ATTR_TRANSFORM_SHEAR_Y, aPt.Y()));
+        if(pView->GetSdrPageView())
+        {
+            aObjectRange.transform(basegfx::tools::createTranslateB2DHomMatrix(-pView->GetSdrPageView()->GetPageOrigin()));
+        }
+
+        const basegfx::B2DPoint aCenter(aObjectRange.getCenter());
+
+        rAttrs.Put(SfxInt32Item(SID_ATTR_TRANSFORM_SHEAR_X, basegfx::fround(aCenter.getX())));
+        rAttrs.Put(SfxInt32Item(SID_ATTR_TRANSFORM_SHEAR_Y, basegfx::fround(aCenter.getY())));
         rAttrs.Put( SfxBoolItem( SID_ATTR_TRANSFORM_SHEAR_VERTICAL, sal_False ) );
     }
 
@@ -617,8 +626,8 @@ void SvxSlantTabPage::Reset(const SfxItemSet& rAttrs)
 
         if( pItem )
         {
-            const double fUIScale(double(pView->GetModel()->GetUIScale()));
-            const double fTmp((double)((const SdrEckenradiusItem*)pItem)->GetValue() / fUIScale);
+            const double fUIScale(double(pView->getSdrModelFromSdrView().GetUIScale()));
+            const double fTmp((double)((const SdrMetricItem*)pItem)->GetValue() / fUIScale);
             SetMetricValue(aMtrRadius, basegfx::fround(fTmp), ePoolUnit);
         }
         else
@@ -793,32 +802,38 @@ void SvxPositionSizeTabPage::Construct()
     }
 
     { // #i75273#
-        Rectangle aTempRect(mpView->GetAllMarkedRect());
-        mpView->GetSdrPageView()->LogicToPagePos(aTempRect);
-        maRange = basegfx::B2DRange(aTempRect.Left(), aTempRect.Top(), aTempRect.Right(), aTempRect.Bottom());
+        maRange = mpView->getMarkedObjectSnapRange();
+
+        if(mpView->GetSdrPageView())
+        {
+            maRange.transform(basegfx::tools::createTranslateB2DHomMatrix(-mpView->GetSdrPageView()->GetPageOrigin()));
+        }
     }
 
     { // #i75273#
-        Rectangle aTempRect(mpView->GetWorkArea());
-        mpView->GetSdrPageView()->LogicToPagePos(aTempRect);
-        maWorkRange = basegfx::B2DRange(aTempRect.Left(), aTempRect.Top(), aTempRect.Right(), aTempRect.Bottom());
+        maWorkRange = mpView->GetWorkArea();
+
+        if(mpView->GetSdrPageView())
+        {
+            maWorkRange.transform(basegfx::tools::createTranslateB2DHomMatrix(-mpView->GetSdrPageView()->GetPageOrigin()));
+        }
     }
 
     // take anchor into account (Writer)
-    const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+    const SdrObjectVector aSelection(mpView->getSelectedSdrObjectVectorFromSdrMarkView());
 
-    if(rMarkList.GetMarkCount())
+    if(aSelection.size())
     {
-        const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-        maAnchor = basegfx::B2DPoint(pObj->GetAnchorPos().X(), pObj->GetAnchorPos().Y());
+        const SdrObject* pObj = aSelection[0];
+        maAnchor = pObj->GetAnchorPos();
 
         if(!maAnchor.equalZero()) // -> Writer
         {
-            for(sal_uInt16 i(1); i < rMarkList.GetMarkCount(); i++)
+            for(sal_uInt32 i(1); i < aSelection.size(); i++)
             {
-                pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
+                const SdrObject* pCandidate = aSelection[i];
 
-                if(maAnchor != basegfx::B2DPoint(pObj->GetAnchorPos().X(), pObj->GetAnchorPos().Y()))
+                if(!maAnchor.equal(pCandidate->GetAnchorPos()))
                 {
                     // diferent anchor positions
                     maMtrPosX.SetText( String() );
@@ -835,12 +850,14 @@ void SvxPositionSizeTabPage::Construct()
     }
 
     // this should happen via SID_ATTR_TRANSFORM_AUTOSIZE
-    if(1 == rMarkList.GetMarkCount())
+    if(1 == aSelection.size())
     {
-        const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+        const SdrObject* pObj = aSelection[0];
         const SdrObjKind eKind((SdrObjKind)pObj->GetObjIdentifier());
 
-        if((pObj->GetObjInventor() == SdrInventor) && (OBJ_TEXT == eKind || OBJ_TITLETEXT == eKind || OBJ_OUTLINETEXT == eKind) && ((SdrTextObj*)pObj)->HasText())
+        if((pObj->GetObjInventor() == SdrInventor)
+            && (OBJ_TEXT == eKind || OBJ_TITLETEXT == eKind || OBJ_OUTLINETEXT == eKind)
+            && ((SdrTextObj*)pObj)->HasText())
         {
             mbAdjustDisabled = false;
             maFlAdjust.Enable();
@@ -856,7 +873,7 @@ void SvxPositionSizeTabPage::Construct()
     }
 
     // take scale into account
-    const Fraction aUIScale(mpView->GetModel()->GetUIScale());
+    const Fraction aUIScale(mpView->getSdrModelFromSdrView().GetUIScale());
     lcl_ScaleRect( maWorkRange, aUIScale );
     lcl_ScaleRect( maRange, aUIScale );
 
@@ -888,14 +905,17 @@ sal_Bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
     {
         if ( maMtrPosX.IsValueModified() || maMtrPosY.IsValueModified() )
         {
-            const double fUIScale(double(mpView->GetModel()->GetUIScale()));
+            const double fUIScale(double(mpView->getSdrModelFromSdrView().GetUIScale()));
             double fX((GetCoreValue( maMtrPosX, mePoolUnit ) + maAnchor.getX()) * fUIScale);
             double fY((GetCoreValue( maMtrPosY, mePoolUnit ) + maAnchor.getY()) * fUIScale);
 
-            { // #i75273#
-                Rectangle aTempRect(mpView->GetAllMarkedRect());
-                mpView->GetSdrPageView()->LogicToPagePos(aTempRect);
-                maRange = basegfx::B2DRange(aTempRect.Left(), aTempRect.Top(), aTempRect.Right(), aTempRect.Bottom());
+            {
+                maRange = mpView->getMarkedObjectSnapRange();
+
+                if(mpView->GetSdrPageView())
+                {
+                    maRange.transform(basegfx::tools::createTranslateB2DHomMatrix(-mpView->GetSdrPageView()->GetPageOrigin()));
+                }
             }
 
             // #101581# GetTopLeftPosition(...) needs coordinates after UI scaling, in real PagePositions
@@ -926,7 +946,7 @@ sal_Bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
 
     if ( maMtrWidth.IsValueModified() || maMtrHeight.IsValueModified() )
     {
-        Fraction aUIScale = mpView->GetModel()->GetUIScale();
+        Fraction aUIScale = mpView->getSdrModelFromSdrView().GetUIScale();
 
         // get Width
         double nWidth = static_cast<double>(maMtrWidth.GetValue( meDlgUnit ));
@@ -999,7 +1019,7 @@ sal_Bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
 void SvxPositionSizeTabPage::Reset( const SfxItemSet&  )
 {
     const SfxPoolItem* pItem;
-    const double fUIScale(double(mpView->GetModel()->GetUIScale()));
+    const double fUIScale(double(mpView->getSdrModelFromSdrView().GetUIScale()));
 
     if ( !mbPageDisabled )
     {

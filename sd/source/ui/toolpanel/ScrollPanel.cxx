@@ -76,10 +76,10 @@ void ScrollPanel::Construct()
     // Initialize the scroll bars.
     maVerticalScrollBar.SetScrollHdl (
         LINK(this, ScrollPanel, ScrollBarHandler));
-    maVerticalScrollBar.EnableDrag (sal_True);
+    maVerticalScrollBar.EnableDrag (true);
     maHorizontalScrollBar.SetScrollHdl (
         LINK(this, ScrollPanel, ScrollBarHandler));
-    maHorizontalScrollBar.EnableDrag (sal_True);
+    maHorizontalScrollBar.EnableDrag (true);
 }
 
 
@@ -652,15 +652,12 @@ IMPL_LINK(ScrollPanel, ScrollBarHandler, ScrollBar*, EMPTYARG)
 
 long ScrollPanel::Notify( NotifyEvent& rNEvt )
 {
-    long nRet = sal_False;
+    long nRet = false;
     if( rNEvt.GetType() == EVENT_COMMAND )
     {
         // note: dynamic_cast is not possible as GetData() returns a void*
         CommandEvent* pCmdEvent = reinterpret_cast< CommandEvent* >(rNEvt.GetData());
-        DBG_ASSERT( pCmdEvent!=0 &&
-                    ( pCmdEvent->IsMouseEvent() == sal_True ||
-                      pCmdEvent->IsMouseEvent() == sal_False ),
-                    "Invalid CommandEvent" );
+        DBG_ASSERT( pCmdEvent, "Invalid CommandEvent" );
         if (pCmdEvent)
             switch (pCmdEvent->GetCommand())
             {

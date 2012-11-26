@@ -50,7 +50,7 @@
 #include "fmprop.hrc"
 #endif
 #include <svx/dialmgr.hxx>
-#include "svx/svditer.hxx"
+#include <svx/svditer.hxx>
 #include <svx/svdouno.hxx>
 #include <fmundo.hxx>
 #include <svx/svdobj.hxx>
@@ -100,135 +100,107 @@ SV_IMPL_PTRARR_SORT( SvLBoxEntrySortedArray, SvLBoxEntryPtr )
 //========================================================================
 // class FmNavInsertedHint
 //========================================================================
-TYPEINIT1( FmNavInsertedHint, SfxHint );
-DBG_NAME(FmNavInsertedHint);
 //------------------------------------------------------------------------
 FmNavInsertedHint::FmNavInsertedHint( FmEntryData* pInsertedEntryData, sal_uInt32 nRelPos )
     :pEntryData( pInsertedEntryData )
     ,nPos( nRelPos )
 
 {
-    DBG_CTOR(FmNavInsertedHint,NULL);
 }
 
 //------------------------------------------------------------------------
 FmNavInsertedHint::~FmNavInsertedHint()
 {
-    DBG_DTOR(FmNavInsertedHint,NULL);
 }
 
 
 //========================================================================
 // class FmNavInsertedHint
 //========================================================================
-TYPEINIT1( FmNavModelReplacedHint, SfxHint );
-DBG_NAME(FmNavModelReplacedHint);
 //------------------------------------------------------------------------
 FmNavModelReplacedHint::FmNavModelReplacedHint( FmEntryData* pAffectedEntryData )
     :pEntryData( pAffectedEntryData )
 {
-    DBG_CTOR(FmNavModelReplacedHint,NULL);
 }
 
 //------------------------------------------------------------------------
 FmNavModelReplacedHint::~FmNavModelReplacedHint()
 {
-    DBG_DTOR(FmNavModelReplacedHint,NULL);
 }
 
 //========================================================================
 // class FmNavRemovedHint
 //========================================================================
-TYPEINIT1( FmNavRemovedHint, SfxHint );
-DBG_NAME(FmNavRemovedHint);
 //------------------------------------------------------------------------
 FmNavRemovedHint::FmNavRemovedHint( FmEntryData* pRemovedEntryData )
     :pEntryData( pRemovedEntryData )
 {
-    DBG_CTOR(FmNavRemovedHint,NULL);
 }
 
 //------------------------------------------------------------------------
 FmNavRemovedHint::~FmNavRemovedHint()
 {
-    DBG_DTOR(FmNavRemovedHint,NULL);
 }
 
 
 //========================================================================
 // class FmNavNameChangedHint
 //========================================================================
-TYPEINIT1( FmNavNameChangedHint, SfxHint );
-DBG_NAME(FmNavNameChangedHint);
 //------------------------------------------------------------------------
 FmNavNameChangedHint::FmNavNameChangedHint( FmEntryData* pData, const ::rtl::OUString& rNewName )
     :pEntryData( pData )
     ,aNewName( rNewName )
 {
-    DBG_CTOR(FmNavNameChangedHint,NULL);
 }
 
 //------------------------------------------------------------------------
 FmNavNameChangedHint::~FmNavNameChangedHint()
 {
-    DBG_DTOR(FmNavNameChangedHint,NULL);
 }
 
 //========================================================================
 // class FmNavClearedHint
 //========================================================================
-TYPEINIT1( FmNavClearedHint, SfxHint );
-DBG_NAME(FmNavClearedHint);
 //------------------------------------------------------------------------
 FmNavClearedHint::FmNavClearedHint()
 {
-    DBG_CTOR(FmNavClearedHint,NULL);
 }
 
 //------------------------------------------------------------------------
 FmNavClearedHint::~FmNavClearedHint()
 {
-    DBG_DTOR(FmNavClearedHint,NULL);
 }
 
 //========================================================================
 // class FmNavRequestSelectHint
 //========================================================================
-TYPEINIT1(FmNavRequestSelectHint, SfxHint);
 
 //========================================================================
 // class FmNavViewMarksChanged
 //========================================================================
-TYPEINIT1(FmNavViewMarksChanged, SfxHint);
 
 //========================================================================
 // class FmEntryDataList
 //========================================================================
-DBG_NAME(FmEntryDataList);
 //------------------------------------------------------------------------
 FmEntryDataList::FmEntryDataList()
 {
-    DBG_CTOR(FmEntryDataList,NULL);
 }
 
 //------------------------------------------------------------------------
 FmEntryDataList::~FmEntryDataList()
 {
-    DBG_DTOR(FmEntryDataList,NULL);
 }
 
 
 //========================================================================
 // class FmEntryData
 //========================================================================
-TYPEINIT0( FmEntryData );
-DBG_NAME(FmEntryData);
 //------------------------------------------------------------------------
 FmEntryData::FmEntryData( FmEntryData* pParentData, const Reference< XInterface >& _rxIFace )
     :pParent( pParentData )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmEntryData::FmEntryData" );
-    DBG_CTOR(FmEntryData,NULL);
     pChildList = new FmEntryDataList();
 
     newObject( _rxIFace );
@@ -239,7 +211,6 @@ FmEntryData::~FmEntryData()
 {
     Clear();
     delete pChildList;
-    DBG_DTOR(FmEntryData,NULL);
 }
 
 //------------------------------------------------------------------------
@@ -321,14 +292,11 @@ sal_Bool FmEntryData::IsEqualWithoutChilds( FmEntryData* pEntryData )
 //========================================================================
 // class FmFormData
 //========================================================================
-TYPEINIT1( FmFormData, FmEntryData );
-DBG_NAME(FmFormData);
 //------------------------------------------------------------------------
 FmFormData::FmFormData( const Reference< XForm >& _rxForm, const ImageList& _rNormalImages, const ImageList& _rHCImages, FmFormData* _pParent )
     :FmEntryData( _pParent, _rxForm )
     ,m_xForm( _rxForm )
 {
-    DBG_CTOR(FmEntryData,NULL);
     //////////////////////////////////////////////////////////////////////
     // Images setzen
 
@@ -353,14 +321,12 @@ FmFormData::FmFormData( const Reference< XForm >& _rxForm, const ImageList& _rNo
 //------------------------------------------------------------------------
 FmFormData::~FmFormData()
 {
-    DBG_DTOR(FmEntryData,NULL);
 }
 
 //------------------------------------------------------------------------
 FmFormData::FmFormData( const FmFormData& rFormData )
     :FmEntryData( rFormData )
 {
-    DBG_CTOR(FmEntryData,NULL);
     m_xForm = rFormData.GetFormIface();
 }
 
@@ -375,9 +341,12 @@ sal_Bool FmFormData::IsEqualWithoutChilds( FmEntryData* pEntryData )
 {
     if(this == pEntryData)
         return sal_True;
-    if( !pEntryData->ISA(FmFormData) )
+
+    FmFormData* pFormData = dynamic_cast< FmFormData* >(pEntryData);
+
+    if( !pFormData )
         return sal_False;
-    FmFormData* pFormData = (FmFormData*)pEntryData;
+
     if( (XForm*)m_xForm.get() != (XForm*)pFormData->GetFormIface().get() )
         return sal_False;
 
@@ -388,15 +357,12 @@ sal_Bool FmFormData::IsEqualWithoutChilds( FmEntryData* pEntryData )
 //========================================================================
 // class FmControlData
 //========================================================================
-TYPEINIT1( FmControlData, FmEntryData );
-DBG_NAME(FmControlData);
 //------------------------------------------------------------------------
 FmControlData::FmControlData( const Reference< XFormComponent >& _rxComponent, const ImageList& _rNormalImages, const ImageList& _rHCImages, FmFormData* _pParent )
     :FmEntryData( _pParent, _rxComponent )
     ,m_xFormComponent( _rxComponent )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmControlData::FmControlData" );
-    DBG_CTOR(FmControlData,NULL);
     //////////////////////////////////////////////////////////////////////
     // Images setzen
     m_aNormalImage = GetImage( _rNormalImages );
@@ -417,14 +383,12 @@ FmControlData::FmControlData( const Reference< XFormComponent >& _rxComponent, c
 //------------------------------------------------------------------------
 FmControlData::~FmControlData()
 {
-    DBG_DTOR(FmControlData,NULL);
 }
 
 //------------------------------------------------------------------------
 FmControlData::FmControlData( const FmControlData& rControlData )
     :FmEntryData( rControlData )
 {
-    DBG_CTOR(FmControlData,NULL);
     m_xFormComponent = rControlData.GetFormComponent();
 }
 
@@ -550,9 +514,10 @@ sal_Bool FmControlData::IsEqualWithoutChilds( FmEntryData* pEntryData )
     if(this == pEntryData)
         return sal_True;
 
-    if( !pEntryData->ISA(FmControlData) )
+    FmControlData* pControlData = dynamic_cast< FmControlData* >(pEntryData);
+
+    if( !pControlData )
         return sal_False;
-    FmControlData* pControlData = (FmControlData*)pEntryData;
 
     if( (XFormComponent*)m_xFormComponent.get() != (XFormComponent*)pControlData->GetFormComponent().get() )
         return sal_False;
@@ -580,14 +545,12 @@ namespace svxform
     //========================================================================
     // class NavigatorFrame
     //========================================================================
-    DBG_NAME(NavigatorFrame)
     //------------------------------------------------------------------------
     NavigatorFrame::NavigatorFrame( SfxBindings* _pBindings, SfxChildWindow* _pMgr,
                                   Window* _pParent )
       :SfxDockingWindow( _pBindings, _pMgr, _pParent, WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_ROLLABLE|WB_3DLOOK|WB_DOCKABLE) )
       ,SfxControllerItem( SID_FM_FMEXPLORER_CONTROL, *_pBindings )
     {
-        DBG_CTOR(NavigatorFrame,NULL);
         SetHelpId( HID_FORM_NAVIGATOR_WIN );
 
         m_pNavigatorTree = new NavigatorTree(comphelper::getProcessServiceFactory(), this );
@@ -600,7 +563,6 @@ namespace svxform
     NavigatorFrame::~NavigatorFrame()
     {
         delete m_pNavigatorTree;
-        DBG_DTOR(NavigatorFrame,NULL);
     }
 
     //-----------------------------------------------------------------------
@@ -617,7 +579,7 @@ namespace svxform
 
         if( eState >= SFX_ITEM_AVAILABLE )
         {
-            FmFormShell* pShell = PTR_CAST( FmFormShell,((SfxObjectItem*)pState)->GetShell() );
+            FmFormShell* pShell = dynamic_cast< FmFormShell* >( ((SfxObjectItem*)pState)->GetShell() );
             UpdateContent( pShell );
         }
         else

@@ -30,7 +30,6 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
-
 #include <numeric>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -47,7 +46,7 @@ namespace basegfx
             for(sal_uInt32 a(0L); a < nCount; a++)
             {
                 const B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
-                const B2VectorOrientation aOrientation(tools::getOrientation(aCandidate));
+                const B2VectorOrientation aOrientation(getOrientation(aCandidate));
                 sal_uInt32 nDepth(0L);
 
                 for(sal_uInt32 b(0L); b < nCount; b++)
@@ -56,7 +55,7 @@ namespace basegfx
                     {
                         const B2DPolygon aCompare(rCandidate.getB2DPolygon(b));
 
-                        if(tools::isInside(aCompare, aCandidate, true))
+                        if(isInside(aCompare, aCandidate, true))
                         {
                             nDepth++;
                         }
@@ -94,7 +93,7 @@ namespace basegfx
                         {
                             const B2DPolygon aCompare(rCandidate.getB2DPolygon(b));
 
-                            if(tools::isInside(aCompare, aCandidate, true))
+                            if(isInside(aCompare, aCandidate, true))
                             {
                                 nDepth++;
                             }
@@ -134,7 +133,7 @@ namespace basegfx
 
                     if(aCandidate.areControlPointsUsed())
                     {
-                        aRetval.append(tools::adaptiveSubdivideByDistance(aCandidate, fDistanceBound));
+                        aRetval.append(adaptiveSubdivideByDistance(aCandidate, fDistanceBound));
                     }
                     else
                     {
@@ -163,7 +162,7 @@ namespace basegfx
 
                     if(aCandidate.areControlPointsUsed())
                     {
-                        aRetval.append(tools::adaptiveSubdivideByAngle(aCandidate, fAngleBound));
+                        aRetval.append(adaptiveSubdivideByAngle(aCandidate, fAngleBound));
                     }
                     else
                     {
@@ -192,7 +191,7 @@ namespace basegfx
 
                     if(aCandidate.areControlPointsUsed())
                     {
-                        aRetval.append(tools::adaptiveSubdivideByCount(aCandidate, nCount));
+                        aRetval.append(adaptiveSubdivideByCount(aCandidate, nCount));
                     }
                     else
                     {
@@ -218,7 +217,7 @@ namespace basegfx
             }
             else
             {
-                sal_Int32 nInsideCount(0L);
+                sal_uInt32 nInsideCount(0);
 
                 for(sal_uInt32 a(0L); a < nPolygonCount; a++)
                 {
@@ -243,7 +242,7 @@ namespace basegfx
             for(sal_uInt32 a(0L); a < nPolygonCount; a++)
             {
                 B2DPolygon aCandidate = rCandidate.getB2DPolygon(a);
-                aRetval.expand(tools::getRangeWithControlPoints(aCandidate));
+                aRetval.expand(getRangeWithControlPoints(aCandidate));
             }
 
             return aRetval;
@@ -257,7 +256,7 @@ namespace basegfx
             for(sal_uInt32 a(0L); a < nPolygonCount; a++)
             {
                 B2DPolygon aCandidate = rCandidate.getB2DPolygon(a);
-                aRetval.expand(tools::getRange(aCandidate));
+                aRetval.expand(getRange(aCandidate));
             }
 
             return aRetval;
@@ -592,6 +591,119 @@ namespace basegfx
             }
 
             return aRetval;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
+        // converters for com::sun::star::drawing::PointSequence
+
+        B2DPolyPolygon UnoPointSequenceSequenceToB2DPolyPolygon(
+            const com::sun::star::drawing::PointSequenceSequence& rPointSequenceSequenceSource,
+            bool bCheckClosed)
+        {
+            B2DPolyPolygon aRetval;
+            const com::sun::star::drawing::PointSequence* pPointSequence = rPointSequenceSequenceSource.getConstArray();
+            const com::sun::star::drawing::PointSequence* pPointSeqEnd = pPointSequence + rPointSequenceSequenceSource.getLength();
+
+            for(;pPointSequence != pPointSeqEnd; pPointSequence++)
+            {
+                const B2DPolygon aNewPolygon = UnoPointSequenceToB2DPolygon(*pPointSequence, bCheckClosed);
+                aRetval.append(aNewPolygon);
+            }
+
+            return aRetval;
+        }
+
+        void B2DPolyPolygonToUnoPointSequenceSequence(
+            const B2DPolyPolygon& rPolyPolygon,
+            com::sun::star::drawing::PointSequenceSequence& rPointSequenceSequenceRetval)
+        {
+            const sal_uInt32 nCount(rPolyPolygon.count());
+
+            if(nCount)
+            {
+                rPointSequenceSequenceRetval.realloc(nCount);
+                com::sun::star::drawing::PointSequence* pPointSequence = rPointSequenceSequenceRetval.getArray();
+
+                for(sal_uInt32 a(0); a < nCount; a++)
+                {
+                    const B2DPolygon aPolygon(rPolyPolygon.getB2DPolygon(a));
+
+                    B2DPolygonToUnoPointSequence(aPolygon, *pPointSequence);
+                    pPointSequence++;
+                }
+            }
+            else
+            {
+                rPointSequenceSequenceRetval.realloc(0);
+            }
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
+        // converters for com::sun::star::drawing::PolyPolygonBezierCoords (curved polygons)
+
+        B2DPolyPolygon UnoPolyPolygonBezierCoordsToB2DPolyPolygon(
+            const com::sun::star::drawing::PolyPolygonBezierCoords& rPolyPolygonBezierCoordsSource,
+            bool bCheckClosed)
+        {
+            B2DPolyPolygon aRetval;
+            const sal_uInt32 nSequenceCount((sal_uInt32)rPolyPolygonBezierCoordsSource.Coordinates.getLength());
+
+            if(nSequenceCount)
+            {
+                OSL_ENSURE(nSequenceCount == (sal_uInt32)rPolyPolygonBezierCoordsSource.Flags.getLength(),
+                    "UnoPolyPolygonBezierCoordsToB2DPolyPolygon: unequal number of Points and Flags (!)");
+                const com::sun::star::drawing::PointSequence* pPointSequence = rPolyPolygonBezierCoordsSource.Coordinates.getConstArray();
+                const com::sun::star::drawing::FlagSequence* pFlagSequence = rPolyPolygonBezierCoordsSource.Flags.getConstArray();
+
+                for(sal_uInt32 a(0); a < nSequenceCount; a++)
+                {
+                    const B2DPolygon aNewPolygon(UnoPolygonBezierCoordsToB2DPolygon(
+                        *pPointSequence,
+                        *pFlagSequence,
+                        bCheckClosed));
+
+                    pPointSequence++;
+                    pFlagSequence++;
+                    aRetval.append(aNewPolygon);
+                }
+            }
+
+            return aRetval;
+        }
+
+        void B2DPolyPolygonToUnoPolyPolygonBezierCoords(
+            const B2DPolyPolygon& rPolyPolygon,
+            com::sun::star::drawing::PolyPolygonBezierCoords& rPolyPolygonBezierCoordsRetval)
+        {
+            const sal_uInt32 nCount(rPolyPolygon.count());
+
+            if(nCount)
+            {
+                // prepare return value memory
+                rPolyPolygonBezierCoordsRetval.Coordinates.realloc((sal_Int32)nCount);
+                rPolyPolygonBezierCoordsRetval.Flags.realloc((sal_Int32)nCount);
+
+                // get pointers to arrays
+                com::sun::star::drawing::PointSequence* pPointSequence = rPolyPolygonBezierCoordsRetval.Coordinates.getArray();
+                com::sun::star::drawing::FlagSequence*  pFlagSequence = rPolyPolygonBezierCoordsRetval.Flags.getArray();
+
+                for(sal_uInt32 a(0); a < nCount; a++)
+                {
+                    const B2DPolygon aSource(rPolyPolygon.getB2DPolygon(a));
+
+                    B2DPolygonToUnoPolygonBezierCoords(
+                        aSource,
+                        *pPointSequence,
+                        *pFlagSequence);
+                    pPointSequence++;
+                    pFlagSequence++;
+                }
+            }
+            else
+            {
+                rPolyPolygonBezierCoordsRetval.Coordinates.realloc(0);
+                rPolyPolygonBezierCoordsRetval.Flags.realloc(0);
+            }
         }
 
     } // end of namespace tools

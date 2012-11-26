@@ -52,7 +52,7 @@ public:
     virtual void TakeSdrDragComment(String& rStr) const;
 
     virtual bool BeginSdrDrag();
-    virtual void MoveSdrDrag(const Point& rPnt);
+    virtual void MoveSdrDrag(const basegfx::B2DPoint& rPnt);
     virtual bool EndSdrDrag(bool bCopy);
 
     virtual void CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlayManager);
@@ -60,8 +60,8 @@ public:
 private:
     E3dScene*   m_pScene;
 
-    Rectangle   m_aReferenceRect;
-    Point       m_aStartPos;
+    basegfx::B2DRange       m_aReferenceRect;
+    basegfx::B2DPoint       m_aStartPos;
     basegfx::B3DPolyPolygon m_aWireframePolyPolygon;
 
     double      m_fInitialXAngleRad;

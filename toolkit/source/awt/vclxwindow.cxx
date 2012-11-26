@@ -452,8 +452,8 @@ IMPL_LINK( VCLXWindow, WindowEventListener, VclSimpleEvent*, pEvent )
     if ( mpImpl->mnListenerLockLevel )
         return 0L;
 
-    DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
-    if ( pEvent && pEvent->ISA( VclWindowEvent ) )
+    DBG_ASSERT( pEvent && dynamic_cast< VclWindowEvent* >(pEvent), "Unknown WindowEvent!" );
+    if ( pEvent && dynamic_cast< VclWindowEvent* >(pEvent) )
     {
         DBG_ASSERT( ((VclWindowEvent*)pEvent)->GetWindow() && GetWindow(), "Window???" );
         ProcessWindowEvent( *(VclWindowEvent*)pEvent );

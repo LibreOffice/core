@@ -457,21 +457,21 @@ bool SbiRuntime::checkClass_Impl( const SbxVariableRef& refVal,
     {
         SbxObject* pObj;
         SbxVariable* pVal = (SbxVariable*)refVal;
-        if( pVal->IsA( TYPE(SbxObject) ) )
+        if( dynamic_cast< SbxObject* >(pVal) )
             pObj = (SbxObject*) pVal;
         else
         {
             pObj = (SbxObject*) refVal->GetObject();
-            if( pObj && !pObj->IsA( TYPE(SbxObject) ) )
+            if( pObj && !dynamic_cast< SbxObject* >(pObj) )
                 pObj = NULL;
         }
         if( pObj )
         {
             if( !implIsClass( pObj, aClass ) )
             {
-                if ( bVBAEnabled && pObj->IsA( TYPE(SbUnoObject) ) )
+                if ( bVBAEnabled && dynamic_cast< SbUnoObject* >(pObj) )
                 {
-                    SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,pObj);
+                    SbUnoObject* pUnoObj = dynamic_cast< SbUnoObject* >( pObj);
                     bOk = checkUnoObjectType( pUnoObj, aClass );
                 }
                 else
@@ -486,7 +486,7 @@ bool SbiRuntime::checkClass_Impl( const SbxVariableRef& refVal,
             {
                 bOk = true;
 
-                SbClassModuleObject* pClassModuleObject = PTR_CAST(SbClassModuleObject,pObj);
+                SbClassModuleObject* pClassModuleObject = dynamic_cast< SbClassModuleObject* >( pObj);
                 if( pClassModuleObject != NULL )
                     pClassModuleObject->triggerInitializeEvent();
             }

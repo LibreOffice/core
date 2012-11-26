@@ -51,8 +51,6 @@ class XMLTextFrameHyperlinkContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLTextFrameHyperlinkContext( SvXMLImport& rImport,
             sal_uInt16 nPrfx,
             const ::rtl::OUString& rLName,

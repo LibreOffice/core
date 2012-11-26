@@ -97,9 +97,6 @@ public:
 //#endif
 
 public:
-
-                        TYPEINFO();
-
                         Graphic();
                         Graphic( const Graphic& rGraphic );
                         Graphic( const Bitmap& rBmp );

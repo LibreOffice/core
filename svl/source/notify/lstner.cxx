@@ -40,9 +40,6 @@ SV_DECL_PTRARR( SfxBroadcasterArr_Impl, SfxBroadcaster*, 0, 2 )
 
 //====================================================================
 DBG_NAME(SfxListener)
-TYPEINIT0(SfxListener);
-
-//====================================================================
 // simple ctor of class SfxListener
 
 SfxListener::SfxListener()

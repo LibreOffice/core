@@ -41,10 +41,8 @@
 class EDITENG_DLLPUBLIC SvxCharScaleWidthItem : public SfxUInt16Item
 {
 public:
-    TYPEINFO();
-
-    SvxCharScaleWidthItem( sal_uInt16 nValue /*= 100*/,
-                            const sal_uInt16 nId );
+    POOLITEM_FACTORY()
+    SvxCharScaleWidthItem( sal_uInt16 nValue = 100, const sal_uInt16 nId = 0 );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;

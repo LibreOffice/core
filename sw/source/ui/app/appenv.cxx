@@ -237,7 +237,7 @@ static sal_uInt16 nTitleNo = 0;
     SfxAbstractTabDialog * pDlg=NULL;
     short nMode = ENV_INSERT;
 
-    SFX_REQUEST_ARG( rReq, pItem, SwEnvItem, FN_ENVELOP, sal_False );
+    SFX_REQUEST_ARG( rReq, pItem, SwEnvItem, FN_ENVELOP );
     if ( !pItem )
     {
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
@@ -249,7 +249,7 @@ static sal_uInt16 nTitleNo = 0;
     }
     else
     {
-        SFX_REQUEST_ARG( rReq, pBoolItem, SfxBoolItem, FN_PARAM_1, sal_False );
+        SFX_REQUEST_ARG( rReq, pBoolItem, SfxBoolItem, FN_PARAM_1 );
         if ( pBoolItem && pBoolItem->GetValue() )
             nMode = ENV_NEWDOC;
     }

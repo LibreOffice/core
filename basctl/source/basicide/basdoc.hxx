@@ -46,8 +46,6 @@ protected:
                                sal_Bool bTemplate = sal_False ) const;
 
 public:
-                        TYPEINFO();
-
                         using SotObject::GetInterface;
                         SFX_DECL_OBJECTFACTORY();
                         SFX_DECL_INTERFACE( SVX_INTERFACE_BASIDE_DOCSH )

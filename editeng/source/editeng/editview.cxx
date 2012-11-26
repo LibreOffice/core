@@ -1381,7 +1381,7 @@ const SvxFieldItem* EditView::GetFieldAtSelection() const
             if ( pAttr->GetStart() == nXPos )
                 if ( pAttr->Which() == EE_FEATURE_FIELD )
                 {
-                    DBG_ASSERT( pAttr->GetItem()->ISA( SvxFieldItem ), "Kein FeldItem..." );
+                    DBG_ASSERT( dynamic_cast< const SvxFieldItem* >(pAttr->GetItem()), "Kein FeldItem..." );
                     return (const SvxFieldItem*)pAttr->GetItem();
                 }
         }

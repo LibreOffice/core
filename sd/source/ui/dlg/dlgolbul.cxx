@@ -42,7 +42,6 @@
 
 #include <svx/dialogs.hrc>
 #include <svl/intitem.hxx>
-#include <svx/svdmark.hxx>
 #include "View.hxx"
 #include <svx/svdobj.hxx>
 #include <svl/style.hxx>
@@ -73,7 +72,7 @@ OutlineBulletDlg::OutlineBulletDlg(
     ::sd::View* pView )
     : SfxTabDialog  ( pParent, SdResId(TAB_OUTLINEBULLET) ),
       aInputSet     ( *pAttr ),
-      bTitle            ( sal_False ),
+      bTitle            ( false ),
       pSdView           ( pView )
 {
     FreeResource();
@@ -84,26 +83,26 @@ OutlineBulletDlg::OutlineBulletDlg(
     pOutputSet = new SfxItemSet( *pAttr );
     pOutputSet->ClearItem();
 
-    sal_Bool bOutliner = sal_False;
+    bool bOutliner = false;
 
     // Sonderbehandlung wenn eine Title Objekt selektiert wurde
     if( pView )
     {
-        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-        const sal_uLong nCount = rMarkList.GetMarkCount();
-        for(sal_uLong nNum = 0; nNum < nCount; nNum++)
+        const SdrObjectVector aSelection(pView->getSelectedSdrObjectVectorFromSdrMarkView());
+
+        for(sal_uInt32 nNum(0); nNum < aSelection.size(); nNum++)
         {
-            SdrObject* pObj = rMarkList.GetMark(nNum)->GetMarkedSdrObj();
+            const SdrObject* pObj = aSelection[nNum];
+
             if( pObj->GetObjInventor() == SdrInventor )
             {
-
                 switch(pObj->GetObjIdentifier())
                 {
                 case OBJ_TITLETEXT:
-                    bTitle = sal_True;
+                    bTitle = true;
                     break;
                 case OBJ_OUTLINETEXT:
-                    bOutliner = sal_True;
+                    bOutliner = true;
                     break;
                 }
             }
@@ -120,7 +119,7 @@ OutlineBulletDlg::OutlineBulletDlg(
             aStyleName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " 1" ) );
             SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( aStyleName, SD_STYLE_FAMILY_PSEUDO);
             if( pFirstStyleSheet )
-                pFirstStyleSheet->GetItemSet().GetItemState(EE_PARA_NUMBULLET, sal_False, (const SfxPoolItem**)&pItem);
+                pFirstStyleSheet->GetItemSet().GetItemState(EE_PARA_NUMBULLET, false, (const SfxPoolItem**)&pItem);
         }
 
         if( pItem == NULL )
@@ -131,25 +130,14 @@ OutlineBulletDlg::OutlineBulletDlg(
         aInputSet.Put(*pItem, EE_PARA_NUMBULLET);
     }
 
-    /* debug
-    if( SFX_ITEM_SET == aInputSet.GetItemState(EE_PARA_NUMBULLET, sal_False, &pItem ))
+    if(bTitle && aInputSet.GetItemState(EE_PARA_NUMBULLET,true) == SFX_ITEM_ON )
     {
-        SvxNumRule& rItem = *((SvxNumBulletItem*)pItem)->GetNumRule();
-        for( int i = 0; i < 9; i++ )
-        {
-            SvxNumberFormat aNumberFormat = rItem.GetLevel(i);
-        }
-    }
-    */
-
-    if(bTitle && aInputSet.GetItemState(EE_PARA_NUMBULLET,sal_True) == SFX_ITEM_ON )
-    {
-        SvxNumBulletItem* pItem = (SvxNumBulletItem*)aInputSet.GetItem(EE_PARA_NUMBULLET,sal_True);
+        SvxNumBulletItem* pItem = (SvxNumBulletItem*)aInputSet.GetItem(EE_PARA_NUMBULLET,true);
         SvxNumRule* pRule = pItem->GetNumRule();
         if(pRule)
         {
             SvxNumRule aNewRule( *pRule );
-            aNewRule.SetFeatureFlag( NUM_NO_NUMBERS, sal_True );
+            aNewRule.SetFeatureFlag( NUM_NO_NUMBERS, true );
 
             SvxNumBulletItem aNewItem( aNewRule, EE_PARA_NUMBULLET );
             aInputSet.Put(aNewItem);
@@ -210,26 +198,17 @@ const SfxItemSet* OutlineBulletDlg::GetOutputItemSet() const
     pOutputSet->Put( aSet );
 
     const SfxPoolItem *pItem = NULL;
-    if( SFX_ITEM_SET == pOutputSet->GetItemState(pOutputSet->GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE), sal_False, &pItem ))
+    if( SFX_ITEM_SET == pOutputSet->GetItemState(pOutputSet->GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE), false, &pItem ))
     {
         SdBulletMapper::MapFontsInNumRule( *((SvxNumBulletItem*)pItem)->GetNumRule(), *pOutputSet );
-
-/* #i35937#
-        SfxUInt16Item aBulletState( EE_PARA_BULLETSTATE, 1 );
-        pOutputSet->Put(aBulletState);
-*/
     }
 
-/* #i35937#
-    SdBulletMapper::PostMapNumBulletForDialog( *pOutputSet );
-*/
-
-    if(bTitle && pOutputSet->GetItemState(EE_PARA_NUMBULLET,sal_True) == SFX_ITEM_ON )
+    if(bTitle && pOutputSet->GetItemState(EE_PARA_NUMBULLET,true) == SFX_ITEM_ON )
     {
-        SvxNumBulletItem* pBulletItem = (SvxNumBulletItem*)pOutputSet->GetItem(EE_PARA_NUMBULLET,sal_True);
+        SvxNumBulletItem* pBulletItem = (SvxNumBulletItem*)pOutputSet->GetItem(EE_PARA_NUMBULLET,true);
         SvxNumRule* pRule = pBulletItem->GetNumRule();
         if(pRule)
-            pRule->SetFeatureFlag( NUM_NO_NUMBERS, sal_False );
+            pRule->SetFeatureFlag( NUM_NO_NUMBERS, false );
     }
 
     return pOutputSet;

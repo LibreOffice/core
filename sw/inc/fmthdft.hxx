@@ -46,8 +46,6 @@ public:
     ~SwFmtHeader();
     SwFmtHeader& operator=( const SwFmtHeader &rCpy );
 
-    TYPEINFO();
-
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
@@ -79,8 +77,6 @@ public:
     SwFmtFooter( const SwFmtFooter &rCpy );
     ~SwFmtFooter();
     SwFmtFooter& operator=( const SwFmtFooter &rCpy );
-
-    TYPEINFO();
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;

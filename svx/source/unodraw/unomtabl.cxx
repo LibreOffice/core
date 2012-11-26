@@ -130,9 +130,9 @@ void SvxUnoMarkerTable::dispose()
 // SfxListener
 void SvxUnoMarkerTable::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
 {
-    const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
+    const SdrBaseHint* pSdrHint = dynamic_cast< const SdrBaseHint* >(&rHint);
 
-    if( pSdrHint && HINT_MODELCLEARED == pSdrHint->GetKind() )
+    if( pSdrHint && HINT_MODELCLEARED == pSdrHint->GetSdrHintKind() )
         dispose();
 }
 

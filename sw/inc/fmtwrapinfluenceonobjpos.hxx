@@ -34,8 +34,6 @@ private:
     sal_Int16 mnWrapInfluenceOnPosition;
 
 public:
-    TYPEINFO();
-
     // --> OD 2004-10-18 #i35017# - constant name has changed
     SwFmtWrapInfluenceOnObjPos(
             sal_Int16 _nWrapInfluenceOnPosition =

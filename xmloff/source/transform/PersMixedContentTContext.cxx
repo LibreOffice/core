@@ -39,8 +39,6 @@ class XMLPersTextTContext_Impl : public XMLTransformerContext
     ::rtl::OUString m_aCharacters;
 
 public:
-    TYPEINFO();
-
     XMLPersTextTContext_Impl( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rChars );
     virtual ~XMLPersTextTContext_Impl();
@@ -57,8 +55,6 @@ public:
     virtual void Export();
     const ::rtl::OUString& GetText() const { return m_aCharacters; }
 };
-
-TYPEINIT1( XMLPersTextTContext_Impl, XMLTransformerContext );
 
 XMLPersTextTContext_Impl::XMLPersTextTContext_Impl(
         XMLTransformerBase& rImp,
@@ -109,8 +105,6 @@ void XMLPersTextTContext_Impl::Export()
 }
 
 //------------------------------------------------------------------------------
-
-TYPEINIT1( XMLPersMixedContentTContext, XMLPersElemContentTContext );
 
 XMLPersMixedContentTContext::XMLPersMixedContentTContext(
         XMLTransformerBase& rImp,

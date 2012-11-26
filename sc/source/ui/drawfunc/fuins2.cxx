@@ -50,8 +50,8 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>
+#include <svx/svdlegacy.hxx>
 #include <sfx2/msgpool.hxx>
-#include <svx/charthelper.hxx>
 #include <scmod.hxx>
 
 // BM/IHA --
@@ -89,6 +89,8 @@ using namespace ::com::sun::star;
 #include "uiitems.hxx"
 #include "globstr.hrc"
 #include "drawview.hxx"
+
+extern SdrObject* pSkipPaintObj;            // output.cxx - dieses Objekt nicht zeichnen
 
 //------------------------------------------------------------------------
 
@@ -232,7 +234,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
 
 
     sal_uInt16 nSlot = rReq.GetSlot();
-    SFX_REQUEST_ARG( rReq, pNameItem, SfxGlobalNameItem, SID_INSERT_OBJECT, sal_False );
+    SFX_REQUEST_ARG( rReq, pNameItem, SfxGlobalNameItem, SID_INSERT_OBJECT );
     if ( nSlot == SID_INSERT_OBJECT && pNameItem )
     {
         SvGlobalName aClassName = pNameItem->GetValue();
@@ -330,14 +332,15 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
         try
         {
             ::svt::EmbeddedObjectRef aObjRef( xObj, nAspect );
-            Size aSize;
-            MapMode aMap100( MAP_100TH_MM );
-            MapUnit aMapUnit = MAP_100TH_MM;
+            basegfx::B2DVector aScale;
+            MapUnit aMapUnit(MAP_100TH_MM);
 
             if ( nAspect == embed::Aspects::MSOLE_ICON )
             {
                 aObjRef.SetGraphicStream( xIconMetaFile, aIconMediaType );
-                aSize = aObjRef.GetSize( &aMap100 );
+                MapMode aMap100( MAP_100TH_MM );
+                const Size aSize(aObjRef.GetSize( &aMap100 ));
+                aScale = basegfx::B2DVector(aSize.Width(), aSize.Height());
             }
             else
             {
@@ -351,26 +354,22 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
                     // the default size will be set later
                 }
 
-                aSize = Size( aSz.Width, aSz.Height );
-
+                aScale = basegfx::B2DVector( aSz.Width, aSz.Height );
                 aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
-                if (aSize.Height() == 0 || aSize.Width() == 0)
+
+                if(basegfx::fTools::equalZero(aScale.getY()) || basegfx::fTools::equalZero(aScale.getX()))
                 {
                     // Rechteck mit ausgewogenem Kantenverhaeltnis
-                    aSize.Width() = 5000;
-                    aSize.Height() = 5000;
-                    Size aTmp = OutputDevice::LogicToLogic( aSize, MAP_100TH_MM, aMapUnit );
-                    aSz.Width = aTmp.Width();
-                    aSz.Height = aTmp.Height();
+                    aScale = basegfx::B2DVector(5000.0, 5000.0);
+
+                    basegfx::B2DVector aTmp(aScale * OutputDevice::GetFactorLogicToLogic(MAP_100TH_MM, aMapUnit));
+                    aSz.Width = basegfx::fround(aTmp.getX());
+                    aSz.Height = basegfx::fround(aTmp.getY());
                     xObj->setVisualAreaSize( nAspect, aSz );
+                }
 
                     //  re-convert aSize to 1/100th mm to avoid rounding errors in comparison below
-                    aSize = Window::LogicToLogic( aTmp,
-                                    MapMode( aMapUnit ), aMap100 );
-                }
-                else
-                    aSize = Window::LogicToLogic( aSize,
-                                    MapMode( aMapUnit ), aMap100 );
+                aScale *= Window::GetFactorLogicToLogic(aMapUnit, MAP_100TH_MM);
             }
 
             //  Chart initialisieren ?
@@ -379,31 +378,42 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
 
             ScViewData* pData = pViewSh->GetViewData();
 
-            Point aPnt = pViewSh->GetInsertPos();
+            basegfx::B2DPoint aPnt(pViewSh->GetInsertPos());
             if ( pData->GetDocument()->IsNegativePage( pData->GetTabNo() ) )
-                aPnt.X() -= aSize.Width();      // move position to left edge
-            Rectangle aRect (aPnt, aSize);
-            SdrOle2Obj* pObj = new SdrOle2Obj( aObjRef, aName, aRect);
-            SdrPageView* pPV = pView->GetSdrPageView();
-            pView->InsertObjectAtView(pObj, *pPV);
+                aPnt.setX(aPnt.getX() - aScale.getX());     // move position to left edge
+
+            SdrOle2Obj* pObj = new SdrOle2Obj(
+                pView->getSdrModelFromSdrView(),
+                aObjRef,
+                aName,
+                basegfx::tools::createScaleTranslateB2DHomMatrix(
+                    aScale,
+                    aPnt));
+
+                // Dieses Objekt nicht vor dem Aktivieren zeichnen
+                // (in MarkListHasChanged kommt ein Update)
+            if (!bIsFromFile)
+                pSkipPaintObj = pObj;
+
+            pView->InsertObjectAtView(*pObj);
 
             if ( nAspect != embed::Aspects::MSOLE_ICON )
             {
-                //  #73279# Math objects change their object size during InsertObject.
+                //  #73279# Math objects change their object size during InsertObjectToSdrObjList.
                 //  New size must be set in SdrObject, or a wrong scale will be set at
                 //  ActivateObject.
 
                 try
                 {
-                    awt::Size aSz = xObj->getVisualAreaSize( nAspect );
+                    const awt::Size aSz(xObj->getVisualAreaSize( nAspect ));
+                    const basegfx::B2DVector aNewSize(basegfx::B2DVector(aSz.Width, aSz.Height) * OutputDevice::GetFactorLogicToLogic(aMapUnit, MAP_100TH_MM));
 
-                    Size aNewSize( aSz.Width, aSz.Height );
-                    aNewSize = OutputDevice::LogicToLogic( aNewSize, aMapUnit, MAP_100TH_MM );
-
-                    if ( aNewSize != aSize )
+                    if ( !aNewSize.equal(aScale) )
                     {
-                        aRect.SetSize( aNewSize );
-                        pObj->SetLogicRect( aRect );
+                        pObj->setSdrObjectTransformation(
+                            basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                aNewSize,
+                                aPnt));
                     }
                 }
                 catch( embed::NoVisualAreaSizeException& )
@@ -421,6 +431,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
                 else
                 {
                     pViewShell->ActivateObject( (SdrOle2Obj*) pObj, SVVERB_SHOW );
+                    pSkipPaintObj = NULL;
                 }
             }
 
@@ -552,33 +563,32 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
             xChartModel->lockControllers();
 
         ScRangeListRef aDummy;
-        Rectangle aMarkDest;
+        basegfx::B2DRange aMarkDest;
         SCTAB nMarkTab;
         sal_Bool bDrawRect = pViewShell->GetChartArea( aDummy, aMarkDest, nMarkTab );
 
         //  Objekt-Groesse
         awt::Size aSz = xObj->getVisualAreaSize( nAspect );
-        Size aSize( aSz.Width, aSz.Height );
+        basegfx::B2DVector aScale( aSz.Width, aSz.Height );
 
         MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
 
         sal_Bool bSizeCh = sal_False;
-        if (bDrawRect && !aMarkDest.IsEmpty())
+        if (bDrawRect && !aMarkDest.isEmpty())
         {
-            aSize = aMarkDest.GetSize();
+            aScale = aMarkDest.getRange();
             bSizeCh = sal_True;
         }
-        if (aSize.Height() <= 0 || aSize.Width() <= 0)
+        if (aScale.getY() <= 0.0 || aScale.getX() <= 0.0)
         {
-            aSize.Width() = 5000;
-            aSize.Height() = 5000;
+            aScale = basegfx::B2DVector(5000.0, 5000.0);
             bSizeCh = sal_True;
         }
         if (bSizeCh)
         {
-            aSize = Window::LogicToLogic( aSize, MapMode( MAP_100TH_MM ), MapMode( aMapUnit ) );
-            aSz.Width = aSize.Width();
-            aSz.Height = aSize.Height();
+            aScale = Window::GetFactorLogicToLogic(MAP_100TH_MM, aMapUnit) * aScale;
+            aSz.Width = basegfx::fround(aScale.getX());
+            aSz.Height = basegfx::fround(aScale.getY());
             xObj->setVisualAreaSize( nAspect, aSz );
         }
 
@@ -594,9 +604,11 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
 
             if( IS_AVAILABLE( FN_PARAM_4, &pItem ) )
             {
-                if ( pItem->ISA( SfxUInt16Item ) )
+                if ( dynamic_cast< const SfxUInt16Item* >(pItem) )
+                {
                     nToTable = ((const SfxUInt16Item*)pItem)->GetValue();
-                else if ( pItem->ISA( SfxBoolItem ) )
+                }
+                else if ( dynamic_cast< const SfxBoolItem* >(pItem) )
                 {
                     //  #46033# in der idl fuer Basic steht FN_PARAM_4 als SfxBoolItem
                     //  -> wenn gesetzt, neue Tabelle, sonst aktuelle Tabelle
@@ -653,148 +665,160 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
 
         //  Objekt-Position
 
-        Point aStart;
+        basegfx::B2DPoint aStart(0.0, 0.0);
         if ( bDrawRect )
-            aStart = aMarkDest.TopLeft();                       // marked by hand
+        {
+            aStart = aMarkDest.getMinimum(); // marked by hand
+        }
         else
         {
             // get chart position (from window size and data range)
-            aStart = pViewSh->GetChartInsertPos( aSize, aPositionRange );
+            aStart = pViewSh->GetChartInsertPos( aScale, aPositionRange );
         }
 
-        Rectangle aRect (aStart, aSize);
-        SdrOle2Obj* pObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect);
+        SdrOle2Obj* pObj = new SdrOle2Obj(
+            pView->getSdrModelFromSdrView(),
+            svt::EmbeddedObjectRef( xObj, nAspect ),
+            aName,
+            basegfx::tools::createScaleTranslateB2DHomMatrix(
+                aScale,
+                aStart));
+
+        // Dieses Objekt nicht vor dem Aktivieren zeichnen
+        pSkipPaintObj = pObj;
+
         SdrPageView* pPV = pView->GetSdrPageView();
 
-        // #121334# This call will change the chart's default background fill from white to transparent.
-        // Add here again if this is wanted (see task description for details)
-        // ChartHelper::AdaptDefaultsForChart( xObj );
-
-//        pView->InsertObjectAtView(pObj, *pPV);//this call leads to an immidiate redraw and asks the chart for a visual representation
-
-        // use the page instead of the view to insert, so no undo action is created yet
-        SdrPage* pInsPage = pPV->GetPage();
-        pInsPage->InsertObject( pObj );
-        pView->UnmarkAllObj();
-        pView->MarkObj( pObj, pPV );
-        bool bAddUndo = true;               // add undo action later, unless the dialog is canceled
-
-        if (rReq.IsAPI())
+        if(pPV)
         {
-            if( xChartModel.is() )
-                xChartModel->unlockControllers();
-        }
-        else
-        {
-            //the controller will be unlocked by the dialog when the dialog is told to do so
+            // use the page instead of the view to insert, so no undo action is created yet
+            SdrPage& rInsPage = pPV->getSdrPageFromSdrPageView();
+            rInsPage.InsertObjectToSdrObjList(*pObj);
+            pView->UnmarkAllObj();
+            pView->MarkObj( *pObj );
+            bool bAddUndo = true;               // add undo action later, unless the dialog is canceled
 
-            // only activate object if not called via API (e.g. macro)
-            pViewShell->ActivateObject( (SdrOle2Obj*) pObj, SVVERB_SHOW );
-
-            //open wizard
-            //@todo get context from calc if that has one
-            uno::Reference< uno::XComponentContext > xContext(
-                ::cppu::defaultBootstrap_InitialComponentContext() );
-            if(xContext.is())
+            if (rReq.IsAPI())
             {
-                uno::Reference< lang::XMultiComponentFactory > xMCF( xContext->getServiceManager() );
-                if(xMCF.is())
+                if( xChartModel.is() )
+                    xChartModel->unlockControllers();
+            }
+            else
+            {
+                //the controller will be unlocked by the dialog when the dialog is told to do so
+
+                // only activate object if not called via API (e.g. macro)
+                pViewShell->ActivateObject( (SdrOle2Obj*) pObj, SVVERB_SHOW );
+
+                //open wizard
+                //@todo get context from calc if that has one
+                uno::Reference< uno::XComponentContext > xContext(
+                    ::cppu::defaultBootstrap_InitialComponentContext() );
+                if(xContext.is())
                 {
-                    uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
-                        xMCF->createInstanceWithContext(
-                            rtl::OUString::createFromAscii("com.sun.star.comp.chart2.WizardDialog")
-                            , xContext), uno::UNO_QUERY);
-                    uno::Reference< lang::XInitialization > xInit( xDialog, uno::UNO_QUERY );
-                    if( xChartModel.is() && xInit.is() )
+                    uno::Reference< lang::XMultiComponentFactory > xMCF( xContext->getServiceManager() );
+                    if(xMCF.is())
                     {
-                        uno::Reference< awt::XWindow > xDialogParentWindow(0);
-                        //  initialize dialog
-                        uno::Sequence<uno::Any> aSeq(2);
-                        uno::Any* pArray = aSeq.getArray();
-                        beans::PropertyValue aParam1;
-                        aParam1.Name = rtl::OUString::createFromAscii("ParentWindow");
-                        aParam1.Value <<= uno::makeAny(xDialogParentWindow);
-                        beans::PropertyValue aParam2;
-                        aParam2.Name = rtl::OUString::createFromAscii("ChartModel");
-                        aParam2.Value <<= uno::makeAny(xChartModel);
-                        pArray[0] <<= uno::makeAny(aParam1);
-                        pArray[1] <<= uno::makeAny(aParam2);
-                        xInit->initialize( aSeq );
-
-                        // try to set the dialog's position so it doesn't hide the chart
-                        uno::Reference < beans::XPropertySet > xDialogProps( xDialog, uno::UNO_QUERY );
-                        if ( xDialogProps.is() )
+                        uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
+                            xMCF->createInstanceWithContext(
+                                rtl::OUString::createFromAscii("com.sun.star.comp.chart2.WizardDialog")
+                                , xContext), uno::UNO_QUERY);
+                        uno::Reference< lang::XInitialization > xInit( xDialog, uno::UNO_QUERY );
+                        if( xChartModel.is() && xInit.is() )
                         {
-                            try
+                            uno::Reference< awt::XWindow > xDialogParentWindow(0);
+                            //  initialize dialog
+                            uno::Sequence<uno::Any> aSeq(2);
+                            uno::Any* pArray = aSeq.getArray();
+                            beans::PropertyValue aParam1;
+                            aParam1.Name = rtl::OUString::createFromAscii("ParentWindow");
+                            aParam1.Value <<= uno::makeAny(xDialogParentWindow);
+                            beans::PropertyValue aParam2;
+                            aParam2.Name = rtl::OUString::createFromAscii("ChartModel");
+                            aParam2.Value <<= uno::makeAny(xChartModel);
+                            pArray[0] <<= uno::makeAny(aParam1);
+                            pArray[1] <<= uno::makeAny(aParam2);
+                            xInit->initialize( aSeq );
+
+                            // try to set the dialog's position so it doesn't hide the chart
+                            uno::Reference < beans::XPropertySet > xDialogProps( xDialog, uno::UNO_QUERY );
+                            if ( xDialogProps.is() )
                             {
-                                //get dialog size:
-                                awt::Size aDialogAWTSize;
-                                if( xDialogProps->getPropertyValue( ::rtl::OUString::createFromAscii("Size") )
-                                    >>= aDialogAWTSize )
+                                try
                                 {
-                                    Size aDialogSize( aDialogAWTSize.Width, aDialogAWTSize.Height );
-                                    if ( aDialogSize.Width() > 0 && aDialogSize.Height() > 0 )
+                                    //get dialog size:
+                                    awt::Size aDialogAWTSize;
+                                    if( xDialogProps->getPropertyValue( ::rtl::OUString::createFromAscii("Size") )
+                                        >>= aDialogAWTSize )
                                     {
-                                        //calculate and set new position
-                                        Point aDialogPos = pViewShell->GetChartDialogPos( aDialogSize, aRect );
-                                        xDialogProps->setPropertyValue( ::rtl::OUString::createFromAscii("Position"),
-                                            uno::makeAny( awt::Point(aDialogPos.getX(),aDialogPos.getY()) ) );
+                                        const basegfx::B2DVector aDialogScale(aDialogAWTSize.Width, aDialogAWTSize.Height);
+
+                                        if( aDialogScale.getX() > 0 && aDialogScale.getY() > 0 )
+                                        {
+                                            //calculate and set new position
+                                            const basegfx::B2DRange aOldObjRange(sdr::legacy::GetLogicRange(*pObj));
+                                            const basegfx::B2DPoint aDialogPos(pViewShell->GetChartDialogPos(aDialogScale, aOldObjRange));
+
+                                            xDialogProps->setPropertyValue( ::rtl::OUString::createFromAscii("Position"),
+                                                    uno::makeAny(
+                                                        awt::Point(
+                                                            basegfx::fround(aDialogPos.getX()),
+                                                            basegfx::fround(aDialogPos.getY())) ) );
+                                        }
                                     }
+                                    //tell the dialog to unlock controller
+                                    xDialogProps->setPropertyValue( ::rtl::OUString::createFromAscii("UnlockControllersOnExecute"),
+                                                uno::makeAny( sal_True ) );
+
                                 }
-                                //tell the dialog to unlock controller
-                                xDialogProps->setPropertyValue( ::rtl::OUString::createFromAscii("UnlockControllersOnExecute"),
-                                            uno::makeAny( sal_True ) );
-
+                                catch( uno::Exception& )
+                                {
+                                    OSL_ASSERT( "Chart wizard couldn't be positioned automatically\n" );
+                                }
                             }
-                            catch( uno::Exception& )
+
+                            sal_Int16 nDialogRet = xDialog->execute();
+                            if( nDialogRet == ui::dialogs::ExecutableDialogResults::CANCEL )
                             {
-                                OSL_ASSERT( "Chart wizard couldn't be positioned automatically\n" );
+                                // leave OLE inplace mode and unmark
+                                OSL_ASSERT( pViewShell );
+                                OSL_ASSERT( pView );
+                                pViewShell->DeactivateOle();
+                                pView->UnmarkAll();
+
+                                // old page view pointer is invalid after switching sheets
+                                pPV = pView->GetSdrPageView();
+
+                                // remove the chart
+                                OSL_ASSERT( pPV );
+                                    SdrPage& rPage = pPV->getSdrPageFromSdrPageView();
+                                OSL_ASSERT( pObj );
+                                    rPage.RemoveObjectFromSdrObjList(pObj->GetNavigationPosition());
+
+                                bAddUndo = false;       // don't create the undo action for inserting
+
+                                // leave the draw shell
+                                pViewShell->SetDrawShell( sal_False );
+                            }
+                            else
+                            {
+                                OSL_ASSERT( nDialogRet == ui::dialogs::ExecutableDialogResults::OK );
+                                //@todo maybe move chart to different table
                             }
                         }
-
-                        sal_Int16 nDialogRet = xDialog->execute();
-                        if( nDialogRet == ui::dialogs::ExecutableDialogResults::CANCEL )
-                        {
-                            // leave OLE inplace mode and unmark
-                            OSL_ASSERT( pViewShell );
-                            OSL_ASSERT( pView );
-                            pViewShell->DeactivateOle();
-                            pView->UnmarkAll();
-
-                            // old page view pointer is invalid after switching sheets
-                            pPV = pView->GetSdrPageView();
-
-                            // remove the chart
-                            OSL_ASSERT( pPV );
-                            SdrPage * pPage( pPV->GetPage());
-                            OSL_ASSERT( pPage );
-                            OSL_ASSERT( pObj );
-                            if( pPage )
-                                pPage->RemoveObject( pObj->GetOrdNum());
-
-                            bAddUndo = false;       // don't create the undo action for inserting
-
-                            // leave the draw shell
-                            pViewShell->SetDrawShell( sal_False );
-                        }
-                        else
-                        {
-                            OSL_ASSERT( nDialogRet == ui::dialogs::ExecutableDialogResults::OK );
-                            //@todo maybe move chart to different table
-                        }
+                        uno::Reference< lang::XComponent > xComponent( xDialog, uno::UNO_QUERY );
+                        if( xComponent.is())
+                            xComponent->dispose();
                     }
-                    uno::Reference< lang::XComponent > xComponent( xDialog, uno::UNO_QUERY );
-                    if( xComponent.is())
-                        xComponent->dispose();
                 }
             }
-        }
 
-        if ( bAddUndo )
-        {
-            // add undo action the same way as in SdrEditView::InsertObjectAtView
-            // (using UndoActionHdl etc.)
-            pView->AddUndo(pDoc->GetSdrUndoFactory().CreateUndoNewObject(*pObj));
+            if ( bAddUndo )
+            {
+                // add undo action the same way as in SdrEditView::InsertObjectAtView
+                // (using UndoActionHdl etc.)
+                pView->AddUndo(pDoc->GetSdrUndoFactory().CreateUndoNewObject(*pObj));
+            }
         }
 
         // BM/IHA --

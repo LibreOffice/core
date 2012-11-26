@@ -28,7 +28,7 @@
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>
 #include <svx/fmglob.hxx>
-#include "svx/svditer.hxx"
+#include <svx/svditer.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdpagv.hxx>
 
@@ -162,7 +162,7 @@ namespace svxform
         FmEntryData* pEntryData = m_pNavModel->FindData(xReplaced, m_pNavModel->GetRootList(), sal_True);
         if (pEntryData)
         {
-            if (pEntryData->ISA(FmControlData))
+            if (dynamic_cast< FmControlData* >(pEntryData))
             {
                 Reference< XFormComponent >  xComp;
                 evt.Element >>= xComp;
@@ -170,7 +170,7 @@ namespace svxform
                     // an einer FmControlData sollte eine XFormComponent haengen
                 m_pNavModel->ReplaceFormComponent(xReplaced, xComp);
             }
-            else if (pEntryData->ISA(FmFormData))
+            else if (dynamic_cast< FmFormData* >(pEntryData))
             {
                 DBG_ERROR("replacing forms not implemented yet !");
             }
@@ -306,7 +306,7 @@ namespace svxform
         if (bAlterModel)
         {
             XubString aStr;
-            if (pEntry->ISA(FmFormData))
+            if (dynamic_cast< FmFormData* >(pEntry))
                 aStr = SVX_RES(RID_STR_FORM);
             else
                 aStr = SVX_RES(RID_STR_CONTROL);
@@ -371,7 +371,7 @@ namespace svxform
 
         //////////////////////////////////////////////////////////////////////
         // Daten aus Model entfernen
-        if (pEntry->ISA(FmFormData))
+        if (dynamic_cast< FmFormData* >(pEntry))
         {
             Reference< XContainer >  xContainer(xElement, UNO_QUERY);
             if (xContainer.is())
@@ -413,7 +413,7 @@ namespace svxform
         if (bAlterModel)
         {
             XubString        aStr;
-            if (pEntry->ISA(FmFormData))
+            if (dynamic_cast< FmFormData* >(pEntry))
                 aStr = SVX_RES(RID_STR_FORM);
             else
                 aStr = SVX_RES(RID_STR_CONTROL);
@@ -427,11 +427,21 @@ namespace svxform
         }
 
         // jetzt die eigentliche Entfernung der Daten aus dem Model
-        if (pEntry->ISA(FmFormData))
-            RemoveForm((FmFormData*)pEntry);
-        else
-            RemoveFormComponent((FmControlData*)pEntry);
+        FmFormData* pFmFormData = dynamic_cast< FmFormData* >(pEntry);
 
+        if (pFmFormData)
+        {
+            RemoveForm( pFmFormData );
+        }
+        else
+        {
+            FmControlData* pFmControlData = dynamic_cast< FmControlData* >(pEntry);
+
+            if(pFmControlData)
+            {
+                RemoveFormComponent( pFmControlData );
+            }
+        }
 
         if (bAlterModel)
         {
@@ -501,10 +511,21 @@ namespace svxform
 
             //////////////////////////////////////////////////////////////////////
             // Child ist Form -> rekursiver Aufruf
-            if( pEntryData->ISA(FmFormData) )
-                RemoveForm( (FmFormData*)pEntryData);
-            else if( pEntryData->ISA(FmControlData) )
-                RemoveFormComponent((FmControlData*) pEntryData);
+            FmFormData* pFmFormData = dynamic_cast< FmFormData* >(pEntryData);
+
+            if( pFmFormData )
+            {
+                RemoveForm( pFmFormData );
+            }
+            else
+            {
+                FmControlData* pFmControlData = dynamic_cast< FmControlData* >(pEntryData);
+
+                if( pFmControlData )
+                {
+                    RemoveFormComponent( pFmControlData );
+                }
+            }
         }
 
         //////////////////////////////////////////////////////////////////////
@@ -546,8 +567,10 @@ namespace svxform
         for( sal_uInt32 i=pChildList->Count(); i>0; i-- )
         {
             pChildData = pChildList->GetObject(i-1);
-            if( pChildData->ISA(FmFormData) )
-                ClearBranch( (FmFormData*)pChildData );
+            FmFormData* pFmFormData = dynamic_cast< FmFormData* >(pChildData);
+
+            if( pFmFormData )
+                ClearBranch( pFmFormData );
 
             pChildList->Remove( pChildData );
         }
@@ -674,7 +697,7 @@ namespace svxform
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::ReplaceFormComponent" );
         FmEntryData* pData = FindData(xOld, GetRootList(), sal_True);
-        DBG_ASSERT(pData && pData->ISA(FmControlData), "NavigatorTreeModel::ReplaceFormComponent : invalid argument !");
+        DBG_ASSERT(pData && dynamic_cast< FmControlData* >(pData), "NavigatorTreeModel::ReplaceFormComponent : invalid argument !");
         ((FmControlData*)pData)->ModelReplaced( xNew, m_aNormalImages, m_aHCImages );
 
         FmNavModelReplacedHint aReplacedHint( pData );
@@ -725,9 +748,11 @@ namespace svxform
             if (rText == aEntryText)
                 return pEntryData;
 
-            if( bRecurs && pEntryData->ISA(FmFormData) )
+            FmFormData* pFmFormData = dynamic_cast< FmFormData* >(pEntryData);
+
+            if( bRecurs && pFmFormData )
             {
-                pChildData = FindData( rText, (FmFormData*)pEntryData );
+                pChildData = FindData( rText, pFmFormData );
                 if( pChildData )
                     return pChildData;
             }
@@ -740,30 +765,33 @@ namespace svxform
     void NavigatorTreeModel::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::Notify" );
-        if( rHint.ISA(SdrHint) )
+        const SdrBaseHint* pSdrHint = dynamic_cast< const SdrBaseHint* >(&rHint);
+        const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+        const FmNavViewMarksChanged* pFmNavViewMarksChanged = dynamic_cast< const FmNavViewMarksChanged* >(&rHint);
+
+        if(pSdrHint)
         {
-            SdrHint* pSdrHint = (SdrHint*)&rHint;
-            switch( pSdrHint->GetKind() )
+            switch( pSdrHint->GetSdrHintKind() )
             {
                 case HINT_OBJINSERTED:
-                    InsertSdrObj(pSdrHint->GetObject());
+                    InsertSdrObj(pSdrHint->GetSdrHintObject());
                     break;
                 case HINT_OBJREMOVED:
-                    RemoveSdrObj(pSdrHint->GetObject());
+                    RemoveSdrObj(pSdrHint->GetSdrHintObject());
                     break;
                 default:
                     break;
             }
         }
         // hat sich die shell verabschiedet?
-        else if ( rHint.ISA(SfxSimpleHint) && ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING)
-            UpdateContent((FmFormShell*)NULL);
-
-        // hat sich die Markierung der Controls veraendert ?
-        else if (rHint.ISA(FmNavViewMarksChanged))
+        else if ( pSfxSimpleHint && SFX_HINT_DYING == pSfxSimpleHint->GetId() )
         {
-            FmNavViewMarksChanged* pvmcHint = (FmNavViewMarksChanged*)&rHint;
-            BroadcastMarkedObjects( pvmcHint->GetAffectedView()->GetMarkedObjectList() );
+            UpdateContent((FmFormShell*)NULL);
+        }
+        // hat sich die Markierung der Controls veraendert ?
+        else if (pFmNavViewMarksChanged)
+        {
+            BroadcastMarkedObjects( pFmNavViewMarksChanged->GetAffectedView()->getSelectedSdrObjectVectorFromSdrMarkView() );
         }
     }
 
@@ -787,9 +815,9 @@ namespace svxform
                 DBG_UNHANDLED_EXCEPTION();
             }
         }
-        else if ( pObj->IsGroupObject() )
+        else if ( pObj->getChildrenOfSdrObject() )
         {
-            SdrObjListIter aIter( *pObj->GetSubList() );
+            SdrObjListIter aIter( *pObj->getChildrenOfSdrObject() );
             while ( aIter.IsMore() )
                 InsertSdrObj( aIter.Next() );
         }
@@ -814,9 +842,9 @@ namespace svxform
                 DBG_UNHANDLED_EXCEPTION();
             }
         }
-        else if ( pObj->IsGroupObject() )
+        else if ( pObj->getChildrenOfSdrObject() )
         {
-            SdrObjListIter aIter( *pObj->GetSubList() );
+            SdrObjListIter aIter( *pObj->getChildrenOfSdrObject() );
             while ( aIter.IsMore() )
                 RemoveSdrObj( aIter.Next() );
         }
@@ -825,9 +853,11 @@ namespace svxform
     sal_Bool NavigatorTreeModel::InsertFormComponent(FmNavRequestSelectHint& rHint, SdrObject* pObject)
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::InsertFormComponent" );
-        if ( pObject->ISA(SdrObjGroup) )
+        SdrObjGroup* pSdrObjGroup = dynamic_cast< SdrObjGroup* >(pObject);
+
+        if ( pSdrObjGroup )
         {   // rekursiv absteigen
-            const SdrObjList *pChilds = ((SdrObjGroup*)pObject)->GetSubList();
+            const SdrObjList *pChilds = pSdrObjGroup->getChildrenOfSdrObject();
             for ( sal_uInt16 i=0; i<pChilds->GetObjCount(); ++i )
             {
                 SdrObject* pCurrent = pChilds->GetObj(i);
@@ -861,16 +891,16 @@ namespace svxform
         return sal_True;
     }
 
-    void NavigatorTreeModel::BroadcastMarkedObjects(const SdrMarkList& mlMarked)
+    void NavigatorTreeModel::BroadcastMarkedObjects(const SdrObjectVector& mlMarked)
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::BroadcastMarkedObjects" );
         // gehen wir durch alle markierten Objekte und suchen wir die raus, mit denen ich was anfangen kann
         FmNavRequestSelectHint rshRequestSelection;
         sal_Bool bIsMixedSelection = sal_False;
 
-        for (sal_uLong i=0; (i<mlMarked.GetMarkCount()) && !bIsMixedSelection; i++)
+        for (sal_uInt32 i(0); (i < mlMarked.size()) && !bIsMixedSelection; i++)
         {
-            SdrObject* pobjCurrent = mlMarked.GetMark(i)->GetMarkedSdrObj();
+            SdrObject* pobjCurrent = mlMarked[i];
             bIsMixedSelection |= !InsertFormComponent(rshRequestSelection, pobjCurrent);
                 // bei einem Nicht-Form-Control liefert InsertFormComponent sal_False !
         }
@@ -904,7 +934,7 @@ namespace svxform
 
             FmFormView* pFormView = m_pFormShell->GetFormView();
             DBG_ASSERT(pFormView != NULL, "NavigatorTreeModel::UpdateContent : keine FormView");
-            BroadcastMarkedObjects(pFormView->GetMarkedObjectList());
+            BroadcastMarkedObjects(pFormView->getSelectedSdrObjectVectorFromSdrMarkView());
         }
     }
 
@@ -968,7 +998,8 @@ namespace svxform
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::CheckEntry" );
         //////////////////////////////////////////////////////////////////////
         // Nur Forms duerfen auf Doppeldeutigkeit untersucht werden
-        if( !pEntryData->ISA(FmFormData) ) return sal_True;
+        if( !dynamic_cast< FmFormData* >(pEntryData) )
+            return sal_True;
 
         //////////////////////////////////////////////////////////////////////
         // ChildListe des Parents holen
@@ -1020,17 +1051,18 @@ namespace svxform
         //////////////////////////////////////////////////////////////////////
         // PropertySet besorgen
         Reference< XFormComponent >  xFormComponent;
+        FmFormData* pFormData = dynamic_cast< FmFormData* >(pEntryData);
 
-        if( pEntryData->ISA(FmFormData) )
+        if( pFormData )
         {
-            FmFormData* pFormData = (FmFormData*)pEntryData;
             Reference< XForm >  xForm( pFormData->GetFormIface());
             xFormComponent = Reference< XFormComponent > (xForm, UNO_QUERY);
         }
 
-        if( pEntryData->ISA(FmControlData) )
+        FmControlData* pControlData = dynamic_cast< FmControlData* >(pEntryData);
+
+        if( pControlData )
         {
-            FmControlData* pControlData = (FmControlData*)pEntryData;
             xFormComponent = pControlData->GetFormComponent();
         }
 
@@ -1084,10 +1116,15 @@ namespace svxform
 
         FmFormView*     pFormView       = m_pFormShell->GetFormView();
         SdrPageView*    pPageView       = pFormView->GetSdrPageView();
-        SdrPage*        pPage           = pPageView->GetPage();
 
-        SdrObjListIter  aIter( *pPage );
+        if(pPageView)
+        {
+            SdrPage& rPage = pPageView->getSdrPageFromSdrPageView();
+            SdrObjListIter aIter( rPage );
         return Search(aIter, xFormComponent);
+    }
+
+        return 0;
     }
 
     //------------------------------------------------------------------
@@ -1104,9 +1141,9 @@ namespace svxform
                 if ( xFormViewControl == xComp )
                     return pObj;
             }
-            else if ( pObj->IsGroupObject() )
+            else if ( pObj->getChildrenOfSdrObject() )
             {
-                SdrObjListIter aIter( *pObj->GetSubList() );
+                SdrObjListIter aIter( *pObj->getChildrenOfSdrObject() );
                 pObj = Search( aIter, xComp );
                 if ( pObj )
                     return pObj;

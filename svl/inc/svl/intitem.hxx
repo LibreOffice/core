@@ -31,8 +31,7 @@
 class SVL_DLLPUBLIC SfxByteItem: public CntByteItem
 {
 public:
-    TYPEINFO();
-
+    POOLITEM_FACTORY()
     SfxByteItem(sal_uInt16 which = 0, sal_uInt8 nValue = 0):
         CntByteItem(which, nValue) {}
 
@@ -53,8 +52,7 @@ class SVL_DLLPUBLIC SfxInt16Item: public SfxPoolItem
     sal_Int16 m_nValue;
 
 public:
-    TYPEINFO();
-
+    POOLITEM_FACTORY()
     SfxInt16Item(sal_uInt16 which = 0, sal_Int16 nTheValue = 0):
         SfxPoolItem(which), m_nValue(nTheValue)
     { DBG_CTOR(SfxInt16Item, 0); }
@@ -111,8 +109,7 @@ inline void SfxInt16Item::SetValue(sal_Int16 nTheValue)
 class SVL_DLLPUBLIC SfxUInt16Item: public CntUInt16Item
 {
 public:
-    TYPEINFO();
-
+    POOLITEM_FACTORY()
     SfxUInt16Item(sal_uInt16 which = 0, sal_uInt16 nValue = 0):
         CntUInt16Item(which, nValue) {}
 
@@ -130,8 +127,7 @@ public:
 class SVL_DLLPUBLIC SfxInt32Item: public CntInt32Item
 {
 public:
-    TYPEINFO();
-
+    POOLITEM_FACTORY()
     SfxInt32Item(sal_uInt16 which = 0, sal_Int32 nValue = 0):
         CntInt32Item(which, nValue) {}
 
@@ -150,8 +146,7 @@ public:
 class SVL_DLLPUBLIC SfxUInt32Item: public CntUInt32Item
 {
 public:
-    TYPEINFO();
-
+    POOLITEM_FACTORY()
     SfxUInt32Item(sal_uInt16 which = 0, sal_uInt32 nValue = 0):
         CntUInt32Item(which, nValue) {}
 

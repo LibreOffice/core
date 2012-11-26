@@ -123,8 +123,6 @@ class XMLTextFrameTitleOrDescContext_Impl : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLTextFrameTitleOrDescContext_Impl( SvXMLImport& rImport,
                                          sal_uInt16 nPrfx,
                                          const ::rtl::OUString& rLName,
@@ -133,8 +131,6 @@ public:
 
     virtual void Characters( const OUString& rText );
 };
-
-TYPEINIT1( XMLTextFrameTitleOrDescContext_Impl, SvXMLImportContext );
 
 XMLTextFrameTitleOrDescContext_Impl::XMLTextFrameTitleOrDescContext_Impl(
         SvXMLImport& rImport,
@@ -162,8 +158,6 @@ class XMLTextFrameParam_Impl : public SvXMLImportContext
 {
 public:
 
-    TYPEINFO();
-
     XMLTextFrameParam_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                   const ::rtl::OUString& rLName,
             const ::com::sun::star::uno::Reference<
@@ -172,8 +166,6 @@ public:
             ParamMap &rParamMap);
     virtual ~XMLTextFrameParam_Impl();
 };
-
-TYPEINIT1( XMLTextFrameParam_Impl, SvXMLImportContext );
 
 XMLTextFrameParam_Impl::~XMLTextFrameParam_Impl()
 {
@@ -220,8 +212,6 @@ class XMLTextFrameContourContext_Impl : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLTextFrameContourContext_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                   const ::rtl::OUString& rLName,
             const ::com::sun::star::uno::Reference<
@@ -230,8 +220,6 @@ public:
             sal_Bool bPath );
     virtual ~XMLTextFrameContourContext_Impl();
 };
-
-TYPEINIT1( XMLTextFrameContourContext_Impl, SvXMLImportContext );
 
 XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
         SvXMLImport& rImport,
@@ -319,7 +307,7 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
         else
         {
             SdXMLImExPointsElement aPoints( sPoints, aViewBox, aPoint, aSize,
-                                        GetImport().GetMM100UnitConverter() );
+                                        GetImport().GetMM100UnitConverter(), true );
             aAny <<= aPoints.GetPointSequenceSequence();
         }
 
@@ -430,8 +418,6 @@ class XMLTextFrameContext_Impl : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     sal_Bool CreateIfNotThere();
     const OUString& GetHRef() const { return sHRef; }
 
@@ -469,8 +455,6 @@ public:
     const ::com::sun::star::uno::Reference <
         ::com::sun::star::beans::XPropertySet >& GetPropSet() const { return xPropSet; }
 };
-
-TYPEINIT1( XMLTextFrameContext_Impl, SvXMLImportContext );
 
 void XMLTextFrameContext_Impl::Create( sal_Bool /*bHRefOrBase64*/ )
 {
@@ -1307,8 +1291,6 @@ void XMLTextFrameContext_Impl::SetDesc( const OUString& rDesc )
 
 //-----------------------------------------------------------------------------------------------------
 
-TYPEINIT1( XMLTextFrameContext, SvXMLImportContext );
-
 void XMLTextFrameContext::removeGraphicFromImportContext(const SvXMLImportContext& rContext) const
 {
     const XMLTextFrameContext_Impl* pXMLTextFrameContext_Impl = dynamic_cast< const XMLTextFrameContext_Impl* >(&rContext);
@@ -1349,7 +1331,7 @@ sal_Bool XMLTextFrameContext::CreateIfNotThere()
 {
     sal_Bool bRet = sal_False;
     SvXMLImportContext *pContext = &m_xImplContext;
-    XMLTextFrameContext_Impl *pImpl = PTR_CAST( XMLTextFrameContext_Impl, pContext );
+    XMLTextFrameContext_Impl *pImpl = dynamic_cast< XMLTextFrameContext_Impl* >( pContext );
     if( pImpl )
         bRet = pImpl->CreateIfNotThere();
 
@@ -1360,7 +1342,7 @@ sal_Bool XMLTextFrameContext::CreateIfNotThere( ::com::sun::star::uno::Reference
         ::com::sun::star::beans::XPropertySet >& rPropSet )
 {
     SvXMLImportContext *pContext = &m_xImplContext;
-    XMLTextFrameContext_Impl *pImpl = PTR_CAST( XMLTextFrameContext_Impl, pContext );
+    XMLTextFrameContext_Impl *pImpl = dynamic_cast< XMLTextFrameContext_Impl* >( pContext );
     if( pImpl )
     {
         if( pImpl->CreateIfNotThere() )
@@ -1440,11 +1422,10 @@ XMLTextFrameContext::~XMLTextFrameContext()
 void XMLTextFrameContext::EndElement()
 {
     /// solve if multiple image child contexts were imported
-    /// the winner is returned, if something has yet to be done with it
-    /*const SvXMLImportContext* pWinner =*/ solveMultipleImages();
+    solveMultipleImages();
 
     SvXMLImportContext *pContext = &m_xImplContext;
-    XMLTextFrameContext_Impl *pImpl = PTR_CAST( XMLTextFrameContext_Impl, pContext );
+    XMLTextFrameContext_Impl *pImpl = dynamic_cast< XMLTextFrameContext_Impl* >( pContext );
     if( pImpl )
     {
         pImpl->CreateIfNotThere();
@@ -1594,7 +1575,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
             m_xReplImplContext = pContext;
         }
     }
-    else if( m_xImplContext->ISA( XMLTextFrameContext_Impl ) )
+    else if( dynamic_cast< XMLTextFrameContext_Impl* >(&m_xImplContext) )
     {
         // the child is a writer frame
         if( XML_NAMESPACE_SVG == p_nPrefix )
@@ -1704,7 +1685,7 @@ void XMLTextFrameContext::SetHyperlink( const OUString& rHRef,
 TextContentAnchorType XMLTextFrameContext::GetAnchorType() const
 {
     SvXMLImportContext *pContext = &m_xImplContext;
-    XMLTextFrameContext_Impl *pImpl = PTR_CAST( XMLTextFrameContext_Impl, pContext );
+    XMLTextFrameContext_Impl *pImpl = dynamic_cast< XMLTextFrameContext_Impl* >( pContext );
     if( pImpl )
         return pImpl->GetAnchorType();
     else
@@ -1715,7 +1696,7 @@ Reference < XTextContent > XMLTextFrameContext::GetTextContent() const
 {
     Reference < XTextContent > xTxtCntnt;
     SvXMLImportContext *pContext = &m_xImplContext;
-    XMLTextFrameContext_Impl *pImpl = PTR_CAST( XMLTextFrameContext_Impl, pContext );
+    XMLTextFrameContext_Impl *pImpl = dynamic_cast< XMLTextFrameContext_Impl* >( pContext );
     if( pImpl )
         xTxtCntnt.set( pImpl->GetPropSet(), UNO_QUERY );
 
@@ -1727,7 +1708,7 @@ Reference < XShape > XMLTextFrameContext::GetShape() const
 {
     Reference < XShape > xShape;
     SvXMLImportContext* pContext = &m_xImplContext;
-    SvXMLShapeContext* pImpl = PTR_CAST( SvXMLShapeContext, pContext );
+    SvXMLShapeContext* pImpl = dynamic_cast< SvXMLShapeContext* >( pContext );
     if ( pImpl )
     {
         xShape = pImpl->getShape();

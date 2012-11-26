@@ -167,11 +167,11 @@ void AccessibleDocumentViewBase::Init (void)
 IMPL_LINK(AccessibleDocumentViewBase, WindowChildEventListener,
     VclSimpleEvent*, pEvent)
 {
-    OSL_ASSERT(pEvent!=NULL && pEvent->ISA(VclWindowEvent));
-    if (pEvent!=NULL && pEvent->ISA(VclWindowEvent))
+    VclWindowEvent* pWindowEvent = dynamic_cast< VclWindowEvent* >(pEvent);
+    OSL_ASSERT(pWindowEvent);
+
+    if(pWindowEvent)
     {
-        VclWindowEvent* pWindowEvent = static_cast<VclWindowEvent*>(pEvent);
-        //      DBG_ASSERT( pVclEvent->GetWindow(), "Window???" );
         switch (pWindowEvent->GetId())
         {
             case VCLEVENT_OBJECT_DYING:

@@ -64,6 +64,19 @@ namespace basegfx
         }
     }
 
+    B3DRange& B3DRange::operator*=( const ::basegfx::B3DHomMatrix& rMat )
+    {
+        transform(rMat);
+        return *this;
+    }
+
+    const B3DRange& B3DRange::getUnitB3DRange()
+    {
+        static const B3DRange aUnitB3DRange(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+
+        return aUnitB3DRange;
+    }
+
     B3IRange fround(const B3DRange& rRange )
     {
         return rRange.isEmpty() ?
@@ -76,6 +89,11 @@ namespace basegfx
                      fround(rRange.getMaxZ()));
     }
 
+    B3DRange operator*( const ::basegfx::B3DHomMatrix& rMat, const B3DRange& rB3DRange )
+    {
+        B3DRange aRes( rB3DRange );
+        return aRes *= rMat;
+    }
 } // end of namespace basegfx
 
 // eof

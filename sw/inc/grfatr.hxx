@@ -95,7 +95,6 @@ public:
 class SW_DLLPUBLIC SwCropGrf : public SvxGrfCrop
 {
 public:
-    TYPEINFO();
     SwCropGrf();
     SwCropGrf(  sal_Int32 nLeft,    sal_Int32 nRight,
                 sal_Int32 nTop,     sal_Int32 nBottom );
@@ -173,6 +172,7 @@ protected:
 
 public:
     // pure virtual-Methiden from SfxInt16Item
+    virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -209,7 +209,6 @@ class SW_DLLPUBLIC SwGammaGrf : public SfxPoolItem
 {
     double nValue;
 public:
-    TYPEINFO();
     SwGammaGrf() : SfxPoolItem( RES_GRFATR_GAMMA ), nValue( 1.0 )
     {}
 

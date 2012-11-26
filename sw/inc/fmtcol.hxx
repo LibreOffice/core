@@ -98,8 +98,6 @@ protected:
 
 public:
 
-    TYPEINFO();     //Bereits in Basisklasse Client drin.
-
     inline void SetNextTxtFmtColl(SwTxtFmtColl& rNext);
     SwTxtFmtColl& GetNextTxtFmtColl() const { return *pNextTxtFmtColl; }
 
@@ -187,7 +185,6 @@ protected:
     {}
 
 public:
-    TYPEINFO();     //Bereits in Basisklasse Client drin.
 };
 
 typedef SwGrfFmtColl* SwGrfFmtCollPtr;
@@ -225,9 +222,6 @@ class SW_DLLPUBLIC SwCollCondition : public SwClient
     } aSubCondition;
 
 public:
-    TYPEINFO();     //Bereits in Basisklasse Client drin.
-
-
     SwCollCondition( SwTxtFmtColl* pColl, sal_uLong nMasterCond,
                     sal_uLong nSubCond = 0 );
     SwCollCondition( SwTxtFmtColl* pColl, sal_uLong nMasterCond,
@@ -275,8 +269,6 @@ protected:
     {}
 
 public:
-    TYPEINFO();     //Bereits in Basisklasse Client drin.
-
     virtual ~SwConditionTxtFmtColl();
 
     const SwCollCondition* HasCondition( const SwCollCondition& rCond ) const;

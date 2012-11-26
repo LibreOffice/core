@@ -111,6 +111,9 @@ $(eval $(call gb_Library_add_exception_objects,editeng,\
     editeng/source/outliner/outlvw \
     editeng/source/outliner/outl_pch \
     editeng/source/outliner/paralist \
+    editeng/source/outliner/outlinerdecomposition \
+    editeng/source/outliner/pathtextportion \
+    editeng/source/outliner/pathtextportioncreator \
     editeng/source/rtf/rtfgrf \
     editeng/source/rtf/rtfitem \
     editeng/source/rtf/svxrtf \
@@ -138,6 +141,7 @@ $(eval $(call gb_Library_add_exception_objects,editeng,\
 $(eval $(call gb_Library_add_linked_libs,editeng,\
     xo \
     basegfx \
+    drawinglayer \
     lng \
     svt \
     tk \

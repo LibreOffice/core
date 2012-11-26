@@ -38,7 +38,7 @@ class SVL_DLLPUBLIC SfxPointItem: public SfxPoolItem
     Point                    aVal;
 
 public:
-                             TYPEINFO();
+    POOLITEM_FACTORY()
                              SfxPointItem();
                              SfxPointItem( sal_uInt16 nWhich, const Point& rVal );
                              SfxPointItem( sal_uInt16 nWhich, SvStream & );

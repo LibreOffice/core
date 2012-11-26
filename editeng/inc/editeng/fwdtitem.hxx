@@ -42,8 +42,6 @@ class SvxFontWidthItem : public SfxPoolItem
     sal_uInt16  nWidth;         // 0 = default
     sal_uInt16  nProp;          // default 100%
 public:
-    TYPEINFO();
-
     SvxFontWidthItem(   const sal_uInt16 nSz /*= 0*/,
                         const sal_uInt16 nPropWidth /*= 100*/,
                         const sal_uInt16 nId  );
@@ -61,8 +59,8 @@ public:
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const;
-    virtual int              ScaleMetrics( long nMult, long nDiv );
-    virtual int              HasMetrics() const;
+    virtual void             ScaleMetrics( long nMult, long nDiv );
+    virtual bool             HasMetrics() const;
 
     inline SvxFontWidthItem& operator=(const SvxFontWidthItem& rItem )
         {

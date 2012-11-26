@@ -64,7 +64,6 @@ private:
                                 const ScStyleSaveData& rData );
 
 public:
-                    TYPEINFO();
                     ScUndoModifyStyle( ScDocShell* pDocSh,
                                         SfxStyleFamily eFam,
                                         const ScStyleSaveData& rOld,
@@ -82,7 +81,6 @@ public:
 class ScUndoApplyPageStyle: public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
                     ScUndoApplyPageStyle( ScDocShell* pDocSh, const String& rNewStyle );
     virtual         ~ScUndoApplyPageStyle();
 

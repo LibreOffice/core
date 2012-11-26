@@ -64,9 +64,6 @@ namespace drawinglayer
             sal_uInt32 getHorizontalSegments() const { return mnHorizontalSegments; }
             sal_uInt32 getVerticalSegments() const { return mnVerticalSegments; }
 
-            /// compare operator
-            virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
-
             /// get range
             virtual basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& rViewInformation) const;
 

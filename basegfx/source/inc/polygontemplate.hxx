@@ -131,7 +131,7 @@ template < class Point, class Vector > class ImplPolygonTemplate
     SimplePointVector                               maPoints;
     SimpleBezierVector*                             mpVectors;
 
-    unsigned                                        mbIsClosed : 1;
+    bool                        mbIsClosed : 1;
 
     void implTryToReduceToPointVector()
     {

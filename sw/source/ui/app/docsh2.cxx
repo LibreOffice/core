@@ -144,7 +144,7 @@ SfxDocumentInfoDialog* SwDocShell::CreateDocumentInfoDialog(
     {
         //Nicht fuer SourceView.
         SfxViewShell *pVSh = SfxViewShell::Current();
-        if ( pVSh && !pVSh->ISA(SwSrcView) )
+        if ( pVSh && !dynamic_cast< SwSrcView* >(pVSh) )
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
@@ -219,10 +219,12 @@ void SwDocShell::DoFlushDocInfo()
 void lcl_processCompatibleSfxHint( const uno::Reference< script::vba::XVBAEventProcessor >& xVbaEvents, const SfxHint& rHint )
 {
     using namespace com::sun::star::script::vba::VBAEventId;
-    if ( rHint.ISA( SfxEventHint ) )
+    const SfxEventHint* pSfxEventHint = dynamic_cast< const SfxEventHint* >(&rHint);
+
+    if(pSfxEventHint)
     {
         uno::Sequence< uno::Any > aArgs;
-        sal_uLong nEventId = ((SfxEventHint&)rHint).GetEventId();
+        sal_uLong nEventId = pSfxEventHint->GetEventId();
         switch( nEventId )
         {
             case SFX_EVENT_CREATEDOC:
@@ -256,10 +258,12 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 #endif
 
     sal_uInt16 nAction = 0;
-    if( rHint.ISA(SfxSimpleHint) )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if( pSfxSimpleHint )
     {
         // swithc for more actions
-        switch( ((SfxSimpleHint&) rHint).GetId() )
+        switch( pSfxSimpleHint->GetId() )
         {
             case SFX_HINT_TITLECHANGED:
                 if( GetMedium() )
@@ -267,12 +271,16 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
             break;
         }
     }
-    else if( rHint.ISA(SfxEventHint) &&
-        ((SfxEventHint&) rHint).GetEventId() == SFX_EVENT_LOADFINISHED )
+    else
+    {
+        const SfxEventHint* pSfxEventHint = dynamic_cast< const SfxEventHint* >(&rHint);
+
+        if( pSfxEventHint && SFX_EVENT_LOADFINISHED == pSfxEventHint->GetEventId() )
     {
         // --> OD 2004-12-03 #i38126# - own action id
         nAction = 3;
         // <--
+    }
     }
 
     if( nAction )
@@ -444,7 +452,7 @@ sal_Bool SwDocShell::Insert( SfxObjectShell &rSource,
 
         rtl::Reference< SwDocStyleSheet > xNewSheet( new SwDocStyleSheet( (SwDocStyleSheet&)pMyPool
                 ->Make(rOldName, eOldFamily, pHisSheet->GetMask() ) ) );
-        if( SFX_STYLE_FAMILY_PAGE == eOldFamily && rSource.ISA(SwDocShell) )
+        if( SFX_STYLE_FAMILY_PAGE == eOldFamily && dynamic_cast< SwDocShell* >(&rSource) )
         {
             // gesondert behandeln!!
             SwPageDesc* pDestDsc = (SwPageDesc*)xNewSheet->GetPageDesc();
@@ -712,10 +720,9 @@ void SwDocShell::Execute(SfxRequest& rReq)
             {
                 // call on all Docs the idle formatter to start
                 // the collection of Words
-                TypeId aType = TYPE(SwDocShell);
-                for( SwDocShell *pDocSh = (SwDocShell*)SfxObjectShell::GetFirst(&aType);
+                for( SwDocShell *pDocSh = (SwDocShell*)SfxObjectShell::GetFirst( _IsObjectShell< SwDocShell > );
                      pDocSh;
-                     pDocSh = (SwDocShell*)SfxObjectShell::GetNext( *pDocSh, &aType ) )
+                     pDocSh = (SwDocShell*)SfxObjectShell::GetNext( *pDocSh, _IsObjectShell< SwDocShell > ) )
                 {
                     SwDoc* pTmp = pDocSh->GetDoc();
                     if ( pTmp->GetCurrentViewShell() )  //swmod 071108//swmod 071225
@@ -731,16 +738,19 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this);
                 SfxViewShell* pViewShell = SfxViewShell::Current();
                 SwView* pCurrView = dynamic_cast< SwView *> ( pViewShell );
-                sal_Bool bCurrent = IS_TYPE( SwPagePreView, pViewShell );
+                sal_Bool bCurrent = pViewShell && typeid(SwPagePreView) == typeid(*pViewShell); // IS_TYPE( SwPagePreView, pViewShell );
 
                 while( pTmpFrm )    // search PreView
                 {
-                    if( IS_TYPE( SwView, pTmpFrm->GetViewShell()) )
+                    if(pTmpFrm->GetViewShell())
+                    {
+                        if( typeid(SwView) == typeid(*pTmpFrm->GetViewShell()) ) // IS_TYPE( SwView, pTmpFrm->GetViewShell()) )
                         bOnly = sal_False;
-                    else if( IS_TYPE( SwPagePreView, pTmpFrm->GetViewShell()))
+                        else if( typeid(SwPagePreView) == typeid(*pTmpFrm->GetViewShell()) ) // IS_TYPE( SwPagePreView, pTmpFrm->GetViewShell()))
                     {
                         pTmpFrm->GetFrame().Appear();
                         bFound = sal_True;
+                    }
                     }
                     if( bFound && !bOnly )
                         break;
@@ -763,7 +773,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 {
                     //JP 23.8.2001: Bug 91360 - PagePreView in the WebDocShell
                     //              is found under Id ViewShell2.
-                    if( ISA(SwWebDocShell) && SID_VIEWSHELL1 == nSlotId )
+                    if( dynamic_cast< SwWebDocShell* >(this) && SID_VIEWSHELL1 == nSlotId )
                         nSlotId = SID_VIEWSHELL2;
 
                     if( pCurrView && pCurrView->GetDocShell() == this )
@@ -799,11 +809,11 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                 if ( pArgs )
                 {
-                    SFX_REQUEST_ARG( rReq, pTemplateItem, SfxStringItem, SID_TEMPLATE_NAME, sal_False );
+                    SFX_REQUEST_ARG( rReq, pTemplateItem, SfxStringItem, SID_TEMPLATE_NAME );
                     if ( pTemplateItem )
                     {
                         aFileName = pTemplateItem->GetValue();
-                        SFX_REQUEST_ARG( rReq, pFlagsItem, SfxInt32Item, SID_TEMPLATE_LOAD, sal_False );
+                        SFX_REQUEST_ARG( rReq, pFlagsItem, SfxInt32Item, SID_TEMPLATE_LOAD );
                         if ( pFlagsItem )
                             nFlags = (sal_uInt16) pFlagsItem->GetValue();
                     }
@@ -1217,7 +1227,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nWhich, sal_False, &pItem ) )
                 {
                     aFileName = ((const SfxStringItem*)pItem)->GetValue();
-                    SFX_ITEMSET_ARG( pArgs, pTemplItem, SfxStringItem, SID_TEMPLATE_NAME, sal_False );
+                    SFX_ITEMSET_ARG( pArgs, pTemplItem, SfxStringItem, SID_TEMPLATE_NAME );
                     if ( pTemplItem )
                         aTemplateName = pTemplItem->GetValue();
                 }
@@ -1508,7 +1518,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
         case SID_ATTR_YEAR2000:
             if ( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nWhich , sal_False, &pItem ))
             {
-                DBG_ASSERT(pItem->ISA(SfxUInt16Item), "falsches Item");
+                DBG_ASSERT(dynamic_cast< const SfxUInt16Item* >(pItem), "falsches Item");
                 sal_uInt16 nYear2K = ((SfxUInt16Item*)pItem)->GetValue();
                 //ueber Views iterieren und den State an den FormShells setzen
 

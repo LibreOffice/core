@@ -42,9 +42,8 @@ class EDITENG_DLLPUBLIC SvxSizeItem : public SfxPoolItem
     Size aSize;
 
 public:
-    TYPEINFO();
-
-    SvxSizeItem( const sal_uInt16 nId );
+    POOLITEM_FACTORY()
+    SvxSizeItem( const sal_uInt16 nId = 0);
     SvxSizeItem( const sal_uInt16 nId, const Size& rSize);
 
     inline SvxSizeItem& operator=( const SvxSizeItem &rCpy );
@@ -62,8 +61,8 @@ public:
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const;
-    virtual int              ScaleMetrics( long nMult, long nDiv );
-    virtual int              HasMetrics() const;
+    virtual void             ScaleMetrics( long nMult, long nDiv );
+    virtual bool             HasMetrics() const;
 
     const Size& GetSize() const { return aSize; }
     void        SetSize(const Size& rSize) { aSize = rSize; }

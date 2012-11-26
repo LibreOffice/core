@@ -91,14 +91,6 @@ namespace drawinglayer
             BasePrimitive3D();
             virtual ~BasePrimitive3D();
 
-            /** the ==operator is mainly needed to allow testing newly-created high level primitives against their last
-                incarnation which buffers/holds the decompositionsThe default implementation
-                uses getPrimitive3DID()-calls to test if it's the same ID at last. Overloaded implementation are then
-                based on this implementation.
-             */
-            virtual bool operator==( const BasePrimitive3D& rPrimitive ) const;
-            bool operator!=( const BasePrimitive3D& rPrimitive ) const { return !operator==(rPrimitive); }
-
             /** This method is for places where using the C++ implementation directly is possible. The subprocessing
                 and range merging is more efficient when working directly on basegfx::B3DRange. The default implementation
                 will use getDecomposition results to create the range
@@ -191,14 +183,6 @@ namespace drawinglayer
 
         /// get range3D from a given Primitive3DSequence
         basegfx::B3DRange DRAWINGLAYER_DLLPUBLIC getB3DRangeFromPrimitive3DSequence(const Primitive3DSequence& rCandidate, const geometry::ViewInformation3D& aViewInformation);
-
-        /** compare two Primitive2DReferences for equality, including trying to get implementations (BasePrimitive2D)
-            and using compare operator
-         */
-        bool DRAWINGLAYER_DLLPUBLIC arePrimitive3DReferencesEqual(const Primitive3DReference& rA, const Primitive3DReference& rB);
-
-        /// compare two Primitive3DReferences for equality, uses arePrimitive3DReferencesEqual internally
-        bool DRAWINGLAYER_DLLPUBLIC arePrimitive3DSequencesEqual(const Primitive3DSequence& rA, const Primitive3DSequence& rB);
 
         /// concatenate sequence
         void DRAWINGLAYER_DLLPUBLIC appendPrimitive3DSequenceToPrimitive3DSequence(Primitive3DSequence& rDest, const Primitive3DSequence& rSource);

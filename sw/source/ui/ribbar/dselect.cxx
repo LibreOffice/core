@@ -88,7 +88,7 @@ sal_Bool DrawSelection::KeyInput(const KeyEvent& rKEvt)
 
 void DrawSelection::Activate(const sal_uInt16 nSlotId)
 {
-    m_pWin->SetSdrDrawMode(OBJ_NONE);
+    m_pWin->setSdrObjectCreationInfo(SdrObjectCreationInfo());
     m_pWin->SetObjectSelect( sal_True );
     SwDrawBase::Activate(nSlotId);
 

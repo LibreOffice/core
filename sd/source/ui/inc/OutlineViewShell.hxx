@@ -42,8 +42,6 @@ class OutlineViewShell
     : public ViewShell
 {
 public:
-    TYPEINFO();
-
     SFX_DECL_VIEWFACTORY(OutlineViewShell);
     SFX_DECL_INTERFACE(SD_IF_SDOUTLINEVIEWSHELL)
 
@@ -76,7 +74,7 @@ public:
     */
     virtual void ArrangeGUIElements (void);
 
-    virtual sal_uInt16 PrepareClose( sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False );
+    virtual sal_uInt16 PrepareClose( bool bUI = true, bool bForBrowsing = false );
 
     virtual long VirtHScrollHdl(ScrollBar* pHScroll);
     virtual long VirtVScrollHdl(ScrollBar* pVHScroll);
@@ -107,9 +105,9 @@ public:
     void FuSupport(SfxRequest &rReq);
 
     virtual void SetZoom(long nZoom);
-    virtual void SetZoomRect(const Rectangle& rZoomRect);
-    virtual String  GetSelectionText( sal_Bool bCompleteWords = sal_False );
-    virtual sal_Bool    HasSelection( sal_Bool bText = sal_True ) const;
+    virtual void SetZoomRange(const basegfx::B2DRange& rZoomRange);
+    virtual String  GetSelectionText( bool bCompleteWords = false );
+    virtual bool    HasSelection( bool bText = true ) const;
 
     void Execute(SfxRequest& rReq);
 
@@ -117,7 +115,7 @@ public:
     virtual void WriteFrameViewData();
 
     virtual void Command( const CommandEvent& rCEvt, ::sd::Window* pWin );
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin);
+    virtual bool KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin);
     virtual void MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin);
 
     sal_uLong   Read(SvStream& rInput, const String& rBaseURL, sal_uInt16 eFormat);
@@ -141,7 +139,7 @@ public:
 
     /** Update the preview to show the specified page.
     */
-    virtual void UpdatePreview (SdPage* pPage, sal_Bool bInit = sal_False);
+    virtual void UpdatePreview (SdPage* pPage, bool bInit = false);
 
     virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController (void);
 
@@ -163,7 +161,7 @@ private:
     OutlineView* pOlView;
     SdPage*         pLastPage; // Zur performanten Aufbereitung der Preview
     TransferableClipboardListener* pClipEvtLstnr;
-    sal_Bool            bPastePossible;
+    bool            bPastePossible;
     bool mbInitialized;
 
     void Construct (DrawDocShell* pDocSh);

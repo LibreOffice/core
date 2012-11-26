@@ -360,7 +360,7 @@ void SwVisCrsr::Show()
             }
         }
 #else
-            _SetPosAndShow();
+        _SetPosAndShow();
 #endif
     }
 }
@@ -863,7 +863,7 @@ sal_Bool SwShellCrsr::IsAtValidPos( sal_Bool bPoint ) const
     if( GetShell() && ( GetShell()->IsAllProtect() ||
         GetShell()->GetViewOptions()->IsReadonly() ||
         ( GetShell()->Imp()->GetDrawView() &&
-          GetShell()->Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() )))
+          GetShell()->Imp()->GetDrawView()->areSdrObjectsSelected() )))
         return sal_True;
 
     return SwCursor::IsAtValidPos( bPoint );

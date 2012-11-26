@@ -172,7 +172,7 @@ start:
             break;
         case SbxOBJECT:
         {
-            SbxValue* pVal = PTR_CAST(SbxValue,p->pObj);
+            SbxValue* pVal = dynamic_cast< SbxValue* >( p->pObj);
             if( pVal )
                 nRes = pVal->GetChar();
             else
@@ -275,7 +275,7 @@ start:
             break;
         case SbxOBJECT:
         {
-            SbxValue* pVal = PTR_CAST(SbxValue,p->pObj);
+            SbxValue* pVal = dynamic_cast< SbxValue* >( p->pObj);
             if( pVal )
                 pVal->PutChar( n );
             else

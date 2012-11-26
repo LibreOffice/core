@@ -58,9 +58,6 @@ DBG_NAME(SfxShell)
 
 //====================================================================
 
-TYPEINIT0(SfxShell);
-
-//====================================================================
 typedef SfxSlot* SfxSlotPtr;
 SV_DECL_PTRARR_DEL( SfxVerbSlotArr_Impl, SfxSlotPtr, 4, 4)
 SV_IMPL_PTRARR( SfxVerbSlotArr_Impl, SfxSlotPtr);
@@ -102,10 +99,10 @@ String SfxShellIdent_Impl( const SfxShell *pSh )
 */
 
 {
-    String aIdent( pSh->ISA(SfxApplication) ? DEFINE_CONST_UNICODE("SfxApplication") :
-                   pSh->ISA(SfxViewFrame) ? DEFINE_CONST_UNICODE("SfxViewFrame") :
-                   pSh->ISA(SfxViewShell) ? DEFINE_CONST_UNICODE("SfxViewShell") :
-                   pSh->ISA(SfxObjectShell) ? DEFINE_CONST_UNICODE("SfxObjectShell") : DEFINE_CONST_UNICODE("SfxShell") );
+    String aIdent( dynamic_cast< const SfxApplication* >(pSh) ? DEFINE_CONST_UNICODE("SfxApplication") :
+                   dynamic_cast< const SfxViewFrame* >(pSh) ? DEFINE_CONST_UNICODE("SfxViewFrame") :
+                   dynamic_cast< const SfxViewShell* >(pSh) ? DEFINE_CONST_UNICODE("SfxViewShell") :
+                   dynamic_cast< const SfxObjectShell* >(pSh) ? DEFINE_CONST_UNICODE("SfxObjectShell") : DEFINE_CONST_UNICODE("SfxShell") );
     aIdent += '[';
     aIdent += pSh->GetName();
     aIdent += ']';
@@ -401,7 +398,7 @@ void SfxShell::PutItem
 */
 
 {
-    DBG_ASSERT( !rItem.ISA(SfxSetItem), "SetItems aren't allowed here" );
+    DBG_ASSERT( !dynamic_cast< const SfxSetItem* >(&rItem), "SetItems aren't allowed here" );
     DBG_ASSERT( SfxItemPool::IsSlot( rItem.Which() ),
                 "items with Which-Ids aren't allowed here" );
 
@@ -1074,7 +1071,7 @@ SFX_STATE_STUB(SfxShell, VerbState)
 
 void SfxShell::SetVerbs(const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& aVerbs)
 {
-    SfxViewShell *pViewSh = PTR_CAST ( SfxViewShell, this);
+    SfxViewShell *pViewSh = dynamic_cast< SfxViewShell* >( this);
 
     DBG_ASSERT(pViewSh, "SetVerbs nur an der ViewShell aufrufen!");
     if ( !pViewSh )

@@ -96,6 +96,9 @@ namespace sdr
             drawinglayer::attribute::SdrLineAttribute* impCreateFallbackLineAttribute(const basegfx::BColor& rBColor) const;
 
         public:
+            // React on changes of the object of this ViewContact
+            virtual void ActionChanged();
+
             // access to the local primitive without the object's local 3D transform. This is e.g. needed
             // to get the not-yet transformed BoundVolume for e.g. interactions
             drawinglayer::primitive3d::Primitive3DSequence getVIP3DSWithoutObjectTransform() const;

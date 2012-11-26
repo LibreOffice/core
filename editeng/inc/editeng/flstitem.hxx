@@ -48,8 +48,6 @@ private:
     com::sun::star::uno::Sequence< rtl::OUString >  aFontNameSeq;
 
 public:
-    TYPEINFO();
-
     SvxFontListItem( const FontList* pFontLst,
                      const sal_uInt16 nId  );
     SvxFontListItem( const SvxFontListItem& rItem );

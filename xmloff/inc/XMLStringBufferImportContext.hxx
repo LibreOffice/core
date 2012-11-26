@@ -42,8 +42,6 @@ class XMLStringBufferImportContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLStringBufferImportContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,

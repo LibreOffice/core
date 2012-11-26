@@ -63,7 +63,7 @@ void SvxSelectionModeControl::StateChanged( sal_uInt16, SfxItemState eState,
         GetStatusBar().SetItemText( GetId(), String() );
     else
     {
-        DBG_ASSERT( pState->ISA( SfxUInt16Item ), "invalid item type" );
+        DBG_ASSERT( dynamic_cast< const SfxUInt16Item* >(pState), "invalid item type" );
         SfxUInt16Item* pItem = (SfxUInt16Item*)pState;
         nState = pItem->GetValue();
         DrawItemText_Impl();

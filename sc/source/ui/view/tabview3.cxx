@@ -41,6 +41,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/cursor.hxx>
+#include <svx/svdlegacy.hxx>
 
 #include "tabview.hxx"
 #include "tabvwsh.hxx"
@@ -276,8 +277,6 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, sal_Bool bNew )
 {
     SCCOL nOldX = aViewData.GetCurX();
     SCROW nOldY = aViewData.GetCurY();
-
-    //  DeactivateIP nur noch bei MarkListHasChanged
 
     if ( nPosX != nOldX || nPosY != nOldY || bNew )
     {
@@ -1705,7 +1704,7 @@ void ScTabView::SetTabNo( SCTAB nTab, sal_Bool bNew, sal_Bool bExtendSelection, 
                     SdrOle2Obj* pDrawObj = pClient->GetDrawObj();
                     if ( pDrawObj )
                     {
-                        Rectangle aRect = pDrawObj->GetLogicRect();
+                        Rectangle aRect(sdr::legacy::GetLogicRect(*pDrawObj));
                         MapMode aMapMode( MAP_100TH_MM );
                         Size aOleSize = pDrawObj->GetOrigObjSize( &aMapMode );
                         aRect.SetSize( aOleSize );
@@ -1851,7 +1850,7 @@ void ScTabView::UpdateEditView()
                 static_cast<ScEditEngineDefaulter*>(pEditView->GetEditEngine()),
                 pGridWin[i], GetViewData()->GetCurX(), GetViewData()->GetCurY() );
             if ( (ScSplitPos)i == eActive )
-                pEditView->ShowCursor( sal_False );
+                pEditView->ShowCursor( false );
         }
 }
 
@@ -2555,9 +2554,6 @@ void ScTabView::ActivateView( sal_Bool bActivate, sal_Bool bFirst )
         HideAllCursors();               // Cursor
     else if (!bFirst)
         ShowAllCursors();
-
-    //HMHif (pDrawView)
-    //HMH   DrawShowMarkHdl(bActivate);     // Drawing-Markierung
 
     if (bActivate)
     {

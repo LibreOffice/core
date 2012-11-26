@@ -24,24 +24,22 @@
 #ifndef _SHAPELIST_HXX
 #define _SHAPELIST_HXX
 
-#include <svx/sdrobjectuser.hxx>
-
 #include <list>
 
 namespace sd
 {
-    class ShapeList : public sdr::ObjectUser
+    class ShapeList : public SfxListener
     {
     public:
         ShapeList();
         virtual ~ShapeList();
 
         /** adds the given shape to this list */
-        void addShape( SdrObject& rObject );
+        void addShape( const SdrObject& rObject );
 
         /** removes the shape from this list and returns
             a pointer to the next shape in list or 0*/
-        SdrObject* removeShape( SdrObject& rObject );
+        const SdrObject* removeShape( const SdrObject& rObject );
 
         /** removes all shapes from this list */
         void clear();
@@ -50,15 +48,15 @@ namespace sd
         bool isEmpty() const;
 
         /** returns true if given shape is part of this list */
-        bool hasShape( SdrObject& rObject ) const;
+        bool hasShape( const SdrObject& rObject ) const;
 
         /** returns the shape following the given shape in the list or 0
             returns the first shape if pObj is 0 */
-        SdrObject* getNextShape(SdrObject* pObj) const;
+        const SdrObject* getNextShape(const SdrObject* pObj) const;
 
         /**
         */
-        SdrObject* getNextShape();
+        const SdrObject* getNextShape();
 
         /**
         */
@@ -68,12 +66,13 @@ namespace sd
         */
         bool hasMore() const;
 
-        const std::list< SdrObject* >& getList() const { return maShapeList; }
+        const std::list< const SdrObject* >& getList() const { return maShapeList; }
 
     private:
-        virtual void ObjectInDestruction(const SdrObject& rObject);
+        // derived from SfxListener
+        virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
-        typedef std::list< SdrObject* > ListImpl;
+        typedef std::list< const SdrObject* > ListImpl;
         ListImpl maShapeList;
         ListImpl::iterator maIter;
     };

@@ -687,7 +687,7 @@ namespace pcr
         const SfxPoolItem* pItem = pDocSh ? pDocSh->GetItem( SID_COLOR_TABLE ) : NULL;
         if ( pItem )
         {
-            DBG_ASSERT(pItem->ISA(SvxColorTableItem), "OColorControl::OColorControl: invalid color item!");
+            DBG_ASSERT(dynamic_cast< const SvxColorTableItem* >(pItem), "OColorControl::OColorControl: invalid color item!");
             pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
         }
 

@@ -95,8 +95,6 @@ SFX_IMPL_INTERFACE( TextObjectBar, SfxShell, SdResId(STR_TEXTOBJECTBARSHELL) )
 {
 }
 
-TYPEINIT1( TextObjectBar, SfxShell );
-
 /*************************************************************************
 |*
 |* Standard-Konstruktor
@@ -163,8 +161,8 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 {
     SfxWhichIter        aIter( rSet );
     sal_uInt16              nWhich = aIter.FirstWhich();
-    sal_Bool                bTemplate = sal_False;
-    SfxItemSet          aAttrSet( mpView->GetDoc()->GetPool() );
+    bool                bTemplate = false;
+    SfxItemSet          aAttrSet( mpView->GetDoc()->GetItemPool() );
     SvtLanguageOptions  aLangOpt;
     sal_Bool            bDisableParagraphTextDirection = !aLangOpt.IsCTLFontEnabled();
     sal_Bool            bDisableVerticalText = !aLangOpt.IsVerticalTextEnabled();
@@ -185,7 +183,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
             case SID_ATTR_CHAR_POSTURE:
             {
                 SvxScriptSetItem aSetItem( nSlotId, GetPool() );
-                aSetItem.GetItemSet().Put( aAttrSet, sal_False );
+                aSetItem.GetItemSet().Put( aAttrSet, false );
 
                 sal_uInt16 nScriptType = mpView->GetScriptType();
 
@@ -194,11 +192,11 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                     // #42732# input language should be preferred over
                     // current cursor position to detect script type
                     OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
+                    OutlineView* pOutlineView = dynamic_cast< OutlineView* >(mpView);
 
-                    if (mpView->ISA(OutlineView))
+                    if (pOutlineView)
                     {
-                        pOLV = static_cast<OutlineView*>(mpView)->GetViewByWindow(
-                            mpViewShell->GetActiveWindow());
+                        pOLV = pOutlineView->GetViewByWindow(mpViewShell->GetActiveWindow());
                     }
 
                     if(pOLV && !pOLV->GetSelection().HasRange())
@@ -231,7 +229,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                 {
                     rSet.Put( SfxTemplateItem( nWhich, String() ) );
                 }
-                bTemplate = sal_True;
+                bTemplate = true;
             }
             break;
 
@@ -240,19 +238,19 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
             case SID_OUTLINE_UP:
             case SID_OUTLINE_DOWN:
             {
-                sal_Bool bDisableLeft     = sal_True;
-                sal_Bool bDisableRight    = sal_True;
-                sal_Bool bDisableUp       = sal_True;
-                sal_Bool bDisableDown     = sal_True;
+                bool bDisableLeft     = true;
+                bool bDisableRight    = true;
+                bool bDisableUp       = true;
+                bool bDisableDown     = true;
                 OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
+                OutlineView* pOutlineView = dynamic_cast< OutlineView* >(mpView);
 
-                if (mpView->ISA(OutlineView))
+                if (pOutlineView)
                 {
-                    pOLV = static_cast<OutlineView*>(mpView)->GetViewByWindow(
-                        mpViewShell->GetActiveWindow());
+                    pOLV = pOutlineView->GetViewByWindow(mpViewShell->GetActiveWindow());
                 }
 
-                sal_Bool bOutlineViewSh = mpViewShell->ISA(OutlineViewShell);
+                bool bOutlineViewSh = dynamic_cast< OutlineViewShell* >(mpViewShell);
 
                 if (pOLV &&
                     ( pOLV->GetOutliner()->GetMode() == OUTLINERMODE_OUTLINEOBJECT || bOutlineViewSh ) )
@@ -263,7 +261,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                     Paragraph* pPara = (Paragraph*) pList->First();
 
                     // #96539# find out if we are a OutlineView
-                    sal_Bool bIsOutlineView(OUTLINERMODE_OUTLINEVIEW == pOLV->GetOutliner()->GetMode());
+                    bool bIsOutlineView(OUTLINERMODE_OUTLINEVIEW == pOLV->GetOutliner()->GetMode());
 
                     // #96539# This is ONLY for OutlineViews
                     if(bIsOutlineView)
@@ -283,7 +281,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                         if(pOutl->GetAbsPos(pPara) > 0)
                         {
                             // Nicht ganz oben
-                            bDisableUp = sal_False;
+                            bDisableUp = false;
                         }
                     }
 
@@ -294,14 +292,14 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                         if (nDepth > 0 || (bOutlineViewSh && (nDepth <= 0) && !pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE )) )
                         {
                             // Nicht minimale Tiefe
-                            bDisableLeft = sal_False;
+                            bDisableLeft = false;
                         }
 
                         if( (nDepth < pOLV->GetOutliner()->GetMaxDepth() && ( !bOutlineViewSh || pOutl->GetAbsPos(pPara) != 0 )) ||
                             (bOutlineViewSh && (nDepth <= 0) && pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE ) && pOutl->GetAbsPos(pPara) != 0) )
                         {
                             // Nicht maximale Tiefe und nicht ganz oben
-                            bDisableRight = sal_False;
+                            bDisableRight = false;
                         }
 
                         pPara = static_cast<Paragraph*>( pList->Next() );
@@ -311,7 +309,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                          ( pOutl->GetParagraphCount() > 1 || !bOutlineViewSh) )
                     {
                         // Nicht letzter Absatz
-                        bDisableDown = sal_False;
+                        bDisableDown = false;
                     }
 
                     // #96250# and #78665#
@@ -324,7 +322,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                         && !pOutl->HasParaFlag( pOutl->GetParagraph(1), PARAFLAG_ISPAGE ) )
                     {
                         // Needs to be disabled
-                        bDisableDown = sal_True;
+                        bDisableDown = true;
                     }
 
                     delete pList;
@@ -351,13 +349,13 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                 }
                 else
                 {
-                    sal_Bool bLeftToRight = sal_True;
+                    bool bLeftToRight = true;
 
                     SdrOutliner* pOutl = mpView->GetTextEditOutliner();
                     if( pOutl )
                     {
                         if( pOutl->IsVertical() )
-                            bLeftToRight = sal_False;
+                            bLeftToRight = false;
                     }
                     else
                         bLeftToRight = ( (const SvxWritingModeItem&) aAttrSet.Get( SDRATTR_TEXTDIRECTION ) ).GetValue() == com::sun::star::text::WritingMode_LR_TB;
@@ -411,11 +409,11 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
         nWhich = aIter.NextWhich();
     }
 
-    rSet.Put( aAttrSet, sal_False ); // <- sal_False, damit DontCare-Status uebernommen wird
+    rSet.Put( aAttrSet, false ); // <- false, damit DontCare-Status uebernommen wird
 
 
     // die sind im Gliederungsmodus disabled
-    if (!mpViewShell->ISA(DrawViewShell))
+    if (!dynamic_cast< DrawViewShell* >(mpViewShell))
     {
         rSet.DisableItem( SID_ATTR_PARA_ADJUST_LEFT );
         rSet.DisableItem( SID_ATTR_PARA_ADJUST_RIGHT );
@@ -468,16 +466,16 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
         switch( eAdj )
         {
             case SVX_ADJUST_LEFT:
-                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_LEFT, sal_True ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_LEFT, true ) );
             break;
             case SVX_ADJUST_CENTER:
-                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_CENTER, sal_True ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_CENTER, true ) );
             break;
             case SVX_ADJUST_RIGHT:
-                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_RIGHT, sal_True ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_RIGHT, true ) );
             break;
             case SVX_ADJUST_BLOCK:
-                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_BLOCK, sal_True ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_BLOCK, true ) );
             break;
             default:
             break;
@@ -502,13 +500,13 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                 break;
 
                 case FRMDIR_HORI_LEFT_TOP:
-                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_LEFT_TO_RIGHT, sal_True ) );
-                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_RIGHT_TO_LEFT, sal_False ) );
+                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_LEFT_TO_RIGHT, true ) );
+                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_RIGHT_TO_LEFT, false ) );
                 break;
 
                 case FRMDIR_HORI_RIGHT_TOP:
-                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_LEFT_TO_RIGHT, sal_False ) );
-                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_RIGHT_TO_LEFT, sal_True ) );
+                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_LEFT_TO_RIGHT, false ) );
+                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_RIGHT_TO_LEFT, true ) );
                 break;
 
                 // #107865#
@@ -539,11 +537,11 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 
             if (aBulletState.GetValue() != 0)
             {
-                rSet.Put(SfxBoolItem(FN_NUM_BULLET_ON, sal_True));
+                rSet.Put(SfxBoolItem(FN_NUM_BULLET_ON, true));
             }
             else
             {
-                rSet.Put(SfxBoolItem(FN_NUM_BULLET_ON, sal_False));
+                rSet.Put(SfxBoolItem(FN_NUM_BULLET_ON, false));
             }
         }
 */
@@ -552,13 +550,13 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
         switch( nLineSpace )
         {
             case 100:
-                rSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_10, sal_True ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_10, true ) );
             break;
             case 150:
-                rSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_15, sal_True ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_15, true ) );
             break;
             case 200:
-                rSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_20, sal_True ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_20, true ) );
             break;
         }
     }
@@ -568,9 +566,9 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                     aAttrSet.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
 
     if( eEsc == SVX_ESCAPEMENT_SUPERSCRIPT )
-        rSet.Put( SfxBoolItem( SID_SET_SUPER_SCRIPT, sal_True ) );
+        rSet.Put( SfxBoolItem( SID_SET_SUPER_SCRIPT, true ) );
     else if( eEsc == SVX_ESCAPEMENT_SUBSCRIPT )
-        rSet.Put( SfxBoolItem( SID_SET_SUB_SCRIPT, sal_True ) );
+        rSet.Put( SfxBoolItem( SID_SET_SUB_SCRIPT, true ) );
 }
 
 /*************************************************************************

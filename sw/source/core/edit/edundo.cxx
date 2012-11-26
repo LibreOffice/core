@@ -37,13 +37,13 @@
 #include <flyfrm.hxx>
 #include <frmfmt.hxx>
 #include <viewimp.hxx>
+#include <svx/svdlegacy.hxx>
 #include <docsh.hxx>
 
 
-/** helper function to select all objects in an SdrMarkList;
+/** helper function to select all objects in an SdrObject vector with selectedobjects;
  * implementation: see below */
-void lcl_SelectSdrMarkList( SwEditShell* pShell,
-                            const SdrMarkList* pSdrMarkList );
+void lcl_SelectSdrMarkList( SwEditShell* pShell, const SdrObjectVector& rSdrObjectVector );
 
 bool SwEditShell::CursorsLocked() const
 {
@@ -61,16 +61,15 @@ SwEditShell::HandleUndoRedoContext(::sw::UndoRedoContext & rContext)
     }
 
     SwFrmFmt * pSelFmt(0);
-    SdrMarkList * pMarkList(0);
-    rContext.GetSelections(pSelFmt, pMarkList);
+    SdrObjectVector aSdrObjectVector;
+    rContext.GetSelections(pSelFmt, aSdrObjectVector);
 
     if (pSelFmt) // select frame
     {
         if (RES_DRAWFRMFMT == pSelFmt->Which())
         {
             SdrObject* pSObj = pSelFmt->FindSdrObject();
-            static_cast<SwFEShell*>(this)->SelectObj(
-                    pSObj->GetCurrentBoundRect().Center() );
+            static_cast<SwFEShell*>(this)->SelectObj(pSObj->getObjectRange(0).getCenter());
         }
         else
         {
@@ -83,9 +82,9 @@ SwEditShell::HandleUndoRedoContext(::sw::UndoRedoContext & rContext)
             }
         }
     }
-    else if (pMarkList)
+    else if (aSdrObjectVector.size())
     {
-        lcl_SelectSdrMarkList( this, pMarkList );
+        lcl_SelectSdrMarkList( this, aSdrObjectVector );
     }
     else if (GetCrsr()->GetNext() != GetCrsr())
     {
@@ -225,19 +224,18 @@ bool SwEditShell::Repeat(sal_uInt16 const nCount)
 }
 
 
-void lcl_SelectSdrMarkList( SwEditShell* pShell,
-                            const SdrMarkList* pSdrMarkList )
+void lcl_SelectSdrMarkList( SwEditShell* pShell, const SdrObjectVector& rSdrObjectVector )
 {
     ASSERT( pShell != NULL, "need shell!" );
-    ASSERT( pSdrMarkList != NULL, "need mark list" );
+    SwFEShell* pFEShell = dynamic_cast< SwFEShell* >( pShell );
 
-    if( pShell->ISA( SwFEShell ) )
+    if( pFEShell )
     {
         SwFEShell* pFEShell = static_cast<SwFEShell*>( pShell );
         bool bFirst = true;
-        for( sal_uInt16 i = 0; i < pSdrMarkList->GetMarkCount(); ++i )
+        for( sal_uInt32 i = 0; i < rSdrObjectVector.size(); ++i )
         {
-            SdrObject *pObj = pSdrMarkList->GetMark( i )->GetMarkedSdrObj();
+            SdrObject *pObj = rSdrObjectVector[i];
             if( pObj )
             {
                 pFEShell->SelectObj( Point(), bFirst ? 0 : SW_ADD_SELECT, pObj );
@@ -248,7 +246,7 @@ void lcl_SelectSdrMarkList( SwEditShell* pShell,
         // the old implementation would always unselect
         // objects, even if no new ones were selected. If this
         // is a problem, we need to re-work this a little.
-        ASSERT( pSdrMarkList->GetMarkCount() != 0, "empty mark list" );
+        ASSERT( rSdrObjectVector.size() != 0, "empty mark list" );
     }
 }
 

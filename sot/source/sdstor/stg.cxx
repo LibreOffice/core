@@ -57,10 +57,6 @@ static long nTmpCount = 0;
 
 ///////////////////////// class StorageBase //////////////////////////////
 
-TYPEINIT0( StorageBase );
-TYPEINIT1( BaseStorageStream, StorageBase );
-TYPEINIT1( BaseStorage, StorageBase );
-
 StorageBase::StorageBase()
     : m_bAutoCommit( sal_False )
 {
@@ -175,8 +171,6 @@ sal_Bool OLEStorageBase::ValidateMode_Impl( StreamMode m, StgDirEntry* p ) const
 
 //////////////////////// class StorageStream /////////////////////////////
 
-TYPEINIT1( StorageStream, BaseStorageStream );
-
 StorageStream::StorageStream( StgIo* p, StgDirEntry* q, StreamMode m )
              : OLEStorageBase( p, q, m_nMode ), nPos( 0L )
 {
@@ -205,7 +199,7 @@ StorageStream::~StorageStream()
 
 sal_Bool StorageStream::Equals( const BaseStorageStream& rStream ) const
 {
-    const StorageStream* pOther = PTR_CAST( StorageStream, &rStream );
+    const StorageStream* pOther = dynamic_cast< const StorageStream* >( &rStream );
     return pOther && ( pOther->pEntry == pEntry );
 }
 
@@ -375,8 +369,6 @@ sal_Bool Storage::IsStorageFile( SvStream* pStream )
 
 // Open the storage file. If writing is permitted and the file is not
 // a storage file, initialize it.
-
-TYPEINIT1( Storage, BaseStorage );
 
 Storage::Storage( const String& rFile, StreamMode m, sal_Bool bDirect )
        : OLEStorageBase( new StgIo, NULL, m_nMode ), aName( rFile ), bIsRoot( sal_False )
@@ -863,7 +855,7 @@ sal_Bool Storage::MoveTo( const String& rElem, BaseStorage* pODest, const String
     {
         // Simplest case: both storages share the same file
         sal_Bool bRes;
-        Storage *pOther = PTR_CAST( Storage, pODest );
+        Storage *pOther = dynamic_cast< Storage* >( pODest );
         if( pOther && pIo == pOther->pIo && rElem == rNew )
         {
             Storage *p = (Storage*) pODest;
@@ -1115,7 +1107,7 @@ sal_Bool Storage::ValidateMode( StreamMode nMode, StgDirEntry* p ) const
 
 sal_Bool Storage::Equals( const BaseStorage& rStorage ) const
 {
-    const Storage* pOther = PTR_CAST( Storage, &rStorage );
+    const Storage* pOther = dynamic_cast< const Storage* >( &rStorage );
     return pOther && ( pOther->pEntry == pEntry );
 }
 

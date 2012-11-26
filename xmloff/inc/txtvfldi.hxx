@@ -176,8 +176,6 @@ private:
 
 public:
 
-    TYPEINFO();
-
     XMLVarFieldImportContext(
         // for XMLTextFieldImportContext:
         SvXMLImport& rImport,           /// XML Import
@@ -227,8 +225,6 @@ class XMLVariableGetFieldImportContext : public XMLVarFieldImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLVariableGetFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
@@ -252,8 +248,6 @@ class XMLExpressionFieldImportContext : public XMLVarFieldImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLExpressionFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
@@ -272,8 +266,6 @@ class XMLTextInputFieldImportContext : public XMLVarFieldImportContext
     const ::rtl::OUString sPropertyContent;
 
 public:
-
-    TYPEINFO();
 
     XMLTextInputFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
@@ -301,8 +293,6 @@ class XMLSetVarFieldImportContext : public XMLVarFieldImportContext
     const VarType eFieldType;
 
 public:
-
-    TYPEINFO();
 
     XMLSetVarFieldImportContext(
         // for XMLTextFieldImportContext:
@@ -348,8 +338,6 @@ class XMLVariableSetFieldImportContext : public XMLSetVarFieldImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLVariableSetFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
@@ -373,8 +361,6 @@ class XMLVariableInputFieldImportContext : public XMLSetVarFieldImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLVariableInputFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
@@ -397,8 +383,6 @@ class XMLUserFieldImportContext : public XMLSetVarFieldImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLUserFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
@@ -411,8 +395,6 @@ class XMLUserFieldInputImportContext : public XMLVarFieldImportContext
 {
 
 public:
-
-    TYPEINFO();
 
     XMLUserFieldInputImportContext(
         SvXMLImport& rImport,                   /// XML Import
@@ -441,8 +423,6 @@ class XMLSequenceFieldImportContext : public XMLSetVarFieldImportContext
     sal_Bool bRefNameOK;
 
 public:
-
-    TYPEINFO();
 
     XMLSequenceFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
@@ -478,8 +458,6 @@ class XMLVariableDeclsImportContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLVariableDeclsImportContext(
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// text import helper
@@ -512,8 +490,6 @@ class XMLVariableDeclImportContext : public SvXMLImportContext
     sal_Unicode cSeparationChar;
 
 public:
-
-    TYPEINFO();
 
     XMLVariableDeclImportContext(
         SvXMLImport& rImport,                   /// XML Import
@@ -551,8 +527,6 @@ class XMLTableFormulaImportContext : public XMLTextFieldImportContext
     sal_Bool bIsShowFormula;
 
 public:
-
-    TYPEINFO();
 
     XMLTableFormulaImportContext(
         SvXMLImport& rImport,                   /// XML Import
@@ -592,8 +566,6 @@ class XMLDatabaseDisplayImportContext : public XMLDatabaseFieldImportContext
     sal_Bool bDisplayOK;
 
 public:
-
-    TYPEINFO();
 
     XMLDatabaseDisplayImportContext(
         SvXMLImport& rImport,                   /// XML Import

@@ -34,8 +34,6 @@
 #define CNTWALLPAPERITEM_STREAM_MAGIC   ( (sal_uInt32)0xfefefefe )
 #define CNTWALLPAPERITEM_STREAM_SEEKREL (-( (long)( sizeof( sal_uInt32 ) ) ) )
 
-TYPEINIT1( CntWallpaperItem, SfxPoolItem );
-
 // -----------------------------------------------------------------------
 CntWallpaperItem::CntWallpaperItem( sal_uInt16 which )
     : SfxPoolItem( which ), _nColor( COL_TRANSPARENT ), _nStyle( 0 )

@@ -45,10 +45,9 @@ namespace rtl
 class EDITENG_DLLPUBLIC SvxCaseMapItem : public SfxEnumItem
 {
 public:
-    TYPEINFO();
-
-    SvxCaseMapItem( const SvxCaseMap eMap /*= SVX_CASEMAP_NOT_MAPPED*/,
-                    const sal_uInt16 nId );
+    POOLITEM_FACTORY()
+    SvxCaseMapItem( const SvxCaseMap eMap = SVX_CASEMAP_NOT_MAPPED,
+                    const sal_uInt16 nId = 0);
 
     // "pure virtual Methoden" vom SfxPoolItem + SfxEnumItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,

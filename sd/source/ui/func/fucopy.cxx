@@ -49,8 +49,6 @@
 #include "copydlg.hrc"
 namespace sd {
 
-TYPEINIT1( FuCopy, FuPoor );
-
 /*************************************************************************
 |*
 |* Konstruktor
@@ -76,10 +74,11 @@ FunctionReference FuCopy::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::
 
 void FuCopy::DoExecute( SfxRequest& rReq )
 {
-    if( mpView->AreObjectsMarked() )
+    if( mpView->areSdrObjectsSelected() )
     {
         // Undo
-        String aString( mpView->GetDescriptionOfMarkedObjects() );
+        const SdrObjectVector aInitialSelection(mpView->getSelectedSdrObjectVectorFromSdrMarkView());
+        String aString(getSelectionDescription(aInitialSelection));
         aString.Append( sal_Unicode(' ') );
         aString.Append( String( SdResId( STR_UNDO_COPYOBJECTS ) ) );
         mpView->BegUndo( aString );
@@ -92,16 +91,16 @@ void FuCopy::DoExecute( SfxRequest& rReq )
                                 ATTR_COPY_START, ATTR_COPY_END, 0 );
 
             // Farb-Attribut angeben
-            SfxItemSet aAttr( mpDoc->GetPool() );
+            SfxItemSet aAttr( mpDoc->GetItemPool() );
             mpView->GetAttributes( aAttr );
             const SfxPoolItem*  pPoolItem = NULL;
 
-            if( SFX_ITEM_SET == aAttr.GetItemState( XATTR_FILLSTYLE, sal_True, &pPoolItem ) )
+            if( SFX_ITEM_SET == aAttr.GetItemState( XATTR_FILLSTYLE, true, &pPoolItem ) )
             {
                 XFillStyle eStyle = ( ( const XFillStyleItem* ) pPoolItem )->GetValue();
 
                 if( eStyle == XFILL_SOLID &&
-                    SFX_ITEM_SET == aAttr.GetItemState( XATTR_FILLCOLOR, sal_True, &pPoolItem ) )
+                    SFX_ITEM_SET == aAttr.GetItemState( XATTR_FILLCOLOR, true, &pPoolItem ) )
                 {
                     const XFillColorItem* pItem = ( const XFillColorItem* ) pPoolItem;
                     XColorItem aXColorItem( ATTR_COPY_START_COLOR, pItem->GetName(),
@@ -139,51 +138,72 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             }
         }
 
-        Rectangle           aRect;
-        sal_Int32               lWidth = 0, lHeight = 0, lSizeX = 0L, lSizeY = 0L, lAngle = 0L;
-        sal_uInt16              nNumber = 0;
+        basegfx::B2DRange aRange;
+        double lWidth(0.0);
+        double lHeight(0.0);
+        double lSizeX(0.0);
+        double lSizeY(0.0);
+        double lAngle(0.0);
+        sal_uInt16 nNumber(0);
         Color               aStartColor, aEndColor;
-        sal_Bool                bColor = sal_False;
-        const SfxPoolItem*  pPoolItem = NULL;
+        bool bColor(false);
+        const SfxPoolItem* pPoolItem = 0;
 
         // Anzahl
-        if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_NUMBER, sal_True, &pPoolItem ) )
+        if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_NUMBER, true, &pPoolItem ) )
+        {
             nNumber = ( ( const SfxUInt16Item* ) pPoolItem )->GetValue();
+        }
 
         // Verschiebung
-        if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_MOVE_X, sal_True, &pPoolItem ) )
+        if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_MOVE_X, true, &pPoolItem ) )
+        {
             lSizeX = ( ( const SfxInt32Item* ) pPoolItem )->GetValue();
-        if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_MOVE_Y, sal_True, &pPoolItem ) )
+        }
+
+        if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_MOVE_Y, true, &pPoolItem ) )
+        {
             lSizeY = ( ( const SfxInt32Item* ) pPoolItem )->GetValue();
-        if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_ANGLE, sal_True, &pPoolItem ) )
-            lAngle = ( ( const SfxInt32Item* )pPoolItem )->GetValue();
+        }
+
+        if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_ANGLE, true, &pPoolItem ) )
+        {
+            const sal_Int32 nAngle(((const SfxInt32Item*)pPoolItem)->GetValue());
+            lAngle = (((360 - nAngle) % 360) * F_PI) / 180.0;
+        }
 
         // Verrgroesserung / Verkleinerung
-        if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_WIDTH, sal_True, &pPoolItem ) )
+        if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_WIDTH, true, &pPoolItem ) )
+        {
             lWidth = ( ( const SfxInt32Item* ) pPoolItem )->GetValue();
-        if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_HEIGHT, sal_True, &pPoolItem ) )
+        }
+
+        if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_HEIGHT, true, &pPoolItem ) )
+        {
             lHeight = ( ( const SfxInt32Item* ) pPoolItem )->GetValue();
+        }
 
         // Startfarbe / Endfarbe
-        if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_START_COLOR, sal_True, &pPoolItem ) )
+        if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_START_COLOR, true, &pPoolItem ) )
         {
             aStartColor = ( ( const XColorItem* ) pPoolItem )->GetColorValue();
-            bColor = sal_True;
+            bColor = true;
         }
-        if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_END_COLOR, sal_True, &pPoolItem ) )
+
+        if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_END_COLOR, true, &pPoolItem ) )
         {
             aEndColor = ( ( const XColorItem* ) pPoolItem )->GetColorValue();
+
             if( aStartColor == aEndColor )
-                bColor = sal_False;
+                bColor = false;
         }
         else
-            bColor = sal_False;
-
-        // Handles wegnehmen
-        //HMHmpView->HideMarkHdl();
+        {
+            bColor = false;
+        }
 
         SfxProgress*    pProgress = NULL;
-        sal_Bool            bWaiting = sal_False;
+        bool            bWaiting = false;
 
         if( nNumber > 1 )
         {
@@ -192,86 +212,88 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             aStr.Append( String( SdResId( STR_UNDO_COPYOBJECTS ) ) );
 
             pProgress = new SfxProgress( mpDocSh, aStr, nNumber );
-            mpDocSh->SetWaitCursor( sal_True );
-            bWaiting = sal_True;
+            mpDocSh->SetWaitCursor( true );
+            bWaiting = true;
         }
-
-        const SdrMarkList   aMarkList( mpView->GetMarkedObjectList() );
-        const sal_uLong         nMarkCount = aMarkList.GetMarkCount();
-        SdrObject*          pObj = NULL;
 
         // Anzahl moeglicher Kopien berechnen
-        aRect = mpView->GetAllMarkedRect();
+        aRange = mpView->getMarkedObjectSnapRange();
 
-        if( lWidth < 0L )
+        if( lWidth < 0.0 )
         {
-            long nTmp = ( aRect.Right() - aRect.Left() ) / -lWidth;
-            nNumber = (sal_uInt16) Min( nTmp, (long)nNumber );
+            const double fTmp(aRange.getWidth() / -lWidth);
+            nNumber = std::min((sal_uInt16)basegfx::fround(fTmp), nNumber);
         }
 
-        if( lHeight < 0L )
+        if( lHeight < 0.0 )
         {
-            long nTmp = ( aRect.Bottom() - aRect.Top() ) / -lHeight;
-            nNumber = (sal_uInt16) Min( nTmp, (long)nNumber );
+            const double fTmp(aRange.getHeight() / -lHeight);
+            nNumber = std::min((sal_uInt16)basegfx::fround(fTmp), nNumber);
         }
 
-        for( sal_uInt16 i = 1; i <= nNumber; i++ )
+        for( sal_uInt16 i(1); i <= nNumber; i++ )
         {
             if( pProgress )
+            {
                 pProgress->SetState( i );
+            }
 
-            aRect = mpView->GetAllMarkedRect();
+            aRange = mpView->getMarkedObjectSnapRange();
 
             if( ( 1 == i ) && bColor )
             {
                 SfxItemSet aNewSet( mpViewShell->GetPool(), XATTR_FILLSTYLE, XATTR_FILLCOLOR, 0L );
+
                 aNewSet.Put( XFillStyleItem( XFILL_SOLID ) );
                 aNewSet.Put( XFillColorItem( String(), aStartColor ) );
                 mpView->SetAttributes( aNewSet );
             }
 
             // make a copy of selected objects
-            mpView->CopyMarked();
+            mpView->CopyMarkedObj();
 
             // get newly selected objects
-            SdrMarkList aCopyMarkList( mpView->GetMarkedObjectList() );
-            sal_uLong       j, nCopyMarkCount = aMarkList.GetMarkCount();
+            const SdrObjectVector aSelectedSdrObjects(mpView->getSelectedSdrObjectVectorFromSdrMarkView());
+            sal_uInt32 j;
 
             // set protection flags at marked copies to null
-            for( j = 0; j < nCopyMarkCount; j++ )
+            for(j = 0; j < aSelectedSdrObjects.size(); j++)
             {
-                pObj = aCopyMarkList.GetMark( j )->GetMarkedSdrObj();
+                SdrObject* pObj = aSelectedSdrObjects[j];
 
-                if( pObj )
-                {
-                    pObj->SetMoveProtect( sal_False );
-                    pObj->SetResizeProtect( sal_False );
-                }
+                pObj->SetMoveProtect(false);
+                pObj->SetResizeProtect(false);
             }
 
-            Fraction aWidth( aRect.Right() - aRect.Left() + lWidth, aRect.Right() - aRect.Left() );
-            Fraction aHeight( aRect.Bottom() - aRect.Top() + lHeight, aRect.Bottom() - aRect.Top() );
-
             if( mpView->IsResizeAllowed() )
-                mpView->ResizeAllMarked( aRect.TopLeft(), aWidth, aHeight );
+            {
+                const basegfx::B2DVector aScale(
+                    (aRange.getWidth() + lWidth) / (basegfx::fTools::equalZero(aRange.getWidth()) ? 1.0 : aRange.getWidth()),
+                    (aRange.getHeight() + lHeight) / (basegfx::fTools::equalZero(aRange.getHeight()) ? 1.0 : aRange.getHeight()));
+
+                mpView->ResizeMarkedObj(aRange.getMinimum(), aScale);
+            }
 
             if( mpView->IsRotateAllowed() )
-                mpView->RotateAllMarked( aRect.Center(), lAngle * 100 );
+            {
+                mpView->RotateMarkedObj(aRange.getCenter(), lAngle);
+            }
 
             if( mpView->IsMoveAllowed() )
-                mpView->MoveAllMarked( Size( lSizeX, lSizeY ) );
+            {
+                mpView->MoveMarkedObj(basegfx::B2DVector(lSizeX, lSizeY));
+            }
 
             // set protection flags at marked copies to original values
-            if( nMarkCount == nCopyMarkCount )
+            if(aInitialSelection.size() == aSelectedSdrObjects.size())
             {
-                for( j = 0; j < nMarkCount; j++ )
+                for(j = 0; j < aInitialSelection.size(); j++)
                 {
-                    SdrObject* pSrcObj = aMarkList.GetMark( j )->GetMarkedSdrObj();
-                    SdrObject* pDstObj = aCopyMarkList.GetMark( j )->GetMarkedSdrObj();
+                    SdrObject* pSrcObj = aInitialSelection[j];
+                    SdrObject* pDstObj = aSelectedSdrObjects[j];
 
-                    if( pSrcObj && pDstObj &&
-                        ( pSrcObj->GetObjInventor() == pDstObj->GetObjInventor() ) &&
-                        ( pSrcObj->GetObjIdentifier() == pDstObj->GetObjIdentifier() ) )
+                    if(pSrcObj->GetObjInventor() == pDstObj->GetObjInventor()
+                        && pSrcObj->GetObjIdentifier() == pDstObj->GetObjIdentifier())
                     {
                         pDstObj->SetMoveProtect( pSrcObj->IsMoveProtect() );
                         pDstObj->SetResizeProtect( pSrcObj->IsResizeProtect() );
@@ -295,14 +317,17 @@ void FuCopy::DoExecute( SfxRequest& rReq )
         }
 
         if ( pProgress )
+        {
             delete pProgress;
+        }
 
         if ( bWaiting )
-            mpDocSh->SetWaitCursor( sal_False );
+        {
+            mpDocSh->SetWaitCursor( false );
+        }
 
-        // Handles zeigen
-        mpView->AdjustMarkHdl(); //HMH sal_True );
-        //HMHpView->ShowMarkHdl();
+        // adapt handles
+        mpView->SetMarkHandles();
 
         mpView->EndUndo();
     }

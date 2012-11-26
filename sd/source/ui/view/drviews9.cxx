@@ -101,108 +101,78 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
 
         if ( pGal )
         {
-            GetDocSh()->SetWaitCursor( sal_True );
+            GetDocSh()->SetWaitCursor( true );
 
             // Graphik einfuegen
-            if (nFormats & SGA_FORMAT_GRAPHIC)
+            if (nFormats & SGA_FORMAT_GRAPHIC && mpDrawView->GetSdrPageView())
             {
                 Graphic aGraphic = pGal->GetGraphic();
 
                 // Ggf. Groesse reduzieren
-                Window aWindow (GetActiveWindow());
-                aWindow.SetMapMode(aGraphic.GetPrefMapMode());
-                Size aSizePix = aWindow.LogicToPixel(aGraphic.GetPrefSize());
-                aWindow.SetMapMode( MapMode(MAP_100TH_MM) );
-                Size aSize = aWindow.PixelToLogic(aSizePix);
+                const Size aSiz100thmm(GetActiveWindow()->LogicToLogic(aGraphic.GetPrefSize(), aGraphic.GetPrefMapMode(), MapMode(MAP_100TH_MM)));
+                basegfx::B2DVector aSizeLogic(aSiz100thmm.Width(), aSiz100thmm.Height());
 
                 // Groesse ggf. auf Seitengroesse begrenzen
-                SdrPage* pPage = mpDrawView->GetSdrPageView()->GetPage();
-                Size aPageSize = pPage->GetSize();
-                aPageSize.Width() -= pPage->GetLftBorder() + pPage->GetRgtBorder();
-                aPageSize.Height() -= pPage->GetUppBorder() + pPage->GetLwrBorder();
+                SdrPage& rPage = mpDrawView->GetSdrPageView()->getSdrPageFromSdrPageView();
+                const basegfx::B2DVector aInnerPageScale(rPage.GetInnerPageScale());
 
-
-                // Falls Grafik zu gross, wird die Grafik
-                // in die Seite eingepasst
-                if ( ( ( aSize.Height() > aPageSize.Height() ) || ( aSize.Width()   > aPageSize.Width() ) ) &&
-                    aSize.Height() && aPageSize.Height() )
+                // Falls Grafik zu gross, wird die Grafik in die Seite eingepasst
+                if(!basegfx::fTools::equalZero(aSizeLogic.getY())
+                    && !basegfx::fTools::equalZero(aInnerPageScale.getY())
+                    && (basegfx::fTools::more(aSizeLogic.getY(), aInnerPageScale.getY())
+                        || basegfx::fTools::more(aSizeLogic.getX(), aInnerPageScale.getX())))
                 {
-                    float fGrfWH =  (float)aSize.Width() /
-                                    (float)aSize.Height();
-                    float fWinWH =  (float)aPageSize.Width() /
-                                    (float)aPageSize.Height();
+                    const double fGrfWH(aSizeLogic.getX() / aSizeLogic.getY());
+                    const double fWinWH(aInnerPageScale.getX() / aInnerPageScale.getY());
 
                     // Grafik an Pagesize anpassen (skaliert)
-                    if ((fGrfWH != 0.F) && (fGrfWH < fWinWH))
+                    if(!basegfx::fTools::equalZero(fGrfWH) && basegfx::fTools::less(fGrfWH, fWinWH))
                     {
-                        aSize.Width() = (long)(aPageSize.Height() * fGrfWH);
-                        aSize.Height()= aPageSize.Height();
+                        aSizeLogic.setX(aInnerPageScale.getY() * fGrfWH);
+                        aSizeLogic.setY(aInnerPageScale.getY());
                     }
                     else
                     {
-                        aSize.Width() = aPageSize.Width();
-                        aSize.Height()= (long)(aPageSize.Width() / fGrfWH);
+                        aSizeLogic.setX(aInnerPageScale.getX());
+                        aSizeLogic.setY(aInnerPageScale.getX() / fGrfWH);
                     }
                 }
 
-
                 // Ausgaberechteck fuer Grafik setzen
-                Point aPnt ((aPageSize.Width()  - aSize.Width())  / 2,
-                            (aPageSize.Height() - aSize.Height()) / 2);
-                aPnt += Point(pPage->GetLftBorder(), pPage->GetUppBorder());
-                Rectangle aRect (aPnt, aSize);
+                const basegfx::B2DPoint aPnt(((aInnerPageScale - aSizeLogic) * 0.5) + basegfx::B2DPoint(rPage.GetLeftPageBorder(), rPage.GetTopPageBorder()));
+                bool bInsertNewObject = true;
+                SdrGrafObj* pGrafObj = dynamic_cast< SdrGrafObj* >(mpDrawView->getSelectedIfSingle());
 
-                SdrGrafObj* pGrafObj = NULL;
-
-                sal_Bool bInsertNewObject = sal_True;
-
-                if ( mpDrawView->AreObjectsMarked() )
+                if(pGrafObj && pGrafObj->IsEmptyPresObj() )
                 {
-                    /******************************************************
-                    * Ist ein leeres Graphik-Objekt vorhanden?
-                    ******************************************************/
-                    const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
+                    /******************************************
+                    * Das leere Graphik-Objekt bekommt eine neue
+                    * Graphik
+                    ******************************************/
+                    bInsertNewObject = false;
 
-                    if (rMarkList.GetMarkCount() == 1)
-                    {
-                        SdrMark* pMark = rMarkList.GetMark(0);
-                        SdrObject* pObj = pMark->GetMarkedSdrObj();
-
-                        if (pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_GRAF)
-                        {
-                            pGrafObj = (SdrGrafObj*) pObj;
-
-                            if( pGrafObj->IsEmptyPresObj() )
-                            {
-                                /******************************************
-                                * Das leere Graphik-Objekt bekommt eine neue
-                                * Graphik
-                                ******************************************/
-                                bInsertNewObject = sal_False;
-
-                                SdrGrafObj* pNewGrafObj = (SdrGrafObj*) pGrafObj->Clone();
-                                pNewGrafObj->SetEmptyPresObj(sal_False);
+                    SdrGrafObj* pNewGrafObj = (SdrGrafObj*) pGrafObj->CloneSdrObject();
+                    pNewGrafObj->SetEmptyPresObj(false);
                                 pNewGrafObj->SetOutlinerParaObject(NULL);
                                 pNewGrafObj->SetGraphic(aGraphic);
 
-                                String aStr(mpDrawView->GetDescriptionOfMarkedObjects());
+                    String aStr;
+
+                    pGrafObj->TakeObjNameSingul(aStr);
                                 aStr += sal_Unicode(' ');
                                 aStr += String(SdResId(STR_UNDO_REPLACE));
                                 mpDrawView->BegUndo(aStr);
-                                SdrPageView* pPV = mpDrawView->GetSdrPageView();
-                                mpDrawView->ReplaceObjectAtView(pGrafObj, *pPV, pNewGrafObj);
+                    mpDrawView->ReplaceObjectAtView(*pGrafObj, *pNewGrafObj);
                                 mpDrawView->EndUndo();
-                            }
-                        }
-                    }
                 }
-
 
                 if( bInsertNewObject )
                 {
-                    pGrafObj = new SdrGrafObj(aGraphic, aRect);
-                    SdrPageView* pPV = mpDrawView->GetSdrPageView();
-                    mpDrawView->InsertObjectAtView(pGrafObj, *pPV, SDRINSERT_SETDEFLAYER);
+                    pGrafObj = new SdrGrafObj(
+                        *GetDoc(),
+                        aGraphic,
+                        basegfx::tools::createScaleTranslateB2DHomMatrix(aSizeLogic, aPnt));
+                    mpDrawView->InsertObjectAtView(*pGrafObj, SDRINSERT_SETDEFLAYER);
                 }
 
                 // Soll nur ein Link benutzt werden?
@@ -216,7 +186,7 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
                    GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_AVMEDIA, SFX_CALLMODE_SYNCHRON, &aMediaURLItem, 0L );
             }
 
-            GetDocSh()->SetWaitCursor( sal_False );
+            GetDocSh()->SetWaitCursor( false );
         }
     }
 }
@@ -255,7 +225,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
     CheckLineTo (rReq);
 
     SfxBindings&    rBindings = GetViewFrame()->GetBindings();
-    SfxItemSet*     pAttr = new SfxItemSet ( GetDoc()->GetPool() );
+    SfxItemSet*     pAttr = new SfxItemSet ( GetDoc()->GetItemPool() );
 
     GetView()->GetAttributes( *pAttr );
     const SfxItemSet* pArgs = rReq.GetArgs();
@@ -267,7 +237,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
             if (pArgs)
                 if (pArgs->Count () == 1)
                 {
-                    SFX_REQUEST_ARG (rReq, pFillStyle, SfxUInt32Item, ID_VAL_STYLE, sal_False);
+                    SFX_REQUEST_ARG (rReq, pFillStyle, SfxUInt32Item, ID_VAL_STYLE );
                     if (CHECK_RANGE (XFILL_NONE, (sal_Int32)pFillStyle->GetValue (), XFILL_BITMAP))
                     {
                         pAttr->ClearItem (XATTR_FILLSTYLE);
@@ -287,7 +257,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
             if (pArgs)
                 if (pArgs->Count () == 1)
                 {
-                    SFX_REQUEST_ARG (rReq, pLineStyle, SfxUInt32Item, ID_VAL_STYLE, sal_False);
+                    SFX_REQUEST_ARG (rReq, pLineStyle, SfxUInt32Item, ID_VAL_STYLE );
                     if (CHECK_RANGE (XLINE_NONE, (sal_Int32)pLineStyle->GetValue (), XLINE_DASH))
                     {
                         pAttr->ClearItem (XATTR_LINESTYLE);
@@ -307,7 +277,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
             if (pArgs)
                 if (pArgs->Count () == 1)
                 {
-                    SFX_REQUEST_ARG (rReq, pLineWidth, SfxUInt32Item, ID_VAL_WIDTH, sal_False);
+                    SFX_REQUEST_ARG (rReq, pLineWidth, SfxUInt32Item, ID_VAL_WIDTH );
                     pAttr->ClearItem (XATTR_LINEWIDTH);
                     pAttr->Put (XLineWidthItem (pLineWidth->GetValue ()), XATTR_LINEWIDTH);
                     rBindings.Invalidate (SID_ATTR_LINE_WIDTH);
@@ -321,9 +291,9 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
             if (pArgs)
                 if (pArgs->Count () == 3)
                 {
-                    SFX_REQUEST_ARG (rReq, pRed, SfxUInt32Item, ID_VAL_RED, sal_False);
-                    SFX_REQUEST_ARG (rReq, pGreen, SfxUInt32Item, ID_VAL_GREEN, sal_False);
-                    SFX_REQUEST_ARG (rReq, pBlue, SfxUInt32Item, ID_VAL_BLUE, sal_False);
+                    SFX_REQUEST_ARG (rReq, pRed, SfxUInt32Item, ID_VAL_RED );
+                    SFX_REQUEST_ARG (rReq, pGreen, SfxUInt32Item, ID_VAL_GREEN );
+                    SFX_REQUEST_ARG (rReq, pBlue, SfxUInt32Item, ID_VAL_BLUE );
 
                     pAttr->ClearItem (XATTR_FILLCOLOR);
                     pAttr->ClearItem (XATTR_FILLSTYLE);
@@ -344,9 +314,9 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
             if (pArgs)
                 if (pArgs->Count () == 3)
                 {
-                    SFX_REQUEST_ARG (rReq, pRed, SfxUInt32Item, ID_VAL_RED, sal_False);
-                    SFX_REQUEST_ARG (rReq, pGreen, SfxUInt32Item, ID_VAL_GREEN, sal_False);
-                    SFX_REQUEST_ARG (rReq, pBlue, SfxUInt32Item, ID_VAL_BLUE, sal_False);
+                    SFX_REQUEST_ARG (rReq, pRed, SfxUInt32Item, ID_VAL_RED );
+                    SFX_REQUEST_ARG (rReq, pGreen, SfxUInt32Item, ID_VAL_GREEN );
+                    SFX_REQUEST_ARG (rReq, pBlue, SfxUInt32Item, ID_VAL_BLUE );
 
                     pAttr->ClearItem (XATTR_LINECOLOR);
                     pAttr->Put (XLineColorItem (-1, Color ((sal_uInt8) pRed->GetValue (),
@@ -365,10 +335,10 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
             if (pArgs)
                 if (pArgs->Count () == 4)
                 {
-                    SFX_REQUEST_ARG (rReq, pName, SfxStringItem, ID_VAL_INDEX, sal_False);
-                    SFX_REQUEST_ARG (rReq, pRed, SfxUInt32Item, ID_VAL_RED, sal_False);
-                    SFX_REQUEST_ARG (rReq, pGreen, SfxUInt32Item, ID_VAL_GREEN, sal_False);
-                    SFX_REQUEST_ARG (rReq, pBlue, SfxUInt32Item, ID_VAL_BLUE, sal_False);
+                    SFX_REQUEST_ARG (rReq, pName, SfxStringItem, ID_VAL_INDEX );
+                    SFX_REQUEST_ARG (rReq, pRed, SfxUInt32Item, ID_VAL_RED );
+                    SFX_REQUEST_ARG (rReq, pGreen, SfxUInt32Item, ID_VAL_GREEN );
+                    SFX_REQUEST_ARG (rReq, pBlue, SfxUInt32Item, ID_VAL_BLUE );
 
                     XGradientList *pGradientList = GetDoc()->GetGradientList ();
                     long          nCounts        = pGradientList->Count ();
@@ -425,10 +395,10 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
             if (pArgs)
                 if (pArgs->Count () == 4)
                 {
-                    SFX_REQUEST_ARG (rReq, pName, SfxStringItem, ID_VAL_INDEX, sal_False);
-                    SFX_REQUEST_ARG (rReq, pRed, SfxUInt32Item, ID_VAL_RED, sal_False);
-                    SFX_REQUEST_ARG (rReq, pGreen, SfxUInt32Item, ID_VAL_GREEN, sal_False);
-                    SFX_REQUEST_ARG (rReq, pBlue, SfxUInt32Item, ID_VAL_BLUE, sal_False);
+                    SFX_REQUEST_ARG (rReq, pName, SfxStringItem, ID_VAL_INDEX );
+                    SFX_REQUEST_ARG (rReq, pRed, SfxUInt32Item, ID_VAL_RED );
+                    SFX_REQUEST_ARG (rReq, pGreen, SfxUInt32Item, ID_VAL_GREEN );
+                    SFX_REQUEST_ARG (rReq, pBlue, SfxUInt32Item, ID_VAL_BLUE );
 
                     XHatchList *pHatchList = GetDoc()->GetHatchList ();
                     long       nCounts     = pHatchList->Count ();
@@ -479,13 +449,13 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
             if (pArgs)
                 if (pArgs->Count () == 7)
                 {
-                    SFX_REQUEST_ARG (rReq, pName, SfxStringItem, ID_VAL_INDEX, sal_False);
-                    SFX_REQUEST_ARG (rReq, pStyle, SfxUInt32Item, ID_VAL_STYLE, sal_False);
-                    SFX_REQUEST_ARG (rReq, pDots, SfxUInt32Item, ID_VAL_DOTS, sal_False);
-                    SFX_REQUEST_ARG (rReq, pDotLen, SfxUInt32Item, ID_VAL_DOTLEN, sal_False);
-                    SFX_REQUEST_ARG (rReq, pDashes, SfxUInt32Item, ID_VAL_DASHES, sal_False);
-                    SFX_REQUEST_ARG (rReq, pDashLen, SfxUInt32Item, ID_VAL_DASHLEN, sal_False);
-                    SFX_REQUEST_ARG (rReq, pDistance, SfxUInt32Item, ID_VAL_DISTANCE, sal_False);
+                    SFX_REQUEST_ARG (rReq, pName, SfxStringItem, ID_VAL_INDEX );
+                    SFX_REQUEST_ARG (rReq, pStyle, SfxUInt32Item, ID_VAL_STYLE );
+                    SFX_REQUEST_ARG (rReq, pDots, SfxUInt32Item, ID_VAL_DOTS );
+                    SFX_REQUEST_ARG (rReq, pDotLen, SfxUInt32Item, ID_VAL_DOTLEN );
+                    SFX_REQUEST_ARG (rReq, pDashes, SfxUInt32Item, ID_VAL_DASHES );
+                    SFX_REQUEST_ARG (rReq, pDashLen, SfxUInt32Item, ID_VAL_DASHLEN );
+                    SFX_REQUEST_ARG (rReq, pDistance, SfxUInt32Item, ID_VAL_DISTANCE );
 
                     if (CHECK_RANGE (XDASH_RECT, (sal_Int32)pStyle->GetValue (), XDASH_ROUNDRELATIVE))
                     {
@@ -527,14 +497,14 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
             if (pArgs)
                 if (pArgs->Count () == 8)
                 {
-                    SFX_REQUEST_ARG (rReq, pName, SfxStringItem, ID_VAL_INDEX, sal_False);
-                    SFX_REQUEST_ARG (rReq, pStyle, SfxUInt32Item, ID_VAL_STYLE, sal_False);
-                    SFX_REQUEST_ARG (rReq, pAngle, SfxUInt32Item, ID_VAL_ANGLE, sal_False);
-                    SFX_REQUEST_ARG (rReq, pBorder, SfxUInt32Item, ID_VAL_BORDER, sal_False);
-                    SFX_REQUEST_ARG (rReq, pCenterX, SfxUInt32Item, ID_VAL_CENTER_X, sal_False);
-                    SFX_REQUEST_ARG (rReq, pCenterY, SfxUInt32Item, ID_VAL_CENTER_Y, sal_False);
-                    SFX_REQUEST_ARG (rReq, pStart, SfxUInt32Item, ID_VAL_STARTINTENS, sal_False);
-                    SFX_REQUEST_ARG (rReq, pEnd, SfxUInt32Item, ID_VAL_ENDINTENS, sal_False);
+                    SFX_REQUEST_ARG (rReq, pName, SfxStringItem, ID_VAL_INDEX );
+                    SFX_REQUEST_ARG (rReq, pStyle, SfxUInt32Item, ID_VAL_STYLE );
+                    SFX_REQUEST_ARG (rReq, pAngle, SfxUInt32Item, ID_VAL_ANGLE );
+                    SFX_REQUEST_ARG (rReq, pBorder, SfxUInt32Item, ID_VAL_BORDER );
+                    SFX_REQUEST_ARG (rReq, pCenterX, SfxUInt32Item, ID_VAL_CENTER_X );
+                    SFX_REQUEST_ARG (rReq, pCenterY, SfxUInt32Item, ID_VAL_CENTER_Y );
+                    SFX_REQUEST_ARG (rReq, pStart, SfxUInt32Item, ID_VAL_STARTINTENS );
+                    SFX_REQUEST_ARG (rReq, pEnd, SfxUInt32Item, ID_VAL_ENDINTENS );
 
                     if (CHECK_RANGE (XGRAD_LINEAR, (sal_Int32)pStyle->GetValue (), XGRAD_RECT) &&
                         CHECK_RANGE (0, (sal_Int32)pAngle->GetValue (), 360) &&
@@ -602,10 +572,10 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
             if (pArgs)
                 if (pArgs->Count () == 4)
                 {
-                    SFX_REQUEST_ARG (rReq, pName, SfxStringItem, ID_VAL_INDEX, sal_False);
-                    SFX_REQUEST_ARG (rReq, pStyle, SfxUInt32Item, ID_VAL_STYLE, sal_False);
-                    SFX_REQUEST_ARG (rReq, pDistance, SfxUInt32Item, ID_VAL_DISTANCE, sal_False);
-                    SFX_REQUEST_ARG (rReq, pAngle, SfxUInt32Item, ID_VAL_ANGLE, sal_False);
+                    SFX_REQUEST_ARG (rReq, pName, SfxStringItem, ID_VAL_INDEX );
+                    SFX_REQUEST_ARG (rReq, pStyle, SfxUInt32Item, ID_VAL_STYLE );
+                    SFX_REQUEST_ARG (rReq, pDistance, SfxUInt32Item, ID_VAL_DISTANCE );
+                    SFX_REQUEST_ARG (rReq, pAngle, SfxUInt32Item, ID_VAL_ANGLE );
 
                     if (CHECK_RANGE (XHATCH_SINGLE, (sal_Int32)pStyle->GetValue (), XHATCH_TRIPLE) &&
                         CHECK_RANGE (0, (sal_Int32)pAngle->GetValue (), 360))
@@ -661,7 +631,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
             if (pArgs)
                 if (pArgs->Count () == 1)
                 {
-                    SFX_REQUEST_ARG (rReq, pName, SfxStringItem, ID_VAL_INDEX, sal_False);
+                    SFX_REQUEST_ARG (rReq, pName, SfxStringItem, ID_VAL_INDEX );
 
                     XGradientList  *pGradientList = GetDoc()->GetGradientList ();
                     long           nCounts        = pGradientList->Count ();
@@ -695,7 +665,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
             if (pArgs)
                 if (pArgs->Count () == 1)
                 {
-                    SFX_REQUEST_ARG (rReq, pName, SfxStringItem, ID_VAL_INDEX, sal_False);
+                    SFX_REQUEST_ARG (rReq, pName, SfxStringItem, ID_VAL_INDEX );
 
                     XHatchList *pHatchList = GetDoc()->GetHatchList ();
                     long       nCounts     = pHatchList->Count ();
@@ -777,7 +747,7 @@ void DrawViewShell::AttrState (SfxItemSet& rSet)
 {
     SfxWhichIter     aIter (rSet);
     sal_uInt16           nWhich = aIter.FirstWhich ();
-    SfxItemSet aAttr( GetDoc()->GetPool() );
+    SfxItemSet aAttr( GetDoc()->GetItemPool() );
     mpDrawView->GetAttributes( aAttr );
 
     while (nWhich)

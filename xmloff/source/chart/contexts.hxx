@@ -55,8 +55,6 @@ public:
         const rtl::OUString& rLName );
     virtual ~SchXMLDocContext();
 
-    TYPEINFO();
-
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
         const ::rtl::OUString& rLocalName,

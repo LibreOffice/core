@@ -44,10 +44,8 @@ class EDITENG_DLLPUBLIC SvxTextLineItem : public SfxEnumItem
 {
     Color mColor;
 public:
-    TYPEINFO();
-
-    SvxTextLineItem( const FontUnderline eSt,
-                     const sal_uInt16 nId );
+    POOLITEM_FACTORY()
+    SvxTextLineItem( const FontUnderline eSt = UNDERLINE_NONE, const sal_uInt16 nId = 0 );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -99,8 +97,6 @@ public:
 class EDITENG_DLLPUBLIC SvxUnderlineItem : public SvxTextLineItem
 {
 public:
-    TYPEINFO();
-
     SvxUnderlineItem( const FontUnderline eSt,
                       const sal_uInt16 nId );
 
@@ -116,8 +112,6 @@ public:
 class EDITENG_DLLPUBLIC SvxOverlineItem : public SvxTextLineItem
 {
 public:
-    TYPEINFO();
-
     SvxOverlineItem( const FontUnderline eSt,
                      const sal_uInt16 nId );
 

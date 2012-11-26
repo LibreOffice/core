@@ -410,7 +410,6 @@ uno::Sequence< beans::PropertyValue > SwXRedlinePortion::CreateRedlineProperties
     return aRet;
 }
 
-TYPEINIT1(SwXRedline, SwClient);
 SwXRedline::SwXRedline(SwRedline& rRedline, SwDoc& rDoc) :
     SwXText(&rDoc, CURSOR_REDLINE),
     pDoc(&rDoc),

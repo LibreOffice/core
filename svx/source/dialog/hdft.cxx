@@ -373,7 +373,7 @@ void SvxHFPage::Reset( const SfxItemSet& rSet )
         const SfxPoolItem* pExt1 = GetItem( rSet, SID_ATTR_PAGE_EXT1 );
         const SfxPoolItem* pExt2 = GetItem( rSet, SID_ATTR_PAGE_EXT2 );
 
-        if ( pExt1 && pExt1->ISA(SfxBoolItem) && pExt2 && pExt2->ISA(SfxBoolItem) )
+        if ( pExt1 && dynamic_cast< const SfxBoolItem* >(pExt1) && pExt2 && dynamic_cast< const SfxBoolItem* >(pExt2) )
             nDefaultDist = DEF_DIST_CALC;
 
         SetMetricValue( aDistEdit, nDefaultDist, SFX_MAPUNIT_100TH_MM );
@@ -860,7 +860,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 
     pItem = GetItem( rSet, SID_ATTR_PAGE_EXT1 );
 
-    if ( pItem && pItem->ISA(SfxBoolItem) )
+    if ( pItem && dynamic_cast< const SfxBoolItem* >(pItem) )
     {
         aBspWin.SetTable( sal_True );
         aBspWin.SetHorz( ( (SfxBoolItem*)pItem )->GetValue() );
@@ -868,7 +868,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 
     pItem = GetItem( rSet, SID_ATTR_PAGE_EXT2 );
 
-    if ( pItem && pItem->ISA(SfxBoolItem) )
+    if ( pItem && dynamic_cast< const SfxBoolItem* >(pItem) )
     {
         aBspWin.SetTable( sal_True );
         aBspWin.SetVert( ( (SfxBoolItem*)pItem )->GetValue() );

@@ -24,165 +24,165 @@
 #ifndef _SVDDRAG_HXX
 #define _SVDDRAG_HXX
 
-
-#include <tools/contnr.hxx>
-#include <tools/gen.hxx>
-#include <tools/fract.hxx>
+#include <sal/types.h>
 #include "svx/svxdllapi.h"
+#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/range/b2drange.hxx>
+#include <boost/utility.hpp>
 
-// Statushalter fuer objektspeziefisches Draggen. Damit das Model
-// Statusfrei bleibt werden die Statusdaten an der View gehalten
-// und dem Objekt zu gegebener Zeit als Parameter uebergeben.
-// Ausserdem auch Statushalter fuer den Vorgang der Interaktiven
-// Objekterzeugung. pHdl ist in diesem Fall NULL.
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// predefines
+
 class SdrHdl;
 class SdrView;
-class SdrPageView;
+//class SdrPaintView;
+//class SdrPageView;
 class SdrDragMethod;
 
-struct SVX_DLLPUBLIC SdrDragStatUserData
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+struct SVX_DLLPUBLIC SdrDragStatUserData {};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class SVX_DLLPUBLIC SdrDragStat : private boost::noncopyable
 {
-};
+private:
+    typedef ::std::vector< basegfx::B2DPoint > B2DPointVector;
 
-class SVX_DLLPUBLIC SdrDragStat {
-protected:
-    SdrHdl*  pHdl;      // Der Handle an dem der User zottelt
-    SdrView* pView;
-    SdrPageView* pPageView;
-    Container aPnts;    // Alle bisherigen Punkte: [0]=Start, [Count()-2]=Prev
-    Point     aRef1;     // Referenzpunkt: Resize-Fixpunkt, (Drehachse,
-    Point     aRef2;     // Spiegelachse, ...)
-    Point     aPos0;     // Position beim letzten Event
-    Point     aRealPos0; // Position beim letzten Event
-    Point     aRealNow;  // Aktuelle Dragposition ohne Snap, Ortho und Limit
-    Point     aRealLast; // RealPos des letzten Punkts (fuer MinMoved)
-    Rectangle aActionRect;
+    SdrHdl*                 mpHdl;      // Der Handle an dem der User zottelt
+    SdrView&                mrSdrView;
+//  SdrPageView*            mpPageView;
+    SdrDragMethod*          mpDragMethod;
+    SdrDragStatUserData*    mpUser;     // Userdata
 
-    // Reserve fuer kompatible Erweiterungen, die sonst inkompatibel wuerden.
-    Point     aReservePoint1;
-    Point     aReservePoint2;
-    Point     aReservePoint3;
-    Point     aReservePoint4;
-    Rectangle aReserveRect1;
-    Rectangle aReserveRect2;
-    FASTBOOL  bEndDragChangesAttributes;
-    FASTBOOL  bEndDragChangesGeoAndAttributes;
-    FASTBOOL  bMouseIsUp;
-    FASTBOOL  aReserveBool3;
-    FASTBOOL  aReserveBool4;
-    long      aReserveLong1;
-    long      aReserveLong2;
-    long      aReserveLong3;
-    long      aReserveLong4;
-    void*     aReservePtr1;
-    void*     aReservePtr2;
-    void*     aReservePtr3;
-    void*     aReservePtr4;
+    B2DPointVector          maPnts;    // Alle bisherigen Punkte: [0]=Start, [Count()-2]=Prev
+    basegfx::B2DPoint       maRef1;     // Referenzpunkt: Resize-Fixpunkt, (Drehachse,
+    basegfx::B2DPoint       maRef2;     // Spiegelachse, ...)
+    basegfx::B2DPoint       maPos0;     // Position beim letzten Event
+    basegfx::B2DPoint       maRealPos0; // Position beim letzten Event
+    basegfx::B2DPoint       maRealNow;  // Aktuelle Dragposition ohne Snap, Ortho und Limit
+    basegfx::B2DRange       maActionRange;
+    double                  mfMinMov;   // Soviel muss erstmal minimal bewegt werden
 
-    FASTBOOL  bShown;    // Xor sichrbar?
-    sal_uInt16    nMinMov;   // Soviel muss erstmal minimal bewegt werden
-    FASTBOOL  bMinMoved; // MinMove durchbrochen?
+    /// bitfield
+    bool                    mbEndDragChangesAttributes : 1;
+    bool                    mbEndDragChangesGeoAndAttributes : 1;
+    bool                    mbMouseIsUp : 1;
+    bool                    mbShown : 1;    // Xor sichrbar?
+    bool                    mbMinMoved : 1; // MinMove durchbrochen?
+    bool                    mbHorFixed : 1; // nur Vertikal draggen
+    bool                    mbVerFixed : 1; // nur Horizontal draggen
 
-    FASTBOOL  bHorFixed; // nur Vertikal draggen
-    FASTBOOL  bVerFixed; // nur Horizontal draggen
-    FASTBOOL  bWantNoSnap; // sal_True=Fuer die Entscheidung ob fuer pObj->MovCreate() NoSnapPos verwendet
+    // true=Fuer die Entscheidung ob fuer pObj->MovCreate() NoSnapPos verwendet
                           // werden soll. Entsprechend wird auch NoSnapPos in den Buffer geschrieben.
-    FASTBOOL  bOrtho4;
-    FASTBOOL  bOrtho8;
+    bool                    mbWantNoSnap : 1;
 
-    SdrDragMethod* pDragMethod;
+    bool                    mbOrtho4 : 1;
+    bool                    mbOrtho8 : 1;
 
-protected:
-    void Clear(FASTBOOL bLeaveOne);
-    Point& Pnt(sal_uIntPtr nNum)                           { return *((Point*)aPnts.GetObject(nNum)); }
-//public:
-    SdrDragStatUserData*    pUser;     // Userdata
 public:
-    SdrDragStat(): aPnts(1024,16,16)                 { pUser=NULL; Reset(); }
-    ~SdrDragStat()                                   { Clear(sal_False); }
+    SdrDragStat(SdrView& rSdrView);
+    ~SdrDragStat();
+
     void         Reset();
-    SdrView*     GetView() const                     { return pView; }
-    void         SetView(SdrView* pV)                { pView=pV; }
-    SdrPageView* GetPageView() const                 { return pPageView; }
-    void         SetPageView(SdrPageView* pPV)       { pPageView=pPV; }
-    const Point& GetPoint(sal_uIntPtr nNum) const          { return *((Point*)aPnts.GetObject(nNum)); }
-    sal_uIntPtr        GetPointAnz() const                 { return aPnts.Count(); }
-    const Point& GetStart() const                    { return GetPoint(0); }
-    Point&       Start()                             { return Pnt(0); }
-    const Point& GetPrev() const                     { return GetPoint(GetPointAnz()-(GetPointAnz()>=2 ? 2:1)); }
-    Point& Prev()                                    { return Pnt(GetPointAnz()-(GetPointAnz()>=2 ? 2:1)); }
-    const Point& GetPos0() const                     { return aPos0;  }
-    Point&       Pos0()                              { return aPos0;  }
-    const Point& GetNow() const                      { return GetPoint(GetPointAnz()-1); }
-    Point&       Now()                               { return Pnt(GetPointAnz()-1); }
-    const Point& GetRealNow() const                  { return aRealNow; }
-    Point&       RealNow()                           { return aRealNow; }
-    const Point& GetRef1() const                     { return aRef1;  }
-    Point&       Ref1()                              { return aRef1;  }
-    const Point& GetRef2() const                     { return aRef2;  }
-    Point&       Ref2()                              { return aRef2;  }
-    const        SdrHdl* GetHdl() const              { return pHdl;   }
-    void         SetHdl(SdrHdl* pH)                  { pHdl=pH;       }
-    SdrDragStatUserData* GetUser() const             { return pUser;  }
-    void SetUser(SdrDragStatUserData* pU)            { pUser=pU; }
-    FASTBOOL     IsShown() const                     { return bShown; }
-    void         SetShown(FASTBOOL bOn)              { bShown=bOn; }
+    void Reset(const basegfx::B2DPoint& rPnt);
 
-    FASTBOOL     IsMinMoved() const                  { return bMinMoved; }
-    void         SetMinMoved()                       { bMinMoved=sal_True; }
-    void         ResetMinMoved()                     { bMinMoved=sal_False; }
-    void         SetMinMove(sal_uInt16 nDist)            { nMinMov=nDist; if (nMinMov<1) nMinMov=1; }
-    sal_uInt16       GetMinMove() const                  { return nMinMov; }
+    SdrView& GetSdrViewFromSdrDragStat() const { return mrSdrView; }
 
-    FASTBOOL     IsHorFixed() const                  { return bHorFixed; }
-    void         SetHorFixed(FASTBOOL bOn)           { bHorFixed=bOn; }
-    FASTBOOL     IsVerFixed() const                  { return bVerFixed; }
-    void         SetVerFixed(FASTBOOL bOn)           { bVerFixed=bOn; }
+//  SdrPageView* GetPageView() const { return mpPageView; }
+//  void SetPageView(SdrPageView* pPV) { if(mpPageView != pPV) mpPageView = pPV; }
+
+    sal_uInt32 GetPointAnz() const { return maPnts.size(); }
+    const basegfx::B2DPoint& GetPoint(sal_uInt32 nNum) const;
+
+    const basegfx::B2DPoint& GetStart() const;
+    void SetStart(const basegfx::B2DPoint& rNew);
+
+    const basegfx::B2DPoint& GetPrev() const;
+    void SetPrev(const basegfx::B2DPoint& rNew);
+
+    const basegfx::B2DPoint& GetPos0() const { return maPos0;  }
+    void SetPos0(const basegfx::B2DPoint& rNew) { if(maPos0 != rNew) maPos0 = rNew;  }
+
+    const basegfx::B2DPoint& GetNow() const;
+    void SetNow(const basegfx::B2DPoint& rNew);
+
+    const basegfx::B2DPoint& GetRealNow() const { return maRealNow; }
+    void SetRealNow(const basegfx::B2DPoint& rNew) { if(maRealNow != rNew) maRealNow = rNew; }
+
+    const basegfx::B2DPoint& GetRef1() const { return maRef1;  }
+    void SetRef1(const basegfx::B2DPoint& rNew) { if(maRef1 != rNew) maRef1 = rNew;  }
+
+    const basegfx::B2DPoint& GetRef2() const { return maRef2;  }
+    void SetRef2(const basegfx::B2DPoint& rNew) { if(maRef2 != rNew) maRef2 = rNew;  }
+
+    const SdrHdl* GetActiveHdl() const { return mpHdl;   }
+    void SetActiveHdl(SdrHdl* pH) { if(mpHdl != pH) mpHdl = pH; }
+
+    SdrDragStatUserData* GetUser() const { return mpUser;  }
+    void SetUser(SdrDragStatUserData* pU) { if(mpUser != pU) mpUser = pU; }
+
+    bool IsShown() const { return mbShown; }
+    void SetShown(bool bOn) { if(mbShown != bOn) mbShown = bOn; }
+
+    bool IsMinMoved() const { return mbMinMoved; }
+    void SetMinMoved() { mbMinMoved = true; }
+    void ResetMinMoved() { mbMinMoved = false; }
+    void SetMinMove(double fDist) { mfMinMov = std::min(fDist, 1.0); }
+    double GetMinMove() const { return mfMinMov; }
+
+    bool IsHorFixed() const { return mbHorFixed; }
+    void SetHorFixed(bool bOn) { if(mbHorFixed != bOn) mbHorFixed = bOn; }
+    bool IsVerFixed() const { return mbVerFixed; }
+    void SetVerFixed(bool bOn) { if(mbVerFixed != bOn) mbVerFixed = bOn; }
 
     // Hier kann das Obj sagen: "Ich will keinen Koordinatenfang!"
     // z.B. fuer den Winkel des Kreisbogen...
-    FASTBOOL     IsNoSnap() const                     { return bWantNoSnap; }
-    void         SetNoSnap(FASTBOOL bOn=sal_True)         { bWantNoSnap=bOn; }
+    bool IsNoSnap() const { return mbWantNoSnap; }
+    void SetNoSnap(bool bOn = true) { if(mbWantNoSnap != bOn) mbWantNoSnap = bOn; }
 
-    // Und hier kann das Obj sagen welches Ortho (wenn ueberhaupt eins)
-    // sinnvoll auf ihm angewendet werden kann.
     // Ortho4 bedeutet Ortho in 4 Richtungen (fuer Rect und Cirt)
-    FASTBOOL     IsOrtho4Possible() const             { return bOrtho4; }
-    void         SetOrtho4Possible(FASTBOOL bOn=sal_True) { bOrtho4=bOn; }
+    bool IsOrtho4Possible() const { return mbOrtho4; }
+    void SetOrtho4Possible(bool bOn = true) { if(mbOrtho4 != bOn) mbOrtho4 = bOn; }
+
     // Ortho8 bedeutet Ortho in 8 Richtungen (fuer Linien)
-    FASTBOOL     IsOrtho8Possible() const             { return bOrtho8; }
-    void         SetOrtho8Possible(FASTBOOL bOn=sal_True) { bOrtho8=bOn; }
+    bool IsOrtho8Possible() const { return mbOrtho8; }
+    void SetOrtho8Possible(bool bOn = true) { if(mbOrtho8 != bOn) mbOrtho8 = bOn; }
 
     // Wird vom gedraggten Objekt gesetzt
-    FASTBOOL     IsEndDragChangesAttributes() const   { return bEndDragChangesAttributes; }
-    void         SetEndDragChangesAttributes(FASTBOOL bOn) { bEndDragChangesAttributes=bOn; }
-    FASTBOOL     IsEndDragChangesGeoAndAttributes() const   { return bEndDragChangesGeoAndAttributes; }
-    void         SetEndDragChangesGeoAndAttributes(FASTBOOL bOn) { bEndDragChangesGeoAndAttributes=bOn; }
+    bool IsEndDragChangesAttributes() const { return mbEndDragChangesAttributes; }
+    void SetEndDragChangesAttributes(bool bOn) { if(mbEndDragChangesAttributes != bOn) mbEndDragChangesAttributes = bOn; }
+    bool IsEndDragChangesGeoAndAttributes() const { return mbEndDragChangesGeoAndAttributes; }
+    void SetEndDragChangesGeoAndAttributes(bool bOn) { if(mbEndDragChangesGeoAndAttributes != bOn) mbEndDragChangesGeoAndAttributes = bOn; }
 
     // Wird von der View gesetzt und kann vom Obj ausgewertet werden
-    FASTBOOL     IsMouseDown() const                  { return !bMouseIsUp; }
-    void         SetMouseDown(FASTBOOL bDown)         { bMouseIsUp=!bDown; }
+    bool IsMouseDown() const { return !mbMouseIsUp; }
+    void SetMouseDown(bool bDown) { if(mbMouseIsUp == bDown) mbMouseIsUp = !bDown; }
 
-    Point KorregPos(const Point& rNow, const Point& rPrev) const;
-    void  Reset(const Point& rPnt);
-    void  NextMove(const Point& rPnt);
-    void  NextPoint(FASTBOOL bSaveReal=sal_False);
+    basegfx::B2DPoint KorregPos(const basegfx::B2DPoint & rNow, const basegfx::B2DPoint & rPrev) const;
+    void NextMove(const basegfx::B2DPoint& rPnt);
+    void NextPoint(bool bSaveReal = false);
     void  PrevPoint();
-    FASTBOOL CheckMinMoved(const Point& rPnt);
-    long  GetDX() const                     { return GetNow().X()-GetPrev().X(); }
-    long  GetDY() const                     { return GetNow().Y()-GetPrev().Y(); }
-    Fraction GetXFact() const;
-    Fraction GetYFact() const;
+    bool CheckMinMoved(const basegfx::B2DPoint& rPnt);
+    double GetDX() const { return GetNow().getX() - GetPrev().getX(); }
+    double GetDY() const { return GetNow().getY() - GetPrev().getY(); }
+    double GetXFact() const;
+    double GetYFact() const;
 
-    SdrDragMethod* GetDragMethod() const               { return pDragMethod; }
-    void           SetDragMethod(SdrDragMethod* pMth)  { pDragMethod=pMth; }
+    SdrDragMethod* GetDragMethod() const { return mpDragMethod; }
+    void SetDragMethod(SdrDragMethod* pMth) { if(mpDragMethod != pMth) mpDragMethod = pMth; }
 
-    const Rectangle& GetActionRect() const             { return aActionRect; }
-    void             SetActionRect(const Rectangle& rR) { aActionRect=rR; }
+    const basegfx::B2DRange& GetActionRange() const { return maActionRange; }
+    void SetActionRange(const basegfx::B2DRange& rR) { if(maActionRange != rR) maActionRange = rR; }
 
     // Unter Beruecksichtigung von 1stPointAsCenter
-    void TakeCreateRect(Rectangle& rRect) const;
+    basegfx::B2DRange TakeCreateRange() const;
 };
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #endif //_SVDDRAG_HXX
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// eof

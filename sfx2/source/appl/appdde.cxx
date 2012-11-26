@@ -561,8 +561,7 @@ sal_Bool ImplDdeService::MakeTopic( const String& rNm )
     sal_Bool bRet = sal_False;
     String sNm( rNm );
     sNm.ToLowerAscii();
-    TypeId aType( TYPE(SfxObjectShell) );
-    SfxObjectShell* pShell = SfxObjectShell::GetFirst( &aType );
+    SfxObjectShell* pShell = SfxObjectShell::GetFirst(_IsObjectShell< SfxObjectShell >);
     while( pShell )
     {
         String sTmp( pShell->GetTitle(SFX_TITLE_FULLNAME) );
@@ -573,7 +572,7 @@ sal_Bool ImplDdeService::MakeTopic( const String& rNm )
             bRet = sal_True;
             break;
         }
-        pShell = SfxObjectShell::GetNext( *pShell, &aType );
+        pShell = SfxObjectShell::GetNext( *pShell, _IsObjectShell< SfxObjectShell > );
     }
 
     if( !bRet )
@@ -596,7 +595,7 @@ sal_Bool ImplDdeService::MakeTopic( const String& rNm )
                     &aName, &aNewView,
                     &aSilent, 0L );
 
-            if( pRet && pRet->ISA( SfxViewFrameItem ) &&
+            if( pRet && dynamic_cast< const SfxViewFrameItem* >(pRet) &&
                 ((SfxViewFrameItem*)pRet)->GetFrame() &&
                 0 != ( pShell = ((SfxViewFrameItem*)pRet)
                     ->GetFrame()->GetObjectShell() ) )
@@ -615,8 +614,7 @@ String ImplDdeService::Topics()
     if( GetSysTopic() )
         sRet += GetSysTopic()->GetName();
 
-    TypeId aType( TYPE(SfxObjectShell) );
-    SfxObjectShell* pShell = SfxObjectShell::GetFirst( &aType );
+    SfxObjectShell* pShell = SfxObjectShell::GetFirst( _IsObjectShell< SfxObjectShell > );
     while( pShell )
     {
         if( SfxViewFrame::GetFirst( pShell ) )
@@ -625,7 +623,7 @@ String ImplDdeService::Topics()
                 sRet += '\t';
             sRet += pShell->GetTitle(SFX_TITLE_FULLNAME);
         }
-        pShell = SfxObjectShell::GetNext( *pShell, &aType );
+        pShell = SfxObjectShell::GetNext( *pShell, _IsObjectShell< SfxObjectShell > );
     }
     if( sRet.Len() )
         sRet += DEFINE_CONST_UNICODE("\r\n");

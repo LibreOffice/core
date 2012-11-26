@@ -119,7 +119,7 @@ namespace dbaui
 
                 // check whether this must be a tristate check box
                 const SfxPoolItem& rItem = _rCoreAttrs.Get( nItemId );
-                if ( rItem.ISA( OptionalBoolItem ) )
+                if ( dynamic_cast< const OptionalBoolItem* >(&rItem) )
                     (*setting->ppControl)->EnableTriState( sal_True );
             }
         }
@@ -300,13 +300,13 @@ namespace dbaui
             ::boost::optional< bool > aValue;
 
             SFX_ITEMSET_GET( _rSet, pItem, SfxPoolItem, setting->nItemId, sal_True );
-            if ( pItem->ISA( SfxBoolItem ) )
+            if ( dynamic_cast< const SfxBoolItem* >(pItem) )
             {
-                aValue.reset( PTR_CAST( SfxBoolItem, pItem )->GetValue() );
+                aValue.reset( dynamic_cast< const SfxBoolItem* >( pItem )->GetValue() );
             }
-            else if ( pItem->ISA( OptionalBoolItem ) )
+            else if ( dynamic_cast< const OptionalBoolItem* >(pItem) )
             {
-                aValue = PTR_CAST( OptionalBoolItem, pItem )->GetFullValue();
+                aValue = dynamic_cast< const OptionalBoolItem* >( pItem )->GetFullValue();
             }
             else
                 DBG_ERROR( "SpecialSettingsPage::implInitControls: unknown boolean item type!" );

@@ -176,7 +176,7 @@ void PresetPropertyBox::setValue( const Any& rValue, const OUString& rPresetId )
         }
         else
         {
-            mpControl->Enable( sal_False );
+            mpControl->Enable( false );
         }
     }
 }
@@ -240,7 +240,7 @@ ColorPropertyBox::ColorPropertyBox( sal_Int32 nControlType, Window* pParent, con
     if ( !pColorTable )
     {
         pColorTable = new XColorTable( SvtPathOptions().GetPalettePath() );
-        bKillTable = sal_True;
+        bKillTable = true;
     }
 
     sal_Int32 nColor = 0;
@@ -331,7 +331,7 @@ FontPropertyBox::FontPropertyBox( sal_Int32 nControlType, Window* pParent, const
 
     if(!pFontList)
     {
-        pFontList = new FontList( Application::GetDefaultDevice(), NULL, sal_False );
+        pFontList = new FontList( Application::GetDefaultDevice(), NULL, false );
         bMustDelete = true;
     }
 
@@ -1260,10 +1260,10 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
     if ( !pColorTable )
     {
         pColorTable = new XColorTable( SvtPathOptions().GetPalettePath() );
-        bKillTable = sal_True;
+        bKillTable = true;
     }
 
-    mpCLBDimColor->SetUpdateMode( sal_False );
+    mpCLBDimColor->SetUpdateMode( false );
 
     for ( long i = 0; i < pColorTable->Count(); i++ )
     {
@@ -1271,7 +1271,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
         mpCLBDimColor->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
     }
 
-    mpCLBDimColor->SetUpdateMode( sal_True );
+    mpCLBDimColor->SetUpdateMode( true );
 
     if ( bKillTable )
         delete pColorTable;
@@ -1458,11 +1458,10 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
     }
     else
     {
-        mpFTTextAnim->Enable( sal_False );
-        mpLBTextAnim->Enable( sal_False );
-        mpMFTextDelay->Enable( sal_False );
-        mpFTTextDelay->Enable( sal_False );
-
+        mpFTTextAnim->Enable( false );
+        mpLBTextAnim->Enable( false );
+        mpMFTextDelay->Enable( false );
+        mpFTTextDelay->Enable( false );
     }
 
     if( pSet->getPropertyState( nHandleSoundURL ) != STLPropertyState_AMBIGUOUS )
@@ -1830,8 +1829,8 @@ void CustomAnimationEffectTabPage::openSoundFileDialog()
                 String aStr; aStr += sal_Unicode('%');
                 aStrWarning.SearchAndReplace( aStr , aFile );
                 WarningBox aWarningBox( NULL, WB_3DLOOK | WB_RETRY_CANCEL, aStrWarning );
-                aWarningBox.SetModalInputMode (sal_True);
-                bQuitLoop = aWarningBox.Execute()==RET_RETRY ? sal_False : sal_True;
+                aWarningBox.SetModalInputMode (true);
+                bQuitLoop = aWarningBox.Execute()==RET_RETRY ? false : true;
 
                 bValidSoundFile=false;
             }
@@ -2019,7 +2018,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(Window* pParent, 
         sal_Int16 nFill = 0;
         if( pSet->getPropertyValue( nHandleRewind ) >>= nFill )
         {
-            mpCBXRewind->Check( (nFill == AnimationFill::REMOVE) ? sal_True : sal_False );
+            mpCBXRewind->Check( (nFill == AnimationFill::REMOVE) ? true : false );
         }
         else
         {
@@ -2078,8 +2077,8 @@ IMPL_LINK( CustomAnimationDurationTabPage, implControlHdl, Control*, pControl )
 {
     if( pControl == mpLBTrigger.get() )
     {
-        mpRBClickSequence->Check( sal_False );
-        mpRBInteractive->Check( sal_True );
+        mpRBClickSequence->Check( false );
+        mpRBInteractive->Check( true );
     }
 
     return 0;
@@ -2319,7 +2318,7 @@ CustomAnimationTextAnimTabPage::CustomAnimationTextAnimTabPage(Window* pParent, 
     }
     else
     {
-        maCBXAnimateForm.Enable( sal_False );
+        maCBXAnimateForm.Enable( false );
     }
 
     maCBXReverse.SetState( STATE_DONTKNOW );
@@ -2413,12 +2412,12 @@ void CustomAnimationTextAnimTabPage::updateControlStates()
 
     if( !mbHasVisibleShapes && nPos > 0 )
     {
-        maCBXAnimateForm.Check(sal_False);
-        maCBXAnimateForm.Enable(sal_False);
+        maCBXAnimateForm.Check(false);
+        maCBXAnimateForm.Enable(false);
     }
     else
     {
-        maCBXAnimateForm.Enable(sal_True);
+        maCBXAnimateForm.Enable(true);
     }
 }
 

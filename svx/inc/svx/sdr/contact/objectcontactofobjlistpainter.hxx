@@ -57,13 +57,13 @@ namespace sdr
 
 //////////////////////////////////////////////////////////////////////////////
 
+// typedef for transferring SdrObject
+typedef SdrObjectVector SdrObjectVector;
+
 namespace sdr
 {
     namespace contact
     {
-        // typedef for transferring SdrObject
-        typedef ::std::vector< SdrObject* > SdrObjectVector;
-
         class SVX_DLLPUBLIC ObjectContactOfObjListPainter : public ObjectContactPainter
         {
         protected:

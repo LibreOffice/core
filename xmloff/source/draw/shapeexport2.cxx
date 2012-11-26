@@ -35,10 +35,7 @@
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/media/ZoomLevel.hpp>
 #include "anim.hxx"
-
-#ifndef _XMLOFF_SHAPEEXPORT_HXX
 #include <xmloff/shapeexport.hxx>
-#endif
 #include "sdpropls.hxx"
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
@@ -50,10 +47,11 @@
 #include <tools/gen.hxx>        // FRound
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
-
-#include "xmloff/xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/point/b2dpoint.hxx>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -109,16 +107,7 @@ void XMLShapeExport::ImpExportNewTrans_GetB2DHomMatrix(::basegfx::B2DHomMatrix& 
     // <--
     drawing::HomogenMatrix3 aMatrix;
     aAny >>= aMatrix;
-
-    rMatrix.set(0, 0, aMatrix.Line1.Column1);
-    rMatrix.set(0, 1, aMatrix.Line1.Column2);
-    rMatrix.set(0, 2, aMatrix.Line1.Column3);
-    rMatrix.set(1, 0, aMatrix.Line2.Column1);
-    rMatrix.set(1, 1, aMatrix.Line2.Column2);
-    rMatrix.set(1, 2, aMatrix.Line2.Column3);
-    rMatrix.set(2, 0, aMatrix.Line3.Column1);
-    rMatrix.set(2, 1, aMatrix.Line3.Column2);
-    rMatrix.set(2, 2, aMatrix.Line3.Column3);
+    rMatrix = basegfx::tools::UnoHomogenMatrix3ToB2DHomMatrix(aMatrix);
 }
 
 void XMLShapeExport::ImpExportNewTrans_DecomposeAndRefPoint(const ::basegfx::B2DHomMatrix& rMatrix, ::basegfx::B2DTuple& rTRScale,
@@ -148,13 +137,6 @@ void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(::basegfx::B2DTuple& rTR
     {
         aTRScale.setX(1.0);
     }
-    else
-    {
-        if( aTRScale.getX() > 0.0 )
-            aTRScale.setX(aTRScale.getX() - 1.0);
-        else if( aTRScale.getX() < 0.0 )
-            aTRScale.setX(aTRScale.getX() + 1.0);
-    }
 
     mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, FRound(aTRScale.getX()));
     aStr = sStringBuffer.makeStringAndClear();
@@ -164,13 +146,6 @@ void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(::basegfx::B2DTuple& rTR
     if(!(nFeatures & SEF_EXPORT_HEIGHT))
     {
         aTRScale.setY(1.0);
-    }
-    else
-    {
-        if( aTRScale.getY() > 0.0 )
-            aTRScale.setY(aTRScale.getY() - 1.0);
-        else if( aTRScale.getY() < 0.0 )
-            aTRScale.setY(aTRScale.getY() + 1.0);
     }
 
     mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, FRound(aTRScale.getY()));
@@ -185,7 +160,8 @@ void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(::basegfx::B2DTuple& rTR
         // write transformation, but WITHOUT scale which is exported as size above
         SdXMLImExTransform2D aTransform;
 
-        aTransform.AddSkewX(atan(fTRShear));
+        // Export Shear mirrored to stay compatible to ODF1.3
+        aTransform.AddSkewX(atan(-fTRShear));
 
         // #i78696#
         // fTRRotate is mathematically correct, but due to the error
@@ -810,59 +786,24 @@ void XMLShapeExport::ImpExportLineShape(
     {
         OUString aStr;
         OUStringBuffer sStringBuffer;
-        awt::Point aStart(0,0);
-        awt::Point aEnd(1,1);
-
-        // #85920# use 'Geometry' to get the points of the line
-        // since this slot take anchor pos into account.
 
         // get matrix
-        ::basegfx::B2DHomMatrix aMatrix;
+        basegfx::B2DHomMatrix aMatrix;
         ImpExportNewTrans_GetB2DHomMatrix(aMatrix, xPropSet);
 
-        // decompose and correct about pRefPoint
-        ::basegfx::B2DTuple aTRScale;
-        double fTRShear(0.0);
-        double fTRRotate(0.0);
-        ::basegfx::B2DTuple aTRTranslate;
-        ImpExportNewTrans_DecomposeAndRefPoint(aMatrix, aTRScale, fTRShear, fTRRotate, aTRTranslate, pRefPoint);
+        // Create the two points directy using the transformation
+        basegfx::B2DPoint aB2DStart(aMatrix * basegfx::B2DPoint(0.0, 0.0));
+        basegfx::B2DPoint aB2DEnd(aMatrix * basegfx::B2DPoint(1.0, 0.0));
 
-        // create base position
-        awt::Point aBasePosition(FRound(aTRTranslate.getX()), FRound(aTRTranslate.getY()));
-
-        // get the two points
-        uno::Any aAny(xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Geometry"))));
-        drawing::PointSequenceSequence* pSourcePolyPolygon = (drawing::PointSequenceSequence*)aAny.getValue();
-
-        if(pSourcePolyPolygon)
+        if(pRefPoint)
         {
-            drawing::PointSequence* pOuterSequence = pSourcePolyPolygon->getArray();
-            if(pOuterSequence)
-            {
-                drawing::PointSequence* pInnerSequence = pOuterSequence++;
-                if(pInnerSequence)
-                {
-                    awt::Point* pArray = pInnerSequence->getArray();
-                    if(pArray)
-                    {
-                        if(pInnerSequence->getLength() > 0)
-                        {
-                            aStart = awt::Point(
-                                pArray->X + aBasePosition.X,
-                                pArray->Y + aBasePosition.Y);
-                            pArray++;
-                        }
-
-                        if(pInnerSequence->getLength() > 1)
-                        {
-                            aEnd = awt::Point(
-                                pArray->X + aBasePosition.X,
-                                pArray->Y + aBasePosition.Y);
-                        }
-                    }
-                }
-            }
+            const basegfx::B2DPoint aRefPoint(pRefPoint->X, pRefPoint->Y);
+            aB2DStart -= aRefPoint;
+            aB2DEnd -= aRefPoint;
         }
+
+        awt::Point aStart(basegfx::fround(aB2DStart.getX()), basegfx::fround(aB2DStart.getY()));
+        awt::Point aEnd(basegfx::fround(aB2DEnd.getX()), basegfx::fround(aB2DEnd.getY()));
 
         if( nFeatures & SEF_EXPORT_X )
         {
@@ -1073,9 +1014,7 @@ void XMLShapeExport::ImpExportPolygonShape(
                     drawing::PointSequence* pSequence = pSourcePolyPolygon->getArray();
                     if(pSequence)
                     {
-                        SdXMLImExPointsElement aPoints(pSequence, aViewBox, aPoint, aSize,
-                            // #96328#
-                            bClosed);
+                        SdXMLImExPointsElement aPoints(pSequence, aViewBox, aPoint, aSize, bClosed);
 
                         // write point array
                         mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_POINTS, aPoints.GetExportString());

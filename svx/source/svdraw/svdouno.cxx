@@ -48,7 +48,6 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdorect.hxx>
-#include "svx/svdviter.hxx"
 #include <rtl/ref.hxx>
 #include <set>
 #include <memory>
@@ -56,6 +55,7 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <tools/diagnose_ex.h>
 #include <svx/svdograf.hxx>
+#include <svx/svdlegacy.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::sdr::contact;
@@ -158,14 +158,14 @@ namespace
 //   SdrUnoObj
 //************************************************************
 
-TYPEINIT1(SdrUnoObj, SdrRectObj);
-
-SdrUnoObj::SdrUnoObj(const String& rModelName, sal_Bool _bOwnUnoControlModel)
-:   m_pImpl( new SdrUnoObjDataHolder ),
+SdrUnoObj::SdrUnoObj(
+    SdrModel& rSdrModel,
+    const String& rModelName,
+    bool _bOwnUnoControlModel)
+:   SdrRectObj(rSdrModel),
+    m_pImpl( new SdrUnoObjDataHolder ),
     bOwnUnoControlModel( _bOwnUnoControlModel )
 {
-    bIsUnoObj = sal_True;
-
     m_pImpl->pEventListener = new SdrControlEventListenerImpl(this);
 
     // nur ein owner darf eigenstaendig erzeugen
@@ -173,14 +173,15 @@ SdrUnoObj::SdrUnoObj(const String& rModelName, sal_Bool _bOwnUnoControlModel)
         CreateUnoControlModel(rModelName);
 }
 
-SdrUnoObj::SdrUnoObj(const String& rModelName,
+SdrUnoObj::SdrUnoObj(
+    SdrModel& rSdrModel,
+    const String& rModelName,
                      const uno::Reference< lang::XMultiServiceFactory >& rxSFac,
-                     sal_Bool _bOwnUnoControlModel)
-:   m_pImpl( new SdrUnoObjDataHolder ),
+    bool _bOwnUnoControlModel)
+:   SdrRectObj(rSdrModel),
+    m_pImpl( new SdrUnoObjDataHolder ),
     bOwnUnoControlModel( _bOwnUnoControlModel )
 {
-    bIsUnoObj = sal_True;
-
     m_pImpl->pEventListener = new SdrControlEventListenerImpl(this);
 
     // nur ein owner darf eigenstaendig erzeugen
@@ -211,33 +212,138 @@ SdrUnoObj::~SdrUnoObj()
     delete m_pImpl;
 }
 
-void SdrUnoObj::SetModel(SdrModel* pNewModel)
+void SdrUnoObj::copyDataFromSdrObject(const SdrObject& rSource)
 {
-    SdrRectObj::SetModel(pNewModel);
+    if(this != &rSource)
+    {
+        const SdrUnoObj* pSource = dynamic_cast< const SdrUnoObj* >(&rSource);
+
+        if(pSource)
+        {
+            // call parent
+            SdrRectObj::copyDataFromSdrObject(rSource);
+
+            // release the reference to the current control model
+            SetUnoControlModel(uno::Reference< awt::XControlModel >());
+
+            aUnoControlModelTypeName = pSource->aUnoControlModelTypeName;
+            aUnoControlTypeName = pSource->aUnoControlTypeName;
+
+            // copy the uno control model
+            uno::Reference< awt::XControlModel > xCtrl( pSource->GetUnoControlModel(), uno::UNO_QUERY );
+            uno::Reference< util::XCloneable > xClone( xCtrl, uno::UNO_QUERY );
+
+            if ( xClone.is() )
+            {
+                // copy the model by cloning
+                uno::Reference< awt::XControlModel > xNewModel( xClone->createClone(), uno::UNO_QUERY );
+                DBG_ASSERT( xNewModel.is(), "SdrUnoObj::operator =, no control model!");
+                xUnoControlModel = xNewModel;
+            }
+            else
+            {
+                // copy the model by streaming
+                uno::Reference< io::XPersistObject > xObj( xCtrl, uno::UNO_QUERY );
+                uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+
+                if ( xObj.is() && xFactory.is() )
+                {
+                    // creating a pipe
+                    uno::Reference< io::XOutputStream > xOutPipe(xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.io.Pipe")), uno::UNO_QUERY);
+                    uno::Reference< io::XInputStream > xInPipe(xOutPipe, uno::UNO_QUERY);
+
+                    // creating the mark streams
+                    uno::Reference< io::XInputStream > xMarkIn(xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.io.MarkableInputStream")), uno::UNO_QUERY);
+                    uno::Reference< io::XActiveDataSink > xMarkSink(xMarkIn, uno::UNO_QUERY);
+
+                    uno::Reference< io::XOutputStream > xMarkOut(xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.io.MarkableOutputStream")), uno::UNO_QUERY);
+                    uno::Reference< io::XActiveDataSource > xMarkSource(xMarkOut, uno::UNO_QUERY);
+
+                    // connect mark and sink
+                    uno::Reference< io::XActiveDataSink > xSink(xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.io.ObjectInputStream")), uno::UNO_QUERY);
+
+                    // connect mark and source
+                    uno::Reference< io::XActiveDataSource > xSource(xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.io.ObjectOutputStream")), uno::UNO_QUERY);
+
+                    uno::Reference< io::XObjectOutputStream > xOutStrm(xSource, uno::UNO_QUERY);
+                    uno::Reference< io::XObjectInputStream > xInStrm(xSink, uno::UNO_QUERY);
+
+                    if (xMarkSink.is() && xMarkSource.is() && xSink.is() && xSource.is())
+                    {
+                        xMarkSink->setInputStream(xInPipe);
+                        xMarkSource->setOutputStream(xOutPipe);
+                        xSink->setInputStream(xMarkIn);
+                        xSource->setOutputStream(xMarkOut);
+
+                        // write the object to source
+                        xOutStrm->writeObject(xObj);
+                        xOutStrm->closeOutput();
+                        // read the object
+                        uno::Reference< awt::XControlModel > xModel(xInStrm->readObject(), uno::UNO_QUERY);
+                        xInStrm->closeInput();
+
+                        DBG_ASSERT(xModel.is(), "SdrUnoObj::operator =, keine Model erzeugt");
+
+                        xUnoControlModel = xModel;
+                    }
+                }
+            }
+
+            // get service name of the control from the control model
+            uno::Reference< beans::XPropertySet > xSet(xUnoControlModel, uno::UNO_QUERY);
+            if (xSet.is())
+            {
+                uno::Any aValue( xSet->getPropertyValue( rtl::OUString::createFromAscii("DefaultControl")) );
+                ::rtl::OUString aStr;
+
+                if( aValue >>= aStr )
+                    aUnoControlTypeName = String(aStr);
+            }
+
+            uno::Reference< lang::XComponent > xComp(xUnoControlModel, uno::UNO_QUERY);
+            if (xComp.is())
+                m_pImpl->pEventListener->StartListening(xComp);
+        }
+        else
+        {
+            OSL_ENSURE(false, "copyDataFromSdrObject with ObjectType of Source different from Target (!)");
+        }
+    }
 }
 
-void SdrUnoObj::SetPage(SdrPage* pNewPage)
+SdrObject* SdrUnoObj::CloneSdrObject(SdrModel* pTargetModel) const
 {
-    SdrRectObj::SetPage(pNewPage);
+    SdrUnoObj* pClone = new SdrUnoObj(
+        pTargetModel ? *pTargetModel : getSdrModelFromSdrObject(),
+        String());
+    OSL_ENSURE(pClone, "CloneSdrObject error (!)");
+    pClone->copyDataFromSdrObject(*this);
+
+    return pClone;
+}
+
+bool SdrUnoObj::IsSdrUnoObj() const
+{
+    return true;
 }
 
 void SdrUnoObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    rInfo.bRotateFreeAllowed        =   sal_False;
-    rInfo.bRotate90Allowed          =   sal_False;
-    rInfo.bMirrorFreeAllowed        =   sal_False;
-    rInfo.bMirror45Allowed          =   sal_False;
-    rInfo.bMirror90Allowed          =   sal_False;
-    rInfo.bTransparenceAllowed = sal_False;
-    rInfo.bGradientAllowed = sal_False;
-    rInfo.bShearAllowed             =   sal_False;
-    rInfo.bEdgeRadiusAllowed        =   sal_False;
-    rInfo.bNoOrthoDesired           =   sal_False;
-    rInfo.bCanConvToPath            =   sal_False;
-    rInfo.bCanConvToPoly            =   sal_False;
-    rInfo.bCanConvToPathLineToArea  =   sal_False;
-    rInfo.bCanConvToPolyLineToArea  =   sal_False;
-    rInfo.bCanConvToContour = sal_False;
+    rInfo.mbRotateFreeAllowed = false;
+    rInfo.mbRotate90Allowed = false;
+    rInfo.mbMirrorFreeAllowed = false;
+    rInfo.mbMirror45Allowed = false;
+    rInfo.mbMirror90Allowed = false;
+    rInfo.mbTransparenceAllowed = false;
+    rInfo.mbGradientAllowed = false;
+    rInfo.mbShearAllowed = false;
+    rInfo.mbEdgeRadiusAllowed = false;
+    rInfo.mbNoOrthoDesired = false;
+    rInfo.mbCanConvToPath = false;
+    rInfo.mbCanConvToPoly = false;
+    rInfo.mbCanConvToPathLineToArea = false;
+    rInfo.mbCanConvToPolyLineToArea = false;
+    rInfo.mbCanConvToContour = false;
 }
 
 sal_uInt16 SdrUnoObj::GetObjIdentifier() const
@@ -309,72 +415,6 @@ void SdrUnoObj::TakeObjNamePlural(XubString& rName) const
     rName = ImpGetResStr(STR_ObjNamePluralUno);
 }
 
-void SdrUnoObj::operator = (const SdrObject& rObj)
-{
-    SdrRectObj::operator = (rObj);
-
-    // release the reference to the current control model
-    SetUnoControlModel( NULL );
-
-    const SdrUnoObj& rUnoObj = dynamic_cast< const SdrUnoObj& >( rObj );
-
-    aUnoControlModelTypeName = rUnoObj.aUnoControlModelTypeName;
-    aUnoControlTypeName = rUnoObj.aUnoControlTypeName;
-
-    // copy the uno control model
-    const uno::Reference< awt::XControlModel > xSourceControlModel( rUnoObj.GetUnoControlModel(), uno::UNO_QUERY );
-    if ( xSourceControlModel.is() )
-    {
-        try
-        {
-            uno::Reference< util::XCloneable > xClone( xSourceControlModel, uno::UNO_QUERY_THROW );
-            xUnoControlModel.set( xClone->createClone(), uno::UNO_QUERY_THROW );
-        }
-        catch( const uno::Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-    }
-
-    // get service name of the control from the control model
-    uno::Reference< beans::XPropertySet > xSet(xUnoControlModel, uno::UNO_QUERY);
-    if (xSet.is())
-    {
-        uno::Any aValue( xSet->getPropertyValue( rtl::OUString::createFromAscii("DefaultControl")) );
-        ::rtl::OUString aStr;
-
-        if( aValue >>= aStr )
-            aUnoControlTypeName = String(aStr);
-    }
-
-    uno::Reference< lang::XComponent > xComp(xUnoControlModel, uno::UNO_QUERY);
-    if (xComp.is())
-        m_pImpl->pEventListener->StartListening(xComp);
-}
-
-void SdrUnoObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
-{
-    SdrRectObj::NbcResize(rRef,xFact,yFact);
-
-    if (aGeo.nShearWink!=0 || aGeo.nDrehWink!=0)
-    {
-        // kleine Korrekturen
-        if (aGeo.nDrehWink>=9000 && aGeo.nDrehWink<27000)
-        {
-            aRect.Move(aRect.Left()-aRect.Right(),aRect.Top()-aRect.Bottom());
-        }
-
-        aGeo.nDrehWink  = 0;
-        aGeo.nShearWink = 0;
-        aGeo.nSin       = 0.0;
-        aGeo.nCos       = 1.0;
-        aGeo.nTan       = 0.0;
-        SetRectsDirty();
-    }
-}
-
-// -----------------------------------------------------------------------------
-
 bool SdrUnoObj::hasSpecialDrag() const
 {
     // no special drag; we have no rounding rect and
@@ -402,7 +442,10 @@ SdrObject* SdrUnoObj::getFullDragClone() const
         // special handling for SdrUnoObj (FormControl). Create a SdrGrafObj
         // for drag containing the graphical representation. This does not work too
         // well, so the default is to simply clone
-        pRetval = new SdrGrafObj(SdrDragView::GetObjGraphic(GetModel(), this), GetLogicRect());
+        pRetval = new SdrGrafObj(
+            getSdrModelFromSdrObject(),
+            GetObjGraphic(*this),
+            getSdrObjectTransformation());
     }
     else
     {
@@ -414,73 +457,29 @@ SdrObject* SdrUnoObj::getFullDragClone() const
 }
 
 // -----------------------------------------------------------------------------
-void SdrUnoObj::NbcSetLayer( SdrLayerID _nLayer )
+void SdrUnoObj::SetLayer( SdrLayerID _nLayer )
 {
-    if ( GetLayer() == _nLayer )
-    {   // redundant call -> not interested in doing anything here
-        SdrRectObj::NbcSetLayer( _nLayer );
-        return;
-    }
-
-    // we need some special handling here in case we're moved from an invisible layer
-    // to a visible one, or vice versa
-    // (relative to a layer. Remember that the visibility of a layer is a view attribute
-    // - the same layer can be visible in one view, and invisible in another view, at the
-    // same time)
-    // 2003-06-03 - #110592# - fs@openoffice.org
-
-    // collect all views in which our old layer is visible
-    ::std::set< SdrView* > aPreviouslyVisible;
-
+    if(_nLayer != GetLayer())
     {
-        SdrViewIter aIter( this );
-        for ( SdrView* pView = aIter.FirstView(); pView; pView = aIter.NextView() )
-            aPreviouslyVisible.insert( pView );
-    }
+        // call parent
+        SdrRectObj::SetLayer( _nLayer );
 
-    SdrRectObj::NbcSetLayer( _nLayer );
+        // check visibility
+        const ::std::set< SdrView* > aViews(getSdrModelFromSdrObject().getSdrViews());
 
-    // collect all views in which our new layer is visible
-    ::std::set< SdrView* > aNewlyVisible;
-
-    {
-        SdrViewIter aIter( this );
-        for ( SdrView* pView = aIter.FirstView(); pView; pView = aIter.NextView() )
+        for(::std::set< SdrView* >::const_iterator aLoop(aViews.begin());
+            aLoop != aViews.end(); aLoop++)
         {
-            ::std::set< SdrView* >::const_iterator aPrevPos = aPreviouslyVisible.find( pView );
-            if ( aPreviouslyVisible.end() != aPrevPos )
-            {   // in pView, we were visible _before_ the layer change, and are
-                // visible _after_ the layer change, too
-                // -> we're not interested in this view at all
-                aPreviouslyVisible.erase( aPrevPos );
-            }
-            else
+            SdrPageView* pPageView = (*aLoop)->GetSdrPageView();
+
+            if(pPageView)
             {
-                // in pView, we were visible _before_ the layer change, and are
-                // _not_ visible after the layer change
-                // => remember this view, as our visibility there changed
-                aNewlyVisible.insert( pView );
+                const SetOfByte& rVisibleLayers = pPageView->GetVisibleLayers();
+                const bool bVisible(rVisibleLayers.IsSet(GetLayer()));
+
+                lcl_ensureControlVisibility( *aLoop, this, bVisible );
             }
         }
-    }
-
-    // now aPreviouslyVisible contains all views where we became invisible
-    ::std::set< SdrView* >::const_iterator aLoopViews;
-    for (   aLoopViews = aPreviouslyVisible.begin();
-            aLoopViews != aPreviouslyVisible.end();
-            ++aLoopViews
-        )
-    {
-        lcl_ensureControlVisibility( *aLoopViews, this, false );
-    }
-
-    // and aNewlyVisible all views where we became visible
-    for (   aLoopViews = aNewlyVisible.begin();
-            aLoopViews != aNewlyVisible.end();
-            ++aLoopViews
-        )
-    {
-        lcl_ensureControlVisibility( *aLoopViews, this, true );
     }
 }
 
@@ -568,8 +567,13 @@ uno::Reference< awt::XControl > SdrUnoObj::GetUnoControl(const SdrView& _rView, 
     uno::Reference< awt::XControl > xControl;
 
     SdrPageView* pPageView = _rView.GetSdrPageView();
-    OSL_ENSURE( GetPage() == pPageView->GetPage(), "SdrUnoObj::GetUnoControl: This object is not displayed in that particular view!" );
-    if ( GetPage() != pPageView->GetPage() )
+
+    if(!pPageView)
+        return NULL;
+
+    OSL_ENSURE( getSdrPageFromSdrObject() == &pPageView->getSdrPageFromSdrPageView(),
+        "SdrUnoObj::GetUnoControl: This object is not displayed in that particular view!" );
+    if ( getSdrPageFromSdrObject() != &pPageView->getSdrPageFromSdrPageView() )
         return NULL;
 
     SdrPageWindow* pPageWindow = pPageView ? pPageView->FindPageWindow( _rOut ) : NULL;

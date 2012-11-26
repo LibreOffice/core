@@ -40,9 +40,6 @@
 
 #define GLOBALOVERFLOW
 
-DBG_NAME(XPolygon);
-DBG_NAME(XPolyPolygon);
-
 /*************************************************************************
 |*
 |*    ImpXPolygon::ImpXPolygon()
@@ -279,7 +276,6 @@ void ImpXPolygon::Remove( sal_uInt16 nPos, sal_uInt16 nCount )
 
 XPolygon::XPolygon( sal_uInt16 nSize, sal_uInt16 nResize )
 {
-    DBG_CTOR(XPolygon,NULL);
     pImpXPolygon = new ImpXPolygon( nSize, nResize );
 }
 
@@ -295,7 +291,6 @@ XPolygon::XPolygon( sal_uInt16 nSize, sal_uInt16 nResize )
 
 XPolygon::XPolygon( const XPolygon& rXPoly )
 {
-    DBG_CTOR(XPolygon,NULL);
     pImpXPolygon = rXPoly.pImpXPolygon;
     pImpXPolygon->nRefCount++;
 }
@@ -312,8 +307,6 @@ XPolygon::XPolygon( const XPolygon& rXPoly )
 
 XPolygon::XPolygon( const Polygon& rPoly )
 {
-    DBG_CTOR(XPolygon,NULL);
-
     sal_uInt16 nSize = rPoly.GetSize();
     pImpXPolygon = new ImpXPolygon( nSize );
     pImpXPolygon->nPoints = nSize;
@@ -337,7 +330,6 @@ XPolygon::XPolygon( const Polygon& rPoly )
 
 XPolygon::XPolygon(const Rectangle& rRect, long nRx, long nRy)
 {
-    DBG_CTOR(XPolygon,NULL);
     pImpXPolygon = new ImpXPolygon(17);
     long nWh = (rRect.GetWidth()  - 1) / 2;
     long nHh = (rRect.GetHeight() - 1) / 2;
@@ -408,7 +400,6 @@ XPolygon::XPolygon(const Rectangle& rRect, long nRx, long nRy)
 XPolygon::XPolygon(const Point& rCenter, long nRx, long nRy,
                    sal_uInt16 nStartAngle, sal_uInt16 nEndAngle, sal_Bool bClose)
 {
-    DBG_CTOR(XPolygon,NULL);
     pImpXPolygon = new ImpXPolygon(17);
 
     nStartAngle %= 3600;
@@ -458,7 +449,6 @@ XPolygon::XPolygon(const Point& rCenter, long nRx, long nRy,
 
 XPolygon::~XPolygon()
 {
-    DBG_DTOR(XPolygon,NULL);
     if( pImpXPolygon->nRefCount > 1 )
         pImpXPolygon->nRefCount--;
     else
@@ -1480,8 +1470,6 @@ XPolygon::XPolygon(const basegfx::B2DPolygon& rPolygon)
     // #i74631# use tools Polygon class for conversion to not have the code doubled
     // here. This needs one more conversion but avoids different convertors in
     // the long run
-    DBG_CTOR(XPolygon,NULL);
-
     const Polygon aSource(rPolygon);
     sal_uInt16 nSize = aSource.GetSize();
     pImpXPolygon = new ImpXPolygon( nSize );
@@ -1578,7 +1566,6 @@ bool ImpXPolyPolygon::operator==(const ImpXPolyPolygon& rImpXPolyPoly) const
 
 XPolyPolygon::XPolyPolygon( sal_uInt16 nInitSize, sal_uInt16 nResize )
 {
-    DBG_CTOR(XPolyPolygon,NULL);
     pImpXPolyPolygon = new ImpXPolyPolygon( nInitSize, nResize );
 }
 
@@ -1595,7 +1582,6 @@ XPolyPolygon::XPolyPolygon( sal_uInt16 nInitSize, sal_uInt16 nResize )
 
 XPolyPolygon::XPolyPolygon( const XPolygon& rXPoly )
 {
-    DBG_CTOR(XPolyPolygon,NULL);
     pImpXPolyPolygon = new ImpXPolyPolygon;
     pImpXPolyPolygon->aXPolyList.Insert( new XPolygon( rXPoly ) );
 }
@@ -1612,7 +1598,6 @@ XPolyPolygon::XPolyPolygon( const XPolygon& rXPoly )
 
 XPolyPolygon::XPolyPolygon( const XPolyPolygon& rXPolyPoly )
 {
-    DBG_CTOR(XPolyPolygon,NULL);
     pImpXPolyPolygon = rXPolyPoly.pImpXPolyPolygon;
     pImpXPolyPolygon->nRefCount++;
 }
@@ -1629,7 +1614,6 @@ XPolyPolygon::XPolyPolygon( const XPolyPolygon& rXPolyPoly )
 
 XPolyPolygon::XPolyPolygon( const PolyPolygon& rPolyPoly )
 {
-    DBG_CTOR(XPolyPolygon,NULL);
     pImpXPolyPolygon = new ImpXPolyPolygon;
 
     for (sal_uInt16 i = 0; i < rPolyPoly.Count(); i++)
@@ -1649,7 +1633,6 @@ XPolyPolygon::XPolyPolygon( const PolyPolygon& rPolyPoly )
 
 XPolyPolygon::~XPolyPolygon()
 {
-    DBG_DTOR(XPolyPolygon,NULL);
     if( pImpXPolyPolygon->nRefCount > 1 )
         pImpXPolyPolygon->nRefCount--;
     else
@@ -2117,7 +2100,6 @@ basegfx::B2DPolyPolygon XPolyPolygon::getB2DPolyPolygon() const
 
 XPolyPolygon::XPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon)
 {
-    DBG_CTOR(XPolyPolygon,NULL);
     pImpXPolyPolygon = new ImpXPolyPolygon( 16, 16 );
 
     for(sal_uInt32 a(0L); a < rPolyPolygon.count(); a++)

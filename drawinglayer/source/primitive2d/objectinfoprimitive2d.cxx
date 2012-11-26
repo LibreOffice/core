@@ -49,20 +49,6 @@ namespace drawinglayer
         {
         }
 
-        bool ObjectInfoPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(GroupPrimitive2D::operator==(rPrimitive))
-            {
-                const ObjectInfoPrimitive2D& rCompare = (ObjectInfoPrimitive2D&)rPrimitive;
-
-                return (getName() == rCompare.getName()
-                    && getTitle() == rCompare.getTitle()
-                    && getDesc() == rCompare.getDesc());
-            }
-
-            return false;
-        }
-
         // provide unique ID
         ImplPrimitrive2DIDBlock(ObjectInfoPrimitive2D, PRIMITIVE2D_ID_OBJECTINFOPRIMITIVE2D)
 

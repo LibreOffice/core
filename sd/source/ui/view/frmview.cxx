@@ -65,28 +65,28 @@ namespace sd {
 |*
 \************************************************************************/
 
-FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK */)
-  : SdrView(pDrawDoc, (OutputDevice*) NULL),
+FrameView::FrameView(SdDrawDocument& rDrawDoc, FrameView* pFrameView /* = NULK */)
+:   SdrView(rDrawDoc, (OutputDevice*) NULL),
     mnRefCount(0),
     mnPresViewShellId(SID_VIEWSHELL0),
     mnSlotId(SID_OBJECT_SELECT),
     mbIsNavigatorShowingAllShapes(false)
 {
-    EndListening(*pDrawDoc);
+    EndListening(rDrawDoc);
 
-    EnableExtendedKeyInputDispatcher(sal_False);
-    EnableExtendedMouseEventDispatcher(sal_False);
-    EnableExtendedCommandEventDispatcher(sal_False);
+    EnableExtendedKeyInputDispatcher(false);
+    EnableExtendedMouseEventDispatcher(false);
+    EnableExtendedCommandEventDispatcher(false);
 
-    SetGridFront( sal_False );
-    SetHlplFront( sal_False );
-    SetOConSnap( sal_False );
-    SetFrameDragSingles( sal_True );
+    SetGridFront( false );
+    SetHlplFront( false );
+    SetOConnectorSnap(false);
+    SetFrameHandles(true);
     SetSlidesPerRow(4);
 
     if( NULL == pFrameView )
     {
-        DrawDocShell* pDocShell = pDrawDoc->GetDocSh();
+        DrawDocShell* pDocShell = rDrawDoc.GetDocSh();
 
         if ( pDocShell )
         {
@@ -103,7 +103,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
                 // Count the FrameViews and remember the type of the main
                 // view shell.
                 pSfxViewSh = pSfxViewFrame->GetViewShell();
-                pBase = PTR_CAST(ViewShellBase, pSfxViewSh );
+                pBase = dynamic_cast< ViewShellBase* >(pSfxViewSh );
 
                 if (pBase != NULL)
                 {
@@ -158,24 +158,24 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         SetGridFront( pFrameView->IsGridFront() );
         SetSnapAngle( pFrameView->GetSnapAngle() );
         SetGridSnap( pFrameView->IsGridSnap() );
-        SetBordSnap( pFrameView->IsBordSnap() );
-        SetHlplSnap( pFrameView->IsHlplSnap() );
-        SetOFrmSnap( pFrameView->IsOFrmSnap() );
-        SetOPntSnap( pFrameView->IsOPntSnap() );
-        SetOConSnap( pFrameView->IsOConSnap() );
+        SetBorderSnap( pFrameView->IsBorderSnap() );
+        SetHelplineSnap( pFrameView->IsHelplineSnap() );
+        SetOFrameSnap( pFrameView->IsOFrameSnap() );
+        SetOPointSnap( pFrameView->IsOPointSnap() );
+        SetOConnectorSnap( pFrameView->IsOConnectorSnap() );
         SetHlplVisible( pFrameView->IsHlplVisible() );
         SetDragStripes( pFrameView->IsDragStripes() );
         SetPlusHandlesAlwaysVisible( pFrameView->IsPlusHandlesAlwaysVisible() );
-        SetFrameDragSingles( pFrameView->IsFrameDragSingles() );
-        SetSnapMagneticPixel( pFrameView->GetSnapMagneticPixel() );
+        SetFrameHandles( pFrameView->IsFrameHandles() );
+        SetDiscreteMagneticSnap( pFrameView->GetDiscreteMagneticSnap() );
         SetMarkedHitMovesAlways( pFrameView->IsMarkedHitMovesAlways() );
         SetMoveOnlyDragging( pFrameView->IsMoveOnlyDragging() );
         SetCrookNoContortion( pFrameView->IsCrookNoContortion() );
         SetSlantButShear( pFrameView->IsSlantButShear() );
         SetNoDragXorPolys( pFrameView->IsNoDragXorPolys() );
         SetAngleSnapEnabled( pFrameView->IsAngleSnapEnabled() );
-        SetBigOrtho( pFrameView->IsBigOrtho() );
-        SetOrtho( pFrameView->IsOrtho() );
+        SetBigOrthogonal( pFrameView->IsBigOrthogonal() );
+        SetOrthogonal( pFrameView->IsOrthogonal() );
         SetEliminatePolyPointLimitAngle( pFrameView->GetEliminatePolyPointLimitAngle() );
         SetEliminatePolyPoints( pFrameView->IsEliminatePolyPoints() );
 // #110094#-7
@@ -228,10 +228,10 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         maVisibleLayers.SetAll();
         maPrintableLayers.SetAll();
         SetGridCoarse( Size( 1000, 1000 ) );
-        SetSnapGridWidth(Fraction(1000, 1), Fraction(1000, 1));
+        SetSnapGridWidth(1000.0, 1000.0);
         SetActiveLayer( String( SdResId(STR_LAYER_LAYOUT) ) );
-        mbNoColors = sal_True;
-        mbNoAttribs = sal_False;
+        mbNoColors = true;
+        mbNoAttribs = false;
         maVisArea = Rectangle( Point(), Size(0, 0) );
         mePageKind = PK_STANDARD;
         mePageKindOnLoad = PK_STANDARD;
@@ -241,16 +241,16 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         meNotesEditMode = EM_PAGE;
         meHandoutEditMode = EM_MASTERPAGE;
         SetViewShEditModeOnLoad(EM_PAGE);
-        mbLayerMode = sal_False;
-        SetEliminatePolyPoints(sal_False);
-        mbBigHandles = sal_False;
-        mbDoubleClickTextEdit = sal_False;
-        mbClickChangeRotation = sal_False;
+        mbLayerMode = false;
+        SetEliminatePolyPoints(false);
+        mbBigHandles = false;
+        mbDoubleClickTextEdit = false;
+        mbClickChangeRotation = false;
         mnSlidesPerRow = 4;
 
         {
             bool bUseContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
-            mnDrawMode = bUseContrast ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR;
+            mnDrawMode = bUseContrast ? SD_OUTPUT_DRAWMODE_CONTRAST : SD_OUTPUT_DRAWMODE_COLOR;
         }
         mnTabCtrlPercent = 0.0;
         mbIsNavigatorShowingAllShapes = false;
@@ -258,18 +258,18 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         SetViewShellTypeOnLoad (ViewShell::ST_IMPRESS);
 
         // get default for design mode
-        sal_Bool bInitDesignMode = pDrawDoc->GetOpenInDesignMode();
-        if( pDrawDoc->OpenInDesignModeIsDefaulted() )
+        sal_Bool bInitDesignMode = rDrawDoc.GetOpenInDesignMode();
+        if( rDrawDoc.OpenInDesignModeIsDefaulted() )
         {
             bInitDesignMode = sal_True;
         }
 
-        SfxObjectShell* pObjShell = pDrawDoc->GetObjectShell();
+        SfxObjectShell* pObjShell = rDrawDoc.GetObjectShell();
         if( pObjShell && pObjShell->IsReadOnly() )
             bInitDesignMode = sal_False;
         SetDesignMode( bInitDesignMode );
 
-        Update( SD_MOD()->GetSdOptions(pDrawDoc->GetDocumentType()) );
+        Update( SD_MOD()->GetSdOptions(rDrawDoc.GetDocumentType()) );
     }
 
 }
@@ -330,35 +330,35 @@ void FrameView::Update(SdOptions* pOptions)
         SetGridVisible( pOptions->IsGridVisible() );
         SetSnapAngle( pOptions->GetAngle() );
         SetGridSnap( pOptions->IsUseGridSnap() );
-        SetBordSnap( pOptions->IsSnapBorder()  );
-        SetHlplSnap( pOptions->IsSnapHelplines() );
-        SetOFrmSnap( pOptions->IsSnapFrame() );
-        SetOPntSnap( pOptions->IsSnapPoints() );
+        SetBorderSnap( pOptions->IsSnapBorder()  );
+        SetHelplineSnap( pOptions->IsSnapHelplines() );
+        SetOFrameSnap( pOptions->IsSnapFrame() );
+        SetOPointSnap( pOptions->IsSnapPoints() );
         SetHlplVisible( pOptions->IsHelplines() );
         SetDragStripes( pOptions->IsDragStripes() );
         SetPlusHandlesAlwaysVisible( pOptions->IsHandlesBezier() );
-        SetSnapMagneticPixel( pOptions->GetSnapArea() );
+        SetDiscreteMagneticSnap( pOptions->GetSnapArea() );
         SetMarkedHitMovesAlways( pOptions->IsMarkedHitMovesAlways() );
         SetMoveOnlyDragging( pOptions->IsMoveOnlyDragging() );
         SetSlantButShear( pOptions->IsMoveOnlyDragging() );
         SetNoDragXorPolys ( !pOptions->IsMoveOutline() );
         SetCrookNoContortion( pOptions->IsCrookNoContortion() );
         SetAngleSnapEnabled( pOptions->IsRotate() );
-        SetBigOrtho( pOptions->IsBigOrtho() );
-        SetOrtho( pOptions->IsOrtho() );
+        SetBigOrthogonal( pOptions->IsBigOrtho() );
+        SetOrthogonal( pOptions->IsOrtho() );
         SetEliminatePolyPointLimitAngle( pOptions->GetEliminatePolyPointLimitAngle() );
 // #110094#-7
 //      SetMasterPagePaintCaching( pOptions->IsMasterPagePaintCaching() );
-        GetModel()->SetPickThroughTransparentTextFrames( pOptions->IsPickThrough() );
+        getSdrModelFromSdrView().SetPickThroughTransparentTextFrames( pOptions->IsPickThrough() );
 
         SetSolidMarkHdl( pOptions->IsSolidMarkHdl() );
         SetSolidDragging( pOptions->IsSolidDragging() );
 
         SetGridCoarse( Size( pOptions->GetFldDrawX(), pOptions->GetFldDrawY() ) );
         SetGridFine( Size( pOptions->GetFldDivisionX(), pOptions->GetFldDivisionY() ) );
-        Fraction aFractX(pOptions->GetFldDrawX(), pOptions->GetFldDrawX() / ( pOptions->GetFldDivisionX() ? pOptions->GetFldDivisionX() : 1 ));
-        Fraction aFractY(pOptions->GetFldDrawY(), pOptions->GetFldDrawY() / ( pOptions->GetFldDivisionY() ? pOptions->GetFldDivisionY() : 1 ));
-        SetSnapGridWidth(aFractX, aFractY);
+        const Fraction aFractX(pOptions->GetFldDrawX(), pOptions->GetFldDrawX() / ( pOptions->GetFldDivisionX() ? pOptions->GetFldDivisionX() : 1 ));
+        const Fraction aFractY(pOptions->GetFldDrawY(), pOptions->GetFldDrawY() / ( pOptions->GetFldDivisionY() ? pOptions->GetFldDivisionY() : 1 ));
+        SetSnapGridWidth(double(aFractX), double(aFractY));
         SetQuickEdit(pOptions->IsQuickEdit());
 
         // #i26631#
@@ -448,23 +448,23 @@ static OUString createHelpLinesString( const SdrHelpLineList& rHelpLines )
     for( sal_uInt16 nHlpLine = 0; nHlpLine < nCount; nHlpLine++ )
     {
         const SdrHelpLine& rHelpLine = rHelpLines[nHlpLine];
-        const Point& rPos = rHelpLine.GetPos();
+        const basegfx::B2DPoint& rPos = rHelpLine.GetPos();
 
         switch( rHelpLine.GetKind() )
         {
             case SDRHELPLINE_POINT:
                 aLines.append( (sal_Unicode)'P' );
-                aLines.append( (sal_Int32)rPos.X() );
+                aLines.append( (sal_Int32)rPos.getX() );
                 aLines.append( (sal_Unicode)',' );
-                aLines.append( (sal_Int32)rPos.Y() );
+                aLines.append( (sal_Int32)rPos.getY() );
                 break;
             case SDRHELPLINE_VERTICAL:
                 aLines.append( (sal_Unicode)'V' );
-                aLines.append( (sal_Int32)rPos.X() );
+                aLines.append( (sal_Int32)rPos.getX() );
                 break;
             case SDRHELPLINE_HORIZONTAL:
                 aLines.append( (sal_Unicode)'H' );
-                aLines.append( (sal_Int32)rPos.Y() );
+                aLines.append( (sal_Int32)rPos.getY() );
                 break;
             default:
                 DBG_ERROR( "Unsupported helpline Kind!" );
@@ -482,10 +482,10 @@ void FrameView::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com:
     aUserData.addValue( sUNO_View_GridIsVisible, makeAny( (sal_Bool)IsGridVisible() ) );
     aUserData.addValue( sUNO_View_GridIsFront, makeAny( (sal_Bool)IsGridFront() ) );
     aUserData.addValue( sUNO_View_IsSnapToGrid, makeAny( (sal_Bool)IsGridSnap() ) );
-    aUserData.addValue( sUNO_View_IsSnapToPageMargins, makeAny( (sal_Bool)IsBordSnap() ) );
-    aUserData.addValue( sUNO_View_IsSnapToSnapLines, makeAny( (sal_Bool)IsHlplSnap() ) );
-    aUserData.addValue( sUNO_View_IsSnapToObjectFrame, makeAny( (sal_Bool)IsOFrmSnap() ) );
-    aUserData.addValue( sUNO_View_IsSnapToObjectPoints, makeAny( (sal_Bool)IsOPntSnap() ) );
+    aUserData.addValue( sUNO_View_IsSnapToPageMargins, makeAny( (sal_Bool)IsBorderSnap() ) );
+    aUserData.addValue( sUNO_View_IsSnapToSnapLines, makeAny( (sal_Bool)IsHelplineSnap() ) );
+    aUserData.addValue( sUNO_View_IsSnapToObjectFrame, makeAny( (sal_Bool)IsOFrameSnap() ) );
+    aUserData.addValue( sUNO_View_IsSnapToObjectPoints, makeAny( (sal_Bool)IsOPointSnap() ) );
 
 //  pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_IsSnapLinesVisible ) );
 //  pValue->Value <<= (sal_Bool)IsHlplVisible();
@@ -496,7 +496,7 @@ void FrameView::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com:
 //  pValue++;nIndex++;
 
     aUserData.addValue( sUNO_View_IsPlusHandlesAlwaysVisible, makeAny( (sal_Bool)IsPlusHandlesAlwaysVisible() ) );
-    aUserData.addValue( sUNO_View_IsFrameDragSingles, makeAny( (sal_Bool)IsFrameDragSingles() ) );
+    aUserData.addValue( sUNO_View_IsFrameDragSingles, makeAny( (sal_Bool)IsFrameHandles() ) );
 
 //  pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_IsMarkedHitMovesAlways ) );
 //  pValue->Value <<= (sal_Bool)IsMarkedHitMovesAlways();
@@ -582,10 +582,12 @@ void FrameView::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com:
     aUserData.addValue( sUNO_View_GridCoarseHeight, makeAny( (sal_Int32)GetGridCoarse().Height() ) );
     aUserData.addValue( sUNO_View_GridFineWidth, makeAny( (sal_Int32)GetGridFine().Width() ) );
     aUserData.addValue( sUNO_View_GridFineHeight, makeAny( (sal_Int32)GetGridFine().Height() ) );
-    aUserData.addValue( sUNO_View_GridSnapWidthXNumerator, makeAny( (sal_Int32)GetSnapGridWidthX().GetNumerator() ) );
-    aUserData.addValue( sUNO_View_GridSnapWidthXDenominator, makeAny( (sal_Int32)GetSnapGridWidthX().GetDenominator() ) );
-    aUserData.addValue( sUNO_View_GridSnapWidthYNumerator, makeAny( (sal_Int32)GetSnapGridWidthY().GetNumerator() ) );
-    aUserData.addValue( sUNO_View_GridSnapWidthYDenominator, makeAny( (sal_Int32)GetSnapGridWidthY().GetDenominator() ) );
+    const Fraction aGridSnapWidthX(GetSnapGridWidthX());
+    aUserData.addValue( sUNO_View_GridSnapWidthXNumerator, makeAny( (sal_Int32)aGridSnapWidthX.GetNumerator() ) );
+    aUserData.addValue( sUNO_View_GridSnapWidthXDenominator, makeAny( (sal_Int32)aGridSnapWidthX.GetDenominator() ) );
+    const Fraction aGridSnapWidthY(GetSnapGridWidthY());
+    aUserData.addValue( sUNO_View_GridSnapWidthYNumerator, makeAny( (sal_Int32)aGridSnapWidthY.GetNumerator() ) );
+    aUserData.addValue( sUNO_View_GridSnapWidthYDenominator, makeAny( (sal_Int32)aGridSnapWidthY.GetDenominator() ) );
     aUserData.addValue( sUNO_View_IsAngleSnapEnabled, makeAny( (sal_Bool)IsAngleSnapEnabled() ) );
     aUserData.addValue( sUNO_View_SnapAngle, makeAny( (sal_Int32)GetSnapAngle() ) );
 
@@ -611,7 +613,7 @@ static void createHelpLinesFromString( const rtl::OUString& rLines, SdrHelpLineL
 
     while( *pStr )
     {
-        Point aPoint;
+        basegfx::B2DPoint aPoint;
 
         switch( *pStr )
         {
@@ -636,15 +638,15 @@ static void createHelpLinesFromString( const rtl::OUString& rLines, SdrHelpLineL
             sBuffer.append( *pStr++ );
         }
 
-        sal_Int32 nValue = sBuffer.makeStringAndClear().toInt32();
+        const sal_Int32 nValue = sBuffer.makeStringAndClear().toInt32();
 
         if( aNewHelpLine.GetKind() == SDRHELPLINE_HORIZONTAL )
         {
-            aPoint.Y() = nValue;
+            aPoint.setY(nValue);
         }
         else
         {
-            aPoint.X() = nValue;
+            aPoint.setX(nValue);
 
             if( aNewHelpLine.GetKind() == SDRHELPLINE_POINT )
             {
@@ -656,7 +658,7 @@ static void createHelpLinesFromString( const rtl::OUString& rLines, SdrHelpLineL
                     sBuffer.append( *pStr++ );
                 }
 
-                aPoint.Y() = sBuffer.makeStringAndClear().toInt32();
+                aPoint.setY(sBuffer.makeStringAndClear().toInt32());
 
             }
         }
@@ -671,18 +673,20 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
     const sal_Int32 nLength = rSequence.getLength();
     if (nLength)
     {
-        const bool bImpress = dynamic_cast< SdDrawDocument* >(GetModel())->GetDocumentType() == DOCUMENT_TYPE_IMPRESS;
+        const bool bImpress = dynamic_cast< SdDrawDocument& >(getSdrModelFromSdrView()).GetDocumentType() == DOCUMENT_TYPE_IMPRESS;
 
         sal_Bool bBool = sal_False;
         sal_Int32 nInt32 = 0;
         sal_Int16 nInt16 = 0;
         rtl::OUString aString;
 
-        sal_Int32 aSnapGridWidthXNum = GetSnapGridWidthX().GetNumerator();
-        sal_Int32 aSnapGridWidthXDom = GetSnapGridWidthX().GetDenominator();
+        const Fraction aGridSnapWidthX(GetSnapGridWidthX());
+        sal_Int32 aSnapGridWidthXNum = aGridSnapWidthX.GetNumerator();
+        sal_Int32 aSnapGridWidthXDom = aGridSnapWidthX.GetDenominator();
 
-        sal_Int32 aSnapGridWidthYNum = GetSnapGridWidthY().GetNumerator();
-        sal_Int32 aSnapGridWidthYDom = GetSnapGridWidthY().GetDenominator();
+        const Fraction aGridSnapWidthY(GetSnapGridWidthY());
+        sal_Int32 aSnapGridWidthYNum = aGridSnapWidthY.GetNumerator();
+        sal_Int32 aSnapGridWidthYDom = aGridSnapWidthY.GetDenominator();
 
         EditMode eStandardEditMode;
         EditMode eNotesEditMode;
@@ -732,8 +736,8 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
             {
                 if( pValue->Value >>= nInt16 )
                 {
-                    SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
-                    if( pDoc && pDoc->GetDocSh() && ( SFX_CREATE_MODE_EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
+                    SdDrawDocument& rDoc = dynamic_cast< SdDrawDocument& >( getSdrModelFromSdrView() );
+                    if( rDoc.GetDocSh() && ( SFX_CREATE_MODE_EMBEDDED == rDoc.GetDocSh()->GetCreateMode() ) )
                         SetPageKind( (PageKind)nInt16 );
 
                     SetPageKindOnLoad( (PageKind)nInt16 );
@@ -743,11 +747,11 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
             {
                 if( pValue->Value >>= nInt16 )
                 {
-                    SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
-                    if( pDoc && pDoc->GetDocSh() && ( SFX_CREATE_MODE_EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
-                        SetSelectedPage( (sal_uInt16)nInt16 );
+                    SdDrawDocument& rDoc = dynamic_cast< SdDrawDocument& >( getSdrModelFromSdrView() );
+                    if( rDoc.GetDocSh() && ( SFX_CREATE_MODE_EMBEDDED == rDoc.GetDocSh()->GetCreateMode() ) )
+                        SetSelectedPage( (sal_uInt32)nInt16 );
 
-                    SetSelectedPageOnLoad( (sal_uInt16)nInt16 );
+                    SetSelectedPageOnLoad( (sal_uInt32)nInt16 );
                 }
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsLayerMode ) ) )
@@ -826,8 +830,8 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
             {
                 if( pValue->Value >>= nInt32 )
                 {
-                    SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
-                    if( pDoc && pDoc->GetDocSh() && ( SFX_CREATE_MODE_EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
+                    SdDrawDocument& rDoc = dynamic_cast< SdDrawDocument& >( getSdrModelFromSdrView() );
+                    if( rDoc.GetDocSh() && ( SFX_CREATE_MODE_EMBEDDED == rDoc.GetDocSh()->GetCreateMode() ) )
                         SetViewShEditMode( (EditMode)nInt32, PK_STANDARD );
                     eStandardEditMode = (EditMode)nInt32;
                 }
@@ -836,8 +840,8 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
             {
                 if( pValue->Value >>= nInt32 )
                 {
-                    SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
-                    if( pDoc && pDoc->GetDocSh() && ( SFX_CREATE_MODE_EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
+                    SdDrawDocument& rDoc = dynamic_cast< SdDrawDocument& >( getSdrModelFromSdrView() );
+                    if( rDoc.GetDocSh() && ( SFX_CREATE_MODE_EMBEDDED == rDoc.GetDocSh()->GetCreateMode() ) )
                         SetViewShEditMode( (EditMode)nInt32, PK_NOTES );
                     eNotesEditMode = (EditMode)nInt32;
                 }
@@ -846,8 +850,8 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
             {
                 if( pValue->Value >>= nInt32 )
                 {
-                    SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
-                    if( pDoc && pDoc->GetDocSh() && ( SFX_CREATE_MODE_EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
+                    SdDrawDocument& rDoc = dynamic_cast< SdDrawDocument& >( getSdrModelFromSdrView() );
+                    if( rDoc.GetDocSh() && ( SFX_CREATE_MODE_EMBEDDED == rDoc.GetDocSh()->GetCreateMode() ) )
                         SetViewShEditMode( (EditMode)nInt32, PK_HANDOUT );
                     eHandoutEditMode = (EditMode)nInt32;
                 }
@@ -921,28 +925,28 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
             {
                 if( pValue->Value >>= bBool )
                 {
-                    SetBordSnap( bBool );
+                    SetBorderSnap( bBool );
                 }
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsSnapToSnapLines ) ) )
             {
                 if( pValue->Value >>= bBool )
                 {
-                    SetHlplSnap( bBool );
+                    SetHelplineSnap( bBool );
                 }
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsSnapToObjectFrame ) ) )
             {
                 if( pValue->Value >>= bBool )
                 {
-                    SetOFrmSnap( bBool );
+                    SetOFrameSnap( bBool );
                 }
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsSnapToObjectPoints ) ) )
             {
                 if( pValue->Value >>= bBool )
                 {
-                    SetOPntSnap( bBool );
+                    SetOPointSnap( bBool );
                 }
             }
 /*          else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsSnapLinesVisible ) ) )
@@ -970,7 +974,7 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
             {
                 if( pValue->Value >>= bBool )
                 {
-                    SetFrameDragSingles( bBool );
+                    SetFrameHandles( bBool );
                 }
             }
 /*          else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsMarkedHitMovesAlways ) ) )
@@ -1138,7 +1142,7 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
         const Fraction aSnapGridWidthX( aSnapGridWidthXNum, aSnapGridWidthXDom );
         const Fraction aSnapGridWidthY( aSnapGridWidthYNum, aSnapGridWidthYDom );
 
-        SetSnapGridWidth( aSnapGridWidthX, aSnapGridWidthY );
+        SetSnapGridWidth( double(aSnapGridWidthX), double(aSnapGridWidthY) );
     }
 }
 
@@ -1177,7 +1181,7 @@ ViewShell::ShellType FrameView::GetViewShellTypeOnLoad (void) const
 
 
 
-void FrameView::SetSelectedPage(sal_uInt16 nPage)
+void FrameView::SetSelectedPage(sal_uInt32 nPage)
 {
     mnSelectedPage = nPage;
 }
@@ -1185,7 +1189,7 @@ void FrameView::SetSelectedPage(sal_uInt16 nPage)
 
 
 
-sal_uInt16 FrameView::GetSelectedPage (void) const
+sal_uInt32 FrameView::GetSelectedPage (void) const
 {
     return mnSelectedPage;
 }

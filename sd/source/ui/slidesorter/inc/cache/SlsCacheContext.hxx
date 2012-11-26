@@ -74,7 +74,7 @@ public:
         the list of visible entries and maybe for the list of not visible
         entries and creates preview creation requests for them.
         @param bVisible
-            When this is <FALSE/> then the implementation can decide whether
+            When this is <false/> then the implementation can decide whether
             to allow rendering of previews that are not visible (ahead of
             time). When not then return an empty pointer or an empty vector.
     */

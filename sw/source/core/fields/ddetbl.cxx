@@ -37,8 +37,6 @@
 #include <swtblfmt.hxx>
 #include <fieldhint.hxx>
 
-TYPEINIT1( SwDDETable, SwTable );
-
     // Constructor movet alle Lines/Boxen aus der SwTable zu sich.
     // Die SwTable ist danach Leer und muss geloescht werden.
 SwDDETable::SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType,

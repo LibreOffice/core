@@ -45,6 +45,7 @@
 #include "editeng/editdata.hxx"
 #include "svx/svdmodel.hxx"
 #include "editeng/svxrtf.hxx"
+#include <svx/svdlegacy.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
@@ -134,8 +135,8 @@ private:
 
 SdrTableRTFParser::SdrTableRTFParser( SdrTableObj& rTableObj )
 : mrTableObj( rTableObj )
-, mpOutliner( SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, rTableObj.GetModel() ) )
-, mrItemPool( rTableObj.GetModel()->GetItemPool() )
+, mpOutliner( SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, &rTableObj.getSdrModelFromSdrObject() ) )
+, mrItemPool( rTableObj.GetObjectItemPool() )
 , mnLastToken( 0 )
 , mnLastWidth( 0 )
 , mbNewDef( false )
@@ -186,8 +187,8 @@ IMPL_LINK( SdrTableRTFParser, RTFImportHdl, ImportInfo*, pInfo )
             pParser->SetAttrPool( &mrItemPool );
             RTFPardAttrMapIds& rMap = pParser->GetPardMap();
             rMap.nBox = SDRATTR_TABLE_BORDER;
-        }
             break;
+        }
         case RTFIMP_END:
             if ( pInfo->aSelection.nEndPos )
             {
@@ -289,16 +290,16 @@ void SdrTableRTFParser::FillTable()
                         SdrOutliner& rOutliner=mrTableObj.ImpGetDrawOutliner();
                         rOutliner.SetUpdateMode(sal_True);
                         rOutliner.SetText( *pTextObject );
-                        mrTableObj.NbcSetOutlinerParaObjectForText( rOutliner.CreateParaObject(), xCell.get() );
+                        mrTableObj.SetOutlinerParaObjectForText( rOutliner.CreateParaObject(), xCell.get() );
                         delete pTextObject;
                     }
                 }
             }
         }
 
-        Rectangle aRect( mrTableObj.GetSnapRect() );
+        Rectangle aRect( sdr::legacy::GetSnapRect(mrTableObj) );
         aRect.nRight = aRect.nLeft + nLastEdge;
-        mrTableObj.NbcSetSnapRect( aRect );
+        sdr::legacy::SetSnapRect(mrTableObj, aRect );
 
     }
     catch( Exception& e )

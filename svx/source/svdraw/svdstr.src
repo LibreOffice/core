@@ -245,18 +245,6 @@ String STR_ObjNameSingulFREELINE
 {
     Text [ en-US ] = "Freeform Line" ;
 };
-String STR_ObjNamePluralFREELINE
-{
-    Text [ en-US ] = "Freeform Lines" ;
-};
-String STR_ObjNameSingulFREEFILL
-{
-    Text [ en-US ] = "Freeform Line" ;
-};
-String STR_ObjNamePluralFREEFILL
-{
-    Text [ en-US ] = "Freeform Lines" ;
-};
 String STR_ObjNameSingulCOMBLINE
 {
     Text [ en-US ] = "Curve" ;
@@ -273,24 +261,6 @@ String STR_ObjNamePluralCOMBFILL
 {
     Text [ en-US ] = "Curve objects" ;
 };
- ////////////////////////////////////////////////////////////////////////////////////////////////////
-String STR_ObjNameSingulNATSPLN
-{
-    Text [ en-US ] = "Natural Spline" ;
-};
-String STR_ObjNamePluralNATSPLN
-{
-    Text [ en-US ] = "Natural Splines" ;
-};
-String STR_ObjNameSingulPERSPLN
-{
-    Text [ en-US ] = "Periodic Spline" ;
-};
-String STR_ObjNamePluralPERSPLN
-{
-    Text [ en-US ] = "Periodic Splines" ;
-};
- ////////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ObjNameSingulTEXT
 {
     Text [ en-US ] = "Text Frame" ;
@@ -1130,10 +1100,10 @@ String STR_UndoDelLayer
 {
     Text [ en-US ] = "Delete layer" ;
 };
-String STR_UndoMovLayer
-{
-    Text [ en-US ] = "Change order of layers" ;
-};
+//String STR_UndoMovLayer
+//{
+//  Text [ en-US ] = "Change order of layers" ;
+//};
 // --> OD 2009-07-09 #i73249#
 String STR_UndoObjName
 {

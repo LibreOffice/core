@@ -19,16 +19,14 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
 
 #include <errhdl.hxx>
 #include <dpage.hxx>
 #include <dobjfac.hxx>
 #include <dflyobj.hxx>
+#include <svx/sdrobjectfactory.hxx>
 
 SwObjectFactory aSwObjectFactory;
 
@@ -40,12 +38,12 @@ SwObjectFactory aSwObjectFactory;
 
 IMPL_LINK( SwObjectFactory, MakeObject, SdrObjFactory*, pObjFactory )
 {
-    if ( pObjFactory->nInventor == SWGInventor )
+    if ( SWGInventor == pObjFactory->getSdrObjectCreationInfo().getInvent() )
     {
         //Kein switch, derzeit gibt es nur einen.
-        ASSERT( pObjFactory->nIdentifier == SwFlyDrawObjIdentifier,
-                                        "Falscher Inventor oder identifier." );
-        pObjFactory->pNewObj = new SwFlyDrawObj();
+        ASSERT( SwFlyDrawObjIdentifier == pObjFactory->getSdrObjectCreationInfo().getIdent(), "Falscher Inventor oder identifier." );
+        pObjFactory->setNewSdrObject(
+            new SwFlyDrawObj(pObjFactory->getTargetModel()));
     }
     return 0;
 }

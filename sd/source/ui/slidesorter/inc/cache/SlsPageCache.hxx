@@ -150,8 +150,8 @@ public:
         This is the case when the size of the page objects on the screen has
         changed or when the model has changed.
         @param bUpdateCache
-            When this flags is <TRUE/> then requests for updated previews
-            are created.  When it is <FALSE/> the existing previews are only
+            When this flags is <true/> then requests for updated previews
+            are created.  When it is <false/> the existing previews are only
             marked as not being up-to-date anymore.
     */
     void InvalidateCache (const bool bUpdateCache = true);

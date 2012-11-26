@@ -35,6 +35,7 @@
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdlegacy.hxx>
 
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
@@ -57,8 +58,8 @@ sal_uInt16 lcl_DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, sal_Bool
 
     sal_uInt16 nFound = 0;
 
-    sal_uInt16 nPageCount = pModel->GetPageCount();
-    for (sal_uInt16 nPageNo=0; nPageNo<nPageCount; nPageNo++)
+    const sal_uInt32 nPageCount(pModel->GetPageCount());
+    for (sal_uInt32 nPageNo=0; nPageNo<nPageCount; nPageNo++)
     {
         SdrPage* pPage = pModel->GetPage(nPageNo);
         DBG_ASSERT(pPage,"Page ?");
@@ -461,7 +462,7 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument* pDoc, Sd
 
                         if ( pModelObj && pModelObj->HasChangesListeners() )
                         {
-                            Rectangle aRectangle = pSdrOle2Obj->GetSnapRect();
+                            Rectangle aRectangle = sdr::legacy::GetSnapRect(*pSdrOle2Obj);
                             ScRange aRange( pDoc->GetRange( nTab, aRectangle ) );
                             ScRangeList aChangeRanges;
                             aChangeRanges.Append( aRange );

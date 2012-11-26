@@ -59,8 +59,8 @@ namespace sdr
             basegfx::B3DHomMatrix aWorldTransform;
 
             aWorldTransform.translate(-0.5, -0.5, -0.5);
-            aWorldTransform.scale(aSphereSize.getX(), aSphereSize.getY(), aSphereSize.getZ());
-            aWorldTransform.translate(aSpherePosition.getX(), aSpherePosition.getY(), aSpherePosition.getZ());
+            aWorldTransform.scale(aSphereSize);
+            aWorldTransform.translate(aSpherePosition);
 
             // get 3D Object Attributes
             drawinglayer::attribute::Sdr3DObjectAttribute* pSdr3DObjectAttribute = drawinglayer::primitive2d::createNewSdr3DObjectAttribute(rItemSet);

@@ -25,12 +25,10 @@
 #include "precompiled_sw.hxx"
 #include <tools/ref.hxx>
 #include <hintids.hxx>
-
 #include <doc.hxx>
 #ifdef DBG_UTIL
 #include <stdio.h>
 #endif
-
 #include <vcl/help.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/securityoptions.hxx>
@@ -67,14 +65,11 @@
 #include <viewopt.hxx>
 #include <docvw.hrc>
 #include <utlui.hrc>
-
 #include <PostItMgr.hxx>
 #include <fmtfld.hxx>
-
-// --> OD 2009-08-18 #i104300#
 #include <IDocumentMarkAccess.hxx>
 #include <ndtxt.hxx>
-// <--
+#include <svx/svdlegacy.hxx>
 
 /*--------------------------------------------------------------------
     Beschreibung:   KeyEvents
@@ -123,7 +118,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
         if( pSdrView )
         {
             SdrPageView* pPV = pSdrView->GetSdrPageView();
-            SwDPage* pPage = pPV ? ((SwDPage*)pPV->GetPage()) : 0;
+            SwDPage* pPage = pPV ? ((SwDPage*)&pPV->getSdrPageFromSdrPageView()) : 0;
             bWeiter = pPage && pPage->RequestHelp(this, pSdrView, rEvt);
         }
     }
@@ -463,36 +458,27 @@ aktuelle Zeichenvorlage anzeigen?
     if( bWeiter && pSdrView && bQuickBalloon)
     {
         SdrViewEvent aVEvt;
-        SdrHitKind eHit = pSdrView->PickAnything(aPos, aVEvt);
+        SdrHitKind eHit = pSdrView->PickAnything(basegfx::B2DPoint(aPos.X(), aPos.Y()), aVEvt);
         const SvxURLField *pField;
         SdrObject* pObj = NULL;
 
-        if ((pField = aVEvt.pURLField) != 0)
+        if(aVEvt.maURLField.Len())
         {
-            // URL-Feld getroffen
-            if (pField)
-            {
-                pObj = aVEvt.pObj;
-                sTxt = pField->GetURL();
+            // URLField hit
+            pObj = aVEvt.mpObj;
+            sTxt = aVEvt.maURLField;
 
                 bWeiter = sal_False;
             }
-        }
         if (bWeiter && eHit == SDRHIT_TEXTEDIT)
         {
             // URL-Feld in zum Editieren ge?ffneten DrawText-Objekt suchen
             OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
             const SvxFieldItem* pFieldItem;
 
-            if (pSdrView->AreObjectsMarked())
-            {
-                const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
+            pObj = pSdrView->getSelectedIfSingle();
 
-                if (rMarkList.GetMarkCount() == 1)
-                    pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-            }
-
-            if (pObj && pObj->ISA(SdrTextObj) && pOLV &&
+            if (pObj && dynamic_cast< SdrTextObj* >(pObj) && pOLV &&
                     (pFieldItem = pOLV->GetFieldUnderMousePointer()) != 0)
             {
                 pField = dynamic_cast<const SvxURLField*>(pFieldItem->GetField());
@@ -509,7 +495,7 @@ aktuelle Zeichenvorlage anzeigen?
             sTxt = URIHelper::removePassword( sTxt, INetURLObject::WAS_ENCODED,
                                            INetURLObject::DECODE_UNAMBIGUOUS);
 
-            Rectangle aLogicPix = LogicToPixel(pObj->GetLogicRect());
+            Rectangle aLogicPix = LogicToPixel(sdr::legacy::GetLogicRect(*pObj));
             Rectangle aScreenRect(OutputToScreenPixel(aLogicPix.TopLeft()),
                                 OutputToScreenPixel(aLogicPix.BottomRight()));
 

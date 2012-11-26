@@ -85,13 +85,7 @@ private:
 
     // bitfield
     // #i72889# flag if this is only a temporary target for repaint, default is false
-    unsigned                                            mbTemporaryTarget : 1;
-
-    /** Remember whether the mpOverlayManager supports buffering.  Using
-        this flags expensive dynamic_casts on mpOverlayManager in order to
-        detect this.
-    */
-    bool mbUseBuffer;
+    bool                                                mbTemporaryTarget : 1;
 
     // helpers
     void impCreateOverlayManager();
@@ -106,7 +100,6 @@ public:
 
     // OVERLAYMANAGER
     ::sdr::overlay::OverlayManager* GetOverlayManager() const;
-    // #i73602# add flag if buffer shall be used
     void DrawOverlay(const Region& rRegion);
     void HideOverlay(const Region& rRegion);
 

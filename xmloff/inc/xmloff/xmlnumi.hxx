@@ -57,8 +57,6 @@ protected:
 
 public:
 
-    TYPEINFO();
-
     SvxXMLListStyleContext(
             SvXMLImport& rImport, sal_uInt16 nPrfx,
             const ::rtl::OUString& rLName,

@@ -29,16 +29,6 @@
 #include "hints.hxx"
 
 // -----------------------------------------------------------------------
-
-TYPEINIT1(ScPaintHint, SfxHint);
-TYPEINIT1(ScUpdateRefHint, SfxHint);
-TYPEINIT1(ScPointerChangedHint, SfxHint);
-TYPEINIT1(ScLinkRefreshedHint, SfxHint);
-TYPEINIT1(ScAutoStyleHint, SfxHint);
-TYPEINIT1(ScDBRangeRefreshedHint, SfxHint);
-TYPEINIT1(ScDataPilotModifiedHint, SfxHint);
-
-// -----------------------------------------------------------------------
 //      ScPaintHint - Angabe, was neu gezeichnet werden muss
 // -----------------------------------------------------------------------
 

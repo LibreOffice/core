@@ -155,8 +155,6 @@ SFX_IMPL_INTERFACE(SwBaseShell, SfxShell, SW_RES(0))
     SFX_CHILDWINDOW_REGISTRATION(SvxContourDlgChildWindow::GetChildWindowId());
 }
 
-TYPEINIT1(SwBaseShell,SfxShell)
-
 /*--------------------------------------------------------------------
     Beschreibung:   statics
  --------------------------------------------------------------------*/
@@ -1172,7 +1170,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             if( pArgs != NULL
                 && pArgs->GetItemState( nSlot, sal_True, &pItem ) == SFX_ITEM_SET
                 && pItem != NULL
-                && pItem->ISA( SfxBoolItem ) )
+                && dynamic_cast< const SfxBoolItem* >(pItem) )
             {
                 sal_Bool bDesignMode =
                     static_cast<const SfxBoolItem*>( pItem )->GetValue();
@@ -1605,7 +1603,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
             case FN_TOOL_ANKER_AT_CHAR:
             case FN_TOOL_ANKER_FRAME:
             {
-                sal_Bool bObj = 0 != rSh.IsObjSelected();
+                sal_Bool bObj(rSh.IsObjSelected());
                 sal_Bool bParentCntProt = rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0;
 
                 if( !bParentCntProt && (bObj || rSh.IsFrmSelected()))
@@ -1678,7 +1676,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
             case FN_FRAME_WRAP_LEFT:
             case FN_FRAME_WRAP_RIGHT:
             {
-                sal_Bool bObj = 0 != rSh.IsObjSelected();
+                sal_Bool bObj(rSh.IsObjSelected());
                 sal_Bool bParentCntProt = rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0;
 
                 if( !bParentCntProt && (bObj || rSh.IsFrmSelected()))
@@ -1867,7 +1865,7 @@ void SwBaseShell::StateStyle( SfxItemSet &rSet )
 void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
 {
     SwWrtShell &rSh = GetShell();
-    sal_Bool bObj = 0 != rSh.IsObjSelected();
+    sal_Bool bObj(rSh.IsObjSelected());
     if( bObj || rSh.IsFrmSelected())
     {
         SfxItemSet aSet(GetPool(), RES_OPAQUE, RES_SURROUND);
@@ -2195,13 +2193,15 @@ void SwBaseShell::GetTxtFontCtrlState( SfxItemSet& rSet )
                 if(RES_CHRATR_FONT == nWhich)
                 {
                     Font aFont;
-                    if(pI && pI->ISA(SvxFontItem))
+                    const SvxFontItem* pSvxFontItem = dynamic_cast< const SvxFontItem* >(pI);
+
+                    if(pSvxFontItem)
                     {
-                        aFont.SetName( ((const SvxFontItem*)pI)->GetFamilyName());
-                        aFont.SetStyleName(((const SvxFontItem*)pI)->GetStyleName());
-                        aFont.SetFamily(((const SvxFontItem*)pI)->GetFamily());
-                        aFont.SetPitch(((const SvxFontItem*)pI)->GetPitch());
-                        aFont.SetCharSet(((const SvxFontItem*)pI)->GetCharSet());
+                        aFont.SetName( pSvxFontItem->GetFamilyName());
+                        aFont.SetStyleName(pSvxFontItem->GetStyleName());
+                        aFont.SetFamily(pSvxFontItem->GetFamily());
+                        aFont.SetPitch(pSvxFontItem->GetPitch());
+                        aFont.SetCharSet(pSvxFontItem->GetCharSet());
                     }
 
                     sal_Bool bVertical = rSh.IsInVerticalText();
@@ -2664,11 +2664,11 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
 
             if( pArgs && pArgs->Count() >= 2 )
             {
-                SFX_REQUEST_ARG( _rRequest, pName, SfxStringItem, FN_INSERT_TABLE, sal_False );
-                SFX_REQUEST_ARG( _rRequest, pCols, SfxUInt16Item, SID_ATTR_TABLE_COLUMN, sal_False );
-                SFX_REQUEST_ARG( _rRequest, pRows, SfxUInt16Item, SID_ATTR_TABLE_ROW, sal_False );
-                SFX_REQUEST_ARG( _rRequest, pFlags, SfxInt32Item, FN_PARAM_1, sal_False );
-                SFX_REQUEST_ARG( _rRequest, pAuto, SfxStringItem, FN_PARAM_2, sal_False );
+                SFX_REQUEST_ARG( _rRequest, pName, SfxStringItem, FN_INSERT_TABLE );
+                SFX_REQUEST_ARG( _rRequest, pCols, SfxUInt16Item, SID_ATTR_TABLE_COLUMN );
+                SFX_REQUEST_ARG( _rRequest, pRows, SfxUInt16Item, SID_ATTR_TABLE_ROW );
+                SFX_REQUEST_ARG( _rRequest, pFlags, SfxInt32Item, FN_PARAM_1 );
+                SFX_REQUEST_ARG( _rRequest, pAuto, SfxStringItem, FN_PARAM_2 );
 
                 if ( pName )
                     aTableName = pName->GetValue();

@@ -86,10 +86,11 @@ sal_Bool TextEditImp::ViewMoved()
 void TextEditImp::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     (void) rBC; /* avoid warning about unused parameter */
-    if ( rHint.ISA( TextHint ) )
+    const TextHint* pTextHint = dynamic_cast< const TextHint* >(&rHint);
+
+    if ( pTextHint )
     {
-        const TextHint& rTextHint = (const TextHint&)rHint;
-        if( rTextHint.GetId() == TEXT_HINT_VIEWSCROLLED )
+        if( pTextHint->GetId() == TEXT_HINT_VIEWSCROLLED )
         {
             pAppEdit->pHScroll->SetThumbPos( pTextView->GetStartDocPos().X() );
             pAppEdit->pVScroll->SetThumbPos( pTextView->GetStartDocPos().Y() );
@@ -97,7 +98,7 @@ void TextEditImp::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 ((TextEdit*)(pAppEdit->pDataEdit))->GetBreakpointWindow()->Scroll( 0, ((TextEdit*)(pAppEdit->pDataEdit))->GetBreakpointWindow()->GetCurYOffset() - pTextView->GetStartDocPos().Y() );
             bViewMoved = sal_True;
         }
-        else if( rTextHint.GetId() == TEXT_HINT_TEXTHEIGHTCHANGED )
+        else if( pTextHint->GetId() == TEXT_HINT_TEXTHEIGHTCHANGED )
         {
             if ( pTextView->GetStartDocPos().Y() )
             {
@@ -109,7 +110,7 @@ void TextEditImp::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
             pAppEdit->SetScrollBarRanges();
         }
-        else if( rTextHint.GetId() == TEXT_HINT_TEXTFORMATTED )
+        else if( pTextHint->GetId() == TEXT_HINT_TEXTFORMATTED )
         {
             sal_uIntPtr nWidth = pTextEngine->CalcTextWidth();
             if ( (sal_uIntPtr)nWidth != pAppEdit->nCurTextWidth )
@@ -122,23 +123,23 @@ void TextEditImp::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 }
             }
         }
-        else if( rTextHint.GetId() == TEXT_HINT_PARAINSERTED )
+        else if( pTextHint->GetId() == TEXT_HINT_PARAINSERTED )
         {
             if ( ((TextEdit*)(pAppEdit->pDataEdit))->GetBreakpointWindow() )
-                ((TextEdit*)(pAppEdit->pDataEdit))->GetBreakpointWindow()->AdjustBreakpoints( rTextHint.GetValue()+1, sal_True );
+                ((TextEdit*)(pAppEdit->pDataEdit))->GetBreakpointWindow()->AdjustBreakpoints( pTextHint->GetValue()+1, sal_True );
         }
-        else if( rTextHint.GetId() == TEXT_HINT_PARAREMOVED )
+        else if( pTextHint->GetId() == TEXT_HINT_PARAREMOVED )
         {
             if ( ((TextEdit*)(pAppEdit->pDataEdit))->GetBreakpointWindow() )
-                ((TextEdit*)(pAppEdit->pDataEdit))->GetBreakpointWindow()->AdjustBreakpoints( rTextHint.GetValue()+1, sal_False );
+                ((TextEdit*)(pAppEdit->pDataEdit))->GetBreakpointWindow()->AdjustBreakpoints( pTextHint->GetValue()+1, sal_False );
 
             // Itchy adaption for two signs at line ends instead of one (hard coded default)
             pTextEngine->SetMaxTextLen( STRING_MAXLEN - pTextEngine->GetParagraphCount() );
         }
-        else if( rTextHint.GetId() == TEXT_HINT_FORMATPARA )
+        else if( pTextHint->GetId() == TEXT_HINT_FORMATPARA )
         {
             DoDelayedSyntaxHighlight(
-                sal::static_int_cast< xub_StrLen >( rTextHint.GetValue() ) );
+                sal::static_int_cast< xub_StrLen >( pTextHint->GetValue() ) );
             if ( pTextView->GetTextEngine()->IsModified() )
                 ModifyHdl.Call( NULL );
         }
@@ -243,31 +244,31 @@ void TextEditImp::ImpDoHighlight( const String& rSource, sal_uIntPtr nLineOff )
         }
     }
 
-        // Es muessen nur die Blanks und Tabs mit attributiert werden.
-        // If there are two equal attributes one after another,
-        // they are optimized by the EditEngine.
-        xub_StrLen nLastEnd = 0;
+    // Es muessen nur die Blanks und Tabs mit attributiert werden.
+    // If there are two equal attributes one after another,
+    // they are optimized by the EditEngine.
+    xub_StrLen nLastEnd = 0;
 #ifdef DBG_UTIL
-        xub_StrLen nLine1 = aPortionList[0].nLine;
+    xub_StrLen nLine1 = aPortionList[0].nLine;
 #endif
-        for ( i = 0; i < nCount; i++ )
-        {
-            SbTextPortion& r = aPortionList[i];
-            DBG_ASSERT( r.nLine == nLine1, "doch mehrere Zeilen ?" );
-            DBG_ASSERT( r.nStart <= r.nEnd, "Highlight: Start > End?" );
-            if ( r.nStart > r.nEnd )    // Nur bis Bug von MD behoben
-                continue;
+    for ( i = 0; i < nCount; i++ )
+    {
+        SbTextPortion& r = aPortionList[i];
+        DBG_ASSERT( r.nLine == nLine1, "doch mehrere Zeilen ?" );
+        DBG_ASSERT( r.nStart <= r.nEnd, "Highlight: Start > End?" );
+        if ( r.nStart > r.nEnd )    // Nur bis Bug von MD behoben
+            continue;
 
-            if ( r.nStart > nLastEnd )
-            {
-                // Kann ich mich drauf verlassen, dass alle ausser
-                // Blank und Tab gehighlightet wird ?!
-                r.nStart = nLastEnd;
-            }
-            nLastEnd = r.nEnd+1;
-            if ( ( i == (nCount-1) ) && ( r.nEnd < rSource.Len() ) )
-                r.nEnd = rSource.Len()-1;
+        if ( r.nStart > nLastEnd )
+        {
+            // Kann ich mich drauf verlassen, dass alle ausser
+            // Blank und Tab gehighlightet wird ?!
+            r.nStart = nLastEnd;
         }
+        nLastEnd = r.nEnd+1;
+        if ( ( i == (nCount-1) ) && ( r.nEnd < rSource.Len() ) )
+            r.nEnd = rSource.Len()-1;
+    }
 
     sal_Bool bWasModified = pTextEngine->IsModified();
     for ( i = 0; i < aPortionList.Count(); i++ )
@@ -566,21 +567,25 @@ IMPL_LINK( TextEditImp, ShowVarContents, void*, EMPTYARG )
     SbxBase* pSBX = GetSbxAtMousePos( aWord );
     String aHelpText;
     Point aPos = GetPointerPosPixel();
+    SbxVariable* pVar = dynamic_cast< SbxVariable* >(pSBX);
 
-    if ( pSBX && pSBX->ISA( SbxVariable ) && !pSBX->ISA( SbxMethod ) )
+    if ( pVar && !dynamic_cast< SbxMethod* >(pSBX) )
     {
-        SbxVariable* pVar = (SbxVariable*)pSBX;
         SbxDataType eType = pVar->GetType();
         if ( eType == SbxOBJECT )
         {
         // Can cause a crash: Type == Object does not mean pVar == Object
-            if ( pVar->GetObject() && pVar->GetObject()->ISA( SbxObject ) )
-                aHelpText = ((SbxObject*)(pVar->GetObject()))->GetClassName();
+            SbxObject* pSbxObject = dynamic_cast< SbxObject* >(pVar->GetObject());
+
+            if ( pSbxObject )
+                aHelpText = pSbxObject->GetClassName();
             else
                 aHelpText = CUniString("Object");
         }
         else if ( eType & SbxARRAY )
+        {
             aHelpText = CUniString("{...}");
+        }
         else if ( eType != SbxEMPTY )
         {
             aHelpText = pVar->GetName();
@@ -617,9 +622,10 @@ void TextEditImp::BuildKontextMenu( PopupMenu *&pMenu )
 {
     String aWord;
     SbxBase* pSBX = GetSbxAtMousePos( aWord );
-    if ( pSBX && pSBX->ISA( SbxVariable ) && !pSBX->ISA( SbxMethod ) )
+    SbxVariable* pVar = dynamic_cast< SbxVariable* >(pSBX);
+
+    if ( pVar && !dynamic_cast< SbxMethod* >(pSBX) )
     {
-        SbxVariable* pVar = (SbxVariable*)pSBX;
         SbxDataType eType = pVar->GetType();
 
         if ( ( eType & ( SbxVECTOR | SbxARRAY | SbxBYREF )) == 0 )

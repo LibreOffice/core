@@ -34,8 +34,6 @@ using namespace ::com::sun::star;
 |*  DiaEffectItem
 |*
 *************************************************************************/
-TYPEINIT1_AUTOFACTORY( DiaEffectItem, SfxEnumItem );
-
 
 DiaEffectItem::DiaEffectItem( presentation::FadeEffect eFE ) :
     SfxEnumItem( ATTR_DIA_EFFECT, (sal_uInt16)eFE )
@@ -65,8 +63,6 @@ SfxPoolItem* DiaEffectItem::Create( SvStream& rIn, sal_uInt16 ) const
 |*  DiaSpeedItem
 |*
 *************************************************************************/
-TYPEINIT1_AUTOFACTORY( DiaSpeedItem, SfxEnumItem );
-
 
 DiaSpeedItem::DiaSpeedItem( FadeSpeed eFS ) :
     SfxEnumItem( ATTR_DIA_SPEED, (sal_uInt16)eFS )
@@ -96,7 +92,6 @@ SfxPoolItem* DiaSpeedItem::Create( SvStream& rIn, sal_uInt16 ) const
 |*  DiaAutoItem
 |*
 *************************************************************************/
-TYPEINIT1_AUTOFACTORY( DiaAutoItem, SfxEnumItem );
 
 DiaAutoItem::DiaAutoItem( PresChange eChange ) :
     SfxEnumItem( ATTR_DIA_AUTO, (sal_uInt16)eChange )
@@ -126,8 +121,6 @@ SfxPoolItem* DiaAutoItem::Create( SvStream& rIn, sal_uInt16 ) const
 |*  DiaTimeItem
 |*
 *************************************************************************/
-TYPEINIT1_AUTOFACTORY( DiaTimeItem, SfxUInt32Item );
-
 
 DiaTimeItem::DiaTimeItem( sal_uInt32 nValue ) :
         SfxUInt32Item( ATTR_DIA_TIME, nValue )

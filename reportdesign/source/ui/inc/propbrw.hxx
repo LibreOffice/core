@@ -33,7 +33,7 @@
 #include <svl/brdcst.hxx>
 #include <svl/lstner.hxx>
 #include <vcl/dockwin.hxx>
-#include <svx/svdmark.hxx>
+#include <svx/svdobj.hxx>
 #include "ModuleHelper.hxx"
 
 namespace rptui
@@ -75,7 +75,7 @@ protected:
     virtual sal_Bool Close();
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> >
-        CreateCompPropSet(const SdrMarkList& rMarkList);
+        CreateCompPropSet(const SdrObjectVector& rSelection);
 
     void implSetNewObject(
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> >& _aObjects = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> >());

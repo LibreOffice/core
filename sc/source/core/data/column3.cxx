@@ -56,6 +56,8 @@
 #include "dpglobal.hxx"
 #include <dptablecache.hxx>
 #include <com/sun/star/i18n/LocaleDataItem.hpp>
+#include <memory.h>
+
 using ::com::sun::star::i18n::LocaleDataItem;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;

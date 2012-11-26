@@ -46,13 +46,12 @@ class ScDrawView: public FmFormView
     SdrDropMarkerOverlay*   pDropMarker;
     SdrObject*              pDropMarkObj;
     sal_Bool                    bInConstruct;
-    //HMHBOOL                   bDisableHdl;
 
     void            Construct();
     void            UpdateBrowser();
 
 protected:
-    virtual void    ModelHasChanged();
+    virtual void    LazyReactOnObjectChanges();
 
     // add custom handles (used by other apps, e.g. AnchorPos)
     virtual void AddCustomHdl();
@@ -66,12 +65,12 @@ public:
                     ScDrawView( OutputDevice* pOut, ScViewData* pData );
     virtual         ~ScDrawView();
 
-    virtual void    MarkListHasChanged();
+    virtual void handleSelectionChange();
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     virtual void    DoConnect(SdrOle2Obj* pOleObj);
 
-    virtual void    MakeVisible( const Rectangle& rRect, Window& rWin );
+    virtual void    MakeVisibleAtView( const basegfx::B2DRange& rRange, Window& rWin );
 
     virtual void    DeleteMarked();
 
@@ -79,14 +78,12 @@ public:
 
     void            MarkDropObj( SdrObject* pObj );
 
-    //HMHBOOL           IsDisableHdl() const    { return bDisableHdl; }
-
     void            SetMarkedToLayer( sal_uInt8 nLayerNo );
 
     void            InvalidateAttribs();
     void            InvalidateDrawTextAttrs();
 
-    sal_Bool            BeginDrag( Window* pWindow, const Point& rStartPos );
+    sal_Bool        BeginDrag( Window* pWindow, const basegfx::B2DPoint& rStartPos );
     void            DoCut();
     void            DoCopy();
 
@@ -115,7 +112,7 @@ public:
     bool            HasMarkedControl() const;
     bool            HasMarkedInternal() const;
 
-    FASTBOOL        InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, sal_uLong nOptions=0);
+    bool InsertObjectSafe(SdrObject& rObj, sal_uLong nOptions=0);
 
     /** Returns the selected object, if it is the caption object of a cell note.
         @param ppCaptData  (out-param) If not null, returns the pointer to the caption object data. */

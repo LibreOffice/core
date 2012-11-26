@@ -24,7 +24,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 #include "swwrtshitem.hxx"
-TYPEINIT1(SwWrtShellItem,SfxPoolItem);
+
 SwWrtShellItem::SwWrtShellItem( sal_uInt16 _nWhich, SwWrtShell* pSh )
     : SfxPoolItem( _nWhich ), pWrtSh( pSh )
 {

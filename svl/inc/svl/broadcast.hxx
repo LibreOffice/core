@@ -24,7 +24,6 @@
 #define _SVT_BROADCAST_HXX
 
 #include "svl/svldllapi.h"
-#include <tools/rtti.hxx>
 
 class SvtListener;
 class SfxHint;
@@ -47,8 +46,6 @@ protected:
     virtual void            ListenersGone();
 
 public:
-                            TYPEINFO();
-
                             SvtBroadcaster();
                             SvtBroadcaster( const SvtBroadcaster &rBC );
     virtual                 ~SvtBroadcaster();

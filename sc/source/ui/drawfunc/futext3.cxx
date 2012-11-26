@@ -73,7 +73,7 @@ void FuText::StopEditMode(sal_Bool /*bTextDirection*/)
 
     ScAddress aNotePos;
     ScPostIt* pNote = 0;
-    if( const ScDrawObjData* pCaptData = ScDrawLayer::GetNoteCaptionData( pObject, rViewData.GetTabNo() ) )
+    if( const ScDrawObjData* pCaptData = ScDrawLayer::GetNoteCaptionData( *pObject, rViewData.GetTabNo() ) )
     {
         aNotePos = pCaptData->maStart;
         pNote = rDoc.GetNote( aNotePos );
@@ -94,7 +94,7 @@ void FuText::StopEditMode(sal_Bool /*bTextDirection*/)
             /*  Note has been created before editing, if first undo action is
                 an insert action. Needed below to decide whether to drop the
                 undo if editing a new note has been cancelled. */
-            bNewNote = (pCalcUndo->GetActionCount() > 0) && pCalcUndo->GetAction( 0 )->ISA( SdrUndoNewObj );
+            bNewNote = (pCalcUndo->GetActionCount() > 0) && dynamic_cast< SdrUndoNewObj* >(pCalcUndo->GetAction( 0 ));
             // create a "insert note" undo action if needed
             if( bNewNote )
                 pUndoMgr->AddUndoAction( new ScUndoReplaceNote( *pDocShell, aNotePos, pNote->GetNoteData(), true, pCalcUndo ) );
@@ -188,20 +188,20 @@ void FuText::StopEditMode(sal_Bool /*bTextDirection*/)
 }
 
 // Called following an EndDragObj() to update the new note rectangle position
-void FuText::StopDragMode(SdrObject* /*pObject*/)
+void FuText::StopDragMode(const SdrObject& /*rObject*/)
 {
 #if 0 // DR
     ScViewData& rViewData = *pViewShell->GetViewData();
-    if( ScDrawObjData* pData = ScDrawLayer::GetNoteCaptionData( pObject, rViewData.GetTabNo() ) )
+    if( ScDrawObjData* pData = ScDrawLayer::GetNoteCaptionData( rObject, rViewData.GetTabNo() ) )
     {
         ScDocument& rDoc = *rViewData.GetDocument();
         const ScAddress& rPos = pData->maStart;
         ScPostIt* pNote = rDoc.GetNote( rPos );
-        DBG_ASSERT( pNote && (pNote->GetCaption() == pObject), "FuText::StopDragMode - missing or invalid cell note" );
+        DBG_ASSERT( pNote && (pNote->GetCaption() == &rObject), "FuText::StopDragMode - missing or invalid cell note" );
         if( pNote )
         {
             Rectangle aOldRect = pNote->CalcRectangle( rDoc, rPos );
-            Rectangle aNewRect = pObject->GetLogicRect();
+            Rectangle aNewRect = rObject.GetLogicRect();
             if( aOldRect != aNewRect )
             {
                 pNote->UpdateFromRectangle( rDoc, rPos, aNewRect );
@@ -212,7 +212,7 @@ void FuText::StopDragMode(SdrObject* /*pObject*/)
                 {
                     if(pCaption->IsAutoGrowHeight() && !bVertical)
                     {
-                        pCaption->SetMergedItem( SdrTextAutoGrowHeightItem( false ) );
+                        pCaption->SetMergedItem( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT, false ) );
                         aNote.SetItemSet( *pDoc, pCaption->GetMergedItemSet() );
                     }
                 }
@@ -220,7 +220,7 @@ void FuText::StopDragMode(SdrObject* /*pObject*/)
                 {
                     if(pCaption->IsAutoGrowWidth() && bVertical)
                     {
-                        pCaption->SetMergedItem( SdrTextAutoGrowWidthItem( false ) );
+                        pCaption->SetMergedItem( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWWIDTH, false ) );
                         aNote.SetItemSet( *pDoc, pCaption->GetMergedItemSet() );
                     }
                 }

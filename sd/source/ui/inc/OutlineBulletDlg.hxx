@@ -57,7 +57,7 @@ private:
 
     SfxItemSet  aInputSet;
     SfxItemSet  *pOutputSet;
-    sal_Bool        bTitle;
+    bool        bTitle;
     ::sd::View      *pSdView;
 };
 

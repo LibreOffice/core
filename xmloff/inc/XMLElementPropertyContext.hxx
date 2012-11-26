@@ -47,8 +47,6 @@ protected:
     void SetInsert( sal_Bool bIns ) { bInsert = bIns; }
 
 public:
-    TYPEINFO();
-
     XMLElementPropertyContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                const ::rtl::OUString& rLName,
                                const XMLPropertyState& rProp,

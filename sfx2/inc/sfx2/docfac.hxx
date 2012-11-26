@@ -27,7 +27,6 @@
 #include "sfx2/dllapi.h"
 #include <sal/types.h>
 #include <tools/solar.h>
-#include <tools/rtti.hxx>
 
 // SFX_IMPL_MODULE_LIB
 #include <vos/module.hxx>

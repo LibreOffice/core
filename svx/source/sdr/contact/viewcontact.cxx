@@ -32,6 +32,7 @@
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
+#include <drawinglayer/processor2d/hairlineextractor2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -49,7 +50,9 @@ namespace sdr
 
         ViewContact::ViewContact()
         :   maViewObjectContactVector(),
-            mxViewIndependentPrimitive2DSequence()
+            mxViewIndependentPrimitive2DSequence(),
+            maViewIndependentRange(),
+            maSnapRange()
         {
         }
 
@@ -193,6 +196,62 @@ namespace sdr
             return false;
         }
 
+        // get the view independent bound rectangle
+        const basegfx::B2DRange& ViewContact::getViewIndependentRange() const
+        {
+            if(maViewIndependentRange.isEmpty())
+            {
+                const drawinglayer::primitive2d::Primitive2DSequence xPrimitives(getViewIndependentPrimitive2DSequence());
+
+                if(xPrimitives.hasElements())
+                {
+                    // use neutral ViewInformation and get the range of the primitives. This means that
+                    // the ObjectRange on Model-Level is seen as only logical coordinates (no ViewTransformation
+                    // in ViewInformation2D). With a identity view transformation the logical coordinates
+                    // are used as view coordinates. Also, time point 0.0 is taken which means non-animated
+                    // resp. start of animation is used.
+                    const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+
+                    const_cast< ViewContact* >(this)->maViewIndependentRange =
+                        drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(xPrimitives, aViewInformation2D);
+                }
+            }
+
+            return maViewIndependentRange;
+        }
+
+        const basegfx::B2DRange& ViewContact::getSnapRange() const
+        {
+            if(maSnapRange.isEmpty())
+            {
+                const drawinglayer::primitive2d::Primitive2DSequence xPrimitives(getViewIndependentPrimitive2DSequence());
+
+                if(xPrimitives.hasElements())
+                {
+                    const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+                    drawinglayer::processor2d::HairlineGeometryExtractor2D aHairlineGeometryExtractor2D(aViewInformation2D);
+
+                    aHairlineGeometryExtractor2D.process(xPrimitives);
+
+                    const std::vector< basegfx::B2DPolyPolygon >& rPolygons = aHairlineGeometryExtractor2D.getExtractedHairlines();
+
+                    if(!rPolygons.empty())
+                    {
+                        basegfx::B2DRange aNewRange;
+
+                        for(sal_uInt32 a(0); a < rPolygons.size(); a++)
+                        {
+                            aNewRange.expand(rPolygons[a].getB2DRange());
+                        }
+
+                        const_cast< ViewContact* >(this)->maSnapRange = aNewRange;
+                    }
+                }
+            }
+
+            return maSnapRange;
+        }
+
         // Access to possible sub-hierarchy and parent. GetObjectCount() default is 0L
         // and GetViewContact default pops up an assert since it's an error if
         // GetObjectCount has a result != 0 and it's not overloaded.
@@ -246,6 +305,16 @@ namespace sdr
 
                 pCandidate->ActionChanged();
             }
+
+            // reset local buffered primitive sequence (always)
+            if(mxViewIndependentPrimitive2DSequence.hasElements())
+            {
+                mxViewIndependentPrimitive2DSequence.realloc(0);
+            }
+
+            // reset view independent range, it needs to be recalculated
+            maViewIndependentRange.reset();
+            maSnapRange.reset();
         }
 
         // access to SdrObject and/or SdrPage. May return 0L like the default
@@ -281,18 +350,17 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DSequence ViewContact::getViewIndependentPrimitive2DSequence() const
         {
-            // local up-to-date checks. Create new list and compare.
-            drawinglayer::primitive2d::Primitive2DSequence xNew(createViewIndependentPrimitive2DSequence());
-
-            if(xNew.hasElements())
+            if(!mxViewIndependentPrimitive2DSequence.hasElements())
             {
-                // allow evtl. embedding in object-specific infos, e.g. Name, Title, Description
-                xNew = embedToObjectSpecificInformation(xNew);
-            }
+                // create primitive list on demand
+                drawinglayer::primitive2d::Primitive2DSequence xNew(createViewIndependentPrimitive2DSequence());
 
-            if(!drawinglayer::primitive2d::arePrimitive2DSequencesEqual(mxViewIndependentPrimitive2DSequence, xNew))
-            {
-                // has changed, copy content
+                if(xNew.hasElements())
+                {
+                    // allow evtl. embedding in object-specific infos, e.g. Name, Title, Description
+                    xNew = embedToObjectSpecificInformation(xNew);
+                }
+
                 const_cast< ViewContact* >(this)->mxViewIndependentPrimitive2DSequence = xNew;
             }
 
@@ -330,6 +398,7 @@ namespace sdr
             // delete local VOCs
             deleteAllVOCs();
         }
+
     } // end of namespace contact
 } // end of namespace sdr
 

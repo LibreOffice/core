@@ -28,14 +28,11 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
-
 #include <cppuhelper/typeprovider.hxx>
 #include <svl/style.hxx>
 #include <svl/itemset.hxx>
-
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
-
 #include "svx/sdr/properties/textproperties.hxx"
 #include "editeng/outlobj.hxx"
 #include "editeng/writingmodeitem.hxx"
@@ -43,7 +40,6 @@
 #include "svx/svdoutl.hxx"
 #include "svx/unoshtxt.hxx"
 #include "svx/svdmodel.hxx"
-
 #include "tableundo.hxx"
 #include "cell.hxx"
 #include "svx/svdotable.hxx"
@@ -56,6 +52,8 @@
 #include "svx/xflbstit.hxx"
 #include "svx/xflbmtit.hxx"
 #include <svx/svdpool.hxx>
+#include <svx/xit.hxx>
+#include <svx/globaldrawitempool.hxx>
 
 // -----------------------------------------------------------------------------
 
@@ -101,7 +99,7 @@ static const SvxItemPropertySet* ImplGetSvxCellPropertySet()
         {0,0,0,0,0,0}
     };
 
-    static SvxItemPropertySet aSvxCellPropertySet( aSvxCellPropertyMap, SdrObject::GetGlobalDrawObjectItemPool() );
+    static SvxItemPropertySet aSvxCellPropertySet( aSvxCellPropertyMap, GetGlobalDrawObjectItemPool() );
     return &aSvxCellPropertySet;
 }
 
@@ -255,7 +253,7 @@ namespace sdr
         {
             if(pNewItem && (SDRATTR_TEXTDIRECTION == nWhich))
             {
-                sal_Bool bVertical(com::sun::star::text::WritingMode_TB_RL == ((SvxWritingModeItem*)pNewItem)->GetValue());
+                const bool bVertical(com::sun::star::text::WritingMode_TB_RL == ((SvxWritingModeItem*)pNewItem)->GetValue());
 
                 sdr::table::SdrTableObj& rObj = (sdr::table::SdrTableObj&)GetSdrObject();
                 if( rObj.IsVerticalWriting() != bVertical )
@@ -315,8 +313,6 @@ Cell::Cell( SdrTableObj& rTableObj, OutlinerParaObject* pOutlinerParaObject ) th
 , mnColSpan( 1 )
 , mxTable( rTableObj.getTable() )
 {
-    if( rTableObj.GetModel() )
-        SetModel( rTableObj.GetModel() );
 }
 
 // -----------------------------------------------------------------------------
@@ -354,37 +350,6 @@ void Cell::dispose()
 
 // -----------------------------------------------------------------------------
 
-void Cell::SetModel(SdrModel* pNewModel)
-{
-    SvxTextEditSource* pTextEditSource = dynamic_cast< SvxTextEditSource* >( GetEditSource() );
-    if( (GetModel() != pNewModel) || ( pNewModel && !pTextEditSource) )
-    {
-        if( mpProperties )
-        {
-            SfxItemPool* pItemPool = mpProperties->GetObjectItemSet().GetPool();
-
-            // test for correct pool in ItemSet; move to new pool if necessary
-            if( pNewModel && pItemPool && pItemPool != &pNewModel->GetItemPool())
-                mpProperties->MoveToItemPool(pItemPool, &pNewModel->GetItemPool(), pNewModel);
-        }
-
-        if( pTextEditSource )
-        {
-            pTextEditSource->ChangeModel( pNewModel );
-        }
-        else
-        {
-            SetEditSource( new SvxTextEditSource( &GetObject(), this, static_cast< XWeak * >( this ) ) );
-        }
-
-        SetStyleSheet( 0, sal_True );
-        SdrText::SetModel( pNewModel );
-        ForceOutlinerParaObject( OUTLINERMODE_TEXTOBJECT );
-    }
-}
-
-// -----------------------------------------------------------------------------
-
 void Cell::merge( sal_Int32 nColumnSpan, sal_Int32 nRowSpan )
 {
     if( (mnColSpan != nColumnSpan) || (mnRowSpan != nRowSpan) || (mbMerged != sal_False) )
@@ -400,7 +365,7 @@ void Cell::merge( sal_Int32 nColumnSpan, sal_Int32 nRowSpan )
 
 void Cell::mergeContent( const CellRef& xSourceCell )
 {
-    SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
+    SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( getSdrTextObj() );
 
     if( xSourceCell->hasText() )
     {
@@ -421,7 +386,7 @@ void Cell::mergeContent( const CellRef& xSourceCell )
         rOutliner.Clear();
         xSourceCell->SetOutlinerParaObject(rOutliner.CreateParaObject());
         rOutliner.Clear();
-        SetStyleSheet( GetStyleSheet(), sal_True );
+        SetStyleSheet( GetStyleSheet(), true);
     }
 }
 
@@ -454,12 +419,12 @@ void Cell::replaceContentAndFormating( const CellRef& xSourceCell )
         mpProperties->SetMergedItemSet( xSourceCell->GetObjectItemSet() );
         SetOutlinerParaObject( new OutlinerParaObject(*xSourceCell->GetOutlinerParaObject()) );
 
-        SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
-        SdrTableObj& rSourceTableObj = dynamic_cast< SdrTableObj& >( xSourceCell->GetObject() );
+        SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( getSdrTextObj() );
+        SdrTableObj& rSourceTableObj = dynamic_cast< SdrTableObj& >( xSourceCell->getSdrTextObj() );
 
-        if(rSourceTableObj.GetModel() != rTableObj.GetModel())
+        if(&rSourceTableObj.getSdrModelFromSdrObject() != &rTableObj.getSdrModelFromSdrObject())
         {
-            SetStyleSheet( 0, sal_True );
+            SetStyleSheet( 0, true);
         }
     }
 }
@@ -490,7 +455,7 @@ void Cell::notifyModified()
 bool Cell::IsTextEditActive()
 {
     bool isActive = false;
-    SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
+    SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( getSdrTextObj() );
     if(rTableObj.getActiveCell().get() == this )
     {
         OutlinerParaObject* pParaObj = rTableObj.GetEditOutlinerParaObject();
@@ -529,7 +494,7 @@ bool Cell::hasText() const
 
 OutlinerParaObject* Cell::GetEditOutlinerParaObject() const
 {
-    SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
+    SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( getSdrTextObj() );
     if( rTableObj.getActiveCell().get() == this )
         return rTableObj.GetEditOutlinerParaObject();
     return 0;
@@ -560,7 +525,7 @@ const SfxItemSet& Cell::GetObjectItemSet()
     else
     {
         DBG_ERROR("Cell::GetObjectItemSet(), called without properties!");
-        return GetObject().GetObjectItemSet();
+        return getSdrTextObj().GetObjectItemSet();
     }
 }
 
@@ -605,7 +570,7 @@ const Rectangle& Cell::GetCurrentBoundRect() const
 
 // -----------------------------------------------------------------------------
 
-void Cell::TakeTextAnchorRect(Rectangle& rAnchorRect) const
+void Cell::TakeCellsTextAnchorRect(Rectangle& rAnchorRect) const
 {
     rAnchorRect.nLeft = maCellRect.nLeft + GetTextLeftDistance();
     rAnchorRect.nRight = maCellRect.nRight - GetTextRightDistance();
@@ -622,7 +587,7 @@ const SfxItemSet& Cell::GetItemSet() const
 
 // -----------------------------------------------------------------------------
 
-void Cell::SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, sal_Bool bClearAllItems)
+void Cell::SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, bool bClearAllItems)
 {
     if( mpProperties )
     {
@@ -645,11 +610,11 @@ sal_Int32 Cell::getMinimumHeight()
     if( !mpProperties )
         return 0;
 
-    SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
+    SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( getSdrTextObj() );
     sal_Int32 nMinimumHeight = 0;
 
     Rectangle aTextRect;
-    TakeTextAnchorRect( aTextRect );
+    TakeCellsTextAnchorRect( aTextRect );
     Size aSize( aTextRect.GetSize() );
     aSize.Height()=0x0FFFFFFF;
 
@@ -682,28 +647,28 @@ sal_Int32 Cell::getMinimumHeight()
 
 long Cell::GetTextLeftDistance() const
 {
-    return ((SdrTextLeftDistItem&)(GetItemSet().Get(SDRATTR_TEXT_LEFTDIST))).GetValue();
+    return ((SdrMetricItem&)(GetItemSet().Get(SDRATTR_TEXT_LEFTDIST))).GetValue();
 }
 
 // -----------------------------------------------------------------------------
 
 long Cell::GetTextRightDistance() const
 {
-    return ((SdrTextRightDistItem&)(GetItemSet().Get(SDRATTR_TEXT_RIGHTDIST))).GetValue();
+    return ((SdrMetricItem&)(GetItemSet().Get(SDRATTR_TEXT_RIGHTDIST))).GetValue();
 }
 
 // -----------------------------------------------------------------------------
 
 long Cell::GetTextUpperDistance() const
 {
-    return ((SdrTextUpperDistItem&)(GetItemSet().Get(SDRATTR_TEXT_UPPERDIST))).GetValue();
+    return ((SdrMetricItem&)(GetItemSet().Get(SDRATTR_TEXT_UPPERDIST))).GetValue();
 }
 
 // -----------------------------------------------------------------------------
 
 long Cell::GetTextLowerDistance() const
 {
-    return ((SdrTextLowerDistItem&)(GetItemSet().Get(SDRATTR_TEXT_LOWERDIST))).GetValue();
+    return ((SdrMetricItem&)(GetItemSet().Get(SDRATTR_TEXT_LOWERDIST))).GetValue();
 }
 
 // -----------------------------------------------------------------------------
@@ -735,11 +700,14 @@ void Cell::SetOutlinerParaObject( OutlinerParaObject* pTextObject )
 
 void Cell::AddUndo()
 {
-    SdrObject& rObj = GetObject();
-    if( rObj.IsInserted() && GetModel() && GetModel()->IsUndoEnabled() )
+    SdrObject& rObj = getSdrTextObj();
+    if( rObj.IsObjectInserted())
     {
-        CellRef xCell( this );
-        GetModel()->AddUndo( new CellUndo( &rObj, xCell ) );
+        if(getSdrTextObj().getSdrModelFromSdrObject().IsUndoEnabled() )
+        {
+            CellRef xCell( this );
+            getSdrTextObj().getSdrModelFromSdrObject().AddUndo( new CellUndo( &rObj, xCell ) );
+        }
     }
 }
 
@@ -1000,7 +968,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if( (mpProperties == 0) || (GetModel() == 0) )
+    if( !mpProperties )
         throw DisposedException();
 
     const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(rPropertyName);
@@ -1011,129 +979,129 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
 
         switch( pMap->nWID )
         {
-        case OWN_ATTR_STYLE:
-        {
-            Reference< XStyle > xStyle;
-            if( !( rValue >>= xStyle ) )
-                throw IllegalArgumentException();
-
-            SfxUnoStyleSheet* pStyle = SfxUnoStyleSheet::getUnoStyleSheet(xStyle);
-            SetStyleSheet( pStyle, sal_True );
-            return;
-        }
-        case OWN_ATTR_TABLEBORDER:
-        {
-            if(rValue.getValueType() != ::getCppuType((const TableBorder*)0) )
-                break;
-
-            const TableBorder* pBorder = (const TableBorder* )rValue.getValue();
-            if( pBorder == NULL )
-                break;
-
-            SvxBoxItem aBox( SDRATTR_TABLE_BORDER );
-            SvxBoxInfoItem aBoxInfo( SDRATTR_TABLE_BORDER_INNER );
-            SvxBorderLine aLine;
-
-            sal_Bool bSet = SvxBoxItem::LineToSvxLine(pBorder->TopLine, aLine, false);
-            aBox.SetLine(bSet ? &aLine : 0, BOX_LINE_TOP);
-            aBoxInfo.SetValid(VALID_TOP, pBorder->IsTopLineValid);
-
-            bSet = SvxBoxItem::LineToSvxLine(pBorder->BottomLine, aLine, false);
-            aBox.SetLine(bSet ? &aLine : 0, BOX_LINE_BOTTOM);
-            aBoxInfo.SetValid(VALID_BOTTOM, pBorder->IsBottomLineValid);
-
-            bSet = SvxBoxItem::LineToSvxLine(pBorder->LeftLine, aLine, false);
-            aBox.SetLine(bSet ? &aLine : 0, BOX_LINE_LEFT);
-            aBoxInfo.SetValid(VALID_LEFT, pBorder->IsLeftLineValid);
-
-            bSet = SvxBoxItem::LineToSvxLine(pBorder->RightLine, aLine, false);
-            aBox.SetLine(bSet ? &aLine : 0, BOX_LINE_RIGHT);
-            aBoxInfo.SetValid(VALID_RIGHT, pBorder->IsRightLineValid);
-
-            bSet = SvxBoxItem::LineToSvxLine(pBorder->HorizontalLine, aLine, false);
-            aBoxInfo.SetLine(bSet ? &aLine : 0, BOXINFO_LINE_HORI);
-            aBoxInfo.SetValid(VALID_HORI, pBorder->IsHorizontalLineValid);
-
-            bSet = SvxBoxItem::LineToSvxLine(pBorder->VerticalLine, aLine, false);
-            aBoxInfo.SetLine(bSet ? &aLine : 0, BOXINFO_LINE_VERT);
-            aBoxInfo.SetValid(VALID_VERT, pBorder->IsVerticalLineValid);
-
-            aBox.SetDistance(pBorder->Distance, false);
-            aBoxInfo.SetValid(VALID_DISTANCE, pBorder->IsDistanceValid);
-
-            mpProperties->SetObjectItem(aBox);
-            mpProperties->SetObjectItem(aBoxInfo);
-            return;
-        }
-        case OWN_ATTR_FILLBMP_MODE:
-        {
-            BitmapMode eMode;
-            if(!(rValue >>= eMode) )
+            case OWN_ATTR_STYLE:
             {
-                sal_Int32 nMode = 0;
-                if(!(rValue >>= nMode))
+                Reference< XStyle > xStyle;
+                if( !( rValue >>= xStyle ) )
                     throw IllegalArgumentException();
 
-                    eMode = (BitmapMode)nMode;
+                SfxUnoStyleSheet* pStyle = SfxUnoStyleSheet::getUnoStyleSheet(xStyle);
+                SetStyleSheet( pStyle, true);
+                return;
             }
-
-            mpProperties->SetObjectItem( XFillBmpStretchItem( eMode == BitmapMode_STRETCH ) );
-            mpProperties->SetObjectItem( XFillBmpTileItem( eMode == BitmapMode_REPEAT ) );
-            return;
-        }
-        default:
-        {
-            SfxItemSet aSet( GetModel()->GetItemPool(), pMap->nWID, pMap->nWID);
-            aSet.Put(mpProperties->GetItem(pMap->nWID));
-
-            bool bSpecial = false;
-
-            switch( pMap->nWID )
+            case OWN_ATTR_TABLEBORDER:
             {
-                case XATTR_FILLBITMAP:
-                case XATTR_FILLGRADIENT:
-                case XATTR_FILLHATCH:
-                case XATTR_FILLFLOATTRANSPARENCE:
-                case XATTR_LINEEND:
-                case XATTR_LINESTART:
-                case XATTR_LINEDASH:
+                if(rValue.getValueType() != ::getCppuType((const TableBorder*)0) )
+                    break;
+
+                const TableBorder* pBorder = (const TableBorder* )rValue.getValue();
+                if( pBorder == NULL )
+                    break;
+
+                SvxBoxItem aBox( SDRATTR_TABLE_BORDER );
+                SvxBoxInfoItem aBoxInfo( SDRATTR_TABLE_BORDER_INNER );
+                SvxBorderLine aLine;
+
+                sal_Bool bSet = SvxBoxItem::LineToSvxLine(pBorder->TopLine, aLine, false);
+                aBox.SetLine(bSet ? &aLine : 0, BOX_LINE_TOP);
+                aBoxInfo.SetValid(VALID_TOP, pBorder->IsTopLineValid);
+
+                bSet = SvxBoxItem::LineToSvxLine(pBorder->BottomLine, aLine, false);
+                aBox.SetLine(bSet ? &aLine : 0, BOX_LINE_BOTTOM);
+                aBoxInfo.SetValid(VALID_BOTTOM, pBorder->IsBottomLineValid);
+
+                bSet = SvxBoxItem::LineToSvxLine(pBorder->LeftLine, aLine, false);
+                aBox.SetLine(bSet ? &aLine : 0, BOX_LINE_LEFT);
+                aBoxInfo.SetValid(VALID_LEFT, pBorder->IsLeftLineValid);
+
+                bSet = SvxBoxItem::LineToSvxLine(pBorder->RightLine, aLine, false);
+                aBox.SetLine(bSet ? &aLine : 0, BOX_LINE_RIGHT);
+                aBoxInfo.SetValid(VALID_RIGHT, pBorder->IsRightLineValid);
+
+                bSet = SvxBoxItem::LineToSvxLine(pBorder->HorizontalLine, aLine, false);
+                aBoxInfo.SetLine(bSet ? &aLine : 0, BOXINFO_LINE_HORI);
+                aBoxInfo.SetValid(VALID_HORI, pBorder->IsHorizontalLineValid);
+
+                bSet = SvxBoxItem::LineToSvxLine(pBorder->VerticalLine, aLine, false);
+                aBoxInfo.SetLine(bSet ? &aLine : 0, BOXINFO_LINE_VERT);
+                aBoxInfo.SetValid(VALID_VERT, pBorder->IsVerticalLineValid);
+
+                aBox.SetDistance(pBorder->Distance, false);
+                aBoxInfo.SetValid(VALID_DISTANCE, pBorder->IsDistanceValid);
+
+                mpProperties->SetObjectItem(aBox);
+                mpProperties->SetObjectItem(aBoxInfo);
+                return;
+            }
+            case OWN_ATTR_FILLBMP_MODE:
+            {
+                BitmapMode eMode;
+                if(!(rValue >>= eMode) )
                 {
-                    if( pMap->nMemberId == MID_NAME )
+                    sal_Int32 nMode = 0;
+                    if(!(rValue >>= nMode))
+                        throw IllegalArgumentException();
+
+                    eMode = (BitmapMode)nMode;
+                }
+
+                mpProperties->SetObjectItem( XFillBmpStretchItem( eMode == BitmapMode_STRETCH ) );
+                mpProperties->SetObjectItem( XFillBmpTileItem( eMode == BitmapMode_REPEAT ) );
+                return;
+            }
+            default:
+            {
+                SfxItemSet aSet( getSdrTextObj().getSdrModelFromSdrObject().GetItemPool(), pMap->nWID, pMap->nWID);
+                aSet.Put(mpProperties->GetItem(pMap->nWID));
+
+                bool bSpecial = false;
+
+                switch( pMap->nWID )
+                {
+                    case XATTR_FILLBITMAP:
+                    case XATTR_FILLGRADIENT:
+                    case XATTR_FILLHATCH:
+                    case XATTR_FILLFLOATTRANSPARENCE:
+                    case XATTR_LINEEND:
+                    case XATTR_LINESTART:
+                    case XATTR_LINEDASH:
                     {
-                        OUString aApiName;
-                        if( rValue >>= aApiName )
+                        if( pMap->nMemberId == MID_NAME )
                         {
-                            if( SvxShape::SetFillAttribute( pMap->nWID, aApiName, aSet, GetModel() ) )
-                                bSpecial = true;
+                            OUString aApiName;
+                            if( rValue >>= aApiName )
+                            {
+                                    if( SvxShape::SetFillAttribute( pMap->nWID, aApiName, aSet, &getSdrTextObj().getSdrModelFromSdrObject() ) )
+                                    bSpecial = true;
+                            }
+                        }
+                    }
+                    break;
+                }
+
+                if( !bSpecial )
+                {
+
+                    if( !SvxUnoTextRangeBase::SetPropertyValueHelper( aSet, pMap, rValue, aSet ))
+                    {
+                        if( aSet.GetItemState( pMap->nWID ) != SFX_ITEM_SET )
+                        {
+                            // Default aus ItemPool holen
+                                if(getSdrTextObj().getSdrModelFromSdrObject().GetItemPool().IsWhich(pMap->nWID))
+                                    aSet.Put(getSdrTextObj().getSdrModelFromSdrObject().GetItemPool().GetDefaultItem(pMap->nWID));
+                        }
+
+                        if( aSet.GetItemState( pMap->nWID ) == SFX_ITEM_SET )
+                        {
+                            SvxItemPropertySet_setPropertyValue( *mpPropSet, pMap, rValue, aSet );
                         }
                     }
                 }
-                break;
+
+                getSdrTextObj().getSdrModelFromSdrObject().SetChanged();
+                mpProperties->SetMergedItemSetAndBroadcast( aSet );
+                return;
             }
-
-            if( !bSpecial )
-            {
-
-                if( !SvxUnoTextRangeBase::SetPropertyValueHelper( aSet, pMap, rValue, aSet ))
-                {
-                    if( aSet.GetItemState( pMap->nWID ) != SFX_ITEM_SET )
-                    {
-                        // Default aus ItemPool holen
-                        if(GetModel()->GetItemPool().IsWhich(pMap->nWID))
-                            aSet.Put(GetModel()->GetItemPool().GetDefaultItem(pMap->nWID));
-                    }
-
-                    if( aSet.GetItemState( pMap->nWID ) == SFX_ITEM_SET )
-                    {
-                        SvxItemPropertySet_setPropertyValue( *mpPropSet, pMap, rValue, aSet );
-                    }
-                }
-            }
-
-            GetModel()->SetChanged();
-            mpProperties->SetMergedItemSetAndBroadcast( aSet );
-            return;
-        }
         }
     }
     throw UnknownPropertyException();
@@ -1145,7 +1113,7 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName ) throw(Unknow
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if( (mpProperties == 0) || (GetModel() == 0) )
+    if( !mpProperties )
         throw DisposedException();
 
     const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
@@ -1154,76 +1122,75 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName ) throw(Unknow
         switch( pMap->nWID )
         {
 /*
-        case OWN_ATTR_HASLEVELS:
-        {
-            return Any( hasLevels() );
-        }
+            case OWN_ATTR_HASLEVELS:
+            {
+                return Any( hasLevels() );
+            }
 */
-        case OWN_ATTR_STYLE:
-        {
-            return Any( Reference< XStyle >( dynamic_cast< SfxUnoStyleSheet* >( GetStyleSheet() ) ) );
-        }
-        case OWN_ATTR_TABLEBORDER:
-        {
-            const SvxBoxInfoItem& rBoxInfoItem = static_cast<const SvxBoxInfoItem&>(mpProperties->GetItem(SDRATTR_TABLE_BORDER_INNER));
-            const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>(mpProperties->GetItem(SDRATTR_TABLE_BORDER));
-
-             TableBorder aTableBorder;
-            aTableBorder.TopLine                = SvxBoxItem::SvxLineToLine(rBox.GetTop(), false);
-            aTableBorder.IsTopLineValid         = rBoxInfoItem.IsValid(VALID_TOP);
-            aTableBorder.BottomLine             = SvxBoxItem::SvxLineToLine(rBox.GetBottom(), false);
-            aTableBorder.IsBottomLineValid      = rBoxInfoItem.IsValid(VALID_BOTTOM);
-            aTableBorder.LeftLine               = SvxBoxItem::SvxLineToLine(rBox.GetLeft(), false);
-            aTableBorder.IsLeftLineValid        = rBoxInfoItem.IsValid(VALID_LEFT);
-            aTableBorder.RightLine              = SvxBoxItem::SvxLineToLine(rBox.GetRight(), false);
-            aTableBorder.IsRightLineValid       = rBoxInfoItem.IsValid(VALID_RIGHT );
-            aTableBorder.HorizontalLine         = SvxBoxItem::SvxLineToLine(rBoxInfoItem.GetHori(), false);
-            aTableBorder.IsHorizontalLineValid  = rBoxInfoItem.IsValid(VALID_HORI);
-            aTableBorder.VerticalLine           = SvxBoxItem::SvxLineToLine(rBoxInfoItem.GetVert(), false);
-            aTableBorder.IsVerticalLineValid    = rBoxInfoItem.IsValid(VALID_VERT);
-            aTableBorder.Distance               = rBox.GetDistance();
-            aTableBorder.IsDistanceValid        = rBoxInfoItem.IsValid(VALID_DISTANCE);
-
-            return Any( aTableBorder );
-        }
-        case OWN_ATTR_FILLBMP_MODE:
-        {
-            const XFillBmpStretchItem& rStretchItem = static_cast<const XFillBmpStretchItem&>(mpProperties->GetItem(XATTR_FILLBMP_STRETCH));
-            const XFillBmpTileItem& rTileItem = static_cast<const XFillBmpTileItem&>(mpProperties->GetItem(XATTR_FILLBMP_TILE));
-            if( rTileItem.GetValue() )
+            case OWN_ATTR_STYLE:
             {
-                return Any( BitmapMode_REPEAT );
+                return Any( Reference< XStyle >( dynamic_cast< SfxUnoStyleSheet* >( GetStyleSheet() ) ) );
             }
-            else if( rStretchItem.GetValue() )
+            case OWN_ATTR_TABLEBORDER:
             {
-                return Any(  BitmapMode_STRETCH );
-            }
-            else
-            {
-                return Any(  BitmapMode_NO_REPEAT );
-            }
-        }
-        default:
-        {
-            SfxItemSet aSet( GetModel()->GetItemPool(), pMap->nWID, pMap->nWID);
-            aSet.Put(mpProperties->GetItem(pMap->nWID));
+                const SvxBoxInfoItem& rBoxInfoItem = static_cast<const SvxBoxInfoItem&>(mpProperties->GetItem(SDRATTR_TABLE_BORDER_INNER));
+                const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>(mpProperties->GetItem(SDRATTR_TABLE_BORDER));
 
-            Any aAny;
-            if(!SvxUnoTextRangeBase::GetPropertyValueHelper( aSet, pMap, aAny ))
+                 TableBorder aTableBorder;
+                aTableBorder.TopLine                = SvxBoxItem::SvxLineToLine(rBox.GetTop(), false);
+                aTableBorder.IsTopLineValid         = rBoxInfoItem.IsValid(VALID_TOP);
+                aTableBorder.BottomLine             = SvxBoxItem::SvxLineToLine(rBox.GetBottom(), false);
+                aTableBorder.IsBottomLineValid      = rBoxInfoItem.IsValid(VALID_BOTTOM);
+                aTableBorder.LeftLine               = SvxBoxItem::SvxLineToLine(rBox.GetLeft(), false);
+                aTableBorder.IsLeftLineValid        = rBoxInfoItem.IsValid(VALID_LEFT);
+                aTableBorder.RightLine              = SvxBoxItem::SvxLineToLine(rBox.GetRight(), false);
+                aTableBorder.IsRightLineValid       = rBoxInfoItem.IsValid(VALID_RIGHT );
+                aTableBorder.HorizontalLine         = SvxBoxItem::SvxLineToLine(rBoxInfoItem.GetHori(), false);
+                aTableBorder.IsHorizontalLineValid  = rBoxInfoItem.IsValid(VALID_HORI);
+                aTableBorder.VerticalLine           = SvxBoxItem::SvxLineToLine(rBoxInfoItem.GetVert(), false);
+                aTableBorder.IsVerticalLineValid    = rBoxInfoItem.IsValid(VALID_VERT);
+                aTableBorder.Distance               = rBox.GetDistance();
+                aTableBorder.IsDistanceValid        = rBoxInfoItem.IsValid(VALID_DISTANCE);
+
+                return Any( aTableBorder );
+            }
+            case OWN_ATTR_FILLBMP_MODE:
             {
-                if(!aSet.Count())
+                const XFillBmpStretchItem& rStretchItem = static_cast<const XFillBmpStretchItem&>(mpProperties->GetItem(XATTR_FILLBMP_STRETCH));
+                const XFillBmpTileItem& rTileItem = static_cast<const XFillBmpTileItem&>(mpProperties->GetItem(XATTR_FILLBMP_TILE));
+                if( rTileItem.GetValue() )
                 {
-                    // Default aus ItemPool holen
-                    if(GetModel()->GetItemPool().IsWhich(pMap->nWID))
-                        aSet.Put(GetModel()->GetItemPool().GetDefaultItem(pMap->nWID));
+                    return Any( BitmapMode_REPEAT );
                 }
-
-                if( aSet.Count() )
-                    aAny = GetAnyForItem( aSet, pMap );
+                else if( rStretchItem.GetValue() )
+                {
+                    return Any(  BitmapMode_STRETCH );
+                }
+                else
+                {
+                    return Any(  BitmapMode_NO_REPEAT );
+                }
             }
+            default:
+            {
+                    SfxItemSet aSet( getSdrTextObj().getSdrModelFromSdrObject().GetItemPool(), pMap->nWID, pMap->nWID);
+                aSet.Put(mpProperties->GetItem(pMap->nWID));
 
-            return aAny;
-        }
+                Any aAny;
+                if(!SvxUnoTextRangeBase::GetPropertyValueHelper( aSet, pMap, aAny ))
+                {
+                    if(!aSet.Count())
+                    {
+                        // Default aus ItemPool holen
+                            if(getSdrTextObj().getSdrModelFromSdrObject().GetItemPool().IsWhich(pMap->nWID))
+                                aSet.Put(getSdrTextObj().getSdrModelFromSdrObject().GetItemPool().GetDefaultItem(pMap->nWID));
+                    }
+
+                    if( aSet.Count() )
+                        aAny = GetAnyForItem( aSet, pMap );
+                }
+                return aAny;
+            }
         }
     }
     throw UnknownPropertyException();
@@ -1261,11 +1228,10 @@ void SAL_CALL Cell::setPropertyValues( const Sequence< OUString >& aPropertyName
 {
     OGuard aSolarGuard( Application::GetSolarMutex() );
 
-    if( (mpProperties == 0) || (GetModel() == 0) )
+    if( !mpProperties )
         throw DisposedException();
 
     const sal_Int32 nCount = aPropertyNames.getLength();
-
     const OUString* pNames = aPropertyNames.getConstArray();
     const Any* pValues = aValues.getConstArray();
 
@@ -1292,7 +1258,7 @@ Sequence< Any > SAL_CALL Cell::getPropertyValues( const Sequence< OUString >& aP
 {
     OGuard aSolarGuard( Application::GetSolarMutex() );
 
-    if( (mpProperties == 0) || (GetModel() == 0) )
+    if( !mpProperties )
         throw DisposedException();
 
     const sal_Int32 nCount = aPropertyNames.getLength();
@@ -1346,7 +1312,7 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName ) th
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if( (mpProperties == 0) || (GetModel() == 0) )
+    if( !mpProperties )
         throw DisposedException();
 
     const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
@@ -1356,96 +1322,96 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName ) th
         PropertyState eState;
         switch( pMap->nWID )
         {
-        case OWN_ATTR_FILLBMP_MODE:
-        {
-            const SfxItemSet& rSet = mpProperties->GetMergedItemSet();
-
-            const bool bStretch = rSet.GetItemState( XATTR_FILLBMP_STRETCH, false ) == SFX_ITEM_SET;
-            const bool bTile = rSet.GetItemState( XATTR_FILLBMP_TILE, false ) == SFX_ITEM_SET;
-            if( bStretch || bTile )
+            case OWN_ATTR_FILLBMP_MODE:
             {
-                eState = PropertyState_DIRECT_VALUE;
-            }
-            else
-            {
-                eState = PropertyState_DEFAULT_VALUE;
-            }
-        }
-/*
-        case OWN_ATTR_HASLEVELS:
-        {
-            return PropertyState_DIRECT_VALUE;
-        }
-*/
-        case OWN_ATTR_STYLE:
-        {
-            return PropertyState_DIRECT_VALUE;
-        }
-        case OWN_ATTR_TABLEBORDER:
-        {
-            const SfxItemSet& rSet = mpProperties->GetMergedItemSet();
-            if( (rSet.GetItemState( SDRATTR_TABLE_BORDER_INNER, sal_False ) == SFX_ITEM_DEFAULT) && (rSet.GetItemState( SDRATTR_TABLE_BORDER, sal_False ) == SFX_ITEM_DEFAULT) )
-                return PropertyState_DEFAULT_VALUE;
+                const SfxItemSet& rSet = mpProperties->GetMergedItemSet();
 
-            return PropertyState_DIRECT_VALUE;
-        }
-        default:
-        {
-            const SfxItemSet& rSet = mpProperties->GetMergedItemSet();
-
-            switch( rSet.GetItemState( pMap->nWID, sal_False ) )
-            {
-            case SFX_ITEM_READONLY:
-            case SFX_ITEM_SET:
-                eState = PropertyState_DIRECT_VALUE;
-                break;
-            case SFX_ITEM_DEFAULT:
-                eState = PropertyState_DEFAULT_VALUE;
-                break;
-    //      case SFX_ITEM_UNKNOWN:
-    //      case SFX_ITEM_DONTCARE:
-    //      case SFX_ITEM_DISABLED:
-            default:
-                eState = PropertyState_AMBIGUOUS_VALUE;
-                break;
-            }
-
-            // if a item is set, this doesn't mean we want it :)
-            if( ( PropertyState_DIRECT_VALUE == eState ) )
-            {
-                switch( pMap->nWID )
+                const bool bStretch = rSet.GetItemState( XATTR_FILLBMP_STRETCH, false ) == SFX_ITEM_SET;
+                const bool bTile = rSet.GetItemState( XATTR_FILLBMP_TILE, false ) == SFX_ITEM_SET;
+                if( bStretch || bTile )
                 {
-                // the following items are disabled by changing the
-                // fill style or the line style. so there is no need
-                // to export items without names which should be empty
-                case XATTR_FILLBITMAP:
-                case XATTR_FILLGRADIENT:
-                case XATTR_FILLHATCH:
-                case XATTR_LINEDASH:
-                    {
-                        NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((sal_uInt16)pMap->nWID);
-                        if( ( pItem == NULL ) || ( pItem->GetName().Len() == 0) )
-                            eState = PropertyState_DEFAULT_VALUE;
-                    }
-                    break;
-
-                // #i36115#
-                // If e.g. the LineStart is on NONE and thus the string has length 0, it still
-                // may be a hard attribute covering the set LineStart of the parent (Style).
-                // #i37644#
-                // same is for fill float transparency
-                case XATTR_LINEEND:
-                case XATTR_LINESTART:
-                case XATTR_FILLFLOATTRANSPARENCE:
-                    {
-                        NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((sal_uInt16)pMap->nWID);
-                        if( ( pItem == NULL ) )
-                            eState = PropertyState_DEFAULT_VALUE;
-                    }
-                    break;
+                    eState = PropertyState_DIRECT_VALUE;
+                }
+                else
+                {
+                    eState = PropertyState_DEFAULT_VALUE;
                 }
             }
-        }
+/*
+            case OWN_ATTR_HASLEVELS:
+            {
+                return PropertyState_DIRECT_VALUE;
+            }
+*/
+            case OWN_ATTR_STYLE:
+            {
+                return PropertyState_DIRECT_VALUE;
+            }
+            case OWN_ATTR_TABLEBORDER:
+            {
+                const SfxItemSet& rSet = mpProperties->GetMergedItemSet();
+                if( (rSet.GetItemState( SDRATTR_TABLE_BORDER_INNER, sal_False ) == SFX_ITEM_DEFAULT) && (rSet.GetItemState( SDRATTR_TABLE_BORDER, sal_False ) == SFX_ITEM_DEFAULT) )
+                    return PropertyState_DEFAULT_VALUE;
+
+                return PropertyState_DIRECT_VALUE;
+            }
+            default:
+            {
+                const SfxItemSet& rSet = mpProperties->GetMergedItemSet();
+
+                switch( rSet.GetItemState( pMap->nWID, sal_False ) )
+                {
+                case SFX_ITEM_READONLY:
+                case SFX_ITEM_SET:
+                    eState = PropertyState_DIRECT_VALUE;
+                    break;
+                case SFX_ITEM_DEFAULT:
+                    eState = PropertyState_DEFAULT_VALUE;
+                    break;
+        //      case SFX_ITEM_UNKNOWN:
+        //      case SFX_ITEM_DONTCARE:
+        //      case SFX_ITEM_DISABLED:
+                default:
+                    eState = PropertyState_AMBIGUOUS_VALUE;
+                    break;
+                }
+
+                // if a item is set, this doesn't mean we want it :)
+                if( ( PropertyState_DIRECT_VALUE == eState ) )
+                {
+                    switch( pMap->nWID )
+                    {
+                    // the following items are disabled by changing the
+                    // fill style or the line style. so there is no need
+                    // to export items without names which should be empty
+                    case XATTR_FILLBITMAP:
+                    case XATTR_FILLGRADIENT:
+                    case XATTR_FILLHATCH:
+                    case XATTR_LINEDASH:
+                        {
+                            NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((sal_uInt16)pMap->nWID);
+                            if( ( pItem == NULL ) || ( pItem->GetName().Len() == 0) )
+                                eState = PropertyState_DEFAULT_VALUE;
+                        }
+                        break;
+
+                    // #i36115#
+                    // If e.g. the LineStart is on NONE and thus the string has length 0, it still
+                    // may be a hard attribute covering the set LineStart of the parent (Style).
+                    // #i37644#
+                    // same is for fill float transparency
+                    case XATTR_LINEEND:
+                    case XATTR_LINESTART:
+                    case XATTR_FILLFLOATTRANSPARENCE:
+                        {
+                            NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((sal_uInt16)pMap->nWID);
+                            if( ( pItem == NULL ) )
+                                eState = PropertyState_DEFAULT_VALUE;
+                        }
+                        break;
+                    }
+                }
+            }
         }
         return eState;
     }
@@ -1458,7 +1424,7 @@ Sequence< PropertyState > SAL_CALL Cell::getPropertyStates( const Sequence< OUSt
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if( (mpProperties == 0) || (GetModel() == 0) )
+    if( !mpProperties )
         throw DisposedException();
 
     const sal_Int32 nCount = aPropertyName.getLength();
@@ -1489,7 +1455,7 @@ void SAL_CALL Cell::setPropertyToDefault( const OUString& PropertyName ) throw(U
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if( (mpProperties == 0) || (GetModel() == 0) )
+    if( !mpProperties )
         throw DisposedException();
 
     const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
@@ -1497,30 +1463,30 @@ void SAL_CALL Cell::setPropertyToDefault( const OUString& PropertyName ) throw(U
     {
         switch( pMap->nWID )
         {
-        case OWN_ATTR_FILLBMP_MODE:
-        {
-            mpProperties->ClearObjectItem( XATTR_FILLBMP_STRETCH );
-            mpProperties->ClearObjectItem( XATTR_FILLBMP_TILE );
-            break;
-        }
-//      case OWN_ATTR_HASLEVELS:
-        case OWN_ATTR_STYLE:
-            break;
+            case OWN_ATTR_FILLBMP_MODE:
+            {
+                mpProperties->ClearObjectItem( XATTR_FILLBMP_STRETCH );
+                mpProperties->ClearObjectItem( XATTR_FILLBMP_TILE );
+                break;
+            }
+    //      case OWN_ATTR_HASLEVELS:
+            case OWN_ATTR_STYLE:
+                break;
 
-        case OWN_ATTR_TABLEBORDER:
-        {
-            mpProperties->ClearObjectItem( SDRATTR_TABLE_BORDER_INNER );
-            mpProperties->ClearObjectItem( SDRATTR_TABLE_BORDER );
-            break;
+            case OWN_ATTR_TABLEBORDER:
+            {
+                mpProperties->ClearObjectItem( SDRATTR_TABLE_BORDER_INNER );
+                mpProperties->ClearObjectItem( SDRATTR_TABLE_BORDER );
+                break;
+            }
+
+            default:
+            {
+                mpProperties->ClearObjectItem( pMap->nWID );
+            }
         }
 
-        default:
-        {
-            mpProperties->ClearObjectItem( pMap->nWID );
-        }
-        }
-
-        GetModel()->SetChanged();
+        getSdrTextObj().getSdrModelFromSdrObject().SetChanged();
         return;
     }
     throw UnknownPropertyException();
@@ -1532,7 +1498,7 @@ Any SAL_CALL Cell::getPropertyDefault( const OUString& aPropertyName ) throw(Unk
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if( (mpProperties == 0) || (GetModel() == 0) )
+    if( !mpProperties )
         throw DisposedException();
 
     const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(aPropertyName);
@@ -1540,34 +1506,34 @@ Any SAL_CALL Cell::getPropertyDefault( const OUString& aPropertyName ) throw(Unk
     {
         switch( pMap->nWID )
         {
-        case OWN_ATTR_FILLBMP_MODE:
-            return Any(  BitmapMode_NO_REPEAT );
+            case OWN_ATTR_FILLBMP_MODE:
+                return Any(  BitmapMode_NO_REPEAT );
 
 /*
-        case OWN_ATTR_HASLEVELS:
-            return Any( sal_False );
+            case OWN_ATTR_HASLEVELS:
+                return Any( sal_False );
 */
-        case OWN_ATTR_STYLE:
-        {
-            Reference< XStyle > xStyle;
-            return Any( xStyle );
-        }
-
-        case OWN_ATTR_TABLEBORDER:
-        {
-            TableBorder aBorder;
-            return Any( aBorder );
-        }
-
-        default:
-        {
-            if(  GetModel()->GetItemPool().IsWhich(pMap->nWID) )
+            case OWN_ATTR_STYLE:
             {
-                SfxItemSet aSet( GetModel()->GetItemPool(), pMap->nWID, pMap->nWID);
-                aSet.Put(GetModel()->GetItemPool().GetDefaultItem(pMap->nWID));
-                return GetAnyForItem( aSet, pMap );
+                Reference< XStyle > xStyle;
+                return Any( xStyle );
             }
-        }
+
+            case OWN_ATTR_TABLEBORDER:
+            {
+                TableBorder aBorder;
+                return Any( aBorder );
+            }
+
+            default:
+            {
+                if(  getSdrTextObj().getSdrModelFromSdrObject().GetItemPool().IsWhich(pMap->nWID) )
+                {
+                    SfxItemSet aSet( getSdrTextObj().getSdrModelFromSdrObject().GetItemPool(), pMap->nWID, pMap->nWID);
+                    aSet.Put(getSdrTextObj().getSdrModelFromSdrObject().GetItemPool().GetDefaultItem(pMap->nWID));
+                    return GetAnyForItem( aSet, pMap );
+                }
+            }
         }
     }
     throw UnknownPropertyException();
@@ -1581,9 +1547,9 @@ void SAL_CALL Cell::setAllPropertiesToDefault(  ) throw (RuntimeException)
 {
     if( mpProperties )
         delete mpProperties;
-    mpProperties = new sdr::properties::CellProperties( static_cast< SdrTableObj& >( GetObject() ), this );
+    mpProperties = new sdr::properties::CellProperties( static_cast< SdrTableObj& >( getSdrTextObj() ), this );
 
-    SdrOutliner& rOutliner = GetObject().ImpGetDrawOutliner();
+    SdrOutliner& rOutliner = getSdrTextObj().ImpGetDrawOutliner();
 
     OutlinerParaObject* pParaObj = GetOutlinerParaObject();
     if( pParaObj )

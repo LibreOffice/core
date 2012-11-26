@@ -61,8 +61,8 @@ namespace sdr
             ObjectContact&                                  mrObjectContact;
             ViewContact&                                    mrViewContact;
 
-            // This range defines the object's BoundRect
-            basegfx::B2DRange                               maObjectRange;
+            // This range defines the view dependent bounding rectangle
+            basegfx::B2DRange                               maViewDependentRange;
 
             // PrimitiveSequence of the ViewContact. This contains all necessary information
             // for the graphical visualisation and needs to be supported by all VCs which
@@ -75,7 +75,7 @@ namespace sdr
             // bitfield
             // This bool gets set when the object gets invalidated by ActionChanged() and
             // can be used from the OC to late-invalidates
-            unsigned                                        mbLazyInvalidate : 1;
+            bool                                            mbLazyInvalidate : 1;
 
         protected:
             // make redirector a protected friend, it needs to call createPrimitives as default action
@@ -106,8 +106,9 @@ namespace sdr
             // access to ViewContact
             ViewContact& GetViewContact() const { return mrViewContact; }
 
-            // get the oebject's size range
-            const basegfx::B2DRange& getObjectRange() const;
+            // get the view dependent bound rectangle. Default implementation uses
+            // the range of getPrimitive2DSequence and buffers the result in maViewDependentRange
+            virtual const basegfx::B2DRange& getViewDependentRange() const;
 
             // A ViewObjectContact was deleted and shall be forgotten.
             void RemoveViewObjectContact(ViewObjectContact& rVOContact);

@@ -25,6 +25,7 @@
 #define SD_FU_EDIT_GLUE_POINTS_HXX
 
 #include "fudraw.hxx"
+#include <svx/svdview.hxx>
 
 namespace sd {
 
@@ -38,17 +39,15 @@ class FuEditGluePoints
     : public FuDraw
 {
 public:
-    TYPEINFO();
-
     static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent );
     virtual void DoExecute( SfxRequest& rReq );
 
     // Mouse- & Key-Events
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
-    virtual sal_Bool Command(const CommandEvent& rCEvt);
+    virtual bool KeyInput(const KeyEvent& rKEvt);
+    virtual bool MouseMove(const MouseEvent& rMEvt);
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt);
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt);
+    virtual bool Command(const CommandEvent& rCEvt);
     virtual void ReceiveRequest(SfxRequest& rReq);
 
     virtual void Activate();           // Function aktivieren
@@ -62,6 +61,8 @@ protected:
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
     virtual ~FuEditGluePoints (void);
+
+    SdrViewEditMode         meLastSdrViewEditMode;
 };
 
 } // end of namespace sd

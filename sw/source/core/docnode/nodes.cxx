@@ -648,7 +648,7 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                             }
                         }
 
-                        if( pTblNd->GetTable().IsA( TYPE( SwDDETable ) ))
+                        if( dynamic_cast< SwDDETable* >(&pTblNd->GetTable()))
                         {
                             SwDDEFieldType* pTyp = ((SwDDETable&)pTblNd->
                                                 GetTable()).GetDDEFldType();

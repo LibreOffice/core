@@ -107,7 +107,7 @@ struct SfxRequest_Impl: public SfxListener
 
 void SfxRequest_Impl::Notify( SfxBroadcaster&, const SfxHint &rHint )
 {
-    SfxSimpleHint *pSimpleHint = PTR_CAST(SfxSimpleHint, &rHint);
+    const SfxSimpleHint *pSimpleHint = dynamic_cast< const SfxSimpleHint* >( &rHint);
     if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
         pAnti->Cancel();
 }
@@ -466,12 +466,10 @@ void SfxRequest::RemoveItem( sal_uInt16 nID )
 
 const SfxPoolItem* SfxRequest::GetArg
 (
-    sal_uInt16          nSlotId,    // Slot-Id oder Which-Id des Parameters
-    bool        bDeep,      // false: nicht in Parent-ItemSets suchen
-    TypeId          aType       // != 0:  RTTI Pruefung mit Assertion
+    sal_uInt16      nSlotId     // Slot-Id oder Which-Id des Parameters
 )   const
 {
-    return GetItem( pArgs, nSlotId, bDeep, aType );
+    return GetItem( pArgs, nSlotId );
 }
 
 
@@ -479,9 +477,7 @@ const SfxPoolItem* SfxRequest::GetArg
 const SfxPoolItem* SfxRequest::GetItem
 (
     const SfxItemSet* pArgs,
-    sal_uInt16          nSlotId,    // Slot-Id oder Which-Id des Parameters
-    bool            bDeep,      // false: nicht in Parent-ItemSets suchen
-    TypeId          aType       // != 0:  RTTI Pruefung mit Assertion
+    sal_uInt16      nSlotId     // Slot-Id oder Which-Id des Parameters
 )
 
 /*  [Beschreibung]
@@ -509,7 +505,7 @@ const SfxPoolItem* SfxRequest::GetItem
                 sal_uInt16 nPos = pPosItem ? pPosItem->GetValue() : 0;
 
                 // ein Beispiel mit Verwendung des Makros
-                SFX_REQUEST_ARG(rReq, pSizeItem, SfxInt32Item, SID_SIZE, sal_False);
+                SFX_REQUEST_ARG(rReq, pSizeItem, SfxInt32Item, SID_SIZE );
                 sal_uInt16 nSize = pSizeItem ? pPosItem->GetValue() : 0;
 
                 ...
@@ -521,27 +517,18 @@ const SfxPoolItem* SfxRequest::GetItem
 */
 
 {
+    const SfxPoolItem *pItem = 0;
+
     if ( pArgs )
     {
         // ggf. in Which-Id umrechnen
         sal_uInt16 nWhich = pArgs->GetPool()->GetWhich(nSlotId);
 
-        // ist das Item gesetzt oder bei bDeep==TRUE verf"ugbar?
-        const SfxPoolItem *pItem = 0;
-        if ( ( bDeep ? SFX_ITEM_AVAILABLE : SFX_ITEM_SET )
-             <= pArgs->GetItemState( nWhich, bDeep, &pItem ) )
-        {
-            // stimmt der Typ "uberein?
-            if ( !pItem || pItem->IsA(aType) )
-                return pItem;
-
-            // Item da aber falsch => Programmierfehler
-            DBG_ERROR(  "invalid argument type" );
-        }
+        // ist das Item gesetzt ?
+        pArgs->GetItemState( nWhich, sal_False, &pItem );
     }
 
-    // keine Parameter, nicht gefunden oder falschen Typ gefunden
-    return 0;
+    return pItem;
 }
 
 //--------------------------------------------------------------------

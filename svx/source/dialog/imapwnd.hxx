@@ -86,15 +86,15 @@ class IMapUserData : public SdrObjUserData
 public:
 
                             IMapUserData() :
-                                SdrObjUserData  ( IMapInventor, SVD_IMAP_USERDATA, 0 ),
+                                SdrObjUserData  ( IMapInventor, SVD_IMAP_USERDATA ),
                                 mpObj           ( ) {}
 
                             IMapUserData( const IMapObjectPtr& rIMapObj ) :
-                                SdrObjUserData  ( IMapInventor, SVD_IMAP_USERDATA, 0 ),
+                                SdrObjUserData  ( IMapInventor, SVD_IMAP_USERDATA ),
                                 mpObj           ( rIMapObj ) {}
 
                             IMapUserData( const IMapUserData& rIMapUserData ) :
-                                SdrObjUserData  ( IMapInventor, SVD_IMAP_USERDATA, 0 ),
+                                SdrObjUserData  ( IMapInventor, SVD_IMAP_USERDATA ),
                                 mpObj           ( rIMapUserData.mpObj ) {}
 
                             ~IMapUserData() { }
@@ -169,7 +169,7 @@ protected:
     virtual void        RequestHelp( const HelpEvent& rHEvt );
     virtual void        SdrObjCreated( const SdrObject& rObj );
     virtual void        SdrObjChanged( const SdrObject& rObj );
-    virtual void        MarkListHasChanged();
+    virtual void selectionChange();
     virtual void        InitSdrModel();
 
     // DropTargetHelper

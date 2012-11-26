@@ -395,7 +395,7 @@ void ScOutputData::DrawGrid( sal_Bool bGrid, sal_Bool bPage )
                 }
             }
 
-            sal_Bool bDraw = bGrid || nBreakOld;    // einfaches Gitter nur wenn eingestellt
+            bool bDraw = bGrid || nBreakOld;    // einfaches Gitter nur wenn eingestellt
 
             //! Mit dieser Abfrage wird zuviel weggelassen, wenn ein automatischer
             //! Umbruch mitten in den Wiederholungsspalten liegt.
@@ -405,9 +405,9 @@ void ScOutputData::DrawGrid( sal_Bool bGrid, sal_Bool bPage )
             if ( eType == OUTTYPE_PRINTER && !bMetaFile )
             {
                 if ( nX == MAXCOL )
-                    bDraw = sal_False;
+                    bDraw = false;
                 else if (pDoc->HasColBreak(nXplus1, nTab))
-                    bDraw = sal_False;
+                    bDraw = false;
             }
 #endif
 
@@ -524,7 +524,7 @@ void ScOutputData::DrawGrid( sal_Bool bGrid, sal_Bool bPage )
                 }
             }
 
-            sal_Bool bDraw = bGrid || nBreakOld;    // einfaches Gitter nur wenn eingestellt
+            bool bDraw = bGrid || nBreakOld;    // einfaches Gitter nur wenn eingestellt
 
             //! Mit dieser Abfrage wird zuviel weggelassen, wenn ein automatischer
             //! Umbruch mitten in den Wiederholungszeilen liegt.
@@ -534,9 +534,9 @@ void ScOutputData::DrawGrid( sal_Bool bGrid, sal_Bool bPage )
             if ( eType == OUTTYPE_PRINTER && !bMetaFile )
             {
                 if ( nY == MAXROW )
-                    bDraw = sal_False;
+                    bDraw = false;
                 else if (pDoc->HasRowBreak(nYplus1, nTab))
-                    bDraw = sal_False;
+                    bDraw = false;
             }
 #endif
 
@@ -2238,7 +2238,7 @@ void ScOutputData::DrawNoteMarks()
 
 void ScOutputData::AddPDFNotes()
 {
-    vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
+    vcl::PDFExtOutDevData* pPDFData = dynamic_cast< vcl::PDFExtOutDevData* >( pDev->GetExtOutDevData() );
     if ( !pPDFData || !pPDFData->GetIsExportNotes() )
         return;
 

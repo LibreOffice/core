@@ -35,20 +35,6 @@
 #include <map>
 #include "svx/svxdllapi.h"
 
-class SdrCustomShapeEngineItem : public SfxStringItem
-{
-    public :
-            SdrCustomShapeEngineItem();
-            SdrCustomShapeEngineItem( const String& rCustomShapeEngine );
-};
-
-class SdrCustomShapeDataItem : public SfxStringItem
-{
-    public :
-            SdrCustomShapeDataItem();
-            SdrCustomShapeDataItem( const String& rCustomShapeData );
-};
-
 class SVX_DLLPUBLIC SdrCustomShapeGeometryItem : public SfxPoolItem
 {
 public:
@@ -76,8 +62,6 @@ private:
     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aPropSeq;
 
     public :
-
-            TYPEINFO();
 
             SdrCustomShapeGeometryItem();
             SdrCustomShapeGeometryItem( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& );
@@ -111,31 +95,6 @@ private:
 
             void ClearPropertyValue( const rtl::OUString& rPropertyName );
             void ClearPropertyValue( const rtl::OUString& rSequenceName, const rtl::OUString& rPropertyName );
-};
-
-class SdrCustomShapeReplacementURLItem : public SfxStringItem
-{
-    public :
-            SdrCustomShapeReplacementURLItem();
-            SdrCustomShapeReplacementURLItem( const String& rCustomShapeReplacementURL );
-};
-
-//---------------------------
-// class SdrTextWordWrapItem
-//---------------------------
-class SdrTextWordWrapItem : public SdrOnOffItem {
-public:
-    SdrTextWordWrapItem( sal_Bool bAuto = sal_False ):  SdrOnOffItem( SDRATTR_TEXT_WORDWRAP, bAuto ) {}
-    SdrTextWordWrapItem( SvStream& rIn )  :     SdrOnOffItem( SDRATTR_TEXT_WORDWRAP, rIn )   {}
-};
-
-//-------------------------------
-// class SdrTextAutoGrowSizeItem
-//-------------------------------
-class SdrTextAutoGrowSizeItem : public SdrOnOffItem {
-public:
-    SdrTextAutoGrowSizeItem( sal_Bool bAuto = sal_False ):      SdrOnOffItem( SDRATTR_TEXT_AUTOGROWSIZE, bAuto ) {}
-    SdrTextAutoGrowSizeItem( SvStream& rIn )   :        SdrOnOffItem( SDRATTR_TEXT_AUTOGROWSIZE, rIn )   {}
 };
 
 #endif

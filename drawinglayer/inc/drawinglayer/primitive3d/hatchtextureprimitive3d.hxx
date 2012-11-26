@@ -70,9 +70,6 @@ namespace drawinglayer
             /// data read access
             const attribute::FillHatchAttribute& getHatch() const { return maHatch; }
 
-            /// compare operator
-            virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
-
             /// local decomposition.
             virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
 

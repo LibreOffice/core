@@ -71,7 +71,7 @@ ZoomList::~ZoomList()
 #endif
     {
         // Ggf. ZoomRects loeschen
-        delete ((Rectangle*) GetObject(nObject));
+        delete ((basegfx::B2DRange*) GetObject(nObject));
     }
 }
 
@@ -82,16 +82,16 @@ ZoomList::~ZoomList()
 |*
 \************************************************************************/
 
-void ZoomList::InsertZoomRect(const Rectangle& rRect)
+void ZoomList::InsertZoomRange(const basegfx::B2DRange& rRange)
 {
-    sal_uLong nRectCount = Count();
+    const sal_uInt32 nRangeCount(Count());
 
-    if (nRectCount >= MAX_ENTRYS)
+    if (nRangeCount >= MAX_ENTRYS)
     {
-        delete ((Rectangle*) GetObject(0));
-        Remove((sal_uLong) 0);
+        delete ((basegfx::B2DRange*) GetObject(0));
+        Remove((sal_uIntPtr) 0);
     }
-    else if (nRectCount == 0)
+    else if (nRangeCount == 0)
     {
         mnCurPos = 0;
     }
@@ -100,8 +100,8 @@ void ZoomList::InsertZoomRect(const Rectangle& rRect)
         mnCurPos++;
     }
 
-    Rectangle* pRect = new Rectangle(rRect);
-    Insert(pRect, mnCurPos);
+    basegfx::B2DRange* pRange = new basegfx::B2DRange(rRange);
+    Insert(pRange, mnCurPos);
 
     SfxBindings& rBindings = mpViewShell->GetViewFrame()->GetBindings();
     rBindings.Invalidate( SID_ZOOM_NEXT );
@@ -114,22 +114,22 @@ void ZoomList::InsertZoomRect(const Rectangle& rRect)
 |*
 \************************************************************************/
 
-Rectangle ZoomList::GetNextZoomRect()
+basegfx::B2DRange ZoomList::GetNextZoomRange()
 {
     mnCurPos++;
-    sal_uLong nRectCount = Count();
+    const sal_uInt32 nRangeCount(Count());
 
-    if (nRectCount > 0 && mnCurPos > nRectCount - 1)
+    if (nRangeCount > 0 && mnCurPos > nRangeCount - 1)
     {
-        mnCurPos = nRectCount - 1;
+        mnCurPos = nRangeCount - 1;
     }
 
     SfxBindings& rBindings = mpViewShell->GetViewFrame()->GetBindings();
     rBindings.Invalidate( SID_ZOOM_NEXT );
     rBindings.Invalidate( SID_ZOOM_PREV );
 
-    Rectangle aRect(*(Rectangle*) GetObject(mnCurPos));
-    return (aRect);
+    basegfx::B2DRange aRange(*(basegfx::B2DRange*)GetObject(mnCurPos));
+    return aRange;
 }
 
 /*************************************************************************
@@ -138,7 +138,7 @@ Rectangle ZoomList::GetNextZoomRect()
 |*
 \************************************************************************/
 
-Rectangle ZoomList::GetPreviousZoomRect()
+basegfx::B2DRange ZoomList::GetPreviousZoomRange()
 {
     if (mnCurPos > 0)
     {
@@ -149,8 +149,8 @@ Rectangle ZoomList::GetPreviousZoomRect()
     rBindings.Invalidate( SID_ZOOM_NEXT );
     rBindings.Invalidate( SID_ZOOM_PREV );
 
-    Rectangle aRect(*(Rectangle*) GetObject(mnCurPos));
-    return (aRect);
+    basegfx::B2DRange aRange(*(basegfx::B2DRange*) GetObject(mnCurPos));
+    return aRange;
 }
 
 /*************************************************************************
@@ -159,17 +159,17 @@ Rectangle ZoomList::GetPreviousZoomRect()
 |*
 \************************************************************************/
 
-sal_Bool ZoomList::IsNextPossible() const
+bool ZoomList::IsNextPossible() const
 {
-    sal_Bool bPossible = sal_False;
-    sal_uLong nRectCount = Count();
+    bool bPossible = false;
+    const sal_uInt32 nRangeCount(Count());
 
-    if (nRectCount > 0 && mnCurPos < nRectCount - 1)
+    if (nRangeCount > 0 && mnCurPos < nRangeCount - 1)
     {
-        bPossible = sal_True;
+        bPossible = true;
     }
 
-    return (bPossible);
+    return bPossible;
 }
 
 /*************************************************************************
@@ -178,13 +178,13 @@ sal_Bool ZoomList::IsNextPossible() const
 |*
 \************************************************************************/
 
-sal_Bool ZoomList::IsPreviousPossible() const
+bool ZoomList::IsPreviousPossible() const
 {
-    sal_Bool bPossible = sal_False;
+    bool bPossible = false;
 
     if (mnCurPos > 0)
     {
-        bPossible = sal_True;
+        bPossible = true;
     }
 
     return (bPossible);

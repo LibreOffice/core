@@ -48,12 +48,12 @@ namespace drawinglayer
         Primitive3DSequence SdrSpherePrimitive3D::create3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
             Primitive3DSequence aRetval;
-            const basegfx::B3DRange aUnitRange(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
             const bool bCreateNormals(::com::sun::star::drawing::NormalsKind_SPECIFIC == getSdr3DObjectAttribute().getNormalsKind()
                 || ::com::sun::star::drawing::NormalsKind_SPHERE == getSdr3DObjectAttribute().getNormalsKind());
 
             // create unit geometry
-            basegfx::B3DPolyPolygon aFill(basegfx::tools::createSphereFillPolyPolygonFromB3DRange(aUnitRange,
+            basegfx::B3DPolyPolygon aFill(basegfx::tools::createSphereFillPolyPolygonFromB3DRange(
+                basegfx::B3DRange::getUnitB3DRange(),
                 getHorizontalSegments(), getVerticalSegments(), bCreateNormals));
 
             // normal inversion
@@ -119,7 +119,7 @@ namespace drawinglayer
 
                 // transform texture coordinates to texture size
                 basegfx::B2DHomMatrix aTexMatrix;
-                aTexMatrix.scale(getTextureSize().getX(), getTextureSize().getY());
+                aTexMatrix.scale(getTextureSize());
                 aFill.transformTextureCoordiantes(aTexMatrix);
             }
 
@@ -155,7 +155,8 @@ namespace drawinglayer
             // add line
             if(!getSdrLFSAttribute().getLine().isDefault())
             {
-                basegfx::B3DPolyPolygon aSphere(basegfx::tools::createSpherePolyPolygonFromB3DRange(aUnitRange, getHorizontalSegments(), getVerticalSegments()));
+                basegfx::B3DPolyPolygon aSphere(basegfx::tools::createSpherePolyPolygonFromB3DRange(
+                    basegfx::B3DRange::getUnitB3DRange(), getHorizontalSegments(), getVerticalSegments()));
                 const Primitive3DSequence aLines(create3DPolyPolygonLinePrimitives(
                     aSphere, getTransform(), getSdrLFSAttribute().getLine()));
                 appendPrimitive3DSequenceToPrimitive3DSequence(aRetval, aLines);
@@ -184,19 +185,6 @@ namespace drawinglayer
             mnHorizontalSegments(nHorizontalSegments),
             mnVerticalSegments(nVerticalSegments)
         {
-        }
-
-        bool SdrSpherePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
-        {
-            if(SdrPrimitive3D::operator==(rPrimitive))
-            {
-                const SdrSpherePrimitive3D& rCompare = static_cast< const SdrSpherePrimitive3D& >(rPrimitive);
-
-                return (getHorizontalSegments() == rCompare.getHorizontalSegments()
-                    && getVerticalSegments() == rCompare.getVerticalSegments());
-            }
-
-            return false;
         }
 
         basegfx::B3DRange SdrSpherePrimitive3D::getB3DRange(const geometry::ViewInformation3D& /*rViewInformation*/) const

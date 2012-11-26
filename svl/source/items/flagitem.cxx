@@ -43,10 +43,6 @@ sal_uInt16 nSfxFlagVal[16] =
 
 // -----------------------------------------------------------------------
 
-TYPEINIT1(SfxFlagItem, SfxPoolItem);
-
-// -----------------------------------------------------------------------
-
 SfxFlagItem::SfxFlagItem( sal_uInt16 nW, sal_uInt16 nV ) :
     SfxPoolItem( nW ),
     nVal(nV)

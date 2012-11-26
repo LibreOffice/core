@@ -29,21 +29,15 @@
 #endif
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
-
-
+#include <svx/svdview.hxx>
 #include "strings.hrc"
 #include "glob.hxx"
 #include "glob.hrc"         // STR_BCKGRND, STR_BCKGRNDOBJ
 #include "app.hrc"          // SID_SWITCHPAGE
-
 #include "unmodpg.hxx"
 #include "sdpage.hxx"
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
-
-
-TYPEINIT1(ModifyPageUndoAction, SdUndoAction);
-
 
 /*************************************************************************
 |*
@@ -56,8 +50,8 @@ ModifyPageUndoAction::ModifyPageUndoAction(
     SdPage* pThePage,
     String aTheNewName,
     AutoLayout  eTheNewAutoLayout,
-    sal_Bool bTheNewBckgrndVisible,
-    sal_Bool bTheNewBckgrndObjsVisible)
+    bool bTheNewBckgrndVisible,
+    bool bTheNewBckgrndObjsVisible)
 :   SdUndoAction(pTheDoc)
 {
     DBG_ASSERT(pThePage, "Undo ohne Seite ???");
@@ -73,9 +67,9 @@ ModifyPageUndoAction::ModifyPageUndoAction(
     if (!mpPage->IsMasterPage())
     {
         maOldName = mpPage->GetName();
-        SdrLayerAdmin& rLayerAdmin = mpDoc->GetLayerAdmin();
-        sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False);
-        sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False);
+        SdrLayerAdmin& rLayerAdmin = mpDoc->GetModelLayerAdmin();
+        sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), false);
+        sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), false);
         SetOfByte aVisibleLayers = mpPage->TRG_GetMasterPageVisibleLayers();
 
         mbOldBckgrndVisible = aVisibleLayers.IsSet(aBckgrnd);
@@ -90,20 +84,17 @@ ModifyPageUndoAction::ModifyPageUndoAction(
 |* Undo()
 |*
 \************************************************************************/
-#include <svx/svdviter.hxx>
-#include <svx/svdview.hxx>
+
 void ModifyPageUndoAction::Undo()
 {
     // #94637# invalidate Selection, there could be objects deleted in tis UNDO
     // which are no longer allowed to be selected then.
-      SdrViewIter aIter(mpPage);
-    SdrView* pView = aIter.FirstView();
+    const ::std::set< SdrView* > aAllSdrViews(mpPage->getSdrModelFromSdrPage().getSdrViews());
 
-    while(pView)
+    for(::std::set< SdrView* >::const_iterator aLoopViews(aAllSdrViews.begin());
+        aLoopViews != aAllSdrViews.end(); aLoopViews++)
     {
-        if(pView->AreObjectsMarked())
-            pView->UnmarkAll();
-        pView = aIter.NextView();
+        (*aLoopViews)->UnmarkAll();
     }
 
     mpPage->SetAutoLayout( meOldAutoLayout );
@@ -116,14 +107,14 @@ void ModifyPageUndoAction::Undo()
 
             if (mpPage->GetPageKind() == PK_STANDARD)
             {
-                SdPage* pNotesPage = (SdPage*)mpDoc->GetPage(mpPage->GetPageNum() + 1);
+                SdPage* pNotesPage = (SdPage*)mpDoc->GetPage(mpPage->GetPageNumber() + 1);
                 pNotesPage->SetName(maOldName);
             }
         }
 
-        SdrLayerAdmin& rLayerAdmin = mpDoc->GetLayerAdmin();
-        sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False);
-        sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False);
+        SdrLayerAdmin& rLayerAdmin = mpDoc->GetModelLayerAdmin();
+        sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), false);
+        sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), false);
         SetOfByte aVisibleLayers;
         aVisibleLayers.Set(aBckgrnd, mbOldBckgrndVisible);
         aVisibleLayers.Set(aBckgrndObj, mbOldBckgrndObjsVisible);
@@ -145,14 +136,12 @@ void ModifyPageUndoAction::Redo()
 {
     // #94637# invalidate Selection, there could be objects deleted in tis UNDO
     // which are no longer allowed to be selected then.
-      SdrViewIter aIter(mpPage);
-    SdrView* pView = aIter.FirstView();
+    const ::std::set< SdrView* > aAllSdrViews(mpPage->getSdrModelFromSdrPage().getSdrViews());
 
-    while(pView)
+    for(::std::set< SdrView* >::const_iterator aLoopViews(aAllSdrViews.begin());
+        aLoopViews != aAllSdrViews.end(); aLoopViews++)
     {
-        if(pView->AreObjectsMarked())
-            pView->UnmarkAll();
-        pView = aIter.NextView();
+        (*aLoopViews)->UnmarkAll();
     }
 
     mpPage->meAutoLayout = meNewAutoLayout;
@@ -165,14 +154,14 @@ void ModifyPageUndoAction::Redo()
 
             if (mpPage->GetPageKind() == PK_STANDARD)
             {
-                SdPage* pNotesPage = (SdPage*)mpDoc->GetPage(mpPage->GetPageNum() + 1);
+                SdPage* pNotesPage = (SdPage*)mpDoc->GetPage(mpPage->GetPageNumber() + 1);
                 pNotesPage->SetName(maNewName);
             }
         }
 
-        SdrLayerAdmin& rLayerAdmin = mpDoc->GetLayerAdmin();
-        sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False);
-        sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False);
+        SdrLayerAdmin& rLayerAdmin = mpDoc->GetModelLayerAdmin();
+        sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), false);
+        sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), false);
         SetOfByte aVisibleLayers;
         aVisibleLayers.Set(aBckgrnd, mbNewBckgrndVisible);
         aVisibleLayers.Set(aBckgrndObj, mbNewBckgrndObjsVisible);

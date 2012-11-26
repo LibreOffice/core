@@ -454,7 +454,7 @@ sal_Int32 Layouter::GetIndex (const sal_Int32 nRow, const sal_Int32 nColumn) con
 
 
 
-Size Layouter::GetPageObjectSize (void) const
+const Size& Layouter::GetPageObjectSize (void) const
 {
     return mpImplementation->maPageObjectSize;
 }

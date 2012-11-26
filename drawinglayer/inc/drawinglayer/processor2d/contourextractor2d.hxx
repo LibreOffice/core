@@ -50,7 +50,9 @@ namespace drawinglayer
             bool                                mbExtractFillOnly : 1;
 
             /// tooling methods
-            void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
+            void processBasePrimitive2D(
+                const primitive2d::BasePrimitive2D& rCandidate,
+                const primitive2d::Primitive2DReference& rUnoCandidate);
 
         public:
             ContourExtractor2D(

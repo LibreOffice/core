@@ -135,29 +135,19 @@ Window *SwAccessibleContext::GetWindow()
 // get ViewShell from accessibility map, and cast to cursor shell
 SwCrsrShell* SwAccessibleContext::GetCrsrShell()
 {
-    SwCrsrShell* pCrsrShell;
     ViewShell* pViewShell = GetMap() ? GetMap()->GetShell() : 0;
     ASSERT( pViewShell, "no view shell" );
-    if( pViewShell && pViewShell->ISA( SwCrsrShell ) )
-        pCrsrShell = static_cast<SwCrsrShell*>( pViewShell );
-    else
-        pCrsrShell = NULL;
 
-    return pCrsrShell;
+    return dynamic_cast< SwCrsrShell* >(pViewShell);
 }
 
 const SwCrsrShell* SwAccessibleContext::GetCrsrShell() const
 {
     // just like non-const GetCrsrShell
-    const SwCrsrShell* pCrsrShell;
     const ViewShell* pViewShell = GetMap() ? GetMap()->GetShell() : 0;
     ASSERT( pViewShell, "no view shell" );
-    if( pViewShell && pViewShell->ISA( SwCrsrShell ) )
-        pCrsrShell = static_cast<const SwCrsrShell*>( pViewShell );
-    else
-        pCrsrShell = NULL;
 
-    return pCrsrShell;
+    return dynamic_cast< const SwCrsrShell* >(pViewShell);
 }
 
 
@@ -1409,9 +1399,8 @@ sal_Bool SwAccessibleContext::Select( SwPaM *pPaM, SdrObject *pObj,
     if( !pCrsrShell )
         return sal_False;
 
-    SwFEShell* pFEShell = pCrsrShell->ISA( SwFEShell )
-                                ? static_cast<SwFEShell*>( pCrsrShell )
-                                : 0;
+    SwFEShell* pFEShell = dynamic_cast< SwFEShell* >(pCrsrShell);
+
     // Get rid of activated OLE object
     if( pFEShell )
         pFEShell->FinishOLEObj();
@@ -1421,9 +1410,8 @@ sal_Bool SwAccessibleContext::Select( SwPaM *pPaM, SdrObject *pObj,
     {
         if( pFEShell )
         {
-            Point aDummy;
             sal_uInt8 nFlags = bAdd ? SW_ADD_SELECT : 0;
-            pFEShell->SelectObj( aDummy, nFlags, pObj );
+            pFEShell->SelectObj( basegfx::B2DPoint(), nFlags, pObj );
             bRet = sal_True;
         }
     }
@@ -1435,8 +1423,7 @@ sal_Bool SwAccessibleContext::Select( SwPaM *pPaM, SdrObject *pObj,
         if( pFEShell && (pFEShell->IsFrmSelected() ||
                          pFEShell->IsObjSelected()) )
         {
-            Point aPt( LONG_MIN, LONG_MIN );
-            pFEShell->SelectObj( aPt, 0 );
+            pFEShell->SelectObj( basegfx::B2DPoint(LONG_MIN, LONG_MIN), 0 );
             bCallShowCrsr = sal_True;
         }
         pCrsrShell->KillPams();

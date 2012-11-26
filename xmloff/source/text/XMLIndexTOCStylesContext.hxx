@@ -64,8 +64,6 @@ class XMLIndexTOCStylesContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLIndexTOCStylesContext(
         SvXMLImport& rImport,
         ::com::sun::star::uno::Reference<

@@ -25,6 +25,7 @@
 #define _SDR_PROPERTIES_ITEMSETTOOLS_HXX
 
 #include <sal/types.h>
+#include <vector>
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
@@ -33,24 +34,25 @@ class SdrObject;
 class SfxItemSet;
 class Rectangle;
 class Fraction;
+class SdrObjectChangeBroadcaster;
 
 //////////////////////////////////////////////////////////////////////////////
-// class to remember broadcast start positions
+// class to remember complete broadcast for ItemChange in evtl. hierarchies
+
 namespace sdr
 {
     namespace properties
     {
+        typedef ::std::vector< SdrObjectChangeBroadcaster* > BroadcastVector;
+
         class ItemChangeBroadcaster
         {
-            sal_uInt32                                      mnCount;
-            void*                                           mpData;
+        private:
+            BroadcastVector         maBroadcastVector;
 
         public:
             ItemChangeBroadcaster(const SdrObject& rObj);
             ~ItemChangeBroadcaster();
-
-            sal_uInt32 GetRectangleCount() const;
-            const Rectangle& GetRectangle(sal_uInt32 nIndex) const;
         };
     } // end of namespace properties
 } // end of namespace sdr

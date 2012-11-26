@@ -35,6 +35,7 @@
 #include "svx/svxdllapi.h"
 #include <tools/date.hxx>
 #include <tools/time.hxx>
+#include <svx/sdrobjectfactory.hxx>
 
 // ------------
 // - Forwards -
@@ -122,10 +123,10 @@ class SgaIMapInfo : public SdrObjUserData, public SfxListener
     ImageMap                aImageMap;
 
 public:
-                            SgaIMapInfo() : SdrObjUserData( IV_IMAPINFO, ID_IMAPINFO, 0 ) {};
+                            SgaIMapInfo() : SdrObjUserData( IV_IMAPINFO, ID_IMAPINFO ) {};
 
                             SgaIMapInfo( const ImageMap& rImageMap) :
-                                SdrObjUserData( IV_IMAPINFO, ID_IMAPINFO, 0 ),
+                                SdrObjUserData( IV_IMAPINFO, ID_IMAPINFO ),
                                 aImageMap( rImageMap ) {};
 
     virtual                 ~SgaIMapInfo() {};

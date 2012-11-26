@@ -24,65 +24,89 @@
 #ifndef _SVDLAYER_HXX
 #define _SVDLAYER_HXX
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 #include <tools/string.hxx>
 #include <tools/stream.hxx>
 #include <svx/svdsob.hxx>
 #include <svx/svdtypes.hxx> // fuer typedef SdrLayerID
 #include "svx/svxdllapi.h"
+#include <vector>
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// predefines
 
 class SdrModel;
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 class SVX_DLLPUBLIC SdrLayer
 {
-friend class SdrLayerAdmin;
+private:
 protected:
-    String     aName;
+    String          maName;
+
+    // title and description set and get in SD over UNO API
     String      maTitle;
     String      maDescription;
-    SdrModel*  pModel; // zum Broadcasten
-    sal_uInt16     nType;  // 0=Userdefined,1=Standardlayer
-    SdrLayerID nID;
+
+    SdrModel&       mrModel; // zum Broadcasten
+    SdrLayerID      mnID;
+
+    /// bitfield
+    bool            mbStandardlayer : 1;  // Userdefined or Standardlayer // 0=Userdefined,1=Standardlayer
+
 protected:
-    SdrLayer(SdrLayerID nNewID, const String& rNewName)       { nID=nNewID; aName=rNewName; nType=0; pModel=NULL; }
-    void SetID(SdrLayerID nNewID)                             { nID=nNewID; }
+    void SetID(SdrLayerID nNewID) { if(mnID != nNewID) mnID = nNewID; }
+
 public:
-    SdrLayer(): pModel(NULL),nType(0),nID(0)                  {}
+    SdrLayer(SdrLayerID nNewID, const String& rNewName, SdrModel& rSdrModel);
+
     bool      operator==(const SdrLayer& rCmpLayer) const;
     bool      operator!=(const SdrLayer& rCmpLayer) const { return !operator==(rCmpLayer); }
 
     void          SetName(const String& rNewName);
-    const String& GetName() const                             { return aName; }
+    const String& GetName() const { return maName; }
 
     void          SetTitle(const String& rTitle) { maTitle = rTitle; }
     const String& GetTitle() const { return maTitle; }
-
     void          SetDescription(const String& rDesc) { maDescription = rDesc; }
     const String& GetDescription() const { return maDescription; }
 
-    SdrLayerID    GetID() const                               { return nID; }
-    void          SetModel(SdrModel* pNewModel)               { pModel=pNewModel; }
-    SdrModel*     GetModel() const                            { return pModel; }
+    SdrLayerID GetID() const { return mnID; }
+    SdrModel& GetSdrModel() const { return mrModel; }
+
     // Einem SdrLayer kann man sagen dass er ein (der) Standardlayer sein soll.
     // Es wird dann laenderspeziefisch der passende Name gesetzt. SetName()
     // setzt das Flag "StandardLayer" ggf. zurueck auf "Userdefined".
-    void          SetStandardLayer(FASTBOOL bStd=sal_True);
-    FASTBOOL      IsStandardLayer() const                     { return nType==1; }
+    void SetStandardLayer(bool bStd = true);
+    bool IsStandardLayer() const { return mbStandardlayer; }
 };
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // Beim Aendern von Layerdaten muss man derzeit
 // noch selbst das Modify-Flag am Model setzen.
+
 #define SDRLAYER_MAXCOUNT 255
-class SVX_DLLPUBLIC SdrLayerAdmin {
-friend class SdrView;
-friend class SdrModel;
-friend class SdrPage;
+
+class SVX_DLLPUBLIC SdrLayerAdmin
+{
+private:
+    // allow SdrUndoNewLayer/SdrUndoDelLayer to call
+    // InsertLayerFromUndoRedo to execute it's undo/redo
+    friend class SdrUndoNewLayer;
+    friend class SdrUndoDelLayer;
+
+    void InsertLayerFromUndoRedo(SdrLayer* pLayer, sal_uInt32 nPos = 0xffffffff);
 
 protected:
-    Container      aLayer;
-    Container      aLSets;
-    SdrLayerAdmin* pParent; // Der Admin der Seite kennt den Admin des Docs
-    SdrModel*      pModel; // zum Broadcasten
-    String         aControlLayerName;
+    typedef ::std::vector< SdrLayer* > SdrLayerContainerType;
+
+    SdrLayerContainerType   maLayer;
+    SdrLayerAdmin*          mpParent; // Der Admin der Seite kennt den Admin des Docs
+    SdrModel&               mrModel; // zum Broadcasten
+    String                  maControlLayerName;
+
 protected:
     // Eine noch nicht verwendete LayerID raussuchen. Sind bereits alle
     // verbraucht, so gibt's 'ne 0. Wer sicher gehen will, muss vorher
@@ -90,44 +114,41 @@ protected:
     // vergeben.
     SdrLayerID           GetUniqueLayerID() const;
     void                 Broadcast() const;
+
 public:
-    SdrLayerAdmin(SdrLayerAdmin* pNewParent=NULL);
-    SdrLayerAdmin(const SdrLayerAdmin& rSrcLayerAdmin);
+    SdrLayerAdmin(SdrModel& rSdrModel, SdrLayerAdmin* pNewParent = 0);
     ~SdrLayerAdmin();
-    const SdrLayerAdmin& operator=(const SdrLayerAdmin& rSrcLayerAdmin);
+
     bool             operator==(const SdrLayerAdmin& rCmpLayerAdmin) const;
     bool             operator!=(const SdrLayerAdmin& rCmpLayerAdmin) const       { return !operator==(rCmpLayerAdmin); }
-    SdrLayerAdmin*       GetParent() const                                           { return pParent; }
-    void                 SetParent(SdrLayerAdmin* pNewParent)                        { pParent=pNewParent; }
-    void                 SetModel(SdrModel* pNewModel);
-    SdrModel*            GetModel() const                                            { return pModel; }
-    void                 InsertLayer(SdrLayer* pLayer, sal_uInt16 nPos=0xFFFF)           { aLayer.Insert(pLayer,nPos); pLayer->SetModel(pModel); Broadcast(); }
-    SdrLayer*            RemoveLayer(sal_uInt16 nPos);
+
+    SdrLayerAdmin* GetParent() const { return mpParent; }
+    void SetParent(SdrLayerAdmin* pNewParent) { if(mpParent != pNewParent) mpParent = pNewParent; }
+
+    SdrModel& GetSdrModel() const { return mrModel; }
+    SdrLayer* RemoveLayer(sal_uInt32 nPos);
+
     // Alle Layer loeschen
     void               ClearLayer();
+
     // Neuer Layer wird angelegt und eingefuegt
-    SdrLayer*          NewLayer(const String& rName, sal_uInt16 nPos=0xFFFF);
-    void               DeleteLayer(SdrLayer* pLayer)                                 { aLayer.Remove(pLayer); delete pLayer; Broadcast(); }
-    void               MoveLayer(SdrLayer* pLayer, sal_uInt16 nNewPos=0xFFFF);
-    SdrLayer*          MoveLayer(sal_uInt16 nPos, sal_uInt16 nNewPos);
+    SdrLayer* NewLayer(const String& rName, sal_uInt32 nPos = 0xffffffff);
+    void DeleteLayer(SdrLayer* pLayer);
+
     // Neuer Layer, Name wird aus der Resource geholt
-    SdrLayer*          NewStandardLayer(sal_uInt16 nPos=0xFFFF);
+    SdrLayer* NewStandardLayer(sal_uInt32 nPos = 0xffffffff);
 
     // Iterieren ueber alle Layer
-    sal_uInt16             GetLayerCount() const                                         { return sal_uInt16(aLayer.Count()); }
-    SdrLayer*          GetLayer(sal_uInt16 i)                                            { return (SdrLayer*)(aLayer.GetObject(i)); }
-    const SdrLayer*    GetLayer(sal_uInt16 i) const                                      { return (SdrLayer*)(aLayer.GetObject(i)); }
+    sal_uInt32 GetLayerCount() const { return maLayer.size(); }
+    SdrLayer* GetLayer(sal_uInt32 i) const;
 
-    sal_uInt16             GetLayerPos(SdrLayer* pLayer) const;
+    sal_uInt32 GetLayerPos(SdrLayer* pLayer) const;
+    SdrLayer* GetLayer(const String& rName, bool bInherited) const;
+    SdrLayerID GetLayerID(const String& rName, bool bInherited) const;
+    SdrLayer* GetLayerPerID(SdrLayerID nID) const;
 
-    SdrLayer*          GetLayer(const String& rName, FASTBOOL bInherited)            { return (SdrLayer*)(((const SdrLayerAdmin*)this)->GetLayer(rName,bInherited)); }
-    const SdrLayer*    GetLayer(const String& rName, FASTBOOL bInherited) const;
-          SdrLayerID   GetLayerID(const String& rName, FASTBOOL bInherited) const;
-          SdrLayer*    GetLayerPerID(sal_uInt16 nID)                                     { return (SdrLayer*)(((const SdrLayerAdmin*)this)->GetLayerPerID(nID)); }
-    const SdrLayer*    GetLayerPerID(sal_uInt16 nID) const;
-
-    void               SetControlLayerName(const String& rNewName) { aControlLayerName=rNewName; }
-    const String&      GetControlLayerName() const                 { return aControlLayerName; }
+    void SetControlLayerName(const String& rNewName) { maControlLayerName = rNewName; }
+    const String& GetControlLayerName() const;
 };
 
 /*
@@ -152,5 +173,9 @@ bInherited:
     Model. Das Model selbst hat keinen Parent.
 */
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 #endif //_SVDLAYER_HXX
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// eof

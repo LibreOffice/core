@@ -25,7 +25,6 @@
 #define _SVTOOLS_TTPROPS_HXX
 
 #include "svtools/svtdllapi.h"
-#include <tools/rtti.hxx>
 #include <vcl/apptypes.hxx>
 #include <svtools/svtdata.hxx>
 
@@ -62,14 +61,13 @@ class SVT_DLLPUBLIC TTProperties : public ApplicationProperty
     sal_Bool HasSlots(){ return nPropertyVersion == TT_PROPERTIES_VERSION; }
 
 public:
-    TYPEINFO();
-
     TTProperties()
             : nDonePRs( 0 )
             , mppArgs( NULL )
             , mpBmp( NULL )
             , nPropertyVersion( 0 )
                     {}
+    virtual ~TTProperties();
 
     sal_Bool GetSlots();
 

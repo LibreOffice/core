@@ -43,30 +43,39 @@ private:
 protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
-    void SetDefaultAttributes(E3dDefaultAttributes& rDefault);
+    void SetDefaultAttributes(const E3dDefaultAttributes& rDefault);
+
+    virtual ~E3dSphereObj();
+
+    /// method to copy all data from given source
+    virtual void copyDataFromSdrObject(const SdrObject& rSource);
 
 public:
-    TYPEINFO();
-    E3dSphereObj(E3dDefaultAttributes& rDefault, const basegfx::B3DPoint& rCenter, const basegfx::B3DVector& r3DSize);
-    E3dSphereObj();
+    /// create a copy, evtl. with a different target model (if given)
+    virtual SdrObject* CloneSdrObject(SdrModel* pTargetModel = 0) const;
+
+    E3dSphereObj(
+        SdrModel& rSdrModel,
+        const E3dDefaultAttributes& rDefault,
+        const basegfx::B3DPoint aCenter = basegfx::B3DPoint(0.0, 0.0, 0.0),
+        const basegfx::B3DVector a3DSize = basegfx::B3DVector(1.0, 1.0, 1.0));
+//  E3dSphereObj();
 
     // FG: Dieser Konstruktor wird nur von MakeObject aus der 3d-Objectfactory beim
     //     Laden von Dokumenten mit Kugeln aufgerufen. Dieser Konstruktor ruft kein
     //     CreateSphere auf, er erzeugt also keine Kugel.
-    E3dSphereObj(int dummy);
+//  E3dSphereObj(int dummy);
 
     // HorizontalSegments:
     sal_uInt32 GetHorizontalSegments() const
-        { return ((const Svx3DHorizontalSegmentsItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_HORZ_SEGS)).GetValue(); }
+        { return ((const SfxUInt32Item&)GetObjectItemSet().Get(SDRATTR_3DOBJ_HORZ_SEGS)).GetValue(); }
 
     // VerticalSegments:
     sal_uInt32 GetVerticalSegments() const
-        { return ((const Svx3DVerticalSegmentsItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_VERT_SEGS)).GetValue(); }
+        { return ((const SfxUInt32Item&)GetObjectItemSet().Get(SDRATTR_3DOBJ_VERT_SEGS)).GetValue(); }
 
     virtual sal_uInt16 GetObjIdentifier() const;
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
-
-    virtual void operator=(const SdrObject&);
+    virtual SdrObject* DoConvertToPolygonObject(bool bBezier, bool bAddText) const;
 
     void ReSegment(sal_uInt32 nHorzSegments, sal_uInt32 nVertSegments);
     const basegfx::B3DPoint& Center() const { return aCenter; }

@@ -140,7 +140,6 @@ DECLARE_STL_MAP(sal_uInt16, GridFieldValueListener*, ::std::less<sal_uInt16>, Co
 
 //==============================================================================
 
-DBG_NAME(GridFieldValueListener)
 class GridFieldValueListener : protected ::comphelper::OPropertyChangeListener
 {
     osl::Mutex                          m_aMutex;
@@ -170,7 +169,6 @@ GridFieldValueListener::GridFieldValueListener(DbGridControl& _rParent, const Re
     ,m_nSuspended(0)
     ,m_bDisposed(sal_False)
 {
-    DBG_CTOR(GridFieldValueListener, NULL);
     if (_rField.is())
     {
         m_pRealListener = new ::comphelper::OPropertyChangeMultiplexer(this, _rField);
@@ -182,7 +180,6 @@ GridFieldValueListener::GridFieldValueListener(DbGridControl& _rParent, const Re
 //------------------------------------------------------------------------------
 GridFieldValueListener::~GridFieldValueListener()
 {
-    DBG_DTOR(GridFieldValueListener, NULL);
     dispose();
 }
 
@@ -232,15 +229,12 @@ public:
 //==============================================================================
 
 
-DBG_NAME(DisposeListenerGridBridge)
 //------------------------------------------------------------------------------
 DisposeListenerGridBridge::DisposeListenerGridBridge(DbGridControl& _rParent, const Reference< XComponent >& _rxObject, sal_Int16 _rId)
     :FmXDisposeListener(m_aMutex)
     ,m_rParent(_rParent)
     ,m_pRealListener(NULL)
 {
-    DBG_CTOR(DisposeListenerGridBridge,NULL);
-
     if (_rxObject.is())
     {
         m_pRealListener = new FmXDisposeMultiplexer(this, _rxObject, _rId);
@@ -257,8 +251,6 @@ DisposeListenerGridBridge::~DisposeListenerGridBridge()
         m_pRealListener->release();
         m_pRealListener = NULL;
     }
-
-    DBG_DTOR(DisposeListenerGridBridge,NULL);
 }
 
 //==============================================================================
@@ -916,7 +908,6 @@ void DbGridRow::SetState(CursorWrapper* pCur, sal_Bool bPaintCursor)
     }
 }
 
-DBG_NAME(DbGridControl);
 //------------------------------------------------------------------------------
 DbGridControl::DbGridControl(
                 Reference< XMultiServiceFactory > _rxFactory,
@@ -957,8 +948,6 @@ DbGridControl::DbGridControl(
             ,m_bHideScrollbars( sal_False )
             ,m_bUpdating(sal_False)
 {
-    DBG_CTOR(DbGridControl,NULL);
-
     String sName(SVX_RES(RID_STR_NAVIGATIONBAR));
     m_aBar.SetAccessibleName(sName);
     m_aBar.Show();
@@ -1022,8 +1011,6 @@ DbGridControl::~DbGridControl()
 
     delete m_pDataCursor;
     delete m_pSeekCursor;
-
-    DBG_DTOR(DbGridControl,NULL);
 }
 
 //------------------------------------------------------------------------------
@@ -1862,7 +1849,6 @@ void DbGridControl::VisibleRowsChanged( long nNewTopRow, sal_uInt16 nLinesOnScre
 //------------------------------------------------------------------------------
 void DbGridControl::RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, sal_Bool bUpdateCursor)
 {
-    DBG_CHKTHIS( DbGridControl, NULL );
     // Wenn kein Cursor -> keine Rows im Browser.
     if (!m_pSeekCursor)
     {
@@ -2077,8 +2063,6 @@ void DbGridControl::PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uI
 //------------------------------------------------------------------------------
 sal_Bool DbGridControl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
 {
-    DBG_CHKTHIS( DbGridControl, NULL );
-
     DeactivateCell( sal_False );
 
     if  (   m_pDataCursor
@@ -2185,8 +2169,6 @@ sal_Bool DbGridControl::SetCurrent(long nNewRow)
 //------------------------------------------------------------------------------
 void DbGridControl::CursorMoved()
 {
-    DBG_CHKTHIS( DbGridControl, NULL );
-
     // CursorBewegung durch loeschen oder einfuegen von Zeilen
     if (m_pDataCursor && m_nCurrentPos != GetCurRow())
     {
@@ -2264,7 +2246,7 @@ void DbGridControl::forceROController(sal_Bool bForce)
             continue;
 
         // nur wenn es eine Edit-Zeile ist, kann ich ihr das forced read-only mitgeben
-        if (!pReturn->ISA(EditCellController) && !pReturn->ISA(SpinCellController))
+        if (!dynamic_cast< EditCellController* >(pReturn) && !dynamic_cast< SpinCellController* >(pReturn))
             continue;
 
         Edit& rEdit = (Edit&)pReturn->GetWindow();
@@ -2359,7 +2341,6 @@ void DbGridControl::AdjustDataSource(sal_Bool bFull)
 //------------------------------------------------------------------------------
 sal_Int32 DbGridControl::AlignSeekCursor()
 {
-    DBG_CHKTHIS( DbGridControl, NULL );
     // Positioniert den SeekCursor auf den DatenCursor, Daten werden nicht uebertragen
 
     if (!m_pSeekCursor)
@@ -2411,7 +2392,6 @@ sal_Int32 DbGridControl::AlignSeekCursor()
 //------------------------------------------------------------------------------
 sal_Bool DbGridControl::SeekCursor(long nRow, sal_Bool bAbsolute)
 {
-    DBG_CHKTHIS( DbGridControl, NULL );
     // Positioniert den SeekCursor, Daten werden nicht uebertragen
 
     // additions for the filtermode
@@ -2977,7 +2957,6 @@ void DbGridControl::Command(const CommandEvent& rEvt)
 //------------------------------------------------------------------------------
 IMPL_LINK(DbGridControl, OnDelete, void*, /*EMPTYTAG*/ )
 {
-    DBG_CHKTHIS(DbGridControl, NULL );
     m_nDeleteEvent = 0;
     DeleteSelectedRows();
     return 0;
@@ -3076,7 +3055,7 @@ CellController* DbGridControl::GetController(long /*nRow*/, sal_uInt16 nColumnId
             if (pReturn)
             {
                 // wenn es eine Edit-Zeile ist, kann ich ihr das forced read-only mitgeben
-                if (!pReturn->ISA(EditCellController) && !pReturn->ISA(SpinCellController))
+                if (!dynamic_cast< EditCellController* >(pReturn) && !dynamic_cast< SpinCellController* >(pReturn))
                     // ich konnte den Controller in forceROController nicht auf ReadOnly setzen
                     if (!bInsert && !bUpdate)
                         // ich bin nur hier, da m_bForceROController gesetzt war

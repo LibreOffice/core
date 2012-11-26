@@ -65,10 +65,10 @@ protected:
     sal_Bool            bVCAction;
 
 private:
-    sal_Bool TestDetective( SdrPageView* pPV, const Point& rPos );  // -> fusel2
+    bool TestDetective( SdrPageView* pPV, const basegfx::B2DPoint& rPos );  // -> fusel2
 
     bool                IsNoteCaptionMarked() const;
-    bool                IsNoteCaptionClicked( const Point& rPos ) const;
+    bool                IsNoteCaptionClicked( const basegfx::B2DPoint& rPos ) const;
 };
 
 

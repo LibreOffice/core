@@ -248,7 +248,6 @@ protected:
 public:
     SFX_DECL_VIEWFACTORY(SwPagePreView);
     SFX_DECL_INTERFACE(SW_PAGEPREVIEW)
-    TYPEINFO();
 
     inline Window*          GetFrameWindow() const { return &(GetViewFrame())->GetWindow(); }
     inline ViewShell*       GetViewShell() const { return aViewWin.GetViewShell(); }

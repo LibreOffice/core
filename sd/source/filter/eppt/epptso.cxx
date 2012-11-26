@@ -40,9 +40,6 @@
 #include <vcl/gradient.hxx>
 #include <sfx2/app.hxx>
 #include <svl/languageoptions.hxx>
-//#ifndef _SVX_XIT_HXX
-//#include <svx/xit.hxx>
-//#endif
 #include <editeng/svxenum.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdoashp.hxx>
@@ -97,24 +94,18 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <com/sun/star/text/FontRelief.hpp>
 #include <editeng/frmdiritem.hxx>
-/*
-#include <editeng/outliner.hxx>
-#include <editeng/outlobj.hxx>
-#include <svx/svdmodel.hxx>
-*/
 #include <svtools/fltcall.hxx>
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/table/XMergeableCell.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
 #include <set>
-
-//#include <svx/xbtmpit.hxx>
-
 #include "i18npool/mslangid.hxx"
-
 #include <vos/xception.hxx>
-using namespace vos;
+#include <svx/svdlegacy.hxx>
+#include <svx/svdocirc.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
 
+using namespace vos;
 using namespace ::com::sun::star;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -165,7 +156,6 @@ sal_uInt16 PPTExBulletProvider::GetId( const ByteString& rUniqueId, Size& rGraph
 
     if ( rUniqueId.Len() )
     {
-        Rectangle       aRect;
         GraphicObject   aGraphicObject( rUniqueId );
         Graphic         aMappedGraphic, aGraphic( aGraphicObject.GetGraphic() );
         Size            aPrefSize( aGraphic.GetPrefSize() );
@@ -196,7 +186,7 @@ sal_uInt16 PPTExBulletProvider::GetId( const ByteString& rUniqueId, Size& rGraph
             }
         }
 
-        nId = pGraphicProv->GetBlibID( aBuExPictureStream, aGraphicObject.GetUniqueID(), aRect, NULL, NULL );
+        nId = pGraphicProv->GetBlibID( aBuExPictureStream, aGraphicObject.GetUniqueID(), basegfx::B2DRange(0.0, 0.0, 1.0, 1.0), NULL, NULL );
 
         if ( nId && ( nId < 0x10000 ) )
             nRetValue = (sal_uInt16)nId - 1;
@@ -241,9 +231,9 @@ void GroupTable::ImplResizeGroupTable( sal_uInt32 nEntrys )
 
 // ---------------------------------------------------------------------------------------------
 
-sal_Bool GroupTable::EnterGroup( ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rXIndexAccessRef )
+bool GroupTable::EnterGroup( ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rXIndexAccessRef )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet(false);
     if ( rXIndexAccessRef.is() )
     {
         GroupEntry* pNewGroup = new GroupEntry( rXIndexAccessRef );
@@ -252,7 +242,7 @@ sal_Bool GroupTable::EnterGroup( ::com::sun::star::uno::Reference< ::com::sun::s
             if ( mnMaxGroupEntry == mnCurrentGroupEntry )
                 ImplResizeGroupTable( mnMaxGroupEntry + 8 );
             mpGroupEntry[ mnCurrentGroupEntry++ ] = pNewGroup;
-            bRet = sal_True;
+            bRet = true;
         }
         else
             delete pNewGroup;
@@ -287,21 +277,21 @@ void GroupTable::ResetGroupTable( sal_uInt32 nCount )
 
 // ---------------------------------------------------------------------------------------------
 
-sal_Bool GroupTable::GetNextGroupEntry()
+bool GroupTable::GetNextGroupEntry()
 {
     while ( mnCurrentGroupEntry )
     {
         mnIndex = mpGroupEntry[ mnCurrentGroupEntry - 1 ]->mnCurrentPos++;
 
         if ( mpGroupEntry[ mnCurrentGroupEntry - 1 ]->mnCount > mnIndex )
-            return sal_True;
+            return true;
 
         delete ( mpGroupEntry[ --mnCurrentGroupEntry ] );
 
         if ( mnCurrentGroupEntry )
             mnGroupsClosed++;
     }
-    return sal_False;
+    return false;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -318,12 +308,12 @@ void FontCollectionEntry::ImplInit( const String& rName )
     if ( aSubstName.Len() )
     {
         Name = aSubstName;
-        bIsConverted = sal_True;
+        bIsConverted = true;
     }
     else
     {
         Name = rName;
-        bIsConverted = sal_False;
+        bIsConverted = false;
     }
 }
 
@@ -706,7 +696,7 @@ sal_uInt32 PPTWriter::ImplInsertBookmarkURL( const String& rBookmarkURL, const s
 
 // ---------------------------------------------------------------------------------------------
 
-sal_Bool PPTWriter::ImplCloseDocument()
+bool PPTWriter::ImplCloseDocument()
 {
     sal_uInt32 nOfs = mpPptEscherEx->PtGetOffsetByID( EPP_Persist_Document );
     if ( nOfs )
@@ -720,12 +710,12 @@ sal_Bool PPTWriter::ImplCloseDocument()
             EscherExAtom aTxMasterStyleAtom( aTxMasterStyleAtomStrm, EPP_TxMasterStyleAtom, EPP_TEXTTYPE_Other );
             aTxMasterStyleAtomStrm << (sal_uInt16)5;        // paragraph count
             sal_uInt16 nLev;
-            sal_Bool bFirst = sal_True;
+            bool bFirst(true);
             for ( nLev = 0; nLev < 5; nLev++ )
             {
-                mpStyleSheet->mpParaSheet[ EPP_TEXTTYPE_Other ]->Write( aTxMasterStyleAtomStrm, mpPptEscherEx, nLev, bFirst, sal_False, mXPagePropSet );
-                mpStyleSheet->mpCharSheet[ EPP_TEXTTYPE_Other ]->Write( aTxMasterStyleAtomStrm, mpPptEscherEx, nLev, bFirst, sal_False, mXPagePropSet );
-                bFirst = sal_False;
+                mpStyleSheet->mpParaSheet[ EPP_TEXTTYPE_Other ]->Write( aTxMasterStyleAtomStrm, mpPptEscherEx, nLev, bFirst, false, mXPagePropSet );
+                mpStyleSheet->mpCharSheet[ EPP_TEXTTYPE_Other ]->Write( aTxMasterStyleAtomStrm, mpPptEscherEx, nLev, bFirst, false, mXPagePropSet );
+                bFirst = false;
             }
         }
 
@@ -859,24 +849,24 @@ sal_Bool PPTWriter::ImplCloseDocument()
         if ( nOldPos )
         {
             mpStrm->Seek( nOldPos );
-            return sal_True;
+            return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 // ---------------------------------------------------------------------------------------------
 
-sal_Bool PropValue::GetPropertyValue(
+bool PropValue::GetPropertyValue(
     ::com::sun::star::uno::Any& rAny,
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
             const String& rString,
-                    sal_Bool bTestPropertyAvailability )
+                    bool bTestPropertyAvailability )
 {
-    sal_Bool bRetValue = sal_True;
+    bool bRetValue(true);
     if ( bTestPropertyAvailability )
     {
-        bRetValue = sal_False;
+        bRetValue = false;
         try
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
@@ -886,7 +876,7 @@ sal_Bool PropValue::GetPropertyValue(
         }
         catch( ::com::sun::star::uno::Exception& )
         {
-            bRetValue = sal_False;
+            bRetValue = false;
         }
     }
     if ( bRetValue )
@@ -895,11 +885,11 @@ sal_Bool PropValue::GetPropertyValue(
         {
             rAny = rXPropSet->getPropertyValue( rString );
             if ( !rAny.hasValue() )
-                bRetValue = sal_False;
+                bRetValue = false;
         }
         catch( ::com::sun::star::uno::Exception& )
         {
-            bRetValue = sal_False;
+            bRetValue = false;
         }
     }
     return bRetValue;
@@ -928,35 +918,51 @@ sal_Bool PropValue::GetPropertyValue(
 
 // ---------------------------------------------------------------------------------------------
 
-sal_Bool PropValue::ImplGetPropertyValue( const String& rString )
+bool PropValue::ImplGetPropertyValue( const String& rString )
 {
     return GetPropertyValue( mAny, mXPropSet, rString );
 }
 
 // ---------------------------------------------------------------------------------------------
 
-sal_Bool PropValue::ImplGetPropertyValue( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & aXPropSet, const String& rString )
+basegfx::B2DHomMatrix PropValue::ImplGetObjectTransformation()
+{
+    basegfx::B2DHomMatrix aRetval;
+
+    if(GetPropertyValue(mAny, mXPropSet, String(RTL_CONSTASCII_USTRINGPARAM("Transformation"))))
+    {
+        drawing::HomogenMatrix3 aMatrix;
+        mAny >>= aMatrix;
+        aRetval = basegfx::tools::UnoHomogenMatrix3ToB2DHomMatrix(aMatrix);
+    }
+
+    return aRetval;
+}
+
+// ---------------------------------------------------------------------------------------------
+
+bool PropValue::ImplGetPropertyValue( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & aXPropSet, const String& rString )
 {
     return GetPropertyValue( mAny, aXPropSet, rString );
 }
 
 // ---------------------------------------------------------------------------------------------
 
-sal_Bool PropStateValue::ImplGetPropertyValue( const String& rString, sal_Bool bGetPropertyState )
+bool PropStateValue::ImplGetPropertyValue( const String& rString, bool bGetPropertyState )
 {
     ePropState = ::com::sun::star::beans::PropertyState_AMBIGUOUS_VALUE;
-    sal_Bool bRetValue = sal_True;
+    bool bRetValue(true);
 #ifdef UNX
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
             aXPropSetInfo( mXPropSet->getPropertySetInfo() );
         if ( !aXPropSetInfo.is() )
-            return sal_False;
+            return false;
 #endif
     try
     {
         mAny = mXPropSet->getPropertyValue( rString );
         if ( !mAny.hasValue() )
-            bRetValue = sal_False;
+            bRetValue = false;
         else if ( bGetPropertyState )
             ePropState = mXPropState->getPropertyState( rString );
         else
@@ -964,16 +970,16 @@ sal_Bool PropStateValue::ImplGetPropertyValue( const String& rString, sal_Bool b
     }
     catch( ::com::sun::star::uno::Exception& )
     {
-        bRetValue = sal_False;
+        bRetValue = false;
     }
     return bRetValue;
 }
 
 // ---------------------------------------------------------------------------------------------
 
-sal_Bool PPTWriter::ImplInitSOIface()
+bool PPTWriter::ImplInitSOIface()
 {
-    while( sal_True )
+    while( true )
     {
         mXDrawPagesSupplier = ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::XDrawPagesSupplier >
@@ -997,29 +1003,29 @@ sal_Bool PPTWriter::ImplInitSOIface()
         if ( !ImplGetPageByIndex( 0, NORMAL ) )
             break;
 
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 // ---------------------------------------------------------------------------------------------
 
-sal_Bool PPTWriter::ImplSetCurrentStyleSheet( sal_uInt32 nPageNum )
+bool PPTWriter::ImplSetCurrentStyleSheet( sal_uInt32 nPageNum )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if ( nPageNum >= maStyleSheetList.size() )
         nPageNum = 0;
     else
-        bRet = sal_True;
+        bRet = true;
     mpStyleSheet = maStyleSheetList[ nPageNum ];
     return bRet;
 }
 
 // ---------------------------------------------------------------------------------------------
 
-sal_Bool PPTWriter::ImplGetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
+bool PPTWriter::ImplGetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
 {
-    while( sal_True )
+    while( true )
     {
         if ( ePageType != meLatestPageType )
         {
@@ -1030,7 +1036,7 @@ sal_Bool PPTWriter::ImplGetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
                 {
                     mXDrawPages = mXDrawPagesSupplier->getDrawPages();
                     if( !mXDrawPages.is() )
-                        return sal_False;
+                        return false;
                 }
                 break;
 
@@ -1038,7 +1044,7 @@ sal_Bool PPTWriter::ImplGetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
                 {
                     mXDrawPages = mXMasterPagesSupplier->getMasterPages();
                     if( !mXDrawPages.is() )
-                        return sal_False;
+                        return false;
                 }
                 break;
                 default:
@@ -1073,7 +1079,7 @@ sal_Bool PPTWriter::ImplGetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
 
         /* try to get the "real" background PropertySet. If the normal page is not supporting this property, it is
            taken the property from the master */
-        sal_Bool bHasBackground = GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Background" ) ), sal_True );
+        bool bHasBackground = GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Background" ) ), true );
         if ( bHasBackground )
             bHasBackground = ( aAny >>= mXBackgroundPropSet );
         if ( !bHasBackground )
@@ -1091,7 +1097,7 @@ sal_Bool PPTWriter::ImplGetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
                         ( aXMasterDrawPage, ::com::sun::star::uno::UNO_QUERY );
                     if ( aXMasterPagePropSet.is() )
                     {
-                        sal_Bool bBackground = GetPropertyValue( aAny, aXMasterPagePropSet,
+                        bool bBackground = GetPropertyValue( aAny, aXMasterPagePropSet,
                                 String( RTL_CONSTASCII_USTRINGPARAM( "Background" ) ) );
                         if ( bBackground )
                         {
@@ -1101,18 +1107,18 @@ sal_Bool PPTWriter::ImplGetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
                 }
             }
         }
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 // ---------------------------------------------------------------------------------------------
 
-sal_Bool PPTWriter::ImplGetShapeByIndex( sal_uInt32 nIndex, sal_Bool bGroup )
+bool PPTWriter::ImplGetShapeByIndex( sal_uInt32 nIndex, bool bGroup )
 {
-    while(sal_True)
+    while(true)
     {
-        if (  ( bGroup == sal_False ) || ( GetCurrentGroupLevel() == 0 ) )
+        if (  ( bGroup == false ) || ( GetCurrentGroupLevel() == 0 ) )
         {
             ::com::sun::star::uno::Any aAny( mXShapes->getByIndex( nIndex ) );
             aAny >>= mXShape;
@@ -1130,29 +1136,102 @@ sal_Bool PPTWriter::ImplGetShapeByIndex( sal_uInt32 nIndex, sal_Bool bGroup )
 
         if ( !mXPropSet.is() )
             break;
-        maPosition = ImplMapPoint( mXShape->getPosition() );
-        maSize = ImplMapSize( mXShape->getSize() );
-        maRect = Rectangle( Point( maPosition.X, maPosition.Y ), Size( maSize.Width, maSize.Height ) );
+
+        // get object transformation
+        maObjTrans = ImplGetObjectTransformation();
+
+        // map to PPt metrics
+        maObjTrans.setScale(maMap100thMmToMs* maObjTrans.getScale());
+        maObjTrans.setTranslate(maMap100thMmToMs * maObjTrans.getTranslate());
+
+        // Use translation and scale to create range. Use signed scale
+        // to get the unrotated SnapRect
+        maObjectRange = basegfx::B2DRange(
+            maObjTrans.getTranslate(),
+            maObjTrans.getTranslate() + maObjTrans.getScale());
+
+        // check mirroring
+        bool bMirroredX(maObjTrans.getScale().getX() < 0.0);
+        bool bMirroredY(maObjTrans.getScale().getY() < 0.0);
+
+        // get rotation
+        mfObjectRotation = maObjTrans.getRotate();
+
+        // if mirror is X and Y, replace with 180 degree rotation. Prefer
+        // rotation export over mirror export.
+        if(bMirroredX && bMirroredY)
+        {
+            bMirroredX = bMirroredY = false;
+            mfObjectRotation += F_PI;
+        }
+
+        // reset mirror flags
+        mnMirrorFlags = 0;
+
+        // set mirror flags
+        if(bMirroredX)
+        {
+            mnMirrorFlags |= SHAPEFLAG_FLIPH;
+        }
+
+        if(bMirroredY)
+        {
+            mnMirrorFlags |= SHAPEFLAG_FLIPV;
+        }
+
+        if(bMirroredX != bMirroredY)
+        {
+            // if one axis is mirrored, invert the rotation
+            mfObjectRotation = -mfObjectRotation;
+        }
+
+//        mbMirroredX = aObjTrans.getScale().getX() < 0.0;
+//        mbMirroredY = aObjTrans.getScale().getY() < 0.0;
+
+        // mbMirroredX and mbMirroredY are new aspects to handle. The text
+        // in offices before transformation ignored mirrorX and used a 180
+        // deg rotation for mirrorY. To get close to the old behaviour, use
+        // mbMirroredY to apply a 180 deg rotation to mimic old behaviour.
+        // Do not forget to adapt the object's range!
+//        if(mbMirroredY)
+//        {
+//            // adapt object range
+//            maObjectRange.transform(basegfx::tools::createRotateAroundPoint(maObjectRange.getMaximum(), -M_PI));
+//
+//            // add to rotation and clear mirror flag
+//            mfObjectRotation += M_PI;
+//            mbMirroredX = false;
+//        }
+
+        // assert shear (not supported yet)
+        if(!basegfx::fTools::equalZero(maObjTrans.getShearX()))
+        {
+            OSL_ENSURE(false, "PPt export: shear is not supported (!)");
+        }
+
         mType = ByteString( String( mXShape->getShapeType() ), RTL_TEXTENCODING_UTF8 );
         mType.Erase( 0, 13 );                                   // "com.sun.star." entfernen
         sal_uInt16 nPos = mType.Search( (const char*)"Shape" );
         mType.Erase( nPos, 5 );
 
-        mbPresObj = mbEmptyPresObj = sal_False;
+        mbPresObj = mbEmptyPresObj = false;
         if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsPresentationObject" ) ) ) )
-            mAny >>= mbPresObj;
+        {
+            sal_Bool bValue(sal_False);
+            mAny >>= bValue;
+            mbPresObj = bValue;
+        }
 
         if ( mbPresObj && ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsEmptyPresentationObject" ) ) ) )
-            mAny >>= mbEmptyPresObj;
+        {
+            sal_Bool bValue(sal_False);
+            mAny >>= bValue;
+            mbEmptyPresObj = bValue;
+        }
 
-        mnAngle = ( PropValue::GetPropertyValue( aAny,
-            mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "RotateAngle" ) ), sal_True ) )
-                ? *((sal_Int32*)aAny.getValue() )
-                : 0;
-
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 //  -----------------------------------------------------------------------
@@ -1188,10 +1267,10 @@ sal_uInt32 PPTWriter::ImplGetMasterIndex( PageType ePageType )
 
 //  -----------------------------------------------------------------------
 
-sal_Bool PPTWriter::ImplGetStyleSheets()
+bool PPTWriter::ImplGetStyleSheets()
 {
     int             nInstance, nLevel;
-    sal_Bool        bRetValue = sal_False;
+    bool bRetValue(false);
     sal_uInt32      nPageNum;
 
     for ( nPageNum = 0; nPageNum < mnMasterPages; nPageNum++ )
@@ -1327,14 +1406,14 @@ sal_Bool PPTWriter::ImplGetStyleSheets()
 
 void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
 {
-    sal_Bool            bFirstParagraph = sal_True;
+    bool            bFirstParagraph(true);
     sal_uInt32          nCharCount;
     sal_uInt32          nPropertyFlags = 0;
     sal_uInt16          nDepth = 0;
     sal_Int16           nLineSpacing;
     int                 nInstance = rTextObj.GetInstance();
 
-    for ( ParagraphObj* pPara = rTextObj.First() ; pPara; pPara = rTextObj.Next(), bFirstParagraph = sal_False )
+    for ( ParagraphObj* pPara = rTextObj.First() ; pPara; pPara = rTextObj.Next(), bFirstParagraph = false )
     {
         PortionObj* pPortion = (PortionObj*)pPara->First();
         nCharCount = pPara->Count();
@@ -1433,10 +1512,14 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
             sal_uInt32 nBulletColor = pPara->nBulletColor;
             if ( nBulletColor == COL_AUTO )
             {
-                sal_Bool bIsDark = sal_False;
+                bool bIsDark(false);
                 ::com::sun::star::uno::Any aAny;
-                if ( PropValue::GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsBackgroundDark" ) ), sal_True ) )
-                    aAny >>= bIsDark;
+                if ( PropValue::GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsBackgroundDark" ) ), true ) )
+                {
+                    sal_Bool bBool(sal_False);
+                    aAny >>= bBool;
+                    bIsDark = bBool;
+                }
                 nBulletColor = bIsDark ? 0xffffff : 0x000000;
             }
             nBulletColor &= 0xffffff;
@@ -1486,10 +1569,14 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
 
             if ( nCharColor == COL_AUTO )   // nCharColor depends to the background color
             {
-                sal_Bool bIsDark = sal_False;
+                bool bIsDark(false);
                 ::com::sun::star::uno::Any aAny;
-                if ( PropValue::GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsBackgroundDark" ) ), sal_True ) )
-                    aAny >>= bIsDark;
+                if ( PropValue::GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsBackgroundDark" ) ), true ) )
+                {
+                    sal_Bool bBool(sal_False);
+                    aAny >>= bBool;
+                    bIsDark = bBool;
+                }
                 nCharColor = bIsDark ? 0xffffff : 0x000000;
             }
 
@@ -1512,9 +1599,9 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                 {
                     case ::com::sun::star::drawing::FillStyle_GRADIENT :
                     {
-                        Point aEmptyPoint = Point();
-                        Rectangle aRect( aEmptyPoint, Size( 28000, 21000 ) );
-                        EscherPropertyContainer aPropOpt( mpPptEscherEx->GetGraphicProvider(), mpPicStrm, aRect );
+                        basegfx::B2DRange aPageRange(0.0, 0.0, 28000.0, 21000.0);
+                        EscherPropertyContainer aPropOpt(mpPptEscherEx->GetGraphicProvider(), mpPicStrm, aPageRange);
+
                         aPropOpt.CreateGradientProperties( mXPropSet );
                         aPropOpt.GetOpt( ESCHER_Prop_fillColor, nBackgroundColor );
                     }
@@ -1535,9 +1622,9 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                         {
                             case ::com::sun::star::drawing::FillStyle_GRADIENT :
                             {
-                                Point aEmptyPoint = Point();
-                                Rectangle aRect( aEmptyPoint, Size( 28000, 21000 ) );
-                                EscherPropertyContainer aPropOpt( mpPptEscherEx->GetGraphicProvider(), mpPicStrm, aRect );
+                                basegfx::B2DRange aPageRange(0.0, 0.0, 28000.0, 21000.0);
+                                EscherPropertyContainer aPropOpt(mpPptEscherEx->GetGraphicProvider(), mpPicStrm, aPageRange);
+
                                 aPropOpt.CreateGradientProperties( mXBackgroundPropSet );
                                 aPropOpt.GetOpt( ESCHER_Prop_fillColor, nBackgroundColor );
                             }
@@ -1578,7 +1665,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                             if ( aPropSetOfNextShape.is() )
                             {
                                 if ( PropValue::GetPropertyValue( aAny, aPropSetOfNextShape,
-                                                    String( RTL_CONSTASCII_USTRINGPARAM( "FillColor" ) ), sal_True ) )
+                                                    String( RTL_CONSTASCII_USTRINGPARAM( "FillColor" ) ), true ) )
                                 {
                                     if ( nCharColor == mpPptEscherEx->GetColor( *((sal_uInt32*)aAny.getValue()) ) )
                                     {
@@ -1655,10 +1742,10 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
 
 //  ----------------------------------------------------------------------------------------
 //  laedt und konvertiert text aus shape, ergebnis ist mnTextSize gespeichert;
-sal_Bool PPTWriter::ImplGetText()
+bool PPTWriter::ImplGetText()
 {
     mnTextSize = 0;
-    mbFontIndependentLineSpacing = sal_False;
+    mbFontIndependentLineSpacing = false;
     mXText = ::com::sun::star::uno::Reference<
         ::com::sun::star::text::XSimpleText >
             ( mXShape, ::com::sun::star::uno::UNO_QUERY );
@@ -1667,46 +1754,56 @@ sal_Bool PPTWriter::ImplGetText()
     {
         mnTextSize = mXText->getString().getLength();
         ::com::sun::star::uno::Any aAny;
-        if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FontIndependentLineSpacing" ) ) ), sal_True )
-            aAny >>= mbFontIndependentLineSpacing;
+        if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FontIndependentLineSpacing" ) ) ), true )
+        {
+            sal_Bool bBool(sal_False);
+            aAny >>= bBool;
+            mbFontIndependentLineSpacing = bBool;
+        }
     }
     return ( mnTextSize != 0 );
 }
 
 //  -----------------------------------------------------------------------
 
-void PPTWriter::ImplFlipBoundingBox( EscherPropertyContainer& rPropOpt )
+void PPTWriter::ImplHandleRotation( EscherPropertyContainer& rPropOpt )
 {
-    if ( mnAngle < 0 )
-        mnAngle = ( 36000 + mnAngle ) % 36000;
-    else
-        mnAngle = ( 36000 - ( mnAngle % 36000 ) );
-
-    double  fCos = cos( (double)mnAngle * F_PI18000 );
-    double  fSin = sin( (double)mnAngle * F_PI18000 );
-
-    double  fWidthHalf = maRect.GetWidth() / 2;
-    double  fHeightHalf = maRect.GetHeight() / 2;
-
-    double  fXDiff = fCos * fWidthHalf + fSin * (-fHeightHalf);
-    double  fYDiff = - ( fSin * fWidthHalf - fCos * ( -fHeightHalf ) );
-
-    maRect.Move( (sal_Int32)( -( fWidthHalf - fXDiff ) ), (sal_Int32)(  - ( fHeightHalf + fYDiff ) ) );
-    mnAngle *= 655;
-    mnAngle += 0x8000;
-    mnAngle &=~0xffff;                                  // nAngle auf volle Gradzahl runden
-    rPropOpt.AddOpt( ESCHER_Prop_Rotation, mnAngle );
-
-    if ( ( mnAngle >= ( 45 << 16 ) && mnAngle < ( 135 << 16 ) ) ||
-            ( mnAngle >= ( 225 << 16 ) && mnAngle < ( 315 << 16 ) ) )
+    if(!basegfx::fTools::equalZero(mfObjectRotation))
     {
-        // In diesen beiden Bereichen steht in PPT gemeinerweise die
-        // BoundingBox bereits senkrecht. Daher muss diese VOR
-        // DER ROTATION flachgelegt werden.
-        ::com::sun::star::awt::Point
-            aTopLeft( (sal_Int32)( maRect.Left() + fWidthHalf - fHeightHalf ), (sal_Int32)( maRect.Top() + fHeightHalf - fWidthHalf ) );
-        Size    aNewSize( maRect.GetHeight(), maRect.GetWidth() );
-        maRect = Rectangle( Point( aTopLeft.X, aTopLeft.Y ), aNewSize );
+        // MS shape format rotates around the object center, so adapt adapt ObjectRange
+        // to be centered at the center of the original shape to do this
+        const basegfx::B2DPoint aCurrentCenter(maObjTrans.getB2DHomMatrix() * basegfx::B2DPoint(0.5, 0.5));
+        const basegfx::B2DPoint aObjectRangeCenter(maObjectRange.getCenter());
+
+        if(!aCurrentCenter.equal(aObjectRangeCenter))
+        {
+            const basegfx::B2DHomMatrix aAdaptToCenterRotation(
+                basegfx::tools::createTranslateB2DHomMatrix(
+                    aCurrentCenter - aObjectRangeCenter));
+
+            maObjectRange.transform(aAdaptToCenterRotation);
+        }
+
+        // do not use negative mfObjectRotation here, PPT uses the correct orientation, too
+        sal_Int32 nAngle(basegfx::fround(basegfx::snapToZeroRange(mfObjectRotation / F_PI18000, 36000.0)));
+
+        // adapt angle to MS format
+        nAngle *= 655;
+        nAngle += 0x8000;
+        nAngle &=~0xffff; // round to full degrees
+        rPropOpt.AddOpt(ESCHER_Prop_Rotation, nAngle);
+
+        if((nAngle >= (45 << 16) && nAngle < (135 << 16)) || (nAngle >= (225 << 16) && nAngle < (315 << 16)))
+        {
+            // in this region of rotation the ObjectRange is already rotated,
+            // so do this here, too
+            const basegfx::B2DHomMatrix aMirrorDiagonal(
+                basegfx::tools::createRotateAroundPoint(
+                    maObjectRange.getCenter(),
+                    F_PI2));
+
+            maObjectRange.transform(aMirrorDiagonal);
+        }
     }
 }
 
@@ -1737,17 +1834,17 @@ PortionObj::PortionObj( const ::com::sun::star::uno::Reference< ::com::sun::star
     mnFont              ( 0 ),
     mnAsianOrComplexFont( 0xffff ),
     mnTextSize          ( 0 ),
-    mbLastPortion       ( sal_True ),
+    mbLastPortion       ( true ),
     mpText              ( NULL ),
     mpFieldEntry        ( NULL )
 {
     mXPropSet = rXPropSet;
 
-    ImplGetPortionValues( rFontCollection, sal_False );
+    ImplGetPortionValues( rFontCollection, false );
 }
 
 PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & rXTextRange,
-                            sal_Bool bLast, FontCollection& rFontCollection ) :
+                            bool bLast, FontCollection& rFontCollection ) :
     mnCharAttrHard          ( 0 ),
     mnCharAttr              ( 0 ),
     mnFont                  ( 0 ),
@@ -1758,7 +1855,7 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
 {
     String aString( rXTextRange->getString() );
     String aURL;
-    sal_Bool bRTL_endingParen = sal_False;
+    bool bRTL_endingParen = false;
 
     mnTextSize = aString.Len();
     if ( bLast )
@@ -1776,7 +1873,7 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
             ::com::sun::star::beans::XPropertyState >
                 ( rXTextRange, ::com::sun::star::uno::UNO_QUERY );
 
-        sal_Bool bPropSetsValid = ( mXPropSet.is() && mXPropState.is() );
+        bool bPropSetsValid = ( mXPropSet.is() && mXPropState.is() );
         if ( bPropSetsValid )
             nFieldType = ImplGetTextField( rXTextRange, mXPropSet, aURL );
         if ( nFieldType )
@@ -1788,14 +1885,14 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
                 mpFieldEntry->aFieldUrl = aURL;
             }
         }
-        sal_Bool bSymbol = sal_False;
+        bool bSymbol(false);
 
-        if ( bPropSetsValid && ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontCharSet" ) ), sal_False ) )
+        if ( bPropSetsValid && ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontCharSet" ) ), false ) )
         {
             sal_Int16 nCharset;
             mAny >>= nCharset;
             if ( nCharset == ::com::sun::star::awt::CharSet::SYMBOL )
-                bSymbol = sal_True;
+                bSymbol = true;
         }
         if ( mpFieldEntry && ( nFieldType & 0x800000 ) )    // placeholder ?
         {
@@ -1813,7 +1910,7 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
             if ( bLast && pText[ aString.Len() - 1 ] == sal_Unicode(')') && rFontCollection.GetScriptDirection( aString ) == com::sun::star::i18n::ScriptDirection::RIGHT_TO_LEFT )
             {
                 mnTextSize++;
-                bRTL_endingParen = sal_True;
+                bRTL_endingParen = true;
             }
             mpText = new sal_uInt16[ mnTextSize ];
             sal_uInt16 nChar;
@@ -1873,7 +1970,7 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
             mpText[ mnTextSize - 1 ] = 0xd;
 
         if ( bPropSetsValid )
-            ImplGetPortionValues( rFontCollection, sal_True );
+            ImplGetPortionValues( rFontCollection, true );
     }
 }
 
@@ -1888,7 +1985,7 @@ PortionObj::~PortionObj()
     ImplClear();
 }
 
-void PortionObj::Write( SvStream* pStrm, sal_Bool bLast )
+void PortionObj::Write( SvStream* pStrm, bool bLast )
 {
     sal_uInt32 nCount = mnTextSize;
     if ( bLast && mbLastPortion )
@@ -1897,10 +1994,10 @@ void PortionObj::Write( SvStream* pStrm, sal_Bool bLast )
         *pStrm << (sal_uInt16)mpText[ i ];
 }
 
-void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool bGetPropStateValue )
+void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, bool bGetPropStateValue )
 {
 
-    sal_Bool bOk = ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontName" ) ), bGetPropStateValue );
+    bool bOk = ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontName" ) ), bGetPropStateValue );
     meFontName = ePropState;
     if ( bOk )
     {
@@ -1910,11 +2007,11 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
         if ( mnFont == nCount )
         {
             FontCollectionEntry& rFontDesc = rFontCollection.GetLast();
-            if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontCharSet" ) ), sal_False ) )
+            if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontCharSet" ) ), false ) )
                 mAny >>= rFontDesc.CharSet;
-            if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontFamily" ) ), sal_False ) )
+            if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontFamily" ) ), false ) )
                 mAny >>= rFontDesc.Family;
-            if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontPitch" ) ), sal_False ) )
+            if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontPitch" ) ), false ) )
                 mAny >>= rFontDesc.Pitch;
         }
     }
@@ -1937,11 +2034,11 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
             if ( mnAsianOrComplexFont == nCount )
             {
                 FontCollectionEntry& rFontDesc = rFontCollection.GetLast();
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontCharSetAsian" ) ), sal_False ) )
+                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontCharSetAsian" ) ), false ) )
                     mAny >>= rFontDesc.CharSet;
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontFamilyAsian" ) ), sal_False ) )
+                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontFamilyAsian" ) ), false ) )
                     mAny >>= rFontDesc.Family;
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontPitchAsian" ) ), sal_False ) )
+                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontPitchAsian" ) ), false ) )
                     mAny >>= rFontDesc.Pitch;
             }
         }
@@ -1958,11 +2055,11 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
             if ( mnAsianOrComplexFont == nCount )
             {
                 FontCollectionEntry& rFontDesc = rFontCollection.GetLast();
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontCharSetComplex" ) ), sal_False ) )
+                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontCharSetComplex" ) ), false ) )
                     mAny >>= rFontDesc.CharSet;
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontFamilyComplex" ) ), sal_False ) )
+                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontFamilyComplex" ) ), false ) )
                     mAny >>= rFontDesc.Family;
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontPitchComplex" ) ), sal_False ) )
+                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontPitchComplex" ) ), false ) )
                     mAny >>= rFontDesc.Pitch;
             }
         }
@@ -1998,7 +2095,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
     }
 
     mnCharHeight = 24;
-    if ( GetPropertyValue( mAny, mXPropSet, aCharHeightName, sal_False ) )
+    if ( GetPropertyValue( mAny, mXPropSet, aCharHeightName, false ) )
     {
         float fVal(0.0);
         if ( mAny >>= fVal )
@@ -2007,7 +2104,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
             meCharHeight = GetPropertyState( mXPropSet, aCharHeightName );
         }
     }
-    if ( GetPropertyValue( mAny, mXPropSet, aCharWeightName, sal_False ) )
+    if ( GetPropertyValue( mAny, mXPropSet, aCharWeightName, false ) )
     {
         float fFloat(0.0);
         if ( mAny >>= fFloat )
@@ -2018,13 +2115,13 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
                 mnCharAttrHard |= 1;
         }
     }
-    if ( GetPropertyValue( mAny, mXPropSet, aCharLocaleName, sal_False ) )
+    if ( GetPropertyValue( mAny, mXPropSet, aCharLocaleName, false ) )
     {
         com::sun::star::lang::Locale eLocale;
         if ( mAny >>= eLocale )
             meCharLocale = eLocale;
     }
-    if ( GetPropertyValue( mAny, mXPropSet, aCharPostureName, sal_False ) )
+    if ( GetPropertyValue( mAny, mXPropSet, aCharPostureName, false ) )
     {
         ::com::sun::star::awt::FontSlant aFS;
         if ( mAny >>= aFS )
@@ -2060,7 +2157,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
 
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharShadowed" ) ), bGetPropStateValue ) )
     {
-        sal_Bool bBool(sal_False);
+        bool bBool(sal_False);
         mAny >>= bBool;
         if ( bBool )
             mnCharAttr |= 0x10;
@@ -2159,12 +2256,12 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
     sal_uInt32 nRetValue = 0;
     sal_Int32 nFormat;
     ::com::sun::star::uno::Any aAny;
-    if ( GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TextPortionType" ) ), sal_True ) )
+    if ( GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TextPortionType" ) ), true ) )
     {
         String  aTextFieldType( *(::rtl::OUString*)aAny.getValue() );
         if ( aTextFieldType == String( RTL_CONSTASCII_USTRINGPARAM( "TextField" ) ) )
         {
-            if ( GetPropertyValue( aAny, rXPropSet, aTextFieldType, sal_True ) )
+            if ( GetPropertyValue( aAny, rXPropSet, aTextFieldType, true ) )
             {
                 ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextField > aXTextField;
                 if ( aAny >>= aXTextField )
@@ -2175,16 +2272,16 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
                             xFieldPropSet( aXTextField, ::com::sun::star::uno::UNO_QUERY );
                         if ( xFieldPropSet.is() )
                         {
-                            String aFieldKind( aXTextField->getPresentation( sal_True ) );
+                            String aFieldKind( aXTextField->getPresentation( true ) );
                             if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "Date" ) ) )
                             {
-                                if ( GetPropertyValue( aAny, xFieldPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsFix" ) ) ), sal_True )
+                                if ( GetPropertyValue( aAny, xFieldPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsFix" ) ) ), true )
                                 {
                                     sal_Bool bBool;
                                     aAny >>= bBool;
                                     if ( !bBool )  // Fixed DateFields gibt es in PPT nicht
                                     {
-                                        if ( GetPropertyValue( aAny, xFieldPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Format" ) ) ), sal_True )
+                                        if ( GetPropertyValue( aAny, xFieldPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Format" ) ) ), true )
                                         {
                                             nFormat = *(sal_Int32*)aAny.getValue();
                                             switch ( nFormat )
@@ -2206,7 +2303,7 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
                             }
                             else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "URL" ) ) )
                             {
-                                if ( GetPropertyValue( aAny, xFieldPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "URL" ) ) ), sal_True )
+                                if ( GetPropertyValue( aAny, xFieldPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "URL" ) ) ), true )
                                     rURL = String( *(::rtl::OUString*)aAny.getValue() );
                                 nRetValue = 4 << 28;
                             }
@@ -2220,13 +2317,13 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
                             }
                             else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "Time" ) ) )
                             {
-                                if ( GetPropertyValue( aAny, xFieldPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsFix" ) ) ), sal_True )
+                                if ( GetPropertyValue( aAny, xFieldPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsFix" ) ) ), true )
                                 {
                                     sal_Bool bBool;
                                     aAny >>= bBool;
                                     if ( !bBool )
                                     {
-                                        if ( GetPropertyValue( aAny, xFieldPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsFix" ) ) ), sal_True )
+                                        if ( GetPropertyValue( aAny, xFieldPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsFix" ) ) ), true )
                                         {
                                             nFormat = *(sal_Int32*)aAny.getValue();
                                             nRetValue |= ( ( ( 2 << 4 ) | nFormat ) << 24 ) | 0x800000;
@@ -2244,13 +2341,13 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
                             }
                             else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "ExtTime" ) ) )
                             {
-                                if ( GetPropertyValue( aAny, xFieldPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsFix" ) ) ), sal_True )
+                                if ( GetPropertyValue( aAny, xFieldPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsFix" ) ) ), true )
                                 {
                                     sal_Bool bBool;
                                     aAny >>= bBool;
                                     if ( !bBool )
                                     {
-                                        if ( GetPropertyValue( aAny, xFieldPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Format" ) ) ), sal_True )
+                                        if ( GetPropertyValue( aAny, xFieldPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Format" ) ) ), true )
                                         {
                                             nFormat = *(sal_Int32*)aAny.getValue();
                                             switch ( nFormat )
@@ -2311,30 +2408,24 @@ PortionObj& PortionObj::operator=( const PortionObj& rPortionObj )
 
 //  -----------------------------------------------------------------------
 
-ParagraphObj::ParagraphObj( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
-                PPTExBulletProvider& rProv ) :
-    maMapModeSrc        ( MAP_100TH_MM ),
-    maMapModeDest       ( MAP_INCH, Point(), Fraction( 1, 576 ), Fraction( 1, 576 ) )
+ParagraphObj::ParagraphObj( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet, PPTExBulletProvider& rProv )
 {
     mXPropSet = rXPropSet;
 
-    bExtendedParameters = sal_False;
+    bExtendedParameters = false;
 
     nDepth = 0;
     nBulletFlags = 0;
     nParaFlags = 0;
 
-    ImplGetParagraphValues( rProv, sal_False );
+    ImplGetParagraphValues( rProv, false );
 }
 
-    ParagraphObj::ParagraphObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > & rXTextContent,
-                    ParaFlags aParaFlags, FontCollection& rFontCollection, PPTExBulletProvider& rProv ) :
-    maMapModeSrc        ( MAP_100TH_MM ),
-    maMapModeDest       ( MAP_INCH, Point(), Fraction( 1, 576 ), Fraction( 1, 576 ) ),
-    mbFirstParagraph    ( aParaFlags.bFirstParagraph ),
+ParagraphObj::ParagraphObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > & rXTextContent, ParaFlags aParaFlags, FontCollection& rFontCollection, PPTExBulletProvider& rProv )
+:   mbFirstParagraph    ( aParaFlags.bFirstParagraph ),
     mbLastParagraph     ( aParaFlags.bLastParagraph )
 {
-    bExtendedParameters = sal_False;
+    bExtendedParameters = false;
 
     nDepth = 0;
     nBulletFlags = 0;
@@ -2373,7 +2464,7 @@ ParagraphObj::ParagraphObj( const ::com::sun::star::uno::Reference< ::com::sun::
                 }
             }
         }
-        ImplGetParagraphValues( rProv, sal_True );//
+        ImplGetParagraphValues( rProv, true );//
     }
 }
 
@@ -2456,7 +2547,7 @@ static void lcl_SubstituteBullet(String& rNumStr, rtl_TextEncoding& rChrSet, Str
      }
 }
 
-void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int16 nNumberingDepth, sal_Bool bIsBullet, sal_Bool bGetPropStateValue )
+void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int16 nNumberingDepth, bool bIsBullet, bool bGetPropStateValue )
 {
     ::com::sun::star::uno::Any aAny;
     if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "ParaLeftMargin" ) ) ) )
@@ -2488,7 +2579,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
             sal_Int32 nPropertyCount = aPropertySequence.getLength();
             if ( nPropertyCount )
             {
-                bExtendedParameters = sal_True;
+                bExtendedParameters = true;
                 nBulletRealSize = 100;
                 nMappedNumType = 0;
 
@@ -2583,7 +2674,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                                 {
                                     nBulletId = rBuProv.GetId( aUniqueId, aBuGraSize );
                                     if ( nBulletId != 0xffff )
-                                        bExtendedBulletsUsed = sal_True;
+                                        bExtendedBulletsUsed = true;
                                 }
                             }
                         }
@@ -2680,7 +2771,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                     {
                         if ( nNumberingType != SVX_NUM_CHAR_SPECIAL )
                         {
-                            bExtendedBulletsUsed = sal_True;
+                            bExtendedBulletsUsed = true;
                             if ( nNumberingDepth & 1 )
                                 cBulletId = 0x2013;         // defaulting bullet characters for ppt97
                             else if ( nNumberingDepth == 4 )
@@ -2820,12 +2911,12 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
         nBulletOfs = 0;
 }
 
-void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Bool bGetPropStateValue )
+void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider& rBuProv, bool bGetPropStateValue )
 {
     static String sNumberingLevel   ( RTL_CONSTASCII_USTRINGPARAM( "NumberingLevel" ) );
 
     ::com::sun::star::uno::Any aAny;
-    if ( GetPropertyValue( aAny, mXPropSet, sNumberingLevel, sal_True ) )
+    if ( GetPropertyValue( aAny, mXPropSet, sNumberingLevel, true ) )
     {
         if ( bGetPropStateValue )
             meBullet = GetPropertyState( mXPropSet, sNumberingLevel );
@@ -2833,20 +2924,20 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Boo
 
         if ( nDepth < 0 )
         {
-            mbIsBullet = sal_False;
+            mbIsBullet = false;
             nDepth = 0;
         }
         else
         {
             if ( nDepth > 4 )
                 nDepth = 4;
-            mbIsBullet = sal_True;
+            mbIsBullet = true;
         }
     }
     else
     {
         nDepth = 0;
-        mbIsBullet = sal_False;
+        mbIsBullet = false;
     }
     ImplGetNumberingLevel( rBuProv, nDepth, mbIsBullet, bGetPropStateValue );
 
@@ -2997,8 +3088,8 @@ ImplTextObj::ImplTextObj( int nInstance )
     mnTextSize = 0;
     mnInstance = nInstance;
     mpList = new List;
-    mbHasExtendedBullets = sal_False;
-    mbFixedCellHeightUsed = sal_False;
+    mbHasExtendedBullets = false;
+    mbFixedCellHeightUsed = false;
 }
 
 ImplTextObj::~ImplTextObj()
@@ -3030,11 +3121,11 @@ TextObj::TextObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XSim
                 if ( aAny >>= aXParagraph )
                 {
                     if ( !aXTextParagraphE->hasMoreElements() )
-                        aParaFlags.bLastParagraph = sal_True;
+                        aParaFlags.bLastParagraph = true;
                     ParagraphObj* pPara = new ParagraphObj( aXParagraph, aParaFlags, rFontCollection, rProv );
                     mpImplTextObj->mbHasExtendedBullets |= pPara->bExtendedBulletsUsed;
                     mpImplTextObj->mpList->Insert( pPara, LIST_APPEND );
-                    aParaFlags.bFirstParagraph = sal_False;
+                    aParaFlags.bFirstParagraph = false;
                 }
             }
         }
@@ -3339,8 +3430,8 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
             }
             nParaFlags >>= 16;
 
-            sal_uInt32  nDefaultTabSize = ImplMapSize( ::com::sun::star::awt::Size( 2011, 1 ) ).Width;
-            sal_uInt32  nDefaultTabs = abs( maRect.GetWidth() ) / nDefaultTabSize;
+            sal_uInt32  nDefaultTabSize = mfMap100thMmToMs * 2011.0;
+            sal_uInt32  nDefaultTabs = basegfx::fround(fabs(maObjectRange.getWidth())) / nDefaultTabSize;
             if ( nTabs )
                 nDefaultTabs -= (sal_Int32)( ( ( pTabStop[ nTabs - 1 ].Position / 4.40972 ) + nTextOfs ) / nDefaultTabSize );
             if ( (sal_Int32)nDefaultTabs < 0 )
@@ -3992,7 +4083,7 @@ void PPTWriter::ImplWriteObjectEffect( SvStream& rSt,
 
 //  -----------------------------------------------------------------------
 
-void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentation::ClickAction eCa, sal_Bool bMediaClickAction )
+void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentation::ClickAction eCa, bool bMediaClickAction )
 {
     sal_uInt32 nSoundRef = 0;   // a reference to a sound in the sound collection, or NULL.
     sal_uInt32 nHyperLinkID = 0;// a persistent unique identifier to an external hyperlink object (only valid when action == HyperlinkAction).
@@ -4149,27 +4240,43 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentat
 
 //  -----------------------------------------------------------------------
 
-sal_Bool PPTWriter::ImplGetEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rPropSet,
+bool PPTWriter::ImplGetEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rPropSet,
                                 ::com::sun::star::presentation::AnimationEffect& eEffect,
                                 ::com::sun::star::presentation::AnimationEffect& eTextEffect,
-                                sal_Bool& bIsSound )
+                                bool& bIsSound )
 {
     ::com::sun::star::uno::Any aAny;
+
     if ( GetPropertyValue( aAny, rPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Effect" ) ) ) )
+    {
         aAny >>= eEffect;
+    }
     else
+    {
         eEffect = ::com::sun::star::presentation::AnimationEffect_NONE;
+    }
 
     if ( GetPropertyValue( aAny, rPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TextEffect" ) ) ) )
+    {
         aAny >>= eTextEffect;
+    }
     else
+    {
         eTextEffect = ::com::sun::star::presentation::AnimationEffect_NONE;
-    if ( GetPropertyValue( aAny, rPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "SoundOn" ) ) ) )
-        aAny >>= bIsSound;
-    else
-        bIsSound = sal_False;
+    }
 
-    sal_Bool bHasEffect = ( ( eEffect != ::com::sun::star::presentation::AnimationEffect_NONE )
+    if ( GetPropertyValue( aAny, rPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "SoundOn" ) ) ) )
+    {
+        sal_Bool bBool(sal_False);
+        aAny >>= bBool;
+        bIsSound = bBool;
+    }
+    else
+    {
+        bIsSound = false;
+    }
+
+    bool bHasEffect = ( ( eEffect != ::com::sun::star::presentation::AnimationEffect_NONE )
                         || ( eTextEffect != ::com::sun::star::presentation::AnimationEffect_NONE )
                         || bIsSound );
     return bHasEffect;
@@ -4177,10 +4284,10 @@ sal_Bool PPTWriter::ImplGetEffect( const ::com::sun::star::uno::Reference< ::com
 
 //  -----------------------------------------------------------------------
 
-sal_Bool PPTWriter::ImplCreatePresentationPlaceholder( const sal_Bool bMasterPage, const PageType /* ePageType */,
+bool PPTWriter::ImplCreatePresentationPlaceholder( const bool bMasterPage, const PageType /* ePageType */,
                                                         const sal_uInt32 nStyleInstance, const sal_uInt8 nPlaceHolderId )
 {
-    sal_Bool bRet = ImplGetText();
+    bool bRet = ImplGetText();
     if ( bRet && bMasterPage )
     {
         mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
@@ -4193,7 +4300,7 @@ sal_Bool PPTWriter::ImplCreatePresentationPlaceholder( const sal_Bool bMasterPag
         aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x110001 );
         aPropOpt.AddOpt( ESCHER_Prop_lineColor, 0x8000001 );
         aPropOpt.AddOpt( ESCHER_Prop_shadowColor, 0x8000002 );
-        aPropOpt.CreateFillProperties( mXPropSet, sal_True, mXShape );
+        aPropOpt.CreateFillProperties( mXPropSet, true, mXShape );
         sal_uInt32 nLineFlags = 0x90001;
         if ( aPropOpt.GetOpt( ESCHER_Prop_fNoLineDrawDash, nLineFlags ) )
             nLineFlags |= 0x10001;  // draw dashed line if no line
@@ -4203,11 +4310,14 @@ sal_Bool PPTWriter::ImplCreatePresentationPlaceholder( const sal_Bool bMasterPag
         SvMemoryStream  aClientTextBox( 0x200, 0x200 );
         ImplWriteTextStyleAtom( aClientTextBox, nStyleInstance, 0, NULL, aExtBu, &aPropOpt );
 
-        aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, sal_False, sal_True );
+        aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, false, true );
         aPropOpt.CreateShapeProperties( mXShape );
         aPropOpt.Commit( *mpStrm );
         mpPptEscherEx->AddAtom( 8, ESCHER_ClientAnchor );
-        *mpStrm << (sal_Int16)maRect.Top() << (sal_Int16)maRect.Left() << (sal_Int16)maRect.Right() << (sal_Int16)maRect.Bottom();      // oben, links, rechts, unten ????
+        *mpStrm << (sal_Int16)basegfx::fround(maObjectRange.getMinY()) // CAUTION! Here, X,Y is exchanged
+                << (sal_Int16)basegfx::fround(maObjectRange.getMinX()) // by PURPOSE, it's not an error (!)
+                << (sal_Int16)basegfx::fround(maObjectRange.getMaxX()) // TTTT: Check for mirrored if Min/Max needs to be exchanged
+                << (sal_Int16)basegfx::fround(maObjectRange.getMaxY());
         mpPptEscherEx->OpenContainer( ESCHER_ClientData );
         mpPptEscherEx->AddAtom( 8, EPP_OEPlaceholderAtom );
         *mpStrm << (sal_uInt32)0                // PlacementID
@@ -4233,7 +4343,7 @@ sal_Bool PPTWriter::ImplCreatePresentationPlaceholder( const sal_Bool bMasterPag
         mpPptEscherEx->CloseContainer();    // ESCHER_SpContainer
     }
     else
-        bRet = sal_False;
+        bRet = false;
     return bRet;
 }
 
@@ -4242,22 +4352,22 @@ sal_Bool PPTWriter::ImplCreatePresentationPlaceholder( const sal_Bool bMasterPag
 void PPTWriter::ImplCreateShape( sal_uInt32 nType, sal_uInt32 nFlags, EscherSolverContainer& rSolver )
 {
     sal_uInt32 nId = mpPptEscherEx->GenerateShapeId();
-    mpPptEscherEx->AddShape( nType, nFlags, nId );
+    mpPptEscherEx->AddShape( nType, nFlags | mnMirrorFlags, nId );
     rSolver.AddShape( mXShape, nId );
 }
 
-void PPTWriter::ImplCreateTextShape( EscherPropertyContainer& rPropOpt, EscherSolverContainer& rSolver, sal_Bool bFill )
+void PPTWriter::ImplCreateTextShape( EscherPropertyContainer& rPropOpt, EscherSolverContainer& rSolver, bool bFill )
 {
     mnTextStyle = EPP_TEXTSTYLE_TEXT;
     mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
     ImplCreateShape( ESCHER_ShpInst_TextBox, 0xa00, rSolver );
     if ( bFill )
-        rPropOpt.CreateFillProperties( mXPropSet, sal_True, mXShape );
+        rPropOpt.CreateFillProperties( mXPropSet, true, mXShape );
     if ( ImplGetText() )
-        rPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, sal_False, sal_True );
+        rPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, false, true );
 }
 
-void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& aSolverContainer, PageType ePageType, sal_Bool bMasterPage, int nPageNumber )
+void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& aSolverContainer, PageType ePageType, bool bMasterPage, int nPageNumber )
 {
     // #119551# PPT does not support groups of polygons and text (MS patch KB2289187)
     // sal_uInt32  nGroupLevel = 0;
@@ -4270,18 +4380,16 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
 
     nIndices = nInstance = nLastPer = nShapeCount = nEffectCount = 0;
 
-    sal_Bool bIsTitlePossible = sal_True;           // bei mehr als einem title geht powerpoint in die knie
-
+    bool bIsTitlePossible = true;           // bei mehr als einem title geht powerpoint in die knie
     sal_uInt32  nOutlinerCount = 0;             // die gliederungsobjekte muessen dem layout entsprechen,
     sal_uInt32  nPrevTextStyle = 0;                // es darf nicht mehr als zwei geben
 
     nOlePictureId = 0;
 
-    sal_Bool bAdditionalText = sal_False;
-
-    sal_Bool bSecOutl = sal_False;
+    bool bAdditionalText = false;
+    double fTextRotation(0.0);
+    bool bSecOutl(false);
     sal_uInt32 nPObjects = 0;
-
     SvMemoryStream* pClientTextBox = NULL;
     SvMemoryStream* pClientData = NULL;
 
@@ -4305,34 +4413,35 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
         nGroups = GetGroupsClosed();
         for ( sal_uInt32 i = 0; i < nGroups; i++, mpPptEscherEx->LeaveGroup() ) ;
 
-        if ( ImplGetShapeByIndex( GetCurrentGroupIndex(), sal_True ) )
+        if ( ImplGetShapeByIndex( GetCurrentGroupIndex(), true ) )
         {
-            sal_Bool bIsSound;
-            sal_Bool bMediaClickAction = sal_False;
+            bool bIsSound(false);
+            bool bMediaClickAction(false);
             ::com::sun::star::presentation::AnimationEffect eAe;
             ::com::sun::star::presentation::AnimationEffect eTe;
 
             if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "PresentationOrder" ) ) ) )
                 nEffectCount = *(sal_uInt16*)mAny.getValue();
 
-            sal_Bool bEffect = ImplGetEffect( mXPropSet, eAe, eTe, bIsSound );
+            bool bEffect = ImplGetEffect( mXPropSet, eAe, eTe, bIsSound );
             ::com::sun::star::presentation::ClickAction eCa = ::com::sun::star::presentation::ClickAction_NONE;
             if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "OnClick" ) ) ) )
                 mAny >>= eCa;
 
-            sal_Bool bGroup = mType == "drawing.Group";
-            sal_Bool bOpenBezier   = mType == "drawing.OpenBezier";
-            sal_Bool bClosedBezier = mType == "drawing.ClosedBezier";
-            sal_Bool bPolyPolygon  = mType == "drawing.PolyPolygon";
-            sal_Bool bPolyLine = mType == "drawing.PolyLine";
+            bool bGroup = mType == "drawing.Group";
+            bool bOpenBezier   = mType == "drawing.OpenBezier";
+            bool bClosedBezier = mType == "drawing.ClosedBezier";
+            bool bPolyPolygon  = mType == "drawing.PolyPolygon";
+            bool bPolyLine = mType == "drawing.PolyLine";
 
             List        aAdjustmentList;
             Rectangle   aPolyBoundRect;
 
-            const ::com::sun::star::awt::Size   aSize100thmm( mXShape->getSize() );
-            const ::com::sun::star::awt::Point  aPoint100thmm( mXShape->getPosition() );
-            Rectangle   aRect100thmm( Point( aPoint100thmm.X, aPoint100thmm.Y ), Size( aSize100thmm.Width, aSize100thmm.Height ) );
-            EscherPropertyContainer aPropOpt( mpPptEscherEx->GetGraphicProvider(), mpPicStrm, aRect100thmm );
+            basegfx::B2DRange aObjectRange100thmm(maObjectRange);
+
+            aObjectRange100thmm.transform(maInvMap100thMmToMs);
+
+            EscherPropertyContainer aPropOpt(mpPptEscherEx->GetGraphicProvider(), mpPicStrm, aObjectRange100thmm);
 
             if ( bGroup )
             {
@@ -4352,20 +4461,20 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                             pTmp = new SvMemoryStream( 0x200, 0x200 );
                         ImplWriteClickAction( *pTmp, eCa, bMediaClickAction );
                     }
-                    sal_uInt32 nShapeId = mpPptEscherEx->EnterGroup( &maRect, pTmp );
+                    sal_uInt32 nShapeId = mpPptEscherEx->EnterGroup( &maObjectRange, pTmp );
                     aSolverContainer.AddShape( mXShape, nShapeId );
                     delete pTmp;
                 }
             }
             else
             {
-                sal_Bool bIsFontwork = sal_False;
-                sal_Bool bIsHatching = sal_False;
+                bool bIsFontwork(false);
+                bool bIsHatching(false);
                 ::com::sun::star::uno::Any aAny;
                 ::com::sun::star::drawing::FillStyle eFS;
-                if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsFontwork" ) ), sal_True ) )
+                if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsFontwork" ) ), true ) )
                     aAny >>= bIsFontwork;
-                if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillStyle" ) ), sal_True ) )
+                if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillStyle" ) ), true ) )
                 {
                     aAny >>= eFS;
                     bIsHatching = eFS == ::com::sun::star::drawing::FillStyle_HATCH;
@@ -4374,51 +4483,49 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 {
                     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "BoundRect" ) ) ) )
                     {
-                        ::com::sun::star::awt::Rectangle aRect( *(::com::sun::star::awt::Rectangle*)mAny.getValue() );
-                        maPosition = ImplMapPoint( ::com::sun::star::awt::Point( aRect.X, aRect.Y ) );
-                        maSize = ImplMapSize( ::com::sun::star::awt::Size( aRect.Width, aRect.Height ) );
-                        maRect = Rectangle( Point( maPosition.X, maPosition.Y ), Size( maSize.Width, maSize.Height ) );
+                        const ::com::sun::star::awt::Rectangle aAwtRect(*(::com::sun::star::awt::Rectangle*)mAny.getValue());
+
+                        maObjectRange = basegfx::B2DRange(aAwtRect.X, aAwtRect.Y, aAwtRect.X + aAwtRect.Width, aAwtRect.Y + aAwtRect.Height);
+                        maObjectRange.transform(maMap100thMmToMs);
                     }
                     mType = "drawing.dontknow";
                 }
             }
-            sal_uInt8 nPlaceHolderAtom = EPP_PLACEHOLDER_NONE;
 
+            sal_uInt8 nPlaceHolderAtom = EPP_PLACEHOLDER_NONE;
             mnTextSize = 0;
             mnTextStyle = EPP_TEXTSTYLE_NORMAL;
 
             if ( mType == "drawing.Custom" )
             {
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-                sal_uInt32 nMirrorFlags;
+                // TTTT: not needed here sal_uInt32 nMirrorFlags;
                 rtl::OUString sCustomShapeType;
-                MSO_SPT eShapeType = aPropOpt.GetCustomShapeType( mXShape, nMirrorFlags, sCustomShapeType );
+                MSO_SPT eShapeType = aPropOpt.GetCustomShapeType( mXShape, /*nMirrorFlags, */sCustomShapeType );
                 if ( sCustomShapeType.equalsAscii( "col-502ad400" ) || sCustomShapeType.equalsAscii( "col-60da8460" ) )
                 {   // sj: creating metafile for customshapes that can't be saved to ms format properly
                     ImplCreateShape( ESCHER_ShpInst_PictureFrame, 0xa00, aSolverContainer );
-                    if ( aPropOpt.CreateGraphicProperties( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ), sal_False ) )
+                    if ( aPropOpt.CreateGraphicProperties( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ), false ) )
                     {
                         aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                         SdrObject* pObj = GetSdrObjectFromXShape( mXShape );
                         if ( pObj )
                         {
-                            Rectangle aBound = pObj->GetCurrentBoundRect();
-                            maPosition = ImplMapPoint( ::com::sun::star::awt::Point( aBound.Left(), aBound.Top() ) );
-                            maSize = ImplMapSize( ::com::sun::star::awt::Size ( aBound.GetWidth(), aBound.GetHeight() ) );
-                            maRect = Rectangle( Point( maPosition.X, maPosition.Y ), Size( maSize.Width, maSize.Height ) );
-                            mnAngle = 0;
+                            maObjectRange = pObj->getObjectRange(0);
+                            maObjectRange.transform(maMap100thMmToMs);
+                            mfObjectRotation = 0.0;
                         }
                     }
                 }
                 else
                 {
-                    ImplCreateShape( eShapeType, nMirrorFlags | 0xa00, aSolverContainer );
+                    ImplCreateShape( eShapeType, /*nMirrorFlags | */0xa00, aSolverContainer ); // Flags: Connector | HasSpt
                     aPropOpt.CreateCustomShapeProperties( eShapeType, mXShape );
-                    aPropOpt.CreateFillProperties( mXPropSet, sal_True, mXShape);
+                    aPropOpt.CreateFillProperties( mXPropSet, true, mXShape);
                     if ( ImplGetText() )
                     {
                         if ( !aPropOpt.IsFontWork() )
-                            aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, sal_True, sal_True );
+                            aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, true, true );
                     }
                 }
             }
@@ -4429,131 +4536,96 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CornerRadius" ) ) ) )
                 {
                     mAny >>= nRadius;
-                    nRadius = ImplMapSize( ::com::sun::star::awt::Size( nRadius, 0 ) ).Width;
+                    nRadius = basegfx::fround(mfMap100thMmToMs * nRadius);
                 }
                 if ( nRadius )
                 {
                     ImplCreateShape( ESCHER_ShpInst_RoundRectangle, 0xa00, aSolverContainer ); // Flags: Connector | HasSpt
-                    sal_Int32 nLenght = maRect.GetWidth();
-                    if ( nLenght > maRect.GetHeight() )
-                        nLenght = maRect.GetHeight();
-                    nLenght >>= 1;
-                    if ( nRadius >= nLenght )
+                    double fLength(fabs(std::min(maObjectRange.getWidth(), maObjectRange.getHeight()) * 0.5));
+
+                    if ( nRadius >= fLength )
+                    {
                         nRadius = 0x2a30;                           // 0x2a30 ist PPTs maximum radius
+                    }
                     else
-                        nRadius = ( 0x2a30 * nRadius ) / nLenght;
+                    {
+                        nRadius = ( 0x2a30 * nRadius ) / basegfx::fround(fLength);
+                    }
+
                     aPropOpt.AddOpt( ESCHER_Prop_adjustValue, nRadius );
                 }
                 else
                 {
                     ImplCreateShape( ESCHER_ShpInst_Rectangle, 0xa00, aSolverContainer );          // Flags: Connector | HasSpt
                 }
-                aPropOpt.CreateFillProperties( mXPropSet, sal_True, mXShape );
+                aPropOpt.CreateFillProperties( mXPropSet, true, mXShape );
                 if ( ImplGetText() )
-                    aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, sal_False, sal_False );
+                    aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, false, false );
             }
             else if ( mType == "drawing.Ellipse" )
             {
-                ::com::sun::star::drawing::CircleKind  eCircleKind( ::com::sun::star::drawing::CircleKind_FULL );
-                PolyStyle ePolyKind = POLY_CHORD;
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CircleKind" ) ) ) )
-                {
-                    mAny >>= eCircleKind;
-                    switch ( eCircleKind )
-                    {
-                        case ::com::sun::star::drawing::CircleKind_SECTION :
-                        {
-                            ePolyKind = POLY_PIE;
-                        }
-                        break;
-                        case ::com::sun::star::drawing::CircleKind_ARC :
-                        {
-                            ePolyKind = POLY_ARC;
-                        }
-                        break;
+                // changed to directly use the SdrObject, using the handmade creatin of the polygon data
+                // seemed too dangerous for the moment. Can be changed back to own geometry creation, of
+                // course (e.g. by getting primitives using UNO API and filtering for hairlines)
+                SdrCircObj* pCircObj = dynamic_cast< SdrCircObj* >(GetSdrObjectFromXShape(mXShape));
 
-                        case ::com::sun::star::drawing::CircleKind_CUT :
-                        {
-                            ePolyKind = POLY_CHORD;
-                        }
-                        break;
+                if(!pCircObj)
+                    continue;
 
-                        default:
-                            eCircleKind = ::com::sun::star::drawing::CircleKind_FULL;
-                    }
-                }
-                if ( eCircleKind == ::com::sun::star::drawing::CircleKind_FULL )
+                if(CircleType_Circle == pCircObj->GetSdrCircleObjType())
                 {
                     mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                     ImplCreateShape( ESCHER_ShpInst_Ellipse, 0xa00, aSolverContainer );            // Flags: Connector | HasSpt
-                    aPropOpt.CreateFillProperties( mXPropSet, sal_True, mXShape );
+                    aPropOpt.CreateFillProperties( mXPropSet, true, mXShape );
                     if ( ImplGetText() )
-                        aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, sal_False, sal_False );
+                        aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, false, false );
                 }
                 else
                 {
-                    sal_Int32 nStartAngle, nEndAngle;
-                    if ( !ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CircleStartAngle" ) ) ) )
+                    const basegfx::B2DPolyPolygon aOutline(pCircObj->TakeXorPoly());
+
+                    if(!aOutline.count())
                         continue;
-                    nStartAngle = *( (sal_Int32*)mAny.getValue() );
-                    if( !ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CircleEndAngle" ) ) ) )
-                        continue;
-                    nEndAngle = *( (sal_Int32*)mAny.getValue() );
-                    ::com::sun::star::awt::Point aPoint( mXShape->getPosition() );
-                    ::com::sun::star::awt::Size  aSize( mXShape->getSize() );
-                    ::com::sun::star::awt::Point aStart, aEnd, aCenter;
-                    Rectangle aRect( Point( aPoint.X, aPoint.Y ), Size( aSize.Width, aSize.Height ) );
-                    aStart.X = (sal_Int32)( ( cos( (double)( nStartAngle * F_PI18000 ) ) * 100.0 ) );
-                    aStart.Y = - (sal_Int32)( ( sin( (double)( nStartAngle * F_PI18000 ) ) * 100.0 ) );
-                    aEnd.X = (sal_Int32)( ( cos( (double)( nEndAngle * F_PI18000 ) ) * 100.0 ) );
-                    aEnd.Y = - (sal_Int32)( ( sin( (double)( nEndAngle * F_PI18000 ) ) * 100.0 ) );
-                    aCenter.X = aPoint.X + ( aSize.Width / 2 );
-                    aCenter.Y = aPoint.Y + ( aSize.Height / 2 );
-                    aStart.X += aCenter.X;
-                    aStart.Y += aCenter.Y;
-                    aEnd.X += aCenter.X;
-                    aEnd.Y += aCenter.Y;
-                    Polygon aPolygon( aRect, Point( aStart.X, aStart.Y ), Point( aEnd.X, aEnd.Y ), ePolyKind );
-                    sal_Bool bNeedText = sal_True;
-                    if ( mnAngle )
+
+                    Polygon aPolygon(aOutline.getB2DPolygon(0));
+                    bool bNeedText(true);
+
+                    if ( mfObjectRotation )
                     {
-                        aPolygon.Rotate( aRect.TopLeft(), (sal_uInt16)( mnAngle / 10 ) );
+                        // already applied to the polygon, nothing to do there
                         if ( ImplGetText() )
                         {
                             // #119551# PPT does not support groups of polygons and text (MS patch KB2289187)
                             // mpPptEscherEx->EnterGroup( 0,0 );
                             // nGroupLevel = mpPptEscherEx->GetGroupLevel();
-                            bNeedText = sal_False;
-                            bAdditionalText = sal_True;
+                            bNeedText = false;
+                            bAdditionalText = true;
+                            fTextRotation = mfObjectRotation;
                             mnTextSize = 0;
                         }
-                        mnAngle = 0;
+                        mfObjectRotation = 0.0;
                     }
+
                     mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                     ImplCreateShape( ESCHER_ShpInst_NotPrimitive, 0xa00, aSolverContainer );       // Flags: Connector | HasSpt
                     ::com::sun::star::awt::Rectangle aNewRect;
-                    switch ( ePolyKind )
-                    {
-                        case POLY_PIE :
-                        case POLY_CHORD :
-                        {
-                            if ( aPropOpt.CreatePolygonProperties( mXPropSet, ESCHER_CREATEPOLYGON_POLYPOLYGON, sal_False, aNewRect, &aPolygon ) )
-                                aPropOpt.CreateFillProperties( mXPropSet, sal_True , mXShape );
-                        }
-                        break;
 
-                        case POLY_ARC :
-                        {
-                            if ( aPropOpt.CreatePolygonProperties( mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, sal_False, aNewRect, &aPolygon ) )
-                                aPropOpt.CreateLineProperties( mXPropSet, sal_False );
-                        }
-                        break;
+                    if(aOutline.isClosed())
+                    {
+                        if ( aPropOpt.CreatePolygonProperties( mXPropSet, ESCHER_CREATEPOLYGON_POLYPOLYGON, false, aNewRect, &aPolygon ) )
+                            aPropOpt.CreateFillProperties( mXPropSet, true, mXShape );
                     }
-                    maRect = ImplMapRectangle( aNewRect );
-                    maPosition = ::com::sun::star::awt::Point( maRect.Left(), maRect.Top() );
-                    maSize = ::com::sun::star::awt::Size( maRect.GetWidth(), maRect.GetHeight() );
+                    else
+                    {
+                        if ( aPropOpt.CreatePolygonProperties( mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, false, aNewRect, &aPolygon ) )
+                            aPropOpt.CreateLineProperties( mXPropSet, false );
+                    }
+
+                    maObjectRange = basegfx::B2DRange(aNewRect.X, aNewRect.Y, aNewRect.X + aNewRect.Width, aNewRect.Y + aNewRect.Height);
+                    maObjectRange.transform(maMap100thMmToMs);
+
                     if ( bNeedText && ImplGetText() )
-                        aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, sal_False, sal_False );
+                        aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, false, false );
                 }
             }
             else if ( mType == "drawing.Control" )
@@ -4610,7 +4682,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
 
                 ::com::sun::star::awt::Size     aSize;
                 String          aControlName;
-                SvStorageRef    xTemp( new SvStorage( new SvMemoryStream(), sal_True ) );
+                SvStorageRef    xTemp( new SvStorage( new SvMemoryStream(), true ) );
                 if ( SvxMSConvertOCXControls::WriteOCXStream( xTemp, aXControlModel, aSize, aControlName ) )
                 {
                     String  aUserName( xTemp->GetUserName() );
@@ -4665,7 +4737,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 sal_uInt32 nSpFlags = SHAPEFLAG_HAVESPT | SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_OLESHAPE;
                 ImplCreateShape( ESCHER_ShpInst_HostControl, nSpFlags, aSolverContainer );
-                if ( aPropOpt.CreateGraphicProperties( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ), sal_False  ) )
+                if ( aPropOpt.CreateGraphicProperties( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ), false  ) )
                     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                 //export form control graphic
                 else if ( aPropOpt.CreateBlipPropertiesforOLEControl(mXPropSet,mXShape))
@@ -4687,25 +4759,24 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     }
                     *pTmp++ = 0;
                     *pTmp = 0;
-                    aPropOpt.AddOpt( ESCHER_Prop_wzName, sal_True, nBufSize, pBuf, nBufSize );
+                    aPropOpt.AddOpt( ESCHER_Prop_wzName, true, nBufSize, pBuf, nBufSize );
                 }
             }
             else if ( mType == "drawing.Connector" )
             {
                 sal_uInt16 nSpType, nSpFlags;
                 ::com::sun::star::awt::Rectangle aNewRect;
-                if ( aPropOpt.CreateConnectorProperties( mXShape, aSolverContainer, aNewRect, nSpType, nSpFlags ) == sal_False )
+                if ( aPropOpt.CreateConnectorProperties( mXShape, aSolverContainer, aNewRect, nSpType, nSpFlags ) == false )
                     continue;
 
-                maRect = ImplMapRectangle( aNewRect );
-                maPosition = ::com::sun::star::awt::Point( maRect.Left(), maRect.Top() );
-                maSize = ::com::sun::star::awt::Size( maRect.GetWidth(), maRect.GetHeight() );
+                maObjectRange = basegfx::B2DRange(aNewRect.X, aNewRect.Y, aNewRect.X + aNewRect.Width, aNewRect.Y + aNewRect.Height);
+                maObjectRange.transform(maMap100thMmToMs);
 
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 ImplCreateShape( nSpType, nSpFlags, aSolverContainer );
 
                 // #119459# for connector shape, the start point and end point is fixed, and should not be rotated.
-                mnAngle = 0;
+                mfObjectRotation = 0.0;
             }
             else if ( mType == "drawing.Measure" )
             {
@@ -4714,109 +4785,142 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             else if ( mType == "drawing.Line" )
             {
                 ::com::sun::star::awt::Rectangle aNewRect;
-                aPropOpt.CreatePolygonProperties( mXPropSet, ESCHER_CREATEPOLYGON_LINE, sal_False, aNewRect, NULL );
-                maRect = ImplMapRectangle( aNewRect );
-                maPosition = ::com::sun::star::awt::Point( maRect.Left(), maRect.Top() );
-                maSize = ::com::sun::star::awt::Size( maRect.GetWidth(), maRect.GetHeight() );
+                aPropOpt.CreatePolygonProperties( mXPropSet, ESCHER_CREATEPOLYGON_LINE, false, aNewRect, NULL );
+
+                // remember hor/ver mirror; it is part of aNewRect since it gets created
+                // from the two single points of the line. It's needed for thr flags below.
+                // If the flags are not set the line gets also exported correctly, but start
+                // and end point may be exchanged.
+                const bool bMirrorX(aNewRect.Width < 0);
+                const bool bMirrorY(aNewRect.Height < 0);
+
+                // TTTT this implies that CreatePolygonProperties returns negative values in
+                // ::com::sun::star::awt::Rectangle's Width and Height. SOlve this and the
+                // mirror flags, too
+
+                maObjectRange = basegfx::B2DRange(
+                    aNewRect.X, aNewRect.Y,
+                    aNewRect.X + fabs((double)aNewRect.Width), aNewRect.Y + fabs((double)aNewRect.Height));
+                maObjectRange.transform(maMap100thMmToMs);
+
                 if ( ImplGetText() )
                 {
-                    aTextRefPoint = ::com::sun::star::awt::Point( maRect.Left(), maRect.Top() );
+                    aTextRefPoint = ::com::sun::star::awt::Point(basegfx::fround(maObjectRange.getMinX()), basegfx::fround(maObjectRange.getMinY()));
                     mnTextSize = 0;
-                    bAdditionalText = sal_True;
+                    bAdditionalText = true;
                     // #119551# PPT does not support groups of polygons and text (MS patch KB2289187)
-                    // mpPptEscherEx->EnterGroup( &maRect,0 );
+                    // mpPptEscherEx->EnterGroup( &maObjectRange, 0 );
                 }
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 sal_uInt32 nFlags = 0xa00;                                  // Flags: Connector | HasSpt
-                if ( maRect.Top() > maRect.Bottom() )
+
+                if(bMirrorX)
+                {
                     nFlags |= 0x80;                                         // Flags: VertMirror
-                if ( maRect.Left() > maRect.Right() )
+                }
+
+                if(bMirrorY)
+                {
                     nFlags |= 0x40;                                         // Flags: HorzMirror
+                }
 
                 ImplCreateShape( ESCHER_ShpInst_Line, nFlags, aSolverContainer );
                 aPropOpt.AddOpt( ESCHER_Prop_shapePath, ESCHER_ShapeComplex );
-                aPropOpt.CreateLineProperties( mXPropSet, sal_False );
-                mnAngle = 0;
+                aPropOpt.CreateLineProperties( mXPropSet, false );
+                mfObjectRotation = 0.0;
             }
             else if ( bPolyPolygon )
             {
                 if ( ImplGetText() )
                 {
                     // #119551# PPT does not support groups of polygons and text (MS patch KB2289187)
-                    // mpPptEscherEx->EnterGroup( 0,0 );
+                    // mpPptEscherEx->EnterGroup();
                     // nGroupLevel = mpPptEscherEx->GetGroupLevel();
-                    bAdditionalText = sal_True;
+                    bAdditionalText = true;
+                    fTextRotation = mfObjectRotation;
                     mnTextSize = 0;
                 }
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 ImplCreateShape( ESCHER_ShpInst_NotPrimitive, 0xa00, aSolverContainer );            // Flags: Connector | HasSpt
                 ::com::sun::star::awt::Rectangle aNewRect;
-                aPropOpt.CreatePolygonProperties( mXPropSet, ESCHER_CREATEPOLYGON_POLYPOLYGON, sal_False, aNewRect, NULL );
-                maRect = ImplMapRectangle( aNewRect );
-                maPosition = ::com::sun::star::awt::Point( maRect.Left(), maRect.Top() );
-                maSize = ::com::sun::star::awt::Size( maRect.GetWidth(), maRect.GetHeight() );
-                aPropOpt.CreateFillProperties( mXPropSet, sal_True , mXShape );
-                mnAngle = 0;
+                aPropOpt.CreatePolygonProperties( mXPropSet, ESCHER_CREATEPOLYGON_POLYPOLYGON, false, aNewRect, NULL );
+
+                maObjectRange = basegfx::B2DRange(aNewRect.X, aNewRect.Y, aNewRect.X + aNewRect.Width, aNewRect.Y + aNewRect.Height);
+                maObjectRange.transform(maMap100thMmToMs);
+
+                // TTTT: check if it was by purpose to apply transform only to scale, not to pos
+                // compare with original (!)
+                //maObjectPosition = basegfx::B2DPoint(aNewRect.X, aNewRect.Y);
+                //maObjectScale = maMap100thMmToMs * basegfx::B2DVector(aNewRect.Width, aNewRect.Height);
+
+                aPropOpt.CreateFillProperties( mXPropSet, true , mXShape );
+                mfObjectRotation = 0.0;
             }
             else if ( bPolyLine )
             {
                 if ( ImplGetText() )
                 {
                     // #119551# PPT does not support groups of polygons and text (MS patch KB2289187)
-                    // mpPptEscherEx->EnterGroup( 0,0 );
+                    // mpPptEscherEx->EnterGroup();
                     // nGroupLevel = mpPptEscherEx->GetGroupLevel();
-                    bAdditionalText = sal_True;
+                    bAdditionalText = true;
+                    fTextRotation = mfObjectRotation;
                     mnTextSize = 0;
                 }
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 ImplCreateShape( ESCHER_ShpInst_NotPrimitive, 0xa00, aSolverContainer );            // Flags: Connector | HasSpt
                 ::com::sun::star::awt::Rectangle aNewRect;
-                aPropOpt.CreatePolygonProperties( mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, sal_False, aNewRect, NULL );
-                maRect = ImplMapRectangle( aNewRect );
-                maPosition = ::com::sun::star::awt::Point( maRect.Left(), maRect.Top() );
-                maSize = ::com::sun::star::awt::Size( maRect.GetWidth(), maRect.GetHeight() );
-                aPropOpt.CreateLineProperties( mXPropSet, sal_False );
-                mnAngle = 0;
+                aPropOpt.CreatePolygonProperties( mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, false, aNewRect, NULL );
+
+                maObjectRange = basegfx::B2DRange(aNewRect.X, aNewRect.Y, aNewRect.X + aNewRect.Width, aNewRect.Y + aNewRect.Height);
+                maObjectRange.transform(maMap100thMmToMs);
+
+                aPropOpt.CreateLineProperties( mXPropSet, false );
+                mfObjectRotation = 0.0;
             }
             else if ( bOpenBezier )
             {
                 if ( ImplGetText() )
                 {
                     // #119551# PPT does not support groups of polygons and text (MS patch KB2289187)
-                    // mpPptEscherEx->EnterGroup( 0,0 );
+                    // mpPptEscherEx->EnterGroup();
                     // nGroupLevel = mpPptEscherEx->GetGroupLevel();
-                    bAdditionalText = sal_True;
+                    bAdditionalText = true;
+                    fTextRotation = mfObjectRotation;
                     mnTextSize = 0;
                 }
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 ImplCreateShape( ESCHER_ShpInst_NotPrimitive, 0xa00, aSolverContainer );            // Flags: Connector | HasSpt
                 ::com::sun::star::awt::Rectangle aNewRect;
-                aPropOpt.CreatePolygonProperties( mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, sal_True, aNewRect, NULL );
-                maRect = ImplMapRectangle( aNewRect );
-                maPosition = ::com::sun::star::awt::Point( maRect.Left(), maRect.Top() );
-                maSize = ::com::sun::star::awt::Size( maRect.GetWidth(), maRect.GetHeight() );
-                aPropOpt.CreateLineProperties( mXPropSet, sal_False );
-                mnAngle = 0;
+                aPropOpt.CreatePolygonProperties( mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, true, aNewRect, NULL );
+
+                maObjectRange = basegfx::B2DRange(aNewRect.X, aNewRect.Y, aNewRect.X + aNewRect.Width, aNewRect.Y + aNewRect.Height);
+                maObjectRange.transform(maMap100thMmToMs);
+
+                aPropOpt.CreateLineProperties( mXPropSet, false );
+                mfObjectRotation = 0.0;
             }
             else if ( bClosedBezier )
             {
                 if ( ImplGetText() )
                 {
                     // #119551# PPT does not support groups of polygons and text (MS patch KB2289187)
-                    // mpPptEscherEx->EnterGroup( 0,0 );
+                    // mpPptEscherEx->EnterGroup();
                     // nGroupLevel = mpPptEscherEx->GetGroupLevel();
-                    bAdditionalText = sal_True;
+                    bAdditionalText = true;
+                    fTextRotation = mfObjectRotation;
                     mnTextSize = 0;
                 }
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 ImplCreateShape( ESCHER_ShpInst_NotPrimitive, 0xa00, aSolverContainer );            // Flags: Connector | HasSpt
                 ::com::sun::star::awt::Rectangle aNewRect;
-                aPropOpt.CreatePolygonProperties( mXPropSet, ESCHER_CREATEPOLYGON_POLYPOLYGON, sal_True, aNewRect, NULL );
-                maRect = ImplMapRectangle( aNewRect );
-                maPosition = ::com::sun::star::awt::Point( maRect.Left(), maRect.Top() );
-                maSize = ::com::sun::star::awt::Size( maRect.GetWidth(), maRect.GetHeight() );
-                aPropOpt.CreateFillProperties( mXPropSet, sal_True , mXShape );
-                mnAngle = 0;
+                aPropOpt.CreatePolygonProperties( mXPropSet, ESCHER_CREATEPOLYGON_POLYPOLYGON, true, aNewRect, NULL );
+
+                maObjectRange = basegfx::B2DRange(aNewRect.X, aNewRect.Y, aNewRect.X + aNewRect.Width, aNewRect.Y + aNewRect.Height);
+                maObjectRange.transform(maMap100thMmToMs);
+
+                aPropOpt.CreateFillProperties( mXPropSet, true , mXShape );
+                mfObjectRotation = 0.0;
             }
             else if ( ( mType == "drawing.GraphicObject" ) || ( mType == "presentation.GraphicObject" ) )
             {
@@ -4847,7 +4951,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         have to create a simpe Rectangle with fill bitmap instead (while not allowing BitmapMode_Repeat).
                         */
                         ImplCreateShape( ESCHER_ShpInst_Rectangle, 0xa00, aSolverContainer );       // Flags: Connector | HasSpt
-                        if ( aPropOpt.CreateGraphicProperties( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ), sal_True, sal_True, sal_False ) )
+                        if ( aPropOpt.CreateGraphicProperties( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ), true, true, false ) )
                         {
                             aPropOpt.AddOpt( ESCHER_Prop_WrapText, ESCHER_WrapNone );
                             aPropOpt.AddOpt( ESCHER_Prop_AnchorText, ESCHER_AnchorMiddle );
@@ -4855,14 +4959,14 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                             aPropOpt.AddOpt( ESCHER_Prop_fillBackColor, 0x8000000 );
                             aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x80000 );
                             if ( ImplGetText() )
-                                aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, sal_False, sal_False );
+                                aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, false, false );
                         }
                     }
                     else
                     {
                         ImplCreateShape( ESCHER_ShpInst_PictureFrame, 0xa00, aSolverContainer );
 
-                        if ( aPropOpt.CreateGraphicProperties( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ), sal_False, sal_True ) )
+                        if ( aPropOpt.CreateGraphicProperties( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ), false, true ) )
                         {
                             aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                         }
@@ -4878,7 +4982,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     else
                         nPlaceHolderAtom = EPP_PLACEHOLDER_NOTESBODY;
                 }
-                ImplCreateTextShape( aPropOpt, aSolverContainer, sal_True );
+                ImplCreateTextShape( aPropOpt, aSolverContainer, true );
             }
             else if ( mType == "presentation.TitleText" )
             {
@@ -4889,12 +4993,12 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                         nPlaceHolderAtom = EPP_PLACEHOLDER_MASTERNOTESBODYIMAGE;
                         ImplCreateShape( ESCHER_ShpInst_Rectangle, 0x200, aSolverContainer );
-                        aPropOpt.CreateLineProperties( mXPropSet, sal_False );
+                        aPropOpt.CreateLineProperties( mXPropSet, false );
                         aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x10001 );
                     }
                     else if ( rLayout.bTitlePossible && bIsTitlePossible )
                     {
-                        bIsTitlePossible = sal_False;
+                        bIsTitlePossible = false;
 
                         ImplGetText();
                         TextObj aTextObj( mXText, EPP_TEXTTYPE_Title, maFontCollection, (PPTExBulletProvider&)*this );
@@ -4917,16 +5021,19 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 aPropertyOptions.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x110001 );
                                 aPropertyOptions.AddOpt( ESCHER_Prop_lineColor, 0x8000001 );
                                 aPropertyOptions.AddOpt( ESCHER_Prop_shadowColor, 0x8000002 );
-                                aPropertyOptions.CreateFillProperties( mXPropSet, sal_True, mXShape );
+                                aPropertyOptions.CreateFillProperties( mXPropSet, true, mXShape );
                                 sal_uInt32 nLineFlags = 0x90001;
                                 if ( aPropertyOptions.GetOpt( ESCHER_Prop_fNoLineDrawDash, nLineFlags ) )
                                     nLineFlags |= 0x10001;  // draw dashed line if no line
                                 aPropertyOptions.AddOpt( ESCHER_Prop_fNoLineDrawDash, nLineFlags );
-                                aPropertyOptions.CreateTextProperties( mXPropSet, mnTxId += 0x60, sal_False, sal_True );
+                                aPropertyOptions.CreateTextProperties( mXPropSet, mnTxId += 0x60, false, true );
                                 ImplAdjustFirstLineLineSpacing( aTextObj, aPropOpt );
                                 aPropertyOptions.Commit( *mpStrm );
                                 mpPptEscherEx->AddAtom( 8, ESCHER_ClientAnchor );
-                                *mpStrm << (sal_Int16)maRect.Top() << (sal_Int16)maRect.Left() << (sal_Int16)maRect.Right() << (sal_Int16)maRect.Bottom();      // oben, links, rechts, unten ????
+                                *mpStrm << (sal_Int16)basegfx::fround(maObjectRange.getMinY()) // CAUTION! Here, X,Y is exchanged
+                                        << (sal_Int16)basegfx::fround(maObjectRange.getMinX()) // by PURPOSE, it's not an error (!)
+                                        << (sal_Int16)basegfx::fround(maObjectRange.getMaxX()) // TTTT: Check for mirrored if Min/Max needs to be exchanged
+                                        << (sal_Int16)basegfx::fround(maObjectRange.getMaxY());      // oben, links, rechts, unten ????
                                 mpPptEscherEx->OpenContainer( ESCHER_ClientData );
                                 mpPptEscherEx->AddAtom( 8, EPP_OEPlaceholderAtom );
                                 *mpStrm << (sal_uInt32)0                                                        // PlacementID
@@ -4962,8 +5069,8 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                             nPlaceHolderAtom = rLayout.nTypeOfTitle;
                             ImplCreateShape( ESCHER_ShpInst_Rectangle, 0x220, aSolverContainer );          // Flags: HaveAnchor | HaveMaster
                             aPropOpt.AddOpt( ESCHER_Prop_hspMaster, mnShapeMasterTitle );
-                            aPropOpt.CreateFillProperties( mXPropSet, sal_True, mXShape );
-                            aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, sal_False, sal_True );
+                            aPropOpt.CreateFillProperties( mXPropSet, true, mXShape );
+                            aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, false, true );
                             ImplAdjustFirstLineLineSpacing( aTextObj, aPropOpt );
                             if ( mbEmptyPresObj )
                             {
@@ -4975,12 +5082,12 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         }
                     }
                     else
-                        mbPresObj = sal_False;
+                        mbPresObj = false;
                 }
                 if ( !mbPresObj )
                 {
                     mType = "drawing.Text";
-                    ImplCreateTextShape( aPropOpt, aSolverContainer, sal_True );
+                    ImplCreateTextShape( aPropOpt, aSolverContainer, true );
                 }
             }
             else if ( ( mType == "presentation.Outliner" ) || ( mType == "presentation.Subtitle" ) )
@@ -5011,16 +5118,19 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 aPropOpt2.AddOpt( ESCHER_Prop_lineColor, 0x8000001 );
                                 aPropOpt2.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90001 );
                                 aPropOpt2.AddOpt( ESCHER_Prop_shadowColor, 0x8000002 );
-                                aPropOpt2.CreateFillProperties( mXPropSet, sal_True, mXShape  );
+                                aPropOpt2.CreateFillProperties( mXPropSet, true, mXShape  );
                                 sal_uInt32 nLineFlags = 0x90001;
                                 if ( aPropOpt2.GetOpt( ESCHER_Prop_fNoLineDrawDash, nLineFlags ) )
                                     nLineFlags |= 0x10001;  // draw dashed line if no line
                                 aPropOpt2.AddOpt( ESCHER_Prop_fNoLineDrawDash, nLineFlags );
-                                aPropOpt2.CreateTextProperties( mXPropSet, mnTxId += 0x60, sal_False, sal_True );
+                                aPropOpt2.CreateTextProperties( mXPropSet, mnTxId += 0x60, false, true );
                                 ImplAdjustFirstLineLineSpacing( aTextObj, aPropOpt2 );
                                 aPropOpt2.Commit( *mpStrm );
                                 mpPptEscherEx->AddAtom( 8, ESCHER_ClientAnchor );
-                                *mpStrm << (sal_Int16)maRect.Top() << (sal_Int16)maRect.Left() << (sal_Int16)maRect.Right() << (sal_Int16)maRect.Bottom();  // oben, links, rechts, unten ????
+                                *mpStrm << (sal_Int16)basegfx::fround(maObjectRange.getMinY()) // CAUTION! Here, X,Y is exchanged
+                                        << (sal_Int16)basegfx::fround(maObjectRange.getMinX()) // by PURPOSE, it's not an error (!)
+                                        << (sal_Int16)basegfx::fround(maObjectRange.getMaxX()) // TTTT: Check for mirrored if Min/Max needs to be exchanged
+                                        << (sal_Int16)basegfx::fround(maObjectRange.getMaxY());  // oben, links, rechts, unten ????
                                 mpPptEscherEx->OpenContainer( ESCHER_ClientData );
                                 mpPptEscherEx->AddAtom( 8, EPP_OEPlaceholderAtom );
                                 sal_uInt8 PlaceHolderID = ( mType == "presentation.Subtitle") ? EPP_PLACEHOLDER_MASTERSUBTITLE:EPP_PLACEHOLDER_MASTERBODY;
@@ -5064,8 +5174,8 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                             mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                             ImplCreateShape( ESCHER_ShpInst_Rectangle, 0x220, aSolverContainer );          // Flags: HaveAnchor | HaveMaster
                             aPropOpt.AddOpt( ESCHER_Prop_hspMaster, mnShapeMasterBody );
-                            aPropOpt.CreateFillProperties( mXPropSet, sal_True, mXShape );
-                            aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, sal_False, sal_True );
+                            aPropOpt.CreateFillProperties( mXPropSet, true, mXShape );
+                            aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, false, true );
                             ImplAdjustFirstLineLineSpacing( aTextObj, aPropOpt );
                             if ( mbEmptyPresObj )
                             {
@@ -5077,7 +5187,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         }
                     }
                     else
-                        mbPresObj = sal_False;
+                        mbPresObj = false;
                 }
                 if ( !mbPresObj )
                 {
@@ -5089,7 +5199,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     }
 
                     mType = "drawing.Text";
-                    ImplCreateTextShape( aPropOpt, aSolverContainer, sal_True );
+                    ImplCreateTextShape( aPropOpt, aSolverContainer, true );
                 }
             }
             else if ( ( mType == "drawing.Page" ) || ( mType == "presentation.Page" ) )
@@ -5101,7 +5211,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     else
                         nPlaceHolderAtom = EPP_PLACEHOLDER_NOTESSLIDEIMAGE;
                 }
-                ImplCreateTextShape( aPropOpt, aSolverContainer, sal_True );
+                ImplCreateTextShape( aPropOpt, aSolverContainer, true );
             }
             else if ( mType == "drawing.Frame" )
             {
@@ -5190,9 +5300,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     continue;
                 else
                 {
-                    mbPresObj = sal_False;
+                    mbPresObj = false;
                     mType = "drawing.Text";
-                    ImplCreateTextShape( aPropOpt, aSolverContainer, sal_True );
+                    ImplCreateTextShape( aPropOpt, aSolverContainer, true );
                 }
             }
             else if ( mType == "presentation.Footer" )
@@ -5201,9 +5311,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     continue;
                 else
                 {
-                    mbPresObj = sal_False;
+                    mbPresObj = false;
                     mType = "drawing.Text";
-                    ImplCreateTextShape( aPropOpt, aSolverContainer, sal_True );
+                    ImplCreateTextShape( aPropOpt, aSolverContainer, true );
                 }
             }
             else if ( mType == "presentation.DateTime" )
@@ -5212,9 +5322,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     continue;
                 else
                 {
-                    mbPresObj = sal_False;
+                    mbPresObj = false;
                     mType = "drawing.Text";
-                    ImplCreateTextShape( aPropOpt, aSolverContainer, sal_True );
+                    ImplCreateTextShape( aPropOpt, aSolverContainer, true );
                 }
             }
             else if ( mType == "presentation.SlideNumber" )
@@ -5223,9 +5333,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     continue;
                 else
                 {
-                    mbPresObj = sal_False;
+                    mbPresObj = false;
                     mType = "drawing.Text";
-                    ImplCreateTextShape( aPropOpt, aSolverContainer, sal_True );
+                    ImplCreateTextShape( aPropOpt, aSolverContainer, true );
                 }
             }
             else if ( ( (sal_Char)'3' == mType.GetChar( 8 ) ) && ( (char)'D' == mType.GetChar( 9 ) ) )  // drawing.3D
@@ -5237,18 +5347,18 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 ImplCreateShape( ESCHER_ShpInst_PictureFrame, 0xa00, aSolverContainer );
 
-                if ( aPropOpt.CreateGraphicProperties( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Bitmap" ) ), sal_False ) )
+                if ( aPropOpt.CreateGraphicProperties( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Bitmap" ) ), false ) )
                     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
             }
             else if ( mType == "drawing.Media" )
             {
-                mnAngle = 0;
+                mfObjectRotation = 0.0;
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 ImplCreateShape( ESCHER_ShpInst_PictureFrame, 0xa00, aSolverContainer );
                 if ( aPropOpt.CreateMediaGraphicProperties( mXShape ) )
                     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                 ::com::sun::star::uno::Any aAny;
-                if ( PropValue::GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "MediaURL" ) ), sal_True ) )
+                if ( PropValue::GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "MediaURL" ) ), true ) )
                 {
                     rtl::OUString aMediaURL;
                     if ( (aAny >>= aMediaURL ) &&  aMediaURL.getLength() )
@@ -5331,10 +5441,10 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             }
             else if ( mType == "drawing.dontknow" )
             {
-                mnAngle = 0;
+                mfObjectRotation = 0.0;
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 ImplCreateShape( ESCHER_ShpInst_PictureFrame, 0xa00, aSolverContainer );
-                if ( aPropOpt.CreateGraphicProperties( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ), sal_False ) )
+                if ( aPropOpt.CreateGraphicProperties( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ), false ) )
                     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
             }
             else
@@ -5343,7 +5453,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             }
             sal_Int32 nPlacementID = -1;
 
-            sal_Bool bClientData = ( bEffect || ( eCa != ::com::sun::star::presentation::ClickAction_NONE ) ||
+            bool bClientData = ( bEffect || ( eCa != ::com::sun::star::presentation::ClickAction_NONE ) ||
                                         nPlaceHolderAtom || nOlePictureId );
             if ( bClientData )
             {
@@ -5424,9 +5534,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 if ( !pClientTextBox )
                     pClientTextBox = new SvMemoryStream( 0x200, 0x200 );
 
-                if ( mbEmptyPresObj == sal_False )
+                if ( mbEmptyPresObj == false )
                 {
-                    if ( ( ePageType == NORMAL ) && ( bMasterPage == sal_False ) )
+                    if ( ( ePageType == NORMAL ) && ( bMasterPage == false ) )
                     {
                         sal_uInt32 nTextType = EPP_TEXTTYPE_Body;
                         if ( mnTextStyle == EPP_TEXTSTYLE_BODY )
@@ -5435,7 +5545,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 nTextType = EPP_TEXTTYPE_HalfBody;
                             else if ( mType == "presentation.Subtitle" )
                                 nTextType = EPP_TEXTTYPE_CenterBody;
-                            bSecOutl = sal_True;
+                            bSecOutl = true;
                         }
                         else
                             nTextType = EPP_TEXTTYPE_Title;
@@ -5496,15 +5606,18 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             }
 
             aPropOpt.CreateShadowProperties( mXPropSet );
-            maRect.Justify();
-            if ( mnAngle )
-                ImplFlipBoundingBox( aPropOpt );
+
+            if(!basegfx::fTools::equalZero(mfObjectRotation))
+            {
+                ImplHandleRotation( aPropOpt );
+            }
+
             aPropOpt.CreateShapeProperties( mXShape );
             aPropOpt.Commit( *mpStrm );
             if ( GetCurrentGroupLevel() > 0 )
-                mpPptEscherEx->AddChildAnchor( maRect );
+                mpPptEscherEx->AddChildAnchor( maObjectRange );
             else
-                mpPptEscherEx->AddClientAnchor( maRect );
+                mpPptEscherEx->AddClientAnchor( maObjectRange );
 
             if ( pClientData )
             {
@@ -5528,45 +5641,44 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
 
         if ( bAdditionalText )
         {
-            bAdditionalText = sal_False;
-
-            ::com::sun::star::uno::Any  aAny;
+            bAdditionalText = false;
+            mfObjectRotation = fTextRotation;
             EscherPropertyContainer     aPropOpt;
-            mnAngle = ( PropValue::GetPropertyValue( aAny,
-                mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "RotateAngle" ) ), sal_True ) )
-                    ? *((sal_Int32*)aAny.getValue() )
-                    : 0;
 
             aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90000 );
             aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );
             if ( mType == "drawing.Line" )
             {
-                double fDist = hypot( maRect.GetWidth(), maRect.GetHeight() );
-                maRect = Rectangle( Point( aTextRefPoint.X, aTextRefPoint.Y ),
-                                        Point( (sal_Int32)( aTextRefPoint.X + fDist ), aTextRefPoint.Y - 1 ) );
-                ImplCreateTextShape( aPropOpt, aSolverContainer, sal_False );
+                const double fDist(hypot(maObjectRange.getWidth(), maObjectRange.getHeight()));
+
+                maObjectRange = basegfx::B2DRange(aTextRefPoint.X, aTextRefPoint.Y, aTextRefPoint.X + fDist, aTextRefPoint.Y);
+                ImplCreateTextShape( aPropOpt, aSolverContainer, false );
                 aPropOpt.AddOpt( ESCHER_Prop_FitTextToShape, 0x60006 );        // Size Shape To Fit Text
-                if ( mnAngle < 0 )
-                    mnAngle = ( 36000 + mnAngle ) % 36000;
-                if ( mnAngle )
-                    ImplFlipBoundingBox( aPropOpt );
+
+                if(!basegfx::fTools::equalZero(mfObjectRotation))
+                {
+                    ImplHandleRotation( aPropOpt );
+                }
             }
             else
             {
-                ImplCreateTextShape( aPropOpt, aSolverContainer, sal_False );
-                if ( mnAngle < 0 )
-                    mnAngle = ( 36000 + mnAngle ) % 36000;
-                else
-                    mnAngle = ( 36000 - ( mnAngle % 36000 ) );
+                // TTTT check against original
+                // if ( mnAngle < 0 )
+                //     mnAngle = ( 36000 + mnAngle ) % 36000;
+                // else
+                //     mnAngle = ( 36000 - ( mnAngle % 36000 ) );
+                ImplCreateTextShape( aPropOpt, aSolverContainer, false );
+                sal_Int32 nAngle(basegfx::fround(basegfx::snapToZeroRange(-mfObjectRotation / F_PI18000, 36000.0)));
 
-                mnAngle *= 655;
-                mnAngle += 0x8000;
-                mnAngle &=~0xffff;  // nAngle auf volle Gradzahl runden
-                aPropOpt.AddOpt( ESCHER_Prop_Rotation, mnAngle );
+                nAngle = ( 36000 - ( nAngle % 36000 ) );
+                nAngle *= 655;
+                nAngle += 0x8000;
+                nAngle &=~0xffff;  // nAngle auf volle Gradzahl runden
+                aPropOpt.AddOpt( ESCHER_Prop_Rotation, nAngle );
 
                 // #119551# PPT does not support groups of polygons and text (MS patch KB2289187)
-                // mpPptEscherEx->SetGroupSnapRect( nGroupLevel, maRect );
-                // mpPptEscherEx->SetGroupLogicRect( nGroupLevel, maRect );
+                // mpPptEscherEx->SetGroupSnapPositionAndScale( nGroupLevel, maObjectRange );
+                // mpPptEscherEx->SetGroupLogicPositionAndScale( nGroupLevel, maObjectRange );
             }
             if ( !pClientTextBox )
                 pClientTextBox = new SvMemoryStream( 0x200, 0x200 );
@@ -5577,9 +5689,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             aPropOpt.CreateShapeProperties( mXShape );
             aPropOpt.Commit( *mpStrm );
             if ( GetCurrentGroupLevel() > 0 )
-                mpPptEscherEx->AddChildAnchor( maRect );
+                mpPptEscherEx->AddChildAnchor( maObjectRange );
             else
-                mpPptEscherEx->AddClientAnchor( maRect );
+                mpPptEscherEx->AddClientAnchor( maObjectRange );
 
             *mpStrm << (sal_uInt32)( ( ESCHER_ClientTextbox << 16 ) | 0xf )
                     << (sal_uInt32)pClientTextBox->Tell();
@@ -5601,38 +5713,6 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
 
 //  -----------------------------------------------------------------------
 
-::com::sun::star::awt::Point PPTWriter::ImplMapPoint( const ::com::sun::star::awt::Point& rPoint )
-{
-    Point aRet( OutputDevice::LogicToLogic( Point( rPoint.X, rPoint.Y ), maMapModeSrc, maMapModeDest ) );
-    return ::com::sun::star::awt::Point( aRet.X(), aRet.Y() );
-}
-
-//  -----------------------------------------------------------------------
-
-::com::sun::star::awt::Size PPTWriter::ImplMapSize( const ::com::sun::star::awt::Size& rSize )
-{
-    Size aRetSize( OutputDevice::LogicToLogic( Size( rSize.Width, rSize.Height ), maMapModeSrc, maMapModeDest ) );
-
-    if ( !aRetSize.Width() )
-        aRetSize.Width()++;
-    if ( !aRetSize.Height() )
-        aRetSize.Height()++;
-    return ::com::sun::star::awt::Size( aRetSize.Width(), aRetSize.Height() );
-}
-
-//  -----------------------------------------------------------------------
-
-Rectangle PPTWriter::ImplMapRectangle( const ::com::sun::star::awt::Rectangle& rRect )
-{
-    ::com::sun::star::awt::Point    aPoint( rRect.X, rRect.Y );
-    ::com::sun::star::awt::Size     aSize( rRect.Width, rRect.Height );
-    ::com::sun::star::awt::Point    aP( ImplMapPoint( aPoint ) );
-    ::com::sun::star::awt::Size     aS( ImplMapSize( aSize ) );
-    return Rectangle( Point( aP.X, aP.Y ), Size( aS.Width, aS.Height ) );
-}
-
-//  -----------------------------------------------------------------------
-
 struct CellBorder
 {
     sal_Int32                       mnPos;      // specifies the distance to the top/left position of the table
@@ -5642,13 +5722,13 @@ struct CellBorder
     CellBorder() : mnPos ( 0 ), mnLength( 0 ){};
 };
 
-sal_Bool PPTWriter::ImplCreateCellBorder( const CellBorder* pCellBorder, sal_Int32 nX1, sal_Int32 nY1, sal_Int32 nX2, sal_Int32 nY2)
+bool PPTWriter::ImplCreateCellBorder( const CellBorder* pCellBorder, sal_Int32 nX1, sal_Int32 nY1, sal_Int32 nX2, sal_Int32 nY2)
 {
-    sal_Int32 nLineWidth = pCellBorder->maCellBorder.OuterLineWidth + pCellBorder->maCellBorder.InnerLineWidth;
+    const sal_Int32 nLineWidth(2 * (pCellBorder->maCellBorder.OuterLineWidth + pCellBorder->maCellBorder.InnerLineWidth));
+
     if ( nLineWidth )
     {
-        nLineWidth *= 2;
-        mnAngle = 0;
+        mfObjectRotation = 0.0;
         mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
         EscherPropertyContainer aPropOptSp;
 
@@ -5672,14 +5752,14 @@ sal_Bool PPTWriter::ImplCreateCellBorder( const CellBorder* pCellBorder, sal_Int
                     << nX2
                     << nY2;
         mpPptEscherEx->CloseContainer();
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 //get merged cell's width
 sal_Int32 GetCellRight( sal_Int32 nColumn,
-    Rectangle& rect,
+    const basegfx::B2DRange& rObjectRange,
     std::vector< std::pair< sal_Int32, sal_Int32 > >& aColumns,
     uno::Reference< table::XMergeableCell >& xCell )
 {
@@ -5690,13 +5770,13 @@ sal_Int32 GetCellRight( sal_Int32 nColumn,
         if ( nC < aColumns.size() )
             nRight += aColumns[ nC ].second;
         else
-            nRight = rect.Right();
+            nRight = basegfx::fround(rObjectRange.getMaxX());
     }
     return nRight;
 }
 //get merged cell's height
 sal_Int32 GetCellBottom( sal_Int32 nRow,
-    Rectangle& rect,
+    const basegfx::B2DRange& rObjectRange,
     std::vector< std::pair< sal_Int32, sal_Int32 > >& aRows,
     uno::Reference< table::XMergeableCell >& xCell )
 {
@@ -5707,7 +5787,7 @@ sal_Int32 GetCellBottom( sal_Int32 nRow,
         if ( nR < aRows.size() )
             nBottom += aRows[ nR ].second;
         else
-            nBottom = rect.Bottom();
+            nBottom = basegfx::fround(rObjectRange.getMaxY());
     }
     return nBottom;
 }
@@ -5745,39 +5825,52 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
             std::vector< std::pair< sal_Int32, sal_Int32 > > aColumns;
             std::vector< std::pair< sal_Int32, sal_Int32 > > aRows;
 
-            awt::Point aPosition( ImplMapPoint( rXShape->getPosition() ) );
-            sal_uInt32 nPosition = aPosition.X;
+            sal_uInt32 nPosition = basegfx::fround(maObjectRange.getMinX());
+
             for ( sal_Int32 x = 0; x < nColumnCount; x++ )
             {
                 uno::Reference< beans::XPropertySet > xPropSet( xColumns->getByIndex( x ), uno::UNO_QUERY_THROW );
-                awt::Size aS( 0, 0 );
-                xPropSet->getPropertyValue( sWidth ) >>= aS.Width;
-                awt::Size aM( ImplMapSize( aS ) );
-                aColumns.push_back( std::pair< sal_Int32, sal_Int32 >( nPosition, aM.Width ) );
-                nPosition += aM.Width;
-                if ( x == nColumnCount - 1  && nPosition != maRect.Right() )
-                    maRect.Right() = nPosition;
+                long aWidth(0);
+                xPropSet->getPropertyValue( sWidth ) >>= aWidth;
+                aWidth = basegfx::fround(mfMap100thMmToMs * aWidth);
+                aColumns.push_back( std::pair< sal_Int32, sal_Int32 >( nPosition, aWidth ) );
+                nPosition += aWidth;
             }
 
-            nPosition = aPosition.Y;
+            if(nPosition != basegfx::fround(maObjectRange.getMaxX()))
+            {
+                maObjectRange = basegfx::B2DRange(
+                    maObjectRange.getMinX(), maObjectRange.getMinY(),
+                    nPosition, maObjectRange.getMaxX());
+            }
+
+            nPosition = basegfx::fround(maObjectRange.getMinY());
+
             for ( sal_Int32 y = 0; y < nRowCount; y++ )
             {
                 uno::Reference< beans::XPropertySet > xPropSet( xRows->getByIndex( y ), uno::UNO_QUERY_THROW );
-                awt::Size aS( 0, 0 );
-                xPropSet->getPropertyValue( sHeight ) >>= aS.Height;
-                awt::Size aM( ImplMapSize( aS ) );
-                aRows.push_back( std::pair< sal_Int32, sal_Int32 >( nPosition, aM.Height ) );
-                nPosition += aM.Height;
-                if ( y == nRowCount - 1 && nPosition != maRect.Bottom())
-                    maRect.Bottom() = nPosition;
+                long aHeight(0);
+                xPropSet->getPropertyValue( sHeight ) >>= aHeight;
+                aHeight = basegfx::fround(mfMap100thMmToMs * aHeight);
+                aRows.push_back( std::pair< sal_Int32, sal_Int32 >( nPosition, aHeight ) );
+                nPosition += aHeight;
             }
+
+            if(nPosition != basegfx::fround(maObjectRange.getMaxY()))
+            {
+                maObjectRange = basegfx::B2DRange(
+                    maObjectRange.getMinX(), maObjectRange.getMinY(),
+                    maObjectRange.getMaxX(), nPosition);
+            }
+
             mpPptEscherEx->OpenContainer( ESCHER_SpgrContainer );
             mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
             mpPptEscherEx->AddAtom( 16, ESCHER_Spgr, 1 );
-            *mpStrm     << (sal_Int32)maRect.Left() // Bounding box fuer die Gruppierten shapes an die sie attached werden
-                        << (sal_Int32)maRect.Top()
-                        << (sal_Int32)maRect.Right()
-                        << (sal_Int32)maRect.Bottom();
+
+            *mpStrm     << (sal_Int32)basegfx::fround(maObjectRange.getMinX())  // Bounding box fuer die Gruppierten shapes an die sie attached werden
+                        << (sal_Int32)basegfx::fround(maObjectRange.getMinY())    // TTTT: Check for mirrored if Min/Max needs to be exchanged
+                        << (sal_Int32)basegfx::fround(maObjectRange.getMaxX())
+                        << (sal_Int32)basegfx::fround(maObjectRange.getMaxY());
 
             sal_uInt32 nShapeId = mpPptEscherEx->GenerateShapeId();
             mpPptEscherEx->AddShape( ESCHER_ShpInst_Min, 0x201, nShapeId );     // Flags: Group | Patriarch
@@ -5787,7 +5880,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
             if ( nRowCount )
             {
                 SvMemoryStream aMemStrm;
-                aMemStrm.ObjectOwnsMemory( sal_False );
+                aMemStrm.ObjectOwnsMemory( false );
                 aMemStrm << nRowCount
                          << nRowCount
                          << (sal_uInt16)4;
@@ -5798,14 +5891,14 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
 
                 aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x1000100 );
                 aPropOpt2.AddOpt( ESCHER_Prop_tableProperties, 1 );
-                aPropOpt2.AddOpt( ESCHER_Prop_tableRowProperties, sal_True, aMemStrm.Tell(), static_cast< sal_uInt8* >( const_cast< void* >( aMemStrm.GetData() ) ), aMemStrm.Tell() );
+                aPropOpt2.AddOpt( ESCHER_Prop_tableRowProperties, true, aMemStrm.Tell(), static_cast< sal_uInt8* >( const_cast< void* >( aMemStrm.GetData() ) ), aMemStrm.Tell() );
                 aPropOpt.CreateShapeProperties( rXShape );
                 aPropOpt.Commit( *mpStrm );
                 aPropOpt2.Commit( *mpStrm, 3, ESCHER_UDefProp );
                 if ( GetCurrentGroupLevel() > 0 )
-                    mpPptEscherEx->AddChildAnchor( maRect );
+                    mpPptEscherEx->AddChildAnchor( maObjectRange );
                 else
-                    mpPptEscherEx->AddClientAnchor( maRect );
+                    mpPptEscherEx->AddClientAnchor( maObjectRange );
                 mpPptEscherEx->CloseContainer();
 
 
@@ -5819,24 +5912,28 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                         {
                             sal_Int32 nLeft   = aColumns[ nColumn ].first;
                             sal_Int32 nTop    = aRows[ nRow ].first;
-                            sal_Int32 nRight  = GetCellRight( nColumn, maRect,aColumns,xCell );
-                            sal_Int32 nBottom = GetCellBottom( nRow,  maRect,aRows,xCell );
+                            sal_Int32 nRight  = GetCellRight( nColumn, maObjectRange, aColumns, xCell );
+                            sal_Int32 nBottom = GetCellBottom( nRow,  maObjectRange, aRows, xCell );
 
-                            mbFontIndependentLineSpacing = sal_False;
+                            mbFontIndependentLineSpacing = false;
                             mXPropSet = uno::Reference< beans::XPropertySet >( xCell, uno::UNO_QUERY_THROW );
                             mXText = uno::Reference< text::XSimpleText >( xCell, uno::UNO_QUERY_THROW );
                             mnTextSize = mXText->getString().getLength();
 
                             ::com::sun::star::uno::Any aAny;
-                            if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FontIndependentLineSpacing" ) ) ), sal_True )
-                                aAny >>= mbFontIndependentLineSpacing;
+                            if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FontIndependentLineSpacing" ) ) ), true )
+                            {
+                                sal_Bool bBool(sal_False);
+                                aAny >>= bBool;
+                                mbFontIndependentLineSpacing = bBool;
+                            }
 
                             EscherPropertyContainer aPropOptSp;
                             mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                             ImplCreateShape( ESCHER_ShpInst_Rectangle, 0xa02, aSolverContainer );          // Flags: Connector | HasSpt | Child
-                            aPropOptSp.CreateFillProperties( mXPropSet, sal_True );
+                            aPropOptSp.CreateFillProperties( mXPropSet, true );
                             aPropOptSp.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90000 );
-                            aPropOptSp.CreateTextProperties( mXPropSet, mnTxId += 0x60, sal_False, sal_True );
+                            aPropOptSp.CreateTextProperties( mXPropSet, mnTxId += 0x60, false, true );
                             aPropOptSp.AddOpt( ESCHER_Prop_WrapText, ESCHER_WrapSquare );
 
                             SvMemoryStream aClientTextBox( 0x200, 0x200 );
@@ -5887,7 +5984,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                         CellBorder aCellBorder;
                         aCellBorder.mnPos = aColumns[ nColumn ].first;
                         aCellBorder.mnLength = aColumns[ nColumn ].second;
-                        sal_Bool bTop = sal_False;
+                        bool bTop(false);
                         //write nLine*nColumn cell's top border
                         if ( nLine < xRows->getCount() )
                         {   // top border
@@ -5898,7 +5995,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                                 table::BorderLine aBorderLine;
                                 if ( xPropSet2->getPropertyValue( sTopBorder ) >>= aBorderLine )
                                     aCellBorder.maCellBorder = aBorderLine;
-                                sal_Int32 nRight  = GetCellRight( nColumn, maRect,aColumns,xCell );
+                                sal_Int32 nRight  = GetCellRight( nColumn, maObjectRange, aColumns, xCell );
                                 bTop = ImplCreateCellBorder( &aCellBorder, aCellBorder.mnPos,
                                     aRows[ nLine ].first, nRight,  aRows[ nLine ].first );
                             }
@@ -5915,8 +6012,8 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                                 uno::Reference< table::XMergeableCell > xCell( xCellRange->getCellByPosition( nColumn, nRow - 1 ), uno::UNO_QUERY_THROW );
                                 if ( !xCell->isMerged()  )
                                 {
-                                    sal_Int32 nRight  = GetCellRight( nColumn,  maRect,aColumns,xCell );
-                                    sal_Int32 nBottom = GetCellBottom( nRow - 1, maRect,aRows,xCell );
+                                    sal_Int32 nRight  = GetCellRight( nColumn, maObjectRange, aColumns, xCell );
+                                    sal_Int32 nBottom = GetCellBottom( nRow - 1, maObjectRange, aRows, xCell );
                                     if ( nBottom == ( aRows[ nLine-1 ].first + aRows[ nLine-1 ].second ) )
                                     {
                                         uno::Reference< table::XMergeableCell > xCellOwn( xCellRange->getCellByPosition( nColumn, nRow - 1 ), uno::UNO_QUERY_THROW );
@@ -5945,7 +6042,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                         CellBorder aCellBorder;
                         aCellBorder.mnPos = aRows[ nRow].first;
                         aCellBorder.mnLength = aRows[ nRow].second;
-                        sal_Bool bLeft = sal_False;
+                        bool bLeft(false);
                         if ( nLine < xColumns->getCount() )
                         {   // left border
                             uno::Reference< table::XMergeableCell > xCell( xCellRange->getCellByPosition( nLine, nRow ), uno::UNO_QUERY_THROW );
@@ -5955,7 +6052,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                                 table::BorderLine aBorderLine;
                                 if ( xCellSet->getPropertyValue( sLeftBorder ) >>= aBorderLine )
                                     aCellBorder.maCellBorder = aBorderLine;
-                                sal_Int32 nBottom = GetCellBottom( nRow, maRect, aRows,xCell );
+                                sal_Int32 nBottom = GetCellBottom( nRow, maObjectRange, aRows, xCell );
                                 bLeft = ImplCreateCellBorder( &aCellBorder, aColumns[nLine].first, aCellBorder.mnPos,
                                     aColumns[nLine].first, nBottom );
                             }
@@ -5968,8 +6065,8 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                                 uno::Reference< table::XMergeableCell > xCell( xCellRange->getCellByPosition( nColumn - 1, nRow ), uno::UNO_QUERY_THROW );
                                 if (!xCell->isMerged() )
                                 {
-                                    sal_Int32 nRight  = GetCellRight( nColumn-1, maRect, aColumns,xCell );
-                                    sal_Int32 nBottom = GetCellBottom( nRow,   maRect, aRows, xCell );
+                                    sal_Int32 nRight  = GetCellRight( nColumn-1, maObjectRange, aColumns, xCell );
+                                    sal_Int32 nBottom = GetCellBottom( nRow, maObjectRange, aRows, xCell );
                                     if ( nRight == (aColumns[nLine-1].first + aColumns[nLine-1].second) )
                                     {
                                         uno::Reference< table::XMergeableCell > xCellOwn( xCellRange->getCellByPosition( nColumn - 1, nRow ), uno::UNO_QUERY_THROW );

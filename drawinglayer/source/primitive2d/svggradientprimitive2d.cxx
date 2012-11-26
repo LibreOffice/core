@@ -302,17 +302,6 @@ namespace drawinglayer
         {
         }
 
-        bool SvgGradientHelper::operator==(const SvgGradientHelper& rSvgGradientHelper) const
-        {
-            const SvgGradientHelper& rCompare = static_cast< const SvgGradientHelper& >(rSvgGradientHelper);
-
-            return (getPolyPolygon() == rCompare.getPolyPolygon()
-                && getGradientEntries() == rCompare.getGradientEntries()
-                && getStart() == rCompare.getStart()
-                && getUseUnitCoordinates() == rCompare.getUseUnitCoordinates()
-                && getSpreadMethod() == rCompare.getSpreadMethod());
-        }
-
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
@@ -564,20 +553,6 @@ namespace drawinglayer
 
         SvgLinearGradientPrimitive2D::~SvgLinearGradientPrimitive2D()
         {
-        }
-
-        bool SvgLinearGradientPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            const SvgGradientHelper* pSvgGradientHelper = dynamic_cast< const SvgGradientHelper* >(&rPrimitive);
-
-            if(pSvgGradientHelper && SvgGradientHelper::operator==(*pSvgGradientHelper))
-            {
-                const SvgLinearGradientPrimitive2D& rCompare = static_cast< const SvgLinearGradientPrimitive2D& >(rPrimitive);
-
-                return (getEnd() == rCompare.getEnd());
-            }
-
-            return false;
         }
 
         basegfx::B2DRange SvgLinearGradientPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
@@ -855,33 +830,6 @@ namespace drawinglayer
         {
         }
 
-        bool SvgRadialGradientPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            const SvgGradientHelper* pSvgGradientHelper = dynamic_cast< const SvgGradientHelper* >(&rPrimitive);
-
-            if(pSvgGradientHelper && SvgGradientHelper::operator==(*pSvgGradientHelper))
-            {
-                const SvgRadialGradientPrimitive2D& rCompare = static_cast< const SvgRadialGradientPrimitive2D& >(rPrimitive);
-
-                if(getRadius() == rCompare.getRadius())
-                {
-                    if(isFocalSet() == rCompare.isFocalSet())
-                    {
-                        if(isFocalSet())
-                        {
-                            return getFocal() == rCompare.getFocal();
-                        }
-                        else
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-
-            return false;
-        }
-
         basegfx::B2DRange SvgRadialGradientPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // return ObjectRange
@@ -958,21 +906,6 @@ namespace drawinglayer
                 OSL_ENSURE(false, "Wrong offset order (!)");
                 ::std::swap(mfOffsetA, mfOffsetB);
             }
-        }
-
-        bool SvgLinearAtomPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(DiscreteMetricDependentPrimitive2D::operator==(rPrimitive))
-            {
-                const SvgLinearAtomPrimitive2D& rCompare = static_cast< const SvgLinearAtomPrimitive2D& >(rPrimitive);
-
-                return (getColorA() == rCompare.getColorA()
-                    && getColorB() == rCompare.getColorB()
-                    && getOffsetA() == rCompare.getOffsetA()
-                    && getOffsetB() == rCompare.getOffsetB());
-            }
-
-            return false;
         }
 
         // provide unique ID
@@ -1108,32 +1041,6 @@ namespace drawinglayer
                 delete mpTranslate;
                 mpTranslate = 0;
             }
-        }
-
-        bool SvgRadialAtomPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(DiscreteMetricDependentPrimitive2D::operator==(rPrimitive))
-            {
-                const SvgRadialAtomPrimitive2D& rCompare = static_cast< const SvgRadialAtomPrimitive2D& >(rPrimitive);
-
-                if(getColorA() == rCompare.getColorA()
-                    && getColorB() == rCompare.getColorB()
-                    && getScaleA() == rCompare.getScaleA()
-                    && getScaleB() == rCompare.getScaleB())
-                {
-                    if(isTranslateSet() && rCompare.isTranslateSet())
-                    {
-                        return (getTranslateA() == rCompare.getTranslateA()
-                            && getTranslateB() == rCompare.getTranslateB());
-                    }
-                    else if(!isTranslateSet() && !rCompare.isTranslateSet())
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
         }
 
         // provide unique ID

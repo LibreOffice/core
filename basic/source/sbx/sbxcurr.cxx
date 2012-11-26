@@ -124,7 +124,7 @@ start:
             break;
         case SbxOBJECT:
         {
-            SbxValue* pVal = PTR_CAST(SbxValue,p->pObj);
+            SbxValue* pVal = dynamic_cast< SbxValue* >( p->pObj);
             if( pVal )
                 nRes = pVal->GetCurrency();
             else
@@ -227,7 +227,7 @@ start:
             break;
         case SbxOBJECT:
         {
-            SbxValue* pVal = PTR_CAST(SbxValue,p->pObj);
+            SbxValue* pVal = dynamic_cast< SbxValue* >( p->pObj);
             if( pVal )
                 pVal->PutCurrency( r );
             else

@@ -288,8 +288,6 @@ int SfxFrameProperties::operator ==( const SfxFrameProperties& rProp ) const
             bResizable == rProp.bResizable && bSetResizable == rProp.bSetResizable;
 }
 
-TYPEINIT1(SfxFrameDescriptorItem, SfxPoolItem);
-
 SfxFrameDescriptorItem::~SfxFrameDescriptorItem()
 {}
 

@@ -2023,9 +2023,12 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
             BitmapReadAccess*   pP = ( (Bitmap&) rBmp ).AcquireReadAccess();
             BitmapReadAccess*   pA = ( (AlphaMask&) rAlpha ).AcquireReadAccess();
 
-            DBG_ASSERT( pA->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL ||
-                        pA->GetScanlineFormat() == BMP_FORMAT_8BIT_TC_MASK,
-                        "OutputDevice::ImplDrawAlpha(): non-8bit alpha no longer supported!" );
+#ifdef DBG_UTIL
+            if(pA->GetScanlineFormat() != BMP_FORMAT_8BIT_PAL && pA->GetScanlineFormat() != BMP_FORMAT_8BIT_TC_MASK)
+            {
+                OSL_ENSURE(false, "OutputDevice::ImplDrawAlpha(): non-8bit alpha no longer supported!");
+            }
+#endif
 
             // #i38887# reading from screen may sometimes fail
             if( aBmp.ImplGetImpBitmap() )

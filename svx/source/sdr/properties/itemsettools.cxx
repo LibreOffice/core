@@ -40,12 +40,12 @@ namespace sdr
     {
         ItemChangeBroadcaster::ItemChangeBroadcaster(const SdrObject& rObj)
         {
-            if(rObj.ISA(SdrObjGroup))
+            const SdrObjGroup* pSdrObjGroup = dynamic_cast< const SdrObjGroup* >(&rObj);
+
+            if(pSdrObjGroup)
             {
-                SdrObjListIter aIter((const SdrObjGroup&)rObj, IM_DEEPNOGROUPS);
-                mpData = new RectangleVector;
-                DBG_ASSERT(mpData, "ItemChangeBroadcaster: No memory (!)");
-                ((RectangleVector*)mpData)->reserve(aIter.Count());
+                SdrObjListIter aIter(*pSdrObjGroup->getChildrenOfSdrObject(), IM_DEEPNOGROUPS);
+                maBroadcastVector.reserve(aIter.Count());
 
                 while(aIter.IsMore())
                 {
@@ -53,45 +53,21 @@ namespace sdr
 
                     if(pObj)
                     {
-                        ((RectangleVector*)mpData)->push_back(pObj->GetLastBoundRect());
+                        maBroadcastVector.push_back(new SdrObjectChangeBroadcaster(*pObj, HINT_OBJCHG_ATTR));
                     }
                 }
-
-                mnCount = ((RectangleVector*)mpData)->size();
             }
             else
             {
-                mpData = new Rectangle(rObj.GetLastBoundRect());
-                mnCount = 1L;
+                maBroadcastVector.push_back(new SdrObjectChangeBroadcaster(rObj, HINT_OBJCHG_ATTR));
             }
         }
 
         ItemChangeBroadcaster::~ItemChangeBroadcaster()
         {
-            if(mnCount > 1)
+            for(sal_uInt32 a(0); a < maBroadcastVector.size(); a++)
             {
-                delete ((RectangleVector*)mpData);
-            }
-            else
-            {
-                delete ((Rectangle*)mpData);
-            }
-        }
-
-        sal_uInt32 ItemChangeBroadcaster::GetRectangleCount() const
-        {
-            return mnCount;
-        }
-
-        const Rectangle& ItemChangeBroadcaster::GetRectangle(sal_uInt32 nIndex) const
-        {
-            if(mnCount > 1)
-            {
-                return (*((RectangleVector*)mpData))[nIndex];
-            }
-            else
-            {
-                return *((Rectangle*)mpData);
+                delete maBroadcastVector[a];
             }
         }
     } // end of namespace properties

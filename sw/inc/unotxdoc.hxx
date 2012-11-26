@@ -246,6 +246,9 @@ class SW_DLLPUBLIC SwXTextDocument : public SwXTextDocumentBaseClass,
     using SfxBaseModel::removeEventListener;
 
 protected:
+    /** abstract SdrModel provider */
+    virtual SdrModel* getSdrModel() const;
+
     virtual ~SwXTextDocument();
 public:
     SwXTextDocument(SwDocShell* pShell);

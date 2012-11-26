@@ -867,8 +867,7 @@ void ScHeaderControl::Command( const CommandEvent& rCEvt )
 
         //  Popup ausfuehren
 
-        ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell,
-                                            SfxViewShell::Current() );
+        ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell* >( SfxViewShell::Current() );
         if ( pViewSh )
         {
             if ( rCEvt.IsMouseEvent() )

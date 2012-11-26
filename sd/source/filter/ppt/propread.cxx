@@ -28,6 +28,7 @@
 #include "tools/debug.hxx"
 #include "rtl/tencinfo.h"
 #include "rtl/textenc.h"
+#include <string.h>
 
 // ------------------------------------------------------------------------
 
@@ -98,7 +99,7 @@ static xub_StrLen lcl_getMaxSafeStrLen(sal_uInt32 nSize)
     return static_cast< xub_StrLen >( nSize );
 }
 
-sal_Bool PropItem::Read( String& rString, sal_uInt32 nStringType, sal_Bool bAlign )
+bool PropItem::Read( String& rString, sal_uInt32 nStringType, sal_Bool bAlign )
 {
     sal_uInt32  i, nItemSize, nType, nItemPos;
     sal_Bool    bRetValue = sal_False;

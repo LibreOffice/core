@@ -56,8 +56,7 @@ class SW_DLLPUBLIC SwFmtDrop: public SfxPoolItem, public SwClient
     sal_uInt8   nChars;      // Number of characters
     sal_Bool   bWholeWord;   // Erstes Wort als Initialen
 public:
-    TYPEINFO(); //Bereits in der Basisklasse SwClient
-
+    POOLITEM_FACTORY()
     SwFmtDrop();
     virtual ~SwFmtDrop();
 
@@ -110,8 +109,6 @@ public:
 class SwRegisterItem : public SfxBoolItem
 {
 public:
-    TYPEINFO();
-
     inline SwRegisterItem( const sal_Bool bRegister = sal_False );
 
     // @@@ public copy assignment, but no copy ctor?
@@ -140,8 +137,6 @@ inline SwRegisterItem& SwRegisterItem::operator=(
 class SW_DLLPUBLIC SwNumRuleItem : public SfxStringItem
 {
 public:
-    TYPEINFO();
-
     // --> OD 2008-03-04 #refactorlists# - removed <pDefinedIn>
     SwNumRuleItem()
         : SfxStringItem( RES_PARATR_NUMRULE, aEmptyStr ) {}
@@ -172,8 +167,6 @@ public:
 class SwParaConnectBorderItem : public SfxBoolItem
 {
 public:
-    TYPEINFO();
-
     inline SwParaConnectBorderItem( const sal_Bool bConnect = sal_True );
 
     // @@@ public copy assignment, but no copy ctor?

@@ -19,27 +19,21 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
-#endif
-
 #include <math.h>
 #include <stdio.h>
 #include <signal.h>
 #include <vector>
 using namespace std;
-
 #include <vcl/svapp.hxx>
-
 #include "svl/solar.hrc"
 #include <svtools/filedlg.hxx>
 #include "bmpcore.hxx"
 #include "bmp.hrc"
+#include <memory.h>
 
 // ----------
 // - BmpApp -

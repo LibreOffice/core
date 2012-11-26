@@ -23,9 +23,7 @@
 #ifndef _DATETIMEITEM_HXX
 #define _DATETIMEITEM_HXX
 
-#include <tools/rtti.hxx>
 #include <tools/datetime.hxx>
-
 #include <svl/poolitem.hxx>
 
 class SvStream;
@@ -40,8 +38,6 @@ private:
     DateTime                aDateTime;
 
 public:
-                            TYPEINFO();
-
                             SfxDateTimeItem( sal_uInt16 nWhich );
                             SfxDateTimeItem( sal_uInt16 nWhich,
                                              const DateTime& rDT );
@@ -79,8 +75,6 @@ public:
 class SfxColumnDateTimeItem : public SfxDateTimeItem
 {
 public:
-                            TYPEINFO();
-
                             SfxColumnDateTimeItem( sal_uInt16 nWhich );
                             SfxColumnDateTimeItem( sal_uInt16 nWhich,
                                              const DateTime& rDT );

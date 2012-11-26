@@ -54,8 +54,6 @@ SFX_IMPL_INTERFACE(SwWebTableShell, SwTableShell, SW_RES(STR_SHELLNAME_TABLE))
     SFX_OBJECTBAR_REGISTRATION(SFX_OBJECTBAR_OBJECT, SW_RES(RID_TABLE_TOOLBOX));
 }
 
-TYPEINIT1(SwWebTableShell,SwTableShell)
-
 SwWebTableShell::SwWebTableShell(SwView &_rView) :
     SwTableShell(_rView)
 {

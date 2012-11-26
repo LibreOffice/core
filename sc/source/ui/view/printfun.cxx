@@ -524,9 +524,9 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
 
     if( pModel )
     {
-        pDrawView = new FmFormView( pModel, pDev );
-        pDrawView->ShowSdrPage(pDrawView->GetModel()->GetPage(nTab));
-        pDrawView->SetPrintPreview( sal_True );
+        pDrawView = new FmFormView( *pModel, pDev );
+        pDrawView->ShowSdrPage(*pDrawView->getSdrModelFromSdrView().GetPage(nTab));
+        pDrawView->SetPrintPreview(true);
         aOutputData.SetDrawView( pDrawView );
     }
 
@@ -1093,7 +1093,7 @@ void ScPrintFunc::SetDateTime( const Date& rDate, const Time& rTime )
 void lcl_DrawGraphic( const Graphic &rGraphic, OutputDevice *pOut,
                       const Rectangle &rGrf, const Rectangle &rOut )
 {
-    const FASTBOOL bNotInside = !rOut.IsInside( rGrf );
+    const bool bNotInside = !rOut.IsInside( rGrf );
     if ( bNotInside )
     {
         pOut->Push();
@@ -1128,8 +1128,7 @@ void lcl_DrawGraphic( const SvxBrushItem &rBrush, OutputDevice *pOut, OutputDevi
     Point aPos;
     Size aDrawSize = aGrfSize;
 
-    FASTBOOL bDraw = sal_True;
-//  FASTBOOL bRetouche = sal_True;
+    bool bDraw = true;
     switch ( ePos )
     {
         case GPOS_LT: aPos = rOrg.TopLeft();
@@ -1164,7 +1163,6 @@ void lcl_DrawGraphic( const SvxBrushItem &rBrush, OutputDevice *pOut, OutputDevi
         case GPOS_AREA:
                       aPos = rOrg.TopLeft();
                       aDrawSize = rOrg.GetSize();
-//                    bRetouche = sal_False;
                       break;
         case GPOS_TILED:
                     {
@@ -1213,13 +1211,12 @@ void lcl_DrawGraphic( const SvxBrushItem &rBrush, OutputDevice *pOut, OutputDevi
                             aObject.DrawTiled( pOut, rOrg, aGrfSize, Size(0,0) );
                         }
 
-                        bDraw = sal_False;
-//                      bRetouche = sal_False;
+                        bDraw = false;
                     }
                     break;
 
         case GPOS_NONE:
-                      bDraw = sal_False;
+                      bDraw = false;
                       break;
 
         default: DBG_ASSERT( !pOut, "new Graphic position?" );

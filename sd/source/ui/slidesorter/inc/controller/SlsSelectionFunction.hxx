@@ -53,15 +53,13 @@ class SelectionFunction
       private ::boost::noncopyable
 {
 public:
-    TYPEINFO();
-
     static FunctionReference Create( SlideSorter& rSlideSorter, SfxRequest& rRequest );
 
     // Mouse- & Key-Events
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
+    virtual bool KeyInput(const KeyEvent& rKEvt);
+    virtual bool MouseMove(const MouseEvent& rMEvt);
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt);
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt);
 
     virtual void Activate();
     virtual void Deactivate();
@@ -176,7 +174,7 @@ private:
             Index of the new current slide.  When the new index is outside
             the range of valid page numbers it is clipped to that range.
     */
-    void GotoPage (int nIndex);
+    void GotoPage (sal_uInt32 nIndex);
 
     void ProcessMouseEvent (sal_uInt32 nEventType, const MouseEvent& rEvent);
     void ProcessKeyEvent (const KeyEvent& rEvent);

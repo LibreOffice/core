@@ -263,7 +263,7 @@ SwTwips lcl_GetFtnLower( const SwTxtFrm* pFrm, SwTwips nLower )
                 SwAnchoredObject* pAnchoredObj = rObjs[i];
                 SwRect aRect( pAnchoredObj->GetObjRect() );
 
-                if ( !pAnchoredObj->ISA(SwFlyFrm) ||
+                if ( !dynamic_cast< SwFlyFrm* >(pAnchoredObj) ||
                      static_cast<SwFlyFrm*>(pAnchoredObj)->IsValid() )
                 {
                     const SwTwips nBottom = (aRect.*fnRect->fnGetBottom)();

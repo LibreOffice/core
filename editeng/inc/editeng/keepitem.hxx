@@ -43,10 +43,9 @@ Dieses Item beschreibt eine logische Variable "Absaetze zusammenhalten?".
 class EDITENG_DLLPUBLIC SvxFmtKeepItem : public SfxBoolItem
 {
 public:
-    TYPEINFO();
-
-    inline SvxFmtKeepItem( const sal_Bool bKeep /*= sal_False*/,
-                           const sal_uInt16 _nWhich  );
+    POOLITEM_FACTORY()
+    inline SvxFmtKeepItem( const sal_Bool bKeep = sal_False,
+                           const sal_uInt16 _nWhich = 0 );
     inline SvxFmtKeepItem& operator=( const SvxFmtKeepItem& rSplit );
 
     // "pure virtual Methoden" vom SfxPoolItem

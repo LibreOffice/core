@@ -30,14 +30,10 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
 #include <svl/intitem.hxx>
-
-
 #include <svx/fmglob.hxx>
-
 #include <svx/dialogs.hrc>
-
+#include <svx/svdlegacy.hxx>
 class SbModule;
-
 
 #include "app.hrc"
 #include "glob.hrc"
@@ -53,8 +49,6 @@ class SbModule;
 #include "res_bmp.hrc"
 
 namespace sd {
-
-TYPEINIT1( FuConstructUnoControl, FuConstruct );
 
 /*************************************************************************
 |*
@@ -85,8 +79,8 @@ void FuConstructUnoControl::DoExecute( SfxRequest& rReq )
 {
     FuConstruct::DoExecute( rReq );
 
-    SFX_REQUEST_ARG( rReq, pInventorItem, SfxUInt32Item, SID_FM_CONTROL_INVENTOR, sal_False );
-    SFX_REQUEST_ARG( rReq, pIdentifierItem, SfxUInt16Item, SID_FM_CONTROL_IDENTIFIER, sal_False );
+    SFX_REQUEST_ARG( rReq, pInventorItem, SfxUInt32Item, SID_FM_CONTROL_INVENTOR );
+    SFX_REQUEST_ARG( rReq, pIdentifierItem, SfxUInt16Item, SID_FM_CONTROL_IDENTIFIER );
     if( pInventorItem )
         nInventor = pInventorItem->GetValue();
     if( pIdentifierItem )
@@ -102,17 +96,19 @@ void FuConstructUnoControl::DoExecute( SfxRequest& rReq )
 |* MouseButtonDown-event
 |*
 \************************************************************************/
-sal_Bool FuConstructUnoControl::MouseButtonDown(const MouseEvent& rMEvt)
+bool FuConstructUnoControl::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
+    bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
 
     if ( rMEvt.IsLeft() && !mpView->IsAction() )
     {
-        Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
+        const basegfx::B2DPoint aPixelPos(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
+        const basegfx::B2DPoint aLogicPos(mpWindow->GetInverseViewTransformation() * aPixelPos);
+
         mpWindow->CaptureMouse();
-        sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
-        mpView->BegCreateObj(aPnt, (OutputDevice*) NULL, nDrgLog);
-        bReturn = sal_True;
+        const double fTolerance(basegfx::B2DVector(mpWindow->GetInverseViewTransformation() * basegfx::B2DVector(DRGPIX, 0.0)).getLength());
+        mpView->BegCreateObj(aLogicPos, fTolerance);
+        bReturn = true;
     }
     return bReturn;
 }
@@ -122,7 +118,7 @@ sal_Bool FuConstructUnoControl::MouseButtonDown(const MouseEvent& rMEvt)
 |* MouseMove-event
 |*
 \************************************************************************/
-sal_Bool FuConstructUnoControl::MouseMove(const MouseEvent& rMEvt)
+bool FuConstructUnoControl::MouseMove(const MouseEvent& rMEvt)
 {
     return FuConstruct::MouseMove(rMEvt);
 }
@@ -132,15 +128,15 @@ sal_Bool FuConstructUnoControl::MouseMove(const MouseEvent& rMEvt)
 |* MouseButtonUp-event
 |*
 \************************************************************************/
-sal_Bool FuConstructUnoControl::MouseButtonUp(const MouseEvent& rMEvt)
+bool FuConstructUnoControl::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
-    if ( mpView->IsCreateObj() && rMEvt.IsLeft() )
+    if ( mpView->GetCreateObj() && rMEvt.IsLeft() )
     {
         Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
         mpView->EndCreateObj(SDRCREATE_FORCEEND);
-        bReturn = sal_True;
+        bReturn = true;
     }
 
     bReturn = (FuConstruct::MouseButtonUp(rMEvt) || bReturn);
@@ -155,13 +151,13 @@ sal_Bool FuConstructUnoControl::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
-|* sal_False.
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert true, andernfalls
+|* false.
 |*
 \************************************************************************/
-sal_Bool FuConstructUnoControl::KeyInput(const KeyEvent& rKEvt)
+bool FuConstructUnoControl::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
+    bool bReturn = FuConstruct::KeyInput(rKEvt);
     return(bReturn);
 }
 
@@ -172,7 +168,7 @@ sal_Bool FuConstructUnoControl::KeyInput(const KeyEvent& rKEvt)
 \************************************************************************/
 void FuConstructUnoControl::Activate()
 {
-    mpView->SetCurrentObj( nIdentifier, nInventor );
+    mpView->setSdrObjectCreationInfo(SdrObjectCreationInfo(nIdentifier, nInventor));
 
     aNewPointer = Pointer(POINTER_DRAW_RECT);
     aOldPointer = mpWindow->GetPointer();
@@ -198,17 +194,17 @@ void FuConstructUnoControl::Deactivate()
 }
 
 // #97016#
-SdrObject* FuConstructUnoControl::CreateDefaultObject(const sal_uInt16, const Rectangle& rRectangle)
+SdrObject* FuConstructUnoControl::CreateDefaultObject(const sal_uInt16, const basegfx::B2DRange& rRange)
 {
     // case SID_FM_CREATE_CONTROL:
 
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
-        mpView->GetCurrentObjInventor(), mpView->GetCurrentObjIdentifier(),
-        0L, mpDoc);
+        mpView->getSdrModelFromSdrView(),
+        mpView->getSdrObjectCreationInfo());
 
     if(pObj)
     {
-        pObj->SetLogicRect(rRectangle);
+        sdr::legacy::SetLogicRange(*pObj, rRange);
     }
 
     return pObj;

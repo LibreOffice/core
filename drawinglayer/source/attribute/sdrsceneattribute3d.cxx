@@ -43,7 +43,7 @@ namespace drawinglayer
             ::com::sun::star::drawing::ShadeMode        maShadeMode;
 
             // bitfield
-            unsigned                                    mbTwoSidedLighting : 1;
+            bool                                        mbTwoSidedLighting : 1;
 
         public:
             ImpSdrSceneAttribute(

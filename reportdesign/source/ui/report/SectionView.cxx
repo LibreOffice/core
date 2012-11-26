@@ -38,12 +38,11 @@
 namespace rptui
 {
     using namespace ::com::sun::star;
-TYPEINIT1( OSectionView, SdrView );
 
 //----------------------------------------------------------------------------
 DBG_NAME( rpt_OSectionView )
-OSectionView::OSectionView( SdrModel* pModel, OReportSection* _pSectionWindow, OReportWindow* pEditor )
-    :SdrView( pModel, _pSectionWindow )
+OSectionView::OSectionView( SdrModel& rModel, OReportSection* _pSectionWindow, OReportWindow* pEditor )
+    :SdrView( rModel, _pSectionWindow )
     ,m_pReportWindow( pEditor )
     ,m_pSectionWindow(_pSectionWindow)
 {
@@ -65,11 +64,12 @@ OSectionView::~OSectionView()
 
 //----------------------------------------------------------------------------
 
-void OSectionView::MarkListHasChanged()
+void OSectionView::handleSelectionChange()
 {
-    DBG_CHKTHIS( rpt_OSectionView,NULL);
-    SdrView::MarkListHasChanged();
+    // call parent
+    SdrView::handleSelectionChange();
 
+    // local reactions
     if ( m_pReportWindow && m_pSectionWindow && !m_pSectionWindow->getPage()->getSpecialMode() )
     {
         //m_pReportWindow->unmarkAllObjects(this); // WHY
@@ -81,47 +81,56 @@ void OSectionView::MarkListHasChanged()
 
 //----------------------------------------------------------------------------
 
-void OSectionView::MakeVisible( const Rectangle& rRect, Window& rWin )
+void OSectionView::MakeVisibleAtView( const basegfx::B2DRange& rRange, Window& rWin )
 {
     DBG_CHKTHIS( rpt_OSectionView,NULL);
     // visible area
-    MapMode aMap( rWin.GetMapMode() );
-    const Point aOrg( aMap.GetOrigin() );
-    const Size aVisSize( rWin.GetOutputSize() );
-    const Rectangle aVisRect( Point(-aOrg.X(),-aOrg.Y()), aVisSize );
+    const basegfx::B2DRange aVisRange(rWin.GetLogicRange());
 
     // check, if rectangle is inside visible area
-    if ( !aVisRect.IsInside( rRect ) )
+    if ( !aVisRange.isInside( rRange ) )
     {
         // calculate scroll distance; the rectangle must be inside the visible area
-        sal_Int32 nScrollX = 0, nScrollY = 0;
+        double fScrollX(0.0);
+        double fScrollY(0.0);
 
-        const sal_Int32 nVisLeft   = aVisRect.Left();
-        const sal_Int32 nVisRight  = aVisRect.Right();
-        const sal_Int32 nVisTop    = aVisRect.Top();
-        const sal_Int32 nVisBottom = aVisRect.Bottom();
+        const double fVisLeft(aVisRange.getMinX());
+        const double fVisRight(aVisRange.getMaxX());
+        const double fVisTop(aVisRange.getMinY());
+        const double fVisBottom(aVisRange.getMaxY());
 
         // don't scroll beyond the page size
-        Size aPageSize = m_pSectionWindow->getPage()->GetSize();
-        const sal_Int32 nPageWidth  = aPageSize.Width();
-        const sal_Int32 nPageHeight = aPageSize.Height();
+        const double fPageWidth(m_pSectionWindow->getPage()->GetPageScale().getX());
+        const double fPageHeight(m_pSectionWindow->getPage()->GetPageScale().getY());
 
-        if ( nVisRight + nScrollX > nPageWidth )
-            nScrollX = nPageWidth - nVisRight;
+        if ( fVisRight + fScrollX > fPageWidth )
+        {
+            fScrollX = fPageWidth - fVisRight;
+        }
 
-        if ( nVisLeft + nScrollX < 0 )
-            nScrollX = -nVisLeft;
+        if ( fVisLeft + fScrollX < 0 )
+        {
+            fScrollX = -fVisLeft;
+        }
 
-        if ( nVisBottom + nScrollY > nPageHeight )
-            nScrollY = nPageHeight - nVisBottom;
+        if ( fVisBottom + fScrollY > fPageHeight )
+        {
+            fScrollY = fPageHeight - fVisBottom;
+        }
 
-        if ( nVisTop + nScrollY < 0 )
-            nScrollY = -nVisTop;
+        if ( fVisTop + fScrollY < 0 )
+        {
+            fScrollY = -fVisTop;
+        }
 
         // scroll window
+        const sal_uInt32 nScrollX(basegfx::fround(fScrollX));
+        const sal_uInt32 nScrollY(basegfx::fround(fScrollY));
+        MapMode aMap( rWin.GetMapMode() );
+
         rWin.Update();
         rWin.Scroll( -nScrollX, -nScrollY );
-        aMap.SetOrigin( Point( aOrg.X() - nScrollX, aOrg.Y() - nScrollY ) );
+        aMap.SetOrigin( Point( aMap.GetOrigin().X() - nScrollX, aMap.GetOrigin().Y() - nScrollY ) );
         rWin.SetMapMode( aMap );
         rWin.Update();
         rWin.Invalidate();
@@ -142,57 +151,67 @@ void OSectionView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     DBG_CHKTHIS( rpt_OSectionView,NULL);
     SdrView::Notify(rBC,rHint);
-    if ( rHint.ISA(SdrHint) )
+    const SdrBaseHint* pSdrHint = dynamic_cast< const SdrBaseHint* >(&rHint);
+
+    if ( pSdrHint )
     {
-        const SdrObject* pObj = ((SdrHint&)rHint).GetObject();
-        const SdrHintKind eKind = ((SdrHint&)rHint).GetKind();
+        const SdrObject* pObj = pSdrHint->GetSdrHintObject();
+        const SdrHintKind eKind = pSdrHint->GetSdrHintKind();
         // check for change of selected object
-        if(HINT_OBJCHG == eKind && pObj && IsObjMarked(const_cast<SdrObject*>(pObj)))
-            AdjustMarkHdl();
+        if((HINT_OBJCHG_MOVE == eKind || HINT_OBJCHG_RESIZE == eKind || HINT_OBJCHG_ATTR == eKind)
+            && pObj && IsObjMarked(*pObj))
+        {
+            SetMarkHandles();
+        }
         else if ( eKind == HINT_OBJREMOVED )
+        {
             ObjectRemovedInAliveMode(pObj);
     }
+}
 }
 
 //------------------------------------------------------------------------------
 void OSectionView::ObjectRemovedInAliveMode( const SdrObject* _pObject )
 {
-    DBG_CHKTHIS( rpt_OSectionView,NULL);
-    const SdrMarkList& rMarkedList = GetMarkedObjectList();
-    const sal_uLong nMark = rMarkedList.GetMarkCount();
-
-    for( sal_uLong i = 0; i < nMark; i++ )
+    if(_pObject)
     {
-        SdrObject* pSdrObj = rMarkedList.GetMark(i)->GetMarkedSdrObj();
+    DBG_CHKTHIS( rpt_OSectionView,NULL);
+        const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
+
+        for( sal_uInt32 i(0); i < aSelection.size(); i++ )
+    {
+            SdrObject* pSdrObj = aSelection[i];
+
         if (_pObject == pSdrObj)
         {
-            SdrPageView*    pPgView = GetSdrPageView();
             BrkAction();
-            MarkObj( pSdrObj, pPgView, sal_True );
+                MarkObj( *pSdrObj, true );
             break;
         }
     }
+}
 }
 
 // -----------------------------------------------------------------------------
 void OSectionView::SetMarkedToLayer( SdrLayerID _nLayerNo )
 {
-    if (AreObjectsMarked())
+    if (areSdrObjectsSelected())
     {
         //  #i11702# use SdrUndoObjectLayerChange for undo
         //  STR_UNDO_SELATTR is "Attributes" - should use a different text later
         BegUndo( );
+        const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
 
-        const SdrMarkList& rMark = GetMarkedObjectList();
-        sal_uLong nCount = rMark.GetMarkCount();
-        for (sal_uLong i=0; i<nCount; i++)
+        for (sal_uInt32 i(0); i < aSelection.size(); i++)
         {
-            SdrObject* pObj = rMark.GetMark(i)->GetMarkedSdrObj();
-            if ( pObj->ISA(OCustomShape) )
+            OCustomShape* pObj = dynamic_cast< OCustomShape* >(aSelection[i]);
+
+            if ( pObj )
             {
                 AddUndo( new SdrUndoObjectLayerChange( *pObj, pObj->GetLayer(), _nLayerNo) );
                 pObj->SetLayer( _nLayerNo );
                 OObjectBase* pBaseObj = dynamic_cast<OObjectBase*>(pObj);
+
                 try
                 {
                     pBaseObj->getReportComponent()->setPropertyValue(PROPERTY_OPAQUE,uno::makeAny(_nLayerNo == RPT_LAYER_FRONT));
@@ -205,29 +224,29 @@ void OSectionView::SetMarkedToLayer( SdrLayerID _nLayerNo )
         }
 
         EndUndo();
-
-        //  #84073# check mark list now instead of later in a timer
-        CheckMarked();
-        MarkListHasChanged();
     }
 }
 // -----------------------------------------------------------------------------
 bool OSectionView::OnlyShapesMarked() const
 {
-    const SdrMarkList& rMark = GetMarkedObjectList();
-    const sal_uLong nCount = rMark.GetMarkCount();
-    if ( !nCount )
-        return false;
-    sal_uLong i=0;
-    for (; i<nCount; i++)
+    const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
+
+    if(!aSelection.size())
     {
-        SdrObject* pObj = rMark.GetMark(i)->GetMarkedSdrObj();
-        if ( !pObj->ISA(OCustomShape) )
+        return false;
+    }
+
+    sal_uInt32 a(0);
+
+    for(; a < aSelection.size(); a++)
+    {
+        if(!dynamic_cast< OCustomShape* >(aSelection[a]))
         {
             break;
         }
-    } // for (sal_uLong i=0; i<nCount; i++)
-    return i == nCount;
+    }
+
+    return a == aSelection.size();
 }
 
 bool OSectionView::IsDragResize() const
@@ -249,20 +268,28 @@ bool OSectionView::IsDragResize() const
 short OSectionView::GetLayerIdOfMarkedObjects() const
 {
     short nRet = SHRT_MAX;
-    const SdrMarkList &rMrkList = GetMarkedObjectList();
-    for ( sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i )
+    const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
+
+    for ( sal_uInt32 i(0); i < aSelection.size(); ++i )
     {
-        const SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
+        const SdrObject* pObj = aSelection[i];
+
         if ( nRet == SHRT_MAX )
+        {
             nRet = pObj->GetLayer();
+        }
         else if ( nRet != pObj->GetLayer() )
         {
             nRet = -1;
             break;
         }
     }
+
     if ( nRet == SHRT_MAX )
+    {
         nRet = -1;
+    }
+
     return nRet;
 }
 

@@ -44,10 +44,8 @@ namespace rtl
 class EDITENG_DLLPUBLIC SvxAutoKernItem : public SfxBoolItem
 {
 public:
-    TYPEINFO();
-
-    SvxAutoKernItem( const sal_Bool bAutoKern /*= sal_False*/,
-                     const sal_uInt16 nId );
+    POOLITEM_FACTORY()
+    SvxAutoKernItem( const sal_Bool bAutoKern = sal_False, const sal_uInt16 nId = 0 );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;

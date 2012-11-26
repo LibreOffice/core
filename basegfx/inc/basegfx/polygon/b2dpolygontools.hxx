@@ -29,6 +29,8 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
+#include <com/sun/star/drawing/PointSequence.hpp>
+#include <com/sun/star/drawing/FlagSequence.hpp>
 #include <vector>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -526,6 +528,26 @@ namespace basegfx
             The modified version of the source polygon
         */
         B2DPolygon snapPointsOfHorizontalOrVerticalEdges(const B2DPolygon& rCandidate);
+
+        /// converters for com::sun::star::drawing::PointSequence
+        B2DPolygon UnoPointSequenceToB2DPolygon(
+            const com::sun::star::drawing::PointSequence& rPointSequenceSource,
+            bool bCheckClosed = true);
+        void B2DPolygonToUnoPointSequence(
+            const B2DPolygon& rPolygon,
+            com::sun::star::drawing::PointSequence& rPointSequenceRetval);
+
+        /* converters for com::sun::star::drawing::PointSequence and
+           com::sun::star::drawing::FlagSequence to B2DPolygon (curved polygons)
+         */
+        B2DPolygon UnoPolygonBezierCoordsToB2DPolygon(
+            const com::sun::star::drawing::PointSequence& rPointSequenceSource,
+            const com::sun::star::drawing::FlagSequence& rFlagSequenceSource,
+            bool bCheckClosed = true);
+        void B2DPolygonToUnoPolygonBezierCoords(
+            const B2DPolygon& rPolyPolygon,
+            com::sun::star::drawing::PointSequence& rPointSequenceRetval,
+            com::sun::star::drawing::FlagSequence& rFlagSequenceRetval);
 
     } // end of namespace tools
 } // end of namespace basegfx

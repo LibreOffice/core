@@ -142,7 +142,7 @@ public:
     *
     * \return
     */
-    ::boost::shared_ptr<rptui::OReportModel> getSdrModel() const { return m_pReportModel; }
+    ::boost::shared_ptr<rptui::OReportModel> getSharedSdrModel() const { return m_pReportModel; }
     void FinishStyles();
 
     virtual void SAL_CALL startDocument(void)

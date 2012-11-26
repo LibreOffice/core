@@ -149,7 +149,7 @@ private:
     SfxMapUnit          ePoolUnit;
 
     String          GetScale( sal_Int32 nX, sal_Int32 nY );
-    sal_Bool            SetScale( const String& aScale, sal_Int32& rX, sal_Int32& rY );
+    bool            SetScale( const String& aScale, sal_Int32& rX, sal_Int32& rY );
 
     DECL_LINK( ModifyScaleHdl, void * );
     DECL_LINK( ModifyOriginalScaleHdl, void * );

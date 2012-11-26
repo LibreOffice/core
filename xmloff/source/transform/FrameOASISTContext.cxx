@@ -40,8 +40,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
-TYPEINIT1( XMLFrameOASISTransformerContext, XMLTransformerContext );
-
 sal_Bool XMLFrameOASISTransformerContext::IsLinkedEmbeddedObject(
             const OUString& rLocalName,
             const Reference< XAttributeList >& rAttrList )

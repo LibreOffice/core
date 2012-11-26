@@ -67,10 +67,11 @@ SwAnchoredObjectPosition::SwAnchoredObjectPosition( SdrObject& _rDrawObj )
 #if OSL_DEBUG_LEVEL > 1
     // assert, if object isn't of excepted type
     const bool bObjOfExceptedType =
-            mrDrawObj.ISA(SwVirtFlyDrawObj) || // object representing fly frame
-            mrDrawObj.ISA(SwDrawVirtObj)    || // 'virtual' drawing object
-            ( !mrDrawObj.ISA(SdrVirtObj) &&    // 'master' drawing object
-              !mrDrawObj.ISA(SwFlyDrawObj) );  // - indirectly checked
+            dynamic_cast< SwVirtFlyDrawObj* >(&mrDrawObj) || // object representing fly frame
+            dynamic_cast< SwDrawVirtObj* >(&mrDrawObj)    || // 'virtual' drawing object
+            ( !dynamic_cast< SwVirtFlyDrawObj* >(&mrDrawObj) &&    // 'master' drawing object
+              !dynamic_cast< SwDrawVirtObj* >(&mrDrawObj) &&
+              !dynamic_cast< SwFlyDrawObj* >(&mrDrawObj) );  // - indirectly checked
     (void) bObjOfExceptedType;
     ASSERT( bObjOfExceptedType,
             "SwAnchoredObjectPosition(..) - object of unexcepted type!" );
@@ -91,12 +92,12 @@ void SwAnchoredObjectPosition::_GetInfoAboutObj()
 {
     // determine, if object represents a fly frame
     {
-        mbIsObjFly = mrDrawObj.ISA(SwVirtFlyDrawObj);
+        mbIsObjFly = dynamic_cast< SwVirtFlyDrawObj* >(&mrDrawObj);
     }
 
     // determine contact object
     {
-        mpContact = static_cast<SwContact*>(GetUserCall( &mrDrawObj ));
+        mpContact = static_cast<SwContact*>(findConnectionToSdrObject( &mrDrawObj ));
         ASSERT( mpContact,
                 "SwAnchoredObjectPosition::_GetInfoAboutObj() - missing SwContact-object." );
     }
@@ -901,7 +902,7 @@ SwTwips SwAnchoredObjectPosition::_CalcRelPosX(
     // it is horizontal positioned left or right, but not relative to character,
     // it has to be drawn aside another object, which have the same horizontal
     // position and lay below it.
-    if ( GetAnchoredObj().ISA(SwFlyFrm) &&
+    if ( dynamic_cast< SwFlyFrm* >(&GetAnchoredObj()) &&
          ( GetContact().ObjAnchoredAtPara() || GetContact().ObjAnchoredAtChar() ) &&
          ( eHoriOrient == text::HoriOrientation::LEFT || eHoriOrient == text::HoriOrientation::RIGHT ) &&
          eRelOrient != text::RelOrientation::CHAR )
@@ -940,8 +941,8 @@ SwTwips SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(
                                           ) const
 {
     // OD 2004-03-23 #i26791#
-    if ( !GetAnchorFrm().ISA(SwTxtFrm) ||
-         !GetAnchoredObj().ISA(SwFlyAtCntFrm) )
+    if ( !dynamic_cast< SwTxtFrm* >(&GetAnchorFrm()) ||
+         !dynamic_cast< SwFlyAtCntFrm* >(&GetAnchoredObj()) )
     {
         ASSERT( false,
                 "<SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(..) - usage for wrong anchor type" );
@@ -971,13 +972,13 @@ SwTwips SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(
     }
     SwRect aTmpObjRect( aTmpPos, aObjBoundRect.SSize() );
 
-    const sal_uInt32 nObjOrdNum = GetObject().GetOrdNum();
+    const sal_uInt32 nObjOrdNum = GetObject().GetNavigationPosition();
     const SwPageFrm* pObjPage = rFlyAtCntFrm.FindPageFrm();
     const SwFrm* pObjContext = ::FindKontext( &rAnchorTxtFrm, FRM_COLUMN );
     sal_uLong nObjIndex = rAnchorTxtFrm.GetTxtNode()->GetIndex();
     SwOrderIter aIter( pObjPage, sal_True );
     const SwFlyFrm* pFly = ((SwVirtFlyDrawObj*)aIter.Bottom())->GetFlyFrm();
-    while ( pFly && nObjOrdNum > pFly->GetVirtDrawObj()->GetOrdNumDirect() )
+    while ( pFly && nObjOrdNum > pFly->GetVirtDrawObj()->GetNavigationPosition() )
     {
         if ( _DrawAsideFly( pFly, aTmpObjRect, pObjContext, nObjIndex,
                            _bEvenPage, _eHoriOrient, _eRelOrient ) )

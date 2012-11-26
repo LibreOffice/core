@@ -38,9 +38,7 @@ namespace internal {
 // TODO(Q2): Move this to basegfx
 ::basegfx::B2DPolygon createUnitRect()
 {
-    return ::basegfx::tools::createPolygonFromRect(
-        ::basegfx::B2DRectangle(0.0,0.0,
-                                1.0,1.0 ) );
+    return ::basegfx::tools::createUnitPolygon();
 }
 
 ::basegfx::B2DPolyPolygon flipOnYAxis(

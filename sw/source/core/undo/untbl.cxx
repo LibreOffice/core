@@ -308,7 +308,7 @@ void SwUndoInsTbl::UndoImpl(::sw::UndoRedoContext & rContext)
 
 
     sTblNm = pTblNd->GetTable().GetFrmFmt()->GetName();
-    if( pTblNd->GetTable().IsA( TYPE( SwDDETable )) )
+    if( dynamic_cast< SwDDETable* >(&pTblNd->GetTable()))
         pDDEFldType = (SwDDEFieldType*)((SwDDETable&)pTblNd->GetTable()).
                                         GetDDEFldType()->Copy();
 
@@ -434,7 +434,7 @@ SwUndoTblToTxt::SwUndoTblToTxt( const SwTable& rTbl, sal_Unicode cCh )
     pTblSave = new _SaveTable( rTbl );
     pBoxSaves = new SwTblToTxtSaves( (sal_uInt8)rTbl.GetTabSortBoxes().Count() );
 
-    if( rTbl.IsA( TYPE( SwDDETable ) ) )
+    if( dynamic_cast< const SwDDETable* >(&rTbl) )
         pDDEFldType = (SwDDEFieldType*)((SwDDETable&)rTbl).GetDDEFldType()->Copy();
 
     bCheckNumFmt = rTbl.GetFrmFmt()->GetDoc()->IsInsTblFormatNum();
@@ -669,7 +669,7 @@ void SwUndoTblToTxt::RedoImpl(::sw::UndoRedoContext & rContext)
     SwTableNode* pTblNd = pPam->GetNode()->GetTableNode();
     ASSERT( pTblNd, "keinen TableNode gefunden" );
 
-    if( pTblNd->GetTable().IsA( TYPE( SwDDETable )) )
+    if( dynamic_cast< SwDDETable* >(&pTblNd->GetTable()) )
         pDDEFldType = (SwDDEFieldType*)((SwDDETable&)pTblNd->GetTable()).
                                                 GetDDEFldType()->Copy();
 

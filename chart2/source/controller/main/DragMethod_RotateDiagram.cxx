@@ -42,6 +42,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
 #include <drawinglayer/geometry/viewinformation3d.hxx>
+#include <svx/svdlegacy.hxx>
 
 #define FIXED_SIZE_FOR_3D_CHART_VOLUME (10000.0)
 
@@ -59,8 +60,8 @@ DragMethod_RotateDiagram::DragMethod_RotateDiagram( DrawViewWrapper& rDrawViewWr
         , RotationDirection eRotationDirection )
     : DragMethod_Base( rDrawViewWrapper, rObjectCID, xChartModel, ActionDescriptionProvider::ROTATE )
     , m_pScene(0)
-    , m_aReferenceRect(100,100,100,100)
-    , m_aStartPos(0,0)
+    , m_aReferenceRect(100.0, 100.0, 100.0, 100.0)
+    , m_aStartPos(0.0, 0.0)
     , m_aWireframePolyPolygon()
     , m_fInitialXAngleRad(0.0)
     , m_fInitialYAngleRad(0.0)
@@ -76,12 +77,10 @@ DragMethod_RotateDiagram::DragMethod_RotateDiagram( DrawViewWrapper& rDrawViewWr
     , m_bRightAngledAxes(sal_False)
 {
     m_pScene = SelectionHelper::getSceneToRotate( rDrawViewWrapper.getNamedSdrObject( rObjectCID ) );
-    SdrObject* pObj = rDrawViewWrapper.getSelectedObject();
+    SdrObject* pObj = rDrawViewWrapper.getSelectedIfSingle();
     if(pObj && m_pScene)
     {
-        m_aReferenceRect = pObj->GetLogicRect();
-        Rectangle aTemp = m_pScene->GetLogicRect();
-
+        m_aReferenceRect = sdr::legacy::GetLogicRange(*pObj);
         m_aWireframePolyPolygon = m_pScene->CreateWireframe();
 
         uno::Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram(this->getChartModel()) );
@@ -118,17 +117,15 @@ bool DragMethod_RotateDiagram::BeginSdrDrag()
     Show();
     return true;
 }
-void DragMethod_RotateDiagram::MoveSdrDrag(const Point& rPnt)
+void DragMethod_RotateDiagram::MoveSdrDrag(const basegfx::B2DPoint& rPnt)
 {
     if( DragStat().CheckMinMoved(rPnt) )
     {
         Hide();
 
         //calculate new angle
-        double fX = F_PI / 2.0 * (double)(rPnt.Y() - m_aStartPos.Y())
-                / (double)m_aReferenceRect.GetHeight();
-        double fY = F_PI * (double)(rPnt.X() - m_aStartPos.X())
-                / (double)m_aReferenceRect.GetWidth();
+        double fX = F_PI / 2.0 * (rPnt.getY() - m_aStartPos.getY()) / m_aReferenceRect.getHeight();
+        double fY = F_PI * (rPnt.getX() - m_aStartPos.getX()) / m_aReferenceRect.getWidth();
 
         if( m_eRotationDirection != ROTATIONDIRECTION_Y )
             m_fAdditionalYAngleRad = fY;
@@ -145,11 +142,11 @@ void DragMethod_RotateDiagram::MoveSdrDrag(const Point& rPnt)
             m_fAdditionalXAngleRad = 0.0;
             m_fAdditionalYAngleRad = 0.0;
 
-            double fCx = m_aReferenceRect.Center().X();
-            double fCy = m_aReferenceRect.Center().Y();
+            double fCx = m_aReferenceRect.getCenterX();
+            double fCy = m_aReferenceRect.getCenterY();
 
-            m_fAdditionalZAngleRad = atan((double)(fCx - m_aStartPos.X())/(m_aStartPos.Y()-fCy))
-                + atan((double)(fCx - rPnt.X())/(fCy-rPnt.Y()));
+            m_fAdditionalZAngleRad = atan((fCx - m_aStartPos.getX())/(m_aStartPos.getY() - fCy))
+                + atan((fCx - rPnt.getX())/(fCy - rPnt.getY()));
         }
 
         m_nAdditionalHorizontalAngleDegree = static_cast<sal_Int32>(m_fAdditionalXAngleRad*180.0/F_PI);

@@ -38,7 +38,7 @@
 #include <fmtornt.hxx>
 
 #include <com/sun/star/text/HoriOrientation.hpp>
-
+#include <svx/svdlegacy.hxx>
 
 using namespace ::com::sun::star;
 using namespace objectpositioning;
@@ -81,7 +81,7 @@ SwAsCharAnchoredObjectPosition::~SwAsCharAnchoredObjectPosition()
 */
 const SwTxtFrm& SwAsCharAnchoredObjectPosition::GetAnchorTxtFrm() const
 {
-    ASSERT( GetAnchorFrm().ISA(SwTxtFrm),
+    ASSERT( dynamic_cast< SwTxtFrm* >(&GetAnchorFrm()),
             "SwAsCharAnchoredObjectPosition::GetAnchorTxtFrm() - wrong anchor frame type" );
 
     return static_cast<const SwTxtFrm&>(GetAnchorFrm());
@@ -160,7 +160,7 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
     // left difference is only considered, if requested.
     if( !IsObjFly() )
     {
-        SwRect aSnapRect = GetObject().GetSnapRect();
+        SwRect aSnapRect( sdr::legacy::GetSnapRect(GetObject()) );
         if ( rAnchorFrm.IsVertical() )
         {
             rAnchorFrm.SwitchVerticalToHorizontal( aSnapRect );
@@ -253,11 +253,18 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
             // set proposed anchor position at the drawing object.
             // OD 2004-04-06 #i26791# - distinction between 'master' drawing
             // object and 'virtual' drawing object no longer needed.
-            GetObject().SetAnchorPos( aAbsAnchorPos );
+
+            // #i108739#
+            {
+                const basegfx::B2DPoint aTempAnchorPos(GetObject().GetAnchorPos());
+                const basegfx::B2DPoint aB2DAbsAnchorPos(aAbsAnchorPos.X(), aAbsAnchorPos.Y());
+                sdr::legacy::transformSdrObject(GetObject(), basegfx::tools::createTranslateB2DHomMatrix(aB2DAbsAnchorPos - aTempAnchorPos));
+                GetObject().SetAnchorPos(aB2DAbsAnchorPos);
+            }
 
             // move drawing object to set its correct relative position.
             {
-                SwRect aSnapRect = GetObject().GetSnapRect();
+                SwRect aSnapRect( sdr::legacy::GetSnapRect(GetObject()) );
                 if ( rAnchorFrm.IsVertical() )
                     rAnchorFrm.SwitchVerticalToHorizontal( aSnapRect );
 
@@ -272,7 +279,7 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
 
                 // OD 2004-04-06 #i26791# - distinction between 'master' drawing
                 // object and 'virtual' drawing object no longer needed.
-                GetObject().Move( Size( aDiff.X(), aDiff.Y() ) );
+                sdr::legacy::transformSdrObject(GetObject(), basegfx::tools::createTranslateB2DHomMatrix(aDiff.X(), aDiff.Y()));
             }
         }
 
@@ -286,7 +293,7 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
             rAnchorFrm.SwitchHorizontalToVertical( aAnchorPos );
 
         // --> OD 2005-03-09 #i44347# - keep last object rectangle at anchored object
-        ASSERT ( GetAnchoredObj().ISA(SwAnchoredDrawObject),
+        ASSERT ( dynamic_cast< SwAnchoredDrawObject* >(&GetAnchoredObj()),
                  "<SwAsCharAnchoredObjectPosition::CalcPosition()> - wrong type of anchored object." );
         SwAnchoredDrawObject& rAnchoredDrawObj =
                         static_cast<SwAnchoredDrawObject&>( GetAnchoredObj() );
@@ -314,7 +321,7 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
             aRelAttr = Point( 0, nRelPos );
 
         // OD 2004-03-23 #i26791#
-        ASSERT( GetAnchoredObj().ISA(SwFlyInCntFrm),
+        ASSERT( dynamic_cast< SwFlyInCntFrm* >(&GetAnchoredObj()),
                 "<SwAsCharAnchoredObjectPosition::CalcPosition()> - wrong anchored object." );
         const SwFlyInCntFrm& rFlyInCntFrm =
                 static_cast<const SwFlyInCntFrm&>(GetAnchoredObj());

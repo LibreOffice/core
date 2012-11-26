@@ -27,6 +27,7 @@
 #include <tools/ref.hxx>
 #include <bastype.hxx>
 #include <tools/pstm.hxx>
+#include <typeinfo>
 
 class SvTokenStream;
 class SvMetaObject;
@@ -120,6 +121,11 @@ SV_DECL_IMPL_REF(SvMetaObject)
 SV_DECL_PERSIST_LIST(SvMetaObject,SvMetaObject *)
 SV_IMPL_PERSIST_LIST(SvMetaObject,SvMetaObject *)
 
+typedef bool (*ConvertToSvMetaObject)( const SvMetaObject* );
+template<class T> bool _IsSvMetaObject(const SvMetaObject* pObj)
+{
+    return 0 != dynamic_cast<const T*>(pObj);
+}
 
 class SvMetaObjectMemberStack
 {
@@ -134,12 +140,14 @@ public:
     void            Clear() { aList.Clear(); }
     sal_uLong     Count() const { return aList.Count(); }
 
-    SvMetaObject *  Get( TypeId nType )
+    SvMetaObject *  Get( ConvertToSvMetaObject rConvert )
+//    SvMetaObject *  Get( TypeId nType )
                     {
                         SvMetaObject * pObj = aList.Last();
                         while( pObj )
                         {
-                            if( pObj->IsA( nType ) )
+                            if( rConvert(pObj) )
+//                            if( pObj->IsA( nType ) )
                                 return pObj;
                             pObj = aList.Prev();
                         }

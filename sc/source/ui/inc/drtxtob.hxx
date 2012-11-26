@@ -48,7 +48,6 @@ class ScDrawTextObjectBar : public SfxShell
     DECL_LINK( ClipboardChanged, TransferableDataHelper* );
 
 public:
-    TYPEINFO();
     SFX_DECL_INTERFACE(SCID_DRAW_TEXT_SHELL)
 
         ScDrawTextObjectBar(ScViewData* pData);

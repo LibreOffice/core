@@ -132,7 +132,9 @@ namespace drawinglayer
             /*  the local processor for BasePrinitive2D-Implementation based primitives,
                 called from the common process()-implementation
              */
-            virtual void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
+            virtual void processBasePrimitive2D(
+                const primitive2d::BasePrimitive2D& rCandidate,
+                const primitive2d::Primitive2DReference& rUnoCandidate);
 
         public:
             /// constructor/destructor

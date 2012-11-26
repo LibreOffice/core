@@ -672,8 +672,6 @@ Any AnimationsImportHelperImpl::convertPath( const OUString& rValue )
 
 ///////////////////////////////////////////////////////////////////////
 
-TYPEINIT1( AnimationNodeContext, SvXMLImportContext );
-
 AnimationNodeContext::AnimationNodeContext(
         const Reference< XAnimationNode >& xParentNode,
         SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName,

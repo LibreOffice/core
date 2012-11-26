@@ -56,24 +56,6 @@
 #include "postit.hxx"
 #include "docuno.hxx"
 
-// STATIC DATA ---------------------------------------------------------------
-
-TYPEINIT1(ScUndoDeleteContents,     SfxUndoAction);
-TYPEINIT1(ScUndoFillTable,          SfxUndoAction);
-TYPEINIT1(ScUndoSelectionAttr,      SfxUndoAction);
-TYPEINIT1(ScUndoAutoFill,           SfxUndoAction);
-TYPEINIT1(ScUndoMerge,              SfxUndoAction);
-TYPEINIT1(ScUndoAutoFormat,         SfxUndoAction);
-TYPEINIT1(ScUndoReplace,            SfxUndoAction);
-TYPEINIT1(ScUndoTabOp,              SfxUndoAction);
-TYPEINIT1(ScUndoConversion,         SfxUndoAction);
-TYPEINIT1(ScUndoRefConversion,      SfxUndoAction);
-TYPEINIT1(ScUndoRefreshLink,        SfxUndoAction);
-TYPEINIT1(ScUndoInsertAreaLink,     SfxUndoAction);
-TYPEINIT1(ScUndoRemoveAreaLink,     SfxUndoAction);
-TYPEINIT1(ScUndoUpdateAreaLink,     SfxUndoAction);
-
-
 // To Do:
 /*A*/   // SetOptimalHeight auf Dokument, wenn keine View
 
@@ -244,8 +226,12 @@ void __EXPORT ScUndoDeleteContents::Redo()
 
 void __EXPORT ScUndoDeleteContents::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->DeleteContents( nFlags, sal_True );
+    ScTabViewTarget* pScTabViewTarget = dynamic_cast< ScTabViewTarget* >(&rTarget);
+
+    if (pScTabViewTarget)
+    {
+        pScTabViewTarget->GetViewShell()->DeleteContents( nFlags, sal_True );
+    }
 }
 
 
@@ -253,7 +239,7 @@ void __EXPORT ScUndoDeleteContents::Repeat(SfxRepeatTarget& rTarget)
 
 sal_Bool __EXPORT ScUndoDeleteContents::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return 0 != dynamic_cast< ScTabViewTarget* >(&rTarget);
 }
 
 
@@ -408,8 +394,10 @@ void __EXPORT ScUndoFillTable::Redo()
 
 void __EXPORT ScUndoFillTable::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->FillTab( nFlags, nFunction, bSkipEmpty, bAsLink );
+    ScTabViewTarget* pScTabViewTarget = dynamic_cast< ScTabViewTarget* >(&rTarget);
+
+    if (pScTabViewTarget)
+        pScTabViewTarget->GetViewShell()->FillTab( nFlags, nFunction, bSkipEmpty, bAsLink );
 }
 
 
@@ -417,7 +405,7 @@ void __EXPORT ScUndoFillTable::Repeat(SfxRepeatTarget& rTarget)
 
 sal_Bool __EXPORT ScUndoFillTable::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return 0 != dynamic_cast< ScTabViewTarget* >(&rTarget);
 }
 
 
@@ -539,9 +527,11 @@ void __EXPORT ScUndoSelectionAttr::Redo()
 
 void __EXPORT ScUndoSelectionAttr::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    ScTabViewTarget* pScTabViewTarget = dynamic_cast< ScTabViewTarget* >(&rTarget);
+
+    if (pScTabViewTarget)
     {
-        ScTabViewShell& rViewShell = *((ScTabViewTarget&)rTarget).GetViewShell();
+        ScTabViewShell& rViewShell = *pScTabViewTarget->GetViewShell();
         if (pLineOuter)
             rViewShell.ApplyPatternLines( *pApplyPattern, pLineOuter, pLineInner, sal_True );
         else
@@ -554,7 +544,7 @@ void __EXPORT ScUndoSelectionAttr::Repeat(SfxRepeatTarget& rTarget)
 
 sal_Bool __EXPORT ScUndoSelectionAttr::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return 0 != dynamic_cast< ScTabViewTarget* >(&rTarget);
 }
 
 
@@ -738,9 +728,11 @@ void __EXPORT ScUndoAutoFill::Redo()
 
 void __EXPORT ScUndoAutoFill::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    ScTabViewTarget* pScTabViewTarget = dynamic_cast< ScTabViewTarget* >(&rTarget);
+
+    if (pScTabViewTarget)
     {
-        ScTabViewShell& rViewShell = *((ScTabViewTarget&)rTarget).GetViewShell();
+        ScTabViewShell& rViewShell = *pScTabViewTarget->GetViewShell();
         if (eFillCmd==FILL_SIMPLE)
             rViewShell.FillSimple( eFillDir, sal_True );
         else
@@ -754,7 +746,7 @@ void __EXPORT ScUndoAutoFill::Repeat(SfxRepeatTarget& rTarget)
 
 sal_Bool __EXPORT ScUndoAutoFill::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return 0 != dynamic_cast< ScTabViewTarget* >(&rTarget);
 }
 
 
@@ -873,9 +865,11 @@ void ScUndoMerge::Redo()
 
 void ScUndoMerge::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    ScTabViewTarget* pScTabViewTarget = dynamic_cast< ScTabViewTarget* >(&rTarget);
+
+    if (pScTabViewTarget)
     {
-        ScTabViewShell& rViewShell = *((ScTabViewTarget&)rTarget).GetViewShell();
+        ScTabViewShell& rViewShell = *pScTabViewTarget->GetViewShell();
         sal_Bool bCont = sal_False;
         rViewShell.MergeCells( sal_False, bCont, sal_True );
     }
@@ -886,7 +880,7 @@ void ScUndoMerge::Repeat(SfxRepeatTarget& rTarget)
 
 sal_Bool ScUndoMerge::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return 0 != dynamic_cast< ScTabViewTarget* >(&rTarget);
 }
 
 
@@ -1059,8 +1053,12 @@ void __EXPORT ScUndoAutoFormat::Redo()
 
 void __EXPORT ScUndoAutoFormat::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->AutoFormat( nFormatNo, sal_True );
+    ScTabViewTarget* pScTabViewTarget = dynamic_cast< ScTabViewTarget* >(&rTarget);
+
+    if (pScTabViewTarget)
+    {
+        pScTabViewTarget->GetViewShell()->AutoFormat( nFormatNo, sal_True );
+    }
 }
 
 
@@ -1068,7 +1066,7 @@ void __EXPORT ScUndoAutoFormat::Repeat(SfxRepeatTarget& rTarget)
 
 sal_Bool __EXPORT ScUndoAutoFormat::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return 0 != dynamic_cast< ScTabViewTarget* >(&rTarget);
 }
 
 
@@ -1262,8 +1260,12 @@ void __EXPORT ScUndoReplace::Redo()
 
 void __EXPORT ScUndoReplace::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->SearchAndReplace( pSearchItem, sal_True, sal_False );
+    ScTabViewTarget* pScTabViewTarget = dynamic_cast< ScTabViewTarget* >(&rTarget);
+
+    if (pScTabViewTarget)
+    {
+        pScTabViewTarget->GetViewShell()->SearchAndReplace( pSearchItem, sal_True, sal_False );
+    }
 }
 
 
@@ -1271,7 +1273,7 @@ void __EXPORT ScUndoReplace::Repeat(SfxRepeatTarget& rTarget)
 
 sal_Bool __EXPORT ScUndoReplace::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return 0 != dynamic_cast< ScTabViewTarget* >(&rTarget);
 }
 
 
@@ -1504,8 +1506,12 @@ void ScUndoConversion::Redo()
 
 void ScUndoConversion::Repeat( SfxRepeatTarget& rTarget )
 {
-    if( rTarget.ISA( ScTabViewTarget ) )
-        ((ScTabViewTarget&)rTarget).GetViewShell()->DoSheetConversion( maConvParam, sal_True );
+    ScTabViewTarget* pScTabViewTarget = dynamic_cast< ScTabViewTarget* >(&rTarget);
+
+    if( pScTabViewTarget )
+    {
+        pScTabViewTarget->GetViewShell()->DoSheetConversion( maConvParam, sal_True );
+    }
 }
 
 
@@ -1513,7 +1519,7 @@ void ScUndoConversion::Repeat( SfxRepeatTarget& rTarget )
 
 sal_Bool ScUndoConversion::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return rTarget.ISA( ScTabViewTarget );
+    return 0 != dynamic_cast< ScTabViewTarget* >(&rTarget);
 }
 
 
@@ -1600,13 +1606,15 @@ void __EXPORT ScUndoRefConversion::Redo()
 
 void __EXPORT ScUndoRefConversion::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->DoRefConversion();
+    ScTabViewTarget* pScTabViewTarget = dynamic_cast< ScTabViewTarget* >(&rTarget);
+
+    if (pScTabViewTarget)
+        pScTabViewTarget->GetViewShell()->DoRefConversion();
 }
 
 sal_Bool __EXPORT ScUndoRefConversion::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return 0 != dynamic_cast< ScTabViewTarget* >(&rTarget);
 }
 //============================================================================
 //  class ScUndoRefreshLink
@@ -1758,9 +1766,11 @@ ScAreaLink* lcl_FindAreaLink( sfx2::LinkManager* pLinkManager, const String& rDo
     for (sal_uInt16 i=0; i<nCount; i++)
     {
         ::sfx2::SvBaseLink* pBase = *rLinks[i];
-        if (pBase->ISA(ScAreaLink))
-            if ( ((ScAreaLink*)pBase)->IsEqual( rDoc, rFlt, rOpt, rSrc, rDest ) )
-                return (ScAreaLink*)pBase;
+        ScAreaLink* pScAreaLink = dynamic_cast< ScAreaLink* >(pBase);
+
+        if (pScAreaLink)
+            if ( pScAreaLink->IsEqual( rDoc, rFlt, rOpt, rSrc, rDest ) )
+                return pScAreaLink;
     }
 
     DBG_ERROR("ScAreaLink nicht gefunden");

@@ -412,7 +412,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
         if(pDrawView)
         {
             sal_Bool bOnlyHardAttr = sal_True;
-            if( pDrawView->AreObjectsMarked() )
+            if( pDrawView->areSdrObjectsSelected() )
             {
                 pItemSet = new SfxItemSet( pDrawView->GetAttrFromMarked(bOnlyHardAttr) );
                 //remove attributes defining the type/data of custom shapes

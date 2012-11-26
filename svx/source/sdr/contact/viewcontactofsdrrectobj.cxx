@@ -50,6 +50,9 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrRectObj::createViewIndependentPrimitive2DSequence() const
         {
+            drawinglayer::primitive2d::Primitive2DSequence xRetval;
+
+            // Prepare attribute settings
             const SfxItemSet& rItemSet = GetRectObj().GetMergedItemSet();
             const drawinglayer::attribute::SdrLineFillShadowTextAttribute aAttribute(
                 drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(
@@ -57,42 +60,41 @@ namespace sdr
                     GetRectObj().getText(0),
                     false));
 
-            // take unrotated snap rect (direct model data) for position and size
-            const Rectangle& rRectangle = GetRectObj().GetGeoRect();
-            const ::basegfx::B2DRange aObjectRange(
-                rRectangle.Left(), rRectangle.Top(),
-                rRectangle.Right(), rRectangle.Bottom());
-            const GeoStat& rGeoStat(GetRectObj().GetGeoStat());
-
-            // fill object matrix
-            basegfx::B2DHomMatrix aObjectMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
-                aObjectRange.getWidth(), aObjectRange.getHeight(),
-                rGeoStat.nShearWink ? tan((36000 - rGeoStat.nShearWink) * F_PI18000) : 0.0,
-                rGeoStat.nDrehWink ? (36000 - rGeoStat.nDrehWink) * F_PI18000 : 0.0,
-                aObjectRange.getMinX(), aObjectRange.getMinY()));
-
             // calculate corner radius
-            sal_uInt32 nCornerRadius(((SdrEckenradiusItem&)(rItemSet.Get(SDRATTR_ECKENRADIUS))).GetValue());
-            double fCornerRadiusX;
-            double fCornerRadiusY;
-            drawinglayer::primitive2d::calculateRelativeCornerRadius(nCornerRadius, aObjectRange, fCornerRadiusX, fCornerRadiusY);
+            const sal_uInt32 nCornerRadius(((SdrMetricItem&)(rItemSet.Get(SDRATTR_ECKENRADIUS))).GetValue());
+            double fCornerRadiusX(0.0);
+            double fCornerRadiusY(0.0);
+
+            if(nCornerRadius)
+            {
+                // get absolute object size
+                const basegfx::B2DVector aAbsScale(basegfx::absolute(GetRectObj().getSdrObjectScale()));
+
+                drawinglayer::primitive2d::calculateRelativeCornerRadius(
+                    nCornerRadius,
+                    aAbsScale.getX(),
+                    aAbsScale.getY(),
+                    fCornerRadiusX,
+                    fCornerRadiusY);
+            }
 
             // #i105856# use knowledge about pickthrough from the model
-            const bool bPickThroughTransparentTextFrames(
-                GetRectObj().GetModel() && GetRectObj().GetModel()->IsPickThroughTransparentTextFrames());
+            const bool bPickThroughTransparentTextFrames(GetRectObj().getSdrModelFromSdrObject().IsPickThroughTransparentTextFrames());
 
             // create primitive. Always create primitives to allow the decomposition of
             // SdrRectanglePrimitive2D to create needed invisible elements for HitTest and/or BoundRect
             const drawinglayer::primitive2d::Primitive2DReference xReference(
                 new drawinglayer::primitive2d::SdrRectanglePrimitive2D(
-                    aObjectMatrix,
+                    GetRectObj().getSdrObjectTransformation(),
                     aAttribute,
                     fCornerRadiusX,
                     fCornerRadiusY,
                     // #i105856# use fill for HitTest when TextFrame and not PickThrough
                     GetRectObj().IsTextFrame() && !bPickThroughTransparentTextFrames));
 
-            return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+            xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+
+            return xRetval;
         }
     } // end of namespace contact
 } // end of namespace sdr

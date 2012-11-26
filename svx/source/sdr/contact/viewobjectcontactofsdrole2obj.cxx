@@ -103,11 +103,12 @@ namespace sdr
                             const_cast< SdrOle2Obj* >(&rSdrOle2)->SetResizeProtect(true);
                         }
 
-                        SdrPageView* pPageView = GetObjectContact().TryToGetSdrPageView();
-                        if(pPageView && (nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE))
+                        SdrView* pSdrView = GetObjectContact().TryToGetSdrView();
+
+                        if(pSdrView && (nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE))
                         {
                             // connect plugin object
-                            pPageView->GetView().DoConnect(const_cast< SdrOle2Obj* >(&rSdrOle2));
+                            pSdrView->DoConnect(const_cast< SdrOle2Obj* >(&rSdrOle2));
                         }
                     }
                 }//end old stuff to rework
@@ -121,12 +122,9 @@ namespace sdr
                     // do not shade when printing or PDF exporting
                     if(!GetObjectContact().isOutputToPrinter() && !GetObjectContact().isOutputToRecordingMetaFile())
                     {
-                        // get object transformation
-                        const basegfx::B2DHomMatrix aObjectMatrix(static_cast< ViewContactOfSdrOle2Obj& >(GetViewContact()).createObjectTransform());
-
                         // shade the representation if the object is activated outplace
                         basegfx::B2DPolygon aObjectOutline(basegfx::tools::createUnitPolygon());
-                        aObjectOutline.transform(aObjectMatrix);
+                        aObjectOutline.transform(rSdrOle2.getSdrObjectTransformation());
 
                         // Use a FillHatchPrimitive2D with necessary attributes
                         const drawinglayer::attribute::FillHatchAttribute aFillHatch(

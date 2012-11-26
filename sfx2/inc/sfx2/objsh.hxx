@@ -188,6 +188,16 @@ in fremde Objekte integriert werden k"onnen.
 class SfxToolBoxConfig;
 struct TransferableObjectDescriptor;
 
+// -----------------------------------------------------------------------
+
+typedef bool (*ConvertToObjectShell)( const SfxObjectShell* );
+template<class T> bool _IsObjectShell(const SfxObjectShell* pShell)
+{
+    return 0 != dynamic_cast< const T* >(pShell);
+}
+
+// -----------------------------------------------------------------------
+
 class SFX2_DLLPUBLIC SfxObjectShell :
     public SfxShell, virtual public SotObject,
     public ::comphelper::IEmbeddedHelper, public ::sfx2::IXmlIdRegistrySupplier
@@ -234,7 +244,6 @@ protected:
     virtual void                DoFlushDocInfo();
 
 public:
-                                TYPEINFO();
                                 SFX_DECL_INTERFACE(SFX_INTERFACE_SFXDOCSH)
 
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
@@ -246,11 +255,8 @@ public:
     using SotObject::GetInterface;
 
     // Document-Shell Iterator
-    static SfxObjectShell*      GetFirst( const TypeId* pType = 0,
-                                          sal_Bool bOnlyVisible = sal_True );
-    static SfxObjectShell*      GetNext( const SfxObjectShell& rPrev,
-                                         const TypeId* pType = 0,
-                                         sal_Bool bOnlyVisible = sal_True );
+    static SfxObjectShell*      GetFirst( ConvertToObjectShell = 0, sal_Bool bOnlyVisible = sal_True );
+    static SfxObjectShell*      GetNext( const SfxObjectShell& rPrev, ConvertToObjectShell = 0, sal_Bool bOnlyVisible = sal_True );
     static SfxObjectShell*      Current();
     static sal_uInt16           Count();
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
@@ -825,7 +831,7 @@ class SFX2_DLLPUBLIC SfxObjectShellItem: public SfxPoolItem
     SfxObjectShell*         pObjSh;
 
 public:
-                            TYPEINFO();
+                            POOLITEM_FACTORY()
                             SfxObjectShellItem() :
                                 SfxPoolItem( 0 ),
                                 pObjSh( 0 )

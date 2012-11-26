@@ -136,7 +136,7 @@ namespace sdr
                         OutlinerParaObject* pTemp = pOutliner->CreateParaObject(0, (sal_uInt16)nParaCount);
                         pOutliner->Clear();
 
-                        rObj.NbcSetOutlinerParaObjectForText(pTemp,pText);
+                        rObj.SetOutlinerParaObjectForText(pTemp,pText);
                     }
                 }
             }
@@ -146,7 +146,6 @@ namespace sdr
             {
                 // Here only repaint wanted
                 rObj.ActionChanged();
-                //rObj.BroadcastObjectChange();
             }
 
             // call parent
@@ -194,7 +193,7 @@ namespace sdr
                             OutlinerParaObject* pTemp = rOutliner.CreateParaObject(0, (sal_uInt16)nParaCount);
                             rOutliner.Clear();
 
-                            rObj.NbcSetOutlinerParaObjectForText( pTemp, pText );
+                            rObj.SetOutlinerParaObjectForText( pTemp, pText );
                         }
                     }
                 }
@@ -215,21 +214,21 @@ namespace sdr
 
                     if(bLineVisible)
                     {
-                        const sal_Int32 nLeftDist(((const SdrTextLeftDistItem&)GetItem(SDRATTR_TEXT_LEFTDIST)).GetValue());
-                        const sal_Int32 nRightDist(((const SdrTextRightDistItem&)GetItem(SDRATTR_TEXT_RIGHTDIST)).GetValue());
-                        const sal_Int32 nUpperDist(((const SdrTextUpperDistItem&)GetItem(SDRATTR_TEXT_UPPERDIST)).GetValue());
-                        const sal_Int32 nLowerDist(((const SdrTextLowerDistItem&)GetItem(SDRATTR_TEXT_LOWERDIST)).GetValue());
+                        const sal_Int32 nLeftDist(((const SdrMetricItem&)GetItem(SDRATTR_TEXT_LEFTDIST)).GetValue());
+                        const sal_Int32 nRightDist(((const SdrMetricItem&)GetItem(SDRATTR_TEXT_RIGHTDIST)).GetValue());
+                        const sal_Int32 nUpperDist(((const SdrMetricItem&)GetItem(SDRATTR_TEXT_UPPERDIST)).GetValue());
+                        const sal_Int32 nLowerDist(((const SdrMetricItem&)GetItem(SDRATTR_TEXT_LOWERDIST)).GetValue());
 
-                        SetObjectItemDirect(SdrTextLeftDistItem(nLeftDist + nDifference));
-                        SetObjectItemDirect(SdrTextRightDistItem(nRightDist + nDifference));
-                        SetObjectItemDirect(SdrTextUpperDistItem(nUpperDist + nDifference));
-                        SetObjectItemDirect(SdrTextLowerDistItem(nLowerDist + nDifference));
+                        SetObjectItemDirect(SdrMetricItem(SDRATTR_TEXT_LEFTDIST, nLeftDist + nDifference));
+                        SetObjectItemDirect(SdrMetricItem(SDRATTR_TEXT_RIGHTDIST, nRightDist + nDifference));
+                        SetObjectItemDirect(SdrMetricItem(SDRATTR_TEXT_UPPERDIST, nUpperDist + nDifference));
+                        SetObjectItemDirect(SdrMetricItem(SDRATTR_TEXT_LOWERDIST, nLowerDist + nDifference));
                     }
                 }
             }
         }
 
-        void TextProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
+        void TextProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
             SdrTextObj& rObj = (SdrTextObj&)GetSdrObject();
 
@@ -239,7 +238,7 @@ namespace sdr
             // #i101556# StyleSheet has changed -> new version
             maVersion++;
 
-            if( rObj.GetModel() /*&& !rObj.IsTextEditActive()*/ && !rObj.IsLinkedText() )
+            if( !rObj.IsLinkedText() )
             {
                 SdrOutliner& rOutliner = rObj.ImpGetDrawOutliner();
 
@@ -279,8 +278,7 @@ namespace sdr
                                     sal_Int16 nDepth = rOutliner.GetDepth((sal_uInt16)nPara);
                                     aNewStyleSheetName += String::CreateFromInt32( nDepth <= 0 ? 1 : nDepth + 1);
 
-                                    SdrModel* pModel = rObj.GetModel();
-                                    SfxStyleSheetBasePool* pStylePool = (pModel != NULL) ? pModel->GetStyleSheetPool() : 0L;
+                                    SfxStyleSheetBasePool* pStylePool = rObj.getSdrModelFromSdrObject().GetStyleSheetPool();
                                     SfxStyleSheet* pNewStyle = (SfxStyleSheet*)pStylePool->Find(aNewStyleSheetName, GetStyleSheet()->GetFamily());
                                     DBG_ASSERT( pNewStyle, "AutoStyleSheetName - Style not found!" );
 
@@ -342,14 +340,14 @@ namespace sdr
 
                         OutlinerParaObject* pTemp = rOutliner.CreateParaObject(0, (sal_uInt16)nParaCount);
                         rOutliner.Clear();
-                        rObj.NbcSetOutlinerParaObjectForText(pTemp, pText);
+                        rObj.SetOutlinerParaObjectForText(pTemp, pText);
                     }
                 }
             }
 
             if(rObj.IsTextFrame())
             {
-                rObj.NbcAdjustTextFrameWidthAndHeight();
+                rObj.AdjustTextFrameWidthAndHeight();
             }
         }
 
@@ -397,11 +395,9 @@ namespace sdr
             // now the standard TextProperties stuff
             SdrTextObj& rObj = (SdrTextObj&)GetSdrObject();
 
-            if(rObj.GetModel()
-                && !rObj.IsTextEditActive()
-                && !rObj.IsLinkedText())
+            if(!rObj.IsTextEditActive() && !rObj.IsLinkedText())
             {
-                Outliner* pOutliner = SdrMakeOutliner(OUTLINERMODE_OUTLINEOBJECT, rObj.GetModel());
+                Outliner* pOutliner = SdrMakeOutliner(OUTLINERMODE_OUTLINEOBJECT, &rObj.getSdrModelFromSdrObject());
                 sal_Int32 nText = rObj.getTextCount();
 
                 while( --nText >= 0 )
@@ -469,9 +465,9 @@ namespace sdr
 
                                                 if(pFieldItem)
                                                 {
-                                                    const SvxFieldData* pData = pFieldItem->GetField();
+                                                    const SvxURLField* pData = dynamic_cast< const SvxURLField* >(pFieldItem->GetField());
 
-                                                    if(pData && pData->ISA(SvxURLField))
+                                                    if(pData)
                                                     {
                                                         bHasURL = sal_True;
                                                         break;
@@ -530,7 +526,7 @@ namespace sdr
                         if(bBurnIn)
                         {
                             OutlinerParaObject* pTemp = pOutliner->CreateParaObject(0, (sal_uInt16)nParaCount);
-                            rObj.NbcSetOutlinerParaObjectForText(pTemp,pText);
+                            rObj.SetOutlinerParaObjectForText(pTemp,pText);
                         }
                     }
 
@@ -555,9 +551,9 @@ namespace sdr
             SdrTextObj& rObj = (SdrTextObj&)GetSdrObject();
             if(rObj.HasText())
             {
-                if(HAS_BASE(SfxStyleSheet, &rBC))
+                if(dynamic_cast< SfxStyleSheet* >(&rBC))
                 {
-                    SfxSimpleHint* pSimple = PTR_CAST(SfxSimpleHint, &rHint);
+                    const SfxSimpleHint* pSimple = dynamic_cast< const SfxSimpleHint* >( &rHint);
                     sal_uInt32 nId(pSimple ? pSimple->GetId() : 0L);
 
                     if(SFX_HINT_DATACHANGED == nId)
@@ -573,11 +569,10 @@ namespace sdr
                         }
                         rObj.SetTextSizeDirty();
 
-                        if(rObj.IsTextFrame() && rObj.NbcAdjustTextFrameWidthAndHeight())
+                        if(rObj.IsTextFrame() && rObj.AdjustTextFrameWidthAndHeight())
                         {
                             // here only repaint wanted
                             rObj.ActionChanged();
-                            //rObj.BroadcastObjectChange();
                         }
 
                         // #i101556# content of StyleSheet has changed -> new version
@@ -596,9 +591,9 @@ namespace sdr
                         }
                     }
                 }
-                else if(HAS_BASE(SfxStyleSheetBasePool, &rBC))
+                else if(dynamic_cast< SfxStyleSheetBasePool* >(&rBC))
                 {
-                    SfxStyleSheetHintExtended* pExtendedHint = PTR_CAST(SfxStyleSheetHintExtended, &rHint);
+                    const SfxStyleSheetHintExtended* pExtendedHint = dynamic_cast< const SfxStyleSheetHintExtended* >( &rHint);
 
                     if(pExtendedHint
                         && SFX_STYLESHEET_MODIFIED == pExtendedHint->GetHint())

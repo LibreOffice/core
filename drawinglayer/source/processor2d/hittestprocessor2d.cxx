@@ -39,6 +39,7 @@
 #include <drawinglayer/processor3d/cutfindprocessor3d.hxx>
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
+#include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -49,10 +50,12 @@ namespace drawinglayer
         HitTestProcessor2D::HitTestProcessor2D(const geometry::ViewInformation2D& rViewInformation,
             const basegfx::B2DPoint& rLogicHitPosition,
             double fLogicHitTolerance,
-            bool bHitTextOnly)
+            bool bHitTextOnly,
+            primitive2d::Primitive2DSequence* pRecordFields)
         :   BaseProcessor2D(rViewInformation),
             maDiscreteHitPosition(),
             mfDiscreteHitTolerance(0.0),
+            mpRecordFields(pRecordFields),
             mbHit(false),
             mbHitToleranceUsed(false),
             mbUseInvisiblePrimitiveContent(true),
@@ -270,7 +273,9 @@ namespace drawinglayer
             }
         }
 
-        void HitTestProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
+        void HitTestProcessor2D::processBasePrimitive2D(
+            const primitive2d::BasePrimitive2D& rCandidate,
+            const primitive2d::Primitive2DReference& rUnoCandidate)
         {
             if(getHit())
             {
@@ -498,9 +503,8 @@ namespace drawinglayer
                                 aBackTransform.invert();
 
                                 const basegfx::B2DPoint aRelativePoint(aBackTransform * getDiscreteHitPosition());
-                                const basegfx::B2DRange aUnitRange(0.0, 0.0, 1.0, 1.0);
 
-                                if(aUnitRange.isInside(aRelativePoint))
+                                if(basegfx::B2DRange::getUnitB2DRange().isInside(aRelativePoint))
                                 {
                                     const sal_Int32 nX(basegfx::fround(aRelativePoint.getX() * rSizePixel.Width()));
                                     const sal_Int32 nY(basegfx::fround(aRelativePoint.getY() * rSizePixel.Height()));
@@ -580,6 +584,30 @@ namespace drawinglayer
                             {
                                 mbHit = true;
                             }
+                        }
+                    }
+
+                    break;
+                }
+                case PRIMITIVE2D_ID_TEXTHIERARCHYFIELDPRIMITIVE2D :
+                {
+                    const primitive2d::TextHierarchyFieldPrimitive2D& rFieldPrimitive(static_cast< const primitive2d::TextHierarchyFieldPrimitive2D& >(rCandidate));
+                       const primitive2d::Primitive2DSequence& rChildren = rFieldPrimitive.getChildren();
+
+                    // hit only possible with child content
+                    if(rChildren.hasElements())
+                    {
+                        // remember old HitState
+                        const bool bOldHit(getHit());
+
+                        // process sub-content, the FieldContent itself
+                        process(rChildren);
+
+                        // if HitState changed, the FieldContent was the reason
+                        if(mpRecordFields && bOldHit != getHit())
+                        {
+                            // record the TextHierarchyFieldPrimitive2D hit
+                            primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(*mpRecordFields, rUnoCandidate);
                         }
                     }
 

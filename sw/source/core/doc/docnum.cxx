@@ -841,7 +841,7 @@ sal_Bool SwDoc::GotoOutline( SwPosition& rPos, const String& rName ) const
 //                    ((SwNumRuleItem*)pItem)->GetValue().Len() &&
 //                    ((SwNumRuleItem*)pItem)->GetValue() == rName )
 //                {
-//                    if( pMod->IsA( TYPE( SwFmt )) )
+//                    if( dynamic_cast< SwFmt* >(pMod) )
 //                        pMod->GetInfo( *this );
 //                    else
 //                    {

@@ -24,14 +24,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-// #i13033#
-// New mechanism to hold a ist of all original and cloned objects for later
-// re-creating the connections for contained connectors
 #include <clonelist.hxx>
 #include <svx/svdoedge.hxx>
 #include <svx/scene3d.hxx>
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 CloneList::CloneList()
+:   maOriginalList(),
+    maCloneList()
 {
 }
 
@@ -41,26 +42,19 @@ CloneList::~CloneList()
 
 void CloneList::AddPair(const SdrObject* pOriginal, SdrObject* pClone)
 {
-    maOriginalList.Insert((SdrObject*)pOriginal, LIST_APPEND);
-    maCloneList.Insert(pClone, LIST_APPEND);
+    maOriginalList.push_back(const_cast< SdrObject* >(pOriginal));
+    maCloneList.push_back(pClone);
 
     // look for subobjects, too.
-    sal_Bool bOriginalIsGroup(pOriginal->IsGroupObject());
-    sal_Bool bCloneIsGroup(pClone->IsGroupObject());
-
-    if(bOriginalIsGroup && pOriginal->ISA(E3dObject) && !pOriginal->ISA(E3dScene))
-        bOriginalIsGroup = sal_False;
-
-    if(bCloneIsGroup && pClone->ISA(E3dObject) && !pClone->ISA(E3dScene))
-        bCloneIsGroup = sal_False;
+    const bool bOriginalIsGroup(pOriginal->getChildrenOfSdrObject());
+    const bool bCloneIsGroup(pClone->getChildrenOfSdrObject());
 
     if(bOriginalIsGroup && bCloneIsGroup)
     {
-        const SdrObjList* pOriginalList = pOriginal->GetSubList();
-        SdrObjList* pCloneList = pClone->GetSubList();
+        const SdrObjList* pOriginalList = pOriginal->getChildrenOfSdrObject();
+        SdrObjList* pCloneList = pClone->getChildrenOfSdrObject();
 
-        if(pOriginalList && pCloneList
-            && pOriginalList->GetObjCount() == pCloneList->GetObjCount())
+        if(pOriginalList && pCloneList && pOriginalList->GetObjCount() == pCloneList->GetObjCount())
         {
             for(sal_uInt32 a(0); a < pOriginalList->GetObjCount(); a++)
             {
@@ -71,55 +65,48 @@ void CloneList::AddPair(const SdrObject* pOriginal, SdrObject* pClone)
     }
 }
 
-sal_uInt32 CloneList::Count() const
-{
-    return maOriginalList.Count();
-}
-
-const SdrObject* CloneList::GetOriginal(sal_uInt32 nIndex) const
-{
-    return (SdrObject*)maOriginalList.GetObject(nIndex);
-}
-
-SdrObject* CloneList::GetClone(sal_uInt32 nIndex) const
-{
-    return (SdrObject*)maCloneList.GetObject(nIndex);
-}
-
 void CloneList::CopyConnections() const
 {
-    for(sal_uInt32 a(0); a < maOriginalList.Count(); a++)
+    SdrObjectVector::const_iterator aOuterOriginal(maOriginalList.begin());
+    SdrObjectVector::const_iterator aOuterClone(maCloneList.begin());
+
+    for(; aOuterOriginal != maOriginalList.begin(); aOuterOriginal++, aOuterClone++)
     {
-        const SdrEdgeObj* pOriginalEdge = PTR_CAST(SdrEdgeObj, GetOriginal(a));
-        SdrEdgeObj* pCloneEdge = PTR_CAST(SdrEdgeObj, GetClone(a));
+        const SdrEdgeObj* pOriginalEdge = dynamic_cast< const SdrEdgeObj* >(*aOuterOriginal);
+        SdrEdgeObj* pCloneEdge = dynamic_cast< SdrEdgeObj* >(*aOuterClone);
 
         if(pOriginalEdge && pCloneEdge)
         {
-            SdrObject* pOriginalNode1 = pOriginalEdge->GetConnectedNode(sal_True);
-            SdrObject* pOriginalNode2 = pOriginalEdge->GetConnectedNode(sal_False);
+            SdrObject* pOriginalNode1 = pOriginalEdge->GetConnectedNode(true);
 
             if(pOriginalNode1)
             {
-                sal_uLong nPos(maOriginalList.GetPos(pOriginalNode1));
+                SdrObjectVector::const_iterator aOriginal(maOriginalList.begin());
+                SdrObjectVector::const_iterator aClone(maCloneList.begin());
 
-                if(LIST_ENTRY_NOTFOUND != nPos)
+                for(;aOriginal != maOriginalList.end(); aOriginal++, aClone++)
                 {
-                    if(pOriginalEdge->GetConnectedNode(sal_True) != GetClone(nPos))
+                    if(*aOriginal == pOriginalNode1)
                     {
-                        pCloneEdge->ConnectToNode(sal_True, GetClone(nPos));
+                        pCloneEdge->ConnectToNode(true, *aClone);
+                        break;
                     }
                 }
             }
 
+            SdrObject* pOriginalNode2 = pOriginalEdge->GetConnectedNode(false);
+
             if(pOriginalNode2)
             {
-                sal_uLong nPos(maOriginalList.GetPos(pOriginalNode2));
+                SdrObjectVector::const_iterator aOriginal(maOriginalList.begin());
+                SdrObjectVector::const_iterator aClone(maCloneList.begin());
 
-                if(LIST_ENTRY_NOTFOUND != nPos)
+                for(;aOriginal != maOriginalList.end(); aOriginal++, aClone++)
                 {
-                    if(pOriginalEdge->GetConnectedNode(sal_False) != GetClone(nPos))
+                    if(*aOriginal == pOriginalNode2)
                     {
-                        pCloneEdge->ConnectToNode(sal_False, GetClone(nPos));
+                        pCloneEdge->ConnectToNode(false, *aClone);
+                        break;
                     }
                 }
             }
@@ -127,4 +114,5 @@ void CloneList::CopyConnections() const
     }
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // eof

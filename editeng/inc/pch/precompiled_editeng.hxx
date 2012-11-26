@@ -798,7 +798,6 @@
 #include "tools/resary.hxx"
 #include "tools/resid.hxx"
 #include "tools/resmgr.hxx"
-#include "tools/rtti.hxx"
 #include "tools/shl.hxx"
 #include "tools/solar.h"
 #include "tools/stack.hxx"

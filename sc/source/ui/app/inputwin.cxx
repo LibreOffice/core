@@ -157,7 +157,7 @@ ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
     {
         SfxViewFrame* pViewFrm = pDisp->GetFrame();
         if ( pViewFrm )
-            pViewSh = PTR_CAST( ScTabViewShell, pViewFrm->GetViewShell() );
+            pViewSh = dynamic_cast< ScTabViewShell* >( pViewFrm->GetViewShell() );
     }
     DBG_ASSERT( pViewSh, "no view shell for input window" );
 
@@ -232,8 +232,7 @@ __EXPORT ScInputWindow::~ScInputWindow()
 
     if ( !bDown )
     {
-        TypeId aScType = TYPE(ScTabViewShell);
-        SfxViewShell* pSh = SfxViewShell::GetFirst( &aScType );
+        SfxViewShell* pSh = SfxViewShell::GetFirst( _IsSfxViewShell< ScTabViewShell > );
         while ( pSh )
         {
             ScInputHandler* pHdl = ((ScTabViewShell*)pSh)->GetInputHandler();
@@ -242,7 +241,7 @@ __EXPORT ScInputWindow::~ScInputWindow()
                 pHdl->SetInputWindow( NULL );
                 pHdl->StopInputWinEngine( sal_False );  // #125841# reset pTopView pointer
             }
-            pSh = SfxViewShell::GetNext( *pSh, &aScType );
+            pSh = SfxViewShell::GetNext( *pSh, _IsSfxViewShell< ScTabViewShell > );
         }
     }
 
@@ -267,7 +266,7 @@ void ScInputWindow::SetInputHandler( ScInputHandler* pNew )
 sal_Bool ScInputWindow::UseSubTotal(ScRangeList* pRangeList) const
 {
     sal_Bool bSubTotal(sal_False);
-    ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
+    ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell* >( SfxViewShell::Current() );
     if ( pViewSh )
     {
         ScDocument* pDoc = pViewSh->GetViewData()->GetDocument();
@@ -361,7 +360,7 @@ void __EXPORT ScInputWindow::Select()
 
         case SID_INPUT_SUM:
             {
-                ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
+                ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell* >( SfxViewShell::Current() );
                 if ( pViewSh )
                 {
                     const ScMarkData& rMark = pViewSh->GetViewData()->GetMarkData();
@@ -1114,7 +1113,7 @@ void ScTextWnd::StartEditEngine()
         //  as long as EditEngine and DrawText sometimes differ for CTL text,
         //  repaint now to have the EditEngine's version visible
 //        SfxObjectShell* pObjSh = SfxObjectShell::Current();
-        if ( pObjSh && pObjSh->ISA(ScDocShell) )
+        if ( pObjSh && dynamic_cast< ScDocShell* >(pObjSh) )
         {
             ScDocument* pDoc = ((ScDocShell*)pObjSh)->GetDocument();    // any document
             sal_uInt8 nScript = pDoc->GetStringScriptType( aString );
@@ -1199,7 +1198,7 @@ void ScTextWnd::SetTextString( const String& rNewString )
                 sal_uInt8 nOldScript = 0;
                 sal_uInt8 nNewScript = 0;
                 SfxObjectShell* pObjSh = SfxObjectShell::Current();
-                if ( pObjSh && pObjSh->ISA(ScDocShell) )
+                if ( pObjSh && dynamic_cast< ScDocShell* >(pObjSh) )
                 {
                     //  any document can be used (used only for its break iterator)
                     ScDocument* pDoc = ((ScDocShell*)pObjSh)->GetDocument();
@@ -1429,7 +1428,7 @@ void ScPosWnd::FillRangeNames()
     Clear();
 
     SfxObjectShell* pObjSh = SfxObjectShell::Current();
-    if ( pObjSh && pObjSh->ISA(ScDocShell) )
+    if ( pObjSh && dynamic_cast< ScDocShell* >(pObjSh) )
     {
         ScDocument* pDoc = ((ScDocShell*)pObjSh)->GetDocument();
 
@@ -1516,20 +1515,26 @@ void __EXPORT ScPosWnd::Notify( SfxBroadcaster&, const SfxHint& rHint )
     if ( !bFormulaMode )
     {
         //  muss die Liste der Bereichsnamen updgedated werden?
+        const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
 
-        if ( rHint.ISA(SfxSimpleHint) )
+        if ( pSfxSimpleHint )
         {
-            sal_uLong nHintId = ((SfxSimpleHint&)rHint).GetId();
+            sal_uLong nHintId = pSfxSimpleHint->GetId();
             if ( nHintId == SC_HINT_AREAS_CHANGED || nHintId == SC_HINT_NAVIGATOR_UPDATEALL)
                 FillRangeNames();
         }
-        else if ( rHint.ISA(SfxEventHint) )
+        else
         {
-            sal_uLong nEventId = ((SfxEventHint&)rHint).GetEventId();
+            const SfxEventHint* pSfxEventHint = dynamic_cast< const SfxEventHint* >(&rHint);
+
+            if ( pSfxEventHint )
+        {
+                sal_uLong nEventId = pSfxEventHint->GetEventId();
             if ( nEventId == SFX_EVENT_ACTIVATEDOC )
                 FillRangeNames();
         }
     }
+}
 }
 
 void ScPosWnd::HideTip()
@@ -1678,7 +1683,7 @@ void ScPosWnd::DoEnter()
             }
             else
             {
-                ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
+                ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell* >( SfxViewShell::Current() );
                 ScInputHandler* pHdl = pScMod->GetInputHdl( pViewSh );
                 if (pHdl)
                     pHdl->InsertFunction( aText );
@@ -1789,7 +1794,7 @@ void ScPosWnd::ReleaseFocus_Impl()
     HideTip();
 
     SfxViewShell* pCurSh = SfxViewShell::Current();
-    ScInputHandler* pHdl = SC_MOD()->GetInputHdl( PTR_CAST( ScTabViewShell, pCurSh ) );
+    ScInputHandler* pHdl = SC_MOD()->GetInputHdl( dynamic_cast< ScTabViewShell* >( pCurSh ) );
     if ( pHdl && pHdl->IsTopMode() )
     {
         //  Focus wieder in die Eingabezeile?

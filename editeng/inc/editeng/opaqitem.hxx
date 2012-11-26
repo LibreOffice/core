@@ -45,8 +45,6 @@ Dieses Item beschreibt eine logische Variable "Undurchsichtig ja oder nein".
 class EDITENG_DLLPUBLIC SvxOpaqueItem : public SfxBoolItem
 {
 public:
-    TYPEINFO();
-
     SvxOpaqueItem( const sal_uInt16 nId , const sal_Bool bOpa = sal_True );
     inline SvxOpaqueItem &operator=( const SvxOpaqueItem &rCpy );
 

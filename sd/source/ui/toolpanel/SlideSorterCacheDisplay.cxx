@@ -117,17 +117,19 @@ void SlideSorterCacheDisplay::Paint (const Rectangle& rBoundingBox)
                 sal_Int32 nPageIndex (nC + nR*mnColumnCount);
                 if (nPageIndex < mnPageCount)
                 {
-                    Rectangle aBox (GetPageBox(nPageIndex));
+                    basegfx::B2DRange aBox(GetPageBox(nPageIndex));
+
                     if ( ! maPageDescriptors[nPageIndex].mbVisible)
                     {
                         mpWindow->SetLineColor();
                         mpWindow->SetFillColor(maBackgroundColor);
                         mpWindow->DrawRect(aBox);
 
-                        aBox.Left() += maCellSize.Width()/4;
-                        aBox.Right() -= maCellSize.Width()/4;
-                        aBox.Top() += maCellSize.Height()/4;
-                        aBox.Bottom() -= maCellSize.Height()/4;
+                        aBox = basegfx::B2DRange(
+                            aBox.getMinX() + (maCellSize.getX() * 0.25),
+                            aBox.getMinY() + (maCellSize.getY() * 0.25),
+                            aBox.getMaxX() - (maCellSize.getX() * 0.25),
+                            aBox.getMaxY() - (maCellSize.getY() * 0.25));
                     }
 
                     switch (maPageDescriptors[nPageIndex].meStatus)
@@ -143,7 +145,7 @@ void SlideSorterCacheDisplay::Paint (const Rectangle& rBoundingBox)
                     mpWindow->DrawRect(aBox);
 
                     if ( ! maPageDescriptors[nPageIndex].mbUpToDate)
-                        mpWindow->DrawLine(aBox.TopLeft(), aBox.BottomRight());
+                        mpWindow->DrawLine(aBox.getMinimum(), aBox.getMaximum());
                 }
             }
         mpWindow->SetLineColor(maSavedLineColor);
@@ -251,14 +253,15 @@ void SlideSorterCacheDisplay::SetUpToDate (sal_Int32 nPageIndex, bool bUpToDate)
 
 
 
-Rectangle SlideSorterCacheDisplay::GetPageBox (sal_Int32 nPageIndex)
+basegfx::B2DRange SlideSorterCacheDisplay::GetPageBox (sal_Int32 nPageIndex)
 {
-    sal_Int32 nRow = nPageIndex / mnColumnCount;
-    sal_Int32 nColumn = nPageIndex % mnColumnCount;
-    return Rectangle(
-        Point(mnHorizontalBorder + nColumn * maCellSize.Width() + nColumn*mnHorizontalGap,
-            mnVerticalBorder + nRow * maCellSize.Height() + nRow*mnVerticalGap),
-        maCellSize);
+    const sal_Int32 nRow(nPageIndex / mnColumnCount);
+    const sal_Int32 nColumn(nPageIndex % mnColumnCount);
+    const basegfx::B2DPoint aTopLeft(
+        mnHorizontalBorder + nColumn * maCellSize.Width() + nColumn * mnHorizontalGap,
+        mnVerticalBorder + nRow * maCellSize.Height() + nRow * mnVerticalGap);
+
+    return basegfx::B2DRange(aTopLeft, aTopLeft + maCellSize);
 }
 
 

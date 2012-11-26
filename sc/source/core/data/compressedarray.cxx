@@ -26,8 +26,8 @@
 
 #include "compressedarray.hxx"
 #include "address.hxx"
-
 #include <algorithm>
+#include <memory.h>
 
 template< typename A, typename D >
 ScCompressedArray<A,D>::ScCompressedArray( A nMaxAccessP, const D& rValue,

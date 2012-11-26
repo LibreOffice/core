@@ -191,7 +191,7 @@ AnnotationManagerImpl::AnnotationManagerImpl( ViewShellBase& rViewShellBase )
 {
     SdOptions* pOptions = SD_MOD()->GetSdOptions(mpDoc->GetDocumentType());
     if( pOptions )
-        mbShowAnnotations = pOptions->IsShowComments() == sal_True;
+        mbShowAnnotations = pOptions->IsShowComments();
 }
 
 // --------------------------------------------------------------------
@@ -333,7 +333,7 @@ void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest& rReq)
         if( pArgs )
         {
             const SfxPoolItem*  pPoolItem = NULL;
-            if( SFX_ITEM_SET == pArgs->GetItemState( SID_DELETEALLBYAUTHOR_POSTIT, sal_True, &pPoolItem ) )
+            if( SFX_ITEM_SET == pArgs->GetItemState( SID_DELETEALLBYAUTHOR_POSTIT, true, &pPoolItem ) )
             {
                 OUString sAuthor( (( const SfxStringItem* ) pPoolItem )->GetValue() );
                 DeleteAnnotationsByAuthor( sAuthor );
@@ -349,7 +349,7 @@ void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest& rReq)
                 if( pArgs )
                 {
                     const SfxPoolItem*  pPoolItem = NULL;
-                    if( SFX_ITEM_SET == pArgs->GetItemState( SID_DELETE_POSTIT, sal_True, &pPoolItem ) )
+                    if( SFX_ITEM_SET == pArgs->GetItemState( SID_DELETE_POSTIT, true, &pPoolItem ) )
                         ( ( const SfxUnoAnyItem* ) pPoolItem )->GetValue() >>= xAnnotation;
                 }
             }
@@ -381,7 +381,7 @@ void AnnotationManagerImpl::InsertAnnotation()
            AnnotationVector aAnnotations( pPage->getAnnotations() );
            if( !aAnnotations.empty() )
            {
-               const int page_width = pPage->GetSize().Width();
+               const int page_width = pPage->GetPageScale().getX();
             const int width = 1000;
             const int height = 800;
             Rectangle aTagRect;
@@ -453,7 +453,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
     if( pArgs )
     {
         const SfxPoolItem*  pPoolItem = NULL;
-        if( SFX_ITEM_SET == pArgs->GetItemState( rReq.GetSlot(), sal_True, &pPoolItem ) )
+        if( SFX_ITEM_SET == pArgs->GetItemState( rReq.GetSlot(), true, &pPoolItem ) )
             ( ( const SfxUnoAnyItem* ) pPoolItem )->GetValue() >>= xAnnotation;
     }
 
@@ -464,7 +464,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
         std::auto_ptr< ::Outliner > pOutliner( new ::Outliner(GetAnnotationPool(),OUTLINERMODE_TEXTOBJECT) );
 
         mpDoc->SetCalcFieldValueHdl( pOutliner.get() );
-        pOutliner->SetUpdateMode( sal_True );
+        pOutliner->SetUpdateMode( true );
 
         String aStr(SdResId(STR_ANNOTATION_REPLY));
         OUString sAuthor( xAnnotation->getAuthor() );
@@ -716,8 +716,8 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
                 ::boost::shared_ptr<DrawViewShell> pDrawViewShell(::boost::dynamic_pointer_cast<DrawViewShell>(mrBase.GetMainViewShell()));
                 if (pDrawViewShell.get() != NULL)
                 {
-                    pDrawViewShell->ChangeEditMode(pPage->IsMasterPage() ? EM_MASTERPAGE : EM_PAGE, sal_False);
-                    pDrawViewShell->SwitchPage((pPage->GetPageNum() - 1) >> 1);
+                    pDrawViewShell->ChangeEditMode(pPage->IsMasterPage() ? EM_MASTERPAGE : EM_PAGE, false);
+                    pDrawViewShell->SwitchPage((pPage->GetPageNumber() - 1) >> 1);
 
                     SfxDispatcher* pDispatcher = getDispatcher( mrBase );
                     if( pDispatcher )
@@ -772,7 +772,7 @@ void AnnotationManagerImpl::onTagDeselected( AnnotationTag& rTag )
 
 // --------------------------------------------------------------------
 
-void AnnotationManagerImpl::SelectAnnotation( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > xAnnotation, bool bEdit /* = sal_False */ )
+void AnnotationManagerImpl::SelectAnnotation( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > xAnnotation, bool bEdit /* = false */ )
 {
     mxSelectedAnnotation = xAnnotation;
 
@@ -856,7 +856,7 @@ IMPL_LINK(AnnotationManagerImpl,UpdateTagsHdl, void *, EMPTYARG)
         CreateTags();
 
     if(  mrBase.GetDrawView() )
-        static_cast< ::sd::View* >( mrBase.GetDrawView() )->updateHandles();
+        static_cast< ::sd::View* >( mrBase.GetDrawView() )->SetMarkHandles();
 
     invalidateSlots();
 
@@ -1016,7 +1016,7 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation
     aStr.SearchAndReplaceAscii("%1", aReplace);
     pMenu->SetItemText( SID_DELETEALLBYAUTHOR_POSTIT, aStr );
     pMenu->EnableItem( SID_REPLYTO_POSTIT, (sAuthor != sCurrentAuthor) && !bReadOnly );
-    pMenu->EnableItem( SID_DELETE_POSTIT, (xAnnotation.is() && !bReadOnly) ? sal_True : sal_False );
+    pMenu->EnableItem( SID_DELETE_POSTIT, (xAnnotation.is() && !bReadOnly) ? true : false );
     pMenu->EnableItem( SID_DELETEALLBYAUTHOR_POSTIT, !bReadOnly );
     pMenu->EnableItem( SID_DELETEALL_POSTIT, !bReadOnly );
 
@@ -1024,11 +1024,11 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation
     {
         if( pAnnotationWindow->IsProtected() || bReadOnly )
         {
-            pMenu->EnableItem( SID_ATTR_CHAR_WEIGHT, sal_False );
-            pMenu->EnableItem( SID_ATTR_CHAR_POSTURE, sal_False );
-            pMenu->EnableItem( SID_ATTR_CHAR_UNDERLINE, sal_False );
-            pMenu->EnableItem( SID_ATTR_CHAR_STRIKEOUT, sal_False );
-            pMenu->EnableItem( SID_PASTE, sal_False );
+            pMenu->EnableItem( SID_ATTR_CHAR_WEIGHT, false );
+            pMenu->EnableItem( SID_ATTR_CHAR_POSTURE, false );
+            pMenu->EnableItem( SID_ATTR_CHAR_UNDERLINE, false );
+            pMenu->EnableItem( SID_ATTR_CHAR_STRIKEOUT, false );
+            pMenu->EnableItem( SID_PASTE, false );
         }
         else
         {
@@ -1174,7 +1174,7 @@ SdPage* AnnotationManagerImpl::GetNextPage( SdPage* pPage, bool bForeward )
     if( pPage == 0 )
         return bForeward ? GetFirstPage() : GetLastPage();
 
-    sal_uInt16 nPageNum = (pPage->GetPageNum() - 1) >> 1;
+    sal_uInt32 nPageNum = (pPage->GetPageNumber() - 1) >> 1;
 
     // first all non master pages
     if( !pPage->IsMasterPage() )

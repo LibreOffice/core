@@ -319,10 +319,9 @@ SwPaM* SwAccessibleParagraph::GetCursor( const bool _bForSelection )
          ( _bForSelection || !pCrsrShell->IsTableMode() ) )
     // <--
     {
-        SwFEShell *pFESh = pCrsrShell->ISA( SwFEShell )
-                            ? static_cast< SwFEShell * >( pCrsrShell ) : 0;
+        SwFEShell *pFESh = dynamic_cast< SwFEShell * >( pCrsrShell );
         if( !pFESh ||
-            !(pFESh->IsFrmSelected() || pFESh->IsObjSelected() > 0) )
+            !(pFESh->IsFrmSelected() || pFESh->IsObjSelected() ) )
         {
             // get the selection, and test whether it affects our text node
             pCrsr = pCrsrShell->GetCrsr( sal_False /* ??? */ );
@@ -846,7 +845,7 @@ lang::Locale SAL_CALL SwAccessibleParagraph::getLocale (void)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    SwTxtFrm *pTxtFrm = PTR_CAST( SwTxtFrm, GetFrm() );
+    const SwTxtFrm *pTxtFrm = dynamic_cast< const SwTxtFrm* >( GetFrm() );
     if( !pTxtFrm )
     {
         THROW_RUNTIME_EXCEPTION( XAccessibleContext, "internal error (no text frame)" );

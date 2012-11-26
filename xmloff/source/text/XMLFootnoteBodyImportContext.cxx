@@ -41,8 +41,6 @@ using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::xml::sax::XAttributeList;
 
 
-TYPEINIT1( XMLFootnoteBodyImportContext, SvXMLImportContext );
-
 XMLFootnoteBodyImportContext::XMLFootnoteBodyImportContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,

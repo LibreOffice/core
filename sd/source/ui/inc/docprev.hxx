@@ -45,10 +45,10 @@ class SD_DLLPUBLIC SdDocPreviewWin : public Control, public SfxListener
 {
 protected:
     GDIMetaFile*    pMetaFile;
-    sal_Bool            bInEffect;
+    bool            bInEffect;
     Link            aClickHdl;
     SfxObjectShell* mpObj;
-    sal_uInt16      mnShowPage;
+    sal_uInt32      mnShowPage;
     Color           maDocumentColor;
     rtl::Reference< sd::SlideShow > mxSlideShow;
 
@@ -67,7 +67,7 @@ protected:
 public:
                     SdDocPreviewWin( Window* pParent, const ResId& rResId );
                     ~SdDocPreviewWin();
-    void            SetObjectShell( SfxObjectShell* pObj, sal_uInt16 nShowPage = 0 );
+    void            SetObjectShell( SfxObjectShell* pObj, sal_uInt32 nShowPage = 0 );
     virtual void    Resize();
     void            startPreview();
 

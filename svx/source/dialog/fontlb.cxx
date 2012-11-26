@@ -28,12 +28,9 @@
 
 // ============================================================================
 
-DBG_NAME( SvLBoxFontString );
-
 SvLBoxFontString::SvLBoxFontString() :
     SvLBoxString()
 {
-    DBG_CTOR( SvLBoxFontString, 0 );
 }
 
 SvLBoxFontString::SvLBoxFontString(
@@ -43,7 +40,6 @@ SvLBoxFontString::SvLBoxFontString(
     maFont( rFont ),
     mbUseColor( pColor != NULL )
 {
-    DBG_CTOR( SvLBoxFontString, 0 );
     SetText( pEntry, rString );
     if( pColor )
         maFont.SetColor( *pColor );
@@ -51,19 +47,16 @@ SvLBoxFontString::SvLBoxFontString(
 
 SvLBoxFontString::~SvLBoxFontString()
 {
-    DBG_DTOR( SvLBoxFontString, 0 );
 }
 
 
 SvLBoxItem* SvLBoxFontString::Create() const
 {
-    DBG_CHKTHIS( SvLBoxFontString, 0 );
     return new SvLBoxFontString;
 }
 
 void SvLBoxFontString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry )
 {
-    DBG_CHKTHIS( SvLBoxFontString, 0 );
     Font aOldFont( rDev.GetFont() );
     Font aNewFont( maFont );
     bool bSel = (nFlags & SVLISTENTRYFLAG_SELECTED) != 0;
@@ -81,7 +74,6 @@ void SvLBoxFontString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags
 
 void SvLBoxFontString::InitViewData( SvLBox* pView, SvLBoxEntry* pEntry, SvViewDataItem* pViewData )
 {
-    DBG_CHKTHIS( SvLBoxFontString, 0 );
     Font aOldFont( pView->GetFont() );
     pView->SetFont( maFont );
     SvLBoxString::InitViewData( pView, pEntry, pViewData);

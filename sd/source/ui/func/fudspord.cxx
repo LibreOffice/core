@@ -42,8 +42,6 @@
 
 namespace sd {
 
-TYPEINIT1( FuDisplayOrder, FuPoor );
-
 /*************************************************************************
 |*
 |* Konstruktor
@@ -89,12 +87,12 @@ FunctionReference FuDisplayOrder::Create( ViewShell* pViewSh, ::sd::Window* pWin
 |*
 \************************************************************************/
 
-sal_Bool FuDisplayOrder::MouseButtonDown(const MouseEvent& rMEvt)
+bool FuDisplayOrder::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************
@@ -103,13 +101,12 @@ sal_Bool FuDisplayOrder::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuDisplayOrder::MouseMove(const MouseEvent& rMEvt)
+bool FuDisplayOrder::MouseMove(const MouseEvent& rMEvt)
 {
     SdrObject* pPickObj;
-    SdrPageView* pPV;
-    Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
+    const basegfx::B2DPoint aPnt(mpWindow->GetInverseViewTransformation() * basegfx::B2DPoint(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y()));
 
-    if ( mpView->PickObj(aPnt, mpView->getHitTolLog(), pPickObj, pPV) )
+    if ( mpView->PickObj(aPnt, mpView->getHitTolLog(), pPickObj) )
     {
         if (mpRefObj != pPickObj)
         {
@@ -129,7 +126,7 @@ sal_Bool FuDisplayOrder::MouseMove(const MouseEvent& rMEvt)
         implClearOverlay();
     }
 
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************
@@ -138,15 +135,13 @@ sal_Bool FuDisplayOrder::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuDisplayOrder::MouseButtonUp(const MouseEvent& rMEvt)
+bool FuDisplayOrder::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
+    const basegfx::B2DPoint aPnt(mpWindow->GetInverseViewTransformation() * basegfx::B2DPoint(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y()));
 
-    SdrPageView* pPV = NULL;
-    Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
-
-    if ( mpView->PickObj(aPnt, mpView->getHitTolLog(), mpRefObj, pPV) )
+    if ( mpView->PickObj(aPnt, mpView->getHitTolLog(), mpRefObj) )
     {
         if (nSlotId == SID_BEFORE_OBJ)
         {
@@ -160,7 +155,7 @@ sal_Bool FuDisplayOrder::MouseButtonUp(const MouseEvent& rMEvt)
 
     mpViewShell->Cancel();
 
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************

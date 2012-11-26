@@ -159,7 +159,7 @@ sal_Bool TextConvWrapper::FindConvText_impl()
 
     //ShowLanguageErrors();
 
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
 
     pWin->EnterWait();
     sal_Bool bConvert = sal_True;

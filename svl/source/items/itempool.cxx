@@ -34,6 +34,8 @@
 #include <svl/brdcst.hxx>
 #include <svl/smplhint.hxx>
 #include "poolio.hxx"
+#include <algorithm>
+#include <typeinfo>
 
 //========================================================================
 
@@ -70,7 +72,7 @@ const SfxPoolItem* SfxItemPool::GetPoolDefaultItem( sal_uInt16 nWhich ) const
 
 // -----------------------------------------------------------------------
 
-inline FASTBOOL SfxItemPool::IsItemFlag_Impl( sal_uInt16 nPos, sal_uInt16 nFlag ) const
+inline bool SfxItemPool::IsItemFlag_Impl( sal_uInt16 nPos, sal_uInt16 nFlag ) const
 {
     sal_uInt16 nItemFlag = pItemInfos[nPos]._nFlags;
     return nFlag == (nItemFlag & nFlag);
@@ -78,7 +80,7 @@ inline FASTBOOL SfxItemPool::IsItemFlag_Impl( sal_uInt16 nPos, sal_uInt16 nFlag 
 
 // -----------------------------------------------------------------------
 
-FASTBOOL SfxItemPool::IsItemFlag( sal_uInt16 nWhich, sal_uInt16 nFlag ) const
+bool SfxItemPool::IsItemFlag( sal_uInt16 nWhich, sal_uInt16 nFlag ) const
 {
     for ( const SfxItemPool *pPool = this; pPool; pPool = pPool->pSecondary )
     {
@@ -114,7 +116,7 @@ SfxItemPool::SfxItemPool
 #ifndef TF_POOLABLE
     sal_uInt16*             pSlotIdArray,   /* Zuordnung von Slot-Ids zu Which-Ids */
 #endif
-    FASTBOOL            bLoadRefCounts  /* Ref-Counts mitladen oder auf 1 setzen */
+    bool            bLoadRefCounts  /* Ref-Counts mitladen oder auf 1 setzen */
 )
 
 /*  [Beschreibung]
@@ -175,7 +177,7 @@ SfxItemPool::SfxItemPool
     pImp->nInitRefCount = 1;
     pImp->nVerStart = nStart;
     pImp->nVerEnd = nEnd;
-    pImp->bInSetItem = sal_False;
+    pImp->bInSetItem = false;
     pImp->nStoringStart = nStartWhich;
     pImp->nStoringEnd = nEndWhich;
 
@@ -229,12 +231,12 @@ SfxItemPool::SfxItemPool
     DBG_CTOR(SfxItemPool, 0);
     pImp->eDefMetric = rPool.pImp->eDefMetric;
     pImp->nVersion = rPool.pImp->nVersion;
-    pImp->bStreaming = sal_False;
+    pImp->bStreaming = false;
     pImp->nLoadingVersion = 0;
     pImp->nInitRefCount = 1;
     pImp->nVerStart = rPool.pImp->nVerStart;
     pImp->nVerEnd = rPool.pImp->nVerEnd;
-    pImp->bInSetItem = sal_False;
+    pImp->bInSetItem = false;
     pImp->nStoringStart = nStart;
     pImp->nStoringEnd = nEnd;
 
@@ -437,12 +439,12 @@ void SfxItemPool::SetSecondaryPool( SfxItemPool *pPool )
             if ( pImp->ppPoolItems && pSecondary->pImp->ppPoolItems )
             {
                 // hat der master SetItems?
-                sal_Bool bHasSetItems = sal_False;
+                bool bHasSetItems = false;
                 for ( sal_uInt16 i = 0; !bHasSetItems && i < nEnd-nStart; ++i )
-                    bHasSetItems = ppStaticDefaults[i]->ISA(SfxSetItem);
+                    bHasSetItems = dynamic_cast< SfxSetItem* >(ppStaticDefaults[i]);
 
                 // abgehaengte Pools muessen leer sein
-                sal_Bool bOK = bHasSetItems;
+                bool bOK = bHasSetItems;
                 for ( sal_uInt16 n = 0;
                       bOK && n <= pSecondary->nEnd - pSecondary->nStart;
                       ++n )
@@ -456,7 +458,7 @@ void SfxItemPool::SetSecondaryPool( SfxItemPool *pPool )
                             if ( !(*ppHtArr) )
                             {
                                 DBG_ERROR( "old secondary pool must be empty" );
-                                bOK = sal_False;
+                                bOK = false;
                                 break;
                             }
                     }
@@ -574,7 +576,7 @@ void SfxItemPool::Delete()
             // KSO (22.10.98): *ppStaticDefaultItem kann im dtor einer
             // von SfxItemPool abgeleiteten Klasse bereits geloescht worden
             // sein! -> CHAOS Itempool
-            if ( *ppStaticDefaultItem && (*ppStaticDefaultItem)->ISA(SfxSetItem) )
+            if ( *ppStaticDefaultItem && dynamic_cast< SfxSetItem* >(*ppStaticDefaultItem) )
             {
                 if ( *ppItemArr )
                 {
@@ -656,8 +658,8 @@ void SfxItemPool::Cleanup()
         {
             //Fuer jedes Item gibt es entweder ein Default oder ein static Default!
             if ( *ppItemArr &&
-                 ((*ppDefaultItem && (*ppDefaultItem)->ISA(SfxSetItem)) ||
-                  (*ppStaticDefaultItem)->ISA(SfxSetItem)) )
+                 ((*ppDefaultItem && dynamic_cast< SfxSetItem* >(*ppDefaultItem)) ||
+                  dynamic_cast< SfxSetItem* >(*ppStaticDefaultItem)) )
             {
                 SfxPoolItemArrayBase_Impl::iterator ppHtArr = (*ppItemArr)->begin();
                 for ( size_t n = (*ppItemArr)->size(); n; --n, ++ppHtArr )
@@ -740,7 +742,7 @@ void SfxItemPool::ResetPoolDefaultItem( sal_uInt16 nWhichId )
 
 const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich )
 {
-    DBG_ASSERT( !rItem.ISA(SfxSetItem) ||
+    DBG_ASSERT( !dynamic_cast< const SfxSetItem* >(&rItem) ||
                 0 != &((const SfxSetItem&)rItem).GetItemSet(),
                 "SetItem without ItemSet" );
 
@@ -771,8 +773,16 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
         return *pPoolItem;
     }
 
-    SFX_ASSERT( rItem.IsA(GetDefaultItem(nWhich).Type()), nWhich,
-                "SFxItemPool: wrong item type in Put" );
+#ifdef DBG_UTIL
+    const SfxPoolItem& rDefaultItem = GetDefaultItem(nWhich);
+    const std::type_info& aTypeA(typeid(rItem));
+    const std::type_info& aTypeB(typeid(rDefaultItem));
+
+    if(aTypeA != aTypeB)
+    {
+        SFX_ASSERT(false, nWhich, "SFxItemPool: wrong item type in Put");
+    }
+#endif
 
     SfxPoolItemArray_Impl** ppItemArr = pImp->ppPoolItems + nIndex;
     if( !*ppItemArr )
@@ -840,9 +850,16 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
     SfxPoolItem* pNewItem = rItem.Clone(pMaster);
     pNewItem->SetWhich(nWhich);
 #ifdef DBG_UTIL
-    SFX_ASSERT( rItem.Type() == pNewItem->Type(), nWhich, "unequal types in Put(): no Clone()?" )
+    const std::type_info& aTypeC(typeid(rItem));
+    const std::type_info& aTypeD(typeid(*pNewItem));
+
+    if(aTypeC != aTypeD)
+    {
+//      SFX_ASSERT( typeid(&rItem) == typeid(pNewItem), nWhich, "unequal types in Put(): no Clone()?" )
+        SFX_ASSERT(false, nWhich, "unequal types in Put(): no Clone()?")
+    }
 #ifdef TF_POOLABLE
-    if ( !rItem.ISA(SfxSetItem) )
+    if ( !dynamic_cast< const SfxSetItem* >(&rItem) )
     {
         SFX_ASSERT( !IsItemFlag(nWhich, SFX_ITEM_POOLABLE) ||
                     rItem == *pNewItem,
@@ -871,7 +888,7 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
 {
     DBG_CHKTHIS(SfxItemPool, 0);
 
-    DBG_ASSERT( !rItem.ISA(SfxSetItem) ||
+    DBG_ASSERT( !dynamic_cast< const SfxSetItem* >(&rItem) ||
                 0 != &((const SfxSetItem&)rItem).GetItemSet(),
                 "SetItem without ItemSet" );
 

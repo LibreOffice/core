@@ -63,6 +63,11 @@ namespace embed {
 
 namespace css = ::com::sun::star;
 
+#define SD_OUTPUT_DRAWMODE_COLOR (DRAWMODE_DEFAULT)
+#define SD_OUTPUT_DRAWMODE_GRAYSCALE (DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_BLACKTEXT | DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT)
+#define SD_OUTPUT_DRAWMODE_BLACKWHITE (DRAWMODE_BLACKLINE | DRAWMODE_BLACKTEXT | DRAWMODE_WHITEFILL | DRAWMODE_GRAYBITMAP | DRAWMODE_WHITEGRADIENT)
+#define SD_OUTPUT_DRAWMODE_CONTRAST (DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT)
+
 namespace sd {
 
 class Client;
@@ -79,9 +84,6 @@ class ViewTabBar;
 class Window;
 class WindowUpdater;
 class ZoomList;
-
-#undef OUTPUT_DRAWMODE_COLOR
-#undef OUTPUT_DRAWMODE_CONTRAST
 
 /** Base class of the stacked shell hierarchy.
 
@@ -113,24 +115,6 @@ public:
         ST_PRESENTATION,
         ST_TASK_PANE
     };
-    static const int MAX_HSPLIT_CNT = 1;
-    static const int MAX_VSPLIT_CNT = 1;
-    static const int MIN_SCROLLBAR_SIZE = 50;
-
-    static const sal_uLong OUTPUT_DRAWMODE_COLOR = DRAWMODE_DEFAULT;
-    static const sal_uLong OUTPUT_DRAWMODE_GRAYSCALE
-        = DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL
-        | DRAWMODE_BLACKTEXT | DRAWMODE_GRAYBITMAP
-        | DRAWMODE_GRAYGRADIENT;
-    static const int  OUTPUT_DRAWMODE_BLACKWHITE
-        = DRAWMODE_BLACKLINE | DRAWMODE_BLACKTEXT
-        | DRAWMODE_WHITEFILL | DRAWMODE_GRAYBITMAP
-        | DRAWMODE_WHITEGRADIENT;
-    static const int OUTPUT_DRAWMODE_CONTRAST
-        = DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL
-        | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT;
-
-    TYPEINFO();
 
     ViewShell (
         SfxViewFrame *pFrame,
@@ -197,12 +181,12 @@ public:
     // Mouse- & Key-Events
     virtual void PrePaint();
     virtual void Paint (const Rectangle& rRect, ::sd::Window* pWin);
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin);
+    virtual bool KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin);
     virtual void MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin);
     virtual void MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin);
     virtual void MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin);
     virtual void Command(const CommandEvent& rCEvt, ::sd::Window* pWin);
-    virtual sal_Bool RequestHelp( const HelpEvent& rEvt, ::sd::Window* pWin );
+    virtual bool RequestHelp( const HelpEvent& rEvt, ::sd::Window* pWin );
     virtual long Notify( NotifyEvent& rNEvt, ::sd::Window* pWin );
 
     virtual bool HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWin);
@@ -212,8 +196,8 @@ public:
     virtual void SetUIUnit(FieldUnit eUnit);
     virtual void SetDefTabHRuler( sal_uInt16 nDefTab );
 
-    sal_Bool HasRuler (void);
-    void SetRuler(sal_Bool bRuler);
+    bool HasRuler (void);
+    void SetRuler(bool bRuler);
 
     /** Set internal values of all scroll bars that determine thumb size and
         position.  The external values like size and position of the scroll
@@ -221,19 +205,18 @@ public:
     */
     virtual void UpdateScrollBars (void);
     void    Scroll(long nX, long nY);
-    void    ScrollLines(long nX, long nY);
+    void    ScrollLines(const basegfx::B2DVector& rDelta);
     virtual void    SetZoom(long nZoom);
-    virtual void    SetZoomRect(const Rectangle& rZoomRect);
-    void    InitWindows(const Point& rViewOrigin, const Size& rViewSize,
-                        const Point& rWinPos, sal_Bool bUpdate = sal_False);
+    virtual void    SetZoomRange(const basegfx::B2DRange& rZoomRange);
+    void InitWindows(const basegfx::B2DPoint& rViewOrigin, const basegfx::B2DVector& rViewSize, const basegfx::B2DPoint& rWinPos, bool bUpdate = false);
     void    InvalidateWindows();
     /** This method is still used by the OutlineViewShell to update the
         model according to the content of the outline view.  This in turn
         updates the previews in the slide sorter.
     */
-     virtual void UpdatePreview (SdPage* pPage, sal_Bool bInit = sal_False);
+     virtual void UpdatePreview (SdPage* pPage, bool bInit = false);
 
-    void    DrawMarkRect(const Rectangle& rRect) const;
+    void    DrawMarkRange(const basegfx::B2DRange& rRange) const;
 
     void    ExecReq( SfxRequest &rReq );
 
@@ -251,7 +234,7 @@ public:
     virtual void  WriteUserData(String& rString);
     virtual void  ReadUserData(const String& rString);
 
-    virtual sal_Bool  ActivateObject(SdrOle2Obj* pObj, long nVerb);
+    virtual bool  ActivateObject(SdrOle2Obj* pObj, long nVerb);
 
     /** @returns
             current or selected page or 0. This method
@@ -276,13 +259,13 @@ public:
     void SetOldFunction(const FunctionReference& xFunction);
     void DeactivateCurrentFunction( bool bPermanent = false );
 
-    void    SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
-                            long nLeft, long nRight, long nUpper, long nLower,
-                            sal_Bool bScaleAll, Orientation eOrient, sal_uInt16 nPaperBin,
-                            sal_Bool bBackgroundFullSize );
+    void    SetPageSizeAndBorder(PageKind ePageKind, const basegfx::B2DVector& rNewSize,
+                            double fLeft, double fRight, double fTop, double fBottom,
+                            bool bScaleAll, Orientation eOrient, sal_uInt16 nPaperBin,
+                            bool bBackgroundFullSize );
 
-    void    SetStartShowWithDialog( sal_Bool bIn = sal_True ) { mbStartShowWithDialog = bIn; }
-    sal_Bool    IsStartShowWithDialog() const { return mbStartShowWithDialog; }
+    void    SetStartShowWithDialog( bool bIn = true ) { mbStartShowWithDialog = bIn; }
+    bool    IsStartShowWithDialog() const { return mbStartShowWithDialog; }
 
     sal_uInt16 GetPrintedHandoutPageNum (void) const { return mnPrintedHandoutPageNum; }
     void SetPrintedHandoutPageNum (sal_uInt16 nPageNumber) {mnPrintedHandoutPageNum=nPageNumber; }
@@ -290,14 +273,14 @@ public:
     sal_uInt16 GetPrintedHandoutPageCount(void) const { return mnPrintedHandoutPageCount; }
     void SetPrintedHandoutPageCount (sal_uInt16 nPageCount) {mnPrintedHandoutPageCount=nPageCount; }
 
-    virtual sal_uInt16 PrepareClose( sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False );
+    virtual sal_uInt16 PrepareClose( bool bUI = true, bool bForBrowsing = false );
 
     void GetMenuState(SfxItemSet& rSet);
 
     virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTargetHelper,
-                                 ::sd::Window* pTargetWindow, sal_uInt16 nPage, sal_uInt16 nLayer );
+                                 ::sd::Window* pTargetWindow, sal_uInt32 nPage, SdrLayerID aLayer );
     virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTargetHelper,
-                                  ::sd::Window* pTargetWindow, sal_uInt16 nPage, sal_uInt16 nLayer );
+                                  ::sd::Window* pTargetWindow, sal_uInt32 nPage, SdrLayerID aLayer );
 
     virtual void WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
     virtual void ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
@@ -317,9 +300,9 @@ public:
         ::com::sun::star::accessibility::XAccessible>
         CreateAccessibleDocumentView (::sd::Window* pWindow);
 
-    void SetWinViewPos(const Point& rWinPos, bool bUpdate);
-    Point GetWinViewPos() const;
-    Point GetViewOrigin() const;
+    void SetWinViewPos(const basegfx::B2DPoint& rWinPos, bool bUpdate);
+    basegfx::B2DPoint GetWinViewPos() const;
+    basegfx::B2DPoint GetViewOrigin() const;
 
     /** Return the window updater of this view shell.
         @return
@@ -331,11 +314,11 @@ public:
     /** Return the border that is drawn arround the actual document view.
         The border contains typically rulers and scroll bars.
         @param bOuterResize
-            When this flag is <TRUE/> then the border is used for an
+            When this flag is <true/> then the border is used for an
             OuterResizePixel(), i.e. there is a given window size and the
             border elements are placed inside so that the document view has
             the given window size minus the border.
-            When the flag is <FALSE/> then the border is used for an
+            When the flag is <false/> then the border is used for an
             InnerResizePixel(), i.e. the document view has a given size and
             the border is placed outside.  In this scenario the parent
             window has the size of the document view plus the border.
@@ -381,7 +364,7 @@ public:
 
     ViewShellBase& GetViewShellBase (void) const;
 
-    /** Return <TRUE/> when the called view shell is the main sub shell of
+    /** Return <true/> when the called view shell is the main sub shell of
         its ViewShellBase object, i.e. is display in the center pane.  This
         convenience function is equivalent to comparing the this pointer to
         the result of ViewShellBase::GetViewShell(PT_CENTER).
@@ -390,7 +373,7 @@ public:
 
     /** Set or reset the flag that indicates whether the called shell is the
         one displayed in the center pane.  By default this flag is set to
-        <FALSE/>.  For the main view shell it thus has to be set to <TRUE/>.
+        <false/>.  For the main view shell it thus has to be set to <true/>.
     */
     void SetIsMainViewShell (bool bIsMainViewShell);
 
@@ -426,13 +409,16 @@ public:
         As a result the border is adapted.
     */
     virtual void ShowUIControls (bool bVisible = true);
-    sal_Bool IsPageFlipMode(void) const;
+    bool IsPageFlipMode(void) const;
 
     /** Set the given window as new parent window.  This is not possible for
         all views, so the return value tells the caller if the relocation
         was successfull.
     */
     virtual bool RelocateToParentWindow (::Window* pParentWindow);
+
+    void AdaptDefaultsForChart(
+        const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject > & xEmbObj );
 
     /** Depending on the given request create a new page or duplicate an
         existing one.  A new page is created behind the given slide.
@@ -502,14 +488,11 @@ protected:
     Size        maViewSize;
     Size        maScrBarWH;
 
-    sal_Bool        mbCenterAllowed;          // wird an Fenster weitergegeben
+    bool        mbCenterAllowed;          // wird an Fenster weitergegeben
 
-    sal_Bool        mbStartShowWithDialog;  // Praesentation wurde ueber Dialog gestartet
+    bool        mbStartShowWithDialog;  // Praesentation wurde ueber Dialog gestartet
     sal_uInt16      mnPrintedHandoutPageNum; // Page number of the handout page that is to be printed.
     sal_uInt16      mnPrintedHandoutPageCount; // Page count of the handout pages that are to be printed.
-
-    //af    sal_Bool        bPrintDirectSelected;       // Print only selected objects in direct print
-    //afString      sPageRange;                 // pagerange if selected objects in direct print
 
     /** Area covered by all windows, i.e. the area of the parent window
         without the controls at the borders like rulers, scroll bars, tab
@@ -530,8 +513,8 @@ protected:
     virtual ::svl::IUndoManager* ImpGetUndoManager (void) const;
     void ImpGetUndoStrings(SfxItemSet &rSet) const;
     void ImpGetRedoStrings(SfxItemSet &rSet) const;
-    void ImpSidUndo(sal_Bool bDrawViewShell, SfxRequest& rReq);
-    void ImpSidRedo(sal_Bool bDrawViewShell, SfxRequest& rReq);
+    void ImpSidUndo(bool bDrawViewShell, SfxRequest& rReq);
+    void ImpSidRedo(bool bDrawViewShell, SfxRequest& rReq);
 
     DECL_LINK( HScrollHdl, ScrollBar * );
     DECL_LINK( VScrollHdl, ScrollBar * );
@@ -541,7 +524,7 @@ protected:
     virtual long VirtVScrollHdl(ScrollBar* pVScroll);
 
     // virtuelle Funktionen fuer Lineal-Handling
-    virtual SvxRuler* CreateHRuler(::sd::Window* pWin, sal_Bool bIsFirst);
+    virtual SvxRuler* CreateHRuler(::sd::Window* pWin, bool bIsFirst);
     virtual SvxRuler* CreateVRuler(::sd::Window* pWin);
     virtual void UpdateHRuler();
     virtual void UpdateVRuler();
@@ -574,6 +557,10 @@ private:
     /** Create the rulers.
     */
     void SetupRulers (void);
+
+    /** Update VisAreaChanged by using size ouf OutDev
+    */
+    void UpdateVisAreaChanged();
 };
 
 

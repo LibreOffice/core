@@ -98,9 +98,6 @@ namespace drawinglayer
             const basegfx::BColor& getRGBColB() const { return maRGBColB; }
             double getDiscreteDashLength() const { return mfDiscreteDashLength; }
 
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
-
             /// provide unique ID
             DeclPrimitrive2DIDBlock()
 

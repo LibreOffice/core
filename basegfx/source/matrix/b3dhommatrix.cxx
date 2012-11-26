@@ -241,6 +241,11 @@ namespace basegfx
         }
     }
 
+    void B3DHomMatrix::rotate(const B3DTuple& rRotation)
+    {
+        rotate(rRotation.getX(), rRotation.getY(), rRotation.getZ());
+    }
+
     void B3DHomMatrix::translate(double fX, double fY, double fZ)
     {
         if(!fTools::equalZero(fX) || !fTools::equalZero(fY) || !fTools::equalZero(fZ))
@@ -253,6 +258,11 @@ namespace basegfx
 
             mpImpl->doMulMatrix(aTransMat);
         }
+    }
+
+    void B3DHomMatrix::translate(const B3DTuple& rRotation)
+    {
+        translate(rRotation.getX(), rRotation.getY(), rRotation.getZ());
     }
 
     void B3DHomMatrix::scale(double fX, double fY, double fZ)
@@ -269,6 +279,11 @@ namespace basegfx
 
             mpImpl->doMulMatrix(aScaleMat);
         }
+    }
+
+    void B3DHomMatrix::scale(const B3DTuple& rRotation)
+    {
+        scale(rRotation.getX(), rRotation.getY(), rRotation.getZ());
     }
 
     void B3DHomMatrix::shearXY(double fSx, double fSy)

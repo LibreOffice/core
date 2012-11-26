@@ -43,14 +43,10 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-// STATIC DATA -----------------------------------------------------------
-
-TYPEINIT1_FACTORY(SvxRotateModeItem, SfxEnumItem, new SvxRotateModeItem(SVX_ROTATE_MODE_STANDARD, 0));
-
-
 //-----------------------------------------------------------------------
 //  SvxRotateModeItem - Ausrichtung bei gedrehtem Text
 //-----------------------------------------------------------------------
+IMPL_POOLITEM_FACTORY(SvxRotateModeItem)
 
 SvxRotateModeItem::SvxRotateModeItem( SvxRotateMode eMode, sal_uInt16 _nWhich )
     : SfxEnumItem( _nWhich, (sal_uInt16)eMode )

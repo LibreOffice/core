@@ -32,7 +32,6 @@
 class ScTabPopShell : public SfxShell
 {
 public:
-    TYPEINFO();
     SFX_DECL_INTERFACE(SCID_TABPOP_SHELL);
 
                             ScTabPopShell(SfxItemPool& rItemPool);

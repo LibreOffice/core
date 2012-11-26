@@ -38,6 +38,7 @@
 #include "unohelp.hxx"
 #include "unoprnms.hxx"
 #include "unosrch.hxx"
+#include <svx/globaldrawitempool.hxx>
 
 using namespace ::vos;
 using namespace ::rtl;
@@ -719,7 +720,7 @@ UNO3_GETIMPLEMENTATION_IMPL( SdUnoSearchReplaceDescriptor );
 
 SdUnoSearchReplaceDescriptor::SdUnoSearchReplaceDescriptor( sal_Bool bReplace ) throw()
 {
-    mpPropSet = new SvxItemPropertySet(ImplGetSearchPropertyMap(), SdrObject::GetGlobalDrawObjectItemPool());
+    mpPropSet = new SvxItemPropertySet(ImplGetSearchPropertyMap(), GetGlobalDrawObjectItemPool());
 
     mbBackwards = sal_False;
     mbCaseSensitive = sal_False;

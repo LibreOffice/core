@@ -32,7 +32,6 @@ class SlideSelectionUndoAction : public SdUndoAction
     Container* pNewOrder;
 
 public:
-    TYPEINFO();
     SlideSelectionUndoAction(SdDrawDocument*  pTheDoc,
                              Container* pOld, Container* pNew)
                            : SdUndoAction(pTheDoc),

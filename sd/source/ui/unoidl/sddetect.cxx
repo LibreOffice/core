@@ -176,7 +176,7 @@ SdFilterDetect::~SdFilterDetect()
     SfxApplication* pApp = SFX_APP();
     SfxAllItemSet *pSet = new SfxAllItemSet( pApp->GetPool() );
     TransformParameters( SID_OPENDOC, lDescriptor, *pSet );
-    SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, SID_DOC_READONLY, sal_False );
+    SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, SID_DOC_READONLY );
 
     bWasReadOnly = pItem && pItem->GetValue();
 
@@ -204,8 +204,8 @@ SdFilterDetect::~SdFilterDetect()
     else
     {
         // ctor of SfxMedium uses owner transition of ItemSet
-        SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, sal_False, NULL, pSet );
-        aMedium.UseInteractionHandler( sal_True );
+        SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, false, NULL, pSet );
+        aMedium.UseInteractionHandler( true );
         if ( aPreselectedFilterName.Len() )
             pFilter = SfxFilter::GetFilterByName( aPreselectedFilterName );
         else if( aTypeName.Len() )
@@ -221,7 +221,7 @@ SdFilterDetect::~SdFilterDetect()
             xStream = aMedium.GetInputStream();
             xContent = aMedium.GetContent();
             bReadOnly = aMedium.IsReadOnly();
-            sal_Bool bIsStorage = aMedium.IsStorage();
+            bool bIsStorage = aMedium.IsStorage();
 
             if (aMedium.GetError() == SVSTREAM_OK)
             {
@@ -269,7 +269,7 @@ SdFilterDetect::~SdFilterDetect()
                             String sFilterName;
                             if ( pFilter )
                                 sFilterName = pFilter->GetName();
-                            aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsOwnTemplateFormat() : sal_False, &sFilterName );
+                            aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsOwnTemplateFormat() : false, &sFilterName );
                         }
                         catch( lang::WrappedTargetException& aWrap )
                         {
@@ -337,7 +337,7 @@ SdFilterDetect::~SdFilterDetect()
                     }
                     else
                     {
-                        SotStorageRef aStorage = new SotStorage ( pStm, sal_False );
+                        SotStorageRef aStorage = new SotStorage ( pStm, false );
                         if ( !aStorage->GetError() )
                         {
                             String aStreamName = UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "PowerPoint Document" ) );
@@ -360,7 +360,7 @@ SdFilterDetect::~SdFilterDetect()
                             const String        aFileName( aMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
                             GraphicDescriptor   aDesc( *pStm, &aFileName );
                             GraphicFilter*      pGrfFilter = GraphicFilter::GetGraphicFilter();
-                            if( !aDesc.Detect( sal_False ) )
+                            if( !aDesc.Detect( false ) )
                             {
                                 pFilter = 0;
                                 if( SvtModuleOptions().IsImpress() )

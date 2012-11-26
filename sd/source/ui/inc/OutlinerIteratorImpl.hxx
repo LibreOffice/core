@@ -55,7 +55,7 @@ public:
         @param pViewShellWeak
             Some information has to be taken from the view shell.
         @param bDirectionIsForward
-            This flag defines the iteration direction.  When <TRUE/> then
+            This flag defines the iteration direction.  When <true/> then
             the direction is forwards otherwise it is backwards.
     */
     IteratorImplBase (SdDrawDocument* pDocument,
@@ -95,7 +95,7 @@ public:
         @param rIterator
             The iterator to compare to.
         @return
-            When both iterators ar equal <TRUE/> is returned, <FALSE/> otherwise.
+            When both iterators ar equal <true/> is returned, <false/> otherwise.
     */
     virtual bool operator== (const IteratorImplBase& rIterator) const;
     /** This method is used by the equality operator.  Additionaly to the
@@ -106,7 +106,7 @@ public:
         @param aType
             The type of the iterator.
         @return
-            Returns <TRUE/> when both iterators point to the same object.
+            Returns <true/> when both iterators point to the same object.
     */
     virtual bool IsEqual (const IteratorImplBase& rIterator, IteratorType aType) const;
     /** Reverse the direction of iteration.  The current object stays the same.
@@ -141,7 +141,7 @@ class SelectionIteratorImpl
 {
 public:
     SelectionIteratorImpl (
-        const ::std::vector< SdrObjectWeakRef >& rObjectList,
+        const SdrObjectVector& rObjectList,
         sal_Int32 nObjectIndex,
         SdDrawDocument* pDocument,
         const ::boost::weak_ptr<ViewShell>& rpViewShellWeak,
@@ -155,7 +155,7 @@ public:
     virtual bool operator== (const IteratorImplBase& rIterator) const;
 
 private:
-    const ::std::vector<SdrObjectWeakRef>& mrObjectList;
+    const SdrObjectVector& mrObjectList;
     sal_Int32 mnObjectIndex;
 
     /** Compare the given iterator with this object.  This method handles
@@ -165,7 +165,7 @@ private:
         @param aType
             The type of the iterator.
         @return
-            Returns <TRUE/> when both iterators point to the same object.
+            Returns <true/> when both iterators point to the same object.
     */
     virtual bool IsEqual (const IteratorImplBase& rIterator, IteratorType aType) const;
 

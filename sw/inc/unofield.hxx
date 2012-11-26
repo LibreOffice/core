@@ -82,8 +82,6 @@ public:
     SwXFieldMaster(SwFieldType& rType, SwDoc* pDoc);
 
 
-    TYPEINFO();
-
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
     //XUnoTunnel
@@ -153,8 +151,6 @@ public:
     SwXTextField(sal_uInt16 nServiceId, SwDoc* pDoc=0);
     SwXTextField(const SwFmtFld& rFmt, SwDoc* pDoc);
 
-
-    TYPEINFO();
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 

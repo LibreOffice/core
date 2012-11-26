@@ -57,13 +57,6 @@ namespace drawinglayer
             const basegfx::BColor& getColor() const { return maColor; }
             double getOpacity() const { return mfOpacity; }
 
-            bool operator==(const SvgGradientEntry& rCompare) const
-            {
-                return (getOffset() == rCompare.getOffset()
-                    && getColor() == getColor()
-                    && getOpacity() == getOpacity());
-            }
-
             bool operator<(const SvgGradientEntry& rCompare) const
             {
                 return getOffset() < rCompare.getOffset();
@@ -161,9 +154,6 @@ namespace drawinglayer
             const basegfx::B2DPoint& getStart() const { return maStart; }
             bool getUseUnitCoordinates() const { return mbUseUnitCoordinates; }
             SpreadMethod getSpreadMethod() const { return maSpreadMethod; }
-
-            /// compare operator
-            virtual bool operator==(const SvgGradientHelper& rSvgGradientHelper) const;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -208,9 +198,6 @@ namespace drawinglayer
 
             /// data read access
             const basegfx::B2DPoint& getEnd() const { return maEnd; }
-
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
             /// get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
@@ -280,9 +267,6 @@ namespace drawinglayer
             const basegfx::B2DPoint& getFocal() const { return maFocal; }
             bool isFocalSet() const { return mbFocalSet; }
 
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
-
             /// get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 
@@ -328,9 +312,6 @@ namespace drawinglayer
             const basegfx::BColor& getColorB() const { return maColorB; }
             double getOffsetA() const { return mfOffsetA; }
             double getOffsetB() const { return mfOffsetB; }
-
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
             /// provide unique ID
             DeclPrimitrive2DIDBlock()
@@ -397,9 +378,6 @@ namespace drawinglayer
             bool isTranslateSet() const { return (0 != mpTranslate); }
             basegfx::B2DVector getTranslateA() const { if(mpTranslate) return mpTranslate->maTranslateA; return basegfx::B2DVector(); }
             basegfx::B2DVector getTranslateB() const { if(mpTranslate) return mpTranslate->maTranslateB; return basegfx::B2DVector(); }
-
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
             /// provide unique ID
             DeclPrimitrive2DIDBlock()

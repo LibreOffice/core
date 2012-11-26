@@ -96,8 +96,6 @@ class XMLTextColumnContext_Impl: public SvXMLImportContext
     text::TextColumn aColumn;
 
 public:
-    TYPEINFO();
-
     XMLTextColumnContext_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                const OUString& rLName,
                                const uno::Reference<
@@ -108,8 +106,6 @@ public:
 
     text::TextColumn& getTextColumn() { return aColumn; }
 };
-
-TYPEINIT1( XMLTextColumnContext_Impl, SvXMLImportContext );
 
 XMLTextColumnContext_Impl::XMLTextColumnContext_Impl(
                                SvXMLImport& rImport, sal_uInt16 nPrfx,
@@ -180,8 +176,6 @@ class XMLTextColumnSepContext_Impl: public SvXMLImportContext
 
 
 public:
-    TYPEINFO();
-
     XMLTextColumnSepContext_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                const OUString& rLName,
                                const uno::Reference<
@@ -196,8 +190,6 @@ public:
     VerticalAlignment GetVertAlign() const { return eVertAlign; }
 };
 
-
-TYPEINIT1( XMLTextColumnSepContext_Impl, SvXMLImportContext );
 
 XMLTextColumnSepContext_Impl::XMLTextColumnSepContext_Impl(
                                SvXMLImport& rImport, sal_uInt16 nPrfx,
@@ -264,8 +256,6 @@ XMLTextColumnSepContext_Impl::~XMLTextColumnSepContext_Impl()
 
 typedef XMLTextColumnContext_Impl *XMLTextColumnContext_ImplPtr;
 SV_DECL_PTRARR( XMLTextColumnsArray_Impl, XMLTextColumnContext_ImplPtr, 5, 5 )
-
-TYPEINIT1( XMLTextColumnsContext, XMLElementPropertyContext );
 
 XMLTextColumnsContext::XMLTextColumnsContext(
                                 SvXMLImport& rImport, sal_uInt16 nPrfx,

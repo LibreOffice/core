@@ -71,16 +71,16 @@ namespace
         sal_Int16 nRetval(0);
         SdrPage* pPage = GetSdrPageFromXDrawPage(rxDrawPage);
 
-        if(pPage && pPage->GetModel())
+        if(pPage)
         {
-            if( (pPage->GetPageNum() == 0) && !pPage->IsMasterPage() )
+            if( (pPage->GetPageNumber() == 0) && !pPage->IsMasterPage() )
             {
                 // handout page!
-                return pPage->GetModel()->getHandoutPageCount();
+                return pPage->getSdrModelFromSdrPage().getHandoutPageCount();
             }
             else
             {
-                const sal_uInt16 nPageCount(pPage->GetModel()->GetPageCount());
+                const sal_uInt32 nPageCount(pPage->getSdrModelFromSdrPage().GetPageCount());
                 nRetval = ((sal_Int16)nPageCount - 1) / 2;
             }
         }
@@ -122,30 +122,12 @@ namespace drawinglayer
         {
             const EditTextObject& rETO = maOutlinerParaObject.GetTextObject();
 
-            mbContainsPageField = rETO.HasField(SvxPageField::StaticType());
-            mbContainsPageCountField = rETO.HasField(SvxPagesField::StaticType());
-            mbContainsOtherFields = rETO.HasField(SvxHeaderField::StaticType())
-                || rETO.HasField(SvxFooterField::StaticType())
-                || rETO.HasField(SvxDateTimeField::StaticType())
-                || rETO.HasField(SvxAuthorField::StaticType());
-        }
-
-        bool SdrTextPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const SdrTextPrimitive2D& rCompare = (SdrTextPrimitive2D&)rPrimitive;
-
-                return (
-
-                    // compare OPO and content, but not WrongList
-                    getOutlinerParaObject() == rCompare.getOutlinerParaObject()
-
-                    // also compare WrongList (not-persistent data, but visualized)
-                    && getOutlinerParaObject().isWrongListEqual(rCompare.getOutlinerParaObject()));
-            }
-
-            return false;
+            mbContainsPageField = rETO.HasField(&typeid(SvxPageField));
+            mbContainsPageCountField = rETO.HasField(&typeid(SvxPagesField));
+            mbContainsOtherFields = rETO.HasField(&typeid(SvxHeaderField))
+                || rETO.HasField(&typeid(SvxFooterField))
+                || rETO.HasField(&typeid(SvxDateTimeField))
+                || rETO.HasField(&typeid(SvxAuthorField));
         }
 
         Primitive2DSequence SdrTextPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
@@ -197,9 +179,9 @@ namespace drawinglayer
                 }
 
                 // #i101443#  check change of TextBackgroundolor
-                if(!bDoDelete && getSdrText() && getSdrText()->GetModel())
+                if(!bDoDelete && getSdrText())
                 {
-                    SdrOutliner& rDrawOutliner = getSdrText()->GetModel()->GetDrawOutliner(0);
+                    SdrOutliner& rDrawOutliner = getSdrText()->getSdrTextObj().getSdrModelFromSdrObject().GetDrawOutliner(0);
                     aNewTextBackgroundColor = rDrawOutliner.GetBackgroundColor();
                     bNewTextBackgroundColorIsSet = true;
 
@@ -232,9 +214,9 @@ namespace drawinglayer
                     nCurrentlyValidPageCount = getPageCount(xCurrentlyVisualizingPage);
                 }
 
-                if(!bNewTextBackgroundColorIsSet && getSdrText() && getSdrText()->GetModel())
+                if(!bNewTextBackgroundColorIsSet && getSdrText())
                 {
-                    SdrOutliner& rDrawOutliner = getSdrText()->GetModel()->GetDrawOutliner(0);
+                    SdrOutliner& rDrawOutliner = getSdrText()->getSdrTextObj().getSdrModelFromSdrObject().GetDrawOutliner(0);
                     aNewTextBackgroundColor = rDrawOutliner.GetBackgroundColor();
                 }
 
@@ -259,7 +241,7 @@ namespace drawinglayer
         Primitive2DSequence SdrContourTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
             Primitive2DSequence aRetval;
-            getSdrText()->GetObject().impDecomposeContourTextPrimitive(aRetval, *this, aViewInformation);
+            getSdrText()->getSdrTextObj().impDecomposeContourTextPrimitive(aRetval, *this, aViewInformation);
 
             return encapsulateWithTextHierarchyBlockPrimitive2D(aRetval);
         }
@@ -273,19 +255,6 @@ namespace drawinglayer
             maUnitPolyPolygon(rUnitPolyPolygon),
             maObjectTransform(rObjectTransform)
         {
-        }
-
-        bool SdrContourTextPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(SdrTextPrimitive2D::operator==(rPrimitive))
-            {
-                const SdrContourTextPrimitive2D& rCompare = (SdrContourTextPrimitive2D&)rPrimitive;
-
-                return (getUnitPolyPolygon() == rCompare.getUnitPolyPolygon()
-                    && getObjectTransform() == rCompare.getObjectTransform());
-            }
-
-            return false;
         }
 
         SdrTextPrimitive2D* SdrContourTextPrimitive2D::createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const
@@ -312,7 +281,7 @@ namespace drawinglayer
         Primitive2DSequence SdrPathTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
             Primitive2DSequence aRetval;
-            getSdrText()->GetObject().impDecomposePathTextPrimitive(aRetval, *this, aViewInformation);
+            getSdrText()->getSdrTextObj().impDecomposePathTextPrimitive(aRetval, *this, aViewInformation);
 
             return encapsulateWithTextHierarchyBlockPrimitive2D(aRetval);
         }
@@ -326,19 +295,6 @@ namespace drawinglayer
             maPathPolyPolygon(rPathPolyPolygon),
             maSdrFormTextAttribute(rSdrFormTextAttribute)
         {
-        }
-
-        bool SdrPathTextPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(SdrTextPrimitive2D::operator==(rPrimitive))
-            {
-                const SdrPathTextPrimitive2D& rCompare = (SdrPathTextPrimitive2D&)rPrimitive;
-
-                return (getPathPolyPolygon() == rCompare.getPathPolyPolygon()
-                    && getSdrFormTextAttribute() == rCompare.getSdrFormTextAttribute());
-            }
-
-            return false;
         }
 
         SdrTextPrimitive2D* SdrPathTextPrimitive2D::createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const
@@ -368,7 +324,7 @@ namespace drawinglayer
         Primitive2DSequence SdrBlockTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
             Primitive2DSequence aRetval;
-            getSdrText()->GetObject().impDecomposeBlockTextPrimitive(aRetval, *this, aViewInformation);
+            getSdrText()->getSdrTextObj().impDecomposeBlockTextPrimitive(aRetval, *this, aViewInformation);
 
             return encapsulateWithTextHierarchyBlockPrimitive2D(aRetval);
         }
@@ -394,25 +350,6 @@ namespace drawinglayer
             mbWordWrap(bWordWrap),
             mbClipOnBounds(bClipOnBounds)
         {
-        }
-
-        bool SdrBlockTextPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(SdrTextPrimitive2D::operator==(rPrimitive))
-            {
-                const SdrBlockTextPrimitive2D& rCompare = (SdrBlockTextPrimitive2D&)rPrimitive;
-
-                return (getTextRangeTransform() == rCompare.getTextRangeTransform()
-                    && getSdrTextHorzAdjust() == rCompare.getSdrTextHorzAdjust()
-                    && getSdrTextVertAdjust() == rCompare.getSdrTextVertAdjust()
-                    && isFixedCellHeight() == rCompare.isFixedCellHeight()
-                    && getUnlimitedPage() == rCompare.getUnlimitedPage()
-                    && getCellText() == rCompare.getCellText()
-                    && getWordWrap() == rCompare.getWordWrap()
-                    && getClipOnBounds() == rCompare.getClipOnBounds());
-            }
-
-            return false;
         }
 
         SdrTextPrimitive2D* SdrBlockTextPrimitive2D::createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const
@@ -445,7 +382,7 @@ namespace drawinglayer
         Primitive2DSequence SdrStretchTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
             Primitive2DSequence aRetval;
-            getSdrText()->GetObject().impDecomposeStretchTextPrimitive(aRetval, *this, aViewInformation);
+            getSdrText()->getSdrTextObj().impDecomposeStretchTextPrimitive(aRetval, *this, aViewInformation);
 
             return encapsulateWithTextHierarchyBlockPrimitive2D(aRetval);
         }
@@ -459,19 +396,6 @@ namespace drawinglayer
             maTextRangeTransform(rTextRangeTransform),
             mbFixedCellHeight(bFixedCellHeight)
         {
-        }
-
-        bool SdrStretchTextPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(SdrTextPrimitive2D::operator==(rPrimitive))
-            {
-                const SdrStretchTextPrimitive2D& rCompare = (SdrStretchTextPrimitive2D&)rPrimitive;
-
-                return (getTextRangeTransform() == rCompare.getTextRangeTransform()
-                    && isFixedCellHeight() == rCompare.isFixedCellHeight());
-            }
-
-            return false;
         }
 
         SdrTextPrimitive2D* SdrStretchTextPrimitive2D::createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const

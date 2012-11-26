@@ -64,9 +64,6 @@ namespace drawinglayer
             const GraphicAttr& getGraphicAttr() const { return maGraphicAttr; }
             bool isTransparent() const;
 
-            // compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
-
             // provide unique ID
             DeclPrimitrive2DIDBlock()
         };

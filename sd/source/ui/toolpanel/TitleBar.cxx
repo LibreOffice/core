@@ -65,7 +65,7 @@ TitleBar::TitleBar ( ::Window* pParent, const String& rsTitle, TitleBarType eTyp
 , mpDevice(new VirtualDevice (*this))
 , mbIsExpandable (bIsExpandable)
 {
-    EnableMapMode (sal_False);
+    EnableMapMode (false);
 
     SetBackground (Wallpaper());
 
@@ -306,7 +306,7 @@ void TitleBar::PaintFocusIndicator (const Rectangle& rTextBox)
     if (mbFocused)
     {
         Rectangle aTextPixelBox (mpDevice->LogicToPixel (rTextBox));
-        mpDevice->EnableMapMode (sal_False);
+        mpDevice->EnableMapMode (false);
         Rectangle aBox (rTextBox);
         aBox.Top() -= 1;
         aBox.Bottom() += 1;
@@ -323,7 +323,7 @@ void TitleBar::PaintFocusIndicator (const Rectangle& rTextBox)
 
         mpDevice->SetLineColor (COL_BLACK);
         mpDevice->DrawPolyLine (Polygon(aTextPixelBox), aDottedStyle);
-        mpDevice->EnableMapMode (sal_False);
+        mpDevice->EnableMapMode (false);
     }
     else
         HideFocus ();

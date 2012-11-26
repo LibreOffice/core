@@ -60,7 +60,6 @@ private:
     DlgEdObj*       pDlgEdObj;
 
 public:
-    TYPEINFO();
     DlgEdHint( DlgEdHintKind eHint );
     DlgEdHint( DlgEdHintKind eHint, DlgEdObj* pObj );
     virtual ~DlgEdHint();

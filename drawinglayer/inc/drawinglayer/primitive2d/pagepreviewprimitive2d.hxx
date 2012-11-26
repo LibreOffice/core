@@ -64,7 +64,7 @@ namespace drawinglayer
 
             /// bitfield
             /// flag to allow keeping the aspect ratio
-            unsigned                                    mbKeepAspectRatio : 1;
+            bool                                        mbKeepAspectRatio : 1;
 
         protected:
             /// local decomposition. Implementation will just return children
@@ -87,9 +87,6 @@ namespace drawinglayer
             double getContentWidth() const { return mfContentWidth; }
             double getContentHeight() const { return mfContentHeight; }
             bool getKeepAspectRatio() const { return mbKeepAspectRatio; }
-
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
             /// own getB2DRange
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;

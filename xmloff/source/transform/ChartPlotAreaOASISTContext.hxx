@@ -30,8 +30,6 @@
 class XMLChartPlotAreaOASISTContext  : public XMLProcAttrTransformerContext
 {
 public:
-    TYPEINFO();
-
     explicit XMLChartPlotAreaOASISTContext(
         XMLTransformerBase & rTransformer, const ::rtl::OUString & rQName );
     virtual ~XMLChartPlotAreaOASISTContext();

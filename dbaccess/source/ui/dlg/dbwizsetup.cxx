@@ -274,7 +274,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     m_sWorkPath = SvtPathOptions().GetWorkPath();
     pFinalPage = NULL;
     // extract the datasource type collection from the item set
-    DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _pItems->GetItem(DSID_TYPECOLLECTION));
+    const DbuTypeCollectionItem* pCollectionItem = dynamic_cast< const DbuTypeCollectionItem* >( _pItems->GetItem(DSID_TYPECOLLECTION));
     if (pCollectionItem)
         m_pCollection = pCollectionItem->getCollection();
 

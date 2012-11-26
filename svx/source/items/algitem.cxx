@@ -56,16 +56,8 @@ using namespace ::com::sun::star;
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
 
-// STATIC DATA -----------------------------------------------------------
-
-//TYPEINIT1_AUTOFACTORY( SvxHorJustifyItem, SfxEnumItem );
-TYPEINIT1_FACTORY( SvxHorJustifyItem, SfxEnumItem, new SvxHorJustifyItem(SVX_HOR_JUSTIFY_STANDARD, 0))
-TYPEINIT1_FACTORY( SvxVerJustifyItem, SfxEnumItem, new SvxVerJustifyItem(SVX_VER_JUSTIFY_STANDARD, 0) );
-TYPEINIT1_FACTORY( SvxOrientationItem, SfxEnumItem, new SvxOrientationItem(SVX_ORIENTATION_STANDARD, 0) );
-TYPEINIT1_FACTORY( SvxMarginItem, SfxPoolItem, new SvxMarginItem(0) );
-
 // class SvxHorJustifyItem -----------------------------------------------
-
+IMPL_POOLITEM_FACTORY(SvxHorJustifyItem)
 
 SvxHorJustifyItem::SvxHorJustifyItem( const sal_uInt16 nId ) :
     SfxEnumItem( nId, (sal_uInt16)SVX_HOR_JUSTIFY_STANDARD )
@@ -231,6 +223,7 @@ sal_uInt16 SvxHorJustifyItem::GetValueCount() const
 }
 
 // class SvxVerJustifyItem -----------------------------------------------
+IMPL_POOLITEM_FACTORY(SvxVerJustifyItem)
 
 SvxVerJustifyItem::SvxVerJustifyItem( const sal_uInt16 nId ) :
     SfxEnumItem( nId, (sal_uInt16)SVX_VER_JUSTIFY_STANDARD )
@@ -528,6 +521,7 @@ void SvxOrientationItem::SetFromRotation( sal_Int32 nRotation, sal_Bool bStacked
 }
 
 // class SvxMarginItem ---------------------------------------------------
+IMPL_POOLITEM_FACTORY(SvxMarginItem)
 
 SvxMarginItem::SvxMarginItem( const sal_uInt16 nId ) :
 

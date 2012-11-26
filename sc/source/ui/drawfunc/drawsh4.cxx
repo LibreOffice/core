@@ -47,21 +47,16 @@
 
 void ScDrawShell::GetFormTextState(SfxItemSet& rSet)
 {
-    const SdrObject*    pObj        = NULL;
     SvxFontWorkDialog*  pDlg        = NULL;
     ScDrawView*         pDrView     = pViewData->GetScDrawView();
-    const SdrMarkList&  rMarkList   = pDrView->GetMarkedObjectList();
+    const SdrObject*    pObj        = pDrView->getSelectedIfSingle();
     sal_uInt16              nId = SvxFontWorkChildWindow::GetChildWindowId();
-
     SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
+
     if ( pViewFrm->HasChildWindow(nId) )
         pDlg = (SvxFontWorkDialog*)(pViewFrm->GetChildWindow(nId)->GetWindow());
 
-    if ( rMarkList.GetMarkCount() == 1 )
-        pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-
-    if ( pObj == NULL || !pObj->ISA(SdrTextObj) ||
-        !((SdrTextObj*) pObj)->HasText() )
+    if ( !pObj || !dynamic_cast< const SdrTextObj* >(pObj) || !static_cast< const SdrTextObj* >(pObj)->HasText() )
     {
         if ( pDlg )
             pDlg->SetActive(sal_False);
@@ -101,7 +96,7 @@ void ScDrawShell::GetFormTextState(SfxItemSet& rSet)
                     { DBG_ERROR( "ColorList not found :-/" ); }
             }
         }
-        SfxItemSet aViewAttr(pDrView->GetModel()->GetItemPool());
+        SfxItemSet aViewAttr(pDrView->getSdrModelFromSdrView().GetItemPool());
         pDrView->GetAttributes(aViewAttr);
         rSet.Set(aViewAttr);
     }

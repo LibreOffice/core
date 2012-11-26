@@ -186,8 +186,7 @@ namespace vclcanvas
             // make transformation absolute (put sprite to final
             // output position). Need to happen here, as we also have
             // to translate the clip polygon
-            aTransform.translate( aOutPos.X(),
-                                  aOutPos.Y() );
+            aTransform.translate( aOutPos.X(), aOutPos.Y() );
 
             if( !bIdentityTransform )
             {

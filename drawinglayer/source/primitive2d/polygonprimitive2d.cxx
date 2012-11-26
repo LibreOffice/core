@@ -53,19 +53,6 @@ namespace drawinglayer
         {
         }
 
-        bool PolygonHairlinePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BasePrimitive2D::operator==(rPrimitive))
-            {
-                const PolygonHairlinePrimitive2D& rCompare = (PolygonHairlinePrimitive2D&)rPrimitive;
-
-                return (getB2DPolygon() == rCompare.getB2DPolygon()
-                    && getBColor() == rCompare.getBColor());
-            }
-
-            return false;
-        }
-
         basegfx::B2DRange PolygonHairlinePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
             // this is a hairline, thus the line width is view-dependent. Get range of polygon
@@ -144,21 +131,6 @@ namespace drawinglayer
             mfDiscreteDashLength(fDiscreteDashLength),
             maLastInverseObjectToViewTransformation()
         {
-        }
-
-        bool PolygonMarkerPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const PolygonMarkerPrimitive2D& rCompare = (PolygonMarkerPrimitive2D&)rPrimitive;
-
-                return (getB2DPolygon() == rCompare.getB2DPolygon()
-                    && getRGBColorA() == rCompare.getRGBColorA()
-                    && getRGBColorB() == rCompare.getRGBColorB()
-                    && getDiscreteDashLength() == rCompare.getDiscreteDashLength());
-            }
-
-            return false;
         }
 
         basegfx::B2DRange PolygonMarkerPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
@@ -324,20 +296,6 @@ namespace drawinglayer
         {
         }
 
-        bool PolygonStrokePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const PolygonStrokePrimitive2D& rCompare = (PolygonStrokePrimitive2D&)rPrimitive;
-
-                return (getB2DPolygon() == rCompare.getB2DPolygon()
-                    && getLineAttribute() == rCompare.getLineAttribute()
-                    && getStrokeAttribute() == rCompare.getStrokeAttribute());
-            }
-
-            return false;
-        }
-
         basegfx::B2DRange PolygonStrokePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
             basegfx::B2DRange aRetval;
@@ -478,19 +436,6 @@ namespace drawinglayer
             }
         }
 
-        bool PolygonWavePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(PolygonStrokePrimitive2D::operator==(rPrimitive))
-            {
-                const PolygonWavePrimitive2D& rCompare = (PolygonWavePrimitive2D&)rPrimitive;
-
-                return (getWaveWidth() == rCompare.getWaveWidth()
-                    && getWaveHeight() == rCompare.getWaveHeight());
-            }
-
-            return false;
-        }
-
         basegfx::B2DRange PolygonWavePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
             // get range of parent
@@ -616,19 +561,6 @@ namespace drawinglayer
             maStart(rStart),
             maEnd(rEnd)
         {
-        }
-
-        bool PolygonStrokeArrowPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(PolygonStrokePrimitive2D::operator==(rPrimitive))
-            {
-                const PolygonStrokeArrowPrimitive2D& rCompare = (PolygonStrokeArrowPrimitive2D&)rPrimitive;
-
-                return (getStart() == rCompare.getStart()
-                    && getEnd() == rCompare.getEnd());
-            }
-
-            return false;
         }
 
         basegfx::B2DRange PolygonStrokeArrowPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const

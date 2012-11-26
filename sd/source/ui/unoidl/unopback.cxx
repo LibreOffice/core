@@ -42,6 +42,7 @@
 #include "unohelp.hxx"
 #include "drawdoc.hxx"
 #include "unokywds.hxx"
+#include <svx/globaldrawitempool.hxx>
 
 using namespace ::rtl;
 using namespace ::vos;
@@ -55,7 +56,7 @@ const SvxItemPropertySet* ImplGetPageBackgroundPropertySet()
         {0,0,0,0,0,0}
     };
 
-    static SvxItemPropertySet aPageBackgroundPropertySet_Impl( aPageBackgroundPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
+    static SvxItemPropertySet aPageBackgroundPropertySet_Impl( aPageBackgroundPropertyMap_Impl, GetGlobalDrawObjectItemPool() );
     return &aPageBackgroundPropertySet_Impl;
 }
 
@@ -71,7 +72,7 @@ SdUnoPageBackground::SdUnoPageBackground(
     if( pDoc )
     {
         StartListening( *pDoc );
-        mpSet = new SfxItemSet( pDoc->GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST );
+        mpSet = new SfxItemSet( pDoc->GetItemPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST );
 
         if( pSet )
             mpSet->Put(*pSet);
@@ -89,13 +90,13 @@ SdUnoPageBackground::~SdUnoPageBackground() throw()
 
 void SdUnoPageBackground::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
+    const SdrBaseHint* pSdrHint = dynamic_cast< const SdrBaseHint* >(&rHint);
 
     if( pSdrHint )
     {
         // delete item set if document is dying because then the pool
         // will also die
-        if( pSdrHint->GetKind() == HINT_MODELCLEARED )
+        if( pSdrHint->GetSdrHintKind() == HINT_MODELCLEARED )
         {
             delete mpSet;
             mpSet = NULL;

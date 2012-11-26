@@ -2243,8 +2243,9 @@ namespace xmloff { namespace token {
         XML_ENGINE,
         XML_ENHANCED_GEOMETRY,
         XML_TEXT_ROTATE_ANGLE,
-        XML_MIRROR_VERTICAL,
-        XML_MIRROR_HORIZONTAL,
+        //  TTTT: MirrorX/Y removed
+        //XML_MIRROR_VERTICAL,
+        //XML_MIRROR_HORIZONTAL,
         XML_EXTRUSION_ALLOWED,
         XML_TEXT_PATH_ALLOWED,
         XML_CONCENTRIC_GRADIENT_FILL_ALLOWED,

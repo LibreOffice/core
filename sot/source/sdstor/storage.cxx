@@ -55,15 +55,12 @@ using namespace ::com::sun::star;
 class SotStorageStreamFactory : public SotFactory
 {
 public:
-         TYPEINFO();
         SotStorageStreamFactory( const SvGlobalName & rName,
                               const String & rClassName,
                               CreateInstanceType pCreateFuncP )
             : SotFactory( rName, rClassName, pCreateFuncP )
         {}
 };
-TYPEINIT1(SotStorageStreamFactory,SotFactory);
-
 
 SO2_IMPL_BASIC_CLASS1_DLL(SotStorageStream,SotStorageStreamFactory,SotObject,
                         SvGlobalName( 0xd7deb420, 0xf902, 0x11d0,
@@ -381,7 +378,7 @@ sal_Bool SotStorageStream::Revert()
 
 sal_Bool SotStorageStream::SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue )
 {
-    UCBStorageStream* pStg = PTR_CAST( UCBStorageStream, pOwnStm );
+    UCBStorageStream* pStg = dynamic_cast< UCBStorageStream* >( pOwnStm );
     if ( pStg )
     {
         return pStg->SetProperty( rName, rValue );
@@ -395,7 +392,7 @@ sal_Bool SotStorageStream::SetProperty( const String& rName, const ::com::sun::s
 
 sal_Bool SotStorageStream::GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue )
 {
-    UCBStorageStream* pStg = PTR_CAST( UCBStorageStream, pOwnStm );
+    UCBStorageStream* pStg = dynamic_cast< UCBStorageStream* >( pOwnStm );
     if ( pStg )
     {
         return pStg->GetProperty( rName, rValue );
@@ -409,7 +406,7 @@ sal_Bool SotStorageStream::GetProperty( const String& rName, ::com::sun::star::u
 
 ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SotStorageStream::GetXInputStream() const
 {
-    UCBStorageStream* pStg = PTR_CAST( UCBStorageStream, pOwnStm );
+    UCBStorageStream* pStg = dynamic_cast< UCBStorageStream* >( pOwnStm );
     if ( pStg )
     {
         return pStg->GetXInputStream();
@@ -428,15 +425,12 @@ sal_Bool SotStorageStream::GetProperty( const String& rName, ::com::sun::star::u
 class SotStorageFactory : public SotFactory
 {
 public:
-         TYPEINFO();
         SotStorageFactory( const SvGlobalName & rName,
                               const String & rClassName,
                               CreateInstanceType pCreateFuncP )
             : SotFactory( rName, rClassName, pCreateFuncP )
         {}
 };
-TYPEINIT1(SotStorageFactory,SotFactory);
-
 
 SO2_IMPL_BASIC_CLASS1_DLL(SotStorage,SotStorageFactory,SotObject,
                         SvGlobalName( 0x980ce7e0, 0xf905, 0x11d0,
@@ -731,7 +725,7 @@ SotStorage::~SotStorage()
 *************************************************************************/
 void SotStorage::RemoveUNOStorageHolder( UNOStorageHolder* pHolder )
 {
-    UCBStorage* pStg = PTR_CAST( UCBStorage, m_pOwnStg );
+    UCBStorage* pStg = dynamic_cast< UCBStorage* >( m_pOwnStg );
     if ( pStg )
     {
         pStg->GetUNOStorageHolderList()->remove( pHolder );
@@ -756,7 +750,7 @@ uno::Reference< embed::XStorage > SotStorage::GetUNOAPIDuplicate( const String& 
 
     uno::Reference< embed::XStorage > xResult;
 
-    UCBStorage* pStg = PTR_CAST( UCBStorage, m_pOwnStg );
+    UCBStorage* pStg = dynamic_cast< UCBStorage* >( m_pOwnStg );
     if ( !pStg )
         return xResult;
 
@@ -791,7 +785,7 @@ uno::Reference< embed::XStorage > SotStorage::GetUNOAPIDuplicate( const String& 
             {
                     if ( !bStorageReady )
                     {
-                           UCBStorage* pChildUCBStg = PTR_CAST( UCBStorage, pChildStorage->m_pOwnStg );
+                           UCBStorage* pChildUCBStg = dynamic_cast< UCBStorage* >( pChildStorage->m_pOwnStg );
                         if ( pChildUCBStg )
                         {
                             UCBStorage* pTempStorage = new UCBStorage( pTempFile->GetURL(), STREAM_WRITE, sal_False, sal_True );
@@ -1385,7 +1379,7 @@ sal_Bool SotStorage::Validate()
 
 sal_Bool SotStorage::SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue )
 {
-    UCBStorage* pStg = PTR_CAST( UCBStorage, m_pOwnStg );
+    UCBStorage* pStg = dynamic_cast< UCBStorage* >( m_pOwnStg );
     if ( pStg )
     {
         return pStg->SetProperty( rName, rValue );
@@ -1399,7 +1393,7 @@ sal_Bool SotStorage::SetProperty( const String& rName, const ::com::sun::star::u
 
 sal_Bool SotStorage::GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue )
 {
-    UCBStorage* pStg = PTR_CAST( UCBStorage, m_pOwnStg );
+    UCBStorage* pStg = dynamic_cast< UCBStorage* >( m_pOwnStg );
     if ( pStg )
     {
         return pStg->GetProperty( rName, rValue );
@@ -1422,7 +1416,7 @@ sal_Bool SotStorage::GetProperty( const String& rName, ::com::sun::star::uno::An
 
 sal_Bool SotStorage::GetProperty( const String& rEleName, const String& rName, ::com::sun::star::uno::Any& rValue )
 {
-    UCBStorage* pStg = PTR_CAST( UCBStorage, m_pOwnStg );
+    UCBStorage* pStg = dynamic_cast< UCBStorage* >( m_pOwnStg );
     if ( pStg )
     {
         return pStg->GetProperty( rEleName, rName, rValue );
@@ -1436,7 +1430,7 @@ sal_Bool SotStorage::GetProperty( const String& rEleName, const String& rName, :
 
 sal_Bool SotStorage::IsOLEStorage() const
 {
-    UCBStorage* pStg = PTR_CAST( UCBStorage, m_pOwnStg );
+    UCBStorage* pStg = dynamic_cast< UCBStorage* >( m_pOwnStg );
     return !pStg;
 }
 

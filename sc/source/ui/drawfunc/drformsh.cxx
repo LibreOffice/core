@@ -62,8 +62,6 @@ SFX_IMPL_INTERFACE(ScDrawFormShell, ScDrawShell, ScResId(SCSTR_DRAWFORMSHELL) )
     SFX_POPUPMENU_REGISTRATION( ScResId(RID_POPUP_DRAWFORM) );
 }
 
-TYPEINIT1( ScDrawFormShell, ScDrawShell );
-
 ScDrawFormShell::ScDrawFormShell(ScViewData* pData) :
     ScDrawShell(pData)
 {

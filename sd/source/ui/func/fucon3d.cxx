@@ -26,14 +26,12 @@
 
 #include "fucon3d.hxx"
 #include <vcl/waitobj.hxx>
-
 #include <svx/svxids.hrc>
 #include <svl/aeitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <tools/poly.hxx>
-
 #include <math.h>
 #include <svx/globl3d.hxx>
 #include <svx/scene3d.hxx>
@@ -41,6 +39,8 @@
 #include <svx/cube3d.hxx>
 #include <svx/lathe3d.hxx>
 #include <svx/camera3d.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <svx/svdlegacy.hxx>
 
 #include "app.hrc"
 #include "res_bmp.hrc"
@@ -52,13 +52,7 @@
 #include "ToolBarManager.hxx"
 #include <svx/svx3ditems.hxx>
 
-// #97016#
-#include <svx/polysc3d.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-
 namespace sd {
-
-TYPEINIT1( FuConstruct3dObject, FuConstruct );
 
 /*************************************************************************
 |*
@@ -110,6 +104,7 @@ E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
         case SID_3D_CUBE:
         {
             p3DObj = new E3dCubeObj(
+                *GetDoc(),
                 mpView->Get3DDefaultAttributes(),
                 ::basegfx::B3DPoint(-2500, -2500, -2500),
                 ::basegfx::B3DVector(5000, 5000, 5000));
@@ -119,6 +114,7 @@ E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
         case SID_3D_SPHERE:
         {
             p3DObj = new E3dSphereObj(
+                *GetDoc(),
                 mpView->Get3DDefaultAttributes(),
                 ::basegfx::B3DPoint(0, 0, 0),
                 ::basegfx::B3DVector(5000, 5000, 5000));
@@ -127,53 +123,81 @@ E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
 
         case SID_3D_SHELL:
         {
-            XPolygon aXPoly(Point (0, 1250), 2500, 2500, 0, 900, sal_False);
-            aXPoly.Scale(5.0, 5.0);
+            basegfx::B2DPolygon aB2DPolygon(
+                basegfx::tools::createPolygonFromEllipseSegment(
+                    basegfx::B2DPoint(0.0, 1250.0 * 5.0),
+                    2500.0 * 5.0,
+                    2500.0 * 5.0,
+                    270.0 * F_PI / 180.0,
+                    0.0));
 
-            ::basegfx::B2DPolygon aB2DPolygon(aXPoly.getB2DPolygon());
             if(aB2DPolygon.areControlPointsUsed())
             {
-                aB2DPolygon = ::basegfx::tools::adaptiveSubdivideByAngle(aB2DPolygon);
+                aB2DPolygon = basegfx::tools::adaptiveSubdivideByAngle(aB2DPolygon);
             }
-            p3DObj = new E3dLatheObj(mpView->Get3DDefaultAttributes(), ::basegfx::B2DPolyPolygon(aB2DPolygon));
+
+            p3DObj = new E3dLatheObj(
+                *GetDoc(),
+                mpView->Get3DDefaultAttributes(),
+                ::basegfx::B2DPolyPolygon(aB2DPolygon));
 
             // Dies ist ein offenes Objekt, muss daher defaultmaessig
             // doppelseitig behandelt werden
-            p3DObj->SetMergedItem(Svx3DDoubleSidedItem(sal_True));
+            p3DObj->SetMergedItem(SfxBoolItem(SDRATTR_3DOBJ_DOUBLE_SIDED, true));
             break;
         }
 
         case SID_3D_HALF_SPHERE:
         {
-            XPolygon aXPoly(Point (0, 1250), 2500, 2500, 0, 900, sal_False);
-            aXPoly.Scale(5.0, 5.0);
+            basegfx::B2DPolygon aB2DPolygon;
 
-            aXPoly.Insert(0, Point (2400*5, 1250*5), XPOLY_NORMAL);
-            aXPoly.Insert(0, Point (2000*5, 1250*5), XPOLY_NORMAL);
-            aXPoly.Insert(0, Point (1500*5, 1250*5), XPOLY_NORMAL);
-            aXPoly.Insert(0, Point (1000*5, 1250*5), XPOLY_NORMAL);
-            aXPoly.Insert(0, Point (500*5, 1250*5), XPOLY_NORMAL);
-            aXPoly.Insert(0, Point (250*5, 1250*5), XPOLY_NORMAL);
-            aXPoly.Insert(0, Point (50*5, 1250*5), XPOLY_NORMAL);
-            aXPoly.Insert(0, Point (0*5, 1250*5), XPOLY_NORMAL);
+            // add in-between points to the horizontal line to not run into problems
+            // when the vertical segment count gets changed eventually later
+            aB2DPolygon.append(basegfx::B2DPoint(0.0, 1250.0 * 5.0));
+            aB2DPolygon.append(basegfx::B2DPoint(50.0 * 5.0, 1250.0 * 5.0));
+            aB2DPolygon.append(basegfx::B2DPoint(250.0 * 5.0, 1250.0 * 5.0));
+            aB2DPolygon.append(basegfx::B2DPoint(500.0 * 5.0, 1250.0 * 5.0));
+            aB2DPolygon.append(basegfx::B2DPoint(1000.0 * 5.0, 1250.0 * 5.0));
+            aB2DPolygon.append(basegfx::B2DPoint(1500.0 * 5.0, 1250.0 * 5.0));
+            aB2DPolygon.append(basegfx::B2DPoint(2000.0 * 5.0, 1250.0 * 5.0));
+            aB2DPolygon.append(basegfx::B2DPoint(2400.0 * 5.0, 1250.0 * 5.0));
 
-            ::basegfx::B2DPolygon aB2DPolygon(aXPoly.getB2DPolygon());
+            basegfx::B2DPolygon aHalfSphere(
+                basegfx::tools::createPolygonFromEllipseSegment(
+                    basegfx::B2DPoint(0.0, 1250.0 * 5.0),
+                    2500.0 * 5.0,
+                    2500.0 * 5.0,
+                    270.0 * F_PI / 180.0,
+                    0.0));
+
+            aHalfSphere.flip();
+            aB2DPolygon.append(aHalfSphere);
+
             if(aB2DPolygon.areControlPointsUsed())
             {
                 aB2DPolygon = ::basegfx::tools::adaptiveSubdivideByAngle(aB2DPolygon);
             }
-            p3DObj = new E3dLatheObj(mpView->Get3DDefaultAttributes(), ::basegfx::B2DPolyPolygon(aB2DPolygon));
+
+            p3DObj = new E3dLatheObj(
+                *GetDoc(),
+                mpView->Get3DDefaultAttributes(),
+                ::basegfx::B2DPolyPolygon(aB2DPolygon));
             break;
         }
 
         case SID_3D_TORUS:
         {
             ::basegfx::B2DPolygon aB2DPolygon(::basegfx::tools::createPolygonFromCircle(::basegfx::B2DPoint(1000.0, 0.0), 500.0));
+
             if(aB2DPolygon.areControlPointsUsed())
             {
                 aB2DPolygon = ::basegfx::tools::adaptiveSubdivideByAngle(aB2DPolygon);
             }
-            p3DObj = new E3dLatheObj(mpView->Get3DDefaultAttributes(), ::basegfx::B2DPolyPolygon(aB2DPolygon));
+
+            p3DObj = new E3dLatheObj(
+                *GetDoc(),
+                mpView->Get3DDefaultAttributes(),
+                ::basegfx::B2DPolyPolygon(aB2DPolygon));
             break;
         }
 
@@ -199,7 +223,10 @@ E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
             aInnerPoly.append(::basegfx::B2DPoint(0*5, -1000*5));
             aInnerPoly.setClosed(true);
 
-            p3DObj = new E3dLatheObj(mpView->Get3DDefaultAttributes(), ::basegfx::B2DPolyPolygon(aInnerPoly));
+            p3DObj = new E3dLatheObj(
+                *GetDoc(),
+                mpView->Get3DDefaultAttributes(),
+                ::basegfx::B2DPolyPolygon(aInnerPoly));
             break;
         }
 
@@ -223,7 +250,10 @@ E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
             aInnerPoly.append(::basegfx::B2DPoint(0*5, 1000*5));
             aInnerPoly.setClosed(true);
 
-            p3DObj = new E3dLatheObj(mpView->Get3DDefaultAttributes(), ::basegfx::B2DPolyPolygon(aInnerPoly));
+            p3DObj = new E3dLatheObj(
+                *GetDoc(),
+                mpView->Get3DDefaultAttributes(),
+                ::basegfx::B2DPolyPolygon(aInnerPoly));
             break;
         }
 
@@ -247,8 +277,11 @@ E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
             aInnerPoly.append(::basegfx::B2DPoint(0, 1000*5));
             aInnerPoly.setClosed(true);
 
-            p3DObj = new E3dLatheObj(mpView->Get3DDefaultAttributes(), ::basegfx::B2DPolyPolygon(aInnerPoly));
-            p3DObj->SetMergedItem(Svx3DHorizontalSegmentsItem(4));
+            p3DObj = new E3dLatheObj(
+                *GetDoc(),
+                mpView->Get3DDefaultAttributes(),
+                ::basegfx::B2DPolyPolygon(aInnerPoly));
+            p3DObj->SetMergedItem(SfxUInt32Item(SDRATTR_3DOBJ_HORZ_SEGS, 4));
             break;
         }
     }
@@ -264,7 +297,7 @@ void FuConstruct3dObject::ImpPrepareBasic3DShape(E3dCompoundObject* p3DObj, E3dS
     // get transformed BoundVolume of the new object
     basegfx::B3DRange aBoundVol;
     basegfx::B3DRange aObjVol(p3DObj->GetBoundVolume());
-    aObjVol.transform(p3DObj->GetTransform());
+    aObjVol.transform(p3DObj->GetB3DTransform());
     aBoundVol.expand(aObjVol);
     double fDeepth(aBoundVol.getDepth());
 
@@ -316,19 +349,20 @@ void FuConstruct3dObject::ImpPrepareBasic3DShape(E3dCompoundObject* p3DObj, E3dS
         break;
     }
 
-    pScene->SetTransform(aTransformation * pScene->GetTransform());
+    pScene->SetB3DTransform(aTransformation * pScene->GetB3DTransform());
 
     SfxItemSet aAttr (mpViewShell->GetPool());
     pScene->SetMergedItemSetAndBroadcast(aAttr);
 }
 
-sal_Bool FuConstruct3dObject::MouseButtonDown(const MouseEvent& rMEvt)
+bool FuConstruct3dObject::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
+    bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
 
     if ( rMEvt.IsLeft() && !mpView->IsAction() )
     {
-        Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
+        const basegfx::B2DPoint aPixelPos(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
+        const basegfx::B2DPoint aLogicPos(mpWindow->GetInverseViewTransformation() * aPixelPos);
 
         mpWindow->CaptureMouse();
         sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
@@ -343,13 +377,13 @@ sal_Bool FuConstruct3dObject::MouseButtonDown(const MouseEvent& rMEvt)
 
         // #97016#
         ImpPrepareBasic3DShape(p3DObj, pScene);
-        bReturn = mpView->BegCreatePreparedObject(aPnt, nDrgLog, pScene);
+        bReturn = mpView->BegCreatePreparedObject(aLogicPos, nDrgLog, pScene);
 
         SdrObject* pObj = mpView->GetCreateObj();
 
         if (pObj)
         {
-            SfxItemSet aAttr(mpDoc->GetPool());
+            SfxItemSet aAttr(mpDoc->GetItemPool());
             SetStyleSheet(aAttr, pObj);
 
             // LineStyle rausnehmen
@@ -368,7 +402,7 @@ sal_Bool FuConstruct3dObject::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuConstruct3dObject::MouseMove(const MouseEvent& rMEvt)
+bool FuConstruct3dObject::MouseMove(const MouseEvent& rMEvt)
 {
     return FuConstruct::MouseMove(rMEvt);
 }
@@ -379,15 +413,14 @@ sal_Bool FuConstruct3dObject::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuConstruct3dObject::MouseButtonUp(const MouseEvent& rMEvt)
+bool FuConstruct3dObject::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
-    if ( mpView->IsCreateObj() && rMEvt.IsLeft() )
+    if ( mpView->GetCreateObj() && rMEvt.IsLeft() )
     {
-        Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
         mpView->EndCreateObj(SDRCREATE_FORCEEND);
-        bReturn = sal_True;
+        bReturn = true;
     }
 
     bReturn = FuConstruct::MouseButtonUp(rMEvt) || bReturn;
@@ -402,12 +435,12 @@ sal_Bool FuConstruct3dObject::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
-|* sal_False.
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert true, andernfalls
+|* false.
 |*
 \************************************************************************/
 
-sal_Bool FuConstruct3dObject::KeyInput(const KeyEvent& rKEvt)
+bool FuConstruct3dObject::KeyInput(const KeyEvent& rKEvt)
 {
     return( FuConstruct::KeyInput(rKEvt) );
 }
@@ -420,7 +453,7 @@ sal_Bool FuConstruct3dObject::KeyInput(const KeyEvent& rKEvt)
 
 void FuConstruct3dObject::Activate()
 {
-    mpView->SetCurrentObj(OBJ_NONE);
+    mpView->setSdrObjectCreationInfo(SdrObjectCreationInfo(static_cast< sal_uInt16 >(OBJ_NONE)));
 
     FuConstruct::Activate();
 }
@@ -437,7 +470,7 @@ void FuConstruct3dObject::Deactivate()
 }
 
 // #97016#
-SdrObject* FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
+SdrObject* FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID, const basegfx::B2DRange& rRange)
 {
     // case SID_3D_CUBE:
     // case SID_3D_SHELL:
@@ -453,18 +486,20 @@ SdrObject* FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID, const 
     // E3dView::SetCurrent3DObj part
     // get transformed BoundVolume of the object
     basegfx::B3DRange aObjVol(p3DObj->GetBoundVolume());
-    aObjVol.transform(p3DObj->GetTransform());
+    aObjVol.transform(p3DObj->GetB3DTransform());
     basegfx::B3DRange aVolume(aObjVol);
     double fW(aVolume.getWidth());
     double fH(aVolume.getHeight());
     Rectangle a3DRect(0, 0, (long)fW, (long)fH);
-    E3dScene* pScene = new E3dPolyScene(mpView->Get3DDefaultAttributes());
+    E3dScene* pScene = new E3dScene(
+        *GetDoc(),
+        mpView->Get3DDefaultAttributes());
 
     // mpView->InitScene(pScene, fW, fH, aVolume.MaxVec().Z() + ((fW + fH) / 4.0));
     // copied code from E3dView::InitScene
     double fCamZ(aVolume.getMaxZ() + ((fW + fH) / 4.0));
     Camera3D aCam(pScene->GetCamera());
-    aCam.SetAutoAdjustProjection(sal_False);
+    aCam.SetAutoAdjustProjection(false);
     aCam.SetViewWindow(- fW / 2, - fH / 2, fW, fH);
     ::basegfx::B3DPoint aLookAt;
     double fDefaultCamPosZ = mpView->GetDefaultCamPosZ();
@@ -474,22 +509,22 @@ SdrObject* FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID, const 
     aCam.SetDefaults(::basegfx::B3DPoint(0.0, 0.0, fDefaultCamPosZ), aLookAt, mpView->GetDefaultCamFocal());
     pScene->SetCamera(aCam);
 
-    pScene->Insert3DObj(p3DObj);
-    pScene->NbcSetSnapRect(a3DRect);
-    pScene->SetModel(mpDoc);
+    pScene->Insert3DObj(*p3DObj);
+    sdr::legacy::SetSnapRect(*pScene, a3DRect);
+    // pScene->SetModel(mpDoc);
 
     ImpPrepareBasic3DShape(p3DObj, pScene);
 
-    SfxItemSet aAttr(mpDoc->GetPool());
+    SfxItemSet aAttr(mpDoc->GetItemPool());
     SetStyleSheet(aAttr, p3DObj);
     aAttr.Put(XLineStyleItem (XLINE_NONE));
     p3DObj->SetMergedItemSet(aAttr);
 
     // make object interactive at once
-    pScene->SetRectsDirty();
+    pScene->ActionChanged();
 
     // Take care of restrictions for the rectangle
-    Rectangle aRect(rRectangle);
+    basegfx::B2DRange aRange(rRange);
 
     switch(nID)
     {
@@ -498,7 +533,7 @@ SdrObject* FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID, const 
         case SID_3D_TORUS:
         {
             // force quadratic
-            ImpForceQuadratic(aRect);
+            ImpForceQuadratic(aRange);
             break;
         }
 
@@ -519,7 +554,7 @@ SdrObject* FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID, const 
     }
 
     // #97016#, #98245# use changed rectangle, not original one
-    pScene->SetLogicRect(aRect);
+    sdr::legacy::SetLogicRange(*pScene, aRange);
 
     return pScene;
 }

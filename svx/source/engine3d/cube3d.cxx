@@ -40,8 +40,6 @@ sdr::contact::ViewContact* E3dCubeObj::CreateObjectSpecificViewContact()
     return new sdr::contact::ViewContactOfE3dCube(*this);
 }
 
-TYPEINIT1(E3dCubeObj, E3dCompoundObject);
-
 /*************************************************************************
 |*
 |* Konstruktor:                                                 |
@@ -50,26 +48,69 @@ TYPEINIT1(E3dCubeObj, E3dCompoundObject);
 |*
 \************************************************************************/
 
-E3dCubeObj::E3dCubeObj(E3dDefaultAttributes& rDefault, basegfx::B3DPoint aPos, const basegfx::B3DVector& r3DSize)
-:   E3dCompoundObject(rDefault)
+E3dCubeObj::E3dCubeObj(
+    SdrModel& rSdrModel,
+    const E3dDefaultAttributes& rDefault,
+    const basegfx::B3DPoint aPos,
+    const basegfx::B3DVector a3DSize)
+:   E3dCompoundObject(rSdrModel, rDefault)
 {
     // Defaults setzen
     SetDefaultAttributes(rDefault);
 
     // uebergebene drueberbuegeln
     aCubePos = aPos;
-    aCubeSize = r3DSize;
+    aCubeSize = a3DSize;
 }
 
-E3dCubeObj::E3dCubeObj()
-:   E3dCompoundObject()
+//E3dCubeObj::E3dCubeObj()
+//: E3dCompoundObject()
+//{
+//  // Defaults setzen
+//  E3dDefaultAttributes aDefault;
+//  SetDefaultAttributes(aDefault);
+//}
+
+E3dCubeObj::~E3dCubeObj()
 {
-    // Defaults setzen
-    E3dDefaultAttributes aDefault;
-    SetDefaultAttributes(aDefault);
 }
 
-void E3dCubeObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
+void E3dCubeObj::copyDataFromSdrObject(const SdrObject& rSource)
+{
+    if(this != &rSource)
+    {
+        const E3dCubeObj* pSource = dynamic_cast< const E3dCubeObj* >(&rSource);
+
+        if(pSource)
+        {
+            // call parent
+            E3dCompoundObject::copyDataFromSdrObject(rSource);
+
+            // copy local data
+            aCubePos = pSource->aCubePos;
+            aCubeSize = pSource->aCubeSize;
+            bPosIsCenter = pSource->bPosIsCenter;
+            nSideFlags = pSource->nSideFlags;
+        }
+        else
+        {
+            OSL_ENSURE(false, "copyDataFromSdrObject with ObjectType of Source different from Target (!)");
+        }
+    }
+}
+
+SdrObject* E3dCubeObj::CloneSdrObject(SdrModel* pTargetModel) const
+{
+    E3dCubeObj* pClone = new E3dCubeObj(
+        pTargetModel ? *pTargetModel : getSdrModelFromSdrObject(),
+        E3dDefaultAttributes());
+    OSL_ENSURE(pClone, "CloneSdrObject error (!)");
+    pClone->copyDataFromSdrObject(*this);
+
+    return pClone;
+}
+
+void E3dCubeObj::SetDefaultAttributes(const E3dDefaultAttributes& rDefault)
 {
     aCubePos = rDefault.GetDefaultCubePos();
     aCubeSize = rDefault.GetDefaultCubeSize();
@@ -94,29 +135,9 @@ sal_uInt16 E3dCubeObj::GetObjIdentifier() const
 |*
 \************************************************************************/
 
-SdrObject *E3dCubeObj::DoConvertToPolyObj(sal_Bool /*bBezier*/, bool /*bAddText*/) const
+SdrObject* E3dCubeObj::DoConvertToPolygonObject(bool /*bBezier*/, bool /*bAddText*/) const
 {
-    return NULL;
-}
-
-/*************************************************************************
-|*
-|* Zuweisungsoperator
-|*
-\************************************************************************/
-
-void E3dCubeObj::operator=(const SdrObject& rObj)
-{
-    // erstmal alle Childs kopieren
-    E3dCompoundObject::operator=(rObj);
-
-    // weitere Parameter kopieren
-    const E3dCubeObj& r3DObj = (const E3dCubeObj&)rObj;
-
-    aCubePos = r3DObj.aCubePos;
-    aCubeSize = r3DObj.aCubeSize;
-    bPosIsCenter = r3DObj.bPosIsCenter;
-    nSideFlags = r3DObj.nSideFlags;
+    return 0;
 }
 
 /*************************************************************************
@@ -143,7 +164,7 @@ void E3dCubeObj::SetCubeSize(const basegfx::B3DVector& rNew)
     }
 }
 
-void E3dCubeObj::SetPosIsCenter(sal_Bool bNew)
+void E3dCubeObj::SetPosIsCenter(bool bNew)
 {
     if(bPosIsCenter != bNew)
     {

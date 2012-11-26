@@ -28,7 +28,6 @@
 #include "xmloff/dllapi.h"
 #include "sal/types.h"
 #include <rsc/rscsfx.hxx>
-#include <tools/rtti.hxx>
 #include <xmloff/uniref.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlictxt.hxx>
@@ -92,8 +91,6 @@ protected:
     void SetAutoName( const ::rtl::OUString& rName ) { maAutoName = rName; }
 
 public:
-
-    TYPEINFO();
 
     SvXMLStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const ::rtl::OUString& rLName,
@@ -214,8 +211,6 @@ protected:
     virtual sal_Bool InsertStyleFamily( sal_uInt16 nFamily ) const;
 
 public:
-    TYPEINFO();
-
     SvXMLStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const ::rtl::OUString& rLName,
         const ::com::sun::star::uno::Reference<

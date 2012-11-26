@@ -44,6 +44,7 @@
 #include <drawinglayer/attribute/sdrshadowattribute.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 
 #include "cell.hxx"
 #include "tablelayouter.hxx"
@@ -81,9 +82,6 @@ namespace drawinglayer
             // data access
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
             const attribute::SdrFillTextAttribute& getSdrFTAttribute() const { return maSdrFTAttribute; }
-
-            // compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
             // provide unique ID
             DeclPrimitrive2DIDBlock()
@@ -132,19 +130,6 @@ namespace drawinglayer
             return aRetval;
         }
 
-        bool SdrCellPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const SdrCellPrimitive2D& rCompare = (SdrCellPrimitive2D&)rPrimitive;
-
-                return (getTransform() == rCompare.getTransform()
-                    && getSdrFTAttribute() == rCompare.getSdrFTAttribute());
-            }
-
-            return false;
-        }
-
         // provide unique ID
         ImplPrimitrive2DIDBlock(SdrCellPrimitive2D, PRIMITIVE2D_ID_SDRCELLPRIMITIVE2D)
 
@@ -167,11 +152,11 @@ namespace drawinglayer
             SvxBorderLine                               maTopLine;
 
             // bitfield
-            unsigned                                    mbLeftIsOutside : 1;
-            unsigned                                    mbBottomIsOutside : 1;
-            unsigned                                    mbRightIsOutside : 1;
-            unsigned                                    mbTopIsOutside : 1;
-            unsigned                                    mbInTwips : 1;
+            bool                                        mbLeftIsOutside : 1;
+            bool                                        mbBottomIsOutside : 1;
+            bool                                        mbRightIsOutside : 1;
+            bool                                        mbTopIsOutside : 1;
+            bool                                        mbInTwips : 1;
 
         protected:
             // local decomposition.
@@ -215,9 +200,6 @@ namespace drawinglayer
             bool getRightIsOutside() const { return mbRightIsOutside; }
             bool getTopIsOutside() const { return mbTopIsOutside; }
             bool getInTwips() const { return mbInTwips; }
-
-            // compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
             // provide unique ID
             DeclPrimitrive2DIDBlock()
@@ -462,27 +444,6 @@ namespace drawinglayer
             return xRetval;
         }
 
-        bool SdrBorderlinePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const SdrBorderlinePrimitive2D& rCompare = (SdrBorderlinePrimitive2D&)rPrimitive;
-
-                return (getTransform() == rCompare.getTransform()
-                    && getLeftLine() == rCompare.getLeftLine()
-                    && getBottomLine() == rCompare.getBottomLine()
-                    && getRightLine() == rCompare.getRightLine()
-                    && getTopLine() == rCompare.getTopLine()
-                    && getLeftIsOutside() == rCompare.getLeftIsOutside()
-                    && getBottomIsOutside() == rCompare.getBottomIsOutside()
-                    && getRightIsOutside() == rCompare.getRightIsOutside()
-                    && getTopIsOutside() == rCompare.getTopIsOutside()
-                    && getInTwips() == rCompare.getInTwips());
-            }
-
-            return false;
-        }
-
         // provide unique ID
         ImplPrimitrive2DIDBlock(SdrBorderlinePrimitive2D, PRIMITIVE2D_ID_SDRBORDERLINEPRIMITIVE2D)
 
@@ -560,11 +521,6 @@ namespace sdr
                     sdr::table::CellRef xCurrentCell;
                     basegfx::B2IRectangle aCellArea;
 
-                    // create range using the model data directly. This is in SdrTextObj::aRect which i will access using
-                    // GetGeoRect() to not trigger any calculations. It's the unrotated geometry.
-                    const Rectangle& rObjectRectangle(rTableObj.GetGeoRect());
-                    const basegfx::B2DRange aObjectRange(rObjectRectangle.Left(), rObjectRectangle.Top(), rObjectRectangle.Right(), rObjectRectangle.Bottom());
-
                     // for each cell we need potentially a cell primitive and a border primitive
                     // (e.g. single cell). Prepare sequences and input counters
                     drawinglayer::primitive2d::Primitive2DSequence xCellSequence(nAllCount);
@@ -593,8 +549,8 @@ namespace sdr
                                     basegfx::B2DHomMatrix aCellMatrix;
                                     aCellMatrix.set(0, 0, (double)aCellArea.getWidth());
                                     aCellMatrix.set(1, 1, (double)aCellArea.getHeight());
-                                    aCellMatrix.set(0, 2, (double)aCellArea.getMinX() + aObjectRange.getMinX());
-                                    aCellMatrix.set(1, 2, (double)aCellArea.getMinY() + aObjectRange.getMinY());
+                                    aCellMatrix.set(0, 2, (double)aCellArea.getMinX());
+                                    aCellMatrix.set(1, 2, (double)aCellArea.getMinY());
 
                                     // handle cell fillings and text
                                     const SfxItemSet& rCellItemSet = xCurrentCell->GetItemSet();
@@ -674,6 +630,20 @@ namespace sdr
                     // append to target. We want fillings and text first
                     xRetval = xCellSequence;
                     drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xRetval, xBorderSequence);
+
+                    // embed whole visualisation into oebjct matrix, but without scale which is already
+                    // included into the single cell and border objects
+                    const basegfx::B2DHomMatrix aObjNoScale(
+                        basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
+                            rTableObj.getSdrObjectShearX(),
+                            rTableObj.getSdrObjectRotate(),
+                            rTableObj.getSdrObjectTranslate()));
+                    const drawinglayer::primitive2d::Primitive2DReference xTransRef(
+                        new drawinglayer::primitive2d::TransformPrimitive2D(
+                            aObjNoScale,
+                            xRetval));
+
+                    xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xTransRef, 1);
                 }
 
                 if(xRetval.hasElements())
@@ -693,25 +663,14 @@ namespace sdr
             }
             else
             {
-                // take unrotated snap rect (direct model data) for position and size
-                const Rectangle& rRectangle = rTableObj.GetGeoRect();
-                const basegfx::B2DRange aObjectRange(
-                    rRectangle.Left(), rRectangle.Top(),
-                    rRectangle.Right(), rRectangle.Bottom());
-
-                // create object matrix
-                const GeoStat& rGeoStat(rTableObj.GetGeoStat());
-                const double fShearX(rGeoStat.nShearWink ? tan((36000 - rGeoStat.nShearWink) * F_PI18000) : 0.0);
-                const double fRotate(rGeoStat.nDrehWink ? (36000 - rGeoStat.nDrehWink) * F_PI18000 : 0.0);
-                const basegfx::B2DHomMatrix aObjectMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
-                    aObjectRange.getWidth(), aObjectRange.getHeight(), fShearX, fRotate,
-                    aObjectRange.getMinX(), aObjectRange.getMinY()));
+                // get object transformation
+                const basegfx::B2DHomMatrix& rObjectMatrix(rTableObj.getSdrObjectTransformation());
 
                 // credate an invisible outline for the cases where no visible content exists
                 const drawinglayer::primitive2d::Primitive2DReference xReference(
                     drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
                         false,
-                        aObjectMatrix));
+                        rObjectMatrix));
 
                 return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
             }

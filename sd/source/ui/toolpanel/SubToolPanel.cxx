@@ -352,9 +352,10 @@ sal_Int32 SubToolPanel::LayoutChildren (void)
 
 IMPL_LINK(SubToolPanel, WindowEventListener, VclSimpleEvent*, pEvent)
 {
-    if (pEvent!=NULL && pEvent->ISA(VclWindowEvent))
+    VclWindowEvent* pWindowEvent = dynamic_cast< VclWindowEvent* >(pEvent);
+
+    if (pWindowEvent)
     {
-        VclWindowEvent* pWindowEvent = static_cast<VclWindowEvent*>(pEvent);
         switch (pWindowEvent->GetId())
         {
             case VCLEVENT_WINDOW_SHOW:

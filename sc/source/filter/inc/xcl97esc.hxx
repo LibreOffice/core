@@ -99,7 +99,7 @@ public:
 
     virtual EscherExHostAppData* StartShape(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape>& rxShape,
-                            const Rectangle* pChildAnchor );
+                            const basegfx::B2DRange* pObjectRange);
     virtual void                EndShape( sal_uInt16 nShapeType, sal_uInt32 nShapeID );
     virtual EscherExHostAppData*    EnterAdditionalTextGroup();
 
@@ -111,11 +111,11 @@ public:
         @descr  Writes the form control data to the 'Ctls' stream. */
     XclExpOcxControlObj* CreateOCXCtrlObj(
                             ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape,
-                            const Rectangle* pChildAnchor );
+                            const basegfx::B2DRange* pObjectRange);
     /** Creates a TBX form control OBJ record from the passed form control. */
     XclExpTbxControlObj* CreateTBXCtrlObj(
                             ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape,
-                            const Rectangle* pChildAnchor );
+                            const basegfx::B2DRange* pObjectRange);
 
 
 private:

@@ -789,7 +789,8 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
 
             if (eState >= SFX_ITEM_AVAILABLE && pItem )
             {
-                bChecked = pItem->ISA(SfxBoolItem) && ((SfxBoolItem*)pItem)->GetValue();
+                SfxBoolItem* pSfxBoolItem = dynamic_cast< SfxBoolItem* >(pItem);
+                bChecked = pSfxBoolItem && pSfxBoolItem->GetValue();
                 rMenu.CheckItem(SID_FM_SHOW_PROPERTY_BROWSER,bChecked);
             }
             delete pItem;

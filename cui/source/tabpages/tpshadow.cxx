@@ -216,7 +216,7 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
     sal_uInt16 nPos;
     sal_uInt16 nCount;
     //add CHINA001 Begin
-    SFX_ITEMSET_ARG (&rSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE,sal_False);
+    SFX_ITEMSET_ARG (&rSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE);
     if (pPageTypeItem)
         SetPageType(pPageTypeItem->GetValue());
     //add CHINA001 end
@@ -285,9 +285,9 @@ sal_Bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
         TriState eState = aTsbShowShadow.GetState();
         if( eState != aTsbShowShadow.GetSavedValue() )
         {
-            SdrShadowItem aItem( sal::static_int_cast< sal_Bool >( eState ) );
+            SdrOnOffItem aItem( sal::static_int_cast< sal_Bool >( eState ) );
             pOld = GetOldItem( rAttrs, SDRATTR_SHADOW );
-            if ( !pOld || !( *(const SdrShadowItem*)pOld == aItem ) )
+            if ( !pOld || !( *(const SdrOnOffItem*)pOld == aItem ) )
             {
                 rAttrs.Put( aItem );
                 bModified = sal_True;
@@ -326,23 +326,23 @@ sal_Bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
             if( rOutAttrs.GetItemState( SDRATTR_SHADOWXDIST ) != SFX_ITEM_DONTCARE &&
                 rOutAttrs.GetItemState( SDRATTR_SHADOWYDIST ) != SFX_ITEM_DONTCARE )
             {
-                nOldX = ( ( const SdrShadowXDistItem& ) rOutAttrs.
+                nOldX = ( ( const SdrMetricItem& ) rOutAttrs.
                                     Get( SDRATTR_SHADOWXDIST ) ).GetValue();
-                nOldY = ( ( const SdrShadowYDistItem& ) rOutAttrs.
+                nOldY = ( ( const SdrMetricItem& ) rOutAttrs.
                                     Get( SDRATTR_SHADOWYDIST ) ).GetValue();
             }
-            SdrShadowXDistItem aXItem( nX );
+            SdrMetricItem aXItem(SDRATTR_SHADOWXDIST, nX );
             pOld = GetOldItem( rAttrs, SDRATTR_SHADOWXDIST );
             if ( nX != nOldX &&
-                ( !pOld || !( *(const SdrShadowXDistItem*)pOld == aXItem ) ) )
+                ( !pOld || !( *(const SdrMetricItem*)pOld == aXItem ) ) )
             {
                 rAttrs.Put( aXItem );
                 bModified = sal_True;
             }
-            SdrShadowYDistItem aYItem( nY );
+            SdrMetricItem aYItem( SDRATTR_SHADOWYDIST, nY );
             pOld = GetOldItem( rAttrs, SDRATTR_SHADOWYDIST );
             if ( nY != nOldY &&
-                ( !pOld || !( *(const SdrShadowYDistItem*)pOld == aYItem ) ) )
+                ( !pOld || !( *(const SdrMetricItem*)pOld == aYItem ) ) )
             {
                 rAttrs.Put( aYItem );
                 bModified = sal_True;
@@ -354,10 +354,10 @@ sal_Bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
         if( nPos != LISTBOX_ENTRY_NOTFOUND &&
             nPos != aLbShadowColor.GetSavedValue() )
         {
-            SdrShadowColorItem aItem( aLbShadowColor.GetSelectEntry(),
+            XColorItem aItem(SDRATTR_SHADOWCOLOR, aLbShadowColor.GetSelectEntry(),
                                     aLbShadowColor.GetSelectEntryColor() );
             pOld = GetOldItem( rAttrs, SDRATTR_SHADOWCOLOR );
-            if ( !pOld || !( *(const SdrShadowColorItem*)pOld == aItem ) )
+            if ( !pOld || !( *(const XColorItem*)pOld == aItem ) )
             {
                 rAttrs.Put( aItem );
                 bModified = sal_True;
@@ -368,9 +368,9 @@ sal_Bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
         sal_uInt16 nVal = (sal_uInt16)aMtrTransparent.GetValue();
         if( nVal != (sal_uInt16)aMtrTransparent.GetSavedValue().ToInt32() )
         {
-            SdrShadowTransparenceItem aItem( nVal );
+            SdrPercentItem aItem(SDRATTR_SHADOWTRANSPARENCE, nVal );
             pOld = GetOldItem( rAttrs, SDRATTR_SHADOWTRANSPARENCE );
-            if ( !pOld || !( *(const SdrShadowTransparenceItem*)pOld == aItem ) )
+            if ( !pOld || !( *(const SdrPercentItem*)pOld == aItem ) )
             {
                 rAttrs.Put( aItem );
                 bModified = sal_True;
@@ -397,7 +397,7 @@ void SvxShadowTabPage::Reset( const SfxItemSet& rAttrs )
         {
             aTsbShowShadow.EnableTriState( sal_False );
 
-            if( ( ( const SdrShadowItem& ) rAttrs.Get( SDRATTR_SHADOW ) ).GetValue() )
+            if( ( ( const SdrOnOffItem& ) rAttrs.Get( SDRATTR_SHADOW ) ).GetValue() )
                 aTsbShowShadow.SetState( STATE_CHECK );
             else
             {
@@ -413,8 +413,8 @@ void SvxShadowTabPage::Reset( const SfxItemSet& rAttrs )
         if( rAttrs.GetItemState( SDRATTR_SHADOWXDIST ) != SFX_ITEM_DONTCARE &&
             rAttrs.GetItemState( SDRATTR_SHADOWYDIST ) != SFX_ITEM_DONTCARE )
         {
-            sal_Int32 nX = ( ( const SdrShadowXDistItem& ) rAttrs.Get( SDRATTR_SHADOWXDIST ) ).GetValue();
-            sal_Int32 nY = ( ( const SdrShadowYDistItem& ) rAttrs.Get( SDRATTR_SHADOWYDIST ) ).GetValue();
+            sal_Int32 nX = ( ( const SdrMetricItem& ) rAttrs.Get( SDRATTR_SHADOWXDIST ) ).GetValue();
+            sal_Int32 nY = ( ( const SdrMetricItem& ) rAttrs.Get( SDRATTR_SHADOWYDIST ) ).GetValue();
 
             if( nX != 0 )
                 SetMetricValue( aMtrDistance, nX < 0L ? -nX : nX, ePoolUnit );
@@ -437,8 +437,8 @@ void SvxShadowTabPage::Reset( const SfxItemSet& rAttrs )
         {
             // determine default-distance
             SfxItemPool* pPool = rOutAttrs.GetPool();
-            SdrShadowXDistItem* pXDistItem = (SdrShadowXDistItem*)&pPool->GetDefaultItem (SDRATTR_SHADOWXDIST);
-            SdrShadowYDistItem* pYDistItem = (SdrShadowYDistItem*)&pPool->GetDefaultItem (SDRATTR_SHADOWYDIST);
+            SdrMetricItem* pXDistItem = (SdrMetricItem*)&pPool->GetDefaultItem (SDRATTR_SHADOWXDIST);
+            SdrMetricItem* pYDistItem = (SdrMetricItem*)&pPool->GetDefaultItem (SDRATTR_SHADOWYDIST);
             if (pXDistItem && pYDistItem)
             {
                 sal_Int32 nX = pXDistItem->GetValue();
@@ -459,7 +459,7 @@ void SvxShadowTabPage::Reset( const SfxItemSet& rAttrs )
         // SchattenFarbe:
         if( rAttrs.GetItemState( SDRATTR_SHADOWCOLOR ) != SFX_ITEM_DONTCARE )
         {
-            aLbShadowColor.SelectEntry( ( ( const SdrShadowColorItem& ) rAttrs.Get( SDRATTR_SHADOWCOLOR ) ).GetColorValue() );
+            aLbShadowColor.SelectEntry( ( ( const XColorItem& ) rAttrs.Get( SDRATTR_SHADOWCOLOR ) ).GetColorValue() );
         }
         else
             aLbShadowColor.SetNoSelection();
@@ -467,7 +467,7 @@ void SvxShadowTabPage::Reset( const SfxItemSet& rAttrs )
         // Transparenz
         if( rAttrs.GetItemState( SDRATTR_SHADOWTRANSPARENCE ) != SFX_ITEM_DONTCARE )
         {
-            sal_uInt16 nTransp = ( ( const SdrShadowTransparenceItem& ) rAttrs.Get( SDRATTR_SHADOWTRANSPARENCE ) ).GetValue();
+            sal_uInt16 nTransp = ( ( const SdrPercentItem& ) rAttrs.Get( SDRATTR_SHADOWTRANSPARENCE ) ).GetValue();
             aMtrTransparent.SetValue( nTransp );
         }
         else
@@ -593,9 +593,9 @@ void SvxShadowTabPage::PointChanged( Window* pWindow, RECT_POINT eRcPt )
 
 void SvxShadowTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
 {
-    SFX_ITEMSET_ARG (&aSet,pColorTabItem,SvxColorTableItem,SID_COLOR_TABLE,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pDlgTypeItem,SfxUInt16Item,SID_DLG_TYPE,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pColorTabItem,SvxColorTableItem,SID_COLOR_TABLE);
+    SFX_ITEMSET_ARG (&aSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE);
+    SFX_ITEMSET_ARG (&aSet,pDlgTypeItem,SfxUInt16Item,SID_DLG_TYPE);
 
 
     if (pColorTabItem)

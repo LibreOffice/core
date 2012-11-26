@@ -721,7 +721,7 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
             if ( pDocSh->GetMedium() )
             {
                 // if there is no hidden property in the MediaDescriptor it should be removed after loading
-                SFX_ITEMSET_ARG( pDocSh->GetMedium()->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False );
+                SFX_ITEMSET_ARG( pDocSh->GetMedium()->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN );
                 bRemoveHidden = ( pHiddenItem == NULL || !pHiddenItem->GetValue() );
             }
 
@@ -750,7 +750,7 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
 
     const SdrView* pDrawView = pVSh ? pVSh->GetDrawView() : 0;
 
-    SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, pObj );
+    const SdrUnoObj *pFormObj = dynamic_cast< const SdrUnoObj* >( pObj );
     uno::Reference< awt::XControl > xControl;
     if ( pDrawView && pVSh->GetWin() )
         xControl = pFormObj->GetUnoControl( *pDrawView, *pVSh->GetWin() );

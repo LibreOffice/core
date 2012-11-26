@@ -54,8 +54,6 @@ using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
 
 
-TYPEINIT1( XMLSectionImportContext, SvXMLImportContext );
-
 const sal_Char sAPI_TextSection[] = "com.sun.star.text.TextSection";
 const sal_Char sAPI_IndexHeaderSection[] = "com.sun.star.text.IndexHeaderSection";
 const sal_Char sAPI_IsProtected[] = "IsProtected";

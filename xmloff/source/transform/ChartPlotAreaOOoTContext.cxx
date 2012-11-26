@@ -41,8 +41,6 @@ using ::rtl::OUString;
 class XMLAxisOOoContext : public XMLPersElemContentTContext
 {
 public:
-    TYPEINFO();
-
     XMLAxisOOoContext( XMLTransformerBase& rTransformer,
                        const ::rtl::OUString& rQName );
     ~XMLAxisOOoContext();
@@ -54,8 +52,6 @@ public:
 private:
     bool m_bIsCategoryAxis;
 };
-
-TYPEINIT1( XMLAxisOOoContext, XMLPersElemContentTContext );
 
 XMLAxisOOoContext::XMLAxisOOoContext(
     XMLTransformerBase& rTransformer,
@@ -131,8 +127,6 @@ bool XMLAxisOOoContext::IsCategoryAxis() const
     return m_bIsCategoryAxis;
 }
 
-
-TYPEINIT1( XMLChartPlotAreaOOoTContext, XMLProcAttrTransformerContext )
 
 XMLChartPlotAreaOOoTContext::XMLChartPlotAreaOOoTContext(
     XMLTransformerBase & rTransformer, const ::rtl::OUString & rQName ) :

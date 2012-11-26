@@ -35,6 +35,7 @@ namespace sdr
     {
         class SVX_DLLPUBLIC DefaultProperties : public BaseProperties
         {
+        private:
         protected:
             // the to be used ItemSet
             SfxItemSet*                                     mpItemSet;
@@ -43,7 +44,7 @@ namespace sdr
             virtual SfxItemSet& CreateObjectSpecificItemSet(SfxItemPool& rPool);
 
             // test changeability for a single item
-            virtual sal_Bool AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0) const;
+            virtual bool AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0) const;
 
             // Do the ItemChange, may do special handling
             virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0);
@@ -87,7 +88,7 @@ namespace sdr
             virtual void SetObjectItemSet(const SfxItemSet& rSet);
 
             // set a new StyleSheet and broadcast
-            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr);
+            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr);
 
             // get the installed StyleSheet
             virtual SfxStyleSheet* GetStyleSheet() const;

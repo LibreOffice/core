@@ -148,14 +148,14 @@ public:
 
 DocObjectWrapper::DocObjectWrapper( SbModule* pVar ) : m_pMod( pVar ), mName( pVar->GetName() )
 {
-    SbObjModule* pMod = PTR_CAST(SbObjModule,pVar);
+    SbObjModule* pMod = dynamic_cast< SbObjModule* >( pVar);
     if ( pMod )
     {
         if ( pMod->GetModuleType() == ModuleType::DOCUMENT )
         {
             Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
             // Use proxy factory service to create aggregatable proxy.
-            SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,pMod->GetObject() );
+            SbUnoObject* pUnoObj = dynamic_cast< SbUnoObject* >( pMod->GetObject() );
             Reference< XInterface > xIf;
             if ( pUnoObj )
             {
@@ -436,14 +436,6 @@ SbPropertyRef DocObjectWrapper::getProperty( const rtl::OUString& aName ) throw 
     return pProperty;
 }
 
-TYPEINIT1(SbModule,SbxObject)
-TYPEINIT1(SbMethod,SbxMethod)
-TYPEINIT1(SbProperty,SbxProperty)
-TYPEINIT1(SbProcedureProperty,SbxProperty)
-TYPEINIT1(SbJScriptModule,SbModule)
-TYPEINIT1(SbJScriptMethod,SbMethod)
-TYPEINIT1(SbObjModule,SbModule)
-TYPEINIT1(SbUserFormModule,SbObjModule)
 
 typedef std::vector<HighlightPortion> HighlightPortions;
 
@@ -574,13 +566,13 @@ void SbModule::StartDefinitions()
     sal_uInt16 i;
     for( i = 0; i < pMethods->Count(); i++ )
     {
-        SbMethod* p = PTR_CAST(SbMethod,pMethods->Get( i ) );
+        SbMethod* p = dynamic_cast< SbMethod* >( pMethods->Get( i ) );
         if( p )
             p->bInvalid = sal_True;
     }
     for( i = 0; i < pProps->Count(); )
     {
-        SbProperty* p = PTR_CAST(SbProperty,pProps->Get( i ) );
+        SbProperty* p = dynamic_cast< SbProperty* >( pProps->Get( i ) );
         if( p )
             pProps->Remove( i );
         else
@@ -593,7 +585,7 @@ void SbModule::StartDefinitions()
 SbMethod* SbModule::GetMethod( const String& rName, SbxDataType t )
 {
     SbxVariable* p = pMethods->Find( rName, SbxCLASS_METHOD );
-    SbMethod* pMeth = p ? PTR_CAST(SbMethod,p) : NULL;
+    SbMethod* pMeth = p ? dynamic_cast< SbMethod* >( p) : NULL;
     if( p && !pMeth )
         pMethods->Remove( p );
     if( !pMeth )
@@ -621,7 +613,7 @@ SbMethod* SbModule::GetMethod( const String& rName, SbxDataType t )
 SbProperty* SbModule::GetProperty( const String& rName, SbxDataType t )
 {
     SbxVariable* p = pProps->Find( rName, SbxCLASS_PROPERTY );
-    SbProperty* pProp = p ? PTR_CAST(SbProperty,p) : NULL;
+    SbProperty* pProp = p ? dynamic_cast< SbProperty* >( p) : NULL;
     if( p && !pProp )
         pProps->Remove( p );
     if( !pProp )
@@ -639,7 +631,7 @@ SbProcedureProperty* SbModule::GetProcedureProperty
     ( const String& rName, SbxDataType t )
 {
     SbxVariable* p = pProps->Find( rName, SbxCLASS_PROPERTY );
-    SbProcedureProperty* pProp = p ? PTR_CAST(SbProcedureProperty,p) : NULL;
+    SbProcedureProperty* pProp = p ? dynamic_cast< SbProcedureProperty* >( p) : NULL;
     if( p && !pProp )
         pProps->Remove( p );
     if( !pProp )
@@ -657,7 +649,7 @@ SbIfaceMapperMethod* SbModule::GetIfaceMapperMethod
     ( const String& rName, SbMethod* pImplMeth )
 {
     SbxVariable* p = pMethods->Find( rName, SbxCLASS_METHOD );
-    SbIfaceMapperMethod* pMapperMethod = p ? PTR_CAST(SbIfaceMapperMethod,p) : NULL;
+    SbIfaceMapperMethod* pMapperMethod = p ? dynamic_cast< SbIfaceMapperMethod* >( p) : NULL;
     if( p && !pMapperMethod )
         pMethods->Remove( p );
     if( !pMapperMethod )
@@ -675,16 +667,13 @@ SbIfaceMapperMethod::~SbIfaceMapperMethod()
 {
 }
 
-TYPEINIT1(SbIfaceMapperMethod,SbMethod)
-
-
 // Aus dem Codegenerator: Ungueltige Eintraege entfernen
 
 void SbModule::EndDefinitions( sal_Bool bNewState )
 {
     for( sal_uInt16 i = 0; i < pMethods->Count(); )
     {
-        SbMethod* p = PTR_CAST(SbMethod,pMethods->Get( i ) );
+        SbMethod* p = dynamic_cast< SbMethod* >( pMethods->Get( i ) );
         if( p )
         {
             if( p->bInvalid )
@@ -727,7 +716,7 @@ SbxVariable* SbModule::Find( const XubString& rName, SbxClassType t )
             if( xArray.Is() )
             {
                 SbxVariable* pEnumVar = xArray->Find( rName, SbxCLASS_DONTCARE );
-                SbxObject* pEnumObject = PTR_CAST( SbxObject, pEnumVar );
+                SbxObject* pEnumObject = dynamic_cast< SbxObject* >( pEnumVar );
                 if( pEnumObject )
                 {
                     bool bPrivate = pEnumObject->IsSet( SBX_PRIVATE );
@@ -764,19 +753,19 @@ const String& SbModule::GetSource() const
 void SbModule::SetParent( SbxObject* p )
 {
     // #118083: Assertion is not valid any more
-    // DBG_ASSERT( !p || p->IsA( TYPE(StarBASIC) ), "SbModules nur in BASIC eintragen" );
+    // DBG_ASSERT( !p || dynamic_cast< StarBASIC* >(p), "SbModules nur in BASIC eintragen" );
     pParent = p;
 }
 
 void SbModule::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                            const SfxHint& rHint, const TypeId& rHintType )
 {
-    const SbxHint* pHint = PTR_CAST(SbxHint,&rHint);
+    const SbxHint* pHint = dynamic_cast< const SbxHint* >( &rHint);
     if( pHint )
     {
         SbxVariable* pVar = pHint->GetVar();
-        SbProperty* pProp = PTR_CAST(SbProperty,pVar);
-        SbMethod* pMeth = PTR_CAST(SbMethod,pVar);
+        SbProperty* pProp = dynamic_cast< SbProperty* >( pVar);
+        SbMethod* pMeth = dynamic_cast< SbMethod* >( pVar);
         if( pProp )
         {
             if( pProp->GetModule() != this )
@@ -932,15 +921,15 @@ SbMethod* SbModule::GetFunctionForLine( sal_uInt16 nLine )
 static void _SendHint( SbxObject* pObj, sal_uIntPtr nId, SbMethod* p )
 {
     // Selbst ein BASIC?
-    if( pObj->IsA( TYPE(StarBASIC) ) && pObj->IsBroadcaster() )
+    if( dynamic_cast< StarBASIC* >(pObj) && pObj->IsBroadcaster() )
         pObj->GetBroadcaster().Broadcast( SbxHint( nId, p ) );
     // Dann die Unterobjekte fragen
     SbxArray* pObjs = pObj->GetObjects();
     for( sal_uInt16 i = 0; i < pObjs->Count(); i++ )
     {
-        SbxVariable* pVar = pObjs->Get( i );
-        if( pVar->IsA( TYPE(SbxObject) ) )
-            _SendHint( PTR_CAST(SbxObject,pVar), nId, p );
+        SbxObject* pVar = dynamic_cast< SbxObject* >(pObjs->Get( i ));
+        if( pVar )
+            _SendHint( pVar, nId, p );
     }
 }
 
@@ -985,7 +974,7 @@ void ClearUnoObjectsInRTL_Impl_Rek( StarBASIC* pBasic )
     for( sal_uInt16 i = 0 ; i < nCount ; i++ )
     {
         SbxVariable* pObjVar = pObjs->Get( i );
-        StarBASIC* pSubBasic = PTR_CAST( StarBASIC, pObjVar );
+        StarBASIC* pSubBasic = dynamic_cast< StarBASIC* >( pObjVar );
         if( pSubBasic )
             ClearUnoObjectsInRTL_Impl_Rek( pSubBasic );
     }
@@ -1076,7 +1065,7 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
             SbxBase::ResetError();
         if( pMSOMacroRuntimeLibVar )
         {
-            StarBASIC* pMSOMacroRuntimeLib = PTR_CAST(StarBASIC,pMSOMacroRuntimeLibVar);
+            StarBASIC* pMSOMacroRuntimeLib = dynamic_cast< StarBASIC* >( pMSOMacroRuntimeLibVar);
             if( pMSOMacroRuntimeLib )
             {
                 sal_uInt16 nGblFlag = pMSOMacroRuntimeLib->GetFlags() & SBX_GBLSEARCH;
@@ -1239,7 +1228,8 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
         StarBASIC::FatalError( SbERR_STACK_OVERFLOW );
     }
 
-    StarBASIC* pBasic = PTR_CAST(StarBASIC,GetParent());
+    StarBASIC* pBasic = dynamic_cast< StarBASIC* >(GetParent());
+
     if( bDelInst )
     {
         // #57841 Uno-Objekte, die in RTL-Funktionen gehalten werden,
@@ -1335,18 +1325,18 @@ void SbModule::ClearPrivateVars()
 {
     for( sal_uInt16 i = 0 ; i < pProps->Count() ; i++ )
     {
-        SbProperty* p = PTR_CAST(SbProperty,pProps->Get( i ) );
+        SbProperty* p = dynamic_cast< SbProperty* >( pProps->Get( i ) );
         if( p )
         {
             // Arrays nicht loeschen, sondern nur deren Inhalt
             if( p->GetType() & SbxARRAY )
             {
-                SbxArray* pArray = PTR_CAST(SbxArray,p->GetObject());
+                SbxArray* pArray = dynamic_cast< SbxArray* >( p->GetObject());
                 if( pArray )
                 {
                     for( sal_uInt16 j = 0 ; j < pArray->Count() ; j++ )
                     {
-                        SbxVariable* pj = PTR_CAST(SbxVariable,pArray->Get( j ));
+                        SbxVariable* pj = dynamic_cast< SbxVariable* >( pArray->Get( j ));
                         pj->SbxValue::Clear();
                         /*
                         sal_uInt16 nFlags = pj->GetFlags();
@@ -1373,21 +1363,21 @@ void SbModule::ClearPrivateVars()
 
 void SbModule::implClearIfVarDependsOnDeletedBasic( SbxVariable* pVar, StarBASIC* pDeletedBasic )
 {
-    if( pVar->SbxValue::GetType() != SbxOBJECT || pVar->ISA( SbProcedureProperty ) )
+    if( pVar->SbxValue::GetType() != SbxOBJECT || dynamic_cast< SbProcedureProperty* >(pVar) )
         return;
 
-    SbxObject* pObj = PTR_CAST(SbxObject,pVar->GetObject());
+    SbxObject* pObj = dynamic_cast< SbxObject* >(pVar->GetObject());
     if( pObj != NULL )
     {
         SbxObject* p = pObj;
 
-        SbModule* pMod = PTR_CAST( SbModule, p );
+        SbModule* pMod = dynamic_cast< SbModule* >( p );
         if( pMod != NULL )
             pMod->ClearVarsDependingOnDeletedBasic( pDeletedBasic );
 
         while( (p = p->GetParent()) != NULL )
         {
-            StarBASIC* pBasic = PTR_CAST( StarBASIC, p );
+            StarBASIC* pBasic = dynamic_cast< StarBASIC* >( p );
             if( pBasic != NULL && pBasic == pDeletedBasic )
             {
                 pVar->SbxValue::Clear();
@@ -1403,17 +1393,17 @@ void SbModule::ClearVarsDependingOnDeletedBasic( StarBASIC* pDeletedBasic )
 
     for( sal_uInt16 i = 0 ; i < pProps->Count() ; i++ )
     {
-        SbProperty* p = PTR_CAST(SbProperty,pProps->Get( i ) );
+        SbProperty* p = dynamic_cast< SbProperty* >( pProps->Get( i ) );
         if( p )
         {
             if( p->GetType() & SbxARRAY )
             {
-                SbxArray* pArray = PTR_CAST(SbxArray,p->GetObject());
+                SbxArray* pArray = dynamic_cast< SbxArray* >(p->GetObject());
                 if( pArray )
                 {
                     for( sal_uInt16 j = 0 ; j < pArray->Count() ; j++ )
                     {
-                        SbxVariable* pVar = PTR_CAST(SbxVariable,pArray->Get( j ));
+                        SbxVariable* pVar = dynamic_cast< SbxVariable* >(pArray->Get( j ));
                         implClearIfVarDependsOnDeletedBasic( pVar, pDeletedBasic );
                     }
                 }
@@ -1435,7 +1425,7 @@ void StarBASIC::ClearAllModuleVars( void )
     {
         SbModule* pModule = (SbModule*)pModules->Get( nMod );
         // Nur initialisieren, wenn der Startcode schon ausgefuehrt wurde
-        if( pModule->pImage && pModule->pImage->bInit && !pModule->isProxyModule() && !pModule->ISA(SbObjModule) )
+        if( pModule->pImage && pModule->pImage->bInit && !pModule->isProxyModule() && !dynamic_cast< SbObjModule* >( pModule ) )
             pModule->ClearPrivateVars();
     }
 
@@ -1445,7 +1435,7 @@ void StarBASIC::ClearAllModuleVars( void )
     for ( sal_uInt16 nObj = 0; nObj < pObjs->Count(); nObj++ )
     {
         SbxVariable* pVar = pObjs->Get( nObj );
-        StarBASIC* pBasic = PTR_CAST(StarBASIC,pVar);
+        StarBASIC* pBasic = dynamic_cast< StarBASIC* >( pVar);
         if( pBasic )
             pBasic->ClearAllModuleVars();
     }
@@ -1467,7 +1457,7 @@ void SbModule::GlobalRunInit( sal_Bool bBasicStart )
     GetSbData()->bGlobalInitErr = sal_False;
 
     // Parent vom Modul ist ein Basic
-    StarBASIC *pBasic = PTR_CAST(StarBASIC,GetParent());
+    StarBASIC *pBasic = dynamic_cast< StarBASIC* >( GetParent());
     if( pBasic )
     {
         pBasic->InitAllModules();
@@ -1475,7 +1465,7 @@ void SbModule::GlobalRunInit( sal_Bool bBasicStart )
         SbxObject* pParent_ = pBasic->GetParent();
         if( pParent_ )
         {
-            StarBASIC * pParentBasic = PTR_CAST(StarBASIC,pParent_);
+            StarBASIC * pParentBasic = dynamic_cast< StarBASIC* >( pParent_);
             if( pParentBasic )
             {
                 pParentBasic->InitAllModules( pBasic );
@@ -1484,7 +1474,7 @@ void SbModule::GlobalRunInit( sal_Bool bBasicStart )
                 SbxObject* pParentParent = pParentBasic->GetParent();
                 if( pParentParent )
                 {
-                    StarBASIC * pParentParentBasic = PTR_CAST(StarBASIC,pParentParent);
+                    StarBASIC * pParentParentBasic = dynamic_cast< StarBASIC* >( pParentParent);
                     if( pParentParentBasic )
                         pParentParentBasic->InitAllModules( pParentBasic );
                 }
@@ -1495,14 +1485,14 @@ void SbModule::GlobalRunInit( sal_Bool bBasicStart )
 
 void SbModule::GlobalRunDeInit( void )
 {
-    StarBASIC *pBasic = PTR_CAST(StarBASIC,GetParent());
+    StarBASIC *pBasic = dynamic_cast< StarBASIC* >( GetParent());
     if( pBasic )
     {
         pBasic->DeInitAllModules();
 
         SbxObject* pParent_ = pBasic->GetParent();
         if( pParent_ )
-            pBasic = PTR_CAST(StarBASIC,pParent_);
+            pBasic = dynamic_cast< StarBASIC* >( pParent_);
         if( pBasic )
             pBasic->DeInitAllModules();
     }
@@ -1657,7 +1647,7 @@ SbModule::fixUpMethodStart( bool bCvtToLegacy, SbiImage* pImg ) const
             pImg = pImage;
         for( sal_uInt32 i = 0; i < pMethods->Count(); i++ )
         {
-            SbMethod* pMeth = PTR_CAST(SbMethod,pMethods->Get( (sal_uInt16)i ) );
+            SbMethod* pMeth = dynamic_cast< SbMethod* >( pMethods->Get( (sal_uInt16)i ) );
             if( pMeth )
             {
                 //fixup method start positions
@@ -1819,14 +1809,14 @@ sal_Bool SbModule::LoadCompleted()
     sal_uInt16 i;
     for( i = 0; i < p->Count(); i++ )
     {
-        SbMethod* q = PTR_CAST(SbMethod,p->Get( i ) );
+        SbMethod* q = dynamic_cast< SbMethod* >( p->Get( i ) );
         if( q )
             q->pMod = this;
     }
     p = GetProperties();
     for( i = 0; i < p->Count(); i++ )
     {
-        SbProperty* q = PTR_CAST(SbProperty,p->Get( i ) );
+        SbProperty* q = dynamic_cast< SbProperty* >( p->Get( i ) );
         if( q )
             q->pMod = this;
     }
@@ -1837,11 +1827,11 @@ void SbModule::handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rH
 {
     bool bDone = false;
 
-    const SbxHint* pHint = PTR_CAST(SbxHint,&rHint);
+    const SbxHint* pHint = dynamic_cast< const SbxHint* >( &rHint);
     if( pHint )
     {
         SbxVariable* pVar = pHint->GetVar();
-        SbProcedureProperty* pProcProperty = PTR_CAST( SbProcedureProperty, pVar );
+        SbProcedureProperty* pProcProperty = dynamic_cast< SbProcedureProperty* >( pVar );
         if( pProcProperty )
         {
             bDone = true;
@@ -2163,7 +2153,7 @@ SbObjModule::~SbObjModule()
 void
 SbObjModule::SetUnoObject( const uno::Any& aObj ) throw ( uno::RuntimeException )
 {
-    SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,(SbxVariable*)pDocObject);
+    SbUnoObject* pUnoObj = dynamic_cast< SbUnoObject* >( (SbxVariable*)pDocObject);
     if ( pUnoObj && pUnoObj->getUnoAny() == aObj ) // object is equal, nothing to do
         return;
     pDocObject = new SbUnoObject( GetName(), uno::makeAny( aObj ) );
@@ -2653,7 +2643,7 @@ void SbUserFormModule::InitObject()
             do
             {
                 SbxObject* pObjParent = pCurObject->GetParent();
-                pParentBasic = PTR_CAST( StarBASIC, pObjParent );
+                pParentBasic = dynamic_cast< StarBASIC* >( pObjParent );
                 pCurObject = pObjParent;
             }
             while( pParentBasic == NULL && pCurObject != NULL );

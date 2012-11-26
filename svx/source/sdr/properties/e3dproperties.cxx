@@ -81,18 +81,22 @@ namespace sdr
             rObj.StructureChanged();
         }
 
-        void E3dProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
+        void E3dProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
             // call parent
             AttributeProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
 
             // propagate call to contained objects
-            const SdrObjList* pSub = ((const E3dObject&)GetSdrObject()).GetSubList();
-            const sal_uInt32 nCount(pSub->GetObjCount());
+            const SdrObjList* pSub = GetSdrObject().getChildrenOfSdrObject();
 
-            for(sal_uInt32 a(0L); a < nCount; a++)
+            if(pSub)
             {
-                pSub->GetObj(a)->GetProperties().SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
+                const sal_uInt32 nCount(pSub->GetObjCount());
+
+                for(sal_uInt32 a(0L); a < nCount; a++)
+                {
+                    pSub->GetObj(a)->GetProperties().SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
+                }
             }
         }
     } // end of namespace properties

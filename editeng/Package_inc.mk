@@ -146,5 +146,6 @@ $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/widwitem.hxx,editeng/w
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/writingmodeitem.hxx,editeng/writingmodeitem.hxx))
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/wrlmitem.hxx,editeng/wrlmitem.hxx))
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/xmlcnitm.hxx,editeng/xmlcnitm.hxx))
+$(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/pathtextportion.hxx,editeng/pathtextportion.hxx))
 
 # vim: set noet sw=4 ts=4:

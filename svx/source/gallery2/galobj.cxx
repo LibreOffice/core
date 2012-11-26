@@ -29,10 +29,8 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfac.hxx>
-
 #include <comphelper/classids.hxx>
 #include <unotools/pathoptions.hxx>
-
 #include <tools/rcid.h>
 #include <tools/vcompat.hxx>
 #include <vcl/virdev.hxx>
@@ -45,8 +43,8 @@
 #include "galobj.hxx"
 #include <vcl/salbtype.hxx>     // FRound
 #include <vcl/svapp.hxx>
-
 #include "gallerydrawmodel.hxx"
+#include <svx/svdlegacy.hxx>
 
 using namespace ::com::sun::star;
 
@@ -552,13 +550,13 @@ sal_Bool SgaObjectSvDraw::DrawCentered( OutputDevice* pOut, const FmFormModel& r
 
     if( pOut && pPage )
     {
-        const Rectangle aObjRect( pPage->GetAllObjBoundRect() );
+        const Rectangle aObjRect(sdr::legacy::GetAllObjBoundRect(pPage->getSdrObjectVector()));
         const Size      aOutSizePix( pOut->GetOutputSizePixel() );
 
         if( aObjRect.GetWidth() && aObjRect.GetHeight() && aOutSizePix.Width() > 2 && aOutSizePix.Height() > 2 )
         {
-            FmFormView      aView( const_cast< FmFormModel* >( &rModel ), pOut );
-            MapMode         aMap( rModel.GetScaleUnit() );
+            FmFormView      aView( const_cast< FmFormModel& >( rModel ), pOut );
+            MapMode         aMap( rModel.GetExchangeObjectUnit() );
             Rectangle       aDrawRectPix( Point( 1, 1 ), Size( aOutSizePix.Width() - 2, aOutSizePix.Height() - 2 ) );
             const double    fFactor  = (double) aObjRect.GetWidth() / aObjRect.GetHeight();
             Fraction        aFrac( FRound( fFactor < 1. ? aDrawRectPix.GetWidth() * fFactor : aDrawRectPix.GetWidth() ),
@@ -582,7 +580,7 @@ sal_Bool SgaObjectSvDraw::DrawCentered( OutputDevice* pOut, const FmFormModel& r
 
             pOut->Push();
             pOut->SetMapMode( aMap );
-            aView.ShowSdrPage( const_cast< FmFormPage* >( pPage ));
+            aView.ShowSdrPage( *const_cast< FmFormPage* >( pPage ));
             aView.CompleteRedraw( pOut, Rectangle( pOut->PixelToLogic( Point() ), pOut->GetOutputSize() ) );
             pOut->Pop();
 

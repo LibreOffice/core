@@ -81,8 +81,6 @@ using ::com::sun::star::container::XEnumerationAccess;
 using ::com::sun::star::container::XEnumeration;
 
 
-TYPEINIT1( XMLCharContext, SvXMLImportContext );
-
 XMLCharContext::XMLCharContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
@@ -174,8 +172,6 @@ void XMLCharContext::InsertString(const ::rtl::OUString& _sString)
 class XMLStartReferenceContext_Impl : public SvXMLImportContext
 {
 public:
-    TYPEINFO();
-
     // Do everything in constructor. Well ...
     XMLStartReferenceContext_Impl (
         SvXMLImport& rImport,
@@ -189,8 +185,6 @@ public:
         const Reference<xml::sax::XAttributeList> & xAttrList,
         OUString& rName);
 };
-
-TYPEINIT1( XMLStartReferenceContext_Impl, SvXMLImportContext );
 
 XMLStartReferenceContext_Impl::XMLStartReferenceContext_Impl(
     SvXMLImport& rImport,
@@ -247,8 +241,6 @@ sal_Bool XMLStartReferenceContext_Impl::FindName(
 class XMLEndReferenceContext_Impl : public SvXMLImportContext
 {
 public:
-    TYPEINFO();
-
     // Do everything in constructor. Well ...
     XMLEndReferenceContext_Impl(
         SvXMLImport& rImport,
@@ -257,8 +249,6 @@ public:
         XMLHints_Impl& rHnts,
         const Reference<xml::sax::XAttributeList> & xAttrList);
 };
-
-TYPEINIT1( XMLEndReferenceContext_Impl, SvXMLImportContext );
 
 XMLEndReferenceContext_Impl::XMLEndReferenceContext_Impl(
     SvXMLImport& rImport,
@@ -306,8 +296,6 @@ class XMLImpSpanContext_Impl : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLImpSpanContext_Impl(
             SvXMLImport& rImport,
             sal_uInt16 nPrfx,
@@ -345,8 +333,6 @@ class XMLImpHyperlinkContext_Impl : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLImpHyperlinkContext_Impl(
             SvXMLImport& rImport,
             sal_uInt16 nPrfx,
@@ -363,8 +349,6 @@ public:
 
     virtual void Characters( const OUString& rChars );
 };
-
-TYPEINIT1( XMLImpHyperlinkContext_Impl, SvXMLImportContext );
 
 XMLImpHyperlinkContext_Impl::XMLImpHyperlinkContext_Impl(
         SvXMLImport& rImport,
@@ -474,8 +458,6 @@ class XMLImpRubyBaseContext_Impl : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLImpRubyBaseContext_Impl(
             SvXMLImport& rImport,
             sal_uInt16 nPrfx,
@@ -492,8 +474,6 @@ public:
 
     virtual void Characters( const OUString& rChars );
 };
-
-TYPEINIT1( XMLImpRubyBaseContext_Impl, SvXMLImportContext );
 
 XMLImpRubyBaseContext_Impl::XMLImpRubyBaseContext_Impl(
         SvXMLImport& rImport,
@@ -545,8 +525,6 @@ class XMLImpRubyContext_Impl : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLImpRubyContext_Impl(
             SvXMLImport& rImport,
             sal_uInt16 nPrfx,
@@ -573,8 +551,6 @@ class XMLImpRubyTextContext_Impl : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLImpRubyTextContext_Impl(
             SvXMLImport& rImport,
             sal_uInt16 nPrfx,
@@ -586,8 +562,6 @@ public:
 
     virtual void Characters( const OUString& rChars );
 };
-
-TYPEINIT1( XMLImpRubyTextContext_Impl, SvXMLImportContext );
 
 XMLImpRubyTextContext_Impl::XMLImpRubyTextContext_Impl(
         SvXMLImport& rImport,
@@ -627,8 +601,6 @@ void XMLImpRubyTextContext_Impl::Characters( const OUString& rChars )
 }
 
 // ---------------------------------------------------------------------
-
-TYPEINIT1( XMLImpRubyContext_Impl, SvXMLImportContext );
 
 XMLImpRubyContext_Impl::XMLImpRubyContext_Impl(
         SvXMLImport& rImport,
@@ -719,8 +691,6 @@ protected:
     OUString m_XmlId;
 
 public:
-    TYPEINFO();
-
     XMLMetaImportContextBase(
         SvXMLImport& i_rImport,
         const sal_uInt16 i_nPrefix,
@@ -747,8 +717,6 @@ public:
     virtual void InsertMeta(const Reference<XTextRange> & i_xInsertionRange)
         = 0;
 };
-
-TYPEINIT1( XMLMetaImportContextBase, SvXMLImportContext );
 
 XMLMetaImportContextBase::XMLMetaImportContextBase(
         SvXMLImport& i_rImport,
@@ -843,8 +811,6 @@ class XMLMetaImportContext : public XMLMetaImportContextBase
     ::rtl::OUString m_sDatatype;
 
 public:
-    TYPEINFO();
-
     XMLMetaImportContext(
         SvXMLImport& i_rImport,
         const sal_uInt16 i_nPrefix,
@@ -857,8 +823,6 @@ public:
 
     virtual void InsertMeta(const Reference<XTextRange> & i_xInsertionRange);
 };
-
-TYPEINIT1( XMLMetaImportContext, XMLMetaImportContextBase );
 
 XMLMetaImportContext::XMLMetaImportContext(
         SvXMLImport& i_rImport,
@@ -941,8 +905,6 @@ class XMLMetaFieldImportContext : public XMLMetaImportContextBase
     OUString m_DataStyleName;
 
 public:
-    TYPEINFO();
-
     XMLMetaFieldImportContext(
         SvXMLImport& i_rImport,
         const sal_uInt16 i_nPrefix,
@@ -955,8 +917,6 @@ public:
 
     virtual void InsertMeta(const Reference<XTextRange> & i_xInsertionRange);
 };
-
-TYPEINIT1( XMLMetaFieldImportContext, XMLMetaImportContextBase );
 
 XMLMetaFieldImportContext::XMLMetaFieldImportContext(
         SvXMLImport& i_rImport,
@@ -1052,8 +1012,6 @@ class XMLIndexMarkImportContext_Impl : public SvXMLImportContext
     OUString sID;
 
 public:
-    TYPEINFO();
-
     XMLIndexMarkImportContext_Impl(
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
@@ -1089,8 +1047,6 @@ protected:
                         const OUString& rServiceName);
 };
 
-
-TYPEINIT1( XMLIndexMarkImportContext_Impl, SvXMLImportContext );
 
 XMLIndexMarkImportContext_Impl::XMLIndexMarkImportContext_Impl(
     SvXMLImport& rImport,
@@ -1329,8 +1285,6 @@ class XMLTOCMarkImportContext_Impl : public XMLIndexMarkImportContext_Impl
     const OUString sLevel;
 
 public:
-    TYPEINFO();
-
     XMLTOCMarkImportContext_Impl(
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
@@ -1346,9 +1300,6 @@ protected:
                                   OUString sValue,
                                   Reference<beans::XPropertySet>& rPropSet);
 };
-
-TYPEINIT1( XMLTOCMarkImportContext_Impl, XMLIndexMarkImportContext_Impl );
-
 
 XMLTOCMarkImportContext_Impl::XMLTOCMarkImportContext_Impl(
     SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -1395,8 +1346,6 @@ class XMLUserIndexMarkImportContext_Impl : public XMLIndexMarkImportContext_Impl
     const OUString sLevel;
 
 public:
-    TYPEINFO();
-
     XMLUserIndexMarkImportContext_Impl(
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
@@ -1412,8 +1361,6 @@ protected:
                                   OUString sValue,
                                   Reference<beans::XPropertySet>& rPropSet);
 };
-
-TYPEINIT1( XMLUserIndexMarkImportContext_Impl, XMLIndexMarkImportContext_Impl);
 
 XMLUserIndexMarkImportContext_Impl::XMLUserIndexMarkImportContext_Impl(
     SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -1473,8 +1420,6 @@ class XMLAlphaIndexMarkImportContext_Impl : public XMLIndexMarkImportContext_Imp
     const OUString sMainEntry;
 
 public:
-    TYPEINFO();
-
     XMLAlphaIndexMarkImportContext_Impl(
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
@@ -1490,9 +1435,6 @@ protected:
                                   OUString sValue,
                                   Reference<beans::XPropertySet>& rPropSet);
 };
-
-TYPEINIT1( XMLAlphaIndexMarkImportContext_Impl,
-           XMLIndexMarkImportContext_Impl );
 
 XMLAlphaIndexMarkImportContext_Impl::XMLAlphaIndexMarkImportContext_Impl(
     SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -1558,8 +1500,6 @@ void XMLAlphaIndexMarkImportContext_Impl::ProcessAttribute(
 
 
 // ---------------------------------------------------------------------
-
-TYPEINIT1( XMLImpSpanContext_Impl, SvXMLImportContext );
 
 XMLImpSpanContext_Impl::XMLImpSpanContext_Impl(
         SvXMLImport& rImport,
@@ -1886,8 +1826,6 @@ void XMLImpSpanContext_Impl::Characters( const OUString& rChars )
 }
 
 // ---------------------------------------------------------------------
-
-TYPEINIT1( XMLParaContext, SvXMLImportContext );
 
 XMLParaContext::XMLParaContext(
         SvXMLImport& rImport,
@@ -2319,8 +2257,6 @@ void XMLParaContext::Characters( const OUString& rChars )
 }
 
 
-
-TYPEINIT1( XMLNumberedParaContext, SvXMLImportContext );
 
 XMLNumberedParaContext::XMLNumberedParaContext(
         SvXMLImport& i_rImport,

@@ -39,9 +39,10 @@ SwUndoTOXChange::~SwUndoTOXChange()
 
 void SwUndoTOXChange::UpdateTOXBaseSection()
 {
-    if (pTOX->ISA(SwTOXBaseSection))
+    SwTOXBaseSection* pTOXBase = dynamic_cast< SwTOXBaseSection * >(pTOX);
+
+    if (pTOXBase)
     {
-        SwTOXBaseSection * pTOXBase = static_cast<SwTOXBaseSection *>(pTOX);
         pTOXBase->Update();
         pTOXBase->UpdatePageNum();
     }

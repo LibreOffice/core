@@ -54,9 +54,12 @@ namespace drawinglayer
             /// discrete HitTolerance
             double                      mfDiscreteHitTolerance;
 
+            /// space to keep hit TextHierarchyFieldPrimitive2Ds
+            primitive2d::Primitive2DSequence*   mpRecordFields;
+
             /// bitfield
-            unsigned                    mbHit : 1;
-            unsigned                    mbHitToleranceUsed : 1;
+            bool                        mbHit : 1;
+            bool                        mbHitToleranceUsed : 1;
 
             /*  this flag decides if primitives which are embedded to an
                 UnifiedTransparencePrimitive2D and are invisible will be taken into account for
@@ -64,13 +67,15 @@ namespace drawinglayer
                 completely invisible and normally their content exists of hairline
                 primitives describing the object's contour
              */
-            unsigned                    mbUseInvisiblePrimitiveContent : 1;
+            bool                        mbUseInvisiblePrimitiveContent : 1;
 
-            /// flag to concentraze on text hits only
-            unsigned                    mbHitTextOnly : 1;
+            /// flag to concentrate on text hits only
+            bool                        mbHitTextOnly : 1;
 
             /// tooling methods
-            void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
+            void processBasePrimitive2D(
+                const primitive2d::BasePrimitive2D& rCandidate,
+                const primitive2d::Primitive2DReference& rUnoCandidate);
             bool checkHairlineHitWithTolerance(
                 const basegfx::B2DPolygon& rPolygon,
                 double fDiscreteHitTolerance);
@@ -84,13 +89,14 @@ namespace drawinglayer
                 const geometry::ViewInformation2D& rViewInformation,
                 const basegfx::B2DPoint& rLogicHitPosition,
                 double fLogicHitTolerance,
-                bool bHitTextOnly);
+                bool bHitTextOnly,
+                primitive2d::Primitive2DSequence* pRecordFields);
             virtual ~HitTestProcessor2D();
 
             /// data write access
             void setUseInvisiblePrimitiveContent(bool bNew)
             {
-                if((bool)mbUseInvisiblePrimitiveContent != bNew) mbUseInvisiblePrimitiveContent = bNew;
+                if(mbUseInvisiblePrimitiveContent != bNew) mbUseInvisiblePrimitiveContent = bNew;
             }
 
             /// data read access

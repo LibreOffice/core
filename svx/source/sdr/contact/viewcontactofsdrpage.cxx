@@ -131,11 +131,9 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfPageShadow::createViewIndependentPrimitive2DSequence() const
         {
-            static bool bUseOldPageShadow(false);
             const SdrPage& rPage = getPage();
-            basegfx::B2DHomMatrix aPageMatrix;
-            aPageMatrix.set(0, 0, (double)rPage.GetWdt());
-            aPageMatrix.set(1, 1, (double)rPage.GetHgt());
+            const basegfx::B2DHomMatrix aPageMatrix(basegfx::tools::createScaleB2DHomMatrix(rPage.GetPageScale()));
+            static bool bUseOldPageShadow(false);
 
             if(bUseOldPageShadow)
             {
@@ -218,7 +216,7 @@ namespace sdr
 
             if(rPage.IsMasterPage())
             {
-                if(0 == rPage.GetPageNum())
+                if(0 == rPage.GetPageNumber())
                 {
                     // #i98063#
                     // filter MasterPage 0 since it's the HandoutPage. Thus, it's a
@@ -242,9 +240,7 @@ namespace sdr
                     if(!aFill.isDefault())
                     {
                         // direct model data is the page size, get and use it
-                        const basegfx::B2DRange aInnerRange(
-                            rPage.GetLftBorder(), rPage.GetUppBorder(),
-                            rPage.GetWdt() - rPage.GetRgtBorder(), rPage.GetHgt() - rPage.GetLwrBorder());
+                        const basegfx::B2DRange aInnerRange(rPage.GetInnerPageRange());
                         const basegfx::B2DPolygon aInnerPolgon(basegfx::tools::createPolygonFromRect(aInnerRange));
                         const basegfx::B2DHomMatrix aEmptyTransform;
                         const drawinglayer::primitive2d::Primitive2DReference xReference(
@@ -290,7 +286,7 @@ namespace sdr
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfPageFill::createViewIndependentPrimitive2DSequence() const
         {
             const SdrPage& rPage = getPage();
-            const basegfx::B2DRange aPageFillRange(0.0, 0.0, (double)rPage.GetWdt(), (double)rPage.GetHgt());
+            const basegfx::B2DRange aPageFillRange(basegfx::B2DPoint(0.0, 0.0), rPage.GetPageScale());
             const basegfx::B2DPolygon aPageFillPolygon(basegfx::tools::createPolygonFromRect(aPageFillRange));
 
             // We have only the page information, not the view information. Use the
@@ -334,7 +330,7 @@ namespace sdr
         {
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
             const SdrPage& rPage = getPage();
-            const basegfx::B2DRange aPageBorderRange(0.0, 0.0, (double)rPage.GetWdt(), (double)rPage.GetHgt());
+            const basegfx::B2DRange aPageBorderRange(basegfx::B2DPoint(0.0, 0.0), rPage.GetPageScale());
 
             // Changed to 0x949599 for renaissance, before svtools::FONTCOLOR was used.
             // Added old case as fallback for HighContrast.
@@ -402,9 +398,7 @@ namespace sdr
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfInnerPageBorder::createViewIndependentPrimitive2DSequence() const
         {
             const SdrPage& rPage = getPage();
-            const basegfx::B2DRange aPageBorderRange(
-                (double)rPage.GetLftBorder(), (double)rPage.GetUppBorder(),
-                (double)(rPage.GetWdt() - rPage.GetRgtBorder()), (double)(rPage.GetHgt() - rPage.GetLwrBorder()));
+            const basegfx::B2DRange aPageBorderRange(rPage.GetInnerPageRange());
             const basegfx::B2DPolygon aPageBorderPolygon(basegfx::tools::createPolygonFromRect(aPageBorderRange));
 
             // We have only the page information, not the view information. Use the

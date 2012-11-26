@@ -125,11 +125,6 @@ namespace dbaui
 }
 //==============================================================================
 
-//  TYPEINIT1(OTableEditorCtrl, DBView);
-DBG_NAME(OTableEditorCtrl)
-
-//==============================================================================
-
 #define HANDLE_ID       0
 
 // default Spaltenbreiten
@@ -151,7 +146,10 @@ DBG_NAME(OTableEditorCtrl)
 
 
 //==================================================================
+
 DBG_NAME(ClipboardInvalidator)
+DBG_NAME(OTableEditorCtrl)
+
 //------------------------------------------------------------------
 OTableEditorCtrl::ClipboardInvalidator::ClipboardInvalidator(sal_uLong nTimeout,OTableEditorCtrl* _pOwner)
 : m_pOwner(_pOwner)

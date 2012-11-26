@@ -38,6 +38,7 @@
 #include <vcl/help.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <svx/svdlegacy.hxx>
 
 #include <unotools/localedatawrapper.hxx>
 
@@ -81,7 +82,7 @@ ScHideTextCursor::~ScHideTextCursor()
     {
         //  restore text cursor
         if ( pViewData->HasEditView(eWhich) && pWin->HasFocus() )
-            pViewData->GetEditView(eWhich)->ShowCursor( sal_False, sal_True );
+            pViewData->GetEditView(eWhich)->ShowCursor( false, true );
     }
 }
 
@@ -300,14 +301,14 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
             MouseEvent aMEvt( aPosPixel, 1, 0, MOUSE_LEFT );
             SdrHitKind eHit = pDrView->PickAnything( aMEvt, SDRMOUSEBUTTONDOWN, aVEvt );
 
-            if ( eHit != SDRHIT_NONE && aVEvt.pObj != NULL )
+            if ( eHit != SDRHIT_NONE && aVEvt.mpObj != NULL )
             {
                 // URL fuer IMapObject unter Pointer ist Hilfetext
-                if ( ScDrawLayer::GetIMapInfo( aVEvt.pObj ) )
+                if ( ScDrawLayer::GetIMapInfo( aVEvt.mpObj ) )
                 {
-                    Point aLogicPos = PixelToLogic( aPosPixel );
-                    IMapObject* pIMapObj = ScDrawLayer::GetHitIMapObject(
-                                                    aVEvt.pObj, aLogicPos, *this );
+                    const basegfx::B2DPoint aPixelPos(aPosPixel.X(), aPosPixel.Y());
+                    const basegfx::B2DPoint aLogicPos(GetInverseViewTransformation() * aPixelPos);
+                    IMapObject* pIMapObj = ScDrawLayer::GetHitIMapObject( *aVEvt.mpObj, aLogicPos, *this );
 
                     if ( pIMapObj )
                     {
@@ -315,35 +316,34 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
                         aHelpText = pIMapObj->GetAltText();
                         if (!aHelpText.Len())
                             aHelpText = pIMapObj->GetURL();
-                        aPixRect = LogicToPixel(aVEvt.pObj->GetLogicRect());
+                        aPixRect = LogicToPixel(sdr::legacy::GetLogicRect(*aVEvt.mpObj));
                     }
                 }
                 // URL in shape text or at shape itself (URL in text overrides object URL)
                 if ( aHelpText.Len() == 0 )
                 {
-                    if( aVEvt.eEvent == SDREVENT_EXECUTEURL )
+                    if( aVEvt.meEvent == SDREVENT_EXECUTEURL )
                     {
-                        aHelpText = aVEvt.pURLField->GetURL();
-                        aPixRect = LogicToPixel(aVEvt.pObj->GetLogicRect());
+                        aHelpText = aVEvt.maURLField;
+                        aPixRect = LogicToPixel(sdr::legacy::GetLogicRect(*aVEvt.mpObj));
                     }
                     else
                     {
                         SdrObject* pObj = 0;
-                        SdrPageView* pPV = 0;
-                        Point aMDPos = PixelToLogic( aPosPixel );
-                        if ( pDrView->PickObj(aMDPos, pDrView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER) )
+                        const basegfx::B2DPoint aMDPos(GetInverseViewTransformation() * basegfx::B2DPoint(aPosPixel.X(), aPosPixel.Y()));
+                        if ( pDrView->PickObj(aMDPos, pDrView->getHitTolLog(), pObj, SDRSEARCH_ALSOONMASTER) )
                         {
-                            if ( pObj->IsGroupObject() )
+                            if ( pObj->getChildrenOfSdrObject() )
                             {
                                     SdrObject* pHit = 0;
-                                    if ( pDrView->PickObj(aMDPos, pDrView->getHitTolLog(), pHit, pPV, SDRSEARCH_DEEP ) )
+                                    if ( pDrView->PickObj(aMDPos, pDrView->getHitTolLog(), pHit, SDRSEARCH_DEEP ) )
                                         pObj = pHit;
                             }
 #ifdef ISSUE66550_HLINK_FOR_SHAPES
                             ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj );
                             if ( pInfo && (pInfo->GetHlink().getLength() > 0) )
                             {
-                                aPixRect = LogicToPixel(aVEvt.pObj->GetLogicRect());
+                                aPixRect = LogicToPixel(aVEvt.mpObj->GetLogicRect());
                                 aHelpText = pInfo->GetHlink();
                             }
 #endif
@@ -396,7 +396,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
         SdrPageView* pPV = pDrView->GetSdrPageView();
         DBG_ASSERT( pPV, "SdrPageView* ist NULL" );
         if (pPV)
-            bDone = ((ScDrawPage*)pPV->GetPage())->RequestHelp( this, pDrView, rHEvt );
+            bDone = ((ScDrawPage&)pPV->getSdrPageFromSdrPageView()).RequestHelp( this, pDrView, rHEvt );
     }
 
     //  Wenn QuickHelp fuer AutoFill angezeigt wird, nicht wieder wegnehmen lassen
@@ -411,8 +411,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
 
 sal_Bool ScGridWindow::IsMyModel(SdrEditView* pSdrView)
 {
-    return pSdrView &&
-            pSdrView->GetModel() == pViewData->GetDocument()->GetDrawLayer();
+    return pSdrView && &pSdrView->getSdrModelFromSdrView() == pViewData->GetDocument()->GetDrawLayer();
 }
 
 void ScGridWindow::HideNoteMarker()

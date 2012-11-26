@@ -32,8 +32,6 @@
 class XMLFormsContext : public SvXMLImportContext
 {
 public:
-    TYPEINFO();
-
     XMLFormsContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName);
     virtual ~XMLFormsContext();
 

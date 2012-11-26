@@ -33,7 +33,7 @@
 #include <svl/brdcst.hxx>
 #include <svl/lstner.hxx>
 #include <sfx2/childwin.hxx>
-#include <svx/svdmark.hxx>
+#include <svx/svdobj.hxx>
 
 //============================================================================
 // PropBrwMgr
@@ -78,7 +78,7 @@ protected:
     DECLARE_STL_VECTOR(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>, InterfaceArray);
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >
-        CreateMultiSelectionSequence( const SdrMarkList& _rMarkList );
+        CreateMultiSelectionSequence(const SdrObjectVector& rSelection);
     void implSetNewObjectSequence( const ::com::sun::star::uno::Sequence
         < ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >& _rObjectSeq );
 

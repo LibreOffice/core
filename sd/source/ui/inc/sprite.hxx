@@ -46,7 +46,7 @@ public:
     Sprite( List* pListOfBmpEx );
     ~Sprite();
 
-    sal_Bool            StartMoving( OutputDevice* pOut,
+    bool            StartMoving( OutputDevice* pOut,
                                  OutputDevice* pBottomLayer = NULL,
                                  BitmapEx* pTopLayer = NULL,
                                  MetaFile** ppTopMtf = NULL,
@@ -72,9 +72,9 @@ protected:
     Marker*         pObjEndMarker;
     List*           pListOfBmpEx;
     sal_uLong           nLastTime;
-    sal_Bool            bClipRegion;
+    bool            bClipRegion;
 
-    sal_Bool            ImplPrepareMoveTo();
+    bool            ImplPrepareMoveTo();
     void            ImplDrawSprite( OutputDevice* pOut, const Point& rPt, const Size& rSz );
 
 };

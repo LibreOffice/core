@@ -2342,7 +2342,7 @@ sal_Bool EditEngine::UpdateFields()
     return bChanges;
 }
 
-void EditEngine::RemoveFields( sal_Bool bKeepFieldText, TypeId aType )
+void EditEngine::RemoveFields( sal_Bool bKeepFieldText, const std::type_info* pTypeInfo )
 {
     DBG_CHKTHIS( EditEngine, 0 );
 
@@ -2360,9 +2360,9 @@ void EditEngine::RemoveFields( sal_Bool bKeepFieldText, TypeId aType )
             if ( pAttr->Which() == EE_FEATURE_FIELD )
             {
                 const SvxFieldData* pFldData = ((const SvxFieldItem*)pAttr->GetItem())->GetField();
-                if ( pFldData && ( !aType || ( pFldData->IsA( aType ) ) ) )
+                if ( pFldData && ( !pTypeInfo || ( *pTypeInfo == typeid(*pFldData) ) ) )
                 {
-                    DBG_ASSERT( pAttr->GetItem()->ISA( SvxFieldItem ), "Kein FeldItem..." );
+                    DBG_ASSERT( dynamic_cast< const SvxFieldItem* >(pAttr->GetItem()), "Kein FeldItem..." );
                     EditSelection aSel( EditPaM( pNode, pAttr->GetStart() ), EditPaM( pNode, pAttr->GetEnd() ) );
                     String aFieldText = ((EditCharAttribField*)pAttr)->GetFieldValue();
                     pImpEditEngine->ImpInsertText( aSel, aFieldText );

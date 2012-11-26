@@ -34,8 +34,6 @@ namespace dbaui
     //====================================================================
     //= OptionalBoolItem
     //====================================================================
-    TYPEINIT1( OptionalBoolItem, SfxPoolItem );
-    //--------------------------------------------------------------------
     OptionalBoolItem::OptionalBoolItem( sal_Int16 _nWhich )
         :SfxPoolItem( _nWhich )
         ,m_aValue()
@@ -52,7 +50,7 @@ namespace dbaui
     //--------------------------------------------------------------------
     int OptionalBoolItem::operator==( const SfxPoolItem& _rItem ) const
     {
-        const OptionalBoolItem* pCompare = PTR_CAST( OptionalBoolItem, &_rItem );
+        const OptionalBoolItem* pCompare = dynamic_cast< const OptionalBoolItem* >( &_rItem );
         if ( !pCompare )
             return 0;
 

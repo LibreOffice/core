@@ -50,20 +50,6 @@ namespace drawinglayer
         {
         }
 
-        bool PolyPolygonMaterialPrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
-        {
-            if(BasePrimitive3D::operator==(rPrimitive))
-            {
-                const PolyPolygonMaterialPrimitive3D& rCompare = (PolyPolygonMaterialPrimitive3D&)rPrimitive;
-
-                return (getB3DPolyPolygon() == rCompare.getB3DPolyPolygon()
-                    && getMaterial() == rCompare.getMaterial()
-                    && getDoubleSided() == rCompare.getDoubleSided());
-            }
-
-            return false;
-        }
-
         basegfx::B3DRange PolyPolygonMaterialPrimitive3D::getB3DRange(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
             return basegfx::tools::getRange(getB3DPolyPolygon());

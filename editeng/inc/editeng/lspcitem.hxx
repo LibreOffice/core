@@ -54,14 +54,14 @@ class EDITENG_DLLPUBLIC SvxLineSpacingItem : public SfxEnumItemInterface
     SvxInterLineSpace eInterLineSpace;
 
 public:
-    TYPEINFO();
-
+    POOLITEM_FACTORY()
     // Der Writer verlaesst sich auf eine Default-Hoehe von 200!
     // Eigentlich wuerde ich alle Werte mit 0 initialisieren, aber wer kann
     // die Folgen beim Writer absehen ?
     // => lieber einen krummen Wert als Default, aber der Programmierer
     // sieht, dass dort etwas besonderes passiert.
 
+    SvxLineSpacingItem( );
     SvxLineSpacingItem( sal_uInt16 nHeight /*= LINE_SPACE_DEFAULT_HEIGHT*/, const sal_uInt16 nId  );
 
     // "pure virtual Methoden" vom SfxPoolItem

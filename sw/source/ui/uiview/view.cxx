@@ -195,7 +195,7 @@ void SwView::GotFocus() const
     // the top then)
     const SfxDispatcher& rDispatcher = const_cast< SwView* >( this )->GetDispatcher();
     SfxShell* pTopShell = rDispatcher.GetShell( 0 );
-    FmFormShell* pAsFormShell = PTR_CAST( FmFormShell, pTopShell );
+    FmFormShell* pAsFormShell = dynamic_cast< FmFormShell* >( pTopShell );
     if ( pAsFormShell )
     {
         pAsFormShell->ForgetActiveControl();
@@ -203,7 +203,7 @@ void SwView::GotFocus() const
     }
     else if ( mpPostItMgr )
     {
-        SwAnnotationShell* pAsAnnotationShell = PTR_CAST( SwAnnotationShell, pTopShell );
+        SwAnnotationShell* pAsAnnotationShell = dynamic_cast< SwAnnotationShell* >( pTopShell );
         if ( pAsAnnotationShell )
         {
             mpPostItMgr->SetActiveSidebarWin(0);
@@ -232,7 +232,7 @@ IMPL_LINK( SwView, FormControlActivated, FmFormShell*, EMPTYARG )
     // of the dispatcher stack, then we need to activate it
     const SfxDispatcher& rDispatcher = GetDispatcher();
     const SfxShell* pTopShell = rDispatcher.GetShell( 0 );
-    const FmFormShell* pAsFormShell = PTR_CAST( FmFormShell, pTopShell );
+    const FmFormShell* pAsFormShell = dynamic_cast< const FmFormShell* >( pTopShell );
     if ( !pAsFormShell )
     {
         // if we're editing text currently, cancel this
@@ -300,16 +300,16 @@ void SwView::SelectShell()
             for ( sal_uInt16 i = 0; sal_True; ++i )
             {
                 pSfxShell = rDispatcher.GetShell( i );
-                if  (  pSfxShell->ISA( SwBaseShell )
-                    || pSfxShell->ISA( SwDrawTextShell )
-                    || pSfxShell->ISA( svx::ExtrusionBar )
-                    || pSfxShell->ISA( svx::FontworkBar )
-                    || pSfxShell->ISA( SwAnnotationShell )
+                if  (  dynamic_cast< SwBaseShell* >(pSfxShell)
+                    || dynamic_cast< SwDrawTextShell* >(pSfxShell)
+                    || dynamic_cast< svx::ExtrusionBar* >(pSfxShell)
+                    || dynamic_cast< svx::FontworkBar* >(pSfxShell)
+                    || dynamic_cast< SwAnnotationShell* >(pSfxShell)
                     )
                 {
                     rDispatcher.Pop( *pSfxShell, SFX_SHELL_POP_DELETE );
                 }
-                else if ( pSfxShell->ISA( FmFormShell ) )
+                else if ( dynamic_cast< FmFormShell* >(pSfxShell) )
                 {
                     rDispatcher.Pop( *pSfxShell );
                 }
@@ -466,7 +466,7 @@ void SwView::SelectShell()
 
         SdrView* pDView = GetWrtShell().GetDrawView();
         if ( bInitFormShell && pDView )
-            pFormShell->SetView(PTR_CAST(FmFormView, pDView));
+            pFormShell->SetView(dynamic_cast< FmFormView* >( pDView));
 
     }
     //Guenstiger Zeitpunkt fuer die Kommunikation mit OLE-Objekten?
@@ -691,7 +691,7 @@ void SwView::_CheckReadonlySelection()
 
     if( pWrtShell->HasReadonlySel() &&
         ( !pWrtShell->GetDrawView() ||
-            !pWrtShell->GetDrawView()->GetMarkedObjectList().GetMarkCount() ))
+            !pWrtShell->GetDrawView()->areSdrObjectsSelected() ))
         nDisableFlags |= SW_DISABLE_ON_PROTECTED_CURSOR;
 
     if( (SW_DISABLE_ON_PROTECTED_CURSOR & nDisableFlags ) !=
@@ -811,12 +811,12 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 
     aTimer.SetTimeout( 120 );
 
-    SwDocShell* pDocSh = PTR_CAST( SwDocShell, _pFrame->GetObjectShell() );
+    SwDocShell* pDocSh = dynamic_cast< SwDocShell* >( _pFrame->GetObjectShell() );
     sal_Bool bOldModifyFlag = pDocSh->IsEnableSetModified();
     if(bOldModifyFlag)
         pDocSh->EnableSetModified( sal_False );
     ASSERT( pDocSh, "View ohne DocShell." );
-    SwWebDocShell* pWebDShell = PTR_CAST( SwWebDocShell, pDocSh );
+    SwWebDocShell* pWebDShell = dynamic_cast< SwWebDocShell* >( pDocSh );
 
     const SwMasterUsrPref *pUsrPref = SW_MOD()->GetUsrPref(0 != pWebDShell);
     SwViewOption aUsrPref( *pUsrPref);
@@ -835,20 +835,24 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     {
         pExistingSh = pOldSh;
         // determine type of existing view
-        if( pExistingSh->IsA( TYPE( SwPagePreView ) ) )
+        SwPagePreView* pSwPagePreView = dynamic_cast< SwPagePreView* >(pExistingSh);
+
+        if( pSwPagePreView )
         {
-            sSwViewData = ((SwPagePreView*)pExistingSh)->GetPrevSwViewData();
-            sNewCrsrPos = ((SwPagePreView*)pExistingSh)->GetNewCrsrPos();
-            nNewPage = ((SwPagePreView*)pExistingSh)->GetNewPage();
+            sSwViewData = pSwPagePreView->GetPrevSwViewData();
+            sNewCrsrPos = pSwPagePreView->GetNewCrsrPos();
+            nNewPage = pSwPagePreView->GetNewPage();
             bOldShellWasPagePreView = sal_True;
-            bIsPreviewDoubleClick = sNewCrsrPos.Len() > 0 || nNewPage != USHRT_MAX;
+            bIsPreviewDoubleClick = sNewCrsrPos.Len() > 0 || nNewPage != USHRT_MAX; // TTTT: Check for sal_uInt32
         }
-        else if( pExistingSh->IsA( TYPE( SwSrcView ) ) )
+        else if( dynamic_cast< SwSrcView* >(pExistingSh) )
+        {
             bOldShellWasSrcView = sal_True;
+    }
     }
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "before create WrtShell" );
-    if(PTR_CAST( SwView, pExistingSh))
+    if(dynamic_cast< SwView* >( pExistingSh))
     {
         pWrtShell = new SwWrtShell( *((SwView*)pExistingSh)->pWrtShell,
                                     pEditWin, *this);
@@ -1029,8 +1033,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     bNoInterrupt = bOld;
 
     // wird ein GlobalDoc neu angelegt, soll auch der Navigator erzeugt werden
-    if( pDocSh->IsA(SwGlobalDocShell::StaticType()) &&
-        !pVFrame->GetChildWindow( SID_NAVIGATOR ))
+    if( dynamic_cast< SwGlobalDocShell* >(pDocSh) && !pVFrame->GetChildWindow( SID_NAVIGATOR ))
     {
         SfxBoolItem aNavi(SID_NAVIGATOR, sal_True);
         GetDispatcher().Execute(SID_NAVIGATOR, SFX_CALLMODE_ASYNCHRON, &aNavi, 0L);
@@ -1112,7 +1115,7 @@ SwView::~SwView()
 SwDocShell* SwView::GetDocShell()
 {
     SfxObjectShell* pDocShell = GetViewFrame()->GetObjectShell();
-    return PTR_CAST(SwDocShell, pDocShell);
+    return dynamic_cast< SwDocShell* >( pDocShell);
 }
 
 /*--------------------------------------------------------------------
@@ -1564,7 +1567,7 @@ void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSe
 
 
 
-void SwView::ShowCursor( FASTBOOL bOn )
+void SwView::ShowCursor( bool bOn )
 {
     //JP 10.10.2001: Bug 90461 - don't scroll the cursor into the visible area
     sal_Bool bUnlockView = !pWrtShell->IsViewLocked();
@@ -1649,9 +1652,11 @@ SwGlossaryHdl* SwView::GetGlosHdl()
 void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     sal_Bool bCallBase = sal_True;
-    if ( rHint.ISA(SfxSimpleHint) )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if ( pSfxSimpleHint )
     {
-        sal_uInt32 nId = ((SfxSimpleHint&)rHint).GetId();
+        sal_uInt32 nId = pSfxSimpleHint->GetId();
         switch ( nId )
         {
             // --> OD 2005-03-03 #i43775# - sub shells will be destroyed by the
@@ -1711,8 +1716,7 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     bCallBase = sal_False;
                     if ( GetFormShell() )
                     {
-                        GetFormShell()->SetView(
-                            PTR_CAST(FmFormView, GetWrtShell().GetDrawView()) );
+                        GetFormShell()->SetView(dynamic_cast< FmFormView* >( GetWrtShell().GetDrawView()) );
                         SfxBoolItem aItem( SID_FM_DESIGN_MODE, !GetDocShell()->IsReadOnly());
                         GetDispatcher().Execute( SID_FM_DESIGN_MODE, SFX_CALLMODE_SYNCHRON,
                                                   &aItem, 0L );
@@ -1721,9 +1725,13 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 break;
         }
     }
-    else if(rHint.ISA(FmDesignModeChangedHint))
+    else
     {
-        sal_Bool bDesignMode = ((FmDesignModeChangedHint&)rHint).GetDesignMode();
+        const FmDesignModeChangedHint* pFmDesignModeChangedHint = dynamic_cast< const FmDesignModeChangedHint* >(&rHint);
+
+        if(pFmDesignModeChangedHint)
+    {
+            sal_Bool bDesignMode = pFmDesignModeChangedHint->GetDesignMode();
         if (!bDesignMode && GetDrawFuncPtr())
         {
             GetDrawFuncPtr()->Deactivate();
@@ -1731,6 +1739,7 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             LeaveDrawCreate();
             AttrChangedNotify(pWrtShell);
         }
+    }
     }
 
     if ( bCallBase )

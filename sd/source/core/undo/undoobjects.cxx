@@ -35,24 +35,24 @@ using namespace sd;
 ///////////////////////////////////////////////////////////////////////
 
 UndoRemovePresObjectImpl::UndoRemovePresObjectImpl( SdrObject& rObject )
-: mpUndoUsercall(0)
+: mpUndoSdPage(0)
 , mpUndoAnimation(0)
 , mpUndoPresObj(0)
 {
-    SdPage* pPage = dynamic_cast< SdPage* >( rObject.GetPage() );
+    SdPage* pPage = dynamic_cast< SdPage* >( rObject.getSdrPageFromSdrObject() );
     if( pPage )
     {
         if( pPage->IsPresObj(&rObject) )
             mpUndoPresObj = new UndoObjectPresentationKind( rObject );
-        if( rObject.GetUserCall() )
-            mpUndoUsercall = new UndoObjectUserCall(rObject);
+        if( findConnectionToSdrObject(&rObject) )
+            mpUndoSdPage = new UndoConnectionToSdrObject(rObject);
 
         if( pPage->hasAnimationNode() )
         {
             com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape( rObject.getUnoShape(), com::sun::star::uno::UNO_QUERY );
             if( pPage->getMainSequence()->hasEffect( xShape ) )
             {
-                mpUndoAnimation = new UndoAnimation( static_cast< SdDrawDocument* >( pPage->GetModel() ), pPage );
+                mpUndoAnimation = new UndoAnimation( static_cast< SdDrawDocument* >( &pPage->getSdrModelFromSdrPage() ), pPage );
             }
         }
     }
@@ -64,15 +64,15 @@ UndoRemovePresObjectImpl::~UndoRemovePresObjectImpl()
 {
     delete mpUndoAnimation;
     delete mpUndoPresObj;
-    delete mpUndoUsercall;
+    delete mpUndoSdPage;
 }
 
 //---------------------------------------------------------------------
 
 void UndoRemovePresObjectImpl::Undo()
 {
-    if( mpUndoUsercall )
-        mpUndoUsercall->Undo();
+    if( mpUndoSdPage )
+        mpUndoSdPage->Undo();
     if( mpUndoPresObj )
         mpUndoPresObj->Undo();
     if( mpUndoAnimation )
@@ -87,15 +87,15 @@ void UndoRemovePresObjectImpl::Redo()
         mpUndoAnimation->Redo();
     if( mpUndoPresObj )
         mpUndoPresObj->Redo();
-    if( mpUndoUsercall )
-        mpUndoUsercall->Redo();
+    if( mpUndoSdPage )
+        mpUndoSdPage->Redo();
 }
 
 ///////////////////////////////////////////////////////////////////////
 
 
-UndoRemoveObject::UndoRemoveObject( SdrObject& rObject, bool bOrdNumDirect )
-: SdrUndoRemoveObj( rObject, bOrdNumDirect ), UndoRemovePresObjectImpl( rObject )
+UndoRemoveObject::UndoRemoveObject( SdrObject& rObject )
+: SdrUndoRemoveObj( rObject ), UndoRemovePresObjectImpl( rObject )
 , mxSdrObject(&rObject)
 {
 }
@@ -126,8 +126,8 @@ void UndoRemoveObject::Redo()
 
 ///////////////////////////////////////////////////////////////////////
 
-UndoDeleteObject::UndoDeleteObject( SdrObject& rObject, bool bOrdNumDirect )
-: SdrUndoDelObj( rObject, bOrdNumDirect )
+UndoDeleteObject::UndoDeleteObject( SdrObject& rObject )
+: SdrUndoDelObj( rObject )
 , UndoRemovePresObjectImpl( rObject )
 , mxSdrObject(&rObject)
 {
@@ -159,8 +159,8 @@ void UndoDeleteObject::Redo()
 
 ///////////////////////////////////////////////////////////////////////
 
-UndoReplaceObject::UndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject, bool bOrdNumDirect )
-: SdrUndoReplaceObj( rOldObject, rNewObject, bOrdNumDirect )
+UndoReplaceObject::UndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject )
+: SdrUndoReplaceObj( rOldObject, rNewObject )
 , UndoRemovePresObjectImpl( rOldObject )
 , mxSdrObject( &rOldObject )
 {
@@ -198,13 +198,13 @@ UndoObjectSetText::UndoObjectSetText( SdrObject& rObject, sal_Int32 nText )
 , mbNewEmptyPresObj(false)
 , mxSdrObject( &rObject )
 {
-    SdPage* pPage = dynamic_cast< SdPage* >( rObject.GetPage() );
+    SdPage* pPage = dynamic_cast< SdPage* >( rObject.getSdrPageFromSdrObject() );
     if( pPage && pPage->hasAnimationNode() )
     {
         com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape( rObject.getUnoShape(), com::sun::star::uno::UNO_QUERY );
         if( pPage->getMainSequence()->hasEffect( xShape ) )
         {
-            mpUndoAnimation = new UndoAnimation( static_cast< SdDrawDocument* >( pPage->GetModel() ), pPage );
+            mpUndoAnimation = new UndoAnimation( static_cast< SdDrawDocument* >( &pPage->getSdrModelFromSdrPage() ), pPage );
         }
     }
 }
@@ -240,41 +240,41 @@ void UndoObjectSetText::Redo()
         if( mpUndoAnimation )
             mpUndoAnimation->Redo();
         SdrUndoObjSetText::Redo();
-        mxSdrObject->SetEmptyPresObj(mbNewEmptyPresObj ? sal_True : sal_False );
+        mxSdrObject->SetEmptyPresObj(mbNewEmptyPresObj ? true : false );
     }
 }
 
 //////////////////////////////////////////////////////////////////////////////
-// Undo for SdrObject::SetUserCall()
+// Undo for connecting SdrObject to SdPage
 
-UndoObjectUserCall::UndoObjectUserCall(SdrObject& rObject)
+UndoConnectionToSdrObject::UndoConnectionToSdrObject(SdrObject& rObject)
 :   SdrUndoObj(rObject)
-,   mpOldUserCall((SdPage*)rObject.GetUserCall())
-,   mpNewUserCall(0)
+,   mpOldSdPage(findConnectionToSdrObject(&rObject))
+,   mpNewSdPage(0)
 ,   mxSdrObject( &rObject )
 {
 }
 
 //---------------------------------------------------------------------
 
-void UndoObjectUserCall::Undo()
+void UndoConnectionToSdrObject::Undo()
 {
-    DBG_ASSERT( mxSdrObject.is(), "sd::UndoObjectUserCall::Undo(), object already dead!" );
+    DBG_ASSERT( mxSdrObject.is(), "sd::UndoConnectionToSdrObject::Undo(), object already dead!" );
     if( mxSdrObject.is() )
     {
-        mpNewUserCall = mxSdrObject->GetUserCall();
-        mxSdrObject->SetUserCall(mpOldUserCall);
+        mpNewSdPage = findConnectionToSdrObject(mxSdrObject.get());
+        establishConnectionToSdrObject(mxSdrObject.get(), mpOldSdPage);
     }
 }
 
 //---------------------------------------------------------------------
 
-void UndoObjectUserCall::Redo()
+void UndoConnectionToSdrObject::Redo()
 {
-    DBG_ASSERT( mxSdrObject.is(), "sd::UndoObjectUserCall::Redo(), object already dead!" );
+    DBG_ASSERT( mxSdrObject.is(), "sd::UndoConnectionToSdrObject::Redo(), object already dead!" );
     if( mxSdrObject.is() )
     {
-        mxSdrObject->SetUserCall(mpNewUserCall);
+        establishConnectionToSdrObject(mxSdrObject.get(), mpNewSdPage);
     }
 }
 
@@ -285,7 +285,7 @@ UndoObjectPresentationKind::UndoObjectPresentationKind(SdrObject& rObject)
 :   SdrUndoObj(rObject)
 ,   meOldKind(PRESOBJ_NONE)
 ,   meNewKind(PRESOBJ_NONE)
-,   mxPage( rObject.GetPage() )
+,   mxPage( rObject.getSdrPageFromSdrObject() )
 ,   mxSdrObject( &rObject )
 {
     DBG_ASSERT( mxPage.is(), "sd::UndoObjectPresentationKind::UndoObjectPresentationKind(), does not work for shapes without a slide!" );
@@ -343,14 +343,14 @@ void UndoAutoLayoutPosAndSize::Redo()
 {
     SdPage* pPage = static_cast< SdPage* >( mxPage.get() );
     if( pPage )
-        pPage->SetAutoLayout( pPage->GetAutoLayout(), sal_False, sal_False );
+        pPage->SetAutoLayout( pPage->GetAutoLayout(), false, false );
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
 UndoGeoObject::UndoGeoObject( SdrObject& rNewObj )
 : SdrUndoGeoObj( rNewObj )
-, mxPage( rNewObj.GetPage() )
+, mxPage( rNewObj.getSdrPageFromSdrObject() )
 , mxSdrObject( &rNewObj )
 {
 }
@@ -398,8 +398,8 @@ void UndoGeoObject::Redo()
 //////////////////////////////////////////////////////////////////////////////
 
 UndoAttrObject::UndoAttrObject( SdrObject& rObject, bool bStyleSheet1, bool bSaveText )
-: SdrUndoAttrObj( rObject, bStyleSheet1 ? sal_True : sal_False, bSaveText ? sal_True : sal_False )
-, mxPage( rObject.GetPage() )
+: SdrUndoAttrObj( rObject, bStyleSheet1 ? true : false, bSaveText ? true : false )
+, mxPage( rObject.getSdrPageFromSdrObject() )
 , mxSdrObject( &rObject )
 {
 }

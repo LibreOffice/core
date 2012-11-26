@@ -41,6 +41,7 @@
 #include <svtools/embedtransfer.hxx>
 #include <svl/urihelper.hxx>
 #include <tools/urlobj.hxx>
+#include <svx/svdlegacy.hxx>
 
 #include "htmlexp.hxx"
 #include "global.hxx"
@@ -90,7 +91,7 @@ void ScHTMLExport::FillGraphList( const SdrPage* pPage, SCTAB nTab,
         SdrObject* pObject = aIter.Next();
         while ( pObject )
         {
-            Rectangle aObjRect = pObject->GetCurrentBoundRect();
+            Rectangle aObjRect = sdr::legacy::GetBoundRect(*pObject);
             if ( bAll || aRect.IsInside( aObjRect ) )
             {
                 Size aSpace;
@@ -150,16 +151,19 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
         case OBJ_GRAF:
         {
             const SdrGrafObj* pSGO = (SdrGrafObj*)pObject;
-            const SdrGrafObjGeoData* pGeo = (SdrGrafObjGeoData*)pSGO->GetGeoData();
-            sal_uInt16 nMirrorCase = (pGeo->aGeo.nDrehWink == 18000 ?
-                    ( pGeo->bMirrored ? 3 : 4 ) : ( pGeo->bMirrored ? 2 : 1 ));
-            sal_Bool bHMirr = ( ( nMirrorCase == 2 ) || ( nMirrorCase == 4 ) );
-            sal_Bool bVMirr = ( ( nMirrorCase == 3 ) || ( nMirrorCase == 4 ) );
+            const basegfx::B2DVector& rScale = pSGO->getSdrObjectScale();
             sal_uLong nXOutFlags = 0;
-            if ( bHMirr )
+
+            if(basegfx::fTools::less(rScale.getX(), 0.0))
+            {
                 nXOutFlags |= XOUTBMP_MIRROR_HORZ;
-            if ( bVMirr )
+            }
+
+            if(basegfx::fTools::less(rScale.getY(), 0.0))
+            {
                 nXOutFlags |= XOUTBMP_MIRROR_VERT;
+            }
+
             String aLinkName;
             if ( pSGO->IsLinkedGraphic() )
                 aLinkName = pSGO->GetFileName();
@@ -180,8 +184,7 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
         break;
         default:
         {
-            Graphic aGraph( SdrExchangeView::GetObjGraphic(
-                pDoc->GetDrawLayer(), pObject ) );
+            const Graphic aGraph(GetObjGraphic(*pObject));
             String aLinkName;
             WriteImage( aLinkName, aGraph, aOpt );
             pE->bWritten = sal_True;

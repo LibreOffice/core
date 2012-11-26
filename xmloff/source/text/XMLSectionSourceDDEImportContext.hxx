@@ -45,8 +45,6 @@ class XMLSectionSourceDDEImportContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLSectionSourceDDEImportContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,

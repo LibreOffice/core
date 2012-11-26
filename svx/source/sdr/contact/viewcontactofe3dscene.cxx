@@ -24,7 +24,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
-#include <svx/polysc3d.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -39,6 +38,7 @@
 #include <drawinglayer/primitive2d/sceneprimitive2d.hxx>
 #include <drawinglayer/primitive3d/transformprimitive3d.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
+#include <svx/scene3d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -81,7 +81,7 @@ namespace
 
                 // create transform primitive for the created content combining content and transformtion
                 const drawinglayer::primitive3d::Primitive3DReference xReference(new drawinglayer::primitive3d::TransformPrimitive3D(
-                    pViewContactOfE3dScene->GetE3dScene().GetTransform(),
+                    pViewContactOfE3dScene->GetE3dScene().GetB3DTransform(),
                     aNewAllTarget));
 
                 // add created content to all target
@@ -180,7 +180,7 @@ namespace sdr
             // without that transformation and makes it necessary to NOT add the first scene to the
             // Primitive3DSequence of contained objects.
             {
-                aTransformation = GetE3dScene().GetTransform();
+                aTransformation = GetE3dScene().GetB3DTransform();
             }
 
             // create orientation (world to camera coordinate system)
@@ -257,13 +257,8 @@ namespace sdr
 
         void ViewContactOfE3dScene::createObjectTransformation()
         {
-            // create 2d Object Transformation from relative point in 2d scene to world
-            const Rectangle& rRectangle = GetE3dScene().GetSnapRect();
-
-            maObjectTransformation.set(0, 0, rRectangle.getWidth());
-            maObjectTransformation.set(1, 1, rRectangle.getHeight());
-            maObjectTransformation.set(0, 2, rRectangle.Left());
-            maObjectTransformation.set(1, 2, rRectangle.Top());
+            // get Object Transformation
+            maObjectTransformation = GetE3dScene().getSdrObjectTransformation();
         }
 
         void ViewContactOfE3dScene::createSdrSceneAttribute()
@@ -360,6 +355,28 @@ namespace sdr
         {
             // call parent
             ViewContactOfSdrObj::ActionChanged();
+
+            // Iterate over children and propagate ActionChanged there.
+            // This is needed for 3D objects. In comparison, changes on a
+            // 2d group object are done by changing all sub-objects individually,
+            // so not necessary there
+            const sal_uInt32 nChildrenCount(GetObjectCount());
+
+            for(sal_uInt32 a(0); a < nChildrenCount; a++)
+            {
+                ViewContactOfE3d* pViewContactOfE3d = dynamic_cast< ViewContactOfE3d* >(&GetViewContact(a));
+
+                if(pViewContactOfE3d)
+                {
+                    // only reset 2D buffered part (the bound range which is
+                    // global to the page)
+                    pViewContactOfE3d->ViewContactOfSdrObj::ActionChanged();
+                }
+                else
+                {
+                    OSL_ENSURE(false, "3D scene with a non-3D child object (!)");
+                }
+            }
 
             // mark locally cached values as invalid
             maViewInformation3D = drawinglayer::geometry::ViewInformation3D();

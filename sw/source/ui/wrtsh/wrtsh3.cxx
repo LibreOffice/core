@@ -31,7 +31,6 @@
 #include <sfx2/app.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/bindings.hxx>
-#include <svx/svdmark.hxx>
 #include <svx/svdview.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
@@ -192,11 +191,8 @@ sal_Bool SwWrtShell::GetURLFromButton( String& rURL, String& rDescr ) const
     if( pDView )
     {
         // Ein Fly ist genau dann erreichbar, wenn er selektiert ist.
-        const SdrMarkList &rMarkList = pDView->GetMarkedObjectList();
+        SdrUnoObj* pUnoCtrl = dynamic_cast< SdrUnoObj* >(pDView->getSelectedIfSingle());
 
-        if (rMarkList.GetMark(0))
-        {
-            SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, rMarkList.GetMark(0)->GetMarkedSdrObj());
             if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
             {
                 uno::Reference< awt::XControlModel >  xControlModel = pUnoCtrl->GetUnoControlModel();
@@ -236,7 +232,6 @@ sal_Bool SwWrtShell::GetURLFromButton( String& rURL, String& rDescr ) const
                     }
                 }
             }
-        }
     }
 
     return bRet;

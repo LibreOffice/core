@@ -62,9 +62,6 @@ namespace drawinglayer
             const rtl::OUString& getTitle() const { return maTitle; }
             const rtl::OUString& getDesc() const { return maDesc; }
 
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
-
             /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };

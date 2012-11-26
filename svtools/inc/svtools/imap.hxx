@@ -70,8 +70,6 @@ protected:
 
 public:
 
-    TYPEINFO();
-
                         ImageMap() {};
                         ImageMap( const String& rName );
                         ImageMap( const ImageMap& rImageMap );

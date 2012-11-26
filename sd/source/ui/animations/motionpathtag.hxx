@@ -60,11 +60,11 @@ public:
     virtual bool KeyInput( const KeyEvent& rKEvt );
 
     // callbacks from sdr view
-    virtual sal_uLong GetMarkablePointCount() const;
-    virtual sal_uLong GetMarkedPointCount() const;
-    virtual sal_Bool MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark=sal_False);
+    virtual sal_uInt32 GetMarkablePointCount() const;
+    virtual sal_uInt32 GetMarkedPointCount() const;
+    virtual bool MarkPoint(SdrHdl& rHdl, bool bUnmark = false);
     virtual void CheckPossibilities();
-    virtual sal_Bool MarkPoints(const Rectangle* pRect, sal_Bool bUnmark);
+    virtual bool MarkPoints(const basegfx::B2DRange* pRange, bool bUnmark);
 
     const CustomAnimationEffectPtr& getEffect() const { return mpEffect; }
 
@@ -72,20 +72,20 @@ public:
 
     // IPolyPolygonEditorController
     virtual void DeleteMarkedPoints();
-    virtual sal_Bool IsDeleteMarkedPointsPossible() const;
+    virtual bool IsDeleteMarkedPointsPossible() const;
 
     virtual void RipUpAtMarkedPoints();
     virtual bool IsRipUpAtMarkedPointsPossible() const;
 
-    virtual sal_Bool IsSetMarkedSegmentsKindPossible() const;
+    virtual bool IsSetMarkedSegmentsKindPossible() const;
     virtual SdrPathSegmentKind GetMarkedSegmentsKind() const;
     virtual void SetMarkedSegmentsKind(SdrPathSegmentKind eKind);
 
-    virtual sal_Bool IsSetMarkedPointsSmoothPossible() const;
+    virtual bool IsSetMarkedPointsSmoothPossible() const;
     virtual SdrPathSmoothKind GetMarkedPointsSmooth() const;
     virtual void SetMarkedPointsSmooth(SdrPathSmoothKind eKind);
 
-    virtual void CloseMarkedObjects(sal_Bool bToggle, sal_Bool bOpen );
+    virtual void CloseMarkedObjects(bool bToggle, bool bOpen );
     virtual bool IsOpenCloseMarkedObjectsPossible() const;
     virtual SdrObjClosedKind GetMarkedObjectsClosedState() const;
 
@@ -118,7 +118,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > mxOrigin;
     SdrPathObj* mpPathObj;
     ::com::sun::star::awt::Point maOriginPos;
-    SdrMark* mpMark;
+    sdr::selection::Indices maSelectedPoints;
     rtl::OUString msLastPath;
     bool mbInUpdatePath;
 };

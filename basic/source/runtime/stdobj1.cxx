@@ -119,8 +119,6 @@ void SbStdPicture::PropHeight( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
 }
 
 
-TYPEINIT1( SbStdPicture, SbxObject );
-
 SbStdPicture::SbStdPicture() :
     SbxObject( String( RTL_CONSTASCII_USTRINGPARAM("Picture") ) )
 {
@@ -153,7 +151,7 @@ void SbStdPicture::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                                const SfxHint& rHint, const TypeId& rHintType )
 
 {
-    const SbxHint* pHint = PTR_CAST( SbxHint, &rHint );
+    const SbxHint* pHint = dynamic_cast< const SbxHint* >( &rHint );
 
     if( pHint )
     {
@@ -231,8 +229,6 @@ void SbStdFont::PropName( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
 }
 
 
-TYPEINIT1( SbStdFont, SbxObject );
-
 SbStdFont::SbStdFont() :
     SbxObject( String( RTL_CONSTASCII_USTRINGPARAM("Font") ) )
 {
@@ -275,7 +271,7 @@ SbxVariable* SbStdFont::Find( const String& rName, SbxClassType t )
 void SbStdFont::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                             const SfxHint& rHint, const TypeId& rHintType )
 {
-    const SbxHint* pHint = PTR_CAST( SbxHint, &rHint );
+    const SbxHint* pHint = dynamic_cast< const SbxHint* >( &rHint );
 
     if( pHint )
     {
@@ -447,7 +443,7 @@ void SbStdClipboard::MethSetData( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
     {
         SbxObject* pObj = (SbxObject*)pPar_->Get(1)->GetObject();
 
-        if( pObj && pObj->IsA( TYPE( SbStdPicture ) ) )
+        if( pObj && dynamic_cast< SbStdPicture* >(pObj) )
             ((SbStdPicture*)(SbxObject*)pObj)->GetGraphic().Copy();
     }
     */
@@ -466,8 +462,6 @@ void SbStdClipboard::MethSetText( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
     // Clipboard::CopyString( pPar_->Get(1)->GetString() );
 }
 
-
-TYPEINIT1( SbStdClipboard, SbxObject );
 
 SbStdClipboard::SbStdClipboard() :
     SbxObject( String( RTL_CONSTASCII_USTRINGPARAM("Clipboard") ) )
@@ -514,7 +508,7 @@ SbxVariable* SbStdClipboard::Find( const String& rName, SbxClassType t )
 void SbStdClipboard::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                                  const SfxHint& rHint, const TypeId& rHintType )
 {
-    const SbxHint* pHint = PTR_CAST( SbxHint, &rHint );
+    const SbxHint* pHint = dynamic_cast< const SbxHint* >( &rHint );
 
     if( pHint )
     {

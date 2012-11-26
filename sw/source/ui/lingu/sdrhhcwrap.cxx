@@ -51,6 +51,8 @@
 #include <doc.hxx>        //     "     "     "
 #include <docary.hxx>
 #include <edtwin.hxx>
+#include <svx/svdlegacy.hxx>
+#include <svx/fmmodel.hxx>
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -151,7 +153,7 @@ sal_Bool SdrHHCWrapper::ConvertNextDocument()
             OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject();
             if ( pParaObj )
             {
-                SetPaperSize( pTextObj->GetLogicRect().GetSize() );
+                SetPaperSize( sdr::legacy::GetLogicRect(*pTextObj).GetSize() );
                 SetText( *pParaObj );
 
                 ClearModifyFlag();
@@ -166,15 +168,14 @@ sal_Bool SdrHHCWrapper::ConvertNextDocument()
                 {
                     SdrView *pSdrView = pView->GetWrtShell().GetDrawView();
                     ASSERT( pSdrView, "SdrHHCWrapper without DrawView?" );
-                    SdrPageView* pPV = pSdrView->GetSdrPageView();
                     nDocIndex = n;
                     bNextDoc = sal_True;
                     pOutlView->SetOutputArea( Rectangle( Point(), Size(1,1)));
-                    SetPaperSize( pTextObj->GetLogicRect().GetSize() );
+                    SetPaperSize( sdr::legacy::GetLogicRect(*pTextObj).GetSize() );
                     SetUpdateMode(sal_True);
-                    pView->GetWrtShell().MakeVisible(pTextObj->GetLogicRect());
+                    pView->GetWrtShell().MakeVisible(sdr::legacy::GetLogicRange(*pTextObj));
 
-                    pSdrView->SdrBeginTextEdit(pTextObj, pPV, &pView->GetEditWin(), sal_False, this, pOutlView, sal_True, sal_True);
+                    pSdrView->SdrBeginTextEdit(pTextObj, &pView->GetEditWin(), sal_False, this, pOutlView, sal_True, sal_True);
                 }
                 else
                     SetUpdateMode(sal_False);

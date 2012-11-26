@@ -27,7 +27,6 @@
 #define _EINF_HXX
 
 #include <limits.h>
-#include <tools/rtti.hxx>
 #include <tools/errcode.hxx>
 #include <tools/string.hxx>
 #include "tools/toolsdllapi.h"
@@ -46,8 +45,6 @@ private:
     sal_uIntPtr                   lUserId;
 
 public:
-                            TYPEINFO();
-
                             ErrorInfo( sal_uIntPtr lArgUserId ) :
                                 lUserId( lArgUserId ){}
     virtual                 ~ErrorInfo(){}
@@ -70,8 +67,6 @@ private:
     EDcr_Impl*              pImpl;
 
 public:
-                            TYPEINFO();
-
                             DynamicErrorInfo(sal_uIntPtr lUserId, sal_uInt16 nMask);
     virtual                 ~DynamicErrorInfo();
 
@@ -90,8 +85,6 @@ private:
     sal_uIntPtr                   lExtId;
 
 public:
-                            TYPEINFO();
-
                             StandardErrorInfo( sal_uIntPtr lUserId, sal_uIntPtr lExtId,
                                               sal_uInt16 nFlags = 0);
     sal_uIntPtr                   GetExtendedErrorCode() const { return lExtId; }
@@ -109,8 +102,6 @@ private:
     String                  aString;
 
 public:
-                            TYPEINFO();
-
                             StringErrorInfo( sal_uIntPtr lUserId,
                                             const String& aStringP,
                                             sal_uInt16 nFlags = 0);
@@ -125,8 +116,6 @@ private:
     String aArg2;
 
 public:
-    TYPEINFO();
-
     TwoStringErrorInfo(sal_uIntPtr nUserID, const String & rTheArg1,
                        const String & rTheArg2, sal_uInt16 nFlags = 0):
      DynamicErrorInfo(nUserID, nFlags), aArg1(rTheArg1), aArg2(rTheArg2) {}
@@ -144,7 +133,6 @@ class TOOLS_DLLPUBLIC MessageInfo : public DynamicErrorInfo
 {
   public:
 
-                            TYPEINFO();
                             MessageInfo(sal_uIntPtr UserId, sal_uInt16 nFlags = 0) :
                                 DynamicErrorInfo(UserId, nFlags){}
                             MessageInfo(sal_uIntPtr UserId, const String &rArg,

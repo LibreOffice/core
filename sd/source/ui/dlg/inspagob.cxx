@@ -113,7 +113,7 @@ void SdInsertPagesObjsDlg::Reset()
         aLbTree.SetCollapsedEntryBmp( pEntry, aImgTextH, BMP_COLOR_HIGHCONTRAST );
     }
 
-    aCbxMasters.Check( sal_True );
+    aCbxMasters.Check( true );
 }
 
 /*************************************************************************
@@ -149,7 +149,7 @@ List* SdInsertPagesObjsDlg::GetList( sal_uInt16 nType )
 |*
 \************************************************************************/
 
-sal_Bool SdInsertPagesObjsDlg::IsLink()
+bool SdInsertPagesObjsDlg::IsLink()
 {
     return( aCbxLink.IsChecked() );
 }
@@ -160,7 +160,7 @@ sal_Bool SdInsertPagesObjsDlg::IsLink()
 |*
 \************************************************************************/
 
-sal_Bool SdInsertPagesObjsDlg::IsRemoveUnnessesaryMasterPages() const
+bool SdInsertPagesObjsDlg::IsRemoveUnnessesaryMasterPages() const
 {
     return( aCbxMasters.IsChecked() );
 }

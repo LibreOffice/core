@@ -24,12 +24,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 #include <vcl/extoutdevdata.hxx>
-#include <tools/rtti.hxx>
 
 namespace vcl
 {
 
-TYPEINIT0(ExtOutDevData);
 ExtOutDevData::~ExtOutDevData()
 {
 }

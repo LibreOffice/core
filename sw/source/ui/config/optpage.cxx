@@ -579,9 +579,9 @@ IMPL_LINK_INLINE_END( SwAddPrinterTabPage, SelectHdl, ListBox *, EMPTYARG )
 
 void SwAddPrinterTabPage::PageCreated (SfxAllItemSet aSet)
 {
-    //SFX_ITEMSET_ARG (&aSet,pListItem,SfxStringListItem,SID_FAX_LIST,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pListItem,SfxBoolItem,SID_FAX_LIST,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pPreviewItem,SfxBoolItem,SID_PREVIEWFLAG_TYPE,sal_False);
+    //SFX_ITEMSET_ARG (&aSet,pListItem,SfxStringListItem,SID_FAX_LIST);
+    SFX_ITEMSET_ARG (&aSet,pListItem,SfxBoolItem,SID_FAX_LIST);
+    SFX_ITEMSET_ARG (&aSet,pPreviewItem,SfxBoolItem,SID_PREVIEWFLAG_TYPE);
     if (pPreviewItem)
     {
         SetPreview(pPreviewItem->GetValue());
@@ -1211,7 +1211,7 @@ IMPL_LINK( SwStdFontTabPage, LoseFocusHdl, ComboBox*, pBox )
 
 void SwStdFontTabPage::PageCreated (SfxAllItemSet aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt16Item, SID_FONTMODE_TYPE, sal_False);
+    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt16Item, SID_FONTMODE_TYPE );
     if (pFlagItem)
         SetFontMode(sal::static_int_cast< sal_uInt8, sal_uInt16>( pFlagItem->GetValue()));
 }
@@ -1484,7 +1484,7 @@ IMPL_LINK(SwTableOptionsTabPage, CheckBoxHdl, CheckBox*, EMPTYARG)
 
 void SwTableOptionsTabPage::PageCreated (SfxAllItemSet aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pWrtSh,SwWrtShellItem,SID_WRT_SHELL,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pWrtSh,SwWrtShellItem,SID_WRT_SHELL);
     if (pWrtSh)
         SetWrtShell(pWrtSh->GetValue());
 }
@@ -1577,7 +1577,7 @@ SfxTabPage* SwShdwCrsrOptionsTabPage::Create( Window* pParent, const SfxItemSet&
 
 void SwShdwCrsrOptionsTabPage::PageCreated( SfxAllItemSet aSet )
 {
-    SFX_ITEMSET_ARG (&aSet,pWrtSh,SwWrtShellItem,SID_WRT_SHELL,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pWrtSh,SwWrtShellItem,SID_WRT_SHELL);
     if (pWrtSh)
         SetWrtShell(pWrtSh->GetValue());
 }
@@ -2092,13 +2092,12 @@ sal_Bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet& )
        nOldMarkMode != pOpt->GetMarkAlignMode())
     {
         // Alle Dokumente aktualisieren
-        TypeId aType(TYPE(SwDocShell));
-        SwDocShell* pDocShell = (SwDocShell*)SfxObjectShell::GetFirst(&aType);
+        SwDocShell* pDocShell = (SwDocShell*)SfxObjectShell::GetFirst( _IsObjectShell< SwDocShell > );
 
         while( pDocShell )
         {
             pDocShell->GetWrtShell()->UpdateRedlineAttr();
-            pDocShell = (SwDocShell*)SfxObjectShell::GetNext(*pDocShell, &aType);
+            pDocShell = (SwDocShell*)SfxObjectShell::GetNext(*pDocShell, _IsObjectShell< SwDocShell > );
         }
     }
 

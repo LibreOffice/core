@@ -129,8 +129,6 @@ protected:
     SAL_DLLPRIVATE      SfxFrame( Window& i_rContainerWindow, bool bHidden );
 
 public:
-                        TYPEINFO();
-
     static SfxFrame*    Create( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame );
     static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
                         CreateBlankFrame();
@@ -253,8 +251,7 @@ class SFX2_DLLPUBLIC SfxFrameItem: public SfxPoolItem
     SAL_DLLPRIVATE void SetFramePtr_Impl( SfxFrame* /*pFrameP*/ ) { pFrame = wFrame; }
 
 public:
-                            TYPEINFO();
-
+//                            POOLITEM_FACTORY()
                             SfxFrameItem( sal_uInt16 nWhich, SfxViewFrame *p );
                             SfxFrameItem( SfxFrame *p=0 );
                             SfxFrameItem( sal_uInt16 nWhich, SfxFrame *p );
@@ -276,7 +273,8 @@ class SFX2_DLLPUBLIC SfxUsrAnyItem : public SfxPoolItem
 {
     ::com::sun::star::uno::Any  aValue;
 public:
-                                TYPEINFO();
+    POOLITEM_FACTORY()
+                                SfxUsrAnyItem() : SfxPoolItem(0) {}
                                 SfxUsrAnyItem( sal_uInt16 nWhich, const ::com::sun::star::uno::Any& rAny );
     ::com::sun::star::uno::Any  GetValue() const
                                 { return aValue; }
@@ -292,7 +290,7 @@ class SFX2_DLLPUBLIC SfxUnoFrameItem : public SfxPoolItem
                                 m_xFrame;
 
 public:
-                                TYPEINFO();
+    POOLITEM_FACTORY()
                                 SfxUnoFrameItem();
                                 SfxUnoFrameItem( sal_uInt16 nWhich, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame );
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >&

@@ -125,8 +125,7 @@ __EXPORT ScTpUserLists::~ScTpUserLists()
 
 void ScTpUserLists::Init()
 {
-    SfxViewShell*   pSh = SfxViewShell::Current();
-    ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell, pSh);
+    ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
 
     aLbLists.SetSelectHdl   ( LINK( this, ScTpUserLists, LbSelectHdl ) );
     aBtnNew.SetClickHdl     ( LINK( this, ScTpUserLists, BtnClickHdl ) );

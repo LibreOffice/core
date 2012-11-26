@@ -50,8 +50,6 @@ SFX_IMPL_INTERFACE(ScMediaShell, ScDrawShell, ScResId(SCSTR_GRAPHICSHELL) )
     SFX_POPUPMENU_REGISTRATION( ScResId(RID_POPUP_MEDIA) );
 }
 
-TYPEINIT1( ScMediaShell, ScDrawShell );
-
 ScMediaShell::ScMediaShell(ScViewData* pData) :
     ScDrawShell(pData)
 {
@@ -76,14 +74,14 @@ void ScMediaShell::GetMediaState( SfxItemSet& rSet )
         {
             if( SID_AVMEDIA_TOOLBOX == nWhich )
             {
-                SdrMarkList*    pMarkList = new SdrMarkList( pView->GetMarkedObjectList() );
+                const SdrObjectVector aSdrObjectVector(pView->getSelectedSdrObjectVectorFromSdrMarkView());
                 bool            bDisable = true;
 
-                if( 1 == pMarkList->GetMarkCount() )
+                if( 1 == aSdrObjectVector.size() )
                 {
-                    SdrObject* pObj = pMarkList->GetMark( 0 )->GetMarkedSdrObj();
+                    const SdrMediaObj* pObj = dynamic_cast< const SdrMediaObj* >(aSdrObjectVector[0]);
 
-                    if( pObj && pObj->ISA( SdrMediaObj ) )
+                    if( pObj )
                     {
                         ::avmedia::MediaItem aItem( SID_AVMEDIA_TOOLBOX );
 
@@ -95,8 +93,6 @@ void ScMediaShell::GetMediaState( SfxItemSet& rSet )
 
                 if( bDisable )
                     rSet.DisableItem( SID_AVMEDIA_TOOLBOX );
-
-                delete pMarkList;
             }
 
             nWhich = aIter.NextWhich();
@@ -118,19 +114,17 @@ void ScMediaShell::ExecuteMedia( SfxRequest& rReq )
 
         if( pItem )
         {
-            SdrMarkList* pMarkList = new SdrMarkList( pView->GetMarkedObjectList() );
+            const SdrObjectVector aSdrObjectVector(pView->getSelectedSdrObjectVectorFromSdrMarkView());
 
-            if( 1 == pMarkList->GetMarkCount() )
+            if( 1 == aSdrObjectVector.size() )
             {
-                SdrObject* pObj = pMarkList->GetMark( 0 )->GetMarkedSdrObj();
+                const SdrMediaObj* pObj = dynamic_cast< const SdrMediaObj* >(aSdrObjectVector[0]);
 
-                if( pObj && pObj->ISA( SdrMediaObj ) )
+                if( pObj )
                 {
                     static_cast< sdr::contact::ViewContactOfSdrMediaObj& >( pObj->GetViewContact() ).executeMediaItem(
                         static_cast< const ::avmedia::MediaItem& >( *pItem ) );
                 }
-
-                delete pMarkList;
             }
         }
     }

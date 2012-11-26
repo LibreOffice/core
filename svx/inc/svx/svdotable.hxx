@@ -105,19 +105,29 @@ class SdrTableObjImpl;
 
 class SVX_DLLPUBLIC SdrTableObj : public ::SdrTextObj
 {
+private:
     friend class Cell;
     friend class SdrTableObjImpl;
     friend class SdrTableModifyGuard;
 
-public:
-    SdrTableObj(SdrModel* _pModel);
-    SdrTableObj(SdrModel* _pModel, const ::Rectangle& rNewRect, sal_Int32 nColumns, sal_Int32 nRows);
+protected:
     virtual ~SdrTableObj();
 
-    TYPEINFO();
+    /// method to copy all data from given source
+    virtual void copyDataFromSdrObject(const SdrObject& rSource);
+
+public:
+    /// create a copy, evtl. with a different target model (if given)
+    virtual SdrObject* CloneSdrObject(SdrModel* pTargetModel = 0) const;
+
+    SdrTableObj(
+        SdrModel& rSdrModel,
+        const basegfx::B2DHomMatrix& rTransform = basegfx::B2DHomMatrix(),
+        sal_Int32 nColumns = 1,
+        sal_Int32 nRows = 1);
+    virtual bool IsClosedObj() const;
 
     // table stuff
-
     SdrTableObj* CloneRange( const CellPos& rStartPos, const CellPos& rEndPos );
     void DistributeColumns( sal_Int32 nFirstColumn, sal_Int32 nLastColumn );
     void DistributeRows( sal_Int32 nFirstRow, sal_Int32 nLastRow );
@@ -141,7 +151,7 @@ public:
     const ::sdr::table::TableStyleSettings& getTableStyleSettings() const;
     void setTableStyleSettings( const ::sdr::table::TableStyleSettings& rStyle );
 
-    TableHitKind CheckTableHit( const Point& rPos, sal_Int32& rnX, sal_Int32& rnY, int nTol ) const;
+    TableHitKind CheckTableHit( const basegfx::B2DPoint& rPos, sal_Int32& rnX, sal_Int32& rnY, int nTol ) const;
 
     void uno_lock();
     void uno_unlock();
@@ -182,10 +192,10 @@ public:
     virtual void setActiveText( sal_Int32 nIndex );
 
     /** returns the index of the text that contains the given point or -1 */
-    virtual sal_Int32 CheckTextHit(const Point& rPnt) const;
+    virtual sal_Int32 CheckTextHit(const basegfx::B2DPoint& rPnt) const;
 
     virtual bool HasText() const;
-    sal_Bool IsTextEditActive() const { return (pEdtOutl != 0L); }
+    bool IsTextEditActive() const { return (pEdtOutl != 0L); }
     bool IsTextEditActive( const sdr::table::CellPos& rPos );
 
     /** returns true only if we are in edit mode and the user actually changed anything */
@@ -197,46 +207,34 @@ public:
 
     // Gleichzeitig wird der Text in den Outliner gesetzt (ggf.
     // der des EditOutliners) und die PaperSize gesetzt.
-    virtual void TakeTextRect( const sdr::table::CellPos& rPos, SdrOutliner& rOutliner, ::Rectangle& rTextRect, FASTBOOL bNoEditText=sal_False, ::Rectangle* pAnchorRect=NULL, sal_Bool bLineWidth=sal_True ) const;
-    virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FASTBOOL bNoEditText=sal_False, Rectangle* pAnchorRect=NULL, sal_Bool bLineWidth=sal_True ) const;
-    virtual void TakeTextAnchorRect(const sdr::table::CellPos& rPos, ::Rectangle& rAnchorRect ) const;
-    virtual void TakeTextAnchorRect(::Rectangle& rAnchorRect) const;
+    void TakeTextRange(const sdr::table::CellPos& rPos, SdrOutliner& rOutliner, basegfx::B2DRange& rTextRange, basegfx::B2DRange& rAnchorRange) const;
+    virtual void TakeTextRange(SdrOutliner& rOutliner, basegfx::B2DRange& rTextRange, basegfx::B2DRange& rAnchorRange) const;
+    virtual void TakeTextAnchorRangeFromCell(const sdr::table::CellPos& rPos, basegfx::B2DRange& rAnchorRange ) const;
+    virtual basegfx::B2DRange getUnifiedTextRange() const;
 
-    virtual FASTBOOL IsAutoGrowHeight() const;
+    virtual bool IsAutoGrowHeight() const;
     long GetMinTextFrameHeight() const;
     long GetMaxTextFrameHeight() const;
-    virtual FASTBOOL IsAutoGrowWidth() const;
+    virtual bool IsAutoGrowWidth() const;
     long GetMinTextFrameWidth() const;
     long GetMaxTextFrameWidth() const;
 
-    virtual FASTBOOL IsFontwork() const;
+    virtual bool IsFontwork() const;
 
-    virtual void SetPage(SdrPage* pNewPage);
-    virtual void SetModel(SdrModel* pNewModel);
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual sal_uInt16 GetObjIdentifier() const;
     virtual void SetChanged();
 
-    virtual FASTBOOL AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt=sal_True, FASTBOOL bWdt=sal_True) const;
-    virtual FASTBOOL AdjustTextFrameWidthAndHeight(FASTBOOL bHgt=sal_True, FASTBOOL bWdt=sal_True);
+    virtual basegfx::B2DRange AdjustTextFrameWidthAndHeight(const basegfx::B2DRange& rRange, bool bHgt = true, bool bWdt = true) const;
+    virtual bool AdjustTextFrameWidthAndHeight(bool bHgt = true, bool bWdt = true);
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
-    virtual void operator=(const SdrObject& rObj);
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
-    virtual basegfx::B2DPolyPolygon TakeContour() const;
-    virtual void RecalcSnapRect();
-    virtual const Rectangle& GetSnapRect() const;
-    virtual void NbcSetSnapRect(const Rectangle& rRect);
-
-    virtual const Rectangle& GetLogicRect() const;
-    virtual void NbcSetLogicRect(const Rectangle& rRect);
-    virtual void AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly = false );
+    virtual void AdjustToMaxRange( const basegfx::B2DRange& rMaxRange, bool bShrinkOnly = false );
 
     virtual sal_uInt32 GetSnapPointCount() const;
-    virtual Point GetSnapPoint(sal_uInt32 i) const;
+    virtual basegfx::B2DPoint GetSnapPoint(sal_uInt32 i) const;
 
-    virtual sal_uInt32 GetHdlCount() const;
-    virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
     virtual void AddToHdlList(SdrHdlList& rHdlList) const;
 
     // special drag methods
@@ -246,88 +244,52 @@ public:
     virtual String getSpecialDragComment(const SdrDragStat& rDrag) const;
     virtual basegfx::B2DPolyPolygon getSpecialDragPoly(const SdrDragStat& rDrag) const;
 
-    virtual FASTBOOL BegCreate(SdrDragStat& rStat);
-    virtual FASTBOOL MovCreate(SdrDragStat& rStat);
-    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
-    virtual FASTBOOL BckCreate(SdrDragStat& rStat);
+    virtual bool BckCreate(SdrDragStat& rStat);
     virtual void BrkCreate(SdrDragStat& rStat);
-    virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;
-    virtual Pointer GetCreatePointer() const;
+    virtual Pointer GetCreatePointer(const SdrView& rSdrView) const;
 
-    virtual void NbcMove(const Size& rSiz);
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-
-    virtual sal_Bool BegTextEdit(SdrOutliner& rOutl);
+    virtual bool BegTextEdit(SdrOutliner& rOutl);
     virtual void EndTextEdit(SdrOutliner& rOutl);
-    virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const;
-    virtual void TakeTextEditArea(const sdr::table::CellPos& rPos, Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const;
+    virtual void TakeTextEditArea(basegfx::B2DVector* pPaperMin, basegfx::B2DVector* pPaperMax, basegfx::B2DRange* pViewInit, basegfx::B2DRange* pViewMin) const;
+    void TakeTextEditArea(const sdr::table::CellPos& rPos, basegfx::B2DVector* pPaperMin, basegfx::B2DVector* pPaperMax, basegfx::B2DRange* pViewInit, basegfx::B2DRange* pViewMin) const;
     virtual sal_uInt16 GetOutlinerViewAnchorMode() const;
 
-    virtual void NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject);
+    virtual void SetOutlinerParaObject(OutlinerParaObject* pTextObject);
 
     virtual OutlinerParaObject* GetOutlinerParaObject() const;
     virtual OutlinerParaObject* GetEditOutlinerParaObject() const;
 
-    virtual void NbcReformatText();
+    // virtual void NbcReformatText();
     virtual void ReformatText();
 
     void SetTextEditOutliner(SdrOutliner* pOutl) { pEdtOutl=pOutl; }
 
-    virtual sal_Bool IsVerticalWriting() const;
-    virtual void SetVerticalWriting(sal_Bool bVertical);
+    virtual bool IsVerticalWriting() const;
+    virtual void SetVerticalWriting(bool bVertical);
 
     com::sun::star::text::WritingMode GetWritingMode() const;
 
     virtual void onEditOutlinerStatusEvent( EditStatus* pEditStatus );
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // transformation interface for StarOfficeAPI. This implements support for
-    // homogen 3x3 matrices containing the transformation of the SdrObject. At the
-    // moment it contains a shearX, rotation and translation, but for setting all linear
-    // transforms like Scale, ShearX, ShearY, Rotate and Translate are supported.
-    //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    // gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
-    // with the base geometry and returns TRUE. Otherwise it returns FALSE.
-    virtual sal_Bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const;
-
-    // sets the base geometry of the object using infos contained in the homogen 3x3 matrix.
-    // If it's an SdrPathObj it will use the provided geometry information. The Polygon has
-    // to use (0,0) as upper left and will be scaled to the given size in the matrix.
-    virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon);
-
-    // #103836# iterates over the paragraphs of a given SdrObject and removes all
-    //          hard set character attributes with the which ids contained in the
-    //          given vector
-//  virtual void RemoveOutlinerCharacterAttribs( const std::vector<sal_uInt16>& rCharWhichIds );
-
     /** hack for clipboard with calc and writer, export and import table content as rtf table */
     static void ExportAsRTF( SvStream& rStrm, SdrTableObj& rObj );
     static void ImportAsRTF( SvStream& rStrm, SdrTableObj& rObj );
 
-private:
-    void init( sal_Int32 nColumns, sal_Int32 nRows );
+    virtual void setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransformation);
 
 protected:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
-    virtual SdrObjGeoData* NewGeoData() const;
-    virtual void SaveGeoData(SdrObjGeoData& rGeo) const;
-    virtual void RestGeoData(const SdrObjGeoData& rGeo);
-
 private:
+    void init( sal_Int32 nColumns, sal_Int32 nRows );
     SdrOutliner* GetCellTextEditOutliner( const ::sdr::table::Cell& rCell ) const;
 
-private:
     // for the ViewContactOfTableObj to build the primitive representation, it is necessary to access the
     // TableLayouter for position and attribute informations
     friend class sdr::contact::ViewContactOfTableObj;
     const TableLayouter& getTableLayouter() const;
 
-    Rectangle   maLogicRect;
-private:
     SdrTableObjImpl*    mpImpl;
 };
 

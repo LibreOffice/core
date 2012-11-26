@@ -35,6 +35,7 @@ class FmFormView;
 class FmXForms;
 class FmFormObj: public SdrUnoObj
 {
+private:
     ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >  aEvts;  // events des Objects
     ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor>   m_aEventsHistory;
                 // valid if and only if m_pEnvironmentHistory != NULL, this are the events which we're set when
@@ -54,11 +55,19 @@ class FmFormObj: public SdrUnoObj
                             // the last ref device we know, as set at the model
                             // only to be used for comparison with the current ref device!
 
-public:
-    SVX_DLLPUBLIC FmFormObj(const ::rtl::OUString& rModelName,sal_Int32 _nType);
-    SVX_DLLPUBLIC FmFormObj(sal_Int32 _nType);
+protected:
+    virtual ~FmFormObj();
 
-    TYPEINFO();
+    /// method to copy all data from given source
+    virtual void copyDataFromSdrObject(const SdrObject& rSource);
+
+public:
+    /// create a copy, evtl. with a different target model (if given)
+    virtual SdrObject* CloneSdrObject(SdrModel* pTargetModel = 0) const;
+    virtual void clonedFrom(const FmFormObj* _pSource);
+
+    SVX_DLLPUBLIC FmFormObj(SdrModel& rSdrModel, const ::rtl::OUString& rModelName, sal_Int32 _nType);
+//  SVX_DLLPUBLIC FmFormObj(sal_Int32 _nType);
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>&
         GetOriginalParent() const { return m_xParent; }
@@ -73,21 +82,12 @@ public:
             const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& rEvts );
     void ClearObjEnv();
 
-public:
-    virtual ~FmFormObj();
-    virtual void SetPage(SdrPage* pNewPage);
+    // react on page change
+    virtual void handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage);
 
     virtual sal_uInt32 GetObjInventor() const;
     virtual sal_uInt16 GetObjIdentifier() const;
-    virtual void NbcReformatText();
-
-    virtual SdrObject*  Clone() const;
-    // #116235# virtual SdrObject*  Clone(SdrPage* pPage, SdrModel* pModel) const;
-    virtual void        operator= (const SdrObject& rObj);
-
-    virtual void SetModel(SdrModel* pNewModel);
-
-    virtual void clonedFrom(const FmFormObj* _pSource);
+    virtual void ReformatText();
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> ensureModelEnv(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rSourceContainer, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer> _rTopLevelDestContainer);
 
@@ -107,12 +107,12 @@ public:
     virtual void SetUnoControlModel( const ::com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >& _rxModel );
 
 protected:
-    virtual FASTBOOL    EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd );
+    virtual bool EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd );
     virtual void        BrkCreate( SdrDragStat& rStat );
 
     // #i70852# overload Layer interface to force to FormColtrol layer
     virtual SdrLayerID GetLayer() const;
-    virtual void NbcSetLayer(SdrLayerID nLayer);
+    virtual void SetLayer(SdrLayerID nLayer);
 
 private:
     /** isolates the control model from its form component hierarchy, i.e. removes it from

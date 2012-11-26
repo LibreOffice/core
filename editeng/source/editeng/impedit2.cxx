@@ -3683,12 +3683,13 @@ uno::Reference< datatransfer::XTransferable > ImpEditEngine::CreateTransferable(
             ( pAttr->Which() == EE_FEATURE_FIELD ) )
         {
             const SvxFieldItem* pField = (const SvxFieldItem*)pAttr->GetItem();
-            const SvxFieldData* pFld = pField->GetField();
-            if ( pFld && pFld->ISA( SvxURLField ) )
+            const SvxURLField* pSvxURLField = dynamic_cast< const SvxURLField* >(pField->GetField());
+
+            if ( pSvxURLField )
             {
                 // Office-Bookmark
-                String aURL( ((const SvxURLField*)pFld)->GetURL() );
-                String aTxt( ((const SvxURLField*)pFld)->GetRepresentation() );
+                String aURL( pSvxURLField->GetURL() );
+                String aTxt( pSvxURLField->GetRepresentation() );
                 pDataObj->GetURL() = aURL;
             }
         }

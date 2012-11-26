@@ -169,8 +169,6 @@ inline int ScDocOptions::operator!=( const ScDocOptions& rOpt ) const
 class SC_DLLPUBLIC ScTpCalcItem : public SfxPoolItem
 {
 public:
-                TYPEINFO();
-//UNUSED2008-05  ScTpCalcItem( sal_uInt16 nWhich );
                 ScTpCalcItem( sal_uInt16 nWhich,
                               const ScDocOptions& rOpt );
                 ScTpCalcItem( const ScTpCalcItem& rItem );

@@ -224,12 +224,9 @@ void SAL_CALL TableRow::setFastPropertyValue( sal_Int32 nHandle, const Any& aVal
 {
     bool bOk = false;
     bool bChange = false;
-
     TableRowUndo* pUndo = 0;
-
-    SdrModel* pModel = mxTableModel->getSdrTableObj()->GetModel();
-
-    const bool bUndo = mxTableModel.is() && mxTableModel->getSdrTableObj() && mxTableModel->getSdrTableObj()->IsInserted() && pModel && pModel->IsUndoEnabled();
+    SdrModel& rModel = mxTableModel->getSdrTableObj()->getSdrModelFromSdrObject();
+    const bool bUndo = mxTableModel.is() && mxTableModel->getSdrTableObj() && mxTableModel->getSdrTableObj()->IsObjectInserted() && rModel.IsUndoEnabled();
 
     if( bUndo )
     {
@@ -298,7 +295,7 @@ void SAL_CALL TableRow::setFastPropertyValue( sal_Int32 nHandle, const Any& aVal
     {
         if( pUndo )
         {
-            pModel->AddUndo( pUndo );
+            rModel.AddUndo( pUndo );
             pUndo = 0;
         }
         mxTableModel->setModified(sal_True);

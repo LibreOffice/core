@@ -293,7 +293,7 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     pImpl               ( new SvxPage_Impl )
 
 {
-    bBorderModified = sal_False;
+    bBorderModified = false;
     FreeResource();
     aBspWin.EnableRTL( sal_False );
 
@@ -560,12 +560,12 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     if ( pItem )
         aPaperSize = ( (const SvxSizeItem*)pItem )->GetSize();
 
-    FASTBOOL bOrientationSupport =
+    bool bOrientationSupport =
         pImpl->mpDefPrinter->HasSupport( SUPPORT_SET_ORIENTATION );
 #ifdef OS2
     // unter OS/2 wird bei HasSupport() immer sal_True returned
     // aber nur als Dummy, deshalb FALSE
-    bOrientationSupport = sal_False;
+    bOrientationSupport = false;
 #endif
 
     if ( !bOrientationSupport &&
@@ -676,8 +676,8 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     InitHeadFoot_Impl( rSet );
 
     // R"ander auf Hoch/Quer updaten, dann Beispiel updaten
-    bBorderModified = sal_False;
-    SwapFirstValues_Impl( sal_False );
+    bBorderModified = false;
+    SwapFirstValues_Impl( false );
     UpdateExample_Impl();
 
     // Alte Werte sichern
@@ -1156,7 +1156,7 @@ IMPL_LINK( SvxPageDescPage, SwapOrientation_Impl, RadioButton *, pBtn )
 
 // -----------------------------------------------------------------------
 
-void SvxPageDescPage::SwapFirstValues_Impl( FASTBOOL bSet )
+void SvxPageDescPage::SwapFirstValues_Impl( bool bSet )
 {
     MapMode aOldMode = pImpl->mpDefPrinter->GetMapMode();
     Orientation eOri = ORIENTATION_PORTRAIT;
@@ -1229,7 +1229,7 @@ void SvxPageDescPage::SwapFirstValues_Impl( FASTBOOL bSet )
 IMPL_LINK_INLINE_START( SvxPageDescPage, BorderModify_Impl, MetricField *, EMPTYARG )
 {
     if ( !bBorderModified )
-        bBorderModified = sal_True;
+        bBorderModified = true;
     UpdateExample_Impl();
     return 0;
 }
@@ -1760,10 +1760,10 @@ bool SvxPageDescPage::IsMarginOutOfRange()
 
 void SvxPageDescPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
 {
-    SFX_ITEMSET_ARG (&aSet,pModeItem,SfxAllEnumItem,SID_ENUM_PAGE_MODE,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pPaperStartItem,SfxAllEnumItem,SID_PAPER_START,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pPaperEndItem,SfxAllEnumItem,SID_PAPER_END,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pCollectListItem,SfxStringListItem,SID_COLLECT_LIST,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pModeItem,SfxAllEnumItem,SID_ENUM_PAGE_MODE );
+    SFX_ITEMSET_ARG (&aSet,pPaperStartItem,SfxAllEnumItem,SID_PAPER_START );
+    SFX_ITEMSET_ARG (&aSet,pPaperEndItem,SfxAllEnumItem,SID_PAPER_END );
+    SFX_ITEMSET_ARG (&aSet,pCollectListItem,SfxStringListItem,SID_COLLECT_LIST );
     if (pModeItem)
         SetMode((SvxModeType)pModeItem->GetEnumValue());
     if (pPaperStartItem && pPaperEndItem)

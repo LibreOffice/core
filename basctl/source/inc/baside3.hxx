@@ -74,7 +74,6 @@ protected:
     void                InitSettings(sal_Bool bFont,sal_Bool bForeground,sal_Bool bBackground);
 
 public:
-                        TYPEINFO();
                         DialogWindow( Window* pParent, const ScriptDocument& rDocument, String aLibName, String aName,
                             const com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >& xDialogModel );
                         DialogWindow( DialogWindow* pCurView ); // never implemented

@@ -682,9 +682,10 @@ void lcl_CheckObjects( SwSortedObjs* pSortedObjs, SwFrm* pFrm, long& rBot )
         // entries.
         SwAnchoredObject* pObj = (*pSortedObjs)[i];
         long nTmp = 0;
-        if ( pObj->ISA(SwFlyFrm) )
+        SwFlyFrm *pFly = dynamic_cast<SwFlyFrm*>(pObj);
+
+        if ( pFly )
         {
-            SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pObj);
             if( pFly->Frm().Top() != WEIT_WECH &&
                 ( pFrm->IsPageFrm() ? pFly->IsFlyLayFrm() :
                   ( pFly->IsFlyAtCntFrm() &&
@@ -1003,13 +1004,13 @@ sal_Bool SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
                 //geben kann (RootFrm::ImplCalcBrowseWidth())
                 long nMinWidth = 0;
 
-                for (sal_uInt16 i = 0; GetDrawObjs() && i < GetDrawObjs()->Count();++i)
+                for (sal_uInt32 i = 0; GetDrawObjs() && i < GetDrawObjs()->Count();++i)
                 {
                     // --> OD 2004-07-01 #i28701# - consider changed type of
                     // <SwSortedObjs> entries
                     SwAnchoredObject* pObj = (*GetDrawObjs())[i];
                     const SwFrmFmt& rFmt = pObj->GetFrmFmt();
-                    const sal_Bool bFly = pObj->ISA(SwFlyFrm);
+                    const bool bFly = dynamic_cast< SwFlyFrm* >(pObj);
                     if ((bFly && (WEIT_WECH == pObj->GetObjRect().Width()))
                         || rFmt.GetFrmSize().GetWidthPercent())
                     {

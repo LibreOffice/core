@@ -33,9 +33,6 @@ static inline NUMTYPE Count_Impl(const NUMTYPE * pRanges)
 
 // -----------------------------------------------------------------------
 
-TYPEINIT1_AUTOFACTORY(SfxXRangeItem, SfxPoolItem);
-TYPEINIT1_AUTOFACTORY(SfxXRangesItem, SfxPoolItem);
-
 NUMTYPE Count_Impl( const NUMTYPE *pRanges );
 
 // -----------------------------------------------------------------------

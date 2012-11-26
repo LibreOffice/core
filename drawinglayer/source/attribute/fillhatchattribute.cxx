@@ -45,7 +45,7 @@ namespace drawinglayer
             sal_uInt32                              mnMinimalDiscreteDistance;
 
             // bitfield
-            unsigned                                mbFillBackground : 1;
+            bool                                    mbFillBackground : 1;
 
             ImpFillHatchAttribute(
                 HatchStyle eStyle,

@@ -44,8 +44,6 @@ class XMLFootnoteBodyImportContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLFootnoteBodyImportContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,

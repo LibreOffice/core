@@ -27,7 +27,6 @@
 #include "connectivity/sqliterator.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
 #include "connectivity/CommonTools.hxx"
-#include <tools/rtti.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include "connectivity/FValue.hxx"
@@ -65,8 +64,6 @@ namespace connectivity
                 { ::rtl_freeMemory( pMem ); }
             inline static void SAL_CALL operator delete( void * /*pMem*/,void* /*_pHint*/ ) SAL_THROW( () )
                 {  }
-
-            TYPEINFO();
         };
 
 
@@ -86,8 +83,6 @@ namespace connectivity
             virtual sal_Int32 getDBType() const {return m_eDBType;}
             virtual OEvaluateSet* preProcess(OBoolOperator* pOp, OOperand* pRight = 0);
             inline sal_Bool isValid() const;
-
-            TYPEINFO();
         };
 
         class OOO_DLLPUBLIC_FILE OOperandRow : public OOperand
@@ -102,8 +97,6 @@ namespace connectivity
             virtual const ORowSetValue& getValue() const;
             virtual void setValue(const ORowSetValue& _rVal);
             void bindValue(const OValueRefRow& _pRow);                      // Bindung an den Wert, den der Operand repraesentiert
-
-            TYPEINFO();
         };
 
         // Attribute aus einer Ergebniszeile
@@ -118,7 +111,6 @@ namespace connectivity
 
             virtual sal_Bool isIndexed() const;
             virtual OEvaluateSet* preProcess(OBoolOperator* pOp, OOperand* pRight = 0);
-            TYPEINFO();
         };
 
         // Parameter fuer ein Praedikat
@@ -127,8 +119,6 @@ namespace connectivity
         public:
             OOperandParam(connectivity::OSQLParseNode* pNode, sal_Int32 _nPos);
             void describe(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn, ::vos::ORef<connectivity::OSQLColumns> _xParamColumns);
-
-            TYPEINFO();
         };
 
         // WerteOperanden
@@ -148,8 +138,6 @@ namespace connectivity
         public:
             virtual const ORowSetValue& getValue() const;
             virtual void setValue(const ORowSetValue& _rVal);
-
-            TYPEINFO();
         };
 
 
@@ -158,8 +146,6 @@ namespace connectivity
         {
         public:
             OOperandConst(const connectivity::OSQLParseNode& rColumnRef, const rtl::OUString& aStrValue);
-
-            TYPEINFO();
         };
 
 
@@ -174,7 +160,6 @@ namespace connectivity
         public:
             OOperandResult(const ORowSetValue& _rVar)
                             :OOperandValue(_rVar, _rVar.getTypeKind()) {}
-            TYPEINFO();
         };
 
 
@@ -205,7 +190,6 @@ namespace connectivity
         {
         public:
             OStopOperand(){}
-            TYPEINFO();
         };
 
         // Operatoren
@@ -215,7 +199,6 @@ namespace connectivity
             virtual void Exec(OCodeStack&) = 0;
             virtual sal_uInt16 getRequestedOperands() const;    // Anzahl benoetigter Operanden
                                                                 // Standard ist 2
-            TYPEINFO();
         };
 
 
@@ -224,7 +207,6 @@ namespace connectivity
         class OOO_DLLPUBLIC_FILE OBoolOperator : public OOperator
         {
         public:
-            TYPEINFO();
             virtual void Exec(OCodeStack&);
             virtual sal_Bool operate(const OOperand*, const OOperand*) const;
         };
@@ -232,8 +214,6 @@ namespace connectivity
         class OOp_NOT : public OBoolOperator
         {
         public:
-            TYPEINFO();
-
         protected:
             virtual void Exec(OCodeStack&);
             virtual sal_Bool operate(const OOperand*, const OOperand* = NULL) const;
@@ -243,8 +223,6 @@ namespace connectivity
         class OOp_AND : public OBoolOperator
         {
         public:
-            TYPEINFO();
-
         protected:
             virtual sal_Bool operate(const OOperand*, const OOperand*) const;
         };
@@ -252,7 +230,6 @@ namespace connectivity
         class OOp_OR : public OBoolOperator
         {
         public:
-            TYPEINFO();
         protected:
             virtual sal_Bool operate(const OOperand*, const OOperand*) const;
         };
@@ -260,7 +237,6 @@ namespace connectivity
         class OOO_DLLPUBLIC_FILE OOp_ISNULL : public OBoolOperator
         {
         public:
-            TYPEINFO();
         public:
             virtual void Exec(OCodeStack&);
             virtual sal_uInt16 getRequestedOperands() const;
@@ -270,14 +246,12 @@ namespace connectivity
         class OOO_DLLPUBLIC_FILE OOp_ISNOTNULL : public OOp_ISNULL
         {
         public:
-            TYPEINFO();
             virtual sal_Bool operate(const OOperand*, const OOperand* = NULL) const;
         };
 
         class OOO_DLLPUBLIC_FILE OOp_LIKE : public OBoolOperator
         {
         public:
-            TYPEINFO();
         protected:
             const sal_Unicode cEscape;
 
@@ -290,7 +264,6 @@ namespace connectivity
         class OOp_NOTLIKE : public OOp_LIKE
         {
         public:
-            TYPEINFO();
         public:
             OOp_NOTLIKE(const sal_Unicode cEsc = L'\0'):OOp_LIKE(cEsc){};
 
@@ -302,7 +275,6 @@ namespace connectivity
             sal_Int32 aPredicateType;
 
         public:
-            TYPEINFO();
             OOp_COMPARE(sal_Int32 aPType)
                          :aPredicateType(aPType) {}
 
@@ -316,8 +288,6 @@ namespace connectivity
         {
         public:
             virtual void Exec(OCodeStack&);
-
-            TYPEINFO();
 
         protected:
             virtual double operate(const double& fLeft,const double& fRight) const = 0;
@@ -358,8 +328,6 @@ namespace connectivity
         public:
             virtual void Exec(OCodeStack&);
 
-            TYPEINFO();
-
         protected:
             virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const = 0;
         };
@@ -368,8 +336,6 @@ namespace connectivity
         {
         public:
             virtual void Exec(OCodeStack&);
-
-            TYPEINFO();
 
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs,const ORowSetValue& rhs) const = 0;
@@ -381,9 +347,6 @@ namespace connectivity
             virtual void Exec(OCodeStack&);
             virtual sal_uInt16 getRequestedOperands() const;
             virtual ORowSetValue operate(const ORowSetValue& lhs) const = 0;
-
-            TYPEINFO();
-
         };
     }
 }

@@ -73,13 +73,13 @@ namespace drawinglayer
 
             /// bitfield
             /// flag if shadow plane projection preparation leaded to valid results
-            unsigned                                        mbShadowProjectionIsValid : 1;
+            bool                                            mbShadowProjectionIsValid : 1;
 
             /// flag if conversion is switched on
-            unsigned                                        mbConvert : 1;
+            bool                                            mbConvert : 1;
 
             /// flag if conversion shall use projection
-            unsigned                                        mbUseProjection : 1;
+            bool                                            mbUseProjection : 1;
 
             /// local helpers
             basegfx::B2DPolygon impDoShadowProjection(const basegfx::B3DPolygon& rSource);

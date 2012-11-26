@@ -341,7 +341,7 @@ String SfxPickList::GetMenuEntryTitle( sal_uInt32 nIndex )
 
 void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.IsA( TYPE( SfxStringHint )))
+    if ( dynamic_cast< const SfxStringHint* >(&rHint))
     {
         SfxStringHint* pStringHint = (SfxStringHint*) &rHint;
 
@@ -349,9 +349,9 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
             INetURLHistory::GetOrCreate()->PutUrl( INetURLObject( pStringHint->GetObject() ));
     }
 
-    if ( rHint.IsA( TYPE( SfxEventHint )))
+    if ( dynamic_cast< const SfxEventHint* >(&rHint))
     {
-        SfxEventHint* pEventHint = PTR_CAST(SfxEventHint,&rHint);
+        const SfxEventHint* pEventHint = dynamic_cast< const SfxEventHint* >(&rHint);
         // nur ObjectShell-bezogene Events mit Medium interessieren
         SfxObjectShell* pDocSh = pEventHint->GetObjShell();
         if( !pDocSh )
@@ -434,7 +434,7 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     return;
 
                 // add no document that forbids this (for example Message-Body)
-                SFX_ITEMSET_ARG( pMed->GetItemSet(), pPicklistItem, SfxBoolItem, SID_PICKLIST, sal_False );
+                SFX_ITEMSET_ARG( pMed->GetItemSet(), pPicklistItem, SfxBoolItem, SID_PICKLIST );
                 if (
                     (pPicklistItem && !pPicklistItem->GetValue()) ||
                     (!(pDocSh->Get_Impl()->bWaitingForPicklist) )

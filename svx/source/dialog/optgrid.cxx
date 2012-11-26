@@ -34,10 +34,10 @@
 
 #include <svx/svxids.hrc>
 #include <svx/dialmgr.hxx>
-#include "svx/optgrid.hxx"
+#include <svx/optgrid.hxx>
 #include <svx/dialogs.hrc>
-#include "optgrid.hrc"
-#include "svx/dlgutil.hxx"
+#include <optgrid.hrc>
+#include <svx/dlgutil.hxx>
 
 /* -----------------18.08.98 17:41-------------------
  * local functions
@@ -63,16 +63,16 @@ void    lcl_SetMinMax(MetricField& rField, long nFirst, long nLast, long nMin, l
  --------------------------------------------------------------------*/
 
 SvxOptionsGrid::SvxOptionsGrid() :
-    nFldDrawX       ( 100 ),
-    nFldDivisionX   ( 0 ),
-    nFldDrawY       ( 100 ),
-    nFldDivisionY   ( 0 ),
-    nFldSnapX       ( 100 ),
-    nFldSnapY       ( 100 ),
-    bUseGridsnap    ( 0 ),
-    bSynchronize    ( 1 ),
-    bGridVisible    ( 0 ),
-    bEqualGrid      ( 1 )
+    mnFldDrawX      ( 100 ),
+    mnFldDivisionX  ( 0 ),
+    mnFldDrawY      ( 100 ),
+    mnFldDivisionY  ( 0 ),
+    mnFldSnapX      ( 100 ),
+    mnFldSnapY      ( 100 ),
+    mbUseGridsnap   ( 0 ),
+    mbSynchronize   ( 1 ),
+    mbGridVisible   ( 0 ),
+    mbEqualGrid     ( 1 )
 {
 }
 
@@ -92,16 +92,16 @@ SvxGridItem::SvxGridItem( const SvxGridItem& rItem )
 :   SvxOptionsGrid()
 ,   SfxPoolItem(rItem)
 {
-    bUseGridsnap = rItem.bUseGridsnap ;
-    bSynchronize = rItem.bSynchronize ;
-    bGridVisible = rItem.bGridVisible ;
-    bEqualGrid   = rItem.bEqualGrid   ;
-    nFldDrawX    = rItem.nFldDrawX    ;
-    nFldDivisionX= rItem.nFldDivisionX;
-    nFldDrawY    = rItem.nFldDrawY    ;
-    nFldDivisionY= rItem.nFldDivisionY;
-    nFldSnapX    = rItem.nFldSnapX    ;
-    nFldSnapY    = rItem.nFldSnapY    ;
+    mbUseGridsnap = rItem.mbUseGridsnap ;
+    mbSynchronize = rItem.mbSynchronize ;
+    mbGridVisible = rItem.mbGridVisible ;
+    mbEqualGrid  = rItem.mbEqualGrid      ;
+    mnFldDrawX    = rItem.mnFldDrawX    ;
+    mnFldDivisionX= rItem.mnFldDivisionX;
+    mnFldDrawY    = rItem.mnFldDrawY    ;
+    mnFldDivisionY= rItem.mnFldDivisionY;
+    mnFldSnapX    = rItem.mnFldSnapX    ;
+    mnFldSnapY    = rItem.mnFldSnapY    ;
 
 };
 
@@ -124,16 +124,16 @@ int SvxGridItem::operator==( const SfxPoolItem& rAttr ) const
 
     const SvxGridItem& rItem = (const SvxGridItem&) rAttr;
 
-    return (    bUseGridsnap == rItem.bUseGridsnap &&
-                bSynchronize == rItem.bSynchronize &&
-                bGridVisible == rItem.bGridVisible &&
-                bEqualGrid   == rItem.bEqualGrid   &&
-                nFldDrawX    == rItem.nFldDrawX    &&
-                nFldDivisionX== rItem.nFldDivisionX&&
-                nFldDrawY    == rItem.nFldDrawY    &&
-                nFldDivisionY== rItem.nFldDivisionY&&
-                nFldSnapX    == rItem.nFldSnapX    &&
-                nFldSnapY    == rItem.nFldSnapY     );
+    return (    mbUseGridsnap == rItem.mbUseGridsnap &&
+                mbSynchronize == rItem.mbSynchronize &&
+                mbGridVisible == rItem.mbGridVisible &&
+                mbEqualGrid  == rItem.mbEqualGrid   &&
+                mnFldDrawX    == rItem.mnFldDrawX    &&
+                mnFldDivisionX== rItem.mnFldDivisionX&&
+                mnFldDrawY    == rItem.mnFldDrawY    &&
+                mnFldDivisionY== rItem.mnFldDivisionY&&
+                mnFldSnapX    == rItem.mnFldSnapX    &&
+                mnFldSnapY    == rItem.mnFldSnapY       );
 }
 
 /*--------------------------------------------------------------------
@@ -210,7 +210,7 @@ SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
     aFtBezAngle         ( this, SVX_RES( FT_BEZ_ANGLE ) ),
     aMtrFldBezAngle     ( this, SVX_RES( MTR_FLD_BEZ_ANGLE ) ),
 
-    bAttrModified( sal_False )
+    mbAttrModified( false )
 {
     // diese Page braucht ExchangeSupport
     SetExchangeSupport();
@@ -268,27 +268,27 @@ SfxTabPage* SvxGridTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet 
 
 sal_Bool SvxGridTabPage::FillItemSet( SfxItemSet& rCoreSet )
 {
-    if ( bAttrModified )
+    if ( mbAttrModified )
     {
         SvxGridItem aGridItem( SID_ATTR_GRID_OPTIONS );
 
-        aGridItem.bUseGridsnap  = aCbxUseGridsnap.IsChecked();
-        aGridItem.bSynchronize  = aCbxSynchronize.IsChecked();
-        aGridItem.bGridVisible  = aCbxGridVisible.IsChecked();
+        aGridItem.mbUseGridsnap = aCbxUseGridsnap.IsChecked();
+        aGridItem.mbSynchronize = aCbxSynchronize.IsChecked();
+        aGridItem.mbGridVisible = aCbxGridVisible.IsChecked();
 
         SfxMapUnit eUnit =
             rCoreSet.GetPool()->GetMetric( GetWhich( SID_ATTR_GRID_OPTIONS ) );
         long nX =GetCoreValue(  aMtrFldDrawX, eUnit );
         long nY = GetCoreValue( aMtrFldDrawY, eUnit );
 
-        aGridItem.nFldDrawX    = (sal_uInt32) nX;
-        aGridItem.nFldDrawY    = (sal_uInt32) nY;
-        aGridItem.nFldDivisionX = static_cast<long>(aNumFldDivisionX.GetValue()-1);
-        aGridItem.nFldDivisionY = static_cast<long>(aNumFldDivisionY.GetValue()-1);
+        aGridItem.mnFldDrawX    = (sal_uInt32) nX;
+        aGridItem.mnFldDrawY    = (sal_uInt32) nY;
+        aGridItem.mnFldDivisionX = static_cast<long>(aNumFldDivisionX.GetValue() - 1);
+        aGridItem.mnFldDivisionY = static_cast<long>(aNumFldDivisionY.GetValue() - 1);
 
         rCoreSet.Put( aGridItem );
     }
-    return bAttrModified;
+    return mbAttrModified;
 }
 
 //------------------------------------------------------------------------
@@ -301,21 +301,21 @@ void SvxGridTabPage::Reset( const SfxItemSet& rSet )
                                     (const SfxPoolItem**)&pAttr ))
     {
         const SvxGridItem* pGridAttr = (SvxGridItem*)pAttr;
-        aCbxUseGridsnap.Check( pGridAttr->bUseGridsnap == 1 );
-        aCbxSynchronize.Check( pGridAttr->bSynchronize == 1 );
-        aCbxGridVisible.Check( pGridAttr->bGridVisible == 1 );
+        aCbxUseGridsnap.Check( pGridAttr->mbUseGridsnap == 1 );
+        aCbxSynchronize.Check( pGridAttr->mbSynchronize == 1 );
+        aCbxGridVisible.Check( pGridAttr->mbGridVisible == 1 );
 
         SfxMapUnit eUnit =
             rSet.GetPool()->GetMetric( GetWhich( SID_ATTR_GRID_OPTIONS ) );
-        SetMetricValue( aMtrFldDrawX , pGridAttr->nFldDrawX, eUnit );
-        SetMetricValue( aMtrFldDrawY , pGridAttr->nFldDrawY, eUnit );
+        SetMetricValue( aMtrFldDrawX , pGridAttr->mnFldDrawX, eUnit );
+        SetMetricValue( aMtrFldDrawY , pGridAttr->mnFldDrawY, eUnit );
 
-        aNumFldDivisionX.SetValue( pGridAttr->nFldDivisionX+1 );
-        aNumFldDivisionY.SetValue( pGridAttr->nFldDivisionY+1 );
+        aNumFldDivisionX.SetValue( pGridAttr->mnFldDivisionX + 1);
+        aNumFldDivisionY.SetValue( pGridAttr->mnFldDivisionY + 1);
     }
 
     ChangeGridsnapHdl_Impl( &aCbxUseGridsnap );
-    bAttrModified = sal_False;
+    mbAttrModified = false;
 }
 
 // -----------------------------------------------------------------------
@@ -327,7 +327,7 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
                                     (const SfxPoolItem**)&pAttr ))
     {
         const SvxGridItem* pGridAttr = (SvxGridItem*) pAttr;
-        aCbxUseGridsnap.Check( pGridAttr->bUseGridsnap == 1 );
+        aCbxUseGridsnap.Check( pGridAttr->mbUseGridsnap == 1 );
 
         ChangeGridsnapHdl_Impl( &aCbxUseGridsnap );
     }
@@ -375,7 +375,7 @@ int SvxGridTabPage::DeactivatePage( SfxItemSet* _pSet )
 //------------------------------------------------------------------------
 IMPL_LINK( SvxGridTabPage, ChangeDrawHdl_Impl, MetricField *, pField )
 {
-    bAttrModified = sal_True;
+    mbAttrModified = true;
     if( aCbxSynchronize.IsChecked() )
     {
         if(pField == &aMtrFldDrawX)
@@ -401,7 +401,7 @@ IMPL_LINK( SvxGridTabPage, ClickRotateHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxGridTabPage, ChangeDivisionHdl_Impl, NumericField *, pField )
 {
-    bAttrModified = sal_True;
+    mbAttrModified = true;
     if( aCbxSynchronize.IsChecked() )
     {
         if(&aNumFldDivisionX == pField)
@@ -415,7 +415,7 @@ IMPL_LINK( SvxGridTabPage, ChangeDivisionHdl_Impl, NumericField *, pField )
 
 IMPL_LINK( SvxGridTabPage, ChangeGridsnapHdl_Impl, void *, EMPTYARG )
 {
-    bAttrModified = sal_True;
+    mbAttrModified = true;
     return 0;
 }
 

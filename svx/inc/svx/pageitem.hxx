@@ -81,9 +81,9 @@ private:
     sal_uInt16          eUse;               // Layout
 
 public:
-
-    TYPEINFO();
-    SvxPageItem( const sal_uInt16 nId );
+    POOLITEM_FACTORY()
+    SvxPageItem();
+    SvxPageItem( sal_uInt16 nId );
     SvxPageItem( const SvxPageItem& rItem );
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;

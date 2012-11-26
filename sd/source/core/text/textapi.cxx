@@ -35,6 +35,7 @@
 #include <editeng/outlobj.hxx>
 #include "Outliner.hxx"
 #include <svx/svdpool.hxx>
+#include <svx/globaldrawitempool.hxx>
 
 using ::rtl::OUString;
 
@@ -133,7 +134,7 @@ const SvxItemPropertySet* ImplGetSdTextPortionPropertyMap()
         {MAP_CHAR_LEN("ParaUserDefinedAttributes"),     EE_PARA_XMLATTRIBS,     &::getCppuType((const Reference< XNameContainer >*)0)  ,        0,     0},
         {0,0,0,0,0,0}
     };
-    static SvxItemPropertySet aSdTextPortionPropertyMap( aSdTextPortionPropertyEntries, SdrObject::GetGlobalDrawObjectItemPool() );
+    static SvxItemPropertySet aSdTextPortionPropertyMap( aSdTextPortionPropertyEntries, GetGlobalDrawObjectItemPool() );
 
     return &aSdTextPortionPropertyMap;
 }

@@ -49,10 +49,6 @@ SFX_IMPL_INTERFACE(LeftImpressPaneShell, SfxShell, SdResId(STR_LEFT_IMPRESS_PANE
         ::sd::LeftPaneImpressChildWindow::GetChildWindowId());
 }
 
-TYPEINIT1(LeftImpressPaneShell, SfxShell);
-
-
-
 LeftImpressPaneShell::LeftImpressPaneShell (void)
     : SfxShell()
 {
@@ -85,10 +81,6 @@ SFX_IMPL_INTERFACE(LeftDrawPaneShell, SfxShell, SdResId(STR_LEFT_DRAW_PANE_SHELL
         ::sd::LeftPaneDrawChildWindow::GetChildWindowId());
 }
 
-TYPEINIT1(LeftDrawPaneShell, SfxShell);
-
-
-
 LeftDrawPaneShell::LeftDrawPaneShell (void)
     : SfxShell()
 {
@@ -119,8 +111,6 @@ SFX_IMPL_INTERFACE( ToolPanelPaneShell, SfxShell, SdResId( STR_TOOL_PANEL_SHELL 
 {
     SFX_CHILDWINDOW_REGISTRATION( ::sd::ToolPanelChildWindow::GetChildWindowId() );
 }
-
-TYPEINIT1( ToolPanelPaneShell, SfxShell );
 
 ToolPanelPaneShell::ToolPanelPaneShell()
     :SfxShell()

@@ -87,9 +87,6 @@ SFX_IMPL_INTERFACE(MasterPagesSelector, SfxShell,
     SFX_POPUPMENU_REGISTRATION( SdResId(RID_TASKPANE_MASTERPAGESSELECTOR_POPUP) );
 }
 
-TYPEINIT1(MasterPagesSelector, SfxShell);
-
-
 
 MasterPagesSelector::MasterPagesSelector (
     TreeNode* pParent,
@@ -109,7 +106,7 @@ MasterPagesSelector::MasterPagesSelector (
       maTokenToValueSetIndex(),
       maLockedMasterPages()
 {
-    SetPool (&rDocument.GetPool());
+    SetPool (&rDocument.GetItemPool());
 
     mpPageSet->SetSelectHdl (
         LINK(this, MasterPagesSelector, ClickHandler));
@@ -289,18 +286,20 @@ IMPL_LINK(MasterPagesSelector, ContextMenuCallback, CommandEvent*, pEvent)
         // taken either from the mouse position (when the command was sent
         // as reaction to a right click) or in the center of the selected
         // item (when the command was sent as reaction to Shift+F10.)
-        Point aPosition (pEvent->GetMousePosPixel());
+        Point aDiscretePos(pEvent->GetMousePosPixel());
+
         if ( ! pEvent->IsMouseEvent())
         {
-            Rectangle aBBox (mpPageSet->GetItemRect(nIndex));
-            aPosition = aBBox.Center();
+            const Rectangle aBBox(mpPageSet->GetItemRect(nIndex));
+
+            aDiscretePos = aBBox.Center();
         }
 
         const ResId aPopupResId (GetContextMenuResId());
         mrBase.GetViewFrame()->GetDispatcher()->ExecutePopup(
             aPopupResId,
             mpPageSet.get(),
-            &aPosition);
+            &aDiscretePos);
     }
 
     return 0;
@@ -346,7 +345,7 @@ void MasterPagesSelector::AssignMasterPageToAllSlides (SdPage* pMasterPage)
         if (pMasterPage == NULL)
             break;
 
-        sal_uInt16 nPageCount = mrDocument.GetSdPageCount(PK_STANDARD);
+        sal_uInt32 nPageCount = mrDocument.GetSdPageCount(PK_STANDARD);
         if (nPageCount == 0)
             break;
 
@@ -356,7 +355,7 @@ void MasterPagesSelector::AssignMasterPageToAllSlides (SdPage* pMasterPage)
         String sFullLayoutName (pMasterPage->GetLayoutName());
         ::sd::slidesorter::SharedPageSelection pPageList (
             new ::sd::slidesorter::SlideSorterViewShell::PageSelection());
-        for (sal_uInt16 nPageIndex=0; nPageIndex<nPageCount; nPageIndex++)
+        for (sal_uInt32 nPageIndex=0; nPageIndex<nPageCount; nPageIndex++)
         {
             SdPage* pPage = mrDocument.GetSdPage (nPageIndex, PK_STANDARD);
             if (pPage != NULL

@@ -23,12 +23,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
+
 #include <svx/sdrmasterpagedescriptor.hxx>
 #include <svx/sdr/contact/viewcontactofmasterpagedescriptor.hxx>
 #include <svx/svdpage.hxx>
-
-// #i42075#
 #include <svx/svdobj.hxx>
+#include <svx/svdmodel.hxx>
 #include <svx/xfillit0.hxx>
 #include <svl/itemset.hxx>
 
@@ -43,7 +43,8 @@ namespace sdr
     }
 
     MasterPageDescriptor::MasterPageDescriptor(SdrPage& aOwnerPage, SdrPage& aUsedPage)
-    :   maOwnerPage(aOwnerPage),
+    :   SfxListener(),
+        maOwnerPage(aOwnerPage),
         maUsedPage(aUsedPage),
         mpViewContact(0L)
     {
@@ -51,13 +52,13 @@ namespace sdr
         maVisibleLayers.SetAll();
 
         // register at used page
-        maUsedPage.AddPageUser(*this);
+        maUsedPage.AddListener(*this);
     }
 
     MasterPageDescriptor::~MasterPageDescriptor()
     {
         // de-register at used page
-        maUsedPage.RemovePageUser(*this);
+        maUsedPage.RemoveListener(*this);
 
         if(mpViewContact)
         {
@@ -81,9 +82,17 @@ namespace sdr
     // this method is called form the destructor of the referenced page.
     // do all necessary action to forget the page. It is not necessary to call
     // RemovePageUser(), that is done form the destructor.
-    void MasterPageDescriptor::PageInDestruction(const SdrPage& /*rPage*/)
+    void MasterPageDescriptor::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
     {
-        maOwnerPage.TRG_ClearMasterPage();
+        const SdrBaseHint* pSdrHint = dynamic_cast< const SdrBaseHint* >(&rHint);
+
+        if(pSdrHint && HINT_SDRPAGEDYING == pSdrHint->GetSdrHintKind() && pSdrHint->GetSdrHintPage())
+        {
+            if(&maUsedPage == pSdrHint->GetSdrHintPage())
+            {
+                maOwnerPage.TRG_ClearMasterPage();
+            }
+        }
     }
 
     void MasterPageDescriptor::SetVisibleLayers(const SetOfByte& rNew)
@@ -96,14 +105,14 @@ namespace sdr
     }
 
     // operators
-    sal_Bool MasterPageDescriptor::operator==(const MasterPageDescriptor& rCandidate) const
+    bool MasterPageDescriptor::operator==(const MasterPageDescriptor& rCandidate) const
     {
         return (&maOwnerPage == &rCandidate.maOwnerPage
             && &maUsedPage == &rCandidate.maUsedPage
             && maVisibleLayers == rCandidate.maVisibleLayers);
     }
 
-    sal_Bool MasterPageDescriptor::operator!=(const MasterPageDescriptor& rCandidate) const
+    bool MasterPageDescriptor::operator!=(const MasterPageDescriptor& rCandidate) const
     {
         return (&maOwnerPage != &rCandidate.maOwnerPage
             || &maUsedPage != &rCandidate.maUsedPage

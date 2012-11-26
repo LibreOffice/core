@@ -29,8 +29,6 @@
 class XMLDlgOASISTransformerContext : public XMLTransformerContext
 {
 public:
-    TYPEINFO();
-
     XMLDlgOASISTransformerContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName );
     virtual ~XMLDlgOASISTransformerContext();

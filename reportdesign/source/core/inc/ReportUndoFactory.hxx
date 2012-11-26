@@ -41,26 +41,26 @@ namespace rptui
         virtual ~OReportUndoFactory();
 
            // shapes
-        virtual SdrUndoAction* CreateUndoMoveObject( SdrObject& rObject );
-        virtual SdrUndoAction* CreateUndoMoveObject( SdrObject& rObject, const Size& rDist );
+//      virtual SdrUndoAction* CreateUndoMoveObject( SdrObject& rObject );
+//      virtual SdrUndoAction* CreateUndoMoveObject( SdrObject& rObject, const basegfx::B2DPoint& rOffset );
         virtual SdrUndoAction* CreateUndoGeoObject( SdrObject& rObject );
         virtual SdrUndoAction* CreateUndoAttrObject( SdrObject& rObject, bool bStyleSheet1 = false, bool bSaveText = false );
-        virtual SdrUndoAction* CreateUndoRemoveObject( SdrObject& rObject, bool bOrdNumDirect = false);
-        virtual SdrUndoAction* CreateUndoInsertObject( SdrObject& rObject, bool bOrdNumDirect = false);
-        virtual SdrUndoAction* CreateUndoDeleteObject( SdrObject& rObject, bool bOrdNumDirect = false);
-        virtual SdrUndoAction* CreateUndoNewObject( SdrObject& rObject, bool bOrdNumDirect = false);
-        virtual SdrUndoAction* CreateUndoCopyObject( SdrObject& rObject, bool bOrdNumDirect = false);
+        virtual SdrUndoAction* CreateUndoRemoveObject( SdrObject& rObject );
+        virtual SdrUndoAction* CreateUndoInsertObject( SdrObject& rObject );
+        virtual SdrUndoAction* CreateUndoDeleteObject( SdrObject& rObject );
+        virtual SdrUndoAction* CreateUndoNewObject( SdrObject& rObject );
+        virtual SdrUndoAction* CreateUndoCopyObject( SdrObject& rObject );
 
         virtual SdrUndoAction* CreateUndoObjectOrdNum( SdrObject& rObject, sal_uInt32 nOldOrdNum1, sal_uInt32 nNewOrdNum1);
 
-        virtual SdrUndoAction* CreateUndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject, bool bOrdNumDirect = false );
+        virtual SdrUndoAction* CreateUndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject );
         virtual SdrUndoAction* CreateUndoObjectLayerChange( SdrObject& rObject, SdrLayerID aOldLayer, SdrLayerID aNewLayer );
         virtual SdrUndoAction* CreateUndoObjectSetText( SdrObject& rNewObj, sal_Int32 nText );
 
         // layer
         virtual SdrUndoAction* CreateUndoNewLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel);
         virtual SdrUndoAction* CreateUndoDeleteLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel);
-        virtual SdrUndoAction* CreateUndoMoveLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel, sal_uInt16 nNeuPos1);
+//      virtual SdrUndoAction* CreateUndoMoveLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel, sal_uInt16 nNeuPos1);
 
         // page
         virtual SdrUndoAction*  CreateUndoDeletePage(SdrPage& rPage);

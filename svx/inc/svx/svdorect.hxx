@@ -31,8 +31,6 @@
 //   Vorausdeklarationen
 //************************************************************
 
-class XPolygon;
-
 namespace sdr { namespace properties {
     class RectangleProperties;
 }}
@@ -47,61 +45,38 @@ namespace sdr { namespace properties {
 class SVX_DLLPUBLIC SdrRectObj : public SdrTextObj
 {
 private:
-    // to allow sdr::properties::RectangleProperties access to SetXPolyDirty()
-    friend class sdr::properties::RectangleProperties;
-    friend class                SdrTextObj; // wg SetXPolyDirty bei GrowAdjust
+    // wg SetXPolyDirty bei GrowAdjust
+    friend class                SdrTextObj;
 
 protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
-    XPolygon*                   mpXPoly;
+    virtual ~SdrRectObj();
 
-protected:
-    // Liefert sal_True, wenn das Painten ein Polygon erfordert.
-    FASTBOOL PaintNeedsXPoly(long nEckRad) const;
-
-protected:
-    XPolygon ImpCalcXPoly(const Rectangle& rRect1, long nRad1) const;
-    void SetXPolyDirty();
-
-    // RecalcXPoly sollte ueberladen werden. Dabei muss dann eine XPolygon
-    // Instanz generiert (new) und an mpXPoly zugewiesen werden.
-    virtual void RecalcXPoly();
-    const XPolygon& GetXPoly() const;
-    virtual void           RestGeoData(const SdrObjGeoData& rGeo);
+    /// method to copy all data from given source
+    virtual void copyDataFromSdrObject(const SdrObject& rSource);
 
 public:
-    TYPEINFO();
-    // Der Eckenradius-Parameter fliegt irgendwann raus. Der Eckenradius
-    // ist dann (spaeter) ueber SfxItems einzustellen (SetAttributes()).
-    // Konstruktion eines Rechteck-Zeichenobjekts
+    /// create a copy, evtl. with a different target model (if given)
+    virtual SdrObject* CloneSdrObject(SdrModel* pTargetModel = 0) const;
 
-    SdrRectObj();
-    SdrRectObj(const Rectangle& rRect);
-
-    // Konstruktion eines Textrahmens
-    SdrRectObj(SdrObjKind eNewTextKind);
-    SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rRect);
-    // der sal_uInt16 eFormat nimmt Werte des enum EETextFormat entgegen
-    SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStream& rInput, const String& rBaseURL, sal_uInt16 eFormat);
-    virtual ~SdrRectObj();
+    SdrRectObj(
+        SdrModel& rSdrModel,
+        const basegfx::B2DHomMatrix& rTransform = basegfx::B2DHomMatrix(),
+        SdrObjKind eNewTextKind = OBJ_TEXT,
+        bool bIsTextFrame = false);
+    virtual bool IsClosedObj() const;
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual sal_uInt16 GetObjIdentifier() const;
-    virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const;
 
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
 
-    virtual void operator=(const SdrObject& rObj);
-    virtual void RecalcSnapRect();
-    virtual void NbcSetSnapRect(const Rectangle& rRect);
-    virtual void NbcSetLogicRect(const Rectangle& rRect);
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
 
-    virtual sal_uInt32 GetHdlCount() const;
-    virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
+    virtual void AddToHdlList(SdrHdlList& rHdlList) const;
 
     // special drag methods
     virtual bool hasSpecialDrag() const;
@@ -110,23 +85,12 @@ public:
     virtual String getSpecialDragComment(const SdrDragStat& rDrag) const;
 
     virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;
-    virtual Pointer GetCreatePointer() const;
+    virtual Pointer GetCreatePointer(const SdrView& rSdrView) const;
 
-    virtual void NbcMove(const Size& rSiz);
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-    virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs);
-    virtual void NbcMirror(const Point& rRef1, const Point& rRef2);
-    virtual void NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear);
-
-    virtual FASTBOOL DoMacro(const SdrObjMacroHitRec& rRec);
+    virtual bool DoMacro(const SdrObjMacroHitRec& rRec);
     virtual XubString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const;
 
-    virtual SdrGluePoint GetVertexGluePoint(sal_uInt16 nNum) const;
-    virtual SdrGluePoint GetCornerGluePoint(sal_uInt16 nNum) const;
-
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
-
-    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
+    virtual SdrObject* DoConvertToPolygonObject(bool bBezier, bool bAddText) const;
 };
 
 #endif //_SVDORECT_HXX

@@ -28,7 +28,6 @@
 
 #include <com/sun/star/uno/Sequence.h>
 
-#include <tools/rtti.hxx>
 #include <tools/ref.hxx>
 #include <svl/svarray.hxx>
 // --> OD #i117863#
@@ -179,8 +178,6 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
 
 public:
-    TYPEINFO();     // rtti
-
     SwSection(SectionType const eType, String const& rName,
                 SwSectionFmt & rFormat);
     virtual ~SwSection();
@@ -323,10 +320,9 @@ protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
 
 public:
-    TYPEINFO();     //Bereits in Basisklasse Client drin.
     ~SwSectionFmt();
 
-    //Vernichtet alle Frms in aDepend (Frms werden per PTR_CAST erkannt).
+    //Vernichtet alle Frms in aDepend (Frms werden per RTTI erkannt).
     virtual void DelFrms();
 
     //Erzeugt die Ansichten
@@ -390,7 +386,7 @@ inline SwSectionFmt* SwSectionFmt::GetParent() const
 {
     SwSectionFmt* pRet = 0;
     if( GetRegisteredIn() )
-        pRet = PTR_CAST( SwSectionFmt, GetRegisteredIn() );
+        pRet = const_cast< SwSectionFmt* >(dynamic_cast< const SwSectionFmt* >( GetRegisteredIn() ));
     return pRet;
 }
 

@@ -29,6 +29,7 @@
 #include <uno/environment.h>
 #include <cppuhelper/factory.hxx>
 #include <unotools/configmgr.hxx>
+#include <string.h>
 
 #include "splash.hxx"
 #include "firststart.hxx"

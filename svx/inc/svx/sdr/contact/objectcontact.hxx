@@ -27,13 +27,14 @@
 #include <svx/sdr/animation/objectanimator.hxx>
 #include "svx/svxdllapi.h"
 #include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <set>
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
 
 class SetOfByte;
 class Rectangle;
-class SdrPageView;
+class SdrView;
 class OutputDevice;
 
 namespace sdr { namespace contact {
@@ -57,6 +58,15 @@ namespace sdr
 {
     namespace contact
     {
+        // sort by ViewObjectContact memory address
+        struct VOCComparator
+        {
+            bool operator()(ViewObjectContact* pA, ViewObjectContact* pB) const;
+        };
+
+        // define std::set type for VOCs
+        typedef ::std::set< ViewObjectContact*, VOCComparator > ViewObjectContactSet;
+
         class SVX_DLLPUBLIC ObjectContact
         {
         private:
@@ -67,7 +77,7 @@ namespace sdr
             // All VOCs which are created using this OC, thus remembering this OC
             // as a reference. All those VOCs need to be deleted when the OC goes down.
             // Registering and de-registering is done in the VOC constructors/destructors.
-            std::vector< ViewObjectContact* >               maViewObjectContactVector;
+            ViewObjectContactSet                            maViewObjectContacts;
 
             // A new ViewObjectContact was created and shall be remembered.
             void AddViewObjectContact(ViewObjectContact& rVOContact);
@@ -91,15 +101,14 @@ namespace sdr
 
             // bitfield
             // flag for preview renderer
-            unsigned                                        mbIsPreviewRenderer : 1;
+            bool                                            mbIsPreviewRenderer : 1;
 
             // method to create a EventHandler. Needs to give a result.
             sdr::event::TimerEventHandler* CreateEventHandler();
 
         protected:
             // Interface to allow derivates to travel over the registered VOC's
-            sal_uInt32 getViewObjectContactCount() const { return maViewObjectContactVector.size(); }
-            ViewObjectContact* getViewObjectContact(sal_uInt32 a) const { return maViewObjectContactVector[a]; }
+            ViewObjectContactSet& getViewObjectContacts() { return maViewObjectContacts; }
 
             // interface to allow derivates to set PreviewRenderer flag
             void setPreviewRenderer(bool bNew) { mbIsPreviewRenderer = bNew; }
@@ -201,8 +210,8 @@ namespace sdr
             // get Primitive2DParameters for this view
             const drawinglayer::geometry::ViewInformation2D& getViewInformation2D() const { return maViewInformation2D; }
 
-            // access to SdrPageView. May return 0L like the default implementations do. Needs to be overloaded as needed.
-            virtual SdrPageView* TryToGetSdrPageView() const;
+            // access to SdrView. May return 0L like the default implementations do. Needs to be overloaded as needed.
+            virtual SdrView* TryToGetSdrView() const;
 
             // access to OutputDevice. May return 0L like the default implementations do. Needs to be overloaded as needed.
             virtual OutputDevice* TryToGetOutputDevice() const;

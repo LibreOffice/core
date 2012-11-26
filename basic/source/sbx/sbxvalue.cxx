@@ -38,8 +38,6 @@ using namespace rtl;
 #endif
 
 
-TYPEINIT1(SbxValue,SbxBase)
-
 /////////////////////////// SbxINT64 /////////////////////////////////////
 SbxINT64 &SbxINT64::operator -= ( const SbxINT64 &r )
 {
@@ -316,7 +314,7 @@ SbxValue& SbxValue::operator=( const SbxValue& r )
                 && (aData.eType == SbxSTRING) )
             {
                 SbxBase* pObj = r.GetObject();
-                SbxArray* pArr = PTR_CAST(SbxArray, pObj);
+                SbxArray* pArr = dynamic_cast< SbxArray* >( pObj);
                 if( pArr )
                 {
                     ::rtl::OUString aStr = ByteArrayToString( pArr );
@@ -358,7 +356,7 @@ SbxValue::~SbxValue()
         if( aData.pObj && aData.pObj != this )
         {
             HACK(nicht bei Parent-Prop - sonst CyclicRef)
-            SbxVariable *pThisVar = PTR_CAST(SbxVariable, this);
+            SbxVariable *pThisVar = dynamic_cast< SbxVariable* >( this);
             sal_Bool bParentProp = pThisVar && 5345 ==
             ( (sal_Int16) ( pThisVar->GetUserData() & 0xFFFF ) );
             if ( !bParentProp )
@@ -389,7 +387,7 @@ void SbxValue::Clear()
                 if( aData.pObj != this )
                 {
                     HACK(nicht bei Parent-Prop - sonst CyclicRef)
-                    SbxVariable *pThisVar = PTR_CAST(SbxVariable, this);
+                    SbxVariable *pThisVar = dynamic_cast< SbxVariable* >( this);
                     sal_Bool bParentProp = pThisVar && 5345 ==
                     ( (sal_Int16) ( pThisVar->GetUserData() & 0xFFFF ) );
                     if ( !bParentProp )
@@ -443,7 +441,7 @@ SbxValue* SbxValue::TheRealValue( sal_Bool bObjInObjError ) const
         if( t == SbxOBJECT )
         {
             // Der Block enthaelt ein Objekt oder eine Variable
-            SbxObject* pObj = PTR_CAST(SbxObject,p->aData.pObj);
+            SbxObject* pObj = dynamic_cast< SbxObject* >( p->aData.pObj);
             if( pObj )
             {
                 // Hat das Objekt eine Default-Property?
@@ -475,18 +473,18 @@ SbxValue* SbxValue::TheRealValue( sal_Bool bObjInObjError ) const
                 break;
             }
             // Haben wir ein Array?
-            SbxArray* pArray = PTR_CAST(SbxArray,p->aData.pObj);
+            SbxArray* pArray = dynamic_cast< SbxArray* >( p->aData.pObj);
             if( pArray )
             {
                 // Ggf. Parameter holen
                 SbxArray* pPar = NULL;
-                SbxVariable* pVar = PTR_CAST(SbxVariable,p);
+                SbxVariable* pVar = dynamic_cast< SbxVariable* >( p);
                 if( pVar )
                     pPar = pVar->GetParameters();
                 if( pPar )
                 {
                     // Haben wir ein dimensioniertes Array?
-                    SbxDimArray* pDimArray = PTR_CAST(SbxDimArray,p->aData.pObj);
+                    SbxDimArray* pDimArray = dynamic_cast< SbxDimArray* >( p->aData.pObj);
                     if( pDimArray )
                         p = pDimArray->Get( pPar );
                     else
@@ -495,7 +493,7 @@ SbxValue* SbxValue::TheRealValue( sal_Bool bObjInObjError ) const
                 }
             }
             // Sonst einen SbxValue annehmen
-            SbxValue* pVal = PTR_CAST(SbxValue,p->aData.pObj);
+            SbxValue* pVal = dynamic_cast< SbxValue* >( p->aData.pObj);
             if( pVal )
                 p = pVal;
             else
@@ -772,7 +770,7 @@ sal_Bool SbxValue::Put( const SbxValues& rVal )
                                 DBG_ERROR( "TheRealValue" );
                             }
                             HACK(nicht bei Parent-Prop - sonst CyclicRef)
-                            SbxVariable *pThisVar = PTR_CAST(SbxVariable, this);
+                            SbxVariable *pThisVar = dynamic_cast< SbxVariable* >( this);
                             sal_Bool bParentProp = pThisVar && 5345 ==
                                     ( (sal_Int16) ( pThisVar->GetUserData() & 0xFFFF ) );
                             if ( !bParentProp )
@@ -990,7 +988,7 @@ sal_Bool SbxValue::ImpIsNumeric( sal_Bool bOnlyIntntl ) const
         SetError( SbxERR_PROP_WRITEONLY ); return sal_False;
     }
     // Downcast pruefen!!!
-    if( this->ISA(SbxVariable) )
+    if( dynamic_cast< const SbxVariable* >(this) )
         ((SbxVariable*)this)->Broadcast( SBX_HINT_DATAWANTED );
     SbxDataType t = GetType();
     if( t == SbxSTRING )
@@ -1061,7 +1059,7 @@ sal_Bool SbxValue::SetType( SbxDataType t )
                     if( aData.pObj && aData.pObj != this )
                     {
                         HACK(nicht bei Parent-Prop - sonst CyclicRef)
-                        SbxVariable *pThisVar = PTR_CAST(SbxVariable, this);
+                        SbxVariable *pThisVar = dynamic_cast< SbxVariable* >( this);
                         sal_uInt16 nSlotId = pThisVar
                                     ? ( (sal_Int16) ( pThisVar->GetUserData() & 0xFFFF ) )
                                     : 0;
@@ -1807,7 +1805,7 @@ sal_Bool SbxValue::StoreData( SvStream& r ) const
             // sich selbst als Objektptr speichern geht nicht!
             if( aData.pObj )
             {
-                if( PTR_CAST(SbxValue,aData.pObj) != this )
+                if( dynamic_cast< SbxValue* >( aData.pObj) != this )
                 {
                     r << (sal_uInt8) 1;
                     return aData.pObj->Store( r );

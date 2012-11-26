@@ -33,42 +33,20 @@
 #include <vcl/menu.hxx>
 #endif
 #include <vcl/image.hxx>
-//#ifndef _SFXITEMPOOL_HXX
-//#include <svl/itempool.hxx>
-//#endif
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxsids.hrc>
-
 #include <svl/intitem.hxx>
-
 #include <svl/eitem.hxx>
-
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
 #include "svx/xmlsecctrl.hxx"
 #include <tools/urlobj.hxx>
 
 #define PAINT_OFFSET    5
-
-//#include <editeng/sizeitem.hxx>
-//#include <svx/dialmgr.hxx>
-//#include "svx/dlgutil.hxx"
-//#include "stbctrls.h"
-
-//#include <svx/dialogs.hrc>
-
-/*#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
-#include <unotools/localedatawrapper.hxx>
-#endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
-#include <comphelper/processfactory.hxx>
-#endif*/
-
-
 
 SFX_IMPL_STATUSBAR_CONTROL( XmlSecStatusBarControl, SfxUInt16Item );
 
@@ -109,7 +87,7 @@ void XmlSecStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState, cons
     {
         mpImpl->mnState = (sal_uInt16)SIGNATURESTATE_UNKNOWN;
     }
-    else if( pState->ISA( SfxUInt16Item ) )
+    else if( dynamic_cast< const SfxUInt16Item* >(pState) )
     {
 //      mpImpl->mbSigned = ( ( SfxUInt16Item* ) pState )->GetValue() == 1 /* SIGNED*/ ;
         mpImpl->mnState = ( ( SfxUInt16Item* ) pState )->GetValue();

@@ -44,8 +44,6 @@ class XMLReplacementImageContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLReplacementImageContext( SvXMLImport& rImport,
             sal_uInt16 nPrfx,
             const ::rtl::OUString& rLName,

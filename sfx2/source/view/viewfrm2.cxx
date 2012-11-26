@@ -159,9 +159,11 @@ String SfxViewFrame::UpdateTitle()
 
     void SwDocShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     {
-        if ( rHint.IsA(TYPE(SfxSimpleHint)) )
+        const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+        if ( pSfxSimpleHint )
         {
-            switch( ( (SfxSimpleHint&) rHint ).GetId() )
+            switch( pSfxSimpleHint->GetId() )
             {
                 case SFX_HINT_TITLECHANGED:
                     for ( SfxViewFrame *pTop = SfxViewFrame::GetFirst( this );
@@ -274,9 +276,9 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
     {
         case SID_SHOWPOPUPS :
         {
-            SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, SID_SHOWPOPUPS, sal_False);
+            SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, SID_SHOWPOPUPS );
             sal_Bool bShow = pShowItem ? pShowItem->GetValue() : sal_True;
-            SFX_REQUEST_ARG(rReq, pIdItem, SfxUInt16Item, SID_CONFIGITEMID, sal_False);
+            SFX_REQUEST_ARG(rReq, pIdItem, SfxUInt16Item, SID_CONFIGITEMID );
             sal_uInt16 nId = pIdItem ? pIdItem->GetValue() : 0;
 
             // ausfuehren
@@ -318,7 +320,7 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
 
         case SID_NEWDOCDIRECT :
         {
-            SFX_REQUEST_ARG( rReq, pFactoryItem, SfxStringItem, SID_NEWDOCDIRECT, sal_False);
+            SFX_REQUEST_ARG( rReq, pFactoryItem, SfxStringItem, SID_NEWDOCDIRECT );
             String aFactName;
             if ( pFactoryItem )
                 aFactName = pFactoryItem->GetValue();
@@ -337,7 +339,7 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
             aReq.AppendItem( SfxFrameItem( SID_DOCFRAME, &GetFrame() ) );
             aReq.AppendItem( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii( "_blank" ) ) );
             SFX_APP()->ExecuteSlot( aReq );
-            const SfxViewFrameItem* pItem = PTR_CAST( SfxViewFrameItem, aReq.GetReturnValue() );
+            const SfxViewFrameItem* pItem = dynamic_cast< const SfxViewFrameItem* >( aReq.GetReturnValue() );
             if ( pItem )
                 rReq.SetReturnValue( SfxFrameItem( 0, pItem->GetFrame() ) );
             break;

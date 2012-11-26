@@ -38,7 +38,7 @@
 #include "fmvwimp.hxx"
 #include "formtoolbars.hxx"
 #include "gridcols.hxx"
-#include "svx/svditer.hxx"
+#include <svx/svditer.hxx>
 #include "svx/dialmgr.hxx"
 #include "svx/dialogs.hrc"
 #include "svx/fmglob.hxx"
@@ -285,19 +285,18 @@ using namespace ::svx;
 namespace
 {
     //..........................................................................
-    void collectInterfacesFromMarkList( const SdrMarkList& _rMarkList, InterfaceBag& /* [out] */ _rInterfaces )
+    void collectInterfacesFromSdrObjectVector( const SdrObjectVector& _rSelection, InterfaceBag& /* [out] */ _rInterfaces )
     {
         _rInterfaces.clear();
 
-        sal_uInt32 nMarkCount = _rMarkList.GetMarkCount();
-        for ( sal_uInt32 i = 0; i < nMarkCount; ++i)
+        for ( sal_uInt32 i = 0; i < _rSelection.size(); ++i)
         {
-            SdrObject* pCurrent = _rMarkList.GetMark( i )->GetMarkedSdrObj();
+            SdrObject* pCurrent = _rSelection[i];
 
             SdrObjListIter* pGroupIterator = NULL;
-            if ( pCurrent->IsGroupObject() )
+            if ( pCurrent->getChildrenOfSdrObject() )
             {
-                pGroupIterator = new SdrObjListIter( *pCurrent->GetSubList() );
+                pGroupIterator = new SdrObjListIter( *pCurrent->getChildrenOfSdrObject() );
                 pCurrent = pGroupIterator->IsMore() ? pGroupIterator->Next() : NULL;
             }
 
@@ -566,42 +565,29 @@ sal_Bool FmXBoundFormFieldIterator::ShouldHandleElement(const Reference< XInterf
 }
 
 //------------------------------------------------------------------------------
-sal_Bool isControlList(const SdrMarkList& rMarkList)
+sal_Bool isControlList(const SdrObjectVector& _rSelection)
 {
     // enthaelt die liste nur Controls und mindestens ein control
-    sal_uInt32 nMarkCount = rMarkList.GetMarkCount();
-    sal_Bool  bControlList = nMarkCount != 0;
-
+    sal_Bool bControlList(0 != _rSelection.size());
     sal_Bool bHadAnyLeafs = sal_False;
 
-    for (sal_uInt32 i = 0; i < nMarkCount && bControlList; i++)
+    for (sal_uInt32 i = 0; i < _rSelection.size() && bControlList; i++)
     {
-        SdrObject *pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-        E3dObject* pAs3DObject = PTR_CAST(E3dObject, pObj);
-        // E3dObject's do not contain any 2D-objects (by definition)
-        // we need this extra check here : an E3dObject->IsGroupObject says "YES", but an SdrObjListIter working
-        // with an E3dObject doesn't give me any Nodes (E3dObject has a sub list, but no members in that list,
-        // cause there implementation differs from the one of "normal" SdrObject's. Unfortunally SdrObject::IsGroupObject
-        // doesn't check the element count of the sub list, which is simply a bug in IsGroupObject we can't fix at the moment).
-        // So at the end of this function bControlList would have the same value it was initialized with above : sal_True
-        // And this would be wrong :)
-        // 03.02.00 - 72529 - FS
-        if (!pAs3DObject)
+        SdrObject *pObj = _rSelection[i];
+
+        if (pObj->getChildrenOfSdrObject())
         {
-            if (pObj->IsGroupObject())
+            SdrObjListIter aIter(*pObj->getChildrenOfSdrObject());
+            while (aIter.IsMore() && bControlList)
             {
-                SdrObjListIter aIter(*pObj->GetSubList());
-                while (aIter.IsMore() && bControlList)
-                {
-                    bControlList = FmFormInventor == aIter.Next()->GetObjInventor();
-                    bHadAnyLeafs = sal_True;
-                }
-            }
-            else
-            {
+                bControlList = FmFormInventor == aIter.Next()->GetObjInventor();
                 bHadAnyLeafs = sal_True;
-                bControlList = FmFormInventor == pObj->GetObjInventor();
             }
+        }
+        else
+        {
+            bHadAnyLeafs = sal_True;
+            bControlList = FmFormInventor == pObj->GetObjInventor();
         }
     }
 
@@ -644,7 +630,6 @@ void SAL_CALL FmXFormShell_Base_Disambiguation::disposing()
 //========================================================================
 // class FmXFormShell
 //========================================================================
-DBG_NAME(FmXFormShell);
 //------------------------------------------------------------------------
 FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
         :FmXFormShell_BASE(m_aMutex)
@@ -669,7 +654,6 @@ FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
         ,m_bPreparedClose( sal_False )
         ,m_bFirstActivation( sal_True )
 {
-    DBG_CTOR(FmXFormShell,NULL);
     m_aMarkTimer.SetTimeout(100);
     m_aMarkTimer.SetTimeoutHdl(LINK(this,FmXFormShell,OnTimeOut));
 
@@ -694,7 +678,6 @@ FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
 FmXFormShell::~FmXFormShell()
 {
     delete m_pTextShell;
-    DBG_DTOR(FmXFormShell,NULL);
 }
 
 //------------------------------------------------------------------
@@ -1096,7 +1079,7 @@ void FmXFormShell::ForceUpdateSelection(sal_Bool bAllowInvalidation)
         if (!bAllowInvalidation)
             LockSlotInvalidation(sal_True);
 
-        SetSelection(m_pShell->GetFormView()->GetMarkedObjectList());
+        SetSelection(m_pShell->GetFormView()->getSelectedSdrObjectVectorFromSdrMarkView());
 
         if (!bAllowInvalidation)
             LockSlotInvalidation(sal_False);
@@ -1669,7 +1652,7 @@ void FmXFormShell::ExecuteSearch()
     // GridControls wieder restaurieren
     LoopGrids(GA_ENABLE_SYNC | GA_DISABLE_ROCTRLR);
 
-    m_pShell->GetFormView()->UnMarkAll(m_pShell->GetFormView()->GetSdrPageView());
+    m_pShell->GetFormView()->UnmarkAllObj();
         // da ich in OnFoundData (fals ich dort war) Controls markiert habe
 }
 
@@ -2028,12 +2011,14 @@ void FmXFormShell::getCurrentSelection( InterfaceBag& /* [out] */ _rSelection ) 
 }
 
 //------------------------------------------------------------------------------
-bool FmXFormShell::setCurrentSelectionFromMark( const SdrMarkList& _rMarkList )
+bool FmXFormShell::setCurrentSelectionFromSdrObjectVector( const SdrObjectVector& _rSelection )
 {
     m_aLastKnownMarkedControls.clear();
 
-    if ( ( _rMarkList.GetMarkCount() > 0 ) && isControlList( _rMarkList ) )
-        collectInterfacesFromMarkList( _rMarkList, m_aLastKnownMarkedControls );
+    if ( ( _rSelection.size() > 0 ) && isControlList( _rSelection ) )
+    {
+        collectInterfacesFromSdrObjectVector( _rSelection, m_aLastKnownMarkedControls );
+    }
 
     return setCurrentSelection( m_aLastKnownMarkedControls );
 }
@@ -2316,8 +2301,8 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
     SdrObject* pObject = m_arrSearchedControls.GetObject(pfriWhere->nFieldPos);
     DBG_ASSERT(pObject != NULL, "FmXFormShell::OnFoundData : unerwartet : ungueltiges VclControl-Interface");
 
-    m_pShell->GetFormView()->UnMarkAll(m_pShell->GetFormView()->GetSdrPageView());
-    m_pShell->GetFormView()->MarkObj(pObject, m_pShell->GetFormView()->GetSdrPageView());
+    m_pShell->GetFormView()->UnmarkAllObj();
+    m_pShell->GetFormView()->MarkObj(*pObject);
 
     FmFormObj* pFormObject = FmFormObj::GetFormObject( pObject );
     Reference< XControlModel > xControlModel( pFormObject ? pFormObject->GetUnoControlModel() : Reference< XControlModel >() );
@@ -2393,7 +2378,7 @@ IMPL_LINK(FmXFormShell, OnCanceledNotFound, FmFoundRecordInformation*, pfriWhere
     }
 
 
-    m_pShell->GetFormView()->UnMarkAll(m_pShell->GetFormView()->GetSdrPageView());
+    m_pShell->GetFormView()->UnmarkAllObj();
     return 0L;
 }
 
@@ -2762,7 +2747,7 @@ IMPL_LINK(FmXFormShell, OnTimeOut, void*, /*EMPTYTAG*/)
         return 0;
 
     if (m_pShell->IsDesignMode() && m_pShell->GetFormView())
-        SetSelection(m_pShell->GetFormView()->GetMarkedObjectList());
+        SetSelection(m_pShell->GetFormView()->getSelectedSdrObjectVectorFromSdrMarkView());
 
     return 0;
 }
@@ -2778,19 +2763,19 @@ void FmXFormShell::SetSelectionDelayed()
 }
 
 //------------------------------------------------------------------------
-void FmXFormShell::SetSelection(const SdrMarkList& rMarkList)
+void FmXFormShell::SetSelection(const SdrObjectVector& _rSelection)
 {
     if ( impl_checkDisposed() )
         return;
 
-    DetermineSelection(rMarkList);
+    DetermineSelection(_rSelection);
     m_pShell->NotifyMarkListChanged(m_pShell->GetFormView());
 }
 
 //------------------------------------------------------------------------
-void FmXFormShell::DetermineSelection(const SdrMarkList& rMarkList)
+void FmXFormShell::DetermineSelection(const SdrObjectVector& _rSelection)
 {
-    if ( setCurrentSelectionFromMark( rMarkList ) && IsPropBrwOpen() )
+    if ( setCurrentSelectionFromSdrObjectVector( _rSelection ) && IsPropBrwOpen() )
         ShowSelectionProperties( sal_True );
 }
 
@@ -2883,7 +2868,7 @@ void FmXFormShell::SetDesignMode(sal_Bool bDesign)
 
     if (bDesign)
     {
-        SdrMarkList aList;
+        SdrObjectVector aList;
         {
             // during changing the mark list, don't track the selected objects in the property browser
             SuspendPropertyTracking aSuspend( *this );
@@ -2892,7 +2877,7 @@ void FmXFormShell::SetDesignMode(sal_Bool bDesign)
         }
 
         // synchronize with the restored mark list
-        if ( aList.GetMarkCount() )
+        if ( aList.size() )
             SetSelection( aList );
     }
     else
@@ -3811,7 +3796,7 @@ void FmXFormShell::viewActivated( FmFormView& _rCurrentView, sal_Bool _bSyncActi
         // first-time initializations for the views
         if ( !_rCurrentView.GetImpl()->hasEverBeenActivated( ) )
         {
-            _rCurrentView.GetImpl()->onFirstViewActivation( PTR_CAST( FmFormModel, _rCurrentView.GetModel() ) );
+            _rCurrentView.GetImpl()->onFirstViewActivation( dynamic_cast< FmFormModel* >( &_rCurrentView.getSdrModelFromSdrView() ) );
             _rCurrentView.GetImpl()->setHasBeenActivated( );
         }
 
@@ -3996,7 +3981,7 @@ void FmXFormShell::loadForms( FmFormPage* _pPage, const sal_uInt16 _nBehaviour /
     {
         // lock the undo env so the forms can change non-transient properties while loading
         // (without this my doc's modified flag would be set)
-        FmFormModel* pModel = PTR_CAST( FmFormModel, _pPage->GetModel() );
+        FmFormModel* pModel = dynamic_cast< FmFormModel* >( &_pPage->getSdrModelFromSdrPage() );
         DBG_ASSERT( pModel, "FmXFormShell::loadForms: invalid model!" );
         if ( pModel )
             pModel->GetUndoEnv().Lock();
@@ -4092,9 +4077,9 @@ void FmXFormShell::handleShowPropertiesRequest()
 void FmXFormShell::handleMouseButtonDown( const SdrViewEvent& _rViewEvent )
 {
     // catch simple double clicks
-    if ( ( _rViewEvent.nMouseClicks == 2 ) && ( _rViewEvent.nMouseCode == MOUSE_LEFT ) )
+    if ( ( 2 == _rViewEvent.mnMouseClicks ) && ( MOUSE_LEFT == _rViewEvent.mnMouseCode  ) )
     {
-        if ( _rViewEvent.eHit == SDRHIT_MARKEDOBJECT )
+        if ( SDRHIT_MARKEDOBJECT == _rViewEvent.meHit )
         {
             if ( onlyControlsAreMarked() )
                 ShowSelectionProperties( sal_True );

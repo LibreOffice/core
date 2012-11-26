@@ -76,8 +76,8 @@ Shape::Shape( const sal_Char* pServiceName )
 , mnSubTypeIndex( -1 )
 , meFrameType( FRAMETYPE_GENERIC )
 , mnRotation( 0 )
-, mbFlipH( false )
-, mbFlipV( false )
+//, mbFlipH( false ) //  TTTT: MirrorX/Y removed
+//, mbFlipV( false )
 , mbHidden( false )
 {
     if ( pServiceName )
@@ -196,8 +196,8 @@ void Shape::applyShapeReference( const Shape& rReferencedShape )
     maSize = rReferencedShape.maSize;
     maPosition = rReferencedShape.maPosition;
     mnRotation = rReferencedShape.mnRotation;
-    mbFlipH = rReferencedShape.mbFlipH;
-    mbFlipV = rReferencedShape.mbFlipV;
+    //mbFlipH = rReferencedShape.mbFlipH; //  TTTT: MirrorX/Y removed
+    //mbFlipV = rReferencedShape.mbFlipV;
     mbHidden = rReferencedShape.mbHidden;
 }
 
@@ -284,20 +284,21 @@ Reference< XShape > Shape::createAndInsert(
             aSize.Height ? aSize.Height / 360.0 : 1.0 );
     }
 
-    if( mbFlipH || mbFlipV || mnRotation != 0)
+    if( /*mbFlipH || mbFlipV || //  TTTT: MirrorX/Y removed*/ mnRotation != 0)
     {
         // calculate object's center
         basegfx::B2DPoint aCenter(0.5, 0.5);
         aCenter *= aTransformation;
 
         // center object at origin
-        aTransformation.translate( -aCenter.getX(), -aCenter.getY() );
+        aTransformation.translate( -aCenter );
 
-        if( !bIsCustomShape && ( mbFlipH || mbFlipV ) )
-        {
-            // mirror around object's center
-            aTransformation.scale( mbFlipH ? -1.0 : 1.0, mbFlipV ? -1.0 : 1.0 );
-        }
+        //  TTTT: MirrorX/Y removed
+        //if( !bIsCustomShape && ( mbFlipH || mbFlipV ) )
+        //{
+        //    // mirror around object's center
+        //    aTransformation.scale( mbFlipH ? -1.0 : 1.0, mbFlipV ? -1.0 : 1.0 );
+        //}
 
         if( mnRotation != 0 )
         {
@@ -306,7 +307,7 @@ Reference< XShape > Shape::createAndInsert(
         }
 
         // move object back from center
-        aTransformation.translate( aCenter.getX(), aCenter.getY() );
+        aTransformation.translate( aCenter );
     }
 
     if( aPosition.X != 0 || aPosition.Y != 0)
@@ -471,10 +472,11 @@ Reference< XShape > Shape::createAndInsert(
 
         if( bIsCustomShape )
         {
-            if ( mbFlipH )
-                mpCustomShapePropertiesPtr->setMirroredX( sal_True );
-            if ( mbFlipV )
-                mpCustomShapePropertiesPtr->setMirroredY( sal_True );
+            //  TTTT: MirrorX/Y removed
+            //if ( mbFlipH )
+            //  mpCustomShapePropertiesPtr->setMirroredX( sal_True );
+            //if ( mbFlipV )
+            //  mpCustomShapePropertiesPtr->setMirroredY( sal_True );
 
             // #119920# Handle missing text rotation
             if(getTextBody())

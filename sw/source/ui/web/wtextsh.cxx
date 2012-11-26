@@ -70,8 +70,6 @@ SFX_IMPL_INTERFACE(SwWebTextShell, SwBaseShell, SW_RES(STR_SHELLNAME_WEBTEXT))
     SFX_CHILDWINDOW_REGISTRATION(FN_INSERT_FIELD);
 }
 
-TYPEINIT1(SwWebTextShell, SwTextShell)
-
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/

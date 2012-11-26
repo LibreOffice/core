@@ -48,6 +48,7 @@
 #include <docsh.hxx>
 #endif
 #include <doc.hxx>
+#include <svx/fmmodel.hxx>
 
 using namespace ::com::sun::star;
 

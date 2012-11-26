@@ -71,9 +71,8 @@ class EDITENG_DLLPUBLIC SvxBrushItem : public SfxPoolItem
                   sal_uInt16 nVersion, sal_uInt16 nWhich  );
 
 public:
-    TYPEINFO();
-
-    SvxBrushItem( sal_uInt16 nWhich );
+    POOLITEM_FACTORY()
+    SvxBrushItem( sal_uInt16 nWhich = 0);
     SvxBrushItem( const Color& rColor, sal_uInt16 nWhich  );
 
     SvxBrushItem( const Graphic& rGraphic,

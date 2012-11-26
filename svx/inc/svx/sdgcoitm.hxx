@@ -36,8 +36,6 @@ class SVX_DLLPUBLIC SdrGrafRedItem : public SdrSignedPercentItem
 {
 public:
 
-                            TYPEINFO();
-
                             SdrGrafRedItem( short nRedPercent = 0 ) : SdrSignedPercentItem( SDRATTR_GRAFRED, nRedPercent ) {}
                             SdrGrafRedItem( SvStream& rIn ) : SdrSignedPercentItem( SDRATTR_GRAFRED, rIn ) {}
 
@@ -53,8 +51,6 @@ class SVX_DLLPUBLIC SdrGrafGreenItem : public SdrSignedPercentItem
 {
 public:
 
-                            TYPEINFO();
-
                             SdrGrafGreenItem( short nGreenPercent = 0 ) : SdrSignedPercentItem( SDRATTR_GRAFGREEN, nGreenPercent ) {}
                             SdrGrafGreenItem( SvStream& rIn ) : SdrSignedPercentItem( SDRATTR_GRAFGREEN, rIn ) {}
 
@@ -69,8 +65,6 @@ public:
 class SVX_DLLPUBLIC SdrGrafBlueItem : public SdrSignedPercentItem
 {
 public:
-
-                            TYPEINFO();
 
                             SdrGrafBlueItem( short nBluePercent = 0 ) : SdrSignedPercentItem( SDRATTR_GRAFBLUE, nBluePercent ) {}
                             SdrGrafBlueItem( SvStream& rIn ) : SdrSignedPercentItem( SDRATTR_GRAFBLUE, rIn ) {}

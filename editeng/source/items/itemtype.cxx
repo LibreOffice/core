@@ -151,7 +151,7 @@ XubString GetColorString( const Color& rCol )
 {
     XubString sStr;
 
-    FASTBOOL bFound = sal_False;
+    bool bFound = false;
     ColorData nColData =
         RGB_COLORDATA( rCol.GetRed(), rCol.GetGreen(), rCol.GetBlue() );
     sal_uInt16 nColor = 0, nColCount = 16;
@@ -165,7 +165,7 @@ XubString GetColorString( const Color& rCol )
     while ( !bFound && nColor < nColCount )
     {
         if ( aColAry[nColor] == nColData )
-            bFound = sal_True;
+            bFound = true;
         else
             nColor++;
     }

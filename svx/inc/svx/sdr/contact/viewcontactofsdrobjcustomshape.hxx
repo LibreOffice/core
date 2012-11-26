@@ -47,7 +47,10 @@ namespace sdr
             }
 
             // #i101684# internal tooling
-            basegfx::B2DRange getCorrectedTextBoundRect() const;
+            basegfx::B2DRange getCorrectedTextBoundRect(
+                const basegfx::B2DRange& rObjectRange,
+                double fRotate,
+                double fShearX) const;
 
         public:
             // basic constructor, used from SdrObject.

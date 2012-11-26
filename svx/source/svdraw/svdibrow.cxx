@@ -32,7 +32,8 @@
 #define _STDLIB_H
 #endif
 
-#include "svx/svditext.hxx"
+#include <editeng/editdata.hxx>
+#include <svx/svditext.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/editdata.hxx>
 #include <svx/svdpool.hxx>
@@ -50,17 +51,14 @@
 #include <svx/xflbtoxy.hxx>
 #include <svx/xftshit.hxx>
 #include <editeng/colritem.hxx>
-
-
+#include <svx/xcolit.hxx>
 #include "editeng/fontitem.hxx"
 #include <editeng/fhgtitem.hxx>
-
 #include <editeng/charscaleitem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/flagitem.hxx>
 #include <svl/ptitem.hxx>
 #include <svl/rectitem.hxx>
-
 #include <svl/rngitem.hxx>
 #include <svx/sdrpaintwindow.hxx>
 
@@ -89,7 +87,7 @@ public:
     SfxItemState                eState;
     sal_uInt16                      nWhichId;
 
-    TypeId                      pType;
+    const std::type_info*       pType;
     ItemType                    eItemType;
 
     sal_Int32                       nVal;
@@ -104,7 +102,7 @@ public:
     ImpItemListRow()
     :   eState(SFX_ITEM_UNKNOWN),
         nWhichId(0),
-        pType(NULL),
+        pType(0),
         eItemType(ITEM_DONTKNOW),
         nVal(0),
         nMin(0),
@@ -411,7 +409,7 @@ void __EXPORT _SdrItemBrowserControl::DoubleClick(const BrowserMouseEvent&)
 void __EXPORT _SdrItemBrowserControl::KeyInput(const KeyEvent& rKEvt)
 {
     sal_uInt16 nKeyCode=rKEvt.GetKeyCode().GetCode()+rKEvt.GetKeyCode().GetModifier();
-    FASTBOOL bAusgewertet=sal_False;
+    bool bAusgewertet=sal_False;
     sal_uIntPtr nPos=GetCurrentPos();
     if (nPos!=CONTAINER_ENTRY_NOTFOUND) {
         if (nKeyCode==KEY_RETURN) {
@@ -479,7 +477,7 @@ void _SdrItemBrowserControl::ImpSaveWhich()
 void _SdrItemBrowserControl::ImpRestoreWhich()
 {
     if (nLastWhich!=0) {
-        FASTBOOL bFnd=sal_False;
+        bool bFnd=sal_False;
         sal_uInt16 nBestMinWh=0,nBestMaxWh=0xFFFF;       // not implemented yet
         sal_uIntPtr nBestMinPos=0,nBestMaxPos=0xFFFFFFFF;  // not implemented yet
         sal_uIntPtr nAnz=aList.Count();
@@ -504,10 +502,10 @@ void _SdrItemBrowserControl::ImpRestoreWhich()
     }
 }
 
-FASTBOOL _SdrItemBrowserControl::BegChangeEntry(sal_uIntPtr nPos)
+bool _SdrItemBrowserControl::BegChangeEntry(sal_uIntPtr nPos)
 {
     BrkChangeEntry();
-    FASTBOOL bRet=sal_False;
+    bool bRet=sal_False;
     ImpItemListRow* pEntry=ImpGetEntry(nPos);
     if (pEntry!=NULL && !pEntry->bComment) {
         SetMode(MYBROWSEMODE & ~BROWSER_KEEPHIGHLIGHT);
@@ -543,9 +541,9 @@ FASTBOOL _SdrItemBrowserControl::BegChangeEntry(sal_uIntPtr nPos)
     return bRet;
 }
 
-FASTBOOL _SdrItemBrowserControl::EndChangeEntry()
+bool _SdrItemBrowserControl::EndChangeEntry()
 {
-    FASTBOOL bRet=sal_False;
+    bool bRet=sal_False;
     if (pEditControl!=NULL) {
         aEntryChangedHdl.Call(this);
         delete pEditControl;
@@ -580,9 +578,9 @@ void _SdrItemBrowserControl::ImpSetEntry(const ImpItemListRow& rEntry, sal_uIntP
         aList.Insert(new ImpItemListRow(rEntry),CONTAINER_APPEND);
         RowInserted(nEntryNum);
     } else if (*pAktEntry!=rEntry) {
-        FASTBOOL bStateDiff=rEntry.eState!=pAktEntry->eState;
-        FASTBOOL bValueDiff=!rEntry.aValue.Equals(pAktEntry->aValue);
-        FASTBOOL bAllDiff=sal_True;
+        bool bStateDiff=rEntry.eState!=pAktEntry->eState;
+        bool bValueDiff=!rEntry.aValue.Equals(pAktEntry->aValue);
+        bool bAllDiff=sal_True;
         if (bStateDiff || bValueDiff) {
             // Checken, ob nur State und/oder Value geaendert
             ImpItemListRow aTest(rEntry);
@@ -600,7 +598,7 @@ void _SdrItemBrowserControl::ImpSetEntry(const ImpItemListRow& rEntry, sal_uIntP
     }
 }
 
-FASTBOOL ImpGetItem(const SfxItemSet& rSet, sal_uInt16 nWhich, const SfxPoolItem*& rpItem)
+bool ImpGetItem(const SfxItemSet& rSet, sal_uInt16 nWhich, const SfxPoolItem*& rpItem)
 {
     SfxItemState eState=rSet.GetItemState(nWhich,sal_True,&rpItem);
     if (eState==SFX_ITEM_DEFAULT) {
@@ -609,12 +607,12 @@ FASTBOOL ImpGetItem(const SfxItemSet& rSet, sal_uInt16 nWhich, const SfxPoolItem
     return (eState==SFX_ITEM_DEFAULT || eState==SFX_ITEM_SET) && rpItem!=NULL;
 }
 
-FASTBOOL IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rIndent)
+bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rIndent)
 {
     rIndent=0;
     if (pSet==NULL) return sal_False;
     const SfxPoolItem* pItem=NULL;
-    FASTBOOL bRet=sal_False;
+    bool bRet=sal_False;
     switch (nWhich) {
         case XATTR_LINEDASH         :
         case XATTR_LINEWIDTH        :
@@ -683,10 +681,10 @@ FASTBOOL IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16
             if (nWhich==XATTR_FILLBITMAP || nWhich==XATTR_FILLBMP_TILE) {
                 return sal_False; // immer anwaehlbar
             }
-            FASTBOOL bTileTRUE=sal_False;
-            FASTBOOL bTileFALSE=sal_False;
-            FASTBOOL bStretchTRUE=sal_False;
-            FASTBOOL bStretchFALSE=sal_False;
+            bool bTileTRUE=sal_False;
+            bool bTileFALSE=sal_False;
+            bool bStretchTRUE=sal_False;
+            bool bStretchFALSE=sal_False;
             if (ImpGetItem(*pSet,XATTR_FILLBMP_TILE,pItem)) {
                 bTileTRUE=((const XFillBmpTileItem*)pItem)->GetValue();
                 bTileFALSE=!bTileTRUE;
@@ -713,7 +711,7 @@ FASTBOOL IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16
             if (nWhich==XATTR_FILLBMP_TILEOFFSETX || nWhich==XATTR_FILLBMP_TILEOFFSETY) {
                 if (bTileFALSE) return sal_True;
                 sal_uInt16 nX=0,nY=0;
-                FASTBOOL bX=sal_False,bY=sal_False;
+                bool bX=sal_False,bY=sal_False;
                 if (ImpGetItem(*pSet,XATTR_FILLBMP_TILEOFFSETX,pItem)) {
                     nX=((const XFillBmpTileOffsetXItem*)pItem)->GetValue();
                     bX=sal_True;
@@ -773,32 +771,32 @@ FASTBOOL IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16
         case SDRATTR_SHADOWPERSP       : {
             rIndent=1;
             if (ImpGetItem(*pSet,SDRATTR_SHADOW,pItem)) {
-                FASTBOOL bShadow=((const SdrShadowItem*)pItem)->GetValue();
-                if (!bShadow) return sal_True;
+                bool bShadow=((const SdrOnOffItem*)pItem)->GetValue();
+                if (!bShadow) return true;
             }
         } break;
 
         case SDRATTR_CAPTIONANGLE: {
             rIndent=1;
             if (ImpGetItem(*pSet,SDRATTR_CAPTIONFIXEDANGLE,pItem)) {
-                FASTBOOL bFixed=((const SdrCaptionFixedAngleItem*)pItem)->GetValue();
-                if (!bFixed) return sal_True;
+                bool bFixed=((const SdrOnOffItem*)pItem)->GetValue();
+                if (!bFixed) return true;
             }
         } break;
         case SDRATTR_CAPTIONESCREL:
         case SDRATTR_CAPTIONESCABS: {
             rIndent=1;
             if (ImpGetItem(*pSet,SDRATTR_CAPTIONESCISREL,pItem)) {
-                FASTBOOL bRel=((const SdrCaptionEscIsRelItem*)pItem)->GetValue();
-                if (bRel && nWhich==SDRATTR_CAPTIONESCABS) return sal_True;
-                if (!bRel && nWhich==SDRATTR_CAPTIONESCREL) return sal_True;
+                bool bRel=((const SdrYesNoItem*)pItem)->GetValue();
+                if (bRel && nWhich==SDRATTR_CAPTIONESCABS) return true;
+                if (!bRel && nWhich==SDRATTR_CAPTIONESCREL) return true;
             }
         } break;
         case SDRATTR_CAPTIONLINELEN: {
             rIndent=1;
             if (ImpGetItem(*pSet,SDRATTR_CAPTIONFITLINELEN,pItem)) {
-                FASTBOOL bFit=((const SdrCaptionFitLineLenItem*)pItem)->GetValue();
-                if (bFit) return sal_True;
+                bool bFit=((const SdrYesNoItem*)pItem)->GetValue();
+                if (bFit) return true;
             }
         } break;
 
@@ -806,16 +804,16 @@ FASTBOOL IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16
         case SDRATTR_TEXT_MAXFRAMEHEIGHT: {
             rIndent=1;
             if (ImpGetItem(*pSet,SDRATTR_TEXT_AUTOGROWHEIGHT,pItem)) {
-                FASTBOOL bAutoGrow=((const SdrTextAutoGrowHeightItem*)pItem)->GetValue();
-                if (!bAutoGrow) return sal_True;
+                bool bAutoGrow=((const SdrOnOffItem*)pItem)->GetValue();
+                if (!bAutoGrow) return true;
             }
         } break;
         case SDRATTR_TEXT_MINFRAMEWIDTH:
         case SDRATTR_TEXT_MAXFRAMEWIDTH: {
             rIndent=1;
             if (ImpGetItem(*pSet,SDRATTR_TEXT_AUTOGROWWIDTH,pItem)) {
-                FASTBOOL bAutoGrow=((const SdrTextAutoGrowWidthItem*)pItem)->GetValue();
-                if (!bAutoGrow) return sal_True;
+                bool bAutoGrow=((const SdrOnOffItem*)pItem)->GetValue();
+                if (!bAutoGrow) return true;
             }
         } break;
         case SDRATTR_TEXT_VERTADJUST:
@@ -854,22 +852,14 @@ FASTBOOL IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16
                 if (eKind!=SDREDGE_ORTHOLINES && eKind!=SDREDGE_BEZIER) return sal_True;
             }
             if (ImpGetItem(*pSet,SDRATTR_EDGELINEDELTAANZ,pItem)) {
-                sal_uInt16 nAnz=((const SdrEdgeLineDeltaAnzItem*)pItem)->GetValue();
-                if (nAnz==0) return sal_True;
-                if (nAnz==1 && nWhich>SDRATTR_EDGELINE1DELTA) return sal_True;
-                if (nAnz==2 && nWhich>SDRATTR_EDGELINE2DELTA) return sal_True;
-                if (nAnz==3 && nWhich>SDRATTR_EDGELINE3DELTA) return sal_True;
+                sal_uInt16 nAnz=((const SfxUInt16Item*)pItem)->GetValue();
+                if (nAnz==0) return true;
+                if (nAnz==1 && nWhich>SDRATTR_EDGELINE1DELTA) return true;
+                if (nAnz==2 && nWhich>SDRATTR_EDGELINE2DELTA) return true;
+                if (nAnz==3 && nWhich>SDRATTR_EDGELINE3DELTA) return true;
             }
         } break;
 
-        case SDRATTR_CIRCSTARTANGLE:
-        case SDRATTR_CIRCENDANGLE  : {
-            rIndent=1;
-            if (ImpGetItem(*pSet,SDRATTR_CIRCKIND,pItem)) {
-                SdrCircKind eKind=((const SdrCircKindItem*)pItem)->GetValue();
-                if (eKind==SDRCIRC_FULL) return sal_True;
-            }
-        } break;
     } // switch
     return bRet;
 }
@@ -948,7 +938,7 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
             if (eState!=SFX_ITEM_DISABLED) {
                 const SfxPoolItem& rItem=pSet->Get(nWhich);
                 sal_uInt16 nIndent=0;
-                if (!HAS_BASE(SfxVoidItem,&rItem) && !HAS_BASE(SfxSetItem,&rItem) && (!IsItemIneffective(nWhich,pSet,nIndent) || bDontHideIneffectiveItems)) {
+                if (!dynamic_cast< const SfxVoidItem* >(&rItem) && !dynamic_cast< const SfxSetItem* >(&rItem) && (!IsItemIneffective(nWhich,pSet,nIndent) || bDontHideIneffectiveItems)) {
                     XubString aCommentStr;
 
                     INSERTCOMMENT(XATTR_LINE_FIRST,XATTR_LINE_LAST,String("L I N I E", aTextEncoding));
@@ -959,7 +949,6 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
                     INSERTCOMMENT(SDRATTR_MISC_FIRST,SDRATTR_MISC_LAST,String("V E R S C H I E D E N E S", aTextEncoding));
                     INSERTCOMMENT(SDRATTR_EDGE_FIRST,SDRATTR_EDGE_LAST,String("V E R B I N D E R", aTextEncoding));
                     INSERTCOMMENT(SDRATTR_MEASURE_FIRST,SDRATTR_MEASURE_LAST,String("B E M A S S U N G", aTextEncoding));
-                    INSERTCOMMENT(SDRATTR_CIRC_FIRST,SDRATTR_CIRC_LAST,String("K R E I S", aTextEncoding));
                     INSERTCOMMENT(SDRATTR_NOTPERSIST_FIRST,SDRATTR_NOTPERSIST_LAST,String("N O T P E R S I S T", aTextEncoding));
                     INSERTCOMMENT(SDRATTR_MOVEX,SDRATTR_VERTSHEARONE,String("Transformationen auf alle Objekte einzeln", aTextEncoding));
                     INSERTCOMMENT(SDRATTR_RESIZEXALL,SDRATTR_VERTSHEARALL,String("Transformationen auf alle Objekte gemeinsam", aTextEncoding));
@@ -990,29 +979,29 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
                     aEntry.eState=eState;
                     aEntry.nWhichId=nWhich;
                     if (!IsInvalidItem(&rItem)) {
-                        aEntry.pType=rItem.Type();
+                        aEntry.pType = &typeid(rItem);
                         aEntry.nMax=0x7FFFFFFF;
                         aEntry.nMin=-aEntry.nMax;
                         aEntry.nVal=-4711;
-                        if      (HAS_BASE(SfxByteItem     ,&rItem)) aEntry.eItemType=ITEM_BYTE;
-                        else if (HAS_BASE(SfxInt16Item    ,&rItem)) aEntry.eItemType=ITEM_INT16;
-                        else if (HAS_BASE(SfxUInt16Item   ,&rItem)) aEntry.eItemType=ITEM_UINT16;
-                        else if (HAS_BASE(SfxInt32Item    ,&rItem)) aEntry.eItemType=ITEM_INT32;
-                        else if (HAS_BASE(SfxUInt32Item   ,&rItem)) aEntry.eItemType=ITEM_UINT32;
-                        else if (HAS_BASE(SfxEnumItemInterface,&rItem)) aEntry.eItemType=ITEM_ENUM;
-                        else if (HAS_BASE(SfxBoolItem     ,&rItem)) aEntry.eItemType=ITEM_BOOL;
-                        else if (HAS_BASE(SfxFlagItem     ,&rItem)) aEntry.eItemType=ITEM_FLAG;
-                        else if (HAS_BASE(XColorItem      ,&rItem)) aEntry.eItemType=ITEM_XCOLOR;
-                        else if (HAS_BASE(SfxStringItem   ,&rItem)) aEntry.eItemType=ITEM_STRING;
-                        else if (HAS_BASE(SfxPointItem    ,&rItem)) aEntry.eItemType=ITEM_POINT;
-                        else if (HAS_BASE(SfxRectangleItem,&rItem)) aEntry.eItemType=ITEM_RECT;
-                        else if (HAS_BASE(SfxRangeItem    ,&rItem)) aEntry.eItemType=ITEM_RANGE;
-                        else if (HAS_BASE(SdrFractionItem ,&rItem)) aEntry.eItemType=ITEM_FRACTION;
-                        else if (HAS_BASE(SvxColorItem    ,&rItem)) aEntry.eItemType=ITEM_COLOR;
-                        else if (HAS_BASE(SvxFontItem     ,&rItem)) aEntry.eItemType=ITEM_FONT;
-                        else if (HAS_BASE(SvxFontHeightItem,&rItem))aEntry.eItemType=ITEM_FONTHEIGHT;
-                        else if (HAS_BASE(SvxCharScaleWidthItem,&rItem)) aEntry.eItemType=ITEM_FONTWIDTH;
-                        else if (HAS_BASE(SvxFieldItem    ,&rItem)) aEntry.eItemType=ITEM_FIELD;
+                        if      (dynamic_cast< const SfxByteItem* >(&rItem)) aEntry.eItemType=ITEM_BYTE;
+                        else if (dynamic_cast< const SfxInt16Item* >(&rItem)) aEntry.eItemType=ITEM_INT16;
+                        else if (dynamic_cast< const SfxUInt16Item* >(&rItem)) aEntry.eItemType=ITEM_UINT16;
+                        else if (dynamic_cast< const SfxInt32Item* >(&rItem)) aEntry.eItemType=ITEM_INT32;
+                        else if (dynamic_cast< const SfxUInt32Item* >(&rItem)) aEntry.eItemType=ITEM_UINT32;
+                        else if (dynamic_cast< const SfxEnumItemInterface* >(&rItem)) aEntry.eItemType=ITEM_ENUM;
+                        else if (dynamic_cast< const SfxBoolItem* >(&rItem)) aEntry.eItemType=ITEM_BOOL;
+                        else if (dynamic_cast< const SfxFlagItem* >(&rItem)) aEntry.eItemType=ITEM_FLAG;
+                        else if (dynamic_cast< const XColorItem* >(&rItem)) aEntry.eItemType=ITEM_XCOLOR;
+                        else if (dynamic_cast< const SfxStringItem* >(&rItem)) aEntry.eItemType=ITEM_STRING;
+                        else if (dynamic_cast< const SfxPointItem* >(&rItem)) aEntry.eItemType=ITEM_POINT;
+                        else if (dynamic_cast< const SfxRectangleItem* >(&rItem)) aEntry.eItemType=ITEM_RECT;
+                        else if (dynamic_cast< const SfxRangeItem* >(&rItem)) aEntry.eItemType=ITEM_RANGE;
+                        else if (dynamic_cast< const SdrFractionItem* >(&rItem)) aEntry.eItemType=ITEM_FRACTION;
+                        else if (dynamic_cast< const SvxColorItem* >(&rItem)) aEntry.eItemType=ITEM_COLOR;
+                        else if (dynamic_cast< const SvxFontItem* >(&rItem)) aEntry.eItemType=ITEM_FONT;
+                        else if (dynamic_cast< const SvxFontHeightItem* >(&rItem))aEntry.eItemType=ITEM_FONTHEIGHT;
+                        else if (dynamic_cast< const SvxCharScaleWidthItem* >(&rItem)) aEntry.eItemType=ITEM_FONTWIDTH;
+                        else if (dynamic_cast< const SvxFieldItem* >(&rItem)) aEntry.eItemType=ITEM_FIELD;
                         switch (aEntry.eItemType) {
                             case ITEM_BYTE      : aEntry.bIsNum=sal_True;  aEntry.nVal=((SfxByteItem  &)rItem).GetValue(); aEntry.nMin=0;      aEntry.nMax=255;   break;
                             case ITEM_INT16     : aEntry.bIsNum=sal_True;  aEntry.nVal=((SfxInt16Item &)rItem).GetValue(); aEntry.nMin=-32767; aEntry.nMax=32767; break;
@@ -1027,7 +1016,7 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
                             default: break;
                         } // switch
                         if (aEntry.bIsNum) aEntry.bCanNum=sal_True;
-                        FASTBOOL bGetPres=sal_True;
+                        bool bGetPres=sal_True;
                         if (bGetPres) {
                             rItem.GetPresentation(SFX_ITEM_PRESENTATION_NAMELESS,
                                                   pPool->GetMetric(nWhich),
@@ -1144,14 +1133,14 @@ void SdrItemBrowser::Undirty()
     bDirty = sal_False;
 
 //  SfxItemSet aSet(pView->GetAttributes());
-    SfxItemSet aSet(pView->GetModel()->GetItemPool());
+    SfxItemSet aSet(pView->getSdrModelFromSdrView().GetItemPool());
     pView->GetAttributes(aSet);
 
-    if(pView->AreObjectsMarked())
+    if(pView->areSdrObjectsSelected())
     {
-        // SfxItemSet a2ndSet(pView->GetAttributes(sal_True));
-        SfxItemSet a2ndSet(pView->GetModel()->GetItemPool());
-        pView->GetAttributes(a2ndSet, sal_True);
+        // SfxItemSet a2ndSet(pView->GetAttributes(TRUE));
+        SfxItemSet a2ndSet(pView->getSdrModelFromSdrView().GetItemPool());
+        pView->GetAttributes(a2ndSet, true);
 
         SetAttributes(&aSet,&a2ndSet);
     }
@@ -1173,7 +1162,7 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
     if (pEntry!=NULL)
     {
 //      SfxItemSet aSet(pView->GetAttributes());
-        SfxItemSet aSet(pView->GetModel()->GetItemPool());
+        SfxItemSet aSet(pView->getSdrModelFromSdrView().GetItemPool());
         pView->GetAttributes(aSet);
 
         SfxItemSet aNewSet(*aSet.GetPool(),pEntry->nWhichId,pEntry->nWhichId);
@@ -1193,9 +1182,9 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
                 if (nLongVal>pEntry->nMax) nLongVal=pEntry->nMax;
                 if (nLongVal<pEntry->nMin) nLongVal=pEntry->nMin;
             }
-            FASTBOOL bPair=sal_False;
-            FASTBOOL bPairX=sal_True;
-            FASTBOOL bPairY=sal_False;
+            bool bPair=sal_False;
+            bool bPairX=sal_True;
+            bool bPairY=sal_False;
             sal_uInt16 nSepLen=1;
             long nLongX = aNewText.ToInt32();
             long nLongY=0;
@@ -1216,7 +1205,7 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
                 case ITEM_INT16 : ((SfxInt16Item *)pNewItem)->SetValue((sal_Int16 )nLongVal); break;
                 case ITEM_UINT16: ((SfxUInt16Item*)pNewItem)->SetValue((sal_uInt16)nLongVal); break;
                 case ITEM_INT32: {
-                    if(HAS_BASE(SdrAngleItem, pNewItem))
+                    if(dynamic_cast< SdrAngleItem* >(pNewItem))
                     {
                         aNewText.SearchAndReplace(sal_Unicode(','), sal_Unicode('.'));
                         double nVal = aNewText.ToFloat();

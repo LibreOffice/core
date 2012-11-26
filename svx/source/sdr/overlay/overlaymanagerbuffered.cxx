@@ -310,10 +310,8 @@ namespace sdr
             if(!maBufferRememberedRangePixel.isEmpty())
             {
                 // logic size for impDrawMember call
-                basegfx::B2DRange aBufferRememberedRangeLogic(
-                    maBufferRememberedRangePixel.getMinX(), maBufferRememberedRangePixel.getMinY(),
-                    maBufferRememberedRangePixel.getMaxX(), maBufferRememberedRangePixel.getMaxY());
-                aBufferRememberedRangeLogic.transform(getOutputDevice().GetInverseViewTransformation());
+                const basegfx::B2DRange aBufferRememberedRangeLogic(
+                    getOutputDevice().GetInverseViewTransformation() * basegfx::B2DRange(maBufferRememberedRangePixel));
 
                 // prepare cursor handling
                 const bool bTargetIsWindow(OUTDEV_WINDOW == rmOutputDevice.GetOutDevType());
@@ -557,8 +555,7 @@ namespace sdr
                 // since it just transforms the top left and bottom right points equally without taking
                 // discrete pixel coverage into account. An empty B2DRange and thus empty logic Rectangle translated
                 // to an also empty discrete pixel rectangle - what is wrong.
-                basegfx::B2DRange aDiscreteRange(rRange);
-                aDiscreteRange.transform(getOutputDevice().GetViewTransformation());
+                const basegfx::B2DRange aDiscreteRange(getOutputDevice().GetViewTransformation() * rRange);
 
                 if(maDrawinglayerOpt.IsAntiAliasing())
                 {

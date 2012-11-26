@@ -26,12 +26,9 @@
 
 #include <com/sun/star/uno/Any.hxx>
 #include <tools/stream.hxx>
-
-#ifndef _STRING_H
 #include <tools/string.hxx> //wg. memset
-#define _STRING_H
-#endif
 #include "svx/svxdllapi.h"
+#include <string.h>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /*
@@ -45,17 +42,17 @@ protected:
     sal_uInt8 aData[32];
 
 public:
-    SetOfByte(sal_Bool bInitVal = sal_False)
+    SetOfByte(bool bInitVal = false)
     {
         memset(aData, bInitVal ? 0xFF : 0x00, sizeof(aData));
     }
 
-    sal_Bool operator==(const SetOfByte& rCmpSet) const
+    bool operator==(const SetOfByte& rCmpSet) const
     {
         return (memcmp(aData, rCmpSet.aData, sizeof(aData)) == 0);
     }
 
-    sal_Bool operator!=(const SetOfByte& rCmpSet) const
+    bool operator!=(const SetOfByte& rCmpSet) const
     {
         return (memcmp(aData, rCmpSet.aData, sizeof(aData))!=0);
     }
@@ -70,15 +67,19 @@ public:
         aData[a/8] &= ~(1<<a%8);
     }
 
-    void Set(sal_uInt8 a, sal_Bool b)
+    void Set(sal_uInt8 a, bool b)
     {
         if(b)
+        {
             Set(a);
+        }
         else
+        {
             Clear(a);
     }
+    }
 
-    sal_Bool IsSet(sal_uInt8 a) const
+    bool IsSet(sal_uInt8 a) const
     {
         return (aData[a/8] & 1<<a%8) != 0;
     }
@@ -93,8 +94,8 @@ public:
         memset(aData, 0x00, sizeof(aData));
     }
 
-    sal_Bool IsEmpty() const;
-    sal_Bool IsFull() const;
+    bool IsEmpty() const;
+    bool IsFull() const;
 
     sal_uInt16 GetSetCount() const;
     sal_uInt8 GetSetBit(sal_uInt16 nNum) const;
@@ -125,5 +126,9 @@ inline SvStream& operator>>(SvStream& rIn, SetOfByte& rSet)
     return rIn;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 #endif // _SVDSOB_HXX
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// eof

@@ -82,13 +82,13 @@ sal_uIntPtr OIndexIterator::Find(sal_Bool bFirst)
         ONDXKey* pKey = GetNextKey();
         nRes = pKey ? pKey->GetRecord() : STRING_NOTFOUND;
     }
-    else if (m_pOperator->IsA(TYPE(OOp_ISNOTNULL)))
+    else if (dynamic_cast< OOp_ISNOTNULL* >(m_pOperator))
         nRes = GetNotNull(bFirst);
-    else if (m_pOperator->IsA(TYPE(OOp_ISNULL)))
+    else if (dynamic_cast< OOp_ISNULL* >(m_pOperator))
         nRes = GetNull(bFirst);
-    else if (m_pOperator->IsA(TYPE(OOp_LIKE)))
+    else if (dynamic_cast< OOp_LIKE* >(m_pOperator))
         nRes = GetLike(bFirst);
-    else if (m_pOperator->IsA(TYPE(OOp_COMPARE)))
+    else if (dynamic_cast< OOp_COMPARE* >(m_pOperator))
         nRes = GetCompare(bFirst);
 
     return nRes;
@@ -146,7 +146,7 @@ sal_uIntPtr OIndexIterator::GetCompare(sal_Bool bFirst)
 {
     ONDXKey* pKey = NULL;
     //  ONDXIndex* m_pIndex = GetNDXIndex();
-    sal_Int32 ePredicateType = PTR_CAST(file::OOp_COMPARE,m_pOperator)->getPredicateType();
+    sal_Int32 ePredicateType = dynamic_cast< file::OOp_COMPARE* >( m_pOperator)->getPredicateType();
 
     if (bFirst)
     {

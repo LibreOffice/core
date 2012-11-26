@@ -25,13 +25,9 @@
 #include "precompiled_sw.hxx"
 
 #include <UndoManager.hxx>
-
 #include <unotools/undoopt.hxx>
-
 #include <vcl/wrkwin.hxx>
-
 #include <svx/svdmodel.hxx>
-
 #include <swmodule.hxx>
 #include <doc.hxx>
 #include <ndarr.hxx>
@@ -41,6 +37,7 @@
 #include <UndoCore.hxx>
 #include <rolbck.hxx>
 #include <undo.hrc>
+#include <svx/fmmodel.hxx>
 #include <editsh.hxx>
 #include <unobaseclass.hxx>
 #include <limits>

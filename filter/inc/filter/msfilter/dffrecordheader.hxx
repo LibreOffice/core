@@ -41,7 +41,7 @@ public:
     sal_uLong   nFilePos;
 public:
     DffRecordHeader() : nRecVer(0), nRecInstance(0), nImpVerInst(0), nRecType(0), nRecLen(0), nFilePos(0) {}
-    FASTBOOL IsContainer() const { return nRecVer == DFF_PSFLAG_CONTAINER; }
+    bool IsContainer() const { return nRecVer == DFF_PSFLAG_CONTAINER; }
     sal_uLong    GetRecBegFilePos() const { return nFilePos; }
     sal_uLong    GetRecEndFilePos() const { return nFilePos + DFF_COMMON_RECORD_HEADER_SIZE + nRecLen; }
     void SeekToEndOfRecord(SvStream& rIn) const { rIn.Seek(nFilePos + DFF_COMMON_RECORD_HEADER_SIZE + nRecLen ); }

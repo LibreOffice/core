@@ -42,13 +42,15 @@ public:
     const SwDoc& GetDoc() const { return *pDoc; }
           SwDoc& GetDoc()       { return *pDoc; }
 
-    virtual SdrPage* AllocPage(FASTBOOL bMasterPage);
+    virtual SdrPage* AllocPage(bool bMasterPage);
 
     // fuers "load on demand" von Grafiken im DrawingLayer
     virtual SvStream* GetDocumentStream( SdrDocumentStreamInfo& rInfo ) const;
 
     // fuers Speicher von Rechtecken als Control-Ersatz fuker Versionen < 5.0
     virtual SdrLayerID GetControlExportLayerId( const SdrObject & ) const;
+
+    virtual bool IsWriter() const;
 
 protected:
     // --> OD 2006-03-01 #b6382898#

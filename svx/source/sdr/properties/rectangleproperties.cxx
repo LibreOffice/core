@@ -53,25 +53,15 @@ namespace sdr
 
         void RectangleProperties::ItemSetChanged(const SfxItemSet& rSet)
         {
-            SdrRectObj& rObj = (SdrRectObj&)GetSdrObject();
-
             // call parent
             TextProperties::ItemSetChanged(rSet);
-
-            // local changes
-            rObj.SetXPolyDirty();
         }
 
         // set a new StyleSheet and broadcast
-        void RectangleProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
+        void RectangleProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
-            SdrRectObj& rObj = (SdrRectObj&)GetSdrObject();
-
             // call parent
             TextProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
-
-            // local changes
-            rObj.SetXPolyDirty();
         }
     } // end of namespace properties
 } // end of namespace sdr

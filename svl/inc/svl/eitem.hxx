@@ -38,16 +38,13 @@ protected:
         CntEnumItem(which, rStream) {}
 
 public:
-    TYPEINFO();
-
 };
 
 //============================================================================
 class SVL_DLLPUBLIC SfxBoolItem: public CntBoolItem
 {
 public:
-    TYPEINFO();
-
+    POOLITEM_FACTORY()
     SfxBoolItem(sal_uInt16 which = 0, sal_Bool bValue = sal_False):
         CntBoolItem(which, bValue) {}
 

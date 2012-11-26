@@ -818,16 +818,6 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         {
             pContentDev->SetClipRegion();
         }
-
-        //sal_Bool bDraw = sal_True;
-        //if (eMode == SC_UPDATE_CHANGED)
-        //  bDraw = NeedDrawMarks() && aOutputData.SetChangedClip();
-        //if (bDraw)
-        //{
-        //  DrawMarks();
-        //  if (eMode == SC_UPDATE_CHANGED)
-        //      pContentDev->SetClipRegion();
-        //}
     }
 
     pContentDev->SetMapMode(MAP_PIXEL);

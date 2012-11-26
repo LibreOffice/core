@@ -24,8 +24,6 @@
 #ifndef _SVDVIEW_HXX
 #define _SVDVIEW_HXX
 
-// HACK to avoid too deep includes and to have some
-// levels free in svdmark itself (MS compiler include depth limit)
 #include <svx/svdhdl.hxx>
 #include <tools/weakbase.hxx>
 #include <svtools/accessibilityoptions.hxx>
@@ -34,45 +32,26 @@
 #include <unotools/options.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Klassenhierarchie der View:
-//         SfxListener
-//         SdrPaintView    PntV   Action            ModChg   Attr   Notify
-//         SdrSnapView     SnpV   Action
-//
-//         SdrMarkView     MrkV   Action   MrkChg   ModChg          Notify
-//
-//         SdrEditView     EdtV            MrkChg   ModChg   Attr
-//         SdrPolyEditView PoEV
-//         SdrGlueEditView GlEV
-//         SdrObjEditView  EdxV   Action            ModChg   Attr   Notify
-//
-//         SdrExchangeView XcgV
-//         SdrDragView     DrgV   Action
-//
-//         SdrCreateView   CrtV   Action
-//         SdrView         View
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//************************************************************
-//   Vorausdeklarationen
-//************************************************************
+// predefines
 
 class SvxURLField;
 
-//************************************************************
-//   Defines
-//************************************************************
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// defines
 
-enum SdrViewContext {SDRCONTEXT_STANDARD,
+enum SdrViewContext
+{
+    SDRCONTEXT_STANDARD,
                      SDRCONTEXT_POINTEDIT,
                      SDRCONTEXT_GLUEPOINTEDIT,
                      SDRCONTEXT_GRAPHIC,
                      SDRCONTEXT_MEDIA,
-                     SDRCONTEXT_TABLE};
+    SDRCONTEXT_TABLE
+};
 
-enum SdrEventKind  {SDREVENT_NONE,
+enum SdrEventKind
+{
+    SDREVENT_NONE,
                     SDREVENT_TEXTEDIT,
                     SDREVENT_MOVACTION,
                     SDREVENT_ENDACTION,
@@ -94,52 +73,52 @@ enum SdrEventKind  {SDREVENT_NONE,
                     SDREVENT_BEGTEXTEDIT,
                     SDREVENT_ENDMARK,
                     SDREVENT_BRKMARK,
-                    SDREVENT_EXECUTEURL};
+    SDREVENT_EXECUTEURL
+};
 
 #define SDRMOUSEBUTTONDOWN 1
 #define SDRMOUSEMOVE       2
 #define SDRMOUSEBUTTONUP   3
 
-//************************************************************
-//   Hilfsklasse SdrViewEvent
-//************************************************************
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// SdrViewEvent
 
 struct SVX_DLLPUBLIC SdrViewEvent
 {
-    SdrHdl*                     pHdl;
-    SdrObject*                  pObj;
-    SdrObject*                  pRootObj;        // Dieses Markieren bei SdrBeginTextEdit
-    SdrPageView*                pPV;
-    const SvxURLField*          pURLField;
-
-    Point                       aLogicPos;
-    SdrHitKind                  eHit;
-    SdrEventKind                eEvent;
-    SdrHdlKind                  eHdlKind;
-    SdrCreateCmd                eEndCreateCmd;   // auch fuer EndInsPoint
-
-    sal_uInt16                      nMouseClicks;
-    sal_uInt16                      nMouseMode;
-    sal_uInt16                      nMouseCode;
-    sal_uInt16                      nHlplIdx;
-    sal_uInt16                      nGlueId;
-
-    unsigned                    bMouseDown : 1;
-    unsigned                    bMouseUp : 1;
-    unsigned                    bDoubleHdlSize : 1;  // Doppelte Handlegroesse wg. TextEdit
-    unsigned                    bIsAction : 1;       // Action ist aktiv
-    unsigned                    bIsTextEdit : 1;     // TextEdit laeuft zur Zeit
-    unsigned                    bTextEditHit : 1;    // offene OutlinerView getroffen
-    unsigned                    bAddMark : 1;
-    unsigned                    bUnmark : 1;
-    unsigned                    bPrevNextMark : 1;
-    unsigned                    bMarkPrev : 1;
-    unsigned                    bInsPointNewObj : 1;
-    unsigned                    bDragWithCopy : 1;
-    unsigned                    bCaptureMouse : 1;
-    unsigned                    bReleaseMouse : 1;
-
 public:
+    const SdrHdl*       mpHdl;
+    SdrObject*          mpObj;
+    SdrObject*          mpRootObj;        // Dieses Markieren bei SdrBeginTextEdit
+//  SdrPageView*        mpPV;
+
+    String              maURLField;
+    String              maTargetFrame;
+
+    basegfx::B2DPoint   maLogicPos;
+    SdrHitKind          meHit;
+    SdrEventKind        meEvent;
+    SdrCreateCmd        meEndCreateCmd;   // auch fuer EndInsPoint
+
+    sal_uInt16          mnMouseClicks;
+    sal_uInt16          mnMouseMode;
+    sal_uInt16          mnMouseCode;
+    sal_uInt32          mnHlplIdx;
+    sal_uInt32          mnGlueId;
+
+    bool                mbMouseDown : 1;
+    bool                mbMouseUp : 1;
+    bool                mbIsAction : 1;       // Action ist aktiv
+    bool                mbIsTextEdit : 1;     // TextEdit laeuft zur Zeit
+    bool                mbTextEditHit : 1;    // offene OutlinerView getroffen
+    bool                mbAddMark : 1;
+    bool                mbUnmark : 1;
+    bool                mbPrevNextMark : 1;
+    bool                mbMarkPrev : 1;
+    bool                mbInsPointNewObj : 1;
+    bool                mbDragWithCopy : 1;
+    bool                mbCaptureMouse : 1;
+    bool                mbReleaseMouse : 1;
+
     SdrViewEvent();
     ~SdrViewEvent();
 
@@ -152,6 +131,7 @@ public:
 
 class SVX_DLLPUBLIC SdrDropMarkerOverlay
 {
+private:
     // The OverlayObjects
     ::sdr::overlay::OverlayObjectList               maObjects;
 
@@ -165,35 +145,57 @@ public:
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// old view hierarchy, but in principle a single class since the lowest incarnated class
+// has to be SdrView anyways
+//
+//  SdrPaintView
+//      SdrSnapView
+//          SdrMarkView
+//              SdrEditView, IPolyPolygonEditorController
+//                  SdrPolyEditView
+//                      SdrGlueEditView
+//                          SdrObjEditView
+//                              SdrExchangeView
+//                                  SdrDragView
+//                                      SdrCreateView
+//                                          SdrView
+//
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-//  @@ @@ @@ @@@@@ @@   @@
-//  @@ @@ @@ @@    @@   @@
-//  @@ @@ @@ @@    @@ @ @@
-//  @@@@@ @@ @@@@  @@@@@@@
-//   @@@  @@ @@    @@@@@@@
-//   @@@  @@ @@    @@@ @@@
-//    @   @@ @@@@@ @@   @@
+// All current derivations from SdrView
 //
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
+//                              HideSdrPage()       implemented
+//                              in destructor       and overloaded
+//
+// SdrView                          *                   SdrarkView, SdrPaintView
+//  DlgEdView
+//  OSectionView
+//  FrameView
+//  GraphCtrlView
+//  E3dView
+//      DrawViewWrapper
+//      FmFormView                  *                   *
+//          ScDrawView
+//          sd::View
+//              sd::DrawView        *                   *
+//          SwDrawView
+//
 
 class SVX_DLLPUBLIC SdrView: public SdrCreateView, public tools::WeakBase< SdrView >
 {
-    friend class                SdrPageView;
-
-    unsigned                    bNoExtendedMouseDispatcher : 1;
-    unsigned                    bNoExtendedKeyDispatcher : 1;
-    unsigned                    bNoExtendedCommandDispatcher : 1;
-    unsigned                    bTextEditOnObjectsWithoutTextIfTextTool : 1;
-    unsigned                    mbMasterPagePaintCaching : 1;
+private:
+    /// bitfield
+    bool                mbNoExtendedMouseDispatcher : 1;
+    bool                mbNoExtendedKeyDispatcher : 1;
+    bool                mbNoExtendedCommandDispatcher : 1;
+    bool                mbMasterPagePaintCaching : 1;
 
 protected:
     SvtAccessibilityOptions maAccessibilityOptions;
 
 public:
-    TYPEINFO();
-    SdrView(SdrModel* pModel1, OutputDevice* pOut = 0L);
+    SdrView(SdrModel& rModel1, OutputDevice* pOut = 0);
     virtual ~SdrView();
 
     // Default sind alle Dispatcher aktiviert. Will die App z.B. fuer
@@ -206,44 +208,39 @@ public:
     //      pSdrView->DoMouseEvent(aVEvt);
     //      SetPointer(GetPreferedPointer(...))
     //      CaptureMouse(...)
-    void EnableExtendedMouseEventDispatcher(sal_Bool bOn) { bNoExtendedMouseDispatcher = !bOn; }
-    sal_Bool IsExtendedMouseEventDispatcherEnabled() const { return bNoExtendedMouseDispatcher; }
+    void EnableExtendedMouseEventDispatcher(bool bOn) { mbNoExtendedMouseDispatcher = !bOn; }
+    bool IsExtendedMouseEventDispatcherEnabled() const { return mbNoExtendedMouseDispatcher; }
 
-    void EnableExtendedKeyInputDispatcher(sal_Bool bOn) { bNoExtendedKeyDispatcher=!bOn; }
-    sal_Bool IsExtendedKeyInputDispatcherEnabled() const { return bNoExtendedKeyDispatcher; }
+    void EnableExtendedKeyInputDispatcher(bool bOn) { mbNoExtendedKeyDispatcher=!bOn; }
+    bool IsExtendedKeyInputDispatcherEnabled() const { return mbNoExtendedKeyDispatcher; }
 
-    void EnableExtendedCommandEventDispatcher(sal_Bool bOn) { bNoExtendedCommandDispatcher=!bOn; }
-    sal_Bool IsExtendedCommandEventDispatcherEnabled() const { return bNoExtendedCommandDispatcher; }
+    void EnableExtendedCommandEventDispatcher(bool bOn) { mbNoExtendedCommandDispatcher=!bOn; }
+    bool IsExtendedCommandEventDispatcherEnabled() const { return mbNoExtendedCommandDispatcher; }
 
-    void EnableTextEditOnObjectsWithoutTextIfTextTool(sal_Bool bOn) { bTextEditOnObjectsWithoutTextIfTextTool=bOn; }
-    sal_Bool IsEnableTextEditOnObjectsWithoutTextIfTextToolEnabled() const { return bTextEditOnObjectsWithoutTextIfTextTool; }
+    void SetMasterPagePaintCaching(bool bOn);
+    bool IsMasterPagePaintCaching() const { return mbMasterPagePaintCaching; }
 
-    void SetMasterPagePaintCaching(sal_Bool bOn);
-    sal_Bool IsMasterPagePaintCaching() const { return mbMasterPagePaintCaching; }
-
-    sal_Bool KeyInput(const KeyEvent& rKEvt, Window* pWin);
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt, Window* pWin);
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt, Window* pWin);
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt, Window* pWin);
-    virtual sal_Bool Command(const CommandEvent& rCEvt, Window* pWin);
+    virtual bool KeyInput(const KeyEvent& rKEvt, Window* pWin);
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt, Window* pWin);
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt, Window* pWin);
+    virtual bool MouseMove(const MouseEvent& rMEvt, Window* pWin);
+    virtual bool Command(const CommandEvent& rCEvt, Window* pWin);
 
     virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
 
-    sal_Bool SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll=sal_False) { return SdrCreateView::SetAttributes(rSet,bReplaceAll); }
-    sal_Bool SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr=sal_False) { return SdrCreateView::SetStyleSheet(pStyleSheet,bDontRemoveHardAttr); }
-
-    /* new interface src537 */
-    sal_Bool GetAttributes(SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr=sal_False) const;
+    bool SetAttributes(const SfxItemSet& rSet, bool bReplaceAll=false) { return SdrCreateView::SetAttributes(rSet,bReplaceAll); }
+    bool SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr=false) { return SdrCreateView::SetStyleSheet(pStyleSheet,bDontRemoveHardAttr); }
+    bool GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr=false) const;
 
     SfxStyleSheet* GetStyleSheet() const;
 
     // unvollstaendige Implementation:
     // Das OutputDevice ist notwendig, damit ich die HandleSize ermitteln kann.
     // Bei NULL wird das 1. angemeldete Win verwendet.
-    Pointer GetPreferedPointer(const Point& rMousePos, const OutputDevice* pOut, sal_uInt16 nModifier=0, sal_Bool bLeftDown=sal_False) const;
+    Pointer GetPreferedPointer(const basegfx::B2DPoint& rMousePos, const OutputDevice* pOut, sal_uInt16 nModifier = 0, bool bLeftDown = false) const;
     SdrHitKind PickAnything(const MouseEvent& rMEvt, sal_uInt16 nMouseDownOrMoveOrUp, SdrViewEvent& rVEvt) const;
-    SdrHitKind PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) const;
-    sal_Bool DoMouseEvent(const SdrViewEvent& rVEvt);
+    SdrHitKind PickAnything(const basegfx::B2DPoint& rLogicPos, SdrViewEvent& rVEvt) const;
+    bool DoMouseEvent(const SdrViewEvent& rVEvt);
     virtual SdrViewContext GetContext() const;
 
     // Die Methoden beruecksichtigen den jeweiligen Kontex:
@@ -252,27 +249,24 @@ public:
     // - Klebepunkt-Editmode
     // - TextEdit
     // - ... to be continued
-    sal_Bool IsMarkPossible() const;
+    bool IsMarkPossible() const;
     void MarkAll();
     void UnmarkAll();
-    sal_Bool IsAllMarked() const;
-    sal_Bool IsAllMarkPrevNextPossible() const; // das geht naemlich nicht bei TextEdit!
-    sal_Bool MarkNext(sal_Bool bPrev=sal_False);
-    sal_Bool MarkNext(const Point& rPnt, sal_Bool bPrev=sal_False);
-
-    const Rectangle& GetMarkedRect() const;
-    void SetMarkedRect(const Rectangle& rRect);
+    bool IsAllMarked() const;
+    bool IsAllMarkPrevNextPossible() const; // das geht naemlich nicht bei TextEdit!
+    bool MarkNext(bool bPrev = false);
+    bool MarkNext(const basegfx::B2DPoint& rPnt, bool bPrev = false);
 
     virtual void DeleteMarked();
-    sal_Bool IsDeleteMarkedPossible() const;
-    sal_Bool IsDeletePossible() const { return IsDeleteMarkedPossible(); }
+    bool IsDeleteMarkedPossible() const;
+    bool IsDeletePossible() const { return IsDeleteMarkedPossible(); }
 
     // Markieren von Objekten, Polygonpunkten oder Klebepunkten (je nach View-
     // Kontext) durch Aufziehen eines Selektionsrahmens.
-    //   bAddMark=TRUE: zur bestehenden Selektion hinzumarkieren (->Shift)
-    //   bUnmark=TRUE: Bereits selektierte Objekte/Punkte/Klebepunkte die innerhalb
+    //   bAddMark=true: zur bestehenden Selektion hinzumarkieren (->Shift)
+    //   bUnmark=true: Bereits selektierte Objekte/Punkte/Klebepunkte die innerhalb
     //                 des aufgezogenen Rahmens liegen werden deselektiert.
-    sal_Bool BegMark(const Point& rPnt, sal_Bool bAddMark=sal_False, sal_Bool bUnmark=sal_False);
+    bool BegMark(const basegfx::B2DPoint& rPnt, bool bAddMark = false, bool bUnmark = false);
 
     // Folgende Actions sind moeglich:
     //   - ObjectCreating
@@ -287,49 +281,9 @@ public:
     virtual void onAccessibilityOptionsChanged();
 };
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 #endif //_SVDVIEW_HXX
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// Die App macht sich zunaechst ein SdrModel.
-// Anschliessend oeffnet sie ein Win und erzeugt dann eine SdrView.
-// An der SdrView meldet sie dann mit der Methode ShowSdrPage() eine Seite an.
-// Eine SdrView kann in beliebig vielen Fenstern gleichzeitig angezeigt werden.
-// Intern:
-// Eine SdrView kann beliebig viele Seiten gleichzeitig anzeigen. Seiten
-// werden an- und abgemeldet mit ShowSdrPage()/HideSdrPage(). Fuer jede angemeldete
-// Seite wird eine SdrPageView-Instanz im Container aPages angelegt. Bei
-// gleichzeitiger Anzeige mehrerer Seiten ist darauf zu achten, dass der Offset-
-// Parameter von ShowSdrPage() der Seitengroesse angepasst ist, da sich sonst die
-// Seiten ueberlappen koennten.
-//
-// Elementare Methoden:
-// ~~~~~~~~~~~~~~~~~~~~
-//   Einfache Events:
-//   ~~~~~~~~~~~~~~~~
-//     sal_Bool KeyInput(const KeyEvent& rKEvt, Window* pWin);
-//     sal_Bool MouseButtonDown(const MouseEvent& rMEvt, Window* pWin);
-//     sal_Bool MouseButtonUp(const MouseEvent& rMEvt, Window* pWin);
-//     sal_Bool MouseMove(const MouseEvent& rMEvt, Window* pWin);
-//     sal_Bool Command(const CommandEvent& rCEvt, Window* pWin);
-//
-//   Exchange (Clipboard derzeit noch ohne SdrPrivateData):
-//   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//     sal_Bool Cut(sal_uIntPtr nFormat=SDR_ANYFORMAT);
-//     sal_Bool Yank(sal_uIntPtr nFormat=SDR_ANYFORMAT);
-//     sal_Bool Paste(Window* pWin=NULL, sal_uIntPtr nFormat=SDR_ANYFORMAT);
-//
-//   SfxItems:
-//   ~~~~~~~~~
-//     sal_Bool GetAttributes(SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr=sal_False) const;
-//     sal_Bool SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll);
-//     SfxStyleSheet* GetStyleSheet() const;
-//     sal_Bool SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr);
-//
-//   Sonstiges:
-//   ~~~~~~~~~~
-//     Pointer GetPreferedPointer(const Point& rMousePos, const OutputDevice* pOut, sal_uInt16 nTol=0) const;
-//     String  GetStatusText();
-//
-///////////////////////////////////////////////////////////////////////////////////////////////// */
-
+// eof

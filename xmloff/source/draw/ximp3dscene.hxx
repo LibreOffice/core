@@ -28,7 +28,6 @@
 #include "sdxmlimp_impl.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <com/sun/star/drawing/XShapes.hpp>
-#include <tools/rtti.hxx>
 #include <tools/color.hxx>
 #include <ximpshap.hxx>
 
@@ -49,8 +48,6 @@ protected:
         { mxChilds = rNew; }
 
 public:
-    TYPEINFO();
-
     SdXML3DSceneShapeContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,

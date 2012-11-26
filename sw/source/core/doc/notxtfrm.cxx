@@ -1011,8 +1011,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                                           pShell->GetWin();
                 // <--
 
-                if( bAnimate &&
-                    FindFlyFrm() != ::GetFlyFromMarked( 0, pShell ))
+                if( bAnimate && FindFlyFrm() != ::GetFlyFromMarked( pShell ))
                 {
                     OutputDevice* pVout;
                     if( pOut == pShell->GetOut() && SwRootFrm::FlushVout() )
@@ -1182,13 +1181,21 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             if( bDummyJobSetup )
                 delete pJobSetup;  // ... und raeumen wieder auf.
 
-            sal_Int64 nMiscStatus = pOLENd->GetOLEObj().GetOleRef()->getStatus( pOLENd->GetAspect() );
-            if ( !bPrn && pShell->ISA( SwCrsrShell ) &&
-                    nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
+            if ( !bPrn )
             {
-                const SwFlyFrm *pFly = FindFlyFrm();
-                ASSERT( pFly, "OLE not in FlyFrm" );
-                ((SwFEShell*)pShell)->ConnectObj( pOLENd->GetOLEObj().GetObject(), pFly->Prt(), pFly->Frm());
+                SwFEShell* pSwFEShell = dynamic_cast< SwFEShell* >(pShell);
+
+                if(pSwFEShell)
+                {
+                    const sal_Int64 nMiscStatus(pOLENd->GetOLEObj().GetOleRef()->getStatus(pOLENd->GetAspect()));
+
+                    if(nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE)
+                    {
+                        const SwFlyFrm *pFly = FindFlyFrm();
+                        ASSERT( pFly, "OLE not in FlyFrm" );
+                        pSwFEShell->ConnectObj( pOLENd->GetOLEObj().GetObject(), pFly->Prt(), pFly->Frm());
+                    }
+                }
             }
         }
 

@@ -30,8 +30,6 @@
 
 // -----------------------------------------------------------------------
 
-TYPEINIT1_FACTORY(SvxZoomSliderItem,SfxUInt16Item, new SvxZoomSliderItem);
-
 #define ZOOMSLIDER_PARAM_CURRENTZOOM    "Columns"
 #define ZOOMSLIDER_PARAM_SNAPPINGPOINTS "SnappingPoints"
 #define ZOOMSLIDER_PARAM_MINZOOM        "MinValue"
@@ -39,6 +37,8 @@ TYPEINIT1_FACTORY(SvxZoomSliderItem,SfxUInt16Item, new SvxZoomSliderItem);
 #define ZOOMSLIDER_PARAMS           4
 
 // -----------------------------------------------------------------------
+
+IMPL_POOLITEM_FACTORY(SvxZoomSliderItem)
 
 SvxZoomSliderItem::SvxZoomSliderItem( sal_uInt16 nCurrentZoom, sal_uInt16 nMinZoom, sal_uInt16 nMaxZoom, sal_uInt16 _nWhich )
 :   SfxUInt16Item( _nWhich, nCurrentZoom ), mnMinZoom( nMinZoom ), mnMaxZoom( nMaxZoom )

@@ -44,7 +44,6 @@ String *AppWin::pNoName = NULL; // contains the "Untitled"-String
 short AppWin::nNumber = 0;      // consecutive number
 short AppWin::nCount = 0;       // number of edit windows
 
-TYPEINIT0(AppWin);
 AppWin::AppWin( BasicFrame* pParent )
 : DockingWindow( pParent, WB_SIZEMOVE | WB_CLOSEABLE | WB_PINABLE )
 , nSkipReload(0)

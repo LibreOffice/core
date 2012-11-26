@@ -24,9 +24,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
-
 #include "fuoaprms.hxx"
-
 #include "sdattr.hxx"
 #include <svx/svdpagv.hxx>
 #include <editeng/colritem.hxx>
@@ -41,6 +39,9 @@
 #endif
 #include <svl/aeitem.hxx>
 #include "svx/xtable.hxx"
+#include <svx/svdlegacy.hxx>
+#include <vcl/salbtype.hxx>     // FRound
+#include <basegfx/polygon/b2dpolygon.hxx>
 
 #include "strings.hrc"
 #include "glob.hrc"
@@ -52,14 +53,10 @@
 #include "View.hxx"
 #include "sdabstdlg.hxx"
 #include "sdresid.hxx"
-#include <vcl/salbtype.hxx>     // FRound
-#include <basegfx/polygon/b2dpolygon.hxx>
 
 using namespace ::com::sun::star;
 
 namespace sd {
-
-TYPEINIT1( FuObjectAnimationParameters, FuPoor );
 
 #define ATTR_MISSING    0       // Attribut nicht verfuegbar
 #define ATTR_MIXED      1       // Attribut uneindeutig (bei Mehrfachselektion)
@@ -91,10 +88,7 @@ FunctionReference FuObjectAnimationParameters::Create( ViewShell* pViewSh, ::sd:
 void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 {
     ::svl::IUndoManager* pUndoMgr = mpViewShell->GetViewFrame()->GetObjectShell()->GetUndoManager();
-
-    const SdrMarkList& rMarkList  = mpView->GetMarkedObjectList();
-    sal_uLong        nCount     = rMarkList.GetMarkCount();
-    sal_uLong        nObject    = 0;
+    sal_uInt32 nObject  = 0;
 
     short nAnimationSet     = ATTR_MISSING;
     short nEffectSet        = ATTR_MISSING;
@@ -114,36 +108,35 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
     short nSecondSoundOnSet     = ATTR_MISSING;
     short nSecondPlayFullSet    = ATTR_MISSING;
 
-
-
-//    sal_Bool bDontKnow   = sal_False;
-
                                     // defaulten (fuer Undo-Aktion)
     presentation::AnimationEffect eEffect         = presentation::AnimationEffect_NONE;
     presentation::AnimationEffect eTextEffect     = presentation::AnimationEffect_NONE;
     presentation::AnimationSpeed  eSpeed          = presentation::AnimationSpeed_MEDIUM;
-    sal_Bool            bActive         = sal_False;
-    sal_Bool            bFadeOut        = sal_False;
+    bool            bActive         = false;
+    bool            bFadeOut        = false;
     Color           aFadeColor      = COL_LIGHTGRAY;
-    sal_Bool            bInvisible      = sal_False;
-    sal_Bool            bSoundOn        = sal_False;
+    bool            bInvisible      = false;
+    bool            bSoundOn        = false;
     String          aSound;
-    sal_Bool            bPlayFull       = sal_False;
+    bool            bPlayFull       = false;
     presentation::ClickAction     eClickAction    = presentation::ClickAction_NONE;
     String          aBookmark;
 
     presentation::AnimationEffect eSecondEffect   = presentation::AnimationEffect_NONE;
     presentation::AnimationSpeed  eSecondSpeed    = presentation::AnimationSpeed_MEDIUM;
-    sal_Bool            bSecondSoundOn  = sal_False;
-    sal_Bool            bSecondPlayFull = sal_False;
+    bool            bSecondSoundOn  = false;
+    bool            bSecondPlayFull = false;
 
-
-    SdAnimationInfo* pInfo;
-    SdrMark* pMark;
+    SdAnimationInfo* pInfo(0);
 
     // das erste Objekt untersuchen
-    pMark = rMarkList.GetMark(0);
-    pInfo = mpDoc->GetAnimationInfo(pMark->GetMarkedSdrObj());
+    const SdrObjectVector aSelection(mpView->getSelectedSdrObjectVectorFromSdrMarkView());
+
+    if(aSelection.size())
+    {
+        pInfo = mpDoc->GetAnimationInfo(aSelection[0]);
+    }
+
     if( pInfo )
     {
         bActive             = pInfo->mbActive;
@@ -196,11 +189,11 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
     }
 
     // ggfs. weitere Objekte untersuchen
-    for( nObject = 1; nObject < nCount; nObject++ )
+    for( nObject = 1; nObject < aSelection.size(); nObject++ )
     {
-        pMark = rMarkList.GetMark( nObject );
-        SdrObject* pObject = pMark->GetMarkedSdrObj();
+        SdrObject* pObject = aSelection[nObject];
         pInfo = mpDoc->GetAnimationInfo(pObject);
+
         if( pInfo )
         {
             if( bActive != pInfo->mbActive )
@@ -253,7 +246,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         }
         else
         {
-            if (nAnimationSet == ATTR_SET && bActive == sal_True)
+            if (nAnimationSet == ATTR_SET && bActive == true)
                 nAnimationSet = ATTR_MIXED;
 
             if (nEffectSet == ATTR_SET && eEffect != presentation::AnimationEffect_NONE)
@@ -265,22 +258,22 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             if (nSpeedSet == ATTR_SET)
                 nSpeedSet = ATTR_MIXED;
 
-            if (nFadeOutSet == ATTR_SET && bFadeOut == sal_True)
+            if (nFadeOutSet == ATTR_SET && bFadeOut == true)
                 nFadeOutSet = ATTR_MIXED;
 
             if (nFadeColorSet == ATTR_SET)
                 nFadeColorSet = ATTR_MIXED;
 
-            if (nInvisibleSet == ATTR_SET && bInvisible == sal_True)
+            if (nInvisibleSet == ATTR_SET && bInvisible == true)
                 nInvisibleSet = ATTR_MIXED;
 
-            if (nSoundOnSet == ATTR_SET && bSoundOn == sal_True)
+            if (nSoundOnSet == ATTR_SET && bSoundOn == true)
                 nSoundOnSet = ATTR_MIXED;
 
             if (nSoundFileSet == ATTR_SET)
                 nSoundFileSet = ATTR_MIXED;
 
-            if (nPlayFullSet == ATTR_SET && bPlayFull == sal_True)
+            if (nPlayFullSet == ATTR_SET && bPlayFull == true)
                 nPlayFullSet = ATTR_MIXED;
 
             if (nClickActionSet == ATTR_SET && eClickAction != presentation::ClickAction_NONE)
@@ -295,42 +288,42 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             if (nSecondSpeedSet == ATTR_SET)
                 nSecondSpeedSet = ATTR_MIXED;
 
-            if (nSecondSoundOnSet == ATTR_SET && bSecondSoundOn == sal_True)
+            if (nSecondSoundOnSet == ATTR_SET && bSecondSoundOn == true)
                 nSecondSoundOnSet = ATTR_MIXED;
 
-            if (nSecondPlayFullSet == ATTR_SET && bSecondPlayFull == sal_True)
+            if (nSecondPlayFullSet == ATTR_SET && bSecondPlayFull == true)
                 nSecondPlayFullSet = ATTR_MIXED;
         }
     }
 
     // Genau zwei Objekte mit Pfadeffekt? Dann gilt nur die Animationsinfo
     // am bewegten Objekt.
-    if (nCount == 2)
+    if (2 == aSelection.size())
     {
-        SdrObject* pObject1 = rMarkList.GetMark(0)->GetMarkedSdrObj();
-        SdrObject* pObject2 = rMarkList.GetMark(1)->GetMarkedSdrObj();
-        SdrObjKind eKind1   = (SdrObjKind)pObject1->GetObjIdentifier();
-        SdrObjKind eKind2   = (SdrObjKind)pObject2->GetObjIdentifier();
+        SdrObject* pObject1 = aSelection[0];
+        SdrObject* pObject2 = aSelection[1];
         SdAnimationInfo* pInfo1 = mpDoc->GetAnimationInfo(pObject1);
         SdAnimationInfo* pInfo2 = mpDoc->GetAnimationInfo(pObject2);
         pInfo  = NULL;
 
-        if (pObject1->GetObjInventor() == SdrInventor &&
-            ((eKind1 == OBJ_LINE) ||                        // 2-Punkt-Linie
-             (eKind1 == OBJ_PLIN) ||                        // Polygon
-             (eKind1 == OBJ_PATHLINE))                &&    // Bezier-Kurve
-             (pInfo2 && pInfo2->meEffect == presentation::AnimationEffect_PATH))
+        if(pObject1 && pInfo2 && pInfo2->meEffect == presentation::AnimationEffect_PATH)
         {
-            pInfo = pInfo2;
+            SdrPathObj* pSdrPathObj = dynamic_cast< SdrPathObj* >(pObject1);
+
+            if(pSdrPathObj && !pSdrPathObj->isClosed())
+            {
+                pInfo = pInfo2;
+            }
         }
 
-        if (pObject2->GetObjInventor() == SdrInventor &&
-            ((eKind2 == OBJ_LINE) ||                        // 2-Punkt-Linie
-             (eKind2 == OBJ_PLIN) ||                        // Polygon
-             (eKind2 == OBJ_PATHLINE))                &&    // Bezier-Kurve
-            (pInfo1 && pInfo1->meEffect == presentation::AnimationEffect_PATH))
+        if(pObject2 && pInfo1 && pInfo1->meEffect == presentation::AnimationEffect_PATH)
         {
-            pInfo = pInfo1;
+            SdrPathObj* pSdrPathObj = dynamic_cast< SdrPathObj* >(pObject2);
+
+            if(pSdrPathObj && !pSdrPathObj->isClosed())
+            {
+                pInfo = pInfo1;
+            }
         }
 
         if (pInfo)
@@ -359,7 +352,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
     if(!pArgs)
     {
         // ItemSet fuer Dialog fuellen
-        SfxItemSet aSet(mpDoc->GetPool(), ATTR_ANIMATION_START, ATTR_ACTION_END);
+        SfxItemSet aSet(mpDoc->GetItemPool(), ATTR_ANIMATION_START, ATTR_ACTION_END);
 
         // das Set besetzen
         if (nAnimationSet == ATTR_SET)
@@ -367,7 +360,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         else if (nAnimationSet == ATTR_MIXED)
             aSet.InvalidateItem(ATTR_ANIMATION_ACTIVE);
         else
-            aSet.Put(SfxBoolItem(ATTR_ANIMATION_ACTIVE, sal_False));
+            aSet.Put(SfxBoolItem(ATTR_ANIMATION_ACTIVE, false));
 
         if (nEffectSet == ATTR_SET)
             aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_EFFECT, (sal_uInt16)eEffect));
@@ -393,7 +386,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         else if (nFadeOutSet == ATTR_MIXED)
             aSet.InvalidateItem(ATTR_ANIMATION_FADEOUT);
         else
-            aSet.Put(SfxBoolItem(ATTR_ANIMATION_FADEOUT, sal_False));
+            aSet.Put(SfxBoolItem(ATTR_ANIMATION_FADEOUT, false));
 
         if (nFadeColorSet == ATTR_SET)
             aSet.Put(SvxColorItem(aFadeColor, ATTR_ANIMATION_COLOR));
@@ -407,14 +400,14 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         else if (nInvisibleSet == ATTR_MIXED)
             aSet.InvalidateItem(ATTR_ANIMATION_INVISIBLE);
         else
-            aSet.Put(SfxBoolItem(ATTR_ANIMATION_INVISIBLE, sal_False));
+            aSet.Put(SfxBoolItem(ATTR_ANIMATION_INVISIBLE, false));
 
         if (nSoundOnSet == ATTR_SET)
             aSet.Put(SfxBoolItem(ATTR_ANIMATION_SOUNDON, bSoundOn));
         else if (nSoundOnSet == ATTR_MIXED)
             aSet.InvalidateItem(ATTR_ANIMATION_SOUNDON);
         else
-            aSet.Put(SfxBoolItem(ATTR_ANIMATION_SOUNDON, sal_False));
+            aSet.Put(SfxBoolItem(ATTR_ANIMATION_SOUNDON, false));
 
         if (nSoundFileSet == ATTR_SET)
             aSet.Put(SfxStringItem(ATTR_ANIMATION_SOUNDFILE, aSound));
@@ -426,7 +419,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         else if (nPlayFullSet == ATTR_MIXED)
             aSet.InvalidateItem(ATTR_ANIMATION_PLAYFULL);
         else
-            aSet.Put(SfxBoolItem(ATTR_ANIMATION_PLAYFULL, sal_False));
+            aSet.Put(SfxBoolItem(ATTR_ANIMATION_PLAYFULL, false));
 
         if (nClickActionSet == ATTR_SET)
             aSet.Put(SfxAllEnumItem(ATTR_ACTION, (sal_uInt16)eClickAction));
@@ -457,14 +450,14 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         else if (nSecondSoundOnSet == ATTR_MIXED)
             aSet.InvalidateItem(ATTR_ACTION_SOUNDON);
         else
-            aSet.Put(SfxBoolItem(ATTR_ACTION_SOUNDON, sal_False));
+            aSet.Put(SfxBoolItem(ATTR_ACTION_SOUNDON, false));
 
         if (nSecondPlayFullSet == ATTR_SET)
             aSet.Put(SfxBoolItem(ATTR_ACTION_PLAYFULL, bSecondPlayFull));
         else if (nPlayFullSet == ATTR_MIXED)
             aSet.InvalidateItem(ATTR_ACTION_PLAYFULL);
         else
-            aSet.Put(SfxBoolItem(ATTR_ACTION_PLAYFULL, sal_False));
+            aSet.Put(SfxBoolItem(ATTR_ACTION_PLAYFULL, false));
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
         SfxAbstractDialog* pDlg = pFact ? pFact->CreatSdActionDialog( NULL, &aSet, mpView ) : 0;
@@ -654,59 +647,57 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         SdrPathObj* pPath       = NULL;
         if (eEffect == presentation::AnimationEffect_PATH && nEffectSet == ATTR_SET)
         {
-            DBG_ASSERT(nCount == 2, "dieser Effekt braucht genau 2 selektierte Objekte");
-            SdrObject* pObject1 = rMarkList.GetMark(0)->GetMarkedSdrObj();
-            SdrObject* pObject2 = rMarkList.GetMark(1)->GetMarkedSdrObj();
+            DBG_ASSERT(2 == aSelection.size(), "dieser Effekt braucht genau 2 selektierte Objekte");
+            SdrObject* pObject1 = aSelection[0];
+            SdrObject* pObject2 = aSelection[1];
             SdrObjKind eKind1   = (SdrObjKind)pObject1->GetObjIdentifier();
             SdrObjKind eKind2   = (SdrObjKind)pObject2->GetObjIdentifier();
 
-            if (pObject1->GetObjInventor() == SdrInventor &&
-                ((eKind1 == OBJ_LINE) ||        // 2-Punkt-Linie
-                 (eKind1 == OBJ_PLIN) ||        // Polygon
-                 (eKind1 == OBJ_PATHLINE)))     // Bezier-Kurve
+            if(pObject1)
             {
-                pPath = (SdrPathObj*)pObject1;
-                pRunningObj = pObject2;
+                SdrPathObj* pSdrPathObj = dynamic_cast< SdrPathObj* >(pObject1);
+
+                if(pSdrPathObj && !pSdrPathObj->isClosed())
+                {
+                    pPath = pSdrPathObj;
+                    pRunningObj = pObject2;
+                }
             }
 
-            if (pObject2->GetObjInventor() == SdrInventor &&
-                ((eKind2 == OBJ_LINE) ||        // 2-Punkt-Linie
-                 (eKind2 == OBJ_PLIN) ||        // Polygon
-                 (eKind2 == OBJ_PATHLINE)))     // Bezier-Kurve
+            if(pObject2)
             {
-                pPath = (SdrPathObj*)pObject2;
-                pRunningObj = pObject1;
+                SdrPathObj* pSdrPathObj = dynamic_cast< SdrPathObj* >(pObject2);
+
+                if(pSdrPathObj && !pSdrPathObj->isClosed())
+                {
+                    pPath = pSdrPathObj;
+                    pRunningObj = pObject1;
+                }
             }
 
             DBG_ASSERT(pPath, "keine Kurve gefunden");
 
-
             // das laufende Objekt auf das Kurvenende schieben
-            Rectangle aCurRect(pRunningObj->GetLogicRect());
-            Point     aCurCenter(aCurRect.Center());
-            const ::basegfx::B2DPolyPolygon& rPolyPolygon = pPath->GetPathPoly();
-            sal_uInt32 nNoOfPolygons(rPolyPolygon.count());
-            const ::basegfx::B2DPolygon aPolygon(rPolyPolygon.getB2DPolygon(nNoOfPolygons - 1L));
-            sal_uInt32 nPoints(aPolygon.count());
-            const ::basegfx::B2DPoint aNewB2DCenter(aPolygon.getB2DPoint(nPoints - 1L));
-            const Point aNewCenter(FRound(aNewB2DCenter.getX()), FRound(aNewB2DCenter.getY()));
-            Size aDistance(aNewCenter.X() - aCurCenter.X(), aNewCenter.Y() - aCurCenter.Y());
-            pRunningObj->Move(aDistance);
+            const basegfx::B2DRange aCurRange(sdr::legacy::GetLogicRange(*pRunningObj));
+            const basegfx::B2DPolyPolygon aPolyPolygon(pPath->getB2DPolyPolygonInObjectCoordinates());
+            const basegfx::B2DPolygon aPolygon(aPolyPolygon.count() ? aPolyPolygon.getB2DPolygon(aPolyPolygon.count() - 1) : basegfx::B2DPolygon());
+            const basegfx::B2DPoint aNewB2DCenter(aPolygon.count() ? aPolygon.getB2DPoint(aPolygon.count() - 1) : basegfx::B2DPoint());
 
-            pUndoMgr->AddUndoAction(mpDoc->GetSdrUndoFactory().CreateUndoMoveObject( *pRunningObj, aDistance));
+            sdr::legacy::transformSdrObject(*pRunningObj, basegfx::tools::createTranslateB2DHomMatrix(aNewB2DCenter - aCurRange.getCenter()));
+
+            pUndoMgr->AddUndoAction(mpDoc->GetSdrUndoFactory().CreateUndoGeoObject( *pRunningObj ));
         }
 
-        for (nObject = 0; nObject < nCount; nObject++)
+        for (nObject = 0; nObject < aSelection.size(); nObject++)
         {
-            SdrObject* pObject = rMarkList.GetMark(nObject)->GetMarkedSdrObj();
-
+            SdrObject* pObject = aSelection[nObject];
             pInfo = mpDoc->GetAnimationInfo(pObject);
 
-            sal_Bool bCreated = sal_False;
+            bool bCreated = false;
             if( !pInfo )
             {
                 pInfo = SdDrawDocument::GetShapeUserData(*pObject,true);
-                bCreated = sal_True;
+                bCreated = true;
             }
 
             // das Pfadobjekt fuer 'an Kurve entlang'?
@@ -727,7 +718,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 //              pAction->SetPathObj(pInfo->mpPathObj, pInfo->mpPathObj);
                 pAction->SetClickAction(pInfo->meClickAction, pInfo->meClickAction);
                 pAction->SetBookmark(pInfo->GetBookmark(), pInfo->GetBookmark());
-//              pAction->SetInvisibleInPres(pInfo->mbInvisibleInPresentation, sal_True);
+//              pAction->SetInvisibleInPres(pInfo->mbInvisibleInPresentation, true);
                 pAction->SetVerb(pInfo->mnVerb, pInfo->mnVerb);
                 pAction->SetSecondEffect(pInfo->meSecondEffect, pInfo->meSecondEffect);
                 pAction->SetSecondSpeed(pInfo->meSecondSpeed, pInfo->meSecondSpeed);
@@ -735,7 +726,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
                 pAction->SetSecondPlayFull(pInfo->mbSecondPlayFull, pInfo->mbSecondPlayFull);
                 pUndoGroup->AddAction(pAction);
 
-//              pInfo->mbInvisibleInPresentation = sal_True;
+//              pInfo->mbInvisibleInPresentation = true;
             }
             else
             {

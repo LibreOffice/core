@@ -130,7 +130,7 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrm)
 
     if( bShowSelFrm )
     {
-        rContext.SetSelections(pFrmFmt, 0);
+        rContext.SetSelections(pFrmFmt);
     }
 
     if( GetHistory() )
@@ -346,7 +346,7 @@ void SwUndoInsLayFmt::RepeatImpl(::sw::RepeatContext & rContext)
     SwFrmFmt* pFlyFmt = pDoc->CopyLayoutFmt( *pFrmFmt, aAnchor, true, true );
     (void) pFlyFmt;
 //FIXME nobody ever did anything with this selection:
-//    rContext.SetSelections(pFlyFmt, 0);
+//    rContext.SetSelections(pFlyFmt);
 }
 
 // #111827#
@@ -622,7 +622,7 @@ void SwUndoSetFlyFmt::UndoImpl(::sw::UndoRedoContext & rContext)
 
             pFrmFmt->MakeFrms();
         }
-        rContext.SetSelections(pFrmFmt, 0);
+        rContext.SetSelections(pFrmFmt);
     }
 }
 
@@ -645,7 +645,7 @@ void SwUndoSetFlyFmt::RedoImpl(::sw::UndoRedoContext & rContext)
         else
             rDoc.SetFrmFmtToFly( *pFrmFmt, *pNewFmt, 0 );
 
-        rContext.SetSelections(pFrmFmt, 0);
+        rContext.SetSelections(pFrmFmt);
     }
 }
 

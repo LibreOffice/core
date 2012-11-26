@@ -39,8 +39,6 @@
 class EDITENG_DLLPUBLIC SvxParaGridItem : public SfxBoolItem
 {
 public:
-    TYPEINFO();
-
     SvxParaGridItem( const sal_Bool bSnapToGrid /*= sal_True*/,
                      const sal_uInt16 nId  );
 

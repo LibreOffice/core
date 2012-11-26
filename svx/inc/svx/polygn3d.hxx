@@ -41,41 +41,35 @@ private:
 
 protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+    virtual ~E3dPolygonObj();
+
+    /// method to copy all data from given source
+    virtual void copyDataFromSdrObject(const SdrObject& rSource);
 
 public:
+    /// create a copy, evtl. with a different target model (if given)
+    virtual SdrObject* CloneSdrObject(SdrModel* pTargetModel = 0) const;
+
     void SetPolyPolygon3D(const basegfx::B3DPolyPolygon& rNewPolyPoly3D);
     void SetPolyNormals3D(const basegfx::B3DPolyPolygon& rNewPolyPoly3D);
     void SetPolyTexture2D(const basegfx::B2DPolyPolygon& rNewPolyPoly2D);
 
-    TYPEINFO();
-
     E3dPolygonObj(
-        E3dDefaultAttributes& rDefault,
+        SdrModel& rSdrModel,
+        const E3dDefaultAttributes& rDefault,
         const basegfx::B3DPolyPolygon& rPolyPoly3D,
-        sal_Bool bLinOnly=sal_False);
-    E3dPolygonObj(
-        E3dDefaultAttributes& rDefault,
-        const basegfx::B3DPolyPolygon& rPolyPoly3D,
-        const basegfx::B3DPolyPolygon& rPolyNormals3D,
-        sal_Bool bLinOnly=sal_False);
-    E3dPolygonObj(
-        E3dDefaultAttributes& rDefault,
-        const basegfx::B3DPolyPolygon& rPolyPoly3D,
-        const basegfx::B3DPolyPolygon& rPolyNormals3D,
-        const basegfx::B2DPolyPolygon& rPolyTexture2D,
-        sal_Bool bLinOnly=sal_False);
+        const basegfx::B3DPolyPolygon* pPolyNormals3D = 0,
+        const basegfx::B2DPolyPolygon* pPolyTexture2D = 0,
+        bool bLinOnly = false);
 
     E3dPolygonObj();
-    virtual ~E3dPolygonObj();
 
     const basegfx::B3DPolyPolygon& GetPolyPolygon3D() const { return aPolyPoly3D; }
     const basegfx::B3DPolyPolygon& GetPolyNormals3D() const { return aPolyNormals3D; }
     const basegfx::B2DPolyPolygon& GetPolyTexture2D() const { return aPolyTexture2D; }
 
     virtual sal_uInt16 GetObjIdentifier() const;
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
-
-    virtual void operator=(const SdrObject&);
+    virtual SdrObject* DoConvertToPolygonObject(bool bBezier, bool bAddText) const;
 
     // LineOnly?
     sal_Bool GetLineOnly() { return bLineOnly; }

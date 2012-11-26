@@ -2947,7 +2947,7 @@ sal_Bool ScCompiler::IsMacro( const String& rName )
     // It really should be a BASIC function!
     if( pMeth->GetType() == SbxVOID
      || ( pMeth->IsFixed() && pMeth->GetType() == SbxEMPTY )
-     || !pMeth->ISA(SbMethod) )
+     || !dynamic_cast< SbMethod* >(pMeth) )
     {
         return sal_False;
     }

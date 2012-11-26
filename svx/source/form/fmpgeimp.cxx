@@ -32,8 +32,8 @@
 #include "fmservs.hxx"
 #include "fmobj.hxx"
 #include "formcontrolfactory.hxx"
-#include "svx/svditer.hxx"
-#include "svx/fmresids.hrc"
+#include <svx/svditer.hxx>
+#include <svx/fmresids.hrc>
 #include "svx/dbtoolsclient.hxx"
 #include "treevisitor.hxx"
 
@@ -72,7 +72,6 @@ using ::com::sun::star::container::EnumerableMap;
 using ::com::sun::star::drawing::XControlShape;
 using namespace ::svxform;
 
-DBG_NAME(FmFormPageImpl)
 //------------------------------------------------------------------------------
 FmFormPageImpl::FmFormPageImpl( FmFormPage& _rPage )
                :m_rPage( _rPage )
@@ -81,7 +80,6 @@ FmFormPageImpl::FmFormPageImpl( FmFormPage& _rPage )
                ,m_bInFind( false )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::FmFormPageImpl" );
-    DBG_CTOR(FmFormPageImpl,NULL);
 }
 
 //------------------------------------------------------------------------------
@@ -336,7 +334,7 @@ const Reference< XNameContainer >& FmFormPageImpl::getForms( bool _bForceCreate 
             m_aFormsCreationHdl.Call( this );
         }
 
-        FmFormModel* pFormsModel = PTR_CAST( FmFormModel, m_rPage.GetModel() );
+        FmFormModel* pFormsModel = dynamic_cast< FmFormModel* >( &m_rPage.getSdrModelFromSdrPage() );
 
         // give the newly created collection a place in the universe
         Reference< XChild > xAsChild( m_xForms, UNO_QUERY );
@@ -360,7 +358,6 @@ FmFormPageImpl::~FmFormPageImpl()
     xCurrentForm = NULL;
 
     ::comphelper::disposeComponent( m_xForms );
-    DBG_DTOR(FmFormPageImpl,NULL);
 }
 
 //------------------------------------------------------------------------------
@@ -426,14 +423,14 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
     // did not find an existing suitable form -> create a new one
     if ( !xForm.is() )
     {
-        SdrModel* pModel = m_rPage.GetModel();
+        SdrModel& rModel = m_rPage.getSdrModelFromSdrPage();
 
-        if( pModel->IsUndoEnabled() )
+        if( rModel.IsUndoEnabled() )
         {
             XubString aStr(SVX_RES(RID_STR_FORM));
             XubString aUndoStr(SVX_RES(RID_STR_UNDO_CONTAINER_INSERT));
             aUndoStr.SearchAndReplace('#', aStr);
-            pModel->BegUndo(aUndoStr);
+            rModel.BegUndo(aUndoStr);
         }
 
         try
@@ -449,9 +446,9 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
             xFormProps->setPropertyValue( FM_PROP_NAME, makeAny( sName ) );
 
             Reference< XIndexContainer > xContainer( xForms, UNO_QUERY );
-            if( pModel->IsUndoEnabled() )
+            if( rModel.IsUndoEnabled() )
             {
-                pModel->AddUndo(new FmUndoContainerAction(*(FmFormModel*)pModel,
+                rModel.AddUndo(new FmUndoContainerAction(static_cast< FmFormModel& >(rModel),
                                                            FmUndoContainerAction::Inserted,
                                                            xContainer,
                                                            xForm,
@@ -466,8 +463,8 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
             xForm.clear();
         }
 
-        if( pModel->IsUndoEnabled() )
-            pModel->EndUndo();
+        if( rModel.IsUndoEnabled() )
+            rModel.EndUndo();
     }
 
     return xForm;
@@ -508,16 +505,16 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormCompo
         // wenn keine ::com::sun::star::form gefunden, dann eine neue erzeugen
         if (!xForm.is())
         {
-            SdrModel* pModel = m_rPage.GetModel();
+            SdrModel& rModel = m_rPage.getSdrModelFromSdrPage();
 
-            const bool bUndo = pModel->IsUndoEnabled();
+            const bool bUndo = rModel.IsUndoEnabled();
 
             if( bUndo )
             {
                 XubString aStr(SVX_RES(RID_STR_FORM));
                 XubString aUndoStr(SVX_RES(RID_STR_UNDO_CONTAINER_INSERT));
                 aUndoStr.SearchAndReplace('#', aStr);
-                pModel->BegUndo(aUndoStr);
+                rModel.BegUndo(aUndoStr);
             }
 
             xForm = Reference< ::com::sun::star::form::XForm >(::comphelper::getProcessServiceFactory()->createInstance(FM_SUN_COMPONENT_FORM), UNO_QUERY);
@@ -549,7 +546,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormCompo
             if( bUndo )
             {
                 Reference< ::com::sun::star::container::XIndexContainer >  xContainer( getForms(), UNO_QUERY );
-                pModel->AddUndo(new FmUndoContainerAction(*(FmFormModel*)pModel,
+                rModel.AddUndo(new FmUndoContainerAction(static_cast< FmFormModel& >(rModel),
                                                          FmUndoContainerAction::Inserted,
                                                          xContainer,
                                                          xForm,
@@ -559,7 +556,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormCompo
             getForms()->insertByName( sName, makeAny( xForm ) );
 
             if( bUndo )
-                pModel->EndUndo();
+                rModel.EndUndo();
         }
         xCurrentForm = xForm;
     }

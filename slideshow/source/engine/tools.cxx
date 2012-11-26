@@ -146,8 +146,7 @@ namespace slideshow
                 // center of the shape to the origin (the
                 // translate( -0.5, -0.5 ) above), translate to
                 // center of final shape position here.
-                aTransform.translate( rShapeBounds.getCenterX(),
-                                      rShapeBounds.getCenterY() );
+                aTransform.translate( rShapeBounds.getCenter() );
 
                 return aTransform;
             }

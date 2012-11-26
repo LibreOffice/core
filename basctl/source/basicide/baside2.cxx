@@ -102,8 +102,6 @@ using namespace comphelper;
 
 DBG_NAME( ModulWindow )
 
-TYPEINIT1( ModulWindow , IDEBaseWindow );
-
 void lcl_PrintHeader( Printer* pPrinter, sal_uInt16 nPages, sal_uInt16 nCurPage, const String& rTitle, bool bOutput )
 {
     short nLeftMargin   = LMARGPRN;
@@ -1718,8 +1716,10 @@ void ModulWindowLayout::ConfigurationChanged( utl::ConfigurationBroadcaster*, sa
         bool bChanged = aColor != m_aSyntaxColors[TT_IDENTIFIER];
         m_aSyntaxColors[TT_IDENTIFIER] = aColor;
         aColor = Color(m_aColorConfig.GetColorValue(svtools::BASICNUMBER).nColor);
-    if (bChanged || aColor != m_aSyntaxColors[TT_NUMBER])
+
+        if (bChanged || aColor != m_aSyntaxColors[TT_NUMBER])
             bChanged = true;
+
         m_aSyntaxColors[TT_NUMBER] = aColor;
         aColor = Color(m_aColorConfig.GetColorValue(svtools::BASICSTRING).nColor);
         if (bChanged || aColor != m_aSyntaxColors[TT_STRING])

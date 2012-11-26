@@ -42,6 +42,7 @@
 #include <svx/svdpagv.hxx>
 #include <hintids.hxx>
 #include <tgrditem.hxx>
+#include <svx/svdlegacy.hxx>
 #include <switerator.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtclds.hxx>
@@ -98,6 +99,9 @@
 #define COL_NOTES_SIDEPANE                  RGB_COLORDATA(230,230,230)
 #define COL_NOTES_SIDEPANE_BORDER           RGB_COLORDATA(200,200,200)
 #define COL_NOTES_SIDEPANE_SCROLLAREA       RGB_COLORDATA(230,230,220)
+
+#include <vcl/svapp.hxx>
+#include <svx/fmmodel.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1317,7 +1321,7 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
         if ( !pPage->GetFmt()->GetDoc()->IsVisibleLayerId( pSdrObj->GetLayer() ) )
             continue;
 
-        if ( !pAnchoredObj->ISA(SwFlyFrm) )
+        if ( !dynamic_cast< const SwFlyFrm* >(pAnchoredObj) )
             continue;
 
         const SwFlyFrm *pFly = static_cast<const SwFlyFrm*>(pAnchoredObj);
@@ -1351,7 +1355,7 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
         if ( pSelfFly && bLowerOfSelf )
         {
             ASSERT( pFly->IsFlyInCntFrm() ||
-                    pSdrObj->GetOrdNumDirect() > pSelfFly->GetVirtDrawObj()->GetOrdNumDirect(),
+                    pSdrObj->GetNavigationPosition() > pSelfFly->GetVirtDrawObj()->GetNavigationPosition(),
                     "Fly with wrong z-Order" );
         }
 #endif
@@ -1362,7 +1366,7 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
             const SdrObject *pTmp = pSelfFly->GetVirtDrawObj();
             if ( pSdrObj->GetLayer() == pTmp->GetLayer() )
             {
-                if ( pSdrObj->GetOrdNumDirect() < pTmp->GetOrdNumDirect() )
+                if ( pSdrObj->GetNavigationPosition() < pTmp->GetNavigationPosition() )
                     //Im gleichen Layer werden nur obenliegende beachtet.
                     continue;
             }
@@ -1380,7 +1384,7 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
             const SdrObject *pTmp = pRetoucheFly->GetVirtDrawObj();
             if ( pSdrObj->GetLayer() == pTmp->GetLayer() )
             {
-                if ( pSdrObj->GetOrdNumDirect() < pTmp->GetOrdNumDirect() )
+                if ( pSdrObj->GetNavigationPosition() < pTmp->GetNavigationPosition() )
                     //Im gleichen Layer werden nur obenliegende beachtet.
                     continue;
             }
@@ -3003,7 +3007,12 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
                 {
                     SdrPaintView* pPaintView = pSh->Imp()->GetDrawView();
                     SdrPageView* pPageView = pPaintView->GetSdrPageView();
-                    pPageView->DrawPageViewGrid(*pSh->GetOut(), aPaintRect.SVRect(), SwViewOption::GetTextGridColor() );
+
+                    if(pPageView)
+                    {
+                        const Rectangle aOldRect(aPaintRect.SVRect());
+                        pPageView->DrawPageViewGrid(*pSh->GetOut(), basegfx::B2DRange(aOldRect.Left(), aOldRect.Top(), aOldRect.Right(), aOldRect.Bottom()), SwViewOption::GetTextGridColor());
+                    }
                 }
 
                 // #i68597#
@@ -3403,14 +3412,13 @@ sal_Bool SwFlyFrm::IsShadowTransparent() const
 
 sal_Bool SwFlyFrm::IsPaint( SdrObject *pObj, const ViewShell *pSh )
 {
-    SdrObjUserCall *pUserCall;
+    SwContact *pSwContact;
 
-    if ( 0 == ( pUserCall = GetUserCall(pObj) ) )
+    if ( 0 == ( pSwContact = findConnectionToSdrObject(pObj) ) )
         return sal_True;
 
     //Attributabhaengig nicht fuer Drucker oder PreView painten
-    sal_Bool bPaint =  pFlyOnlyDraw ||
-                       ((SwContact*)pUserCall)->GetFmt()->GetPrint().GetValue();
+    sal_Bool bPaint =  pFlyOnlyDraw || pSwContact->GetFmt()->GetPrint().GetValue();
     if ( !bPaint )
         bPaint = pSh->GetWin() && !pSh->IsPreView();
 
@@ -3419,12 +3427,12 @@ sal_Bool SwFlyFrm::IsPaint( SdrObject *pObj, const ViewShell *pSh )
         //Das Paint kann evtl. von von uebergeordneten Flys verhindert werden.
         SwFrm *pAnch = 0;
         // --> OD #i117962#
-        if ( pObj->ISA(SwFlyDrawObj) )
+        if ( dynamic_cast< SwFlyDrawObj* >(pObj) )
         {
             bPaint = false;
         }
         // <--
-        else if ( pObj->ISA(SwVirtFlyDrawObj) )
+        else if ( dynamic_cast< SwVirtFlyDrawObj* >(pObj) )
         {
             SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
             if ( pFlyOnlyDraw && pFlyOnlyDraw == pFly )
@@ -3456,7 +3464,7 @@ sal_Bool SwFlyFrm::IsPaint( SdrObject *pObj, const ViewShell *pSh )
         {
             // OD 13.10.2003 #i19919# - consider 'virtual' drawing objects
             // OD 2004-03-29 #i26791#
-            pAnch = ((SwDrawContact*)pUserCall)->GetAnchorFrm( pObj );
+            pAnch = ((SwDrawContact*)pSwContact)->GetAnchorFrm( pObj );
             if ( pAnch )
             {
                 if ( !pAnch->GetValidPosFlag() )
@@ -3471,14 +3479,14 @@ sal_Bool SwFlyFrm::IsPaint( SdrObject *pObj, const ViewShell *pSh )
                     //Position her gerade schweben.
                     const SwPageFrm *pPage = pAnch->FindPageFrm();
                     if ( !bTableHack &&
-                         !pPage->Frm().IsOver( pObj->GetCurrentBoundRect() ) )
+                         !pPage->Frm().IsOver( sdr::legacy::GetBoundRect(*pObj) ) )
                         pAnch = 0;
                 }
             }
             else
             {
                 // OD 02.07.2003 #108784# - debug assert
-                if ( !pObj->ISA(SdrObjGroup) )
+                if ( !dynamic_cast< SdrObjGroup* >(pObj) )
                 {
                     ASSERT( false, "<SwFlyFrm::IsPaint(..)> - paint of drawing object without anchor frame!?" );
                 }
@@ -5992,7 +6000,7 @@ void SwLayoutFrm::RefreshLaySubsidiary( const SwPageFrm *pPage,
                     const SwAnchoredObject* pAnchoredObj = rObjs[i];
                     if ( pPage->GetFmt()->GetDoc()->IsVisibleLayerId(
                                     pAnchoredObj->GetDrawObj()->GetLayer() ) &&
-                         pAnchoredObj->ISA(SwFlyFrm) )
+                         dynamic_cast< const SwFlyFrm* >(pAnchoredObj) )
                     {
                         const SwFlyFrm *pFly =
                                     static_cast<const SwFlyFrm*>(pAnchoredObj);
@@ -6068,7 +6076,7 @@ void MA_FASTCALL lcl_RefreshLine( const SwLayoutFrm *pLay,
             aIter.Current( pMyFly->GetVirtDrawObj() );
             while ( 0 != (pMyFly = pMyFly->GetAnchorFrm()->FindFlyFrm()) )
             {
-                if ( aIter()->GetOrdNum() > pMyFly->GetVirtDrawObj()->GetOrdNum() )
+                if ( aIter()->GetNavigationPosition() > pMyFly->GetVirtDrawObj()->GetNavigationPosition() )
                     aIter.Current( pMyFly->GetVirtDrawObj() );
             }
         }
@@ -6100,9 +6108,9 @@ void MA_FASTCALL lcl_RefreshLine( const SwLayoutFrm *pLay,
             }
 
             //Sitzt das Obj auf der Linie
-            const Rectangle &rBound = pObj->GetCurrentBoundRect();
-            const Point aDrPt( rBound.TopLeft() );
-            const Size  aDrSz( rBound.GetSize() );
+            const Rectangle aBound = sdr::legacy::GetBoundRect(*pObj);
+            const Point aDrPt( aBound.TopLeft() );
+            const Size  aDrSz( aBound.GetSize() );
             if ( rP1.*pOthPt >= aDrPt.*pOthPt &&
                  rP1.*pOthPt <= (aDrPt.*pOthPt + aDrSz.*pOthSz) )
             {
@@ -6318,9 +6326,10 @@ void SwPageFrm::RefreshExtraData( const SwRect &rRect ) const
             for ( sal_uInt16 i = 0; i < GetSortedObjs()->Count(); ++i )
             {
                 const SwAnchoredObject* pAnchoredObj = (*GetSortedObjs())[i];
-                if ( pAnchoredObj->ISA(SwFlyFrm) )
+                const SwFlyFrm* pFly = dynamic_cast< const SwFlyFrm* >(pAnchoredObj);
+
+                if ( pFly )
                 {
-                    const SwFlyFrm *pFly = static_cast<const SwFlyFrm*>(pAnchoredObj);
                     if ( pFly->Frm().Top() <= aRect.Bottom() &&
                          pFly->Frm().Bottom() >= aRect.Top() )
                         pFly->RefreshExtraData( aRect );
@@ -6353,9 +6362,10 @@ void SwLayoutFrm::RefreshExtraData( const SwRect &rRect ) const
             for ( sal_uInt32 i = 0; i < pCnt->GetDrawObjs()->Count(); ++i )
             {
                 const SwAnchoredObject* pAnchoredObj = (*pCnt->GetDrawObjs())[i];
-                if ( pAnchoredObj->ISA(SwFlyFrm) )
+                const SwFlyFrm* pFly = dynamic_cast< const SwFlyFrm* >(pAnchoredObj);
+
+                if ( pFly )
                 {
-                    const SwFlyFrm *pFly = static_cast<const SwFlyFrm*>(pAnchoredObj);
                     if ( pFly->IsFlyInCntFrm() &&
                          pFly->Frm().Top() <= rRect.Bottom() &&
                          pFly->Frm().Bottom() >= rRect.Top() )
@@ -6770,11 +6780,10 @@ Graphic SwDrawFrmFmt::MakeGraphic( ImageMap* )
     if ( pMod )
     {
         SdrObject *pObj = FindSdrObject();
-        SdrView *pView = new SdrView( pMod );
-        SdrPageView *pPgView = pView->ShowSdrPage(pView->GetModel()->GetPage(0));
-        pView->MarkObj( pObj, pPgView );
+        SdrView *pView = new SdrView( *pMod );
+        pView->ShowSdrPage(*pView->getSdrModelFromSdrView().GetPage(0));
+        pView->MarkObj( *pObj );
         aRet = pView->GetMarkedObjBitmapEx();
-        pView->HideSdrPage();
         delete pView;
     }
     return aRet;

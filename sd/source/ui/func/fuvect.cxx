@@ -49,8 +49,6 @@
 namespace sd
 {
 
-TYPEINIT1( FuVectorize, FuPoor );
-
 /*************************************************************************
 |*
 |* Konstruktor
@@ -76,36 +74,31 @@ FunctionReference FuVectorize::Create( ViewShell* pViewSh, ::sd::Window* pWin, :
 
 void FuVectorize::DoExecute( SfxRequest& )
 {
-    const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+    SdrGrafObj* pObj = dynamic_cast< SdrGrafObj* >(mpView->getSelectedIfSingle());
 
-    if( rMarkList.GetMarkCount() == 1 )
+    if( pObj )
     {
-        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-
-        if( pObj && pObj->ISA( SdrGrafObj ) )
+        SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+        AbstractSdVectorizeDlg* pDlg = pFact ? pFact->CreateSdVectorizeDlg( mpWindow, pObj->GetGraphic().GetBitmap(), mpDocSh ) : 0;
+        if( pDlg && pDlg->Execute() == RET_OK )
         {
-            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            AbstractSdVectorizeDlg* pDlg = pFact ? pFact->CreateSdVectorizeDlg( mpWindow, ( (SdrGrafObj*) pObj )->GetGraphic().GetBitmap(), mpDocSh ) : 0;
-            if( pDlg && pDlg->Execute() == RET_OK )
+            const GDIMetaFile&  rMtf = pDlg->GetGDIMetaFile();
+
+            if( rMtf.GetActionCount() )
             {
-                const GDIMetaFile&  rMtf = pDlg->GetGDIMetaFile();
-                SdrPageView*        pPageView = mpView->GetSdrPageView();
+                SdrGrafObj* pVectObj = static_cast< SdrGrafObj* >(pObj->CloneSdrObject());
+                String      aStr;
 
-                if( pPageView && rMtf.GetActionCount() )
-                {
-                    SdrGrafObj* pVectObj = (SdrGrafObj*) pObj->Clone();
-                    String      aStr( mpView->GetDescriptionOfMarkedObjects() );
-
+                pObj->TakeObjNameSingul(aStr);
                     aStr.Append( sal_Unicode(' ') );
                     aStr.Append( String( SdResId( STR_UNDO_VECTORIZE ) ) );
                     mpView->BegUndo( aStr );
                     pVectObj->SetGraphic( rMtf );
-                    mpView->ReplaceObjectAtView( pObj, *pPageView, pVectObj );
+                mpView->ReplaceObjectAtView( *pObj, *pVectObj );
                     mpView->EndUndo();
-                }
             }
-            delete pDlg;
         }
+        delete pDlg;
     }
 }
 

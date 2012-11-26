@@ -62,8 +62,9 @@
 #include <redline.hxx>
 #include <section.hxx>
 #include <charfmt.hxx>
+#include <svx/svdlegacy.hxx>
+#include <svx/fmmodel.hxx>
 #include <switerator.hxx>
-
 
 // -----------------------------------------------------
 
@@ -239,7 +240,7 @@ void SwUndoFmtAttr::UndoImpl(::sw::UndoRedoContext & rContext)
 
         if ( RES_FLYFRMFMT == m_nFmtWhich || RES_DRAWFRMFMT == m_nFmtWhich )
         {
-            rContext.SetSelections(static_cast<SwFrmFmt*>(m_pFmt), 0);
+            rContext.SetSelections(static_cast<SwFrmFmt*>(m_pFmt));
         }
     }
 }
@@ -430,17 +431,12 @@ void SwUndoFmtAttr::SaveFlyAnchor( bool bSvDrwPt )
     {
         if ( RES_DRAWFRMFMT == m_pFmt->Which() )
         {
-            Point aPt( static_cast<SwFrmFmt*>(m_pFmt)->FindSdrObject()
-                            ->GetRelativePos() );
+            const SdrObject* pSdrObject = static_cast<SwFrmFmt*>(m_pFmt)->FindSdrObject();
+            const Point aPt(sdr::legacy::GetSnapRect(*pSdrObject).TopLeft() - sdr::legacy::GetAnchorPos(*pSdrObject));
             // store old value as attribute, to keep SwUndoFmtAttr small
             m_pOldSet->Put( SwFmtFrmSize( ATT_VAR_SIZE, aPt.X(), aPt.Y() ) );
         }
-/*      else
-        {
-            pOldSet->Put( pFmt->GetVertOrient() );
-            pOldSet->Put( pFmt->GetHoriOrient() );
         }
-*/  }
 
     const SwFmtAnchor& rAnchor =
         static_cast<const SwFmtAnchor&>( m_pOldSet->Get( RES_ANCHOR, sal_False ) );
@@ -524,7 +520,8 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
             m_pOldSet->ClearItem( RES_FRM_SIZE );
 
             // den akt. wieder zwischenspeichern
-            aDrawOldPt = pFrmFmt->FindSdrObject()->GetRelativePos();
+            const SdrObject* pSdrObject = pFrmFmt->FindSdrObject();
+            aDrawOldPt = sdr::legacy::GetSnapRect(*pSdrObject).TopLeft() - sdr::legacy::GetAnchorPos(*pSdrObject);
 //JP 08.10.97: ist laut AMA/MA nicht mehr noetig
 //          pCont->DisconnectFromLayout();
         }
@@ -589,12 +586,20 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
 //          pCont->ConnectToLayout();
         SdrObject* pObj = pCont->GetMaster();
 
-        if( pCont->GetAnchorFrm() && !pObj->IsInserted() )
+        if( pCont->GetAnchorFrm() && !pObj->IsObjectInserted() )
         {
             ASSERT( pDoc->GetDrawModel(), "RestoreFlyAnchor without DrawModel" );
-            pDoc->GetDrawModel()->GetPage( 0 )->InsertObject( pObj );
+            pDoc->GetDrawModel()->GetPage(0)->InsertObjectToSdrObjList(*pObj);
         }
-        pObj->SetRelativePos( aDrawSavePt );
+
+        // #i108739#
+        {
+            const Point aTopLeft(sdr::legacy::GetSnapRect(*pObj).TopLeft());
+            const Point aAnchorPos(sdr::legacy::GetAnchorPos(*pObj));
+            sdr::legacy::transformSdrObject(*pObj, basegfx::tools::createTranslateB2DHomMatrix(
+                aDrawSavePt.X() - aTopLeft.X() + aAnchorPos.X(),
+                aDrawSavePt.Y() - aTopLeft.Y() + aAnchorPos.Y()));
+        }
 
         // den alten Wert wieder zwischenspeichern.
         m_pOldSet->Put(
@@ -614,7 +619,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
     if( RES_DRAWFRMFMT != pFrmFmt->Which() )
         pFrmFmt->MakeFrms();
 
-    rContext.SetSelections(pFrmFmt, 0);
+    rContext.SetSelections(pFrmFmt);
 
     // --> OD 2004-10-26 #i35443# - anchor attribute restored.
     return true;

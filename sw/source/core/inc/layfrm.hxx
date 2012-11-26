@@ -63,8 +63,6 @@ protected:
 
 public:
     // --> OD 2004-06-29 #i28701#
-    TYPEINFO();
-
     void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const;
     void RefreshLaySubsidiary( const SwPageFrm*, const SwRect& ) const;
     void RefreshExtraData( const SwRect & ) const;

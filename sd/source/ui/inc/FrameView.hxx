@@ -38,11 +38,10 @@ namespace sd {
 |* View fuer den MDIFrame
 |*
 \************************************************************************/
-class FrameView
-    : public SdrView
+class FrameView : public SdrView
 {
 public:
-    SD_DLLPUBLIC FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView = NULL );
+    SD_DLLPUBLIC FrameView(SdDrawDocument& rDrawDoc, FrameView* pFrameView = NULL );
     FrameView(const FrameView& rFrameView);
     virtual ~FrameView();
 
@@ -73,17 +72,17 @@ public:
                          { maPrintableLayers = rPrintableLayers; }
     const SetOfByte& GetPrintableLayers() { return maPrintableLayers; }
 
-    void SetRuler(const sal_Bool bRulerOn)
+    void SetRuler(const bool bRulerOn)
                  { mbRuler = bRulerOn; }
-    sal_Bool HasRuler() const { return mbRuler; }
+    bool HasRuler() const { return mbRuler; }
 
-    void SetNoColors(const sal_Bool bNoCol)
+    void SetNoColors(const bool bNoCol)
                  { mbNoColors = bNoCol; }
-    sal_Bool IsNoColors() const { return mbNoColors; }
+    bool IsNoColors() const { return mbNoColors; }
 
-    void SetNoAttribs(const sal_Bool bNoAttr)
+    void SetNoAttribs(const bool bNoAttr)
                  { mbNoAttribs = bNoAttr; }
-    sal_Bool IsNoAttribs() const { return mbNoAttribs; }
+    bool IsNoAttribs() const { return mbNoAttribs; }
 
     void SetVisArea(const Rectangle& rVisArea)
                  { maVisArea = rVisArea; }
@@ -99,15 +98,15 @@ public:
     /** can be used to get the page kind that was selected on last save of this document */
     PageKind GetPageKindOnLoad() const { return mePageKindOnLoad; }
 
-    SD_DLLPUBLIC void SetSelectedPage (sal_uInt16 nPage);
-    sal_uInt16 GetSelectedPage () const;
+    SD_DLLPUBLIC void SetSelectedPage (sal_uInt32 nPage);
+    sal_uInt32 GetSelectedPage () const;
 
     /** is used in FrameView::ReadUserDataSequence() only to store the
         page that was selected while last saving this document */
-    void SetSelectedPageOnLoad (sal_uInt16 nPage) { mnSelectedPageOnLoad = nPage; }
+    void SetSelectedPageOnLoad (sal_uInt32 nPage) { mnSelectedPageOnLoad = nPage; }
 
     /** can be used to get the page that was selected on last save of this document */
-    sal_uInt16 GetSelectedPageOnLoad () const { return mnSelectedPageOnLoad; }
+    sal_uInt32 GetSelectedPageOnLoad () const { return mnSelectedPageOnLoad; }
 
     SD_DLLPUBLIC void SetViewShEditMode(EditMode eMode, PageKind eKind);
     EditMode GetViewShEditMode (PageKind eKind);
@@ -122,22 +121,22 @@ public:
     */
     EditMode GetViewShEditModeOnLoad (void) const;
 
-    void SetLayerMode(sal_Bool bMode)
+    void SetLayerMode(bool bMode)
                  { mbLayerMode = bMode; }
-    sal_Bool IsLayerMode() const { return mbLayerMode; }
+    bool IsLayerMode() const { return mbLayerMode; }
 
-    void SetQuickEdit(sal_Bool bQEdit)
+    void SetQuickEdit(bool bQEdit)
                  { mbQuickEdit = bQEdit; }
-    sal_Bool IsQuickEdit() const { return mbQuickEdit; }
+    bool IsQuickEdit() const { return mbQuickEdit; }
 
-    void        SetBigHandles( sal_Bool bOn = sal_True ) { mbBigHandles = bOn; }
-    sal_Bool    IsBigHandles() const { return mbBigHandles; }
+    void        SetBigHandles( bool bOn = true ) { mbBigHandles = bOn; }
+    bool    IsBigHandles() const { return mbBigHandles; }
 
-    void        SetDoubleClickTextEdit( sal_Bool bOn = sal_True ) { mbDoubleClickTextEdit = bOn; }
-    sal_Bool    IsDoubleClickTextEdit() const { return mbDoubleClickTextEdit; }
+    void        SetDoubleClickTextEdit( bool bOn = true ) { mbDoubleClickTextEdit = bOn; }
+    bool    IsDoubleClickTextEdit() const { return mbDoubleClickTextEdit; }
 
-    void        SetClickChangeRotation( sal_Bool bOn = sal_True ) { mbClickChangeRotation = bOn; }
-    sal_Bool    IsClickChangeRotation() const { return mbClickChangeRotation; }
+    void        SetClickChangeRotation( bool bOn = true ) { mbClickChangeRotation = bOn; }
+    bool    IsClickChangeRotation() const { return mbClickChangeRotation; }
 
     /** Remember the type of the view shell that was (or soon will be)
         previously associated with this frame view.
@@ -184,36 +183,36 @@ public:
 private:
     sal_uInt16          mnRefCount;
     VirtualDevice*  mpVDev;
-    sal_Bool            mbRuler;
+    bool            mbRuler;
     SetOfByte       maVisibleLayers;
     SetOfByte       maLockedLayers;
     SetOfByte       maPrintableLayers;
     SdrHelpLineList maStandardHelpLines;
     SdrHelpLineList maNotesHelpLines;
     SdrHelpLineList maHandoutHelpLines;
-    sal_Bool            mbNoColors;        // Gliederungsmodus
-    sal_Bool            mbNoAttribs;       // Gliederungsmodus
+    bool            mbNoColors;        // Gliederungsmodus
+    bool            mbNoAttribs;       // Gliederungsmodus
     Rectangle       maVisArea;         // Sichtbarer Bereich
     PageKind        mePageKind;        // Seitentyp (Standard, Notizen, Handzettel)
     sal_uInt16          mnSelectedPage;    // Selektierte Seite
     PageKind        mePageKindOnLoad;
-    sal_uInt16          mnSelectedPageOnLoad;
+    sal_uInt32      mnSelectedPageOnLoad;
     EditMode        meStandardEditMode; // Editmode im Zeichenmodus (Page/MasterPage)
     EditMode        meNotesEditMode;    // Editmode im Notizen-Modus (Page/MasterPage)
     EditMode        meHandoutEditMode;  // Editmode im Handzettel-Modus (Page/MasterPage)
     EditMode        meEditModeOnLoad;
-    sal_Bool            mbLayerMode;       // Layer an/aus
-    sal_Bool            mbQuickEdit;       // QuickEdit an/aus
-    sal_Bool            mbBigHandles;      // Grosse Handles
-    sal_Bool            mbDoubleClickTextEdit; // Textmodus nach Doppelklick
-    sal_Bool            mbClickChangeRotation; // Einfachklick wechselt Selektions-/Rotationsmodus
+    bool            mbLayerMode;       // Layer an/aus
+    bool            mbQuickEdit;       // QuickEdit an/aus
+    bool            mbBigHandles;      // Grosse Handles
+    bool            mbDoubleClickTextEdit; // Textmodus nach Doppelklick
+    bool            mbClickChangeRotation; // Einfachklick wechselt Selektions-/Rotationsmodus
     sal_uInt16          mnPresViewShellId;  // ViewShell aus der die Pres. gestartet wurde
     sal_uInt16          mnSlotId;          // SlotId, welche initial ausgefuehrt wird
     sal_uInt16          mnSlidesPerRow;     // Dias pro Reihe auf dem Diatisch
     sal_uLong           mnDrawMode;        // Drawmode fuer das normale Fenster
     double          mnTabCtrlPercent;
-    /** Remember whether the navigator shows all shapes (<TRUE/>) or only
-        the names ones (<FALSE/>).  Not persistent.
+    /** Remember whether the navigator shows all shapes (<true/>) or only
+        the names ones (<false/>).  Not persistent.
     */
     bool            mbIsNavigatorShowingAllShapes;
 

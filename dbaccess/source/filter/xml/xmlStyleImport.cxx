@@ -96,8 +96,6 @@ using namespace ::com::sun::star::container;
 using namespace xmloff::token;
 
 // -----------------------------------------------------------------------------
-TYPEINIT1( OTableStyleContext, XMLPropStyleContext );
-TYPEINIT1( OTableStylesContext, SvXMLStylesContext );
 DBG_NAME(OTableStyleContext)
 
 OTableStyleContext::OTableStyleContext( ODBFilter& rImport,
@@ -141,13 +139,13 @@ void OTableStyleContext::FillPropertySet(
         {
             if ((m_nNumberFormat == -1) && m_sDataStyleName.getLength())
             {
-                SvXMLNumFormatContext* pStyle = PTR_CAST(SvXMLNumFormatContext,pStyles->FindStyleChildContext(
+                const SvXMLNumFormatContext* pStyle = dynamic_cast< const SvXMLNumFormatContext* >( pStyles->FindStyleChildContext(
                     XML_STYLE_FAMILY_DATA_STYLE, m_sDataStyleName, sal_True));
                 if ( !pStyle )
                 {
-                    OTableStylesContext* pMyStyles = PTR_CAST(OTableStylesContext,GetOwnImport().GetAutoStyles());
+                    OTableStylesContext* pMyStyles = dynamic_cast< OTableStylesContext* >( GetOwnImport().GetAutoStyles());
                     if ( pMyStyles )
-                        pStyle = PTR_CAST(SvXMLNumFormatContext,pMyStyles->
+                        pStyle = dynamic_cast< const SvXMLNumFormatContext* >( pMyStyles->
                             FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, m_sDataStyleName, sal_True));
                     else {
                         DBG_ERROR("not possible to get style");
@@ -156,7 +154,7 @@ void OTableStyleContext::FillPropertySet(
                 if ( pStyle )
                 {
                     uno::Any aNumberFormat;
-                    m_nNumberFormat = pStyle->GetKey();
+                    m_nNumberFormat = const_cast< SvXMLNumFormatContext* >(pStyle)->GetKey();
                     aNumberFormat <<= m_nNumberFormat;
                     //rPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NUMBERFORMAT)), aNumberFormat);
                     AddProperty(CTF_DB_NUMBERFORMAT, aNumberFormat);

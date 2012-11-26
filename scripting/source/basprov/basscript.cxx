@@ -97,7 +97,7 @@ namespace basprov
             // not interested in
             return;
         }
-        const SfxSimpleHint* pSimpleHint = PTR_CAST( SfxSimpleHint, &rHint );
+        const SfxSimpleHint* pSimpleHint = dynamic_cast< const SfxSimpleHint* >( &rHint );
         if ( pSimpleHint && ( pSimpleHint->GetId() == SFX_HINT_DYING ) )
         {
             m_documentBasicManager = NULL;

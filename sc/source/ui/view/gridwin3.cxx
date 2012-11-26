@@ -56,7 +56,8 @@ sal_Bool ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
     if (pDraw && !pViewData->IsRefMode())
     {
         pDraw->SetWindow( this );
-        Point aLogicPos = PixelToLogic(rMEvt.GetPosPixel());
+        const basegfx::B2DPoint aLogicPos(GetInverseViewTransformation() * basegfx::B2DPoint(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y()));
+
         if ( pDraw->IsDetectiveHit( aLogicPos ) )
         {
             //  auf Detektiv-Pfeilen gar nichts (Doppelklick wird bei ButtonUp ausgewertet)
@@ -165,12 +166,12 @@ sal_Bool ScGridWindow::DrawKeyInput(const KeyEvent& rKEvt)
     if (pDrView && pDraw && !pViewData->IsRefMode())
     {
         pDraw->SetWindow( this );
-        sal_Bool bOldMarked = pDrView->AreObjectsMarked();
+        sal_Bool bOldMarked = pDrView->areSdrObjectsSelected();
         if (pDraw->KeyInput( rKEvt ))
         {
             sal_Bool bLeaveDraw = sal_False;
             sal_Bool bUsed = sal_True;
-            sal_Bool bNewMarked = pDrView->AreObjectsMarked();
+            sal_Bool bNewMarked = pDrView->areSdrObjectsSelected();
             if ( !pViewData->GetView()->IsDrawSelMode() )
                 if ( !bNewMarked )
                 {
@@ -225,17 +226,18 @@ void ScGridWindow::DrawRedraw( ScOutputData& rOutputData, ScUpdateMode eMode, sa
 void ScGridWindow::DrawSdrGrid( const Rectangle& rDrawingRect, OutputDevice* pContentDev )
 {
     //  Draw-Gitterlinien
-
     ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
+
     if ( pDrView && pDrView->IsGridVisible() )
     {
         SdrPageView* pPV = pDrView->GetSdrPageView();
         DBG_ASSERT(pPV, "keine PageView");
+
         if (pPV)
         {
             pContentDev->SetLineColor(COL_GRAY);
 
-            pPV->DrawPageViewGrid( *pContentDev, rDrawingRect );
+            pPV->DrawPageViewGrid(*pContentDev, basegfx::B2DRange(rDrawingRect.Left(), rDrawingRect.Top(), rDrawingRect.Right(), rDrawingRect.Bottom()));
         }
     }
 }
@@ -307,7 +309,7 @@ void ScGridWindow::DrawAfterScroll(/*sal_Bool bVal*/)
 
         OutlinerView* pOlView = pDrView->GetTextEditOutlinerView();
         if (pOlView && pOlView->GetWindow() == this)
-            pOlView->ShowCursor(sal_False);                 // ist beim Scrollen weggekommen
+            pOlView->ShowCursor(false);                 // ist beim Scrollen weggekommen
     }
 }
 
@@ -321,7 +323,7 @@ void ScGridWindow::DrawAfterScroll(/*sal_Bool bVal*/)
 //sal_Bool ScGridWindow::NeedDrawMarks()
 //{
 //  ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
-//  return pDrView && pDrView->IsMarkHdlShown() && pDrView->AreObjectsMarked();
+//  return pDrView && pDrView->IsMarkHdlShown() && pDrView->areSdrObjectsSelected();
 //}
 
 void ScGridWindow::CreateAnchorHandle(SdrHdlList& rHdl, const ScAddress& rAddress)
@@ -333,9 +335,11 @@ void ScGridWindow::CreateAnchorHandle(SdrHdlList& rHdl, const ScAddress& rAddres
         if(rOpts.GetOption( VOPT_ANCHOR ))
         {
             sal_Bool bNegativePage = pViewData->GetDocument()->IsNegativePage( pViewData->GetTabNo() );
-            Point aPos = pViewData->GetScrPos( rAddress.Col(), rAddress.Row(), eWhich, sal_True );
-            aPos = PixelToLogic(aPos);
-            rHdl.AddHdl(new SdrHdl(aPos, bNegativePage ? HDL_ANCHOR_TR : HDL_ANCHOR));
+            const Point aPos(pViewData->GetScrPos(rAddress.Col(), rAddress.Row(), eWhich, true));
+            const basegfx::B2DPoint aPixelPos(aPos.X(), aPos.Y());
+            const basegfx::B2DPoint aLogicPos(GetInverseViewTransformation() * aPixelPos); // after cell edit mode is ended
+
+            new SdrHdl(rHdl, 0, bNegativePage ? HDL_ANCHOR_TR : HDL_ANCHOR, aLogicPos);
         }
     }
 }
@@ -373,32 +377,35 @@ void ScGridWindow::UpdateStatusPosSize()
     sal_Bool bActionItem = sal_False;
     if ( pDrView->IsAction() )              // action rectangle
     {
-        Rectangle aRect;
-        pDrView->TakeActionRect( aRect );
-        if ( !aRect.IsEmpty() )
+        basegfx::B2DRange aRange(pDrView->TakeActionRange());
+
+        if(!aRange.isEmpty())
         {
-            pPV->LogicToPagePos(aRect);
-            aSet.Put( SfxPointItem( SID_ATTR_POSITION, aRect.TopLeft() ) );
-            aSet.Put( SvxSizeItem( SID_ATTR_SIZE,
-                    Size( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() ) ) );
+            aRange.transform(basegfx::tools::createTranslateB2DHomMatrix(-pPV->GetPageOrigin()));
+            const Point aOldTopLeft(basegfx::fround(aRange.getMinX()), basegfx::fround(aRange.getMinY()));
+            const Size aOldSize(basegfx::fround(aRange.getWidth()), basegfx::fround(aRange.getHeight()));
+
+            aSet.Put( SfxPointItem( SID_ATTR_POSITION, aOldTopLeft ) );
+            aSet.Put( SvxSizeItem( SID_ATTR_SIZE, aOldSize ) );
+
             bActionItem = sal_True;
         }
     }
     if ( !bActionItem )
     {
-        if ( pDrView->AreObjectsMarked() )      // selected objects
+        if ( pDrView->areSdrObjectsSelected() )     // selected objects
         {
-            Rectangle aRect = pDrView->GetAllMarkedRect();
-            pPV->LogicToPagePos(aRect);
-            aSet.Put( SfxPointItem( SID_ATTR_POSITION, aRect.TopLeft() ) );
-            aSet.Put( SvxSizeItem( SID_ATTR_SIZE,
-                    Size( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() ) ) );
+            basegfx::B2DRange aRange(pDrView->getMarkedObjectSnapRange());
+            aRange.transform(basegfx::tools::createTranslateB2DHomMatrix(-pPV->GetPageOrigin()));
+
+            aSet.Put(SfxPointItem(SID_ATTR_POSITION, Point(basegfx::fround(aRange.getMinX()), basegfx::fround(aRange.getMinY()))));
+            aSet.Put(SvxSizeItem(SID_ATTR_SIZE, Size(basegfx::fround(aRange.getWidth()), basegfx::fround(aRange.getHeight()))));
         }
         else                                // mouse position
         {
-            Point aPos = PixelToLogic(aCurMousePos);
-            pPV->LogicToPagePos(aPos);
-            aSet.Put( SfxPointItem( SID_ATTR_POSITION, aPos ) );
+            const basegfx::B2DPoint aPos((GetInverseViewTransformation() * basegfx::B2DPoint(aCurMousePos.X(), aCurMousePos.Y())) - pPV->GetPageOrigin());
+
+            aSet.Put(SfxPointItem(SID_ATTR_POSITION, Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY()))));
             aSet.Put( SvxSizeItem( SID_ATTR_SIZE, Size( 0, 0 ) ) );
         }
     }
@@ -409,24 +416,8 @@ void ScGridWindow::UpdateStatusPosSize()
 sal_Bool ScGridWindow::DrawHasMarkedObj()
 {
     ScDrawView* p = pViewData->GetScDrawView();
-    return p ? p->AreObjectsMarked() : sal_False;
+    return p ? p->areSdrObjectsSelected() : sal_False;
 }
-
-//void ScGridWindow::DrawStartTimer()
-//{
-    //ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
-    //if (pDrView)
-    //{
-        /* jetzt in DrawMarks
-        sal_uInt16 nWinNum = pDrView->FindWin(this);
-        if (nWinNum!=SDRVIEWWIN_NOTFOUND)
-            pDrView->AfterInitRedraw(nWinNum);
-        */
-
-        // pDrView->PostPaint();
-        // pDrView->RestartAfterPaintTimer();
-    //}
-//}
 
 void ScGridWindow::DrawMarkDropObj( SdrObject* pObj )
 {

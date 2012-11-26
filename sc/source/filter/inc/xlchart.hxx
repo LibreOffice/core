@@ -32,6 +32,7 @@
 #include <map>
 #include <tools/gen.hxx>
 #include "fapihelper.hxx"
+#include <basegfx/range/b2drange.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
@@ -1479,7 +1480,7 @@ struct XclChRootData
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >
                         mxChartDoc;             /// The chart document.
-    Rectangle           maChartRect;            /// Position and size of the chart shape.
+    basegfx::B2DRange   maChartRange;           /// Position and size of the chart shape.
     XclChTypeProvRef    mxTypeInfoProv;         /// Provides info about chart types.
     XclChFmtInfoProvRef mxFmtInfoProv;          /// Provides info about auto formatting.
     XclChObjectTableRef mxLineDashTable;        /// Container for line dash styles.
@@ -1499,7 +1500,7 @@ struct XclChRootData
     void                InitConversion(
                             const XclRoot& rRoot,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& rxChartDoc,
-                            const Rectangle& rChartRect );
+                            const basegfx::B2DRange& rChartRange );
     /** Finishes the API chart document conversion. Must be called once before any API access. */
     void                FinishConversion();
 

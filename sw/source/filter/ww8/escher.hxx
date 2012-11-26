@@ -29,6 +29,7 @@
 #ifndef _ESCHEREX_HXX
 #include <filter/msfilter/escherex.hxx>
 #endif
+#include <svx/svdtrans.hxx>
 
 const sal_uInt32 nInlineHack = 0x00010001;
 class SwFrmFmt;
@@ -172,8 +173,9 @@ public:
 
     virtual void WriteFrmExtraData(const SwFrmFmt& rFmt);
 
-    EscherExHostAppData* StartShape(const com::sun::star::uno::Reference<
-        com::sun::star::drawing::XShape > &, const Rectangle*) {return &aHostData;}
+    virtual EscherExHostAppData* StartShape(
+        const com::sun::star::uno::Reference< com::sun::star::drawing::XShape > &,
+        const basegfx::B2DRange* pObjectRange);
 private:
     //No copying
     SwEscherEx(const SwEscherEx&);

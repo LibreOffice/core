@@ -27,7 +27,6 @@
 
 #include "svtools/svtdllapi.h"
 #include <tools/ref.hxx>
-#include <tools/rtti.hxx>
 #include <vcl/window.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
@@ -98,8 +97,6 @@ namespace svt
         sal_Bool    bSuspended;     // <sal_True> if the window is hidden and disabled
 
     public:
-        TYPEINFO();
-
         CellController(Control* pW);
         virtual ~CellController();
 
@@ -245,7 +242,6 @@ namespace svt
         sal_Bool                    m_bOwnImplementation;   // did we create m_pEditImplementation?
 
     public:
-        TYPEINFO();
         EditCellController( Edit* _pEdit );
         EditCellController( MultiLineTextCell* _pEdit );
         EditCellController( IEditImplementation* _pImplementation );
@@ -269,7 +265,6 @@ namespace svt
     class SVT_DLLPUBLIC SpinCellController : public CellController
     {
     public:
-        TYPEINFO();
         SpinCellController(SpinField* pSpinField);
         SpinField& GetSpinWindow() const {return (SpinField &)GetWindow();}
 
@@ -321,8 +316,6 @@ namespace svt
     class SVT_DLLPUBLIC CheckBoxCellController : public CellController
     {
     public:
-        TYPEINFO();
-
         CheckBoxCellController(CheckBoxControl* pWin):CellController(pWin){}
         CheckBox& GetCheckBox() const;
 
@@ -354,8 +347,6 @@ namespace svt
     class SVT_DLLPUBLIC ComboBoxCellController : public CellController
     {
     public:
-        TYPEINFO();
-
         ComboBoxCellController(ComboBoxControl* pParent);
         ComboBoxControl& GetComboBox() const {return (ComboBoxControl &)GetWindow();}
 
@@ -387,8 +378,6 @@ namespace svt
     class SVT_DLLPUBLIC ListBoxCellController : public CellController
     {
     public:
-        TYPEINFO();
-
         ListBoxCellController(ListBoxControl* pParent);
         ListBoxControl& GetListBox() const {return (ListBoxControl &)GetWindow();}
 
@@ -406,7 +395,6 @@ namespace svt
     class SVT_DLLPUBLIC FormattedFieldCellController : public EditCellController
     {
     public:
-        TYPEINFO();
         FormattedFieldCellController( FormattedField* _pFormatted );
 
         virtual void CommitModifications();

@@ -144,7 +144,7 @@ void DrawViewShell::AssignFrom3DWindow()
         {
             if(!GetView()->IsPresObjSelected())
             {
-                SfxItemSet aSet( GetDoc()->GetPool(),
+                SfxItemSet aSet( GetDoc()->GetItemPool(),
                     SDRATTR_START,  SDRATTR_END,
                     0, 0);
                 p3DWin->GetAttr( aSet );
@@ -155,14 +155,14 @@ void DrawViewShell::AssignFrom3DWindow()
                 if(GetView()->IsConvertTo3DObjPossible())
                 {
                     // Nur TextAttribute zuweisen
-                    SfxItemSet aTextSet( GetDoc()->GetPool(),
+                    SfxItemSet aTextSet( GetDoc()->GetItemPool(),
                         EE_ITEMS_START, EE_ITEMS_END, 0 );
-                    aTextSet.Put( aSet, sal_False );
+                    aTextSet.Put( aSet, false );
                     GetView()->SetAttributes( aTextSet );
 
                     // Text in 3D umwandeln
                     sal_uInt16 nSId = SID_CONVERT_TO_3D;
-                    SfxBoolItem aItem( nSId, sal_True );
+                    SfxBoolItem aItem( nSId, true );
                     GetViewFrame()->GetDispatcher()->Execute(
                         nSId, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 

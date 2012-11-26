@@ -106,17 +106,25 @@ void ScSheetLinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //! notify if links in document are changed
     //  UpdateRef is not needed here
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
 
-    if ( rHint.ISA( SfxSimpleHint ) )
+    if ( pSfxSimpleHint )
     {
-        if ( ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+        if ( SFX_HINT_DYING == pSfxSimpleHint->GetId() )
             pDocShell = NULL;       // pointer is invalid
     }
-    else if ( rHint.ISA( ScLinkRefreshedHint ) )
+    else
     {
-        const ScLinkRefreshedHint& rLH = (const ScLinkRefreshedHint&) rHint;
-        if ( rLH.GetLinkType() == SC_LINKREFTYPE_SHEET && rLH.GetUrl() == aFileName )
-            Refreshed_Impl();
+        const ScLinkRefreshedHint* pScLinkRefreshedHint = dynamic_cast< const ScLinkRefreshedHint* >(&rHint);
+
+        if ( pScLinkRefreshedHint )
+        {
+            if ( pScLinkRefreshedHint->GetLinkType() == SC_LINKREFTYPE_SHEET
+                && pScLinkRefreshedHint->GetUrl() == aFileName )
+            {
+                Refreshed_Impl();
+            }
+        }
     }
 }
 
@@ -129,9 +137,10 @@ ScTableLink* ScSheetLinkObj::GetLink_Impl() const
         for (sal_uInt16 i=0; i<nCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[i];
-            if (pBase->ISA(ScTableLink))
+            ScTableLink* pTabLink = dynamic_cast< ScTableLink* >(pBase);
+
+            if (pTabLink)
             {
-                ScTableLink* pTabLink = (ScTableLink*)pBase;
                 if ( pTabLink->GetFileName() == aFileName )
                     return pTabLink;
             }
@@ -403,9 +412,9 @@ ScSheetLinksObj::~ScSheetLinksObj()
 void ScSheetLinksObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
 
-    if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    if ( pSfxSimpleHint && SFX_HINT_DYING == pSfxSimpleHint->GetId() )
     {
         pDocShell = NULL;       // ungueltig geworden
     }
@@ -604,10 +613,12 @@ ScAreaLink* lcl_GetAreaLink( ScDocShell* pDocShell, sal_uInt16 nPos )
         for (sal_uInt16 i=0; i<nTotalCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[i];
-            if (pBase->ISA(ScAreaLink))
+            ScAreaLink* pScAreaLink = dynamic_cast< ScAreaLink* >(pBase);
+
+            if (pScAreaLink)
             {
                 if ( nAreaCount == nPos )
-                    return (ScAreaLink*)pBase;
+                    return pScAreaLink;
                 ++nAreaCount;
             }
         }
@@ -633,21 +644,26 @@ void ScAreaLinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //! notify if links in document are changed
     //  UpdateRef is not needed here
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
 
-    if ( rHint.ISA( SfxSimpleHint ) )
+    if ( pSfxSimpleHint )
     {
-        if ( ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+        if ( SFX_HINT_DYING == pSfxSimpleHint->GetId() )
             pDocShell = NULL;       // pointer is invalid
     }
-    else if ( rHint.ISA( ScLinkRefreshedHint ) )
+    else
     {
-        const ScLinkRefreshedHint& rLH = (const ScLinkRefreshedHint&) rHint;
-        if ( rLH.GetLinkType() == SC_LINKREFTYPE_AREA )
+        const ScLinkRefreshedHint* pScLinkRefreshedHint = dynamic_cast< const ScLinkRefreshedHint* >(&rHint);
+
+        if ( pScLinkRefreshedHint )
         {
-            //  get this link to compare dest position
-            ScAreaLink* pLink = lcl_GetAreaLink(pDocShell, nPos);
-            if ( pLink && pLink->GetDestArea().aStart == rLH.GetDestPos() )
-                Refreshed_Impl();
+            if ( pScLinkRefreshedHint->GetLinkType() == SC_LINKREFTYPE_AREA )
+            {
+                //  get this link to compare dest position
+                ScAreaLink* pLink = lcl_GetAreaLink(pDocShell, nPos);
+                if ( pLink && pLink->GetDestArea().aStart == pScLinkRefreshedHint->GetDestPos() )
+                    Refreshed_Impl();
+            }
         }
     }
 }
@@ -946,9 +962,9 @@ ScAreaLinksObj::~ScAreaLinksObj()
 void ScAreaLinksObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
 
-    if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    if ( pSfxSimpleHint && SFX_HINT_DYING == pSfxSimpleHint->GetId() )
     {
         pDocShell = NULL;       // ungueltig geworden
     }
@@ -1024,7 +1040,7 @@ sal_Int32 SAL_CALL ScAreaLinksObj::getCount() throw(uno::RuntimeException)
         for (sal_uInt16 i=0; i<nTotalCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[i];
-            if (pBase->ISA(ScAreaLink))
+            if (dynamic_cast< ScAreaLink* >(pBase))
                 ++nAreaCount;
         }
     }
@@ -1078,20 +1094,25 @@ void ScDDELinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //! notify if links in document are changed
     //  UpdateRef is not needed here
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
 
-    if ( rHint.ISA( SfxSimpleHint ) )
+    if ( pSfxSimpleHint )
     {
-        if ( ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+        if ( SFX_HINT_DYING == pSfxSimpleHint->GetId() )
             pDocShell = NULL;       // pointer is invalid
     }
-    else if ( rHint.ISA( ScLinkRefreshedHint ) )
+    else
     {
-        const ScLinkRefreshedHint& rLH = (const ScLinkRefreshedHint&) rHint;
-        if ( rLH.GetLinkType() == SC_LINKREFTYPE_DDE &&
-             rLH.GetDdeAppl()  == aAppl &&
-             rLH.GetDdeTopic() == aTopic &&
-             rLH.GetDdeItem()  == aItem )       //! mode is ignored
-            Refreshed_Impl();
+        const ScLinkRefreshedHint* pScLinkRefreshedHint = dynamic_cast< const ScLinkRefreshedHint* >(&rHint);
+
+        if ( pScLinkRefreshedHint )
+        {
+            if ( pScLinkRefreshedHint->GetLinkType() == SC_LINKREFTYPE_DDE &&
+                 pScLinkRefreshedHint->GetDdeAppl()  == aAppl &&
+                 pScLinkRefreshedHint->GetDdeTopic() == aTopic &&
+                 pScLinkRefreshedHint->GetDdeItem()  == aItem )     //! mode is ignored
+                Refreshed_Impl();
+        }
     }
 }
 
@@ -1288,9 +1309,9 @@ ScDDELinksObj::~ScDDELinksObj()
 void ScDDELinksObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
 
-    if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    if ( pSfxSimpleHint && SFX_HINT_DYING == pSfxSimpleHint->GetId() )
     {
         pDocShell = NULL;       // ungueltig geworden
     }

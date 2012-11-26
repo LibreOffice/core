@@ -450,8 +450,7 @@ namespace canvas
     {
         // Internal! Only call with locked object mutex!
         ::basegfx::B2DHomMatrix aTransform( maTransform );
-        aTransform.translate( maPosition.getX(),
-                              maPosition.getY() );
+        aTransform.translate(maPosition);
 
         // transform bounds at origin, as the sprite transformation is
         // formulated that way

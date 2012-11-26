@@ -26,12 +26,9 @@
 
 #include "fuconcs.hxx"
 #include <svx/svdpagv.hxx>
-
-
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
-
 #include "app.hrc"
 #include <svl/aeitem.hxx>
 #include <svx/xlnstwit.hxx>
@@ -40,9 +37,7 @@
 #include <svx/xlnstit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svx/sdtmfitm.hxx>
 #include <svx/sxekitm.hxx>
-#include <svx/sderitm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdocirc.hxx>
@@ -53,21 +48,16 @@
 #include <svx/sdasitm.hxx>
 #include <svx/tbxcustomshapes.hxx>
 #include <svx/svdoashp.hxx>
-#include <svx/sdtagitm.hxx>
-
-// #88751#
 #include <svx/svdocapt.hxx>
-
-// #97016#
 #include <svx/svdomeas.hxx>
 #include "ViewShell.hxx"
 #include "ViewShellBase.hxx"
 #include "ToolBarManager.hxx"
-// #109583#
 #include <editeng/writingmodeitem.hxx>
 #include <svx/gallery.hxx>
 #include <svl/itempool.hxx>
 #include <com/sun/star/uno/Any.hxx>
+#include <svx/svdlegacy.hxx>
 
 #include "sdresid.hxx"
 #include "View.hxx"
@@ -79,8 +69,6 @@
 #include "glob.hrc"
 
 namespace sd {
-
-TYPEINIT1( FuConstructCustomShape, FuConstruct );
 
 /*************************************************************************
 |*
@@ -129,18 +117,19 @@ void FuConstructCustomShape::DoExecute( SfxRequest& rReq )
 |*
 \************************************************************************/
 
-sal_Bool FuConstructCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
+bool FuConstructCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
+    bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
 
     if ( rMEvt.IsLeft() && !mpView->IsAction() )
     {
-        Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
+        const basegfx::B2DPoint aPixelPos(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
+        const basegfx::B2DPoint aLogicPos(mpWindow->GetInverseViewTransformation() * aPixelPos);
 
         mpWindow->CaptureMouse();
         sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
 
-        mpView->BegCreateObj(aPnt, (OutputDevice*) NULL, nDrgLog);
+        mpView->BegCreateObj(aLogicPos, nDrgLog);
 
         SdrObject* pObj = mpView->GetCreateObj();
         if ( pObj )
@@ -153,7 +142,7 @@ sal_Bool FuConstructCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
                 bForceFillStyle = sal_False;
                 bForceNoFillStyle = sal_True;
             }
-            SfxItemSet aAttr(mpDoc->GetPool());
+            SfxItemSet aAttr(mpDoc->GetItemPool());
             SetStyleSheet( aAttr, pObj, bForceFillStyle, bForceNoFillStyle );
             pObj->SetMergedItemSet(aAttr);
         }
@@ -168,7 +157,7 @@ sal_Bool FuConstructCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuConstructCustomShape::MouseMove(const MouseEvent& rMEvt)
+bool FuConstructCustomShape::MouseMove(const MouseEvent& rMEvt)
 {
     return FuConstruct::MouseMove(rMEvt);
 }
@@ -179,16 +168,16 @@ sal_Bool FuConstructCustomShape::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuConstructCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
+bool FuConstructCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn(sal_False);
+    bool bReturn(false);
 
-    if(mpView->IsCreateObj() && rMEvt.IsLeft())
+    if(mpView->GetCreateObj() && rMEvt.IsLeft())
     {
         SdrObject* pObj = mpView->GetCreateObj();
         if( pObj && mpView->EndCreateObj( SDRCREATE_FORCEEND ) )
         {
-            bReturn = sal_True;
+            bReturn = true;
         }
     }
     bReturn = FuConstruct::MouseButtonUp (rMEvt) || bReturn;
@@ -203,14 +192,15 @@ sal_Bool FuConstructCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
-|* sal_False.
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert true, andernfalls
+|* false.
 |*
 \************************************************************************/
 
-sal_Bool FuConstructCustomShape::KeyInput(const KeyEvent& rKEvt)
+bool FuConstructCustomShape::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
+    bool bReturn = FuConstruct::KeyInput(rKEvt);
+
     return(bReturn);
 }
 
@@ -222,7 +212,7 @@ sal_Bool FuConstructCustomShape::KeyInput(const KeyEvent& rKEvt)
 
 void FuConstructCustomShape::Activate()
 {
-    mpView->SetCurrentObj( OBJ_CUSTOMSHAPE );
+    mpView->setSdrObjectCreationInfo(SdrObjectCreationInfo(static_cast< sal_uInt16 >(OBJ_CUSTOMSHAPE)));
     FuConstruct::Activate();
 }
 
@@ -234,6 +224,7 @@ void FuConstructCustomShape::Activate()
 
 void FuConstructCustomShape::SetAttributes( SdrObject* pObj )
 {
+    OSL_ENSURE(pObj, "FuConstructCustomShape::SetAttributes without SdrObject (!)");
     sal_Bool bAttributesAppliedFromGallery = sal_False;
 
     if ( GalleryExplorer::GetSdrObjCount( GALLERY_THEME_POWERPOINT ) )
@@ -258,7 +249,7 @@ void FuConstructCustomShape::SetAttributes( SdrObject* pObj )
                             if( pSourceObj )
                             {
                                 const SfxItemSet& rSource = pSourceObj->GetMergedItemSet();
-                                SfxItemSet aDest( pObj->GetModel()->GetItemPool(),              // ranges from SdrAttrObj
+                                SfxItemSet aDest( pObj->GetObjectItemPool(),                // ranges from SdrAttrObj
                                 SDRATTR_START, SDRATTR_SHADOW_LAST,
                                 SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
                                 SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
@@ -274,11 +265,12 @@ void FuConstructCustomShape::SetAttributes( SdrObject* pObj )
                                 0, 0);
                                 aDest.Set( rSource );
                                 pObj->SetMergedItemSet( aDest );
-                                sal_Int32 nAngle = pSourceObj->GetRotateAngle();
+
+                                const long nAngle(sdr::legacy::GetRotateAngle(*pSourceObj));
                                 if ( nAngle )
                                 {
-                                    double a = nAngle * F_PI18000;
-                                    pObj->NbcRotate( pObj->GetSnapRect().Center(), nAngle, sin( a ), cos( a ) );
+                                    const Rectangle aOldObjSnapRect(sdr::legacy::GetSnapRect(*pObj));
+                                    sdr::legacy::RotateSdrObject(*pObj, aOldObjSnapRect.Center(), nAngle);
                                 }
                                 bAttributesAppliedFromGallery = sal_True;
 
@@ -305,26 +297,30 @@ void FuConstructCustomShape::SetAttributes( SdrObject* pObj )
         pObj->SetMergedItem( SvxAdjustItem( SVX_ADJUST_CENTER, EE_PARA_JUST ) );
         pObj->SetMergedItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
         pObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
-        pObj->SetMergedItem( SdrTextAutoGrowHeightItem( sal_False ) );
+        pObj->SetMergedItem( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT, sal_False ) );
         ((SdrObjCustomShape*)pObj)->MergeDefaultAttributes( &aCustomShape );
     }
 }
 
 // #97016#
-SdrObject* FuConstructCustomShape::CreateDefaultObject(const sal_uInt16, const Rectangle& rRectangle)
+SdrObject* FuConstructCustomShape::CreateDefaultObject(const sal_uInt16, const basegfx::B2DRange& rRange)
 {
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
-        mpView->GetCurrentObjInventor(), mpView->GetCurrentObjIdentifier(),
-        0L, mpDoc);
+        mpView->getSdrModelFromSdrView(),
+        mpView->getSdrObjectCreationInfo());
 
     if( pObj )
     {
-        Rectangle aRect( rRectangle );
+        basegfx::B2DRange aRange( rRange );
+
         if ( doConstructOrthogonal() )
-            ImpForceQuadratic( aRect );
-        pObj->SetLogicRect( aRect );
+        {
+            ImpForceQuadratic( aRange );
+        }
+
+        sdr::legacy::SetLogicRange(*pObj, aRange );
         SetAttributes( pObj );
-        SfxItemSet aAttr(mpDoc->GetPool());
+        SfxItemSet aAttr(pObj->GetObjectItemPool());
         SetStyleSheet(aAttr, pObj);
         pObj->SetMergedItemSet(aAttr);
     }

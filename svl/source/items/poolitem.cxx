@@ -26,6 +26,7 @@
 
 #include <svl/poolitem.hxx>
 #include <tools/stream.hxx>
+#include <typeinfo>
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -56,14 +57,6 @@ sal_uLong nSfxFlag32Val[32] =
     0x1000000L, 0x2000000L, 0x4000000L, 0x8000000L,
     0x10000000L, 0x20000000L, 0x40000000L, 0x80000000L
 };
-
-// RTTI ------------------------------------------------------------------
-
-TYPEINIT0(SfxPoolItem);
-TYPEINIT1(SfxVoidItem, SfxPoolItem);
-// @@@ TYPEINIT1(SfxInvalidItem, SfxPoolItem);
-TYPEINIT1(SfxSetItem, SfxPoolItem);
-// @@@ TYPEINIT1(SfxItemChangedHint, SfxHint);
 
 // ------------------------------------------------------------------------
 #if OSL_DEBUG_LEVEL > 1
@@ -179,7 +172,14 @@ int SfxPoolItem::Compare( const SfxPoolItem& rWith, const IntlWrapper& ) const
 int SfxPoolItem::operator==( const SfxPoolItem& rCmp ) const
 {
     DBG_CHKTHIS(SfxPoolItem, 0);
-    return rCmp.Type() == Type();
+#ifdef DBG_UTIL
+    const std::type_info& aTypeA(typeid(rCmp));
+    const std::type_info& aTypeB(typeid(*this));
+
+    return aTypeA == aTypeB;
+#else
+    return typeid(rCmp) == typeid(*this);
+#endif
 }
 
 // -----------------------------------------------------------------------
@@ -308,6 +308,14 @@ SfxItemPresentation SfxPoolItem::GetPresentation
 }
 
 // SfxVoidItem ------------------------------------------------------------
+IMPL_POOLITEM_FACTORY(SfxVoidItem)
+
+SfxVoidItem::SfxVoidItem( ):
+    SfxPoolItem(0)
+{
+    DBG_CTOR(SfxVoidItem, 0);
+}
+
 SfxVoidItem::SfxVoidItem( sal_uInt16 which ):
     SfxPoolItem(which)
 {
@@ -329,7 +337,12 @@ rCmp
 ) const
 {
     DBG_CHKTHIS(SfxVoidItem, 0);
-    DBG_ASSERT( SfxPoolItem::operator==( rCmp ), "unequal type" );
+#ifdef DBG_UTIL
+    if(!SfxPoolItem::operator==( rCmp ))
+    {
+        DBG_ASSERT( false, "unequal type" );
+    }
+#endif
     return sal_True;
 }
 
@@ -473,15 +486,14 @@ SfxItemHandle::~SfxItemHandle()
 }
 
 // ------------------------------------------------------------------------
-int SfxPoolItem::ScaleMetrics( long /*lMult*/, long /*lDiv*/ )
+void SfxPoolItem::ScaleMetrics( long /*lMult*/, long /*lDiv*/ )
 {
-    return 0;
 }
 
 // ------------------------------------------------------------------------
-int SfxPoolItem::HasMetrics() const
+bool SfxPoolItem::HasMetrics() const
 {
-    return 0;
+    return false;
 }
 
 // -----------------------------------------------------------------------

@@ -54,7 +54,7 @@ private:
     XBitmapList*        mpBitmapList;
 public:
 
-    SdPageDlg( SfxObjectShell* pDocSh, Window* pParent, const SfxItemSet* pAttr, sal_Bool bAreaPage = sal_True );
+    SdPageDlg( SfxObjectShell* pDocSh, Window* pParent, const SfxItemSet* pAttr, bool bAreaPage = true );
     ~SdPageDlg() {};
 
     virtual void PageCreated(sal_uInt16 nId, SfxTabPage& rPage);

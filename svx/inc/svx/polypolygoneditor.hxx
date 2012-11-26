@@ -25,48 +25,40 @@
 #define _SDR_POLYPOLYGONEDITOR_HXX_
 
 #include "svx/svxdllapi.h"
-
 #include "svx/ipolypolygoneditorcontroller.hxx"
-
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <set>
 
-class SdrUShortCont;
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 namespace sdr
 {
-
-/** this class implements some helper functions to edit a B2DPolyPolygon */
-class SVX_DLLPUBLIC PolyPolygonEditor
+    /** this namespace implements some helper functions to edit a B2DPolyPolygon */
+    namespace PolyPolygonEditor
 {
-public:
-    PolyPolygonEditor( const basegfx::B2DPolyPolygon& rPolyPolygon, bool bClosed );
-
-    const basegfx::B2DPolyPolygon& GetPolyPolygon() const { return maPolyPolygon; }
-
     /** returns true if the B2DPolyPolygon was changed.
         Warning: B2DPolyPolygon can be empty after this operation!
     */
-    bool DeletePoints( const std::set< sal_uInt16 >& rAbsPoints );
+        SVX_DLLPUBLIC bool DeletePoints(basegfx::B2DPolyPolygon& o_rCandidate, const sdr::selection::Indices& rAbsPoints);
 
     /** returns true if the B2DPolyPolygon was changed.
     */
-    bool SetSegmentsKind(SdrPathSegmentKind eKind, const std::set< sal_uInt16 >& rAbsPoints);
+        SVX_DLLPUBLIC bool SetSegmentsKind(basegfx::B2DPolyPolygon& o_rCandidate, SdrPathSegmentKind eKind, const sdr::selection::Indices& rAbsPoints);
 
     /** returns true if the B2DPolyPolygon was changed.
     */
-    bool SetPointsSmooth( basegfx::B2VectorContinuity eFlags, const std::set< sal_uInt16 >& rAbsPoints);
+        SVX_DLLPUBLIC bool SetPointsSmooth(basegfx::B2DPolyPolygon& o_rCandidate, basegfx::B2VectorContinuity eFlags, const sdr::selection::Indices& rAbsPoints);
 
     /** Outputs the realative position ( polygon number and point number in that polygon ) from the absolut point number.
         False is returned if the given absolute point is greater not inside this B2DPolyPolygon
     */
-    static bool GetRelativePolyPoint( const basegfx::B2DPolyPolygon& rPoly, sal_uInt32 nAbsPnt, sal_uInt32& rPolyNum, sal_uInt32& rPointNum );
+        SVX_DLLPUBLIC bool GetRelativePolyPoint(const basegfx::B2DPolyPolygon& rPoly, sal_uInt32 nAbsPnt, sal_uInt32& rPolyNum, sal_uInt32& rPointNum);
+    } // end of namespace PolyPolygonEditor
+} // end of namespace sdr
 
-private:
-    basegfx::B2DPolyPolygon maPolyPolygon;
-    bool mbIsClosed;
-};
-
-}
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #endif
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// eof

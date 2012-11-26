@@ -1242,6 +1242,13 @@ namespace basegfx
         return !(*this == rPolygon);
     }
 
+    B2DPolygon& B2DPolygon::operator*=(const ::basegfx::B2DHomMatrix& rMatrix)
+    {
+        transform(rMatrix);
+
+        return *this;
+    }
+
     sal_uInt32 B2DPolygon::count() const
     {
         return mpPolygon->count();
@@ -1643,6 +1650,13 @@ namespace basegfx
     B2DPoint* B2DPolygon::end()
     {
         return mpPolygon->end();
+    }
+
+    B2DPolygon operator*(const B2DHomMatrix& rMatrix, const B2DPolygon& rB2DPolygon)
+    {
+        B2DPolygon aRes(rB2DPolygon);
+
+        return aRes *= rMatrix;
     }
 } // end of namespace basegfx
 

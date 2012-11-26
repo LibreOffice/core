@@ -46,7 +46,6 @@ class SdrUndoAction;
 class ScUndoDoOutline: public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
                     ScUndoDoOutline( ScDocShell* pNewDocShell,
                             SCCOLROW nNewStart, SCCOLROW nNewEnd, SCTAB nNewTab,
                             ScDocument* pNewUndoDoc, sal_Bool bNewColumns,
@@ -75,7 +74,6 @@ private:
 class ScUndoMakeOutline: public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
                     ScUndoMakeOutline( ScDocShell* pNewDocShell,
                             SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                             SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
@@ -102,7 +100,6 @@ private:
 class ScUndoOutlineLevel: public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
                     ScUndoOutlineLevel( ScDocShell* pNewDocShell,
                             SCCOLROW nNewStart, SCCOLROW nNewEnd, SCTAB nNewTab,
                             ScDocument* pNewUndoDoc, ScOutlineTable* pNewUndoTab,
@@ -130,7 +127,6 @@ private:
 class ScUndoOutlineBlock: public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
                     ScUndoOutlineBlock( ScDocShell* pNewDocShell,
                             SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                             SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
@@ -157,7 +153,6 @@ private:
 class ScUndoRemoveAllOutlines: public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
                     ScUndoRemoveAllOutlines( ScDocShell* pNewDocShell,
                             SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                             SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
@@ -182,7 +177,6 @@ private:
 class ScUndoAutoOutline: public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
                     ScUndoAutoOutline( ScDocShell* pNewDocShell,
                             SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                             SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
@@ -207,7 +201,6 @@ private:
 class ScUndoSubTotals: public ScDBFuncUndo
 {
 public:
-                    TYPEINFO();
                     ScUndoSubTotals( ScDocShell* pNewDocShell, SCTAB nNewTab,
                             const ScSubTotalParam& rNewParam, SCROW nNewEndY,
                             ScDocument* pNewUndoDoc, ScOutlineTable* pNewUndoTab,
@@ -237,7 +230,6 @@ private:
 class ScUndoSort: public ScDBFuncUndo
 {
 public:
-                    TYPEINFO();
                     ScUndoSort( ScDocShell* pNewDocShell, SCTAB nNewTab,
                             const ScSortParam& rParam,
                             sal_Bool bQuery, ScDocument* pNewUndoDoc,
@@ -265,7 +257,6 @@ private:
 class ScUndoQuery: public ScDBFuncUndo
 {
 public:
-                    TYPEINFO();
                     ScUndoQuery( ScDocShell* pNewDocShell, SCTAB nNewTab,
                             const ScQueryParam& rParam, ScDocument* pNewUndoDoc,
                             ScDBCollection* pNewUndoDB, const ScRange* pOld,
@@ -302,7 +293,6 @@ private:
     void            DoChange( sal_Bool bUndo );
 
 public:
-                    TYPEINFO();
                     ScUndoAutoFilter( ScDocShell* pNewDocShell, const ScRange& rRange,
                             const String& rName, sal_Bool bSet );
     virtual         ~ScUndoAutoFilter();
@@ -319,7 +309,6 @@ public:
 class ScUndoDBData: public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
                     ScUndoDBData( ScDocShell* pNewDocShell,
                             ScDBCollection* pNewUndoColl, ScDBCollection* pNewRedoColl );
     virtual         ~ScUndoDBData();
@@ -340,7 +329,6 @@ private:
 class ScUndoImportData: public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
                     ScUndoImportData( ScDocShell* pNewDocShell, SCTAB nNewTab,
                             const ScImportParam& rParam, SCCOL nNewEndX, SCROW nNewEndY,
                             SCCOL nNewFormula,
@@ -372,7 +360,6 @@ private:
 class ScUndoRepeatDB: public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
                     ScUndoRepeatDB( ScDocShell* pNewDocShell, SCTAB nNewTab,
                             SCCOL nStartX, SCROW nStartY, SCCOL nEndX, SCROW nEndY,
                             SCROW nResultEndRow, SCCOL nCurX, SCROW nCurY,
@@ -405,7 +392,6 @@ private:
 //UNUSED2008-05  class ScUndoPivot: public ScSimpleUndo
 //UNUSED2008-05  {
 //UNUSED2008-05  public:
-//UNUSED2008-05                      TYPEINFO();
 //UNUSED2008-05                      ScUndoPivot( ScDocShell* pNewDocShell,
 //UNUSED2008-05                              const ScArea& rOld, const ScArea& rNew,
 //UNUSED2008-05                              ScDocument* pOldDoc, ScDocument* pNewDoc,
@@ -439,7 +425,6 @@ private:
 class ScUndoDataPilot: public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
                     ScUndoDataPilot( ScDocShell* pNewDocShell,
                             ScDocument* pOldDoc, ScDocument* pNewDoc,
                             const ScDPObject* pOldObj, const ScDPObject* pNewObj,
@@ -465,7 +450,6 @@ private:
 class ScUndoConsolidate: public ScSimpleUndo
 {
 public:
-                        TYPEINFO();
                         ScUndoConsolidate( ScDocShell* pNewDocShell,
                                 const ScArea& rArea, const ScConsolidateParam& rPar,
                                 ScDocument* pNewUndoDoc, sal_Bool bReference,
@@ -494,7 +478,6 @@ private:
 class ScUndoChartData: public ScSimpleUndo
 {
 public:
-                        TYPEINFO();
                         ScUndoChartData( ScDocShell* pNewDocShell,
                                 const String& rName, const ScRange& rNew,
                                 sal_Bool bColHdr, sal_Bool bRowHdr, sal_Bool bAdd );

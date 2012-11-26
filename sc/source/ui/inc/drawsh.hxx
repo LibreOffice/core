@@ -27,7 +27,7 @@
 #include <sfx2/shell.hxx>
 #include "shellids.hxx"
 #include <sfx2/module.hxx>
-#include <svx/svdmark.hxx>
+#include <svx/svdobj.hxx>
 #include <tools/link.hxx>
 
 class AbstractSvxNameDialog; //CHINA001 class SvxNameDialog;
@@ -48,7 +48,6 @@ protected:
     ScViewData* GetViewData()   { return pViewData; }
 
 public:
-    TYPEINFO();
     SFX_DECL_INTERFACE(SCID_DRAW_SHELL)
 
                     ScDrawShell(ScViewData* pData);
@@ -80,7 +79,7 @@ public:
 
     ScDrawView* GetDrawView();
 
-    sal_Bool    AreAllObjectsOnLayer(sal_uInt16 nLayerNo,const SdrMarkList& rMark);
+    bool AreAllObjectsOnLayer(sal_uInt16 nLayerNo, const SdrObjectVector& rSelection);
 };
 
 

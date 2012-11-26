@@ -37,12 +37,14 @@ namespace sdr
     namespace properties
     {
         BaseProperties::BaseProperties(SdrObject& rObj)
-        :   mrObject(rObj)
+        :   boost::noncopyable(),
+            mrObject(rObj)
         {
         }
 
         BaseProperties::BaseProperties(const BaseProperties& /*rProps*/, SdrObject& rObj)
-        :   mrObject(rObj)
+        :   boost::noncopyable(),
+            mrObject(rObj)
         {
         }
 
@@ -56,7 +58,7 @@ namespace sdr
             return GetObjectItemSet();
         }
 
-        void BaseProperties::SetMergedItemSet(const SfxItemSet& rSet, sal_Bool bClearAllItems)
+        void BaseProperties::SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems)
         {
             // clear items if requested
             if(bClearAllItems)
@@ -86,18 +88,6 @@ namespace sdr
             // an ItemSet is implemented.
         }
 
-        void BaseProperties::MoveToItemPool(SfxItemPool* /*pSrcPool*/, SfxItemPool* /*pDestPool*/, SdrModel* /*pNewModel*/)
-        {
-            // Move properties to a new ItemPool. Default implementation does nothing.
-            // Overload where an ItemSet is implemented.
-        }
-
-        void BaseProperties::SetModel(SdrModel* /*pOldModel*/, SdrModel* /*pNewModel*/)
-        {
-            // Set new model. Default implementation does nothing.
-            // Overload where an ItemSet is implemented.
-        }
-
         void BaseProperties::ForceStyleToHardAttributes()
         {
             // force all attributes which come from styles to hard attributes
@@ -105,21 +95,7 @@ namespace sdr
             // Overload where an ItemSet is implemented.
         }
 
-        //void BaseProperties::SetItemAndBroadcast(const SfxPoolItem& rItem)
-        //{
-        //  ItemChangeBroadcaster aC(GetSdrObject());
-        //  SetObjectItem(rItem);
-        //  BroadcastItemChange(aC);
-        //}
-
-        //void BaseProperties::ClearItemAndBroadcast(const sal_uInt16 nWhich)
-        //{
-        //  ItemChangeBroadcaster aC(GetSdrObject());
-        //  ClearObjectItem(nWhich);
-        //  BroadcastItemChange(aC);
-        //}
-
-        void BaseProperties::SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, sal_Bool bClearAllItems)
+        void BaseProperties::SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, bool bClearAllItems)
         {
             ItemChangeBroadcaster aC(GetSdrObject());
 
@@ -129,50 +105,11 @@ namespace sdr
             }
 
             SetMergedItemSet(rSet);
-            BroadcastItemChange(aC);
         }
 
         const SfxPoolItem& BaseProperties::GetItem(const sal_uInt16 nWhich) const
         {
             return GetObjectItemSet().Get(nWhich);
-        }
-
-        void BaseProperties::BroadcastItemChange(const ItemChangeBroadcaster& rChange)
-        {
-            const sal_uInt32 nCount(rChange.GetRectangleCount());
-
-            // #110094#-14 Reduce to do only second change
-            //// invalidate all remembered rectangles
-            //for(sal_uInt32 a(0); a < nCount; a++)
-            //{
-            //  GetSdrObject().BroadcastObjectChange(rChange.GetRectangle(a));
-            //}
-
-            // invalidate all new rectangles
-            if(GetSdrObject().ISA(SdrObjGroup))
-            {
-                SdrObjListIter aIter((SdrObjGroup&)GetSdrObject(), IM_DEEPNOGROUPS);
-
-                while(aIter.IsMore())
-                {
-                    SdrObject* pObj = aIter.Next();
-                    // This is done with ItemSetChanged
-                    // pObj->SetChanged();
-                    pObj->BroadcastObjectChange();
-                }
-            }
-            else
-            {
-                // This is done with ItemSetChanged
-                // GetSdrObject().SetChanged();
-                GetSdrObject().BroadcastObjectChange();
-            }
-
-            // also send the user calls
-            for(sal_uInt32 a(0L); a < nCount; a++)
-            {
-                GetSdrObject().SendUserCall(SDRUSERCALL_CHGATTR, rChange.GetRectangle(a));
-            }
         }
 
         sal_uInt32 BaseProperties::getVersion() const

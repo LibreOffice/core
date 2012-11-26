@@ -36,7 +36,7 @@
 class SVX_DLLPUBLIC XFormTextDistanceItem : public SfxMetricItem
 {
 public:
-                            TYPEINFO();
+    POOLITEM_FACTORY()
                             XFormTextDistanceItem(long nDist = 0);
                             XFormTextDistanceItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const;

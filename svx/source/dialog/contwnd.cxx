@@ -87,26 +87,27 @@ void ContourWindow::SetPolyPolygon( const PolyPolygon& rPolyPoly )
     // them first (!)
     pView->UnmarkAllObj();
 
-    pPage->Clear();
+    if(pPage->GetObjCount())
+    {
+        pPage->ClearSdrObjList();
+        pPage->getSdrModelFromSdrObjList().SetChanged();
+    }
 
     for ( sal_uInt16 i = 0; i < nPolyCount; i++ )
     {
         basegfx::B2DPolyPolygon aPolyPolygon;
         aPolyPolygon.append(aPolyPoly[ i ].getB2DPolygon());
-        SdrPathObj* pPathObj = new SdrPathObj( OBJ_PATHFILL, aPolyPolygon );
+        SdrPathObj* pPathObj = new SdrPathObj( *pModel, aPolyPolygon );
 
         if ( pPathObj )
         {
-            SfxItemSet aSet( pModel->GetItemPool() );
+            SfxItemSet aSet( pPathObj->GetObjectItemPool() );
 
             aSet.Put( XFillStyleItem( XFILL_SOLID ) );
             aSet.Put( XFillColorItem( String(), TRANSCOL ) );
             aSet.Put( XFillTransparenceItem( 50 ) );
-
-            //pPathObj->SetItemSetAndBroadcast(aSet);
             pPathObj->SetMergedItemSetAndBroadcast(aSet);
-
-            pPage->InsertObject( pPathObj );
+            pPage->InsertObjectToSdrObjList(*pPathObj);
         }
     }
 
@@ -139,7 +140,7 @@ const PolyPolygon& ContourWindow::GetPolyPolygon()
             SdrPathObj* pPathObj = (SdrPathObj*)pPage->GetObj(0L);
             // Not sure if subdivision is needed for ContourWindow, but maybe it cannot handle
             // curves at all. Keeping subdivision here for security
-            const basegfx::B2DPolyPolygon aB2DPolyPolygon(basegfx::tools::adaptiveSubdivideByAngle(pPathObj->GetPathPoly()));
+            const basegfx::B2DPolyPolygon aB2DPolyPolygon(basegfx::tools::adaptiveSubdivideByAngle(pPathObj->getB2DPolyPolygonInObjectCoordinates()));
             aPolyPoly = PolyPolygon(aB2DPolyPolygon);
         }
 
@@ -165,7 +166,7 @@ void ContourWindow::InitSdrModel()
     aSet.Put( XFillColorItem( String(), TRANSCOL ) );
     aSet.Put( XFillTransparenceItem( 50 ) );
     pView->SetAttributes( aSet );
-    pView->SetFrameDragSingles( sal_True );
+    pView->SetFrameHandles(true);
 }
 
 
@@ -194,7 +195,7 @@ sal_Bool ContourWindow::IsContourChanged() const
     sal_Bool        bRet = sal_False;
 
     if ( pPage && pPage->GetObjCount() )
-        bRet = ( (SdrPathObj*) pPage->GetObj( 0 ) )->GetPathPoly().count() && pModel->IsChanged();
+        bRet = ( (SdrPathObj*) pPage->GetObj( 0 ) )->getB2DPolyPolygonInObjectCoordinates().count() && pModel->IsChanged();
 
     return bRet;
 }
@@ -288,10 +289,10 @@ void ContourWindow::MouseButtonUp(const MouseEvent& rMEvt)
 
             _aPolyPoly.Clip( aWorkRect );
             SetPolyPolygon( _aPolyPoly );
-            pView->SetWorkArea( aWorkRect );
+            pView->SetWorkArea( basegfx::B2DRange( aWorkRect.Left(), aWorkRect.Top(), aWorkRect.Right(), aWorkRect.Bottom() ) );
         }
         else
-            pView->SetWorkArea( aGraphRect );
+            pView->SetWorkArea( basegfx::B2DRange( aGraphRect.Left(), aGraphRect.Top(), aGraphRect.Right(), aGraphRect.Bottom() ) );
 
         Invalidate( aGraphRect );
 

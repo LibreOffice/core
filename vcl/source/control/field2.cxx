@@ -24,28 +24,22 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 #include <tools/debug.hxx>
-
 #include <tools/rc.h>
-
 #include <vcl/svapp.hxx>
 #include <vcl/sound.hxx>
 #include <vcl/event.hxx>
 #include <vcl/field.hxx>
 #include <vcl/unohelp.hxx>
-
 #include <svdata.hxx>
-
 #include <i18npool/mslangid.hxx>
-
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/i18n/KCharacterType.hpp>
-
-
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/misccfg.hxx>
+#include <memory.h>
 
 using namespace ::com::sun::star;
 

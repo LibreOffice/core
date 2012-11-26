@@ -39,8 +39,6 @@ class HideSlideFunction
     : public SlideFunction
 {
 public:
-    TYPEINFO();
-
     virtual ~HideSlideFunction (void);
 
     static FunctionReference Create( SlideSorter& rSlideSorter, SfxRequest& rRequest );

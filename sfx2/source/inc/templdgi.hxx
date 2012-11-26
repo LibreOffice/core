@@ -42,8 +42,6 @@ class SfxTemplateControllerItem;
 #include <svl/svstdarr.hxx>     // SvUShorts
 
 #include <rsc/rscsfx.hxx>
-#include <tools/rtti.hxx>
-
 #include <sfx2/childwin.hxx>
 #include <sfx2/templdlg.hxx>
 
@@ -239,8 +237,6 @@ protected:
     void                SaveFactoryStyleFilter( SfxObjectShell* i_pObjSh, sal_Int32 i_nFilter );
 
 public:
-    TYPEINFO();
-
     SfxCommonTemplateDialog_Impl( SfxBindings* pB, SfxDockingWindow* );
     SfxCommonTemplateDialog_Impl( SfxBindings* pB, ModalDialog* );
     ~SfxCommonTemplateDialog_Impl();
@@ -328,8 +324,6 @@ protected:
 
 public:
     friend class SfxTemplateDialog;
-    TYPEINFO();
-
     SfxTemplateDialog_Impl( Window* pParent, SfxBindings*, SfxTemplateDialog* pWindow );
     ~SfxTemplateDialog_Impl();
 };
@@ -376,7 +370,6 @@ protected:
     DECL_LINK( OrgHdl, Button * );
 
 public:
-    TYPEINFO();
     SfxTemplateCatalog_Impl( Window* pParent, SfxBindings*, SfxTemplateCatalog* pWindow );
     ~SfxTemplateCatalog_Impl();
 

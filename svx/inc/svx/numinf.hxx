@@ -41,8 +41,6 @@ Dieses Item dient als Transport-Medium fuer einen Number-Formatter.
 class SVX_DLLPUBLIC SvxNumberInfoItem : public SfxPoolItem
 {
 public:
-    TYPEINFO();
-
     SvxNumberInfoItem( const sal_uInt16 nId  );
     SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
                        const sal_uInt16 nId  );

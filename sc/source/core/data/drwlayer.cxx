@@ -63,6 +63,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <svx/svdlegacy.hxx>
 
 #include "drwlayer.hxx"
 #include "drawpage.hxx"
@@ -92,9 +93,6 @@ using namespace ::com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
 
-TYPEINIT1(ScTabDeletedHint, SfxHint);
-TYPEINIT1(ScTabSizeChangedHint, SfxHint);
-
 static ScDrawObjFactory* pFac = NULL;
 static E3dObjFactory* pF3d = NULL;
 static sal_uInt16 nInst = 0;
@@ -122,7 +120,7 @@ __EXPORT ScUndoObjData::~ScUndoObjData()
 
 void ScUndoObjData::Undo()
 {
-    ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj );
+    ScDrawObjData* pData = ScDrawLayer::GetObjData( mrSdrObject );
     DBG_ASSERT(pData,"ScUndoObjData: Daten nicht da");
     if (pData)
     {
@@ -133,7 +131,7 @@ void ScUndoObjData::Undo()
 
 void __EXPORT ScUndoObjData::Redo()
 {
-    ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj );
+    ScDrawObjData* pData = ScDrawLayer::GetObjData( mrSdrObject );
     DBG_ASSERT(pData,"ScUndoObjData: Daten nicht da");
     if (pData)
     {
@@ -234,7 +232,7 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
     SetSwapGraphics(sal_True);
 //  SetSwapAsynchron(sal_True);     // an der View
 
-    SetScaleUnit(MAP_100TH_MM);
+    SetExchangeObjectUnit(MAP_100TH_MM);
     SfxItemPool& rPool = GetItemPool();
     rPool.SetDefaultMetric(SFX_MAPUNIT_100TH_MM);
     SvxFrameDirectionItem aModeItem( FRMDIR_ENVIRONMENT, EE_PARA_WRITINGDIR );
@@ -242,8 +240,8 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
 
     // #i33700#
     // Set shadow distance defaults as PoolDefaultItems. Details see bug.
-    rPool.SetPoolDefaultItem(SdrShadowXDistItem(300));
-    rPool.SetPoolDefaultItem(SdrShadowYDistItem(300));
+    rPool.SetPoolDefaultItem(SdrMetricItem(SDRATTR_SHADOWXDIST, 300));
+    rPool.SetPoolDefaultItem(SdrMetricItem(SDRATTR_SHADOWYDIST, 300));
 
     // #111216# default for script spacing depends on locale, see SdDrawDocument ctor in sd
     LanguageType eOfficeLanguage = Application::GetSettings().GetLanguage();
@@ -256,7 +254,7 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
 
     rPool.FreezeIdRanges();                         // the pool is also used directly
 
-    SdrLayerAdmin& rAdmin = GetLayerAdmin();
+    SdrLayerAdmin& rAdmin = GetModelLayerAdmin();
     rAdmin.NewLayer(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("vorne")),    SC_LAYER_FRONT);
     rAdmin.NewLayer(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("hinten")),   SC_LAYER_BACK);
     rAdmin.NewLayer(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("intern")),   SC_LAYER_INTERN);
@@ -269,16 +267,10 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
     Outliner& rOutliner = GetDrawOutliner();
     rOutliner.SetCalcFieldValueHdl( LINK( pScMod, ScModule, CalcFieldValueHdl ) );
 
-    Outliner& rHitOutliner = GetHitTestOutliner();
-    rHitOutliner.SetCalcFieldValueHdl( LINK( pScMod, ScModule, CalcFieldValueHdl ) );
-
     // #95129# SJ: set FontHeight pool defaults without changing static SdrEngineDefaults
     SfxItemPool* pOutlinerPool = rOutliner.GetEditTextObjectPool();
     if ( pOutlinerPool )
-         pItemPool->SetPoolDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT ));           // 12Pt
-    SfxItemPool* pHitOutlinerPool = rHitOutliner.GetEditTextObjectPool();
-    if ( pHitOutlinerPool )
-         pHitOutlinerPool->SetPoolDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT ));    // 12Pt
+         mpItemPool->SetPoolDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT ));           // 12Pt
 
     // initial undo mode as in Calc document
     if( pDoc )
@@ -295,11 +287,11 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
 
 __EXPORT ScDrawLayer::~ScDrawLayer()
 {
-    Broadcast(SdrHint(HINT_MODELCLEARED));
+    Broadcast(SdrBaseHint(HINT_MODELCLEARED));
 
     // #116168#
     //Clear();
-    ClearModel(sal_True);
+    ClearModel(true);
 
     delete pUndoGroup;
     if( !--nInst )
@@ -317,13 +309,11 @@ void ScDrawLayer::UseHyphenator()
                                     xHyphenator = LinguMgr::GetHyphenator();
 
         GetDrawOutliner().SetHyphenator( xHyphenator );
-        GetHitTestOutliner().SetHyphenator( xHyphenator );
-
         bHyphenatorSet = sal_True;
     }
 }
 
-SdrPage* __EXPORT ScDrawLayer::AllocPage(FASTBOOL bMasterPage)
+SdrPage* __EXPORT ScDrawLayer::AllocPage(bool bMasterPage)
 {
     //  don't create basic until it is needed
     StarBASIC* pBasic = NULL;
@@ -335,8 +325,8 @@ sal_Bool ScDrawLayer::HasObjects() const
 {
     sal_Bool bFound = sal_False;
 
-    sal_uInt16 nCount = GetPageCount();
-    for (sal_uInt16 i=0; i<nCount && !bFound; i++)
+    const sal_uInt32 nCount(GetPageCount());
+    for (sal_uInt32 i=0; i<nCount && !bFound; i++)
         if (GetPage(i)->GetObjCount())
             bFound = sal_True;
 
@@ -432,16 +422,12 @@ void ScDrawLayer::ScCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos, sal_Bool b
         while (pOldObject)
         {
             // #i112034# do not copy internal objects (detective) and note captions
-            if ( pOldObject->GetLayer() != SC_LAYER_INTERN && !IsNoteCaption( pOldObject ) )
+            if ( pOldObject->GetLayer() != SC_LAYER_INTERN && !IsNoteCaption( *pOldObject ) )
             {
                 // #116235#
-                SdrObject* pNewObject = pOldObject->Clone();
-                //SdrObject* pNewObject = pOldObject->Clone( pNewPage, this );
-                pNewObject->SetModel(this);
-                pNewObject->SetPage(pNewPage);
+                SdrObject* pNewObject = pOldObject->CloneSdrObject();
 
-                pNewObject->NbcMove(Size(0,0));
-                pNewPage->InsertObject( pNewObject );
+                pNewPage->InsertObjectToSdrObjList(*pNewObject);
                 if (bRecording)
                     AddCalcUndo< SdrUndoInsertObj >( *pNewObject );
             }
@@ -470,11 +456,11 @@ void ScDrawLayer::MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SC
 
     sal_Bool bNegativePage = pDoc && pDoc->IsNegativePage( nTab );
 
-    sal_uLong nCount = pPage->GetObjCount();
-    for ( sal_uLong i = 0; i < nCount; i++ )
+    sal_uInt32 nCount = pPage->GetObjCount();
+    for ( sal_uInt32 i = 0; i < nCount; i++ )
     {
         SdrObject* pObj = pPage->GetObj( i );
-        ScDrawObjData* pData = GetObjDataTab( pObj, nTab );
+        ScDrawObjData* pData = pObj ? GetObjDataTab( *pObj, nTab ) : 0;
         if( pData )
         {
             const ScAddress aOldStt = pData->maStart;
@@ -494,7 +480,7 @@ void ScDrawLayer::MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SC
             }
             if (bChange)
             {
-                if ( pObj->ISA( SdrRectObj ) && pData->maStart.IsValid() && pData->maEnd.IsValid() )
+                if ( dynamic_cast< SdrRectObj* >(pObj) && pData->maStart.IsValid() && pData->maEnd.IsValid() )
                     pData->maStart.PutInOrder( pData->maEnd );
                 AddCalcUndo< ScUndoObjData >( pObj, aOldStt, aOldEnd, pData->maStart, pData->maEnd );
                 RecalcPos( pObj, *pData, bNegativePage, bUpdateNoteCaptionPos );
@@ -503,14 +489,14 @@ void ScDrawLayer::MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SC
     }
 }
 
-void ScDrawLayer::SetPageSize( sal_uInt16 nPageNo, const Size& rSize, bool bUpdateNoteCaptionPos )
+void ScDrawLayer::SetPageSize( sal_uInt32 nPageNo, const basegfx::B2DVector& rSize, bool bUpdateNoteCaptionPos )
 {
     SdrPage* pPage = GetPage(nPageNo);
     if (pPage)
     {
-        if ( rSize != pPage->GetSize() )
+        if(!rSize.equal(pPage->GetPageScale()))
         {
-            pPage->SetSize( rSize );
+            pPage->SetPageScale( rSize );
             Broadcast( ScTabSizeChangedHint( static_cast<SCTAB>(nPageNo) ) );   // SetWorkArea() an den Views
         }
 
@@ -520,11 +506,11 @@ void ScDrawLayer::SetPageSize( sal_uInt16 nPageNo, const Size& rSize, bool bUpda
 
         sal_Bool bNegativePage = pDoc && pDoc->IsNegativePage( static_cast<SCTAB>(nPageNo) );
 
-        sal_uLong nCount = pPage->GetObjCount();
-        for ( sal_uLong i = 0; i < nCount; i++ )
+        sal_uInt32 nCount = pPage->GetObjCount();
+        for ( sal_uInt32 i = 0; i < nCount; i++ )
         {
             SdrObject* pObj = pPage->GetObj( i );
-            ScDrawObjData* pData = GetObjDataTab( pObj, static_cast<SCTAB>(nPageNo) );
+            ScDrawObjData* pData = pObj ? GetObjDataTab( *pObj, static_cast<SCTAB>(nPageNo) ) : 0;
             if( pData )
                 RecalcPos( pObj, *pData, bNegativePage, bUpdateNoteCaptionPos );
         }
@@ -564,33 +550,27 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, const ScDrawObjData& rData, bool b
     SCTAB nTab2 = rData.maEnd.Tab();
 
     // validation circle
-    bool bCircle = pObj->ISA( SdrCircObj );
+    bool bCircle = dynamic_cast< SdrCircObj* >(pObj);
     // detective arrow
-    bool bArrow = pObj->IsPolyObj() && (pObj->GetPointCount() == 2);
+    bool bArrow = pObj->IsPolygonObject() && (2 == pObj->GetObjectPointCount());
 
     if( bCircle )
     {
-        Point aPos( pDoc->GetColOffset( nCol1, nTab1 ), pDoc->GetRowOffset( nRow1, nTab1 ) );
-        TwipsToMM( aPos.X() );
-        TwipsToMM( aPos.Y() );
-
         //  Berechnung und Werte wie in detfunc.cxx
+        const basegfx::B2DPoint aPos(pDoc->GetColOffset(nCol1, nTab1) * HMM_PER_TWIPS, pDoc->GetRowOffset(nRow1, nTab1) * HMM_PER_TWIPS);
+        const basegfx::B2DVector aSize(pDoc->GetColWidth(nCol1, nTab1) * HMM_PER_TWIPS, pDoc->GetRowHeight(nRow1, nTab1) * HMM_PER_TWIPS);
+        basegfx::B2DRange aRange(aPos.getX() - 250.0, aPos.getY() - 70.0, aPos.getX() + aSize.getX() + 250.0, aPos.getY() + aSize.getY() + 70.0);
 
-        Size aSize( (long)(pDoc->GetColWidth( nCol1, nTab1 ) * HMM_PER_TWIPS),
-                    (long)(pDoc->GetRowHeight( nRow1, nTab1 ) * HMM_PER_TWIPS) );
-        Rectangle aRect( aPos, aSize );
-        aRect.Left()    -= 250;
-        aRect.Right()   += 250;
-        aRect.Top()     -= 70;
-        aRect.Bottom()  += 70;
         if ( bNegativePage )
-            MirrorRectRTL( aRect );
+        {
+            aRange = basegfx::B2DRange(-aRange.getMaxX(), aRange.getMinY(), -aRange.getMinX(), aRange.getMaxY());
+        }
 
-        if ( pObj->GetLogicRect() != aRect )
+        if(!sdr::legacy::GetLogicRange(*pObj).equal(aRange))
         {
             if (bRecording)
                         AddCalcUndo<SdrUndoGeoObj>( *pObj );
-            pObj->SetLogicRect(aRect);
+            sdr::legacy::SetLogicRange(*pObj, aRange);
         }
     }
     else if( bArrow )
@@ -601,71 +581,114 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, const ScDrawObjData& rData, bool b
         SCROW nLastRow;
         if( bValid1 )
         {
-            Point aPos( pDoc->GetColOffset( nCol1, nTab1 ), pDoc->GetRowOffset( nRow1, nTab1 ) );
+            basegfx::B2DPoint aPos(pDoc->GetColOffset(nCol1, nTab1), pDoc->GetRowOffset(nRow1, nTab1));
+
             if (!pDoc->ColHidden(nCol1, nTab1, nLastCol))
-                aPos.X() += pDoc->GetColWidth( nCol1, nTab1 ) / 4;
+            {
+                aPos.setX(aPos.getX() + pDoc->GetColWidth(nCol1, nTab1) / 4.0);
+            }
+
             if (!pDoc->RowHidden(nRow1, nTab1, nLastRow))
-                aPos.Y() += pDoc->GetRowHeight( nRow1, nTab1 ) / 2;
-            TwipsToMM( aPos.X() );
-            TwipsToMM( aPos.Y() );
-            Point aStartPos = aPos;
+            {
+                aPos.setY(aPos.getY() + pDoc->GetRowHeight(nRow1, nTab1) / 2.0);
+            }
+
+            aPos *= HMM_PER_TWIPS;
+
+            basegfx::B2DPoint aStartPos(aPos);
+
             if ( bNegativePage )
-                aStartPos.X() = -aStartPos.X();     // don't modify aPos - used below
-            if ( pObj->GetPoint( 0 ) != aStartPos )
+            {
+                aStartPos.setX(-aStartPos.getX());      // don't modify aPos - used below
+            }
+
+            if(!pObj->GetObjectPoint(0).equal(aStartPos))
             {
                 if (bRecording)
                             AddCalcUndo< SdrUndoGeoObj> ( *pObj );
-                pObj->SetPoint( aStartPos, 0 );
+
+                pObj->SetObjectPoint( aStartPos, 0 );
             }
 
             if( !bValid2 )
             {
-                Point aEndPos( aPos.X() + DET_ARROW_OFFSET, aPos.Y() - DET_ARROW_OFFSET );
-                if (aEndPos.Y() < 0)
-                    aEndPos.Y() += (2 * DET_ARROW_OFFSET);
+                basegfx::B2DPoint aEndPos(aPos.getX() + DET_ARROW_OFFSET, aPos.getY() - DET_ARROW_OFFSET);
+
+                if(aEndPos.getY() < 0.0)
+                {
+                    aEndPos.setY(aEndPos.getY() + (2 * DET_ARROW_OFFSET));
+                }
+
                 if ( bNegativePage )
-                    aEndPos.X() = -aEndPos.X();
-                if ( pObj->GetPoint( 1 ) != aEndPos )
+                {
+                    aEndPos.setX(-aEndPos.getX());
+                }
+
+                if(!pObj->GetObjectPoint(1).equal(aEndPos))
                 {
                     if (bRecording)
                                 AddCalcUndo< SdrUndoGeoObj >( *pObj );
-                    pObj->SetPoint( aEndPos, 1 );
+
+                    pObj->SetObjectPoint( aEndPos, 1 );
                 }
             }
         }
         if( bValid2 )
         {
-            Point aPos( pDoc->GetColOffset( nCol2, nTab2 ), pDoc->GetRowOffset( nRow2, nTab2 ) );
+            basegfx::B2DPoint aPos(pDoc->GetColOffset(nCol2, nTab2), pDoc->GetRowOffset(nRow2, nTab2));
+
             if (!pDoc->ColHidden(nCol2, nTab2, nLastCol))
-                aPos.X() += pDoc->GetColWidth( nCol2, nTab2 ) / 4;
+            {
+                aPos.setX(aPos.getX() + pDoc->GetColWidth(nCol2, nTab2) / 4.0);
+            }
+
             if (!pDoc->RowHidden(nRow2, nTab2, nLastRow))
-                aPos.Y() += pDoc->GetRowHeight( nRow2, nTab2 ) / 2;
-            TwipsToMM( aPos.X() );
-            TwipsToMM( aPos.Y() );
-            Point aEndPos = aPos;
+            {
+                aPos.setY(aPos.getY() + pDoc->GetRowHeight(nRow2, nTab2) / 2);
+            }
+
+            aPos *= HMM_PER_TWIPS;
+
+            basegfx::B2DPoint aEndPos(aPos);
+
             if ( bNegativePage )
-                aEndPos.X() = -aEndPos.X();         // don't modify aPos - used below
-            if ( pObj->GetPoint( 1 ) != aEndPos )
+            {
+                aEndPos.setX(-aEndPos.getX());          // don't modify aPos - used below
+            }
+
+            if(!pObj->GetObjectPoint(1).equal(aEndPos))
             {
                 if (bRecording)
                             AddCalcUndo< SdrUndoGeoObj> ( *pObj  );
-                pObj->SetPoint( aEndPos, 1 );
+
+                pObj->SetObjectPoint( aEndPos, 1 );
             }
 
             if( !bValid1 )
             {
-                Point aStartPos( aPos.X() - DET_ARROW_OFFSET, aPos.Y() - DET_ARROW_OFFSET );
-                if (aStartPos.X() < 0)
-                    aStartPos.X() += (2 * DET_ARROW_OFFSET);
-                if (aStartPos.Y() < 0)
-                    aStartPos.Y() += (2 * DET_ARROW_OFFSET);
+                basegfx::B2DPoint aStartPos(aPos.getX() - DET_ARROW_OFFSET, aPos.getY() - DET_ARROW_OFFSET);
+
+                if(aStartPos.getX() < 0.0)
+                {
+                    aStartPos.setX(aStartPos.getX() + (2 * DET_ARROW_OFFSET));
+                }
+
+                if(aStartPos.getY() < 0.0)
+                {
+                    aStartPos.setY(aStartPos.getY() + (2 * DET_ARROW_OFFSET));
+                }
+
                 if ( bNegativePage )
-                    aStartPos.X() = -aStartPos.X();
-                if ( pObj->GetPoint( 0 ) != aStartPos )
+                {
+                    aStartPos.setX(-aStartPos.getX());
+                }
+
+                if(!pObj->GetObjectPoint(0).equal(aStartPos))
                 {
                     if (bRecording)
                                     AddCalcUndo< SdrUndoGeoObj >( *pObj );
-                    pObj->SetPoint( aStartPos, 0 );
+
+                    pObj->SetObjectPoint( aStartPos, 0 );
                 }
             }
         }
@@ -673,35 +696,42 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, const ScDrawObjData& rData, bool b
     else                                // Referenz-Rahmen
     {
         DBG_ASSERT( bValid1, "ScDrawLayer::RecalcPos - invalid start position" );
-        Point aPos( pDoc->GetColOffset( nCol1, nTab1 ), pDoc->GetRowOffset( nRow1, nTab1 ) );
-        TwipsToMM( aPos.X() );
-        TwipsToMM( aPos.Y() );
+        basegfx::B2DPoint aPos(pDoc->GetColOffset(nCol1, nTab1) * HMM_PER_TWIPS, pDoc->GetRowOffset(nRow1, nTab1) * HMM_PER_TWIPS);
 
         if( bValid2 )
         {
-            Point aEnd( pDoc->GetColOffset( nCol2 + 1, nTab2 ), pDoc->GetRowOffset( nRow2 + 1, nTab2 ) );
-            TwipsToMM( aEnd.X() );
-            TwipsToMM( aEnd.Y() );
+            const basegfx::B2DPoint aEnd(pDoc->GetColOffset(nCol2 + 1, nTab2) + HMM_PER_TWIPS, pDoc->GetRowOffset(nRow2 + 1, nTab2) * HMM_PER_TWIPS);
+            basegfx::B2DRange aNew(aPos, aPos + aEnd);
 
-            Rectangle aNew( aPos, aEnd );
             if ( bNegativePage )
-                MirrorRectRTL( aNew );
-            if ( pObj->GetLogicRect() != aNew )
+            {
+                aNew = basegfx::B2DRange(-aNew.getMaxX(), aNew.getMinY(), -aNew.getMinX(), aNew.getMaxY());
+            }
+
+            if(!sdr::legacy::GetLogicRange(*pObj).equal(aNew))
             {
                 if (bRecording)
                             AddCalcUndo< SdrUndoGeoObj >( *pObj );
-                pObj->SetLogicRect(aNew);
+
+                sdr::legacy::SetLogicRange(*pObj, aNew);
             }
         }
         else
         {
             if ( bNegativePage )
-                aPos.X() = -aPos.X();
-            if ( pObj->GetRelativePos() != aPos )
+            {
+                aPos.setX(-aPos.getX());
+            }
+
+            // #i108739# SC never used anchor, thus i simplified this to just TopLeft
+            const basegfx::B2DPoint aRelativePos(pObj->getSdrObjectTranslate());
+
+            if(!aRelativePos.equal(aPos))
             {
                 if (bRecording)
                             AddCalcUndo< SdrUndoGeoObj >( *pObj );
-                pObj->SetRelativePos( aPos );
+
+                sdr::legacy::transformSdrObject(*pObj, basegfx::tools::createTranslateB2DHomMatrix(aPos - aRelativePos));
             }
         }
     }
@@ -766,7 +796,7 @@ sal_Bool ScDrawLayer::GetPrintArea( ScRange& rRange, sal_Bool bSetHor, sal_Bool 
         {
                             //! Flags (ausgeblendet?) testen
 
-            Rectangle aObjRect = pObject->GetCurrentBoundRect();
+            Rectangle aObjRect = sdr::legacy::GetBoundRect(*pObject);
             sal_Bool bFit = sal_True;
             if ( !bSetHor && ( aObjRect.Right() < nStartX || aObjRect.Left() > nEndX ) )
                 bFit = sal_False;
@@ -911,21 +941,22 @@ void ScDrawLayer::MoveAreaTwips( SCTAB nTab, const Rectangle& rArea,
     {
         if( GetAnchor( pObject ) == SCA_CELL )
         {
-            if ( GetObjData( pObject ) )                    // Detektiv-Pfeil ?
+            if ( GetObjData( *pObject ) )                   // Detektiv-Pfeil ?
             {
                 // hier nichts
             }
-            else if ( pObject->ISA( SdrEdgeObj ) )          // Verbinder?
+            else if (pObject->IsSdrEdgeObj())           // Verbinder?
             {
                 //  hier auch nichts
                 //! nicht verbundene Enden wie bei Linien (s.u.) behandeln?
             }
-            else if ( pObject->IsPolyObj() && pObject->GetPointCount()==2 )
+            else if ( pObject->IsPolygonObject() && 2 == pObject->GetObjectPointCount() )
             {
                 for (sal_uInt16 i=0; i<2; i++)
                 {
                     sal_Bool bMoved = sal_False;
-                    Point aPoint = pObject->GetPoint(i);
+                    const basegfx::B2DPoint aB2DPoint(pObject->GetObjectPoint(i));
+                    Point aPoint(basegfx::fround(aB2DPoint.getX()), basegfx::fround(aB2DPoint.getY()));
                     lcl_ReverseTwipsToMM( aPoint );
                     if (rArea.IsInside(aPoint))
                     {
@@ -951,13 +982,13 @@ void ScDrawLayer::MoveAreaTwips( SCTAB nTab, const Rectangle& rArea,
                     {
                                     AddCalcUndo< SdrUndoGeoObj >( *pObject );
                         lcl_TwipsToMM( aPoint );
-                        pObject->SetPoint( aPoint, i );
+                        pObject->SetObjectPoint( basegfx::B2DPoint(aPoint.X(), aPoint.Y()), i );
                     }
                 }
             }
             else
             {
-                Rectangle aObjRect = pObject->GetLogicRect();
+                Rectangle aObjRect(sdr::legacy::GetLogicRect(*pObject));
                 // aOldMMPos: not converted, millimeters
                 Point aOldMMPos = bNegativePage ? aObjRect.TopRight() : aObjRect.TopLeft();
                 lcl_ReverseTwipsToMM( aObjRect );
@@ -1003,8 +1034,8 @@ void ScDrawLayer::MoveAreaTwips( SCTAB nTab, const Rectangle& rArea,
                     lcl_TwipsToMM( aNewPos );
                     aMoveSize = Size( aNewPos.X() - aOldMMPos.X(), aNewPos.Y() - aOldMMPos.Y() );   // millimeters
 
-                                AddCalcUndo< SdrUndoMoveObj >( *pObject, aMoveSize );
-                    pObject->Move( aMoveSize );
+                    AddCalcUndo(new SdrUndoGeoObj(*pObject));
+                    sdr::legacy::transformSdrObject(*pObject, basegfx::tools::createTranslateB2DHomMatrix(aMoveSize.Width(), aMoveSize.Height()));
                 }
                 else if ( rArea.IsInside( bNegativePage ? aObjRect.BottomLeft() : aObjRect.BottomRight() ) &&
                             !pObject->IsResizeProtect() )
@@ -1015,7 +1046,8 @@ void ScDrawLayer::MoveAreaTwips( SCTAB nTab, const Rectangle& rArea,
                     long nOldSizeX = aObjRect.Right() - aObjRect.Left() + 1;
                     long nOldSizeY = aObjRect.Bottom() - aObjRect.Top() + 1;
                     long nLogMoveX = rMove.X() * ( bNegativePage ? -1 : 1 );    // logical direction
-                    pObject->Resize( aOldMMPos, Fraction( nOldSizeX+nLogMoveX, nOldSizeX ),
+
+                    sdr::legacy::ResizeSdrObject(*pObject, aOldMMPos, Fraction( nOldSizeX+nLogMoveX, nOldSizeX ),
                                                 Fraction( nOldSizeY+rMove.Y(), nOldSizeY ) );
                 }
             }
@@ -1196,11 +1228,13 @@ sal_Bool ScDrawLayer::HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndR
     SdrObject* pObject = aIter.Next();
     while ( pObject && !bFound )
     {
-        aObjRect = pObject->GetSnapRect();  //! GetLogicRect ?
+        aObjRect = sdr::legacy::GetSnapRect(*pObject);  //! GetLogicRect ?
         // #i116164# note captions are handled separately, don't have to be included for each single row height change
         if ( (aTestRect.IsInside(aObjRect.TopLeft()) || aTestRect.IsInside(aObjRect.BottomLeft())) &&
-             (bIncludeNotes || !IsNoteCaption(pObject)) )
+             (bIncludeNotes || !IsNoteCaption(*pObject)) )
+        {
             bFound = sal_True;
+        }
 
         pObject = aIter.Next();
     }
@@ -1216,10 +1250,8 @@ void ScDrawLayer::DeleteObjects( SCTAB nTab )
     if (!pPage)
         return;
 
-    pPage->RecalcObjOrdNums();
-
     long    nDelCount = 0;
-    sal_uLong   nObjCount = pPage->GetObjCount();
+    sal_uInt32 nObjCount = pPage->GetObjCount();
     if (nObjCount)
     {
         SdrObject** ppObj = new SdrObject*[nObjCount];
@@ -1239,7 +1271,7 @@ void ScDrawLayer::DeleteObjects( SCTAB nTab )
                         AddCalcUndo< SdrUndoRemoveObj >( *ppObj[nDelCount-i] );
 
         for (i=1; i<=nDelCount; i++)
-            pPage->RemoveObject( ppObj[nDelCount-i]->GetOrdNum() );
+            pPage->RemoveObjectFromSdrObjList( ppObj[nDelCount-i]->GetNavigationPosition() );
 
         delete[] ppObj;
     }
@@ -1258,10 +1290,8 @@ void ScDrawLayer::DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
     if (!pPage)
         return;
 
-    pPage->RecalcObjOrdNums();
-
     long    nDelCount = 0;
-    sal_uLong   nObjCount = pPage->GetObjCount();
+    sal_uInt32 nObjCount = pPage->GetObjCount();
     if (nObjCount)
     {
         Rectangle aDelRect = pDoc->GetMMRect( nCol1, nRow1, nCol2, nRow2, nTab );
@@ -1274,9 +1304,9 @@ void ScDrawLayer::DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
         {
             // do not delete note caption, they are always handled by the cell note
             // TODO: detective objects are still deleted, is this desired?
-            if (!IsNoteCaption( pObject ))
+            if (!IsNoteCaption( *pObject ))
             {
-                Rectangle aObjRect = pObject->GetCurrentBoundRect();
+                Rectangle aObjRect = sdr::legacy::GetBoundRect(*pObject);
                 if ( aDelRect.IsInside( aObjRect ) )
                     ppObj[nDelCount++] = pObject;
             }
@@ -1290,7 +1320,7 @@ void ScDrawLayer::DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
                         AddCalcUndo< SdrUndoRemoveObj >( *ppObj[nDelCount-i] );
 
         for (i=1; i<=nDelCount; i++)
-            pPage->RemoveObject( ppObj[nDelCount-i]->GetOrdNum() );
+            pPage->RemoveObjectFromSdrObjList( ppObj[nDelCount-i]->GetNavigationPosition() );
 
         delete[] ppObj;
     }
@@ -1315,9 +1345,8 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
             SdrPage* pPage = GetPage(static_cast<sal_uInt16>(nTab));
             if (pPage)
             {
-                pPage->RecalcObjOrdNums();
                 long    nDelCount = 0;
-                sal_uLong   nObjCount = pPage->GetObjCount();
+                sal_uInt32 nObjCount = pPage->GetObjCount();
                 if (nObjCount)
                 {
                     //  Rechteck um die ganze Selektion
@@ -1333,9 +1362,9 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
                     {
                         // do not delete note caption, they are always handled by the cell note
                         // TODO: detective objects are still deleted, is this desired?
-                        if (!IsNoteCaption( pObject ))
+                        if (!IsNoteCaption( *pObject ))
                         {
-                            Rectangle aObjRect = pObject->GetCurrentBoundRect();
+                            Rectangle aObjRect = sdr::legacy::GetBoundRect(*pObject);
                             if ( aMarkBound.IsInside( aObjRect ) )
                             {
                                 ScRange aRange = pDoc->GetRange( nTab, aObjRect );
@@ -1355,7 +1384,7 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
                                         AddCalcUndo< SdrUndoRemoveObj >( *ppObj[nDelCount-i] );
 
                     for (i=1; i<=nDelCount; i++)
-                        pPage->RemoveObject( ppObj[nDelCount-i]->GetOrdNum() );
+                        pPage->RemoveObjectFromSdrObjList( ppObj[nDelCount-i]->GetNavigationPosition() );
 
                     delete[] ppObj;
                 }
@@ -1381,9 +1410,9 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const Rectangle&
         SdrObject* pOldObject = aIter.Next();
         while (pOldObject)
         {
-            Rectangle aObjRect = pOldObject->GetCurrentBoundRect();
+            Rectangle aObjRect = sdr::legacy::GetBoundRect(*pOldObject);
             // do not copy internal objects (detective) and note captions
-            if ( rRange.IsInside( aObjRect ) && (pOldObject->GetLayer() != SC_LAYER_INTERN) && !IsNoteCaption( pOldObject ) )
+            if ( rRange.IsInside( aObjRect ) && (pOldObject->GetLayer() != SC_LAYER_INTERN) && !IsNoteCaption( *pOldObject ) )
             {
                 if ( !pDestModel )
                 {
@@ -1402,17 +1431,9 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const Rectangle&
                 DBG_ASSERT( pDestPage, "no page" );
                 if (pDestPage)
                 {
-                    // #116235#
-                    SdrObject* pNewObject = pOldObject->Clone();
-                    //SdrObject* pNewObject = pOldObject->Clone( pDestPage, pDestModel );
-                    pNewObject->SetModel(pDestModel);
-                    pNewObject->SetPage(pDestPage);
-
+                    SdrObject* pNewObject = pOldObject->CloneSdrObject();
                     uno::Reference< chart2::XChartDocument > xOldChart( ScChartHelper::GetChartFromSdrObject( pOldObject ) );
-                    if(!xOldChart.is())//#i110034# do not move charts as they loose all their data references otherwise
-                        pNewObject->NbcMove(Size(0,0));
-                    pDestPage->InsertObject( pNewObject );
-
+                    pDestPage->InsertObjectToSdrObjList(*pNewObject);
                     //  no undo needed in clipboard document
                     //  charts are not updated
                 }
@@ -1564,28 +1585,21 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
 
     while (pOldObject)
     {
-        Rectangle aObjRect = pOldObject->GetCurrentBoundRect();
+        Rectangle aObjRect = sdr::legacy::GetBoundRect(*pOldObject);
         // do not copy internal objects (detective) and note captions
-        if ( rSourceRange.IsInside( aObjRect ) && (pOldObject->GetLayer() != SC_LAYER_INTERN) && !IsNoteCaption( pOldObject ) )
+        if ( rSourceRange.IsInside( aObjRect ) && (pOldObject->GetLayer() != SC_LAYER_INTERN) && !IsNoteCaption( *pOldObject ) )
         {
-            // #116235#
-            SdrObject* pNewObject = pOldObject->Clone();
-            //SdrObject* pNewObject = pOldObject->Clone( pDestPage, this );
-            pNewObject->SetModel(this);
-            pNewObject->SetPage(pDestPage);
-
+            SdrObject* pNewObject = pOldObject->CloneSdrObject();
             if ( bMirrorObj )
                 MirrorRTL( pNewObject );        // first mirror, then move
 
-            pNewObject->NbcMove( aMove );
+            sdr::legacy::MoveSdrObject(*pNewObject, aMove );
             if ( bResize )
-                pNewObject->NbcResize( aRefPos, aHorFract, aVerFract );
+                sdr::legacy::ResizeSdrObject(*pNewObject, aRefPos, aHorFract, aVerFract );
 
-            pDestPage->InsertObject( pNewObject );
+            pDestPage->InsertObjectToSdrObjList(*pNewObject);
             if (bRecording)
                         AddCalcUndo< SdrUndoInsertObj >( *pNewObject );
-
-            //#i110034# handle chart data references (after InsertObject)
 
             if ( pNewObject->GetObjIdentifier() == OBJ_OLE2 )
             {
@@ -1685,7 +1699,7 @@ void ScDrawLayer::MirrorRTL( SdrObject* pObj )
     {
         SdrObjTransformInfoRec aInfo;
         pObj->TakeObjInfo( aInfo );
-        bCanMirror = aInfo.bMirror90Allowed;
+        bCanMirror = aInfo.mbMirror90Allowed;
     }
 
     if (bCanMirror)
@@ -1694,18 +1708,22 @@ void ScDrawLayer::MirrorRTL( SdrObject* pObj )
         Point aRef2( 0, 1 );
         if (bRecording)
                     AddCalcUndo< SdrUndoGeoObj >( *pObj );
-        pObj->Mirror( aRef1, aRef2 );
+        sdr::legacy::MirrorSdrObject(*pObj, aRef1, aRef2 );
     }
     else
     {
         //  Move instead of mirroring:
         //  New start position is negative of old end position
         //  -> move by sum of start and end position
-        Rectangle aObjRect = pObj->GetLogicRect();
-        Size aMoveSize( -(aObjRect.Left() + aObjRect.Right()), 0 );
+        const basegfx::B2DRange aObjRange(sdr::legacy::GetLogicRange(*pObj));
+        const double aDeltaX(-aObjRange.getMinX() - aObjRange.getMaxX());
+
         if (bRecording)
-                    AddCalcUndo< SdrUndoMoveObj >( *pObj, aMoveSize );
-        pObj->Move( aMoveSize );
+        {
+            AddCalcUndo(new SdrUndoGeoObj(*pObj));
+        }
+
+        sdr::legacy::transformSdrObject(*pObj, basegfx::tools::createTranslateB2DHomMatrix(aDeltaX, 0.0));
     }
 }
 
@@ -1716,6 +1734,12 @@ void ScDrawLayer::MirrorRectRTL( Rectangle& rRect )
     long nTemp = rRect.Left();
     rRect.Left() = -rRect.Right();
     rRect.Right() = -nTemp;
+}
+
+basegfx::B2DRange ScDrawLayer::GetCellRange(ScDocument& rDoc, const ScAddress& rPos, bool bMergedCell)
+{
+    const Rectangle aCellRect(GetCellRect(rDoc, rPos, bMergedCell));
+    return basegfx::B2DRange(aCellRect.Left(), aCellRect.Top(), aCellRect.Right(), aCellRect.Bottom());
 }
 
 Rectangle ScDrawLayer::GetCellRect( ScDocument& rDoc, const ScAddress& rPos, bool bMergedCell )
@@ -1788,8 +1812,8 @@ inline sal_Bool IsNamedObject( SdrObject* pObj, const String& rName )
 
 SdrObject* ScDrawLayer::GetNamedObject( const String& rName, sal_uInt16 nId, SCTAB& rFoundTab ) const
 {
-    sal_uInt16 nTabCount = GetPageCount();
-    for (sal_uInt16 nTab=0; nTab<nTabCount; nTab++)
+    const sal_uInt32 nTabCount(GetPageCount());
+    for (sal_uInt32 nTab=0; nTab<nTabCount; nTab++)
     {
         const SdrPage* pPage = GetPage(nTab);
         DBG_ASSERT(pPage,"Page ?");
@@ -1841,8 +1865,8 @@ void ScDrawLayer::EnsureGraphicNames()
 {
     //  make sure all graphic objects have names (after Excel import etc.)
 
-    sal_uInt16 nTabCount = GetPageCount();
-    for (sal_uInt16 nTab=0; nTab<nTabCount; nTab++)
+    const sal_uInt32 nTabCount(GetPageCount());
+    for (sal_uInt32 nTab=0; nTab<nTabCount; nTab++)
     {
         SdrPage* pPage = GetPage(nTab);
         DBG_ASSERT(pPage,"Page ?");
@@ -1873,8 +1897,9 @@ void ScDrawLayer::SetAnchor( SdrObject* pObj, ScAnchorType eType )
 
     // Ein an der Seite verankertes Objekt zeichnet sich durch eine Anker-Pos
     // von (0,1) aus. Das ist ein shabby Trick, der aber funktioniert!
-    Point aAnchor( 0, eType == SCA_PAGE ? 1 : 0 );
-    pObj->SetAnchorPos( aAnchor );
+
+    // #i108739# get rid of that SC anchor hack, replace with bool flag
+    pObj->setUniversalApplicationFlag01(SCA_PAGE == eType);
 
     if ( eOldAnchorType != eType )
         pObj->notifyShapePropertyChange( ::svx::eSpreadsheetAnchor );
@@ -1882,32 +1907,33 @@ void ScDrawLayer::SetAnchor( SdrObject* pObj, ScAnchorType eType )
 
 ScAnchorType ScDrawLayer::GetAnchor( const SdrObject* pObj )
 {
-    Point aAnchor( pObj->GetAnchorPos() );
-    return ( aAnchor.Y() != 0 ) ? SCA_PAGE : SCA_CELL;
+    // #i108739# get rid of that SC anchor hack, replace with bool flag
+    return pObj->getUniversalApplicationFlag01() ? SCA_PAGE : SCA_CELL;
 }
 
-ScDrawObjData* ScDrawLayer::GetObjData( SdrObject* pObj, sal_Bool bCreate )     // static
+ScDrawObjData* ScDrawLayer::GetObjData( const SdrObject& rObj, sal_Bool bCreate )       // static
 {
-    sal_uInt16 nCount = pObj ? pObj->GetUserDataCount() : 0;
-    for( sal_uInt16 i = 0; i < nCount; i++ )
+    const sal_uInt32 nCount(rObj.GetUserDataCount());
+
+    for( sal_uInt32 i = 0; i < nCount; i++ )
     {
-        SdrObjUserData* pData = pObj->GetUserData( i );
+        SdrObjUserData* pData = rObj.GetUserData( i );
         if( pData && pData->GetInventor() == SC_DRAWLAYER
                     && pData->GetId() == SC_UD_OBJDATA )
             return (ScDrawObjData*) pData;
     }
-    if( pObj && bCreate )
+    if( bCreate )
     {
         ScDrawObjData* pData = new ScDrawObjData;
-        pObj->InsertUserData( pData, 0 );
+        const_cast< SdrObject& >(rObj).InsertUserData( pData, 0 );
         return pData;
     }
     return 0;
 }
 
-ScDrawObjData* ScDrawLayer::GetObjDataTab( SdrObject* pObj, SCTAB nTab )    // static
+ScDrawObjData* ScDrawLayer::GetObjDataTab( const SdrObject& rObj, SCTAB nTab )    // static
 {
-    ScDrawObjData* pData = GetObjData( pObj );
+    ScDrawObjData* pData = GetObjData( rObj );
     if ( pData )
     {
         if ( pData->maStart.IsValid() )
@@ -1918,22 +1944,25 @@ ScDrawObjData* ScDrawLayer::GetObjDataTab( SdrObject* pObj, SCTAB nTab )    // s
     return pData;
 }
 
-bool ScDrawLayer::IsNoteCaption( SdrObject* pObj )
+bool ScDrawLayer::IsNoteCaption( const SdrObject& rObj )
 {
-    ScDrawObjData* pData = pObj ? GetObjData( pObj ) : 0;
+    ScDrawObjData* pData = GetObjData( rObj );
+
     return pData && pData->mbNote;
 }
 
-ScDrawObjData* ScDrawLayer::GetNoteCaptionData( SdrObject* pObj, SCTAB nTab )
+ScDrawObjData* ScDrawLayer::GetNoteCaptionData( const SdrObject& rObj, SCTAB nTab )
 {
-    ScDrawObjData* pData = pObj ? GetObjDataTab( pObj, nTab ) : 0;
+    ScDrawObjData* pData = GetObjDataTab( rObj, nTab );
+
     return (pData && pData->mbNote) ? pData : 0;
 }
 
 ScIMapInfo* ScDrawLayer::GetIMapInfo( SdrObject* pObj )             // static
 {
-    sal_uInt16 nCount = pObj->GetUserDataCount();
-    for( sal_uInt16 i = 0; i < nCount; i++ )
+    const sal_uInt32 nCount(pObj->GetUserDataCount());
+
+    for( sal_uInt32 i = 0; i < nCount; i++ )
     {
         SdrObjUserData* pData = pObj->GetUserData( i );
         if( pData && pData->GetInventor() == SC_DRAWLAYER
@@ -1944,65 +1973,67 @@ ScIMapInfo* ScDrawLayer::GetIMapInfo( SdrObject* pObj )             // static
 }
 
 // static:
-IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
-                                          const Point& rWinPoint, const Window& rCmpWnd )
+IMapObject* ScDrawLayer::GetHitIMapObject(SdrObject& rObj,  const basegfx::B2DPoint& rWinPoint, const Window& rCmpWnd)
 {
-    const MapMode       aMap100( MAP_100TH_MM );
-    MapMode             aWndMode = rCmpWnd.GetMapMode();
-    Point               aRelPoint( rCmpWnd.LogicToLogic( rWinPoint, &aWndMode, &aMap100 ) );
-    Rectangle           aLogRect = rCmpWnd.LogicToLogic( pObj->GetLogicRect(), &aWndMode, &aMap100 );
-    ScIMapInfo*         pIMapInfo = GetIMapInfo( pObj );
+    const basegfx::B2DHomMatrix aTransWinTo100thmm(rCmpWnd.GetTransformLogicToLogic(rCmpWnd.GetMapMode(), MapMode(MAP_100TH_MM)));
+    basegfx::B2DPoint aRelPoint(aTransWinTo100thmm * rWinPoint);
+    basegfx::B2DRange aLogRange(sdr::legacy::GetLogicRange(rObj));
+    aLogRange.transform(aTransWinTo100thmm);
+    ScIMapInfo* pIMapInfo = GetIMapInfo(&rObj);
     IMapObject*         pIMapObj = NULL;
 
     if ( pIMapInfo )
     {
         Size        aGraphSize;
         ImageMap&   rImageMap = (ImageMap&) pIMapInfo->GetImageMap();
-        Graphic     aGraphic;
-        sal_Bool        bObjSupported = sal_False;
+        bool bObjSupported(false);
+        const SdrGrafObj* pGrafObj = dynamic_cast< const SdrGrafObj* >(&rObj);
 
-        if ( pObj->ISA( SdrGrafObj )  ) // einfaches Grafik-Objekt
+        if ( pGrafObj  ) // einfaches Grafik-Objekt
         {
-            const SdrGrafObj*   pGrafObj = (const SdrGrafObj*) pObj;
-            const GeoStat&      rGeo = pGrafObj->GetGeoStat();
-            const Graphic&      rGraphic = pGrafObj->GetGraphic();
+            // remove shear, mirror and rotation; so just absolute scale and translation get applied
+            basegfx::B2DHomMatrix aJustAbsScaleTranslate(pGrafObj->getSdrObjectTransformation());
 
-            // Drehung rueckgaengig
-            if ( rGeo.nDrehWink )
-                RotatePoint( aRelPoint, aLogRect.TopLeft(), -rGeo.nSin, rGeo.nCos );
+            aJustAbsScaleTranslate.invert();
+            aJustAbsScaleTranslate.scale(basegfx::absolute(pGrafObj->getSdrObjectScale()));
+            aJustAbsScaleTranslate.translate(pGrafObj->getSdrObjectTranslate());
+            aRelPoint = aJustAbsScaleTranslate * aRelPoint;
 
-            // Spiegelung rueckgaengig
-            if ( ( (const SdrGrafObjGeoData*) pGrafObj->GetGeoData() )->bMirrored )
-                aRelPoint.X() = aLogRect.Right() + aLogRect.Left() - aRelPoint.X();
-
-            // ggf. Unshear:
-            if ( rGeo.nShearWink )
-                ShearPoint( aRelPoint, aLogRect.TopLeft(), -rGeo.nTan );
-
+            const Graphic& rGraphic = pGrafObj->GetGraphic();
 
             if ( rGraphic.GetPrefMapMode().GetMapUnit() == MAP_PIXEL )
-                aGraphSize = rCmpWnd.PixelToLogic( rGraphic.GetPrefSize(),
-                                                         aMap100 );
+            {
+                aGraphSize = rCmpWnd.PixelToLogic( rGraphic.GetPrefSize(), MapMode( MAP_100TH_MM ) );
+            }
             else
+            {
+                const MapMode       aMap100( MAP_100TH_MM );
                 aGraphSize = OutputDevice::LogicToLogic( rGraphic.GetPrefSize(),
-                                                         rGraphic.GetPrefMapMode(),
-                                                         aMap100 );
+                    rGraphic.GetPrefMapMode(), MapMode( MAP_100TH_MM ) );
+            }
 
-            bObjSupported = sal_True;
+            bObjSupported = true;
         }
-        else if ( pObj->ISA( SdrOle2Obj ) ) // OLE-Objekt
+        else
+        {
+            const SdrOle2Obj* pSdrOle2Obj = dynamic_cast< const SdrOle2Obj* >(&rObj);
+
+            if ( pSdrOle2Obj ) // OLE-Objekt
         {
             // TODO/LEAN: working with visual area needs running state
-            aGraphSize = ((SdrOle2Obj*)pObj)->GetOrigObjSize();
-            bObjSupported = sal_True;
+                aGraphSize = pSdrOle2Obj->GetOrigObjSize();
+                bObjSupported = true;
+            }
         }
 
         // hat alles geklappt, dann HitTest ausfuehren
         if ( bObjSupported )
         {
             // relativen Mauspunkt berechnen
-            aRelPoint -= aLogRect.TopLeft();
-            pIMapObj = rImageMap.GetHitIMapObject( aGraphSize, aLogRect.GetSize(), aRelPoint );
+            aRelPoint -= aLogRange.getMinimum();
+            const Size aDisplaySize(basegfx::fround(aLogRange.getWidth()), basegfx::fround(aLogRange.getHeight()));
+            const Point aRelHitPoint(basegfx::fround(aRelPoint.getX()), basegfx::fround(aRelPoint.getY()));
+            pIMapObj = rImageMap.GetHitIMapObject(aGraphSize, aDisplaySize, aRelHitPoint);
         }
     }
 
@@ -2011,8 +2042,9 @@ IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
 
 ScMacroInfo* ScDrawLayer::GetMacroInfo( SdrObject* pObj, sal_Bool bCreate )             // static
 {
-    sal_uInt16 nCount = pObj->GetUserDataCount();
-    for( sal_uInt16 i = 0; i < nCount; i++ )
+    const sal_uInt32 nCount(pObj->GetUserDataCount());
+
+    for( sal_uInt32 i = 0; i < nCount; i++ )
     {
         SdrObjUserData* pData = pObj->GetUserData( i );
         if( pData && pData->GetInventor() == SC_DRAWLAYER
@@ -2034,7 +2066,7 @@ void ScDrawLayer::SetGlobalDrawPersist(SfxObjectShell* pPersist)            // s
     pGlobalDrawPersist = pPersist;
 }
 
-void __EXPORT ScDrawLayer::SetChanged( sal_Bool bFlg /* = sal_True */ )
+void __EXPORT ScDrawLayer::SetChanged( bool bFlg /* = true */ )
 {
     if ( bFlg && pDoc )
         pDoc->SetChartListenerCollectionNeedsUpdate( sal_True );

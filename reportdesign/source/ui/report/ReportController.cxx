@@ -120,6 +120,7 @@
 #include <svx/svxdlg.hxx>
 #include <svx/zoom_def.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/svdlegacy.hxx>
 
 #include "DesignView.hxx"
 #include "ModuleHelper.hxx"
@@ -489,7 +490,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
             if ( aReturn.bEnabled )
             {
                 OSectionView* pSectionView = getCurrentSectionView();
-                aReturn.bEnabled = pSectionView && pSectionView->GetMarkedObjectCount() > 2;
+                aReturn.bEnabled = pSectionView && pSectionView->getSelectedSdrObjectCount() > 2;
             }
             break;
         case SID_ARRANGEMENU:
@@ -1685,7 +1686,8 @@ void OReportController::impl_initialize( )
             //m_sName = m_xReportDefinition->getName();
             getView()->initialize();    // show the windows and fill with our informations
 
-            m_aReportModel = reportdesign::OReportDefinition::getSdrModel(m_xReportDefinition);
+            m_aReportModel = reportdesign::OReportDefinition::getSharedSdrModel(m_xReportDefinition);
+
             if ( !m_aReportModel )
                 throw RuntimeException();
             m_aReportModel->attachController( *this );
@@ -1733,7 +1735,7 @@ void OReportController::impl_initialize( )
 
         if ( m_nPageNum != -1 )
         {
-            if ( m_nPageNum < m_aReportModel->GetPageCount() )
+            if ( m_nPageNum < (sal_Int32)m_aReportModel->GetPageCount() )
             {
                 const OReportPage* pPage = dynamic_cast<OReportPage*>(m_aReportModel->GetPage(static_cast<sal_uInt16>(m_nPageNum)));
                 if ( pPage )
@@ -2586,9 +2588,9 @@ IMPL_LINK( OReportController, EventLstHdl, VclWindowEvent*, _pEvent )
 // -----------------------------------------------------------------------------
 void OReportController::Notify(SfxBroadcaster & /* _rBc */, SfxHint const & _rHint)
 {
-    if (_rHint.ISA(DlgEdHint)
-        && (static_cast< DlgEdHint const & >(_rHint).GetKind()
-            == RPTUI_HINT_SELECTIONCHANGED))
+    const DlgEdHint* pDlgEdHint = dynamic_cast< const DlgEdHint* >(&_rHint);
+
+    if(pDlgEdHint && RPTUI_HINT_SELECTIONCHANGED == pDlgEdHint->GetKind())
     {
         const sal_Int32 nSelectionCount = getDesignView()->getMarkedObjectCount();
         if ( m_nSelectionCount != nSelectionCount )
@@ -2780,7 +2782,7 @@ uno::Any SAL_CALL OReportController::getViewData(void) throw( uno::RuntimeExcept
         ::boost::shared_ptr<OSectionWindow> pSectionWindow = getDesignView()->getMarkedSection();
         if ( pSectionWindow.get() )
         {
-            aViewData.put( "MarkedSection", (sal_Int32)pSectionWindow->getReportSection().getPage()->GetPageNum() );
+            aViewData.put( "MarkedSection", (sal_Int32)pSectionWindow->getReportSection().getPage()->GetPageNumber() );
         } // if ( pSectionWindow.get() )
     } // if ( getDesignView() )
 
@@ -3060,7 +3062,7 @@ void OReportController::insertGraphic()
     }
 }
 // -----------------------------------------------------------------------------
-::boost::shared_ptr<rptui::OReportModel> OReportController::getSdrModel() const
+::boost::shared_ptr<rptui::OReportModel> OReportController::getSharedSdrModel() const
 {
     return m_aReportModel;
 }
@@ -3166,19 +3168,19 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
     uno::Reference< report::XReportComponent> xShapeProp;
     if ( _nObjectId == OBJ_CUSTOMSHAPE )
     {
-        pNewControl = SdrObjFactory::MakeNewObject( ReportInventor, _nObjectId, pSectionWindow->getReportSection().getPage(),m_aReportModel.get() );
+        pNewControl = SdrObjFactory::MakeNewObject( *m_aReportModel.get(), SdrObjectCreationInfo(_nObjectId, ReportInventor) );
         xShapeProp.set(pNewControl->getUnoShape(),uno::UNO_QUERY);
         ::rtl::OUString sCustomShapeType = getDesignView()->GetInsertObjString();
         if ( !sCustomShapeType.getLength() )
             sCustomShapeType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("diamond"));
         pSectionWindow->getReportSection().createDefault(sCustomShapeType,pNewControl);
-        pNewControl->SetLogicRect(Rectangle(3000,500,6000,3500)); // switch height and width
+        sdr::legacy::SetLogicRect(*pNewControl, Rectangle(3000,500,6000,3500)); // switch height and width
     } // if ( _nObjectId == OBJ_CUSTOMSHAPE )
     else if ( _nObjectId == OBJ_OLE2 || OBJ_DLG_SUBREPORT == _nObjectId  )
     {
-        pNewControl = SdrObjFactory::MakeNewObject( ReportInventor, _nObjectId, pSectionWindow->getReportSection().getPage(),m_aReportModel.get() );
+        pNewControl = SdrObjFactory::MakeNewObject( *m_aReportModel.get(), SdrObjectCreationInfo(_nObjectId, ReportInventor) );
 
-        pNewControl->SetLogicRect(Rectangle(3000,500,8000,5500)); // switch height and width
+        sdr::legacy::SetLogicRect(*pNewControl, Rectangle(3000,500,8000,5500)); // switch height and width
         xShapeProp.set(pNewControl->getUnoShape(),uno::UNO_QUERY_THROW);
         OOle2Obj* pObj = dynamic_cast<OOle2Obj*>(pNewControl);
         if ( pObj && !pObj->IsEmpty() )
@@ -3195,7 +3197,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
                             ,NULL,NULL,_nObjectId,::rtl::OUString(),ReportInventor,OBJ_DLG_FIXEDTEXT,
                          NULL,pSectionWindow->getReportSection().getPage(),m_aReportModel.get(),
                          pLabel,pControl);
-        delete pLabel;
+        deleteSdrObjectSafeAndClearPointer(pLabel);
 
         pNewControl = pControl;
         OUnoObject* pObj = dynamic_cast<OUnoObject*>(pControl);
@@ -3592,12 +3594,12 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                     {
                         if ( pSectionViews[0] == pSectionViews[1] )
                         {
-                            Rectangle aLabel = getRectangleFromControl(pControl[0]);
-                            Rectangle aTextfield = getRectangleFromControl(pControl[1]);
+                            const Rectangle aLabel(getRectangleFromControl(pControl[0]));
+                            const Rectangle aTextfield(getRectangleFromControl(pControl[1]));
 
                             // create a Union of the given Label and Textfield
-                            Rectangle aLabelAndTextfield( aLabel );
-                            aLabelAndTextfield.Union(aTextfield);
+                            basegfx::B2DRange aLabelAndTextfield(aLabel.Left(), aLabel.Top(), aLabel.Right(), aLabel.Bottom());
+                            aLabelAndTextfield.expand(basegfx::B2DRange(aTextfield.Left(), aTextfield.Top(), aTextfield.Right(), aTextfield.Bottom()));
 
                             // check if there exists other fields and if yes, move down
                             bool bOverlapping = true;
@@ -3608,8 +3610,10 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                                 bOverlapping = pOverlappedObj != NULL;
                                 if ( bOverlapping )
                                 {
-                                    const Rectangle& aLogicRect = pOverlappedObj->GetLogicRect();
-                                    aLabelAndTextfield.Move(0,aLogicRect.Top() + aLogicRect.getHeight() - aLabelAndTextfield.Top());
+                                    const basegfx::B2DRange aLogicRange(sdr::legacy::GetLogicRange(*pOverlappedObj));
+
+                                    aLabelAndTextfield.transform(basegfx::tools::createTranslateB2DHomMatrix(
+                                        0.0, aLogicRange.getMaxY() - aLabelAndTextfield.getMinY()));
                                     bHasToMove = true;
                                 }
                             }
@@ -3617,14 +3621,19 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                             if (bHasToMove)
                             {
                                 // There was a move down, we need to move the Label and the Textfield down
-                                aLabel.Move(0, aLabelAndTextfield.Top() - aLabel.Top());
-                                aTextfield.Move(0, aLabelAndTextfield.Top() - aTextfield.Top());
+
+                                // aLabel.Move below moves Y relative to aLabel.Top(), thus we get
+                                // aLabel.Top() + aLabelAndTextfield.Top() - aLabel.Top(), which is
+                                // aLabelAndTextfield.Top() as new top position. Same for aTextfield.Top()
+                                //aLabel.Move(0, aLabelAndTextfield.Top() - aLabel.Top());
+                                //aTextfield.Move(0, aLabelAndTextfield.Top() - aTextfield.Top());
+                                const sal_Int32 nNewY(basegfx::fround(aLabelAndTextfield.getMinY()));
 
                                 uno::Reference< report::XReportComponent> xLabel(pControl[0]->getUnoShape(),uno::UNO_QUERY_THROW);
-                                xLabel->setPositionY(aLabel.Top());
+                                xLabel->setPositionY(nNewY); // aLabel.Top());
 
                                 uno::Reference< report::XReportComponent> xTextfield(pControl[1]->getUnoShape(),uno::UNO_QUERY_THROW);
-                                xTextfield->setPositionY(aTextfield.Top());
+                                xTextfield->setPositionY(nNewY); // aTextfield.Top());
                         }
                     }
                         // this should never happen.
@@ -3638,7 +3647,9 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
             else
             {
                 for(size_t i = 0; i < sizeof(pControl)/sizeof(pControl[0]);++i)
-                    delete pControl[i];
+                {
+                    deleteSdrObjectSafeAndClearPointer(pControl[i]);
+                }
             }
         }
     }
@@ -4396,7 +4407,7 @@ SfxUndoManager& OReportController::getUndoManager() const
     DBG_TESTSOLARMUTEX();
         // this is expected to be called during UI actions, so the SM is assumed to be locked
 
-    ::boost::shared_ptr< OReportModel > pReportModel( getSdrModel() );
+    ::boost::shared_ptr< OReportModel > pReportModel( m_aReportModel );
     ENSURE_OR_THROW( !!pReportModel, "no access to our model" );
 
     SfxUndoManager* pUndoManager( pReportModel->GetSdrUndoManager() );

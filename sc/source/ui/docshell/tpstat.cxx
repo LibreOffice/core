@@ -57,7 +57,7 @@ ScDocStatPage::ScDocStatPage( Window *pParent, const SfxItemSet& rSet )
         aFtPagesLbl     ( this, ScResId( FT_PAGES_LBL ) ),
         aFtPages        ( this, ScResId( FT_PAGES ) )
 {
-    ScDocShell* pDocSh = PTR_CAST( ScDocShell, SfxObjectShell::Current() );
+    ScDocShell* pDocSh = dynamic_cast< ScDocShell* >( SfxObjectShell::Current() );
     ScDocStat   aDocStat;
 
     if ( pDocSh )

@@ -302,14 +302,14 @@ SdPage* TemplatePageObjectProvider::operator() (SdDrawDocument* pContainerDocume
 {
     SfxApplication* pSfxApp = SFX_APP();
     SfxItemSet* pSet = new SfxAllItemSet (pSfxApp->GetPool());
-    pSet->Put (SfxBoolItem (SID_TEMPLATE, sal_True));
-    pSet->Put (SfxBoolItem (SID_PREVIEW, sal_True));
-    if (pSfxApp->LoadTemplate (mxDocumentShell, sFileName, sal_True, pSet))
+    pSet->Put (SfxBoolItem (SID_TEMPLATE, true));
+    pSet->Put (SfxBoolItem (SID_PREVIEW, true));
+    if (pSfxApp->LoadTemplate (mxDocumentShell, sFileName, true, pSet))
     {
         mxDocumentShell = NULL;
     }
     SfxObjectShell* pShell = mxDocumentShell;
-    return PTR_CAST(::sd::DrawDocShell,pShell);
+    return dynamic_cast< ::sd::DrawDocShell* >(pShell);
 }
 
 
@@ -350,8 +350,7 @@ SdPage* DefaultPageObjectProvider::operator () (SdDrawDocument* pContainerDocume
     SdPage* pLocalMasterPage = NULL;
     if (pContainerDocument != NULL)
     {
-        sal_Int32 nIndex (0);
-        SdPage* pLocalSlide = pContainerDocument->GetSdPage((sal_uInt16)nIndex, PK_STANDARD);
+        SdPage* pLocalSlide = pContainerDocument->GetSdPage(0, PK_STANDARD);
         if (pLocalSlide!=NULL && pLocalSlide->TRG_HasMasterPage())
             pLocalMasterPage = dynamic_cast<SdPage*>(&pLocalSlide->TRG_GetMasterPage());
     }

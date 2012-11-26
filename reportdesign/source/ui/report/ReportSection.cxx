@@ -42,6 +42,7 @@
 #include <svx/svxids.hrc>
 #include <svx/svditer.hxx>
 #include <svx/dbaexchange.hxx>
+#include <svx/svdlegacy.hxx>
 
 #include <vcl/svapp.hxx>
 
@@ -135,7 +136,7 @@ OReportSection::~OReportSection()
             m_pView->EndListening( *m_pModel );
         m_pView = NULL;
     }
-    /*m_pModel->DeletePage(m_pPage->GetPageNum());*/
+    /*m_pModel->DeletePage(m_pPage->GetPageNumber());*/
 }
 //------------------------------------------------------------------------------
 void OReportSection::Paint( const Rectangle& rRect )
@@ -189,19 +190,19 @@ void OReportSection::fill()
 
     m_pReportListener = addStyleListener(m_xSection->getReportDefinition(),this);
 
-    m_pModel = m_pParent->getViewsWindow()->getView()->getReportView()->getController().getSdrModel();
+    m_pModel = m_pParent->getViewsWindow()->getView()->getReportView()->getController().getSharedSdrModel();
     m_pPage = m_pModel->getPage(m_xSection);
 
-    m_pView = new OSectionView( m_pModel.get(), this, m_pParent->getViewsWindow()->getView() );
+    m_pView = new OSectionView( *m_pModel.get(), this, m_pParent->getViewsWindow()->getView() );
 
     // #i93597# tell SdrPage that only left and right page border is defined
     // instead of the full rectangle definition
     m_pPage->setPageBorderOnlyLeftRight(true);
 
     // without the following call, no grid is painted
-    m_pView->ShowSdrPage( m_pPage );
+    m_pView->ShowSdrPage( *m_pPage );
 
-    m_pView->SetMoveSnapOnlyTopLeft( sal_True );
+    m_pView->SetMoveSnapOnlyTopLeft(true);
     ODesignView* pDesignView = m_pParent->getViewsWindow()->getView()->getReportView();
 
     // #i93595# Adapted grid to a more coarse grid and subdivisions for better visualisation. This
@@ -212,9 +213,7 @@ void OReportSection::fill()
     m_pView->SetGridFine(aGridSizeFine);
 
     // #i93595# set snap grid width to snap to all existing subdivisions
-    const Fraction aX(aGridSizeFine.A());
-    const Fraction aY(aGridSizeFine.B());
-    m_pView->SetSnapGridWidth(aX, aY);
+    m_pView->SetSnapGridWidth(aGridSizeFine.A(), aGridSizeFine.B());
 
     m_pView->SetGridSnap( pDesignView->isGridSnap() );
     m_pView->SetGridFront( sal_False );
@@ -228,19 +227,27 @@ void OReportSection::fill()
     uno::Reference<report::XReportDefinition> xReportDefinition = m_xSection->getReportDefinition();
     const sal_Int32 nLeftMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_LEFTMARGIN);
     const sal_Int32 nRightMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_RIGHTMARGIN);
-    m_pPage->SetLftBorder(nLeftMargin);
-    m_pPage->SetRgtBorder(nRightMargin);
+    m_pPage->SetLeftPageBorder(nLeftMargin);
+    m_pPage->SetRightPageBorder(nRightMargin);
 
 // LLA: TODO
-//  m_pPage->SetUppBorder(-10000);
+//  m_pPage->SetTopPageBorder(-10000);
 
-    m_pView->SetDesignMode( sal_True );
+    m_pView->SetDesignMode( true );
 
     m_pView->StartListening( *m_pModel  );
     /*Resize();*/
-    m_pPage->SetSize( Size( getStyleProperty<awt::Size>(xReportDefinition,PROPERTY_PAPERSIZE).Width,5*m_xSection->getHeight()) );
-    const Size aPageSize = m_pPage->GetSize();
-    m_pView->SetWorkArea( Rectangle( Point( nLeftMargin, 0), Size(aPageSize.Width() - nLeftMargin - nRightMargin,aPageSize.Height()) ) );
+    m_pPage->SetPageScale(
+        basegfx::B2DVector(
+            getStyleProperty<awt::Size>(xReportDefinition,PROPERTY_PAPERSIZE).Width,
+            5*m_xSection->getHeight()));
+    const basegfx::B2DVector& rPageScale = m_pPage->GetPageScale();
+    m_pView->SetWorkArea(
+        basegfx::B2DRange(
+            nLeftMargin,
+            0.0,
+            rPageScale.getX() - nLeftMargin - nRightMargin,
+            rPageScale.getY()));
 
     //SetBackground( Wallpaper( COL_BLUE ));
 }
@@ -275,31 +282,42 @@ void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyC
                         SdrObject* pObject = pShape ? pShape->GetSdrObject() : NULL;
                         if ( pObject )
                         {
-                            SdrObject* pNeuObj = pObject->Clone();
+                            SdrObject* pNeuObj = pObject->CloneSdrObject();
+                            m_pPage->InsertObjectToSdrObjList(*pNeuObj);
 
-                            pNeuObj->SetPage( m_pPage );
-                            pNeuObj->SetModel( m_pModel.get() );
-                            SdrInsertReason aReason(SDRREASON_VIEWCALL);
-                            m_pPage->InsertObject(pNeuObj,CONTAINER_APPEND,&aReason);
-
-                            Rectangle aRet(VCLPoint((*pCopiesIter)->getPosition()),VCLSize((*pCopiesIter)->getSize()));
-                            aRet.setHeight(aRet.getHeight() + 1);
-                            aRet.setWidth(aRet.getWidth() + 1);
+                            const awt::Point aWorkPos((*pCopiesIter)->getPosition());
+                            const awt::Size aWorkSize((*pCopiesIter)->getSize());
+                            basegfx::B2DRange aWorkRange(aWorkPos.X, aWorkPos.Y, aWorkPos.X + aWorkSize.Width, aWorkPos.Y + aWorkSize.Height);
                             bool bOverlapping = true;
+
                             while ( bOverlapping )
                             {
-                                bOverlapping = isOver(aRet,*m_pPage,*m_pView,true,pNeuObj) != NULL;
+                                bOverlapping = isOver(aWorkRange,*m_pPage,*m_pView,true,pNeuObj) != NULL;
                                 if ( bOverlapping )
                                 {
-                                    aRet.Move(0,aRet.getHeight()+1);
-                                    pNeuObj->SetLogicRect(aRet);
+                                    aWorkRange.transform(
+                                        basegfx::tools::createTranslateB2DHomMatrix(
+                                            0.0,
+                                            aWorkRange.getHeight()));
+                                    pNeuObj->setSdrObjectTransformation(
+                                        basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                            aWorkRange.getRange(),
+                                            aWorkRange.getMinimum()));
                                     //(*pCopiesIter)->setPositionY(aRet.Top());
                                 }
                             }
-                            m_pView->AddUndo( m_pView->GetModel()->GetSdrUndoFactory().CreateUndoNewObject( *pNeuObj ) );
-                            m_pView->MarkObj( pNeuObj, m_pView->GetSdrPageView() );
-                            if ( m_xSection.is() && (static_cast<sal_uInt32>(aRet.getHeight() + aRet.Top()) > m_xSection->getHeight()) )
-                                m_xSection->setHeight(aRet.getHeight() + aRet.Top());
+                            m_pView->AddUndo( m_pView->getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoNewObject( *pNeuObj ) );
+                            m_pView->MarkObj( *pNeuObj );
+
+                            if(m_xSection.is())
+                            {
+                                const sal_Int32 nBottom(basegfx::fround(aWorkRange.getMaxY()));
+
+                                if(static_cast<sal_uInt32>(nBottom) > m_xSection->getHeight())
+                                {
+                                    m_xSection->setHeight(nBottom);
+                                }
+                            }
                         }
                     }
                 }
@@ -316,7 +334,7 @@ void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyC
 //----------------------------------------------------------------------------
 void OReportSection::Delete()
 {
-    if( !m_pView->AreObjectsMarked() )
+    if( !m_pView->areSdrObjectsSelected() )
         return;
 
     m_pView->BrkAction();
@@ -349,36 +367,35 @@ void OReportSection::Copy(uno::Sequence< beans::NamedValue >& _rAllreadyCopiedOb
 void OReportSection::Copy(uno::Sequence< beans::NamedValue >& _rAllreadyCopiedObjects,bool _bEraseAnddNoClone)
 {
     OSL_ENSURE(m_xSection.is(),"Why is the section here NULL!");
-    if( !m_pView->AreObjectsMarked() || !m_xSection.is() )
+    if( !m_pView->areSdrObjectsSelected() || !m_xSection.is() )
         return;
 
     // stop all drawing actions
     //m_pView->BrkAction();
 
     // insert control models of marked objects into clipboard dialog model
-    const SdrMarkList& rMarkedList = m_pView->GetMarkedObjectList();
-    const sal_uLong nMark = rMarkedList.GetMarkCount();
-
+    const SdrObjectVector aSelection(m_pView->getSelectedSdrObjectVectorFromSdrMarkView());
     ::std::vector< uno::Reference<report::XReportComponent> > aCopies;
-    aCopies.reserve(nMark);
+    aCopies.reserve(aSelection.size());
+    SdrUndoFactory& rUndo = m_pView->getSdrModelFromSdrView().GetSdrUndoFactory();
 
-    SdrUndoFactory& rUndo = m_pView->GetModel()->GetSdrUndoFactory();
-
-    for( sal_uLong i = nMark; i > 0; )
+    for( sal_uInt32 i = aSelection.size(); i > 0; )
     {
         --i;
-        SdrObject* pSdrObject = rMarkedList.GetMark(i)->GetMarkedSdrObj();
+        SdrObject* pSdrObject = aSelection[i];
         OObjectBase* pObj = dynamic_cast<OObjectBase*>(pSdrObject);
+
         if ( pObj  )
         {
             try
             {
-                SdrObject* pNeuObj = pSdrObject->Clone();
+                SdrObject* pNeuObj = pSdrObject->CloneSdrObject();
                 aCopies.push_back(uno::Reference<report::XReportComponent>(pNeuObj->getUnoShape(),uno::UNO_QUERY));
+
                 if ( _bEraseAnddNoClone )
                 {
                     m_pView->AddUndo( rUndo.CreateUndoDeleteObject( *pSdrObject ) );
-                    m_pPage->RemoveObject(pSdrObject->GetOrdNum());
+                    m_pPage->RemoveObjectFromSdrObjList(pSdrObject->GetNavigationPosition());
                 }
 
             }
@@ -440,7 +457,7 @@ void OReportSection::SelectAll(const sal_uInt16 _nObjectType)
             while( (pObjIter = aIter.Next()) != NULL )
             {
                 if ( pObjIter->GetObjIdentifier() == _nObjectType )
-                    m_pView->MarkObj( pObjIter, m_pView->GetSdrPageView() );
+                    m_pView->MarkObj( *pObjIter );
             }
         }
     }
@@ -535,20 +552,28 @@ void OReportSection::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
 
             if ( _rEvent.PropertyName == PROPERTY_LEFTMARGIN )
             {
-                m_pPage->SetLftBorder(nLeftMargin);
+                m_pPage->SetLeftPageBorder(nLeftMargin);
             }
             else if ( _rEvent.PropertyName == PROPERTY_RIGHTMARGIN )
             {
-                m_pPage->SetRgtBorder(nRightMargin);
+                m_pPage->SetRightPageBorder(nRightMargin);
             }
-            const Size aOldPageSize = m_pPage->GetSize();
-            sal_Int32 nNewHeight = 5*m_xSection->getHeight();
-            if ( aOldPageSize.Height() != nNewHeight || nPaperWidth != aOldPageSize.Width() )
+
+            const basegfx::B2DVector& rCurrentPageSize = m_pPage->GetPageScale();
+            const sal_uInt32 nNewHeight(m_xSection->getHeight() >= 0.0 ? 5 * m_xSection->getHeight() : 0);
+
+            if(basegfx::fround(rCurrentPageSize.getY()) != nNewHeight || nPaperWidth != basegfx::fround(rCurrentPageSize.getX()))
             {
-                m_pPage->SetSize( Size( nPaperWidth,nNewHeight) );
-                const Size aPageSize = m_pPage->GetSize();
-                m_pView->SetWorkArea( Rectangle( Point( nLeftMargin, 0), Size(aPageSize.Width() - nLeftMargin - nRightMargin,aPageSize.Height()) ) );
+                m_pPage->SetPageScale(basegfx::B2DVector(nPaperWidth, nNewHeight));
+                const basegfx::B2DVector& rNewPageSize = m_pPage->GetPageScale();
+                m_pView->SetWorkArea(
+                    basegfx::B2DRange(
+                        nLeftMargin,
+                        0.0,
+                        rNewPageSize.getX() - nLeftMargin - nRightMargin,
+                        rNewPageSize.getY()));
             }
+
             impl_adjustObjectSizePosition(nPaperWidth,nLeftMargin,nRightMargin);
             m_pParent->Invalidate(INVALIDATE_UPDATE | INVALIDATE_TRANSPARENT);
         }
@@ -603,7 +628,7 @@ void OReportSection::impl_adjustObjectSizePosition(sal_Int32 i_nPaperWidth,sal_I
                     if ( m_xSection.is() && (static_cast<sal_uInt32>(aRet.getHeight() + aRet.Top()) > m_xSection->getHeight()) )
                         m_xSection->setHeight(aRet.getHeight() + aRet.Top());
 
-                    pObject->RecalcBoundRect();
+                    pObject->ActionChanged();
                 }
                 pBase->StartListening();
             }
@@ -628,7 +653,7 @@ void OReportSection::deactivateOle()
 // -----------------------------------------------------------------------------
 void OReportSection::createDefault(const ::rtl::OUString& _sType)
 {
-    SdrObject* pObj = m_pView->GetCreateObj();//rMarkList.GetMark(0)->GetObj();
+    SdrObject* pObj = m_pView->GetCreateObj();//rMarkList.GetMark(0).GetObj();
     if ( !pObj )
         return;
     createDefault(_sType,pObj);
@@ -658,7 +683,7 @@ void OReportSection::createDefault(const ::rtl::OUString& _sType,SdrObject* _pOb
                         if( pSourceObj )
                         {
                             const SfxItemSet& rSource = pSourceObj->GetMergedItemSet();
-                            SfxItemSet aDest( _pObj->GetModel()->GetItemPool(),                 // ranges from SdrAttrObj
+                            SfxItemSet aDest( _pObj->GetObjectItemPool(),               // ranges from SdrAttrObj
                             SDRATTR_START, SDRATTR_SHADOW_LAST,
                             SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
                             SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
@@ -674,11 +699,11 @@ void OReportSection::createDefault(const ::rtl::OUString& _sType,SdrObject* _pOb
                             0, 0);
                             aDest.Set( rSource );
                             _pObj->SetMergedItemSet( aDest );
-                            sal_Int32 nAngle = pSourceObj->GetRotateAngle();
-                            if ( nAngle )
+
+                            const long aOldRotation(sdr::legacy::GetRotateAngle(*pSourceObj));
+                            if ( aOldRotation )
                             {
-                                double a = nAngle * F_PI18000;
-                                _pObj->NbcRotate( _pObj->GetSnapRect().Center(), nAngle, sin( a ), cos( a ) );
+                                sdr::legacy::RotateSdrObject(*_pObj, sdr::legacy::GetSnapRect(*_pObj).Center(), aOldRotation);
                             }
                             bAttributesAppliedFromGallery = sal_True;
                         }
@@ -693,7 +718,7 @@ void OReportSection::createDefault(const ::rtl::OUString& _sType,SdrObject* _pOb
         _pObj->SetMergedItem( SvxAdjustItem( SVX_ADJUST_CENTER ,ITEMID_ADJUST) );
         _pObj->SetMergedItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
         _pObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
-        _pObj->SetMergedItem( SdrTextAutoGrowHeightItem( sal_False ) );
+        _pObj->SetMergedItem( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT, sal_False ) );
         ((SdrObjCustomShape*)_pObj)->MergeDefaultAttributes( &_sType );
     }
 }
@@ -703,17 +728,14 @@ uno::Reference< report::XReportComponent > OReportSection::getCurrentControlMode
     uno::Reference< report::XReportComponent > xModel;
     if ( m_pView )
     {
-        const SdrMarkList& rMarkList = m_pView->GetMarkedObjectList();
-        sal_uInt32 nMarkCount = rMarkList.GetMarkCount();
+        OObjectBase* pSelected = dynamic_cast< OObjectBase* >(m_pView->getSelectedIfSingle());
 
-        if ( nMarkCount == 1 )
+        if ( pSelected )
         {
-            SdrObject* pDlgEdObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-            OObjectBase* pObj = dynamic_cast<OObjectBase*>(pDlgEdObj);
-            if ( pObj )
-                xModel = pObj->getReportComponent().get();
+            xModel = pSelected->getReportComponent().get();
         }
     }
+
     return xModel;
 }
 // -----------------------------------------------------------------------------
@@ -721,17 +743,18 @@ void OReportSection::fillControlModelSelection(::std::vector< uno::Reference< un
 {
     if ( m_pView )
     {
-        const SdrMarkList& rMarkList = m_pView->GetMarkedObjectList();
-        const sal_uInt32 nMarkCount = rMarkList.GetMarkCount();
+        const SdrObjectVector aSelection(m_pView->getSelectedSdrObjectVectorFromSdrMarkView());
 
-        for (sal_uInt32 i=0; i < nMarkCount; ++i)
+        for(sal_uInt32 i(0); i < aSelection.size(); ++i)
         {
-            const SdrObject* pDlgEdObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-            const OObjectBase* pObj = dynamic_cast<const OObjectBase*>(pDlgEdObj);
+            const OObjectBase* pObj = dynamic_cast< const OObjectBase* >(aSelection[i]);
+
             if ( pObj )
+            {
                 _rSelection.push_back(pObj->getReportComponent());
         }
     }
+}
 }
 // -----------------------------------------------------------------------------
 sal_Int8 OReportSection::AcceptDrop( const AcceptDropEvent& _rEvt )
@@ -810,14 +833,10 @@ sal_Int8 OReportSection::ExecuteDrop( const ExecuteDropEvent& _rEvt )
     {
         m_pParent->getViewsWindow()->getView()->setMarked(m_pView,sal_True);
         m_pView->UnmarkAll();
-        const Rectangle& rRect = m_pView->GetWorkArea();
-        if ( aDropPos.X() < rRect.Left() )
-            aDropPos.X() = rRect.Left();
-        else if ( aDropPos.X() > rRect.Right() )
-            aDropPos.X() = rRect.Right();
 
-        if ( aDropPos.Y() > rRect.Bottom() )
-            aDropPos.Y() = rRect.Bottom();
+        const basegfx::B2DRange aWorkArea(m_pView->GetWorkArea());
+        const basegfx::B2DPoint aClampedDropPos(aWorkArea.clamp(basegfx::B2DPoint(aDropPos.X(), aDropPos.Y())));
+        aDropPos = Point(basegfx::fround(aClampedDropPos.getX()), basegfx::fround(aClampedDropPos.getY()));
 
         uno::Sequence<beans::PropertyValue> aValues;
         if ( !bMultipleFormat )

@@ -57,22 +57,6 @@ namespace drawinglayer
         {
         }
 
-        bool CropPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(GroupPrimitive2D::operator==(rPrimitive))
-            {
-                const CropPrimitive2D& rCompare = static_cast< const CropPrimitive2D& >(rPrimitive);
-
-                return (getTransformation() == rCompare.getTransformation()
-                    && getCropLeft() == rCompare.getCropLeft()
-                    && getCropTop() == rCompare.getCropTop()
-                    && getCropRight() == rCompare.getCropRight()
-                    && getCropBottom() == rCompare.getCropBottom());
-            }
-
-            return false;
-        }
-
         Primitive2DSequence CropPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             Primitive2DSequence xRetval;

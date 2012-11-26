@@ -37,8 +37,6 @@
 SV_IMPL_PTRARR(SbxParams,SbxParamInfo*);
 SV_IMPL_PTRARR(SbxFacs,SbxFactory*);
 
-TYPEINIT0(SbxBase)
-
 // SBX-Daten anfordern oder ggf. anlegen
 // wir legen den Bereich einfach an und verzichten auf die Freigabe!
 

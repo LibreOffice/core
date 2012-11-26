@@ -47,7 +47,8 @@
     {\
         ViewShell *_pStartShell = pEShell; \
         do { \
-            if( _pStartShell->IsA( TYPE( SwCrsrShell )) ) \
+            SwCrsrShell* pSwCrsrShell = dynamic_cast< SwCrsrShell* >(_pStartShell); \
+            if( pSwCrsrShell ) \
             {
 
 #define FOREACHSHELL_END( pEShell ) \
@@ -348,8 +349,9 @@ SwEditShell* SwDoc::GetEditShell( ViewShell** ppSh ) const
 
         // wir suchen uns eine EditShell, falls diese existiert
         do {
-            if( pSh->IsA( TYPE( SwEditShell ) ) )
-                return (SwEditShell*)pSh;
+            SwEditShell* pSwEditShell = dynamic_cast< SwEditShell* >(pSh);
+            if( pSwEditShell )
+                return pSwEditShell;
 
         } while( pVSh != ( pSh = (ViewShell*)pSh->GetNext() ));
     }

@@ -57,8 +57,6 @@ class XMLChangedRegionImportContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLChangedRegionImportContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,

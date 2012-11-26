@@ -71,8 +71,6 @@ class XMLFootnoteConfigHelper : public SvXMLImportContext
     sal_Bool bIsBegin;
 
 public:
-    TYPEINFO();
-
     XMLFootnoteConfigHelper(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
@@ -84,8 +82,6 @@ public:
 
     virtual void Characters( const OUString& rChars );
 };
-
-TYPEINIT1( XMLFootnoteConfigHelper, SvXMLImportContext );
 
 XMLFootnoteConfigHelper::XMLFootnoteConfigHelper(
     SvXMLImport& rImport,
@@ -123,8 +119,6 @@ void XMLFootnoteConfigHelper::Characters( const OUString& rChars )
 // XMLFootnoteConfigurationImportContext
 //
 
-
-TYPEINIT1( XMLFootnoteConfigurationImportContext, SvXMLStyleContext );
 
 XMLFootnoteConfigurationImportContext::XMLFootnoteConfigurationImportContext(
     SvXMLImport& rImport,

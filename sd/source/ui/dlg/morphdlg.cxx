@@ -79,12 +79,8 @@ MorphDlg::MorphDlg( ::Window* pParent, const SdrObject* pObj1, const SdrObject* 
     FreeResource();
     LoadSettings();
 
-    SfxItemPool*    pPool = (SfxItemPool*) pObj1->GetObjectItemPool();
-    SfxItemSet      aSet1( *pPool );
-    SfxItemSet      aSet2( *pPool );
-
-    aSet1.Put(pObj1->GetMergedItemSet());
-    aSet2.Put(pObj2->GetMergedItemSet());
+    SfxItemSet aSet1( pObj1->GetMergedItemSet() );
+    SfxItemSet aSet2( pObj2->GetMergedItemSet() );
 
     const XLineStyle    eLineStyle1 = ( (const XLineStyleItem&) aSet1.Get( XATTR_LINESTYLE ) ).GetValue();
     const XLineStyle    eLineStyle2 = ( (const XLineStyleItem&) aSet2.Get( XATTR_LINESTYLE ) ).GetValue();
@@ -122,18 +118,21 @@ void MorphDlg::LoadSettings()
                                RTL_CONSTASCII_STRINGPARAM( SD_OPTION_MORPHING ) ),
                                SD_OPTION_LOAD ) );
     sal_uInt16              nSteps;
-    sal_Bool                bOrient, bAttrib;
+    bool                bOrient, bAttrib;
 
     if( xIStm.Is() )
     {
         SdIOCompat aCompat( *xIStm, STREAM_READ );
+        sal_Bool bTempBOOL;
 
-        *xIStm >> nSteps >> bOrient >> bAttrib;
+        *xIStm >> nSteps;
+        *xIStm >> bTempBOOL; bOrient = bTempBOOL;
+        *xIStm >> bTempBOOL; bAttrib = bTempBOOL;
     }
     else
     {
         nSteps = 16;
-        bOrient = bAttrib = sal_True;
+        bOrient = bAttrib = true;
     }
 
     aMtfSteps.SetValue( nSteps );
@@ -154,8 +153,8 @@ void MorphDlg::SaveSettings() const
         SdIOCompat aCompat( *xOStm, STREAM_WRITE, 1 );
 
         *xOStm << (sal_uInt16) aMtfSteps.GetValue()
-               << aCbxOrientation.IsChecked()
-               << aCbxAttributes.IsChecked();
+               << (sal_Bool)aCbxOrientation.IsChecked()
+               << (sal_Bool)aCbxAttributes.IsChecked();
     }
 }
 

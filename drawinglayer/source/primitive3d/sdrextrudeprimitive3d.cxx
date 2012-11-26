@@ -459,27 +459,6 @@ namespace drawinglayer
             }
         }
 
-        bool SdrExtrudePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
-        {
-            if(SdrPrimitive3D::operator==(rPrimitive))
-            {
-                const SdrExtrudePrimitive3D& rCompare = static_cast< const SdrExtrudePrimitive3D& >(rPrimitive);
-
-                return (getPolyPolygon() == rCompare.getPolyPolygon()
-                    && getDepth() == rCompare.getDepth()
-                    && getDiagonal() == rCompare.getDiagonal()
-                    && getBackScale() == rCompare.getBackScale()
-                    && getSmoothNormals() == rCompare.getSmoothNormals()
-                    && getSmoothHorizontalNormals() == rCompare.getSmoothHorizontalNormals()
-                    && getSmoothLids() == rCompare.getSmoothLids()
-                    && getCharacterMode() == rCompare.getCharacterMode()
-                    && getCloseFront() == rCompare.getCloseFront()
-                    && getCloseBack() == rCompare.getCloseBack());
-            }
-
-            return false;
-        }
-
         basegfx::B3DRange SdrExtrudePrimitive3D::getB3DRange(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
             // use defaut from sdrPrimitive3D which uses transformation expanded by line width/2

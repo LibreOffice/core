@@ -45,13 +45,13 @@ namespace drawinglayer
             sal_uInt16                                  mnWeight;           // Font weight
 
             /// bitfield
-            unsigned                                    mbSymbol : 1;       // Symbol Font Flag
-            unsigned                                    mbVertical : 1;     // Vertical Text Flag
-            unsigned                                    mbItalic : 1;       // Italic Flag
-            unsigned                                    mbOutline : 1;      // Outline Flag
-            unsigned                                    mbRTL : 1;          // RTL Flag
-            unsigned                                    mbBiDiStrong : 1;   // BiDi Flag
-            unsigned                                    mbMonospaced : 1;
+            bool                                        mbSymbol : 1;       // Symbol Font Flag
+            bool                                        mbVertical : 1;     // Vertical Text Flag
+            bool                                        mbItalic : 1;       // Italic Flag
+            bool                                        mbOutline : 1;      // Outline Flag
+            bool                                        mbRTL : 1;          // RTL Flag
+            bool                                        mbBiDiStrong : 1;   // BiDi Flag
+            bool                                        mbMonospaced : 1;
 
             ImpFontAttribute(
                 const String& rFamilyName,

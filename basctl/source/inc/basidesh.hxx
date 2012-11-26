@@ -153,7 +153,7 @@ protected:
     virtual void        Deactivate(sal_Bool bMDI);
 
     virtual void        Move();
-    virtual void        ShowCursor( FASTBOOL bOn = sal_True );
+    virtual void        ShowCursor( bool bOn = sal_True );
 
     void                CreateModulWindowLayout();
     void                DestroyModulWindowLayout();
@@ -171,7 +171,6 @@ protected:
     virtual void onDocumentModeChanged( const ScriptDocument& _rDocument );
 
 public:
-                        TYPEINFO();
                         SFX_DECL_INTERFACE( SVX_INTERFACE_BASIDE_VIEWSH )
                         SFX_DECL_VIEWFACTORY(BasicIDEShell);
 

@@ -35,8 +35,6 @@ class XMLPersElemContentTContext : public XMLPersAttrListTContext
     XMLTransformerContextVector m_aChildContexts;
 
 public:
-    TYPEINFO();
-
     // element content persistence only
     XMLPersElemContentTContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName );

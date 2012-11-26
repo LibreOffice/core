@@ -30,6 +30,7 @@
 #include <svl/itemset.hxx>
 #include <editeng/eeitem.hxx>
 #include "editeng/editengdllapi.h"
+#include <typeinfo>
 
 DBG_NAMEEX( EE_EditTextObject )
 
@@ -101,7 +102,7 @@ public:
 
     virtual sal_Bool        IsFieldObject() const;
     virtual const SvxFieldItem* GetField() const;
-    virtual sal_Bool        HasField( TypeId aType = NULL ) const;
+    virtual sal_Bool    HasField( const std::type_info* pTypeInfo = 0 ) const;
 
     virtual SfxItemSet  GetParaAttribs( sal_uInt16 nPara ) const;
     virtual void        SetParaAttribs( sal_uInt16 nPara, const SfxItemSet& rAttribs );

@@ -70,7 +70,7 @@ void SvxInsertStatusBarControl::StateChanged( sal_uInt16 , SfxItemState eState,
         GetStatusBar().SetItemText( GetId(), String() );
     else
     {
-        DBG_ASSERT( pState->ISA( SfxBoolItem ), "invalid item type" );
+        DBG_ASSERT( dynamic_cast< const SfxBoolItem* >(pState), "invalid item type" );
         SfxBoolItem* pItem = (SfxBoolItem*)pState;
         bInsert = pItem->GetValue();
         DrawItemText_Impl();

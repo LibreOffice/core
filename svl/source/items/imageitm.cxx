@@ -27,8 +27,6 @@
 #include <svl/imageitm.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-TYPEINIT1( SfxImageItem, SfxInt16Item );
-
 struct SfxImageItem_Impl
 {
     String  aURL;

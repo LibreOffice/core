@@ -35,16 +35,13 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::form::XFormsSupplier2;
 
-DBG_NAME(SvxFmDrawPage)
 SvxFmDrawPage::SvxFmDrawPage( SdrPage* pInPage ) :
     SvxDrawPage( pInPage )
 {
-    DBG_CTOR(SvxFmDrawPage,NULL);
 }
 
 SvxFmDrawPage::~SvxFmDrawPage() throw ()
 {
-    DBG_DTOR(SvxFmDrawPage,NULL);
 }
 
 ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL SvxFmDrawPage::getImplementationId() throw(::com::sun::star::uno::RuntimeException)
@@ -91,10 +88,13 @@ SdrObject *SvxFmDrawPage::_CreateSdrObject( const ::com::sun::star::uno::Referen
 {
     ::rtl::OUString aShapeType( xDescr->getShapeType() );
 
-    if  (   aShapeType.equalsAscii( "com.sun.star.drawing.ShapeControl" )   // compatibility
+    if  (GetSdrPage()
+            && (   aShapeType.equalsAscii( "com.sun.star.drawing.ShapeControl" )   // compatibility
         ||  aShapeType.equalsAscii( "com.sun.star.drawing.ControlShape" )
-        )
-        return new FmFormObj( OBJ_FM_CONTROL );
+        ))
+    {
+        return new FmFormObj( GetSdrPage()->getSdrModelFromSdrPage(), ::rtl::OUString(), OBJ_FM_CONTROL );
+    }
     else
         return SvxDrawPage::_CreateSdrObject( xDescr );
 
@@ -116,7 +116,7 @@ SdrObject *SvxFmDrawPage::_CreateSdrObject( const ::com::sun::star::uno::Referen
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >  xForms;
 
-    FmFormPage *pFmPage = PTR_CAST( FmFormPage, GetSdrPage() );
+    FmFormPage *pFmPage = dynamic_cast< FmFormPage* >( GetSdrPage() );
     if( pFmPage )
         xForms = pFmPage->GetForms();
 
@@ -127,7 +127,7 @@ SdrObject *SvxFmDrawPage::_CreateSdrObject( const ::com::sun::star::uno::Referen
 sal_Bool SAL_CALL SvxFmDrawPage::hasForms(void) throw( ::com::sun::star::uno::RuntimeException )
 {
     sal_Bool bHas = sal_False;
-    FmFormPage* pFormPage = PTR_CAST( FmFormPage, GetSdrPage() );
+    FmFormPage* pFormPage = dynamic_cast< FmFormPage* >( GetSdrPage() );
     if ( pFormPage )
         bHas = pFormPage->GetForms( false ).is();
     return bHas;

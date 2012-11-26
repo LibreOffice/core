@@ -35,8 +35,8 @@
 #include "fmundo.hxx"
 #include "fmvwimp.hxx"
 #include "formcontrolfactory.hxx"
-#include "svx/sdrpaintwindow.hxx"
-#include "svx/svditer.hxx"
+#include <svx/sdrpaintwindow.hxx>
+#include <svx/svditer.hxx>
 #include "svx/dataaccessdescriptor.hxx"
 #include "svx/dialmgr.hxx"
 #include "svx/fmglob.hxx"
@@ -91,7 +91,7 @@
 #include <vcl/stdtext.hxx>
 #include <vos/mutex.hxx>
 #include <rtl/logfile.hxx>
-
+#include <svx/svdlegacy.hxx>
 #include <algorithm>
 
 using namespace ::comphelper;
@@ -169,18 +169,21 @@ public:
 };
 
 //========================================================================
+
 DBG_NAME(FormViewPageWindowAdapter)
+
 //------------------------------------------------------------------------
+
 FormViewPageWindowAdapter::FormViewPageWindowAdapter( const ::comphelper::ComponentContext& _rContext, const SdrPageWindow& _rWindow, FmXFormView* _pViewImpl )
 :   m_xControlContainer( _rWindow.GetControlContainer() ),
     m_aContext( _rContext ),
     m_pViewImpl( _pViewImpl ),
     m_pWindow( dynamic_cast< Window* >( &_rWindow.GetPaintWindow().GetOutputDevice() ) )
 {
-    DBG_CTOR(FormViewPageWindowAdapter,NULL);
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXPageViewWinRec::FmXPageViewWinRec" );
 
     // create an XFormController for every form
-    FmFormPage* pFormPage = dynamic_cast< FmFormPage* >( _rWindow.GetPageView().GetPage() );
+    FmFormPage* pFormPage = dynamic_cast< FmFormPage* >( &_rWindow.GetPageView().getSdrPageFromSdrPageView() );
     DBG_ASSERT( pFormPage, "FormViewPageWindowAdapter::FormViewPageWindowAdapter: no FmFormPage found!" );
     if ( pFormPage )
     {
@@ -204,7 +207,6 @@ FormViewPageWindowAdapter::FormViewPageWindowAdapter( const ::comphelper::Compon
 // -----------------------------------------------------------------------------
 FormViewPageWindowAdapter::~FormViewPageWindowAdapter()
 {
-    DBG_DTOR(FormViewPageWindowAdapter,NULL);
 }
 
 //------------------------------------------------------------------
@@ -288,10 +290,11 @@ void SAL_CALL FormViewPageWindowAdapter::makeVisible( const Reference< XControl 
     Reference< XWindow >  xWindow( _Control, UNO_QUERY );
     if ( xWindow.is() && m_pViewImpl->getView() && m_pWindow )
     {
-        awt::Rectangle aRect = xWindow->getPosSize();
-        ::Rectangle aNewRect( aRect.X, aRect.Y, aRect.X + aRect.Width, aRect.Y + aRect.Height );
-        aNewRect = m_pWindow->PixelToLogic( aNewRect );
-        m_pViewImpl->getView()->MakeVisible( aNewRect, *m_pWindow );
+        const awt::Rectangle aRect = xWindow->getPosSize();
+        const basegfx::B2DRange aRange(m_pWindow->GetInverseViewTransformation() *
+            basegfx::B2DRange(aRect.X, aRect.Y, aRect.X + aRect.Width, aRect.Y + aRect.Height));
+
+        m_pViewImpl->getView()->MakeVisibleAtView( aRange, *m_pWindow );
     }
 }
 
@@ -583,7 +586,8 @@ PFormViewPageWindowAdapter FmXFormView::findWindow( const Reference< XControlCon
 //------------------------------------------------------------------------------
 void FmXFormView::addWindow(const SdrPageWindow& rWindow)
 {
-    FmFormPage* pFormPage = PTR_CAST( FmFormPage, rWindow.GetPageView().GetPage() );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::addWindow" );
+    FmFormPage* pFormPage = dynamic_cast< FmFormPage* >( &rWindow.GetPageView().getSdrPageFromSdrPageView() );
     if ( !pFormPage )
         return;
 
@@ -700,10 +704,10 @@ IMPL_LINK(FmXFormView, OnActivate, void*, /*EMPTYTAG*/)
     }
 
     // setting the controller to activate
-    if (m_pView->GetFormShell() && m_pView->GetActualOutDev() && m_pView->GetActualOutDev()->GetOutDevType() == OUTDEV_WINDOW)
+    if (m_pView->GetFormShell() && m_pView->GetCurrentViewDevice() && m_pView->GetCurrentViewDevice()->GetOutDevType() == OUTDEV_WINDOW)
     {
-        Window* pWindow = const_cast<Window*>(static_cast<const Window*>(m_pView->GetActualOutDev()));
-        PFormViewPageWindowAdapter pAdapter = m_aPageWindowAdapters.empty() ? NULL : m_aPageWindowAdapters[0];
+        Window* pWindow = const_cast<Window*>(static_cast<const Window*>(m_pView->GetCurrentViewDevice()));
+        PFormViewPageWindowAdapter pAdapter = m_aPageWindowAdapters.empty() ? 0 : m_aPageWindowAdapters[0];
         for (   PageWindowAdapterList::const_iterator i = m_aPageWindowAdapters.begin();
                 i != m_aPageWindowAdapters.end();
                 ++i
@@ -927,64 +931,66 @@ IMPL_LINK(FmXFormView, OnAutoFocus, void*, /*EMPTYTAG*/)
 
     do
     {
+        // get the forms collection of the page we belong to
+        FmFormPage* pPage = (m_pView && m_pView->GetSdrPageView())
+            ? dynamic_cast< FmFormPage* >( &m_pView->GetSdrPageView()->getSdrPageFromSdrPageView() )
+            : NULL;
+        Reference< XIndexAccess > xForms( pPage ? Reference< XIndexAccess >( pPage->GetForms(), UNO_QUERY ) : Reference< XIndexAccess >() );
 
-    // get the forms collection of the page we belong to
-    FmFormPage* pPage = m_pView ? PTR_CAST( FmFormPage, m_pView->GetSdrPageView()->GetPage() ) : NULL;
-    Reference< XIndexAccess > xForms( pPage ? Reference< XIndexAccess >( pPage->GetForms(), UNO_QUERY ) : Reference< XIndexAccess >() );
+        const PFormViewPageWindowAdapter pAdapter = m_aPageWindowAdapters.empty() ? NULL : m_aPageWindowAdapters[0];
+        const Window* pWindow = pAdapter.get() ? pAdapter->getWindow() : NULL;
 
-    const PFormViewPageWindowAdapter pAdapter = m_aPageWindowAdapters.empty() ? NULL : m_aPageWindowAdapters[0];
-    const Window* pWindow = pAdapter.get() ? pAdapter->getWindow() : NULL;
+        ENSURE_OR_RETURN( xForms.is() && pWindow, "FmXFormView::OnAutoFocus: could not collect all essentials!", 0L );
 
-    ENSURE_OR_RETURN( xForms.is() && pWindow, "FmXFormView::OnAutoFocus: could not collect all essentials!", 0L );
-
-    try
-    {
-        // go for the tab controller of the first form
-        if ( !xForms->getCount() )
-            break;
-        Reference< XForm > xForm( xForms->getByIndex( 0 ), UNO_QUERY_THROW );
-        Reference< XTabController > xTabController( pAdapter->getController( xForm ), UNO_QUERY_THROW );
-
-        // go for the first control of the controller
-        Sequence< Reference< XControl > > aControls( xTabController->getControls() );
-        if ( aControls.getLength() == 0 )
+        try
         {
-            Reference< XElementAccess > xFormElementAccess( xForm, UNO_QUERY_THROW );
-            if ( xFormElementAccess->hasElements() )
+            // go for the tab controller of the first form
+            if ( !xForms->getCount() )
+                break;
+            Reference< XForm > xForm( xForms->getByIndex( 0 ), UNO_QUERY_THROW );
+            Reference< XTabController > xTabController( pAdapter->getController( xForm ), UNO_QUERY_THROW );
+
+            // go for the first control of the controller
+            Sequence< Reference< XControl > > aControls( xTabController->getControls() );
+            if ( aControls.getLength() == 0 )
             {
-                // there are control models in the form, but no controls, yet.
-                // Well, since some time controls are created on demand only. In particular,
-                // they're normally created when they're first painted.
-                // Unfortunately, the FormController does not have any way to
-                // trigger the creation itself, so we must hack this ...
-                lcl_ensureControlsOfFormExist_nothrow( *pPage, *m_pView, *pWindow, xForm );
-                aControls = xTabController->getControls();
-                OSL_ENSURE( aControls.getLength(), "FmXFormView::OnAutoFocus: no controls at all!" );
+                Reference< XElementAccess > xFormElementAccess( xForm, UNO_QUERY_THROW );
+                if ( xFormElementAccess->hasElements() )
+                {
+                    // there are control models in the form, but no controls, yet.
+                    // Well, since some time controls are created on demand only. In particular,
+                    // they're normally created when they're first painted.
+                    // Unfortunately, the FormController does not have any way to
+                    // trigger the creation itself, so we must hack this ...
+                    lcl_ensureControlsOfFormExist_nothrow( *pPage, *m_pView, *pWindow, xForm );
+                    aControls = xTabController->getControls();
+                    OSL_ENSURE( aControls.getLength(), "FmXFormView::OnAutoFocus: no controls at all!" );
+                }
+            }
+
+            // set the focus to this first control
+            Reference< XWindow > xControlWindow( lcl_firstFocussableControl( aControls ), UNO_QUERY );
+            if ( !xControlWindow.is() )
+                break;
+
+            xControlWindow->setFocus();
+
+            // ensure that the control is visible
+            // 80210 - 12/07/00 - FS
+            const Window* pCurrentWindow = dynamic_cast< const Window* >( m_pView->GetCurrentViewDevice() );
+            if ( pCurrentWindow )
+            {
+                const awt::Rectangle aRect = xControlWindow->getPosSize();
+                const basegfx::B2DRange aRange(pCurrentWindow->GetInverseViewTransformation() *
+                    basegfx::B2DRange(aRect.X, aRect.Y, aRect.X + aRect.Width, aRect.Y + aRect.Height));
+
+                m_pView->MakeVisibleAtView( aRange, *const_cast< Window* >( pCurrentWindow ) );
             }
         }
-
-        // set the focus to this first control
-        Reference< XWindow > xControlWindow( lcl_firstFocussableControl( aControls ), UNO_QUERY );
-        if ( !xControlWindow.is() )
-            break;
-
-        xControlWindow->setFocus();
-
-        // ensure that the control is visible
-        // 80210 - 12/07/00 - FS
-        const Window* pCurrentWindow = dynamic_cast< const Window* >( m_pView->GetActualOutDev() );
-        if ( pCurrentWindow )
+        catch( const Exception& )
         {
-            awt::Rectangle aRect = xControlWindow->getPosSize();
-            ::Rectangle aNonUnoRect( aRect.X, aRect.Y, aRect.X + aRect.Width, aRect.Y + aRect.Height );
-            m_pView->MakeVisible( pCurrentWindow->PixelToLogic( aNonUnoRect ), *const_cast< Window* >( pCurrentWindow ) );
+            DBG_UNHANDLED_EXCEPTION();
         }
-    }
-    catch( const Exception& )
-    {
-        DBG_UNHANDLED_EXCEPTION();
-    }
-
     }   // do
     while ( false );
 
@@ -1107,18 +1113,23 @@ namespace
         const Reference< XDataSource >& _rxDataSource = NULL, const ::rtl::OUString& _rDataSourceName = ::rtl::OUString(),
         const ::rtl::OUString& _rCommand = ::rtl::OUString(), const sal_Int32 _nCommandType = -1 )
     {
-        FmFormPage& rPage = static_cast< FmFormPage& >( *_rView.GetSdrPageView()->GetPage() );
+        FmFormPage* pPage = _rView.GetSdrPageView()
+            ? static_cast< FmFormPage* >( &_rView.GetSdrPageView()->getSdrPageFromSdrPageView() )
+            : NULL;
 
+        if(pPage)
+        {
         Reference< XFormComponent > xFormComponent( _rSdrObj.GetUnoControlModel(), UNO_QUERY_THROW );
         Reference< XForm > xTargetForm(
-            rPage.GetImpl().findPlaceInFormComponentHierarchy( xFormComponent, _rxDataSource, _rDataSourceName, _rCommand, _nCommandType ),
+                pPage->GetImpl().findPlaceInFormComponentHierarchy( xFormComponent, _rxDataSource, _rDataSourceName, _rCommand, _nCommandType ),
             UNO_SET_THROW );
 
-        rPage.GetImpl().setUniqueName( xFormComponent, xTargetForm );
+            pPage->GetImpl().setUniqueName( xFormComponent, xTargetForm );
 
         Reference< XIndexContainer > xFormAsContainer( xTargetForm, UNO_QUERY_THROW );
         xFormAsContainer->insertByIndex( xFormAsContainer->getCount(), makeAny( xFormComponent ) );
     }
+}
 }
 
 // -----------------------------------------------------------------------------
@@ -1218,8 +1229,8 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
         ////////////////////////////////////////////////////////////////
         // nur fuer Textgroesse
         OutputDevice* pOutDev = NULL;
-        if (m_pView->GetActualOutDev() && m_pView->GetActualOutDev()->GetOutDevType() == OUTDEV_WINDOW)
-            pOutDev = const_cast<OutputDevice*>(m_pView->GetActualOutDev());
+        if (m_pView->GetCurrentViewDevice() && m_pView->GetCurrentViewDevice()->GetOutDevType() == OUTDEV_WINDOW)
+            pOutDev = const_cast<OutputDevice*>(m_pView->GetCurrentViewDevice());
         else
         {// OutDev suchen
             SdrPageView* pPageView = m_pView->GetSdrPageView();
@@ -1323,10 +1334,9 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
         if ( bCheckbox )
             return pControl;
 
-        SdrObjGroup* pGroup  = new SdrObjGroup();
-        SdrObjList* pObjList = pGroup->GetSubList();
-        pObjList->InsertObject( pLabel );
-        pObjList->InsertObject( pControl );
+        SdrObjGroup* pGroup  = new SdrObjGroup(getView()->getSdrModelFromSdrView());
+        pGroup->InsertObjectToSdrObjList(*pLabel);
+        pGroup->InsertObjectToSdrObjList(*pControl);
 
         if ( bDateNTimeField )
         {   // so far we created a date field only, but we also need a time field
@@ -1336,8 +1346,8 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
                         xDataSource, sDataSource, sCommand, nCommandType )
                 )
             {
-                pObjList->InsertObject( pLabel );
-                pObjList->InsertObject( pControl );
+                pGroup->InsertObjectToSdrObjList(*pLabel);
+                pGroup->InsertObjectToSdrObjList(*pControl);
             }
         }
 
@@ -1371,8 +1381,8 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
         ////////////////////////////////////////////////////////////////
         // nur fuer Textgroesse
         OutputDevice* pOutDev = NULL;
-        if (m_pView->GetActualOutDev() && m_pView->GetActualOutDev()->GetOutDevType() == OUTDEV_WINDOW)
-            pOutDev = const_cast<OutputDevice*>(m_pView->GetActualOutDev());
+        if (m_pView->GetCurrentViewDevice() && m_pView->GetCurrentViewDevice()->GetOutDevType() == OUTDEV_WINDOW)
+            pOutDev = const_cast<OutputDevice*>(m_pView->GetCurrentViewDevice());
         else
         {// OutDev suchen
             SdrPageView* pPageView = m_pView->GetSdrPageView();
@@ -1438,10 +1448,9 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
 
             //////////////////////////////////////////////////////////////////////
             // group objects
-            SdrObjGroup* pGroup  = new SdrObjGroup();
-            SdrObjList* pObjList = pGroup->GetSubList();
-            pObjList->InsertObject(pLabel);
-            pObjList->InsertObject(pControl);
+            SdrObjGroup* pGroup = new SdrObjGroup(getView()->getSdrModelFromSdrView());
+            pGroup->InsertObjectToSdrObjList(*pLabel);
+            pGroup->InsertObjectToSdrObjList(*pControl);
 
             return pGroup;
         }
@@ -1452,12 +1461,14 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
             const MapMode eSourceMode(MAP_100TH_MM);
             const sal_uInt16 nObjID = OBJ_FM_BUTTON;
             ::Size controlSize(4000, 500);
-            FmFormObj *pControl = static_cast<FmFormObj*>(SdrObjFactory::MakeNewObject( FmFormInventor, nObjID, NULL, NULL ));
+            FmFormObj* pControl = static_cast< FmFormObj* >(SdrObjFactory::MakeNewObject(
+                getView()->getSdrModelFromSdrView(),
+                SdrObjectCreationInfo(nObjID, FmFormInventor)));
             controlSize.Width() = Fraction(controlSize.Width(), 1) * eTargetMode.GetScaleX();
             controlSize.Height() = Fraction(controlSize.Height(), 1) * eTargetMode.GetScaleY();
             ::Point controlPos( pOutDev->LogicToLogic( ::Point( controlSize.Width(), 0 ), eSourceMode, eTargetMode ) );
             ::Rectangle controlRect( controlPos, pOutDev->LogicToLogic( controlSize, eSourceMode, eTargetMode ) );
-            pControl->SetLogicRect(controlRect);
+            sdr::legacy::SetLogicRect(*pControl, controlRect);
 
             // set the button label
             Reference< XPropertySet > xControlSet(pControl->GetUnoControlModel(), UNO_QUERY);
@@ -1492,7 +1503,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXO
 {
     if  (   !createControlLabelPair( m_aContext, _rOutDev, _nXOffsetMM, _nYOffsetMM,
                 _rxField, _rxNumberFormats, _nControlObjectID, _rFieldPostfix, FmFormInventor, OBJ_FM_FIXEDTEXT,
-                NULL, NULL, NULL, _rpLabel, _rpControl )
+                NULL, NULL, &m_pView->getSdrModelFromSdrView(), _rpLabel, _rpControl )
         )
         return false;
 
@@ -1515,7 +1526,7 @@ bool FmXFormView::createControlLabelPair( const ::comphelper::ComponentContext& 
     OutputDevice& _rOutDev, sal_Int32 _nXOffsetMM, sal_Int32 _nYOffsetMM, const Reference< XPropertySet >& _rxField,
     const Reference< XNumberFormats >& _rxNumberFormats, sal_uInt16 _nControlObjectID,
     const ::rtl::OUString& _rFieldPostfix, sal_uInt32 _nInventor, sal_uInt16 _nLabelObjectID,
-    SdrPage* _pLabelPage, SdrPage* _pControlPage, SdrModel* _pModel, SdrUnoObj*& _rpLabel, SdrUnoObj*& _rpControl)
+    SdrPage* /*_pLabelPage*/, SdrPage* /*_pControlPage*/, SdrModel* _pModel, SdrUnoObj*& _rpLabel, SdrUnoObj*& _rpControl)
 {
     sal_Int32 nDataType = 0;
     ::rtl::OUString sFieldName;
@@ -1551,14 +1562,15 @@ bool FmXFormView::createControlLabelPair( const ::comphelper::ComponentContext& 
     bool bNeedLabel = ( _nControlObjectID != OBJ_FM_CHECKBOX );
 
     // the label
-    ::std::auto_ptr< SdrUnoObj > pLabel;
+    SdrUnoObj* pLabel = 0;
     Reference< XPropertySet > xLabelModel;
     if ( bNeedLabel )
     {
-        pLabel.reset( dynamic_cast< SdrUnoObj* >(
-            SdrObjFactory::MakeNewObject( _nInventor, _nLabelObjectID, _pLabelPage, _pModel ) ) );
-        OSL_ENSURE( pLabel.get(), "FmXFormView::createControlLabelPair: could not create the label!" );
-        if ( !pLabel.get() )
+        pLabel = dynamic_cast< SdrUnoObj* >(SdrObjFactory::MakeNewObject(
+            *_pModel,
+            SdrObjectCreationInfo(_nLabelObjectID, _nInventor)));
+        OSL_ENSURE( pLabel, "FmXFormView::createControlLabelPair: could not create the label!" );
+        if ( !pLabel )
             return false;
 
         xLabelModel.set( pLabel->GetUnoControlModel(), UNO_QUERY );
@@ -1576,17 +1588,18 @@ bool FmXFormView::createControlLabelPair( const ::comphelper::ComponentContext& 
             xLabelModel->setPropertyValue( FM_PROP_NAME, makeAny( ::rtl::OUString( sObjectLabel ) ) );
         }
 
-        pLabel->SetLogicRect( ::Rectangle(
+        sdr::legacy::SetLogicRect(*pLabel, ::Rectangle(
             _rOutDev.LogicToLogic( ::Point( _nXOffsetMM, _nYOffsetMM ), eSourceMode, eTargetMode ),
             _rOutDev.LogicToLogic( aRealSize, eSourceMode, eTargetMode )
         ) );
     }
 
     // the control
-    ::std::auto_ptr< SdrUnoObj > pControl( dynamic_cast< SdrUnoObj* >(
-        SdrObjFactory::MakeNewObject( _nInventor, _nControlObjectID, _pControlPage, _pModel ) ) );
-    OSL_ENSURE( pControl.get(), "FmXFormView::createControlLabelPair: could not create the control!" );
-    if ( !pControl.get() )
+    SdrUnoObj* pControl = dynamic_cast< SdrUnoObj* >(SdrObjFactory::MakeNewObject(
+        *_pModel,
+        SdrObjectCreationInfo(_nControlObjectID, _nInventor)));
+    OSL_ENSURE( pControl, "FmXFormView::createControlLabelPair: could not create the control!" );
+    if ( !pControl )
         return false;
 
     Reference< XPropertySet > xControlSet( pControl->GetUnoControlModel(), UNO_QUERY );
@@ -1615,7 +1628,7 @@ bool FmXFormView::createControlLabelPair( const ::comphelper::ComponentContext& 
     aControlSize.Width() = long(Fraction(aControlSize.Width(), 1) * eTargetMode.GetScaleX());
     aControlSize.Height() = long(Fraction(aControlSize.Height(), 1) * eTargetMode.GetScaleY());
 
-    pControl->SetLogicRect( ::Rectangle(
+    sdr::legacy::SetLogicRect(*pControl, ::Rectangle(
         _rOutDev.LogicToLogic( ::Point( aRealSize.Width() + _nXOffsetMM, _nYOffsetMM ), eSourceMode, eTargetMode ),
         _rOutDev.LogicToLogic( aControlSize, eSourceMode, eTargetMode )
     ) );
@@ -1661,8 +1674,8 @@ bool FmXFormView::createControlLabelPair( const ::comphelper::ComponentContext& 
         aControlFactory.initializeFieldDependentProperties( _rxField, xControlSet, _rxNumberFormats );
     }
 
-    _rpLabel = pLabel.release();
-    _rpControl = pControl.release();
+    _rpLabel = pLabel;
+    _rpControl = pControl;
     return true;
 }
 
@@ -1675,8 +1688,12 @@ FmXFormView::ObjectRemoveListener::ObjectRemoveListener( FmXFormView* pParent )
 //------------------------------------------------------------------------------
 void FmXFormView::ObjectRemoveListener::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    if (rHint.ISA(SdrHint) && (((SdrHint&)rHint).GetKind() == HINT_OBJREMOVED))
-        m_pParent->ObjectRemovedInAliveMode(((SdrHint&)rHint).GetObject());
+    const SdrBaseHint* pSdrHint = dynamic_cast< const SdrBaseHint* >(&rHint);
+
+    if (pSdrHint && pSdrHint->GetSdrHintKind() == HINT_OBJREMOVED)
+    {
+        m_pParent->ObjectRemovedInAliveMode(pSdrHint->GetSdrHintObject());
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -1686,14 +1703,12 @@ void FmXFormView::ObjectRemovedInAliveMode( const SdrObject* pObject )
     // muss ich es jetzt da rausnehmen, da ich sonst beim Zurueckschalten versuche, die Markierung wieder zu setzen
     // (interesanterweise geht das nur bei gruppierten Objekten schief (beim Zugriff auf deren ObjList GPF), nicht bei einzelnen)
 
-    sal_uIntPtr nCount = m_aMark.GetMarkCount();
-    for (sal_uIntPtr i = 0; i < nCount; ++i)
+    for (sal_uInt32 i(0); i < m_aMark.size(); ++i)
     {
-        SdrMark* pMark = m_aMark.GetMark(i);
-        SdrObject* pCurrent = pMark->GetMarkedSdrObj();
+        SdrObject* pCurrent = m_aMark[i];
         if (pObject == pCurrent)
         {
-            m_aMark.DeleteMark(i);
+            m_aMark.erase(m_aMark.begin() + i);
             return;
         }
         // ich brauche nicht in GroupObjects absteigen : wenn dort unten ein Objekt geloescht wird, dann bleibt der
@@ -1733,20 +1748,19 @@ void FmXFormView::saveMarkList( sal_Bool _bSmartUnmark )
 {
     if ( m_pView )
     {
-        m_aMark = m_pView->GetMarkedObjectList();
+        m_aMark = m_pView->getSelectedSdrObjectVectorFromSdrMarkView();
+
         if ( _bSmartUnmark )
         {
-            sal_uIntPtr nCount = m_aMark.GetMarkCount( );
-            for ( sal_uIntPtr i = 0; i < nCount; ++i )
+            for ( sal_uIntPtr i = 0; i < m_aMark.size(); ++i )
             {
-                SdrMark*   pMark = m_aMark.GetMark(i);
-                SdrObject* pObj  = pMark->GetMarkedSdrObj();
+                SdrObject* pObj = m_aMark[i];
 
-                if ( m_pView->IsObjMarked( pObj ) )
+                if ( m_pView->IsObjMarked( *pObj ) )
                 {
-                    if ( pObj->IsGroupObject() )
+                    if ( pObj->getChildrenOfSdrObject() )
                     {
-                        SdrObjListIter aIter( *pObj->GetSubList() );
+                        SdrObjListIter aIter( *pObj->getChildrenOfSdrObject() );
                         sal_Bool bMixed = sal_False;
                         while ( aIter.IsMore() && !bMixed )
                             bMixed = ( aIter.Next()->GetObjInventor() != FmFormInventor );
@@ -1754,14 +1768,14 @@ void FmXFormView::saveMarkList( sal_Bool _bSmartUnmark )
                         if ( !bMixed )
                         {
                             // all objects in the group are form objects
-                            m_pView->MarkObj( pMark->GetMarkedSdrObj(), pMark->GetPageView(), sal_True /* unmark! */ );
+                            m_pView->MarkObj( *pObj, true /* unmark! */ );
                         }
                     }
                     else
                     {
                         if ( pObj->GetObjInventor() == FmFormInventor )
                         {   // this is a form layer object
-                            m_pView->MarkObj( pMark->GetMarkedSdrObj(), pMark->GetPageView(), sal_True /* unmark! */ );
+                            m_pView->MarkObj( *pObj, true /* unmark! */ );
                         }
                     }
                 }
@@ -1771,7 +1785,7 @@ void FmXFormView::saveMarkList( sal_Bool _bSmartUnmark )
     else
     {
         DBG_ERROR( "FmXFormView::saveMarkList: invalid view!" );
-        m_aMark = SdrMarkList();
+        m_aMark.clear();
     }
 }
 
@@ -1787,33 +1801,33 @@ static sal_Bool lcl_hasObject( SdrObjListIter& rIter, SdrObject* pObj )
 }
 
 //------------------------------------------------------------------------------
-void FmXFormView::restoreMarkList( SdrMarkList& _rRestoredMarkList )
+void FmXFormView::restoreMarkList( SdrObjectVector& _rRestoredSelection )
 {
     if ( !m_pView )
         return;
 
-    _rRestoredMarkList.Clear();
+    _rRestoredSelection.clear();
 
-    const SdrMarkList& rCurrentList = m_pView->GetMarkedObjectList();
     FmFormPage* pPage = GetFormShell() ? GetFormShell()->GetCurPage() : NULL;
-    if (pPage)
+    if (pPage && m_pView->areSdrObjectsSelected())
     {
-        if (rCurrentList.GetMarkCount())
+        const SdrObjectVector aSelection(m_pView->getSelectedSdrObjectVectorFromSdrMarkView());
+
+        if (aSelection.size())
         {   // there is a current mark ... hmm. Is it a subset of the mark we remembered in saveMarkList?
             sal_Bool bMisMatch = sal_False;
 
             // loop through all current marks
-            sal_uIntPtr nCurrentCount = rCurrentList.GetMarkCount();
-            for ( sal_uIntPtr i=0; i<nCurrentCount&& !bMisMatch; ++i )
+            for ( sal_uInt32 i(0); i < aSelection.size() && !bMisMatch; ++i )
             {
-                const SdrObject* pCurrentMarked = rCurrentList.GetMark( i )->GetMarkedSdrObj();
+                const SdrObject* pCurrentMarked = aSelection[i];
 
                 // loop through all saved marks, check for equality
                 sal_Bool bFound = sal_False;
-                sal_uIntPtr nSavedCount = m_aMark.GetMarkCount();
-                for ( sal_uIntPtr j=0; j<nSavedCount && !bFound; ++j )
+
+                for ( sal_uInt32 j(0); j < m_aMark.size() && !bFound; ++j )
                 {
-                    if ( m_aMark.GetMark( j )->GetMarkedSdrObj() == pCurrentMarked )
+                    if ( m_aMark[j] == pCurrentMarked )
                         bFound = sal_True;
                 }
 
@@ -1824,53 +1838,50 @@ void FmXFormView::restoreMarkList( SdrMarkList& _rRestoredMarkList )
 
             if ( bMisMatch )
             {
-                m_aMark.Clear();
-                _rRestoredMarkList = rCurrentList;
+                m_aMark.clear();
+                for(sal_uInt32 a(0); a < aSelection.size(); a++)
+                {
+                    _rRestoredSelection.push_back(aSelection[a]);
+                }
                 return;
             }
         }
         // wichtig ist das auf die Objecte der markliste nicht zugegriffen wird
         // da diese bereits zerstoert sein koennen
-        SdrPageView* pCurPageView = m_pView->GetSdrPageView();
         SdrObjListIter aPageIter( *pPage );
         sal_Bool bFound = sal_True;
 
         // gibt es noch alle Objecte
-        sal_uIntPtr nCount = m_aMark.GetMarkCount();
-        for (sal_uIntPtr i = 0; i < nCount && bFound; i++)
+        for (sal_uIntPtr i = 0; i < m_aMark.size() && bFound; i++)
         {
-            SdrMark*   pMark = m_aMark.GetMark(i);
-            SdrObject* pObj  = pMark->GetMarkedSdrObj();
-            if (pObj->IsGroupObject())
+            SdrObject* pObj  = m_aMark[i];
+            if (pObj->getChildrenOfSdrObject())
             {
-                SdrObjListIter aIter(*pObj->GetSubList());
+                SdrObjListIter aIter(*pObj->getChildrenOfSdrObject());
                 while (aIter.IsMore() && bFound)
                     bFound = lcl_hasObject(aPageIter, aIter.Next());
             }
             else
                 bFound = lcl_hasObject(aPageIter, pObj);
-
-            bFound = bFound && pCurPageView == pMark->GetPageView();
         }
 
         if (bFound)
         {
             // Das LastObject auswerten
-            if (nCount) // Objecte jetzt Markieren
+            if (m_aMark.size()) // Objecte jetzt Markieren
             {
-                for (sal_uIntPtr i = 0; i < nCount; i++)
+                for (sal_uIntPtr i = 0; i < m_aMark.size(); i++)
                 {
-                    SdrMark* pMark = m_aMark.GetMark(i);
-                    SdrObject* pObj = pMark->GetMarkedSdrObj();
+                    SdrObject* pObj = m_aMark[i];
                     if ( pObj->GetObjInventor() == FmFormInventor )
-                        if ( !m_pView->IsObjMarked( pObj ) )
-                            m_pView->MarkObj( pObj, pMark->GetPageView() );
+                        if ( !m_pView->IsObjMarked( *pObj ) )
+                            m_pView->MarkObj( *pObj );
                 }
 
-                _rRestoredMarkList = m_aMark;
+                _rRestoredSelection.insert(_rRestoredSelection.end(), m_aMark.begin(), m_aMark.end());
             }
         }
-        m_aMark.Clear();
+        m_aMark.clear();
     }
 }
 // -----------------------------------------------------------------------------

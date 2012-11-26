@@ -137,7 +137,7 @@ SwWrtShell* GetActiveWrtShell()
 SwView* GetActiveView()
 {
     SfxViewShell* pView = SfxViewShell::Current();
-    return PTR_CAST( SwView, pView );
+    return dynamic_cast< SwView* >( pView );
 }
 /*--------------------------------------------------------------------
     Beschreibung:   Ueber Views iterieren - static
@@ -146,17 +146,15 @@ SwView* GetActiveView()
 SwView* SwModule::GetFirstView()
 {
     // liefert nur sichtbare SwViews
-    const TypeId aTypeId = TYPE(SwView);
-    SwView* pView = (SwView*)SfxViewShell::GetFirst(&aTypeId);
+    SwView* pView = (SwView*)SfxViewShell::GetFirst( _IsSfxViewShell< SwView >);
     return pView;
 }
 
 
 SwView* SwModule::GetNextView(SwView* pView)
 {
-    DBG_ASSERT(PTR_CAST(SwView, pView),"keine SwView uebergeben");
-    const TypeId aTypeId = TYPE(SwView);
-    SwView* pNView = (SwView*)SfxViewShell::GetNext(*pView, &aTypeId, sal_True);
+    DBG_ASSERT(dynamic_cast< SwView* >( pView),"keine SwView uebergeben");
+    SwView* pNView = (SwView*)SfxViewShell::GetNext(*pView, _IsSfxViewShell< SwView >, sal_True);
     return pNView;
 }
 
@@ -175,13 +173,13 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
     SwMasterUsrPref* pPref = (SwMasterUsrPref*)GetUsrPref( static_cast< sal_Bool >(
                                          VIEWOPT_DEST_WEB == nDest ? sal_True  :
                                          VIEWOPT_DEST_TEXT== nDest ? sal_False :
-                                         pCurrView && pCurrView->ISA(SwWebView) ));
+                                         pCurrView && dynamic_cast< SwWebView* >(pCurrView) ));
 
     //per Uno soll nur die sdbcx::View, aber nicht das Module veraendert werden
     sal_Bool bViewOnly = VIEWOPT_DEST_VIEW_ONLY == nDest;
     //PreView abfruehstuecken
     SwPagePreView* pPPView;
-    if( !pCurrView && 0 != (pPPView = PTR_CAST( SwPagePreView, SfxViewShell::Current())) )
+    if( !pCurrView && 0 != (pPPView = dynamic_cast< SwPagePreView* >( SfxViewShell::Current())) )
     {
         if(!bViewOnly)
             pPref->SetUIOptions( rUsrPref );
@@ -265,7 +263,7 @@ void SwModule::ApplyUserMetric( FieldUnit eMetric, sal_Bool bWeb )
         // fuer alle MDI-Fenster das Lineal umschalten
         while(pTmpView)
         {
-            if(bWeb == (0 != PTR_CAST(SwWebView, pTmpView)))
+            if(bWeb == (0 != dynamic_cast< SwWebView* >( pTmpView)))
             {
                 pTmpView->ChangeVLinealMetric(eVScrollMetric);
                 pTmpView->ChangeTabMetric(eHScrollMetric);
@@ -650,10 +648,9 @@ void SwModule::CheckSpellChanges( sal_Bool bOnlineSpelling,
     sal_Bool bInvalid = bOnlyWrong || bIsSpellAllAgain;
     if( bOnlineSpelling || bInvalid )
     {
-        TypeId aType = TYPE(SwDocShell);
-        for( SwDocShell *pDocSh = (SwDocShell*)SfxObjectShell::GetFirst(&aType);
+        for( SwDocShell *pDocSh = (SwDocShell*)SfxObjectShell::GetFirst( _IsObjectShell< SwDocShell > );
              pDocSh;
-             pDocSh = (SwDocShell*)SfxObjectShell::GetNext( *pDocSh, &aType ) )
+             pDocSh = (SwDocShell*)SfxObjectShell::GetNext( *pDocSh, _IsObjectShell< SwDocShell > ) )
         {
             SwDoc* pTmp = pDocSh->GetDoc();
             if ( pTmp->GetCurrentViewShell() )  //swmod 071108//swmod 071225

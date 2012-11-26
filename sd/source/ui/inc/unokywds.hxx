@@ -176,7 +176,7 @@ SD_CONSTASCII_ACTION( sUNO_View_IsSnapToObjectPoints,           "IsSnapToObjectP
 SD_CONSTASCII_ACTION( sUNO_View_IsSnapLinesVisible,             "IsSnapLinesVisible" );
 SD_CONSTASCII_ACTION( sUNO_View_IsDragStripes,                  "IsDragStripes" );
 SD_CONSTASCII_ACTION( sUNO_View_IsPlusHandlesAlwaysVisible,     "IsPlusHandlesAlwaysVisible" );
-SD_CONSTASCII_ACTION( sUNO_View_IsFrameDragSingles,             "IsFrameDragSingles" );
+SD_CONSTASCII_ACTION( sUNO_View_IsFrameDragSingles,             "IsFrameDragSingles" ); // other name for IsFrameHandles
 SD_CONSTASCII_ACTION( sUNO_View_IsMarkedHitMovesAlways,         "IsMarkedHitMovesAlways" );
 SD_CONSTASCII_ACTION( sUNO_View_EliminatePolyPointLimitAngle,   "EliminatePolyPointLimitAngle" );
 SD_CONSTASCII_ACTION( sUNO_View_IsEliminatePolyPoints,          "IsEliminatePolyPoints" );

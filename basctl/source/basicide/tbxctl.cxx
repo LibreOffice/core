@@ -139,7 +139,7 @@ void TbxControls::StateChanged( sal_uInt16 nSID, SfxItemState eState,
 {
     if( pState )
     {
-        SfxAllEnumItem* pItem = PTR_CAST(SfxAllEnumItem, pState);
+        const SfxAllEnumItem* pItem = dynamic_cast< const SfxAllEnumItem* >( pState);
         if( pItem )
         {
             sal_uInt16 nLastEnum = pItem->GetValue();

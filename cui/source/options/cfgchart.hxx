@@ -24,8 +24,6 @@
 #ifndef _SVX_CFGCHART_HXX
 #define _SVX_CFGCHART_HXX
 
-// header for TYPEINFO
-#include <tools/rtti.hxx>
 // header for ConfigItem
 #include <unotools/configitem.hxx>
 // header for SfxPoolItem
@@ -92,7 +90,6 @@ public:
 class SvxChartColorTableItem : public SfxPoolItem
 {
 public:
-    TYPEINFO();
     SvxChartColorTableItem( sal_uInt16 nWhich, const SvxChartColorTable& );
     SvxChartColorTableItem( const SvxChartColorTableItem& );
 

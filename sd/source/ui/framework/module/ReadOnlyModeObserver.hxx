@@ -124,7 +124,7 @@ private:
     class ModifyBroadcaster;
     ::boost::scoped_ptr<ModifyBroadcaster> mpBroadcaster;
 
-    /** Listen for the .uno:EditMode command.  Returns <TRUE/> when the connection
+    /** Listen for the .uno:EditMode command.  Returns <true/> when the connection
         has been established.
     */
     bool ConnectToDispatch (void);

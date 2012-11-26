@@ -58,8 +58,6 @@ sdr::properties::BaseProperties* E3dLatheObj::CreateObjectSpecificProperties()
 
 //////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1(E3dLatheObj, E3dCompoundObject);
-
 /*************************************************************************
 |*
 |* Konstruktor aus 3D-Polygon, Scale gibt den Umrechnungsfaktor fuer
@@ -67,9 +65,12 @@ TYPEINIT1(E3dLatheObj, E3dCompoundObject);
 |*
 \************************************************************************/
 
-E3dLatheObj::E3dLatheObj(E3dDefaultAttributes& rDefault, const basegfx::B2DPolyPolygon rPoly2D)
-:   E3dCompoundObject(rDefault),
-    maPolyPoly2D(rPoly2D)
+E3dLatheObj::E3dLatheObj(
+    SdrModel& rSdrModel,
+    const E3dDefaultAttributes& rDefault,
+    const basegfx::B2DPolyPolygon aPoly2D)
+:   E3dCompoundObject(rSdrModel, rDefault),
+    maPolyPoly2D(aPoly2D)
 {
     // since the old class PolyPolygon3D did mirror the given PolyPolygons in Y, do the same here
     basegfx::B2DHomMatrix aMirrorY;
@@ -93,25 +94,47 @@ E3dLatheObj::E3dLatheObj(E3dDefaultAttributes& rDefault, const basegfx::B2DPolyP
             nSegCnt -= 1;
         }
 
-        GetProperties().SetObjectItemDirect(Svx3DVerticalSegmentsItem(nSegCnt));
+        GetProperties().SetObjectItemDirect(SfxUInt32Item(SDRATTR_3DOBJ_VERT_SEGS, nSegCnt));
     }
 }
 
-/*************************************************************************
-|*
-|* Leer-Konstruktor
-|*
-\************************************************************************/
-
-E3dLatheObj::E3dLatheObj()
-:    E3dCompoundObject()
+E3dLatheObj::~E3dLatheObj()
 {
-    // Defaults setzen
-    E3dDefaultAttributes aDefault;
-    SetDefaultAttributes(aDefault);
 }
 
-void E3dLatheObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
+void E3dLatheObj::copyDataFromSdrObject(const SdrObject& rSource)
+{
+    if(this != &rSource)
+    {
+        const E3dLatheObj* pSource = dynamic_cast< const E3dLatheObj* >(&rSource);
+
+        if(pSource)
+        {
+            // call parent
+            E3dCompoundObject::copyDataFromSdrObject(rSource);
+
+            // copy local data
+            maPolyPoly2D  = pSource->maPolyPoly2D;
+        }
+        else
+        {
+            OSL_ENSURE(false, "copyDataFromSdrObject with ObjectType of Source different from Target (!)");
+        }
+    }
+}
+
+SdrObject* E3dLatheObj::CloneSdrObject(SdrModel* pTargetModel) const
+{
+    E3dLatheObj* pClone = new E3dLatheObj(
+        pTargetModel ? *pTargetModel : getSdrModelFromSdrObject(),
+        E3dDefaultAttributes());
+    OSL_ENSURE(pClone, "CloneSdrObject error (!)");
+    pClone->copyDataFromSdrObject(*this);
+
+    return pClone;
+}
+
+void E3dLatheObj::SetDefaultAttributes(const E3dDefaultAttributes& rDefault)
 {
     GetProperties().SetObjectItemDirect(Svx3DSmoothNormalsItem(rDefault.GetDefaultLatheSmoothed()));
     GetProperties().SetObjectItemDirect(Svx3DSmoothLidsItem(rDefault.GetDefaultLatheSmoothFrontBack()));
@@ -133,30 +156,13 @@ sal_uInt16 E3dLatheObj::GetObjIdentifier() const
 
 /*************************************************************************
 |*
-|* Zuweisungsoperator
-|*
-\************************************************************************/
-
-void E3dLatheObj::operator=(const SdrObject& rObj)
-{
-    // erstmal alle Childs kopieren
-    E3dCompoundObject::operator=(rObj);
-
-    // weitere Parameter kopieren
-    const E3dLatheObj& r3DObj = (const E3dLatheObj&)rObj;
-
-    maPolyPoly2D  = r3DObj.maPolyPoly2D;
-}
-
-/*************************************************************************
-|*
 |* Wandle das Objekt in ein Gruppenobjekt bestehend aus n Polygonen
 |*
 \************************************************************************/
 
-SdrObject *E3dLatheObj::DoConvertToPolyObj(sal_Bool /*bBezier*/, bool /*bAddText*/) const
+SdrObject* E3dLatheObj::DoConvertToPolygonObject(bool /*bBezier*/, bool /*bAddText*/) const
 {
-    return NULL;
+    return 0;
 }
 
 /*************************************************************************
@@ -170,8 +176,8 @@ void E3dLatheObj::ReSegment(sal_uInt32 nHSegs, sal_uInt32 nVSegs)
     if ((nHSegs != GetHorizontalSegments() || nVSegs != GetVerticalSegments()) &&
         (nHSegs != 0 || nVSegs != 0))
     {
-        GetProperties().SetObjectItemDirect(Svx3DHorizontalSegmentsItem(nHSegs));
-        GetProperties().SetObjectItemDirect(Svx3DVerticalSegmentsItem(nVSegs));
+        GetProperties().SetObjectItemDirect(SfxUInt32Item(SDRATTR_3DOBJ_HORZ_SEGS, nHSegs));
+        GetProperties().SetObjectItemDirect(SfxUInt32Item(SDRATTR_3DOBJ_VERT_SEGS, nVSegs));
 
         ActionChanged();
     }
@@ -200,7 +206,7 @@ void E3dLatheObj::SetPolyPoly2D(const basegfx::B2DPolyPolygon& rNew)
                 nSegCnt -= 1;
             }
 
-            GetProperties().SetObjectItemDirect(Svx3DVerticalSegmentsItem(nSegCnt));
+            GetProperties().SetObjectItemDirect(SfxUInt32Item(SDRATTR_3DOBJ_VERT_SEGS, nSegCnt));
         }
 
         ActionChanged();
@@ -254,7 +260,9 @@ SdrAttrObj* E3dLatheObj::GetBreakObj()
     // create PathObj
     basegfx::B3DPolyPolygon aLathePoly3D(basegfx::tools::createB3DPolyPolygonFromB2DPolyPolygon(maPolyPoly2D));
     basegfx::B2DPolyPolygon aTransPoly(TransformToScreenCoor(aLathePoly3D));
-    SdrPathObj* pPathObj = new SdrPathObj(OBJ_PLIN, aTransPoly);
+    SdrPathObj* pPathObj = new SdrPathObj(
+        getSdrModelFromSdrObject(),
+        aTransPoly);
 
     if(pPathObj)
     {

@@ -32,8 +32,6 @@ namespace com { namespace sun { namespace star {
 class XMLSymbolImageContext : public XMLElementPropertyContext
 {
 public:
-    TYPEINFO();
-
     XMLSymbolImageContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                            const ::rtl::OUString& rLName,
                            const XMLPropertyState& rProp,

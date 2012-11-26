@@ -94,57 +94,44 @@ multiImageImportHelper::~multiImageImportHelper()
     }
 }
 
-const SvXMLImportContext* multiImageImportHelper::solveMultipleImages()
+void multiImageImportHelper::solveMultipleImages()
 {
-    const SvXMLImportContext* pRetval = 0;
-
-    if(maImplContextVector.size())
+    if(maImplContextVector.size() > 1)
     {
-        if(maImplContextVector.size() > 1)
+        // multiple child contexts were imported, decide which is the most valuable one
+        // and remove the rest
+        sal_uInt32 nIndexOfPreferred(maImplContextVector.size());
+        sal_uInt32 nBestQuality(0), a(0);
+
+        for(a = 0; a < maImplContextVector.size(); a++)
         {
-            // multiple child contexts were imported, decide which is the most valuable one
-            // and remove the rest
-            sal_uInt32 nIndexOfPreferred(maImplContextVector.size());
-            sal_uInt32 nBestQuality(0), a(0);
+            const rtl::OUString aStreamURL(getGraphicURLFromImportContext(**maImplContextVector[a]));
+            const sal_uInt32 nNewQuality(getQualityIndex(aStreamURL));
 
-            for(a = 0; a < maImplContextVector.size(); a++)
+            if(nNewQuality > nBestQuality)
             {
-                const rtl::OUString aStreamURL(getGraphicURLFromImportContext(**maImplContextVector[a]));
-                const sal_uInt32 nNewQuality(getQualityIndex(aStreamURL));
-
-                if(nNewQuality > nBestQuality)
-                {
-                    nBestQuality = nNewQuality;
-                    nIndexOfPreferred = a;
-                }
-            }
-
-            // correct if needed, default is to use the last entry
-            if(nIndexOfPreferred >= maImplContextVector.size())
-            {
-                nIndexOfPreferred = maImplContextVector.size() - 1;
-            }
-
-            // get the winner
-            pRetval = *maImplContextVector[nIndexOfPreferred];
-
-            // remove the rest from parent
-            for(a = 0; a < maImplContextVector.size(); a++)
-            {
-                if(a != nIndexOfPreferred)
-                {
-                    removeGraphicFromImportContext(**maImplContextVector[a]);
-                }
+                nBestQuality = nNewQuality;
+                nIndexOfPreferred = a;
             }
         }
-        else
+
+        // correct if needed, default is to use the last entry
+        if(nIndexOfPreferred >= maImplContextVector.size())
         {
-            // only one, winner is implicit
-            pRetval = *maImplContextVector[0];
+            nIndexOfPreferred = maImplContextVector.size() - 1;
+        }
+
+        // Take out the most valuable one
+        const std::vector< SvXMLImportContextRef* >::iterator aRemove(maImplContextVector.begin() + nIndexOfPreferred);
+        delete *aRemove;
+        maImplContextVector.erase(aRemove);
+
+        // remove the rest from parent
+        for(a = 0; a < maImplContextVector.size(); a++)
+        {
+            removeGraphicFromImportContext(**maImplContextVector[a]);
         }
     }
-
-    return pRetval;
 }
 
 void multiImageImportHelper::addContent(const SvXMLImportContext& rSvXMLImportContext)

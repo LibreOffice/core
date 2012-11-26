@@ -23,8 +23,8 @@
 #ifndef _SFXMSG_HXX
 #define _SFXMSG_HXX
 
-#include <tools/rtti.hxx>
 #include <sfx2/shell.hxx>
+#include <typeinfo>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <sfx2/dllapi.h>
@@ -111,32 +111,41 @@ struct SfxTypeAttrib
     const char __FAR_DATA*  pName;
 };
 
+typedef bool (*ConvertToSlotType)( const SfxPoolItem* );
+typedef SfxPoolItem* (*CreatePoolItem)();
+
 struct SfxType
 {
-    TypeId          aTypeId;
+    CreatePoolItem          aCreateFunc;
+    ConvertToSlotType       aConvertFunc;
+    const std::type_info*   pType;
     sal_uInt16          nAttribs;
     SfxTypeAttrib   aAttrib[16];
 
-    const TypeId&   Type() const
-                    { return aTypeId; }
-    SfxPoolItem*    CreateItem() const
-                    { return (SfxPoolItem*) aTypeId(); }
+    const std::type_info&  Type() const { return *pType; }
+    SfxPoolItem*    CreateItem() const { return aCreateFunc(); }
+
+    bool IsSlotType(const SfxPoolItem* pItem) const { return aConvertFunc(pItem); }
 };
 
 struct SfxType0
 {
-    TypeId          aTypeId;
+    CreatePoolItem      aCreateFunc;
+    ConvertToSlotType   aConvertFunc;
+    const std::type_info*   pType;
     sal_uInt16          nAttribs;
 
-    const TypeId&   Type() const
-                    { return aTypeId; }
-    SfxPoolItem*    CreateItem() const
-                    { return (SfxPoolItem*) aTypeId(); }
+    const std::type_info&  Type() const { return *pType; }
+    SfxPoolItem*    CreateItem() const { return aCreateFunc(); }
+
+    bool IsSlotType(const SfxPoolItem* pItem) const { return aConvertFunc(pItem); }
 };
 
 #define SFX_DECL_TYPE(n)    struct SfxType##n                   \
                             {                                   \
-                                TypeId          aTypeId;        \
+                                CreatePoolItem      aCreate;    \
+                                ConvertToSlotType   aConvert;   \
+                                const std::type_info*   pType;  \
                                 sal_uInt16          nAttribs;       \
                                 SfxTypeAttrib   aAttrib[n];     \
                             }
@@ -238,10 +247,7 @@ struct SfxFormalArgument
     const char __FAR_DATA*  pName;  // Name des Parameters
     sal_uInt16                  nSlotId;// Slot-Id zur Identifikation des Parameters
 
-    const TypeId&           Type() const
-                            { return pType->aTypeId; }
-    SfxPoolItem*            CreateItem() const
-                            { return (SfxPoolItem*) pType->aTypeId(); }
+    SfxPoolItem*            CreateItem() const { return pType->CreateItem(); }
 };
 
 //--------------------------------------------------------------------

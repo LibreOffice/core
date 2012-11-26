@@ -170,7 +170,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         case SID_THES:
         {
             String aReplaceText;
-            SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES, sal_False );
+            SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES );
             if (pItem2)
                 aReplaceText = pItem2->GetValue();
             if (aReplaceText.Len() > 0)
@@ -303,7 +303,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 }
 
                 SwView* pView = &GetView();
-                FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, pView));
+                FieldUnit eMetric = ::GetDfltMetric(0 != dynamic_cast< SwWebView* >( pView));
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)) );
                 SfxItemSet aDlgAttr(GetPool(), EE_ITEMS_START, EE_ITEMS_END);
 
@@ -398,7 +398,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             if (!pArgs)
             {
                 SwView* pView = &GetView();
-                FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, pView));
+                FieldUnit eMetric = ::GetDfltMetric(0 != dynamic_cast< SwWebView* >( pView));
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)) );
                 SfxItemSet aDlgAttr(GetPool(),
                                     EE_ITEMS_START, EE_ITEMS_END,
@@ -471,7 +471,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 
                 const SvxFieldItem* pFieldItem = pOLV->GetFieldAtSelection();
 
-                if (pFieldItem && pFieldItem->GetField()->ISA(SvxURLField))
+                if (pFieldItem && dynamic_cast< const SvxURLField* >(pFieldItem->GetField()))
                 {
                     // Feld selektieren, so dass es beim Insert geloescht wird
                     ESelection aSel = pOLV->GetSelection();
@@ -487,8 +487,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
             // Shellwechsel!
             {
-                SdrObject* pTmpObj = pSdrView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
-                SdrPageView* pTmpPV = pSdrView->GetSdrPageView();
+                SdrObject* pTmpObj = pSdrView->getSelectedIfSingle();
                 SdrView* pTmpView = pSdrView;
 
                 pSdrView->SdrEndTextEdit(sal_True);
@@ -503,7 +502,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                         : text::WritingMode_TB_RL, SDRATTR_TEXTDIRECTION ) );
                 pTmpView->SetAttributes( aAttr );
 
-                rSh.GetView().BeginTextEdit( pTmpObj, pTmpPV, &rSh.GetView().GetEditWin(), sal_False);
+                rSh.GetView().BeginTextEdit( pTmpObj, &rSh.GetView().GetEditWin(), sal_False);
                 rSh.GetView().AttrChangedNotify( &rSh );
             }
             return;
@@ -511,8 +510,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         case SID_ATTR_PARA_LEFT_TO_RIGHT:
         case SID_ATTR_PARA_RIGHT_TO_LEFT:
         {
-            SdrObject* pTmpObj = pSdrView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
-            SdrPageView* pTmpPV = pSdrView->GetSdrPageView();
+            SdrObject* pTmpObj = pSdrView->getSelectedIfSingle();
             SdrView* pTmpView = pSdrView;
 
             pSdrView->SdrEndTextEdit(sal_True);
@@ -546,7 +544,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                     aAttr.Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
             }
             pTmpView->SetAttributes( aAttr );
-            rSh.GetView().BeginTextEdit( pTmpObj, pTmpPV, &rSh.GetView().GetEditWin(), sal_False );
+            rSh.GetView().BeginTextEdit( pTmpObj, &rSh.GetView().GetEditWin(), sal_False );
             rSh.GetView().AttrChangedNotify( &rSh );
         }
         return;
@@ -977,13 +975,13 @@ void SwDrawTextShell::StateInsert(SfxItemSet &rSet)
 
                     if (pFieldItem)
                     {
-                        const SvxFieldData* pField = pFieldItem->GetField();
+                        const SvxURLField* pField = dynamic_cast< const SvxURLField* >(pFieldItem->GetField());
 
-                        if (pField->ISA(SvxURLField))
+                        if (pField )
                         {
-                            aHLinkItem.SetName(((const SvxURLField*) pField)->GetRepresentation());
-                            aHLinkItem.SetURL(((const SvxURLField*) pField)->GetURL());
-                            aHLinkItem.SetTargetFrame(((const SvxURLField*) pField)->GetTargetFrame());
+                            aHLinkItem.SetName(pField->GetRepresentation());
+                            aHLinkItem.SetURL(pField->GetURL());
+                            aHLinkItem.SetTargetFrame(pField->GetTargetFrame());
                         }
                     }
                     else

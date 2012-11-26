@@ -72,9 +72,6 @@ SwFlyInCntFrm::~SwFlyInCntFrm()
     }
 }
 
-// --> OD 2004-06-29 #i28701#
-TYPEINIT1(SwFlyInCntFrm,SwFlyFrm);
-// <--
 /*************************************************************************
 |*
 |*  SwFlyInCntFrm::SetRefPoint(),

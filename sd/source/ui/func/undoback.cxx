@@ -34,10 +34,6 @@
 // - BackgroundObjUndoAction -
 // ---------------------------
 
-TYPEINIT1( SdBackgroundObjUndoAction, SdUndoAction );
-
-// -----------------------------------------------------------------------------
-
 SdBackgroundObjUndoAction::SdBackgroundObjUndoAction(
     SdDrawDocument& rDoc,
     SdPage& rPage,

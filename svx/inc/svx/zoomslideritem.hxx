@@ -39,8 +39,7 @@ class SVX_DLLPUBLIC SvxZoomSliderItem: public SfxUInt16Item
     sal_uInt16 mnMaxZoom;
 
 public:
-    TYPEINFO();
-
+    POOLITEM_FACTORY()
     SvxZoomSliderItem( sal_uInt16 nCurrentZoom = 100, sal_uInt16 nMinZoom = 20, sal_uInt16 nMaxZoom = 600, sal_uInt16 nWhich = SID_ATTR_ZOOMSLIDER );
     SvxZoomSliderItem( const SvxZoomSliderItem& );
     ~SvxZoomSliderItem();

@@ -843,10 +843,9 @@ sal_Bool GalleryTheme::GetGraphic( sal_uIntPtr nPos, Graphic& rGraphic, sal_Bool
                         {
                             VirtualDevice aVDev;
                             aVDev.SetMapMode( MapMode( MAP_100TH_MM ) );
-                            FmFormView aView( aModel.GetModel(), &aVDev );
+                            FmFormView aView( *aModel.GetModel(), &aVDev );
 
-                            aView.hideMarkHandles();
-                            aView.ShowSdrPage(aView.GetModel()->GetPage(0));
+                            aView.ShowSdrPage(*aView.getSdrModelFromSdrView().GetPage(0));
                             aView.MarkAll();
                             rGraphic = aView.GetAllMarkedGraphic();
                             bRet = sal_True;
@@ -1307,10 +1306,12 @@ sal_Bool GalleryTheme::InsertTransferable( const uno::Reference< datatransfer::X
                         SgaUserDataFactory  aFactory;
 
                         SdrPage*    pPage = aModel.GetModel()->GetPage(0);
-                        SdrGrafObj* pGrafObj = new SdrGrafObj( *pGraphic );
+                        SdrGrafObj* pGrafObj = new SdrGrafObj(
+                            *aModel.GetModel(),
+                            *pGraphic );
 
                         pGrafObj->InsertUserData( new SgaIMapInfo( aImageMap ) );
-                        pPage->InsertObject( pGrafObj );
+                        pPage->InsertObjectToSdrObjList(*pGrafObj);
                         bRet = InsertModel( *aModel.GetModel(), nInsertPos );
                     }
                 }
@@ -1573,7 +1574,9 @@ SvStream& operator>>( SvStream& rIn, GalleryTheme& rTheme )
 }
 
 void GalleryTheme::ImplSetModified( sal_Bool bModified )
-{ pThm->SetModified( bModified ); }
+{
+    pThm->SetModified( bModified );
+}
 
 const String& GalleryTheme::GetRealName() const { return pThm->GetThemeName(); }
 const INetURLObject& GalleryTheme::GetThmURL() const { return pThm->GetThmURL(); }

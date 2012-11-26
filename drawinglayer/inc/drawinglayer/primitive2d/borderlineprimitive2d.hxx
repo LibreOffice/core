@@ -66,8 +66,8 @@ namespace drawinglayer
 
             /// bitfield
             /// flags to influence inside/outside creation
-            unsigned                                        mbCreateInside : 1;
-            unsigned                                        mbCreateOutside : 1;
+            bool                                            mbCreateInside : 1;
+            bool                                            mbCreateOutside : 1;
 
             /// local helpers
             double getCorrectedLeftWidth() const
@@ -143,9 +143,6 @@ namespace drawinglayer
             bool getCreateInside() const { return mbCreateInside; }
             bool getCreateOutside() const { return mbCreateOutside; }
             const basegfx::BColor& getRGBColor() const { return maRGBColor; }
-
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
             /// provide unique ID
             DeclPrimitrive2DIDBlock()

@@ -36,21 +36,19 @@ class DlgEditor;
 class DlgEdView : public SdrView
 {
 private:
-    DlgEditor* pDlgEditor;
+    DlgEditor&  mrDlgEditor;
 
 public:
-    TYPEINFO();
-
-    DlgEdView( SdrModel* pModel, OutputDevice* pOut, DlgEditor* pEditor );
+    DlgEdView( SdrModel& rModel, OutputDevice* pOut, DlgEditor& rEditor );
     virtual ~DlgEdView();
 
-    virtual void MarkListHasChanged();
-    virtual void MakeVisible( const Rectangle& rRect, Window& rWin );
+    virtual void handleSelectionChange();
+    virtual void MakeVisibleAtView( const basegfx::B2DRange& rRange, Window& rWin );
 
 protected:
     // overloaded to handle HitTest for some objects special
     using SdrView::CheckSingleSdrObjectHit;
-    virtual SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObject* pObj, SdrPageView* pPV, sal_uLong nOptions, const SetOfByte* pMVisLay) const;
+    virtual SdrObject* CheckSingleSdrObjectHit(const basegfx::B2DPoint& rPnt, double fTol, SdrObject* pObj, sal_uInt32 nOptions, const SetOfByte* pMVisLay) const;
 };
 
 #endif //_BASCTL_DLGEDVIEW_HXX

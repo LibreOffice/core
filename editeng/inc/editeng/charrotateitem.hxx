@@ -43,11 +43,10 @@ class EDITENG_DLLPUBLIC SvxCharRotateItem : public SfxUInt16Item
 {
     sal_Bool bFitToLine;
 public:
-    TYPEINFO();
-
-    SvxCharRotateItem( sal_uInt16 nValue /*= 0*/,
-                       sal_Bool bFitIntoLine /*= sal_False*/,
-                       const sal_uInt16 nId );
+    POOLITEM_FACTORY()
+    SvxCharRotateItem( sal_uInt16 nValue = 0,
+                       sal_Bool bFitIntoLine = sal_False,
+                       const sal_uInt16 nId = 0);
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;

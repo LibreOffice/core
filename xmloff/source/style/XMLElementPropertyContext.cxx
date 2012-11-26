@@ -29,8 +29,6 @@
 
 using ::rtl::OUString;
 
-TYPEINIT1( XMLElementPropertyContext , SvXMLImportContext );
-
 XMLElementPropertyContext::XMLElementPropertyContext (
                                 SvXMLImport& rImport, sal_uInt16 nPrfx,
                                 const OUString& rLName,

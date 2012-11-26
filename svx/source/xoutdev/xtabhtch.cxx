@@ -169,8 +169,8 @@ public:
     ~impXHatchList()
     {
         delete mpVirtualDevice;
-        SdrObject::Free(mpBackgroundObject);
-        SdrObject::Free(mpHatchObject);
+        deleteSdrObjectSafeAndClearPointer(mpBackgroundObject);
+        deleteSdrObjectSafeAndClearPointer(mpHatchObject);
         delete mpSdrModel;
     }
 
@@ -183,7 +183,6 @@ void XHatchList::impCreate()
 {
     if(!mpData)
     {
-        const Point aZero(0, 0);
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
         VirtualDevice* pVirDev = new VirtualDevice;
@@ -199,19 +198,19 @@ void XHatchList::impCreate()
         OSL_ENSURE(0 != pSdrModel, "XDashList: no SdrModel created!" );
         pSdrModel->GetItemPool().FreezeIdRanges();
 
-        const Size aSinglePixel(pVirDev->PixelToLogic(Size(1, 1)));
-        const Rectangle aBackgroundSize(aZero, Size(aSize.getWidth() - aSinglePixel.getWidth(), aSize.getHeight() - aSinglePixel.getHeight()));
-        SdrObject* pBackgroundObject = new SdrRectObj(aBackgroundSize);
+        SdrObject* pBackgroundObject = new SdrRectObj(
+            *pSdrModel,
+            basegfx::tools::createScaleB2DHomMatrix(aSize.getWidth(), aSize.getHeight()));
         OSL_ENSURE(0 != pBackgroundObject, "XDashList: no BackgroundObject created!" );
-        pBackgroundObject->SetModel(pSdrModel);
         pBackgroundObject->SetMergedItem(XFillStyleItem(XFILL_SOLID));
         pBackgroundObject->SetMergedItem(XFillColorItem(String(), rStyleSettings.GetFieldColor()));
         pBackgroundObject->SetMergedItem(XLineStyleItem(XLINE_SOLID));
         pBackgroundObject->SetMergedItem(XLineColorItem(String(), Color(COL_BLACK)));
 
-        SdrObject* pHatchObject = new SdrRectObj(aBackgroundSize);
+        SdrObject* pHatchObject = new SdrRectObj(
+            *pSdrModel,
+            basegfx::tools::createScaleB2DHomMatrix(aSize.getWidth(), aSize.getHeight()));
         OSL_ENSURE(0 != pHatchObject, "XDashList: no HatchObject created!" );
-        pHatchObject->SetModel(pSdrModel);
         pHatchObject->SetMergedItem(XFillStyleItem(XFILL_HATCH));
         pHatchObject->SetMergedItem(XLineStyleItem(XLINE_NONE));
 
@@ -347,7 +346,7 @@ Bitmap* XHatchList::CreateBitmapForUI( long nIndex, sal_Bool bDelete )
     pHatchObject->SetMergedItem(XFillStyleItem(XFILL_HATCH));
     pHatchObject->SetMergedItem(XFillHatchItem(String(), GetHatch(nIndex)->GetHatch()));
 
-    sdr::contact::SdrObjectVector aObjectVector;
+    SdrObjectVector aObjectVector;
     aObjectVector.push_back(mpData->getBackgroundObject());
     aObjectVector.push_back(pHatchObject);
     sdr::contact::ObjectContactOfObjListPainter aPainter(*pVD, aObjectVector, 0);

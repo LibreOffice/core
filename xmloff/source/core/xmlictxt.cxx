@@ -40,7 +40,6 @@ using ::rtl::OUStringBuffer;
 using namespace ::com::sun::star;
 
 DBG_NAME(SvXMLImportContext)
-TYPEINIT0( SvXMLImportContext );
 SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
                               const OUString& rLName ) :
     mrImport( rImp ),

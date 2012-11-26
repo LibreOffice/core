@@ -40,8 +40,6 @@ using ::rtl::OUStringBuffer;
 using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_INCREMENT;
 
-TYPEINIT1( XMLLineNumberingSeparatorImportContext, SvXMLImportContext );
-
 XMLLineNumberingSeparatorImportContext::XMLLineNumberingSeparatorImportContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,

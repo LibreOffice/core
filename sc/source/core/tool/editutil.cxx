@@ -649,16 +649,15 @@ String __EXPORT ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
     const SvxFieldData* pFieldData = rField.GetField();
     if ( pFieldData )
     {
-        TypeId aType = pFieldData->Type();
-        if (aType == TYPE(SvxPageField))
+        if (dynamic_cast< const SvxPageField* >(pFieldData))
             aRet = lcl_GetNumStr( aData.nPageNo,aData.eNumType );
-        else if (aType == TYPE(SvxPagesField))
+        else if (dynamic_cast< const SvxPagesField* >(pFieldData))
             aRet = lcl_GetNumStr( aData.nTotalPages,aData.eNumType );
-        else if (aType == TYPE(SvxTimeField))
+        else if (dynamic_cast< const SvxTimeField* >(pFieldData))
             aRet = ScGlobal::pLocaleData->getTime(aData.aTime);
-        else if (aType == TYPE(SvxFileField))
+        else if (dynamic_cast< const SvxFileField* >(pFieldData))
             aRet = aData.aTitle;
-        else if (aType == TYPE(SvxExtFileField))
+        else if (dynamic_cast< const SvxExtFileField* >(pFieldData))
         {
             switch ( ((const SvxExtFileField*)pFieldData)->GetFormat() )
             {
@@ -669,9 +668,9 @@ String __EXPORT ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
                     aRet = aData.aShortDocName;
             }
         }
-        else if (aType == TYPE(SvxTableField))
+        else if (dynamic_cast< const SvxTableField* >(pFieldData))
             aRet = aData.aTabName;
-        else if (aType == TYPE(SvxDateField))
+        else if (dynamic_cast< const SvxDateField* >(pFieldData))
             aRet = ScGlobal::pLocaleData->getDate(aData.aDate);
         else
         {
@@ -716,9 +715,7 @@ String __EXPORT ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
 
     if ( pFieldData )
     {
-        TypeId aType = pFieldData->Type();
-
-        if (aType == TYPE(SvxURLField))
+        if (dynamic_cast< const SvxURLField* >(pFieldData))
         {
             String aURL = ((const SvxURLField*)pFieldData)->GetURL();
 
@@ -753,13 +750,16 @@ String __EXPORT ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
 
 void __EXPORT ScFieldEditEngine::FieldClicked( const SvxFieldItem& rField, sal_uInt16, sal_uInt16 )
 {
-    const SvxFieldData* pFld = rField.GetField();
-
-    if ( pFld && pFld->ISA( SvxURLField ) && bExecuteURL )
+    if(bExecuteURL)
     {
-        const SvxURLField* pURLField = (const SvxURLField*) pFld;
+    const SvxFieldData* pFld = rField.GetField();
+        const SvxURLField* pURLField = dynamic_cast< const SvxURLField* >(pFld);
+
+        if(pURLField)
+    {
         ScGlobal::OpenURL( pURLField->GetURL(), pURLField->GetTargetFrame() );
     }
+}
 }
 
 //------------------------------------------------------------------------

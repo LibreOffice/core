@@ -30,7 +30,6 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdocapt.hxx>
-#include <svx/svdmark.hxx>
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
 #include <fmtsrnd.hxx>
@@ -604,15 +603,15 @@ void SwDoc::GetGrfNms( const SwFlyFrmFmt& rFmt, String* pGrfName,
         pGrfNd->GetFileFilterNms( pGrfName, pFltName );
 }
 
-sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
+sal_Bool SwDoc::ChgAnchor( const SdrObjectVector& rSdrObjectVector,
                            RndStdIds _eAnchorType,
                            const sal_Bool _bSameOnly,
                            const sal_Bool _bPosCorr )
 {
     ASSERT( GetCurrentLayout(), "Ohne Layout geht gar nichts" );    //swmod 080218
 
-    if ( !_rMrkList.GetMarkCount() ||
-         _rMrkList.GetMark( 0 )->GetMarkedSdrObj()->GetUpGroup() )
+    if ( !rSdrObjectVector.size() ||
+         rSdrObjectVector[0]->GetParentSdrObject() )
     {
         return false;
     }
@@ -620,12 +619,13 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
     GetIDocumentUndoRedo().StartUndo( UNDO_INSATTR, NULL );
 
     sal_Bool bUnmark = sal_False;
-    for ( sal_uInt16 i = 0; i < _rMrkList.GetMarkCount(); ++i )
+    for ( sal_uInt32 i = 0; i < rSdrObjectVector.size(); ++i )
     {
-        SdrObject* pObj = _rMrkList.GetMark( i )->GetMarkedSdrObj();
-        if ( !pObj->ISA(SwVirtFlyDrawObj) )
+        const SdrObject* pObj = rSdrObjectVector[i];
+
+        if ( !dynamic_cast< const SwVirtFlyDrawObj* >(pObj) )
         {
-            SwDrawContact* pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
+            SwDrawContact* pContact = static_cast<SwDrawContact*>(findConnectionToSdrObject(pObj));
 
             // OD 27.06.2003 #108784# - consider, that drawing object has
             // no user call. E.g.: a 'virtual' drawing object is disconnected by
@@ -635,8 +635,8 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
             {
 #ifdef DBG_UTIL
                 bool bNoUserCallExcepted =
-                        pObj->ISA(SwDrawVirtObj) &&
-                        !static_cast<SwDrawVirtObj*>(pObj)->IsConnected();
+                        dynamic_cast< const SwDrawVirtObj* >(pObj) &&
+                        !static_cast< const SwDrawVirtObj* >(pObj)->IsConnected();
                 ASSERT( bNoUserCallExcepted, "SwDoc::ChgAnchor(..) - no contact at selected drawing object" );
 #endif
                 continue;
@@ -807,8 +807,8 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                 {
                     // --> OD 2004-08-24 #i33313# - consider not connected
                     // 'virtual' drawing objects
-                    if ( pObj->ISA(SwDrawVirtObj) &&
-                         !static_cast<SwDrawVirtObj*>(pObj)->IsConnected() )
+                    if ( dynamic_cast< const SwDrawVirtObj* >(pObj)
+                        && !static_cast< const SwDrawVirtObj* >(pObj)->IsConnected() )
                     {
                         SwRect aNewObjRect( aObjRect );
                         static_cast<SwAnchoredDrawObject*>(pContact->GetAnchoredObj( 0L ))
@@ -818,8 +818,8 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     }
                     else
                     {
-                        static_cast<SwAnchoredDrawObject*>(pContact->GetAnchoredObj( pObj ))
-                                    ->AdjustPositioningAttr( pNewAnchorFrm );
+                        const SwAnchoredDrawObject* pAnchoredDrawObject = static_cast< const SwAnchoredDrawObject* >(pContact->GetAnchoredObj( pObj ));
+                        const_cast< SwAnchoredDrawObject* >(pAnchoredDrawObject)->AdjustPositioningAttr( pNewAnchorFrm );
                     }
                 }
             }

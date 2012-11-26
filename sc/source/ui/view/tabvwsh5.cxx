@@ -54,9 +54,9 @@
 
 void __EXPORT ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if (rHint.ISA(SfxSimpleHint))                       // ohne Parameter
+    if (dynamic_cast< const SfxSimpleHint* >(&rHint))                       // ohne Parameter
     {
-        sal_uLong nSlot = ((SfxSimpleHint&)rHint).GetId();
+        sal_uLong nSlot = static_cast< const SfxSimpleHint& >(rHint).GetId();
         switch ( nSlot )
         {
             case FID_DATACHANGED:
@@ -143,9 +143,9 @@ void __EXPORT ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 break;
         }
     }
-    else if (rHint.ISA(ScPaintHint))                    // neu zeichnen
+    else if (dynamic_cast< const ScPaintHint* >(&rHint))                    // neu zeichnen
     {
-        ScPaintHint* pHint = (ScPaintHint*) &rHint;
+        const ScPaintHint* pHint = static_cast< const ScPaintHint* >(&rHint);
         sal_uInt16 nParts = pHint->GetParts();
         SCTAB nTab = GetViewData()->GetTabNo();
         if (pHint->GetStartTab() <= nTab && pHint->GetEndTab() >= nTab)
@@ -181,11 +181,11 @@ void __EXPORT ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
             HideNoteMarker();
         }
     }
-    else if (rHint.ISA(ScEditViewHint))                 // Edit-View anlegen
+    else if (dynamic_cast< const ScEditViewHint* >(&rHint))                 // Edit-View anlegen
     {
         //  ScEditViewHint kommt nur an aktiver View an
 
-        ScEditViewHint* pHint = (ScEditViewHint*) &rHint;
+        const ScEditViewHint* pHint = static_cast< const ScEditViewHint* >(&rHint);
         SCTAB nTab = GetViewData()->GetTabNo();
         if ( pHint->GetTab() == nTab )
         {
@@ -212,12 +212,12 @@ void __EXPORT ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
             }
         }
     }
-    else if (rHint.ISA(ScTablesHint))               // Tabelle eingefuegt / geloescht
+    else if (dynamic_cast< const ScTablesHint* >(&rHint))               // Tabelle eingefuegt / geloescht
     {
             //  aktuelle Tabelle zuerst holen (kann bei DeleteTab an ViewData geaendert werden)
         SCTAB nActiveTab = GetViewData()->GetTabNo();
 
-        const ScTablesHint& rTabHint = (const ScTablesHint&)rHint;
+        const ScTablesHint& rTabHint = static_cast< const ScTablesHint& >(rHint);
         SCTAB nTab1 = rTabHint.GetTab1();
         SCTAB nTab2 = rTabHint.GetTab2();
         sal_uInt16 nId  = rTabHint.GetId();
@@ -289,9 +289,9 @@ void __EXPORT ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
         sal_Bool bForce = !bStayOnActiveTab;
         SetTabNo( nNewTab, bForce, sal_False, bStayOnActiveTab );
     }
-    else if (rHint.ISA(ScIndexHint))
+    else if (dynamic_cast< const ScIndexHint* >(&rHint))
     {
-        const ScIndexHint& rIndexHint = (const ScIndexHint&)rHint;
+        const ScIndexHint& rIndexHint = static_cast< const ScIndexHint& >(rHint);
         sal_uInt16 nId = rIndexHint.GetId();
         sal_uInt16 nIndex = rIndexHint.GetIndex();
         switch (nId)

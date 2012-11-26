@@ -260,8 +260,6 @@ public:
     SvXMLShapeContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
         const ::rtl::OUString& rLName, sal_Bool bTemporaryShape ) : SvXMLImportContext( rImp, nPrfx, rLName ), mbTemporaryShape(bTemporaryShape) {}
 
-    TYPEINFO();
-
     const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& getShape() const { return mxShape; }
 
     void setHyperlink( const ::rtl::OUString& rHyperlink );

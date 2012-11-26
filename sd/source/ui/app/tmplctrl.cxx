@@ -91,12 +91,19 @@ SdTemplateControl::~SdTemplateControl()
 void SdTemplateControl::StateChanged(
     sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
-    if( eState != SFX_ITEM_AVAILABLE || pState->ISA( SfxVoidItem ) )
-        GetStatusBar().SetItemText( GetId(), String() );
-    else if ( pState->ISA( SfxStringItem ) )
+    if( eState != SFX_ITEM_AVAILABLE || dynamic_cast< const SfxVoidItem* >(pState) )
     {
-        msTemplate = ((SfxStringItem*)pState)->GetValue();
-        GetStatusBar().SetItemText( GetId(), msTemplate );
+        GetStatusBar().SetItemText( GetId(), String() );
+    }
+    else
+    {
+        const SfxStringItem* pSfxStringItem = dynamic_cast< const SfxStringItem* >(pState);
+
+        if ( pSfxStringItem )
+        {
+            msTemplate = pSfxStringItem->GetValue();
+            GetStatusBar().SetItemText( GetId(), msTemplate );
+        }
     }
 }
 
@@ -126,10 +133,10 @@ void SdTemplateControl::Command( const CommandEvent& rCEvt )
         CaptureMouse();
         TemplatePopup_Impl aPop;
         {
-            const sal_uInt16 nMasterCount = pDoc->GetMasterSdPageCount(PK_STANDARD);
+            const sal_uInt32 nMasterCount = pDoc->GetMasterSdPageCount(PK_STANDARD);
 
-            sal_uInt16 nCount = 0;
-            for( sal_uInt16 nPage = 0; nPage < nMasterCount; ++nPage )
+            sal_uInt32 nCount = 0;
+            for( sal_uInt32 nPage = 0; nPage < nMasterCount; ++nPage )
             {
                 SdPage* pMaster = pDoc->GetMasterSdPage(nPage, PK_STANDARD);
                 if( pMaster )
@@ -137,7 +144,7 @@ void SdTemplateControl::Command( const CommandEvent& rCEvt )
             }
             aPop.Execute( &GetStatusBar(), rCEvt.GetMousePosPixel());
 
-            sal_uInt16 nCurrId = aPop.GetCurId()-1;
+            sal_uInt32 nCurrId = aPop.GetCurId()-1;
             if( nCurrId < nMasterCount )
             {
                 SdPage* pMaster = pDoc->GetMasterSdPage(nCurrId, PK_STANDARD);

@@ -111,15 +111,15 @@ private:
     css::uno::Reference<
         css::drawing::framework::XConfiguration> mxRequestedConfiguration;
 
-    /** This flag is set to </sal_True> when an update of the current
+    /** This flag is set to </true> when an update of the current
         configurtion was requested (because the last request in the queue
         was processed) but could not be exected because the
         ConfigurationController was locked.  A call to UpdateConfiguration()
-        resets the flag to </sal_False>.
+        resets the flag to </false>.
     */
     bool mbUpdatePending;
 
-    /** This flag is set to </sal_True> while the UpdateConfiguration() method
+    /** This flag is set to </true> while the UpdateConfiguration() method
         is running.  It is used to prevent reentrance problems with this
         method.
     */
@@ -194,7 +194,7 @@ private:
     bool IsUpdatePossible (void);
 
     /** Lock updates of the current configuration.  For intermediate requests
-        for updates mbUpdatePending is set to <TRUE/>.
+        for updates mbUpdatePending is set to <true/>.
     */
     void LockUpdates (void);
 

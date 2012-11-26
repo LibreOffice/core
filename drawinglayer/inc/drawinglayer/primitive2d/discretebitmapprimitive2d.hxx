@@ -65,9 +65,6 @@ namespace drawinglayer
             const BitmapEx& getBitmapEx() const { return maBitmapEx; }
             const basegfx::B2DPoint& getTopLeft() const { return maTopLeft; }
 
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
-
             /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };

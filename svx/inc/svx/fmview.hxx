@@ -60,10 +60,10 @@ class SVX_DLLPUBLIC FmFormView : public E3dView
     void Init();
 
 public:
-    TYPEINFO();
-
-    FmFormView(FmFormModel* pModel, OutputDevice* pOut = 0L);
+    FmFormView(FmFormModel& rModel, OutputDevice* pOut = 0);
     virtual ~FmFormView();
+
+    const OutputDevice* GetCurrentViewDevice() const { return GetActualOutDev() ; }
 
     /** create a control pair (label/bound control) for the database field description given.
         @param rFieldDesc
@@ -81,7 +81,7 @@ public:
     */
     SdrObject*   CreateXFormsControl( const ::svx::OXFormsDescriptor &_rDesc );
 
-    virtual void MarkListHasChanged();
+    virtual void handleSelectionChange();
     virtual void AddWindowToPaintView(OutputDevice* pNewWin);
     virtual void DeleteWindowFromPaintView(OutputDevice* pOldWin);
 
@@ -102,15 +102,15 @@ public:
         SdrUnoObj*& _rpControl
     );
 
-    virtual SdrPageView* ShowSdrPage(SdrPage* pPage);
+    virtual void ShowSdrPage(SdrPage& rPage);
     virtual void HideSdrPage();
 
     // for copying complete form structures, not only control models
     virtual SdrModel* GetMarkedObjModel() const;
     using E3dView::Paste;
-    virtual sal_Bool Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0);
+    virtual bool Paste(const SdrModel& rMod, const basegfx::B2DPoint& rPos, SdrObjList* pLst = 0, sal_uInt32 nOptions = 0);
 
-    virtual sal_Bool MouseButtonDown( const MouseEvent& _rMEvt, Window* _pWin );
+    virtual bool MouseButtonDown( const MouseEvent& _rMEvt, Window* _pWin );
 
     /** grab the focus to the first form control on the view
         @param _bForceSync
@@ -124,9 +124,9 @@ public:
             GetFormController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm, const OutputDevice& _rDevice ) const;
 
     // SdrView
-    sal_Bool KeyInput(const KeyEvent& rKEvt, Window* pWin);
+    virtual bool KeyInput(const KeyEvent& rKEvt, Window* pWin);
 
-    /// shortcut to "GetSdrPageView() ? PTR_CAST( FmFormPage, GetSdrPageView() ) : NULL"
+    /// shortcut to "GetSdrPageView() ? dynamic_cast< FmFormPage* >( GetSdrPageView() ) : NULL"
     FmFormPage* GetCurPage();
 
     SVX_DLLPRIVATE void ActivateControls(SdrPageView*);
@@ -148,11 +148,9 @@ public:
     virtual SdrPaintWindow* BeginCompleteRedraw(OutputDevice* pOut);
     virtual void EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer);
 
-    SVX_DLLPRIVATE const OutputDevice* GetActualOutDev() const {return pActualOutDev;}
     SVX_DLLPRIVATE sal_Bool checkUnMarkAll(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xSource);
 
 private:
-    SVX_DLLPRIVATE void AdjustMarks(const SdrMarkList& rMarkList);
     SVX_DLLPRIVATE FmFormObj* getMarkedGrid() const;
  protected:
     using E3dView::SetMoveOutside;

@@ -82,9 +82,16 @@ void ClientView::InvalidateOneWin(::Window& rWin)
 |*
 \************************************************************************/
 
-void ClientView::InvalidateOneWin(::Window& rWin, const Rectangle& rRect)
+void ClientView::InvalidateOneWin(::Window& rWin, const basegfx::B2DRange& rRange)
 {
-    CompleteRedraw(&rWin, rRect);
+    if(!rRange.isEmpty())
+    {
+        const Region aRegion(Rectangle(
+            basegfx::fround(rRange.getMinX()), basegfx::fround(rRange.getMinY()),
+            basegfx::fround(rRange.getMaxX()), basegfx::fround(rRange.getMaxY())));
+
+        CompleteRedraw(&rWin, aRegion);
+    }
 }
 
 

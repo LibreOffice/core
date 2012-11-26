@@ -848,8 +848,7 @@ void ScAutoFmtPreview::Init()
     CalcCellArray( sal_False );
     CalcLineMap();
 
-    TypeId aType(TYPE(ScDocShell));
-    ScDocShell* pDocShell = (ScDocShell*)SfxObjectShell::GetFirst(&aType);
+    ScDocShell* pDocShell = (ScDocShell*)SfxObjectShell::GetFirst(_IsObjectShell< ScDocShell >);
     SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocShell );
     SfxViewShell* p = pFrame->GetViewShell();
     ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell* >( p );

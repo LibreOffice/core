@@ -137,7 +137,7 @@ SbMethod* CreateMacro( SbModule* pModule, const String& rMacroName )
     // update module in library
     ScriptDocument aDocument( ScriptDocument::NoDocument );
     SbxObject* pParent = pModule->GetParent();
-    StarBASIC* pBasic = PTR_CAST(StarBASIC,pParent);
+    StarBASIC* pBasic = dynamic_cast< StarBASIC* >( pParent);
     DBG_ASSERT(pBasic, "BasicIDE::CreateMacro: No Basic found!");
     if ( pBasic )
     {
@@ -252,10 +252,10 @@ bool RemoveDialog( const ScriptDocument& rDocument, const String& rLibName, cons
 StarBASIC* FindBasic( const SbxVariable* pVar )
 {
     const SbxVariable* pSbx = pVar;
-    while ( pSbx && !pSbx->ISA( StarBASIC ) )
+    while ( pSbx && !dynamic_cast< const StarBASIC* >(pSbx) )
         pSbx = pSbx->GetParent();
 
-    DBG_ASSERT( !pSbx || pSbx->ISA( StarBASIC ), "Find Basic: Kein Basic!" );
+    DBG_ASSERT( !pSbx || dynamic_cast< const StarBASIC* >(pSbx), "Find Basic: Kein Basic!" );
     return (StarBASIC*)pSbx;
 }
 
@@ -505,7 +505,7 @@ SfxBindings* GetBindingsPtr()
         while ( pView )
         {
             SfxObjectShell* pObjShell = pView->GetObjectShell();
-            if ( pObjShell && pObjShell->ISA( BasicDocShell ) )
+            if ( pObjShell && dynamic_cast< BasicDocShell* >(pObjShell) )
             {
                 pFrame = pView;
                 break;

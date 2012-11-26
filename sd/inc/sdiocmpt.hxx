@@ -36,7 +36,7 @@ protected:
     sal_uInt32                      nSubRecSiz;
     sal_uInt32                      nSubRecPos;
     sal_uInt16                      nMode;
-    sal_Bool                        bOpen;
+    bool                        bOpen;
 
 protected:
     void Read();

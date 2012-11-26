@@ -349,7 +349,7 @@ void ScTpContentOptions::InitGridOpt()
     {
         SfxObjectShell* pDocSh = SfxObjectShell::Current();
         // hier koennte auch eine andere DocShell kommen!
-        pDocSh = PTR_CAST(ScDocShell, pDocSh);
+        pDocSh = dynamic_cast< ScDocShell* >( pDocSh);
 
         XColorTable* pColorTable = NULL;
 
@@ -495,7 +495,7 @@ SfxTabPage* ScTpLayoutOptions::Create( Window*          pParent,
                                     const SfxItemSet&   rCoreSet )
 {
     ScTpLayoutOptions* pNew = new ScTpLayoutOptions(pParent, rCoreSet);
-    ScDocShell* pDocSh = PTR_CAST(ScDocShell,SfxObjectShell::Current());
+    ScDocShell* pDocSh = dynamic_cast< ScDocShell* >( SfxObjectShell::Current());
 
     if(pDocSh!=NULL)
         pNew->SetDocument(pDocSh->GetDocument());

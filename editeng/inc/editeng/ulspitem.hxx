@@ -48,9 +48,8 @@ class EDITENG_DLLPUBLIC SvxULSpaceItem : public SfxPoolItem
     sal_uInt16 nLower;  //Unterer Rand
     sal_uInt16 nPropUpper, nPropLower;      // relativ oder absolut (=100%)
 public:
-    TYPEINFO();
-
-    SvxULSpaceItem( const sal_uInt16 nId  );
+    POOLITEM_FACTORY()
+    SvxULSpaceItem( const sal_uInt16 nId = 0 );
     SvxULSpaceItem( const sal_uInt16 nUp, const sal_uInt16 nLow,
                     const sal_uInt16 nId  );
     inline SvxULSpaceItem& operator=( const SvxULSpaceItem &rCpy );
@@ -70,8 +69,8 @@ public:
     virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const;
     virtual sal_uInt16           GetVersion( sal_uInt16 nFileVersion ) const;
-    virtual int              ScaleMetrics( long nMult, long nDiv );
-    virtual int              HasMetrics() const;
+    virtual void             ScaleMetrics( long nMult, long nDiv );
+    virtual bool             HasMetrics() const;
 
     inline void SetUpper( const sal_uInt16 nU, const sal_uInt16 nProp = 100 );
     inline void SetLower( const sal_uInt16 nL, const sal_uInt16 nProp = 100 );

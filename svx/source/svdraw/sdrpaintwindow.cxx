@@ -142,7 +142,7 @@ void SdrPaintWindow::impCreateOverlayManager()
         if(OUTDEV_WINDOW == GetOutputDevice().GetOutDevType())
         {
             // decide which OverlayManager to use
-            if(GetPaintView().IsBufferedOverlayAllowed() && mbUseBuffer)
+            if(GetPaintView().IsBufferedOverlayAllowed())
             {
                 // buffered OverlayManager, buffers it's background and refreshes from there
                 // for pure overlay changes (no system redraw). The 3rd parameter specifies
@@ -188,10 +188,9 @@ void SdrPaintWindow::impCreateOverlayManager()
 SdrPaintWindow::SdrPaintWindow(SdrPaintView& rNewPaintView, OutputDevice& rOut)
 :   mrOutputDevice(rOut),
     mrPaintView(rNewPaintView),
-    mpOverlayManager(0L),
-    mpPreRenderDevice(0L),
-    mbTemporaryTarget(false), // #i72889#
-    mbUseBuffer(true)
+    mpOverlayManager(0),
+    mpPreRenderDevice(0),
+    mbTemporaryTarget(false)
 {
 }
 
@@ -275,7 +274,7 @@ void SdrPaintWindow::OutputPreRenderDevice(const Region& rExpandedRegion)
 // #i73602# add flag if buffer shall be used
 void SdrPaintWindow::DrawOverlay(const Region& rRegion)
 {
-    // ## force creation of OverlayManager since the first repaint needs to
+    // force creation of OverlayManager since the first repaint needs to
     // save the background to get a controlled start into overlay mechanism
     impCreateOverlayManager();
 

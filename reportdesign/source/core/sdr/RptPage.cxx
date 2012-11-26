@@ -31,13 +31,11 @@
 namespace rptui
 {
 using namespace ::com::sun::star;
-TYPEINIT1( OReportPage, SdrPage );
-
 //----------------------------------------------------------------------------
 DBG_NAME( rpt_OReportPage )
 OReportPage::OReportPage( OReportModel& _rModel
                          ,const uno::Reference< report::XSection >& _xSection
-                         ,FASTBOOL bMasterPage )
+                         ,bool bMasterPage )
     :SdrPage( _rModel, bMasterPage )
     ,rModel(_rModel)
     ,m_xSection(_xSection)
@@ -48,15 +46,15 @@ OReportPage::OReportPage( OReportModel& _rModel
 
 //----------------------------------------------------------------------------
 
-OReportPage::OReportPage( const OReportPage& rPage )
-    :SdrPage( rPage )
-    ,rModel(rPage.rModel)
-     ,m_xSection(rPage.m_xSection)
-     ,m_bSpecialInsertMode(rPage.m_bSpecialInsertMode)
-     ,m_aTemporaryObjectList(rPage.m_aTemporaryObjectList)
-{
-    DBG_CTOR( rpt_OReportPage,NULL);
-}
+//OReportPage::OReportPage( const OReportPage& rPage )
+//  :SdrPage( rPage )
+//  ,rModel(rPage.rModel)
+//     ,m_xSection(rPage.m_xSection)
+//     ,m_bSpecialInsertMode(rPage.m_bSpecialInsertMode)
+//     ,m_aTemporaryObjectList(rPage.m_aTemporaryObjectList)
+//{
+//  DBG_CTOR( rpt_OReportPage,NULL);
+//}
 
 //----------------------------------------------------------------------------
 
@@ -65,12 +63,38 @@ OReportPage::~OReportPage()
     DBG_DTOR( rpt_OReportPage,NULL);
 }
 
-//----------------------------------------------------------------------------
-
-SdrPage* OReportPage::Clone() const
+void OReportPage::copyDataFromSdrPage(const SdrPage& rSource)
 {
-    DBG_CHKTHIS( rpt_OReportPage,NULL);
-    return new OReportPage( *this );
+    if(this != &rSource)
+    {
+        const OReportPage* pSource = dynamic_cast< const OReportPage* >(&rSource);
+
+        if(pSource)
+{
+            // call parent
+            SdrPage::copyDataFromSdrPage(rSource);
+
+            // no local data to copy
+        }
+        else
+        {
+            OSL_ENSURE(false, "copyDataFromSdrObject with ObjectType of Source different from Target (!)");
+        }
+    }
+}
+
+SdrPage* OReportPage::CloneSdrPage(SdrModel* pTargetModel) const
+{
+    OReportModel* pOReportModel = static_cast< OReportModel* >(pTargetModel ? pTargetModel : &getSdrModelFromSdrPage());
+    OSL_ENSURE(dynamic_cast< OReportModel* >(pOReportModel), "Wrong SdrModel type in OReportPage cloner (!)");
+    OReportPage* pClone = new OReportPage(
+        *pOReportModel,
+        getSection(),
+        IsMasterPage());
+    OSL_ENSURE(pClone, "CloneSdrPage error (!)");
+    pClone->copyDataFromSdrPage(*this);
+
+    return pClone;
 }
 
 //----------------------------------------------------------------------------
@@ -101,13 +125,13 @@ void OReportPage::removeSdrObject(const uno::Reference< report::XReportComponent
         OSL_ENSURE(pBase,"Why is this not a OObjectBase?");
         if ( pBase )
             pBase->EndListening();
-        /*delete */RemoveObject(nPos);
+        /*delete */RemoveObjectFromSdrObjList(nPos);
     }
 }
 // -----------------------------------------------------------------------------
-SdrObject* OReportPage::RemoveObject(sal_uLong nObjNum)
+SdrObject* OReportPage::RemoveObjectFromSdrObjList(sal_uInt32 nObjNum)
 {
-    SdrObject* pObj = SdrPage::RemoveObject(nObjNum);
+    SdrObject* pObj = SdrPage::RemoveObjectFromSdrObjList(nObjNum);
     if (getSpecialMode())
     {
         return pObj;
@@ -117,13 +141,15 @@ SdrObject* OReportPage::RemoveObject(sal_uLong nObjNum)
     reportdesign::OSection* pSection = reportdesign::OSection::getImplementation(m_xSection);
     uno::Reference< drawing::XShape> xShape(pObj->getUnoShape(),uno::UNO_QUERY);
     pSection->notifyElementRemoved(xShape);
-    if (pObj->ISA(OUnoObject))
-    {
         OUnoObject* pUnoObj = dynamic_cast<OUnoObject*>(pObj);
+
+    if (pUnoObj)
+    {
         uno::Reference< container::XChild> xChild(pUnoObj->GetUnoControlModel(),uno::UNO_QUERY);
         if ( xChild.is() )
             xChild->setParent(NULL);
     }
+
     return pObj;
 }
 //----------------------------------------------------------------------------
@@ -178,7 +204,7 @@ void OReportPage::removeTempObject(SdrObject *_pToRemoveObj)
             SdrObject *aObj = GetObj(i);
             if (aObj && aObj == _pToRemoveObj)
             {
-                SdrObject* pObject = RemoveObject(i);
+                SdrObject* pObject = RemoveObjectFromSdrObjList(i);
                 (void)pObject;
                 break;
                 // delete pObject;
@@ -190,8 +216,8 @@ void OReportPage::removeTempObject(SdrObject *_pToRemoveObj)
 void OReportPage::resetSpecialMode()
 {
     const sal_Bool bChanged = rModel.IsChanged();
-    ::std::vector<SdrObject*>::iterator aIter = m_aTemporaryObjectList.begin();
-    ::std::vector<SdrObject*>::iterator aEnd = m_aTemporaryObjectList.end();
+    SdrObjectVector::iterator aIter = m_aTemporaryObjectList.begin();
+    SdrObjectVector::iterator aEnd = m_aTemporaryObjectList.end();
 
     for (; aIter != aEnd; ++aIter)
     {
@@ -203,14 +229,14 @@ void OReportPage::resetSpecialMode()
     m_bSpecialInsertMode = false;
 }
 // -----------------------------------------------------------------------------
-void OReportPage::NbcInsertObject(SdrObject* pObj, sal_uLong nPos, const SdrInsertReason* pReason)
+void OReportPage::InsertObjectToSdrObjList(SdrObject& rObj, sal_uInt32 nPos)
 {
-    SdrPage::NbcInsertObject(pObj, nPos, pReason);
+    SdrPage::InsertObjectToSdrObjList(rObj, nPos);
 
-    OUnoObject* pUnoObj = dynamic_cast< OUnoObject* >( pObj );
+    OUnoObject* pUnoObj = dynamic_cast< OUnoObject* >( &rObj );
     if (getSpecialMode())
     {
-        m_aTemporaryObjectList.push_back(pObj);
+        m_aTemporaryObjectList.push_back(&rObj);
         return;
     }
 
@@ -224,7 +250,7 @@ void OReportPage::NbcInsertObject(SdrObject* pObj, sal_uLong nPos, const SdrInse
 
     // this code is evil, but what else shall I do
     reportdesign::OSection* pSection = reportdesign::OSection::getImplementation(m_xSection);
-    uno::Reference< drawing::XShape> xShape(pObj->getUnoShape(),uno::UNO_QUERY);
+    uno::Reference< drawing::XShape> xShape(rObj.getUnoShape(),uno::UNO_QUERY);
     pSection->notifyElementAdded(xShape);
 
     //// check if we are a shape
@@ -237,8 +263,8 @@ void OReportPage::NbcInsertObject(SdrObject* pObj, sal_uLong nPos, const SdrInse
 
     // now that the shape is inserted into its structures, we can allow the OObjectBase
     // to release the reference to it
-    OObjectBase* pObjectBase = dynamic_cast< OObjectBase* >( pObj );
-    OSL_ENSURE( pObjectBase, "OReportPage::NbcInsertObject: what is being inserted here?" );
+    OObjectBase* pObjectBase = dynamic_cast< OObjectBase* >( &rObj );
+    OSL_ENSURE( pObjectBase, "OReportPage::InsertObjectToSdrObjList: what is being inserted here?" );
     if ( pObjectBase )
         pObjectBase->releaseUnoShape();
 }

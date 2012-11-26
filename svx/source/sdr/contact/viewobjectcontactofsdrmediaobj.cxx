@@ -135,7 +135,7 @@ void ViewObjectContactOfSdrMediaObj::updateMediaItem( ::avmedia::MediaItem& rIte
         }
         else
         {
-            basegfx::B2DRange aViewRange(getObjectRange());
+            basegfx::B2DRange aViewRange(getViewDependentRange());
             aViewRange.transform(GetObjectContact().getViewInformation2D().getViewTransformation());
 
             const Rectangle aViewRectangle(

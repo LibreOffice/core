@@ -72,7 +72,7 @@ protected:
     virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
 
 private:
-    /** This flag is set to <TRUE/> when the destructor is called to
+    /** This flag is set to <true/> when the destructor is called to
         indicate that further calls made to it must not call outside.
     */
     bool mbInDestructor;

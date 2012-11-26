@@ -69,6 +69,7 @@ using namespace ::com::sun::star;
 #include <svl/PasswordHelper.hxx>
 #include <svl/documentlockfile.hxx>
 #include <svl/sharecontrolfile.hxx>
+#include <svx/svdlegacy.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include "docuno.hxx"
@@ -579,7 +580,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 if(pDoc!=NULL)
                 {
                     // get argument (recorded macro)
-                    SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, FID_CHG_RECORD, sal_False );
+                    SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, FID_CHG_RECORD );
                     sal_Bool bDo = sal_True;
 
                     // xmlsec05/06:
@@ -688,25 +689,25 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 SfxMedium* pMed = NULL;
                 if ( pReqArgs &&
                      pReqArgs->GetItemState( SID_FILE_NAME, sal_True, &pItem ) == SFX_ITEM_SET &&
-                     pItem->ISA(SfxStringItem) )
+                     dynamic_cast< const SfxStringItem* >(pItem) )
                 {
                     String aFileName = ((const SfxStringItem*)pItem)->GetValue();
 
                     String aFilterName;
                     if ( pReqArgs->GetItemState( SID_FILTER_NAME, sal_True, &pItem ) == SFX_ITEM_SET &&
-                         pItem->ISA(SfxStringItem) )
+                         dynamic_cast< const SfxStringItem* >(pItem) )
                     {
                         aFilterName = ((const SfxStringItem*)pItem)->GetValue();
                     }
                     String aOptions;
                     if ( pReqArgs->GetItemState( SID_FILE_FILTEROPTIONS, sal_True, &pItem ) == SFX_ITEM_SET &&
-                         pItem->ISA(SfxStringItem) )
+                         dynamic_cast< const SfxStringItem* >(pItem) )
                     {
                         aOptions = ((const SfxStringItem*)pItem)->GetValue();
                     }
                     short nVersion = 0;
                     if ( pReqArgs->GetItemState( SID_VERSION, sal_True, &pItem ) == SFX_ITEM_SET &&
-                         pItem->ISA(SfxInt16Item) )
+                         dynamic_cast< const SfxInt16Item* >(pItem) )
                     {
                         nVersion = ((const SfxInt16Item*)pItem)->GetValue();
                     }
@@ -824,7 +825,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 const SfxPoolItem* pItem;
                 if ( pReqArgs->GetItemState( nSlot, sal_True, &pItem ) == SFX_ITEM_SET )
                 {
-                    if ( pItem->ISA(SfxStringItem) )
+                    if ( dynamic_cast< const SfxStringItem* >(pItem) )
                     {
                         String aName = ((const SfxStringItem*)pItem)->GetValue();
                         SCTAB nTab;
@@ -852,7 +853,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 const SfxPoolItem* pItem;
                 if ( pReqArgs->GetItemState( nSlot, sal_True, &pItem ) == SFX_ITEM_SET )
                 {
-                    if ( pItem->ISA(SfxStringItem) )
+                    if ( dynamic_cast< const SfxStringItem* >(pItem) )
                     {
                         String aName = ((const SfxStringItem*)pItem)->GetValue();
                         SCTAB nTab;
@@ -904,7 +905,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
             const SfxPoolItem* pItem;
             if ( pReqArgs->GetItemState( nSlot, sal_True, &pItem ) == SFX_ITEM_SET )
             {
-                if ( pItem->ISA(SfxUInt16Item) )
+                if ( dynamic_cast< const SfxUInt16Item* >(pItem) )
                 {
                     sal_uInt16 nY2k = ((SfxUInt16Item*)pItem)->GetValue();
                     // immer an den DocOptions setzen, damit das auch fuer SO50
@@ -1316,9 +1317,9 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
 
             String aNewName = pStyle->GetName();
             String aOldName = aNewName;
-            sal_Bool bExtended = rHint.ISA(SfxStyleSheetHintExtended);      // Name geaendert?
+            const bool bExtended = dynamic_cast< const SfxStyleSheetHintExtended* >(&rHint);        // Name geaendert?
             if (bExtended)
-                aOldName = ((SfxStyleSheetHintExtended&)rHint).GetOldName();
+                aOldName = ((const SfxStyleSheetHintExtended&)rHint).GetOldName();
 
             if ( aNewName != aOldName )
                 aDocument.RenamePageStyleInUse( aOldName, aNewName );
@@ -1354,9 +1355,9 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
         {
             String aNewName = pStyle->GetName();
             String aOldName = aNewName;
-            sal_Bool bExtended = rHint.ISA(SfxStyleSheetHintExtended);
+            const bool bExtended = dynamic_cast< const SfxStyleSheetHintExtended* >(&rHint);
             if (bExtended)
-                aOldName = ((SfxStyleSheetHintExtended&)rHint).GetOldName();
+                aOldName = ((const SfxStyleSheetHintExtended&)rHint).GetOldName();
             if ( aNewName != aOldName )
             {
                 ScConditionalFormatList* pList = aDocument.GetCondFormList();
@@ -2137,7 +2138,7 @@ long __EXPORT ScDocShell::DdeSetData( const String& rItem,
 ScViewData* ScDocShell::GetViewData()
 {
     SfxViewShell* pCur = SfxViewShell::Current();
-    ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,pCur);
+    ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell* >( pCur);
     return pViewSh ? pViewSh->GetViewData() : NULL;
 }
 
@@ -2165,7 +2166,7 @@ ScTabViewShell* ScDocShell::GetBestViewShell( sal_Bool bOnlyVisible )
         if( pFrame )
         {
             SfxViewShell* p = pFrame->GetViewShell();
-            pViewSh = PTR_CAST(ScTabViewShell,p);
+            pViewSh = dynamic_cast< ScTabViewShell* >( p);
         }
     }
     return pViewSh;
@@ -2192,7 +2193,7 @@ ScDocShell* ScDocShell::GetShellByNum( sal_uInt16 nDocNo )      // static
 
     while ( pShell && !pFound )
     {
-        if ( pShell->Type() == TYPE(ScDocShell) )
+        if ( typeid(*pShell) == typeid(ScDocShell) )
         {
             if ( nShellCnt == nDocNo )
                 pFound = (ScDocShell*) pShell;
@@ -2233,7 +2234,7 @@ IMPL_LINK( ScDocShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
             SfxItemSet* pSet = pMed->GetItemSet();
             if ( pSet &&
                     pSet->GetItemState( SID_VERSION, sal_True, &pItem ) == SFX_ITEM_SET &&
-                    pItem->ISA( SfxInt16Item ) )
+                    dynamic_cast< const SfxInt16Item* >(pItem) )
             {
                 pImpl->pRequest->AppendItem( *pItem );
             }
@@ -2297,7 +2298,7 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
 
         if ( GetMedium() )
         {
-            SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD, sal_False);
+            SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD);
             if ( pPasswordItem && pPasswordItem->GetValue().Len() )
             {
                 aArgs.realloc( 2 );

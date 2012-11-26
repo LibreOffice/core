@@ -35,15 +35,12 @@
 class SotObjectFactory : public SotFactory
 {
 public:
-         TYPEINFO();
         SotObjectFactory( const SvGlobalName & rName,
                               const String & rClassName,
                               CreateInstanceType pCreateFuncP )
             : SotFactory( rName, rClassName, pCreateFuncP )
         {}
 };
-TYPEINIT1(SotObjectFactory,SotFactory);
-
 
 SO2_IMPL_BASIC_CLASS_DLL(SotObject,SotObjectFactory,
                     SvGlobalName( 0xf44b7830, 0xf83c, 0x11d0,

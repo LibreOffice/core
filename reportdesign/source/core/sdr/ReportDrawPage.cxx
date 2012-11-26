@@ -37,6 +37,7 @@
 
 #include <tools/diagnose_ex.h>
 #include <svx/unoshape.hxx>
+#include <svx/svdlegacy.hxx>
 
 namespace reportdesign
 {
@@ -54,7 +55,7 @@ SdrObject* OReportDrawPage::_CreateSdrObject( const uno::Reference< drawing::XSh
 {
     uno::Reference< report::XReportComponent> xReportComponent(xDescr,uno::UNO_QUERY);
     if ( xReportComponent.is() )
-        return OObjectBase::createObject(xReportComponent);
+        return OObjectBase::createObject(&GetSdrPage()->getSdrModelFromSdrPage(), xReportComponent);
     return SvxDrawPage::_CreateSdrObject( xDescr );
 }
 
@@ -75,10 +76,10 @@ uno::Reference< drawing::XShape >  OReportDrawPage::_CreateShape( SdrObject *pOb
         bool bChangeOrientation = false;
         ::rtl::OUString sServiceName = pBaseObj->getServiceName();
         OSL_ENSURE(sServiceName.getLength(),"No Service Name given!");
+        OUnoObject* pUnoObj = dynamic_cast< OUnoObject* >(pObj);
 
-        if ( pObj->ISA(OUnoObject) )
+        if ( pUnoObj )
         {
-            OUnoObject* pUnoObj = dynamic_cast<OUnoObject*>(pObj);
             if ( pUnoObj->GetObjIdentifier() == OBJ_DLG_FIXEDTEXT )
             {
                 uno::Reference<beans::XPropertySet> xControlModel(pUnoObj->GetUnoControlModel(),uno::UNO_QUERY);
@@ -87,26 +88,30 @@ uno::Reference< drawing::XShape >  OReportDrawPage::_CreateShape( SdrObject *pOb
             }
             else
                 bChangeOrientation = pUnoObj->GetObjIdentifier() == OBJ_DLG_HFIXEDLINE;
+
             SvxShapeControl* pShape = new SvxShapeControl( pObj );
             xShape.set(*pShape,uno::UNO_QUERY);
-            pShape->setShapeKind(pObj->GetObjIdentifier());
+            pShape->setSvxShapeKind(SdrObjectCreatorInventorToSvxShapeKind(pObj->GetObjIdentifier(), pObj->GetObjInventor()));
         }
-        else if ( pObj->ISA(OCustomShape) )
+        else if ( dynamic_cast< OCustomShape* >(pObj) )
         {
             SvxCustomShape* pShape = new SvxCustomShape( pObj );
             uno::Reference < drawing::XEnhancedCustomShapeDefaulter > xShape2 = pShape;
             xShape.set(xShape2,uno::UNO_QUERY);
-            pShape->setShapeKind(pObj->GetObjIdentifier());
+            pShape->setSvxShapeKind(SdrObjectCreatorInventorToSvxShapeKind(pObj->GetObjIdentifier(), pObj->GetObjInventor()));
         }
-        else if ( pObj->ISA(SdrOle2Obj) )
+        else
         {
             SdrOle2Obj* pOle2Obj = dynamic_cast<SdrOle2Obj*>(pObj);
+
+            if ( pOle2Obj )
+            {
             if ( !pOle2Obj->GetObjRef().is() )
             {
                 sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
                 uno::Reference < embed::XEmbeddedObject > xObj;
                 ::rtl::OUString sName;
-                xObj = pObj->GetModel()->GetPersist()->getEmbeddedObjectContainer().CreateEmbeddedObject(
+                    xObj = pObj->getSdrModelFromSdrObject().GetPersist()->getEmbeddedObjectContainer().CreateEmbeddedObject(
                     ::comphelper::MimeConfigurationHelper::GetSequenceClassIDRepresentation(
                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("80243D39-6741-46C5-926E-069164FF87BB"))), sName );
                 OSL_ENSURE(xObj.is(),"Embedded Object could not be created!");
@@ -120,7 +125,7 @@ uno::Reference< drawing::XShape >  OReportDrawPage::_CreateShape( SdrObject *pOb
                 pOle2Obj->SetPersistName(sName);
                 pOle2Obj->SetName(sName);
                 pOle2Obj->SetAspect(nAspect);
-                Rectangle aRect = pOle2Obj->GetLogicRect();
+                    const Rectangle aRect(sdr::legacy::GetLogicRect(*pOle2Obj));
 
                 Size aTmp = aRect.GetSize();
                 awt::Size aSz( aTmp.Width(), aTmp.Height() );
@@ -128,8 +133,9 @@ uno::Reference< drawing::XShape >  OReportDrawPage::_CreateShape( SdrObject *pOb
             }
             SvxOle2Shape* pShape = new SvxOle2Shape( pObj );
             xShape.set(*pShape,uno::UNO_QUERY);
-            pShape->setShapeKind(pObj->GetObjIdentifier());
+            pShape->setSvxShapeKind(SdrObjectCreatorInventorToSvxShapeKind(pObj->GetObjIdentifier(), pObj->GetObjInventor()));
             //xShape = new SvxOle2Shape( pOle2Obj );
+        }
         }
 
         if ( !xShape.is() )
@@ -137,8 +143,8 @@ uno::Reference< drawing::XShape >  OReportDrawPage::_CreateShape( SdrObject *pOb
 
         try
         {
-            OReportModel* pRptModel = static_cast<OReportModel*>(pObj->GetModel());
-            xRet.set( pRptModel->createShape(sServiceName,xShape,bChangeOrientation ? 0 : 1), uno::UNO_QUERY_THROW );
+            OReportModel& rRptModel = static_cast< OReportModel& >(pObj->getSdrModelFromSdrObject());
+            xRet.set( rRptModel.createShape(sServiceName,xShape,bChangeOrientation ? 0 : 1), uno::UNO_QUERY_THROW );
         }
         catch( const uno::Exception& )
         {

@@ -42,9 +42,8 @@
 class EDITENG_DLLPUBLIC SvxPaperBinItem : public SfxByteItem
 {
 public:
-    TYPEINFO();
-
-    inline SvxPaperBinItem( const sal_uInt16 nId ,
+    POOLITEM_FACTORY()
+    inline SvxPaperBinItem( const sal_uInt16 nId = 0,
                             const sal_uInt8 nTray = PAPERBIN_PRINTER_SETTINGS );
     inline SvxPaperBinItem &operator=( const SvxPaperBinItem &rCpy );
 

@@ -39,8 +39,6 @@ class XMLStyleOASISTContext : public XMLPersElemContentTContext
 
     ::rtl::OUString m_aStyleFamily;
 public:
-    TYPEINFO();
-
     XMLStyleOASISTContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName,
                               sal_Bool bPersistent=sal_False );

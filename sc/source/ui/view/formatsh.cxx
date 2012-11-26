@@ -136,8 +136,6 @@ SvxCellVerJustify lclConvertSlotToVAlign( sal_uInt16 nSlot )
 
 } // namespace
 
-TYPEINIT1( ScFormatShell, SfxShell );
-
 SFX_IMPL_INTERFACE(ScFormatShell, SfxShell, ScResId(SCSTR_FORMATSHELL) )
 {
     SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD |
@@ -351,8 +349,8 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
             case SID_STYLE_APPLY:
             {
-                SFX_REQUEST_ARG( rReq, pNameItem, SfxStringItem, SID_APPLY_STYLE, sal_False );
-                SFX_REQUEST_ARG( rReq, pFamilyItem, SfxStringItem, SID_STYLE_FAMILYNAME, sal_False );
+                SFX_REQUEST_ARG( rReq, pNameItem, SfxStringItem, SID_APPLY_STYLE );
+                SFX_REQUEST_ARG( rReq, pFamilyItem, SfxStringItem, SID_STYLE_FAMILYNAME );
                 if ( pFamilyItem && pNameItem )
                 {
                     com::sun::star::uno::Reference< com::sun::star::style::XStyleFamiliesSupplier > xModel(pDocSh->GetModel(), com::sun::star::uno::UNO_QUERY);
@@ -397,7 +395,7 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                     if ( SFX_ITEM_SET ==
                          pArgs->GetItemState( nSlotId, sal_True, &pItem ) )
                     {
-                        const SfxStringItem* pStrItem = PTR_CAST(SfxStringItem,pItem);
+                        const SfxStringItem* pStrItem = dynamic_cast< const SfxStringItem* >( pItem);
                         if ( pStrItem )
                         {
                             aStyleName  = pStrItem->GetValue();
@@ -1220,19 +1218,23 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                     {
                         const SfxPoolItem& rUnderline = pSet->Get( ATTR_FONT_UNDERLINE );
 
-                        if( rUnderline.ISA(SvxUnderlineItem) )
+                        if( dynamic_cast< const SvxUnderlineItem* >(&rUnderline) )
                         {
                             pTabViewShell->ApplyAttr( rUnderline );
                             pNewSet->Put( rUnderline,rUnderline.Which() );
                         }
-                        else if ( rUnderline.ISA(SvxTextLineItem) )
+                        else
                         {
-                            // #i106580# also allow SvxTextLineItem (base class of SvxUnderlineItem)
-                            const SvxTextLineItem& rTextLineItem = static_cast<const SvxTextLineItem&>(rUnderline);
-                            SvxUnderlineItem aNewItem( rTextLineItem.GetLineStyle(), rTextLineItem.Which() );
-                            aNewItem.SetColor( rTextLineItem.GetColor() );
-                            pTabViewShell->ApplyAttr( aNewItem );
-                            pNewSet->Put( aNewItem, aNewItem.Which() );
+                            const SvxTextLineItem* pSvxTextLineItem = dynamic_cast< const SvxTextLineItem* >(&rUnderline);
+
+                            if ( pSvxTextLineItem )
+                            {
+                                // #i106580# also allow SvxTextLineItem (base class of SvxUnderlineItem)
+                                SvxUnderlineItem aNewItem( pSvxTextLineItem->GetLineStyle(), pSvxTextLineItem->Which() );
+                                aNewItem.SetColor( pSvxTextLineItem->GetColor() );
+                                pTabViewShell->ApplyAttr( aNewItem );
+                                pNewSet->Put( aNewItem, aNewItem.Which() );
+                            }
                         }
                     }
                     else

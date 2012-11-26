@@ -66,8 +66,6 @@
 using namespace com::sun::star;
 
 
-TYPEINIT2(SwFmtCharFmt,SfxPoolItem,SwClient);
-
 // erfrage die Attribut-Beschreibung
 void SwAttrSet::GetPresentation(
         SfxItemPresentation ePres,
@@ -1181,6 +1179,11 @@ SfxItemPresentation SwContrastGrf::GetPresentation(
         break;
     }
     return ePres;
+}
+
+SfxPoolItem* SwChannelGrf::Clone(SfxItemPool* /*pPool*/) const
+{
+    return new SwChannelGrf( *this );
 }
 
 SfxItemPresentation SwChannelGrf::GetPresentation(

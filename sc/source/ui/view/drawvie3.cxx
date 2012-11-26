@@ -48,8 +48,8 @@ sal_uInt16 ScIMapChildWindowId();
 
 // STATIC DATA -----------------------------------------------------------
 
-ScDrawView::ScDrawView( OutputDevice* pOut, ScViewData* pData ) :
-    FmFormView( pData->GetDocument()->GetDrawLayer(), pOut ),
+ScDrawView::ScDrawView( OutputDevice* pOut, ScViewData* pData )
+:   FmFormView( *pData->GetDocument()->GetDrawLayer(), pOut ),
     pViewData( pData ),
     pDev( pOut ),
     pDoc( pData->GetDocument() ),
@@ -57,7 +57,6 @@ ScDrawView::ScDrawView( OutputDevice* pOut, ScViewData* pData ) :
     pDropMarker( NULL ),
     pDropMarkObj( NULL ),
     bInConstruct( sal_True )
-    //HMHbDisableHdl( sal_False )
 {
     // #i73602# Use default from the configuration
     SetBufferedOverlayAllowed(getOptionsDrawinglayer().IsOverlayBuffer_Calc());
@@ -72,15 +71,13 @@ ScDrawView::ScDrawView( OutputDevice* pOut, ScViewData* pData ) :
 
 void ScDrawView::SetAnchor( ScAnchorType eType )
 {
-    SdrObject* pObj = NULL;
-    if( AreObjectsMarked() )
+    const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
+
+    if( aSelection.size() )
     {
-        const SdrMarkList* pMark = &GetMarkedObjectList();
-        sal_uLong nCount = pMark->GetMarkCount();
-        for( sal_uLong i=0; i<nCount; i++ )
+        for( sal_uInt32 i(0); i < aSelection.size(); i++ )
         {
-            pObj = pMark->GetMark(i)->GetMarkedSdrObj();
-            ScDrawLayer::SetAnchor( pObj, eType );
+            ScDrawLayer::SetAnchor( aSelection[i], eType );
         }
 
         if ( pViewData )
@@ -92,21 +89,20 @@ ScAnchorType ScDrawView::GetAnchor() const
 {
     sal_Bool bPage = sal_False;
     sal_Bool bCell = sal_False;
-    const SdrObject* pObj = NULL;
-    if( AreObjectsMarked() )
+
+    if( areSdrObjectsSelected() )
     {
-        const SdrMarkList* pMark = &GetMarkedObjectList();
-        sal_uLong nCount = pMark->GetMarkCount();
-        Point p0;
-        for( sal_uLong i=0; i<nCount; i++ )
+        const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
+
+        for( sal_uInt32 i(0); i < aSelection.size(); i++ )
         {
-            pObj = pMark->GetMark(i)->GetMarkedSdrObj();
-            if( ScDrawLayer::GetAnchor( pObj ) == SCA_CELL )
+            if( ScDrawLayer::GetAnchor( aSelection[i] ) == SCA_CELL )
                 bCell =sal_True;
             else
                 bPage = sal_True;
         }
     }
+
     if( bPage && !bCell )
         return SCA_PAGE;
     if( !bPage && bCell )
@@ -116,9 +112,11 @@ ScAnchorType ScDrawView::GetAnchor() const
 
 void __EXPORT ScDrawView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if (rHint.ISA(ScTabDeletedHint))                        // Tabelle geloescht
+    const ScTabDeletedHint* pScTabDeletedHint = dynamic_cast< const ScTabDeletedHint* >(&rHint);
+
+    if (pScTabDeletedHint)                      // Tabelle geloescht
     {
-        SCTAB nDelTab = ((ScTabDeletedHint&)rHint).GetTab();
+        SCTAB nDelTab = const_cast< ScTabDeletedHint* >(pScTabDeletedHint)->GetTab();
         if (ValidTab(nDelTab))
         {
             // used to be: HidePagePgNum(nDelTab) - hide only if the deleted sheet is shown here
@@ -126,49 +124,64 @@ void __EXPORT ScDrawView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 HideSdrPage();
         }
     }
-    else if (rHint.ISA(ScTabSizeChangedHint))               // Groesse geaendert
-    {
-        if ( nTab == ((ScTabSizeChangedHint&)rHint).GetTab() )
-            UpdateWorkArea();
-    }
     else
-        FmFormView::Notify( rBC,rHint );
+    {
+        const ScTabSizeChangedHint* pScTabSizeChangedHint = dynamic_cast< const ScTabSizeChangedHint* >(&rHint);
+
+        if (pScTabSizeChangedHint)              // Groesse geaendert
+        {
+            if ( nTab == const_cast< ScTabSizeChangedHint* >(pScTabSizeChangedHint)->GetTab() )
+            UpdateWorkArea();
+        }
+        else
+        {
+            FmFormView::Notify( rBC,rHint );
+        }
+    }
 }
 
 void ScDrawView::UpdateIMap( SdrObject* pObj )
 {
     if ( pViewData &&
          pViewData->GetViewShell()->GetViewFrame()->HasChildWindow( ScIMapChildWindowId() ) &&
-         pObj && ( pObj->ISA(SdrGrafObj) || pObj->ISA(SdrOle2Obj) ) )
+         pObj )
     {
-        Graphic     aGraphic;
-        TargetList  aTargetList;
-        ScIMapInfo* pIMapInfo = ScDrawLayer::GetIMapInfo( pObj );
-        const ImageMap* pImageMap = NULL;
-        if ( pIMapInfo )
-            pImageMap = &pIMapInfo->GetImageMap();
+        SdrGrafObj* pSdrGrafObj = dynamic_cast< SdrGrafObj* >(pObj);
+        SdrOle2Obj* pSdrOle2Obj = dynamic_cast< SdrOle2Obj* >(pObj);
 
-        // Target-Liste besorgen
-        pViewData->GetViewShell()->GetViewFrame()->GetTargetList( aTargetList );
-
-        // Grafik vom Objekt besorgen
-        if ( pObj->ISA( SdrGrafObj ) )
-            aGraphic = ( (SdrGrafObj*) pObj )->GetGraphic();
-        else
+        if( pSdrGrafObj || pSdrOle2Obj )
         {
-            Graphic* pGraphic = ((const SdrOle2Obj*) pObj )->GetGraphic();
-            if ( pGraphic )
-                aGraphic = *pGraphic;
-        }
+            Graphic     aGraphic;
+            TargetList  aTargetList;
+            ScIMapInfo* pIMapInfo = ScDrawLayer::GetIMapInfo( pObj );
+            const ImageMap* pImageMap = NULL;
+            if ( pIMapInfo )
+                pImageMap = &pIMapInfo->GetImageMap();
 
-        ScIMapDlgSet( aGraphic, pImageMap, &aTargetList, pObj );    // aus imapwrap
+            // Target-Liste besorgen
+            pViewData->GetViewShell()->GetViewFrame()->GetTargetList( aTargetList );
 
-        // TargetListe kann von uns wieder geloescht werden
-        String* pEntry = aTargetList.First();
-        while( pEntry )
-        {
-            delete pEntry;
-            pEntry = aTargetList.Next();
+            // Grafik vom Objekt besorgen
+            if ( pSdrGrafObj )
+            {
+                aGraphic = pSdrGrafObj->GetGraphic();
+            }
+            else
+            {
+                    Graphic* pGraphic = pSdrOle2Obj->GetGraphic();
+                if ( pGraphic )
+                    aGraphic = *pGraphic;
+            }
+
+            ScIMapDlgSet( aGraphic, pImageMap, &aTargetList, pObj );    // aus imapwrap
+
+            // TargetListe kann von uns wieder geloescht werden
+            String* pEntry = aTargetList.First();
+            while( pEntry )
+            {
+                delete pEntry;
+                pEntry = aTargetList.Next();
+            }
         }
     }
 }

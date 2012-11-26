@@ -47,8 +47,6 @@
 
 namespace sd {
 
-TYPEINIT1( FuSnapLine, FuPoor );
-
 /*************************************************************************
 |*
 |* Konstruktor
@@ -71,15 +69,14 @@ FunctionReference FuSnapLine::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::
 void FuSnapLine::DoExecute( SfxRequest& rReq )
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
-    SdrPageView* pPV = 0;
-    sal_uInt16  nHelpLine = 0;
-    sal_Bool    bCreateNew = sal_True;
+    sal_uInt32 nHelpLine(0);
+    bool    bCreateNew = true;
 
     // Get index of snap line or snap point from the request.
-    SFX_REQUEST_ARG (rReq, pHelpLineIndex, SfxUInt32Item, ID_VAL_INDEX, sal_False);
+    SFX_REQUEST_ARG (rReq, pHelpLineIndex, SfxUInt32Item, ID_VAL_INDEX );
     if (pHelpLineIndex != NULL)
     {
-        nHelpLine = static_cast<sal_uInt16>(pHelpLineIndex->GetValue());
+        nHelpLine = pHelpLineIndex->GetValue();
         // Reset the argument pointer to trigger the display of the dialog.
         pArgs = NULL;
     }
@@ -88,71 +85,75 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
     {
         SfxItemSet aNewAttr(mpViewShell->GetPool(), ATTR_SNAPLINE_START, ATTR_SNAPLINE_END);
         bool bLineExist (false);
-        pPV = mpView->GetSdrPageView();
-        Point aLinePos;
+        basegfx::B2DPoint aLinePos;
 
-        if (pHelpLineIndex == NULL)
+        if(mpView->GetSdrPageView())
         {
-            // The index of the snap line is not provided as argument to the
-            // request.  Determine it from the mouse position.
-
-            aLinePos = static_cast<DrawViewShell*>(mpViewShell)->GetMousePos();
-            static_cast<DrawViewShell*>(mpViewShell)->SetMousePosFreezed( sal_False );
-
-
-            if ( aLinePos.X() >= 0 )
+            if (pHelpLineIndex == NULL)
             {
-                aLinePos = mpWindow->PixelToLogic(aLinePos);
-                sal_uInt16 nHitLog = (sal_uInt16) mpWindow->PixelToLogic(Size(HITPIX,0)).Width();
-                bLineExist = mpView->PickHelpLine(aLinePos, nHitLog, *mpWindow, nHelpLine, pPV);
-                if ( bLineExist )
-                    aLinePos = (pPV->GetHelpLines())[nHelpLine].GetPos();
-                else
-                    pPV = mpView->GetSdrPageView();
+                // The index of the snap line is not provided as argument to the
+                // request.  Determine it from the mouse position.
+                static_cast<DrawViewShell*>(mpViewShell)->SetMousePosFreezed( false );
+                aLinePos = static_cast<DrawViewShell*>(mpViewShell)->GetMousePos();
 
-                pPV->LogicToPagePos(aLinePos);
+                if(basegfx::fTools::moreOrEqual(aLinePos.getX(), 0.0))
+                {
+                    aLinePos = mpWindow->GetInverseViewTransformation() * aLinePos;
+                    const double fHitLog(basegfx::B2DVector(mpWindow->GetInverseViewTransformation() * basegfx::B2DVector(HITPIX, 0.0)).getLength());
+                    bLineExist = mpView->PickHelpLine(aLinePos, fHitLog, nHelpLine);
+
+                    if(bLineExist)
+                    {
+                        aLinePos = (mpView->GetSdrPageView()->GetHelpLines())[nHelpLine].GetPos();
+                        aLinePos -= mpView->GetSdrPageView()->GetPageOrigin();
+                    }
+                }
+                else
+                {
+                    aLinePos = basegfx::B2DPoint(0.0, 0.0);
+                }
             }
             else
-                aLinePos = Point(0,0);
+            {
+                aLinePos = (mpView->GetSdrPageView()->GetHelpLines())[nHelpLine].GetPos();
+                aLinePos -= mpView->GetSdrPageView()->GetPageOrigin();
+                bLineExist = true;
+            }
         }
-        else
-        {
-            OSL_ASSERT(pPV!=NULL);
-            aLinePos = (pPV->GetHelpLines())[nHelpLine].GetPos();
-            pPV->LogicToPagePos(aLinePos);
-            bLineExist = true;
-        }
-        aNewAttr.Put(SfxUInt32Item(ATTR_SNAPLINE_X, aLinePos.X()));
-        aNewAttr.Put(SfxUInt32Item(ATTR_SNAPLINE_Y, aLinePos.Y()));
+
+        aNewAttr.Put(SfxUInt32Item(ATTR_SNAPLINE_X, basegfx::fround(aLinePos.getX())));
+        aNewAttr.Put(SfxUInt32Item(ATTR_SNAPLINE_Y, basegfx::fround(aLinePos.getY())));
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
         AbstractSdSnapLineDlg* pDlg = pFact ? pFact->CreateSdSnapLineDlg( NULL, aNewAttr, mpView ) : 0;
         if( pDlg )
         {
-            if ( bLineExist )
+            if ( bLineExist ) // includes mpView->GetSdrPageView() != 0
             {
                 pDlg->HideRadioGroup();
 
-                const SdrHelpLine& rHelpLine = (pPV->GetHelpLines())[nHelpLine];
+                const SdrHelpLine& rHelpLine = (mpView->GetSdrPageView()->GetHelpLines())[nHelpLine];
 
                 if ( rHelpLine.GetKind() == SDRHELPLINE_POINT )
                 {
                     pDlg->SetText(String(SdResId(STR_SNAPDLG_SETPOINT)));
-                    pDlg->SetInputFields(sal_True, sal_True);
+                    pDlg->SetInputFields(true, true);
                 }
                 else
                 {
                     pDlg->SetText(String(SdResId(STR_SNAPDLG_SETLINE)));
 
                     if ( rHelpLine.GetKind() == SDRHELPLINE_VERTICAL )
-                        pDlg->SetInputFields(sal_True, sal_False);
+                        pDlg->SetInputFields(true, false);
                     else
-                        pDlg->SetInputFields(sal_False, sal_True);
+                        pDlg->SetInputFields(false, true);
                 }
-                bCreateNew = sal_False;
+                bCreateNew = false;
             }
             else
+            {
                 pDlg->HideDeleteBtn();
+            }
 
             sal_uInt16 nResult = pDlg->Execute();
 
@@ -168,39 +169,44 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
 
                 case RET_SNAP_DELETE:
                     // Fangobjekt loeschen
-                    if ( !bCreateNew )
-                        pPV->DeleteHelpLine(nHelpLine);
+                    if ( !bCreateNew && mpView->GetSdrPageView())
+                    {
+                        mpView->GetSdrPageView()->DeleteHelpLine(nHelpLine);
+                    }
                     // und weiter wie bei default
                 default:
                     return;
             }
         }
     }
-    Point aHlpPos;
 
-    aHlpPos.X() = ((const SfxUInt32Item&) pArgs->Get(ATTR_SNAPLINE_X)).GetValue();
-    aHlpPos.Y() = ((const SfxUInt32Item&) pArgs->Get(ATTR_SNAPLINE_Y)).GetValue();
-    pPV->PagePosToLogic(aHlpPos);
-
-    if ( bCreateNew )
+    if(mpView->GetSdrPageView())
     {
-        SdrHelpLineKind eKind;
+        basegfx::B2DPoint aHlpPos;
+        aHlpPos.setX(((const SfxUInt32Item&) pArgs->Get(ATTR_SNAPLINE_X)).GetValue());
+        aHlpPos.setY(((const SfxUInt32Item&) pArgs->Get(ATTR_SNAPLINE_Y)).GetValue());
+        aHlpPos += mpView->GetSdrPageView()->GetPageOrigin();
 
-        pPV = mpView->GetSdrPageView();
-
-        switch ( (SnapKind) ((const SfxAllEnumItem&)
-                 pArgs->Get(ATTR_SNAPLINE_KIND)).GetValue() )
+        if ( bCreateNew )
         {
-            case SK_HORIZONTAL  : eKind = SDRHELPLINE_HORIZONTAL;   break;
-            case SK_VERTICAL    : eKind = SDRHELPLINE_VERTICAL;     break;
-            default             : eKind = SDRHELPLINE_POINT;        break;
+            SdrHelpLineKind eKind;
+
+            switch ( (SnapKind) ((const SfxAllEnumItem&)
+                     pArgs->Get(ATTR_SNAPLINE_KIND)).GetValue() )
+            {
+                case SK_HORIZONTAL  : eKind = SDRHELPLINE_HORIZONTAL;   break;
+                case SK_VERTICAL    : eKind = SDRHELPLINE_VERTICAL;     break;
+                default             : eKind = SDRHELPLINE_POINT;        break;
+            }
+
+            mpView->GetSdrPageView()->InsertHelpLine(SdrHelpLine(eKind, aHlpPos));
         }
-        pPV->InsertHelpLine(SdrHelpLine(eKind, aHlpPos));
-    }
-    else
-    {
-        const SdrHelpLine& rHelpLine = (pPV->GetHelpLines())[nHelpLine];
-        pPV->SetHelpLine(nHelpLine, SdrHelpLine(rHelpLine.GetKind(), aHlpPos));
+        else
+        {
+            const SdrHelpLine& rHelpLine = (mpView->GetSdrPageView()->GetHelpLines())[nHelpLine];
+
+            mpView->GetSdrPageView()->SetHelpLine(nHelpLine, SdrHelpLine(rHelpLine.GetKind(), aHlpPos));
+        }
     }
 }
 

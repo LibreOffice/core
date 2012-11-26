@@ -102,7 +102,7 @@ sal_Bool SdCGMFilter::Import()
 
         if( nRetValue )
         {
-            bRet = sal_True;
+            bRet = true;
 
             if( ( nRetValue &~0xff000000 ) != 0xffffff )    // maybe the backgroundcolor is already white
             {                                               // so we must not set a master page

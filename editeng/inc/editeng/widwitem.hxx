@@ -45,9 +45,8 @@ class EDITENG_DLLPUBLIC SvxWidowsItem: public SfxByteItem
 {
     friend SvStream & operator<<( SvStream & aS, SvxWidowsItem & );
 public:
-    TYPEINFO();
-
-    SvxWidowsItem( const sal_uInt8 nL /*= 0*/, const sal_uInt16 nId  );
+    POOLITEM_FACTORY()
+    SvxWidowsItem( const sal_uInt8 nL = 0, const sal_uInt16 nId = 0 );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;

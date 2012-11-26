@@ -38,8 +38,6 @@ protected:
     sal_uInt16 GetActionMap() const { return m_nActionMap; }
 
 public:
-    TYPEINFO();
-
     XMLCreateElemTransformerContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName,
                               sal_uInt16 nActionMap );

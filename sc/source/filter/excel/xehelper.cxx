@@ -495,7 +495,7 @@ XclExpStringRef lclCreateFormattedString(
                 if( aEditSet.GetItemState( EE_FEATURE_FIELD, sal_False, &pItem ) == SFX_ITEM_SET )
                 {
                     const SvxFieldData* pField = static_cast< const SvxFieldItem* >( pItem )->GetField();
-                    if( const SvxURLField* pUrlField = PTR_CAST( SvxURLField, pField ) )
+                    if( const SvxURLField* pUrlField = dynamic_cast< const SvxURLField* >( pField ) )
                     {
                         // convert URL field to string representation
                         aXclPortionText = pLinkHelper ?
@@ -849,19 +849,19 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                 {
                     if( const SvxFieldData* pFieldData = static_cast< const SvxFieldItem* >( pItem )->GetField() )
                     {
-                        if( pFieldData->ISA( SvxPageField ) )
+                        if( dynamic_cast< const SvxPageField* >(pFieldData) )
                             aParaText.AppendAscii( "&P" );
-                        else if( pFieldData->ISA( SvxPagesField ) )
+                        else if( dynamic_cast< const SvxPagesField* >(pFieldData) )
                             aParaText.AppendAscii( "&N" );
-                        else if( pFieldData->ISA( SvxDateField ) )
+                        else if( dynamic_cast< const SvxDateField* >(pFieldData) )
                             aParaText.AppendAscii( "&D" );
-                        else if( pFieldData->ISA( SvxTimeField ) || pFieldData->ISA( SvxExtTimeField ) )
+                        else if( dynamic_cast< const SvxTimeField* >(pFieldData) || dynamic_cast< const SvxExtTimeField* >(pFieldData) )
                             aParaText.AppendAscii( "&T" );
-                        else if( pFieldData->ISA( SvxTableField ) )
+                        else if( dynamic_cast< const SvxTableField* >(pFieldData) )
                             aParaText.AppendAscii( "&A" );
-                        else if( pFieldData->ISA( SvxFileField ) )  // title -> file name
+                        else if( dynamic_cast< const SvxFileField* >(pFieldData) )  // title -> file name
                             aParaText.AppendAscii( "&F" );
-                        else if( const SvxExtFileField* pFileField = PTR_CAST( SvxExtFileField, pFieldData ) )
+                        else if( const SvxExtFileField* pFileField = dynamic_cast< const SvxExtFileField* >( pFieldData ) )
                         {
                             switch( pFileField->GetFormat() )
                             {

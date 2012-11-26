@@ -66,8 +66,6 @@ protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue );
 
 public:
-    TYPEINFO();     //Bereits in Basisklasse Client drin.
-
     virtual ~SwFmt();
     SwFmt &operator=(const SwFmt&);
 

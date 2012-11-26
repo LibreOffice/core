@@ -67,7 +67,6 @@ class ScUnoRefUndoHint : public SfxHint
     ScUnoRefEntry   aEntry;
 
 public:
-                TYPEINFO();
                 ScUnoRefUndoHint( const ScUnoRefEntry& rRefEntry );
                 ~ScUnoRefUndoHint();
 

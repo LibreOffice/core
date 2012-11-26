@@ -56,7 +56,6 @@ class SbMethod : public SbxMethod
 
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_BASICMETHOD,2);
-    TYPEINFO();
     virtual SbxInfo* GetInfo();
     SbxArray* GetLocals();
     SbxArray* GetStatics();
@@ -84,7 +83,6 @@ class SbIfaceMapperMethod : public SbMethod
     SbMethodRef mxImplMeth;
 
 public:
-    TYPEINFO();
     SbIfaceMapperMethod( const String& rName, SbMethod* pImplMeth )
         : SbMethod( rName, pImplMeth->GetType(), NULL )
         , mxImplMeth( pImplMeth )

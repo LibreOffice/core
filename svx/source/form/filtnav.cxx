@@ -140,14 +140,12 @@ OLocalExchange* OFilterExchangeHelper::createExchange() const
 }
 
 //========================================================================
-TYPEINIT0(FmFilterData);
 Image FmFilterData::GetImage( BmpColorMode /*_eMode*/ ) const
 {
     return Image();
 }
 
 //========================================================================
-TYPEINIT1(FmParentData, FmFilterData);
 //------------------------------------------------------------------------
 FmParentData::~FmParentData()
 {
@@ -157,7 +155,6 @@ FmParentData::~FmParentData()
 }
 
 //========================================================================
-TYPEINIT1(FmFormItem, FmParentData);
 //------------------------------------------------------------------------
 Image FmFormItem::GetImage( BmpColorMode _eMode ) const
 {
@@ -176,7 +173,6 @@ Image FmFormItem::GetImage( BmpColorMode _eMode ) const
 }
 
 //========================================================================
-TYPEINIT1(FmFilterItems, FmParentData);
 //------------------------------------------------------------------------
 FmFilterItem* FmFilterItems::Find( const ::sal_Int32 _nFilterComponentIndex ) const
 {
@@ -185,7 +181,7 @@ FmFilterItem* FmFilterItems::Find( const ::sal_Int32 _nFilterComponentIndex ) co
             ++i
         )
     {
-        FmFilterItem* pCondition = PTR_CAST( FmFilterItem, *i );
+        FmFilterItem* pCondition = dynamic_cast< FmFilterItem* >( *i );
         DBG_ASSERT( pCondition, "FmFilterItems::Find: Wrong element in container!" );
         if ( _nFilterComponentIndex == pCondition->GetComponentIndex() )
             return pCondition;
@@ -211,7 +207,6 @@ Image FmFilterItems::GetImage( BmpColorMode _eMode ) const
 }
 
 //========================================================================
-TYPEINIT1(FmFilterItem, FmFilterData);
 //------------------------------------------------------------------------
 FmFilterItem::FmFilterItem( const Reference< XMultiServiceFactory >& _rxFactory,
                             FmFilterItems* pParent,
@@ -249,11 +244,9 @@ class FmFilterHint : public SfxHint
     FmFilterData*   m_pData;
 
 public:
-    TYPEINFO();
     FmFilterHint(FmFilterData* pData):m_pData(pData){}
     FmFilterData* GetData() const { return m_pData; }
 };
-TYPEINIT1( FmFilterHint, SfxHint );
 
 //========================================================================
 class FmFilterInsertedHint : public FmFilterHint
@@ -261,54 +254,44 @@ class FmFilterInsertedHint : public FmFilterHint
     sal_Int32 m_nPos;   // Position relative to the parent of the data
 
 public:
-    TYPEINFO();
     FmFilterInsertedHint(FmFilterData* pData, sal_Int32 nRelPos)
         :FmFilterHint(pData)
         ,m_nPos(nRelPos){}
 
     sal_Int32 GetPos() const { return m_nPos; }
 };
-TYPEINIT1( FmFilterInsertedHint, FmFilterHint );
 
 //========================================================================
 class FmFilterRemovedHint : public FmFilterHint
 {
 public:
-    TYPEINFO();
     FmFilterRemovedHint(FmFilterData* pData)
         :FmFilterHint(pData){}
 
 };
-TYPEINIT1( FmFilterRemovedHint, FmFilterHint );
 
 //========================================================================
 class FmFilterTextChangedHint : public FmFilterHint
 {
 public:
-    TYPEINFO();
     FmFilterTextChangedHint(FmFilterData* pData)
         :FmFilterHint(pData){}
 
 };
-TYPEINIT1( FmFilterTextChangedHint, FmFilterHint );
 
 //========================================================================
 class FilterClearingHint : public SfxHint
 {
 public:
-    TYPEINFO();
     FilterClearingHint(){}
 };
-TYPEINIT1( FilterClearingHint, SfxHint );
 
 //========================================================================
 class FmFilterCurrentChangedHint : public SfxHint
 {
 public:
-    TYPEINFO();
     FmFilterCurrentChangedHint(){}
 };
-TYPEINIT1( FmFilterCurrentChangedHint, SfxHint );
 
 //========================================================================
 // class FmFilterAdapter, Listener an den FilterControls
@@ -381,7 +364,7 @@ void FmFilterAdapter::setText(sal_Int32 nRowPos,
                               const FmFilterItem* pFilterItem,
                               const ::rtl::OUString& rText)
 {
-    FmFormItem* pFormItem = PTR_CAST( FmFormItem, pFilterItem->GetParent()->GetParent() );
+    FmFormItem* pFormItem = dynamic_cast< FmFormItem* >( pFilterItem->GetParent()->GetParent() );
 
     try
     {
@@ -458,7 +441,7 @@ void FmFilterAdapter::predicateExpressionChanged( const FilterEvent& _Event ) th
 
     const sal_Int32 nActiveTerm( xFilterController->getActiveTerm() );
 
-    FmFilterItems* pFilter = PTR_CAST( FmFilterItems, pFormItem->GetChildren()[ nActiveTerm ] );
+    FmFilterItems* pFilter = dynamic_cast< FmFilterItems* >( pFormItem->GetChildren()[ nActiveTerm ] );
     FmFilterItem* pFilterItem = pFilter->Find( _Event.FilterComponent );
     if ( pFilterItem )
     {
@@ -554,7 +537,6 @@ void SAL_CALL FmFilterAdapter::disjunctiveTermAdded( const FilterEvent& _Event )
 //========================================================================
 // class FmFilterModel
 //========================================================================
-TYPEINIT1(FmFilterModel, FmParentData);
 //------------------------------------------------------------------------
 FmFilterModel::FmFilterModel(const Reference< XMultiServiceFactory >& _rxFactory)
               :FmParentData(_rxFactory,NULL, ::rtl::OUString())
@@ -705,7 +687,7 @@ FmFormItem* FmFilterModel::Find(const ::std::vector<FmFilterData*>& rItems, cons
     for (::std::vector<FmFilterData*>::const_iterator i = rItems.begin();
          i != rItems.end(); i++)
     {
-        FmFormItem* pForm = PTR_CAST(FmFormItem,*i);
+        FmFormItem* pForm = dynamic_cast< FmFormItem* >(*i);
         if (pForm)
         {
             if ( xController == pForm->GetController() )
@@ -727,7 +709,7 @@ FmFormItem* FmFilterModel::Find(const ::std::vector<FmFilterData*>& rItems, cons
     for (::std::vector<FmFilterData*>::const_iterator i = rItems.begin();
          i != rItems.end(); i++)
     {
-        FmFormItem* pForm = PTR_CAST(FmFormItem,*i);
+        FmFormItem* pForm = dynamic_cast< FmFormItem* >(*i);
         if (pForm)
         {
             if (xForm == pForm->GetController()->getModel())
@@ -780,7 +762,7 @@ void FmFilterModel::AppendFilterItems( FmFormItem& _rFormItem )
             ++iter
         )
     {
-        if ((*iter)->ISA(FmFilterItems))
+        if (dynamic_cast<FmFilterItems* >(*iter))
             break;
     }
 
@@ -821,7 +803,7 @@ void FmFilterModel::Remove(FmFilterData* pData)
     DBG_ASSERT(i != rItems.end(), "FmFilterModel::Remove(): unknown Item");
     // position within the parent
     sal_Int32 nPos = i - rItems.begin();
-    if (pData->ISA(FmFilterItems))
+    if (dynamic_cast< FmFilterItems* >(pData))
     {
         FmFormItem* pFormItem = (FmFormItem*)pParent;
 
@@ -837,7 +819,7 @@ void FmFilterModel::Remove(FmFilterData* pData)
                 while ( !rChildren.empty() )
                 {
                     ::std::vector< FmFilterData* >::iterator removePos = rChildren.end() - 1;
-                    FmFilterItem* pFilterItem = PTR_CAST( FmFilterItem, *removePos );
+                    FmFilterItem* pFilterItem = dynamic_cast< FmFilterItem* >(*removePos );
                     m_pAdapter->setText( nPos, pFilterItem, ::rtl::OUString() );
                     Remove( removePos );
                 }
@@ -854,7 +836,7 @@ void FmFilterModel::Remove(FmFilterData* pData)
     }
     else // FormItems can not be deleted
     {
-        FmFilterItem* pFilterItem = PTR_CAST(FmFilterItem, pData);
+        FmFilterItem* pFilterItem = dynamic_cast< FmFilterItem* >(pData);
 
         // if its the last condition remove the parent
         if (rItems.size() == 1)
@@ -891,7 +873,7 @@ void FmFilterModel::Remove( const ::std::vector<FmFilterData*>::iterator& rPos )
 //------------------------------------------------------------------------
 sal_Bool FmFilterModel::ValidateText(FmFilterItem* pItem, UniString& rText, UniString& rErrorMsg) const
 {
-    FmFormItem* pFormItem = PTR_CAST( FmFormItem, pItem->GetParent()->GetParent() );
+    FmFormItem* pFormItem = dynamic_cast< FmFormItem* >( pItem->GetParent()->GetParent() );
     try
     {
         Reference< XFormController > xFormController( pFormItem->GetController() );
@@ -1009,21 +991,21 @@ void FmFilterModel::EnsureEmptyFilterRows( FmParentData& _rItem )
 {
     // checks whether for each form there's one free level for input
     ::std::vector< FmFilterData* >& rChildren = _rItem.GetChildren();
-    sal_Bool bAppendLevel = _rItem.ISA( FmFormItem );
+    sal_Bool bAppendLevel(0 != dynamic_cast< FmFormItem* >(&_rItem));
 
     for (   ::std::vector<FmFilterData*>::iterator i = rChildren.begin();
             i != rChildren.end();
             ++i
         )
     {
-        FmFilterItems* pItems = PTR_CAST(FmFilterItems, *i);
+        FmFilterItems* pItems = dynamic_cast< FmFilterItems* >(*i);
         if ( pItems && pItems->GetChildren().empty() )
         {
             bAppendLevel = sal_False;
             break;
         }
 
-        FmFormItem* pFormItem = PTR_CAST(FmFormItem, *i);
+        FmFormItem* pFormItem = dynamic_cast< FmFormItem* >(*i);
         if (pFormItem)
         {
             EnsureEmptyFilterRows( *pFormItem );
@@ -1033,7 +1015,7 @@ void FmFilterModel::EnsureEmptyFilterRows( FmParentData& _rItem )
 
     if ( bAppendLevel )
     {
-        FmFormItem* pFormItem = PTR_CAST( FmFormItem, &_rItem );
+        FmFormItem* pFormItem = dynamic_cast< FmFormItem* >( &_rItem );
         OSL_ENSURE( pFormItem, "FmFilterModel::EnsureEmptyFilterRows: no FmFormItem, but a FmFilterItems child?" );
         if ( pFormItem )
             AppendFilterItems( *pFormItem );
@@ -1243,7 +1225,7 @@ sal_Bool FmFilterNavigator::EditingEntry( SvLBoxEntry* pEntry, Selection& rSelec
     if (!SvTreeListBox::EditingEntry( pEntry, rSelection ))
         return sal_False;
 
-    return pEntry && ((FmFilterData*)pEntry->GetUserData())->ISA(FmFilterItem);
+    return pEntry && (0 != dynamic_cast< FmFilterItem* >((FmFilterData*)pEntry->GetUserData()));
 }
 
 //------------------------------------------------------------------------
@@ -1255,7 +1237,7 @@ sal_Bool FmFilterNavigator::EditedEntry( SvLBoxEntry* pEntry, const XubString& r
     if (EditingCanceled())
         return sal_True;
 
-    DBG_ASSERT(((FmFilterData*)pEntry->GetUserData())->ISA(FmFilterItem),
+    DBG_ASSERT(dynamic_cast< FmFilterItem* >((FmFilterData*)pEntry->GetUserData()),
                     "FmFilterNavigator::EditedEntry() wrong entry");
 
     UniString aText(rNewText);
@@ -1412,15 +1394,15 @@ sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
 
     FmFilterData* pData = (FmFilterData*)pDropTarget->GetUserData();
     FmFormItem* pForm = NULL;
-    if (pData->ISA(FmFilterItem))
+    if(dynamic_cast< FmFilterItem* >(pData))
     {
-        pForm = PTR_CAST(FmFormItem,pData->GetParent()->GetParent());
+        pForm = dynamic_cast< FmFormItem* >(pData->GetParent()->GetParent());
         if (pForm != m_aControlExchange->getFormItem())
             return DND_ACTION_NONE;
     }
-    else if (pData->ISA(FmFilterItems))
+    else if (dynamic_cast< FmFilterItems* >(pData))
     {
-        pForm = PTR_CAST(FmFormItem,pData->GetParent());
+        pForm = dynamic_cast< FmFormItem* >(pData->GetParent());
         if (pForm != m_aControlExchange->getFormItem())
             return DND_ACTION_NONE;
     }
@@ -1435,12 +1417,16 @@ namespace
     FmFilterItems* getTargetItems(SvLBoxEntry* _pTarget)
     {
         FmFilterData*   pData = static_cast<FmFilterData*>(_pTarget->GetUserData());
-        FmFilterItems*  pTargetItems = pData->ISA(FmFilterItems)
-                                        ?
-                                        PTR_CAST(FmFilterItems,pData)
-                                        :
-                                    PTR_CAST(FmFilterItems,pData->GetParent());
-        return pTargetItems;
+        FmFilterItems* pTargetItems = dynamic_cast< FmFilterItems* >(pData);
+
+        if(pTargetItems)
+        {
+            return pTargetItems;
+        }
+        else
+        {
+            return dynamic_cast< FmFilterItems* >(pData->GetParent());
+        }
     }
 }
 //------------------------------------------------------------------------
@@ -1481,10 +1467,11 @@ void FmFilterNavigator::InitEntry(SvLBoxEntry* pEntry,
 {
     SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
     SvLBoxString* pString = NULL;
+    FmFilterItem* pFmFilterItem = dynamic_cast< FmFilterItem* >((FmFilterData*)pEntry->GetUserData());
 
-    if (((FmFilterData*)pEntry->GetUserData())->ISA(FmFilterItem))
-        pString = new FmFilterString(pEntry, 0, rStr, ((FmFilterItem*)pEntry->GetUserData())->GetFieldName());
-    else if (((FmFilterData*)pEntry->GetUserData())->ISA(FmFilterItems))
+    if (pFmFilterItem)
+        pString = new FmFilterString(pEntry, 0, rStr, pFmFilterItem->GetFieldName());
+    else if (dynamic_cast< FmFilterItems* >((FmFilterData*)pEntry->GetUserData()))
         pString = new FmFilterItemsString(pEntry, 0, rStr );
 
     if (pString)
@@ -1501,22 +1488,23 @@ sal_Bool FmFilterNavigator::Select( SvLBoxEntry* pEntry, sal_Bool bSelect )
     {
         if (bSelect)
         {
-            FmFormItem* pFormItem = NULL;
-            if (((FmFilterData*)pEntry->GetUserData())->ISA(FmFilterItem))
+            FmFormItem* pFormItem = 0;
+
+            if (dynamic_cast< FmFilterItem* >((FmFilterData*)pEntry->GetUserData()))
                 pFormItem = (FmFormItem*)((FmFilterItem*)pEntry->GetUserData())->GetParent()->GetParent();
-            else if (((FmFilterData*)pEntry->GetUserData())->ISA(FmFilterItems))
+            else if (dynamic_cast< FmFilterItems* >((FmFilterData*)pEntry->GetUserData()))
                 pFormItem = (FmFormItem*)((FmFilterItem*)pEntry->GetUserData())->GetParent()->GetParent();
-            else if (((FmFilterData*)pEntry->GetUserData())->ISA(FmFormItem))
+            else if (dynamic_cast< FmFormItem* >((FmFilterData*)pEntry->GetUserData()))
                 pFormItem = (FmFormItem*)pEntry->GetUserData();
 
             if (pFormItem)
             {
                 // will the controller be exchanged?
-                if (((FmFilterData*)pEntry->GetUserData())->ISA(FmFilterItem))
+                if (dynamic_cast< FmFilterItem* >((FmFilterData*)pEntry->GetUserData()))
                     m_pModel->SetCurrentItems((FmFilterItems*)((FmFilterItem*)pEntry->GetUserData())->GetParent());
-                else if (((FmFilterData*)pEntry->GetUserData())->ISA(FmFilterItems))
+                else if (dynamic_cast< FmFilterItems* >((FmFilterData*)pEntry->GetUserData()))
                     m_pModel->SetCurrentItems((FmFilterItems*)pEntry->GetUserData());
-                else if (((FmFilterData*)pEntry->GetUserData())->ISA(FmFormItem))
+                else if (dynamic_cast< FmFormItem* >((FmFilterData*)pEntry->GetUserData()))
                     m_pModel->SetCurrentController(((FmFormItem*)pEntry->GetUserData())->GetController());
             }
         }
@@ -1529,33 +1517,52 @@ sal_Bool FmFilterNavigator::Select( SvLBoxEntry* pEntry, sal_Bool bSelect )
 //------------------------------------------------------------------------
 void FmFilterNavigator::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    if (rHint.ISA(FmFilterInsertedHint))
+    const FmFilterInsertedHint* pFmFilterInsertedHint = dynamic_cast< const FmFilterInsertedHint* >(&rHint);
+
+    if (pFmFilterInsertedHint)
     {
-        FmFilterInsertedHint* pHint = (FmFilterInsertedHint*)&rHint;
-        Insert(pHint->GetData(), pHint->GetPos());
+        Insert(pFmFilterInsertedHint->GetData(), pFmFilterInsertedHint->GetPos());
     }
-    else if( rHint.ISA(FilterClearingHint) )
+    else
     {
-        SvTreeListBox::Clear();
-    }
-    else if( rHint.ISA(FmFilterRemovedHint) )
-    {
-        FmFilterRemovedHint* pHint = (FmFilterRemovedHint*)&rHint;
-        Remove(pHint->GetData());
-    }
-    else if( rHint.ISA(FmFilterTextChangedHint) )
-    {
-        FmFilterTextChangedHint* pHint = (FmFilterTextChangedHint*)&rHint;
-        SvLBoxEntry* pEntry = FindEntry(pHint->GetData());
-        if (pEntry)
-            SetEntryText( pEntry, pHint->GetData()->GetText());
-    }
-    else if( rHint.ISA(FmFilterCurrentChangedHint) )
-    {
-        // invalidate the entries
-        for (SvLBoxEntry* pEntry = First(); pEntry != NULL;
-             pEntry = Next(pEntry))
-            GetModel()->InvalidateEntry( pEntry );
+        const FilterClearingHint* pFilterClearingHint = dynamic_cast< const FilterClearingHint* >(&rHint);
+
+        if( pFilterClearingHint )
+        {
+            SvTreeListBox::Clear();
+        }
+        else
+        {
+            const FmFilterRemovedHint* pFmFilterRemovedHint = dynamic_cast< const FmFilterRemovedHint* >(&rHint);
+
+            if( pFmFilterRemovedHint )
+            {
+                Remove(pFmFilterRemovedHint->GetData());
+            }
+            else
+            {
+                const FmFilterTextChangedHint* pFmFilterTextChangedHint = dynamic_cast< const FmFilterTextChangedHint* >(&rHint);
+
+                if( pFmFilterTextChangedHint )
+                {
+                    SvLBoxEntry* pEntry = FindEntry(pFmFilterTextChangedHint->GetData());
+                    if (pEntry)
+                        SetEntryText( pEntry, pFmFilterTextChangedHint->GetData()->GetText());
+                }
+                else
+                {
+                    const FmFilterCurrentChangedHint* pFmFilterCurrentChangedHint = dynamic_cast< const FmFilterCurrentChangedHint* >(&rHint);
+
+                    if( pFmFilterCurrentChangedHint )
+                    {
+                        // invalidate the entries
+                        for (SvLBoxEntry* pEntry = First(); pEntry != NULL;
+                                pEntry = Next(pEntry))
+                            GetModel()->InvalidateEntry( pEntry );
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -1617,10 +1624,10 @@ FmFormItem* FmFilterNavigator::getSelectedFilterItems(::std::vector<FmFilterItem
          bHandled && pEntry != NULL;
          pEntry = NextSelected(pEntry))
     {
-        FmFilterItem* pFilter = PTR_CAST(FmFilterItem, (FmFilterData*)pEntry->GetUserData());
+        FmFilterItem* pFilter = dynamic_cast< FmFilterItem* >((FmFilterData*)pEntry->GetUserData());
         if (pFilter)
         {
-            FmFormItem* pForm = PTR_CAST(FmFormItem,pFilter->GetParent()->GetParent());
+            FmFormItem* pForm = dynamic_cast< FmFormItem* >(pFilter->GetParent()->GetParent());
             if (!pForm)
                 bHandled = sal_False;
             else if (!pFirstItem)
@@ -1726,14 +1733,14 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
                  pEntry = NextSelected(pEntry))
             {
                 // don't delete forms
-                FmFormItem* pForm = PTR_CAST(FmFormItem, (FmFilterData*)pEntry->GetUserData());
+                FmFormItem* pForm = dynamic_cast< FmFormItem* >((FmFilterData*)pEntry->GetUserData());
                 if (!pForm)
                     aSelectList.push_back((FmFilterData*)pEntry->GetUserData());
             }
             if (aSelectList.size() == 1)
             {
                 // don't delete the only empty row of a form
-                FmFilterItems* pFilterItems = PTR_CAST(FmFilterItems, aSelectList[0]);
+                FmFilterItems* pFilterItems = dynamic_cast< FmFilterItems* >(aSelectList[0]);
                 if (pFilterItems && pFilterItems->GetChildren().empty()
                     && pFilterItems->GetParent()->GetChildren().size() == 1)
                     aSelectList.clear();
@@ -1745,7 +1752,7 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
             aContextMenu.EnableItem( SID_FM_DELETE, !aSelectList.empty() );
 
             //
-            sal_Bool bEdit = PTR_CAST(FmFilterItem, (FmFilterData*)pClicked->GetUserData()) != NULL &&
+            sal_Bool bEdit = dynamic_cast< FmFilterItem* >((FmFilterData*)pClicked->GetUserData()) != NULL &&
                 IsSelected(pClicked) && GetSelectionCount() == 1;
 
             aContextMenu.EnableItem( SID_FM_FILTER_EDIT,
@@ -1908,11 +1915,11 @@ void FmFilterNavigator::DeleteSelection()
          pEntry != NULL;
          pEntry = NextSelected(pEntry))
     {
-        FmFilterItem* pFilterItem = PTR_CAST(FmFilterItem, (FmFilterData*)pEntry->GetUserData());
+        FmFilterItem* pFilterItem = dynamic_cast< FmFilterItem* >((FmFilterData*)pEntry->GetUserData());
         if (pFilterItem && IsSelected(GetParent(pEntry)))
             continue;
 
-        FmFormItem* pForm = PTR_CAST(FmFormItem, (FmFilterData*)pEntry->GetUserData());
+        FmFormItem* pForm = dynamic_cast< FmFormItem* >((FmFilterData*)pEntry->GetUserData());
         if (!pForm)
             aEntryList.push_back(pEntry);
     }
@@ -1983,7 +1990,7 @@ void FmFilterNavigatorWin::StateChanged( sal_uInt16 nSID, SfxItemState eState, c
 
     if( eState >= SFX_ITEM_AVAILABLE )
     {
-        FmFormShell* pShell = PTR_CAST( FmFormShell,((SfxObjectItem*)pState)->GetShell() );
+        FmFormShell* pShell = dynamic_cast< FmFormShell* >(((SfxObjectItem*)pState)->GetShell() );
         UpdateContent( pShell );
     }
     else

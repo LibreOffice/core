@@ -93,6 +93,7 @@
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <svx/unoapi.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <svx/svdlegacy.hxx>
 
 #include <numeric>
 
@@ -105,28 +106,26 @@ namespace sd {
 SO2_DECL_REF(SvInPlaceObject)
 #endif
 
-TYPEINIT1(View, FmFormView);
-
 /*************************************************************************
 |*
 |* Ctor
 |*
 \************************************************************************/
 
-View::View(SdDrawDocument* pDrawDoc, OutputDevice* pOutDev,
+View::View(SdDrawDocument& rDrawDoc, OutputDevice* pOutDev,
                ViewShell* pViewShell)
-  : FmFormView(pDrawDoc, pOutDev),
-    mpDoc(pDrawDoc),
-    mpDocSh( pDrawDoc->GetDocSh() ),
+  : FmFormView(rDrawDoc, pOutDev),
+    mpDoc(&rDrawDoc),
+    mpDocSh( rDrawDoc.GetDocSh() ),
     mpViewSh(pViewShell),
-    mpDragSrcMarkList(NULL),
+    maDragSrcMarkList(),
     mpDropMarkerObj(NULL),
     mpDropMarker(NULL),
     mnDragSrcPgNum(SDRPAGE_NOTFOUND),
     mnAction(DND_ACTION_NONE),
     mnLockRedrawSmph(0),
     mpLockedRedraws(NULL),
-    mbIsDropAllowed(sal_True),
+    mbIsDropAllowed(true),
     maSmartTags(*this),
     mpClipboard (new ViewClipboard (*this))
 {
@@ -136,13 +135,9 @@ View::View(SdDrawDocument* pDrawDoc, OutputDevice* pOutDev,
     // #i74769#, #i75172# Use default from the configuration
     SetBufferedOutputAllowed(getOptionsDrawinglayer().IsPaintBuffer_DrawImpress());
 
-    EnableExtendedKeyInputDispatcher(sal_False);
-    EnableExtendedMouseEventDispatcher(sal_False);
-    EnableExtendedCommandEventDispatcher(sal_False);
-
-    SetUseIncompatiblePathCreateInterface(sal_False);
-    SetMarkHdlWhenTextEdit(sal_True);
-    EnableTextEditOnObjectsWithoutTextIfTextTool(sal_True);
+    EnableExtendedKeyInputDispatcher(false);
+    EnableExtendedMouseEventDispatcher(false);
+    EnableExtendedCommandEventDispatcher(false);
 
     SetMinMoveDistancePixel(2);
     SetHitTolerancePixel(2);
@@ -175,7 +170,7 @@ View::~View()
     maSmartTags.Dispose();
 
     // release content of selection clipboard, if we own the content
-    UpdateSelectionClipboard( sal_True );
+    UpdateSelectionClipboard( true );
 
     maDropErrorTimer.Stop();
     maDropInsertFileTimer.Stop();
@@ -230,21 +225,21 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
     SdrObject* pObject = rOriginal.GetViewContact().TryToGetSdrObject();
     drawinglayer::primitive2d::Primitive2DSequence xRetval;
 
-    if(pObject && pObject->GetPage())
+    if(pObject && pObject->getSdrPageFromSdrObject())
     {
-        const bool bDoCreateGeometry(pObject->GetPage()->checkVisibility( rOriginal, rDisplayInfo, true ));
+        const bool bDoCreateGeometry(pObject->getSdrPageFromSdrObject()->checkVisibility( rOriginal, rDisplayInfo, true ));
 
         if(!bDoCreateGeometry && !(( pObject->GetObjInventor() == SdrInventor ) && ( pObject->GetObjIdentifier() == OBJ_PAGE )) )
             return xRetval;
 
         PresObjKind eKind(PRESOBJ_NONE);
         const bool bSubContentProcessing(rDisplayInfo.GetSubContentActive());
-        const bool bIsMasterPageObject(pObject->GetPage()->IsMasterPage());
+        const bool bIsMasterPageObject(pObject->getSdrPageFromSdrObject()->IsMasterPage());
         const bool bIsPrinting(rOriginal.GetObjectContact().isOutputToPrinter());
-        const SdrPageView* pPageView = rOriginal.GetObjectContact().TryToGetSdrPageView();
         const SdrPage* pVisualizedPage = GetSdrPageFromXDrawPage(rOriginal.GetObjectContact().getViewInformation2D().getVisualizedPage());
-        const SdPage* pObjectsSdPage = dynamic_cast< SdPage* >(pObject->GetPage());
-        const bool bIsInsidePageObj(pPageView && pPageView->GetPage() != pVisualizedPage);
+        const SdPage* pObjectsSdPage = dynamic_cast< SdPage* >(pObject->getSdrPageFromSdrObject());
+        const SdrView* pSdrView = rOriginal.GetObjectContact().TryToGetSdrView();
+        const bool bIsInsidePageObj(pSdrView && pSdrView->GetSdrPageView() && &pSdrView->GetSdrPageView()->getSdrPageFromSdrPageView() != pVisualizedPage);
 
         // check if we need to draw a placeholder border. Never do it for
         // objects inside a SdrPageObj and never when printing
@@ -252,7 +247,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
         {
             bool bCreateOutline(false);
 
-            if( pObject->IsEmptyPresObj() && pObject->ISA(SdrTextObj) )
+            if( pObject->IsEmptyPresObj() && dynamic_cast< SdrTextObj* >(pObject) )
             {
                 if( !bSubContentProcessing || !pObject->IsNotVisibleAsMaster() )
                 {
@@ -296,9 +291,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                 {
                     // get basic object transformation
                     const basegfx::BColor aRGBColor(Color(aColor.nColor).getBColor());
-                    basegfx::B2DHomMatrix aObjectMatrix;
-                    basegfx::B2DPolyPolygon aObjectPolyPolygon;
-                    pObject->TRGetBaseGeometry(aObjectMatrix, aObjectPolyPolygon);
+                    const basegfx::B2DHomMatrix aObjectMatrix(pObject->getSdrObjectTransformation());
 
                     // create dashed border
                     {
@@ -395,8 +388,8 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                         if( aObjectString.Len() )
                         {
                             // decompose object matrix to be able to place text correctly
-                            basegfx::B2DTuple aScale;
-                            basegfx::B2DTuple aTranslate;
+                            basegfx::B2DVector aScale;
+                            basegfx::B2DPoint aTranslate;
                             double fRotate, fShearX;
                             aObjectMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
 
@@ -508,30 +501,27 @@ void View::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contac
 
         if (pPgView)
         {
-            SdPage* pPage = (SdPage*) pPgView->GetPage();
-            if( pPage )
+            SdPage& rPage = (SdPage&) pPgView->getSdrPageFromSdrPageView();
+            SdrOutliner& rOutl=mpDoc->GetDrawOutliner(NULL);
+            bool bScreenDisplay(true);
+
+            if(bScreenDisplay && pOutDev && OUTDEV_PRINTER == pOutDev->GetOutDevType())
             {
-                SdrOutliner& rOutl=mpDoc->GetDrawOutliner(NULL);
-                bool bScreenDisplay(true);
-
-                if(bScreenDisplay && pOutDev && OUTDEV_PRINTER == pOutDev->GetOutDevType())
-                {
-                    // #i75566# printing; suppress AutoColor BackgroundColor generation
-                    // for visibility reasons by giving GetPageBackgroundColor()
-                    // the needed hint
-                    bScreenDisplay = false;
-                }
-
-                if(bScreenDisplay && pOutDev && pOutDev->GetPDFWriter())
-                {
-                    // #i75566# PDF export; suppress AutoColor BackgroundColor generation (see above)
-                    bScreenDisplay = false;
-                }
-
-                // #i75566# Name change GetBackgroundColor -> GetPageBackgroundColor and
-                // hint value if screen display. Only then the AutoColor mechanisms shall be applied
-                rOutl.SetBackgroundColor( pPage->GetPageBackgroundColor(pPgView, bScreenDisplay) );
+                // #i75566# printing; suppress AutoColor BackgroundColor generation
+                // for visibility reasons by giving GetPageBackgroundColor()
+                // the needed hint
+                bScreenDisplay = false;
             }
+
+            if(bScreenDisplay && pOutDev && pOutDev->GetPDFWriter())
+            {
+                // #i75566# PDF export; suppress AutoColor BackgroundColor generation (see above)
+                bScreenDisplay = false;
+            }
+
+            // #i75566# Name change GetBackgroundColor -> GetPageBackgroundColor and
+            // hint value if screen display. Only then the AutoColor mechanisms shall be applied
+            rOutl.SetBackgroundColor( rPage.GetPageBackgroundColor(pPgView, bScreenDisplay) );
         }
 
         ViewRedirector aViewRedirector;
@@ -557,11 +547,13 @@ void View::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contac
 |*
 \************************************************************************/
 
-void View::MarkListHasChanged()
+void View::handleSelectionChange()
 {
-    FmFormView::MarkListHasChanged();
+    // call parent
+    FmFormView::handleSelectionChange();
 
-    if( GetMarkedObjectCount() > 0 )
+    // local reactions
+    if( areSdrObjectsSelected() )
         maSmartTags.deselect();
 }
 
@@ -572,9 +564,9 @@ void View::MarkListHasChanged()
 |*
 \************************************************************************/
 
-sal_Bool View::SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll)
+bool View::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
 {
-    sal_Bool bOk = FmFormView::SetAttributes(rSet, bReplaceAll);
+    bool bOk = FmFormView::SetAttributes(rSet, bReplaceAll);
     return (bOk);
 }
 
@@ -585,7 +577,7 @@ sal_Bool View::SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll)
 |*
 \************************************************************************/
 
-sal_Bool View::GetAttributes( SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr ) const
+bool View::GetAttributes( SfxItemSet& rTargetSet, bool bOnlyHardAttr ) const
 {
     return( FmFormView::GetAttributes( rTargetSet, bOnlyHardAttr ) );
 }
@@ -597,70 +589,63 @@ sal_Bool View::GetAttributes( SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr ) c
 |*
 \************************************************************************/
 
-sal_Bool View::IsPresObjSelected(sal_Bool bOnPage, sal_Bool bOnMasterPage, sal_Bool bCheckPresObjListOnly, sal_Bool bCheckLayoutOnly) const
+bool View::IsPresObjSelected(bool bOnPage, bool bOnMasterPage, bool bCheckPresObjListOnly, bool bCheckLayoutOnly) const
 {
     /**************************************************************************
     * Ist ein Presentationsobjekt selektiert?
     **************************************************************************/
-    SdrMarkList* pMarkList;
+    SdrObjectVector aSelection;
 
-    if (mnDragSrcPgNum != SDRPAGE_NOTFOUND &&
-        mnDragSrcPgNum != GetSdrPageView()->GetPage()->GetPageNum())
+    if (mnDragSrcPgNum != SDRPAGE_NOTFOUND && GetSdrPageView() && mnDragSrcPgNum != GetSdrPageView()->getSdrPageFromSdrPageView().GetPageNumber())
     {
         // Es laeuft gerade Drag&Drop
         // Source- und Destination-Page unterschiedlich:
         // es wird die gemerkte MarkList verwendet
-        pMarkList = mpDragSrcMarkList;
+        aSelection = maDragSrcMarkList;
     }
     else
     {
         // Es wird die aktuelle MarkList verwendet
-        pMarkList = new SdrMarkList(GetMarkedObjectList());
+        aSelection = getSelectedSdrObjectVectorFromSdrMarkView();
     }
 
-    SdrMark* pMark;
     SdPage* pPage;
     SdrObject* pObj;
 
-    sal_Bool bSelected = sal_False;
-    sal_Bool bMasterPage = sal_False;
-    long nMark;
-    long nMarkMax = long(pMarkList->GetMarkCount()) - 1;
+    bool bSelected = false;
+    bool bMasterPage = false;
 
-    for (nMark = nMarkMax; (nMark >= 0) && !bSelected; nMark--)
+    if(aSelection.size())
     {
-        // Rueckwaerts durch die Marklist
-        pMark = pMarkList->GetMark(nMark);
-        pObj = pMark->GetMarkedSdrObj();
-
-        if ( pObj && ( bCheckPresObjListOnly || pObj->IsEmptyPresObj() || pObj->GetUserCall() ) )
+        for(sal_uInt32 nMark(aSelection.size()); nMark && !bSelected;)
         {
-            pPage = (SdPage*) pObj->GetPage();
-            bMasterPage = pPage->IsMasterPage();
+            // Rueckwaerts durch die Marklist
+            pObj = aSelection[--nMark];
 
-            if ( (bMasterPage && bOnMasterPage) || (!bMasterPage && bOnPage) )
+            if ( pObj && ( bCheckPresObjListOnly || pObj->IsEmptyPresObj() || findConnectionToSdrObject(pObj) ) )
             {
-                if ( pPage && pPage->IsPresObj(pObj) )
-                {
-                    if( bCheckLayoutOnly )
-                    {
-                        PresObjKind eKind = pPage->GetPresObjKind(pObj);
+                pPage = (SdPage*) pObj->getSdrPageFromSdrObject();
+                bMasterPage = pPage->IsMasterPage();
 
-                        if((eKind != PRESOBJ_FOOTER) && (eKind != PRESOBJ_HEADER) && (eKind != PRESOBJ_DATETIME) && (eKind != PRESOBJ_SLIDENUMBER) )
-                            bSelected = sal_True;
-                    }
-                    else
+                if ( (bMasterPage && bOnMasterPage) || (!bMasterPage && bOnPage) )
+                {
+                    if ( pPage && pPage->IsPresObj(pObj) )
                     {
-                        bSelected = sal_True;
+                        if( bCheckLayoutOnly )
+                        {
+                            PresObjKind eKind = pPage->GetPresObjKind(pObj);
+
+                            if((eKind != PRESOBJ_FOOTER) && (eKind != PRESOBJ_HEADER) && (eKind != PRESOBJ_DATETIME) && (eKind != PRESOBJ_SLIDENUMBER) )
+                                    bSelected = true;
+                        }
+                        else
+                        {
+                                bSelected = true;
+                        }
                     }
                 }
             }
         }
-    }
-
-    if (pMarkList != mpDragSrcMarkList)
-    {
-       delete pMarkList;
     }
 
     return (bSelected);
@@ -693,10 +678,10 @@ void View::SelectAll()
 |*
 \************************************************************************/
 
-void View::ModelHasChanged()
+void View::LazyReactOnObjectChanges()
 {
-    // Erst SdrView benachrichtigen
-    FmFormView::ModelHasChanged();
+    // call parent
+    FmFormView::LazyReactOnObjectChanges();
 }
 
 /*************************************************************************
@@ -705,7 +690,7 @@ void View::ModelHasChanged()
 |*
 \************************************************************************/
 
-sal_Bool View::SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr)
+bool View::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr)
 {
     // weiter an SdrView
     return FmFormView::SetStyleSheet(pStyleSheet, bDontRemoveHardAttr);
@@ -718,9 +703,9 @@ sal_Bool View::SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHar
 |*
 \************************************************************************/
 
-static void SetSpellOptions( SdDrawDocument* pDoc, sal_uLong& rCntrl )
+static void SetSpellOptions( SdDrawDocument* pDoc, sal_uInt32& rCntrl )
 {
-    sal_Bool bOnlineSpell = pDoc->GetOnlineSpell();
+    bool bOnlineSpell = pDoc->GetOnlineSpell();
 
     if( bOnlineSpell )
         rCntrl |= EE_CNTRL_ONLINESPELLING;
@@ -728,24 +713,23 @@ static void SetSpellOptions( SdDrawDocument* pDoc, sal_uLong& rCntrl )
         rCntrl &= ~EE_CNTRL_ONLINESPELLING;
 }
 
-sal_Bool View::SdrBeginTextEdit(
-    SdrObject* pObj, SdrPageView* pPV, ::Window* pWin,
-    sal_Bool bIsNewObj,
-    SdrOutliner* pOutl, OutlinerView* pGivenOutlinerView,
-    sal_Bool bDontDeleteOutliner, sal_Bool bOnlyOneView, sal_Bool bGrabFocus )
+bool View::SdrBeginTextEdit(
+    SdrObject* pObj, ::Window* pWin,
+    bool bIsNewObj, SdrOutliner* pOutl, OutlinerView* pGivenOutlinerView,
+    bool bDontDeleteOutliner, bool bOnlyOneView, bool bGrabFocus )
 {
     GetViewShell()->GetViewShellBase().GetEventMultiplexer()->MultiplexEvent(
         sd::tools::EventMultiplexerEvent::EID_BEGIN_TEXT_EDIT, (void*)pObj );
 
     if( pOutl==NULL && pObj )
-        pOutl = SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, pObj->GetModel() );
+        pOutl = SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, &pObj->getSdrModelFromSdrObject() );
 
     // make draw&impress specific initialisations
     if( pOutl )
     {
         pOutl->SetStyleSheetPool((SfxStyleSheetPool*) mpDoc->GetStyleSheetPool());
         pOutl->SetCalcFieldValueHdl(LINK(SD_MOD(), SdModule, CalcFieldValueHdl));
-        sal_uLong nCntrl = pOutl->GetControlWord();
+        sal_uInt32 nCntrl = pOutl->GetControlWord();
         nCntrl |= EE_CNTRL_ALLOWBIGOBJS;
         nCntrl |= EE_CNTRL_URLSFXEXECUTE;
         nCntrl |= EE_CNTRL_MARKFIELDS;
@@ -771,7 +755,7 @@ sal_Bool View::SdrBeginTextEdit(
     }
 
     sal_Bool bReturn = FmFormView::SdrBeginTextEdit(
-        pObj, pPV, pWin, bIsNewObj, pOutl,
+        pObj, pWin, bIsNewObj, pOutl,
         pGivenOutlinerView, bDontDeleteOutliner,
         bOnlyOneView, bGrabFocus);
 
@@ -779,7 +763,7 @@ sal_Bool View::SdrBeginTextEdit(
     {
         ::Outliner* pOL = GetTextEditOutliner();
 
-        if( pObj && pObj->GetPage() )
+        if( pObj && pObj->getSdrPageFromSdrObject() )
         {
             Color aBackground;
             if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_TABLE )
@@ -788,7 +772,10 @@ sal_Bool View::SdrBeginTextEdit(
             }
             else
             {
-                aBackground = pObj->GetPage()->GetPageBackgroundColor(pPV);
+                if(GetSdrPageView())
+                {
+                    aBackground = pObj->getSdrPageFromSdrObject()->GetPageBackgroundColor(GetSdrPageView());
+                }
             }
             pOL->SetBackgroundColor( aBackground  );
         }
@@ -801,11 +788,11 @@ sal_Bool View::SdrBeginTextEdit(
 }
 
 /** ends current text editing */
-SdrEndTextEditKind View::SdrEndTextEdit(sal_Bool bDontDeleteReally )
+SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally )
 {
     SdrObjectWeakRef xObj( GetTextEditObject() );
 
-    sal_Bool bDefaultTextRestored = RestoreDefaultText( dynamic_cast< SdrTextObj* >( GetTextEditObject() ) );
+    bool bDefaultTextRestored = RestoreDefaultText( dynamic_cast< SdrTextObj* >( GetTextEditObject() ) );
 
     SdrEndTextEditKind eKind = FmFormView::SdrEndTextEdit(bDontDeleteReally);
 
@@ -813,7 +800,7 @@ SdrEndTextEditKind View::SdrEndTextEdit(sal_Bool bDontDeleteReally )
     {
         if( xObj.is() && !xObj->IsEmptyPresObj() )
         {
-            xObj->SetEmptyPresObj( sal_True );
+            xObj->SetEmptyPresObj( true );
         }
         else
         {
@@ -825,9 +812,9 @@ SdrEndTextEditKind View::SdrEndTextEdit(sal_Bool bDontDeleteReally )
         SdrTextObj* pObj = dynamic_cast< SdrTextObj* >( xObj.get() );
         if( pObj && pObj->HasText() )
         {
-            SdrPage* pPage = pObj->GetPage();
+            SdrPage* pPage = pObj->getSdrPageFromSdrObject();
             if( !pPage || !pPage->IsMasterPage() )
-                pObj->SetEmptyPresObj( sal_False );
+                pObj->SetEmptyPresObj( false );
         }
     }
 
@@ -835,7 +822,7 @@ SdrEndTextEditKind View::SdrEndTextEdit(sal_Bool bDontDeleteReally )
 
     if( xObj.is() )
     {
-        SdPage* pPage = dynamic_cast< SdPage* >( xObj->GetPage() );
+        SdPage* pPage = dynamic_cast< SdPage* >( xObj->getSdrPageFromSdrObject() );
         if( pPage )
             pPage->onEndTextEdit( xObj.get() );
     }
@@ -855,7 +842,7 @@ bool View::RestoreDefaultText( SdrTextObj* pTextObj )
     {
         if( !pTextObj->HasText() )
         {
-            SdPage* pPage = dynamic_cast< SdPage* >( pTextObj->GetPage() );
+            SdPage* pPage = dynamic_cast< SdPage* >( pTextObj->getSdrPageFromSdrObject() );
 
             if(pPage)
             {
@@ -884,75 +871,96 @@ bool View::RestoreDefaultText( SdrTextObj* pTextObj )
 void View::SetMarkedOriginalSize()
 {
     SdrUndoGroup*   pUndoGroup = new SdrUndoGroup(*mpDoc);
-    sal_uLong           nCount = GetMarkedObjectCount();
-    sal_Bool            bOK = sal_False;
+    const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView() );
+    bool bOK(false);
 
-    for( sal_uInt32 i = 0; i < nCount; i++ )
+    for(sal_uInt32 i(0); i < aSelection.size(); i++)
     {
-        SdrObject* pObj = GetMarkedObjectByIndex(i);
+        SdrOle2Obj* pSdrOle2Obj = dynamic_cast< SdrOle2Obj* >(aSelection[i]);
+        SdrGrafObj* pSdrGrafObj = dynamic_cast< SdrGrafObj* >(aSelection[i]);
 
-        if( pObj->GetObjInventor() == SdrInventor )
+        if(pSdrOle2Obj)
         {
-            if( pObj->GetObjIdentifier() == OBJ_OLE2 )
+            uno::Reference < embed::XEmbeddedObject > xObj = pSdrOle2Obj->GetObjRef();
+
+            if( xObj.is() )
             {
-                uno::Reference < embed::XEmbeddedObject > xObj = ((SdrOle2Obj*)pObj)->GetObjRef();
-                if( xObj.is() )
+                // TODO/LEAN: working with VisualArea can switch object to running state
+                sal_Int64 nAspect = pSdrOle2Obj->GetAspect();
+                basegfx::B2DVector aOleSize(0.0, 0.0);
+
+                if ( nAspect == embed::Aspects::MSOLE_ICON )
                 {
-                    // TODO/LEAN: working with VisualArea can switch object to running state
+                    MapMode aMap100( MAP_100TH_MM );
+                    const Size aSize(pSdrOle2Obj->GetOrigObjSize( &aMap100 ));
 
-                       sal_Int64 nAspect = ((SdrOle2Obj*)pObj)->GetAspect();
-                    Size aOleSize;
-
-                    if ( nAspect == embed::Aspects::MSOLE_ICON )
-                    {
-                        MapMode aMap100( MAP_100TH_MM );
-                        aOleSize = ((SdrOle2Obj*)pObj)->GetOrigObjSize( &aMap100 );
-                        bOK = sal_True;
-                    }
-                    else
-                    {
-                        MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
-                        try
-                        {
-                            awt::Size aSz = xObj->getVisualAreaSize( nAspect );
-                            aOleSize = OutputDevice::LogicToLogic( Size( aSz.Width, aSz.Height ), aUnit, MAP_100TH_MM );
-                            bOK = sal_True;
-                        }
-                        catch( embed::NoVisualAreaSizeException& )
-                        {}
-                    }
-
-                    if ( bOK )
-                    {
-                        Rectangle   aDrawRect( pObj->GetLogicRect() );
-
-                        pUndoGroup->AddAction( mpDoc->GetSdrUndoFactory().CreateUndoGeoObject( *pObj ) );
-                        pObj->Resize( aDrawRect.TopLeft(), Fraction( aOleSize.Width(), aDrawRect.GetWidth() ),
-                                                           Fraction( aOleSize.Height(), aDrawRect.GetHeight() ) );
-                    }
+                    aOleSize.setX(aSize.Width());
+                    aOleSize.setY(aSize.Height());
+                    bOK = true;
                 }
-            }
-            else if( pObj->GetObjIdentifier() == OBJ_GRAF )
-            {
-                const MapMode   aMap100( MAP_100TH_MM );
-                Size            aSize;
-
-                if ( static_cast< SdrGrafObj* >( pObj )->GetGrafPrefMapMode().GetMapUnit() == MAP_PIXEL )
-                    aSize = Application::GetDefaultDevice()->PixelToLogic( static_cast< SdrGrafObj* >( pObj )->GetGrafPrefSize(), aMap100 );
                 else
                 {
-                    aSize = OutputDevice::LogicToLogic( static_cast< SdrGrafObj* >( pObj )->GetGrafPrefSize(),
-                                                        static_cast< SdrGrafObj* >( pObj )->GetGrafPrefMapMode(),
-                                                        aMap100 );
+                    MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
+                    try
+                    {
+                        const awt::Size aSz(xObj->getVisualAreaSize( nAspect ));
+                        const double fFactor(OutputDevice::GetFactorLogicToLogic(aUnit, MAP_100TH_MM));
+                        aOleSize = basegfx::B2DVector(aSz.Width, aSz.Height) * fFactor;
+                        bOK = true;
+                    }
+                    catch( embed::NoVisualAreaSizeException& )
+                    {}
                 }
 
-                pUndoGroup->AddAction( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj ) );
-                Rectangle aRect( pObj->GetLogicRect() );
-                aRect.SetSize( aSize );
-                pObj->SetLogicRect( aRect );
+                if ( bOK )
+                {
+                    const basegfx::B2DVector& rScale = pSdrOle2Obj->getSdrObjectScale();
+                    const basegfx::B2DPoint& rTopLeft = pSdrOle2Obj->getSdrObjectTranslate();
+                    basegfx::B2DHomMatrix aTransform;
 
-                bOK = sal_True;
+                    pUndoGroup->AddAction( mpDoc->GetSdrUndoFactory().CreateUndoGeoObject( *pSdrOle2Obj ) );
+
+                    aTransform.translate(-rTopLeft);
+                    aTransform.scale(
+                        aOleSize.getX() / (basegfx::fTools::equalZero(rScale.getX()) ? 1.0 : rScale.getX()),
+                        aOleSize.getY() / (basegfx::fTools::equalZero(rScale.getY()) ? 1.0 : rScale.getY()));
+                    aTransform.translate(rTopLeft);
+
+                    sdr::legacy::transformSdrObject(*pSdrOle2Obj, aTransform);
+                }
             }
+        }
+        else if( pSdrGrafObj )
+        {
+            double fFactor(1.0);
+
+            if ( MAP_PIXEL == pSdrGrafObj->GetGrafPrefMapMode().GetMapUnit() )
+            {
+                fFactor = OutputDevice::GetFactorLogicToLogic(MAP_PIXEL, MAP_100TH_MM);
+            }
+            else
+            {
+                fFactor = OutputDevice::GetFactorLogicToLogic(pSdrGrafObj->GetGrafPrefMapMode().GetMapUnit(), MAP_100TH_MM);
+            }
+
+            const basegfx::B2DVector aSize(
+                pSdrGrafObj->GetGrafPrefSize().Width() * fFactor,
+                pSdrGrafObj->GetGrafPrefSize().Height() * fFactor);
+
+            pUndoGroup->AddAction( getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoGeoObject(*pSdrGrafObj));
+
+            const basegfx::B2DVector& rScale = pSdrGrafObj->getSdrObjectScale();
+            const basegfx::B2DPoint& rTopLeft = pSdrGrafObj->getSdrObjectTranslate();
+            basegfx::B2DHomMatrix aTransform;
+
+            aTransform.translate(-rTopLeft);
+            aTransform.scale(
+                aSize.getX() / (basegfx::fTools::equalZero(rScale.getX()) ? 1.0 : rScale.getX()),
+                aSize.getY() / (basegfx::fTools::equalZero(rScale.getY()) ? 1.0 : rScale.getY()));
+            aTransform.translate(rTopLeft);
+            sdr::legacy::transformSdrObject(*pSdrGrafObj, aTransform);
+
+            bOK = true;
         }
     }
 
@@ -962,7 +970,9 @@ void View::SetMarkedOriginalSize()
         mpDocSh->GetUndoManager()->AddUndoAction(pUndoGroup);
     }
     else
+    {
         delete pUndoGroup;
+    }
 }
 
 /*************************************************************************
@@ -983,13 +993,13 @@ void View::DoConnect(SdrOle2Obj* pObj)
             if ( !pSdClient )
             {
                 pSdClient = new Client(pObj, mpViewSh, pWindow);
-                Rectangle aRect = pObj->GetLogicRect();
+                Rectangle aRect(sdr::legacy::GetLogicRect(*pObj));
                 {
                     // TODO/LEAN: working with visual area can switch object to running state
                     Size aDrawSize = aRect.GetSize();
                     awt::Size aSz;
 
-                    MapMode aMapMode( mpDoc->GetScaleUnit() );
+                    MapMode aMapMode( mpDoc->GetExchangeObjectUnit() );
                     Size aObjAreaSize = pObj->GetOrigObjSize( &aMapMode );
 
                     Fraction aScaleWidth (aDrawSize.Width(),  aObjAreaSize.Width() );
@@ -1014,46 +1024,47 @@ void View::DoConnect(SdrOle2Obj* pObj)
 |*
 \************************************************************************/
 
-sal_Bool View::IsMorphingAllowed() const
+bool View::IsMorphingAllowed() const
 {
-    const SdrMarkList&  rMarkList = GetMarkedObjectList();
-    sal_Bool                bRet = sal_False;
+    const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
+    bool bRet(false);
 
-    if ( rMarkList.GetMarkCount() == 2 )
+    if(2 == aSelection.size())
     {
-        const SdrObject*    pObj1 = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-        const SdrObject*    pObj2 = rMarkList.GetMark( 1 )->GetMarkedSdrObj();
-        const sal_uInt16        nKind1 = pObj1->GetObjIdentifier();
-        const sal_uInt16        nKind2 = pObj2->GetObjIdentifier();
+        const SdrObject* pObj1 = aSelection[0];
+        const SdrObject* pObj2 = aSelection[1];
+        const SdrPathObj* pSdrPathObj = dynamic_cast< const SdrPathObj* >(pObj1);
 
-        if ( ( nKind1 != OBJ_TEXT && nKind2 != OBJ_TEXT ) &&
-             ( nKind1 != OBJ_TITLETEXT && nKind2 != OBJ_TITLETEXT ) &&
-             ( nKind1 != OBJ_OUTLINETEXT && nKind2 != OBJ_OUTLINETEXT ) &&
-             ( nKind1 != OBJ_GRUP && nKind2 != OBJ_GRUP ) &&
-             ( nKind1 != OBJ_LINE && nKind2 != OBJ_LINE ) &&
-             ( nKind1 != OBJ_PLIN && nKind2 != OBJ_PLIN ) &&
-             ( nKind1 != OBJ_PATHLINE && nKind2 != OBJ_PATHLINE ) &&
-             ( nKind1 != OBJ_FREELINE && nKind2 != OBJ_FREELINE ) &&
-             ( nKind1 != OBJ_PATHPLIN && nKind2 != OBJ_PATHPLIN ) &&
-             ( nKind1 != OBJ_MEASURE && nKind2 != OBJ_MEASURE ) &&
-             ( nKind1 != OBJ_EDGE && nKind2 != OBJ_EDGE ) &&
-             ( nKind1 != OBJ_GRAF && nKind2 != OBJ_GRAF ) &&
-             ( nKind1 != OBJ_OLE2 && nKind2 != OBJ_OLE2 ) &&
-             ( nKind1 != OBJ_CAPTION && nKind2 !=  OBJ_CAPTION ) &&
-             !pObj1->ISA( E3dObject) && !pObj2->ISA( E3dObject) )
+        if(!pSdrPathObj || pSdrPathObj->isClosed()) // not a path or closed (not OBJ_LINE, OBJ_PLIN, OBJ_PATHLINE, OBJ_FREELINE or OBJ_PATHPLIN)
         {
-            SfxItemSet      aSet1( mpDoc->GetPool(), XATTR_FILLSTYLE, XATTR_FILLSTYLE );
-            SfxItemSet      aSet2( mpDoc->GetPool(), XATTR_FILLSTYLE, XATTR_FILLSTYLE );
+            pSdrPathObj = dynamic_cast< const SdrPathObj* >(pObj2);
 
-            aSet1.Put(pObj1->GetMergedItemSet());
-            aSet2.Put(pObj2->GetMergedItemSet());
+            if(!pSdrPathObj || pSdrPathObj->isClosed()) // not a path or closed (not OBJ_LINE, OBJ_PLIN, OBJ_PATHLINE, OBJ_FREELINE or OBJ_PATHPLIN)
+            {
+                const sal_uInt16 nKind1 = pObj1->GetObjIdentifier();
+                const sal_uInt16 nKind2 = pObj2->GetObjIdentifier();
 
-            const XFillStyle    eFillStyle1 = ( (const XFillStyleItem&) aSet1.Get( XATTR_FILLSTYLE ) ).GetValue();
-            const XFillStyle    eFillStyle2 = ( (const XFillStyleItem&) aSet2.Get( XATTR_FILLSTYLE ) ).GetValue();
+                if ( ( nKind1 != OBJ_TEXT && nKind2 != OBJ_TEXT ) &&
+                     ( nKind1 != OBJ_TITLETEXT && nKind2 != OBJ_TITLETEXT ) &&
+                     ( nKind1 != OBJ_OUTLINETEXT && nKind2 != OBJ_OUTLINETEXT ) &&
+                     ( nKind1 != OBJ_GRUP && nKind2 != OBJ_GRUP ) &&
+                     ( nKind1 != OBJ_MEASURE && nKind2 != OBJ_MEASURE ) &&
+                     ( nKind1 != OBJ_EDGE && nKind2 != OBJ_EDGE ) &&
+                     ( nKind1 != OBJ_GRAF && nKind2 != OBJ_GRAF ) &&
+                     ( nKind1 != OBJ_OLE2 && nKind2 != OBJ_OLE2 ) &&
+                     ( nKind1 != OBJ_CAPTION && nKind2 !=  OBJ_CAPTION ) &&
+                     !dynamic_cast< const E3dObject* >(pObj1) && !dynamic_cast< const E3dObject* >(pObj2) )
+                {
+                    const XFillStyle eFillStyle1(((const XFillStyleItem&)pObj1->GetMergedItem(XATTR_FILLSTYLE)).GetValue());
+                    const XFillStyle eFillStyle2(((const XFillStyleItem&)pObj2->GetMergedItem(XATTR_FILLSTYLE)).GetValue());
 
-            if( ( eFillStyle1 == XFILL_NONE || eFillStyle1 == XFILL_SOLID ) &&
-                ( eFillStyle2 == XFILL_NONE || eFillStyle2 == XFILL_SOLID ) )
-                bRet = sal_True;
+                    if( ( eFillStyle1 == XFILL_NONE || eFillStyle1 == XFILL_SOLID ) &&
+                        ( eFillStyle2 == XFILL_NONE || eFillStyle2 == XFILL_SOLID ) )
+                    {
+                        bRet = true;
+                    }
+                }
+            }
         }
     }
 
@@ -1066,25 +1077,11 @@ sal_Bool View::IsMorphingAllowed() const
 |*
 \************************************************************************/
 
-sal_Bool View::IsVectorizeAllowed() const
+bool View::IsVectorizeAllowed() const
 {
-    const SdrMarkList&  rMarkList = GetMarkedObjectList();
-    sal_Bool                bRet = sal_False;
+    const SdrGrafObj* pObj = dynamic_cast< const SdrGrafObj* >(getSelectedIfSingle());
 
-    if( rMarkList.GetMarkCount() == 1 )
-    {
-        const SdrGrafObj* pObj = dynamic_cast< const SdrGrafObj* >(rMarkList.GetMark( 0 )->GetMarkedSdrObj());
-
-        if(pObj)
-        {
-            if(GRAPHIC_BITMAP == pObj->GetGraphicType() && !pObj->isEmbeddedSvg())
-            {
-                bRet = sal_True;
-            }
-        }
-    }
-
-    return bRet;
+    return (pObj && GRAPHIC_BITMAP == pObj->GetGraphicType() && !pObj->isEmbeddedSvg());
 }
 
 void View::onAccessibilityOptionsChanged()
@@ -1136,7 +1133,7 @@ IMPL_LINK( View, OnParagraphInsertedHdl, ::Outliner *, pOutliner )
 
     if( pPara && pObj )
     {
-        SdPage* pPage = dynamic_cast< SdPage* >( pObj->GetPage() );
+        SdPage* pPage = dynamic_cast< SdPage* >( pObj->getSdrPageFromSdrObject() );
         if( pPage )
             pPage->onParagraphInserted( pOutliner, pPara, pObj );
     }
@@ -1156,7 +1153,7 @@ IMPL_LINK( View, OnParagraphRemovingHdl, ::Outliner *, pOutliner )
 
     if( pPara && pObj )
     {
-        SdPage* pPage = dynamic_cast< SdPage* >( pObj->GetPage() );
+        SdPage* pPage = dynamic_cast< SdPage* >( pObj->getSdrPageFromSdrObject() );
         if( pPage )
             pPage->onParagraphRemoving( pOutliner, pPara, pObj );
     }
@@ -1178,12 +1175,7 @@ bool View::isRecordingUndo() const
 
 void View::AddCustomHdl()
 {
-    maSmartTags.addCustomHandles( aHdl );
-}
-
-void View::updateHandles()
-{
-    AdjustMarkHdl();
+    maSmartTags.addCustomHandles(maViewHandleList);
 }
 
 SdrViewContext View::GetContext() const
@@ -1195,22 +1187,26 @@ SdrViewContext View::GetContext() const
         return FmFormView::GetContext();
 }
 
-sal_Bool View::HasMarkablePoints() const
+bool View::HasMarkablePoints() const
 {
     if( maSmartTags.HasMarkablePoints() )
+    {
         return true;
+    }
     else
+    {
         return FmFormView::HasMarkablePoints();
+    }
 }
 
-sal_uLong View::GetMarkablePointCount() const
+sal_uInt32 View::GetMarkablePointCount() const
 {
-    sal_uLong nCount = FmFormView::GetMarkablePointCount();
+    sal_uInt32 nCount = FmFormView::GetMarkablePointCount();
     nCount += maSmartTags.GetMarkablePointCount();
     return nCount;
 }
 
-sal_Bool View::HasMarkedPoints() const
+bool View::HasMarkedPoints() const
 {
     if( maSmartTags.HasMarkedPoints() )
         return true;
@@ -1218,14 +1214,14 @@ sal_Bool View::HasMarkedPoints() const
         return FmFormView::HasMarkedPoints();
 }
 
-sal_uLong View::GetMarkedPointCount() const
+sal_uInt32 View::GetMarkedPointCount() const
 {
-    sal_uLong nCount = FmFormView::GetMarkedPointCount();
+    sal_uInt32 nCount = FmFormView::GetMarkedPointCount();
     nCount += maSmartTags.GetMarkedPointCount();
     return nCount;
 }
 
-sal_Bool View::IsPointMarkable(const SdrHdl& rHdl) const
+bool View::IsPointMarkable(const SdrHdl& rHdl) const
 {
     if( maSmartTags.IsPointMarkable( rHdl ) )
         return true;
@@ -1233,7 +1229,7 @@ sal_Bool View::IsPointMarkable(const SdrHdl& rHdl) const
         return FmFormView::IsPointMarkable( rHdl );
 }
 
-sal_Bool View::MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark )
+bool View::MarkPoint(SdrHdl& rHdl, bool bUnmark )
 {
     if( maSmartTags.MarkPoint( rHdl, bUnmark ) )
         return true;
@@ -1241,12 +1237,12 @@ sal_Bool View::MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark )
         return FmFormView::MarkPoint( rHdl, bUnmark );
 }
 
-sal_Bool View::MarkPoints(const Rectangle* pRect, sal_Bool bUnmark)
+void View::MarkPoints(const basegfx::B2DRange* pRange, bool bUnmark)
 {
-    if( maSmartTags.MarkPoints( pRect, bUnmark ) )
-        return true;
-    else
-        return FmFormView::MarkPoints( pRect, bUnmark );
+    if( !maSmartTags.MarkPoints( pRange, bUnmark ) )
+    {
+        FmFormView::MarkPoints( pRange, bUnmark );
+    }
 }
 
 void View::CheckPossibilities()
@@ -1265,9 +1261,9 @@ void View::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
 {
     SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( GetTextEditObject() );
     SdrOutliner* pOutliner = GetTextEditOutliner();
-    if( pOutliner && pTextObj && pTextObj->GetPage() )
+    if( pOutliner && pTextObj && pTextObj->getSdrPageFromSdrObject() )
     {
-        SdPage* pPage = static_cast< SdPage* >( pTextObj->GetPage() );
+        SdPage* pPage = static_cast< SdPage* >( pTextObj->getSdrPageFromSdrObject() );
 
         SfxStyleSheet* pStyleSheet = 0;
 

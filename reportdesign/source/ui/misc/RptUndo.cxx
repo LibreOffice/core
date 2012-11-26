@@ -114,9 +114,7 @@ namespace
     }
 }
 //----------------------------------------------------------------------------
-TYPEINIT1( OSectionUndo,         OCommentUndoAction );
 DBG_NAME(rpt_OSectionUndo)
-//----------------------------------------------------------------------------
 OSectionUndo::OSectionUndo(OReportModel& _rMod
                            ,sal_uInt16 _nSlot
                            ,Action _eAction
@@ -133,7 +131,7 @@ OSectionUndo::~OSectionUndo()
 {
     if ( !m_bInserted )
     {
-        OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
+        OXUndoEnvironment& rEnv = static_cast< OReportModel& >( mrModel ).GetUndoEnv();
         ::std::vector< uno::Reference< drawing::XShape> >::iterator aEnd = m_aControls.end();
         for (::std::vector< uno::Reference< drawing::XShape> >::iterator aIter = m_aControls.begin(); aIter != aEnd; ++aIter)
         {
@@ -143,7 +141,7 @@ OSectionUndo::~OSectionUndo()
 #if OSL_DEBUG_LEVEL > 0
             SvxShape* pShape = SvxShape::getImplementation( xShape );
             SdrObject* pObject = pShape ? pShape->GetSdrObject() : NULL;
-            OSL_ENSURE( pShape && pShape->HasSdrObjectOwnership() && pObject && !pObject->IsInserted(),
+            OSL_ENSURE( pShape && pShape->HasSdrObjectOwnership() && pObject && !pObject->IsObjectInserted(),
                 "OSectionUndo::~OSectionUndo: inconsistency in the shape/object ownership!" );
 #endif
             try
@@ -223,8 +221,6 @@ void OSectionUndo::Redo()
     }
 }
 //----------------------------------------------------------------------------
-TYPEINIT1( OReportSectionUndo,         OSectionUndo );
-//----------------------------------------------------------------------------
 OReportSectionUndo::OReportSectionUndo(OReportModel& _rMod,sal_uInt16 _nSlot
                                        ,::std::mem_fun_t< uno::Reference< report::XSection >
                                             ,OReportHelper> _pMemberFunction
@@ -261,8 +257,6 @@ void OReportSectionUndo::implReRemove( )
     m_pController->executeChecked(m_nSlot,aArgs);
     m_bInserted = false;
 }
-//----------------------------------------------------------------------------
-TYPEINIT1( OGroupSectionUndo,         OSectionUndo );
 //----------------------------------------------------------------------------
 OGroupSectionUndo::OGroupSectionUndo(OReportModel& _rMod,sal_uInt16 _nSlot
                                        ,::std::mem_fun_t< uno::Reference< report::XSection >
@@ -331,8 +325,6 @@ void OGroupSectionUndo::implReRemove( )
     m_pController->executeChecked(m_nSlot,aArgs);
     m_bInserted = false;
 }
-//----------------------------------------------------------------------------
-TYPEINIT1( OGroupUndo,         OCommentUndoAction );
 //----------------------------------------------------------------------------
 OGroupUndo::OGroupUndo(OReportModel& _rMod
                        ,sal_uInt16 nCommentID

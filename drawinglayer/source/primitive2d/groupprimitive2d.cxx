@@ -43,22 +43,6 @@ namespace drawinglayer
         {
         }
 
-        /** The compare opertator uses the Sequence::==operator, so only checking if
-            the rererences are equal. All non-equal references are interpreted as
-            non-equal.
-         */
-        bool GroupPrimitive2D::operator==( const BasePrimitive2D& rPrimitive ) const
-        {
-            if(BasePrimitive2D::operator==(rPrimitive))
-            {
-                const GroupPrimitive2D& rCompare = static_cast< const GroupPrimitive2D& >(rPrimitive);
-
-                return (arePrimitive2DSequencesEqual(getChildren(), rCompare.getChildren()));
-            }
-
-            return false;
-        }
-
         /// default: just return children, so all renderers not supporting group will use it's content
         Primitive2DSequence GroupPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {

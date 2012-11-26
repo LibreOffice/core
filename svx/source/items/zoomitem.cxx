@@ -34,14 +34,14 @@
 
 // -----------------------------------------------------------------------
 
-TYPEINIT1_FACTORY(SvxZoomItem,SfxUInt16Item, new SvxZoomItem);
-
 #define ZOOM_PARAM_VALUE    "Value"
 #define ZOOM_PARAM_VALUESET "ValueSet"
 #define ZOOM_PARAM_TYPE     "Type"
 #define ZOOM_PARAMS         3
 
 // -----------------------------------------------------------------------
+
+IMPL_POOLITEM_FACTORY(SvxZoomItem)
 
 SvxZoomItem::SvxZoomItem
 (

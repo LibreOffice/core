@@ -131,7 +131,7 @@ void RequestQueue::AddRequest (
 #ifdef VERBOSE
     OSL_TRACE("%s request for page %d with priority class %d",
         bRemoved?"replaced":"added",
-        (rRequestData.GetPage()->GetPageNum()-1)/2,
+        (rRequestData.GetPage()->GetPageNumber()-1)/2,
         eRequestClass);
 #endif
 }

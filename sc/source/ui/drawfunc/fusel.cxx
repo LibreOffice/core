@@ -124,30 +124,30 @@ sal_Bool __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
     sal_Bool bReturn = FuDraw::MouseButtonDown(rMEvt);
 
-    aMDPos = pWindow->PixelToLogic( rMEvt.GetPosPixel() );
+    aMDPos = pWindow->GetInverseViewTransformation() * basegfx::B2DPoint(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
 
     if ( rMEvt.IsLeft() )
     {
         SdrHdl* pHdl = pView->PickHandle(aMDPos);
         SdrObject* pObj;
-        SdrPageView* pPV;
 
-        if ( pHdl!=NULL || pView->IsMarkedHit(aMDPos) )
+        if ( pHdl!=NULL || pView->IsMarkedObjHit(aMDPos) )
         {
             // Determine if this is the tail of a SdrCaptionObj i.e.
             // we need to disable the drag option on the tail of a note
             // object. Also, disable the ability to use the circular
             // drag of a note object.
             bool bDrag = false;
-            const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-            if( rMarkList.GetMarkCount() == 1 )
+            const SdrObject* pSelected = pView->getSelectedIfSingle();
+
+            if( pSelected )
             {
-                SdrObject* pMarkedObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-                if( ScDrawLayer::IsNoteCaption( pMarkedObj ) )
+                if( ScDrawLayer::IsNoteCaption( *pSelected ) )
                 {
                     // move using the valid caption handles for note text box.
                     if(pHdl && (pHdl->GetKind() != HDL_POLY && pHdl->GetKind() != HDL_CIRC))
                         bDrag = true;
+
                     // move the complete note box.
                     else if(!pHdl)
                         bDrag = true;
@@ -161,22 +161,22 @@ sal_Bool __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             if ( bDrag )
             {
                 aDragTimer.Start();
-                pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl);
+                pView->BegDragObj(aMDPos, pHdl);
                 bReturn = sal_True;
             }
         }
         else
         {
             sal_Bool bAlt = rMEvt.IsMod2();
-            if ( !bAlt && pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKMACRO) )
+            if ( !bAlt && pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, SDRSEARCH_PICKMACRO) )
             {
-                pView->BegMacroObj(aMDPos, pObj, pPV, pWindow);
+                pView->BegMacroObj(aMDPos, 2.0, pObj, pWindow);
                 bReturn = sal_True;
             }
             else
             {
                 String sURL, sTarget;
-                if ( !bAlt && pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER))
+                if ( !bAlt && pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, SDRSEARCH_ALSOONMASTER))
                 {
                    // Support for imported Excel docs
                    // Excel is of course not consistent and allows
@@ -194,10 +194,10 @@ sal_Bool __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                    // If a group object has no hyperlink use the hyperlink of the
                    // object clicked
 
-                   if ( pObj->IsGroupObject() )
+                   if ( pObj->getChildrenOfSdrObject() )
                    {
                        SdrObject* pHit = NULL;
-                       if ( pView->PickObj(aMDPos, pView->getHitTolLog(), pHit, pPV, SDRSEARCH_DEEP ) )
+                       if ( pView->PickObj(aMDPos, pView->getHitTolLog(), pHit, SDRSEARCH_DEEP ) )
                            pObj = pHit;
                    }
 
@@ -235,22 +235,21 @@ sal_Bool __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 SdrViewEvent aVEvt;
                 if ( !bAlt &&
                     pView->PickAnything( rMEvt, SDRMOUSEBUTTONDOWN, aVEvt ) != SDRHIT_NONE &&
-                    aVEvt.pObj != NULL )
+                    aVEvt.mpObj != NULL )
                 {
-                    if ( ScDrawLayer::GetIMapInfo( aVEvt.pObj ) )       // ImageMap
+                    if ( ScDrawLayer::GetIMapInfo( aVEvt.mpObj ) )      // ImageMap
                     {
-                        const IMapObject* pIMapObj =
-                                ScDrawLayer::GetHitIMapObject( aVEvt.pObj, aMDPos, *pWindow );
+                        const IMapObject* pIMapObj = ScDrawLayer::GetHitIMapObject( *aVEvt.mpObj, aMDPos, *pWindow );
                         if ( pIMapObj && pIMapObj->GetURL().Len() )
                         {
                             sURL = pIMapObj->GetURL();
                             sTarget = pIMapObj->GetTarget();
                         }
                     }
-                    if ( aVEvt.eEvent == SDREVENT_EXECUTEURL && aVEvt.pURLField )   // URL
+                    if ( aVEvt.meEvent == SDREVENT_EXECUTEURL && aVEvt.maURLField.Len() )   // URL
                     {
-                        sURL = aVEvt.pURLField->GetURL();
-                        sTarget = aVEvt.pURLField->GetTargetFrame();
+                        sURL = aVEvt.maURLField;
+                        sTarget = aVEvt.maTargetFrame;
                     }
                 }
 
@@ -263,7 +262,6 @@ sal_Bool __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 }
 
                 //  Is another object being edited in this view?
-                //  (Editing is ended in MarkListHasChanged - test before UnmarkAll)
                 SfxInPlaceClient* pClient = pViewShell->GetIPClient();
                 sal_Bool bWasOleActive = ( pClient && pClient->IsObjectInPlaceActive() );
 
@@ -274,18 +272,17 @@ sal_Bool __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 if ( !rMEvt.IsShift() || bCaptionClicked || IsNoteCaptionMarked() )
                     pView->UnmarkAll();
 
-                /*  Unlock internal layer, if a note caption is clicked. The
-                    layer will be relocked in ScDrawView::MarkListHasChanged(). */
+                /*  Unlock internal layer, if a note caption is clicked */
                 if( bCaptionClicked )
                     pView->UnlockInternalLayer();
 
                 // try to select the clicked object
-                if ( pView->MarkObj( aMDPos, -2, sal_False, rMEvt.IsMod1() ) )
+                if ( pView->MarkObj( aMDPos, 2.0, false, rMEvt.IsMod1() ) )
                 {
                     //*********************************************************
                     //Objekt verschieben
                     //********************************************************
-                    if (pView->IsMarkedHit(aMDPos))
+                    if (pView->IsMarkedObjHit(aMDPos))
                     {
                         //  #95834# Don't start drag timer if inplace editing of an OLE object
                         //  was just ended with this mouse click - the view will be moved
@@ -295,7 +292,7 @@ sal_Bool __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                             aDragTimer.Start();
 
                         pHdl=pView->PickHandle(aMDPos);
-                        pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl);
+                        pView->BegDragObj(aMDPos, pHdl);
                         bReturn = sal_True;
                     }
                     else                                    // Objekt am Rand getroffen
@@ -342,20 +339,21 @@ sal_Bool __EXPORT FuSelection::MouseMove(const MouseEvent& rMEvt)
 
     if (aDragTimer.IsActive() )
     {
-        Point aOldPixel = pWindow->LogicToPixel( aMDPos );
-        Point aNewPixel = rMEvt.GetPosPixel();
-        if ( Abs( aOldPixel.X() - aNewPixel.X() ) > SC_MAXDRAGMOVE ||
-             Abs( aOldPixel.Y() - aNewPixel.Y() ) > SC_MAXDRAGMOVE )
+        const basegfx::B2DPoint aOldPixel(pWindow->GetViewTransformation() * aMDPos);
+        const basegfx::B2DPoint aNewPixel(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
+
+        if ( fabs( aOldPixel.getX() - aNewPixel.getX() ) > SC_MAXDRAGMOVE ||
+             fabs( aOldPixel.getY() - aNewPixel.getY() ) > SC_MAXDRAGMOVE )
             aDragTimer.Stop();
     }
 
     if ( pView->IsAction() )
     {
-        Point aPix(rMEvt.GetPosPixel());
-        Point aPnt(pWindow->PixelToLogic(aPix));
+        const Point aPix(rMEvt.GetPosPixel());
+        const basegfx::B2DPoint aLogicPos(pWindow->GetInverseViewTransformation() * basegfx::B2DPoint(aPix.X(), aPix.Y()));
 
         ForceScroll(aPix);
-        pView->MovAction(aPnt);
+        pView->MovAction(aLogicPos);
         bReturn = sal_True;
     }
 
@@ -397,13 +395,13 @@ sal_Bool __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         aDragTimer.Stop();
     }
 
-    Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
+    const basegfx::B2DPoint aPnt(pWindow->GetInverseViewTransformation() * basegfx::B2DPoint(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y()));
 
     bool bCopy = false;
     ScViewData* pViewData = ( pViewShell ? pViewShell->GetViewData() : NULL );
     ScDocument* pDocument = ( pViewData ? pViewData->GetDocument() : NULL );
     SdrPageView* pPageView = ( pView ? pView->GetSdrPageView() : NULL );
-    SdrPage* pPage = ( pPageView ? pPageView->GetPage() : NULL );
+    SdrPage* pPage = ( pPageView ? &pPageView->getSdrPageFromSdrPageView() : NULL );
     ::std::vector< ::rtl::OUString > aExcludedChartNames;
     ScRangeListVector aProtectedChartRangesVector;
 
@@ -422,32 +420,24 @@ sal_Bool __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 }
                 if ( pView && pDocument )
                 {
-                    const SdrMarkList& rSdrMarkList = pView->GetMarkedObjectList();
-                    sal_uLong nMarkCount = rSdrMarkList.GetMarkCount();
-                    for ( sal_uLong i = 0; i < nMarkCount; ++i )
+                    const SdrObjectVector aSelection(pView->getSelectedSdrObjectVectorFromSdrMarkView());
+
+                    for ( sal_uInt32 i(0); i < aSelection.size(); ++i )
                     {
-                        SdrMark* pMark = rSdrMarkList.GetMark( i );
-                        SdrObject* pObj = ( pMark ? pMark->GetMarkedSdrObj() : NULL );
-                        if ( pObj )
-                        {
-                            ScChartHelper::AddRangesIfProtectedChart( aProtectedChartRangesVector, pDocument, pObj );
-                        }
+                        ScChartHelper::AddRangesIfProtectedChart( aProtectedChartRangesVector, pDocument, aSelection[i] );
                     }
                 }
                 bCopy = true;
             }
 
             pView->EndDragObj( rMEvt.IsMod1() );
-            pView->ForceMarkedToAnotherPage();
+            const SdrObject* pSelected = pView->getSelectedIfSingle();
 
-            const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-            if (rMarkList.GetMarkCount() == 1)
+            if (pSelected)
             {
-                  SdrMark* pMark = rMarkList.GetMark(0);
-                  SdrObject* pObj = pMark->GetMarkedSdrObj();
                   FuPoor* pPoor = pViewShell->GetViewData()->GetView()->GetDrawFuncPtr();
                   FuText* pText = static_cast<FuText*>(pPoor);
-                pText->StopDragMode(pObj );
+                pText->StopDragMode(*pSelected);
             }
             bReturn = sal_True;
         }
@@ -456,25 +446,27 @@ sal_Bool __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             // unlock internal layer to include note captions
             pView->UnlockInternalLayer();
             pView->EndAction();
-            if ( pView->AreObjectsMarked() )
+
+            if(pView->areSdrObjectsSelected())
             {
+                const SdrObjectVector aSelection(pView->getSelectedSdrObjectVectorFromSdrMarkView());
                 bReturn = sal_True;
 
                 /*  if multi-selection contains a note caption object, remove
                     all other objects from selection. */
-                const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-                sal_uLong nCount = rMarkList.GetMarkCount();
-                if( nCount > 1 )
+                if( aSelection.size() > 1 )
                 {
                     bool bFound = false;
-                    for( sal_uLong nIdx = 0; !bFound && (nIdx < nCount); ++nIdx )
+
+                    for( sal_uInt32 nIdx = 0; !bFound && (nIdx < aSelection.size()); ++nIdx )
                     {
-                        SdrObject* pObj = rMarkList.GetMark( nIdx )->GetMarkedSdrObj();
-                        bFound = ScDrawLayer::IsNoteCaption( pObj );
+                        SdrObject* pObj = aSelection[nIdx];
+                        bFound = ScDrawLayer::IsNoteCaption( *pObj );
+
                         if( bFound )
                         {
-                            pView->UnMarkAll();
-                            pView->MarkObj( pObj, pView->GetSdrPageView() );
+                            pView->UnmarkAllObj();
+                            pView->MarkObj( *pObj );
                         }
                     }
                 }
@@ -507,81 +499,66 @@ sal_Bool __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     sal_uInt16 nClicks = rMEvt.GetClicks();
     if ( nClicks == 2 && rMEvt.IsLeft() )
     {
-        if ( pView->AreObjectsMarked() )
+        SdrObject* pSelected = pView->getSelectedIfSingle();
+
+        if ( pSelected )
         {
-            const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-            if (rMarkList.GetMarkCount() == 1)
+            //  #43984# aktivieren nur, wenn die Maus auch (noch) ueber dem
+            //  selektierten Objekt steht
+            SdrViewEvent aVEvt;
+            SdrHitKind eHit = pView->PickAnything( rMEvt, SDRMOUSEBUTTONDOWN, aVEvt );
+
+            if ( eHit != SDRHIT_NONE && aVEvt.mpObj == pSelected )
             {
-                SdrMark* pMark = rMarkList.GetMark(0);
-                SdrObject* pObj = pMark->GetMarkedSdrObj();
+                //
+                //  OLE: aktivieren
+                //
 
-                //  #43984# aktivieren nur, wenn die Maus auch (noch) ueber dem
-                //  selektierten Objekt steht
+                SdrOle2Obj* pSdrOle2Obj = dynamic_cast< SdrOle2Obj* >(pSelected) ;
 
-                SdrViewEvent aVEvt;
-                SdrHitKind eHit = pView->PickAnything( rMEvt, SDRMOUSEBUTTONDOWN, aVEvt );
-                if ( eHit != SDRHIT_NONE && aVEvt.pObj == pObj )
+                if (pSdrOle2Obj && !bOle && pSdrOle2Obj->GetObjRef().is())
                 {
-                    sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
+                    pViewShell->ActivateObject( pSdrOle2Obj, 0 );
+                }
 
-                    //
-                    //  OLE: aktivieren
-                    //
+                //
+                //  Edit text
+                //  #49458# not in UNO controls
+                //  #i32352# not in media objects
+                //
+                else if ( dynamic_cast< SdrTextObj* >(pSelected)
+                    && !dynamic_cast< SdrUnoObj* >(pSelected)
+                    && !dynamic_cast< SdrMediaObj* >(pSelected) )
+                {
+                    OutlinerParaObject* pOPO = pSelected->GetOutlinerParaObject();
+                    sal_Bool bVertical = ( pOPO && pOPO->IsVertical() );
+                    sal_uInt16 nTextSlotId = bVertical ? SID_DRAW_TEXT_VERTICAL : SID_DRAW_TEXT;
 
-                    if (nSdrObjKind == OBJ_OLE2)
+                    pViewShell->GetViewData()->GetDispatcher().
+                        Execute(nTextSlotId, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
+
+                    // jetzt den erzeugten FuText holen und in den EditModus setzen
+                    FuPoor* pPoor = pViewShell->GetViewData()->GetView()->GetDrawFuncPtr();
+                    if ( pPoor && pPoor->GetSlotID() == nTextSlotId )    // hat keine RTTI
                     {
-                        if (!bOle)
-                        {
-                            if (((SdrOle2Obj*) pObj)->GetObjRef().is())
-                            {
-                                //HMHpView->HideMarkHdl();
-                                pViewShell->ActivateObject( (SdrOle2Obj*) pObj, 0 );
-                            }
-                        }
+                        FuText* pText = (FuText*)pPoor;
+                        Point aMousePixel = rMEvt.GetPosPixel();
+                        pText->SetInEditMode( pSelected, &aMousePixel );
                     }
-
-                    //
-                    //  Edit text
-                    //  #49458# not in UNO controls
-                    //  #i32352# not in media objects
-                    //
-                    else if ( pObj->ISA(SdrTextObj) && !pObj->ISA(SdrUnoObj) && !pObj->ISA(SdrMediaObj) )
-                    {
-                        OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
-                        sal_Bool bVertical = ( pOPO && pOPO->IsVertical() );
-                        sal_uInt16 nTextSlotId = bVertical ? SID_DRAW_TEXT_VERTICAL : SID_DRAW_TEXT;
-
-                        pViewShell->GetViewData()->GetDispatcher().
-                            Execute(nTextSlotId, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
-
-                        // jetzt den erzeugten FuText holen und in den EditModus setzen
-                        FuPoor* pPoor = pViewShell->GetViewData()->GetView()->GetDrawFuncPtr();
-                        if ( pPoor && pPoor->GetSlotID() == nTextSlotId )    // hat keine RTTI
-                        {
-                            FuText* pText = (FuText*)pPoor;
-                            Point aMousePixel = rMEvt.GetPosPixel();
-                            pText->SetInEditMode( pObj, &aMousePixel );
-                        }
-                        bReturn = sal_True;
-                    }
+                    bReturn = sal_True;
                 }
             }
         }
         else if ( TestDetective( pView->GetSdrPageView(), aPnt ) )
+        {
             bReturn = sal_True;
+        }
     }
 
     // Ein VCControl ist aktiv
     // Event an den Manager weiterleiten
     if( bVCAction )
     {
-        //  GetSbxForm gibts nicht mehr - Basic-Controls sind tot
-        //SdrPageView* pPgView = pView->GetPageViewByIndex(0);
-        //ScDrawPage*  pPage     = (ScDrawPage*)pPgView->GetPage();
-        //VCSbxForm* pForm = (VCSbxForm*)(SbxObject*)(pPage->GetSbxForm());
-        //((VCManager*)(pForm->GetVCContainer()))->
-        //    MouseButtonUp( pWindow, rMEvt );
-        //HMHpView->ShowMarkHdl();
         bVCAction = sal_False;
         bReturn = sal_True;
     }

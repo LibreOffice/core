@@ -264,19 +264,22 @@ if( !pChkLnk )
         for( sal_uInt16 n = rLnks.Count(); n; )
         {
             const ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
-            if( pLnk && OBJECT_CLIENT_GRF != pLnk->GetObjType() &&
-                pLnk->ISA( SwBaseLink ) &&
-                !((SwBaseLink*)pLnk)->IsNoDataFlag() &&
-                ((SwBaseLink*)pLnk)->IsInRange( nSttNd, nEndNd, nStt, nEnd ))
+            if( pLnk && OBJECT_CLIENT_GRF != pLnk->GetObjType())
+            {
+                const SwBaseLink* pSwBaseLink = dynamic_cast< const SwBaseLink* >(pLnk);
+
+                if(pSwBaseLink &&
+                    !pSwBaseLink->IsNoDataFlag() &&
+                    pSwBaseLink->IsInRange( nSttNd, nEndNd, nStt, nEnd ))
             {
                 if( pChkLnk )
                 {
-                    if( pLnk == pChkLnk ||
-                        ((SwBaseLink*)pLnk)->IsRecursion( pChkLnk ) )
+                        if( pLnk == pChkLnk || pSwBaseLink->IsRecursion( pChkLnk ) )
                         return sal_True;
                 }
-                else if( ((SwBaseLink*)pLnk)->IsRecursion( (SwBaseLink*)pLnk ) )
-                    ((SwBaseLink*)pLnk)->SetNoDataFlag();
+                    else if( pSwBaseLink->IsRecursion( (SwBaseLink*)pLnk ) )
+                        const_cast< SwBaseLink* >(pSwBaseLink)->SetNoDataFlag();
+                }
             }
         }
 if( !pChkLnk )
@@ -345,13 +348,17 @@ SwDataChanged::~SwDataChanged()
         {
             ::sfx2::SvLinkSourceRef refObj( rServers[ --nCnt ] );
             // noch jemand am Object interessiert ?
-            if( refObj->HasDataLinks() && refObj->ISA( SwServerObject ))
+            if( refObj->HasDataLinks() )
             {
-                SwServerObject& rObj = *(SwServerObject*)&refObj;
-                if( pPos )
-                    rObj.SendDataChanged( *pPos );
-                else
-                    rObj.SendDataChanged( *pPam );
+                SwServerObject* pObj = dynamic_cast< SwServerObject* >(&refObj);
+
+                if(pObj)
+                {
+                    if( pPos )
+                        pObj->SendDataChanged( *pPos );
+                    else
+                        pObj->SendDataChanged( *pPam );
+                }
             }
 
             // sollte jetzt gar keine Verbindung mehr bestehen

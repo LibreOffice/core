@@ -66,27 +66,10 @@ namespace drawinglayer
         {
         }
 
-        bool EpsPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const EpsPrimitive2D& rCompare = (EpsPrimitive2D&)rPrimitive;
-
-                return (getEpsTransform() == rCompare.getEpsTransform()
-                    && getGfxLink().IsEqual(rCompare.getGfxLink())
-                    && getMetaFile() == rCompare.getMetaFile());
-            }
-
-            return false;
-        }
-
         basegfx::B2DRange EpsPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // use own implementation to quickly answer the getB2DRange question.
-            basegfx::B2DRange aRetval(0.0, 0.0, 1.0, 1.0);
-            aRetval.transform(getEpsTransform());
-
-            return aRetval;
+            return getEpsTransform() * basegfx::B2DRange::getUnitB2DRange();
         }
 
         // provide unique ID

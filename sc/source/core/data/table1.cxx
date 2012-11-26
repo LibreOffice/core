@@ -129,9 +129,9 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
         if ( pDrawLayer->ScAddPage( nTab ) )    // sal_False (not inserted) during Undo
         {
             pDrawLayer->ScRenamePage( nTab, aName );
-            sal_uLong nx = (sal_uLong) ((double) (MAXCOL+1) * STD_COL_WIDTH           * HMM_PER_TWIPS );
-            sal_uLong ny = (sal_uLong) ((double) (MAXROW+1) * ScGlobal::nStdRowHeight * HMM_PER_TWIPS );
-            pDrawLayer->SetPageSize( static_cast<sal_uInt16>(nTab), Size( nx, ny ), false );
+            const double fx((double)(MAXCOL+1) * STD_COL_WIDTH           * HMM_PER_TWIPS );
+            const double fy((double)(MAXROW+1) * ScGlobal::nStdRowHeight * HMM_PER_TWIPS );
+            pDrawLayer->SetPageSize( static_cast< sal_uInt32 >(nTab), basegfx::B2DVector( fx, fy ), false );
         }
     }
 

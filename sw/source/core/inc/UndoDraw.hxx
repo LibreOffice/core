@@ -25,13 +25,11 @@
 #define SW_UNDO_DRAW_HXX
 
 #include <undobj.hxx>
-
 #include <svx/svdundo.hxx>
-
+#include <svx/svdobj.hxx>
 
 struct SwUndoGroupObjImpl;
 class SdrMark;
-class SdrMarkList;
 class SdrObject;
 class SdrObjGroup;
 class SdrUndoAction;
@@ -45,9 +43,10 @@ class SwDrawFrmFmt;
 class SwSdrUndo : public SwUndo
 {
     SdrUndoAction* pSdrUndo;
-    SdrMarkList* pMarkList; // MarkList for all selected SdrObjects
+    SdrObjectVector maSelectedSdrObjectVector; // all selected SdrObjects
+
 public:
-    SwSdrUndo( SdrUndoAction* , const SdrMarkList* pMarkList );
+    SwSdrUndo( SdrUndoAction* , const SdrObjectVector& rSelectedSdrObjectVector );
 
     virtual ~SwSdrUndo();
 
@@ -60,18 +59,18 @@ public:
 class SwUndoDrawGroup : public SwUndo
 {
     SwUndoGroupObjImpl* pObjArr;
-    sal_uInt16 nSize;
-    sal_Bool bDelFmt;
+    sal_uInt32 nSize;
+    bool bDelFmt;
 
 public:
-    SwUndoDrawGroup( sal_uInt16 nCnt );
+    SwUndoDrawGroup( sal_uInt32 nCnt );
 
     virtual ~SwUndoDrawGroup();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & );
     virtual void RedoImpl( ::sw::UndoRedoContext & );
 
-    void AddObj( sal_uInt16 nPos, SwDrawFrmFmt*, SdrObject* );
+    void AddObj( sal_uInt32 nPos, SwDrawFrmFmt*, SdrObject* );
     void SetGroupFmt( SwDrawFrmFmt* );
 };
 
@@ -90,8 +89,8 @@ public:
 class SwUndoDrawUnGroup : public SwUndo
 {
     SwUndoGroupObjImpl* pObjArr;
-    sal_uInt16 nSize;
-    sal_Bool bDelFmt;
+    sal_uInt32 nSize;
+    bool bDelFmt;
 
 public:
     SwUndoDrawUnGroup( SdrObjGroup* );
@@ -101,7 +100,7 @@ public:
     virtual void UndoImpl( ::sw::UndoRedoContext & );
     virtual void RedoImpl( ::sw::UndoRedoContext & );
 
-    void AddObj( sal_uInt16 nPos, SwDrawFrmFmt* );
+    void AddObj( sal_uInt32 nPos, SwDrawFrmFmt* );
 };
 
 // --> OD 2006-11-01 #130889#
@@ -127,19 +126,19 @@ class SwUndoDrawUnGroupConnectToLayout : public SwUndo
 class SwUndoDrawDelete : public SwUndo
 {
     SwUndoGroupObjImpl* pObjArr;
-    SdrMarkList* pMarkLst;  // MarkList for all selected SdrObjects
-    sal_uInt16 nSize;
-    sal_Bool bDelFmt;
+    SdrObjectVector maSdrObjectVector;  // MarkList for all selected SdrObjects
+    sal_uInt32 nSize;
+    bool bDelFmt;
 
 public:
-    SwUndoDrawDelete( sal_uInt16 nCnt );
+    SwUndoDrawDelete( sal_uInt32 nCnt );
 
     virtual ~SwUndoDrawDelete();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & );
     virtual void RedoImpl( ::sw::UndoRedoContext & );
 
-    void AddObj( sal_uInt16 nPos, SwDrawFrmFmt*, const SdrMark& );
+    void AddObj( sal_uInt32 nPos, SwDrawFrmFmt*, const SdrObject& );
 };
 
 #endif // SW_UNDO_DRAW_HXX

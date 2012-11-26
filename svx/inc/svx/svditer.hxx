@@ -27,51 +27,64 @@
 #include <sal/types.h>
 #include <tools/list.hxx>
 #include "svx/svxdllapi.h"
+#include <vector>
+#include <svx/svdobj.hxx>
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// predefines
 
 class SdrObjList;
-class SdrObject;
-class SdrMarkList;
 
-// SdrObjListIter methods:
-// IM_FLAT              : Flach ueber die Liste
-// IM_DEEPWITHGROUPS    : Mit rekursivem Abstieg, Next() liefert auch Gruppenobjekte
-// IM_DEEPNOGROUPS      : Mit rekursivem Abstieg, Next() liefert keine Gruppenobjekte
-enum SdrIterMode { IM_FLAT, IM_DEEPWITHGROUPS, IM_DEEPNOGROUPS};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// defines
+
+enum SdrIterMode
+{
+    IM_FLAT,                // : Flach ueber die Liste
+    IM_DEEPWITHGROUPS,      // : Mit rekursivem Abstieg, Next() liefert auch Gruppenobjekte
+    IM_DEEPNOGROUPS         // : Mit rekursivem Abstieg, Next() liefert keine Gruppenobjekte
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class SVX_DLLPUBLIC SdrObjListIter
 {
-    List                        maObjList;
+private:
+    SdrObjectVector             maObjList;
     sal_uInt32                  mnIndex;
-    sal_Bool                        mbReverse;
 
-    void ImpProcessObjectList(const SdrObjList& rObjList, SdrIterMode eMode, sal_Bool bUseZOrder);
-    void ImpProcessMarkList(const SdrMarkList& rMarkList, SdrIterMode eMode);
-    void ImpProcessObj(SdrObject* pObj, SdrIterMode eMode, sal_Bool bUseZOrder);
+    /// bitfield
+    bool                        mbReverse : 1;
+
+    void ImpProcessObjectList(const SdrObjList& rObjList, SdrIterMode eMode); // , bool bUseZOrder);
+    void ImpProcessObj(const SdrObject& rObj, SdrIterMode eMode); // , bool bUseZOrder);
 
 public:
-    SdrObjListIter(const SdrObjList& rObjList, SdrIterMode eMode = IM_DEEPNOGROUPS, sal_Bool bReverse = sal_False);
+    SdrObjListIter(const SdrObjList& rObjList, SdrIterMode eMode = IM_DEEPNOGROUPS, bool bReverse = false);
+
     /** This variant lets the user choose the order in which to travel over
         the objects.
         @param bUseZOrder
-            When <TRUE/> then the z-order defines the order of iteration.
+            When <true/> then the z-order defines the order of iteration.
             Otherwise the navigation position as returned by
             SdrObject::GetNavigationPosition() is used.
     */
-    SdrObjListIter(const SdrObjList& rObjList, sal_Bool bUseZOrder, SdrIterMode eMode = IM_DEEPNOGROUPS, sal_Bool bReverse = sal_False);
+//  SdrObjListIter(const SdrObjList& rObjList, bool bUseZOrder, SdrIterMode eMode = IM_DEEPNOGROUPS, bool bReverse = false);
 
     /* SJ: the following function can now be used with every
        SdrObject and is no longer limited to group objects */
-    SdrObjListIter(const SdrObject& rObj, SdrIterMode eMode = IM_DEEPNOGROUPS, sal_Bool bReverse = sal_False);
+    SdrObjListIter(const SdrObject& rObj, SdrIterMode eMode = IM_DEEPNOGROUPS, bool bReverse = false);
 
-    /** Iterates over a list of marked objects received from the SdrMarkView. */
-    SdrObjListIter(const SdrMarkList& rMarkList, SdrIterMode eMode = IM_DEEPNOGROUPS, sal_Bool bReverse = sal_False);
-
-    void Reset() { mnIndex = (mbReverse ? maObjList.Count() : 0L); }
-    sal_Bool IsMore() const { return (mbReverse ? mnIndex != 0 : ( mnIndex < maObjList.Count())); }
-    SdrObject* Next() { return (SdrObject*)maObjList.GetObject(mbReverse ? --mnIndex : mnIndex++); }
-
-    sal_uInt32 Count() { return maObjList.Count(); }
+    void Reset() { mnIndex = (mbReverse ? maObjList.size() : 0); }
+    bool IsMore() const { return (mbReverse ? (mnIndex != 0) : (mnIndex < maObjList.size())); }
+    SdrObject* Next() { return (mbReverse ? (mnIndex != 0 ? maObjList[--mnIndex] : 0) : (mnIndex < maObjList.size() ? maObjList[mnIndex++] : 0)); }
+    sal_uInt32 Count() { return maObjList.size(); }
+    bool Contains(const SdrObject& rObject) { for(SdrObjectVector::const_iterator aCandidate(maObjList.begin()); aCandidate != maObjList.end(); aCandidate++) if(*aCandidate == &rObject) return true; return false; }
 };
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #endif //_SVDITER_HXX
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// eof

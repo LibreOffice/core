@@ -60,6 +60,7 @@
 #include "unokywds.hxx"
 #include "unowcntr.hxx"
 #include <vcl/svapp.hxx>
+#include <svx/globaldrawitempool.hxx>
 
 using namespace ::rtl;
 using namespace ::vos;
@@ -88,7 +89,7 @@ const SvxItemPropertySet* ImplGetSdLayerPropertySet()
         { MAP_CHAR_LEN("Description"),              WID_LAYER_DESC,     &::getCppuType((const OUString*)0), 0, 0 },
         { 0,0,0,0,0,0}
     };
-    static SvxItemPropertySet aSDLayerPropertySet_Impl( aSdLayerPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
+    static SvxItemPropertySet aSDLayerPropertySet_Impl( aSdLayerPropertyMap_Impl, GetGlobalDrawObjectItemPool() );
     return &aSDLayerPropertySet_Impl;
 }
 
@@ -541,7 +542,7 @@ uno::Reference< drawing::XLayer > SAL_CALL SdLayerManager::insertNewByIndex( sal
 
     if( mpModel->mpDoc )
     {
-        SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetLayerAdmin();
+        SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetModelLayerAdmin();
         sal_uInt16 nLayerCnt = rLayerAdmin.GetLayerCount();
         sal_uInt16 nLayer = nLayerCnt - 2 + 1;
         String aLayerName;
@@ -554,7 +555,7 @@ uno::Reference< drawing::XLayer > SAL_CALL SdLayerManager::insertNewByIndex( sal
             nLayer++;
         }
 
-        SdrLayerAdmin& rLA=mpModel->mpDoc->GetLayerAdmin();
+        SdrLayerAdmin& rLA=mpModel->mpDoc->GetModelLayerAdmin();
         const sal_Int32 nMax=rLA.GetLayerCount();
         if (nIndex>nMax) nIndex=nMax;
         xLayer = GetLayer (rLA.NewLayer(aLayerName,(sal_uInt16)nIndex));
@@ -622,7 +623,7 @@ uno::Reference< drawing::XLayer > SAL_CALL SdLayerManager::getLayerForShape( con
         if(pObj)
         {
             SdrLayerID aId = pObj->GetLayer();
-            SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetLayerAdmin();
+            SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetModelLayerAdmin();
             xLayer = GetLayer (rLayerAdmin.GetLayerPerID(aId));
         }
     }
@@ -640,7 +641,7 @@ sal_Int32 SAL_CALL SdLayerManager::getCount()
 
     if( mpModel->mpDoc )
     {
-        SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetLayerAdmin();
+        SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetModelLayerAdmin();
         return rLayerAdmin.GetLayerCount();
     }
 
@@ -662,7 +663,7 @@ uno::Any SAL_CALL SdLayerManager::getByIndex( sal_Int32 nLayer )
 
     if( mpModel->mpDoc )
     {
-        SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetLayerAdmin();
+        SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetModelLayerAdmin();
         uno::Reference<drawing::XLayer> xLayer (GetLayer (rLayerAdmin.GetLayer((sal_uInt16)nLayer)));
         aAny <<= xLayer;
     }
@@ -679,8 +680,8 @@ uno::Any SAL_CALL SdLayerManager::getByName( const OUString& aName )
     if( (mpModel == 0) || (mpModel->mpDoc == 0 ) )
         throw lang::DisposedException();
 
-    SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetLayerAdmin();
-    SdrLayer* pLayer = rLayerAdmin.GetLayer( SdLayer::convertToInternalName( aName ), sal_False );
+    SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetModelLayerAdmin();
+    SdrLayer* pLayer = rLayerAdmin.GetLayer( SdLayer::convertToInternalName( aName ), false );
     if( pLayer == NULL )
         throw container::NoSuchElementException();
 
@@ -695,7 +696,7 @@ uno::Sequence< OUString > SAL_CALL SdLayerManager::getElementNames()
     if( mpModel == 0 )
         throw lang::DisposedException();
 
-    SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetLayerAdmin();
+    SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetModelLayerAdmin();
     const sal_uInt16 nLayerCount = rLayerAdmin.GetLayerCount();
 
     uno::Sequence< OUString > aSeq( nLayerCount );
@@ -720,9 +721,9 @@ sal_Bool SAL_CALL SdLayerManager::hasByName( const OUString& aName ) throw(uno::
     if( mpModel == 0 )
         throw lang::DisposedException();
 
-    SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetLayerAdmin();
+    SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetModelLayerAdmin();
 
-    return NULL != rLayerAdmin.GetLayer( SdLayer::convertToInternalName( aName ), sal_False );
+    return NULL != rLayerAdmin.GetLayer( SdLayer::convertToInternalName( aName ), false );
 }
 
 // XElementAccess
@@ -743,8 +744,7 @@ void SdLayerManager::UpdateLayerView( sal_Bool modify ) const throw()
 {
     if(mpModel->mpDocShell)
     {
-        ::sd::DrawViewShell* pDrViewSh =
-            PTR_CAST(::sd::DrawViewShell, mpModel->mpDocShell->GetViewShell());
+        ::sd::DrawViewShell* pDrViewSh = dynamic_cast< ::sd::DrawViewShell* >(mpModel->mpDocShell->GetViewShell());
 
         if(pDrViewSh)
         {

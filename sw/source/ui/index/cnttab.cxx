@@ -3495,7 +3495,7 @@ void    SwTokenWindow::InsertAtSelection(
         pButton->SetText(sTmp.Copy(0, 2));
     }
 
- Size aEditSize(GetOutputSizePixel());
+    Size aEditSize(GetOutputSizePixel());
     aEditSize.Width() = pButton->GetTextWidth(rText) + 5;
     pButton->SetSizePixel(aEditSize);
     pButton->Check(sal_True);
@@ -3802,14 +3802,11 @@ sal_Bool SwTokenWindow::CreateQuickHelp(Control* pCtrl,
  ---------------------------------------------------------------------------*/
 void SwTokenWindow::Resize()
 {
- Size aCompleteSize(GetOutputSizePixel());
-
- Point aRightPos(aRightScrollWin.GetPosPixel());
- Size aRightSize(aRightScrollWin.GetSizePixel());
-
- Size aMiddleSize(aCtrlParentWin.GetSizePixel());
-
-    long nMove = aCompleteSize.Width() - aRightSize.Width() - aRightPos.X();
+    const Size aCompleteSize(GetOutputSizePixel());
+    Point aRightPos(aRightScrollWin.GetPosPixel());
+    const Size aRightSize(aRightScrollWin.GetSizePixel());
+    Size aMiddleSize(aCtrlParentWin.GetSizePixel());
+    long nMove(aCompleteSize.Width() - aRightSize.Width() - aRightPos.X());
 
     aRightPos.X() += nMove;
     aRightScrollWin.SetPosPixel(aRightPos);

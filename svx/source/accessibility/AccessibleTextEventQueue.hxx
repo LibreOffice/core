@@ -28,10 +28,9 @@
 #include <list>
 #include <algorithm>
 #include <tools/solar.h>
-#include <tools/rtti.hxx>
 
 class SfxHint;
-class SdrHint;
+class SdrBaseHint;
 class SfxSimpleHint;
 class TextHint;
 class SvxViewHint;
@@ -56,7 +55,7 @@ namespace accessibility
         /// Append event to end of queue
         void Append( const SfxHint& rHint );
         /// Append event to end of queue
-        void Append( const SdrHint& rHint );
+        void Append( const SdrBaseHint& rHint );
         /// Append event to end of queue
         void Append( const SfxSimpleHint& rHint );
         /// Append event to end of queue

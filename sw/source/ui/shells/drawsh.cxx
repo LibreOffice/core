@@ -77,8 +77,6 @@ SFX_IMPL_INTERFACE(SwDrawShell, SwDrawBaseShell, SW_RES(STR_SHELLNAME_DRAW))
     SFX_CHILDWINDOW_REGISTRATION(SvxFontWorkChildWindow::GetChildWindowId());
 }
 
-TYPEINIT1(SwDrawShell,SwDrawBaseShell)
-
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
@@ -91,9 +89,9 @@ void SwDrawShell::Execute(SfxRequest &rReq)
     const SfxItemSet    *pArgs = rReq.GetArgs();
     SfxBindings         &rBnd  = GetView().GetViewFrame()->GetBindings();
     sal_uInt16               nSlotId = rReq.GetSlot();
-    sal_Bool                 bChanged = pSdrView->GetModel()->IsChanged();
+    bool bChanged = pSdrView->getSdrModelFromSdrView().IsChanged();
 
-    pSdrView->GetModel()->SetChanged(sal_False);
+    pSdrView->getSdrModelFromSdrView().SetChanged(false);
 
     const SfxPoolItem* pItem;
     if(pArgs)
@@ -122,7 +120,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
                 GetView().FlipDrawRotate();
             }
             GetView().FlipDrawSelMode();
-            pSdrView->SetFrameDragSingles(GetView().IsDrawSelMode());
+            pSdrView->SetFrameHandles(GetView().IsDrawSelMode());
             GetView().AttrChangedNotify(&rSh); // Shellwechsel...
             break;
 
@@ -177,7 +175,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
 
         case SID_FONTWORK:
         {
-            FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &rSh.GetView()));
+            FieldUnit eMetric = ::GetDfltMetric(0 != dynamic_cast< SwWebView* >( &rSh.GetView()));
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)) );
             SfxViewFrame* pVFrame = GetView().GetViewFrame();
             if (pArgs)
@@ -288,10 +286,10 @@ void SwDrawShell::Execute(SfxRequest &rReq)
             DBG_ASSERT(!this, "falscher Dispatcher");
             return;
     }
-    if (pSdrView->GetModel()->IsChanged())
+    if (pSdrView->getSdrModelFromSdrView().IsChanged())
         rSh.SetModified();
     else if (bChanged)
-        pSdrView->GetModel()->SetChanged(sal_True);
+        pSdrView->getSdrModelFromSdrView().SetChanged(true);
 }
 
 /*--------------------------------------------------------------------
@@ -398,12 +396,11 @@ void SwDrawShell::ExecFormText(SfxRequest& rReq)
 {
     SwWrtShell &rSh = GetShell();
     SdrView*    pDrView = rSh.GetDrawView();
-    sal_Bool        bChanged = pDrView->GetModel()->IsChanged();
-    pDrView->GetModel()->SetChanged(sal_False);
+    bool bChanged = pDrView->getSdrModelFromSdrView().IsChanged();
+    pDrView->getSdrModelFromSdrView().SetChanged(false);
+    SdrObject* pSingleSelected = pDrView->getSelectedIfSingle();
 
-    const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
-
-    if ( rMarkList.GetMarkCount() == 1 && rReq.GetArgs() )
+    if ( pSingleSelected && rReq.GetArgs() )
     {
         const SfxItemSet& rSet = *rReq.GetArgs();
         const SfxPoolItem* pItem;
@@ -424,8 +421,8 @@ void SwDrawShell::ExecFormText(SfxRequest& rReq)
             SvxFontWorkDialog* pDlg = (SvxFontWorkDialog*)(GetView().GetViewFrame()->
                                         GetChildWindow(nId)->GetWindow());
 
-            pDlg->CreateStdFormObj(*pDrView, *pDrView->GetSdrPageView(),
-                                    rSet, *rMarkList.GetMark(0)->GetMarkedSdrObj(),
+            pDlg->CreateStdFormObj(*pDrView,
+                                    rSet, *pSingleSelected,
                                    ((const XFormTextStdFormItem*) pItem)->
                                    GetValue());
 
@@ -433,11 +430,11 @@ void SwDrawShell::ExecFormText(SfxRequest& rReq)
         else
             pDrView->SetAttributes(rSet);
     }
-    if (pDrView->GetModel()->IsChanged())
+    if (pDrView->getSdrModelFromSdrView().IsChanged())
         rSh.SetModified();
     else
         if (bChanged)
-            pDrView->GetModel()->SetChanged(sal_True);
+            pDrView->getSdrModelFromSdrView().SetChanged(true);
 }
 
 /*************************************************************************
@@ -452,20 +449,15 @@ void SwDrawShell::GetFormTextState(SfxItemSet& rSet)
 {
     SwWrtShell &rSh = GetShell();
     SdrView* pDrView = rSh.GetDrawView();
-    const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
-    const SdrObject* pObj = NULL;
+    const SdrObject* pObj = pDrView->getSelectedIfSingle();
     SvxFontWorkDialog* pDlg = NULL;
-
     const sal_uInt16 nId = SvxFontWorkChildWindow::GetChildWindowId();
 
     SfxViewFrame* pVFrame = GetView().GetViewFrame();
     if ( pVFrame->HasChildWindow(nId) )
         pDlg = (SvxFontWorkDialog*)(pVFrame->GetChildWindow(nId)->GetWindow());
 
-    if ( rMarkList.GetMarkCount() == 1 )
-        pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-
-    if ( pObj == NULL || !pObj->ISA(SdrTextObj) ||
+    if ( pObj == NULL || !dynamic_cast< const SdrTextObj* >(pObj) ||
         !((SdrTextObj*) pObj)->HasText() )
     {
 #define XATTR_ANZ 12

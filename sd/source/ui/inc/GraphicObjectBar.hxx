@@ -38,7 +38,6 @@ class GraphicObjectBar
     : public SfxShell
 {
 public:
-    TYPEINFO();
     SFX_DECL_INTERFACE( SD_IF_SDDRAWGRAFOBJECTBAR )
 
     GraphicObjectBar (ViewShell* pSdViewShell, ::sd::View* pSdView);

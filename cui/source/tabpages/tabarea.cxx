@@ -31,7 +31,6 @@
 #include <sfx2/objsh.hxx>
 #include <vcl/msgbox.hxx>
 #include <unotools/pathoptions.hxx>
-#include <svx/svdmark.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdview.hxx>
 #include <svx/dialogs.hrc>

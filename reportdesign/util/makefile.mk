@@ -50,6 +50,7 @@ SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
 SHL1STDLIBS= \
     $(EDITENGLIB)			\
         $(SVXCORELIB)			\
+        $(BASEGFXLIB)			\
         $(SVXLIB)				\
         $(FWELIB)				\
         $(SFXLIB)				\
@@ -106,6 +107,7 @@ SHL2TARGET=$(TARGET2)$(DLLPOSTFIX)
 
 SHL2STDLIBS= \
     $(EDITENGLIB)			\
+        $(BASEGFXLIB)			\
         $(SVXCORELIB)			\
         $(SVXLIB)				\
         $(SFXLIB)				\

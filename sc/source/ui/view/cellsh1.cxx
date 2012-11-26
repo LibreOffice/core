@@ -1189,7 +1189,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 const SfxPoolItem* pItem;
                 if ( pReqArgs &&
                      pReqArgs->GetItemState(nSlot, sal_True, &pItem) == SFX_ITEM_SET &&
-                     pItem->ISA(SfxUInt32Item) )
+                     dynamic_cast< const SfxUInt32Item* >(pItem) )
                 {
                     nFormat = ((const SfxUInt32Item*)pItem)->GetValue();
                 }
@@ -1197,9 +1197,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 if ( nFormat )
                 {
                     Window* pWin = GetViewData()->GetActiveWin();
-                    sal_Bool bCells = ( ScTransferObj::GetOwnClipboard( pWin ) != NULL );
-                    sal_Bool bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != NULL );
-                    sal_Bool bOle = ( nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE );
+                    bool bCells = ( ScTransferObj::GetOwnClipboard( pWin ) != NULL );
+                    bool bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != NULL );
+                    bool bOle = ( nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE );
 
                     if ( bCells && bOle )
                         pTabViewShell->PasteFromSystem();
@@ -1261,11 +1261,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             }
                         }
 
-                        SFX_REQUEST_ARG( rReq, pFuncItem, SfxUInt16Item, FN_PARAM_1, sal_False );
-                        SFX_REQUEST_ARG( rReq, pSkipItem, SfxBoolItem, FN_PARAM_2, sal_False );
-                        SFX_REQUEST_ARG( rReq, pTransposeItem, SfxBoolItem, FN_PARAM_3, sal_False );
-                        SFX_REQUEST_ARG( rReq, pLinkItem, SfxBoolItem, FN_PARAM_4, sal_False );
-                        SFX_REQUEST_ARG( rReq, pMoveItem, SfxInt16Item, FN_PARAM_5, sal_False );
+                        SFX_REQUEST_ARG( rReq, pFuncItem, SfxUInt16Item, FN_PARAM_1 );
+                        SFX_REQUEST_ARG( rReq, pSkipItem, SfxBoolItem, FN_PARAM_2 );
+                        SFX_REQUEST_ARG( rReq, pTransposeItem, SfxBoolItem, FN_PARAM_3 );
+                        SFX_REQUEST_ARG( rReq, pLinkItem, SfxBoolItem, FN_PARAM_4 );
+                        SFX_REQUEST_ARG( rReq, pMoveItem, SfxInt16Item, FN_PARAM_5 );
                         if ( pFuncItem )
                             nFunction = pFuncItem->GetValue();
                         if ( pSkipItem )
@@ -1390,13 +1390,13 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 const SfxPoolItem* pItem=NULL;
                 if ( pReqArgs &&
                      pReqArgs->GetItemState(nSlot, sal_True, &pItem) == SFX_ITEM_SET &&
-                     pItem->ISA(SfxUInt32Item) )
+                     dynamic_cast< const SfxUInt32Item* >(pItem) )
                 {
                     sal_uLong nFormat = ((const SfxUInt32Item*)pItem)->GetValue();
                     sal_Bool bRet=sal_True;
                     {
                         WaitObject aWait( GetViewData()->GetDialogParent() );
-                        sal_Bool bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != NULL );
+                        bool bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != NULL );
                         if ( bDraw && nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE )
                             pTabViewShell->PasteDraw();
                         else
@@ -1423,7 +1423,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     }
                     else                                    // Zeichenobjekte oder fremde Daten
                     {
-                        sal_Bool bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != NULL );
+                        bool bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != NULL );
 
                         SvxClipboardFmtItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
                         GetPossibleClipboardFormats( aFormats );
@@ -1903,12 +1903,12 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), sal_False, &pItem);
                 if ( pItem )
                 {
-                    const SfxStringItem* pStringItem = PTR_CAST( SfxStringItem, pItem );
+                    const SfxStringItem* pStringItem = dynamic_cast< const SfxStringItem* >( pItem );
                     if ( pStringItem )
                         aChars = pStringItem->GetValue();
                     const SfxPoolItem* pFtItem = NULL;
                     pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), sal_False, &pFtItem);
-                    const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
+                    const SfxStringItem* pFontItem = dynamic_cast< const SfxStringItem* >( pFtItem );
                     if ( pFontItem )
                         aFontName = pFontItem->GetValue();
                 }
@@ -1944,8 +1944,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 if ( pDlg->Execute() == RET_OK )
                 {
-                    SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pItem, SfxStringItem, SID_CHARMAP, sal_False );
-                    SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT, sal_False );
+                    SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pItem, SfxStringItem, SID_CHARMAP );
+                    SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT );
 
                     if ( pItem && pFontItem )
                     {
@@ -2035,19 +2035,19 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 String aSource;
                 sal_uLong nRefresh=0;
 
-                SFX_REQUEST_ARG( rReq, pFile, SfxStringItem, SID_FILE_NAME, sal_False );
-                SFX_REQUEST_ARG( rReq, pSource, SfxStringItem, FN_PARAM_1, sal_False );
+                SFX_REQUEST_ARG( rReq, pFile, SfxStringItem, SID_FILE_NAME );
+                SFX_REQUEST_ARG( rReq, pSource, SfxStringItem, FN_PARAM_1 );
                 if ( pFile && pSource )
                 {
                     aFile = pFile->GetValue();
                     aSource = pSource->GetValue();
-                    SFX_REQUEST_ARG( rReq, pFilter, SfxStringItem, SID_FILTER_NAME, sal_False );
+                    SFX_REQUEST_ARG( rReq, pFilter, SfxStringItem, SID_FILTER_NAME );
                     if ( pFilter )
                         aFilter = pFilter->GetValue();
-                    SFX_REQUEST_ARG( rReq, pOptions, SfxStringItem, SID_FILE_FILTEROPTIONS, sal_False );
+                    SFX_REQUEST_ARG( rReq, pOptions, SfxStringItem, SID_FILE_FILTEROPTIONS );
                     if ( pOptions )
                         aOptions = pOptions->GetValue();
-                    SFX_REQUEST_ARG( rReq, pRefresh, SfxUInt32Item, FN_PARAM_2, sal_False );
+                    SFX_REQUEST_ARG( rReq, pRefresh, SfxUInt32Item, FN_PARAM_2 );
                     if ( pRefresh )
                         nRefresh = pRefresh->GetValue();
                 }

@@ -37,7 +37,6 @@ class TTBasic : public MyBasic
 {
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_TEST2,SBXID_TTBASIC,1);
-    TYPEINFO();
     TTBasic();
    ~TTBasic();
     sal_Bool Compile( SbModule* );

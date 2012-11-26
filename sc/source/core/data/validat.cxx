@@ -306,9 +306,10 @@ sal_Bool ScValidationData::DoMacro( const ScAddress& rPos, const String& rInput,
 
     StarBASIC* pRoot = pDocSh->GetBasic();
     SbxVariable* pVar = pRoot->Find( aErrorTitle, SbxCLASS_METHOD );
-    if ( pVar && pVar->ISA(SbMethod) )
+    SbMethod* pMethod = dynamic_cast< SbMethod* >(pVar);
+
+    if ( pMethod )
     {
-        SbMethod* pMethod = (SbMethod*)pVar;
         SbModule* pModule = pMethod->GetModule();
         SbxObject* pObject = pModule->GetParent();
         String aMacroStr = pObject->GetName();

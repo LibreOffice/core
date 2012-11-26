@@ -76,9 +76,9 @@ namespace drawinglayer
 
             // bitfield
             // is there a PageNumber, Header, Footer or DateTimeField used? Evaluated at construction
-            unsigned                                mbContainsPageField : 1;
-            unsigned                                mbContainsPageCountField : 1;
-            unsigned                                mbContainsOtherFields : 1;
+            bool                                    mbContainsPageField : 1;
+            bool                                    mbContainsPageCountField : 1;
+            bool                                    mbContainsOtherFields : 1;
 
         protected:
             // support for XTEXT_PAINTSHAPE_BEGIN/XTEXT_PAINTSHAPE_END Metafile comments
@@ -92,9 +92,6 @@ namespace drawinglayer
             // get data
             const SdrText* getSdrText() const { return mrSdrText.get(); }
             const OutlinerParaObject& getOutlinerParaObject() const { return maOutlinerParaObject; }
-
-            // compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
             // own get2DDecomposition to take aspect of decomposition with or without spell checker
             // into account
@@ -136,9 +133,6 @@ namespace drawinglayer
             const basegfx::B2DPolyPolygon& getUnitPolyPolygon() const { return maUnitPolyPolygon; }
             const basegfx::B2DHomMatrix& getObjectTransform() const { return maObjectTransform; }
 
-            // compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
-
             // transformed clone operator
             virtual SdrTextPrimitive2D* createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const;
 
@@ -178,9 +172,6 @@ namespace drawinglayer
             const basegfx::B2DPolyPolygon& getPathPolyPolygon() const { return maPathPolyPolygon; }
             const attribute::SdrFormTextAttribute& getSdrFormTextAttribute() const { return maSdrFormTextAttribute; }
 
-            // compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
-
             // transformed clone operator
             virtual SdrTextPrimitive2D* createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const;
 
@@ -207,11 +198,11 @@ namespace drawinglayer
             SdrTextVertAdjust                       maSdrTextVertAdjust;
 
             // bitfield
-            unsigned                                mbFixedCellHeight : 1;
-            unsigned                                mbUnlimitedPage : 1;    // force layout with no text break
-            unsigned                                mbCellText : 1;         // this is a cell text as block text
-            unsigned                                mbWordWrap : 1;         // for CustomShapes text layout
-            unsigned                                mbClipOnBounds : 1;     // for CustomShapes text layout
+            bool                                    mbFixedCellHeight : 1;
+            bool                                    mbUnlimitedPage : 1;    // force layout with no text break
+            bool                                    mbCellText : 1;         // this is a cell text as block text
+            bool                                    mbWordWrap : 1;         // for CustomShapes text layout
+            bool                                    mbClipOnBounds : 1;     // for CustomShapes text layout
 
         protected:
             // local decomposition.
@@ -240,9 +231,6 @@ namespace drawinglayer
             bool getWordWrap() const { return mbWordWrap; }
             bool getClipOnBounds() const { return mbClipOnBounds; }
 
-            // compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
-
             // transformed clone operator
             virtual SdrTextPrimitive2D* createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const;
 
@@ -265,7 +253,7 @@ namespace drawinglayer
             basegfx::B2DHomMatrix                   maTextRangeTransform;
 
             // bitfield
-            unsigned                                mbFixedCellHeight : 1;
+            bool                                    mbFixedCellHeight : 1;
 
         protected:
             // local decomposition.
@@ -281,9 +269,6 @@ namespace drawinglayer
             // get data
             const basegfx::B2DHomMatrix& getTextRangeTransform() const { return maTextRangeTransform; }
             bool isFixedCellHeight() const { return mbFixedCellHeight; }
-
-            // compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
             // transformed clone operator
             virtual SdrTextPrimitive2D* createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const;

@@ -26,6 +26,7 @@
 
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 #include <svx/fmpage.hxx>
+#include <svx/svdlegacy.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 
@@ -57,7 +58,7 @@
 #include <sfx2/objsh.hxx>
 #endif
 #endif
-#include "svx/svditer.hxx"
+#include <svx/svditer.hxx>
 #include <svx/svdview.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/help.hxx>
@@ -82,10 +83,8 @@ using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::container::XChild;
 using com::sun::star::container::XNameContainer;
 
-TYPEINIT1(FmFormPage, SdrPage);
-
 //------------------------------------------------------------------
-FmFormPage::FmFormPage(FmFormModel& rModel, StarBASIC* _pBasic, FASTBOOL bMasterPage)
+FmFormPage::FmFormPage(FmFormModel& rModel, StarBASIC* _pBasic, bool bMasterPage)
            :SdrPage(rModel, bMasterPage)
 #ifndef SVX_LIGHT
            ,m_pImpl( new FmFormPageImpl( *this ) )
@@ -98,23 +97,6 @@ FmFormPage::FmFormPage(FmFormModel& rModel, StarBASIC* _pBasic, FASTBOOL bMaster
 }
 
 //------------------------------------------------------------------
-FmFormPage::FmFormPage(const FmFormPage& rPage)
-           :SdrPage(rPage)
-#ifndef SVX_LIGHT
-           ,m_pImpl(new FmFormPageImpl( *this ) )
-#else
-           ,m_pImpl(NULL)
-#endif
-           ,m_pBasic(0)
-{
-#ifndef SVX_LIGHT
-    m_pImpl->initFrom( rPage.GetImpl() );
-#endif
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::FmFormPage" );
-    m_sPageName = rPage.m_sPageName;
-}
-
-//------------------------------------------------------------------
 FmFormPage::~FmFormPage()
 {
 #ifndef SVX_LIGHT
@@ -122,62 +104,49 @@ FmFormPage::~FmFormPage()
 #endif
 }
 
-//------------------------------------------------------------------
-void FmFormPage::SetModel(SdrModel* pNewModel)
+void FmFormPage::copyDataFromSdrPage(const SdrPage& rSource)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::SetModel" );
-    /* #35055# */
-    // we want to call the super's "SetModel" method even if the model is the
-    // same, in case code somewhere in the system depends on it.  But our code
-    // doesn't, so get the old model to do a check.
-    SdrModel *pOldModel = GetModel();
-
-    SdrPage::SetModel( pNewModel );
-
-    /* #35055# */
-    if ( ( pOldModel != pNewModel ) && m_pImpl )
+    if(this != &rSource)
     {
-        try
+        const FmFormPage* pSource = dynamic_cast< const FmFormPage* >(&rSource);
+
+        if(pSource)
         {
-            Reference< XNameContainer > xForms( m_pImpl->getForms( false ) );
-            if ( xForms.is() )
-            {
-                // we want to keep the current collection, just reset the model
-                // with which it's associated.
-                Reference< XChild > xAsChild( xForms, UNO_QUERY );
-                if ( xAsChild.is() )
-                {
-                    FmFormModel* pDrawModel = (FmFormModel*) GetModel();
-                    SfxObjectShell* pObjShell = pDrawModel->GetObjectShell();
-                    if ( pObjShell )
-                        xAsChild->setParent( pObjShell->GetModel() );
-                }
-            }
+            // call parent
+            SdrPage::copyDataFromSdrPage(rSource);
+
+            // no local data to copy
         }
-        catch( ::com::sun::star::uno::Exception ex )
+        else
         {
-            OSL_ENSURE( sal_False, "UNO Exception caught resetting model for m_pImpl (FmFormPageImpl) in FmFormPage::SetModel" );
+            OSL_ENSURE(false, "copyDataFromSdrObject with ObjectType of Source different from Target (!)");
         }
     }
 }
 
-//------------------------------------------------------------------
-SdrPage* FmFormPage::Clone() const
+SdrPage* FmFormPage::CloneSdrPage(SdrModel* pTargetModel) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::Clone" );
-    return new FmFormPage(*this);
-    // hier fehlt noch ein kopieren der Objekte
+    FmFormModel* pFmFormModel = static_cast< FmFormModel* >(pTargetModel ? pTargetModel : &getSdrModelFromSdrPage());
+    OSL_ENSURE(dynamic_cast< FmFormModel* >(pFmFormModel), "FmFormPage::CloneSdrPage with wrong SdrModel type (!)");
+    FmFormPage* pClone = new FmFormPage(
+        *pFmFormModel,
+        GetBasic(),
+        IsMasterPage());
+    OSL_ENSURE(pClone, "CloneSdrPage error (!)");
+    pClone->copyDataFromSdrPage(*this);
+
+    return pClone;
 }
 
 //------------------------------------------------------------------
-void FmFormPage::InsertObject(SdrObject* pObj, sal_uLong nPos,
-                              const SdrInsertReason* pReason)
+void FmFormPage::InsertObjectToSdrObjList(SdrObject& rObj, sal_uInt32 nPos)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::InsertObject" );
-    SdrPage::InsertObject( pObj, nPos, pReason );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::InsertObjectToSdrObjList" );
+    SdrPage::InsertObjectToSdrObjList( rObj, nPos );
 #ifndef SVX_LIGHT
-    if (GetModel() && (!pReason || pReason->GetReason() != SDRREASON_STREAMING))
-        ((FmFormModel*)GetModel())->GetUndoEnv().Inserted(pObj);
+    FmFormModel* pFmFormModel = dynamic_cast< FmFormModel* >(&getSdrModelFromSdrPage());
+    if(pFmFormModel)
+        pFmFormModel->GetUndoEnv().Inserted(&rObj);
 #endif
 }
 
@@ -208,13 +177,11 @@ sal_Bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
     if( pView->IsAction() )
         return sal_False;
 
-    Point aPos = rEvt.GetMousePosPixel();
-    aPos = pWindow->ScreenToOutputPixel( aPos );
-    aPos = pWindow->PixelToLogic( aPos );
+    const Point aOutputPixel(pWindow->ScreenToOutputPixel(rEvt.GetMousePosPixel()));
+    const basegfx::B2DPoint aPos(pWindow->GetInverseViewTransformation() * basegfx::B2DPoint(aOutputPixel.X(), aOutputPixel.Y()));
 
     SdrObject* pObj = NULL;
-    SdrPageView* pPV = NULL;
-    if ( !pView->PickObj( aPos, 0, pObj, pPV, SDRSEARCH_DEEP ) )
+    if ( !pView->PickObj( aPos, 0.0, pObj, SDRSEARCH_DEEP ) )
         return sal_False;
 
     FmFormObj* pFormObject = FmFormObj::GetFormObject( pObj );
@@ -251,31 +218,38 @@ sal_Bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
     if ( aHelpText.Len() != 0 )
     {
         // Hilfe anzeigen
-        Rectangle aItemRect = pObj->GetCurrentBoundRect();
-        aItemRect = pWindow->LogicToPixel( aItemRect );
-        Point aPt = pWindow->OutputToScreenPixel( aItemRect.TopLeft() );
-        aItemRect.Left()   = aPt.X();
-        aItemRect.Top()    = aPt.Y();
-        aPt = pWindow->OutputToScreenPixel( aItemRect.BottomRight() );
-        aItemRect.Right()  = aPt.X();
-        aItemRect.Bottom() = aPt.Y();
-        if( rEvt.GetMode() == HELPMODE_BALLOON )
-            Help::ShowBalloon( pWindow, aItemRect.Center(), aItemRect, aHelpText);
+        const basegfx::B2DRange aDiscreteRange(pWindow->GetInverseViewTransformation() * pObj->getObjectRange(pView));
+        const Point aTopLeft(basegfx::fround(aDiscreteRange.getMinX()), aDiscreteRange.getMinY());
+        const Point aBottomRight(basegfx::fround(aDiscreteRange.getMaxX()), aDiscreteRange.getMaxY());
+        const Rectangle aItemRectangle(
+            pWindow->OutputToScreenPixel(aTopLeft),
+            pWindow->OutputToScreenPixel(aBottomRight));
+
+        if(HELPMODE_BALLOON == rEvt.GetMode())
+        {
+            Help::ShowBalloon(pWindow, aItemRectangle.Center(), aItemRectangle, aHelpText);
+        }
         else
-            Help::ShowQuickHelp( pWindow, aItemRect, aHelpText );
+        {
+            Help::ShowQuickHelp(pWindow, aItemRectangle, aHelpText);
+        }
     }
 #endif
     return sal_True;
 }
 
 //------------------------------------------------------------------
-SdrObject* FmFormPage::RemoveObject(sal_uLong nObjNum)
+SdrObject* FmFormPage::RemoveObjectFromSdrObjList(sal_uInt32 nObjNum)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::RemoveObject" );
-    SdrObject* pObj = SdrPage::RemoveObject(nObjNum);
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::RemoveObjectFromSdrObjList" );
+    SdrObject* pObj = SdrPage::RemoveObjectFromSdrObjList(nObjNum);
 #ifndef SVX_LIGHT
-    if (pObj && GetModel())
-        ((FmFormModel*)GetModel())->GetUndoEnv().Removed(pObj);
+    if(pObj)
+    {
+        FmFormModel* pFmFormModel = dynamic_cast< FmFormModel* >(&getSdrModelFromSdrPage());
+        if(pFmFormModel)
+            pFmFormModel->GetUndoEnv().Removed(pObj);
+    }
 #endif
     return pObj;
 }

@@ -33,13 +33,7 @@
 
 //------------------------------------------------------------------------
 
-TYPEINIT1_AUTOFACTORY(SvxPagePosSizeItem, SfxPoolItem);
-TYPEINIT1_AUTOFACTORY(SvxLongLRSpaceItem, SfxPoolItem);
-TYPEINIT1_AUTOFACTORY(SvxLongULSpaceItem, SfxPoolItem);
-TYPEINIT1(SvxColumnItem, SfxPoolItem);
-TYPEINIT1(SvxObjectItem, SfxPoolItem);
-
-//------------------------------------------------------------------------
+IMPL_POOLITEM_FACTORY(SvxLongLRSpaceItem)
 
 int SvxLongLRSpaceItem::operator==( const SfxPoolItem& rCmp) const
 {
@@ -170,6 +164,8 @@ SvxLongLRSpaceItem::SvxLongLRSpaceItem(const SvxLongLRSpaceItem &rCpy)
 
 //------------------------------------------------------------------------
 
+IMPL_POOLITEM_FACTORY(SvxLongULSpaceItem)
+
 int SvxLongULSpaceItem::operator==( const SfxPoolItem& rCmp) const
 {
     return SfxPoolItem::operator==(rCmp) &&
@@ -294,6 +290,8 @@ SvxLongULSpaceItem::SvxLongULSpaceItem() :
 {}
 
 //------------------------------------------------------------------------
+
+IMPL_POOLITEM_FACTORY(SvxPagePosSizeItem)
 
 int SvxPagePosSizeItem::operator==( const SfxPoolItem& rCmp) const
 {
@@ -425,6 +423,7 @@ SvxPagePosSizeItem::SvxPagePosSizeItem()
 {}
 
 //------------------------------------------------------------------------
+IMPL_POOLITEM_FACTORY(SvxColumnItem)
 
 void SvxColumnItem::DeleteAndDestroyColumns()
 {
@@ -672,6 +671,8 @@ SfxPoolItem* SvxObjectItem::Clone(SfxItemPool *) const
 }
 
 //------------------------------------------------------------------------
+
+IMPL_POOLITEM_FACTORY(SvxObjectItem)
 
 SvxObjectItem::SvxObjectItem( long nSX, long nEX,
                               long nSY, long nEY, sal_Bool limits ) :

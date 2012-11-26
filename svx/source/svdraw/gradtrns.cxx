@@ -30,13 +30,18 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <vcl/salbtype.hxx>     // FRound
+#include <svx/svdlegacy.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
-void GradTransformer::GradToVec(GradTransGradient& rG, GradTransVector& rV, const SdrObject* pObj)
+void GradTransformer::GradToVec(
+    GradTransGradient& rG,
+    GradTransVector& rV,
+    const SdrObject* pObj)
 {
     // handle start color
     rV.aCol1 = rG.aGradient.GetStartColor();
+
     if(100 != rG.aGradient.GetStartIntens())
     {
         const double fFact((double)rG.aGradient.GetStartIntens() / 100.0);
@@ -45,6 +50,7 @@ void GradTransformer::GradToVec(GradTransGradient& rG, GradTransVector& rV, cons
 
     // handle end color
     rV.aCol2 = rG.aGradient.GetEndColor();
+
     if(100 != rG.aGradient.GetEndIntens())
     {
         const double fFact((double)rG.aGradient.GetEndIntens() / 100.0);
@@ -52,8 +58,7 @@ void GradTransformer::GradToVec(GradTransGradient& rG, GradTransVector& rV, cons
     }
 
     // calc the basic positions
-    const Rectangle aObjectSnapRectangle(pObj->GetSnapRect());
-    const basegfx::B2DRange aRange(aObjectSnapRectangle.Left(), aObjectSnapRectangle.Top(), aObjectSnapRectangle.Right(), aObjectSnapRectangle.Bottom());
+    const basegfx::B2DRange aRange(sdr::legacy::GetSnapRange(*pObj));
     const basegfx::B2DPoint aCenter(aRange.getCenter());
     basegfx::B2DPoint aStartPos, aEndPos;
 
@@ -184,8 +189,13 @@ void GradTransformer::GradToVec(GradTransGradient& rG, GradTransVector& rV, cons
 
 //////////////////////////////////////////////////////////////////////////////
 
-void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, GradTransGradient& rGOld, const SdrObject* pObj,
-    sal_Bool bMoveSingle, sal_Bool bMoveFirst)
+void GradTransformer::VecToGrad(
+    GradTransVector& rV,
+    GradTransGradient& rG,
+    GradTransGradient& rGOld,
+    const SdrObject* pObj,
+    bool bMoveSingle,
+    bool bMoveFirst)
 {
     // fill old gradient to new gradient to have a base
     rG = rGOld;
@@ -196,6 +206,7 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
         rG.aGradient.SetStartColor(rV.aCol1);
         rG.aGradient.SetStartIntens(100);
     }
+
     if(rV.aCol2 != rGOld.aGradient.GetEndColor())
     {
         rG.aGradient.SetEndColor(rV.aCol2);
@@ -203,8 +214,7 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
     }
 
     // calc the basic positions
-    const Rectangle aObjectSnapRectangle(pObj->GetSnapRect());
-    const basegfx::B2DRange aRange(aObjectSnapRectangle.Left(), aObjectSnapRectangle.Top(), aObjectSnapRectangle.Right(), aObjectSnapRectangle.Bottom());
+    const basegfx::B2DRange aRange(sdr::legacy::GetSnapRange(*pObj));
     const basegfx::B2DPoint aCenter(aRange.getCenter());
     basegfx::B2DPoint aStartPos(rV.maPositionA);
     basegfx::B2DPoint aEndPos(rV.maPositionB);

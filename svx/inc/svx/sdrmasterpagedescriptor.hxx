@@ -24,28 +24,21 @@
 #ifndef _SDR_MASTERPAGEDESCRIPTOR_HXX
 #define _SDR_MASTERPAGEDESCRIPTOR_HXX
 
-#include <svx/sdrpageuser.hxx>
 #include <svx/svdsob.hxx>
+#include <svl/lstner.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
-class SdrObject;
-class SfxItemSet;
-class SdrPageProperties;
 
-namespace sdr
-{
-    namespace contact
-    {
-        class ViewContact;
-    } // end of namespace contact
-} // end of namespace sdr
+class SdrPage;
+namespace sdr { namespace contact { class ViewContact; }}
+class SdrPageProperties;
 
 //////////////////////////////////////////////////////////////////////////////
 
 namespace sdr
 {
-    class MasterPageDescriptor : public sdr::PageUser
+    class MasterPageDescriptor : public SfxListener
     {
     private:
         SdrPage&                                        maOwnerPage;
@@ -71,7 +64,7 @@ namespace sdr
         // this method is called form the destructor of the referenced page.
         // do all necessary action to forget the page. It is not necessary to call
         // RemovePageUser(), that is done form the destructor.
-        virtual void PageInDestruction(const SdrPage& rPage);
+        virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
         // member access to UsedPage
         SdrPage& GetUsedPage() const { return maUsedPage; }
@@ -84,8 +77,8 @@ namespace sdr
         void SetVisibleLayers(const SetOfByte& rNew);
 
         // operators
-        sal_Bool operator==(const MasterPageDescriptor& rCandidate) const;
-        sal_Bool operator!=(const MasterPageDescriptor& rCandidate) const;
+        bool operator==(const MasterPageDescriptor& rCandidate) const;
+        bool operator!=(const MasterPageDescriptor& rCandidate) const;
 
         const SdrPageProperties* getCorrectSdrPageProperties() const;
     };

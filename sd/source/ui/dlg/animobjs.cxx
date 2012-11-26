@@ -50,13 +50,11 @@
 #include "sdpage.hxx"
 #include "res_bmp.hrc"
 #include "ViewShell.hxx"
-
-#ifndef _SV_SVAPP_HXX_
 #include <vcl/svapp.hxx>
-#endif
-
 #include <string>
 #include <algorithm>
+#include <svx/svdlegacy.hxx>
+#include <svx/svdetc.hxx>
 
 using namespace ::com::sun::star;
 
@@ -132,8 +130,8 @@ void SdDisplay::DataChanged( const DataChangedEvent& rDCEvt )
         const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
         SetBackground( Wallpaper( Color( rStyles.GetFieldColor() ) ) );
         SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode()
-            ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
-            : ViewShell::OUTPUT_DRAWMODE_COLOR );
+            ? SD_OUTPUT_DRAWMODE_CONTRAST
+            : SD_OUTPUT_DRAWMODE_COLOR );
     }
 }
 
@@ -170,8 +168,8 @@ AnimationWindow::AnimationWindow( SfxBindings* pInBindings,
         pWin                ( pParent ),
         pBitmapEx           ( NULL ),
 
-        bMovie              ( sal_False ),
-        bAllObjects         ( sal_False ),
+        bMovie              ( false ),
+        bAllObjects         ( false ),
 
         pBindings           ( pInBindings )
 {
@@ -185,7 +183,7 @@ AnimationWindow::AnimationWindow( SfxBindings* pInBindings,
 
     // neues Dokument mit Seite erzeugen
     pMyDoc = new SdDrawDocument(DOCUMENT_TYPE_IMPRESS, NULL);
-    SdPage* pPage = (SdPage*) pMyDoc->AllocPage(sal_False);
+    SdPage* pPage = (SdPage*) pMyDoc->AllocPage(false);
     pMyDoc->InsertPage(pPage);
 
     pControllerItem = new AnimationControllerItem( SID_ANIMATOR_STATE, this, pBindings );
@@ -265,7 +263,7 @@ IMPL_LINK( AnimationWindow, ClickFirstHdl, void *, EMPTYARG )
 
 IMPL_LINK( AnimationWindow, ClickStopHdl, void *, EMPTYARG )
 {
-    bMovie = sal_False;
+    bMovie = false;
     return( 0L );
 }
 
@@ -275,15 +273,15 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
 {
     ScopeLockGuard aGuard( maPlayLock );
 
-    bMovie = sal_True;
-    sal_Bool bDisableCtrls = sal_False;
+    bMovie = true;
+    bool bDisableCtrls = false;
     sal_uLong nCount = aBmpExList.Count();
-    sal_Bool bReverse = p == &aBtnReverse;
+    bool bReverse = p == &aBtnReverse;
 
     // Kann spaeter schwer ermittelt werden
-    sal_Bool bRbtGroupEnabled = aRbtGroup.IsEnabled();
-    sal_Bool bBtnGetAllObjectsEnabled = aBtnGetAllObjects.IsEnabled();
-    sal_Bool bBtnGetOneObjectEnabled = aBtnGetOneObject.IsEnabled();
+    bool bRbtGroupEnabled = aRbtGroup.IsEnabled();
+    bool bBtnGetAllObjectsEnabled = aBtnGetAllObjects.IsEnabled();
+    bool bBtnGetOneObjectEnabled = aBtnGetOneObject.IsEnabled();
 
     // Gesamtzeit ermitteln
     Time aTime( 0 );
@@ -304,7 +302,7 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
     SfxProgress* pProgress = NULL;
     if( nFullTime >= 1000 )
     {
-        bDisableCtrls = sal_True;
+        bDisableCtrls = true;
         aBtnStop.Enable();
         aBtnStop.Update();
         String aStr( RTL_CONSTASCII_USTRINGPARAM( "Animator:" ) ); // Hier sollte man sich noch etwas gescheites ausdenken!
@@ -313,7 +311,7 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
 
     sal_uLong nTmpTime = 0;
     long i = 0;
-    sal_Bool bCount = i < (long) nCount;
+    bool bCount = i < (long) nCount;
     if( bReverse )
     {
         i = nCount - 1;
@@ -368,7 +366,7 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
     }
 
     // Um die Controls wieder zu enablen
-    bMovie = sal_False;
+    bMovie = false;
     if (nCount > 0)
         UpdateControl(i);
 
@@ -403,8 +401,8 @@ IMPL_LINK( AnimationWindow, ClickRbtHdl, void *, p )
     if( !pBitmapEx || p == &aRbtGroup || aRbtGroup.IsChecked() )
     {
         aTimeField.SetText( String() );
-        aTimeField.Enable( sal_False );
-        aLbLoopCount.Enable( sal_False );
+        aTimeField.Enable( false );
+        aLbLoopCount.Enable( false );
     }
     else if( p == &aRbtBitmap || aRbtBitmap.IsChecked() )
     {
@@ -429,7 +427,7 @@ IMPL_LINK( AnimationWindow, ClickGetObjectHdl, void *, pBtn )
     bAllObjects = pBtn == &aBtnGetAllObjects;
 
     // Code jetzt in AddObj()
-    SfxBoolItem aItem( SID_ANIMATOR_ADD, sal_True );
+    SfxBoolItem aItem( SID_ANIMATOR_ADD, true );
 
     GetBindings().GetDispatcher()->Execute(
         SID_ANIMATOR_ADD, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD, &aItem, 0L );
@@ -465,10 +463,9 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, void *, pBtn )
         // Objekte vorhanden sein.
         if( pObject )
         {
-            pObject = pPage->RemoveObject(nPos);
+            pObject = pPage->RemoveObjectFromSdrObjList(nPos);
             DBG_ASSERT(pObject, "Clone beim Loeschen nicht gefunden");
-            SdrObject::Free( pObject );
-            pPage->RecalcObjOrdNums();
+            deleteSdrObjectSafeAndClearPointer( pObject );
         }
 
     }
@@ -491,10 +488,9 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, void *, pBtn )
                 pObject = pPage->GetObj( i );
                 if( pObject )
                 {
-                    pObject = pPage->RemoveObject( i );
+                    pObject = pPage->RemoveObjectFromSdrObjList( i );
                     DBG_ASSERT(pObject, "Clone beim Loeschen nicht gefunden");
-                    SdrObject::Free( pObject );
-                    //pPage->RecalcObjOrdNums();
+                    deleteSdrObjectSafeAndClearPointer( pObject );
                 }
 
             }
@@ -533,7 +529,7 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, void *, pBtn )
 IMPL_LINK( AnimationWindow, ClickCreateGroupHdl, void *, EMPTYARG )
 {
     // Code jetzt in CreatePresObj()
-    SfxBoolItem aItem( SID_ANIMATOR_CREATE, sal_True );
+    SfxBoolItem aItem( SID_ANIMATOR_CREATE, true );
 
     GetBindings().GetDispatcher()->Execute(
         SID_ANIMATOR_CREATE, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD, &aItem, 0L );
@@ -575,7 +571,7 @@ IMPL_LINK( AnimationWindow, ModifyTimeHdl, void *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-void AnimationWindow::UpdateControl( sal_uLong nListPos, sal_Bool bDisableCtrls )
+void AnimationWindow::UpdateControl( sal_uLong nListPos, bool bDisableCtrls )
 {
     String aString;
 
@@ -588,7 +584,7 @@ void AnimationWindow::UpdateControl( sal_uLong nListPos, sal_Bool bDisableCtrls 
         if( pObject )
         {
             VirtualDevice   aVD;
-            Rectangle       aObjRect( pObject->GetCurrentBoundRect() );
+            Rectangle       aObjRect( sdr::legacy::GetBoundRect(*pObject) );
             Size            aObjSize( aObjRect.GetSize() );
             Point           aOrigin( Point( -aObjRect.Left(), -aObjRect.Top() ) );
             MapMode         aMap( aVD.GetMapMode() );
@@ -599,8 +595,8 @@ void AnimationWindow::UpdateControl( sal_uLong nListPos, sal_Bool bDisableCtrls 
             const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
             aVD.SetBackground( Wallpaper( rStyles.GetFieldColor() ) );
             aVD.SetDrawMode( rStyles.GetHighContrastMode()
-                ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
-                : ViewShell::OUTPUT_DRAWMODE_COLOR );
+                ? SD_OUTPUT_DRAWMODE_CONTRAST
+                : SD_OUTPUT_DRAWMODE_COLOR );
             aVD.Erase();
             pObject->SingleObjectPainter( aVD ); // #110094#-17
             aBmp = BitmapEx( aVD.GetBitmap( aObjRect.TopLeft(), aObjSize ) );
@@ -638,15 +634,15 @@ void AnimationWindow::UpdateControl( sal_uLong nListPos, sal_Bool bDisableCtrls 
         //aFiCount.SetText( String( SdResId( STR_NULL ) ) );
 
         // Wenn kein Objekt in der Liste ist
-        aBtnFirst.Enable( sal_False );
-        aBtnReverse.Enable( sal_False );
-        aBtnPlay.Enable( sal_False );
-        aBtnLast.Enable( sal_False );
-        aNumFldBitmap.Enable( sal_False );
-        aTimeField.Enable( sal_False );
-        aLbLoopCount.Enable( sal_False );
-        aBtnRemoveBitmap.Enable( sal_False );
-        aBtnRemoveAll.Enable( sal_False );
+        aBtnFirst.Enable( false );
+        aBtnReverse.Enable( false );
+        aBtnPlay.Enable( false );
+        aBtnLast.Enable( false );
+        aNumFldBitmap.Enable( false );
+        aTimeField.Enable( false );
+        aLbLoopCount.Enable( false );
+        aBtnRemoveBitmap.Enable( false );
+        aBtnRemoveAll.Enable( false );
 
         //aFtAdjustment.Enable();
         //aLbAdjustment.Enable();
@@ -654,13 +650,13 @@ void AnimationWindow::UpdateControl( sal_uLong nListPos, sal_Bool bDisableCtrls 
 
     if( bMovie && bDisableCtrls )
     {
-        aBtnGetOneObject.Enable( sal_False );
-        aBtnGetAllObjects.Enable( sal_False );
-        aRbtGroup.Enable( sal_False );
-        aRbtBitmap.Enable( sal_False );
-        aBtnCreateGroup.Enable( sal_False );
-        aFtAdjustment.Enable( sal_False );
-        aLbAdjustment.Enable( sal_False );
+        aBtnGetOneObject.Enable( false );
+        aBtnGetAllObjects.Enable( false );
+        aRbtGroup.Enable( false );
+        aRbtBitmap.Enable( false );
+        aBtnCreateGroup.Enable( false );
+        aFtAdjustment.Enable( false );
+        aLbAdjustment.Enable( false );
     }
     else
     {
@@ -670,8 +666,8 @@ void AnimationWindow::UpdateControl( sal_uLong nListPos, sal_Bool bDisableCtrls 
 
         aRbtBitmap.Enable();
         aBtnCreateGroup.Enable(aBmpExList.Count() != 0);
-        aFtAdjustment.Enable( sal_True );
-        aLbAdjustment.Enable( sal_True );
+        aFtAdjustment.Enable( true );
+        aLbAdjustment.Enable( true );
     }
 
     ClickRbtHdl( NULL );
@@ -850,18 +846,18 @@ sal_Bool AnimationWindow::Close()
 {
     if( maPlayLock.isLocked() )
     {
-        return sal_False;
+        return false;
     }
     else
     {
-        SfxBoolItem aItem( SID_ANIMATION_OBJECTS, sal_False );
+        SfxBoolItem aItem( SID_ANIMATION_OBJECTS, false );
 
         GetBindings().GetDispatcher()->Execute(
             SID_ANIMATION_OBJECTS, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 
         SfxDockingWindow::Close();
 
-        return sal_True;
+        return true;
     }
 }
 
@@ -882,29 +878,28 @@ void AnimationWindow::AddObj (::sd::View& rView )
         rView.SdrEndTextEdit();
 
     // Objekt(e) clonen und den/die Clone(s) in die Liste stellen
-    const SdrMarkList& rMarkList   = rView.GetMarkedObjectList();
-    sal_uLong              nMarkCount  = rMarkList.GetMarkCount();
+    const SdrObjectVector aSelection(rView.getSelectedSdrObjectVectorFromSdrMarkView());
     SdPage*            pPage       = pMyDoc->GetSdPage(0, PK_STANDARD);
-    sal_uLong              nCloneCount = pPage->GetObjCount();
 
-    if (nMarkCount > 0)
+    if (aSelection.size())
     {
+        const sal_uInt32 nCloneCount(pPage->GetObjCount());
         // Wenn es sich um EIN Animationsobjekt oder ein Gruppenobjekt
         // handelt, das 'einzeln uebernommen' wurde,
         // werden die einzelnen Objekte eingefuegt
-        sal_Bool bAnimObj = sal_False;
-        if( nMarkCount == 1 )
+        bool bAnimObj = false;
+        if( 1 == aSelection.size() )
         {
-            SdrMark*            pMark = rMarkList.GetMark(0);
-            SdrObject*          pObject = pMark->GetMarkedSdrObj();
+            SdrObject* pObject = aSelection[0];
             SdAnimationInfo*    pAnimInfo = rView.GetDoc()->GetAnimationInfo( pObject );
-            sal_uInt32              nInv = pObject->GetObjInventor();
-            sal_uInt16              nId = pObject->GetObjIdentifier();
+            const sal_uInt32 nInv = pObject->GetObjInventor();
+            const sal_uInt16 nId = pObject->GetObjIdentifier();
 
             // Animated Bitmap (GIF)
-            if( nInv == SdrInventor && nId == OBJ_GRAF && ( (SdrGrafObj*) pObject )->IsAnimated() )
+            const SdrGrafObj* pGrafObj = dynamic_cast< SdrGrafObj* >(pObject);
+
+            if( pGrafObj && pGrafObj->IsAnimated() )
             {
-                const SdrGrafObj*   pGrafObj = (SdrGrafObj*) pObject;
                 Graphic             aGraphic( pGrafObj->GetTransformedGraphic() );
                 sal_uInt16              nCount = 0;
 
@@ -943,37 +938,41 @@ void AnimationWindow::AddObj (::sd::View& rView )
                     }
                     // Nachdem ein animated GIF uebernommen wurde, kann auch nur ein solches erstellt werden
                     aRbtBitmap.Check();
-                    aRbtGroup.Enable( sal_False );
-                    bAnimObj = sal_True;
+                    aRbtGroup.Enable( false );
+                    bAnimObj = true;
                 }
             }
             else if( bAllObjects || ( pAnimInfo && pAnimInfo->mbIsMovie ) )
             {
                 // Mehrere Objekte
-                SdrObjList* pObjList = ((SdrObjGroup*)pObject)->GetSubList();
+                SdrObjList* pObjList = pObject->getChildrenOfSdrObject();
 
-                for( sal_uInt16 nObject = 0; nObject < pObjList->GetObjCount(); nObject++ )
+                if(pObjList)
                 {
-                    SdrObject* pSnapShot = (SdrObject*) pObjList->GetObj( (sal_uLong) nObject );
+                    for( sal_uInt32 nObject (0); nObject < pObjList->GetObjCount(); nObject++ )
+                    {
+                        SdrObject* pSnapShot = (SdrObject*) pObjList->GetObj( nObject );
+                        OSL_ENSURE(pSnapShot, "zero SdrObject* in SdrObjList (!)");
 
-                    pBitmapEx = new BitmapEx( SdrExchangeView::GetObjGraphic( pSnapShot->GetModel(), pSnapShot ).GetBitmapEx() );
-                    aBmpExList.Insert( pBitmapEx, aBmpExList.GetCurPos() + 1 );
+                        pBitmapEx = new BitmapEx(GetObjGraphic(*pSnapShot).GetBitmapEx());
+                        aBmpExList.Insert( pBitmapEx, aBmpExList.GetCurPos() + 1 );
 
-                    // Time
-                    Time* pTime = new Time( aTimeField.GetTime() );
-                    aTimeList.Insert( pTime, aBmpExList.GetCurPos() + 1 );
+                        // Time
+                        Time* pTime = new Time( aTimeField.GetTime() );
+                        aTimeList.Insert( pTime, aBmpExList.GetCurPos() + 1 );
 
-                    // Clone
-                    pPage->InsertObject( pSnapShot->Clone(), aBmpExList.GetCurPos() + 1 );
+                        // Clone
+                        pPage->InsertObjectToSdrObjList(*pSnapShot->CloneSdrObject(), aBmpExList.GetCurPos() + 1);
 
-                    // Weiterschalten der BitmapListe
-                    aBmpExList.Next();
+                        // Weiterschalten der BitmapListe
+                        aBmpExList.Next();
+                    }
                 }
-                bAnimObj = sal_True;
+                bAnimObj = true;
             }
         }
         // Auch ein einzelnes animiertes Objekt
-        if( !bAnimObj && !( bAllObjects && nMarkCount > 1 ) )
+        if( !bAnimObj && !( bAllObjects && aSelection.size() > 1 ) )
         {
             pBitmapEx = new BitmapEx( rView.GetAllMarkedGraphic().GetBitmapEx() );
             aBmpExList.Insert( pBitmapEx, aBmpExList.GetCurPos() + 1 );
@@ -985,46 +984,44 @@ void AnimationWindow::AddObj (::sd::View& rView )
         }
 
         // ein einzelnes Objekt
-        if( nMarkCount == 1 && !bAnimObj )
+        if( 1 == aSelection.size() && !bAnimObj )
         {
-            SdrMark*    pMark   = rMarkList.GetMark(0);
-            SdrObject*  pObject = pMark->GetMarkedSdrObj();
-            SdrObject*  pClone  = pObject->Clone();
-            pPage->InsertObject(pClone, aBmpExList.GetCurPos() + 1);
+            pPage->InsertObjectToSdrObjList(*aSelection[0]->CloneSdrObject(), aBmpExList.GetCurPos() + 1);
         }
-        // mehrere Objekte: die Clones zu einer Gruppe zusammenfassen
-        else if (nMarkCount > 1)
+        else if (aSelection.size() > 1)
         {
+            // mehrere Objekte: die Clones zu einer Gruppe zusammenfassen
             // Objekte einzeln uebernehmen
             if( bAllObjects )
             {
-                for( sal_uLong nObject= 0; nObject < nMarkCount; nObject++ )
+                for( sal_uInt32 nObject(0); nObject < aSelection.size(); nObject++ )
                 {
                     // Clone
-                    SdrObject* pObject = rMarkList.GetMark( nObject )->GetMarkedSdrObj();
+                    SdrObject* pObject = aSelection[nObject];
 
-                    pBitmapEx = new BitmapEx( SdrExchangeView::GetObjGraphic( pObject->GetModel(), pObject ).GetBitmapEx() );
+                    pBitmapEx = new BitmapEx(GetObjGraphic(*pObject).GetBitmapEx());
                     aBmpExList.Insert( pBitmapEx, aBmpExList.GetCurPos() + 1 );
 
                     // Time
                     Time* pTime = new Time( aTimeField.GetTime() );
                     aTimeList.Insert( pTime, aBmpExList.GetCurPos() + 1 );
 
-                    pPage->InsertObject( pObject->Clone(), aBmpExList.GetCurPos() + 1 );
+                    pPage->InsertObjectToSdrObjList(*pObject->CloneSdrObject(), aBmpExList.GetCurPos() + 1 );
 
                     aBmpExList.Next();
                 }
-                bAnimObj = sal_True; // damit nicht nochmal weitergeschaltet wird
+                bAnimObj = true; // damit nicht nochmal weitergeschaltet wird
             }
             else
             {
-                SdrObjGroup* pCloneGroup = new SdrObjGroup;
-                SdrObjList*  pObjList    = pCloneGroup->GetSubList();
+                SdrObjGroup* pCloneGroup = new SdrObjGroup(pPage->getSdrModelFromSdrPage());
 
-                for (sal_uLong nObject= 0; nObject < nMarkCount; nObject++)
-                    pObjList->InsertObject(rMarkList.GetMark(nObject)->GetMarkedSdrObj()->Clone(), LIST_APPEND);
+                for (sal_uInt32 nObject(0); nObject < aSelection.size(); nObject++)
+                {
+                    pCloneGroup->InsertObjectToSdrObjList(*aSelection[nObject]->CloneSdrObject());
+                }
 
-                pPage->InsertObject(pCloneGroup, aBmpExList.GetCurPos() + 1);
+                pPage->InsertObjectToSdrObjList(*pCloneGroup, aBmpExList.GetCurPos() + 1);
             }
         }
 
@@ -1081,8 +1078,6 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
         aMaxSizePix.Width() = Max( aMaxSizePix.Width(), aTmpSizePix.Width() );
         aMaxSizePix.Height() = Max( aMaxSizePix.Height(), aTmpSizePix.Height() );
     }
-
-    SdrPageView* pPV = rView.GetSdrPageView();
 
     if( aRbtBitmap.IsChecked() )
     {
@@ -1157,18 +1152,20 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
             aAnimBmp.aSizePix = aBitmapSize;
             aAnimBmp.nWait = nTime;
             aAnimBmp.eDisposal = DISPOSE_BACK;
-            aAnimBmp.bUserInput = sal_False;
+            aAnimBmp.bUserInput = false;
 
             aAnimation.Insert( aAnimBmp );
             aAnimation.SetDisplaySizePixel( aMaxSizePix );
             aAnimation.SetLoopCount( nLoopCount );
         }
 
-        SdrGrafObj* pGrafObj = new SdrGrafObj( Graphic( aAnimation ) );
+        SdrGrafObj* pGrafObj = new SdrGrafObj(
+            rView.getSdrModelFromSdrView(),
+            Graphic( aAnimation ) );
         const Point aOrg( aWindowCenter.X() - ( aMaxSizeLog.Width() >> 1 ), aWindowCenter.Y() - ( aMaxSizeLog.Height() >> 1 ) );
 
-        pGrafObj->SetLogicRect( Rectangle( aOrg, aMaxSizeLog ) );
-        rView.InsertObjectAtView( pGrafObj, *pPV, SDRINSERT_SETDEFLAYER);
+        sdr::legacy::SetLogicRect(*pGrafObj, Rectangle( aOrg, aMaxSizeLog ) );
+        rView.InsertObjectAtView( *pGrafObj, SDRINSERT_SETDEFLAYER);
     }
     else
     {
@@ -1180,7 +1177,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
         for(i = 0; i < nCount; i++)
         {
             pClone = pPage->GetObj(i);
-            Rectangle aRect( pClone->GetSnapRect() );
+            Rectangle aRect( sdr::legacy::GetSnapRect(*pClone) );
 
             switch( eBA )
             {
@@ -1229,21 +1226,19 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
             // SetSnapRect ist fuer Ellipsen leider nicht implementiert !!!
             Point aMovePt( aWindowCenter + Point( aOffset.Width(), aOffset.Height() ) - aRect.TopLeft() );
             Size aMoveSize( aMovePt.X(), aMovePt.Y() );
-            pClone->NbcMove( aMoveSize );
+            sdr::legacy::MoveSdrObject(*pClone, aMoveSize );
         }
 
         // Animationsgruppe erzeugen
-        SdrObjGroup* pGroup   = new SdrObjGroup;
-        SdrObjList*  pObjList = pGroup->GetSubList();
+        SdrObjGroup* pGroup   = new SdrObjGroup(rView.getSdrModelFromSdrView());
 
         for (i = 0; i < nCount; i++)
         {
             // der Clone verbleibt im Animator; in die Gruppe kommt ein Clone
             // des Clones
             pClone = pPage->GetObj(i);
-            SdrObject* pCloneOfClone = pClone->Clone();
-            //SdrObject* pCloneOfClone = pPage->GetObj(i)->Clone();
-            pObjList->InsertObject(pCloneOfClone, LIST_APPEND);
+            SdrObject* pCloneOfClone = pClone->CloneSdrObject();
+            pGroup->InsertObjectToSdrObjList(*pCloneOfClone);
         }
 
         // bis jetzt liegt die linke obere Ecke der Gruppe in der Fenstermitte;
@@ -1251,17 +1246,17 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
         aTemp = aMaxSizeLog;
         aTemp.Height() = - aTemp.Height() / 2;
         aTemp.Width()  = - aTemp.Width() / 2;
-        pGroup->NbcMove(aTemp);
+        sdr::legacy::MoveSdrObject(*pGroup, aTemp);
 
         // Animationsinformation erzeugen
         SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*pGroup,true);
         pInfo->meEffect = presentation::AnimationEffect_NONE;
         pInfo->meSpeed = presentation::AnimationSpeed_MEDIUM;
-        pInfo->mbActive = sal_True;
-        pInfo->mbIsMovie = sal_True;
+        pInfo->mbActive = true;
+        pInfo->mbIsMovie = true;
         pInfo->maBlueScreen = COL_WHITE;
 
-        rView.InsertObjectAtView( pGroup, *pPV, SDRINSERT_SETDEFLAYER);
+        rView.InsertObjectAtView( *pGroup, SDRINSERT_SETDEFLAYER);
     }
 
     ClickFirstHdl( this );
@@ -1299,7 +1294,7 @@ void AnimationControllerItem::StateChanged( sal_uInt16 nSId,
 {
     if( eState >= SFX_ITEM_AVAILABLE && nSId == SID_ANIMATOR_STATE )
     {
-        const SfxUInt16Item* pStateItem = PTR_CAST( SfxUInt16Item, pItem );
+        const SfxUInt16Item* pStateItem = dynamic_cast< const SfxUInt16Item* >(pItem );
         DBG_ASSERT( pStateItem, "SfxUInt16Item erwartet");
         sal_uInt16 nState = pStateItem->GetValue();
 

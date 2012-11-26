@@ -27,95 +27,68 @@
 #include <tools/datetime.hxx>
 #include <svx/svdobj.hxx>
 #include "svx/svxdllapi.h"
+#include <svx/svdpage.hxx>
 
-//************************************************************
-//   Vorausdeklarationen
-//************************************************************
+//////////////////////////////////////////////////////////////////////////////
+// predefines
 
-class SdrObjList;
 class SdrObjListIter;
 class SfxItemSet;
 
-//************************************************************
-//   SdrObjGroup
-//************************************************************
+//////////////////////////////////////////////////////////////////////////////
 
-class SVX_DLLPUBLIC SdrObjGroup : public SdrObject
+class SVX_DLLPUBLIC SdrObjGroup
+:   public SdrObject,
+    public SdrObjList
 {
 private:
 protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
-    SdrObjList*                 pSub;    // Subliste (Kinder)
-    long                        nDrehWink;
-    long                        nShearWink;
-
-    Point                       aRefPoint; // Referenzpunkt innerhalb der Objektgruppe
-    FASTBOOL                    bRefPoint; // Ist ein RefPoint gesetzt?
-
-public:
-    TYPEINFO();
-    SdrObjGroup();
     virtual ~SdrObjGroup();
 
-    virtual void SetBoundRectDirty();
+    /// method to copy all data from given source
+    virtual void copyDataFromSdrObject(const SdrObject& rSource);
+
+public:
+    SdrObjGroup(SdrModel& rSdrModel);
+
+    /// create a copy, evtl. with a different target model (if given)
+    virtual SdrObject* CloneSdrObject(SdrModel* pTargetModel = 0) const;
+
+    // derived from SdrObjList
+    virtual SdrPage* getSdrPageFromSdrObjList() const;
+    virtual SdrObject* getSdrObjectFromSdrObjList() const;
+    virtual SdrModel& getSdrModelFromSdrObjList() const;
+    virtual void handleContentChange(const SfxHint& rHint);
+
+    // derived from SdrObject
+    virtual SdrObjList* getChildrenOfSdrObject() const;
+
+    // react on model change
+    virtual void handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage);
+
     virtual sal_uInt16 GetObjIdentifier() const;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual SdrLayerID GetLayer() const;
-    virtual void NbcSetLayer(SdrLayerID nLayer);
-    virtual void SetObjList(SdrObjList* pNewObjList);
-    virtual void SetPage(SdrPage* pNewPage);
-    virtual void SetModel(SdrModel* pNewModel);
-    virtual FASTBOOL HasRefPoint() const;
-    virtual Point GetRefPoint() const;
-    virtual void SetRefPoint(const Point& rPnt);
-    virtual SdrObjList* GetSubList() const;
-
-    virtual const Rectangle& GetCurrentBoundRect() const;
-    virtual const Rectangle& GetSnapRect() const;
-
-    virtual void operator=(const SdrObject& rObj);
-
+    virtual void SetLayer(SdrLayerID nLayer);
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
-
-    virtual void RecalcSnapRect();
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
-
-    // special drag methods
     virtual bool beginSpecialDrag(SdrDragStat& rDrag) const;
-
-    virtual FASTBOOL BegCreate(SdrDragStat& rStat);
-
-    virtual long GetRotateAngle() const;
-    virtual long GetShearAngle(FASTBOOL bVertical=sal_False) const;
-
-    virtual void Move(const Size& rSiz);
-    virtual void Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-    virtual void Rotate(const Point& rRef, long nWink, double sn, double cs);
-    virtual void Mirror(const Point& rRef1, const Point& rRef2);
-    virtual void Shear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear);
-    virtual void SetAnchorPos(const Point& rPnt);
-    virtual void SetRelativePos(const Point& rPnt);
-    virtual void SetSnapRect(const Rectangle& rRect);
-    virtual void SetLogicRect(const Rectangle& rRect);
-
-    virtual void NbcMove(const Size& rSiz);
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-    virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs);
-    virtual void NbcMirror(const Point& rRef1, const Point& rRef2);
-    virtual void NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear);
-    virtual void NbcSetAnchorPos(const Point& rPnt);
-    virtual void NbcSetRelativePos(const Point& rPnt);
-    virtual void NbcSetSnapRect(const Rectangle& rRect);
-    virtual void NbcSetLogicRect(const Rectangle& rRect);
-
-    virtual void NbcReformatText();
+    virtual bool BegCreate(SdrDragStat& rStat);
+    virtual const basegfx::B2DHomMatrix& getSdrObjectTransformation() const;
+    virtual void setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransformation);
+    virtual void SetAnchorPos(const basegfx::B2DPoint& rPnt);
     virtual void ReformatText();
-
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
+    virtual SdrObject* DoConvertToPolygonObject(bool bBezier, bool bAddText) const;
+    virtual void getMergedHierarchyLayerSet(SetOfByte& rSet) const;
 };
+
+//////////////////////////////////////////////////////////////////////////////
 
 #endif //_SVDOGRP_HXX
 
+//////////////////////////////////////////////////////////////////////////////
+// eof

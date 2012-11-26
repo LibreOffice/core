@@ -26,14 +26,13 @@
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 #include <tools/string.hxx>
-#include <tools/rtti.hxx>
 #include <svl/flagitem.hxx>
 
 class SFX2_DLLPUBLIC SfxTemplateItem: public SfxFlagItem
 {
     String aStyle;
 public:
-    TYPEINFO();
+    POOLITEM_FACTORY()
     SfxTemplateItem();
     SfxTemplateItem( sal_uInt16 nWhich,
                      const String &rStyle,

@@ -138,11 +138,16 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
                         // Einfuege-Position
 
-                    Point aInsertPos;
+                    basegfx::B2DPoint aInsertPos(0.0, 0.0);
                     if ( pReqArgs->GetItemState(FN_PARAM_1,sal_True,&pItem) == SFX_ITEM_SET )
-                        aInsertPos = ((const SfxPointItem*)pItem)->GetValue();
+                    {
+                        const Point aPoint(((const SfxPointItem*)pItem)->GetValue());
+                        aInsertPos = basegfx::B2DPoint(aPoint.X(), aPoint.Y());
+                    }
                     else
+                    {
                         aInsertPos = GetInsertPos();
+                    }
 
                         //  als Link?
 
@@ -800,7 +805,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             SCTAB nTab;
 
             SvULongs aIndexList( 4, 4 );
-            SFX_REQUEST_ARG( rReq, pItem, SfxIntegerListItem, SID_SELECT_TABLES, sal_False );
+            SFX_REQUEST_ARG( rReq, pItem, SfxIntegerListItem, SID_SELECT_TABLES );
             if ( pItem )
                 pItem->GetList( aIndexList );
             else
@@ -957,7 +962,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     const SfxPoolItem* pItem;
                     if ( pReqArgs &&
                          pReqArgs->GetItemState( nSlot, sal_True, &pItem ) == SFX_ITEM_SET &&
-                         pItem->ISA( SfxStringItem ) )
+                         dynamic_cast< const SfxStringItem* >(pItem) )
                     {
                         String aComment = ((const SfxStringItem*)pItem)->GetValue();
                         pDocSh->SetChangeComment( pAction, aComment );

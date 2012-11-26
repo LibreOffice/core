@@ -79,14 +79,14 @@ namespace sdr
             }
 
             // collect all ItemSets of contained 3d objects
-            const SdrObjList* pSub = ((const E3dScene&)GetSdrObject()).GetSubList();
-            const sal_uInt32 nCount(pSub->GetObjCount());
+            const SdrObjList* pSub = GetSdrObject().getChildrenOfSdrObject();
+            const sal_uInt32 nCount(pSub ? pSub->GetObjCount() : 0);
 
             for(sal_uInt32 a(0L); a < nCount; a++)
             {
-                SdrObject* pObj = pSub->GetObj(a);
+                E3dCompoundObject* pObj = dynamic_cast< E3dCompoundObject* >(pSub->GetObj(a));
 
-                if(pObj && pObj->ISA(E3dCompoundObject))
+                if(pObj)
                 {
                     const SfxItemSet& rSet = pObj->GetMergedItemSet();
                     SfxWhichIter aIter(rSet);
@@ -117,11 +117,11 @@ namespace sdr
             return E3dProperties::GetMergedItemSet();
         }
 
-        void E3dSceneProperties::SetMergedItemSet(const SfxItemSet& rSet, sal_Bool bClearAllItems)
+        void E3dSceneProperties::SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems)
         {
             // Set SDRATTR_3DOBJ_ range at contained objects.
-            const SdrObjList* pSub = ((const E3dScene&)GetSdrObject()).GetSubList();
-            const sal_uInt32 nCount(pSub->GetObjCount());
+            const SdrObjList* pSub = GetSdrObject().getChildrenOfSdrObject();
+            const sal_uInt32 nCount(pSub ? pSub->GetObjCount() : 0);
 
             if(nCount)
             {
@@ -139,9 +139,9 @@ namespace sdr
                 {
                     for(sal_uInt32 a(0L); a < nCount; a++)
                     {
-                        SdrObject* pObj = pSub->GetObj(a);
+                        E3dCompoundObject* pObj = dynamic_cast< E3dCompoundObject* >(pSub->GetObj(a));
 
-                        if(pObj && pObj->ISA(E3dCompoundObject))
+                        if(pObj)
                         {
                             // set merged ItemSet at contained 3d object.
                             pObj->SetMergedItemSet(*pNewSet, bClearAllItems);
@@ -158,8 +158,8 @@ namespace sdr
 
         void E3dSceneProperties::SetMergedItem(const SfxPoolItem& rItem)
         {
-            const SdrObjList* pSub = ((const E3dScene&)GetSdrObject()).GetSubList();
-            const sal_uInt32 nCount(pSub->GetObjCount());
+            const SdrObjList* pSub = GetSdrObject().getChildrenOfSdrObject();
+            const sal_uInt32 nCount(pSub ? pSub->GetObjCount() : 0);
 
             for(sal_uInt32 a(0L); a < nCount; a++)
             {
@@ -172,8 +172,8 @@ namespace sdr
 
         void E3dSceneProperties::ClearMergedItem(const sal_uInt16 nWhich)
         {
-            const SdrObjList* pSub = ((const E3dScene&)GetSdrObject()).GetSubList();
-            const sal_uInt32 nCount(pSub->GetObjCount());
+            const SdrObjList* pSub = GetSdrObject().getChildrenOfSdrObject();
+            const sal_uInt32 nCount(pSub ? pSub->GetObjCount() : 0);
 
             for(sal_uInt32 a(0L); a < nCount; a++)
             {
@@ -242,10 +242,10 @@ namespace sdr
             }
         }
 
-        void E3dSceneProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
+        void E3dSceneProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
-            const SdrObjList* pSub = ((const E3dScene&)GetSdrObject()).GetSubList();
-            const sal_uInt32 nCount(pSub->GetObjCount());
+            const SdrObjList* pSub = GetSdrObject().getChildrenOfSdrObject();
+            const sal_uInt32 nCount(pSub ? pSub->GetObjCount() : 0);
 
             for(sal_uInt32 a(0L); a < nCount; a++)
             {
@@ -257,8 +257,8 @@ namespace sdr
         {
             SfxStyleSheet* pRetval = 0L;
 
-            const SdrObjList* pSub = ((const E3dScene&)GetSdrObject()).GetSubList();
-            const sal_uInt32 nCount(pSub->GetObjCount());
+            const SdrObjList* pSub = GetSdrObject().getChildrenOfSdrObject();
+            const sal_uInt32 nCount(pSub ? pSub->GetObjCount() : 0);
 
             for(sal_uInt32 a(0L); a < nCount; a++)
             {
@@ -281,31 +281,6 @@ namespace sdr
             return pRetval;
         }
 
-        void E3dSceneProperties::MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel)
-        {
-            if(pSrcPool && pDestPool && (pSrcPool != pDestPool))
-            {
-                // call parent
-                E3dProperties::MoveToItemPool(pSrcPool, pDestPool, pNewModel);
-
-                // own reaction, but only with outmost scene
-                E3dScene& rObj = (E3dScene&)GetSdrObject();
-                const SdrObjList* pSubList = rObj.GetSubList();
-
-                if(pSubList && rObj.GetScene() == &rObj)
-                {
-                    SdrObjListIter a3DIterator(*pSubList, IM_DEEPWITHGROUPS);
-
-                    while(a3DIterator.IsMore())
-                    {
-                        E3dObject* pObj = (E3dObject*)a3DIterator.Next();
-                        DBG_ASSERT(pObj->ISA(E3dObject), "In scenes there are only 3D objects allowed (!)");
-                        pObj->GetProperties().MoveToItemPool(pSrcPool, pDestPool, pNewModel);
-                    }
-                }
-            }
-        }
-
         void E3dSceneProperties::SetSceneItemsFromCamera()
         {
             // force ItemSet
@@ -318,10 +293,10 @@ namespace sdr
             mpItemSet->Put(Svx3DPerspectiveItem((sal_uInt16)aSceneCam.GetProjection()));
 
             // CamPos
-            mpItemSet->Put(Svx3DDistanceItem((sal_uInt32)(aSceneCam.GetPosition().getZ() + 0.5)));
+            mpItemSet->Put(SfxUInt32Item(SDRATTR_3DSCENE_DISTANCE, (sal_uInt32)(aSceneCam.GetPosition().getZ() + 0.5)));
 
             // FocalLength
-            mpItemSet->Put(Svx3DFocalLengthItem((sal_uInt32)((aSceneCam.GetFocalLength() * 100.0) + 0.5)));
+            mpItemSet->Put(SfxUInt32Item(SDRATTR_3DSCENE_FOCAL_LENGTH, (sal_uInt32)((aSceneCam.GetFocalLength() * 100.0) + 0.5)));
         }
     } // end of namespace properties
 } // end of namespace sdr

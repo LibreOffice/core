@@ -374,7 +374,7 @@ sal_Bool OfaMiscTabPage::FillItemSet( SfxItemSet& rSet )
     }
 
     const SfxUInt16Item* pUInt16Item =
-        PTR_CAST( SfxUInt16Item, GetOldItem( rSet, SID_ATTR_YEAR2000 ) );
+        dynamic_cast< const SfxUInt16Item* >( GetOldItem( rSet, SID_ATTR_YEAR2000 ) );
     sal_uInt16 nNum = (sal_uInt16)aYearValueField.GetText().ToInt32();
     if ( pUInt16Item && pUInt16Item->GetValue() != nNum )
     {
@@ -1585,7 +1585,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
 
     if(aAsianSupportCB.GetSavedValue() != aAsianSupportCB.IsChecked() )
     {
-        sal_Bool bChecked = aAsianSupportCB.IsChecked();
+        bool bChecked = aAsianSupportCB.IsChecked();
         pLangConfig->aLanguageOptions.SetAll(bChecked);
 
         //iterate over all bindings to invalidate vertical text direction

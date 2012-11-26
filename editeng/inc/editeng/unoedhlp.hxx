@@ -49,7 +49,6 @@ private:
     sal_uLong   mnEnd;
 
 public:
-            TYPEINFO();
             SvxEditSourceHint( sal_uLong nId );
             SvxEditSourceHint( sal_uLong nId, sal_uLong nValue, sal_uLong nStart=0, sal_uLong nEnd=0 );
 

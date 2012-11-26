@@ -104,8 +104,8 @@ class HtmlExport
     HtmlPublishMode meMode;
     SfxProgress* mpProgress;
     bool mbImpress;
-    sal_uInt16 mnSdPageCount;
-    sal_uInt16 mnPagesWritten;
+    sal_uInt32 mnSdPageCount;
+    sal_uInt32 mnPagesWritten;
     bool mbContentsPage;
     sal_Int16 mnButtonThema;
     sal_uInt16 mnWidthPixel;
@@ -186,7 +186,7 @@ class HtmlExport
     String  CreateLink( const String& aLink, const String& aText,
                         const String& aTarget = String()) const;
     String  CreateImage( const String& aImage, const String& aAltText, sal_Int16 nWidth = -1, sal_Int16 nHeight = -1 ) const;
-    String  CreateNavBar( sal_uInt16 nSdPage, bool bIsText ) const;
+    String  CreateNavBar( sal_uInt32 nSdPage, bool bIsText ) const;
     String  CreateBodyTag() const;
 
     String  ParagraphToHTMLString( SdrOutliner* pOutliner, sal_uLong nPara, const Color& rBackgroundColor );
@@ -202,7 +202,7 @@ class HtmlExport
     String  CreateHTMLRectArea( const Rectangle& rRect,
                                 const String& rHRef ) const;
 
-    String  CreatePageURL( sal_uInt16 nPgNum );
+    String  CreatePageURL( sal_uInt32 nPgNum );
 
     String InsertSound( const String& rSoundFile );
     bool CopyFile( const String& rSourceFile, const String& rDestPath );

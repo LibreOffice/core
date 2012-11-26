@@ -80,6 +80,8 @@
 
 #include <algorithm>
 #include <functional>
+#include <typeinfo>
+
 //.........................................................................
 namespace dbaui
 {
@@ -100,7 +102,7 @@ using namespace com::sun::star::frame;
 //-------------------------------------------------------------------------
 namespace
 {
-    sal_Bool implCheckItemType( SfxItemSet& _rSet, const sal_uInt16 _nId, const TypeId _nExpectedItemType )
+    sal_Bool implCheckItemType( SfxItemSet& _rSet, const sal_uInt16 _nId, const std::type_info& _nExpectedItemType )
     {
         sal_Bool bCorrectType = sal_False;
 
@@ -109,7 +111,7 @@ namespace
         if ( pPool )
         {
             const SfxPoolItem& rDefItem = pPool->GetDefaultItem( _nId );
-            bCorrectType = rDefItem.IsA( _nExpectedItemType );
+            bCorrectType = typeid(rDefItem) == _nExpectedItemType;
         }
         return bCorrectType;
     }
@@ -914,11 +916,11 @@ Any ODbDataSourceAdministrationHelper::implTranslateProperty(const SfxPoolItem* 
     // translate the SfxPoolItem
     Any aValue;
 
-    const SfxStringItem* pStringItem = PTR_CAST( SfxStringItem, _pItem );
-    const SfxBoolItem* pBoolItem = PTR_CAST( SfxBoolItem, _pItem );
-    const OptionalBoolItem* pOptBoolItem = PTR_CAST( OptionalBoolItem, _pItem );
-    const SfxInt32Item* pInt32Item = PTR_CAST( SfxInt32Item, _pItem );
-    const OStringListItem* pStringListItem = PTR_CAST( OStringListItem, _pItem );
+    const SfxStringItem* pStringItem = dynamic_cast< const SfxStringItem* >( _pItem );
+    const SfxBoolItem* pBoolItem = dynamic_cast< const SfxBoolItem* >( _pItem );
+    const OptionalBoolItem* pOptBoolItem = dynamic_cast< const OptionalBoolItem* >( _pItem );
+    const SfxInt32Item* pInt32Item = dynamic_cast< const SfxInt32Item* >( _pItem );
+    const OStringListItem* pStringListItem = dynamic_cast< const OStringListItem* >( _pItem );
 
     if ( pStringItem )
     {
@@ -986,7 +988,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
     switch ( _rValue.getValueType().getTypeClass() )
     {
         case TypeClass_STRING:
-            if ( implCheckItemType( _rSet, _nId, SfxStringItem::StaticType() ) )
+            if ( implCheckItemType( _rSet, _nId, typeid(SfxStringItem) ) )
             {
                 ::rtl::OUString sValue;
                 _rValue >>= sValue;
@@ -1003,13 +1005,13 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
             break;
 
         case TypeClass_BOOLEAN:
-            if ( implCheckItemType( _rSet, _nId, SfxBoolItem::StaticType() ) )
+            if ( implCheckItemType( _rSet, _nId, typeid(SfxBoolItem) ) )
             {
                 sal_Bool bVal = sal_False;
                 _rValue >>= bVal;
                 _rSet.Put(SfxBoolItem(_nId, bVal));
             }
-            else if ( implCheckItemType( _rSet, _nId, OptionalBoolItem::StaticType() ) )
+            else if ( implCheckItemType( _rSet, _nId, typeid(OptionalBoolItem) ) )
             {
                 OptionalBoolItem aItem( _nId );
                 if ( _rValue.hasValue() )
@@ -1033,7 +1035,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
             break;
 
         case TypeClass_LONG:
-            if ( implCheckItemType( _rSet, _nId, SfxInt32Item::StaticType() ) )
+            if ( implCheckItemType( _rSet, _nId, typeid(SfxInt32Item) ) )
             {
                 sal_Int32 nValue = 0;
                 _rValue >>= nValue;
@@ -1050,7 +1052,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
             break;
 
         case TypeClass_SEQUENCE:
-            if ( implCheckItemType( _rSet, _nId, OStringListItem::StaticType() ) )
+            if ( implCheckItemType( _rSet, _nId, typeid(OStringListItem) ) )
             {
                 // determine the element type
                 TypeDescription aTD(_rValue.getValueType());
@@ -1181,8 +1183,6 @@ void ODbDataSourceAdministrationHelper::setDataSourceOrName( const Any& _rDataSo
 //=========================================================================
 //= DbuTypeCollectionItem
 //=========================================================================
-TYPEINIT1(DbuTypeCollectionItem, SfxPoolItem);
-//-------------------------------------------------------------------------
 DbuTypeCollectionItem::DbuTypeCollectionItem(sal_Int16 _nWhich, ::dbaccess::ODsnTypeCollection* _pCollection)
     :SfxPoolItem(_nWhich)
     ,m_pCollection(_pCollection)
@@ -1199,7 +1199,7 @@ DbuTypeCollectionItem::DbuTypeCollectionItem(const DbuTypeCollectionItem& _rSour
 //-------------------------------------------------------------------------
 int DbuTypeCollectionItem::operator==(const SfxPoolItem& _rItem) const
 {
-    DbuTypeCollectionItem* pCompare = PTR_CAST(DbuTypeCollectionItem, &_rItem);
+    const DbuTypeCollectionItem* pCompare = dynamic_cast< const DbuTypeCollectionItem* >( &_rItem);
     return pCompare && (pCompare->getCollection() == getCollection());
 }
 

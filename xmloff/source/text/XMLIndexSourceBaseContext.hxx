@@ -93,8 +93,6 @@ protected:
 
 public:
 
-    TYPEINFO();
-
     XMLIndexSourceBaseContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,

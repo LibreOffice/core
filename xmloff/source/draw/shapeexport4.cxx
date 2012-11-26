@@ -487,22 +487,23 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                         rGeoProp.Value >>= aCustomShapeType;
                     }
                     break;
-                    case EAS_MirroredX :
-                    {
-                        sal_Bool bMirroredX = sal_Bool();
-                        if ( rGeoProp.Value >>= bMirroredX )
-                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIRROR_HORIZONTAL,
-                                bMirroredX ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
-                    }
-                    break;
-                    case EAS_MirroredY :
-                    {
-                        sal_Bool bMirroredY = sal_Bool();
-                        if ( rGeoProp.Value >>= bMirroredY )
-                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIRROR_VERTICAL,
-                                bMirroredY ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
-                    }
-                    break;
+                    //  TTTT: MirrorX/Y removed, no longer exported
+                    //case EAS_MirroredX :
+                    //{
+                    //  sal_Bool bMirroredX = sal_Bool();
+                    //  if ( rGeoProp.Value >>= bMirroredX )
+                    //      rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIRROR_HORIZONTAL,
+                    //          bMirroredX ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
+                    //}
+                    //break;
+                    //case EAS_MirroredY :
+                    //{
+                    //  sal_Bool bMirroredY = sal_Bool();
+                    //  if ( rGeoProp.Value >>= bMirroredY )
+                    //      rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIRROR_VERTICAL,
+                    //          bMirroredY ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
+                    //}
+                    //break;
                     case EAS_ViewBox :
                     {
                         awt::Rectangle aRect;

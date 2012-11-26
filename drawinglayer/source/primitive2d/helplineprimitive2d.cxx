@@ -167,23 +167,6 @@ namespace drawinglayer
         {
         }
 
-        bool HelplinePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const HelplinePrimitive2D& rCompare = (HelplinePrimitive2D&)rPrimitive;
-
-                return (getPosition() == rCompare.getPosition()
-                    && getDirection() == rCompare.getDirection()
-                    && getStyle() == rCompare.getStyle()
-                    && getRGBColA() == rCompare.getRGBColA()
-                    && getRGBColB() == rCompare.getRGBColB()
-                    && getDiscreteDashLength() == rCompare.getDiscreteDashLength());
-            }
-
-            return false;
-        }
-
         Primitive2DSequence HelplinePrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );

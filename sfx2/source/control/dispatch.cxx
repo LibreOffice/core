@@ -792,7 +792,7 @@ void SfxDispatcher::DoActivate_Impl( sal_Bool bMDI, SfxViewFrame* /* pOld */ )
         SfxBindings *pBind = GetBindings();
         while ( pBind )
         {
-            pBind->HidePopupCtrls_Impl( sal_False );
+            pBind->HidePopupCtrls_Impl( false );
             pBind = pBind->GetSubBindings_Impl();
         }
 
@@ -897,7 +897,7 @@ void SfxDispatcher::DoDeactivate_Impl( sal_Bool bMDI, SfxViewFrame* pNew )
         SfxBindings *pBind = GetBindings();
         while ( pBind )
         {
-            pBind->HidePopupCtrls_Impl( sal_True );
+            pBind->HidePopupCtrls_Impl( true );
             pBind = pBind->GetSubBindings_Impl();
         }
 
@@ -1795,7 +1795,7 @@ void SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, sal_Bo
             {
                 sal_Bool bViewerTbx = SFX_VISIBILITY_VIEWER == ( nPos & SFX_VISIBILITY_VIEWER );
                 SfxObjectShell* pSh = pImp->pFrame->GetObjectShell();
-                SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_VIEWONLY, sal_False );
+                SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_VIEWONLY );
                 sal_Bool bIsViewer = pItem && pItem->GetValue();
                 if ( bIsViewer != bViewerTbx )
                     continue;
@@ -2279,7 +2279,7 @@ sal_Bool SfxDispatcher::_FindServer
             SfxShell *pSh = GetShell(nShell);
             if ( pSh == NULL )
                 return false;
-            if ( pSh->ISA(SfxViewShell) )
+            if ( dynamic_cast< SfxViewShell* >(pSh) )
             {
                 const SfxSlot* pSlot = pSh->GetVerbSlot_Impl(nSlot);
                 if ( pSlot )
@@ -2418,7 +2418,7 @@ sal_Bool SfxDispatcher::HasSlot_Impl( sal_uInt16 nSlot )
             SfxShell *pSh = GetShell(nShell);
             if ( pSh == NULL )
                 return false;
-            if ( pSh->ISA(SfxViewShell) )
+            if ( dynamic_cast< SfxViewShell* >(pSh) )
                 return true;
         }
     }
@@ -2549,10 +2549,10 @@ sal_Bool SfxDispatcher::_FillState
             for ( const SfxPoolItem *pItem = aIter.FirstItem();
                   pItem;
                   pItem = aIter.NextItem() )
-                if ( !IsInvalidItem(pItem) && !pItem->ISA(SfxVoidItem) )
+                if ( !IsInvalidItem(pItem) && !dynamic_cast< const SfxVoidItem* >(pItem) )
                 {
                     sal_uInt16 nSlotId = rState.GetPool()->GetSlotId(pItem->Which());
-                    if ( !pItem->IsA(pIF->GetSlot(nSlotId)->GetType()->Type()) )
+                    if ( !pIF->GetSlot(nSlotId)->GetType()->IsSlotType(pItem) )
                     {
                         ByteString aMsg( "item-type unequal to IDL (=> no BASIC)" );
                         aMsg += "\nwith SID: ";
@@ -2913,7 +2913,7 @@ SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSID, ::com::sun::star::uno::
         else
         {
             ::com::sun::star::uno::Any aState;
-            if ( !pItem->ISA(SfxVoidItem) )
+            if ( !dynamic_cast< const SfxVoidItem* >(pItem) )
             {
                 sal_uInt16 nSubId( 0 );
                 SfxItemPool& rPool = pShell->GetPool();
@@ -2937,7 +2937,7 @@ sal_Bool SfxDispatcher::IsReadOnlyShell_Impl( sal_uInt16 nShell ) const
     if ( nShell < nShellCount )
     {
         SfxShell* pShell = pImp->aStack.Top( nShell );
-        if( pShell->ISA( SfxModule ) || pShell->ISA( SfxApplication ) || pShell->ISA( SfxViewFrame ) )
+        if( dynamic_cast< SfxModule* >(pShell) || dynamic_cast< SfxApplication* >(pShell) || dynamic_cast< SfxViewFrame* >(pShell) )
             return sal_False;
         else
             return pImp->bReadOnly;
@@ -3103,7 +3103,7 @@ SfxModule* SfxDispatcher::GetModule() const
         SfxShell *pSh = GetShell(nShell);
         if ( pSh == NULL )
             return 0;
-        if ( pSh->ISA(SfxModule) )
+        if ( dynamic_cast< SfxModule* >(pSh) )
             return (SfxModule*) pSh;
     }
 }

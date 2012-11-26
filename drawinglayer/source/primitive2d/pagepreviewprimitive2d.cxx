@@ -52,7 +52,8 @@ namespace drawinglayer
                 && basegfx::fTools::more(getContentHeight(), 0.0))
             {
                 // the decomposed matrix will be needed
-                basegfx::B2DVector aScale, aTranslate;
+                basegfx::B2DVector aScale;
+                basegfx::B2DPoint aTranslate;
                 double fRotate, fShearX;
                 getTransform().decompose(aScale, aTranslate, fRotate, fShearX);
 
@@ -104,8 +105,11 @@ namespace drawinglayer
                         }
 
                         // add the missing object transformation aspects
-                        const basegfx::B2DHomMatrix aCombined(basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
-                            fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
+                        const basegfx::B2DHomMatrix aCombined(
+                            basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
+                                fShearX,
+                                fRotate,
+                                aTranslate.getX(), aTranslate.getY()));
                         aPageTrans = aCombined * aPageTrans;
                     }
                     else
@@ -143,30 +147,11 @@ namespace drawinglayer
         {
         }
 
-        bool PagePreviewPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BasePrimitive2D::operator==(rPrimitive))
-            {
-                const PagePreviewPrimitive2D& rCompare = static_cast< const PagePreviewPrimitive2D& >(rPrimitive);
-
-                return (getXDrawPage() == rCompare.getXDrawPage()
-                    && getPageContent() == rCompare.getPageContent()
-                    && getTransform() == rCompare.getTransform()
-                    && getContentWidth() == rCompare.getContentWidth()
-                    && getContentHeight() == rCompare.getContentHeight()
-                    && getKeepAspectRatio() == rCompare.getKeepAspectRatio());
-            }
-
-            return false;
-        }
-
         basegfx::B2DRange PagePreviewPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation`*/) const
         {
             // nothing is allowed to stick out of a PagePreviewPrimitive, thus we
             // can quickly deliver our range here
-            basegfx::B2DRange aRetval(0.0, 0.0, 1.0, 1.0);
-            aRetval.transform(getTransform());
-            return aRetval;
+            return getTransform() * basegfx::B2DRange::getUnitB2DRange();
         }
 
         // provide unique ID

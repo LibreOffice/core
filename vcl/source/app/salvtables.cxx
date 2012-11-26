@@ -34,9 +34,16 @@
 #include <salbmp.hxx>
 #include <salobj.hxx>
 #include <salmenu.hxx>
+#include <vcl/apptypes.hxx>
 
 // this file contains the virtual destructors of the sal interface
 // compilers ususally put their vtables where the destructor is
+
+ApplicationProperty::~ApplicationProperty()
+{
+}
+
+// -----------------------------------------------------------------------
 
 SalFrame::~SalFrame()
 {

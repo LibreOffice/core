@@ -69,8 +69,7 @@ ScHFPage::ScHFPage( Window* pParent, sal_uInt16 nResId,
 {
     SetExchangeSupport();
 
-    SfxViewShell*   pSh = SfxViewShell::Current();
-    ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,pSh);
+    ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
     Point           aPos( aBackgroundBtn.GetPosPixel() );
 
     // aBackgroundBtn position not changed anymore

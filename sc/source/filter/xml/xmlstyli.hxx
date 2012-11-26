@@ -132,8 +132,6 @@ protected:
 
 public:
 
-    TYPEINFO();
-
     XMLTableStyleContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
             const ::rtl::OUString& rLName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
@@ -249,8 +247,6 @@ protected:
     virtual sal_Bool InsertStyleFamily( sal_uInt16 nFamily ) const;
 
 public:
-    TYPEINFO();
-
     ScXMLMasterStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const ::rtl::OUString& rLName,
         const ::com::sun::star::uno::Reference<
@@ -273,8 +269,6 @@ class ScMasterPageContext : public XMLTextMasterPageContext
 
     void ClearContent(const rtl::OUString& rContent);
 public:
-
-    TYPEINFO();
 
     ScMasterPageContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const ::rtl::OUString& rLName,

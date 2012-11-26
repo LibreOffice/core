@@ -1870,7 +1870,7 @@ bool SwTxtFrm::FillSelection( SwSelectionList& rSelList, const SwRect& rRect ) c
         for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
         {
             const SwAnchoredObject* pAnchoredObj = rObjs[i];
-            if( !pAnchoredObj->ISA(SwFlyFrm) )
+            if( !dynamic_cast< const SwFlyFrm* >(pAnchoredObj) )
                 continue;
             const SwFlyFrm* pFly = static_cast<const SwFlyFrm*>(pAnchoredObj);
             if( pFly->IsFlyInCntFrm() && pFly->FillSelection( rSelList, rRect ) )

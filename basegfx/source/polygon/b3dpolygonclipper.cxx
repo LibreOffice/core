@@ -497,7 +497,7 @@ namespace basegfx
             {
                 // build transform to project planeNormal on X-Axis and pointOnPlane to null point
                 B3DHomMatrix aMatrixTransform;
-                aMatrixTransform.translate(-rPointOnPlane.getX(), -rPointOnPlane.getY(), -rPointOnPlane.getZ());
+                aMatrixTransform.translate(-rPointOnPlane);
                 const double fRotInXY(atan2(rPlaneNormal.getY(), rPlaneNormal.getX()));
                 const double fRotInXZ(atan2(-rPlaneNormal.getZ(), rPlaneNormal.getXYLength()));
                 if(!fTools::equalZero(fRotInXY) || !fTools::equalZero(fRotInXZ))
@@ -536,7 +536,7 @@ namespace basegfx
             {
                 // build transform to project planeNormal on X-Axis and pointOnPlane to null point
                 B3DHomMatrix aMatrixTransform;
-                aMatrixTransform.translate(-rPointOnPlane.getX(), -rPointOnPlane.getY(), -rPointOnPlane.getZ());
+                aMatrixTransform.translate(-rPointOnPlane);
                 const double fRotInXY(atan2(rPlaneNormal.getY(), rPlaneNormal.getX()));
                 const double fRotInXZ(atan2(-rPlaneNormal.getZ(), rPlaneNormal.getXYLength()));
                 if(!fTools::equalZero(fRotInXY) || !fTools::equalZero(fRotInXZ))

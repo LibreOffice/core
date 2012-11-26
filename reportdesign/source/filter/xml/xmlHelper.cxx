@@ -273,7 +273,7 @@ void OXMLHelper::copyStyleElements(const bool _bOld,const ::rtl::OUString& _sSty
 {
     if ( !_xProp.is() || !_sStyleName.getLength() || !_pAutoStyles )
         return;
-    XMLPropStyleContext* pAutoStyle = PTR_CAST(XMLPropStyleContext,_pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_CELL,_sStyleName));
+    const XMLPropStyleContext* pAutoStyle = dynamic_cast< const XMLPropStyleContext* >( _pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_CELL,_sStyleName));
     if ( pAutoStyle )
     {
         ::com::sun::star::awt::FontDescriptor aFont;
@@ -306,12 +306,12 @@ void OXMLHelper::copyStyleElements(const bool _bOld,const ::rtl::OUString& _sSty
         };
         try
         {
-            pAutoStyle->FillPropertySet(_xProp);
+            const_cast< XMLPropStyleContext* >(pAutoStyle)->FillPropertySet(_xProp);
             if ( _bOld && _xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_CHARHIDDEN) )
                 _xProp->setPropertyValue(PROPERTY_CHARHIDDEN,uno::makeAny(sal_False));
 
             uno::Reference<beans::XPropertySet> xProp = comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(pMap));
-            pAutoStyle->FillPropertySet(xProp);
+            const_cast< XMLPropStyleContext* >(pAutoStyle)->FillPropertySet(xProp);
             xProp->getPropertyValue(PROPERTY_FONTNAME) >>=          aFont.Name;
             xProp->getPropertyValue(PROPERTY_CHARFONTHEIGHT) >>=        aFont.Height;
             xProp->getPropertyValue(PROPERTY_FONTWIDTH) >>=             aFont.Width;

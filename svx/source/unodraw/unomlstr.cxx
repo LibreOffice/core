@@ -48,8 +48,8 @@ void SAL_CALL SvxUnoShapeModifyListener::modified(const lang::EventObject& ) thr
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if( mpObj )
     {
+        const SdrObjectChangeBroadcaster aSdrObjectChangeBroadcaster(*mpObj);
         mpObj->SetChanged();
-        mpObj->BroadcastObjectChange();
     }
 }
 

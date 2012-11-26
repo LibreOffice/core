@@ -92,7 +92,7 @@ SwTwips SwToCntntAnchoredObjectPosition::ToCharTopOfLine() const
 
 SwTxtFrm& SwToCntntAnchoredObjectPosition::GetAnchorTxtFrm() const
 {
-    ASSERT( GetAnchorFrm().ISA(SwTxtFrm),
+    ASSERT( dynamic_cast< SwTxtFrm* >(&GetAnchorFrm()),
             "SwToCntntAnchoredObjectPosition::GetAnchorTxtFrm() - wrong anchor frame type" );
 
     return static_cast<SwTxtFrm&>(GetAnchorFrm());

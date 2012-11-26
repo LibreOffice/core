@@ -411,24 +411,25 @@ IMPL_LINK(XMLFileWindow, ScrollHdl, ScrollBar*, pScroll)
 
 void XMLFileWindow::Notify( SfxBroadcaster& /* rBC */, const SfxHint& rHint )
 {
-    if ( rHint.ISA( TextHint ) )
+    const TextHint* pTextHint = dynamic_cast< const TextHint* >(&rHint);
+
+    if ( pTextHint )
     {
-        const TextHint& rTextHint = (const TextHint&)rHint;
-        if( rTextHint.GetId() == TEXT_HINT_VIEWSCROLLED )
+        if( pTextHint->GetId() == TEXT_HINT_VIEWSCROLLED )
         {
             pHScrollbar->SetThumbPos( pTextView->GetStartDocPos().X() );
             pVScrollbar->SetThumbPos( pTextView->GetStartDocPos().Y() );
         }
-        else if( rTextHint.GetId() == TEXT_HINT_TEXTHEIGHTCHANGED )
+        else if( pTextHint->GetId() == TEXT_HINT_TEXTHEIGHTCHANGED )
         {
             if ( (long)pTextEngine->GetTextHeight() < pOutWin->GetOutputSizePixel().Height() )
                 pTextView->Scroll( 0, pTextView->GetStartDocPos().Y() );
             pVScrollbar->SetThumbPos( pTextView->GetStartDocPos().Y() );
             SetScrollBarRanges();
         }
-        else if( rTextHint.GetId() == TEXT_HINT_FORMATPARA )
+        else if( pTextHint->GetId() == TEXT_HINT_FORMATPARA )
         {
-            DoDelayedSyntaxHighlight( (sal_uInt16)rTextHint.GetValue() );
+            DoDelayedSyntaxHighlight( (sal_uInt16)pTextHint->GetValue() );
         }
     }
 }

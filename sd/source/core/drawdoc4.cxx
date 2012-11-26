@@ -51,15 +51,12 @@
 #include <svx/dialmgr.hxx>                  // SVX_RESSTR
 #include <editeng/bulitem.hxx>
 #include <svx/xtable.hxx>
-#include <svx/sxmsuitm.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
 #include <svx/xit.hxx>
 #include <svx/xlineit0.hxx>
-#include <svx/sdshitm.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/xfillit0.hxx>
-#include <svx/sdshcitm.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/fhgtitem.hxx>
@@ -193,10 +190,10 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(XFillBitmapItem(pPool, Graphic(aNullBmp)));
 
                     // Schattenattribute (Drawing Engine)
-    rISet.Put(SdrShadowItem(sal_False));
-    rISet.Put(SdrShadowColorItem(aNullStr, RGB_Color(COL_GRAY)));
-    rISet.Put(SdrShadowXDistItem(200));         // 3 mm Schattendistanz
-    rISet.Put(SdrShadowYDistItem(200));
+    rISet.Put(SdrOnOffItem(SDRATTR_SHADOW, sal_False));
+    rISet.Put(XColorItem(SDRATTR_SHADOWCOLOR, aNullStr, RGB_Color(COL_GRAY)));
+    rISet.Put(SdrMetricItem(SDRATTR_SHADOWXDIST, 200));         // 3 mm Schattendistanz
+    rISet.Put(SdrMetricItem(SDRATTR_SHADOWYDIST, 200));
 
     Font aLatinFont, aCJKFont, aCTLFont;
 
@@ -240,10 +237,10 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(SvxLRSpaceItem(EE_PARA_LRSPACE));
     rISet.Put(SvxULSpaceItem(EE_PARA_ULSPACE));
 
-    rISet.Put( SdrTextLeftDistItem( 250 ) );    // sj: (i33745) using text frame distances seems to be a better default
-    rISet.Put( SdrTextRightDistItem( 250 ) );
-    rISet.Put( SdrTextUpperDistItem( 125 ) );
-    rISet.Put( SdrTextLowerDistItem( 125 ) );
+    rISet.Put( SdrMetricItem(SDRATTR_TEXT_LEFTDIST, 250 ) );    // sj: (i33745) using text frame distances seems to be a better default
+    rISet.Put( SdrMetricItem(SDRATTR_TEXT_RIGHTDIST, 250 ) );
+    rISet.Put( SdrMetricItem(SDRATTR_TEXT_UPPERDIST, 125 ) );
+    rISet.Put( SdrMetricItem(SDRATTR_TEXT_LOWERDIST, 125 ) );
 
     rISet.Put( SvxLineSpacingItem( LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL ) );
 
@@ -305,10 +302,10 @@ void SdDrawDocument::CreateLayoutTemplates()
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_OBJWITHSHADOW );
     pISet = &pSheet->GetItemSet();
 
-    pISet->Put(SdrShadowItem(sal_True));
-    pISet->Put(SdrShadowColorItem(aNullStr, RGB_Color(COL_GRAY)));
-    pISet->Put(SdrShadowXDistItem(200));        // 3 mm Schattendistanz
-    pISet->Put(SdrShadowYDistItem(200));
+    pISet->Put(SdrOnOffItem(SDRATTR_SHADOW, true));
+    pISet->Put(XColorItem(SDRATTR_SHADOWCOLOR, aNullStr, RGB_Color(COL_GRAY)));
+    pISet->Put(SdrMetricItem(SDRATTR_SHADOWXDIST, 200));        // 3 mm Schattendistanz
+    pISet->Put(SdrMetricItem(SDRATTR_SHADOWYDIST, 200));
 
     // ---- Objekt ohne Fllung -------------------------------------------
 
@@ -415,10 +412,10 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XFillStyleItem(XFILL_SOLID));
     pISet->Put(XFillColorItem(String(), RGB_Color(COL_CYAN)));
 
-    pISet->Put(SdrShadowItem(sal_True));
-    pISet->Put(SdrShadowColorItem(aNullStr, RGB_Color(COL_GRAY)));
-    pISet->Put(SdrShadowXDistItem(200));        // 2 mm Schattendistanz
-    pISet->Put(SdrShadowYDistItem(200));
+    pISet->Put(SdrOnOffItem(SDRATTR_SHADOW, true));
+    pISet->Put(XColorItem(SDRATTR_SHADOWCOLOR, aNullStr, RGB_Color(COL_GRAY)));
+    pISet->Put(SdrMetricItem(SDRATTR_SHADOWXDIST, 200));        // 2 mm Schattendistanz
+    pISet->Put(SdrMetricItem(SDRATTR_SHADOWYDIST, 200));
 
     pISet->Put(SvxFontHeightItem(846, 100, EE_CHAR_FONTHEIGHT ));       // 24 pt
 
@@ -439,10 +436,10 @@ void SdDrawDocument::CreateLayoutTemplates()
     Color aOrange4(255, 204, 153);
     pISet->Put(XFillColorItem(String(), aOrange4));
 
-    pISet->Put(SdrShadowItem(sal_True));
-    pISet->Put(SdrShadowColorItem(aNullStr, RGB_Color(COL_GRAY)));
-    pISet->Put(SdrShadowXDistItem(200));        // 2 mm Schattendistanz
-    pISet->Put(SdrShadowYDistItem(200));
+    pISet->Put(SdrOnOffItem(SDRATTR_SHADOW, true));
+    pISet->Put(XColorItem(SDRATTR_SHADOWCOLOR, aNullStr, RGB_Color(COL_GRAY)));
+    pISet->Put(SdrMetricItem(SDRATTR_SHADOWXDIST, 200));        // 2 mm Schattendistanz
+    pISet->Put(SdrMetricItem(SDRATTR_SHADOWYDIST, 200));
 
     pISet->Put(SvxFontHeightItem(1270, 100, EE_CHAR_FONTHEIGHT ));      // 36 pt
 
@@ -531,7 +528,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XLineEndItem(SVX_RESSTR(RID_SVXSTR_ARROW),::basegfx::B2DPolyPolygon(aArrow)));
     pISet->Put(XLineEndWidthItem(200));
     pISet->Put(XLineStyleItem(XLINE_SOLID));
-    pISet->Put(SdrMeasureShowUnitItem(true));
+    pISet->Put(SdrYesNoItem(SDRATTR_MEASURESHOWUNIT, true));
 
     // Praesentationsvorlagen fuer das Standardlayout erzeugen
     String aPrefix = String(SdResId(STR_LAYOUT_DEFAULT_NAME));
@@ -636,8 +633,8 @@ void SdDrawDocument::CreateDefaultCellStyles()
 //  rISet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CJK ) );
 //  rISet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CTL ) );
 
-//    rISet.Put(SvxContourItem(sal_False, EE_CHAR_OUTLINE ));
-//    rISet.Put(SvxShadowedItem(sal_False, EE_CHAR_SHADOW ));
+//    rISet.Put(SvxContourItem(false, EE_CHAR_OUTLINE ));
+//    rISet.Put(SvxShadowedItem(false, EE_CHAR_SHADOW ));
 //    rISet.Put(SvxUnderlineItem(UNDERLINE_NONE, EE_CHAR_UNDERLINE));
 //    rISet.Put(SvxOverlineItem(UNDERLINE_NONE, EE_CHAR_OVERLINE));
 //    rISet.Put(SvxCrossedOutItem(STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ));
@@ -649,13 +646,13 @@ void SdDrawDocument::CreateDefaultCellStyles()
     rISet.Put(SvxLRSpaceItem(EE_PARA_LRSPACE));
     rISet.Put(SvxULSpaceItem(EE_PARA_ULSPACE));
 
-    rISet.Put( SdrTextLeftDistItem( 250 ) );
-    rISet.Put( SdrTextRightDistItem( 250 ) );
-    rISet.Put( SdrTextUpperDistItem( 130 ) );
-    rISet.Put( SdrTextLowerDistItem( 130 ) );
+    rISet.Put( SdrMetricItem(SDRATTR_TEXT_LEFTDIST, 250 ) );
+    rISet.Put( SdrMetricItem(SDRATTR_TEXT_RIGHTDIST, 250 ) );
+    rISet.Put( SdrMetricItem(SDRATTR_TEXT_UPPERDIST, 130 ) );
+    rISet.Put( SdrMetricItem(SDRATTR_TEXT_LOWERDIST, 130 ) );
 
     rISet.Put( SvxLineSpacingItem( LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL ) );
-    rISet.Put( SvxAutoKernItem( sal_True, EE_CHAR_PAIRKERNING ) );
+    rISet.Put( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
     rISet.Put( SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP) );
     rISet.Put( SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_LEFT) );
 
@@ -767,11 +764,11 @@ void SdDrawDocument::CreateDefaultCellStyles()
 |*
 \************************************************************************/
 
-sal_uInt16 SdDrawDocument::GetMasterPageUserCount(SdrPage* pMaster) const
+sal_uInt32 SdDrawDocument::GetMasterPageUserCount(SdrPage* pMaster) const
 {
-    sal_uInt16 nResult = 0;
-    sal_uInt16 nPage;
-    sal_uInt16 nPageCount = GetPageCount();
+    sal_uInt32 nResult = 0;
+    sal_uInt32 nPage;
+    sal_uInt32 nPageCount = GetPageCount();
 
     for (nPage = 0; nPage < nPageCount; nPage++)
     {
@@ -815,14 +812,14 @@ void SdDrawDocument::StopOnlineSpelling()
 |*
 \************************************************************************/
 
-void SdDrawDocument::StartOnlineSpelling(sal_Bool bForceSpelling)
+void SdDrawDocument::StartOnlineSpelling(bool bForceSpelling)
 {
     if (mbOnlineSpell && (bForceSpelling || mbInitialOnlineSpellingEnabled) &&
         mpDocSh && !mpDocSh->IsReadOnly() )
     {
         StopOnlineSpelling();
 
-        ::sd::Outliner* pOutl = GetInternalOutliner(sal_True);
+        ::sd::Outliner* pOutl = GetInternalOutliner(true);
 
         Reference< XSpellChecker1 > xSpellChecker( LinguMgr::GetSpellChecker() );
         if ( xSpellChecker.is() )
@@ -835,7 +832,7 @@ void SdDrawDocument::StartOnlineSpelling(sal_Bool bForceSpelling)
         pOutl->SetDefaultLanguage( meLanguage );
 
         mpOnlineSpellingList = new ShapeList;
-        sal_uInt16 nPage;
+        sal_uInt32 nPage;
 
         for ( nPage = 0; nPage < GetPageCount(); nPage++ )
         {
@@ -880,20 +877,18 @@ void SdDrawDocument::FillOnlineSpellingList(SdPage* pPage)
             // Textobjekt gefunden
             mpOnlineSpellingList->addShape(*pObj);
         }
-        else if (pObj->GetObjIdentifier() == OBJ_GRUP)
+        else if (OBJ_GRUP == pObj->GetObjIdentifier() && pObj->getChildrenOfSdrObject() )
         {
             // Gruppenobjekt gefunden
-            SdrObjListIter aGroupIter(*((SdrObjGroup*)pObj)->GetSubList(),
-                                      IM_DEEPNOGROUPS);
-
-            sal_Bool bSubTextObjFound = sal_False;
+            SdrObjListIter aGroupIter(*pObj->getChildrenOfSdrObject(), IM_DEEPNOGROUPS);
+            bool bSubTextObjFound = false;
 
             while (aGroupIter.IsMore() && !bSubTextObjFound)
             {
                 if (aGroupIter.Next()->GetOutlinerParaObject())
                 {
                     // Textobjekt im Gruppenobjekt gefunden
-                    bSubTextObjFound = sal_True;
+                    bSubTextObjFound = true;
                 }
             }
 
@@ -919,31 +914,30 @@ IMPL_LINK(SdDrawDocument, OnlineSpellingHdl, Timer*, EMPTYARG )
         /**********************************************************************
         * Naechstes Objekt spellen
         **********************************************************************/
-        SdrObject* pObj = mpOnlineSpellingList->getNextShape();
+        const SdrObject* pObj = mpOnlineSpellingList->getNextShape();
 
         if (pObj)
         {
-            if (pObj->GetOutlinerParaObject() && pObj->ISA(SdrTextObj))
+            const SdrTextObj* pSdrTextObj = dynamic_cast< const SdrTextObj* >(pObj);
+
+            if (pSdrTextObj && pSdrTextObj->GetOutlinerParaObject())
             {
                 // Textobjekt spellen
-                SpellObject((SdrTextObj*) pObj);
+                SpellObject(pSdrTextObj);
             }
-            else if (pObj->GetObjIdentifier() == OBJ_GRUP)
+            else if (OBJ_GRUP == pObj->GetObjIdentifier() && pObj->getChildrenOfSdrObject())
             {
                 // Gruppenobjekt gefunden
-                SdrObjListIter aGroupIter(*((SdrObjGroup*)pObj)->GetSubList(),
-                                          IM_DEEPNOGROUPS);
-
-                SdrObject* pSubObj = NULL;
+                SdrObjListIter aGroupIter(*pObj->getChildrenOfSdrObject(), IM_DEEPNOGROUPS);
 
                 while (aGroupIter.IsMore())
                 {
-                    pSubObj = aGroupIter.Next();
+                    pSdrTextObj = dynamic_cast< SdrTextObj* >(aGroupIter.Next());
 
-                    if (pSubObj->GetOutlinerParaObject() && pSubObj->ISA(SdrTextObj))
+                    if (pSdrTextObj && pSdrTextObj->GetOutlinerParaObject())
                     {
                         // Textobjekt im Gruppenobjekt gefunden
-                        SpellObject((SdrTextObj*) pSubObj);
+                        SpellObject(pSdrTextObj);
                     }
                 }
             }
@@ -955,7 +949,7 @@ IMPL_LINK(SdDrawDocument, OnlineSpellingHdl, Timer*, EMPTYARG )
     else
     {
         // Spelling wurde initial durchgefuehrt
-        mbInitialOnlineSpellingEnabled = sal_False;
+        mbInitialOnlineSpellingEnabled = false;
 
         // Suche beenden
         StopOnlineSpelling();
@@ -973,13 +967,13 @@ IMPL_LINK(SdDrawDocument, OnlineSpellingHdl, Timer*, EMPTYARG )
 |*
 \************************************************************************/
 
-void SdDrawDocument::SpellObject(SdrTextObj* pObj)
+void SdDrawDocument::SpellObject(const SdrTextObj* pObj)
 {
     if (pObj && pObj->GetOutlinerParaObject() /* && pObj != pView->GetTextEditObject() */)
     {
-        mbHasOnlineSpellErrors = sal_False;
-        ::sd::Outliner* pOutl = GetInternalOutliner(sal_True);
-        pOutl->SetUpdateMode(sal_True);
+        mbHasOnlineSpellErrors = false;
+        ::sd::Outliner* pOutl = GetInternalOutliner(true);
+        pOutl->SetUpdateMode(true);
         Link aEvtHdl = pOutl->GetStatusEventHdl();
         pOutl->SetStatusEventHdl(LINK(this, SdDrawDocument, OnlineSpellEventHdl));
 
@@ -1003,26 +997,23 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
             if (mbHasOnlineSpellErrors)
             {
                 sd::ModifyGuard aGuard( this );
-                SdrModel* pModel = pObj->GetModel();
                 sal_Bool bLock = sal_False;
-                if ( pModel )
-                {
-                    bLock = pModel->isLocked();
-                    pModel->setLock( sal_True );
-                }
+
+                // inside a locked model nothing should be broadcasted, so this should
+                // be not needed at all; keeping to not change anything
+                const SdrObjectChangeBroadcaster aSdrObjectChangeBroadcaster(*pObj);
+                bLock = pObj->getSdrModelFromSdrObject().isLocked();
+                pObj->getSdrModelFromSdrObject().setLock( sal_True );
                 // taking text from the outliner
                 ((SdrTextObj*) pObj)->SetOutlinerParaObject( pOutl->CreateParaObject() );
-
-                pObj->BroadcastObjectChange();
-                if ( pModel )
-                    pModel->setLock( bLock );
+                pObj->getSdrModelFromSdrObject().setLock( bLock );
             }
         }
 
         pOutl->SetStatusEventHdl(aEvtHdl);
-        pOutl->SetUpdateMode(sal_False);
+        pOutl->SetUpdateMode(false);
         pOutl->Init( nOldOutlMode );
-        mbHasOnlineSpellErrors = sal_False;
+        mbHasOnlineSpellErrors = false;
     }
 }
 
@@ -1031,7 +1022,7 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
 |* Objekt wurde ins Model eingefuegt
 |*
 \************************************************************************/
-void SdDrawDocument::InsertObject(SdrObject* pObj, SdPage* /*pPage*/)
+void SdDrawDocument::InsertObject(const SdrObject* pObj)
 {
     if(mpOnlineSpellingList && pObj)
     {
@@ -1048,7 +1039,7 @@ void SdDrawDocument::InsertObject(SdrObject* pObj, SdPage* /*pPage*/)
 |* Objekt wurde aus dem Model entfernt
 |*
 \************************************************************************/
-void SdDrawDocument::RemoveObject(SdrObject* pObj, SdPage* /*pPage*/)
+void SdDrawDocument::RemoveObject(const SdrObject* pObj)
 {
     if(mpOnlineSpellingList && pObj)
     {
@@ -1067,7 +1058,7 @@ void SdDrawDocument::RemoveObject(SdrObject* pObj, SdPage* /*pPage*/)
 \************************************************************************/
 IMPL_LINK(SdDrawDocument, OnlineSpellEventHdl, EditStatus*, pEditStat)
 {
-    sal_uLong nStat = pEditStat->GetStatusWord();
+    sal_uInt32 nStat = pEditStat->GetStatusWord();
     mbHasOnlineSpellErrors = (nStat & EE_STAT_WRONGWORDCHANGED) != 0;
 
     return(0);
@@ -1091,12 +1082,14 @@ void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject*
         // #91457# restart when add to dictionary takes place, too.
         || nCommand == SPELLCMD_ADDTODICTIONARY)
     {
-        if(pObj && pOutl && pObj->ISA(SdrTextObj))
+        SdrTextObj* pSdrTextObj = dynamic_cast< SdrTextObj* >(pObj);
+
+        if(pSdrTextObj && pOutl)
         {
-            sal_Bool bModified(IsChanged());
-            ((SdrTextObj*)pObj)->SetOutlinerParaObject(pOutl->CreateParaObject());
+            bool bModified(IsChanged());
+            const SdrObjectChangeBroadcaster aSdrObjectChangeBroadcaster(*pSdrTextObj);
+            pSdrTextObj->SetOutlinerParaObject(pOutl->CreateParaObject());
             SetChanged(bModified);
-            pObj->BroadcastObjectChange();
         }
 
         mpOnlineSearchItem = new SvxSearchItem( SID_SEARCH_ITEM );
@@ -1117,7 +1110,7 @@ void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject*
 \************************************************************************/
 void SdDrawDocument::RestoreLayerNames()
 {
-    SdrLayerAdmin& rLayerAdmin = GetLayerAdmin();
+    SdrLayerAdmin& rLayerAdmin = GetModelLayerAdmin();
     sal_uInt16 nLayerCount = rLayerAdmin.GetLayerCount();
 
     for (sal_uInt16 nLayer = 0; nLayer < nLayerCount; nLayer++)
@@ -1158,10 +1151,10 @@ void SdDrawDocument::RestoreLayerNames()
 |*
 \************************************************************************/
 
-String SdDrawDocument::CreatePageNumValue(sal_uInt16 nNum) const
+String SdDrawDocument::CreatePageNumValue(sal_uInt32 nNum) const
 {
     String aPageNumValue;
-    sal_Bool bUpper = sal_False;
+    bool bUpper = false;
 
     switch (mePageNumType)
     {
@@ -1172,7 +1165,7 @@ String SdDrawDocument::CreatePageNumValue(sal_uInt16 nNum) const
             aPageNumValue += (sal_Unicode)(char)((nNum - 1) % 26 + 'a');
             break;
         case SVX_ROMAN_UPPER:
-            bUpper = sal_True;
+            bUpper = true;
         case SVX_ROMAN_LOWER:
             aPageNumValue += SvxNumberFormat::CreateRomanString(nNum, bUpper);
             break;
@@ -1206,7 +1199,7 @@ void SdDrawDocument::RenameLayoutTemplate(const String& rOldLayoutName, const St
     aOldName.Erase(nPos + sizeof(SD_LT_SEPARATOR) - 1 );
     sal_uInt16 nLen = aOldName.Len();
     std::vector< StyleReplaceData* > aRememberedStyleReplaceData; // #120074#
-    SfxStyleSheetIterator aIter(mxStyleSheetPool.get(), SD_STYLE_FAMILY_MASTERPAGE);
+    SfxStyleSheetIterator aIter(GetStyleSheetPool(), SD_STYLE_FAMILY_MASTERPAGE);
     SfxStyleSheetBase* pSheet = aIter.First();
 
     while (pSheet)
@@ -1240,7 +1233,7 @@ void SdDrawDocument::RenameLayoutTemplate(const String& rOldLayoutName, const St
 
     // an allen Seiten, die das jetzt umbeannte Layout benutzen, die
     // Textobjekte von der Aenderung unterrichten und Layoutnamen setzen
-    sal_uInt16 nPage;
+    sal_uInt32 nPage;
     for (nPage = 0; nPage < GetPageCount(); nPage++)
     {
         SdPage* pPage = (SdPage*) GetPage(nPage);
@@ -1250,7 +1243,7 @@ void SdDrawDocument::RenameLayoutTemplate(const String& rOldLayoutName, const St
         {
             pPage->SetLayoutName(aPageLayoutName);
 
-            for (sal_uLong nObj = 0; nObj < pPage->GetObjCount(); nObj++)
+            for (sal_uInt32 nObj = 0; nObj < pPage->GetObjCount(); nObj++)
             {
                 SdrObject* pObj = pPage->GetObj(nObj);
 
@@ -1296,7 +1289,7 @@ void SdDrawDocument::RenameLayoutTemplate(const String& rOldLayoutName, const St
             pPage->SetLayoutName(aPageLayoutName);
             pPage->SetName(rNewName);
 
-            for (sal_uLong nObj = 0; nObj < pPage->GetObjCount(); nObj++)
+            for (sal_uInt32 nObj = 0; nObj < pPage->GetObjCount(); nObj++)
             {
                 SdrObject* pObj = pPage->GetObj(nObj);
 
@@ -1342,22 +1335,22 @@ void SdDrawDocument::RenameLayoutTemplate(const String& rOldLayoutName, const St
 |* Outliner-Defaults setzen (Pool-Defaults)
 |*
 \************************************************************************/
-void SdDrawDocument::SetTextDefaults() const
+void SdDrawDocument::SetSDTextDefaults()
 {
     // BulletItem und BulletFont fuer Titel und Gliederung
     SvxBulletItem aBulletItem(EE_PARA_BULLET);
-    Font aBulletFont( static_cast<SdStyleSheetPool*>( mxStyleSheetPool.get())->GetBulletFont() );
+    Font aBulletFont( GetSdStyleSheetPool()->GetBulletFont() );
     aBulletFont.SetSize(Size(0,846));       // 24 pt
     aBulletItem.SetFont(aBulletFont);
     aBulletItem.SetStyle(BS_BULLET);
     aBulletItem.SetStart(1);
     aBulletItem.SetScale(45);               // in Prozent
     aBulletItem.SetSymbol( 0x25CF );                // Punkt
-    pItemPool->SetPoolDefaultItem( aBulletItem );
+    GetItemPool().SetPoolDefaultItem( aBulletItem );
 
     // Bullets nicht sichtbar
 //  SfxUInt16Item aBulletStateItem(EE_PARA_BULLETSTATE, 0);
-//  pItemPool->SetPoolDefaultItem( aBulletStateItem );
+//  GetItemPool().SetPoolDefaultItem( aBulletStateItem );
 
     // Neues BulletItem
     SvxNumberFormat aNumberFormat(SVX_NUM_CHAR_SPECIAL);
@@ -1368,7 +1361,7 @@ void SdDrawDocument::SetTextDefaults() const
     aNumberFormat.SetStart(1);
     aNumberFormat.SetNumAdjust(SVX_ADJUST_LEFT);
 
-    SvxNumRule aNumRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE, 10, sal_False);
+    SvxNumRule aNumRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE, 10, false);
 
     aNumberFormat.SetLSpace( 0 );
     aNumberFormat.SetAbsLSpace( 0 );
@@ -1385,7 +1378,7 @@ void SdDrawDocument::SetTextDefaults() const
     }
 
     SvxNumBulletItem aNumBulletItem( aNumRule, EE_PARA_NUMBULLET );
-    pItemPool->SetPoolDefaultItem( aNumBulletItem );
+    GetItemPool().SetPoolDefaultItem( aNumBulletItem );
 }
 
 /*************************************************************************
@@ -1396,7 +1389,7 @@ void SdDrawDocument::SetTextDefaults() const
 
 ::com::sun::star::text::WritingMode SdDrawDocument::GetDefaultWritingMode() const
 {
-    const SfxPoolItem*                  pItem = ( pItemPool ? pItemPool->GetPoolDefaultItem( EE_PARA_WRITINGDIR ) : NULL );
+    const SfxPoolItem*                  pItem = GetItemPool().GetPoolDefaultItem( EE_PARA_WRITINGDIR );
     ::com::sun::star::text::WritingMode eRet = ::com::sun::star::text::WritingMode_LR_TB;
 
     if( pItem )
@@ -1418,8 +1411,6 @@ void SdDrawDocument::SetTextDefaults() const
 
 void SdDrawDocument::SetDefaultWritingMode(::com::sun::star::text::WritingMode eMode )
 {
-    if( pItemPool )
-    {
         SvxFrameDirection nVal;
         switch( eMode )
         {
@@ -1432,17 +1423,14 @@ void SdDrawDocument::SetDefaultWritingMode(::com::sun::star::text::WritingMode e
         }
 
         SvxFrameDirectionItem aModeItem( nVal, EE_PARA_WRITINGDIR );
-        pItemPool->SetPoolDefaultItem( aModeItem );
+    GetItemPool().SetPoolDefaultItem( aModeItem );
 
         SvxAdjustItem aAdjust( SVX_ADJUST_LEFT, EE_PARA_JUST );
 
         if( eMode == ::com::sun::star::text::WritingMode_RL_TB )
             aAdjust.SetEnumValue( SVX_ADJUST_RIGHT );
 
-        pItemPool->SetPoolDefaultItem( aAdjust );
-
-
-    }
+    GetItemPool().SetPoolDefaultItem( aAdjust );
 }
 
 void SdDrawDocument::getDefaultFonts( Font& rLatinFont, Font& rCJKFont, Font& rCTLFont )
@@ -1504,17 +1492,17 @@ void ModifyGuard::init()
         mpDocShell = mpDoc->GetDocSh();
     }
 
-    mbIsEnableSetModified = mpDocShell ? mpDocShell->IsEnableSetModified() : sal_False;
-    mbIsDocumentChanged = mpDoc ? mpDoc->IsChanged() : sal_False;
+    mbIsEnableSetModified = mpDocShell ? mpDocShell->IsEnableSetModified() : false;
+    mbIsDocumentChanged = mpDoc ? mpDoc->IsChanged() : false;
 
     if( mbIsEnableSetModified )
-        mpDocShell->EnableSetModified( sal_False );
+        mpDocShell->EnableSetModified( false );
 }
 
 ModifyGuard::~ModifyGuard()
 {
     if( mbIsEnableSetModified )
-        mpDocShell->EnableSetModified( sal_True );
+        mpDocShell->EnableSetModified( true );
 
     if( mpDoc && (mpDoc->IsChanged() != mbIsDocumentChanged) )
         mpDoc->SetChanged(mbIsDocumentChanged);

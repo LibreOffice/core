@@ -63,7 +63,7 @@ namespace drawinglayer
 
                     // prepare transform of sub-group back to it's position and rotation
                     basegfx::B2DHomMatrix aForwardTransform(basegfx::tools::createRotateB2DHomMatrix(getDirection()));
-                    aForwardTransform.translate(getRotationCenter().getX(), getRotationCenter().getY());
+                    aForwardTransform.translate(getRotationCenter());
 
                     // create transformation for one discrete unit
                     const bool bEmbossed(
@@ -78,12 +78,12 @@ namespace drawinglayer
                     if(bEmbossed)
                     {
                         // to bottom-right
-                        aTransform.translate(aDiagonalDistance.getX(), aDiagonalDistance.getY());
+                        aTransform.translate(aDiagonalDistance);
                     }
                     else
                     {
                         // to top-left
-                        aTransform.translate(-aDiagonalDistance.getX(), -aDiagonalDistance.getY());
+                        aTransform.translate(-aDiagonalDistance);
                     }
 
                     aTransform *= aForwardTransform;
@@ -172,21 +172,6 @@ namespace drawinglayer
             mfDirection(fDirection),
             meTextEffectStyle2D(eTextEffectStyle2D)
         {
-        }
-
-        bool TextEffectPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BasePrimitive2D::operator==(rPrimitive))
-            {
-                const TextEffectPrimitive2D& rCompare = (TextEffectPrimitive2D&)rPrimitive;
-
-                return (getTextContent() == rCompare.getTextContent()
-                    && getRotationCenter() == rCompare.getRotationCenter()
-                    && getDirection() == rCompare.getDirection()
-                    && getTextEffectStyle2D() == rCompare.getTextEffectStyle2D());
-            }
-
-            return false;
         }
 
         basegfx::B2DRange TextEffectPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const

@@ -61,6 +61,7 @@
 #include "miscuno.hxx"
 #include "chart2uno.hxx"
 #include "charthelper.hxx"
+#include <svx/svdlegacy.hxx>
 
 using namespace ::com::sun::star;
 
@@ -204,7 +205,7 @@ void ScDocument::UpdateAllCharts()
     pChartCollection->FreeAll();
 }
 
-sal_Bool ScDocument::HasChartAtPoint( SCTAB nTab, const Point& rPos, String* pName )
+sal_Bool ScDocument::HasChartAtPoint( SCTAB nTab, const basegfx::B2DPoint& rPos, String* pName, const SdrView* pSdrView )
 {
     if (pDrawLayer && pTab[nTab])
     {
@@ -215,11 +216,9 @@ sal_Bool ScDocument::HasChartAtPoint( SCTAB nTab, const Point& rPos, String* pNa
         SdrObject* pObject = aIter.Next();
         while (pObject)
         {
-            if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
-                 pObject->GetCurrentBoundRect().IsInside(rPos) )
+            if ( pObject->GetObjIdentifier() == OBJ_OLE2 && pObject->getObjectRange(pSdrView).isInside(rPos) )
             {
-                        // auch Chart-Objekte die nicht in der Collection sind
-
+                // auch Chart-Objekte die nicht in der Collection sind
                 if (IsChart(pObject))
                 {
                     if (pName)
@@ -251,8 +250,8 @@ uno::Reference< chart2::XChartDocument > ScDocument::GetChartByName( const Strin
 
     if (pDrawLayer)
     {
-        sal_uInt16 nCount = pDrawLayer->GetPageCount();
-        for (sal_uInt16 nTab=0; nTab<nCount; nTab++)
+        const sal_uInt32 nCount(pDrawLayer->GetPageCount());
+        for (sal_uInt32 nTab=0; nTab<nCount; nTab++)
         {
             SdrPage* pPage = pDrawLayer->GetPage(nTab);
             DBG_ASSERT(pPage,"Page ?");
@@ -316,8 +315,8 @@ void ScDocument::GetOldChartParameters( const String& rName,
     if (!pDrawLayer)
         return;
 
-    sal_uInt16 nCount = pDrawLayer->GetPageCount();
-    for (sal_uInt16 nTab=0; nTab<nCount; nTab++)
+    const sal_uInt32 nCount(pDrawLayer->GetPageCount());
+    for (sal_uInt32 nTab=0; nTab<nCount; nTab++)
     {
         SdrPage* pPage = pDrawLayer->GetPage(nTab);
         DBG_ASSERT(pPage,"Page ?");
@@ -670,8 +669,8 @@ uno::Reference< embed::XEmbeddedObject >
     //  weil sie evtl. nicht mit den Tabellen uebereinstimmen
     //  (z.B. Redo von Tabelle loeschen, Draw-Redo passiert vor DeleteTab).
 
-    sal_uInt16 nCount = pDrawLayer->GetPageCount();
-    for (sal_uInt16 nTab=0; nTab<nCount; nTab++)
+    const sal_uInt32 nCount(pDrawLayer->GetPageCount());
+    for (sal_uInt32 nTab=0; nTab<nCount; nTab++)
     {
         SdrPage* pPage = pDrawLayer->GetPage(nTab);
         DBG_ASSERT(pPage,"Page ?");

@@ -139,18 +139,6 @@ namespace drawinglayer
         {
         }
 
-        bool SdrPolyPolygonPrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
-        {
-            if(SdrPrimitive3D::operator==(rPrimitive))
-            {
-                const SdrPolyPolygonPrimitive3D& rCompare = static_cast< const SdrPolyPolygonPrimitive3D& >(rPrimitive);
-
-                return (getPolyPolygon3D() == rCompare.getPolyPolygon3D());
-            }
-
-            return false;
-        }
-
         basegfx::B3DRange SdrPolyPolygonPrimitive3D::getB3DRange(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
             // added this implementation to make sure that non-visible objects of this

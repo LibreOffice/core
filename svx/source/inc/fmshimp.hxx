@@ -45,7 +45,7 @@
 #include <com/sun/star/form/runtime/FeatureState.hpp>
 #include <vcl/timer.hxx>
 #include <sfx2/app.hxx>
-#include <svx/svdmark.hxx>
+#include <svx/svdobj.hxx>
 #include <svx/fmsearch.hxx>
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
@@ -395,7 +395,7 @@ public:
         @return
             <TRUE/> if and only if the to-bet-set selection was different from the previous selection
     */
-    bool    setCurrentSelectionFromMark(const SdrMarkList& rMarkList);
+    bool    setCurrentSelectionFromSdrObjectVector(const SdrObjectVector& _rSelection);
 
     /// returns the currently selected form, or the form which all currently selected controls belong to, or <NULL/>
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >
@@ -421,8 +421,8 @@ public:
     void ShowSelectionProperties( sal_Bool bShow );
     sal_Bool IsPropBrwOpen() const;
 
-    void DetermineSelection(const SdrMarkList& rMarkList);
-    void SetSelection(const SdrMarkList& rMarkList);
+    void DetermineSelection(const SdrObjectVector& _rSelection);
+    void SetSelection(const SdrObjectVector& _rSelection);
     void SetSelectionDelayed();
 
     void SetDesignMode(sal_Bool bDesign);

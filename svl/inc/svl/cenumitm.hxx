@@ -40,8 +40,6 @@ protected:
         SfxPoolItem(rItem) {}
 
 public:
-    TYPEINFO();
-
     virtual int operator ==(const SfxPoolItem & rItem) const;
 
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation,
@@ -102,8 +100,6 @@ protected:
         SfxEnumItemInterface(rItem), m_nValue(rItem.m_nValue) {}
 
 public:
-    TYPEINFO();
-
     virtual SvStream & Store(SvStream & rStream, sal_uInt16) const;
 
     virtual sal_uInt16 GetEnumValue() const;
@@ -129,8 +125,6 @@ class SVL_DLLPUBLIC CntBoolItem: public SfxPoolItem
     sal_Bool m_bValue;
 
 public:
-    TYPEINFO();
-
     CntBoolItem(sal_uInt16 which = 0, sal_Bool bTheValue = sal_False):
         SfxPoolItem(which), m_bValue(bTheValue) {}
 

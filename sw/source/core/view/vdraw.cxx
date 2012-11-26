@@ -25,7 +25,7 @@
 #include "precompiled_sw.hxx"
 
 
-#include <svx/svdmodel.hxx>
+#include <svx/fmmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <tools/shl.hxx>
 #include <swmodule.hxx>
@@ -33,6 +33,7 @@
 #include <svx/svdpagv.hxx>
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
+#include <svx/svdlegacy.hxx>
 
 /// OD 29.08.2002 #102450#
 /// include <svx/svdoutl.hxx>
@@ -100,10 +101,8 @@ void SwViewImp::StartAction()
     if ( HasDrawView() )
     {
         SET_CURR_SHELL( GetShell() );
-        if ( pSh->ISA(SwFEShell) )
+        if ( dynamic_cast< SwFEShell* >(pSh) )
             ((SwFEShell*)pSh)->HideChainMarker();   //Kann sich geaendert haben
-        //bResetXorVisibility = GetDrawView()->IsShownXorVisible( GetShell()->GetOut());
-        //GetDrawView()->HideShownXor( GetShell()->GetOut() );
     }
 }
 
@@ -114,9 +113,7 @@ void SwViewImp::EndAction()
     if ( HasDrawView() )
     {
         SET_CURR_SHELL( GetShell() );
-        //if ( bResetXorVisibility )
-        //  GetDrawView()->ShowShownXor( GetShell()->GetOut() );
-        if ( pSh->ISA(SwFEShell) )
+        if ( dynamic_cast< SwFEShell* >(pSh) )
             ((SwFEShell*)pSh)->SetChainMarker();    //Kann sich geaendert haben
     }
 }
@@ -133,29 +130,12 @@ void SwViewImp::EndAction()
 
 void SwViewImp::LockPaint()
 {
-    if ( HasDrawView() )
-    {
-        //HMHbShowHdlPaint = GetDrawView()->IsMarkHdlShown();
-        //HMHif ( bShowHdlPaint )
-        //HMH   GetDrawView()->HideMarkHdl();
-        bResetHdlHiddenPaint = !GetDrawView()->areMarkHandlesHidden();
-        GetDrawView()->hideMarkHandles();
-    }
-    else
-    {
-        //HMHbShowHdlPaint = sal_False;
-        bResetHdlHiddenPaint = sal_False;
-    }
 }
 
 
 
 void SwViewImp::UnlockPaint()
 {
-    if ( bResetHdlHiddenPaint )
-        GetDrawView()->showMarkHandles();
-    //HMHif ( bShowHdlPaint )
-    //HMH   GetDrawView()->ShowMarkHdl();
 }
 
 
@@ -211,25 +191,34 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
             if ( _pPageBackgrdColor )
             {
                 aOldOutlinerBackgrdColor =
-                        GetDrawView()->GetModel()->GetDrawOutliner().GetBackgroundColor();
-                GetDrawView()->GetModel()->GetDrawOutliner().SetBackgroundColor( *_pPageBackgrdColor );
+                        GetDrawView()->getSdrModelFromSdrView().GetDrawOutliner().GetBackgroundColor();
+                GetDrawView()->getSdrModelFromSdrView().GetDrawOutliner().SetBackgroundColor( *_pPageBackgrdColor );
             }
 
             aOldEEHoriTextDir =
-                GetDrawView()->GetModel()->GetDrawOutliner().GetDefaultHorizontalTextDirection();
+                GetDrawView()->getSdrModelFromSdrView().GetDrawOutliner().GetDefaultHorizontalTextDirection();
             EEHorizontalTextDirection aEEHoriTextDirOfPage =
                 _bIsPageRightToLeft ? EE_HTEXTDIR_R2L : EE_HTEXTDIR_L2R;
-            GetDrawView()->GetModel()->GetDrawOutliner().SetDefaultHorizontalTextDirection( aEEHoriTextDirOfPage );
+            GetDrawView()->getSdrModelFromSdrView().GetDrawOutliner().SetDefaultHorizontalTextDirection( aEEHoriTextDirOfPage );
         }
 
         pOutDev->Push( PUSH_LINECOLOR ); // #114231#
         if (pPrintData)
         {
             // hide drawings but not form controls (form controls are handled elsewhere)
-            SdrView &rSdrView = const_cast< SdrView & >(GetPageView()->GetView());
-            rSdrView.setHideDraw( !pPrintData->IsPrintDraw() );
+            SwDrawView* pSdrView = const_cast< SwDrawView* >(GetDrawView());
+            pSdrView->setHideDraw( !pPrintData->IsPrintDraw() );
         }
-        GetPageView()->DrawLayer( _nLayerID, pOutDev, pRedirector );
+
+        if(GetDrawView()->GetSdrPageView())
+        {
+            GetDrawView()->GetSdrPageView()->DrawLayer( _nLayerID, pOutDev, pRedirector );
+        }
+        else
+        {
+            OSL_ENSURE(false, "Missing SdrPageView, use ShowSdrPage() first (!)");
+        }
+
         pOutDev->Pop();
 
         // OD 29.08.2002 #102450#
@@ -238,8 +227,8 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
         if ( (_nLayerID == pIDDMA->GetHellId()) ||
              (_nLayerID == pIDDMA->GetHeavenId()) )
         {
-            GetDrawView()->GetModel()->GetDrawOutliner().SetBackgroundColor( aOldOutlinerBackgrdColor );
-            GetDrawView()->GetModel()->GetDrawOutliner().SetDefaultHorizontalTextDirection( aOldEEHoriTextDir );
+            GetDrawView()->getSdrModelFromSdrView().GetDrawOutliner().SetBackgroundColor( aOldOutlinerBackgrdColor );
+            GetDrawView()->getSdrModelFromSdrView().GetDrawOutliner().SetDefaultHorizontalTextDirection( aOldEEHoriTextDir );
         }
 
         pOutDev->SetDrawMode( nOldDrawMode );
@@ -258,15 +247,11 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
 
 sal_Bool SwViewImp::IsDragPossible( const Point &rPoint )
 {
-    if ( !HasDrawView() )
+    if ( !HasDrawView() || !GetDrawView()->areSdrObjectsSelected() )
         return sal_False;
 
-    const SdrMarkList &rMrkList = GetDrawView()->GetMarkedObjectList();
-
-    if( !rMrkList.GetMarkCount() )
-        return sal_False;
-
-    SdrObject *pO = rMrkList.GetMark(rMrkList.GetMarkCount()-1)->GetMarkedSdrObj();
+    const SdrObjectVector aSelection(GetDrawView()->getSelectedSdrObjectVectorFromSdrMarkView());
+    SdrObject *pO = aSelection[aSelection.size() - 1];
 
     SwRect aRect;
     if( pO && ::CalcClipRect( pO, aRect, sal_False ) )
@@ -282,6 +267,7 @@ sal_Bool SwViewImp::IsDragPossible( const Point &rPoint )
     aRect.Bottom( aRect.Bottom() + WIEDUWILLST );
     aRect.Left(   aRect.Left()   - WIEDUWILLST );
     aRect.Right(  aRect.Right()  + WIEDUWILLST );
+
     return aRect.IsInside( rPoint );
 }
 
@@ -299,18 +285,21 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
     if ( !HasDrawView() )
         return;
 
-    if ( GetPageView() )
-        GetPageView()->GetPage()->SetSize( rNewSz );
+    if ( GetDrawView() && GetDrawView()->GetSdrPageView() )
+        GetDrawView()->GetSdrPageView()->getSdrPageFromSdrPageView().SetPageScale( basegfx::B2DVector(rNewSz.Width(), rNewSz.Height()) );
 
     //Begrenzung des Arbeitsbereiches.
-    const Rectangle aRect( Point( DOCUMENTBORDER, DOCUMENTBORDER ), rNewSz );
-    const Rectangle &rOldWork = GetDrawView()->GetWorkArea();
-    sal_Bool bCheckDrawObjs = sal_False;
-    if ( aRect != rOldWork )
+    const basegfx::B2DRange aRange(
+        DOCUMENTBORDER, DOCUMENTBORDER,
+        DOCUMENTBORDER + rNewSz.getWidth(), DOCUMENTBORDER + rNewSz.getHeight());
+    const basegfx::B2DRange& rOldWork = GetDrawView()->GetWorkArea();
+    bool bCheckDrawObjs(false);
+
+    if(!aRange.equal(rOldWork))
     {
-        if ( rOldWork.Bottom() > aRect.Bottom() || rOldWork.Right() > aRect.Right())
-            bCheckDrawObjs = sal_True;
-        GetDrawView()->SetWorkArea( aRect );
+        if ( rOldWork.getMaxY() > aRange.getMaxY() || rOldWork.getMaxX() > aRange.getMaxX())
+            bCheckDrawObjs = true;
+        GetDrawView()->SetWorkArea( aRange );
     }
     if ( !bCheckDrawObjs )
         return;
@@ -321,16 +310,16 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
     for( sal_uLong nObj = 0; nObj < nObjs; ++nObj )
     {
         SdrObject *pObj = pPage->GetObj( nObj );
-        if( !pObj->ISA(SwVirtFlyDrawObj) )
+        if( !dynamic_cast< SwVirtFlyDrawObj* >(pObj) )
         {
             //Teilfix(26793): Objekte, die in Rahmen verankert sind, brauchen
             //nicht angepasst werden.
-            const SwContact *pCont = (SwContact*)GetUserCall(pObj);
+            const SwContact *pCont = (SwContact*)findConnectionToSdrObject(pObj);
             //JP - 16.3.00 Bug 73920: this function might be called by the
             //              InsertDocument, when a PageDesc-Attribute is
             //              set on a node. Then the SdrObject must not have
             //              an UserCall.
-            if( !pCont || !pCont->ISA(SwDrawContact) )
+            if( !pCont || !dynamic_cast< const SwDrawContact* >(pCont) )
                 continue;
 
             const SwFrm *pAnchor = ((SwDrawContact*)pCont)->GetAnchorFrm();
@@ -347,25 +336,40 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
                 continue;
             }
 
-            const Rectangle aBound( pObj->GetCurrentBoundRect() );
-            if ( !aRect.IsInside( aBound ) )
+            const basegfx::B2DRange& rBound(pObj->getObjectRange(GetDrawView()));
+
+            if ( !aRange.isInside( rBound ) )
             {
-                Size aSz;
-                if ( aBound.Left() > aRect.Right() )
-                    aSz.Width() = (aRect.Right() - aBound.Left()) - MINFLY;
-                if ( aBound.Top() > aRect.Bottom() )
-                    aSz.Height() = (aRect.Bottom() - aBound.Top()) - MINFLY;
-                if ( aSz.Width() || aSz.Height() )
-                    pObj->Move( aSz );
+                basegfx::B2DPoint aMove(0.0, 0.0);
+
+                if(rBound.getMinX() > aRange.getMaxX())
+                {
+                    aMove.setX((aRange.getMaxX() - rBound.getMinX()) - MINFLY);
+                }
+                if(rBound.getMinY() > aRange.getMaxY())
+                {
+                    aMove.setY((aRange.getMaxY() - rBound.getMinY()) - MINFLY);
+                }
+                if(!aMove.equalZero())
+            {
+                    sdr::legacy::transformSdrObject(*pObj, basegfx::tools::createTranslateB2DHomMatrix(aMove));
+                }
 
                 //Notanker: Grosse Objekte nicht nach oben verschwinden lassen.
-                aSz.Width() = aSz.Height() = 0;
-                if ( aBound.Bottom() < aRect.Top() )
-                    aSz.Width() = (aBound.Bottom() - aRect.Top()) - MINFLY;
-                if ( aBound.Right() < aRect.Left() )
-                    aSz.Height() = (aBound.Right() - aRect.Left()) - MINFLY;
-                if ( aSz.Width() || aSz.Height() )
-                    pObj->Move( aSz );
+                aMove = basegfx::B2DPoint(0.0, 0.0);
+
+                if(rBound.getMaxY() < aRange.getMinY())
+                {
+                    aMove.setX((rBound.getMaxY() - aRange.getMinY()) - MINFLY);
+                }
+                if(rBound.getMaxX() < aRange.getMinX())
+                {
+                    aMove.setY((rBound.getMaxX() - aRange.getMinX()) - MINFLY);
+                }
+                if(!aMove.equalZero())
+                {
+                    sdr::legacy::transformSdrObject(*pObj, basegfx::tools::createTranslateB2DHomMatrix(aMove));
+                }
             }
         }
     }

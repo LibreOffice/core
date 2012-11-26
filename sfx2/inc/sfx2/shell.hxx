@@ -28,13 +28,10 @@
 #include "sal/types.h"
 #include <com/sun/star/embed/VerbDescriptor.hpp>
 #include <tools/debug.hxx>
-#include <tools/rtti.hxx>
 #include <svl/brdcst.hxx>
-
 #include <tools/ownlist.hxx>
 #include <tools/unqid.hxx>
 #include <tools/string.hxx>
-
 #include <sfx2/sfxuno.hxx>
 
 class ResMgr;
@@ -180,7 +177,6 @@ protected:
 #endif
 
 public:
-                                TYPEINFO();
     virtual                     ~SfxShell();
 
     SfxBroadcaster*             GetBroadcaster();

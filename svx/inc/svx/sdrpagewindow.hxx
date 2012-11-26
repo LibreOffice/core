@@ -128,7 +128,7 @@ public:
 
     /** sets all elements in the view which support a design and a alive mode into the given mode
     */
-    void    SetDesignMode( bool _bDesignMode ) const;
+    void SetDesignMode( bool _bDesignMode );
 };
 
 // typedefs for a list of SdrPageWindow

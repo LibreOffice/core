@@ -353,7 +353,7 @@ sal_Bool SvxTransparenceTabPage::FillItemSet(SfxItemSet& rAttrs)
         if(nPos != (sal_uInt16)aMtrTransparent.GetSavedValue().ToInt32() || !bLinearActive)
         {
             XFillTransparenceItem aItem(nPos);
-            SdrShadowTransparenceItem aShadowItem(nPos);
+            SdrPercentItem aShadowItem(SDRATTR_SHADOWTRANSPARENCE, nPos);
             const SfxPoolItem* pOld = GetOldItem(rAttrs, XATTR_FILLTRANSPARENCE);
             if(!pOld || !(*(const XFillTransparenceItem*)pOld == aItem) || !bLinearActive)
             {
@@ -425,7 +425,7 @@ sal_Bool SvxTransparenceTabPage::FillItemSet(SfxItemSet& rAttrs)
     if(bSwitchOffLinear && (bLinearActive || bLinearUsed))
     {
         XFillTransparenceItem aItem(0);
-        SdrShadowTransparenceItem aShadowItem(0);
+        SdrPercentItem aShadowItem(SDRATTR_SHADOWTRANSPARENCE, 0);
         rAttrs.Put(aItem);
         rAttrs.Put(aShadowItem);
         bModified = sal_True;
@@ -504,7 +504,7 @@ void SvxTransparenceTabPage::Reset(const SfxItemSet& rAttrs)
 void SvxTransparenceTabPage::ActivatePage(const SfxItemSet& rSet)
 {
     //add CHINA001 Begin
-    SFX_ITEMSET_ARG (&rSet,pPageTypeItem,CntUInt16Item,SID_PAGE_TYPE,sal_False);
+    SFX_ITEMSET_ARG (&rSet,pPageTypeItem,CntUInt16Item,SID_PAGE_TYPE );
     if (pPageTypeItem)
         SetPageType(pPageTypeItem->GetValue());
     //add CHINA001 end
@@ -601,8 +601,8 @@ void SvxTransparenceTabPage::InvalidatePreview (sal_Bool bEnable)
 
 void SvxTransparenceTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
 {
-    SFX_ITEMSET_ARG (&aSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pDlgTypeItem,SfxUInt16Item,SID_DLG_TYPE,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE );
+    SFX_ITEMSET_ARG (&aSet,pDlgTypeItem,SfxUInt16Item,SID_DLG_TYPE );
 
     if (pPageTypeItem)
         SetPageType(pPageTypeItem->GetValue());
@@ -802,8 +802,8 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
     sal_uInt16 _nPos = 0;
     sal_uInt16 nCount;
     //add CHINA001 Begin
-    SFX_ITEMSET_ARG (&rSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE,sal_False);
-    SFX_ITEMSET_ARG (&rSet,pPosItem,SfxUInt16Item,SID_TABPAGE_POS,sal_False);
+    SFX_ITEMSET_ARG (&rSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE );
+    SFX_ITEMSET_ARG (&rSet,pPosItem,SfxUInt16Item,SID_TABPAGE_POS );
     if (pPageTypeItem)
         SetPageType(pPageTypeItem->GetValue());
     if (pPosItem)
@@ -2567,13 +2567,13 @@ void SvxAreaTabPage::PointChanged( Window* pWindow, RECT_POINT eRcPt )
 
 void SvxAreaTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
 {
-    SFX_ITEMSET_ARG (&aSet,pColorTabItem,SvxColorTableItem,SID_COLOR_TABLE,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pGradientListItem,SvxGradientListItem,SID_GRADIENT_LIST,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pHatchingListItem,SvxHatchListItem,SID_HATCH_LIST,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pBitmapListItem,SvxBitmapListItem,SID_BITMAP_LIST,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pDlgTypeItem,SfxUInt16Item,SID_DLG_TYPE,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pPosItem,SfxUInt16Item,SID_TABPAGE_POS,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pColorTabItem,SvxColorTableItem,SID_COLOR_TABLE );
+    SFX_ITEMSET_ARG (&aSet,pGradientListItem,SvxGradientListItem,SID_GRADIENT_LIST );
+    SFX_ITEMSET_ARG (&aSet,pHatchingListItem,SvxHatchListItem,SID_HATCH_LIST );
+    SFX_ITEMSET_ARG (&aSet,pBitmapListItem,SvxBitmapListItem,SID_BITMAP_LIST );
+    SFX_ITEMSET_ARG (&aSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE );
+    SFX_ITEMSET_ARG (&aSet,pDlgTypeItem,SfxUInt16Item,SID_DLG_TYPE );
+    SFX_ITEMSET_ARG (&aSet,pPosItem,SfxUInt16Item,SID_TABPAGE_POS );
 
     if (pColorTabItem)
         SetColorTable(pColorTabItem->GetColorTable());

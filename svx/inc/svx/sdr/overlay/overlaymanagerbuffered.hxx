@@ -59,7 +59,7 @@ namespace sdr
             // bitfield
             // Flag to decide if PreRendering shall be used for overlay refreshes.
             // Default is false.
-            unsigned                                mbRefreshWithPreRendering : 1;
+            bool                                    mbRefreshWithPreRendering : 1;
 
             // link for timer
             DECL_LINK(ImpBufferTimerHandler, AutoTimer*);

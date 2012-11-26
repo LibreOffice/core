@@ -48,7 +48,7 @@ public:
 
     /** A frame window typically can (and should) exists on its own without
         children, if only to visualize that something (a view) is missing.
-        Therefore this method always returns <FALSE/>.
+        Therefore this method always returns <false/>.
     */
     virtual sal_Bool SAL_CALL isAnchorOnly (void)
         throw (com::sun::star::uno::RuntimeException);

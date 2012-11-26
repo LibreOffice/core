@@ -47,24 +47,9 @@ namespace drawinglayer
         {
         }
 
-        bool BitmapPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BasePrimitive2D::operator==(rPrimitive))
-            {
-                const BitmapPrimitive2D& rCompare = (BitmapPrimitive2D&)rPrimitive;
-
-                return (getBitmapEx() == rCompare.getBitmapEx()
-                    && getTransform() == rCompare.getTransform());
-            }
-
-            return false;
-        }
-
         basegfx::B2DRange BitmapPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            basegfx::B2DRange aRetval(0.0, 0.0, 1.0, 1.0);
-            aRetval.transform(maTransform);
-            return aRetval;
+            return getTransform() * basegfx::B2DRange::getUnitB2DRange();
         }
 
         // provide unique ID

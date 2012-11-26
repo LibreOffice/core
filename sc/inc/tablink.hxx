@@ -50,7 +50,6 @@ private:
     sal_Bool            bDoPaint;
 
 public:
-    TYPEINFO();
     ScTableLink( ScDocShell* pDocSh, const String& rFile,
                     const String& rFilter, const String& rOpt, sal_uLong nRefresh );
     ScTableLink( SfxObjectShell* pShell, const String& rFile,

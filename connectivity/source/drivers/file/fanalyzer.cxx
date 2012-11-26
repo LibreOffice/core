@@ -137,7 +137,7 @@ void OSQLAnalyzer::bindRow(OCodeList& rCodeList,const OValueRefRow& _pRow,OEvalu
 
     for (OCodeList::iterator aIter = rCodeList.begin(); aIter != rCodeList.end(); ++aIter)
     {
-        OOperandAttr* pAttr = PTR_CAST(OOperandAttr,(*aIter));
+        OOperandAttr* pAttr = dynamic_cast< OOperandAttr* >( (*aIter));
         if (pAttr)
         {
             if (pAttr->isIndexed() && !m_aCompiler->hasORCondition())
@@ -145,10 +145,10 @@ void OSQLAnalyzer::bindRow(OCodeList& rCodeList,const OValueRefRow& _pRow,OEvalu
                 OCode* pCode1 = *(aIter + 1);
                 OCode* pCode2 = *(aIter + 2);
 
-                if (PTR_CAST(OOperand,pCode1))
-                    pEvaluateSet = pAttr->preProcess(PTR_CAST(OBoolOperator,pCode2), PTR_CAST(OOperand,pCode1));
+                if (dynamic_cast< OOperand* >( pCode1))
+                    pEvaluateSet = pAttr->preProcess(dynamic_cast< OBoolOperator* >( pCode2), dynamic_cast< OOperand* >(pCode1));
                 else
-                    pEvaluateSet = pAttr->preProcess(PTR_CAST(OBoolOperator,pCode1));
+                    pEvaluateSet = pAttr->preProcess(dynamic_cast< OBoolOperator* >( pCode1));
             }
 
             if (pEvaluateSet)
@@ -234,18 +234,18 @@ void OSQLAnalyzer::describeParam(::vos::ORef<OSQLColumns> rParameterColumns)
 
     for(OCodeList::iterator aIter = rCodeList.begin(); aIter != rCodeList.end(); ++aIter)
     {
-        OOperand* pOperand = PTR_CAST(OOperand,(*aIter));
-        OOperator* pOperator = PTR_CAST(OOperator,(*aIter));
+        OOperand* pOperand = dynamic_cast< OOperand* >( (*aIter));
+        OOperator* pOperator = dynamic_cast< OOperator* >( (*aIter));
         if (pOperand)
             aCodeStack.push(pOperand);
         else
         {
             if (pOperator->getRequestedOperands() == 2)     // bei zwei Operatoren ist es moeglich
             {                                               // einen Parameter weiter zu spezifizieren
-                OOperandParam *pParam  = PTR_CAST(OOperandParam,aCodeStack.top());
+                OOperandParam *pParam  = dynamic_cast< OOperandParam* >( aCodeStack.top());
                 if (pParam)  // Anpassen des ParameterTyps, wenn der linke Operand ein Attribut ist
                 {
-                    OOperandAttr *pLeft  = PTR_CAST(OOperandAttr,*(rCodeList.end() - 2));
+                    OOperandAttr *pLeft  = dynamic_cast< OOperandAttr* >( *(rCodeList.end() - 2));
                     if (pLeft)
                     {
                         Reference< XPropertySet> xCol;
@@ -263,7 +263,7 @@ void OSQLAnalyzer::describeParam(::vos::ORef<OSQLColumns> rParameterColumns)
 
     OSL_ENSURE(aCodeStack.size() == 0, "StackFehler");
     OSL_ENSURE(pOperand, "StackFehler");
-    if (IS_TYPE(OOperandResult,pOperand))
+    if ( typeid(OOperandResult) == typeid(*pOperand) ) // IS_TYPE(OOperandResult,pOperand))
         delete pOperand;
     else
         OSL_ENSURE(0,"Illegal here!");

@@ -75,6 +75,8 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <svx/svdoedge.hxx>
+#include <drawinglayer/processor2d/contourextractor2d.hxx>
+#include <svx/sdr/contact/viewcontact.hxx>
 #include "doc.hxx"
 
 #ifdef DBG_UTIL
@@ -949,7 +951,7 @@ sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
     sal_Bool bOpaque = sal_False;
     // --> OD 2006-08-15 #i68520#
     const sal_uInt32 nCurrOrd = mpCurrAnchoredObj
-                            ? mpCurrAnchoredObj->GetDrawObj()->GetOrdNum()
+                            ? mpCurrAnchoredObj->GetDrawObj()->GetNavigationPosition()
                             : SAL_MAX_UINT32;
     // <--
     ASSERT( !bTopRule, "DrawTextOpaque: Wrong TopRule" );
@@ -992,7 +994,7 @@ sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
                         ) &&
                         // --> OD 2006-08-15 #i68520#
                         pTmpAnchoredObj->GetDrawObj()->GetLayer() != nHellId &&
-                        nCurrOrd < pTmpAnchoredObj->GetDrawObj()->GetOrdNum()
+                        nCurrOrd < pTmpAnchoredObj->GetDrawObj()->GetNavigationPosition()
                         // <--
                       )
                     {
@@ -1141,10 +1143,11 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
         const SdrObject* pNew = _pAnchoredObj->GetDrawObj();
         // <--
         // #102344# Ignore connectors which have one or more connections
-        if(pNew && pNew->ISA(SdrEdgeObj))
+        const SdrEdgeObj* pSdrEdgeObj = dynamic_cast< const SdrEdgeObj* >(pNew);
+
+        if(pSdrEdgeObj)
         {
-            if(((SdrEdgeObj*)pNew)->GetConnectedNode(sal_True)
-                || ((SdrEdgeObj*)pNew)->GetConnectedNode(sal_False))
+            if(pSdrEdgeObj->GetConnectedNode(true) || pSdrEdgeObj->GetConnectedNode(false))
             {
                 return sal_False;
             }
@@ -1250,7 +1253,7 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
             // ausgewichen und ausserdem braucht nur bei Ueberlappung
             // ausgewichen werden.
             // --> OD 2006-08-15 #i68520#
-            bEvade &= ( mpCurrAnchoredObj->GetDrawObj()->GetOrdNum() < pNew->GetOrdNum() );
+            bEvade &= ( mpCurrAnchoredObj->GetDrawObj()->GetNavigationPosition() < pNew->GetNavigationPosition() );
             // <--
             if( bEvade )
             {
@@ -1721,7 +1724,7 @@ const SwRect SwContourCache::CalcBoundRect( const SwAnchoredObject* pAnchoredObj
     SwRect aRet;
     const SwFrmFmt* pFmt = &(pAnchoredObj->GetFrmFmt());
     if( pFmt->GetSurround().IsContour() &&
-        ( !pAnchoredObj->ISA(SwFlyFrm) ||
+        ( !dynamic_cast< const SwFlyFrm* >(pAnchoredObj) ||
           ( static_cast<const SwFlyFrm*>(pAnchoredObj)->Lower() &&
             static_cast<const SwFlyFrm*>(pAnchoredObj)->Lower()->IsNoTxtFrm() ) ) )
     {
@@ -1763,27 +1766,56 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
         }
         ::basegfx::B2DPolyPolygon aPolyPolygon;
         ::basegfx::B2DPolyPolygon* pPolyPolygon = 0L;
+        const SwVirtFlyDrawObj* pSwVirtFlyDrawObj = dynamic_cast< const SwVirtFlyDrawObj* >(pObj);
 
-        if ( pObj->ISA(SwVirtFlyDrawObj) )
+        if ( pSwVirtFlyDrawObj )
         {
             // Vorsicht #37347: Das GetContour() fuehrt zum Laden der Grafik,
             // diese aendert dadurch ggf. ihre Groesse, ruft deshalb ein
             // ClrObject() auf.
             PolyPolygon aPoly;
-            if( !((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->GetContour( aPoly ) )
-                aPoly = PolyPolygon( ((SwVirtFlyDrawObj*)pObj)->
-                                     GetFlyFrm()->Frm().SVRect() );
+            if( !pSwVirtFlyDrawObj->GetFlyFrm()->GetContour( aPoly ) )
+                aPoly = PolyPolygon( pSwVirtFlyDrawObj->GetFlyFrm()->Frm().SVRect() );
             aPolyPolygon.clear();
             aPolyPolygon.append(aPoly.getB2DPolyPolygon());
         }
         else
         {
-            if( !pObj->ISA( E3dObject ) )
+            if( !dynamic_cast< const E3dObject* >(pObj) )
             {
                 aPolyPolygon = pObj->TakeXorPoly();
             }
 
-            ::basegfx::B2DPolyPolygon aContourPoly(pObj->TakeContour());
+            // get primitive sequence
+            ::basegfx::B2DPolyPolygon aContourPoly;
+            const sdr::contact::ViewContact& rVC(pObj->GetViewContact());
+            const drawinglayer::primitive2d::Primitive2DSequence xSequence(rVC.getViewIndependentPrimitive2DSequence());
+
+            if(xSequence.hasElements())
+            {
+                // use neutral ViewInformation
+                const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+
+                // create extractor, process and get result
+                ::drawinglayer::processor2d::ContourExtractor2D aExtractor(aViewInformation2D, false);
+                aExtractor.process(xSequence);
+                const std::vector< basegfx::B2DPolyPolygon >& rResult(aExtractor.getExtractedContour());
+                const sal_uInt32 nSize(rResult.size());
+
+                // when count is one, it is implied that the object has only it's normal
+                // contour anyways and TakeCountour() is to return an empty PolyPolygon
+                // (see old implementation for historical reasons)
+                if(nSize > 1)
+                {
+                    // the topology for contour is correctly a vector of PolyPolygons; for
+                    // historical reasons cut it back to a single PolyPolygon here
+                    for(sal_uInt32 a(0); a < nSize; a++)
+                    {
+                        aContourPoly.append(rResult[a]);
+                    }
+                }
+            }
+
             pPolyPolygon = new ::basegfx::B2DPolyPolygon(aContourPoly);
         }
         const SvxLRSpaceItem &rLRSpace = pFmt->GetLRSpace();

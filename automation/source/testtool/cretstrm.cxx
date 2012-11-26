@@ -29,6 +29,7 @@
 #include <tools/debug.hxx>
 #include "rcontrol.hxx"
 #include "svcommstream.hxx"
+#include <typeinfo>
 
 
 SV_IMPL_REF(SbxBase)
@@ -63,7 +64,14 @@ void CRetStream::Read( SbxValue &aValue )
         DBG_ERROR1( "Falscher Typ im Stream: Erwartet SbxValue, gefunden :%hu", nId );
     }
     SbxBaseRef xBase = SbxBase::Load( *pSammel );
-    if ( IS_TYPE( SbxValue, xBase ) )
-        aValue = *PTR_CAST( SbxValue, &xBase );
+
+    // old RTTI did the following:
+    //  if ( IS_TYPE( SbxValue, xBase ) )
+    //      aValue = *dynamic_cast< SbxValue* >( &xBase );
+    SbxValue* pSbxValue = dynamic_cast< SbxValue* >(&xBase);
+    if(pSbxValue)
+    {
+        aValue = *pSbxValue;
+    }
 }
 

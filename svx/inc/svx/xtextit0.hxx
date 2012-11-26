@@ -37,7 +37,7 @@
 class SVX_DLLPUBLIC XFormTextStyleItem : public SfxEnumItem
 {
 public:
-                            TYPEINFO();
+    POOLITEM_FACTORY()
                             XFormTextStyleItem(XFormTextStyle = XFT_NONE);
                             XFormTextStyleItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const;
@@ -58,7 +58,7 @@ public:
 class SVX_DLLPUBLIC XFormTextHideFormItem : public SfxBoolItem
 {
 public:
-                            TYPEINFO();
+    POOLITEM_FACTORY()
                             XFormTextHideFormItem(sal_Bool bHide = sal_False);
                             XFormTextHideFormItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const;

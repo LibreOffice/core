@@ -31,10 +31,6 @@
 using namespace ::com::sun::star;
 
 // -----------------------------------------------------------------------
-
-TYPEINIT1(ScAccWinFocusLostHint, SfxHint);
-
-// -----------------------------------------------------------------------
 //      ScAccWinFocusLostHint - the current window lost its focus (to another application, view or document)
 // -----------------------------------------------------------------------
 
@@ -50,10 +46,6 @@ ScAccWinFocusLostHint::~ScAccWinFocusLostHint()
 }
 
 // -----------------------------------------------------------------------
-
-TYPEINIT1(ScAccWinFocusGotHint, SfxHint);
-
-// -----------------------------------------------------------------------
 //      ScAccWinFocusGotHint - the window got the focus (from another application, view or document)
 // -----------------------------------------------------------------------
 
@@ -67,9 +59,6 @@ ScAccWinFocusGotHint::ScAccWinFocusGotHint(
 ScAccWinFocusGotHint::~ScAccWinFocusGotHint()
 {
 }
-// -----------------------------------------------------------------------
-
-TYPEINIT1(ScAccGridWinFocusLostHint, SfxHint);
 
 // -----------------------------------------------------------------------
 //      ScAccGridWinFocusLostHint - the current grid window lost its focus (to another application, view or document)
@@ -86,10 +75,6 @@ ScAccGridWinFocusLostHint::ScAccGridWinFocusLostHint(ScSplitPos eOld,
 ScAccGridWinFocusLostHint::~ScAccGridWinFocusLostHint()
 {
 }
-
-// -----------------------------------------------------------------------
-
-TYPEINIT1(ScAccGridWinFocusGotHint, SfxHint);
 
 // -----------------------------------------------------------------------
 //      ScAccGridWinFocusGotHint - the grid window got the focus (from another application, view or document)

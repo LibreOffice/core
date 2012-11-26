@@ -133,8 +133,8 @@ ScPrintAreasDlg::ScPrintAreasDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* 
         pViewData       ( NULL ),
         nCurTab         ( 0 )
 {
-    ScTabViewShell* pScViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
-    ScDocShell*     pScDocSh  = PTR_CAST( ScDocShell,     SfxObjectShell::Current() );
+    ScTabViewShell* pScViewSh = dynamic_cast< ScTabViewShell* >( SfxViewShell::Current() );
+    ScDocShell*     pScDocSh  = dynamic_cast< ScDocShell* >( SfxObjectShell::Current() );
 
     DBG_ASSERT( pScDocSh, "Current DocumentShell not found :-(" );
 

@@ -212,17 +212,22 @@ void __EXPORT ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
     if ( &rBC == pDocSh )
     {
         //  from DocShell, only SFX_HINT_DYING is interesting
-        if ( rHint.ISA(SfxSimpleHint) && ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+        const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+        if ( pSfxSimpleHint && SFX_HINT_DYING == pSfxSimpleHint->GetId() )
         {
             pDocSh = NULL;
             EndListening(*SFX_APP());
             //  don't access DocShell anymore for EndListening etc.
         }
     }
-    else if (rBC.ISA(SfxApplication))
+    else if (dynamic_cast< SfxApplication* >(&rBC))
     {
-        if ( aItemStr.Len() && rHint.ISA(SfxSimpleHint) &&
-                ((const SfxSimpleHint&)rHint).GetId() == SC_HINT_AREAS_CHANGED )
+        if ( aItemStr.Len() )
+    {
+            const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+            if(pSfxSimpleHint && SC_HINT_AREAS_CHANGED == pSfxSimpleHint->GetId() )
         {
             //  check if named range was modified
             ScRange aNew;
@@ -230,25 +235,37 @@ void __EXPORT ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 bDataChanged = sal_True;
         }
     }
+    }
     else
     {
         //  must be from Area broadcasters
+        const ScHint* pScHint = dynamic_cast< const ScHint* >( &rHint );
 
-        const ScHint* pScHint = PTR_CAST( ScHint, &rHint );
         if( pScHint && (pScHint->GetId() & (SC_HINT_DATACHANGED | SC_HINT_DYING)) )
-            bDataChanged = sal_True;
-        else if (rHint.ISA(ScAreaChangedHint))      // position of broadcaster changed
         {
-            ScRange aNewRange = ((const ScAreaChangedHint&)rHint).GetRange();
+            bDataChanged = sal_True;
+        }
+        else
+        {
+            const ScAreaChangedHint* pScAreaChangedHint = dynamic_cast< const ScAreaChangedHint* >( &rHint );
+
+            if (pScAreaChangedHint)     // position of broadcaster changed
+            {
+                ScRange aNewRange = pScAreaChangedHint->GetRange();
             if ( aRange != aNewRange )
             {
                 bRefreshListener = sal_True;
                 bDataChanged = sal_True;
             }
         }
-        else if (rHint.ISA(SfxSimpleHint))
+            else
+            {
+                const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+                if (pSfxSimpleHint)
         {
-            sal_uLong nId = ((const SfxSimpleHint&)rHint).GetId();
+                    sal_uLong nId = pSfxSimpleHint->GetId();
+
             if (nId == SFX_HINT_DYING)
             {
                 //  If the range is being deleted, listening must be restarted
@@ -256,6 +273,8 @@ void __EXPORT ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 bRefreshListener = sal_True;
                 bDataChanged = sal_True;
             }
+        }
+    }
         }
     }
 

@@ -94,7 +94,7 @@ cclass_Unicode::toTitle( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
         nCount = len - nPos;
 
     trans->setMappingType(MappingTypeToTitle, rLocale);
-    rtl_uString* pStr = x_rtl_uString_new_WithLength( nCount ); // defined in x_rtl_ustring.h
+    rtl_uString* pStr = x_rtl_uString_new_WithLength( nCount, 1 );
     sal_Unicode* out = pStr->buffer;
     BreakIteratorImpl brk(xMSF);
     Boundary bdy = brk.getWordBoundary(Text, nPos, rLocale,

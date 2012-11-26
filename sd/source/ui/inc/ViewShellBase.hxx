@@ -69,7 +69,6 @@ class ViewShellBase
     : public SfxViewShell
 {
 public:
-    TYPEINFO();
     SFX_DECL_VIEWFACTORY(ViewShellBase);
     SFX_DECL_INTERFACE(SD_IF_SDVIEWSHELLBASE)
 
@@ -132,7 +131,7 @@ public:
     virtual com::sun::star::uno::Reference<com::sun::star::view::XRenderable> GetRenderable (void);
 
     /// Forwarded to the print manager.
-    virtual SfxPrinter* GetPrinter (sal_Bool bCreate = sal_False);
+    virtual SfxPrinter* GetPrinter (sal_Bool bCreate = false);
 
     /// Forwarded to the print manager.
     virtual sal_uInt16 SetPrinter (
@@ -172,7 +171,7 @@ public:
     virtual SdrView* GetDrawView (void) const;
     virtual void AdjustPosSizePixel (const Point &rOfs, const Size &rSize);
 
-    /** When <TRUE/> is given, then the mouse shape is set to hour glass (or
+    /** When <true/> is given, then the mouse shape is set to hour glass (or
         whatever the busy shape looks like on the system.)
     */
     void SetBusyState (bool bBusy);

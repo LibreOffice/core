@@ -45,7 +45,7 @@
 #include <basic/sbx.hxx>
 #include "fmitems.hxx"
 #include "fmobj.hxx"
-#include "svx/svditer.hxx"
+#include <svx/svditer.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/fmview.hxx>
@@ -87,11 +87,9 @@ using namespace ::svx;
 
 //========================================================================
 //------------------------------------------------------------------------
-TYPEINIT1(FmFormView, E3dView);
-
 //------------------------------------------------------------------------
-FmFormView::FmFormView( FmFormModel* pModel, OutputDevice* pOut )
-    :E3dView(pModel,pOut)
+FmFormView::FmFormView( FmFormModel& rModel, OutputDevice* pOut )
+    :E3dView(rModel,pOut)
 {
     Init();
 }
@@ -105,16 +103,12 @@ void FmFormView::Init()
 
     //////////////////////////////////////////////////////////////////////
     // Model setzen
-    SdrModel* pModel = GetModel();
-
-    DBG_ASSERT( pModel->ISA(FmFormModel), "Falsches Model" );
-    if( !pModel->ISA(FmFormModel) ) return;
-    FmFormModel* pFormModel = (FmFormModel*)pModel;
+    FmFormModel& rFormModel = dynamic_cast< FmFormModel& >(getSdrModelFromSdrView());
 
     //////////////////////////////////////////////////////////////////////
     // DesignMode vom Model holen
-    sal_Bool bInitDesignMode = pFormModel->GetOpenInDesignMode();
-    if ( pFormModel->OpenInDesignModeIsDefaulted( ) )
+    sal_Bool bInitDesignMode = rFormModel.GetOpenInDesignMode();
+    if ( rFormModel.OpenInDesignModeIsDefaulted( ) )
     {   // this means that nobody ever explicitly set this on the model, and the model has never
         // been loaded from a stream.
         // This means this is a newly created document. This means, we want to have it in design
@@ -128,7 +122,7 @@ void FmFormView::Init()
         bInitDesignMode = sal_True;
     }
 
-    SfxObjectShell* pObjShell = pFormModel->GetObjectShell();
+    SfxObjectShell* pObjShell = rFormModel.GetObjectShell();
     if ( pObjShell && pObjShell->GetMedium() )
     {
         const SfxPoolItem *pItem=0;
@@ -150,6 +144,12 @@ void FmFormView::Init()
 //------------------------------------------------------------------------
 FmFormView::~FmFormView()
 {
+    // call here when still set due to it's virtual nature
+    if(GetSdrPageView())
+    {
+        HideSdrPage();
+    }
+
     if( pFormShell )
         pFormShell->SetView( NULL );
 
@@ -162,15 +162,17 @@ FmFormView::~FmFormView()
 FmFormPage* FmFormView::GetCurPage()
 {
     SdrPageView* pPageView = GetSdrPageView();
-    FmFormPage*  pCurPage = pPageView ? PTR_CAST( FmFormPage, pPageView->GetPage() ) : NULL;
+    FmFormPage*  pCurPage = pPageView ? dynamic_cast< FmFormPage* >( &pPageView->getSdrPageFromSdrPageView() ) : NULL;
     return pCurPage;
 }
 
 //------------------------------------------------------------------------
-void FmFormView::MarkListHasChanged()
+void FmFormView::handleSelectionChange()
 {
-    E3dView::MarkListHasChanged();
+    // call parent
+    E3dView::handleSelectionChange();
 
+    // local reactions
     if ( pFormShell && IsDesignMode() )
     {
         FmFormObj* pObj = getMarkedGrid();
@@ -182,8 +184,7 @@ void FmFormView::MarkListHasChanged()
                 pImpl->m_xWindow->removeFocusListener(pImpl);
                 pImpl->m_xWindow = NULL;
             }
-            SetMoveOutside(sal_False);
-            //OLMRefreshAllIAOManagers();
+            SetMoveOutside(false);
         }
 
         pFormShell->GetImpl()->SetSelectionDelayed();
@@ -238,17 +239,15 @@ void FmFormView::DeleteWindowFromPaintView(OutputDevice* pNewWin)
 //------------------------------------------------------------------------
 void FmFormView::ChangeDesignMode(sal_Bool bDesign)
 {
-    if (bDesign == IsDesignMode())
+    if (bDesign == (sal_Bool)IsDesignMode())
         return;
 
-    FmFormModel* pModel = PTR_CAST(FmFormModel, GetModel());
-    if (pModel)
-    {   // fuer die Zeit des Uebergangs das Undo-Environment ausschalten, das sichert, dass man dort auch nicht-transiente
+    FmFormModel& rModel = dynamic_cast< FmFormModel& >(getSdrModelFromSdrView());
+    // fuer die Zeit des Uebergangs das Undo-Environment ausschalten, das sichert, dass man dort auch nicht-transiente
         // Properties mal eben aendern kann (sollte allerdings mit Vorsicht genossen und beim Rueckschalten des Modes
         // auch immer wieder rueckgaegig gemacht werden. Ein Beispiel ist das Setzen der maximalen Text-Laenge durch das
         // FmXEditModel an seinem Control.)
-        pModel->GetUndoEnv().Lock();
-    }
+    rModel.GetUndoEnv().Lock();
 
     // --- 1. deactivate all controls if we are switching to design mode
     if ( bDesign )
@@ -299,10 +298,9 @@ void FmFormView::ChangeDesignMode(sal_Bool bDesign)
                 while( aIter.IsMore() )
                 {
                     SdrObject* pObj = aIter.Next();
-                    if (pObj && pObj->IsUnoObj())
+                    if (pObj && pObj->IsSdrUnoObj())
                     {
                         // For redraw just use ActionChanged()
-                        // pObj->BroadcastObjectChange();
                         pObj->ActionChanged();
                     }
                 }
@@ -311,15 +309,13 @@ void FmFormView::ChangeDesignMode(sal_Bool bDesign)
         else
         {
             // set the auto focus to the first control (if indicated by the model to do so)
-            sal_Bool bForceControlFocus = pModel ? pModel->GetAutoControlFocus() : sal_False;
-            if (bForceControlFocus)
+            if (rModel.GetAutoControlFocus())
                 pImpl->AutoFocus();
         }
     }
 
     // und mein Undo-Environment wieder an
-    if (pModel)
-        pModel->GetUndoEnv().UnLock();
+    rModel.GetUndoEnv().UnLock();
 }
 
 //------------------------------------------------------------------------
@@ -330,16 +326,15 @@ void FmFormView::GrabFirstControlFocus( sal_Bool _bForceSync )
 }
 
 //------------------------------------------------------------------------
-SdrPageView* FmFormView::ShowSdrPage(SdrPage* pPage)
+void FmFormView::ShowSdrPage(SdrPage& rPage)
 {
-    SdrPageView* pPV = E3dView::ShowSdrPage(pPage);
+    // call parent
+    E3dView::ShowSdrPage(rPage);
 
-    if (pPage)
-    {
         if (!IsDesignMode())
         {
             // creating the controllers
-            ActivateControls(pPV);
+        ActivateControls(GetSdrPageView());
 
             // Alles deselektieren
             UnmarkAll();
@@ -352,8 +347,7 @@ SdrPageView* FmFormView::ShowSdrPage(SdrPage* pPage)
             // damit der Formular-Navigator auf den Seitenwechsel reagieren kann
             pFormShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_FMEXPLORER_CONTROL , sal_True, sal_False);
 
-            pFormShellImpl->SetSelection(GetMarkedObjectList());
-        }
+        pFormShellImpl->SetSelection(getSelectedSdrObjectVectorFromSdrMarkView());
     }
 
     // notify our shell that we have been activated
@@ -361,8 +355,6 @@ SdrPageView* FmFormView::ShowSdrPage(SdrPage* pPage)
         pFormShell->GetImpl()->viewActivated( *this );
     else
         pImpl->Activate();
-
-    return pPV;
 }
 
 //------------------------------------------------------------------------
@@ -389,7 +381,7 @@ SdrModel* FmFormView::GetMarkedObjModel() const
 }
 
 //------------------------------------------------------------------------
-sal_Bool FmFormView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions)
+bool FmFormView::Paste(const SdrModel& rMod, const basegfx::B2DPoint& rPos, SdrObjList* pLst, sal_uInt32 nOptions)
 {
     return E3dView::Paste(rMod, rPos, pLst, nOptions);
 }
@@ -499,7 +491,7 @@ void FmFormView::EndCompleteRedraw( SdrPaintWindow& rPaintWindow, bool bPaintFor
 }
 
 // -----------------------------------------------------------------------------
-sal_Bool FmFormView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
+bool FmFormView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
 {
     sal_Bool bDone = sal_False;
     const KeyCode& rKeyCode = rKEvt.GetKeyCode();
@@ -524,8 +516,7 @@ sal_Bool FmFormView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
                     pImpl->m_xWindow = xWindow;
                     // add as listener to get notified when ESC will be pressed inside the grid
                     pImpl->m_xWindow->addFocusListener(pImpl);
-                    SetMoveOutside(sal_True);
-                    //OLMRefreshAllIAOManagers();
+                    SetMoveOutside(true);
                     xWindow->setFocus();
                     bDone = sal_True;
                 }
@@ -560,7 +551,7 @@ sal_Bool FmFormView::checkUnMarkAll(const Reference< XInterface >& _xSource)
 }
 
 // -----------------------------------------------------------------------------
-sal_Bool FmFormView::MouseButtonDown( const MouseEvent& _rMEvt, Window* _pWin )
+bool FmFormView::MouseButtonDown( const MouseEvent& _rMEvt, Window* _pWin )
 {
     sal_Bool bReturn = E3dView::MouseButtonDown( _rMEvt, _pWin );
 
@@ -577,22 +568,20 @@ sal_Bool FmFormView::MouseButtonDown( const MouseEvent& _rMEvt, Window* _pWin )
 // -----------------------------------------------------------------------------
 FmFormObj* FmFormView::getMarkedGrid() const
 {
+    SdrObject* pSingleSelected = getSelectedIfSingle();
     FmFormObj* pFormObject = NULL;
-    const SdrMarkList& rMarkList = GetMarkedObjectList();
-    if ( 1 == rMarkList.GetMarkCount() )
+
+    if ( pSingleSelected )
     {
-        SdrMark* pMark = rMarkList.GetMark(0);
-        if ( pMark )
+        pFormObject = FmFormObj::GetFormObject( pSingleSelected );
+        if ( pFormObject )
         {
-            pFormObject = FmFormObj::GetFormObject( pMark->GetMarkedSdrObj() );
-            if ( pFormObject )
-            {
-                Reference< XServiceInfo > xServInfo( pFormObject->GetUnoControlModel(), UNO_QUERY );
-                if ( !xServInfo.is() || !xServInfo->supportsService( FM_SUN_COMPONENT_GRIDCONTROL ) )
-                    pFormObject = NULL;
-            }
+            Reference< XServiceInfo > xServInfo( pFormObject->GetUnoControlModel(), UNO_QUERY );
+            if ( !xServInfo.is() || !xServInfo->supportsService( FM_SUN_COMPONENT_GRIDCONTROL ) )
+                pFormObject = NULL;
         }
     }
+
     return pFormObject;
 }
 

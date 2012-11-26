@@ -28,7 +28,6 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <svx/svdmark.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdview.hxx>
 #include <sfx2/app.hxx>
@@ -37,6 +36,7 @@
 #include <basic/sbxcore.hxx>
 #include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
+#include <svx/svdlegacy.hxx>
 
 #include "tabvwsh.hxx"
 #include "client.hxx"
@@ -90,9 +90,10 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
                 SdrView* pDrView = GetSdrView();
                 if (pDrView)
                 {
-                    const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
-                    if (rMarkList.GetMarkCount() == 1)
-                        aName = ScDrawLayer::GetVisibleName( rMarkList.GetMark(0)->GetMarkedSdrObj() );
+                    SdrObject* pSelected = pDrView->getSelectedIfSingle();
+
+                    if (pSelected)
+                        aName = ScDrawLayer::GetVisibleName( pSelected );
                 }
                 pVisibleSh->SelectObject( aName );
 
@@ -124,24 +125,20 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
                     SdrView* pDrView = GetSdrView();
                     if ( pDrView )
                     {
-                        const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
-                        if (rMarkList.GetMarkCount() == 1)
+                        SdrObject* pSelected = pDrView->getSelectedIfSingle();
+
+                        if (pSelected)
                         {
-                            SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                            Rectangle aRect = pObj->GetLogicRect();
+                            const basegfx::B2DRange aRange(sdr::legacy::GetLogicRange(*pSelected));
 
                             if ( nSlotId == SID_OBJECT_LEFT )
-                                pDrView->MoveMarkedObj( Size( nNewVal - aRect.Left(), 0 ) );
+                                pDrView->MoveMarkedObj( basegfx::B2DVector( nNewVal - aRange.getMinX(), 0 ) );
                             else if ( nSlotId == SID_OBJECT_TOP )
-                                pDrView->MoveMarkedObj( Size( 0, nNewVal - aRect.Top() ) );
+                                pDrView->MoveMarkedObj( basegfx::B2DVector( 0, nNewVal - aRange.getMinY() ) );
                             else if ( nSlotId == SID_OBJECT_WIDTH )
-                                pDrView->ResizeMarkedObj( aRect.TopLeft(),
-                                                Fraction( nNewVal, aRect.GetWidth() ),
-                                                Fraction( 1, 1 ) );
+                                pDrView->ResizeMarkedObj( aRange.getMinimum(), basegfx::B2DVector(nNewVal /aRange.getWidth(), 1.0));
                             else // if ( nSlotId == SID_OBJECT_HEIGHT )
-                                pDrView->ResizeMarkedObj( aRect.TopLeft(),
-                                                Fraction( 1, 1 ),
-                                                Fraction( nNewVal, aRect.GetHeight() ) );
+                                pDrView->ResizeMarkedObj( aRange.getMinimum(), basegfx::B2DVector(1.0, nNewVal / aRange.getHeight()));
                             bDone = sal_True;
                         }
                     }
@@ -159,15 +156,11 @@ uno::Reference < embed::XEmbeddedObject > lcl_GetSelectedObj( SdrView* pDrView )
     uno::Reference < embed::XEmbeddedObject > xRet;
     if (pDrView)
     {
-        const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
-        if (rMarkList.GetMarkCount() == 1)
+        SdrOle2Obj* pSelected = dynamic_cast< SdrOle2Obj* >(pDrView->getSelectedIfSingle());
+
+        if (pSelected)
         {
-            SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-            if (pObj->GetObjIdentifier() == OBJ_OLE2)
-            {
-                SdrOle2Obj* pOle2Obj = (SdrOle2Obj*) pObj;
-                xRet = pOle2Obj->GetObjRef();
-            }
+            xRet = pSelected->GetObjRef();
         }
     }
 
@@ -203,25 +196,25 @@ void ScTabViewShell::GetObjectState( SfxItemSet& rSet )
                     SdrView* pDrView = GetSdrView();
                     if ( pDrView )
                     {
-                        const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
-                        if (rMarkList.GetMarkCount() == 1)
-                        {
-                            SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                            Rectangle aRect = pObj->GetLogicRect();
+                        SdrObject* pSelected = pDrView->getSelectedIfSingle();
 
-                            long nVal;
+                        if (pSelected)
+                        {
+                            const basegfx::B2DRange aRange(sdr::legacy::GetLogicRange(*pSelected));
+
+                            double fVal(0.0);
                             if ( nWhich == SID_OBJECT_LEFT )
-                                nVal = aRect.Left();
+                                fVal = aRange.getMinX();
                             else if ( nWhich == SID_OBJECT_TOP )
-                                nVal = aRect.Top();
+                                fVal = aRange.getMinY();
                             else if ( nWhich == SID_OBJECT_WIDTH )
-                                nVal = aRect.GetWidth();
+                                fVal = aRange.getWidth();
                             else // if ( nWhich == SID_OBJECT_HEIGHT )
-                                nVal = aRect.GetHeight();
+                                fVal = aRange.getHeight();
 
                             //! von 1/100mm in irgendwas umrechnen ??????
 
-                            rSet.Put( SfxInt32Item( nWhich, nVal ) );
+                            rSet.Put( SfxInt32Item( nWhich, basegfx::fround(fVal) ) );
                         }
                     }
                 }

@@ -572,11 +572,13 @@ sal_Bool OAccessibleMenuBaseComponent::IsPopupMenuOpen()
 
 IMPL_LINK( OAccessibleMenuBaseComponent, MenuEventListener, VclSimpleEvent*, pEvent )
 {
-    DBG_ASSERT( pEvent && pEvent->ISA( VclMenuEvent ), "OAccessibleMenuBaseComponent - Unknown MenuEvent!" );
-    if ( pEvent && pEvent->ISA( VclMenuEvent ) )
+    VclMenuEvent* pVclMenuEvent = dynamic_cast< VclMenuEvent* >(pEvent);
+    DBG_ASSERT( pVclMenuEvent, "OAccessibleMenuBaseComponent - Unknown MenuEvent!" );
+
+    if ( pVclMenuEvent )
     {
-        DBG_ASSERT( ((VclMenuEvent*)pEvent)->GetMenu(), "OAccessibleMenuBaseComponent - Menu?" );
-        ProcessMenuEvent( *(VclMenuEvent*)pEvent );
+        DBG_ASSERT( pVclMenuEvent->GetMenu(), "OAccessibleMenuBaseComponent - Menu?" );
+        ProcessMenuEvent( *pVclMenuEvent );
     }
     return 0;
 }

@@ -48,8 +48,6 @@
 
 namespace sd {
 
-TYPEINIT1( FuParagraph, FuPoor );
-
 /*************************************************************************
 |*
 |* Konstruktor
@@ -82,7 +80,7 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
 
     if( !pArgs )
     {
-        SfxItemSet aEditAttr( mpDoc->GetPool() );
+        SfxItemSet aEditAttr( mpDoc->GetItemPool() );
         mpView->GetAttributes( aEditAttr );
         SfxItemPool *pPool =  aEditAttr.GetPool();
         SfxItemSet aNewAttr( *pPool,

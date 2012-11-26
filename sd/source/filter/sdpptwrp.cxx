@@ -47,7 +47,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::frame;
 
-typedef sal_Bool ( __LOADONCALLAPI *ExportPPT )( const std::vector< com::sun::star::beans::PropertyValue >&, SvStorageRef&,
+typedef bool ( __LOADONCALLAPI *ExportPPT )( const std::vector< com::sun::star::beans::PropertyValue >&, SvStorageRef&,
                                              Reference< XModel > &,
                                              Reference< XStatusIndicator > &,
                                              SvMemoryStream*, sal_uInt32 nCnvrtFlags );
@@ -55,7 +55,7 @@ typedef sal_Bool ( __LOADONCALLAPI *ExportPPT )( const std::vector< com::sun::st
 typedef sal_Bool ( SAL_CALL *ImportPPT )( const ::rtl::OUString&, Sequence< PropertyValue >*,
                                           SdDrawDocument*, SvStream&, SvStorage&, SfxMedium& );
 
-typedef sal_Bool ( __LOADONCALLAPI *SaveVBA )( SfxObjectShell&, SvMemoryStream*& );
+typedef bool ( __LOADONCALLAPI *SaveVBA )( SfxObjectShell&, SvMemoryStream*& );
 
 // ---------------
 // - SdPPTFilter -
@@ -79,7 +79,7 @@ SdPPTFilter::~SdPPTFilter()
 sal_Bool SdPPTFilter::Import()
 {
     sal_Bool    bRet = sal_False;
-    SotStorageRef pStorage = new SotStorage( mrMedium.GetInStream(), sal_False );
+    SotStorageRef pStorage = new SotStorage( mrMedium.GetInStream(), false );
     if( !pStorage->GetError() )
     {
         /* check if there is a dualstorage, then the
@@ -138,7 +138,7 @@ sal_Bool SdPPTFilter::Export()
     {
         if( mxModel.is() )
         {
-            SotStorageRef    xStorRef = new SotStorage( mrMedium.GetOutStream(), sal_False );
+            SotStorageRef    xStorRef = new SotStorage( mrMedium.GetOutStream(), false );
             ExportPPT       PPTExport = reinterpret_cast<ExportPPT>(pLibrary->getFunctionSymbol( ::rtl::OUString::createFromAscii("ExportPPT") ));
 
             /* !!!

@@ -46,7 +46,7 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrEdgeObj::createViewIndependentPrimitive2DSequence() const
         {
-            const basegfx::B2DPolygon& rEdgeTrack = GetEdgeObj().getEdgeTrack();
+            const basegfx::B2DPolygon& rEdgeTrack = GetEdgeObj().GetEdgeTrackPath();
 
             // what to do when no EdgeTrack is provided (HitTest and selectability) ?
             OSL_ENSURE(0 != rEdgeTrack.count(), "Connectors with no geometry are not allowed (!)");

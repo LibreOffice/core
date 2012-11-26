@@ -774,18 +774,21 @@ void ScShapeChilds::SetDrawBroadcaster()
 
 void ScShapeChilds::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
-    if ( rHint.ISA( SdrHint ) )
-    {
-        const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
+    const SdrBaseHint* pSdrHint = dynamic_cast< const SdrBaseHint* >(&rHint);
+
         if (pSdrHint)
         {
-            SdrObject* pObj = const_cast<SdrObject*>(pSdrHint->GetObject());
-            if (pObj && (pObj->GetPage() == GetDrawPage()))
+        const SdrObject* pObj = pSdrHint->GetSdrHintObject();
+
+        if (pObj && (pObj->getSdrPageFromSdrObject() == GetDrawPage()))
             {
-                switch (pSdrHint->GetKind())
+            switch (pSdrHint->GetSdrHintKind())
                 {
-                    case HINT_OBJCHG :         // Objekt geaendert
+                case HINT_OBJCHG_MOVE :
+                case HINT_OBJCHG_RESIZE :
+                case HINT_OBJCHG_ATTR :
                     {
+                    // Objekt geaendert
                     }
                     break;
                     // no longer necessary
@@ -812,7 +815,6 @@ void ScShapeChilds::Notify(SfxBroadcaster&, const SfxHint& rHint)
             }
         }
     }
-}
 
 void ScShapeChilds::FindChanged(ScShapeChildVec& rOld, ScShapeChildVec& rNew) const
 {
@@ -1360,8 +1362,8 @@ SdrPage* ScShapeChilds::GetDrawPage() const
         if (pDoc && pDoc->GetDrawLayer())
         {
             ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
-            if (pDrawLayer->HasObjects() && (pDrawLayer->GetPageCount() > nTab))
-                pDrawPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(static_cast<sal_Int16>(nTab)));
+            if (pDrawLayer->HasObjects() && (pDrawLayer->GetPageCount() > static_cast< sal_uInt32 >(nTab)))
+                pDrawPage = pDrawLayer->GetPage(static_cast< sal_uInt32 >(nTab));
         }
     }
     return pDrawPage;
@@ -1497,11 +1499,12 @@ void SAL_CALL ScAccessibleDocumentPagePreview::disposing()
 
 void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if (rHint.ISA( SfxSimpleHint ) )
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if (pSfxSimpleHint )
     {
-        const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
         // only notify if child exist, otherwise it is not necessary
-        if ((rRef.GetId() == SC_HINT_DATACHANGED))
+        if ((pSfxSimpleHint->GetId() == SC_HINT_DATACHANGED))
         {
             if (mpTable) // if there is no table there is nothing to notify, because no one recongnizes the change
             {
@@ -1551,11 +1554,11 @@ void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint
                 }
             }
         }
-        else if (rRef.GetId() == SC_HINT_ACC_MAKEDRAWLAYER)
+        else if (pSfxSimpleHint->GetId() == SC_HINT_ACC_MAKEDRAWLAYER)
         {
             GetShapeChilds()->SetDrawBroadcaster();
         }
-        else if (rRef.GetId() == SC_HINT_ACC_VISAREACHANGED)
+        else if (pSfxSimpleHint->GetId() == SC_HINT_ACC_VISAREACHANGED)
         {
             Size aOutputSize;
             Window* pSizeWindow = mpViewShell->GetWindow();
@@ -1573,11 +1576,11 @@ void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint
             CommitChange(aEvent);
         }
     }
-    else if ( rHint.ISA(ScAccWinFocusLostHint) )
+    else if ( dynamic_cast< const ScAccWinFocusLostHint* >(&rHint) )
     {
         CommitFocusLost();
     }
-    else if ( rHint.ISA(ScAccWinFocusGotHint) )
+    else if ( dynamic_cast< const ScAccWinFocusGotHint* >(&rHint) )
     {
         CommitFocusGained();
     }

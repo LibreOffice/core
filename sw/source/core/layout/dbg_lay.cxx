@@ -769,7 +769,7 @@ void SwImplProtocol::SnapShot( const SwFrm* pFrm, sal_uLong nFlags )
             for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
             {
                 SwAnchoredObject* pObj = rObjs[i];
-                if ( pObj->ISA(SwFlyFrm) )
+                if ( dynamic_cast< SwFlyFrm* >(pObj) )
                     SnapShot( static_cast<SwFlyFrm*>(pObj), nFlags );
             }
             if( aLayer.Len() > 1 )

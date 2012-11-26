@@ -41,9 +41,9 @@ using namespace com::sun::star;
 #include <sot/storage.hxx>
 #include <sfx2/app.hxx>
 #include <sot/clsids.hxx>
-#include <svx/charthelper.hxx>
-#include "address.hxx"
+#include <svx/svdlegacy.hxx>
 
+#include "address.hxx"
 #include "scfobj.hxx"
 #include "document.hxx"
 #include "drwlayer.hxx"
@@ -67,8 +67,6 @@ void Sc10InsertObject::InsertChart( ScDocument* pDoc, SCTAB nDestTab, const Rect
             GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID ).GetByteSequence(), aName );
     if ( xObj.is() )
     {
-        SdrOle2Obj* pSdrOle2Obj = new SdrOle2Obj( ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), aName, rRect );
-
         ScDrawLayer* pModel = pDoc->GetDrawLayer();
         if (!pModel)
         {
@@ -77,19 +75,22 @@ void Sc10InsertObject::InsertChart( ScDocument* pDoc, SCTAB nDestTab, const Rect
             DBG_ASSERT(pModel,"Draw Layer ?");
         }
 
+        SdrOle2Obj* pSdrOle2Obj = new SdrOle2Obj(
+            *pModel,
+            ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ),
+            aName,
+            basegfx::tools::createScaleTranslateB2DHomMatrix(
+                rRect.getWidth(), rRect.getHeight(),
+                rRect.Left(), rRect.Top()));
+
         SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nDestTab));
         DBG_ASSERT(pPage,"Page ?");
-        pPage->InsertObject(pSdrOle2Obj);
+        pPage->InsertObjectToSdrObjList(*pSdrOle2Obj);
 
-        pSdrOle2Obj->SetLogicRect(rRect);               // erst nach InsertObject !!!
         awt::Size aSz;
         aSz.Width = rRect.GetSize().Width();
         aSz.Height = rRect.GetSize().Height();
         xObj->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT, aSz );
-
-        // #121334# This call will change the chart's default background fill from white to transparent.
-        // Add here again if this is wanted (see task description for details)
-        // ChartHelper::AdaptDefaultsForChart( xObj );
 
             // hier kann das Chart noch nicht mit Daten gefuettert werden,
             // weil die Formeln noch nicht berechnet sind.

@@ -25,6 +25,7 @@
 
 #include <filter/msfilter/dffpropset.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <memory.h>
 
 static const DffPropSetEntry mso_PropSetDefaults[] = {
 

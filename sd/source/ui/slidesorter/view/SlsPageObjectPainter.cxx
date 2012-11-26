@@ -232,8 +232,8 @@ void PageObjectPainter::PaintBackground (
     SdPage* pPage = rpDescriptor->GetPage();
     if (pPage != NULL)
     {
-        rDevice.SetFillColor(pPage->GetPageBackgroundColor(NULL));
-        rDevice.SetLineColor(pPage->GetPageBackgroundColor(NULL));
+        rDevice.SetFillColor(pPage->GetPageBackgroundColor());
+        rDevice.SetLineColor(pPage->GetPageBackgroundColor());
         const Rectangle aPreviewBox (mpPageObjectLayouter->GetBoundingBox(
             rpDescriptor,
             PageObjectLayouter::Preview,
@@ -382,7 +382,7 @@ void PageObjectPainter::PaintPageNumber (
 
     // Paint the page number.
     OSL_ASSERT(rpDescriptor->GetPage()!=NULL);
-    const sal_Int32 nPageNumber ((rpDescriptor->GetPage()->GetPageNum() - 1) / 2 + 1);
+    const sal_Int32 nPageNumber ((rpDescriptor->GetPage()->GetPageNumber() - 1) / 2 + 1);
     const String sPageNumber (String::CreateFromInt32(nPageNumber));
     rDevice.SetFont(*mpPageNumberFont);
     rDevice.SetTextColor(aPageNumberColor);

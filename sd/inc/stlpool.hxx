@@ -60,8 +60,8 @@ class SdStyleSheetPool : public SdStyleSheetPoolBase, public SfxListener
 public:
                         SdStyleSheetPool(SfxItemPool const& rPool, SdDrawDocument* pDocument);
 
-    void                SetActualStyleSheet(SfxStyleSheetBase* pActStyleSheet)  { mpActualStyleSheet = pActStyleSheet; }
-    SfxStyleSheetBase*  GetActualStyleSheet()                                   { return mpActualStyleSheet; }
+    void                SetActualStyleSheet(SfxStyleSheetBase* pActStyleSheet)  { mxActualStyleSheet = pActStyleSheet; }
+    SfxStyleSheetBase*  GetActualStyleSheet()                                   { return mxActualStyleSheet.get(); }
 
     SfxStyleSheetBase*  GetTitleSheet(const String& rLayoutName);
 
@@ -135,7 +135,7 @@ protected:
     void RemoveStyleFamily( const SdPage* pPage );
 
 private:
-    SfxStyleSheetBase*      mpActualStyleSheet;
+    rtl::Reference< SfxStyleSheetBase > mxActualStyleSheet;
     SdDrawDocument*         mpDoc;
     SdStyleFamilyRef        mxGraphicFamily;
     SdStyleFamilyRef        mxCellFamily;

@@ -323,7 +323,7 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         DBG_ERROR("control acces failed");
     }
 
-    SFX_REQUEST_ARG( rReq, pName, SfxStringItem, SID_INSERT_GRAPHIC , sal_False );
+    SFX_REQUEST_ARG( rReq, pName, SfxStringItem, SID_INSERT_GRAPHIC );
     sal_Bool bShowError = !pName;
     if( pName || ERRCODE_NONE == pFileDlg->Execute() )
     {
@@ -332,7 +332,7 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         if ( pName )
         {
             aFileName = pName->GetValue();
-            SFX_REQUEST_ARG( rReq, pFilter, SfxStringItem, FN_PARAM_FILTER , sal_False );
+            SFX_REQUEST_ARG( rReq, pFilter, SfxStringItem, FN_PARAM_FILTER );
             if ( pFilter )
                 aFilterName = pFilter->GetValue();
         }
@@ -368,8 +368,8 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
             rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bAsLink ) );
         }
 
-        SFX_REQUEST_ARG( rReq, pAsLink, SfxBoolItem, FN_PARAM_1 , sal_False );
-        SFX_REQUEST_ARG( rReq, pStyle, SfxStringItem, FN_PARAM_2 , sal_False );
+        SFX_REQUEST_ARG( rReq, pAsLink, SfxBoolItem, FN_PARAM_1 );
+        SFX_REQUEST_ARG( rReq, pStyle, SfxStringItem, FN_PARAM_2 );
 
         sal_Bool bAsLink = sal_False;
         if( nHtmlMode & HTMLMODE_ON )
@@ -713,7 +713,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             else if ( pWrtShell->HasSelection() || IsDrawMode() )
             {
                 SdrView *pSdrView = pWrtShell->HasDrawView() ? pWrtShell->GetDrawView() : 0;
-                if(pSdrView && pSdrView->AreObjectsMarked() &&
+                if(pSdrView && pSdrView->areSdrObjectsSelected() &&
                     pSdrView->GetHdlList().GetFocusHdl())
                 {
                     ((SdrHdlList&)pSdrView->GetHdlList()).ResetFocusHdl();
@@ -897,7 +897,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                 {
                     case FN_INSERT_CTRL:
                     {
-                        sal_Bool bWeb = 0 != PTR_CAST(SwWebView, this);
+                        sal_Bool bWeb = 0 != dynamic_cast< SwWebView* >( this);
                         if(bWeb)
                             SwView::nWebInsertCtrlState = nValue;
                         else
@@ -1185,18 +1185,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
         switch( nWhich )
         {
             case FN_STAT_PAGE:
-/*
-//JP 07.01.00: is a nice feature - show the selektion of DrawObjects
-            if( rShell.IsObjSelected()
-//???               || rShell.IsFrmSelected()
-                )
             {
-                String sDisplay( rShell.GetDrawView()->GetMarkedObjectList().
-                                    GetDescriptionOfMarkedObjects() );
-                rSet.Put( SfxStringItem( FN_STAT_PAGE, sDisplay ));
-            }
-            else
-*/          {
                 // Anzahl der Seiten, log. SeitenNr. SeitenNr ermitteln
                 sal_uInt16 nPage, nLogPage;
                 String sDisplay;
@@ -1809,7 +1798,7 @@ void SwView::InsFrmMode(sal_uInt16 nCols)
 
 void SwView::EditLinkDlg()
 {
-    sal_Bool bWeb = 0 != PTR_CAST(SwWebView, this);
+    sal_Bool bWeb = 0 != dynamic_cast< SwWebView* >( this);
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     SfxAbstractLinksDialog* pDlg = pFact->CreateLinksDialog( &GetViewFrame()->GetWindow(), &GetWrtShell().GetLinkManager(), bWeb );
     if ( pDlg )

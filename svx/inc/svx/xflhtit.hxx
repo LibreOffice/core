@@ -38,7 +38,7 @@ class SVX_DLLPUBLIC XFillHatchItem : public NameOrIndex
     XHatch  aHatch;
 
 public:
-                            TYPEINFO();
+    POOLITEM_FACTORY()
                             XFillHatchItem() : NameOrIndex(XATTR_FILLHATCH, -1) {}
                             XFillHatchItem(sal_Int32 nIndex, const XHatch& rTheHatch);
                             XFillHatchItem(const String& rName, const XHatch& rTheHatch);
@@ -58,11 +58,11 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
-    virtual FASTBOOL        HasMetrics() const;
-    virtual FASTBOOL        ScaleMetrics(long nMul, long nDiv);
+    virtual bool        HasMetrics() const;
+    virtual void        ScaleMetrics(long nMul, long nDiv);
 
-    const XHatch&           GetHatchValue(const XHatchTable* pTable = 0) const; // GetValue -> GetHatchValue
-    void                    SetHatchValue(const XHatch& rNew)  { aHatch = rNew; Detach(); } // SetValue -> SetHatchValue
+    const XHatch&       GetHatchValue(const XHatchTable* pTable = 0) const; // GetValue -> GetHatchValue
+    void                SetHatchValue(const XHatch& rNew)  { aHatch = rNew; Detach(); } // SetValue -> SetHatchValue
 
     static sal_Bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
     XFillHatchItem* checkForUniqueItem( SdrModel* pModel ) const;

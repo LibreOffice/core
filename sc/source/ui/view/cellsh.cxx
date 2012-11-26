@@ -67,7 +67,7 @@
 #define CellMovement
 #include "scslots.hxx"
 
-TYPEINIT1( ScCellShell, ScFormatShell );
+#define SearchSettings
 
 SFX_IMPL_INTERFACE(ScCellShell, ScFormatShell , ScResId(SCSTR_CELLSHELL) )
 {
@@ -367,7 +367,7 @@ sal_Bool lcl_TestFormat( SvxClipboardFmtItem& rFormats, const TransferableDataHe
 void ScCellShell::GetPossibleClipboardFormats( SvxClipboardFmtItem& rFormats )
 {
     Window* pWin = GetViewData()->GetActiveWin();
-    sal_Bool bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != NULL );
+    bool bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != NULL );
 
     TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
 

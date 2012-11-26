@@ -180,7 +180,7 @@ MyApp::MyApp()
 
 void MyApp::Property( ApplicationProperty& rProp )
 {
-    TTProperties* pTTProperties = PTR_CAST( TTProperties, &rProp );
+    TTProperties* pTTProperties = dynamic_cast< TTProperties* >( &rProp );
     if ( pTTProperties )
     {
         pTTProperties->nPropertyVersion = TT_PROPERTIES_VERSION;

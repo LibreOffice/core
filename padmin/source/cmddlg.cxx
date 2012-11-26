@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 #include <stdio.h>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
@@ -31,6 +29,7 @@
 #include <padialog.hxx>
 #include <helper.hxx>
 #include <prtsetup.hxx>
+#include <string.h>
 
 using namespace psp;
 using namespace rtl;

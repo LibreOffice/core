@@ -124,7 +124,7 @@ public:
                                                        ::com::sun::star::datatransfer::XTransferable >& rxTransferable );
 
     void            PasteDraw();
-    void            PasteDraw( const Point& rLogicPos, SdrModel* pModel,
+    void            PasteDraw( const basegfx::B2DPoint& rLogicPos, SdrModel* pModel,
                                 sal_Bool bGroup = sal_False, sal_Bool bSameDocClipboard = sal_False );
 
     sal_Bool            PasteOnDrawObject( const ::com::sun::star::uno::Reference<
@@ -134,14 +134,14 @@ public:
     sal_Bool            PasteDataFormat( sal_uLong nFormatId,
                                         const ::com::sun::star::uno::Reference<
                                             ::com::sun::star::datatransfer::XTransferable >& rxTransferable,
-                                        SCCOL nPosX, SCROW nPosY, Point* pLogicPos = NULL,
+                                        SCCOL nPosX, SCROW nPosY, basegfx::B2DPoint* pLogicPos = NULL,
                                         sal_Bool bLink = sal_False, sal_Bool bAllowDialogs = sal_False );
 
-    sal_Bool            PasteFile( const Point&, const String&, sal_Bool bLink=sal_False );
-    sal_Bool            PasteObject( const Point&, const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >&, const Size* = NULL, const Graphic* = NULL, const ::rtl::OUString& = ::rtl::OUString(), sal_Int64 nAspect = ::com::sun::star::embed::Aspects::MSOLE_CONTENT );
-    sal_Bool            PasteBitmap( const Point&, const Bitmap& );
-    sal_Bool            PasteMetaFile( const Point&, const GDIMetaFile& );
-    sal_Bool            PasteGraphic( const Point& rPos, const Graphic& rGraphic,
+    sal_Bool        PasteFile( const basegfx::B2DPoint&, const String&, sal_Bool bLink=sal_False );
+    sal_Bool        PasteObject( const basegfx::B2DPoint&, const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >&, const basegfx::B2DVector* = NULL, const Graphic* = NULL, const ::rtl::OUString& = ::rtl::OUString(), sal_Int64 nAspect = ::com::sun::star::embed::Aspects::MSOLE_CONTENT );
+    sal_Bool        PasteBitmap( const basegfx::B2DPoint&, const Bitmap& );
+    sal_Bool        PasteMetaFile( const basegfx::B2DPoint&, const GDIMetaFile& );
+    sal_Bool        PasteGraphic( const basegfx::B2DPoint& rPos, const Graphic& rGraphic,
                                     const String& rFile, const String& rFilter );
     sal_Bool            PasteBookmark( sal_uLong nFormatId,
                                 const ::com::sun::star::uno::Reference<

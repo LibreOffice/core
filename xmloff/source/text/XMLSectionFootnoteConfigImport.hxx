@@ -52,8 +52,6 @@ class XMLSectionFootnoteConfigImport : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLSectionFootnoteConfigImport(
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,

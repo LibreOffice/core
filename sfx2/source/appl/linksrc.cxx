@@ -40,8 +40,6 @@ using namespace ::com::sun::star::uno;
 namespace sfx2
 {
 
-TYPEINIT0( SvLinkSource )
-
 /************** class SvLinkSourceTimer *********************************/
 class SvLinkSourceTimer : public Timer
 {

@@ -28,10 +28,8 @@
 #include "sc.hrc"
 #include "tabvwsh.hxx"
 #include "drawview.hxx"
-
-// #98185# Create default drawing objects via keyboard
 #include <svx/svdocirc.hxx>
-#include <svx/sxciaitm.hxx>
+#include <svx/svdlegacy.hxx>
 
 /*************************************************************************
 |*
@@ -70,9 +68,11 @@ sal_Bool __EXPORT FuConstArc::MouseButtonDown( const MouseEvent& rMEvt )
 
     if ( rMEvt.IsLeft() && !pView->IsAction() )
     {
-        Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
+        const basegfx::B2DPoint aPixelPos(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
+        const basegfx::B2DPoint aLogicPos(pWindow->GetInverseViewTransformation() * aPixelPos);
+
         pWindow->CaptureMouse();
-        pView->BegCreateObj( aPnt );
+        pView->BegCreateObj( aLogicPos );
         bReturn = sal_True;
     }
     return bReturn;
@@ -102,20 +102,13 @@ sal_Bool __EXPORT FuConstArc::MouseButtonUp( const MouseEvent& rMEvt )
 
     sal_Bool bReturn = sal_False;
 
-    if ( pView->IsCreateObj() && rMEvt.IsLeft() )
+    if ( pView->GetCreateObj() && rMEvt.IsLeft() )
     {
         // Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
         pView->EndCreateObj( SDRCREATE_NEXTPOINT );
         bReturn = sal_True;
     }
-/*
-    else if ( pView->IsCreateObj() && rMEvt.IsRight() )
-    {
-        // Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
-        pView->EndCreateObj( SDRCREATE_FORCEEND );
-        bReturn = sal_True;
-    }
-*/
+
     return (FuConstruct::MouseButtonUp(rMEvt) || bReturn);
 }
 
@@ -142,32 +135,35 @@ sal_Bool __EXPORT FuConstArc::KeyInput(const KeyEvent& rKEvt)
 
 void FuConstArc::Activate()
 {
-    SdrObjKind aObjKind;
+    SdrCircleObjType aSdrCircleObjType(CircleType_Circle);
 
     switch (aSfxRequest.GetSlot() )
     {
         case SID_DRAW_ARC:
             aNewPointer = Pointer( POINTER_DRAW_ARC );
-            aObjKind = OBJ_CARC;
+            aSdrCircleObjType = CircleType_Arc;
             break;
 
         case SID_DRAW_PIE:
             aNewPointer = Pointer( POINTER_DRAW_PIE );
-            aObjKind = OBJ_SECT;
+            aSdrCircleObjType = CircleType_Sector;
             break;
 
         case SID_DRAW_CIRCLECUT:
             aNewPointer = Pointer( POINTER_DRAW_CIRCLECUT );
-            aObjKind = OBJ_CCUT;
+            aSdrCircleObjType = CircleType_Segment;
             break;
 
         default:
             aNewPointer = Pointer( POINTER_CROSS );
-            aObjKind = OBJ_CARC;
+            aSdrCircleObjType = CircleType_Arc;
             break;
     }
 
-    pView->SetCurrentObj( sal::static_int_cast<sal_uInt16>( aObjKind ) );
+    SdrObjectCreationInfo aSdrObjectCreationInfo(static_cast< sal_uInt16 >(OBJ_CIRC));
+
+    aSdrObjectCreationInfo.setSdrCircleObjType(aSdrCircleObjType);
+    pView->setSdrObjectCreationInfo(aSdrObjectCreationInfo);
 
     aOldPointer = pWindow->GetPointer();
     pViewShell->SetActivePointer( aNewPointer );
@@ -188,35 +184,33 @@ void FuConstArc::Deactivate()
 }
 
 // #98185# Create default drawing objects via keyboard
-SdrObject* FuConstArc::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
+SdrObject* FuConstArc::CreateDefaultObject(const sal_uInt16 nID, const basegfx::B2DRange& rRange)
 {
     // case SID_DRAW_ARC:
     // case SID_DRAW_PIE:
     // case SID_DRAW_CIRCLECUT:
 
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
-        pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(),
-        0L, pDrDoc);
+        pView->getSdrModelFromSdrView(),
+        pView->getSdrObjectCreationInfo());
 
     if(pObj)
     {
-        if(pObj->ISA(SdrCircObj))
+        SdrCircObj* pSdrCircObj = dynamic_cast< SdrCircObj* >(pObj);
+
+        if(pSdrCircObj)
         {
-            Rectangle aRect(rRectangle);
+            basegfx::B2DRange aRange(rRange);
 
             if(SID_DRAW_ARC == nID || SID_DRAW_CIRCLECUT == nID)
             {
                 // force quadratic
-                ImpForceQuadratic(aRect);
+                ImpForceQuadratic(aRange);
             }
 
-            pObj->SetLogicRect(aRect);
-
-            SfxItemSet aAttr(pDrDoc->GetItemPool());
-            aAttr.Put(SdrCircStartAngleItem(9000));
-            aAttr.Put(SdrCircEndAngleItem(0));
-
-            pObj->SetMergedItemSet(aAttr);
+            sdr::legacy::SetLogicRange(*pSdrCircObj, aRange);
+            pSdrCircObj->SetStartAngle(F_PI2 * 3.0); // TTTT formally 9000, needs check (mirroring?)
+            pSdrCircObj->SetEndAngle(0.0);
         }
         else
         {

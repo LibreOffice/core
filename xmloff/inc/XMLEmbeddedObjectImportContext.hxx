@@ -42,8 +42,6 @@ class XMLEmbeddedObjectImportContext : public SvXMLImportContext
     ::rtl::OUString sCLSID;
 
 public:
-    TYPEINFO();
-
     const ::rtl::OUString& GetFilterServiceName() const { return sFilterService; }
     // #100592#
     const ::rtl::OUString& GetFilterCLSID() const { return sCLSID; }

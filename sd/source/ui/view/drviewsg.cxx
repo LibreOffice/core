@@ -70,11 +70,10 @@ void DrawViewShell::ExecIMap( SfxRequest& rReq )
 
     if ( rReq.GetSlot() == SID_IMAP_EXEC )
     {
-        SdrMark* pMark = mpDrawView->GetMarkedObjectList().GetMark(0);
+        SdrObject* pSdrObj = mpDrawView->getSelectedIfSingle();
 
-        if ( pMark )
+        if(pSdrObj)
         {
-            SdrObject*  pSdrObj = pMark->GetMarkedSdrObj();
             SvxIMapDlg* pDlg = ViewShell::Implementation::GetImageMapDialog();
 
             if ( pDlg->GetEditingObject() == (void*) pSdrObj )
@@ -102,24 +101,19 @@ void DrawViewShell::ExecIMap( SfxRequest& rReq )
 
 void DrawViewShell::GetIMapState( SfxItemSet& rSet )
 {
-    sal_Bool bDisable = sal_True;
+    bool bDisable = true;
 
     if( GetViewFrame()->HasChildWindow( SvxIMapDlgChildWindow::GetChildWindowId() ) )
     {
-        const SdrMarkList&  rMarkList = mpDrawView->GetMarkedObjectList();
-        const SdrObject*    pObj = NULL;
-        sal_uLong               nMarkCount = rMarkList.GetMarkCount();
+        const SdrGrafObj* pObj = dynamic_cast< const SdrGrafObj* >(mpDrawView->getSelectedIfSingle());
 
-        if ( nMarkCount == 1 )
+        if(pObj)
         {
-            pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-
             SvxIMapDlg* pImageMapDialog = ViewShell::Implementation::GetImageMapDialog();
-            if ( ( pObj->ISA( SdrGrafObj ) /*|| pObj->ISA( SdrOle2Obj )*/ )
-                && pImageMapDialog!=NULL
-                && ( pImageMapDialog->GetEditingObject() == (void*) pObj ) )
+
+            if ( pImageMapDialog && ( pImageMapDialog->GetEditingObject() == (void*) pObj ) )
             {
-                bDisable = sal_False;
+                bDisable = false;
             }
         }
     }
@@ -139,9 +133,8 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
     if(HasCurrentFunction(SID_PRESENTATION))
         return;
 
-    sal_Bool   bDefault = sal_False;
+    bool   bDefault = false;
     sal_uInt16 nSlot = rReq.GetSlot();
-
     SdOptions* pOptions = SD_MOD()->GetSdOptions(GetDoc()->GetDocumentType());
 
     switch( nSlot )
@@ -176,7 +169,7 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
 
         case SID_HELPLINES_USE:
         {
-            pOptions->SetSnapHelplines( !mpDrawView->IsHlplSnap() );
+            pOptions->SetSnapHelplines( !mpDrawView->IsHelplineSnap() );
         }
         break;
 
@@ -189,19 +182,19 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
 
         case SID_SNAP_BORDER:
         {
-            pOptions->SetSnapBorder( !mpDrawView->IsBordSnap() );
+            pOptions->SetSnapBorder( !mpDrawView->IsBorderSnap() );
         }
         break;
 
         case SID_SNAP_FRAME:
         {
-            pOptions->SetSnapFrame( !mpDrawView->IsOFrmSnap() );
+            pOptions->SetSnapFrame( !mpDrawView->IsOFrameSnap() );
         }
         break;
 
         case SID_SNAP_POINTS:
         {
-            pOptions->SetSnapPoints( !mpDrawView->IsOPntSnap() );
+            pOptions->SetSnapPoints( !mpDrawView->IsOPointSnap() );
         }
         break;
 
@@ -215,7 +208,7 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
         case SID_PICK_THROUGH:
         {
             pOptions->SetPickThrough(
-                !mpDrawView->GetModel()->IsPickThroughTransparentTextFrames() );
+                !mpDrawView->getSdrModelFromSdrView().IsPickThroughTransparentTextFrames() );
         }
         break;
 
@@ -238,7 +231,7 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
         break;
 
         default:
-            bDefault = sal_True;
+            bDefault = true;
         break;
     }
 
@@ -273,16 +266,16 @@ void DrawViewShell::GetOptionsBarState( SfxItemSet& rSet )
     rSet.Put( SfxBoolItem( SID_GRID_VISIBLE, mpDrawView->IsGridVisible() ) );
     rSet.Put( SfxBoolItem( SID_GRID_USE, mpDrawView->IsGridSnap() ) );
     rSet.Put( SfxBoolItem( SID_HELPLINES_VISIBLE, mpDrawView->IsHlplVisible() ) );
-    rSet.Put( SfxBoolItem( SID_HELPLINES_USE, mpDrawView->IsHlplSnap() ) );
+    rSet.Put( SfxBoolItem( SID_HELPLINES_USE, mpDrawView->IsHelplineSnap() ) );
     rSet.Put( SfxBoolItem( SID_HELPLINES_MOVE, mpDrawView->IsDragStripes() ) );
 
-    rSet.Put( SfxBoolItem( SID_SNAP_BORDER, mpDrawView->IsBordSnap() ) );
-    rSet.Put( SfxBoolItem( SID_SNAP_FRAME, mpDrawView->IsOFrmSnap() ) );
-    rSet.Put( SfxBoolItem( SID_SNAP_POINTS, mpDrawView->IsOPntSnap() ) );
+    rSet.Put( SfxBoolItem( SID_SNAP_BORDER, mpDrawView->IsBorderSnap() ) );
+    rSet.Put( SfxBoolItem( SID_SNAP_FRAME, mpDrawView->IsOFrameSnap() ) );
+    rSet.Put( SfxBoolItem( SID_SNAP_POINTS, mpDrawView->IsOPointSnap() ) );
 
     rSet.Put( SfxBoolItem( SID_QUICKEDIT, mpDrawView->IsQuickTextEditMode() ) );
-    rSet.Put( SfxBoolItem( SID_PICK_THROUGH, (sal_Bool)
-                mpDrawView->GetModel()->IsPickThroughTransparentTextFrames() ) );
+    rSet.Put( SfxBoolItem( SID_PICK_THROUGH, (bool)
+                mpDrawView->getSdrModelFromSdrView().IsPickThroughTransparentTextFrames() ) );
 
     rSet.Put( SfxBoolItem( SID_BIG_HANDLES, mpFrameView->IsBigHandles() ) );
     rSet.Put( SfxBoolItem( SID_DOUBLECLICK_TEXTEDIT, mpFrameView->IsDoubleClickTextEdit() ) );

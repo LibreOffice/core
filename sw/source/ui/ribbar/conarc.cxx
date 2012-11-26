@@ -102,11 +102,6 @@ sal_Bool ConstArc::MouseButtonUp( const MouseEvent& rMEvt )
                 m_pSh->EndCreate(SDRCREATE_NEXTPOINT);
         }
     }
-/*  else if ( pView->IsCreateObj() && rMEvt.IsRight() )
-    {
-        pView->EndCreateObj( SDRCREATE_FORCEEND );
-        bReturn = sal_True;
-    }*/
 
     return (bReturn);
 }
@@ -121,21 +116,27 @@ sal_Bool ConstArc::MouseButtonUp( const MouseEvent& rMEvt )
 
 void ConstArc::Activate(const sal_uInt16 nSlotId)
 {
+    SdrObjectCreationInfo aSdrObjectCreationInfo;
+
     switch (nSlotId)
     {
         case SID_DRAW_ARC:
-            m_pWin->SetSdrDrawMode(OBJ_CARC);
+            aSdrObjectCreationInfo.setIdent(OBJ_CIRC);
+            aSdrObjectCreationInfo.setSdrCircleObjType(CircleType_Arc);
             break;
         case SID_DRAW_PIE:
-            m_pWin->SetSdrDrawMode(OBJ_SECT);
+            aSdrObjectCreationInfo.setIdent(OBJ_CIRC);
+            aSdrObjectCreationInfo.setSdrCircleObjType(CircleType_Sector);
             break;
         case SID_DRAW_CIRCLECUT:
-            m_pWin->SetSdrDrawMode(OBJ_CCUT);
+            aSdrObjectCreationInfo.setIdent(OBJ_CIRC);
+            aSdrObjectCreationInfo.setSdrCircleObjType(CircleType_Segment);
             break;
         default:
-            m_pWin->SetSdrDrawMode(OBJ_NONE);
             break;
     }
+
+    m_pWin->setSdrObjectCreationInfo(aSdrObjectCreationInfo);
 
     SwDrawBase::Activate(nSlotId);
 }

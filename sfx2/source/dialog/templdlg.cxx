@@ -100,10 +100,6 @@ static sal_uInt16 nLastItemId = USHRT_MAX;
 
 //=========================================================================
 
-TYPEINIT0(SfxCommonTemplateDialog_Impl);
-TYPEINIT1(SfxTemplateDialog_Impl,SfxCommonTemplateDialog_Impl);
-TYPEINIT1(SfxTemplateCatalog_Impl,SfxCommonTemplateDialog_Impl);
-
 SFX_IMPL_DOCKINGWINDOW(SfxTemplateDialogWrapper, SID_STYLE_DESIGNER)
 
 //-------------------------------------------------------------------------
@@ -1568,9 +1564,14 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, TimeOut, Timer *, pTim )
 void SfxCommonTemplateDialog_Impl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
     // Aktualisierung anstossen
-    if(rHint.Type() == TYPE(SfxSimpleHint))
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+    sal_uLong nId(0);
+
+    if(pSfxSimpleHint)
     {
-        switch(((SfxSimpleHint&) rHint ).GetId())
+        nId = pSfxSimpleHint->GetId();
+
+        switch(nId)
         {
           case SFX_HINT_UPDATEDONE:
             {
@@ -1631,13 +1632,10 @@ void SfxCommonTemplateDialog_Impl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint
     // Timer nicht aufsetzen, wenn der StyleSheetPool in die Kiste geht, denn
     // es kann sein, da\s sich ein neuer erst anmeldet, nachdem der Timer
     // abgelaufen ist - macht sich schlecht in UpdateStyles_Impl() !
-
-    sal_uIntPtr nId = rHint.ISA(SfxSimpleHint) ? ( (SfxSimpleHint&)rHint ).GetId() : 0;
-
     if(!bDontUpdate && nId != SFX_HINT_DYING &&
-       (rHint.Type() == TYPE(SfxStyleSheetPoolHint)||
-       rHint.Type() == TYPE(SfxStyleSheetHint) ||
-       rHint.Type() == TYPE( SfxStyleSheetHintExtended )))
+       (dynamic_cast< const SfxStyleSheetPoolHint* >(&rHint)||
+       dynamic_cast< const SfxStyleSheetHint* >(&rHint) ||
+       dynamic_cast< const SfxStyleSheetHintExtended* >(&rHint)))
     {
         if(!pTimer)
         {
@@ -1730,7 +1728,7 @@ sal_Bool SfxCommonTemplateDialog_Impl::Execute_Impl(
 
     if ( nId == SID_STYLE_NEW || SID_STYLE_EDIT == nId )
     {
-        SfxUInt16Item *pFilterItem = PTR_CAST(SfxUInt16Item, pItem);
+        const SfxUInt16Item *pFilterItem = dynamic_cast< const SfxUInt16Item* >( pItem);
         DBG_ASSERT(pFilterItem, "SfxUINT16Item erwartet");
         sal_uInt16 nFilterFlags = pFilterItem->GetValue() & ~SFXSTYLEBIT_USERDEF;
         if(!nFilterFlags)       // Benutzervorlage?
@@ -1991,7 +1989,7 @@ void SfxCommonTemplateDialog_Impl::NewHdl(void *)
     {
         Window* pTmp;
         pTmp = Application::GetDefDialogParent();
-        if ( ISA(SfxTemplateDialog_Impl) )
+        if ( dynamic_cast< SfxTemplateDialog_Impl* >(this) )
             Application::SetDefDialogParent( pWindow->GetParent() );
         else
             Application::SetDefDialogParent( pWindow );
@@ -2058,7 +2056,7 @@ void SfxCommonTemplateDialog_Impl::EditHdl(void *)
         //DefModalDialogParent setzen fuer
         //Modalitaet der nachfolgenden Dialoge
         pTmp = Application::GetDefDialogParent();
-        if ( ISA(SfxTemplateDialog_Impl) )
+        if ( dynamic_cast< SfxTemplateDialog_Impl* >(this) )
             Application::SetDefDialogParent( pWindow->GetParent() );
         else
             Application::SetDefDialogParent( pWindow );
@@ -2166,7 +2164,7 @@ void    SfxCommonTemplateDialog_Impl::EnableDelete()
 // setzen
 void    SfxCommonTemplateDialog_Impl::ResetFocus()
 {
-    if(ISA(SfxTemplateDialog_Impl))
+    if(dynamic_cast< SfxTemplateDialog_Impl* >(this))
     {
         SfxViewFrame *pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
         SfxViewShell *pVu = pViewFrame->GetViewShell();
@@ -2191,7 +2189,7 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, ApplyHdl, Control *, pControl )
                      GetSelectedEntry(), String(),
                      ( sal_uInt16 )GetFamilyItem_Impl()->GetFamily(),
                      0, 0, &nModifier );
-        if(ISA(SfxTemplateCatalog_Impl))
+        if(dynamic_cast< SfxTemplateCatalog_Impl* >(this))
             ((SfxTemplateCatalog_Impl*) this)->pReal->EndDialog(RET_OK);
     }
     ResetFocus();

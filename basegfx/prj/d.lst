@@ -14,6 +14,7 @@ mkdir: %_DEST%\inc%_EXT%\basegfx\matrix
 ..\inc\basegfx\matrix\b2dhommatrix.hxx %_DEST%\inc%_EXT%\basegfx\matrix\b2dhommatrix.hxx
 ..\inc\basegfx\matrix\b2dhommatrixtools.hxx %_DEST%\inc%_EXT%\basegfx\matrix\b2dhommatrixtools.hxx
 ..\inc\basegfx\matrix\b3dhommatrix.hxx %_DEST%\inc%_EXT%\basegfx\matrix\b3dhommatrix.hxx
+..\inc\basegfx\matrix\b3dhommatrixtools.hxx %_DEST%\inc%_EXT%\basegfx\matrix\b3dhommatrixtools.hxx
 
 mkdir: %_DEST%\inc%_EXT%\basegfx\point
 ..\inc\basegfx\point\b2dpoint.hxx %_DEST%\inc%_EXT%\basegfx\point\b2dpoint.hxx

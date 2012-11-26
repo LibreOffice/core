@@ -29,7 +29,6 @@ class SwWebListShell: public SwListShell
 {
 public:
     SFX_DECL_INTERFACE(SW_WEBLISTSHELL)
-    TYPEINFO();
 
     virtual     ~SwWebListShell();
                 SwWebListShell(SwView &rView);

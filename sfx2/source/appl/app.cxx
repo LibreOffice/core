@@ -171,7 +171,7 @@ SfxPropertyHandler* GetOrCreatePropertyHandler()
 
 void SfxPropertyHandler::Property( ApplicationProperty& rProp )
 {
-    TTProperties* pTTProperties = PTR_CAST( TTProperties, &rProp );
+    TTProperties* pTTProperties = dynamic_cast< TTProperties* >( &rProp );
     if ( pTTProperties )
     {
         pTTProperties->nPropertyVersion = TT_PROPERTIES_VERSION;
@@ -222,7 +222,7 @@ void SfxPropertyHandler::Property( ApplicationProperty& rProp )
                             String aFactory = String::CreateFromAscii("private:factory/");
                             if ( pArgs && *pArgs )
                             {
-                                SFX_ITEMSET_ARG( &aSet, pFactoryName, SfxStringItem, SID_NEWDOCDIRECT, sal_False );
+                                SFX_ITEMSET_ARG( &aSet, pFactoryName, SfxStringItem, SID_NEWDOCDIRECT );
                                 if ( pFactoryName )
                                     aFactory += pFactoryName->GetValue();
                                 else

@@ -38,8 +38,6 @@ class FuSlideHide
     : public FuSlide
 {
 public:
-    TYPEINFO();
-
     static FunctionReference Create( SlideViewShell* pViewSh, ::sd::Window* pWin, SlideView* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
     virtual void DoExecute( SfxRequest& rReq );
 

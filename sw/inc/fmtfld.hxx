@@ -56,8 +56,6 @@ protected:
     virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint );
 
 public:
-    TYPEINFO();
-
     // single argument constructors shall be explicit.
     explicit SwFmtFld( const SwField &rFld );
 
@@ -112,7 +110,6 @@ public:
         , pView(pV)
     {}
 
-    TYPEINFO();
     const SwFmtFld* GetField() const { return pFld; }
     sal_Int16 Which() const { return nWhich; }
     const SwView* GetView() const { return pView; }

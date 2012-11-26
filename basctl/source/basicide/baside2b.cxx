@@ -274,7 +274,7 @@ void __EXPORT EditorWindow::RequestHelp( const HelpEvent& rHEvt )
                     if ( strchr( cSuffixes, aWord.GetChar( nLastChar ) ) )
                         aWord.Erase( nLastChar, 1 );
                     SbxBase* pSBX = StarBASIC::FindSBXInCurrentScope( aWord );
-                    if ( pSBX && pSBX->ISA( SbxVariable ) && !pSBX->ISA( SbxMethod ) )
+                    if ( pSBX && dynamic_cast< SbxVariable* >(pSBX) && !dynamic_cast< SbxMethod* >(pSBX) )
                     {
                         SbxVariable* pVar = (SbxVariable*)pSBX;
                         SbxDataType eType = pVar->GetType();
@@ -665,10 +665,11 @@ void EditorWindow::DataChanged(DataChangedEvent const & rDCEvt)
 
 void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    if ( rHint.ISA( TextHint ) )
+    const TextHint* pTextHint = dynamic_cast< const TextHint* >(&rHint);
+
+    if ( pTextHint )
     {
-        const TextHint& rTextHint = (const TextHint&)rHint;
-        if( rTextHint.GetId() == TEXT_HINT_VIEWSCROLLED )
+        if( pTextHint->GetId() == TEXT_HINT_VIEWSCROLLED )
         {
             if ( pModulWindow->GetHScrollBar() )
                 pModulWindow->GetHScrollBar()->SetThumbPos( pEditView->GetStartDocPos().X() );
@@ -676,7 +677,7 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             pModulWindow->GetBreakPointWindow().DoScroll
                 ( 0, pModulWindow->GetBreakPointWindow().GetCurYOffset() - pEditView->GetStartDocPos().Y() );
         }
-        else if( rTextHint.GetId() == TEXT_HINT_TEXTHEIGHTCHANGED )
+        else if( pTextHint->GetId() == TEXT_HINT_TEXTHEIGHTCHANGED )
         {
             if ( pEditView->GetStartDocPos().Y() )
             {
@@ -688,7 +689,7 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
             SetScrollBarRanges();
         }
-        else if( rTextHint.GetId() == TEXT_HINT_TEXTFORMATTED )
+        else if( pTextHint->GetId() == TEXT_HINT_TEXTFORMATTED )
         {
             if ( pModulWindow->GetHScrollBar() )
             {
@@ -705,18 +706,18 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             if ( nCurTextWidth != nPrevTextWidth )
                 SetScrollBarRanges();
         }
-        else if( rTextHint.GetId() == TEXT_HINT_PARAINSERTED )
+        else if( pTextHint->GetId() == TEXT_HINT_PARAINSERTED )
         {
-            ParagraphInsertedDeleted( rTextHint.GetValue(), sal_True );
-            DoDelayedSyntaxHighlight( rTextHint.GetValue() );
+            ParagraphInsertedDeleted( pTextHint->GetValue(), sal_True );
+            DoDelayedSyntaxHighlight( pTextHint->GetValue() );
         }
-        else if( rTextHint.GetId() == TEXT_HINT_PARAREMOVED )
+        else if( pTextHint->GetId() == TEXT_HINT_PARAREMOVED )
         {
-            ParagraphInsertedDeleted( rTextHint.GetValue(), sal_False );
+            ParagraphInsertedDeleted( pTextHint->GetValue(), sal_False );
         }
-        else if( rTextHint.GetId() == TEXT_HINT_PARACONTENTCHANGED )
+        else if( pTextHint->GetId() == TEXT_HINT_PARACONTENTCHANGED )
         {
-            DoDelayedSyntaxHighlight( rTextHint.GetValue() );
+            DoDelayedSyntaxHighlight( pTextHint->GetValue() );
         }
     }
 }
@@ -1914,8 +1915,8 @@ SbxBase* WatchTreeListBox::ImplGetSBXForEntry( SvLBoxEntry* pEntry, bool& rbArra
             pSBX = pObj->Find( aVName, SbxCLASS_DONTCARE );
 
             SbxVariable* pVar;
-            if ( pSBX && (pVar = PTR_CAST( SbxVariable, pSBX )) != NULL
-                        && !pSBX->ISA( SbxMethod ) )
+            if ( pSBX && (pVar = dynamic_cast< SbxVariable* >( pSBX )) != NULL
+                        && !dynamic_cast< SbxMethod* >(pSBX) )
             {
                 // Force getting value
                 SbxValues aRes;
@@ -1952,7 +1953,7 @@ sal_Bool __EXPORT WatchTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection
         // No out of scope entries
         bool bArrayElement;
         SbxBase* pSBX = ImplGetSBXForEntry( pEntry, bArrayElement );
-        if ( ( pSBX && pSBX->ISA( SbxVariable ) && !pSBX->ISA( SbxMethod ) ) || bArrayElement )
+        if ( ( pSBX && dynamic_cast< SbxVariable* >(pSBX) && !dynamic_cast< SbxMethod* >(pSBX) ) || bArrayElement )
         {
             // Accept no objects and only end nodes of arrays for editing
             if( !pItem->mpObject && (pItem->mpArray == NULL || pItem->nDimLevel == pItem->nDimCount) )
@@ -2019,7 +2020,7 @@ sal_Bool WatchTreeListBox::ImplBasicEntryEdited( SvLBoxEntry* pEntry, const Stri
     SbxBase* pSBX = ImplGetSBXForEntry( pEntry, bArrayElement );
 
     SbxBase* pToBeChanged = NULL;
-    if ( pSBX && pSBX->ISA( SbxVariable ) && !pSBX->ISA( SbxMethod ) )
+    if ( pSBX && dynamic_cast< SbxVariable* >(pSBX) && !dynamic_cast< SbxMethod* >(pSBX) )
     {
         SbxVariable* pVar = (SbxVariable*)pSBX;
         SbxDataType eType = pVar->GetType();
@@ -2033,11 +2034,13 @@ sal_Bool WatchTreeListBox::ImplBasicEntryEdited( SvLBoxEntry* pEntry, const Stri
 
     if ( pToBeChanged )
     {
-        if ( pToBeChanged->ISA( SbxVariable ) )
+        SbxVariable* pSbxVariable = dynamic_cast< SbxVariable* >(pToBeChanged);
+
+        if ( pSbxVariable )
         {
             // Wenn der Typ variabel ist, macht die Konvertierung des SBX nichts,
             // bei festem Typ wird der String konvertiert.
-            ((SbxVariable*)pToBeChanged)->PutStringExt( aResult );
+            pSbxVariable->PutStringExt( aResult );
         }
         else
             bError = sal_True;
@@ -2157,7 +2160,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
             }
 
             bool bCollapse = false;
-            if ( pSBX && pSBX->ISA( SbxVariable ) && !pSBX->ISA( SbxMethod ) )
+            if ( pSBX && dynamic_cast< SbxVariable* >(pSBX) && !dynamic_cast< SbxMethod* >(pSBX) )
             {
                 SbxVariable* pVar = (SbxVariable*)pSBX;
                 // Sonderbehandlung fuer Arrays:
@@ -2166,7 +2169,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                 {
                     // Mehrdimensionale Arrays beruecksichtigen!
                     SbxBase* pBase = pVar->GetObject();
-                    if ( pBase && pBase->ISA( SbxDimArray ) )
+                    if ( pBase && dynamic_cast< SbxDimArray* >(pBase) )
                     {
                         SbxDimArray* pNewArray = (SbxDimArray*)pBase;
                         SbxDimArray* pOldArray = pItem->mpArray;
@@ -2231,7 +2234,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                 {
                     SbxObject* pObj = NULL;
                     SbxBase* pBase = pVar->GetObject();
-                    if( pBase && pBase->ISA( SbxObject ) )
+                    if( pBase && dynamic_cast< SbxObject* >(pBase) )
                         pObj = (SbxObject*)pBase;
 
                     if( pObj )

@@ -54,7 +54,7 @@ namespace drawinglayer
             }
 
             // get NoermalsInvert flag
-            const bool bInvertNormals(((const Svx3DNormalsInvertItem&)rSet.Get(SDRATTR_3DOBJ_NORMALS_INVERT)).GetValue());
+            const bool bInvertNormals(((const SfxBoolItem&)rSet.Get(SDRATTR_3DOBJ_NORMALS_INVERT)).GetValue());
 
             // get TextureProjectionX
             ::com::sun::star::drawing::TextureProjectionMode aTextureProjectionX(::com::sun::star::drawing::TextureProjectionMode_OBJECTSPECIFIC);
@@ -83,13 +83,13 @@ namespace drawinglayer
             }
 
             // get DoubleSided flag
-            const bool bDoubleSided(((const Svx3DDoubleSidedItem&)rSet.Get(SDRATTR_3DOBJ_DOUBLE_SIDED)).GetValue());
+            const bool bDoubleSided(((const SfxBoolItem&)rSet.Get(SDRATTR_3DOBJ_DOUBLE_SIDED)).GetValue());
 
             // get Shadow3D flag
-            const bool bShadow3D(((const Svx3DShadow3DItem&)rSet.Get(SDRATTR_3DOBJ_SHADOW_3D)).GetValue());
+            const bool bShadow3D(((const SfxBoolItem&)rSet.Get(SDRATTR_3DOBJ_SHADOW_3D)).GetValue());
 
             // get TextureFilter flag
-            const bool bTextureFilter(((const Svx3DTextureFilterItem&)rSet.Get(SDRATTR_3DOBJ_TEXTURE_FILTER)).GetValue());
+            const bool bTextureFilter(((const SfxBoolItem&)rSet.Get(SDRATTR_3DOBJ_TEXTURE_FILTER)).GetValue());
 
             // get texture kind
             // TextureKind: 1 == Base3DTextureLuminance, 2 == Base3DTextureIntensity, 3 == Base3DTextureColor
@@ -123,13 +123,13 @@ namespace drawinglayer
             const ::basegfx::BColor aObjectColor(((const XFillColorItem&)rSet.Get(XATTR_FILLCOLOR)).GetColorValue().getBColor());
 
             // get specular color
-            const ::basegfx::BColor aSpecular(((const Svx3DMaterialSpecularItem&)rSet.Get(SDRATTR_3DOBJ_MAT_SPECULAR)).GetValue().getBColor());
+            const ::basegfx::BColor aSpecular(((const SvxColorItem&)rSet.Get(SDRATTR_3DOBJ_MAT_SPECULAR)).GetValue().getBColor());
 
             // get emissive color
-            const ::basegfx::BColor aEmission(((const Svx3DMaterialEmissionItem&)rSet.Get(SDRATTR_3DOBJ_MAT_EMISSION)).GetValue().getBColor());
+            const ::basegfx::BColor aEmission(((const SvxColorItem&)rSet.Get(SDRATTR_3DOBJ_MAT_EMISSION)).GetValue().getBColor());
 
             // get specular intensity
-            sal_uInt16 nSpecularIntensity(((const Svx3DMaterialSpecularIntensityItem&)rSet.Get(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY)).GetValue());
+            sal_uInt16 nSpecularIntensity(((const SfxUInt16Item&)rSet.Get(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY)).GetValue());
 
             if(nSpecularIntensity > 128)
             {

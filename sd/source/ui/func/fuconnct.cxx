@@ -37,8 +37,6 @@
 
 namespace sd {
 
-TYPEINIT1( FuConnectionDlg, FuPoor );
-
 /*************************************************************************
 |*
 |* Konstruktor
@@ -64,7 +62,7 @@ FunctionReference FuConnectionDlg::Create( ViewShell* pViewSh, ::sd::Window* pWi
 
 void FuConnectionDlg::DoExecute( SfxRequest& rReq )
 {
-    SfxItemSet aNewAttr( mpDoc->GetPool() );
+    SfxItemSet aNewAttr( mpDoc->GetItemPool() );
     mpView->GetAttributes( aNewAttr );
 
     const SfxItemSet* pArgs = rReq.GetArgs();

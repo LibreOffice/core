@@ -30,11 +30,10 @@
 #include <svx/xlnasit.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdattr.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
-//************************************************************
-//   Vorausdeklarationen
-//************************************************************
+//////////////////////////////////////////////////////////////////////////////
+// predefines
 
 class SfxPoolItem;
 class SfxSetItem;
@@ -42,45 +41,36 @@ class SdrOutliner;
 class SfxItemSet;
 class SfxItemPool;
 
-//************************************************************
-//   SdrAttrObj
-//************************************************************
+//////////////////////////////////////////////////////////////////////////////
 
 class SVX_DLLPUBLIC SdrAttrObj : public SdrObject
 {
 private:
-    friend class                SdrOutliner;
-
 protected:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
-    Rectangle                   maSnapRect;
-
-protected:
     // Strichstaerke ermitteln. Keine Linie -> 0.
     sal_Int32 ImpGetLineWdt() const;
 
     // Zuhoeren, ob sich ein StyleSheet aendert
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
-    SdrAttrObj();
+    // protected constructor; this is only a helper class which should never be directly
+    // incarnated
+    SdrAttrObj(SdrModel& rSdrModel, const basegfx::B2DHomMatrix& rTransform = basegfx::B2DHomMatrix());
     virtual ~SdrAttrObj();
 
 public:
-    TYPEINFO();
-
     // Feststellen, ob bFilledObj && Fuellung!=FillNone
-    sal_Bool HasFill() const;
+    bool HasFill() const;
 
     // Feststellen, ob Linie!=LineNone
-    sal_Bool HasLine() const;
-
-    virtual const Rectangle& GetSnapRect() const;
-
-    virtual void SetModel(SdrModel* pNewModel);
+    bool HasLine() const;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #endif //_SVDOATTR_HXX
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// eof

@@ -75,8 +75,6 @@ class XMLIndexTOCContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLIndexTOCContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,

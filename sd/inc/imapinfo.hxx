@@ -43,14 +43,14 @@ class SdIMapInfo : public SdrObjUserData, public SfxListener
 
 public:
                     SdIMapInfo() :
-                        SdrObjUserData( SdUDInventor, SD_IMAPINFO_ID, 0 ) {};
+                        SdrObjUserData( SdUDInventor, SD_IMAPINFO_ID ) {};
 
                     SdIMapInfo( const ImageMap& rImageMap ) :
-                        SdrObjUserData( SdUDInventor, SD_IMAPINFO_ID, 0 ),
+                        SdrObjUserData( SdUDInventor, SD_IMAPINFO_ID ),
                         aImageMap( rImageMap ) {};
 
                     SdIMapInfo( const SdIMapInfo& rIMapInfo ) :
-                        SdrObjUserData( SdUDInventor, SD_IMAPINFO_ID, 0 ),
+                        SdrObjUserData( SdUDInventor, SD_IMAPINFO_ID ),
                         SfxListener(),
                         aImageMap( rIMapInfo.aImageMap ) {};
 

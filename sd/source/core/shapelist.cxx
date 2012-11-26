@@ -26,12 +26,13 @@
 #include <tools/debug.hxx>
 #include <svx/svdobj.hxx>
 #include "shapelist.hxx"
-
 #include <algorithm>
+#include <svx/svdmodel.hxx>
 
 using namespace sd;
 
 ShapeList::ShapeList()
+:   SfxListener()
 {
     maIter = maShapeList.end();
 }
@@ -42,13 +43,13 @@ ShapeList::~ShapeList()
 }
 
 /** adds the given shape to this list */
-void ShapeList::addShape( SdrObject& rObject )
+void ShapeList::addShape( const SdrObject& rObject )
 {
     ListImpl::iterator aIter( std::find( maShapeList.begin(), maShapeList.end(), &rObject ) );
     if( aIter == maShapeList.end() )
     {
         maShapeList.push_back(&rObject);
-        rObject.AddObjectUser( *this );
+        StartListening(const_cast< SdrObject& >(rObject));
     }
     else
     {
@@ -57,14 +58,14 @@ void ShapeList::addShape( SdrObject& rObject )
 }
 
 /** removes the given shape from this list */
-SdrObject* ShapeList::removeShape( SdrObject& rObject )
+const SdrObject* ShapeList::removeShape( const SdrObject& rObject )
 {
     ListImpl::iterator aIter( std::find( maShapeList.begin(), maShapeList.end(), &rObject ) );
     if( aIter != maShapeList.end() )
     {
         bool bIterErased = aIter == maIter;
 
-        (*aIter)->RemoveObjectUser(*this);
+        EndListening(const_cast< SdrObject& >(rObject));
         aIter = maShapeList.erase( aIter );
 
         if( bIterErased )
@@ -85,11 +86,15 @@ SdrObject* ShapeList::removeShape( SdrObject& rObject )
 void ShapeList::clear()
 {
     ListImpl aShapeList;
+
     aShapeList.swap( maShapeList );
 
     ListImpl::iterator aIter( aShapeList.begin() );
+
     while( aIter != aShapeList.end() )
-        (*aIter++)->RemoveObjectUser(*this);
+    {
+        EndListening(const_cast< SdrObject& >(**aIter++));
+    }
 
     maIter = aShapeList.end();
 }
@@ -101,12 +106,12 @@ bool ShapeList::isEmpty() const
 }
 
 /** returns true if given shape is part of this list */
-bool ShapeList::hasShape( SdrObject& rObject ) const
+bool ShapeList::hasShape( const SdrObject& rObject ) const
 {
     return std::find( maShapeList.begin(), maShapeList.end(), &rObject )  != maShapeList.end();
 }
 
-SdrObject* ShapeList::getNextShape(SdrObject* pObj) const
+const SdrObject* ShapeList::getNextShape(const SdrObject* pObj) const
 {
     if( pObj )
     {
@@ -128,9 +133,15 @@ SdrObject* ShapeList::getNextShape(SdrObject* pObj) const
     return 0;
 }
 
-void ShapeList::ObjectInDestruction(const SdrObject& rObject)
+// derived from SfxListener
+void ShapeList::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
-    ListImpl::iterator aIter( std::find( maShapeList.begin(), maShapeList.end(), &rObject ) );
+    const SdrBaseHint* pSdrHint = dynamic_cast< const SdrBaseHint* >(&rHint);
+
+    if(pSdrHint && HINT_SDROBJECTDYING == pSdrHint->GetSdrHintKind() && pSdrHint->GetSdrHintObject())
+    {
+        ListImpl::iterator aIter(std::find(maShapeList.begin(), maShapeList.end(), pSdrHint->GetSdrHintObject()));
+
     if( aIter != maShapeList.end() )
     {
         bool bIterErased = aIter == maIter;
@@ -145,8 +156,9 @@ void ShapeList::ObjectInDestruction(const SdrObject& rObject)
         DBG_ERROR("sd::ShapeList::ObjectInDestruction(), got a call from an unknown friend!");
     }
 }
+}
 
-SdrObject* ShapeList::getNextShape()
+const SdrObject* ShapeList::getNextShape()
 {
     if( maIter != maShapeList.end() )
     {

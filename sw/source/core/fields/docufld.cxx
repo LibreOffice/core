@@ -170,16 +170,18 @@ void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc, sal_uInt16 nPage,
         const SwFmtPageDesc *pDesc;
         sal_uInt32 nMaxItems = rPool.GetItemCount2( RES_PAGEDESC );
         for( sal_uInt32 n = 0; n < nMaxItems; ++n )
+        {
             if( 0 != (pDesc = (SwFmtPageDesc*)rPool.GetItem2( RES_PAGEDESC, n ) )
                 && pDesc->GetNumOffset() && pDesc->GetDefinedIn() )
             {
-                SwCntntNode* pNd = PTR_CAST( SwCntntNode, pDesc->GetDefinedIn() );
-                if( pNd )
+                const SwCntntNode* pSwCntntNode = dynamic_cast< const SwCntntNode* >(pDesc->GetDefinedIn());
+
+                if(pSwCntntNode)
                 {
-                    if ( SwIterator<SwFrm,SwCntntNode>::FirstElement(*pNd) )
+                    if ( SwIterator<SwFrm,SwCntntNode>::FirstElement(*pSwCntntNode) )
                         bVirtuell = sal_True;
                 }
-                else if( pDesc->GetDefinedIn()->ISA( SwFmt ))
+                else if( dynamic_cast< const SwFmt* >(pDesc->GetDefinedIn()))
                 {
                     SwAutoFmtGetDocNode aGetHt( &pDoc->GetNodes() );
                     bVirtuell = !pDesc->GetDefinedIn()->GetInfo( aGetHt );
@@ -187,6 +189,7 @@ void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc, sal_uInt16 nPage,
                 }
             }
     }
+}
 }
 
 /*--------------------------------------------------------------------

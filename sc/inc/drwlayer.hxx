@@ -48,7 +48,6 @@ class ScTabDeletedHint : public SfxHint
 private:
     SCTAB   nTab;
 public:
-            TYPEINFO();
             ScTabDeletedHint( SCTAB nTabNo = SCTAB_MAX );
     virtual ~ScTabDeletedHint();
 
@@ -60,7 +59,6 @@ class ScTabSizeChangedHint : public SfxHint
 private:
     SCTAB   nTab;
 public:
-            TYPEINFO();
             ScTabSizeChangedHint( SCTAB nTabNo = SCTAB_MAX );
     virtual ~ScTabSizeChangedHint();
 
@@ -115,9 +113,9 @@ public:
                     ScDrawLayer( ScDocument* pDocument, const String& rName );
     virtual         ~ScDrawLayer();
 
-    virtual SdrPage*  AllocPage(FASTBOOL bMasterPage);
+    virtual SdrPage*  AllocPage(bool bMasterPage);
     virtual SdrModel* AllocModel() const;
-    virtual void    SetChanged( sal_Bool bFlg = sal_True );
+    virtual void    SetChanged( bool bFlg = true );
 
     virtual Window* GetCurDocViewWin();
     virtual SvStream* GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const;
@@ -185,7 +183,7 @@ public:
                                     SCTAB nSourceTab, const Rectangle& rSourceRange,
                                     const ScAddress& rDestPos, const Rectangle& rDestRange );
 
-    void            SetPageSize( sal_uInt16 nPageNo, const Size& rSize, bool bUpdateNoteCaptionPos = true );
+    void            SetPageSize( sal_uInt32 nPageNo, const basegfx::B2DVector& rSize, bool bUpdateNoteCaptionPos = true );
 
                     //  mirror or move between positive and negative positions for RTL
     void            MirrorRTL( SdrObject* pObj );
@@ -194,6 +192,7 @@ public:
     /** Returns the rectangle for the passed cell address in 1/100 mm.
         @param bMergedCell  True = regards merged cells. False = use single column/row size. */
     static Rectangle GetCellRect( ScDocument& rDoc, const ScAddress& rPos, bool bMergedCell );
+    static basegfx::B2DRange GetCellRange(ScDocument& rDoc, const ScAddress& rPos, bool bMergedCell);
 
                     //  GetVisibleName: name for navigator etc: GetPersistName or GetName
                     //  (ChartListenerCollection etc. must use GetPersistName directly)
@@ -210,24 +209,23 @@ public:
     static ScAnchorType GetAnchor( const SdrObject* );
 
     // Positionen fuer Detektivlinien
-    static ScDrawObjData* GetObjData( SdrObject* pObj, sal_Bool bCreate=sal_False );
+    static ScDrawObjData* GetObjData( const SdrObject& rObj, sal_Bool bCreate=sal_False );
 
     // The sheet information in ScDrawObjData isn't updated when sheets are inserted/deleted.
     // Use this method to get an object with positions on the specified sheet (should be the
     // sheet on which the object is inserted).
-    static ScDrawObjData* GetObjDataTab( SdrObject* pObj, SCTAB nTab );
+    static ScDrawObjData* GetObjDataTab( const SdrObject& rObj, SCTAB nTab );
 
     /** Returns true, if the passed object is the caption of a cell note. */
-    static bool     IsNoteCaption( SdrObject* pObj );
+    static bool     IsNoteCaption( const SdrObject& rObj );
 
     /** Returns the object data, if the passed object is a cell note caption. */
-    static ScDrawObjData* GetNoteCaptionData( SdrObject* pObj, SCTAB nTab );
+    static ScDrawObjData* GetNoteCaptionData( const SdrObject& rObj, SCTAB nTab );
 
     // Image-Map
     static ScIMapInfo* GetIMapInfo( SdrObject* pObj );
 
-    static IMapObject* GetHitIMapObject( SdrObject* pObject,
-                            const Point& rWinPoint, const Window& rCmpWnd );
+    static IMapObject* GetHitIMapObject(SdrObject& rObject, const basegfx::B2DPoint& rWinPoint, const Window& rCmpWnd);
 
     static ScMacroInfo* GetMacroInfo( SdrObject* pObj, sal_Bool bCreate = sal_False );
 

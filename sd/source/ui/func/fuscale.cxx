@@ -55,8 +55,6 @@
 
 namespace sd {
 
-TYPEINIT1( FuScale, FuPoor );
-
 /*************************************************************************
 |*
 |* Konstruktor
@@ -88,15 +86,16 @@ void FuScale::DoExecute( SfxRequest& rReq )
 
     if( !pArgs )
     {
-        SfxItemSet aNewAttr( mpDoc->GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM );
+        SfxItemSet aNewAttr( mpDoc->GetItemPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM );
         SvxZoomItem* pZoomItem;
         sal_uInt16 nZoomValues = SVX_ZOOM_ENABLE_ALL;
 
         nValue = (sal_Int16) mpWindow->GetZoom();
 
         // Zoom auf Seitengroesse ?
-        if( mpViewShell && mpViewShell->ISA( DrawViewShell ) &&
-            static_cast<DrawViewShell*>(mpViewShell)->IsZoomOnPage() )
+        DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >(mpViewShell);
+
+        if( pDrawViewShell && pDrawViewShell->IsZoomOnPage() )
         {
             pZoomItem = new SvxZoomItem( SVX_ZOOM_WHOLEPAGE, nValue );
         }
@@ -108,16 +107,15 @@ void FuScale::DoExecute( SfxRequest& rReq )
         // Bereich einschraenken
         if( mpViewShell )
         {
-            if( mpViewShell->ISA( DrawViewShell ) )
+            if( pDrawViewShell )
             {
                 SdrPageView* pPageView = mpView->GetSdrPageView();
-                if( ( pPageView && pPageView->GetObjList()->GetObjCount() == 0 ) )
-                    // || ( mpView->GetMarkedObjectList().GetMarkCount() == 0 ) )
+                if( ( pPageView && pPageView->GetCurrentObjectList()->GetObjCount() == 0 ) )
                 {
                     nZoomValues &= ~SVX_ZOOM_ENABLE_OPTIMAL;
                 }
             }
-            else if( mpViewShell->ISA( OutlineViewShell ) )
+            else if( dynamic_cast< OutlineViewShell* >(mpViewShell) )
             {
                 nZoomValues &= ~SVX_ZOOM_ENABLE_OPTIMAL;
                 nZoomValues &= ~SVX_ZOOM_ENABLE_WHOLEPAGE;
@@ -151,7 +149,7 @@ void FuScale::DoExecute( SfxRequest& rReq )
                 default:
                 {
                     rReq.Ignore ();
-        /*
+                    /*
                         rReq.Done( *( pDlg->GetOutputItemSet() ) );
                         pArgs = rReq.GetArgs();*/
                 }
@@ -176,7 +174,7 @@ void FuScale::DoExecute( SfxRequest& rReq )
 
                 case SVX_ZOOM_OPTIMAL:
                 {
-                    if( mpViewShell->ISA( DrawViewShell ) )
+                    if( pDrawViewShell )
                     {
                         // Namensverwirrung: SID_SIZE_ALL -> Zoom auf alle Objekte
                         // --> Wird als Optimal im Programm angeboten
@@ -201,7 +199,7 @@ void FuScale::DoExecute( SfxRequest& rReq )
     }
     else if(mpViewShell && (pArgs->Count () == 1))
     {
-        SFX_REQUEST_ARG (rReq, pScale, SfxUInt32Item, ID_VAL_ZOOM, sal_False);
+        SFX_REQUEST_ARG (rReq, pScale, SfxUInt32Item, ID_VAL_ZOOM );
         mpViewShell->SetZoom (pScale->GetValue ());
 
         mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArrayZoom );

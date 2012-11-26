@@ -171,7 +171,7 @@ void AccessibleShape::Init (void)
             SdrObject* pSdrObject = GetSdrObjectFromXShape(mxShape);
             if( pSdrObject )
             {
-                SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, pSdrObject );
+                SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pSdrObject );
                 OutlinerParaObject* pOutlinerParaObject = NULL;
 
                 if( pTextObj )
@@ -250,7 +250,7 @@ void AccessibleShape::UpdateStates (void)
     // XXX fix_me this has to be done with an extra interface later on
     if ( m_pShape && maShapeTreeInfo.GetSdrView() )
     {
-        bShapeIsSelected = maShapeTreeInfo.GetSdrView()->IsObjMarked(m_pShape) == sal_True;
+        bShapeIsSelected = maShapeTreeInfo.GetSdrView()->IsObjMarked(*m_pShape) == sal_True;
     }
 
     if (bShapeIsSelected)
@@ -1085,7 +1085,6 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
 
         case DRAWING_CAPTION:
         case DRAWING_CLOSED_BEZIER:
-        case DRAWING_CLOSED_FREEHAND:
         case DRAWING_ELLIPSE:
         case DRAWING_POLY_POLYGON:
         case DRAWING_POLY_POLYGON_PATH:
@@ -1098,7 +1097,6 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
         case DRAWING_LINE:
         case DRAWING_MEASURE:
         case DRAWING_OPEN_BEZIER:
-        case DRAWING_OPEN_FREEHAND:
         case DRAWING_POLY_LINE:
         case DRAWING_POLY_LINE_PATH:
             aDG.AddLineProperties ();

@@ -1097,11 +1097,10 @@ void SAL_CALL SmModel::render(
         {
             //!! when called via API we may not have an active view
             //!! thus we go and look for a view that can be used.
-            const TypeId aTypeId = TYPE( SmViewShell );
-            SfxViewShell* pViewSh = SfxViewShell::GetFirst( &aTypeId, sal_False /* search non-visible views as well*/ );
+            SfxViewShell* pViewSh = SfxViewShell::GetFirst( _IsSfxViewShell< SmViewShell >, sal_False /* search non-visible views as well*/ );
             while (pViewSh && pViewSh->GetObjectShell() != pDocSh)
-                pViewSh = SfxViewShell::GetNext( *pViewSh, &aTypeId, sal_False /* search non-visible views as well*/ );
-            SmViewShell *pView = PTR_CAST( SmViewShell, pViewSh );
+                pViewSh = SfxViewShell::GetNext( *pViewSh, _IsSfxViewShell< SmViewShell >, sal_False /* search non-visible views as well*/ );
+            SmViewShell *pView = dynamic_cast< SmViewShell* >( pViewSh );
             DBG_ASSERT( pView, "SmModel::render : no SmViewShell found" );
 
             if (pView)

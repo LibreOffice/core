@@ -36,8 +36,6 @@ using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_P;
 
 
-TYPEINIT1(XMLStringBufferImportContext, SvXMLImportContext);
-
 XMLStringBufferImportContext::XMLStringBufferImportContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,

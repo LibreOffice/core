@@ -60,7 +60,6 @@ class SbUnoObject: public SbxObject
 
 public:
     static bool getDefaultPropName( SbUnoObject* pUnoObj, String& sDfltProp );
-    TYPEINFO();
     SbUnoObject( const String& aName_, const ::com::sun::star::uno::Any& aUnoObj_ );
     ~SbUnoObject();
 
@@ -108,8 +107,6 @@ class SbUnoMethod : public SbxMethod
     bool mbDirectInvocation; // Method should be used with XDirectInvocation interface
 
 public:
-    TYPEINFO();
-
     SbUnoMethod( const String& aName_, SbxDataType eSbxType, ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlMethod > xUnoMethod_,
         bool bInvocation,
         bool bDirect = false );
@@ -137,7 +134,6 @@ class SbUnoProperty : public SbxProperty
 
     virtual ~SbUnoProperty();
 public:
-    TYPEINFO();
     SbUnoProperty( const String& aName_, SbxDataType eSbxType,
         const ::com::sun::star::beans::Property& aUnoProp_, sal_Int32 nId_, bool bInvocation );
 
@@ -159,7 +155,6 @@ class SbUnoClass : public SbxObject
     const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >   m_xClass;
 
 public:
-    TYPEINFO();
     SbUnoClass( const String& aName_ )
         : SbxObject( aName_ )
     {}
@@ -192,7 +187,6 @@ class SbUnoService : public SbxObject
     bool                                                                                                m_bNeedsInit;
 
 public:
-    TYPEINFO();
     SbUnoService( const String& aName_,
         const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XServiceTypeDescription2 >& xServiceTypeDesc )
             : SbxObject( aName_ )
@@ -222,8 +216,6 @@ class SbUnoServiceCtor : public SbxMethod
     SbUnoServiceCtor* pNext;
 
 public:
-    TYPEINFO();
-
     SbUnoServiceCtor( const String& aName_, ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XServiceConstructorDescription > xServiceCtorDesc );
     virtual ~SbUnoServiceCtor();
     virtual SbxInfo* GetInfo();
@@ -239,7 +231,6 @@ class SbUnoSingleton : public SbxObject
     const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XSingletonTypeDescription >   m_xSingletonTypeDesc;
 
 public:
-    TYPEINFO();
     SbUnoSingleton( const String& aName_,
         const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XSingletonTypeDescription >& xSingletonTypeDesc );
 
@@ -263,8 +254,6 @@ public:
 
     const ::com::sun::star::uno::Any& getValue( void )
         { return mVal; }
-
-    TYPEINFO();
 };
 
 
@@ -275,7 +264,6 @@ class AutomationNamedArgsSbxArray : public SbxArray
 {
     ::com::sun::star::uno::Sequence< ::rtl::OUString >      maNameSeq;
 public:
-    TYPEINFO();
     AutomationNamedArgsSbxArray( sal_Int32 nSeqSize )
         : maNameSeq( nSeqSize )
     {}
@@ -323,7 +311,6 @@ class BasicCollection : public SbxObject
     void CollRemove( SbxArray* pPar_ );
 
 public:
-    TYPEINFO();
     BasicCollection( const String& rClassname );
     virtual SbxVariable* Find( const String&, SbxClassType );
     virtual void Clear();

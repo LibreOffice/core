@@ -121,8 +121,8 @@ namespace basegfx
             VNV                     maVNV;
             SNV                     maSNV;
 
-            unsigned                mbIsCurve : 1;
-            unsigned                mbChanged : 1;
+            bool                    mbIsCurve : 1;
+            bool                    mbChanged : 1;
 
             void impAddPolygon(const sal_uInt32 aPos, const B2DPolygon& rGeometry)
             {

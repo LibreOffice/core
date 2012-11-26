@@ -51,8 +51,8 @@ namespace sd {
 #define SCROLL_PAGE_FACT   0.5      // Faktor fuer Seitenscrolling
 #define SCROLL_SENSITIVE   20       // Sensitiver Bereich (Pixel)
 #define ZOOM_MULTIPLICATOR 10000    // Multiplikator um Rundungsfehler zu vermeiden
-#define MIN_ZOOM           5        // Minimaler Zoomfaktor
-#define MAX_ZOOM           3000     // Maximaler Zoomfaktor
+#define MIN_ZOOM           5.0      // Minimaler Zoomfaktor
+#define MAX_ZOOM           3000.0   // Maximaler Zoomfaktor
 
 
 /*************************************************************************
@@ -65,11 +65,11 @@ Window::Window(::Window* pParent)
     : ::Window(pParent, WinBits(WB_CLIPCHILDREN | WB_DIALOGCONTROL)),
       DropTargetHelper( this ),
       mpShareWin(NULL),
-      maWinPos(0, 0),           // vorsichtshalber; die Werte sollten aber
-      maViewOrigin(0, 0),       // vom Besitzer des Fensters neu gesetzt
-      maViewSize(1000, 1000),   // werden
-      mnMinZoom(MIN_ZOOM),
-      mnMaxZoom(MAX_ZOOM),
+      maWinPos(0.0, 0.0),           // vorsichtshalber; die Werte sollten aber
+      maViewOrigin(0.0, 0.0),       // vom Besitzer des Fensters neu gesetzt
+      maViewSize(1000.0, 1000.0),   // werden
+      mfMinZoom(MIN_ZOOM),
+      mfMaxZoom(MAX_ZOOM),
       mbMinZoomAutoCalc(false),
       mbCalcMinZoomByMinSide(true),
       mbCenterAllowed(true),
@@ -90,15 +90,15 @@ Window::Window(::Window* pParent)
     // adjust contrast mode initially
     bool bUseContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
     SetDrawMode( bUseContrast
-        ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
-        : ViewShell::OUTPUT_DRAWMODE_COLOR );
+        ? SD_OUTPUT_DRAWMODE_CONTRAST
+        : SD_OUTPUT_DRAWMODE_COLOR );
 
     // Hilfe-ID setzen
     // SetHelpId(HID_SD_WIN_DOCUMENT);
     SetUniqueId(HID_SD_WIN_DOCUMENT);
 
     // #i78183# Added after discussed with AF
-    EnableRTL(sal_False);
+    EnableRTL(false);
 }
 
 /*************************************************************************
@@ -148,12 +148,12 @@ void Window::CalcMinZoom()
     if ( mbMinZoomAutoCalc )
     {
         // Get current zoom factor.
-        long nZoom = GetZoom();
+        const double fZoom(GetZoom());
 
         if ( mpShareWin )
         {
             mpShareWin->CalcMinZoom();
-            mnMinZoom = mpShareWin->mnMinZoom;
+            mfMinZoom = mpShareWin->mfMinZoom;
         }
         else
         {
@@ -161,76 +161,75 @@ void Window::CalcMinZoom()
             // and calculate the scaling factors that would lead to the view
             // area (also called application area) to completely fill the
             // window.
-            Size aWinSize = PixelToLogic(GetOutputSizePixel());
-            sal_uLong nX = (sal_uLong) ((double) aWinSize.Width()
-                * (double) ZOOM_MULTIPLICATOR / (double) maViewSize.Width());
-            sal_uLong nY = (sal_uLong) ((double) aWinSize.Height()
-                * (double) ZOOM_MULTIPLICATOR / (double) maViewSize.Height());
+            const basegfx::B2DVector aWinSize(GetLogicVector());
+            const double fX(aWinSize.getX() / maViewSize.getX());
+            const double fY(aWinSize.getY() / maViewSize.getY());
 
             // Decide whether to take the larger or the smaller factor.
-            sal_uLong nFact;
+            double fFact;
+
             if (mbCalcMinZoomByMinSide)
-                nFact = Min(nX, nY);
+                fFact = std::min(fX, fY);
             else
-                nFact = Max(nX, nY);
+                fFact = std::max(fX, fY);
 
             // The factor is tansfomed according to the current zoom factor.
-            nFact = nFact * nZoom / ZOOM_MULTIPLICATOR;
-            mnMinZoom = Max((sal_uInt16) MIN_ZOOM, (sal_uInt16) nFact);
+            fFact *= fZoom;
+            mfMinZoom = std::max(MIN_ZOOM, fFact);
         }
         // If the current zoom factor is smaller than the calculated minimal
         // zoom factor then set the new minimal factor as the current zoom
         // factor.
-        if ( nZoom < (long) mnMinZoom )
-            SetZoomFactor(mnMinZoom);
+        if ( fZoom < mfMinZoom )
+            SetZoomFactor(mfMinZoom);
     }
 }
 
 
 
 
-void Window::SetMinZoom (long int nMin)
+void Window::SetMinZoom (double fMin)
 {
-    mnMinZoom = (sal_uInt16) nMin;
+    mfMinZoom = fMin;
 }
 
 
 
 
-long Window::GetMinZoom (void) const
+double Window::GetMinZoom (void) const
 {
-    return mnMinZoom;
+    return mfMinZoom;
 }
 
 
 
 
-void Window::SetMaxZoom (long int nMax)
+void Window::SetMaxZoom (double fMax)
 {
-    mnMaxZoom = (sal_uInt16) nMax;
+    mfMaxZoom = fMax;
 }
 
 
 
 
-long Window::GetMaxZoom (void) const
+double Window::GetMaxZoom (void) const
 {
-    return mnMaxZoom;
+    return mfMaxZoom;
 }
 
 
 
 
-long Window::GetZoom (void) const
+double Window::GetZoom (void) const
 {
     if( GetMapMode().GetScaleX().GetDenominator() )
     {
-        return GetMapMode().GetScaleX().GetNumerator() * 100L
+        return GetMapMode().GetScaleX().GetNumerator() * 100.0
             / GetMapMode().GetScaleX().GetDenominator();
     }
     else
     {
-        return 0;
+        return 0.0;
     }
 }
 
@@ -349,7 +348,7 @@ void Window::Command(const CommandEvent& rCEvt)
 
 long Window::Notify( NotifyEvent& rNEvt )
 {
-    long nResult = sal_False;
+    long nResult = false;
     if ( mpViewShell )
     {
         nResult = mpViewShell->Notify(rNEvt, this);
@@ -381,7 +380,7 @@ void Window::RequestHelp(const HelpEvent& rEvt)
 
 
 
-Point Window::GetWinViewPos (void) const
+basegfx::B2DPoint Window::GetWinViewPos (void) const
 {
     return maWinPos;
 }
@@ -389,7 +388,7 @@ Point Window::GetWinViewPos (void) const
 
 
 
-Point Window::GetViewOrigin (void) const
+basegfx::B2DPoint Window::GetViewOrigin (void) const
 {
     return maViewOrigin;
 }
@@ -397,7 +396,7 @@ Point Window::GetViewOrigin (void) const
 
 
 
-Size Window::GetViewSize (void) const
+basegfx::B2DVector Window::GetViewSize (void) const
 {
     return maViewSize;
 }
@@ -412,7 +411,7 @@ Size Window::GetViewSize (void) const
 |*
 \************************************************************************/
 
-void Window::SetWinViewPos(const Point& rPnt)
+void Window::SetWinViewPos(const basegfx::B2DPoint& rPnt)
 {
     maWinPos = rPnt;
 }
@@ -423,7 +422,7 @@ void Window::SetWinViewPos(const Point& rPnt)
 |*
 \************************************************************************/
 
-void Window::SetViewOrigin(const Point& rPnt)
+void Window::SetViewOrigin(const basegfx::B2DPoint& rPnt)
 {
     maViewOrigin = rPnt;
 }
@@ -435,7 +434,7 @@ void Window::SetViewOrigin(const Point& rPnt)
 |*
 \************************************************************************/
 
-void Window::SetViewSize(const Size& rSize)
+void Window::SetViewSize(const basegfx::B2DVector& rSize)
 {
     maViewSize = rSize;
     CalcMinZoom();
@@ -452,194 +451,217 @@ void Window::SetCenterAllowed (bool bIsAllowed)
 
 
 
-long Window::SetZoomFactor(long nZoom)
+double Window::SetZoomFactor(double fZoom)
 {
     // Clip the zoom factor to the valid range marked by nMinZoom as
     // calculated by CalcMinZoom() and the constant MAX_ZOOM.
-    if ( nZoom > MAX_ZOOM )
-        nZoom = MAX_ZOOM;
-    if ( nZoom < (long) mnMinZoom )
-        nZoom = mnMinZoom;
+    if ( fZoom > MAX_ZOOM )
+    {
+        fZoom = MAX_ZOOM;
+    }
+
+    if ( fZoom < mfMinZoom )
+    {
+        fZoom = mfMinZoom;
+    }
 
     // Set the zoom factor at the window's map mode.
     MapMode aMap(GetMapMode());
-    aMap.SetScaleX(Fraction(nZoom, 100));
-    aMap.SetScaleY(Fraction(nZoom, 100));
+    aMap.SetScaleX(Fraction(fZoom * 0.01));
+    aMap.SetScaleY(Fraction(fZoom * 0.01));
     SetMapMode(aMap);
 
     // Update the map mode's origin (to what effect?).
     UpdateMapOrigin();
 
-    // Update the view's snapping to the the new zoom factor.
-    if ( mpViewShell && mpViewShell->ISA(DrawViewShell) )
-        ((DrawViewShell*) mpViewShell)->GetView()->
-                                        RecalcLogicSnapMagnetic(*this);
-
     // Return the zoom factor just in case it has been changed above to lie
     // inside the valid range.
-    return nZoom;
+    return fZoom;
 }
 
-void Window::SetZoomIntegral(long nZoom)
+void Window::SetZoomIntegral(double fZoom)
 {
     // Clip the zoom factor to the valid range marked by nMinZoom as
     // previously calculated by <member>CalcMinZoom()</member> and the
     // MAX_ZOOM constant.
-    if ( nZoom > MAX_ZOOM )
-        nZoom = MAX_ZOOM;
-    if ( nZoom < (long) mnMinZoom )
-        nZoom = mnMinZoom;
+    if ( fZoom > MAX_ZOOM )
+    {
+        fZoom = MAX_ZOOM;
+    }
+
+    if ( fZoom < mfMinZoom )
+    {
+        fZoom = mfMinZoom;
+    }
 
     // Calculate the window's new origin.
-    Size aSize = PixelToLogic(GetOutputSizePixel());
-    long nW = aSize.Width()  * GetZoom() / nZoom;
-    long nH = aSize.Height() * GetZoom() / nZoom;
-    maWinPos.X() += (aSize.Width()  - nW) / 2;
-    maWinPos.Y() += (aSize.Height() - nH) / 2;
-    if ( maWinPos.X() < 0 ) maWinPos.X() = 0;
-    if ( maWinPos.Y() < 0 ) maWinPos.Y() = 0;
+    const basegfx::B2DVector aWinSize(GetLogicVector());
+    const double fW(aWinSize.getX() * GetZoom() / fZoom);
+    const double fH(aWinSize.getY() * GetZoom() / fZoom);
+
+    maWinPos.setX(maWinPos.getX() + ((aWinSize.getX() - fW) * 0.5));
+    maWinPos.setY(maWinPos.getY() + ((aWinSize.getY() - fH) * 0.5));
+
+    if(maWinPos.getX() < 0.0)
+    {
+        maWinPos.setX(0.0);
+    }
+
+    if(maWinPos.getY() < 0.0)
+    {
+        maWinPos.setY(0.0);
+    }
 
     // Finally update this window's map mode to the given zoom factor that
     // has been clipped to the valid range.
-    SetZoomFactor(nZoom);
+    SetZoomFactor(fZoom);
 }
 
-long Window::GetZoomForRect( const Rectangle& rZoomRect )
+double Window::GetZoomForRange(const basegfx::B2DRange& rZoomRange)
 {
-    long nRetZoom = 100;
+    const basegfx::B2DVector aZoomScale(rZoomRange.getRange());
+    double fRetZoom(100.0);
 
-    if( (rZoomRect.GetWidth() != 0) && (rZoomRect.GetHeight() != 0))
+    if(!aZoomScale.equalZero())
     {
         // Calculate the scale factors which will lead to the given
         // rectangle being fully visible (when translated accordingly) as
         // large as possible in the output area independently in both
         // coordinate directions .
-        sal_uLong nX(0L);
-        sal_uLong nY(0L);
+        double fX(0.0);
+        double fY(0.0);
+        const basegfx::B2DVector aWinSize(GetLogicVector());
 
-        const Size aWinSize( PixelToLogic(GetOutputSizePixel()) );
-        if(rZoomRect.GetHeight())
+        if(!basegfx::fTools::equalZero(aZoomScale.getY()))
         {
-            nX = (sal_uLong) ((double) aWinSize.Height()
-               * (double) ZOOM_MULTIPLICATOR / (double) rZoomRect.GetHeight());
+            fX = aWinSize.getY() / aZoomScale.getY();
         }
 
-        if(rZoomRect.GetWidth())
+        if(!basegfx::fTools::equalZero(aZoomScale.getX()))
         {
-            nY = (sal_uLong) ((double) aWinSize.Width()
-                * (double) ZOOM_MULTIPLICATOR / (double) rZoomRect.GetWidth());
+            fY = aWinSize.getX() / aZoomScale.getX();
         }
 
         // Use the smaller one of both so that the zoom rectangle will be
         // fully visible with respect to both coordinate directions.
-        sal_uLong nFact = Min(nX, nY);
+        double fFact(std::min(fX, fY));
 
         // Transform the current zoom factor so that it leads to the desired
         // scaling.
-        nRetZoom = nFact * GetZoom() / ZOOM_MULTIPLICATOR;
+        fRetZoom = fFact * GetZoom();
 
         // Calculate the new origin.
-        if ( nFact == 0 )
+        if(basegfx::fTools::equalZero(fFact))
         {
             // Don't change anything if the scale factor is degenrate.
-            nRetZoom = GetZoom();
+            fRetZoom = GetZoom();
         }
         else
         {
             // Clip the zoom factor to the valid range marked by nMinZoom as
             // previously calculated by <member>CalcMinZoom()</member> and the
             // MAX_ZOOM constant.
-            if ( nRetZoom > MAX_ZOOM )
-                nRetZoom = MAX_ZOOM;
-            if ( nRetZoom < (long) mnMinZoom )
-                nRetZoom = mnMinZoom;
+            if(fRetZoom > MAX_ZOOM)
+            {
+                fRetZoom = MAX_ZOOM;
+            }
+
+            if(fRetZoom < mfMinZoom)
+            {
+                fRetZoom = mfMinZoom;
+            }
        }
     }
 
-    return nRetZoom;
+    return fRetZoom;
 }
 
 /** Recalculate the zoom factor and translation so that the given rectangle
     is displayed centered and as large as possible while still being fully
     visible in the window.
 */
-long Window::SetZoomRect (const Rectangle& rZoomRect)
+double Window::SetZoomRange(const basegfx::B2DRange& rZoomRange)
 {
-    long nNewZoom = 100;
+    const basegfx::B2DVector aZoomScale(rZoomRange.getRange());
+    double fNewZoom(100.0);
 
-    if (rZoomRect.GetWidth() == 0 || rZoomRect.GetHeight() == 0)
+    if(aZoomScale.equalZero())
     {
         // The given rectangle is degenerate.  Use the default zoom factor
         // (above) of 100%.
-        SetZoomIntegral(nNewZoom);
+        SetZoomIntegral(fNewZoom);
     }
     else
     {
-        Point aPos = rZoomRect.TopLeft();
+        const basegfx::B2DPoint aPos(rZoomRange.getMinimum());
         // Transform the output area from pixel coordinates into logical
         // coordinates.
-        Size aWinSize = PixelToLogic(GetOutputSizePixel());
-        // Paranoia!  The degenerate case of zero width or height has been
-        // taken care of above.
-        DBG_ASSERT(rZoomRect.GetWidth(), "ZoomRect-Breite = 0!");
-        DBG_ASSERT(rZoomRect.GetHeight(), "ZoomRect-Hoehe = 0!");
+        const basegfx::B2DVector aWinSize(GetLogicVector());
 
         // Calculate the scale factors which will lead to the given
         // rectangle being fully visible (when translated accordingly) as
         // large as possible in the output area independently in both
         // coordinate directions .
-        sal_uLong nX(0L);
-        sal_uLong nY(0L);
+        double fX(0.0);
+        double fY(0.0);
 
-        if(rZoomRect.GetHeight())
+        if(!basegfx::fTools::equalZero(aZoomScale.getX()))
         {
-            nX = (sal_uLong) ((double) aWinSize.Height()
-               * (double) ZOOM_MULTIPLICATOR / (double) rZoomRect.GetHeight());
+            fX = aWinSize.getX() / aZoomScale.getX();
         }
 
-        if(rZoomRect.GetWidth())
+        if(!basegfx::fTools::equalZero(aZoomScale.getY()))
         {
-            nY = (sal_uLong) ((double) aWinSize.Width()
-                * (double) ZOOM_MULTIPLICATOR / (double) rZoomRect.GetWidth());
+            fY = aWinSize.getY() / aZoomScale.getY();
         }
 
         // Use the smaller one of both so that the zoom rectangle will be
         // fully visible with respect to both coordinate directions.
-        sal_uLong nFact = Min(nX, nY);
+        double fFact(std::min(fX, fY));
 
         // Transform the current zoom factor so that it leads to the desired
         // scaling.
-        long nZoom = nFact * GetZoom() / ZOOM_MULTIPLICATOR;
+        const double fZoom(fFact * GetZoom());
 
         // Calculate the new origin.
-        if ( nFact == 0 )
+        if(basegfx::fTools::equalZero(fFact))
         {
             // Don't change anything if the scale factor is degenrate.
-            nNewZoom = GetZoom();
+            fNewZoom = GetZoom();
         }
         else
         {
             // Calculate the new window position that centers the given
             // rectangle on the screen.
-            if ( nZoom > MAX_ZOOM )
-                nFact = nFact * MAX_ZOOM / nZoom;
+            if ( fZoom > MAX_ZOOM )
+            {
+                fFact = fFact * MAX_ZOOM / fZoom;
+            }
 
             maWinPos = maViewOrigin + aPos;
 
-            aWinSize.Width() = (long) ((double) aWinSize.Width() * (double) ZOOM_MULTIPLICATOR / (double) nFact);
-            maWinPos.X() += (rZoomRect.GetWidth() - aWinSize.Width()) / 2;
-            aWinSize.Height() = (long) ((double) aWinSize.Height() * (double) ZOOM_MULTIPLICATOR / (double) nFact);
-            maWinPos.Y() += (rZoomRect.GetHeight() - aWinSize.Height()) / 2;
+            const double fNewWinX(aWinSize.getX() / fFact);
+            const double fNewWinY(aWinSize.getY() / fFact);
 
-            if ( maWinPos.X() < 0 ) maWinPos.X() = 0;
-            if ( maWinPos.Y() < 0 ) maWinPos.Y() = 0;
+            maWinPos.setX(maWinPos.getX() + ((aZoomScale.getX() - fNewWinX) * 0.5));
+            maWinPos.setY(maWinPos.getY() + ((aZoomScale.getY() - fNewWinY) * 0.5));
+
+            if(maWinPos.getX() < 0.0)
+            {
+                maWinPos.setX(0.0);
+            }
+
+            if(maWinPos.getY() < 0.0)
+            {
+                maWinPos.setY(0.0);
+            }
 
             // Adapt the window's map mode to the new zoom factor.
-            nNewZoom = SetZoomFactor(nZoom);
+            fNewZoom = SetZoomFactor(fZoom);
         }
     }
 
-    return(nNewZoom);
+    return(fNewZoom);
 }
 
 
@@ -661,91 +683,61 @@ void Window::SetMinZoomAutoCalc (bool bAuto)
 |*
 \************************************************************************/
 
-void Window::UpdateMapOrigin(sal_Bool bInvalidate)
+void Window::UpdateMapOrigin(bool bInvalidate)
 {
-    sal_Bool    bChanged = sal_False;
-    Size    aWinSize = PixelToLogic(GetOutputSizePixel());
+    bool bChanged(false);
 
     if ( mbCenterAllowed )
     {
-        if ( maWinPos.X() > maViewSize.Width() - aWinSize.Width() )
+        const basegfx::B2DVector aWinSize(GetLogicVector());
+
+        if(basegfx::fTools::more(maWinPos.getX(), maViewSize.getX() - aWinSize.getX()))
         {
-            maWinPos.X() = maViewSize.Width() - aWinSize.Width();
-            bChanged = sal_True;
+            maWinPos.setX(maViewSize.getX() - aWinSize.getX());
+            bChanged = true;
         }
-        if ( maWinPos.Y() > maViewSize.Height() - aWinSize.Height() )
+
+        if(basegfx::fTools::more(maWinPos.getY(), maViewSize.getY() - aWinSize.getY()))
         {
-            maWinPos.Y() = maViewSize.Height() - aWinSize.Height();
-            bChanged = sal_True;
+            maWinPos.setY(maViewSize.getY() - aWinSize.getY());
+            bChanged = true;
         }
-        if ( aWinSize.Width() > maViewSize.Width() || maWinPos.X() < 0 )
+
+        if(basegfx::fTools::more(aWinSize.getX(), maViewSize.getX()) || (maWinPos.getX() < 0.0))
         {
-            maWinPos.X() = maViewSize.Width()  / 2 - aWinSize.Width()  / 2;
-            bChanged = sal_True;
+            maWinPos.setX((maViewSize.getX() - aWinSize.getX()) * 0.5);
+            bChanged = true;
         }
-        if ( aWinSize.Height() > maViewSize.Height() || maWinPos.Y() < 0 )
+
+        if(basegfx::fTools::more(aWinSize.getY(), maViewSize.getY()) || (maWinPos.getY() < 0.0 ))
         {
-            maWinPos.Y() = maViewSize.Height() / 2 - aWinSize.Height() / 2;
-            bChanged = sal_True;
+            maWinPos.setY((maViewSize.getY() - aWinSize.getY()) * 0.5);
+            bChanged = true;
         }
     }
 
-    UpdateMapMode ();
+    UpdateMapMode();
 
-    if (bChanged && bInvalidate)
-        Invalidate();
-}
-
-
-
-
-void Window::UpdateMapMode (void)
-{
-    Size aWinSize = PixelToLogic(GetOutputSizePixel());
-    maWinPos -= maViewOrigin;
-    Size aPix(maWinPos.X(), maWinPos.Y());
-    aPix = LogicToPixel(aPix);
-    // Groesse muss vielfaches von BRUSH_SIZE sein, damit Muster
-    // richtig dargestellt werden
-    // #i2237#
-    // removed old stuff here which still forced zoom to be
-    // %BRUSH_SIZE which is outdated now
-
-    if (mpViewShell && mpViewShell->ISA(DrawViewShell))
+    if(bChanged && bInvalidate)
     {
-        Size aViewSizePixel = LogicToPixel(maViewSize);
-        Size aWinSizePixel = LogicToPixel(aWinSize);
-
-        // Seite soll nicht am Fensterrand "kleben"
-        if (aPix.Width() == 0)
-        {
-            // #i2237#
-            // Since BRUSH_SIZE alignment is outdated now, i use the
-            // former constant here directly
-            aPix.Width() -= 8;
-        }
-        if (aPix.Height() == 0)
-        {
-            // #i2237#
-            // Since BRUSH_SIZE alignment is outdated now, i use the
-            // former constant here directly
-            aPix.Height() -= 8;
-        }
+        Invalidate();
     }
-
-    aPix = PixelToLogic(aPix);
-    maWinPos.X() = aPix.Width();
-    maWinPos.Y() = aPix.Height();
-    Point aNewOrigin (-maWinPos.X(), -maWinPos.Y());
-    maWinPos += maViewOrigin;
-
-    MapMode aMap(GetMapMode());
-    aMap.SetOrigin(aNewOrigin);
-    SetMapMode(aMap);
 }
 
+void Window::UpdateMapMode(void)
+{
+    const Point aNewOffset(
+        basegfx::fround(maViewOrigin.getX() - maWinPos.getX()),
+        basegfx::fround(maViewOrigin.getY() - maWinPos.getY()));
+    MapMode aMap(GetMapMode());
 
+    if(aMap.GetOrigin() != aNewOffset)
+    {
+        aMap.SetOrigin(aNewOffset);
 
+        SetMapMode(aMap);
+    }
+}
 
 /*************************************************************************
 |*
@@ -756,7 +748,7 @@ void Window::UpdateMapMode (void)
 
 double Window::GetVisibleX()
 {
-    return ((double) maWinPos.X() / maViewSize.Width());
+    return maWinPos.getX() / maViewSize.getX();
 }
 
 /*************************************************************************
@@ -768,7 +760,7 @@ double Window::GetVisibleX()
 
 double Window::GetVisibleY()
 {
-    return ((double) maWinPos.Y() / maViewSize.Height());
+    return maWinPos.getY() / maViewSize.getY();
 }
 
 /*************************************************************************
@@ -781,17 +773,23 @@ double Window::GetVisibleY()
 
 void Window::SetVisibleXY(double fX, double fY)
 {
-    long nOldX = maWinPos.X();
-    long nOldY = maWinPos.Y();
+    const basegfx::B2DPoint aOldWinPos(maWinPos);
 
-    if ( fX >= 0 )
-        maWinPos.X() = (long) (fX * maViewSize.Width());
-    if ( fY >= 0 )
-        maWinPos.Y() = (long) (fY * maViewSize.Height());
-    UpdateMapOrigin(sal_False);
-    //  Size sz(nOldX - aWinPos.X(), nOldY - aWinPos.Y());
-    //  sz = LogicToPixel(sz);
-    Scroll(nOldX - maWinPos.X(), nOldY - maWinPos.Y(), SCROLL_CHILDREN);
+    if(basegfx::fTools::moreOrEqual(fX, 0.0))
+    {
+        maWinPos.setX(fX * maViewSize.getX());
+    }
+
+    if(basegfx::fTools::moreOrEqual(fY, 0.0))
+    {
+        maWinPos.setY(fY * maViewSize.getY());
+    }
+
+    UpdateMapOrigin(false);
+    Scroll(
+        basegfx::fround(aOldWinPos.getX() - maWinPos.getX()),
+        basegfx::fround(aOldWinPos.getY() - maWinPos.getY()),
+        SCROLL_CHILDREN);
     Update();
 }
 
@@ -802,12 +800,16 @@ void Window::SetVisibleXY(double fX, double fY)
 |*
 \************************************************************************/
 
-double Window::GetVisibleWidth()
+double Window::GetVisibleWidthRelativeToView()
 {
-    Size aWinSize = PixelToLogic(GetOutputSizePixel());
-    if ( aWinSize.Width() > maViewSize.Width() )
-        aWinSize.Width() = maViewSize.Width();
-    return ((double) aWinSize.Width() / maViewSize.Width());
+    basegfx::B2DVector aWinSize(GetLogicVector());
+
+    if(basegfx::fTools::more(aWinSize.getX(), maViewSize.getX()))
+    {
+        aWinSize.setX(maViewSize.getX());
+    }
+
+    return aWinSize.getX() / maViewSize.getX();
 }
 
 /*************************************************************************
@@ -817,12 +819,16 @@ double Window::GetVisibleWidth()
 |*
 \************************************************************************/
 
-double Window::GetVisibleHeight()
+double Window::GetVisibleHeightRelativeToView()
 {
-    Size aWinSize = PixelToLogic(GetOutputSizePixel());
-    if ( aWinSize.Height() > maViewSize.Height() )
-        aWinSize.Height() = maViewSize.Height();
-    return ((double) aWinSize.Height() / maViewSize.Height());
+    basegfx::B2DVector aWinSize(GetLogicVector());
+
+    if(basegfx::fTools::more(aWinSize.getY(), maViewSize.getY()))
+    {
+        aWinSize.setY(maViewSize.getY());
+    }
+
+    return aWinSize.getY() / maViewSize.getY();
 }
 
 /*************************************************************************
@@ -834,7 +840,7 @@ double Window::GetVisibleHeight()
 
 double Window::GetScrlLineWidth()
 {
-    return (GetVisibleWidth() * SCROLL_LINE_FACT);
+    return (GetVisibleWidthRelativeToView() * SCROLL_LINE_FACT);
 }
 
 /*************************************************************************
@@ -846,7 +852,7 @@ double Window::GetScrlLineWidth()
 
 double Window::GetScrlLineHeight()
 {
-    return (GetVisibleHeight() * SCROLL_LINE_FACT);
+    return (GetVisibleHeightRelativeToView() * SCROLL_LINE_FACT);
 }
 
 /*************************************************************************
@@ -858,7 +864,7 @@ double Window::GetScrlLineHeight()
 
 double Window::GetScrlPageWidth()
 {
-    return (GetVisibleWidth() * SCROLL_PAGE_FACT);
+    return (GetVisibleWidthRelativeToView() * SCROLL_PAGE_FACT);
 }
 
 /*************************************************************************
@@ -870,7 +876,7 @@ double Window::GetScrlPageWidth()
 
 double Window::GetScrlPageHeight()
 {
-    return (GetVisibleHeight() * SCROLL_PAGE_FACT);
+    return (GetVisibleHeightRelativeToView() * SCROLL_PAGE_FACT);
 }
 
 /*************************************************************************
@@ -950,16 +956,16 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
                 sal_uInt16                  nPreviewSlot;
 
                 if( rStyleSettings.GetHighContrastMode() )
-                    nOutputMode = ViewShell::OUTPUT_DRAWMODE_CONTRAST;
+                    nOutputMode = SD_OUTPUT_DRAWMODE_CONTRAST;
                 else
-                    nOutputMode = ViewShell::OUTPUT_DRAWMODE_COLOR;
+                    nOutputMode = SD_OUTPUT_DRAWMODE_COLOR;
 
                 if( rStyleSettings.GetHighContrastMode() && aAccOptions.GetIsForPagePreviews() )
                     nPreviewSlot = SID_PREVIEW_QUALITY_CONTRAST;
                 else
                     nPreviewSlot = SID_PREVIEW_QUALITY_COLOR;
 
-                if( mpViewShell->ISA( DrawViewShell ) )
+                if( dynamic_cast< DrawViewShell* >(mpViewShell) )
                 {
                     SetDrawMode( nOutputMode );
                     mpViewShell->GetFrameView()->SetDrawMode( nOutputMode );
@@ -969,7 +975,7 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
                 }
 
                 // #103100# Overwrite window color for OutlineView
-                if( mpViewShell->ISA(OutlineViewShell ) )
+                if( dynamic_cast< OutlineViewShell* >(mpViewShell) )
                 {
                     svtools::ColorConfig aColorConfig;
                     const Color aDocColor( aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor );
@@ -982,9 +988,9 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
                 mpViewShell->ArrangeGUIElements();
 
                 // #101928# re-create handles to show new outfit
-                if(mpViewShell->ISA(DrawViewShell))
+                if(dynamic_cast< DrawViewShell* >(mpViewShell))
                 {
-                    mpViewShell->GetView()->AdjustMarkHdl();
+                    mpViewShell->GetView()->SetMarkHandles();
                 }
             }
         }
@@ -1025,7 +1031,7 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
             {
                 DrawDocShell* pDocSh = mpViewShell->GetDocSh();
                 if( pDocSh )
-                    pDocSh->SetPrinter( pDocSh->GetPrinter( sal_True ) );
+                    pDocSh->SetPrinter( pDocSh->GetPrinter( true ) );
             }
         }
 
@@ -1042,7 +1048,7 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
             {
                 DrawDocShell* pDocSh = mpViewShell->GetDocSh();
                 if( pDocSh )
-                    pDocSh->SetPrinter( pDocSh->GetPrinter( sal_True ) );
+                    pDocSh->SetPrinter( pDocSh->GetPrinter( true ) );
             }
         }
 
@@ -1069,8 +1075,10 @@ sal_Int8 Window::AcceptDrop( const AcceptDropEvent& rEvt )
         if( mpViewShell )
             nRet = mpViewShell->AcceptDrop( rEvt, *this, this, SDRPAGE_NOTFOUND, SDRLAYER_NOTFOUND );
 
-        if (mbUseDropScroll && ! mpViewShell->ISA(OutlineViewShell))
-            DropScroll( rEvt.maPosPixel );
+        if (mbUseDropScroll && !dynamic_cast< OutlineViewShell* >(mpViewShell))
+        {
+            DropScroll( basegfx::B2DPoint(rEvt.maPosPixel.X(), rEvt.maPosPixel.Y()) );
+        }
     }
 
     return nRet;
@@ -1111,45 +1119,47 @@ void Window::SetUseDropScroll (bool bUseDropScroll)
 |*
 \************************************************************************/
 
-void Window::DropScroll(const Point& rMousePos)
+void Window::DropScroll(const basegfx::B2DPoint& rMousePos)
 {
-    short nDx = 0;
-    short nDy = 0;
+    const basegfx::B2DVector aDiscretePixels(GetDiscreteVector());
+    basegfx::B2DVector fDelta(0.0, 0.0);
 
-    Size aSize = GetOutputSizePixel();
-
-    if (aSize.Width() > SCROLL_SENSITIVE * 3)
+    if (aDiscretePixels.getX() > SCROLL_SENSITIVE * 3)
     {
-        if ( rMousePos.X() < SCROLL_SENSITIVE )
+        if ( rMousePos.getX() < SCROLL_SENSITIVE )
         {
-            nDx = -1;
+            fDelta.setX(-1.0);
         }
 
-        if ( rMousePos.X() >= aSize.Width() - SCROLL_SENSITIVE )
+        if ( rMousePos.getX() >= aDiscretePixels.getX() - SCROLL_SENSITIVE )
         {
-            nDx = 1;
+            fDelta.setX(1.0);
         }
     }
 
-    if (aSize.Height() > SCROLL_SENSITIVE * 3)
+    if (aDiscretePixels.getY() > SCROLL_SENSITIVE * 3)
     {
-        if ( rMousePos.Y() < SCROLL_SENSITIVE )
+        if ( rMousePos.getY() < SCROLL_SENSITIVE )
         {
-            nDy = -1;
+            fDelta.setY(-1.0);
         }
 
-        if ( rMousePos.Y() >= aSize.Height() - SCROLL_SENSITIVE )
+        if ( rMousePos.getY() >= aDiscretePixels.getY() - SCROLL_SENSITIVE )
         {
-            nDy = 1;
+            fDelta.setY(1.0);
         }
     }
 
-    if ( (nDx || nDy) && (rMousePos.X()!=0 || rMousePos.Y()!=0 ) )
+    if(!fDelta.equalZero() && !rMousePos.equalZero())
     {
         if (mnTicks > 20)
-            mpViewShell->ScrollLines(nDx, nDy);
+        {
+            mpViewShell->ScrollLines(fDelta);
+        }
         else
+        {
             mnTicks ++;
+        }
     }
 }
 

@@ -36,8 +36,6 @@ class SVX_DLLPUBLIC SdrGrafLuminanceItem : public SdrSignedPercentItem
 {
 public:
 
-                            TYPEINFO();
-
                             SdrGrafLuminanceItem( short nLuminancePercent = 0 ) : SdrSignedPercentItem( SDRATTR_GRAFLUMINANCE, nLuminancePercent ) {}
                             SdrGrafLuminanceItem( SvStream& rIn ) : SdrSignedPercentItem( SDRATTR_GRAFLUMINANCE, rIn ) {}
 
@@ -52,8 +50,6 @@ public:
 class SVX_DLLPUBLIC SdrGrafContrastItem : public SdrSignedPercentItem
 {
 public:
-
-                            TYPEINFO();
 
                             SdrGrafContrastItem( short nContrastPercent = 0 ) : SdrSignedPercentItem( SDRATTR_GRAFCONTRAST, nContrastPercent ) {}
                             SdrGrafContrastItem( SvStream& rIn ) : SdrSignedPercentItem( SDRATTR_GRAFCONTRAST, rIn ) {}

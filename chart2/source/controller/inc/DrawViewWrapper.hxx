@@ -49,7 +49,7 @@ public:
 class DrawViewWrapper : public E3dView
 {
 public:
-    DrawViewWrapper(SdrModel* pModel, OutputDevice* pOut, bool bPaintPageForEditMode);
+    DrawViewWrapper(SdrModel& rModel, OutputDevice* pOut, bool bPaintPageForEditMode);
     virtual ~DrawViewWrapper();
 
     //triggers the use of an updated first page
@@ -59,17 +59,12 @@ public:
     void attachParentReferenceDevice(
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xChartModel );
 
-    //fill list of selection handles 'aHdl'
+    //fill list of selection handles 'maViewHandleList'
     virtual void SetMarkHandles();
 
     SdrPageView*    GetPageView() const;
 
-    SdrObject* getHitObject( const Point& rPnt ) const;
-    //sal_Bool PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrPageView*& rpPV, sal_uLong nOptions, SdrObject** ppRootObj, sal_uLong* pnMarkNum=NULL, sal_uInt16* pnPassNum=NULL) const;
-    //sal_Bool PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrPageView*& rpPV, sal_uLong nOptions=0) const;
-    //sal_Bool PickObj(const Point& rPnt, SdrObject*& rpObj, SdrPageView*& rpPV, sal_uLong nOptions=0) const { return PickObj(rPnt,nHitTolLog,rpObj,rpPV,nOptions); }
-
-    //void MarkObj(SdrObject* pObj, SdrPageView* pPV, sal_Bool bUnmark=sal_False, sal_Bool bImpNoSetMarkHdl=sal_False);
+    SdrObject* getHitObject( const basegfx::B2DPoint& rPnt ) const;
     void MarkObject( SdrObject* pObj );
 
     //----------------------
@@ -77,14 +72,13 @@ public:
     void setMarkHandleProvider( MarkHandleProvider* pMarkHandleProvider );
     void CompleteRedraw(OutputDevice* pOut, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0);
 
-    SdrObject*   getSelectedObject() const;
     SdrObject*   getTextEditObject() const;
     SdrOutliner* getOutliner() const;
 
     SfxItemSet   getPositionAndSizeItemSetFromMarkedObject() const;
 
     SdrObject* getNamedSdrObject( const rtl::OUString& rName ) const;
-    bool IsObjectHit( SdrObject* pObj, const Point& rPnt ) const;
+    bool IsObjectHit( SdrObject* pObj, const basegfx::B2DPoint& rPnt ) const;
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 

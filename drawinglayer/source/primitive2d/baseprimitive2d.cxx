@@ -47,11 +47,6 @@ namespace drawinglayer
         {
         }
 
-        bool BasePrimitive2D::operator==( const BasePrimitive2D& rPrimitive ) const
-        {
-            return (getPrimitive2DID() == rPrimitive.getPrimitive2DID());
-        }
-
         basegfx::B2DRange BasePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
             return getB2DRangeFromPrimitive2DSequence(get2DDecomposition(rViewInformation), rViewInformation);
@@ -178,69 +173,6 @@ namespace drawinglayer
             }
 
             return aRetval;
-        }
-
-        bool arePrimitive2DReferencesEqual(const Primitive2DReference& rxA, const Primitive2DReference& rxB)
-        {
-            const sal_Bool bAIs(rxA.is());
-
-            if(bAIs != rxB.is())
-            {
-                return false;
-            }
-
-            if(!bAIs)
-            {
-                return true;
-            }
-
-            const BasePrimitive2D* pA(dynamic_cast< const BasePrimitive2D* >(rxA.get()));
-            const BasePrimitive2D* pB(dynamic_cast< const BasePrimitive2D* >(rxB.get()));
-            const bool bAEqualZero(pA == 0L);
-
-            if(bAEqualZero != (pB == 0L))
-            {
-                return false;
-            }
-
-            if(bAEqualZero)
-            {
-                return false;
-            }
-
-            return (pA->operator==(*pB));
-        }
-
-        bool arePrimitive2DSequencesEqual(const Primitive2DSequence& rA, const Primitive2DSequence& rB)
-        {
-            const sal_Bool bAHasElements(rA.hasElements());
-
-            if(bAHasElements != rB.hasElements())
-            {
-                return false;
-            }
-
-            if(!bAHasElements)
-            {
-                return true;
-            }
-
-            const sal_Int32 nCount(rA.getLength());
-
-            if(nCount != rB.getLength())
-            {
-                return false;
-            }
-
-            for(sal_Int32 a(0L); a < nCount; a++)
-            {
-                if(!arePrimitive2DReferencesEqual(rA[a], rB[a]))
-                {
-                    return false;
-                }
-            }
-
-            return true;
         }
 
         // concatenate sequence

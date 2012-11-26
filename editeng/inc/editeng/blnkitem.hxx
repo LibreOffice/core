@@ -45,9 +45,8 @@ namespace rtl
 class EDITENG_DLLPUBLIC SvxBlinkItem : public SfxBoolItem
 {
 public:
-    TYPEINFO();
-
-    SvxBlinkItem( const sal_Bool bBlink /*= sal_False*/, const sal_uInt16 nId  );
+    POOLITEM_FACTORY()
+    SvxBlinkItem( const sal_Bool bBlink = sal_False, const sal_uInt16 nId = 0 );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;

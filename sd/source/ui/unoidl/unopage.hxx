@@ -83,10 +83,10 @@ protected:
     rtl::OUString getBookmarkURL() const;
     void setBookmarkURL( rtl::OUString& rURL );
 
-    void SetLftBorder( sal_Int32 nValue );
-    void SetRgtBorder( sal_Int32 nValue );
-    void SetUppBorder( sal_Int32 nValue );
-    void SetLwrBorder( sal_Int32 nValue );
+    void SetLeftPageBorder( sal_Int32 nValue );
+    void SetRightPageBorder( sal_Int32 nValue );
+    void SetTopPageBorder( sal_Int32 nValue );
+    void SetBottomPageBorder( sal_Int32 nValue );
 
     void SetWidth( sal_Int32 nWidth );
     void SetHeight( sal_Int32 nHeight );

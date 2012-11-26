@@ -56,6 +56,7 @@
 #include <sortedobjs.hxx>
 #include <viewsh.hxx>
 #include <viewimp.hxx>
+#include <svx/svdlegacy.hxx>
 
 
 using namespace ::com::sun::star;
@@ -109,9 +110,6 @@ SwFlyFreeFrm::~SwFlyFreeFrm()
     }
 }
 
-// --> OD 2004-06-29 #i28701#
-TYPEINIT1(SwFlyFreeFrm,SwFlyFrm);
-// <--
 /*************************************************************************
 |*
 |*  SwFlyFreeFrm::NotifyBackground()
@@ -550,9 +548,6 @@ SwFlyLayFrm::SwFlyLayFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
     bLayout = sal_True;
 }
 
-// --> OD 2004-06-29 #i28701#
-TYPEINIT1(SwFlyLayFrm,SwFlyFreeFrm);
-// <--
 /*************************************************************************
 |*
 |*  SwFlyLayFrm::Modify()
@@ -648,10 +643,10 @@ void SwFlyLayFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 
 void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
 {
-    if ( !pNew->GetVirtDrawObj()->IsInserted() )
-        getRootFrm()->GetDrawPage()->InsertObject(
-                (SdrObject*)pNew->GetVirtDrawObj(),
-                pNew->GetVirtDrawObj()->GetReferencedObj().GetOrdNumDirect() );
+    if ( !pNew->GetVirtDrawObj()->IsObjectInserted() )
+        getRootFrm()->GetDrawPage()->InsertObjectToSdrObjList(
+                *pNew->GetVirtDrawObj(),
+                pNew->GetVirtDrawObj()->GetReferencedObj().GetNavigationPosition() );
 
     InvalidateSpelling();
     InvalidateSmartTags();  // SMARTTAGS
@@ -666,15 +661,26 @@ void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
 
     SdrObject* pObj = pNew->GetVirtDrawObj();
     ASSERT( pNew->GetAnchorFrm(), "Fly without Anchor" );
-    SwFlyFrm* pFly = (SwFlyFrm*)pNew->GetAnchorFrm()->FindFlyFrm();
-    if ( pFly && pObj->GetOrdNum() < pFly->GetVirtDrawObj()->GetOrdNum() )
+    const SwFlyFrm* pFly = pNew->GetAnchorFrm()->FindFlyFrm();
+
+    if ( pFly && pObj->GetNavigationPosition() < pFly->GetVirtDrawObj()->GetNavigationPosition() )
     {
         //#i119945# set pFly's OrdNum to _rNewObj's. So when pFly is removed by Undo, the original OrdNum will not be changed.
-        sal_uInt32 nNewNum = pObj->GetOrdNumDirect();
-        if ( pObj->GetPage() )
-            pObj->GetPage()->SetObjectOrdNum( pFly->GetVirtDrawObj()->GetOrdNumDirect(), nNewNum );
+        sal_uInt32 nNewNum = pFly->GetVirtDrawObj()->GetNavigationPosition();
+
+        if ( pObj->getParentOfSdrObject() )
+        {
+            pObj->getParentOfSdrObject()->SetNavigationPosition( pFly->GetVirtDrawObj()->GetNavigationPosition(), nNewNum);
+        }
         else
-            pFly->GetVirtDrawObj()->SetOrdNum( nNewNum );
+        {
+            // TTTT: object should always be inserted into an ObjectList, thus this should not
+            // happen. Even if it happens, there is no use in setting an OrdNum since an object
+            // which is not member of an SdrObjLsit by definition has an OrdNum of 0 since it
+            // is not member of a Z-Order (see SdrObject::GetNavigationPosition())
+            OSL_ENSURE(false, "SwPageFrm::AppendFlyToPage tried to set OrdNum for non-inserted SdrObject (!)");
+            // former code: pFly->GetVirtDrawObj()->SetOrdNum( nNewNum );
+        }
     }
 
     //Flys die im Cntnt sitzen beachten wir nicht weiter.
@@ -725,14 +731,15 @@ void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
         for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
         {
             SwAnchoredObject* pTmpObj = rObjs[i];
-            if ( pTmpObj->ISA(SwFlyFrm) )
+            SwFlyFrm* pTmpFly = dynamic_cast< SwFlyFrm* >(pTmpObj);
+
+            if ( pTmpFly )
             {
-                SwFlyFrm* pTmpFly = static_cast<SwFlyFrm*>(pTmpObj);
                 // --> OD 2004-06-30 #i28701# - use new method <GetPageFrm()>
                 if ( pTmpFly->IsFlyFreeFrm() && !pTmpFly->GetPageFrm() )
                     AppendFlyToPage( pTmpFly );
             }
-            else if ( pTmpObj->ISA(SwAnchoredDrawObject) )
+            else if ( dynamic_cast< SwAnchoredDrawObject* >(pTmpObj) )
             {
                 // --> OD 2008-04-22 #i87493#
 //                AppendDrawObjToPage( *pTmpObj );
@@ -761,9 +768,14 @@ void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
 
 void SwPageFrm::RemoveFlyFromPage( SwFlyFrm *pToRemove )
 {
-    const sal_uInt32 nOrdNum = pToRemove->GetVirtDrawObj()->GetOrdNum();
-    getRootFrm()->GetDrawPage()->RemoveObject( nOrdNum );
-    pToRemove->GetVirtDrawObj()->ReferencedObj().SetOrdNum( nOrdNum );
+    const sal_uInt32 nOrdNum = pToRemove->GetVirtDrawObj()->GetNavigationPosition();
+    getRootFrm()->GetDrawPage()->RemoveObjectFromSdrObjList( nOrdNum );
+
+    SdrObject& rRefObj = pToRemove->GetVirtDrawObj()->ReferencedObj();
+    if(rRefObj.getParentOfSdrObject())
+    {
+        rRefObj.getParentOfSdrObject()->SetNavigationPosition(rRefObj.GetNavigationPosition(), nOrdNum );
+    }
 
     if ( GetUpper() )
     {
@@ -893,9 +905,10 @@ void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
         for ( sal_uInt32 i = 0; i < rObjs.Count(); ++i )
         {
             SwAnchoredObject* pObj = rObjs[i];
-            if ( pObj->ISA(SwFlyFrm) )
+            SwFlyFrm* pFly = dynamic_cast< SwFlyFrm* >(pObj);
+
+            if ( pFly )
             {
-                SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pObj);
                 if ( pFly->IsFlyFreeFrm() )
                 {
                     // --> OD 2004-06-30 #i28701# - use new method <GetPageFrm()>
@@ -906,7 +919,7 @@ void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
                         pDest->AppendFlyToPage( pFly );
                 }
             }
-            else if ( pObj->ISA(SwAnchoredDrawObject) )
+            else if ( dynamic_cast< SwAnchoredDrawObject* >(pObj) )
             {
                 RemoveDrawObjFromPage( *pObj );
                 pDest->AppendDrawObjToPage( *pObj );
@@ -924,7 +937,7 @@ void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
 |*************************************************************************/
 void SwPageFrm::AppendDrawObjToPage( SwAnchoredObject& _rNewObj )
 {
-    if ( !_rNewObj.ISA(SwAnchoredDrawObject) )
+    if ( !dynamic_cast< SwAnchoredDrawObject* >(&_rNewObj) )
     {
         ASSERT( false,
                 "SwPageFrm::AppendDrawObjToPage(..) - anchored object of unexcepted type -> object not appended" );
@@ -939,14 +952,24 @@ void SwPageFrm::AppendDrawObjToPage( SwAnchoredObject& _rNewObj )
     ASSERT( _rNewObj.GetAnchorFrm(), "anchored draw object without anchor" );
     SwFlyFrm* pFlyFrm = (SwFlyFrm*)_rNewObj.GetAnchorFrm()->FindFlyFrm();
     if ( pFlyFrm &&
-         _rNewObj.GetDrawObj()->GetOrdNum() < pFlyFrm->GetVirtDrawObj()->GetOrdNum() )
+         _rNewObj.GetDrawObj()->GetNavigationPosition() < pFlyFrm->GetVirtDrawObj()->GetNavigationPosition() )
     {
         //#i119945# set pFly's OrdNum to _rNewObj's. So when pFly is removed by Undo, the original OrdNum will not be changed.
-        sal_uInt32 nNewNum = _rNewObj.GetDrawObj()->GetOrdNumDirect();
-        if ( _rNewObj.GetDrawObj()->GetPage() )
-            _rNewObj.DrawObj()->GetPage()->SetObjectOrdNum( pFlyFrm->GetVirtDrawObj()->GetOrdNumDirect(), nNewNum );
+        sal_uInt32 nNewNum = pFlyFrm->GetVirtDrawObj()->GetNavigationPosition();
+
+        if ( _rNewObj.GetDrawObj()->getParentOfSdrObject() )
+        {
+            _rNewObj.DrawObj()->getParentOfSdrObject()->SetNavigationPosition(pFlyFrm->GetVirtDrawObj()->GetNavigationPosition(), nNewNum);
+        }
         else
-            pFlyFrm->GetVirtDrawObj()->SetOrdNum( nNewNum );
+        {
+            // TTTT: object should always be inserted into an ObjectList, thus this should not
+            // happen. Even if it happens, there is no use in setting an OrdNum since an object
+            // which is not member of an SdrObjLsit by definition has an OrdNum of 0 since it
+            // is not member of a Z-Order (see SdrObject::GetNavigationPosition())
+            OSL_ENSURE(false, "SwPageFrm::AppendDrawObjToPage try to set OrdNum for non-inserted SdrObject (!)");
+            // former code: pFlyFrm->GetVirtDrawObj()->SetOrdNum( nNewNum );
+        }
     }
 
     if ( FLY_AS_CHAR == _rNewObj.GetFrmFmt().GetAnchor().GetAnchorId() )
@@ -977,7 +1000,7 @@ void SwPageFrm::AppendDrawObjToPage( SwAnchoredObject& _rNewObj )
 
 void SwPageFrm::RemoveDrawObjFromPage( SwAnchoredObject& _rToRemoveObj )
 {
-    if ( !_rToRemoveObj.ISA(SwAnchoredDrawObject) )
+    if ( !dynamic_cast< SwAnchoredDrawObject* >(&_rToRemoveObj) )
     {
         ASSERT( false,
                 "SwPageFrm::RemoveDrawObjFromPage(..) - anchored object of unexcepted type -> object not removed" );
@@ -1063,7 +1086,7 @@ void SwPageFrm::PlaceFly( SwFlyFrm* pFly, SwFlyFrmFmt* pFmt )
 sal_Bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, sal_Bool bMove )
 {
     sal_Bool bRet = sal_True;
-    if ( pSdrObj->ISA(SwVirtFlyDrawObj) )
+    if ( dynamic_cast< const SwVirtFlyDrawObj* >(pSdrObj) )
     {
         const SwFlyFrm* pFly = ((const SwVirtFlyDrawObj*)pSdrObj)->GetFlyFrm();
         const bool bFollowTextFlow = pFly->GetFmt()->GetFollowTextFlow().GetValue();
@@ -1300,7 +1323,7 @@ sal_Bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, sal_Bool bMove )
             }
             long nHeight = (9*(rRect.*fnRect->fnGetHeight)())/10;
             long nTop;
-            const SwFmt *pFmt = ((SwContact*)GetUserCall(pSdrObj))->GetFmt();
+            const SwFmt *pFmt = ((SwContact*)findConnectionToSdrObject(pSdrObj))->GetFmt();
             const SvxULSpaceItem &rUL = pFmt->GetULSpace();
             if( bMove )
             {
@@ -1325,7 +1348,7 @@ sal_Bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, sal_Bool bMove )
     }
     else
     {
-        const SwDrawContact *pC = (const SwDrawContact*)GetUserCall(pSdrObj);
+        const SwDrawContact *pC = (const SwDrawContact*)findConnectionToSdrObject(pSdrObj);
         const SwFrmFmt  *pFmt = (const SwFrmFmt*)pC->GetFmt();
         const SwFmtAnchor &rAnch = pFmt->GetAnchor();
         if ( FLY_AS_CHAR == rAnch.GetAnchorId() )
@@ -1344,23 +1367,21 @@ sal_Bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, sal_Bool bMove )
             long nHeight = (9*(rRect.*fnRect->fnGetHeight)())/10;
             long nTop;
             const SvxULSpaceItem &rUL = pFmt->GetULSpace();
-            SwRect aSnapRect( pSdrObj->GetSnapRect() );
+            SwRect aSnapRect( sdr::legacy::GetSnapRect(*pSdrObj) );
             long nTmpH = 0;
             if( bMove )
             {
-                nTop = (*fnRect->fnYInc)( bVert ? pSdrObj->GetAnchorPos().X() :
-                                       pSdrObj->GetAnchorPos().Y(), -nHeight );
+                const Point aObjAnchor(sdr::legacy::GetAnchorPos(*pSdrObj));
+                nTop = (*fnRect->fnYInc)( bVert ? aObjAnchor.X() : aObjAnchor.Y(), -nHeight );
                 long nWidth = (aSnapRect.*fnRect->fnGetWidth)();
-                (rRect.*fnRect->fnSetLeftAndWidth)( bVert ?
-                            pSdrObj->GetAnchorPos().Y() :
-                            pSdrObj->GetAnchorPos().X(), nWidth );
+                (rRect.*fnRect->fnSetLeftAndWidth)( bVert ? aObjAnchor.Y() : aObjAnchor.X(), nWidth );
             }
             else
             {
                 // OD 2004-04-13 #i26791# - value of <nTmpH> is needed to
                 // calculate value of <nTop>.
-                nTmpH = bVert ? pSdrObj->GetCurrentBoundRect().GetWidth() :
-                                pSdrObj->GetCurrentBoundRect().GetHeight();
+                nTmpH = bVert ? sdr::legacy::GetBoundRect(*pSdrObj).GetWidth() :
+                                sdr::legacy::GetBoundRect(*pSdrObj).GetHeight();
                 nTop = (*fnRect->fnYInc)( (aSnapRect.*fnRect->fnGetTop)(),
                                           rUL.GetLower() + nTmpH - nHeight );
             }

@@ -59,8 +59,8 @@ void __EXPORT ScNavigatorControllerItem::StateChanged( sal_uInt16 /* nSID */, Sf
         case SID_CURRENTCELL:
             if ( pItem )
             {
-//              const SfxPointItem* pCellPosItem = PTR_CAST(SfxPointItem, pItem);
-                const SfxStringItem* pCellPosItem = PTR_CAST(SfxStringItem, pItem);
+//              const SfxPointItem* pCellPosItem = dynamic_cast< const SfxPointItem* >( pItem);
+                const SfxStringItem* pCellPosItem = dynamic_cast< const SfxStringItem* >( pItem);
 
                 DBG_ASSERT( pCellPosItem, "SfxStringItem expected!" );
 
@@ -86,7 +86,7 @@ void __EXPORT ScNavigatorControllerItem::StateChanged( sal_uInt16 /* nSID */, Sf
         case SID_CURRENTTAB:
             if ( pItem )
             {
-                const SfxUInt16Item* pTabItem = PTR_CAST(SfxUInt16Item, pItem);
+                const SfxUInt16Item* pTabItem = dynamic_cast< const SfxUInt16Item* >( pItem);
 
                 DBG_ASSERT( pTabItem, "SfxUInt16Item expected!" );
 

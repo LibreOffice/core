@@ -34,8 +34,6 @@ class XMLControlOOoTransformerContext : public XMLTransformerContext
     ::rtl::OUString m_aElemQName;
 
 public:
-    TYPEINFO();
-
     XMLControlOOoTransformerContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName );
 

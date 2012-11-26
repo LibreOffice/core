@@ -236,7 +236,7 @@ void __EXPORT SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
     if( pItem )
     {
         aTsbStartInside.EnableTriState( sal_False );
-        sal_Bool bValue = ( ( const SdrTextAniStartInsideItem* )pItem )->GetValue();
+        sal_Bool bValue = ( ( const SdrYesNoItem* )pItem )->GetValue();
         if( bValue )
             aTsbStartInside.SetState( STATE_CHECK );
         else
@@ -253,7 +253,7 @@ void __EXPORT SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
     if( pItem )
     {
         aTsbStopInside.EnableTriState( sal_False );
-        sal_Bool bValue = ( ( const SdrTextAniStopInsideItem* )pItem )->GetValue();
+        sal_Bool bValue = ( ( const SdrYesNoItem* )pItem )->GetValue();
         if( bValue )
             aTsbStopInside.SetState( STATE_CHECK );
         else
@@ -270,7 +270,7 @@ void __EXPORT SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
     if( pItem )
     {
         aTsbEndless.EnableTriState( sal_False );
-        long nValue = (long) ( ( const SdrTextAniCountItem* )pItem )->GetValue();
+        long nValue = (long) ( ( const SfxUInt16Item* )pItem )->GetValue();
         aNumFldCount.SetValue( nValue );
         if( nValue == 0 )
         {
@@ -413,7 +413,7 @@ sal_Bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
     eState = aTsbStartInside.GetState();
     if( eState != aTsbStartInside.GetSavedValue() )
     {
-        rAttrs.Put( SdrTextAniStartInsideItem( (sal_Bool) STATE_CHECK == eState ) );
+        rAttrs.Put( SdrYesNoItem(SDRATTR_TEXT_ANISTARTINSIDE, (sal_Bool) STATE_CHECK == eState ) );
         bModified = sal_True;
     }
 
@@ -421,7 +421,7 @@ sal_Bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
     eState = aTsbStopInside.GetState();
     if( eState != aTsbStopInside.GetSavedValue() )
     {
-        rAttrs.Put( SdrTextAniStopInsideItem( (sal_Bool) STATE_CHECK == eState ) );
+        rAttrs.Put( SdrYesNoItem(SDRATTR_TEXT_ANISTOPINSIDE, (sal_Bool) STATE_CHECK == eState ) );
         bModified = sal_True;
     }
 
@@ -443,7 +443,7 @@ sal_Bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
             }
         }
         if( bModified )
-            rAttrs.Put( SdrTextAniCountItem( (sal_uInt16) nValue ) );
+            rAttrs.Put( SfxUInt16Item(SDRATTR_TEXT_ANICOUNT, (sal_uInt16) nValue ) );
     }
 
     // Verzoegerung

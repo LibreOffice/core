@@ -36,9 +36,6 @@
 DBG_NAME(SfxVisibilityItem)
 
 //============================================================================
-TYPEINIT1_AUTOFACTORY(SfxVisibilityItem, SfxPoolItem);
-
-//============================================================================
 SfxVisibilityItem::SfxVisibilityItem(sal_uInt16 which, SvStream & rStream):
     SfxPoolItem(which)
 {
@@ -62,7 +59,7 @@ int SfxVisibilityItem::operator ==(const SfxPoolItem & rItem) const
 // virtual
 int SfxVisibilityItem::Compare(const SfxPoolItem & rWith) const
 {
-    DBG_ASSERT(rWith.ISA(SfxVisibilityItem), "SfxVisibilityItem::Compare(): Bad type");
+    DBG_ASSERT(dynamic_cast< const SfxVisibilityItem* >(&rWith), "SfxVisibilityItem::Compare(): Bad type");
     return m_nValue.bVisible == static_cast< SfxVisibilityItem const * >(&rWith)->m_nValue.bVisible ?
                0 : m_nValue.bVisible ? -1 : 1;
 }

@@ -49,7 +49,7 @@ class SdTransferable : public TransferableHelper, public SfxListener
 {
 public:
 
-                                    SdTransferable( SdDrawDocument* pSrcDoc, ::sd::View* pWorkView, sal_Bool bInitOnGetData );
+                                    SdTransferable( SdDrawDocument* pSrcDoc, ::sd::View* pWorkView, bool bInitOnGetData );
                                     ~SdTransferable();
 
     void                            SetDocShell( const SfxObjectShellRef& rRef ) { maDocShellRef = rRef; }
@@ -63,17 +63,17 @@ public:
 
     void                            SetObjectDescriptor( const TransferableObjectDescriptor& rObjDesc );
 
-    void                            SetStartPos( const Point& rStartPos ) { maStartPos = rStartPos; }
-    const Point&                    GetStartPos() const { return maStartPos; }
+    void                            SetStartPos( const basegfx::B2DPoint& rStartPos ) { maStartPos = rStartPos; }
+    const basegfx::B2DPoint&        GetStartPos() const { return maStartPos; }
 
-    void                            SetInternalMove( sal_Bool bSet ) { mbInternalMove = bSet; }
-    sal_Bool                            IsInternalMove() const { return mbInternalMove; }
+    void                            SetInternalMove( bool bSet ) { mbInternalMove = bSet; }
+    bool                            IsInternalMove() const { return mbInternalMove; }
 
-    sal_Bool                            HasSourceDoc( const SdDrawDocument* pDoc ) const { return( mpSourceDoc == pDoc ); }
+    bool                            HasSourceDoc( const SdDrawDocument* pDoc ) const { return( mpSourceDoc == pDoc ); }
 
-    void                            SetPageBookmarks( const List& rPageBookmarks, sal_Bool bPersistent );
-    sal_Bool                            IsPageTransferable() const { return mbPageTransferable; }
-    sal_Bool                            HasPageBookmarks() const { return( mpPageDocShell && ( maPageBookmarks.Count() > 0 ) ); }
+    void                            SetPageBookmarks( const List& rPageBookmarks, bool bPersistent );
+    bool                            IsPageTransferable() const { return mbPageTransferable; }
+    bool                            HasPageBookmarks() const { return( mpPageDocShell && ( maPageBookmarks.Count() > 0 ) ); }
     const List&                     GetPageBookmarks() const { return maPageBookmarks; }
     ::sd::DrawDocShell*                 GetPageDocShell() const { return mpPageDocShell; }
 
@@ -141,13 +141,13 @@ private:
     Graphic*                        mpGraphic;
     ImageMap*                       mpImageMap;
     Rectangle                       maVisArea;
-    Point                           maStartPos;
-    sal_Bool                            mbInternalMove               : 1;
-    sal_Bool                            mbOwnDocument                : 1;
-    sal_Bool                            mbOwnView                    : 1;
-    sal_Bool                            mbLateInit                   : 1;
-    sal_Bool                            mbPageTransferable           : 1;
-    sal_Bool                            mbPageTransferablePersistent : 1;
+    basegfx::B2DPoint               maStartPos;
+    bool                            mbInternalMove               : 1;
+    bool                            mbOwnDocument                : 1;
+    bool                            mbOwnView                    : 1;
+    bool                            mbLateInit                   : 1;
+    bool                            mbPageTransferable           : 1;
+    bool                            mbPageTransferablePersistent : 1;
     bool                            mbIsUnoObj                  : 1;
     ::std::vector<boost::shared_ptr<UserData> > maUserData;
 

@@ -72,26 +72,25 @@ class E3dDragMethod : public SdrDragMethod
 protected:
     ::std::vector< E3dDragMethodUnit >  maGrp;
     E3dDragConstraint                   meConstraint;
-    Point                               maLastPos;
-    Rectangle                           maFullBound;
+    basegfx::B2DPoint                   maLastPos;
+    basegfx::B2DRange                   maFullBound;
     bool                                mbMoveFull;
     bool                                mbMovedAtAll;
 
 public:
-    TYPEINFO();
     E3dDragMethod(
-        SdrDragView &rView,
-        const SdrMarkList& rMark,
+        SdrView &rView,
+        const SdrObjectVector& rSelection,
         E3dDragConstraint eConstr = E3DDRAG_CONSTR_XYZ,
         sal_Bool bFull = sal_False);
 
     virtual void TakeSdrDragComment(String& rStr) const;
     virtual bool BeginSdrDrag();
-    virtual void MoveSdrDrag(const Point& rPnt);
+    virtual void MoveSdrDrag(const basegfx::B2DPoint& rPnt);
     virtual void CancelSdrDrag();
     virtual bool EndSdrDrag(bool bCopy);
 
-    E3dView& Get3DView()  { return (E3dView&)getSdrDragView();  }
+    E3dView& Get3DView()  { return (E3dView&)getSdrView();  }
 
     // for migration from XOR to overlay
     virtual void CreateOverlayGeometry(::sdr::overlay::OverlayManager& rOverlayManager);
@@ -109,14 +108,13 @@ class E3dDragRotate : public E3dDragMethod
     basegfx::B3DPoint                   maGlobalCenter;
 
 public:
-    TYPEINFO();
     E3dDragRotate(
-        SdrDragView &rView,
-        const SdrMarkList& rMark,
+        SdrView &rView,
+        const SdrObjectVector& rSelection,
         E3dDragConstraint eConstr = E3DDRAG_CONSTR_XYZ,
         sal_Bool bFull = sal_False);
 
-    virtual void MoveSdrDrag(const Point& rPnt);
+    virtual void MoveSdrDrag(const basegfx::B2DPoint& rPnt);
     virtual Pointer GetSdrDragPointer() const;
 };
 
@@ -130,18 +128,17 @@ public:
 class E3dDragMove : public E3dDragMethod
 {
     SdrHdlKind              meWhatDragHdl;
-    Point                   maScaleFixPos;
+    basegfx::B2DPoint       maScaleFixPos;
 
 public:
-    TYPEINFO();
     E3dDragMove(
-        SdrDragView &rView,
-        const SdrMarkList& rMark,
+        SdrView &rView,
+        const SdrObjectVector& rSelection,
         SdrHdlKind eDrgHdl = HDL_MOVE,
         E3dDragConstraint eConstr = E3DDRAG_CONSTR_XYZ,
         sal_Bool bFull = sal_False);
 
-    virtual void MoveSdrDrag(const Point& rPnt);
+    virtual void MoveSdrDrag(const basegfx::B2DPoint& rPnt);
     virtual Pointer GetSdrDragPointer() const;
 };
 

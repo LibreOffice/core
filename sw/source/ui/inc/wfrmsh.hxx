@@ -32,7 +32,6 @@ class SwWebFrameShell: public SwFrameShell
 
 public:
     SFX_DECL_INTERFACE(SW_WEBFRAMESHELL)
-    TYPEINFO();
 
              SwWebFrameShell(SwView &rView);
     virtual ~SwWebFrameShell();

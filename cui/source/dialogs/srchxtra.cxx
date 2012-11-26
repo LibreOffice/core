@@ -166,14 +166,15 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog( Window* pParent,
         sal_uInt16 nSlot = rPool.GetSlotId( nWhich );
         if ( nSlot >= SID_SVX_START )
         {
-            sal_Bool bChecked = sal_False, bFound = sal_False;
+            bool bChecked = false;
+            bool bFound = false;
             for ( sal_uInt16 i = 0; !bFound && i < rList.Count(); ++i )
             {
                 if ( nSlot == rList[i].nSlot )
                 {
-                    bFound = sal_True;
+                    bFound = true;
                     if ( IsInvalidItem( rList[i].pItem ) )
-                        bChecked = sal_True;
+                        bChecked = true;
                 }
             }
 
@@ -212,7 +213,7 @@ IMPL_LINK( SvxSearchAttributeDialog, OKHdl, Button *, EMPTYARG )
     for ( sal_uInt16 i = 0; i < aAttrLB.GetEntryCount(); ++i )
     {
         sal_uInt16 nSlot = (sal_uInt16)(sal_uLong)aAttrLB.GetEntryData(i);
-        sal_Bool bChecked = aAttrLB.IsChecked(i);
+        bool bChecked = aAttrLB.IsChecked(i);
 
         sal_uInt16 j;
         for ( j = rList.Count(); j; )

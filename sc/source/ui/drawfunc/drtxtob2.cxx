@@ -60,7 +60,7 @@ sal_uInt16 ScGetFontWorkId()
 
 sal_Bool ScDrawTextObjectBar::IsNoteEdit()
 {
-    return ScDrawLayer::IsNoteCaption( pViewData->GetView()->GetSdrView()->GetTextEditObject() );
+    return ScDrawLayer::IsNoteCaption( *pViewData->GetView()->GetSdrView()->GetTextEditObject() );
 }
 
 //  wenn kein Text editiert wird, Funktionen wie in drawsh
@@ -100,7 +100,7 @@ void __EXPORT ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
         case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
         case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
             {
-                SfxItemSet aAttr( pView->GetModel()->GetItemPool(), SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION, 0 );
+                SfxItemSet aAttr( pView->getSdrModelFromSdrView().GetItemPool(), SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION, 0 );
                 aAttr.Put( SvxWritingModeItem(
                     nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ?
                         com::sun::star::text::WritingMode_LR_TB : com::sun::star::text::WritingMode_TB_RL,
@@ -113,7 +113,7 @@ void __EXPORT ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
 
         case SID_ENABLE_HYPHENATION:
             {
-                SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, SID_ENABLE_HYPHENATION, sal_False);
+                SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, SID_ENABLE_HYPHENATION );
                 if( pItem )
                 {
                     SfxItemSet aSet( GetPool(), EE_PARA_HYPHENATE, EE_PARA_HYPHENATE );
@@ -171,7 +171,7 @@ void __EXPORT ScDrawTextObjectBar::ExecuteExtra( SfxRequest &rReq )
         case SID_ATTR_PARA_LEFT_TO_RIGHT:
         case SID_ATTR_PARA_RIGHT_TO_LEFT:
             {
-                SfxItemSet aAttr( pView->GetModel()->GetItemPool(),
+                SfxItemSet aAttr( pView->getSdrModelFromSdrView().GetItemPool(),
                                     EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR,
                                     EE_PARA_JUST, EE_PARA_JUST,
                                     0 );
@@ -195,9 +195,9 @@ void ScDrawTextObjectBar::ExecFormText(SfxRequest& rReq)
 {
     ScTabView*          pTabView    = pViewData->GetView();
     ScDrawView*         pDrView     = pTabView->GetScDrawView();
-    const SdrMarkList&  rMarkList   = pDrView->GetMarkedObjectList();
+    SdrObject* pSelected = pDrView->getSelectedIfSingle();
 
-    if ( rMarkList.GetMarkCount() == 1 && rReq.GetArgs() )
+    if ( pSelected && rReq.GetArgs() )
     {
         const SfxItemSet& rSet = *rReq.GetArgs();
         const SfxPoolItem* pItem;
@@ -217,8 +217,8 @@ void ScDrawTextObjectBar::ExecFormText(SfxRequest& rReq)
                                        (pViewFrm->
                                             GetChildWindow(nId)->GetWindow());
 
-            pDlg->CreateStdFormObj(*pDrView, *pDrView->GetSdrPageView(),
-                                    rSet, *rMarkList.GetMark(0)->GetMarkedSdrObj(),
+            pDlg->CreateStdFormObj(*pDrView,
+                                    rSet, *pSelected,
                                    ((const XFormTextStdFormItem*) pItem)->
                                    GetValue());
         }
@@ -229,21 +229,16 @@ void ScDrawTextObjectBar::ExecFormText(SfxRequest& rReq)
 
 void ScDrawTextObjectBar::GetFormTextState(SfxItemSet& rSet)
 {
-    const SdrObject*    pObj        = NULL;
     SvxFontWorkDialog*  pDlg        = NULL;
     ScDrawView*         pDrView     = pViewData->GetView()->GetScDrawView();
-    const SdrMarkList&  rMarkList   = pDrView->GetMarkedObjectList();
+    const SdrObject* pSelected = pDrView->getSelectedIfSingle();
     sal_uInt16              nId = SvxFontWorkChildWindow::GetChildWindowId();
-
     SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
+
     if ( pViewFrm->HasChildWindow(nId) )
         pDlg = (SvxFontWorkDialog*)(pViewFrm->GetChildWindow(nId)->GetWindow());
 
-    if ( rMarkList.GetMarkCount() == 1 )
-        pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-
-    if ( pObj == NULL || !pObj->ISA(SdrTextObj) ||
-        !((SdrTextObj*) pObj)->HasText() )
+    if ( !pSelected || !dynamic_cast< const SdrTextObj* >(pSelected) || !static_cast< const SdrTextObj* >(pSelected)->HasText() )
     {
         if ( pDlg )
             pDlg->SetActive(sal_False);
@@ -283,7 +278,7 @@ void ScDrawTextObjectBar::GetFormTextState(SfxItemSet& rSet)
                     { DBG_ERROR( "ColorList not found :-/" ); }
             }
         }
-        SfxItemSet aViewAttr(pDrView->GetModel()->GetItemPool());
+        SfxItemSet aViewAttr(pDrView->getSdrModelFromSdrView().GetItemPool());
         pDrView->GetAttributes(aViewAttr);
         rSet.Set(aViewAttr);
     }

@@ -101,7 +101,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
             SfxViewFrame* pMyViewFrm = pMyDisp->GetFrame();
             if (pMyViewFrm)
             {
-                pScViewShell = PTR_CAST( ScTabViewShell, pMyViewFrm->GetViewShell() );
+                pScViewShell = dynamic_cast< ScTabViewShell* >( pMyViewFrm->GetViewShell() );
                 if( pScViewShell )
                     pScViewShell->UpdateInputHandler(sal_True);
                 pParentDoc = pMyViewFrm->GetObjectShell();
@@ -286,13 +286,12 @@ sal_Bool ScFormulaDlg::IsInputHdl(ScInputHandler* pHdl)
 
     //  gehoert der InputHandler zu irgendeiner ViewShell ?
 
-    TypeId aScType = TYPE(ScTabViewShell);
-    SfxViewShell* pSh = SfxViewShell::GetFirst( &aScType );
+    SfxViewShell* pSh = SfxViewShell::GetFirst( _IsSfxViewShell< ScTabViewShell > );
     while ( pSh && !bAlive )
     {
         if (((ScTabViewShell*)pSh)->GetInputHandler() == pHdl)
             bAlive = sal_True;
-        pSh = SfxViewShell::GetNext( *pSh, &aScType );
+        pSh = SfxViewShell::GetNext( *pSh, _IsSfxViewShell< ScTabViewShell > );
     }
 
     return bAlive;
@@ -307,7 +306,7 @@ ScInputHandler* ScFormulaDlg::GetNextInputHandler(ScDocShell* pDocShell,PtrTabVi
     while( pFrame && pHdl==NULL)
     {
         SfxViewShell* p = pFrame->GetViewShell();
-        ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,p);
+        ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell* >( p);
         if(pViewSh!=NULL)
         {
             pHdl=pViewSh->GetInputHandler();
@@ -579,7 +578,7 @@ void ScFormulaDlg::clear()
     pScMod->SetRefInputHdl(NULL);
 
     // Enable() der Eingabezeile erzwingen:
-    ScTabViewShell* pScViewShell = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
+    ScTabViewShell* pScViewShell = dynamic_cast< ScTabViewShell* >( SfxViewShell::Current());
     if ( pScViewShell )
         pScViewShell->UpdateInputHandler();
 }
@@ -596,7 +595,7 @@ void ScFormulaDlg::switchBack()
     }
 
     // aktuelle Tabelle ggF. restaurieren (wg. Maus-RefInput)
-    ScTabViewShell* pScViewShell = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
+    ScTabViewShell* pScViewShell = dynamic_cast< ScTabViewShell* >( SfxViewShell::Current());
     if ( pScViewShell )
     {
         ScViewData* pVD=pScViewShell->GetViewData();

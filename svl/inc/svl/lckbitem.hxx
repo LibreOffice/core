@@ -25,7 +25,6 @@
 
 #include "svl/svldllapi.h"
 #include <tools/solar.h>
-#include <tools/rtti.hxx>
 #include <tools/stream.hxx>
 #include <svl/poolitem.hxx>
 
@@ -36,7 +35,7 @@ class SVL_DLLPUBLIC SfxLockBytesItem : public SfxPoolItem
     SvLockBytesRef          _xVal;
 
 public:
-                            TYPEINFO();
+    POOLITEM_FACTORY()
                             SfxLockBytesItem();
                             SfxLockBytesItem( sal_uInt16 nWhich,
                                               SvLockBytes *pLockBytes );

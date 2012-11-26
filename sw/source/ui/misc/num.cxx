@@ -644,7 +644,7 @@ void SwNumPositionTabPage::SetWrtShell(SwWrtShell* pSh)
 
     const SwRect& rPrtRect = pWrtSh->GetAnyCurRect(RECT_PAGE);
     aPreviewWIN.SetPageWidth(rPrtRect.Width());
-    FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &pWrtSh->GetView()));
+    FieldUnit eMetric = ::GetDfltMetric(0 != dynamic_cast< SwWebView* >( &pWrtSh->GetView()));
     if(eMetric == FUNIT_MM)
     {
         aDistBorderMF .SetDecimalDigits(1);
@@ -1136,7 +1136,7 @@ void SwSvxNumBulletTabDialog::PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage)
             }
             aSet.Put( SfxStringListItem( SID_CHAR_FMT_LIST_BOX,&aList ) ) ;
 
-            FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebDocShell, pDocShell));
+            FieldUnit eMetric = ::GetDfltMetric(0 != dynamic_cast< SwWebDocShell* >( pDocShell));
             aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric) ) );
             rPage.PageCreated(aSet);
             for( sal_uInt16 i = (sal_uInt16)aList.Count(); i; --i )
@@ -1147,7 +1147,7 @@ void SwSvxNumBulletTabDialog::PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage)
     case RID_SVXPAGE_NUM_POSITION:
         {
             SwDocShell* pDocShell = rWrtSh.GetView().GetDocShell();
-            FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebDocShell, pDocShell));
+            FieldUnit eMetric = ::GetDfltMetric(0 != dynamic_cast< SwWebDocShell* >( pDocShell));
             SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
             aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric)) );
             rPage.PageCreated(aSet);

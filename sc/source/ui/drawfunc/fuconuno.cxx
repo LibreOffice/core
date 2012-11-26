@@ -28,6 +28,7 @@
 #include "tabvwsh.hxx"
 #include "sc.hrc"
 #include "drawview.hxx"
+#include <svx/svdlegacy.hxx>
 
 /*************************************************************************
 |*
@@ -39,8 +40,8 @@ FuConstUnoControl::FuConstUnoControl(ScTabViewShell* pViewSh, Window* pWin, ScDr
                    SdrModel* pDoc, SfxRequest& rReq)
     : FuConstruct(pViewSh, pWin, pViewP, pDoc, rReq)
 {
-    SFX_REQUEST_ARG( rReq, pInventorItem, SfxUInt32Item, SID_FM_CONTROL_INVENTOR, sal_False );
-    SFX_REQUEST_ARG( rReq, pIdentifierItem, SfxUInt16Item, SID_FM_CONTROL_IDENTIFIER, sal_False );
+    SFX_REQUEST_ARG( rReq, pInventorItem, SfxUInt32Item, SID_FM_CONTROL_INVENTOR );
+    SFX_REQUEST_ARG( rReq, pIdentifierItem, SfxUInt16Item, SID_FM_CONTROL_IDENTIFIER );
     if( pInventorItem )
         nInventor = pInventorItem->GetValue();
     if( pIdentifierItem )
@@ -72,9 +73,11 @@ sal_Bool __EXPORT FuConstUnoControl::MouseButtonDown(const MouseEvent& rMEvt)
 
     if ( rMEvt.IsLeft() && !pView->IsAction() )
     {
-        Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
+        const basegfx::B2DPoint aPixelPos(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
+        const basegfx::B2DPoint aLogicPos(pWindow->GetInverseViewTransformation() * aPixelPos);
+
         pWindow->CaptureMouse();
-        pView->BegCreateObj(aPnt);
+        pView->BegCreateObj(aLogicPos);
         bReturn = sal_True;
     }
     return bReturn;
@@ -104,7 +107,7 @@ sal_Bool __EXPORT FuConstUnoControl::MouseButtonUp(const MouseEvent& rMEvt)
 
     sal_Bool bReturn = sal_False;
 
-    if ( pView->IsCreateObj() && rMEvt.IsLeft() )
+    if ( pView->GetCreateObj() && rMEvt.IsLeft() )
     {
         Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
         pView->EndCreateObj(SDRCREATE_FORCEEND);
@@ -136,13 +139,13 @@ sal_Bool __EXPORT FuConstUnoControl::KeyInput(const KeyEvent& rKEvt)
 
 void FuConstUnoControl::Activate()
 {
-    pView->SetCurrentObj( nIdentifier, nInventor );
+    pView->setSdrObjectCreationInfo(SdrObjectCreationInfo(nIdentifier, nInventor));
 
     aNewPointer = Pointer( POINTER_DRAW_RECT );
     aOldPointer = pWindow->GetPointer();
     pViewShell->SetActivePointer( aNewPointer );
 
-    SdrLayer* pLayer = pView->GetModel()->GetLayerAdmin().GetLayerPerID(SC_LAYER_CONTROLS);
+    SdrLayer* pLayer = pView->getSdrModelFromSdrView().GetModelLayerAdmin().GetLayerPerID(SC_LAYER_CONTROLS);
     if (pLayer)
         pView->SetActiveLayer( pLayer->GetName() );
 
@@ -159,7 +162,7 @@ void FuConstUnoControl::Deactivate()
 {
     FuConstruct::Deactivate();
 
-    SdrLayer* pLayer = pView->GetModel()->GetLayerAdmin().GetLayerPerID(SC_LAYER_FRONT);
+    SdrLayer* pLayer = pView->getSdrModelFromSdrView().GetModelLayerAdmin().GetLayerPerID(SC_LAYER_FRONT);
     if (pLayer)
         pView->SetActiveLayer( pLayer->GetName() );
 
@@ -167,17 +170,17 @@ void FuConstUnoControl::Deactivate()
 }
 
 // #98185# Create default drawing objects via keyboard
-SdrObject* FuConstUnoControl::CreateDefaultObject(const sal_uInt16 /* nID */, const Rectangle& rRectangle)
+SdrObject* FuConstUnoControl::CreateDefaultObject(const sal_uInt16 /* nID */, const basegfx::B2DRange& rRange)
 {
     // case SID_FM_CREATE_CONTROL:
 
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
-        pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(),
-        0L, pDrDoc);
+        pView->getSdrModelFromSdrView(),
+        pView->getSdrObjectCreationInfo());
 
     if(pObj)
     {
-        pObj->SetLogicRect(rRectangle);
+        sdr::legacy::SetLogicRange(*pObj, rRange);
     }
 
     return pObj;

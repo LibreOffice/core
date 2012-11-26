@@ -370,9 +370,10 @@ void ScDocShell::UpdateLinks()
     {
         --k;
         ::sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[k];
-        if (pBase->ISA(ScTableLink))
+        ScTableLink* pTabLink = dynamic_cast< ScTableLink* >(pBase);
+
+        if (pTabLink)
         {
-            ScTableLink* pTabLink = (ScTableLink*)pBase;
             if (pTabLink->IsUsed())
             {
                 StrData* pData = new StrData(pTabLink->GetFileName());
@@ -438,9 +439,10 @@ sal_Bool ScDocShell::ReloadTabLinks()
     for (sal_uInt16 i=0; i<nCount; i++ )
     {
         ::sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[i];
-        if (pBase->ISA(ScTableLink))
+        ScTableLink* pTabLink = dynamic_cast< ScTableLink* >(pBase);
+
+        if (pTabLink)
         {
-            ScTableLink* pTabLink = (ScTableLink*)pBase;
 //          pTabLink->SetAddUndo(sal_False);        //! Undo's zusammenfassen
             // Painting only after Update() makes no sense:
             // ScTableLink::Refresh() will post a Paint only is bDoPaint is true

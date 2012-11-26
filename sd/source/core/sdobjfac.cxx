@@ -19,14 +19,10 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
-
 #include <basic/sbx.hxx>
-
 #include <app.hxx>
 #include "sdpage.hxx"
 #include "sdobjfac.hxx"
@@ -34,7 +30,7 @@
 #include "anminfo.hxx"
 #include "imapinfo.hxx"
 #include "drawdoc.hxx"
-
+#include <svx/sdrobjectfactory.hxx>
 
 SdObjectFactory aSdObjectFactory;
 
@@ -46,16 +42,27 @@ SdObjectFactory aSdObjectFactory;
 
 IMPL_LINK( SdObjectFactory, MakeUserData, SdrObjFactory *, pObjFactory )
 {
-    if ( pObjFactory->nInventor == SdUDInventor )
+    if ( SdUDInventor == pObjFactory->getSdrObjectCreationInfo().getInvent() )
     {
-        switch( pObjFactory->nIdentifier )
+        switch( pObjFactory->getSdrObjectCreationInfo().getIdent() )
         {
             case( SD_ANIMATIONINFO_ID ):
-                pObjFactory->pNewData = new SdAnimationInfo( *pObjFactory->pObj );
+            {
+                if(pObjFactory->getSdrObjUserDataTargetSdrObject())
+                {
+                    pObjFactory->setNewSdrObjUserData(new SdAnimationInfo(*pObjFactory->getSdrObjUserDataTargetSdrObject()));
+                }
+                else
+                {
+                    OSL_ENSURE(false, "Got no target SdrObject in SdrObjUserData Factory (!)");
+                }
+            }
             break;
 
             case( SD_IMAPINFO_ID ):
-                pObjFactory->pNewData = new SdIMapInfo;
+            {
+                pObjFactory->setNewSdrObjUserData(new SdIMapInfo);
+            }
             break;
 
             default:
@@ -63,11 +70,15 @@ IMPL_LINK( SdObjectFactory, MakeUserData, SdrObjFactory *, pObjFactory )
         }
     }
 
-    if ( pObjFactory->pNewData )
+    if ( pObjFactory->getNewSdrObjUserData() )
+    {
         return 0;
+    }
 
     if( aOldMakeUserDataLink.IsSet() )
+    {
         aOldMakeUserDataLink.Call( this );
+    }
 
     return 0;
 }

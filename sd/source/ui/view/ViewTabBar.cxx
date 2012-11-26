@@ -642,8 +642,8 @@ void ViewTabBar::UpdateActiveButton (void)
 void ViewTabBar::UpdateTabBarButtons (void)
 {
     TabBarButtonList::const_iterator iTab;
-    sal_uInt16 nPageCount (mpTabControl->GetPageCount());
-    sal_uInt16 nIndex;
+    sal_uInt32 nPageCount (mpTabControl->GetPageCount());
+    sal_uInt32 nIndex;
     for (iTab=maTabBarButtons.begin(),nIndex=1; iTab!=maTabBarButtons.end(); ++iTab,++nIndex)
     {
         // Create a new tab when there are not enough.

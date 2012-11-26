@@ -35,8 +35,6 @@ using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-TYPEINIT1( XMLRenameElemTransformerContext, XMLTransformerContext );
-
 XMLRenameElemTransformerContext::XMLRenameElemTransformerContext(
         XMLTransformerBase& rImp,
         const OUString& rQName,

@@ -45,18 +45,6 @@ namespace drawinglayer
         {
         }
 
-        bool MaskPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(GroupPrimitive2D::operator==(rPrimitive))
-            {
-                const MaskPrimitive2D& rCompare = static_cast< const MaskPrimitive2D& >(rPrimitive);
-
-                return (getMask() == rCompare.getMask());
-            }
-
-            return false;
-        }
-
         basegfx::B2DRange MaskPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             return getMask().getB2DRange();

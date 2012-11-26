@@ -68,9 +68,6 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-TYPEINIT1( ScHint, SfxSimpleHint );
-TYPEINIT1( ScAreaChangedHint, SfxHint );
-
 struct ScSlotData
 {
     SCROW  nStartRow;   // first row of this segment

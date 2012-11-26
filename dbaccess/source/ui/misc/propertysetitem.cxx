@@ -39,8 +39,6 @@ namespace dbaui
     //=========================================================================
     //= OPropertySetItem
     //=========================================================================
-    TYPEINIT1(OPropertySetItem, SfxPoolItem);
-    //-------------------------------------------------------------------------
     OPropertySetItem::OPropertySetItem(sal_Int16 _nWhich)
         :SfxPoolItem(_nWhich)
     {
@@ -63,7 +61,7 @@ namespace dbaui
     //-------------------------------------------------------------------------
     int OPropertySetItem::operator==(const SfxPoolItem& _rItem) const
     {
-        const OPropertySetItem* pCompare = PTR_CAST(OPropertySetItem, &_rItem);
+        const OPropertySetItem* pCompare = dynamic_cast< const OPropertySetItem* >( &_rItem);
         if ((!pCompare) || (pCompare->m_xSet.get() != m_xSet.get()))
             return 0;
 

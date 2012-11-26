@@ -146,7 +146,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
         pStoreMaster = pStoreMaster->pSecondary;
 
     // Alter-Header (Version des Pools an sich und Inhalts-Version 0xffff)
-    pImp->bStreaming = sal_True;
+    pImp->bStreaming = true;
     if ( !pStoreMaster )
     {
         rStream << ( rStream.GetVersion() >= SOFFICE_FILEFORMAT_50
@@ -198,7 +198,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
         SfxMultiMixRecordWriter aWhichIdsRec( &rStream, SFX_ITEMPOOL_REC_WHICHIDS, 0 );
 
         // erst Atomaren-Items und dann die Sets schreiben (wichtig beim Laden)
-        for ( pImp->bInSetItem = sal_False; pImp->bInSetItem <= sal_True && !rStream.GetError(); ++pImp->bInSetItem )
+        for ( pImp->bInSetItem = false; pImp->bInSetItem <= (int)true && !rStream.GetError(); ++pImp->bInSetItem )
         {
             SfxPoolItemArray_Impl **pArr = pImp->ppPoolItems;
             SfxPoolItem **ppDefItem = ppStaticDefaults;
@@ -218,7 +218,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
 #else
                 if ( *pArr && (*ppDefItem)->IsPoolable() &&
 #endif
-                     pImp->bInSetItem == (*ppDefItem)->ISA(SfxSetItem) )
+                     pImp->bInSetItem == (0 != dynamic_cast<const SfxSetItem*>(*ppDefItem)) )
                 {
                     // eigene Kennung, globale Which-Id und Item-Version
                     sal_uInt16 nSlotId = GetSlotId( (*ppDefItem)->Which(), sal_False );
@@ -253,7 +253,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
                             else
                                 break;
 #ifdef DBG_UTIL_MI
-                            if ( !pItem->ISA(SfxSetItem) )
+                            if ( !dynamic_cast< SfxSetItem* >(pItem) )
                             {
                                 sal_uLong nMark = rStream.Tell();
                                 rStream.Seek( nItemStartPos + sizeof(sal_uInt16) );
@@ -270,7 +270,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
             }
         }
 
-        pImp->bInSetItem = sal_False;
+        pImp->bInSetItem = false;
     }
 
     // die gesetzten Defaults speichern (Pool-Defaults)
@@ -307,7 +307,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
     if ( !rStream.GetError() && pSecondary )
         pSecondary->Store( rStream );
 
-    pImp->bStreaming = sal_False;
+    pImp->bStreaming = false;
     return rStream;
 }
 
@@ -355,7 +355,7 @@ void SfxItemPool::LoadCompleted()
                     {
                         #ifdef DBG_UTIL
                         const SfxPoolItem &rItem = **ppHtArr;
-                        DBG_ASSERT( !rItem.ISA(SfxSetItem) ||
+                        DBG_ASSERT( !dynamic_cast< const SfxSetItem* >(&rItem) ||
                                     0 != &((const SfxSetItem&)rItem).GetItemSet(),
                                     "SetItem without ItemSet" );
                         #endif
@@ -503,7 +503,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
                     {
                         #ifdef DBG_UTIL
                         const SfxPoolItem &rItem = **ppHtArr;
-                        DBG_ASSERT( !rItem.ISA(SfxSetItem) ||
+                        DBG_ASSERT( !dynamic_cast< const SfxSetItem* >(&rItem) ||
                                     0 != &((const SfxSetItem&)rItem).GetItemSet(),
                                     "SetItem without ItemSet" );
                         DBG_WARNING( "loading non-empty ItemPool" );
@@ -524,7 +524,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
         pLoadMaster = pLoadMaster->pSecondary;
 
     // Gesamt Header einlesen
-    pImp->bStreaming = sal_True;
+    pImp->bStreaming = true;
     if ( !pLoadMaster )
     {
         // Format-Version laden
@@ -545,7 +545,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
         if ( pImp->nMajorVer > SFX_ITEMPOOL_VER_MAJOR )
         {
             rStream.SetError(SVSTREAM_FILEFORMAT_ERROR);
-            pImp->bStreaming = sal_False;
+            pImp->bStreaming = false;
             return rStream;
         }
 
@@ -558,7 +558,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
     SfxMiniRecordReader aPoolRec( &rStream, SFX_ITEMPOOL_REC );
     if ( rStream.GetError() )
     {
-        pImp->bStreaming = sal_False;
+        pImp->bStreaming = false;
         return rStream;
     }
 
@@ -570,7 +570,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
         SfxMiniRecordReader aPoolHeaderRec( &rStream, SFX_ITEMPOOL_REC_HEADER );
         if ( rStream.GetError() )
         {
-            pImp->bStreaming = sal_False;
+            pImp->bStreaming = false;
             return rStream;
         }
 
@@ -584,7 +584,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
         {
             rStream.SetError(SVSTREAM_FILEFORMAT_ERROR);
             aPoolRec.Skip();
-            pImp->bStreaming = sal_False;
+            pImp->bStreaming = false;
             return rStream;
         }
     }
@@ -594,7 +594,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
         SfxMultiRecordReader aVerRec( &rStream, SFX_ITEMPOOL_REC_VERSIONMAP );
         if ( rStream.GetError() )
         {
-            pImp->bStreaming = sal_False;
+            pImp->bStreaming = false;
             return rStream;
         }
 
@@ -622,7 +622,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
     }
 
     // Items laden
-    FASTBOOL bSecondaryLoaded = sal_False;
+    bool bSecondaryLoaded = false;
     long nSecondaryEnd = 0;
     {
         SfxMultiRecordReader aWhichIdsRec( &rStream, SFX_ITEMPOOL_REC_WHICHIDS);
@@ -653,7 +653,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
 
             // SfxSetItems k"onnten Items aus Sekund"arpools beinhalten
             SfxPoolItem *pDefItem = *(ppStaticDefaults + nIndex);
-            pImp->bInSetItem = pDefItem->ISA(SfxSetItem);
+            pImp->bInSetItem = (0 != dynamic_cast< const SfxSetItem* >(pDefItem));
             if ( !bSecondaryLoaded && pSecondary && pImp->bInSetItem )
             {
                 // an das Ende des eigenen Pools seeken
@@ -662,7 +662,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
 
                 // Sekund"arpool einlesen
                 pSecondary->Load( rStream );
-                bSecondaryLoaded = sal_True;
+                bSecondaryLoaded = true;
                 nSecondaryEnd = rStream.Tell();
 
                 // zur"uck zu unseren eigenen Items
@@ -672,7 +672,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
             // Items an sich lesen
             readTheItems(rStream, nCount, nVersion, pDefItem, ppArr);
 
-            pImp->bInSetItem = sal_False;
+            pImp->bInSetItem = false;
         }
     }
 
@@ -721,7 +721,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
     if ( aExternName != aName )
         aName.Erase();
 
-    pImp->bStreaming = sal_False;
+    pImp->bStreaming = false;
     return rStream;
 };
 
@@ -743,13 +743,13 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
         rStream >> pImp->nLoadingVersion;
     SfxPoolItem::readByteString(rStream, aExternName);
     bOwnPool = aExternName == aName;
-    pImp->bStreaming = sal_True;
+    pImp->bStreaming = true;
 
     //! solange wir keine fremden laden k"onnen
     if ( !bOwnPool )
     {
         rStream.SetError(SVSTREAM_FILEFORMAT_ERROR);
-        pImp->bStreaming = sal_False;
+        pImp->bStreaming = false;
         return rStream;
     }
 
@@ -758,7 +758,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
          pImp->nVersion < pImp->nLoadingVersion )
     {
         rStream.SetError(ERRCODE_IO_WRONGVERSION);
-        pImp->bStreaming = sal_False;
+        pImp->bStreaming = false;
         return rStream;
     }
 
@@ -816,7 +816,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
     // Items laden
     rStream.Seek( nStartPos );
     CHECK_FILEFORMAT( rStream, SFX_ITEMPOOL_TAG_ITEMS );
-    FASTBOOL bSecondaryLoaded = sal_False;
+    bool bSecondaryLoaded = false;
     long nSecondaryEnd = 0;
     sal_uInt16 nWhich(0), nSlot(0);
     while ( rStream >> nWhich, nWhich )
@@ -856,7 +856,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
         sal_uLong nLastPos = rStream.Tell();
 
         // SfxSetItems k"onnten Items aus Sekund"arpools beinhalten
-        if ( !bSecondaryLoaded && pSecondary && pDefItem->ISA(SfxSetItem) )
+        if ( !bSecondaryLoaded && pSecondary && dynamic_cast< SfxSetItem* >(pDefItem) )
         {
             // an das Ende des eigenen Pools seeken
             rStream.Seek(nEndOfSizes);
@@ -865,7 +865,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
 
             // Sekund"arpool einlesen
             pSecondary->Load1_Impl( rStream );
-            bSecondaryLoaded = sal_True;
+            bSecondaryLoaded = true;
             nSecondaryEnd = rStream.Tell();
 
             // zur"uck zu unseren eigenen Items
@@ -1018,7 +1018,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
     if ( aExternName != aName )
         aName.Erase();
 
-    pImp->bStreaming = sal_False;
+    pImp->bStreaming = false;
     return rStream;
 }
 
@@ -1088,7 +1088,7 @@ const SfxPoolItem* SfxItemPool::LoadSurrogate
     // auf jeden Fall aufgel"ost werden.
     if ( !pRefPool )
         pRefPool = this;
-    FASTBOOL bResolvable = pRefPool->GetName().Len() > 0;
+    bool bResolvable = pRefPool->GetName().Len() > 0;
     if ( !bResolvable )
     {
         // Bei einem anders aufgebauten Pool im Stream, mu\s die SlotId
@@ -1098,7 +1098,7 @@ const SfxPoolItem* SfxItemPool::LoadSurrogate
         {
             // gemappte SlotId kann "ubernommen werden
             rWhich = nMappedWhich;
-            bResolvable = sal_True;
+            bResolvable = true;
         }
     }
 
@@ -1151,7 +1151,7 @@ const SfxPoolItem* SfxItemPool::LoadSurrogate
 //-------------------------------------------------------------------------
 
 
-FASTBOOL SfxItemPool::StoreSurrogate
+bool SfxItemPool::StoreSurrogate
 (
     SvStream&           rStream,
     const SfxPoolItem*  pItem
@@ -1164,13 +1164,13 @@ FASTBOOL SfxItemPool::StoreSurrogate
 
     [R"uckgabewert]
 
-    FASTBOOL                sal_True
+    bool                true
                             es wurde ein echtes Surrogat gespeichert, auch
                             SFX_ITEMS_NULL bei 'pItem==0',
                             SFX_ITEMS_STATICDEFAULT und SFX_ITEMS_POOLDEFAULT
                             gelten als 'echte' Surrogate
 
-                            sal_False
+                        false
                             es wurde ein Dummy-Surrogat (SFX_ITEMS_DIRECT)
                             gespeichert, das eigentliche Item mu\s direkt
                             hinterher selbst gespeichert werden
@@ -1179,7 +1179,7 @@ FASTBOOL SfxItemPool::StoreSurrogate
 {
     if ( pItem )
     {
-        FASTBOOL bRealSurrogate = IsItemFlag(*pItem, SFX_ITEM_POOLABLE);
+        bool bRealSurrogate = IsItemFlag(*pItem, SFX_ITEM_POOLABLE);
         rStream << ( bRealSurrogate
                         ? GetSurrogate( pItem )
                         : SFX_ITEMS_DIRECT );
@@ -1187,7 +1187,7 @@ FASTBOOL SfxItemPool::StoreSurrogate
     }
 
     rStream << SFX_ITEMS_NULL;
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -1225,7 +1225,7 @@ sal_uInt32 SfxItemPool::GetSurrogate(const SfxPoolItem *pItem) const
 
 // -----------------------------------------------------------------------
 
-FASTBOOL SfxItemPool::IsInStoringRange( sal_uInt16 nWhich ) const
+bool SfxItemPool::IsInStoringRange( sal_uInt16 nWhich ) const
 {
     return nWhich >= pImp->nStoringStart &&
            nWhich <= pImp->nStoringEnd;
@@ -1442,14 +1442,14 @@ sal_uInt16 SfxItemPool::GetNewWhich
 // -----------------------------------------------------------------------
 
 
-FASTBOOL SfxItemPool::IsInVersionsRange( sal_uInt16 nWhich ) const
+bool SfxItemPool::IsInVersionsRange( sal_uInt16 nWhich ) const
 {
     return nWhich >= pImp->nVerStart && nWhich <= pImp->nVerEnd;
 }
 
 // -----------------------------------------------------------------------
 
-FASTBOOL SfxItemPool::IsCurrentVersionLoading() const
+bool SfxItemPool::IsCurrentVersionLoading() const
 
 /*  [Beschreibung]
 
@@ -1540,7 +1540,7 @@ sal_uInt16 SfxItemPool::GetLoadingVersion() const
 
 //-------------------------------------------------------------------------
 
-FASTBOOL SfxItemPool::IsVer2_Impl() const
+bool SfxItemPool::IsVer2_Impl() const
 {
     return pMaster->pImp->nMajorVer >= 2;
 }
@@ -1548,13 +1548,13 @@ FASTBOOL SfxItemPool::IsVer2_Impl() const
 //-------------------------------------------------------------------------
 
 
-FASTBOOL SfxItemPool::StoreItem( SvStream &rStream, const SfxPoolItem &rItem,
-                                 FASTBOOL bDirect ) const
+bool SfxItemPool::StoreItem( SvStream &rStream, const SfxPoolItem &rItem,
+                                 bool bDirect ) const
 
 /*  [Beschreibung]
 
     Speichert das <SfxPoolItem> 'rItem' in den <SvStream> 'rStream'
-    entweder als Surrogat ('bDirect == sal_False') oder direkt mit 'rItem.Store()'.
+    entweder als Surrogat ('bDirect == false') oder direkt mit 'rItem.Store()'.
     Nicht poolable Items werden immer direkt gespeichert. Items ohne Which-Id,
     also SID-Items, werden nicht gespeichert, ebenso wenn Items, die in der
     File-Format-Version noch nicht vorhanden waren (return sal_False).
@@ -1565,7 +1565,7 @@ FASTBOOL SfxItemPool::StoreItem( SvStream &rStream, const SfxPoolItem &rItem,
     sal_uInt16  GetSlotId( rItem.Which() ) bzw. 0 falls nicht verf"urbar
     sal_uInt16  GetSurrogate( &rItem ) bzw. SFX_ITEM_DIRECT bei '!SFX_ITEM_POOLBLE'
 
-    optional (falls 'bDirect == sal_True' oder '!rItem.IsPoolable()':
+    optional (falls 'bDirect == true' oder '!rItem.IsPoolable()':
 
     sal_uInt16  rItem.GetVersion()
     sal_uLong   Size
@@ -1574,7 +1574,7 @@ FASTBOOL SfxItemPool::StoreItem( SvStream &rStream, const SfxPoolItem &rItem,
 
     [Querverweise]
 
-    <SfxItemPool::LoadItem(SvStream&,FASTBOOL)const>
+    <SfxItemPool::LoadItem(SvStream&,bool)const>
 */
 
 {
@@ -1587,7 +1587,7 @@ FASTBOOL SfxItemPool::StoreItem( SvStream &rStream, const SfxPoolItem &rItem,
         if ( 0 == ( pPool = pPool->pSecondary ) )
             return sal_False;
 
-    DBG_ASSERT( !pImp->bInSetItem || !rItem.ISA(SfxSetItem),
+    DBG_ASSERT( !pImp->bInSetItem || !dynamic_cast< const SfxSetItem* >(&rItem),
                 "SetItem contains ItemSet with SetItem" );
 
     sal_uInt16 nSlotId = pPool->GetSlotId( rItem.Which(), sal_True );
@@ -1614,7 +1614,7 @@ FASTBOOL SfxItemPool::StoreItem( SvStream &rStream, const SfxPoolItem &rItem,
 //-------------------------------------------------------------------------
 
 
-const SfxPoolItem* SfxItemPool::LoadItem( SvStream &rStream, FASTBOOL bDirect,
+const SfxPoolItem* SfxItemPool::LoadItem( SvStream &rStream, bool bDirect,
                                           const SfxItemPool *pRefPool )
 
 // pRefPool==-1 => nicht putten!
@@ -1648,13 +1648,13 @@ const SfxPoolItem* SfxItemPool::LoadItem( SvStream &rStream, FASTBOOL bDirect,
     }
 
     // wird eine andere Version geladen?
-    FASTBOOL bCurVersion = pRefPool->IsCurrentVersionLoading();
+    bool bCurVersion = pRefPool->IsCurrentVersionLoading();
     if ( !bCurVersion )
         // Which-Id auf neue Version mappen
         nWhich = pRefPool->GetNewWhich( nWhich );
 
     DBG_ASSERT( !nWhich || !pImp->bInSetItem ||
-                !pRefPool->ppStaticDefaults[pRefPool->GetIndex_Impl(nWhich)]->ISA(SfxSetItem),
+                !dynamic_cast< SfxSetItem* >(pRefPool->ppStaticDefaults[pRefPool->GetIndex_Impl(nWhich)]),
                 "loading SetItem in ItemSet of SetItem" );
 
     // soll "uber Surrogat geladen werden?

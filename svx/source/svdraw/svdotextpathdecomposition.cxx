@@ -63,155 +63,13 @@
 #include <svx/unoapi.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <svx/sdr/attribute/sdrformtextoutlineattribute.hxx>
+#include <editeng/pathtextportion.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
-
-//////////////////////////////////////////////////////////////////////////////
-// PathTextPortion helper
-
-namespace
-{
-    class impPathTextPortion
-    {
-        basegfx::B2DVector                          maOffset;
-        String                                      maText;
-        xub_StrLen                                  mnTextStart;
-        xub_StrLen                                  mnTextLength;
-        sal_uInt16                                  mnParagraph;
-        xub_StrLen                                  mnIndex;
-        SvxFont                                     maFont;
-        ::std::vector< double >                     maDblDXArray;   // double DXArray, font size independent -> unit coordinate system
-        ::com::sun::star::lang::Locale              maLocale;
-
-        // bitfield
-        unsigned                                    mbRTL : 1;
-
-    public:
-        impPathTextPortion(DrawPortionInfo& rInfo)
-        :   maOffset(rInfo.mrStartPos.X(), rInfo.mrStartPos.Y()),
-            maText(rInfo.mrText),
-            mnTextStart(rInfo.mnTextStart),
-            mnTextLength(rInfo.mnTextLen),
-            mnParagraph(rInfo.mnPara),
-            mnIndex(rInfo.mnIndex),
-            maFont(rInfo.mrFont),
-            maDblDXArray(),
-            maLocale(rInfo.mpLocale ? *rInfo.mpLocale : ::com::sun::star::lang::Locale()),
-            mbRTL(rInfo.mrFont.IsVertical() ? false : rInfo.IsRTL())
-        {
-            if(mnTextLength && rInfo.mpDXArray)
-            {
-                maDblDXArray.reserve(mnTextLength);
-
-                for(xub_StrLen a(0); a < mnTextLength; a++)
-                {
-                    maDblDXArray.push_back((double)rInfo.mpDXArray[a]);
-                }
-            }
-        }
-
-        // for ::std::sort
-        bool operator<(const impPathTextPortion& rComp) const
-        {
-            if(mnParagraph < rComp.mnParagraph)
-            {
-                return true;
-            }
-
-            if(maOffset.getX() < rComp.maOffset.getX())
-            {
-                return true;
-            }
-
-            return (maOffset.getY() < rComp.maOffset.getY());
-        }
-
-        const basegfx::B2DVector& getOffset() const { return maOffset; }
-        const String& getText() const { return maText; }
-        xub_StrLen getTextStart() const { return mnTextStart; }
-        xub_StrLen getTextLength() const { return mnTextLength; }
-        sal_uInt16 getParagraph() const { return mnParagraph; }
-        xub_StrLen getIndex() const { return mnIndex; }
-        const SvxFont& getFont() const { return maFont; }
-        bool isRTL() const { return mbRTL; }
-        const ::std::vector< double >& getDoubleDXArray() const { return maDblDXArray; }
-        const ::com::sun::star::lang::Locale& getLocale() const { return maLocale; }
-
-        xub_StrLen getPortionIndex(xub_StrLen nIndex, xub_StrLen nLength) const
-        {
-            if(mbRTL)
-            {
-                return (mnTextStart + (mnTextLength - (nIndex + nLength)));
-            }
-            else
-            {
-                return (mnTextStart + nIndex);
-            }
-        }
-
-        double getDisplayLength(xub_StrLen nIndex, xub_StrLen nLength) const
-        {
-            drawinglayer::primitive2d::TextLayouterDevice aTextLayouter;
-            double fRetval(0.0);
-
-            if(maFont.IsVertical())
-            {
-                fRetval = aTextLayouter.getTextHeight() * (double)nLength;
-            }
-            else
-            {
-                fRetval = aTextLayouter.getTextWidth(maText, getPortionIndex(nIndex, nLength), nLength);
-            }
-
-            return fRetval;
-        }
-    };
-} // end of anonymous namespace
-
-//////////////////////////////////////////////////////////////////////////////
-// TextBreakup helper
-
-namespace
-{
-    class impTextBreakupHandler
-    {
-        SdrOutliner&                                mrOutliner;
-        ::std::vector< impPathTextPortion >         maPathTextPortions;
-
-        DECL_LINK(decompositionPathTextPrimitive, DrawPortionInfo* );
-
-    public:
-        impTextBreakupHandler(SdrOutliner& rOutliner)
-        :   mrOutliner(rOutliner)
-        {
-        }
-
-        const ::std::vector< impPathTextPortion >& decompositionPathTextPrimitive()
-        {
-            // strip portions to maPathTextPortions
-            mrOutliner.SetDrawPortionHdl(LINK(this, impTextBreakupHandler, decompositionPathTextPrimitive));
-            mrOutliner.StripPortions();
-
-            if(!maPathTextPortions.empty())
-            {
-                // sort portions by paragraph, x and y
-                ::std::sort(maPathTextPortions.begin(), maPathTextPortions.end());
-            }
-
-            return maPathTextPortions;
-        }
-    };
-
-    IMPL_LINK(impTextBreakupHandler, decompositionPathTextPrimitive, DrawPortionInfo*, pInfo)
-    {
-        maPathTextPortions.push_back(impPathTextPortion(*pInfo));
-        return 0;
-    }
-} // end of anonymous namespace
 
 //////////////////////////////////////////////////////////////////////////////
 // TextBreakup one poly and one paragraph helper
@@ -225,14 +83,14 @@ namespace
         std::vector< drawinglayer::primitive2d::BasePrimitive2D* >& mrShadowDecomposition;  // destination primitive list for shadow
         Reference < com::sun::star::i18n::XBreakIterator >          mxBreak;                // break iterator
 
-        double getParagraphTextLength(const ::std::vector< const impPathTextPortion* >& rTextPortions)
+        double getParagraphTextLength(const ::std::vector< const PathTextPortion* >& rTextPortions)
         {
             drawinglayer::primitive2d::TextLayouterDevice aTextLayouter;
             double fRetval(0.0);
 
             for(sal_uInt32 a(0L); a < rTextPortions.size(); a++)
             {
-                const impPathTextPortion* pCandidate = rTextPortions[a];
+                const PathTextPortion* pCandidate = rTextPortions[a];
 
                 if(pCandidate && pCandidate->getTextLength())
                 {
@@ -244,7 +102,7 @@ namespace
             return fRetval;
         }
 
-        xub_StrLen getNextGlyphLen(const impPathTextPortion* pCandidate, xub_StrLen nPosition, const ::com::sun::star::lang::Locale& rFontLocale)
+        xub_StrLen getNextGlyphLen(const PathTextPortion* pCandidate, xub_StrLen nPosition, const ::com::sun::star::lang::Locale& rFontLocale)
         {
             xub_StrLen nNextGlyphLen(1);
 
@@ -278,7 +136,7 @@ namespace
             }
         }
 
-        void HandlePair(const basegfx::B2DPolygon rPolygonCandidate, const ::std::vector< const impPathTextPortion* >& rTextPortions)
+        void HandlePair(const basegfx::B2DPolygon rPolygonCandidate, const ::std::vector< const PathTextPortion* >& rTextPortions)
         {
             // prepare polygon geometry, take into account as many parameters as possible
             basegfx::B2DPolygon aPolygonCandidate(rPolygonCandidate);
@@ -356,7 +214,7 @@ namespace
             // handle text portions for this paragraph
             for(sal_uInt32 a(0L); a < rTextPortions.size() && fPolyStart < fPolyEnd; a++)
             {
-                const impPathTextPortion* pCandidate = rTextPortions[a];
+                const PathTextPortion* pCandidate = rTextPortions[a];
                 basegfx::B2DVector aFontScaling;
                 const drawinglayer::attribute::FontAttribute aCandidateFontAttribute(
                     drawinglayer::primitive2d::getFontAttributeFromVclFont(
@@ -390,7 +248,7 @@ namespace
                         basegfx::B2DPoint aEndPos(aStartPos);
 
                         // add font scaling
-                        aNewTransformA.scale(aFontScaling.getX(), aFontScaling.getY());
+                        aNewTransformA.scale(aFontScaling);
 
                         // prepare scaling of text primitive
                         if(bAutosizeScale)
@@ -428,7 +286,7 @@ namespace
                                 aEndPos = basegfx::tools::getPositionAbsolute(aPolygonCandidate, fPolyStart + fPortionLength, fPolyLength);
                                 const basegfx::B2DVector aDirection(aEndPos - aStartPos);
                                 aNewTransformB.rotate(atan2(aDirection.getY(), aDirection.getX()));
-                                aNewTransformB.translate(aStartPos.getX(), aStartPos.getY());
+                                aNewTransformB.translate(aStartPos);
 
                                 break;
                             }
@@ -471,7 +329,7 @@ namespace
                                 // lead to primitives without width which the renderers will handle
                                    aNewTransformA.scale(fCos, 1.0);
 
-                                aNewTransformB.translate(aStartPos.getX(), aStartPos.getY());
+                                aNewTransformB.translate(aStartPos);
 
                                 break;
                             }
@@ -490,7 +348,7 @@ namespace
                             const basegfx::B2DVector aPerpendicular(
                                 basegfx::getNormalizedPerpendicular(aStartPos - aEndPos) *
                                 maSdrFormTextAttribute.getFormTextDistance());
-                            aNewTransformB.translate(aPerpendicular.getX(), aPerpendicular.getY());
+                            aNewTransformB.translate(aPerpendicular);
                         }
 
                         if(pCandidate->getText().Len() && nNextGlyphLen)
@@ -623,7 +481,7 @@ namespace
                 // get text outlines and their object transformation
                 pTextCandidate->getTextOutlinesAndTransformation(aB2DPolyPolyVector, aPolygonTransform);
 
-                if(!aB2DPolyPolyVector.empty())
+                if(aB2DPolyPolyVector.size())
                 {
                     // create stroke primitives
                     std::vector< drawinglayer::primitive2d::BasePrimitive2D* > aStrokePrimitives;
@@ -705,10 +563,10 @@ void SdrTextObj::impDecomposePathTextPrimitive(
     rOutliner.setVisualizedPage(GetSdrPageFromXDrawPage(aViewInformation.getVisualizedPage()));
 
     // now break up to text portions
-    impTextBreakupHandler aConverter(rOutliner);
-    const ::std::vector< impPathTextPortion > rPathTextPortions = aConverter.decompositionPathTextPrimitive();
+    ::std::vector< PathTextPortion > aPathTextPortions;
+    rOutliner.getPathTextPortions(aPathTextPortions);
 
-    if(!rPathTextPortions.empty())
+    if(aPathTextPortions.size())
     {
         // get FormText and polygon values
         const drawinglayer::attribute::SdrFormTextAttribute& rFormTextAttribute = rSdrPathTextPrimitive.getSdrFormTextAttribute();
@@ -736,11 +594,11 @@ void SdrTextObj::impDecomposePathTextPrimitive(
             for(a = 0L; a < nLoopCount; a++)
             {
                 // filter text portions for this paragraph
-                ::std::vector< const impPathTextPortion* > aParagraphTextPortions;
+                ::std::vector< const PathTextPortion* > aParagraphTextPortions;
 
-                for(sal_uInt32 b(0L); b < rPathTextPortions.size(); b++)
+                for(sal_uInt32 b(0L); b < aPathTextPortions.size(); b++)
                 {
-                    const impPathTextPortion& rCandidate = rPathTextPortions[b];
+                    const PathTextPortion& rCandidate = aPathTextPortions[b];
 
                     if(rCandidate.getParagraph() == a)
                     {
@@ -749,7 +607,7 @@ void SdrTextObj::impDecomposePathTextPrimitive(
                 }
 
                 // handle data pair polygon/ParagraphTextPortions
-                if(!aParagraphTextPortions.empty())
+                if(aParagraphTextPortions.size())
                 {
                     aPolygonParagraphHandler.HandlePair(rPathPolyPolygon.getB2DPolygon(a), aParagraphTextPortions);
                 }

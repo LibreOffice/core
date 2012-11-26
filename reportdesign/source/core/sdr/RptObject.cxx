@@ -41,9 +41,10 @@
 #include <svx/xlnclit.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlineit0.hxx>
-#include <svx/sderitm.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xlntrit.hxx>
+#include <svx/svdlegacy.hxx>
+
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/awt/XTabControllerModel.hpp>
 #include <com/sun/star/awt/XUnoControlContainer.hpp>
@@ -115,7 +116,7 @@ sal_uInt16 OObjectBase::getObjectType(const uno::Reference< report::XReportCompo
     return 0;
 }
 // -----------------------------------------------------------------------------
-SdrObject* OObjectBase::createObject(const uno::Reference< report::XReportComponent>& _xComponent)
+SdrObject* OObjectBase::createObject(SdrModel* pTargetModel, const uno::Reference< report::XReportComponent>& _xComponent)
 {
     SdrObject* pNewObj = NULL;
     sal_uInt16 nType = OObjectBase::getObjectType(_xComponent);
@@ -123,9 +124,12 @@ SdrObject* OObjectBase::createObject(const uno::Reference< report::XReportCompon
     {
         case OBJ_DLG_FIXEDTEXT:
             {
-                OUnoObject* pUnoObj = new OUnoObject( _xComponent
-                                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.FixedText"))
-                                    ,OBJ_DLG_FIXEDTEXT);
+                OUnoObject* pUnoObj = new OUnoObject(
+                    *pTargetModel,
+                    _xComponent
+                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.FixedText"))
+                    ,OBJ_DLG_FIXEDTEXT);
+                SetUnoShapeAtSdrObjectFromSvxShape(*pUnoObj, _xComponent);
                 pNewObj = pUnoObj;
 
                 uno::Reference<beans::XPropertySet> xControlModel(pUnoObj->GetUnoControlModel(),uno::UNO_QUERY);
@@ -134,23 +138,34 @@ SdrObject* OObjectBase::createObject(const uno::Reference< report::XReportCompon
             }
             break;
         case OBJ_DLG_IMAGECONTROL:
-            pNewObj = new OUnoObject(_xComponent
-                                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.DatabaseImageControl"))
-                                    ,OBJ_DLG_IMAGECONTROL);
+            pNewObj = new OUnoObject(
+                *pTargetModel,
+                _xComponent
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.DatabaseImageControl"))
+                ,OBJ_DLG_IMAGECONTROL);
+            SetUnoShapeAtSdrObjectFromSvxShape(*pNewObj, _xComponent);
             break;
         case OBJ_DLG_FORMATTEDFIELD:
-            pNewObj = new OUnoObject( _xComponent
-                                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.FormattedField"))
-                                    ,OBJ_DLG_FORMATTEDFIELD);
+            pNewObj = new OUnoObject(
+                *pTargetModel,
+                _xComponent
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.FormattedField"))
+                ,OBJ_DLG_FORMATTEDFIELD);
+            SetUnoShapeAtSdrObjectFromSvxShape(*pNewObj, _xComponent);
             break;
         case OBJ_DLG_HFIXEDLINE:
         case OBJ_DLG_VFIXEDLINE:
-            pNewObj = new OUnoObject( _xComponent
-                                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlFixedLineModel"))
-                                    ,nType);
+            pNewObj = new OUnoObject(
+                *pTargetModel,
+                _xComponent
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlFixedLineModel"))
+                ,nType);
+            SetUnoShapeAtSdrObjectFromSvxShape(*pNewObj, _xComponent);
             break;
         case OBJ_CUSTOMSHAPE:
-            pNewObj = OCustomShape::Create( _xComponent );
+            pNewObj = OCustomShape::Create(
+                *pTargetModel,
+                _xComponent );
             try
             {
                 sal_Bool bOpaque = sal_False;
@@ -164,7 +179,10 @@ SdrObject* OObjectBase::createObject(const uno::Reference< report::XReportCompon
             break;
         case OBJ_DLG_SUBREPORT:
         case OBJ_OLE2:
-            pNewObj = OOle2Obj::Create( _xComponent,nType );
+            pNewObj = OOle2Obj::Create(
+                *pTargetModel,
+                _xComponent,
+                nType );
             break;
         default:
             OSL_ENSURE(0,"Unknown object id");
@@ -412,7 +430,7 @@ void OObjectBase::SetPropsFromRect(const Rectangle& _rRect)
             xSection->setHeight(_rRect.getHeight() + _rRect.Top());
 
         // TODO
-        //pModel->GetRefDevice()->Invalidate(INVALIDATE_CHILDREN);
+        //pModel->GetReferenceDevice()->Invalidate(INVALIDATE_CHILDREN);
     }
 }
 //----------------------------------------------------------------------------
@@ -479,21 +497,18 @@ uno::Reference< uno::XInterface > OObjectBase::getUnoShapeOf( SdrObject& _rSdrOb
 }
 
 //----------------------------------------------------------------------------
-TYPEINIT1(OCustomShape, SdrObjCustomShape);
 DBG_NAME( rpt_OCustomShape );
-OCustomShape::OCustomShape(const uno::Reference< report::XReportComponent>& _xComponent
-                           )
-          :SdrObjCustomShape()
-          ,OObjectBase(_xComponent)
+OCustomShape::OCustomShape(SdrModel& rSdrModel, const uno::Reference< report::XReportComponent>& _xComponent)
+    :SdrObjCustomShape(rSdrModel)
+    ,OObjectBase(_xComponent)
 {
     DBG_CTOR( rpt_OCustomShape, NULL);
-    impl_setUnoShape( uno::Reference< uno::XInterface >(_xComponent,uno::UNO_QUERY) );
     m_bIsListening = sal_True;
 }
 //----------------------------------------------------------------------------
-OCustomShape::OCustomShape(const ::rtl::OUString& _sComponentName)
-          :SdrObjCustomShape()
-          ,OObjectBase(_sComponentName)
+OCustomShape::OCustomShape(SdrModel& rSdrModel, const ::rtl::OUString& _sComponentName)
+    :SdrObjCustomShape(rSdrModel)
+    ,OObjectBase(_sComponentName)
 {
     DBG_CTOR( rpt_OCustomShape, NULL);
     m_bIsListening = sal_True;
@@ -504,6 +519,47 @@ OCustomShape::~OCustomShape()
 {
     DBG_DTOR( rpt_OCustomShape, NULL);
 }
+
+void OCustomShape::copyDataFromSdrObject(const SdrObject& rSource)
+{
+    if(this != &rSource)
+    {
+        const OCustomShape* pSource = dynamic_cast< const OCustomShape* >(&rSource);
+
+        if(pSource)
+        {
+            // call parent
+            SdrObjCustomShape::copyDataFromSdrObject(rSource);
+
+            // no local data to copy
+        }
+        else
+        {
+            OSL_ENSURE(false, "copyDataFromSdrObject with ObjectType of Source different from Target (!)");
+        }
+    }
+}
+
+SdrObject* OCustomShape::CloneSdrObject(SdrModel* pTargetModel) const
+{
+    OCustomShape* pClone = new OCustomShape(
+        pTargetModel ? *pTargetModel : getSdrModelFromSdrObject(),
+        getReportComponent());
+    OSL_ENSURE(pClone, "CloneSdrObject error (!)");
+    pClone->copyDataFromSdrObject(*this);
+
+    return pClone;
+}
+
+OCustomShape* OCustomShape::Create(SdrModel& rSdrModel, const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent)
+{
+    OCustomShape* pNew = new OCustomShape( rSdrModel, _xComponent );
+    OSL_ENSURE(pNew, "Create error (!)");
+    SetUnoShapeAtSdrObjectFromSvxShape(*pNew, _xComponent);
+
+    return pNew;
+}
+
 // -----------------------------------------------------------------------------
 sal_uInt16 OCustomShape::GetObjIdentifier() const
 {
@@ -517,12 +573,12 @@ sal_uInt32 OCustomShape::GetObjInventor() const
 //----------------------------------------------------------------------------
 SdrPage* OCustomShape::GetImplPage() const
 {
-    return GetPage();
+    return getSdrPageFromSdrObject();
 }
 //----------------------------------------------------------------------------
 void OCustomShape::SetSnapRectImpl(const Rectangle& _rRect)
 {
-    SetSnapRect( _rRect );
+    sdr::legacy::SetSnapRect(*this, _rRect );
 }
 //----------------------------------------------------------------------------
 sal_Int32 OCustomShape::GetStep() const
@@ -532,56 +588,44 @@ sal_Int32 OCustomShape::GetStep() const
     OSL_ENSURE(0,"Who called me!");
     return nStep;
 }
+
 //----------------------------------------------------------------------------
-void OCustomShape::NbcMove( const Size& rSize )
+void OCustomShape::setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransformation)
 {
+    // call parent
+    SdrObjCustomShape::setSdrObjectTransformation(rTransformation);
+
     if ( m_bIsListening )
     {
         m_bIsListening = sal_False;
 
         if ( m_xReportComponent.is() )
         {
-            OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
-            OXUndoEnvironment::OUndoEnvLock aLock(pRptModel->GetUndoEnv());
-            m_xReportComponent->setPositionX(m_xReportComponent->getPositionX() + rSize.A());
-            m_xReportComponent->setPositionY(m_xReportComponent->getPositionY() + rSize.B());
+            OReportModel& rRptModel = static_cast< OReportModel& >(getSdrModelFromSdrObject());
+            OXUndoEnvironment::OUndoEnvLock aLock(rRptModel.GetUndoEnv());
+            const basegfx::B2DPoint& rTopLeft = getSdrObjectTranslate();
+            m_xReportComponent->setPositionX(int(rTopLeft.getX()));
+            m_xReportComponent->setPositionY(int(rTopLeft.getY()));
         }
 
         // set geometry properties
-        SetPropsFromRect(GetSnapRect());
+        SetPropsFromRect(sdr::legacy::GetSnapRect(*this));
 
         m_bIsListening = sal_True;
     }
-    else
-        SdrObjCustomShape::NbcMove( rSize );
 }
-//----------------------------------------------------------------------------
-void OCustomShape::NbcResize(const Point& rRef, const Fraction& xFract, const Fraction& yFract)
-{
-    SdrObjCustomShape::NbcResize( rRef, xFract, yFract );
 
-    SetPropsFromRect(GetSnapRect());
-}
 //----------------------------------------------------------------------------
-void OCustomShape::NbcSetLogicRect(const Rectangle& rRect)
+bool OCustomShape::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
-    SdrObjCustomShape::NbcSetLogicRect(rRect);
-    SetPropsFromRect(rRect);
-}
-//----------------------------------------------------------------------------
-FASTBOOL OCustomShape::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
-{
-    FASTBOOL bResult = SdrObjCustomShape::EndCreate(rStat, eCmd);
+    bool bResult(SdrObjCustomShape::EndCreate(rStat, eCmd));
     if ( bResult )
     {
-        OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
-        if ( pRptModel )
-        {
-            OXUndoEnvironment::OUndoEnvLock aLock(pRptModel->GetUndoEnv());
+        OReportModel& rRptModel = static_cast< OReportModel& >(getSdrModelFromSdrObject());
+        OXUndoEnvironment::OUndoEnvLock aLock(rRptModel.GetUndoEnv());
             if ( !m_xReportComponent.is() )
                 m_xReportComponent.set(getUnoShape(),uno::UNO_QUERY);
-        }
-        SetPropsFromRect(GetSnapRect());
+        SetPropsFromRect(sdr::legacy::GetSnapRect(*this));
     }
 
     return bResult;
@@ -591,8 +635,6 @@ FASTBOOL OCustomShape::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 void OCustomShape::SetObjectItemHelper(const SfxPoolItem& rItem)
 {
     SetObjectItem(rItem);
-    // TODO
-    //getSectionWindow()->getView()->AdjustMarkHdl();
 }
 
 // -----------------------------------------------------------------------------
@@ -607,8 +649,8 @@ uno::Reference< uno::XInterface > OCustomShape::getUnoShape()
     uno::Reference< uno::XInterface> xShape = OObjectBase::getUnoShapeOf( *this );
     if ( !m_xReportComponent.is() )
     {
-        OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
-        OXUndoEnvironment::OUndoEnvLock aLock(pRptModel->GetUndoEnv());
+        OReportModel& rRptModel = static_cast< OReportModel& >(getSdrModelFromSdrObject());
+        OXUndoEnvironment::OUndoEnvLock aLock(rRptModel.GetUndoEnv());
         m_xReportComponent.set(xShape,uno::UNO_QUERY);
     }
     return xShape;
@@ -616,13 +658,12 @@ uno::Reference< uno::XInterface > OCustomShape::getUnoShape()
 
 //----------------------------------------------------------------------------
 //----------------------------------------------------------------------------
-TYPEINIT1(OUnoObject, SdrUnoObj);
 DBG_NAME( rpt_OUnoObject );
-//----------------------------------------------------------------------------
-OUnoObject::OUnoObject(const ::rtl::OUString& _sComponentName
+OUnoObject::OUnoObject(SdrModel& rSdrModel
+    ,const ::rtl::OUString& _sComponentName
                        ,const ::rtl::OUString& rModelName
                        ,sal_uInt16   _nObjectType)
-          :SdrUnoObj(rModelName, sal_True)
+:   SdrUnoObj(rSdrModel, rModelName, sal_True)
           ,OObjectBase(_sComponentName)
           ,m_nObjectType(_nObjectType)
 {
@@ -631,15 +672,15 @@ OUnoObject::OUnoObject(const ::rtl::OUString& _sComponentName
         impl_initializeModel_nothrow();
 }
 //----------------------------------------------------------------------------
-OUnoObject::OUnoObject(const uno::Reference< report::XReportComponent>& _xComponent
+OUnoObject::OUnoObject(SdrModel& rSdrModel
+    ,const uno::Reference< report::XReportComponent>& _xComponent
                        ,const ::rtl::OUString& rModelName
                        ,sal_uInt16   _nObjectType)
-          :SdrUnoObj(rModelName, sal_True)
+:   SdrUnoObj(rSdrModel, rModelName, sal_True)
           ,OObjectBase(_xComponent)
           ,m_nObjectType(_nObjectType)
 {
     DBG_CTOR( rpt_OUnoObject, NULL);
-    impl_setUnoShape( uno::Reference< uno::XInterface >( _xComponent, uno::UNO_QUERY ) );
 
     if ( rModelName.getLength() )
         impl_initializeModel_nothrow();
@@ -652,6 +693,48 @@ OUnoObject::~OUnoObject()
 {
     DBG_DTOR( rpt_OUnoObject, NULL);
 }
+
+void OUnoObject::copyDataFromSdrObject(const SdrObject& rSource)
+{
+    if(this != &rSource)
+    {
+        const OUnoObject* pSource = dynamic_cast< const OUnoObject* >(&rSource);
+
+        if(pSource)
+        {
+            // call parent
+            SdrUnoObj::copyDataFromSdrObject(rSource);
+
+            // no own local data to copy (? had no own operator= at least)
+            Reference<XPropertySet> xSource(const_cast< OUnoObject* >(pSource)->getUnoShape(),uno::UNO_QUERY);
+            Reference<XPropertySet> xDest(getUnoShape(),uno::UNO_QUERY);
+
+            if ( xSource.is() && xDest.is() )
+            {
+                comphelper::copyProperties(xSource.get(),xDest.get());
+            }
+        }
+        else
+        {
+            OSL_ENSURE(false, "copyDataFromSdrObject with ObjectType of Source different from Target (!)");
+        }
+    }
+}
+
+SdrObject* OUnoObject::CloneSdrObject(SdrModel* pTargetModel) const
+{
+    OUnoObject* pClone = new OUnoObject(
+        pTargetModel ? *pTargetModel : getSdrModelFromSdrObject(),
+        getReportComponent(),
+        String(),
+        GetObjIdentifier());
+    SetUnoShapeAtSdrObjectFromSvxShape(*pClone, getReportComponent());
+    OSL_ENSURE(pClone, "CloneSdrObject error (!)");
+    pClone->copyDataFromSdrObject(*this);
+
+    return pClone;
+}
+
 // -----------------------------------------------------------------------------
 void OUnoObject::impl_initializeModel_nothrow()
 {
@@ -677,12 +760,8 @@ void OUnoObject::impl_setReportComponent_nothrow()
     if ( m_xReportComponent.is() )
         return;
 
-    OReportModel* pReportModel = static_cast<OReportModel*>(GetModel());
-    OSL_ENSURE( pReportModel, "OUnoObject::impl_setReportComponent_nothrow: no report model!" );
-    if ( !pReportModel )
-        return;
-
-    OXUndoEnvironment::OUndoEnvLock aLock( pReportModel->GetUndoEnv() );
+    OReportModel& rReportModel = static_cast< OReportModel& >(getSdrModelFromSdrObject());
+    OXUndoEnvironment::OUndoEnvLock aLock( rReportModel.GetUndoEnv() );
     m_xReportComponent.set(getUnoShape(),uno::UNO_QUERY);
 
     impl_initializeModel_nothrow();
@@ -701,13 +780,13 @@ sal_uInt32 OUnoObject::GetObjInventor() const
 SdrPage* OUnoObject::GetImplPage() const
 {
     DBG_CHKTHIS( rpt_OUnoObject,NULL);
-    return GetPage();
+    return getSdrPageFromSdrObject();
 }
 //----------------------------------------------------------------------------
 void OUnoObject::SetSnapRectImpl(const Rectangle& _rRect)
 {
     DBG_CHKTHIS( rpt_OUnoObject,NULL);
-    SetSnapRect( _rRect );
+    sdr::legacy::SetSnapRect(*this, _rRect );
 }
 //----------------------------------------------------------------------------
 sal_Int32 OUnoObject::GetStep() const
@@ -720,94 +799,58 @@ sal_Int32 OUnoObject::GetStep() const
 }
 
 //----------------------------------------------------------------------------
-void OUnoObject::NbcMove( const Size& rSize )
+void OUnoObject::setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransformation)
 {
     DBG_CHKTHIS( rpt_OUnoObject,NULL);
+
+    // call parent
+    SdrUnoObj::setSdrObjectTransformation(rTransformation);
 
     if ( m_bIsListening )
     {
         // stop listening
         OObjectBase::EndListening(sal_False);
 
-        bool bPositionFixed = false;
-        Size aUndoSize(0,0);
-        bool bUndoMode = false;
         if ( m_xReportComponent.is() )
         {
-            OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
-            if (pRptModel->GetUndoEnv().IsUndoMode())
-            {
-                // if we are locked from outside, then we must not handle wrong moves, we are in UNDO mode
-                bUndoMode = true;
-            }
-            OXUndoEnvironment::OUndoEnvLock aLock(pRptModel->GetUndoEnv());
+            OReportModel& rRptModel = static_cast< OReportModel& >(getSdrModelFromSdrObject());
+            const bool bUndoMode(rRptModel.GetUndoEnv().IsUndoMode());
+            OXUndoEnvironment::OUndoEnvLock aLock(rRptModel.GetUndoEnv());
+            const basegfx::B2DPoint& rNewTopLeft(getSdrObjectTranslate());
+            basegfx::B2DPoint aCorrectedTopLeft(rNewTopLeft);
 
-            // LLA: why there exists getPositionX and getPositionY and NOT getPosition() which return a Point?
-            int nNewX = m_xReportComponent->getPositionX() + rSize.A();
-            // can this hinder us to set components outside the area?
-            // if (nNewX < 0)
-            // {
-            //     nNewX = 0;
-            // }
-            m_xReportComponent->setPositionX(nNewX);
-            int nNewY = m_xReportComponent->getPositionY() + rSize.B();
-            if (nNewY < 0 && !bUndoMode)
-            {
-                aUndoSize.B() = abs(nNewY);
-                bPositionFixed = true;
-                nNewY = 0;
-            }
-            m_xReportComponent->setPositionY(nNewY);
-        }
-        if (bPositionFixed)
+            if(rNewTopLeft.getY() < 0.0 && !bUndoMode)
         {
-            GetModel()->AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoMoveObject(*this, aUndoSize));
-        }
-        // set geometry properties
-        SetPropsFromRect(GetLogicRect());
-
-        // start listening
-        OObjectBase::StartListening();
-    }
-    else
-        SdrUnoObj::NbcMove( rSize );
+                aCorrectedTopLeft.setY(0.0);
 }
 
-//----------------------------------------------------------------------------
-
-void OUnoObject::NbcResize(const Point& rRef, const Fraction& xFract, const Fraction& yFract)
+            if(aCorrectedTopLeft != rNewTopLeft)
 {
-    DBG_CHKTHIS( rpt_OUnoObject,NULL);
-    SdrUnoObj::NbcResize( rRef, xFract, yFract );
+                basegfx::B2DHomMatrix aCorrected(rTransformation);
 
-    // stop listening
-    OObjectBase::EndListening(sal_False);
+                aCorrected.translate(aCorrectedTopLeft - rNewTopLeft);
+                rRptModel.AddUndo(rRptModel.GetSdrUndoFactory().CreateUndoGeoObject(*this));
+                SdrUnoObj::setSdrObjectTransformation(aCorrected);
+            }
+
+            m_xReportComponent->setPositionX(int(aCorrectedTopLeft.getX()));
+            m_xReportComponent->setPositionY(int(aCorrectedTopLeft.getY()));
+}
 
     // set geometry properties
-    SetPropsFromRect(GetLogicRect());
+        SetPropsFromRect(sdr::legacy::GetLogicRect(*this));
 
     // start listening
     OObjectBase::StartListening();
 }
-//----------------------------------------------------------------------------
-void OUnoObject::NbcSetLogicRect(const Rectangle& rRect)
-{
-    SdrUnoObj::NbcSetLogicRect(rRect);
-    // stop listening
-    OObjectBase::EndListening(sal_False);
-
-    // set geometry properties
-    SetPropsFromRect(rRect);
-
-    // start listening
-    OObjectBase::StartListening();
 }
+
 //----------------------------------------------------------------------------
 
-FASTBOOL OUnoObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
+bool OUnoObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     DBG_CHKTHIS( rpt_OUnoObject,NULL);
-    FASTBOOL bResult = SdrUnoObj::EndCreate(rStat, eCmd);
+    bool bResult(SdrUnoObj::EndCreate(rStat, eCmd));
     if ( bResult )
     {
         impl_setReportComponent_nothrow();
@@ -829,7 +872,7 @@ FASTBOOL OUnoObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
             impl_initializeModel_nothrow();
         }
         // set geometry properties
-        SetPropsFromRect(GetLogicRect());
+        SetPropsFromRect(sdr::legacy::GetLogicRect(*this));
     }
 
     return bResult;
@@ -943,38 +986,28 @@ uno::Reference< uno::XInterface > OUnoObject::getUnoShape()
 {
     return OObjectBase::getUnoShapeOf( *this );
 }
-// -----------------------------------------------------------------------------
-SdrObject* OUnoObject::Clone() const
-{
-    SdrObject* pClone = SdrUnoObj::Clone();
-    if ( pClone )
-    {
-        Reference<XPropertySet> xSource(const_cast<OUnoObject*>(this)->getUnoShape(),uno::UNO_QUERY);
-        Reference<XPropertySet> xDest(pClone->getUnoShape(),uno::UNO_QUERY);
-        if ( xSource.is() && xDest.is() )
-            comphelper::copyProperties(xSource.get(),xDest.get());
-    } // if ( pClone )
-    return pClone;
-}
 //----------------------------------------------------------------------------
 // OOle2Obj
 //----------------------------------------------------------------------------
-TYPEINIT1(OOle2Obj, SdrOle2Obj);
 DBG_NAME( rpt_OOle2Obj );
-OOle2Obj::OOle2Obj(const uno::Reference< report::XReportComponent>& _xComponent,sal_uInt16 _nType)
-          :SdrOle2Obj()
+OOle2Obj::OOle2Obj(
+    SdrModel& rSdrModel,
+    const uno::Reference< report::XReportComponent>& _xComponent,
+    sal_uInt16 _nType)
+:   SdrOle2Obj(rSdrModel)
           ,OObjectBase(_xComponent)
           ,m_nType(_nType)
           ,m_bOnlyOnce(true)
 {
     DBG_CTOR( rpt_OOle2Obj, NULL);
-
-    impl_setUnoShape( uno::Reference< uno::XInterface >( _xComponent, uno::UNO_QUERY ) );
     m_bIsListening = sal_True;
 }
 //----------------------------------------------------------------------------
-OOle2Obj::OOle2Obj(const ::rtl::OUString& _sComponentName,sal_uInt16 _nType)
-          :SdrOle2Obj()
+OOle2Obj::OOle2Obj(
+    SdrModel& rSdrModel,
+    ::rtl::OUString _sComponentName,
+    sal_uInt16 _nType)
+:   SdrOle2Obj(rSdrModel)
           ,OObjectBase(_sComponentName)
           ,m_nType(_nType)
           ,m_bOnlyOnce(true)
@@ -1001,13 +1034,13 @@ sal_uInt32 OOle2Obj::GetObjInventor() const
 SdrPage* OOle2Obj::GetImplPage() const
 {
     DBG_CHKTHIS( rpt_OOle2Obj,NULL);
-    return GetPage();
+    return getSdrPageFromSdrObject();
 }
 //----------------------------------------------------------------------------
 void OOle2Obj::SetSnapRectImpl(const Rectangle& _rRect)
 {
     DBG_CHKTHIS( rpt_OOle2Obj,NULL);
-    SetSnapRect( _rRect );
+    sdr::legacy::SetSnapRect(*this, _rRect );
 }
 //----------------------------------------------------------------------------
 sal_Int32 OOle2Obj::GetStep() const
@@ -1020,105 +1053,66 @@ sal_Int32 OOle2Obj::GetStep() const
 }
 
 //----------------------------------------------------------------------------
-void OOle2Obj::NbcMove( const Size& rSize )
+void OOle2Obj::setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransformation)
 {
     DBG_CHKTHIS( rpt_OOle2Obj,NULL);
+
+    // call parent
+    SdrOle2Obj::setSdrObjectTransformation(rTransformation);
 
     if ( m_bIsListening )
     {
         // stop listening
         OObjectBase::EndListening(sal_False);
 
-        bool bPositionFixed = false;
-        Size aUndoSize(0,0);
-        bool bUndoMode = false;
         if ( m_xReportComponent.is() )
         {
-            OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
-            if (pRptModel->GetUndoEnv().IsUndoMode())
-            {
-                // if we are locked from outside, then we must not handle wrong moves, we are in UNDO mode
-                bUndoMode = true;
-            }
-            OXUndoEnvironment::OUndoEnvLock aLock(pRptModel->GetUndoEnv());
+            OReportModel& rRptModel = static_cast< OReportModel& >(getSdrModelFromSdrObject());
+            const bool bUndoMode(rRptModel.GetUndoEnv().IsUndoMode());
+            OXUndoEnvironment::OUndoEnvLock aLock(rRptModel.GetUndoEnv());
+            const basegfx::B2DPoint& rNewTopLeft(getSdrObjectTranslate());
+            basegfx::B2DPoint aCorrectedTopLeft(rNewTopLeft);
 
-            // LLA: why there exists getPositionX and getPositionY and NOT getPosition() which return a Point?
-            int nNewX = m_xReportComponent->getPositionX() + rSize.A();
-            // can this hinder us to set components outside the area?
-            // if (nNewX < 0)
-            // {
-            //     nNewX = 0;
-            // }
-            m_xReportComponent->setPositionX(nNewX);
-            int nNewY = m_xReportComponent->getPositionY() + rSize.B();
-            if (nNewY < 0 && !bUndoMode)
-            {
-                aUndoSize.B() = abs(nNewY);
-                bPositionFixed = true;
-                nNewY = 0;
-            }
-            m_xReportComponent->setPositionY(nNewY);
-        }
-        if (bPositionFixed)
+            if(rNewTopLeft.getY() < 0.0 && !bUndoMode)
         {
-            GetModel()->AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoMoveObject(*this, aUndoSize));
-        }
-        // set geometry properties
-        SetPropsFromRect(GetLogicRect());
-
-        // start listening
-        OObjectBase::StartListening();
-    }
-    else
-        SdrOle2Obj::NbcMove( rSize );
+                aCorrectedTopLeft.setY(0.0);
 }
 
-//----------------------------------------------------------------------------
-
-void OOle2Obj::NbcResize(const Point& rRef, const Fraction& xFract, const Fraction& yFract)
+            if(aCorrectedTopLeft != rNewTopLeft)
 {
-    DBG_CHKTHIS( rpt_OOle2Obj,NULL);
-    SdrOle2Obj::NbcResize( rRef, xFract, yFract );
+                basegfx::B2DHomMatrix aCorrected(rTransformation);
 
-    // stop listening
-    OObjectBase::EndListening(sal_False);
+                aCorrected.translate(aCorrectedTopLeft - rNewTopLeft);
+                rRptModel.AddUndo(rRptModel.GetSdrUndoFactory().CreateUndoGeoObject(*this));
+                SdrOle2Obj::setSdrObjectTransformation(aCorrected);
+            }
+
+            m_xReportComponent->setPositionX(int(aCorrectedTopLeft.getX()));
+            m_xReportComponent->setPositionY(int(aCorrectedTopLeft.getY()));
+}
 
     // set geometry properties
-    SetPropsFromRect(GetLogicRect());
+        SetPropsFromRect(sdr::legacy::GetLogicRect(*this));
 
     // start listening
     OObjectBase::StartListening();
 }
-//----------------------------------------------------------------------------
-void OOle2Obj::NbcSetLogicRect(const Rectangle& rRect)
-{
-    SdrOle2Obj::NbcSetLogicRect(rRect);
-    // stop listening
-    OObjectBase::EndListening(sal_False);
-
-    // set geometry properties
-    SetPropsFromRect(rRect);
-
-    // start listening
-    OObjectBase::StartListening();
 }
+
 //----------------------------------------------------------------------------
 
-FASTBOOL OOle2Obj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
+bool OOle2Obj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     DBG_CHKTHIS( rpt_OOle2Obj,NULL);
-    FASTBOOL bResult = SdrOle2Obj::EndCreate(rStat, eCmd);
+    bool bResult(SdrOle2Obj::EndCreate(rStat, eCmd));
     if ( bResult )
     {
-        OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
-        if ( pRptModel )
-        {
-            OXUndoEnvironment::OUndoEnvLock aLock(pRptModel->GetUndoEnv());
+        OReportModel& rRptModel = static_cast< OReportModel& >(getSdrModelFromSdrObject());
+        OXUndoEnvironment::OUndoEnvLock aLock(rRptModel.GetUndoEnv());
             if ( !m_xReportComponent.is() )
                 m_xReportComponent.set(getUnoShape(),uno::UNO_QUERY);
-        }
         // set geometry properties
-        SetPropsFromRect(GetLogicRect());
+        SetPropsFromRect(sdr::legacy::GetLogicRect(*this));
     }
 
     return bResult;
@@ -1135,8 +1129,8 @@ uno::Reference< uno::XInterface > OOle2Obj::getUnoShape()
     uno::Reference< uno::XInterface> xShape = OObjectBase::getUnoShapeOf( *this );
     if ( !m_xReportComponent.is() )
     {
-        OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
-        OXUndoEnvironment::OUndoEnvLock aLock(pRptModel->GetUndoEnv());
+        OReportModel& rRptModel = static_cast< OReportModel& >(getSdrModelFromSdrObject());
+        OXUndoEnvironment::OUndoEnvLock aLock(rRptModel.GetUndoEnv());
         m_xReportComponent.set(xShape,uno::UNO_QUERY);
     }
     return xShape;
@@ -1157,21 +1151,62 @@ uno::Reference< chart2::data::XDatabaseDataProvider > lcl_getDataProvider(const 
     return xSource;
 }
 // -----------------------------------------------------------------------------
-// Clone() soll eine komplette Kopie des Objektes erzeugen.
-SdrObject* OOle2Obj::Clone() const
+void OOle2Obj::copyDataFromSdrObject(const SdrObject& rSource)
 {
-    OOle2Obj* pObj = static_cast<OOle2Obj*>(SdrOle2Obj::Clone());
-    OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
-    svt::EmbeddedObjectRef::TryRunningState( pObj->GetObjRef() );
-    pObj->impl_createDataProvider_nothrow(pRptModel->getReportDefinition().get());
+    if(this != &rSource)
+    {
+        const OOle2Obj* pSource = dynamic_cast< const OOle2Obj* >(&rSource);
 
-    uno::Reference< chart2::data::XDatabaseDataProvider > xSource( lcl_getDataProvider(GetObjRef()) );
-    uno::Reference< chart2::data::XDatabaseDataProvider > xDest( lcl_getDataProvider(pObj->GetObjRef()) );
-    if ( xSource.is() && xDest.is() )
-        comphelper::copyProperties(xSource.get(),xDest.get());
+        if(pSource)
+        {
+            // call parent
+            SdrOle2Obj::copyDataFromSdrObject(rSource);
 
-    pObj->initializeChart(pRptModel->getReportDefinition().get());
-    return pObj;
+            // no own local data to copy (? had no own operator= at least)
+            OReportModel& rRptModel = static_cast< OReportModel& >(pSource->getSdrModelFromSdrObject());
+            svt::EmbeddedObjectRef::TryRunningState( GetObjRef() );
+            impl_createDataProvider_nothrow(rRptModel.getReportDefinition().get());
+
+            uno::Reference< chart2::data::XDatabaseDataProvider > xSource( lcl_getDataProvider(pSource->GetObjRef()) );
+            uno::Reference< chart2::data::XDatabaseDataProvider > xDest( lcl_getDataProvider(GetObjRef()) );
+
+            if ( xSource.is() && xDest.is() )
+            {
+                comphelper::copyProperties(xSource.get(),xDest.get());
+            }
+
+            initializeChart(rRptModel.getReportDefinition().get());
+        }
+        else
+        {
+            OSL_ENSURE(false, "copyDataFromSdrObject with ObjectType of Source different from Target (!)");
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+SdrObject* OOle2Obj::CloneSdrObject(SdrModel* pTargetModel) const
+{
+    OOle2Obj* pClone = new OOle2Obj(
+        pTargetModel ? *pTargetModel : getSdrModelFromSdrObject(),
+        getReportComponent(),
+        GetObjIdentifier());
+    OSL_ENSURE(pClone, "CloneSdrObject error (!)");
+    SetUnoShapeAtSdrObjectFromSvxShape(*pClone, getReportComponent());
+    pClone->copyDataFromSdrObject(*this);
+
+    return pClone;
+}
+// -----------------------------------------------------------------------------
+OOle2Obj* OOle2Obj::Create(
+    SdrModel& rSdrModel,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent >& _xComponent,
+    sal_uInt16 _nType)
+{
+    OOle2Obj* pNew = new OOle2Obj( rSdrModel, _xComponent, _nType );
+    OSL_ENSURE(pNew, "Create error (!)");
+    SetUnoShapeAtSdrObjectFromSvxShape(*pNew, _xComponent);
+
+    return pNew;
 }
 // -----------------------------------------------------------------------------
 void OOle2Obj::impl_createDataProvider_nothrow(const uno::Reference< frame::XModel>& _xModel)
@@ -1202,8 +1237,8 @@ void OOle2Obj::initializeOle()
     {
         m_bOnlyOnce = false;
         uno::Reference < embed::XEmbeddedObject > xObj = GetObjRef();
-        OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
-        pRptModel->GetUndoEnv().AddElement(lcl_getDataProvider(xObj));
+        OReportModel& rRptModel = static_cast< OReportModel& >(getSdrModelFromSdrObject());
+        rRptModel.GetUndoEnv().AddElement(lcl_getDataProvider(xObj));
 
         uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
         if( xCompSupp.is() )
@@ -1233,8 +1268,8 @@ void OOle2Obj::initializeChart( const uno::Reference< frame::XModel>& _xModel)
         if ( !lcl_getDataProvider(xObj).is() )
             impl_createDataProvider_nothrow(_xModel);
 
-        OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
-        pRptModel->GetUndoEnv().AddElement(lcl_getDataProvider(xObj));
+        OReportModel& rRptModel = static_cast< OReportModel& >(getSdrModelFromSdrObject());
+        rRptModel.GetUndoEnv().AddElement(lcl_getDataProvider(xObj));
 
         ::comphelper::NamedValueCollection aArgs;
         aArgs.put( "CellRangeRepresentation", uno::makeAny( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "all" ) ) ) );

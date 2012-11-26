@@ -88,8 +88,7 @@ namespace cppcanvas
                                    &rState.fontRotation );
 
                 basegfx::B2DHomMatrix aLocalTransformation(basegfx::tools::createRotateB2DHomMatrix(rState.fontRotation));
-                aLocalTransformation.translate( rStartPoint.getX(),
-                                                rStartPoint.getY() );
+                aLocalTransformation.translate( rStartPoint );
                 ::canvas::tools::appendToRenderState( o_rRenderState,
                                                       aLocalTransformation );
 
@@ -517,8 +516,7 @@ namespace cppcanvas
                     rendering::RenderState aShadowState( rRenderState );
                     ::basegfx::B2DHomMatrix aTranslate;
 
-                    aTranslate.translate( rShadowOffset.getX(),
-                                          rShadowOffset.getY() );
+                    aTranslate.translate( rShadowOffset );
 
                     ::canvas::tools::appendToRenderState(aShadowState, aTranslate);
 
@@ -535,8 +533,7 @@ namespace cppcanvas
                     rendering::RenderState aReliefState( rRenderState );
                     ::basegfx::B2DHomMatrix aTranslate;
 
-                    aTranslate.translate( rReliefOffset.getX(),
-                                          rReliefOffset.getY() );
+                    aTranslate.translate( rReliefOffset );
 
                     ::canvas::tools::appendToRenderState(aReliefState, aTranslate);
 

@@ -41,8 +41,6 @@ using namespace ::com::sun::star::beans;
 using namespace xmloff::token;
 
 
-TYPEINIT1( XMLTableHeaderFooterContext, SvXMLImportContext );
-
 XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                        const OUString& rLName,
                        const uno::Reference<
@@ -204,8 +202,6 @@ void XMLTableHeaderFooterContext::EndElement()
         xPropSet->setPropertyValue( sCont, uno::makeAny(xHeaderFooterContent) );
     }
 }
-
-TYPEINIT1( XMLHeaderFooterRegionContext, SvXMLImportContext );
 
 XMLHeaderFooterRegionContext::XMLHeaderFooterRegionContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                        const OUString& rLName,

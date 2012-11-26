@@ -44,8 +44,6 @@ class XMLLineNumberingSeparatorImportContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLLineNumberingSeparatorImportContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,

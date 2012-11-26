@@ -35,6 +35,7 @@
 #include <sot/clsids.hxx>
 #include <rtl/instance.hxx>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
+#include <string.h>
 
 /************** class SotData_Impl *********************************************/
 /*************************************************************************
@@ -141,7 +142,6 @@ void SotFactory::DeInit()
 |*
 |*    Beschreibung
 *************************************************************************/
-TYPEINIT0(SotFactory);
 
 SotFactory::SotFactory( const SvGlobalName & rName,
                       const String & rClassName,

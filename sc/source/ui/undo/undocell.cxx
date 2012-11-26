@@ -50,21 +50,6 @@
 #include "sc.hrc"
 #include "docuno.hxx"
 
-// STATIC DATA -----------------------------------------------------------
-
-TYPEINIT1(ScUndoCursorAttr, ScSimpleUndo);
-TYPEINIT1(ScUndoEnterData, ScSimpleUndo);
-TYPEINIT1(ScUndoEnterValue, ScSimpleUndo);
-TYPEINIT1(ScUndoPutCell, ScSimpleUndo);
-TYPEINIT1(ScUndoPageBreak, ScSimpleUndo);
-TYPEINIT1(ScUndoPrintZoom, ScSimpleUndo);
-TYPEINIT1(ScUndoThesaurus, ScSimpleUndo);
-TYPEINIT1(ScUndoReplaceNote, ScSimpleUndo);
-TYPEINIT1(ScUndoShowHideNote, ScSimpleUndo);
-TYPEINIT1(ScUndoDetective, ScSimpleUndo);
-TYPEINIT1(ScUndoRangeNames, ScSimpleUndo);
-
-
 // -----------------------------------------------------------------------
 //
 //      Attribute auf Cursor anwenden
@@ -154,13 +139,15 @@ void __EXPORT ScUndoCursorAttr::Redo()
 
 void __EXPORT ScUndoCursorAttr::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->ApplySelectionPattern( *pApplyPattern );
+    ScTabViewTarget* pScTabViewTarget = dynamic_cast< ScTabViewTarget* >(&rTarget);
+
+    if (pScTabViewTarget)
+        pScTabViewTarget->GetViewShell()->ApplySelectionPattern( *pApplyPattern );
 }
 
 sal_Bool __EXPORT ScUndoCursorAttr::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return 0 != dynamic_cast< ScTabViewTarget* >(&rTarget);
 }
 
 
@@ -330,16 +317,18 @@ void __EXPORT ScUndoEnterData::Redo()
 
 void __EXPORT ScUndoEnterData::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    ScTabViewTarget* pScTabViewTarget = dynamic_cast< ScTabViewTarget* >(&rTarget);
+
+    if (pScTabViewTarget)
     {
         String aTemp = aNewString;
-        ((ScTabViewTarget&)rTarget).GetViewShell()->EnterDataAtCursor( aTemp );
+        pScTabViewTarget->GetViewShell()->EnterDataAtCursor( aTemp );
     }
 }
 
 sal_Bool __EXPORT ScUndoEnterData::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return 0 != dynamic_cast< ScTabViewTarget* >(&rTarget);
 }
 
 
@@ -585,9 +574,11 @@ void __EXPORT ScUndoPageBreak::Redo()
 
 void __EXPORT ScUndoPageBreak::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    ScTabViewTarget* pScTabViewTarget = dynamic_cast< ScTabViewTarget* >(&rTarget);
+
+    if (pScTabViewTarget)
     {
-        ScTabViewShell& rViewShell = *((ScTabViewTarget&)rTarget).GetViewShell();
+        ScTabViewShell& rViewShell = *pScTabViewTarget->GetViewShell();
 
         if (bInsert)
             rViewShell.InsertPageBreak(bColumn, sal_True);
@@ -598,7 +589,7 @@ void __EXPORT ScUndoPageBreak::Repeat(SfxRepeatTarget& rTarget)
 
 sal_Bool __EXPORT ScUndoPageBreak::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return 0 != dynamic_cast< ScTabViewTarget* >(&rTarget);
 }
 
 // -----------------------------------------------------------------------
@@ -663,9 +654,11 @@ void __EXPORT ScUndoPrintZoom::Redo()
 
 void __EXPORT ScUndoPrintZoom::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
+    ScTabViewTarget* pScTabViewTarget = dynamic_cast< ScTabViewTarget* >(&rTarget);
+
+    if (pScTabViewTarget)
     {
-        ScTabViewShell& rViewShell = *((ScTabViewTarget&)rTarget).GetViewShell();
+        ScTabViewShell& rViewShell = *pScTabViewTarget->GetViewShell();
         ScViewData* pViewData = rViewShell.GetViewData();
         pViewData->GetDocShell()->SetPrintZoom( pViewData->GetTabNo(), nNewScale, nNewPages );
     }
@@ -673,7 +666,7 @@ void __EXPORT ScUndoPrintZoom::Repeat(SfxRepeatTarget& rTarget)
 
 sal_Bool __EXPORT ScUndoPrintZoom::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return 0 != dynamic_cast< ScTabViewTarget* >(&rTarget);
 }
 
 
@@ -793,13 +786,17 @@ void __EXPORT ScUndoThesaurus::Redo()
 
 void __EXPORT ScUndoThesaurus::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->DoThesaurus( sal_True );
+    ScTabViewTarget* pScTabViewTarget = dynamic_cast< ScTabViewTarget* >(&rTarget);
+
+    if (pScTabViewTarget)
+    {
+        pScTabViewTarget->GetViewShell()->DoThesaurus( sal_True );
+    }
 }
 
 sal_Bool __EXPORT ScUndoThesaurus::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    return (rTarget.ISA(ScTabViewTarget));
+    return 0 != dynamic_cast< ScTabViewTarget* >(&rTarget);
 }
 
 

@@ -168,7 +168,7 @@ public:
 
     /** Test whether the called FrameworkHelper object is valid.
         @return
-            When the object has already been disposed then <FALSE/> is returned.
+            When the object has already been disposed then <false/> is returned.
     */
     bool IsValid (void);
 
@@ -372,7 +372,7 @@ private:
         @param rsEventType
             Run rCallback only on this event.
         @param rFilter
-            This filter has to return <TRUE/> in order for rCallback to be
+            This filter has to return <true/> in order for rCallback to be
             called.
         @param rCallback
             The callback functor to be called.

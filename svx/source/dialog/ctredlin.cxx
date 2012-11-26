@@ -92,8 +92,6 @@ SvxRedlinEntry::~SvxRedlinEntry()
 #* Funktionen der in den SvxRedlinTable eingefuegten Items
 #************************************************************************/
 
-DBG_NAME(SvLBoxColorString);
-
 /*************************************************************************
 #*  Member:     SvLBoxColorString                           Datum:23.10.97
 #*------------------------------------------------------------------------
@@ -113,7 +111,6 @@ SvLBoxColorString::SvLBoxColorString( SvLBoxEntry*pEntry,sal_uInt16 nFlags,const
 
 : SvLBoxString( pEntry, nFlags, rStr )
 {
-    DBG_CTOR(SvLBoxColorString,0);
     aPrivColor=rCol;
     SetText( pEntry, rStr );
 }
@@ -135,7 +132,6 @@ SvLBoxColorString::SvLBoxColorString( SvLBoxEntry*pEntry,sal_uInt16 nFlags,const
 SvLBoxColorString::SvLBoxColorString()
 : SvLBoxString()
 {
-    DBG_CTOR(SvLBoxColorString,0);
 }
 
 /*************************************************************************
@@ -154,7 +150,6 @@ SvLBoxColorString::SvLBoxColorString()
 
 SvLBoxColorString::~SvLBoxColorString()
 {
-    DBG_DTOR(SvLBoxColorString,0);
 }
 
 
@@ -174,7 +169,6 @@ SvLBoxColorString::~SvLBoxColorString()
 
 SvLBoxItem* SvLBoxColorString::Create() const
 {
-    DBG_CHKTHIS(SvLBoxColorString,0);
     return new SvLBoxColorString;
 }
 

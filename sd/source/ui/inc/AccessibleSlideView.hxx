@@ -64,7 +64,7 @@ private:
     AccessibleSlideView*                                                                                                    mpManager;
     /// client id in the AccessibleEventNotifier queue
     sal_uInt32                                                                                                              mnClientId;
-    sal_uInt16                                                                                                              mnPage;
+    sal_uInt32                                                                                                              mnPage;
     sal_Bool                                                                                                                mbVisible;
     sal_Bool                                                                                                                mbValid;
 
@@ -146,7 +146,7 @@ public:
     */
     void Destroyed (void);
 
-    sal_uInt16                  GetPageNum() const { return mnPage; }
+    sal_uInt32                  GetPageNum() const { return mnPage; }
 
     void                        SetVisible( sal_Bool bVisible );
     sal_Bool                    IsVisible() const;

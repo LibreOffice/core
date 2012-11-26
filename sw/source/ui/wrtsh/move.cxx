@@ -497,7 +497,7 @@ sal_Bool SwWrtShell::PushCrsr(SwTwips lOffset, sal_Bool bSelect)
             EndSelect();
 
         bIsFrmSel = IsFrmSelected();
-        bIsObjSel = 0 != IsObjSelected();
+        bIsObjSel = IsObjSelected();
 
         // Rahmenselektion aufheben
         if( bIsFrmSel || bIsObjSel )

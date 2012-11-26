@@ -41,10 +41,6 @@
 #include <fmtmeta.hxx>
 
 
-TYPEINIT1(SwTxtINetFmt,SwClient);
-TYPEINIT1(SwTxtRuby,SwClient);
-
-
 /*************************************************************************
  *                      class SwTxtCharFmt
  *************************************************************************/

@@ -48,8 +48,6 @@
 
 //------------------------------------------------------------------------
 
-TYPEINIT1( ScAuditingShell, SfxShell );
-
 SFX_IMPL_INTERFACE(ScAuditingShell, SfxShell, ScResId(SCSTR_AUDITSHELL))
 {
     SFX_POPUPMENU_REGISTRATION( ScResId(RID_POPUP_AUDIT) );
@@ -113,7 +111,7 @@ void ScAuditingShell::Execute( SfxRequest& rReq )
                     if ( pReqArgs->GetItemState( SID_RANGE_COL, sal_True, &pXItem ) == SFX_ITEM_SET
                       && pReqArgs->GetItemState( SID_RANGE_ROW, sal_True, &pYItem ) == SFX_ITEM_SET )
                     {
-                        DBG_ASSERT( pXItem->ISA(SfxInt16Item) && pYItem->ISA(SfxInt32Item),
+                        DBG_ASSERT( dynamic_cast< const SfxInt16Item* >(pXItem) && dynamic_cast< const SfxInt32Item* >(pYItem),
                                         "falsche Items" );
                         SCsCOL nCol = static_cast<SCsCOL>(((const SfxInt16Item*) pXItem)->GetValue());
                         SCsROW nRow = static_cast<SCsROW>(((const SfxInt32Item*) pYItem)->GetValue());

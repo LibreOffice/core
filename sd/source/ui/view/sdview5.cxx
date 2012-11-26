@@ -55,25 +55,20 @@ SdrObject* View::GetEmptyPresentationObject( PresObjKind eKind )
     SdrPageView*    pPV = GetSdrPageView();
     if( pPV )
     {
-        SdPage* pPage = static_cast< SdPage* >( pPV->GetPage() );
-        if( pPage && !pPage->IsMasterPage() )
+        SdPage& rPage = static_cast< SdPage& >( pPV->getSdrPageFromSdrPageView() );
+        if( !rPage.IsMasterPage() )
         {
             // first try selected shape
-            if ( AreObjectsMarked() )
-            {
+            SdrObject* pSelectedObj = getSelectedIfSingle();
+
                 /**********************************************************
                 * Is an empty graphic object available?
                 **********************************************************/
-                const SdrMarkList& rMarkList = GetMarkedObjectList();
-
-                if (rMarkList.GetMarkCount() == 1)
+            if( pSelectedObj
+                && pSelectedObj->IsEmptyPresObj()
+                && implIsMultiPresObj( rPage.GetPresObjKind(pSelectedObj) ) )
                 {
-                    SdrMark* pMark = rMarkList.GetMark(0);
-                    SdrObject* pObj = pMark->GetMarkedSdrObj();
-
-                    if( pObj->IsEmptyPresObj() && implIsMultiPresObj( pPage->GetPresObjKind(pObj) ) )
-                        pEmptyObj = pObj;
-                }
+                pEmptyObj = pSelectedObj;
             }
 
             // try to find empty pres obj of same type
@@ -82,7 +77,7 @@ SdrObject* View::GetEmptyPresentationObject( PresObjKind eKind )
                 int nIndex = 1;
                 do
                 {
-                    pEmptyObj = pPage->GetPresObj(eKind, nIndex++ );
+                    pEmptyObj = rPage.GetPresObj(eKind, nIndex++ );
                 }
                 while( (pEmptyObj != 0) && (!pEmptyObj->IsEmptyPresObj()) );
             }
@@ -90,13 +85,13 @@ SdrObject* View::GetEmptyPresentationObject( PresObjKind eKind )
             // last try to find empty pres obj of multiple type
             if( !pEmptyObj )
             {
-                const std::list< SdrObject* >& rShapes = pPage->GetPresentationShapeList().getList();
+                const std::list< const SdrObject* >& rShapes = rPage.GetPresentationShapeList().getList();
 
-                for( std::list< SdrObject* >::const_iterator iter( rShapes.begin() ); iter != rShapes.end(); iter++ )
+                for( std::list< const SdrObject* >::const_iterator iter( rShapes.begin() ); iter != rShapes.end(); iter++ )
                 {
-                    if( (*iter)->IsEmptyPresObj() && implIsMultiPresObj(pPage->GetPresObjKind(*iter)) )
+                    if( (*iter)->IsEmptyPresObj() && implIsMultiPresObj(rPage.GetPresObjKind(*iter)) )
                     {
-                        pEmptyObj = (*iter);
+                        pEmptyObj = const_cast< SdrObject* >(*iter);
                         break;
                     }
                 }

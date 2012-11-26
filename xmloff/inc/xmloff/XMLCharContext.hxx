@@ -37,8 +37,6 @@ protected:
     sal_Unicode m_c;
 public:
 
-    TYPEINFO();
-
     XMLCharContext(
             SvXMLImport& rImport,
             sal_uInt16 nPrfx,

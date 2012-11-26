@@ -78,25 +78,22 @@ using namespace com::sun::star;
 void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
 {
     ScDrawView* pView = pViewData->GetScDrawView();
-    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-    sal_uLong nMarkCount = rMarkList.GetMarkCount();
+    SdrObject* pSelected = pView->getSelectedIfSingle();
 
         //  Hyperlink
-
     SvxHyperlinkItem aHLinkItem;
 
-    if ( nMarkCount == 1 )              // URL-Button markiert ?
+    if ( pSelected )              // URL-Button markiert ?
     {
-        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 #ifdef ISSUE66550_HLINK_FOR_SHAPES
-        ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj );
+        ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pSelected );
         if ( pInfo && (pInfo->GetHlink().getLength() > 0) )
         {
             aHLinkItem.SetURL( pInfo->GetHlink() );
             aHLinkItem.SetInsertMode(HLINK_FIELD);
         }
 #endif
-        SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pObj);
+        SdrUnoObj* pUnoCtrl = dynamic_cast< SdrUnoObj* >( pSelected);
         if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
         {
             uno::Reference<awt::XControlModel> xControlModel = pUnoCtrl->GetUnoControlModel();
@@ -178,11 +175,11 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
                     if ( eMode == HLINK_FIELD || eMode == HLINK_BUTTON )
                     {
                         ScDrawView* pView = pViewData->GetScDrawView();
-                        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-                        if ( rMarkList.GetMarkCount() == 1 )
+                        SdrObject* pSelected = pView->getSelectedIfSingle();
+
+                        if ( pSelected )
                         {
-                            SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                            SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pObj );
+                            SdrUnoObj* pUnoCtrl = dynamic_cast< SdrUnoObj* >( pSelected );
                             if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
                             {
                                 uno::Reference<awt::XControlModel> xControlModel =
@@ -241,7 +238,7 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
 #ifdef ISSUE66550_HLINK_FOR_SHAPES
                             else
                             {
-                                SetHlinkForObject( pObj, rURL );
+                                SetHlinkForObject( pSelected, rURL );
                                 bDone = sal_True;
                             }
 #endif
@@ -325,10 +322,10 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
             break;
 
         case SID_MIRROR_HORIZONTAL:
-            pView->MirrorAllMarkedHorizontal();
+            pView->MirrorMarkedObjHorizontal();
             break;
         case SID_MIRROR_VERTICAL:
-            pView->MirrorAllMarkedVertical();
+            pView->MirrorMarkedObjVertical();
             break;
 
         case SID_OBJECT_ALIGN_LEFT:
@@ -424,9 +421,9 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                 pView->SetDragMode( eMode );
                 rBindings.Invalidate( SID_OBJECT_ROTATE );
                 rBindings.Invalidate( SID_OBJECT_MIRROR );
-                if (eMode == SDRDRAG_ROTATE && !pView->IsFrameDragSingles())
+                if (eMode == SDRDRAG_ROTATE && !pView->IsFrameHandles())
                 {
-                    pView->SetFrameDragSingles( sal_True );
+                    pView->SetFrameHandles(true);
                     rBindings.Invalidate( SID_BEZIER_EDIT );
                 }
             }
@@ -441,17 +438,17 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                 pView->SetDragMode( eMode );
                 rBindings.Invalidate( SID_OBJECT_ROTATE );
                 rBindings.Invalidate( SID_OBJECT_MIRROR );
-                if (eMode == SDRDRAG_MIRROR && !pView->IsFrameDragSingles())
+                if (eMode == SDRDRAG_MIRROR && !pView->IsFrameHandles())
                 {
-                    pView->SetFrameDragSingles( sal_True );
+                    pView->SetFrameHandles(true);
                     rBindings.Invalidate( SID_BEZIER_EDIT );
                 }
             }
             break;
         case SID_BEZIER_EDIT:
             {
-                sal_Bool bOld = pView->IsFrameDragSingles();
-                pView->SetFrameDragSingles( !bOld );
+                bool bOld(pView->IsFrameHandles());
+                pView->SetFrameHandles( !bOld );
                 rBindings.Invalidate( SID_BEZIER_EDIT );
                 if (bOld && pView->GetDragMode() != SDRDRAG_MOVE)
                 {
@@ -486,7 +483,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
         case SID_ENABLE_HYPHENATION:
             {
-                SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, SID_ENABLE_HYPHENATION, sal_False);
+                SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, SID_ENABLE_HYPHENATION );
                 if( pItem )
                 {
                     SfxItemSet aSet( GetPool(), EE_PARA_HYPHENATE, EE_PARA_HYPHENATE );
@@ -500,13 +497,10 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
         case SID_RENAME_OBJECT:
             {
-                if(1L == pView->GetMarkedObjectCount())
-                {
                     // #i68101#
-                    SdrObject* pSelected = pView->GetMarkedObjectByIndex(0L);
-                    OSL_ENSURE(pSelected, "ScDrawShell::ExecDrawFunc: nMarkCount, but no object (!)");
+                SdrObject* pSelected = pView->getSelectedIfSingle();
 
-                    if(SC_LAYER_INTERN != pSelected->GetLayer())
+                if(pSelected && SC_LAYER_INTERN != pSelected->GetLayer())
                     {
                         String aName(pSelected->GetName());
 
@@ -564,19 +558,15 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
                         delete pDlg;
                     }
-                }
                 break;
             }
 
         // #i68101#
         case SID_TITLE_DESCRIPTION_OBJECT:
             {
-                if(1L == pView->GetMarkedObjectCount())
-                {
-                    SdrObject* pSelected = pView->GetMarkedObjectByIndex(0L);
-                    OSL_ENSURE(pSelected, "ScDrawShell::ExecDrawFunc: nMarkCount, but no object (!)");
+                SdrObject* pSelected = pView->getSelectedIfSingle();
 
-                    if(SC_LAYER_INTERN != pSelected->GetLayer())
+                if(pSelected && SC_LAYER_INTERN != pSelected->GetLayer())
                     {
                         String aTitle(pSelected->GetTitle());
                         String aDescription(pSelected->GetDescription());
@@ -603,7 +593,6 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
                         delete pDlg;
                     }
-                }
                 break;
             }
 
@@ -672,9 +661,9 @@ IMPL_LINK( ScDrawShell, NameObjectHdl, AbstractSvxNameDialog*, pDialog )
 void ScDrawShell::ExecFormText(SfxRequest& rReq)
 {
     ScDrawView*         pDrView     = pViewData->GetScDrawView();
-    const SdrMarkList&  rMarkList   = pDrView->GetMarkedObjectList();
+    SdrObject* pSelected = pDrView->getSelectedIfSingle();
 
-    if ( rMarkList.GetMarkCount() == 1 && rReq.GetArgs() )
+    if ( pSelected && rReq.GetArgs() )
     {
         const SfxItemSet& rSet = *rReq.GetArgs();
         const SfxPoolItem* pItem;
@@ -694,8 +683,8 @@ void ScDrawShell::ExecFormText(SfxRequest& rReq)
                                        (pViewFrm->
                                             GetChildWindow(nId)->GetWindow());
 
-            pDlg->CreateStdFormObj(*pDrView, *pDrView->GetSdrPageView(),
-                                    rSet, *rMarkList.GetMark(0)->GetMarkedSdrObj(),
+            pDlg->CreateStdFormObj(*pDrView,
+                                    rSet, *pSelected,
                                    ((const XFormTextStdFormItem*) pItem)->
                                    GetValue());
         }
@@ -722,7 +711,7 @@ void ScDrawShell::ExecFormatPaintbrush( SfxRequest& rReq )
             bLock = static_cast<const SfxBoolItem&>(pArgs->Get(SID_FORMATPAINTBRUSH)).GetValue();
 
         ScDrawView* pDrawView = pViewData->GetScDrawView();
-        if ( pDrawView && pDrawView->AreObjectsMarked() )
+        if ( pDrawView && pDrawView->areSdrObjectsSelected() )
         {
             sal_Bool bOnlyHardAttr = sal_True;
             SfxItemSet* pItemSet = new SfxItemSet( pDrawView->GetAttrFromMarked(bOnlyHardAttr) );
@@ -734,7 +723,7 @@ void ScDrawShell::ExecFormatPaintbrush( SfxRequest& rReq )
 void ScDrawShell::StateFormatPaintbrush( SfxItemSet& rSet )
 {
     ScDrawView* pDrawView = pViewData->GetScDrawView();
-    sal_Bool bSelection = pDrawView && pDrawView->AreObjectsMarked();
+    sal_Bool bSelection = pDrawView && pDrawView->areSdrObjectsSelected();
     sal_Bool bHasPaintBrush = pViewData->GetView()->HasPaintBrush();
 
     if ( !bHasPaintBrush && !bSelection )

@@ -155,9 +155,6 @@ namespace drawinglayer
             const ::com::sun::star::lang::Locale& getLocale() const { return  maLocale; }
             const basegfx::BColor& getFontColor() const { return maFontColor; }
 
-            /// compare operator
-            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
-
             /// get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 

@@ -146,7 +146,7 @@ namespace drawinglayer
             GeoTexSvxHatch*                 mp2;
 
             // bitfield
-            unsigned                        mbFillBackground : 1;
+            bool                            mbFillBackground : 1;
 
             // helpers
             bool impIsOnHatch(const basegfx::B2DPoint& rUV) const;

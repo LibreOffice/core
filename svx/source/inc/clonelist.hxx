@@ -25,29 +25,26 @@
 
 #include <sal/types.h>
 #include <tools/list.hxx>
+#include <vector>
+#include <svx/svdobj.hxx>
 
-// predeclarations
-class SdrObject;
-
-// #i13033#
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // New mechanism to hold a ist of all original and cloned objects for later
 // re-creating the connections for contained connectors
+
 class CloneList
 {
-    List                        maOriginalList;
-    List                        maCloneList;
+    SdrObjectVector     maOriginalList;
+    SdrObjectVector     maCloneList;
 
 public:
     CloneList();
     ~CloneList();
 
     void AddPair(const SdrObject* pOriginal, SdrObject* pClone);
-    sal_uInt32 Count() const;
-
-    const SdrObject* GetOriginal(sal_uInt32 nIndex) const;
-    SdrObject* GetClone(sal_uInt32 nIndex) const;
-
     void CopyConnections() const;
 };
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #endif // _CLONELIST_HXX_

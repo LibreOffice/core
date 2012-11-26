@@ -95,7 +95,7 @@ namespace drawinglayer
             basegfx::B2DRange& rUnitVisibleRange) const
         {
             // use unit range and transform to discrete coordinates
-            rDiscreteRange = basegfx::B2DRange(0.0, 0.0, 1.0, 1.0);
+            rDiscreteRange = basegfx::B2DRange::getUnitB2DRange();
             rDiscreteRange.transform(rViewInformation.getObjectToViewTransformation() * getObjectTransformation());
 
             // clip it against discrete Viewport (if set)
@@ -423,26 +423,10 @@ namespace drawinglayer
         {
         }
 
-        bool ScenePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const ScenePrimitive2D& rCompare = (ScenePrimitive2D&)rPrimitive;
-
-                return (primitive3d::arePrimitive3DSequencesEqual(getChildren3D(), rCompare.getChildren3D())
-                    && getSdrSceneAttribute() == rCompare.getSdrSceneAttribute()
-                    && getSdrLightingAttribute() == rCompare.getSdrLightingAttribute()
-                    && getObjectTransformation() == rCompare.getObjectTransformation()
-                    && getViewInformation3D() == rCompare.getViewInformation3D());
-            }
-
-            return false;
-        }
-
         basegfx::B2DRange ScenePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
             // transform unit range to discrete coordinate range
-            basegfx::B2DRange aRetval(0.0, 0.0, 1.0, 1.0);
+            basegfx::B2DRange aRetval(basegfx::B2DRange::getUnitB2DRange());
             aRetval.transform(rViewInformation.getObjectToViewTransformation() * getObjectTransformation());
 
             // force to discrete expanded bounds (it grows, so expanding works perfectly well)

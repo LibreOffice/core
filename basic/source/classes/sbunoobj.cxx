@@ -99,14 +99,6 @@ using namespace cppu;
 #include <com/sun/star/reflection/XTypeDescriptionEnumerationAccess.hpp>
 #include <com/sun/star/reflection/XConstantsTypeDescription.hpp>
 
-TYPEINIT1(SbUnoMethod,SbxMethod)
-TYPEINIT1(SbUnoProperty,SbxProperty)
-TYPEINIT1(SbUnoObject,SbxObject)
-TYPEINIT1(SbUnoClass,SbxObject)
-TYPEINIT1(SbUnoService,SbxObject)
-TYPEINIT1(SbUnoServiceCtor,SbxMethod)
-TYPEINIT1(SbUnoSingleton,SbxObject)
-
 typedef WeakImplHelper1< XAllListener > BasicAllListenerHelper;
 
 // Flag, um immer ueber Invocation zu gehen
@@ -143,15 +135,18 @@ SbxVariable* getDefaultProp( SbxVariable* pRef )
     SbxVariable* pDefaultProp = NULL;
     if ( pRef->GetType() == SbxOBJECT )
     {
-          SbxObject* pObj = PTR_CAST(SbxObject,(SbxVariable*) pRef);
+          SbxObject* pObj = dynamic_cast< SbxObject* >( (SbxVariable*) pRef);
+
         if ( !pObj )
         {
             SbxBase* pObjVarObj = pRef->GetObject();
-            pObj = PTR_CAST(SbxObject,pObjVarObj);
+            pObj = dynamic_cast< SbxObject* >( pObjVarObj);
         }
-        if ( pObj && pObj->ISA(SbUnoObject) )
+
+        SbUnoObject* pUnoObj = dynamic_cast< SbUnoObject* >(pObj);
+
+        if ( pUnoObj )
         {
-            SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,(SbxObject*)pObj);
             pDefaultProp = pUnoObj->GetDfltProperty();
         }
     }
@@ -386,11 +381,6 @@ Any convertAny( const Any& rVal, const Type& aDestType )
     }
     return aConvertedVal;
 }
-
-
-// #105565 Special Object to wrap a strongly typed Uno Any
-TYPEINIT1(SbUnoAnyObject,SbxObject)
-
 
 // TODO: Spaeter auslagern
 Reference<XIdlClass> TypeToIdlClass( const Type& rType )
@@ -849,7 +839,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
             enum2int( nEnum, aValue );
             pVar->PutLong( nEnum );
         }
-            break;
+        break;
 
         case TypeClass_SEQUENCE:
         {
@@ -1010,11 +1000,10 @@ Type getUnoTypeForSbxValue( SbxValue* pVal )
             return aRetType;
         }
 
-        if( xObj->ISA(SbxDimArray) )
-        {
-            SbxBase* pObj = (SbxBase*)xObj;
-            SbxDimArray* pArray = (SbxDimArray*)pObj;
+        SbxDimArray* pArray = dynamic_cast< SbxDimArray* >((SbxBase*)xObj);
 
+        if( pArray )
+        {
             short nDims = pArray->GetDims();
             Type aElementType = getUnoTypeForSbxBaseType( (SbxDataType)(pArray->GetType() & 0xfff) );
             TypeClass eElementTypeClass = aElementType.getTypeClass();
@@ -1103,16 +1092,26 @@ Type getUnoTypeForSbxValue( SbxValue* pVal )
             }
         }
         // Kein Array, sondern...
-        else if( xObj->ISA(SbUnoObject) )
+        else
         {
-            aRetType = ((SbUnoObject*)(SbxBase*)xObj)->getUnoAny().getValueType();
+            SbUnoObject* pSbUnoObject = dynamic_cast< SbUnoObject* >((SbxBase*)xObj);
+
+            if( pSbUnoObject )
+            {
+                aRetType = pSbUnoObject->getUnoAny().getValueType();
+            }
+            // SbUnoAnyObject?
+            else
+            {
+                SbUnoAnyObject* pSbUnoAnyObject = dynamic_cast< SbUnoAnyObject* >((SbxBase*)xObj);
+
+                if( pSbUnoAnyObject )
+                {
+                    aRetType = pSbUnoAnyObject->getValue().getValueType();
+                }
+                // Sonst ist es ein Nicht-Uno-Basic-Objekt -> default==void liefern
+            }
         }
-        // SbUnoAnyObject?
-        else if( xObj->ISA(SbUnoAnyObject) )
-        {
-            aRetType = ((SbUnoAnyObject*)(SbxBase*)xObj)->getValue().getValueType();
-        }
-        // Sonst ist es ein Nicht-Uno-Basic-Objekt -> default==void liefern
     }
     // Kein Objekt, Basistyp konvertieren
     else
@@ -1134,20 +1133,26 @@ Any sbxToUnoValueImpl( SbxVariable* pVar, bool bBlockConversionToSmallestType = 
         SbxBaseRef xObj = (SbxBase*)pVar->GetObject();
         if( xObj.Is() )
         {
-            if( xObj->ISA(SbUnoAnyObject) )
-                return ((SbUnoAnyObject*)(SbxBase*)xObj)->getValue();
-            if( xObj->ISA(SbClassModuleObject) )
+            SbUnoAnyObject* pSbUnoAnyObject = dynamic_cast< SbUnoAnyObject* >((SbxBase*)xObj);
+
+            if(pSbUnoAnyObject)
+            {
+                return pSbUnoAnyObject->getValue();
+            }
+
+            SbClassModuleObject* pClassModuleObj = dynamic_cast< SbClassModuleObject* >((SbxBase*)xObj);
+
+            if(pClassModuleObj)
             {
                 Any aRetAny;
-                SbClassModuleObject* pClassModuleObj = (SbClassModuleObject*)(SbxBase*)xObj;
                 SbModule* pClassModule = pClassModuleObj->getClassModule();
                 if( pClassModule->createCOMWrapperForIface( aRetAny, pClassModuleObj ) )
                     return aRetAny;
             }
-            if( !xObj->ISA(SbUnoObject) )
+            if( !dynamic_cast< SbUnoObject* >( (SbxBase*)xObj ) )
             {
                 // Create NativeObjectWrapper to identify object in case of callbacks
-                SbxObject* pObj = PTR_CAST(SbxObject,pVar->GetObject());
+                SbxObject* pObj = dynamic_cast< SbxObject* >(pVar->GetObject());
                 if( pObj != NULL )
                 {
                     NativeObjectWrapper aNativeObjectWrapper;
@@ -1332,10 +1337,11 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
     SbxDataType eBaseType = pVar->SbxValue::GetType();
     if( eBaseType == SbxOBJECT )
     {
-        SbxBaseRef xObj = (SbxBase*)pVar->GetObject();
-        if( xObj.Is() && xObj->ISA(SbUnoAnyObject) )
+        SbUnoAnyObject* pSbUnoAnyObject = dynamic_cast< SbUnoAnyObject* >((SbxBase*)pVar->GetObject());
+
+        if( pSbUnoAnyObject )
         {
-            return ((SbUnoAnyObject*)(SbxBase*)xObj)->getValue();
+            return pSbUnoAnyObject->getValue();
         }
     }
 
@@ -1393,9 +1399,11 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
                 }
 
                 SbxBaseRef pObj = (SbxBase*)pVar->GetObject();
-                if( pObj && pObj->ISA(SbUnoObject) )
+                SbUnoObject* pSbUnoObject = dynamic_cast< SbUnoObject* >((SbxBase*)pObj);
+
+                if( pSbUnoObject )
                 {
-                    aRetVal = ((SbUnoObject*)(SbxBase*)pObj)->getUnoAny();
+                    aRetVal = pSbUnoObject->getUnoAny();
                 }
                 else
                 {
@@ -1415,7 +1423,7 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
                 Reference< XIdlClass > xIdlClass;
 
                 SbxBaseRef pObj = (SbxBase*)pVar->GetObject();
-                if( pObj && pObj->ISA(SbUnoObject) )
+                if( pObj && dynamic_cast< SbUnoObject* >((SbxBase*)pObj) )
                 {
                     Any aUnoAny = ((SbUnoObject*)(SbxBase*)pObj)->getUnoAny();
                     aUnoAny >>= xIdlClass;
@@ -1458,12 +1466,10 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
 
         case TypeClass_SEQUENCE:
         {
-            SbxBaseRef xObj = (SbxBase*)pVar->GetObject();
-            if( xObj && xObj->ISA(SbxDimArray) )
-            {
-                SbxBase* pObj = (SbxBase*)xObj;
-                SbxDimArray* pArray = (SbxDimArray*)pObj;
+            SbxDimArray* pArray = dynamic_cast< SbxDimArray* >((SbxBase*)pVar->GetObject());
 
+            if( pArray )
+            {
                 short nDims = pArray->GetDims();
 
                 // Normal case: One dimensional array
@@ -1711,7 +1717,7 @@ String getBasicObjectTypeName( SbxObject* pObj )
     String aName;
     if( pObj )
     {
-        SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,pObj);
+        SbUnoObject* pUnoObj = dynamic_cast< SbUnoObject* >( pObj);
         if( pUnoObj )
             aName = getDbgObjectNameImpl( pUnoObj );
     }
@@ -2072,8 +2078,6 @@ String Impl_DumpMethods( SbUnoObject* pUnoObj )
     return aRet;
 }
 
-TYPEINIT1(AutomationNamedArgsSbxArray,SbxArray)
-
 // Implementation SbUnoObject
 void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                            const SfxHint& rHint, const TypeId& rHintType )
@@ -2081,13 +2085,13 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
     if( bNeedIntrospection )
         doIntrospection();
 
-    const SbxHint* pHint = PTR_CAST(SbxHint,&rHint);
+    const SbxHint* pHint = dynamic_cast< const SbxHint* >( &rHint);
     if( pHint )
     {
         SbxVariable* pVar = pHint->GetVar();
         SbxArray* pParams = pVar->GetParameters();
-        SbUnoProperty* pProp = PTR_CAST(SbUnoProperty,pVar);
-        SbUnoMethod* pMeth = PTR_CAST(SbUnoMethod,pVar);
+        SbUnoProperty* pProp = dynamic_cast< SbUnoProperty* >( pVar);
+        SbUnoMethod* pMeth = dynamic_cast< SbUnoMethod* >( pVar);
         if( pProp )
         {
             bool bInvocation = pProp->isInvocationBased();
@@ -2278,7 +2282,7 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
 
                     AutomationNamedArgsSbxArray* pArgNamesArray = NULL;
                     if( bOLEAutomation )
-                        pArgNamesArray = PTR_CAST(AutomationNamedArgsSbxArray,pParams);
+                        pArgNamesArray = dynamic_cast< AutomationNamedArgsSbxArray* >( pParams);
 
                     args.realloc( nParamCount );
                     Any* pAnyArgs = args.getArray();
@@ -3044,7 +3048,7 @@ void createAllObjectProperties( SbxObject* pObj )
     if( !pObj )
         return;
 
-    SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,pObj);
+    SbUnoObject* pUnoObj = dynamic_cast< SbUnoObject* >( pObj);
     if( pUnoObj )
         pUnoObj->createAllProperties();
     else
@@ -3232,7 +3236,7 @@ void RTL_Impl_HasInterfaces( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite 
 
     // Uno-Objekt holen
     SbxBaseRef pObj = (SbxBase*)rPar.Get( 1 )->GetObject();
-    if( !(pObj && pObj->ISA(SbUnoObject)) )
+    if( !(pObj && dynamic_cast< SbUnoObject* >((SbxBase*)pObj)) )
         return;
     Any aAny = ((SbUnoObject*)(SbxBase*)pObj)->getUnoAny();
     TypeClass eType = aAny.getValueType().getTypeClass();
@@ -3289,7 +3293,7 @@ void RTL_Impl_IsUnoStruct( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
     if( !xParam->IsObject() )
         return;
     SbxBaseRef pObj = (SbxBase*)rPar.Get( 1 )->GetObject();
-    if( !(pObj && pObj->ISA(SbUnoObject)) )
+    if( !(pObj && dynamic_cast< SbUnoObject* >((SbxBase*)pObj)) )
         return;
     Any aAny = ((SbUnoObject*)(SbxBase*)pObj)->getUnoAny();
     TypeClass eType = aAny.getValueType().getTypeClass();
@@ -3318,7 +3322,7 @@ void RTL_Impl_EqualUnoObjects( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
     if( !xParam1->IsObject() )
         return;
     SbxBaseRef pObj1 = (SbxBase*)xParam1->GetObject();
-    if( !(pObj1 && pObj1->ISA(SbUnoObject)) )
+    if( !(pObj1 && dynamic_cast< SbUnoObject* >((SbxBase*)pObj1)) )
         return;
     Any aAny1 = ((SbUnoObject*)(SbxBase*)pObj1)->getUnoAny();
     TypeClass eType1 = aAny1.getValueType().getTypeClass();
@@ -3332,7 +3336,7 @@ void RTL_Impl_EqualUnoObjects( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
     if( !xParam2->IsObject() )
         return;
     SbxBaseRef pObj2 = (SbxBase*)xParam2->GetObject();
-    if( !(pObj2 && pObj2->ISA(SbUnoObject)) )
+    if( !(pObj2 && dynamic_cast< SbUnoObject* >((SbxBase*)pObj2)) )
         return;
     Any aAny2 = ((SbUnoObject*)(SbxBase*)pObj2)->getUnoAny();
     TypeClass eType2 = aAny2.getValueType().getTypeClass();
@@ -3648,12 +3652,12 @@ SbxVariable* SbUnoService::Find( const String& rName, SbxClassType )
 void SbUnoService::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                            const SfxHint& rHint, const TypeId& rHintType )
 {
-    const SbxHint* pHint = PTR_CAST(SbxHint,&rHint);
+    const SbxHint* pHint = dynamic_cast< const SbxHint* >( &rHint);
     if( pHint )
     {
         SbxVariable* pVar = pHint->GetVar();
         SbxArray* pParams = pVar->GetParameters();
-        SbUnoServiceCtor* pUnoCtor = PTR_CAST(SbUnoServiceCtor,pVar);
+        SbUnoServiceCtor* pUnoCtor = dynamic_cast< SbUnoServiceCtor* >( pVar);
         if( pUnoCtor && pHint->GetId() == SBX_HINT_DATAWANTED )
         {
             // Parameter count -1 because of Param0 == this
@@ -3878,7 +3882,7 @@ SbUnoSingleton::SbUnoSingleton( const String& aName_,
 void SbUnoSingleton::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                            const SfxHint& rHint, const TypeId& rHintType )
 {
-    const SbxHint* pHint = PTR_CAST(SbxHint,&rHint);
+    const SbxHint* pHint = dynamic_cast< const SbxHint* >( &rHint);
     if( pHint )
     {
         SbxVariable* pVar = pHint->GetVar();
@@ -3983,7 +3987,7 @@ void BasicAllListener_Impl::firing_impl( const AllEventObject& Event, Any* pRet 
         while( pP->GetParent() )
         {
             pP = pP->GetParent();
-            StarBASIC * pLib = PTR_CAST(StarBASIC,pP);
+            StarBASIC * pLib = dynamic_cast< StarBASIC* >( pP);
             if( pLib )
             {
                 // In Basic Array anlegen
@@ -4326,7 +4330,7 @@ void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite
             Reference< XIdlClass > xIdlClass;
 
             SbxBaseRef pObj = (SbxBase*)pVal->GetObject();
-            if( pObj && pObj->ISA(SbUnoObject) )
+            if( pObj && dynamic_cast< SbUnoObject* >((SbxBase*)pObj) )
             {
                 Any aUnoAny = ((SbUnoObject*)(SbxBase*)pObj)->getUnoAny();
                 aUnoAny >>= xIdlClass;
@@ -4453,7 +4457,7 @@ ModuleInvocationProxy::ModuleInvocationProxy( const ::rtl::OUString& aPrefix, Sb
     , m_xScopeObj( xScopeObj )
     , m_aListeners( m_aMutex )
 {
-    m_bProxyIsClassModuleObject = xScopeObj.Is() ? xScopeObj->ISA(SbClassModuleObject) : false;
+    m_bProxyIsClassModuleObject = xScopeObj.Is() ? 0 != dynamic_cast< SbClassModuleObject* >((SbxBase*)xScopeObj) : false;
 }
 
 Reference< XIntrospectionAccess > SAL_CALL ModuleInvocationProxy::getIntrospection() throw()
@@ -4473,7 +4477,7 @@ void SAL_CALL ModuleInvocationProxy::setValue( const ::rtl::OUString& rProperty,
     aPropertyFunctionName += rProperty;
 
     SbxVariable* p = m_xScopeObj->Find( aPropertyFunctionName, SbxCLASS_METHOD );
-    SbMethod* pMeth = p != NULL ? PTR_CAST(SbMethod,p) : NULL;
+    SbMethod* pMeth = p != NULL ? dynamic_cast< SbMethod* >( p) : NULL;
     if( pMeth == NULL )
     {
         // TODO: Check vba behavior concernig missing function
@@ -4514,7 +4518,7 @@ Any SAL_CALL ModuleInvocationProxy::getValue( const ::rtl::OUString& rProperty )
     aPropertyFunctionName += rProperty;
 
     SbxVariable* p = m_xScopeObj->Find( aPropertyFunctionName, SbxCLASS_METHOD );
-    SbMethod* pMeth = p != NULL ? PTR_CAST(SbMethod,p) : NULL;
+    SbMethod* pMeth = p != NULL ? dynamic_cast< SbMethod* >( p) : NULL;
     if( pMeth == NULL )
     {
         // TODO: Check vba behavior concernig missing function
@@ -4569,7 +4573,8 @@ Any SAL_CALL ModuleInvocationProxy::invoke( const ::rtl::OUString& rFunction,
     }
 
     SbxVariable* p = xScopeObj->Find( aFunctionName, SbxCLASS_METHOD );
-    SbMethod* pMeth = p != NULL ? PTR_CAST(SbMethod,p) : NULL;
+    SbMethod* pMeth = dynamic_cast< SbMethod* >(p);
+
     if( pMeth == NULL )
     {
         // TODO: Check vba behavior concernig missing function
@@ -4813,7 +4818,7 @@ bool SbModule::createCOMWrapperForIface( Any& o_rRetAny, SbClassModuleObject* pP
                     do
                     {
                         SbxObject* pObjParent = pCurObject->GetParent();
-                        pParentBasic = PTR_CAST( StarBASIC, pObjParent );
+                        pParentBasic = dynamic_cast< StarBASIC* >( pObjParent );
                         pCurObject = pObjParent;
                     }
                     while( pParentBasic == NULL && pCurObject != NULL );
@@ -4840,7 +4845,7 @@ bool handleToStringForCOMObjects( SbxObject* pObj, SbxValue* pVal )
     bool bSuccess = false;
 
     SbUnoObject* pUnoObj = NULL;
-    if( pObj != NULL && (pUnoObj = PTR_CAST(SbUnoObject,(SbxObject*)pObj)) != NULL )
+    if( pObj != NULL && (pUnoObj = dynamic_cast< SbUnoObject* >((SbxObject*)pObj)) != NULL )
     {
         // Only for native COM objects
         if( pUnoObj->isNativeCOMObject() )

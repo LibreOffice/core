@@ -39,11 +39,6 @@
 #include <switerator.hxx>
 #include <svl/intitem.hxx>
 
-TYPEINIT1( SwTxtFmtColl, SwFmtColl );
-TYPEINIT1( SwGrfFmtColl, SwFmtColl );
-TYPEINIT1( SwConditionTxtFmtColl, SwTxtFmtColl );
-TYPEINIT1( SwCollCondition, SwClient );
-
 SV_IMPL_PTRARR( SwFmtCollConditions, SwCollConditionPtr );
 
 // --> OD 2008-03-04 #refactorlists#

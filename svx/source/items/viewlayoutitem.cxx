@@ -31,13 +31,12 @@
 
 // -----------------------------------------------------------------------
 
-TYPEINIT1_FACTORY(SvxViewLayoutItem,SfxUInt16Item, new SvxViewLayoutItem);
-
 #define VIEWLAYOUT_PARAM_COLUMNS    "Columns"
 #define VIEWLAYOUT_PARAM_BOOKMODE   "BookMode"
 #define VIEWLAYOUT_PARAMS           2
 
 // -----------------------------------------------------------------------
+IMPL_POOLITEM_FACTORY(SvxViewLayoutItem)
 
 SvxViewLayoutItem::SvxViewLayoutItem
 (

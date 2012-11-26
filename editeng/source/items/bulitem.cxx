@@ -40,10 +40,6 @@
 
 // -----------------------------------------------------------------------
 
-TYPEINIT1(SvxBulletItem,SfxPoolItem);
-
-// -----------------------------------------------------------------------
-
 void SvxBulletItem::StoreFont( SvStream& rStream, const Font& rFont )
 {
     sal_uInt16 nTemp;
@@ -331,7 +327,7 @@ void SvxBulletItem::CopyValidProperties( const SvxBulletItem& rCopyFrom )
 
 int SvxBulletItem::operator==( const SfxPoolItem& rItem ) const
 {
-    DBG_ASSERT(rItem.ISA(SvxBulletItem),"operator==Types not matching");
+    DBG_ASSERT(dynamic_cast< const SvxBulletItem* >(&rItem),"operator==Types not matching");
     const SvxBulletItem& rBullet = (const SvxBulletItem&)rItem;
     // ValidMask mitvergleichen, da sonst kein Putten in ein AttrSet moeglich,
     // wenn sich das Item nur in der ValidMask von einem existierenden unterscheidet.

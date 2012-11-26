@@ -36,7 +36,6 @@
 class SVX_DLLPUBLIC XFillBmpPosItem : public SfxEnumItem
 {
 public:
-                            TYPEINFO();
                             XFillBmpPosItem( RECT_POINT eRP = RP_MM );
                             SVX_DLLPRIVATE XFillBmpPosItem( SvStream& rIn );
 

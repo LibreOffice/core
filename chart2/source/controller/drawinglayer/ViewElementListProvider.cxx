@@ -32,6 +32,7 @@
 #include <svx/XPropertyTable.hxx>
 #include <svx/unofill.hxx>
 #include <svx/unoapi.hxx>
+#include <svx/svdlegacy.hxx>
 
 // header for class NameOrIndex
 #include <svx/xit.hxx>
@@ -152,7 +153,7 @@ SdrObjList* ViewElementListProvider::GetSymbolList() const
 
             SdrObject* pSdrObject = DrawViewWrapper::getSdrObject( uno::Reference< drawing::XShape >( m_xSymbols, uno::UNO_QUERY ) );
             if(pSdrObject)
-                m_pSymbolList = pSdrObject->GetSubList();
+                m_pSymbolList = pSdrObject->getChildrenOfSdrObject();
         }
     }
     catch( uno::Exception& e )
@@ -178,28 +179,27 @@ Graphic ViewElementListProvider::GetSymbolGraphic( sal_Int32 nStandardSymbol, co
     SdrModel* pModel = new SdrModel();
     pModel->GetItemPool().FreezeIdRanges();
     SdrPage* pPage = new SdrPage( *pModel, sal_False );
-    pPage->SetSize(Size(1000,1000));
+    pPage->SetPageScale(basegfx::B2DVector(1000.0, 1000.0));
     pModel->InsertPage( pPage, 0 );
-    SdrView* pView = new SdrView( pModel, &aVDev );
-    pView->hideMarkHandles();
-    SdrPageView* pPageView = pView->ShowSdrPage(pPage);
+    SdrView* pView = new SdrView( *pModel, &aVDev );
+    pView->ShowSdrPage(*pPage);
 
-    pObj=pObj->Clone();
-    pPage->NbcInsertObject(pObj);
-    pView->MarkObj(pObj,pPageView);
+    pObj = pObj->CloneSdrObject();
+    pPage->InsertObjectToSdrObjList(*pObj);
+    pView->MarkObj(*pObj);
     if( pSymbolShapeProperties )
         pObj->SetMergedItemSet(*pSymbolShapeProperties);
 
     GDIMetaFile aMeta(pView->GetMarkedObjMetaFile());
 
     Graphic aGraph(aMeta);
-    Size aSize = pObj->GetSnapRect().GetSize();
+    const Size aSize(sdr::legacy::GetSnapRect(*pObj).GetSize());
     aGraph.SetPrefSize(aSize);
     aGraph.SetPrefMapMode(MAP_100TH_MM);
 
     pView->UnmarkAll();
-    pObj=pPage->RemoveObject(0);
-    SdrObject::Free( pObj );
+    pObj=pPage->RemoveObjectFromSdrObjList(0);
+    deleteSdrObjectSafeAndClearPointer( pObj );
     delete pView;
     delete pModel;
 

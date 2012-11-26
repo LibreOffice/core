@@ -26,9 +26,10 @@
 #include <svtools/ttprops.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/bitmap.hxx>
-#include <tools/rtti.hxx>
 
-TYPEINIT1( TTProperties, ApplicationProperty )
+TTProperties::~TTProperties()
+{
+}
 
 sal_Bool TTProperties::RequestProperty( sal_uInt16 nRequest )
 {

@@ -350,7 +350,6 @@ protected:
 
 //===== SelectionFunction =====================================================
 
-TYPEINIT1(SelectionFunction, FuPoor);
 
 
 SelectionFunction::SelectionFunction (
@@ -394,24 +393,24 @@ FunctionReference SelectionFunction::Create(
 
 
 
-sal_Bool SelectionFunction::MouseButtonDown (const MouseEvent& rEvent)
+bool SelectionFunction::MouseButtonDown (const MouseEvent& rEvent)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode (rEvent.GetButtons());
-    aMDPos = rEvent.GetPosPixel();
+    aMDPos = basegfx::B2DPoint(rEvent.GetPosPixel().X(), rEvent.GetPosPixel().Y());
     mbProcessingMouseButtonDown = true;
 
     //  mpWindow->CaptureMouse();
 
     ProcessMouseEvent(BUTTON_DOWN, rEvent);
 
-    return sal_True;
+    return true;
 }
 
 
 
 
-sal_Bool SelectionFunction::MouseMove (const MouseEvent& rEvent)
+bool SelectionFunction::MouseMove (const MouseEvent& rEvent)
 {
     ProcessMouseEvent(MOUSE_MOTION, rEvent);
     return sal_True;
@@ -420,7 +419,7 @@ sal_Bool SelectionFunction::MouseMove (const MouseEvent& rEvent)
 
 
 
-sal_Bool SelectionFunction::MouseButtonUp (const MouseEvent& rEvent)
+bool SelectionFunction::MouseButtonUp (const MouseEvent& rEvent)
 {
     mrController.GetScrollBarManager().StopAutoScroll ();
 
@@ -429,7 +428,7 @@ sal_Bool SelectionFunction::MouseButtonUp (const MouseEvent& rEvent)
     mbProcessingMouseButtonDown = false;
 //    mpWindow->ReleaseMouse();
 
-    return sal_True;
+    return true;
 }
 
 
@@ -443,12 +442,12 @@ void SelectionFunction::NotifyDragFinished (void)
 
 
 
-sal_Bool SelectionFunction::KeyInput (const KeyEvent& rEvent)
+bool SelectionFunction::KeyInput (const KeyEvent& rEvent)
 {
     view::SlideSorterView::DrawLock aDrawLock (mrSlideSorter);
     PageSelector::UpdateLock aLock (mrSlideSorter);
     FocusManager& rFocusManager (mrController.GetFocusManager());
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     const KeyCode& rCode (rEvent.GetKeyCode());
     switch (rCode.GetCode())
@@ -473,7 +472,7 @@ sal_Bool SelectionFunction::KeyInput (const KeyEvent& rEvent)
                         SID_INSERTPAGE,
                         SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
                 }
-                bResult = sal_True;
+                bResult = true;
             }
             break;
         }
@@ -505,7 +504,7 @@ sal_Bool SelectionFunction::KeyInput (const KeyEvent& rEvent)
                 else
                     mrController.GetPageSelector().SelectPage(pDescriptor);
             }
-            bResult = sal_True;
+            bResult = true;
         }
         break;
 
@@ -537,13 +536,13 @@ sal_Bool SelectionFunction::KeyInput (const KeyEvent& rEvent)
         // Go to previous page.  No wrap around.
         case KEY_PAGEUP:
             GotoNextPage(-1);
-            bResult = sal_True;
+            bResult = true;
             break;
 
         // Go to next page.  No wrap around..
         case KEY_PAGEDOWN:
             GotoNextPage(+1);
-            bResult = sal_True;
+            bResult = true;
             break;
 
         case KEY_HOME:
@@ -733,7 +732,7 @@ void SelectionFunction::GotoNextPage (int nOffset)
     {
         SdPage* pPage = pDescriptor->GetPage();
         OSL_ASSERT(pPage!=NULL);
-        sal_Int32 nIndex = (pPage->GetPageNum()-1) / 2;
+        sal_Int32 nIndex = (pPage->GetPageNumber()-1) / 2;
         GotoPage(nIndex + nOffset);
     }
     ResetShiftKeySelectionAnchor();
@@ -742,14 +741,12 @@ void SelectionFunction::GotoNextPage (int nOffset)
 
 
 
-void SelectionFunction::GotoPage (int nIndex)
+void SelectionFunction::GotoPage (sal_uInt32 nIndex)
 {
-    sal_uInt16 nPageCount = (sal_uInt16)mrSlideSorter.GetModel().GetPageCount();
+    const sal_uInt32 nPageCount = mrSlideSorter.GetModel().GetPageCount();
 
     if (nIndex >= nPageCount)
         nIndex = nPageCount - 1;
-    if (nIndex < 0)
-        nIndex = 0;
 
     mrController.GetFocusManager().SetFocusedPage(nIndex);
     model::SharedPageDescriptor pNextPageDescriptor (
@@ -1258,7 +1255,7 @@ void SelectionFunction::ModeHandler::SwitchView (const model::SharedPageDescript
         {
             mrSlideSorter.GetModel().GetDocument()->SetSelected(rpDescriptor->GetPage(), sal_True);
             pViewShell->GetFrameView()->SetSelectedPage(
-                (rpDescriptor->GetPage()->GetPageNum()-1)/2);
+                (rpDescriptor->GetPage()->GetPageNumber()-1)/2);
         }
         if (mrSlideSorter.GetViewShellBase() != NULL)
         framework::FrameworkHelper::Instance(*mrSlideSorter.GetViewShellBase())->RequestView(
@@ -1538,8 +1535,8 @@ void NormalModeHandler::RangeSelect (const model::SharedPageDescriptor& rpDescri
     {
         // Select all pages between the anchor and the given one, including
         // the two.
-        const sal_uInt16 nAnchorIndex ((pAnchor->GetPage()->GetPageNum()-1) / 2);
-        const sal_uInt16 nOtherIndex ((rpDescriptor->GetPage()->GetPageNum()-1) / 2);
+        const sal_uInt16 nAnchorIndex ((pAnchor->GetPage()->GetPageNumber()-1) / 2);
+        const sal_uInt16 nOtherIndex ((rpDescriptor->GetPage()->GetPageNumber()-1) / 2);
 
         // Iterate over all pages in the range.  Start with the anchor
         // page.  This way the PageSelector will recognize it again as
@@ -1833,7 +1830,7 @@ DragAndDropModeHandler::DragAndDropModeHandler (
         SlideSorterViewShell* pSlideSorterViewShell
             = dynamic_cast<SlideSorterViewShell*>(mrSlideSorter.GetViewShell());
         if (pSlideSorterViewShell != NULL)
-            pSlideSorterViewShell->StartDrag(rMousePosition, pWindow);
+            pSlideSorterViewShell->StartDrag(basegfx::B2DPoint(rMousePosition.X(), rMousePosition.Y()), pWindow);
         pDragTransferable = SD_MOD()->pTransferDrag;
     }
 
@@ -2013,7 +2010,6 @@ bool ButtonModeHandler::ProcessMotionEvent (SelectionFunction::EventDescriptor& 
 
     return false;
 }
-
 
 
 

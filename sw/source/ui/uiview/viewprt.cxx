@@ -100,7 +100,7 @@ SfxPrinter* __EXPORT SwView::GetPrinter( sal_Bool bCreate )
     SfxPrinter *pPrt = pIDDA->getPrinter( bCreate );
     if ( pOld != pPrt )
     {
-        sal_Bool bWeb = 0 != PTR_CAST(SwWebView, this);
+        sal_Bool bWeb = 0 != dynamic_cast< SwWebView* >( this);
         ::SetAppPrintOptions( &GetWrtShell(), bWeb );
     }
     return pPrt;
@@ -144,7 +144,7 @@ sal_uInt16 __EXPORT SwView::SetPrinter(SfxPrinter* pNew, sal_uInt16 nDiffFlags, 
         if ( nDiffFlags & SFX_PRINTER_PRINTER )
             rSh.SetModified();
     }
-    sal_Bool bWeb = 0 != PTR_CAST(SwWebView, this);
+    sal_Bool bWeb = 0 != dynamic_cast< SwWebView* >( this);
     if ( nDiffFlags & SFX_PRINTER_OPTIONS )
         ::SetPrinter( rSh.getIDocumentDeviceAccess(), pNew, bWeb );
 
@@ -183,7 +183,7 @@ SfxTabPage* __EXPORT SwView::CreatePrintOptionsPage(Window* pParent,
 
 void __EXPORT SwView::ExecutePrint(SfxRequest& rReq)
 {
-    sal_Bool bWeb = 0 != PTR_CAST(SwWebView, this);
+    sal_Bool bWeb = 0 != dynamic_cast< SwWebView* >( this);
     ::SetAppPrintOptions( &GetWrtShell(), bWeb );
     switch (rReq.GetSlot())
     {
@@ -218,9 +218,9 @@ void __EXPORT SwView::ExecutePrint(SfxRequest& rReq)
         case SID_PRINTDOCDIRECT:
         {
             SwWrtShell* pSh = &GetWrtShell();
-            SFX_REQUEST_ARG(rReq, pSilentItem, SfxBoolItem, SID_SILENT, sal_False);
+            SFX_REQUEST_ARG(rReq, pSilentItem, SfxBoolItem, SID_SILENT );
             sal_Bool bSilent = pSilentItem ? pSilentItem->GetValue() : sal_False;
-            SFX_REQUEST_ARG(rReq, pPrintFromMergeItem, SfxBoolItem, FN_QRY_MERGE, sal_False);
+            SFX_REQUEST_ARG(rReq, pPrintFromMergeItem, SfxBoolItem, FN_QRY_MERGE );
             if(pPrintFromMergeItem)
                 rReq.RemoveItem(FN_QRY_MERGE);
             sal_Bool bFromMerge = pPrintFromMergeItem ? pPrintFromMergeItem->GetValue() : sal_False;

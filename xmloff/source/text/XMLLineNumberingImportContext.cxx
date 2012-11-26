@@ -47,9 +47,6 @@ using ::com::sun::star::xml::sax::XAttributeList;
 using ::com::sun::star::text::XLineNumberingProperties;
 using ::rtl::OUString;
 
-TYPEINIT1( XMLLineNumberingImportContext, SvXMLStyleContext );
-
-
 XMLLineNumberingImportContext::XMLLineNumberingImportContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,

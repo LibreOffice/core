@@ -3045,7 +3045,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
 
 void AttributeOutputBase::TextFlyContent( const SwFmtFlyCnt& rFlyContent )
 {
-    if ( GetExport().pOutFmtNode && GetExport().pOutFmtNode->ISA( SwCntntNode ) )
+    if ( GetExport().pOutFmtNode && dynamic_cast< const SwCntntNode* >(GetExport().pOutFmtNode) )
     {
         SwTxtNode* pTxtNd = (SwTxtNode*)GetExport().pOutFmtNode;
 
@@ -3385,7 +3385,7 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
             ++nNumId;
             if ( GetExport().pOutFmtNode )
             {
-                if ( GetExport().pOutFmtNode->ISA( SwCntntNode ) )
+                if ( dynamic_cast< const SwCntntNode* >(GetExport().pOutFmtNode) )
                 {
                     pTxtNd = (SwTxtNode*)GetExport().pOutFmtNode;
 
@@ -3410,7 +3410,7 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
                         nNumId = 0;
                     }
                 }
-                else if ( GetExport().pOutFmtNode->ISA( SwTxtFmtColl ) )
+                else if ( dynamic_cast< const SwTxtFmtColl* >(GetExport().pOutFmtNode) )
                 {
                     const SwTxtFmtColl* pC = (SwTxtFmtColl*)GetExport().pOutFmtNode;
                     if ( pC && pC->IsAssignedToListLevelOfOutlineStyle() )
@@ -3619,7 +3619,7 @@ void WW8AttributeOutput::TableRowEnd(sal_uInt32 nDepth)
 
 void AttributeOutputBase::FormatPageDescription( const SwFmtPageDesc& rPageDesc )
 {
-    if ( GetExport().bStyDef && GetExport().pOutFmtNode && GetExport().pOutFmtNode->ISA( SwTxtFmtColl ) )
+    if ( GetExport().bStyDef && GetExport().pOutFmtNode && dynamic_cast< const SwTxtFmtColl* >(GetExport().pOutFmtNode) )
     {
         const SwTxtFmtColl* pC = (SwTxtFmtColl*)GetExport().pOutFmtNode;
         if ( (SFX_ITEM_SET != pC->GetItemState( RES_BREAK, false ) ) && rPageDesc.KnowsPageDesc() )
@@ -4560,12 +4560,12 @@ void AttributeOutputBase::ParaLineSpacing( const SvxLineSpacingItem& rSpacing )
                     sal_uInt16 nScript =
                         i18n::ScriptType::LATIN;
                     const SwAttrSet *pSet = 0;
-                    if ( GetExport().pOutFmtNode && GetExport().pOutFmtNode->ISA( SwFmt ) )
+                    if ( GetExport().pOutFmtNode && dynamic_cast< const SwFmt* >(GetExport().pOutFmtNode) )
                     {
                         const SwFmt *pFmt = (const SwFmt*)( GetExport().pOutFmtNode );
                         pSet = &pFmt->GetAttrSet();
                     }
-                    else if ( GetExport().pOutFmtNode && GetExport().pOutFmtNode->ISA( SwTxtNode ) )
+                    else if ( GetExport().pOutFmtNode && dynamic_cast< const SwTxtNode* >(GetExport().pOutFmtNode) )
                     {
                         const SwTxtNode* pNd = (const SwTxtNode*)GetExport().pOutFmtNode;
                         pSet = &pNd->GetSwAttrSet();
@@ -4644,12 +4644,12 @@ void WW8AttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
             if ( m_rWW8Export.pOutFmtNode )
             {
                 short nDirection = FRMDIR_HORI_LEFT_TOP;
-                if ( m_rWW8Export.pOutFmtNode->ISA( SwTxtNode ) )
+                if ( dynamic_cast< const SwTxtNode* >(m_rWW8Export.pOutFmtNode) )
                 {
                     SwPosition aPos(*(const SwCntntNode*)m_rWW8Export.pOutFmtNode);
                     nDirection = m_rWW8Export.pDoc->GetTextDirection(aPos);
                 }
-                else if ( m_rWW8Export.pOutFmtNode->ISA( SwTxtFmtColl ) )
+                else if ( dynamic_cast< const SwTxtFmtColl* >(m_rWW8Export.pOutFmtNode) )
                 {
                     const SwTxtFmtColl* pC =
                         (const SwTxtFmtColl*)m_rWW8Export.pOutFmtNode;
@@ -4697,14 +4697,14 @@ void WW8AttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDir
                 nDir = m_rWW8Export.TrueFrameDirection(
                     *(const SwFrmFmt*)m_rWW8Export.pOutFmtNode );
             }
-            else if ( m_rWW8Export.pOutFmtNode->ISA( SwCntntNode ) )   //pagagraph
+            else if ( dynamic_cast< const SwCntntNode* >(m_rWW8Export.pOutFmtNode) )   //pagagraph
             {
                 const SwCntntNode* pNd =
                     (const SwCntntNode*)m_rWW8Export.pOutFmtNode;
                 SwPosition aPos( *pNd );
                 nDir = m_rWW8Export.pDoc->GetTextDirection( aPos );
             }
-            else if ( m_rWW8Export.pOutFmtNode->ISA( SwTxtFmtColl ) )
+            else if ( dynamic_cast< const SwTxtFmtColl* >(m_rWW8Export.pOutFmtNode) )
                 nDir = FRMDIR_HORI_LEFT_TOP;    //what else can we do :-(
         }
 
@@ -4892,9 +4892,8 @@ void SwWW8WrTabu::PutAll(WW8Export& rWrt)
 }
 
 
-static void ParaTabStopAdd( WW8Export& rWrt,
-                            const SvxTabStopItem& rTStops,
-                            const long nLParaMgn )
+static void ParaTabStopAdd( WW8Export& rWrt, const SvxTabStopItem& rTStops,
+    long nLParaMgn )
 {
     SwWW8WrTabu aTab( 0, rTStops.Count());
 
@@ -4919,11 +4918,8 @@ bool lcl_IsEqual(long nOneLeft, const SvxTabStop &rOne,
           );
 }
 
-static void ParaTabStopDelAdd( WW8Export& rWrt,
-                               const SvxTabStopItem& rTStyle,
-                               const long nLStypeMgn,
-                               const SvxTabStopItem& rTNew,
-                               const long nLParaMgn )
+static void ParaTabStopDelAdd( WW8Export& rWrt, const SvxTabStopItem& rTStyle,
+    long nLStypeMgn, const SvxTabStopItem& rTNew, long nLParaMgn )
 {
     SwWW8WrTabu aTab(rTStyle.Count(), rTNew.Count());
 
@@ -4999,15 +4995,15 @@ static void ParaTabStopDelAdd( WW8Export& rWrt,
 
 void WW8AttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStops )
 {
-    const bool bTabsRelativeToIndex = m_rWW8Export.pCurPam->GetDoc()->get( IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT );
-
+    bool bTabsRelativeToIndex = m_rWW8Export.pCurPam->GetDoc()->get( IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT );
     long nCurrentLeft = 0;
+
     if ( bTabsRelativeToIndex )
     {
         const SfxPoolItem* pLR = m_rWW8Export.HasItem( RES_LR_SPACE );
 
         if ( pLR != NULL )
-            nCurrentLeft = static_cast<const SvxLRSpaceItem*>(pLR)->GetTxtLeft();
+            nCurrentLeft = ((const SvxLRSpaceItem*)pLR)->GetTxtLeft();
     }
 
     // --> FLR 2009-03-17 #i100264#
@@ -5015,51 +5011,42 @@ void WW8AttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStops )
          m_rWW8Export.pCurrentStyle != NULL &&
          m_rWW8Export.pCurrentStyle->DerivedFrom() != NULL )
     {
-        SvxTabStopItem aParentTabs( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
+        SvxTabStopItem aTabs( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
         const SwFmt *pParentStyle = m_rWW8Export.pCurrentStyle->DerivedFrom();
+        const SvxTabStopItem* pParentTabs = HasItem<SvxTabStopItem>( pParentStyle->GetAttrSet(), RES_PARATR_TABSTOP );
+        if ( pParentTabs )
         {
-            const SvxTabStopItem* pParentTabs = HasItem<SvxTabStopItem>( pParentStyle->GetAttrSet(), RES_PARATR_TABSTOP );
-            if ( pParentTabs )
-            {
-                aParentTabs.Insert( pParentTabs );
-            }
+            aTabs.Insert( pParentTabs );
         }
 
-        // #120938# - consider left indentation of style and its parent style
-        long nParentLeft = 0;
-        if ( bTabsRelativeToIndex )
-        {
-            const SvxLRSpaceItem &rStyleLR = ItemGet<SvxLRSpaceItem>( pParentStyle->GetAttrSet(), RES_LR_SPACE );
-            nParentLeft = rStyleLR.GetTxtLeft();
-        }
-
-        ParaTabStopDelAdd( m_rWW8Export, aParentTabs, nParentLeft, rTabStops, nCurrentLeft );
+        ParaTabStopDelAdd( m_rWW8Export, aTabs, 0, rTabStops, 0 );
         return;
     }
     // <--
 
+    // StyleDef -> "einfach" eintragen || keine Style-Attrs -> dito
     const SvxTabStopItem* pStyleTabs = 0;
     if ( !m_rWW8Export.bStyDef && m_rWW8Export.pStyAttr )
     {
-        pStyleTabs = HasItem<SvxTabStopItem>( *m_rWW8Export.pStyAttr, RES_PARATR_TABSTOP );
+        pStyleTabs =
+            HasItem<SvxTabStopItem>( *m_rWW8Export.pStyAttr, RES_PARATR_TABSTOP );
     }
 
     if ( !pStyleTabs )
-    {
         ParaTabStopAdd(m_rWW8Export, rTabStops, nCurrentLeft);
-    }
     else
     {
         long nStyleLeft = 0;
-        if ( bTabsRelativeToIndex )
+
+        if (bTabsRelativeToIndex)
         {
-            const SvxLRSpaceItem &rStyleLR = ItemGet<SvxLRSpaceItem>(*m_rWW8Export.pStyAttr, RES_LR_SPACE);
+            const SvxLRSpaceItem &rStyleLR =
+            ItemGet<SvxLRSpaceItem>(*m_rWW8Export.pStyAttr, RES_LR_SPACE);
             nStyleLeft = rStyleLR.GetTxtLeft();
         }
 
-        ParaTabStopDelAdd( m_rWW8Export,
-                           *pStyleTabs, nStyleLeft,
-                           rTabStops, nCurrentLeft);
+        ParaTabStopDelAdd(m_rWW8Export, *pStyleTabs, nStyleLeft, rTabStops,
+            nCurrentLeft);
     }
 }
 

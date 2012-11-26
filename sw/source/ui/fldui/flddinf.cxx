@@ -94,7 +94,7 @@ SwFldDokInfPage::SwFldDokInfPage(Window* pWindow, const SfxItemSet& rCoreSet ) :
     //enable 'active' language selection
     aFormatLB.SetShowLanguageControl(sal_True);
 
-    SFX_ITEMSET_ARG( &rCoreSet, pItem, SfxUnoAnyItem, SID_DOCINFO, sal_False );
+    SFX_ITEMSET_ARG( &rCoreSet, pItem, SfxUnoAnyItem, SID_DOCINFO );
     if ( pItem )
         pItem->GetValue() >>= xCustomPropertySet;
 }

@@ -65,8 +65,6 @@ const sal_Char sAPI_SortAlgorithm[] = "SortAlgorithm";
 const sal_Char sAPI_Locale[] = "Locale";
 
 
-TYPEINIT1( XMLIndexAlphabeticalSourceContext, XMLIndexSourceBaseContext );
-
 XMLIndexAlphabeticalSourceContext::XMLIndexAlphabeticalSourceContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,

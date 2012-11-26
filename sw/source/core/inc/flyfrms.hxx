@@ -68,8 +68,6 @@ protected:
 
 public:
     // --> OD 2004-06-29 #i28701#
-    TYPEINFO();
-
     virtual ~SwFlyFreeFrm();
 
     virtual void MakeAll();
@@ -124,8 +122,6 @@ class SwFlyLayFrm : public SwFlyFreeFrm
 {
 public:
     // --> OD 2004-06-29 #i28701#
-    TYPEINFO();
-
     SwFlyLayFrm( SwFlyFrmFmt*, SwFrm*, SwFrm *pAnchor );
     SwFlyLayFrm( SwFlyLayFrm& );
 protected:
@@ -153,8 +149,6 @@ protected:
 
 public:
     // --> OD 2004-06-29 #i28701#
-    TYPEINFO();
-
     SwFlyAtCntFrm( SwFlyFrmFmt*, SwFrm*, SwFrm *pAnchor );
 
     void SetAbsPos( const Point &rNew );
@@ -191,8 +185,6 @@ protected:
 
 public:
     // --> OD 2004-06-29 #i28701#
-    TYPEINFO();
-
     SwFlyInCntFrm( SwFlyFrmFmt*, SwFrm*, SwFrm *pAnchor );
 
     virtual ~SwFlyInCntFrm();

@@ -31,7 +31,6 @@
 #include <editeng/eeitem.hxx>
 #include <svl/itempool.hxx>
 
-DBG_NAME(SdrOutliner)
 /*************************************************************************
 |*
 |* Ctor
@@ -39,10 +38,8 @@ DBG_NAME(SdrOutliner)
 \************************************************************************/
 SdrOutliner::SdrOutliner( SfxItemPool* pItemPool, sal_uInt16 nMode )
 :   Outliner( pItemPool, nMode ),
-    //mpPaintInfoRec( NULL )
     mpVisualizedPage(0)
 {
-    DBG_CTOR(SdrOutliner,NULL);
 }
 
 
@@ -53,7 +50,6 @@ SdrOutliner::SdrOutliner( SfxItemPool* pItemPool, sal_uInt16 nMode )
 \************************************************************************/
 SdrOutliner::~SdrOutliner()
 {
-    DBG_DTOR(SdrOutliner,NULL);
 }
 
 
@@ -107,7 +103,7 @@ void SdrOutliner::SetTextObjNoInit( const SdrTextObj* pObj )
 XubString SdrOutliner::CalcFieldValue(const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos,
                                      Color*& rpTxtColor, Color*& rpFldColor)
 {
-    FASTBOOL bOk = sal_False;
+    bool bOk = sal_False;
     XubString aRet;
 
     if(mpTextObj.is())
@@ -126,3 +122,5 @@ const SdrTextObj* SdrOutliner::GetTextObj() const
     else
         return 0;
 }
+
+// eof

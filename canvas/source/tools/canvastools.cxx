@@ -750,8 +750,7 @@ namespace canvas
             // TODO(E2): error handling
 
             // translate to final position
-            aCorrectedTransform.translate( destRect.getMinX(),
-                                           destRect.getMinY() );
+            aCorrectedTransform.translate( destRect.getMinimum() );
 
             ::basegfx::B2DHomMatrix transform( transformation );
             o_transform = aCorrectedTransform * transform;

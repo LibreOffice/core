@@ -37,7 +37,6 @@
 #include <tools/solar.h>
 #include <string.h>
 #include <tools/string.hxx>
-#include <tools/rtti.hxx>
 #include <limits.h>
 #include <tools/ref.hxx>
 #include <tools/list.hxx>

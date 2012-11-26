@@ -87,6 +87,8 @@
 #include <com/sun/star/awt/CharSet.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 enum PageType { NORMAL = 0, MASTER = 1, NOTICE = 2, UNDEFINED = 3 };
 
@@ -143,14 +145,14 @@ struct PHLayout
     sal_uInt8   nTypeOfTitle;
     sal_uInt8   nTypeOfOutliner;
 
-    sal_Bool    bTitlePossible;
-    sal_Bool    bOutlinerPossible;
-    sal_Bool    bSecOutlinerPossible;
+    bool    bTitlePossible;
+    bool    bOutlinerPossible;
+    bool    bSecOutlinerPossible;
 };
 
 struct SOParagraph
 {
-    sal_Bool                bExtendedParameters;
+    bool                    bExtendedParameters;
     sal_uInt32              nParaFlags;
     sal_Int16               nBulletFlags;
     String                  sPrefix;
@@ -168,22 +170,22 @@ struct SOParagraph
     sal_Unicode             cBulletId;              // wenn Numbering Type == CharSpecial
     ::com::sun::star::awt::FontDescriptor       aFontDesc;
 
-    sal_Bool                bExtendedBulletsUsed;
+    bool                    bExtendedBulletsUsed;
     sal_uInt16              nBulletId;
     sal_uInt32              nMappedNumType;
-    sal_Bool                bNumberingIsNumber;
+    bool                    bNumberingIsNumber;
 
     SOParagraph()
     {
         nDepth = 0;
-        bExtendedParameters = sal_False;
+        bExtendedParameters = false;
         nParaFlags = 0;
         nBulletFlags = 0;
         nBulletOfs = 0;
         nTextOfs = 0;
-        bExtendedBulletsUsed = sal_False;
+        bExtendedBulletsUsed = false;
         nBulletId = 0xffff;
-        bNumberingIsNumber = sal_True;
+        bNumberingIsNumber = true;
     };
 };
 
@@ -219,7 +221,7 @@ struct FontCollectionEntry
         sal_Int16               CharSet;
 
         String                  Original;
-        sal_Bool                bIsConverted;
+        bool                    bIsConverted;
 
         FontCollectionEntry( const String& rName, sal_Int16 nFamily, sal_Int16 nPitch, sal_Int16 nCharSet ) :
                             Scaling ( 1.0 ),
@@ -318,14 +320,14 @@ struct PPTExCharSheet
 
                 void    SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
                                         FontCollection& rFontCollection, int nLevel );
-                void    Write( SvStream& rSt, PptEscherEx* pEx, sal_uInt16 nLev, sal_Bool bFirst, sal_Bool bSimpleText,
+                void    Write( SvStream& rSt, PptEscherEx* pEx, sal_uInt16 nLev, bool bFirst, bool bSimpleText,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rPagePropSet );
 
 };
 
 struct PPTExParaLevel
 {
-    sal_Bool        mbIsBullet;
+    bool            mbIsBullet;
     sal_uInt16      mnBulletChar;
     sal_uInt16      mnBulletFont;
     sal_uInt16      mnBulletHeight;
@@ -339,7 +341,7 @@ struct PPTExParaLevel
     sal_uInt16      mnBulletOfs;
     sal_uInt16      mnDefaultTab;
 
-    sal_Bool        mbExtendedBulletsUsed;
+    bool            mbExtendedBulletsUsed;
     sal_uInt16      mnBulletId;
     sal_uInt16      mnBulletStart;
     sal_uInt32      mnMappedNumType;
@@ -359,7 +361,7 @@ struct PPTExParaSheet
 
                 void    SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
                                         FontCollection& rFontCollection, int nLevel, const PPTExCharLevel& rCharLevel );
-                void    Write( SvStream& rSt, PptEscherEx* pEx, sal_uInt16 nLev, sal_Bool bFirst, sal_Bool bSimpleText,
+                void    Write( SvStream& rSt, PptEscherEx* pEx, sal_uInt16 nLev, bool bFirst, bool bSimpleText,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rPagePropSet );
 };
 
@@ -379,7 +381,7 @@ class PPTExStyleSheet
 
                 void            SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
                                                 FontCollection& rFontCollection, int nInstance, int nLevel );
-                sal_Bool        IsHardAttribute( sal_uInt32 nInstance, sal_uInt32 nLevel, PPTExTextAttr eAttr, sal_uInt32 nValue );
+                bool            IsHardAttribute( sal_uInt32 nInstance, sal_uInt32 nLevel, PPTExTextAttr eAttr, sal_uInt32 nValue );
 
                 sal_uInt32      SizeOfTxCFStyleAtom() const;
                 void            WriteTxCFStyleAtom( SvStream& rSt );
@@ -474,8 +476,8 @@ class GroupTable
         sal_uInt32              GetGroupsClosed();
         void                    ResetGroupTable( sal_uInt32 nCount );
         void                    ClearGroupTable();
-        sal_Bool                EnterGroup( ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & rIndex );
-        sal_Bool                GetNextGroupEntry();
+        bool                    EnterGroup( ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & rIndex );
+        bool                    GetNextGroupEntry();
                                 GroupTable();
                                 ~GroupTable();
 };
@@ -489,17 +491,18 @@ class PropValue
         ::com::sun::star::uno::Reference
             < ::com::sun::star::beans::XPropertySet >           mXPropSet;
 
-        sal_Bool    ImplGetPropertyValue( const String& rString );
-        sal_Bool    ImplGetPropertyValue( const ::com::sun::star::uno::Reference
+        basegfx::B2DHomMatrix ImplGetObjectTransformation();
+        bool    ImplGetPropertyValue( const String& rString );
+        bool    ImplGetPropertyValue( const ::com::sun::star::uno::Reference
                         < ::com::sun::star::beans::XPropertySet > &, const String& );
 
     public :
 
-        static sal_Bool GetPropertyValue(
+        static bool GetPropertyValue(
                 ::com::sun::star::uno::Any& rAny,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
                         const String& rPropertyName,
-                            sal_Bool bTestPropertyAvailability = sal_False );
+                            bool bTestPropertyAvailability = false );
 
         static ::com::sun::star::beans::PropertyState GetPropertyState(
                     const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > &,
@@ -514,7 +517,7 @@ class PropStateValue : public PropValue
         ::com::sun::star::uno::Reference
             < ::com::sun::star::beans::XPropertyState >         mXPropState;
 
-        sal_Bool    ImplGetPropertyValue( const String& rString, sal_Bool bGetPropertyState = sal_True );
+        bool    ImplGetPropertyValue( const String& rString, bool bGetPropertyState = true );
 
 };
 
@@ -533,7 +536,7 @@ class PortionObj : public PropStateValue
         sal_uInt32      ImplGetTextField( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & rXTextRangeRef,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSetRef, String& rURL );
         sal_uInt32      ImplCalculateTextPositions( sal_uInt32 nCurrentTextPosition );
-        void            ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool bGetPropStateValue = sal_False );
+        void            ImplGetPortionValues( FontCollection& rFontCollection, bool bGetPropStateValue = false );
 
     public :
 
@@ -553,19 +556,19 @@ class PortionObj : public PropStateValue
         sal_Int16       mnCharEscapement;
 
         sal_uInt32      mnTextSize;
-        sal_Bool        mbLastPortion;
+        bool            mbLastPortion;
 
         sal_uInt16*     mpText;
         FieldEntry*     mpFieldEntry;
 
                         PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & rXTextRangeRef,
-                                        sal_Bool bLast, FontCollection& rFontCollection );
+                                        bool bLast, FontCollection& rFontCollection );
                         PortionObj( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSetRef,
                                         FontCollection& rFontCollection );
                         PortionObj( const PortionObj& rPortionObj );
                         ~PortionObj();
 
-        void            Write( SvStream* pStrm, sal_Bool bLast );
+        void            Write( SvStream* pStrm, bool bLast );
         sal_uInt32      Count() const { return mnTextSize; };
 
         PortionObj&     operator=( const PortionObj& rPortionObj );
@@ -573,10 +576,10 @@ class PortionObj : public PropStateValue
 
 struct ParaFlags
 {
-    sal_Bool    bFirstParagraph : 1;
-    sal_Bool    bLastParagraph  : 1;
+    bool    bFirstParagraph : 1;
+    bool    bLastParagraph  : 1;
 
-                    ParaFlags() { bFirstParagraph = sal_True; bLastParagraph = sal_False; };
+                    ParaFlags() { bFirstParagraph = true; bLastParagraph = false; };
 };
 
 class ParagraphObj : public List, public PropStateValue, public SOParagraph
@@ -584,16 +587,13 @@ class ParagraphObj : public List, public PropStateValue, public SOParagraph
     friend class TextObj;
     friend struct PPTExParaSheet;
 
-        MapMode         maMapModeSrc;
-        MapMode         maMapModeDest;
-
     protected :
 
         void            ImplConstruct( const ParagraphObj& rParagraphObj );
         void            ImplClear();
         sal_uInt32      ImplCalculateTextPositions( sal_uInt32 nCurrentTextPosition );
-        void            ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Bool bGetPropStateValue = sal_False );
-        void            ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int16 nDepth, sal_Bool bIsBullet, sal_Bool bGetPropStateValue = sal_False );
+        void            ImplGetParagraphValues( PPTExBulletProvider& rBuProv, bool bGetPropStateValue = false );
+        void            ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int16 nDepth, bool bIsBullet, bool bGetPropStateValue = false );
 
     public :
 
@@ -601,9 +601,9 @@ class ParagraphObj : public List, public PropStateValue, public SOParagraph
 
         sal_uInt32          mnTextSize;
 
-        sal_Bool            mbIsBullet;
-        sal_Bool            mbFirstParagraph;
-        sal_Bool            mbLastParagraph;
+        bool                mbIsBullet;
+        bool                mbFirstParagraph;
+        bool                mbLastParagraph;
 
         ::com::sun::star::beans::PropertyState  meBullet;
         ::com::sun::star::beans::PropertyState  meTextAdjust;
@@ -618,8 +618,8 @@ class ParagraphObj : public List, public PropStateValue, public SOParagraph
         sal_Int16                               mnLineSpacing;
         sal_Int16                               mnLineSpacingTop;
         sal_Int16                               mnLineSpacingBottom;
-        sal_Bool                                mbForbiddenRules;
-        sal_Bool                                mbParagraphPunctation;
+        bool                                    mbForbiddenRules;
+        bool                                    mbParagraphPunctation;
         sal_uInt16                              mnBiDi;
 
                         ParagraphObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > & rXTextContentRef,
@@ -644,8 +644,8 @@ struct ImplTextObj
     sal_uInt32      mnTextSize;
     int             mnInstance;
     List*           mpList;
-    sal_Bool        mbHasExtendedBullets;
-    sal_Bool        mbFixedCellHeightUsed;
+    bool            mbHasExtendedBullets;
+    bool            mbFixedCellHeightUsed;
 
                     ImplTextObj( int nInstance );
                     ~ImplTextObj();
@@ -668,7 +668,7 @@ class TextObj
         ParagraphObj*   Next(){ return(ParagraphObj*)mpImplTextObj->mpList->Next(); };
         sal_uInt32      Count() const { return mpImplTextObj->mnTextSize; };
         int             GetInstance() const { return mpImplTextObj->mnInstance; };
-        sal_Bool        HasExtendedBullets(){ return mpImplTextObj->mbHasExtendedBullets; };
+        bool            HasExtendedBullets(){ return mpImplTextObj->mbHasExtendedBullets; };
         void            WriteTextSpecInfo( SvStream* pStrm );
 
         TextObj&        operator=( TextObj& rTextObj );
@@ -678,23 +678,19 @@ class TextObj
 struct CellBorder;
 class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvider
 {
-        sal_Bool                        mbStatus;
-        sal_Bool                        mbUseNewAnimations;
         sal_uInt32                      mnStatMaxValue;
         sal_uInt32                      mnLatestStatValue;
         std::vector< PPTExStyleSheet* > maStyleSheetList;
         PPTExStyleSheet*                mpStyleSheet;
-
-        Fraction                        maFraction;
-        MapMode                         maMapModeSrc;
-        MapMode                         maMapModeDest;
-        ::com::sun::star::awt::Size     maDestPageSize;
+        double                          mfMap100thMmToMs;
+        basegfx::B2DHomMatrix           maMap100thMmToMs;
+        basegfx::B2DHomMatrix           maInvMap100thMmToMs;
+        basegfx::B2DVector              maDestPageSize;
         Size                            maPageSize; // #121183# Keep size in logic coordinates (100th mm)
-        ::com::sun::star::awt::Size     maNotesPageSize;
+        basegfx::B2DVector              maNotesPageSize;
         PageType                        meLatestPageType;
         List                            maSlideNameList;
         rtl::OUString                   maBaseURI;
-
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >                 mXModel;
         ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator >        mXStatusIndicator;
         ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPagesSupplier >   mXDrawPagesSupplier;
@@ -710,52 +706,54 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >              mXCursorText;       // TextRef des Teilstuecks des Cursors
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >           mXCursorPropSet;    // die Properties des Teilstueckes
         ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextField >              mXTextField;
-        ::com::sun::star::awt::Size         maSize;
-        ::com::sun::star::awt::Point        maPosition;
-        Rectangle           maRect;
-        ByteString          mType;
-        sal_Bool            mbPresObj;
-        sal_Bool            mbEmptyPresObj;
-        sal_Bool            mbStatusIndicator;
-        sal_Int32           mnAngle;
-        sal_uInt32          mnTextStyle;
 
-        sal_Bool            mbFontIndependentLineSpacing;
-        sal_uInt32          mnTextSize;
+        // the object range, split in pos and scale to keep the evtl. negative size (mirroring)
+        basegfx::B2DRange               maObjectRange;
+        basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose   maObjTrans;
+//        basegfx::B2DRange               maObjectRange; // TTTT mirrored needed here ?!?
+        sal_uInt32                      mnMirrorFlags;
+//        bool                            mbMirroredX;
+//        bool                            mbMirroredY;
+        double                          mfObjectRotation;
 
-        SvStorageRef        mrStg;
-        SvStream*           mpCurUserStrm;
-        SvStream*           mpStrm;
-        SvStream*           mpPicStrm;
-        PptEscherEx*        mpPptEscherEx;
+        ByteString                      mType;
+        sal_uInt32                      mnTextStyle;
+        sal_uInt32                      mnTextSize;
+        SvStorageRef                    mrStg;
+        SvStream*                       mpCurUserStrm;
+        SvStream*                       mpStrm;
+        SvStream*                       mpPicStrm;
+        PptEscherEx*                    mpPptEscherEx;
+        List                            maExOleObj;
+        sal_uInt32                      mnVBAOleOfs;
+        SvMemoryStream*                 mpVBA;
+        sal_uInt32                      mnExEmbed;
+        SvMemoryStream*                 mpExEmbed;
+        sal_uInt32                      mnPages;            // anzahl einzelner Slides ( ohne masterpages & notes & handout )
+        sal_uInt32                      mnMasterPages;      //
+        sal_uInt32                      mnDrawings;         // anzahl Slides +  masterpages + notes +  handout
+        sal_uInt32                      mnPagesWritten;
+        sal_uInt32                      mnUniqueSlideIdentifier;
+        sal_uInt32                      mnTxId;             // Identifier determined by the HOST (PP) ????
+        sal_uInt32                      mnDiaMode;          // 0 -> manuell
+                                                            // 1 -> halbautomatisch
+                                                            // 2 -> automatisch
+        sal_uInt32                      mnShapeMasterTitle;
+        sal_uInt32                      mnShapeMasterBody;
+        List                            maHyperlink;
+        FontCollection                  maFontCollection;
+        ppt::ExSoundCollection          maSoundCollection;
 
-        List                maExOleObj;
-        sal_uInt32          mnVBAOleOfs;
-        SvMemoryStream*     mpVBA;
-        sal_uInt32          mnExEmbed;
-        SvMemoryStream*     mpExEmbed;
-
-        sal_uInt32          mnPages;            // anzahl einzelner Slides ( ohne masterpages & notes & handout )
-        sal_uInt32          mnMasterPages;      //
-        sal_uInt32          mnDrawings;         // anzahl Slides +  masterpages + notes +  handout
-        sal_uInt32          mnPagesWritten;
-        sal_uInt32          mnUniqueSlideIdentifier;
-        sal_uInt32          mnTxId;             // Identifier determined by the HOST (PP) ????
-        sal_uInt32          mnDiaMode;          // 0 -> manuell
-                                                // 1 -> halbautomatisch
-                                                // 2 -> automatisch
-
-        sal_uInt32          mnShapeMasterTitle;
-        sal_uInt32          mnShapeMasterBody;
-
-        List                maHyperlink;
-
-        FontCollection          maFontCollection;
-        ppt::ExSoundCollection  maSoundCollection;
+        /// bitfield
+        bool                            mbStatus : 1;
+        bool                            mbUseNewAnimations : 1;
+        bool                            mbPresObj : 1;
+        bool                            mbEmptyPresObj : 1;
+        bool                            mbStatusIndicator : 1;
+        bool                            mbFontIndependentLineSpacing : 1;
 
         PHLayout&           ImplGetLayout( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet ) const;
         void                ImplWriteExtParaHeader( SvMemoryStream& rSt, sal_uInt32 nRef, sal_uInt32 nInstance, sal_uInt32 nSlideId );
-
 
         sal_uInt32          ImplProgBinaryTag( SvStream* pOutStrm = NULL );
         sal_uInt32          ImplProgBinaryTagContainer( SvStream* pOutStrm = NULL, SvMemoryStream* pBinTag = NULL );
@@ -771,74 +769,71 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
 
     protected:
 
-        sal_Bool            ImplCreateDocumentSummaryInformation( sal_uInt32 nCnvrtFlags );
-        sal_Bool            ImplCreateCurrentUserStream();
+        bool                ImplCreateDocumentSummaryInformation( sal_uInt32 nCnvrtFlags );
+        bool                ImplCreateCurrentUserStream();
         void                ImplCreateHeaderFooterStrings( SvStream& rOut,
                                 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPagePropSet );
         void                ImplCreateHeaderFooters( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPagePropSet );
-        sal_Bool            ImplCreateDocument();
-        sal_Bool            ImplCreateHyperBlob( SvMemoryStream& rStream );
+        bool                ImplCreateDocument();
+        bool                ImplCreateHyperBlob( SvMemoryStream& rStream );
         sal_uInt32          ImplInsertBookmarkURL( const String& rBookmark, const sal_uInt32 nType,
             const String& rStringVer0, const String& rStringVer1, const String& rStringVer2, const String& rStringVer3 );
-        sal_Bool            ImplCreateMaster( sal_uInt32 nPageNum );
-        sal_Bool            ImplCreateMainNotes();
-        sal_Bool            ImplCreateSlide( sal_uInt32 nPageNum );
-        sal_Bool            ImplCreateNotes( sal_uInt32 nPageNum );
+        bool                ImplCreateMaster( sal_uInt32 nPageNum );
+        bool                ImplCreateMainNotes();
+        bool                ImplCreateSlide( sal_uInt32 nPageNum );
+        bool                ImplCreateNotes( sal_uInt32 nPageNum );
         void                ImplWriteBackground( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXBackgroundPropSet );
         void                ImplWriteVBA( SvMemoryStream* pVBA );
         void                ImplWriteOLE( sal_uInt32 nCnvrtFlags );
-        sal_Bool            ImplWriteAtomEnding();
+        bool                ImplWriteAtomEnding();
 
-        sal_Bool            ImplInitSOIface();
-        sal_Bool            ImplSetCurrentStyleSheet( sal_uInt32 nPageNum );
-        sal_Bool            ImplGetPageByIndex( sal_uInt32 nIndex, PageType );
-        sal_Bool            ImplGetShapeByIndex( sal_uInt32 nIndex, sal_Bool bGroup = sal_False );
+        bool                ImplInitSOIface();
+        bool                ImplSetCurrentStyleSheet( sal_uInt32 nPageNum );
+        bool                ImplGetPageByIndex( sal_uInt32 nIndex, PageType );
+        bool                ImplGetShapeByIndex( sal_uInt32 nIndex, bool bGroup = false );
         sal_uInt32          ImplGetMasterIndex( PageType ePageType );
-        void                ImplFlipBoundingBox( EscherPropertyContainer& rPropOpt );
-        sal_Bool            ImplGetText();
-        sal_Bool            ImplCreatePresentationPlaceholder( const sal_Bool bMaster, const PageType PageType,
+        void                ImplHandleRotation( EscherPropertyContainer& rPropOpt );
+        bool                ImplGetText();
+        bool                ImplCreatePresentationPlaceholder( const bool bMaster, const PageType PageType,
                                 const sal_uInt32 StyleInstance, const sal_uInt8 PlaceHolderId );
-        sal_Bool            ImplGetEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
+        bool                ImplGetEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
                                 ::com::sun::star::presentation::AnimationEffect& eEffect,
                                 ::com::sun::star::presentation::AnimationEffect& eTextEffect,
-                                sal_Bool& bHasSound );
+                                bool& bHasSound );
         void                ImplWriteObjectEffect( SvStream& rSt,
                                 ::com::sun::star::presentation::AnimationEffect eEffect,
                                 ::com::sun::star::presentation::AnimationEffect eTextEffect,
                                 sal_uInt16 nOrder );
-        void                ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentation::ClickAction eAction, sal_Bool bMediaClickAction );
-        sal_Bool            ImplGetStyleSheets();
+        void                ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentation::ClickAction eAction, bool bMediaClickAction );
+        bool                ImplGetStyleSheets();
         void                ImplWriteParagraphs( SvStream& rOutStrm, TextObj& rTextObj );
         void                ImplWritePortions( SvStream& rOutStrm, TextObj& rTextObj );
         void                ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_uInt32 nAtomInstance,
                                 TextRuleEntry* pTextRule, SvStream& rExtBu, EscherPropertyContainer* );
         void                ImplAdjustFirstLineLineSpacing( TextObj& rTextObj, EscherPropertyContainer& rPropOpt );
         void                ImplCreateShape( sal_uInt32 nType, sal_uInt32 nFlags, EscherSolverContainer& );
-        void                ImplCreateTextShape( EscherPropertyContainer&, EscherSolverContainer&, sal_Bool bFill );
+        void                ImplCreateTextShape( EscherPropertyContainer&, EscherSolverContainer&, bool bFill );
 
         void                ImplWritePage( const PHLayout& rLayout,
                                                 EscherSolverContainer& rSolver,
                                                     PageType ePageType,
-                                                        sal_Bool bMaster,
+                                                        bool bMaster,
                                                             int nPageNumber = 0 );
-        sal_Bool            ImplCreateCellBorder( const CellBorder* pCellBorder, sal_Int32 nX1, sal_Int32 nY1, sal_Int32 nX2, sal_Int32 nY2 );
+        bool                ImplCreateCellBorder( const CellBorder* pCellBorder, sal_Int32 nX1, sal_Int32 nY1, sal_Int32 nX2, sal_Int32 nY2 );
         void                ImplCreateTable( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rXShape, EscherSolverContainer& aSolverContainer,
                                 EscherPropertyContainer& aPropOpt );
-        ::com::sun::star::awt::Point        ImplMapPoint( const ::com::sun::star::awt::Point& );
-        ::com::sun::star::awt::Size         ImplMapSize( const ::com::sun::star::awt::Size& );
-        Rectangle                           ImplMapRectangle( const ::com::sun::star::awt::Rectangle& );
 
-        sal_Bool                            ImplCloseDocument();        // die font-, hyper-, Soundliste wird geschrieben ..
+        bool                ImplCloseDocument();        // die font-, hyper-, Soundliste wird geschrieben ..
 
     public:
-                                PPTWriter( const std::vector< com::sun::star::beans::PropertyValue >&, SvStorageRef& rSvStorage,
-                                            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rModel,
-                                            ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > & rStatInd,
-                                                SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags );
+                            PPTWriter( const std::vector< com::sun::star::beans::PropertyValue >&, SvStorageRef& rSvStorage,
+                                        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rModel,
+                                        ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > & rStatInd,
+                                            SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags );
 
-                                ~PPTWriter();
+                            ~PPTWriter();
 
-        sal_Bool                IsValid() const { return mbStatus; };
+        bool                IsValid() const { return mbStatus; };
 };
 
 

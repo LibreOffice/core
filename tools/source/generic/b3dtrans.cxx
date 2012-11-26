@@ -43,7 +43,7 @@ B3dTransformationSet::~B3dTransformationSet()
 
 void B3dTransformationSet::Orientation(basegfx::B3DHomMatrix& rTarget, basegfx::B3DPoint aVRP, basegfx::B3DVector aVPN, basegfx::B3DVector aVUP)
 {
-    rTarget.translate( -aVRP.getX(), -aVRP.getY(), -aVRP.getZ());
+    rTarget.translate(-aVRP);
     aVUP.normalize();
     aVPN.normalize();
     basegfx::B3DVector aRx(aVUP);
@@ -517,7 +517,7 @@ void B3dTransformationSet::SetPerspective(sal_Bool bNew)
     }
 }
 
-void B3dTransformationSet::SetViewportRectangle(Rectangle& rRect, Rectangle& rVisible)
+void B3dTransformationSet::SetViewportRectangle(const Rectangle& rRect, const Rectangle& rVisible)
 {
     if(rRect != maViewportRectangle || rVisible != maVisibleRectangle)
     {
@@ -609,9 +609,9 @@ basegfx::B3DHomMatrix B3dTransformationSet::GetMatFromObjectToView()
     basegfx::B3DHomMatrix aFromObjectToView = GetObjectToDevice();
 
     const basegfx::B3DVector& rScale(GetScale());
-    aFromObjectToView.scale(rScale.getX(), rScale.getY(), rScale.getZ());
+    aFromObjectToView.scale(rScale);
     const basegfx::B3DVector& rTranslate(GetTranslate());
-    aFromObjectToView.translate(rTranslate.getX(), rTranslate.getY(), rTranslate.getZ());
+    aFromObjectToView.translate(rTranslate);
 
     return aFromObjectToView;
 }
@@ -621,9 +621,9 @@ void B3dTransformationSet::CalcMatFromWorldToView()
     maMatFromWorldToView = maOrientation;
     maMatFromWorldToView *= GetProjection();
     const basegfx::B3DVector& rScale(GetScale());
-    maMatFromWorldToView.scale(rScale.getX(), rScale.getY(), rScale.getZ());
+    maMatFromWorldToView.scale(rScale);
     const basegfx::B3DVector& rTranslate(GetTranslate());
-    maMatFromWorldToView.translate(rTranslate.getX(), rTranslate.getY(), rTranslate.getZ());
+    maMatFromWorldToView.translate(rTranslate);
     maInvMatFromWorldToView = maMatFromWorldToView;
     maInvMatFromWorldToView.invert();
 

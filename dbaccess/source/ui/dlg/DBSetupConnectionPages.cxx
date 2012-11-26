@@ -245,7 +245,7 @@ DBG_NAME(OTextConnectionPageSetup)
 
         if ( m_aETHostServer.GetText() != m_aETHostServer.GetSavedValue() )
         {
-            DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rSet.GetItem(DSID_TYPECOLLECTION));
+            const DbuTypeCollectionItem* pCollectionItem = dynamic_cast< const DbuTypeCollectionItem* >( _rSet.GetItem(DSID_TYPECOLLECTION));
             ::dbaccess::ODsnTypeCollection* pCollection = NULL;
             if (pCollectionItem)
                 pCollection = pCollectionItem->getCollection();
@@ -352,7 +352,7 @@ DBG_NAME(OMySQLIntroPageSetup)
     void OMySQLIntroPageSetup::implInitControls(const SfxItemSet& _rSet, sal_Bool /*_bSaveValue*/)
     {
         // show the "Connect directly" option only if the driver is installed
-        DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rSet.GetItem(DSID_TYPECOLLECTION));
+        const DbuTypeCollectionItem* pCollectionItem = dynamic_cast< const DbuTypeCollectionItem* >( _rSet.GetItem(DSID_TYPECOLLECTION));
         bool bHasMySQLNative = ( pCollectionItem != NULL ) && pCollectionItem->getCollection()->hasDriver( "sdbc:mysqlc:" );
         if ( bHasMySQLNative )
             m_aRB_NATIVEDatabase.Show();

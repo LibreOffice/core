@@ -182,7 +182,7 @@ void SdTransformOOo2xDocument::transformShape( SdrObject& rObj )
     SdrObjGroup* pGroupShape = dynamic_cast< SdrObjGroup* >( &rObj );
     if( pGroupShape )
     {
-        SdrObjList* pObjList = pGroupShape->GetSubList();
+        SdrObjList* pObjList = pGroupShape->getChildrenOfSdrObject();
         if( pObjList )
             transformShapes( *pObjList );
         return;

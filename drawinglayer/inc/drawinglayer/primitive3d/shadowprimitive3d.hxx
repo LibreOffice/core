@@ -54,7 +54,7 @@ namespace drawinglayer
             double                                  mfShadowTransparence;
 
             /// bitfield
-            unsigned                                mbShadow3D : 1;
+            bool                                    mbShadow3D : 1;
 
         public:
             /// constructor
@@ -70,9 +70,6 @@ namespace drawinglayer
             const basegfx::BColor& getShadowColor() const { return maShadowColor; }
             double getShadowTransparence() const { return mfShadowTransparence; }
             bool getShadow3D() const { return mbShadow3D; }
-
-            /// compare operator
-            virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
             /// provide unique ID
             DeclPrimitrive3DIDBlock()

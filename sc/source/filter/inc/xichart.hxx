@@ -112,7 +112,7 @@ public:
     Color               GetSeriesFillAutoColor( sal_uInt16 nFormatIdx ) const;
 
     /** Starts the API chart document conversion. Must be called once before all API conversion. */
-    void                InitConversion( XChartDocRef xChartDoc, const Rectangle& rChartRect ) const;
+    void                InitConversion( XChartDocRef xChartDoc, const basegfx::B2DRange& rChartRange ) const;
     /** Finishes the API chart document conversion. Must be called once after all API conversion. */
     void                FinishConversion( XclImpDffConverter& rDffConv ) const;
 
@@ -1400,7 +1400,7 @@ public:
     void                Convert( XChartDocRef xChartDoc,
                             XclImpDffConverter& rDffConv,
                             const ::rtl::OUString& rObjName,
-                            const Rectangle& rChartRect ) const;
+                            const basegfx::B2DRange& rChartRange ) const;
 
 private:
     /** Reads a CHSERIES group (data series source and formatting). */
@@ -1455,15 +1455,15 @@ public:
     void                ConvertObjects(
                             XclImpDffConverter& rDffConv,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel,
-                            const Rectangle& rChartRect );
+                            const basegfx::B2DRange& rChartRange );
 
     /** Calculate the resulting rectangle of the passed anchor. */
-    virtual Rectangle   CalcAnchorRect( const XclObjAnchor& rAnchor, bool bDffAnchor ) const;
+    virtual basegfx::B2DRange CalcAnchorRange( const XclObjAnchor& rAnchor, bool bDffAnchor ) const;
     /** Called whenever an object has been inserted into the draw page. */
     virtual void        OnObjectInserted( const XclImpDrawObjBase& rDrawObj );
 
 private:
-    Rectangle           maChartRect;        /// Position and size of the chart shape in 1/100 mm.
+    basegfx::B2DRange   maChartRange;       /// Position and size of the chart shape in 1/100 mm.
     SCTAB               mnScTab;            /// Index of the sheet that contains the chart.
     bool                mbOwnTab;           /// True = own sheet, false = embedded object.
 };
@@ -1497,7 +1497,7 @@ public:
     void                Convert( XModelRef xModel,
                             XclImpDffConverter& rDffConv,
                             const ::rtl::OUString& rObjName,
-                            const Rectangle& rChartRect ) const;
+                            const basegfx::B2DRange& rChartRange ) const;
 
 private:
     /** Returns (initially creates) the drawing container for embedded shapes. **/

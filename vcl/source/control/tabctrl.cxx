@@ -996,7 +996,7 @@ IMPL_LINK( TabControl, ImplListBoxSelectHdl, ListBox*, EMPTYARG )
 
 IMPL_LINK( TabControl, ImplWindowEventListener, VclSimpleEvent*, pEvent )
 {
-    if ( pEvent && pEvent->ISA( VclWindowEvent ) && (pEvent->GetId() == VCLEVENT_WINDOW_KEYINPUT) )
+    if ( pEvent && dynamic_cast< VclWindowEvent* >(pEvent) && (pEvent->GetId() == VCLEVENT_WINDOW_KEYINPUT) )
     {
         VclWindowEvent* pWindowEvent = static_cast< VclWindowEvent* >(pEvent);
         // Do not handle events from TabControl or it's children, which is done in Notify(), where the events can be consumed.

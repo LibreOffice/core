@@ -59,9 +59,6 @@ namespace drawinglayer
             const basegfx::B2DHomMatrix& getObjectTransformation() const { return maObjectTransformation; }
             double getWidth() const { return mfWidth; }
             const basegfx::BColor& getFontColor() const { return maFontColor; }
-
-            /// compare operator
-            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -97,9 +94,6 @@ namespace drawinglayer
             sal_Unicode getStrikeoutChar() const { return maStrikeoutChar; }
             const attribute::FontAttribute& getFontAttribute() const { return maFontAttribute; }
             const ::com::sun::star::lang::Locale& getLocale() const { return maLocale; }
-
-            /// compare operator
-            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
 
             /// provide unique ID
             DeclPrimitrive2DIDBlock()
@@ -138,9 +132,6 @@ namespace drawinglayer
             double getHeight() const { return mfHeight; }
             double getOffset() const { return mfOffset; }
             TextStrikeout getTextStrikeout() const { return meTextStrikeout; }
-
-            /// compare operator
-            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
 
             /// provide unique ID
             DeclPrimitrive2DIDBlock()

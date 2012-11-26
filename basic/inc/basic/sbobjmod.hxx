@@ -44,7 +44,6 @@ protected:
     virtual ~SbObjModule();
 
 public:
-    TYPEINFO();
     SbObjModule( const String& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsVbaCompatible );
     virtual SbxVariable* Find( const XubString& rName, SbxClassType t );
 
@@ -72,7 +71,6 @@ class SbUserFormModule : public SbObjModule
 //protected:
     virtual void InitObject();
 public:
-    TYPEINFO();
     SbUserFormModule( const String& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsVBACompat );
     virtual ~SbUserFormModule();
     virtual SbxVariable* Find( const XubString& rName, SbxClassType t );

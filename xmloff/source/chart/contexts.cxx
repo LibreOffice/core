@@ -97,8 +97,6 @@ SchXMLDocContext::SchXMLDocContext( SchXMLImportHelper& rImpHelper,
 SchXMLDocContext::~SchXMLDocContext()
 {}
 
-TYPEINIT1( SchXMLDocContext, SvXMLImportContext );
-
 SvXMLImportContext* SchXMLDocContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const ::rtl::OUString& rLocalName,

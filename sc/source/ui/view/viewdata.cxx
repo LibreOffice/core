@@ -1161,7 +1161,7 @@ IMPL_LINK( ScViewData, EditEngineHdl, EditStatus *, pStatus )
         {
             ScSplitPos eWhich = GetActivePart();
             if (pEditView[eWhich])
-                pEditView[eWhich]->ShowCursor(sal_False);
+                pEditView[eWhich]->ShowCursor(false);
         }
     }
     return 0;

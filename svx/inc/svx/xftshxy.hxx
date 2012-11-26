@@ -36,7 +36,7 @@
 class SVX_DLLPUBLIC XFormTextShadowXValItem : public SfxMetricItem
 {
 public:
-                            TYPEINFO();
+    POOLITEM_FACTORY()
                             XFormTextShadowXValItem(long nVal = 0);
                             XFormTextShadowXValItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const;
@@ -52,7 +52,7 @@ public:
 class SVX_DLLPUBLIC XFormTextShadowYValItem : public SfxMetricItem
 {
 public:
-                            TYPEINFO();
+    POOLITEM_FACTORY()
                             XFormTextShadowYValItem(long nVal = 0);
                             XFormTextShadowYValItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const;

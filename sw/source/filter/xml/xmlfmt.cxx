@@ -221,8 +221,6 @@ public:
             const uno::Reference< xml::sax::XAttributeList > & xAttrList );
     virtual ~SwXMLConditionContext_Impl();
 
-    TYPEINFO();
-
     sal_Bool IsValid() const { return 0 != nCondition; }
 
     sal_uInt32 GetCondition() const { return nCondition; }
@@ -272,8 +270,6 @@ SwXMLConditionContext_Impl::~SwXMLConditionContext_Impl()
 {
 }
 
-TYPEINIT1( SwXMLConditionContext_Impl, XMLTextStyleContext );
-
 // ---------------------------------------------------------------------
 
 typedef SwXMLConditionContext_Impl *SwXMLConditionContextPtr;
@@ -289,8 +285,6 @@ protected:
 
 public:
 
-    TYPEINFO();
-
     SwXMLTextStyleContext_Impl( SwXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList,
@@ -305,8 +299,6 @@ public:
 
     virtual void Finish( sal_Bool bOverwrite );
 };
-
-TYPEINIT1( SwXMLTextStyleContext_Impl, XMLTextStyleContext );
 
 uno::Reference < style::XStyle > SwXMLTextStyleContext_Impl::Create()
 {
@@ -473,8 +465,6 @@ protected:
 
 public:
 
-    TYPEINFO();
-
     SwXMLItemSetStyleContext_Impl(
             SwXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
@@ -576,8 +566,6 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateItemSetContext(
 
     return pContext;
 }
-
-TYPEINIT1( SwXMLItemSetStyleContext_Impl, SvXMLStyleContext );
 
 SwXMLItemSetStyleContext_Impl::SwXMLItemSetStyleContext_Impl( SwXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
@@ -765,8 +753,6 @@ protected:
 
 public:
 
-    TYPEINFO();
-
     SwXMLStylesContext_Impl(
             SwXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName ,
@@ -779,12 +765,10 @@ public:
     virtual void EndElement();
 };
 
-TYPEINIT1( SwXMLStylesContext_Impl, SvXMLStylesContext );
-
 inline SwXMLItemSetStyleContext_Impl *SwXMLStylesContext_Impl::GetSwStyle(
         sal_uInt16 i ) const
 {
-    return PTR_CAST( SwXMLItemSetStyleContext_Impl, GetStyle( i ) );
+    return const_cast< SwXMLItemSetStyleContext_Impl* >( dynamic_cast< const SwXMLItemSetStyleContext_Impl* >( GetStyle( i ) ) );
 }
 
 SvXMLStyleContext *SwXMLStylesContext_Impl::CreateStyleStyleChildContext(
@@ -965,8 +949,6 @@ protected:
 
 public:
 
-    TYPEINFO();
-
     SwXMLMasterStylesContext_Impl(
             SwXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName ,
@@ -974,8 +956,6 @@ public:
     virtual ~SwXMLMasterStylesContext_Impl();
     virtual void EndElement();
 };
-
-TYPEINIT1( SwXMLMasterStylesContext_Impl, XMLTextMasterStylesContext );
 
 SwXMLMasterStylesContext_Impl::SwXMLMasterStylesContext_Impl(
         SwXMLImport& rImport, sal_uInt16 nPrfx,
@@ -1098,10 +1078,7 @@ sal_Bool SwXMLImport::FindAutomaticStyle(
     SwXMLItemSetStyleContext_Impl *pStyle = 0;
     if( GetAutoStyles() )
     {
-        pStyle = PTR_CAST( SwXMLItemSetStyleContext_Impl,
-              GetAutoStyles()->
-                    FindStyleChildContext( nFamily, rName,
-                                           sal_True ) );
+        pStyle = const_cast< SwXMLItemSetStyleContext_Impl* >( dynamic_cast< const SwXMLItemSetStyleContext_Impl* >( GetAutoStyles()->FindStyleChildContext( nFamily, rName, sal_True ) ) );
         if( pStyle )
         {
             if( ppItemSet )

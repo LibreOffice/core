@@ -91,7 +91,7 @@ private:
     SdDrawDocument*         mpDoc;
     XColorTable*            pColTab;
 
-    sal_Bool                    bTreeUpdated;
+    bool                    bTreeUpdated;
     List*                   pCurrentActions;
     String                  aLastFile;
     ::std::vector< long >   aVerbVector;
@@ -109,7 +109,7 @@ private:
     void                    SetActualClickAction( ::com::sun::star::presentation::ClickAction eCA );
     void                    SetActualAnimationEffect( ::com::sun::star::presentation::AnimationEffect eAE );
     void                    SetEditText( String const & rStr );
-    String                  GetEditText( sal_Bool bURL = sal_False );
+    String                  GetEditText( bool bURL = false );
     sal_uInt16                  GetClickActionSdResId( ::com::sun::star::presentation::ClickAction eCA );
     sal_uInt16                  GetAnimationEffectSdResId( ::com::sun::star::presentation::AnimationEffect eAE );
 

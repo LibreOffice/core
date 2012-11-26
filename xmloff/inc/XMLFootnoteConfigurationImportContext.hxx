@@ -70,8 +70,6 @@ class XMLFootnoteConfigurationImportContext : public SvXMLStyleContext
 
 public:
 
-    TYPEINFO();
-
     XMLFootnoteConfigurationImportContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,

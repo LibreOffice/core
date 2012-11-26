@@ -54,6 +54,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
 #include <vcl/svapp.hxx>
+#include <svx/svdlegacy.hxx>
 
 #include <algorithm>
 #include <functional>
@@ -65,14 +66,12 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::script;
 using ::rtl::OUString;
 
-
-TYPEINIT1(DlgEdObj, SdrUnoObj);
 DBG_NAME(DlgEdObj);
 
 //----------------------------------------------------------------------------
 
-DlgEdObj::DlgEdObj()
-          :SdrUnoObj(String(), sal_False)
+DlgEdObj::DlgEdObj(SdrModel& rSdrModel)
+:   SdrUnoObj(rSdrModel, String(), sal_False)
           ,bIsListening(sal_False)
           ,pDlgEdForm( NULL )
 {
@@ -81,9 +80,11 @@ DlgEdObj::DlgEdObj()
 
 //----------------------------------------------------------------------------
 
-DlgEdObj::DlgEdObj(const ::rtl::OUString& rModelName,
+DlgEdObj::DlgEdObj(
+    SdrModel& rSdrModel,
+    const ::rtl::OUString& rModelName,
                    const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac)
-          :SdrUnoObj(rModelName, rxSFac, sal_False)
+:   SdrUnoObj(rSdrModel, rModelName, rxSFac, sal_False)
           ,bIsListening(sal_False)
           ,pDlgEdForm( NULL )
 {
@@ -100,13 +101,44 @@ DlgEdObj::~DlgEdObj()
         EndListening();
 }
 
+void DlgEdObj::copyDataFromSdrObject(const SdrObject& rSource)
+{
+    if(this != &rSource)
+    {
+        const DlgEdObj* pSource = dynamic_cast< const DlgEdObj* >(&rSource);
+
+        if(pSource)
+        {
+            // call parent
+            SdrUnoObj::copyDataFromSdrObject(rSource);
+
+            // no own local data to copy (? had no own operator= at least)
+            clonedFrom(pSource);
+        }
+        else
+        {
+            OSL_ENSURE(false, "copyDataFromSdrObject with ObjectType of Source different from Target (!)");
+        }
+    }
+}
+
+SdrObject* DlgEdObj::CloneSdrObject(SdrModel* pTargetModel) const
+{
+    DlgEdObj* pClone = new DlgEdObj(
+        pTargetModel ? *pTargetModel : getSdrModelFromSdrObject());
+    OSL_ENSURE(pClone, "CloneSdrObject error (!)");
+    pClone->copyDataFromSdrObject(*this);
+
+    return pClone;
+}
+
 //----------------------------------------------------------------------------
 
-void DlgEdObj::SetPage(SdrPage* _pNewPage)
-{
-    // now set the page
-    SdrUnoObj::SetPage(_pNewPage);
-}
+//void DlgEdObj::SetPage(SdrPage* _pNewPage)
+//{
+//  // now set the page
+//  SdrUnoObj::SetPage(_pNewPage);
+//}
 
 //----------------------------------------------------------------------------
 
@@ -159,7 +191,7 @@ bool DlgEdObj::TransformSdrToControlCoordinates(
     DlgEdForm* pForm = NULL;
     if ( !lcl_getDlgEdForm( this, pForm ) )
         return false;
-    Rectangle aFormRect = pForm->GetSnapRect();
+    const Rectangle aFormRect(sdr::legacy::GetSnapRect(*pForm));
     Size aFormPos( aFormRect.Left(), aFormRect.Top() );
 
     // convert 100th_mm to pixel
@@ -385,7 +417,7 @@ void DlgEdObj::SetRectFromProps()
             // set rectangle position and size
             Point aPoint( nXOut, nYOut );
             Size aSize( nWidthOut, nHeightOut );
-            SetSnapRect( Rectangle( aPoint, aSize ) );
+            sdr::legacy::SetSnapRect(*this, Rectangle( aPoint, aSize ) );
         }
     }
 }
@@ -395,7 +427,7 @@ void DlgEdObj::SetRectFromProps()
 void DlgEdObj::SetPropsFromRect()
 {
     // get control position and size from rectangle
-    Rectangle aRect_ = GetSnapRect();
+    const Rectangle aRect_(sdr::legacy::GetSnapRect(*this));
     sal_Int32 nXIn = aRect_.Left();
     sal_Int32 nYIn = aRect_.Top();
     sal_Int32 nWidthIn = aRect_.GetWidth();
@@ -438,9 +470,8 @@ void DlgEdObj::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
     {
         sal_Int32 nPageXIn = 0;
         sal_Int32 nPageYIn = 0;
-        Size aPageSize = pPage_->GetSize();
-        sal_Int32 nPageWidthIn = aPageSize.Width();
-        sal_Int32 nPageHeightIn = aPageSize.Height();
+        sal_Int32 nPageWidthIn = basegfx::fround(pPage_->GetPageScale().getX());
+        sal_Int32 nPageHeightIn = basegfx::fround(pPage_->GetPageScale().getY());
         sal_Int32 nPageX, nPageY, nPageWidth, nPageHeight;
         if ( TransformSdrToControlCoordinates( nPageXIn, nPageYIn, nPageWidthIn, nPageHeightIn, nPageX, nPageY, nPageWidth, nPageHeight ) )
         {
@@ -531,7 +562,7 @@ void SAL_CALL DlgEdObj::NameChange( const  ::com::sun::star::beans::PropertyChan
                     xCont->insertByName( aNewName , aAny );
 
                     DlgEditor* pEditor;
-                    if ( ISA(DlgEdForm) )
+                    if ( dynamic_cast< DlgEdForm* >(this) )
                         pEditor = ((DlgEdForm*)this)->GetDlgEditor();
                     else
                         pEditor = GetDlgEdForm()->GetDlgEditor();
@@ -570,10 +601,9 @@ sal_Int32 DlgEdObj::GetStep() const
 
 void DlgEdObj::UpdateStep()
 {
-    sal_Int32 nCurStep = GetDlgEdForm()->GetStep();
-    sal_Int32 nStep = GetStep();
-
-    SdrLayerAdmin& rLayerAdmin = GetModel()->GetLayerAdmin();
+    const sal_Int32 nCurStep(GetDlgEdForm()->GetStep());
+    const sal_Int32 nStep(GetStep());
+    SdrLayerAdmin& rLayerAdmin = getSdrModelFromSdrObject().GetModelLayerAdmin();
     SdrLayerID nHiddenLayerId   = rLayerAdmin.GetLayerID( String( RTL_CONSTASCII_USTRINGPARAM( "HiddenLayer" ) ), sal_False );
     SdrLayerID nControlLayerId   = rLayerAdmin.GetLayerID( rLayerAdmin.GetControlLayerName(), sal_False );
 
@@ -677,7 +707,16 @@ void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt ) throw (Ru
             }
 
             // reorder objects in drawing page
-            GetModel()->GetPage(0)->SetObjectOrdNum( nOldTabIndex + 1, nNewTabIndex + 1 );
+            SdrPage* pOwningPage = getSdrModelFromSdrObject().GetPage(0);
+
+            if(pOwningPage)
+            {
+                pOwningPage->SetNavigationPosition( nOldTabIndex + 1, nNewTabIndex + 1 );
+            }
+            else
+            {
+                OSL_ENSURE(pOwningPage, "DlgEdObj::TabIndexChange got no SdrPage (!)");
+            }
 
             // #110559#
             pForm->UpdateTabOrderAndGroups();
@@ -976,42 +1015,18 @@ void DlgEdObj::clonedFrom(const DlgEdObj* _pSource)
 
 //----------------------------------------------------------------------------
 
-SdrObject* DlgEdObj::Clone() const
-{
-    SdrObject* pReturn = SdrUnoObj::Clone();
-
-    DlgEdObj* pDlgEdObj = PTR_CAST(DlgEdObj, pReturn);
-    DBG_ASSERT( pDlgEdObj != NULL, "DlgEdObj::Clone: invalid clone!" );
-    if ( pDlgEdObj )
-        pDlgEdObj->clonedFrom( this );
-
-    return pReturn;
-}
-
-//----------------------------------------------------------------------------
-
 SdrObject* DlgEdObj::getFullDragClone() const
 {
     // no need to really add the clone for dragging, it's a temporary
-    // object
-    SdrObject* pObj = new SdrUnoObj(String());
-    *pObj = *((const SdrUnoObj*)this);
-
-    return pObj;
+    // object. Force to SdrUnoObj by using the correct method call
+    return SdrUnoObj::CloneSdrObject();
 }
 
 //----------------------------------------------------------------------------
 
-void DlgEdObj::operator= (const SdrObject& rObj)
+void DlgEdObj::setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransformation)
 {
-    SdrUnoObj::operator= (rObj);
-}
-
-//----------------------------------------------------------------------------
-
-void DlgEdObj::NbcMove( const Size& rSize )
-{
-    SdrUnoObj::NbcMove( rSize );
+    SdrUnoObj::setSdrObjectTransformation(rTransformation);
 
     // stop listening
     EndListening(sal_False);
@@ -1028,28 +1043,9 @@ void DlgEdObj::NbcMove( const Size& rSize )
 
 //----------------------------------------------------------------------------
 
-void DlgEdObj::NbcResize(const Point& rRef, const Fraction& xFract, const Fraction& yFract)
+bool DlgEdObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
-    SdrUnoObj::NbcResize( rRef, xFract, yFract );
-
-    // stop listening
-    EndListening(sal_False);
-
-    // set geometry properties
-    SetPropsFromRect();
-
-    // start listening
-    StartListening();
-
-    // dialog model changed
-    GetDlgEdForm()->GetDlgEditor()->SetDialogModelChanged(sal_True);
-}
-
-//----------------------------------------------------------------------------
-
-FASTBOOL DlgEdObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
-{
-    FASTBOOL bResult = SdrUnoObj::EndCreate(rStat, eCmd);
+    bool bResult(SdrUnoObj::EndCreate(rStat, eCmd));
 
     SetDefaults();
     StartListening();
@@ -1062,7 +1058,8 @@ FASTBOOL DlgEdObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 void DlgEdObj::SetDefaults()
 {
     // set parent form
-    pDlgEdForm = ((DlgEdPage*)GetPage())->GetDlgEdForm();
+    DlgEdPage* pOwningPage = dynamic_cast< DlgEdPage* >(getSdrPageFromSdrObject());
+    pDlgEdForm = pOwningPage ? pOwningPage->GetDlgEdForm() : 0;
 
     if ( pDlgEdForm )
     {
@@ -1129,7 +1126,7 @@ void DlgEdObj::SetDefaults()
                 xCont->insertByName( aOUniqueName , aAny );
 
                 DlgEditor* pEditor;
-                if ( ISA(DlgEdForm) )
+                if ( dynamic_cast< DlgEdForm* >(this) )
                     pEditor = ((DlgEdForm*)this)->GetDlgEditor();
                 else
                     pEditor = GetDlgEdForm()->GetDlgEditor();
@@ -1259,7 +1256,7 @@ void SAL_CALL DlgEdObj::_propertyChange( const  ::com::sun::star::beans::Propert
 
             if ( evt.PropertyName == DLGED_PROP_DECORATION )
             {
-                if ( ISA(DlgEdForm) )
+                if ( dynamic_cast< DlgEdForm* >(this) )
                     ((DlgEdForm*)this)->GetDlgEditor()->ResetDialog();
                 else
                     GetDlgEdForm()->GetDlgEditor()->ResetDialog();
@@ -1268,7 +1265,7 @@ void SAL_CALL DlgEdObj::_propertyChange( const  ::com::sun::star::beans::Propert
         // change name of control in dialog model
         else if ( evt.PropertyName == DLGED_PROP_NAME )
         {
-            if ( !ISA(DlgEdForm) )
+            if ( !dynamic_cast< DlgEdForm* >(this) )
             {
                 NameChange(evt);
             }
@@ -1281,7 +1278,7 @@ void SAL_CALL DlgEdObj::_propertyChange( const  ::com::sun::star::beans::Propert
         // change tabindex
         else if ( evt.PropertyName == DLGED_PROP_TABINDEX )
         {
-            if ( !ISA(DlgEdForm) )
+            if ( !dynamic_cast< DlgEdForm* >(this) )
             {
                 TabIndexChange(evt);
             }
@@ -1296,7 +1293,7 @@ void SAL_CALL DlgEdObj::_elementInserted(const ::com::sun::star::container::Cont
     if (isListening())
     {
         // dialog model changed
-        if ( ISA(DlgEdForm) )
+        if ( dynamic_cast< DlgEdForm* >(this) )
         {
             ((DlgEdForm*)this)->GetDlgEditor()->SetDialogModelChanged(sal_True);
         }
@@ -1314,7 +1311,7 @@ void SAL_CALL DlgEdObj::_elementReplaced(const ::com::sun::star::container::Cont
     if (isListening())
     {
         // dialog model changed
-        if ( ISA(DlgEdForm) )
+        if ( dynamic_cast< DlgEdForm* >(this) )
         {
             ((DlgEdForm*)this)->GetDlgEditor()->SetDialogModelChanged(sal_True);
         }
@@ -1332,7 +1329,7 @@ void SAL_CALL DlgEdObj::_elementRemoved(const ::com::sun::star::container::Conta
     if (isListening())
     {
         // dialog model changed
-        if ( ISA(DlgEdForm) )
+        if ( dynamic_cast< DlgEdForm* >(this) )
         {
             ((DlgEdForm*)this)->GetDlgEditor()->SetDialogModelChanged(sal_True);
         }
@@ -1360,13 +1357,12 @@ void DlgEdObj::SetLayer(SdrLayerID nLayer)
 
 //----------------------------------------------------------------------------
 
-TYPEINIT1(DlgEdForm, DlgEdObj);
 DBG_NAME(DlgEdForm);
 
 //----------------------------------------------------------------------------
 
-DlgEdForm::DlgEdForm()
-          :DlgEdObj()
+DlgEdForm::DlgEdForm(SdrModel& rSdrModel)
+:   DlgEdObj(rSdrModel)
 {
     DBG_CTOR(DlgEdForm, NULL);
 }
@@ -1376,6 +1372,36 @@ DlgEdForm::DlgEdForm()
 DlgEdForm::~DlgEdForm()
 {
     DBG_DTOR(DlgEdForm, NULL);
+}
+
+void DlgEdForm::copyDataFromSdrObject(const SdrObject& rSource)
+{
+    if(this != &rSource)
+    {
+        const DlgEdForm* pSource = dynamic_cast< const DlgEdForm* >(&rSource);
+
+        if(pSource)
+        {
+            // call parent
+            DlgEdObj::copyDataFromSdrObject(rSource);
+
+            // no own local data to copy (? had no own operator= at least)
+        }
+        else
+        {
+            OSL_ENSURE(false, "copyDataFromSdrObject with ObjectType of Source different from Target (!)");
+        }
+    }
+}
+
+SdrObject* DlgEdForm::CloneSdrObject(SdrModel* pTargetModel) const
+{
+    DlgEdForm* pClone = new DlgEdForm(
+        pTargetModel ? *pTargetModel : getSdrModelFromSdrObject());
+    OSL_ENSURE(pClone, "CloneSdrObject error (!)");
+    pClone->copyDataFromSdrObject(*this);
+
+    return pClone;
 }
 
 //----------------------------------------------------------------------------
@@ -1414,7 +1440,7 @@ void DlgEdForm::SetRectFromProps()
             // set rectangle position and size
             Point aPoint( nXOut, nYOut );
             Size aSize( nWidthOut, nHeightOut );
-            SetSnapRect( Rectangle( aPoint, aSize ) );
+            sdr::legacy::SetSnapRect(*this, Rectangle( aPoint, aSize ) );
         }
     }
 }
@@ -1424,7 +1450,7 @@ void DlgEdForm::SetRectFromProps()
 void DlgEdForm::SetPropsFromRect()
 {
     // get form position and size from rectangle
-    Rectangle aRect_ = GetSnapRect();
+    const Rectangle aRect_(sdr::legacy::GetSnapRect(*this));
     sal_Int32 nXIn = aRect_.Left();
     sal_Int32 nYIn = aRect_.Top();
     sal_Int32 nWidthIn = aRect_.GetWidth();
@@ -1479,9 +1505,8 @@ void DlgEdForm::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
         {
             sal_Int32 nPageXIn = 0;
             sal_Int32 nPageYIn = 0;
-            Size aPageSize = pPage_->GetSize();
-            sal_Int32 nPageWidthIn = aPageSize.Width();
-            sal_Int32 nPageHeightIn = aPageSize.Height();
+            sal_Int32 nPageWidthIn = basegfx::fround(pPage_->GetPageScale().getX());
+            sal_Int32 nPageHeightIn = basegfx::fround(pPage_->GetPageScale().getY());
             sal_Int32 nPageX, nPageY, nPageWidth, nPageHeight;
             if ( TransformSdrToFormCoordinates( nPageXIn, nPageYIn, nPageWidthIn, nPageHeightIn, nPageX, nPageY, nPageWidth, nPageHeight ) )
             {
@@ -1532,9 +1557,8 @@ void DlgEdForm::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
             if ( bAdjustedPageSize )
             {
                 pEditor->InitScrollBars();
-                aPageSize = pPage_->GetSize();
-                nPageWidthIn = aPageSize.Width();
-                nPageHeightIn = aPageSize.Height();
+                nPageWidthIn = basegfx::fround(pPage_->GetPageScale().getX());
+                nPageHeightIn = basegfx::fround(pPage_->GetPageScale().getY());
                 if ( TransformSdrToControlCoordinates( nPageXIn, nPageYIn, nPageWidthIn, nPageHeightIn, nPageX, nPageY, nPageWidth, nPageHeight ) )
                 {
                     for ( aIter = aChildList.begin(); aIter != aChildList.end(); aIter++ )
@@ -1597,15 +1621,15 @@ void DlgEdForm::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
 void DlgEdForm::UpdateStep()
 {
     sal_uLong nObjCount;
-    SdrPage* pSdrPage = GetPage();
+    SdrPage* pOwningPage = getSdrPageFromSdrObject();
 
-    if ( pSdrPage && ( ( nObjCount = pSdrPage->GetObjCount() ) > 0 ) )
+    if ( pOwningPage && ( ( nObjCount = pOwningPage->GetObjCount() ) > 0 ) )
     {
         for ( sal_uLong i = 0 ; i < nObjCount ; i++ )
         {
-            SdrObject* pObj = pSdrPage->GetObj(i);
-            DlgEdObj* pDlgEdObj = PTR_CAST(DlgEdObj, pObj);
-            if ( pDlgEdObj && !pDlgEdObj->ISA(DlgEdForm) )
+            SdrObject* pObj = pOwningPage->GetObj(i);
+            DlgEdObj* pDlgEdObj = dynamic_cast< DlgEdObj* >( pObj);
+            if ( pDlgEdObj && !dynamic_cast< DlgEdForm* >(pDlgEdObj) )
                 pDlgEdObj->UpdateStep();
         }
     }
@@ -1775,9 +1799,9 @@ void DlgEdForm::UpdateTabOrderAndGroups()
 
 //----------------------------------------------------------------------------
 
-void DlgEdForm::NbcMove( const Size& rSize )
+void DlgEdForm::setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransformation)
 {
-    SdrUnoObj::NbcMove( rSize );
+    SdrUnoObj::setSdrObjectTransformation(rTransformation);
 
     // set geometry properties of form
     EndListening(sal_False);
@@ -1799,33 +1823,9 @@ void DlgEdForm::NbcMove( const Size& rSize )
 
 //----------------------------------------------------------------------------
 
-void DlgEdForm::NbcResize(const Point& rRef, const Fraction& xFract, const Fraction& yFract)
+bool DlgEdForm::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
-    SdrUnoObj::NbcResize( rRef, xFract, yFract );
-
-    // set geometry properties of form
-    EndListening(sal_False);
-    SetPropsFromRect();
-    StartListening();
-
-    // set geometry properties of all childs
-    ::std::vector<DlgEdObj*>::iterator aIter;
-    for ( aIter = pChilds.begin() ; aIter != pChilds.end() ; aIter++ )
-    {
-        (*aIter)->EndListening(sal_False);
-        (*aIter)->SetPropsFromRect();
-        (*aIter)->StartListening();
-    }
-
-    // dialog model changed
-    GetDlgEditor()->SetDialogModelChanged(sal_True);
-}
-
-//----------------------------------------------------------------------------
-
-FASTBOOL DlgEdForm::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
-{
-    FASTBOOL bResult = SdrUnoObj::EndCreate(rStat, eCmd);
+    bool bResult(SdrUnoObj::EndCreate(rStat, eCmd));
 
     // stop listening
     EndListening(sal_False);

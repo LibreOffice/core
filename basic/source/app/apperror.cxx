@@ -31,7 +31,6 @@
 #include "basic.hrc"
 #include "apperror.hxx"
 
-TYPEINIT1(AppError,AppWin);
 AppError::AppError( BasicFrame* pParent, String aFileName )
 : AppWin( pParent )
 {

@@ -87,8 +87,8 @@ namespace sdr
             }
 
             // collect all ItemSets in mpItemSet
-            const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
-            const sal_uInt32 nCount(pSub->GetObjCount());
+            const SdrObjList* pSub = GetSdrObject().getChildrenOfSdrObject();
+            const sal_uInt32 nCount(pSub ? pSub->GetObjCount() : 0);
 
             for(sal_uInt32 a(0L); a < nCount; a++)
             {
@@ -116,11 +116,11 @@ namespace sdr
             return *mpItemSet;
         }
 
-        void GroupProperties::SetMergedItemSet(const SfxItemSet& rSet, sal_Bool bClearAllItems)
+        void GroupProperties::SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems)
         {
             // iterate over contained SdrObjects
-            const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
-            const sal_uInt32 nCount(pSub->GetObjCount());
+            const SdrObjList* pSub = GetSdrObject().getChildrenOfSdrObject();
+            const sal_uInt32 nCount(pSub ? pSub->GetObjCount() : 0);
 
             for(sal_uInt32 a(0L); a < nCount; a++)
             {
@@ -160,8 +160,8 @@ namespace sdr
 
         void GroupProperties::SetMergedItem(const SfxPoolItem& rItem)
         {
-            const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
-            const sal_uInt32 nCount(pSub->GetObjCount());
+            const SdrObjList* pSub = GetSdrObject().getChildrenOfSdrObject();
+            const sal_uInt32 nCount(pSub ? pSub->GetObjCount() : 0);
 
             for(sal_uInt32 a(0L); a < nCount; a++)
             {
@@ -171,8 +171,8 @@ namespace sdr
 
         void GroupProperties::ClearMergedItem(const sal_uInt16 nWhich)
         {
-            const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
-            const sal_uInt32 nCount(pSub->GetObjCount());
+            const SdrObjList* pSub = GetSdrObject().getChildrenOfSdrObject();
+            const sal_uInt32 nCount(pSub ? pSub->GetObjCount() : 0);
 
             for(sal_uInt32 a(0L); a < nCount; a++)
             {
@@ -190,7 +190,7 @@ namespace sdr
             DBG_ASSERT(sal_False, "GroupProperties::ItemSetChanged() should never be called (!)");
         }
 
-        sal_Bool GroupProperties::AllowItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/) const
+        bool GroupProperties::AllowItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/) const
         {
             DBG_ASSERT(sal_False, "GroupProperties::AllowItemChange() should never be called (!)");
             return sal_False;
@@ -210,8 +210,8 @@ namespace sdr
         {
             SfxStyleSheet* pRetval = 0L;
 
-            const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
-            const sal_uInt32 nCount(pSub->GetObjCount());
+            const SdrObjList* pSub = GetSdrObject().getChildrenOfSdrObject();
+            const sal_uInt32 nCount(pSub ? pSub->GetObjCount() : 0);
 
             for(sal_uInt32 a(0L); a < nCount; a++)
             {
@@ -234,10 +234,10 @@ namespace sdr
             return pRetval;
         }
 
-        void GroupProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
+        void GroupProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
-            const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
-            const sal_uInt32 nCount(pSub->GetObjCount());
+            const SdrObjList* pSub = GetSdrObject().getChildrenOfSdrObject();
+            const sal_uInt32 nCount(pSub ? pSub->GetObjCount() : 0);
 
             for(sal_uInt32 a(0L); a < nCount; a++)
             {
@@ -250,37 +250,10 @@ namespace sdr
             // nothing to do here, groups have no items and thus no default items, too.
         }
 
-        void GroupProperties::MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel)
-        {
-            if(pSrcPool && pDestPool && (pSrcPool != pDestPool))
-            {
-                const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
-                const sal_uInt32 nCount(pSub->GetObjCount());
-
-                for(sal_uInt32 a(0L); a < nCount; a++)
-                {
-                    pSub->GetObj(a)->GetProperties().MoveToItemPool(pSrcPool, pDestPool, pNewModel);
-                }
-
-                // also clear local ItemSet, it's only temporary for group objects anyways.
-                if(mpItemSet)
-                {
-                    // #121905#
-                    // copy/paste is still using clone operators and MoveToItemPool functionality.
-                    // Since SfxItemSet contains a pool pointer, ClearItem is not enough here.
-                    // The ItemSet for merge is constructed on demand, so it's enough here to
-                    // just delete it and set to 0L.
-                    // mpItemSet->ClearItem();
-                    delete mpItemSet;
-                    mpItemSet = 0L;
-                }
-            }
-        }
-
         void GroupProperties::ForceStyleToHardAttributes()
         {
-            const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
-            const sal_uInt32 nCount(pSub->GetObjCount());
+            const SdrObjList* pSub = GetSdrObject().getChildrenOfSdrObject();
+            const sal_uInt32 nCount(pSub ? pSub->GetObjCount() : 0);
 
             for(sal_uInt32 a(0L); a < nCount; a++)
             {

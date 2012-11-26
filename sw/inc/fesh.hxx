@@ -26,16 +26,13 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/embed/XClassifiedObject.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
-
 #include <svx/svdobj.hxx>
 #include "swdllapi.h"
 #include <editsh.hxx>
 #include <flyenum.hxx>
-
-// OD 25.06.2003 #108784#
 #include <svx/svdtypes.hxx>
-
 #include <svtools/embedhlp.hxx>
+#include <svx/sdrobjectfactory.hxx>
 
 #ifndef INCLUDED_VECTOR
 #include <vector>
@@ -58,7 +55,6 @@ class Outliner;
 class SotDataObject;
 class SwFrmFmt;
 struct SwSortOptions;
-class SdrMarkList;
 
 namespace svx
 {
@@ -192,6 +188,7 @@ class SW_DLLPUBLIC SwFEShell : public SwEditShell
     SW_DLLPRIVATE void EndAllActionAndCall();
 
     SW_DLLPRIVATE void ScrollTo( const Point &rPt );
+    SW_DLLPRIVATE void ScrollTo( const basegfx::B2DPoint &rPt ); // TTTT: remove wrapper later
 
     // OD 25.06.2003 #108784# - correct type of 1st parameter
     SW_DLLPRIVATE void ChangeOpaque( SdrLayerID nLayerId );
@@ -216,10 +213,6 @@ class SW_DLLPUBLIC SwFEShell : public SwEditShell
                                 const Point& rInsPt, sal_Bool bIsMove,
                                 sal_Bool bSelectInsert );
 
-    // get list of marked SdrObjects;
-    // helper method for GetSelFrmType, IsSelContainsControl
-    SW_DLLPRIVATE const SdrMarkList* _GetMarkList() const;
-
     SW_DLLPRIVATE sal_Bool CheckHeadline( bool bRepeat ) const;
 
     using SwEditShell::Copy;
@@ -228,7 +221,6 @@ public:
 
     using SwEditShell::Insert;
 
-    TYPEINFO();
     SwFEShell( SwDoc& rDoc, Window *pWin, const SwViewOption *pOpt = 0 );
     SwFEShell( SwEditShell& rShell, Window *pWin );
     virtual ~SwFEShell();
@@ -250,7 +242,8 @@ public:
 //SS fuer DrawObjekte und Rahmen-----------------------------
 
     //Wenn ein Objekt angegeben wurde, so wird genau diese Markiert (anstatt
-    //ueber die Position zu suchen.
+    //ueber die Position zu suchen. // TTTT: remove wrapper later
+    sal_Bool SelectObj( const basegfx::B2DPoint& rSelPt, sal_uInt8 nFlag = 0, SdrObject *pObj = 0 );
     sal_Bool SelectObj( const Point& rSelPt, sal_uInt8 nFlag = 0, SdrObject *pObj = 0 );
     void DelSelectedObj();
 
@@ -265,9 +258,10 @@ public:
     void  SelectionToHell();    //Unter dem Dokument
 
     // folgende zwei Methoden returnen den enum SdrHdlKind, um sich ein
-    // includen von SVDRAW.HXX zu ersparen als int deklariert.
+    // includen von SVDRAW.HXX zu ersparen als int deklariert. // TTTT: remove wrapper later
     bool IsObjSelectable( const Point& rPt );
-    int IsInsideSelectedObj( const Point& rPt );    //!! returns enum values
+    bool IsObjSelectable( const basegfx::B2DPoint& rPt );
+    int IsInsideSelectedObj( const basegfx::B2DPoint& rPt );    //!! returns enum values
 
     // #107513#
     // Test if there is a draw object at that position and if it should be selected.
@@ -479,8 +473,8 @@ public:
     //Setzen vom DragMode (z.B. Rotate), tut nix bei Rahmenselektion.
     void SetDragMode( sal_uInt16 eSdrDragMode );
 
-    sal_uInt16 IsObjSelected() const;   //Liefert gleich die Anzahl der Objekte,
-                                    //zaehlt aber nicht die Objekte in Gruppen.
+    sal_uInt32 GetNumberOfSelectedObjects() const;  //Liefert gleich die Anzahl der Objekte, zaehlt aber nicht die Objekte in Gruppen.
+    sal_Bool IsObjSelected() const;
     sal_Bool IsObjSelected( const SdrObject& rObj ) const;
 
     void EndTextEdit();             //Loescht ggf. das Objekt.
@@ -496,18 +490,17 @@ public:
     //selektiert.
     //Mit BreakCreate wird der Vorgang abgebrochen, dann ist kein Objekt
     //mehr selektiert.
-    sal_Bool BeginCreate( sal_uInt16 /*SdrObjKind ?*/ eSdrObjectKind, const Point &rPos );
-    sal_Bool BeginCreate( sal_uInt16 /*SdrObjKind ?*/ eSdrObjectKind, sal_uInt32 eObjInventor, const Point &);
-    void MoveCreate ( const Point &rPos );
-    sal_Bool EndCreate  ( sal_uInt16 eSdrCreateCmd );
+    bool BeginCreate(const SdrObjectCreationInfo& rSdrObjectCreationInfo, const basegfx::B2DPoint& rPos );
+    void MoveCreate( const basegfx::B2DPoint &rPos );
+    bool EndCreate( sal_uInt16 eSdrCreateCmd );
     void BreakCreate();
-    sal_Bool IsDrawCreate() const;
-    void CreateDefaultShape( sal_uInt16 /*SdrObjKind ?*/ eSdrObjectKind, const Rectangle& rRect, sal_uInt16 nSlotId);
+    bool IsDrawCreate() const;
+    void CreateDefaultShape(const SdrObjectCreationInfo& rSdrObjectCreationInfo, const Rectangle& rRect, sal_uInt16 nSlotId);
 
     // Funktionen f�r Rubberbox, um Draw-Objekte zu selektieren
-    sal_Bool BeginMark( const Point &rPos );
-    void MoveMark ( const Point &rPos );
-    sal_Bool EndMark  ();
+    bool BeginMark( const basegfx::B2DPoint& rPos );
+    void MoveMark( const basegfx::B2DPoint& rPos );
+    bool EndMark();
     void BreakMark();
 
     //Gruppe erzeugen, aufloesen, nix bei Rahmenselektion.
@@ -597,8 +590,9 @@ public:
 
     //Seitennummer der Seite in der der Point liegt, 0 wenn keine
     //getroffen ist.
-    sal_uInt16 GetPageNumber( const Point &rPoint ) const;
-    sal_Bool GetPageNumber( long nYPos, sal_Bool bAtCrsrPos, sal_uInt16& rPhyNum, sal_uInt16& rVirtNum, String &rDisplay ) const;
+    sal_uInt32 GetPageNumber( const Point &rPoint ) const;
+    sal_uInt32 GetPageNumber( const basegfx::B2DPoint &rPoint ) const; // TTTT: remove wrapper later
+    bool GetPageNumber( long nYPos, bool bAtCrsrPos, sal_uInt16& rPhyNum, sal_uInt16& rVirtNum, String &rDisplay ) const;
 
     SwFlyFrmFmt* InsertObject( const svt::EmbeddedObjectRef&,
                 const SfxItemSet* pFlyAttrSet = 0,

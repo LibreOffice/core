@@ -171,7 +171,6 @@ enum SvxChartRegress
 class SVX_DLLPUBLIC SvxChartStyleItem : public SfxEnumItem
 {
 public:
-    TYPEINFO();
     SvxChartStyleItem(SvxChartStyle eStyle /*= CHSTYLE_2D_LINE*/,
                       sal_uInt16 nId );
     SvxChartStyleItem(SvStream& rIn, sal_uInt16 nId );
@@ -189,7 +188,6 @@ public:
 class SVX_DLLPUBLIC SvxChartRegressItem : public SfxEnumItem
 {
 public:
-    TYPEINFO();
     SvxChartRegressItem(SvxChartRegress eRegress /*= CHREGRESS_LINEAR*/,
                         sal_uInt16 nId );
     SvxChartRegressItem(SvStream& rIn, sal_uInt16 nId );
@@ -208,7 +206,6 @@ public:
 class SVX_DLLPUBLIC SvxChartDataDescrItem : public SfxEnumItem
 {
 public:
-    TYPEINFO();
     SvxChartDataDescrItem(SvxChartDataDescr eDataDescr /*= CHDESCR_NONE*/,
                           sal_uInt16 nId );
     SvxChartDataDescrItem(SvStream& rIn,
@@ -227,7 +224,6 @@ public:
 class SVX_DLLPUBLIC SvxChartTextOrderItem : public SfxEnumItem
 {
 public:
-    TYPEINFO();
     SvxChartTextOrderItem(SvxChartTextOrder eOrder /*= CHTXTORDER_SIDEBYSIDE*/,
                           sal_uInt16 nId );
     SvxChartTextOrderItem(SvStream& rIn,
@@ -249,7 +245,6 @@ public:
 class SVX_DLLPUBLIC SvxChartTextOrientItem : public SfxEnumItem
 {
 public:
-    TYPEINFO();
     SvxChartTextOrientItem(SvxChartTextOrient /*eOrient = CHTXTORIENT_STANDARD*/,
                            sal_uInt16 nId );
     SvxChartTextOrientItem(SvStream& rIn,
@@ -268,7 +263,6 @@ public:
 class SVX_DLLPUBLIC SvxChartKindErrorItem : public SfxEnumItem
 {
 public:
-    TYPEINFO();
     SvxChartKindErrorItem(SvxChartKindError /*eOrient = CHERROR_NONE*/,
                            sal_uInt16 nId );
     SvxChartKindErrorItem(SvStream& rIn,
@@ -289,7 +283,6 @@ public:
 class SVX_DLLPUBLIC SvxChartIndicateItem : public SfxEnumItem
 {
 public:
-    TYPEINFO();
     SvxChartIndicateItem(SvxChartIndicate eOrient /*= CHINDICATE_NONE*/,
                            sal_uInt16 nId );
     SvxChartIndicateItem(SvStream& rIn,
@@ -312,8 +305,8 @@ class SVX_DLLPUBLIC SvxDoubleItem : public SfxPoolItem
     double fVal;
 
 public:
-    TYPEINFO();
-    SvxDoubleItem(double fValue /*= 0.0*/, sal_uInt16 nId );
+    POOLITEM_FACTORY()
+    SvxDoubleItem(double fValue = 0.0, sal_uInt16 nId = 0 );
     SvxDoubleItem(SvStream& rIn, sal_uInt16 nId );
     SvxDoubleItem(const SvxDoubleItem& rItem);
 

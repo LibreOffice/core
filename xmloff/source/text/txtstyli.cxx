@@ -130,8 +130,6 @@ void XMLTextStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
     }
 }
 
-TYPEINIT1( XMLTextStyleContext, XMLPropStyleContext );
-
 XMLTextStyleContext::XMLTextStyleContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,

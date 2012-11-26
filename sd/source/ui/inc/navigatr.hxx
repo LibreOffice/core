@@ -69,16 +69,16 @@ class NavDocInfo
 public:
             NavDocInfo() { mpDocShell = NULL; }
 
-    sal_Bool    HasName() { return( (sal_Bool) bName ); }
-    sal_Bool    IsActive() { return( (sal_Bool) bActive ); }
+    bool    HasName() { return( bName ); }
+    bool    IsActive() { return( bActive ); }
 
-    void    SetName( sal_Bool bOn = sal_True ) { bName = bOn; }
-    void    SetActive( sal_Bool bOn = sal_True ) { bActive = bOn; }
+    void    SetName( bool bOn = true ) { bName = bOn; }
+    void    SetActive( bool bOn = true ) { bActive = bOn; }
 
 private:
     friend class SdNavigatorWin;
-    sal_Bool            bName   : 1;
-    sal_Bool            bActive : 1;
+    bool            bName   : 1;
+    bool            bActive : 1;
     ::sd::DrawDocShell* mpDocShell;
 };
 
@@ -100,7 +100,7 @@ public:
     void                        InitTreeLB( const SdDrawDocument* pDoc );
     void                        RefreshDocumentLB( const String* pDocName = NULL );
 
-    sal_Bool                        InsertFile(const String& rFileName);
+    bool                        InsertFile(const String& rFileName);
 
     NavigatorDragType           GetNavigatorDragType();
     void                        SetNavigatorDragType(NavigatorDragType eType) { meDragType = eType; }
@@ -123,7 +123,7 @@ private:
     Size                        maSize;
     Size                        maMinSize;
 //  Size                        maFltWinSize;
-    sal_Bool                        mbDocImported;
+    bool                        mbDocImported;
     String                      maDropFileName;
     NavigatorDragType           meDragType;
     List*                       mpDocList;
@@ -139,7 +139,7 @@ private:
     */
     bool                        mbShowAllShapes;
 
-    sal_uInt16                      GetDragTypeSdResId( NavigatorDragType eDT, sal_Bool bImage = sal_False );
+    sal_uInt16                  GetDragTypeSdResId( NavigatorDragType eDT, bool bImage = false );
     NavDocInfo*                 GetDocInfo();
 
                                 DECL_LINK( GetFocusObjectsHdl, void * );

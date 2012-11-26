@@ -107,10 +107,11 @@ void TransferableData::DragFinished (sal_Int8 nDropAction)
 
 void TransferableData::Notify (SfxBroadcaster&, const SfxHint& rHint)
 {
-    if (rHint.ISA(SfxSimpleHint) && mpViewShell!=NULL)
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if(pSfxSimpleHint && mpViewShell)
     {
-        SfxSimpleHint& rSimpleHint (*PTR_CAST(SfxSimpleHint, &rHint));
-        if (rSimpleHint.GetId() == SFX_HINT_DYING)
+        if(SFX_HINT_DYING == pSfxSimpleHint->GetId())
         {
             // This hint may come either from the ViewShell or from the
             // document (registered by SdTransferable).  We do not know

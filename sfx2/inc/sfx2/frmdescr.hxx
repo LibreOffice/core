@@ -248,8 +248,6 @@ class SfxFrameDescriptorItem : public SfxPoolItem
 {
     SfxFrameProperties                  aProperties;
 public:
-                                        TYPEINFO();
-
                                         SfxFrameDescriptorItem ( const SfxFrameDescriptor *pD, const sal_uInt16 nId = SID_FRAMEDESCRIPTOR )
                                             : SfxPoolItem( nId )
                                             , aProperties( pD )

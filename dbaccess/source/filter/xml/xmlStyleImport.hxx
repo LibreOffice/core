@@ -81,9 +81,6 @@ namespace dbaxml
                                 const ::rtl::OUString& rValue );
 
     public:
-
-        TYPEINFO();
-
         OTableStyleContext( ODBFilter& rImport, sal_uInt16 nPrfx,
                 const ::rtl::OUString& rLName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
@@ -127,9 +124,6 @@ namespace dbaxml
                 const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     public:
-
-        TYPEINFO();
-
         OTableStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx ,
                 const ::rtl::OUString& rLName ,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,

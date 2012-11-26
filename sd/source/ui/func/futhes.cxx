@@ -62,8 +62,6 @@ class SfxRequest;
 
 namespace sd {
 
-TYPEINIT1( FuThesaurus, FuPoor );
-
 /*************************************************************************
 |*
 |* Konstruktor
@@ -88,26 +86,9 @@ void FuThesaurus::DoExecute( SfxRequest& )
     SfxErrorContext aContext(ERRCTX_SVX_LINGU_THESAURUS, String(),
                              mpWindow, RID_SVXERRCTX, &DIALOG_MGR() );
 
-    if( mpViewShell && mpViewShell->ISA(DrawViewShell) )
-    {
-        SdrTextObj* pTextObj = NULL;
-
-        if ( mpView->AreObjectsMarked() )
+    if( mpViewShell && dynamic_cast< DrawViewShell* >(mpViewShell) )
         {
-            const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-
-            if ( rMarkList.GetMarkCount() == 1 )
-            {
-                SdrMark* pMark = rMarkList.GetMark(0);
-                SdrObject* pObj = pMark->GetMarkedSdrObj();
-
-                if ( pObj->ISA(SdrTextObj) )
-                {
-                    pTextObj = (SdrTextObj*) pObj;
-                }
-            }
-        }
-
+        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >(mpView->getSelectedIfSingle());
         ::Outliner* pOutliner = mpView->GetTextEditOutliner();
         const OutlinerView* pOutlView = mpView->GetTextEditOutlinerView();
 
@@ -135,7 +116,7 @@ void FuThesaurus::DoExecute( SfxRequest& )
             }
         }
     }
-    else if ( mpViewShell->ISA(OutlineViewShell) )
+    else if ( dynamic_cast< OutlineViewShell* >(mpViewShell) )
     {
         Outliner* pOutliner = mpDoc->GetOutliner();
         OutlinerView* pOutlView = pOutliner->GetView(0);

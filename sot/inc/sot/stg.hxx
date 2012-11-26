@@ -40,7 +40,6 @@
 #endif
 
 
-#include <tools/rtti.hxx>
 #ifndef _TOOLS_STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
@@ -75,7 +74,6 @@ protected:
                     StorageBase();
     virtual         ~StorageBase();
 public:
-                    TYPEINFO();
     virtual const SvStream* GetSvStream() const = 0;
     virtual sal_Bool    Validate( sal_Bool=sal_False ) const = 0;
     virtual sal_Bool    ValidateMode( StreamMode ) const = 0;
@@ -91,7 +89,6 @@ public:
 class BaseStorageStream : public StorageBase
 {
 public:
-                    TYPEINFO();
     virtual sal_uLong   Read( void * pData, sal_uLong nSize ) = 0;
     virtual sal_uLong   Write( const void* pData, sal_uLong nSize ) = 0;
     virtual sal_uLong   Seek( sal_uLong nPos ) = 0;
@@ -108,7 +105,6 @@ class SvStorageInfoList;
 class BaseStorage : public StorageBase
 {
 public:
-                                TYPEINFO();
     virtual const String&       GetName() const = 0;
     virtual sal_Bool                IsRoot() const = 0;
     virtual void                SetClassId( const ClsId& ) = 0;
@@ -172,7 +168,6 @@ class StorageStream : public BaseStorageStream, public OLEStorageBase
 protected:
                     ~StorageStream();
 public:
-                    TYPEINFO();
                     StorageStream( StgIo*, StgDirEntry*, StreamMode );
     virtual sal_uLong   Read( void * pData, sal_uLong nSize );
     virtual sal_uLong   Write( const void* pData, sal_uLong nSize );
@@ -201,7 +196,6 @@ class SOT_DLLPUBLIC Storage : public BaseStorage, public OLEStorageBase
 protected:
                                 ~Storage();
 public:
-                                TYPEINFO();
                                 Storage( const String &, StreamMode = STREAM_STD_READWRITE, sal_Bool bDirect = sal_True );
                                 Storage( SvStream& rStrm, sal_Bool bDirect = sal_True );
                                 Storage( UCBStorageStream& rStrm, sal_Bool bDirect = sal_True );
@@ -265,7 +259,6 @@ friend class UCBStorage;
 protected:
                                 ~UCBStorageStream();
 public:
-                                TYPEINFO();
                                 UCBStorageStream( const String& rName, StreamMode nMode, sal_Bool bDirect, const ByteString* pKey=0 );
                                 UCBStorageStream( const String& rName, StreamMode nMode, sal_Bool bDirect, const ByteString* pKey, sal_Bool bRepair, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XProgressHandler > xProgress );
                                 UCBStorageStream( UCBStorageStream_Impl* );
@@ -328,7 +321,6 @@ public:
                                 UCBStorage( UCBStorage_Impl* );
                                 UCBStorage( SvStream& rStrm, sal_Bool bDirect = sal_True );
 
-                                TYPEINFO();
     virtual const String&       GetName() const;
     virtual sal_Bool                IsRoot() const;
     virtual void                SetClassId( const ClsId& );

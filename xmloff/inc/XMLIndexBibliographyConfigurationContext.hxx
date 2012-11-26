@@ -69,8 +69,6 @@ class XMLIndexBibliographyConfigurationContext : public SvXMLStyleContext
 
 public:
 
-    TYPEINFO();
-
     XMLIndexBibliographyConfigurationContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,

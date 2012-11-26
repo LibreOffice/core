@@ -76,7 +76,7 @@ public:
 
         if bFitWidth or bFitHeight is set, the model is changed.
     */
-    void LayoutTable( ::Rectangle& rRectangle, bool bFitWidth, bool bFitHeight );
+    void LayoutTable( basegfx::B2DRange& o_aArea, bool bFitWidth, bool bFitHeight );
 
     /** after a call to LayoutTable, this method can be used to set the new
         column and row sizes back to the model. */
@@ -119,8 +119,8 @@ public:
     sal_Int32 getHorizontalEdge( int nEdgeY, sal_Int32* pnMin = 0, sal_Int32* pnMax = 0 );
     sal_Int32 getVerticalEdge( int nEdgeX , sal_Int32* pnMin = 0, sal_Int32* pnMax = 0);
 
-    void DistributeColumns( ::Rectangle& rArea, sal_Int32 nFirstCol, sal_Int32 nLastCol );
-    void DistributeRows( ::Rectangle& rArea, sal_Int32 nFirstRow, sal_Int32 nLastRow );
+    void DistributeColumns( basegfx::B2DRange& o_aArea, sal_Int32 nFirstCol, sal_Int32 nLastCol );
+    void DistributeRows( basegfx::B2DRange& o_aArea, sal_Int32 nFirstRow, sal_Int32 nLastRow );
 
     com::sun::star::text::WritingMode GetWritingMode() const { return meWritingMode; }
     void SetWritingMode( com::sun::star::text::WritingMode eWritingMode );

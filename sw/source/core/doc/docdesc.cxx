@@ -71,6 +71,7 @@
 #include <SwUndoPageDesc.hxx>
 #include <pagedeschint.hxx>
 #include <tgrditem.hxx>
+#include <svx/fmmodel.hxx>
 
 using namespace com::sun::star;
 
@@ -191,6 +192,10 @@ void lcl_DescSetAttr( const SwFrmFmt &rSource, SwFrmFmt &rDest,
     rDest.SetPoolHlpFileId( rSource.GetPoolHlpFileId() );
 }
 
+namespace
+{
+    bool ImpCheck(const SwClient& rClient) { return 0 != dynamic_cast< const SwFrm* >(&rClient); }
+}
 
 void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
 {
@@ -410,11 +415,13 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
     {
         pDesc->SetFtnInfo( rChged.GetFtnInfo() );
         SwMsgPoolItem  aInfo( RES_PAGEDESC_FTNINFO );
+
         {
-            pDesc->GetMaster().ModifyBroadcast( &aInfo, 0, TYPE(SwFrm) );
+            pDesc->GetMaster().ModifyBroadcast( &aInfo, 0, &ImpCheck );
         }
+
         {
-            pDesc->GetLeft().ModifyBroadcast( &aInfo, 0, TYPE(SwFrm) );
+            pDesc->GetLeft().ModifyBroadcast( &aInfo, 0, &ImpCheck );
         }
     }
     SetModified();
@@ -640,7 +647,7 @@ void SwDoc::PrtDataChanged()
             if( pDrawModel )
             {
                 pDrawModel->SetAddExtLeading( get(IDocumentSettingAccess::ADD_EXT_LEADING) );
-                pDrawModel->SetRefDevice( getReferenceDevice( false ) );
+                pDrawModel->SetReferenceDevice( getReferenceDevice( false ) );
             }
 
             pFntCache->Flush();
@@ -662,13 +669,13 @@ void SwDoc::PrtDataChanged()
     }   //swmod 080218
     if ( bDraw && pDrawModel )
     {
-        const sal_Bool bTmpAddExtLeading = get(IDocumentSettingAccess::ADD_EXT_LEADING);
+        const bool bTmpAddExtLeading = get(IDocumentSettingAccess::ADD_EXT_LEADING);
         if ( bTmpAddExtLeading != pDrawModel->IsAddExtLeading() )
             pDrawModel->SetAddExtLeading( bTmpAddExtLeading );
 
         OutputDevice* pOutDev = getReferenceDevice( false );
-        if ( pOutDev != pDrawModel->GetRefDevice() )
-            pDrawModel->SetRefDevice( pOutDev );
+        if ( pOutDev != pDrawModel->GetReferenceDevice() )
+            pDrawModel->SetReferenceDevice( pOutDev );
     }
 
     PrtOLENotify( sal_True );
@@ -691,15 +698,14 @@ void SwDoc::PrtOLENotify( sal_Bool bAll )
     if ( GetCurrentViewShell() )
     {
         ViewShell *pSh = GetCurrentViewShell();
-        if ( !pSh->ISA(SwFEShell) )
+        if ( !dynamic_cast< SwFEShell* >(pSh) )
             do
             {   pSh = (ViewShell*)pSh->GetNext();
-            } while ( !pSh->ISA(SwFEShell) &&
+            } while ( !dynamic_cast< SwFEShell* >(pSh) &&
                       pSh != GetCurrentViewShell() );
 
-        if ( pSh->ISA(SwFEShell) )
-            pShell = (SwFEShell*)pSh;
-    }   //swmod 071107//swmod 071225
+        pShell = dynamic_cast< SwFEShell* >(pSh);
+    }
     if ( !pShell )
     {
         //Das hat ohne Shell und damit ohne Client keinen Sinn, weil nur darueber
@@ -717,8 +723,8 @@ void SwDoc::PrtOLENotify( sal_Bool bAll )
             bAll = sal_True;
 
         mbOLEPrtNotifyPending = mbAllOLENotify = sal_False;
-
         SwOLENodes *pNodes = SwCntntNode::CreateOLENodesArray( *GetDfltGrfFmtColl(), !bAll );
+
         if ( pNodes )
         {
             ::StartProgress( STR_STATSTR_SWGPRTOLENOTIFY,
@@ -791,8 +797,8 @@ IMPL_LINK( SwDoc, DoUpdateModifiedOLE, Timer *, )
     if( pSh )
     {
         mbOLEPrtNotifyPending = mbAllOLENotify = sal_False;
-
         SwOLENodes *pNodes = SwCntntNode::CreateOLENodesArray( *GetDfltGrfFmtColl(), true );
+
         if( pNodes )
         {
             ::StartProgress( STR_STATSTR_SWGPRTOLENOTIFY,

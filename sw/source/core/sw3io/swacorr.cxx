@@ -41,9 +41,6 @@
 using namespace ::com::sun::star;
 
 
-TYPEINIT1( SwAutoCorrect, SvxAutoCorrect );
-
-
     //  - return den Ersetzungstext (nur fuer SWG-Format, alle anderen
     //      koennen aus der Wortliste herausgeholt werden!)
     //      rShort ist der Stream-Name - gecryptet!
@@ -68,7 +65,7 @@ sal_Bool SwAutoCorrect::GetLongText( const uno::Reference < embed::XStorage >& r
 sal_Bool SwAutoCorrect::PutText( const uno::Reference < embed::XStorage >&  rStg, const String& rFileName, const String& rShort,
                             SfxObjectShell& rObjSh, String& rLong )
 {
-    if( !rObjSh.IsA( TYPE(SwDocShell) ) )
+    if( !dynamic_cast< SwDocShell* >(&rObjSh) )
         return sal_False;
 
     SwDocShell& rDShell = (SwDocShell&)rObjSh;

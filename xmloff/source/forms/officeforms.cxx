@@ -48,8 +48,6 @@ namespace xmloff
     //=========================================================================
     //= OFormsRootImport
     //=========================================================================
-    TYPEINIT1(OFormsRootImport, SvXMLImportContext);
-    //-------------------------------------------------------------------------
     OFormsRootImport::OFormsRootImport( SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName )
         :SvXMLImportContext(rImport, nPrfx, rLocalName)
     {

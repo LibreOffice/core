@@ -153,11 +153,10 @@ void SAL_CALL TableColumn::setFastPropertyValue( sal_Int32 nHandle, const Any& a
 {
     bool bOk = false;
     bool bChange = false;
-
-    SdrModel* pModel = mxTableModel->getSdrTableObj()->GetModel();
+    SdrModel& rModel = mxTableModel->getSdrTableObj()->getSdrModelFromSdrObject();
 
     TableColumnUndo* pUndo = 0;
-    if( mxTableModel.is() && mxTableModel->getSdrTableObj() && mxTableModel->getSdrTableObj()->IsInserted() && pModel && pModel->IsUndoEnabled() )
+    if( mxTableModel.is() && mxTableModel->getSdrTableObj() && mxTableModel->getSdrTableObj()->IsObjectInserted() && rModel.IsUndoEnabled() )
     {
         TableColumnRef xThis( this );
         pUndo = new TableColumnUndo( xThis );
@@ -223,7 +222,7 @@ void SAL_CALL TableColumn::setFastPropertyValue( sal_Int32 nHandle, const Any& a
     {
         if( pUndo )
         {
-            pModel->AddUndo( pUndo );
+            rModel.AddUndo( pUndo );
             pUndo = 0;
         }
         mxTableModel->setModified(sal_True);

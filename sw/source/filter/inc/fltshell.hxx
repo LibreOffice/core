@@ -237,32 +237,28 @@ public:
 
 class SW_DLLPUBLIC SwFltBookmark : public SfxPoolItem
 {
-private:
     friend class SwFltShell;    // darf aName und aVal uebersetzen
-
-    long mnHandle;
-    String maName;
-    String maVal;
-    bool mbIsTOCBookmark;
-
+    long nHandle;
+    String aName;
+    String aVal;
+    sal_Bool bOnlyRef;          // "FRAGE"-Feld, Ref/Seitenrf oder nichts
+    sal_Bool bRef;
+    sal_Bool bPgRef;
 public:
-    SwFltBookmark( const String& rNa,
-                   const String& rVa,
-                   long nHand,
-                   const bool bIsTOCBookmark = false );
+    SwFltBookmark( const String& rNa, const String& rVa,
+                    long nHand, sal_Bool bOnlyR );
     SwFltBookmark( const SwFltBookmark& );
-
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int operator==(const SfxPoolItem&) const;
     virtual SfxPoolItem* Clone(SfxItemPool* = 0) const;
-
-    long GetHandle() const              { return mnHandle; }
-    const String& GetName() const       { return maName; }
-    const String& GetValSys() const     { return maVal; }
-    const bool IsTOCBookmark() const
-    {
-        return mbIsTOCBookmark;
-    }
+    const String& GetName() const       { return aName; }
+    const String& GetValSys() const     { return aVal; }
+    sal_Bool IsOnlyRef() const              { return bOnlyRef; }
+    sal_Bool IsRef() const                  { return bRef; }
+    void SetRef(sal_Bool b = sal_True)          { bRef = b; }
+    sal_Bool IsPgRef() const                { return bPgRef; }
+    void SetPgRef(sal_Bool b = sal_True)        { bPgRef = b; }
+    long GetHandle() const              { return nHandle; }
 };
 
 class SW_DLLPUBLIC SwFltTOX : public SfxPoolItem

@@ -73,8 +73,6 @@ namespace svx
         DatabaseRegistrations   m_aRegistrations;
 
     public:
-        TYPEINFO();
-
         DatabaseMapItem( sal_uInt16 _nId, const DatabaseRegistrations& _rRegistrations );
 
         virtual int              operator==( const SfxPoolItem& ) const;

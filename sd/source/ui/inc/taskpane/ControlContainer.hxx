@@ -122,9 +122,9 @@ public:
         @param bIncludeHidden
             This flag tells the method whether to include the controls that
             are not visible in the search for the previous control.  When it
-            is <FALSE/> the hidden controls are skipped.
+            is <false/> the hidden controls are skipped.
         @param bCycle
-            When this flag is <TRUE/> then the search for the previous
+            When this flag is <true/> then the search for the previous
             control wraps arround when reaching the first control.
         @return
             Returns the index to the previous control or (sal_uInt32)-1 when
@@ -144,9 +144,9 @@ public:
         @param bIncludeHidden
             This flag tells the method whether to include the controls that
             are not visible in the search for the next control.  When it is
-            <FALSE/> the hidden controls are skipped.
+            <false/> the hidden controls are skipped.
         @param bCycle
-            When this flag is <TRUE/> then the search for the next control
+            When this flag is <true/> then the search for the next control
             wraps arround when reaching the last control.
         @return
             Returns the index to the next control or (sal_uInt32)-1 when

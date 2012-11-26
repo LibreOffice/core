@@ -27,15 +27,15 @@
 #include <vcl/event.hxx>
 #include <vcl/timer.hxx>
 #include <sfx2/request.hxx>
+#include <basegfx/point/b2dpoint.hxx>
 
 class ScDrawView;
 class ScTabViewShell;
 class Window;
 class SdrModel;
 class Dialog;
-
-// #98185# Create default drawing objects via keyboard
 class SdrObject;
+namespace basegfx { class B2DRange; }
 
 //  Return-Werte fuer Command
 #define SC_CMD_NONE     0
@@ -67,7 +67,7 @@ protected:
     DECL_LINK( DragTimerHdl, Timer * );
     DECL_LINK( DragHdl, void * );
     sal_Bool            bIsInDragMode;
-    Point           aMDPos;                 // Position von MouseButtonDown
+    basegfx::B2DPoint   aMDPos;                 // Position von MouseButtonDown
 
     // #95491# member to hold state of the mouse buttons for creation
     // of own MouseEvents (like in ScrollHdl)
@@ -111,15 +111,15 @@ public:
 
     sal_uInt16 GetSlotID() const { return( aSfxRequest.GetSlot() ); }
 
-    sal_Bool    IsDetectiveHit( const Point& rLogicPos );
+    bool IsDetectiveHit( const basegfx::B2DPoint& rLogicPos );
 
     void    StopDragTimer();
 
     // #98185# Create default drawing objects via keyboard
-    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
+    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const basegfx::B2DRange& rRange);
 
 protected:
-    void ImpForceQuadratic(Rectangle& rRect);
+    void ImpForceQuadratic(basegfx::B2DRange& rRange);
 
 public:
     // #i33136#

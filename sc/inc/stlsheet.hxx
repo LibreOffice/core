@@ -51,8 +51,6 @@ private:
     mutable ScStyleSheet::Usage eUsage;
 
 public:
-                        TYPEINFO();
-
                         ScStyleSheet( const ScStyleSheet& rStyle );
 
     virtual sal_Bool        SetParent        ( const String& rParentName );

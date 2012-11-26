@@ -28,7 +28,6 @@
 #ifndef SHL_HXX
 #include <tools/shl.hxx>
 #endif
-#include <tools/rtti.hxx>
 #include <tools/color.hxx>
 #include <svl/poolitem.hxx>
 
@@ -42,8 +41,6 @@ private:
     sal_uInt16                  _nStyle;
 
 public:
-                            TYPEINFO();
-
                             CntWallpaperItem( sal_uInt16 nWhich );
                             CntWallpaperItem( sal_uInt16 nWhich, SvStream& rStream, sal_uInt16 nVersion );
                             CntWallpaperItem( const CntWallpaperItem& rCpy );

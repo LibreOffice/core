@@ -45,11 +45,11 @@
 #include <comphelper/servicehelper.hxx>
 
 #include <svx/unoprov.hxx>
+#include <svx/unoshape.hxx>
 
 class SdrPage;
 class SdrModel;
 class SdrView;
-class SdrPageView;
 class SdrObject;
 class List;
 class SvxShapeDescriptor;
@@ -58,6 +58,7 @@ class SvxShapeGroup;
 class SvxShapeConnector;
 class SvxShapeList;
 class SvxDrawPageList;
+class SdrObjectCreationInfo;
 
 /***********************************************************************
 * Macros fuer Umrechnung Twips<->100tel mm                             *
@@ -83,8 +84,8 @@ class SVX_DLLPUBLIC SvxDrawPage : public ::cppu::WeakAggImplHelper5< ::com::sun:
     SdrModel*       mpModel;
     SdrView*        mpView;
 
-    void    _SelectObjectsInView( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& aShapes, SdrPageView*   pPageView ) throw ();
-    void    _SelectObjectInView( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape, SdrPageView*  pPageView ) throw();
+    void    _SelectObjectsInView( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& aShapes ) throw ();
+    void    _SelectObjectInView( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape ) throw();
 
     virtual void disposing() throw();
 
@@ -95,20 +96,22 @@ class SVX_DLLPUBLIC SvxDrawPage : public ::cppu::WeakAggImplHelper5< ::com::sun:
 
     // Internals
     SdrPage* GetSdrPage() const { return mpPage; }
-    void ChangeModel( SdrModel* pNewModel );
 
     // Erzeugen eines SdrObjects und Einfugen in die SdrPage
     SdrObject *CreateSdrObject( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape ) throw();
 
     // Typ und Inventor bestimmen
-    void GetTypeAndInventor( sal_uInt16& rType, sal_uInt32& rInventor, const ::rtl::OUString& aName ) const throw();
+    SvxShapeKind getSvxShapeKind( const ::rtl::OUString& aName ) const throw();
 
     // Erzeugen eines SdrObjects anhand einer Description. Kann von
     // abgeleiteten Klassen dazu benutzt werden, eigene Shapes zu
     // unterstuetzen (z.B. Controls)
     virtual SdrObject *_CreateSdrObject( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape ) throw();
 
-    static SvxShape* CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt32 nInventor, SdrObject *pObj = NULL, SvxDrawPage *pPage = NULL ) throw();
+    static SvxShape* CreateShapeBySvxShapeKind(
+        SvxShapeKind aSvxShapeKind,
+        SdrObject *pObj = 0,
+        SvxDrawPage *pPage = 0) throw();
 
     // Die folgende Methode wird gerufen, wenn ein SvxShape-Objekt angelegt
     // werden soll. abgeleitete Klassen koennen hier eine Ableitung oder

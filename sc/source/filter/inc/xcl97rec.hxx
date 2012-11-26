@@ -83,7 +83,10 @@ protected:
         See SetOwnEscher() for details. */
     explicit                    XclObj( XclExpObjectManager& rObjMgr, sal_uInt16 nObjType, bool bOwnEscher = false );
 
-    void                        ImplWriteAnchor( const XclExpRoot& rRoot, const SdrObject* pSdrObj, const Rectangle* pChildAnchor );
+    void                        ImplWriteAnchor(
+                                    const XclExpRoot& rRoot,
+                                    const SdrObject* pSdrObj,
+                                    const basegfx::B2DRange* pObjectRange);
 
                                 // overwritten for writing MSODRAWING record
     virtual void                WriteBody( XclExpStream& rStrm );
@@ -134,13 +137,13 @@ class XclObjComment : public XclObj
 {
 public:
                                 XclObjComment( XclExpObjectManager& rObjMgr,
-                                    const Rectangle& rRect, const EditTextObject& rEditObj, SdrObject* pCaption, bool bVisible );
+                                    const basegfx::B2DRange& rObjectRange, const EditTextObject& rEditObj, SdrObject* pCaption, bool bVisible );
     virtual                     ~XclObjComment();
 
     /** c'tor process for formatted text objects above .
        @descr used to construct the MSODRAWING Escher object properties. */
     void                        ProcessEscherObj( const XclExpRoot& rRoot,
-                                    const Rectangle& rRect, SdrObject* pCaption, bool bVisible );
+                                    const basegfx::B2DRange& rObjectRange, SdrObject* pCaption, bool bVisible );
 
 
     virtual void                Save( XclExpStream& rStrm );

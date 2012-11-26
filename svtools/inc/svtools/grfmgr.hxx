@@ -313,8 +313,6 @@ protected:
 
 public:
 
-                            TYPEINFO();
-
                             GraphicObject( const GraphicManager* pMgr = NULL );
                             GraphicObject( const Graphic& rGraphic, const GraphicManager* pMgr = NULL );
                             GraphicObject( const Graphic& rGraphic, const String& rLink, const GraphicManager* pMgr = NULL );

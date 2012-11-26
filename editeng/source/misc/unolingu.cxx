@@ -139,7 +139,7 @@ Sequence< OUString > lcl_GetLastFoundSvcs(
                                 SvxLocaleToLanguage( rAvailLocale ) ) );
 
     Sequence< OUString > aNodeNames( rCfg.GetNodeNames(rLastFoundList) );
-    sal_Bool bFound = lcl_FindEntry( aCfgLocaleStr, aNodeNames);
+    bool bFound = lcl_FindEntry( aCfgLocaleStr, aNodeNames);
 
     if (bFound)
     {
@@ -576,7 +576,7 @@ sal_Bool SAL_CALL
     else if (!pLocaleSeq)       // if not already loaded save startup time by avoiding loading them now
         GetCfgLocales();
         GetCfgLocales();
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     sal_Int32 nLen = pLocaleSeq->getLength();
     const Locale *pLocale = pLocaleSeq->getConstArray();
     const Locale *pEnd = pLocale + nLen;

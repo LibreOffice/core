@@ -69,7 +69,7 @@ class OfaMSFilterTabPage2 : public SfxTabPage
         using SvTreeListBox::SetCheckButtonState;
         using SvxSimpleTable::SetTabs;
 
-        void            CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, sal_Bool bChecked);
+        void            CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, bool bChecked);
         SvButtonState   GetCheckButtonState( SvLBoxEntry*, sal_uInt16 nCol ) const;
         void            SetCheckButtonState( SvLBoxEntry*, sal_uInt16 nCol, SvButtonState );
     protected:

@@ -34,7 +34,6 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-TYPEINIT1(ScTabViewTarget, SfxRepeatTarget);
 
 __EXPORT ScTabViewTarget::~ScTabViewTarget()
 {

@@ -180,8 +180,8 @@ private:
 
     Assistent       aAssistentFunc;
 
-    sal_Bool            m_bImpress;
-    sal_Bool            m_bButtonsDirty;
+    bool            m_bImpress;
+    bool            m_bButtonsDirty;
 
     void SetDefaults();
     void CreatePages();
@@ -194,10 +194,10 @@ private:
     void    UpdatePage();
 
     List*   m_pDesignList;
-    sal_Bool    m_bDesignListDirty;
+    bool    m_bDesignListDirty;
     SdPublishingDesign* m_pDesign;
-    sal_Bool    Load();
-    sal_Bool    Save();
+    bool    Load();
+    bool    Save();
 
     void    GetDesign( SdPublishingDesign* pDesign );
     void    SetDesign( SdPublishingDesign* pDesign );

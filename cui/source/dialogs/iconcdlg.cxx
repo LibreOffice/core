@@ -971,7 +971,7 @@ const sal_uInt16* IconChoiceDialog::GetInputRanges( const SfxItemPool& rPool )
 
 void IconChoiceDialog::SetInputSet( const SfxItemSet* pInSet )
 {
-    FASTBOOL bSet = ( pSet != NULL );
+    bool bSet = ( pSet != NULL );
 
     pSet = pInSet;
 
@@ -1103,7 +1103,7 @@ const SfxItemSet* IconChoiceDialog::GetRefreshedSet()
 IconChoicePageData* IconChoiceDialog::GetPageData ( sal_uInt16 nId )
 {
     IconChoicePageData *pRet = NULL;
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
 
     for ( sal_uLong i=0; i<maPageList.Count() && !bFound; i++ )
     {

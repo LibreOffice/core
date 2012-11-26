@@ -31,8 +31,6 @@
 
 //------------------------------------------------------------------------
 
-TYPEINIT1( SvxEditSourceHint, TextHint );
-
 SvxEditSourceHint::SvxEditSourceHint( sal_uLong _nId ) :
     TextHint( _nId ),
     mnStart( 0 ),

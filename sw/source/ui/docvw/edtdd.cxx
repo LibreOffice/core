@@ -24,20 +24,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <hintids.hxx>
-
-
 #include <svx/svdview.hxx>
 #include <editeng/outliner.hxx>
-//#ifndef _SVDVMARK_HXX //autogen
-//#include <svx/svdvmark.hxx>
-//#endif
 #include <svx/svdobj.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <sfx2/bindings.hxx>
-
 #include <sfx2/viewfrm.hxx>
 #include <fmturl.hxx>
 #include <frmfmt.hxx>
@@ -54,6 +47,7 @@
 #endif
 #include <wdocsh.hxx>
 #include <swundo.hxx>
+#include <svx/svdlegacy.hxx>
 
 using namespace ::com::sun::star;
 
@@ -106,7 +100,7 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
             //Selektion
             bStart = sal_True;
         else if ( !bFrmDrag && rSh.IsSelFrmMode() &&
-                    rSh.IsInsideSelectedObj( aDocPos ) )
+                    rSh.IsInsideSelectedObj( basegfx::B2DPoint(aDocPos.X(), aDocPos.Y()) ) )
         {
             //Wir sind nicht am internen Draggen und stehen auf
             //einem Objekt (Rahmen, Zeichenobjekt)
@@ -223,7 +217,7 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
     if( pObj && 0 != ( pOLV = rSh.GetDrawView()->GetTextEditOutlinerView() ))
     {
         Rectangle aRect( pOLV->GetOutputArea() );
-        aRect.Union( pObj->GetLogicRect() );
+        aRect.Union( sdr::legacy::GetLogicRect(*pObj) );
         const Point aPos = pOLV->GetWindow()->PixelToLogic(rEvt.maPosPixel);
         if ( aRect.IsInside(aPos) )
         {
@@ -285,7 +279,7 @@ sal_uInt16 SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject ** ppO
         if ( pOLV )
         {
             Rectangle aRect( pOLV->GetOutputArea() );
-            aRect.Union( pObj->GetLogicRect() );
+            aRect.Union( sdr::legacy::GetLogicRect(*pObj) );
             const Point aPos = pOLV->GetWindow()->PixelToLogic( rPixPnt );
             if( aRect.IsInside( aPos ) )
                 return 0;
@@ -317,7 +311,7 @@ sal_uInt16 SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject ** ppO
             }
             break;
         case OBJCNT_FLY:
-            if( rSh.GetView().GetDocShell()->ISA(SwWebDocShell) )
+            if( dynamic_cast< SwWebDocShell* >(rSh.GetView().GetDocShell()) )
                 nDropDestination = EXCHG_DEST_DOC_TEXTFRAME_WEB;
             else
                 nDropDestination = EXCHG_DEST_DOC_TEXTFRAME;
@@ -333,7 +327,7 @@ sal_uInt16 SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject ** ppO
     }
     if ( !nDropDestination )
     {
-        if( rSh.GetView().GetDocShell()->ISA(SwWebDocShell) )
+        if( dynamic_cast< SwWebDocShell* >(rSh.GetView().GetDocShell()) )
             nDropDestination = EXCHG_DEST_SWDOC_FREE_AREA_WEB;
         else
             nDropDestination = EXCHG_DEST_SWDOC_FREE_AREA;
@@ -459,7 +453,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
                  EXCHG_IN_ACTION_LINK == m_nDropAction) ||
                  SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE == m_nDropFormat  )
             {
-                SdrMarkView* pMView = PTR_CAST( SdrMarkView, rSh.GetDrawView() );
+                SdrMarkView* pMView = dynamic_cast< SdrMarkView* >( rSh.GetDrawView() );
                 if( pMView && !pMView->IsDesignMode() )
                     return DND_ACTION_NONE;
             }

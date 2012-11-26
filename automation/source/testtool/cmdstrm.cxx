@@ -216,8 +216,12 @@ void CmdStream::WriteSortedParams( SbxArray* rPar, sal_Bool IsKeyString )
                 case SbxOBJECT:     // whenever a control is passed. TabPage, MenuBar
                     {
                         SbxProperty *pMember = NULL;
-                        if ( rPar->Get( i )->ISA( SbxObject ) )
-                            pMember = ((SbxObject*)rPar->Get( i ))->GetDfltProperty();
+                        SbxObject* pSbxObject = dynamic_cast< SbxObject* >(rPar->Get( i ));
+
+                        if ( pSbxObject )
+                        {
+                            pMember = pSbxObject->GetDfltProperty();
+                        }
                         if ( pMember != NULL )
                         {
                             if ( pMember->GetType() == SbxSTRING )

@@ -442,7 +442,7 @@ void SwNumFmt::UpdateNumNodes( SwDoc* pDoc )
 //                                GetDefinedIn()) &&
 //                        ((SwNumRuleItem*)pItem)->GetValue() == rRuleNm )
 //                    {
-//                        if( pMod->IsA( TYPE( SwFmt )) )
+//                        if( dynamic_cast< SwFmt* >(pMod) )
 //                        {
 //                            SwNumRuleInfo aInfo( rRuleNm );
 //                            pMod->GetInfo( aInfo );

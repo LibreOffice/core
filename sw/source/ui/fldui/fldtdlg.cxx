@@ -367,11 +367,10 @@ void SwFldDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
         SfxViewFrame* pViewFrame = pDispatch ? pDispatch->GetFrame() : 0;
         if(pViewFrame)
         {
-            const TypeId aSwViewTypeId = TYPE(SwView);
-            SfxViewShell* pViewShell = SfxViewShell::GetFirst( &aSwViewTypeId );
+            SfxViewShell* pViewShell = SfxViewShell::GetFirst( _IsSfxViewShell< SwView > );
             while(pViewShell && pViewShell->GetViewFrame() != pViewFrame)
             {
-                pViewShell = SfxViewShell::GetNext( *pViewShell, &aSwViewTypeId );
+                pViewShell = SfxViewShell::GetNext( *pViewShell, _IsSfxViewShell< SwView > );
             }
             if(pViewShell)
                 static_cast<SwFldDBPage&>(rPage).SetWrtShell(static_cast<SwView*>(pViewShell)->GetWrtShell());

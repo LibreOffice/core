@@ -307,17 +307,18 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                 for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
                 {
                     SwAnchoredObject* pAnchoredObj = rObjs[i];
-                    if ( pAnchoredObj->ISA(SwFlyFrm) )
+                    SwFlyFrm* pFly = dynamic_cast< SwFlyFrm* >(pAnchoredObj);
+
+                    if ( pFly )
                     {
-                        SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
                         if( pFly->Frm().Left() != WEIT_WECH &&
                             !pFly->GetAnchorFrm()->FindFooterOrHeader() )
                         {
                             const SwContact *pC =
-                                    ::GetUserCall(pAnchoredObj->GetDrawObj());
+                                    ::findConnectionToSdrObject(pAnchoredObj->GetDrawObj());
                             if( pC )
                             {
-                                sal_uInt32 nOrdNum = pAnchoredObj->GetDrawObj()->GetOrdNum();
+                                sal_uInt32 nOrdNum = pAnchoredObj->GetDrawObj()->GetNavigationPosition();
                                 sal_uInt16 nPageNum = pPage->GetPhyPageNum();
                                 /* Open Fly Record */
                                 aIo.OpenRec( SW_LAYCACHE_IO_REC_FLY );
@@ -997,7 +998,7 @@ struct SdrObjectCompare
 {
   bool operator()( const SdrObject* pF1, const SdrObject* pF2 ) const
   {
-    return pF1->GetOrdNum() < pF2->GetOrdNum();
+    return pF1->GetNavigationPosition() < pF2->GetNavigationPosition();
   }
 };
 
@@ -1041,16 +1042,16 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
         for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )  // check objects
         {
             SdrObject *pO = rObjs[i];
-            if ( pO->ISA(SwVirtFlyDrawObj) )  // a text frame?
+            SwFlyFrm *pFly = dynamic_cast< SwVirtFlyDrawObj* >(pO)->GetFlyFrm();
+            if ( pFly )  // a text frame?
             {
-                SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
                 if( pFly->Frm().Left() == WEIT_WECH && pFly->GetAnchor() &&
                     !pFly->GetAnchor()->FindFooterOrHeader() )
                 {   // Only frame with default position and not in header/footer
-                    const SwContact *pC = (SwContact*)GetUserCall(pO);
+                    const SwContact *pC = (SwContact*)findConnectionToSdrObject(pO);
                     if( pC )
                     {
-                        sal_uLong nOrdNum = pO->GetOrdNum(); // the Id
+                        sal_uLong nOrdNum = pO->GetNavigationPosition(); // the Id
                         SwFlyCache* pFlyC;
                         while( nFlyIdx < nFlyCount && ( pFlyC = pImpl->
                                GetFlyCache(nFlyIdx) )->nPageNum < nPgNum)
@@ -1106,13 +1107,14 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
         for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
         {
             SwAnchoredObject* pAnchoredObj = rObjs[i];
-            if ( pAnchoredObj->ISA(SwFlyFrm) )  // a text frame?
+            SwFlyFrm* pFly = dynamic_cast< SwFlyFrm* >(pAnchoredObj);
+
+            if ( pFly )  // a text frame?
             {
-                SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
                 if( pFly->GetAnchorFrm() &&
                     !pFly->GetAnchorFrm()->FindFooterOrHeader() )
                 {
-                    const SwContact *pC = ::GetUserCall( pAnchoredObj->GetDrawObj() );
+                    const SwContact *pC = ::findConnectionToSdrObject( pAnchoredObj->GetDrawObj() );
                     if( pC )
                     {
                         aFlySet.insert( pAnchoredObj->GetDrawObj() );
@@ -1177,7 +1179,7 @@ sal_Bool SwLayHelper::CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly )
         sal_uInt16 nPgNum = rpPage->GetPhyPageNum();
         sal_uInt16 nIdx = 0;
         sal_uInt16 nCnt = pCache->GetFlyCount();
-        sal_uLong nOrdNum = pFly->GetVirtDrawObj()->GetOrdNum();
+        sal_uLong nOrdNum = pFly->GetVirtDrawObj()->GetNavigationPosition();
         SwFlyCache* pFlyC = 0;
 
         // skip fly frames from pages before the current page

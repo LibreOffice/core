@@ -159,8 +159,6 @@ class XMLTypedPropertiesOOoTContext_Impl : public XMLPersElemContentTContext
 
 public:
 
-    TYPEINFO();
-
     XMLTypedPropertiesOOoTContext_Impl( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName );
 
@@ -176,8 +174,6 @@ public:
 
     virtual void Export();
 };
-
-TYPEINIT1( XMLTypedPropertiesOOoTContext_Impl, XMLPersElemContentTContext );
 
 XMLTypedPropertiesOOoTContext_Impl::XMLTypedPropertiesOOoTContext_Impl(
     XMLTransformerBase& rImp,
@@ -250,8 +246,6 @@ class XMLPropertiesOOoTContext_Impl : public XMLTransformerContext
 
 public:
 
-    TYPEINFO();
-
     XMLPropertiesOOoTContext_Impl( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName,
                                XMLPropTypes& rTypes,
@@ -275,8 +269,6 @@ public:
 
     virtual sal_Bool IsPersistent() const;
 };
-
-TYPEINIT1( XMLPropertiesOOoTContext_Impl, XMLTransformerContext );
 
 XMLTypedPropertiesOOoTContext_Impl
     *XMLPropertiesOOoTContext_Impl::GetPropContext(
@@ -1070,8 +1062,6 @@ sal_Bool XMLPropertiesOOoTContext_Impl::IsPersistent() const
 
 
 //------------------------------------------------------------------------------
-
-TYPEINIT1( XMLStyleOOoTContext, XMLPersElemContentTContext );
 
 XMLStyleOOoTContext::XMLStyleOOoTContext( XMLTransformerBase& rImp,
                                             const OUString& rQName,

@@ -24,7 +24,6 @@
 #define _SFXSLSTITM_HXX
 
 #include "svl/svldllapi.h"
-#include <tools/rtti.hxx>
 #include <tools/list.hxx>
 #include <svl/poolitem.hxx>
 #include <com/sun/star/uno/Sequence.h>
@@ -37,8 +36,7 @@ protected:
     SfxImpStringList*   pImp;
 
 public:
-    TYPEINFO();
-
+    POOLITEM_FACTORY()
     SfxStringListItem();
     SfxStringListItem( sal_uInt16 nWhich, const List* pList=NULL );
     SfxStringListItem( sal_uInt16 nWhich, SvStream& rStream );

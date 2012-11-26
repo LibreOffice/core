@@ -161,8 +161,8 @@ class SvxPageDescPage : public SfxTabPage
     long                nLastBottomMargin;
 
     Size                aMaxSize;
-    sal_Bool                bLandscape;
-    FASTBOOL            bBorderModified;
+    sal_Bool            bLandscape;
+    bool                bBorderModified;
     SvxModeType         eMode;
     Paper               ePaperStart;
     Paper               ePaperEnd;
@@ -174,7 +174,7 @@ class SvxPageDescPage : public SfxTabPage
     DECL_LINK(          LayoutHdl_Impl, ListBox* );
     DECL_LINK(          PaperBinHdl_Impl, ListBox* );
     DECL_LINK(          SwapOrientation_Impl, RadioButton* );
-    void                SwapFirstValues_Impl( FASTBOOL bSet );
+    void                SwapFirstValues_Impl( bool bSet );
     DECL_LINK(          BorderModify_Impl, MetricField* );
     void                InitHeadFoot_Impl( const SfxItemSet& rSet );
     DECL_LINK(          CenterHdl_Impl, CheckBox* );

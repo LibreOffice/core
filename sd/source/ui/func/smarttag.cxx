@@ -117,30 +117,30 @@ bool SmartTag::getContext( SdrViewContext& /*rContext*/ )
 
 // --------------------------------------------------------------------
 
-sal_uLong SmartTag::GetMarkablePointCount() const
+sal_uInt32 SmartTag::GetMarkablePointCount() const
 {
     return 0;
 }
 
 // --------------------------------------------------------------------
 
-sal_uLong SmartTag::GetMarkedPointCount() const
+sal_uInt32 SmartTag::GetMarkedPointCount() const
 {
     return 0;
 }
 
 // --------------------------------------------------------------------
 
-sal_Bool SmartTag::MarkPoint(SdrHdl& /*rHdl*/, sal_Bool /*bUnmark*/ )
+bool SmartTag::MarkPoint(SdrHdl& /*rHdl*/, bool /*bUnmark*/ )
 {
-    return sal_False;
+    return false;
 }
 
 // --------------------------------------------------------------------
 
-sal_Bool SmartTag::MarkPoints(const Rectangle* /*pRect*/, sal_Bool /*bUnmark*/ )
+bool SmartTag::MarkPoints(const basegfx::B2DRange* /*pRange*/, bool /*bUnmark*/ )
 {
-    return sal_False;
+    return false;
 }
 
 // --------------------------------------------------------------------
@@ -217,10 +217,10 @@ void SmartTagSet::select( const SmartTagReference& xTag )
         mxSelectedTag = xTag;
         mxSelectedTag->select();
         mrView.SetPossibilitiesDirty();
-        if( mrView.GetMarkedObjectCount() > 0 )
+        if( mrView.areSdrObjectsSelected() )
             mrView.UnmarkAllObj();
         else
-            mrView.updateHandles();
+            mrView.SetMarkHandles();
     }
 }
 
@@ -233,7 +233,7 @@ void SmartTagSet::deselect()
         mxSelectedTag->deselect();
         mxSelectedTag.clear();
         mrView.SetPossibilitiesDirty();
-        mrView.updateHandles();
+        mrView.SetMarkHandles();
     }
 }
 
@@ -241,7 +241,8 @@ void SmartTagSet::deselect()
 
 bool SmartTagSet::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    Point aMDPos( mrView.GetViewShell()->GetActiveWindow()->PixelToLogic( rMEvt.GetPosPixel() ) );
+    const basegfx::B2DPoint aPixelPos(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
+    const basegfx::B2DPoint aMDPos(mrView.GetViewShell()->GetActiveWindow()->GetInverseViewTransformation() * aPixelPos);
     SdrHdl* pHdl = mrView.PickHandle(aMDPos);
 
     // check if a smart tag is selected and no handle is hit
@@ -289,7 +290,8 @@ bool SmartTagSet::KeyInput( const KeyEvent& rKEvt )
 
 bool SmartTagSet::RequestHelp( const HelpEvent& rHEvt )
 {
-    Point aMDPos( mrView.GetViewShell()->GetActiveWindow()->PixelToLogic( rHEvt.GetMousePosPixel() ) );
+    const basegfx::B2DPoint aPixelPos(rHEvt.GetMousePosPixel().X(), rHEvt.GetMousePosPixel().Y());
+    const basegfx::B2DPoint aMDPos(mrView.GetViewShell()->GetActiveWindow()->GetInverseViewTransformation() * aPixelPos);
     SdrHdl* pHdl = mrView.PickHandle(aMDPos);
 
     if( pHdl )
@@ -313,7 +315,8 @@ bool SmartTagSet::Command( const CommandEvent& rCEvt )
 {
     if( rCEvt.IsMouseEvent() )
     {
-        Point aMDPos( mrView.GetViewShell()->GetActiveWindow()->PixelToLogic( rCEvt.GetMousePosPixel() ) );
+        const basegfx::B2DPoint aPixelPos(rCEvt.GetMousePosPixel().X(), rCEvt.GetMousePosPixel().Y());
+        const basegfx::B2DPoint aMDPos(mrView.GetViewShell()->GetActiveWindow()->GetInverseViewTransformation() * aPixelPos);
         SdrHdl* pHdl = mrView.PickHandle(aMDPos);
 
         if( pHdl )
@@ -364,14 +367,14 @@ bool SmartTagSet::getContext( SdrViewContext& rContext ) const
 // support point editing
 // --------------------------------------------------------------------
 
-sal_Bool SmartTagSet::HasMarkablePoints() const
+bool SmartTagSet::HasMarkablePoints() const
 {
-    return GetMarkablePointCount() != 0 ? sal_True : sal_False;
+    return 0 != GetMarkablePointCount();
 }
 
 // --------------------------------------------------------------------
 
-sal_uLong SmartTagSet::GetMarkablePointCount() const
+sal_uInt32 SmartTagSet::GetMarkablePointCount() const
 {
     if( mxSelectedTag.is() )
         return mxSelectedTag->GetMarkablePointCount();
@@ -380,14 +383,14 @@ sal_uLong SmartTagSet::GetMarkablePointCount() const
 
 // --------------------------------------------------------------------
 
-sal_Bool SmartTagSet::HasMarkedPoints() const
+bool SmartTagSet::HasMarkedPoints() const
 {
-    return GetMarkedPointCount() != 0 ? sal_True : sal_False;
+    return 0 != GetMarkedPointCount();
 }
 
 // --------------------------------------------------------------------
 
-sal_uLong SmartTagSet::GetMarkedPointCount() const
+sal_uInt32 SmartTagSet::GetMarkedPointCount() const
 {
     if( mxSelectedTag.is() )
         return mxSelectedTag->GetMarkedPointCount();
@@ -397,7 +400,7 @@ sal_uLong SmartTagSet::GetMarkedPointCount() const
 
 // --------------------------------------------------------------------
 
-sal_Bool SmartTagSet::IsPointMarkable(const SdrHdl& rHdl) const
+bool SmartTagSet::IsPointMarkable(const SdrHdl& rHdl) const
 {
     const SmartHdl* pSmartHdl = dynamic_cast< const SmartHdl* >( &rHdl );
 
@@ -406,21 +409,24 @@ sal_Bool SmartTagSet::IsPointMarkable(const SdrHdl& rHdl) const
 
 // --------------------------------------------------------------------
 
-sal_Bool SmartTagSet::MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark )
+bool SmartTagSet::MarkPoint(SdrHdl& rHdl, bool bUnmark )
 {
     if( mxSelectedTag.is() )
         return mxSelectedTag->MarkPoint( rHdl, bUnmark );
 
-    return sal_False;
+    return false;
 }
 
 // --------------------------------------------------------------------
 
-sal_Bool SmartTagSet::MarkPoints(const Rectangle* pRect, sal_Bool bUnmark)
+bool SmartTagSet::MarkPoints(const basegfx::B2DRange* pRange, bool bUnmark)
 {
     if( mxSelectedTag.is() )
-        return mxSelectedTag->MarkPoints( pRect, bUnmark );
-    return sal_False;
+    {
+        return mxSelectedTag->MarkPoints( pRange, bUnmark );
+    }
+
+    return false;
 }
 
 // --------------------------------------------------------------------
@@ -433,18 +439,34 @@ void SmartTagSet::CheckPossibilities()
 
 // ====================================================================
 
-SmartHdl::SmartHdl( const SmartTagReference& xTag, SdrObject* pObject, const Point& rPnt, SdrHdlKind eNewKind /*=HDL_MOVE*/ )
-: SdrHdl( rPnt, eNewKind )
+SmartHdl::SmartHdl(
+    SdrHdlList& rHdlList,
+    const SdrObject* pSdrHdlObject,
+    const SmartTagReference& xTag,
+    SdrHdlKind eNewKind,
+    const basegfx::B2DPoint& rPnt)
+: SdrHdl( rHdlList, pSdrHdlObject, eNewKind, rPnt )
 , mxTag( xTag )
 {
-    SetObj( pObject );
 }
 
-// --------------------------------------------------------------------
-
-SmartHdl::SmartHdl( const SmartTagReference& xTag, const Point& rPnt, SdrHdlKind eNewKind /*=HDL_MOVE*/ )
-: SdrHdl( rPnt, eNewKind )
+SmartHdl::SmartHdl(
+    SdrHdlList& rHdlList,
+    const SdrObject* pSdrHdlObject,
+    const SmartTagReference& xTag,
+    sal_uInt32 nObjHandleNum,
+    SdrHdl& rSource)
+: SdrHdl( rHdlList, pSdrHdlObject, rSource.GetKind(), rSource.getPosition())
 , mxTag( xTag )
+{
+    mnObjHdlNum = nObjHandleNum;
+    mnPolyNum = rSource.GetPolyNum();
+    mnPPntNum = rSource.GetPointNum();
+    mbPlusHdl = rSource.IsPlusHdl();
+    mnSourceHdlNum = rSource.GetSourceHdlNum();
+}
+
+SmartHdl::~SmartHdl()
 {
 }
 

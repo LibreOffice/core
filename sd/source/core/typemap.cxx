@@ -87,6 +87,7 @@
 #include <svx/xtextit0.hxx>
 #include <avmedia/mediaitem.hxx>
 #include <svx/drawitem.hxx>
+#include <svx/sdooitm.hxx>
 
 // #UndoRedo#
 #include <svl/slstitm.hxx>

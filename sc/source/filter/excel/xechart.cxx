@@ -328,9 +328,9 @@ const XclChFormatInfo& XclExpChRoot::GetFormatInfo( XclChObjectType eObjType ) c
     return mxChData->mxFmtInfoProv->GetFormatInfo( eObjType );
 }
 
-void XclExpChRoot::InitConversion( XChartDocRef xChartDoc, const Rectangle& rChartRect ) const
+void XclExpChRoot::InitConversion( XChartDocRef xChartDoc, const basegfx::B2DRange& rChartRange ) const
 {
-    mxChData->InitConversion( GetRoot(), xChartDoc, rChartRect );
+    mxChData->InitConversion( GetRoot(), xChartDoc, rChartRange );
 }
 
 void XclExpChRoot::FinishConversion() const
@@ -373,12 +373,12 @@ XclChRectangle XclExpChRoot::CalcChartRectFromHmm( const ::com::sun::star::awt::
 
 sal_Int32 XclExpChRoot::CalcChartXFromRelative( double fPosX ) const
 {
-    return CalcChartXFromHmm( static_cast< sal_Int32 >( fPosX * mxChData->maChartRect.GetWidth() + 0.5 ) );
+    return CalcChartXFromHmm( static_cast< sal_Int32 >( fPosX * mxChData->maChartRange.getWidth() + 0.5 ) );
 }
 
 sal_Int32 XclExpChRoot::CalcChartYFromRelative( double fPosY ) const
 {
-    return CalcChartYFromHmm( static_cast< sal_Int32 >( fPosY * mxChData->maChartRect.GetHeight() + 0.5 ) );
+    return CalcChartYFromHmm( static_cast< sal_Int32 >( fPosY * mxChData->maChartRange.getHeight() + 0.5 ) );
 }
 
 void XclExpChRoot::ConvertLineFormat( XclChLineFormat& rLineFmt,
@@ -3300,14 +3300,15 @@ void XclExpChAxesSet::WriteBody( XclExpStream& rStrm )
 // The chart object ===========================================================
 
 XclExpChChart::XclExpChChart( const XclExpRoot& rRoot,
-        Reference< XChartDocument > xChartDoc, const Rectangle& rChartRect ) :
+        Reference< XChartDocument > xChartDoc, const basegfx::B2DRange& rChartRange ) :
     XclExpChGroupBase( XclExpChRoot( rRoot, *this ), EXC_CHFRBLOCK_TYPE_CHART, EXC_ID_CHCHART, 16 )
 {
-    Size aPtSize = OutputDevice::LogicToLogic( rChartRect.GetSize(), MapMode( MAP_100TH_MM ), MapMode( MAP_POINT ) );
+    const double fMapFactor(OutputDevice::GetFactorLogicToLogic(MAP_100TH_MM, MAP_POINT));
+    const basegfx::B2DVector aPtSize(rChartRange.getRange() * fMapFactor);
     // rectangle is stored in 16.16 fixed-point format
     maRect.mnX = maRect.mnY = 0;
-    maRect.mnWidth = static_cast< sal_Int32 >( aPtSize.Width() << 16 );
-    maRect.mnHeight = static_cast< sal_Int32 >( aPtSize.Height() << 16 );
+    maRect.mnWidth = static_cast< sal_Int32 >( basegfx::fround(aPtSize.getX()) << 16 );
+    maRect.mnHeight = static_cast< sal_Int32 >( basegfx::fround(aPtSize.getY()) << 16 );
 
     // global chart properties (default values)
     ::set_flag( maProps.mnFlags, EXC_CHPROPS_SHOWVISIBLEONLY, false );
@@ -3327,8 +3328,8 @@ XclExpChChart::XclExpChChart( const XclExpRoot& rRoot,
         bool bIncludeHidden = aDiagramProp.GetBoolProperty( EXC_CHPROP_INCLUDEHIDDENCELLS );
         ::set_flag( maProps.mnFlags,  EXC_CHPROPS_SHOWVISIBLEONLY, !bIncludeHidden );
 
-        // initialize API conversion (remembers xChartDoc and rChartRect internally)
-        InitConversion( xChartDoc, rChartRect );
+        // initialize API conversion (remembers xChartDoc and rChartRange internally)
+        InitConversion( xChartDoc, rChartRange );
 
         // chart frame
         ScfPropertySet aFrameProp( xChartDoc->getPageBackground() );
@@ -3426,10 +3427,10 @@ void XclExpChChart::WriteBody( XclExpStream& rStrm )
 // ----------------------------------------------------------------------------
 
 XclExpChartDrawing::XclExpChartDrawing( const XclExpRoot& rRoot,
-        const Reference< XModel >& rxModel, const Size& rChartSize ) :
+        const Reference< XModel >& rxModel, const basegfx::B2DVector& rChartScale ) :
     XclExpRoot( rRoot )
 {
-    if( (rChartSize.Width() > 0) && (rChartSize.Height() > 0) )
+    if( (rChartScale.getX() > 0.0) && (rChartScale.getY() > 0.0) )
     {
         ScfPropertySet aPropSet( rxModel );
         Reference< XShapes > xShapes;
@@ -3438,7 +3439,7 @@ XclExpChartDrawing::XclExpChartDrawing( const XclExpRoot& rRoot,
             /*  Create a new independent object manager with own DFF stream for the
                 DGCONTAINER, pass global manager as parent for shared usage of
                 global DFF data (picture container etc.). */
-            mxObjMgr.reset( new XclExpEmbeddedObjectManager( GetObjectManager(), rChartSize, EXC_CHART_TOTALUNITS, EXC_CHART_TOTALUNITS ) );
+            mxObjMgr.reset( new XclExpEmbeddedObjectManager( GetObjectManager(), rChartScale, EXC_CHART_TOTALUNITS, EXC_CHART_TOTALUNITS ) );
             // initialize the drawing object list
             mxObjMgr->StartSheet();
             // process the draw page (convert all shapes)
@@ -3461,17 +3462,17 @@ void XclExpChartDrawing::Save( XclExpStream& rStrm )
 
 // ----------------------------------------------------------------------------
 
-XclExpChart::XclExpChart( const XclExpRoot& rRoot, Reference< XModel > xModel, const Rectangle& rChartRect ) :
+XclExpChart::XclExpChart( const XclExpRoot& rRoot, Reference< XModel > xModel, const basegfx::B2DRange& rChartRange ) :
     XclExpSubStream( EXC_BOF_CHART ),
     XclExpRoot( rRoot )
 {
     AppendNewRecord( new XclExpChartPageSettings( rRoot ) );
     AppendNewRecord( new XclExpBoolRecord( EXC_ID_PROTECT, false ) );
-    AppendNewRecord( new XclExpChartDrawing( rRoot, xModel, rChartRect.GetSize() ) );
+    AppendNewRecord( new XclExpChartDrawing( rRoot, xModel, rChartRange.getRange() ) );
     AppendNewRecord( new XclExpUInt16Record( EXC_ID_CHUNITS, EXC_CHUNITS_TWIPS ) );
 
     Reference< XChartDocument > xChartDoc( xModel, UNO_QUERY );
-    AppendNewRecord( new XclExpChChart( rRoot, xChartDoc, rChartRect ) );
+    AppendNewRecord( new XclExpChChart( rRoot, xChartDoc, rChartRange ) );
 }
 
 // ============================================================================

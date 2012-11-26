@@ -26,124 +26,286 @@
 #include <svx/svdview.hxx>
 #include <svx/svddrag.hxx>
 
-void SdrDragStat::Clear(FASTBOOL bLeaveOne)
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+SdrDragStat::SdrDragStat(SdrView& rSdrView)
+:   boost::noncopyable(),
+    mpHdl(0),
+    mrSdrView(rSdrView),
+    mpDragMethod(0),
+    mpUser(0),
+    maPnts(),
+    maRef1(),
+    maRef2(),
+    maPos0(),
+    maRealPos0(),
+    maRealNow(),
+    maActionRange(),
+    mfMinMov(1.0),
+    mbEndDragChangesAttributes(false),
+    mbEndDragChangesGeoAndAttributes(false),
+    mbMouseIsUp(false),
+    mbShown(false),
+    mbMinMoved(false),
+    mbHorFixed(false),
+    mbVerFixed(false),
+    mbWantNoSnap(false),
+    mbOrtho4(false),
+    mbOrtho8(false)
 {
-    void* pP=aPnts.First();
-    while (pP!=NULL) {
-        delete (Point*)pP;
-        pP=aPnts.Next();
+}
+
+SdrDragStat::~SdrDragStat()
+{
+    if(mpUser)
+    {
+        delete mpUser;
+        mpUser = 0;
     }
-    if (pUser!=NULL) delete pUser;
-    pUser=NULL;
-    aPnts.Clear();
-    if (bLeaveOne) {
-        aPnts.Insert(new Point,CONTAINER_APPEND);
+}
+
+const basegfx::B2DPoint& SdrDragStat::GetPoint(sal_uInt32 nNum) const
+{
+    if(nNum < maPnts.size())
+    {
+        return *(maPnts.begin() + nNum);
+    }
+    else
+    {
+        OSL_ENSURE(false, "SdrDragStat::GetPoint access out of range (!)");
+        return maRef1;
+    }
+}
+
+const basegfx::B2DPoint& SdrDragStat::GetStart() const
+{
+    if(!maPnts.empty())
+    {
+        return *(maPnts.begin());
+    }
+    else
+    {
+        OSL_ENSURE(false, "SdrDragStat::GetStart not possible, too less points (!)");
+        return maRef1;
+    }
+}
+
+void SdrDragStat::SetStart(const basegfx::B2DPoint& rNew)
+{
+    if(!maPnts.empty())
+    {
+        *(maPnts.begin()) = rNew;
+    }
+    else
+    {
+        OSL_ENSURE(false, "SdrDragStat::SetStart not possible, too less points (!)");
+    }
+}
+
+const basegfx::B2DPoint& SdrDragStat::GetPrev() const
+{
+    if(maPnts.size())
+    {
+        return *(maPnts.begin() + (maPnts.size() - (maPnts.size() >= 2 ? 2 : 1)));
+    }
+    else
+    {
+        OSL_ENSURE(false, "SdrDragStat::GetPrev invalid access");
+        return maRef1;
+    }
+}
+
+void SdrDragStat::SetPrev(const basegfx::B2DPoint& rNew)
+{
+    if(maPnts.size())
+    {
+        B2DPointVector::iterator aCandidate(maPnts.begin() + (maPnts.size() - (maPnts.size() >= 2 ? 2 : 1)));
+
+        if(*aCandidate != rNew)
+        {
+            *aCandidate = rNew;
+        }
+    }
+    else
+    {
+        OSL_ENSURE(false, "SdrDragStat::GetPrev invalid access");
+    }
+}
+
+const basegfx::B2DPoint& SdrDragStat::GetNow() const
+{
+    if(!maPnts.empty())
+    {
+        return *(maPnts.end() - 1);
+    }
+    else
+    {
+        OSL_ENSURE(false, "SdrDragStat::GetNow not possible, too less points (!)");
+        return maRef1;
+    }
+}
+
+void SdrDragStat::SetNow(const basegfx::B2DPoint& rNew)
+{
+    if(!maPnts.empty())
+    {
+        B2DPointVector::iterator aPosition(maPnts.end() - 1);
+
+        if(*aPosition != rNew)
+        {
+            *aPosition = rNew;
+        }
+    }
+    else
+    {
+        OSL_ENSURE(false, "SdrDragStat::SetNow not possible, too less points (!)");
     }
 }
 
 void SdrDragStat::Reset()
 {
-    pView=NULL;
-    pPageView=NULL;
-    bShown=sal_False;
-    nMinMov=1;
-    bMinMoved=sal_False;
-    bHorFixed=sal_False;
-    bVerFixed=sal_False;
-    bWantNoSnap=sal_False;
-    pHdl=NULL;
-    bOrtho4=sal_False;
-    bOrtho8=sal_False;
-    pDragMethod=NULL;
-    bEndDragChangesAttributes=sal_False;
-    bEndDragChangesGeoAndAttributes=sal_False;
-    bMouseIsUp=sal_False;
-    Clear(sal_True);
-    aActionRect=Rectangle();
+    mpHdl = 0;
+    mpDragMethod = 0;
+
+    if(mpUser)
+    {
+        delete mpUser;
+        mpUser = 0;
+    }
+
+    maPnts.clear();
+    maPnts.push_back(basegfx::B2DPoint());
+
+    maRef1 = maRef2 = maPos0 = maRealPos0 = maRealNow = basegfx::B2DPoint();
+
+    maActionRange.reset();
+    mfMinMov = 1.0;
+    mbEndDragChangesAttributes = false;
+    mbEndDragChangesGeoAndAttributes = false;
+    mbMouseIsUp = false;
+    mbShown = false;
+    mbMinMoved = false;
+    mbHorFixed = false;
+    mbVerFixed = false;
+    mbWantNoSnap = false;
+    mbOrtho4 = false;
+    mbOrtho8 = false;
 }
 
-void SdrDragStat::Reset(const Point& rPnt)
+void SdrDragStat::Reset(const basegfx::B2DPoint& rPnt)
 {
     Reset();
-    Start()=rPnt;
-    aPos0=rPnt;
-    aRealPos0=rPnt;
-    RealNow()=rPnt;
+
+    SetStart(rPnt);
+    SetPos0(rPnt);
+    maRealPos0 = rPnt;
+    SetRealNow(rPnt);
 }
 
-void SdrDragStat::NextMove(const Point& rPnt)
+void SdrDragStat::NextMove(const basegfx::B2DPoint& rPnt)
 {
-    aRealPos0=GetRealNow();
-    aPos0=GetNow();
-    RealNow()=rPnt;
-    Point aBla=KorregPos(GetRealNow(),GetPrev());
-    Now()=aBla;
+    maRealPos0 = GetRealNow();
+    SetPos0(GetNow());
+    SetRealNow(rPnt);
+    SetNow(KorregPos(GetRealNow(), GetPrev()));
 }
 
-void SdrDragStat::NextPoint(FASTBOOL bSaveReal)
+void SdrDragStat::NextPoint(bool bSaveReal)
 {
-    Point aPnt(GetNow());
-    if (bSaveReal) aPnt=aRealNow;
-    aPnts.Insert(new Point(KorregPos(GetRealNow(),aPnt)),CONTAINER_APPEND);
-    Prev()=aPnt;
+    basegfx::B2DPoint aPnt(GetNow());
+
+    if(bSaveReal)
+    {
+        aPnt = maRealNow;
+    }
+
+    maPnts.push_back(KorregPos(GetRealNow(), aPnt));
+    SetPrev(aPnt);
 }
 
 void SdrDragStat::PrevPoint()
 {
-    if (aPnts.Count()>=2) { // einer muss immer da bleiben
-        Point* pPnt=(Point*)(aPnts.GetObject(aPnts.Count()-2));
-        aPnts.Remove(aPnts.Count()-2);
-        delete pPnt;
-        Now()=KorregPos(GetRealNow(),GetPrev());
+    if(maPnts.size() >= 2)
+    {
+        // always leave one point
+        maPnts.erase(maPnts.end() - 2);
+        SetNow(KorregPos(GetRealNow(), GetPrev()));
     }
 }
 
-Point SdrDragStat::KorregPos(const Point& rNow, const Point& /*rPrev*/) const
+basegfx::B2DPoint SdrDragStat::KorregPos(const basegfx::B2DPoint& rNow, const basegfx::B2DPoint& /*rPrev*/) const
 {
-    Point aRet(rNow);
+    basegfx::B2DPoint aRet(rNow);
+
     return aRet;
 }
 
-FASTBOOL SdrDragStat::CheckMinMoved(const Point& rPnt)
+bool SdrDragStat::CheckMinMoved(const basegfx::B2DPoint& rPnt)
 {
-    if (!bMinMoved) {
-        long dx=rPnt.X()-GetPrev().X(); if (dx<0) dx=-dx;
-        long dy=rPnt.Y()-GetPrev().Y(); if (dy<0) dy=-dy;
-        if (dx>=long(nMinMov) || dy>=long(nMinMov))
-            bMinMoved=sal_True;
+    if(!mbMinMoved)
+    {
+        mbMinMoved = basegfx::B2DVector(rPnt - GetPrev()).getLength() > GetMinMove();
     }
-    return bMinMoved;
+
+    return mbMinMoved;
 }
 
-Fraction SdrDragStat::GetXFact() const
+double SdrDragStat::GetXFact() const
 {
-    long nMul=GetNow().X()-aRef1.X();
-    long nDiv=GetPrev().X()-aRef1.X();
-    if (nDiv==0) nDiv=1;
-    if (bHorFixed) { nMul=1; nDiv=1; }
-    return Fraction(nMul,nDiv);
-}
-
-Fraction SdrDragStat::GetYFact() const
-{
-    long nMul=GetNow().Y()-aRef1.Y();
-    long nDiv=GetPrev().Y()-aRef1.Y();
-    if (nDiv==0) nDiv=1;
-    if (bVerFixed) { nMul=1; nDiv=1; }
-    return Fraction(nMul,nDiv);
-}
-
-void SdrDragStat::TakeCreateRect(Rectangle& rRect) const
-{
-    rRect=Rectangle(GetStart(),GetNow());
-    if (GetPointAnz()>=2) {
-        Point aBtmRgt(GetPoint(1));
-        rRect.Right()=aBtmRgt.X();
-        rRect.Bottom()=aBtmRgt.Y();
+    if(IsHorFixed())
+    {
+        return 1.0;
     }
-    if (pView!=NULL && pView->IsCreate1stPointAsCenter()) {
-        rRect.Top()+=rRect.Top()-rRect.Bottom();
-        rRect.Left()+=rRect.Left()-rRect.Right();
+    else
+    {
+        const double fMul(GetNow().getX() - GetRef1().getX());
+        const double fDiv(GetPrev().getX() - GetRef1().getX());
+
+        if(basegfx::fTools::equalZero(fDiv))
+        {
+            return fMul;
+        }
+        else
+        {
+            return fMul / fDiv;
+        }
     }
 }
 
+double SdrDragStat::GetYFact() const
+{
+    if(IsVerFixed())
+    {
+        return 1.0;
+    }
+    else
+    {
+        const double fMul(GetNow().getY() - GetRef1().getY());
+        const double fDiv(GetPrev().getY() - GetRef1().getY());
+
+        if(basegfx::fTools::equalZero(fDiv))
+        {
+            return fMul;
+        }
+        else
+        {
+            return fMul / fDiv;
+        }
+    }
+}
+
+basegfx::B2DRange SdrDragStat::TakeCreateRange() const
+{
+    basegfx::B2DPoint aTopLeft(GetStart());
+    basegfx::B2DPoint aBottomRight(maPnts.size() >= 2 ? GetPoint(1) : GetNow());
+
+    if(GetSdrViewFromSdrDragStat().IsCreate1stPointAsCenter())
+    {
+        aTopLeft += aTopLeft - aBottomRight;
+    }
+
+    return basegfx::B2DRange(aTopLeft, aBottomRight);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// eof

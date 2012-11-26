@@ -62,7 +62,6 @@ typedef ::std::multimap< sal_Int16, ::rtl::OUString, ::std::less< sal_Int16 > > 
         DlgEdHint(DlgEdHint&);
         void operator =(DlgEdHint&);
     public:
-        TYPEINFO();
         DlgEdHint( DlgEdHintKind eHint );
         virtual ~DlgEdHint();
 
@@ -132,7 +131,9 @@ public:
     */
     void    releaseUnoShape() { m_xKeepShapeAlive.clear(); }
 
-    static SdrObject* createObject(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent);
+    static SdrObject* createObject(
+        SdrModel* pTargetModel,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent);
     static sal_uInt16 getObjectType(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent);
 };
 //============================================================================
@@ -144,27 +145,26 @@ class REPORTDESIGN_DLLPUBLIC OCustomShape: public SdrObjCustomShape , public OOb
     friend class DlgEdFactory;
 
 public:
-    static OCustomShape* Create( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent )
-    {
-        return new OCustomShape( _xComponent );
-    }
+    static OCustomShape* Create(SdrModel& rSdrModel, const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent);
+
+    /// create a copy, evtl. with a different target model (if given)
+    virtual SdrObject* CloneSdrObject(SdrModel* pTargetModel = 0) const;
 
 protected:
-    OCustomShape(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent);
-    OCustomShape(const ::rtl::OUString& _sComponentName);
+    /// method to copy all data from given source
+    virtual void copyDataFromSdrObject(const SdrObject& rSource);
 
-    virtual void NbcMove( const Size& rSize );
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-    virtual void NbcSetLogicRect(const Rectangle& rRect);
-    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+    OCustomShape(SdrModel& rSdrModel, const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent);
+    OCustomShape(SdrModel& rSdrModel, const ::rtl::OUString& _sComponentName);
+
+    virtual void setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransformation);
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
 
     virtual void SetSnapRectImpl(const Rectangle& _rRect);
     virtual SdrPage* GetImplPage() const;
     void SetObjectItemHelper(const SfxPoolItem& rItem);
 
 public:
-    TYPEINFO();
-
     virtual ~OCustomShape();
 
     virtual sal_Int32   GetStep() const;
@@ -180,34 +180,39 @@ public:
 //============================================================================
 class REPORTDESIGN_DLLPUBLIC OOle2Obj: public SdrOle2Obj , public OObjectBase
 {
+private:
     friend class OReportPage;
     friend class DlgEdFactory;
 
     sal_uInt16 m_nType;
     bool    m_bOnlyOnce;
     void impl_createDataProvider_nothrow( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& _xModel);
-public:
-    static OOle2Obj* Create( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent,sal_uInt16 _nType )
-    {
-        return new OOle2Obj( _xComponent,_nType );
-    }
+
 protected:
-    OOle2Obj(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent,sal_uInt16 _nType);
-    OOle2Obj(const ::rtl::OUString& _sComponentName,sal_uInt16 _nType);
+    OOle2Obj(
+        SdrModel& rSdrModel,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent >& _xComponent,
+        sal_uInt16 _nType);
+    OOle2Obj(
+        SdrModel& rSdrModel,
+        ::rtl::OUString _sComponentName,
+        sal_uInt16 _nType);
 
+    virtual ~OOle2Obj();
 
-    virtual void NbcMove( const Size& rSize );
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-    virtual void NbcSetLogicRect(const Rectangle& rRect);
-    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+    virtual void setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransformation);
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
 
     virtual void SetSnapRectImpl(const Rectangle& _rRect);
     virtual SdrPage* GetImplPage() const;
 
-public:
-    TYPEINFO();
+    /// method to copy all data from given source
+    virtual void copyDataFromSdrObject(const SdrObject& rSource);
 
-    virtual ~OOle2Obj();
+public:
+    /// create a copy, evtl. with a different target model (if given)
+    virtual SdrObject* CloneSdrObject(SdrModel* pTargetModel = 0) const;
+    static OOle2Obj* Create(SdrModel& rSdrModel, const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent >& _xComponent, sal_uInt16 _nType);
 
     virtual sal_Int32   GetStep() const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getAwtComponent();
@@ -215,8 +220,6 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape();
     virtual sal_uInt16 GetObjIdentifier() const;
     virtual sal_uInt32 GetObjInventor() const;
-    // Clone() soll eine komplette Kopie des Objektes erzeugen.
-    virtual SdrObject* Clone() const;
     virtual void initializeOle();
 
     void initializeChart( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& _xModel);
@@ -227,31 +230,40 @@ public:
 //============================================================================
 class REPORTDESIGN_DLLPUBLIC OUnoObject: public SdrUnoObj , public OObjectBase
 {
+private:
     friend class OReportPage;
     friend class OObjectBase;
     friend class DlgEdFactory;
 
     sal_uInt16   m_nObjectType;
+
+    void    impl_setReportComponent_nothrow();
+    void    impl_initializeModel_nothrow();
+
 protected:
-    OUnoObject(const ::rtl::OUString& _sComponentName
+    OUnoObject(SdrModel& rSdrModel
+                ,const ::rtl::OUString& _sComponentName
                 ,const ::rtl::OUString& rModelName
                 ,sal_uInt16   _nObjectType);
-    OUnoObject(  const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent
+    OUnoObject(  SdrModel& rSdrModel
+                ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent
                 ,const ::rtl::OUString& rModelName
                 ,sal_uInt16   _nObjectType);
 
     virtual ~OUnoObject();
 
-    virtual void NbcMove( const Size& rSize );
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-    virtual void NbcSetLogicRect(const Rectangle& rRect);
-    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+    virtual void setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransformation);
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
 
     virtual void SetSnapRectImpl(const Rectangle& _rRect);
     virtual SdrPage* GetImplPage() const;
 
+    /// method to copy all data from given source
+    virtual void copyDataFromSdrObject(const SdrObject& rSource);
+
 public:
-    TYPEINFO();
+    /// create a copy, evtl. with a different target model (if given)
+    virtual SdrObject* CloneSdrObject(SdrModel* pTargetModel = 0) const;
 
     virtual sal_Int32   GetStep() const;
     virtual void _propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(::com::sun::star::uno::RuntimeException);
@@ -268,11 +280,6 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape();
     virtual sal_uInt16 GetObjIdentifier() const;
     virtual sal_uInt32 GetObjInventor() const;
-    virtual SdrObject* Clone() const;
-
-private:
-    void    impl_setReportComponent_nothrow();
-    void    impl_initializeModel_nothrow();
 };
 
 //============================================================================

@@ -94,8 +94,6 @@ SFX_IMPL_INTERFACE( PresentationViewShell, DrawViewShell, SdResId( STR_PRESVIEWS
 }
 
 
-TYPEINIT1( PresentationViewShell, DrawViewShell );
-
 PresentationViewShell::PresentationViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBase, ::Window* pParentWindow, FrameView* pFrameView)
 : DrawViewShell( pFrame, rViewShellBase, pParentWindow, PK_STANDARD, pFrameView)
 {
@@ -130,7 +128,7 @@ void PresentationViewShell::FinishInitialization( FrameView* pFrameView )
 }
 
 
-SvxRuler* PresentationViewShell::CreateHRuler(::sd::Window*, sal_Bool)
+SvxRuler* PresentationViewShell::CreateHRuler(::sd::Window*, bool)
 {
     return NULL;
 }
@@ -141,14 +139,13 @@ SvxRuler* PresentationViewShell::CreateVRuler(::sd::Window*)
 }
 
 
-void PresentationViewShell::Activate( sal_Bool bIsMDIActivate )
+void PresentationViewShell::Activate( bool bIsMDIActivate )
 {
     DrawViewShell::Activate( bIsMDIActivate );
 
     if( bIsMDIActivate )
     {
-        //HMH::sd::View*     pView = GetView();
-        SfxBoolItem aItem( SID_NAVIGATOR_INIT, sal_True );
+        SfxBoolItem aItem( SID_NAVIGATOR_INIT, true );
 
         GetViewFrame()->GetDispatcher()->Execute( SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 

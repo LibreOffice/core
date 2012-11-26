@@ -127,7 +127,8 @@ namespace sdr
             }
 
             // decompose object matrix to get single values
-            basegfx::B2DVector aScale, aTranslate;
+            basegfx::B2DVector aScale;
+            basegfx::B2DPoint aTranslate;
             double fRotate, fShearX;
             rObjectMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
 
@@ -138,9 +139,13 @@ namespace sdr
             {
                 // create the EmptyPresObj fallback visualisation. The fallback graphic
                 // is already provided in rGraphicObject in this case, use it
-                aSmallerMatrix = basegfx::tools::createScaleTranslateB2DHomMatrix(aPrefSize.getWidth(), aPrefSize.getHeight(), fOffsetX, fOffsetY);
-                aSmallerMatrix = basegfx::tools::createShearXRotateTranslateB2DHomMatrix(fShearX, fRotate, aTranslate)
-                    * aSmallerMatrix;
+                aSmallerMatrix = basegfx::tools::createScaleTranslateB2DHomMatrix(
+                    aPrefSize.getWidth(), aPrefSize.getHeight(),
+                    fOffsetX, fOffsetY);
+                aSmallerMatrix = basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
+                    fShearX,
+                    fRotate,
+                    aTranslate) * aSmallerMatrix;
 
                 const GraphicObject& rGraphicObject = GetGrafObject().GetGraphicObject(false);
                 const drawinglayer::primitive2d::Primitive2DReference xReferenceB(new drawinglayer::primitive2d::SdrGrafPrimitive2D(
@@ -187,7 +192,8 @@ namespace sdr
             }
 
             // decompose object matrix to get single values
-            basegfx::B2DVector aScale, aTranslate;
+            basegfx::B2DVector aScale;
+            basegfx::B2DPoint aTranslate;
             double fRotate, fShearX;
             rObjectMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
 
@@ -227,7 +233,10 @@ namespace sdr
                     && basegfx::fTools::lessOrEqual(fHeight, aScale.getY()))
                 {
                     const basegfx::B2DHomMatrix aBitmapMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
-                        fWidth, fHeight, fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
+                        fWidth, fHeight,
+                        fShearX,
+                        fRotate,
+                        aTranslate.getX(), aTranslate.getY()));
 
                     drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval,
                         drawinglayer::primitive2d::Primitive2DReference(
@@ -250,7 +259,7 @@ namespace sdr
                 aDraftText.AppendAscii(" ...");
             }
 
-            if(aDraftText.Len() && GetGrafObject().GetModel())
+            if(aDraftText.Len()) // && GetGrafObject().GetModel())
             {
                 // #i103255# Goal is to produce TextPrimitives which hold the given text as
                 // BlockText in the available space. It would be very tricky to do
@@ -262,20 +271,26 @@ namespace sdr
                 // needed and can be deleted.
 
                 // create temp RectObj as TextObj and set needed attributes
-                SdrRectObj aRectObj(OBJ_TEXT);
-                aRectObj.SetModel(GetGrafObject().GetModel());
-                aRectObj.NbcSetText(aDraftText);
-                aRectObj.SetMergedItem(SvxColorItem(Color(COL_LIGHTRED), EE_CHAR_COLOR));
+                SdrRectObj* pRectObj = new SdrRectObj(
+                    GetGrafObject().getSdrModelFromSdrObject(),
+                    basegfx::B2DHomMatrix(),
+                    OBJ_TEXT,
+                    true);
+                pRectObj->SetText(aDraftText);
+                pRectObj->SetMergedItem(SvxColorItem(Color(COL_LIGHTRED), EE_CHAR_COLOR));
 
                 // get SdrText and OPO
-                SdrText* pSdrText = aRectObj.getText(0);
-                OutlinerParaObject* pOPO = aRectObj.GetOutlinerParaObject();
+                SdrText* pSdrText = pRectObj->getText(0);
+                OutlinerParaObject* pOPO = pRectObj->GetOutlinerParaObject();
 
                 if(pSdrText && pOPO)
                 {
                     // directly use the remaining space as TextRangeTransform
                     const basegfx::B2DHomMatrix aTextRangeTransform(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
-                        aScale, fShearX, fRotate, aTranslate));
+                        aScale,
+                        fShearX,
+                        fRotate,
+                        aTranslate));
 
                     // directly create temp SdrBlockTextPrimitive2D
                     drawinglayer::primitive2d::SdrBlockTextPrimitive2D aBlockTextPrimitive(
@@ -298,6 +313,8 @@ namespace sdr
                         xRetval,
                         aBlockTextPrimitive.get2DDecomposition(aViewInformation2D));
                 }
+
+                deleteSdrObjectSafeAndClearPointer(pRectObj);
             }
 
             return xRetval;
@@ -331,55 +348,14 @@ namespace sdr
                     GetGrafObject().getText(0),
                     bHasContent));
 
-            // take unrotated snap rect for position and size. Directly use model data, not getBoundRect() or getSnapRect()
-            // which will use the primitive data we just create in the near future
-            const Rectangle& rRectangle = GetGrafObject().GetGeoRect();
-            const ::basegfx::B2DRange aObjectRange(
-                rRectangle.Left(), rRectangle.Top(),
-                rRectangle.Right(), rRectangle.Bottom());
-
-            // look for mirroring
-            const GeoStat& rGeoStat(GetGrafObject().GetGeoStat());
-            const sal_Int32 nDrehWink(rGeoStat.nDrehWink);
-            const bool bRota180(18000 == nDrehWink);
-            const bool bMirrored(GetGrafObject().IsMirrored());
-            const sal_uInt16 nMirrorCase(bRota180 ? (bMirrored ? 3 : 4) : (bMirrored ? 2 : 1));
-            bool bHMirr((2 == nMirrorCase ) || (4 == nMirrorCase));
-            bool bVMirr((3 == nMirrorCase ) || (4 == nMirrorCase));
-
-            // set mirror flags at LocalGrafInfo. Take into account that the geometry in
-            // aObjectRange is already changed and rotated when bRota180 is used. To rebuild
-            // that old behaviour (as long as part of the model data), correct the H/V flags
-            // accordingly. The created bitmapPrimitive WILL use the rotation, too.
-            if(bRota180)
-            {
-                // if bRota180 which is used for vertical mirroring, the graphic will already be rotated
-                // by 180 degrees. To correct, switch off VMirror and invert HMirroring.
-                bHMirr = !bHMirr;
-                bVMirr = false;
-            }
-
-            if(bHMirr || bVMirr)
-            {
-                aLocalGrafInfo.SetMirrorFlags((bHMirr ? BMP_MIRROR_HORZ : 0)|(bVMirr ? BMP_MIRROR_VERT : 0));
-            }
-
-            // fill object matrix
-            const double fShearX(rGeoStat.nShearWink ? tan((36000 - rGeoStat.nShearWink) * F_PI18000) : 0.0);
-            const double fRotate(nDrehWink ? (36000 - nDrehWink) * F_PI18000 : 0.0);
-            const basegfx::B2DHomMatrix aObjectMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
-                aObjectRange.getWidth(), aObjectRange.getHeight(),
-                fShearX, fRotate,
-                aObjectRange.getMinX(), aObjectRange.getMinY()));
-
-            // get the current, unchenged graphic obect from SdrGrafObj
-            const GraphicObject& rGraphicObject = GetGrafObject().GetGraphicObject(false);
+            // get object transformation
+            const basegfx::B2DHomMatrix& rObjectMatrix(GetGrafObject().getSdrObjectTransformation());
 
             if(visualisationUsesPresObj())
             {
                 // it's an EmptyPresObj, create the SdrGrafPrimitive2D without content and another scaled one
                 // with the content which is the placeholder graphic
-                xRetval = createVIP2DSForPresObj(aObjectMatrix, aAttribute, aLocalGrafInfo);
+                xRetval = createVIP2DSForPresObj(rObjectMatrix, aAttribute, aLocalGrafInfo);
             }
             else if(visualisationUsesDraft())
             {
@@ -388,15 +364,18 @@ namespace sdr
                 // visual update mechanism for swapped-out grapgics when they were loaded (see AsynchGraphicLoadingEvent
                 // and ViewObjectContactOfGraphic implementation). Not forcing the swap-in here allows faster
                 // (non-blocking) processing here and thus in the effect e.g. fast scrolling through pages
-                xRetval = createVIP2DSForDraft(aObjectMatrix, aAttribute);
+                xRetval = createVIP2DSForDraft(rObjectMatrix, aAttribute);
             }
             else
             {
+                // get the current, unchanged graphic obect from SdrGrafObj
+                const GraphicObject& rGraphicObject = GetGrafObject().GetGraphicObject(false);
+
                 // create primitive. Info: Calling the copy-constructor of GraphicObject in this
                 // SdrGrafPrimitive2D constructor will force a full swap-in of the graphic
                 const drawinglayer::primitive2d::Primitive2DReference xReference(
                     new drawinglayer::primitive2d::SdrGrafPrimitive2D(
-                        aObjectMatrix,
+                        rObjectMatrix,
                         aAttribute,
                         rGraphicObject,
                         aLocalGrafInfo));
@@ -407,7 +386,8 @@ namespace sdr
             // always append an invisible outline for the cases where no visible content exists
             drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval,
                 drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
-                    false, aObjectMatrix));
+                    false,
+                    rObjectMatrix));
 
             return xRetval;
         }

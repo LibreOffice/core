@@ -47,7 +47,6 @@ protected:
     virtual sal_uInt16 ImplSave();              // Save file
 
 public:
-    TYPEINFO();
     AppBasEd( BasicFrame*, SbModule* );
     ~AppBasEd();
     FileType GetFileType();         // Returns Filetype

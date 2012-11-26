@@ -82,8 +82,6 @@ const sal_Char __FAR_DATA sPageDeli[] = ", ";
 
 SV_IMPL_PTRARR(SwTOXSortTabBases, SwTOXSortTabBasePtr)
 
-TYPEINIT2( SwTOXBaseSection, SwTOXBase, SwSection );    // fuers RTTI
-
 struct LinkStruct
 {
     SwFmtINetFmt    aINetFmt;
@@ -463,8 +461,7 @@ const SwTOXBase* SwDoc::GetCurTOX( const SwPosition& rPos ) const
         SectionType eT = pSectNd->GetSection().GetType();
         if( TOX_CONTENT_SECTION == eT )
         {
-            ASSERT( pSectNd->GetSection().ISA( SwTOXBaseSection ),
-                    "keine TOXBaseSection!" );
+            ASSERT( dynamic_cast< const SwTOXBaseSection* >(&pSectNd->GetSection()), "keine TOXBaseSection!" );
             SwTOXBaseSection& rTOXSect = (SwTOXBaseSection&)
                                                 pSectNd->GetSection();
             return &rTOXSect;
@@ -476,7 +473,7 @@ const SwTOXBase* SwDoc::GetCurTOX( const SwPosition& rPos ) const
 
 const SwAttrSet& SwDoc::GetTOXBaseAttrSet(const SwTOXBase& rTOXBase) const
 {
-    ASSERT( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
+    ASSERT( dynamic_cast< const SwTOXBaseSection* >(&rTOXBase), "no TOXBaseSection!" );
     const SwTOXBaseSection& rTOXSect = (const SwTOXBaseSection&)rTOXBase;
     SwSectionFmt* pFmt = rTOXSect.GetFmt();
     ASSERT( pFmt, "invalid TOXBaseSection!" );
@@ -532,7 +529,7 @@ sal_Bool SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, sal_Bool bDelNodes )
 {
     // its only delete the TOX, not the nodes
     sal_Bool bRet = sal_False;
-    ASSERT( rTOXBase.ISA( SwTOXBaseSection ), "keine TOXBaseSection!" );
+    ASSERT( dynamic_cast< const SwTOXBaseSection* >(&rTOXBase), "keine TOXBaseSection!" );
 
     const SwTOXBaseSection& rTOXSect = (const SwTOXBaseSection&)rTOXBase;
     SwSectionFmt* pFmt = rTOXSect.GetFmt();
@@ -705,8 +702,7 @@ String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
 
 sal_Bool SwDoc::SetTOXBaseName(const SwTOXBase& rTOXBase, const String& rName)
 {
-    ASSERT( rTOXBase.ISA( SwTOXBaseSection ),
-                    "keine TOXBaseSection!" );
+    ASSERT( dynamic_cast< const SwTOXBaseSection* >(&rTOXBase), "keine TOXBaseSection!" );
     SwTOXBaseSection* pTOX = (SwTOXBaseSection*)&rTOXBase;
 
     String sTmp = GetUniqueTOXBaseName(*rTOXBase.GetTOXType(), &rName);
@@ -2397,7 +2393,7 @@ Range SwTOXBaseSection::GetKeyRange(const String& rStr, const String& rStrReadin
 
 sal_Bool SwTOXBase::IsTOXBaseInReadonly() const
 {
-    const SwTOXBaseSection *pSect = PTR_CAST(SwTOXBaseSection, this);
+    const SwTOXBaseSection *pSect = dynamic_cast< const SwTOXBaseSection* >( this);
     sal_Bool bRet = sal_False;
     const SwSectionNode* pSectNode;
     if(pSect && pSect->GetFmt() &&
@@ -2415,7 +2411,7 @@ sal_Bool SwTOXBase::IsTOXBaseInReadonly() const
 
 const SfxItemSet* SwTOXBase::GetAttrSet() const
 {
-    const SwTOXBaseSection *pSect = PTR_CAST(SwTOXBaseSection, this);
+    const SwTOXBaseSection *pSect = dynamic_cast< const SwTOXBaseSection* >( this);
     if(pSect && pSect->GetFmt())
         return &pSect->GetFmt()->GetAttrSet();
     return 0;
@@ -2423,7 +2419,7 @@ const SfxItemSet* SwTOXBase::GetAttrSet() const
 
 void SwTOXBase::SetAttrSet( const SfxItemSet& rSet )
 {
-    SwTOXBaseSection *pSect = PTR_CAST(SwTOXBaseSection, this);
+    SwTOXBaseSection *pSect = dynamic_cast< SwTOXBaseSection* >( this);
     if( pSect && pSect->GetFmt() )
         pSect->GetFmt()->SetFmtAttr( rSet );
 }
@@ -2434,7 +2430,7 @@ sal_Bool SwTOXBase::GetInfo( SfxPoolItem& rInfo ) const
     {
     case RES_CONTENT_VISIBLE:
         {
-            SwTOXBaseSection *pSect = PTR_CAST(SwTOXBaseSection, this);
+            SwTOXBaseSection *pSect = const_cast< SwTOXBaseSection* >(dynamic_cast< const SwTOXBaseSection* >(this));
             if( pSect && pSect->GetFmt() )
                 pSect->GetFmt()->GetInfo( rInfo );
         }

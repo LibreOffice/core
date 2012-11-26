@@ -117,8 +117,6 @@ public:
     const ::rtl::OUString sParaStyleLevel;
 
 
-    TYPEINFO();
-
     XMLIndexTemplateContext(
         SvXMLImport& rImport,
         ::com::sun::star::uno::Reference<

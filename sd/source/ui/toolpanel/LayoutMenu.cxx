@@ -113,8 +113,6 @@ SFX_IMPL_INTERFACE(LayoutMenu, SfxShell,
     SFX_POPUPMENU_REGISTRATION(SdResId(RID_TASKPANE_LAYOUTMENU_POPUP));
 }
 
-TYPEINIT1(LayoutMenu, SfxShell);
-
 struct snewfoil_value_info
 {
     sal_uInt16 mnBmpResId;
@@ -203,7 +201,7 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
         SetStyle (GetStyle() | WB_VSCROLL);
     SetExtraSpacing(2);
     SetSelectHdl (LINK(this, LayoutMenu, ClickHandler));
-    SetPool (&rDocumentShell.GetDoc()->GetPool());
+    SetPool (&rDocumentShell.GetDoc()->GetItemPool());
     SetName(String(RTL_CONSTASCII_USTRINGPARAM("LayoutMenu")));
     InvalidateContent();
 
@@ -605,7 +603,6 @@ int LayoutMenu::CalculateRowCount (const Size&, int nColumnCount)
     if (GetItemCount() > 0 && nColumnCount > 0)
     {
         nRowCount = (GetItemCount() + nColumnCount - 1) / nColumnCount;
-        //        nRowCount = GetOutputSizePixel().Height() / rItemSize.Height();
         if (nRowCount < 1)
             nRowCount = 1;
     }
@@ -700,16 +697,16 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
 
         ::std::vector<SdPage*>::iterator iPage;
         for (iPage=pPageSelection->begin(); iPage!=pPageSelection->end(); ++iPage)
-            {
-                if ((*iPage) == NULL)
-                    continue;
+        {
+            if ((*iPage) == NULL)
+                continue;
 
-                // Call the SID_ASSIGN_LAYOUT slot with all the necessary parameters.
-                SfxRequest aRequest (mrBase.GetViewFrame(), SID_ASSIGN_LAYOUT);
-                aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATPAGE, ((*iPage)->GetPageNum()-1)/2));
-                aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATLAYOUT, aLayout));
-                pMainViewShell->ExecuteSlot (aRequest, sal_Bool(sal_False));
-            }
+            // Call the SID_ASSIGN_LAYOUT slot with all the necessary parameters.
+            SfxRequest aRequest (mrBase.GetViewFrame(), SID_ASSIGN_LAYOUT);
+            aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATPAGE, ((*iPage)->GetPageNumber()-1)/2));
+            aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATLAYOUT, aLayout));
+            pMainViewShell->ExecuteSlot (aRequest, sal_False);
+        }
     }
     while(false);
 }
@@ -725,11 +722,11 @@ SfxRequest LayoutMenu::CreateRequest (
 
     do
     {
-        SdrLayerAdmin& rLayerAdmin (mrBase.GetDocument()->GetLayerAdmin());
+        SdrLayerAdmin& rLayerAdmin (mrBase.GetDocument()->GetModelLayerAdmin());
         sal_uInt8 aBackground (rLayerAdmin.GetLayerID(
-            String(SdResId(STR_LAYER_BCKGRND)), sal_False));
+            String(SdResId(STR_LAYER_BCKGRND)), false));
         sal_uInt8 aBackgroundObject (rLayerAdmin.GetLayerID(
-            String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False));
+            String(SdResId(STR_LAYER_BCKGRNDOBJ)), false));
         ViewShell* pViewShell = mrBase.GetMainViewShell().get();
         if (pViewShell == NULL)
             break;
@@ -882,8 +879,9 @@ void LayoutMenu::Command (const CommandEvent& rEvent)
                     // popup menu at the center of the current item.
                     if (GetSelectItemId() != (sal_uInt16)-1)
                     {
-                        Rectangle aBBox (GetItemRect(GetSelectItemId()));
-                        Point aPosition (aBBox.Center());
+                        const Rectangle aBBox(GetItemRect(GetSelectItemId()));
+                        const Point aPosition(aBBox.Center());
+
                         mrBase.GetViewFrame()->GetDispatcher()->ExecutePopup(
                             SdResId(RID_TASKPANE_LAYOUTMENU_POPUP),
                             this,

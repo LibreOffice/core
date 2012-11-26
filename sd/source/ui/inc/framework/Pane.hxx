@@ -133,7 +133,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     /** For the typical pane it makes no sense to be dislayed without a
-        view.  Therefore this default implementation returns always <TRUE/>.
+        view.  Therefore this default implementation returns always <true/>.
     */
     virtual sal_Bool SAL_CALL isAnchorOnly (void)
         throw (com::sun::star::uno::RuntimeException);

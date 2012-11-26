@@ -74,10 +74,6 @@ struct GrfSimpleCacheObj
 // - GraphicObject -
 // -----------------
 
-TYPEINIT1_AUTOFACTORY( GraphicObject, SvDataCopyStream );
-
-// -----------------------------------------------------------------------------
-
 GraphicObject::GraphicObject( const GraphicManager* pMgr ) :
     mpLink      ( NULL ),
     mpUserData  ( NULL )

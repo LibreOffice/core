@@ -28,6 +28,7 @@
 #include <svx/obj3d.hxx>
 #include <svx/scene3d.hxx>
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
+#include <svx/svdlegacy.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -79,12 +80,12 @@ E3DModifySceneSnapRectUpdater::~E3DModifySceneSnapRectUpdater()
         if(!aAllContentRange.isEmpty())
         {
             // check if object transform of scene has changed
-            if(mpViewInformation3D->getObjectTransformation() != mpScene->GetTransform())
+            if(mpViewInformation3D->getObjectTransformation() != mpScene->GetB3DTransform())
             {
                 // If Yes, it needs to be updated since it's - for historical reasons -
                 // part of the basic 3d transformation stack of the scene
                 drawinglayer::geometry::ViewInformation3D* pNew = new drawinglayer::geometry::ViewInformation3D(
-                    mpScene->GetTransform(), // replace object transformation with new local transform
+                    mpScene->GetB3DTransform(), // replace object transformation with new local transform
                     mpViewInformation3D->getOrientation(),
                     mpViewInformation3D->getProjection(),
                     mpViewInformation3D->getDeviceToView(),
@@ -111,9 +112,9 @@ E3DModifySceneSnapRectUpdater::~E3DModifySceneSnapRectUpdater()
                 sal_Int32(ceil(aSnapRange.getMaxX())), sal_Int32(ceil(aSnapRange.getMaxY())));
 
             // set as new SnapRect and invalidate bound volume
-            if(mpScene->GetSnapRect() != aNewSnapRect)
+            if(sdr::legacy::GetSnapRect(*mpScene) != aNewSnapRect)
             {
-                mpScene->SetSnapRect(aNewSnapRect);
+                sdr::legacy::SetSnapRect(*mpScene, aNewSnapRect);
                 mpScene->InvalidateBoundVolume();
             }
         }

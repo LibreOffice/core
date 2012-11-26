@@ -44,6 +44,7 @@
 
 #include <toolkit/unohlp.hxx>
 #include <svx/unoprov.hxx>
+#include <svx/globaldrawitempool.hxx>
 
 #include "framework/FrameworkHelper.hxx"
 
@@ -165,7 +166,7 @@ const SfxItemPropertyMapEntry* ImplGetPresentationPropertyMap()
 
 SlideShow::SlideShow( SdDrawDocument* pDoc )
 : SlideshowBase( m_aMutex )
-, maPropSet(ImplGetPresentationPropertyMap(), SdrObject::GetGlobalDrawObjectItemPool())
+, maPropSet(ImplGetPresentationPropertyMap(), GetGlobalDrawObjectItemPool())
 , mbIsInStartup(false)
 , mpDoc( pDoc )
 , mpCurrentViewShellBase( 0 )
@@ -747,7 +748,7 @@ void SAL_CALL SlideShow::end() throw(RuntimeException)
                 WorkWindow* pWorkWindow = dynamic_cast<WorkWindow*>(pShell->GetViewFrame()->GetTopFrame().GetWindow().GetParent());
                 if( pWorkWindow )
                 {
-                    pWorkWindow->StartPresentationMode( sal_False, isAlwaysOnTop() );
+                    pWorkWindow->StartPresentationMode( false, isAlwaysOnTop() );
                 }
             }
         }
@@ -786,7 +787,7 @@ void SAL_CALL SlideShow::end() throw(RuntimeException)
                         framework::FrameworkHelper::GetViewURL(ePreviousType),
                         framework::FrameworkHelper::msCenterPaneURL);
 
-                    pViewShell->GetViewFrame()->GetBindings().InvalidateAll( sal_True );
+                    pViewShell->GetViewFrame()->GetBindings().InvalidateAll( true );
                 }
             }
         }
@@ -805,7 +806,7 @@ void SAL_CALL SlideShow::end() throw(RuntimeException)
                     // switch to the previously visible Slide
                     DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>( pViewShell );
                     if( pDrawViewShell )
-                        pDrawViewShell->SwitchPage( (sal_uInt16)xController->getRestoreSlide() );
+                        pDrawViewShell->SwitchPage( xController->getRestoreSlide() );
                     else
                     {
                         Reference<XDrawView> xDrawView (
@@ -1231,8 +1232,8 @@ void SlideShow::StartFullscreenPresentation( )
     const sal_Int32 nDisplay (GetDisplay());
     WorkWindow* pWorkWindow = new FullScreenWorkWindow(this, mpCurrentViewShellBase);
     pWorkWindow->SetBackground(Wallpaper(COL_BLACK));
-    pWorkWindow->StartPresentationMode( sal_True, mpDoc->getPresentationSettings().mbAlwaysOnTop ? PRESENTATION_HIDEALLAPPS : 0, nDisplay);
-    //    pWorkWindow->ShowFullScreenMode(sal_False, nDisplay);
+    pWorkWindow->StartPresentationMode(true, mpDoc->getPresentationSettings().mbAlwaysOnTop ? PRESENTATION_HIDEALLAPPS : 0, nDisplay);
+    //    pWorkWindow->ShowFullScreenMode(FALSE, nDisplay);
 
     if (pWorkWindow->IsVisible())
     {
@@ -1244,7 +1245,7 @@ void SlideShow::StartFullscreenPresentation( )
 
         if( mpFullScreenFrameView )
             delete mpFullScreenFrameView;
-        mpFullScreenFrameView = new FrameView(mpDoc, pOriginalFrameView);
+        mpFullScreenFrameView = new FrameView(*mpDoc, pOriginalFrameView);
 
 //      Reference<XController> xController;
 
@@ -1252,7 +1253,7 @@ void SlideShow::StartFullscreenPresentation( )
         // new view shell--a prerequisite to process slot calls and initialize
         // its panes--a GrabFocus() has to be called later on.
         SfxFrame* pNewFrame = SfxFrame::Create( *mpDoc->GetDocSh(), *pWorkWindow, PRESENTATION_FACTORY_ID, true );
-        pNewFrame->SetPresentationMode(sal_True);
+        pNewFrame->SetPresentationMode(true);
 
         mpFullScreenViewShellBase = static_cast<ViewShellBase*>(pNewFrame->GetCurrentViewFrame()->GetViewShell());
         if(mpFullScreenViewShellBase != NULL)

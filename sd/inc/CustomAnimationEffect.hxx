@@ -30,14 +30,11 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <tools/string.hxx>
-
 #include <boost/shared_ptr.hpp>
-
 #include <comphelper/stl_types.hxx>
 #include <vcl/timer.hxx>
-
+#include <svx/svdmodel.hxx>
 #include <sddllapi.h>
-
 #include <list>
 #include <map>
 
@@ -181,7 +178,7 @@ public:
     static sal_Int32 get_node_type( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
     static sal_Int32 getNumberOfSubitems( const ::com::sun::star::uno::Any& aTarget, sal_Int16 nIterateType );
 
-    SdrPathObj* createSdrPathObjFromPath();
+    SdrPathObj* createSdrPathObjFromPath(SdrModel& rTargetModel);
     void updateSdrPathObjFromPath( SdrPathObj& rPathObj );
     void updatePathFromSdrPathObj( const SdrPathObj& rPathObj );
 

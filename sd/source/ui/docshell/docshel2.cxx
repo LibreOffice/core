@@ -70,11 +70,11 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
 
     ClientView* pView = new ClientView(this, pOut, NULL);
 
-    pView->SetHlplVisible(sal_False);
-    pView->SetGridVisible(sal_False);
-    pView->SetBordVisible(sal_False);
-    pView->SetPageVisible(sal_False);
-    pView->SetGlueVisible(sal_False);
+    pView->SetHlplVisible(false);
+    pView->SetGridVisible(false);
+    pView->SetBordVisible(false);
+    pView->SetPageVisible(false);
+    pView->SetGlueVisible(false);
 
     SdPage* pSelectedPage = NULL;
 
@@ -84,7 +84,7 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
         FrameView* pFrameView = (FrameView*)pFrameViewList->GetObject(0);
         if( pFrameView && pFrameView->GetPageKind() == PK_STANDARD )
         {
-            sal_uInt16 nSelectedPage = pFrameView->GetSelectedPage();
+            sal_uInt32 nSelectedPage = pFrameView->GetSelectedPage();
             pSelectedPage = mpDoc->GetSdPage(nSelectedPage, PK_STANDARD);
         }
     }
@@ -92,10 +92,10 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
     if( NULL == pSelectedPage )
     {
         SdPage* pPage = NULL;
-        sal_uInt16 nSelectedPage = 0;
-        sal_uInt16 nPageCnt = (sal_uInt16) mpDoc->GetSdPageCount(PK_STANDARD);
+        sal_uInt32 nSelectedPage = 0;
+        sal_uInt32 nPageCnt = mpDoc->GetSdPageCount(PK_STANDARD);
 
-        for (sal_uInt16 i = 0; i < nPageCnt; i++)
+        for (sal_uInt32 i = 0; i < nPageCnt; i++)
         {
             pPage = mpDoc->GetSdPage(i, PK_STANDARD);
 
@@ -112,7 +112,7 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
 
     Rectangle aVisArea = GetVisArea(nAspect);
     pOut->IntersectClipRegion(aVisArea);
-    pView->ShowSdrPage(pSelectedPage);
+    pView->ShowSdrPage(*pSelectedPage);
 
     if (pOut->GetOutDevType() != OUTDEV_WINDOW)
     {
@@ -173,13 +173,9 @@ Rectangle DrawDocShell::GetVisArea(sal_uInt16 nAspect) const
     if( ( ASPECT_THUMBNAIL == nAspect ) || ( ASPECT_DOCPRINT == nAspect ) )
     {
         // Groesse der ersten Seite herausgeben
-        MapMode aSrcMapMode(MAP_PIXEL);
-        MapMode aDstMapMode(MAP_100TH_MM);
-        Size aSize = mpDoc->GetSdPage(0, PK_STANDARD)->GetSize();
-        aSrcMapMode.SetMapUnit(MAP_100TH_MM);
+        const basegfx::B2DVector& rPageScale = mpDoc->GetSdPage(0, PK_STANDARD)->GetPageScale();
 
-        aSize = Application::GetDefaultDevice()->LogicToLogic(aSize, &aSrcMapMode, &aDstMapMode);
-        aVisArea.SetSize(aSize);
+        aVisArea.SetSize(Size(basegfx::fround(rPageScale.getX()), basegfx::fround(rPageScale.getY())));
     }
     else
     {
@@ -262,7 +258,8 @@ Size DrawDocShell::GetFirstPageSize()
 Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixel)
 {
     MapMode         aMapMode( MAP_100TH_MM );
-    const Size      aSize( pPage->GetSize() );
+    const basegfx::B2DVector& rPageScale = pPage->GetPageScale();
+    const Size aSize(basegfx::fround(rPageScale.getX()), basegfx::fround(rPageScale.getY()));
     const Point     aNullPt;
     VirtualDevice   aVDev( *Application::GetDefaultDevice() );
 
@@ -285,7 +282,7 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixe
 
     ClientView* pView = new ClientView( this, &aVDev, NULL );
     FrameView*      pFrameView = GetFrameView();
-    pView->ShowSdrPage( pPage );
+    pView->ShowSdrPage( *pPage );
 
     if ( GetFrameView() )
     {
@@ -297,22 +294,22 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixe
         pView->SetGridFront( pFrameView->IsGridFront() );
         pView->SetSnapAngle( pFrameView->GetSnapAngle() );
         pView->SetGridSnap( pFrameView->IsGridSnap() );
-        pView->SetBordSnap( pFrameView->IsBordSnap() );
-        pView->SetHlplSnap( pFrameView->IsHlplSnap() );
-        pView->SetOFrmSnap( pFrameView->IsOFrmSnap() );
-        pView->SetOPntSnap( pFrameView->IsOPntSnap() );
-        pView->SetOConSnap( pFrameView->IsOConSnap() );
+        pView->SetBorderSnap( pFrameView->IsBorderSnap() );
+        pView->SetHelplineSnap( pFrameView->IsHelplineSnap() );
+        pView->SetOFrameSnap( pFrameView->IsOFrameSnap() );
+        pView->SetOPointSnap( pFrameView->IsOPointSnap() );
+        pView->SetOConnectorSnap( pFrameView->IsOConnectorSnap() );
         pView->SetDragStripes( pFrameView->IsDragStripes() );
-        pView->SetFrameDragSingles( pFrameView->IsFrameDragSingles() );
-        pView->SetSnapMagneticPixel( pFrameView->GetSnapMagneticPixel() );
+        pView->SetFrameHandles( pFrameView->IsFrameHandles() );
+        pView->SetDiscreteMagneticSnap( pFrameView->GetDiscreteMagneticSnap() );
         pView->SetMarkedHitMovesAlways( pFrameView->IsMarkedHitMovesAlways() );
         pView->SetMoveOnlyDragging( pFrameView->IsMoveOnlyDragging() );
         pView->SetSlantButShear( pFrameView->IsSlantButShear() );
         pView->SetNoDragXorPolys( pFrameView->IsNoDragXorPolys() );
         pView->SetCrookNoContortion( pFrameView->IsCrookNoContortion() );
         pView->SetAngleSnapEnabled( pFrameView->IsAngleSnapEnabled() );
-        pView->SetBigOrtho( pFrameView->IsBigOrtho() );
-        pView->SetOrtho( pFrameView->IsOrtho() );
+        pView->SetBigOrthogonal( pFrameView->IsBigOrthogonal() );
+        pView->SetOrthogonal( pFrameView->IsOrthogonal() );
 
         SdrPageView* pPageView = pView->GetSdrPageView();
 
@@ -353,12 +350,12 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixe
 /*************************************************************************
 |*
 |* Pruefen, ob die Seite vorhanden ist und dann den Anwender zwingen einen
-|* noch nicht vorhandenen Namen einzugeben. Wird sal_False zurueckgegeben,
+|* noch nicht vorhandenen Namen einzugeben. Wird false zurueckgegeben,
 |* wurde die Aktion vom Anwender abgebrochen.
 |*
 \************************************************************************/
 
-sal_Bool DrawDocShell::CheckPageName (::Window* pWin, String& rName )
+bool DrawDocShell::CheckPageName (::Window* pWin, String& rName )
 {
     const String aStrForDlg( rName );
     bool bIsNameValid = IsNewPageNameValid( rName, true );
@@ -388,7 +385,7 @@ sal_Bool DrawDocShell::CheckPageName (::Window* pWin, String& rName )
         }
     }
 
-    return ( bIsNameValid ? sal_True : sal_False );
+    return (bIsNameValid);
 }
 
 bool DrawDocShell::IsNewPageNameValid( String & rInOutPageName, bool bResetStringIfStandardName /* = false */ )
@@ -481,8 +478,8 @@ bool DrawDocShell::IsNewPageNameValid( String & rInOutPageName, bool bResetStrin
     {
         if( rInOutPageName.Len() > 0 )
         {
-            sal_Bool   bOutDummy;
-            sal_uInt16 nExistingPageNum = mpDoc->GetPageByName( rInOutPageName, bOutDummy );
+            bool   bOutDummy;
+            sal_uInt32 nExistingPageNum = mpDoc->GetPageByName( rInOutPageName, bOutDummy );
             bCanUseNewName = ( nExistingPageNum == SDRPAGE_NOTFOUND );
         }
         else

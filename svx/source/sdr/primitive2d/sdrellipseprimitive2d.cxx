@@ -124,19 +124,6 @@ namespace drawinglayer
         {
         }
 
-        bool SdrEllipsePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const SdrEllipsePrimitive2D& rCompare = (SdrEllipsePrimitive2D&)rPrimitive;
-
-                return (getTransform() == rCompare.getTransform()
-                    && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute());
-            }
-
-            return false;
-        }
-
         // provide unique ID
         ImplPrimitrive2DIDBlock(SdrEllipsePrimitive2D, PRIMITIVE2D_ID_SDRELLIPSEPRIMITIVE2D)
 
@@ -154,7 +141,10 @@ namespace drawinglayer
             Primitive2DSequence aRetval;
 
             // create unit outline polygon
-            basegfx::B2DPolygon aUnitOutline(basegfx::tools::createPolygonFromUnitEllipseSegment(mfStartAngle, mfEndAngle));
+            // Exchange start and end since the historical definitions spawns
+            // the visible part of the circle segment in mathematically negative
+            // direction
+            basegfx::B2DPolygon aUnitOutline(basegfx::tools::createPolygonFromUnitEllipseSegment(mfEndAngle, mfStartAngle));
 
             if(mbCloseSegment)
             {
@@ -244,24 +234,6 @@ namespace drawinglayer
             mbCloseSegment(bCloseSegment),
             mbCloseUsingCenter(bCloseUsingCenter)
         {
-        }
-
-        bool SdrEllipseSegmentPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(SdrEllipsePrimitive2D::operator==(rPrimitive))
-            {
-                const SdrEllipseSegmentPrimitive2D& rCompare = (SdrEllipseSegmentPrimitive2D&)rPrimitive;
-
-                if( mfStartAngle == rCompare.mfStartAngle
-                    && mfEndAngle == rCompare.mfEndAngle
-                    && mbCloseSegment == rCompare.mbCloseSegment
-                    && mbCloseUsingCenter == rCompare.mbCloseUsingCenter)
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
 
         // provide unique ID

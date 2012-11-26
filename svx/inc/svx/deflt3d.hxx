@@ -77,7 +77,7 @@ public:
 
     // Getter/Setter fuer Default-Werte aller 3D-Objekte
     // Compound-Objekt
-    const Color& GetDefaultAmbientColor() { return aDefaultAmbientColor; }
+    const Color& GetDefaultAmbientColor() const { return aDefaultAmbientColor; }
     void SetDefaultAmbientColor(const Color& rNew) { aDefaultAmbientColor = rNew; }
 
     sal_Bool GetDefaultCreateNormals() const { return bDefaultCreateNormals; }
@@ -86,9 +86,9 @@ public:
     void SetDefaultCreateTexture(const sal_Bool bNew) { bDefaultCreateTexture = bNew; }
 
     // Cube-Objekt
-    const basegfx::B3DPoint& GetDefaultCubePos() { return aDefaultCubePos; }
+    const basegfx::B3DPoint& GetDefaultCubePos() const { return aDefaultCubePos; }
     void SetDefaultCubePos(const basegfx::B3DPoint& rNew) { aDefaultCubePos = rNew; }
-    const basegfx::B3DVector& GetDefaultCubeSize() { return aDefaultCubeSize; }
+    const basegfx::B3DVector& GetDefaultCubeSize() const { return aDefaultCubeSize; }
     void SetDefaultCubeSize(const basegfx::B3DVector& rNew) { aDefaultCubeSize = rNew; }
     sal_uInt16 GetDefaultCubeSideFlags() const { return nDefaultCubeSideFlags; }
     void SetDefaultCubeSideFlags(const sal_uInt16 nNew) { nDefaultCubeSideFlags = nNew; }
@@ -96,9 +96,9 @@ public:
     void SetDefaultCubePosIsCenter(const sal_Bool bNew) { bDefaultCubePosIsCenter = bNew; }
 
     // Sphere-Objekt
-    const basegfx::B3DPoint& GetDefaultSphereCenter() { return aDefaultSphereCenter; }
+    const basegfx::B3DPoint& GetDefaultSphereCenter() const { return aDefaultSphereCenter; }
     void SetDefaultSphereCenter(const basegfx::B3DPoint& rNew) { aDefaultSphereCenter = rNew; }
-    const basegfx::B3DVector& GetDefaultSphereSize() { return aDefaultSphereSize; }
+    const basegfx::B3DVector& GetDefaultSphereSize() const { return aDefaultSphereSize; }
     void SetDefaultSphereSize(const basegfx::B3DPoint& rNew) { aDefaultSphereSize = rNew; }
 
     // Lathe-Objekt

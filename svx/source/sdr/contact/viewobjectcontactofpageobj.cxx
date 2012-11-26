@@ -37,6 +37,7 @@
 #include <svx/unoapi.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
+#include <svx/svdlegacy.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -82,7 +83,7 @@ namespace sdr
             virtual bool isDrawModeGray() const;
             virtual bool isDrawModeBlackWhite() const;
             virtual bool isDrawModeHighContrast() const;
-            virtual SdrPageView* TryToGetSdrPageView() const;
+            virtual SdrView* TryToGetSdrView() const;
             virtual OutputDevice* TryToGetOutputDevice() const;
         };
 
@@ -119,12 +120,15 @@ namespace sdr
             Stop();
 
             // invalidate all LazyInvalidate VOCs new situations
-            const sal_uInt32 nVOCCount(getViewObjectContactCount());
-
-            for(sal_uInt32 a(0); a < nVOCCount; a++)
+            if(!getViewObjectContacts().empty())
             {
-                ViewObjectContact* pCandidate = getViewObjectContact(a);
-                pCandidate->triggerLazyInvalidate();
+                const ViewObjectContactSet::const_iterator aEnd(getViewObjectContacts().end());
+                ViewObjectContactSet::iterator aCurrent(getViewObjectContacts().begin());
+
+                for(;aCurrent != aEnd; aCurrent++)
+            {
+                    (*aCurrent)->triggerLazyInvalidate();
+                }
             }
         }
 
@@ -175,7 +179,7 @@ namespace sdr
 
             if(pStartPage && !rRange.isEmpty())
             {
-                const basegfx::B2DRange aPageRange(0.0, 0.0, (double)pStartPage->GetWdt(), (double)pStartPage->GetHgt());
+                const basegfx::B2DRange aPageRange(basegfx::B2DPoint(0.0, 0.0), pStartPage->GetPageScale());
 
                 if(rRange.overlaps(aPageRange))
                 {
@@ -195,7 +199,7 @@ namespace sdr
         bool PagePrimitiveExtractor::isDrawModeGray() const { return mrViewObjectContactOfPageObj.GetObjectContact().isDrawModeGray(); }
         bool PagePrimitiveExtractor::isDrawModeBlackWhite() const { return mrViewObjectContactOfPageObj.GetObjectContact().isDrawModeBlackWhite(); }
         bool PagePrimitiveExtractor::isDrawModeHighContrast() const { return mrViewObjectContactOfPageObj.GetObjectContact().isDrawModeHighContrast(); }
-        SdrPageView* PagePrimitiveExtractor::TryToGetSdrPageView() const { return mrViewObjectContactOfPageObj.GetObjectContact().TryToGetSdrPageView(); }
+        SdrView* PagePrimitiveExtractor::TryToGetSdrView() const { return mrViewObjectContactOfPageObj.GetObjectContact().TryToGetSdrView(); }
         OutputDevice* PagePrimitiveExtractor::TryToGetOutputDevice() const { return mrViewObjectContactOfPageObj.GetObjectContact().TryToGetOutputDevice(); }
     } // end of namespace contact
 } // end of namespace sdr
@@ -216,10 +220,7 @@ namespace sdr
             // get PageObject's geometry
             basegfx::B2DHomMatrix aPageObjectTransform;
             {
-                const Rectangle aPageObjectModelData(rPageObject.GetLastBoundRect());
-                const basegfx::B2DRange aPageObjectBound(
-                    aPageObjectModelData.Left(), aPageObjectModelData.Top(),
-                    aPageObjectModelData.Right(), aPageObjectModelData.Bottom());
+                const basegfx::B2DRange aPageObjectBound(sdr::legacy::GetSnapRange(rPageObject));
 
                 aPageObjectTransform.set(0, 0, aPageObjectBound.getWidth());
                 aPageObjectTransform.set(1, 1, aPageObjectBound.getHeight());
@@ -235,9 +236,7 @@ namespace sdr
             {
                 // get displayed page's geometry
                    drawinglayer::primitive2d::Primitive2DSequence xPageContent;
-                const Size aPageSize(pPage->GetSize());
-                const double fPageWidth(aPageSize.getWidth());
-                const double fPageHeight(aPageSize.getHeight());
+                const basegfx::B2DVector& rPageScale = pPage->GetPageScale();
 
                 // The case that a PageObject contains another PageObject which visualizes the
                 // same page again would lead to a recursion. Limit that recursion depth to one
@@ -250,7 +249,7 @@ namespace sdr
                     xPageContent.realloc(2);
                     const Color aDocColor(aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor);
                     const Color aBorderColor(aColorConfig.GetColorValue(svtools::DOCBOUNDARIES).nColor);
-                    const basegfx::B2DRange aPageBound(0.0, 0.0, fPageWidth, fPageHeight);
+                    const basegfx::B2DRange aPageBound(basegfx::B2DPoint(0.0, 0.0), rPageScale);
                     const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aPageBound));
 
                     // add replacement fill
@@ -287,8 +286,15 @@ namespace sdr
                 if(xPageContent.hasElements())
                 {
                     const uno::Reference< drawing::XDrawPage > xDrawPage(GetXDrawPageForSdrPage(const_cast< SdrPage*>(pPage)));
-                    const drawinglayer::primitive2d::Primitive2DReference xPagePreview(new drawinglayer::primitive2d::PagePreviewPrimitive2D(
-                        xDrawPage, aPageObjectTransform, fPageWidth, fPageHeight, xPageContent, true));
+                    const drawinglayer::primitive2d::Primitive2DReference xPagePreview(
+                        new drawinglayer::primitive2d::PagePreviewPrimitive2D(
+                            xDrawPage,
+                            aPageObjectTransform,
+                            rPageScale.getX(),
+                            rPageScale.getY(),
+                            xPageContent,
+                            true));
+
                     xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xPagePreview, 1);
                 }
             }

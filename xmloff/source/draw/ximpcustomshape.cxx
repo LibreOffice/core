@@ -52,13 +52,13 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <hash_map>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 using namespace ::xmloff::EnhancedCustomShapeToken;
-
-TYPEINIT1( XMLEnhancedCustomShapeContext, SvXMLImportContext );
 
 XMLEnhancedCustomShapeContext::XMLEnhancedCustomShapeContext( SvXMLImport& rImport,
             ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
@@ -67,7 +67,9 @@ XMLEnhancedCustomShapeContext::XMLEnhancedCustomShapeContext( SvXMLImport& rImpo
         SvXMLImportContext( rImport, nPrefix, rLocalName ),
         mrUnitConverter( rImport.GetMM100UnitConverter() ),
         mrxShape( rxShape ),
-        mrCustomShapeGeometry( rCustomShapeGeometry )
+        mrCustomShapeGeometry( rCustomShapeGeometry ),
+        mbCompatibilityMirroredX(false),
+        mbCompatibilityMirroredY(false)
 {
 }
 
@@ -829,12 +831,29 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
                 case EAS_type :
                     GetString( mrCustomShapeGeometry, rValue, EAS_Type );
                 break;
+
+                //  TTTT: MirrorX/Y removed, need to replace at import
                 case EAS_mirror_horizontal :
-                    GetBool( mrCustomShapeGeometry, rValue, EAS_MirroredX );
-                break;
+                {
+                    sal_Bool bAttrBool(sal_False);
+
+                    if(SvXMLUnitConverter::convertBool(bAttrBool, rValue))
+                    {
+                        mbCompatibilityMirroredX = bAttrBool;
+                    }
+                    break;
+                }
                 case EAS_mirror_vertical :
-                    GetBool( mrCustomShapeGeometry, rValue, EAS_MirroredY );
-                break;
+                {
+                    sal_Bool bAttrBool(sal_False);
+
+                    if(SvXMLUnitConverter::convertBool(bAttrBool, rValue))
+                    {
+                        mbCompatibilityMirroredY = bAttrBool;
+                    }
+                    break;
+                }
+
                 case EAS_viewBox :
                 {
                     SdXMLImExViewBox aViewBox( rValue, GetImport().GetMM100UnitConverter() );
@@ -1280,6 +1299,49 @@ void XMLEnhancedCustomShapeContext::EndElement()
     SdXMLCustomShapePropertyMerge( mrCustomShapeGeometry, maEquations, EASGet( EAS_Equations ) );
     if  ( !maHandles.empty() )
         SdXMLCustomShapePropertyMerge( mrCustomShapeGeometry, maHandles, EASGet( EAS_Handles ) );
+
+    if(mbCompatibilityMirroredX || mbCompatibilityMirroredY)
+    {
+        // when saved, this EnhancedCustomShapeGeometry was mirrored in X and/or Y. This
+        // will now be expressed in the transformation of the EnhancedCustomShape itself,
+        // so apply it to the already transformed object
+        uno::Reference< beans::XPropertySet > xPropSet(mrxShape, uno::UNO_QUERY);
+
+        if(xPropSet.is())
+        {
+            uno::Any aAny;
+            drawing::HomogenMatrix3 aMatrix;
+            basegfx::B2DHomMatrix aB2DMatrix;
+            const rtl::OUString aTrans(RTL_CONSTASCII_USTRINGPARAM("Transformation"));
+
+            // get UNO API Matrix from xShape
+            aAny = xPropSet->getPropertyValue(aTrans);
+            aAny >>= aMatrix;
+
+            // pre-apply mirrorings
+            aB2DMatrix.translate(-0.5, -0.5);
+
+            if(mbCompatibilityMirroredX)
+            {
+                aB2DMatrix.scale(-1.0, 1.0);
+            }
+
+            if(mbCompatibilityMirroredY)
+            {
+                aB2DMatrix.scale(1.0, -1.0);
+            }
+
+            aB2DMatrix.translate(0.5, 0.5);
+
+            // apply already valid transformation
+            aB2DMatrix = basegfx::tools::UnoHomogenMatrix3ToB2DHomMatrix(aMatrix) * aB2DMatrix;
+
+            // transform back to UNO API matrix and set at xShape
+            basegfx::tools::B2DHomMatrixToUnoHomogenMatrix3(aB2DMatrix, aMatrix);
+            aAny <<= aMatrix;
+            xPropSet->setPropertyValue(aTrans, aAny);
+        }
+    }
 }
 
 SvXMLImportContext* XMLEnhancedCustomShapeContext::CreateChildContext( sal_uInt16 nPrefix,const rtl::OUString& rLocalName,

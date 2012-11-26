@@ -43,7 +43,6 @@ class SW_DLLPUBLIC SwFmtVertOrient: public SfxPoolItem
     sal_Int16       eOrient;
     sal_Int16       eRelation;
 public:
-    TYPEINFO();
     SwFmtVertOrient( SwTwips nY = 0, sal_Int16 eVert = com::sun::star::text::VertOrientation::NONE,
                      sal_Int16 eRel = com::sun::star::text::RelOrientation::PRINT_AREA );
     inline SwFmtVertOrient &operator=( const SwFmtVertOrient &rCpy );
@@ -81,7 +80,6 @@ class SW_DLLPUBLIC SwFmtHoriOrient: public SfxPoolItem
     sal_Int16       eRelation;
     sal_Bool            bPosToggle : 1; // auf geraden Seiten Position spiegeln
 public:
-    TYPEINFO();
     SwFmtHoriOrient( SwTwips nX = 0, sal_Int16 eHori = com::sun::star::text::HoriOrientation::NONE,
         sal_Int16 eRel = com::sun::star::text::RelOrientation::PRINT_AREA, sal_Bool bPos = sal_False );
     inline SwFmtHoriOrient &operator=( const SwFmtHoriOrient &rCpy );

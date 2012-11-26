@@ -222,12 +222,13 @@ sal_Bool SdGRFFilter::Import()
 
             SdPage*     pPage = mrDocument.GetSdPage( 0, PK_STANDARD );
             Point       aPos;
-            Size        aPagSize( pPage->GetSize() );
+            const basegfx::B2DVector& rPageScale = pPage->GetPageScale();
+            Size aPagSize(basegfx::fround(rPageScale.getX()), basegfx::fround(rPageScale.getY()));
             Size        aGrfSize( OutputDevice::LogicToLogic( aGraphic.GetPrefSize(),
                                   aGraphic.GetPrefMapMode(), MAP_100TH_MM ) );
 
-            aPagSize.Width() -= pPage->GetLftBorder() + pPage->GetRgtBorder();
-            aPagSize.Height() -= pPage->GetUppBorder() + pPage->GetLwrBorder();
+            aPagSize.Width() -= pPage->GetLeftPageBorder() + pPage->GetRightPageBorder();
+            aPagSize.Height() -= pPage->GetTopPageBorder() + pPage->GetBottomPageBorder();
 
             // scale to fit page
             if ( ( ( aGrfSize.Height() > aPagSize.Height() ) || ( aGrfSize.Width() > aPagSize.Width() ) ) &&
@@ -250,10 +251,16 @@ sal_Bool SdGRFFilter::Import()
             }
 
             // Ausgaberechteck fuer Grafik setzen
-            aPos.X() = ( ( aPagSize.Width() - aGrfSize.Width() ) >> 1 ) + pPage->GetLftBorder();
-            aPos.Y() = ( ( aPagSize.Height() - aGrfSize.Height() ) >> 1 )  + pPage->GetUppBorder();
+            aPos.X() = ( ( aPagSize.Width() - aGrfSize.Width() ) >> 1 ) + pPage->GetLeftPageBorder();
+            aPos.Y() = ( ( aPagSize.Height() - aGrfSize.Height() ) >> 1 )  + pPage->GetTopPageBorder();
 
-            pPage->InsertObject( new SdrGrafObj( aGraphic, Rectangle( aPos, aGrfSize ) ) );
+            SdrGrafObj* pNewSdrGraf = new SdrGrafObj(
+                    pPage->getSdrModelFromSdrPage(),
+                    aGraphic,
+                    basegfx::tools::createScaleTranslateB2DHomMatrix(
+                        aGrfSize.getWidth(), aGrfSize.getHeight(),
+                        aPos.X(), aPos.Y()));
+            pPage->InsertObjectToSdrObjList(*pNewSdrGraf);
             bRet = sal_True;
         }
     }
@@ -282,8 +289,8 @@ sal_Bool SdGRFFilter::Export()
         if ( xExporter.is() && xFilter.is() )
         {
             SdPage* pPage = NULL;
-            sd::DrawViewShell*  pDrawViewShell = static_cast< ::sd::DrawViewShell* >
-                ( ( ( mrDocShell.GetViewShell() && mrDocShell.GetViewShell()->ISA(::sd::DrawViewShell ) ) ? mrDocShell.GetViewShell() : NULL ) );
+
+            sd::DrawViewShell* pDrawViewShell = dynamic_cast< ::sd::DrawViewShell* >(mrDocShell.GetViewShell());
 
             PageKind ePageKind = PK_STANDARD;
             if( pDrawViewShell )
@@ -300,7 +307,7 @@ sal_Bool SdGRFFilter::Export()
             if ( pPage )
             {
                 // taking the 'correct' page number, seems that there might exist a better method to archive this
-                pPage = mrDocument.GetSdPage( pPage->GetPageNum() ? ( pPage->GetPageNum() - 1 ) >> 1 : 0, ePageKind );
+                pPage = mrDocument.GetSdPage( pPage->GetPageNumber() ? ( pPage->GetPageNumber() - 1 ) >> 1 : 0, ePageKind );
                 if ( pPage )
                 {
                     uno::Reference< lang::XComponent > xSource( pPage->getUnoPage(), uno::UNO_QUERY );

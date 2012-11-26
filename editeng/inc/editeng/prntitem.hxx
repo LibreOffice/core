@@ -42,8 +42,6 @@ Dieses Item beschreibt eine logische Variable "Drucken ja oder nein".
 class EDITENG_DLLPUBLIC SvxPrintItem : public SfxBoolItem
 {
 public:
-    TYPEINFO();
-
     SvxPrintItem( const sal_uInt16 nId , const sal_Bool bPrt = sal_True );
     inline SvxPrintItem &operator=( const SvxPrintItem &rCpy );
 

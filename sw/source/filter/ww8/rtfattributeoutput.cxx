@@ -1497,18 +1497,19 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
                 const SdrObject* pSdrObj = rFrame.GetFrmFmt().FindRealSdrObject();
                 if ( pSdrObj )
                 {
-                    bool bSwapInPage = false;
-                    if ( !pSdrObj->GetPage() )
-                    {
-                        if ( SdrModel* pModel = m_rExport.pDoc->GetDrawModel() )
-                        {
-                            if ( SdrPage *pPage = pModel->GetPage( 0 ) )
-                            {
-                                bSwapInPage = true;
-                                const_cast< SdrObject* >( pSdrObj )->SetPage( pPage );
-                            }
-                        }
-                    }
+                    //bool bSwapInPage = false;
+                    //if ( !pSdrObj->getSdrPageFromSdrObject() )
+                    //{
+                    //    if ( SdrModel* pModel = m_rExport.pDoc->GetDrawModel() )
+                    //    {
+                    //        if ( SdrPage *pPage = pModel->GetPage( 0 ) )
+                    //        {
+                    //            bSwapInPage = true;
+                    //            //const_cast< SdrObject* >( pSdrObj )->SetPage( pPage );
+                    //        }
+                    //    }
+                    //}
+                    // TTTT: Check if this can be really removed...
 
                     m_aRunText.append("{" OOO_STRING_SVTOOLS_RTF_FIELD "{");
                     m_aRunText.append(OOO_STRING_SVTOOLS_RTF_IGNORE);
@@ -1521,8 +1522,8 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
                     m_aRunText.append('}');
                     m_aRunText.append('}');
 
-                    if ( bSwapInPage )
-                        const_cast< SdrObject* >( pSdrObj )->SetPage( 0 );
+                    //if ( bSwapInPage )
+                    //    const_cast< SdrObject* >( pSdrObj )->SetPage( 0 );
                 }
             }
             break;
@@ -1536,7 +1537,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
 
                 if (pObject && pObject->GetObjInventor() == FmFormInventor)
                 {
-                    if (SdrUnoObj *pFormObj = PTR_CAST(SdrUnoObj,pObject))
+                    if (const SdrUnoObj *pFormObj = dynamic_cast< const SdrUnoObj* >( pObject))
                     {
                         uno::Reference< awt::XControlModel > xControlModel =
                             pFormObj->GetUnoControlModel();

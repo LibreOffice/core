@@ -72,8 +72,6 @@ public:
     virtual Point       LogicToPixel( const Point&, const MapMode& ) const;
     virtual Point       PixelToLogic( const Point&, const MapMode& ) const;
 
-    void ChangeModel( SdrModel* pNewModel );
-
 private:
     CellEditSource( CellEditSourceImpl* pImpl );
 

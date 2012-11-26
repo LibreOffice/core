@@ -86,8 +86,6 @@ static sal_uInt16 SidArray[] = {
                 SID_PARASPACE_DECREASE,
                 0 };
 
-TYPEINIT1( FuOutlineText, FuOutline );
-
 /*************************************************************************
 |*
 |* Konstruktor
@@ -114,9 +112,9 @@ FunctionReference FuOutlineText::Create( ViewShell* pViewSh, ::sd::Window* pWin,
 |*
 \************************************************************************/
 
-sal_Bool FuOutlineText::MouseButtonDown(const MouseEvent& rMEvt)
+bool FuOutlineText::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     mpWindow->GrabFocus();
 
@@ -141,9 +139,9 @@ sal_Bool FuOutlineText::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuOutlineText::MouseMove(const MouseEvent& rMEvt)
+bool FuOutlineText::MouseMove(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     bReturn = pOutlineView->GetViewByWindow(mpWindow)->MouseMove(rMEvt);
 
@@ -151,22 +149,6 @@ sal_Bool FuOutlineText::MouseMove(const MouseEvent& rMEvt)
     {
         bReturn = FuOutline::MouseMove(rMEvt);
     }
-
-    // MT 07/2002: Done in OutlinerView::MouseMove
-    /*
-    const SvxFieldItem* pFieldItem = pOutlineView->GetViewByWindow( mpWindow )->
-                                        GetFieldUnderMousePointer();
-    const SvxFieldData* pField = NULL;
-    if( pFieldItem )
-        pField = pFieldItem->GetField();
-
-    if( pField && pField->ISA( SvxURLField ) )
-    {
-       mpWindow->SetPointer( Pointer( POINTER_REFHAND ) );
-    }
-    else
-       mpWindow->SetPointer( Pointer( POINTER_TEXT ) );
-    */
 
     return (bReturn);
 }
@@ -177,9 +159,9 @@ sal_Bool FuOutlineText::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuOutlineText::MouseButtonUp(const MouseEvent& rMEvt)
+bool FuOutlineText::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     bReturn = pOutlineView->GetViewByWindow(mpWindow)->MouseButtonUp(rMEvt);
 
@@ -195,13 +177,13 @@ sal_Bool FuOutlineText::MouseButtonUp(const MouseEvent& rMEvt)
         {
             const SvxFieldData* pField = pFieldItem->GetField();
 
-            if( pField && pField->ISA( SvxURLField ) )
+            if( pField && dynamic_cast< const SvxURLField* >(pField) )
             {
-                bReturn = sal_True;
+                bReturn = true;
                 mpWindow->ReleaseMouse();
                 SfxStringItem aStrItem( SID_FILE_NAME, ( (SvxURLField*) pField)->GetURL() );
                 SfxStringItem aReferer( SID_REFERER, mpDocSh->GetMedium()->GetName() );
-                SfxBoolItem aBrowseItem( SID_BROWSE, sal_True );
+                SfxBoolItem aBrowseItem( SID_BROWSE, true );
                 SfxViewFrame* pFrame = mpViewShell->GetViewFrame();
 
                 if ( rMEvt.IsMod1() )
@@ -231,15 +213,14 @@ sal_Bool FuOutlineText::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
-|* sal_False.
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert true, andernfalls
+|* false.
 |*
 \************************************************************************/
 
-sal_Bool FuOutlineText::KeyInput(const KeyEvent& rKEvt)
+bool FuOutlineText::KeyInput(const KeyEvent& rKEvt)
 {
-    sal_Bool bReturn = sal_False;
-
+    bool bReturn = false;
     sal_uInt16 nKeyGroup = rKEvt.GetKeyCode().GetGroup();
     if( !mpDocSh->IsReadOnly() || nKeyGroup == KEYGROUP_CURSOR )
     {

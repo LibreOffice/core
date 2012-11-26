@@ -41,8 +41,6 @@ using ::xmloff::token::XML_GRAPHIC_PROPERTIES;
 using ::xmloff::token::XML_CHART_PROPERTIES;
 
 
-TYPEINIT1( XMLChartStyleContext, XMLPropStyleContext );
-
 // protected
 
 void XMLChartStyleContext::SetAttribute(

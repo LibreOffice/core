@@ -28,10 +28,6 @@
 #include "sorgitm.hxx"
 // STATIC DATA -----------------------------------------------------------
 
-TYPEINIT1_AUTOFACTORY(SfxScriptOrganizerItem, SfxStringItem);
-
-//------------------------------------------------------------------------
-
 SfxScriptOrganizerItem::SfxScriptOrganizerItem() :
 
     SfxStringItem()
@@ -78,9 +74,11 @@ SfxPoolItem* SfxScriptOrganizerItem::Clone( SfxItemPool * ) const
 
 int SfxScriptOrganizerItem::operator==( const SfxPoolItem& rItem) const
 {
-     return rItem.Type() == Type() &&
+    const SfxScriptOrganizerItem* pSfxScriptOrganizerItem = dynamic_cast< const SfxScriptOrganizerItem* >(&rItem);
+
+     return pSfxScriptOrganizerItem &&
          SfxStringItem::operator==(rItem) &&
-         aLanguage == ((const SfxScriptOrganizerItem &)rItem).aLanguage;
+         aLanguage == pSfxScriptOrganizerItem->aLanguage;
 }
 
 

@@ -154,7 +154,7 @@ void SelectionManager::DeleteSelectedPages (const bool bSelectFollowingPage)
     // Set the new current slide.
     if (nNewCurrentSlide < 0)
         nNewCurrentSlide = 0;
-    else if (nNewCurrentSlide >= mrSlideSorter.GetModel().GetPageCount())
+    else if (nNewCurrentSlide >= (sal_Int32)mrSlideSorter.GetModel().GetPageCount())
         nNewCurrentSlide = mrSlideSorter.GetModel().GetPageCount()-1;
     mrController.GetPageSelector().CountSelectedPages();
     mrController.GetPageSelector().SelectPage(nNewCurrentSlide);
@@ -185,7 +185,7 @@ void SelectionManager::DeleteSelectedNormalPages (const ::std::vector<SdPage*>& 
             if (xPages->getCount() <= 1)
                 break;
 
-            const sal_uInt16 nPage (model::FromCoreIndex((*aI)->GetPageNum()));
+            const sal_uInt32 nPage(model::FromCoreIndex((*aI)->GetPageNumber()));
 
             Reference< XDrawPage > xPage( xPages->getByIndex( nPage ), UNO_QUERY_THROW );
             xPages->remove(xPage);
@@ -221,7 +221,7 @@ void SelectionManager::DeleteSelectedMasterPages (const ::std::vector<SdPage*>& 
             if (xPages->getCount() <= 1)
                 break;
 
-            const sal_uInt16 nPage (model::FromCoreIndex((*aI)->GetPageNum()));
+            const sal_uInt32 nPage (model::FromCoreIndex((*aI)->GetPageNumber()));
 
             Reference< XDrawPage > xPage( xPages->getByIndex( nPage ), UNO_QUERY_THROW );
             xPages->remove(xPage);
@@ -317,7 +317,7 @@ sal_Int32 SelectionManager::GetInsertionPosition (void) const
         nInsertionPosition = mrSlideSorter.GetModel().GetPageCount();
         while (aSelectedPages.HasMoreElements())
         {
-            const sal_Int32 nPosition (aSelectedPages.GetNextElement()->GetPage()->GetPageNum());
+            const sal_Int32 nPosition (aSelectedPages.GetNextElement()->GetPage()->GetPageNumber());
             // Convert *2+1 index to straight index (n-1)/2 after the page
             // (+1).
             nInsertionPosition = model::FromCoreIndex(nPosition) + 1;
@@ -334,10 +334,10 @@ void SelectionManager::SetInsertionPosition (const sal_Int32 nInsertionPosition)
 {
     if (nInsertionPosition < 0)
         mnInsertionPosition = -1;
-    else if (nInsertionPosition > mrSlideSorter.GetModel().GetPageCount())
+    else if (nInsertionPosition > (sal_Int32)mrSlideSorter.GetModel().GetPageCount())
     {
         // Assert but then ignore invalid values.
-        OSL_ASSERT(nInsertionPosition<=mrSlideSorter.GetModel().GetPageCount());
+        OSL_ASSERT(nInsertionPosition <= (sal_Int32)mrSlideSorter.GetModel().GetPageCount());
         return;
     }
     else

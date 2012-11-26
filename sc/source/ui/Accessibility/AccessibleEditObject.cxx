@@ -345,8 +345,7 @@ void ScAccessibleEditObject::CreateTextHelper()
             const ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
             if( pInputHdl && !pInputHdl->IsTopMode() )
             {
-                SdrHint aHint( HINT_BEGEDIT );
-                mpTextHelper->GetEditSource().GetBroadcaster().Broadcast( aHint );
+                mpTextHelper->GetEditSource().GetBroadcaster().Broadcast(SdrBaseHint(HINT_BEGEDIT));
             }
         }
     }

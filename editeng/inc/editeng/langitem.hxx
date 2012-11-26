@@ -45,10 +45,8 @@ namespace rtl
 class EDITENG_DLLPUBLIC SvxLanguageItem : public SfxEnumItem
 {
 public:
-    TYPEINFO();
-
-    SvxLanguageItem( const LanguageType eLang /*= LANGUAGE_GERMAN*/,
-                     const sal_uInt16 nId  );
+    POOLITEM_FACTORY()
+    SvxLanguageItem( const LanguageType eLang = LANGUAGE_GERMAN, const sal_uInt16 nId = 0 );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,

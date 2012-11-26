@@ -85,17 +85,10 @@
 #define STR_ObjNameSingulPATHFILL    (STR_ObjNameBegin + 53)
 #define STR_ObjNamePluralPATHFILL    (STR_ObjNameBegin + 54)
 #define STR_ObjNameSingulFREELINE    (STR_ObjNameBegin + 55)
-#define STR_ObjNamePluralFREELINE    (STR_ObjNameBegin + 56)
-#define STR_ObjNameSingulFREEFILL    (STR_ObjNameBegin + 57)
-#define STR_ObjNamePluralFREEFILL    (STR_ObjNameBegin + 58)
 #define STR_ObjNameSingulCOMBLINE    (STR_ObjNameBegin + 59)
 #define STR_ObjNamePluralCOMBLINE    (STR_ObjNameBegin + 60)
 #define STR_ObjNameSingulCOMBFILL    (STR_ObjNameBegin + 61)
 #define STR_ObjNamePluralCOMBFILL    (STR_ObjNameBegin + 62)
-#define STR_ObjNameSingulNATSPLN     (STR_ObjNameBegin + 63)
-#define STR_ObjNamePluralNATSPLN     (STR_ObjNameBegin + 64)
-#define STR_ObjNameSingulPERSPLN     (STR_ObjNameBegin + 65)
-#define STR_ObjNamePluralPERSPLN     (STR_ObjNameBegin + 66)
 #define STR_ObjNameSingulTEXT        (STR_ObjNameBegin + 67)
 #define STR_ObjNamePluralTEXT        (STR_ObjNameBegin + 68)
 #define STR_ObjNameSingulTEXTLNK     (STR_ObjNameBegin + 69)
@@ -325,7 +318,7 @@
 
 #define STR_UndoNewLayer             (STR_UndoBegin +13)
 #define STR_UndoDelLayer             (STR_UndoBegin +14)
-#define STR_UndoMovLayer             (STR_UndoBegin +15)
+//#define STR_UndoMovLayer             (STR_UndoBegin +15)
 
 // --> OD 2009-07-09 #i73249#
 #define STR_UndoObjName              (STR_UndoBegin +16)

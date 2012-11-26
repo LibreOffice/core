@@ -90,8 +90,14 @@ const Bitmap& AlphaMask::ImplGetBitmap() const
 
 void AlphaMask::ImplSetBitmap( const Bitmap& rBitmap )
 {
-    DBG_ASSERT( ( 8 == rBitmap.GetBitCount() ) && rBitmap.HasGreyPalette(), "AlphaMask::ImplSetBitmap: invalid bitmap" );
     *(Bitmap*) this = rBitmap;
+
+#ifdef DBG_UTIL
+    if((8 != rBitmap.GetBitCount()) || !rBitmap.HasGreyPalette())
+    {
+        OSL_ENSURE(false, "AlphaMask::ImplSetBitmap: invalid bitmap");
+    }
+#endif
 }
 
 // -----------------------------------------------------------------------------

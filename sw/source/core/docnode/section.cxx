@@ -100,9 +100,6 @@ public:
 };
 
 
-TYPEINIT1(SwSectionFmt,SwFrmFmt );
-TYPEINIT1(SwSection,SwClient );
-
 typedef SwSection* SwSectionPtr;
 
 SV_IMPL_PTRARR( SwSections, SwSection*)
@@ -634,7 +631,7 @@ void SwSection::MakeChildLinksVisible( const SwSectionNode& rSectNd )
     {
         ::sfx2::SvBaseLink* pBLnk = &(*rLnks[ --n ]);
         if( pBLnk && !pBLnk->IsVisible() &&
-            pBLnk->ISA( SwBaseLink ) &&
+            dynamic_cast< SwBaseLink* >(pBLnk) &&
             0 != ( pNd = ((SwBaseLink*)pBLnk)->GetAnchor() ) )
         {
             pNd = pNd->StartOfSectionNode();    // falls SectionNode ist!
@@ -656,7 +653,7 @@ const SwTOXBase* SwSection::GetTOXBase() const
 {
     const SwTOXBase* pRet = 0;
     if( TOX_CONTENT_SECTION == GetType() )
-        pRet = PTR_CAST( SwTOXBaseSection, this );
+        pRet = dynamic_cast< const SwTOXBaseSection* >( this );
     return pRet;
 }
 
@@ -720,7 +717,7 @@ SwSection * SwSectionFmt::GetSection() const
 
 extern void lcl_DeleteFtn( SwSectionNode *pNd, sal_uLong nStt, sal_uLong nEnd );
 
-//Vernichtet alle Frms in aDepend (Frms werden per PTR_CAST erkannt).
+//Vernichtet alle Frms in aDepend (Frms werden per RTTI erkannt).
 void SwSectionFmt::DelFrms()
 {
     SwSectionNode* pSectNd;
@@ -872,7 +869,7 @@ void SwSectionFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     case RES_FMT_CHG:
         if( !GetDoc()->IsInDtor() &&
             ((SwFmtChg*)pNew)->pChangedFmt == (void*)GetRegisteredIn() &&
-            ((SwFmtChg*)pNew)->pChangedFmt->IsA( TYPE( SwSectionFmt )) )
+            dynamic_cast< SwSectionFmt* >(((SwFmtChg*)pNew)->pChangedFmt) )
         {
             // mein Parent wird veraendert, muss mich aktualisieren
             SwFrmFmt::Modify( pOld, pNew );     //  erst umhaengen !!!
@@ -1031,10 +1028,10 @@ void SwSectionFmt::UpdateParent()       // Parent wurde veraendert
     bool bIsHidden = false;
 
     SwClientIter aIter( *this );    // TODO
-    ::SwClient * pLast = aIter.GoStart();
+    ::SwClient * pLast = aIter.SwClientIter_First();
     if( pLast )     // konnte zum Anfang gesprungen werden ??
         do {
-            if( pLast->IsA( TYPE(SwSectionFmt) ) )
+            if( dynamic_cast< SwSectionFmt* >(pLast) )
             {
                 if( !pSection )
                 {
@@ -1081,8 +1078,7 @@ void SwSectionFmt::UpdateParent()       // Parent wurde veraendert
                     pLast->ModifyNotification( &aMsgItem, &aMsgItem );
                 }
             }
-            else if( !pSection &&
-                    pLast->IsA( TYPE(SwSection) ) )
+            else if( !pSection && dynamic_cast< SwSection* >(pLast) )
             {
                 pSection = (SwSectionPtr)pLast;
                 if( GetRegisteredIn() )
@@ -1103,7 +1099,7 @@ void SwSectionFmt::UpdateParent()       // Parent wurde veraendert
                     bIsHidden = pSection->IsHidden();
                 }
             }
-        } while( 0 != ( pLast = ++aIter ));
+        } while( 0 != ( pLast = aIter.SwClientIter_Next() ));
 }
 
 
@@ -1230,7 +1226,7 @@ void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
         ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
         if( pLnk && pLnk != &rUpdLnk &&
             OBJECT_CLIENT_FILE == pLnk->GetObjType() &&
-            pLnk->ISA( SwBaseLink ) &&
+            dynamic_cast< SwBaseLink* >(pLnk) &&
             ( pBLink = (SwBaseLink*)pLnk )->IsInRange( rSectNd.GetIndex(),
                                                 rSectNd.EndOfSectionIndex() ) )
         {
@@ -1283,15 +1279,13 @@ int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
 
     // erstmal nur ueber die DocumentShells laufen und die mit dem
     // Namen heraussuchen:
-    TypeId aType( TYPE(SwDocShell) );
-
     SfxObjectShell* pShell = pDestSh;
     sal_Bool bFirst = 0 != pShell;
 
     if( !bFirst )
         // keine DocShell uebergeben, also beginne mit der ersten aus der
         // DocShell Liste
-        pShell = SfxObjectShell::GetFirst( &aType );
+        pShell = SfxObjectShell::GetFirst( _IsObjectShell< SwDocShell > );
 
     while( pShell )
     {
@@ -1314,10 +1308,10 @@ int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
         if( bFirst )
         {
             bFirst = sal_False;
-            pShell = SfxObjectShell::GetFirst( &aType );
+            pShell = SfxObjectShell::GetFirst( _IsObjectShell< SwDocShell > );
         }
         else
-            pShell = SfxObjectShell::GetNext( *pShell, &aType );
+            pShell = SfxObjectShell::GetNext( *pShell, _IsObjectShell< SwDocShell > );
     }
 
     // 2. selbst die Date oeffnen

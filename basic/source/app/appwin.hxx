@@ -85,7 +85,6 @@ protected:
     sal_uInt16 nWinId;
 
 public:
-    TYPEINFO();
     AppWin( BasicFrame* );
     ~AppWin();
     DataEdit* pDataEdit;                // Data area

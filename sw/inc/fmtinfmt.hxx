@@ -48,12 +48,11 @@ class SW_DLLPUBLIC SwFmtINetFmt: public SfxPoolItem
     sal_uInt16 nINetId;
     sal_uInt16 nVisitedId;
 public:
+    POOLITEM_FACTORY()
     SwFmtINetFmt( const String& rURL, const String& rTarget );
     SwFmtINetFmt( const SwFmtINetFmt& rAttr );
     SwFmtINetFmt();                     // for TypeInfo
     virtual ~SwFmtINetFmt();
-
-    TYPEINFO();
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;

@@ -105,7 +105,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
 
     long nFac = nFactor;
 
-    sal_Bool bWeb = 0 != PTR_CAST(SwWebView, this);
+    sal_Bool bWeb = 0 != dynamic_cast< SwWebView* >( this);
     SwMasterUsrPref *pUsrPref = (SwMasterUsrPref*)SW_MOD()->GetUsrPref(bWeb);
 
     const SwPageDesc &rDesc = pWrtShell->GetPageDesc( pWrtShell->GetCurPageDesc() );
@@ -258,7 +258,7 @@ void SwView::SetViewLayout( sal_uInt16 nColumns, bool bBookMode, sal_Bool bViewO
 
     if ( !GetViewFrame()->GetFrame().IsInPlace() && !bViewOnly )
     {
-        const sal_Bool bWeb = 0 != PTR_CAST(SwWebView, this);
+        const sal_Bool bWeb = 0 != dynamic_cast< SwWebView* >( this);
         SwMasterUsrPref *pUsrPref = (SwMasterUsrPref*)SW_MOD()->GetUsrPref(bWeb);
 
         //MasterUsrPrefs updaten UND DANACH die ViewOptions der aktuellen
@@ -681,12 +681,11 @@ void SwView::SetMoveType(sal_uInt16 nSet)
     if(bNewPage != bLastPage)
     {
         Color aColor(bNewPage ? COL_BLACK : VIEW_IMAGECOLOR);
-        const TypeId aTypeId = TYPE(SwView);
-        SwView* pView = (SwView*)SfxViewShell::GetFirst(&aTypeId);
+        SwView* pView = (SwView*)SfxViewShell::GetFirst( _IsSfxViewShell< SwView > );
         while( pView )
         {
             pView->SetImageButtonColor(aColor);
-            pView = (SwView*)SfxViewShell::GetNext(*pView, &aTypeId);
+            pView = (SwView*)SfxViewShell::GetNext(*pView, _IsSfxViewShell< SwView > );
         }
     }
 }

@@ -70,7 +70,6 @@ private:
 //#endif
 
 public:
-                                TYPEINFO();
                                 SFX_DECL_INTERFACE(SFX_INTERFACE_SFXMODULE)
 
                                 SfxModule( ResMgr* pMgrP, sal_Bool bDummy,

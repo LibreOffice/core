@@ -48,7 +48,7 @@ protected:
     OReportSection* m_pParent;
     OSectionView&   m_rView;
     Timer           aScrollTimer;
-    Point           m_aMDPos;
+    basegfx::B2DPoint   m_aMDPos;
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface> m_xOverlappingObj;
     SdrObject *     m_pOverlappingObj;
     sal_Int32       m_nOverlappedControlColor;
@@ -58,7 +58,7 @@ protected:
     bool            m_bShowPropertyBrowser;
 
     DECL_LINK( ScrollTimeout, Timer * );
-    void    ForceScroll( const Point& rPos );
+    void    ForceScroll( const basegfx::B2DPoint& rPos );
     /** checks that no other object is overlapped.
     *
     * \param rMEvt
@@ -81,7 +81,7 @@ protected:
 
     /** activate object if it is of type OBJ_OLE2
     */
-    void    activateOle(SdrObject* _pObj);
+    void    activateOle(SdrObject& _rObj);
 
     void checkTwoCklicks(const MouseEvent& rMEvt);
 

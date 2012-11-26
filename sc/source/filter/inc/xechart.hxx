@@ -102,7 +102,7 @@ public:
     const XclChFormatInfo& GetFormatInfo( XclChObjectType eObjType ) const;
 
     /** Starts the API chart document conversion. Must be called once before all API conversion. */
-    void                InitConversion( XChartDocRef xChartDoc, const Rectangle& rChartRect ) const;
+    void                InitConversion( XChartDocRef xChartDoc, const basegfx::B2DRange& rChartRange ) const;
     /** Finishes the API chart document conversion. Must be called once after all API conversion. */
     void                FinishConversion() const;
 
@@ -1211,7 +1211,7 @@ public:
 
 public:
     explicit            XclExpChChart( const XclExpRoot& rRoot,
-                            XChartDocRef xChartDoc, const Rectangle& rChartRect );
+                            XChartDocRef xChartDoc, const basegfx::B2DRange& rChartRange );
 
     /** Creates, registers and returns a new data series object. */
     XclExpChSeriesRef   CreateSeries();
@@ -1253,7 +1253,7 @@ public:
     explicit            XclExpChartDrawing(
                             const XclExpRoot& rRoot,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel,
-                            const Size& rChartSize );
+                            const basegfx::B2DVector& rChartScale );
     virtual             ~XclExpChartDrawing();
 
     virtual void        Save( XclExpStream& rStrm );
@@ -1273,7 +1273,7 @@ public:
 
 public:
     explicit            XclExpChart( const XclExpRoot& rRoot,
-                            XModelRef xModel, const Rectangle& rChartRect );
+                            XModelRef xModel, const basegfx::B2DRange& rChartRange );
 };
 
 // ============================================================================

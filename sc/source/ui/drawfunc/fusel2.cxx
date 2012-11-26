@@ -33,6 +33,7 @@
 #include <svx/svdpagv.hxx>
 #include <sfx2/dispatch.hxx>
 #include <editeng/outliner.hxx>
+#include <svx/svdlegacy.hxx>
 
 #include "fusel.hxx"
 #include "tabvwsh.hxx"
@@ -50,43 +51,41 @@
 
 // -----------------------------------------------------------------------
 
-inline long Diff( const Point& rP1, const Point& rP2 )
+inline double Diff( const basegfx::B2DPoint& rP1, const basegfx::B2DPoint& rP2 )
 {
-    long nX = rP1.X() - rP2.X();
-    if (nX<0) nX = -nX;
-    long nY = rP1.Y() - rP2.Y();
-    if (nY<0) nY = -nY;
-    return nX+nY;
+    const basegfx::B2DVector aDiff(absolute(rP1 - rP2));
+
+    return aDiff.getX() + aDiff.getY();
 }
 
-sal_Bool FuSelection::TestDetective( SdrPageView* pPV, const Point& rPos )
+bool FuSelection::TestDetective( SdrPageView* pPV, const basegfx::B2DPoint& rPos )
 {
     if (!pPV)
-        return sal_False;
+        return false;
 
-    sal_Bool bFound = sal_False;
-    SdrObjListIter aIter( *pPV->GetObjList(), IM_FLAT );
+    bool bFound(false);
+    SdrObjListIter aIter( *pPV->GetCurrentObjectList(), IM_FLAT );
     SdrObject* pObject = aIter.Next();
     while (pObject && !bFound)
     {
         if (ScDetectiveFunc::IsNonAlienArrow( pObject ))
         {
-            sal_uInt16 nHitLog = (sal_uInt16) pWindow->PixelToLogic(
-                                Size(pView->GetHitTolerancePixel(),0)).Width();
-            if (SdrObjectPrimitiveHit(*pObject, rPos, nHitLog, *pPV, 0, false))
+            const double fHitLog(basegfx::B2DVector(pWindow->GetInverseViewTransformation() * basegfx::B2DVector(pView->GetHitTolerancePixel(), 0.0)).getLength());
+
+            if (SdrObjectPrimitiveHit(*pObject, rPos, fHitLog, pPV->GetView(), false, 0))
             {
                 ScViewData* pViewData = pViewShell->GetViewData();
                 ScSplitPos ePos = pViewShell->FindWindow( pWindow );
-                Point aLineStart = pObject->GetPoint(0);
-                Point aLineEnd   = pObject->GetPoint(1);
-                Point aPixel = pWindow->LogicToPixel( aLineStart );
+                const basegfx::B2DPoint aLineStart(pObject->GetObjectPoint(0));
+                const basegfx::B2DPoint aLineEnd(pObject->GetObjectPoint(1));
+                basegfx::B2DPoint aPixel = pWindow->GetViewTransformation() * aLineStart;
                 SCsCOL nStartCol;
                 SCsROW nStartRow;
-                pViewData->GetPosFromPixel( aPixel.X(), aPixel.Y(), ePos, nStartCol, nStartRow );
-                aPixel = pWindow->LogicToPixel( aLineEnd );
+                pViewData->GetPosFromPixel(basegfx::fround(aPixel.getX()), basegfx::fround(aPixel.getY()), ePos, nStartCol, nStartRow);
+                aPixel = pWindow->GetViewTransformation() * aLineEnd;
                 SCsCOL nEndCol;
                 SCsROW nEndRow;
-                pViewData->GetPosFromPixel( aPixel.X(), aPixel.Y(), ePos, nEndCol, nEndRow );
+                pViewData->GetPosFromPixel(basegfx::fround(aPixel.getX()), basegfx::fround(aPixel.getY()), ePos, nEndCol, nEndRow);
                 SCsCOL nCurX = (SCsCOL) pViewData->GetCurX();
                 SCsROW nCurY = (SCsROW) pViewData->GetCurY();
                 sal_Bool bStart = ( Diff( rPos,aLineStart ) > Diff( rPos,aLineEnd ) );
@@ -109,7 +108,7 @@ sal_Bool FuSelection::TestDetective( SdrPageView* pPV, const Point& rPos )
                 }
                 pViewShell->MoveCursorRel( nDifX, nDifY, SC_FOLLOW_JUMP, sal_False );
 
-                bFound = sal_True;
+                bFound = true;
             }
         }
 
@@ -122,17 +121,17 @@ bool FuSelection::IsNoteCaptionMarked() const
 {
     if( pView )
     {
-        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-        if( rMarkList.GetMarkCount() == 1 )
+        const SdrObject* pSelected = pView->getSelectedIfSingle();
+
+        if( pSelected )
         {
-            SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-            return ScDrawLayer::IsNoteCaption( pObj );
+            return ScDrawLayer::IsNoteCaption( *pSelected );
         }
     }
     return false;
 }
 
-bool FuSelection::IsNoteCaptionClicked( const Point& rPos ) const
+bool FuSelection::IsNoteCaptionClicked( const basegfx::B2DPoint& rPos ) const
 {
     SdrPageView* pPageView = pView ? pView->GetSdrPageView() : 0;
     if( pPageView )
@@ -144,12 +143,12 @@ bool FuSelection::IsNoteCaptionClicked( const Point& rPos ) const
         bool bProtectDoc =  rDoc.IsTabProtected( nTab ) || (pDocSh && pDocSh->IsReadOnly());
 
         // search the last object (on top) in the object list
-        SdrObjListIter aIter( *pPageView->GetObjList(), IM_DEEPNOGROUPS, sal_True );
+        SdrObjListIter aIter( *pPageView->GetCurrentObjectList(), IM_DEEPNOGROUPS, sal_True );
         for( SdrObject* pObj = aIter.Next(); pObj; pObj = aIter.Next() )
         {
-            if( pObj->GetLogicRect().IsInside( rPos ) )
+            if( sdr::legacy::GetLogicRange(*pObj).isInside( rPos ) )
             {
-                if( const ScDrawObjData* pCaptData = ScDrawLayer::GetNoteCaptionData( pObj, nTab ) )
+                if( const ScDrawObjData* pCaptData = ScDrawLayer::GetNoteCaptionData( *pObj, nTab ) )
                 {
                     const ScAddress& rNotePos = pCaptData->maStart;
                     // skip caption objects of notes in protected cells
@@ -166,11 +165,11 @@ bool FuSelection::IsNoteCaptionClicked( const Point& rPos ) const
 
 void FuSelection::ActivateNoteHandles(SdrObject* pObject)
 {
-    if( pView && ScDrawLayer::IsNoteCaption( pObject ) )
+    if( pView && pObject && ScDrawLayer::IsNoteCaption( *pObject ) )
     {
-        // Leave the internal layer unlocked - relock in ScDrawView::MarkListHasChanged()
+        // Leave the internal layer unlocked
         pView->UnlockInternalLayer();
-        pView->MarkObj( pObject, pView->GetSdrPageView() );
+        pView->MarkObj( *pObject );
     }
 }
 

@@ -64,13 +64,7 @@ SwFEShell* SwAccessibleSelectionHelper::GetFEShell()
     DBG_ASSERT( pViewShell != NULL,
                 "No view shell? Then what are you looking at?" );
 
-    SwFEShell* pFEShell = NULL;
-    if( pViewShell->ISA( SwFEShell ) )
-    {
-        pFEShell = static_cast<SwFEShell*>( pViewShell );
-    }
-
-    return pFEShell;
+    return dynamic_cast< SwFEShell* >( pViewShell );
 }
 
 void SwAccessibleSelectionHelper::throwIndexOutOfBoundsException()
@@ -208,7 +202,7 @@ sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
         }
         else
         {
-            sal_uInt16 nSelObjs = pFEShell->IsObjSelected();
+            const sal_uInt32 nSelObjs = pFEShell->GetNumberOfSelectedObjects();
             if( nSelObjs > 0 )
             {
                 ::std::list< SwAccessibleChild > aChildren;
@@ -264,7 +258,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     }
     else
     {
-        sal_uInt16 nSelObjs = pFEShell->IsObjSelected();
+        const sal_uInt32 nSelObjs = pFEShell->GetNumberOfSelectedObjects();
         if( 0 == nSelObjs || nSelectedChildIndex >= nSelObjs )
             throwIndexOutOfBoundsException();
 

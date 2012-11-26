@@ -115,8 +115,11 @@ static const TokenTable pTokenTableArray[] =
     { "CustomShapeEngine",                  EAS_CustomShapeEngine },
     { "CustomShapeData",                    EAS_CustomShapeData },
     { "Type",                               EAS_Type },
+
+    // TTTT: MirrorX/Y removed, but still used at import and for EnhancedCustomShapeHandle
     { "MirroredX",                          EAS_MirroredX },
     { "MirroredY",                          EAS_MirroredY },
+
     { "ViewBox",                            EAS_ViewBox },
     { "TextRotateAngle",                    EAS_TextRotateAngle },
     { "ExtrusionAllowed",                   EAS_ExtrusionAllowed },
@@ -185,7 +188,7 @@ EnhancedCustomShapeTokenEnum EASGet( const rtl::OUString& rShapeType )
         if ( !pHashMap )
         {
             TypeNameHashMap* pH = new TypeNameHashMap;
-            const TokenTable* pPtr = pTokenTableArray;
+            const TokenTable* pPtr = pTokenTableArray; //  TTTT: MirrorX/Y removed; when used here reactivate above in the table
             const TokenTable* pEnd = pPtr + ( sizeof( pTokenTableArray ) / sizeof( TokenTable ) );
             for ( ; pPtr < pEnd; pPtr++ )
                 (*pH)[ pPtr->pS ] = pPtr->pE;

@@ -50,8 +50,6 @@ class XMLIndexBibliographyEntryContext : public XMLIndexSimpleEntryContext
 
 public:
 
-    TYPEINFO();
-
     XMLIndexBibliographyEntryContext(
         SvXMLImport& rImport,
         XMLIndexTemplateContext& rTemplate,

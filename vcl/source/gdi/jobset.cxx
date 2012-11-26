@@ -19,19 +19,14 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
-
 #include <rtl/alloc.h>
-
 #include <vcl/jobset.hxx>
-
 #include <jobset.h>
+#include <memory.h>
 
 // =======================================================================
 

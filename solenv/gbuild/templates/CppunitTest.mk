@@ -31,7 +31,7 @@ $(eval $(call gb_CppunitTest_add_linked_libs,MODULE_NAME, \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,MODULE_NAME,\
-    $$(INCLUDE) \
+	$$(INCLUDE) \
 ))
 
 # vim: set noet sw=4 ts=4:

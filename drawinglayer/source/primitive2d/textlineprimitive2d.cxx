@@ -59,7 +59,8 @@ namespace drawinglayer
                 static const int aLongDashArray[]   = { 7, 2, 0};               // LONGDASH
 
                 // get decomposition
-                basegfx::B2DVector aScale, aTranslate;
+                basegfx::B2DVector aScale;
+                basegfx::B2DPoint aTranslate;
                 double fRotate, fShearX;
                 getObjectTransformation().decompose(aScale, aTranslate, fRotate, fShearX);
 
@@ -200,7 +201,9 @@ namespace drawinglayer
 
                 const basegfx::B2DHomMatrix aUnscaledTransform(
                     basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
-                        fShearX, fRotate, aTranslate));
+                        fShearX,
+                        fRotate,
+                        aTranslate));
 
                 aLine.transform(aUnscaledTransform);
 
@@ -240,8 +243,7 @@ namespace drawinglayer
                     }
 
                     // move base point of text to 0.0 and de-rotate
-                    basegfx::B2DHomMatrix aTransform(basegfx::tools::createTranslateB2DHomMatrix(
-                        -aTranslate.getX(), -aTranslate.getY()));
+                    basegfx::B2DHomMatrix aTransform(basegfx::tools::createTranslateB2DHomMatrix(-aTranslate));
                     aTransform.rotate(-fRotate);
 
                     // translate in Y by offset
@@ -249,7 +251,7 @@ namespace drawinglayer
 
                     // move back and rotate
                     aTransform.rotate(fRotate);
-                    aTransform.translate(aTranslate.getX(), aTranslate.getY());
+                    aTransform.translate(aTranslate);
 
                     // add transform primitive
                     const Primitive2DSequence aContent(&aNewPrimitive, 1);
@@ -276,23 +278,6 @@ namespace drawinglayer
             meTextLine(eTextLine),
             maLineColor(rLineColor)
         {
-        }
-
-        bool TextLinePrimitive2D::operator==( const BasePrimitive2D& rPrimitive ) const
-        {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const TextLinePrimitive2D& rCompare = (TextLinePrimitive2D&)rPrimitive;
-
-                return (getObjectTransformation() == rCompare.getObjectTransformation()
-                    && getWidth() == rCompare.getWidth()
-                    && getOffset() == rCompare.getOffset()
-                    && getHeight() == rCompare.getHeight()
-                    && getTextLine() == rCompare.getTextLine()
-                    && getLineColor() == rCompare.getLineColor());
-            }
-
-            return false;
         }
 
         // provide unique ID

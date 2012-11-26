@@ -51,6 +51,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <svx/fmmodel.hxx>
 
 /*************************************************************************
 |*
@@ -66,19 +67,27 @@ void SwViewImp::Init( const SwViewOption *pNewOpt )
     ASSERT( pDrawView, "SwViewImp::Init without DrawView" );
     //Jetzt die PageView erzeugen wenn sie noch nicht existiert.
     SwRootFrm *pRoot = pSh->GetLayout();    //swmod 071108//swmod 071225
-    if ( !pSdrPageView )
+    if ( !pDrawView->GetSdrPageView() )
     {
         IDocumentDrawModelAccess* pIDDMA = pSh->getIDocumentDrawModelAccess();
         if ( !pRoot->GetDrawPage() )
             pRoot->SetDrawPage( pIDDMA->GetDrawModel()->GetPage( 0 ) );
 
-        if ( pRoot->GetDrawPage()->GetSize() != pRoot->Frm().SSize() )
-            pRoot->GetDrawPage()->SetSize( pRoot->Frm().SSize() );
+        const basegfx::B2DVector aFrameScale(pRoot->Frm().SSize().Width(), pRoot->Frm().SSize().Height());
+        if ( !pRoot->GetDrawPage()->GetPageScale().equal(aFrameScale) )
+            pRoot->GetDrawPage()->SetPageScale( aFrameScale );
 
-        pSdrPageView = pDrawView->ShowSdrPage( pRoot->GetDrawPage());
+        pDrawView->ShowSdrPage( *pRoot->GetDrawPage());
         // OD 26.06.2003 #108784# - notify drawing page view about invisible
         // layers.
-        pIDDMA->NotifyInvisibleLayers( *pSdrPageView );
+        if(pDrawView->GetSdrPageView())
+        {
+            pIDDMA->NotifyInvisibleLayers( *pDrawView->GetSdrPageView() );
+        }
+        else
+        {
+            OSL_ENSURE(false, "NoSdrPageView after ShowSdrPage (!)");
+        }
     }
     pDrawView->SetDragStripes( pNewOpt->IsCrossHair() );
     pDrawView->SetGridSnap( pNewOpt->IsSnap() );
@@ -89,17 +98,19 @@ void SwViewImp::Init( const SwViewOption *pNewOpt )
             ( rSz.Width() ? rSz.Width() /Max(short(1),pNewOpt->GetDivisionX()):0,
               rSz.Height()? rSz.Height()/Max(short(1),pNewOpt->GetDivisionY()):0);
      pDrawView->SetGridFine( aFSize );
-    Fraction aSnGrWdtX(rSz.Width(), pNewOpt->GetDivisionX() + 1);
-    Fraction aSnGrWdtY(rSz.Height(), pNewOpt->GetDivisionY() + 1);
-    pDrawView->SetSnapGridWidth( aSnGrWdtX, aSnGrWdtY );
+    const Fraction aSnGrWdtX(rSz.Width(), pNewOpt->GetDivisionX() + 1);
+    const Fraction aSnGrWdtY(rSz.Height(), pNewOpt->GetDivisionY() + 1);
+    pDrawView->SetSnapGridWidth( double(aSnGrWdtX), double(aSnGrWdtY) );
 
     if ( pRoot->Frm().HasArea() )
-        pDrawView->SetWorkArea( pRoot->Frm().SVRect() );
+    {
+        const Rectangle aWorkRect(pRoot->Frm().SVRect());
+        pDrawView->SetWorkArea(basegfx::B2DRange(aWorkRect.Left(), aWorkRect.Top(), aWorkRect.Right(), aWorkRect.Bottom()));
+    }
 
     if ( GetShell()->IsPreView() )
         pDrawView->SetAnimationEnabled( sal_False );
 
-    pDrawView->SetUseIncompatiblePathCreateInterface( sal_False );
     pDrawView->SetSolidMarkHdl(pNewOpt->IsSolidMarkHdl());
 
     // it's a JOE interface !
@@ -118,7 +129,6 @@ void SwViewImp::Init( const SwViewOption *pNewOpt )
 SwViewImp::SwViewImp( ViewShell *pParent ) :
     pSh( pParent ),
     pDrawView( 0 ),
-    pSdrPageView( 0 ),
     pFirstVisPage( 0 ),
     pRegion( 0 ),
     pLayAct( 0 ),
@@ -129,9 +139,6 @@ SwViewImp::SwViewImp( ViewShell *pParent ) :
     // OD 12.12.2002 #103492#
     mpPgPrevwLayout( 0 )
 {
-    //bResetXorVisibility =
-    //HMHbShowHdlPaint =
-    bResetHdlHiddenPaint =
     bSmoothUpdate = bStopSmooth = bStopPrt = sal_False;
     bFirstPageInvalid = sal_True;
 }
@@ -148,14 +155,7 @@ SwViewImp::SwViewImp( ViewShell *pParent ) :
 SwViewImp::~SwViewImp()
 {
     delete pAccMap;
-
-    // OD 12.12.2002 #103492#
     delete mpPgPrevwLayout;
-
-    //JP 29.03.96: nach ShowSdrPage muss auch HideSdrPage gemacht werden!!!
-    if( pDrawView )
-         pDrawView->HideSdrPage();
-
     delete pDrawView;
 
     DelRegion();
@@ -334,7 +334,7 @@ void SwViewImp::MakeDrawView()
                 pOutDevForDrawView = GetShell()->GetOut();
             }
 
-            pDrawView = new SwDrawView( *this, pIDDMA->GetDrawModel(), pOutDevForDrawView);
+            pDrawView = new SwDrawView( *this, *pIDDMA->GetDrawModel(), pOutDevForDrawView);
         }
 
         GetDrawView()->SetActiveLayer( XubString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "Heaven" ) ) );

@@ -69,6 +69,7 @@
 #include <fmtornt.hxx>
 #include <svx/svditer.hxx>
 #include <vector>
+#include <svx/svdlegacy.hxx>
 #include <switerator.hxx>
 
 using namespace ::com::sun::star;
@@ -92,7 +93,7 @@ SV_IMPL_VARARR_SORT( _ZSortFlys, _ZSortFly )
 void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
                                 const SdrObject& _rSdrObj )
 {
-    const SwContact* pContact = GetUserCall( &_rSdrObj );
+    const SwContact* pContact = findConnectionToSdrObject( &_rSdrObj );
     ASSERT( pContact, "<lcl_AdjustPositioningAttr(..)> - missing contact object." );
 
     // determine position of new group object relative to its anchor frame position
@@ -120,7 +121,7 @@ void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
         else
         {
             // --> OD 2005-05-10 #i45952#
-            aAnchorPos = _rSdrObj.GetAnchorPos();
+            aAnchorPos = sdr::legacy::GetAnchorPos(_rSdrObj);
             // <--
             // If no anchor frame exist - e.g. because no layout exists - the
             // default layout direction is taken.
@@ -163,7 +164,7 @@ void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
 
         }
         // use geometry of drawing object
-        const SwRect aObjRect = _rSdrObj.GetSnapRect();
+        const SwRect aObjRect(sdr::legacy::GetSnapRect(_rSdrObj));
 
         if ( bVert )
         {
@@ -200,13 +201,12 @@ void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
     // to adjust the positioning attributes - see <SwDrawContact::_Changed(..)>.
     {
         const SwAnchoredObject* pAnchoredObj = pContact->GetAnchoredObj( &_rSdrObj );
-        if ( pAnchoredObj->ISA(SwAnchoredDrawObject) )
+        const SwAnchoredDrawObject* pAnchoredDrawObj = dynamic_cast< const SwAnchoredDrawObject* >(pAnchoredObj);
+
+        if ( pAnchoredDrawObj )
         {
-            const SwAnchoredDrawObject* pAnchoredDrawObj =
-                            static_cast<const SwAnchoredDrawObject*>(pAnchoredObj);
-            const SwRect aObjRect = _rSdrObj.GetSnapRect();
-            const_cast<SwAnchoredDrawObject*>(pAnchoredDrawObj)
-                                        ->SetLastObjRect( aObjRect.SVRect() );
+            const Rectangle aObjRect(sdr::legacy::GetSnapRect(_rSdrObj));
+            const_cast< SwAnchoredDrawObject* >(pAnchoredDrawObj)->SetLastObjRect(aObjRect);
         }
     }
     // <--
@@ -214,109 +214,111 @@ void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
 
 SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
 {
-    // OD 30.06.2003 #108784# - replace marked 'virtual' drawing objects by
-    // the corresponding 'master' drawing objects.
-    SwDrawView::ReplaceMarkedDrawVirtObjs( rDrawView );
-
-    const SdrMarkList &rMrkList = rDrawView.GetMarkedObjectList();
-    SwDrawFrmFmt *pFmt = 0L;
-    SdrObject *pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
-    sal_Bool bNoGroup = ( 0 == pObj->GetUpGroup() );
     SwDrawContact* pNewContact = 0;
-    if( bNoGroup )
+
+    if(rDrawView.areSdrObjectsSelected())
     {
-        //Ankerattribut aufheben.
-        SwDrawContact *pMyContact = (SwDrawContact*)GetUserCall(pObj);
-        const SwFmtAnchor aAnch( pMyContact->GetFmt()->GetAnchor() );
+        // OD 30.06.2003 #108784# - replace marked 'virtual' drawing objects by
+        // the corresponding 'master' drawing objects.
+        SwDrawView::ReplaceMarkedDrawVirtObjs( rDrawView );
 
-        SwUndoDrawGroup *const pUndo = (!GetIDocumentUndoRedo().DoesUndo())
-                                 ? 0
-                                 : new SwUndoDrawGroup( (sal_uInt16)rMrkList.GetMarkCount() );
+        const SdrObjectVector aSelection(rDrawView.getSelectedSdrObjectVectorFromSdrMarkView());
+        SwDrawFrmFmt *pFmt = 0L;
+        SdrObject *pObj = aSelection[0];
+        sal_Bool bNoGroup = ( 0 == pObj->GetParentSdrObject() );
+        if( bNoGroup )
+        {
+            //Ankerattribut aufheben.
+                SwDrawContact *pMyContact = (SwDrawContact*)findConnectionToSdrObject(pObj);
+            const SwFmtAnchor aAnch( pMyContact->GetFmt()->GetAnchor() );
 
-        // --> OD 2005-08-16 #i53320#
-        bool bGroupMembersNotPositioned( false );
-        {
-            SwAnchoredDrawObject* pAnchoredDrawObj =
-                static_cast<SwAnchoredDrawObject*>(pMyContact->GetAnchoredObj( pObj ));
-            bGroupMembersNotPositioned = pAnchoredDrawObj->NotYetPositioned();
-        }
-        // <--
-        //ContactObjekte und Formate vernichten.
-        for( sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i )
-        {
-            pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
-            SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
+            SwUndoDrawGroup *const pUndo = (!GetIDocumentUndoRedo().DoesUndo())
+                                     ? 0
+                                         : new SwUndoDrawGroup( (sal_uInt16)aSelection.size() );
 
             // --> OD 2005-08-16 #i53320#
+            bool bGroupMembersNotPositioned( false );
+            {
+                SwAnchoredDrawObject* pAnchoredDrawObj =
+                    static_cast<SwAnchoredDrawObject*>(pMyContact->GetAnchoredObj( pObj ));
+                bGroupMembersNotPositioned = pAnchoredDrawObj->NotYetPositioned();
+            }
+            // <--
+            //ContactObjekte und Formate vernichten.
+            for( sal_uInt32 i(0); i < aSelection.size(); ++i )
+            {
+                pObj = aSelection[i];
+                SwDrawContact *pContact = (SwDrawContact*)findConnectionToSdrObject(pObj);
+
+                // --> OD 2005-08-16 #i53320#
 #ifdef DBG_UTIL
-            SwAnchoredDrawObject* pAnchoredDrawObj =
-                static_cast<SwAnchoredDrawObject*>(pContact->GetAnchoredObj( pObj ));
-            ASSERT( bGroupMembersNotPositioned == pAnchoredDrawObj->NotYetPositioned(),
-                    "<SwDoc::GroupSelection(..)> - group members have different positioning status!" );
+                SwAnchoredDrawObject* pAnchoredDrawObj =
+                    static_cast<SwAnchoredDrawObject*>(pContact->GetAnchoredObj( pObj ));
+                ASSERT( bGroupMembersNotPositioned == pAnchoredDrawObj->NotYetPositioned(),
+                        "<SwDoc::GroupSelection(..)> - group members have different positioning status!" );
 #endif
+                // <--
+
+                pFmt = (SwDrawFrmFmt*)pContact->GetFmt();
+                //loescht sich selbst!
+                pContact->HandleChanged(*pObj, HINT_SDROBJECTDYING);
+                resetConnectionToSdrObject(pObj);
+
+                if( pUndo )
+                    pUndo->AddObj( i, pFmt, pObj );
+                else
+                    DelFrmFmt( pFmt );
+
+                // --> OD 2005-05-10 #i45952# - re-introduce position
+                // normalization of group member objects, because its anchor position
+                // is cleared, when they are grouped.
+                // AW: NbcMove no longer needed, just reset anchor
+                pObj->SetAnchorPos( basegfx::B2DPoint() );
+            }
+
+            pFmt = MakeDrawFrmFmt( String::CreateFromAscii(
+                                    RTL_CONSTASCII_STRINGPARAM( "DrawObject" )),
+                                    GetDfltFrmFmt() );
+            pFmt->SetFmtAttr( aAnch );
+            // --> OD 2004-10-25 #i36010# - set layout direction of the position
+            pFmt->SetPositionLayoutDir(
+                text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
             // <--
 
-            pFmt = (SwDrawFrmFmt*)pContact->GetFmt();
-            //loescht sich selbst!
-            pContact->Changed(*pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
-            pObj->SetUserCall( 0 );
+            rDrawView.GroupMarked();
+                SdrObject* pNewGroupObj = rDrawView.getSelectedIfSingle();
+                ASSERT( pNewGroupObj, "GroupMarked more or none groups." );
+
+            pNewContact = new SwDrawContact( pFmt, pNewGroupObj );
+            // --> OD 2004-11-22 #i35635#
+            pNewContact->MoveObjToVisibleLayer( pNewGroupObj );
+            // <--
+            pNewContact->ConnectToLayout();
+            // --> OD 2005-08-16 #i53320# - No adjustment of the positioning and
+            // alignment attributes, if group members aren't positioned yet.
+            if ( !bGroupMembersNotPositioned )
+            {
+                // OD 2004-04-01 #i26791# - Adjust positioning and alignment attributes.
+                lcl_AdjustPositioningAttr( pFmt, *pNewGroupObj );
+            }
+            // <--
 
             if( pUndo )
-                pUndo->AddObj( i, pFmt, pObj );
-            else
-                DelFrmFmt( pFmt );
-
-            // --> OD 2005-05-10 #i45952# - re-introduce position
-            // normalization of group member objects, because its anchor position
-            // is cleared, when they are grouped.
-            Point aAnchorPos( pObj->GetAnchorPos() );
-            pObj->NbcSetAnchorPos( Point( 0, 0 ) );
-            pObj->NbcMove( Size( aAnchorPos.X(), aAnchorPos.Y() ) );
-            // <--
+            {
+                pUndo->SetGroupFmt( pFmt );
+                GetIDocumentUndoRedo().AppendUndo( pUndo );
+            }
         }
-
-        pFmt = MakeDrawFrmFmt( String::CreateFromAscii(
-                                RTL_CONSTASCII_STRINGPARAM( "DrawObject" )),
-                                GetDfltFrmFmt() );
-        pFmt->SetFmtAttr( aAnch );
-        // --> OD 2004-10-25 #i36010# - set layout direction of the position
-        pFmt->SetPositionLayoutDir(
-            text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
-        // <--
-
-        rDrawView.GroupMarked();
-        ASSERT( rMrkList.GetMarkCount() == 1, "GroupMarked more or none groups." );
-
-        SdrObject* pNewGroupObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
-        pNewContact = new SwDrawContact( pFmt, pNewGroupObj );
-        // --> OD 2004-11-22 #i35635#
-        pNewContact->MoveObjToVisibleLayer( pNewGroupObj );
-        // <--
-        pNewContact->ConnectToLayout();
-        // --> OD 2005-08-16 #i53320# - No adjustment of the positioning and
-        // alignment attributes, if group members aren't positioned yet.
-        if ( !bGroupMembersNotPositioned )
+        else
         {
-            // OD 2004-04-01 #i26791# - Adjust positioning and alignment attributes.
-            lcl_AdjustPositioningAttr( pFmt, *pNewGroupObj );
-        }
-        // <--
+            if (GetIDocumentUndoRedo().DoesUndo())
+            {
+                GetIDocumentUndoRedo().ClearRedo();
+            }
 
-        if( pUndo )
-        {
-            pUndo->SetGroupFmt( pFmt );
-            GetIDocumentUndoRedo().AppendUndo( pUndo );
+            rDrawView.GroupMarked();
+            ASSERT( rDrawView.getSelectedIfSingle(), "GroupMarked more or none groups." );
         }
-    }
-    else
-    {
-        if (GetIDocumentUndoRedo().DoesUndo())
-        {
-            GetIDocumentUndoRedo().ClearRedo();
-        }
-
-        rDrawView.GroupMarked();
-        ASSERT( rMrkList.GetMarkCount() == 1, "GroupMarked more or none groups." );
     }
 
     return pNewContact;
@@ -325,111 +327,113 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
 
 void SwDoc::UnGroupSelection( SdrView& rDrawView )
 {
-    bool const bUndo = GetIDocumentUndoRedo().DoesUndo();
-    if( bUndo )
+    if(rDrawView.areSdrObjectsSelected())
     {
-        GetIDocumentUndoRedo().ClearRedo();
-    }
-
-    // OD 30.06.2003 #108784# - replace marked 'virtual' drawing objects by
-    // the corresponding 'master' drawing objects.
-    SwDrawView::ReplaceMarkedDrawVirtObjs( rDrawView );
-
-    const SdrMarkList &rMrkList = rDrawView.GetMarkedObjectList();
-    // --> OD 2006-11-01 #130889#
-    std::vector< std::pair< SwDrawFrmFmt*, SdrObject* > >* pFmtsAndObjs( 0L );
-    const sal_uInt32 nMarkCount( rMrkList.GetMarkCount() );
-    // <--
-    if ( nMarkCount )
-    {
-        // --> OD 2006-11-01 #130889#
-        pFmtsAndObjs = new std::vector< std::pair< SwDrawFrmFmt*, SdrObject* > >[nMarkCount];
-        // <--
-        SdrObject *pMyObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
-        if( !pMyObj->GetUpGroup() )
+        bool const bUndo = GetIDocumentUndoRedo().DoesUndo();
+        if( bUndo )
         {
-            String sDrwFmtNm( String::CreateFromAscii(
-                                RTL_CONSTASCII_STRINGPARAM("DrawObject" )));
-            for ( sal_uInt16 i = 0; i < nMarkCount; ++i )
+            GetIDocumentUndoRedo().ClearRedo();
+        }
+
+        // OD 30.06.2003 #108784# - replace marked 'virtual' drawing objects by
+        // the corresponding 'master' drawing objects.
+        SwDrawView::ReplaceMarkedDrawVirtObjs( rDrawView );
+
+        const SdrObjectVector aSelection(rDrawView.getSelectedSdrObjectVectorFromSdrMarkView());
+        // --> OD 2006-11-01 #130889#
+        std::vector< std::pair< SwDrawFrmFmt*, SdrObject* > >* pFmtsAndObjs( 0L );
+        // <--
+        if ( aSelection.size() )
+        {
+            // --> OD 2006-11-01 #130889#
+            pFmtsAndObjs = new std::vector< std::pair< SwDrawFrmFmt*, SdrObject* > >[aSelection.size()];
+            // <--
+            SdrObject *pMyObj = aSelection[0];
+            if( !pMyObj->GetParentSdrObject() )
             {
-                SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
-                if ( pObj->IsA( TYPE(SdrObjGroup) ) )
+                String sDrwFmtNm( String::CreateFromAscii(
+                                    RTL_CONSTASCII_STRINGPARAM("DrawObject" )));
+                for ( sal_uInt32 i = 0; i < aSelection.size(); ++i )
                 {
-                    SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
-                    SwFmtAnchor aAnch( pContact->GetFmt()->GetAnchor() );
-                    SdrObjList *pLst = ((SdrObjGroup*)pObj)->GetSubList();
-
-                    SwUndoDrawUnGroup* pUndo = 0;
-                    if( bUndo )
+                    SdrObjGroup* pObj = dynamic_cast< SdrObjGroup* >(aSelection[i]);
+                    if ( pObj )
                     {
-                        pUndo = new SwUndoDrawUnGroup( (SdrObjGroup*)pObj );
-                        GetIDocumentUndoRedo().AppendUndo(pUndo);
-                    }
+                        SwDrawContact *pContact = (SwDrawContact*)findConnectionToSdrObject(pObj);
+                        SwFmtAnchor aAnch( pContact->GetFmt()->GetAnchor() );
+                            SdrObjList *pLst = pObj->getChildrenOfSdrObject();
 
-                    for ( sal_uInt16 i2 = 0; i2 < pLst->GetObjCount(); ++i2 )
-                    {
-                        SdrObject* pSubObj = pLst->GetObj( i2 );
-                        SwDrawFrmFmt *pFmt = MakeDrawFrmFmt( sDrwFmtNm,
-                                                            GetDfltFrmFmt() );
-                        pFmt->SetFmtAttr( aAnch );
-                        // --> OD 2004-10-25 #i36010# - set layout direction of the position
-                        pFmt->SetPositionLayoutDir(
-                            text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
-                        // <--
-                        // --> OD 2006-11-01 #130889#
-                        // creation of <SwDrawContact> instances for the group
-                        // members and its connection to the Writer layout is
-                        // done after intrinsic ungrouping.
-//                        SwDrawContact* pContact = new SwDrawContact( pFmt, pSubObj );
-//                        // --> OD 2004-11-22 #i35635#
-//                        pContact->MoveObjToVisibleLayer( pSubObj );
-//                        // <--
-//                        pContact->ConnectToLayout();
-//                        // OD 2004-04-07 #i26791# - Adjust positioning and
-//                        // alignment attributes.
-//                        lcl_AdjustPositioningAttr( pFmt, *pSubObj );
-                        pFmtsAndObjs[i].push_back( std::pair< SwDrawFrmFmt*, SdrObject* >( pFmt, pSubObj ) );
-                        // <--
-
+                        SwUndoDrawUnGroup* pUndo = 0;
                         if( bUndo )
-                            pUndo->AddObj( i2, pFmt );
+                        {
+                            pUndo = new SwUndoDrawUnGroup( (SdrObjGroup*)pObj );
+                            GetIDocumentUndoRedo().AppendUndo(pUndo);
+                        }
+
+                        for ( sal_uInt16 i2 = 0; i2 < pLst->GetObjCount(); ++i2 )
+                        {
+                            SdrObject* pSubObj = pLst->GetObj( i2 );
+                            SwDrawFrmFmt *pFmt = MakeDrawFrmFmt( sDrwFmtNm,
+                                                                GetDfltFrmFmt() );
+                            pFmt->SetFmtAttr( aAnch );
+                            // --> OD 2004-10-25 #i36010# - set layout direction of the position
+                            pFmt->SetPositionLayoutDir(
+                                text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
+                            // <--
+                            // --> OD 2006-11-01 #130889#
+                            // creation of <SwDrawContact> instances for the group
+                            // members and its connection to the Writer layout is
+                            // done after intrinsic ungrouping.
+    //                        SwDrawContact* pContact = new SwDrawContact( pFmt, pSubObj );
+    //                        // --> OD 2004-11-22 #i35635#
+    //                        pContact->MoveObjToVisibleLayer( pSubObj );
+    //                        // <--
+    //                        pContact->ConnectToLayout();
+    //                        // OD 2004-04-07 #i26791# - Adjust positioning and
+    //                        // alignment attributes.
+    //                        lcl_AdjustPositioningAttr( pFmt, *pSubObj );
+                            pFmtsAndObjs[i].push_back( std::pair< SwDrawFrmFmt*, SdrObject* >( pFmt, pSubObj ) );
+                            // <--
+
+                            if( bUndo )
+                                pUndo->AddObj( i2, pFmt );
+                        }
                     }
                 }
             }
         }
-    }
-    rDrawView.UnGroupMarked();
-    // --> OD 2006-11-01 #130889#
-    // creation of <SwDrawContact> instances for the former group members and
-    // its connection to the Writer layout.
-    for ( sal_uInt32 i = 0; i < nMarkCount; ++i )
-    {
-        SwUndoDrawUnGroupConnectToLayout* pUndo = 0;
-        if( bUndo )
+        rDrawView.UnGroupMarked();
+        // --> OD 2006-11-01 #130889#
+        // creation of <SwDrawContact> instances for the former group members and
+        // its connection to the Writer layout.
+        for ( sal_uInt32 i = 0; i < aSelection.size(); ++i )
         {
-            pUndo = new SwUndoDrawUnGroupConnectToLayout();
-            GetIDocumentUndoRedo().AppendUndo(pUndo);
-        }
-
-        while ( pFmtsAndObjs[i].size() > 0 )
-        {
-            SwDrawFrmFmt* pFmt( pFmtsAndObjs[i].back().first );
-            SdrObject* pObj( pFmtsAndObjs[i].back().second );
-            pFmtsAndObjs[i].pop_back();
-
-            SwDrawContact* pContact = new SwDrawContact( pFmt, pObj );
-            pContact->MoveObjToVisibleLayer( pObj );
-            pContact->ConnectToLayout();
-            lcl_AdjustPositioningAttr( pFmt, *pObj );
-
-            if ( bUndo )
+            SwUndoDrawUnGroupConnectToLayout* pUndo = 0;
+            if( bUndo )
             {
-                pUndo->AddFmtAndObj( pFmt, pObj );
+                pUndo = new SwUndoDrawUnGroupConnectToLayout();
+                GetIDocumentUndoRedo().AppendUndo(pUndo);
+            }
+
+            while ( pFmtsAndObjs[i].size() > 0 )
+            {
+                SwDrawFrmFmt* pFmt( pFmtsAndObjs[i].back().first );
+                SdrObject* pObj( pFmtsAndObjs[i].back().second );
+                pFmtsAndObjs[i].pop_back();
+
+                SwDrawContact* pContact = new SwDrawContact( pFmt, pObj );
+                pContact->MoveObjToVisibleLayer( pObj );
+                pContact->ConnectToLayout();
+                lcl_AdjustPositioningAttr( pFmt, *pObj );
+
+                if ( bUndo )
+                {
+                    pUndo->AddFmtAndObj( pFmt, pObj );
+                }
             }
         }
+        delete [] pFmtsAndObjs;
+        // <--
     }
-    delete [] pFmtsAndObjs;
-    // <--
 }
 
 /*************************************************************************
@@ -444,94 +448,94 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
 sal_Bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
 {
     sal_Bool bCallBase = sal_False;
-    const SdrMarkList &rMrkList = rDrawView.GetMarkedObjectList();
-    if( rMrkList.GetMarkCount() )
+
+    if(rDrawView.areSdrObjectsSelected())
     {
-        GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
-        sal_uInt16 i;
-        sal_Bool bDelMarked = sal_True;
+        const SdrObjectVector aSelection(rDrawView.getSelectedSdrObjectVectorFromSdrMarkView());
 
-        if( 1 == rMrkList.GetMarkCount() )
+        if( aSelection.size() )
         {
-            SdrObject *pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
-            if( pObj->ISA(SwVirtFlyDrawObj) )
-            {
-                SwFlyFrmFmt* pFrmFmt = (SwFlyFrmFmt*)
-                    ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->GetFmt();
-                if( pFrmFmt )
-                {
-                    DelLayoutFmt( pFrmFmt );
-                    bDelMarked = sal_False;
-                }
-            }
-        }
+            GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
+            sal_uInt16 i;
+            sal_Bool bDelMarked = sal_True;
 
-        for( i = 0; i < rMrkList.GetMarkCount(); ++i )
-        {
-            SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
-            if( !pObj->ISA(SwVirtFlyDrawObj) )
+            if( 1 == aSelection.size() )
             {
-                SwDrawContact *pC = (SwDrawContact*)GetUserCall(pObj);
-                SwDrawFrmFmt *pFrmFmt = (SwDrawFrmFmt*)pC->GetFmt();
-                if( pFrmFmt &&
-                    FLY_AS_CHAR == pFrmFmt->GetAnchor().GetAnchorId() )
+                SwVirtFlyDrawObj* pObj = dynamic_cast< SwVirtFlyDrawObj* >(aSelection[0]);
+                if( pObj )
                 {
-                    rDrawView.MarkObj( pObj, rDrawView.Imp().GetPageView(), sal_True );
-                    --i;
-                    DelLayoutFmt( pFrmFmt );
-                }
-            }
-        }
-
-        if( rMrkList.GetMarkCount() && bDelMarked )
-        {
-            SdrObject *pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
-            if( !pObj->GetUpGroup() )
-            {
-                SwUndoDrawDelete *const pUndo =
-                    (!GetIDocumentUndoRedo().DoesUndo())
-                        ? 0
-                            : new SwUndoDrawDelete( (sal_uInt16)rMrkList.GetMarkCount() );
-
-                //ContactObjekte vernichten, Formate sicherstellen.
-                for( i = 0; i < rMrkList.GetMarkCount(); ++i )
-                {
-                    const SdrMark& rMark = *rMrkList.GetMark( i );
-                    pObj = rMark.GetMarkedSdrObj();
-                    SwDrawContact *pContact = (SwDrawContact*)pObj->GetUserCall();
-                    if( pContact ) // natuerlich nicht bei gruppierten Objekten
+                    SwFlyFrmFmt* pFrmFmt = (SwFlyFrmFmt*)pObj->GetFlyFrm()->GetFmt();
+                    if( pFrmFmt )
                     {
-                        SwDrawFrmFmt *pFmt = (SwDrawFrmFmt*)pContact->GetFmt();
-                        // OD 18.06.2003 #108784# - before delete of selection
-                        // is performed, marked <SwDrawVirtObj>-objects have to
-                        // be replaced by its reference objects.
-                        // Thus, assert, if a <SwDrawVirt>-object is found in the mark list.
-                        if ( pObj->ISA(SwDrawVirtObj) )
-                        {
-                            ASSERT( false,
-                                    "<SwDrawVirtObj> is still marked for delete. application will crash!" );
-                        }
-                        //loescht sich selbst!
-                        pContact->Changed(*pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
-                        pObj->SetUserCall( 0 );
-
-                        if( pUndo )
-                            pUndo->AddObj( i, pFmt, rMark );
-                        else
-                            DelFrmFmt( pFmt );
+                        DelLayoutFmt( pFrmFmt );
+                        bDelMarked = sal_False;
                     }
                 }
+            }
 
-                if( pUndo )
+            for( i = 0; i < aSelection.size(); ++i )
+            {
+                SdrObject *pObj = aSelection[i];
+                if( !dynamic_cast< SwVirtFlyDrawObj* >(pObj) )
                 {
-                    GetIDocumentUndoRedo().AppendUndo( pUndo );
+                    SwDrawContact *pC = (SwDrawContact*)findConnectionToSdrObject(pObj);
+                    SwDrawFrmFmt *pFrmFmt = (SwDrawFrmFmt*)pC->GetFmt();
+                    if( pFrmFmt &&
+                        FLY_AS_CHAR == pFrmFmt->GetAnchor().GetAnchorId() )
+                    {
+                        rDrawView.MarkObj( *pObj, true);
+                        --i;
+                        DelLayoutFmt( pFrmFmt );
+                    }
                 }
             }
-            bCallBase = sal_True;
-        }
-        SetModified();
 
-        GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
+            if( aSelection.size() && bDelMarked )
+            {
+                SdrObject *pObj = aSelection[0];
+                if( !pObj->GetParentSdrObject() )
+                {
+                    SwUndoDrawDelete *const pUndo =
+                    (!GetIDocumentUndoRedo().DoesUndo()) ? 0 : new SwUndoDrawDelete(    (sal_uInt16)aSelection.size() );
+
+                    //ContactObjekte vernichten, Formate sicherstellen.
+                    for( i = 0; i < aSelection.size(); ++i )
+                    {
+                        pObj = aSelection[i];
+                        SwDrawContact *pContact = (SwDrawContact*)findConnectionToSdrObjectDirect(pObj);
+                        if( pContact ) // natuerlich nicht bei gruppierten Objekten
+                        {
+                            SwDrawFrmFmt *pFmt = (SwDrawFrmFmt*)pContact->GetFmt();
+                            // OD 18.06.2003 #108784# - before delete of selection
+                            // is performed, marked <SwDrawVirtObj>-objects have to
+                            // be replaced by its reference objects.
+                            // Thus, assert, if a <SwDrawVirt>-object is found in the mark list.
+                            if ( dynamic_cast< SwDrawVirtObj* >(pObj) )
+                            {
+                                ASSERT( false, "<SwDrawVirtObj> is still marked for delete. application will crash!" );
+                            }
+                            //loescht sich selbst!
+                            pContact->HandleChanged(*pObj, HINT_SDROBJECTDYING);
+                            resetConnectionToSdrObject(pObj);
+
+                            if( pUndo )
+                                pUndo->AddObj( i, pFmt, *aSelection[i] );
+                            else
+                                DelFrmFmt( pFmt );
+                        }
+                    }
+
+                    if( pUndo )
+                    {
+                        GetIDocumentUndoRedo().AppendUndo( pUndo );
+                    }
+                }
+                bCallBase = sal_True;
+            }
+            SetModified();
+
+            GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
+        }
     }
 
     return bCallBase;
@@ -560,14 +564,14 @@ _ZSortFly::_ZSortFly( const SwFrmFmt* pFrmFmt, const SwFmtAnchor* pFlyAn,
             // Schauen, ob es ein SdrObject dafuer gibt
             SwFlyFrm* pFly = SwIterator<SwFlyFrm,SwFmt>::FirstElement( *pFrmFmt );
             if( pFly )
-                nOrdNum = pFly->GetVirtDrawObj()->GetOrdNum();
+                nOrdNum = pFly->GetVirtDrawObj()->GetNavigationPosition();
         }
         else
         {
             // Schauen, ob es ein SdrObject dafuer gibt
             SwFlyDrawContact* pContact = SwIterator<SwFlyDrawContact,SwFmt>::FirstElement( *pFrmFmt );
             if( pContact )
-                nOrdNum = pContact->GetMaster()->GetOrdNum();
+                nOrdNum = pContact->GetMaster()->GetNavigationPosition();
         }
     }
     else if( RES_DRAWFRMFMT == pFmt->Which() )
@@ -575,9 +579,10 @@ _ZSortFly::_ZSortFly( const SwFrmFmt* pFrmFmt, const SwFmtAnchor* pFlyAn,
         // Schauen, ob es ein SdrObject dafuer gibt
             SwDrawContact* pContact = SwIterator<SwDrawContact,SwFmt>::FirstElement( *pFrmFmt );
             if( pContact )
-                nOrdNum = pContact->GetMaster()->GetOrdNum();
+            nOrdNum = pContact->GetMaster()->GetNavigationPosition();
     }
-    else {
+    else
+    {
         ASSERT( !this, "was ist das fuer ein Format?" );
     }
 }
@@ -617,8 +622,8 @@ void SwDoc::InitDrawModel()
 
         // #i33700#
         // Set shadow distance defaults as PoolDefaultItems. Details see bug.
-        pSdrPool->SetPoolDefaultItem(SdrShadowXDistItem((300 * 72) / 127));
-        pSdrPool->SetPoolDefaultItem(SdrShadowYDistItem((300 * 72) / 127));
+        pSdrPool->SetPoolDefaultItem(SdrMetricItem(SDRATTR_SHADOWXDIST, (300 * 72) / 127));
+        pSdrPool->SetPoolDefaultItem(SdrMetricItem(SDRATTR_SHADOWYDIST, (300 * 72) / 127));
     }
     SfxItemPool *pEEgPool = EditEngine::CreatePool( sal_False );
     pSdrPool->SetSecondaryPool( pEEgPool );
@@ -639,28 +644,28 @@ void SwDoc::InitDrawModel()
 
     String sLayerNm;
     sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("Hell" ));
-    nHell   = pDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
+    nHell   = pDrawModel->GetModelLayerAdmin().NewLayer( sLayerNm )->GetID();
 
     sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("Heaven" ));
-    nHeaven = pDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
+    nHeaven = pDrawModel->GetModelLayerAdmin().NewLayer( sLayerNm )->GetID();
 
     sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("Controls" ));
-    nControls = pDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
+    nControls = pDrawModel->GetModelLayerAdmin().NewLayer( sLayerNm )->GetID();
 
     // OD 25.06.2003 #108784# - add invisible layers corresponding to the
     // visible ones.
     {
         sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("InvisibleHell" ));
-        nInvisibleHell   = pDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
+        nInvisibleHell   = pDrawModel->GetModelLayerAdmin().NewLayer( sLayerNm )->GetID();
 
         sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("InvisibleHeaven" ));
-        nInvisibleHeaven = pDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
+        nInvisibleHeaven = pDrawModel->GetModelLayerAdmin().NewLayer( sLayerNm )->GetID();
 
         sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("InvisibleControls" ));
-        nInvisibleControls = pDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
+        nInvisibleControls = pDrawModel->GetModelLayerAdmin().NewLayer( sLayerNm )->GetID();
     }
 
-    SdrPage* pMasterPage = pDrawModel->AllocPage( sal_False );
+    SdrPage* pMasterPage = pDrawModel->AllocPage( false );
     pDrawModel->InsertPage( pMasterPage );
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "after create DrawDocument" );
 
@@ -673,7 +678,6 @@ void SwDoc::InitDrawModel()
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "after create Spellchecker/Hyphenator" );
 
     SetCalcFieldValueHdl(&rOutliner);
-    SetCalcFieldValueHdl(&pDrawModel->GetHitTestOutliner());
 
     //JP 16.07.98: Bug 50193 - Linkmanager am Model setzen, damit
     //          dort ggfs. verlinkte Grafiken eingefuegt werden koennen
@@ -683,7 +687,7 @@ void SwDoc::InitDrawModel()
 
     OutputDevice* pRefDev = getReferenceDevice( false );
     if ( pRefDev )
-        pDrawModel->SetRefDevice( pRefDev );
+        pDrawModel->SetReferenceDevice( pRefDev );
 
     pDrawModel->SetNotifyUndoActionHdl( LINK( this, SwDoc, AddDrawUndo ));
     if ( pCurrentView )
@@ -700,7 +704,8 @@ void SwDoc::InitDrawModel()
                 // pDrawModel->InsertPage( pDrawPage );
                 SdrPage* pDrawPage = pMasterPage;
                 pRoot->SetDrawPage( pDrawPage );
-                pDrawPage->SetSize( pRoot->Frm().SSize() );
+                const basegfx::B2DVector aNewPageScale(pRoot->Frm().SSize().Width(), pRoot->Frm().SSize().Height());
+                pDrawPage->SetPageScale(aNewPageScale);
             }
             pViewSh = (ViewShell*)pViewSh->GetNext();
         }while( pViewSh != pCurrentView );
@@ -867,7 +872,7 @@ void SwDoc::ReleaseDrawModel()
 /*************************************************************************/
 
 
-SdrModel* SwDoc::_MakeDrawModel()
+FmFormModel* SwDoc::_MakeDrawModel()
 {
     ASSERT( !pDrawModel, "_MakeDrawModel: Why?" );
     InitDrawModel();
@@ -921,7 +926,7 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
         const SvxFieldItem& rField = pInfo->GetField();
         const SvxFieldData* pField = rField.GetField();
 
-        if (pField && pField->ISA(SvxDateField))
+        if (pField && dynamic_cast< const SvxDateField* >(pField))
         {
             /******************************************************************
             * Date-Field
@@ -930,7 +935,7 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
                 ((const SvxDateField*) pField)->GetFormatted(
                         *GetNumberFormatter( sal_True ), LANGUAGE_SYSTEM) );
         }
-        else if (pField && pField->ISA(SvxURLField))
+        else if (pField && dynamic_cast< const SvxURLField* >(pField))
         {
             /******************************************************************
             * URL-Field
@@ -969,14 +974,14 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
 
             pInfo->SetTxtColor(aColor);
         }
-        else if (pField && pField->ISA(SdrMeasureField))
+        else if (pField && dynamic_cast< const SdrMeasureField* >(pField))
         {
             /******************************************************************
             * Measure-Field
             ******************************************************************/
             pInfo->ClearFldColor();
         }
-        else if ( pField && pField->ISA(SvxExtTimeField))
+        else if ( pField && dynamic_cast< const SvxExtTimeField* >(pField))
         {
             /******************************************************************
             * Time-Field
@@ -997,15 +1002,15 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
 
 /* TFFDI: The functions formerly declared 'inline'
  */
-const SdrModel* SwDoc::GetDrawModel() const { return pDrawModel; }
-SdrModel* SwDoc::GetDrawModel() { return pDrawModel; }
+const FmFormModel* SwDoc::GetDrawModel() const { return pDrawModel; }
+FmFormModel* SwDoc::GetDrawModel() { return pDrawModel; }
 SdrLayerID SwDoc::GetHeavenId() const { return nHeaven; }
 SdrLayerID SwDoc::GetHellId() const { return nHell; }
 SdrLayerID SwDoc::GetControlsId() const { return nControls;   }
 SdrLayerID SwDoc::GetInvisibleHeavenId() const { return nInvisibleHeaven; }
 SdrLayerID SwDoc::GetInvisibleHellId() const { return nInvisibleHell; }
 SdrLayerID SwDoc::GetInvisibleControlsId() const { return nInvisibleControls; }
-SdrModel* SwDoc::GetOrCreateDrawModel() { return GetDrawModel() ? GetDrawModel() : _MakeDrawModel(); }
+FmFormModel* SwDoc::GetOrCreateDrawModel() { return GetDrawModel() ? GetDrawModel() : _MakeDrawModel(); }
 
 // --> OD 2006-03-14 #i62875#
 namespace docfunc
@@ -1052,7 +1057,7 @@ namespace docfunc
                      !dynamic_cast<SwFlyDrawObj*>(pObj) )
                 {
                     SwDrawContact* pDrawContact =
-                            dynamic_cast<SwDrawContact*>(::GetUserCall( pObj ));
+                            dynamic_cast<SwDrawContact*>(::findConnectionToSdrObject( pObj ));
                     if ( pDrawContact )
                     {
                         SwAnchoredDrawObject* pAnchoredDrawObj =
@@ -1109,6 +1114,8 @@ void SwDoc::UpdateDrawDefaults()
 {
     // drawing layer defaults that are set for new documents (if InitNew was called)
     if ( pDrawModel && mbSetDrawDefaults )
+    {
         pDrawModel->SetDrawingLayerPoolDefaults();
+    }
 }
 

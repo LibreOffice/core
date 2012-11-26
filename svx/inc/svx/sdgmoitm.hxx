@@ -37,8 +37,6 @@ class SVX_DLLPUBLIC SdrGrafModeItem : public SfxEnumItem
 {
 public:
 
-                            TYPEINFO();
-
                             SdrGrafModeItem( GraphicDrawMode eMode = GRAPHICDRAWMODE_STANDARD ) : SfxEnumItem( SDRATTR_GRAFMODE, (sal_uInt16)eMode ) {}
                             SdrGrafModeItem( SvStream& rIn ) : SfxEnumItem( SDRATTR_GRAFMODE, rIn ) {}
 

@@ -64,6 +64,7 @@
 #include <editeng/editobj.hxx>
 #include <svx/unoapi.hxx>
 #include <svl/languageoptions.hxx>
+#include <svx/svdlegacy.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -621,7 +622,7 @@ void ScXMLTableRowCellContext::SetAnnotation(const table::CellAddress& aCellAddr
         {
             if( SdrCaptionObj* pCaption = dynamic_cast< SdrCaptionObj* >( pObject ) )
             {
-                OSL_ENSURE( !pCaption->GetLogicRect().IsEmpty(), "ScXMLTableRowCellContext::SetAnnotation - invalid caption rectangle" );
+                OSL_ENSURE( !sdr::legacy::GetLogicRect(*pCaption).IsEmpty(), "ScXMLTableRowCellContext::SetAnnotation - invalid caption rectangle" );
                 // create the cell note with the caption object
                 pNote = ScNoteUtil::CreateNoteFromCaption( *pDoc, aPos, *pCaption, true );
                 // forget pointer to object (do not create note again below)
@@ -637,9 +638,9 @@ void ScXMLTableRowCellContext::SetAnnotation(const table::CellAddress& aCellAddr
             ::std::auto_ptr< OutlinerParaObject > xOutlinerObj;
             if( OutlinerParaObject* pOutlinerObj = pObject->GetOutlinerParaObject() )
                 xOutlinerObj.reset( new OutlinerParaObject( *pOutlinerObj ) );
-            Rectangle aCaptionRect;
+            basegfx::B2DRange aCaptionRange;
             if( mxAnnotationData->mbUseShapePos )
-                aCaptionRect = pObject->GetLogicRect();
+                aCaptionRange = sdr::legacy::GetLogicRange(*pObject);
             // remove the shape from the drawing page, this invalidates pObject
             mxAnnotationData->mxShapes->remove( mxAnnotationData->mxShape );
             pObject = 0;
@@ -651,9 +652,14 @@ void ScXMLTableRowCellContext::SetAnnotation(const table::CellAddress& aCellAddr
             if( xOutlinerObj.get() )
             {
                 // create cell note with all data from drawing object
-                pNote = ScNoteUtil::CreateNoteFromObjectData( *pDoc, aPos,
-                    xItemSet.release(), xOutlinerObj.release(),
-                    aCaptionRect, mxAnnotationData->mbShown, false );
+                pNote = ScNoteUtil::CreateNoteFromObjectData(
+                    *pDoc,
+                    aPos,
+                    xItemSet.release(),
+                    xOutlinerObj.release(),
+                    aCaptionRange,
+                    mxAnnotationData->mbShown,
+                    false );
             }
         }
     }

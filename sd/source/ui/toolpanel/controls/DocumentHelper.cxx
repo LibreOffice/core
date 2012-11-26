@@ -58,14 +58,11 @@ SdPage* DocumentHelper::CopyMasterPageToLocalDocument (
             break;
 
         // Check the presence of the source document.
-        SdDrawDocument* pSourceDocument = static_cast<SdDrawDocument*>(
-            pMasterPage->GetModel());
-        if (pSourceDocument == NULL)
-            break;
+        SdDrawDocument& rSourceDocument = static_cast< SdDrawDocument& >(pMasterPage->getSdrModelFromSdrPage());
 
         // When the given master page already belongs to the target document
         // then there is nothing more to do.
-        if (pSourceDocument == &rTargetDocument)
+        if (&rSourceDocument == &rTargetDocument)
         {
             pNewMasterPage = pMasterPage;
             break;
@@ -75,22 +72,22 @@ SdPage* DocumentHelper::CopyMasterPageToLocalDocument (
         // present.  This is not the case when we are called during the
         // creation of the slide master page because then the notes master
         // page is not there.
-        sal_uInt16 nSourceMasterPageCount = pSourceDocument->GetMasterPageCount();
+        sal_uInt32 nSourceMasterPageCount = rSourceDocument.GetMasterPageCount();
         if (nSourceMasterPageCount%2 == 0)
             // There should be 1 handout page + n slide masters + n notes
             // masters = 2*n+1.  An even value indicates that a new slide
             // master but not yet the notes master has been inserted.
             break;
-        sal_uInt16 nIndex = pMasterPage->GetPageNum();
+        sal_uInt32 nIndex = pMasterPage->GetPageNumber();
         if (nSourceMasterPageCount <= nIndex+1)
             break;
         // Get the slide master page.
         if (pMasterPage != static_cast<SdPage*>(
-            pSourceDocument->GetMasterPage(nIndex)))
+            rSourceDocument.GetMasterPage(nIndex)))
             break;
         // Get the notes master page.
         SdPage* pNotesMasterPage = static_cast<SdPage*>(
-            pSourceDocument->GetMasterPage(nIndex+1));
+            rSourceDocument.GetMasterPage(nIndex+1));
         if (pNotesMasterPage == NULL)
             break;
 
@@ -98,8 +95,8 @@ SdPage* DocumentHelper::CopyMasterPageToLocalDocument (
         // Check if a master page with the same name as that of the given
         // master page already exists.
         bool bPageExists (false);
-        sal_uInt16 nMasterPageCount(rTargetDocument.GetMasterSdPageCount(PK_STANDARD));
-        for (sal_uInt16 nMaster=0; nMaster<nMasterPageCount; nMaster++)
+        sal_uInt32 nMasterPageCount(rTargetDocument.GetMasterSdPageCount(PK_STANDARD));
+        for (sal_uInt32 nMaster=0; nMaster<nMasterPageCount; nMaster++)
         {
             SdPage* pCandidate = static_cast<SdPage*>(
                 rTargetDocument.GetMasterSdPage (nMaster, PK_STANDARD));
@@ -131,7 +128,7 @@ SdPage* DocumentHelper::CopyMasterPageToLocalDocument (
             PK_STANDARD);
         if (pSlide == NULL)
             break;
-        pSlide->SetAutoLayout(AUTOLAYOUT_TITLE, sal_True);
+        pSlide->SetAutoLayout(AUTOLAYOUT_TITLE, true);
 
         // Create a copy of the master page and the associated notes
         // master page and insert them into our document.
@@ -149,9 +146,9 @@ SdPage* DocumentHelper::CopyMasterPageToLocalDocument (
             rTargetDocument.GetSdPageCount(PK_STANDARD)-1,
             pNewMasterPage->GetName(),
             &rTargetDocument,
-            sal_False, // Connect the new master page with the new slide but
+            false, // Connect the new master page with the new slide but
                    // do not modify other (master) pages.
-            sal_True);
+            true);
     }
     while (false);
 
@@ -167,23 +164,23 @@ SdPage* DocumentHelper::CopyMasterPageToLocalDocument (
 
 SdPage* DocumentHelper::GetSlideForMasterPage (SdPage* pMasterPage)
 {
-    SdPage* pCandidate = NULL;
+    if(!pMasterPage)
+        return 0;
 
-    SdDrawDocument* pDocument = NULL;
-    if (pMasterPage != NULL)
-        pDocument = dynamic_cast<SdDrawDocument*>(pMasterPage->GetModel());
+    SdPage* pCandidate = NULL;
+    SdDrawDocument& rDocument = dynamic_cast< SdDrawDocument& >(pMasterPage->getSdrModelFromSdrPage());
 
     // Iterate over all pages and check if it references the given master
     // page.
-    if (pDocument!=NULL && pDocument->GetSdPageCount(PK_STANDARD) > 0)
+    if (rDocument.GetSdPageCount(PK_STANDARD) > 0)
     {
         // In most cases a new slide has just been inserted so start with
         // the last page.
-        sal_uInt16 nPageIndex (pDocument->GetSdPageCount(PK_STANDARD)-1);
+        sal_uInt32 nPageIndex (rDocument.GetSdPageCount(PK_STANDARD)-1);
         bool bFound (false);
         while ( ! bFound)
         {
-            pCandidate = pDocument->GetSdPage(
+            pCandidate = rDocument.GetSdPage(
                 nPageIndex,
                 PK_STANDARD);
             if (pCandidate != NULL)
@@ -225,13 +222,11 @@ SdPage* DocumentHelper::AddMasterPage (
         try
         {
             // Duplicate the master page.
-            pClonedMasterPage = static_cast<SdPage*>(pMasterPage->Clone());
+            pClonedMasterPage = static_cast<SdPage*>(pMasterPage->CloneSdrPage(&rTargetDocument));
 
             // Copy the necessary styles.
-            SdDrawDocument* pSourceDocument
-                = static_cast<SdDrawDocument*>(pMasterPage->GetModel());
-            if (pSourceDocument != NULL)
-                ProvideStyles (*pSourceDocument, rTargetDocument, pClonedMasterPage);
+            SdDrawDocument& rSourceDocument = static_cast< SdDrawDocument& >(pMasterPage->getSdrModelFromSdrPage());
+            ProvideStyles(rSourceDocument, rTargetDocument, pClonedMasterPage);
 
             // Copy the precious flag.
             pClonedMasterPage->SetPrecious(pMasterPage->IsPrecious());
@@ -293,7 +288,7 @@ void DocumentHelper::ProvideStyles (
                new SdMoveStyleSheetsUndoAction (
                    &rTargetDocument,
                    aCreatedStyles,
-                   sal_True);
+                   true);
            pUndoManager->AddUndoAction (pMovStyles);
        }
     }
@@ -327,7 +322,7 @@ void DocumentHelper::AssignMasterPageToPageList (
         ::std::vector<SdPage*> aCleanedList;
         for (iPage=rpPageList->begin(); iPage!=rpPageList->end(); ++iPage)
         {
-            OSL_ASSERT(*iPage!=NULL && (*iPage)->GetModel() == &rTargetDocument);
+            OSL_ASSERT(*iPage!=NULL && &(*iPage)->getSdrModelFromSdrPage() == &rTargetDocument);
             if (*iPage != NULL
                 && (*iPage)->GetLayoutName().CompareTo(sFullLayoutName)!=0)
             {
@@ -375,17 +370,14 @@ SdPage* DocumentHelper::AddMasterPage (
     if (pMasterPage!=NULL)
     {
         // Duplicate the master page.
-        pClonedMasterPage = static_cast<SdPage*>(pMasterPage->Clone());
+        pClonedMasterPage = static_cast<SdPage*>(pMasterPage->CloneSdrPage(&rTargetDocument));
 
         // Copy the precious flag.
         pClonedMasterPage->SetPrecious(pMasterPage->IsPrecious());
 
         // Copy the necessary styles.
-        SdDrawDocument* pSourceDocument
-            = static_cast<SdDrawDocument*>(pMasterPage->GetModel());
-        if (pSourceDocument != NULL)
-        {
-            ProvideStyles (*pSourceDocument, rTargetDocument, pClonedMasterPage);
+        SdDrawDocument& rSourceDocument = static_cast< SdDrawDocument& >(pMasterPage->getSdrModelFromSdrPage());
+        ProvideStyles(rSourceDocument, rTargetDocument, pClonedMasterPage);
 
             // Now that the styles are available we can insert the cloned
             // master page.
@@ -393,16 +385,12 @@ SdPage* DocumentHelper::AddMasterPage (
 
             // Adapt the size of the new master page to that of the pages in
             // the document.
-            Size aNewSize (rTargetDocument.GetSdPage(0, pMasterPage->GetPageKind())->GetSize());
-            Rectangle aBorders (
-                pClonedMasterPage->GetLftBorder(),
-                pClonedMasterPage->GetUppBorder(),
-                pClonedMasterPage->GetRgtBorder(),
-                pClonedMasterPage->GetLwrBorder());
-            pClonedMasterPage->ScaleObjects(aNewSize, aBorders, sal_True);
-            pClonedMasterPage->SetSize(aNewSize);
-            pClonedMasterPage->CreateTitleAndLayout(sal_True);
-        }
+        const basegfx::B2DVector& rNewSize(rTargetDocument.GetSdPage(0, pMasterPage->GetPageKind())->GetPageScale());
+        pClonedMasterPage->ScaleObjects(rNewSize, pClonedMasterPage->GetLeftPageBorder(),
+            pClonedMasterPage->GetTopPageBorder(), pClonedMasterPage->GetRightPageBorder(),
+            pClonedMasterPage->GetBottomPageBorder(), true);
+        pClonedMasterPage->SetPageScale(rNewSize);
+        pClonedMasterPage->CreateTitleAndLayout(true);
     }
 
     return pClonedMasterPage;
@@ -432,36 +420,35 @@ void DocumentHelper::AssignMasterPageToPage (
     // Leave early when the parameters are invalid.
     if (pPage == NULL || pMasterPage == NULL)
         return;
-    SdDrawDocument* pDocument = dynamic_cast<SdDrawDocument*>(pPage->GetModel());
-    if (pDocument == NULL)
-        return;
+
+    SdDrawDocument& rDocument = dynamic_cast< SdDrawDocument& >(pPage->getSdrModelFromSdrPage());
 
     if ( ! pPage->IsMasterPage())
     {
         // 1. Remove the background object (so that that, if it exists, does
         // not override the new master page) and assign the master page to
         // the regular slide.
-        pDocument->GetDocSh()->GetUndoManager()->AddUndoAction(
+        rDocument.GetDocSh()->GetUndoManager()->AddUndoAction(
             new SdBackgroundObjUndoAction(
-                *pDocument, *pPage, pPage->getSdrPageProperties().GetItemSet()),
-            sal_True);
+                rDocument, *pPage, pPage->getSdrPageProperties().GetItemSet()),
+            true);
         pPage->getSdrPageProperties().PutItem(XFillStyleItem(XFILL_NONE));
 
-        pDocument->SetMasterPage (
-            (pPage->GetPageNum()-1)/2,
+        rDocument.SetMasterPage (
+            (pPage->GetPageNumber()-1)/2,
             rsBaseLayoutName,
-            pDocument,
-            sal_False,
-            sal_False);
+            &rDocument,
+            false,
+            false);
     }
     else
     {
         // Find first slide that uses the master page.
         SdPage* pSlide = NULL;
-        sal_uInt16 nPageCount = pDocument->GetSdPageCount(PK_STANDARD);
-        for (sal_uInt16 nPage=0; nPage<nPageCount&&pSlide==NULL; nPage++)
+        sal_uInt32 nPageCount = rDocument.GetSdPageCount(PK_STANDARD);
+        for (sal_uInt32 nPage=0; nPage<nPageCount&&pSlide==NULL; nPage++)
         {
-            SdrPage* pCandidate = pDocument->GetSdPage(nPage,PK_STANDARD);
+            SdrPage* pCandidate = rDocument.GetSdPage(nPage,PK_STANDARD);
             if (pCandidate != NULL
                 && pCandidate->TRG_HasMasterPage()
                 && &(pCandidate->TRG_GetMasterPage()) == pPage)
@@ -474,19 +461,19 @@ void DocumentHelper::AssignMasterPageToPage (
         {
             // 2. Assign the given master pages to the first slide that was
             // found above that uses the master page.
-            pDocument->SetMasterPage (
-                (pSlide->GetPageNum()-1)/2,
+            rDocument.SetMasterPage (
+                (pSlide->GetPageNumber()-1)/2,
                 rsBaseLayoutName,
-                pDocument,
-                sal_False,
-                sal_False);
+                &rDocument,
+                false,
+                false);
         }
         else
         {
             // 3. Replace the master page A by a copy of the given master
             // page B.
-            pDocument->RemoveUnnecessaryMasterPages (
-                pPage, sal_False);
+            rDocument.RemoveUnnecessaryMasterPages (
+                pPage, false);
         }
     }
 }
@@ -508,11 +495,10 @@ SdPage* DocumentHelper::ProvideMasterPage (
         OSL_ASSERT(pMasterPage != NULL);
         return NULL;
     }
-    SdDrawDocument* pSourceDocument = static_cast<SdDrawDocument*>(pMasterPage->GetModel());
-    if (pSourceDocument == NULL)
-        return NULL;
-    SdPage* pNotesMasterPage = static_cast<SdPage*>(
-        pSourceDocument->GetMasterPage(pMasterPage->GetPageNum()+1));
+
+    SdDrawDocument& rSourceDocument = static_cast< SdDrawDocument& >(pMasterPage->getSdrModelFromSdrPage());
+    SdPage* pNotesMasterPage = static_cast<SdPage*>(rSourceDocument.GetMasterPage(pMasterPage->GetPageNumber()+1));
+
     if (pNotesMasterPage == NULL)
     {
         // The model is not in a valid state.  Maybe a new master page
@@ -547,11 +533,11 @@ SdPage* DocumentHelper::ProvideMasterPage (
     sal_uInt16 nInsertionIndex = rTargetDocument.GetMasterPageCount();
     if (rpPageList->front()->IsMasterPage())
     {
-        nInsertionIndex = rpPageList->back()->GetPageNum();
+        nInsertionIndex = rpPageList->back()->GetPageNumber();
     }
 
     // Clone the master page.
-    if (pMasterPage->GetModel() != &rTargetDocument)
+    if (&pMasterPage->getSdrModelFromSdrPage() != &rTargetDocument)
     {
         pMasterPageInDocument = AddMasterPage (rTargetDocument, pMasterPage, nInsertionIndex);
         if( rTargetDocument.IsUndoEnabled() )
@@ -562,7 +548,7 @@ SdPage* DocumentHelper::ProvideMasterPage (
         pMasterPageInDocument = pMasterPage;
 
     // Clone the notes master.
-    if (pNotesMasterPage->GetModel() != &rTargetDocument)
+    if (&pNotesMasterPage->getSdrModelFromSdrPage() != &rTargetDocument)
     {
         SdPage* pClonedNotesMasterPage
             = AddMasterPage (rTargetDocument, pNotesMasterPage, nInsertionIndex+1);

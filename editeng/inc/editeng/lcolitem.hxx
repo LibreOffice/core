@@ -36,14 +36,13 @@
 class EDITENG_DLLPUBLIC SvxLineColorItem : public SvxColorItem
 {
 public:
-    TYPEINFO();
-
     SvxLineColorItem( const sal_uInt16 nId  );
     SvxLineColorItem( const Color& aColor, const sal_uInt16 nId  );
     SvxLineColorItem( SvStream& rStrm, const sal_uInt16 nId  );
     SvxLineColorItem( const SvxLineColorItem& rCopy );
     ~SvxLineColorItem();
 
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,

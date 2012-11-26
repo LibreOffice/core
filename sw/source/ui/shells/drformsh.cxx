@@ -73,10 +73,6 @@ SFX_IMPL_INTERFACE(SwDrawFormShell, SwDrawBaseShell, SW_RES(STR_SHELLNAME_DRAWFO
     SFX_OBJECTBAR_REGISTRATION(SFX_OBJECTBAR_OBJECT, SW_RES(RID_TEXT_TOOLBOX));
 }
 
-
-TYPEINIT1(SwDrawFormShell, SwDrawBaseShell)
-
-
 void SwDrawFormShell::Execute(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
@@ -95,10 +91,10 @@ void SwDrawFormShell::Execute(SfxRequest &rReq)
             const SvxHyperlinkItem& rHLinkItem = *(const SvxHyperlinkItem *)pItem;
             bool bConvertToText = rHLinkItem.GetInsertMode() == HLINK_DEFAULT ||
                             rHLinkItem.GetInsertMode() == HLINK_FIELD;
-            const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-            if (rMarkList.GetMark(0))
+            SdrUnoObj* pUnoCtrl = dynamic_cast< SdrUnoObj* >(pSdrView->getSelectedIfSingle());
+
+            if (pUnoCtrl)
             {
-                SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, rMarkList.GetMark(0)->GetMarkedSdrObj());
                 if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
                 {
                     if(bConvertToText)
@@ -183,11 +179,11 @@ void SwDrawFormShell::GetState(SfxItemSet& rSet)
             case SID_HYPERLINK_GETLINK:
             {
                 SdrView* pSdrView = rSh.GetDrawViewWithValidMarkList();
-                const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
+                SdrUnoObj* pUnoCtrl = dynamic_cast< SdrUnoObj* >(pSdrView->getSelectedIfSingle());
                 SvxHyperlinkItem aHLinkItem;
-                if (rMarkList.GetMark(0))
+
+                if (pUnoCtrl)
                 {
-                    SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, rMarkList.GetMark(0)->GetMarkedSdrObj());
                     if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
                     {
                         uno::Reference< awt::XControlModel >  xControlModel = pUnoCtrl->GetUnoControlModel();

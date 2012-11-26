@@ -68,6 +68,7 @@
 #include <algorithm>
 #include <svx/sdrpagewindow.hxx>
 #include <svl/itempool.hxx>
+#include <svx/svdlegacy.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -80,7 +81,6 @@
 #include <vector>
 #endif
 #include <boost/foreach.hpp>
-
 
 using namespace std;
 using namespace ::sd::slidesorter::model;
@@ -140,11 +140,9 @@ private:
 
 
 
-TYPEINIT1(SlideSorterView, ::sd::View);
-
 SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
     : ::sd::View (
-          rSlideSorter.GetModel().GetDocument(),
+          *rSlideSorter.GetModel().GetDocument(),
           rSlideSorter.GetContentWindow().get(),
           rSlideSorter.GetViewShell()),
       mrSlideSorter(rSlideSorter),
@@ -172,7 +170,7 @@ SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
       maVisibilityChangeListeners()
 {
     // Hide the page that contains the page objects.
-    SetPageVisible (sal_False);
+    SetPageVisible (false);
 
     // Register the background painter on level 1 to avoid the creation of a
     // background buffer.
@@ -239,18 +237,19 @@ void SlideSorterView::Dispose (void)
 
 
 
-sal_Int32 SlideSorterView::GetPageIndexAtPoint (const Point& rWindowPosition) const
+sal_uInt32 SlideSorterView::GetPageIndexAtPoint (const Point& rPosition) const
 {
-    sal_Int32 nIndex (-1);
+    sal_uInt32 nIndex (SDRPAGE_NOTFOUND);
 
     SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
     if (pWindow)
     {
-        nIndex = mpLayouter->GetIndexAtPoint(pWindow->PixelToLogic(rWindowPosition), false, false);
+        const Point aLogicPos(pWindow->PixelToLogic(rPosition));
+        nIndex = mpLayouter->GetIndexAtPoint(aLogicPos, false, false);
 
         // Clip the page index against the page count.
         if (nIndex >= mrModel.GetPageCount())
-            nIndex = -1;
+            nIndex = SDRPAGE_NOTFOUND;
     }
 
     return nIndex;
@@ -267,9 +266,9 @@ Layouter& SlideSorterView::GetLayouter (void)
 
 
 
-void SlideSorterView::ModelHasChanged (void)
+void SlideSorterView::LazyReactOnObjectChanges(void)
 {
-    // Ignore this call.  Rely on hints sent by the model to get informed of
+    // Ignore this call, do NOT call parent. Rely on hints sent by the model to get informed of
     // model changes.
 }
 
@@ -281,7 +280,7 @@ void SlideSorterView::LocalModelHasChanged(void)
     mbModelChangedWhileModifyEnabled = false;
 
     // First call our base class.
-    View::ModelHasChanged ();
+    View::LazyReactOnObjectChanges();
 }
 
 
@@ -394,11 +393,12 @@ void SlideSorterView::Rearrange (void)
     if (aWindowSize.Width()<=0 || aWindowSize.Height()<=0)
         return;
 
+    const basegfx::B2DVector& rPageScale(mrModel.GetPageDescriptor(0)->GetPage()->GetPageScale());
     const bool bRearrangeSuccess (
         mpLayouter->Rearrange (
             meOrientation,
             aWindowSize,
-            mrModel.GetPageDescriptor(0)->GetPage()->GetSize(),
+            Size(basegfx::fround(rPageScale.getX()), basegfx::fround(rPageScale.getY())),
             mrModel.GetPageCount()));
     if (bRearrangeSuccess)
     {
@@ -491,8 +491,8 @@ void SlideSorterView::Layout ()
         // Set the model area, i.e. the smallest rectangle that includes all
         // page objects.
         const Rectangle aViewBox (mpLayouter->GetTotalBoundingBox());
-        pWindow->SetViewOrigin (aViewBox.TopLeft());
-        pWindow->SetViewSize (aViewBox.GetSize());
+        pWindow->SetViewOrigin(basegfx::B2DPoint(aViewBox.Left(), aViewBox.Top()));
+        pWindow->SetViewSize(basegfx::B2DVector(aViewBox.getWidth(), aViewBox.getHeight()));
 
         ::boost::shared_ptr<PageObjectLayouter> pPageObjectLayouter(
             mpLayouter->GetPageObjectLayouter());
@@ -830,9 +830,10 @@ void SlideSorterView::ConfigurationChanged (
     SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
     if (pWindow && mpPreviewCache.get() == NULL)
     {
+        const Size& rPageObjSize = mpLayouter->GetPageObjectSize();
         mpPreviewCache.reset(
             new cache::PageCache(
-                mpLayouter->GetPageObjectSize(),
+                rPageObjSize,
                 false,
                 cache::SharedCacheContext(new ViewCacheContext(mrSlideSorter))));
     }

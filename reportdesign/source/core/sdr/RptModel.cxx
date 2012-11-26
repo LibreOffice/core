@@ -52,7 +52,6 @@ namespace rptui
 using namespace reportdesign;
 using namespace com::sun::star;
 DBG_NAME( rpt_OReportModel )
-TYPEINIT1(OReportModel,SdrModel);
 
 //----------------------------------------------------------------------------
 
@@ -62,7 +61,7 @@ OReportModel::OReportModel(::reportdesign::OReportDefinition* _pReportDefinition
     ,m_pReportDefinition(_pReportDefinition)
 {
     DBG_CTOR( rpt_OReportModel,0);
-    SetAllowShapePropertyChangeListener(true);
+//    SetAllowShapePropertyChangeListener(true);
     m_pUndoEnv = new OXUndoEnvironment(*this);
     m_pUndoEnv->acquire();
     SetSdrUndoFactory(new OReportUndoFactory);
@@ -92,7 +91,7 @@ void OReportModel::detachController()
     m_pUndoEnv->Clear(OXUndoEnvironment::Accessor());
 }
 //----------------------------------------------------------------------------
-SdrPage* OReportModel::AllocPage(FASTBOOL /*bMasterPage*/)
+SdrPage* OReportModel::AllocPage(bool /*bMasterPage*/)
 {
     DBG_CHKTHIS( rpt_OReportModel, 0);
     OSL_ENSURE(0,"Who called me!");
@@ -150,7 +149,7 @@ OReportPage* OReportModel::getPage(const uno::Reference< report::XSection >& _xS
     sal_uInt16 nCount = GetPageCount();
     for (sal_uInt16 i = 0; i < nCount && !pPage ; ++i)
     {
-        OReportPage* pRptPage = PTR_CAST( OReportPage, GetPage(i) );
+        OReportPage* pRptPage = dynamic_cast< OReportPage* >( GetPage(i) );
         if ( pRptPage && pRptPage->getSection() == _xSection )
             pPage = pRptPage;
     }

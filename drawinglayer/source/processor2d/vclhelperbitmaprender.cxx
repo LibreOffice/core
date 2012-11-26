@@ -47,7 +47,8 @@ namespace drawinglayer
         GraphicAttr aAttributes;
 
         // decompose matrix to check for shear, rotate and mirroring
-        basegfx::B2DVector aScale, aTranslate;
+        basegfx::B2DVector aScale;
+        basegfx::B2DPoint aTranslate;
         double fRotate, fShearX;
         rTransform.decompose(aScale, aTranslate, fRotate, fShearX);
 
@@ -64,7 +65,7 @@ namespace drawinglayer
         }
 
         // prepare Bitmap
-        basegfx::B2DRange aOutlineRange(0.0, 0.0, 1.0, 1.0);
+        basegfx::B2DRange aOutlineRange(basegfx::B2DRange::getUnitB2DRange());
 
         if(basegfx::fTools::equalZero(fRotate))
         {
@@ -107,8 +108,8 @@ namespace drawinglayer
         BitmapEx aContent(rBitmapEx);
 
         // prepare dest coor. Necessary to expand since vcl's DrawBitmapEx draws one pix less
-        basegfx::B2DRange aOutlineRange(0.0, 0.0, 1.0, 1.0);
-        aOutlineRange.transform(rTransform);
+        const basegfx::B2DRange aOutlineRange(rTransform * basegfx::B2DRange::getUnitB2DRange());
+
         // prepare dest coordinates
         const Point aPoint(
                 basegfx::fround(aOutlineRange.getMinX()),
@@ -118,7 +119,8 @@ namespace drawinglayer
                 basegfx::fround(aOutlineRange.getHeight()));
 
         // decompose matrix to check for shear, rotate and mirroring
-        basegfx::B2DVector aScale, aTranslate;
+        basegfx::B2DVector aScale;
+        basegfx::B2DPoint aTranslate;
         double fRotate, fShearX;
         rTransform.decompose(aScale, aTranslate, fRotate, fShearX);
 
@@ -150,8 +152,7 @@ namespace drawinglayer
         const basegfx::B2DHomMatrix& rTransform)
     {
         // process self with free transformation (containing shear and rotate). Get dest rect in pixels.
-        basegfx::B2DRange aOutlineRange(0.0, 0.0, 1.0, 1.0);
-        aOutlineRange.transform(rTransform);
+        const basegfx::B2DRange aOutlineRange(rTransform * basegfx::B2DRange::getUnitB2DRange());
         const Rectangle aDestRectLogic(
             basegfx::fround(aOutlineRange.getMinX()),
             basegfx::fround(aOutlineRange.getMinY()),

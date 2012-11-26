@@ -479,7 +479,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
 // os: So ein Unsinn! Irgendwo laesst sich so ein Item immer finden,
 //      es muss aber im rSet vorhanden sein!
 //  const SfxPoolItem* pX = GetOldItem( rSet, SID_VIEW_FLD_PIC );
-//  if( pX && pX->ISA(SfxWallpaperItem))
+//  if( pX && dynamic_cast< SfxWallpaperItem* >(pX))
     if(SFX_ITEM_AVAILABLE <= rSet.GetItemState(GetWhich(SID_VIEW_FLD_PIC), sal_False))
     {
         ResetFromWallpaperItem( rSet );
@@ -759,7 +759,7 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
 //      es muss aber im rSet vorhanden sein!
 
 //  const SfxPoolItem* pX = GetOldItem( rCoreSet, SID_VIEW_FLD_PIC );
-//  if( pX && pX->ISA(SfxWallpaperItem))
+//  if( pX && dynamic_cast< SfxWallpaperItem* >(pX))
     if(SFX_ITEM_AVAILABLE <= rCoreSet.GetItemState(GetWhich(SID_VIEW_FLD_PIC), sal_False))
         return FillItemSetWithWallpaperItem( rCoreSet, SID_VIEW_FLD_PIC );
 
@@ -1196,14 +1196,14 @@ void SvxBackgroundTabPage::FillColorValueSets_Impl()
     const SfxPoolItem* pItem = NULL;
     XColorTable* pColorTable = NULL;
     const Size aSize15x15 = Size( 15, 15 );
-    FASTBOOL bOwn = sal_False;
+    bool bOwn = false;
 
     if ( pDocSh && ( 0 != ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) ) )
         pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
 
     if ( !pColorTable )
     {
-        bOwn = sal_True;
+        bOwn = true;
         pColorTable = new XColorTable( SvtPathOptions().GetPalettePath() );
     }
 
@@ -1968,7 +1968,7 @@ void SvxBackgroundTabPage::EnableTransparency(sal_Bool bColor, sal_Bool bGraphic
 
 void SvxBackgroundTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
 {
-    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE );
     if (pFlagItem)
     {
         sal_uInt32 nFlags=pFlagItem->GetValue();

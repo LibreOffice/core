@@ -492,8 +492,6 @@ protected:
     virtual void  Modify( const SfxPoolItem*, const SfxPoolItem* );
 
 public:
-    TYPEINFO(); //Bereits in Basisklasse Client drin.
-
     sal_uInt16 GetType() const { return 0x1 << nType; }
 
     static SwCache &GetCache()                { return *pCache; }

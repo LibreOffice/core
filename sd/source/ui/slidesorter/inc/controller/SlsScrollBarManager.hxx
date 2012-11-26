@@ -97,10 +97,10 @@ public:
         were inserted or deleted, the layout or the zoom factor has
         changed.
         @param bResetThumbPosition
-            When <TRUE/> then set the thumb position to position 0.  This is
+            When <true/> then set the thumb position to position 0.  This is
             done when e.g. switching between master page mode and draw mode.
         @param bScrollToCurrentPosition
-            When <TRUE/> then scroll the window to the new offset that is
+            When <true/> then scroll the window to the new offset that is
             defined by the scroll bars.  Otherwise the new offset is simply
             set and the whole window is repainted.
     */
@@ -162,8 +162,8 @@ public:
         @param rAutoScrollFunctor
             Every time when the window is scrolled then this functor is executed.
         @return
-            When the window is scrolled then this method returns <TRUE/>.
-            When the window is not changed then <FALSE/> is returned.
+            When the window is scrolled then this method returns <true/>.
+            When the window is not changed then <false/> is returned.
     */
     bool AutoScroll (
         const Point& rMouseWindowPosition,
@@ -254,7 +254,7 @@ private:
         or hidden.
         @return
             When the window content can be shown with only being clipped in
-            an orientation where the scroll bar would be shown then <TRUE/>
+            an orientation where the scroll bar would be shown then <true/>
             is returned.
     */
     bool TestScrollBarVisibilities (

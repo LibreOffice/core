@@ -29,7 +29,7 @@
 class DlgEditor;
 class Timer;
 class MouseEvent;
-class Point;
+namespace basegfx { class B2DPoint; }
 
 //============================================================================
 // DlgEdFunc
@@ -42,7 +42,7 @@ protected:
     Timer        aScrollTimer;
 
     DECL_LINK( ScrollTimeout, Timer * );
-    void    ForceScroll( const Point& rPos );
+    void    ForceScroll( const basegfx::B2DPoint& rPos );
 
 public:
     DlgEdFunc( DlgEditor* pParent );

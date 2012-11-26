@@ -110,8 +110,20 @@ namespace sd {
     class UndoAttrObject;
 }
 
-class SD_DLLPUBLIC SdPage : public FmFormPage, public SdrObjUserCall
+//////////////////////////////////////////////////////////////////////////////
+
+// try to find the SdPage connected to the SdrObject
+SdPage* findConnectionToSdrObject(const SdrObject* pSdrObject);
+
+// set/reset connection between SdrObject and SdPage
+SD_DLLPUBLIC void establishConnectionToSdrObject(SdrObject* pSdrObject, SdPage* pSdPage);
+SD_DLLPUBLIC void resetConnectionToSdrObject(SdrObject* pSdrObject);
+
+//////////////////////////////////////////////////////////////////////////////
+
+class SD_DLLPUBLIC SdPage : public FmFormPage, public SfxListener
 {
+private:
 friend class SdGenericDrawPage;
 friend class SdDrawPage;
 friend class sd::UndoAnimation;
@@ -125,12 +137,12 @@ protected:
     AutoLayout  meAutoLayout;             // AutoLayout
     sd::ShapeList maPresentationShapeList;            // Praesentationsobjekte
     sd::ScopeLock maLockAutoLayoutArrangement;
-    sal_Bool        mbSelected;               // Selektionskennung
+    bool        mbSelected;               // Selektionskennung
     PresChange  mePresChange;             // manuell/automatisch/halbautomatisch
     sal_uInt32      mnTime;                   // Anzeigedauer in Sekunden
-    sal_Bool        mbSoundOn;                // mit/ohne Sound (sal_True/sal_False)
-    sal_Bool        mbExcluded;               // wird in der Show nicht/doch
-                                          // angezeigt (sal_True/sal_False)
+    bool        mbSoundOn;                // mit/ohne Sound (true/false)
+    bool        mbExcluded;               // wird in der Show nicht/doch
+                                          // angezeigt (true/false)
     String      maLayoutName;             // Name des Layouts
     String      maSoundFile;               // Pfad zum Soundfile (MSDOS-Notation)
     bool        mbLoopSound;
@@ -138,8 +150,8 @@ protected:
     String      maCreatedPageName;         // von GetPageName erzeugter Seitenname
     String      maFileName;                // Filename
     String      maBookmarkName;           // Bookmarkname
-    sal_Bool        mbScaleObjects;           // Objekte sollen skaliert werden
-    sal_Bool        mbBackgroundFullSize;     // Hintergrundobjekt auf ganze Seite darstellen
+    bool        mbScaleObjects;           // Objekte sollen skaliert werden
+    bool        mbBackgroundFullSize;     // Hintergrundobjekt auf ganze Seite darstellen
     rtl_TextEncoding meCharSet;            // Text-Encoding
     sal_uInt16      mnPaperBin;                // PaperBin
     Orientation meOrientation;             // Print-Orientation
@@ -168,31 +180,25 @@ protected:
     sal_Int32 mnTransitionFadeColor;
     double mfTransitionDuration;
 
+    /// method to copy all data from given source
+    virtual void copyDataFromSdrPage(const SdrPage& rSource);
+
 public:
-    TYPEINFO();
+    /// create a copy, evtl. with a different target model (if given)
+    virtual SdrPage* CloneSdrPage(SdrModel* pTargetModel = 0) const;
 
-    SdPage(SdDrawDocument& rNewDoc, StarBASIC* pBasic, sal_Bool bMasterPage=sal_False);
-    SdPage(const SdPage& rSrcPage);
+    SdPage(SdDrawDocument& rNewDoc, StarBASIC* pBasic, bool bMasterPage = false);
     ~SdPage();
-    virtual SdrPage* Clone() const;
-    virtual SdrPage* Clone(SdrModel* pNewModel) const;
 
-    virtual void    SetSize(const Size& aSize);
-    virtual void    SetBorder(sal_Int32 nLft, sal_Int32 nUpp, sal_Int32 nRgt, sal_Int32 Lwr);
-    virtual void    SetLftBorder(sal_Int32 nBorder);
-    virtual void    SetRgtBorder(sal_Int32 nBorder);
-    virtual void    SetUppBorder(sal_Int32 nBorder);
-    virtual void    SetLwrBorder(sal_Int32 nBorder);
-    virtual void    SetModel(SdrModel* pNewModel);
-    virtual FASTBOOL IsReadOnly() const;
+    virtual void SetPageScale(const basegfx::B2DVector& aNewScale);
 
     sd::ShapeList&  GetPresentationShapeList() { return maPresentationShapeList; }
 
     void EnsureMasterPageDefaultBackground();
-    SdrObject*      CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const Rectangle& rRect, sal_Bool bInsert=sal_False);
+    SdrObject*      CreatePresObj(PresObjKind eObjKind, bool bVertical, const basegfx::B2DRange& rRange, bool bInsert=false);
     SdrObject*      CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert);
     SdrObject*      GetPresObj(PresObjKind eObjKind, int nIndex = 1, bool bFuzzySearch = false );
-    PresObjKind     GetPresObjKind(SdrObject* pObj) const;
+    PresObjKind     GetPresObjKind(const SdrObject* pObj) const;
     String          GetPresObjText(PresObjKind eObjKind) const;
     SfxStyleSheet* GetStyleSheetForMasterPageBackground() const;
     SfxStyleSheet*  GetStyleSheetForPresObj(PresObjKind eObjKind) const;
@@ -207,20 +213,13 @@ public:
     /** inserts the given SdrObject into the presentation object list */
     void            InsertPresObj(SdrObject* pObj, PresObjKind eKind );
 
-    void            SetAutoLayout(AutoLayout eLayout, sal_Bool bInit=sal_False, sal_Bool bCreate=sal_False);
+    void            SetAutoLayout(AutoLayout eLayout, bool bInit=false, bool bCreate=false);
     AutoLayout      GetAutoLayout() const { return meAutoLayout; }
-    void            CreateTitleAndLayout(sal_Bool bInit=sal_False, sal_Bool bCreate=sal_False);
-    SdrObject*      InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, bool bVertical, Rectangle aRect, bool bInit );
+    void            CreateTitleAndLayout(bool bInit=false, bool bCreate=false);
+    SdrObject*      InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, bool bVertical, const basegfx::B2DRange& rRange, bool bInit );
 
-    virtual void       NbcInsertObject(SdrObject* pObj, sal_uLong nPos=CONTAINER_APPEND,
-                                       const SdrInsertReason* pReason=NULL);
-    virtual SdrObject* NbcRemoveObject(sal_uLong nObjNum);
-    virtual SdrObject* RemoveObject(sal_uLong nObjNum);
-
-    // #95876# Also overload ReplaceObject methods to realize when
-    // objects are removed with this mechanism instead of RemoveObject
-    virtual SdrObject* NbcReplaceObject(SdrObject* pNewObj, sal_uLong nObjNum);
-    virtual SdrObject* ReplaceObject(SdrObject* pNewObj, sal_uLong nObjNum);
+    // react on content change
+    virtual void handleContentChange(const SfxHint& rHint);
 
     virtual void SetLinkData(const String& rLinkName, const String& rLinkData);
 
@@ -229,8 +228,8 @@ public:
     void        SetPageKind(PageKind ePgType)        { mePageKind = ePgType; }
     PageKind    GetPageKind() const                  { return mePageKind; }
 
-    void        SetSelected(sal_Bool bSel)               { mbSelected = bSel; }
-    sal_Bool        IsSelected() const                   { return mbSelected; }
+    void        SetSelected(bool bSel)               { mbSelected = bSel; }
+    bool        IsSelected() const                   { return mbSelected; }
 
     void        SetFadeEffect(::com::sun::star::presentation::FadeEffect eNewEffect);
     ::com::sun::star::presentation::FadeEffect  GetFadeEffect() const;
@@ -241,14 +240,14 @@ public:
     void        SetTime(sal_uInt32 nNewTime)             { mnTime = nNewTime; }
     sal_uInt32      GetTime() const                      { return mnTime; }
 
-    void        SetSound(sal_Bool bNewSoundOn)           { mbSoundOn = bNewSoundOn; }
-    sal_Bool        IsSoundOn() const                    { return mbSoundOn; }
+    void        SetSound(bool bNewSoundOn)           { mbSoundOn = bNewSoundOn; }
+    bool        IsSoundOn() const                    { return mbSoundOn; }
 
-    void        SetExcluded(sal_Bool bNewExcluded)      { mbExcluded = bNewExcluded; }
-    sal_Bool        IsExcluded() const                  { return mbExcluded; }
+    void        SetExcluded(bool bNewExcluded)      { mbExcluded = bNewExcluded; }
+    bool        IsExcluded() const                  { return mbExcluded; }
 
-    void        SetScaleObjects(sal_Bool bScale)        { mbScaleObjects = bScale; }
-    sal_Bool        IsScaleObjects() const              { return mbScaleObjects; }
+    void        SetScaleObjects(bool bScale)        { mbScaleObjects = bScale; }
+    bool        IsScaleObjects() const              { return mbScaleObjects; }
 
     void        SetSoundFile(const String& rStr)    { maSoundFile = rStr; }
     String      GetSoundFile() const                { return maSoundFile; }
@@ -274,9 +273,11 @@ public:
     double      getTransitionDuration() const;
     void        setTransitionDuration( double fTranstionDuration );
 
-    // Virtuelle Methoden von SdrObjUserCall
-    virtual void Changed(const SdrObject& rObj, SdrUserCallType eType,
-                         const Rectangle& rOldBoundRect);
+    // virtual notifyer from SfxListener
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
+
+    // new central SdrObject change handler, called from Notify
+    void HandleChanged(const SdrObject& rObj, SdrHintKind eHint);
 
     void            SetLayoutName(String aName);
     virtual String  GetLayoutName() const       { return maLayoutName; }
@@ -290,20 +291,19 @@ public:
     void            ConnectLink();
     void            DisconnectLink();
 
-    void    ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderRect,
-                         sal_Bool bScaleAllObj);
+    void ScaleObjects(const basegfx::B2DVector& rNewPageSize, double fLeft, double fTop, double fRight, double fBottom, bool bScaleAllObj);
 
     const String&   GetName() const;
     String          GetRealName() const { return FmFormPage::GetName(); };
 
     void    SetPresentationLayout(const String& rLayoutName,
-                                  sal_Bool bReplaceStyleSheets = sal_True,
-                                  sal_Bool bSetMasterPage = sal_True,
-                                  sal_Bool bReverseOrder = sal_False);
+                                  bool bReplaceStyleSheets = true,
+                                  bool bSetMasterPage = true,
+                                  bool bReverseOrder = false);
     void    EndListenOutlineText();
 
-    void    SetBackgroundFullSize( sal_Bool bIn );
-    sal_Bool    IsBackgroundFullSize() const { return mbBackgroundFullSize; }
+    void    SetBackgroundFullSize( bool bIn );
+    bool    IsBackgroundFullSize() const { return mbBackgroundFullSize; }
 
     rtl_TextEncoding GetCharSet() { return(meCharSet); }
 
@@ -371,10 +371,10 @@ public:
     /** removes all empty presentation objects from this slide */
     void RemoveEmptyPresentationObjects();
 
-    Rectangle   GetTitleRect() const;
-    Rectangle   GetLayoutRect() const;
+    basegfx::B2DRange GetTitleRange() const;
+    basegfx::B2DRange GetLayoutRange() const;
 
-    static void CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, bool bHorizontal, std::vector< Rectangle >& rAreas );
+    static void CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, bool bHorizontal, std::vector< basegfx::B2DRange >& rAreas );
 
     /** Set the "precious" flag to the given value.
     */
@@ -384,7 +384,7 @@ public:
         master pages from being deleted automatically.  For pages
         other than master pages this flag can be ignored.
         @return
-            When this method returns <TRUE/> for a master page then this
+            When this method returns <true/> for a master page then this
             master page should not be deleted automatically.
     */
     bool IsPrecious (void) const;
@@ -402,8 +402,11 @@ private:
     */
     void cloneAnimations( SdPage& rTargetPage ) const;
 
-    /** called before a shape is removed or replaced from this slide */
-    void onRemoveObject( SdrObject* pObject );
+    /** called before a shape is removed from this slide */
+    void onRemoveObject( const SdrObject* pObject );
+
+    /** called after a shape is inserted to this slide */
+    void onInsertObject( const SdrObject* pObject );
 };
 
 #endif     // _SDPAGE_HXX

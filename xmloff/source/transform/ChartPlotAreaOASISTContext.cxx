@@ -41,8 +41,6 @@ using ::rtl::OUString;
 class XMLAxisOASISContext : public XMLPersElemContentTContext
 {
 public:
-    TYPEINFO();
-
     XMLAxisOASISContext( XMLTransformerBase& rTransformer,
                          const ::rtl::OUString& rQName,
                          ::rtl::Reference< XMLPersAttrListTContext > & rOutCategoriesContext );
@@ -63,8 +61,6 @@ private:
     ::rtl::Reference< XMLPersAttrListTContext > &   m_rCategoriesContext;
     bool                                            m_bHasCategories;
 };
-
-TYPEINIT1( XMLAxisOASISContext, XMLPersElemContentTContext );
 
 XMLAxisOASISContext::XMLAxisOASISContext(
     XMLTransformerBase& rTransformer,
@@ -199,8 +195,6 @@ bool XMLAxisOASISContext::IsCategoryAxis() const
     return m_bHasCategories;
 }
 
-
-TYPEINIT1( XMLChartPlotAreaOASISTContext, XMLProcAttrTransformerContext );
 
 XMLChartPlotAreaOASISTContext::XMLChartPlotAreaOASISTContext(
     XMLTransformerBase & rTransformer, const ::rtl::OUString & rQName ) :

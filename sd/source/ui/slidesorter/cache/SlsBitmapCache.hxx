@@ -81,7 +81,7 @@ public:
     */
     void Clear (void);
 
-    /** Return <TRUE/> when the cache is full, i.e. the cache compactor had
+    /** Return <true/> when the cache is full, i.e. the cache compactor had
         to be run.
     */
     bool IsFull (void) const;
@@ -91,11 +91,11 @@ public:
     */
     sal_Int32 GetSize (void);
 
-    /** Return <TRUE/> when a preview bitmap exists for the given key.
+    /** Return <true/> when a preview bitmap exists for the given key.
     */
     bool HasBitmap (const CacheKey& rKey);
 
-    /** Return <TRUE/> when a preview bitmap exists for the given key and
+    /** Return <true/> when a preview bitmap exists for the given key and
         when it is up-to-date.
     */
     bool BitmapIsUpToDate (const CacheKey& rKey);
@@ -158,12 +158,12 @@ public:
         part of) the cache.  The entries of the index are sorted according
         to last access times with the least recently access time first.
         @param bIncludePrecious
-            When this flag is <TRUE/> entries with the precious flag set are
-            included in the index.  When the flag is <FALSE/> these entries
+            When this flag is <true/> entries with the precious flag set are
+            included in the index.  When the flag is <false/> these entries
             are ommited.
         @param bIncludeNoPreview
-            When this flag is <TRUE/> entries with that have no preview
-            bitmaps are included in the index.  When the flag is <FALSE/> these entries
+            When this flag is <true/> entries with that have no preview
+            bitmaps are included in the index.  When the flag is <false/> these entries
             are ommited.
     */
     ::std::auto_ptr<CacheIndex> GetCacheIndex (

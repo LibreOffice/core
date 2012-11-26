@@ -156,8 +156,6 @@ public:
     Point                   PixelToLogic( const Point&, const MapMode& rMapMode );
 
     DECL_LINK( NotifyHdl, EENotify* );
-
-    void ChangeModel( SdrModel* pNewModel );
 };
 
 //------------------------------------------------------------------------
@@ -256,50 +254,12 @@ void SAL_CALL CellEditSourceImpl::release()
         delete this;
 }
 
-void CellEditSourceImpl::ChangeModel( SdrModel* pNewModel )
-{
-    if( mpModel != pNewModel )
-    {
-        if( mpOutliner )
-        {
-            if( mpModel )
-                mpModel->disposeOutliner( mpOutliner );
-            else
-                delete mpOutliner;
-            mpOutliner = 0;
-        }
-
-        if( mpView )
-        {
-            EndListening( *mpView );
-            mpView = 0;
-        }
-
-        mpWindow = 0;
-        mxLinguServiceManager.clear();
-
-        mpModel = pNewModel;
-
-        if( mpTextForwarder )
-        {
-            delete mpTextForwarder;
-            mpTextForwarder = 0;
-        }
-
-        if( mpViewForwarder )
-        {
-            delete mpViewForwarder;
-            mpViewForwarder = 0;
-        }
-    }
-}
-
 //------------------------------------------------------------------------
 
 void CellEditSourceImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
-    const SvxViewHint* pViewHint = PTR_CAST( SvxViewHint, &rHint );
+    const SdrBaseHint* pSdrHint = dynamic_cast< const SdrBaseHint* >(&rHint);
+    const SvxViewHint* pViewHint = dynamic_cast< const SvxViewHint* >(&rHint);
 
     if( pViewHint )
     {
@@ -312,9 +272,11 @@ void CellEditSourceImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
     else if( pSdrHint )
     {
-        switch( pSdrHint->GetKind() )
+        switch( pSdrHint->GetSdrHintKind() )
         {
-            case HINT_OBJCHG:
+            case HINT_OBJCHG_MOVE:
+            case HINT_OBJCHG_RESIZE:
+            case HINT_OBJCHG_ATTR:
             {
                 mbDataValid = sal_False;                        // Text muss neu geholt werden
 
@@ -322,7 +284,7 @@ void CellEditSourceImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 {
                     // #104157# Update maTextOffset, object has changed
                     // #105196#, #105203#: Cannot call that // here,
-                    // since TakeTextRect() (called from there) //
+                    // since TakeTextRange() (called from there) //
                     // changes outliner content.
                     // UpdateOutliner();
 
@@ -335,7 +297,7 @@ void CellEditSourceImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
             case HINT_BEGEDIT:
 /* todo
-                if( mpObject == pSdrHint->GetObject() )
+                if( mpObject == pSdrHint->GetSdrHintObject() )
                 {
                     // invalidate old forwarder
                     if( !mbForwarderIsEditMode )
@@ -358,7 +320,7 @@ void CellEditSourceImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
             case HINT_ENDEDIT:
 /* todo
-                if( mpObject == pSdrHint->GetObject() )
+                if( mpObject == pSdrHint->GetSdrHintObject() )
                 {
                     Broadcast( *pSdrHint );
 
@@ -447,11 +409,11 @@ void CellEditSourceImpl::SetupOutliner()
 /* todo
     if( mpObject && mpOutliner )
     {
-        SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
+        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( mpObject );
         Rectangle aPaintRect;
         if( pTextObj )
         {
-            Rectangle aBoundRect( pTextObj->GetCurrentBoundRect() );
+            Rectangle aBoundRect( sdr::legacy::GetBoundRect(*pTextObj) );
             pTextObj->SetupOutlinerFormatting( *mpOutliner, aPaintRect );
 
             // #101029# calc text offset from shape anchor
@@ -472,11 +434,11 @@ void CellEditSourceImpl::UpdateOutliner()
 /* todo
     if( mpObject && mpOutliner )
     {
-        SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
+        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( mpObject );
         Rectangle aPaintRect;
         if( pTextObj )
         {
-            Rectangle aBoundRect( pTextObj->GetCurrentBoundRect() );
+            Rectangle aBoundRect( sdr::legacy::GetBoundRect(*pTextObj) );
             pTextObj->UpdateOutlinerFormatting( *mpOutliner, aPaintRect );
 
             // #101029# calc text offset from shape anchor
@@ -716,7 +678,7 @@ SvxEditViewForwarder* CellEditSourceImpl::GetEditViewForwarder( sal_Bool bCreate
             mpView->SdrEndTextEdit();
 
 /* todo
-            if(mpView->SdrBeginTextEdit(mpObject, 0L, 0L, sal_False, (SdrOutliner*)0L, 0L, sal_False, sal_False))
+            if(mpView->SdrBeginTextEdit(mpObject, 0L, sal_False, (SdrOutliner*)0L, 0L, sal_False, sal_False))
             {
                 if( mxCell->IsTextEditActive() )
                 {
@@ -815,7 +777,7 @@ Rectangle CellEditSourceImpl::GetVisArea()
 
         // offset vis area by edit engine left-top position
         Rectangle aAnchorRect;
-        mxCell->TakeTextAnchorRect( aAnchorRect );
+        mxCell->TakeCellsTextAnchorRect( aAnchorRect );
         aVisArea.Move( -aAnchorRect.Left(), -aAnchorRect.Top() );
 
         MapMode aMapMode(mpWindow->GetMapMode());
@@ -849,7 +811,7 @@ Point CellEditSourceImpl::LogicToPixel( const Point& rPoint, const MapMode& rMap
         aPoint1.Y() += maTextOffset.Y();
 
         Point aPoint2( OutputDevice::LogicToLogic( aPoint1, rMapMode,
-                                                   MapMode(mpModel->GetScaleUnit()) ) );
+                                                   MapMode(mpModel->GetExchangeObjectUnit()) ) );
         MapMode aMapMode(mpWindow->GetMapMode());
         aMapMode.SetOrigin(Point());
         return mpWindow->LogicToPixel( aPoint2, aMapMode );
@@ -879,7 +841,7 @@ Point CellEditSourceImpl::PixelToLogic( const Point& rPoint, const MapMode& rMap
         aMapMode.SetOrigin(Point());
         Point aPoint1( mpWindow->PixelToLogic( rPoint, aMapMode ) );
         Point aPoint2( OutputDevice::LogicToLogic( aPoint1,
-                                                   MapMode(mpModel->GetScaleUnit()),
+                                                   MapMode(mpModel->GetExchangeObjectUnit()),
                                                    rMapMode ) );
         // #101029#
         aPoint2.X() -= maTextOffset.X();
@@ -1038,13 +1000,6 @@ void CellEditSource::removeRange( SvxUnoTextRangeBase* pOldRange )
 const SvxUnoTextRangeBaseList& CellEditSource::getRanges() const
 {
     return mpImpl->getRanges();
-}
-
-//------------------------------------------------------------------------
-
-void CellEditSource::ChangeModel( SdrModel* pNewModel )
-{
-    mpImpl->ChangeModel( pNewModel );
 }
 
 //------------------------------------------------------------------------

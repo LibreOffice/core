@@ -26,6 +26,7 @@
 
 #include "file/fcomp.hxx"
 #include "file/filedllapi.hxx"
+#include <tools/solar.h>
 
 namespace connectivity
 {

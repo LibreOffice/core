@@ -29,20 +29,6 @@
 using namespace ::std;
 using namespace com::sun::star;
 
-SdrCustomShapeEngineItem::SdrCustomShapeEngineItem()
-:   SfxStringItem( SDRATTR_CUSTOMSHAPE_ENGINE, String() )
-{}
-SdrCustomShapeEngineItem::SdrCustomShapeEngineItem( const String& rVal )
-:   SfxStringItem( SDRATTR_CUSTOMSHAPE_ENGINE, rVal )
-{}
-
-SdrCustomShapeDataItem::SdrCustomShapeDataItem()
-:   SfxStringItem( SDRATTR_CUSTOMSHAPE_DATA, String() )
-{}
-SdrCustomShapeDataItem::SdrCustomShapeDataItem( const String& rVal )
-:   SfxStringItem( SDRATTR_CUSTOMSHAPE_DATA, rVal )
-{}
-
 bool SdrCustomShapeGeometryItem::PropertyEq::operator()( const rtl::OUString& r1, const rtl::OUString& r2 ) const
 {
     return r1.equals( r2 );
@@ -56,7 +42,6 @@ size_t SdrCustomShapeGeometryItem::PropertyPairHash::operator()( const SdrCustom
     return (size_t)r1.first.hashCode() + r1.second.hashCode();
 };
 
-TYPEINIT1_FACTORY( SdrCustomShapeGeometryItem, SfxPoolItem , new  SdrCustomShapeGeometryItem);
 SdrCustomShapeGeometryItem::SdrCustomShapeGeometryItem()
 :   SfxPoolItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )
 {}
@@ -367,16 +352,5 @@ const uno::Sequence< beans::PropertyValue >& SdrCustomShapeGeometryItem::GetGeom
 {
     return aPropSeq;
 }
-/*
-const uno::Any* GetValueByName( const rtl::OUString& rProperty ) const
-{
 
-}
-*/
-SdrCustomShapeReplacementURLItem::SdrCustomShapeReplacementURLItem()
-:   SfxStringItem( SDRATTR_CUSTOMSHAPE_REPLACEMENT_URL, String() )
-{}
-SdrCustomShapeReplacementURLItem::SdrCustomShapeReplacementURLItem( const String& rVal )
-:   SfxStringItem( SDRATTR_CUSTOMSHAPE_REPLACEMENT_URL, rVal )
-{}
-
+// eof

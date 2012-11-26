@@ -59,9 +59,6 @@ using namespace ::com::sun::star::accessibility;
 #define NOCHILDSELECTED     -1
 
 
-DBG_NAME( SvxRectCtlAccessibleContext )
-
-
 //=====  internal  ============================================================
 
 namespace
@@ -156,8 +153,6 @@ SvxRectCtlAccessibleContext::SvxRectCtlAccessibleContext(
     mnSelectedChild( NOCHILDSELECTED ),
     mbAngleMode( rRepr.GetNumOfChilds() == 8 )
 {
-    DBG_CTOR( SvxRectCtlAccessibleContext, NULL );
-
     if( pName )
         msName = *pName;
     else
@@ -184,8 +179,6 @@ SvxRectCtlAccessibleContext::SvxRectCtlAccessibleContext(
 
 SvxRectCtlAccessibleContext::~SvxRectCtlAccessibleContext()
 {
-    DBG_DTOR( SvxRectCtlAccessibleContext, NULL );
-
     if( IsAlive() )
     {
         osl_incrementInterlockedCount( &m_refCount );
@@ -793,9 +786,6 @@ void SvxRectCtlAccessibleContext::ThrowExceptionIfNotAlive( void ) throw( lang::
 // -------------------------------------------------------------------------------------------------
 
 
-DBG_NAME( SvxRectCtlChildAccessibleContext )
-
-
 SvxRectCtlChildAccessibleContext::SvxRectCtlChildAccessibleContext(
     const Reference<XAccessible>&   rxParent,
     const Window&                       rParentWindow,
@@ -814,14 +804,11 @@ SvxRectCtlChildAccessibleContext::SvxRectCtlChildAccessibleContext(
     mnIndexInParent( nIndexInParent ),
     mbIsChecked( sal_False )
 {
-    DBG_CTOR( SvxRectCtlChildAccessibleContext, NULL );
 }
 
 
 SvxRectCtlChildAccessibleContext::~SvxRectCtlChildAccessibleContext()
 {
-    DBG_DTOR( SvxRectCtlChildAccessibleContext, NULL );
-
     if( IsAlive() )
     {
         osl_incrementInterlockedCount( &m_refCount );

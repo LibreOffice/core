@@ -261,11 +261,11 @@ void SAL_CALL CellCursor::merge(  ) throw (NoSupportException, RuntimeException)
     if( !mxTable.is() || (mxTable->getSdrTableObj() == 0) )
         throw DisposedException();
 
-    SdrModel* pModel = mxTable->getSdrTableObj()->GetModel();
-    const bool bUndo = pModel && mxTable->getSdrTableObj()->IsInserted() && pModel->IsUndoEnabled();
+    SdrModel& rModel = mxTable->getSdrTableObj()->getSdrModelFromSdrObject();
+    const bool bUndo = mxTable->getSdrTableObj()->IsObjectInserted() && rModel.IsUndoEnabled();
 
     if( bUndo )
-        pModel->BegUndo( ImpGetResStr(STR_TABLE_MERGE) );
+        rModel.BegUndo( ImpGetResStr(STR_TABLE_MERGE) );
 
     try
     {
@@ -279,10 +279,9 @@ void SAL_CALL CellCursor::merge(  ) throw (NoSupportException, RuntimeException)
     }
 
     if( bUndo )
-        pModel->EndUndo();
+        rModel.EndUndo();
 
-    if( pModel )
-        pModel->SetChanged();
+    rModel.SetChanged();
 }
 
 // -----------------------------------------------------------------------------
@@ -527,10 +526,10 @@ void SAL_CALL CellCursor::split( sal_Int32 nColumns, sal_Int32 nRows ) throw (No
     if( !mxTable.is() || (mxTable->getSdrTableObj() == 0) )
         throw DisposedException();
 
-    SdrModel* pModel = mxTable->getSdrTableObj()->GetModel();
-    const bool bUndo = pModel && mxTable->getSdrTableObj()->IsInserted() && pModel->IsUndoEnabled();
+    SdrModel& rModel = mxTable->getSdrTableObj()->getSdrModelFromSdrObject();
+    const bool bUndo = mxTable->getSdrTableObj()->IsObjectInserted() && rModel.IsUndoEnabled();
     if( bUndo )
-        pModel->BegUndo( ImpGetResStr(STR_TABLE_SPLIT) );
+        rModel.BegUndo( ImpGetResStr(STR_TABLE_SPLIT) );
 
     try
     {
@@ -550,10 +549,9 @@ void SAL_CALL CellCursor::split( sal_Int32 nColumns, sal_Int32 nRows ) throw (No
     }
 
     if( bUndo )
-        pModel->EndUndo();
+        rModel.EndUndo();
 
-    if( pModel )
-        pModel->SetChanged();
+    rModel.SetChanged();
 }
 
 // -----------------------------------------------------------------------------

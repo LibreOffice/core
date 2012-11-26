@@ -43,18 +43,6 @@ namespace drawinglayer
         {
         }
 
-        bool TransparencePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(GroupPrimitive2D::operator==(rPrimitive))
-            {
-                const TransparencePrimitive2D& rCompare = (TransparencePrimitive2D&)rPrimitive;
-
-                return (getTransparence() == rCompare.getTransparence());
-            }
-
-            return false;
-        }
-
         // provide unique ID
         ImplPrimitrive2DIDBlock(TransparencePrimitive2D, PRIMITIVE2D_ID_TRANSPARENCEPRIMITIVE2D)
     } // end of namespace primitive2d

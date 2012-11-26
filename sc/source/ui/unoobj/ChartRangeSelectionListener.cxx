@@ -69,7 +69,7 @@ void SAL_CALL ScChartRangeSelectionListener::selectionChanged( const lang::Event
 //         while (pFrame)
 //         {
 //             SfxViewShell* pSh = pFrame->GetViewShell();
-//             if (pSh && pSh->ISA(ScTabViewShell))
+//             if (pSh && dynamic_cast< ScTabViewShell* >(pSh))
 //             {
 //                 ScTabViewShell* pViewSh  = (ScTabViewShell*)pSh;
 //             }

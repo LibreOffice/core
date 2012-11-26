@@ -505,8 +505,6 @@ private:
     boost::shared_ptr< SvXMLImportContext > mpSlaveContext;
 
 public:
-    TYPEINFO();
-
     SdXMLNumberFormatMemberImportContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx,
         const rtl::OUString& rLocalName,
@@ -525,8 +523,6 @@ public:
 
     virtual void Characters( const ::rtl::OUString& rChars );
 };
-
-TYPEINIT1( SdXMLNumberFormatMemberImportContext, SvXMLImportContext );
 
 SdXMLNumberFormatMemberImportContext::SdXMLNumberFormatMemberImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList, SdXMLNumberFormatImportContext* pParent, SvXMLImportContext* pSlaveContext )
 :   SvXMLImportContext(rImport, nPrfx, rLocalName),
@@ -594,9 +590,6 @@ void SdXMLNumberFormatMemberImportContext::Characters( const ::rtl::OUString& rC
     mpSlaveContext->Characters( rChars );
     maText += rChars;
 }
-
-TYPEINIT1( SdXMLNumberFormatImportContext, SvXMLImportContext );
-
 
 SdXMLNumberFormatImportContext::SdXMLNumberFormatImportContext( SdXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName, SvXMLNumImpData* pNewData, sal_uInt16 nNewType, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList, SvXMLStylesContext& rStyles)
 :   SvXMLNumFormatContext(rImport, nPrfx, rLocalName, pNewData, nNewType, xAttrList, rStyles),

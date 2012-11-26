@@ -92,7 +92,7 @@ public:
 
     TitleBar* GetTitleBar (void);
     /** Return the control child.  When a control factory has been given and
-        the control has not yet been created and the given flag is <TRUE/>
+        the control has not yet been created and the given flag is <true/>
         then the control is created.
     */
     TreeNode* GetControl (void);
@@ -105,13 +105,13 @@ public:
         higher level expand command.  You may want to use
         ExpandViaContainer() instead.
         @param bExpanded
-            When <TRUE/> then the control is expanded, otherwise it is
+            When <true/> then the control is expanded, otherwise it is
             collapsed.
     */
     virtual bool Expand (bool bExpanded = true);
 
-    /** Return whether the control is currently expanded (<TRUE/>) or
-        not (<FALSE/>).
+    /** Return whether the control is currently expanded (<true/>) or
+        not (<false/>).
     */
     virtual bool IsExpanded (void) const;
 

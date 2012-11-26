@@ -470,7 +470,7 @@ IMPL_LINK(FmSearchDialog, OnFieldSelected, ListBox*, pBox)
 //------------------------------------------------------------------------
 IMPL_LINK(FmSearchDialog, OnCheckBoxToggled, CheckBox*, pBox)
 {
-    sal_Bool bChecked = pBox->IsChecked();
+    bool bChecked = pBox->IsChecked();
 
     // Formatter oder case -> an die Engine weiterreichen
     if (pBox == &m_cbUseFormat)

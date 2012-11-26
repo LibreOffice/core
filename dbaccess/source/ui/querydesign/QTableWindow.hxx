@@ -32,9 +32,6 @@
 #ifndef DBAUI_TABLEFIELDDESC_HXX
 #include "TableFieldDescription.hxx"
 #endif
-#ifndef _RTTI_HXX
-#include <tools/rtti.hxx>
-#endif
 
 namespace dbaui
 {

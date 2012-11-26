@@ -2883,10 +2883,11 @@ void SwStyleSheetIterator::AppendStyleList(const SvStringsDtor& rList,
 void  SwStyleSheetIterator::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     // suchen und aus der Anzeige-Liste entfernen !!
-    if( rHint.ISA( SfxStyleSheetHint ) &&
-        SFX_STYLESHEET_ERASED == ((SfxStyleSheetHint&) rHint).GetHint() )
+    const SfxStyleSheetHint* pSfxStyleSheetHint = dynamic_cast< const SfxStyleSheetHint* >(&rHint);
+
+    if( pSfxStyleSheetHint && SFX_STYLESHEET_ERASED == pSfxStyleSheetHint->GetHint() )
     {
-        SfxStyleSheetBase* pStyle = ((SfxStyleSheetHint&)rHint).GetStyleSheet();
+        SfxStyleSheetBase* pStyle = pSfxStyleSheetHint->GetStyleSheet();
 
         if (pStyle)
         {

@@ -50,8 +50,6 @@ class SlideViewShell
 {
 public:
 
-    TYPEINFO();
-
     SFX_DECL_VIEWFACTORY(SlideViewShell);
     SFX_DECL_INTERFACE(SD_IF_SDSLIDEVIEWSHELL)
 
@@ -84,7 +82,7 @@ public:
     virtual void    AddWindow(::sd::Window* pWin) { pSlideView->AddWindowToPaintView((OutputDevice*) pWin); }
     virtual void    RemoveWindow(::sd::Window* pWin) { pSlideView->DeleteWindowFromPaintView((OutputDevice*) pWin); }
 
-    virtual sal_Bool    KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin);
+    virtual bool KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin);
     virtual void    MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin);
     virtual void    MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin);
     virtual void    MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin);
@@ -115,9 +113,9 @@ public:
     virtual void    WriteFrameViewData();
 
     virtual void    SetZoom(long nZoom);
-    virtual void    SetZoomRect(const Rectangle& rZoomRect);
+    virtual void    SetZoomRange(const basegfx::B2DRange& rZoomRange);
 
-    virtual sal_Bool    HasSelection( sal_Bool bText = sal_True ) const;
+    virtual bool    HasSelection( bool bText = true ) const;
 
     /** Draw the rectangle arround the specified slide that indicates whether
         the slide is selected or not.  When not selected the rectangle is
@@ -142,11 +140,11 @@ public:
     void            SelectionHasChanged();
     void            PageLayoutHasChanged();
     void            FocusHasChanged( sal_uInt16 nOldFocusPage, sal_uInt16 nNewFocusPage );
-    void            PageVisibilityHasChanged( sal_uInt16 nPage, sal_Bool bVisible );
+    void            PageVisibilityHasChanged( sal_uInt16 nPage, bool bVisible );
 
     /** On activation the preview is turned off.
     */
-    virtual void Activate (sal_Bool IsMDIActivate);
+    virtual void Activate (bool IsMDIActivate);
 
 protected:
     virtual Size    GetOptimalSizePixel() const;
@@ -163,7 +161,7 @@ private:
     bool            bInitializeWinPos;
 
     void            Construct(SdDrawDocument* pDoc);
-    void            ImplDrawFocusRect( sal_uInt16 nPage, sal_Bool bVisible );
+    void            ImplDrawFocusRect( sal_uInt16 nPage, bool bVisible );
 };
 
 } // end of namespace sd

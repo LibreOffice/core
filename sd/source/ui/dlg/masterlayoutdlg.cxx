@@ -72,7 +72,7 @@ MasterLayoutDialog::MasterLayoutDialog( Window* pParent, SdDrawDocument* pDoc, S
     case PK_STANDARD:
     {
         //      aTitle = String( SdResId( STR_MASTER_LAYOUT_TITLE ) );
-        maCBHeader.Enable( sal_False );
+        maCBHeader.Enable( false );
     String aSlideNumberStr( SdResId( STR_SLIDE_NUMBER ) );
         maCBPageNumber.SetText( aSlideNumberStr );
         break;
@@ -116,7 +116,7 @@ void MasterLayoutDialog::applyChanges()
 {
     mpDoc->BegUndo(GetText());
 
-    if( (mpCurrentPage->GetPageKind() != PK_STANDARD) && (mbOldHeader != maCBHeader.IsChecked() ) )
+    if( (mpCurrentPage->GetPageKind() != PK_STANDARD) && (mbOldHeader != (bool)maCBHeader.IsChecked() ) )
     {
         if( mbOldHeader )
             remove( PRESOBJ_HEADER );
@@ -124,7 +124,7 @@ void MasterLayoutDialog::applyChanges()
             create( PRESOBJ_HEADER );
     }
 
-    if( mbOldFooter != maCBFooter.IsChecked() )
+    if( mbOldFooter != (bool)maCBFooter.IsChecked() )
     {
         if( mbOldFooter )
             remove( PRESOBJ_FOOTER );
@@ -132,7 +132,7 @@ void MasterLayoutDialog::applyChanges()
             create( PRESOBJ_FOOTER );
     }
 
-    if( mbOldDate != maCBDate.IsChecked() )
+    if( mbOldDate != (bool)maCBDate.IsChecked() )
     {
         if( mbOldDate )
             remove( PRESOBJ_DATETIME );
@@ -140,7 +140,7 @@ void MasterLayoutDialog::applyChanges()
             create( PRESOBJ_DATETIME );
     }
 
-    if( mbOldPageNumber != maCBPageNumber.IsChecked() )
+    if( mbOldPageNumber != (bool)maCBPageNumber.IsChecked() )
     {
         if( mbOldPageNumber )
             remove( PRESOBJ_SLIDENUMBER );
@@ -160,16 +160,17 @@ void MasterLayoutDialog::remove( PresObjKind eKind )
 {
     SdrObject* pObject = mpCurrentPage->GetPresObj( eKind );
 
-    if( pObject )
+    if( pObject && pObject->getParentOfSdrObject() )
     {
         const bool bUndo = mpDoc->IsUndoEnabled();
         if( bUndo )
             mpDoc->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoDeleteObject(*pObject));
-        SdrObjList* pOL =pObject->GetObjList();
-        sal_uInt32 nOrdNum=pObject->GetOrdNumDirect();
-        pOL->RemoveObject(nOrdNum);
+
+        pObject->getParentOfSdrObject()->RemoveObjectFromSdrObjList(pObject->GetNavigationPosition());
 
         if( !bUndo )
-            SdrObject::Free(pObject);
+        {
+            deleteSdrObjectSafeAndClearPointer(pObject);
+        }
     }
 }

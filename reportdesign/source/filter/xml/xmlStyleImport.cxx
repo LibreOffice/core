@@ -79,10 +79,7 @@ public:
     }
 };
 
-TYPEINIT1( OControlStyleContext, XMLPropStyleContext );
-TYPEINIT1( OReportStylesContext, SvXMLStylesContext );
 DBG_NAME( rpt_OControlStyleContext )
-
 OControlStyleContext::OControlStyleContext( ORptFilter& rImport,
         sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
@@ -119,10 +116,10 @@ void OControlStyleContext::FillPropertySet(const Reference< XPropertySet > & rPr
                     XML_STYLE_FAMILY_DATA_STYLE, m_sDataStyleName, sal_False)));
                 if ( !pStyle )
                 {
-                    OReportStylesContext* pMyStyles = PTR_CAST(OReportStylesContext,GetOwnImport().GetAutoStyles());
+                    OReportStylesContext* pMyStyles = dynamic_cast< OReportStylesContext* >( GetOwnImport().GetAutoStyles());
                     if ( pMyStyles )
-                        pStyle = PTR_CAST(SvXMLNumFormatContext,pMyStyles->
-                            FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, m_sDataStyleName, sal_True));
+                        pStyle = const_cast< SvXMLNumFormatContext*>(dynamic_cast< const SvXMLNumFormatContext* >( pMyStyles->
+                            FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, m_sDataStyleName, sal_True)));
                     else {
                         DBG_ERROR("not possible to get style");
                     }

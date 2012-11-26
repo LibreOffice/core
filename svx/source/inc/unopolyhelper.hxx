@@ -36,16 +36,6 @@ namespace basegfx {
     class B2DPolyPolygon;
 }
 
-/** convert a drawing::PolyPolygonBezierCoords to a B2DPolyPolygon
-*/
-basegfx::B2DPolyPolygon SvxConvertPolyPolygonBezierToB2DPolyPolygon( const com::sun::star::drawing::PolyPolygonBezierCoords* pSourcePolyPolygon)
-    throw( com::sun::star::lang::IllegalArgumentException );
-
-/** convert a B2DPolyPolygon to a drawing::PolyPolygonBezierCoords
-*/
-SVX_DLLPUBLIC void SvxConvertB2DPolyPolygonToPolyPolygonBezier( const basegfx::B2DPolyPolygon& rPolyPoly, com::sun::star::drawing::PolyPolygonBezierCoords& rRetval );
-
-
 #endif
 
 

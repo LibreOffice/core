@@ -178,10 +178,8 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/stbctrls/zoomctrl \
     svx/source/svdraw/ActionDescriptionProvider \
     svx/source/smarttags/SmartTagMgr \
-    svx/source/svdraw/impgrfll \
     svx/source/table/accessiblecell \
     svx/source/table/accessibletableshape \
-    svx/source/table/celleditsource \
     svx/source/table/tabledesign \
     svx/source/table/tablertfexporter \
     svx/source/table/tablertfimporter \

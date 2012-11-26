@@ -95,8 +95,6 @@ public:
     //XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
-    TYPEINFO();
-
     //XNamed
     virtual rtl::OUString SAL_CALL getName(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL setName(const rtl::OUString& Name_) throw( ::com::sun::star::uno::RuntimeException );
@@ -143,7 +141,7 @@ public:
 
     SwFrmFmt*       GetFrmFmt() const
     {
-        return PTR_CAST ( SwFrmFmt, GetRegisteredIn() );
+        return const_cast< SwFrmFmt* >(dynamic_cast< const SwFrmFmt* >( GetRegisteredIn() ));
     }
     FlyCntType      GetFlyCntType()const {return eType;}
 
@@ -348,7 +346,6 @@ class SwXOLEListener : public cppu::WeakImplHelper1
 public:
     SwXOLEListener(SwFmt& rOLEFmt, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xOLE);
     ~SwXOLEListener();
-    TYPEINFO();
 
 // ::com::sun::star::lang::XEventListener
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);

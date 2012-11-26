@@ -212,7 +212,6 @@
 #include "tools/rcid.h"
 #include "tools/ref.hxx"
 #include "tools/resid.hxx"
-#include "tools/rtti.hxx"
 #include "tools/shl.hxx"
 #include "tools/solar.h"
 #include "tools/stream.hxx"

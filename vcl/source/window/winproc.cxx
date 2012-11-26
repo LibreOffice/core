@@ -19,15 +19,11 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
 #include <tools/debug.hxx>
-
 #include <unotools/localedatawrapper.hxx>
-
 #include <vcl/i18nhelp.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/timer.hxx>
@@ -54,6 +50,7 @@
 #include <brdwin.hxx>
 #include <salgdi.hxx>
 #include <dndlcon.hxx>
+#include <memory.h>
 
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>

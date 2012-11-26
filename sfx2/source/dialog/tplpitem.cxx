@@ -32,9 +32,7 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-TYPEINIT1_AUTOFACTORY(SfxTemplateItem, SfxFlagItem);
-
-//=========================================================================
+IMPL_POOLITEM_FACTORY(SfxTemplateItem)
 
 SfxTemplateItem::SfxTemplateItem() :
     SfxFlagItem()

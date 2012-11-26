@@ -148,7 +148,7 @@ ODbTypeWizDialog::ODbTypeWizDialog(Window* _pParent
     m_pHelp->SetUniqueId(UID_DBWIZ_HELP);
     // no local resources needed anymore
 
-    DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _pItems->GetItem(DSID_TYPECOLLECTION));
+    const DbuTypeCollectionItem* pCollectionItem = dynamic_cast< const DbuTypeCollectionItem* >( _pItems->GetItem(DSID_TYPECOLLECTION));
     m_pCollection = pCollectionItem->getCollection();
 
     FreeResource();

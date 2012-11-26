@@ -39,20 +39,6 @@ DBG_NAME( EditUndo )
 #define NO_UNDO         0xFFFF
 #define GROUP_NOTFOUND  0xFFFF
 
-TYPEINIT1( EditUndo, SfxUndoAction );
-TYPEINIT1( EditUndoDelContent, EditUndo );
-TYPEINIT1( EditUndoConnectParas, EditUndo );
-TYPEINIT1( EditUndoSplitPara, EditUndo );
-TYPEINIT1( EditUndoInsertChars, EditUndo );
-TYPEINIT1( EditUndoRemoveChars, EditUndo );
-TYPEINIT1( EditUndoInsertFeature, EditUndo );
-TYPEINIT1( EditUndoMoveParagraphs, EditUndo );
-TYPEINIT1( EditUndoSetStyleSheet, EditUndo );
-TYPEINIT1( EditUndoSetParaAttribs, EditUndo );
-TYPEINIT1( EditUndoSetAttribs, EditUndo );
-TYPEINIT1( EditUndoTransliteration, EditUndo );
-TYPEINIT1( EditUndoMarkSelection, EditUndo );
-
 void lcl_DoSetSelection( EditView* pView, sal_uInt16 nPara )
 {
     EPaM aEPaM( nPara, 0 );
@@ -371,7 +357,7 @@ void __EXPORT EditUndoInsertChars::Redo()
 
 sal_Bool __EXPORT EditUndoInsertChars::Merge( SfxUndoAction* pNextAction )
 {
-    if ( !pNextAction->ISA( EditUndoInsertChars ) )
+    if ( !dynamic_cast< EditUndoInsertChars* >(pNextAction) )
         return sal_False;
 
     EditUndoInsertChars* pNext = (EditUndoInsertChars*)pNextAction;

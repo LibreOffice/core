@@ -72,14 +72,13 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 
 #include <IDocumentDrawModelAccess.hxx>
+#include <svx/fmmodel.hxx>
 
 using namespace ::com::sun::star;
 
 SFX_IMPL_INTERFACE(SwDrawBaseShell, SwBaseShell, SW_RES(0))
 {
 }
-
-TYPEINIT1(SwDrawBaseShell,SwBaseShell)
 
 /*--------------------------------------------------------------------
     Beschreibung:
@@ -124,8 +123,8 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
     SdrView*    pSdrView = pSh->GetDrawView();
     const SfxItemSet *pArgs = rReq.GetArgs();
     sal_uInt16      nSlotId = rReq.GetSlot();
-    sal_Bool        bChanged = pSdrView->GetModel()->IsChanged();
-    pSdrView->GetModel()->SetChanged(sal_False);
+    bool bChanged = pSdrView->getSdrModelFromSdrView().IsChanged();
+    pSdrView->getSdrModelFromSdrView().SetChanged(false);
     const SfxPoolItem* pItem = 0;
     if(pArgs)
         pArgs->GetItemState(nSlotId, sal_False, &pItem);
@@ -133,7 +132,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
     //Sonderfall Align per Menue
     if(pItem && nSlotId == SID_OBJECT_ALIGN)
     {
-        DBG_ASSERT(PTR_CAST(SfxEnumItem, pItem),"SfxEnumItem erwartet");
+        DBG_ASSERT(dynamic_cast< const SfxEnumItem* >( pItem),"SfxEnumItem erwartet");
         nSlotId = nSlotId + ((const SfxEnumItem*)pItem)->GetValue();
         nSlotId++;
     }
@@ -149,12 +148,11 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
     {
         case FN_DRAW_WRAP_DLG:
         {
-            if(pSdrView->AreObjectsMarked())
+            if(pSdrView->areSdrObjectsSelected())
             {
                 if(!pArgs)
                 {
-                    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-                    if( rMarkList.GetMark(0) != 0 )
+                    if(pSdrView->areSdrObjectsSelected())
                     {
                         SfxItemSet aSet(GetPool(),  RES_SURROUND, RES_SURROUND,
                                                     RES_ANCHOR, RES_ANCHOR,
@@ -199,14 +197,15 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
         case SID_ATTR_TRANSFORM:
         {
-            if(pSdrView->AreObjectsMarked())
+            if(pSdrView->areSdrObjectsSelected())
             {
                 if(!pArgs)
                 {
-                    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-                    if( rMarkList.GetMark(0) != 0 )
+                    const SdrObjectVector aSelection(pSdrView->getSelectedSdrObjectVectorFromSdrMarkView());
+                    SdrObject* pObj = aSelection[0];
+
+                    if( pObj )
                     {
-                        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                         SfxAbstractTabDialog *pDlg=NULL;
                         sal_Bool bCaption = sal_False;
 
@@ -306,7 +305,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
                             SfxItemSet aFrmAttrSet(GetPool(), RES_FRMATR_BEGIN, RES_FRMATR_END - 1);
 
-                            bool bSingleSelection = rMarkList.GetMarkCount() == 1;
+                            const bool bSingleSelection(1 == aSelection.size());
 
                             const SfxPoolItem* pAnchorItem;
                             if(SFX_ITEM_SET == pOutSet->GetItemState(
@@ -425,7 +424,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
             break;
 
         case SID_GROUP:
-            if (pSh->IsObjSelected() > 1 && pSh->IsGroupAllowed())
+            if (pSh->GetNumberOfSelectedObjects() > 1 && pSh->IsGroupAllowed())
             {
                 pSh->GroupSelection();  // Objekt gruppieren
                 rBind.Invalidate(SID_UNGROUP);
@@ -466,10 +465,11 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
         {
             if ( bAlignPossible )
             {
-                const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-                if( rMarkList.GetMarkCount() == 1 && bAlignPossible )
-                {   // Objekte nicht aneinander ausrichten
+                SdrObject* pObj = pSdrView->getSelectedIfSingle();
 
+                if( pObj )
+                {
+                    // Objekte nicht aneinander ausrichten
                     sal_uInt16 nAnchor = pSh->GetAnchorId();
                     if (nAnchor == FLY_AS_CHAR)
                     {
@@ -492,7 +492,6 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                         if (nVertOrient != -1)
                         {
                             pSh->StartAction();
-                            SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                             SwFrmFmt* pFrmFmt = FindFrmFmt( pObj );
                             SwFmtVertOrient aVOrient((SwFmtVertOrient&)pFrmFmt->GetFmtAttr(RES_VERT_ORIENT));
                             aVOrient.SetVertOrient( nVertOrient );
@@ -549,12 +548,11 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
         case FN_NAME_SHAPE:
         {
             bDone = sal_True;
+            SdrObject* pSelected = pSdrView->getSelectedIfSingle();
 
-            if(1L == pSdrView->GetMarkedObjectCount())
+            if(pSelected)
             {
                 // #i68101#
-                SdrObject* pSelected = pSdrView->GetMarkedObjectByIndex(0L);
-                OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
                 String aName(pSelected->GetName());
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -581,11 +579,10 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
         case FN_TITLE_DESCRIPTION_SHAPE:
         {
             bDone = sal_True;
+            SdrObject* pSelected = pSdrView->getSelectedIfSingle();
 
-            if(1L == pSdrView->GetMarkedObjectCount())
+            if(pSelected)
             {
-                SdrObject* pSelected = pSdrView->GetMarkedObjectByIndex(0L);
-                OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
                 String aTitle(pSelected->GetTitle());
                 String aDescription(pSelected->GetDescription());
 
@@ -619,10 +616,10 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
     {
         if(nSlotId >= SID_OBJECT_ALIGN_LEFT && nSlotId <= SID_OBJECT_ALIGN_DOWN)
             rBind.Invalidate(SID_ATTR_LONG_LRSPACE);
-        if (pSdrView->GetModel()->IsChanged())
+        if (pSdrView->getSdrModelFromSdrView().IsChanged())
             pSh->SetModified();
         else if (bChanged)
-            pSdrView->GetModel()->SetChanged(sal_True);
+            pSdrView->getSdrModelFromSdrView().SetChanged(true);
         // 40220: Nach dem Loeschen von DrawObjekten ueber die API GPF durch Selbstzerstoerung
         if(bNotify)
             GetView().AttrChangedNotify(pSh); // ggf Shellwechsel...
@@ -635,9 +632,8 @@ IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxNameDialog*, pNam
 {
     SwWrtShell          &rSh = GetShell();
     SdrView *pSdrView = rSh.GetDrawView();
-    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-    DBG_ASSERT(rMarkList.GetMarkCount() == 1, "wrong draw selection");
-    SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+    SdrObject* pObj = pSdrView->getSelectedIfSingle();
+    OSL_ENSURE(pObj, "wrong draw selection");
     const String sCurrentName = pObj->GetName();
     String sNewName;
     pNameDialog->GetName(sNewName);
@@ -655,7 +651,7 @@ IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxNameDialog*, pNam
 //        for( sal_uInt32 i=0; i< nCount; i++ )
 //        {
 //            SdrObject* pTemp = pPage->GetObj(i);
-//            if(pObj != pTemp && pTemp->ISA(SdrObjGroup) && pTemp->GetName() == sNewName)
+//            if(pObj != pTemp && dynamic_cast< SdrObjGroup* >(pTemp) && pTemp->GetName() == sNewName)
 //            {
 //                nRet = 0;
 //                break;
@@ -705,7 +701,7 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
                     rSet.DisableItem( nWhich );
                 break;
             case SID_GROUP:
-                if ( rSh.IsObjSelected() < 2 || bProtected || !rSh.IsGroupAllowed() )
+                if ( rSh.GetNumberOfSelectedObjects() < 2 || bProtected || !rSh.IsGroupAllowed() )
                     rSet.DisableItem( nWhich );
                 break;
             case SID_UNGROUP:
@@ -732,10 +728,9 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
                 else
                 {
                     SfxAllEnumItem aEnumItem(nWhich, USHRT_MAX);
-                    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
                     //if only one object is selected it can only be vertically
                     // aligned because it is character bound
-                    if( rMarkList.GetMarkCount() == 1 )
+                    if( pSdrView->getSelectedIfSingle() )
                     {
                         aEnumItem.DisableValue(SID_OBJECT_ALIGN_LEFT);
                         aEnumItem.DisableValue(SID_OBJECT_ALIGN_CENTER);
@@ -747,7 +742,9 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
 
             case FN_NAME_SHAPE :
                 {
-                    if(1L != pSdrView->GetMarkedObjectCount())
+                    const SdrObject* pSelected = pSdrView->getSelectedIfSingle();
+
+                    if(!pSelected)
                     {
                         rSet.DisableItem( nWhich );
                     }
@@ -758,8 +755,9 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
             case FN_TITLE_DESCRIPTION_SHAPE:
                 {
                     const bool bIsWebView(NULL != dynamic_cast<SwWebView*>(&GetView()));
+                    const SdrObject* pSelected = pSdrView->getSelectedIfSingle();
 
-                    if(!bIsWebView && 1L != pSdrView->GetMarkedObjectCount())
+                    if(!bIsWebView && !pSelected)
                     {
                         rSet.DisableItem( nWhich );
                     }
@@ -814,10 +812,10 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation 
     const RndStdIds eAnchorType = static_cast<RndStdIds >(pValidation->nAnchorType);
     const SwPosition* pCntntPos = 0;
     SdrView*  pSdrView = pSh->GetDrawView();
-    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-    if( rMarkList.GetMarkCount() == 1 )
+    SdrObject* pObj = pSdrView->getSelectedIfSingle();
+
+    if( pObj )
     {
-        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
         SwFrmFmt* pFrmFmt = FindFrmFmt( pObj );
         pCntntPos = pFrmFmt->GetAnchor().GetCntntAnchor();
     }

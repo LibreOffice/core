@@ -43,10 +43,7 @@ using namespace ::com::sun::star::uno;
 namespace sfx2
 {
 
-TYPEINIT0( SvBaseLink )
-
 static DdeTopic* FindTopic( const String &, sal_uInt16* = 0 );
-
 class  ImplDdeItem;
 
 struct BaseLink_Impl

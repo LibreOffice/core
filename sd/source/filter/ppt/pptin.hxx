@@ -57,7 +57,7 @@ class ImplSdPPTImport : public SdrPowerPointImport
 //  SvStream*       mpPicStream;
     DffRecordHeader maDocHd;
     List            maSlideNameList;
-    sal_Bool            mbDocumentFound;
+    bool            mbDocumentFound;
     sal_uInt32      mnFilterOptions;
     SdDrawDocument* mpDoc;
     PresChange      mePresChange;
@@ -71,7 +71,7 @@ class ImplSdPPTImport : public SdrPowerPointImport
 
     void            FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiveInfoAtom* pIAtom, String aMacroName );
 
-    virtual         SdrObject* ProcessObj( SvStream& rSt, DffObjData& rData, void* pData, Rectangle& rTextRect, SdrObject* pObj );
+    virtual         SdrObject* ProcessObj( SvStream& rSt, DffObjData& rData, void* pData, basegfx::B2DRange& rTextRect, SdrObject* pObj );
     virtual         SdrObject* ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pText, SdPage* pPage,
                                             SfxStyleSheet*, SfxStyleSheet** ) const;
 

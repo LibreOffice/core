@@ -181,7 +181,7 @@ double getMinimalDepthInViewCoordinates(const E3dCompoundObject& rObject)
 
             while(pParentScene && pParentScene != pScene)
             {
-                aInBetweenSceneMatrix = pParentScene->GetTransform() * aInBetweenSceneMatrix;
+                aInBetweenSceneMatrix = pParentScene->GetB3DTransform() * aInBetweenSceneMatrix;
                 pParentScene = dynamic_cast< E3dScene* >(pParentScene->GetParentObj());
             }
 

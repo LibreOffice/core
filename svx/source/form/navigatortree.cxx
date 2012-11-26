@@ -28,7 +28,7 @@
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>
 #include <svx/svdpagv.hxx>
-#include "svx/svditer.hxx"
+#include <svx/svditer.hxx>
 
 #include "fmhelp.hrc"
 #include "fmexpl.hrc"
@@ -135,21 +135,24 @@ namespace svxform
         MapModelToShape::const_iterator aPos = _rModelMap.find( _pEntry->GetElement() );
         if ( _rModelMap.end() != aPos )
         {   // there is a shape for this model ....
-            bIsMarked = _pView->IsObjMarked( aPos->second );
-            if ( !bIsMarked )
+            bIsMarked = _pView->IsObjMarked( *aPos->second );
+            if ( !bIsMarked && _pView->areSdrObjectsSelected())
             {
                 // IsObjMarked does not step down grouped objects, so the sal_False we
                 // have is not really reliable (while a sal_True would have been)
                 // Okay, travel the mark list, and see if there is a group marked, and our shape
                 // is a part of this group
-                sal_uInt32 nMarked = _pView->GetMarkedObjectList().GetMarkCount();
-                for ( sal_uInt32 i = 0; (i<nMarked ) && !bIsMarked; ++i )
+                const SdrObjectVector aSelection(_pView->getSelectedSdrObjectVectorFromSdrMarkView());
+
+                for ( sal_uInt32 i(0); (i < aSelection.size()) && !bIsMarked; ++i )
                 {
-                    SdrMark* pMark = _pView->GetMarkedObjectList().GetMark( i );
-                    SdrObject* pObj = pMark ? pMark->GetMarkedSdrObj() : NULL;
-                    if ( pObj && pObj->IsGroupObject() )
-                    {   // the i-th marked shape is a group shape
+                    SdrObject* pObj = aSelection[i];
+
+                    if ( pObj->getChildrenOfSdrObject() )
+                    {
+                        // the i-th marked shape is a group shape
                         SdrObjListIter aIter( *pObj );
+
                         while ( aIter.IsMore() )
                         {
                             if ( aIter.Next() == aPos->second )
@@ -642,70 +645,90 @@ namespace svxform
     void NavigatorTree::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::Notify" );
-        if( rHint.ISA(FmNavRemovedHint) )
+        const FmNavRemovedHint* pFmNavRemovedHint = dynamic_cast< const FmNavRemovedHint* >(&rHint);
+
+        if( pFmNavRemovedHint )
         {
-            FmNavRemovedHint* pRemovedHint = (FmNavRemovedHint*)&rHint;
-            FmEntryData* pEntryData = pRemovedHint->GetEntryData();
+            FmEntryData* pEntryData = pFmNavRemovedHint->GetEntryData();
             Remove( pEntryData );
         }
-
-        else if( rHint.ISA(FmNavInsertedHint) )
+        else
         {
-            FmNavInsertedHint* pInsertedHint = (FmNavInsertedHint*)&rHint;
-            FmEntryData* pEntryData = pInsertedHint->GetEntryData();
-            sal_uInt32 nRelPos = pInsertedHint->GetRelPos();
-            Insert( pEntryData, nRelPos );
-        }
+            const FmNavInsertedHint* pFmNavInsertedHint = dynamic_cast< const FmNavInsertedHint* >(&rHint);
 
-        else if( rHint.ISA(FmNavModelReplacedHint) )
-        {
-            FmEntryData* pData = ((FmNavModelReplacedHint*)&rHint)->GetEntryData();
-            SvLBoxEntry* pEntry = FindEntry( pData );
-            if (pEntry)
-            {   // das Image neu setzen
-                SetCollapsedEntryBmp( pEntry, pData->GetNormalImage(), BMP_COLOR_NORMAL );
-                SetExpandedEntryBmp( pEntry, pData->GetNormalImage(), BMP_COLOR_NORMAL );
-
-                SetCollapsedEntryBmp( pEntry, pData->GetHCImage(), BMP_COLOR_HIGHCONTRAST );
-                SetExpandedEntryBmp( pEntry, pData->GetHCImage(), BMP_COLOR_HIGHCONTRAST );
-            }
-        }
-
-        else if( rHint.ISA(FmNavNameChangedHint) )
-        {
-            FmNavNameChangedHint* pNameChangedHint = (FmNavNameChangedHint*)&rHint;
-            SvLBoxEntry* pEntry = FindEntry( pNameChangedHint->GetEntryData() );
-            SetEntryText( pEntry, pNameChangedHint->GetNewName() );
-        }
-
-        else if( rHint.ISA(FmNavClearedHint) )
-        {
-            SvTreeListBox::Clear();
-
-            //////////////////////////////////////////////////////////////////////
-            // Default-Eintrag "Formulare"
-            Image aRootImage( m_aNavigatorImages.GetImage( RID_SVXIMG_FORMS ) );
-            m_pRootEntry = InsertEntry( SVX_RES(RID_STR_FORMS), aRootImage, aRootImage,
-                NULL, sal_False, 0, NULL );
-
-            if ( m_pRootEntry )
+            if( pFmNavInsertedHint )
             {
-                Image aHCRootImage( m_aNavigatorImagesHC.GetImage( RID_SVXIMG_FORMS ) );
-                SetExpandedEntryBmp( m_pRootEntry, aHCRootImage, BMP_COLOR_HIGHCONTRAST );
-                SetCollapsedEntryBmp( m_pRootEntry, aHCRootImage, BMP_COLOR_HIGHCONTRAST );
+                FmEntryData* pEntryData = pFmNavInsertedHint->GetEntryData();
+                sal_uInt32 nRelPos = pFmNavInsertedHint->GetRelPos();
+                Insert( pEntryData, nRelPos );
             }
-        }
-        else if (!m_bMarkingObjects && rHint.ISA(FmNavRequestSelectHint))
-        {   // wenn m_bMarkingObjects sal_True ist, markiere ich gerade selber Objekte, und da der ganze Mechanismus dahinter synchron ist,
-            // ist das genau der Hint, der durch mein Markieren ausgeloest wird, also kann ich ihn ignorieren
-            FmNavRequestSelectHint* pershHint = (FmNavRequestSelectHint*)&rHint;
-            FmEntryDataArray& arredToSelect = pershHint->GetItems();
-            SynchronizeSelection(arredToSelect);
+            else
+            {
+                const FmNavModelReplacedHint* pFmNavModelReplacedHint = dynamic_cast< const FmNavModelReplacedHint* >(&rHint);
 
-            if (pershHint->IsMixedSelection())
-                // in diesem Fall habe ich alles deselektiert, obwohl die View u.U. eine gemischte Markierung hatte
-                // ich muss also im naechsten Select den Navigator an die View anpassen
-                m_bPrevSelectionMixed = sal_True;
+                if( pFmNavModelReplacedHint )
+                {
+                    FmEntryData* pData = pFmNavModelReplacedHint->GetEntryData();
+                    SvLBoxEntry* pEntry = FindEntry( pData );
+
+                    if (pEntry)
+                    {   // das Image neu setzen
+                        SetCollapsedEntryBmp( pEntry, pData->GetNormalImage(), BMP_COLOR_NORMAL );
+                        SetExpandedEntryBmp( pEntry, pData->GetNormalImage(), BMP_COLOR_NORMAL );
+
+                        SetCollapsedEntryBmp( pEntry, pData->GetHCImage(), BMP_COLOR_HIGHCONTRAST );
+                        SetExpandedEntryBmp( pEntry, pData->GetHCImage(), BMP_COLOR_HIGHCONTRAST );
+                    }
+                }
+                else
+                {
+                    const FmNavNameChangedHint* pFmNavNameChangedHint = dynamic_cast< const FmNavNameChangedHint* >(&rHint);
+
+                    if( pFmNavNameChangedHint )
+                    {
+                        SvLBoxEntry* pEntry = FindEntry( pFmNavNameChangedHint->GetEntryData() );
+                        SetEntryText( pEntry, pFmNavNameChangedHint->GetNewName() );
+                    }
+                    else
+                    {
+                        const FmNavClearedHint* pFmNavClearedHint = dynamic_cast< const FmNavClearedHint* >(&rHint);
+
+                        if( pFmNavClearedHint )
+                        {
+                            SvTreeListBox::Clear();
+
+                            //////////////////////////////////////////////////////////////////////
+                            // Default-Eintrag "Formulare"
+                            Image aRootImage( m_aNavigatorImages.GetImage( RID_SVXIMG_FORMS ) );
+                            m_pRootEntry = InsertEntry( SVX_RES(RID_STR_FORMS), aRootImage, aRootImage,
+                                NULL, sal_False, 0, NULL );
+
+                            if ( m_pRootEntry )
+                            {
+                                Image aHCRootImage( m_aNavigatorImagesHC.GetImage( RID_SVXIMG_FORMS ) );
+                                SetExpandedEntryBmp( m_pRootEntry, aHCRootImage, BMP_COLOR_HIGHCONTRAST );
+                                SetCollapsedEntryBmp( m_pRootEntry, aHCRootImage, BMP_COLOR_HIGHCONTRAST );
+                            }
+                        }
+                        else if (!m_bMarkingObjects )
+                        {
+                            FmNavRequestSelectHint* pFmNavRequestSelectHint = dynamic_cast< FmNavRequestSelectHint* >(& const_cast< SfxHint& >(rHint));
+
+                            if( pFmNavRequestSelectHint )
+                            {   // wenn m_bMarkingObjects sal_True ist, markiere ich gerade selber Objekte, und da der ganze Mechanismus dahinter synchron ist,
+                                // ist das genau der Hint, der durch mein Markieren ausgeloest wird, also kann ich ihn ignorieren
+                                FmEntryDataArray& arredToSelect = pFmNavRequestSelectHint->GetItems();
+                                SynchronizeSelection(arredToSelect);
+
+                                if (pFmNavRequestSelectHint->IsMixedSelection())
+                                    // in diesem Fall habe ich alles deselektiert, obwohl die View u.U. eine gemischte Markierung hatte
+                                    // ich muss also im naechsten Select den Navigator an die View anpassen
+                                    m_bPrevSelectionMixed = sal_True;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -795,7 +818,7 @@ namespace svxform
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::IsFormEntry" );
         FmEntryData* pEntryData = (FmEntryData*)pEntry->GetUserData();
-        return !pEntryData || pEntryData->ISA(FmFormData);
+        return !pEntryData || dynamic_cast< FmFormData* >(pEntryData);
     }
 
     //------------------------------------------------------------------------
@@ -803,7 +826,7 @@ namespace svxform
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::IsFormComponentEntry" );
         FmEntryData* pEntryData = (FmEntryData*)pEntry->GetUserData();
-        return pEntryData && pEntryData->ISA(FmControlData);
+        return pEntryData && dynamic_cast< FmControlData* >(pEntryData);
     }
 
     //------------------------------------------------------------------------
@@ -1185,7 +1208,8 @@ namespace svxform
             Reference< XIndexContainer >  xContainer(xCurrentChild->getParent(), UNO_QUERY);
 
             FmFormData* pCurrentParentUserData = (FmFormData*)pCurrentUserData->GetParent();
-            DBG_ASSERT(pCurrentParentUserData == NULL || pCurrentParentUserData->ISA(FmFormData), "NavigatorTree::implExecuteDataTransfer: ungueltiges Parent");
+            DBG_ASSERT(!pCurrentParentUserData || dynamic_cast< FmFormData* >(pCurrentParentUserData),
+                "NavigatorTree::implExecuteDataTransfer: ungueltiges Parent");
 
             // beim Vater austragen
             if (pCurrentParentUserData)
@@ -1288,7 +1312,7 @@ namespace svxform
         // in addition, with the move of controls such things as "the current form" may have changed - force the shell
         // to update itself accordingly
         if( pFormShell && pFormShell->GetImpl() && pFormShell->GetFormView() )
-            pFormShell->GetImpl()->DetermineSelection( pFormShell->GetFormView()->GetMarkedObjectList() );
+            pFormShell->GetImpl()->DetermineSelection( pFormShell->GetFormView()->getSelectedSdrObjectVectorFromSdrMarkView() );
 
         if ( m_aControlExchange.isClipboardOwner() && ( DND_ACTION_MOVE == _nAction ) )
             m_aControlExchange->clear();
@@ -1530,24 +1554,27 @@ namespace svxform
         // Namen setzen
         FmFormView*     pFormView       = GetNavModel()->GetFormShell()->GetFormView();
         SdrPageView*    pPageView       = pFormView->GetSdrPageView();
-        FmFormPage*     pPage           = (FmFormPage*)pPageView->GetPage();
 
-        ::rtl::OUString sName = pPage->GetImpl().setUniqueName( xNewComponent, xParentForm );
-
-        pNewFormControlData->SetText( sName );
-
-        //////////////////////////////////////////////////////////////////////
-        // FormComponent einfuegen
-        GetNavModel()->Insert( pNewFormControlData, LIST_APPEND, sal_True );
-        GetNavModel()->SetModified();
-
-        if (bEditName)
+        if(pPageView)
         {
+            FmFormPage* pPage = dynamic_cast< FmFormPage* >(&pPageView->getSdrPageFromSdrPageView());
+            ::rtl::OUString sName = pPage->GetImpl().setUniqueName( xNewComponent, xParentForm );
+
+            pNewFormControlData->SetText( sName );
+
             //////////////////////////////////////////////////////////////////////
-            // In EditMode schalten
-            SvLBoxEntry* pNewEntry = FindEntry( pNewFormControlData );
-            Select( pNewEntry, sal_True );
-            EditEntry( pNewEntry );
+            // FormComponent einfuegen
+            GetNavModel()->Insert( pNewFormControlData, LIST_APPEND, sal_True );
+            GetNavModel()->SetModified();
+
+            if (bEditName)
+            {
+                //////////////////////////////////////////////////////////////////////
+                // In EditMode schalten
+                SvLBoxEntry* pNewEntry = FindEntry( pNewFormControlData );
+                Select( pNewEntry, sal_True );
+                EditEntry( pNewEntry );
+            }
         }
 
         return pNewFormControlData;
@@ -1563,10 +1590,10 @@ namespace svxform
         //////////////////////////////////////////////////////////////////////
         // BasisNamen erzeugen
         UniString aBaseName;
-        if( pEntryData->ISA(FmFormData) )
+        if( dynamic_cast< FmFormData* >(pEntryData) )
             aBaseName = SVX_RES( RID_STR_STDFORMNAME );
 
-        else if( pEntryData->ISA(FmControlData) )
+        else if( dynamic_cast< FmControlData* >(pEntryData) )
             aBaseName = SVX_RES( RID_STR_CONTROL );
 
         //////////////////////////////////////////////////////////////////////
@@ -1781,7 +1808,7 @@ namespace svxform
 
         // und dann meine Form und mein SelObject
         if ( bSetSelectionAsMarkList )
-            pFormShell->GetImpl()->setCurrentSelectionFromMark( pFormShell->GetFormView()->GetMarkedObjectList() );
+            pFormShell->GetImpl()->setCurrentSelectionFromSdrObjectVector( pFormShell->GetFormView()->getSelectedSdrObjectVectorFromSdrMarkView() );
         else
             pFormShell->GetImpl()->setCurrentSelection( aSelection );
 
@@ -1824,7 +1851,7 @@ namespace svxform
         // see below for why we need this mapping from models to shapes
         FmFormView*     pFormView       = pFormShell->GetFormView();
         SdrPageView*    pPageView       = pFormView ? pFormView->GetSdrPageView() : NULL;
-        SdrPage*        pPage           = pPageView ? pPageView->GetPage() : NULL;
+        SdrPage*        pPage           = pPageView ? &pPageView->getSdrPageFromSdrPageView() : NULL;
         DBG_ASSERT( pPage, "NavigatorTree::DeleteSelection: invalid form page!" );
 
         MapModelToShape aModelShapes;
@@ -1845,7 +1872,7 @@ namespace svxform
             FmEntryData* pCurrent = (FmEntryData*)(m_arrCurrentSelection.GetObject(i - 1)->GetUserData());
 
             // eine Form ?
-            sal_Bool bIsForm = pCurrent->ISA(FmFormData);
+            sal_Bool bIsForm = 0 != dynamic_cast< FmFormData* >(pCurrent);
 
             // da ich das Loeschen im folgenden der View ueberlasse und dabei auf deren MarkList aufbaue, im Normalfall aber bei
             // einem makierten Formular nur die direkt, nicht die indirekt abhaengigen Controls markiert werden, muss ich das hier
@@ -1918,9 +1945,11 @@ namespace svxform
 
             // noch ein kleines Problem, bevor ich das ganz loesche : wenn es eine Form ist und die Shell diese als CurrentObject
             // kennt, dann muss ich ihr das natuerlich ausreden
-            if (pCurrent->ISA(FmFormData))
+            FmFormData* pFmFormData = dynamic_cast< FmFormData* >(pCurrent);
+
+            if (pFmFormData)
             {
-                Reference< XForm >  xCurrentForm( static_cast< FmFormData* >( pCurrent )->GetFormIface() );
+                Reference< XForm >  xCurrentForm( pFmFormData->GetFormIface() );
                 if ( pFormShell->GetImpl()->getCurrentForm() == xCurrentForm )  // die Shell kennt die zu loeschende Form ?
                     pFormShell->GetImpl()->forgetCurrentForm();                 // -> wegnehmen ...
             }
@@ -2027,7 +2056,8 @@ namespace svxform
                     {   // der Entry ist schon selektiert, steht aber auch in der SelectList -> er kann aus letzterer
                         // raus
                         arredToSelect.Remove(nPosition, 1);
-                    } else
+                    }
+                    else
                     {   // der Entry ist selektiert, aber steht nicht in der SelectList -> Selektion rausnehmen
                         Select(pSelection, sal_False);
                         // und sichtbar machen (kann ja sein, dass das die einzige Modifikation ist, die ich hier in dem
@@ -2079,7 +2109,7 @@ namespace svxform
         FmFormView* pFormView = pFormShell->GetFormView();
         if (!pFormView) return;
 
-        GetNavModel()->BroadcastMarkedObjects(pFormView->GetMarkedObjectList());
+        GetNavModel()->BroadcastMarkedObjects(pFormView->getSelectedSdrObjectVectorFromSdrMarkView());
     }
 
     //------------------------------------------------------------------------
@@ -2140,7 +2170,7 @@ namespace svxform
         // aber der Mechanismus greift zum Beispiel nicht, wenn die Form leer ist)
         if ((m_arrCurrentSelection.Count() == 1) && (m_nFormsSelected == 1))
         {
-            FmFormData* pSingleSelectionData = PTR_CAST( FmFormData, static_cast< FmEntryData* >( FirstSelected()->GetUserData() ) );
+            FmFormData* pSingleSelectionData = dynamic_cast< FmFormData* >( static_cast< FmEntryData* >( FirstSelected()->GetUserData() ) );
             DBG_ASSERT( pSingleSelectionData, "NavigatorTree::SynchronizeMarkList: invalid selected form!" );
             if ( pSingleSelectionData )
             {
@@ -2184,7 +2214,7 @@ namespace svxform
         if( !pFormShell )
             return;
         FmFormView* pFormView = pFormShell->GetFormView();
-        pFormView->UnMarkAll();
+        pFormView->UnmarkAllObj();
     }
     //------------------------------------------------------------------------
     void NavigatorTree::MarkViewObj(FmFormData* pFormData, sal_Bool bMark, sal_Bool bDeep )
@@ -2202,10 +2232,12 @@ namespace svxform
         // In der Page das entsprechende SdrObj finden und selektieren
         FmFormView*     pFormView       = pFormShell->GetFormView();
         SdrPageView*    pPageView       = pFormView->GetSdrPageView();
-        SdrPage*        pPage           = pPageView->GetPage();
-        //FmFormPage*     pFormPage       = dynamic_cast< FmFormPage* >( pPage );
 
+        if(pPageView)
+        {
+            SdrPage* pPage = &pPageView->getSdrPageFromSdrPageView();
         SdrObjListIter aIter( *pPage );
+
         while ( aIter.IsMore() )
         {
             SdrObject* pSdrObject = aIter.Next();
@@ -2214,44 +2246,54 @@ namespace svxform
                 continue;
 
             Reference< XFormComponent > xControlModel( pFormObject->GetUnoControlModel(),UNO_QUERY );
-            if ( xControlModel.is() && aObjects.find(xControlModel) != aObjects.end() && bMark != pFormView->IsObjMarked( pSdrObject ) )
+                if ( xControlModel.is() && aObjects.find(xControlModel) != aObjects.end() && bMark != (sal_Bool)pFormView->IsObjMarked( *pSdrObject ) )
             {
                 // unfortunately, the writer doesn't like marking an already-marked object, again, so reset the mark first
-                pFormView->MarkObj( pSdrObject, pPageView, !bMark, sal_False );
+                    pFormView->MarkObj( *pSdrObject, !bMark );
             }
         } // while ( aIter.IsMore() )
         if ( bMark )
         {
             // make the mark visible
-            ::Rectangle aMarkRect( pFormView->GetAllMarkedRect());
+                const basegfx::B2DRange aMarkRange( pFormView->getMarkedObjectSnapRange());
+
             for ( sal_uInt32 i = 0; i < pFormView->PaintWindowCount(); ++i )
             {
                 SdrPaintWindow* pPaintWindow = pFormView->GetPaintWindow( i );
                 OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
-                if ( ( OUTDEV_WINDOW == rOutDev.GetOutDevType() ) && !aMarkRect.IsEmpty() )
+
+                    if ( ( OUTDEV_WINDOW == rOutDev.GetOutDevType() ) && !aMarkRange.isEmpty() )
                 {
-                    pFormView->MakeVisible( aMarkRect, (Window&)rOutDev );
+                        pFormView->MakeVisibleAtView( aMarkRange, (Window&)rOutDev );
                 }
             } // for ( sal_uInt32 i = 0; i < pFormView->PaintWindowCount(); ++i )
         }
+    }
     }
     //------------------------------------------------------------------------
     void NavigatorTree::CollectObjects(FmFormData* pFormData, sal_Bool bDeep, ::std::set< Reference< XFormComponent > >& _rObjects)
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::MarkViewObjects" );
         FmEntryDataList* pChildList = pFormData->GetChildList();
-        FmEntryData* pEntryData;
-        FmControlData* pControlData;
+
         for( sal_uInt32 i=0; i < pChildList->Count(); ++i )
         {
-            pEntryData = pChildList->GetObject(i);
-            if( pEntryData->ISA(FmControlData) )
+            FmEntryData* pEntryData = pChildList->GetObject(i);
+            FmControlData* pControlData = dynamic_cast< FmControlData* >(pEntryData);
+
+            if( pControlData )
             {
-                pControlData = (FmControlData*)pEntryData;
                 _rObjects.insert(pControlData->GetFormComponent());
-            } // if( pEntryData->ISA(FmControlData) )
-            else if (bDeep && (pEntryData->ISA(FmFormData)))
-                CollectObjects((FmFormData*)pEntryData,bDeep,_rObjects);
+            } // if( dynamic_cast< FmControlData* >(pEntryData) )
+            else if (bDeep)
+            {
+                FmFormData* pFmFormData = dynamic_cast< FmFormData* >(pEntryData);
+
+                if (pFmFormData)
+                {
+                    CollectObjects(pFmFormData,bDeep,_rObjects);
+                }
+            }
         } // for( sal_uInt32 i=0; i<pChildList->Count(); i++ )
     }
     //------------------------------------------------------------------------
@@ -2269,45 +2311,49 @@ namespace svxform
         FmFormView*     pFormView       = pFormShell->GetFormView();
         Reference< XFormComponent >  xFormComponent( pControlData->GetFormComponent());
         SdrPageView*    pPageView       = pFormView->GetSdrPageView();
-        SdrPage*        pPage           = pPageView->GetPage();
 
-        bool bPaint = false;
-        SdrObjListIter aIter( *pPage );
-        while ( aIter.IsMore() )
+        if(pPageView)
         {
-            SdrObject* pSdrObject = aIter.Next();
-            FmFormObj* pFormObject = FmFormObj::GetFormObject( pSdrObject );
-            if ( !pFormObject )
-                continue;
-
-            Reference< XInterface > xControlModel( pFormObject->GetUnoControlModel() );
-            if ( xControlModel != xFormComponent )
-                continue;
-
-            // mark the object
-            if ( bMark != pFormView->IsObjMarked( pSdrObject ) )
-                // unfortunately, the writer doesn't like marking an already-marked object, again, so reset the mark first
-                pFormView->MarkObj( pSdrObject, pPageView, !bMark, sal_False );
-
-            if ( !bMarkHandles || !bMark )
-                continue;
-
-            bPaint = true;
-
-        } // while ( aIter.IsMore() )
-        if ( bPaint )
-        {
-            // make the mark visible
-            ::Rectangle aMarkRect( pFormView->GetAllMarkedRect());
-            for ( sal_uInt32 i = 0; i < pFormView->PaintWindowCount(); ++i )
+            SdrPage* pPage = &pPageView->getSdrPageFromSdrPageView();
+            bool bPaint = false;
+            SdrObjListIter aIter( *pPage );
+            while ( aIter.IsMore() )
             {
-                SdrPaintWindow* pPaintWindow = pFormView->GetPaintWindow( i );
-                OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
-                if ( OUTDEV_WINDOW == rOutDev.GetOutDevType() )
+                SdrObject* pSdrObject = aIter.Next();
+                FmFormObj* pFormObject = FmFormObj::GetFormObject( pSdrObject );
+                if ( !pFormObject )
+                    continue;
+
+                Reference< XInterface > xControlModel( pFormObject->GetUnoControlModel() );
+                if ( xControlModel != xFormComponent )
+                    continue;
+
+                // mark the object
+                if ( bMark != (sal_Bool)pFormView->IsObjMarked( *pSdrObject ) )
+                    // unfortunately, the writer doesn't like marking an already-marked object, again, so reset the mark first
+                    pFormView->MarkObj( *pSdrObject, !bMark );
+
+                if ( !bMarkHandles || !bMark )
+                    continue;
+
+                bPaint = true;
+
+            } // while ( aIter.IsMore() )
+            if ( bPaint )
+            {
+                // make the mark visible
+                const basegfx::B2DRange aMarkRange( pFormView->getMarkedObjectSnapRange());
+
+                for ( sal_uInt32 i = 0; i < pFormView->PaintWindowCount(); ++i )
                 {
-                    pFormView->MakeVisible( aMarkRect, (Window&)rOutDev );
-                }
-            } // for ( sal_uInt32 i = 0; i < pFormView->PaintWindowCount(); ++i )
+                    SdrPaintWindow* pPaintWindow = pFormView->GetPaintWindow( i );
+                    OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
+                    if ( OUTDEV_WINDOW == rOutDev.GetOutDevType() )
+                    {
+                            pFormView->MakeVisibleAtView( aMarkRange, (Window&)rOutDev );
+                    }
+                } // for ( sal_uInt32 i = 0; i < pFormView->PaintWindowCount(); ++i )
+            }
         }
     }
 

@@ -63,7 +63,7 @@ ScDrawShell::ScDrawShell( ScViewData* pData ) :
     SfxShell(pData->GetViewShell()),
     pViewData( pData )
 {
-    SetPool( &pViewData->GetScDrawView()->GetModel()->GetItemPool() );
+    SetPool( &pViewData->GetScDrawView()->getSdrModelFromSdrView().GetItemPool() );
     ::svl::IUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
     SetUndoManager( pMgr );
     if ( !pViewData->GetDocument()->IsUndoEnabled() )
@@ -85,7 +85,7 @@ void ScDrawShell::GetState( SfxItemSet& rSet )          // Zustaende / Toggles
 
     rSet.Put( SfxBoolItem( SID_OBJECT_ROTATE, eMode == SDRDRAG_ROTATE ) );
     rSet.Put( SfxBoolItem( SID_OBJECT_MIRROR, eMode == SDRDRAG_MIRROR ) );
-    rSet.Put( SfxBoolItem( SID_BEZIER_EDIT, !pView->IsFrameDragSingles() ) );
+    rSet.Put( SfxBoolItem( SID_BEZIER_EDIT, !pView->IsFrameHandles() ) );
 
     sal_uInt16 nFWId = ScGetFontWorkId();
     SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
@@ -93,12 +93,11 @@ void ScDrawShell::GetState( SfxItemSet& rSet )          // Zustaende / Toggles
 
         // Notes always default to Page anchor.
     bool bDisableAnchor = false;
-    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-    sal_uLong nMarkCount = rMarkList.GetMarkCount();
-    if ( nMarkCount == 1 )
+    SdrObject* pSelected = pView->getSelectedIfSingle();
+
+    if ( pSelected )
     {
-        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-        if( ScDrawLayer::IsNoteCaption( pObj ) )
+        if( ScDrawLayer::IsNoteCaption( *pSelected ) )
         {
             bDisableAnchor = true;
             rSet.DisableItem( SID_ANCHOR_PAGE );
@@ -132,7 +131,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
 {
     ScDrawView* pView = pViewData->GetScDrawView();
 
-    //  #111711# call IsMirrorAllowed first to make sure ForcePossibilities (and thus CheckMarked)
+    //  #111711# call IsMirrorAllowed first to make sure ForcePossibilities
     //  is called before GetMarkCount, so the nMarkCount value is valid for the rest of this method.
     if (!pView->IsMirrorAllowed(sal_True,sal_True))
     {
@@ -140,19 +139,18 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
         rSet.DisableItem( SID_MIRROR_VERTICAL );
     }
 
-    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-    sal_uLong nMarkCount = rMarkList.GetMarkCount();
+    const SdrObjectVector aSelection(pView->getSelectedSdrObjectVectorFromSdrMarkView());
 
-    if ( nMarkCount <= 1 || !pView->IsGroupPossible() )
+    if ( aSelection.size() <= 1 || !pView->IsGroupPossible() )
         rSet.DisableItem( SID_GROUP );
-    if ( nMarkCount == 0 || !pView->IsUnGroupPossible() )
+    if ( !aSelection.size() || !pView->IsUnGroupPossible() )
         rSet.DisableItem( SID_UNGROUP );
-    if ( nMarkCount != 1 || !pView->IsGroupEnterPossible() )
+    if ( aSelection.size() != 1 || !pView->IsGroupEnterPossible() )
         rSet.DisableItem( SID_ENTER_GROUP );
     if ( !pView->IsGroupEntered() )
         rSet.DisableItem( SID_LEAVE_GROUP );
 
-    if ( nMarkCount <= 1 )                      // nichts oder nur ein Objekt selektiert
+    if ( aSelection.size() <= 1 )                       // nichts oder nur ein Objekt selektiert
     {
             //  Ausrichtung
         rSet.DisableItem( SID_OBJECT_ALIGN_LEFT );      // keine Ausrichtung an der Seite
@@ -173,25 +171,25 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
 
     // do not change layer of form controls
     // #158385# #i83729# do not change layer of cell notes (on internal layer)
-    if ( !nMarkCount || pView->HasMarkedControl() || pView->HasMarkedInternal() )
+    if ( !aSelection.size() || pView->HasMarkedControl() || pView->HasMarkedInternal() )
     {
         rSet.DisableItem( SID_OBJECT_HEAVEN );
         rSet.DisableItem( SID_OBJECT_HELL );
     }
     else
     {
-        if(AreAllObjectsOnLayer(SC_LAYER_FRONT,rMarkList))
+        if(AreAllObjectsOnLayer(SC_LAYER_FRONT, aSelection))
         {
             rSet.DisableItem( SID_OBJECT_HEAVEN );
         }
-        else if(AreAllObjectsOnLayer(SC_LAYER_BACK,rMarkList))
+        else if(AreAllObjectsOnLayer(SC_LAYER_BACK, aSelection))
         {
             rSet.DisableItem( SID_OBJECT_HELL );
         }
     }
 
     sal_Bool bCanRename = sal_False;
-    if ( nMarkCount > 1 )
+    if ( aSelection.size() > 1 )
     {
 #ifdef ISSUE66550_HLINK_FOR_SHAPES
         // no hypelink options for a selected group
@@ -200,9 +198,9 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
         rSet.DisableItem( SID_OPEN_HYPERLINK );
 #endif
     }
-    else if ( nMarkCount == 1 )
+    else if ( aSelection.size() == 1 )
     {
-        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+        SdrObject* pObj = aSelection[0];
 #ifdef ISSUE66550_HLINK_FOR_SHAPES
         ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj );
         if ( !pInfo || (pInfo->GetHlink().getLength() == 0) )
@@ -211,21 +209,22 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
             rSet.DisableItem( SID_OPEN_HYPERLINK );
         }
 #endif
-        SdrLayerID nLayerID = pObj->GetLayer();
+        const SdrLayerID nLayerID = pObj->GetLayer();
         if ( nLayerID != SC_LAYER_INTERN )
             bCanRename = sal_True;                          // #i51351# anything except internal objects can be renamed
 
         // #91929#; don't show original size entry if not possible
-        sal_uInt16 nObjType = pObj->GetObjIdentifier();
-        if ( nObjType == OBJ_OLE2 )
+        SdrOle2Obj* pOleObj = dynamic_cast< SdrOle2Obj* >(pObj);
+        SdrCaptionObj* pSdrCaptionObj = dynamic_cast< SdrCaptionObj* >(pObj);
+
+        if(pOleObj)
         {
-            SdrOle2Obj* pOleObj = static_cast<SdrOle2Obj*>(rMarkList.GetMark( 0 )->GetMarkedSdrObj());
             if (pOleObj->GetObjRef().is() &&
                 ((pOleObj->GetObjRef()->getStatus( pOleObj->GetAspect() ) & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE) ) )
                 //TODO/LATER: why different slots in Draw and Calc?
                 rSet.DisableItem(SID_ORIGINALSIZE);
         }
-        else if ( nObjType == OBJ_CAPTION )
+        else if(pSdrCaptionObj)
         {
             if ( nLayerID == SC_LAYER_INTERN )
             {
@@ -245,7 +244,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
         rSet.DisableItem( SID_TITLE_DESCRIPTION_OBJECT );
     }
 
-    if ( !nMarkCount )                          // nichts selektiert
+    if ( !aSelection.size() )                           // nichts selektiert
     {
             //  Anordnung
         rSet.DisableItem( SID_FRAME_UP );
@@ -265,7 +264,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
 
     if ( rSet.GetItemState( SID_ENABLE_HYPHENATION ) != SFX_ITEM_UNKNOWN )
     {
-        SfxItemSet aAttrs( pView->GetModel()->GetItemPool() );
+        SfxItemSet aAttrs( pView->getSdrModelFromSdrView().GetItemPool() );
         pView->GetAttributes( aAttrs );
         if( aAttrs.GetItemState( EE_PARA_HYPHENATE ) >= SFX_ITEM_AVAILABLE )
         {
@@ -284,11 +283,9 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
 
 void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
 {
-    Point       aMousePos   = pViewData->GetMousePosPixel();
     Window*     pWindow     = pViewData->GetActiveWin();
     ScDrawView* pDrView     = pViewData->GetScDrawView();
-    Point       aPos        = pWindow->PixelToLogic(aMousePos);
-    sal_Bool        bHasMarked  = pDrView->AreObjectsMarked();
+    sal_Bool        bHasMarked  = pDrView->areSdrObjectsSelected();
 
     if( bHasMarked )
     {
@@ -324,32 +321,36 @@ void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
         sal_Bool bActionItem = sal_False;
         if ( pDrView->IsAction() )              // action rectangle
         {
-            Rectangle aRect;
-            pDrView->TakeActionRect( aRect );
-            if ( !aRect.IsEmpty() )
+            basegfx::B2DRange aRange(pDrView->TakeActionRange());
+
+            if(!aRange.isEmpty())
             {
-                pPV->LogicToPagePos(aRect);
-                rSet.Put( SfxPointItem( SID_ATTR_POSITION, aRect.TopLeft() ) );
-                Size aSize( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() );
-                rSet.Put( SvxSizeItem( SID_ATTR_SIZE, aSize ) );
+                aRange.transform(basegfx::tools::createTranslateB2DHomMatrix(-pPV->GetPageOrigin()));
+                const Point aOldTopLeft(basegfx::fround(aRange.getMinX()), basegfx::fround(aRange.getMinY()));
+                const Size aOldSize(basegfx::fround(aRange.getWidth()), basegfx::fround(aRange.getHeight()));
+
+                rSet.Put( SfxPointItem( SID_ATTR_POSITION, aOldTopLeft ) );
+                rSet.Put( SvxSizeItem( SID_ATTR_SIZE, aOldSize ) );
+
                 bActionItem = sal_True;
             }
         }
         if ( !bActionItem )
         {
-            if ( pDrView->AreObjectsMarked() )      // selected objects
+            if ( pDrView->areSdrObjectsSelected() )      // selected objects
             {
-                Rectangle aRect = pDrView->GetAllMarkedRect();
-                pPV->LogicToPagePos(aRect);
-                rSet.Put( SfxPointItem( SID_ATTR_POSITION, aRect.TopLeft() ) );
-                Size aSize( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() );
-                rSet.Put( SvxSizeItem( SID_ATTR_SIZE, aSize ) );
+                const basegfx::B2DRange aRange(basegfx::tools::createTranslateB2DHomMatrix(-pPV->GetPageOrigin()) * pDrView->getMarkedObjectSnapRange());
+
+                rSet.Put(SfxPointItem(SID_ATTR_POSITION, Point(basegfx::fround(aRange.getMinX()), basegfx::fround(aRange.getMinY()))));
+                rSet.Put(SvxSizeItem(SID_ATTR_SIZE, Size(basegfx::fround(aRange.getWidth()), basegfx::fround(aRange.getHeight()))));
             }
             else                                // mouse position
             {
                 // aPos is initialized above
-                pPV->LogicToPagePos(aPos);
-                rSet.Put( SfxPointItem( SID_ATTR_POSITION, aPos ) );
+                const basegfx::B2DPoint aPos((pWindow->GetInverseViewTransformation() *
+                    basegfx::B2DPoint(pViewData->GetMousePosPixel().X(), pViewData->GetMousePosPixel().Y())) - pPV->GetPageOrigin());
+
+                rSet.Put(SfxPointItem(SID_ATTR_POSITION, Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY()))));
                 rSet.Put( SvxSizeItem( SID_ATTR_SIZE, Size( 0, 0 ) ) );
             }
         }
@@ -373,23 +374,20 @@ void ScDrawShell::GetAttrFuncState(SfxItemSet &rSet)
         rSet.DisableItem( SID_ATTRIBUTES_AREA );
 }
 
-sal_Bool ScDrawShell::AreAllObjectsOnLayer(sal_uInt16 nLayerNo,const SdrMarkList& rMark)
+bool ScDrawShell::AreAllObjectsOnLayer(sal_uInt16 nLayerNo, const SdrObjectVector& rSelection)
 {
-    sal_Bool bResult=sal_True;
-    sal_uLong nCount = rMark.GetMarkCount();
-    for (sal_uLong i=0; i<nCount; i++)
+    for (sal_uInt32 i(0); i < rSelection.size(); i++)
     {
-        SdrObject* pObj = rMark.GetMark(i)->GetMarkedSdrObj();
-        if ( !pObj->ISA(SdrUnoObj) )
+        if ( !dynamic_cast< SdrUnoObj* >(rSelection[i]) )
         {
-            if(nLayerNo!=pObj->GetLayer())
+            if(nLayerNo != rSelection[i]->GetLayer())
             {
-                bResult=sal_False;
-                break;
+                return false;
             }
         }
     }
-    return bResult;
+
+    return true;
 }
 
 

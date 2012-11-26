@@ -507,9 +507,9 @@ void ScTable::CopyFromClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 }
             }
 
-                //
-                // Zellschutz auf geschuetzter Tabelle nicht setzen
-                //
+            //
+            // Zellschutz auf geschuetzter Tabelle nicht setzen
+            //
 
             if ( IsProtected() && (nInsFlag & IDF_ATTRIB) )
             {
@@ -3231,7 +3231,7 @@ void ScTable::SetDrawPageSize(bool bResetStreamValid, bool bUpdateNoteCaptionPos
         if ( IsLayoutRTL() )        // IsNegativePage
             x = -x;
 
-        pDrawLayer->SetPageSize( static_cast<sal_uInt16>(nTab), Size( x, y ), bUpdateNoteCaptionPos );
+        pDrawLayer->SetPageSize( static_cast< sal_uInt32 >(nTab), basegfx::B2DVector( x, y ), bUpdateNoteCaptionPos );
     }
 
     // #i102616# actions that modify the draw page size count as sheet modification

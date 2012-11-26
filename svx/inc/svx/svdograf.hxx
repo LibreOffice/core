@@ -55,22 +55,6 @@ namespace sdr
 #define SDRGRAFOBJ_TRANSFORMATTR_ROTATE     0x00000004UL
 #define SDRGRAFOBJ_TRANSFORMATTR_ALL        0xffffffffUL
 
-// ---------------------
-// - SdrGrafObjGeoData -
-// ---------------------
-
-// #109872#
-class SdrGrafObjGeoData : public SdrTextObjGeoData
-{
-public:
-    sal_Bool                    bMirrored;
-
-    SdrGrafObjGeoData()
-    :   bMirrored(sal_False)
-    {
-    }
-};
-
 // --------------
 // - SdrGrafObj -
 // --------------
@@ -107,35 +91,44 @@ protected:
 
     // #111096#
     // Flag for allowing text animation. Default is sal_true.
-    unsigned                    mbGrafAnimationAllowed : 1;
+    bool                        mbGrafAnimationAllowed : 1;
 
     // #i25616#
-    unsigned                    mbInsidePaint : 1;
-    unsigned                    mbIsPreview   : 1;
-
-protected:
+    bool                        mbInsidePaint : 1;
+    bool                        mbIsPreview   : 1;
 
     void                    ImpLinkAnmeldung();
     void                    ImpLinkAbmeldung();
-    sal_Bool                ImpUpdateGraphicLink( sal_Bool bAsynchron = sal_True ) const;
+    bool                    ImpUpdateGraphicLink( bool bAsynchron = true ) const;
     void                    ImpSetLinkedGraphic( const Graphic& rGraphic );
                             DECL_LINK( ImpSwapHdl, GraphicObject* );
     void onGraphicChanged();
 
-public:
-
-                            TYPEINFO();
-
-                            SdrGrafObj();
-                            SdrGrafObj(const Graphic& rGrf);
-                            SdrGrafObj(const Graphic& rGrf, const Rectangle& rRect);
     virtual                 ~SdrGrafObj();
+
+    /// method to copy all data from given source
+    virtual void copyDataFromSdrObject(const SdrObject& rSource);
+
+public:
+    /// create a copy, evtl. with a different target model (if given)
+    virtual SdrObject* CloneSdrObject(SdrModel* pTargetModel = 0) const;
+
+    // react on model/page change
+    virtual void handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage);
+
+    SdrGrafObj(
+        SdrModel& rSdrModel,
+        const Graphic& rGrf,
+        const basegfx::B2DHomMatrix& rTransform = basegfx::B2DHomMatrix());
+
+    virtual bool IsSdrGrafObj() const;
+    virtual bool DoesSupportTextIndentingOnLineWidthChange() const;
 
     void                    SetGraphicObject( const GraphicObject& rGrfObj );
     const GraphicObject&    GetGraphicObject( bool bForceSwapIn = false) const;
     const GraphicObject*    GetReplacementGraphicObject() const;
 
-    void                    NbcSetGraphic(const Graphic& rGrf);
+    //void                  NbcSetGraphic(const Graphic& rGrf);
     void                    SetGraphic(const Graphic& rGrf);
     const Graphic&          GetGraphic() const;
 
@@ -145,9 +138,9 @@ public:
 
     // #111096#
     // Keep ATM for SD.
-    sal_Bool IsAnimated() const;
-    sal_Bool IsEPS() const;
-    sal_Bool IsSwappedOut() const;
+    bool IsAnimated() const;
+    bool IsEPS() const;
+    bool IsSwappedOut() const;
 
     const MapMode&          GetGrafPrefMapMode() const;
     const Size&             GetGrafPrefSize() const;
@@ -160,15 +153,12 @@ public:
 
     void                    SetGraphicLink(const String& rFileName, const String& rFilterName);
     void                    ReleaseGraphicLink();
-    sal_Bool IsLinkedGraphic() const { return (sal_Bool)aFileName.Len(); }
+    bool IsLinkedGraphic() const { return (bool)aFileName.Len(); }
 
     void                    SetFileName(const String& rFileName);
     const String&           GetFileName() const { return aFileName; }
     void                    SetFilterName(const String& rFilterName);
     const String&           GetFilterName() const { return aFilterName; }
-
-    void                    StartAnimation(OutputDevice* pOutDev, const Point& rPoint, const Size& rSize, long nExtraData=0L);
-    void                    StopAnimation(OutputDevice* pOutDev=NULL, long nExtraData=0L);
 
     virtual void            TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual sal_uInt16          GetObjIdentifier() const;
@@ -179,33 +169,16 @@ public:
     // #i25616#
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
 
-    virtual void            operator=(const SdrObject& rObj);
+    virtual void AddToHdlList(SdrHdlList& rHdlList) const;
 
-    virtual sal_uInt32 GetHdlCount() const;
-    virtual SdrHdl*         GetHdl(sal_uInt32 nHdlNum) const;
-
-    virtual void            NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-    virtual void            NbcRotate(const Point& rRef, long nWink, double sn, double cs);
-    virtual void            NbcMirror(const Point& rRef1, const Point& rRef2);
-    virtual void            NbcShear (const Point& rRef, long nWink, double tn, FASTBOOL bVShear);
-    virtual void            NbcSetSnapRect(const Rectangle& rRect);
-    virtual void            NbcSetLogicRect(const Rectangle& rRect);
-    virtual SdrObjGeoData*  NewGeoData() const;
-    virtual void            SaveGeoData(SdrObjGeoData& rGeo) const;
-    virtual void            RestGeoData(const SdrObjGeoData& rGeo);
-
-    FASTBOOL                HasGDIMetaFile() const;
+    bool                HasGDIMetaFile() const;
     const GDIMetaFile*      GetGDIMetaFile() const;
 
-    virtual void            SetPage(SdrPage* pNewPage);
-    virtual void            SetModel(SdrModel* pNewModel);
+    virtual SdrObject*      DoConvertToPolygonObject(bool bBezier, bool bAddText) const;
 
+    virtual void            AdjustToMaxRange( const basegfx::B2DRange& rMaxRange, bool bShrinkOnly = false );
     bool isEmbeddedSvg() const;
     GDIMetaFile getMetafileFromEmbeddedSvg() const;
-
-    virtual SdrObject*      DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
-
-    virtual void            AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly = false );
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
@@ -214,16 +187,18 @@ public:
 
     // #111096#
     // Access to GrafAnimationAllowed flag
-    sal_Bool IsGrafAnimationAllowed() const;
-    void SetGrafAnimationAllowed(sal_Bool bNew);
+    bool IsGrafAnimationAllowed() const;
+    void SetGrafAnimationAllowed(bool bNew);
 
     // #i25616#
-    sal_Bool IsObjectTransparent() const;
+    bool IsObjectTransparent() const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > getInputStream();
 
     // #i103116# FullDrag support
     virtual SdrObject* getFullDragClone() const;
+
+    virtual void setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransformation);
 };
 
 #endif //_SVDOGRAF_HXX

@@ -25,6 +25,7 @@
 #define SD_FU_PAGE_HXX
 
 #include "fupoor.hxx"
+#include <basegfx/vector/b2dvector.hxx>
 
 class SfxItemSet;
 class SdBackgroundObjUndoAction;
@@ -37,8 +38,6 @@ class FuPage
     : public FuPoor
 {
  public:
-    TYPEINFO();
-
     static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
     virtual void DoExecute( SfxRequest& rReq );
 
@@ -63,7 +62,7 @@ private:
     SfxRequest&                 mrReq;
     const SfxItemSet*           mpArgs;
     SdBackgroundObjUndoAction*  mpBackgroundObjUndoAction;
-    Size                        maSize;
+    basegfx::B2DVector          maSize;
     bool                        mbPageBckgrdDeleted;
     bool                        mbMasterPage;
     bool                        mbDisplayBackgroundTabPage;

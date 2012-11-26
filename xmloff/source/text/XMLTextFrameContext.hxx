@@ -74,8 +74,6 @@ protected:
 
 public:
 
-    TYPEINFO();
-
     XMLTextFrameContext( SvXMLImport& rImport,
             sal_uInt16 nPrfx,
             const ::rtl::OUString& rLName,

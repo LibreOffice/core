@@ -45,8 +45,6 @@ class XMLIndexIllustrationSourceContext : public XMLIndexTableSourceContext
 {
 public:
 
-    TYPEINFO();
-
     XMLIndexIllustrationSourceContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,

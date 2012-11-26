@@ -192,7 +192,7 @@ namespace sdr
                         rGrafObj.mbInsidePaint = sal_True;
                         rGrafObj.ForceSwapIn();
                         rGrafObj.mbInsidePaint = sal_False;
-                        }
+                    }
 
                     bRetval = true;
                 }
@@ -247,7 +247,7 @@ namespace sdr
         {
             // prepare primitive generation with evtl. loading the graphic when it's swapped out
             SdrGrafObj& rGrafObj = const_cast< ViewObjectContactOfGraphic* >(this)->getSdrGrafObj();
-            bool bDoAsynchronGraphicLoading(rGrafObj.GetModel() && rGrafObj.GetModel()->IsSwapGraphics());
+            bool bDoAsynchronGraphicLoading(rGrafObj.getSdrModelFromSdrObject().IsSwapGraphics());
             bool bSwapInDone(false);
             bool bSwapInExclusive(false);
 
@@ -255,7 +255,7 @@ namespace sdr
             {
                 // sometimes it is needed that each graphic is completely available and swapped in
                 // for these cases a ForceSwapIn is called later at the graphic object
-                if ( rGrafObj.GetPage() && rGrafObj.GetPage()->IsMasterPage() )
+                if ( rGrafObj.getSdrPageFromSdrObject() && rGrafObj.getSdrPageFromSdrObject()->IsMasterPage() )
                 {
                     // #i102380# force Swap-In for GraphicObjects on MasterPage to have a nicer visualisation
                     bDoAsynchronGraphicLoading = false;

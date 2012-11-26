@@ -40,8 +40,7 @@
 #include <svx/xlnstcit.hxx>
 #include <svx/sxcecitm.hxx>
 #include <svx/xflclit.hxx>
-#include <svx/sdshitm.hxx>
-#include <svx/sdsxyitm.hxx>
+#include <svx/svdlegacy.hxx>
 
 #include "document.hxx"
 #include "docpool.hxx"
@@ -104,7 +103,7 @@ void ScCaptionUtil::SetBasicCaptionSettings( SdrCaptionObj& rCaption, bool bShow
 void ScCaptionUtil::SetCaptionUserData( SdrCaptionObj& rCaption, const ScAddress& rPos )
 {
     // pass true to ScDrawLayer::GetObjData() to create the object data entry
-    ScDrawObjData* pObjData = ScDrawLayer::GetObjData( &rCaption, true );
+    ScDrawObjData* pObjData = ScDrawLayer::GetObjData( rCaption, true );
     OSL_ENSURE( pObjData, "ScCaptionUtil::SetCaptionUserData - missing drawing object user data" );
     pObjData->maStart = rPos;
     pObjData->mbNote = true;
@@ -134,17 +133,17 @@ void ScCaptionUtil::SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc )
     /*  SdrShadowItem has sal_False, instead the shadow is set for the
         rectangle only with SetSpecialTextBoxShadow() when the object is
         created (item must be set to adjust objects from older files). */
-    aItemSet.Put( SdrShadowItem( sal_False ) );
-    aItemSet.Put( SdrShadowXDistItem( 100 ) );
-    aItemSet.Put( SdrShadowYDistItem( 100 ) );
+    aItemSet.Put( SdrOnOffItem(SDRATTR_SHADOW, sal_False ) );
+    aItemSet.Put( SdrMetricItem(SDRATTR_SHADOWXDIST, 100 ) );
+    aItemSet.Put( SdrMetricItem(SDRATTR_SHADOWYDIST, 100 ) );
 
     // text attributes
-    aItemSet.Put( SdrTextLeftDistItem( 100 ) );
-    aItemSet.Put( SdrTextRightDistItem( 100 ) );
-    aItemSet.Put( SdrTextUpperDistItem( 100 ) );
-    aItemSet.Put( SdrTextLowerDistItem( 100 ) );
-    aItemSet.Put( SdrTextAutoGrowWidthItem( sal_False ) );
-    aItemSet.Put( SdrTextAutoGrowHeightItem( sal_True ) );
+    aItemSet.Put( SdrMetricItem(SDRATTR_TEXT_LEFTDIST, 100 ) );
+    aItemSet.Put( SdrMetricItem(SDRATTR_TEXT_RIGHTDIST, 100 ) );
+    aItemSet.Put( SdrMetricItem(SDRATTR_TEXT_UPPERDIST, 100 ) );
+    aItemSet.Put( SdrMetricItem(SDRATTR_TEXT_LOWERDIST, 100 ) );
+    aItemSet.Put( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWWIDTH, sal_False ) );
+    aItemSet.Put( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT, sal_True ) );
     // #78943# use the default cell style to be able to modify the caption font
     const ScPatternAttr& rDefPattern = static_cast< const ScPatternAttr& >( rDoc.GetPool()->GetDefaultItem( ATTR_PATTERN ) );
     rDefPattern.FillEditItemSet( &aItemSet );
@@ -157,9 +156,9 @@ void ScCaptionUtil::SetCaptionItems( SdrCaptionObj& rCaption, const SfxItemSet& 
     // copy all items
     rCaption.SetMergedItemSet( rItemSet );
     // reset shadow items
-    rCaption.SetMergedItem( SdrShadowItem( sal_False ) );
-    rCaption.SetMergedItem( SdrShadowXDistItem( 100 ) );
-    rCaption.SetMergedItem( SdrShadowYDistItem( 100 ) );
+    rCaption.SetMergedItem( SdrOnOffItem(SDRATTR_SHADOW, sal_False ) );
+    rCaption.SetMergedItem( SdrMetricItem(SDRATTR_SHADOWXDIST, 100 ) );
+    rCaption.SetMergedItem( SdrMetricItem(SDRATTR_SHADOWYDIST, 100 ) );
     rCaption.SetSpecialTextBoxShadow();
 }
 
@@ -181,18 +180,18 @@ public:
     inline SdrCaptionObj* GetCaption() { return mpCaption; }
 
     /** Moves the caption inside the passed rectangle. Uses page area if 0 is passed. */
-    void                FitCaptionToRect( const Rectangle* pVisRect = 0 );
+    void                FitCaptionToRect( const basegfx::B2DRange* pVisRange = 0 );
     /** Places the caption inside the passed rectangle, tries to keep the cell rectangle uncovered. Uses page area if 0 is passed. */
-    void                AutoPlaceCaption( const Rectangle* pVisRect = 0 );
+    void                AutoPlaceCaption( const basegfx::B2DRange* pVisRange = 0 );
     /** Updates caption tail and textbox according to current cell position. Uses page area if 0 is passed. */
-    void                UpdateCaptionPos( const Rectangle* pVisRect = 0 );
+    void                UpdateCaptionPos( const basegfx::B2DRange* pVisRange = 0 );
 
 protected:
     /** Helper constructor for derived classes. */
     explicit            ScCaptionCreator( ScDocument& rDoc, const ScAddress& rPos );
 
     /** Calculates the caption tail position according to current cell position. */
-    Point               CalcTailPos( bool bTailFront );
+    basegfx::B2DPoint   CalcTailPos( bool bTailFront );
     /** Implements creation of the caption object. The caption will not be inserted into the document. */
     void                CreateCaption( bool bShown, bool bTailFront );
 
@@ -200,14 +199,14 @@ private:
     /** Initializes all members. */
     void                Initialize();
     /** Returns the passed rectangle if existing, page rectangle otherwise. */
-    inline const Rectangle& GetVisRect( const Rectangle* pVisRect ) const { return pVisRect ? *pVisRect : maPageRect; }
+    inline const basegfx::B2DRange& GetVisRange(const basegfx::B2DRange* pVisRange) const { return pVisRange ? *pVisRange : maPageRange; }
 
 private:
     ScDocument&         mrDoc;
     ScAddress           maPos;
     SdrCaptionObj*      mpCaption;
-    Rectangle           maPageRect;
-    Rectangle           maCellRect;
+    basegfx::B2DRange   maPageRange;
+    basegfx::B2DRange   maCellRange;
     bool                mbNegPage;
 };
 
@@ -244,107 +243,105 @@ SdrPage* ScCaptionCreator::GetDrawPage()
     return pDrawLayer ? pDrawLayer->GetPage( static_cast< sal_uInt16 >( maPos.Tab() ) ) : 0;
 }
 
-void ScCaptionCreator::FitCaptionToRect( const Rectangle* pVisRect )
+void ScCaptionCreator::FitCaptionToRect( const basegfx::B2DRange* pVisRange )
 {
-    const Rectangle& rVisRect = GetVisRect( pVisRect );
+    const basegfx::B2DRange& rVisRange = GetVisRange( pVisRange );
 
     // tail position
-    Point aTailPos = mpCaption->GetTailPos();
-    aTailPos.X() = ::std::max( ::std::min( aTailPos.X(), rVisRect.Right() ), rVisRect.Left() );
-    aTailPos.Y() = ::std::max( ::std::min( aTailPos.Y(), rVisRect.Bottom() ), rVisRect.Top() );
-    mpCaption->SetTailPos( aTailPos );
+    mpCaption->SetTailPos(rVisRange.clamp(mpCaption->GetTailPos()));
 
     // caption rectangle
-    Rectangle aCaptRect = mpCaption->GetLogicRect();
-    Point aCaptPos = aCaptRect.TopLeft();
+    basegfx::B2DRange aCaptRange(sdr::legacy::GetLogicRange(*mpCaption));
+    basegfx::B2DPoint aCaptPos(aCaptRange.getMinimum());
     // move textbox inside right border of visible area
-    aCaptPos.X() = ::std::min< long >( aCaptPos.X(), rVisRect.Right() - aCaptRect.GetWidth() );
+    aCaptPos.setX(::std::min(aCaptPos.getX(), rVisRange.getMaxX() - aCaptRange.getWidth()));
     // move textbox inside left border of visible area (this may move it outside on right side again)
-    aCaptPos.X() = ::std::max< long >( aCaptPos.X(), rVisRect.Left() );
+    aCaptPos.setX(::std::max(aCaptPos.getX(), rVisRange.getMinX()));
     // move textbox inside bottom border of visible area
-    aCaptPos.Y() = ::std::min< long >( aCaptPos.Y(), rVisRect.Bottom() - aCaptRect.GetHeight() );
+    aCaptPos.setY(::std::min(aCaptPos.getY(), rVisRange.getMaxY() - aCaptRange.getHeight()));
     // move textbox inside top border of visible area (this may move it outside on bottom side again)
-    aCaptPos.Y() = ::std::max< long >( aCaptPos.Y(), rVisRect.Top() );
+    aCaptPos.setY(::std::max(aCaptPos.getY(), rVisRange.getMinY()));
     // update caption
-    aCaptRect.SetPos( aCaptPos );
-    mpCaption->SetLogicRect( aCaptRect );
+    aCaptRange.transform(basegfx::tools::createTranslateB2DHomMatrix(aCaptPos - aCaptRange.getMinimum()));
+    sdr::legacy::SetLogicRange(*mpCaption, aCaptRange);
 }
 
-void ScCaptionCreator::AutoPlaceCaption( const Rectangle* pVisRect )
+void ScCaptionCreator::AutoPlaceCaption( const basegfx::B2DRange* pVisRange )
 {
-    const Rectangle& rVisRect = GetVisRect( pVisRect );
+    const basegfx::B2DRange& rVisRange = GetVisRange( pVisRange );
 
     // caption rectangle
-    Rectangle aCaptRect = mpCaption->GetLogicRect();
-    long nWidth = aCaptRect.GetWidth();
-    long nHeight = aCaptRect.GetHeight();
+    basegfx::B2DRange aCaptRange(sdr::legacy::GetLogicRange(*mpCaption));
 
     // n***Space contains available space between border of visible area and cell
-    long nLeftSpace = maCellRect.Left() - rVisRect.Left() + 1;
-    long nRightSpace = rVisRect.Right() - maCellRect.Right() + 1;
-    long nTopSpace = maCellRect.Top() - rVisRect.Top() + 1;
-    long nBottomSpace = rVisRect.Bottom() - maCellRect.Bottom() + 1;
+    const double fLeftSpace(maCellRange.getMinX() - rVisRange.getMinX());
+    const double fRightSpace(rVisRange.getMaxX() - maCellRange.getMaxX());
+    const double fTopSpace(maCellRange.getMinY() - rVisRange.getMinY());
+    const double fBottomSpace(rVisRange.getMaxY() - maCellRange.getMaxY());
 
     // nNeeded*** contains textbox dimensions plus needed distances to cell or border of visible area
-    long nNeededSpaceX = nWidth + SC_NOTECAPTION_CELLDIST;
-    long nNeededSpaceY = nHeight + SC_NOTECAPTION_CELLDIST;
+    const double fNeededSpaceX(aCaptRange.getWidth() + SC_NOTECAPTION_CELLDIST);
+    const double fNeededSpaceY(aCaptRange.getHeight() + SC_NOTECAPTION_CELLDIST);
 
     // bFitsWidth*** == true means width of textbox fits into horizontal free space of visible area
-    bool bFitsWidthLeft = nNeededSpaceX <= nLeftSpace;      // text box width fits into the width left of cell
-    bool bFitsWidthRight = nNeededSpaceX <= nRightSpace;    // text box width fits into the width right of cell
-    bool bFitsWidth = nWidth <= rVisRect.GetWidth();        // text box width fits into width of visible area
+    const bool bFitsWidthLeft(fNeededSpaceX <= fLeftSpace);      // text box width fits into the width left of cell
+    const bool bFitsWidthRight(fNeededSpaceX <= fRightSpace);    // text box width fits into the width right of cell
+    const bool bFitsWidth(aCaptRange.getWidth() <= rVisRange.getWidth());        // text box width fits into width of visible area
 
     // bFitsHeight*** == true means height of textbox fits into vertical free space of visible area
-    bool bFitsHeightTop = nNeededSpaceY <= nTopSpace;       // text box height fits into the height above cell
-    bool bFitsHeightBottom = nNeededSpaceY <= nBottomSpace; // text box height fits into the height below cell
-    bool bFitsHeight = nHeight <= rVisRect.GetHeight();     // text box height fits into height of visible area
+    const bool bFitsHeightTop(fNeededSpaceY <= fTopSpace);       // text box height fits into the height above cell
+    const bool bFitsHeightBottom(fNeededSpaceY <= fBottomSpace); // text box height fits into the height below cell
+    const bool bFitsHeight(aCaptRange.getHeight() <= rVisRange.getHeight());     // text box height fits into height of visible area
 
     // bFits*** == true means the textbox fits completely into free space of visible area
-    bool bFitsLeft = bFitsWidthLeft && bFitsHeight;
-    bool bFitsRight = bFitsWidthRight && bFitsHeight;
-    bool bFitsTop = bFitsWidth && bFitsHeightTop;
-    bool bFitsBottom = bFitsWidth && bFitsHeightBottom;
+    const bool bFitsLeft(bFitsWidthLeft && bFitsHeight);
+    const bool bFitsRight(bFitsWidthRight && bFitsHeight);
+    const bool bFitsTop(bFitsWidth && bFitsHeightTop);
+    const bool bFitsBottom(bFitsWidth && bFitsHeightBottom);
 
-    Point aCaptPos;
+    basegfx::B2DPoint aCaptPos(0.0, 0.0);
+
     // use left/right placement if possible, or if top/bottom placement not possible
     if( bFitsLeft || bFitsRight || (!bFitsTop && !bFitsBottom) )
     {
         // prefer left in RTL sheet and right in LTR sheets
-        bool bPreferLeft = bFitsLeft && (mbNegPage || !bFitsRight);
-        bool bPreferRight = bFitsRight && (!mbNegPage || !bFitsLeft);
+        const bool bPreferLeft(bFitsLeft && (mbNegPage || !bFitsRight));
+        const bool bPreferRight(bFitsRight && (!mbNegPage || !bFitsLeft));
+
         // move to left, if left is preferred, or if neither left nor right fit and there is more space to the left
-        if( bPreferLeft || (!bPreferRight && (nLeftSpace > nRightSpace)) )
-            aCaptPos.X() = maCellRect.Left() - SC_NOTECAPTION_CELLDIST - nWidth;
+        if( bPreferLeft || (!bPreferRight && (fLeftSpace > fRightSpace)) )
+            aCaptPos.setX(maCellRange.getMinX() - SC_NOTECAPTION_CELLDIST - aCaptRange.getWidth());
         else // to right
-            aCaptPos.X() = maCellRect.Right() + SC_NOTECAPTION_CELLDIST;
+            aCaptPos.setX(maCellRange.getMaxX() + SC_NOTECAPTION_CELLDIST);
         // Y position according to top cell border
-        aCaptPos.Y() = maCellRect.Top() + SC_NOTECAPTION_OFFSET_Y;
+        aCaptPos.setY(maCellRange.getMinY() + SC_NOTECAPTION_OFFSET_Y);
     }
     else    // top or bottom placement
     {
         // X position
-        aCaptPos.X() = maCellRect.Left() + SC_NOTECAPTION_OFFSET_X;
+        aCaptPos.setX(maCellRange.getMinX() + SC_NOTECAPTION_OFFSET_X);
         // top placement, if possible
         if( bFitsTop )
-            aCaptPos.Y() = maCellRect.Top() - SC_NOTECAPTION_CELLDIST - nHeight;
+            aCaptPos.setY(maCellRange.getMinY() - SC_NOTECAPTION_CELLDIST - aCaptRange.getHeight());
         else    // bottom placement
-            aCaptPos.Y() = maCellRect.Bottom() + SC_NOTECAPTION_CELLDIST;
+            aCaptPos.setY(maCellRange.getMaxY() + SC_NOTECAPTION_CELLDIST);
     }
 
     // update textbox position in note caption object
-    aCaptRect.SetPos( aCaptPos );
-    mpCaption->SetLogicRect( aCaptRect );
-    FitCaptionToRect( pVisRect );
+    aCaptRange.transform(basegfx::tools::createTranslateB2DHomMatrix(aCaptPos - aCaptRange.getMinimum()));
+    sdr::legacy::SetLogicRange(*mpCaption, aCaptRange);
+    FitCaptionToRect(pVisRange);
 }
 
-void ScCaptionCreator::UpdateCaptionPos( const Rectangle* pVisRect )
+void ScCaptionCreator::UpdateCaptionPos( const basegfx::B2DRange* pVisRange )
 {
     ScDrawLayer* pDrawLayer = mrDoc.GetDrawLayer();
 
     // update caption position
-    const Point& rOldTailPos = mpCaption->GetTailPos();
-    Point aTailPos = CalcTailPos( false );
-    if( rOldTailPos != aTailPos )
+    const basegfx::B2DPoint& rOldTailPos = mpCaption->GetTailPos();
+    const basegfx::B2DPoint aTailPos(CalcTailPos(false));
+
+    if(!rOldTailPos.equal(aTailPos))
     {
         // create drawing undo action
         if( pDrawLayer )
@@ -353,20 +350,20 @@ void ScCaptionCreator::UpdateCaptionPos( const Rectangle* pVisRect )
                     pDrawLayer->AddCalcUndo( pDrawLayer->GetSdrUndoFactory().CreateUndoGeoObject( *mpCaption ) );
 
         // calculate new caption rectangle (#i98141# handle LTR<->RTL switch correctly)
-        Rectangle aCaptRect = mpCaption->GetLogicRect();
-        long nDiffX = (rOldTailPos.X() >= 0) ? (aCaptRect.Left() - rOldTailPos.X()) : (rOldTailPos.X() - aCaptRect.Right());
-        if( mbNegPage ) nDiffX = -nDiffX - aCaptRect.GetWidth();
-        long nDiffY = aCaptRect.Top() - rOldTailPos.Y();
-        aCaptRect.SetPos( aTailPos + Point( nDiffX, nDiffY ) );
+        basegfx::B2DRange aCaptRange(sdr::legacy::GetLogicRange(*mpCaption));
+        double fDiffX((rOldTailPos.getX() >= 0.0) ? (aCaptRange.getMinX() - rOldTailPos.getX()) : (rOldTailPos.getX() - aCaptRange.getMaxX()));
+        if( mbNegPage ) fDiffX = -fDiffX - aCaptRange.getWidth();
+        const double fDiffY(aCaptRange.getMinY() - rOldTailPos.getY());
+        aCaptRange.transform(basegfx::tools::createTranslateB2DHomMatrix(fDiffX, fDiffY));
         // set new tail position and caption rectangle
         mpCaption->SetTailPos( aTailPos );
-        mpCaption->SetLogicRect( aCaptRect );
+        sdr::legacy::SetLogicRange(*mpCaption, aCaptRange);
         // fit caption into draw page
-        FitCaptionToRect( pVisRect );
+        FitCaptionToRect(pVisRange);
     }
 
     // update cell position in caption user data
-    ScDrawObjData* pCaptData = ScDrawLayer::GetNoteCaptionData( mpCaption, maPos.Tab() );
+    ScDrawObjData* pCaptData = ScDrawLayer::GetNoteCaptionData( *mpCaption, maPos.Tab() );
     if( pCaptData && (maPos != pCaptData->maStart) )
     {
         // create drawing undo action
@@ -377,38 +374,44 @@ void ScCaptionCreator::UpdateCaptionPos( const Rectangle* pVisRect )
     }
 }
 
-Point ScCaptionCreator::CalcTailPos( bool bTailFront )
+basegfx::B2DPoint ScCaptionCreator::CalcTailPos( bool bTailFront )
 {
     // tail position
-    bool bTailLeft = bTailFront != mbNegPage;
-    Point aTailPos = bTailLeft ? maCellRect.TopLeft() : maCellRect.TopRight();
+    const bool bTailLeft(bTailFront != mbNegPage);
+    basegfx::B2DPoint aTailPos(bTailLeft ? maCellRange.getMinX() : maCellRange.getMaxX(), maCellRange.getMinY());
     // move caption point 1/10 mm inside cell
-    if( bTailLeft ) aTailPos.X() += 10; else aTailPos.X() -= 10;
-    aTailPos.Y() += 10;
+    if( bTailLeft ) aTailPos.setX(aTailPos.getX() + 10.0); else aTailPos.setX(aTailPos.getX() - 10.0);
+    aTailPos.setY(aTailPos.getY() + 10.0);
     return aTailPos;
 }
 
 void ScCaptionCreator::CreateCaption( bool bShown, bool bTailFront )
 {
     // create the caption drawing object
-    Rectangle aTextRect( Point( 0 , 0 ), Size( SC_NOTECAPTION_WIDTH, SC_NOTECAPTION_HEIGHT ) );
-    Point aTailPos = CalcTailPos( bTailFront );
-    mpCaption = new SdrCaptionObj( aTextRect, aTailPos );
+    const basegfx::B2DPoint aTailPos(CalcTailPos(bTailFront));
+
+    if(!mrDoc.GetDrawLayer())
+    {
+        mrDoc.InitDrawLayer();
+    }
+
+    mpCaption = new SdrCaptionObj(
+        *mrDoc.GetDrawLayer(),
+        basegfx::tools::createScaleB2DHomMatrix(
+            SC_NOTECAPTION_WIDTH, SC_NOTECAPTION_HEIGHT),
+        &aTailPos);
+
     // basic caption settings
     ScCaptionUtil::SetBasicCaptionSettings( *mpCaption, bShown );
 }
 
 void ScCaptionCreator::Initialize()
 {
-    maCellRect = ScDrawLayer::GetCellRect( mrDoc, maPos, true );
+    maCellRange = ScDrawLayer::GetCellRange( mrDoc, maPos, true );
     mbNegPage = mrDoc.IsNegativePage( maPos.Tab() );
     if( SdrPage* pDrawPage = GetDrawPage() )
     {
-        maPageRect = Rectangle( Point( 0, 0 ), pDrawPage->GetSize() );
-        /*  #i98141# SdrPage::GetSize() returns negative width in RTL mode.
-            The call to Rectangle::Adjust() orders left/right coordinate
-            accordingly. */
-        maPageRect.Justify();
+        maPageRange = basegfx::B2DRange(0.0, 0.0, pDrawPage->GetPageScale().getX(), pDrawPage->GetPageScale().getY());
     }
 }
 
@@ -442,7 +445,7 @@ ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& r
             // store note position in user data of caption object
             ScCaptionUtil::SetCaptionUserData( *rNoteData.mpCaption, rPos );
             // insert object into draw page
-            pDrawPage->InsertObject( rNoteData.mpCaption );
+            pDrawPage->InsertObjectToSdrObjList(*rNoteData.mpCaption);
         }
     }
 }
@@ -452,8 +455,8 @@ ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& r
 {
     SdrPage* pDrawPage = GetDrawPage();
     OSL_ENSURE( pDrawPage, "ScNoteCaptionCreator::ScNoteCaptionCreator - no drawing page" );
-    OSL_ENSURE( rCaption.GetPage() == pDrawPage, "ScNoteCaptionCreator::ScNoteCaptionCreator - wrong drawing page in caption" );
-    if( pDrawPage && (rCaption.GetPage() == pDrawPage) )
+    OSL_ENSURE( rCaption.getSdrPageFromSdrObject() == pDrawPage, "ScNoteCaptionCreator::ScNoteCaptionCreator - wrong drawing page in caption" );
+    if( pDrawPage && (rCaption.getSdrPageFromSdrObject() == pDrawPage) )
     {
         // store note position in user data of caption object
         ScCaptionUtil::SetCaptionUserData( rCaption, rPos );
@@ -476,8 +479,8 @@ struct ScCaptionInitData
     SfxItemSetPtr       mxItemSet;          /// Caption object formatting.
     OutlinerParaObjPtr  mxOutlinerObj;      /// Text object with all text portion formatting.
     ::rtl::OUString     maSimpleText;       /// Simple text without formatting.
-    Point               maCaptionOffset;    /// Caption position relative to cell corner.
-    Size                maCaptionSize;      /// Size of the caption object.
+    basegfx::B2DPoint   maCaptionOffset;    /// Caption position relative to cell corner.
+    basegfx::B2DVector  maCaptionScale;     /// Size of the caption object.
     bool                mbDefaultPosSize;   /// True = use default position and size for caption.
 
     explicit            ScCaptionInitData();
@@ -675,19 +678,20 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
                 if( rInitData.mbDefaultPosSize )
                 {
                     // set other items and fit caption size to text
-                    maNoteData.mpCaption->SetMergedItem( SdrTextMinFrameWidthItem( SC_NOTECAPTION_WIDTH ) );
-                    maNoteData.mpCaption->SetMergedItem( SdrTextMaxFrameWidthItem( SC_NOTECAPTION_MAXWIDTH_TEMP ) );
+                    maNoteData.mpCaption->SetMergedItem( SdrMetricItem(SDRATTR_TEXT_MINFRAMEWIDTH, SC_NOTECAPTION_WIDTH ) );
+                    maNoteData.mpCaption->SetMergedItem( SdrMetricItem(SDRATTR_TEXT_MAXFRAMEWIDTH, SC_NOTECAPTION_MAXWIDTH_TEMP ) );
                     maNoteData.mpCaption->AdjustTextFrameWidthAndHeight();
                     aCreator.AutoPlaceCaption();
                 }
                 else
                 {
-                    Rectangle aCellRect = ScDrawLayer::GetCellRect( mrDoc, rPos, true );
-                    bool bNegPage = mrDoc.IsNegativePage( rPos.Tab() );
-                    long nPosX = bNegPage ? (aCellRect.Left() - rInitData.maCaptionOffset.X()) : (aCellRect.Right() + rInitData.maCaptionOffset.X());
-                    long nPosY = aCellRect.Top() + rInitData.maCaptionOffset.Y();
-                    Rectangle aCaptRect( Point( nPosX, nPosY ), rInitData.maCaptionSize );
-                    maNoteData.mpCaption->SetLogicRect( aCaptRect );
+                    const basegfx::B2DRange aCellRange(ScDrawLayer::GetCellRange(mrDoc, rPos, true));
+                    const bool bNegPage(mrDoc.IsNegativePage(rPos.Tab()));
+                    const basegfx::B2DPoint aTopLeft(
+                        bNegPage ? (aCellRange.getMinX() - rInitData.maCaptionOffset.getX()) : (aCellRange.getMaxX() + rInitData.maCaptionOffset.getX()),
+                        aCellRange.getMinY() + rInitData.maCaptionOffset.getY());
+                    const basegfx::B2DRange aCaptRange(aTopLeft, aTopLeft + rInitData.maCaptionScale);
+                    sdr::legacy::SetLogicRange(*maNoteData.mpCaption, aCaptRange);
                     aCreator.FitCaptionToRect();
                 }
             }
@@ -725,10 +729,9 @@ void ScPostIt::CreateCaption( const ScAddress& rPos, const SdrCaptionObj* pCapti
             // copy formatting items (after text has been copied to apply font formatting)
             maNoteData.mpCaption->SetMergedItemSetAndBroadcast( pCaption->GetMergedItemSet() );
             // move textbox position relative to new cell, copy textbox size
-            Rectangle aCaptRect = pCaption->GetLogicRect();
-            Point aDist = maNoteData.mpCaption->GetTailPos() - pCaption->GetTailPos();
-            aCaptRect.Move( aDist.X(), aDist.Y() );
-            maNoteData.mpCaption->SetLogicRect( aCaptRect );
+            basegfx::B2DRange aCaptRange(sdr::legacy::GetLogicRange(*pCaption));
+            aCaptRange.transform(basegfx::tools::createTranslateB2DHomMatrix(maNoteData.mpCaption->GetTailPos() - pCaption->GetTailPos()));
+            sdr::legacy::SetLogicRange(*maNoteData.mpCaption, aCaptRange);
             aCreator.FitCaptionToRect();
         }
         else
@@ -753,22 +756,22 @@ void ScPostIt::RemoveCaption()
         undo documents refer to captions in original document, do not remove
         them from drawing layer here). */
     ScDrawLayer* pDrawLayer = mrDoc.GetDrawLayer();
-    if( maNoteData.mpCaption && (pDrawLayer == maNoteData.mpCaption->GetModel()) )
+
+    if( maNoteData.mpCaption && (pDrawLayer == &maNoteData.mpCaption->getSdrModelFromSdrObject()) )
     {
         OSL_ENSURE( pDrawLayer, "ScPostIt::RemoveCaption - object without drawing layer" );
-        SdrPage* pDrawPage = maNoteData.mpCaption->GetPage();
+        SdrPage* pDrawPage = maNoteData.mpCaption->getSdrPageFromSdrObject();
         OSL_ENSURE( pDrawPage, "ScPostIt::RemoveCaption - object without drawing page" );
         if( pDrawPage )
         {
-            pDrawPage->RecalcObjOrdNums();
             // create drawing undo action (before removing the object to have valid draw page in undo action)
             bool bRecording = ( pDrawLayer && pDrawLayer->IsUndoAllowed() && pDrawLayer->IsRecording() );
             if( bRecording )
                 pDrawLayer->AddCalcUndo( pDrawLayer->GetSdrUndoFactory().CreateUndoDeleteObject( *maNoteData.mpCaption ) );
             // remove the object from the drawing page, delete if undo is disabled
-            SdrObject* pObj = pDrawPage->RemoveObject( maNoteData.mpCaption->GetOrdNum() );
+            SdrObject* pObj = pDrawPage->RemoveObjectFromSdrObjList( maNoteData.mpCaption->GetNavigationPosition() );
             if( !bRecording )
-                SdrObject::Free( pObj );
+                deleteSdrObjectSafeAndClearPointer( pObj );
         }
     }
     maNoteData.mpCaption = 0;
@@ -817,7 +820,7 @@ SdrCaptionObj* ScNoteUtil::CreateTempCaption(
     SdrCaptionObj* pCaption = aCreator.GetCaption();
 
     // insert caption into page (needed to set caption text)
-    rDrawPage.InsertObject( pCaption );
+    rDrawPage.InsertObjectToSdrObjList(*pCaption);
 
     // clone the edit text object, unless user text is present, then set this text
     if( pNoteCaption && (rUserText.getLength() == 0) )
@@ -826,8 +829,8 @@ SdrCaptionObj* ScNoteUtil::CreateTempCaption(
             pCaption->SetOutlinerParaObject( new OutlinerParaObject( *pOPO ) );
         // set formatting (must be done after setting text) and resize the box to fit the text
         pCaption->SetMergedItemSetAndBroadcast( pNoteCaption->GetMergedItemSet() );
-        Rectangle aCaptRect( pCaption->GetLogicRect().TopLeft(), pNoteCaption->GetLogicRect().GetSize() );
-        pCaption->SetLogicRect( aCaptRect );
+        const Rectangle aCaptRect(sdr::legacy::GetLogicRect(*pCaption).TopLeft(), sdr::legacy::GetLogicRect(*pNoteCaption).GetSize() );
+        sdr::legacy::SetLogicRect(*pCaption, aCaptRect );
     }
     else
     {
@@ -836,15 +839,16 @@ SdrCaptionObj* ScNoteUtil::CreateTempCaption(
         ScCaptionUtil::SetDefaultItems( *pCaption, rDoc );
         // adjust caption size to text size
         long nMaxWidth = ::std::min< long >( aVisRect.GetWidth() * 2 / 3, SC_NOTECAPTION_MAXWIDTH_TEMP );
-        pCaption->SetMergedItem( SdrTextAutoGrowWidthItem( sal_True ) );
-        pCaption->SetMergedItem( SdrTextMinFrameWidthItem( SC_NOTECAPTION_WIDTH ) );
-        pCaption->SetMergedItem( SdrTextMaxFrameWidthItem( nMaxWidth ) );
-        pCaption->SetMergedItem( SdrTextAutoGrowHeightItem( sal_True ) );
+        pCaption->SetMergedItem( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWWIDTH, sal_True ) );
+        pCaption->SetMergedItem( SdrMetricItem(SDRATTR_TEXT_MINFRAMEWIDTH, SC_NOTECAPTION_WIDTH ) );
+        pCaption->SetMergedItem( SdrMetricItem(SDRATTR_TEXT_MAXFRAMEWIDTH, nMaxWidth ) );
+        pCaption->SetMergedItem( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT, sal_True ) );
         pCaption->AdjustTextFrameWidthAndHeight();
     }
 
     // move caption into visible area
-    aCreator.AutoPlaceCaption( &aVisRect );
+    const basegfx::B2DRange aVisRange(aVisRect.Left(), aVisRect.Top(), aVisRect.Right(), aVisRect.Bottom());
+    aCreator.AutoPlaceCaption( &aVisRange );
     return pCaption;
 }
 
@@ -866,9 +870,13 @@ ScPostIt* ScNoteUtil::CreateNoteFromCaption(
 }
 
 ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
-        ScDocument& rDoc, const ScAddress& rPos, SfxItemSet* pItemSet,
-        OutlinerParaObject* pOutlinerObj, const Rectangle& rCaptionRect,
-        bool bShown, bool bAlwaysCreateCaption )
+    ScDocument& rDoc,
+    const ScAddress& rPos,
+    SfxItemSet* pItemSet,
+    OutlinerParaObject* pOutlinerObj,
+    const basegfx::B2DRange& rCaptionRange,
+    bool bShown,
+    bool bAlwaysCreateCaption )
 {
     OSL_ENSURE( pItemSet && pOutlinerObj, "ScNoteUtil::CreateNoteFromObjectData - item set and outliner object expected" );
     ScNoteData aNoteData( bShown );
@@ -878,14 +886,16 @@ ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
     rInitData.mxOutlinerObj.reset( pOutlinerObj );
 
     // convert absolute caption position to relative position
-    rInitData.mbDefaultPosSize = rCaptionRect.IsEmpty();
+    rInitData.mbDefaultPosSize = rCaptionRange.isEmpty();
     if( !rInitData.mbDefaultPosSize )
     {
-        Rectangle aCellRect = ScDrawLayer::GetCellRect( rDoc, rPos, true );
-        bool bNegPage = rDoc.IsNegativePage( rPos.Tab() );
-        rInitData.maCaptionOffset.X() = bNegPage ? (aCellRect.Left() - rCaptionRect.Right()) : (rCaptionRect.Left() - aCellRect.Right());
-        rInitData.maCaptionOffset.Y() = rCaptionRect.Top() - aCellRect.Top();
-        rInitData.maCaptionSize = rCaptionRect.GetSize();
+        const basegfx::B2DRange aCellRange(ScDrawLayer::GetCellRange(rDoc, rPos, true));
+        const bool bNegPage(rDoc.IsNegativePage(rPos.Tab()));
+
+        rInitData.maCaptionOffset = basegfx::B2DPoint(
+            bNegPage ? (aCellRange.getMinX() - rCaptionRange.getMaxX()) : (rCaptionRange.getMinX() - aCellRange.getMaxX()),
+            rCaptionRange.getMinY() - aCellRange.getMinY());
+        rInitData.maCaptionScale = rCaptionRange.getRange();
     }
 
     /*  Create the note and insert it into the document. If the note is

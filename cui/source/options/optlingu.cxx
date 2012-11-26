@@ -221,7 +221,7 @@ class ModuleUserData_Impl
     String  sImplName;
 
 public:
-    ModuleUserData_Impl( String sImpName, sal_Bool bIsParent, sal_Bool bChecked, sal_uInt8 nSetType, sal_uInt8 nSetIndex ) :
+    ModuleUserData_Impl( String sImpName, sal_Bool bIsParent, bool bChecked, sal_uInt8 nSetType, sal_uInt8 nSetIndex ) :
         bParent(bIsParent),
         bIsChecked(bChecked),
         nType(nSetType),
@@ -250,7 +250,7 @@ class DicUserData
 public:
     DicUserData( sal_uLong nUserData ) : nVal( nUserData ) {}
     DicUserData( sal_uInt16 nEID,
-                 sal_Bool bChecked, sal_Bool bEditable, sal_Bool bDeletable );
+                 bool bChecked, sal_Bool bEditable, sal_Bool bDeletable );
 
     sal_uLong   GetUserData() const         { return nVal; }
     sal_uInt16  GetEntryId() const          { return (sal_uInt16)(nVal >> 16); }
@@ -264,7 +264,7 @@ public:
 
 DicUserData::DicUserData(
         sal_uInt16 nEID,
-        sal_Bool bChecked, sal_Bool bEditable, sal_Bool bDeletable )
+        bool bChecked, sal_Bool bEditable, sal_Bool bDeletable )
 {
     DBG_ASSERT( nEID < 65000, "Entry Id out of range" );
     nVal =  ((sal_uLong)(0xFFFF & nEID)         << 16) |
@@ -416,7 +416,7 @@ public:
     OptionsUserData( sal_uLong nUserData ) : nVal( nUserData ) {}
     OptionsUserData( sal_uInt16 nEID,
                      sal_Bool bHasNV, sal_uInt16 nNumVal,
-                     sal_Bool bCheckable, sal_Bool bChecked );
+                     sal_Bool bCheckable, bool bChecked );
 
     sal_uLong   GetUserData() const         { return nVal; }
     sal_uInt16  GetEntryId() const          { return (sal_uInt16)(nVal >> 16); }
@@ -432,7 +432,7 @@ public:
 
 OptionsUserData::OptionsUserData( sal_uInt16 nEID,
         sal_Bool bHasNV, sal_uInt16 nNumVal,
-        sal_Bool bCheckable, sal_Bool bChecked )
+        sal_Bool bCheckable, bool bChecked )
 {
     DBG_ASSERT( nEID < 65000, "Entry Id out of range" );
     DBG_ASSERT( nNumVal < 256, "value out of range" );
@@ -1365,12 +1365,12 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
             DicUserData aData( (sal_uLong)pEntry->GetUserData() );
             if (aData.GetEntryId() < nDics)
             {
-                sal_Bool bChecked = aLinguDicsCLB.IsChecked( (sal_uInt16) i );
+                bool bChecked = aLinguDicsCLB.IsChecked( (sal_uInt16) i );
                 uno::Reference< XDictionary > xDic( aDics.getConstArray()[ i ] );
                 if (xDic.is())
                 {
                     if (SvxGetIgnoreAllList() == xDic)
-                        bChecked = sal_True;
+                        bChecked = true;
                     xDic->setActive( bChecked );
 
                     if (bChecked)
@@ -1457,7 +1457,7 @@ sal_uLong SvxLinguTabPage::GetDicUserData( const uno::Reference< XDictionary > &
         uno::Reference< frame::XStorable > xStor( rxDic, UNO_QUERY );
 
 //        sal_uLong nUserData = 0;
-        sal_Bool bChecked = rxDic->isActive();
+        bool bChecked = rxDic->isActive();
         sal_Bool bEditable = !xStor.is() || !xStor->isReadonly();
         sal_Bool bDeletable = bEditable;
 //        sal_Bool bNegativ = rxDic->getDictionaryType() == DictionaryType_NEGATIVE;
@@ -2244,7 +2244,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
 
         sal_Int32 nStart = 0, nLocalIndex = 0;
         Sequence< OUString > aChange;
-        sal_Bool bChanged = sal_False;
+        bool bChanged = false;
         for(sal_uInt16 i = 0; i < aModulesCLB.GetEntryCount(); i++)
         {
             SvLBoxEntry *pEntry = aModulesCLB.GetEntry(i);
@@ -2270,7 +2270,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
                 }
                 nLocalIndex = nStart = 0;
                 aChange.realloc(aModulesCLB.GetEntryCount());
-                bChanged = sal_False;
+                bChanged = false;
             }
             else
             {

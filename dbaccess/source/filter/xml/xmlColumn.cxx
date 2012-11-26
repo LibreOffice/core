@@ -169,10 +169,10 @@ void OXMLColumn::EndElement()
                 const SvXMLStylesContext* pAutoStyles = GetOwnImport().GetAutoStyles();
                 if ( pAutoStyles )
                 {
-                    OTableStyleContext* pAutoStyle = PTR_CAST(OTableStyleContext,pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_COLUMN,m_sStyleName));
+                    const OTableStyleContext* pAutoStyle = dynamic_cast< const OTableStyleContext* >( pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_COLUMN,m_sStyleName));
                     if ( pAutoStyle )
                     {
-                        pAutoStyle->FillPropertySet(xProp);
+                        const_cast< OTableStyleContext* >(pAutoStyle)->FillPropertySet(xProp);
                     }
                 }
             } // if ( m_sStyleName.getLength() )
@@ -181,12 +181,12 @@ void OXMLColumn::EndElement()
                 const SvXMLStylesContext* pAutoStyles = GetOwnImport().GetAutoStyles();
                 if ( pAutoStyles )
                 {
-                    OTableStyleContext* pAutoStyle = PTR_CAST(OTableStyleContext,pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_CELL,m_sCellStyleName));
+                    const OTableStyleContext* pAutoStyle = dynamic_cast< const OTableStyleContext* >( pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_CELL,m_sCellStyleName));
                     if ( pAutoStyle )
                     {
-                        pAutoStyle->FillPropertySet(xProp);
+                        const_cast< OTableStyleContext* >(pAutoStyle)->FillPropertySet(xProp);
                         // we also have to do this on the table to import text-properties
-                        pAutoStyle->FillPropertySet(m_xTable);
+                        const_cast< OTableStyleContext* >(pAutoStyle)->FillPropertySet(m_xTable);
                     }
                 }
             }
@@ -198,11 +198,11 @@ void OXMLColumn::EndElement()
         const SvXMLStylesContext* pAutoStyles = GetOwnImport().GetAutoStyles();
         if ( pAutoStyles )
         {
-            OTableStyleContext* pAutoStyle = PTR_CAST(OTableStyleContext,pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_CELL,m_sCellStyleName));
+            const OTableStyleContext* pAutoStyle = dynamic_cast< const OTableStyleContext* >( pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_CELL,m_sCellStyleName));
             if ( pAutoStyle )
             {
                 // we also have to do this on the table to import text-properties
-                pAutoStyle->FillPropertySet(m_xTable);
+                const_cast< OTableStyleContext* >(pAutoStyle)->FillPropertySet(m_xTable);
             }
         }
     }

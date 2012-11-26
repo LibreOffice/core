@@ -54,6 +54,7 @@
 #include "ww8par2.hxx"          // struct WWFlyPara
 #include "ww8graf.hxx"
 #include <svtools/filter.hxx>
+#include <svx/svdlegacy.hxx>
 
 using namespace ::com::sun::star;
 using namespace sw::types;
@@ -239,9 +240,9 @@ sal_uLong wwZOrderer::GetDrawingObjectPos(short nWwHeight)
 
 bool wwZOrderer::InsertObject(SdrObject* pObject, sal_uLong nPos)
 {
-    if (!pObject->IsInserted())
+    if (!pObject->IsObjectInserted())
     {
-        mpDrawPg->InsertObject(pObject, nPos);
+        mpDrawPg->InsertObjectToSdrObjList(*pObject, nPos);
         return true;
     }
     return false;
@@ -360,16 +361,17 @@ void SwWW8ImplReader::ReplaceObj(const SdrObject &rReplaceObj,
     SdrObject &rSubObj)
 {
     // SdrGrafObj anstatt des SdrTextObj in dessen Gruppe einsetzen
-    if (SdrObject* pGroupObject = rReplaceObj.GetUpGroup())
+    if (SdrObject* pGroupObject = rReplaceObj.GetParentSdrObject())
     {
-        SdrObjList* pObjectList = pGroupObject->GetSubList();
+        SdrObjList* pObjectList = pGroupObject->getChildrenOfSdrObject();
 
-        rSubObj.SetLogicRect(rReplaceObj.GetCurrentBoundRect());
+        // copy transformation and layer
+        rSubObj.setSdrObjectTransformation(rReplaceObj.getSdrObjectTransformation());
         rSubObj.SetLayer(rReplaceObj.GetLayer());
 
         // altes Objekt raus aus Gruppen-Liste und neues rein
         // (dies tauscht es ebenfalls in der Drawing-Page aus)
-        pObjectList->ReplaceObject(&rSubObj, rReplaceObj.GetOrdNum());
+        pObjectList->ReplaceObjectInSdrObjList(rSubObj, rReplaceObj.GetNavigationPosition());
     }
     else
     {
@@ -586,10 +588,10 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                 pDataStream->SeekRel( nNameLen );
             }
 
-            Rectangle aChildRect;
-            Rectangle aClientRect( 0,0, aPD.nWidth,  aPD.nHeight);
-            SvxMSDffImportData aData( aClientRect );
-            pObject = pMSDffManager->ImportObj(*pDataStream, &aData, aClientRect, aChildRect );
+            const basegfx::B2DRange aChildRange;
+            basegfx::B2DRange aClientRange(0.0, 0.0, aPD.nWidth, aPD.nHeight);
+            SvxMSDffImportData aData(aClientRange);
+            pObject = pMSDffManager->ImportObj(*pDataStream, &aData, aClientRange, aChildRange);
             if (pObject)
             {
                 // fuer den Rahmen
@@ -667,7 +669,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                 }
 
                 bool bTextObjWasGrouped = false;
-                if (pOldFlyFmt && pTextObj && pTextObj->GetUpGroup())
+                if (pOldFlyFmt && pTextObj && pTextObj->GetParentSdrObject())
                     bTextObjWasGrouped = true;
 
                 if (bTextObjWasGrouped)
@@ -681,13 +683,13 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                     }
                     else
                     {
-                        if (SdrGrafObj* pGraphObject = PTR_CAST(SdrGrafObj, pObject))
+                        if (SdrGrafObj* pGraphObject = dynamic_cast< SdrGrafObj* >( pObject))
                         {
                             // Nun den Link bzw. die Grafik ins Doc stopfen
                             const Graphic& rGraph = pGraphObject->GetGraphic();
 
                             if (nObjLocFc)  // is it a OLE-Object?
-                                pRet = ImportOle(&rGraph, &aAttrSet, &aGrSet, pObject->GetBLIPSizeRectangle());
+                                pRet = ImportOle(&rGraph, &aAttrSet, &aGrSet, pObject->GetBLIPSizeRange());
 
                             if (!pRet)
                             {
@@ -723,9 +725,10 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
 
                             // altes SdrGrafObj aus der Page loeschen und
                             // zerstoeren
-                            if (pObject->GetPage())
-                                pDrawPg->RemoveObject(pObject->GetOrdNum());
-                            SdrObject::Free( pObject );
+                            if (pObject->getSdrPageFromSdrObject())
+                                pDrawPg->RemoveObjectFromSdrObjList(pObject->GetNavigationPosition());
+
+                            deleteSdrObjectSafeAndClearPointer( pObject );
                         }
                     }
                     else
@@ -735,8 +738,8 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                     pMSDffManager->RemoveFromShapeOrder( pObject );
 
                 // auch das ggfs.  Page loeschen, falls nicht gruppiert,
-                if (pTextObj && !bTextObjWasGrouped && pTextObj->GetPage())
-                    pDrawPg->RemoveObject( pTextObj->GetOrdNum() );
+                if (pTextObj && !bTextObjWasGrouped && pTextObj->getSdrPageFromSdrObject())
+                    pDrawPg->RemoveObjectFromSdrObjList( pTextObj->GetNavigationPosition() );
             }
             pMSDffManager->EnableFallbackStream();
         }

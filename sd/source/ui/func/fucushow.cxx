@@ -41,9 +41,6 @@
 
 namespace sd {
 
-TYPEINIT1( FuCustomShowDlg, FuPoor );
-
-
 /*************************************************************************
 |*
 |* Konstruktor
@@ -76,7 +73,7 @@ void FuCustomShowDlg::DoExecute( SfxRequest& )
         sal_uInt16 nRet = pDlg->Execute();
         if( pDlg->IsModified() )
         {
-            mpDoc->SetChanged( sal_True );
+            mpDoc->SetChanged( true );
             sd::PresentationSettings& rSettings = mpDoc->getPresentationSettings();
             rSettings.mbCustomShow = pDlg->IsCustomShow();
         }

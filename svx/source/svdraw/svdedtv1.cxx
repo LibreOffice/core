@@ -26,7 +26,6 @@
 
 #include <svx/svdedtv.hxx>
 #include <math.h>
-
 #ifndef _MATH_H
 #define _MATH_H
 #endif
@@ -36,8 +35,8 @@
 #include <svx/rectenum.hxx>
 #include <svx/svxids.hrc>   // fuer SID_ATTR_TRANSFORM_...
 #include <svx/svdattr.hxx>  // fuer Get/SetGeoAttr
-#include "svx/svditext.hxx"
-#include "svx/svditer.hxx"
+#include <svx/svditer.hxx>
+#include <svx/svditext.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdpage.hxx>
@@ -55,253 +54,289 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/e3dsceneupdater.hxx>
 #include <svx/obj3d.hxx>
+#include <svx/svdlegacy.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  @@@@@ @@@@@  @@ @@@@@@  @@ @@ @@ @@@@@ @@   @@
-//  @@    @@  @@ @@   @@    @@ @@ @@ @@    @@   @@
-//  @@    @@  @@ @@   @@    @@ @@ @@ @@    @@ @ @@
-//  @@@@  @@  @@ @@   @@    @@@@@ @@ @@@@  @@@@@@@
-//  @@    @@  @@ @@   @@     @@@  @@ @@    @@@@@@@
-//  @@    @@  @@ @@   @@     @@@  @@ @@    @@@ @@@
-//  @@@@@ @@@@@  @@   @@      @   @@ @@@@@ @@   @@
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrEditView::SetMarkedObjRect(const Rectangle& rRect, sal_Bool bCopy)
+void SdrEditView::SetMarkedObjSnapRange(const basegfx::B2DRange& rRange, bool bCopy)
 {
-    DBG_ASSERT(!rRect.IsEmpty(),"SetMarkedObjRect() mit leerem Rect mach keinen Sinn");
-    if (rRect.IsEmpty()) return;
-    sal_uIntPtr nAnz=GetMarkedObjectCount();
-    if (nAnz==0) return;
-    Rectangle aR0(GetMarkedObjRect());
-    DBG_ASSERT(!aR0.IsEmpty(),"SetMarkedObjRect(): GetMarkedObjRect() ist leer");
-    if (aR0.IsEmpty()) return;
-    long x0=aR0.Left();
-    long y0=aR0.Top();
-    long w0=aR0.Right()-x0;
-    long h0=aR0.Bottom()-y0;
-    long x1=rRect.Left();
-    long y1=rRect.Top();
-    long w1=rRect.Right()-x1;
-    long h1=rRect.Bottom()-y1;
-    XubString aStr;
-    ImpTakeDescriptionStr(STR_EditPosSize,aStr);
-    if (bCopy)
-        aStr+=ImpGetResStr(STR_EditWithCopy);
-
-    const bool bUndo = IsUndoEnabled();
-    if( bUndo )
-        BegUndo(aStr);
-
-    if (bCopy)
-        CopyMarkedObj();
-
-    for (sal_uIntPtr nm=0; nm<nAnz; nm++)
+    if(!rRange.isEmpty() && areSdrObjectsSelected())
     {
-        SdrMark* pM=GetSdrMarkByIndex(nm);
-        SdrObject* pO=pM->GetMarkedSdrObj();
-        if( bUndo )
-            AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pO));
+        SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
+        const basegfx::B2DRange& rCurrentRange(getMarkedObjectSnapRange());
 
-        Rectangle aR1(pO->GetSnapRect());
-        if (!aR1.IsEmpty())
+        if(!rCurrentRange.equal(rRange))
         {
-            if (aR1==aR0)
+            String aStr;
+            TakeMarkedDescriptionString(STR_EditPosSize, aStr);
+
+            if(bCopy)
             {
-                aR1=rRect;
+                aStr += ImpGetResStr(STR_EditWithCopy);
             }
-            else
-            { // aR1 von aR0 nach rRect transformieren
-                aR1.Move(-x0,-y0);
-                BigInt l(aR1.Left());
-                BigInt r(aR1.Right());
-                BigInt t(aR1.Top());
-                BigInt b(aR1.Bottom());
-                if (w0!=0) {
-                    l*=w1; l/=w0;
-                    r*=w1; r/=w0;
-                } else {
-                    l=0; r=w1;
-                }
-                if (h0!=0) {
-                    t*=h1; t/=h0;
-                    b*=h1; b/=h0;
-                } else {
-                    t=0; b=h1;
-                }
-                aR1.Left  ()=long(l);
-                aR1.Right ()=long(r);
-                aR1.Top   ()=long(t);
-                aR1.Bottom()=long(b);
-                aR1.Move(x1,y1);
+
+            const bool bUndo(IsUndoEnabled());
+
+            if(bUndo)
+            {
+                BegUndo(aStr);
             }
-            pO->SetSnapRect(aR1);
-        } else {
-            DBG_ERROR("SetMarkedObjRect(): pObj->GetSnapRect() liefert leeres Rect");
+
+            if(bCopy)
+            {
+                CopyMarkedObj();
+                aSelection = getSelectedSdrObjectVectorFromSdrMarkView();
+            }
+
+            basegfx::B2DHomMatrix aTransformation(
+                basegfx::tools::createScaleTranslateB2DHomMatrix(
+                    rCurrentRange.getRange(),
+                    rCurrentRange.getMinimum()));
+            aTransformation.invert();
+            aTransformation = basegfx::tools::createScaleTranslateB2DHomMatrix(
+                rRange.getRange(),
+                rRange.getMinimum()) * aTransformation;
+
+            for(sal_uInt32 nm(0); nm < aSelection.size(); nm++)
+            {
+                SdrObject* pO = aSelection[nm];
+
+                if(bUndo)
+                {
+                    AddUndo( getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoGeoObject(*pO));
+                }
+
+                sdr::legacy::transformSdrObject(*pO, aTransformation);
+            }
+
+            if(bUndo)
+            {
+                EndUndo();
+            }
         }
     }
-    if( bUndo )
-        EndUndo();
 }
 
-std::vector< SdrUndoAction* > SdrEditView::CreateConnectorUndo( SdrObject& rO )
+std::vector< SdrUndoAction* > SdrEditView::CreateConnectorUndo(SdrObject& rO)
 {
     std::vector< SdrUndoAction* > vUndoActions;
+    ::std::vector< SdrEdgeObj* > aConnectedEdges(rO.getAllConnectedSdrEdgeObj());
 
-    if ( rO.GetBroadcaster() )
+    if(!aConnectedEdges.empty())
     {
-        const SdrPage* pPage = rO.GetPage();
-        if ( pPage )
+        for(sal_uInt32 a(0); a < aConnectedEdges.size(); a++)
         {
-            SdrObjListIter aIter( *pPage, IM_DEEPWITHGROUPS );
-            while( aIter.IsMore() )
-            {
-                SdrObject* pPartObj = aIter.Next();
-                if ( pPartObj->ISA( SdrEdgeObj ) )
-                {
-                    if ( ( pPartObj->GetConnectedNode( sal_False ) == &rO ) ||
-                         ( pPartObj->GetConnectedNode( sal_True  ) == &rO ) )
-                    {
-                        vUndoActions.push_back( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject( *pPartObj ) );
-                    }
-                }
-            }
+            vUndoActions.push_back(
+                getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoGeoObject(*aConnectedEdges[a]));
         }
     }
+
     return vUndoActions;
 }
 
 void SdrEditView::AddUndoActions( std::vector< SdrUndoAction* >& rUndoActions )
 {
     std::vector< SdrUndoAction* >::iterator aUndoActionIter( rUndoActions.begin() );
+
     while( aUndoActionIter != rUndoActions.end() )
+    {
         AddUndo( *aUndoActionIter++ );
+    }
 }
 
-void SdrEditView::MoveMarkedObj(const Size& rSiz, bool bCopy)
+void SdrEditView::MoveMarkedObj(const basegfx::B2DVector& rOffset, bool bCopy)
 {
-    const bool bUndo = IsUndoEnabled();
-
-    if( bUndo )
+    if(areSdrObjectsSelected() && !rOffset.equalZero())
     {
-        XubString aStr(ImpGetResStr(STR_EditMove));
-        if (bCopy)
-            aStr+=ImpGetResStr(STR_EditWithCopy);
-        // benoetigt eigene UndoGroup wegen Parameter
-        BegUndo(aStr,GetDescriptionOfMarkedObjects(),SDRREPFUNC_OBJ_MOVE);
-    }
+        const bool bUndo(IsUndoEnabled());
 
-    if (bCopy)
-        CopyMarkedObj();
-
-    sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
-    for (sal_uIntPtr nm=0; nm<nMarkAnz; nm++)
-    {
-        SdrMark* pM=GetSdrMarkByIndex(nm);
-        SdrObject* pO=pM->GetMarkedSdrObj();
-        if( bUndo )
+        if(bUndo)
         {
-            std::vector< SdrUndoAction* > vConnectorUndoActions( CreateConnectorUndo( *pO ) );
-            AddUndoActions( vConnectorUndoActions );
-            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoMoveObject(*pO,rSiz));
+            XubString aStr(ImpGetResStr(STR_EditMove));
+
+            if(bCopy)
+            {
+                aStr += ImpGetResStr(STR_EditWithCopy);
+            }
+
+            // benoetigt eigene UndoGroup wegen Parameter
+            BegUndo(aStr, getSelectionDescription(getSelectedSdrObjectVectorFromSdrMarkView()), SDRREPFUNC_OBJ_MOVE);
         }
-        pO->Move(rSiz);
-    }
 
-    if( bUndo )
-        EndUndo();
-}
-
-void SdrEditView::ResizeMarkedObj(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy)
-{
-    const bool bUndo = IsUndoEnabled();
-    if( bUndo )
-    {
-        XubString aStr;
-        ImpTakeDescriptionStr(STR_EditResize,aStr);
-        if (bCopy)
-            aStr+=ImpGetResStr(STR_EditWithCopy);
-        BegUndo(aStr);
-    }
-
-    if (bCopy)
-        CopyMarkedObj();
-
-    sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
-    for (sal_uIntPtr nm=0; nm<nMarkAnz; nm++)
-    {
-        SdrMark* pM=GetSdrMarkByIndex(nm);
-        SdrObject* pO=pM->GetMarkedSdrObj();
-        if( bUndo )
+        if(bCopy)
         {
-            std::vector< SdrUndoAction* > vConnectorUndoActions( CreateConnectorUndo( *pO ) );
-            AddUndoActions( vConnectorUndoActions );
-            AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pO));
+            CopyMarkedObj();
         }
-        pO->Resize(rRef,xFact,yFact);
-    }
 
-    if( bUndo )
-        EndUndo();
+        const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
+        basegfx::B2DHomMatrix aTransformation(basegfx::tools::createTranslateB2DHomMatrix(rOffset));
+
+        for(sal_uInt32 nm(0); nm < aSelection.size(); nm++)
+        {
+            SdrObject* pO = aSelection[nm];
+
+            if(bUndo)
+            {
+                std::vector< SdrUndoAction* > vConnectorUndoActions( CreateConnectorUndo( *pO ) );
+                AddUndoActions( vConnectorUndoActions );
+                AddUndo(getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoGeoObject(*pO));
+            }
+
+            sdr::legacy::transformSdrObject(*pO, aTransformation);
+        }
+
+        if(bUndo)
+        {
+            EndUndo();
+        }
+    }
 }
 
-long SdrEditView::GetMarkedObjRotate() const
+void SdrEditView::ResizeMarkedObj(const basegfx::B2DPoint& rRefPoint, const basegfx::B2DTuple& rScale, bool bCopy)
 {
-    sal_Bool b1st=sal_True;
-    sal_Bool bOk=sal_True;
-    long nWink=0;
-    sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
-    for (sal_uIntPtr nm=0; nm<nMarkAnz && bOk; nm++) {
-        SdrMark* pM=GetSdrMarkByIndex(nm);
-        SdrObject* pO=pM->GetMarkedSdrObj();
-        long nWink2=pO->GetRotateAngle();
-        if (b1st) nWink=nWink2;
-        else if (nWink2!=nWink) bOk=sal_False;
-        b1st=sal_False;
+    if(areSdrObjectsSelected() && !rScale.equalZero())
+    {
+        const bool bUndo(IsUndoEnabled());
+
+        if(bUndo)
+        {
+            XubString aStr;
+
+            TakeMarkedDescriptionString(STR_EditResize,aStr);
+
+            if(bCopy)
+            {
+                aStr += ImpGetResStr(STR_EditWithCopy);
+            }
+
+            BegUndo(aStr);
+        }
+
+        if(bCopy)
+        {
+            CopyMarkedObj();
+        }
+
+        basegfx::B2DHomMatrix aTransformation;
+
+        if(rRefPoint.equalZero())
+        {
+            aTransformation = basegfx::tools::createScaleB2DHomMatrix(rScale);
+        }
+        else
+        {
+            aTransformation.translate(-rRefPoint);
+            aTransformation.scale(rScale);
+            aTransformation.translate(rRefPoint);
+        }
+
+        const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
+
+        for(sal_uInt32 nm(0); nm < aSelection.size(); nm++)
+        {
+            SdrObject* pO = aSelection[nm];
+
+            if(bUndo)
+            {
+                std::vector< SdrUndoAction* > vConnectorUndoActions( CreateConnectorUndo( *pO ) );
+                AddUndoActions( vConnectorUndoActions );
+                AddUndo( getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoGeoObject(*pO));
+            }
+
+            sdr::legacy::transformSdrObject(*pO, aTransformation);
+        }
+
+        if(bUndo)
+        {
+            EndUndo();
+        }
     }
-    if (!bOk) nWink=0;
-    return nWink;
 }
 
-void SdrEditView::RotateMarkedObj(const Point& rRef, long nWink, bool bCopy)
+double SdrEditView::GetMarkedObjRotate() const
 {
-    const bool bUndo = IsUndoEnabled();
-    if( bUndo )
+    double fRetval(0.0);
+
+    if(areSdrObjectsSelected())
     {
-        XubString aStr;
-        ImpTakeDescriptionStr(STR_EditRotate,aStr);
-        if (bCopy) aStr+=ImpGetResStr(STR_EditWithCopy);
-        BegUndo(aStr);
+        const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
+
+        for(sal_uInt32 a(0); a < aSelection.size(); a++)
+        {
+            SdrObject* pObject = aSelection[a];
+
+            if(a)
+            {
+                const double fNew(pObject->getSdrObjectRotate());
+
+                if(!basegfx::fTools::equal(fNew, fRetval))
+                {
+                    return 0.0;
+                }
+            }
+            else
+            {
+                fRetval = pObject->getSdrObjectRotate();
+            }
+        }
     }
 
-    if (bCopy)
-        CopyMarkedObj();
+    return fRetval;
+}
 
-    double nSin=sin(nWink*nPi180);
-    double nCos=cos(nWink*nPi180);
-    const sal_uInt32 nMarkAnz(GetMarkedObjectCount());
-
-    if(nMarkAnz)
+void SdrEditView::RotateMarkedObj(const basegfx::B2DPoint& rRefPoint, double fAngle, bool bCopy)
+{
+    if(areSdrObjectsSelected() && (bCopy || !basegfx::fTools::equalZero(fAngle)))
     {
+        const bool bUndo(IsUndoEnabled());
+
+        if(bUndo)
+        {
+            XubString aStr;
+
+            TakeMarkedDescriptionString(STR_EditRotate,aStr);
+
+            if(bCopy)
+            {
+                aStr += ImpGetResStr(STR_EditWithCopy);
+            }
+
+            BegUndo(aStr);
+        }
+
+        if(bCopy)
+        {
+            CopyMarkedObj();
+        }
+
         std::vector< E3DModifySceneSnapRectUpdater* > aUpdaters;
+        basegfx::B2DHomMatrix aTransformation;
 
-        for(sal_uInt32 nm(0); nm < nMarkAnz; nm++)
+        if(rRefPoint.equalZero())
         {
-            SdrMark* pM = GetSdrMarkByIndex(nm);
-            SdrObject* pO = pM->GetMarkedSdrObj();
+            aTransformation = basegfx::tools::createRotateB2DHomMatrix(fAngle);
+        }
+        else
+        {
+            aTransformation.translate(-rRefPoint);
+            aTransformation.rotate(fAngle);
+            aTransformation.translate(rRefPoint);
+        }
 
-            if( bUndo )
+        const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
+
+        for(sal_uInt32 nm(0); nm < aSelection.size(); nm++)
+        {
+            SdrObject* pO = aSelection[nm];
+
+            if(bUndo)
             {
                 // extra undo actions for changed connector which now may hold it's layouted path (SJ)
                 std::vector< SdrUndoAction* > vConnectorUndoActions( CreateConnectorUndo( *pO ) );
                 AddUndoActions( vConnectorUndoActions );
-
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pO));
+                AddUndo(getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoGeoObject(*pO));
             }
 
             // set up a scene updater if object is a 3d object
@@ -310,50 +345,79 @@ void SdrEditView::RotateMarkedObj(const Point& rRef, long nWink, bool bCopy)
                 aUpdaters.push_back(new E3DModifySceneSnapRectUpdater(pO));
             }
 
-            pO->Rotate(rRef,nWink,nSin,nCos);
+            sdr::legacy::transformSdrObject(*pO, aTransformation);
         }
 
         // fire scene updaters
-        while(!aUpdaters.empty())
+        while(aUpdaters.size())
         {
             delete aUpdaters.back();
             aUpdaters.pop_back();
         }
-    }
 
-    if( bUndo )
-        EndUndo();
+        if(bUndo)
+        {
+            EndUndo();
+        }
+    }
 }
 
-void SdrEditView::MirrorMarkedObj(const Point& rRef1, const Point& rRef2, bool bCopy)
+void SdrEditView::MirrorMarkedObj(const basegfx::B2DPoint& rRef1, const basegfx::B2DPoint& rRef2, bool bCopy)
 {
-    const bool bUndo = IsUndoEnabled();
-
-    if( bUndo )
+    if(areSdrObjectsSelected() && !rRef1.equal(rRef2))
     {
-        XubString aStr;
-        Point aDif(rRef2-rRef1);
-        if (aDif.X()==0) ImpTakeDescriptionStr(STR_EditMirrorHori,aStr);
-        else if (aDif.Y()==0) ImpTakeDescriptionStr(STR_EditMirrorVert,aStr);
-        else if (Abs(aDif.X())==Abs(aDif.Y())) ImpTakeDescriptionStr(STR_EditMirrorDiag,aStr);
-        else ImpTakeDescriptionStr(STR_EditMirrorFree,aStr);
-        if (bCopy) aStr+=ImpGetResStr(STR_EditWithCopy);
-        BegUndo(aStr);
-    }
+        const bool bUndo(IsUndoEnabled());
+        const basegfx::B2DVector aMirrorEdge(rRef2 - rRef1);
 
-    if (bCopy)
-        CopyMarkedObj();
-
-    const sal_uInt32 nMarkAnz(GetMarkedObjectCount());
-
-    if(nMarkAnz)
-    {
-        std::vector< E3DModifySceneSnapRectUpdater* > aUpdaters;
-
-        for(sal_uInt32 nm(0); nm < nMarkAnz; nm++)
+        if(bUndo)
         {
-            SdrMark* pM = GetSdrMarkByIndex(nm);
-            SdrObject* pO = pM->GetMarkedSdrObj();
+            XubString aStr;
+
+            if(basegfx::fTools::equalZero(aMirrorEdge.getX()))
+            {
+                TakeMarkedDescriptionString(STR_EditMirrorHori,aStr);
+            }
+            else if(basegfx::fTools::equalZero(aMirrorEdge.getY()))
+            {
+                TakeMarkedDescriptionString(STR_EditMirrorVert,aStr);
+            }
+            else if(basegfx::fTools::equal(fabs(aMirrorEdge.getX()), fabs(aMirrorEdge.getY())))
+            {
+                TakeMarkedDescriptionString(STR_EditMirrorDiag,aStr);
+            }
+            else
+            {
+                TakeMarkedDescriptionString(STR_EditMirrorFree,aStr);
+            }
+
+            if(bCopy)
+            {
+                aStr += ImpGetResStr(STR_EditWithCopy);
+            }
+
+            BegUndo(aStr);
+        }
+
+        if (bCopy)
+        {
+            CopyMarkedObj();
+        }
+
+        const double fAngleToXAxis(atan2(aMirrorEdge.getY(), aMirrorEdge.getX()));
+        basegfx::B2DHomMatrix aTransformation;
+
+        aTransformation.translate(-rRef1);
+        aTransformation.rotate(-fAngleToXAxis);
+        aTransformation.scale(1.0, -1.0);
+        aTransformation.rotate(fAngleToXAxis);
+        aTransformation.translate(rRef1);
+
+        std::vector< E3DModifySceneSnapRectUpdater* > aUpdaters;
+        const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
+
+        for(sal_uInt32 nm(0); nm < aSelection.size(); nm++)
+        {
+            SdrObject* pO = aSelection[nm];
 
             if( bUndo )
             {
@@ -361,7 +425,7 @@ void SdrEditView::MirrorMarkedObj(const Point& rRef1, const Point& rRef2, bool b
                 std::vector< SdrUndoAction* > vConnectorUndoActions( CreateConnectorUndo( *pO ) );
                 AddUndoActions( vConnectorUndoActions );
 
-                AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pO));
+                AddUndo( getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoGeoObject(*pO));
             }
 
             // set up a scene updater if object is a 3d object
@@ -370,554 +434,851 @@ void SdrEditView::MirrorMarkedObj(const Point& rRef1, const Point& rRef2, bool b
                 aUpdaters.push_back(new E3DModifySceneSnapRectUpdater(pO));
             }
 
-            pO->Mirror(rRef1,rRef2);
+            sdr::legacy::transformSdrObject(*pO, aTransformation);
         }
 
         // fire scene updaters
-        while(!aUpdaters.empty())
+        while(aUpdaters.size())
         {
             delete aUpdaters.back();
             aUpdaters.pop_back();
         }
-    }
 
-    if( bUndo )
-        EndUndo();
-}
-
-void SdrEditView::MirrorMarkedObjHorizontal(sal_Bool bCopy)
-{
-    Point aCenter(GetMarkedObjRect().Center());
-    Point aPt2(aCenter);
-    aPt2.Y()++;
-    MirrorMarkedObj(aCenter,aPt2,bCopy);
-}
-
-void SdrEditView::MirrorMarkedObjVertical(sal_Bool bCopy)
-{
-    Point aCenter(GetMarkedObjRect().Center());
-    Point aPt2(aCenter);
-    aPt2.X()++;
-    MirrorMarkedObj(aCenter,aPt2,bCopy);
-}
-
-long SdrEditView::GetMarkedObjShear() const
-{
-    sal_Bool b1st=sal_True;
-    sal_Bool bOk=sal_True;
-    long nWink=0;
-    sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
-    for (sal_uIntPtr nm=0; nm<nMarkAnz && bOk; nm++) {
-        SdrMark* pM=GetSdrMarkByIndex(nm);
-        SdrObject* pO=pM->GetMarkedSdrObj();
-        long nWink2=pO->GetShearAngle();
-        if (b1st) nWink=nWink2;
-        else if (nWink2!=nWink) bOk=sal_False;
-        b1st=sal_False;
-    }
-    if (nWink>SDRMAXSHEAR) nWink=SDRMAXSHEAR;
-    if (nWink<-SDRMAXSHEAR) nWink=-SDRMAXSHEAR;
-    if (!bOk) nWink=0;
-    return nWink;
-}
-
-void SdrEditView::ShearMarkedObj(const Point& rRef, long nWink, bool bVShear, bool bCopy)
-{
-    const bool bUndo = IsUndoEnabled();
-
-    if( bUndo )
-    {
-        XubString aStr;
-        ImpTakeDescriptionStr(STR_EditShear,aStr);
-        if (bCopy)
-            aStr+=ImpGetResStr(STR_EditWithCopy);
-        BegUndo(aStr);
-    }
-
-    if (bCopy)
-        CopyMarkedObj();
-
-    double nTan=tan(nWink*nPi180);
-    sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
-    for (sal_uIntPtr nm=0; nm<nMarkAnz; nm++)
-    {
-        SdrMark* pM=GetSdrMarkByIndex(nm);
-        SdrObject* pO=pM->GetMarkedSdrObj();
-        if( bUndo )
+        if(bUndo)
         {
-            std::vector< SdrUndoAction* > vConnectorUndoActions( CreateConnectorUndo( *pO ) );
-            AddUndoActions( vConnectorUndoActions );
-            AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pO));
+            EndUndo();
         }
-        pO->Shear(rRef,nWink,nTan,bVShear);
     }
-
-    if( bUndo )
-        EndUndo();
 }
 
-void SdrEditView::ImpCrookObj(SdrObject* pO, const Point& rRef, const Point& rRad,
-    SdrCrookMode eMode, sal_Bool bVertical, sal_Bool bNoContortion, sal_Bool bRotate, const Rectangle& rMarkRect)
+void SdrEditView::MirrorMarkedObjHorizontal(bool bCopy)
 {
-    SdrPathObj* pPath=PTR_CAST(SdrPathObj,pO);
-    sal_Bool bDone = sal_False;
-
-    if(pPath!=NULL && !bNoContortion)
+    if(areSdrObjectsSelected())
     {
-        XPolyPolygon aXPP(pPath->GetPathPoly());
-        switch (eMode) {
-            case SDRCROOK_ROTATE : CrookRotatePoly (aXPP,rRef,rRad,bVertical);           break;
-            case SDRCROOK_SLANT  : CrookSlantPoly  (aXPP,rRef,rRad,bVertical);           break;
-            case SDRCROOK_STRETCH: CrookStretchPoly(aXPP,rRef,rRad,bVertical,rMarkRect); break;
-        } // switch
-        pPath->SetPathPoly(aXPP.getB2DPolyPolygon());
-        bDone = sal_True;
+        const basegfx::B2DRange& rCurrentRange(getMarkedObjectSnapRange());
+
+        MirrorMarkedObj(
+            basegfx::B2DPoint(rCurrentRange.getCenterX(), rCurrentRange.getMinY()),
+            basegfx::B2DPoint(rCurrentRange.getCenterX(), rCurrentRange.getMaxY()),
+            bCopy);
+    }
+}
+
+void SdrEditView::MirrorMarkedObjVertical(bool bCopy)
+{
+    if(areSdrObjectsSelected())
+    {
+        const basegfx::B2DRange& rCurrentRange(getMarkedObjectSnapRange());
+
+        MirrorMarkedObj(
+            basegfx::B2DPoint(rCurrentRange.getMinX(), rCurrentRange.getCenterY()),
+            basegfx::B2DPoint(rCurrentRange.getMaxX(), rCurrentRange.getCenterY()),
+            bCopy);
+    }
+}
+
+double SdrEditView::GetMarkedObjShearX() const
+{
+    double fRetval(0.0);
+
+    if(areSdrObjectsSelected())
+    {
+        const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
+
+        for(sal_uInt32 a(0); a < aSelection.size(); a++)
+        {
+            SdrObject* pObject = aSelection[a];
+
+            if(a)
+            {
+                const double fNew(pObject->getSdrObjectShearX());
+
+                if(!basegfx::fTools::equal(fNew, fRetval))
+                {
+                    return 0.0;
+                }
+            }
+            else
+            {
+                fRetval = pObject->getSdrObjectShearX();
+            }
+        }
+
+        const double fMaxShearRange(F_PI2 * (89.0/90.0));
+        fRetval = basegfx::clamp(fRetval, -fMaxShearRange, fMaxShearRange);
     }
 
-    if(!bDone && !pPath && pO->IsPolyObj() && 0L != pO->GetPointCount())
+    return fRetval;
+}
+
+void SdrEditView::ShearMarkedObj(const basegfx::B2DPoint& rRefPoint, double fAngle, bool bVShear, bool bCopy)
+{
+    if(areSdrObjectsSelected() && !basegfx::fTools::equalZero(fAngle))
+    {
+        const bool bUndo(IsUndoEnabled());
+
+        if(bUndo)
+        {
+            XubString aStr;
+
+            TakeMarkedDescriptionString(STR_EditShear,aStr);
+
+            if(bCopy)
+            {
+                aStr += ImpGetResStr(STR_EditWithCopy);
+            }
+
+            BegUndo(aStr);
+        }
+
+        if(bCopy)
+        {
+            CopyMarkedObj();
+        }
+
+        basegfx::B2DHomMatrix aTransformation;
+
+        if(rRefPoint.equalZero())
+        {
+            if(bVShear)
+            {
+                aTransformation = basegfx::tools::createShearYB2DHomMatrix(tan(fAngle));
+            }
+            else
+            {
+                aTransformation = basegfx::tools::createShearXB2DHomMatrix(tan(fAngle));
+            }
+        }
+        else
+        {
+            aTransformation.translate(-rRefPoint);
+
+            if(bVShear)
+            {
+                aTransformation.shearY(tan(fAngle));
+            }
+            else
+            {
+                aTransformation.shearX(tan(fAngle));
+            }
+
+            aTransformation.translate(rRefPoint);
+        }
+
+        const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
+
+        for(sal_uInt32 nm(0); nm < aSelection.size(); nm++)
+        {
+            SdrObject* pO = aSelection[nm];
+
+            if(bUndo)
+            {
+                std::vector< SdrUndoAction* > vConnectorUndoActions( CreateConnectorUndo( *pO ) );
+                AddUndoActions( vConnectorUndoActions );
+                AddUndo( getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoGeoObject(*pO));
+            }
+
+            sdr::legacy::transformSdrObject(*pO, aTransformation);
+        }
+
+        if(bUndo)
+        {
+            EndUndo();
+        }
+    }
+}
+
+void SdrEditView::ImpCrookObj(SdrObject& rO, const basegfx::B2DPoint& rRef, const basegfx::B2DPoint& rRad,
+    SdrCrookMode eMode, bool bVertical, bool bNoContortion, bool bRotate, const basegfx::B2DRange& rMarkRange)
+{
+    SdrPathObj* pPath = dynamic_cast< SdrPathObj* >(&rO);
+    bool bDone(false);
+
+    if(pPath && !bNoContortion)
+    {
+        basegfx::B2DPolyPolygon aPolyPolygon(pPath->getB2DPolyPolygonInObjectCoordinates());
+
+        switch(eMode)
+        {
+            case SDRCROOK_ROTATE : CrookRotatePoly(aPolyPolygon, rRef, rRad, bVertical); break;
+            case SDRCROOK_SLANT : CrookSlantPoly(aPolyPolygon, rRef, rRad, bVertical); break;
+            case SDRCROOK_STRETCH: CrookStretchPoly(aPolyPolygon, rRef, rRad, bVertical, rMarkRange); break;
+        }
+
+        pPath->setB2DPolyPolygonInObjectCoordinates(aPolyPolygon);
+        bDone = true;
+    }
+
+    if(!bDone && !pPath && rO.IsPolygonObject() && rO.GetObjectPointCount())
     {
         // FuerPolyObj's, aber NICHT fuer SdrPathObj's, z.B. fuer's Bemassungsobjekt
-        sal_uInt32 nPtAnz(pO->GetPointCount());
-        XPolygon aXP((sal_uInt16)nPtAnz);
+        const sal_uInt32 nPtAnz(rO.GetObjectPointCount());
+        basegfx::B2DPolygon aPolygon;
         sal_uInt32 nPtNum;
 
-        for(nPtNum = 0L; nPtNum < nPtAnz; nPtNum++)
+        for(nPtNum = 0; nPtNum < nPtAnz; nPtNum++)
         {
-            Point aPt(pO->GetPoint(nPtNum));
-            aXP[(sal_uInt16)nPtNum]=aPt;
+            aPolygon.append(rO.GetObjectPoint(nPtNum));
         }
 
         switch (eMode)
         {
-            case SDRCROOK_ROTATE : CrookRotatePoly (aXP,rRef,rRad,bVertical);           break;
-            case SDRCROOK_SLANT  : CrookSlantPoly  (aXP,rRef,rRad,bVertical);           break;
-            case SDRCROOK_STRETCH: CrookStretchPoly(aXP,rRef,rRad,bVertical,rMarkRect); break;
+            case SDRCROOK_ROTATE : CrookRotatePoly(aPolygon, rRef, rRad, bVertical); break;
+            case SDRCROOK_SLANT : CrookSlantPoly(aPolygon, rRef, rRad, bVertical); break;
+            case SDRCROOK_STRETCH: CrookStretchPoly(aPolygon, rRef, rRad, bVertical, rMarkRange); break;
         }
 
-        for(nPtNum = 0L; nPtNum < nPtAnz; nPtNum++)
+        for(nPtNum = 0; nPtNum < nPtAnz; nPtNum++)
         {
-            // hier koennte man vieleicht auch mal das Broadcasting optimieren
-            // ist aber z.Zt. bei den 2 Punkten des Bemassungsobjekts noch nicht so tragisch
-            pO->SetPoint(aXP[(sal_uInt16)nPtNum],nPtNum);
+            rO.SetObjectPoint(aPolygon.getB2DPoint(nPtNum), nPtNum);
         }
 
-        bDone = sal_True;
+        bDone = true;
     }
 
     if(!bDone)
     {
         // Fuer alle anderen oder wenn bNoContortion
-        Point aCtr0(pO->GetSnapRect().Center());
-        Point aCtr1(aCtr0);
-        sal_Bool bRotOk(sal_False);
+        const basegfx::B2DPoint aCtr0(sdr::legacy::GetSnapRange(rO).getCenter());
+        basegfx::B2DPoint aCtr1(aCtr0);
+        bool bRotOk(false);
         double nSin(0.0), nCos(1.0);
-        double nWink(0.0);
+        double fAngle(0.0);
 
-        if(0 != rRad.X() && 0 != rRad.Y())
+        if(!rRad.equalZero())
         {
             bRotOk = bRotate;
 
             switch (eMode)
             {
-                case SDRCROOK_ROTATE : nWink=CrookRotateXPoint (aCtr1,NULL,NULL,rRef,rRad,nSin,nCos,bVertical); bRotOk=bRotate; break;
-                case SDRCROOK_SLANT  : nWink=CrookSlantXPoint  (aCtr1,NULL,NULL,rRef,rRad,nSin,nCos,bVertical);           break;
-                case SDRCROOK_STRETCH: nWink=CrookStretchXPoint(aCtr1,NULL,NULL,rRef,rRad,nSin,nCos,bVertical,rMarkRect); break;
+                case SDRCROOK_ROTATE : fAngle = CrookRotateXPoint(aCtr1, 0, 0, rRef, rRad, nSin, nCos, bVertical); bRotOk = bRotate; break;
+                case SDRCROOK_SLANT : fAngle = CrookSlantXPoint(aCtr1, 0, 0, rRef, rRad, nSin, nCos, bVertical); break;
+                case SDRCROOK_STRETCH: fAngle = CrookStretchXPoint(aCtr1, 0, 0, rRef, rRad, nSin, nCos, bVertical, rMarkRange); break;
             }
         }
 
-        aCtr1 -= aCtr0;
+        basegfx::B2DHomMatrix aObjectTransform;
 
         if(bRotOk)
-            pO->Rotate(aCtr0, Round(nWink/nPi180), nSin, nCos);
+        {
+            aObjectTransform.translate(-aCtr0);
+            aObjectTransform.rotate(fAngle);
+            aObjectTransform.translate(aCtr0);
+        }
 
-        pO->Move(Size(aCtr1.X(),aCtr1.Y()));
+        aObjectTransform.translate(aCtr1 - aCtr0);
+
+        sdr::legacy::transformSdrObject(rO, aObjectTransform);
     }
 }
 
-void SdrEditView::CrookMarkedObj(const Point& rRef, const Point& rRad, SdrCrookMode eMode,
+void SdrEditView::CrookMarkedObj(const basegfx::B2DPoint& rRef, const basegfx::B2DPoint& rRad, SdrCrookMode eMode,
     bool bVertical, bool bNoContortion, bool bCopy)
 {
-    Rectangle aMarkRect(GetMarkedObjRect());
-    const bool bUndo = IsUndoEnabled();
-
-    bool bRotate=bNoContortion && eMode==SDRCROOK_ROTATE && IsRotateAllowed(sal_False);
-
-    if( bUndo )
+    if(areSdrObjectsSelected())
     {
-        XubString aStr;
-        ImpTakeDescriptionStr(bNoContortion?STR_EditCrook:STR_EditCrookContortion,aStr);
-        if (bCopy)
-            aStr+=ImpGetResStr(STR_EditWithCopy);
-        BegUndo(aStr);
-    }
+        SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
+        const basegfx::B2DRange& rMarkRange(getMarkedObjectSnapRange());
+        const bool bUndo(IsUndoEnabled());
+        const bool bRotate(bNoContortion && SDRCROOK_ROTATE == eMode && IsRotateAllowed(false));
 
-    if (bCopy)
-        CopyMarkedObj();
+        if(bUndo)
+        {
+            XubString aStr;
 
-    sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
-    for (sal_uIntPtr nm=0; nm<nMarkAnz; nm++)
-    {
-        SdrMark* pM=GetSdrMarkByIndex(nm);
-        SdrObject* pO=pM->GetMarkedSdrObj();
-        if( bUndo )
-            AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pO));
+            TakeMarkedDescriptionString(bNoContortion ? STR_EditCrook : STR_EditCrookContortion, aStr);
 
-        const SdrObjList* pOL=pO->GetSubList();
-        if (bNoContortion || pOL==NULL) {
-            ImpCrookObj(pO,rRef,rRad,eMode,bVertical,bNoContortion,bRotate,aMarkRect);
-        } else {
-            SdrObjListIter aIter(*pOL,IM_DEEPNOGROUPS);
-            while (aIter.IsMore()) {
-                SdrObject* pO1=aIter.Next();
-                ImpCrookObj(pO1,rRef,rRad,eMode,bVertical,bNoContortion,bRotate,aMarkRect);
+            if(bCopy)
+            {
+                aStr += ImpGetResStr(STR_EditWithCopy);
+            }
+
+            BegUndo(aStr);
+        }
+
+        if(bCopy)
+        {
+            CopyMarkedObj();
+            aSelection = getSelectedSdrObjectVectorFromSdrMarkView();
+        }
+
+        for(sal_uInt32 nm(0); nm < aSelection.size(); nm++)
+        {
+            SdrObject* pO = aSelection[nm];
+
+            if(bUndo)
+            {
+                AddUndo(getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoGeoObject(*pO));
+            }
+
+            const SdrObjList* pOL = pO->getChildrenOfSdrObject();
+
+            if(bNoContortion || !pOL)
+            {
+                ImpCrookObj(*pO, rRef, rRad, eMode, bVertical, bNoContortion, bRotate, rMarkRange);
+            }
+            else
+            {
+                SdrObjListIter aIter(*pOL, IM_DEEPNOGROUPS);
+
+                while(aIter.IsMore())
+                {
+                    SdrObject* pO1 = aIter.Next();
+
+                    ImpCrookObj(*pO1, rRef, rRad, eMode, bVertical, bNoContortion, bRotate, rMarkRange);
+                }
             }
         }
-    }
 
-    if( bUndo )
-        EndUndo();
-}
-
-void SdrEditView::ImpDistortObj(SdrObject* pO, const Rectangle& rRef, const XPolygon& rDistortedRect, sal_Bool bNoContortion)
-{
-    SdrPathObj* pPath = PTR_CAST(SdrPathObj, pO);
-
-    if(!bNoContortion && pPath)
-    {
-        XPolyPolygon aXPP(pPath->GetPathPoly());
-        aXPP.Distort(rRef, rDistortedRect);
-        pPath->SetPathPoly(aXPP.getB2DPolyPolygon());
-    }
-    else if(pO->IsPolyObj())
-    {
-        // z.B. fuer's Bemassungsobjekt
-        sal_uInt32 nPtAnz(pO->GetPointCount());
-        XPolygon aXP((sal_uInt16)nPtAnz);
-        sal_uInt32 nPtNum;
-
-        for(nPtNum = 0L; nPtNum < nPtAnz; nPtNum++)
+        if(bUndo)
         {
-            Point aPt(pO->GetPoint(nPtNum));
-            aXP[(sal_uInt16)nPtNum]=aPt;
-        }
-
-        aXP.Distort(rRef, rDistortedRect);
-
-        for(nPtNum = 0L; nPtNum < nPtAnz; nPtNum++)
-        {
-            // hier koennte man vieleicht auch mal das Broadcasting optimieren
-            // ist aber z.Zt. bei den 2 Punkten des Bemassungsobjekts noch nicht so tragisch
-            pO->SetPoint(aXP[(sal_uInt16)nPtNum],nPtNum);
+            EndUndo();
         }
     }
 }
 
-void SdrEditView::DistortMarkedObj(const Rectangle& rRef, const XPolygon& rDistortedRect, bool bNoContortion, bool bCopy)
+void SdrEditView::ImpDistortObj(SdrObject& rO, const basegfx::B2DRange& rRefRange, const basegfx::B2DPolygon& rDistortedPolygon, bool bNoContortion)
 {
-    const bool bUndo = IsUndoEnabled();
-
-    if( bUndo )
+    if(rDistortedPolygon.count() > 3)
     {
-        XubString aStr;
-        ImpTakeDescriptionStr(STR_EditDistort,aStr);
-        if (bCopy)
-            aStr+=ImpGetResStr(STR_EditWithCopy);
-        BegUndo(aStr);
-    }
+        SdrPathObj* pPath = dynamic_cast< SdrPathObj* >(&rO);
 
-    if (bCopy)
-        CopyMarkedObj();
+        if(!bNoContortion && pPath)
+        {
+            const basegfx::B2DPolyPolygon aPolyPolygon(
+                basegfx::tools::distort(
+                    pPath->getB2DPolyPolygonInObjectCoordinates(),
+                    rRefRange,
+                    rDistortedPolygon.getB2DPoint(0),   // TopLeft
+                    rDistortedPolygon.getB2DPoint(1),   // rTopRight
+                    rDistortedPolygon.getB2DPoint(3),   // rBottomLeft
+                    rDistortedPolygon.getB2DPoint(2))); // rBottomRight
 
-    sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
-    for (sal_uIntPtr nm=0; nm<nMarkAnz; nm++)
-    {
-        SdrMark* pM=GetSdrMarkByIndex(nm);
-        SdrObject* pO=pM->GetMarkedSdrObj();
-        if( bUndo )
-            AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pO));
+            pPath->setB2DPolyPolygonInObjectCoordinates(aPolyPolygon);
+        }
+        else if(rO.IsPolygonObject())
+        {
+            // z.B. fuer's Bemassungsobjekt
+            const sal_uInt32 nPtAnz(rO.GetObjectPointCount());
+            basegfx::B2DPolygon aPolygon;
 
-        Rectangle aRefRect(rRef);
-        XPolygon  aRefPoly(rDistortedRect);
-        const SdrObjList* pOL=pO->GetSubList();
-        if (bNoContortion || pOL==NULL) {
-            ImpDistortObj(pO,aRefRect,aRefPoly,bNoContortion);
-        } else {
-            SdrObjListIter aIter(*pOL,IM_DEEPNOGROUPS);
-            while (aIter.IsMore()) {
-                SdrObject* pO1=aIter.Next();
-                ImpDistortObj(pO1,aRefRect,aRefPoly,bNoContortion);
+            for(sal_uInt32 a(0); a < nPtAnz; a++)
+            {
+                aPolygon.append(rO.GetObjectPoint(a));
+            }
+
+            aPolygon = basegfx::tools::distort(
+                aPolygon,
+                rRefRange,
+                rDistortedPolygon.getB2DPoint(0),  // TopLeft
+                rDistortedPolygon.getB2DPoint(1),  // rTopRight
+                rDistortedPolygon.getB2DPoint(3),  // rBottomLeft
+                rDistortedPolygon.getB2DPoint(2)); // rBottomRight
+
+            for(sal_uInt32 b(0); b < nPtAnz; b++)
+            {
+                rO.SetObjectPoint(aPolygon.getB2DPoint(b), b);
             }
         }
     }
-    if( bUndo )
-        EndUndo();
+    else
+    {
+        OSL_ENSURE(false, "SdrEditView::ImpDistortObj: DistortedPolygon needs to have four corner points (!)");
+    }
+}
+
+void SdrEditView::DistortMarkedObj(const basegfx::B2DRange& rRefRange, const basegfx::B2DPolygon& rDistortedRect, bool bNoContortion, bool bCopy)
+{
+    if(areSdrObjectsSelected())
+    {
+        const bool bUndo(IsUndoEnabled());
+
+        if(bUndo)
+        {
+            XubString aStr;
+
+            TakeMarkedDescriptionString(STR_EditDistort, aStr);
+
+            if(bCopy)
+            {
+                aStr += ImpGetResStr(STR_EditWithCopy);
+            }
+
+            BegUndo(aStr);
+        }
+
+        if(bCopy)
+        {
+            CopyMarkedObj();
+        }
+
+        const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
+
+        for(sal_uInt32 nm(0); nm < aSelection.size(); nm++)
+        {
+            SdrObject* pO = aSelection[nm];
+
+            if(bUndo)
+            {
+                AddUndo(getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoGeoObject(*pO));
+            }
+
+            const SdrObjList* pOL = pO->getChildrenOfSdrObject();
+
+            if(bNoContortion || !pOL)
+            {
+                ImpDistortObj(*pO, rRefRange, rDistortedRect, bNoContortion);
+            }
+            else
+            {
+                SdrObjListIter aIter(*pOL, IM_DEEPNOGROUPS);
+
+                while(aIter.IsMore())
+                {
+                    SdrObject* pO1 = aIter.Next();
+
+                    ImpDistortObj(*pO1, rRefRange, rDistortedRect, bNoContortion);
+                }
+            }
+        }
+
+        if(bUndo)
+        {
+            EndUndo();
+        }
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr, sal_Bool /*bReplaceAll*/)
+void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr, bool /*bReplaceAll*/)
 {
-    // bReplaceAll hat hier keinerlei Wirkung
-    Rectangle aAllSnapRect(GetMarkedObjRect());
-    const SfxPoolItem *pPoolItem=NULL;
-    if (rAttr.GetItemState(SDRATTR_TRANSFORMREF1X,sal_True,&pPoolItem)==SFX_ITEM_SET) {
-        long n=((const SdrTransformRef1XItem*)pPoolItem)->GetValue();
-        SetRef1(Point(n,GetRef1().Y()));
-    }
-    if (rAttr.GetItemState(SDRATTR_TRANSFORMREF1Y,sal_True,&pPoolItem)==SFX_ITEM_SET) {
-        long n=((const SdrTransformRef1YItem*)pPoolItem)->GetValue();
-        SetRef1(Point(GetRef1().X(),n));
-    }
-    if (rAttr.GetItemState(SDRATTR_TRANSFORMREF2X,sal_True,&pPoolItem)==SFX_ITEM_SET) {
-        long n=((const SdrTransformRef2XItem*)pPoolItem)->GetValue();
-        SetRef2(Point(n,GetRef2().Y()));
-    }
-    if (rAttr.GetItemState(SDRATTR_TRANSFORMREF2Y,sal_True,&pPoolItem)==SFX_ITEM_SET) {
-        long n=((const SdrTransformRef2YItem*)pPoolItem)->GetValue();
-        SetRef2(Point(GetRef2().X(),n));
-    }
-    long nAllPosX=0; sal_Bool bAllPosX=sal_False;
-    long nAllPosY=0; sal_Bool bAllPosY=sal_False;
-    long nAllWdt=0;  sal_Bool bAllWdt=sal_False;
-    long nAllHgt=0;  sal_Bool bAllHgt=sal_False;
-    sal_Bool bDoIt=sal_False;
-    if (rAttr.GetItemState(SDRATTR_ALLPOSITIONX,sal_True,&pPoolItem)==SFX_ITEM_SET) {
-        nAllPosX=((const SdrAllPositionXItem*)pPoolItem)->GetValue();
-        bAllPosX=sal_True; bDoIt=sal_True;
-    }
-    if (rAttr.GetItemState(SDRATTR_ALLPOSITIONY,sal_True,&pPoolItem)==SFX_ITEM_SET) {
-        nAllPosY=((const SdrAllPositionYItem*)pPoolItem)->GetValue();
-        bAllPosY=sal_True; bDoIt=sal_True;
-    }
-    if (rAttr.GetItemState(SDRATTR_ALLSIZEWIDTH,sal_True,&pPoolItem)==SFX_ITEM_SET) {
-        nAllWdt=((const SdrAllSizeWidthItem*)pPoolItem)->GetValue();
-        bAllWdt=sal_True; bDoIt=sal_True;
-    }
-    if (rAttr.GetItemState(SDRATTR_ALLSIZEHEIGHT,sal_True,&pPoolItem)==SFX_ITEM_SET) {
-        nAllHgt=((const SdrAllSizeHeightItem*)pPoolItem)->GetValue();
-        bAllHgt=sal_True; bDoIt=sal_True;
-    }
-    if (bDoIt) {
-        Rectangle aRect(aAllSnapRect); // !!! fuer PolyPt's und GluePt's aber bitte noch aendern !!!
-        if (bAllPosX) aRect.Move(nAllPosX-aRect.Left(),0);
-        if (bAllPosY) aRect.Move(0,nAllPosY-aRect.Top());
-        if (bAllWdt)  aRect.Right()=aAllSnapRect.Left()+nAllWdt;
-        if (bAllHgt)  aRect.Bottom()=aAllSnapRect.Top()+nAllHgt;
-        SetMarkedObjRect(aRect);
-    }
-    if (rAttr.GetItemState(SDRATTR_RESIZEXALL,sal_True,&pPoolItem)==SFX_ITEM_SET) {
-        Fraction aXFact=((const SdrResizeXAllItem*)pPoolItem)->GetValue();
-        ResizeMarkedObj(aAllSnapRect.TopLeft(),aXFact,Fraction(1,1));
-    }
-    if (rAttr.GetItemState(SDRATTR_RESIZEYALL,sal_True,&pPoolItem)==SFX_ITEM_SET) {
-        Fraction aYFact=((const SdrResizeYAllItem*)pPoolItem)->GetValue();
-        ResizeMarkedObj(aAllSnapRect.TopLeft(),Fraction(1,1),aYFact);
-    }
-    if (rAttr.GetItemState(SDRATTR_ROTATEALL,sal_True,&pPoolItem)==SFX_ITEM_SET) {
-        long nAngle=((const SdrRotateAllItem*)pPoolItem)->GetValue();
-        RotateMarkedObj(aAllSnapRect.Center(),nAngle);
-    }
-    if (rAttr.GetItemState(SDRATTR_HORZSHEARALL,sal_True,&pPoolItem)==SFX_ITEM_SET) {
-        long nAngle=((const SdrHorzShearAllItem*)pPoolItem)->GetValue();
-        ShearMarkedObj(aAllSnapRect.Center(),nAngle,sal_False);
-    }
-    if (rAttr.GetItemState(SDRATTR_VERTSHEARALL,sal_True,&pPoolItem)==SFX_ITEM_SET) {
-        long nAngle=((const SdrVertShearAllItem*)pPoolItem)->GetValue();
-        ShearMarkedObj(aAllSnapRect.Center(),nAngle,sal_True);
-    }
-
-    const bool bUndo = IsUndoEnabled();
-
-    // Todo: WhichRange nach Notwendigkeit ueberpruefen.
-    sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
-    for (sal_uIntPtr nm=0; nm<nMarkAnz; nm++)
+    if(areSdrObjectsSelected())
     {
-        const SdrMark* pM=GetSdrMarkByIndex(nm);
-        SdrObject* pObj=pM->GetMarkedSdrObj();
-        //const SdrPageView* pPV=pM->GetPageView();
-        if( bUndo )
-            AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
+        const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
+        const basegfx::B2DRange& rAllSnapRange(getMarkedObjectSnapRange());
+        const SfxPoolItem *pPoolItem = 0;
+        const bool bUndo(IsUndoEnabled());
 
-        pObj->ApplyNotPersistAttr(rAttr);
+        basegfx::B2DPoint aRef1(GetRef1());
+        basegfx::B2DPoint aRef2(GetRef2());
+
+        if (rAttr.GetItemState(SDRATTR_TRANSFORMREF1X,true,&pPoolItem)==SFX_ITEM_SET)
+        {
+            aRef1.setX(((const SdrMetricItem*)pPoolItem)->GetValue());
+        }
+
+        if (rAttr.GetItemState(SDRATTR_TRANSFORMREF1Y,true,&pPoolItem)==SFX_ITEM_SET)
+        {
+            aRef1.setY(((const SdrMetricItem*)pPoolItem)->GetValue());
+        }
+
+        if (rAttr.GetItemState(SDRATTR_TRANSFORMREF2X,true,&pPoolItem)==SFX_ITEM_SET)
+        {
+            aRef2.setX(((const SdrMetricItem*)pPoolItem)->GetValue());
+        }
+
+        if (rAttr.GetItemState(SDRATTR_TRANSFORMREF2Y,true,&pPoolItem)==SFX_ITEM_SET)
+        {
+            aRef2.setY(((const SdrMetricItem*)pPoolItem)->GetValue());
+        }
+
+        if(!aRef1.equal(GetRef1()))
+        {
+            SetRef1(aRef1);
+        }
+
+        if(!aRef2.equal(GetRef2()))
+        {
+            SetRef2(aRef2);
+        }
+
+        double fLeft(rAllSnapRange.getMinX());
+        double fTop(rAllSnapRange.getMinY());
+        double fWidth(rAllSnapRange.getWidth());
+        double fHeight(rAllSnapRange.getHeight());
+
+        if (rAttr.GetItemState(SDRATTR_ALLPOSITIONX,true,&pPoolItem)==SFX_ITEM_SET)
+        {
+            fLeft = ((const SdrMetricItem*)pPoolItem)->GetValue();
+        }
+
+        if (rAttr.GetItemState(SDRATTR_ALLPOSITIONY,true,&pPoolItem)==SFX_ITEM_SET)
+        {
+            fTop = ((const SdrMetricItem*)pPoolItem)->GetValue();
+        }
+
+        if (rAttr.GetItemState(SDRATTR_ALLSIZEWIDTH,true,&pPoolItem)==SFX_ITEM_SET)
+        {
+            fWidth = ((const SdrMetricItem*)pPoolItem)->GetValue();
+        }
+
+        if (rAttr.GetItemState(SDRATTR_ALLSIZEHEIGHT,true,&pPoolItem)==SFX_ITEM_SET)
+        {
+            fHeight = ((const SdrMetricItem*)pPoolItem)->GetValue();
+        }
+
+        const basegfx::B2DRange aNewRange(fLeft, fTop, fLeft + fWidth, fTop + fHeight);
+
+        if(!aNewRange.equal(rAllSnapRange))
+        {
+            SetMarkedObjSnapRange(aNewRange);
+        }
+
+        basegfx::B2DTuple aScale(1.0, 1.0);
+
+        if (rAttr.GetItemState(SDRATTR_RESIZEXALL,true,&pPoolItem)==SFX_ITEM_SET)
+        {
+            aScale.setX(((const SdrFractionItem*)pPoolItem)->GetValue());
+        }
+
+        if (rAttr.GetItemState(SDRATTR_RESIZEYALL,true,&pPoolItem)==SFX_ITEM_SET)
+        {
+            aScale.setY(((const SdrFractionItem*)pPoolItem)->GetValue());
+        }
+
+        if(!aScale.equal(basegfx::B2DTuple(1.0, 1.0)))
+        {
+            ResizeMarkedObj(rAllSnapRange.getMinimum(), aScale);
+        }
+
+        if (rAttr.GetItemState(SDRATTR_ROTATEALL,true,&pPoolItem)==SFX_ITEM_SET)
+        {
+            const sal_Int32 nAngle(((const SdrAngleItem*)pPoolItem)->GetValue());
+            const double fNewAngle((((36000 - nAngle) % 36000) * F_PI) / 18000.0);
+
+            RotateMarkedObj(rAllSnapRange.getCenter(), fNewAngle);
+        }
+
+        if (rAttr.GetItemState(SDRATTR_HORZSHEARALL,true,&pPoolItem)==SFX_ITEM_SET)
+        {
+            const sal_Int32 nAngle(((const SdrAngleItem*)pPoolItem)->GetValue());
+            const double fAngle(tan(((36000 - nAngle) * F_PI) / 18000.0));
+
+            ShearMarkedObj(rAllSnapRange.getCenter(), fAngle, false);
+        }
+
+        if (rAttr.GetItemState(SDRATTR_VERTSHEARALL,true,&pPoolItem)==SFX_ITEM_SET)
+        {
+            const sal_Int32 nAngle(((const SdrAngleItem*)pPoolItem)->GetValue());
+            const double fAngle(tan(((36000 - nAngle) * F_PI) / 18000.0));
+
+            ShearMarkedObj(rAllSnapRange.getCenter(), fAngle, true);
+        }
+
+        for(sal_uInt32 nm(0); nm < aSelection.size(); nm++)
+        {
+            SdrObject* pObj = aSelection[nm];
+
+            if(bUndo)
+            {
+                AddUndo(getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
+            }
+
+            pObj->ApplyNotPersistAttr(rAttr);
+        }
     }
 }
 
-void SdrEditView::MergeNotPersistAttrFromMarked(SfxItemSet& rAttr, sal_Bool /*bOnlyHardAttr*/) const
+void SdrEditView::MergeNotPersistAttrFromMarked(SfxItemSet& rAttr) const
 {
-    // bOnlyHardAttr hat hier keinerlei Wirkung
-    // Hier muss ausserdem noch der Nullpunkt und
-    // die PvPos berueksichtigt werden.
-    Rectangle aAllSnapRect(GetMarkedObjRect()); // !!! fuer PolyPt's und GluePt's aber bitte noch aendern !!!
-    long nAllSnapPosX=aAllSnapRect.Left();
-    long nAllSnapPosY=aAllSnapRect.Top();
-    long nAllSnapWdt=aAllSnapRect.GetWidth()-1;
-    long nAllSnapHgt=aAllSnapRect.GetHeight()-1;
-    // koennte mal zu CheckPossibilities mit rein
-    sal_Bool bMovProtect=sal_False,bMovProtectDC=sal_False;
-    sal_Bool bSizProtect=sal_False,bSizProtectDC=sal_False;
-    sal_Bool bPrintable =sal_True ,bPrintableDC=sal_False;
-    sal_Bool bVisible = sal_True, bVisibleDC=sal_False;
-    SdrLayerID nLayerId=0; sal_Bool bLayerDC=sal_False;
-    XubString aObjName;     sal_Bool bObjNameDC=sal_False,bObjNameSet=sal_False;
-    long nSnapPosX=0;      sal_Bool bSnapPosXDC=sal_False;
-    long nSnapPosY=0;      sal_Bool bSnapPosYDC=sal_False;
-    long nSnapWdt=0;       sal_Bool bSnapWdtDC=sal_False;
-    long nSnapHgt=0;       sal_Bool bSnapHgtDC=sal_False;
-    long nLogicWdt=0;      sal_Bool bLogicWdtDC=sal_False,bLogicWdtDiff=sal_False;
-    long nLogicHgt=0;      sal_Bool bLogicHgtDC=sal_False,bLogicHgtDiff=sal_False;
-    long nRotAngle=0;      sal_Bool bRotAngleDC=sal_False;
-    long nShrAngle=0;      sal_Bool bShrAngleDC=sal_False;
-    Rectangle aSnapRect;
-    Rectangle aLogicRect;
-    sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
-    for (sal_uIntPtr nm=0; nm<nMarkAnz; nm++) {
-        const SdrMark* pM=GetSdrMarkByIndex(nm);
-        const SdrObject* pObj=pM->GetMarkedSdrObj();
-        if (nm==0) {
-            nLayerId=pObj->GetLayer();
-            bMovProtect=pObj->IsMoveProtect();
-            bSizProtect=pObj->IsResizeProtect();
-            bPrintable =pObj->IsPrintable();
-            bVisible = pObj->IsVisible();
-            Rectangle aSnapRect2(pObj->GetSnapRect());
-            Rectangle aLogicRect2(pObj->GetLogicRect());
-            nSnapPosX=aSnapRect2.Left();
-            nSnapPosY=aSnapRect2.Top();
-            nSnapWdt=aSnapRect2.GetWidth()-1;
-            nSnapHgt=aSnapRect2.GetHeight()-1;
-            nLogicWdt=aLogicRect2.GetWidth()-1;
-            nLogicHgt=aLogicRect2.GetHeight()-1;
-            bLogicWdtDiff=nLogicWdt!=nSnapWdt;
-            bLogicHgtDiff=nLogicHgt!=nSnapHgt;
-            nRotAngle=pObj->GetRotateAngle();
-            nShrAngle=pObj->GetShearAngle();
-        } else {
-            if (!bLayerDC      && nLayerId   !=pObj->GetLayer())        bLayerDC=sal_True;
-            if (!bMovProtectDC && bMovProtect!=pObj->IsMoveProtect())   bMovProtectDC=sal_True;
-            if (!bSizProtectDC && bSizProtect!=pObj->IsResizeProtect()) bSizProtectDC=sal_True;
-            if (!bPrintableDC  && bPrintable !=pObj->IsPrintable())     bPrintableDC=sal_True;
-            if (!bVisibleDC    && bVisible !=pObj->IsVisible())         bVisibleDC=sal_True;
-            if (!bRotAngleDC   && nRotAngle  !=pObj->GetRotateAngle())  bRotAngleDC=sal_True;
-            if (!bShrAngleDC   && nShrAngle  !=pObj->GetShearAngle())   bShrAngleDC=sal_True;
-            if (!bSnapWdtDC || !bSnapHgtDC || !bSnapPosXDC || !bSnapPosYDC || !bLogicWdtDiff || !bLogicHgtDiff) {
-                aSnapRect=pObj->GetSnapRect();
-                if (nSnapPosX!=aSnapRect.Left()) bSnapPosXDC=sal_True;
-                if (nSnapPosY!=aSnapRect.Top()) bSnapPosYDC=sal_True;
-                if (nSnapWdt!=aSnapRect.GetWidth()-1) bSnapWdtDC=sal_True;
-                if (nSnapHgt!=aSnapRect.GetHeight()-1) bSnapHgtDC=sal_True;
+    if(areSdrObjectsSelected())
+    {
+        const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
+        const Rectangle aAllSnapRect(sdr::legacy::GetAllObjSnapRect(aSelection));
+        const sal_Int32 nAllSnapPosX(aAllSnapRect.Left());
+        const sal_Int32 nAllSnapPosY(aAllSnapRect.Top());
+        const sal_Int32 nAllSnapWdt(aAllSnapRect.GetWidth() - 1);
+        const sal_Int32 nAllSnapHgt(aAllSnapRect.GetHeight() - 1);
+
+        // koennte mal zu CheckPossibilities mit rein
+        bool bMovProtect(false);
+        bool bMovProtectDC(false);
+        bool bSizProtect(false);
+        bool bSizProtectDC(false);
+        bool bPrintable(true);
+        bool bPrintableDC(false);
+        bool bVisible(true);
+        bool bVisibleDC(false);
+        SdrLayerID nLayerId(0);
+        bool bLayerDC(false);
+        XubString aObjName;
+        bool bObjNameDC(false);
+        bool bObjNameSet(false);
+
+        sal_Int32 nSnapPosX(0);
+        sal_Int32 nSnapPosY(0);
+        sal_Int32 nSnapWdt(0);
+        sal_Int32 nSnapHgt(0);
+        sal_Int32 nLogicWdt(0);
+        sal_Int32 nLogicHgt(0);
+        sal_Int32 nRotAngle(0);
+        sal_Int32 nShrAngle(0);
+        bool bSnapPosXDC(false);
+        bool bSnapPosYDC(false);
+        bool bSnapWdtDC(false);
+        bool bSnapHgtDC(false);
+        bool bLogicWdtDC(false);
+        bool bLogicWdtDiff(false);
+        bool bLogicHgtDC(false);
+        bool bLogicHgtDiff(false);
+        bool bRotAngleDC(false);
+        bool bShrAngleDC(false);
+        Rectangle aSnapRect;
+        Rectangle aLogicRect;
+
+        for(sal_uInt32 nm(0); nm < aSelection.size(); nm++)
+        {
+            const SdrObject* pObj = aSelection[nm];
+
+            if(!nm)
+            {
+                nLayerId = pObj->GetLayer();
+                bMovProtect = pObj->IsMoveProtect();
+                bSizProtect = pObj->IsResizeProtect();
+                bPrintable  = pObj->IsPrintable();
+                bVisible = pObj->IsVisible();
+                const Rectangle aSnapRect2(sdr::legacy::GetSnapRect(*pObj));
+                const Rectangle aLogicRect2(sdr::legacy::GetLogicRect(*pObj));
+                nSnapPosX = aSnapRect2.Left();
+                nSnapPosY = aSnapRect2.Top();
+                nSnapWdt = aSnapRect2.GetWidth() - 1;
+                nSnapHgt = aSnapRect2.GetHeight() - 1;
+                nLogicWdt = aLogicRect2.GetWidth() - 1;
+                nLogicHgt = aLogicRect2.GetHeight() - 1;
+                bLogicWdtDiff = nLogicWdt != nSnapWdt;
+                bLogicHgtDiff = nLogicHgt != nSnapHgt;
+                nRotAngle = sdr::legacy::GetRotateAngle(*pObj);
+                nShrAngle = sdr::legacy::GetShearAngleX(*pObj);
             }
-            if (!bLogicWdtDC || !bLogicHgtDC || !bLogicWdtDiff || !bLogicHgtDiff) {
-                aLogicRect=pObj->GetLogicRect();
-                if (nLogicWdt!=aLogicRect.GetWidth()-1) bLogicWdtDC=sal_True;
-                if (nLogicHgt!=aLogicRect.GetHeight()-1) bLogicHgtDC=sal_True;
-                if (!bLogicWdtDiff && aSnapRect.GetWidth()!=aLogicRect.GetWidth()) bLogicWdtDiff=sal_True;
-                if (!bLogicHgtDiff && aSnapRect.GetHeight()!=aLogicRect.GetHeight()) bLogicHgtDiff=sal_True;
+            else
+            {
+                if(!bLayerDC && nLayerId != pObj->GetLayer())
+                {
+                    bLayerDC = true;
+                }
+
+                if(!bMovProtectDC && bMovProtect != pObj->IsMoveProtect())
+                {
+                    bMovProtectDC = true;
+                }
+
+                if(!bSizProtectDC && bSizProtect != pObj->IsResizeProtect())
+                {
+                    bSizProtectDC = true;
+                }
+
+                if(!bPrintableDC && bPrintable != pObj->IsPrintable())
+                {
+                    bPrintableDC = true;
+                }
+
+                if(!bVisibleDC && bVisible != pObj->IsVisible())
+                {
+                    bVisibleDC = true;
+                }
+
+                if(!bRotAngleDC && nRotAngle != sdr::legacy::GetRotateAngle(*pObj))
+                {
+                    bRotAngleDC = true;
+                }
+
+                if(!bShrAngleDC && nShrAngle != sdr::legacy::GetShearAngleX(*pObj))
+                {
+                    bShrAngleDC = true;
+                }
+
+                if(!bSnapWdtDC || !bSnapHgtDC || !bSnapPosXDC || !bSnapPosYDC || !bLogicWdtDiff || !bLogicHgtDiff)
+                {
+                    aSnapRect = sdr::legacy::GetSnapRect(*pObj);
+
+                    if(nSnapPosX != aSnapRect.Left())
+                    {
+                        bSnapPosXDC = true;
+                    }
+
+                    if(nSnapPosY != aSnapRect.Top())
+                    {
+                        bSnapPosYDC = true;
+                    }
+
+                    if(nSnapWdt != aSnapRect.GetWidth() - 1)
+                    {
+                        bSnapWdtDC = true;
+                    }
+
+                    if(nSnapHgt != aSnapRect.GetHeight() - 1)
+                    {
+                        bSnapHgtDC = true;
+                    }
+                }
+
+                if(!bLogicWdtDC || !bLogicHgtDC || !bLogicWdtDiff || !bLogicHgtDiff)
+                {
+                    aLogicRect = sdr::legacy::GetLogicRect(*pObj);
+
+                    if(nLogicWdt != aLogicRect.GetWidth() - 1)
+                    {
+                        bLogicWdtDC = true;
+                    }
+
+                    if(nLogicHgt != aLogicRect.GetHeight() - 1)
+                    {
+                        bLogicHgtDC = true;
+                    }
+
+                    if(!bLogicWdtDiff && aSnapRect.GetWidth() != aLogicRect.GetWidth())
+                    {
+                        bLogicWdtDiff = true;
+                    }
+
+                    if(!bLogicHgtDiff && aSnapRect.GetHeight() != aLogicRect.GetHeight())
+                    {
+                        bLogicHgtDiff = true;
+                    }
+                }
+            }
+
+            if(!bObjNameDC)
+            {
+                if(!bObjNameSet)
+                {
+                    aObjName = pObj->GetName();
+                }
+                else
+                {
+                    if(aObjName != pObj->GetName())
+                    {
+                        bObjNameDC = true;
+                    }
+                }
             }
         }
-        if (!bObjNameDC ) {
-            if (!bObjNameSet) {
-                aObjName=pObj->GetName();
-            } else {
-                if (aObjName!=pObj->GetName()) bObjNameDC=sal_True;
-            }
+
+        if(bSnapPosXDC || nAllSnapPosX != nSnapPosX)
+        {
+            rAttr.Put(SdrMetricItem(SDRATTR_ALLPOSITIONX, nAllSnapPosX));
         }
-    }
 
-    if (bSnapPosXDC || nAllSnapPosX!=nSnapPosX) rAttr.Put(SdrAllPositionXItem(nAllSnapPosX));
-    if (bSnapPosYDC || nAllSnapPosY!=nSnapPosY) rAttr.Put(SdrAllPositionYItem(nAllSnapPosY));
-    if (bSnapWdtDC  || nAllSnapWdt !=nSnapWdt ) rAttr.Put(SdrAllSizeWidthItem(nAllSnapWdt));
-    if (bSnapHgtDC  || nAllSnapHgt !=nSnapHgt ) rAttr.Put(SdrAllSizeHeightItem(nAllSnapHgt));
+        if(bSnapPosYDC || nAllSnapPosY != nSnapPosY)
+        {
+            rAttr.Put(SdrMetricItem(SDRATTR_ALLPOSITIONY, nAllSnapPosY));
+        }
 
-    // Items fuer reine Transformationen
-    rAttr.Put(SdrMoveXItem());
-    rAttr.Put(SdrMoveYItem());
-    rAttr.Put(SdrResizeXOneItem());
-    rAttr.Put(SdrResizeYOneItem());
-    rAttr.Put(SdrRotateOneItem());
-    rAttr.Put(SdrHorzShearOneItem());
-    rAttr.Put(SdrVertShearOneItem());
+        if(bSnapWdtDC || nAllSnapWdt != nSnapWdt)
+        {
+            rAttr.Put(SdrMetricItem(SDRATTR_ALLSIZEWIDTH, nAllSnapWdt));
+        }
 
-    if (nMarkAnz>1) {
-        rAttr.Put(SdrResizeXAllItem());
-        rAttr.Put(SdrResizeYAllItem());
-        rAttr.Put(SdrRotateAllItem());
-        rAttr.Put(SdrHorzShearAllItem());
-        rAttr.Put(SdrVertShearAllItem());
-    }
+        if(bSnapHgtDC || nAllSnapHgt != nSnapHgt)
+        {
+            rAttr.Put(SdrMetricItem(SDRATTR_ALLSIZEHEIGHT, nAllSnapHgt));
+        }
 
-    if(eDragMode == SDRDRAG_ROTATE || eDragMode == SDRDRAG_MIRROR)
-    {
-        rAttr.Put(SdrTransformRef1XItem(GetRef1().X()));
-        rAttr.Put(SdrTransformRef1YItem(GetRef1().Y()));
-    }
+        // Items fuer reine Transformationen
+        rAttr.Put(SdrMetricItem(SDRATTR_MOVEX, 0));
+        rAttr.Put(SdrMetricItem(SDRATTR_MOVEY, 0));
+        rAttr.Put(SdrFractionItem(SDRATTR_RESIZEXONE, Fraction(1,1)));
+        rAttr.Put(SdrFractionItem(SDRATTR_RESIZEYONE, Fraction(1,1)));
+        rAttr.Put(SdrAngleItem(SDRATTR_ROTATEONE, 0));
+        rAttr.Put(SdrAngleItem(SDRATTR_HORZSHEARONE, 0));
+        rAttr.Put(SdrAngleItem(SDRATTR_VERTSHEARONE, 0));
 
-    if(eDragMode == SDRDRAG_MIRROR)
-    {
-        rAttr.Put(SdrTransformRef2XItem(GetRef2().X()));
-        rAttr.Put(SdrTransformRef2YItem(GetRef2().Y()));
+        if(aSelection.size() > 1)
+        {
+            rAttr.Put(SdrFractionItem(SDRATTR_RESIZEXALL, Fraction(1,1)));
+            rAttr.Put(SdrFractionItem(SDRATTR_RESIZEYALL, Fraction(1,1)));
+            rAttr.Put(SdrAngleItem(SDRATTR_ROTATEALL, 0));
+            rAttr.Put(SdrAngleItem(SDRATTR_HORZSHEARALL, 0));
+            rAttr.Put(SdrAngleItem(SDRATTR_VERTSHEARALL, 0));
+        }
+
+        if(SDRDRAG_ROTATE == GetDragMode() || SDRDRAG_MIRROR == GetDragMode())
+        {
+            rAttr.Put(SdrMetricItem(SDRATTR_TRANSFORMREF1X, basegfx::fround(GetRef1().getX())));
+            rAttr.Put(SdrMetricItem(SDRATTR_TRANSFORMREF1Y, basegfx::fround(GetRef1().getY())));
+        }
+
+        if(SDRDRAG_MIRROR == GetDragMode())
+        {
+            rAttr.Put(SdrMetricItem(SDRATTR_TRANSFORMREF2X, basegfx::fround(GetRef2().getX())));
+            rAttr.Put(SdrMetricItem(SDRATTR_TRANSFORMREF2Y, basegfx::fround(GetRef2().getY())));
+        }
     }
 }
 
-SfxItemSet SdrEditView::GetAttrFromMarked(sal_Bool bOnlyHardAttr) const
+SfxItemSet SdrEditView::GetAttrFromMarked(bool bOnlyHardAttr) const
 {
-    SfxItemSet aSet(pMod->GetItemPool());
-    MergeAttrFromMarked(aSet,bOnlyHardAttr);
-    //the EE_FEATURE items should not be set with SetAttrToMarked (see error message there)
-    //so we do not set them here
-    // #i32448#
-    // Do not disable, but clear the items.
-    aSet.ClearItem(EE_FEATURE_TAB);
-    aSet.ClearItem(EE_FEATURE_LINEBR);
-    aSet.ClearItem(EE_FEATURE_NOTCONV);
-    aSet.ClearItem(EE_FEATURE_FIELD);
+    SfxItemSet aSet(getSdrModelFromSdrView().GetItemPool());
+
+    if(areSdrObjectsSelected())
+    {
+        MergeAttrFromMarked(aSet, bOnlyHardAttr);
+        //the EE_FEATURE items should not be set with SetAttrToMarked (see error message there)
+        //so we do not set them here
+        // #i32448#
+        // Do not disable, but clear the items.
+        aSet.ClearItem(EE_FEATURE_TAB);
+        aSet.ClearItem(EE_FEATURE_LINEBR);
+        aSet.ClearItem(EE_FEATURE_NOTCONV);
+        aSet.ClearItem(EE_FEATURE_FIELD);
+    }
+
     return aSet;
 }
 
-void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, sal_Bool bOnlyHardAttr) const
+void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, bool bOnlyHardAttr) const
 {
-    sal_uInt32 nMarkAnz(GetMarkedObjectCount());
-
-    for(sal_uInt32 a(0); a < nMarkAnz; a++)
+    if(areSdrObjectsSelected())
     {
-        // #80277# merging was done wrong in the prev version
-        //const SfxItemSet& rSet = GetMarkedObjectByIndex()->GetItemSet();
-        const SfxItemSet& rSet = GetMarkedObjectByIndex(a)->GetMergedItemSet();
-        SfxWhichIter aIter(rSet);
-        sal_uInt16 nWhich(aIter.FirstWhich());
+        const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
 
-        while(nWhich)
+        for(sal_uInt32 a(0); a < aSelection.size(); a++)
         {
-            if(!bOnlyHardAttr)
-            {
-                if(SFX_ITEM_DONTCARE == rSet.GetItemState(nWhich, sal_False))
-                    rAttr.InvalidateItem(nWhich);
-                else
-                    rAttr.MergeValue(rSet.Get(nWhich), sal_True);
-            }
-            else if(SFX_ITEM_SET == rSet.GetItemState(nWhich, sal_False))
-            {
-                const SfxPoolItem& rItem = rSet.Get(nWhich);
-                rAttr.MergeValue(rItem, sal_True);
-            }
+            const SfxItemSet& rSet = aSelection[a]->GetMergedItemSet();
+            SfxWhichIter aIter(rSet);
+            sal_uInt16 nWhich(aIter.FirstWhich());
 
-            nWhich = aIter.NextWhich();
+            while(nWhich)
+            {
+                if(!bOnlyHardAttr)
+                {
+                    if(SFX_ITEM_DONTCARE == rSet.GetItemState(nWhich, false))
+                    {
+                        rAttr.InvalidateItem(nWhich);
+                    }
+                    else
+                    {
+                        rAttr.MergeValue(rSet.Get(nWhich), true);
+                    }
+                }
+                else if(SFX_ITEM_SET == rSet.GetItemState(nWhich, false))
+                {
+                    const SfxPoolItem& rItem = rSet.Get(nWhich);
+
+                    rAttr.MergeValue(rItem, true);
+                }
+
+                nWhich = aIter.NextWhich();
+            }
         }
     }
 }
 
-void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, sal_Bool bReplaceAll)
+void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
 {
-    if (AreObjectsMarked())
+    if (areSdrObjectsSelected())
     {
 #ifdef DBG_UTIL
         {
-            sal_Bool bHasEEFeatureItems=sal_False;
+            bool bHasEEFeatureItems=false;
             SfxItemIter aIter(rAttr);
             const SfxPoolItem* pItem=aIter.FirstItem();
-            while (!bHasEEFeatureItems && pItem!=NULL) {
+            while (!bHasEEFeatureItems && pItem)
+            {
                 if (!IsInvalidItem(pItem)) {
                     sal_uInt16 nW=pItem->Which();
-                    if (nW>=EE_FEATURE_START && nW<=EE_FEATURE_END) bHasEEFeatureItems=sal_True;
+                    if (nW>=EE_FEATURE_START && nW<=EE_FEATURE_END) bHasEEFeatureItems=true;
                 }
                 pItem=aIter.NextItem();
             }
@@ -935,33 +1296,41 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, sal_Bool bReplaceAll)
         //          which ids from the text. We do that later but here we remember
         //          all character attribute which id's that are set.
         std::vector<sal_uInt16> aCharWhichIds;
+
         {
             SfxItemIter aIter(rAttr);
-            const SfxPoolItem* pItem=aIter.FirstItem();
-            while( pItem!=NULL )
+            const SfxPoolItem* pItem = aIter.FirstItem();
+
+            while(pItem)
             {
-                if (!IsInvalidItem(pItem))
+                if(!IsInvalidItem(pItem))
                 {
-                    sal_uInt16 nWhich = pItem->Which();
-                    if (nWhich>=EE_CHAR_START && nWhich<=EE_CHAR_END)
-                        aCharWhichIds.push_back( nWhich );
+                    const sal_uInt16 nWhich(pItem->Which());
+
+                    if(nWhich >= EE_CHAR_START && nWhich <= EE_CHAR_END)
+                    {
+                        aCharWhichIds.push_back(nWhich);
+                    }
                 }
-                pItem=aIter.NextItem();
+
+                pItem = aIter.NextItem();
             }
         }
 
         // Joe, 2.7.98: Damit Undo nach Format.Standard auch die Textattribute korrekt restauriert
-        sal_Bool bHasEEItems=SearchOutlinerItems(rAttr,bReplaceAll);
+        bool bHasEEItems(SearchOutlinerItems(rAttr, bReplaceAll));
 
         // AW 030100: save additional geom info when para or char attributes
         // are changed and the geom form of the text object might be changed
-        sal_Bool bPossibleGeomChange(sal_False);
+        bool bPossibleGeomChange(false);
         SfxWhichIter aIter(rAttr);
-        sal_uInt16 nWhich = aIter.FirstWhich();
+        sal_uInt16 nWhich(aIter.FirstWhich());
+
         while(!bPossibleGeomChange && nWhich)
         {
-            SfxItemState eState = rAttr.GetItemState(nWhich);
-            if(eState == SFX_ITEM_SET)
+            const SfxItemState eState(rAttr.GetItemState(nWhich));
+
+            if(SFX_ITEM_SET == eState)
             {
                 if((nWhich >= SDRATTR_TEXT_MINFRAMEHEIGHT && nWhich <= SDRATTR_TEXT_CONTOURFRAME)
                     || nWhich == SDRATTR_3DOBJ_PERCENT_DIAGONAL
@@ -970,54 +1339,59 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, sal_Bool bReplaceAll)
                     || nWhich == SDRATTR_3DOBJ_END_ANGLE
                     || nWhich == SDRATTR_3DSCENE_DISTANCE)
                 {
-                    bPossibleGeomChange = sal_True;
+                    bPossibleGeomChange = true;
                 }
             }
+
             nWhich = aIter.NextWhich();
         }
 
-        const bool bUndo = IsUndoEnabled();
-        if( bUndo )
+        const bool bUndo(IsUndoEnabled());
+
+        if(bUndo)
         {
             XubString aStr;
-            ImpTakeDescriptionStr(STR_EditSetAttributes,aStr);
+
+            TakeMarkedDescriptionString(STR_EditSetAttributes, aStr);
             BegUndo(aStr);
         }
 
-        const sal_uInt32 nMarkAnz(GetMarkedObjectCount());
+        const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
         std::vector< E3DModifySceneSnapRectUpdater* > aUpdaters;
 
         // create ItemSet without SFX_ITEM_DONTCARE. Put()
         // uses it's second parameter (bInvalidAsDefault) to
         // remove all such items to set them to default.
         SfxItemSet aAttr(*rAttr.GetPool(), rAttr.GetRanges());
-        aAttr.Put(rAttr, sal_True);
+        aAttr.Put(rAttr, true);
 
         // #i38135#
         bool bResetAnimationTimer(false);
 
-        for (sal_uIntPtr nm=0; nm<nMarkAnz; nm++)
+        for(sal_uInt32 nm(0); nm < aSelection.size(); nm++)
         {
-            SdrMark* pM=GetSdrMarkByIndex(nm);
-            SdrObject* pObj = pM->GetMarkedSdrObj();
+            SdrObject* pObj = aSelection[nm];
 
-            if( bUndo )
+            if(bUndo)
             {
-                std::vector< SdrUndoAction* > vConnectorUndoActions;
-                SdrEdgeObj* pEdgeObj = dynamic_cast< SdrEdgeObj* >( pObj );
-                if ( pEdgeObj )
-                    bPossibleGeomChange = sal_True;
-                else if( bUndo )
-                    vConnectorUndoActions = CreateConnectorUndo( *pObj );
+                if(pObj->IsSdrEdgeObj())
+                {
+                    bPossibleGeomChange = true;
+                }
+                else if(bUndo)
+                {
+                    std::vector< SdrUndoAction* > vConnectorUndoActions;
 
-                AddUndoActions( vConnectorUndoActions );
+                    vConnectorUndoActions = CreateConnectorUndo(*pObj);
+                    AddUndoActions( vConnectorUndoActions );
+                }
             }
 
             // new geometry undo
             if(bPossibleGeomChange && bUndo)
             {
                 // save position and size of obect, too
-                AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
+                AddUndo( getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
             }
 
             if( bUndo )
@@ -1031,7 +1405,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, sal_Bool bReplaceAll)
                 const bool bRescueText = dynamic_cast< SdrTextObj* >(pObj) != 0;
 
                 // add attribute undo
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj,sal_False,bHasEEItems || bPossibleGeomChange || bRescueText));
+                AddUndo(getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoAttrObject(*pObj, false, bHasEEItems || bPossibleGeomChange || bRescueText));
             }
 
             // set up a scxene updater if object is a 3d object
@@ -1043,24 +1417,16 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, sal_Bool bReplaceAll)
             // set attributes at object
             pObj->SetMergedItemSetAndBroadcast(aAttr, bReplaceAll);
 
-            if(pObj->ISA(SdrTextObj))
+            SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >(pObj);
+
+            if(pTextObj)
             {
-                SdrTextObj* pTextObj = ((SdrTextObj*)pObj);
-
-                if(!aCharWhichIds.empty())
+                if(aCharWhichIds.size())
                 {
-                    Rectangle aOldBoundRect = pTextObj->GetLastBoundRect();
+                    const SdrObjectChangeBroadcaster aSdrObjectChangeBroadcaster(*pTextObj, HINT_OBJCHG_ATTR);
 
-                    // #110094#-14 pTextObj->SendRepaintBroadcast(pTextObj->GetBoundRect());
                     pTextObj->RemoveOutlinerCharacterAttribs( aCharWhichIds );
-
-                    // object has changed, should be called form
-                    // RemoveOutlinerCharacterAttribs. This will change when the text
-                    // object implementation changes.
                     pTextObj->SetChanged();
-
-                    pTextObj->BroadcastObjectChange();
-                    pTextObj->SendUserCall(SDRUSERCALL_CHGATTR, aOldBoundRect);
                 }
             }
 
@@ -1075,7 +1441,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, sal_Bool bReplaceAll)
         }
 
         // fire scene updaters
-        while(!aUpdaters.empty())
+        while(aUpdaters.size())
         {
             delete aUpdaters.back();
             aUpdaters.pop_back();
@@ -1084,76 +1450,99 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, sal_Bool bReplaceAll)
         // #i38135#
         if(bResetAnimationTimer)
         {
-            SetAnimationTimer(0L);
+            SetAnimationTimer(0);
         }
 
         // besser vorher checken, was gemacht werden soll:
         // pObj->SetAttr() oder SetNotPersistAttr()
         // !!! fehlende Implementation !!!
-        SetNotPersistAttrToMarked(rAttr,bReplaceAll);
+        SetNotPersistAttrToMarked(rAttr, bReplaceAll);
 
-        if( bUndo )
+        if(bUndo)
+        {
             EndUndo();
+        }
     }
 }
 
 SfxStyleSheet* SdrEditView::GetStyleSheetFromMarked() const
 {
-    SfxStyleSheet* pRet=NULL;
-    sal_Bool b1st=sal_True;
-    sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
-    for (sal_uIntPtr nm=0; nm<nMarkAnz; nm++) {
-        SdrMark* pM=GetSdrMarkByIndex(nm);
-        SfxStyleSheet* pSS=pM->GetMarkedSdrObj()->GetStyleSheet();
-        if (b1st) pRet=pSS;
-        else if (pRet!=pSS) return NULL; // verschiedene StyleSheets
-        b1st=sal_False;
+    SfxStyleSheet* pRet = 0;
+
+    if(areSdrObjectsSelected())
+    {
+        const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
+
+        for(sal_uInt32 nm(0); nm < aSelection.size(); nm++)
+        {
+            SfxStyleSheet* pSS = aSelection[nm]->GetStyleSheet();
+
+            if(!nm)
+            {
+                pRet = pSS;
+            }
+            else if(pRet != pSS)
+            {
+                return 0; // different StyleSheets
+            }
+        }
     }
+
     return pRet;
 }
 
-void SdrEditView::SetStyleSheetToMarked(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr)
+void SdrEditView::SetStyleSheetToMarked(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr)
 {
-    if (AreObjectsMarked())
+    if(areSdrObjectsSelected())
     {
-        const bool bUndo = IsUndoEnabled();
+        const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
+        const bool bUndo(IsUndoEnabled());
 
-        if( bUndo )
+        if(bUndo)
         {
             XubString aStr;
-            if (pStyleSheet!=NULL)
-                ImpTakeDescriptionStr(STR_EditSetStylesheet,aStr);
+
+            if(pStyleSheet)
+            {
+                TakeMarkedDescriptionString(STR_EditSetStylesheet, aStr);
+            }
             else
-                ImpTakeDescriptionStr(STR_EditDelStylesheet,aStr);
+            {
+                TakeMarkedDescriptionString(STR_EditDelStylesheet, aStr);
+            }
+
             BegUndo(aStr);
         }
 
-        sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
-        for (sal_uIntPtr nm=0; nm<nMarkAnz; nm++)
+        for(sal_uInt32 nm(0); nm < aSelection.size(); nm++)
         {
-            SdrMark* pM=GetSdrMarkByIndex(nm);
-            if( bUndo )
+            SdrObject* pMarkedSdrObject = aSelection[nm];
+
+            if(bUndo)
             {
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pM->GetMarkedSdrObj()));
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pM->GetMarkedSdrObj(),true,true));
+                AddUndo(getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoGeoObject(*pMarkedSdrObject));
+                AddUndo(getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoAttrObject(*pMarkedSdrObject, true, true));
             }
-            pM->GetMarkedSdrObj()->SetStyleSheet(pStyleSheet,bDontRemoveHardAttr);
+
+            pMarkedSdrObject->SetStyleSheet(pStyleSheet, bDontRemoveHardAttr);
         }
 
-        if( bUndo )
+        if(bUndo)
+        {
             EndUndo();
+        }
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/* new interface src537 */
-sal_Bool SdrEditView::GetAttributes(SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr) const
+bool SdrEditView::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const
 {
-    if(GetMarkedObjectCount())
+    if(areSdrObjectsSelected())
     {
-        rTargetSet.Put(GetAttrFromMarked(bOnlyHardAttr), sal_False);
-        return sal_True;
+        rTargetSet.Put(GetAttrFromMarked(bOnlyHardAttr), false);
+
+        return true;
     }
     else
     {
@@ -1161,33 +1550,43 @@ sal_Bool SdrEditView::GetAttributes(SfxItemSet& rTargetSet, sal_Bool bOnlyHardAt
     }
 }
 
-sal_Bool SdrEditView::SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll)
+bool SdrEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
 {
-    if (GetMarkedObjectCount()!=0) {
-        SetAttrToMarked(rSet,bReplaceAll);
-        return sal_True;
-    } else {
-        return SdrMarkView::SetAttributes(rSet,bReplaceAll);
+    if(areSdrObjectsSelected())
+    {
+        SetAttrToMarked(rSet, bReplaceAll);
+
+        return true;
+    }
+    else
+    {
+        return SdrMarkView::SetAttributes(rSet, bReplaceAll);
     }
 }
 
-SfxStyleSheet* SdrEditView::GetStyleSheet() const // SfxStyleSheet* SdrEditView::GetStyleSheet(sal_Bool& rOk) const
+SfxStyleSheet* SdrEditView::GetStyleSheet() const
 {
-    if (GetMarkedObjectCount()!=0) {
-        //rOk=sal_True;
+    if(areSdrObjectsSelected())
+    {
         return GetStyleSheetFromMarked();
-    } else {
-        return SdrMarkView::GetStyleSheet(); // SdrMarkView::GetStyleSheet(rOk);
+    }
+    else
+    {
+        return SdrMarkView::GetStyleSheet();
     }
 }
 
-sal_Bool SdrEditView::SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr)
+bool SdrEditView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr)
 {
-    if (GetMarkedObjectCount()!=0) {
-        SetStyleSheetToMarked(pStyleSheet,bDontRemoveHardAttr);
-        return sal_True;
-    } else {
-        return SdrMarkView::SetStyleSheet(pStyleSheet,bDontRemoveHardAttr);
+    if(areSdrObjectsSelected())
+    {
+        SetStyleSheetToMarked(pStyleSheet, bDontRemoveHardAttr);
+
+        return true;
+    }
+    else
+    {
+        return SdrMarkView::SetStyleSheet(pStyleSheet, bDontRemoveHardAttr);
     }
 }
 
@@ -1195,586 +1594,657 @@ sal_Bool SdrEditView::SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRe
 
 SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
 {
-    SfxItemSet aRetSet(pMod->GetItemPool(),   // SID_ATTR_TRANSFORM_... aus s:svxids.hrc
-                       SID_ATTR_TRANSFORM_POS_X,SID_ATTR_TRANSFORM_ANGLE,
-                       SID_ATTR_TRANSFORM_PROTECT_POS,SID_ATTR_TRANSFORM_AUTOHEIGHT,
-                       SDRATTR_ECKENRADIUS,SDRATTR_ECKENRADIUS,
-                       0);
-    if (AreObjectsMarked()) {
-        SfxItemSet aMarkAttr(GetAttrFromMarked(sal_False)); // wg. AutoGrowHeight und Eckenradius
-        Rectangle aRect(GetMarkedObjRect());
+    SfxItemSet aRetSet(getSdrModelFromSdrView().GetItemPool(),   // SID_ATTR_TRANSFORM_... aus s:svxids.hrc
+        SID_ATTR_TRANSFORM_POS_X, SID_ATTR_TRANSFORM_ANGLE,
+        SID_ATTR_TRANSFORM_PROTECT_POS, SID_ATTR_TRANSFORM_AUTOHEIGHT,
+        SDRATTR_ECKENRADIUS, SDRATTR_ECKENRADIUS,
+        0, 0);
 
-        if(GetSdrPageView())
+    if(areSdrObjectsSelected())
+    {
+        const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
+        basegfx::B2DRange aRange(getMarkedObjectSnapRange());
+
+        if(aRange.isEmpty())
         {
-            GetSdrPageView()->LogicToPagePos(aRect);
+            return aRetSet;
         }
 
-        // Position
-        aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_POS_X,aRect.Left()));
-        aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_POS_Y,aRect.Top()));
+        const basegfx::B2DPoint aPageOrigin(GetSdrPageView()
+            ? GetSdrPageView()->GetPageOrigin()
+            : basegfx::B2DPoint(0.0, 0.0));
 
-        // Groesse
-        long nResizeRefX=aRect.Left();
-        long nResizeRefY=aRect.Top();
-        if (eDragMode==SDRDRAG_ROTATE) { // Drehachse auch als Referenz fuer Resize
-            nResizeRefX=aRef1.X();
-            nResizeRefY=aRef1.Y();
-        }
-        aRetSet.Put(SfxUInt32Item(SID_ATTR_TRANSFORM_WIDTH,aRect.Right()-aRect.Left()));
-        aRetSet.Put(SfxUInt32Item(SID_ATTR_TRANSFORM_HEIGHT,aRect.Bottom()-aRect.Top()));
-        aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_RESIZE_REF_X,nResizeRefX));
-        aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_RESIZE_REF_Y,nResizeRefY));
+        aRange.transform(basegfx::tools::createTranslateB2DHomMatrix(-aPageOrigin));
 
-        Point aRotateAxe(aRef1);
+        // translation
+        aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_POS_X, basegfx::fround(aRange.getMinX())));
+        aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_POS_Y, basegfx::fround(aRange.getMinY())));
 
-        if(GetSdrPageView())
+        // scale
+        double fResizeRefX(aRange.getMinX());
+        double fResizeRefY(aRange.getMinY());
+
+        if(SDRDRAG_ROTATE == GetDragMode())
         {
-            GetSdrPageView()->LogicToPagePos(aRotateAxe);
+            // rotation axis also for scale
+            fResizeRefX = GetRef1().getX();
+            fResizeRefY = GetRef1().getY();
         }
 
-        // Drehung
-        long nRotateRefX=aRect.Center().X();
-        long nRotateRefY=aRect.Center().Y();
-        if (eDragMode==SDRDRAG_ROTATE) {
-            nRotateRefX=aRotateAxe.X();
-            nRotateRefY=aRotateAxe.Y();
-        }
-        aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_ANGLE,GetMarkedObjRotate()));
-        aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_ROT_X,nRotateRefX));
-        aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_ROT_Y,nRotateRefY));
+        aRetSet.Put(SfxUInt32Item(SID_ATTR_TRANSFORM_WIDTH,basegfx::fround(aRange.getWidth())));
+        aRetSet.Put(SfxUInt32Item(SID_ATTR_TRANSFORM_HEIGHT,basegfx::fround(aRange.getHeight())));
+        aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_RESIZE_REF_X,basegfx::fround(fResizeRefX)));
+        aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_RESIZE_REF_Y,basegfx::fround(fResizeRefY)));
 
-        // Shear
-        long nShearRefX=aRect.Left();
-        long nShearRefY=aRect.Bottom();
-        if (eDragMode==SDRDRAG_ROTATE) { // Drehachse auch als Referenz fuer Shear
-            nShearRefX=aRotateAxe.X();
-            nShearRefY=aRotateAxe.Y();
-        }
-        aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_SHEAR,GetMarkedObjShear()));
-        aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_SHEAR_X,nShearRefX));
-        aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_SHEAR_Y,nShearRefY));
+        basegfx::B2DPoint aRotateAxe(GetRef1() - aPageOrigin);
 
-        // Pruefen der einzelnen Objekte, ob Objekte geschuetzt sind
-        const SdrMarkList& rMarkList=GetMarkedObjectList();
-        sal_uIntPtr nMarkCount=rMarkList.GetMarkCount();
-        SdrObject* pObj=rMarkList.GetMark(0)->GetMarkedSdrObj();
-        sal_Bool bPosProt=pObj->IsMoveProtect();
-        sal_Bool bSizProt=pObj->IsResizeProtect();
-        sal_Bool bPosProtDontCare=sal_False;
-        sal_Bool bSizProtDontCare=sal_False;
-        for (sal_uIntPtr i=1; i<nMarkCount && (!bPosProtDontCare || !bSizProtDontCare); i++) {
-            pObj=rMarkList.GetMark(i)->GetMarkedSdrObj();
-            if (bPosProt!=pObj->IsMoveProtect()) bPosProtDontCare=sal_True;
-            if (bSizProt!=pObj->IsResizeProtect()) bSizProtDontCare=sal_True;
+        // rotation
+        double fRotateRefX(aRange.getCenterX());
+        double fRotateRefY(aRange.getCenterY());
+
+        if(SDRDRAG_ROTATE == GetDragMode())
+        {
+            fRotateRefX = aRotateAxe.getX();
+            fRotateRefY = aRotateAxe.getY();
         }
 
-        // InvalidateItem setzt das Item auf DONT_CARE
-        if (bPosProtDontCare) {
+        const double fAllRotation(GetMarkedObjRotate());
+        const sal_Int32 nOldAllRot((basegfx::fround(((F_2PI - fAllRotation) * 18000.0) / F_PI)) % 36000);
+
+        aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_ANGLE,nOldAllRot));
+        aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_ROT_X,basegfx::fround(fRotateRefX)));
+        aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_ROT_Y,basegfx::fround(fRotateRefY)));
+
+        // shear
+        double fShearRefX(aRange.getMinX());
+        double fShearRefY(aRange.getMaxY());
+
+        if(SDRDRAG_ROTATE == GetDragMode())
+        {
+            // rotation axis also for shear
+            fShearRefX = aRotateAxe.getX();
+            fShearRefY = aRotateAxe.getY();
+        }
+
+        double fAllShearX(GetMarkedObjShearX());
+        const double fMaxShearRange(F_PI2 * (89.0/90.0));
+
+        fAllShearX = basegfx::snapToRange(fAllShearX, -F_PI, F_PI);
+        fAllShearX = basegfx::clamp(fAllShearX, -fMaxShearRange, fMaxShearRange);
+
+        const sal_Int32 nOldAllShearX(basegfx::fround(((-fAllShearX) * 18000.0) / F_PI));
+
+        aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_SHEAR,nOldAllShearX));
+        aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_SHEAR_X,basegfx::fround(fShearRefX)));
+        aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_SHEAR_Y,basegfx::fround(fShearRefY)));
+
+        // check single objects for translation/scale protection
+        SdrObject* pObj = aSelection[0];
+        bool bPosProt(pObj->IsMoveProtect());
+        bool bSizProt(pObj->IsResizeProtect());
+        bool bPosProtDontCare(false);
+        bool bSizProtDontCare(false);
+
+        for(sal_uInt32 i(1); i < aSelection.size() && (!bPosProtDontCare || !bSizProtDontCare); i++)
+        {
+            pObj = aSelection[i];
+
+            if(bPosProt != pObj->IsMoveProtect())
+            {
+                bPosProtDontCare = true;
+            }
+
+            if(bSizProt != pObj->IsResizeProtect())
+            {
+                bSizProtDontCare = true;
+            }
+        }
+
+        // use InvalidateItem to set to DONT_CARE if needed
+        if(bPosProtDontCare)
+        {
             aRetSet.InvalidateItem(SID_ATTR_TRANSFORM_PROTECT_POS);
-        } else {
+        }
+        else
+        {
             aRetSet.Put(SfxBoolItem(SID_ATTR_TRANSFORM_PROTECT_POS,bPosProt));
         }
-        if (bSizProtDontCare) {
+
+        if(bSizProtDontCare)
+        {
             aRetSet.InvalidateItem(SID_ATTR_TRANSFORM_PROTECT_SIZE);
-        } else {
+        }
+        else
+        {
             aRetSet.Put(SfxBoolItem(SID_ATTR_TRANSFORM_PROTECT_SIZE,bSizProt));
         }
 
-        SfxItemState eState=aMarkAttr.GetItemState(SDRATTR_TEXT_AUTOGROWWIDTH);
-        sal_Bool bAutoGrow=((SdrTextAutoGrowWidthItem&)(aMarkAttr.Get(SDRATTR_TEXT_AUTOGROWWIDTH))).GetValue();
-        if (eState==SFX_ITEM_DONTCARE) {
+        // get all attributes from marked SdrObjects
+        SfxItemSet aMarkAttr(GetAttrFromMarked(false));
+
+        SfxItemState eState(aMarkAttr.GetItemState(SDRATTR_TEXT_AUTOGROWWIDTH));
+        bool bAutoGrow(((SdrOnOffItem&)(aMarkAttr.Get(SDRATTR_TEXT_AUTOGROWWIDTH))).GetValue());
+
+        if(SFX_ITEM_DONTCARE == eState)
+        {
             aRetSet.InvalidateItem(SID_ATTR_TRANSFORM_AUTOWIDTH);
-        } else if (eState==SFX_ITEM_SET) {
-            aRetSet.Put(SfxBoolItem(SID_ATTR_TRANSFORM_AUTOWIDTH,bAutoGrow));
+        }
+        else if(SFX_ITEM_SET == eState)
+        {
+            aRetSet.Put(SfxBoolItem(SID_ATTR_TRANSFORM_AUTOWIDTH, bAutoGrow));
         }
 
-        eState=aMarkAttr.GetItemState(SDRATTR_TEXT_AUTOGROWHEIGHT);
-        bAutoGrow=((SdrTextAutoGrowHeightItem&)(aMarkAttr.Get(SDRATTR_TEXT_AUTOGROWHEIGHT))).GetValue();
-        if (eState==SFX_ITEM_DONTCARE) {
+        eState = aMarkAttr.GetItemState(SDRATTR_TEXT_AUTOGROWHEIGHT);
+        bAutoGrow = ((SdrOnOffItem&)(aMarkAttr.Get(SDRATTR_TEXT_AUTOGROWHEIGHT))).GetValue();
+
+        if(SFX_ITEM_DONTCARE == eState)
+        {
             aRetSet.InvalidateItem(SID_ATTR_TRANSFORM_AUTOHEIGHT);
-        } else if (eState==SFX_ITEM_SET) {
+        }
+        else if(SFX_ITEM_SET == eState)
+        {
             aRetSet.Put(SfxBoolItem(SID_ATTR_TRANSFORM_AUTOHEIGHT,bAutoGrow));
         }
 
-        eState=aMarkAttr.GetItemState(SDRATTR_ECKENRADIUS);
-        long nRadius=((SdrEckenradiusItem&)(aMarkAttr.Get(SDRATTR_ECKENRADIUS))).GetValue();
-        if (eState==SFX_ITEM_DONTCARE) {
+        eState = aMarkAttr.GetItemState(SDRATTR_ECKENRADIUS);
+        const sal_Int32 nRadius(((SdrMetricItem&)(aMarkAttr.Get(SDRATTR_ECKENRADIUS))).GetValue());
+
+        if(SFX_ITEM_DONTCARE == eState)
+        {
             aRetSet.InvalidateItem(SDRATTR_ECKENRADIUS);
-        } else if (eState==SFX_ITEM_SET) {
-            aRetSet.Put(SdrEckenradiusItem(nRadius));
         }
-
+        else if(SFX_ITEM_SET == eState)
+        {
+            aRetSet.Put(SdrMetricItem(SDRATTR_ECKENRADIUS, nRadius));
+        }
     }
+
     return aRetSet;
-}
-
-Point ImpGetPoint(Rectangle aRect, RECT_POINT eRP)
-{
-    switch(eRP) {
-        case RP_LT: return aRect.TopLeft();
-        case RP_MT: return aRect.TopCenter();
-        case RP_RT: return aRect.TopRight();
-        case RP_LM: return aRect.LeftCenter();
-        case RP_MM: return aRect.Center();
-        case RP_RM: return aRect.RightCenter();
-        case RP_LB: return aRect.BottomLeft();
-        case RP_MB: return aRect.BottomCenter();
-        case RP_RB: return aRect.BottomRight();
-    }
-    return Point(); // Sollte nicht vorkommen !
 }
 
 void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
 {
-    Rectangle aRect(GetMarkedObjRect());
-
-    if(GetSdrPageView())
+    if(areSdrObjectsSelected())
     {
-        GetSdrPageView()->LogicToPagePos(aRect);
-    }
+        const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
+        basegfx::B2DRange aRange(getMarkedObjectSnapRange());
 
-    long nOldRotateAngle=GetMarkedObjRotate();
-    long nOldShearAngle=GetMarkedObjShear();
-    const SdrMarkList& rMarkList=GetMarkedObjectList();
-    sal_uIntPtr nMarkCount=rMarkList.GetMarkCount();
-    SdrObject* pObj=NULL;
-
-    RECT_POINT eSizePoint=RP_MM;
-    long nPosDX=0;
-    long nPosDY=0;
-    long nSizX=0;
-    long nSizY=0;
-    long nRotateAngle=0;
-
-    // #86909#
-    sal_Bool bModeIsRotate(eDragMode == SDRDRAG_ROTATE);
-    long nRotateX(0);
-    long nRotateY(0);
-    long nOldRotateX(0);
-    long nOldRotateY(0);
-    if(bModeIsRotate)
-    {
-        Point aRotateAxe(aRef1);
-
-        if(GetSdrPageView())
+        if(aRange.isEmpty())
         {
-            GetSdrPageView()->LogicToPagePos(aRotateAxe);
+            return;
         }
 
-        nRotateX = nOldRotateX = aRotateAxe.X();
-        nRotateY = nOldRotateY = aRotateAxe.Y();
-    }
+        const basegfx::B2DPoint aPageOrigin(GetSdrPageView()
+            ? GetSdrPageView()->GetPageOrigin()
+            : basegfx::B2DPoint(0.0, 0.0));
 
-    long nNewShearAngle=0;
-    long nShearAngle=0;
-    long nShearX=0;
-    long nShearY=0;
-    sal_Bool bShearVert=sal_False;
+        aRange.transform(basegfx::tools::createTranslateB2DHomMatrix(-aPageOrigin));
 
-    sal_Bool bChgPos=sal_False;
-    sal_Bool bChgSiz=sal_False;
-    sal_Bool bChgHgt=sal_False;
-    sal_Bool bRotate=sal_False;
-    sal_Bool bShear =sal_False;
+        const bool bModeIsRotate(SDRDRAG_ROTATE == GetDragMode());
+        basegfx::B2DPoint aNewRotateCenter(0.0, 0.0);
+        basegfx::B2DPoint aOldRotateCenter(aNewRotateCenter);
 
-    sal_Bool bSetAttr=sal_False;
-    SfxItemSet aSetAttr(pMod->GetItemPool());
-
-    const SfxPoolItem* pPoolItem=NULL;
-
-    // Position
-    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_POS_X,sal_True,&pPoolItem)) {
-        nPosDX=((const SfxInt32Item*)pPoolItem)->GetValue()-aRect.Left();
-        bChgPos=sal_True;
-    }
-    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_POS_Y,sal_True,&pPoolItem)){
-        nPosDY=((const SfxInt32Item*)pPoolItem)->GetValue()-aRect.Top();
-        bChgPos=sal_True;
-    }
-    // Groesse
-    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_WIDTH,sal_True,&pPoolItem)) {
-        nSizX=((const SfxUInt32Item*)pPoolItem)->GetValue();
-        bChgSiz=sal_True;
-    }
-    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_HEIGHT,sal_True,&pPoolItem)) {
-        nSizY=((const SfxUInt32Item*)pPoolItem)->GetValue();
-        bChgSiz=sal_True;
-        bChgHgt=sal_True;
-    }
-    if (bChgSiz) {
-        eSizePoint=(RECT_POINT)((const SfxAllEnumItem&)rAttr.Get(SID_ATTR_TRANSFORM_SIZE_POINT)).GetValue();
-    }
-
-    // Rotation
-    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_ANGLE,sal_True,&pPoolItem)) {
-        nRotateAngle=((const SfxInt32Item*)pPoolItem)->GetValue()-nOldRotateAngle;
-        bRotate = (nRotateAngle != 0);
-    }
-
-    // #86909# pos rot point x
-    if(bRotate || SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_ROT_X, sal_True ,&pPoolItem))
-        nRotateX = ((const SfxInt32Item&)rAttr.Get(SID_ATTR_TRANSFORM_ROT_X)).GetValue();
-
-    // #86909# pos rot point y
-    if(bRotate || SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_ROT_Y, sal_True ,&pPoolItem))
-        nRotateY = ((const SfxInt32Item&)rAttr.Get(SID_ATTR_TRANSFORM_ROT_Y)).GetValue();
-
-    // Shear
-    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_SHEAR,sal_True,&pPoolItem)) {
-        nNewShearAngle=((const SfxInt32Item*)pPoolItem)->GetValue();
-        if (nNewShearAngle>SDRMAXSHEAR) nNewShearAngle=SDRMAXSHEAR;
-        if (nNewShearAngle<-SDRMAXSHEAR) nNewShearAngle=-SDRMAXSHEAR;
-        if (nNewShearAngle!=nOldShearAngle) {
-            bShearVert=((const SfxBoolItem&)rAttr.Get(SID_ATTR_TRANSFORM_SHEAR_VERTICAL)).GetValue();
-            if (bShearVert) {
-                nShearAngle=nNewShearAngle;
-            } else {
-                if (nNewShearAngle!=0 && nOldShearAngle!=0) {
-                    // Bugfix #25714#.
-                    double nOld=tan((double)nOldShearAngle*nPi180);
-                    double nNew=tan((double)nNewShearAngle*nPi180);
-                    nNew-=nOld;
-                    nNew=atan(nNew)/nPi180;
-                    nShearAngle=Round(nNew);
-                } else {
-                    nShearAngle=nNewShearAngle-nOldShearAngle;
-                }
-            }
-            bShear=nShearAngle!=0;
-            if (bShear) {
-                nShearX=((const SfxInt32Item&)rAttr.Get(SID_ATTR_TRANSFORM_SHEAR_X)).GetValue();
-                nShearY=((const SfxInt32Item&)rAttr.Get(SID_ATTR_TRANSFORM_SHEAR_Y)).GetValue();
-            }
-        }
-    }
-
-    // AutoGrow
-    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_AUTOWIDTH,sal_True,&pPoolItem)) {
-        sal_Bool bAutoGrow=((const SfxBoolItem*)pPoolItem)->GetValue();
-        aSetAttr.Put(SdrTextAutoGrowWidthItem(bAutoGrow));
-        bSetAttr=sal_True;
-    }
-
-    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_AUTOHEIGHT,sal_True,&pPoolItem)) {
-        sal_Bool bAutoGrow=((const SfxBoolItem*)pPoolItem)->GetValue();
-        aSetAttr.Put(SdrTextAutoGrowHeightItem(bAutoGrow));
-        bSetAttr=sal_True;
-    }
-
-    // Eckenradius
-    if (bEdgeRadiusAllowed && SFX_ITEM_SET==rAttr.GetItemState(SDRATTR_ECKENRADIUS,sal_True,&pPoolItem)) {
-        long nRadius=((SdrEckenradiusItem*)pPoolItem)->GetValue();
-        aSetAttr.Put(SdrEckenradiusItem(nRadius));
-        bSetAttr=sal_True;
-    }
-
-    ForcePossibilities();
-
-    BegUndo(ImpGetResStr(STR_EditTransform),GetDescriptionOfMarkedObjects());
-
-    if (bSetAttr) {
-        SetAttrToMarked(aSetAttr,sal_False);
-    }
-
-    // Groesse und Hoehe aendern
-    if (bChgSiz && (bResizeFreeAllowed || bResizePropAllowed)) {
-        Fraction aWdt(nSizX,aRect.Right()-aRect.Left());
-        Fraction aHgt(nSizY,aRect.Bottom()-aRect.Top());
-        Point aRef(ImpGetPoint(aRect,eSizePoint));
-
-        if(GetSdrPageView())
+        if(bModeIsRotate)
         {
-            GetSdrPageView()->PagePosToLogic(aRef);
+            const basegfx::B2DPoint aRotateAxe(GetRef1() - aPageOrigin);
+
+            aNewRotateCenter = aOldRotateCenter = aRotateAxe;
         }
 
-        ResizeMarkedObj(aRef,aWdt,aHgt);
-    }
+        SfxItemSet aSetAttr(getSdrModelFromSdrView().GetItemPool());
+        const SfxPoolItem* pPoolItem = 0;
 
-    // Rotieren
-    if (bRotate && (bRotateFreeAllowed || bRotate90Allowed)) {
-        Point aRef(nRotateX,nRotateY);
+        // position change?
+        const basegfx::B2DPoint aOldTranslate(aRange.getMinimum());
+        basegfx::B2DPoint aNewTranslate(aOldTranslate);
 
-        if(GetSdrPageView())
+        if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_POS_X,true,&pPoolItem))
         {
-            GetSdrPageView()->PagePosToLogic(aRef);
+            aNewTranslate.setX(((const SfxInt32Item*)pPoolItem)->GetValue());
         }
 
-        RotateMarkedObj(aRef,nRotateAngle);
-    }
-
-    // #86909# set rotation point position
-    if(bModeIsRotate && (nRotateX != nOldRotateX || nRotateY != nOldRotateY))
-    {
-        Point aNewRef1(nRotateX, nRotateY);
-
-        if(GetSdrPageView())
+        if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_POS_Y,true,&pPoolItem))
         {
-            GetSdrPageView()->PagePosToLogic(aNewRef1);
+            aNewTranslate.setY(((const SfxInt32Item*)pPoolItem)->GetValue());
         }
 
-        SetRef1(aNewRef1);
-    }
+        // scale change?
+        const basegfx::B2DVector aOldSize(aRange.getRange());
+        basegfx::B2DVector aNewSize(aOldSize);
+        bool bChgHgt(false);
 
-    // Shear
-    if (bShear && bShearAllowed) {
-        Point aRef(nShearX,nShearY);
-
-        if(GetSdrPageView())
+        if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_WIDTH,true,&pPoolItem))
         {
-            GetSdrPageView()->PagePosToLogic(aRef);
+            aNewSize.setX(((const SfxUInt32Item*)pPoolItem)->GetValue());
         }
 
-        ShearMarkedObj(aRef,nShearAngle,bShearVert);
-
-        // #i74358#
-        // ShearMarkedObj creates a linear combination of the existing transformation and
-        // the new shear to apply. If the object is already transformed (e.g. rotated) the
-        // linear combination will not decompose to the same start values again, but to a
-        // new combination. Thus it makes no sense to check if the wanted shear is reached
-        // or not. Taking out.
-#if 0
-        long nTempAngle=GetMarkedObjShear();
-        if (nTempAngle!=0 && nTempAngle!=nNewShearAngle && !bShearVert) {
-            // noch eine 2. Iteration zur Kompensation der Rundungsfehler
-            double nOld=tan((double)nTempAngle*nPi180);
-            double nNew=tan((double)nNewShearAngle*nPi180);
-            nNew-=nOld;
-            nNew=atan(nNew)/nPi180;
-            nTempAngle=Round(nNew);
-            if (nTempAngle!=0) {
-                ShearMarkedObj(aRef,nTempAngle,bShearVert);
-            }
-        }
-#endif
-    }
-
-    // Position aendern
-    if (bChgPos && bMoveAllowed) {
-        MoveMarkedObj(Size(nPosDX,nPosDY));
-    }
-
-    // protect position
-    if(SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_TRANSFORM_PROTECT_POS, sal_True, &pPoolItem))
-    {
-        const sal_Bool bProtPos(((const SfxBoolItem*)pPoolItem)->GetValue());
-        bool bChanged(false);
-
-        for(sal_uInt32 i(0); i < nMarkCount; i++)
+        if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_HEIGHT,true,&pPoolItem))
         {
-            pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
+            aNewSize.setY(((const SfxUInt32Item*)pPoolItem)->GetValue());
+            bChgHgt = true;
+        }
 
-            if(pObj->IsMoveProtect() != bProtPos)
+        RECT_POINT eSizePoint(RP_MM);
+        const bool bScaleChanged(!aNewSize.equal(aOldSize));
+
+        if(bScaleChanged)
+        {
+            eSizePoint=(RECT_POINT)((const SfxAllEnumItem&)rAttr.Get(SID_ATTR_TRANSFORM_SIZE_POINT)).GetValue();
+        }
+
+        // rotation change?
+        const double fOldRotateAngle(GetMarkedObjRotate());
+        double fNewRotateAngle(fOldRotateAngle);
+
+        if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_ANGLE,true,&pPoolItem))
+        {
+            const sal_Int32 nAllRot(((const SfxInt32Item*)pPoolItem)->GetValue());
+            fNewRotateAngle = (((36000 - nAllRot) % 36000) * F_PI) / 18000.0;
+        }
+
+        const bool bRotate(!basegfx::fTools::equal(fOldRotateAngle, fNewRotateAngle));
+
+        // #86909# pos rot point x
+        if(bRotate || SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_ROT_X, true ,&pPoolItem))
+        {
+            aNewRotateCenter.setX(((const SfxInt32Item&)rAttr.Get(SID_ATTR_TRANSFORM_ROT_X)).GetValue());
+        }
+
+        // #86909# pos rot point y
+        if(bRotate || SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_ROT_Y, true ,&pPoolItem))
+        {
+            aNewRotateCenter.setY(((const SfxInt32Item&)rAttr.Get(SID_ATTR_TRANSFORM_ROT_Y)).GetValue());
+        }
+
+        // shear change?
+        double fShearAngle(0.0);
+        basegfx::B2DPoint aShearOffset(0.0, 0.0);
+        bool bShearVert(false);
+        bool bShear(false);
+
+        if(SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_TRANSFORM_SHEAR,true,&pPoolItem))
+        {
+            const sal_Int32 nAllShear(((const SfxInt32Item*)pPoolItem)->GetValue());
+            const double fMaxShearRange(F_PI2 * (89.0/90.0));
+            double fNewShearAngle(((-nAllShear) * F_PI) / 18000.0);
+
+            fNewShearAngle = basegfx::snapToRange(fNewShearAngle, -F_PI, F_PI);
+            fNewShearAngle = basegfx::clamp(fNewShearAngle, -fMaxShearRange, fMaxShearRange);
+
+            bShearVert = ((const SfxBoolItem&)rAttr.Get(SID_ATTR_TRANSFORM_SHEAR_VERTICAL)).GetValue();
+            double fOldShearAngle(GetMarkedObjShearX());
+
+            if(bShearVert)
             {
-                bChanged = true;
-                pObj->SetMoveProtect(bProtPos);
-
-                if(bProtPos)
-                {
-                    pObj->SetResizeProtect(true);
-                }
+                // Currently only ShearX is directly used at the SdrObject since the homogen
+                // matrix only has six degrees of freedom and it has to be decided which one
+                // to use. It can be shown mathematically that a ShearY about degree x is
+                // the same as a 90 degree rotation, a ShearY(-x) and a -90 degree back-rotation.
+                // Exactly this will be used below. It also shows that the ShearY is -ShearX, thus
+                // the compare value can be detected
+                fOldShearAngle = -fOldShearAngle;
             }
-        }
 
-        if(bChanged)
-        {
-            bMoveProtect = bProtPos;
-
-            if(bProtPos)
+            if(!basegfx::fTools::equal(fNewShearAngle, fOldShearAngle))
             {
-                bResizeProtect = true;
+                fShearAngle = fNewShearAngle - fOldShearAngle;
+                bShear = true;
             }
 
-            // #i77187# there is no simple method to get the toolbars updated
-            // in the application. The App is listening to selection change and i
-            // will use it here (even if not true). It's acceptable since changing
-            // this model data is pretty rare and only possible using the F4 dialog
-            MarkListHasChanged();
+            if(bShear)
+            {
+                aShearOffset.setX(((const SfxInt32Item&)rAttr.Get(SID_ATTR_TRANSFORM_SHEAR_X)).GetValue());
+                aShearOffset.setY(((const SfxInt32Item&)rAttr.Get(SID_ATTR_TRANSFORM_SHEAR_Y)).GetValue());
+            }
         }
-    }
 
-    if(!bMoveProtect)
-    {
-        // protect size
-        if(SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_TRANSFORM_PROTECT_SIZE, sal_True, &pPoolItem))
+        bool bSetAttr(false);
+
+        // AutoGrow
+        if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_AUTOWIDTH,true,&pPoolItem))
         {
-            const sal_Bool bProtSize(((const SfxBoolItem*)pPoolItem)->GetValue());
+            bool bAutoGrow=((const SfxBoolItem*)pPoolItem)->GetValue();
+            aSetAttr.Put(SdrOnOffItem(SDRATTR_TEXT_AUTOGROWWIDTH, bAutoGrow));
+            bSetAttr = true;
+        }
+
+        if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_AUTOHEIGHT,true,&pPoolItem))
+        {
+            bool bAutoGrow=((const SfxBoolItem*)pPoolItem)->GetValue();
+            aSetAttr.Put(SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT, bAutoGrow));
+            bSetAttr = true;
+        }
+
+        // rounded edge changed?
+        if (mbEdgeRadiusAllowed && SFX_ITEM_SET==rAttr.GetItemState(SDRATTR_ECKENRADIUS,true,&pPoolItem))
+        {
+            sal_Int32 nRadius=((SdrMetricItem*)pPoolItem)->GetValue();
+            aSetAttr.Put(SdrMetricItem(SDRATTR_ECKENRADIUS, nRadius));
+            bSetAttr = true;
+        }
+
+        ForcePossibilities();
+        BegUndo(ImpGetResStr(STR_EditTransform), getSelectionDescription(aSelection));
+
+        if(bSetAttr)
+        {
+            SetAttrToMarked(aSetAttr, false);
+        }
+
+        // change scale
+        if(bScaleChanged && (mbResizeFreeAllowed || mbResizePropAllowed))
+        {
+            basegfx::B2DPoint aRefPoint(aRange.getMinimum());
+
+            switch(eSizePoint)
+            {
+                default: break; // case RP_LT
+                case RP_MT: aRefPoint = basegfx::B2DPoint(aRange.getCenterX(), aRange.getMinY()); break;
+                case RP_RT: aRefPoint = basegfx::B2DPoint(aRange.getMaxX(), aRange.getMinY()); break;
+                case RP_LM: aRefPoint = basegfx::B2DPoint(aRange.getMinX(), aRange.getCenterY()); break;
+                case RP_MM: aRefPoint = aRange.getCenter(); break;
+                case RP_RM: aRefPoint = basegfx::B2DPoint(aRange.getMaxX(), aRange.getCenterY()); break;
+                case RP_LB: aRefPoint = basegfx::B2DPoint(aRange.getMinX(), aRange.getMaxY()); break;
+                case RP_MB: aRefPoint = basegfx::B2DPoint(aRange.getCenterX(), aRange.getMaxY()); break;
+                case RP_RB: aRefPoint = aRange.getMaximum(); break;
+            }
+
+            aRefPoint += aPageOrigin;
+
+            const basegfx::B2DTuple aScale(
+                aNewSize.getX() / (basegfx::fTools::equalZero(aOldSize.getX()) ? 1.0 : aOldSize.getX()),
+                aNewSize.getY() / (basegfx::fTools::equalZero(aOldSize.getY()) ? 1.0 : aOldSize.getY()));
+
+            ResizeMarkedObj(aRefPoint, aScale);
+        }
+
+        // change shear
+        if(bShear && mbShearAllowed)
+        {
+            basegfx::B2DPoint aRef(aShearOffset + aPageOrigin);
+
+            if(bShearVert)
+            {
+                // see explanation at setting bShearVert
+                RotateMarkedObj(aRef, F_PI2);
+                ShearMarkedObj(aRef, -fShearAngle, true);
+                RotateMarkedObj(aRef, -F_PI2);
+            }
+            else
+            {
+                ShearMarkedObj(aRef, fShearAngle, false);
+            }
+        }
+
+        // change rotation
+        if(bRotate && (mbRotateFreeAllowed || mbRotate90Allowed))
+        {
+            const basegfx::B2DPoint aRef(aNewRotateCenter + aPageOrigin);
+
+            RotateMarkedObj(aRef, fNewRotateAngle - fOldRotateAngle);
+        }
+
+        // set rotation point position
+        if(bModeIsRotate && !aNewRotateCenter.equal(aOldRotateCenter))
+        {
+            const basegfx::B2DPoint aNewRef1(aNewRotateCenter + aPageOrigin);
+
+            SetRef1(aNewRef1);
+        }
+
+        // change translation
+        if(!aOldTranslate.equal(aNewTranslate) && mbMoveAllowedOnSelection)
+        {
+            MoveMarkedObj(aNewTranslate - aOldTranslate);
+        }
+
+        // protect position
+        if(SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_TRANSFORM_PROTECT_POS, true, &pPoolItem))
+        {
+            const bool bProtPos(((const SfxBoolItem*)pPoolItem)->GetValue());
             bool bChanged(false);
 
-            for(sal_uInt32 i(0); i < nMarkCount; i++)
+            for(sal_uInt32 i(0); i < aSelection.size(); i++)
             {
-                pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
+                SdrObject* pObj = aSelection[i];
 
-                if(pObj->IsResizeProtect() != bProtSize)
+                if(pObj->IsMoveProtect() != bProtPos)
                 {
                     bChanged = true;
-                    pObj->SetResizeProtect(bProtSize);
+                    pObj->SetMoveProtect(bProtPos);
+
+                    if(bProtPos)
+                    {
+                        pObj->SetResizeProtect(true);
+                    }
                 }
             }
 
             if(bChanged)
             {
-                bResizeProtect = bProtSize;
+                mbMoveProtect = bProtPos;
 
-                // #i77187# see above
-                MarkListHasChanged();
+                if(bProtPos)
+                {
+                    mbResizeProtect = true;
+                }
             }
         }
-    }
 
-    EndUndo();
+        if(!mbMoveProtect)
+        {
+            // protect size
+            if(SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_TRANSFORM_PROTECT_SIZE, true, &pPoolItem))
+            {
+                const bool bProtSize(((const SfxBoolItem*)pPoolItem)->GetValue());
+                bool bChanged(false);
+
+                for(sal_uInt32 i(0); i < aSelection.size(); i++)
+                {
+                    SdrObject* pObj = aSelection[i];
+
+                    if(pObj->IsResizeProtect() != bProtSize)
+                    {
+                        bChanged = true;
+                        pObj->SetResizeProtect(bProtSize);
+                    }
+                }
+
+                if(bChanged)
+                {
+                    mbResizeProtect = bProtSize;
+                }
+            }
+        }
+
+        EndUndo();
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-sal_Bool SdrEditView::IsAlignPossible() const
-{  // Mindestens 2 markierte Objekte, davon mind. 1 beweglich
-    ForcePossibilities();
-    sal_uIntPtr nAnz=GetMarkedObjectCount();
-    if (nAnz==0) return sal_False;         // Nix markiert!
-    if (nAnz==1) return bMoveAllowed;  // einzelnes Obj an der Seite ausrichten
-    return bOneOrMoreMovable;          // ansonsten ist MarkCount>=2
+bool SdrEditView::IsAlignPossible() const
+{
+    if(!areSdrObjectsSelected())
+    {
+        return false;         // Nix markiert!
+    }
+    else
+    {
+        ForcePossibilities();
+        SdrObject* pSingleSelected = getSelectedIfSingle();
+
+        if(pSingleSelected)
+        {
+            // einzelnes Obj an der Seite ausrichten
+            return mbMoveAllowedOnSelection;
+        }
+
+        // ansonsten ist MarkCount>=2
+        return mbOneOrMoreMovable;
+    }
 }
 
-void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert, sal_Bool bBoundRects)
+void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert, bool bBoundRects)
 {
-    if (eHor==SDRHALIGN_NONE && eVert==SDRVALIGN_NONE)
+    if(SDRHALIGN_NONE == eHor && SDRVALIGN_NONE == eVert)
+    {
         return;
-
-    SortMarkedObjects();
-    if (GetMarkedObjectCount()<1)
-        return;
-
-    const bool bUndo = IsUndoEnabled();
-    if( bUndo )
-    {
-        XubString aStr(GetDescriptionOfMarkedObjects());
-        if (eHor==SDRHALIGN_NONE)
-        {
-            switch (eVert)
-            {
-                case SDRVALIGN_TOP   : ImpTakeDescriptionStr(STR_EditAlignVTop   ,aStr); break;
-                case SDRVALIGN_BOTTOM: ImpTakeDescriptionStr(STR_EditAlignVBottom,aStr); break;
-                case SDRVALIGN_CENTER: ImpTakeDescriptionStr(STR_EditAlignVCenter,aStr); break;
-                default: break;
-            }
-        }
-        else if (eVert==SDRVALIGN_NONE)
-        {
-            switch (eHor)
-            {
-                case SDRHALIGN_LEFT  : ImpTakeDescriptionStr(STR_EditAlignHLeft  ,aStr); break;
-                case SDRHALIGN_RIGHT : ImpTakeDescriptionStr(STR_EditAlignHRight ,aStr); break;
-                case SDRHALIGN_CENTER: ImpTakeDescriptionStr(STR_EditAlignHCenter,aStr); break;
-                default: break;
-            }
-        }
-        else if (eHor==SDRHALIGN_CENTER && eVert==SDRVALIGN_CENTER)
-        {
-            ImpTakeDescriptionStr(STR_EditAlignCenter,aStr);
-        }
-        else
-        {
-            ImpTakeDescriptionStr(STR_EditAlign,aStr);
-        }
-        BegUndo(aStr);
     }
 
-    Rectangle aBound;
-    sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
-    sal_uIntPtr nm;
-    sal_Bool bHasFixed=sal_False;
-    for (nm=0; nm<nMarkAnz; nm++)
+    if(areSdrObjectsSelected())
     {
-        SdrMark* pM=GetSdrMarkByIndex(nm);
-        SdrObject* pObj=pM->GetMarkedSdrObj();
-        SdrObjTransformInfoRec aInfo;
-        pObj->TakeObjInfo(aInfo);
-        if (!aInfo.bMoveAllowed || pObj->IsMoveProtect())
-        {
-            Rectangle aObjRect(bBoundRects?pObj->GetCurrentBoundRect():pObj->GetSnapRect());
-            aBound.Union(aObjRect);
-            bHasFixed=sal_True;
-        }
-    }
-    if (!bHasFixed)
-    {
-        if (nMarkAnz==1)
-        {   // einzelnes Obj an der Seite ausrichten
-            const SdrObject* pObj=GetMarkedObjectByIndex(0L);
-            const SdrPage* pPage=pObj->GetPage();
-            const SdrPageGridFrameList* pGFL=pPage->GetGridFrameList(GetSdrPageViewOfMarkedByIndex(0),&(pObj->GetSnapRect()));
-            const SdrPageGridFrame* pFrame=NULL;
-            if (pGFL!=NULL && pGFL->GetCount()!=0)
-            { // Writer
-                pFrame=&((*pGFL)[0]);
-            }
+        const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
+        const bool bUndo(IsUndoEnabled());
 
-            if (pFrame!=NULL)
-            { // Writer
-                aBound=pFrame->GetUserArea();
-            }
-            else
-            {
-                aBound=Rectangle(pPage->GetLftBorder(),pPage->GetUppBorder(),
-                                 pPage->GetWdt()-pPage->GetRgtBorder(),
-                                 pPage->GetHgt()-pPage->GetLwrBorder());
-            }
-        }
-        else
+        if(bUndo)
         {
-            if (bBoundRects)
-                aBound=GetMarkedObjBoundRect();
-            else
-                aBound=GetMarkedObjRect();
-        }
-    }
-    Point aCenter(aBound.Center());
-    for (nm=0; nm<nMarkAnz; nm++)
-    {
-        SdrMark* pM=GetSdrMarkByIndex(nm);
-        SdrObject* pObj=pM->GetMarkedSdrObj();
-        SdrObjTransformInfoRec aInfo;
-        pObj->TakeObjInfo(aInfo);
-        if (aInfo.bMoveAllowed && !pObj->IsMoveProtect())
-        {
-            // SdrPageView* pPV=pM->GetPageView();
-            long nXMov=0;
-            long nYMov=0;
-            Rectangle aObjRect(bBoundRects?pObj->GetCurrentBoundRect():pObj->GetSnapRect());
-            switch (eVert)
+            String aStr(getSelectionDescription(aSelection));
+
+            if(SDRHALIGN_NONE == eHor)
             {
-                case SDRVALIGN_TOP   : nYMov=aBound.Top()   -aObjRect.Top()       ; break;
-                case SDRVALIGN_BOTTOM: nYMov=aBound.Bottom()-aObjRect.Bottom()    ; break;
-                case SDRVALIGN_CENTER: nYMov=aCenter.Y()    -aObjRect.Center().Y(); break;
-                default: break;
-            }
-            switch (eHor)
-            {
-                case SDRHALIGN_LEFT  : nXMov=aBound.Left()  -aObjRect.Left()      ; break;
-                case SDRHALIGN_RIGHT : nXMov=aBound.Right() -aObjRect.Right()     ; break;
-                case SDRHALIGN_CENTER: nXMov=aCenter.X()    -aObjRect.Center().X(); break;
-                default: break;
-            }
-            if (nXMov!=0 || nYMov!=0)
-            {
-                // #104104# SdrEdgeObj needs an extra SdrUndoGeoObj since the
-                // connections may need to be saved
-                if( bUndo )
+                switch(eVert)
                 {
-                    if( dynamic_cast<SdrEdgeObj*>(pObj) )
-                    {
-                        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
-                    }
+                    case SDRVALIGN_TOP   : TakeMarkedDescriptionString(STR_EditAlignVTop   ,aStr); break;
+                    case SDRVALIGN_BOTTOM: TakeMarkedDescriptionString(STR_EditAlignVBottom,aStr); break;
+                    case SDRVALIGN_CENTER: TakeMarkedDescriptionString(STR_EditAlignVCenter,aStr); break;
+                    default: break;
+                }
+            }
+            else if(SDRVALIGN_NONE == eVert)
+            {
+                switch(eHor)
+                {
+                    case SDRHALIGN_LEFT  : TakeMarkedDescriptionString(STR_EditAlignHLeft  ,aStr); break;
+                    case SDRHALIGN_RIGHT : TakeMarkedDescriptionString(STR_EditAlignHRight ,aStr); break;
+                    case SDRHALIGN_CENTER: TakeMarkedDescriptionString(STR_EditAlignHCenter,aStr); break;
+                    default: break;
+                }
+            }
+            else if(SDRHALIGN_CENTER == eHor && SDRVALIGN_CENTER == eVert)
+            {
+                TakeMarkedDescriptionString(STR_EditAlignCenter, aStr);
+            }
+            else
+            {
+                TakeMarkedDescriptionString(STR_EditAlign, aStr);
+            }
 
-                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoMoveObject(*pObj,Size(nXMov,nYMov)));
+            BegUndo(aStr);
+        }
+
+        basegfx::B2DRange aBound;
+        sal_uInt32 nm;
+        bool bHasFixed(false);
+
+        for(nm = 0; nm < aSelection.size(); nm++)
+        {
+            SdrObject* pObj = aSelection[nm];
+            SdrObjTransformInfoRec aInfo;
+            pObj->TakeObjInfo(aInfo);
+
+            if(!aInfo.mbMoveAllowed || pObj->IsMoveProtect())
+            {
+                const basegfx::B2DRange aObjRange(bBoundRects
+                    ? pObj->getObjectRange(getAsSdrView())
+                    : sdr::legacy::GetSnapRange(*pObj));
+
+                aBound.expand(aObjRange);
+                bHasFixed = true;
+            }
+        }
+
+        if(!bHasFixed)
+        {
+            if(1 == aSelection.size())
+            {
+                // einzelnes Obj an der Seite ausrichten
+                const SdrObject* pObj = aSelection[0];
+                const SdrPage* pPage = pObj->getSdrPageFromSdrObject();
+                const Rectangle aCurrentSnapRect(sdr::legacy::GetSnapRect(*pObj));
+                const SdrPageGridFrameList* pGFL = pPage->GetGridFrameList(*getAsSdrView(), &aCurrentSnapRect);
+                const SdrPageGridFrame* pFrame = 0;
+
+                if(pGFL && pGFL->GetCount())
+                {
+                    // Writer
+                    pFrame = &((*pGFL)[0]);
                 }
 
-                pObj->Move(Size(nXMov,nYMov));
+                if(pFrame)
+                {
+                    // Writer
+                    aBound = pFrame->GetUserArea();
+                }
+                else
+                {
+                    aBound = pPage->GetInnerPageRange();
+                }
+            }
+            else
+            {
+                if (bBoundRects)
+                {
+                    aBound = sdr::legacy::GetAllObjBoundRange(aSelection);
+                }
+                else
+                {
+                    aBound = getMarkedObjectSnapRange();
+                }
             }
         }
-    }
 
-    if( bUndo )
-        EndUndo();
+        const basegfx::B2DPoint aCenter(aBound.getCenter());
+
+        for(nm = 0; nm < aSelection.size(); nm++)
+        {
+            SdrObject* pObj = aSelection[nm];
+            SdrObjTransformInfoRec aInfo;
+            pObj->TakeObjInfo(aInfo);
+
+            if(aInfo.mbMoveAllowed && !pObj->IsMoveProtect())
+            {
+                basegfx::B2DVector aMove(0.0, 0.0);
+                const basegfx::B2DRange aObjRange(bBoundRects
+                    ? pObj->getObjectRange(getAsSdrView())
+                    : sdr::legacy::GetSnapRange(*pObj));
+
+                switch(eVert)
+                {
+                    case SDRVALIGN_TOP : aMove.setY(aBound.getMinY() - aObjRange.getMinY()); break;
+                    case SDRVALIGN_BOTTOM: aMove.setY(aBound.getMaxY() - aObjRange.getMaxY()); break;
+                    case SDRVALIGN_CENTER: aMove.setY(aCenter.getY() - aObjRange.getCenter().getY()); break;
+                    default: break;
+                }
+
+                switch(eHor)
+                {
+                    case SDRHALIGN_LEFT : aMove.setX(aBound.getMinX() - aObjRange.getMinX()); break;
+                    case SDRHALIGN_RIGHT : aMove.setX(aBound.getMaxX() - aObjRange.getMaxX()); break;
+                    case SDRHALIGN_CENTER: aMove.setX(aCenter.getX() - aObjRange.getCenter().getX()); break;
+                    default: break;
+                }
+
+                if(!aMove.equalZero())
+                {
+                    // #104104# SdrEdgeObj needs an extra SdrUndoGeoObj since the
+                    // connections may need to be saved
+                    if(bUndo)
+                    {
+                        AddUndo(getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
+                    }
+
+                    sdr::legacy::transformSdrObject(*pObj, basegfx::tools::createTranslateB2DHomMatrix(aMove));
+                }
+            }
+        }
+
+        if(bUndo)
+        {
+            EndUndo();
+        }
+    }
 }
 
+//////////////////////////////////////////////////////////////////////////////
+// eof

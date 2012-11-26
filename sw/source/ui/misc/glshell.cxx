@@ -69,11 +69,6 @@ SFX_IMPL_INTERFACE( SwWebGlosDocShell, SwWebDocShell, SW_RES(0) )
 {
 }
 
-
-TYPEINIT1( SwGlosDocShell, SwDocShell );
-TYPEINIT1( SwWebGlosDocShell, SwWebDocShell );
-
-
 void lcl_Execute( SwDocShell& rSh, SfxRequest& rReq )
 {
     if ( rReq.GetSlot() == SID_SAVEDOC )

@@ -36,8 +36,6 @@ DBG_NAME(SfxStringListItem)
 
 // -----------------------------------------------------------------------
 
-TYPEINIT1_AUTOFACTORY(SfxStringListItem, SfxPoolItem);
-
 class SfxImpStringList
 {
 public:
@@ -111,6 +109,8 @@ void SfxImpStringList::Sort( sal_Bool bAscending, List* pParallelList )
 }
 
 // class SfxStringListItem -----------------------------------------------
+
+IMPL_POOLITEM_FACTORY(SfxStringListItem)
 
 SfxStringListItem::SfxStringListItem() :
     pImp(NULL)

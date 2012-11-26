@@ -29,7 +29,7 @@
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include "svx/svxdllapi.h"
 
-class SdrHint;
+class SdrBaseHint;
 class SdrModel;
 class SdrModel;
 
@@ -37,6 +37,10 @@ SVX_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::container::XIn
 
 class SVX_DLLPUBLIC SvxUnoDrawMSFactory : public ::com::sun::star::lang::XMultiServiceFactory
 {
+protected:
+    /** abstract SdrModel provider */
+    virtual SdrModel* getSdrModel() const = 0;
+
 public:
     SvxUnoDrawMSFactory() throw() {};
 
@@ -50,12 +54,12 @@ public:
         concatServiceNames( ::com::sun::star::uno::Sequence< ::rtl::OUString >& rServices1,
                             ::com::sun::star::uno::Sequence< ::rtl::OUString >& rServices2 ) throw();
 
-    /** fills the given EventObject from the given SdrHint.
+    /** fills the given EventObject from the given SdrBaseHint.
         @returns
-            true    if the SdrHint could be translated to an EventObject<br>
+            true    if the SdrBaseHint could be translated to an EventObject<br>
             false   if not
     */
-    static sal_Bool createEvent( const SdrModel* pDoc, const SdrHint* pSdrHint, ::com::sun::star::document::EventObject& aEvent );
+    static sal_Bool createEvent( const SdrModel* pDoc, const SdrBaseHint* pSdrHint, ::com::sun::star::document::EventObject& aEvent );
 };
 
 #endif

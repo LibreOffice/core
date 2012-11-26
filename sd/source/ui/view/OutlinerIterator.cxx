@@ -209,7 +209,7 @@ Iterator OutlinerContainer::CreateIterator (IteratorLocation aLocation)
 }
 
 Iterator OutlinerContainer::CreateSelectionIterator (
-    const ::std::vector<SdrObjectWeakRef>& rObjectList,
+    const SdrObjectVector& rObjectList,
     SdDrawDocument* pDocument,
     const ::boost::shared_ptr<ViewShell>& rpViewShell,
     bool bDirectionIsForward,
@@ -349,7 +349,7 @@ sal_Int32 OutlinerContainer::GetPageIndex (
             {
                 const SdPage* pPage = rpViewShell->GetActualPage();
                 if (pPage != NULL)
-                    nPageIndex = (pPage->GetPageNum()-1)/2;
+                    nPageIndex = (pPage->GetPageNumber()-1)/2;
                 else
                     nPageIndex = 0;
             }
@@ -463,7 +463,7 @@ void IteratorImplBase::Reverse (void)
 //===== SelectionIteratorImpl ===========================================
 
 SelectionIteratorImpl::SelectionIteratorImpl (
-    const ::std::vector<SdrObjectWeakRef>& rObjectList,
+    const SdrObjectVector& rObjectList,
     sal_Int32 nObjectIndex,
     SdDrawDocument* pDocument,
     const ::boost::weak_ptr<ViewShell>& rpViewShellWeak,
@@ -489,7 +489,7 @@ IteratorImplBase* SelectionIteratorImpl::Clone (IteratorImplBase* pObject) const
 
 void SelectionIteratorImpl::GotoNextText (void)
 {
-    SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( mrObjectList.at(mnObjectIndex).get() );
+    SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( mrObjectList[mnObjectIndex] );
     if (mbDirectionIsForward)
     {
         if( pTextObj )
@@ -525,7 +525,7 @@ void SelectionIteratorImpl::GotoNextText (void)
 
         if( (maPosition.mnText == -1) && (mnObjectIndex >= 0) )
         {
-            pTextObj = dynamic_cast< SdrTextObj* >( mrObjectList.at(mnObjectIndex).get() );
+            pTextObj = dynamic_cast< SdrTextObj* >( mrObjectList[mnObjectIndex] );
             if( pTextObj )
                 maPosition.mnText = pTextObj->getTextCount() - 1;
         }
@@ -538,7 +538,7 @@ void SelectionIteratorImpl::GotoNextText (void)
 
 const IteratorPosition& SelectionIteratorImpl::GetPosition (void)
 {
-    maPosition.mxObject = mrObjectList.at(mnObjectIndex);
+    maPosition.mxObject = mrObjectList[mnObjectIndex];
 
     return maPosition;
 }
@@ -712,11 +712,11 @@ void ViewIteratorImpl::SetPage (sal_Int32 nPageIndex)
         {
             if (maPosition.meEditMode == EM_PAGE)
                 mpPage = mpDocument->GetSdPage (
-                    (sal_uInt16)nPageIndex,
+                    (sal_uInt32)nPageIndex,
                     maPosition.mePageKind);
             else
                 mpPage = mpDocument->GetMasterSdPage (
-                    (sal_uInt16)nPageIndex,
+                    (sal_uInt32)nPageIndex,
                     maPosition.mePageKind);
         }
         else

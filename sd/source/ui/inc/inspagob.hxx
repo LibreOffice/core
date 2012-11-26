@@ -59,8 +59,8 @@ public:
                 ~SdInsertPagesObjsDlg();
 
     List*       GetList( sal_uInt16 nType );
-    sal_Bool        IsLink();
-    sal_Bool        IsRemoveUnnessesaryMasterPages() const;
+    bool        IsLink();
+    bool        IsRemoveUnnessesaryMasterPages() const;
 };
 
 

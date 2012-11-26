@@ -32,7 +32,6 @@ class SwWebTextShell: public SwTextShell
 
 public:
     SFX_DECL_INTERFACE(SW_WEBTEXTSHELL)
-    TYPEINFO();
 
              SwWebTextShell(SwView &rView);
     virtual ~SwWebTextShell();

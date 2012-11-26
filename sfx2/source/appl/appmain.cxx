@@ -89,9 +89,6 @@ static SfxItemInfo __READONLY_DATA aItemInfos[] =
 
 //===================================================================
 
-TYPEINIT2(SfxApplication,SfxShell,SfxBroadcaster);
-
-//--------------------------------------------------------------------
 void SfxApplication::Init
 (
 )

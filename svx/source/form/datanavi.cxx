@@ -2371,7 +2371,6 @@ namespace svxform
     //========================================================================
     // class DataNavigator
     //========================================================================
-    DBG_NAME(DataNavigator)
     //------------------------------------------------------------------------
     DataNavigator::DataNavigator( SfxBindings* _pBindings, SfxChildWindow* _pMgr, Window* _pParent ) :
 
@@ -2382,8 +2381,6 @@ namespace svxform
         m_aDataWin( this, _pBindings )
 
     {
-        DBG_CTOR(DataNavigator,NULL);
-
         SetHelpId( HID_DATA_NAVIGATOR_WIN );
         SetText( SVX_RES( RID_STR_DATANAVIGATOR ) );
 
@@ -2397,7 +2394,6 @@ namespace svxform
     //------------------------------------------------------------------------
     DataNavigator::~DataNavigator()
     {
-        DBG_DTOR(DataNavigator,NULL);
     }
 
     //-----------------------------------------------------------------------
@@ -2412,7 +2408,7 @@ namespace svxform
 
         if ( eState >= SFX_ITEM_AVAILABLE )
         {
-            FmFormShell* pShell = PTR_CAST( FmFormShell,((SfxObjectItem*)pState)->GetShell() );
+            FmFormShell* pShell = dynamic_cast< FmFormShell* >( ((SfxObjectItem*)pState)->GetShell() );
             Update( pShell );
         }
         else

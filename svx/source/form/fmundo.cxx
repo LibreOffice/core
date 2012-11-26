@@ -27,7 +27,7 @@
 #include "fmundo.hxx"
 #include "fmpgeimp.hxx"
 #include "svx/dbtoolsclient.hxx"
-#include "svx/svditer.hxx"
+#include <svx/svditer.hxx>
 #include "fmobj.hxx"
 #include "fmprop.hrc"
 #include "svx/fmresids.hrc"
@@ -176,7 +176,6 @@ DECLARE_STL_STDKEY_MAP(Reference< XPropertySet >, PropertySetInfo, PropertySetIn
 
 String static_STR_UNDO_PROPERTY;
 //------------------------------------------------------------------------------
-DBG_NAME(FmXUndoEnvironment)
 //------------------------------------------------------------------------------
 FmXUndoEnvironment::FmXUndoEnvironment(FmFormModel& _rModel)
                    :rModel( _rModel )
@@ -187,7 +186,6 @@ FmXUndoEnvironment::FmXUndoEnvironment(FmFormModel& _rModel)
                    ,m_bDisposed( false )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXUndoEnvironment::FmXUndoEnvironment" );
-    DBG_CTOR(FmXUndoEnvironment,NULL);
     try
     {
         m_vbaListener =  new ScriptEventListenerWrapper( _rModel );
@@ -200,7 +198,6 @@ FmXUndoEnvironment::FmXUndoEnvironment(FmFormModel& _rModel)
 //------------------------------------------------------------------------------
 FmXUndoEnvironment::~FmXUndoEnvironment()
 {
-    DBG_DTOR(FmXUndoEnvironment,NULL);
     if ( !m_bDisposed )   // i120746, call FormScriptingEnvironment::dispose to avoid memory leak
         m_pScriptingEnv->dispose();
 
@@ -222,7 +219,7 @@ void FmXUndoEnvironment::dispose()
     sal_uInt16 i;
     for (i = 0; i < nCount; i++)
     {
-        FmFormPage* pPage = PTR_CAST( FmFormPage, rModel.GetPage(i) );
+        FmFormPage* pPage = dynamic_cast< FmFormPage* >( rModel.GetPage(i) );
         if ( pPage )
         {
             Reference< XInterface > xForms = pPage->GetForms( false ).get();
@@ -234,7 +231,7 @@ void FmXUndoEnvironment::dispose()
     nCount = rModel.GetMasterPageCount();
     for (i = 0; i < nCount; i++)
     {
-        FmFormPage* pPage = PTR_CAST( FmFormPage, rModel.GetMasterPage(i) );
+        FmFormPage* pPage = dynamic_cast< FmFormPage* >( rModel.GetMasterPage(i) );
         if ( pPage )
         {
             Reference< XInterface > xForms = pPage->GetForms( false ).get();
@@ -273,7 +270,7 @@ void FmXUndoEnvironment::ModeChanged()
         sal_uInt16 i;
         for (i = 0; i < nCount; i++)
         {
-            FmFormPage* pPage = PTR_CAST( FmFormPage, rModel.GetPage(i) );
+            FmFormPage* pPage = dynamic_cast< FmFormPage* >( rModel.GetPage(i) );
             if ( pPage )
             {
                 Reference< XInterface > xForms = pPage->GetForms( false ).get();
@@ -285,7 +282,7 @@ void FmXUndoEnvironment::ModeChanged()
         nCount = rModel.GetMasterPageCount();
         for (i = 0; i < nCount; i++)
         {
-            FmFormPage* pPage = PTR_CAST( FmFormPage, rModel.GetMasterPage(i) );
+            FmFormPage* pPage = dynamic_cast< FmFormPage* >( rModel.GetMasterPage(i) );
             if ( pPage )
             {
                 Reference< XInterface > xForms = pPage->GetForms( false ).get();
@@ -305,19 +302,20 @@ void FmXUndoEnvironment::ModeChanged()
 void FmXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXUndoEnvironment::Notify" );
-    if (rHint.ISA(SdrHint))
+    const SdrBaseHint* pSdrHint = dynamic_cast< const SdrBaseHint* >(&rHint);
+
+    if (pSdrHint)
     {
-        SdrHint* pSdrHint = (SdrHint*)&rHint;
-        switch( pSdrHint->GetKind() )
+        switch( pSdrHint->GetSdrHintKind() )
         {
             case HINT_OBJINSERTED:
             {
-                SdrObject* pSdrObj = (SdrObject*)pSdrHint->GetObject();
+                SdrObject* pSdrObj = (SdrObject*)pSdrHint->GetSdrHintObject();
                 Inserted( pSdrObj );
             }   break;
             case HINT_OBJREMOVED:
             {
-                SdrObject* pSdrObj = (SdrObject*)pSdrHint->GetObject();
+                SdrObject* pSdrObj = (SdrObject*)pSdrHint->GetSdrHintObject();
                 Removed( pSdrObj );
             }
             break;
@@ -325,44 +323,53 @@ void FmXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 break;
         }
     }
-    else if (rHint.ISA(SfxSimpleHint))
+    else
     {
-        switch ( ((SfxSimpleHint&)rHint).GetId() )
-        {
-            case SFX_HINT_DYING:
-                dispose();
-                rModel.SetObjectShell( NULL );
-                break;
-            case SFX_HINT_MODECHANGED:
-                ModeChanged();
-                break;
-        }
-    }
-    else if (rHint.ISA(SfxEventHint))
-    {
-        switch (((SfxEventHint&)rHint).GetEventId())
-        {
-        case SFX_EVENT_CREATEDOC:
-            case SFX_EVENT_OPENDOC:
-                ModeChanged();
-                break;
-        }
-    }
+        const SfxSimpleHint* pSfxSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
 
+        if (pSfxSimpleHint)
+        {
+            switch ( pSfxSimpleHint->GetId() )
+            {
+                case SFX_HINT_DYING:
+                    dispose();
+                    rModel.SetObjectShell( NULL );
+                    break;
+                case SFX_HINT_MODECHANGED:
+                    ModeChanged();
+                    break;
+            }
+        }
+        else
+        {
+            const SfxEventHint* pSfxEventHint = dynamic_cast< const SfxEventHint* >(&rHint);
+
+            if (pSfxEventHint)
+            {
+                switch (pSfxEventHint->GetEventId())
+                {
+                    case SFX_EVENT_CREATEDOC:
+                    case SFX_EVENT_OPENDOC:
+                        ModeChanged();
+                        break;
+                }
+            }
+        }
+    }
 }
 
 //------------------------------------------------------------------
 void FmXUndoEnvironment::Inserted(SdrObject* pObj)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXUndoEnvironment::Inserted" );
-    if (pObj->GetObjInventor() == FmFormInventor)
+    if (FmFormInventor == pObj->GetObjInventor())
     {
-        FmFormObj* pFormObj = PTR_CAST(FmFormObj, pObj);
+        FmFormObj* pFormObj = dynamic_cast< FmFormObj* >( pObj);
         Inserted( pFormObj );
     }
-    else if (pObj->IsGroupObject())
+    else if (pObj->getChildrenOfSdrObject())
     {
-        SdrObjListIter aIter(*pObj->GetSubList());
+        SdrObjListIter aIter(*pObj->getChildrenOfSdrObject());
         while ( aIter.IsMore() )
             Inserted( aIter.Next() );
     }
@@ -415,50 +422,55 @@ void FmXUndoEnvironment::Inserted(FmFormObj* pObj)
     // ist das Control noch einer Form zugeordnet
     Reference< XInterface >  xModel(pObj->GetUnoControlModel(), UNO_QUERY);
     Reference< XFormComponent >  xContent(xModel, UNO_QUERY);
-    if (xContent.is() && pObj->GetPage())
+    if (xContent.is())
     {
-        // if the component doesn't belong to a form, yet, find one to insert into
-        if (!xContent->getParent().is())
+        SdrPage* pOwningPage = pObj->getSdrPageFromSdrObject();
+
+        if(pOwningPage)
         {
-            try
+            // if the component doesn't belong to a form, yet, find one to insert into
+            if (!xContent->getParent().is())
             {
-                Reference< XIndexContainer > xObjectParent = pObj->GetOriginalParent();
-
-                FmFormPage& rPage = dynamic_cast< FmFormPage& >( *pObj->GetPage() );
-                Reference< XIndexAccess >  xForms( rPage.GetForms(), UNO_QUERY_THROW );
-
-                Reference< XIndexContainer > xNewParent;
-                Reference< XForm >           xForm;
-                sal_Int32 nPos = -1;
-                if ( lcl_searchElement( xForms, xObjectParent ) )
+                try
                 {
-                    // the form which was the parent of the object when it was removed is still
-                    // part of the form component hierachy of the current page
-                    xNewParent = xObjectParent;
-                    xForm.set( xNewParent, UNO_QUERY_THROW );
-                    nPos = ::std::min( pObj->GetOriginalIndex(), xNewParent->getCount() );
+                    Reference< XIndexContainer > xObjectParent = pObj->GetOriginalParent();
+
+                    FmFormPage& rPage = dynamic_cast< FmFormPage& >( *pOwningPage );
+                    Reference< XIndexAccess >  xForms( rPage.GetForms(), UNO_QUERY_THROW );
+
+                    Reference< XIndexContainer > xNewParent;
+                    Reference< XForm >           xForm;
+                    sal_Int32 nPos = -1;
+                    if ( lcl_searchElement( xForms, xObjectParent ) )
+                    {
+                        // the form which was the parent of the object when it was removed is still
+                        // part of the form component hierachy of the current page
+                        xNewParent = xObjectParent;
+                        xForm.set( xNewParent, UNO_QUERY_THROW );
+                        nPos = ::std::min( pObj->GetOriginalIndex(), xNewParent->getCount() );
+                    }
+                    else
+                    {
+                        xForm.set( rPage.GetImpl().findPlaceInFormComponentHierarchy( xContent ), UNO_SET_THROW );
+                        xNewParent.set( xForm, UNO_QUERY_THROW );
+                        nPos = xNewParent->getCount();
+                    }
+
+                    rPage.GetImpl().setUniqueName( xContent, xForm );
+                    xNewParent->insertByIndex( nPos, makeAny( xContent ) );
+
+                    Reference< XEventAttacherManager >  xManager( xNewParent, UNO_QUERY_THROW );
+                    xManager->registerScriptEvents( nPos, pObj->GetOriginalEvents() );
                 }
-                else
+                catch( const Exception& )
                 {
-                    xForm.set( rPage.GetImpl().findPlaceInFormComponentHierarchy( xContent ), UNO_SET_THROW );
-                    xNewParent.set( xForm, UNO_QUERY_THROW );
-                    nPos = xNewParent->getCount();
+                    DBG_UNHANDLED_EXCEPTION();
                 }
-
-                rPage.GetImpl().setUniqueName( xContent, xForm );
-                xNewParent->insertByIndex( nPos, makeAny( xContent ) );
-
-                Reference< XEventAttacherManager >  xManager( xNewParent, UNO_QUERY_THROW );
-                xManager->registerScriptEvents( nPos, pObj->GetOriginalEvents() );
             }
-            catch( const Exception& )
-            {
-                DBG_UNHANDLED_EXCEPTION();
-            }
+
+            // FormObject zuruecksetzen
+            pObj->ClearObjEnv();
         }
-
-        // FormObject zuruecksetzen
-        pObj->ClearObjEnv();
     }
 }
 
@@ -466,19 +478,15 @@ void FmXUndoEnvironment::Inserted(FmFormObj* pObj)
 void FmXUndoEnvironment::Removed(SdrObject* pObj)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXUndoEnvironment::Removed" );
-    if ( pObj->IsVirtualObj() )
-        // for virtual objects, we've already been notified of the removal of the master
-        // object, which is sufficient here
-        return;
 
     if (pObj->GetObjInventor() == FmFormInventor)
     {
-        FmFormObj* pFormObj = PTR_CAST(FmFormObj, pObj);
+        FmFormObj* pFormObj = dynamic_cast< FmFormObj* >( pObj);
         Removed(pFormObj);
     }
-    else if (pObj->IsGroupObject())
+    else if (pObj->getChildrenOfSdrObject())
     {
-        SdrObjListIter aIter(*pObj->GetSubList());
+        SdrObjListIter aIter(*pObj->getChildrenOfSdrObject());
         while ( aIter.IsMore() )
             Removed( aIter.Next() );
     }
@@ -524,7 +532,6 @@ void FmXUndoEnvironment::Removed(FmFormObj* pObj)
                 {
                     DBG_UNHANDLED_EXCEPTION();
                 }
-
             }
         }
     }
@@ -1016,7 +1023,7 @@ FmUndoPropertyAction::FmUndoPropertyAction(FmFormModel& rNewMod, const PropertyC
 void FmUndoPropertyAction::Undo()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmUndoPropertyAction::Undo" );
-    FmXUndoEnvironment& rEnv = ((FmFormModel&)rMod).GetUndoEnv();
+    FmXUndoEnvironment& rEnv = static_cast< FmFormModel& >(mrModel).GetUndoEnv();
 
     if (xObj.is() && !rEnv.IsLocked())
     {
@@ -1037,7 +1044,7 @@ void FmUndoPropertyAction::Undo()
 void FmUndoPropertyAction::Redo()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmUndoPropertyAction::Redo" );
-    FmXUndoEnvironment& rEnv = ((FmFormModel&)rMod).GetUndoEnv();
+    FmXUndoEnvironment& rEnv = static_cast< FmFormModel& >(mrModel).GetUndoEnv();
 
     if (xObj.is() && !rEnv.IsLocked())
     {
@@ -1065,7 +1072,6 @@ String FmUndoPropertyAction::GetComment() const
 }
 
 
-DBG_NAME(FmUndoContainerAction);
 //------------------------------------------------------------------------------
 FmUndoContainerAction::FmUndoContainerAction(FmFormModel& _rMod,
                                              Action _eAction,
@@ -1082,7 +1088,6 @@ FmUndoContainerAction::FmUndoContainerAction(FmFormModel& _rMod,
         // some old code suggested this could be a valid argument. However, this code was
         // buggy, and it *seemed* that nobody used it - so it was removed.
 
-    DBG_CTOR(FmUndoContainerAction,NULL);
     if ( xCont.is() && xElem.is() )
     {
         // normalize
@@ -1109,7 +1114,6 @@ FmUndoContainerAction::~FmUndoContainerAction()
 {
     // if we own the object ....
     DisposeElement( m_xOwnElement );
-    DBG_DTOR(FmUndoContainerAction,NULL);
 }
 
 //------------------------------------------------------------------------------
@@ -1190,7 +1194,7 @@ void FmUndoContainerAction::implReRemove( ) SAL_THROW( ( Exception ) )
 void FmUndoContainerAction::Undo()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmUndoContainerAction::Undo" );
-    FmXUndoEnvironment& rEnv = static_cast< FmFormModel& >( rMod ).GetUndoEnv();
+    FmXUndoEnvironment& rEnv = static_cast< FmFormModel& >( mrModel ).GetUndoEnv();
 
     if ( m_xContainer.is() && !rEnv.IsLocked() && m_xElement.is() )
     {
@@ -1220,7 +1224,7 @@ void FmUndoContainerAction::Undo()
 void FmUndoContainerAction::Redo()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmUndoContainerAction::Redo" );
-    FmXUndoEnvironment& rEnv = static_cast< FmFormModel& >( rMod ).GetUndoEnv();
+    FmXUndoEnvironment& rEnv = static_cast< FmFormModel& >( mrModel ).GetUndoEnv();
     if ( m_xContainer.is() && !rEnv.IsLocked() && m_xElement.is() )
     {
         rEnv.Lock();

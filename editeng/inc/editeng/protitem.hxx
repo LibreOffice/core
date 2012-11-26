@@ -51,9 +51,8 @@ class EDITENG_DLLPUBLIC SvxProtectItem : public SfxPoolItem
     sal_Bool bPos   :1;     //Position geschuetzt
 
 public:
-    TYPEINFO();
-
-    inline SvxProtectItem( const sal_uInt16 nId  );
+    POOLITEM_FACTORY()
+    inline SvxProtectItem( const sal_uInt16 nId = 0 );
     inline SvxProtectItem &operator=( const SvxProtectItem &rCpy );
 
     // "pure virtual Methoden" vom SfxPoolItem

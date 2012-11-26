@@ -62,6 +62,7 @@
 #include "sdpage.hxx"
 #include "drawdoc.hxx"
 #include "smarttag.hxx"
+#include <svx/svdlegacy.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
@@ -145,10 +146,11 @@ private:
 class ImageButtonHdl : public SmartHdl
 {
 public:
-    ImageButtonHdl( const SmartTagReference& xTag, /* sal_uInt16 nSID, const Image& rImage, const Image& rImageMO, */ const Point& rPnt );
-    virtual ~ImageButtonHdl();
-    virtual void CreateB2dIAObject();
-    virtual sal_Bool IsFocusHdl() const;
+    ImageButtonHdl(
+        SdrHdlList& rHdlList,
+        const SmartTagReference& xTag,
+        const basegfx::B2DPoint& rPnt );
+    virtual bool IsFocusHdl() const;
     virtual Pointer GetPointer() const;
     virtual bool isMarkable() const;
 
@@ -158,6 +160,10 @@ public:
     int getHighlightId() const { return mnHighlightId; }
 
     void HideTip();
+
+protected:
+    virtual void CreateB2dIAObject(::sdr::overlay::OverlayManager& rOverlayManager);
+    virtual ~ImageButtonHdl();
 
 private:
     rtl::Reference< ChangePlaceholderTag > mxTag;
@@ -169,8 +175,11 @@ private:
 
 // --------------------------------------------------------------------
 
-ImageButtonHdl::ImageButtonHdl( const SmartTagReference& xTag /*, sal_uInt16 nSID, const Image& rImage, const Image& rImageMO*/, const Point& rPnt )
-: SmartHdl( xTag, rPnt )
+ImageButtonHdl::ImageButtonHdl(
+    SdrHdlList& rHdlList,
+    const SmartTagReference& xTag,
+    const basegfx::B2DPoint& rPnt )
+: SmartHdl( rHdlList, 0, xTag, HDL_SMARTTAG, rPnt )
 , mxTag( dynamic_cast< ChangePlaceholderTag* >( xTag.get() ) )
 , mnHighlightId( -1 )
 , maImageSize( 42, 42 )
@@ -203,36 +212,30 @@ extern ::rtl::OUString ImplRetrieveLabelFromCommand( const Reference< XFrame >& 
 void ImageButtonHdl::onMouseEnter(const MouseEvent& rMEvt)
 {
     int nHighlightId = 0;
+    OutputDevice* pDev = mrHdlList.GetViewFromSdrHdlList().GetFirstOutputDevice();
+    if( pDev == 0 )
+        pDev = Application::GetDefaultDevice();
 
-    if( pHdlList && pHdlList->GetView())
+    Point aMDPos( rMEvt.GetPosPixel() );
+    const basegfx::B2DPoint aPosPixel(pDev->GetViewTransformation() * getPosition());
+    const Point aPointPixel(basegfx::fround(aPosPixel.getX()), basegfx::fround(aPosPixel.getY()));
+    aMDPos -= aPointPixel;
+
+    nHighlightId += aMDPos.X() > maImageSize.Width() ? 1 : 0;
+    nHighlightId += aMDPos.Y() > maImageSize.Height() ? 2 : 0;
+
+    if( mnHighlightId != nHighlightId )
     {
-        OutputDevice* pDev = pHdlList->GetView()->GetFirstOutputDevice();
-        if( pDev == 0 )
-            pDev = Application::GetDefaultDevice();
+        HideTip();
 
-        Point aMDPos( rMEvt.GetPosPixel() );
-        aMDPos -= pDev->LogicToPixel( GetPos() );
+        mnHighlightId = nHighlightId;
+        SdResId aResId( gButtonToolTips[mnHighlightId] );
+        aResId.SetRT( RSC_STRING );
 
-        nHighlightId += aMDPos.X() > maImageSize.Width() ? 1 : 0;
-        nHighlightId += aMDPos.Y() > maImageSize.Height() ? 2 : 0;
-
-        if( mnHighlightId != nHighlightId )
-        {
-            HideTip();
-
-            mnHighlightId = nHighlightId;
-
-            if( pHdlList )
-            {
-                SdResId aResId( gButtonToolTips[mnHighlightId] );
-                aResId.SetRT( RSC_STRING );
-
-                String aHelpText( aResId );
-                Rectangle aScreenRect( pDev->LogicToPixel( GetPos() ), maImageSize );
-                mnTip = Help::ShowTip( static_cast< ::Window* >( pHdlList->GetView()->GetFirstOutputDevice() ), aScreenRect, aHelpText, 0 ) ;
-            }
-            Touch();
-        }
+        String aHelpText( aResId );
+        Rectangle aScreenRect( aPointPixel, maImageSize );
+        mnTip = Help::ShowTip( static_cast< ::Window* >( mrHdlList.GetViewFromSdrHdlList().GetFirstOutputDevice() ), aScreenRect, aHelpText, 0 ) ;
+        Touch();
     }
 }
 
@@ -247,51 +250,22 @@ void ImageButtonHdl::onMouseLeave()
 
 // --------------------------------------------------------------------
 
-void ImageButtonHdl::CreateB2dIAObject()
+void ImageButtonHdl::CreateB2dIAObject(::sdr::overlay::OverlayManager& rOverlayManager)
 {
-    // first throw away old one
-    GetRidOfIAObject();
-
-    const Point aTagPos( GetPos() );
-    basegfx::B2DPoint aPosition( aTagPos.X(), aTagPos.Y() );
-
-    BitmapEx aBitmapEx( mxTag->createOverlayImage( mnHighlightId ) ); // maImageMO.GetBitmapEx() : maImage.GetBitmapEx() );
+    BitmapEx aBitmapEx( mxTag->createOverlayImage( mnHighlightId ) );
     maImageSize = aBitmapEx.GetSizePixel();
     maImageSize.Width() >>= 1;
     maImageSize.Height() >>= 1;
 
-    if(pHdlList)
-    {
-        SdrMarkView* pView = pHdlList->GetView();
+    ::sdr::overlay::OverlayObject* pOverlayObject = new ::sdr::overlay::OverlayBitmapEx( getPosition(), aBitmapEx, 0, 0 );
 
-        if(pView && !pView->areMarkHandlesHidden())
-        {
-            SdrPageView* pPageView = pView->GetSdrPageView();
-
-            if(pPageView)
-            {
-                for(sal_uInt32 b = 0; b < pPageView->PageWindowCount(); b++)
-                {
-                    const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
-
-                    SdrPaintWindow& rPaintWindow = rPageWindow.GetPaintWindow();
-                    if(rPaintWindow.OutputToWindow() && rPageWindow.GetOverlayManager() )
-                    {
-                        ::sdr::overlay::OverlayObject* pOverlayObject = 0;
-
-                        pOverlayObject = new ::sdr::overlay::OverlayBitmapEx( aPosition, aBitmapEx, 0, 0 );
-                        rPageWindow.GetOverlayManager()->add(*pOverlayObject);
+    rOverlayManager.add(*pOverlayObject);
                         maOverlayGroup.append(*pOverlayObject);
-                    }
-                }
-            }
-        }
-    }
 }
 
 // --------------------------------------------------------------------
 
-sal_Bool ImageButtonHdl::IsFocusHdl() const
+bool ImageButtonHdl::IsFocusHdl() const
 {
     return false;
 }
@@ -338,11 +312,12 @@ bool ChangePlaceholderTag::MouseButtonDown( const MouseEvent& /*rMEvt*/, SmartHd
         if( mxPlaceholderObj.get() )
         {
             // mark placeholder if it is not currently marked (or if also others are marked)
-            if( !mrView.IsObjMarked( mxPlaceholderObj.get() ) || (mrView.GetMarkedObjectList().GetMarkCount() != 1) )
+            const SdrObject* pSingleSelected = mrView.getSelectedIfSingle();
+
+            if( pSingleSelected != mxPlaceholderObj.get() )
             {
-                SdrPageView* pPV = mrView.GetSdrPageView();
-                mrView.UnmarkAllObj(pPV );
-                mrView.MarkObj(mxPlaceholderObj.get(), pPV, sal_False);
+                mrView.UnmarkAllObj();
+                mrView.MarkObj(*mxPlaceholderObj.get(), false);
             }
         }
 
@@ -377,18 +352,17 @@ bool ChangePlaceholderTag::KeyInput( const KeyEvent& rKEvt )
 BitmapEx ChangePlaceholderTag::createOverlayImage( int nHighlight )
 {
     BitmapEx aRet;
+
     if( mxPlaceholderObj.is() )
     {
         SdrObject* pPlaceholder = mxPlaceholderObj.get();
         SmartTagReference xThis( this );
-        const Rectangle& rSnapRect = pPlaceholder->GetSnapRect();
-        const Point aPoint;
-
+        const Rectangle aSnapRect(sdr::legacy::GetSnapRect(*pPlaceholder));
         OutputDevice* pDev = mrView.GetFirstOutputDevice();
         if( pDev == 0 )
             pDev = Application::GetDefaultDevice();
 
-        Size aShapeSizePix = pDev->LogicToPixel(rSnapRect.GetSize());
+        Size aShapeSizePix = pDev->LogicToPixel(aSnapRect.GetSize());
         long nShapeSizePix = std::min(aShapeSizePix.Width(),aShapeSizePix.Height());
 
         bool bLarge = nShapeSizePix > 250;
@@ -416,21 +390,20 @@ void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
     {
         SdrObject* pPlaceholder = mxPlaceholderObj.get();
         SmartTagReference xThis( this );
-        const Rectangle& rSnapRect = pPlaceholder->GetSnapRect();
-        const Point aPoint;
+        const Rectangle aSnapRect(sdr::legacy::GetSnapRect(*pPlaceholder));
 
         OutputDevice* pDev = mrView.GetFirstOutputDevice();
         if( pDev == 0 )
             pDev = Application::GetDefaultDevice();
 
-        Size aShapeSizePix = pDev->LogicToPixel(rSnapRect.GetSize());
-        long nShapeSizePix = std::min(aShapeSizePix.Width(),aShapeSizePix.Height());
+        const Size aShapeSizePix(pDev->LogicToPixel(aSnapRect.GetSize()));
+        const long nShapeSizePix(std::min(aShapeSizePix.Width(),aShapeSizePix.Height()));
+
         if( 50 > nShapeSizePix )
             return;
 
-        bool bLarge = nShapeSizePix > 250;
-
-        Size aButtonSize( pDev->PixelToLogic( getButtonImage(0, bLarge )->GetSizePixel()) );
+        const bool bLarge(nShapeSizePix > 250);
+        const Size aButtonSize( pDev->PixelToLogic( getButtonImage(0, bLarge )->GetSizePixel()) );
 
         const int nColumns = 2;
         const int nRows = 2;
@@ -438,17 +411,12 @@ void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
         long all_width = nColumns * aButtonSize.Width();
         long all_height = nRows * aButtonSize.Height();
 
-        Point aPos( rSnapRect.Center() );
+        Point aPos( aSnapRect.Center() );
         aPos.X() -= all_width >> 1;
         aPos.Y() -= all_height >> 1;
 
-        ImageButtonHdl* pHdl = new ImageButtonHdl( xThis, aPoint );
+        ImageButtonHdl* pHdl = new ImageButtonHdl(rHandlerList, xThis, basegfx::B2DPoint(aPos.X(), aPos.Y()) );
         pHdl->SetObjHdlNum( SMART_TAG_HDL_NUM );
-        pHdl->SetPageView( mrView.GetSdrPageView() );
-
-        pHdl->SetPos( aPos );
-
-        rHandlerList.AddHdl( pHdl );
     }
 }
 
@@ -542,7 +510,7 @@ IMPL_LINK(ViewOverlayManager,UpdateTagsHdl, void *, EMPTYARG)
     bChanges |= CreateTags();
 
     if( bChanges && mrBase.GetDrawView() )
-        static_cast< ::sd::View* >( mrBase.GetDrawView() )->updateHandles();
+        static_cast< ::sd::View* >( mrBase.GetDrawView() )->SetMarkHandles();
     return 0;
 }
 
@@ -554,13 +522,15 @@ bool ViewOverlayManager::CreateTags()
 
     if( pPage && !pPage->IsMasterPage() && (pPage->GetPageKind() == PK_STANDARD) )
     {
-        const std::list< SdrObject* >& rShapes = pPage->GetPresentationShapeList().getList();
+        const std::list< const SdrObject* >& rShapes = pPage->GetPresentationShapeList().getList();
 
-        for( std::list< SdrObject* >::const_iterator iter( rShapes.begin() ); iter != rShapes.end(); iter++ )
+        for( std::list< const SdrObject* >::const_iterator iter( rShapes.begin() ); iter != rShapes.end(); iter++ )
         {
             if( (*iter)->IsEmptyPresObj() && ((*iter)->GetObjIdentifier() == OBJ_OUTLINETEXT) && (mrBase.GetDrawView()->GetTextEditObject() != (*iter)) )
             {
-                rtl::Reference< SmartTag > xTag( new ChangePlaceholderTag( *this, *mrBase.GetMainViewShell()->GetView(), *(*iter) ) );
+                rtl::Reference< SmartTag > xTag(
+                    new ChangePlaceholderTag(
+                        *this, *mrBase.GetMainViewShell()->GetView(), *const_cast< SdrObject* >(*iter) ) );
                 maTagVector.push_back(xTag);
                 bChanges = true;
             }

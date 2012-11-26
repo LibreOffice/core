@@ -43,8 +43,14 @@ namespace sdr
 {
     namespace contact
     {
+        // sort by ViewObjectContact memory address
+        bool VOCComparator::operator()(ViewObjectContact* pA, ViewObjectContact* pB) const
+        {
+            return pA < pB;
+        }
+
         ObjectContact::ObjectContact()
-        :   maViewObjectContactVector(),
+        :   maViewObjectContacts(),
             maPrimitiveAnimator(),
             mpEventHandler(0),
             mpViewObjectContactRedirector(0),
@@ -59,8 +65,8 @@ namespace sdr
             // #i84257# To avoid that each 'delete pCandidate' again uses
             // the local RemoveViewObjectContact with a search and removal in the
             // vector, simply copy and clear local vector.
-            std::vector< ViewObjectContact* > aLocalVOCList(maViewObjectContactVector);
-            maViewObjectContactVector.clear();
+            std::vector< ViewObjectContact* > aLocalVOCList(maViewObjectContacts.begin(), maViewObjectContacts.end());
+            maViewObjectContacts.clear();
 
             while(!aLocalVOCList.empty())
             {
@@ -75,7 +81,7 @@ namespace sdr
             }
 
             // assert when there were new entries added during deletion
-            DBG_ASSERT(maViewObjectContactVector.empty(), "Corrupted ViewObjectContactList (!)");
+            DBG_ASSERT(maViewObjectContacts.empty(), "Corrupted ViewObjectContactList (!)");
 
             // delete the EventHandler. This will destroy all still contained events.
             DeleteEventHandler();
@@ -96,17 +102,29 @@ namespace sdr
         // A new ViewObjectContact was created and shall be remembered.
         void ObjectContact::AddViewObjectContact(ViewObjectContact& rVOContact)
         {
-            maViewObjectContactVector.push_back(&rVOContact);
+#ifdef DBG_UTIL
+            std::pair< ViewObjectContactSet::iterator, bool> aRetval = maViewObjectContacts.insert(&rVOContact);
+            OSL_ENSURE(aRetval.second, "OC: someone tried to add the same VOC a 2nd time (!)");
+#else
+            maViewObjectContacts.insert(&rVOContact);
+#endif
         }
 
         // A ViewObjectContact was deleted and shall be forgotten.
         void ObjectContact::RemoveViewObjectContact(ViewObjectContact& rVOContact)
         {
-            std::vector< ViewObjectContact* >::iterator aFindResult = std::find(maViewObjectContactVector.begin(), maViewObjectContactVector.end(), &rVOContact);
-
-            if(aFindResult != maViewObjectContactVector.end())
+            if(!maViewObjectContacts.empty())
             {
-                maViewObjectContactVector.erase(aFindResult);
+                ViewObjectContactSet::iterator aFindResult = maViewObjectContacts.find(&rVOContact);
+
+                if(aFindResult == maViewObjectContacts.end())
+                {
+                    OSL_ENSURE(false, "OC: someone tried to remove a VOC which is not registered (!)");
+                }
+                else
+                {
+                    maViewObjectContacts.erase(aFindResult);
+                }
             }
         }
 
@@ -279,8 +297,8 @@ namespace sdr
             return false;
         }
 
-        // access to SdrPageView. Default implementation returns NULL
-        SdrPageView* ObjectContact::TryToGetSdrPageView() const
+        // access to SdrView. Default implementation returns NULL
+        SdrView* ObjectContact::TryToGetSdrView() const
         {
             return 0;
         }

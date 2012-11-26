@@ -41,8 +41,6 @@ using namespace ::xmloff::token;
 
 // -----------------------------------------------------------------------------
 
-TYPEINIT1( XMLDlgOASISTransformerContext, XMLTransformerContext);
-
 XMLDlgOASISTransformerContext::XMLDlgOASISTransformerContext(
         XMLTransformerBase& rImp,
         const OUString& rQName ) :

@@ -85,8 +85,6 @@ using namespace com::sun::star::style;
 namespace sd
 {
 
-TYPEINIT1( FuTemplate, FuPoor );
-
 /*************************************************************************
 |*
 |* Konstruktor
@@ -122,13 +120,13 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
     const SfxPoolItem* pItem;
     sal_uInt16 nFamily = USHRT_MAX;
     if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_STYLE_FAMILY,
-        sal_False, &pItem ))
+        false, &pItem ))
     {
         nFamily = ( (const SfxUInt16Item &) pArgs->Get( SID_STYLE_FAMILY ) ).GetValue();
     }
     else
     if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_STYLE_FAMILYNAME,
-        sal_False, &pItem ))
+        false, &pItem ))
     {
         String sFamily = ( (const SfxStringItem &) pArgs->Get( SID_STYLE_FAMILYNAME ) ).GetValue();
         if (sFamily.CompareToAscii("graphics") == COMPARE_EQUAL)
@@ -148,8 +146,8 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
         case SID_STYLE_FAMILY:
         case SID_STYLE_NEW_BY_EXAMPLE:
         {
-            SFX_REQUEST_ARG( rReq, pNameItem, SfxStringItem, SID_APPLY_STYLE, sal_False );
-            SFX_REQUEST_ARG( rReq, pFamilyItem, SfxStringItem, SID_STYLE_FAMILYNAME, sal_False );
+            SFX_REQUEST_ARG( rReq, pNameItem, SfxStringItem, SID_APPLY_STYLE );
+            SFX_REQUEST_ARG( rReq, pFamilyItem, SfxStringItem, SID_STYLE_FAMILYNAME );
             if ( pFamilyItem && pNameItem )
             {
                 try
@@ -202,7 +200,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
         {
             // Z.Z. geht immer noch der Dialog auf, um den Namen
             // der Vorlage einzugeben.
-            if( mpView->AreObjectsMarked() || sal_True )
+            if( mpView->areSdrObjectsSelected() || true )
             {
                 SfxStyleSheetBase *p = pSSPool->Find(aStyleName, (SfxStyleFamily) nFamily, SFXSTYLEBIT_ALL );
                 if(p)
@@ -225,12 +223,12 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
             if( pStyleSheet )
             {
                 pSSPool->Remove( pStyleSheet );
-                nRetMask = sal_True;
-                mpDoc->SetChanged(sal_True);
+                nRetMask = true;
+                mpDoc->SetChanged(true);
             }
             else
             {
-                nRetMask = sal_False;
+                nRetMask = false;
             }
         break;
 
@@ -257,7 +255,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     (pOldStyleSheet->GetFamily() == SD_STYLE_FAMILY_MASTERPAGE && mpDoc->GetDocumentType() == DOCUMENT_TYPE_DRAW) )
                 {
                     mpView->SetStyleSheet( (SfxStyleSheet*) pStyleSheet);
-                    mpDoc->SetChanged(sal_True);
+                    mpDoc->SetChanged(true);
                     mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_STYLE_FAMILY2 );
                 }
             }
@@ -273,7 +271,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                 if( pArgs->GetItemState( nSId ) == SFX_ITEM_SET )
                 {
                     aStyleName = ( ( (const SfxStringItem &) pArgs->Get( nSId ) ).GetValue() );
-                    SD_MOD()->SetWaterCan( sal_True );
+                    SD_MOD()->SetWaterCan( true );
                     pStyleSheet = pSSPool->Find( aStyleName, (SfxStyleFamily) nFamily);
                 }
                 // keine Praesentationsobjektvorlagen, die werden nur
@@ -288,11 +286,11 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                 }
                 else
-                    SD_MOD()->SetWaterCan( sal_False );
+                    SD_MOD()->SetWaterCan( false );
             }
             else
             {
-                SD_MOD()->SetWaterCan( sal_False );
+                SD_MOD()->SetWaterCan( false );
                 // Werkzeugleiste muss wieder enabled werden
                 mpViewShell->Invalidate();
             }
@@ -315,7 +313,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                 SfxAbstractTabDialog*  pStdDlg  = NULL;
                 SfxAbstractTabDialog*  pPresDlg = NULL;
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-                sal_Bool bOldDocInOtherLanguage = sal_False;
+                bool bOldDocInOtherLanguage = false;
                 SfxItemSet aOriSet( pStyleSheet->GetItemSet() );
 
                 SfxStyleFamily eFamily = pStyleSheet->GetFamily();
@@ -383,7 +381,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     else
                     {
                         DBG_ERROR("Vorlage aus aelterer anderssprachiger Version");
-                        bOldDocInOtherLanguage = sal_True;
+                        bOldDocInOtherLanguage = true;
                     }
 
                     if( !bOldDocInOtherLanguage )
@@ -569,12 +567,11 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                                     SdrObjListIter aIter( *pPage );
                                     while( aIter.IsMore() )
                                     {
-                                        SdrObject* pObj = aIter.Next();
-                                        if( pObj->ISA(SdrPageObj) )
+                                        SdrPageObj* pObj = dynamic_cast< SdrPageObj* >(aIter.Next());
+
+                                        if( pObj )
                                         {
-                                            // repaint only
                                             pObj->ActionChanged();
-                                            // pObj->SendRepaintBroadcast();
                                         }
                                     }
                                 }
@@ -584,16 +581,16 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         if( mpDoc->GetOnlineSpell() )
                         {
                             const SfxPoolItem* pTempItem;
-                            if( SFX_ITEM_SET == rAttr.GetItemState(EE_CHAR_LANGUAGE, sal_False, &pTempItem ) ||
-                                SFX_ITEM_SET == rAttr.GetItemState(EE_CHAR_LANGUAGE_CJK, sal_False, &pTempItem ) ||
-                                SFX_ITEM_SET == rAttr.GetItemState(EE_CHAR_LANGUAGE_CTL, sal_False, &pTempItem ) )
+                            if( SFX_ITEM_SET == rAttr.GetItemState(EE_CHAR_LANGUAGE, false, &pTempItem ) ||
+                                SFX_ITEM_SET == rAttr.GetItemState(EE_CHAR_LANGUAGE_CJK, false, &pTempItem ) ||
+                                SFX_ITEM_SET == rAttr.GetItemState(EE_CHAR_LANGUAGE_CTL, false, &pTempItem ) )
                             {
                                 mpDoc->StopOnlineSpelling();
                                 mpDoc->StartOnlineSpelling();
                             }
                         }
 
-                        mpDoc->SetChanged(sal_True);
+                        mpDoc->SetChanged(true);
                     }
                     break;
 
@@ -617,8 +614,8 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
             if( pStyleSheet )
             {
                 nRetMask = pStyleSheet->GetMask();
-                SfxItemSet aCoreSet( mpDoc->GetPool() );
-                mpView->GetAttributes( aCoreSet, sal_True );
+                SfxItemSet aCoreSet( mpDoc->GetItemPool() );
+                mpView->GetAttributes( aCoreSet, true );
 
                 // wenn das Objekt eine Vorlage hatte, wird diese Parent
                 // der neuen Vorlage
@@ -644,7 +641,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     }
 
                     ( (SfxStyleSheet*) pStyleSheet )->Broadcast( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
-                    mpDoc->SetChanged(sal_True);
+                    mpDoc->SetChanged(true);
 
                     mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_STYLE_FAMILY2 );
                 }
@@ -654,15 +651,14 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
         case SID_STYLE_UPDATE_BY_EXAMPLE:
         {
-            if ((mpView->AreObjectsMarked() && mpView->GetMarkedObjectList().GetMarkCount() == 1) ||
-                 mpView->ISA(OutlineView))
+            if (mpView->getSelectedIfSingle() || dynamic_cast< OutlineView* >(mpView))
             {
                 pStyleSheet = mpView->GetStyleSheet();
 
                 if( pStyleSheet )
                 {
                     nRetMask = pStyleSheet->GetMask();
-                    SfxItemSet aCoreSet( mpDoc->GetPool() );
+                    SfxItemSet aCoreSet( mpDoc->GetItemPool() );
                     mpView->GetAttributes( aCoreSet );
 
                     SfxItemSet* pStyleSet = &pStyleSheet->GetItemSet();
@@ -671,7 +667,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     mpView->SetStyleSheet( (SfxStyleSheet*) pStyleSheet);
 
                     ( (SfxStyleSheet*) pStyleSheet )->Broadcast( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
-                    mpDoc->SetChanged(sal_True);
+                    mpDoc->SetChanged(true);
                     mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_STYLE_FAMILY2 );
                 }
             }

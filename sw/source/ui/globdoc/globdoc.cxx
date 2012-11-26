@@ -42,9 +42,6 @@
     Beschreibung:   Alle Filter registrieren
  --------------------------------------------------------------------*/
 
-TYPEINIT1(SwGlobalDocShell, SwDocShell);
-
-//-------------------------------------------------------------------------
 SFX_IMPL_OBJECTFACTORY( SwGlobalDocShell, SvGlobalName(SO3_SWGLOB_CLASSID), SFXOBJECTSHELL_STD_NORMAL|SFXOBJECTSHELL_HASMENU, "swriter/GlobalDocument" )
 
 SwGlobalDocShell::SwGlobalDocShell(SfxObjectCreateMode eMode ) :

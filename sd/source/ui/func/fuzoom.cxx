@@ -52,8 +52,6 @@ sal_uInt16 SidArrayZoom[] = {
                     SID_ZOOM_IN,
                     0 };
 
-TYPEINIT1( FuZoom, FuPoor );
-
 /*************************************************************************
 |*
 |* Konstruktor
@@ -67,8 +65,13 @@ FuZoom::FuZoom(
     SdDrawDocument* pDoc,
     SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq),
-      bVisible(sal_False),
-      bStartDrag(sal_False)
+    maBeginPosPixel(),
+    maBeginPos(),
+    maEndPos(),
+    maZoomRange(),
+    maPtr(),
+    mbVisible(false),
+    mbStartDrag(false)
 {
 }
 
@@ -80,13 +83,13 @@ FuZoom::FuZoom(
 
 FuZoom::~FuZoom()
 {
-    if (bVisible)
+    if (mbVisible)
     {
         // Hide ZoomRect
-        mpViewShell->DrawMarkRect(aZoomRect);
+        mpViewShell->DrawMarkRange(maZoomRange);
 
-        bVisible = sal_False;
-        bStartDrag = sal_False;
+        mbVisible = false;
+        mbStartDrag = false;
     }
 }
 
@@ -102,18 +105,18 @@ FunctionReference FuZoom::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::
 |*
 \************************************************************************/
 
-sal_Bool FuZoom::MouseButtonDown(const MouseEvent& rMEvt)
+bool FuZoom::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     mpWindow->CaptureMouse();
-    bStartDrag = sal_True;
+    mbStartDrag = true;
 
-    aBeginPosPix = rMEvt.GetPosPixel();
-    aBeginPos = mpWindow->PixelToLogic(aBeginPosPix);
+    maBeginPosPixel = basegfx::B2DPoint(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
+    maBeginPos = mpWindow->GetInverseViewTransformation() * maBeginPosPixel;
 
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************
@@ -122,53 +125,50 @@ sal_Bool FuZoom::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuZoom::MouseMove(const MouseEvent& rMEvt)
+bool FuZoom::MouseMove(const MouseEvent& rMEvt)
 {
-    if (bStartDrag)
+    if (mbStartDrag)
     {
-        if (bVisible)
+        if (mbVisible)
         {
-            mpViewShell->DrawMarkRect(aZoomRect);
+            mpViewShell->DrawMarkRange(maZoomRange);
         }
 
-        Point aPosPix = rMEvt.GetPosPixel();
-        ForceScroll(aPosPix);
+        const basegfx::B2DPoint aPosPix(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
 
-        aEndPos = mpWindow->PixelToLogic(aPosPix);
-        aBeginPos = mpWindow->PixelToLogic(aBeginPosPix);
+        ForceScroll(aPosPix);
+        maEndPos = mpWindow->GetInverseViewTransformation() * aPosPix;
+        maBeginPos = mpWindow->GetInverseViewTransformation() * maBeginPosPixel;
 
         if (nSlotId == SID_ZOOM_PANNING)
         {
             // Panning
+            basegfx::B2DVector aScroll(maBeginPos - maEndPos);
 
-            Point aScroll = aBeginPos - aEndPos;
-
-            // #i2237#
-            // removed old stuff here which still forced zoom to be
-            // %BRUSH_SIZE which is outdated now
-
-            if (aScroll.X() != 0 || aScroll.Y() != 0)
+            if(!aScroll.equalZero() && mpView->GetSdrPageView())
             {
-                Size aWorkSize = mpView->GetWorkArea().GetSize();
-                Size aPageSize = mpView->GetSdrPageView()->GetPage()->GetSize();
-                aScroll.X() /= aWorkSize.Width()  / aPageSize.Width();
-                aScroll.Y() /= aWorkSize.Height() / aPageSize.Height();
-                mpViewShell->Scroll(aScroll.X(), aScroll.Y());
-                aBeginPosPix = aPosPix;
+                const basegfx::B2DVector aWorkRange(mpView->GetWorkArea().getRange());
+                const SdrPage& rPage = mpView->GetSdrPageView()->getSdrPageFromSdrPageView();
+                const basegfx::B2DVector aPageRange(rPage.GetPageScale());
+                const basegfx::B2DVector aFactor(
+                    aPageRange.getX() / (basegfx::fTools::equalZero(aWorkRange.getX()) ? 1.0 : aWorkRange.getX()),
+                    aPageRange.getY() / (basegfx::fTools::equalZero(aWorkRange.getY()) ? 1.0 : aWorkRange.getY()));
+
+                aScroll *= aFactor;
+                mpViewShell->Scroll(basegfx::fround(aScroll.getX()), basegfx::fround(aScroll.getY()));
+                maBeginPosPixel = aPosPix;
             }
         }
         else
         {
-            Rectangle aRect(aBeginPos, aEndPos);
-            aZoomRect = aRect;
-            aZoomRect.Justify();
-            mpViewShell->DrawMarkRect(aZoomRect);
+            maZoomRange = basegfx::B2DRange(maBeginPos, maEndPos);
+            mpViewShell->DrawMarkRange(maZoomRange);
         }
 
-        bVisible = sal_True;
+        mbVisible = true;
     }
 
-    return bStartDrag;
+    return mbStartDrag;
 }
 
 /*************************************************************************
@@ -177,51 +177,45 @@ sal_Bool FuZoom::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
+bool FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    if (bVisible)
+    if (mbVisible)
     {
         // Hide ZoomRect
-        mpViewShell->DrawMarkRect(aZoomRect);
-        bVisible = sal_False;
+        mpViewShell->DrawMarkRange(maZoomRange);
+        mbVisible = false;
     }
 
-    Point aPosPix = rMEvt.GetPosPixel();
+    const basegfx::B2DPoint aPosPix(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
 
     if(SID_ZOOM_PANNING != nSlotId)
     {
         // Zoom
-        Size aZoomSizePixel = mpWindow->LogicToPixel(aZoomRect).GetSize();
-        sal_uLong nTol = DRGPIX + DRGPIX;
+        const basegfx::B2DVector aZoomSizePixel(mpWindow->GetInverseViewTransformation() * maZoomRange.getRange());
+        const double fTol(DRGPIX + DRGPIX);
 
-        if ( aZoomSizePixel.Width() < (long) nTol && aZoomSizePixel.Height() < (long) nTol )
+        if ( aZoomSizePixel.getX() < fTol && aZoomSizePixel.getY() < fTol )
         {
             // Klick auf der Stelle: Zoomfaktor verdoppeln
-            Point aPos = mpWindow->PixelToLogic(aPosPix);
-            Size aSize = mpWindow->PixelToLogic(mpWindow->GetOutputSizePixel());
-            aSize.Width() /= 2;
-            aSize.Height() /= 2;
-            aPos.X() -= aSize.Width() / 2;
-            aPos.Y() -= aSize.Height() / 2;
-            aZoomRect.SetPos(aPos);
-            aZoomRect.SetSize(aSize);
+            const basegfx::B2DPoint aPos(mpWindow->GetInverseViewTransformation() * aPosPix);
+            const basegfx::B2DVector aScale(mpWindow->GetLogicVector() * 0.25);
+
+            maZoomRange = basegfx::B2DRange(aPos - aScale, aScale * 2.0);
         }
 
-        mpViewShell->SetZoomRect(aZoomRect);
+        mpViewShell->SetZoomRange(maZoomRange);
     }
 
-    Rectangle aVisAreaWin = mpWindow->PixelToLogic(Rectangle(Point(0,0),
-                                           mpWindow->GetOutputSizePixel()));
-    mpViewShell->GetZoomList()->InsertZoomRect(aVisAreaWin);
+    mpViewShell->GetZoomList()->InsertZoomRange(mpWindow->GetLogicRange());
 
-    bStartDrag = sal_False;
+    mbStartDrag = false;
     mpWindow->ReleaseMouse();
     mpViewShell->Cancel();
 
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************
@@ -232,7 +226,7 @@ sal_Bool FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
 
 void FuZoom::Activate()
 {
-    aPtr = mpWindow->GetPointer();
+    maPtr = mpWindow->GetPointer();
 
     if (nSlotId == SID_ZOOM_PANNING)
     {
@@ -252,7 +246,7 @@ void FuZoom::Activate()
 
 void FuZoom::Deactivate()
 {
-    mpWindow->SetPointer( aPtr );
+    mpWindow->SetPointer( maPtr );
     mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArrayZoom );
 }
 } // end of namespace sd

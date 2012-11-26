@@ -34,7 +34,6 @@
 //------------------------------------------------------------
 class SVX_DLLPUBLIC SdrYesNoItem: public SfxBoolItem {
 public:
-    TYPEINFO();
     SdrYesNoItem(): SfxBoolItem() {}
     SdrYesNoItem(sal_uInt16 nId, sal_Bool bOn=sal_False): SfxBoolItem(nId,bOn) {}
     SdrYesNoItem(sal_uInt16 nId, SvStream& rIn):  SfxBoolItem(nId,rIn) {}

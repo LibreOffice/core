@@ -39,8 +39,8 @@ public:
     */
     virtual void RunNextStep (void) = 0;
 
-    /** Return <TRUE/> when there is at least one more step to execute.
-        When the task has been executed completely then <FALSE/> is
+    /** Return <true/> when there is at least one more step to execute.
+        When the task has been executed completely then <false/> is
         returned.
     */
     virtual bool HasNextStep (void) = 0;

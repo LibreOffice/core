@@ -242,9 +242,28 @@ namespace basegfx
         return !((*this) == rPolyPolygon);
     }
 
+    B2DPolyPolygon& B2DPolyPolygon::operator*=(const ::basegfx::B2DHomMatrix& rMatrix)
+    {
+        transform(rMatrix);
+
+        return *this;
+    }
+
     sal_uInt32 B2DPolyPolygon::count() const
     {
         return mpPolyPolygon->count();
+    }
+
+    sal_uInt32 B2DPolyPolygon::allPointCount() const
+    {
+        sal_uInt32 nRetval(0);
+
+        for(sal_uInt32 a(0); a < mpPolyPolygon->count(); a++)
+        {
+            nRetval += mpPolyPolygon->getB2DPolygon(a).count();
+        }
+
+        return nRetval;
     }
 
     B2DPolygon B2DPolyPolygon::getB2DPolygon(sal_uInt32 nIndex) const
@@ -420,6 +439,13 @@ namespace basegfx
     B2DPolygon* B2DPolyPolygon::end()
     {
         return mpPolyPolygon->end();
+    }
+
+    B2DPolyPolygon operator*(const B2DHomMatrix& rMatrix, const B2DPolyPolygon& rB2DPolyPolygon)
+    {
+        B2DPolyPolygon aRes(rB2DPolyPolygon);
+
+        return aRes *= rMatrix;
     }
 } // end of namespace basegfx
 

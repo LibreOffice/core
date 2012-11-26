@@ -169,7 +169,6 @@ GenericLockInformation( const ByteString &rKey, const ByteString &rValue,
       return NULL;
     return GenericInformation::GetSubInfo(rKey, bSearchByPath, bCreatePath); }
 
-  //  TYPEINFO();
 private:
 
   LockState aLockState;

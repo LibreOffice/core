@@ -44,12 +44,10 @@ Dieses Item beschreibt eine logische Variable "Absatz trennen ja oder nein".
 class EDITENG_DLLPUBLIC SvxFmtSplitItem : public SfxBoolItem
 {
 public:
-    TYPEINFO();
-    ~SvxFmtSplitItem();
-
-    inline SvxFmtSplitItem( const sal_Bool bSplit /*= sal_True*/,
-                            const sal_uInt16 nWh  );
+    POOLITEM_FACTORY()
+    inline SvxFmtSplitItem( const sal_Bool bSplit = sal_True, const sal_uInt16 nWh = 0 );
     inline SvxFmtSplitItem& operator=( const SvxFmtSplitItem& rSplit );
+    ~SvxFmtSplitItem();
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;

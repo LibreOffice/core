@@ -130,14 +130,6 @@ void EDcr_Impl::UnRegisterEDcr(DynamicErrorInfo *pDcr)
         ppDcr[lIdx]=0;
 }
 
-TYPEINIT0(ErrorInfo);
-TYPEINIT1(DynamicErrorInfo, ErrorInfo);
-TYPEINIT1(StandardErrorInfo, DynamicErrorInfo);
-TYPEINIT1(StringErrorInfo, DynamicErrorInfo);
-TYPEINIT1(TwoStringErrorInfo, DynamicErrorInfo);
-TYPEINIT1(MessageInfo, DynamicErrorInfo);
-
-
 ErrorInfo *ErrorInfo::GetErrorInfo(sal_uIntPtr lId)
 {
     if(lId & ERRCODE_DYNAMIC_MASK)
@@ -319,7 +311,7 @@ sal_uInt16 ErrorHandler::HandleError_Impl(
     else
         nErrFlags |= ERRCODE_MSG_ERROR;
 
-    DynamicErrorInfo* pDynPtr=PTR_CAST(DynamicErrorInfo,pInfo);
+    DynamicErrorInfo* pDynPtr=dynamic_cast< DynamicErrorInfo* >( pInfo);
     if(pDynPtr)
     {
         sal_uInt16 nDynFlags = pDynPtr->GetDialogMask();
@@ -435,13 +427,13 @@ sal_Bool SimpleErrorHandler::CreateString(
     aStr+="\nErrorArea: ";
     aStr+=ByteString::CreateFromInt32((nId & ERRCODE_ERROR_MASK &
             ~((1 << ERRCODE_AREA_SHIFT ) -1 ) ) >> ERRCODE_AREA_SHIFT);
-    DynamicErrorInfo *pDyn=PTR_CAST(DynamicErrorInfo,pInfo);
+    const DynamicErrorInfo *pDyn = dynamic_cast< const DynamicErrorInfo* >( pInfo);
     if(pDyn)
     {
         aStr+="\nDId ";
         aStr+=ByteString::CreateFromInt32((sal_uIntPtr)*pDyn);
     }
-    StandardErrorInfo *pStd=PTR_CAST(StandardErrorInfo,pInfo);
+    const StandardErrorInfo *pStd = dynamic_cast< const StandardErrorInfo* >( pInfo);
     if(pStd)
     {
         aStr+="\nXId ";

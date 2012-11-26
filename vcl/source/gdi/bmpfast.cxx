@@ -677,8 +677,12 @@ bool ImplBlendToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
     BitmapBuffer& rDstBuffer, const BitmapBuffer& rSrcBuffer,
     const BitmapBuffer& rMskBuffer )
 {
-    //DBG_ASSERT( rMskBuffer.mnFormat == MSKFMT, "FastBmp BlendImage: wrong MSKFMT" );
-    DBG_ASSERT( rMskBuffer.mnFormat == BMP_FORMAT_8BIT_PAL, "FastBmp BlendImage: unusual MSKFMT" );
+#ifdef DBG_UTIL
+    if(rMskBuffer.mnFormat != BMP_FORMAT_8BIT_PAL && rMskBuffer.mnFormat != BMP_FORMAT_8BIT_TC_MASK)
+    {
+        OSL_ENSURE(false, "FastBmp BlendImage: unusual MSKFMT");
+    }
+#endif
 
     const int nSrcLinestep = rSrcBuffer.mnScanlineSize;
     int nMskLinestep = rMskBuffer.mnScanlineSize;

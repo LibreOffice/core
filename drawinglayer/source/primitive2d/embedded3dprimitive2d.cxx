@@ -104,23 +104,6 @@ namespace drawinglayer
             maLightNormal.normalize();
         }
 
-        bool Embedded3DPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const Embedded3DPrimitive2D& rCompare = static_cast< const Embedded3DPrimitive2D& >(rPrimitive);
-
-                return (primitive3d::arePrimitive3DSequencesEqual(getChildren3D(), rCompare.getChildren3D())
-                    && getObjectTransformation() == rCompare.getObjectTransformation()
-                    && getViewInformation3D() == rCompare.getViewInformation3D()
-                    && getLightNormal() == rCompare.getLightNormal()
-                    && getShadowSlant() == rCompare.getShadowSlant()
-                    && getScene3DRange() == rCompare.getScene3DRange());
-            }
-
-            return false;
-        }
-
         basegfx::B2DRange Embedded3DPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
             if(maB2DRange.isEmpty())

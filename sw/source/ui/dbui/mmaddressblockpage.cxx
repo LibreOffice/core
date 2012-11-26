@@ -1522,9 +1522,9 @@ AddressMultiLineEdit::~AddressMultiLineEdit()
   -----------------------------------------------------------------------*/
 void    AddressMultiLineEdit::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    if(rHint.ISA(TextHint) &&
-            static_cast<const TextHint&>(rHint).GetId() == TEXT_HINT_VIEWSELECTIONCHANGED &&
-            m_aSelectionLink.IsSet())
+    const TextHint* pTextHint = dynamic_cast< const TextHint* >(&rHint);
+
+    if(pTextHint && TEXT_HINT_VIEWSELECTIONCHANGED == pTextHint->GetId() && m_aSelectionLink.IsSet())
     {
         m_aSelectionLink.Call(this);
     }

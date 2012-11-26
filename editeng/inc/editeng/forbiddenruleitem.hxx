@@ -38,8 +38,6 @@
 class EDITENG_DLLPUBLIC SvxForbiddenRuleItem : public SfxBoolItem
 {
 public:
-    TYPEINFO();
-
     SvxForbiddenRuleItem( sal_Bool bOn /*= sal_False*/,
                         const sal_uInt16 nId  );
 

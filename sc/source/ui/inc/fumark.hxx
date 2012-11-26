@@ -37,8 +37,8 @@
 class FuMarkRect : public FuPoor
 {
  protected:
-    Point           aBeginPos;
-    Rectangle       aZoomRect;
+    basegfx::B2DPoint   aBeginPos;
+    basegfx::B2DRange   aZoomRange;
     sal_Bool            bVisible;
     sal_Bool            bStartDrag;
     ScRangeListRef  aSourceRange;

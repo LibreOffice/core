@@ -81,8 +81,6 @@ class XMLLineNumberingImportContext : public SvXMLStyleContext
 
 public:
 
-    TYPEINFO();
-
     XMLLineNumberingImportContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,

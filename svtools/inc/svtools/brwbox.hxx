@@ -477,7 +477,7 @@ public:
 
     // Window-Control (pass to DataWindow)
     void            SetUpdateMode( sal_Bool bUpdate );
-    sal_Bool            GetUpdateMode() const;
+    bool            GetUpdateMode() const;
 
     // map-mode and font control
     void            SetFont( const Font& rNewFont );

@@ -328,8 +328,7 @@ long SwWrtShell::SetCrsrKillSel(const Point *pPt, sal_Bool bTextOnly )
 void SwWrtShell::UnSelectFrm()
 {
     // Rahmenselektion aufheben mit garantiert ungueltiger Position
-    Point aPt(LONG_MIN, LONG_MIN);
-    SelectObj(aPt, 0);
+    SelectObj(basegfx::B2DPoint(LONG_MIN, LONG_MIN), 0);
     SwTransferable::ClearSelection( *this );
 }
 

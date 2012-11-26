@@ -403,6 +403,13 @@ SwXTextDocument::SwXTextDocument(SwDocShell* pShell) :
     // <--
 {
 }
+
+SdrModel* SwXTextDocument::getSdrModel() const
+{
+    OSL_ENSURE(pDocShell->GetDoc()->GetOrCreateDrawModel(), "No SdrModel in SwDoc, should not happen");
+    return pDocShell->GetDoc()->GetOrCreateDrawModel();
+}
+
 /*-- 18.12.98 11:53:00---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -554,12 +561,10 @@ Reference< XInterface >  SwXTextDocument::getCurrentSelection() throw( RuntimeEx
     Reference< XInterface >  xRef;
     if(IsValid())
     {
-
-        const TypeId aTypeId = TYPE(SwView);
-        SwView* pView = (SwView*)SfxViewShell::GetFirst(&aTypeId);
+        SwView* pView = (SwView*)SfxViewShell::GetFirst( _IsSfxViewShell< SwView > );
         while(pView && pView->GetObjectShell() != pDocShell)
         {
-            pView = (SwView*)SfxViewShell::GetNext(*pView, &aTypeId);
+            pView = (SwView*)SfxViewShell::GetNext(*pView, _IsSfxViewShell< SwView >);
         }
         if(pView)
         {
@@ -1915,8 +1920,8 @@ sal_Bool SwXTextDocument::supportsService(const OUString& rServiceName) throw( R
        )
     return sal_True;
 
-    sal_Bool bWebDoc    = (0 != PTR_CAST(SwWebDocShell,    pDocShell));
-    sal_Bool bGlobalDoc = (0 != PTR_CAST(SwGlobalDocShell, pDocShell));
+    sal_Bool bWebDoc    = (0 != dynamic_cast< SwWebDocShell* >( pDocShell));
+    sal_Bool bGlobalDoc = (0 != dynamic_cast< SwGlobalDocShell* >( pDocShell));
     sal_Bool bTextDoc   = (!bWebDoc && !bGlobalDoc);
 
     return (
@@ -1930,8 +1935,8 @@ sal_Bool SwXTextDocument::supportsService(const OUString& rServiceName) throw( R
  * --------------------------------------------------*/
 Sequence< OUString > SwXTextDocument::getSupportedServiceNames(void) throw( RuntimeException )
 {
-    sal_Bool bWebDoc    = (0 != PTR_CAST(SwWebDocShell,    pDocShell));
-    sal_Bool bGlobalDoc = (0 != PTR_CAST(SwGlobalDocShell, pDocShell));
+    sal_Bool bWebDoc    = (0 != dynamic_cast< SwWebDocShell* >( pDocShell));
+    sal_Bool bGlobalDoc = (0 != dynamic_cast< SwGlobalDocShell* >( pDocShell));
     sal_Bool bTextDoc   = (!bWebDoc && !bGlobalDoc);
 
     Sequence< OUString > aRet (3);
@@ -2596,10 +2601,11 @@ SwDoc * SwXTextDocument::GetRenderDoc(
             // the view shell should be SwView for documents PDF export.
             // for the page preview no selection should be possible
             // (the export dialog does not allow for this option)
-            const TypeId aSwViewTypeId = TYPE(SwView);
-            if (rpView  &&  rpView->IsA(aSwViewTypeId))
+            SwView* pSwView = dynamic_cast< SwView* >(rpView);
+
+            if (pSwView)
             {
-                SfxObjectShellLock xDocSh(((SwView*)rpView)->GetOrCreateTmpSelectionDoc());
+                SfxObjectShellLock xDocSh(pSwView->GetOrCreateTmpSelectionDoc());
                 if (xDocSh.Is())
                 {
                     pDoc = ((SwDocShell*)&xDocSh)->GetDoc();
@@ -2690,7 +2696,8 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
 
         // TODO/mba: we really need a generic way to get the ViewShell!
         ViewShell* pViewShell = 0;
-        SwView* pSwView = PTR_CAST(SwView, pView);
+        SwView* pSwView = dynamic_cast< SwView* >(pView);
+
         if ( pSwView )
         {
             pViewShell = pSwView->GetWrtShellPtr();
@@ -2862,7 +2869,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
 
     // TODO/mba: we really need a generic way to get the ViewShell!
     ViewShell* pVwSh = 0;
-    SwView* pSwView = PTR_CAST(SwView, pView);
+    SwView* pSwView = dynamic_cast< SwView* >(pView);
     if ( pSwView )
         pVwSh = pSwView->GetWrtShellPtr();
     else
@@ -3150,15 +3157,16 @@ void SAL_CALL SwXTextDocument::render(
                 // or SwPagePreView for PDF export of the page preview
                 //!! (check for SwView first as in GuessViewShell) !!
                 DBG_ASSERT( pView, "!! view missing !!" );
-                const TypeId aSwViewTypeId = TYPE(SwView);
-                ViewShell* pVwSh = 0;
-                if (pView)
-                {
                     // TODO/mba: we really need a generic way to get the ViewShell!
-                    SwView* pSwView = PTR_CAST(SwView, pView);
+                SwView* pSwView = dynamic_cast< SwView* >(pView);
+                ViewShell* pVwSh = 0;
+
                     if ( pSwView )
+                {
                         pVwSh = pSwView->GetWrtShellPtr();
+                }
                     else
+                {
                         pVwSh = ((SwPagePreView*)pView)->GetViewShell();
                 }
 
@@ -3171,8 +3179,8 @@ void SAL_CALL SwXTextDocument::render(
                     const bool bFirstPage           = m_pPrintUIOptions->getBoolValue( "IsFirstPage", sal_False );
                     bool bIsSkipEmptyPages          = !m_pPrintUIOptions->IsPrintEmptyPages( bIsPDFExport );
 
-                    DBG_ASSERT(( pView->IsA(aSwViewTypeId) &&  m_pRenderData->IsViewOptionAdjust())
-                            || (!pView->IsA(aSwViewTypeId) && !m_pRenderData->IsViewOptionAdjust()),
+                    DBG_ASSERT(( pSwView &&  m_pRenderData->IsViewOptionAdjust())
+                            || (!pSwView && !m_pRenderData->IsViewOptionAdjust()),
                             "SwView / SwViewOptionAdjust_Impl availability mismatch" );
 
                     // since printing now also use the API for PDF export this option
@@ -3185,9 +3193,7 @@ void SAL_CALL SwXTextDocument::render(
                     // During this process, additional information required for tagging
                     // the pdf file are collected, which are evaulated during painting.
                     //
-                    SwWrtShell* pWrtShell = pView->IsA(aSwViewTypeId) ?
-                                            ((SwView*)pView)->GetWrtShellPtr() :
-                                            0;
+                    SwWrtShell* pWrtShell = pSwView ? pSwView->GetWrtShellPtr() : 0;
 
                     if (bIsPDFExport && bFirstPage && pWrtShell)
                     {

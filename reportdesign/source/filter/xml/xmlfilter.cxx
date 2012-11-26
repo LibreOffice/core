@@ -91,9 +91,6 @@ class RptMLMasterStylesContext_Impl : public XMLTextMasterStylesContext
     RptMLMasterStylesContext_Impl(const RptMLMasterStylesContext_Impl&);
     void operator =(const RptMLMasterStylesContext_Impl&);
 public:
-
-    TYPEINFO();
-
     RptMLMasterStylesContext_Impl(
             ORptFilter& rImport, sal_uInt16 nPrfx,
             const ::rtl::OUString& rLName ,
@@ -102,7 +99,6 @@ public:
     virtual void EndElement();
 };
 
-TYPEINIT1( RptMLMasterStylesContext_Impl, XMLTextMasterStylesContext );
 DBG_NAME(rpt_RptMLMasterStylesContext_Impl)
 RptMLMasterStylesContext_Impl::RptMLMasterStylesContext_Impl(
         ORptFilter& rImport, sal_uInt16 nPrfx,
@@ -689,10 +685,10 @@ SvXMLImportContext* ORptFilter::CreateContext( sal_uInt16 nPrefix,
                 const SvXMLStylesContext* pAutoStyles = GetAutoStyles();
                 if ( pAutoStyles )
                 {
-                    XMLPropStyleContext* pAutoStyle = PTR_CAST(XMLPropStyleContext,pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_PAGE_MASTER,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pm1"))));
+                    const XMLPropStyleContext* pAutoStyle = dynamic_cast< const XMLPropStyleContext* >( pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_PAGE_MASTER,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pm1"))));
                     if ( pAutoStyle )
                     {
-                        pAutoStyle->FillPropertySet(getReportDefinition().get());
+                        const_cast< XMLPropStyleContext* >(pAutoStyle)->FillPropertySet(getReportDefinition().get());
                     }
                 }
                 pContext = new OXMLReport( *this, nPrefix, rLocalName,xAttrList,getReportDefinition(),NULL );
@@ -1061,7 +1057,7 @@ void SAL_CALL ORptFilter::startDocument( void )
     OSL_ENSURE(m_xReportDefinition.is(),"ReportDefinition is NULL!");
     if ( m_xReportDefinition.is() )
     {
-        m_pReportModel = reportdesign::OReportDefinition::getSdrModel(m_xReportDefinition);
+        m_pReportModel = reportdesign::OReportDefinition::getSharedSdrModel(m_xReportDefinition);
         OSL_ENSURE(m_pReportModel,"Report model is NULL!");
 
         SvXMLImport::startDocument();

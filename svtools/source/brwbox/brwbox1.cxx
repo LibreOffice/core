@@ -697,7 +697,7 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uLong nWidth )
             return;
 
         // soll die Aenderung sofort dargestellt werden?
-        sal_Bool bUpdate = GetUpdateMode() &&
+        bool bUpdate = GetUpdateMode() &&
                        ( pCols->GetObject(nItemPos)->IsFrozen() || nItemPos >= nFirstCol );
 
         if ( bUpdate )
@@ -2457,9 +2457,9 @@ void BrowseBox::SetMode( BrowserMode nMode )
     DBG_ASSERT( !( getDataWindow()->bAutoVScroll && getDataWindow()->bNoVScroll ),
         "BrowseBox::SetMode: AutoVScroll *and* NoVScroll?" );
     if ( getDataWindow()->bAutoHScroll )
-        getDataWindow()->bNoHScroll = sal_False;
+        getDataWindow()->bNoHScroll = false;
     if ( getDataWindow()->bAutoVScroll )
-        getDataWindow()->bNoVScroll = sal_False;
+        getDataWindow()->bNoVScroll = false;
 
     if ( getDataWindow()->bNoHScroll )
         aHScroll.Hide();

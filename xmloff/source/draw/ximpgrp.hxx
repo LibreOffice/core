@@ -28,7 +28,6 @@
 #include "sdxmlimp_impl.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <com/sun/star/drawing/XShapes.hpp>
-#include <tools/rtti.hxx>
 #include "ximpshap.hxx"
 
 //////////////////////////////////////////////////////////////////////////////
@@ -44,8 +43,6 @@ protected:
         { mxShapes = rNew; }
 
 public:
-    TYPEINFO();
-
     SdXMLGroupShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,

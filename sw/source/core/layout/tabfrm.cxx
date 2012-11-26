@@ -69,6 +69,8 @@
 #include <sortedobjs.hxx>
 #include <objectformatter.hxx>
 #include <layouter.hxx>
+// <--
+#include <svx/svdlegacy.hxx>
 #include <switerator.hxx>
 
 extern void AppendObjs( const SwSpzFrmFmts *pTbl, sal_uLong nIndex,
@@ -309,6 +311,8 @@ void lcl_InvalidateLowerObjs( SwLayoutFrm& _rLayoutFrm,
                 pAnchoredObj->UnlockPosition();
                 pAnchoredObj->InvalidateObjPos();
 
+                SwFlyFrm* pFly = dynamic_cast< SwFlyFrm* >(pAnchoredObj);
+
                 // move anchored object 'out of range'
                 if ( _bMoveObjsOutOfRange )
                 {
@@ -330,18 +334,15 @@ void lcl_InvalidateLowerObjs( SwLayoutFrm& _rLayoutFrm,
                                            &(pAnchoredObj->GetFrmFmt()) );
                     }
                     // <--
-                    if ( pAnchoredObj->ISA(SwFlyFrm) )
+                    if ( pFly )
                     {
-                        SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
-                        pFly->GetVirtDrawObj()->SetRectsDirty();
                         pFly->GetVirtDrawObj()->SetChanged();
                     }
                 }
 
                 // If anchored object is a fly frame, invalidate its lower objects
-                if ( pAnchoredObj->ISA(SwFlyFrm) )
+                if ( pFly )
                 {
-                    SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
                     ::lcl_InvalidateLowerObjs( *pFly, _bMoveObjsOutOfRange, _pPageFrm );
                 }
             }
@@ -2794,9 +2795,10 @@ sal_Bool SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
         for ( sal_uInt16 i = 0; i < pPage->GetSortedObjs()->Count(); ++i )
         {
             SwAnchoredObject* pAnchoredObj = (*pPage->GetSortedObjs())[i];
-            if ( pAnchoredObj->ISA(SwFlyFrm) )
+            SwFlyFrm* pFly = dynamic_cast< SwFlyFrm* >(pAnchoredObj);
+
+            if ( pFly )
             {
-                SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
                 const SwRect aFlyRect = pFly->GetObjRectWithSpaces();
                 // --> OD 2004-10-07 #i26945# - correction of conditions,
                 // if Writer fly frame has to be considered:
@@ -5003,10 +5005,11 @@ sal_Bool lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, sal_Bool bInva )
                             default: break;
                         }
                     }
-                    if ( pAnchoredObj->ISA(SwFlyFrm) )
-                    {
-                        SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
 
+                    SwFlyFrm* pFly = dynamic_cast< SwFlyFrm* >(pAnchoredObj);
+
+                    if ( pFly )
+                    {
                         // OD 2004-05-18 #i28701# - no direct move of objects,
                         // which are anchored to-paragraph/to-character, if
                         // the wrapping style influence has to be considered
@@ -5022,7 +5025,6 @@ sal_Bool lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, sal_Bool bInva )
                         {
                             (pFly->Frm().*fnRect->fnSubTop)( -lDiff );
                             (pFly->Frm().*fnRect->fnAddBottom)( lDiff );
-                            pFly->GetVirtDrawObj()->SetRectsDirty();
                             // --> OD 2004-08-17 - also notify view of <SdrObject>
                             // instance, which represents the Writer fly frame in
                             // the drawing layer
@@ -5094,7 +5096,7 @@ sal_Bool lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, sal_Bool bInva )
                             pFly->SetCompletePaint();
                         }
                     }
-                    else if ( pAnchoredObj->ISA(SwAnchoredDrawObject) )
+                    else if ( dynamic_cast< SwAnchoredDrawObject* >(pAnchoredObj) )
                     {
                         // --> OD 2004-11-05 #i26945#
                         const SwTabFrm* pTabFrm = pLay->FindTabFrm();
@@ -5131,11 +5133,11 @@ sal_Bool lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, sal_Bool bInva )
                             SwObjPositioningInProgress aObjPosInProgress( *pAnchoredObj );
                             if ( bVert )
                             {
-                                pAnchoredObj->DrawObj()->Move( Size( lDiff, 0 ) );
+                                sdr::legacy::transformSdrObject(*pAnchoredObj->DrawObj(), basegfx::tools::createTranslateB2DHomMatrix(lDiff, 0.0));
                             }
                             else
                             {
-                                pAnchoredObj->DrawObj()->Move( Size( 0, lDiff ) );
+                                sdr::legacy::transformSdrObject(*pAnchoredObj->DrawObj(), basegfx::tools::createTranslateB2DHomMatrix(0.0, lDiff));
                             }
                             // --> OD 2006-10-13 #i58280#
                             pAnchoredObj->InvalidateObjRectWithSpaces();
@@ -5380,10 +5382,10 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
                     if ( SURROUND_THROUGHT != rSur.GetSurround() )
                     {
                         // frames, which the cell is a lower of, aren't relevant
-                        if ( pAnchoredObj->ISA(SwFlyFrm) )
+                        const SwFlyFrm* pFly = dynamic_cast< const SwFlyFrm* >(pAnchoredObj);
+
+                        if ( pFly )
                         {
-                            const SwFlyFrm *pFly =
-                                    static_cast<const SwFlyFrm*>(pAnchoredObj);
                             if ( pFly->IsAnLower( this ) )
                                 continue;
                         }

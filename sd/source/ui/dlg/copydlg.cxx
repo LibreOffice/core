@@ -112,10 +112,10 @@ CopyDlg::CopyDlg(
 
     FieldUnit eFUnit( SfxModule::GetCurrentFieldUnit() );
 
-    SetFieldUnit( maMtrFldMoveX, eFUnit, sal_True );
-    SetFieldUnit( maMtrFldMoveY, eFUnit, sal_True );
-    SetFieldUnit( maMtrFldWidth, eFUnit, sal_True );
-    SetFieldUnit( maMtrFldHeight, eFUnit, sal_True );
+    SetFieldUnit( maMtrFldMoveX, eFUnit, true );
+    SetFieldUnit( maMtrFldMoveY, eFUnit, true );
+    SetFieldUnit( maMtrFldWidth, eFUnit, true );
+    SetFieldUnit( maMtrFldHeight, eFUnit, true );
 
     Reset(0L);
 }
@@ -167,37 +167,37 @@ IMPL_LINK( CopyDlg, Reset, void*, EMPTYARG )
 
     if( aStr.GetTokenCount( TOKEN ) < 8 )
     {
-        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_NUMBER, sal_True, &pPoolItem ) )
+        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_NUMBER, true, &pPoolItem ) )
             maNumFldCopies.SetValue( ( ( const SfxUInt16Item* ) pPoolItem )->GetValue() );
         else
             maNumFldCopies.SetValue( 1L );
 
         long nMoveX = 500L;
-        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_MOVE_X, sal_True, &pPoolItem ) )
+        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_MOVE_X, true, &pPoolItem ) )
             nMoveX = ( ( ( const SfxInt32Item* ) pPoolItem )->GetValue() );
         SetMetricValue( maMtrFldMoveX, Fraction(nMoveX) / maUIScale, SFX_MAPUNIT_100TH_MM);
 
         long nMoveY = 500L;
-        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_MOVE_Y, sal_True, &pPoolItem ) )
+        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_MOVE_Y, true, &pPoolItem ) )
             nMoveY = ( ( ( const SfxInt32Item* ) pPoolItem )->GetValue() );
         SetMetricValue( maMtrFldMoveY, Fraction(nMoveY) / maUIScale, SFX_MAPUNIT_100TH_MM);
 
-        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_ANGLE, sal_True, &pPoolItem ) )
+        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_ANGLE, true, &pPoolItem ) )
             maMtrFldAngle.SetValue( ( ( const SfxInt32Item* ) pPoolItem )->GetValue() );
         else
             maMtrFldAngle.SetValue( 0L );
 
         long nWidth = 0L;
-        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_WIDTH, sal_True, &pPoolItem ) )
+        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_WIDTH, true, &pPoolItem ) )
             nWidth = ( ( ( const SfxInt32Item* ) pPoolItem )->GetValue() );
         SetMetricValue( maMtrFldWidth, Fraction(nWidth) / maUIScale, SFX_MAPUNIT_100TH_MM);
 
         long nHeight = 0L;
-        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_HEIGHT, sal_True, &pPoolItem ) )
+        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_HEIGHT, true, &pPoolItem ) )
             nHeight = ( ( ( const SfxInt32Item* ) pPoolItem )->GetValue() );
         SetMetricValue( maMtrFldHeight, Fraction(nHeight) / maUIScale, SFX_MAPUNIT_100TH_MM);
 
-        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_START_COLOR, sal_True, &pPoolItem ) )
+        if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_START_COLOR, true, &pPoolItem ) )
         {
             Color aColor = ( ( const XColorItem* ) pPoolItem )->GetColorValue();
             maLbStartColor.SelectEntry( aColor );
@@ -302,16 +302,14 @@ IMPL_LINK( CopyDlg, SelectColorHdl, void *, EMPTYARG )
 
 IMPL_LINK( CopyDlg, SetViewData, void*, EMPTYARG )
 {
-    Rectangle aRect = mpView->GetAllMarkedRect();
+    const basegfx::B2DRange aAllRange(mpView->getMarkedObjectSnapRange());
 
-    SetMetricValue( maMtrFldMoveX, Fraction( aRect.GetWidth() ) /
-                                    maUIScale, SFX_MAPUNIT_100TH_MM);
-    SetMetricValue( maMtrFldMoveY, Fraction( aRect.GetHeight() ) /
-                                    maUIScale, SFX_MAPUNIT_100TH_MM);
+    SetMetricValue(maMtrFldMoveX, Fraction(aAllRange.getWidth() / double(maUIScale)), SFX_MAPUNIT_100TH_MM);
+    SetMetricValue(maMtrFldMoveY, Fraction(aAllRange.getHeight() / double(maUIScale)), SFX_MAPUNIT_100TH_MM);
 
     // Farb-Attribut setzen
     const SfxPoolItem*  pPoolItem = NULL;
-    if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_START_COLOR, sal_True, &pPoolItem ) )
+    if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_START_COLOR, true, &pPoolItem ) )
     {
         Color aColor = ( ( const XColorItem* ) pPoolItem )->GetColorValue();
         maLbStartColor.SelectEntry( aColor );
@@ -339,7 +337,7 @@ IMPL_LINK( CopyDlg, SetDefault, void*, EMPTYARG )
 
     // Farb-Attribut setzen
     const SfxPoolItem*  pPoolItem = NULL;
-    if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_START_COLOR, sal_True, &pPoolItem ) )
+    if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_START_COLOR, true, &pPoolItem ) )
     {
         Color aColor = ( ( const XColorItem* ) pPoolItem )->GetColorValue();
         maLbStartColor.SelectEntry( aColor );

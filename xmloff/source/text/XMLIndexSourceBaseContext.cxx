@@ -153,8 +153,6 @@ static __FAR_DATA SvXMLTokenMapEntry aIndexSourceTokenMap[] =
 };
 
 
-TYPEINIT1( XMLIndexSourceBaseContext, SvXMLImportContext );
-
 XMLIndexSourceBaseContext::XMLIndexSourceBaseContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,

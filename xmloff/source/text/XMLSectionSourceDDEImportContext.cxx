@@ -54,8 +54,6 @@ const sal_Char sAPI_DDECommandElement[] = "DDECommandElement";
 const sal_Char sAPI_IsAutomaticUpdate[] = "IsAutomaticUpdate";
 
 
-TYPEINIT1(XMLSectionSourceDDEImportContext, SvXMLImportContext);
-
 XMLSectionSourceDDEImportContext::XMLSectionSourceDDEImportContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,

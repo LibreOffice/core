@@ -359,9 +359,6 @@ SFX_IMPL_INTERFACE(ToolPanelViewShell, SfxShell, SdResId(STR_TASKPANEVIEWSHELL))
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-TYPEINIT1(ToolPanelViewShell, ViewShell);
-
-// ---------------------------------------------------------------------------------------------------------------------
 ToolPanelViewShell_Impl::InitialPanel ToolPanelViewShell_Impl::impl_determineInitialPanel()
 {
     InitialPanel aPanelToActivate;
@@ -491,12 +488,12 @@ ToolPanelViewShell::ToolPanelViewShell( SfxViewFrame* pFrame, ViewShellBase& rVi
 
     mpImpl->ConnectToDockingWindow();
 
-    SetPool( &GetDoc()->GetPool() );
+    SetPool( &GetDoc()->GetItemPool() );
 
     if ( pFrameViewArgument )
         mpFrameView = pFrameViewArgument;
     else
-        mpFrameView = new FrameView( GetDoc() );
+        mpFrameView = new FrameView( *GetDoc() );
     GetFrameView()->Connect();
 
     // Hide or delete unused controls that we have inherited from the
@@ -880,7 +877,7 @@ void ToolPanelViewShell_Impl::ConnectToDockingWindow()
 // ---------------------------------------------------------------------------------------------------------------------
 Reference< XAccessible > ToolPanelViewShell_Impl::CreateAccessible( ::sd::Window& i_rWindow )
 {
-    Reference< XAccessible > xAccessible( GetToolPanelDeck().GetAccessible( sal_False ) );
+    Reference< XAccessible > xAccessible( GetToolPanelDeck().GetAccessible( false ) );
     if ( !xAccessible.is() )
     {
         // determine the XAccessible which is the parent of the to-be-created object
@@ -888,7 +885,7 @@ Reference< XAccessible > ToolPanelViewShell_Impl::CreateAccessible( ::sd::Window
         OSL_ENSURE( pAccessibleParent, "ToolPanelViewShell_Impl::CreateAccessible: illegal accessible parent provided by the sd::Window!" );
         GetToolPanelDeck().SetAccessibleParentWindow( pAccessibleParent );
 
-        xAccessible = GetToolPanelDeck().GetAccessible( sal_True );
+        xAccessible = GetToolPanelDeck().GetAccessible( true );
         ENSURE_OR_RETURN( xAccessible.is(), "ToolPanelViewShell_Impl::CreateAccessible: illegal ToolPanelDeck accessible!", NULL );
         OSL_ENSURE( xAccessible->getAccessibleContext().is()
                 &&  xAccessible->getAccessibleContext()->getAccessibleParent() == pAccessibleParent->GetAccessible(),

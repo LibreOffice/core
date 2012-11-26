@@ -69,6 +69,7 @@
 
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/xformsimport.hxx>
+#include <svx/fmmodel.hxx>
 
 using ::rtl::OUString;
 
@@ -138,8 +139,6 @@ public:
                 const Reference< xml::sax::XAttributeList > & xAttrList );
     virtual ~SwXMLBodyContext_Impl();
 
-    TYPEINFO();
-
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
                 const Reference< xml::sax::XAttributeList > & xAttrList );
@@ -155,8 +154,6 @@ SwXMLBodyContext_Impl::SwXMLBodyContext_Impl( SwXMLImport& rImport,
 SwXMLBodyContext_Impl::~SwXMLBodyContext_Impl()
 {
 }
-
-TYPEINIT1( SwXMLBodyContext_Impl, SvXMLImportContext );
 
 SvXMLImportContext *SwXMLBodyContext_Impl::CreateChildContext(
         sal_uInt16 /*nPrefix*/,
@@ -188,8 +185,6 @@ public:
                 const Reference< xml::sax::XAttributeList > & xAttrList );
     virtual ~SwXMLDocContext_Impl();
 
-    TYPEINFO();
-
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
                 const Reference< xml::sax::XAttributeList > & xAttrList );
@@ -205,8 +200,6 @@ SwXMLDocContext_Impl::SwXMLDocContext_Impl( SwXMLImport& rImport,
 SwXMLDocContext_Impl::~SwXMLDocContext_Impl()
 {
 }
-
-TYPEINIT1( SwXMLDocContext_Impl, SvXMLImportContext );
 
 SvXMLImportContext *SwXMLDocContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix,
@@ -284,8 +277,6 @@ public:
                 const Reference< xml::sax::XDocumentHandler >& xDocBuilder);
     virtual ~SwXMLOfficeDocContext_Impl();
 
-    TYPEINFO();
-
     virtual SvXMLImportContext *CreateChildContext(
                 sal_uInt16 nPrefix,
                 const OUString& rLocalName,
@@ -308,8 +299,6 @@ SwXMLOfficeDocContext_Impl::SwXMLOfficeDocContext_Impl(
 SwXMLOfficeDocContext_Impl::~SwXMLOfficeDocContext_Impl()
 {
 }
-
-TYPEINIT1( SwXMLOfficeDocContext_Impl, SwXMLDocContext_Impl );
 
 SvXMLImportContext* SwXMLOfficeDocContext_Impl::CreateChildContext(
                 sal_uInt16 nPrefix,
@@ -351,8 +340,6 @@ public:
                                 const Reference< xml::sax::XAttributeList > & xAttrList );
     virtual ~SwXMLDocStylesContext_Impl();
 
-    TYPEINFO();
-
     virtual void EndElement();
 };
 
@@ -369,8 +356,6 @@ SwXMLDocStylesContext_Impl::SwXMLDocStylesContext_Impl(
 SwXMLDocStylesContext_Impl::~SwXMLDocStylesContext_Impl()
 {
 }
-
-TYPEINIT1( SwXMLDocStylesContext_Impl, SwXMLDocContext_Impl );
 
 void SwXMLDocStylesContext_Impl::EndElement()
 {

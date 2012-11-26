@@ -49,6 +49,7 @@
 #include <svx/xlnwtit.hxx>
 #include <svx/xtable.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <svx/svdlegacy.hxx>
 
 #include <boost/bind.hpp>
 
@@ -138,7 +139,7 @@ void DrawCommandDispatch::setAttributes( SdrObject* pObj )
     {
         DrawModelWrapper* pDrawModelWrapper = m_pChartController->GetDrawModelWrapper();
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
-        if ( pDrawModelWrapper && pDrawViewWrapper && pDrawViewWrapper->GetCurrentObjIdentifier() == OBJ_CUSTOMSHAPE )
+        if ( pDrawModelWrapper && pDrawViewWrapper && pDrawViewWrapper->getSdrObjectCreationInfo().getIdent() == OBJ_CUSTOMSHAPE )
         {
             sal_Bool bAttributesAppliedFromGallery = sal_False;
             if ( GalleryExplorer::GetSdrObjCount( GALLERY_THEME_POWERPOINT ) )
@@ -159,7 +160,7 @@ void DrawCommandDispatch::setAttributes( SdrObject* pObj )
                                 if ( pSourceObj )
                                 {
                                     const SfxItemSet& rSource = pSourceObj->GetMergedItemSet();
-                                    SfxItemSet aDest( pObj->GetModel()->GetItemPool(),          // ranges from SdrAttrObj
+                                    SfxItemSet aDest( pObj->GetObjectItemPool(), // ranges from SdrAttrObj
                                         SDRATTR_START, SDRATTR_SHADOW_LAST,
                                         SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
                                         SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
@@ -175,11 +176,11 @@ void DrawCommandDispatch::setAttributes( SdrObject* pObj )
                                         0, 0);
                                     aDest.Set( rSource );
                                     pObj->SetMergedItemSet( aDest );
-                                    sal_Int32 nAngle = pSourceObj->GetRotateAngle();
-                                    if ( nAngle )
+
+                                    const long aOldRotation(sdr::legacy::GetRotateAngle(*pSourceObj));
+                                    if ( aOldRotation )
                                     {
-                                        double a = nAngle * F_PI18000;
-                                        pObj->NbcRotate( pObj->GetSnapRect().Center(), nAngle, sin( a ), cos( a ) );
+                                        sdr::legacy::RotateSdrObject(*pObj, sdr::legacy::GetSnapRect(*pObj).Center(), aOldRotation);
                                     }
                                     bAttributesAppliedFromGallery = sal_True;
                                 }
@@ -194,7 +195,7 @@ void DrawCommandDispatch::setAttributes( SdrObject* pObj )
                 pObj->SetMergedItem( SvxAdjustItem( SVX_ADJUST_CENTER, 0 ) );
                 pObj->SetMergedItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
                 pObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
-                pObj->SetMergedItem( SdrTextAutoGrowHeightItem( sal_False ) );
+                pObj->SetMergedItem( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT, sal_False ) );
                 ( dynamic_cast< SdrObjCustomShape* >( pObj ) )->MergeDefaultAttributes( &m_aCustomShapeType );
             }
         }
@@ -220,7 +221,7 @@ void DrawCommandDispatch::setLineEnds( SfxItemSet& rAttr )
                 aArrow.append( aNewArrow );
             }
 
-            SfxItemSet aSet( pDrawViewWrapper->GetModel()->GetItemPool() );
+            SfxItemSet aSet( pDrawViewWrapper->getSdrModelFromSdrView().GetItemPool() );
             pDrawViewWrapper->GetAttributes( aSet );
 
             long nWidth = 300; // (1/100th mm)
@@ -299,7 +300,10 @@ void DrawCommandDispatch::execute( const ::rtl::OUString& rCommand, const Sequen
     (void)rArgs;
 
     ChartDrawMode eDrawMode = CHARTDRAW_SELECT;
-    SdrObjKind eKind = OBJ_NONE;
+    SdrObjKind eKind(OBJ_NONE);
+    bool bFreehandMode(false);
+    SdrPathObjType aSdrPathObjType(PathType_Line);
+    SdrCircleObjType aSdrCircleObjType(CircleType_Circle);
     bool bCreate = false;
 
     sal_uInt16 nFeatureId = 0;
@@ -322,7 +326,8 @@ void DrawCommandDispatch::execute( const ::rtl::OUString& rCommand, const Sequen
             case COMMAND_ID_LINE_ARROW_END:
                 {
                     eDrawMode = CHARTDRAW_INSERT;
-                    eKind = OBJ_LINE;
+                    eKind = OBJ_POLY;
+                    aSdrPathObjType = PathType_Line;
                 }
                 break;
             case COMMAND_ID_DRAW_RECT:
@@ -335,12 +340,15 @@ void DrawCommandDispatch::execute( const ::rtl::OUString& rCommand, const Sequen
                 {
                     eDrawMode = CHARTDRAW_INSERT;
                     eKind = OBJ_CIRC;
+                    aSdrCircleObjType = CircleType_Circle;
                 }
                 break;
             case COMMAND_ID_DRAW_FREELINE_NOFILL:
                 {
                     eDrawMode = CHARTDRAW_INSERT;
-                    eKind = OBJ_FREELINE;
+                    eKind = OBJ_POLY;
+                    aSdrPathObjType = PathType_OpenBezier;
+                    bFreehandMode = true;
                 }
                 break;
             case COMMAND_ID_DRAW_TEXT:
@@ -382,10 +390,11 @@ void DrawCommandDispatch::execute( const ::rtl::OUString& rCommand, const Sequen
             {
                 ::vos::OGuard aGuard( Application::GetSolarMutex() );
                 m_pChartController->setDrawMode( eDrawMode );
-                setInsertObj( sal::static_int_cast< sal_uInt16 >( eKind ) );
+                setInsertObj(SdrObjectCreationInfo(static_cast< sal_uInt16 >(eKind), SdrInventor, aSdrPathObjType, aSdrCircleObjType, bFreehandMode));
+
                 if ( bCreate )
                 {
-                    pDrawViewWrapper->SetCreateMode();
+                    pDrawViewWrapper->SetViewEditMode(SDREDITMODE_CREATE);
                 }
 
                 const ::rtl::OUString sKeyModifier( C2U( "KeyModifier" ) );
@@ -401,8 +410,7 @@ void DrawCommandDispatch::execute( const ::rtl::OUString& rCommand, const Sequen
                         SdrObject* pObj = createDefaultObject( nFeatureId );
                         if ( pObj )
                         {
-                            SdrPageView* pPageView = pDrawViewWrapper->GetSdrPageView();
-                            pDrawViewWrapper->InsertObjectAtView( pObj, *pPageView );
+                            pDrawViewWrapper->InsertObjectAtView( *pObj );
                             Reference< drawing::XShape > xShape( pObj->getUnoShape(), uno::UNO_QUERY );
                             if ( xShape.is() )
                             {
@@ -439,12 +447,12 @@ void DrawCommandDispatch::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:StarShapes",        COMMAND_ID_DRAWTBX_CS_STAR,         CommandGroup::INSERT );
 }
 
-void DrawCommandDispatch::setInsertObj( sal_uInt16 eObj )
+void DrawCommandDispatch::setInsertObj(const SdrObjectCreationInfo& rSdrObjectCreationInfo)
 {
     DrawViewWrapper* pDrawViewWrapper = ( m_pChartController ? m_pChartController->GetDrawViewWrapper() : NULL );
     if ( pDrawViewWrapper )
     {
-        pDrawViewWrapper->SetCurrentObj( eObj /*, Inventor */);
+        pDrawViewWrapper->setSdrObjectCreationInfo(rSdrObjectCreationInfo);
     }
 }
 
@@ -461,33 +469,30 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
         if ( pPage )
         {
             ::vos::OGuard aGuard( Application::GetSolarMutex() );
-            pObj = SdrObjFactory::MakeNewObject( pDrawViewWrapper->GetCurrentObjInventor(),
-                pDrawViewWrapper->GetCurrentObjIdentifier(), pPage );
+            pObj = SdrObjFactory::MakeNewObject(
+                pDrawViewWrapper->getSdrModelFromSdrView(),
+                pDrawViewWrapper->getSdrObjectCreationInfo());
             if ( pObj )
             {
-                long nDefaultObjectSizeWidth = 4000;
-                long nDefaultObjectSizeHeight = 2500;
-                Size aObjectSize( nDefaultObjectSizeWidth, nDefaultObjectSizeHeight );
-                Rectangle aPageRect( Rectangle( Point( 0, 0 ), pPage->GetSize() ) );
-                Point aObjectPos = aPageRect.Center();
-                aObjectPos.X() -= aObjectSize.Width() / 2;
-                aObjectPos.Y() -= aObjectSize.Height() / 2;
-                Rectangle aRect( aObjectPos, aObjectSize );
+                const basegfx::B2DVector aObjectSize(4000.0, 2500.0);
+                const basegfx::B2DRange aPageRange(basegfx::B2DPoint(0.0, 0.0), pPage->GetPageScale());
+                const basegfx::B2DPoint aObjectPos(aPageRange.getCenter() - (aObjectSize * 0.5));
+                const basegfx::B2DRange aRange(aObjectPos, aObjectPos + aObjectSize);
 
                 switch ( nID )
                 {
                     case COMMAND_ID_DRAW_LINE:
                     case COMMAND_ID_LINE_ARROW_END:
                         {
-                            if ( pObj->ISA( SdrPathObj ) )
+                            SdrPathObj* pSdrPathObj = dynamic_cast< SdrPathObj* >(pObj);
+
+                            if ( pSdrPathObj )
                             {
-                                Point aStart = aRect.TopLeft();
-                                Point aEnd = aRect.BottomRight();
-                                sal_Int32 nYMiddle( ( aRect.Top() + aRect.Bottom() ) / 2 );
+                                const double nYMiddle((aRange.getMinY() + aRange.getMaxY()) * 0.5);
                                 basegfx::B2DPolygon aPoly;
-                                aPoly.append( basegfx::B2DPoint( aStart.X(), nYMiddle ) );
-                                aPoly.append( basegfx::B2DPoint( aEnd.X(), nYMiddle ) );
-                                ( dynamic_cast< SdrPathObj* >( pObj ) )->SetPathPoly( basegfx::B2DPolyPolygon( aPoly ) );
+                                aPoly.append(basegfx::B2DPoint(aRange.getMinX(), nYMiddle));
+                                aPoly.append(basegfx::B2DPoint(aRange.getMaxX(), nYMiddle));
+                                pSdrPathObj->setB2DPolyPolygonInObjectCoordinates(basegfx::B2DPolyPolygon(aPoly));
                                 SfxItemSet aSet( pDrawModelWrapper->GetItemPool() );
                                 setLineEnds( aSet );
                                 pObj->SetMergedItemSet( aSet );
@@ -496,52 +501,54 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                         break;
                     case COMMAND_ID_DRAW_FREELINE_NOFILL:
                         {
-                            if ( pObj->ISA( SdrPathObj ) )
+                            SdrPathObj* pSdrPathObj = dynamic_cast< SdrPathObj* >(pObj);
+
+                            if ( pSdrPathObj )
                             {
                                 basegfx::B2DPolygon aInnerPoly;
-                                aInnerPoly.append( basegfx::B2DPoint( aRect.Left(), aRect.Bottom() ) );
+                                aInnerPoly.append(basegfx::B2DPoint(aRange.getMinX(), aRange.getMaxY()));
                                 aInnerPoly.appendBezierSegment(
-                                    basegfx::B2DPoint( aRect.Left(), aRect.Top() ),
-                                    basegfx::B2DPoint( aRect.Center().X(), aRect.Top() ),
-                                    basegfx::B2DPoint( aRect.Center().X(), aRect.Center().Y() ) );
+                                    aRange.getMinimum(),
+                                    basegfx::B2DPoint(aRange.getCenterX(), aRange.getMinY()),
+                                    aRange.getCenter());
                                 aInnerPoly.appendBezierSegment(
-                                    basegfx::B2DPoint( aRect.Center().X(), aRect.Bottom() ),
-                                    basegfx::B2DPoint( aRect.Right(), aRect.Bottom() ),
-                                    basegfx::B2DPoint( aRect.Right(), aRect.Top() ) );
-                                basegfx::B2DPolyPolygon aPoly;
-                                aPoly.append( aInnerPoly );
-                                ( dynamic_cast< SdrPathObj* >( pObj ) )->SetPathPoly( aPoly );
+                                    basegfx::B2DPoint(aRange.getCenterX(), aRange.getMaxY()),
+                                    aRange.getMaximum(),
+                                    basegfx::B2DPoint(aRange.getMaxX(), aRange.getMinY()));
+                                const basegfx::B2DPolyPolygon aPoly(aInnerPoly);
+                                pSdrPathObj->setB2DPolyPolygonInObjectCoordinates( aPoly );
                             }
                         }
                         break;
                     case COMMAND_ID_DRAW_TEXT:
                     case COMMAND_ID_DRAW_TEXT_VERTICAL:
                         {
-                            if ( pObj->ISA( SdrTextObj ) )
-                            {
                                 SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
+
                                 if ( pTextObj )
                                 {
-                                    pTextObj->SetLogicRect( aRect );
-                                    sal_Bool bVertical = ( nID == SID_DRAW_TEXT_VERTICAL );
+                                sdr::legacy::SetLogicRange(*pTextObj, aRange );
+                                const sal_Bool bVertical = ( nID == SID_DRAW_TEXT_VERTICAL );
                                     pTextObj->SetVerticalWriting( bVertical );
+
                                     if ( bVertical )
                                     {
                                         SfxItemSet aSet( pDrawModelWrapper->GetItemPool() );
-                                        aSet.Put( SdrTextAutoGrowWidthItem( sal_True ) );
-                                        aSet.Put( SdrTextAutoGrowHeightItem( sal_False ) );
+                                    aSet.Put( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWWIDTH, sal_True ) );
+                                    aSet.Put( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT, sal_False ) );
                                         aSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_TOP ) );
                                         aSet.Put( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_RIGHT ) );
                                         pTextObj->SetMergedItemSet( aSet );
                                     }
                                 }
                             }
-                        }
                         break;
                     case COMMAND_ID_DRAW_CAPTION:
                     case COMMAND_ID_DRAW_CAPTION_VERTICAL:
                         {
-                            if ( pObj->ISA( SdrCaptionObj ) )
+                            SdrCaptionObj* pSdrCaptionObj = dynamic_cast< SdrCaptionObj* >(pObj);
+
+                            if ( pSdrCaptionObj )
                             {
                                 sal_Bool bIsVertical( SID_DRAW_CAPTION_VERTICAL == nID );
                                 SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
@@ -556,19 +563,15 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                                     aSet.Put( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_RIGHT ) );
                                     pObj->SetMergedItemSet( aSet );
                                 }
-                                SdrCaptionObj* pCaptionObj = dynamic_cast< SdrCaptionObj* >( pObj );
-                                if ( pCaptionObj )
-                                {
-                                    pCaptionObj->SetLogicRect( aRect );
-                                    pCaptionObj->SetTailPos(
-                                        aRect.TopLeft() - Point( aRect.GetWidth() / 2, aRect.GetHeight() / 2 ) );
-                                }
+
+                                sdr::legacy::SetLogicRange(*pSdrCaptionObj, aRange );
+                                pSdrCaptionObj->SetTailPos(aRange.getMinimum() - (aRange.getRange() * 0.5));
                             }
                         }
                         break;
                     default:
                         {
-                            pObj->SetLogicRect( aRect );
+                            sdr::legacy::SetLogicRange(*pObj, aRange );
                             SfxItemSet aSet( pDrawModelWrapper->GetItemPool() );
                             setAttributes( pObj );
                             pObj->SetMergedItemSet( aSet );

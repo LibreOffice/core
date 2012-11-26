@@ -44,8 +44,6 @@ class XMLIndexSpanEntryContext : public XMLIndexSimpleEntryContext
 
 public:
 
-    TYPEINFO();
-
     XMLIndexSpanEntryContext(
         SvXMLImport& rImport,
         XMLIndexTemplateContext& rTemplate,

@@ -382,7 +382,7 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
             CalcMinMaxBorder();
         }
         else
-            GraphicHasChanged( sal_False );
+            GraphicHasChanged( false );
     }
 
     CalcZoom();
@@ -649,7 +649,7 @@ void SvxGrfCropPage::CalcMinMaxBorder()
                     FixedText mit der Originalgroesse fuellen
  --------------------------------------------------------------------*/
 
-void SvxGrfCropPage::GraphicHasChanged( sal_Bool bFound )
+void SvxGrfCropPage::GraphicHasChanged( bool bFound )
 {
     if( bFound )
     {

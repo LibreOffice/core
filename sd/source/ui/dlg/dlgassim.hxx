@@ -43,8 +43,8 @@ public:
     void Fill( SdDrawDocument* pDoc );
     void Clear();
 
-    sal_uInt16 GetSelectedPage();
-    sal_Bool IsPageChecked( sal_uInt16 nPage );
+    sal_uInt32 GetSelectedPage();
+    bool IsPageChecked( sal_uInt32 nPage );
 
     DECL_LINK( CheckButtonClickHdl, SvLBoxButtonData * );
 

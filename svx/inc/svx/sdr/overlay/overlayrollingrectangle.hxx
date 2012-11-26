@@ -40,10 +40,10 @@ namespace sdr
 
             // bitfield
             // Flag to switch on/off long lines to the OutputDevice bounds
-            unsigned                                mbExtendedLines : 1;
+            bool                                    mbExtendedLines : 1;
 
             // Flag to switch on/off the bounds itself
-            unsigned                                mbShowBounds : 1;
+            bool                                    mbShowBounds : 1;
 
             // geometry creation for OverlayObject
             virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();

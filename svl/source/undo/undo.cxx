@@ -44,13 +44,6 @@ DBG_NAME(SfxUndoAction)
 
 //========================================================================
 
-TYPEINIT0(SfxUndoAction);
-TYPEINIT0(SfxListUndoAction);
-TYPEINIT0(SfxLinkUndoAction);
-TYPEINIT0(SfxRepeatTarget);
-
-//------------------------------------------------------------------------
-
 SfxRepeatTarget::~SfxRepeatTarget()
 {
 }

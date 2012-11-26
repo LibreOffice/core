@@ -92,7 +92,7 @@ namespace dbaui
         // and remember the respective DSN prefixes
         FreeResource();
         // extract the datasource type collection from the item set
-        DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rItems.GetItem(DSID_TYPECOLLECTION));
+        const DbuTypeCollectionItem* pCollectionItem = dynamic_cast< const DbuTypeCollectionItem* >( _rItems.GetItem(DSID_TYPECOLLECTION));
         if (pCollectionItem)
             m_pCollection = pCollectionItem->getCollection();
         DBG_ASSERT(m_pCollection, "OGeneralPage::OGeneralPage : really need a DSN type collection !");

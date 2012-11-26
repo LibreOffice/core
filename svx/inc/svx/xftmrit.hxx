@@ -36,7 +36,7 @@
 class SVX_DLLPUBLIC XFormTextMirrorItem : public SfxBoolItem
 {
 public:
-                            TYPEINFO();
+    POOLITEM_FACTORY()
                             XFormTextMirrorItem(sal_Bool bMirror = sal_False);
                             XFormTextMirrorItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const;

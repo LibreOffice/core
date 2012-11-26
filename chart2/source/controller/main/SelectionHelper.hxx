@@ -72,7 +72,7 @@ public: //methods
     void remindSelectionBeforeMouseDown();
     bool isSelectionDifferentFromBeforeMouseDown();
 
-    void adaptSelectionToNewPos( const Point& rMousePos, DrawViewWrapper* pDrawViewWrapper
+    void adaptSelectionToNewPos( const basegfx::B2DPoint& rMousePos, DrawViewWrapper* pDrawViewWrapper
                                        , bool bIsRightMouse, bool bWaitingForDoubleClick );
 
     void applySelection( DrawViewWrapper* pDrawViewWrapper );
@@ -99,12 +99,12 @@ public:
                                 , bool bGivenObjectMayBeResult );
     static SdrObject*       getMarkHandlesObject( SdrObject* pObj );
     static E3dScene*        getSceneToRotate( SdrObject* pObj );
-    static bool             isDragableObjectHitTwice( const Point& rMPos
+    static bool             isDragableObjectHitTwice( const basegfx::B2DPoint& rMPos
                                 , const rtl::OUString& rNameOfSelectedObject
                                 , const DrawViewWrapper& rDrawViewWrapper );
 
     static ::rtl::OUString getHitObjectCID(
-        const Point& rMPos,
+        const basegfx::B2DPoint& rMPos,
         DrawViewWrapper& rDrawViewWrapper,
         bool bGetDiagramInsteadOf_Wall=false );
 

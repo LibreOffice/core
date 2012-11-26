@@ -39,16 +39,14 @@ class FuSelection
     : public FuDraw
 {
 public:
-    TYPEINFO();
-
     static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
     virtual void DoExecute( SfxRequest& rReq );
 
                                        // Mouse- & Key-Events
-    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
-    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
-    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
+    virtual bool KeyInput(const KeyEvent& rKEvt);
+    virtual bool MouseMove(const MouseEvent& rMEvt);
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt);
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt);
 
     virtual void Activate();           // Function aktivieren
     virtual void Deactivate();         // Function deaktivieren
@@ -58,7 +56,7 @@ public:
     void    SetEditMode(sal_uInt16 nMode);
     sal_uInt16  GetEditMode() { return nEditMode; }
 
-    sal_Bool    AnimateObj(SdrObject* pObj, const Point& rPos);
+    bool AnimateObj(SdrObject* pObj, const basegfx::B2DPoint& rPos);
 
     /** is called when the currenct function should be aborted. <p>
         This is used when a function gets a KEY_ESCAPE but can also
@@ -77,12 +75,12 @@ protected:
 
     virtual ~FuSelection();
 
-    sal_Bool            bTempRotation;
-    sal_Bool            bSelectionChanged;
-    sal_Bool            bHideAndAnimate;
+    bool            bTempRotation;
+    bool            bSelectionChanged;
+    bool            bHideAndAnimate;
     SdrHdl*         pHdl;
-    sal_Bool            bSuppressChangesOfSelection;
-    sal_Bool            bMirrorSide0;
+    bool            bSuppressChangesOfSelection;
+    bool            bMirrorSide0;
     sal_uInt16          nEditMode;
         ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > mxPlayer;
 
@@ -99,7 +97,7 @@ private:
             The shape at the test point.  When there is no shape at this
             position then NULL is returned.
     */
-    SdrObject* pickObject (const Point& rTestPoint);
+    SdrObject* pickObject (const basegfx::B2DPoint& rTestPoint);
 };
 
 } // end of namespace sd

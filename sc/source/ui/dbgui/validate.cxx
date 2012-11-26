@@ -113,7 +113,7 @@ void ScTPValidationValue:: SetActiveHdl()
         }
 }
 
-void            ScTPValidationValue::RefInputStartPreHdl( ScRefEdit* pEdit, ScRefButton* pButton )
+void ScTPValidationValue::RefInputStartPreHdl( ScRefEdit* pEdit, ScRefButton* pButton )
 {
     if ( ScValidationDlg *pValidationDlg = GetValidationDlg() )
     {
@@ -132,7 +132,7 @@ void            ScTPValidationValue::RefInputStartPreHdl( ScRefEdit* pEdit, ScRe
     }
 }
 
-void            ScTPValidationValue::RefInputDonePreHdl()
+void ScTPValidationValue::RefInputDonePreHdl()
 {
 
     if( m_pRefEdit && m_pRefEdit->GetParent()!= this )
@@ -153,7 +153,7 @@ void            ScTPValidationValue::RefInputDonePreHdl()
 //  if( aExample1.GetParent()!=this ) aExample1.SetParent( this );
 }
 
-void            ScTPValidationValue::RefInputDonePostHdl()
+void ScTPValidationValue::RefInputDonePostHdl()
 {
 
 
@@ -982,8 +982,6 @@ bool ScValidationDlg::RemoveRefDlg( sal_Bool bRestoreModal /* = sal_True */ )
 
     return true;
 }
-
-//TYPEINIT1( ScTPValidationValue, SfxTabPage )
 
 void ScTPValidationValue::ScRefButtonEx::Click()
 {

@@ -57,8 +57,8 @@ sal_uInt16 ScDBFunc::DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, sa
 
     sal_uInt16 nFound = 0;
 
-    sal_uInt16 nPageCount = pModel->GetPageCount();
-    for (sal_uInt16 nPageNo=0; nPageNo<nPageCount; nPageNo++)
+    const sal_uInt32 nPageCount(pModel->GetPageCount());
+    for (sal_uInt32 nPageNo=0; nPageNo<nPageCount; nPageNo++)
     {
         SdrPage* pPage = pModel->GetPage(nPageNo);
         DBG_ASSERT(pPage,"Page ?");

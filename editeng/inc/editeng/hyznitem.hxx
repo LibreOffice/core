@@ -53,10 +53,9 @@ class EDITENG_DLLPUBLIC SvxHyphenZoneItem : public SfxPoolItem
     friend SvStream & operator<<( SvStream & aS, SvxHyphenZoneItem & );
 
 public:
-    TYPEINFO();
-
-    SvxHyphenZoneItem( const sal_Bool bHyph /*= sal_False*/,
-                       const sal_uInt16 nId  );
+    POOLITEM_FACTORY()
+    SvxHyphenZoneItem( const sal_Bool bHyph = sal_False,
+                       const sal_uInt16 nId = 0 );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;

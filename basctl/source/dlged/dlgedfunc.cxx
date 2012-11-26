@@ -37,42 +37,39 @@ IMPL_LINK_INLINE_START( DlgEdFunc, ScrollTimeout, Timer *, pTimer )
 {
     (void)pTimer;
     Window* pWindow = pParent->GetWindow();
-    Point aPos = pWindow->ScreenToOutputPixel( pWindow->GetPointerPosPixel() );
-    aPos = pWindow->PixelToLogic( aPos );
-    ForceScroll( aPos );
+    const basegfx::B2DPoint aPixelPos(pWindow->GetPointerPosPixel().X(), pWindow->GetPointerPosPixel().Y());
+    const basegfx::B2DPoint aLogicPos(pWindow->GetInverseViewTransformation() * aPixelPos);
+
+    ForceScroll( aLogicPos );
+
     return 0;
 }
 IMPL_LINK_INLINE_END( DlgEdFunc, ScrollTimeout, Timer *, pTimer )
 
 //----------------------------------------------------------------------------
 
-void DlgEdFunc::ForceScroll( const Point& rPos )
+void DlgEdFunc::ForceScroll( const basegfx::B2DPoint& rPos )
 {
     aScrollTimer.Stop();
 
     Window* pWindow  = pParent->GetWindow();
-
-    static Point aDefPoint;
-    Rectangle aOutRect( aDefPoint, pWindow->GetOutputSizePixel() );
-    aOutRect = pWindow->PixelToLogic( aOutRect );
-
+    const basegfx::B2DRange aOutRangeDiscrete(pWindow->GetDiscreteRange());
+    const basegfx::B2DRange aOutRangeLogic(pWindow->GetLogicRange());
     ScrollBar* pHScroll = pParent->GetHScroll();
     ScrollBar* pVScroll = pParent->GetVScroll();
     long nDeltaX = pHScroll->GetLineSize();
     long nDeltaY = pVScroll->GetLineSize();
 
-    if( !aOutRect.IsInside( rPos ) )
+    if( !aOutRangeLogic.isInside( rPos ) )
     {
-        if( rPos.X() < aOutRect.Left() )
+        if( rPos.getX() < aOutRangeLogic.getMinX() )
             nDeltaX = -nDeltaX;
-        else
-        if( rPos.X() <= aOutRect.Right() )
+        else if( rPos.getX() <= aOutRangeLogic.getMaxX() )
             nDeltaX = 0;
 
-        if( rPos.Y() < aOutRect.Top() )
+        if( rPos.getY() < aOutRangeLogic.getMinY() )
             nDeltaY = -nDeltaY;
-        else
-        if( rPos.Y() <= aOutRect.Bottom() )
+        else if( rPos.getY() <= aOutRangeLogic.getMaxY() )
             nDeltaY = 0;
 
         if( nDeltaX )
@@ -147,7 +144,7 @@ sal_Bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                 pView->BrkAction();
                 bReturn = sal_True;
             }
-            else if ( pView->AreObjectsMarked() )
+            else if ( pView->areSdrObjectsSelected() )
             {
                 const SdrHdlList& rHdlList = pView->GetHdlList();
                 SdrHdl* pHdl = rHdlList.GetFocusHdl();
@@ -172,8 +169,8 @@ sal_Bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                     pView->MarkNextObj( !aCode.IsShift() );
                 }
 
-                if ( pView->AreObjectsMarked() )
-                    pView->MakeVisible( pView->GetAllMarkedRect(), *pWindow );
+                if ( pView->areSdrObjectsSelected() )
+                    pView->MakeVisibleAtView( pView->getMarkedObjectSnapRange(), *pWindow );
 
                 bReturn = sal_True;
             }
@@ -187,9 +184,11 @@ sal_Bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                 SdrHdl* pHdl = rHdlList.GetFocusHdl();
                 if ( pHdl )
                 {
-                    Point aHdlPosition( pHdl->GetPos() );
-                    Rectangle aVisRect( aHdlPosition - Point( 100, 100 ), Size( 200, 200 ) );
-                    pView->MakeVisible( aVisRect, *pWindow );
+                    const basegfx::B2DRange aRange(
+                        pHdl->getPosition() - basegfx::B2DPoint(100.0, 100.0),
+                        pHdl->getPosition() + basegfx::B2DPoint(100.0, 100.0));
+
+                    pView->MakeVisibleAtView( aRange, *pWindow );
                 }
 
                 bReturn = sal_True;
@@ -201,48 +200,42 @@ sal_Bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
         case KEY_LEFT:
         case KEY_RIGHT:
         {
-            long nX = 0;
-            long nY = 0;
+            basegfx::B2DVector aMove(0.0, 0.0);
 
             if ( nCode == KEY_UP )
             {
                 // scroll up
-                nX =  0;
-                nY = -1;
+                aMove = basegfx::B2DVector(0.0, -1.0);
             }
             else if ( nCode == KEY_DOWN )
             {
                 // scroll down
-                nX =  0;
-                nY =  1;
+                aMove = basegfx::B2DVector(0.0, 1.0);
             }
             else if ( nCode == KEY_LEFT )
             {
                 // scroll left
-                nX = -1;
-                nY =  0;
+                aMove = basegfx::B2DVector(-1.0, 0.0);
             }
             else if ( nCode == KEY_RIGHT )
             {
                 // scroll right
-                nX =  1;
-                nY =  0;
+                aMove = basegfx::B2DVector(1.0, 0.0);
             }
 
-            if ( pView->AreObjectsMarked() && !aCode.IsMod1() )
+            if ( pView->areSdrObjectsSelected() && !aCode.IsMod1() )
             {
                 if ( aCode.IsMod2() )
                 {
                     // move in 1 pixel distance
-                    Size aPixelSize = pWindow ? pWindow->PixelToLogic( Size( 1, 1 ) ) : Size( 100, 100 );
-                    nX *= aPixelSize.Width();
-                    nY *= aPixelSize.Height();
+                    aMove *= pWindow
+                        ? pWindow->GetInverseViewTransformation() * basegfx::B2DVector(1.0, 1.0)
+                        : basegfx::B2DVector(100.0, 100.0);
                 }
                 else
                 {
                     // move in 1 mm distance
-                    nX *= 100;
-                    nY *= 100;
+                    aMove *= 100.0;
                 }
 
                 const SdrHdlList& rHdlList = pView->GetHdlList();
@@ -254,88 +247,115 @@ sal_Bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                     if ( pView->IsMoveAllowed() )
                     {
                         // restrict movement to work area
-                        const Rectangle& rWorkArea = pView->GetWorkArea();
+                        const basegfx::B2DRange& rWorkArea = pView->GetWorkArea();
 
-                        if ( !rWorkArea.IsEmpty() )
+                        if ( !rWorkArea.isEmpty() )
                         {
-                            Rectangle aMarkRect( pView->GetMarkedObjRect() );
-                            aMarkRect.Move( nX, nY );
+                            basegfx::B2DRange aMarkRange( pView->getMarkedObjectSnapRange() );
+                            aMarkRange.transform(basegfx::tools::createTranslateB2DHomMatrix(aMove));
 
-                            if ( !rWorkArea.IsInside( aMarkRect ) )
+                            if ( !rWorkArea.isInside( aMarkRange ) )
                             {
-                                if ( aMarkRect.Left() < rWorkArea.Left() )
-                                    nX += rWorkArea.Left() - aMarkRect.Left();
+                                if ( aMarkRange.getMinX() < rWorkArea.getMinX() )
+                                {
+                                    aMove.setX(aMove.getX() + rWorkArea.getMinX() - aMarkRange.getMinX());
+                                }
 
-                                if ( aMarkRect.Right() > rWorkArea.Right() )
-                                    nX -= aMarkRect.Right() - rWorkArea.Right();
+                                if ( aMarkRange.getMaxX() > rWorkArea.getMaxX() )
+                                {
+                                    aMove.setX(aMove.getX() - aMarkRange.getMaxX() - rWorkArea.getMaxX());
+                                }
 
-                                if ( aMarkRect.Top() < rWorkArea.Top() )
-                                    nY += rWorkArea.Top() - aMarkRect.Top();
+                                if ( aMarkRange.getMinY() < rWorkArea.getMinY() )
+                                {
+                                    aMove.setY(aMove.getY() + rWorkArea.getMinY() - aMarkRange.getMinY());
+                                }
 
-                                if ( aMarkRect.Bottom() > rWorkArea.Bottom() )
-                                    nY -= aMarkRect.Bottom() - rWorkArea.Bottom();
+                                if ( aMarkRange.getMaxY() > rWorkArea.getMaxY() )
+                                {
+                                    aMove.setY(aMove.getY() - aMarkRange.getMaxY() - rWorkArea.getMaxY());
+                                }
                             }
                         }
 
-                        if ( nX != 0 || nY != 0 )
+                        if ( !aMove.equalZero() )
                         {
-                            pView->MoveAllMarked( Size( nX, nY ) );
-                            pView->MakeVisible( pView->GetAllMarkedRect(), *pWindow );
+                            pView->MoveMarkedObj( aMove );
+                            pView->MakeVisibleAtView( pView->getMarkedObjectSnapRange(), *pWindow );
                         }
                     }
                 }
                 else
                 {
                     // move the handle
-                    if ( pHdl && ( nX || nY ) )
+                    if ( pHdl && !aMove.equalZero() )
                     {
-                        Point aStartPoint( pHdl->GetPos() );
-                        Point aEndPoint( pHdl->GetPos() + Point( nX, nY ) );
+                        const basegfx::B2DPoint aStartPoint( pHdl->getPosition() );
+                        const basegfx::B2DPoint aEndPoint( pHdl->getPosition() + aMove );
                         const SdrDragStat& rDragStat = pView->GetDragStat();
 
                         // start dragging
-                        pView->BegDragObj( aStartPoint, 0, pHdl, 0 );
+                        pView->BegDragObj( aStartPoint, pHdl, 0.0 );
 
                         if ( pView->IsDragObj() )
                         {
-                            FASTBOOL bWasNoSnap = rDragStat.IsNoSnap();
-                            sal_Bool bWasSnapEnabled = pView->IsSnapEnabled();
+                            const bool bWasNoSnap(rDragStat.IsNoSnap());
+                            const bool bWasSnapEnabled(pView->IsSnapEnabled());
 
                             // switch snapping off
                             if ( !bWasNoSnap )
-                                ((SdrDragStat&)rDragStat).SetNoSnap( sal_True );
+                            {
+                                ((SdrDragStat&)rDragStat).SetNoSnap(true);
+                            }
+
                             if ( bWasSnapEnabled )
-                                pView->SetSnapEnabled( sal_False );
+                            {
+                                pView->SetSnapEnabled( false );
+                            }
 
                             pView->MovAction( aEndPoint );
                             pView->EndDragObj();
 
                             // restore snap
                             if ( !bWasNoSnap )
+                            {
                                 ((SdrDragStat&)rDragStat).SetNoSnap( bWasNoSnap );
+                            }
+
                             if ( bWasSnapEnabled )
+                            {
                                 pView->SetSnapEnabled( bWasSnapEnabled );
+                            }
                         }
 
                         // make moved handle visible
-                        Rectangle aVisRect( aEndPoint - Point( 100, 100 ), Size( 200, 200 ) );
-                        pView->MakeVisible( aVisRect, *pWindow );
+                        const basegfx::B2DRange aVisRange(
+                            aEndPoint - basegfx::B2DPoint(100.0, 100.0),
+                            aEndPoint + basegfx::B2DPoint(100.0, 100.0));
+
+                        pView->MakeVisibleAtView( aVisRange, *pWindow );
                     }
                 }
             }
             else
             {
                 // scroll page
-                ScrollBar* pScrollBar = ( nX != 0 ) ? pParent->GetHScroll() : pParent->GetVScroll();
+                const bool bHorUsed(!basegfx::fTools::equalZero(aMove.getY()));
+                ScrollBar* pScrollBar = bHorUsed ? pParent->GetHScroll() : pParent->GetVScroll();
+
                 if ( pScrollBar )
                 {
                     long nRangeMin = pScrollBar->GetRangeMin();
                     long nRangeMax = pScrollBar->GetRangeMax();
-                    long nThumbPos = pScrollBar->GetThumbPos() + ( ( nX != 0 ) ? nX : nY ) * pScrollBar->GetLineSize();
+                    long nThumbPos = pScrollBar->GetThumbPos() +
+                        basegfx::fround( bHorUsed ? aMove.getX() : aMove.getY() ) *
+                        pScrollBar->GetLineSize();
+
                     if ( nThumbPos < nRangeMin )
                         nThumbPos = nRangeMin;
                     if ( nThumbPos > nRangeMax )
                         nThumbPos = nRangeMax;
+
                     pScrollBar->SetThumbPos( nThumbPos );
                     pParent->DoScroll( pScrollBar );
                 }
@@ -361,14 +381,14 @@ sal_Bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
 DlgEdFuncInsert::DlgEdFuncInsert( DlgEditor* pParent_ ) :
     DlgEdFunc( pParent_ )
 {
-    pParent_->GetView()->SetCreateMode( sal_True );
+    pParent_->GetView()->SetViewEditMode(SDREDITMODE_CREATE);
 }
 
 //----------------------------------------------------------------------------
 
 DlgEdFuncInsert::~DlgEdFuncInsert()
 {
-    pParent->GetView()->SetEditMode( sal_True );
+    pParent->GetView()->SetViewEditMode(SDREDITMODE_EDIT);
 }
 
 //----------------------------------------------------------------------------
@@ -380,32 +400,33 @@ sal_Bool DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
 
     SdrView* pView  = pParent->GetView();
     Window*  pWindow= pParent->GetWindow();
-    pView->SetActualWin( pWindow );
+    pView->SetActualOutDev( pWindow );
 
-    Point aPos = pWindow->PixelToLogic( rMEvt.GetPosPixel() );
-    sal_uInt16 nHitLog = sal_uInt16 ( pWindow->PixelToLogic(Size(3,0)).Width() );
-    sal_uInt16 nDrgLog = sal_uInt16 ( pWindow->PixelToLogic(Size(3,0)).Width() );
+    const basegfx::B2DPoint aPixelPos(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
+    const basegfx::B2DPoint aLogicPos(pWindow->GetInverseViewTransformation() * aPixelPos);
+    const double fTolerance(basegfx::B2DVector(pWindow->GetInverseViewTransformation() *
+        basegfx::B2DVector(3.0, 0.0)).getLength());
 
     pWindow->CaptureMouse();
 
     if ( rMEvt.IsLeft() && rMEvt.GetClicks() == 1 )
     {
-        SdrHdl* pHdl = pView->PickHandle(aPos);
+        SdrHdl* pHdl = pView->PickHandle(aLogicPos);
 
         // if selected object was hit, drag object
-        if ( pHdl!=NULL || pView->IsMarkedHit(aPos, nHitLog) )
-            pView->BegDragObj(aPos, (OutputDevice*) NULL, pHdl, nDrgLog);
-        else if ( pView->AreObjectsMarked() )
+        if ( pHdl!=NULL || pView->IsMarkedObjHit(aLogicPos, fTolerance) )
+            pView->BegDragObj(aLogicPos, pHdl, fTolerance);
+        else if ( pView->areSdrObjectsSelected() )
             pView->UnmarkAll();
 
         // if no action, create object
         if ( !pView->IsAction() )
-            pView->BegCreateObj(aPos);
+            pView->BegCreateObj(aLogicPos);
     }
     else if ( rMEvt.IsLeft() && rMEvt.GetClicks() == 2 )
     {
         // if object was hit, show property browser
-        if ( pView->IsMarkedHit(aPos, nHitLog) && pParent->GetMode() != DLGED_READONLY )
+        if ( pView->IsMarkedObjHit(aLogicPos, fTolerance) && pParent->GetMode() != DLGED_READONLY )
             pParent->ShowProperties();
     }
 
@@ -420,23 +441,26 @@ sal_Bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
 
     SdrView* pView  = pParent->GetView();
     Window*  pWindow= pParent->GetWindow();
-    pView->SetActualWin( pWindow );
+    pView->SetActualOutDev( pWindow );
 
     pWindow->ReleaseMouse();
 
     // object creation active?
-    if ( pView->IsCreateObj() )
+    if ( pView->GetCreateObj() )
     {
         pView->EndCreateObj(SDRCREATE_FORCEEND);
 
-        if ( !pView->AreObjectsMarked() )
+        if ( !pView->areSdrObjectsSelected() )
         {
-            sal_uInt16 nHitLog = sal_uInt16 ( pWindow->PixelToLogic(Size(3,0)).Width() );
-            Point aPos( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
-            pView->MarkObj(aPos, nHitLog);
+            const double fTolerance(basegfx::B2DVector(pWindow->GetInverseViewTransformation() *
+                basegfx::B2DVector(3.0, 0.0)).getLength());
+            const basegfx::B2DPoint aPixelPos(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
+            const basegfx::B2DPoint aLogicPos(pWindow->GetInverseViewTransformation() * aPixelPos);
+
+            pView->MarkObj(aLogicPos, fTolerance);
         }
 
-        if( pView->AreObjectsMarked() )
+        if( pView->areSdrObjectsSelected() )
             return sal_True;
         else
             return sal_False;
@@ -455,18 +479,18 @@ sal_Bool DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
 {
     SdrView* pView  = pParent->GetView();
     Window*  pWindow= pParent->GetWindow();
-    pView->SetActualWin( pWindow );
+    pView->SetActualOutDev( pWindow );
 
-    Point   aPos( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
-    sal_uInt16 nHitLog = sal_uInt16 ( pWindow->PixelToLogic(Size(3,0)).Width() );
+    const basegfx::B2DPoint aPixelPos(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
+    const basegfx::B2DPoint aLogicPos(pWindow->GetInverseViewTransformation() * aPixelPos);
 
     if ( pView->IsAction() )
     {
-        ForceScroll(aPos);
-        pView->MovAction(aPos);
+        ForceScroll(aLogicPos);
+        pView->MovAction(aLogicPos);
     }
 
-    pWindow->SetPointer( pView->GetPreferedPointer( aPos, pWindow, nHitLog ) );
+    pWindow->SetPointer(pView->GetPreferedPointer(aLogicPos, pWindow, rMEvt.GetModifier()));
 
     return sal_True;
 }
@@ -492,22 +516,22 @@ sal_Bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
     // get view from parent
     SdrView* pView   = pParent->GetView();
     Window*  pWindow = pParent->GetWindow();
-    pView->SetActualWin( pWindow );
+    pView->SetActualOutDev( pWindow );
 
-    sal_uInt16 nDrgLog = sal_uInt16 ( pWindow->PixelToLogic(Size(3,0)).Width() );
-    sal_uInt16 nHitLog = sal_uInt16 ( pWindow->PixelToLogic(Size(3,0)).Width() );
-    Point  aMDPos = pWindow->PixelToLogic( rMEvt.GetPosPixel() );
+    const basegfx::B2DPoint aPixelPos(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
+    const basegfx::B2DPoint aLogicPos(pWindow->GetInverseViewTransformation() * aPixelPos);
+    const double fTolerance(basegfx::B2DVector(pWindow->GetInverseViewTransformation() *
+        basegfx::B2DVector(3.0, 0.0)).getLength());
 
     if ( rMEvt.IsLeft() && rMEvt.GetClicks() == 1 )
     {
-        SdrHdl* pHdl = pView->PickHandle(aMDPos);
+        SdrHdl* pHdl = pView->PickHandle(aLogicPos);
         SdrObject* pObj;
-        SdrPageView* pPV;
 
         // hit selected object?
-        if ( pHdl!=NULL || pView->IsMarkedHit(aMDPos, nHitLog) )
+        if ( pHdl!=NULL || pView->IsMarkedObjHit(aLogicPos, fTolerance) )
         {
-            pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
+            pView->BegDragObj(aLogicPos, pHdl, fTolerance);
         }
         else
         {
@@ -516,25 +540,25 @@ sal_Bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
                 pView->UnmarkAll();
             else
             {
-                if( pView->PickObj( aMDPos, nHitLog, pObj, pPV ) )
+                if( pView->PickObj( aLogicPos, fTolerance, pObj ) )
                 {
-                    //if( pObj->ISA( DlgEdForm ) )
+                    //if( dynamic_cast< DlgEdForm* >(pObj) )
                     //  pView->UnmarkAll();
                     //else
                     //  pParent->UnmarkDialog();
                 }
             }
 
-            if ( pView->MarkObj(aMDPos, nHitLog) )
+            if ( pView->MarkObj(aLogicPos, fTolerance) )
             {
                 // drag object
-                pHdl=pView->PickHandle(aMDPos);
-                pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
+                pHdl=pView->PickHandle(aLogicPos);
+                pView->BegDragObj(aLogicPos, pHdl, fTolerance);
             }
             else
             {
                 // select object
-                pView->BegMarkObj(aMDPos);
+                pView->BegMarkObj(aLogicPos);
                 bMarkAction = sal_True;
             }
         }
@@ -542,7 +566,7 @@ sal_Bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
     else if ( rMEvt.IsLeft() && rMEvt.GetClicks() == 2 )
     {
         // if object was hit, show property browser
-        if ( pView->IsMarkedHit(aMDPos, nHitLog) && pParent->GetMode() != DLGED_READONLY )
+        if ( pView->IsMarkedObjHit(aLogicPos, fTolerance) && pParent->GetMode() != DLGED_READONLY )
             pParent->ShowProperties();
     }
 
@@ -558,10 +582,10 @@ sal_Bool DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
     // get view from parent
     SdrView* pView  = pParent->GetView();
     Window*  pWindow= pParent->GetWindow();
-    pView->SetActualWin( pWindow );
+    pView->SetActualOutDev( pWindow );
 
-    Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
-    sal_uInt16 nHitLog = sal_uInt16 ( pWindow->PixelToLogic(Size(3,0)).Width() );
+    const basegfx::B2DPoint aPixelPos(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
+    const basegfx::B2DPoint aLogicPos(pWindow->GetInverseViewTransformation() * aPixelPos);
 
     if ( rMEvt.IsLeft() )
     {
@@ -569,10 +593,8 @@ sal_Bool DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
         {
             // object was dragged
             pView->EndDragObj( rMEvt.IsMod1() );
-            pView->ForceMarkedToAnotherPage();
         }
-        else
-        if (pView->IsAction() )
+        else if (pView->IsAction() )
         {
             pView->EndAction();
             //if( bMarkAction )
@@ -580,26 +602,8 @@ sal_Bool DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
         }
     }
 
-//  sal_uInt16 nClicks = rMEvt.GetClicks();
-//  if (nClicks == 2)
-//  {
-//      if ( pView->AreObjectsMarked() )
-//      {
-//          const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-//
-//          if (rMarkList.GetMarkCount() == 1)
-//          {
-//              SdrMark* pMark = rMarkList.GetMark(0);
-//              SdrObject* pObj = pMark->GetMarkedSdrObj();
-//
-//              // edit objects here
-//          }
-//      }
-//  }
-
     bMarkAction = sal_False;
-
-    pWindow->SetPointer( pView->GetPreferedPointer( aPnt, pWindow, nHitLog ) );
+    pWindow->SetPointer(pView->GetPreferedPointer(aLogicPos, pWindow, rMEvt.GetModifier()));
     pWindow->ReleaseMouse();
 
     return sal_True;
@@ -611,21 +615,18 @@ sal_Bool DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
 {
     SdrView* pView  = pParent->GetView();
     Window*  pWindow= pParent->GetWindow();
-    pView->SetActualWin( pWindow );
+    pView->SetActualOutDev( pWindow );
 
-    Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
-    sal_uInt16 nHitLog = sal_uInt16 ( pWindow->PixelToLogic(Size(3,0)).Width() );
+    const basegfx::B2DPoint aPixelPos(rMEvt.GetPosPixel().X(), rMEvt.GetPosPixel().Y());
+    const basegfx::B2DPoint aLogicPos(pWindow->GetInverseViewTransformation() * aPixelPos);
 
     if ( pView->IsAction() )
     {
-        Point aPix(rMEvt.GetPosPixel());
-        Point aPnt_(pWindow->PixelToLogic(aPix));
-
-        ForceScroll(aPnt_);
-        pView->MovAction(aPnt_);
+        ForceScroll(aLogicPos);
+        pView->MovAction(aLogicPos);
     }
 
-    pWindow->SetPointer( pView->GetPreferedPointer( aPnt, pWindow, nHitLog ) );
+    pWindow->SetPointer(pView->GetPreferedPointer(aLogicPos, pWindow, rMEvt.GetModifier()));
 
     return sal_True;
 }

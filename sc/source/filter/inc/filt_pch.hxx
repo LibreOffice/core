@@ -53,7 +53,6 @@
 #include <global.hxx>
 #include <tools/stream.hxx>
 #include <tools/errinf.hxx>
-#include <tools/rtti.hxx>
 #include <tools/errcode.hxx>
 #include <tools/ref.hxx>
 #include <tools/link.hxx>

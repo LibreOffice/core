@@ -90,11 +90,11 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(Window* pParent, const SfxItemSet* _pSet ) :
 
     if ( _pSet )
     {
-        SFX_ITEMSET_ARG( _pSet, pItem, SfxBoolItem, SID_AUTO_CORRECT_DLG, sal_False );
+        SFX_ITEMSET_ARG( _pSet, pItem, SfxBoolItem, SID_AUTO_CORRECT_DLG );
         if ( pItem && pItem->GetValue() )
             bShowSWOptions = sal_True;
 
-        SFX_ITEMSET_ARG( _pSet, pItem2, SfxBoolItem, SID_OPEN_SMARTTAGOPTIONS, sal_False );
+        SFX_ITEMSET_ARG( _pSet, pItem2, SfxBoolItem, SID_OPEN_SMARTTAGOPTIONS );
         if ( pItem2 && pItem2->GetValue() )
             bOpenSmartTagOptions = sal_True;
     }
@@ -851,7 +851,7 @@ void OfaACorrCheckListBox::SetTabs()
 /*                                                                   */
 /*********************************************************************/
 
-void OfaACorrCheckListBox::CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, sal_Bool bChecked)
+void OfaACorrCheckListBox::CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, bool bChecked)
 {
     if ( nPos < GetEntryCount() )
         SetCheckButtonState(
@@ -2066,7 +2066,7 @@ OfaQuoteTabPage::OfaQuoteTabPage( Window* pParent, const SfxItemSet& rSet ) :
     aCheckLB.SetHelpId( HID_OFAPAGE_QUOTE_CLB );
     aSwCheckLB.SetHelpId( HID_OFAPAGE_QUOTE_SW_CLB );
 
-    SFX_ITEMSET_ARG( &rSet, pItem, SfxBoolItem, SID_AUTO_CORRECT_DLG, sal_False );
+    SFX_ITEMSET_ARG( &rSet, pItem, SfxBoolItem, SID_AUTO_CORRECT_DLG );
     if ( pItem && pItem->GetValue() )
         bShowSWOptions = sal_True;
 
@@ -2832,7 +2832,7 @@ sal_Bool OfaSmartTagOptionsTabPage::FillItemSet( SfxItemSet& )
     {
         const SvLBoxEntry* pEntry = m_aSmartTagTypesLB.GetEntry(i);
         const ImplSmartTagLBUserData* pUserData = static_cast< ImplSmartTagLBUserData* >(pEntry->GetUserData());
-        const sal_Bool bChecked = m_aSmartTagTypesLB.IsChecked(i);
+        const bool bChecked = m_aSmartTagTypesLB.IsChecked(i);
         const sal_Bool bIsCurrentlyEnabled = pSmartTagMgr->IsSmartTagTypeEnabled( pUserData->maSmartTagType );
 
         bModifiedSmartTagTypes = bModifiedSmartTagTypes || ( !bChecked != !bIsCurrentlyEnabled );

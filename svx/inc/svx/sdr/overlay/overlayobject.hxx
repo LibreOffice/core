@@ -93,20 +93,20 @@ namespace sdr
 
             // bitfield
             // Flag for visibility
-            unsigned                                        mbIsVisible : 1;
+            bool                                            mbIsVisible : 1;
 
             // Flag to control hittability
-            unsigned                                        mbIsHittable : 1;
+            bool                                            mbIsHittable : 1;
 
             // Flag to hold info if this objects supports animation. Default is
             // false. If true, the Trigger() method should be overloaded
             // to implement the animation effect and to re-initiate the event.
-            unsigned                                        mbAllowsAnimation : 1;
+            bool                                            mbAllowsAnimation : 1;
 
             // Flag tocontrol if this OverlayObject allows AntiAliased visualisation.
             // Default is true, but e.g. for selection visualisation in SC and SW,
             // it is switched to false
-            unsigned                                        mbAllowsAntiAliase : 1;
+            bool                                            mbAllowsAntiAliase : 1;
 
             // set changed flag. Call after change, since the old range is invalidated
             // and then the new one is calculated and invalidated, too. This will only

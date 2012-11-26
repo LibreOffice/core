@@ -79,9 +79,6 @@ namespace drawinglayer
             /// data read access
             const Primitive2DSequence& getChildren() const { return maChildren; }
 
-            /// compare operator
-            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
-
             /// local decomposition. Implementation will just return children
             virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 

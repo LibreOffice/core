@@ -137,7 +137,7 @@ DialogWindow* BasicIDEShell::FindDlgWin( const ScriptDocument& rDocument, const 
     IDEBaseWindow* pWin = aIDEWindowTable.First();
     while ( pWin && !pDlgWin )
     {
-        if ( ( !pWin->IsSuspended() || bFindSuspended ) && pWin->IsA( TYPE( DialogWindow ) ) )
+        if ( ( !pWin->IsSuspended() || bFindSuspended ) && dynamic_cast< DialogWindow* >(pWin) )
         {
             if ( !rLibName.Len() )  // nur irgendeins finden...
                 pDlgWin = (DialogWindow*)pWin;
@@ -154,7 +154,7 @@ DialogWindow* BasicIDEShell::FindDlgWin( const ScriptDocument& rDocument, const 
 
 SdrView* BasicIDEShell::GetCurDlgView() const
 {
-    if ( !pCurWin || !pCurWin->IsA( TYPE( DialogWindow ) ) )
+    if ( !pCurWin || !dynamic_cast< DialogWindow* >(pCurWin) )
         return NULL;
 
     DialogWindow* pWin = (DialogWindow*)pCurWin;
@@ -164,8 +164,8 @@ SdrView* BasicIDEShell::GetCurDlgView() const
 // Nur wenn Dialogfenster oben:
 void __EXPORT BasicIDEShell::ExecuteDialog( SfxRequest& rReq )
 {
-    if ( pCurWin && ( pCurWin->IsA( TYPE( DialogWindow) ) ||
-        (rReq.GetSlot() == SID_IMPORT_DIALOG &&pCurWin->IsA( TYPE( ModulWindow) ) ) ) )
+    if ( pCurWin && ( dynamic_cast< DialogWindow* >(pCurWin) ||
+        (rReq.GetSlot() == SID_IMPORT_DIALOG && dynamic_cast< ModulWindow* >(pCurWin) ) ) )
     {
         pCurWin->ExecuteCommand( rReq );
     }

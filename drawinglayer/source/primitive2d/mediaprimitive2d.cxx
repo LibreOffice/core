@@ -72,9 +72,7 @@ namespace drawinglayer
                 const basegfx::B2DVector aDiscreteInLogic(rViewInformation.getInverseObjectToViewTransformation() *
                     basegfx::B2DVector((double)getDiscreteBorder(), (double)getDiscreteBorder()));
                 const double fDiscreteSize(aDiscreteInLogic.getX() + aDiscreteInLogic.getY());
-
-                basegfx::B2DRange aSourceRange(0.0, 0.0, 1.0, 1.0);
-                aSourceRange.transform(getTransform());
+                const basegfx::B2DRange aSourceRange(getTransform() * basegfx::B2DRange::getUnitB2DRange());
 
                 basegfx::B2DRange aDestRange(aSourceRange);
                 aDestRange.grow(-0.5 * fDiscreteSize);
@@ -91,9 +89,9 @@ namespace drawinglayer
                 {
                     // create transformation matrix from original range to shrunk range
                     basegfx::B2DHomMatrix aTransform;
-                    aTransform.translate(-aSourceRange.getMinX(), -aSourceRange.getMinY());
+                    aTransform.translate(-aSourceRange.getMinimum());
                     aTransform.scale(aDestRange.getWidth() / aSourceRange.getWidth(), aDestRange.getHeight() / aSourceRange.getHeight());
-                    aTransform.translate(aDestRange.getMinX(), aDestRange.getMinY());
+                    aTransform.translate(aDestRange.getMinimum());
 
                     // add transform primitive
                     const Primitive2DReference aScaled(new TransformPrimitive2D(aTransform, xRetval));
@@ -117,25 +115,9 @@ namespace drawinglayer
         {
         }
 
-        bool MediaPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
-            {
-                const MediaPrimitive2D& rCompare = (MediaPrimitive2D&)rPrimitive;
-
-                return (getTransform() == rCompare.getTransform()
-                    && getURL() == rCompare.getURL()
-                    && getBackgroundColor() == rCompare.getBackgroundColor()
-                    && getDiscreteBorder() == rCompare.getDiscreteBorder());
-            }
-
-            return false;
-        }
-
         basegfx::B2DRange MediaPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
-            basegfx::B2DRange aRetval(0.0, 0.0, 1.0, 1.0);
-            aRetval.transform(getTransform());
+            basegfx::B2DRange aRetval(getTransform() * basegfx::B2DRange::getUnitB2DRange());
 
             if(getDiscreteBorder())
             {

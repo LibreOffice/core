@@ -62,10 +62,6 @@ using namespace com::sun::star::util;
 
 // STATIC DATA -----------------------------------------------------------
 
-TYPEINIT1_FACTORY(SvxSearchItem, SfxPoolItem, new SvxSearchItem(0));
-
-// -----------------------------------------------------------------------
-
 static Sequence< ::rtl::OUString > lcl_GetNotifyNames()
 {
     // names of transliteration relevant properties
@@ -102,6 +98,8 @@ static Sequence< ::rtl::OUString > lcl_GetNotifyNames()
 }
 
 // -----------------------------------------------------------------------
+IMPL_POOLITEM_FACTORY(SvxSearchItem)
+
 SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
 
     SfxPoolItem( nId ),

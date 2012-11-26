@@ -58,7 +58,7 @@ protected:
 
 public:
     virtual sal_uInt16          GetValueCount() const;
-
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
 
     virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;

@@ -66,29 +66,11 @@ namespace sdr
         {
         }
 
-        basegfx::B2DHomMatrix ViewContactOfSdrOle2Obj::createObjectTransform() const
-        {
-            // take unrotated snap rect (direct model data) for position and size
-            const Rectangle& rRectangle = GetOle2Obj().GetGeoRect();
-            const basegfx::B2DRange aObjectRange(rRectangle.Left(), rRectangle.Top(), rRectangle.Right(), rRectangle.Bottom());
-
-            // create object matrix
-            const GeoStat& rGeoStat(GetOle2Obj().GetGeoStat());
-            const double fShearX(rGeoStat.nShearWink ? tan((36000 - rGeoStat.nShearWink) * F_PI18000) : 0.0);
-            const double fRotate(rGeoStat.nDrehWink ? (36000 - rGeoStat.nDrehWink) * F_PI18000 : 0.0);
-
-            return basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
-                aObjectRange.getWidth(), aObjectRange.getHeight(),
-                fShearX,
-                fRotate,
-                aObjectRange.getMinX(), aObjectRange.getMinY());
-        }
-
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrOle2Obj::createPrimitive2DSequenceWithParameters(
             bool bHighContrast) const
         {
             // get object transformation
-            const basegfx::B2DHomMatrix aObjectMatrix(createObjectTransform());
+            const basegfx::B2DHomMatrix& rObjectMatrix(GetOle2Obj().getSdrObjectTransformation());
 
             // Prepare attribute settings, will be used soon anyways
             const SfxItemSet& rItemSet = GetOle2Obj().GetMergedItemSet();
@@ -124,7 +106,7 @@ namespace sdr
                             -aChartContentRange.getMinY()));
 
                     aEmbed.scale(1.0 / fWidth, 1.0 / fHeight);
-                    aEmbed = aObjectMatrix * aEmbed;
+                    aEmbed = rObjectMatrix * aEmbed;
                     xContent = new drawinglayer::primitive2d::TransformPrimitive2D(
                         aEmbed,
                         aChartSequence);
@@ -139,7 +121,7 @@ namespace sdr
                 // It will also take care of HighContrast and ScaleContent
                 xContent = new drawinglayer::primitive2d::SdrOleContentPrimitive2D(
                     GetOle2Obj(),
-                    aObjectMatrix,
+                    rObjectMatrix,
 
                     // #i104867# add GraphicVersion number to be able to check for
                     // content change in the primitive later
@@ -154,7 +136,7 @@ namespace sdr
             const drawinglayer::primitive2d::Primitive2DReference xReference(
                 new drawinglayer::primitive2d::SdrOle2Primitive2D(
                     drawinglayer::primitive2d::Primitive2DSequence(&xContent, 1),
-                    aObjectMatrix,
+                    rObjectMatrix,
                     aAttribute));
 
             return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);

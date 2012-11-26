@@ -79,7 +79,7 @@ namespace drawinglayer
             /** flag if given 3D geometry is already cheched for shadow definitions and 2d shadows
                 are created in maShadowPrimitives
              */
-            unsigned                                            mbShadow3DChecked : 1;
+            bool                                                mbShadow3DChecked : 1;
 
             /// private helpers
             bool impGetShadow3D(const geometry::ViewInformation2D& rViewInformation) const;
@@ -105,9 +105,6 @@ namespace drawinglayer
             const basegfx::B3DVector& getLightNormal() const { return maLightNormal; }
             double getShadowSlant() const { return mfShadowSlant; }
             const basegfx::B3DRange& getScene3DRange() const { return maScene3DRange; }
-
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
             /// get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;

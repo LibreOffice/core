@@ -242,7 +242,6 @@ protected:
     virtual sal_Bool StoreData( SvStream& ) const;
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_VALUE,1);
-    TYPEINFO();
     SbxValue();
     SbxValue( SbxDataType, void* = NULL );
     SbxValue( const SbxValue& );
@@ -458,7 +457,6 @@ protected:
     virtual sal_Bool StoreData( SvStream& ) const;
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_VARIABLE,2);
-    TYPEINFO();
     SbxVariable();
     SbxVariable( SbxDataType, void* = NULL );
     SbxVariable( const SbxVariable& );

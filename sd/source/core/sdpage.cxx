@@ -57,9 +57,7 @@
 #include <editeng/flditem.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/svditer.hxx>
-
 #include <editeng/adjitem.hxx>
-
 #include "../ui/inc/DrawDocShell.hxx"
 #include "Outliner.hxx"
 #include "app.hrc"
@@ -81,34 +79,95 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/unoapi.hxx>
-
 #include <set>
+#include <svx/svdlegacy.hxx>
+#include <svx/svdview.hxx>
 
 using namespace ::sd;
 using namespace ::com::sun::star;
 
-TYPEINIT2( SdPage, FmFormPage, SdrObjUserCall );
+//////////////////////////////////////////////////////////////////////////////
+// detect and hand back the connected SdPage for a SdrObject
 
-/*************************************************************************
-|*
-|*      Ctor
-|*
-\************************************************************************/
+SdPage* findConnectionToSdrObject(const SdrObject* pSdrObject)
+{
+    if(pSdrObject)
+    {
+        if(pSdrObject->HasListeners())
+        {
+            const sal_uInt16 nListenerCount(pSdrObject->GetListenerCount());
 
-SdPage::SdPage(SdDrawDocument& rNewDoc, StarBASIC* pBasic, sal_Bool bMasterPage)
+            for(sal_uInt16 a(0); a < nListenerCount; a++)
+            {
+                SfxListener* pCandidate = pSdrObject->GetListener(a);
+
+                if(pCandidate) // not all slots in a broadcaster have to be used
+                {
+                    SdPage* pRetval = dynamic_cast< SdPage* >(pCandidate);
+
+                    if(pRetval)
+                    {
+                        return pRetval;
+                    }
+                }
+            }
+        }
+    }
+
+    return 0;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// connect to given SdrObject. All existing connections are deleted, a single
+// new one gets established
+
+void establishConnectionToSdrObject(SdrObject* pSdrObject, SdPage* pSdPage)
+{
+    if(pSdrObject)
+    {
+        // remove all SdPages
+        resetConnectionToSdrObject(pSdrObject);
+
+        if(pSdPage)
+        {
+            pSdPage->StartListening(*pSdrObject);
+        }
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// all connections (should be a single one) to the SdrObject are removed
+
+void resetConnectionToSdrObject(SdrObject* pSdrObject)
+{
+    if(pSdrObject)
+    {
+        SdPage* pFound = findConnectionToSdrObject(pSdrObject);
+
+        while(pFound)
+        {
+            pFound->EndListening(*pSdrObject);
+            pFound = findConnectionToSdrObject(pSdrObject);
+        }
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+SdPage::SdPage(SdDrawDocument& rNewDoc, StarBASIC* pBasic, bool bMasterPage)
 :   FmFormPage(rNewDoc, pBasic, bMasterPage)
-,   SdrObjUserCall()
+,   SfxListener()
 ,   mePageKind(PK_STANDARD)
 ,   meAutoLayout(AUTOLAYOUT_NONE)
-,   mbSelected(sal_False)
+,   mbSelected(false)
 ,   mePresChange(PRESCHANGE_MANUAL)
 ,   mnTime(1)
-,   mbSoundOn(sal_False)
-,   mbExcluded(sal_False)
-,   mbLoopSound(sal_False)
-,   mbStopSound(sal_False)
-,   mbScaleObjects(sal_True)
-,   mbBackgroundFullSize( sal_False )
+,   mbSoundOn(false)
+,   mbExcluded(false)
+,   mbLoopSound(false)
+,   mbStopSound(false)
+,   mbScaleObjects(true)
+,   mbBackgroundFullSize( false )
 ,   meCharSet(gsl_getSystemTextEncoding())
 ,   mnPaperBin(PAPERBIN_PRINTER_SETTINGS)
 ,   mpPageLink(NULL)
@@ -127,9 +186,9 @@ SdPage::SdPage(SdDrawDocument& rNewDoc, StarBASIC* pBasic, sal_Bool bMasterPage)
     maLayoutName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ));
     maLayoutName += String(SdResId(STR_LAYOUT_OUTLINE));
 
-    Size aPageSize(GetSize());
+    const basegfx::B2DVector& rPageScale = GetPageScale();
 
-    if (aPageSize.Width() > aPageSize.Height())
+    if (rPageScale.getX() > rPageScale.getY())
     {
         meOrientation = ORIENTATION_LANDSCAPE;
     }
@@ -155,11 +214,45 @@ SdPage::~SdPage()
         delete mpItems;
 }
 
+void SdPage::copyDataFromSdrPage(const SdrPage& rSource)
+{
+    if(this != &rSource)
+    {
+        const SdPage* pSource = dynamic_cast< const SdPage* >(&rSource);
+
+        if(pSource)
+        {
+            // call parent
+            FmFormPage::copyDataFromSdrPage(rSource);
+
+            // no local data to copy
+        }
+        else
+        {
+            OSL_ENSURE(false, "copyDataFromSdrObject with ObjectType of Source different from Target (!)");
+        }
+    }
+}
+
+SdrPage* SdPage::CloneSdrPage(SdrModel* pTargetModel) const
+{
+    SdDrawDocument* pSdDrawDocument = static_cast< SdDrawDocument* >(pTargetModel ? pTargetModel : &getSdrModelFromSdrPage());
+    OSL_ENSURE(dynamic_cast< SdDrawDocument* >(pSdDrawDocument), "Wrong SdrModel type in SdPage clone (!)");
+    SdPage* pClone = new SdPage(
+        *pSdDrawDocument,
+        GetBasic(),
+        IsMasterPage());
+    OSL_ENSURE(pClone, "CloneSdrPage error (!)");
+    pClone->copyDataFromSdrPage(*this);
+
+    return pClone;
+}
+
 struct OrdNumSorter
 {
     bool operator()( SdrObject* p1, SdrObject* p2 )
     {
-        return p1->GetOrdNum() < p2->GetOrdNum();
+        return p1->GetNavigationPosition() < p2->GetNavigationPosition();
     }
 };
 
@@ -167,9 +260,9 @@ struct OrdNumSorter
 SdrObject* SdPage::GetPresObj(PresObjKind eObjKind, int nIndex, bool bFuzzySearch /* = false */ )
 {
     // first sort all matching shapes with z-order
-    std::vector< SdrObject* > aMatches;
+    SdrObjectVector aMatches;
 
-    SdrObject* pObj = 0;
+    const SdrObject* pObj = 0;
     while( (pObj = maPresentationShapeList.getNextShape(pObj)) != 0 )
     {
         SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*pObj);
@@ -192,7 +285,7 @@ SdrObject* SdPage::GetPresObj(PresObjKind eObjKind, int nIndex, bool bFuzzySearc
                 case PRESOBJ_CALC:
                 case PRESOBJ_IMAGE:
                 case PRESOBJ_MEDIA:
-                    bFound = sal_True;
+                    bFound = true;
                     break;
                 default:
                     break;
@@ -200,7 +293,7 @@ SdrObject* SdPage::GetPresObj(PresObjKind eObjKind, int nIndex, bool bFuzzySearc
             }
             if( bFound )
             {
-                aMatches.push_back( pObj );
+                aMatches.push_back( const_cast< SdrObject* >(pObj) );
             }
         }
     }
@@ -245,13 +338,12 @@ void SdPage::EnsureMasterPageDefaultBackground()
 
 /** creates a presentation object with the given PresObjKind on this page. A user call will be set
 */
-SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const Rectangle& rRect, sal_Bool /* bInsert */ )
+SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const basegfx::B2DRange& rRange, bool /* bInsert */ )
 {
-    ::svl::IUndoManager* pUndoManager = pModel ? static_cast<SdDrawDocument*>(pModel)->GetUndoManager() : 0;
+    ::svl::IUndoManager* pUndoManager = static_cast< SdDrawDocument* >(&getSdrModelFromSdrPage())->GetUndoManager();
     const bool bUndo = pUndoManager && pUndoManager->IsInListAction() && IsInserted();
 
     SdrObject* pSdrObj = NULL;
-
     bool bForceText = false;    // forces the shape text to be set even if its empty
     bool bEmptyPresObj = true;
 
@@ -259,40 +351,56 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
     {
         case PRESOBJ_TITLE:
         {
-            pSdrObj = new SdrRectObj(OBJ_TITLETEXT);
+            pSdrObj = new SdrRectObj(
+                getSdrModelFromSdrPage(),
+                basegfx::B2DHomMatrix(),
+                OBJ_TITLETEXT,
+                true);
 
             if (mbMaster)
             {
-                pSdrObj->SetNotVisibleAsMaster(sal_True);
+                pSdrObj->SetNotVisibleAsMaster(true);
             }
         }
         break;
 
         case PRESOBJ_OUTLINE:
         {
-            pSdrObj = new SdrRectObj(OBJ_OUTLINETEXT);
+            pSdrObj = new SdrRectObj(
+                getSdrModelFromSdrPage(),
+                basegfx::B2DHomMatrix(),
+                OBJ_OUTLINETEXT,
+                true);
 
             if (mbMaster)
             {
-                pSdrObj->SetNotVisibleAsMaster(sal_True);
+                pSdrObj->SetNotVisibleAsMaster(true);
             }
         }
         break;
 
         case PRESOBJ_NOTES:
         {
-            pSdrObj = new SdrRectObj(OBJ_TEXT);
+            pSdrObj = new SdrRectObj(
+                getSdrModelFromSdrPage(),
+                basegfx::B2DHomMatrix(),
+                OBJ_TEXT,
+                true);
 
             if (mbMaster)
             {
-                pSdrObj->SetNotVisibleAsMaster(sal_True);
+                pSdrObj->SetNotVisibleAsMaster(true);
             }
         }
         break;
 
         case PRESOBJ_TEXT:
         {
-            pSdrObj = new SdrRectObj(OBJ_TEXT);
+            pSdrObj = new SdrRectObj(
+                getSdrModelFromSdrPage(),
+                basegfx::B2DHomMatrix(),
+                OBJ_TEXT,
+                true);
         }
         break;
 
@@ -308,9 +416,10 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
             aOutDev.SetMapMode(MAP_100TH_MM);
 
             Size aSize = aOutDev.PixelToLogic(aSizePix);
-            Point aPnt (0, 0);
-            Rectangle aRect (aPnt, aSize);
-            pSdrObj = new SdrGrafObj(aGraphic, aRect);
+            pSdrObj = new SdrGrafObj(
+                getSdrModelFromSdrPage(),
+                aGraphic,
+                basegfx::tools::createScaleB2DHomMatrix(aSize.getWidth(), aSize.getHeight()));
             aOutDev.Pop();
         }
         break;
@@ -318,40 +427,44 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
         case PRESOBJ_MEDIA:
         case PRESOBJ_OBJECT:
         {
-            pSdrObj = new SdrOle2Obj();
+            SdrOle2Obj* pNewSdrOle2Obj = new SdrOle2Obj(getSdrModelFromSdrPage());
+            pSdrObj = pNewSdrOle2Obj;
             BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_OBJECT ) );
             Graphic aGraphic( aBmpEx );
-            ( (SdrOle2Obj*) pSdrObj)->SetGraphic(&aGraphic);
+            pNewSdrOle2Obj->SetGraphic(&aGraphic);
         }
         break;
 
         case PRESOBJ_CHART:
         {
-            pSdrObj = new SdrOle2Obj();
-            ( (SdrOle2Obj*) pSdrObj)->SetProgName( String( RTL_CONSTASCII_USTRINGPARAM( "StarChart" )));
+            SdrOle2Obj* pNewSdrOle2Obj = new SdrOle2Obj(getSdrModelFromSdrPage());
+            pSdrObj = pNewSdrOle2Obj;
+            pNewSdrOle2Obj->SetProgName( String( RTL_CONSTASCII_USTRINGPARAM( "StarChart" )));
             BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_CHART ) );
             Graphic aGraphic( aBmpEx );
-            ( (SdrOle2Obj*) pSdrObj)->SetGraphic(&aGraphic);
+            pNewSdrOle2Obj->SetGraphic(&aGraphic);
         }
         break;
 
         case PRESOBJ_ORGCHART:
         {
-            pSdrObj = new SdrOle2Obj();
-            ( (SdrOle2Obj*) pSdrObj)->SetProgName( String( RTL_CONSTASCII_USTRINGPARAM( "StarOrg" )));
+            SdrOle2Obj* pNewSdrOle2Obj = new SdrOle2Obj(getSdrModelFromSdrPage());
+            pSdrObj = pNewSdrOle2Obj;
+            pNewSdrOle2Obj->SetProgName( String( RTL_CONSTASCII_USTRINGPARAM( "StarOrg" )));
             BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_ORGCHART ) );
             Graphic aGraphic( aBmpEx );
-            ( (SdrOle2Obj*) pSdrObj)->SetGraphic(&aGraphic);
+            pNewSdrOle2Obj->SetGraphic(&aGraphic);
         }
 
         case PRESOBJ_TABLE:
         case PRESOBJ_CALC:
         {
-            pSdrObj = new SdrOle2Obj();
-            ( (SdrOle2Obj*) pSdrObj)->SetProgName( String( RTL_CONSTASCII_USTRINGPARAM( "StarCalc" )));
+            SdrOle2Obj* pNewSdrOle2Obj = new SdrOle2Obj(getSdrModelFromSdrPage());
+            pSdrObj = pNewSdrOle2Obj;
+            pNewSdrOle2Obj->SetProgName( String( RTL_CONSTASCII_USTRINGPARAM( "StarCalc" )));
             BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_TABLE ) );
             Graphic aGraphic( aBmpEx );
-            ( (SdrOle2Obj*) pSdrObj)->SetGraphic(&aGraphic);
+            pNewSdrOle2Obj->SetGraphic(&aGraphic);
         }
         break;
 
@@ -360,32 +473,35 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
             //Erste Standardseite am SdrPageObj vermerken
             // #i105146# We want no content to be displayed for PK_HANDOUT,
             // so just never set a page as content
-            pSdrObj = new SdrPageObj(0);
-//          pSdrObj->SetResizeProtect(sal_True);
+            pSdrObj = new SdrPageObj(getSdrModelFromSdrPage());
+//          pSdrObj->SetResizeProtect(true);
         }
         break;
 
         case PRESOBJ_PAGE:
         {
             //Notizseite am SdrPageObj vermerken
-            sal_uInt16 nDestPageNum(GetPageNum());
+            sal_uInt32 nDestPageNum(GetPageNumber());
 
             if(nDestPageNum)
             {
-                // decrement only when != 0, else we get a 0xffff
+                // decrement only when != 0, else we get a SDRPAGE_NOTFOUND
                 nDestPageNum -= 1;
             }
 
-            if(nDestPageNum < pModel->GetPageCount())
+            if(nDestPageNum < getSdrModelFromSdrPage().GetPageCount())
             {
-                pSdrObj = new SdrPageObj(pModel->GetPage(nDestPageNum));
+                pSdrObj = new SdrPageObj(
+                    getSdrModelFromSdrPage(),
+                    basegfx::B2DHomMatrix(),
+                    getSdrModelFromSdrPage().GetPage(nDestPageNum));
             }
             else
             {
-                pSdrObj = new SdrPageObj();
+                pSdrObj = new SdrPageObj(getSdrModelFromSdrPage());
             }
 
-            pSdrObj->SetResizeProtect(sal_True);
+            pSdrObj->SetResizeProtect(true);
         }
         break;
 
@@ -394,7 +510,11 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
         case PRESOBJ_DATETIME:
         case PRESOBJ_SLIDENUMBER:
         {
-            pSdrObj = new SdrRectObj(OBJ_TEXT);
+            pSdrObj = new SdrRectObj(
+                getSdrModelFromSdrPage(),
+                basegfx::B2DHomMatrix(),
+                OBJ_TEXT,
+                true);
             bEmptyPresObj = false;
             bForceText = true;
         }
@@ -406,22 +526,22 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
     if (pSdrObj)
     {
         pSdrObj->SetEmptyPresObj(bEmptyPresObj);
-        pSdrObj->SetLogicRect(rRect);
+        sdr::legacy::SetLogicRange(*pSdrObj, rRange);
+        InsertObjectToSdrObjList(*pSdrObj);
+        SdrTextObj* pSdrTextObj = dynamic_cast< SdrTextObj* >(pSdrObj);
 
-        InsertObject(pSdrObj);
-
-        if ( pSdrObj->ISA(SdrTextObj) )
+        if ( pSdrTextObj )
         {
             // #96243# Tell the object EARLY that it is vertical to have the
             // defaults for AutoGrowWidth/Height reversed
             if(bVertical)
-                ((SdrTextObj*)pSdrObj)->SetVerticalWriting(sal_True);
+                pSdrTextObj->SetVerticalWriting(true);
 
-            SfxItemSet aTempAttr( ((SdDrawDocument*) pModel)->GetPool() );
+            SfxItemSet aTempAttr(pSdrTextObj->GetObjectItemPool());
             if( bVertical )
-                aTempAttr.Put( SdrTextMinFrameWidthItem( rRect.GetSize().Width() ) );
+                aTempAttr.Put( SdrMetricItem(SDRATTR_TEXT_MINFRAMEWIDTH, basegfx::fround(rRange.getWidth()) ) );
             else
-                aTempAttr.Put( SdrTextMinFrameHeightItem( rRect.GetSize().Height() ) );
+                aTempAttr.Put( SdrMetricItem(SDRATTR_TEXT_MINFRAMEHEIGHT, basegfx::fround(rRange.getHeight()) ) );
 
             if (mbMaster)
             {
@@ -431,9 +551,9 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
                 // #96243# potential problem: This action was still NOT
                 // adapted for vertical text. This sure needs to be done.
                 if(bVertical)
-                    aTempAttr.Put(SdrTextAutoGrowWidthItem(sal_False));
+                    aTempAttr.Put(SdrOnOffItem(SDRATTR_TEXT_AUTOGROWWIDTH, false));
                 else
-                    aTempAttr.Put(SdrTextAutoGrowHeightItem(sal_False));
+                    aTempAttr.Put(SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT, false));
             }
 
             // check if we need another vertical adjustement than the default
@@ -451,15 +571,16 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
             if( eV != SDRTEXTVERTADJUST_TOP )
                 aTempAttr.Put(SdrTextVertAdjustItem(eV));
 
-            pSdrObj->SetMergedItemSet(aTempAttr);
+            pSdrTextObj->SetMergedItemSet(aTempAttr);
 
-            pSdrObj->SetLogicRect(rRect);
+            sdr::legacy::SetLogicRange(*pSdrTextObj, rRange);
         }
 
         String aString = GetPresObjText(eObjKind);
-        if( (aString.Len() || bForceText) && pSdrObj->ISA(SdrTextObj) )
+
+        if( pSdrTextObj && (aString.Len() || bForceText) )
         {
-            SdrOutliner* pOutliner = ( (SdDrawDocument*) GetModel() )->GetInternalOutliner();
+            SdrOutliner* pOutliner = (static_cast< SdDrawDocument& >(getSdrModelFromSdrPage())).GetInternalOutliner();
 
             sal_uInt16 nOutlMode = pOutliner->GetMode();
             pOutliner->Init( OUTLINERMODE_TEXTOBJECT );
@@ -467,7 +588,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
             pOutliner->SetVertical( bVertical );
 
             String aEmptyStr;
-            SetObjText( (SdrTextObj*) pSdrObj, (SdrOutliner*)pOutliner, eObjKind, aString );
+            SetObjText( pSdrTextObj, (SdrOutliner*)pOutliner, eObjKind, aString );
 
             pOutliner->Init( nOutlMode );
             pOutliner->SetStyleSheet( 0, NULL );
@@ -475,7 +596,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
 
         if( (eObjKind == PRESOBJ_HEADER) || (eObjKind == PRESOBJ_FOOTER) || (eObjKind == PRESOBJ_SLIDENUMBER) || (eObjKind == PRESOBJ_DATETIME) )
         {
-            SfxItemSet aTempAttr( ((SdDrawDocument*) pModel)->GetPool() );
+            SfxItemSet aTempAttr(pSdrObj->GetObjectItemPool());
             aTempAttr.Put( SvxFontHeightItem( 493, 100, EE_CHAR_FONTHEIGHT ) );
             aTempAttr.Put( SvxFontHeightItem( 493, 100, EE_CHAR_FONTHEIGHT_CTL ) );
             aTempAttr.Put( SvxFontHeightItem( 493, 100, EE_CHAR_FONTHEIGHT_CJK ) );
@@ -503,21 +624,21 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
 
         if (mbMaster)
         {
-            SdrLayerAdmin& rLayerAdmin = pModel->GetLayerAdmin();
+            SdrLayerAdmin& rLayerAdmin = getSdrModelFromSdrPage().GetModelLayerAdmin();
 
             // Hintergrundobjekte der MasterPage
             pSdrObj->SetLayer( rLayerAdmin.
-                GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False) );
+                GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), false) );
         }
 
         // Objekt am StyleSheet anmelden
         // #95114# Set style only when one was found (as in 5.2)
-        // pSdrObj->NbcSetStyleSheet( GetStyleSheetForPresObj(eObjKind), sal_False );
+        // pSdrObj->SetStyleSheet( GetStyleSheetForPresObj(eObjKind), false );
         if( mePageKind != PK_HANDOUT )
         {
             SfxStyleSheet* pSheetForPresObj = GetStyleSheetForPresObj(eObjKind);
             if(pSheetForPresObj)
-                pSdrObj->SetStyleSheet(pSheetForPresObj, sal_False);
+                pSdrObj->SetStyleSheet(pSheetForPresObj, false);
         }
 
         if (eObjKind == PRESOBJ_OUTLINE)
@@ -527,7 +648,8 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
                 String aName(maLayoutName);
                 aName += sal_Unicode( ' ' );
                 aName += String::CreateFromInt32( nLevel );
-                SfxStyleSheet* pSheet = (SfxStyleSheet*)pModel->GetStyleSheetPool()->Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
+                SfxStyleSheet* pSheet = dynamic_cast< SfxStyleSheet* >(
+                    getSdrModelFromSdrPage().GetStyleSheetPool()->Find(aName, SD_STYLE_FAMILY_MASTERPAGE));
                 DBG_ASSERT(pSheet, "Vorlage fuer Gliederungsobjekt nicht gefunden");
                 if (pSheet)
                     pSdrObj->StartListening(*pSheet);
@@ -540,8 +662,8 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
              eObjKind == PRESOBJ_CALC    ||
              eObjKind == PRESOBJ_GRAPHIC )
         {
-            SfxItemSet aSet( ((SdDrawDocument*) pModel)->GetPool() );
-            aSet.Put( SdrTextContourFrameItem( sal_True ) );
+            SfxItemSet aSet(pSdrObj->GetObjectItemPool());
+            aSet.Put( SdrOnOffItem(SDRATTR_TEXT_CONTOURFRAME, true ) );
             aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER, EE_PARA_JUST ) );
 
             pSdrObj->SetMergedItemSet(aSet);
@@ -549,19 +671,17 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
 
         if( bUndo )
         {
-            pUndoManager->AddUndoAction(pModel->GetSdrUndoFactory().CreateUndoNewObject(*pSdrObj));
+            pUndoManager->AddUndoAction(getSdrModelFromSdrPage().GetSdrUndoFactory().CreateUndoNewObject(*pSdrObj));
         }
 
         if( bUndo )
         {
             pUndoManager->AddUndoAction( new UndoObjectPresentationKind( *pSdrObj ) );
-            pUndoManager->AddUndoAction( new UndoObjectUserCall(*pSdrObj) );
+            pUndoManager->AddUndoAction( new UndoConnectionToSdrObject(*pSdrObj) );
         }
 
         InsertPresObj(pSdrObj, eObjKind);
-        pSdrObj->SetUserCall(this);
-
-        pSdrObj->RecalcBoundRect();
+        establishConnectionToSdrObject(pSdrObj, this);
     }
 
     return(pSdrObj);
@@ -588,7 +708,7 @@ SfxStyleSheet* SdPage::GetStyleSheetForMasterPageBackground() const
 
     aName += String(SdResId(STR_LAYOUT_BACKGROUND));
 
-    SfxStyleSheetBasePool* pStShPool = pModel->GetStyleSheetPool();
+    SfxStyleSheetBasePool* pStShPool = getSdrModelFromSdrPage().GetStyleSheetPool();
     SfxStyleSheetBase*     pResult   = pStShPool->Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
     return (SfxStyleSheet*)pResult;
 }
@@ -637,7 +757,7 @@ SfxStyleSheet* SdPage::GetStyleSheetForPresObj(PresObjKind eObjKind) const
             break;
     }
 
-    SfxStyleSheetBasePool* pStShPool = pModel->GetStyleSheetPool();
+    SfxStyleSheetBasePool* pStShPool = getSdrModelFromSdrPage().GetStyleSheetPool();
     SfxStyleSheetBase*     pResult   = pStShPool->Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
     return (SfxStyleSheet*)pResult;
 }
@@ -646,7 +766,7 @@ SfxStyleSheet* SdPage::GetStyleSheetForPresObj(PresObjKind eObjKind) const
     slides masterpage */
 SdStyleSheet* SdPage::getPresentationStyle( sal_uInt32 nHelpId ) const
 {
-    String aStyleName( pPage->GetLayoutName() );
+    String aStyleName( /*GetPage()->*/GetLayoutName() );
     const String aSep( RTL_CONSTASCII_USTRINGPARAM( SD_LT_SEPARATOR ));
     aStyleName.Erase(aStyleName.Search(aSep) + aSep.Len());
 
@@ -679,7 +799,7 @@ SdStyleSheet* SdPage::getPresentationStyle( sal_uInt32 nHelpId ) const
         aStyleName.Append( String::CreateFromInt32( sal_Int32( nHelpId - HID_PSEUDOSHEET_OUTLINE )));
     }
 
-    SfxStyleSheetBasePool* pStShPool = pModel->GetStyleSheetPool();
+    SfxStyleSheetBasePool* pStShPool = getSdrModelFromSdrPage().GetStyleSheetPool();
     SfxStyleSheetBase*     pResult   = pStShPool->Find(aStyleName, SD_STYLE_FAMILY_MASTERPAGE);
     return dynamic_cast<SdStyleSheet*>(pResult);
 }
@@ -692,16 +812,33 @@ SdStyleSheet* SdPage::getPresentationStyle( sal_uInt32 nHelpId ) const
 |*
 \************************************************************************/
 
-void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectangle& )
+void SdPage::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
+{
+    const SdrBaseHint* pSdrBaseHint = dynamic_cast< const SdrBaseHint* >(&rHint);
+
+    if(pSdrBaseHint)
+    {
+        const SdrObject* pObj = pSdrBaseHint->GetSdrHintObject();
+
+        if(pObj)
+        {
+            HandleChanged(*pObj, pSdrBaseHint->GetSdrHintKind());
+        }
+    }
+}
+
+void SdPage::HandleChanged(
+    const SdrObject& rObj,
+    SdrHintKind eHint)
 {
     if (!maLockAutoLayoutArrangement.isLocked())
     {
-        switch (eType)
+        switch (eHint)
         {
-            case SDRUSERCALL_MOVEONLY:
-            case SDRUSERCALL_RESIZE:
+            case HINT_OBJCHG_MOVE:
+            case HINT_OBJCHG_RESIZE:
             {
-                if( pModel->isLocked() )
+                if( getSdrModelFromSdrPage().isLocked() )
                     break;
 
                 SdrObject* pObj = (SdrObject*) &rObj;
@@ -710,30 +847,28 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectang
                 {
                     if (!mbMaster)
                     {
-                        if( pObj->GetUserCall() )
+                        if( findConnectionToSdrObject(pObj) )
                         {
-                            ::svl::IUndoManager* pUndoManager = pModel ? static_cast<SdDrawDocument*>(pModel)->GetUndoManager() : 0;
+                            ::svl::IUndoManager* pUndoManager = static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).GetUndoManager();
                             const bool bUndo = pUndoManager && pUndoManager->IsInListAction() && IsInserted();
-/*
-                            DBG_ASSERT( bUndo || (pUndoManager && pUndoManager->IsDoing()),
-                                            "SdPage::Changed(), model change without undo!?" );
-*/
+
                             if( bUndo )
-                                pUndoManager->AddUndoAction( new UndoObjectUserCall(*pObj) );
+                                pUndoManager->AddUndoAction( new UndoConnectionToSdrObject(*pObj) );
 
                             // Objekt was resized by user and does not listen to its slide anymore
-                            pObj->SetUserCall(0);
+                            resetConnectionToSdrObject(pObj);
                         }
                     }
-                    else if (pModel)
+                    else
                     {
                         // MasterPage-Objekt wurde veraendert, daher
                         // Objekte auf allen Seiten anpassen
-                        sal_uInt16 nPageCount = ((SdDrawDocument*) pModel)->GetSdPageCount(mePageKind);
+                        SdDrawDocument& rDrawDocument = static_cast< SdDrawDocument& >(getSdrModelFromSdrPage());
+                        sal_uInt32 nPageCount = rDrawDocument.GetSdPageCount(mePageKind);
 
-                        for (sal_uInt16 i = 0; i < nPageCount; i++)
+                        for (sal_uInt32 i = 0; i < nPageCount; i++)
                         {
-                            SdPage* pLoopPage = ((SdDrawDocument*) pModel)->GetSdPage(i, mePageKind);
+                            SdPage* pLoopPage = rDrawDocument.GetSdPage(i, mePageKind);
 
                             if (pLoopPage && this == &(pLoopPage->TRG_GetMasterPage()))
                             {
@@ -747,8 +882,6 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectang
             }
             break;
 
-            case SDRUSERCALL_DELETE:
-            case SDRUSERCALL_REMOVED:
             default:
                 break;
         }
@@ -761,9 +894,10 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectang
 |*
 \************************************************************************/
 
-void SdPage::CreateTitleAndLayout(sal_Bool bInit, sal_Bool bCreate )
+void SdPage::CreateTitleAndLayout(bool bInit, bool bCreate )
 {
-    ::svl::IUndoManager* pUndoManager = pModel ? static_cast<SdDrawDocument*>(pModel)->GetUndoManager() : 0;
+    SdDrawDocument& rDrawDocument = static_cast< SdDrawDocument& >(getSdrModelFromSdrPage());
+    ::svl::IUndoManager* pUndoManager = rDrawDocument.GetUndoManager();
     const bool bUndo = pUndoManager && pUndoManager->IsInListAction() && IsInserted();
 
     SdPage* pMasterPage = this;
@@ -786,7 +920,7 @@ void SdPage::CreateTitleAndLayout(sal_Bool bInit, sal_Bool bCreate )
         pMasterPage->EnsureMasterPageDefaultBackground();
     }
 
-    if( ( (SdDrawDocument*) GetModel() )->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
+    if( DOCUMENT_TYPE_IMPRESS == rDrawDocument.GetDocumentType() )
     {
         if( mePageKind == PK_HANDOUT && bInit )
         {
@@ -796,27 +930,34 @@ void SdPage::CreateTitleAndLayout(sal_Bool bInit, sal_Bool bCreate )
             SdrObject *pObj=NULL;
             while( (pObj = pMasterPage->GetPresObj(PRESOBJ_HANDOUT)) != 0 )
             {
-                pMasterPage->RemoveObject(pObj->GetOrdNum());
+                pMasterPage->RemoveObjectFromSdrObjList(pObj->GetNavigationPosition());
+
+                if(getSdrModelFromSdrPage().isLocked())
+                {
+                    // remove self when model is locked (during load), else the
+                    // broadcast of object removal will do that
+                    pMasterPage->RemovePresObj(pObj);
+                }
 
                 if( bUndo )
                 {
-                    pUndoManager->AddUndoAction(pModel->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj));
+                    pUndoManager->AddUndoAction(rDrawDocument.GetSdrUndoFactory().CreateUndoDeleteObject(*pObj));
                 }
                 else
                 {
-                    SdrObject::Free( pObj );  // memory leak i120050
+                    deleteSdrObjectSafeAndClearPointer(pObj);  // memory leak i120050
                 }
             }
 
-            std::vector< Rectangle > aAreas;
-            CalculateHandoutAreas( *static_cast< SdDrawDocument* >(GetModel() ), pMasterPage->GetAutoLayout(), false, aAreas );
+            std::vector< basegfx::B2DRange > aAreas;
+            CalculateHandoutAreas( rDrawDocument, pMasterPage->GetAutoLayout(), false, aAreas );
 
             const bool bSkip = pMasterPage->GetAutoLayout() == AUTOLAYOUT_HANDOUT3;
-            std::vector< Rectangle >::iterator iter( aAreas.begin() );
+            std::vector< basegfx::B2DRange >::iterator iter( aAreas.begin() );
 
             while( iter != aAreas.end() )
             {
-                SdrPageObj* pPageObj = static_cast<SdrPageObj*>(pMasterPage->CreatePresObj(PRESOBJ_HANDOUT, sal_False, (*iter++), sal_True) );
+                SdrPageObj* pPageObj = static_cast<SdrPageObj*>(pMasterPage->CreatePresObj(PRESOBJ_HANDOUT, false, (*iter++), true) );
                 // #i105146# We want no content to be displayed for PK_HANDOUT,
                 // so just never set a page as content
                 pPageObj->SetReferencedPage(0L);
@@ -867,106 +1008,100 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert)
 {
     if( eObjKind == PRESOBJ_TITLE )
     {
-        Rectangle aTitleRect( GetTitleRect() );
-        return CreatePresObj(PRESOBJ_TITLE, sal_False, aTitleRect, bInsert);
+        const basegfx::B2DRange aTitleRange( GetTitleRange() );
+        return CreatePresObj(PRESOBJ_TITLE, false, aTitleRange, bInsert);
     }
     else if( eObjKind == PRESOBJ_OUTLINE )
     {
-        Rectangle aLayoutRect( GetLayoutRect() );
-        return CreatePresObj( PRESOBJ_OUTLINE, sal_False, aLayoutRect, bInsert);
+        const basegfx::B2DRange aLayoutRange( GetLayoutRange() );
+        return CreatePresObj( PRESOBJ_OUTLINE, false, aLayoutRange, bInsert);
     }
     else if( eObjKind == PRESOBJ_NOTES )
     {
-        Rectangle aLayoutRect( GetLayoutRect() );
-        return CreatePresObj( PRESOBJ_NOTES, sal_False, aLayoutRect, bInsert);
+        const basegfx::B2DRange aLayoutRange( GetLayoutRange() );
+        return CreatePresObj( PRESOBJ_NOTES, false, aLayoutRange, bInsert);
     }
     else if( (eObjKind == PRESOBJ_FOOTER) || (eObjKind == PRESOBJ_DATETIME) || (eObjKind == PRESOBJ_SLIDENUMBER) || (eObjKind == PRESOBJ_HEADER ) )
     {
         // create footer objects for standard master page
         if( mePageKind == PK_STANDARD )
         {
-            const long nLftBorder = GetLftBorder();
-            const long nUppBorder = GetUppBorder();
+            const double fLeftBorder(GetLeftPageBorder());
+            const double fTopBorder(GetTopPageBorder());
+            const basegfx::B2DPoint aTitlePos(fLeftBorder, fTopBorder);
+            const basegfx::B2DVector aPageSize(GetInnerPageScale());
+            const double Y(fTopBorder + aPageSize.getY() * 0.911);
+            const double W1(aPageSize.getX() * 0.233);
+            const double W2(aPageSize.getX() * 0.317);
+            const double H(aPageSize.getY() * 0.069);
 
-            Point aTitlePos ( nLftBorder, nUppBorder );
-            Size aPageSize ( GetSize() );
-            aPageSize.Width()  -= nLftBorder + GetRgtBorder();
-            aPageSize.Height() -= nUppBorder + GetLwrBorder();
-
-            const int Y = long(nUppBorder + aPageSize.Height() * 0.911);
-            const int W1 = long(aPageSize.Width() * 0.233);
-            const int W2 = long(aPageSize.Width() * 0.317);
-            const int H = long(aPageSize.Height() * 0.069);
-
-            if( eObjKind == PRESOBJ_DATETIME )
+            if(PRESOBJ_DATETIME == eObjKind)
             {
-                Point aPos( long(nLftBorder+(aPageSize.Width()*0.05)), Y );
-                Size aSize( W1, H );
-                Rectangle aRect( aPos, aSize );
-                return CreatePresObj( PRESOBJ_DATETIME, sal_False, aRect, bInsert );
+                const basegfx::B2DPoint aPos(fLeftBorder + (aPageSize.getX() * 0.05), Y);
+                const basegfx::B2DRange aRange(aPos, aPos + basegfx::B2DTuple(W1, H));
+
+                return CreatePresObj(PRESOBJ_DATETIME, false, aRange, bInsert);
             }
-            else if( eObjKind == PRESOBJ_FOOTER )
+            else if(PRESOBJ_FOOTER == eObjKind)
             {
-                Point aPos( long(nLftBorder+ aPageSize.Width() * 0.342), Y );
-                Size aSize( W2, H );
-                Rectangle aRect( aPos, aSize );
-                return CreatePresObj( PRESOBJ_FOOTER, sal_False, aRect, bInsert );
+                const basegfx::B2DPoint aPos(fLeftBorder + (aPageSize.getX() * 0.342), Y);
+                const basegfx::B2DRange aRange(aPos, aPos + basegfx::B2DTuple(W2, H));
+
+                return CreatePresObj(PRESOBJ_FOOTER, false, aRange, bInsert);
             }
             else if( eObjKind == PRESOBJ_SLIDENUMBER )
             {
-                Point aPos( long(nLftBorder+(aPageSize.Width()*0.717)), Y );
-                Size aSize( W1, H );
-                Rectangle aRect( aPos, aSize );
-                return CreatePresObj( PRESOBJ_SLIDENUMBER, sal_False, aRect, bInsert );
+                const basegfx::B2DPoint aPos(fLeftBorder + (aPageSize.getX() * 0.717), Y);
+                const basegfx::B2DRange aRange(aPos, aPos + basegfx::B2DTuple(W1, H));
+
+                return CreatePresObj(PRESOBJ_SLIDENUMBER, false, aRange, bInsert);
             }
             else
             {
                 DBG_ERROR( "SdPage::CreateDefaultPresObj() - can't create a header placeholder for a slide master" );
-                return NULL;
+                return 0;
             }
         }
         else
         {
             // create header&footer objects for handout and notes master
-            Point aTitlePos ( GetLftBorder(), GetUppBorder() );
-            Size aPageSize ( GetSize() );
-            aPageSize.Width()  -= GetLftBorder() + GetRgtBorder();
-            aPageSize.Height() -= GetUppBorder() + GetLwrBorder();
+            const basegfx::B2DPoint aTitlePos(GetLeftPageBorder(), GetTopPageBorder());
+            const basegfx::B2DVector aPageSize(GetInnerPageScale());
+            const double NOTES_HEADER_FOOTER_WIDTH(aPageSize.getX() * 0.434);
+            const double NOTES_HEADER_FOOTER_HEIGHT(aPageSize.getY() * 0.05);
+            const basegfx::B2DVector aSize(NOTES_HEADER_FOOTER_WIDTH, NOTES_HEADER_FOOTER_HEIGHT);
+            const double X1(GetLeftPageBorder());
+            const double X2(GetLeftPageBorder() + (aPageSize.getX() - NOTES_HEADER_FOOTER_WIDTH));
+            const double Y1(GetTopPageBorder());
+            const double Y2(GetTopPageBorder() + (aPageSize.getY() - NOTES_HEADER_FOOTER_HEIGHT));
 
-
-            const int NOTES_HEADER_FOOTER_WIDTH = long(aPageSize.Width() * 0.434);
-            const int NOTES_HEADER_FOOTER_HEIGHT = long(aPageSize.Height() * 0.05);
-
-            Size aSize( NOTES_HEADER_FOOTER_WIDTH, NOTES_HEADER_FOOTER_HEIGHT );
-
-            const int X1 = GetLftBorder();
-            const int X2 = GetLftBorder() + long(aPageSize.Width() - NOTES_HEADER_FOOTER_WIDTH);
-            const int Y1 = GetUppBorder();
-            const int Y2 = GetUppBorder() + long(aPageSize.Height() - NOTES_HEADER_FOOTER_HEIGHT );
-
-            if( eObjKind == PRESOBJ_HEADER )
+            if(PRESOBJ_HEADER == eObjKind)
             {
-                Point aPos( X1, Y1 );
-                Rectangle aRect( aPos, aSize );
-                return CreatePresObj( PRESOBJ_HEADER, sal_False, aRect, bInsert );
+                const basegfx::B2DPoint aPos(X1, Y1);
+                const basegfx::B2DRange aRange(aPos, aPos + aSize);
+
+                return CreatePresObj(PRESOBJ_HEADER, false, aRange, bInsert);
             }
-            else if( eObjKind == PRESOBJ_DATETIME )
+            else if(PRESOBJ_DATETIME == eObjKind)
             {
-                Point aPos( X2, Y1 );
-                Rectangle aRect( aPos, aSize );
-                return CreatePresObj( PRESOBJ_DATETIME, sal_False, aRect, bInsert );
+                const basegfx::B2DPoint aPos(X2, Y1);
+                const basegfx::B2DRange aRange(aPos, aPos + aSize);
+
+                return CreatePresObj(PRESOBJ_DATETIME, false, aRange, bInsert);
             }
-            else if( eObjKind == PRESOBJ_FOOTER )
+            else if(PRESOBJ_FOOTER == eObjKind)
             {
-                Point aPos( X1, Y2 );
-                Rectangle aRect( aPos, aSize );
-                return CreatePresObj( PRESOBJ_FOOTER, sal_False, aRect, bInsert );
+                const basegfx::B2DPoint aPos(X1, Y2);
+                const basegfx::B2DRange aRange(aPos, aPos + aSize);
+
+                return CreatePresObj(PRESOBJ_FOOTER, false, aRange, bInsert);
             }
-            else if( eObjKind == PRESOBJ_SLIDENUMBER )
+            else if(PRESOBJ_SLIDENUMBER == eObjKind)
             {
-                Point aPos( X2, Y2 );
-                Rectangle aRect( aPos, aSize );
-                return CreatePresObj( PRESOBJ_SLIDENUMBER, sal_False, aRect, bInsert );
+                const basegfx::B2DPoint aPos(X2, Y2);
+                const basegfx::B2DRange aRange(aPos, aPos + aSize);
+
+                return CreatePresObj(PRESOBJ_SLIDENUMBER, false, aRange, bInsert);
             }
 
             DBG_ERROR("SdPage::CreateDefaultPresObj() - this should not happen!");
@@ -986,75 +1121,65 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert)
 |*
 \************************************************************************/
 
-Rectangle SdPage::GetTitleRect() const
+basegfx::B2DRange SdPage::GetTitleRange() const
 {
-    Rectangle aTitleRect;
+    basegfx::B2DRange aTitleRange;
 
     if (mePageKind != PK_HANDOUT)
     {
         /******************************************************************
         * Standard- oder Notiz-Seite: Titelbereich
         ******************************************************************/
-        Point aTitlePos ( GetLftBorder(), GetUppBorder() );
-        Size aTitleSize ( GetSize() );
-        aTitleSize.Width()  -= GetLftBorder() + GetRgtBorder();
-        aTitleSize.Height() -= GetUppBorder() + GetLwrBorder();
+        basegfx::B2DPoint aTitlePos(GetLeftPageBorder(), GetTopPageBorder());
+        basegfx::B2DVector aTitleSize(GetInnerPageScale());
 
         if (mePageKind == PK_STANDARD)
         {
-            aTitlePos.X() += long( aTitleSize.Width() * 0.05 );
-            aTitlePos.Y() += long( aTitleSize.Height() * 0.0399 );
-            aTitleSize.Width() = long( aTitleSize.Width() * 0.9 );
-            aTitleSize.Height() = long( aTitleSize.Height() * 0.167 );
+            aTitlePos += aTitleSize * basegfx::B2DTuple(0.05, 0.0399);
+            aTitleSize *= basegfx::B2DTuple(0.9, 0.167);
         }
         else if (mePageKind == PK_NOTES)
         {
-            Point aPos = aTitlePos;
-            aPos.Y() += long( aTitleSize.Height() * 0.076 );
+            basegfx::B2DPoint aPos(aTitlePos.getX(), aTitlePos.getY() + (aTitleSize.getY() * 0.076));
 
             // Hoehe beschraenken
-            aTitleSize.Height() = (long) (aTitleSize.Height() * 0.375);
+            aTitleSize.setY(aTitleSize.getY() * 0.375);
 
-            Size aPartArea = aTitleSize;
-            Size aSize;
-            sal_uInt16 nDestPageNum(GetPageNum());
+            basegfx::B2DVector aPartArea(aTitleSize);
+            basegfx::B2DVector aSize;
+
+            sal_uInt32 nDestPageNum(GetPageNumber());
             SdrPage* pRefPage = 0L;
 
             if(nDestPageNum)
             {
-                // only decrement if != 0, else we get 0xffff
+                // only decrement if != 0, else we get SDRPAGE_NOTFOUND
                 nDestPageNum -= 1;
             }
 
-            if(nDestPageNum < pModel->GetPageCount())
+            if(nDestPageNum < getSdrModelFromSdrPage().GetPageCount())
             {
-                pRefPage = pModel->GetPage(nDestPageNum);
+                pRefPage = getSdrModelFromSdrPage().GetPage(nDestPageNum);
             }
 
             if ( pRefPage )
             {
                 // tatsaechliche Seitengroesse in das Handout-Rechteck skalieren
-                double fH = (double) aPartArea.Width()  / pRefPage->GetWdt();
-                double fV = (double) aPartArea.Height() / pRefPage->GetHgt();
+                const basegfx::B2DVector aRefPageSize(pRefPage->GetPageScale());
+                const basegfx::B2DVector aFactor(aPartArea / aRefPageSize);
 
-                if ( fH > fV )
-                    fH = fV;
-                aSize.Width()  = (long) (fH * pRefPage->GetWdt());
-                aSize.Height() = (long) (fH * pRefPage->GetHgt());
-
-                aPos.X() += (aPartArea.Width() - aSize.Width()) / 2;
-                aPos.Y() += (aPartArea.Height()- aSize.Height())/ 2;
+                aSize = aRefPageSize * std::max(aFactor.getX(), aFactor.getY());
+                aPos += (aPartArea - aSize) * 0.5;
             }
 
             aTitlePos = aPos;
             aTitleSize = aSize;
         }
 
-        aTitleRect.SetPos(aTitlePos);
-        aTitleRect.SetSize(aTitleSize);
+        aTitleRange = basegfx::B2DRange(aTitlePos, aTitlePos + aTitleSize);
     }
 
-    return aTitleRect;
+    return aTitleRange;
 }
 
 
@@ -1064,38 +1189,32 @@ Rectangle SdPage::GetTitleRect() const
 |*
 \************************************************************************/
 
-Rectangle SdPage::GetLayoutRect() const
+basegfx::B2DRange SdPage::GetLayoutRange() const
 {
-    Rectangle aLayoutRect;
+    basegfx::B2DRange aLayoutRange;
 
     if (mePageKind != PK_HANDOUT)
     {
-        Point aLayoutPos ( GetLftBorder(), GetUppBorder() );
-        Size aLayoutSize ( GetSize() );
-        aLayoutSize.Width()  -= GetLftBorder() + GetRgtBorder();
-        aLayoutSize.Height() -= GetUppBorder() + GetLwrBorder();
+        basegfx::B2DPoint aLayoutPos(GetLeftPageBorder(), GetTopPageBorder());
+        basegfx::B2DVector aLayoutSize(GetInnerPageScale());
 
         if (mePageKind == PK_STANDARD)
         {
-            aLayoutPos.X() += long( aLayoutSize.Width() * 0.05 );
-            aLayoutPos.Y() += long( aLayoutSize.Height() * 0.234 );
-            aLayoutSize.Width() = long( aLayoutSize.Width() * 0.9 );
-            aLayoutSize.Height() = long( aLayoutSize.Height() * 0.66 );
-            aLayoutRect.SetPos(aLayoutPos);
-            aLayoutRect.SetSize(aLayoutSize);
+            aLayoutPos += aLayoutSize * basegfx::B2DTuple(0.05, 0.234);
+            aLayoutSize *= basegfx::B2DTuple(0.9, 0.66);
+
+            aLayoutRange = basegfx::B2DRange(aLayoutPos, aLayoutPos + aLayoutSize);
         }
         else if (mePageKind == PK_NOTES)
         {
-            aLayoutPos.X() += long( aLayoutSize.Width() * 0.1 );
-            aLayoutPos.Y() += long( aLayoutSize.Height() * 0.475 );
-            aLayoutSize.Width() = long( aLayoutSize.Width() * 0.8 );
-            aLayoutSize.Height() = long( aLayoutSize.Height() * 0.45 );
-            aLayoutRect.SetPos(aLayoutPos);
-            aLayoutRect.SetSize(aLayoutSize);
+            aLayoutPos += aLayoutSize * basegfx::B2DTuple(0.1, 0.475);
+            aLayoutSize *= basegfx::B2DTuple(0.8, 0.45);
+
+            aLayoutRange = basegfx::B2DRange(aLayoutPos, aLayoutPos + aLayoutSize);
         }
     }
 
-    return aLayoutRect;
+    return aLayoutRange;
 }
 
 
@@ -1179,10 +1298,10 @@ static const LayoutDescriptor& GetLayoutDescriptor( AutoLayout eLayout )
     return aLayouts[ eLayout - AUTOLAYOUT__START ];
 }
 
-static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRectangle )
+static void CalcAutoLayoutRanges( SdPage& rPage, int nLayout, basegfx::B2DRange* rRanges )
 {
-    Rectangle aTitleRect;
-    Rectangle aLayoutRect;
+    basegfx::B2DRange aTitleRange;
+    basegfx::B2DRange aLayoutRange;
 
     if( rPage.GetPageKind() != PK_HANDOUT )
     {
@@ -1192,33 +1311,34 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
         SdrObject* pMasterOutline = rMasterPage.GetPresObj( rPage.GetPageKind()==PK_NOTES ? PRESOBJ_NOTES : PRESOBJ_OUTLINE );
 
         if( pMasterTitle )
-            aTitleRect = pMasterTitle->GetLogicRect();
+            aTitleRange = sdr::legacy::GetLogicRange(*pMasterTitle);
 
-        if (aTitleRect.IsEmpty() )
-            aTitleRect = rPage.GetTitleRect();
+        if (aTitleRange.isEmpty() )
+            aTitleRange = rPage.GetTitleRange();
         if( pMasterSubTitle )
-            aLayoutRect = pMasterSubTitle->GetLogicRect();
+            aLayoutRange = sdr::legacy::GetLogicRange(*pMasterSubTitle);
         else if( pMasterOutline )
-            aLayoutRect = pMasterOutline->GetLogicRect();
+            aLayoutRange = sdr::legacy::GetLogicRange(*pMasterOutline);
 
-        if (aLayoutRect.IsEmpty() )
-            aLayoutRect = rPage.GetLayoutRect();
+        if (aLayoutRange.isEmpty() )
+            aLayoutRange = rPage.GetLayoutRange();
     }
 
-    rRectangle[0] = aTitleRect;
+    rRanges[0] = aTitleRange;
 
     int i;
     for( i = 1; i < MAX_PRESOBJS; i++ )
-        rRectangle[i] = aLayoutRect;
+        rRanges[i] = aLayoutRange;
 
-    Size        aTitleSize( aTitleRect.GetSize() );
-    Point       aTitlePos( aTitleRect.TopLeft() );
-    Size        aLayoutSize( aLayoutRect.GetSize() );
-    Point       aLayoutPos( aLayoutRect.TopLeft() );
-    Size        aTempSize;
-    Point       aTempPnt;
+    basegfx::B2DVector aTitleSize(aTitleRange.getRange());
+    basegfx::B2DPoint aTitlePos(aTitleRange.getMinimum());
+    basegfx::B2DVector aLayoutSize(aLayoutRange.getRange());
+    basegfx::B2DPoint aLayoutPos(aLayoutRange.getMinimum());
+    basegfx::B2DVector aTempSize;
+    basegfx::B2DPoint aTempPos;
 
-    sal_Bool    bRightToLeft = ( rPage.GetModel() && static_cast< SdDrawDocument* >( rPage.GetModel() )->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB );
+    SdDrawDocument& rDrawDocument = static_cast< SdDrawDocument& >(rPage.getSdrModelFromSdrPage());
+    const bool bRightToLeft(::com::sun::star::text::WritingMode_RL_TB == rDrawDocument.GetDefaultWritingMode());
 
     switch( nLayout )
     {
@@ -1226,163 +1346,178 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
         break; // do nothing
     case 1: // title, 2 shapes
     case 9: // title, 2 vertical shapes
-        aLayoutSize.Width()  = long (aLayoutSize.Width() * 0.488);
-        rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
+        aLayoutSize.setX(aLayoutSize.getX() * 0.488);
+        rRanges[1] = basegfx::B2DRange(aLayoutPos, aLayoutPos + aLayoutSize);
 
-        aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
-        rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
+        aLayoutPos.setX(aLayoutPos.getX() + (aLayoutSize.getX() * 1.05));
+        rRanges[2] = basegfx::B2DRange(aLayoutPos, aLayoutPos + aLayoutSize);
 
         if( bRightToLeft && (nLayout != 9) )
-            ::std::swap< Rectangle >( rRectangle[1], rRectangle[2] );
+        {
+            ::std::swap< basegfx::B2DRange >( rRanges[1], rRanges[2] );
+        }
         break;
     case 2: // title, shape, 2 shapes
-        aTempPnt = aLayoutPos;
+        aTempPos = aLayoutPos;
         aTempSize = aLayoutSize;
-        aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
-        aLayoutSize.Width() = long (aLayoutSize.Width() * 0.488);
-        aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
-        rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
 
-        aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
-        rRectangle[3] = Rectangle (aLayoutPos, aLayoutSize);
+        aLayoutSize *= basegfx::B2DTuple(0.488, 0.477);
+        aLayoutPos.setX(aLayoutPos.getX() + (aLayoutSize.getX() * 1.05));
+        rRanges[2] = basegfx::B2DRange(aLayoutPos, aLayoutPos + aLayoutSize);
 
-        aLayoutPos = aTempPnt;
+        aLayoutPos.setY(aLayoutPos.getY() + (aLayoutSize.getY() * 1.095));
+        rRanges[3] = basegfx::B2DRange(aLayoutPos, aLayoutPos + aLayoutSize);
+
+        aLayoutPos = aTempPos;
         aLayoutSize = aTempSize;
-        aLayoutSize.Width() = long (aLayoutSize.Width() * 0.488);
-        rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
+
+        aLayoutSize.setX(aLayoutSize.getX() * 0.488);
+        rRanges[1] = basegfx::B2DRange(aLayoutPos, aLayoutPos + aLayoutSize);
 
         if( bRightToLeft )
         {
-            ::std::swap< long >( rRectangle[1].Left(), rRectangle[2].Left() );
-            rRectangle[3].Left() = rRectangle[2].Left();
+            // [2] nad [3] are on the right side, [1] is on the left.
+            const double fDeltaX(rRanges[1].getMinX() - rRanges[2].getMinX());
+            const basegfx::B2DHomMatrix aTransToLeft(basegfx::tools::createTranslateB2DHomMatrix(fDeltaX, 0.0));
+            const basegfx::B2DHomMatrix aTransToRight(basegfx::tools::createTranslateB2DHomMatrix(-fDeltaX, 0.0));
+
+            rRanges[1].transform(aTransToRight);
+            rRanges[2].transform(aTransToLeft);
+            rRanges[3].transform(aTransToLeft);
         }
         break;
     case 3: // title, 2 shapes, shape
-        aTempPnt = aLayoutPos;
+        aTempPos = aLayoutPos;
         aTempSize = aLayoutSize;
-        aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
-        aLayoutSize.Width() = long (aLayoutSize.Width() * 0.488);
-        rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
 
-        aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
-        rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
+        aLayoutSize *= basegfx::B2DTuple(0.488, 0.477);
+        rRanges[1] = basegfx::B2DRange(aLayoutPos, aLayoutPos + aLayoutSize);
 
-        aLayoutPos = aTempPnt;
+        aLayoutPos.setY(aLayoutPos.getY() + (aLayoutSize.getY() * 1.095));
+        rRanges[2] = basegfx::B2DRange(aLayoutPos, aLayoutPos + aLayoutSize);
+
+        aLayoutPos = aTempPos;
         aLayoutSize = aTempSize;
-        aLayoutSize.Width() = long (aLayoutSize.Width() * 0.488);
-        aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
-        rRectangle[3] = Rectangle (aLayoutPos, aLayoutSize);
+
+        aLayoutSize.setX(aLayoutSize.getX() * 0.488);
+        aLayoutPos.setX(aLayoutPos.getX() + (aLayoutSize.getX() * 1.05));
+        rRanges[3] = basegfx::B2DRange(aLayoutPos, aLayoutPos + aLayoutSize);
 
         if( bRightToLeft )
         {
-            ::std::swap< long >( rRectangle[1].Left(), rRectangle[2].Left() );
-            rRectangle[3].Left() = rRectangle[2].Left();
+            // [1] and [2] are left, [3] is right
+            const double fDeltaX(rRanges[3].getMinX() - rRanges[1].getMinX());
+            const basegfx::B2DHomMatrix aTransToRight(basegfx::tools::createTranslateB2DHomMatrix(fDeltaX, 0.0));
+            const basegfx::B2DHomMatrix aTransToLeft(basegfx::tools::createTranslateB2DHomMatrix(-fDeltaX, 0.0));
+
+            rRanges[1].transform(aTransToRight);
+            rRanges[2].transform(aTransToRight);
+            rRanges[3].transform(aTransToLeft);
         }
         break;
     case 4: // title, shape above shape
-        aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
-        rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
+        aLayoutSize.setY(aLayoutSize.getY() * 0.477);
+        rRanges[1] = basegfx::B2DRange(aLayoutPos, aLayoutPos + aLayoutSize);
 
-        aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
-        rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
+        aLayoutPos.setY(aLayoutPos.getY() + (aLayoutSize.getY() * 1.095));
+        rRanges[2] = basegfx::B2DRange(aLayoutPos, aLayoutPos + aLayoutSize);
         break;
 
     case 5: // title, 2 shapes above shape
-        aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
-        aLayoutSize.Width() = long (aLayoutSize.Width() * 0.488);
-        rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
+        aLayoutSize *= basegfx::B2DTuple(0.488, 0.477);
+        rRanges[1] = basegfx::B2DRange(aLayoutPos, aLayoutPos + aLayoutSize);
 
-        aTempPnt = aLayoutPos;
-        aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
-        rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
+        aTempPos = aLayoutPos;
+        aLayoutPos.setX(aLayoutPos.getX() + (aLayoutSize.getX() * 1.05));
+        rRanges[2] = basegfx::B2DRange(aLayoutPos, aLayoutPos + aLayoutSize);
 
-        aLayoutPos.X() = aTempPnt.X();
-        aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
-        aLayoutSize.Width() = long (aLayoutSize.Width() / 0.488);
-        rRectangle[3] = Rectangle (aLayoutPos, aLayoutSize);
+        aLayoutPos.setX(aTempPos.getX());
+        aLayoutPos.setY(aLayoutPos.getY() + (aLayoutSize.getY() * 1.095));
+        aLayoutSize.setX(aLayoutSize.getX() / 0.488);
+        rRanges[3] = basegfx::B2DRange(aLayoutPos, aLayoutPos + aLayoutSize);
         break;
     case 6: // title, 4 shapes
     {
-        sal_uLong nX = long (aLayoutPos.X());
+        const double fX(aLayoutPos.getX());
 
-        aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
-        aLayoutSize.Width()  = long (aLayoutSize.Width() * 0.488);
-        rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
+        aLayoutSize *= basegfx::B2DTuple(0.488, 0.477);
+        rRanges[1] = basegfx::B2DRange(aLayoutPos, aLayoutPos + aLayoutSize);
 
-        aLayoutPos.X() = long (nX + aLayoutSize.Width() * 1.05);
-        rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
+        aLayoutPos.setX(fX + (aLayoutSize.getX() * 1.05));
+        rRanges[2] = basegfx::B2DRange(aLayoutPos, aLayoutPos + aLayoutSize);
 
-        aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
-        rRectangle[3] = Rectangle (aLayoutPos, aLayoutSize);
+        aLayoutPos.setY(aLayoutPos.getY() + (aLayoutSize.getY() * 1.095));
+        rRanges[3] = basegfx::B2DRange(aLayoutPos, aLayoutPos + aLayoutSize);
 
-        aLayoutPos.X() = nX;
-        rRectangle[4] = Rectangle (aLayoutPos, aLayoutSize);
+        aLayoutPos.setX(fX);
+        rRanges[4] = basegfx::B2DRange(aLayoutPos, aLayoutPos + aLayoutSize);
         break;
     }
     case 7: // vertical title, shape above shape
     {
-        Size aSize( rRectangle[0].GetSize().Height(), rRectangle[1].BottomLeft().Y() - rRectangle[0].TopLeft().Y() );
-        rRectangle[0].SetSize( aSize );
-        rRectangle[0].SetPos( aTitleRect.TopRight() - Point( aSize.Width(), 0 ) );
+        basegfx::B2DVector aSize(rRanges[0].getHeight(), rRanges[1].getMaxY() - rRanges[0].getMinY());
+        basegfx::B2DPoint aPos(aTitleRange.getMaxX() - aSize.getX(), aTitleRange.getMinY());
 
-        Size aPageSize ( rPage.GetSize() );
-        aPageSize.Height() -= rPage.GetUppBorder() + rPage.GetLwrBorder();
-        aSize.Height() = long ( rRectangle[0].GetSize().Height() * 0.47 );
-        aSize.Width() = long( aPageSize.Width() * 0.7 );
-        rRectangle[1].SetPos( aTitleRect.TopLeft() );
-        rRectangle[1].SetSize( aSize );
+        rRanges[0] = basegfx::B2DRange(aPos, aPos + aSize);
 
-        aSize.Height() = rRectangle[0].GetSize().Height();
-        Point aPos( aTitleRect.TopLeft() );
-        aPos.Y() += long ( aSize.Height() * 0.53 );
-        rRectangle[2].SetPos( aPos );
-        aSize.Height() = long ( rRectangle[0].GetSize().Height() * 0.47 );
-        rRectangle[2].SetSize( aSize );
+        const basegfx::B2DVector aPageSize(rPage.GetPageScale().getX(), rPage.GetPageScale().getY() - (rPage.GetTopPageBorder() + rPage.GetBottomPageBorder()));
+
+        aSize.setX(aPageSize.getX() * 0.7);
+        aSize.setY(rRanges[0].getHeight() * 0.47);
+
+        rRanges[1] = basegfx::B2DRange(aTitleRange.getMinimum(), aTitleRange.getMinimum() + aSize);
+
+        aSize.setY(rRanges[0].getHeight());
+        aPos = aTitleRange.getMinimum();
+        aPos.setY(aPos.getY() + (aSize.getY() * 0.53));
+        aSize.setY(rRanges[0].getHeight() * 0.47);
+
+        rRanges[2] = basegfx::B2DRange(aPos, aPos + aSize);
         break;
     }
     case 8: // vertical title, shape
     {
-        Size aSize( rRectangle[0].GetSize().Height(), rRectangle[1].BottomLeft().Y() - rRectangle[0].TopLeft().Y() );
-        rRectangle[0].SetSize( aSize );
-        rRectangle[0].SetPos( aTitleRect.TopRight() - Point( aSize.Width(), 0 ) );
+        basegfx::B2DVector aSize(rRanges[0].getHeight(), rRanges[1].getMaxY() - rRanges[0].getMinY());
+        const basegfx::B2DPoint aPos(aTitleRange.getMaxX() - aSize.getX(), aTitleRange.getMinY());
 
-        Size aPageSize ( rPage.GetSize() );
-        aPageSize.Height() -= rPage.GetUppBorder() + rPage.GetLwrBorder();
-        aSize.Height() = rRectangle[0].GetSize().Height();
-        aSize.Width() = long( aPageSize.Width() * 0.7 );
-        rRectangle[1].SetPos( aTitleRect.TopLeft() );
-        rRectangle[1].SetSize( aSize );
+        rRanges[0] = basegfx::B2DRange(aPos, aPos + aSize);
+
+        const basegfx::B2DVector aPageSize(rPage.GetPageScale().getX(), rPage.GetPageScale().getY() - (rPage.GetTopPageBorder() + rPage.GetBottomPageBorder()));
+
+        aSize.setX(aPageSize.getX() * 0.7);
+        aSize.setY(rRanges[0].getHeight());
+
+        rRanges[1] = basegfx::B2DRange(aTitleRange.getMinimum(), aTitleRange.getMinimum() + aSize);
         break;
     }
     case 10: // onlytext
     {
-        Size aSize( rRectangle[0].GetSize().Width(), rRectangle[1].BottomLeft().Y() - rRectangle[0].TopLeft().Y() );
-        rRectangle[0].SetSize( aSize );
-        rRectangle[0].SetPos( aTitlePos);
+        const basegfx::B2DVector aSize(rRanges[0].getWidth(), rRanges[1].getMaxY() - rRanges[0].getMinY());
+
+        rRanges[0] = basegfx::B2DRange(aTitlePos, aTitlePos + aSize);
         break;
     }
     case 11: // title, 6 shapes
     {
-        sal_uLong nX = long (aLayoutPos.X());
+        const double fX(aLayoutPos.getX());
 
-        aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
-        aLayoutSize.Width()  = long (aLayoutSize.Width() * 0.322);
-        rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
+        aLayoutSize *= basegfx::B2DTuple(0.322, 0.477);
+        rRanges[1] = basegfx::B2DRange(aLayoutPos, aLayoutPos + aLayoutSize);
 
-        aLayoutPos.X() = long (nX + aLayoutSize.Width() * 1.05);
-        rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
+        aLayoutPos.setX(fX + (aLayoutSize.getX() * 1.05));
+        rRanges[2] = basegfx::B2DRange(aLayoutPos, aLayoutPos + aLayoutSize);
 
-        aLayoutPos.X() = long (nX + aLayoutSize.Width() * 2 * 1.05);
-        rRectangle[3] = Rectangle (aLayoutPos, aLayoutSize);
+        aLayoutPos.setX(fX + (aLayoutSize.getX() * (2.0 * 1.05)));
+        rRanges[3] = basegfx::B2DRange(aLayoutPos, aLayoutPos + aLayoutSize);
 
-        aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
-        rRectangle[4] = Rectangle (aLayoutPos, aLayoutSize);
+        aLayoutPos.setY(aLayoutPos.getY() + (aLayoutSize.getY() * 1.095));
+        rRanges[4] = basegfx::B2DRange(aLayoutPos, aLayoutPos + aLayoutSize);
 
-        aLayoutPos.X() = long (nX + aLayoutSize.Width() * 1.05);
-        rRectangle[5] = Rectangle (aLayoutPos, aLayoutSize);
+        aLayoutPos.setX(fX + (aLayoutSize.getX() * 1.05));
+        rRanges[5] = basegfx::B2DRange(aLayoutPos, aLayoutPos + aLayoutSize);
 
-        aLayoutPos.X() = nX;
-        rRectangle[6] = Rectangle (aLayoutPos, aLayoutSize);
+        aLayoutPos.setX(fX);
+        rRanges[6] = basegfx::B2DRange(aLayoutPos, aLayoutPos + aLayoutSize);
 
         break;
     }
@@ -1391,7 +1526,7 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
 }
 
 
-void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDescriptor, std::vector< SdrObject* >& rShapes, bool bInit, bool bSwitchLayout )
+void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDescriptor, SdrObjectVector& rShapes, bool bInit, bool bSwitchLayout )
 {
     int i;
 
@@ -1480,11 +1615,13 @@ void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDescripto
                         if( pOle2 )
                         {
                             if( pOle2->IsEmpty() )
-                                bFound = true;
-                            else if( rPage.GetModel() )
                             {
-                                SdrModel* pSdrModel = rPage.GetModel();
-                                ::comphelper::IEmbeddedHelper *pPersist = pSdrModel->GetPersist();
+                                bFound = true;
+                            }
+                            else
+                            {
+                                SdDrawDocument& rDrawDocument = static_cast< SdDrawDocument& >(rPage.getSdrModelFromSdrPage());
+                                ::comphelper::IEmbeddedHelper *pPersist = rDrawDocument.GetPersist();
                                 if( pPersist )
                                 {
                                     uno::Reference < embed::XEmbeddedObject > xObject = pPersist->getEmbeddedObjectContainer().
@@ -1552,13 +1689,12 @@ void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDescripto
     }
 }
 
-void SdPage::SetAutoLayout(AutoLayout eLayout, sal_Bool bInit, sal_Bool bCreate )
+void SdPage::SetAutoLayout(AutoLayout eLayout, bool bInit, bool bCreate )
 {
     sd::ScopeLockGuard aGuard( maLockAutoLayoutArrangement );
 
     const bool bSwitchLayout = eLayout != GetAutoLayout();
-
-    ::svl::IUndoManager* pUndoManager = pModel ? static_cast<SdDrawDocument*>(pModel)->GetUndoManager() : 0;
+    ::svl::IUndoManager* pUndoManager = static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).GetUndoManager();
     const bool bUndo = pUndoManager && pUndoManager->IsInListAction() && IsInserted();
 
     meAutoLayout = eLayout;
@@ -1572,14 +1708,14 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, sal_Bool bInit, sal_Bool bCreate 
         return;
     }
 
-    Rectangle aRectangle[MAX_PRESOBJS];
+    basegfx::B2DRange aRanges[MAX_PRESOBJS];
     const LayoutDescriptor& aDescriptor = GetLayoutDescriptor( meAutoLayout );
-    CalcAutoLayoutRectangles( *this, aDescriptor.mnLayout, aRectangle );
+    CalcAutoLayoutRanges( *this, aDescriptor.mnLayout, aRanges );
 
     std::set< SdrObject* > aUsedPresentationObjects;
 
 
-    std::vector< SdrObject* > aLayoutShapes(PRESOBJ_MAX, 0);
+    SdrObjectVector aLayoutShapes(PRESOBJ_MAX, 0);
     findAutoLayoutShapesImpl( *this, aDescriptor, aLayoutShapes, bInit, bSwitchLayout );
 
     int i;
@@ -1588,7 +1724,7 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, sal_Bool bInit, sal_Bool bCreate 
     for (i = 0; (i < MAX_PRESOBJS) && (aDescriptor.meKind[i] != PRESOBJ_NONE); i++)
     {
         PresObjKind eKind = aDescriptor.meKind[i];
-        SdrObject* pObj = InsertAutoLayoutShape( aLayoutShapes[i], eKind, aDescriptor.mbVertical[i], aRectangle[i], bInit );
+        SdrObject* pObj = InsertAutoLayoutShape( aLayoutShapes[i], eKind, aDescriptor.mbVertical[i], aRanges[i], bInit );
         if( pObj )
             aUsedPresentationObjects.insert(pObj); // remember that we used this empty shape
     }
@@ -1596,23 +1732,26 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, sal_Bool bInit, sal_Bool bCreate 
     // now delete all empty presentation objects that are no longer used by the new layout
     if( bInit )
     {
-        SdrObject* pObj = maPresentationShapeList.getNextShape(0);
+        SdrObject* pObj = const_cast< SdrObject* >(maPresentationShapeList.getNextShape(0));
 
         while( pObj )
         {
-            SdrObject* pNext = maPresentationShapeList.getNextShape(pObj);
+            SdrObject* pNext = const_cast< SdrObject* >(maPresentationShapeList.getNextShape(pObj));
+
             if( aUsedPresentationObjects.count(pObj) == 0 )
             {
 
                 if( pObj->IsEmptyPresObj() )
                 {
                     if( bUndo )
-                        pUndoManager->AddUndoAction(pModel->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj));
+                        pUndoManager->AddUndoAction(getSdrModelFromSdrPage().GetSdrUndoFactory().CreateUndoDeleteObject(*pObj));
 
-                    RemoveObject( pObj->GetOrdNum() );
+                    RemoveObjectFromSdrObjList( pObj->GetNavigationPosition() );
 
                     if( !bUndo )
-                        SdrObject::Free( pObj );
+                    {
+                        deleteSdrObjectSafeAndClearPointer( pObj );
+                    }
                 }
 /* #i108541# keep non empty pres obj as pres obj even if they are not part of the current layout
                 else
@@ -1620,11 +1759,11 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, sal_Bool bInit, sal_Bool bCreate 
                     if( bUndo )
                     {
                         pUndoManager->AddUndoAction( new UndoObjectPresentationKind( *pObj ) );
-                        if( pObj->GetUserCall() )
-                            pUndoManager->AddUndoAction( new UndoObjectUserCall( *pObj ) );
+                        if( findConnectionToSdrObject(pObj) )
+                            pUndoManager->AddUndoAction( new UndoConnectionToSdrObject( *pObj ) );
                     }
                     maPresentationShapeList.removeShape( *pObj );
-                    pObj->SetUserCall(0);
+                    resetConnectionToSdrObject(pObj);
                 }
 */
             }
@@ -1633,84 +1772,69 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, sal_Bool bInit, sal_Bool bCreate 
     }
 }
 
-/*************************************************************************
-|*
-|* Objekt einfuegen
-|*
-\************************************************************************/
-
-void SdPage::NbcInsertObject(SdrObject* pObj, sal_uLong nPos, const SdrInsertReason* pReason)
-{
-    FmFormPage::NbcInsertObject(pObj, nPos, pReason);
-
-    ((SdDrawDocument*) pModel)->InsertObject(pObj, this);
-
-    SdrLayerID nId = pObj->GetLayer();
-    if( mbMaster )
-    {
-        if( nId == 0 )
-            pObj->NbcSetLayer( 2 );     // wrong layer. corrected to BackgroundObj layer
-    }
-    else
-    {
-        if( nId == 2 )
-            pObj->NbcSetLayer( 0 );     // wrong layer. corrected to layout layer
-    }
-}
-
-/*************************************************************************
-|*
-|* Objekt loeschen
-|*
-\************************************************************************/
-
-SdrObject* SdPage::RemoveObject(sal_uLong nObjNum)
-{
-    onRemoveObject(GetObj( nObjNum ));
-    return FmFormPage::RemoveObject(nObjNum);
-}
-
-/*************************************************************************
-|*
-|* Objekt loeschen, ohne Broadcast
-|*
-\************************************************************************/
-
-SdrObject* SdPage::NbcRemoveObject(sal_uLong nObjNum)
-{
-    onRemoveObject(GetObj( nObjNum ));
-    return FmFormPage::NbcRemoveObject(nObjNum);
-}
-
 // #95876# Also overload ReplaceObject methods to realize when
 // objects are removed with this mechanism instead of RemoveObject
-SdrObject* SdPage::NbcReplaceObject(SdrObject* pNewObj, sal_uLong nObjNum)
-{
-    onRemoveObject(GetObj( nObjNum ));
-    return FmFormPage::NbcReplaceObject(pNewObj, nObjNum);
-}
-
-// #95876# Also overload ReplaceObject methods to realize when
-// objects are removed with this mechanism instead of RemoveObject
-SdrObject* SdPage::ReplaceObject(SdrObject* pNewObj, sal_uLong nObjNum)
-{
-    onRemoveObject(GetObj( nObjNum ));
-    return FmFormPage::ReplaceObject(pNewObj, nObjNum);
-}
-
 // -------------------------------------------------------------------------
+// called after a shape is removed/replaced inserted from this slide
 
-// called after a shape is removed or replaced from this slide
-
-void SdPage::onRemoveObject( SdrObject* pObject )
+void SdPage::handleContentChange(const SfxHint& rHint)
 {
-    if( pObject )
+    const SdrBaseHint* pSdrBaseHint = dynamic_cast< const SdrBaseHint* >(&rHint);
+
+    if(pSdrBaseHint)
+    {
+        switch(pSdrBaseHint->GetSdrHintKind())
+        {
+            case HINT_OBJINSERTED:
+            {
+                onInsertObject(pSdrBaseHint->GetSdrHintObject());
+                break;
+            }
+            case HINT_OBJREMOVED:
+            {
+                onRemoveObject(pSdrBaseHint->GetSdrHintObject());
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
+    }
+}
+
+void SdPage::onInsertObject(const SdrObject* pObject)
+{
+    if(pObject)
+    {
+        static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).InsertObject(pObject);
+        SdrLayerID nId = pObject->GetLayer();
+
+        if( mbMaster )
+        {
+            if( nId == 0 )
+            {
+                // wrong layer. corrected to BackgroundObj layer
+                const_cast< SdrObject* >(pObject)->SetLayer( 2 );
+            }
+        }
+        else
+        {
+            if( nId == 2 )
+            {
+                // wrong layer. corrected to layout layer
+                const_cast< SdrObject* >(pObject)->SetLayer( 0 );
+            }
+        }
+    }
+}
+
+void SdPage::onRemoveObject(const SdrObject* pObject)
+{
+    if(pObject)
     {
         RemovePresObj(pObject);
-
-        if( pModel )
-            static_cast<SdDrawDocument*>(pModel)->RemoveObject(pObject, this);
-
+        static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).RemoveObject(pObject);
         removeAnimations( pObject );
     }
 }
@@ -1721,19 +1845,19 @@ void SdPage::onRemoveObject( SdrObject* pObject )
 |*
 \************************************************************************/
 
-void SdPage::SetSize(const Size& aSize)
+void SdPage::SetPageScale(const basegfx::B2DVector& aNewScale)
 {
-    Size aOldSize = GetSize();
+    const basegfx::B2DVector aOldScale(GetPageScale());
 
-    if (aSize != aOldSize)
+    if(!aNewScale.equal(aOldScale))
     {
-        FmFormPage::SetSize(aSize);
+        FmFormPage::SetPageScale(aNewScale);
 
-        if (aOldSize.Height() == 10 && aOldSize.Width() == 10)
+        if(aOldScale.getX() == 10.0 && aOldScale.getY() == 10.0)
         {
             // Die Seite bekommt erstmalig eine gueltige Groesse gesetzt,
             // daher wird nun die Orientation initialisiert
-            if (aSize.Width() > aSize.Height())
+            if (aNewScale.getX() > aNewScale.getY())
             {
                 meOrientation = ORIENTATION_LANDSCAPE;
             }
@@ -1748,86 +1872,11 @@ void SdPage::SetSize(const Size& aSize)
 
 /*************************************************************************
 |*
-|*
-|*
-\************************************************************************/
-
-void SdPage::SetBorder(sal_Int32 nLft, sal_Int32 nUpp, sal_Int32 nRgt, sal_Int32 nLwr)
-{
-    if (nLft != GetLftBorder() || nUpp != GetUppBorder() ||
-        nRgt != GetRgtBorder() || nLwr != GetLwrBorder() )
-    {
-        FmFormPage::SetBorder(nLft, nUpp, nRgt, nLwr);
-    }
-}
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
-void SdPage::SetLftBorder(sal_Int32 nBorder)
-{
-    if (nBorder != GetLftBorder() )
-    {
-        FmFormPage::SetLftBorder(nBorder);
-    }
-}
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
-void SdPage::SetRgtBorder(sal_Int32 nBorder)
-{
-    if (nBorder != GetRgtBorder() )
-    {
-        FmFormPage::SetRgtBorder(nBorder);
-    }
-}
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
-void SdPage::SetUppBorder(sal_Int32 nBorder)
-{
-    if (nBorder != GetUppBorder() )
-    {
-        FmFormPage::SetUppBorder(nBorder);
-    }
-}
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
-void SdPage::SetLwrBorder(sal_Int32 nBorder)
-{
-    if (nBorder != GetLwrBorder() )
-    {
-        FmFormPage::SetLwrBorder(nBorder);
-    }
-}
-
-/*************************************************************************
-|*
 |* Setzt BackgroundFullSize und ruft dann AdjustBackground auf
 |*
 \************************************************************************/
 
-void SdPage::SetBackgroundFullSize( sal_Bool bIn )
+void SdPage::SetBackgroundFullSize( bool bIn )
 {
     if( bIn != mbBackgroundFullSize )
     {
@@ -1846,69 +1895,56 @@ void SdPage::SetBackgroundFullSize( sal_Bool bIn )
 |*
 \************************************************************************/
 
-void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderRect, sal_Bool bScaleAllObj)
+void SdPage::ScaleObjects(const basegfx::B2DVector& rNewPageSize, double fLeft, double fTop, double fRight, double fBottom, bool bScaleAllObj)
 {
     sd::ScopeLockGuard aGuard( maLockAutoLayoutArrangement );
 
     mbScaleObjects = bScaleAllObj;
     SdrObject* pObj = NULL;
-    Point aRefPnt(0, 0);
-    Size aNewPageSize(rNewPageSize);
-    sal_Int32 nLeft  = rNewBorderRect.Left();
-    sal_Int32 nRight = rNewBorderRect.Right();
-    sal_Int32 nUpper = rNewBorderRect.Top();
-    sal_Int32 nLower = rNewBorderRect.Bottom();
+    basegfx::B2DPoint aRefPoint(0.0, 0.0);
+    basegfx::B2DVector aNewPageSize(rNewPageSize);
 
     // Negative Werte stehen fuer nicht zu aendernde Werte
     // -> aktuelle Werte verwenden
-    if (aNewPageSize.Width() < 0)
+    if (aNewPageSize.getX() < 0.0)
     {
-        aNewPageSize.Width() = GetWdt();
+        aNewPageSize.setX(GetPageScale().getX());
     }
-    if (aNewPageSize.Height() < 0)
+    if (aNewPageSize.getY() < 0.0)
     {
-        aNewPageSize.Height() = GetHgt();
+        aNewPageSize.setY(GetPageScale().getY());
     }
-    if (nLeft < 0)
+    if (fLeft < 0)
     {
-        nLeft = GetLftBorder();
+        fLeft = GetLeftPageBorder();
     }
-    if (nRight < 0)
+    if (fRight < 0)
     {
-        nRight = GetRgtBorder();
+        fRight = GetRightPageBorder();
     }
-    if (nUpper < 0)
+    if (fTop < 0)
     {
-        nUpper = GetUppBorder();
+        fTop = GetTopPageBorder();
     }
-    if (nLower < 0)
+    if (fBottom < 0)
     {
-        nLower = GetLwrBorder();
+        fBottom = GetBottomPageBorder();
     }
-
-    Point aBackgroundPos(nLeft, nUpper);
-    Size aBackgroundSize(aNewPageSize);
-    Rectangle aBorderRect (aBackgroundPos, aBackgroundSize);
 
     if (mbScaleObjects)
     {
-        aBackgroundSize.Width()  -= nLeft  + nRight;
-        aBackgroundSize.Height() -= nUpper + nLower;
-        aBorderRect.SetSize(aBackgroundSize);
-        aNewPageSize = aBackgroundSize;
+        aNewPageSize.setX(aNewPageSize.getX() - (fLeft  + fRight));
+        aNewPageSize.setY(aNewPageSize.getY() - (fTop + fBottom));
     }
 
-    long nOldWidth  = GetWdt() - GetLftBorder() - GetRgtBorder();
-    long nOldHeight = GetHgt() - GetUppBorder() - GetLwrBorder();
+    const basegfx::B2DVector aFactor(
+        aNewPageSize.getX() / (basegfx::fTools::equalZero(GetInnerPageScale().getX()) ? 1.0 : GetInnerPageScale().getX()),
+        aNewPageSize.getY() / (basegfx::fTools::equalZero(GetInnerPageScale().getY()) ? 1.0 : GetInnerPageScale().getY()));
+    const sal_uInt32 nObjCnt(mbScaleObjects ? GetObjCount() : 0);
 
-    Fraction aFractX = Fraction(aNewPageSize.Width(), nOldWidth);
-    Fraction aFractY = Fraction(aNewPageSize.Height(), nOldHeight);
-
-    sal_uLong nObjCnt = (mbScaleObjects ? GetObjCount() : 0);
-
-    for (sal_uLong nObj = 0; nObj < nObjCnt; nObj++)
+    for (sal_uInt32 nObj = 0; nObj < nObjCnt; nObj++)
     {
-        sal_Bool bIsPresObjOnMaster = sal_False;
+        bool bIsPresObjOnMaster = false;
 
         // Alle Objekte
         pObj = GetObj(nObj);
@@ -1916,15 +1952,15 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
         if (mbMaster && IsPresObj(pObj))
         {
             // Es ist ein Praesentationsobjekt auf der MasterPage
-            bIsPresObjOnMaster = sal_True;
+            bIsPresObjOnMaster = true;
         }
 
         if (pObj)
         {
             // #88084# remember aTopLeft as original TopLeft
-            Point aTopLeft(pObj->GetCurrentBoundRect().TopLeft());
+            const basegfx::B2DPoint aTopLeft(pObj->getObjectRange(0).getMinimum());
 
-            if (!pObj->IsEdgeObj())
+            if (!pObj->IsSdrEdgeObj())
             {
                 /**************************************************************
                 * Objekt skalieren
@@ -1932,10 +1968,18 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                 if (mbScaleObjects)
                 {
                     // #88084# use aTopLeft as original TopLeft
-                    aRefPnt = aTopLeft;
+                    aRefPoint = aTopLeft;
                 }
 
-                pObj->Resize(aRefPnt, aFractX, aFractY);
+                {
+                    basegfx::B2DHomMatrix aTransform;
+
+                    aTransform.translate(-aRefPoint);
+                    aTransform.scale(aFactor);
+                    aTransform.translate(aRefPoint);
+
+                    sdr::legacy::transformSdrObject(*pObj, aTransform);
+                }
 
                 if (mbScaleObjects)
                 {
@@ -1946,9 +1990,9 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                         /**********************************************************
                         * Praesentationsvorlage: Texthoehe anpassen
                         **********************************************************/
-                        sal_uInt16 nIndexTitle = 0;
-                        sal_uInt16 nIndexOutline = 0;
-                        sal_uInt16 nIndexNotes = 0;
+                        sal_uInt32 nIndexTitle = 0;
+                        sal_uInt32 nIndexOutline = 0;
+                        sal_uInt32 nIndexNotes = 0;
 
                         if (pObj == GetPresObj(PRESOBJ_TITLE, nIndexTitle))
                         {
@@ -1959,15 +2003,15 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                                 SfxItemSet& rSet = pTitleSheet->GetItemSet();
 
                                 SvxFontHeightItem& rOldHgt = (SvxFontHeightItem&) rSet.Get(EE_CHAR_FONTHEIGHT);
-                                sal_uLong nFontHeight = rOldHgt.GetHeight();
-                                nFontHeight = long(nFontHeight * (double) aFractY);
+                                sal_uInt32 nFontHeight = rOldHgt.GetHeight();
+                                nFontHeight = long(nFontHeight * aFactor.getY());
                                 rSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT));
 
                                 if( SFX_ITEM_AVAILABLE == rSet.GetItemState( EE_CHAR_FONTHEIGHT_CJK ) )
                                 {
                                     rOldHgt = (SvxFontHeightItem&) rSet.Get(EE_CHAR_FONTHEIGHT_CJK);
                                     nFontHeight = rOldHgt.GetHeight();
-                                    nFontHeight = long(nFontHeight * (double) aFractY);
+                                    nFontHeight = long(nFontHeight * aFactor.getY());
                                     rSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CJK));
                                 }
 
@@ -1975,7 +2019,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                                 {
                                     rOldHgt = (SvxFontHeightItem&) rSet.Get(EE_CHAR_FONTHEIGHT_CTL);
                                     nFontHeight = rOldHgt.GetHeight();
-                                    nFontHeight = long(nFontHeight * (double) aFractY);
+                                    nFontHeight = long(nFontHeight * aFactor.getY());
                                     rSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CTL));
                                 }
 
@@ -1987,11 +2031,12 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                             String aName(GetLayoutName());
                             aName += sal_Unicode( ' ' );
 
-                            for (sal_uInt16 i=1; i<=9; i++)
+                            for (sal_uInt32 i=1; i<=9; i++)
                             {
                                 String sLayoutName(aName);
-                                sLayoutName += String::CreateFromInt32( (sal_Int32)i );
-                                SfxStyleSheet* pOutlineSheet = (SfxStyleSheet*)((SdDrawDocument*) pModel)->GetStyleSheetPool()->Find(sLayoutName, SD_STYLE_FAMILY_MASTERPAGE);
+                                sLayoutName += String::CreateFromInt32( i );
+                                SfxStyleSheet* pOutlineSheet = dynamic_cast< SfxStyleSheet* >(
+                                    static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).GetStyleSheetPool()->Find(sLayoutName, SD_STYLE_FAMILY_MASTERPAGE));
 
                                 if (pOutlineSheet)
                                 {
@@ -1999,15 +2044,15 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                                     SfxItemSet aTempSet(pOutlineSheet->GetItemSet());
 
                                     SvxFontHeightItem& rOldHgt = (SvxFontHeightItem&) aTempSet.Get(EE_CHAR_FONTHEIGHT);
-                                    sal_uLong nFontHeight = rOldHgt.GetHeight();
-                                    nFontHeight = long(nFontHeight * (double) aFractY);
+                                    sal_uInt32 nFontHeight = rOldHgt.GetHeight();
+                                    nFontHeight = long(nFontHeight * aFactor.getY());
                                     aTempSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT));
 
                                     if( SFX_ITEM_AVAILABLE == aTempSet.GetItemState( EE_CHAR_FONTHEIGHT_CJK ) )
                                     {
                                         rOldHgt = (SvxFontHeightItem&) aTempSet.Get(EE_CHAR_FONTHEIGHT_CJK);
                                         nFontHeight = rOldHgt.GetHeight();
-                                        nFontHeight = long(nFontHeight * (double) aFractY);
+                                        nFontHeight = long(nFontHeight * aFactor.getY());
                                         aTempSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CJK));
                                     }
 
@@ -2015,12 +2060,12 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                                     {
                                         rOldHgt = (SvxFontHeightItem&) aTempSet.Get(EE_CHAR_FONTHEIGHT_CTL);
                                         nFontHeight = rOldHgt.GetHeight();
-                                        nFontHeight = long(nFontHeight * (double) aFractY);
+                                        nFontHeight = long(nFontHeight * aFactor.getY());
                                         aTempSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CTL));
                                     }
 
                                     // Bullet anpassen
-                                    ((SdStyleSheet*) pOutlineSheet)->AdjustToFontHeight(aTempSet, sal_False);
+                                    ((SdStyleSheet*) pOutlineSheet)->AdjustToFontHeight(aTempSet, false);
 
                                     // Sonderbehandlung: die INVALIDS auf NULL-Pointer
                                     // zurueckgesetzen (sonst landen INVALIDs oder
@@ -2049,8 +2094,8 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
 
                             if (pNotesSheet)
                             {
-                                sal_uLong nHeight = pObj->GetLogicRect().GetSize().Height();
-                                sal_uLong nFontHeight = (sal_uLong) (nHeight * 0.0741);
+                                sal_uInt32 nHeight = sdr::legacy::GetLogicRect(*pObj).GetSize().Height();
+                                sal_uInt32 nFontHeight = (sal_uInt32) (nHeight * 0.0741);
                                 SfxItemSet& rSet = pNotesSheet->GetItemSet();
                                 rSet.Put( SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT ));
                                 rSet.Put( SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CJK ));
@@ -2061,13 +2106,13 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                     }
                     else if ( eObjKind != OBJ_TITLETEXT   &&
                               eObjKind != OBJ_OUTLINETEXT &&
-                              pObj->ISA(SdrTextObj)       &&
+                              dynamic_cast< SdrTextObj* >(pObj) &&
                               pObj->GetOutlinerParaObject() )
                     {
                         /******************************************************
                         * Normales Textobjekt: Texthoehe anpassen
                         ******************************************************/
-                        sal_uLong nScriptType = pObj->GetOutlinerParaObject()->GetTextObject().GetScriptType();
+                        sal_uInt32 nScriptType = pObj->GetOutlinerParaObject()->GetTextObject().GetScriptType();
                         sal_uInt16 nWhich = EE_CHAR_FONTHEIGHT;
                         if ( nScriptType == SCRIPTTYPE_ASIAN )
                             nWhich = EE_CHAR_FONTHEIGHT_CJK;
@@ -2076,53 +2121,39 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
 
                         // #88084# use more modern method to scale the text height
                         sal_uInt32 nFontHeight = ((SvxFontHeightItem&)pObj->GetMergedItem(nWhich)).GetHeight();
-                        sal_uInt32 nNewFontHeight = sal_uInt32((double)nFontHeight * (double)aFractY);
+                        sal_uInt32 nNewFontHeight = sal_uInt32((double)nFontHeight * aFactor.getY());
 
                         pObj->SetMergedItem(SvxFontHeightItem(nNewFontHeight, 100, nWhich));
                     }
                 }
             }
 
-            if (mbScaleObjects && !pObj->IsEdgeObj())
+            if (mbScaleObjects && !pObj->IsSdrEdgeObj())
             {
-                /**************************************************************
-                * Objektposition skalieren
-                **************************************************************/
-                Point aNewPos;
+                // scale object position
+                const basegfx::B2DPoint aNewPos(
+                    ((aTopLeft.getX() - GetLeftPageBorder()) * aFactor.getX()) + fLeft,
+                    ((aTopLeft.getY() - GetTopPageBorder()) * aFactor.getY()) + fTop);
 
-                // #76447# corrected scaling; only distances may be scaled
-                // #88084# use aTopLeft as original TopLeft
-                aNewPos.X() = long((aTopLeft.X() - GetLftBorder()) * (double)aFractX) + nLeft;
-                aNewPos.Y() = long((aTopLeft.Y() - GetUppBorder()) * (double)aFractY) + nUpper;
-
-                Size aVec(aNewPos.X() - aTopLeft.X(), aNewPos.Y() - aTopLeft.Y());
-
-                if (aVec.Height() != 0 || aVec.Width() != 0)
-                {
-                    pObj->NbcMove(aVec);
-                }
-
-                pObj->SetChanged();
-                pObj->BroadcastObjectChange();
+                sdr::legacy::transformSdrObject(*pObj, basegfx::tools::createTranslateB2DHomMatrix(aNewPos - aTopLeft));
             }
         }
     }
 }
 
-SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, PresObjKind& eObjKind, bool bVertical, Rectangle aRect )
+SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, PresObjKind& o_eObjKind, bool bVertical, const basegfx::B2DRange& rRange)
 {
-    SdDrawDocument* pModel = static_cast< SdDrawDocument* >( rPage.GetModel() );
-    DBG_ASSERT( pModel, "sd::convertPresentationObjectImpl(), no model on page!" );
-    if( !pModel || !pSourceObj )
+    SdDrawDocument& rLocalDrawModel = static_cast< SdDrawDocument& >(rPage.getSdrModelFromSdrPage());
+    if( !pSourceObj )
         return pSourceObj;
 
-    ::svl::IUndoManager* pUndoManager = pModel ? static_cast<SdDrawDocument*>(pModel)->GetUndoManager() : 0;
+    ::svl::IUndoManager* pUndoManager = rLocalDrawModel.GetUndoManager();
     const bool bUndo = pUndoManager && pUndoManager->IsInListAction() && rPage.IsInserted();
 
     SdrObject* pNewObj = pSourceObj;
-    if((eObjKind == PRESOBJ_OUTLINE) && (pSourceObj->GetObjIdentifier() == OBJ_TEXT) )
+    if((o_eObjKind == PRESOBJ_OUTLINE) && (pSourceObj->GetObjIdentifier() == OBJ_TEXT) )
     {
-        pNewObj = rPage.CreatePresObj(PRESOBJ_OUTLINE, bVertical, aRect);
+        pNewObj = rPage.CreatePresObj(PRESOBJ_OUTLINE, bVertical, rRange);
 
         // Text des Untertitels in das PRESOBJ_OUTLINE setzen
         OutlinerParaObject* pOutlParaObj = pSourceObj->GetOutlinerParaObject();
@@ -2130,13 +2161,13 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
         if(pOutlParaObj)
         {
             // Text umsetzen
-            ::sd::Outliner* pOutl = pModel->GetInternalOutliner( sal_True );
+            ::sd::Outliner* pOutl = rLocalDrawModel.GetInternalOutliner( true );
             pOutl->Clear();
             pOutl->SetText( *pOutlParaObj );
             pOutlParaObj = pOutl->CreateParaObject();
             pNewObj->SetOutlinerParaObject( pOutlParaObj );
             pOutl->Clear();
-            pNewObj->SetEmptyPresObj(sal_False);
+            pNewObj->SetEmptyPresObj(false);
 
             for (sal_uInt16 nLevel = 1; nLevel < 10; nLevel++)
             {
@@ -2144,7 +2175,8 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
                 String aName(rPage.GetLayoutName());
                 aName += sal_Unicode( ' ' );
                 aName += String::CreateFromInt32( nLevel );
-                SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>( pModel->GetStyleSheetPool()->Find(aName, SD_STYLE_FAMILY_MASTERPAGE) );
+                SfxStyleSheet* pSheet = static_cast< SfxStyleSheet* >(
+                    rLocalDrawModel.GetStyleSheetPool()->Find(aName, SD_STYLE_FAMILY_MASTERPAGE));
 
                 if (pSheet)
                 {
@@ -2161,28 +2193,29 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
             }
 
             // LRSpace-Item loeschen
-            SfxItemSet aSet(pModel->GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
+            SfxItemSet aSet(pNewObj->GetObjectItemPool());
 
             aSet.Put(pNewObj->GetMergedItemSet());
-
             aSet.ClearItem(EE_PARA_LRSPACE);
 
             pNewObj->SetMergedItemSet(aSet);
 
             if( bUndo )
-                pUndoManager->AddUndoAction( pModel->GetSdrUndoFactory().CreateUndoDeleteObject(*pSourceObj) );
+                pUndoManager->AddUndoAction(rLocalDrawModel.GetSdrUndoFactory().CreateUndoDeleteObject(*pSourceObj) );
 
             // Remove outline shape from page
-            rPage.RemoveObject( pSourceObj->GetOrdNum() );
+            rPage.RemoveObjectFromSdrObjList( pSourceObj->GetNavigationPosition() );
 
             if( !bUndo )
-                SdrObject::Free( pSourceObj );
+            {
+                deleteSdrObjectSafeAndClearPointer( pSourceObj );
         }
     }
-    else if((eObjKind == PRESOBJ_TEXT) && (pSourceObj->GetObjIdentifier() == OBJ_OUTLINETEXT) )
+    }
+    else if((o_eObjKind == PRESOBJ_TEXT) && (pSourceObj->GetObjIdentifier() == OBJ_OUTLINETEXT) )
     {
         // is there an outline shape we can use to replace empty subtitle shape?
-        pNewObj = rPage.CreatePresObj(PRESOBJ_TEXT, bVertical, aRect);
+        pNewObj = rPage.CreatePresObj(PRESOBJ_TEXT, bVertical, rRange);
 
         // Text des Gliederungsobjekts in das PRESOBJ_TITLE setzen
         OutlinerParaObject* pOutlParaObj = pSourceObj->GetOutlinerParaObject();
@@ -2190,16 +2223,16 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
         if(pOutlParaObj)
         {
             // Text umsetzen
-            ::sd::Outliner* pOutl = pModel->GetInternalOutliner();
+            ::sd::Outliner* pOutl = rLocalDrawModel.GetInternalOutliner();
             pOutl->Clear();
             pOutl->SetText( *pOutlParaObj );
             pOutlParaObj = pOutl->CreateParaObject();
             pNewObj->SetOutlinerParaObject( pOutlParaObj );
             pOutl->Clear();
-            pNewObj->SetEmptyPresObj(sal_False);
+            pNewObj->SetEmptyPresObj(false);
 
             // Linken Einzug zuruecksetzen
-            SfxItemSet aSet(pModel->GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
+            SfxItemSet aSet(pNewObj->GetObjectItemPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
 
             aSet.Put(pNewObj->GetMergedItemSet());
 
@@ -2212,26 +2245,28 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
 
             SfxStyleSheet* pSheet = rPage.GetStyleSheetForPresObj(PRESOBJ_TEXT);
             if (pSheet)
-                pNewObj->SetStyleSheet(pSheet, sal_True);
+                pNewObj->SetStyleSheet(pSheet, true);
 
             // Remove subtitle shape from page
             if( bUndo )
-                pUndoManager->AddUndoAction(pModel->GetSdrUndoFactory().CreateUndoDeleteObject(*pSourceObj));
+                pUndoManager->AddUndoAction(rLocalDrawModel.GetSdrUndoFactory().CreateUndoDeleteObject(*pSourceObj));
 
-            rPage.RemoveObject( pSourceObj->GetOrdNum() );
+            rPage.RemoveObjectFromSdrObjList( pSourceObj->GetNavigationPosition() );
 
             if( !bUndo )
-                SdrObject::Free( pSourceObj );
+            {
+                deleteSdrObjectSafeAndClearPointer( pSourceObj );
+            }
         }
     }
-    else if((eObjKind == PRESOBJ_OUTLINE) && (pSourceObj->GetObjIdentifier() != OBJ_OUTLINETEXT) )
+    else if((o_eObjKind == PRESOBJ_OUTLINE) && (pSourceObj->GetObjIdentifier() != OBJ_OUTLINETEXT) )
     {
         switch( pSourceObj->GetObjIdentifier() )
         {
-        case OBJ_TABLE: eObjKind = PRESOBJ_TABLE; break;
-        case OBJ_MEDIA: eObjKind = PRESOBJ_MEDIA; break;
-        case OBJ_GRAF: eObjKind = PRESOBJ_GRAPHIC; break;
-        case OBJ_OLE2: eObjKind = PRESOBJ_OBJECT; break;
+        case OBJ_TABLE: o_eObjKind = PRESOBJ_TABLE; break;
+        case OBJ_MEDIA: o_eObjKind = PRESOBJ_MEDIA; break;
+        case OBJ_GRAF: o_eObjKind = PRESOBJ_GRAPHIC; break;
+        case OBJ_OLE2: o_eObjKind = PRESOBJ_OBJECT; break;
         }
     }
 
@@ -2247,41 +2282,41 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
         looking for an existing presentation shape
     @param  bVertical
         If true, the shape is created vertical if bInit is true
-    @param  aRect
+    @param  rRange
         The rectangle that should be used to transform the shape
     @param  bInit
         If true the shape is created if not found
     @returns
         A presentation shape that was either found or created with the given parameters
 */
-SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind, bool bVertical, Rectangle aRect, bool bInit )
+SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind, bool bVertical, const basegfx::B2DRange& rRange, bool bInit )
 {
-    ::svl::IUndoManager* pUndoManager = pModel ? static_cast<SdDrawDocument*>(pModel)->GetUndoManager() : 0;
+    ::svl::IUndoManager* pUndoManager = static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).GetUndoManager();
     const bool bUndo = pUndoManager && pUndoManager->IsInListAction() && IsInserted();
 
     if (!pObj && bInit)
     {
-        pObj = CreatePresObj(eObjKind, bVertical, aRect);
+        pObj = CreatePresObj(eObjKind, bVertical, rRange);
     }
-    else if ( pObj && (pObj->GetUserCall() || bInit) )
+    else if ( pObj && (findConnectionToSdrObject(pObj) || bInit) )
     {
         // convert object if shape type does not match kind (f.e. converting outline text to subtitle text)
         if( bInit )
-            pObj = convertPresentationObjectImpl( *this, pObj, eObjKind, bVertical, aRect );
+        {
+            // CAUTION! This call may change eObjKind which is given by reference
+            pObj = convertPresentationObjectImpl( *this, pObj, eObjKind, bVertical, rRange );
+        }
 
         if( bUndo )
         {
-            pUndoManager->AddUndoAction( pModel->GetSdrUndoFactory().CreateUndoGeoObject( *pObj ) );
-            pUndoManager->AddUndoAction( pModel->GetSdrUndoFactory().CreateUndoAttrObject( *pObj, sal_True, sal_True ) );
-            pUndoManager->AddUndoAction( new UndoObjectUserCall( *pObj ) );
+            pUndoManager->AddUndoAction( getSdrModelFromSdrPage().GetSdrUndoFactory().CreateUndoGeoObject( *pObj ) );
+            pUndoManager->AddUndoAction( getSdrModelFromSdrPage().GetSdrUndoFactory().CreateUndoAttrObject( *pObj, true, true ) );
+            pUndoManager->AddUndoAction( new UndoConnectionToSdrObject( *pObj ) );
         }
 
-//      if ( pObj->ISA(SdrGrafObj) && !pObj->IsEmptyPresObj() )
-            ( /*(SdrGrafObj*)*/ pObj)->AdjustToMaxRect( aRect );
-//      else
-//          SetLogicRect( pObj, aRect );
+        pObj->AdjustToMaxRange( rRange );
 
-        pObj->SetUserCall(this);
+        establishConnectionToSdrObject(pObj, this);
 
         SdrTextObj* pTextObject = dynamic_cast< SdrTextObj* >(pObj);
         if( pTextObject )
@@ -2301,16 +2336,16 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
                 if ( pTextObject->IsAutoGrowHeight() )
                 {
                     // switch off AutoGrowHeight, set new MinHeight
-                    SfxItemSet aTempAttr( ((SdDrawDocument*) pModel)->GetPool() );
-                    SdrTextMinFrameHeightItem aMinHeight( aRect.GetSize().Height() );
+                    SfxItemSet aTempAttr(pTextObject->GetObjectItemPool());
+                    SdrMetricItem aMinHeight(SDRATTR_TEXT_MINFRAMEHEIGHT, basegfx::fround(rRange.getHeight()) );
                     aTempAttr.Put( aMinHeight );
-                    aTempAttr.Put( SdrTextAutoGrowHeightItem(sal_False) );
+                    aTempAttr.Put( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT, false) );
                     pTextObject->SetMergedItemSet(aTempAttr);
-                    pTextObject->SetLogicRect(aRect);
+                    sdr::legacy::SetLogicRange(*pTextObject, rRange);
 
                     // switch on AutoGrowHeight
-                    SfxItemSet aAttr( ((SdDrawDocument*) pModel)->GetPool() );
-                    aAttr.Put( SdrTextAutoGrowHeightItem(sal_True) );
+                    SfxItemSet aAttr(pTextObject->GetObjectItemPool());
+                    aAttr.Put( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT, true) );
 
                     pTextObject->SetMergedItemSet(aAttr);
                 }
@@ -2318,16 +2353,16 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
                 if ( pTextObject->IsAutoGrowWidth() )
                 {
                     // switch off AutoGrowWidth , set new MinWidth
-                    SfxItemSet aTempAttr( ((SdDrawDocument*) pModel)->GetPool() );
-                    SdrTextMinFrameWidthItem aMinWidth( aRect.GetSize().Width() );
+                    SfxItemSet aTempAttr(pTextObject->GetObjectItemPool());
+                    SdrMetricItem aMinWidth(SDRATTR_TEXT_MINFRAMEWIDTH, basegfx::fround(rRange.getWidth()));
                     aTempAttr.Put( aMinWidth );
-                    aTempAttr.Put( SdrTextAutoGrowWidthItem(sal_False) );
+                    aTempAttr.Put( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWWIDTH, false) );
                     pTextObject->SetMergedItemSet(aTempAttr);
-                    pTextObject->SetLogicRect(aRect);
+                    sdr::legacy::SetLogicRange(*pTextObject, rRange);
 
                     // switch on AutoGrowWidth
-                    SfxItemSet aAttr( ((SdDrawDocument*) pModel)->GetPool() );
-                    aAttr.Put( SdrTextAutoGrowWidthItem(sal_True) );
+                    SfxItemSet aAttr(pTextObject->GetObjectItemPool());
+                    aAttr.Put( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWWIDTH, true) );
                     pTextObject->SetMergedItemSet(aAttr);
                 }
             }
@@ -2348,8 +2383,8 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
         if( bVertical && (( eObjKind == PRESOBJ_TITLE) || (eObjKind == PRESOBJ_OUTLINE)))
         {
             SfxItemSet aNewSet(pObj->GetMergedItemSet());
-            aNewSet.Put( SdrTextAutoGrowWidthItem(sal_True) );
-            aNewSet.Put( SdrTextAutoGrowHeightItem(sal_False) );
+            aNewSet.Put( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWWIDTH, true) );
+            aNewSet.Put( SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT, false) );
             if( eObjKind == PRESOBJ_OUTLINE )
             {
                 aNewSet.Put( SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP) );
@@ -2359,8 +2394,13 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
         }
     }
 
-    if ( pObj && (pObj->GetUserCall() || bInit) && ( pObj->IsEmptyPresObj() || !pObj->ISA(SdrGrafObj) ) )
-        pObj->AdjustToMaxRect( aRect );
+    if(pObj && (pObj->IsEmptyPresObj() || !dynamic_cast< SdrGrafObj* >(pObj)))
+    {
+        if(bInit || findConnectionToSdrObject(pObj))
+        {
+            pObj->AdjustToMaxRange( rRange );
+        }
+    }
 
     return pObj;
 }
@@ -2372,10 +2412,11 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
 |*
 \************************************************************************/
 
-PresObjKind SdPage::GetPresObjKind(SdrObject* pObj) const
+PresObjKind SdPage::GetPresObjKind(const SdrObject* pObj) const
 {
     PresObjKind eKind = PRESOBJ_NONE;
-    if( (pObj != 0) && (maPresentationShapeList.hasShape(*pObj)) )
+
+    if( pObj && maPresentationShapeList.hasShape(*pObj) )
     {
         SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*pObj);
         if( pInfo )
@@ -2424,24 +2465,25 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
 {
     if ( pObj )
     {
-        DBG_ASSERT( pObj->ISA(SdrTextObj), "SetObjText: Kein SdrTextObj!" );
+        DBG_ASSERT( dynamic_cast< SdrTextObj* >(pObj), "SetObjText: Kein SdrTextObj!" );
         ::Outliner* pOutl = pOutliner;
 
         if (!pOutliner)
         {
-            SfxItemPool* pPool = ((SdDrawDocument*) GetModel())->GetDrawOutliner().GetEmptyItemSet().GetPool();
+            SdDrawDocument& rSdDrawDocument = static_cast< SdDrawDocument& >(getSdrModelFromSdrPage());
+            SfxItemPool* pPool = rSdDrawDocument.GetDrawOutliner().GetEmptyItemSet().GetPool();
             pOutl = new ::Outliner( pPool, OUTLINERMODE_OUTLINEOBJECT );
-            pOutl->SetRefDevice( SD_MOD()->GetRefDevice( *( (SdDrawDocument*) GetModel() )->GetDocSh() ) );
+            pOutl->SetRefDevice( SD_MOD()->GetRefDevice( *rSdDrawDocument.GetDocSh() ) );
             pOutl->SetEditTextObjectPool(pPool);
-            pOutl->SetStyleSheetPool((SfxStyleSheetPool*)GetModel()->GetStyleSheetPool());
-            pOutl->EnableUndo(sal_False);
-            pOutl->SetUpdateMode( sal_False );
+            pOutl->SetStyleSheetPool(dynamic_cast< SfxStyleSheetPool* >(rSdDrawDocument.GetStyleSheetPool()));
+            pOutl->EnableUndo(false);
+            pOutl->SetUpdateMode( false );
         }
 
         sal_uInt16 nOutlMode = pOutl->GetMode();
         Size aPaperSize = pOutl->GetPaperSize();
-        sal_Bool bUpdateMode = pOutl->GetUpdateMode();
-        pOutl->SetUpdateMode(sal_False);
+        bool bUpdateMode = pOutl->GetUpdateMode();
+        pOutl->SetUpdateMode(false);
         pOutl->SetParaAttribs( 0, pOutl->GetEmptyItemSet() );
 
         // #95114# Always set the object's StyleSheet at the Outliner to
@@ -2536,7 +2578,7 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
             break;
         }
 
-        pOutl->SetPaperSize( pObj->GetLogicRect().GetSize() );
+        pOutl->SetPaperSize( sdr::legacy::GetLogicRect(*pObj).GetSize() );
 
         if( aString.Len() )
             pOutl->SetText( aString, pOutl->GetParagraph( 0 ) );
@@ -2604,11 +2646,12 @@ const String& SdPage::GetName() const
         if ((mePageKind == PK_STANDARD || mePageKind == PK_NOTES) && !mbMaster)
         {
             // default name for handout pages
-            sal_uInt16  nNum = (GetPageNum() + 1) / 2;
+            sal_uInt32 nNum = (GetPageNumber() + 1) / 2;
 
             aCreatedPageName = String(SdResId(STR_PAGE));
             aCreatedPageName += sal_Unicode( ' ' );
-            if( GetModel()->GetPageNumType() == SVX_NUMBER_NONE )
+
+            if( SVX_NUMBER_NONE == getSdrModelFromSdrPage().GetPageNumType() )
             {
                 // if the document has number none as a formating
                 // for page numbers we still default to arabic numbering
@@ -2617,7 +2660,7 @@ const String& SdPage::GetName() const
             }
             else
             {
-                aCreatedPageName += ((SdDrawDocument*) GetModel())->CreatePageNumValue(nNum);
+                aCreatedPageName += static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).CreatePageNumValue(nNum);
             }
         }
         else
@@ -2782,7 +2825,7 @@ void SdPage::SetName (const String& rName)
 {
     String aOldName = GetName();
     FmFormPage::SetName (rName);
-    static_cast<SdDrawDocument*>(pModel)->UpdatePageRelativeURLs(aOldName, rName);
+    static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).UpdatePageRelativeURLs(aOldName, rName);
     ActionChanged();
 }
 
@@ -2830,8 +2873,8 @@ bool SdPage::checkVisibility(
 
     const SdrPage* pVisualizedPage = GetSdrPageFromXDrawPage(rOriginal.GetObjectContact().getViewInformation2D().getVisualizedPage());
     const bool bIsPrinting(rOriginal.GetObjectContact().isOutputToPrinter() || rOriginal.GetObjectContact().isOutputToPDFFile());
-    const SdrPageView* pPageView = rOriginal.GetObjectContact().TryToGetSdrPageView();
-    const bool bIsInsidePageObj(pPageView && pPageView->GetPage() != pVisualizedPage);
+    const SdrView* pSdrView = rOriginal.GetObjectContact().TryToGetSdrView();
+    const bool bIsInsidePageObj(pSdrView && pSdrView->GetSdrPageView() && &pSdrView->GetSdrPageView()->getSdrPageFromSdrPageView() != pVisualizedPage);
 
     // empty presentation objects only visible during edit mode
     if( (bIsPrinting || !bEdit || bIsInsidePageObj ) && pObj->IsEmptyPresObj() )
@@ -2842,7 +2885,7 @@ bool SdPage::checkVisibility(
 
     if( ( pObj->GetObjInventor() == SdrInventor ) && ( pObj->GetObjIdentifier() == OBJ_TEXT ) )
     {
-           const SdPage* pCheckPage = dynamic_cast< const SdPage* >(pObj->GetPage());
+           const SdPage* pCheckPage = dynamic_cast< const SdPage* >(pObj->getSdrPageFromSdrObject());
 
         if( pCheckPage )
         {
@@ -2889,7 +2932,7 @@ bool SdPage::checkVisibility(
     // i63977, do not print SdrpageObjs from master pages
     if( ( pObj->GetObjInventor() == SdrInventor ) && ( pObj->GetObjIdentifier() == OBJ_PAGE ) )
     {
-        if( pObj->GetPage() && pObj->GetPage()->IsMasterPage() )
+        if( pObj->getSdrPageFromSdrObject() && pObj->getSdrPageFromSdrObject()->IsMasterPage() )
             return false;
     }
 
@@ -2915,7 +2958,7 @@ bool SdPage::RestoreDefaultText( SdrObject* pObj )
 
             if (aString.Len())
             {
-                sal_Bool bVertical = sal_False;
+                bool bVertical = false;
                 OutlinerParaObject* pOldPara = pTextObj->GetOutlinerParaObject();
                 if( pOldPara )
                     bVertical = pOldPara->IsVertical();  // is old para object vertical?
@@ -2934,15 +2977,15 @@ bool SdPage::RestoreDefaultText( SdrObject* pObj )
                         && pTextObj->GetOutlinerParaObject()
                         && pTextObj->GetOutlinerParaObject()->IsVertical() != (bool)bVertical)
                     {
-                        Rectangle aObjectRect = pTextObj->GetSnapRect();
+                        const Rectangle aObjectRect(sdr::legacy::GetSnapRect(*pTextObj));
                         pTextObj->GetOutlinerParaObject()->SetVertical(bVertical);
-                        pTextObj->SetSnapRect(aObjectRect);
+                        sdr::legacy::SetSnapRect(*pTextObj, aObjectRect);
                     }
                 }
 
                 pTextObj->SetTextEditOutliner( NULL );  // to make stylesheet settings work
-                pTextObj->NbcSetStyleSheet( GetStyleSheetForPresObj(ePresObjKind), sal_True );
-                pTextObj->SetEmptyPresObj(sal_True);
+                pTextObj->SetStyleSheet( GetStyleSheetForPresObj(ePresObjKind), true );
+                pTextObj->SetEmptyPresObj(true);
                 bRet = true;
             }
         }
@@ -2950,45 +2993,46 @@ bool SdPage::RestoreDefaultText( SdrObject* pObj )
     return bRet;
 }
 
-void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, bool bHorizontal, std::vector< Rectangle >& rAreas )
+void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, bool bHorizontal, std::vector< basegfx::B2DRange >& rAreas )
 {
     SdPage& rHandoutMaster = *rModel.GetMasterSdPage( 0, PK_HANDOUT );
 
-    if( eLayout == AUTOLAYOUT_NONE )
+    if(AUTOLAYOUT_NONE == eLayout)
     {
         // use layout from handout master
         SdrObjListIter aShapeIter (rHandoutMaster);
+
         while (aShapeIter.IsMore())
         {
             SdrPageObj* pPageObj = dynamic_cast<SdrPageObj*>(aShapeIter.Next());
+
             if (pPageObj)
-                rAreas.push_back( pPageObj->GetCurrentBoundRect() );
+            {
+                rAreas.push_back(pPageObj->getObjectRange(0));
+            }
         }
     }
     else
     {
-        Size    aArea = rHandoutMaster.GetSize();
+        const double fGapW(1000.0); // gap is 1cm
+        const double fGapH(1000.0);
+        const double fLeftBorder(rHandoutMaster.GetLeftPageBorder());
+        const double fRightBorder(rHandoutMaster.GetRightPageBorder());
+        double fTopBorder(rHandoutMaster.GetTopPageBorder());
+        double fBottomBorder(rHandoutMaster.GetBottomPageBorder());
+        basegfx::B2DVector aArea(rHandoutMaster.GetPageScale());
+        const double fHeaderFooterHeight((aArea.getY() - fTopBorder - fLeftBorder) * 0.05);
 
-        const long nGapW = 1000; // gap is 1cm
-        const long nGapH = 1000;
+        fTopBorder += fHeaderFooterHeight;
+        fBottomBorder += fHeaderFooterHeight;
 
-        long nLeftBorder = rHandoutMaster.GetLftBorder();
-        long nRightBorder = rHandoutMaster.GetRgtBorder();
-        long nTopBorder = rHandoutMaster.GetUppBorder();
-        long nBottomBorder = rHandoutMaster.GetLwrBorder();
+        double fX(fGapW + fLeftBorder);
+        double fY(fGapH + fTopBorder);
 
-        const long nHeaderFooterHeight = static_cast< long >( (aArea.Height() - nTopBorder - nLeftBorder) * 0.05  );
+        aArea.setX(aArea.getX() - (fGapW * 2.0 + fLeftBorder + fRightBorder));
+        aArea.setY(aArea.getY() - (fGapH * 2.0 + fTopBorder + fBottomBorder));
 
-        nTopBorder += nHeaderFooterHeight;
-        nBottomBorder += nHeaderFooterHeight;
-
-        long nX = nGapW + nLeftBorder;
-        long nY = nGapH + nTopBorder;
-
-        aArea.Width() -= nGapW * 2 + nLeftBorder + nRightBorder;
-        aArea.Height() -= nGapH * 2 + nTopBorder + nBottomBorder;
-
-        const bool bLandscape = aArea.Width() > aArea.Height();
+        const bool bLandscape(aArea.getX() > aArea.getY());
 
         static sal_uInt16 aOffsets[5][9] =
         {
@@ -3000,7 +3044,9 @@ void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, 
         };
 
         sal_uInt16* pOffsets = aOffsets[0];
-        sal_uInt16  nColCnt = 0, nRowCnt = 0;
+        sal_uInt16 nColCnt(0);
+        sal_uInt16 nRowCnt(0);
+
         switch ( eLayout )
         {
             case AUTOLAYOUT_HANDOUT1:
@@ -3057,56 +3103,57 @@ void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, 
                 break;
         }
 
-        rAreas.resize( nColCnt * nRowCnt );
-
-        Size aPartArea, aSize;
-        aPartArea.Width()  = ((aArea.Width()  - ((nColCnt-1) * nGapW) ) / nColCnt);
-        aPartArea.Height() = ((aArea.Height() - ((nRowCnt-1) * nGapH) ) / nRowCnt);
-
+        const basegfx::B2DVector aPartArea(
+            (aArea.getX()  - ((nColCnt - 1) * fGapW) ) / nColCnt,
+            (aArea.getY() - ((nRowCnt - 1) * fGapH) ) / nRowCnt);
+        basegfx::B2DVector aSize(0.0, 0.0);
         SdrPage* pFirstPage = rModel.GetMasterSdPage(0, PK_STANDARD);
+
         if ( pFirstPage )
         {
             // scale actual size into handout rect
-            double fScale = (double)aPartArea.Width() / (double)pFirstPage->GetWdt();
+            double fScale = aPartArea.getX() / pFirstPage->GetPageScale().getX();
 
-            aSize.Height() = (long)(fScale * pFirstPage->GetHgt() );
-            if( aSize.Height() > aPartArea.Height() )
+            aSize.setY(fScale * pFirstPage->GetPageScale().getY());
+
+            if( aSize.getY() > aPartArea.getY() )
             {
-                fScale = (double)aPartArea.Height() / (double)pFirstPage->GetHgt();
-                aSize.Height() = aPartArea.Height();
-                aSize.Width() = (long)(fScale * pFirstPage->GetWdt());
+                fScale = aPartArea.getY() / pFirstPage->GetPageScale().getY();
+                aSize.setY(aPartArea.getY());
+                aSize.setX(fScale * pFirstPage->GetPageScale().getX());
             }
             else
             {
-                aSize.Width() = aPartArea.Width();
+                aSize.setX(aPartArea.getX());
             }
 
-            nX += (aPartArea.Width() - aSize.Width()) / 2;
-            nY += (aPartArea.Height()- aSize.Height())/ 2;
+            fX += (aPartArea.getX() - aSize.getX()) * 0.5;
+            fY += (aPartArea.getY()- aSize.getY()) * 0.5;
         }
         else
         {
             aSize = aPartArea;
         }
 
-        Point aPos( nX, nY );
+        basegfx::B2DPoint aPos( fX, fY );
+        const bool bRTL(rModel.GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB);
+        const double fOffsetX((aPartArea.getX() + fGapW) * (bRTL ? -1.0 : 1.0));
+        const double fOffsetY(aPartArea.getY() + fGapH);
+        const double fStartX(bRTL ? fOffsetX * (1.0 - nColCnt) - fX : fX);
 
-        const bool bRTL = rModel.GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB;
-
-        const long nOffsetX = (aPartArea.Width() + nGapW) * (bRTL ? -1 : 1);
-        const long nOffsetY = aPartArea.Height() + nGapH;
-        const long nStartX = bRTL ? nOffsetX*(1 - nColCnt) - nX : nX;
+        rAreas.resize( nColCnt * nRowCnt );
 
         for(sal_uInt16 nRow = 0; nRow < nRowCnt; nRow++)
         {
-            aPos.X() = nStartX;
+            aPos.setX(fStartX);
+
             for(sal_uInt16 nCol = 0; nCol < nColCnt; nCol++)
             {
-                rAreas[*pOffsets++] = Rectangle(aPos, aSize);
-                aPos.X() += nOffsetX;
+                rAreas[*pOffsets++] = basegfx::B2DRange(aPos, aPos + aSize);
+                aPos.setX(aPos.getX() + fOffsetX);
             }
 
-            aPos.Y() += nOffsetY;
+            aPos.setY(aPos.getY() + fOffsetY);
         }
     }
 }

@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 #ifndef _ENHANCEDCUSTOMSHAPE3D_HXX
 #define _ENHANCEDCUSTOMSHAPE3D_HXX
 
@@ -28,46 +26,54 @@
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
-
-#include <tools/gen.hxx>
+#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/range/b2drange.hxx>
 
 class SdrObject;
+class SdrObjCustomShape;
 
 class EnhancedCustomShape3d
 {
+private:
     class Transformation2D
     {
-        Point                                   aCenter;
-        com::sun::star::drawing::ProjectionMode eProjectionMode;
+    private:
+        basegfx::B2DPoint                           maCenter;
+        com::sun::star::drawing::ProjectionMode     meProjectionMode;
 
         // parallel projection
-        double      fSkewAngle;
-        double      fSkew;          // in percent
+        double                  mfSkewAngle;
+        double                  mfSkew;         // in percent
 
         // perspective projection
-        double      fZScreen;
-        basegfx::B3DPoint       fViewPoint;
-        double      fOriginX;
-        double      fOriginY;
+        double                  mfZScreen;
+        basegfx::B3DPoint       mfViewPoint;
+        double                  mfOriginX;
+        double                  mfOriginY;
 
-        const double* pMap;
+        const double            mfMap;
 
-        public :
+    public :
+        Transformation2D(const SdrObjCustomShape& rCustomShape, const double fMap);
 
-                        Transformation2D( const SdrObject* pCustomShape, const Rectangle& rBoundRect, const double* pMap );
-
-            basegfx::B3DPolygon ApplySkewSettings( const basegfx::B3DPolygon& rPolygon3D ) const;
-            Point       Transform2D( const basegfx::B3DPoint& rPoint ) const;
-            sal_Bool    IsParallel() const;
+        basegfx::B3DPolygon ApplySkewSettings(const basegfx::B3DPolygon& rPolygon3D) const;
+        basegfx::B2DPoint Transform2D(const basegfx::B3DPoint& rPoint) const;
+        bool IsParallel() const;
     };
 
     friend class Transformation2D;
 
-    protected :
-        static Rectangle CalculateNewSnapRect( const SdrObject* pCustomShape, const Rectangle& rSnapRect, const Rectangle& rBoundRect, const double* pMap );
+protected :
+    static basegfx::B2DRange CalculateNewSnapRect(
+        const SdrObjCustomShape& rCustomShape,
+        const basegfx::B2DRange& rSnapRect,
+        const basegfx::B2DRange& rBoundRect,
+        const double fMap);
 
-    public :
-        static SdrObject* Create3DObject( const SdrObject* pShape2d, const SdrObject* pCustomShape );
+public :
+    static SdrObject* Create3DObject(
+        const SdrObject& rShape2d,
+        const SdrObjCustomShape& rCustomShape);
 };
 
 #endif

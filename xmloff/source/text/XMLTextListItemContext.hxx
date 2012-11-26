@@ -44,8 +44,6 @@ class XMLTextListItemContext : public SvXMLImportContext
 
 public:
 
-    TYPEINFO();
-
     XMLTextListItemContext(
             SvXMLImport& rImport,
             XMLTextImportHelper& rTxtImp,

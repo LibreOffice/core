@@ -68,6 +68,7 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include "sot/clsids.hxx"
+#include <memory.h>
 
 #include "unostorageholder.hxx"
 
@@ -318,9 +319,6 @@ void FileStreamWrapper_Impl::checkError()
         // TODO: really evaluate the error
         throw NotConnectedException(::rtl::OUString(), const_cast<XWeak*>(static_cast<const XWeak*>(this)));
 }
-
-TYPEINIT1( UCBStorageStream, BaseStorageStream );
-TYPEINIT1( UCBStorage, BaseStorage );
 
 #define COMMIT_RESULT_FAILURE           0
 #define COMMIT_RESULT_NOTHING_TO_DO     1
@@ -1549,7 +1547,7 @@ sal_Bool UCBStorageStream::CopyTo( BaseStorageStream* pDestStm )
     if( !pImp->Init() )
         return sal_False;
 
-    UCBStorageStream* pStg = PTR_CAST( UCBStorageStream, pDestStm );
+    UCBStorageStream* pStg = dynamic_cast< UCBStorageStream* >( pDestStm );
     if ( pStg )
         pStg->pImp->m_aContentType = pImp->m_aContentType;
 
@@ -2789,8 +2787,8 @@ sal_Bool UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl& rElement, 
             bDeleteStorage = sal_True;
         }
 
-        UCBStorage* pUCBDest = PTR_CAST( UCBStorage, pDest );
-        UCBStorage* pUCBCopy = PTR_CAST( UCBStorage, pStorage );
+        UCBStorage* pUCBDest = dynamic_cast< UCBStorage* >( pDest );
+        UCBStorage* pUCBCopy = dynamic_cast< UCBStorage* >( pStorage );
 
         sal_Bool bOpenUCBStorage = pUCBDest && pUCBCopy;
         BaseStorage* pOtherStorage = bOpenUCBStorage ?
@@ -2845,7 +2843,7 @@ sal_Bool UCBStorage::CopyTo( BaseStorage* pDestStg ) const
 
     // For UCB storages, the class id and the format id may differ,
     // do passing the class id is not sufficient.
-    if( pDestStg->ISA( UCBStorage ) )
+    if( dynamic_cast< UCBStorage* >(pDestStg) )
         pDestStg->SetClass( pImp->m_aClassId, pImp->m_nFormat,
                             pImp->m_aUserTypeName );
     else
@@ -3046,7 +3044,7 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const String& rEleName, StreamMode nM
         if ( !pElement->m_xStream.Is() )
         {
             BaseStorageStream* pStr = OpenStream( rEleName, nMode, bDirect );
-            UCBStorageStream* pStream = PTR_CAST( UCBStorageStream, pStr );
+            UCBStorageStream* pStream = dynamic_cast< UCBStorageStream* >( pStr );
             if ( !pStream )
             {
                 SetError( ( nMode & STREAM_WRITE ) ? SVSTREAM_CANNOT_MAKE : SVSTREAM_FILE_NOT_FOUND );
@@ -3238,7 +3236,7 @@ sal_Bool UCBStorage::MoveTo( const String& rEleName, BaseStorage* pNewSt, const 
     else
     {
 /*
-        if ( PTR_CAST( UCBStorage, pNewSt ) )
+        if ( dynamic_cast< UCBStorage* >( pNewSt ) )
         {
             // because the element is moved, not copied, a special optimization is possible :
             // first copy the UCBStorageElement; flag old element as "Removed" and new as "Inserted",

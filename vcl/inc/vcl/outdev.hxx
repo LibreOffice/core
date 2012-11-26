@@ -939,13 +939,30 @@ public:
     const Point&        GetRefPoint() const { return maRefPoint; }
     sal_Bool                IsRefPoint() const { return mbRefPoint; }
 
-     // #i75163#
+     // Get the MapMode (which actually is the ViewTransformation) as
+    // basegfx::B2DHomMatrix for better and more precise processing.
     basegfx::B2DHomMatrix GetViewTransformation() const;
     basegfx::B2DHomMatrix GetInverseViewTransformation() const;
 
+     // Same as above, but do not use the current MapMode, but the given
+    // one. Unfortunately this cannot be static since some other aspects
+    // of the OutDev have to be used (the DPI and OutOffOrigX).
     basegfx::B2DHomMatrix GetViewTransformation( const MapMode& rMapMode ) const;
     basegfx::B2DHomMatrix GetInverseViewTransformation( const MapMode& rMapMode ) const;
 
+    // Convenience method which creates the full transform from
+    // source to dest MapMode
+    basegfx::B2DHomMatrix GetTransformLogicToLogic(const MapMode& rMapModeSource, const MapMode& rMapModeDest) const;
+
+    // Convenience method to just get the scaling between the given MapUnits
+    static double GetFactorLogicToLogic(MapUnit eUnitSource, MapUnit eUnitDest);
+
+    // Get the discrete (pixel) and logic range/vector of this OutDev.
+    // getMinimum() of the discrete range will always be (0,0)
+    basegfx::B2DRange GetLogicRange() const;
+    basegfx::B2DVector GetLogicVector() const;
+    basegfx::B2DRange GetDiscreteRange() const;
+    basegfx::B2DVector GetDiscreteVector() const;
 
     /** Set an offset in pixel
 

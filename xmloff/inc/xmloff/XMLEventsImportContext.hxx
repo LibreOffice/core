@@ -69,8 +69,6 @@ protected:
 
 public:
 
-    TYPEINFO();
-
     XMLEventsImportContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,

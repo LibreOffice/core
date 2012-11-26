@@ -93,7 +93,7 @@ TabControl::TabControl(DrawViewShell* pViewSh, Window* pParent) :
     DragSourceHelper( this ),
     DropTargetHelper( this ),
     pDrViewSh(pViewSh),
-    bInternalMove(sal_False)
+    bInternalMove(false)
 {
     EnableEditMode();
     SetSizePixel(Size(0, 0));
@@ -194,7 +194,7 @@ void TabControl::DoubleClick()
 
 void TabControl::StartDrag( sal_Int8, const Point& )
 {
-    bInternalMove = sal_True;
+    bInternalMove = true;
 
     // object is delete by reference mechanismn
     ( new TabControl::TabControlTransferable( *this ) )->StartDrag( this, DND_ACTION_COPYMOVE );
@@ -208,7 +208,7 @@ void TabControl::StartDrag( sal_Int8, const Point& )
 
 void TabControl::DragFinished( sal_Int8 )
 {
-    bInternalMove = sal_False;
+    bInternalMove = false;
 }
 
 /*************************************************************************
@@ -243,11 +243,11 @@ sal_Int8 TabControl::AcceptDrop( const AcceptDropEvent& rEvt )
         {
             HideDropPos();
 
-            sal_Int32 nPageId = GetPageId( aPos ) - 1;
+            const sal_uInt32 nPageId(GetPageId( aPos ));
 
-            if( ( nPageId >= 0 ) && pDoc->GetPage( (sal_uInt16)nPageId ) )
+            if( ( nPageId >= 1 ) && pDoc->GetPage( nPageId - 1 ) )
             {
-                nRet = pDrViewSh->AcceptDrop( rEvt, *this, NULL, (sal_uInt16)nPageId, SDRLAYER_NOTFOUND );
+                nRet = pDrViewSh->AcceptDrop( rEvt, *this, NULL, nPageId - 1, SDRLAYER_NOTFOUND );
                 SwitchPage( aPos );
             }
         }
@@ -324,11 +324,11 @@ sal_Int8 TabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
     }
     else
     {
-        sal_Int32 nPageId = GetPageId( aPos ) - 1;
+        const sal_uInt32 nPageId(GetPageId( aPos ));
 
-        if( ( nPageId >= 0 ) && pDoc->GetPage( (sal_uInt16)nPageId ) )
+        if( ( nPageId >= 1 ) && pDoc->GetPage( nPageId - 1 ) )
         {
-            nRet = pDrViewSh->ExecuteDrop( rEvt, *this, NULL, (sal_uInt16)nPageId, SDRLAYER_NOTFOUND );
+            nRet = pDrViewSh->ExecuteDrop( rEvt, *this, NULL, nPageId - 1, SDRLAYER_NOTFOUND );
         }
     }
 
@@ -348,7 +348,7 @@ void TabControl::Command(const CommandEvent& rCEvt)
 
     if ( nCmd == COMMAND_CONTEXTMENU )
     {
-        sal_Bool bGraphicShell = pDrViewSh->ISA(GraphicViewShell);
+        bool bGraphicShell = dynamic_cast< GraphicViewShell* >(pDrViewSh);
         sal_uInt16 nResId = bGraphicShell ? RID_GRAPHIC_PAGETAB_POPUP :
                                         RID_DRAW_PAGETAB_POPUP;
         SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
@@ -362,11 +362,11 @@ void TabControl::Command(const CommandEvent& rCEvt)
 
 long TabControl::StartRenaming()
 {
-    sal_Bool bOK = sal_False;
+    bool bOK = false;
 
     if (pDrViewSh->GetPageKind() == PK_STANDARD)
     {
-        bOK = sal_True;
+        bOK = true;
 
         ::sd::View* pView = pDrViewSh->GetView();
 
@@ -383,7 +383,7 @@ long TabControl::StartRenaming()
 
 long TabControl::AllowRenaming()
 {
-    sal_Bool bOK = sal_True;
+    bool bOK = true;
 
     String aNewName( GetEditText() );
     String aCompareName( GetPageText( GetEditPageId() ) );
@@ -398,7 +398,7 @@ long TabControl::AllowRenaming()
         }
         else
         {
-            bOK = sal_False;
+            bOK = false;
         }
     }
     return( bOK );

@@ -25,7 +25,6 @@
 
 #include <com/sun/star/embed/XClassifiedObject.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <tools/rtti.hxx>
 #include <svl/svarray.hxx>
 #include "swdllapi.h"
 #include <swtypes.hxx>
@@ -200,8 +199,6 @@ protected:
     sal_uInt16 nLockPaint;   //ist != 0 wenn das Paint gelocked ist.
 
 public:
-    TYPEINFO();
-
           SwViewImp *Imp() { return pImp; }
     const SwViewImp *Imp() const { return pImp; }
 
@@ -264,6 +261,7 @@ public:
         //Es wird, wenn notwendig, soweit gescrollt, dass das
         //uebergebene Rect im sichtbaren Ausschnitt liegt.
     void MakeVisible( const SwRect & );
+    void MakeVisible( const basegfx::B2DRange& );
 
     //Bei naechster Gelegenheit die neue Dokuemntgroesse an das UI weiterreichen.
     void SizeChgNotify();

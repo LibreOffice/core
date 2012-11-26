@@ -49,8 +49,6 @@ class XMLTextHeaderFooterContext: public SvXMLImportContext
     sal_Bool    bLeft : 1;
 
 public:
-    TYPEINFO();
-
     XMLTextHeaderFooterContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const ::rtl::OUString& rLName,
             const ::com::sun::star::uno::Reference<

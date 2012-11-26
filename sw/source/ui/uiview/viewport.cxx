@@ -1070,7 +1070,7 @@ void SwView::InnerResizePixel( const Point &rOfst, const Size &rSize )
                             *pHScrollbar, pPageUpBtn, pPageDownBtn,
                             pNaviBtn,
                             *pScrollFill, pVRuler, pHRuler,
-                            0 != PTR_CAST(SwWebView, this),
+                            0 != dynamic_cast< SwWebView* >( this),
                             pWrtShell->GetViewOptions()->IsVRulerRight());
         if ( bShowAtResize )
             ShowAtResize();
@@ -1178,7 +1178,7 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
                                 *pHScrollbar, pPageUpBtn, pPageDownBtn,
                                 pNaviBtn,
                                 *pScrollFill, pVRuler, pHRuler,
-                                0 != PTR_CAST(SwWebView, this),
+                                0 != dynamic_cast< SwWebView* >( this),
                                 pWrtShell->GetViewOptions()->IsVRulerRight() );
         if ( bShowAtResize )
             ShowAtResize();

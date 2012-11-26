@@ -1155,7 +1155,7 @@ void SwXMLExport::ExportTable( const SwTableNode& rTblNd )
                                   sal_True, sal_True );
 
         // export DDE source (if this is a DDE table)
-        if ( rTbl.ISA(SwDDETable) )
+        if ( dynamic_cast< const SwDDETable* >(&rTbl) )
         {
             // get DDE Field Type (contains the DDE connection)
             const SwDDEFieldType* pDDEFldType =

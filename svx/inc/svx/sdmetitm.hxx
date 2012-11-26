@@ -34,14 +34,13 @@
 //------------------------------------------------------------
 class SVX_DLLPUBLIC SdrMetricItem: public SfxInt32Item {
 public:
-    TYPEINFO();
     SdrMetricItem(): SfxInt32Item() {}
     SdrMetricItem(sal_uInt16 nId, sal_Int32 nVal=0):  SfxInt32Item(nId,nVal) {}
     SdrMetricItem(sal_uInt16 nId, SvStream& rIn): SfxInt32Item(nId,rIn) {}
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=NULL) const;
     virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const;
-    virtual FASTBOOL HasMetrics() const;
-    virtual FASTBOOL ScaleMetrics(long nMul, long nDiv);
+    virtual bool HasMetrics() const;
+    virtual void ScaleMetrics(long nMul, long nDiv);
 
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres,
                                                 SfxMapUnit eCoreMetric,

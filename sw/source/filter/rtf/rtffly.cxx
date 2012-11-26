@@ -69,6 +69,8 @@
 // --> OD, FLR 2006-02-16 #131205#
 #include "dcontact.hxx"
 // <--
+#include <svx/svdpage.hxx>
+#include <svx/fmmodel.hxx>
 
 
 using namespace ::com::sun::star;
@@ -507,9 +509,14 @@ void SwRTFParser::SetFlysInDoc()
         // in order to set the order number.
         // The order number is assumed to be the order of the text flow.
         SwFlyDrawContact* pContact =
-                new SwFlyDrawContact( pFmt,
-                                      pFmt->GetDoc()->GetOrCreateDrawModel() );
-        pContact->GetMaster()->SetOrdNum( n );
+            new SwFlyDrawContact(
+                pFmt,
+                *pFmt->GetDoc()->GetOrCreateDrawModel() );
+        SdrObjList* pObjList = pContact->GetMaster()->getParentOfSdrObject();
+        if(pObjList)
+        {
+            pObjList->SetNavigationPosition(pContact->GetMaster()->GetNavigationPosition(), n);
+        }
         // <--
 
         delete pFlySave;

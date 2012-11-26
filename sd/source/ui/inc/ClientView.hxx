@@ -52,7 +52,7 @@ public:
     // man diese beiden folgenden Methoden ueberladen und entsprechend anders
     // reagieren.
     virtual void InvalidateOneWin(::Window& rWin);
-    virtual void InvalidateOneWin(::Window& rWin, const Rectangle& rRect);
+    virtual void InvalidateOneWin(::Window& rWin, const basegfx::B2DRange& rRange);
 };
 
 } // end of namespace sd

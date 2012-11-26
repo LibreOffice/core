@@ -36,6 +36,7 @@
 #include <svx/svdpagv.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
+#include <svx/svdlegacy.hxx>
 
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -53,7 +54,7 @@ using namespace com::sun::star;
 
 void ScTabViewShell::InsertURLButton( const String& rName, const String& rURL,
                                         const String& rTarget,
-                                        const Point* pInsPos )
+    const basegfx::B2DPoint* pInsPos )
 {
     //  Tabelle geschuetzt ?
 
@@ -68,14 +69,15 @@ void ScTabViewShell::InsertURLButton( const String& rName, const String& rURL,
 
     MakeDrawLayer();
 
-    ScTabView*  pView   = pViewData->GetView();
+//  ScTabView*  pView   = pViewData->GetView();
 //  SdrView*    pDrView = pView->GetSdrView();
-    ScDrawView* pDrView = pView->GetScDrawView();
-    SdrModel*   pModel  = pDrView->GetModel();
+//  ScDrawView* pDrView = pView->GetScDrawView();
+//  SdrModel*   pModel  = pDrView->getSdrModelFromSdrView();
 
-    SdrObject* pObj = SdrObjFactory::MakeNewObject(FmFormInventor, OBJ_FM_BUTTON,
-                               pDrView->GetSdrPageView()->GetPage(), pModel);
-    SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pObj);
+    SdrObject* pObj = SdrObjFactory::MakeNewObject(
+        pViewData->GetView()->GetSdrView()->getSdrModelFromSdrView(),
+        SdrObjectCreationInfo(OBJ_FM_BUTTON, FmFormInventor));
+    SdrUnoObj* pUnoCtrl = dynamic_cast< SdrUnoObj* >( pObj);
 
     uno::Reference<awt::XControlModel> xControlModel = pUnoCtrl->GetUnoControlModel();
     DBG_ASSERT( xControlModel.is(), "UNO-Control ohne Model" );
@@ -109,26 +111,24 @@ void ScTabViewShell::InsertURLButton( const String& rName, const String& rURL,
         xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DispatchURLInternal" )), aAny );
     }
 
-    Point aPos;
+    basegfx::B2DPoint aPos;
+
     if (pInsPos)
         aPos = *pInsPos;
     else
         aPos = GetInsertPos();
 
     // Groesse wie in 3.1:
-    Size aSize = GetActiveWin()->PixelToLogic(Size(140, 20));
+    const basegfx::B2DVector aScale(GetActiveWin()->GetInverseViewTransformation() * basegfx::B2DVector(140.0, 20.0));
 
     if ( pDoc->IsNegativePage(nTab) )
-        aPos.X() -= aSize.Width();
+    {
+        aPos.setX(aPos.getX() - aScale.getX());
+    }
 
-    pObj->SetLogicRect(Rectangle(aPos, aSize));
-//  pObj->Resize(Point(), Fraction(1, 1), Fraction(1, 1));
-
-    //  am alten VC-Button musste die Position/Groesse nochmal explizit
-    //  gesetzt werden - das scheint mit UnoControls nicht noetig zu sein
-
-    //  nicht markieren wenn Ole
-    pDrView->InsertObjectSafe( pObj, *pDrView->GetSdrPageView() );
+    sdr::legacy::SetLogicRange(*pObj, basegfx::B2DRange(aPos, aPos + aScale));
+    ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
+    pDrView->InsertObjectSafe( *pObj );
 }
 
 

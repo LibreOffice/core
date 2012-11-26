@@ -1009,12 +1009,12 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   ::rtl::OUString&        
             aSet.ClearItem( SID_FILLFRAME );
 
             pMedium->GetItemSet()->Put( aSet );
-            SFX_ITEMSET_ARG( &aSet, pItem, SfxStringItem, SID_FILTER_NAME, sal_False );
+            SFX_ITEMSET_ARG( &aSet, pItem, SfxStringItem, SID_FILTER_NAME );
             if ( pItem )
                 pMedium->SetFilter(
                     pObjectShell->GetFactory().GetFilterContainer()->GetFilter4FilterName( pItem->GetValue() ) );
 
-            SFX_ITEMSET_ARG( &aSet, pTitleItem, SfxStringItem, SID_DOCINFO_TITLE, sal_False );
+            SFX_ITEMSET_ARG( &aSet, pTitleItem, SfxStringItem, SID_DOCINFO_TITLE );
             if ( pTitleItem )
             {
                 SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pObjectShell );
@@ -1709,7 +1709,7 @@ void SAL_CALL SfxBaseModel::storeAsURL( const   ::rtl::OUString&                
         attachResource( rURL, aSequence );
 
 #if OSL_DEBUG_LEVEL > 0
-        SFX_ITEMSET_ARG( m_pData->m_pObjectShell->GetMedium()->GetItemSet(), pPasswdItem, SfxStringItem, SID_PASSWORD, sal_False);
+        SFX_ITEMSET_ARG( m_pData->m_pObjectShell->GetMedium()->GetItemSet(), pPasswdItem, SfxStringItem, SID_PASSWORD );
         OSL_ENSURE( !pPasswdItem, "There should be no Password property in the document MediaDescriptor!" );
 #endif
     }
@@ -1845,7 +1845,7 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
 
         SfxMedium* pMedium = new SfxMedium( seqArguments );
         String aFilterName;
-        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pFilterNameItem, SfxStringItem, SID_FILTER_NAME, sal_False );
+        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pFilterNameItem, SfxStringItem, SID_FILTER_NAME );
         if( pFilterNameItem )
             aFilterName = pFilterNameItem->GetValue();
         if( !m_pData->m_pObjectShell->GetFactory().GetFilterContainer()->GetFilter4FilterName( aFilterName ) )
@@ -1856,17 +1856,17 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
         }
 
         // !TODO: currently not working
-        //SFX_ITEMSET_ARG( pParams, pFrameItem, SfxFrameItem, SID_DOCFRAME, sal_False );
+        //SFX_ITEMSET_ARG( pParams, pFrameItem, SfxFrameItem, SID_DOCFRAME );
         //if( pFrameItem && pFrameItem->GetFrame() )
         //{
         //  SfxFrame* pFrame = pFrameItem->GetFrame();
         //  pMedium->SetLoadTargetFrame( pFrame );
         //}
 
-        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False );
+        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE );
         sal_Bool bSalvage = pSalvageItem ? sal_True : sal_False;
 
-        // SFX_ITEMSET_ARG( pMedium->GetItemSet(), pTemplateItem, SfxBoolItem, SID_TEMPLATE, sal_False);
+        // SFX_ITEMSET_ARG( pMedium->GetItemSet(), pTemplateItem, SfxBoolItem, SID_TEMPLATE );
         // sal_Bool bTemplate = pTemplateItem && pTemplateItem->GetValue();
         //
         // does already happen in DoLoad call
@@ -1885,7 +1885,7 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
             if ( nError == ERRCODE_IO_BROKENPACKAGE && xHandler.is() )
             {
                 ::rtl::OUString aDocName = pMedium->GetURLObject().getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
-                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pRepairItem, SfxBoolItem, SID_REPAIRPACKAGE, sal_False );
+                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pRepairItem, SfxBoolItem, SID_REPAIRPACKAGE );
                 if ( !pRepairItem || !pRepairItem->GetValue() )
                 {
                     RequestPackageReparation aRequest( aDocName );
@@ -1922,7 +1922,7 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
         if( bSalvage )
         {
             // file recovery: restore original filter
-            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pFilterItem, SfxStringItem, SID_FILTER_NAME, sal_False );
+            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pFilterItem, SfxStringItem, SID_FILTER_NAME );
             SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
             const SfxFilter* pSetFilter = rMatcher.GetFilter4FilterName( pFilterItem->GetValue() );
             pMedium->SetFilter( pSetFilter );
@@ -1932,7 +1932,7 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
         // TODO/LATER: may be the mode should be retrieved from outside and the preused filter should not be set
         if ( m_pData->m_pObjectShell->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
         {
-            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pFilterItem, SfxStringItem, SID_FILTER_NAME, sal_False );
+            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pFilterItem, SfxStringItem, SID_FILTER_NAME );
             if ( pFilterItem )
                 m_pData->m_aPreusedFilterName = pFilterItem->GetValue();
         }
@@ -1945,7 +1945,7 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
         if ( nError )
         {
             sal_Bool bSilent = sal_False;
-            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSilentItem, SfxBoolItem, SID_SILENT, sal_False);
+            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSilentItem, SfxBoolItem, SID_SILENT );
             if( pSilentItem )
                 bSilent = pSilentItem->GetValue();
 
@@ -1976,12 +1976,12 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
         }
 
         sal_Bool bHidden = sal_False;
-        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHidItem, SfxBoolItem, SID_HIDDEN, sal_False);
+        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHidItem, SfxBoolItem, SID_HIDDEN );
         if ( pHidItem )
             bHidden = pHidItem->GetValue();
 
 #if OSL_DEBUG_LEVEL > 0
-        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pPasswdItem, SfxStringItem, SID_PASSWORD, sal_False);
+        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pPasswdItem, SfxStringItem, SID_PASSWORD );
         OSL_ENSURE( !pPasswdItem, "There should be no Password property in the document MediaDescriptor!" );
 #endif
         // !TODO: will be done by Framework!
@@ -2557,11 +2557,11 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
 
     if ( &rBC == m_pData->m_pObjectShell )
     {
-        SfxSimpleHint* pSimpleHint = PTR_CAST( SfxSimpleHint, &rHint );
+        const SfxSimpleHint* pSimpleHint = dynamic_cast< const SfxSimpleHint* >( &rHint );
         if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DOCCHANGED )
             changing();
 
-        SfxEventHint* pNamedHint = PTR_CAST( SfxEventHint, &rHint );
+        const SfxEventHint* pNamedHint = dynamic_cast< const SfxEventHint* >( &rHint );
         if ( pNamedHint )
         {
 
@@ -2636,7 +2636,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
             }
 
 
-            SfxViewEventHint* pViewHint = PTR_CAST( SfxViewEventHint, &rHint );
+            const SfxViewEventHint* pViewHint = dynamic_cast< const SfxViewEventHint* >( &rHint );
             postEvent_Impl( pNamedHint->GetEventName(), pViewHint ? pViewHint->GetController() : uno::Reference< frame::XController2 >() );
         }
 
@@ -2855,7 +2855,7 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
 
         TransformParameters( SID_SAVEASDOC, seqArguments, *aParams );
 
-        SFX_ITEMSET_ARG( aParams, pCopyStreamItem, SfxBoolItem, SID_COPY_STREAM_IF_POSSIBLE, sal_False );
+        SFX_ITEMSET_ARG( aParams, pCopyStreamItem, SfxBoolItem, SID_COPY_STREAM_IF_POSSIBLE );
 
         if ( pCopyStreamItem && pCopyStreamItem->GetValue() && !bSaveTo )
         {
@@ -2869,7 +2869,7 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
 
         sal_uInt32 nModifyPasswordHash = 0;
         uno::Sequence< beans::PropertyValue > aModifyPasswordInfo;
-        SFX_ITEMSET_ARG( aParams, pModifyPasswordInfoItem, SfxUnoAnyItem, SID_MODIFYPASSWORDINFO, sal_False );
+        SFX_ITEMSET_ARG( aParams, pModifyPasswordInfoItem, SfxUnoAnyItem, SID_MODIFYPASSWORDINFO);
         if ( pModifyPasswordInfoItem )
         {
             // it contains either a simple hash or a set of PropertyValues
@@ -2929,7 +2929,7 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
         }
 
         uno::Reference < task::XInteractionHandler > xHandler;
-        SFX_ITEMSET_ARG( aParams, pItem, SfxUnoAnyItem, SID_INTERACTIONHANDLER, sal_False);
+        SFX_ITEMSET_ARG( aParams, pItem, SfxUnoAnyItem, SID_INTERACTIONHANDLER );
         if ( pItem )
             pItem->GetValue() >>= xHandler;
 
@@ -3621,7 +3621,7 @@ void SAL_CALL SfxBaseModel::loadFromStorage( const uno::Reference< XSTORAGE >& x
     // allow to use an interactionhandler (if there is one)
     pMedium->UseInteractionHandler( sal_True );
 
-    SFX_ITEMSET_ARG( &aSet, pTemplateItem, SfxBoolItem, SID_TEMPLATE, sal_False);
+    SFX_ITEMSET_ARG( &aSet, pTemplateItem, SfxBoolItem, SID_TEMPLATE );
     sal_Bool bTemplate = pTemplateItem && pTemplateItem->GetValue();
     m_pData->m_pObjectShell->SetActivateEvent_Impl( bTemplate ? SFX_EVENT_CREATEDOC : SFX_EVENT_OPENDOC );
     m_pData->m_pObjectShell->Get_Impl()->bOwnsStorage = sal_False;
@@ -3653,7 +3653,7 @@ void SAL_CALL SfxBaseModel::storeToStorage( const uno::Reference< XSTORAGE >& xS
     TransformParameters( SID_SAVEASDOC, aMediaDescriptor, aSet );
 
     // TODO/LATER: may be a special URL "private:storage" should be used
-    SFX_ITEMSET_ARG( &aSet, pItem, SfxStringItem, SID_FILTER_NAME, sal_False );
+    SFX_ITEMSET_ARG( &aSet, pItem, SfxStringItem, SID_FILTER_NAME );
     sal_Int32 nVersion = SOFFICE_FILEFORMAT_CURRENT;
     if( pItem )
     {
@@ -3847,7 +3847,7 @@ css::uno::Reference< css::frame::XUntitledNumbers > SfxBaseModel::impl_getUntitl
         SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
         if ( pMedium )
         {
-            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pRepairedDocItem, SfxBoolItem, SID_REPAIRPACKAGE, sal_False );
+            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pRepairedDocItem, SfxBoolItem, SID_REPAIRPACKAGE );
             if ( pRepairedDocItem && pRepairedDocItem->GetValue() )
                 aResult += String( SfxResId(STR_REPAIREDDOCUMENT) );
         }

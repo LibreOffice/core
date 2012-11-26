@@ -75,8 +75,6 @@ public:
     void ConnectToApplication (void);
     void DisconnectFromApplication (void);
 
-    TYPEINFO();
-
     SdrTextObj*     GetTitleTextObject(SdrPage* pPage);
     SdrTextObj*     GetOutlineTextObject(SdrPage* pPage);
 
@@ -119,12 +117,11 @@ public:
 
     sal_uLong         GetPaperWidth() const { return 2*21000; }  // DIN A4 Breite
 
-    sal_Bool          PrepareClose(sal_Bool bUI = sal_True);
+    bool          PrepareClose(bool bUI = true);
 
-    virtual sal_Bool    GetAttributes( SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr=sal_False ) const;
-    virtual sal_Bool    SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll = sal_False);
+    virtual bool GetAttributes( SfxItemSet& rTargetSet, bool bOnlyHardAttr = false ) const;
+    virtual bool SetAttributes(const SfxItemSet& rSet, bool bReplaceAll = false);
 
-//  virtual sal_Bool       HasMarkedObjUnused() const;
     void               FillOutliner();
     void               SetLinks();
     void               ResetLinks() const;
@@ -137,20 +134,20 @@ public:
         const AcceptDropEvent& rEvt,
         DropTargetHelper& rTargetHelper,
         ::sd::Window* pTargetWindow = NULL,
-        sal_uInt16 nPage = SDRPAGE_NOTFOUND,
-        sal_uInt16 nLayer = SDRPAGE_NOTFOUND);
+        sal_uInt32 nPage = SDRPAGE_NOTFOUND,
+        SdrLayerID aLayer = SDRLAYER_NOTFOUND);
     virtual sal_Int8 ExecuteDrop (
         const ExecuteDropEvent& rEvt,
         DropTargetHelper& rTargetHelper,
         ::sd::Window* pTargetWindow = NULL,
-        sal_uInt16 nPage = SDRPAGE_NOTFOUND,
-        sal_uInt16 nLayer = SDRPAGE_NOTFOUND);
+        sal_uInt32 nPage = SDRPAGE_NOTFOUND,
+        SdrLayerID aLayer = SDRLAYER_NOTFOUND);
 
 
     // #97766# Re-implement GetScriptType for this view to get correct results
     virtual sal_uInt16 GetScriptType() const;
 
-    /** After this method has been called with <TRUE/> following changes of
+    /** After this method has been called with <true/> following changes of
         the current page are ignored in that the corresponding text is not
         selected.
         This is used to supress unwanted side effects between selection and
@@ -198,7 +195,7 @@ private:
     sal_uInt16              mnPagesToProcess;    // fuer die Fortschrittsanzeige
     sal_uInt16              mnPagesProcessed;
 
-    sal_Bool                mbFirstPaint;
+    bool                mbFirstPaint;
 
     SfxProgress*        mpProgress;
 

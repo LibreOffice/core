@@ -45,7 +45,6 @@ class SFX2_DLLPUBLIC SfxEventHint : public SfxHint
     sal_uInt16              nEventId;
 
 public:
-    TYPEINFO();
     SfxEventHint( sal_uInt16 nId, const ::rtl::OUString& aName, SfxObjectShell *pObj = 0 )
                         :   pObjShell(pObj),
                             aEventName(aName),
@@ -69,8 +68,6 @@ class SFX2_DLLPUBLIC SfxViewEventHint : public SfxEventHint
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 > xViewController;
 
 public:
-    TYPEINFO();
-
     SfxViewEventHint( sal_uInt16 nId, const ::rtl::OUString& aName, SfxObjectShell *pObj, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& xController )
                         : SfxEventHint( nId, aName, pObj )
                         , xViewController( xController, ::com::sun::star::uno::UNO_QUERY )
@@ -94,8 +91,6 @@ class SfxNamedHint : public SfxHint
     String              _aArgs;
 
 public:
-                        TYPEINFO();
-
                         SfxNamedHint( const String& rName,
                                       const String& rArgs,
                                       SfxObjectShell *pObj = 0  )
@@ -121,7 +116,6 @@ class SfxPrintingHint : public SfxHint
     sal_Int32           nWhich;
     com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aOpts;
 public:
-                        TYPEINFO();
                         SfxPrintingHint( sal_Int32 nEvent, const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& rOpts )
                             : nWhich( nEvent )
                             , aOpts( rOpts )
@@ -132,7 +126,7 @@ public:
                         {}
 
     sal_Int32           GetWhich() const { return nWhich; }
-    const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& GetOptions() { return aOpts; }
+    const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& GetOptions() const { return aOpts; }
 };
 
 #endif

@@ -124,8 +124,8 @@ void VCLXMenu::ImplCreateMenu( sal_Bool bPopup )
 
 IMPL_LINK( VCLXMenu, MenuEventListener, VclSimpleEvent*, pEvent )
 {
-    DBG_ASSERT( pEvent && pEvent->ISA( VclMenuEvent ), "Unknown Event!" );
-    if ( pEvent && pEvent->ISA( VclMenuEvent ) )
+    DBG_ASSERT( pEvent && dynamic_cast< VclMenuEvent* >(pEvent), "Unknown Event!" );
+    if ( pEvent && dynamic_cast< VclMenuEvent* >(pEvent) )
     {
         DBG_ASSERT( ((VclMenuEvent*)pEvent)->GetMenu() && mpMenu, "Menu???" );
 

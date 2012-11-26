@@ -144,7 +144,7 @@ void LocalizationMgr::implEnableDisableResourceForAllLibraryDialogs( HandleResou
     {
         String aDlgName = pDlgNames[ i ];
         DialogWindow* pWin = m_pIDEShell->FindDlgWin( m_aDocument, m_aLibName, aDlgName, sal_False );
-        if( pWin && pWin->IsA( TYPE( DialogWindow ) ) )
+        if( pWin && dynamic_cast< DialogWindow* >(pWin) )
         {
             DialogWindow* pDialogWin = static_cast< DialogWindow* >( pWin );
             Reference< container::XNameContainer > xDialog = pDialogWin->GetDialog();
@@ -834,7 +834,7 @@ void LocalizationMgr::handleSetCurrentLocale( ::com::sun::star::lang::Locale aLo
             pBindings->Invalidate( SID_BASICIDE_CURRENT_LANG );
 
         IDEBaseWindow* pCurWin = m_pIDEShell->GetCurWindow();
-        if ( pCurWin && !pCurWin->IsSuspended() && pCurWin->IsA( TYPE( DialogWindow ) ) )
+        if ( pCurWin && !pCurWin->IsSuspended() && dynamic_cast< DialogWindow* >(pCurWin) )
         {
             DialogWindow* pDlgWin = (DialogWindow*)pCurWin;
             DlgEditor* pWinEditor = pDlgWin->GetEditor();
@@ -871,7 +871,7 @@ DialogWindow* FindDialogWindowForEditor( DlgEditor* pEditor )
     DialogWindow* pFoundDlgWin = NULL;
     while( pWin )
     {
-        if ( !pWin->IsSuspended() && pWin->IsA( TYPE( DialogWindow ) ) )
+        if ( !pWin->IsSuspended() && dynamic_cast< DialogWindow* >(pWin) )
         {
             DialogWindow* pDlgWin = (DialogWindow*)pWin;
             DlgEditor* pWinEditor = pDlgWin->GetEditor();

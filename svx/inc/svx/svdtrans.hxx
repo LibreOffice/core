@@ -49,85 +49,36 @@
 const double nPi=3.14159265358979323846;
 const double nPi180=0.000174532925199432957692222; // Bei zuweing Stellen ist tan(4500*nPi180)!=1.0
 
-// Der maximale Shearwinkel
-#define SDRMAXSHEAR 8900
-
-class XPolygon;
-class XPolyPolygon;
-
 inline long Round(double a) { return a>0.0 ? (long)(a+0.5) : -(long)((-a)+0.5); }
 
-inline void MoveRect(Rectangle& rRect, const Size& S)    { rRect.Move(S.Width(),S.Height()); }
-inline void MovePoint(Point& rPnt, const Size& S)        { rPnt.X()+=S.Width(); rPnt.Y()+=S.Height(); }
-inline void MovePoly(Polygon& rPoly, const Size& S)      { rPoly.Move(S.Width(),S.Height()); }
-inline void MovePoly(PolyPolygon& rPoly, const Size& S)  { rPoly.Move(S.Width(),S.Height()); }
-void MoveXPoly(XPolygon& rPoly, const Size& S);
-void MoveXPoly(XPolyPolygon& rPoly, const Size& S);
-
-SVX_DLLPUBLIC void ResizeRect(Rectangle& rRect, const Point& rRef, const Fraction& xFact, const Fraction& yFact, FASTBOOL bNoJustify=sal_False);
-inline void ResizePoint(Point& rPnt, const Point& rRef, Fraction xFact, Fraction yFact);
-void ResizePoly(Polygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-void ResizeXPoly(XPolygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-void ResizePoly(PolyPolygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-void ResizeXPoly(XPolyPolygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-
-inline void RotatePoint(Point& rPnt, const Point& rRef, double sn, double cs);
+inline void RotatePoint(basegfx::B2DPoint& rPnt, const basegfx::B2DPoint& rRef, double sn, double cs);
 SVX_DLLPUBLIC void RotatePoly(Polygon& rPoly, const Point& rRef, double sn, double cs);
-void RotateXPoly(XPolygon& rPoly, const Point& rRef, double sn, double cs);
 void RotatePoly(PolyPolygon& rPoly, const Point& rRef, double sn, double cs);
-void RotateXPoly(XPolyPolygon& rPoly, const Point& rRef, double sn, double cs);
-
-// MirrorRect macht nur Sinn bei Spiegelachsen
-// mit einem durch 45 Degree teilbaren Winkel!
-void MirrorRect(Rectangle& rRect, const Point& rRef1, const Point& rRef2, FASTBOOL bNoJustify); // ni.
 void MirrorPoint(Point& rPnt, const Point& rRef1, const Point& rRef2);
-void MirrorPoly(Polygon& rPoly, const Point& rRef1, const Point& rRef2);
-void MirrorXPoly(XPolygon& rPoly, const Point& rRef1, const Point& rRef2);
-void MirrorPoly(PolyPolygon& rPoly, const Point& rRef1, const Point& rRef2);
-void MirrorXPoly(XPolyPolygon& rPoly, const Point& rRef1, const Point& rRef2);
+inline void ShearPoint(Point& rPnt, const Point& rRef, double tn, bool bVShear = false);
+SVX_DLLPUBLIC void ShearPoly(Polygon& rPoly, const Point& rRef, double tn, bool bVShear = false);
+void ShearPoly(PolyPolygon& rPoly, const Point& rRef, double tn, bool bVShear = false);
 
-inline void ShearPoint(Point& rPnt, const Point& rRef, double tn, FASTBOOL bVShear=sal_False);
-SVX_DLLPUBLIC void ShearPoly(Polygon& rPoly, const Point& rRef, double tn, FASTBOOL bVShear=sal_False);
-void ShearXPoly(XPolygon& rPoly, const Point& rRef, double tn, FASTBOOL bVShear=sal_False);
-void ShearPoly(PolyPolygon& rPoly, const Point& rRef, double tn, FASTBOOL bVShear=sal_False);
-void ShearXPoly(XPolyPolygon& rPoly, const Point& rRef, double tn, FASTBOOL bVShear=sal_False);
-
-// rPnt.X bzw rPnt.Y wird auf rCenter.X bzw. rCenter.Y gesetzt!
-// anschliessend muss rPnt nur noch um rCenter gedreht werden.
-// Der Rueckgabewinkel ist ausnahmsweise in Rad.
-inline double GetCrookAngle(Point& rPnt, const Point& rCenter, const Point& rRad, FASTBOOL bVertical);
 // Die folgenden Methoden behandeln einen Punkt eines XPolygons, wobei die
 // benachbarten Kontrollpunkte des eigentlichen Punktes ggf. in pC1/pC2
 // uebergeben werden. Ueber rSin/rCos wird gleichzeitig sin(nWink) und cos(nWink)
 // zurueckgegeben.
 // Der Rueckgabewinkel ist hier ebenfalls in Rad.
-double CrookRotateXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCenter,
-                         const Point& rRad, double& rSin, double& rCos, FASTBOOL bVert);
-double CrookSlantXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCenter,
-                        const Point& rRad, double& rSin, double& rCos, FASTBOOL bVert);
-double CrookStretchXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCenter,
-                          const Point& rRad, double& rSin, double& rCos, FASTBOOL bVert,
-                          const Rectangle rRefRect);
+double CrookRotateXPoint(basegfx::B2DPoint& rPnt, basegfx::B2DPoint* pC1, basegfx::B2DPoint* pC2, const basegfx::B2DPoint& rCenter, const basegfx::B2DPoint& rRad, double& rSin, double& rCos, bool bVert);
+double CrookSlantXPoint(basegfx::B2DPoint& rPnt, basegfx::B2DPoint* pC1, basegfx::B2DPoint* pC2, const basegfx::B2DPoint& rCenter, const basegfx::B2DPoint& rRad, double& rSin, double& rCos, bool bVert);
+double CrookStretchXPoint(basegfx::B2DPoint& rPnt, basegfx::B2DPoint* pC1, basegfx::B2DPoint* pC2, const basegfx::B2DPoint& rCenter, const basegfx::B2DPoint& rRad, double& rSin, double& rCos, bool bVert, const basegfx::B2DRange& rRefRect);
 
-void CrookRotatePoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, FASTBOOL bVert);
-void CrookSlantPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, FASTBOOL bVert);
-void CrookStretchPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, FASTBOOL bVert, const Rectangle rRefRect);
+void CrookRotatePoly(basegfx::B2DPolygon& rPoly, const basegfx::B2DPoint& rCenter, const basegfx::B2DPoint& rRad, bool bVert);
+void CrookSlantPoly(basegfx::B2DPolygon& rPoly, const basegfx::B2DPoint& rCenter, const basegfx::B2DPoint& rRad, bool bVert);
+void CrookStretchPoly(basegfx::B2DPolygon& rPoly, const basegfx::B2DPoint& rCenter, const basegfx::B2DPoint& rRad, bool bVert, const basegfx::B2DRange& rRefRange);
 
-void CrookRotatePoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, FASTBOOL bVert);
-void CrookSlantPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, FASTBOOL bVert);
-void CrookStretchPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, FASTBOOL bVert, const Rectangle rRefRect);
+void CrookRotatePoly(basegfx::B2DPolyPolygon& rPoly, const basegfx::B2DPoint& rCenter, const basegfx::B2DPoint& rRad, bool bVert);
+void CrookSlantPoly(basegfx::B2DPolyPolygon& rPoly, const basegfx::B2DPoint& rCenter, const basegfx::B2DPoint& rRad, bool bVert);
+void CrookStretchPoly(basegfx::B2DPolyPolygon& rPoly, const basegfx::B2DPoint& rCenter, const basegfx::B2DPoint& rRad, bool bVert, const basegfx::B2DRange& rRefRange);
 
 /**************************************************************************************************/
 /*  Inline                                                                                        */
 /**************************************************************************************************/
-
-inline void ResizePoint(Point& rPnt, const Point& rRef, Fraction xFact, Fraction yFact)
-{
-    if (xFact.GetDenominator()==0) xFact=Fraction(xFact.GetNumerator(),1); // DivZero abfangen
-    if (yFact.GetDenominator()==0) yFact=Fraction(yFact.GetNumerator(),1); // DivZero abfangen
-    rPnt.X()=rRef.X()+ Round(((double)(rPnt.X()-rRef.X())*xFact.GetNumerator())/xFact.GetDenominator());
-    rPnt.Y()=rRef.Y()+ Round(((double)(rPnt.Y()-rRef.Y())*yFact.GetNumerator())/yFact.GetDenominator());
-}
 
 inline void RotatePoint(Point& rPnt, const Point& rRef, double sn, double cs)
 {
@@ -137,7 +88,14 @@ inline void RotatePoint(Point& rPnt, const Point& rRef, double sn, double cs)
     rPnt.Y()=Round(rRef.Y()+dy*cs-dx*sn);
 }
 
-inline void ShearPoint(Point& rPnt, const Point& rRef, double tn, FASTBOOL bVShear)
+inline void RotateB2DPointAroundRef(basegfx::B2DPoint& rPnt, const basegfx::B2DPoint& rRef, double sn, double cs)
+{
+    const basegfx::B2DTuple aDelta(rPnt - rRef);
+    rPnt.setX(rRef.getX() + aDelta.getX() * cs + aDelta.getY() * sn);
+    rPnt.setY(rRef.getY() + aDelta.getY() * cs - aDelta.getX() * sn);
+}
+
+inline void ShearPoint(Point& rPnt, const Point& rRef, double tn, bool bVShear)
 {
     if (!bVShear) { // Horizontal
         if (rPnt.Y()!=rRef.Y()) { // sonst nicht noetig
@@ -150,19 +108,26 @@ inline void ShearPoint(Point& rPnt, const Point& rRef, double tn, FASTBOOL bVShe
     }
 }
 
-inline double GetCrookAngle(Point& rPnt, const Point& rCenter, const Point& rRad, FASTBOOL bVertical)
+inline double GetCrookAngle(basegfx::B2DPoint& rPnt, const basegfx::B2DPoint& rCenter, const basegfx::B2DPoint& rRad, bool bVertical)
 {
-    double nWink;
-    if (bVertical) {
-        long dy=rPnt.Y()-rCenter.Y();
-        nWink=(double)dy/(double)rRad.Y();
-        rPnt.Y()=rCenter.Y();
-    } else {
-        long dx=rCenter.X()-rPnt.X();
-        nWink=(double)dx/(double)rRad.X();
-        rPnt.X()=rCenter.X();
+    double fAngle(0.0);
+
+    if(bVertical)
+    {
+        const double dy(rPnt.getY() - rCenter.getY());
+
+        fAngle = dy/rRad.getY();
+        rPnt.setY(rCenter.getY());
     }
-    return nWink;
+    else
+    {
+        const double dx(rCenter.getX() - rPnt.getX());
+
+        fAngle = dx / rRad.getX();
+        rPnt.setX(rCenter.getX());
+    }
+
+    return fAngle;
 }
 
 /**************************************************************************************************/
@@ -180,61 +145,6 @@ sal_uInt16 GetAngleSector(long nWink); // Sektor im kartesischen Koordinatensyst
 // Berechnet die Laenge von (0,0) via a^2 + b^2 = c^2
 // Zur Vermeidung von Ueberlaeufen werden ggf. einige Stellen ignoriert.
 long GetLen(const Point& rPnt);
-
-/*
-  Transformation eines Rechtecks in ein Polygon unter            ------------
-  Anwendung der Winkelparameter aus GeoStat.                    /1        2/
-  Referenzpunkt ist stets der Punkt 0, also die linke          /          /
-  obere Ecke des Ausgangsrects.                               /          /
-  Bei der Berechnung des Polygons ist die Reihenfolge        /          /
-  (erst Shear, dann Rotation vorgegeben).                   /          / \
-                                                           /          /   |
-  A) Ausgangsrechteck aRect  B) Nach Anwendung von Shear  /0        3/  Rot|
-  +------------------+       --------------------        ------------  ------
-  |0                1|        \0                1\       C) Nach Anwendung
-  |                  |         \                  \      von Rotate
-  |                  |       |  \                  \
-  |3                2|       |   \3                2\
-  +------------------+       |    --------------------
-                             |Shr |
-  Bei Rueckkonvertierung des        Polygons in ein Rect ist die Reihenfolge
-  zwangslaeufig umgekehrt:
-  - Berechnung des Drehwinkels: Winkel der Strecke 0-1 aus Abb. C) zum Horizont
-  - Rueckdrehung des geshearten Rects (man erhaelt Abb B))
-  - Bestimmung der Breite des Rects=Laenge der Strecke 0-1 aus Abb. B)
-  - Bestimmung der Hoehe des Rects=vertikaler Abstand zwischen den Punkten
-    0 und 3 aus Abb. B)
-  - Bestimmung des Shear-Winkels aus der Strecke 0-3 zur Senkrechten.
-  Es ist darauf zu achten, dass das Polygon bei einer zwischenzeitlichen
-  Transformation evtl. gespiegelt wurde (Mirror oder Resize mit neg. Faktor).
-  In diesem Fall muss zunaecht eine Normalisierung durch Vertauschung der
-  Punkte (z.B. 0 mit 3 und 1 mit 2) durchgefuehrt werden, damit der
-  Richtungssinn im Polygon wieder stimmig ist.
-  Hinweis: Positiver Shear-Winkel bedeutet Shear mit auf dem Bildschirm
-  sichtbarer positiver Kursivierung. Mathematisch waere dass eine negative
-  Kursivierung, da die Y-Achse auf dem Bildschirm von oben nach unten verlaeuft.
-  Drehwinkel: Positiv bedeutet auf dem Bildschirm sichtbare Linksdrehung.
-*/
-
-class GeoStat { // Geometrischer Status fuer ein Rect
-public:
-    long     nDrehWink;
-    long     nShearWink;
-    double   nTan;      // tan(nShearWink)
-    double   nSin;      // sin(nDrehWink)
-    double   nCos;      // cos(nDrehWink)
-    bool     bMirrored; // Horizontal gespiegelt? (ni)
-public:
-    GeoStat(): nDrehWink(0),nShearWink(0),nTan(0.0),nSin(0.0),nCos(1.0),bMirrored(false) {}
-    void RecalcSinCos();
-    void RecalcTan();
-};
-
-Polygon Rect2Poly(const Rectangle& rRect, const GeoStat& rGeo);
-void Poly2Rect(const Polygon& rPol, Rectangle& rRect, GeoStat& rGeo);
-
-SVX_DLLPUBLIC void OrthoDistance8(const Point& rPt0, Point& rPt, FASTBOOL bBigOrtho);
-SVX_DLLPUBLIC void OrthoDistance4(const Point& rPt0, Point& rPt, FASTBOOL bBigOrtho);
 
 // Multiplikation und anschliessende Division.
 // Rechnung und Zwischenergebnis sind BigInt.
@@ -267,20 +177,20 @@ FrPair GetMapFactor(MapUnit eS, FieldUnit eD);
 FrPair GetMapFactor(FieldUnit eS, MapUnit eD);
 FrPair GetMapFactor(FieldUnit eS, FieldUnit eD);
 
-inline FASTBOOL IsMetric(MapUnit eU) {
+inline bool IsMetric(MapUnit eU) {
     return (eU==MAP_100TH_MM || eU==MAP_10TH_MM || eU==MAP_MM || eU==MAP_CM);
 }
 
-inline FASTBOOL IsInch(MapUnit eU) {
+inline bool IsInch(MapUnit eU) {
     return (eU==MAP_1000TH_INCH || eU==MAP_100TH_INCH || eU==MAP_10TH_INCH || eU==MAP_INCH ||
             eU==MAP_POINT       || eU==MAP_TWIP);
 }
 
-inline FASTBOOL IsMetric(FieldUnit eU) {
+inline bool IsMetric(FieldUnit eU) {
     return (eU==FUNIT_MM || eU==FUNIT_CM || eU==FUNIT_M || eU==FUNIT_KM || eU==FUNIT_100TH_MM);
 }
 
-inline FASTBOOL IsInch(FieldUnit eU) {
+inline bool IsInch(FieldUnit eU) {
     return (eU==FUNIT_TWIP || eU==FUNIT_POINT || eU==FUNIT_PICA ||
             eU==FUNIT_INCH || eU==FUNIT_FOOT || eU==FUNIT_MILE);
 }
@@ -290,9 +200,9 @@ class SVX_DLLPUBLIC SdrFormatter {
     long      nMul_;
     long      nDiv_;
     short     nKomma_;
-    FASTBOOL  bSrcFU;
-    FASTBOOL  bDstFU;
-    FASTBOOL  bDirty;
+    bool  bSrcFU;
+    bool  bDstFU;
+    bool  bDirty;
     MapUnit   eSrcMU;
     MapUnit   eDstMU;
     FieldUnit eSrcFU;

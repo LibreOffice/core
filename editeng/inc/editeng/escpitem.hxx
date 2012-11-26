@@ -53,9 +53,8 @@ class EDITENG_DLLPUBLIC SvxEscapementItem : public SfxEnumItemInterface
     short nEsc;
     sal_uInt8  nProp;
 public:
-    TYPEINFO();
-
-    SvxEscapementItem( const sal_uInt16 nId  );
+    POOLITEM_FACTORY()
+    SvxEscapementItem( const sal_uInt16 nId = 0 );
     SvxEscapementItem( const SvxEscapement eEscape,
                    const sal_uInt16 nId  );
     SvxEscapementItem( const short nEsc, const sal_uInt8 nProp,

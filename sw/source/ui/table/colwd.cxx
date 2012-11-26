@@ -85,10 +85,9 @@ SwTableWidthDlg::SwTableWidthDlg(Window *pParent, SwTableFUNC &rTableFnc ) :
 {
     FreeResource();
 
-    sal_Bool bIsWeb = rTableFnc.GetShell()
-                    ? static_cast< sal_Bool >(0 != PTR_CAST( SwWebDocShell,
-                            rTableFnc.GetShell()->GetView().GetDocShell()) )
-                    : sal_False;
+    bool bIsWeb = rTableFnc.GetShell()
+                    ? dynamic_cast< SwWebDocShell* >( rTableFnc.GetShell()->GetView().GetDocShell())
+                    : false;
     FieldUnit eFieldUnit = SW_MOD()->GetUsrPref( bIsWeb )->GetMetric();
     ::SetFieldUnit(aWidthEdit, eFieldUnit );
 

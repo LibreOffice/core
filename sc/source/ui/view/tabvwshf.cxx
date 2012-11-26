@@ -375,7 +375,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 if( rReq.IsAPI() )
                 {
                     SbxObject* pObj = GetScSbxObject();
-                    ScSbxTable* pSbxTab = PTR_CAST( ScSbxTable, pObj );
+                    ScSbxTable* pSbxTab = dynamic_cast< ScSbxTable* >( pObj );
                     DBG_ASSERT( pSbxTab, "pSbxTab???" );
 
                     if( pSbxTab )
@@ -525,7 +525,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                         while ( pSh )
                         {
-                            pScSh = PTR_CAST( ScDocShell, pSh );
+                            pScSh = dynamic_cast< ScDocShell* >( pSh );
 
                             if( pScSh )
                             {

@@ -38,8 +38,6 @@
 class EDITENG_DLLPUBLIC SvxHangingPunctuationItem : public SfxBoolItem
 {
 public:
-    TYPEINFO();
-
     SvxHangingPunctuationItem( sal_Bool bOn /*= sal_False*/,
                         const sal_uInt16 nId  );
 

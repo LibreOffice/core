@@ -47,16 +47,15 @@ namespace rtl
 class EDITENG_DLLPUBLIC SvxKerningItem : public SfxInt16Item
 {
 public:
-    TYPEINFO();
-
-    SvxKerningItem( const short nKern /*= 0*/, const sal_uInt16 nId  );
+    POOLITEM_FACTORY()
+    SvxKerningItem( const short nKern = 0, const sal_uInt16 nId = 0 );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
     virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion) const;
-    virtual int             ScaleMetrics( long nMult, long nDiv );
-    virtual int             HasMetrics() const;
+    virtual void            ScaleMetrics( long nMult, long nDiv );
+    virtual bool            HasMetrics() const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

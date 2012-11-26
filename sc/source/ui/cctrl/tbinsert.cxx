@@ -77,7 +77,7 @@ void __EXPORT ScTbxInsertCtrl::StateChanged( sal_uInt16 /* nSID */, SfxItemState
     if( eState == SFX_ITEM_AVAILABLE )
     {
 
-        const SfxUInt16Item* pItem = PTR_CAST( SfxUInt16Item, pState );
+        const SfxUInt16Item* pItem = dynamic_cast< const SfxUInt16Item* >( pState );
         if(pItem)
         {
             nLastSlotId = pItem->GetValue();

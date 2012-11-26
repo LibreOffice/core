@@ -267,6 +267,28 @@ namespace basegfx
                 return (mnMaximum - mnMinimum);
             }
         }
+
+        T clamp(T nValue) const
+        {
+            if(isEmpty())
+            {
+                return nValue;
+            }
+            else
+            {
+                if(nValue < mnMinimum)
+                {
+                    return mnMinimum;
+                }
+
+                if(nValue > mnMaximum)
+                {
+                    return mnMaximum;
+                }
+
+                return nValue;
+            }
+        }
     };
 
     // some pre-fabricated traits

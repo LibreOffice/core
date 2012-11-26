@@ -38,8 +38,6 @@ class SvXMLAttrContainerItem: public SfxPoolItem
     SvXMLAttrContainerItem_Impl *pImpl;
 
 public:
-    TYPEINFO();
-
     SvXMLAttrContainerItem( sal_uInt16 nWhich = 0 );
     SvXMLAttrContainerItem( const SvXMLAttrContainerItem& );
     virtual ~SvXMLAttrContainerItem();

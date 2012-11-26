@@ -36,8 +36,7 @@ class SVX_DLLPUBLIC SvxViewLayoutItem: public SfxUInt16Item
     bool                    mbBookMode;
 
 public:
-    TYPEINFO();
-
+    POOLITEM_FACTORY()
     SvxViewLayoutItem( sal_uInt16 nColumns = 0, bool bBookMode = false, sal_uInt16 nWhich = SID_ATTR_VIEWLAYOUT );
     SvxViewLayoutItem( const SvxViewLayoutItem& );
     ~SvxViewLayoutItem();

@@ -43,7 +43,8 @@ class SbxItem : public SfxPoolItem
     sal_uInt16                  m_nType;
 
 public:
-    TYPEINFO();
+    POOLITEM_FACTORY()
+    SbxItem() : SfxPoolItem( 0 ), m_aDocument( ScriptDocument::NoDocument ), m_nType( 0 ) {}
     SbxItem( sal_uInt16 nWhich, const ScriptDocument& rDocument, const String& aLibName, const String& aName, sal_uInt16 nType );
     SbxItem( sal_uInt16 nWhich, const ScriptDocument& rDocument, const String& aLibName, const String& aName, const String& aMethodName, sal_uInt16 nType );
     SbxItem( const SbxItem& );
