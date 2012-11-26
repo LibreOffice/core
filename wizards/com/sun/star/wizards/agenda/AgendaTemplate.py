@@ -17,7 +17,6 @@
 #
 import uno
 import traceback
-from threading import RLock
 from ..text.TextElement import TextElement
 from ..text.TextDocument import TextDocument
 from ..common.FileAccess import FileAccess
@@ -28,18 +27,6 @@ from datetime import date as dateTimeObject
 
 from com.sun.star.text.PlaceholderType import TEXT
 from com.sun.star.i18n.NumberFormatIndex import TIME_HHMM, DATE_SYSTEM_LONG
-
-def synchronized(lock):
-    ''' Synchronization decorator. '''
-    def wrap(f):
-        def newFunction(*args, **kw):
-            lock.acquire()
-            try:
-                return f(*args, **kw)
-            finally:
-                lock.release()
-        return newFunction
-    return wrap
 
 '''
 The classes here implement the whole document-functionality of the agenda wizard:
@@ -87,8 +74,6 @@ events fired too often.
 '''
 class AgendaTemplate(TextDocument):
 
-    lock = RLock()
-
     '''
     constructor. The document is *not* loaded here.
     only some formal members are set.
@@ -103,7 +88,6 @@ class AgendaTemplate(TextDocument):
         self.itemsMap = {}
         self.allItems = []
 
-    @synchronized(lock)
     def load(self, templateURL, topics):
         self.template = self.calcTemplateName(templateURL)
         self.loadAsPreview(templateURL, False)
@@ -148,7 +132,6 @@ class AgendaTemplate(TextDocument):
     The table is being found, in which the item is, and redrawn.
     '''
 
-    @synchronized(lock)
     def redraw(self, itemName):
         self.xTextDocument.lockControllers()
         try:
@@ -381,7 +364,6 @@ class AgendaTemplate(TextDocument):
     def getTable(self, name):
         return getattr(self.xTextDocument.TextTables, name)
 
-    @synchronized(lock)
     def redrawTitle(self, controlName):
         try:
             if controlName == "txtTitle":
@@ -435,7 +417,6 @@ class AgendaTemplate(TextDocument):
         return self.formatter.convertNumberToString(
             AgendaTemplate.timeFormat, t)
 
-    @synchronized(lock)
     def finish(self, topics):
         self.createMinutes(topics)
         self.deleteHiddenSections()
@@ -470,7 +451,6 @@ class AgendaTemplate(TextDocument):
     the values for the topics.
     '''
 
-    @synchronized(lock)
     def createMinutes(self, topicsData):
         # if the minutes section should be removed (the
         # user did not check "create minutes")
@@ -693,83 +673,82 @@ class ItemsTable(object):
     '''
 
     def write(self, dummy):
-        with AgendaTemplate.lock:
-            name = self.section.Name
-            # link and unlink the section to the template.
-            self.agenda.textSectionHandler.linkSectiontoTemplate(
-                self.agenda.template, name, self.section)
-            self.agenda.textSectionHandler.breakLinkOfTextSection(
-                self.section)
-            # we need to get a instance after linking.
-            ItemsTable.table = self.agenda.getTable(name)
-            self.section = self.agenda.getSection(name)
-            cursor = ItemsTable.table.createCursorByCellName("A1")
-            # should this section be visible?
-            visible = False
-            # write items
-            # ===========
-            cellName = ""
-            '''
-            now go through all items that belong to this
-            table. Check each one agains the model. If it should
-            be display, call it's write method.
-            All items are of type AgendaItem which means they write
-            two cells to the table: a title (text) and a placeholder.
-            see AgendaItem class below.
-            '''
-            for i in self.items:
-                if self.agenda.isShowItem(i.name):
-                    visible = True
-                    i.table = ItemsTable.table
-                    i.write(cursor)
-                    # I store the cell name which was last written...
-                    cellName = cursor.RangeName
-                    cursor.goRight(1, False)
-
-            if visible:
-                boolean = True
-            else:
-                boolean = False
-            Helper.setUnoPropertyValue(self.section, "IsVisible", boolean)
-            if not visible:
-                return
-                '''
-                remove obsolete rows
-                ====================
-                if the cell that was last written is the current cell,
-                it means this is the end of the table, so we end here.
-                (because after getting the cellName above,
-                I call the goRight method.
-                If it did not go right, it means its the last cell.
-                '''
-
-            if cellName == cursor.RangeName:
-                return
-                '''
-                if not, we continue and clear all cells until
-                we are at the end of the row.
-                '''
-
-            while not cellName == cursor.RangeName and \
-                    not cursor.RangeName.startswith("A"):
-                cell = ItemsTable.table.getCellByName(cursor.RangeName)
-                cell.String = ""
+        name = self.section.Name
+        # link and unlink the section to the template.
+        self.agenda.textSectionHandler.linkSectiontoTemplate(
+            self.agenda.template, name, self.section)
+        self.agenda.textSectionHandler.breakLinkOfTextSection(
+            self.section)
+        # we need to get a instance after linking.
+        ItemsTable.table = self.agenda.getTable(name)
+        self.section = self.agenda.getSection(name)
+        cursor = ItemsTable.table.createCursorByCellName("A1")
+        # should this section be visible?
+        visible = False
+        # write items
+        # ===========
+        cellName = ""
+        '''
+        now go through all items that belong to this
+        table. Check each one agains the model. If it should
+        be display, call it's write method.
+        All items are of type AgendaItem which means they write
+        two cells to the table: a title (text) and a placeholder.
+        see AgendaItem class below.
+        '''
+        for i in self.items:
+            if self.agenda.isShowItem(i.name):
+                visible = True
+                i.table = ItemsTable.table
+                i.write(cursor)
+                # I store the cell name which was last written...
                 cellName = cursor.RangeName
                 cursor.goRight(1, False)
 
+        if visible:
+            boolean = True
+        else:
+            boolean = False
+        Helper.setUnoPropertyValue(self.section, "IsVisible", boolean)
+        if not visible:
+            return
             '''
-            again: if we are at the end of the table, end here.
+            remove obsolete rows
+            ====================
+            if the cell that was last written is the current cell,
+            it means this is the end of the table, so we end here.
+            (because after getting the cellName above,
+            I call the goRight method.
+            If it did not go right, it means its the last cell.
             '''
-            if cellName == cursor.RangeName:
-                return
 
-            rowIndex = AgendaTemplate.getRowIndex(cursor)
-            rowsCount = AgendaTemplate.getRowCount(ItemsTable.table)
+        if cellName == cursor.RangeName:
+            return
             '''
-            now before deleteing i move the cursor up so it
-            does not disappear, because it will crash office.
+            if not, we continue and clear all cells until
+            we are at the end of the row.
             '''
-            cursor.gotoStart(False)
+
+        while not cellName == cursor.RangeName and \
+                not cursor.RangeName.startswith("A"):
+            cell = ItemsTable.table.getCellByName(cursor.RangeName)
+            cell.String = ""
+            cellName = cursor.RangeName
+            cursor.goRight(1, False)
+
+        '''
+        again: if we are at the end of the table, end here.
+        '''
+        if cellName == cursor.RangeName:
+            return
+
+        rowIndex = AgendaTemplate.getRowIndex(cursor)
+        rowsCount = AgendaTemplate.getRowCount(ItemsTable.table)
+        '''
+        now before deleteing i move the cursor up so it
+        does not disappear, because it will crash office.
+        '''
+        cursor.gotoStart(False)
 
 '''
 This class handles the preview of the topics table.

@@ -16,7 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 from wizards.common.ConfigGroup import *
-from wizards.common.ConfigGroup import *
 
 '''
 CGTopic means: Configuration Group Topic.

@@ -15,7 +15,6 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from threading import RLock
 from .CGTopic import CGTopic
 from ..ui.ControlScroller import *
 from .AgendaWizardDialogConst import HID
@@ -82,21 +81,8 @@ This one is not synchronized "live", since it is unnecessary... instead, it is
 synchronized on call, before the settings should be saved.
 '''
 
-def synchronized(lock):
-    ''' Synchronization decorator. '''
-    def wrap(f):
-        def newFunction(*args, **kw):
-            lock.acquire()
-            try:
-                return f(*args, **kw)
-            finally:
-                lock.release()
-        return newFunction
-    return wrap
-
 class TopicsControl(ControlScroller):
 
-    lock = RLock()
     LABEL = "lblTopicCnt_"
     TOPIC = "txtTopicTopic_"
     RESP = "cbTopicResp_"
@@ -376,55 +362,54 @@ class TopicsControl(ControlScroller):
 
     @classmethod
     def fieldChanged(self, guiRow, column):
-        with TopicsControl.lock:
-            try:
-                # First, I update the document
-                data = self.getTopicData(guiRow + ControlScroller.nscrollvalue)
-                if data is None:
-                    return
+        try:
+            # First, I update the document
+            data = self.getTopicData(guiRow + ControlScroller.nscrollvalue)
+            if data is None:
+                return
 
-                dataValue = [i.Value for i in data]
-                if dataValue == TopicsControl.oldData:
-                    return
-                else:
-                    TopicsControl.oldData = dataValue
+            dataValue = [i.Value for i in data]
+            if dataValue == TopicsControl.oldData:
+                return
+            else:
+                TopicsControl.oldData = dataValue
 
-                self.updateDocumentCell(
-                    guiRow + ControlScroller.nscrollvalue, column, data)
-                if self.isRowEmpty(guiRow + ControlScroller.nscrollvalue):
+            self.updateDocumentCell(
+                guiRow + ControlScroller.nscrollvalue, column, data)
+            if self.isRowEmpty(guiRow + ControlScroller.nscrollvalue):
+                '''
+                if this is the row before the last one
+                (the last row is always empty)
+                delete the last row...
+                '''
+                if (guiRow + ControlScroller.nscrollvalue) \
+                        == len(ControlScroller.scrollfields) - 2:
+                    self.removeLastRow()
+                    '''now consequentially check the last two rows,
+                    and remove the last one if they are both empty.
+                    (actually I check always the "before last" row,
+                    because the last one is always empty...
                     '''
-                    if this is the row before the last one
-                    (the last row is always empty)
-                    delete the last row...
-                    '''
-                    if (guiRow + ControlScroller.nscrollvalue) \
-                            == len(ControlScroller.scrollfields) - 2:
-                        self.removeLastRow()
-                        '''now consequentially check the last two rows,
-                        and remove the last one if they are both empty.
-                        (actually I check always the "before last" row,
-                        because the last one is always empty...
-                        '''
-                        while len(ControlScroller.scrollfields) > 1 \
-                                and self.isRowEmpty(len(ControlScroller.scrollfields) - 2):
-                            removeLastRow()
-                        cr = self.ControlGroupVector[
-                            ControlScroller.scrollfields.size - ControlScroller.nscrollvalue - 1]
-                        # if a remove was performed, set focus
-                        #to the last row with some data in it...
-                        self.focus(getControl(cr, column))
-                        # update the preview document.
-                        self.reduceDocumentToTopics()
+                    while len(ControlScroller.scrollfields) > 1 \
+                            and self.isRowEmpty(len(ControlScroller.scrollfields) - 2):
+                        removeLastRow()
+                    cr = self.ControlGroupVector[
+                        ControlScroller.scrollfields.size - ControlScroller.nscrollvalue - 1]
+                    # if a remove was performed, set focus
+                    #to the last row with some data in it...
+                    self.focus(getControl(cr, column))
+                    # update the preview document.
+                    self.reduceDocumentToTopics()
 
-                else:
-                    # row contains data
-                    # is this the last row?
-                    if (guiRow + ControlScroller.nscrollvalue + 1) \
-                            == len(ControlScroller.scrollfields):
-                        self.insertRowAtEnd()
+            else:
+                # row contains data
+                # is this the last row?
+                if (guiRow + ControlScroller.nscrollvalue + 1) \
+                        == len(ControlScroller.scrollfields):
+                    self.insertRowAtEnd()
 
-            except Exception:
-                traceback.print_exc()
+        except Exception:
+            traceback.print_exc()
 
     '''
     return the corresponding row data for the given index.
@@ -490,7 +475,6 @@ class TopicsControl(ControlScroller):
     @param control the control to gain focus after moving.
     '''
 
-    @synchronized(lock)
     def rowDown(self, guiRow=None, control=None):
         try:
             if guiRow is None and control is None:
@@ -523,7 +507,6 @@ class TopicsControl(ControlScroller):
     move the current row up
     '''
 
-    @synchronized(lock)
     def rowUp(self, guiRow=None, control=None):
         try:
             if guiRow is None and control is None:
@@ -554,7 +537,6 @@ class TopicsControl(ControlScroller):
     '''
 
     @classmethod
-    @synchronized(lock)
     def cursorUp(self, guiRow, control):
         # is this the last full row ?
         actuallRow = guiRow + ControlScroller.nscrollvalue
@@ -579,7 +561,6 @@ class TopicsControl(ControlScroller):
     '''
 
     @classmethod
-    @synchronized(lock)
     def cursorDown(self, guiRow, control):
         # is this the last full row ?
         actuallRow = guiRow + ControlScroller.nscrollvalue
