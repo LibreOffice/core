@@ -191,6 +191,19 @@ private:
     XclExpCFImplPtr     mxImpl;
 };
 
+class XclExpDateFormat : public XclExpRecord, protected XclExpRoot
+{
+public:
+    explicit XclExpDateFormat( const XclExpRoot& rRoot, const ScCondDateFormatEntry& rFormatEntry, sal_Int32 nPriority );
+    virtual ~XclExpDateFormat();
+
+    virtual void SaveXml( XclExpXmlStream& rStrm );
+
+private:
+    const ScCondDateFormatEntry& mrFormatEntry;
+    sal_Int32 mnPriority;
+};
+
 class XclExpCfvo : public XclExpRecord, protected XclExpRoot
 {
 public:

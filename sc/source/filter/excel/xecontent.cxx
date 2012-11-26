@@ -977,6 +977,69 @@ void XclExpCF::SaveXml( XclExpXmlStream& rStrm )
     mxImpl->SaveXml( rStrm );
 }
 
+XclExpDateFormat::XclExpDateFormat( const XclExpRoot& rRoot, const ScCondDateFormatEntry& rFormatEntry, sal_Int32 nPriority ):
+    XclExpRecord( EXC_ID_CF ),
+    XclExpRoot( rRoot ),
+    mrFormatEntry(rFormatEntry),
+    mnPriority(nPriority)
+{
+}
+
+XclExpDateFormat::~XclExpDateFormat()
+{
+}
+
+namespace {
+
+const char* getTimePeriodString( condformat::ScCondFormatDateType eType )
+{
+    switch(eType)
+    {
+        case condformat::TODAY:
+            return "today";
+        case condformat::YESTERDAY:
+            return "yesterday";
+        case condformat::TOMORROW:
+            return "yesterday";
+        case condformat::THISWEEK:
+            return "thisWeek";
+        case condformat::LASTWEEK:
+            return "lastWeek";
+        case condformat::NEXTWEEK:
+            return "nextWeek";
+        case condformat::THISMONTH:
+            return "thisMonth";
+        case condformat::LASTMONTH:
+            return "lastMonth";
+        case condformat::NEXTMONTH:
+            return "nextMonth";
+        case condformat::LAST7DAYS:
+            return "last7Days";
+        default:
+            break;
+    }
+    return NULL;
+}
+
+}
+
+void XclExpDateFormat::SaveXml( XclExpXmlStream& rStrm )
+{
+    // only write the supported entries into OOXML
+    const char* sTimePeriod = getTimePeriodString(mrFormatEntry.GetDateType());
+    if(!sTimePeriod)
+        return;
+
+    sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+    rWorksheet->startElement( XML_cfRule,
+            XML_type, "timePeriod",
+            XML_priority, OString::valueOf( mnPriority + 1 ).getStr(),
+            XML_timePeriod, sTimePeriod,
+            XML_dxfId, OString::valueOf( GetDxfs().GetDxfId( mrFormatEntry.GetStyleName() ) ).getStr(),
+            FSEND );
+    rWorksheet->endElement( XML_cfRule);
+}
+
 XclExpCfvo::XclExpCfvo(const XclExpRoot& rRoot, const ScColorScaleEntry& rEntry, const ScAddress& rAddr, bool bFirst):
     XclExpRecord(),
     XclExpRoot( rRoot ),
@@ -1082,6 +1145,8 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
                     maCFList.AppendNewRecord( new XclExpDataBar( GetRoot(), static_cast<const ScDataBarFormat&>(*pFormatEntry), ++rIndex, xExtLst ) );
                 else if(pFormatEntry->GetType() == condformat::ICONSET)
                     maCFList.AppendNewRecord( new XclExpIconSet( GetRoot(), static_cast<const ScIconSetFormat&>(*pFormatEntry), ++rIndex ) );
+                else if(pFormatEntry->GetType() == condformat::DATE)
+                    maCFList.AppendNewRecord( new XclExpDateFormat( GetRoot(), static_cast<const ScCondDateFormatEntry&>(*pFormatEntry), ++rIndex ) );
             }
         aScRanges.Format( msSeqRef, SCA_VALID, NULL, formula::FormulaGrammar::CONV_XL_A1 );
     }

@@ -2901,11 +2901,22 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                 for (size_t nFormatEntry = 0; nFormatEntry < nEntryCount; ++nFormatEntry)
                 {
                     const ScFormatEntry* pFormatEntry = itr->GetEntry(nFormatEntry);
-                    if (!pFormatEntry || pFormatEntry->GetType() != condformat::CONDITION)
+                    if (!pFormatEntry || (pFormatEntry->GetType() != condformat::CONDITION &&
+                                pFormatEntry->GetType() != condformat::DATE))
                         continue;
-                    const ScCondFormatEntry* pEntry = static_cast<const ScCondFormatEntry*>(pFormatEntry);
 
-                    rtl::OUString aStyleName = pEntry->GetStyle();
+                    rtl::OUString aStyleName;
+                    if(pFormatEntry->GetType() == condformat::CONDITION)
+                    {
+                        const ScCondFormatEntry* pEntry = static_cast<const ScCondFormatEntry*>(pFormatEntry);
+                        aStyleName= pEntry->GetStyle();
+                    }
+                    else
+                    {
+                        const ScCondDateFormatEntry* pEntry = static_cast<const ScCondDateFormatEntry*>(pFormatEntry);
+                        aStyleName = pEntry->GetStyleName();
+                    }
+
                     if (maStyleNameToDxfId.find(aStyleName) == maStyleNameToDxfId.end())
                     {
                         maStyleNameToDxfId.insert(std::pair<rtl::OUString, sal_Int32>(aStyleName, nIndex));
