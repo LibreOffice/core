@@ -256,19 +256,19 @@ class LetterWizardDialogResources(Resource):
         self.loadGreetingResources()
 
     def loadRoadmapResources(self):       
-        for i in xrange(6):
+        for i in range(6):
             self.RoadmapLabels.append(self.getResText(
                 LetterWizardDialogResources.RID_LETTERWIZARDROADMAP_START + \
                 i + 1))
 
     def loadSalutationResources(self):
-        for i in xrange(3):
+        for i in range(3):
             self.SalutationLabels.append(self.getResText(
                 LetterWizardDialogResources.RID_LETTERWIZARDSALUTATION_START + \
                 i + 1))
 
     def loadGreetingResources(self):
-        for i in xrange(3):
+        for i in range(3):
             self.GreetingLabels.append(self.getResText(
                 LetterWizardDialogResources.RID_LETTERWIZARDGREETING_START + \
                 i + 1))

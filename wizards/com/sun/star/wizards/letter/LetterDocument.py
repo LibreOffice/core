@@ -32,6 +32,7 @@ from com.sun.star.text.TextContentAnchorType import AT_PAGE
 from com.sun.star.text.SizeType import FIX
 from com.sun.star.text.WrapTextMode import THROUGHT
 from com.sun.star.awt.FontWeight import BOLD
+from com.sun.star.beans import UnknownPropertyException
 
 class LetterDocument(TextDocument):
 
@@ -272,5 +273,7 @@ class BusinessPaperObject(object):
             try:
                 self.xTextDocument.Text.removeTextContent(
                     self.xFrame)
+            except UnknownPropertyException:
+                pass
             except Exception:
                 traceback.print_exc()

@@ -154,7 +154,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             self.removeTerminateListener()
             self.closeDocument()
             self.running = False
-        except Exception, exception:
+        except Exception:
             self.removeTerminateListener()
             traceback.print_exc()
             self.running = False
@@ -218,7 +218,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                 self.saveConfiguration()
                 xIH = self.xMSF.createInstance(
                     "com.sun.star.comp.uui.UUIInteractionHandler")
-                loadValues = range(4)
+                loadValues = list(range(4))
                 loadValues[0] = uno.createUnoStruct( \
                     'com.sun.star.beans.PropertyValue')
                 loadValues[0].Name = "AsTemplate"
@@ -247,7 +247,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             else:
                 pass
 
-        except Exception, e:
+        except Exception:
             traceback.print_exc()
         finally:
             if endWizard:
@@ -260,7 +260,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         try:
             xCloseable = self.myLetterDoc.xFrame
             xCloseable.close(False)
-        except CloseVetoException, e:
+        except CloseVetoException:
             traceback.print_exc()
 
     def optBusinessLetterItemChanged(self):
@@ -636,7 +636,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                     and (self.chkUseLogo.State != 0)
                 self.myLetterDoc.switchElement(
                 "Company Logo", logostatus)
-        except IllegalArgumentException, e:
+        except IllegalArgumentException:
             traceback.print_exc()
 
     def chkUseAddressReceiverItemChanged(self):
@@ -650,7 +650,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                 self.myLetterDoc.switchElement(
                     "Sender Address Repeated", rstatus)
 
-        except IllegalArgumentException, e:
+        except IllegalArgumentException:
             traceback.print_exc()
 
     def chkUseSignsItemChanged(self):
@@ -676,7 +676,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             if self.chkFooterNextPages.State != 0:
                 self.myLetterDoc.switchFooter(
                     "First Page", False, self.chkFooterPageNumbers.State != 0,
-                    txtFooter.Text)
+                    self.txtFooter.Text)
                 self.myLetterDoc.switchFooter("Standard", bFooterPossible,
                     self.chkFooterPageNumbers.State != 0, self.txtFooter.Text)
             else:
@@ -691,7 +691,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                 self.getRoadmapItemByID(LetterWizardDialogImpl.RM_FOOTER)
             Helper.setUnoPropertyValue(
                 BPaperItem, PropertyNames.PROPERTY_ENABLED, bFooterPossible)
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
 
     def chkFooterNextPagesItemChanged(self):
@@ -899,7 +899,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                     self.xMSF, "Template", "share", "/wizard")
             self.sUserTemplatePath = \
                 FileAccess.getOfficePath2(self.xMSF, "Template", "user", "")
-        except NoValidPathException, e:
+        except NoValidPathException:
             traceback.print_exc()
 
     def initializeTemplates(self, xMSF):
@@ -1133,7 +1133,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             UnoDataAware.attachEditControl(
                 cgl, "cp_TemplatePath", self.myPathSelection.xSaveTextBox,
                 True).updateUI()
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
 
     def saveConfiguration(self):
@@ -1142,7 +1142,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                 "/org.openoffice.Office.Writer/Wizards/Letter", True)
             self.myConfig.writeConfiguration(root, "cp_")
             root.commitChanges()
-        except Exception, e:
+        except Exception:
             traceback.print_exc()
 
     def validatePath(self):

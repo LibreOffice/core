@@ -21,6 +21,7 @@ from ..common.PropertyNames import PropertyNames
 
 from com.sun.star.util import DateTime
 from com.sun.star.uno import RuntimeException
+from com.sun.star.beans import UnknownPropertyException
 
 class TextFieldHandler(object):
 
@@ -102,7 +103,7 @@ class TextFieldHandler(object):
             xProperty = TextFieldHandler.dictTextFields[_aPropertyValue]
             try:
                 xPropertySet = xProperty.TextFieldMaster
-            except Exception:
+            except UnknownPropertyException:
                 return
             if xPropertySet.PropertySetInfo.hasPropertyByName(
                     _PropertyName):
