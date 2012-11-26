@@ -17,7 +17,6 @@
 #
 import traceback
 import time
-import unicodedata
 from ..common.PropertyNames import PropertyNames
 
 from com.sun.star.util import DateTime
@@ -105,9 +104,7 @@ class TextFieldHandler(object):
             if xPropertySet.PropertySetInfo.hasPropertyByName(
                     _PropertyName):
                 oValue = xPropertySet.getPropertyValue(_PropertyName)
-                sValue = unicodedata.normalize(
-                    'NFKD', oValue).encode('ascii','ignore')
-                if sValue == _aPropertyValue:
+                if oValue == _aPropertyValue:
                     return xProperty
             return None
         except KeyError:

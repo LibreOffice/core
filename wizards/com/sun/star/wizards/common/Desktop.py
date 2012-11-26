@@ -51,7 +51,7 @@ class Desktop(object):
     @classmethod
     def getDispatcher(self, xMSF, xFrame, _stargetframe, oURL):
         try:
-            oURLArray = range(1)
+            oURLArray = list(range(1))
             oURLArray[0] = oURL
             xDispatch = xFrame.queryDispatch(oURLArray[0], _stargetframe, ALL)
             return xDispatch

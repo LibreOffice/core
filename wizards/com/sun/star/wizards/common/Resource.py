@@ -50,7 +50,7 @@ class Resource(object):
 
     def getResArray(self, nID, iCount):
         try:
-            ResArray = range(iCount)
+            ResArray = list(range(iCount))
             i = 0
             while i < iCount:
                 ResArray[i] = getResText(nID + i)

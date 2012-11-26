@@ -86,7 +86,7 @@ class TextDocument(object):
                     _moduleIdentifier.Identifier)
                 # load the document into a blank frame
                 xDesktop = Desktop.getDesktop(xMSF)
-                loadArgs = range(1)
+                loadArgs = list(range(1))
                 loadArgs[0] = "Model"
                 loadArgs[0] = -1
                 loadArgs[0] = self.xTextDocument
@@ -244,7 +244,7 @@ class TextDocument(object):
         
         auxList = []
         allItems = self.xTextDocument.findAll(sd)
-        for i in range(allItems.Count):
+        for i in list(range(allItems.Count)):
             auxList.append(allItems.getByIndex(i))
             
         return auxList
