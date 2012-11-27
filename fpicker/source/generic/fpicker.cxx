@@ -138,11 +138,6 @@ static OUString FolderPicker_getSystemPickerServiceName()
     else if (aDesktopEnvironment.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("macosx")))
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.AquaFolderPicker"));
 #endif
-#ifdef WNT
-    if (SvtMiscOptions().TryODMADialog() && ::odma::DMSsAvailable()) {
-        return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.ODMAFolderPicker"));
-    }
-#endif
     return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.SystemFolderPicker"));
 }
 

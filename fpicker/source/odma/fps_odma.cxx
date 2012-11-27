@@ -22,7 +22,6 @@
 #include "cppuhelper/implementationentry.hxx"
 
 #include "ODMAFilePicker.hxx"
-#include "ODMAFolderPicker.hxx"
 
 static cppu::ImplementationEntry g_entries[] =
 {
@@ -30,12 +29,6 @@ static cppu::ImplementationEntry g_entries[] =
         ODMAFilePicker::impl_createInstance,
         ODMAFilePicker::impl_getStaticImplementationName,
         ODMAFilePicker::impl_getStaticSupportedServiceNames,
-        cppu::createSingleComponentFactory, 0, 0
-    },
-    {
-        ODMAFolderPicker::impl_createInstance,
-        ODMAFolderPicker::impl_getStaticImplementationName,
-        ODMAFolderPicker::impl_getStaticSupportedServiceNames,
         cppu::createSingleComponentFactory, 0, 0
     },
     { 0, 0, 0, 0, 0, 0 }

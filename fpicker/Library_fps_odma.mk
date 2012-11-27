@@ -53,7 +53,6 @@ endif
 $(eval $(call gb_Library_add_exception_objects,fps_odma,\
 	fpicker/source/odma/fps_odma \
 	fpicker/source/odma/ODMAFilePicker \
-	fpicker/source/odma/ODMAFolderPicker \
 ))
 
 # vim: set noet sw=4 ts=4:
