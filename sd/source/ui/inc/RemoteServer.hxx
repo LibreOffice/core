@@ -78,10 +78,10 @@ namespace sd
             RemoteServer();
             ~RemoteServer();
             static RemoteServer *spServer;
+            static ::osl::Mutex sDataMutex;
+            static ::std::vector<Communicator*> sCommunicators;
             osl::AcceptorSocket mSocket;
 
-            ::osl::Mutex mDataMutex;
-            ::std::vector<Communicator*> mCommunicators;
             ::std::vector<ClientInfoInternal*> mAvailableClients;
 
             void execute();

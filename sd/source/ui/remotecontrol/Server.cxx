@@ -28,6 +28,7 @@
 #include "Receiver.hxx"
 #include "RemoteServer.hxx"
 #include "BluetoothServer.hxx"
+#include "Communicator.hxx"
 
 using namespace std;
 using namespace sd;
@@ -63,8 +64,6 @@ namespace sd {
 RemoteServer::RemoteServer() :
     Thread( "RemoteServerThread" ),
     mSocket(),
-    mDataMutex(),
-    mCommunicators(),
     mAvailableClients()
 {
 }
@@ -76,6 +75,12 @@ RemoteServer::~RemoteServer()
 void RemoteServer::execute()
 {
     SAL_INFO( "sdremote", "RemoteServer::execute called" );
+    uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+    if (!xContext.is() || !officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
+    {
+        SAL_INFO("sdremote", "not in experimental mode, disabling TCP server");
+        return;
+    }
     osl::SocketAddr aAddr( "0", PORT );
     if ( !mSocket.bind( aAddr ) )
     {
@@ -112,7 +117,7 @@ void RemoteServer::execute()
             pSocket->getPeerAddr( aClientAddr );
             OUString aAddress = aClientAddr.getHostname();
 
-            MutexGuard aGuard( mDataMutex );
+            MutexGuard aGuard( sDataMutex );
             ClientInfoInternal* pClient = new ClientInfoInternal(
                     OStringToOUString( aName, RTL_TEXTENCODING_UTF8 ),
                     aAddress, pSocket, OStringToOUString( aPin,
@@ -165,6 +170,8 @@ void RemoteServer::execute()
 }
 
 RemoteServer *sd::RemoteServer::spServer = NULL;
+::osl::Mutex sd::RemoteServer::sDataMutex;
+::std::vector<Communicator*> sd::RemoteServer::sCommunicators;
 
 void RemoteServer::setup()
 {
@@ -175,7 +182,7 @@ void RemoteServer::setup()
     spServer->launch();
 
 #ifdef ENABLE_SDREMOTE_BLUETOOTH
-    sd::BluetoothServer::setup( &(spServer->mCommunicators) );
+    sd::BluetoothServer::setup( &sCommunicators );
 #endif
 }
 
@@ -185,9 +192,9 @@ void RemoteServer::presentationStarted( const css::uno::Reference<
 {
     if ( !spServer )
         return;
-    MutexGuard aGuard( spServer->mDataMutex );
-    for ( vector<Communicator*>::const_iterator aIt = spServer->mCommunicators.begin();
-         aIt != spServer->mCommunicators.end(); ++aIt )
+    MutexGuard aGuard( sDataMutex );
+    for ( vector<Communicator*>::const_iterator aIt = sCommunicators.begin();
+         aIt != sCommunicators.end(); ++aIt )
     {
         (*aIt)->presentationStarted( rController );
     }
@@ -196,9 +203,9 @@ void RemoteServer::presentationStopped()
 {
     if ( !spServer )
         return;
-    MutexGuard aGuard( spServer->mDataMutex );
-    for ( vector<Communicator*>::const_iterator aIt = spServer->mCommunicators.begin();
-         aIt != spServer->mCommunicators.end(); ++aIt )
+    MutexGuard aGuard( sDataMutex );
+    for ( vector<Communicator*>::const_iterator aIt = sCommunicators.begin();
+         aIt != sCommunicators.end(); ++aIt )
     {
         (*aIt)->disposeListener();
     }
@@ -208,13 +215,13 @@ void RemoteServer::removeCommunicator( Communicator* mCommunicator )
 {
     if ( !spServer )
         return;
-    MutexGuard aGuard( spServer->mDataMutex );
-    for ( vector<Communicator*>::iterator aIt = spServer->mCommunicators.begin();
-         aIt != spServer->mCommunicators.end(); ++aIt )
+    MutexGuard aGuard( sDataMutex );
+    for ( vector<Communicator*>::iterator aIt = sCommunicators.begin();
+         aIt != sCommunicators.end(); ++aIt )
     {
         if ( mCommunicator == *aIt )
         {
-            spServer->mCommunicators.erase( aIt );
+            sCommunicators.erase( aIt );
             break;
         }
     }
@@ -226,7 +233,7 @@ std::vector<ClientInfo*> RemoteServer::getClients()
     if ( !spServer )
         return aClients;
 
-    MutexGuard aGuard( spServer->mDataMutex );
+    MutexGuard aGuard( sDataMutex );
     aClients.assign( spServer->mAvailableClients.begin(),
                      spServer->mAvailableClients.end() );
     return aClients;
@@ -271,9 +278,9 @@ sal_Bool RemoteServer::connectClient( ClientInfo* pClient, rtl::OUString aPin )
         }
 
         Communicator* pCommunicator = new Communicator( apClient->mpStreamSocket );
-        MutexGuard aGuard( spServer->mDataMutex );
+        MutexGuard aGuard( sDataMutex );
 
-        spServer->mCommunicators.push_back( pCommunicator );
+        sCommunicators.push_back( pCommunicator );
 
         for ( vector<ClientInfoInternal*>::iterator aIt = spServer->mAvailableClients.begin();
             aIt != spServer->mAvailableClients.end(); ++aIt )
