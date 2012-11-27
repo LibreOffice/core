@@ -134,7 +134,6 @@ public:
     sal_uLong CalcPageCount();
     sal_Bool CheckInsert( sal_uLong nNodeIndex );
 
-    sal_Bool BreakPage( xub_StrLen& rOffs, sal_uLong nNodeIndex );
     sal_Bool CheckInsertPage();
 
     // Look for fresh text frames at this (new) page and set them to the right
