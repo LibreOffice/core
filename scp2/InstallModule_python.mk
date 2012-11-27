@@ -39,19 +39,17 @@ $(eval $(call gb_InstallModule_add_defs,scp2/python,\
 # mingw: mix mode copy file from system python to installation set
 ifeq ($(GUI)$(COM),WNTGCC)
 $(eval $(call gb_InstallModule_add_defs,scp2/python,\
-	-DPYVERSION=$(MINGW_PYVERSION) \
+	-DPYVERSION=$(PYTHON_VERSION) \
 	-DMINGW_SYSTEM_PYTHON \
 ))
 endif
 
 else
-include $(OUTDIR)/inc/pyversion.Makefile
-
 $(eval $(call gb_InstallModule_add_defs,scp2/python,\
-	-DPYVERSION=$(PYVERSION) \
-	-DPYMAJMIN=$(PYMAJOR).$(PYMINOR) \
-	-DPYMAJOR=$(PYMAJOR) \
-	-DPY_FULL_DLL_NAME=$(PY_FULL_DLL_NAME) \
+	-DPYVERSION=$(PYTHON_VERSION) \
+	-DPYMAJMIN=$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
+	-DPYMAJOR=$(PYTHON_VERSION_MAJOR) \
+	-DPY_FULL_DLL_NAME=$(if $(filter WNT-MSC,$(OS)-$(COM)),python$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR).dll,libpython$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so) \
 ))
 endif
 

@@ -9,11 +9,7 @@
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,python3))
 
-#FIXME configure
-PYTHON3_TARBALL := b3b2524f72409d919a4137826a870a8f-Python-3.3.0.tar.bz2
-python3_PYMAJOR=3
-python3_PYMINOR=3
-$(eval $(call gb_UnpackedTarball_set_tarball,python3,$(PYTHON3_TARBALL)))
+$(eval $(call gb_UnpackedTarball_set_tarball,python3,$(PYTHON_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_fix_end_of_line,python3,\
 	PCbuild/pcbuild.sln \

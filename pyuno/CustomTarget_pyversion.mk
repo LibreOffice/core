@@ -29,19 +29,9 @@ $(eval $(call gb_CustomTarget_CustomTarget,pyuno/pyversion))
 $(call gb_CustomTarget_get_target,pyuno/pyversion) : \
     $(call gb_CustomTarget_get_workdir,pyuno/pyversion)/pyversion.hxx
 
-# system python
-ifeq ($(SYSTEM_PYTHON),YES)
-# mingw: MINGW_PYVERSION is defined in configure
-ifeq ($(GUI)$(COM),WNTGCC)
-PYVERSION=$(MINGW_PYVERSION)
-endif
-else
-include $(OUTDIR)/inc/pyversion.Makefile
-endif
-
 $(call gb_CustomTarget_get_workdir,pyuno/pyversion)/pyversion.hxx : $(SRCDIR)/pyuno/zipcore/pyversion.inc | \
     $(call gb_CustomTarget_get_workdir,pyuno/pyversion)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),SED,1)
-	sed -e "s/@/$(PYVERSION)/g" < $? > $@
+	sed -e "s/@/$(PYTHON_VERSION)/g" < $? > $@
 
 # vim: set noet sw=4 ts=4:

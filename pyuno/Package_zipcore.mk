@@ -26,19 +26,8 @@
 
 $(eval $(call gb_Package_Package,python_zipcore,$(call gb_CustomTarget_get_workdir,pyuno/zipcore)))
 
-# system python
-ifeq ($(SYSTEM_PYTHON),YES)
-# mingw: MINGW_PYVERSION is defined in configure
-ifeq ($(GUI)$(COM),WNTGCC)
-PYVERSION=$(MINGW_PYVERSION)
-endif
-else
-include $(OUTDIR)/inc/pyversion.Makefile
-endif
-
-pyuno_PYTHON_ARCHIVE_NAME:=python-core-$(PYVERSION).zip
+pyuno_PYTHON_ARCHIVE_NAME:=python-core-$(PYTHON_VERSION).zip
 
 $(eval $(call gb_Package_add_file,python_zipcore,bin/$(pyuno_PYTHON_ARCHIVE_NAME),$(pyuno_PYTHON_ARCHIVE_NAME)))
-
 
 # vim: set noet sw=4 ts=4:

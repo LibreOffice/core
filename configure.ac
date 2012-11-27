@@ -7422,8 +7422,9 @@ if test $enable_python = system; then
                 # actual distro package?
                 # 2.6.2 currently on OpenSUSE 12.1?
                 # rpm -q mingw32-python => mingw32-python-2.6.2-17.17.noarch
-                MINGW_PYTHON_MAJOR_VERSION="$python_version"
-                MINGW_PYVERSION=$python_version.2
+                PYTHON_VERSION=$python_version.2
+                PYTHON_MAJOR=${python_version%.*}
+                PYTHON_MINOR=${python_version#*.}
                 break
             fi
         done
@@ -7464,6 +7465,9 @@ int main(int argc, char **argv) {
 
 internal)
     SYSTEM_PYTHON=NO
+    PYTHON_VERSION_MAJOR=3
+    PYTHON_VERSION_MINOR=3
+    PYTHON_VERSION=${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.0
     PYTHON_TARBALL="b3b2524f72409d919a4137826a870a8f-Python-3.3.0.tar.bz2"
     BUILD_TYPE="$BUILD_TYPE PYTHON"
     # Embedded Python dies without Home set
@@ -7498,12 +7502,13 @@ AC_SUBST(SYSTEM_PYTHON)
 AC_SUBST(PYTHON_CFLAGS)
 AC_SUBST(PYTHON_LIBS)
 AC_SUBST(PYTHON_TARBALL)
+AC_SUBST(PYTHON_VERSION)
+AC_SUBST(PYTHON_VERSION_MAJOR)
+AC_SUBST(PYTHON_VERSION_MINOR)
 AC_SUBST([MINGW_PYTHON_EXE])
 AC_SUBST([MINGW_PYTHON_DLL])
 AC_SUBST([MINGW_READLINE_DLL])
 AC_SUBST([MINGW_TERMCAP_DLL])
-AC_SUBST(MINGW_PYVERSION)
-AC_SUBST(MINGW_PYTHON_MAJOR_VERSION)
 
 AC_MSG_CHECKING([whether to build the MySQL Connector extension])
 if test "x$enable_ext_mysql_connector" = "xyes" -a "x$enable_extension_integration" != "xno"; then

@@ -28,17 +28,15 @@ $(eval $(call gb_CustomTarget_CustomTarget,pyuno/zipcore))
 
 # system python (only mingw)
 ifeq ($(SYSTEM_PYTHON),YES)
-# mingw: MINGW_PYVERSION and MINGW_SYSROOT are defined in configure
+# mingw: MINGW_SYSROOT is defined in configure
 ifeq ($(GUI)$(COM),WNTGCC)
-PYVERSION=$(MINGW_PYVERSION)
-pyuno_PYTHON_LIB_DIR=$(MINGW_SYSROOT)/lib/python$(MINGW_PYTHON_MAJOR_VERSION)
+pyuno_PYTHON_LIB_DIR=$(MINGW_SYSROOT)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)
 endif
 else
-include $(OUTDIR)/inc/pyversion.Makefile
 pyuno_PYTHON_LIB_DIR=$(OUTDIR)/lib/python
 endif
 
-pyuno_PYTHON_ARCHIVE_NAME:=python-core-$(PYVERSION).zip
+pyuno_PYTHON_ARCHIVE_NAME:=python-core-$(PYTHON_VERSION).zip
 FIND=find
 GREP=grep
 

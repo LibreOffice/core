@@ -1965,16 +1965,16 @@ define gb_LinkTarget__use_python
 
 ifeq ($(OS),WNT)
 $(call gb_LinkTarget_add_libs,$(1),\
-    python33.lib \
+	python$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR).lib \
 )
 else ifeq ($(OS),MACOSX)
 $(call gb_LinkTarget_add_libs,$(1),\
-    -dylib_file @loader_path/LibreOfficePython.framework/Versions/3.3/LibreOfficePython:$(call gb_UnpackedTarball_get_dir,python3)/python-inst/@__________________________________________________OOO/LibreOfficePython.framework/Versions/3.3/LibreOfficePython \
-    -F$(call gb_UnpackedTarball_get_dir,python3)/python-inst/@__________________________________________________OOO -framework LibreOfficePython \
+	-dylib_file @loader_path/LibreOfficePython.framework/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/LibreOfficePython:$(call gb_UnpackedTarball_get_dir,python3)/python-inst/@__________________________________________________OOO/LibreOfficePython.framework/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/LibreOfficePython \
+	-F$(call gb_UnpackedTarball_get_dir,python3)/python-inst/@__________________________________________________OOO -framework LibreOfficePython \
 )
 else
 $(call gb_LinkTarget_use_libraries,$(1),\
-    python3.3m \
+	python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m \
 )
 endif
 
@@ -1988,8 +1988,8 @@ $(call gb_LinkTarget_set_include,$(1),\
 endef
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
-	python3 \
-	python3.3m \
+	python$(PYTHON_VERSION_MAJOR) \
+	python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m \
 ))
 
 endif # SYSTEM_PYTHON

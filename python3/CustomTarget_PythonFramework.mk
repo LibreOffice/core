@@ -35,13 +35,13 @@ python3_fw_prefix=$(call gb_UnpackedTarball_get_dir,python3)/python-inst/@______
 $(call gb_CustomTarget_get_target,python3/fixscripts): $(call gb_ExternalProject_get_target,python3)
 	$(call gb_Output_announce,python3 - remove reference to installroot from scripts,build,CUS,5)
 	$(COMMAND_ECHO)for file in \
-			$(python3_fw_prefix)/Versions/$(python3_PYMAJOR).$(python3_PYMINOR)/bin/2to3 \
-			$(python3_fw_prefix)/Versions/$(python3_PYMAJOR).$(python3_PYMINOR)/bin/2to3-$(python3_PYMAJOR).$(python3_PYMINOR) \
-			$(python3_fw_prefix)/Versions/$(python3_PYMAJOR).$(python3_PYMINOR)/bin/idle$(python3_PYMAJOR).$(python3_PYMINOR) \
-			$(python3_fw_prefix)/Versions/$(python3_PYMAJOR).$(python3_PYMINOR)/bin/pydoc$(python3_PYMAJOR).$(python3_PYMINOR) \
-			$(python3_fw_prefix)/Versions/$(python3_PYMAJOR).$(python3_PYMINOR)/bin/python$(python3_PYMAJOR).$(python3_PYMINOR)-config \
-			$(python3_fw_prefix)/Versions/$(python3_PYMAJOR).$(python3_PYMINOR)/bin/python$(python3_PYMAJOR).$(python3_PYMINOR)m-config \
-			$(python3_fw_prefix)/Versions/$(python3_PYMAJOR).$(python3_PYMINOR)/bin/pyvenv-$(python3_PYMAJOR).$(python3_PYMINOR) ; do \
+			$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin/2to3 \
+			$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin/2to3-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
+			$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin/idle$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
+			$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin/pydoc$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
+			$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)-config \
+			$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m-config \
+			$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin/pyvenv-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) ; do \
 	{ rm "$$file" && awk '\
 		BEGIN {print "#!/bin/bash\n\
 origpath=$$(pwd)\n\
@@ -56,20 +56,20 @@ cd \"$$origpath\"\n\
 $(call gb_CustomTarget_get_target,python3/fixinstallnames): $(call gb_ExternalProject_get_target,python3)
 	$(call gb_Output_announce,python3 - fix installname,build,CUS,5)
 	install_name_tool -change \
-		$(python3_fw_prefix)/Versions/$(python3_PYMAJOR).$(python3_PYMINOR)/LibreOfficePython \
+		$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/LibreOfficePython \
 		@executable_path/../../../../LibreOfficePython \
-		$(python3_fw_prefix)/Versions/$(python3_PYMAJOR).$(python3_PYMINOR)/Resources/Python.app/Contents/MacOS/LibreOfficePython
+		$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/Resources/Python.app/Contents/MacOS/LibreOfficePython
 	touch $@
 
 # also delete binaries that are symlinked in scp2
 $(call gb_CustomTarget_get_target,python3/executables): $(call gb_ExternalProject_get_target,python3)
 	$(call gb_Output_announce,python3 - fix installnames in executables,build,CUS,5)
-	cd $(python3_fw_prefix)/Versions/$(python3_PYMAJOR).$(python3_PYMINOR)/bin ; \
-	for file in python$(python3_PYMAJOR).$(python3_PYMINOR) \
-	            python$(python3_PYMAJOR).$(python3_PYMINOR)m \
-	            pythonw$(python3_PYMAJOR).$(python3_PYMINOR) ; do \
+	cd $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin ; \
+	for file in python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
+	            python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m \
+	            pythonw$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) ; do \
 	install_name_tool -change \
-		$(python3_fw_prefix)/Versions/$(python3_PYMAJOR).$(python3_PYMINOR)/LibreOfficePython \
+		$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/LibreOfficePython \
 		@executable_path/../LibreOfficePython $$file ; done
 	touch $@
 

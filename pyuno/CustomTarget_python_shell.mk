@@ -29,13 +29,11 @@ $(eval $(call gb_CustomTarget_CustomTarget,pyuno/python_shell))
 $(call gb_CustomTarget_get_target,pyuno/python_shell) : \
     $(call gb_CustomTarget_get_workdir,pyuno/python_shell)/python.sh
 
-include $(OUTDIR)/inc/pyversion.Makefile
-
 ifeq ($(OS),MACOSX)
-pyuno_PYTHON_SHELL_VERSION:=$(PYMAJOR).$(PYMINOR)
+pyuno_PYTHON_SHELL_VERSION:=$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)
 pyuno_PYTHON_SHELL_STRIPRULE:=-e '/^NONMACSECTION/,/^MACSECTION/d'
 else
-pyuno_PYTHON_SHELL_VERSION:=$(PYVERSION)
+pyuno_PYTHON_SHELL_VERSION:=$(PYTHON_VERSION)
 pyuno_PYTHON_SHELL_STRIPRULE:=-e '/^NONMACSECTION/d' -e '/^MACSECTION/,$$d'
 endif
 
