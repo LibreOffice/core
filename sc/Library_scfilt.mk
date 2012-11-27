@@ -65,6 +65,7 @@ $(eval $(call gb_Library_use_libraries,scfilt,\
 ))
 
 $(eval $(call gb_Library_use_externals,scfilt,\
+	zlib \
 	orcus \
 ))
 
@@ -221,5 +222,11 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/oox/worksheetsettings \
 	sc/source/filter/orcus/orcusfiltersimpl \
 ))
+
+ifeq ($(SYSTEM_ZLIB),YES)
+$(eval $(call gb_Library_add_defs,scfilt,\
+	-DSYSTEM_ZLIB \
+))
+endif
 
 # vim: set noet sw=4 ts=4:

@@ -18,6 +18,10 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,zlib,\
 	UnpackedTarball/zlib/compress \
 	UnpackedTarball/zlib/crc32 \
 	UnpackedTarball/zlib/deflate \
+	UnpackedTarball/zlib/gzclose \
+	UnpackedTarball/zlib/gzlib \
+	UnpackedTarball/zlib/gzread \
+	UnpackedTarball/zlib/gzwrite \
 	UnpackedTarball/zlib/inffast \
 	UnpackedTarball/zlib/inflate \
 	UnpackedTarball/zlib/inftrees \
