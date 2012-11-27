@@ -51,8 +51,8 @@ public:
     bool HasFocus() const;
     bool IsCursored() const;
     bool IsSelectable() const;
-    void SetFocus( sal_Bool bFocus);
-    void SetCursored( sal_Bool bCursored );
+    void SetFocus( bool bFocus );
+    void SetCursored( bool bCursored );
     sal_uInt16 GetFlags() const;
     void SetSelectable( bool bSelectable );
 };

@@ -72,7 +72,7 @@ bool SvViewData::IsSelectable() const
     return (nFlags & SVLISTENTRYFLAG_NOT_SELECTABLE) == 0;
 }
 
-void SvViewData::SetFocus( sal_Bool bFocus)
+void SvViewData::SetFocus( bool bFocus )
 {
     if ( !bFocus )
         nFlags &= (~SVLISTENTRYFLAG_FOCUSED);
@@ -80,7 +80,7 @@ void SvViewData::SetFocus( sal_Bool bFocus)
         nFlags |= SVLISTENTRYFLAG_FOCUSED;
 }
 
-void SvViewData::SetCursored( sal_Bool bCursored )
+void SvViewData::SetCursored( bool bCursored )
 {
     if ( !bCursored )
         nFlags &= (~SVLISTENTRYFLAG_CURSORED);
