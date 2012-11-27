@@ -1478,12 +1478,11 @@ endef
 endif # SYSTEM_CURL
 
 # strip because of gb_SPACE
-ifneq ($(strip $(VALGRIND_CFLAGS)),)
+ifeq ($(ENABLE_VALGRIND),TRUE)
 
 define gb_LinkTarget__use_valgrind
 $(call gb_LinkTarget_add_defs,$(1),\
-	-DHAVE_VALGRIND_H \
-	-DHAVE_MEMCHECK_H \
+	-DHAVE_VALGRIND_HEADERS \
 )
 
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1493,13 +1492,13 @@ $(call gb_LinkTarget_set_include,$(1),\
 
 endef
 
-else # !VALGRIND_CFLAGS
+else # !ENABLE_VALGRIND
 
 define gb_LinkTarget__use_valgrind
 
 endef
 
-endif # VALGRIND_CFLAGS
+endif # ENABLE_VALGRIND
 
 ifeq ($(SYSTEM_POPPLER),YES)
 

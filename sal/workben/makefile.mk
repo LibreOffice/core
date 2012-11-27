@@ -96,8 +96,8 @@ APP4DEPN=$(SLB)$/sal.lib
 OBJFILES+=\
     $(OBJ)$/measure_oustrings.obj
 
-.IF "$(HAVE_CALLGRIND)" == "YES"
-CFLAGSCXX+=-DHAVE_CALLGRIND
+.IF "$(ENABLE_VALGRIND)" == "TRUE"
+CFLAGSCXX+=-DHAVE_VALGRIND_HEADERS
 .ENDIF
 
 APP6TARGET=measure_oustrings

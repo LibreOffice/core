@@ -59,8 +59,8 @@
 #include <osl/detail/android-bootstrap.h>
 #endif
 
-#if defined HAVE_VALGRIND_H
-#include <valgrind.h>
+#if defined HAVE_VALGRIND_HEADERS
+#include <valgrind/valgrind.h>
 #else
 #define RUNNING_ON_VALGRIND 0
 #endif

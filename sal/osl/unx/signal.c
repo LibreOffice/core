@@ -76,8 +76,8 @@
 #    define ACT_ABORT   ACT_SYSTEM
 #endif
 
-#if defined(HAVE_MEMCHECK_H)
-#include <memcheck.h>
+#if defined HAVE_VALGRIND_HEADERS
+#include <valgrind/memcheck.h>
 #endif
 
 typedef struct _oslSignalHandlerImpl
@@ -255,7 +255,7 @@ static sal_Bool InitSignal()
     /* Initialize the rest of the signals */
     for (i = 0; i < NoSignals; ++i)
     {
-#if defined(HAVE_MEMCHECK_H)
+#if defined HAVE_VALGRIND_HEADERS
         if (Signals[i].Signal == SIGUSR2 && RUNNING_ON_VALGRIND)
             Signals[i].Action = ACT_IGNORE;
 #endif
@@ -908,7 +908,7 @@ void CallSystemHandler(int Signal)
     }
 }
 
-#if defined(HAVE_MEMCHECK_H)
+#if defined HAVE_VALGRIND_HEADERS
 static void DUMPCURRENTALLOCS()
 {
     VALGRIND_PRINTF( "=== start memcheck dump of active allocations ===\n" );
@@ -965,7 +965,7 @@ void SignalHandlerFunction(int Signal)
             Info.Signal = osl_Signal_Terminate;
             break;
 
-#if defined(HAVE_MEMCHECK_H)
+#if defined HAVE_VALGRIND_HEADERS
         case SIGUSR2:
             if (RUNNING_ON_VALGRIND)
                 DUMPCURRENTALLOCS();

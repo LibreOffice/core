@@ -27,8 +27,8 @@
 
 #include <utility>
 
-#if defined(HAVE_MEMCHECK_H)
-#include <memcheck.h>
+#if defined HAVE_VALGRIND_HEADERS
+#include <valgrind/memcheck.h>
 #endif
 
 
@@ -896,7 +896,7 @@ sal_Bool Bitmap::ImplWriteDIBPalette( SvStream& rOStm, BitmapReadAccess& rAcc )
 
 // ------------------------------------------------------------------
 
-#if defined(HAVE_MEMCHECK_H)
+#if defined HAVE_VALGRIND_HEADERS
 namespace
 {
     void blankExtraSpace(sal_uInt8 *pBits, long nWidth, long nScanlineSize, int nBitCount)
@@ -980,7 +980,7 @@ sal_Bool Bitmap::ImplWriteDIBBits( SvStream& rOStm, BitmapReadAccess& rAcc,
             const long  nWidth = rAcc.Width();
             const long  nHeight = rAcc.Height();
             sal_uInt8*      pBuf = new sal_uInt8[ nAlignedWidth ];
-#if defined(HAVE_MEMCHECK_H)
+#if defined HAVE_VALGRIND_HEADERS
             if (RUNNING_ON_VALGRIND)
                 blankExtraSpace(pBuf, nWidth, nAlignedWidth, discretizeBitcount(nBitCount));
 #endif

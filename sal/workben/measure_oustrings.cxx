@@ -36,7 +36,7 @@
 #include <sstream>
 #include <fstream>
 
-#ifdef HAVE_CALLGRIND
+#if defined HAVE_VALGRIND_HEADERS
 #    include <valgrind/callgrind.h>
 int COUNT = 1;
 #else

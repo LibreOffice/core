@@ -43,8 +43,8 @@
 #include <unx/salinst.h>
 #include <unx/x11/xlimits.hxx>
 
-#if defined(HAVE_MEMCHECK_H)
-#include <memcheck.h>
+#if defined HAVE_VALGRIND_HEADERS
+#include <valgrind/memcheck.h>
 #endif
 
 // -------------
@@ -101,7 +101,7 @@ void X11SalBitmap::ImplRemovedFromCache()
         delete mpDDB, mpDDB = NULL;
 }
 
-#if defined(HAVE_MEMCHECK_H)
+#if defined HAVE_VALGRIND_HEADERS
 namespace
 {
     void blankExtraSpace(BitmapBuffer* pDIB)
@@ -192,7 +192,7 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
             try
             {
                 pDIB->mpBits = new sal_uInt8[ pDIB->mnScanlineSize * pDIB->mnHeight ];
-#if defined(HAVE_MEMCHECK_H)
+#if defined HAVE_VALGRIND_HEADERS
                 if (RUNNING_ON_VALGRIND)
                     blankExtraSpace(pDIB);
 #endif
@@ -540,7 +540,7 @@ XImage* X11SalBitmap::ImplCreateXImage(
 
             if( pDstBuf && pDstBuf->mpBits )
             {
-#if defined(HAVE_MEMCHECK_H)
+#if defined HAVE_VALGRIND_HEADERS
                 if (RUNNING_ON_VALGRIND)
                     blankExtraSpace(pDstBuf);
 #endif
@@ -718,7 +718,7 @@ bool X11SalBitmap::Create( const SalBitmap& rSSalBmp )
         try
         {
             mpDIB->mpBits = new sal_uInt8[ mpDIB->mnScanlineSize * mpDIB->mnHeight ];
-#if defined(HAVE_MEMCHECK_H)
+#if defined HAVE_VALGRIND_HEADERS
             if (RUNNING_ON_VALGRIND)
                 blankExtraSpace(mpDIB);
 #endif

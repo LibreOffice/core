@@ -5074,24 +5074,20 @@ AC_SUBST(ALIGNOF_LONG)
 AC_SUBST(ALIGNOF_DOUBLE)
 
 dnl ===================================================================
-dnl Check if valgrind.h is available
+dnl Check if valgrind headers are available
 dnl ===================================================================
-if test "$cross_compiling" != "yes" -a -n "$ENABLE_DBGUTIL" -a \
-        -z "$VALGRIND_CFLAGS"; then
-    dnl Test $prefix (currently only testing for /usr and /usr/local)
-    dnl so that VALGRIND_CFLAGS = -I$prefix/include/valgrind
+if test "$cross_compiling" = yes -o "$ENABLE_DBGUTIL" != TRUE; then
+    ENABLE_VALGRIND=FALSE
+else
     prev_cppflags=$CPPFLAGS
-    CPPFLAGS="-I/usr/include/valgrind"
-    AC_CHECK_HEADER([valgrind.h], [VALGRIND_CFLAGS=$CPPFLAGS], [unset ac_cv_header_valgrind_h])
-    if test -z "$VALGRIND_CFLAGS"; then
-        CPPFLAGS="-I/usr/local/include/valgrind"
-        AC_CHECK_HEADER([valgrind.h], [VALGRIND_CFLAGS=$CPPFLAGS], [])
-    fi
-    if test -n "$VALGRIND_CFLAGS"; then
-        CPPFLAGS=$VALGRIND_CFLAGS
-        AC_CHECK_HEADER([memcheck.h], [], [VALGRIND_CFLAGS=""])
-    fi
+    CPPFLAGS="$CPPFLAGS $VALGRIND_CFLAGS"
+    AC_CHECK_HEADER([valgrind/valgrind.h],
+        [ENABLE_VALGRIND=TRUE],[ENABLE_VALGRIND=FALSE])
     CPPFLAGS=$prev_cppflags
+fi
+AC_SUBST([ENABLE_VALGRIND])
+if test "$ENABLE_VALGRIND" = FALSE; then
+    VALGRIND_CFLAGS=
 fi
 AC_SUBST([VALGRIND_CFLAGS])
 

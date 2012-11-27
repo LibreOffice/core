@@ -53,14 +53,22 @@ else
 # create a symlink "LO_lib" because the .so are in a directory with platform
 # specific name like build/lib.linux-x86_64-3.3
 
+python3_cflags =
+ifeq ($(ENABLE_VALGRIND),TRUE)
+    python3_cflags += $(VALGRIND_CFLAGS)
+endif
+ifeq ($(OS),AIX)
+    python3_cflags += -g0
+endif
+
 $(call gb_ExternalProject_get_state_target,python3,build) :
 	cd $(EXTERNAL_WORKDIR) \
 	&& ./configure \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		--with-system-expat \
-		$(if $(strip $(VALGRIND_CFLAGS)),--with-valgrind) \
+		$(if $(filter TRUE,$(ENABLE_VALGRIND)),--with-valgrind) \
 		--prefix=/python-inst \
-		$(if $(filter AIX,$(OS)),--disable-ipv6 --with-threads CFLAGS="-g0") \
+		$(if $(filter AIX,$(OS)),--disable-ipv6 --with-threads) \
 		$(if $(filter WNT-GCC,$(OS)-$(COM)),--with-threads ac_cv_printf_zd_format=no) \
 		$(if $(filter MACOSX,$(OS)), \
 			--enable-universalsdk=$(MACOSX_SDK_PATH) --with-universal-archs=32-bit --enable-framework=/@__________________________________________________OOO --with-framework-name=LibreOfficePython, \
@@ -71,6 +79,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			$(if $(filter YES,$(SYSTEM_EXPAT)),, -I$(OUTDIR)/inc/external/expat) \
 			$(if $(SYSBASE), -I$(SYSBASE)/usr/include) \
 			)" \
+		$(if $(python3_cflags),CFLAGS='$(python3_cflags)') \
 		LDFLAGS="$(strip $(LDFLAGS) \
 			$(if $(filter YES,$(SYSTEM_OPENSSL)),, -L$(OUTDIR)/lib) \
 			$(if $(filter YES,$(SYSTEM_EXPAT)),, -L$(OUTDIR)/lib) \
