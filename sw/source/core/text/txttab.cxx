@@ -28,8 +28,10 @@
 
 
 #include "hintids.hxx"
+#include <comphelper/string.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/tstpitem.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <frmatr.hxx>
 #include <SwPortionHandler.hxx>
@@ -617,14 +619,15 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
     if( rInf.GetFont()->IsPaintBlank() )
     {
         // tabs with filling / filled tabs
-        UniString aTxt = OUString(' ');
-        const KSHORT nCharWidth = rInf.GetTxtSize( aTxt ).Width();
+        const KSHORT nCharWidth = rInf.GetTxtSize(OUString(' ')).Width();
         // robust:
         if( nCharWidth )
         {
             // 6864: always with kerning, also on printer!
             KSHORT nChar = Width() / nCharWidth;
-            rInf.DrawText( aTxt.Fill( nChar, ' ' ), *this, 0, nChar, sal_True );
+            rtl::OUStringBuffer aBuf;
+            comphelper::string::padToLength(aBuf, nChar, ' ');
+            rInf.DrawText(aBuf.makeStringAndClear(), *this, 0, nChar, sal_True);
         }
     }
 
@@ -632,8 +635,7 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
     if( IsFilled() )
     {
         // tabs with filling / filled tabs
-        UniString aTxt = OUString(cFill);
-        const KSHORT nCharWidth = rInf.GetTxtSize( aTxt ).Width();
+        const KSHORT nCharWidth = rInf.GetTxtSize(OUString(cFill)).Width();
         OSL_ENSURE( nCharWidth, "!SwTabPortion::Paint: sophisticated tabchar" );
         // robust:
         if( nCharWidth )
@@ -642,7 +644,9 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
             KSHORT nChar = Width() / nCharWidth;
             if ( cFill == '_' )
                 ++nChar; // to avoid gaps (Bug 13430)
-            rInf.DrawText( aTxt.Fill( nChar, cFill ), *this, 0, nChar, sal_True );
+            rtl::OUStringBuffer aBuf;
+            comphelper::string::padToLength(aBuf, nChar, cFill);
+            rInf.DrawText(aBuf.makeStringAndClear(), *this, 0, nChar, sal_True);
         }
     }
 }
