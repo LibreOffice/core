@@ -156,7 +156,7 @@ MergeDataFile::MergeDataFile(
     std::ifstream aInputStream( rFileName.getStr() );
     if ( !aInputStream.is_open() )
     {
-        printf("Warning : Can't open po path container file");
+        printf("Warning : Can't open po path container file\n");
         return;
     }
     std::string sPoFile;
