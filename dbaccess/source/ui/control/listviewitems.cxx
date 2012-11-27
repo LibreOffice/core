@@ -39,7 +39,7 @@ namespace dbaui
         Font aFont( pView->GetFont());
         aFont.SetWeight(WEIGHT_BOLD);
         pView->Control::SetFont( aFont );
-        _pViewData->aSize = Size(pView->GetTextWidth(GetText()), pView->GetTextHeight());
+        _pViewData->maSize = Size(pView->GetTextWidth(GetText()), pView->GetTextHeight());
         pView->Pop();
     }
 

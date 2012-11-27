@@ -162,7 +162,7 @@ Rectangle OCreationList::GetFocusRect( SvTreeListEntry* _pEntry, long _nLine )
     SvViewDataItem* pItemData = pBitmapItem ? GetViewDataItem( _pEntry, pBitmapItem ) : NULL;
     OSL_ENSURE( pTab && pItemData, "OCreationList::GetFocusRect: could not find the first bitmap item!" );
     if ( pTab && pItemData )
-        aRect.Left() = pTab->GetPos() - pItemData->aSize.Width() / 2;
+        aRect.Left() = pTab->GetPos() - pItemData->maSize.Width() / 2;
 
     // inflate the rectangle a little bit - looks better, too
     aRect.Left() = ::std::max< long >( 0, aRect.Left() - 2 );

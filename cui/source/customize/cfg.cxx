@@ -1377,9 +1377,9 @@ public:
         }
 
         SvViewDataItem* pItem = rOutDev.GetViewDataItem( pEntry, this );
-        nX -= pItem->aSize.Height();
+        nX -= pItem->maSize.Height();
 
-        long nSize = pItem->aSize.Height() / 2;
+        long nSize = pItem->maSize.Height() / 2;
         long nHalfSize = nSize / 2;
         long nY = rPos.Y() + nHalfSize;
 

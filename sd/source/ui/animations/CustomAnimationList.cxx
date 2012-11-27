@@ -241,7 +241,7 @@ void CustomAnimationListEntryItem::InitViewData( SvTreeListBox* pView, SvTreeLis
     Size aSize(pView->GetTextWidth( maDescription ) + 2 * 19, pView->GetTextHeight() );
     if( aSize.Height() < 19 )
         aSize.Height() = 19;
-    pViewData->aSize = aSize;
+    pViewData->maSize = aSize;
 }
 
 // --------------------------------------------------------------------
@@ -252,7 +252,7 @@ void CustomAnimationListEntryItem::Paint( const Point& rPos, SvTreeListBox& rDev
     SvViewDataItem* pViewData = mpParent->GetViewDataItem( pEntry, this );
 
     Point aPos( rPos );
-    Size aSize( pViewData->aSize );
+    Size aSize( pViewData->maSize );
 
     sal_Int16 nNodeType = mpEffect->getNodeType();
     if( nNodeType == EffectNodeType::ON_CLICK )
@@ -394,7 +394,7 @@ void CustomAnimationTriggerEntryItem::InitViewData( SvTreeListBox* pView, SvTree
     Size aSize(pView->GetTextWidth( maDescription ) + 2 * 19, pView->GetTextHeight() );
     if( aSize.Height() < 19 )
         aSize.Height() = 19;
-    pViewData->aSize = aSize;
+    pViewData->maSize = aSize;
 }
 
 // --------------------------------------------------------------------

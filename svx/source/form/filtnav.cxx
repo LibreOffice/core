@@ -1082,7 +1082,7 @@ void FmFilterItemsString::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pE
 
     Size aSize(pView->GetTextWidth(GetText()), pView->GetTextHeight());
     aSize.Width() += nxDBmp;
-    pViewData->aSize = aSize;
+    pViewData->maSize = aSize;
 }
 
 //========================================================================
@@ -1120,7 +1120,7 @@ void FmFilterString::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry,
     Size aSize(pView->GetTextWidth(m_aName), pView->GetTextHeight());
     pView->Control::SetFont( aOldFont );
     aSize.Width() += pView->GetTextWidth(GetText()) + nxD;
-    pViewData->aSize = aSize;
+    pViewData->maSize = aSize;
 }
 
 //------------------------------------------------------------------------
