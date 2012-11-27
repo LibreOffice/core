@@ -83,9 +83,7 @@ namespace cairocanvas
         Window* pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
         if( !pParentWindow )
             throw lang::NoSupportException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                     "Parent window not VCL window, or canvas out-of-process!")),
-                NULL);
+                "Parent window not VCL window, or canvas out-of-process!", NULL);
 
         bool bHasXRender = IsCairoWorking(pParentWindow);
         ENSURE_ARG_OR_THROW( bHasXRender == true,
@@ -146,9 +144,9 @@ namespace cairocanvas
             mbSurfaceDirty);
     }
 
-    ::rtl::OUString SAL_CALL SpriteCanvas::getServiceName(  ) throw (uno::RuntimeException)
+    OUString SAL_CALL SpriteCanvas::getServiceName(  ) throw (uno::RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SPRITECANVAS_SERVICE_NAME ) );
+        return OUString( SPRITECANVAS_SERVICE_NAME );
     }
 
     SurfaceSharedPtr SpriteCanvas::getSurface()
