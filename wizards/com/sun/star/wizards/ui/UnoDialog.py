@@ -17,6 +17,7 @@
 #
 import traceback
 from .PeerConfig import PeerConfig
+from .UIConsts import UIConsts
 from ..common.PropertyNames import PropertyNames
 from ..common.Helper import Helper
 

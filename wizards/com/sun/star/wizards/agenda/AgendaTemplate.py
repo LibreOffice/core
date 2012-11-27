@@ -795,6 +795,15 @@ class Topics(object):
         self.topicItems = {}
         self.firstRowFormat = []
         self.agenda = agenda
+        '''
+        this is a list which traces which topics were written to the document
+        and which not. When a cell needs to be actualized, it is checked that the
+        whole topic is already present in the document, using this vector.
+        The vector contains nulls for topics which were not written, and
+        empty strings for topics which were written (though any other
+        object would also do - i check only if it is a null or not...);
+        '''
+        self.writtenTopics = []
         try:
             Topics.table = self.agenda.getTable(
                 self.agenda.templateConsts.SECTION_TOPICS)
@@ -875,12 +884,11 @@ class Topics(object):
     to the table. 0 or a negative number: no rows added.
     '''
 
-    @classmethod
     def write2(self, topic, data):
-        if topic >= len(self.agenda.writtenTopics):
-            size = topic - len(self.agenda.writtenTopics)
-            self.agenda.writtenTopics += [None] * size
-        self.agenda.writtenTopics.insert(topic, "")
+        if topic >= len(self.writtenTopics):
+            size = topic - len(self.writtenTopics)
+            self.writtenTopics += [None] * size
+        self.writtenTopics.insert(topic, "")
         # make sure threr are enough rows for me...
         rows = self.agenda.getRowCount(Topics.table)
         reqRows = 1 + (topic + 1) * Topics.rowsPerTopic
@@ -911,8 +919,8 @@ class Topics(object):
     '''
 
     def isWritten(self, topic):
-        return (len(self.agenda.writtenTopics) > topic \
-            and self.agenda.writtenTopics[topic] is not None)
+        return (len(self.writtenTopics) > topic \
+            and self.writtenTopics[topic] is not None)
 
     '''rewrites a single cell containing.
     This is used in order to refresh the topic/responsible/duration data
@@ -1013,8 +1021,8 @@ class Topics(object):
                 targetNumOfRows, tableRows.Count - targetNumOfRows)'''
 
         self.formatLastRow()
-        while len(self.agenda.writtenTopics) > topics:
-            del self.agenda.writtenTopics[topics]
+        while len(self.writtenTopics) > topics:
+            del self.writtenTopics[topics]
 
     '''reapply the format of the first (header) row.
     '''
@@ -1044,7 +1052,7 @@ class Topics(object):
         if cell >= 0:
             te = Topics.topicCells[cell]
             if te is not None:
-                te.text = str(value)
+                te.Text = str(value)
             return te
 
         return None

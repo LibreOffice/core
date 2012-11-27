@@ -15,8 +15,7 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from .UnoDialog import UnoDialog
-from .UIConsts import UIConsts
+from .UnoDialog import UnoDialog, UIConsts
 from ..common.Desktop import Desktop
 from ..common.PropertyNames import PropertyNames
 from .event.CommonListener import ItemListenerProcAdapter, \
