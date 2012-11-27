@@ -294,7 +294,7 @@ class AgendaTemplate(TextDocument):
         self.initializeItemsSections()
         self.textSectionHandler = TextSectionHandler(
             self.xTextDocument, self.xTextDocument)
-        self.topics = Topics(self)
+        #self.topics = Topics(self)
 
     '''
     locates the titles (name, location, date, time)
@@ -400,9 +400,9 @@ class AgendaTemplate(TextDocument):
         if d is None or d == "":
             return ""
         date = int(d)
-        year = date / 10000
-        month = (date % 10000) / 100
-        day = date % 100
+        year = int(date / 10000)
+        month = int((date % 10000) / 100)
+        day = int(date % 100)
         dateObject = dateTimeObject(year, month, day)
         return AgendaTemplate.dateUtils.format(
             AgendaTemplate.dateFormat, dateObject)
