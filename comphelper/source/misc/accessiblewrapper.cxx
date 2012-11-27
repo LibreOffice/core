@@ -73,8 +73,8 @@ namespace comphelper
     };
 
     //-------------------------------------------------------------------------
-    OWrappedAccessibleChildrenManager::OWrappedAccessibleChildrenManager( const Reference< XMultiServiceFactory >& _rxORB )
-        :m_xORB( _rxORB )
+    OWrappedAccessibleChildrenManager::OWrappedAccessibleChildrenManager( const Reference< XComponentContext >& _rxContext )
+        :m_xContext( _rxContext )
         ,m_bTransientChildren( sal_True )
     {
     }
@@ -142,7 +142,7 @@ namespace comphelper
         else if ( _bCreate )
         {   // not found in the cache, and allowed to create
             // -> new wrapper
-            xValue = new OAccessibleWrapper( m_xORB, _rxKey, (Reference< XAccessible >)m_aOwningAccessible );
+            xValue = new OAccessibleWrapper( m_xContext, _rxKey, (Reference< XAccessible >)m_aOwningAccessible );
 
             // see if we do cache children
             if ( !m_bTransientChildren )
@@ -298,10 +298,10 @@ namespace comphelper
     //= OAccessibleWrapper (implementation)
     //=========================================================================
     //-------------------------------------------------------------------------
-    OAccessibleWrapper::OAccessibleWrapper( const Reference< XMultiServiceFactory >& _rxORB,
+    OAccessibleWrapper::OAccessibleWrapper( const Reference< XComponentContext >& _rxContext,
             const Reference< XAccessible >& _rxInnerAccessible, const Reference< XAccessible >& _rxParentAccessible )
         :OAccessibleWrapper_Base( )
-        ,OComponentProxyAggregation( _rxORB, Reference< XComponent >( _rxInnerAccessible, UNO_QUERY ) )
+        ,OComponentProxyAggregation( _rxContext, Reference< XComponent >( _rxInnerAccessible, UNO_QUERY ) )
         ,m_xParentAccessible( _rxParentAccessible )
         ,m_xInnerAccessible( _rxInnerAccessible )
     {
@@ -341,7 +341,7 @@ namespace comphelper
     //--------------------------------------------------------------------
     OAccessibleContextWrapper* OAccessibleWrapper::createAccessibleContext( const Reference< XAccessibleContext >& _rxInnerContext )
     {
-        return new OAccessibleContextWrapper( getORB(), _rxInnerContext, this, m_xParentAccessible );
+        return new OAccessibleContextWrapper( getComponentContext(), _rxInnerContext, this, m_xParentAccessible );
     }
 
     //--------------------------------------------------------------------
@@ -369,19 +369,19 @@ namespace comphelper
     //=========================================================================
     //-------------------------------------------------------------------------
     OAccessibleContextWrapperHelper::OAccessibleContextWrapperHelper(
-                const Reference< XMultiServiceFactory >& _rxORB,
+                const Reference< XComponentContext >& _rxContext,
                 ::cppu::OBroadcastHelper& _rBHelper,
                 const Reference< XAccessibleContext >& _rxInnerAccessibleContext,
                 const Reference< XAccessible >& _rxOwningAccessible,
                 const Reference< XAccessible >& _rxParentAccessible )
-        :OComponentProxyAggregationHelper( _rxORB, _rBHelper )
+        :OComponentProxyAggregationHelper( _rxContext, _rBHelper )
         ,m_xInnerContext( _rxInnerAccessibleContext )
         ,m_xOwningAccessible( _rxOwningAccessible )
         ,m_xParentAccessible( _rxParentAccessible )
         ,m_pChildMapper( NULL )
     {
         // initialize the mapper for our children
-        m_pChildMapper = new OWrappedAccessibleChildrenManager( getORB() );
+        m_pChildMapper = new OWrappedAccessibleChildrenManager( getComponentContext() );
         m_pChildMapper->acquire();
 
         // determine if we're allowed to cache children
@@ -526,11 +526,11 @@ namespace comphelper
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( OAccessibleContextWrapper, OAccessibleContextWrapper_CBase, OAccessibleContextWrapperHelper )
 
     //--------------------------------------------------------------------
-    OAccessibleContextWrapper::OAccessibleContextWrapper( const Reference< XMultiServiceFactory >& _rxORB,
+    OAccessibleContextWrapper::OAccessibleContextWrapper( const Reference< XComponentContext >& _rxContext,
             const Reference< XAccessibleContext >& _rxInnerAccessibleContext, const Reference< XAccessible >& _rxOwningAccessible,
             const Reference< XAccessible >& _rxParentAccessible )
         :OAccessibleContextWrapper_CBase( m_aMutex )
-        ,OAccessibleContextWrapperHelper( _rxORB, rBHelper, _rxInnerAccessibleContext, _rxOwningAccessible, _rxParentAccessible )
+        ,OAccessibleContextWrapperHelper( _rxContext, rBHelper, _rxInnerAccessibleContext, _rxOwningAccessible, _rxParentAccessible )
         ,m_nNotifierClient( 0 )
     {
         aggregateProxy( m_refCount, *this );

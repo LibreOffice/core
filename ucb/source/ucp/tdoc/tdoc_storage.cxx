@@ -22,6 +22,7 @@
 #include "com/sun/star/beans/XPropertySet.hpp"
 #include "com/sun/star/embed/ElementModes.hpp"
 #include "com/sun/star/lang/XSingleServiceFactory.hpp"
+#include "comphelper/processfactory.hxx"
 
 #include "tdoc_uri.hxx"
 #include "tdoc_docmgr.hxx"
@@ -184,7 +185,7 @@ StorageElementFactory::createStorage( const rtl::OUString & rUri,
                             || ( eMode == READ_WRITE_CREATE ) );
 
         std::auto_ptr< Storage > xElement(
-            new Storage( m_xSMgr, this, aUriKey, xParentStorage, xStorage ) );
+            new Storage( comphelper::getComponentContext(m_xSMgr), this, aUriKey, xParentStorage, xStorage ) );
 
         aIt = m_aMap.insert(
             StorageMap::value_type(
@@ -234,7 +235,7 @@ StorageElementFactory::createStorage( const rtl::OUString & rUri,
         }
 
         aIt->second
-            = new Storage( m_xSMgr, this, aUriKey, xParentStorage, xStorage );
+            = new Storage( comphelper::getComponentContext(m_xSMgr), this, aUriKey, xParentStorage, xStorage );
         aIt->second->m_aContainerIt = aIt;
         return aIt->second;
     }
@@ -312,7 +313,7 @@ StorageElementFactory::createOutputStream( const rtl::OUString & rUri,
     //       read-only instance!)
     return uno::Reference< io::XOutputStream >(
         new OutputStream(
-            m_xSMgr, rUri, xParentStorage, xStream->getOutputStream() ) );
+            comphelper::getComponentContext(m_xSMgr), rUri, xParentStorage, xStream->getOutputStream() ) );
 }
 
 //=========================================================================
@@ -352,7 +353,7 @@ StorageElementFactory::createStream( const rtl::OUString & rUri,
     }
 
     return uno::Reference< io::XStream >(
-        new Stream( m_xSMgr, rUri, xParentStorage, xStream ) );
+        new Stream( comphelper::getComponentContext(m_xSMgr), rUri, xParentStorage, xStream ) );
 }
 
 //=========================================================================

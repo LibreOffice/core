@@ -23,7 +23,7 @@
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/chart/XComplexDescriptionAccess.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
-#include <com/sun/star/reflection/XProxyFactory.hpp>
+#include <com/sun/star/reflection/ProxyFactory.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -354,9 +354,7 @@ void SAL_CALL ImportDocumentHandler::initialize( const uno::Sequence< uno::Any >
 
     m_aArguments = m_xDatabaseDataProvider->detectArguments(NULL);
 
-    uno::Reference< reflection::XProxyFactory > xProxyFactory( m_xContext->getServiceManager()->createInstanceWithContext(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.ProxyFactory")),m_xContext),
-        uno::UNO_QUERY);
+    uno::Reference< reflection::XProxyFactory > xProxyFactory = reflection::ProxyFactory::create( m_xContext );
     m_xProxy = xProxyFactory->createProxy(m_xDelegatee.get());
     ::comphelper::query_aggregation(m_xProxy,m_xDelegatee);
     m_xTypeProvider.set(m_xDelegatee,uno::UNO_QUERY);

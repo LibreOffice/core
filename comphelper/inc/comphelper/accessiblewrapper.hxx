@@ -76,7 +76,7 @@ namespace comphelper
 
     public:
         /** ctor
-            @param _rxORB
+            @param _rxContext
                 a service factory
 
             @param _rxInnerAccessible
@@ -86,7 +86,7 @@ namespace comphelper
                 The XAccessible which is our parent
         */
         OAccessibleWrapper(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxInnerAccessible,
             const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParentAccessible
         );
@@ -160,7 +160,7 @@ namespace comphelper
     protected:
         /** ctor
 
-            @param _rxORB
+            @param _rxContext
                 a service factory
 
             @param _rxInnerAccessibleContext
@@ -176,7 +176,7 @@ namespace comphelper
                 The XAccessible to return in the getAccessibleParent call
         */
         OAccessibleContextWrapperHelper(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
             ::cppu::OBroadcastHelper& _rBHelper,
             const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >& _rxInnerAccessibleContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxOwningAccessible,
@@ -247,7 +247,7 @@ namespace comphelper
     public:
         /** ctor
 
-            @param _rxORB
+            @param _rxContext
                 a service factory
 
             @param _rxInnerAccessibleContext
@@ -263,7 +263,7 @@ namespace comphelper
                 The XAccessible to return in the getAccessibleParent call
         */
         OAccessibleContextWrapper(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >& _rxInnerAccessibleContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxOwningAccessible,
             const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParentAccessible
@@ -330,8 +330,8 @@ namespace comphelper
     class COMPHELPER_DLLPUBLIC OWrappedAccessibleChildrenManager : public OWrappedAccessibleChildrenManager_Base
     {
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                                m_xORB;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+                                m_xContext;
         ::com::sun::star::uno::WeakReference< ::com::sun::star::accessibility::XAccessible >
                                 m_aOwningAccessible;    // the XAccessible which belongs to the XAccessibleContext which we work for
         AccessibleMap           m_aChildrenMap;         // for caching children
@@ -340,7 +340,7 @@ namespace comphelper
     public:
         /// ctor
         OWrappedAccessibleChildrenManager(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext
         );
 
         /** specifies if the children are to be consideren transient (i.e.: not cached)

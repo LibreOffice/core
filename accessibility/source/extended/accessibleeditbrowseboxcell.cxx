@@ -46,7 +46,7 @@ namespace accessibility
                 sal_Int32 _nRowPos,
                 sal_uInt16 _nColPos)
         :AccessibleBrowseBoxCell( _rxParent, _rBrowseBox, _xFocusWindow, _nRowPos, _nColPos )
-        ,OAccessibleContextWrapperHelper( ::comphelper::getProcessServiceFactory(), rBHelper, _xControlChild, _rxOwningAccessible, _rxParent )
+        ,OAccessibleContextWrapperHelper( ::comphelper::getProcessComponentContext(), rBHelper, _xControlChild, _rxOwningAccessible, _rxParent )
     {
         aggregateProxy( m_refCount, *this );
     }

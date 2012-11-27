@@ -70,7 +70,7 @@ using namespace com::sun::star;
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <map>
-#include <com/sun/star/reflection/XProxyFactory.hpp>
+#include <com/sun/star/reflection/ProxyFactory.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
@@ -156,11 +156,7 @@ DocObjectWrapper::DocObjectWrapper( SbModule* pVar ) : m_pMod( pVar ), mName( pV
             {
                 try
                 {
-                    Reference< XComponentContext > xCtx(
-                        comphelper::getProcessComponentContext() );
-                    Reference< XMultiComponentFactory > xMFac(
-                        xCtx->getServiceManager() );
-                    Reference< XProxyFactory > xProxyFac( xMFac->createInstanceWithContext( OUString( "com.sun.star.reflection.ProxyFactory"  ), xCtx  ), UNO_QUERY_THROW );
+                    Reference< XProxyFactory > xProxyFac = ProxyFactory::create( comphelper::getProcessComponentContext() );
                     m_xAggProxy = xProxyFac->createProxy( xIf );
                 }
                 catch(const Exception& )

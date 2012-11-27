@@ -18,7 +18,7 @@
  */
 
 #include <comphelper/proxyaggregation.hxx>
-#include <com/sun/star/reflection/XProxyFactory.hpp>
+#include <com/sun/star/reflection/ProxyFactory.hpp>
 
 //.............................................................................
 namespace comphelper
@@ -33,8 +33,8 @@ namespace comphelper
     //= OProxyAggregation
     //=========================================================================
     //-------------------------------------------------------------------------
-    OProxyAggregation::OProxyAggregation( const Reference< XMultiServiceFactory >& _rxORB )
-        :m_xORB( _rxORB )
+    OProxyAggregation::OProxyAggregation( const Reference< XComponentContext >& _rxContext )
+        :m_xContext( _rxContext )
     {
     }
 
@@ -43,32 +43,25 @@ namespace comphelper
             ::cppu::OWeakObject& _rDelegator )
     {
         // first a factory for the proxy
-        Reference< XProxyFactory > xFactory(
-            m_xORB->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.reflection.ProxyFactory" ) ) ),
-            UNO_QUERY
-        );
-        OSL_ENSURE( xFactory.is(), "OProxyAggregation::baseAggregateProxyFor: could not create a proxy factory!" );
+        Reference< XProxyFactory > xFactory = ProxyFactory::create( m_xContext );
 
         // then the proxy itself
-        if ( xFactory.is() )
-        {
-            { // i36686 OJ: achieve the desctruction of the tempoary -> otherwise it leads to _rRefCount -= 2
-                m_xProxyAggregate = xFactory->createProxy( _rxComponent );
-            }
-            if ( m_xProxyAggregate.is() )
-                m_xProxyAggregate->queryAggregation( ::getCppuType( &m_xProxyTypeAccess ) ) >>= m_xProxyTypeAccess;
-
-            // aggregate the proxy
-            osl_atomic_increment( &_rRefCount );
-            if ( m_xProxyAggregate.is() )
-            {
-                // At this point in time, the proxy has a ref count of exactly two - in m_xControlContextProxy,
-                // and in m_xProxyTypeAccess.
-                // Remember to _not_ reset these members unless the delegator of the proxy has been reset, too!
-                m_xProxyAggregate->setDelegator( _rDelegator );
-            }
-            osl_atomic_decrement( &_rRefCount );
+        { // i36686 OJ: achieve the desctruction of the tempoary -> otherwise it leads to _rRefCount -= 2
+            m_xProxyAggregate = xFactory->createProxy( _rxComponent );
         }
+        if ( m_xProxyAggregate.is() )
+            m_xProxyAggregate->queryAggregation( ::getCppuType( &m_xProxyTypeAccess ) ) >>= m_xProxyTypeAccess;
+
+        // aggregate the proxy
+        osl_atomic_increment( &_rRefCount );
+        if ( m_xProxyAggregate.is() )
+        {
+            // At this point in time, the proxy has a ref count of exactly two - in m_xControlContextProxy,
+            // and in m_xProxyTypeAccess.
+            // Remember to _not_ reset these members unless the delegator of the proxy has been reset, too!
+            m_xProxyAggregate->setDelegator( _rDelegator );
+        }
+        osl_atomic_decrement( &_rRefCount );
     }
 
     //-------------------------------------------------------------------------
@@ -104,12 +97,12 @@ namespace comphelper
     //= OComponentProxyAggregationHelper
     //=========================================================================
     //-------------------------------------------------------------------------
-    OComponentProxyAggregationHelper::OComponentProxyAggregationHelper( const Reference< XMultiServiceFactory >& _rxORB,
+    OComponentProxyAggregationHelper::OComponentProxyAggregationHelper( const Reference< XComponentContext >& _rxContext,
         ::cppu::OBroadcastHelper& _rBHelper )
-        :OProxyAggregation( _rxORB )
+        :OProxyAggregation( _rxContext )
         ,m_rBHelper( _rBHelper )
     {
-        OSL_ENSURE( _rxORB.is(), "OComponentProxyAggregationHelper::OComponentProxyAggregationHelper: invalid arguments!" );
+        OSL_ENSURE( _rxContext.is(), "OComponentProxyAggregationHelper::OComponentProxyAggregationHelper: invalid arguments!" );
     }
 
     //-------------------------------------------------------------------------
@@ -192,10 +185,10 @@ namespace comphelper
     //= OComponentProxyAggregation
     //=========================================================================
     //-------------------------------------------------------------------------
-    OComponentProxyAggregation::OComponentProxyAggregation( const Reference< XMultiServiceFactory >& _rxORB,
+    OComponentProxyAggregation::OComponentProxyAggregation( const Reference< XComponentContext >& _rxContext,
             const Reference< XComponent >& _rxComponent )
         :OComponentProxyAggregation_CBase( m_aMutex )
-        ,OComponentProxyAggregationHelper( _rxORB, rBHelper )
+        ,OComponentProxyAggregationHelper( _rxContext, rBHelper )
     {
         OSL_ENSURE( _rxComponent.is(), "OComponentProxyAggregation::OComponentProxyAggregation: accessible is no XComponent!" );
         if ( _rxComponent.is() )

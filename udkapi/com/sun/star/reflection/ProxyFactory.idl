@@ -44,12 +44,7 @@
     depends on your programming language.
     Thus this service is deprecated, too.
 */
-published service ProxyFactory
-{
-    /** Factory interface to produce proxies
-    */
-    interface com::sun::star::reflection::XProxyFactory;
-};
+published service ProxyFactory : XProxyFactory;
 
 
 }; }; }; };

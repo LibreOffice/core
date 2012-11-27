@@ -381,7 +381,7 @@ namespace connectivity
                             xDesktop->addTerminateListener(s_xTerminateListener);
                         }
                     }
-                    Reference< XComponent> xIfc = new OHsqlConnection( this, xOrig, m_xFactory );
+                    Reference< XComponent> xIfc = new OHsqlConnection( this, xOrig, comphelper::getComponentContext(m_xFactory) );
                     xConnection.set(xIfc,UNO_QUERY);
                     m_aConnections.push_back(TWeakPair(WeakReferenceHelper(xOrig),TWeakConnectionPair(sKey,TWeakRefPair(WeakReferenceHelper(xConnection),WeakReferenceHelper()))));
 

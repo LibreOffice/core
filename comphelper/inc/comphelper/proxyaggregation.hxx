@@ -82,16 +82,16 @@ namespace comphelper
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >             m_xProxyAggregate;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider >           m_xProxyTypeAccess;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
 
     protected:
-        inline const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& getORB()
+        inline const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& getComponentContext()
         {
-            return m_xORB;
+            return m_xContext;
         }
 
     protected:
-        OProxyAggregation( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB );
+        OProxyAggregation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext );
         ~OProxyAggregation();
 
         /// to be called from within your ctor
@@ -138,7 +138,7 @@ namespace comphelper
 
     protected:
         // OProxyAggregation
-        using OProxyAggregation::getORB;
+        using OProxyAggregation::getComponentContext;
 
         // XInterface
         ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException);
@@ -148,7 +148,7 @@ namespace comphelper
 
     protected:
         OComponentProxyAggregationHelper(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
             ::cppu::OBroadcastHelper& _rBHelper
         );
         virtual ~OComponentProxyAggregationHelper( );
@@ -183,7 +183,7 @@ namespace comphelper
     {
     protected:
         OComponentProxyAggregation(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _rxComponent
         );
 

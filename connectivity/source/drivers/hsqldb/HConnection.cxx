@@ -53,6 +53,7 @@ using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::uno::XComponentContext;
 using ::com::sun::star::sdbc::XStatement;
 using ::com::sun::star::sdbc::XConnection;
 using ::com::sun::star::sdbcx::XDataDefinitionSupplier;
@@ -118,15 +119,15 @@ namespace connectivity { namespace hsqldb
     }
     // -----------------------------------------------------------------------------
     OHsqlConnection::OHsqlConnection( const Reference< XDriver > _rxDriver,
-        const Reference< XConnection >& _xConnection ,const Reference< XMultiServiceFactory>& _xORB )
+        const Reference< XConnection >& _xConnection ,const Reference< XComponentContext >& _rxContext )
         :OHsqlConnection_BASE( m_aMutex )
         ,m_aFlushListeners( m_aMutex )
         ,m_xDriver( _rxDriver )
-        ,m_xORB( _xORB )
+        ,m_xContext( _rxContext )
         ,m_bIni(true)
         ,m_bReadOnly(false)
     {
-        setDelegation(_xConnection,_xORB,m_refCount);
+        setDelegation(_xConnection,_rxContext,m_refCount);
     }
     // -----------------------------------------------------------------------------
     OHsqlConnection::~OHsqlConnection()
@@ -343,8 +344,8 @@ namespace connectivity { namespace hsqldb
         {
             // create a graphic provider
             Reference< XGraphicProvider > xProvider;
-            if ( m_xORB.is() )
-                xProvider.set( GraphicProvider::create(::comphelper::getComponentContext(m_xORB)) );
+            if ( m_xContext.is() )
+                xProvider.set( GraphicProvider::create(m_xContext) );
 
             // assemble the image URL
             ::rtl::OUStringBuffer aImageURL;

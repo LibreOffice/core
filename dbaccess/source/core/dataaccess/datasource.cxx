@@ -39,7 +39,7 @@
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/reflection/XProxyFactory.hpp>
+#include <com/sun/star/reflection/ProxyFactory.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
 #include <com/sun/star/sdbc/XDriverManager.hpp>
@@ -313,7 +313,7 @@ protected:
     ~OSharedConnectionManager();
 
 public:
-    OSharedConnectionManager(const Reference< XMultiServiceFactory >& _rxServiceFactory);
+    OSharedConnectionManager(const Reference< XComponentContext >& _rxContext);
 
     void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(RuntimeException);
     Reference<XConnection> getConnection(   const rtl::OUString& url,
@@ -325,10 +325,10 @@ public:
 };
 
 DBG_NAME(OSharedConnectionManager)
-OSharedConnectionManager::OSharedConnectionManager(const Reference< XMultiServiceFactory >& _rxServiceFactory)
+OSharedConnectionManager::OSharedConnectionManager(const Reference< XComponentContext >& _rxContext)
 {
     DBG_CTOR(OSharedConnectionManager,NULL);
-    m_xProxyFactory.set(_rxServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.ProxyFactory"))),UNO_QUERY);
+    m_xProxyFactory.set( ProxyFactory::create( _rxContext ) );
 }
 
 OSharedConnectionManager::~OSharedConnectionManager()
@@ -1212,7 +1212,7 @@ Reference< XConnection > ODatabaseSource::getConnection(const rtl::OUString& use
     { // create a new proxy for the connection
         if ( !m_pImpl->m_xSharedConnectionManager.is() )
         {
-            m_pImpl->m_pSharedConnectionManager = new OSharedConnectionManager( m_pImpl->m_aContext.getLegacyServiceFactory() );
+            m_pImpl->m_pSharedConnectionManager = new OSharedConnectionManager( m_pImpl->m_aContext.getUNOContext() );
             m_pImpl->m_xSharedConnectionManager = m_pImpl->m_pSharedConnectionManager;
         }
         xConn = m_pImpl->m_pSharedConnectionManager->getConnection(

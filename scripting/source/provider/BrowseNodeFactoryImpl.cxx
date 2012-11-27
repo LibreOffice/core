@@ -27,7 +27,7 @@
 
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/reflection/XProxyFactory.hpp>
+#include <com/sun/star/reflection/ProxyFactory.hpp>
 
 #include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
 #include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.hpp>
@@ -397,11 +397,8 @@ public:
     // Use proxy factory service to create aggregatable proxy.
         try
         {
-            Reference< lang::XMultiComponentFactory > xMFac( m_xCtx->getServiceManager(), UNO_QUERY_THROW );
-            Reference< reflection::XProxyFactory > xProxyFac(
-                xMFac->createInstanceWithContext(
-                        rtl::OUString( "com.sun.star.reflection.ProxyFactory"  ),
-                        m_xCtx  ), UNO_QUERY_THROW );
+            Reference< reflection::XProxyFactory > xProxyFac =
+                reflection::ProxyFactory::create( m_xCtx );
             m_xAggProxy = xProxyFac->createProxy( m_xWrappedBrowseNode );
         }
         catch(  uno::Exception& )

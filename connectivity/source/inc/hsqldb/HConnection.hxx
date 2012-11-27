@@ -62,7 +62,7 @@ namespace connectivity
         private:
             ::cppu::OInterfaceContainerHelper                                                           m_aFlushListeners;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >                         m_xDriver;
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >            m_xORB;
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >                m_xContext;
             bool                                                                                        m_bIni;
             bool                                                                                        m_bReadOnly;
 
@@ -74,7 +74,7 @@ namespace connectivity
             OHsqlConnection(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > _rxDriver,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _xORB
+                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext
             );
 
             // XServiceInfo

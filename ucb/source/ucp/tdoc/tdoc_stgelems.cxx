@@ -27,7 +27,7 @@
  *************************************************************************/
 
 #include "com/sun/star/lang/DisposedException.hpp"
-#include "com/sun/star/reflection/XProxyFactory.hpp"
+#include "com/sun/star/reflection/ProxyFactory.hpp"
 
 #include "tdoc_uri.hxx"
 
@@ -63,7 +63,7 @@ ParentStorageHolder::ParentStorageHolder(
 //=========================================================================
 //=========================================================================
 
-Storage::Storage( const uno::Reference< lang::XMultiServiceFactory > & xSMgr,
+Storage::Storage( const uno::Reference< uno::XComponentContext > & rxContext,
                   const rtl::Reference< StorageElementFactory > & xFactory,
                   const rtl::OUString & rUri,
                   const uno::Reference< embed::XStorage > & xParentStorage,
@@ -88,15 +88,9 @@ Storage::Storage( const uno::Reference< lang::XMultiServiceFactory > & xSMgr,
     // Use proxy factory service to create aggregatable proxy.
     try
     {
-        uno::Reference< reflection::XProxyFactory > xProxyFac(
-            xSMgr->createInstance(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.reflection.ProxyFactory" ) ) ),
-            uno::UNO_QUERY );
-        if ( xProxyFac.is() )
-        {
-            m_xAggProxy = xProxyFac->createProxy( m_xWrappedStorage );
-        }
+        uno::Reference< reflection::XProxyFactory > xProxyFac =
+            reflection::ProxyFactory::create( rxContext );
+        m_xAggProxy = xProxyFac->createProxy( m_xWrappedStorage );
     }
     catch ( uno::Exception const & )
     {
@@ -576,7 +570,7 @@ void SAL_CALL Storage::revert()
 //=========================================================================
 
 OutputStream::OutputStream(
-            const uno::Reference< lang::XMultiServiceFactory > & xSMgr,
+            const uno::Reference< uno::XComponentContext > & rxContext,
             const rtl::OUString & rUri,
             const uno::Reference< embed::XStorage >  & xParentStorage,
             const uno::Reference< io::XOutputStream > & xStreamToWrap )
@@ -597,15 +591,9 @@ OutputStream::OutputStream(
     // Use proxy factory service to create aggregatable proxy.
     try
     {
-        uno::Reference< reflection::XProxyFactory > xProxyFac(
-            xSMgr->createInstance(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.reflection.ProxyFactory" ) ) ),
-            uno::UNO_QUERY );
-        if ( xProxyFac.is() )
-        {
-            m_xAggProxy = xProxyFac->createProxy( m_xWrappedStream );
-        }
+        uno::Reference< reflection::XProxyFactory > xProxyFac =
+            reflection::ProxyFactory::create( rxContext );
+        m_xAggProxy = xProxyFac->createProxy( m_xWrappedStream );
     }
     catch ( uno::Exception const & )
     {
@@ -774,7 +762,7 @@ OutputStream::removeEventListener(
 //=========================================================================
 
 Stream::Stream(
-            const uno::Reference< lang::XMultiServiceFactory > & xSMgr,
+            const uno::Reference< uno::XComponentContext > & rxContext,
             const rtl::OUString & rUri,
             const uno::Reference< embed::XStorage >  & xParentStorage,
             const uno::Reference< io::XStream > & xStreamToWrap )
@@ -798,15 +786,9 @@ Stream::Stream(
     // Use proxy factory service to create aggregatable proxy.
     try
     {
-        uno::Reference< reflection::XProxyFactory > xProxyFac(
-            xSMgr->createInstance(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.reflection.ProxyFactory" ) ) ),
-            uno::UNO_QUERY );
-        if ( xProxyFac.is() )
-        {
-            m_xAggProxy = xProxyFac->createProxy( m_xWrappedStream );
-        }
+        uno::Reference< reflection::XProxyFactory > xProxyFac =
+            reflection::ProxyFactory::create( rxContext );
+        m_xAggProxy = xProxyFac->createProxy( m_xWrappedStream );
     }
     catch ( uno::Exception const & )
     {

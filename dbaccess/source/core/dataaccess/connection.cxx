@@ -34,7 +34,7 @@
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
-#include <com/sun/star/reflection/XProxyFactory.hpp>
+#include <com/sun/star/reflection/ProxyFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbmetadata.hxx>
@@ -305,8 +305,8 @@ OConnection::OConnection(ODatabaseSource& _rDB
 
     try
     {
-        Reference< XProxyFactory > xProxyFactory(
-                _rxORB->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.ProxyFactory"))),UNO_QUERY);
+        Reference< XProxyFactory > xProxyFactory =
+                ProxyFactory::create( m_aContext.getUNOContext() );
         Reference<XAggregation> xAgg = xProxyFactory->createProxy(_rxMaster.get());
         setDelegation(xAgg,m_refCount);
         OSL_ENSURE(m_xConnection.is(), "OConnection::OConnection : invalid master connection !");

@@ -96,7 +96,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/loader,
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/reflection,\
 	CoreReflection \
-	ProxyFactory \
 	TypeDescriptionManager \
 	TypeDescriptionProvider \
 ))
@@ -145,6 +144,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/io,\
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/reflection,\
 	theCoreReflection \
+	ProxyFactory \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/registry,\
 	ImplementationRegistration \

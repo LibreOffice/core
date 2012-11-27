@@ -48,12 +48,12 @@ namespace
         sal_Int32 m_nIndexInParent;
     public:
         OToolBoxWindowItemContext(sal_Int32 _nIndexInParent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >& _rxInnerAccessibleContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxOwningAccessible,
             const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParentAccessible
             ) : OAccessibleContextWrapper(
-            _rxORB,
+            _rxContext,
             _rxInnerAccessibleContext,
             _rxOwningAccessible,
             _rxParentAccessible     )
@@ -93,11 +93,11 @@ namespace
 
     public:
         OToolBoxWindowItem(sal_Int32 _nIndexInParent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxInnerAccessible,
             const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParentAccessible
             ) : OAccessibleWrapper(
-            _rxORB,
+            _rxContext,
             _rxInnerAccessible,
             _rxParentAccessible)
             ,m_nIndexInParent(_nIndexInParent)
@@ -127,7 +127,7 @@ namespace
     OAccessibleContextWrapper* OToolBoxWindowItem::createAccessibleContext(
             const Reference< XAccessibleContext >& _rxInnerContext )
     {
-        return new OToolBoxWindowItemContext( m_nIndexInParent,getORB(), _rxInnerContext, this, getParent() );
+        return new OToolBoxWindowItemContext( m_nIndexInParent, getComponentContext(), _rxInnerContext, this, getParent() );
     }
 
     //--------------------------------------------------------------------
@@ -717,7 +717,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleChild( sal
             Reference< XAccessible> xParent = pChild;
             if ( pItemWindow )
             {
-                xChild = new OToolBoxWindowItem(0,::comphelper::getProcessServiceFactory(),pItemWindow->GetAccessible(),xParent);
+                xChild = new OToolBoxWindowItem(0,::comphelper::getProcessComponentContext(),pItemWindow->GetAccessible(),xParent);
                 pItemWindow->SetAccessible(xChild);
                 pChild->SetChild( xChild );
             }

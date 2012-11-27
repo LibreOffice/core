@@ -81,7 +81,7 @@ class Storage : public StorageUNOBase, public ParentStorageHolder
 public:
     Storage(
         const com::sun::star::uno::Reference<
-            com::sun::star::lang::XMultiServiceFactory > & xSMgr,
+            com::sun::star::uno::XComponentContext > & rxContext,
         const rtl::Reference< StorageElementFactory >  & xFactory,
         const rtl::OUString & rUri,
         const com::sun::star::uno::Reference<
@@ -316,7 +316,7 @@ class OutputStream : public OutputStreamUNOBase, public ParentStorageHolder
 public:
     OutputStream(
         const com::sun::star::uno::Reference<
-            com::sun::star::lang::XMultiServiceFactory > & xSMgr,
+            com::sun::star::uno::XComponentContext > & rxContext,
         const rtl::OUString & rUri,
         const com::sun::star::uno::Reference<
             com::sun::star::embed::XStorage >  & xParentStorage,
@@ -398,7 +398,7 @@ class Stream : public StreamUNOBase, public ParentStorageHolder
 public:
     Stream(
         const com::sun::star::uno::Reference<
-            com::sun::star::lang::XMultiServiceFactory > & xSMgr,
+            com::sun::star::uno::XComponentContext > & rxContext,
         const rtl::OUString & rUri,
         const com::sun::star::uno::Reference<
             com::sun::star::embed::XStorage >  & xParentStorage,

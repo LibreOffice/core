@@ -24,7 +24,7 @@
 #include <comphelper/uno3.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <com/sun/star/reflection/XProxyFactory.hpp>
+#include <com/sun/star/reflection/ProxyFactory.hpp>
 #include <rtl/digest.h>
 #include <algorithm>
 #include <string.h>
@@ -65,7 +65,7 @@ void OConnectionWrapper::setDelegation(Reference< XAggregation >& _rxProxyConnec
 }
 // -----------------------------------------------------------------------------
 void OConnectionWrapper::setDelegation(const Reference< XConnection >& _xConnection
-                                       ,const Reference< XMultiServiceFactory>& _xORB
+                                       ,const Reference< XComponentContext>& _rxContext
                                        ,oslInterlockedCount& _rRefCount)
 {
     OSL_ENSURE(_xConnection.is(),"OConnectionWrapper: Connection must be valid!");
@@ -76,7 +76,7 @@ void OConnectionWrapper::setDelegation(const Reference< XConnection >& _xConnect
     m_xUnoTunnel.set(m_xConnection,UNO_QUERY);
     m_xServiceInfo.set(m_xConnection,UNO_QUERY);
 
-    Reference< XProxyFactory >  xProxyFactory(_xORB->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.ProxyFactory"))),UNO_QUERY);
+    Reference< XProxyFactory >  xProxyFactory = ProxyFactory::create( _rxContext );
     Reference< XAggregation > xConProxy = xProxyFactory->createProxy(_xConnection);
     if (xConProxy.is())
     {

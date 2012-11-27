@@ -25,6 +25,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/broadcasthelper.hxx>
 #include "connectivity/CommonTools.hxx"
 #include "connectivity/dbtoolsdllapi.hxx"
@@ -52,7 +53,7 @@ namespace connectivity
         virtual ~OConnectionWrapper();
         void setDelegation(::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >& _rxProxyConnection,oslInterlockedCount& _rRefCount);
         void setDelegation(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection
-            ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _xORB
+            ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext
             ,oslInterlockedCount& _rRefCount);
         // must be called from derived classes
         void disposing();

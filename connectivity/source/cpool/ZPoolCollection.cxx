@@ -24,6 +24,7 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/reflection/ProxyFactory.hpp>
 #include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -78,11 +79,7 @@ OPoolCollection::OPoolCollection(const Reference< XMultiServiceFactory >&   _rxF
     m_xDriverAccess = Reference< XDriverAccess >(m_xManager, UNO_QUERY);
     OSL_ENSURE(m_xDriverAccess.is(), "have no (or an invalid) driver manager!");
 
-    m_xProxyFactory = Reference< XProxyFactory >(
-        m_xServiceFactory->createInstance(
-            ::rtl::OUString("com.sun.star.reflection.ProxyFactory")),
-        UNO_QUERY);
-    OSL_ENSURE(m_xProxyFactory.is(), "OConnectionPool::OConnectionPool: could not create a proxy factory!");
+    m_xProxyFactory = ProxyFactory::create( comphelper::getComponentContext(m_xServiceFactory) );
 
     Reference<XPropertySet> xProp(getConfigPoolRoot(),UNO_QUERY);
     if ( xProp.is() )
@@ -216,16 +213,11 @@ Reference< XDriver > SAL_CALL OPoolCollection::getDriverByURL( const ::rtl::OUSt
         else
         {   // create a new proxy for the driver
             // this allows us to control the connections created by it
-            if (m_xProxyFactory.is())
-            {
-                Reference< XAggregation > xDriverProxy = m_xProxyFactory->createProxy(xDriver.get());
-                OSL_ENSURE(xDriverProxy.is(), "OConnectionPool::getDriverByURL: invalid proxy returned by the proxy factory!");
+            Reference< XAggregation > xDriverProxy = m_xProxyFactory->createProxy(xDriver.get());
+            OSL_ENSURE(xDriverProxy.is(), "OConnectionPool::getDriverByURL: invalid proxy returned by the proxy factory!");
 
-                OConnectionPool* pConnectionPool = getConnectionPool(sImplName,xDriver,xDriverNode);
-                xDriver = new ODriverWrapper(xDriverProxy, pConnectionPool);
-            }
-            else
-                OSL_FAIL("OConnectionPool::getDriverByURL: could not instantiate a proxy factory!");
+            OConnectionPool* pConnectionPool = getConnectionPool(sImplName,xDriver,xDriverNode);
+            xDriver = new ODriverWrapper(xDriverProxy, pConnectionPool);
         }
     }
 

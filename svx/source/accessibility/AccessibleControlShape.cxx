@@ -24,7 +24,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
-#include <com/sun/star/reflection/XProxyFactory.hpp>
+#include <com/sun/star/reflection/ProxyFactory.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <comphelper/processfactory.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
@@ -123,7 +123,7 @@ AccessibleControlShape::AccessibleControlShape (
     ,   m_bDisposeNativeContext( sal_False )
     ,   m_bWaitingForControl( sal_False )
 {
-    m_pChildManager = new OWrappedAccessibleChildrenManager( getProcessServiceFactory() );
+    m_pChildManager = new OWrappedAccessibleChildrenManager( getProcessComponentContext() );
     m_pChildManager->acquire();
 
     osl_atomic_increment( &m_refCount );
@@ -260,11 +260,9 @@ void AccessibleControlShape::Init()
                 // .................................................................
                 // finally, aggregate a proxy for the control context
                 // first a factory for the proxy
-                Reference< XProxyFactory > xFactory;
-                xFactory = xFactory.query( getProcessServiceFactory()->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.reflection.ProxyFactory" ) ) ) );
-                OSL_ENSURE( xFactory.is(), "AccessibleControlShape::Init: could not create a proxy factory!" );
+                Reference< XProxyFactory > xFactory = ProxyFactory::create( comphelper::getComponentContext(getProcessServiceFactory()) );
                 // then the proxy itself
-                if ( xFactory.is() && xNativeControlContext.is() )
+                if ( xNativeControlContext.is() )
                 {
                     m_xControlContextProxy = xFactory->createProxy( xNativeControlContext );
                     OSL_VERIFY( xNativeControlContext->queryInterface( ::getCppuType( &m_xControlContextTypeAccess ) ) >>= m_xControlContextTypeAccess );
