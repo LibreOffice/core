@@ -104,7 +104,7 @@ sal_Size IsciiDevanagariToUnicode::convert(
             break;
         }
 
-        sal_Unicode cChar;
+        sal_Unicode cChar = sal_Unicode();
         sal_uInt8 nIn = static_cast<sal_uInt8>(pSrcBuf[nConverted]);
         sal_uInt8 nNext = nConverted < nSrcBytes + 1 ? static_cast<sal_uInt8>(pSrcBuf[nConverted+1]) : 0;
         bool bNormal = true;
@@ -272,9 +272,9 @@ sal_Size UnicodeToIsciiDevanagari::convert(sal_Unicode const* pSrcBuf, sal_Size 
         //halant + halant     E8 E8  -> halant + ZWNJ   094D 200C
         //halant + nukta    E8 E9   halant + ZWJ    094D 200D
         if (m_cPrevChar == 0x094D && c == 0x200C)
-            cSpecialChar = 0xE8;
+            cSpecialChar = '\xE8';
         else if (m_cPrevChar == 0x094D && c == 0x200D)
-            cSpecialChar = 0xE9;
+            cSpecialChar = '\xE9';
         if (cSpecialChar)
         {
             if (pDestBufEnd - pDestBufPtr < 1)
@@ -289,49 +289,49 @@ sal_Size UnicodeToIsciiDevanagari::convert(sal_Unicode const* pSrcBuf, sal_Size 
         switch (c)
         {
             case 0x0950:
-                cSpecialChar = 0xA1;
+                cSpecialChar = '\xA1';
                 break;
             case 0x090C:
-                cSpecialChar = 0xA6;
+                cSpecialChar = '\xA6';
                 break;
             case 0x0961:
-                cSpecialChar = 0xA7;
+                cSpecialChar = '\xA7';
                 break;
             case 0x0960:
-                cSpecialChar = 0xAA;
+                cSpecialChar = '\xAA';
                 break;
             case 0x0958:
-                cSpecialChar = 0xB3;
+                cSpecialChar = '\xB3';
                 break;
             case 0x0959:
-                cSpecialChar = 0xB4;
+                cSpecialChar = '\xB4';
                 break;
             case 0x095A:
-                cSpecialChar = 0xB5;
+                cSpecialChar = '\xB5';
                 break;
             case 0x095B:
-                cSpecialChar = 0xBA;
+                cSpecialChar = '\xBA';
                 break;
             case 0x095C:
-                cSpecialChar = 0xBF;
+                cSpecialChar = '\xBF';
                 break;
             case 0x095D:
-                cSpecialChar = 0xC0;
+                cSpecialChar = '\xC0';
                 break;
             case 0x095E:
-                cSpecialChar = 0xC9;
+                cSpecialChar = '\xC9';
                 break;
             case 0x0962:
-                cSpecialChar = 0xDB;
+                cSpecialChar = '\xDB';
                 break;
             case 0x0963:
-                cSpecialChar = 0xDC;
+                cSpecialChar = '\xDC';
                 break;
             case 0x0944:
-                cSpecialChar = 0xDF;
+                cSpecialChar = '\xDF';
                 break;
             case 0x093D:
-                cSpecialChar = 0xEA;
+                cSpecialChar = '\xEA';
                 break;
             default:
                 break;
@@ -344,7 +344,7 @@ sal_Size UnicodeToIsciiDevanagari::convert(sal_Unicode const* pSrcBuf, sal_Size 
                 break;
             }
             *pDestBufPtr++ = cSpecialChar;
-            *pDestBufPtr++ = 0xE9;
+            *pDestBufPtr++ = '\xE9';
             m_cPrevChar = 0;
             goto done;
         }
