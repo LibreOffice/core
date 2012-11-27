@@ -145,7 +145,7 @@ public:
     const Size&         GetSize(const SvTreeListBox* pView, const SvTreeListEntry* pEntry) const;
     const Size&         GetSize(const SvViewDataEntry* pData, sal_uInt16 nItemPos) const
                         {
-                            const SvViewDataItem* pIData = pData->pItemData + nItemPos;
+                            const SvViewDataItem* pIData = pData->GetItem(nItemPos);
                             return pIData->maSize;
                         }
 

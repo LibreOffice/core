@@ -24,6 +24,8 @@
 #include "tools/solar.h"
 #include "tools/gen.hxx"
 
+#include <vector>
+
 // Entryflags that are attached to the View
 #define SVLISTENTRYFLAG_SELECTED        0x0001
 #define SVLISTENTRYFLAG_EXPANDED        0x0002
@@ -65,12 +67,15 @@ public:
 // changed (because it's an array)
 class SvViewDataEntry : public SvViewData
 {
+    std::vector<SvViewDataItem> maItems;
 public:
-    SvViewDataItem* pItemData; // An array of SvViewDataItems
-    sal_uInt16      nItmCnt;   // Item count for delete operator
-
                     SvViewDataEntry();
     virtual         ~SvViewDataEntry();
+
+    void Init(size_t nSize);
+
+    const SvViewDataItem* GetItem(size_t nPos) const;
+    SvViewDataItem* GetItem(size_t nPos);
 };
 
 #endif

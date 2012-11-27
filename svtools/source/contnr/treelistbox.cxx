@@ -947,9 +947,8 @@ const SvViewDataItem* SvTreeListBox::GetViewDataItem(const SvTreeListEntry* pEnt
 {
     const SvViewDataEntry* pEntryData = (const SvViewDataEntry*)SvListView::GetViewData(pEntry);
     DBG_ASSERT(pEntryData,"Entry not in View");
-    DBG_ASSERT(pEntryData->pItemData,"No ItemData");
     sal_uInt16 nItemPos = pEntry->GetPos(pItem);
-    return (pEntryData->pItemData + nItemPos);
+    return pEntryData->GetItem(nItemPos);
 }
 
 SvViewData* SvTreeListBox::CreateViewData( SvTreeListEntry* )
@@ -965,14 +964,13 @@ void SvTreeListBox::InitViewData( SvViewData* pData, SvTreeListEntry* pEntry )
     SvTreeListEntry* pInhEntry = (SvTreeListEntry*)pEntry;
     SvViewDataEntry* pEntryData = (SvViewDataEntry*)pData;
 
-    pEntryData->pItemData = new SvViewDataItem[ pInhEntry->ItemCount() ];
-    SvViewDataItem* pItemData = pEntryData->pItemData;
-    pEntryData->nItmCnt = pInhEntry->ItemCount(); // number of items to delete
+    pEntryData->Init(pInhEntry->ItemCount());
     sal_uInt16 nCount = pInhEntry->ItemCount();
     sal_uInt16 nCurPos = 0;
     while( nCurPos < nCount )
     {
         SvLBoxItem* pItem = pInhEntry->GetItem( nCurPos );
+        SvViewDataItem* pItemData = pEntryData->GetItem(nCurPos);
         pItem->InitViewData( this, pInhEntry, pItemData );
         pItemData++;
         nCurPos++;

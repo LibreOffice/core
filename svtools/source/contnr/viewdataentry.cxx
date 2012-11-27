@@ -107,13 +107,26 @@ SvViewDataEntry::SvViewDataEntry()
     : SvViewData()
 {
     DBG_CTOR(SvViewDataEntry,0);
-    pItemData = 0;
 }
 
 SvViewDataEntry::~SvViewDataEntry()
 {
     DBG_DTOR(SvViewDataEntry,0);
-    delete [] pItemData;
+}
+
+void SvViewDataEntry::Init(size_t nSize)
+{
+    maItems.resize(nSize);
+}
+
+const SvViewDataItem* SvViewDataEntry::GetItem(size_t nPos) const
+{
+    return &maItems[nPos];
+}
+
+SvViewDataItem* SvViewDataEntry::GetItem(size_t nPos)
+{
+    return &maItems[nPos];
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
