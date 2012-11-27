@@ -252,12 +252,15 @@ namespace sdr
         void ViewContactOfE3dScene::createObjectTransformation()
         {
             // create 2d Object Transformation from relative point in 2d scene to world
-            const Rectangle& rRectangle = GetE3dScene().GetSnapRect();
-
-            maObjectTransformation.set(0, 0, rRectangle.getWidth());
-            maObjectTransformation.set(1, 1, rRectangle.getHeight());
-            maObjectTransformation.set(0, 2, rRectangle.Left());
-            maObjectTransformation.set(1, 2, rRectangle.Top());
+            Rectangle aRectangle = GetE3dScene().GetSnapRect();
+            // Hack for calc, transform position of object according
+            // to current zoom so as objects relative position to grid
+            // appears stable
+            aRectangle += GetE3dScene().GetGridOffset();
+            maObjectTransformation.set(0, 0, aRectangle.getWidth());
+            maObjectTransformation.set(1, 1, aRectangle.getHeight());
+            maObjectTransformation.set(0, 2, aRectangle.Left());
+            maObjectTransformation.set(1, 2, aRectangle.Top());
         }
 
         void ViewContactOfE3dScene::createSdrSceneAttribute()

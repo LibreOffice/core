@@ -46,6 +46,10 @@ class FuConstruct : public FuDraw
 
     virtual void Activate();
     virtual void Deactivate();
+
+    // Returns grid sync offset for rInOutPos, additionally adjusts rInOutPos
+    // by the offset
+    Point CurrentGridSyncOffsetAndPos( Point& rInOutPos);
 };
 
 

@@ -62,7 +62,11 @@ namespace sdr
         basegfx::B2DHomMatrix ViewContactOfSdrOle2Obj::createObjectTransform() const
         {
             // take unrotated snap rect (direct model data) for position and size
-            const Rectangle& rRectangle = GetOle2Obj().GetGeoRect();
+            Rectangle rRectangle = GetOle2Obj().GetGeoRect();
+            // Hack for calc, transform position of object according
+            // to current zoom so as objects relative position to grid
+            // appears stable
+            rRectangle += GetOle2Obj().GetGridOffset();
             const basegfx::B2DRange aObjectRange(rRectangle.Left(), rRectangle.Top(), rRectangle.Right(), rRectangle.Bottom());
 
             // create object matrix

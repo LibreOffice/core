@@ -314,7 +314,15 @@ sal_Bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                     /**********************************************************
                     * Objekt erzeugen
                     **********************************************************/
-                    pView->BegCreateObj(aMDPos, (OutputDevice*) NULL);
+                    // Hack  to align object to nearest grid position where object
+                    // would be anchored ( if it were cell anchored )
+                    // Get grid offset for current position ( note: aPnt is
+                    // also adjusted )
+                    Point aGridOff = CurrentGridSyncOffsetAndPos( aMDPos );
+
+                    bool bRet = pView->BegCreateObj(aMDPos, (OutputDevice*) NULL);
+                    if ( bRet )
+                        pView->GetCreateObj()->SetGridOffset( aGridOff );
                 }
             }
         }
@@ -359,14 +367,19 @@ sal_Bool FuText::MouseMove(const MouseEvent& rMEvt)
             aDragTimer.Stop();
     }
 
+    Point aPix(rMEvt.GetPosPixel());
+    Point aPnt(pWindow->PixelToLogic(aPix));
+    // if object is being created then more than likely the mouse
+    // position has been 'adjusted' for the current zoom, need to
+    // restore the mouse position here to ensure resize works as expected
+    if ( pView->GetCreateObj() )
+        aPnt -= pView->GetCreateObj()->GetGridOffset();
+
     if ( pView->MouseMove(rMEvt, pWindow) )
         return (sal_True); // Event von der SdrView ausgewertet
 
     if ( pView->IsAction() )
     {
-        Point aPix(rMEvt.GetPosPixel());
-        Point aPnt(pWindow->PixelToLogic(aPix));
-
         ForceScroll(aPix);
         pView->MovAction(aPnt);
     }

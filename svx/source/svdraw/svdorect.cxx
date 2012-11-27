@@ -316,7 +316,9 @@ SdrHdl* SdrRectObj::GetHdl(sal_uInt32 nHdlNum) const
     {
         case 0:
         {
-            pH = new ImpTextframeHdl(aRect);
+            // hack for calc grid sync to ensure the hatched area
+            // for a textbox is displayed at correct position
+            pH = new ImpTextframeHdl(aRect + GetGridOffset() );
             pH->SetObj((SdrObject*)this);
             pH->SetDrehWink(aGeo.nDrehWink);
             break;

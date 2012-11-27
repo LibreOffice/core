@@ -82,7 +82,11 @@ sal_Bool FuConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
     if ( rMEvt.IsLeft() && !pView->IsAction() )
     {
         Point aPos( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
-
+        // Hack  to align object to nearest grid position where object
+        // would be anchored ( if it were cell anchored )
+        // Get grid offset for current position ( note: aPnt is
+        // also adjusted )
+        Point aGridOff = CurrentGridSyncOffsetAndPos( aPos );
         pWindow->CaptureMouse();
 
         if ( pView->GetCurrentObjIdentifier() == OBJ_CAPTION )
@@ -95,6 +99,8 @@ sal_Bool FuConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
         }
         else
             bReturn = pView->BegCreateObj(aPos);
+        if ( bReturn )
+            pView->GetCreateObj()->SetGridOffset( aGridOff );
     }
     return bReturn;
 }

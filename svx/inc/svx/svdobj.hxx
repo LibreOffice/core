@@ -385,6 +385,7 @@ private:
 protected:
     Rectangle                   aOutRect;     // umschliessendes Rechteck fuer Paint (inkl. LineWdt, ...)
     Point                       aAnchor;      // Ankerposition (Writer)
+    Point                       aGridOffset;  // hack (Calc)
     SdrObjList*                 pObjList;     // Liste, in dem das Obj eingefuegt ist.
     SdrPage*                    pPage;
     SdrModel*                   pModel;
@@ -451,6 +452,9 @@ public:
     void SetRelativeHeight( double nValue ) { mnRelativeHeight.reset( nValue ); }
     boost::optional<double> GetRelativeWidth( ) const { return mnRelativeWidth; }
     boost::optional<double> GetRelativeHeight( ) const { return mnRelativeHeight; }
+    // evil calc grid/shape drawlayer syncing
+    Point GetGridOffset() const { return aGridOffset; }
+    void SetGridOffset( const Point& rGridOffset ){ aGridOffset = rGridOffset; }
 protected:
     void ImpDeleteUserData();
     SdrObjUserData* ImpGetMacroUserData() const;

@@ -126,10 +126,15 @@ namespace sdr { namespace contact {
         // create range. Use model data directly, not getBoundRect()/getSnapRect; these will use
         // the primitive data themselves in the long run. Use SdrUnoObj's (which is a SdrRectObj)
         // call to GetGeoRect() to access SdrTextObj::aRect directly and without executing anything
-        const Rectangle& rRectangle(GetSdrUnoObj().GetGeoRect());
+        Rectangle aRectangle(GetSdrUnoObj().GetGeoRect());
+        // Hack for calc, transform position of object according
+        // to current zoom so as objects relative position to grid
+        // appears stable
+        Point aGridOffset = GetSdrUnoObj().GetGridOffset();
+        aRectangle += aGridOffset;
         const basegfx::B2DRange aRange(
-            rRectangle.Left(), rRectangle.Top(),
-            rRectangle.Right(), rRectangle.Bottom());
+            aRectangle.Left(), aRectangle.Top(),
+            aRectangle.Right(), aRectangle.Bottom());
 
         // create object transform
         basegfx::B2DHomMatrix aTransform;

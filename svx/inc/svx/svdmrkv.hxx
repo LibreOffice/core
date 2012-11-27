@@ -124,6 +124,7 @@ protected:
     sdr::ViewSelection*         mpSdrViewSelection;
 
     Rectangle                   aMarkedObjRect;
+    Rectangle                   aMarkedObjRectNoOffset;
     Rectangle                   aMarkedPointsRect;
     Rectangle                   aMarkedGluePointsRect;
 
@@ -444,6 +445,7 @@ public:
     const Rectangle& GetAllMarkedRect() const { return GetMarkedObjRect(); }
     Rectangle GetAllMarkedBoundRect() const { return GetMarkedObjBoundRect(); }
     const Rectangle& GetAllMarkedPointsRect() const  { return GetMarkedPointsRect(); }
+    Point GetGridOffset() const;
 
     // Wird immer dann gerufen, wenn sich die Liste der markierten Objekte
     // moeglicherweise geaendert hat. Wer ueberlaed muss unbedingt auch die

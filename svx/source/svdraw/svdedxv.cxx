@@ -188,7 +188,11 @@ void SdrObjEditView::ModelHasChanged()
                 pTextObj->TakeTextEditArea(&aPaperMin1,&aPaperMax1,&aEditArea1,&aMinArea1);
 
                 Point aPvOfs(pTextObj->GetTextEditOffset());
-
+                // Hack for calc, transform position of edit object according
+                // to current zoom so as objects relative position to grid
+                // appears stable
+                aEditArea1 += pTextObj->GetGridOffset();
+                aMinArea1 += pTextObj->GetGridOffset();
                 aEditArea1.Move(aPvOfs.X(),aPvOfs.Y());
                 aMinArea1.Move(aPvOfs.X(),aPvOfs.Y());
                 Rectangle aNewArea(aMinArea1);
@@ -627,9 +631,14 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
 
             aTextEditArea = aTextRect;
 
-            Point aPvOfs(pTextObj->GetTextEditOffset());
+            // Hack for calc, transform position of edit object according
+            // to current zoom so as objects relative position to grid
+            // appears stable
 
+            Point aPvOfs(pTextObj->GetTextEditOffset());
+            aTextEditArea += pTextObj->GetGridOffset();
             aTextEditArea.Move(aPvOfs.X(),aPvOfs.Y());
+            aMinTextEditArea += pTextObj->GetGridOffset();
             aMinTextEditArea.Move(aPvOfs.X(),aPvOfs.Y());
             pTextEditCursorMerker=pWin->GetCursor();
 

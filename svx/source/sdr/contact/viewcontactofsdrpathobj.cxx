@@ -48,6 +48,11 @@ namespace sdr
                     rItemSet,
                     GetPathObj().getText(0)));
             basegfx::B2DPolyPolygon aUnitPolyPolygon(GetPathObj().GetPathPoly());
+            Point aGridOff = GetPathObj().GetGridOffset();
+            // Hack for calc, transform position of object according
+            // to current zoom so as objects relative position to grid
+            // appears stable
+            aUnitPolyPolygon.transform( basegfx::tools::createTranslateB2DHomMatrix( aGridOff.X(), aGridOff.Y() ) );
             sal_uInt32 nPolyCount(aUnitPolyPolygon.count());
             sal_uInt32 nPointCount(0);
 

@@ -22,6 +22,7 @@
 #include <svx/svdoedge.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <svx/sdr/primitive2d/sdrconnectorprimitive2d.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -40,10 +41,15 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrEdgeObj::createViewIndependentPrimitive2DSequence() const
         {
-            const basegfx::B2DPolygon& rEdgeTrack = GetEdgeObj().getEdgeTrack();
+            basegfx::B2DPolygon aEdgeTrack = GetEdgeObj().getEdgeTrack();
+            Point aGridOff = GetEdgeObj().GetGridOffset();
+            // Hack for calc, transform position of object according
+            // to current zoom so as objects relative position to grid
+            // appears stable
+            aEdgeTrack.transform( basegfx::tools::createTranslateB2DHomMatrix( aGridOff.X(), aGridOff.Y() ) );
 
             // what to do when no EdgeTrack is provided (HitTest and selectability) ?
-            OSL_ENSURE(0 != rEdgeTrack.count(), "Connectors with no geometry are not allowed (!)");
+            OSL_ENSURE(0 != aEdgeTrack.count(), "Connectors with no geometry are not allowed (!)");
 
             // ckeck attributes
             const SfxItemSet& rItemSet = GetEdgeObj().GetMergedItemSet();
@@ -58,7 +64,7 @@ namespace sdr
             const drawinglayer::primitive2d::Primitive2DReference xReference(
                 new drawinglayer::primitive2d::SdrConnectorPrimitive2D(
                     aAttribute,
-                    rEdgeTrack));
+                    aEdgeTrack));
 
             return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
         }

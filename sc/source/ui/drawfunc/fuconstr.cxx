@@ -39,6 +39,8 @@
 #include "futext.hxx"
 #include "sc.hrc"
 #include "drawview.hxx"
+#include "document.hxx"
+#include "gridwin.hxx"
 
 //  Maximal erlaubte Mausbewegung um noch Drag&Drop zu starten
 //! fusel,fuconstr,futext - zusammenfassen!
@@ -75,6 +77,39 @@ sal_uInt8 FuConstruct::Command(const CommandEvent& rCEvt)
     return FuDraw::Command( rCEvt );
 }
 
+// Calculate and return offset at current zoom. rInOutPos is adjusted by
+// the calculated offset. rInOutPos now points to the position than when
+// scaled to 100% actually would be at the position you see at the current zoom
+// ( relative to the grid ) note: units are expected to be in 100th mm
+Point FuConstruct::CurrentGridSyncOffsetAndPos( Point& rInOutPos )
+{
+    Point aRetGridOff;
+    ScViewData* pViewData = pViewShell->GetViewData();
+    ScDocument* pDoc = pViewData ? pViewData->GetDocument() : NULL;
+    if ( pViewData && pDoc )
+    {
+        // rInOutPos mightn't be where you think it is if there is zoom
+        // involved. Lets calculate where aPos would be at 100% zoom
+        // that's the actual correct position for the object ( when you
+        // restore the zoom.
+        Rectangle aObjRect( rInOutPos, rInOutPos );
+        ScRange aRange = pDoc->GetRange( pView->GetTab(), aObjRect );
+        ScAddress aOldStt = aRange.aStart;
+        Point aOldPos( pDoc->GetColOffset( aOldStt.Col(), aOldStt.Tab()  ), pDoc->GetRowOffset( aOldStt.Row(), aOldStt.Tab() ) );
+        aOldPos.X() = sc::TwipsToHMM( aOldPos.X() );
+        aOldPos.Y() = sc::TwipsToHMM( aOldPos.Y() );
+        ScSplitPos eWhich = pViewData->GetActivePart();
+        ScGridWindow* pGridWin = (ScGridWindow*)pViewData->GetActiveWin();
+        // and equiv screen pos
+        Point aScreenPos =  pViewShell->GetViewData()->GetScrPos( aOldStt.Col(), aOldStt.Row(), eWhich, sal_True );
+        MapMode aDrawMode = pGridWin->GetDrawMapMode();
+        Point aCurPosHmm = pGridWin->PixelToLogic(aScreenPos, aDrawMode );
+        Point aOff = ( rInOutPos - aCurPosHmm );
+        rInOutPos = aOldPos + aOff;
+        aRetGridOff = aCurPosHmm - aOldPos;
+    }
+    return aRetGridOff;
+}
 /*************************************************************************
 |*
 |* MouseButtonDown-event
@@ -143,6 +178,12 @@ sal_Bool FuConstruct::MouseMove(const MouseEvent& rMEvt)
 
     Point aPix(rMEvt.GetPosPixel());
     Point aPnt( pWindow->PixelToLogic(aPix) );
+
+    // if object is being created then more than likely the mouse
+    // position has been 'adjusted' for the current zoom, need to
+    // restore the mouse position here to ensure resize works as expected
+    if ( pView->GetCreateObj() )
+        aPnt -= pView->GetCreateObj()->GetGridOffset();
 
     if ( pView->IsAction() )
     {

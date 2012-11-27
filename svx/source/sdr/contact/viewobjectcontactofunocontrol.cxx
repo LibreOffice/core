@@ -1029,7 +1029,13 @@ namespace sdr { namespace contact {
             SdrUnoObj* pUnoObject( NULL );
             if ( getUnoObject( pUnoObject ) )
             {
-                UnoControlContactHelper::adjustControlGeometry_throw( m_aControl, pUnoObject->GetLogicRect(), _rViewTransformation, m_aZoomLevelNormalization );
+                Point aGridOffset = pUnoObject->GetGridOffset();
+                Rectangle aRect( pUnoObject->GetLogicRect() );
+                // Hack for calc, transform position of object according
+                // to current zoom so as objects relative position to grid
+                // appears stable
+                aRect += aGridOffset;
+                UnoControlContactHelper::adjustControlGeometry_throw( m_aControl, aRect, _rViewTransformation, m_aZoomLevelNormalization );
             }
             else
                 OSL_FAIL( "ViewObjectContactOfUnoControl_Impl::positionAndZoomControl: no SdrUnoObj!" );
@@ -1207,11 +1213,17 @@ namespace sdr { namespace contact {
 
             // knit the model and the control
             _out_rControl.setModel( xControlModel );
+            Point aGridOffset =  _rUnoObject.GetGridOffset();
+            Rectangle aRect( _rUnoObject.GetLogicRect() );
+            // Hack for calc, transform position of object according
+            // to current zoom so as objects relative position to grid
+            // appears stable
+            aRect += aGridOffset;
 
             // proper geometry
             UnoControlContactHelper::adjustControlGeometry_throw(
                 _out_rControl,
-                _rUnoObject.GetLogicRect(),
+                aRect,
                 _rInitialViewTransformation,
                 _rInitialZoomNormalization
             );
@@ -1606,7 +1618,12 @@ namespace sdr { namespace contact {
         // Do use model data directly to create the correct geometry. Do NOT
         // use getBoundRect()/getSnapRect() here; tese will use the sequence of
         // primitives themselves in the long run.
-        const Rectangle aSdrGeoData( _rVOC.GetSdrUnoObj().GetGeoRect() );
+        Rectangle aSdrGeoData( _rVOC.GetSdrUnoObj().GetGeoRect() );
+        Point aGridOffset = _rVOC.GetSdrUnoObj().GetGridOffset();
+        // Hack for calc, transform position of object according
+        // to current zoom so as objects relative position to grid
+        // appears stable
+        aSdrGeoData += aGridOffset;
         const basegfx::B2DRange aRange(
             aSdrGeoData.Left(),
             aSdrGeoData.Top(),

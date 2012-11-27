@@ -1748,33 +1748,39 @@ void ScDrawLayer::SetCellAnchored( SdrObject &rObj, const ScDrawObjData &rAnchor
     pAnchor->maEndOffset = rAnchor.maEndOffset;
 }
 
+
 void ScDrawLayer::SetCellAnchoredFromPosition( SdrObject &rObj, const ScDocument &rDoc, SCTAB nTab )
+{
+    ScDrawObjData aAnchor;
+    GetCellAnchorFromPosition( rObj, aAnchor, rDoc, nTab );
+    SetCellAnchored( rObj, aAnchor );
+}
+
+void ScDrawLayer::GetCellAnchorFromPosition( SdrObject &rObj, ScDrawObjData &rAnchor, const ScDocument &rDoc, SCTAB nTab )
 {
     Rectangle aObjRect(rObj.GetLogicRect());
     ScRange aRange = rDoc.GetRange( nTab, aObjRect );
 
     Rectangle aCellRect;
 
-    ScDrawObjData aAnchor;
-    aAnchor.maStart = aRange.aStart;
+    rAnchor.maStart = aRange.aStart;
     aCellRect = rDoc.GetMMRect( aRange.aStart.Col(), aRange.aStart.Row(),
       aRange.aStart.Col(), aRange.aStart.Row(), aRange.aStart.Tab() );
-    aAnchor.maStartOffset.Y() = aObjRect.Top()-aCellRect.Top();
+    rAnchor.maStartOffset.Y() = aObjRect.Top()-aCellRect.Top();
     if (!rDoc.IsNegativePage(nTab))
-        aAnchor.maStartOffset.X() = aObjRect.Left()-aCellRect.Left();
+        rAnchor.maStartOffset.X() = aObjRect.Left()-aCellRect.Left();
     else
-        aAnchor.maStartOffset.X() = aCellRect.Right()-aObjRect.Right();
+        rAnchor.maStartOffset.X() = aCellRect.Right()-aObjRect.Right();
 
-    aAnchor.maEnd = aRange.aEnd;
+    rAnchor.maEnd = aRange.aEnd;
     aCellRect = rDoc.GetMMRect( aRange.aEnd.Col(), aRange.aEnd.Row(),
       aRange.aEnd.Col(), aRange.aEnd.Row(), aRange.aEnd.Tab() );
-    aAnchor.maEndOffset.Y() = aObjRect.Bottom()-aCellRect.Top();
+    rAnchor.maEndOffset.Y() = aObjRect.Bottom()-aCellRect.Top();
     if (!rDoc.IsNegativePage(nTab))
-        aAnchor.maEndOffset.X() = aObjRect.Right()-aCellRect.Left();
+        rAnchor.maEndOffset.X() = aObjRect.Right()-aCellRect.Left();
     else
-        aAnchor.maEndOffset.X() = aCellRect.Right()-aObjRect.Left();
+        rAnchor.maEndOffset.X() = aCellRect.Right()-aObjRect.Left();
 
-    SetCellAnchored( rObj, aAnchor );
 }
 
 void ScDrawLayer::UpdateCellAnchorFromPositionEnd( SdrObject &rObj, const ScDocument &rDoc, SCTAB nTab )

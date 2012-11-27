@@ -74,8 +74,14 @@ sal_Bool FuConstArc::MouseButtonDown( const MouseEvent& rMEvt )
     if ( rMEvt.IsLeft() && !pView->IsAction() )
     {
         Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
+        // Hack  to align object to nearest grid position where object
+        // would be anchored ( if it were cell anchored )
+        // Get grid offset for current position ( note: aPnt is
+        // also adjusted )
+        Point aGridOff = CurrentGridSyncOffsetAndPos( aPnt );
         pWindow->CaptureMouse();
         pView->BegCreateObj( aPnt );
+        pView->GetCreateObj()->SetGridOffset( aGridOff );
         bReturn = sal_True;
     }
     return bReturn;

@@ -1056,6 +1056,7 @@ SdrObject& SdrObject::operator=(const SdrObject& rObj)
         delete pPlusData->pBroadcast; // broadcaster isn't copied
         pPlusData->pBroadcast=NULL;
     }
+    aGridOffset = rObj.aGridOffset;
     return *this;
 }
 

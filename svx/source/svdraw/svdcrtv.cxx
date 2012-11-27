@@ -39,6 +39,7 @@
 #include <svx/svdocirc.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -834,7 +835,13 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
             }
             else
             {
-                mpCreateViewExtraData->CreateAndShowOverlay(*this, 0, pAktCreate->TakeCreatePoly(aDragStat));
+                ::basegfx::B2DPolyPolygon aPoly = pAktCreate->TakeCreatePoly(aDragStat);
+                Point aGridOff = pAktCreate->GetGridOffset();
+                // Hack for calc, transform position of create placeholder
+                // object according to current zoom so as objects relative
+                // position to grid appears stable
+                aPoly.transform( basegfx::tools::createTranslateB2DHomMatrix( aGridOff.X(), aGridOff.Y() ) );
+                mpCreateViewExtraData->CreateAndShowOverlay(*this, 0, aPoly);
             }
 
             // #i101679# Force changed overlay to be shown

@@ -139,6 +139,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > CopyToTransferable();
 
     static void CheckOle( const SdrMarkList& rMarkList, sal_Bool& rAnyOle, sal_Bool& rOneOle );
+    virtual void SyncForGrid( SdrObject* pObj );
 };
 
 

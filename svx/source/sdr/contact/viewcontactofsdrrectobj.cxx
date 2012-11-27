@@ -51,10 +51,15 @@ namespace sdr
                     GetRectObj().getText(0)));
 
             // take unrotated snap rect (direct model data) for position and size
-            const Rectangle& rRectangle = GetRectObj().GetGeoRect();
+            Rectangle rRectangle = GetRectObj().GetGeoRect();
+            // Hack for calc, transform position of object according
+            // to current zoom so as objects relative position to grid
+            // appears stable
+            rRectangle += GetRectObj().GetGridOffset();
             const ::basegfx::B2DRange aObjectRange(
                 rRectangle.Left(), rRectangle.Top(),
-                rRectangle.Right(), rRectangle.Bottom());
+                rRectangle.Right(), rRectangle.Bottom() );
+
             const GeoStat& rGeoStat(GetRectObj().GetGeoStat());
 
             // fill object matrix

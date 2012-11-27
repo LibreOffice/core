@@ -440,9 +440,9 @@ sal_Bool SdrMarkView::BegMarkGluePoints(const Point& rPnt, sal_Bool bUnmark)
         BrkAction();
 
         DBG_ASSERT(0L == mpMarkGluePointsOverlay, "SdrMarkView::BegMarkObj: There exists a mpMarkGluePointsOverlay (!)");
+
         basegfx::B2DPoint aStartPos(rPnt.X(), rPnt.Y());
         mpMarkGluePointsOverlay = new ImplMarkingOverlay(*this, aStartPos, bUnmark);
-
         aDragStat.Reset(rPnt);
         aDragStat.NextPoint();
         aDragStat.SetMinMove(nMinMovLog);
@@ -616,10 +616,13 @@ void SdrMarkView::SetMarkHandles()
             }
         }
 
+        // apply calc offset to marked object rect
+        // ( necessary for handles to be displayed in
+        // correct position )
+        Point aGridOff = GetGridOffset();
         if (bFrmHdl)
         {
             Rectangle aRect(GetMarkedObjRect());
-
             // #i33755#
             const sal_Bool bHideHandlesWhenInTextEdit(
                 ((SdrView*)this)->IsTextEdit()
@@ -648,6 +651,7 @@ void SdrMarkView::SetMarkHandles()
                     {
                         SdrHdl* pHdl=aHdl.GetHdl(i);
                         pHdl->SetObj(pMarkedObj);
+                        pHdl->SetPos( pHdl->GetPos() + aGridOff );
                         pHdl->SetPageView(pMarkedPV);
                         pHdl->SetObjHdlNum(sal_uInt16(i-nSiz0));
                     }
@@ -705,6 +709,7 @@ void SdrMarkView::SetMarkHandles()
                 for (sal_uIntPtr i=nSiz0; i<nSiz1; i++)
                 {
                     SdrHdl* pHdl=aHdl.GetHdl(i);
+                    pHdl->SetPos( pHdl->GetPos() + aGridOff );
                     pHdl->SetObj(pObj);
                     pHdl->SetPageView(pPV);
                     pHdl->SetObjHdlNum(sal_uInt16(i-nSiz0));
@@ -1520,6 +1525,8 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
     const bool bTXT(pObj->ISA(SdrTextObj) && ((SdrTextObj*)pObj)->IsTextFrame());
     SdrObject* pRet=NULL;
     Rectangle aRect(pObj->GetCurrentBoundRect());
+    // hack for calc grid sync
+    aRect += pObj->GetGridOffset();
     sal_uInt16 nTol2(nTol);
 
     // double tolerance for OLE, text frames and objects in
@@ -1872,10 +1879,24 @@ Rectangle SdrMarkView::GetMarkedObjBoundRect() const
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pO=pM->GetMarkedSdrObj();
         Rectangle aR1(pO->GetCurrentBoundRect());
+        // Ensure marked area includes the calc offset
+        // ( if applicable ) to sync to grid
+        aR1 += pO->GetGridOffset();
         if (aRect.IsEmpty()) aRect=aR1;
         else aRect.Union(aR1);
     }
     return aRect;
+}
+
+Point SdrMarkView::GetGridOffset() const
+{
+    Point aOffset;
+    // calculate the area occupied by the union of each marked object
+    // ( synced to grid ) and compare to the same unsynced area to calculate
+    // the offset. Hopefully that's the sensible thing to do
+    const Rectangle& aGroupSyncedRect = GetMarkedObjRect();
+    aOffset =   aGroupSyncedRect.TopLeft() - aMarkedObjRectNoOffset.TopLeft();
+    return aOffset;
 }
 
 const Rectangle& SdrMarkView::GetMarkedObjRect() const
@@ -1883,14 +1904,22 @@ const Rectangle& SdrMarkView::GetMarkedObjRect() const
     if (bMarkedObjRectDirty) {
         ((SdrMarkView*)this)->bMarkedObjRectDirty=sal_False;
         Rectangle aRect;
+        Rectangle aRect2;
         for (sal_uIntPtr nm=0; nm<GetMarkedObjectCount(); nm++) {
             SdrMark* pM=GetSdrMarkByIndex(nm);
             SdrObject* pO=pM->GetMarkedSdrObj();
             Rectangle aR1(pO->GetSnapRect());
+            // apply calc offset to marked object rect
+            // ( necessary for handles to be displayed in
+            // correct position )
+            if (aRect2.IsEmpty()) aRect2=aR1;
+            else aRect2.Union( aR1 );
+            aR1 += pO->GetGridOffset();
             if (aRect.IsEmpty()) aRect=aR1;
             else aRect.Union(aR1);
         }
         ((SdrMarkView*)this)->aMarkedObjRect=aRect;
+        ((SdrMarkView*)this)->aMarkedObjRectNoOffset=aRect2;
     }
     return aMarkedObjRect;
 }

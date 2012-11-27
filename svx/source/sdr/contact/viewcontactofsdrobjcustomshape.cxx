@@ -117,14 +117,21 @@ namespace sdr
             const SdrObject* pSdrObjRepresentation = GetCustomShapeObj().GetSdrObjectFromCustomShape();
             bool b3DShape(false);
 
+            Point aGridOff = GetCustomShapeObj().GetGridOffset();
+
             if(pSdrObjRepresentation)
             {
+                // Hack for calc, transform position of object according
+                // to current zoom so as objects relative position to grid
+                // appears stable
+                const_cast< SdrObject* >( pSdrObjRepresentation )->SetGridOffset( aGridOff );
                 SdrObjListIter aIterator(*pSdrObjRepresentation);
 
                 while(aIterator.IsMore())
                 {
                     SdrObject& rCandidate = *aIterator.Next();
-
+                    // apply offset to each part
+                    rCandidate.SetGridOffset( aGridOff );
                     if(!b3DShape && dynamic_cast< E3dObject* >(&rCandidate))
                     {
                         b3DShape = true;
@@ -145,7 +152,9 @@ namespace sdr
                 {
                     // take unrotated snap rect as default, then get the
                     // unrotated text box. Rotation needs to be done centered
-                    const Rectangle aObjectBound(GetCustomShapeObj().GetGeoRect());
+                    Rectangle aObjectBound(GetCustomShapeObj().GetGeoRect());
+                    // hack for calc grid sync
+                    aObjectBound += GetCustomShapeObj().GetGridOffset();
                     const basegfx::B2DRange aObjectRange(aObjectBound.Left(), aObjectBound.Top(), aObjectBound.Right(), aObjectBound.Bottom());
 
                     // #i101684# get the text range unrotated and absolute to the object range

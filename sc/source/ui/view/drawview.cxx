@@ -59,6 +59,7 @@
 #include "userdat.hxx"
 #include "postit.hxx"
 #include "undocell.hxx"
+#include "gridwin.hxx"
 
 #include "sc.hrc"
 
@@ -330,6 +331,20 @@ void ScDrawView::RecalcScale()
 
     ScDrawUtil::CalcScale( pDoc, nTab, 0,0, nEndCol,nEndRow, pDev,aZoomX,aZoomY,nPPTX,nPPTY,
                             aScaleX,aScaleY );
+    SdrPageView* pPV = GetSdrPageView();
+    if ( pViewData && pPV )
+    {
+        if ( SdrPage* pPage = pPV->GetPage() )
+        {
+            sal_uLong nCount = pPage->GetObjCount();
+            for ( sal_uLong i = 0; i < nCount; i++ )
+            {
+                SdrObject* pObj = pPage->GetObj( i );
+                // Align objects to nearset grid position
+                SyncForGrid( pObj );
+            }
+        }
+    }
 }
 
 void ScDrawView::DoConnect(SdrOle2Obj* pOleObj)
@@ -741,4 +756,49 @@ void ScDrawView::MarkDropObj( SdrObject* pObj )
     }
 }
 
+// In order to counteract the effects of rounding due to the nature of how the
+// grid positions are calcuated and drawn we calculate the offset needed at the
+// current zoom to be applied to an SrdObject when it is drawn in order to make
+// sure that it's position relative to the nearest cell anchor doesn't change.
+// Of course not all shape(s)/control(s) are cell anchored, if the
+// object doesn't have a cell anchor we synthesise a temporary anchor.
+void ScDrawView::SyncForGrid( SdrObject* pObj )
+{
+    // process members of a group shape separately
+    if ( pObj->ISA( SdrObjGroup ) )
+    {
+        SdrObjList *pLst = ((SdrObjGroup*)pObj)->GetSubList();
+        for ( sal_uLong i = 0, nCount = pLst->GetObjCount(); i < nCount; ++i )
+            SyncForGrid( pLst->GetObj( i ) ); }
+    ScSplitPos eWhich = pViewData->GetActivePart();
+    ScGridWindow* pGridWin = (ScGridWindow*)pViewData->GetActiveWin();
+    ScDrawObjData* pData = ScDrawLayer::GetObjDataTab( pObj, nTab );
+    if ( pGridWin )
+    {
+        ScAddress aOldStt;
+        if( pData )
+        {
+            aOldStt = pData->maStart;
+        }
+        else
+        {
+            // Page anchored object so...
+            // synthesise an anchor ( but don't attach it to
+            // the object as we want to maintain page anchoring )
+            ScDrawObjData aAnchor;
+            ScDrawLayer::GetCellAnchorFromPosition( *pObj, aAnchor, *pDoc, GetTab() );
+            aOldStt = aAnchor.maStart;
+        }
+        MapMode aDrawMode = pGridWin->GetDrawMapMode();
+        // find pos anchor position
+        Point aOldPos( pDoc->GetColOffset( aOldStt.Col(), aOldStt.Tab()  ), pDoc->GetRowOffset( aOldStt.Row(), aOldStt.Tab() ) );
+        aOldPos.X() = sc::TwipsToHMM( aOldPos.X() );
+        aOldPos.Y() = sc::TwipsToHMM( aOldPos.Y() );
+        // find position of same point on the screen ( e.g. grid )
+        Point aCurPos =  pViewData->GetScrPos(  aOldStt.Col(), aOldStt.Row(), eWhich, sal_True );
+        Point aCurPosHmm = pGridWin->PixelToLogic(aCurPos, aDrawMode );
+        Point aGridOff = ( aCurPosHmm - aOldPos );
+        pObj->SetGridOffset( aGridOff );
+    }
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

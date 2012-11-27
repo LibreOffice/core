@@ -49,7 +49,9 @@
 #include "document.hxx"
 #include "drwlayer.hxx"
 #include <vcl/svapp.hxx>
-
+#include "userdat.hxx"
+#include "unitconv.hxx"
+#include <svx/svdpage.hxx>
 // -----------------------------------------------------------------------
 
 bool ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
@@ -351,6 +353,10 @@ void ScGridWindow::UpdateStatusPosSize()
         pDrView->TakeActionRect( aRect );
         if ( !aRect.IsEmpty() )
         {
+            // mouse position will have been adjusted for offset
+            // at current position and zoom, restore that adjustment here
+            // so status shows correct value
+            aRect -= pDrView->GetGridOffset();
             pPV->LogicToPagePos(aRect);
             aSet.Put( SfxPointItem( SID_ATTR_POSITION, aRect.TopLeft() ) );
             aSet.Put( SvxSizeItem( SID_ATTR_SIZE,
@@ -363,6 +369,10 @@ void ScGridWindow::UpdateStatusPosSize()
         if ( pDrView->AreObjectsMarked() )      // selected objects
         {
             Rectangle aRect = pDrView->GetAllMarkedRect();
+            // mouse position will have been adjusted for offset
+            // at current position and zoom, restore that adjustment here
+            // so status shows correct value
+            aRect -=  pDrView->GetGridOffset();
             pPV->LogicToPagePos(aRect);
             aSet.Put( SfxPointItem( SID_ATTR_POSITION, aRect.TopLeft() ) );
             aSet.Put( SvxSizeItem( SID_ATTR_SIZE,
