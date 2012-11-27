@@ -10,6 +10,7 @@
 #ifndef _VCLBUILDER_HXX
 #define _VCLBUILDER_HXX
 
+#include <typeinfo>
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
 #include <xmlreader/xmlreader.hxx>
@@ -150,6 +151,9 @@ public:
     template <typename T> T* get(T*& ret, OString sID)
     {
         Window *w = get_by_name(sID);
+        SAL_WARN_IF(!w, "vcl.layout", "widget " << sID.getStr() << " not found in .ui");
+        SAL_WARN_IF(!dynamic_cast<T*>(w),
+            "vcl.layout", "widget " << sID.getStr() << " needs to have type " << typeid(T).name());
         assert(w && dynamic_cast<T*>(w));
         ret = static_cast<T*>(w);
         return ret;
@@ -158,6 +162,8 @@ public:
     template <typename T /*=Window if we had c++11*/> T* get(OString sID)
     {
         Window *w = get_by_name(sID);
+        SAL_WARN_IF(w && !dynamic_cast<T*>(w),
+            "vcl.layout", "widget " << sID.getStr() << " needs to have type " << typeid(T).name());
         assert(!w || dynamic_cast<T*>(w));
         return static_cast<T*>(w);
     }
