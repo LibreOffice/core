@@ -731,7 +731,7 @@ sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
     // build SearchOptions to be used
     //
     SearchOptions aSearchOpt( pSrchItem->GetSearchOptions() );
-    aSearchOpt.Locale = LanguageTag( (sal_uInt16)GetAppLanguage() ).getLocale();
+    aSearchOpt.Locale = GetAppLanguageTag().getLocale();
     if( !bDoReplace )
         aSearchOpt.replaceString = aEmptyStr;
 

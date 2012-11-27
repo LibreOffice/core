@@ -79,7 +79,7 @@ SwAuthorityFieldType::SwAuthorityFieldType(SwDoc* pDoc)
     m_cSuffix(']'),
     m_bIsSequence(sal_False),
     m_bSortByDocument(sal_True),
-    m_eLanguage((LanguageType)::GetAppLanguage())
+    m_eLanguage(::GetAppLanguage())
 {
 }
 

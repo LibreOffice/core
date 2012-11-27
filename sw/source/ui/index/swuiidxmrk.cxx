@@ -450,7 +450,7 @@ static void lcl_SelectSameStrings(SwWrtShell& rSh, sal_Bool bWordOnly, sal_Bool 
                         SearchAlgorithms_ABSOLUTE,
                         ( bWordOnly ? SearchFlags::NORM_WORD_ONLY : 0 ),
                         rSh.GetSelTxt(), OUString(),
-                        LanguageTag( GetAppLanguage() ).getLocale(),
+                        GetAppLanguageTag().getLocale(),
                         0, 0, 0,
                         (bCaseSensitive
                             ? 0

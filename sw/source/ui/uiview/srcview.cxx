@@ -585,8 +585,7 @@ sal_uInt16 SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
     }
 
     util::SearchOptions aSearchOpt( rSearchItem.GetSearchOptions() );
-    aSearchOpt.Locale = LanguageTag(
-        static_cast< LanguageType >( GetAppLanguage() ) ).getLocale();
+    aSearchOpt.Locale = GetAppLanguageTag().getLocale();
 
     sal_uInt16 nFound;
     sal_Bool bAll = sal_False;

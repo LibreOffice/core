@@ -266,8 +266,7 @@ sal_uLong SwHTMLWriter::WriteStream()
     nHeaderFooterSpace = 0;
     nTxtAttrsToIgnore = 0;
     nCSS1OutMode = 0;
-    sal_uInt16 nScript = SvtLanguageOptions::GetScriptTypeOfLanguage(
-            static_cast< LanguageType >( GetAppLanguage() ) );
+    sal_uInt16 nScript = SvtLanguageOptions::GetScriptTypeOfLanguage( GetAppLanguage() );
     switch( nScript )
     {
     case SCRIPTTYPE_ASIAN:

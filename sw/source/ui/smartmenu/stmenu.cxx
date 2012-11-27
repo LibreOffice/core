@@ -42,7 +42,7 @@ SwSmartTagPopup::SwSmartTagPopup( SwView* pSwView,
     mxTextRange( xTextRange )
 {
     Reference <frame::XController> xController = mpSwView->GetController();
-    const lang::Locale aLocale( SW_BREAKITER()->GetLocale( (LanguageType)GetAppLanguage() ) );
+    const lang::Locale aLocale( SW_BREAKITER()->GetLocale( GetAppLanguageTag() ) );
 
     sal_uInt16 nMenuPos = 0;
     sal_uInt16 nSubMenuPos = 0;
@@ -160,7 +160,7 @@ sal_uInt16 SwSmartTagPopup::Execute( const Rectangle& rWordPos, Window* pWin )
                                            maInvokeActions[ nId ].mxSmartTagProperties,
                                            mxTextRange->getString(),
                                            rtl::OUString(),
-                                           SW_BREAKITER()->GetLocale( (LanguageType)GetAppLanguage() )  );
+                                           SW_BREAKITER()->GetLocale( GetAppLanguageTag() )  );
         }
     }
 

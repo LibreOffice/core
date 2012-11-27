@@ -34,7 +34,7 @@
 #include <limits.h>     //For LONG_MAX.
 #include <com/sun/star/uno/Reference.h>
 #include "swdllapi.h"
-#include <i18npool/lang.h>
+#include <i18npool/languagetag.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace linguistic2{
@@ -245,6 +245,7 @@ namespace nsSetAttrMode
 // Returns the APP - CharClass instance - used for all ToUpper/ToLower/...
 SW_DLLPUBLIC CharClass& GetAppCharClass();
 SW_DLLPUBLIC LanguageType GetAppLanguage();
+SW_DLLPUBLIC const LanguageTag& GetAppLanguageTag();
 
 
 #if 0

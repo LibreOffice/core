@@ -90,7 +90,7 @@ void SwSortElement::Init( SwDoc* pD, const SwSortOptions& rOpt,
     {
     case LANGUAGE_NONE:
     case LANGUAGE_DONTKNOW:
-        nLang = (LanguageType)GetAppLanguage();
+        nLang = GetAppLanguage();
         break;
     }
     pLocale = new lang::Locale( LanguageTag( nLang ).getLocale() );

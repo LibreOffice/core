@@ -35,7 +35,7 @@
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/XScriptTypeDetector.hpp>
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
-#include <i18npool/lang.h>
+#include <i18npool/languagetag.hxx>
 #include <swdllapi.h>
 
 /*************************************************************************
@@ -48,13 +48,13 @@ class SW_DLLPUBLIC SwBreakIt : private ::boost::noncopyable
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > m_xContext;
     mutable com::sun::star::uno::Reference< com::sun::star::i18n::XBreakIterator > xBreak;
 
-    com::sun::star::lang::Locale * m_pLocale;
+    LanguageTag * m_pLanguageTag;   ///< language tag of the current locale
     com::sun::star::i18n::ForbiddenCharacters * m_pForbidden;
 
-    LanguageType aLast;          ///< language of the current locale
     LanguageType aForbiddenLang; ///< language of the current forbiddenChar struct
 
     void _GetLocale( const LanguageType aLang );
+    void _GetLocale( const LanguageTag& rLanguageTag );
     void _GetForbidden( const LanguageType  aLang );
 
     void createBreakIterator() const;
@@ -81,9 +81,38 @@ public:
 
     const com::sun::star::lang::Locale& GetLocale( const LanguageType aLang )
     {
-        if( !m_pLocale || aLast != aLang )
+        if( !m_pLanguageTag || m_pLanguageTag->getLanguageType() != aLang )
             _GetLocale( aLang );
-        return *m_pLocale;
+        return m_pLanguageTag->getLocale();
+    }
+
+    const com::sun::star::lang::Locale& GetLocale( const LanguageTag& rLanguageTag )
+    {
+        // Use LanguageType comparison instead of LanguageTag::operator!=()
+        // because here the LanguageTag is already a known LanguageType value
+        // assigned, so LanguageTag does not need to convert to BCP47 for
+        // comparison.
+        if( !m_pLanguageTag || m_pLanguageTag->getLanguageType() != rLanguageTag.getLanguageType() )
+            _GetLocale( rLanguageTag );
+        return m_pLanguageTag->getLocale();
+    }
+
+    const LanguageTag& GetLanguageTag( const LanguageType aLang )
+    {
+        if( !m_pLanguageTag || m_pLanguageTag->getLanguageType() != aLang )
+            _GetLocale( aLang );
+        return *m_pLanguageTag;
+    }
+
+    const LanguageTag& GetLanguageTag( const LanguageTag& rLanguageTag )
+    {
+        // Use LanguageType comparison instead of LanguageTag::operator!=()
+        // because here the LanguageTag is already a known LanguageType value
+        // assigned, so LanguageTag does not need to convert to BCP47 for
+        // comparison.
+        if( !m_pLanguageTag || m_pLanguageTag->getLanguageType() != rLanguageTag.getLanguageType() )
+            _GetLocale( rLanguageTag );
+        return *m_pLanguageTag;
     }
 
     const com::sun::star::i18n::ForbiddenCharacters& GetForbidden( const LanguageType aLang )

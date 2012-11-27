@@ -1673,7 +1673,7 @@ void SwInsertDBColAutoPilot::Commit()
         else
         {
             pSubValues[4].Value <<= rtl::OUString(sTmp);
-            eLang = (LanguageType)GetAppLanguage();
+            eLang = GetAppLanguage();
         }
 
         if( eLang != ePrevLang )

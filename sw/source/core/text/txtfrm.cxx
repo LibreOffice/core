@@ -329,7 +329,7 @@ SwDigitModeModifier::SwDigitModeModifier( const OutputDevice& rOutp, LanguageTyp
     else if ( SvtCTLOptions::NUMERALS_ARABIC == nTextNumerals )
         eLang = LANGUAGE_ENGLISH;
     else if ( SvtCTLOptions::NUMERALS_SYSTEM == nTextNumerals )
-        eLang = (LanguageType)::GetAppLanguage();
+        eLang = ::GetAppLanguage();
 
     ((OutputDevice&)rOut).SetDigitLanguage( eLang );
 }

@@ -329,7 +329,7 @@ sal_Bool SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPo
 
     LanguageType eLang = GetLanguage(nEndPos, sal_False);
     if(LANGUAGE_SYSTEM == eLang)
-        eLang = (LanguageType)GetAppLanguage();
+        eLang = GetAppLanguage();
 
     //JP 22.04.99: Bug 63883 - Sonderbehandlung fuer Punkte.
     bool bLastCharIsPoint = nEndPos < pTxtNd->GetTxt().Len() &&
@@ -439,7 +439,7 @@ LanguageType SwAutoCorrDoc::GetLanguage( xub_StrLen nPos, sal_Bool bPrevPara ) c
     if( pNd )
         eRet = pNd->GetLang( nPos, 0 );
     if(LANGUAGE_SYSTEM == eRet)
-        eRet = (LanguageType)GetAppLanguage();
+        eRet = GetAppLanguage();
     return eRet;
 }
 

@@ -953,7 +953,7 @@ void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
         sal_uInt16 nYStart = 4;
         sal_uInt16 nYStep = sal_uInt16((aSize.Height() - 6)/ MAXLEVEL);
         aStdFont = OutputDevice::GetDefaultFont(
-                                    DEFAULTFONT_UI_SANS, (LanguageType)GetAppLanguage(),
+                                    DEFAULTFONT_UI_SANS, GetAppLanguage(),
                                     DEFAULTFONT_FLAGS_ONLYONE, this );
         // #101524# OJ
         aStdFont.SetColor( SwViewOption::GetFontColor() );

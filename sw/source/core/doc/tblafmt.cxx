@@ -308,7 +308,7 @@ SwBoxAutoFmt::SwBoxAutoFmt()
 //    aBLTR( RES_... ),
     aRotateMode( SVX_ROTATE_MODE_STANDARD, 0 )
 {
-    eSysLanguage = eNumFmtLanguage = static_cast<LanguageType>(::GetAppLanguage());
+    eSysLanguage = eNumFmtLanguage = ::GetAppLanguage();
     aBox.SetDistance( 55 );
 }
 
@@ -492,7 +492,7 @@ sal_Bool SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, s
         eSysLanguage = (LanguageType) eSys;
         eNumFmtLanguage = (LanguageType) eLge;
         if ( eSysLanguage == LANGUAGE_SYSTEM )      // from old versions (Calc)
-            eSysLanguage = static_cast<LanguageType>(::GetAppLanguage());
+            eSysLanguage = ::GetAppLanguage();
     }
 
     aStacked.SetValue( aOrientation.IsStacked() );
@@ -759,12 +759,12 @@ void SwTableAutoFmt::UpdateFromSet( sal_uInt8 nPos,
             0 != (pNumFormat = pNFmtr->GetEntry( pNumFmtItem->GetValue() )) )
             pFmt->SetValueFormat( ((SvNumberformat*)pNumFormat)->GetFormatstring(),
                                     pNumFormat->GetLanguage(),
-                                    static_cast<LanguageType>(::GetAppLanguage()));
+                                    ::GetAppLanguage());
         else
         {
             // default
             pFmt->SetValueFormat( aEmptyStr, LANGUAGE_SYSTEM,
-                                  static_cast<LanguageType>(::GetAppLanguage() ));
+                                  ::GetAppLanguage() );
         }
     }
 

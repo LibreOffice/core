@@ -60,9 +60,8 @@ SwBreakIt * SwBreakIt::Get()
 
 SwBreakIt::SwBreakIt( const uno::Reference<uno::XComponentContext> & rxContext )
     : m_xContext( rxContext ),
-      m_pLocale( NULL ),
+      m_pLanguageTag( NULL ),
       m_pForbidden( NULL ),
-      aLast( LANGUAGE_DONTKNOW ),
       aForbiddenLang( LANGUAGE_DONTKNOW )
 {
     OSL_ENSURE( m_xContext.is(), "SwBreakIt: no MultiServiceFactory" );
@@ -70,7 +69,7 @@ SwBreakIt::SwBreakIt( const uno::Reference<uno::XComponentContext> & rxContext )
 
 SwBreakIt::~SwBreakIt()
 {
-    delete m_pLocale;
+    delete m_pLanguageTag;
     delete m_pForbidden;
 }
 
@@ -82,14 +81,23 @@ void SwBreakIt::createBreakIterator() const
 
 void SwBreakIt::_GetLocale( const LanguageType aLang )
 {
-    aLast = aLang;
-    delete m_pLocale;
-    m_pLocale = new lang::Locale( LanguageTag( aLast ).getLocale() );
+    if (m_pLanguageTag)
+        m_pLanguageTag->reset( aLang );
+    else
+        m_pLanguageTag = new LanguageTag( aLang );
+}
+
+void SwBreakIt::_GetLocale( const LanguageTag& rLanguageTag )
+{
+    if (m_pLanguageTag)
+        *m_pLanguageTag = rLanguageTag;
+    else
+        m_pLanguageTag = new LanguageTag( rLanguageTag );
 }
 
 void SwBreakIt::_GetForbidden( const LanguageType aLang )
 {
-    LocaleDataWrapper aWrap( m_xContext, LanguageTag( GetLocale( aLang )) );
+    LocaleDataWrapper aWrap( m_xContext, GetLanguageTag( aLang ) );
 
     aForbiddenLang = aLang;
     delete m_pForbidden;

@@ -810,7 +810,7 @@ CharClass& GetAppCharClass()
     {
         pAppCharClass = new CharClass(
             ::comphelper::getProcessComponentContext(),
-            LanguageTag( SwBreakIt::Get()->GetLocale( (LanguageType)GetAppLanguage() )));
+            SwBreakIt::Get()->GetLanguageTag( GetAppLanguageTag() ));
     }
     return *pAppCharClass;
 }
@@ -827,12 +827,16 @@ LanguageType GetAppLanguage()
     return Application::GetSettings().GetLanguageTag().getLanguageType();
 }
 
+const LanguageTag& GetAppLanguageTag()
+{
+    return Application::GetSettings().GetLanguageTag();
+}
+
 CollatorWrapper& GetAppCollator()
 {
     if( !pCollator )
     {
-        const lang::Locale& rLcl = pBreakIt->GetLocale(
-                                            (LanguageType)GetAppLanguage() );
+        const lang::Locale& rLcl = pBreakIt->GetLocale( GetAppLanguage() );
         uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
 
         pCollator = new CollatorWrapper( xMSF );
@@ -844,8 +848,7 @@ CollatorWrapper& GetAppCaseCollator()
 {
     if( !pCaseCollator )
     {
-        const lang::Locale& rLcl = pBreakIt->GetLocale(
-                                            (LanguageType)GetAppLanguage() );
+        const lang::Locale& rLcl = pBreakIt->GetLocale( GetAppLanguage() );
         uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
 
         pCaseCollator = new CollatorWrapper( xMSF );
