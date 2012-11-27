@@ -74,11 +74,6 @@ $(eval $(call gb_Module_add_targets,filter,\
 ))
 endif
 
-ifneq ($(SOLAR_JAVA),)
-$(eval $(call gb_Module_add_targets,filter,\
-))
-endif
-
 ifneq ($(DISABLE_CVE_TESTS),TRUE)
 $(eval $(call gb_Module_add_check_targets,filter,\
     CppunitTest_filter_pict_test \
