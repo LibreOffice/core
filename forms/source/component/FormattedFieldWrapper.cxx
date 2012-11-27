@@ -76,7 +76,7 @@ InterfaceRef OFormattedFieldWrapper::createFormattedFieldWrapper(const ::com::su
         query_interface(static_cast<XWeak*>(pModel), xFormattedModel);
 
         pRef->m_xAggregate = Reference<XAggregation> (xFormattedModel, UNO_QUERY);
-        OSL_ENSURE(m_xAggregate.is(), "the OFormattedModel didn't have an XAggregation interface !");
+        OSL_ENSURE(pRef->m_xAggregate.is(), "the OFormattedModel didn't have an XAggregation interface !");
 
         // _before_ setting the delegator, give it to the member references
         query_interface(xFormattedModel, pRef->m_xFormattedPart);
