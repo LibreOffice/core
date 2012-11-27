@@ -90,7 +90,7 @@ LanguageType MsLangId::getRealLanguage( LanguageType nLang )
             else
                 nLang = nConfiguredSystemLanguage;
             break;
-        case LANGUAGE_NONE :
+        case LANGUAGE_HID_HUMAN_INTERFACE_DEVICE :
             if (nConfiguredSystemUILanguage == LANGUAGE_SYSTEM)
                 nLang = getSystemUILanguage();
             else
@@ -161,7 +161,7 @@ void MsLangId::Conversion::convertLanguageToLocale( LanguageType nLang,
     else
     {
         // Still resolve LANGUAGE_DONTKNOW if resolving is not requested,
-        // but not LANGUAGE_NONE or others.
+        // but not LANGUAGE_SYSTEM or others.
         if (bResolveSystem || nLang == LANGUAGE_DONTKNOW)
             nLang = MsLangId::getRealLanguage( nLang);
         convertLanguageToLocale( nLang, aLocale);

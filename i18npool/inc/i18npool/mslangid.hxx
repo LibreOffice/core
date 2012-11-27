@@ -68,11 +68,11 @@ public:
                 application's configuration.
 
         @returns
-            case LANGUAGE_PROCESS_OR_USER_DEFAULT : configured or system language
-            case LANGUAGE_SYSTEM_DEFAULT :          configured or system language
-            case LANGUAGE_SYSTEM :                  configured or system language
-            case LANGUAGE_NONE :                    configured or system UI language
-            case LANGUAGE_DONTKNOW :                LANGUAGE_ENGLISH_US
+            case LANGUAGE_PROCESS_OR_USER_DEFAULT :     configured or system language
+            case LANGUAGE_SYSTEM_DEFAULT :              configured or system language
+            case LANGUAGE_SYSTEM :                      configured or system language
+            case LANGUAGE_HID_HUMAN_INTERFACE_DEVICE :  configured or system UI language
+            case LANGUAGE_DONTKNOW :                    LANGUAGE_ENGLISH_US
             else: nLang
 
             In case the configured language is LANGUAGE_SYSTEM, which is also
