@@ -2634,10 +2634,7 @@ bool SvxLanguageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if(!(rVal >>= aLocale))
                 return sal_False;
 
-            if (!aLocale.Language.isEmpty() || !aLocale.Country.isEmpty())
-                SetValue( LanguageTag( aLocale ).getLanguageType( false));
-            else
-                SetValue(LANGUAGE_NONE);
+            SetValue( LanguageTag( aLocale ).getLanguageType( false));
         }
         break;
     }
