@@ -270,6 +270,7 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
     OUStringBuffer aSearch( rPrefix.getLength() + 16 );
     boost::unordered_map< OUString, ContainerElement, OUStringHash >::iterator it = m_aResFiles.end();
 
+    /* FIXME-BCP47: handle language tags! */
     int nTries = 0;
     if( !aLocale.Language.isEmpty() )
         nTries = 1;
@@ -362,6 +363,7 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
     // give up
     if( it == m_aResFiles.end() )
     {
+        /* FIXME-BCP47: handle language tags! */
         OUStringBuffer sKey = rPrefix;
         sKey.append( rLocale.Language );
         if( !rLocale.Country.isEmpty() )
@@ -423,6 +425,7 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
 
 InternalResMgr* ResMgrContainer::getNextFallback( InternalResMgr* pMgr )
 {
+    /* FIXME-BCP47: handle language tags! */
     com::sun::star::lang::Locale aLocale = pMgr->aLocale;
     if( !aLocale.Variant.isEmpty() )
         aLocale.Variant = OUString();
@@ -1595,6 +1598,7 @@ ResMgr* ResMgr::CreateResMgr( const sal_Char* pPrefixName,
 
     OUString aPrefix( pPrefixName, strlen( pPrefixName ), osl_getThreadTextEncoding() );
 
+    /* FIXME-BCP47: handle language tags! */
     if( aLocale.Language.isEmpty() )
         aLocale = ResMgrContainer::get().getDefLocale();
 
@@ -1615,6 +1619,7 @@ ResMgr* ResMgr::SearchCreateResMgr(
 
     OUString aPrefix( pPrefixName, strlen( pPrefixName ), osl_getThreadTextEncoding() );
 
+    /* FIXME-BCP47: handle language tags! */
     if( rLocale.Language.isEmpty() )
         rLocale = ResMgrContainer::get().getDefLocale();
 
@@ -1824,6 +1829,7 @@ SimpleResMgr::SimpleResMgr( const sal_Char* pPrefixName,
     com::sun::star::lang::Locale aLocale( rLocale );
 
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
+    /* FIXME-BCP47: handle language tags! */
     if( aLocale.Language.isEmpty() )
         aLocale = ResMgrContainer::get().getDefLocale();
 
