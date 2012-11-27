@@ -108,6 +108,7 @@ $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/popupmenucontrollerbas
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/popupwindowcontroller.hxx,svtools/popupwindowcontroller.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/printoptions.hxx,svtools/printoptions.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/prnsetup.hxx,svtools/prnsetup.hxx))
+$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/restartdialog.hxx,svtools/restartdialog.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/roadmap.hxx,svtools/roadmap.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/roadmapwizard.hxx,svtools/roadmapwizard.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/rtfkeywd.hxx,svtools/rtfkeywd.hxx))

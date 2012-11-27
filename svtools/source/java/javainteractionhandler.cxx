@@ -27,6 +27,7 @@
 #include <com/sun/star/java/JavaDisabledException.hpp>
 #include <com/sun/star/java/JavaVMCreationFailureException.hpp>
 #include <com/sun/star/java/RestartRequiredException.hpp>
+#include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include <osl/mutex.hxx>
@@ -34,6 +35,7 @@
 #include <tools/rcid.h>
 #include <jvmfwk/framework.h>
 
+#include <svtools/restartdialog.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/javainteractionhandler.hxx>
 #include <svtools/javacontext.hxx>
@@ -201,14 +203,11 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             //before it can be used.
             SolarMutexGuard aSolarGuard;
             m_bRestartRequired_Handled = true;
-            ErrorBox aErrorBox(NULL, SvtResId( ERRORBOX_RESTARTREQUIRED ) );
-            aErrorBox.SetText(SvtResId( STR_ERROR_RESTARTREQUIRED ).toString());
-            nResult = aErrorBox.Execute();
+            svtools::executeRestartDialog(
+                comphelper::getProcessComponentContext(), 0,
+                svtools::RESTART_REASON_JAVA);
         }
-        else
-        {
-            nResult = RET_OK;
-        }
+        nResult = RET_OK;
     }
 
     if ( nResult == RET_CANCEL || nResult == RET_NO)

@@ -24,7 +24,7 @@
 
 // Resource-Id's ------------------------------------------------------------
 
-#define RID_SVX_MSGBOX_JAVA_RESTART         (RID_SVX_START + 0)
+// RID_SVX_START + 0 unused
 #define RID_SVX_MSGBOX_OPTIONS_RESTART      (RID_SVX_START + 1)
 #define RID_SVX_MSGBOX_LANGUAGE_RESTART     (RID_SVX_START + 2)
 #define RID_CUI_DIALOG_COLORPICKER          (RID_SVX_START + 3)

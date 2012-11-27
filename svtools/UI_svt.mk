@@ -12,6 +12,7 @@ $(eval $(call gb_UI_UI,svt))
 $(eval $(call gb_UI_add_uifiles,svt,\
 	svtools/uiconfig/ui/graphicexport \
 	svtools/uiconfig/ui/placeedit \
+	svtools/uiconfig/ui/restartdialog \
 ))
 
 # vim: set noet sw=4 ts=4:

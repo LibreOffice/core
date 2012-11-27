@@ -32,6 +32,7 @@
 #include <vcl/waitobj.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/imagemgr.hxx>
+#include "svtools/restartdialog.hxx"
 #include "svtools/treelistentry.hxx"
 #include <sfx2/filedlghelper.hxx>
 #include <comphelper/processfactory.hxx>
@@ -662,8 +663,9 @@ sal_Bool SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
                     if ( bRunning ||
                         ( ( pInfo->nRequirements & JFW_REQUIRE_NEEDRESTART ) == JFW_REQUIRE_NEEDRESTART ) )
                     {
-                        WarningBox aWarnBox( this, CUI_RES( RID_SVX_MSGBOX_JAVA_RESTART ) );
-                        aWarnBox.Execute();
+                        svtools::executeRestartDialog(
+                            comphelper::getProcessComponentContext(), this,
+                            svtools::RESTART_REASON_JAVA);
                     }
 
                     eErr = jfw_setSelectedJRE( pInfo );
