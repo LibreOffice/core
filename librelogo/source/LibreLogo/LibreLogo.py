@@ -7,12 +7,23 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
+from __future__ import unicode_literals
 import sys, os, uno, unohelper
 import re, random, traceback, itertools
 import threading, time as __time__
 
-ctx = uno.getComponentContext()
-__lngpath__ = re.sub("[\w_.]*$", "", ctx.ServiceManager.createInstanceWithContext("org.openoffice.LibreLogo.LibreLogoDummy", ctx).get_path()) # instead of PackageInformationProvider, see #115393#
+try:
+    unicode
+except:
+    unicode, long = str, int # support python 3
+
+urebootstrap = os.environ["URE_BOOTSTRAP"]
+if "vnd.sun.star.pathname" in urebootstrap:
+    __lngpath__ = re.sub("^vnd.sun.star.pathname:(.*)program(/|\\)fundamental([.]ini|rc)$", "\\1", urebootstrap)
+else:
+    __lngpath__ = unohelper.fileUrlToSystemPath(re.sub("program/(fundamental.ini|fundamentalrc)$", "", urebootstrap))
+__lngpath__ = __lngpath__ + "share/Scripts/python/LibreLogo/".replace("/", os.sep)
+print (__lngpath__)
 __translang__ = "cz|de|dk|en_US|es|fr|hu|it|nl|no|pl|pt|ru|se|sl" # FIXME supported languages for language guessing, expand this list, according to the localizations
 __lng__ = {}
 __docs__ = {}
@@ -125,7 +136,7 @@ def __l12n__(lng):
         return __lng__[lng]
     except:
         try:
-            __lng__[lng] = dict([[i.split("=")[0].strip(), i.split("=")[1].strip().decode("unicode-escape")] for i in open(__lngpath__ + "LibreLogo_" + lng + ".properties", 'r').readlines() if "=" in i])
+            __lng__[lng] = dict([[i.decode("unicode-escape").split("=")[0].strip(), i.decode("unicode-escape").split("=")[1].strip()] for i in open(__lngpath__ + "LibreLogo_" + lng + ".properties", 'rb').readlines() if b"=" in i])
             return __lng__[lng]
         except:
             return None
@@ -208,7 +219,7 @@ def Input(s):
         # dispose the dialog
         controlContainer.dispose()
         return inputtext
-    except Exception, e:
+    except Exception as e:
         __trace__()
 
 def __string__(s, decimal = None): # convert decimal sign, localized BOOL and SET
@@ -257,10 +268,10 @@ def Random(r):
         return list(r)[int(random.random() * len(r))]
 
 def to_ascii(s):
-    return s.encode("unicode-escape").replace("\u", "__u__").replace(r"\x", "__x__")
+    return s.encode("unicode-escape").decode("utf-8").replace("\\u", "__u__").replace(r"\x", "__x__")
 
 def to_unicode(s):
-    return s.replace("__x__", r"\x").replace("__u__", "\u").decode("unicode-escape")
+    return bytes(s.replace("__x__", r"\x").replace("__u__", "\\u"), "ascii").decode("unicode-escape")
 
 def __trace__():
     if 'PYUNO_LOGLEVEL' in os.environ:
@@ -281,7 +292,7 @@ def __translate__(arg = None):
     # detect language
     text = _.doc.getText().getString()
     # remove comments and strings
-    text = re.sub(r"[ ]*;[^\n]*", "", re.sub(ur"['„“‘«»「][^\n'”“‘’«»」]*['”“‘’«»」]", "", re.sub(r"^[ \t]*[;#][^\n]*", "", text)))
+    text = re.sub(r"[ ]*;[^\n]*", "", re.sub(r"['„“‘«»「][^\n'”“‘’«»」]*['”“‘’«»」]", "", re.sub(r"^[ \t]*[;#][^\n]*", "", text)))
     text = " ".join(set(re.findall("(?u)\w+", text)) - set(re.findall("(?u)\w*\d+\w*", text))).lower()  # only words
     ctx = uno.getComponentContext()
     guess = ctx.ServiceManager.createInstanceWithContext("com.sun.star.linguistic2.LanguageGuessing", ctx)
@@ -309,15 +320,15 @@ def __translate__(arg = None):
     in2 = __l12n__(_.lng)['IN'].split("|")[0].upper()
     if in1[0] == '-' and in2[0] != '-': # "for x y-in" -> "for x in y"
         exception += ['IN']
-        text = re.sub(ur"(?ui)\b((?:%s) +:?\w+) +([^\n]+)(?:%s) +(?=[[] |[[]\n)" % (lang['FOR'], in1), "\\1 %s \\2 " % in2, text)
-        text = re.sub(ur"(?ui)(:?\b\w+|[[][^[\n]*])\b(?:%s)\b" % in1, "%s \\1" % in2, text)
+        text = re.sub(r"(?ui)\b((?:%s) +:?\w+) +([^\n]+)(?:%s) +(?=[[] |[[]\n)" % (lang['FOR'], in1), "\\1 %s \\2 " % in2, text)
+        text = re.sub(r"(?ui)(:?\b\w+|[[][^[\n]*])\b(?:%s)\b" % in1, "%s \\1" % in2, text)
     elif in1[0] != '-' and in2[0] == '-': # "for x in y" -> "for x y-in"
         exception += ['IN']
-        text = re.sub(ur"(?ui)(?<=\n)((?:%s)\b +:?\w+) +(?:%s) +([^\n]+?) +(?=[[] |[[]\n)" % (lang['FOR'], in1), "\\1 \\2%s " % in2, text)
-        text = re.sub(ur"(?ui)(?<!:)\b(?:%s) +(:?\b\w+|[[][^[\n]*])\b" % in1, "\\1%s" % in2, text)
+        text = re.sub(r"(?ui)(?<=\n)((?:%s)\b +:?\w+) +(?:%s) +([^\n]+?) +(?=[[] |[[]\n)" % (lang['FOR'], in1), "\\1 \\2%s " % in2, text)
+        text = re.sub(r"(?ui)(?<!:)\b(?:%s) +(:?\b\w+|[[][^[\n]*])\b" % in1, "\\1%s" % in2, text)
     for i in set(lang) - set(exception):
-        text = re.sub(ur'(?ui)(?<!:)\b(%s)\b' % lang[i], __l12n__(_.lng)[i].split("|")[0].upper(), text)
-    text = re.sub(ur"(?<=\d)[%s](?=\d)" % lang['DECIMAL'], __l12n__(_.lng)['DECIMAL'], text)
+        text = re.sub(r'(?ui)(?<!:)\b(%s)\b' % lang[i], __l12n__(_.lng)[i].split("|")[0].upper(), text)
+    text = re.sub(r"(?<=\d)[%s](?=\d)" % lang['DECIMAL'], __l12n__(_.lng)['DECIMAL'], text)
 
     # decode strings
     quoted = u"(?ui)(?<=%s)(%%s)(?=%s)" % (__l12n__(_.lng)['LEFTSTRING'][0], __l12n__(_.lng)['RIGHTSTRING'][0])
@@ -548,7 +559,7 @@ def run(arg=None, arg2 = -1):
         if arg2 == -1:
             arg2 = _.doc.getText().getString()
             if len(arg2) > 20000:
-                if MessageBox(_.doc.CurrentController.Frame.ContainerWindow, __l12n__(_.lng)['ERR_NOTAPROGRAM'], __l12n__(_.lng)['LIBRELOGO'], "querybox", __YES_NO_CANCEL__) <> 2:
+                if MessageBox(_.doc.CurrentController.Frame.ContainerWindow, __l12n__(_.lng)['ERR_NOTAPROGRAM'], __l12n__(_.lng)['LIBRELOGO'], "querybox", __YES_NO_CANCEL__) != 2:
                     with __lock__:
                         __thread__ = None
                     return None
@@ -718,7 +729,7 @@ def __draw__(d):
 
 def __zoom__():
     z = _.doc.CurrentController.getViewSettings().ZoomValue
-    if z <> _.zoomvalue:
+    if z != _.zoomvalue:
         _.zoomvalue = z
         return True
     return False
@@ -742,7 +753,7 @@ def __go__(shapename, n, dot = False, preciseAngle = -1):
     dx = n * sin((pi/180)*(max(turtle.RotateAngle, preciseAngle)/100))
     dy = n * cos((pi/180)*(max(turtle.RotateAngle, preciseAngle)/100))
     turtle.setPosition(__Point__(pos.X + dx / __MM10_TO_TWIP__, pos.Y + dy / __MM10_TO_TWIP__))
-    if (_.pencolor <> _.oldlc or _.pensize <> _.oldlw or _.linestyle <> _.oldls or _.linejoint <> _.oldlj):
+    if (_.pencolor != _.oldlc or _.pensize != _.oldlw or _.linestyle != _.oldls or _.linejoint != _.oldlj):
         __removeshape__(__ACTUAL__)
         shape = None
     else:
@@ -851,7 +862,7 @@ def point():
     _.pen, _.linestyle = oldpen, oldstyle
 
 def __boxshape__(shapetype, l):
-    if type(l) <> type([]): # default for circle and square
+    if type(l) != type([]): # default for circle and square
         l = [l, l]
     turtle = __getshape__(__TURTLE__)
     shape = __draw__(shapetype + "Shape")
@@ -1144,111 +1155,111 @@ def __loadlang__(lang, a):
     repcount = a['REPCOUNT'].split('|')[0]
     loopi = itertools.count()
     loop = lambda r: "%(i)s = 1\n%(orig)s%(j)s = %(i)s\n%(i)s += 1\n" % \
-        { "i": repcount + str(loopi.next()), "j": repcount, "orig": re.sub( ur"(?ui)(?<!:)\b%s\b" % repcount, repcount + str(loopi.next()-1), r.group(0)) }
+        { "i": repcount + str(loopi.next()), "j": repcount, "orig": re.sub( r"(?ui)(?<!:)\b%s\b" % repcount, repcount + str(loopi.next()-1), r.group(0)) }
 
     __comp__[lang] = [
-    [ur"(?<!:)\b(?:%s) [[]" % a['GROUP'], "\n__groupstart__()\nfor __groupindex__ in range(2):\n[\nif __groupindex__ == 1:\n[\n__groupend__()\nbreak\n]\n"],
-    [ur"(?<!:)\b(?:%s)\b" % a['GROUP'], "\n__removeshape__(__ACTUAL__)\n"],
-    [ur"(\n| )][ \n]*\[(\n| )", "\n]\nelse:\n[\n"], # if/else block
-    [ur"(?<!\n)\[(?= |\n)", ":\n[\n"], # start block
-    [ur"( ]|\n]$)", "\n]\n"], # finish block
-    [ur"(?<!:)\b(?:%s)\b" % a['FOR'], "\nfor"],
-    [ur"(?<!:)\b(?:%s)\b" % a['REPEAT'], "\n__repeat__"],
-    [ur"(?<!:)\b(?:%s)\b" % a['BREAK'], "\nbreak"],
-    [ur"(?<!:)\b(?:%s)\b" % a['CONTINUE'], "\ncontinue"],
-    [ur"(?<!:)\b(?:%s)\b" % a['REPCOUNT'], repcount],
-    [ur"(?<!:)\b(?:%s)\b" % a['IF'], "\nif"],
-    [ur"(?<!:)\b(?:%s)\b" % a['WHILE'], "\nwhile"],
-    [ur"(?<!:)\b(?:%s)\b" % a['OUTPUT'], "\nreturn"],
-    [ur"\n(if|while|return) [^\n]*", lambda r: re.sub("(?<![=!<>])=(?!=)", "==", r.group(0))], # = -> ==, XXX x = y = 1?
-    [ur"(?<=\n)(for\b :?\w+) ([^\n]+)(?<=\w|]|}|\))(?=-|:)(?:%s)\b" % a['IN'], "\\1 in \\2"], # "for x y-in" -> "for x in y"
-    [ur"(:?\b\w+|[[][^[\n]*])\b(?:%s)\b" % a['IN'], "in \\1"], # "x y-in" -> "x in y"
-    [ur"(?<!:)\b(?:%s)\b" % a['IN'], "in"],
-    [ur"(?<!:)\b(?:%s)\b[ \t]+(:?\w+)\b(?! in\b)" % a['FOR'], "\nfor \\1 in"],
-    [ur"(?<=\n)__repeat__ :\n", "while True:\n"], # infinite loop
-    [ur"(?<=\n)(for|while) (?!__groupindex__)[^\n]*:\n\[\n", loop], # loop variables for repcount (not groupindex loop)
-    [ur"(?<=\n)__repeat__([^\n]*\w[^\n]*):(?=\n)", "for %s in range(1, 1+int(\\1)):" % repcount], # repeat block
-    [ur"(?<=\d)[%s](?=\d)" % a['DECIMAL'], "."], # decimal sign
-    [ur"(?<!/)/(?!/)", "*1.0/"], # fix division: /1 -> /1.0, but not with //
-    [ur"\b([0-9]+([,.][0-9]+)?)(%s)\b" % a['HOUR'], "\\1*30"], # 12h = 12*30°
-    [ur"(?<=\d)(%s)" % a['DEG'], ""], # 1° -> 1
-    [ur"(?<!:)\b(?:__def__)[ \t]+(\w+)\b[ \t]*([:]?\w[^\n]*)", "\ndef \\1(\\2):\n["],
-    [ur"(?<!:)\b(?:__def__)\s+(\w+)", "\ndef \\1():\n["],
-    [ur"(?<!:)\b(?:%s)\b" % a['END'], "\n]"],
-    [ur"(?<!:)\b(?:%s)\b" % a['GLOBAL'], "global"],
-    [ur"(?<!:)\b(?:%s)\b" % a['TRUE'], "True"],
-    [ur"(?<!:)\b(?:%s)\b" % a['FALSE'], "False"],
-    [ur"(?<!:)\b(?:%s)\b" % a['NOT'], "not"],
-    [ur"(?<!:)\b(?:%s)\b" % a['AND'], "and"],
-    [ur"(?<!:)\b(?:%s)\b" % a['OR'], "or"],
-    [ur"(?<!:)\b(?:%s)\b" % a['INT'], "__int__"],
-    [ur"(?<!:)\b(?:%s)\b" % a['FLOAT'], "__float__"],
-    [ur"(?<!:)\b(?:%s)\b" % a['STR'], "__string__"],
-    [ur"(?<!:)\b(?:%s)\b" % a['COUNT'], "len"],
-    [ur"(?<!:)\b(?:%s)\b" % a['ROUND'], "round"],
-    [ur"(?<!:)\b(?:%s)\b" % a['ABS'], "abs"],
-    [ur"(?<!:)\b(?:%s)\b" % a['SIN'], "sin"],
-    [ur"(?<!:)\b(?:%s)\b" % a['COS'], "cos"],
-    [ur"(?<!:)\b(?:%s)\b" % a['PI'], "pi"],
-    [ur"(?<!:)\b(?:%s)\b" % a['SQRT'], "sqrt"],
-    [ur"(?<!:)\b(?:%s)\b" % a['MIN'], "min"],
-    [ur"(?<!:)\b(?:%s)\b" % a['MAX'], "max"],
-    [ur"(?<!:)\b(?:%s)\b" % a['STOP'], "\nreturn None"],
-    [ur"(?<!:)\b(?:%s)\b" % a['CLEARSCREEN'], "\n__cs__()"],
-    [ur"(?<!:)\b(?:%s)(\s+|$)" % a['PENCOLOR'], "\n)pencolor("],
-    [ur"(?<!:)\b(?:%s)(\s+|$)" % a['PENSTYLE'], "\n)penstyle("],
-    [ur"(?<!:)\b(?:%s)(\s+|$)" % a['PENJOINT'], "\n)penjoint("],
-    [ur"(?<!:)\b(?:%s)(\s+|$)" % a['FILLCOLOR'], "\n)fillcolor("],
-    [ur"(?<!:)\b(?:%s)(\s+|$)" % a['FILLSTYLE'], "\n)fillstyle("],
-    [ur"(?<!:)\b(?:%s)(\s+|$)" % a['FONTCOLOR'], "\n)fontcolor("],
-    [ur"(?<!:)\b(?:%s)(\s+|$)" % a['FONTFAMILY'], "\nglobal _\n_.fontfamily="],
-    [ur"(?<!:)\b(?:%s)(\s+|$)" % a['FONTHEIGHT'], "\nglobal _\n_.fontheight="],
-    [ur"(?<!:)\b(?:%s)(\s+|$)" % a['FONTWEIGHT'], "\nglobal _\n_.fontweight="],
-    [ur"(?<!:)\b(?:%s)(\s+|$)" % a['FONTSTYLE'], "\nglobal _\n_.fontstyle="],
-    [ur"(?<!:)\b(?:%s)(\s+|$)" % a['PENWIDTH'], "\n)pensize("],
-    [ur"(?<!:)\b(?:%s)\b" % a['PENDOWN'], "\nglobal _\n__pen__(1)"],
-    [ur"(?<!:)\b(?:%s)\b" % a['PENUP'], "\nglobal _\n__pen__(0)"],
-    [ur"(?<!:)\b(?:%s)\b" % a['HIDETURTLE'], "\nhideturtle()"],
-    [ur"(?<!:)\b(?:%s)\b" % a['SHOWTURTLE'], "\nshowturtle()"],
-    [ur"(?<!:)\b(?:%s)\b\[" % a['POSITION'], "position()["],
-    [ur"(?<!:)\b(?:%s)\b(?!\()" % a['POSITION'], "\n)position("],
-    [ur"(?<!:)\b(?:%s)\b" % a['HEADING'], "\n)heading("],
-    [ur"(?<!:)\b(?:%s)\b" % a['PAGESIZE'], "pagesize()"],
-    [ur"(?<!:)\b(?:%s)\b" % a['POINT'], "\npoint()"],
-    [ur"(?<!:)\b(?:%s)\b" % (a['ELLIPSE'] + "|" + a['CIRCLE']), "\n)ellipse("],
-    [ur"(?<!:)\b(?:%s)\b" % (a['RECTANGLE'] + "|" + a['SQUARE']), "\n)rectangle("],
-    [ur"(?<!:)\b(?:%s)\b" % a['CLOSE'], "\n__fillit__(False)"],
-    [ur"(?<!:)\b(?:%s)\b" % a['FILL'], "\n__fillit__()"],
-    [ur"(?<!:)\b(?:%s)\b" % a['LABEL'], "\n)label("],
-    [ur"(?<!:)\b(?:%s)\b" % a['TEXT'], "\n)text(__getshape__(__ACTUAL__),"],
-    [ur"(text\([ \t]*\"[^\"\n\)]*)", "\\1\"\n"],
-    [ur"(?<!:)\b(?:%s)\b" % a['HOME'], "\nturtlehome()"],
-    [ur"(?<!:)\b(?:%s)\b" % a['SLEEP'], "\n)sleep("],
-    [ur"(?<!:)\b(?:%s)\b" % a['FORWARD'], "\n)forward("],
-    [ur"(?<!:)\b(?:%s)\b" % a['BACKWARD'], "\n)backward("],
-    [ur"(?<!:)\b(?:%s)\b" % a['TURNRIGHT'], "\n)turnright("],
-    [ur"(?<!:)\b(?:%s)\b" % a['RANDOM'], "Random"],
-    [ur"(?<!:)\b(?:%s)\b(?= \d)" % 'Random', "random.random()*"],
-    [ur"(?<!:)\b(?:%s)\b" % a['SET'], "set"],
-    [ur"(?<!:)\b(?:%s)\b" % a['RANGE'], "range"],
-    [ur"(?<!:)\b(?:%s)\b" % a['LIST'], "list"],
-    [ur"(?<!:)\b(?:%s)\b" % a['TUPLE'], "tuple"],
-    [ur"(?<!:)\b(?:%s)\b" % a['SORTED'], "sorted"],
-    [ur"(?<!:)\b(?:%s)\b ?\(" % a['RESEARCH'], "re.search('(?u)'+"],
-    [ur"(?<!:)\b(?:%s)\b ?\(" % a['RESUB'], "re.sub('(?u)'+"],
-    [ur"(?<!:)\b(?:%s)\b ?\(" % a['REFINDALL'], "re.findall('(?u)'+"],
-    [ur"(?<!:)\b(?:%s)\b" % a['ANY'], "u'any'"],
-    [ur"(?<!:)\b(?:%s) (\w+|[[][^\]]*])\b" % a['INPUT'], " Input(\\1)"],
-    [ur"(?<!:)\b(?:%s)\b" % a['PRINT'], "\n)Print("],
-    [ur"(?<!:)\b(?:%s)\b" % a['TURNLEFT'], "\n)turnleft("],
-    [ur"\b([0-9]+([,.][0-9]+)?)(%s)\b" % a['PT'], "\\1"],
-    [ur"\b([0-9]+([,.][0-9]+)?)(%s)(?!\w)" % a['INCH'], "\\1*72"],
-    [ur"\b([0-9]+([,.][0-9]+)?)(%s)\b" % a['MM'], "\\1*%s" % __MM_TO_PT__],
-    [ur"\b([0-9]+([,.][0-9]+)?)(%s)\b" % a['CM'], "\\1*%s*10" % __MM_TO_PT__],
-    [ur"\b(__(?:int|float|string)__len|round|abs|sin|cos|sqrt|set|list|tuple|sorted)\b ((?:\w|\d+([,.]\d+)?|[-+*/]| )+)\)" , "\\1(\\2))" ], # fix parsing: (1 + sqrt x) -> (1 + sqrt(x))
-    [ur"(?<=[-*/=+,]) ?\n\)(\w+)\(", "\\1()"], # read attributes, eg. x = fillcolor
-    [ur"(?<=return) ?\n\)(\w+)\(", "\\1()"], # return + user function
-    [ur"(?<=(?:Print|label)\() ?\n\)(\w+)\(", "\\1()\n"] # Print/label + user function
+    [r"(?<!:)\b(?:%s) [[]" % a['GROUP'], "\n__groupstart__()\nfor __groupindex__ in range(2):\n[\nif __groupindex__ == 1:\n[\n__groupend__()\nbreak\n]\n"],
+    [r"(?<!:)\b(?:%s)\b" % a['GROUP'], "\n__removeshape__(__ACTUAL__)\n"],
+    [r"(\n| )][ \n]*\[(\n| )", "\n]\nelse:\n[\n"], # if/else block
+    [r"(?<!\n)\[(?= |\n)", ":\n[\n"], # start block
+    [r"( ]|\n]$)", "\n]\n"], # finish block
+    [r"(?<!:)\b(?:%s)\b" % a['FOR'], "\nfor"],
+    [r"(?<!:)\b(?:%s)\b" % a['REPEAT'], "\n__repeat__"],
+    [r"(?<!:)\b(?:%s)\b" % a['BREAK'], "\nbreak"],
+    [r"(?<!:)\b(?:%s)\b" % a['CONTINUE'], "\ncontinue"],
+    [r"(?<!:)\b(?:%s)\b" % a['REPCOUNT'], repcount],
+    [r"(?<!:)\b(?:%s)\b" % a['IF'], "\nif"],
+    [r"(?<!:)\b(?:%s)\b" % a['WHILE'], "\nwhile"],
+    [r"(?<!:)\b(?:%s)\b" % a['OUTPUT'], "\nreturn"],
+    [r"\n(if|while|return) [^\n]*", lambda r: re.sub("(?<![=!<>])=(?!=)", "==", r.group(0))], # = -> ==, XXX x = y = 1?
+    [r"(?<=\n)(for\b :?\w+) ([^\n]+)(?<=\w|]|}|\))(?=-|:)(?:%s)\b" % a['IN'], "\\1 in \\2"], # "for x y-in" -> "for x in y"
+    [r"(:?\b\w+|[[][^[\n]*])\b(?:%s)\b" % a['IN'], "in \\1"], # "x y-in" -> "x in y"
+    [r"(?<!:)\b(?:%s)\b" % a['IN'], "in"],
+    [r"(?<!:)\b(?:%s)\b[ \t]+(:?\w+)\b(?! in\b)" % a['FOR'], "\nfor \\1 in"],
+    [r"(?<=\n)__repeat__ :\n", "while True:\n"], # infinite loop
+    [r"(?<=\n)(for|while) (?!__groupindex__)[^\n]*:\n\[\n", loop], # loop variables for repcount (not groupindex loop)
+    [r"(?<=\n)__repeat__([^\n]*\w[^\n]*):(?=\n)", "for %s in range(1, 1+int(\\1)):" % repcount], # repeat block
+    [r"(?<=\d)[%s](?=\d)" % a['DECIMAL'], "."], # decimal sign
+    [r"(?<!/)/(?!/)", "*1.0/"], # fix division: /1 -> /1.0, but not with //
+    [r"\b([0-9]+([,.][0-9]+)?)(%s)\b" % a['HOUR'], "\\1*30"], # 12h = 12*30°
+    [r"(?<=\d)(%s)" % a['DEG'], ""], # 1° -> 1
+    [r"(?<!:)\b(?:__def__)[ \t]+(\w+)\b[ \t]*([:]?\w[^\n]*)", "\ndef \\1(\\2):\n["],
+    [r"(?<!:)\b(?:__def__)\s+(\w+)", "\ndef \\1():\n["],
+    [r"(?<!:)\b(?:%s)\b" % a['END'], "\n]"],
+    [r"(?<!:)\b(?:%s)\b" % a['GLOBAL'], "global"],
+    [r"(?<!:)\b(?:%s)\b" % a['TRUE'], "True"],
+    [r"(?<!:)\b(?:%s)\b" % a['FALSE'], "False"],
+    [r"(?<!:)\b(?:%s)\b" % a['NOT'], "not"],
+    [r"(?<!:)\b(?:%s)\b" % a['AND'], "and"],
+    [r"(?<!:)\b(?:%s)\b" % a['OR'], "or"],
+    [r"(?<!:)\b(?:%s)\b" % a['INT'], "__int__"],
+    [r"(?<!:)\b(?:%s)\b" % a['FLOAT'], "__float__"],
+    [r"(?<!:)\b(?:%s)\b" % a['STR'], "__string__"],
+    [r"(?<!:)\b(?:%s)\b" % a['COUNT'], "len"],
+    [r"(?<!:)\b(?:%s)\b" % a['ROUND'], "round"],
+    [r"(?<!:)\b(?:%s)\b" % a['ABS'], "abs"],
+    [r"(?<!:)\b(?:%s)\b" % a['SIN'], "sin"],
+    [r"(?<!:)\b(?:%s)\b" % a['COS'], "cos"],
+    [r"(?<!:)\b(?:%s)\b" % a['PI'], "pi"],
+    [r"(?<!:)\b(?:%s)\b" % a['SQRT'], "sqrt"],
+    [r"(?<!:)\b(?:%s)\b" % a['MIN'], "min"],
+    [r"(?<!:)\b(?:%s)\b" % a['MAX'], "max"],
+    [r"(?<!:)\b(?:%s)\b" % a['STOP'], "\nreturn None"],
+    [r"(?<!:)\b(?:%s)\b" % a['CLEARSCREEN'], "\n__cs__()"],
+    [r"(?<!:)\b(?:%s)(\s+|$)" % a['PENCOLOR'], "\n)pencolor("],
+    [r"(?<!:)\b(?:%s)(\s+|$)" % a['PENSTYLE'], "\n)penstyle("],
+    [r"(?<!:)\b(?:%s)(\s+|$)" % a['PENJOINT'], "\n)penjoint("],
+    [r"(?<!:)\b(?:%s)(\s+|$)" % a['FILLCOLOR'], "\n)fillcolor("],
+    [r"(?<!:)\b(?:%s)(\s+|$)" % a['FILLSTYLE'], "\n)fillstyle("],
+    [r"(?<!:)\b(?:%s)(\s+|$)" % a['FONTCOLOR'], "\n)fontcolor("],
+    [r"(?<!:)\b(?:%s)(\s+|$)" % a['FONTFAMILY'], "\nglobal _\n_.fontfamily="],
+    [r"(?<!:)\b(?:%s)(\s+|$)" % a['FONTHEIGHT'], "\nglobal _\n_.fontheight="],
+    [r"(?<!:)\b(?:%s)(\s+|$)" % a['FONTWEIGHT'], "\nglobal _\n_.fontweight="],
+    [r"(?<!:)\b(?:%s)(\s+|$)" % a['FONTSTYLE'], "\nglobal _\n_.fontstyle="],
+    [r"(?<!:)\b(?:%s)(\s+|$)" % a['PENWIDTH'], "\n)pensize("],
+    [r"(?<!:)\b(?:%s)\b" % a['PENDOWN'], "\nglobal _\n__pen__(1)"],
+    [r"(?<!:)\b(?:%s)\b" % a['PENUP'], "\nglobal _\n__pen__(0)"],
+    [r"(?<!:)\b(?:%s)\b" % a['HIDETURTLE'], "\nhideturtle()"],
+    [r"(?<!:)\b(?:%s)\b" % a['SHOWTURTLE'], "\nshowturtle()"],
+    [r"(?<!:)\b(?:%s)\b\[" % a['POSITION'], "position()["],
+    [r"(?<!:)\b(?:%s)\b(?!\()" % a['POSITION'], "\n)position("],
+    [r"(?<!:)\b(?:%s)\b" % a['HEADING'], "\n)heading("],
+    [r"(?<!:)\b(?:%s)\b" % a['PAGESIZE'], "pagesize()"],
+    [r"(?<!:)\b(?:%s)\b" % a['POINT'], "\npoint()"],
+    [r"(?<!:)\b(?:%s)\b" % (a['ELLIPSE'] + "|" + a['CIRCLE']), "\n)ellipse("],
+    [r"(?<!:)\b(?:%s)\b" % (a['RECTANGLE'] + "|" + a['SQUARE']), "\n)rectangle("],
+    [r"(?<!:)\b(?:%s)\b" % a['CLOSE'], "\n__fillit__(False)"],
+    [r"(?<!:)\b(?:%s)\b" % a['FILL'], "\n__fillit__()"],
+    [r"(?<!:)\b(?:%s)\b" % a['LABEL'], "\n)label("],
+    [r"(?<!:)\b(?:%s)\b" % a['TEXT'], "\n)text(__getshape__(__ACTUAL__),"],
+    [r"(text\([ \t]*\"[^\"\n\)]*)", "\\1\"\n"],
+    [r"(?<!:)\b(?:%s)\b" % a['HOME'], "\nturtlehome()"],
+    [r"(?<!:)\b(?:%s)\b" % a['SLEEP'], "\n)sleep("],
+    [r"(?<!:)\b(?:%s)\b" % a['FORWARD'], "\n)forward("],
+    [r"(?<!:)\b(?:%s)\b" % a['BACKWARD'], "\n)backward("],
+    [r"(?<!:)\b(?:%s)\b" % a['TURNRIGHT'], "\n)turnright("],
+    [r"(?<!:)\b(?:%s)\b" % a['RANDOM'], "Random"],
+    [r"(?<!:)\b(?:%s)\b(?= \d)" % 'Random', "random.random()*"],
+    [r"(?<!:)\b(?:%s)\b" % a['SET'], "set"],
+    [r"(?<!:)\b(?:%s)\b" % a['RANGE'], "range"],
+    [r"(?<!:)\b(?:%s)\b" % a['LIST'], "list"],
+    [r"(?<!:)\b(?:%s)\b" % a['TUPLE'], "tuple"],
+    [r"(?<!:)\b(?:%s)\b" % a['SORTED'], "sorted"],
+    [r"(?<!:)\b(?:%s)\b ?\(" % a['RESEARCH'], "re.search('(?u)'+"],
+    [r"(?<!:)\b(?:%s)\b ?\(" % a['RESUB'], "re.sub('(?u)'+"],
+    [r"(?<!:)\b(?:%s)\b ?\(" % a['REFINDALL'], "re.findall('(?u)'+"],
+    [r"(?<!:)\b(?:%s)\b" % a['ANY'], "u'any'"],
+    [r"(?<!:)\b(?:%s) (\w+|[[][^\]]*])\b" % a['INPUT'], " Input(\\1)"],
+    [r"(?<!:)\b(?:%s)\b" % a['PRINT'], "\n)Print("],
+    [r"(?<!:)\b(?:%s)\b" % a['TURNLEFT'], "\n)turnleft("],
+    [r"\b([0-9]+([,.][0-9]+)?)(%s)\b" % a['PT'], "\\1"],
+    [r"\b([0-9]+([,.][0-9]+)?)(%s)(?!\w)" % a['INCH'], "\\1*72"],
+    [r"\b([0-9]+([,.][0-9]+)?)(%s)\b" % a['MM'], "\\1*%s" % __MM_TO_PT__],
+    [r"\b([0-9]+([,.][0-9]+)?)(%s)\b" % a['CM'], "\\1*%s*10" % __MM_TO_PT__],
+    [r"\b(__(?:int|float|string)__len|round|abs|sin|cos|sqrt|set|list|tuple|sorted)\b ((?:\w|\d+([,.]\d+)?|[-+*/]| )+)\)" , "\\1(\\2))" ], # fix parsing: (1 + sqrt x) -> (1 + sqrt(x))
+    [r"(?<=[-*/=+,]) ?\n\)(\w+)\(", "\\1()"], # read attributes, eg. x = fillcolor
+    [r"(?<=return) ?\n\)(\w+)\(", "\\1()"], # return + user function
+    [r"(?<=(?:Print|label)\() ?\n\)(\w+)\(", "\\1()\n"] # Print/label + user function
     ]
 
 def __concatenation__(r): # keep line positions with extra line breaks
@@ -1278,7 +1289,7 @@ def __compil__(s):
     rmsp = re.compile(r"[ ]*([=+*/]|==|<=|>=|<>|!=|-[ ]+)[ ]*")
     chsp = re.compile(r"[ \t]+")
     chch = re.compile(r"(?u)(?<!\w):(?=\w)")
-    parenfix = re.compile(ur"(?ui)(\([^\(\[\]\)]+)]\)")
+    parenfix = re.compile(r"(?ui)(\([^\(\[\]\)]+)]\)")
 
     # remove CR characters and split lines
     s = re.sub(r'[ \t\r]*(?=\n)', '', s)
@@ -1307,11 +1318,11 @@ def __compil__(s):
     s = re.sub(r"[ ]*;[^\n]*", "", s)
 
     # n-dash and m-dash as minus signs
-    s = re.sub(ur"(?u)[–—]", "-", s)
+    s = re.sub(r"(?u)[–—]", "-", s)
 
     # replace procedure names
-    s = re.sub(ur"(?i)^[ ]*(%s)[ ]+" % __l12n__(_.lng)['TO'], "__def__ ", s)
-    s = re.sub(ur"(?i)\n[ ]*(%s)[ ]+" % __l12n__(_.lng)['TO'], "\n__def__ ", s)
+    s = re.sub(r"(?i)^[ ]*(%s)[ ]+" % __l12n__(_.lng)['TO'], "__def__ ", s)
+    s = re.sub(r"(?i)\n[ ]*(%s)[ ]+" % __l12n__(_.lng)['TO'], "\n__def__ ", s)
     subnames = re.findall(u"(?iu)(?<=__def__ )\w+", s)
     globs = ""
     functions = ["range", "__int__", "__float__", "Random", "Input", "__string__", "len", "round", "abs", "sin", "cos", "sqrt", "set", "list", "tuple", "re.sub", "re.search", "re.findall", "sorted", "min", "max"]
@@ -1319,7 +1330,7 @@ def __compil__(s):
     if len(subnames) > 0:
         globs = "global %s" % ", ".join(subnames)
         # search user functions (function calls with two or more arguments need explicite Python parentheses)
-        functions += [ re.findall("(?u)\w+",i[0])[0]  for i in re.findall(ur"""(?iu)(?<=__def__ )([^\n]*)\n # beginning of a procedure
+        functions += [ re.findall("(?u)\w+",i[0])[0]  for i in re.findall(r"""(?iu)(?<=__def__ )([^\n]*)\n # beginning of a procedure
             (?:[^\n]*(?<!\b(%(END)s))\n)* # 0 or more lines (not END)
             [^\n]*\b(?:%(OUTPUT)s)\b[^\n]*\n # line with OUTPUT (functions = procedures with OUTPUT)
             (?:[^\n]*(?<!\b(?:%(END)s))\n)* # 0 or more lines (not END)
@@ -1327,7 +1338,7 @@ def __compil__(s):
         # add line breaks before procedure calls
         procedures = set(subnames) - set(functions)
         if len(procedures) > 0:
-            s = re.sub(ur"(?<!__def__)(?<![-+=*/])(?<!%s)(?:^|[ \t]+)(" % ")(?<!".join(functions) + "|".join(procedures) + ")", r"\n\1", s)
+            s = re.sub(r"(?<!__def__)(?<![-+=*/])(?<!%s)(?:^|[ \t]+)(" % ")(?<!".join(functions) + "|".join(procedures) + ")", r"\n\1", s)
 
     # compile native Logo
     for i in __comp__[_.lng]:
@@ -1336,7 +1347,7 @@ def __compil__(s):
     indent = 0
     result = ""
     func = re.compile("(?iu)(def (\w+))(\(.*\):)")
-    expr = ur"""(?iu)(?<!def[ ])(?<![:\w])%(name)s(?!\w)(?!\()(?![ ]\()
+    expr = r"""(?iu)(?<!def[ ])(?<![:\w])%(name)s(?!\w)(?!\()(?![ ]\()
         (
             ([ ]+\[*([-+]|\([ ]?)*((%(functions)s)\b[ ]*\(*)*
             (?:[0-9]+([,.][0-9]+)?|:?\w+(?:[.]\w+[\(]?[\)]?)?]*|\[])]*[\)]*
@@ -1377,7 +1388,7 @@ def __compil__(s):
             if j in i:
                 if names[j][0] == 0:
                     if not j in functions:
-                        i = re.sub(ur"(?iu)(?<!def )(?<![_\w])\b%s\b(?!\w)" %j, j+'()', i)
+                        i = re.sub(r"(?iu)(?<!def )(?<![_\w])\b%s\b(?!\w)" %j, j+'()', i)
                 else:
                     r = names[j][1].search(i)
                     if r:

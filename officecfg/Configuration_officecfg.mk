@@ -123,6 +123,7 @@ $(eval $(call gb_Configuration_add_spool_langpack,registry,officecfg/registry/da
 $(eval $(call gb_Configuration_add_localized_datas,registry,officecfg/registry/data,\
 	org/openoffice/Setup.xcu \
 	org/openoffice/Office/Accelerators.xcu \
+	org/openoffice/Office/Addons.xcu \
 	org/openoffice/Office/Common.xcu \
 	org/openoffice/Office/SFX.xcu \
 	org/openoffice/Office/DataAccess.xcu \

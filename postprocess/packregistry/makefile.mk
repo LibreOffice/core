@@ -213,6 +213,7 @@ MY_FILES_main = \
     $(MY_XCU)/Inet.xcu \
     $(MY_XCU)/Interaction.xcu \
     $(MY_XCU)/Office/Accelerators.xcu \
+    $(MY_XCU)/Office/Addons.xcu \
     $(MY_XCU)/Office/Calc.xcu \
     $(MY_XCU)/Office/Canvas.xcu \
     $(MY_XCU)/Office/Common.xcu \

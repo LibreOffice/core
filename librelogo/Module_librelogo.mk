@@ -13,8 +13,8 @@ ifneq ($(DISABLE_SCRIPTING),TRUE)
 ifneq ($(DISABLE_PYTHON),TRUE)
 
 $(eval $(call gb_Module_add_targets,librelogo,\
-	Configuration_librelogo \
-	Extension_librelogo \
+    CustomTarget_librelogo \
+    Zip_librelogo \
 ))
 
 endif
