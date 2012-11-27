@@ -588,7 +588,7 @@ sal_uLong SvTreeList::GetVisiblePos( const SvListView* pView, SvTreeListEntry* p
         ((SvListView*)pView)->nVisibleCount = 0;
         GetVisibleCount( const_cast<SvListView*>(pView) );
     }
-    const SvViewData* pViewData = pView->GetViewData( pEntry );
+    const SvViewDataEntry* pViewData = pView->GetViewData( pEntry );
     return pViewData->nVisPos;
 }
 
@@ -604,7 +604,7 @@ sal_uLong SvTreeList::GetVisibleCount( SvListView* pView ) const
     SvTreeListEntry* pEntry = First();  // first entry is always visible
     while ( pEntry )
     {
-        SvViewData* pViewData = pView->GetViewData( pEntry );
+        SvViewDataEntry* pViewData = pView->GetViewData( pEntry );
         pViewData->nVisPos = nPos;
         nPos++;
         pEntry = NextVisible( pView, pEntry );
@@ -939,7 +939,7 @@ void SvTreeList::Expand( SvListView* pView, SvTreeListEntry* pEntry )
 
     DBG_ASSERT(!pEntry->maChildren.empty(), "SvTreeList::Expand: We expected to have child entries.");
 
-    SvViewData* pViewData = pView->GetViewData(pEntry);
+    SvViewDataEntry* pViewData = pView->GetViewData(pEntry);
     pViewData->nFlags |= SVLISTENTRYFLAG_EXPANDED;
     SvTreeListEntry* pParent = pEntry->pParent;
     // if parent is visible, invalidate status data
@@ -958,7 +958,7 @@ void SvTreeList::Collapse( SvListView* pView, SvTreeListEntry* pEntry )
 
     DBG_ASSERT(!pEntry->maChildren.empty(), "SvTreeList::Collapse: We expected have child entries.");
 
-    SvViewData* pViewData = pView->GetViewData( pEntry );
+    SvViewDataEntry* pViewData = pView->GetViewData( pEntry );
     pViewData->nFlags &=(~SVLISTENTRYFLAG_EXPANDED);
 
     SvTreeListEntry* pParent = pEntry->pParent;
@@ -972,7 +972,7 @@ void SvTreeList::Collapse( SvListView* pView, SvTreeListEntry* pEntry )
 sal_Bool SvTreeList::Select( SvListView* pView, SvTreeListEntry* pEntry, sal_Bool bSelect )
 {
     DBG_ASSERT(pView&&pEntry,"Select:View/Entry?");
-    SvViewData* pViewData = pView->GetViewData( pEntry );
+    SvViewDataEntry* pViewData = pView->GetViewData( pEntry );
     if ( bSelect )
     {
         if ( pViewData->IsSelected() || !pViewData->IsSelectable() )
@@ -1053,7 +1053,7 @@ void SvTreeList::SelectAll( SvListView* pView, sal_Bool bSelect )
     SvTreeListEntry* pEntry = First();
     while ( pEntry )
     {
-        SvViewData* pViewData = pView->GetViewData( pEntry );
+        SvViewDataEntry* pViewData = pView->GetViewData( pEntry );
         if ( bSelect )
             pViewData->nFlags |= SVLISTENTRYFLAG_SELECTED;
         else
@@ -1197,11 +1197,11 @@ void SvListView::InitTable()
     }
 
     SvTreeListEntry* pEntry;
-    SvViewData* pViewData;
+    SvViewDataEntry* pViewData;
 
     // insert root entry
     pEntry = pModel->pRootItem;
-    pViewData = new SvViewData;
+    pViewData = new SvViewDataEntry;
     pViewData->nFlags = SVLISTENTRYFLAG_EXPANDED;
     maDataTable.insert( pEntry, pViewData );
     // now all the other entries
@@ -1216,10 +1216,10 @@ void SvListView::InitTable()
     }
 }
 
-SvViewData* SvListView::CreateViewData( SvTreeListEntry* )
+SvViewDataEntry* SvListView::CreateViewData( SvTreeListEntry* )
 {
     DBG_CHKTHIS(SvListView,0);
-    return new SvViewData;
+    return new SvViewDataEntry;
 }
 
 void SvListView::Clear()
@@ -1232,7 +1232,7 @@ void SvListView::Clear()
     {
         // insert root entry
         SvTreeListEntry* pEntry = pModel->pRootItem;
-        SvViewData* pViewData = new SvViewData;
+        SvViewDataEntry* pViewData = new SvViewDataEntry;
         pViewData->nFlags = SVLISTENTRYFLAG_EXPANDED;
         maDataTable.insert( pEntry, pViewData );
     }
@@ -1307,7 +1307,7 @@ void SvListView::ActionMoving( SvTreeListEntry* pEntry,SvTreeListEntry*,sal_uLon
     DBG_ASSERT(pParent,"Model not consistent");
     if (pParent != pModel->pRootItem && pParent->maChildren.size() == 1)
     {
-        SvViewData* pViewData = maDataTable.find( pParent )->second;
+        SvViewDataEntry* pViewData = maDataTable.find( pParent )->second;
         pViewData->nFlags &= (~SVLISTENTRYFLAG_EXPANDED);
     }
     // vorlaeufig
@@ -1328,7 +1328,7 @@ void SvListView::ActionInserted( SvTreeListEntry* pEntry )
 {
     DBG_CHKTHIS(SvListView,0);
     DBG_ASSERT(pEntry,"Insert:No Entry");
-    SvViewData* pData = CreateViewData( pEntry );
+    SvViewDataEntry* pData = CreateViewData( pEntry );
     InitViewData( pData, pEntry );
     #ifdef DBG_UTIL
     std::pair<SvDataTable::iterator, bool> aSuccess =
@@ -1356,7 +1356,7 @@ void SvListView::ActionInsertedTree( SvTreeListEntry* pEntry )
     while( pCurEntry )
     {
         DBG_ASSERT(maDataTable.find(pCurEntry) != maDataTable.end(),"Entry already in Table");
-        SvViewData* pViewData = CreateViewData( pCurEntry );
+        SvViewDataEntry* pViewData = CreateViewData( pCurEntry );
         DBG_ASSERT(pViewData,"No ViewData");
         InitViewData( pViewData, pEntry );
         maDataTable.insert( pCurEntry, pViewData );
@@ -1385,7 +1385,7 @@ void SvListView::ActionRemoving( SvTreeListEntry* pEntry )
     DBG_CHKTHIS(SvListView,0);
     DBG_ASSERT(pEntry,"Remove:No Entry");
 
-    SvViewData* pViewData = maDataTable.find( pEntry )->second;
+    SvViewDataEntry* pViewData = maDataTable.find( pEntry )->second;
     sal_uLong nSelRemoved = 0;
     if ( pViewData->IsSelected() )
         nSelRemoved = 1 + pModel->GetChildSelectionCount( this, pEntry );
@@ -1477,7 +1477,7 @@ void SvListView::ModelNotification( sal_uInt16 nActionId, SvTreeListEntry* pEntr
     }
 }
 
-void SvListView::InitViewData( SvViewData*, SvTreeListEntry* )
+void SvListView::InitViewData( SvViewDataEntry*, SvTreeListEntry* )
 {
 }
 
@@ -1513,14 +1513,14 @@ void SvListView::SetEntryFocus( SvTreeListEntry* pEntry, sal_Bool bFocus )
     itr->second->SetFocus(bFocus);
 }
 
-const SvViewData* SvListView::GetViewData( const SvTreeListEntry* pEntry ) const
+const SvViewDataEntry* SvListView::GetViewData( const SvTreeListEntry* pEntry ) const
 {
     SvDataTable::const_iterator itr = maDataTable.find( const_cast<SvTreeListEntry*>(pEntry) );
     DBG_ASSERT(itr != maDataTable.end(),"Entry not in model or wrong view");
     return itr->second;
 }
 
-SvViewData* SvListView::GetViewData( SvTreeListEntry* pEntry )
+SvViewDataEntry* SvListView::GetViewData( SvTreeListEntry* pEntry )
 {
     SvDataTable::iterator itr = maDataTable.find( pEntry );
     DBG_ASSERT(itr != maDataTable.end(),"Entry not in model or wrong view");

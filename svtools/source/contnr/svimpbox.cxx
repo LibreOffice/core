@@ -2590,8 +2590,6 @@ void SvImpLBox::LoseFocus()
         SvTreeListEntry* pEntry = pView->FirstSelected();
         while( pEntry )
         {
-            //SvViewData* pViewData = pView->GetViewData( pEntry );
-            //pViewData->SetCursored( true );
             InvalidateEntry( pEntry );
             pEntry = pView->NextSelected( pEntry );
         }

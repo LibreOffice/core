@@ -310,10 +310,10 @@ protected:
     bool            IsEmptyTextAllowed() const;
 
     // Return value must be derived from SvViewDataEntry!
-    virtual SvViewData* CreateViewData( SvTreeListEntry* );
+    virtual SvViewDataEntry* CreateViewData( SvTreeListEntry* );
     // InitViewData is called right after CreateViewData
     // The Entry is has not yet been added to the View in InitViewData!
-    virtual void InitViewData( SvViewData*, SvTreeListEntry* pEntry );
+    virtual void InitViewData( SvViewDataEntry*, SvTreeListEntry* pEntry );
     // Calls InitViewData for all Items
     void            RecalcViewData();
     // Callback of RecalcViewData

@@ -38,18 +38,24 @@ struct SvViewDataItem
     Size maSize;
 };
 
-class SVT_DLLPUBLIC SvViewData
+/**
+ * View-dependent data for an Entry is created in the virtual function
+ * SvTreeListBox::CreateViewData. The View creation of Items should not be
+ * changed.
+ */
+class SVT_DLLPUBLIC SvViewDataEntry
 {
-friend class SvTreeList;
-friend class SvListView;
+    friend class SvTreeList;
+    friend class SvListView;
 
+    std::vector<SvViewDataItem> maItems;
     sal_uLong nVisPos;
-protected:
     sal_uInt16 nFlags;
+
 public:
-    SvViewData();
-    SvViewData( const SvViewData& );
-    virtual ~SvViewData();
+    SvViewDataEntry();
+    SvViewDataEntry( const SvViewDataEntry& );
+    ~SvViewDataEntry();
 
     bool IsSelected() const;
     bool IsExpanded() const;
@@ -60,17 +66,6 @@ public:
     void SetCursored( bool bCursored );
     sal_uInt16 GetFlags() const;
     void SetSelectable( bool bSelectable );
-};
-
-// View-dependent data for an Entry is created in the virtual function
-// SvTreeListBox::CreateViewData. The View creation of Items cannot be
-// changed (because it's an array)
-class SvViewDataEntry : public SvViewData
-{
-    std::vector<SvViewDataItem> maItems;
-public:
-                    SvViewDataEntry();
-    virtual         ~SvViewDataEntry();
 
     void Init(size_t nSize);
 

@@ -21,58 +21,56 @@
 
 #include "tools/debug.hxx"
 
-DBG_NAME(SvViewData);
+DBG_NAME(SvViewDataEntry);
 
-SvViewData::SvViewData()
+SvViewDataEntry::SvViewDataEntry() :
+    nVisPos(0), nFlags(0)
 {
-    DBG_CTOR(SvViewData,0);
-    nFlags = 0;
-    nVisPos = 0;
+    DBG_CTOR(SvViewDataEntry,0);
 }
 
-SvViewData::SvViewData( const SvViewData& rData )
+SvViewDataEntry::SvViewDataEntry( const SvViewDataEntry& rData ) :
+    nVisPos(rData.nVisPos), nFlags(rData.nFlags)
 {
-    DBG_CTOR(SvViewData,0);
-    nFlags  = rData.nFlags;
+    DBG_CTOR(SvViewDataEntry,0);
     nFlags &= ~( SVLISTENTRYFLAG_SELECTED | SVLISTENTRYFLAG_FOCUSED );
-    nVisPos = rData.nVisPos;
 }
 
-SvViewData::~SvViewData()
+SvViewDataEntry::~SvViewDataEntry()
 {
-    DBG_DTOR(SvViewData,0);
+    DBG_DTOR(SvViewDataEntry,0);
 #ifdef DBG_UTIL
     nVisPos = 0x12345678;
     nFlags = 0x1234;
 #endif
 }
 
-bool SvViewData::IsSelected() const
+bool SvViewDataEntry::IsSelected() const
 {
     return (nFlags & SVLISTENTRYFLAG_SELECTED) != 0;
 }
 
-bool SvViewData::IsExpanded() const
+bool SvViewDataEntry::IsExpanded() const
 {
     return (nFlags & SVLISTENTRYFLAG_EXPANDED) != 0;
 }
 
-bool SvViewData::HasFocus() const
+bool SvViewDataEntry::HasFocus() const
 {
     return (nFlags & SVLISTENTRYFLAG_FOCUSED) != 0;
 }
 
-bool SvViewData::IsCursored() const
+bool SvViewDataEntry::IsCursored() const
 {
     return (nFlags & SVLISTENTRYFLAG_CURSORED) != 0;
 }
 
-bool SvViewData::IsSelectable() const
+bool SvViewDataEntry::IsSelectable() const
 {
     return (nFlags & SVLISTENTRYFLAG_NOT_SELECTABLE) == 0;
 }
 
-void SvViewData::SetFocus( bool bFocus )
+void SvViewDataEntry::SetFocus( bool bFocus )
 {
     if ( !bFocus )
         nFlags &= (~SVLISTENTRYFLAG_FOCUSED);
@@ -80,7 +78,7 @@ void SvViewData::SetFocus( bool bFocus )
         nFlags |= SVLISTENTRYFLAG_FOCUSED;
 }
 
-void SvViewData::SetCursored( bool bCursored )
+void SvViewDataEntry::SetCursored( bool bCursored )
 {
     if ( !bCursored )
         nFlags &= (~SVLISTENTRYFLAG_CURSORED);
@@ -88,30 +86,17 @@ void SvViewData::SetCursored( bool bCursored )
         nFlags |= SVLISTENTRYFLAG_CURSORED;
 }
 
-sal_uInt16 SvViewData::GetFlags() const
+sal_uInt16 SvViewDataEntry::GetFlags() const
 {
     return nFlags;
 }
 
-void SvViewData::SetSelectable( bool bSelectable )
+void SvViewDataEntry::SetSelectable( bool bSelectable )
 {
     if( bSelectable )
         nFlags &= (~SVLISTENTRYFLAG_NOT_SELECTABLE);
     else
         nFlags |= SVLISTENTRYFLAG_NOT_SELECTABLE;
-}
-
-DBG_NAME(SvViewDataEntry);
-
-SvViewDataEntry::SvViewDataEntry()
-    : SvViewData()
-{
-    DBG_CTOR(SvViewDataEntry,0);
-}
-
-SvViewDataEntry::~SvViewDataEntry()
-{
-    DBG_DTOR(SvViewDataEntry,0);
 }
 
 void SvViewDataEntry::Init(size_t nSize)

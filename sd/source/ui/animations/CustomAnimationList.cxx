@@ -667,7 +667,7 @@ void CustomAnimationList::update()
                 aDescription += getShapeDescription( xShape, false );
                 pLBoxEntry->AddItem( new CustomAnimationTriggerEntryItem( pLBoxEntry, 0, aDescription ) );
                 Insert( pLBoxEntry );
-                SvViewData* pViewData = GetViewData( pLBoxEntry );
+                SvViewDataEntry* pViewData = GetViewData( pLBoxEntry );
                 if( pViewData )
                     pViewData->SetSelectable(false);
 

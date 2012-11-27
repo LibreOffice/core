@@ -46,7 +46,7 @@
 
 class SvTreeListEntry;
 class SvListView;
-class SvViewData;
+class SvViewDataEntry;
 
 enum SvSortMode { SortAscending, SortDescending, SortNone };
 
@@ -236,7 +236,7 @@ class SVT_DLLPUBLIC SvListView
 {
     friend class SvTreeList;
 
-    typedef boost::ptr_map<SvTreeListEntry*, SvViewData> SvDataTable;
+    typedef boost::ptr_map<SvTreeListEntry*, SvViewDataEntry> SvDataTable;
 
     sal_uLong           nVisibleCount;
     sal_uLong           nSelectionCount;
@@ -343,13 +343,13 @@ public:
     sal_Bool            IsSelected( SvTreeListEntry* pEntry ) const;
     sal_Bool            HasEntryFocus( SvTreeListEntry* pEntry ) const;
     void                SetEntryFocus( SvTreeListEntry* pEntry, sal_Bool bFocus );
-    const SvViewData*         GetViewData( const SvTreeListEntry* pEntry ) const;
-    SvViewData*         GetViewData( SvTreeListEntry* pEntry );
+    const SvViewDataEntry*         GetViewData( const SvTreeListEntry* pEntry ) const;
+    SvViewDataEntry*         GetViewData( SvTreeListEntry* pEntry );
     sal_Bool            HasViewData() const
     { return maDataTable.size() > 1; }  // There's always a ROOT
 
-    virtual SvViewData* CreateViewData( SvTreeListEntry* pEntry );
-    virtual void        InitViewData( SvViewData*, SvTreeListEntry* pEntry );
+    virtual SvViewDataEntry* CreateViewData( SvTreeListEntry* pEntry );
+    virtual void        InitViewData( SvViewDataEntry*, SvTreeListEntry* pEntry );
 
     virtual void        ModelHasCleared();
     virtual void        ModelHasInserted( SvTreeListEntry* pEntry );

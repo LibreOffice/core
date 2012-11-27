@@ -951,14 +951,14 @@ const SvViewDataItem* SvTreeListBox::GetViewDataItem(const SvTreeListEntry* pEnt
     return pEntryData->GetItem(nItemPos);
 }
 
-SvViewData* SvTreeListBox::CreateViewData( SvTreeListEntry* )
+SvViewDataEntry* SvTreeListBox::CreateViewData( SvTreeListEntry* )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     SvViewDataEntry* pEntryData = new SvViewDataEntry;
-    return (SvViewData*)pEntryData;
+    return (SvViewDataEntry*)pEntryData;
 }
 
-void SvTreeListBox::InitViewData( SvViewData* pData, SvTreeListEntry* pEntry )
+void SvTreeListBox::InitViewData( SvViewDataEntry* pData, SvTreeListEntry* pEntry )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     SvTreeListEntry* pInhEntry = (SvTreeListEntry*)pEntry;
