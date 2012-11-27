@@ -34,21 +34,15 @@
 #define CONTENT_TYPE_STR_APP_VND_CHART "application/vnd.stardivision.chart"
 #define CONTENT_TYPE_STR_APP_VND_DRAW "application/vnd.stardivision.draw"
 #define CONTENT_TYPE_STR_APP_VND_IMAGE "application/vnd.stardivision.image"
-#define CONTENT_TYPE_STR_APP_VND_IMPRESSPACKED \
-    "application/vnd.stardivision.impress-packed"
-#define CONTENT_TYPE_STR_APP_VND_IMPRESS \
-    "application/vnd.stardivision.impress"
+#define CONTENT_TYPE_STR_APP_VND_IMPRESSPACKED "application/vnd.stardivision.impress-packed"
+#define CONTENT_TYPE_STR_APP_VND_IMPRESS "application/vnd.stardivision.impress"
 #define CONTENT_TYPE_STR_APP_VND_MAIL "application/vnd.stardivision.mail"
 #define CONTENT_TYPE_STR_APP_VND_MATH "application/vnd.stardivision.math"
 #define CONTENT_TYPE_STR_APP_VND_NEWS "application/vnd.stardivision.news"
-#define CONTENT_TYPE_STR_APP_VND_OUTTRAY \
-    "application/vnd.stardivision.outtray"
-#define CONTENT_TYPE_STR_APP_VND_TEMPLATE \
-    "application/vnd.stardivision.template"
-#define CONTENT_TYPE_STR_APP_VND_WRITER_GLOBAL \
-    "application/vnd.stardivision.writer-global"
-#define CONTENT_TYPE_STR_APP_VND_WRITER_WEB \
-    "application/vnd.stardivision.writer-web"
+#define CONTENT_TYPE_STR_APP_VND_OUTTRAY "application/vnd.stardivision.outtray"
+#define CONTENT_TYPE_STR_APP_VND_TEMPLATE "application/vnd.stardivision.template"
+#define CONTENT_TYPE_STR_APP_VND_WRITER_GLOBAL "application/vnd.stardivision.writer-global"
+#define CONTENT_TYPE_STR_APP_VND_WRITER_WEB "application/vnd.stardivision.writer-web"
 #define CONTENT_TYPE_STR_APP_VND_WRITER "application/vnd.stardivision.writer"
 #define CONTENT_TYPE_STR_APP_FRAMESET "application/x-frameset"
 #define CONTENT_TYPE_STR_APP_GALLERY_THEME "application/x-gallery-theme"
@@ -119,7 +113,6 @@
 #define CONTENT_TYPE_STR_APP_VND_SUN_XML_IMPRESS "application/vnd.sun.xml.impress"
 #define CONTENT_TYPE_STR_APP_VND_SUN_XML_DRAW "application/vnd.sun.xml.draw"
 #define CONTENT_TYPE_STR_APP_VND_SUN_XML_CHART "application/vnd.sun.xml.chart"
-
 #define CONTENT_TYPE_STR_APP_VND_SUN_XML_MATH "application/vnd.sun.xml.math"
 #define CONTENT_TYPE_STR_APP_VND_SUN_XML_WRITER_GLOBAL "application/vnd.sun.xml.writer-global"
 #define CONTENT_TYPE_STR_APP_VND_SUN_XML_IMPRESSPACKED "application/vnd.sun.xml.impress-packed"
@@ -256,28 +249,23 @@ enum INetContentType
 class SVL_DLLPUBLIC INetContentTypes
 {
 public:
-    static INetContentType RegisterContentType(UniString const & rTypeName,
-                                               UniString const &
-                                                   rPresentation,
-                                               UniString const * pExtension
-                                                   = 0,
-                                               UniString const *
-                                                   pSystemFileType = 0);
+    static INetContentType RegisterContentType(OUString const & rTypeName,
+                                               OUString const & rPresentation,
+                                               OUString const * pExtension = 0,
+                                               OUString const * pSystemFileType = 0);
 
-    static INetContentType GetContentType(UniString const & rTypeName);
+    static INetContentType GetContentType(OUString const & rTypeName);
 
     static rtl::OUString GetContentType(INetContentType eTypeID);
 
-    static UniString GetPresentation(INetContentType eTypeID,
-                                     const ::com::sun::star::lang::Locale& aLocale);
+    static OUString GetPresentation(INetContentType eTypeID,
+                                    const ::com::sun::star::lang::Locale& aLocale);
 
-    static INetContentType GetContentType4Extension(UniString const &
-                                                        rExtension);
+    static INetContentType GetContentType4Extension(OUString const & rExtension);
 
-    static INetContentType GetContentTypeFromURL(UniString const & rURL);
+    static INetContentType GetContentTypeFromURL(OUString const & rURL);
 
-    static bool GetExtensionFromURL(UniString const & rURL,
-                                    UniString & rExtension);
+    static bool GetExtensionFromURL(OUString const & rURL, OUString & rExtension);
 
     /** Parse the body of an RFC 2045 Content-Type header field.
 
@@ -306,8 +294,8 @@ public:
         @return  True if the syntax of the field body is correct.  If false is
         returned, none of the output parameters will be modified!
      */
-    static bool parse(UniString const & rMediaType, UniString & rType,
-                      UniString & rSubType,
+    static bool parse(OUString const & rMediaType, OUString & rType,
+                      OUString & rSubType,
                       INetContentTypeParameterList * pParameters = 0);
 };
 

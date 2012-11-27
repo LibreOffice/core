@@ -2247,19 +2247,16 @@ bool HTMLParser::ParseMetaOptions(
 
 rtl_TextEncoding HTMLParser::GetEncodingByMIME( const String& rMime )
 {
-    String sType;
-    String sSubType;
+    OUString sType;
+    OUString sSubType;
     INetContentTypeParameterList aParameters;
     if (INetContentTypes::parse(rMime, sType, sSubType, &aParameters))
     {
-        const INetContentTypeParameter * pCharset
-            = aParameters.find("charset");
+        const INetContentTypeParameter * pCharset = aParameters.find("charset");
         if (pCharset != 0)
         {
-            rtl::OString sValue(rtl::OUStringToOString(pCharset->m_sValue,
-                RTL_TEXTENCODING_ASCII_US));
-            return GetExtendedCompatibilityTextEncoding(
-                    rtl_getTextEncodingFromMimeCharset( sValue.getStr() ) );
+            OString sValue(rtl::OUStringToOString(pCharset->m_sValue, RTL_TEXTENCODING_ASCII_US));
+            return GetExtendedCompatibilityTextEncoding( rtl_getTextEncodingFromMimeCharset( sValue.getStr() ) );
         }
     }
     return RTL_TEXTENCODING_DONTKNOW;

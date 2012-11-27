@@ -169,11 +169,11 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
     }
 
-    String type, subType;
+    OUString type, subType;
     INetContentTypeParameterList params;
     if (INetContentTypes::parse( mediaType, type, subType, &params ))
     {
-        if (type.EqualsIgnoreCaseAscii("application"))
+        if (type.equalsIgnoreAsciiCaseAscii("application"))
         {
             OUString name;
             if (!bRemoved)
@@ -182,7 +182,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                     url, xCmdEnv, getComponentContext() );
                 name = StrTitle::getTitle( ucbContent );
             }
-            if (subType.EqualsIgnoreCaseAscii("vnd.sun.star.executable"))
+            if (subType.equalsIgnoreAsciiCaseAscii("vnd.sun.star.executable"))
             {
                 return new BackendImpl::ExecutablePackageImpl(
                     this, url, name,  m_xExecutableTypeInfo, bRemoved,

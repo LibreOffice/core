@@ -1001,7 +1001,7 @@ Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage_(
 {
     if (ignoreAlienPlatforms)
     {
-        String type, subType;
+        OUString type, subType;
         INetContentTypeParameterList params;
         if (INetContentTypes::parse( data.mediaType, type, subType, &params ))
         {

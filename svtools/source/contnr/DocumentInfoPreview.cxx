@@ -91,11 +91,14 @@ void ODocumentInfoPreview::fill(
         insertNonempty(
             DI_SIZE, CreateExactSizeText(utl::UCBContentHelper::GetSize(rURL)));
         INetContentType eTypeID = INetContentTypes::GetContentTypeFromURL(rURL);
-        insertNonempty(
-            DI_MIMETYPE,
-            (eTypeID == CONTENT_TYPE_APP_OCTSTREAM
-             ? SvFileInformationManager::GetDescription(INetURLObject(rURL))
-             : INetContentTypes::GetPresentation(eTypeID, m_aLocale)));
+        if(eTypeID == CONTENT_TYPE_APP_OCTSTREAM)
+        {
+            insertNonempty( DI_MIMETYPE, SvFileInformationManager::GetDescription(INetURLObject(rURL)));
+        }
+        else
+        {
+            insertNonempty( DI_MIMETYPE, INetContentTypes::GetPresentation(eTypeID, m_aLocale));
+        }
     }
 
     // User-defined (custom) properties:
