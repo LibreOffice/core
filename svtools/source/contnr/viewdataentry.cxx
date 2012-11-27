@@ -47,4 +47,58 @@ SvViewData::~SvViewData()
 #endif
 }
 
+bool SvViewData::IsSelected() const
+{
+    return (nFlags & SVLISTENTRYFLAG_SELECTED) != 0;
+}
+
+bool SvViewData::IsExpanded() const
+{
+    return (nFlags & SVLISTENTRYFLAG_EXPANDED) != 0;
+}
+
+bool SvViewData::HasFocus() const
+{
+    return (nFlags & SVLISTENTRYFLAG_FOCUSED) != 0;
+}
+
+bool SvViewData::IsCursored() const
+{
+    return (nFlags & SVLISTENTRYFLAG_CURSORED) != 0;
+}
+
+bool SvViewData::IsSelectable() const
+{
+    return (nFlags & SVLISTENTRYFLAG_NOT_SELECTABLE) == 0;
+}
+
+void SvViewData::SetFocus( sal_Bool bFocus)
+{
+    if ( !bFocus )
+        nFlags &= (~SVLISTENTRYFLAG_FOCUSED);
+    else
+        nFlags |= SVLISTENTRYFLAG_FOCUSED;
+}
+
+void SvViewData::SetCursored( sal_Bool bCursored )
+{
+    if ( !bCursored )
+        nFlags &= (~SVLISTENTRYFLAG_CURSORED);
+    else
+        nFlags |= SVLISTENTRYFLAG_CURSORED;
+}
+
+sal_uInt16 SvViewData::GetFlags() const
+{
+    return nFlags;
+}
+
+void SvViewData::SetSelectable( bool bSelectable )
+{
+    if( bSelectable )
+        nFlags &= (~SVLISTENTRYFLAG_NOT_SELECTABLE);
+    else
+        nFlags |= SVLISTENTRYFLAG_NOT_SELECTABLE;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

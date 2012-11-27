@@ -35,55 +35,23 @@ class SVT_DLLPUBLIC SvViewData
 friend class SvTreeList;
 friend class SvListView;
 
-    sal_uLong           nVisPos;
+    sal_uLong nVisPos;
 protected:
-    sal_uInt16          nFlags;
+    sal_uInt16 nFlags;
 public:
-                        SvViewData();
-                        SvViewData( const SvViewData& );
-    virtual             ~SvViewData();
+    SvViewData();
+    SvViewData( const SvViewData& );
+    virtual ~SvViewData();
 
-    sal_Bool            IsSelected() const
-    { return (sal_Bool)(nFlags & SVLISTENTRYFLAG_SELECTED) != 0; }
-
-    sal_Bool            IsExpanded() const
-    { return (sal_Bool)(nFlags & SVLISTENTRYFLAG_EXPANDED) != 0; }
-
-    sal_Bool            HasFocus() const
-    { return (sal_Bool)(nFlags & SVLISTENTRYFLAG_FOCUSED) != 0; }
-
-    sal_Bool            IsCursored() const
-    { return (sal_Bool)(nFlags & SVLISTENTRYFLAG_CURSORED) != 0; }
-
-    bool                IsSelectable() const
-    { return (bool)(nFlags & SVLISTENTRYFLAG_NOT_SELECTABLE) == 0; }
-
-    void                SetFocus( sal_Bool bFocus)
-    {
-        if ( !bFocus )
-            nFlags &= (~SVLISTENTRYFLAG_FOCUSED);
-        else
-            nFlags |= SVLISTENTRYFLAG_FOCUSED;
-    }
-
-    void                SetCursored( sal_Bool bCursored )
-    {
-        if ( !bCursored )
-            nFlags &= (~SVLISTENTRYFLAG_CURSORED);
-        else
-            nFlags |= SVLISTENTRYFLAG_CURSORED;
-    }
-
-    sal_uInt16          GetFlags() const
-    { return nFlags; }
-
-    void                SetSelectable( bool bSelectable )
-    {
-        if( bSelectable )
-            nFlags &= (~SVLISTENTRYFLAG_NOT_SELECTABLE);
-        else
-            nFlags |= SVLISTENTRYFLAG_NOT_SELECTABLE;
-    }
+    bool IsSelected() const;
+    bool IsExpanded() const;
+    bool HasFocus() const;
+    bool IsCursored() const;
+    bool IsSelectable() const;
+    void SetFocus( sal_Bool bFocus);
+    void SetCursored( sal_Bool bCursored );
+    sal_uInt16 GetFlags() const;
+    void SetSelectable( bool bSelectable );
 };
 
 #endif
