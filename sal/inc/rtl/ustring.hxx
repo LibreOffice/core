@@ -525,6 +525,30 @@ public:
     }
 
     /**
+      Perform a ASCII lowercase comparison of two strings.
+
+      Compare teh two string with uppercase ASCII
+      character values between 65 and 90 (ASCII A-Z) are interpreted as
+      values between 97 and 122 (ASCII a-z).
+      This function can't be used for language specific comparison.
+
+      @param    str         the object to be compared.
+      @return   0 - if both strings are equal
+                < 0 - if this string is less than the string argument
+                > 0 - if this string is greater than the string argument
+    */
+    sal_Int32 compareToIgnoreAsciiCase( const OUString & str ) const SAL_THROW(())
+    {
+        if ( pData->length != str.pData->length )
+            return sal_False;
+        if ( pData == str.pData )
+            return sal_True;
+        return rtl_ustr_compareIgnoreAsciiCase_WithLength( pData->buffer, pData->length,
+                                                           str.pData->buffer, str.pData->length );
+    }
+
+
+    /**
      @overload
      This function accepts an ASCII string literal as its argument.
      @since LibreOffice 3.6
