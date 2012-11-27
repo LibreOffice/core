@@ -381,8 +381,8 @@ ifeq (,$(GIT_LINK_SRC))
 	./g -f clone
 else # space-saving clone from another local workdir
 	@echo "FIXME: GIT_LINK_SRC method is not yet implemented with submodules" 1>&2
-	$(foreach i,$(GIT_NEEDED_SUBMODULES),\
-		rm -r $(i) && cp -R $(GIT_LINK_SRC)/$(i) $(i))
+	true $(foreach i,$(GIT_NEEDED_SUBMODULES),\
+		&& rm -r $(i) && cp -R $(GIT_LINK_SRC)/$(i) $(i))
 #		bin/git-new-workdir $GIT_LINK_SRC/$i $i
 	git submodule update $(GIT_NEEDED_SUBMODULES)
 endif
