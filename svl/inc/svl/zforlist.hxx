@@ -507,26 +507,17 @@ public:
             <FALSE/> if format code contains an error
             <TRUE/> else, in which case the string and color are returned.
      */
-    bool GetPreviewString( const String& sFormatString, double fPreviewNumber,
-                           String& sOutString, Color** ppColor,
-                           LanguageType eLnge = LANGUAGE_DONTKNOW,
-                           bool bUseStarFormat = false );
-
     bool GetPreviewString(const OUString& sFormatString,
                           double fPreviewNumber,
                           OUString& sOutString,
                           Color** ppColor,
                           LanguageType eLnge,
-                          bool bUseStarFormat );
+                          bool bUseStarFormat = false );
 
     /** Same as <method>GetPreviewString</method> but the format code string
         may be either language/country eLnge or en_US english US */
     bool GetPreviewStringGuess( const OUString& sFormatString, double fPreviewNumber,
                                 OUString& sOutString, Color** ppColor,
-                                LanguageType eLnge = LANGUAGE_DONTKNOW );
-
-    bool GetPreviewStringGuess( const String& sFormatString, double fPreviewNumber,
-                                String& sOutString, Color** ppColor,
                                 LanguageType eLnge = LANGUAGE_DONTKNOW );
 
     /** Format a string according to a format code string to be scanned.

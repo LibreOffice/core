@@ -70,19 +70,19 @@ static const SfxItemPropertyMapEntry* lcl_GetNumberFormatPropertyMap()
 {
     static SfxItemPropertyMapEntry aNumberFormatPropertyMap_Impl[] =
     {
-        {MAP_CHAR_LEN(PROPERTYNAME_FMTSTR),   0, &getCppuType((rtl::OUString*)0),beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {MAP_CHAR_LEN(PROPERTYNAME_FMTSTR),   0, &getCppuType((OUString*)0),    beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
         {MAP_CHAR_LEN(PROPERTYNAME_LOCALE),   0, &getCppuType((lang::Locale*)0),beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
         {MAP_CHAR_LEN(PROPERTYNAME_TYPE),     0, &getCppuType((sal_Int16*)0),   beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {MAP_CHAR_LEN(PROPERTYNAME_COMMENT),  0, &getCppuType((rtl::OUString*)0),beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {MAP_CHAR_LEN(PROPERTYNAME_CURREXT),  0, &getCppuType((rtl::OUString*)0),beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {MAP_CHAR_LEN(PROPERTYNAME_CURRSYM),  0, &getCppuType((rtl::OUString*)0),beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {MAP_CHAR_LEN(PROPERTYNAME_COMMENT),  0, &getCppuType((OUString*)0),    beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {MAP_CHAR_LEN(PROPERTYNAME_CURREXT),  0, &getCppuType((OUString*)0),    beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {MAP_CHAR_LEN(PROPERTYNAME_CURRSYM),  0, &getCppuType((OUString*)0),    beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
         {MAP_CHAR_LEN(PROPERTYNAME_DECIMALS), 0, &getCppuType((sal_Int16*)0),   beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
         {MAP_CHAR_LEN(PROPERTYNAME_LEADING),  0, &getCppuType((sal_Int16*)0),   beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
         {MAP_CHAR_LEN(PROPERTYNAME_NEGRED),   0, &getBooleanCppuType(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
         {MAP_CHAR_LEN(PROPERTYNAME_STDFORM),  0, &getBooleanCppuType(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
         {MAP_CHAR_LEN(PROPERTYNAME_THOUS),    0, &getBooleanCppuType(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
         {MAP_CHAR_LEN(PROPERTYNAME_USERDEF),  0, &getBooleanCppuType(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {MAP_CHAR_LEN(PROPERTYNAME_CURRABB),  0, &getCppuType((rtl::OUString*)0),beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {MAP_CHAR_LEN(PROPERTYNAME_CURRABB),  0, &getCppuType((OUString*)0),    beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
         {0,0,0,0,0,0}
     };
     return aNumberFormatPropertyMap_Impl;
@@ -134,9 +134,8 @@ com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SvN
 
 // XNumberFormatter
 
-void SAL_CALL SvNumberFormatterServiceObj::attachNumberFormatsSupplier(
-                            const uno::Reference<util::XNumberFormatsSupplier>& _xSupplier )
-                                    throw(uno::RuntimeException)
+void SAL_CALL SvNumberFormatterServiceObj::attachNumberFormatsSupplier( const uno::Reference<util::XNumberFormatsSupplier>& _xSupplier )
+    throw(uno::RuntimeException)
 {
     ::rtl::Reference< SvNumberFormatsSupplierObj > xAutoReleaseOld;
 
@@ -156,17 +155,15 @@ void SAL_CALL SvNumberFormatterServiceObj::attachNumberFormatsSupplier(
     // <- SYNCHRONIZED
 }
 
-uno::Reference<util::XNumberFormatsSupplier> SAL_CALL
-                            SvNumberFormatterServiceObj::getNumberFormatsSupplier()
-                                    throw(uno::RuntimeException)
+uno::Reference<util::XNumberFormatsSupplier> SAL_CALL SvNumberFormatterServiceObj::getNumberFormatsSupplier()
+    throw(uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     return xSupplier.get();
 }
 
-sal_Int32 SAL_CALL SvNumberFormatterServiceObj::detectNumberFormat(
-                                    sal_Int32 nKey, const rtl::OUString& aString )
-                            throw(util::NotNumericException, uno::RuntimeException)
+sal_Int32 SAL_CALL SvNumberFormatterServiceObj::detectNumberFormat( sal_Int32 nKey, const OUString& aString )
+    throw(util::NotNumericException, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -174,10 +171,9 @@ sal_Int32 SAL_CALL SvNumberFormatterServiceObj::detectNumberFormat(
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : NULL;
     if (pFormatter)
     {
-        String aTemp = aString;
         sal_uInt32 nUKey = nKey;
         double fValue = 0.0;
-        if ( pFormatter->IsNumberFormat(aTemp, nUKey, fValue) )
+        if ( pFormatter->IsNumberFormat(aString, nUKey, fValue) )
             nRet = nUKey;
         else
             throw util::NotNumericException();
@@ -188,9 +184,8 @@ sal_Int32 SAL_CALL SvNumberFormatterServiceObj::detectNumberFormat(
     return nRet;
 }
 
-double SAL_CALL SvNumberFormatterServiceObj::convertStringToNumber(
-                                    sal_Int32 nKey, const rtl::OUString& aString )
-                            throw(util::NotNumericException, uno::RuntimeException)
+double SAL_CALL SvNumberFormatterServiceObj::convertStringToNumber( sal_Int32 nKey, const OUString& aString )
+    throw(util::NotNumericException, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -198,10 +193,9 @@ double SAL_CALL SvNumberFormatterServiceObj::convertStringToNumber(
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : NULL;
     if (pFormatter)
     {
-        String aTemp = aString;
         sal_uInt32 nUKey = nKey;
         double fValue = 0.0;
-        if ( pFormatter->IsNumberFormat(aTemp, nUKey, fValue) )
+        if ( pFormatter->IsNumberFormat(aString, nUKey, fValue) )
             fRet = fValue;
         else
             throw util::NotNumericException();
@@ -212,12 +206,12 @@ double SAL_CALL SvNumberFormatterServiceObj::convertStringToNumber(
     return fRet;
 }
 
-rtl::OUString SAL_CALL SvNumberFormatterServiceObj::convertNumberToString(
-                                    sal_Int32 nKey, double fValue ) throw(uno::RuntimeException)
+OUString SAL_CALL SvNumberFormatterServiceObj::convertNumberToString( sal_Int32 nKey, double fValue )
+    throw(uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    String aRet;
+    OUString aRet;
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : NULL;
     if (pFormatter)
     {
@@ -231,8 +225,9 @@ rtl::OUString SAL_CALL SvNumberFormatterServiceObj::convertNumberToString(
 }
 
 util::Color SAL_CALL SvNumberFormatterServiceObj::queryColorForNumber( sal_Int32 nKey,
-                                    double fValue, util::Color aDefaultColor )
-                            throw(uno::RuntimeException)
+                                                                       double fValue,
+                                                                       util::Color aDefaultColor )
+    throw(uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -240,7 +235,7 @@ util::Color SAL_CALL SvNumberFormatterServiceObj::queryColorForNumber( sal_Int32
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : NULL;
     if (pFormatter)
     {
-        String aStr;
+        OUString aStr;
         Color* pColor = NULL;
         pFormatter->GetOutputString(fValue, nKey, aStr, &pColor);
         if (pColor)
@@ -303,12 +298,12 @@ util::Color SAL_CALL SvNumberFormatterServiceObj::queryColorForString( sal_Int32
     return nRet;
 }
 
-rtl::OUString SAL_CALL SvNumberFormatterServiceObj::getInputString( sal_Int32 nKey, double fValue )
-                            throw(uno::RuntimeException)
+OUString SAL_CALL SvNumberFormatterServiceObj::getInputString( sal_Int32 nKey, double fValue )
+    throw(uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    String aRet;
+    OUString aRet;
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : NULL;
     if (pFormatter)
         pFormatter->GetInputLineString(fValue, nKey, aRet);
@@ -320,33 +315,28 @@ rtl::OUString SAL_CALL SvNumberFormatterServiceObj::getInputString( sal_Int32 nK
 
 // XNumberFormatPreviewer
 
-rtl::OUString SAL_CALL SvNumberFormatterServiceObj::convertNumberToPreviewString(
-                                    const rtl::OUString& aFormat, double fValue,
-                                    const lang::Locale& nLocale, sal_Bool bAllowEnglish )
-                            throw(util::MalformedNumberFormatException, uno::RuntimeException)
+OUString SAL_CALL SvNumberFormatterServiceObj::convertNumberToPreviewString( const OUString& aFormat,
+                                                                             double fValue,
+                                                                             const lang::Locale& nLocale,
+                                                                             sal_Bool bAllowEnglish )
+    throw(util::MalformedNumberFormatException, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    String aRet;
+    OUString aRet;
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : NULL;
     if (pFormatter)
     {
-        String aOutString;
-        String aFormString = aFormat;
         LanguageType eLang = lcl_GetLanguage( nLocale );
         Color* pColor = NULL;
 
         bool bOk;
         if ( bAllowEnglish )
-            bOk = pFormatter->GetPreviewStringGuess(
-                                aFormString, fValue, aOutString, &pColor, eLang );
+            bOk = pFormatter->GetPreviewStringGuess( aFormat, fValue, aRet, &pColor, eLang );
         else
-            bOk = pFormatter->GetPreviewString(
-                                aFormString, fValue, aOutString, &pColor, eLang );
+            bOk = pFormatter->GetPreviewString( aFormat, fValue, aRet, &pColor, eLang );
 
-        if (bOk)
-            aRet = aOutString;
-        else
+        if (!bOk)
             throw util::MalformedNumberFormatException();
     }
     else
@@ -355,11 +345,12 @@ rtl::OUString SAL_CALL SvNumberFormatterServiceObj::convertNumberToPreviewString
     return aRet;
 }
 
-util::Color SAL_CALL SvNumberFormatterServiceObj::queryPreviewColorForNumber(
-                                    const rtl::OUString& aFormat, double fValue,
-                                    const lang::Locale& nLocale, sal_Bool bAllowEnglish,
-                                    util::Color aDefaultColor )
-                            throw(util::MalformedNumberFormatException, uno::RuntimeException)
+util::Color SAL_CALL SvNumberFormatterServiceObj::queryPreviewColorForNumber( const OUString& aFormat,
+                                                                              double fValue,
+                                                                              const lang::Locale& nLocale,
+                                                                              sal_Bool bAllowEnglish,
+                                                                              util::Color aDefaultColor )
+    throw(util::MalformedNumberFormatException, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -367,18 +358,15 @@ util::Color SAL_CALL SvNumberFormatterServiceObj::queryPreviewColorForNumber(
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : NULL;
     if (pFormatter)
     {
-        String aOutString;
-        String aFormString = aFormat;
+        OUString aOutString;
         LanguageType eLang = lcl_GetLanguage( nLocale );
         Color* pColor = NULL;
 
         bool bOk;
         if ( bAllowEnglish )
-            bOk = pFormatter->GetPreviewStringGuess(
-                                aFormString, fValue, aOutString, &pColor, eLang );
+            bOk = pFormatter->GetPreviewStringGuess( aFormat, fValue, aOutString, &pColor, eLang );
         else
-            bOk = pFormatter->GetPreviewString(
-                                aFormString, fValue, aOutString, &pColor, eLang );
+            bOk = pFormatter->GetPreviewString( aFormat, fValue, aOutString, &pColor, eLang );
 
         if (bOk)
         {
@@ -397,24 +385,24 @@ util::Color SAL_CALL SvNumberFormatterServiceObj::queryPreviewColorForNumber(
 
 // XServiceInfo
 
-rtl::OUString SAL_CALL SvNumberFormatterServiceObj::getImplementationName()
-                            throw(uno::RuntimeException)
+OUString SAL_CALL SvNumberFormatterServiceObj::getImplementationName()
+    throw(uno::RuntimeException)
 {
-    return rtl::OUString("com.sun.star.uno.util.numbers.SvNumberFormatterServiceObject");
+    return OUString("com.sun.star.uno.util.numbers.SvNumberFormatterServiceObject");
 }
 
-sal_Bool SAL_CALL SvNumberFormatterServiceObj::supportsService( const rtl::OUString& ServiceName )
-                            throw(uno::RuntimeException)
+sal_Bool SAL_CALL SvNumberFormatterServiceObj::supportsService( const OUString& ServiceName )
+    throw(uno::RuntimeException)
 {
     return ( ServiceName.compareToAscii(SERVICENAME_NUMBERFORMATTER) == 0 );
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL SvNumberFormatterServiceObj::getSupportedServiceNames()
-                            throw(uno::RuntimeException)
+uno::Sequence<OUString> SAL_CALL SvNumberFormatterServiceObj::getSupportedServiceNames()
+    throw(uno::RuntimeException)
 {
-    uno::Sequence<rtl::OUString> aRet(1);
-    rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString(SERVICENAME_NUMBERFORMATTER);
+    uno::Sequence<OUString> aRet(1);
+    OUString* pArray = aRet.getArray();
+    pArray[0] = SERVICENAME_NUMBERFORMATTER;
     return aRet;
 }
 
@@ -435,7 +423,7 @@ SvNumberFormatsObj::~SvNumberFormatsObj()
 // XNumberFormats
 
 uno::Reference<beans::XPropertySet> SAL_CALL SvNumberFormatsObj::getByKey( sal_Int32 nKey )
-                            throw(uno::RuntimeException)
+    throw(uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -448,8 +436,9 @@ uno::Reference<beans::XPropertySet> SAL_CALL SvNumberFormatsObj::getByKey( sal_I
 }
 
 uno::Sequence<sal_Int32> SAL_CALL SvNumberFormatsObj::queryKeys( sal_Int16 nType,
-                                    const lang::Locale& nLocale, sal_Bool bCreate )
-                            throw(uno::RuntimeException)
+                                                                 const lang::Locale& nLocale,
+                                                                 sal_Bool bCreate )
+    throw(uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -474,9 +463,10 @@ uno::Sequence<sal_Int32> SAL_CALL SvNumberFormatsObj::queryKeys( sal_Int16 nType
         throw uno::RuntimeException();
 }
 
-sal_Int32 SAL_CALL SvNumberFormatsObj::queryKey( const rtl::OUString& aFormat,
-                                    const lang::Locale& nLocale, sal_Bool bScan )
-                            throw(uno::RuntimeException)
+sal_Int32 SAL_CALL SvNumberFormatsObj::queryKey( const OUString& aFormat,
+                                                 const lang::Locale& nLocale,
+                                                 sal_Bool bScan )
+    throw(uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -484,7 +474,6 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::queryKey( const rtl::OUString& aFormat,
     SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
     if (pFormatter)
     {
-        String aFormStr = aFormat;
         LanguageType eLang = lcl_GetLanguage( nLocale );
         if (bScan)
         {
@@ -498,9 +487,9 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::queryKey( const rtl::OUString& aFormat,
     return nRet;
 }
 
-sal_Int32 SAL_CALL SvNumberFormatsObj::addNew( const rtl::OUString& aFormat,
-                                    const lang::Locale& nLocale )
-                            throw(util::MalformedNumberFormatException, uno::RuntimeException)
+sal_Int32 SAL_CALL SvNumberFormatsObj::addNew( const OUString& aFormat,
+                                               const lang::Locale& nLocale )
+    throw(util::MalformedNumberFormatException, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -508,10 +497,10 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::addNew( const rtl::OUString& aFormat,
     SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
     if (pFormatter)
     {
-        String aFormStr = aFormat;
+        OUString aFormStr = aFormat;
         LanguageType eLang = lcl_GetLanguage( nLocale );
         sal_uInt32 nKey = 0;
-        xub_StrLen nCheckPos = 0;
+        sal_Int32 nCheckPos = 0;
         short nType = 0;
         bool bOk = pFormatter->PutEntry( aFormStr, nCheckPos, nType, nKey, eLang );
         if (bOk)
@@ -529,9 +518,10 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::addNew( const rtl::OUString& aFormat,
     return nRet;
 }
 
-sal_Int32 SAL_CALL SvNumberFormatsObj::addNewConverted( const rtl::OUString& aFormat,
-                                    const lang::Locale& nLocale, const lang::Locale& nNewLocale )
-                            throw(util::MalformedNumberFormatException, uno::RuntimeException)
+sal_Int32 SAL_CALL SvNumberFormatsObj::addNewConverted( const OUString& aFormat,
+                                                        const lang::Locale& nLocale,
+                                                        const lang::Locale& nNewLocale )
+    throw(util::MalformedNumberFormatException, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -539,11 +529,11 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::addNewConverted( const rtl::OUString& aFo
     SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
     if (pFormatter)
     {
-        String aFormStr = aFormat;
+        OUString aFormStr = aFormat;
         LanguageType eLang = lcl_GetLanguage( nLocale );
         LanguageType eNewLang = lcl_GetLanguage( nNewLocale );
         sal_uInt32 nKey = 0;
-        xub_StrLen nCheckPos = 0;
+        sal_Int32 nCheckPos = 0;
         short nType = 0;
         bool bOk = pFormatter->PutandConvertEntry( aFormStr, nCheckPos, nType, nKey, eLang, eNewLang );
         if (bOk || nKey > 0)
@@ -574,9 +564,11 @@ void SAL_CALL SvNumberFormatsObj::removeByKey( sal_Int32 nKey ) throw(uno::Runti
 }
 
 OUString SAL_CALL SvNumberFormatsObj::generateFormat( sal_Int32 nBaseKey,
-                                    const lang::Locale& nLocale, sal_Bool bThousands,
-                                    sal_Bool bRed, sal_Int16 nDecimals, sal_Int16 nLeading )
-                            throw(uno::RuntimeException)
+                                                      const lang::Locale& nLocale,
+                                                      sal_Bool bThousands,
+                                                      sal_Bool bRed, sal_Int16 nDecimals,
+                                                      sal_Int16 nLeading )
+    throw(uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -614,7 +606,7 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::getStandardIndex( const lang::Locale& nLo
 }
 
 sal_Int32 SAL_CALL SvNumberFormatsObj::getStandardFormat( sal_Int16 nType, const lang::Locale& nLocale )
-                            throw(uno::RuntimeException)
+    throw(uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -635,7 +627,7 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::getStandardFormat( sal_Int16 nType, const
 }
 
 sal_Int32 SAL_CALL SvNumberFormatsObj::getFormatIndex( sal_Int16 nIndex, const lang::Locale& nLocale )
-                            throw(uno::RuntimeException)
+    throw(uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -653,7 +645,7 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::getFormatIndex( sal_Int16 nIndex, const l
 }
 
 sal_Bool SAL_CALL SvNumberFormatsObj::isTypeCompatible( sal_Int16 nOldType, sal_Int16 nNewType )
-                            throw(uno::RuntimeException)
+    throw(uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -668,7 +660,7 @@ sal_Bool SAL_CALL SvNumberFormatsObj::isTypeCompatible( sal_Int16 nOldType, sal_
 }
 
 sal_Int32 SAL_CALL SvNumberFormatsObj::getFormatForLocale( sal_Int32 nKey, const lang::Locale& nLocale )
-                            throw(uno::RuntimeException)
+    throw(uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -687,24 +679,24 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::getFormatForLocale( sal_Int32 nKey, const
 
 // XServiceInfo
 
-rtl::OUString SAL_CALL SvNumberFormatsObj::getImplementationName()
-                            throw(uno::RuntimeException)
+OUString SAL_CALL SvNumberFormatsObj::getImplementationName()
+    throw(uno::RuntimeException)
 {
-    return rtl::OUString("SvNumberFormatsObj");
+    return OUString("SvNumberFormatsObj");
 }
 
-sal_Bool SAL_CALL SvNumberFormatsObj::supportsService( const rtl::OUString& ServiceName )
-                            throw(uno::RuntimeException)
+sal_Bool SAL_CALL SvNumberFormatsObj::supportsService( const OUString& ServiceName )
+    throw(uno::RuntimeException)
 {
     return ( ServiceName.compareToAscii(SERVICENAME_NUMBERFORMATS) == 0 );
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL SvNumberFormatsObj::getSupportedServiceNames()
-                            throw(uno::RuntimeException)
+uno::Sequence<OUString> SAL_CALL SvNumberFormatsObj::getSupportedServiceNames()
+    throw(uno::RuntimeException)
 {
-    uno::Sequence<rtl::OUString> aRet(1);
-    rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString(SERVICENAME_NUMBERFORMATS);
+    uno::Sequence<OUString> aRet(1);
+    OUString* pArray = aRet.getArray();
+    pArray[0] = OUString(SERVICENAME_NUMBERFORMATS);
     return aRet;
 }
 
@@ -726,7 +718,7 @@ SvNumberFormatObj::~SvNumberFormatObj()
 // XPropertySet
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL SvNumberFormatObj::getPropertySetInfo()
-                            throw(uno::RuntimeException)
+    throw(uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     static uno::Reference<beans::XPropertySetInfo> aRef =
@@ -734,18 +726,18 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL SvNumberFormatObj::getPropertyS
     return aRef;
 }
 
-void SAL_CALL SvNumberFormatObj::setPropertyValue( const rtl::OUString&,
+void SAL_CALL SvNumberFormatObj::setPropertyValue( const OUString&,
                                                    const uno::Any& )
-                throw(beans::UnknownPropertyException, beans::PropertyVetoException,
-                        lang::IllegalArgumentException, lang::WrappedTargetException,
-                        uno::RuntimeException)
+    throw(beans::UnknownPropertyException, beans::PropertyVetoException,
+          lang::IllegalArgumentException, lang::WrappedTargetException,
+          uno::RuntimeException)
 {
     throw beans::UnknownPropertyException();    //  everything is read-only
 }
 
-uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const rtl::OUString& aPropertyName )
-                throw(beans::UnknownPropertyException, lang::WrappedTargetException,
-                        uno::RuntimeException)
+uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const OUString& aPropertyName )
+    throw(beans::UnknownPropertyException, lang::WrappedTargetException,
+          uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -757,68 +749,67 @@ uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const rtl::OUString& aPro
         bool bThousand, bRed;
         sal_uInt16 nDecimals, nLeading;
 
-        String aString = aPropertyName;
-        if (aString.EqualsAscii( PROPERTYNAME_FMTSTR ))
+        if (aPropertyName.equalsAscii( PROPERTYNAME_FMTSTR ))
         {
-            aRet <<= rtl::OUString( pFormat->GetFormatstring() );
+            aRet <<= OUString( pFormat->GetFormatstring() );
         }
-        else if (aString.EqualsAscii( PROPERTYNAME_LOCALE ))
+        else if (aPropertyName.equalsAscii( PROPERTYNAME_LOCALE ))
         {
             lang::Locale aLocale( LanguageTag( pFormat->GetLanguage()).getLocale());
             aRet <<= aLocale;
         }
-        else if (aString.EqualsAscii( PROPERTYNAME_TYPE ))
+        else if (aPropertyName.equalsAscii( PROPERTYNAME_TYPE ))
         {
             aRet <<= (sal_Int16)( pFormat->GetType() );
         }
-        else if (aString.EqualsAscii( PROPERTYNAME_COMMENT ))
+        else if (aPropertyName.equalsAscii( PROPERTYNAME_COMMENT ))
         {
-            aRet <<= rtl::OUString( pFormat->GetComment() );
+            aRet <<= OUString( pFormat->GetComment() );
         }
-        else if (aString.EqualsAscii( PROPERTYNAME_STDFORM ))
+        else if (aPropertyName.equalsAscii( PROPERTYNAME_STDFORM ))
         {
             //! SvNumberformat Member bStandard rausreichen?
             sal_Bool bStandard = ( ( nKey % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 );
             aRet.setValue( &bStandard, getBooleanCppuType() );
         }
-        else if (aString.EqualsAscii( PROPERTYNAME_USERDEF ))
+        else if (aPropertyName.equalsAscii( PROPERTYNAME_USERDEF ))
         {
             sal_Bool bUserDef = ( ( pFormat->GetType() & NUMBERFORMAT_DEFINED ) != 0 );
             aRet.setValue( &bUserDef, getBooleanCppuType() );
         }
-        else if (aString.EqualsAscii( PROPERTYNAME_DECIMALS ))
+        else if (aPropertyName.equalsAscii( PROPERTYNAME_DECIMALS ))
         {
             pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
             aRet <<= (sal_Int16)( nDecimals );
         }
-        else if (aString.EqualsAscii( PROPERTYNAME_LEADING ))
+        else if (aPropertyName.equalsAscii( PROPERTYNAME_LEADING ))
         {
             pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
             aRet <<= (sal_Int16)( nLeading );
         }
-        else if (aString.EqualsAscii( PROPERTYNAME_NEGRED ))
+        else if (aPropertyName.equalsAscii( PROPERTYNAME_NEGRED ))
         {
             pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
             aRet.setValue( &bRed, getBooleanCppuType() );
         }
-        else if (aString.EqualsAscii( PROPERTYNAME_THOUS ))
+        else if (aPropertyName.equalsAscii( PROPERTYNAME_THOUS ))
         {
             pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
             aRet.setValue( &bThousand, getBooleanCppuType() );
         }
-        else if (aString.EqualsAscii( PROPERTYNAME_CURRSYM ))
+        else if (aPropertyName.equalsAscii( PROPERTYNAME_CURRSYM ))
         {
             OUString aSymbol, aExt;
             pFormat->GetNewCurrencySymbol( aSymbol, aExt );
             aRet <<= aSymbol;
         }
-        else if (aString.EqualsAscii( PROPERTYNAME_CURREXT ))
+        else if (aPropertyName.equalsAscii( PROPERTYNAME_CURREXT ))
         {
             OUString aSymbol, aExt;
             pFormat->GetNewCurrencySymbol( aSymbol, aExt );
             aRet <<= aExt;
         }
-        else if (aString.EqualsAscii( PROPERTYNAME_CURRABB ))
+        else if (aPropertyName.equalsAscii( PROPERTYNAME_CURRABB ))
         {
             OUString aSymbol, aExt;
             bool bBank = false;
@@ -826,9 +817,9 @@ uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const rtl::OUString& aPro
             const NfCurrencyEntry* pCurr = pFormatter->GetCurrencyEntry( bBank,
                 aSymbol, aExt, pFormat->GetLanguage() );
             if ( pCurr )
-                aRet <<= rtl::OUString( pCurr->GetBankSymbol() );
+                aRet <<= OUString( pCurr->GetBankSymbol() );
             else
-                aRet <<= rtl::OUString();
+                aRet <<= OUString();
         }
         else
             throw beans::UnknownPropertyException();
@@ -839,34 +830,34 @@ uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const rtl::OUString& aPro
     return aRet;
 }
 
-void SAL_CALL SvNumberFormatObj::addPropertyChangeListener( const rtl::OUString&,
-                        const uno::Reference<beans::XPropertyChangeListener>&)
-                        throw(beans::UnknownPropertyException,
-                        lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL SvNumberFormatObj::addPropertyChangeListener( const OUString&,
+                                                            const uno::Reference<beans::XPropertyChangeListener>&)
+    throw(beans::UnknownPropertyException,
+          lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_FAIL("not implemented");
 }
 
-void SAL_CALL SvNumberFormatObj::removePropertyChangeListener( const rtl::OUString&,
-                        const uno::Reference<beans::XPropertyChangeListener>&)
-                        throw(beans::UnknownPropertyException,
-                        lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL SvNumberFormatObj::removePropertyChangeListener( const OUString&,
+                                                               const uno::Reference<beans::XPropertyChangeListener>&)
+    throw(beans::UnknownPropertyException,
+          lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_FAIL("not implemented");
 }
 
-void SAL_CALL SvNumberFormatObj::addVetoableChangeListener( const rtl::OUString&,
-                        const uno::Reference<beans::XVetoableChangeListener>&)
-                        throw(beans::UnknownPropertyException,
-                        lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL SvNumberFormatObj::addVetoableChangeListener( const OUString&,
+                                                            const uno::Reference<beans::XVetoableChangeListener>&)
+    throw(beans::UnknownPropertyException,
+          lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_FAIL("not implemented");
 }
 
-void SAL_CALL SvNumberFormatObj::removeVetoableChangeListener( const rtl::OUString&,
-                        const uno::Reference<beans::XVetoableChangeListener>&)
-                        throw(beans::UnknownPropertyException,
-                        lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL SvNumberFormatObj::removeVetoableChangeListener( const OUString&,
+                                                               const uno::Reference<beans::XVetoableChangeListener>&)
+    throw(beans::UnknownPropertyException,
+          lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_FAIL("not implemented");
 }
@@ -874,7 +865,7 @@ void SAL_CALL SvNumberFormatObj::removeVetoableChangeListener( const rtl::OUStri
 // XPropertyAccess
 
 uno::Sequence<beans::PropertyValue> SAL_CALL SvNumberFormatObj::getPropertyValues()
-                            throw(uno::RuntimeException)
+    throw(uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -904,31 +895,31 @@ uno::Sequence<beans::PropertyValue> SAL_CALL SvNumberFormatObj::getPropertyValue
         uno::Sequence<beans::PropertyValue> aSeq(13);
         beans::PropertyValue* pArray = aSeq.getArray();
 
-        pArray[0].Name = rtl::OUString(PROPERTYNAME_FMTSTR );
+        pArray[0].Name = PROPERTYNAME_FMTSTR;
         pArray[0].Value <<= aFmtStr;
-        pArray[1].Name = rtl::OUString(PROPERTYNAME_LOCALE );
+        pArray[1].Name = PROPERTYNAME_LOCALE;
         pArray[1].Value <<= aLocale;
-        pArray[2].Name = rtl::OUString(PROPERTYNAME_TYPE );
+        pArray[2].Name = PROPERTYNAME_TYPE;
         pArray[2].Value <<= (sal_Int16)( pFormat->GetType() );
-        pArray[3].Name = rtl::OUString(PROPERTYNAME_COMMENT );
+        pArray[3].Name = PROPERTYNAME_COMMENT;
         pArray[3].Value <<= aComment;
-        pArray[4].Name = rtl::OUString(PROPERTYNAME_STDFORM );
+        pArray[4].Name = PROPERTYNAME_STDFORM;
         pArray[4].Value.setValue( &bStandard, getBooleanCppuType() );
-        pArray[5].Name = rtl::OUString(PROPERTYNAME_USERDEF );
+        pArray[5].Name = PROPERTYNAME_USERDEF;
         pArray[5].Value.setValue( &bUserDef, getBooleanCppuType() );
-        pArray[6].Name = rtl::OUString(PROPERTYNAME_DECIMALS );
+        pArray[6].Name = PROPERTYNAME_DECIMALS;
         pArray[6].Value <<= (sal_Int16)( nDecimals );
-        pArray[7].Name = rtl::OUString(PROPERTYNAME_LEADING );
+        pArray[7].Name = PROPERTYNAME_LEADING;
         pArray[7].Value <<= (sal_Int16)( nLeading );
-        pArray[8].Name = rtl::OUString(PROPERTYNAME_NEGRED );
+        pArray[8].Name = PROPERTYNAME_NEGRED;
         pArray[8].Value.setValue( &bRed, getBooleanCppuType() );
-        pArray[9].Name = rtl::OUString(PROPERTYNAME_THOUS );
+        pArray[9].Name = PROPERTYNAME_THOUS;
         pArray[9].Value.setValue( &bThousand, getBooleanCppuType() );
-        pArray[10].Name = rtl::OUString(PROPERTYNAME_CURRSYM );
+        pArray[10].Name = PROPERTYNAME_CURRSYM;
         pArray[10].Value <<= aSymbol;
-        pArray[11].Name = rtl::OUString(PROPERTYNAME_CURREXT );
+        pArray[11].Name = PROPERTYNAME_CURREXT;
         pArray[11].Value <<= aExt;
-        pArray[12].Name = rtl::OUString(PROPERTYNAME_CURRABB );
+        pArray[12].Name = PROPERTYNAME_CURRABB;
         pArray[12].Value <<= aAbb;
 
         return aSeq;
@@ -938,33 +929,33 @@ uno::Sequence<beans::PropertyValue> SAL_CALL SvNumberFormatObj::getPropertyValue
 }
 
 void SAL_CALL SvNumberFormatObj::setPropertyValues( const uno::Sequence<beans::PropertyValue>& )
-                        throw(beans::UnknownPropertyException, beans::PropertyVetoException,
-                                lang::IllegalArgumentException, lang::WrappedTargetException,
-                                uno::RuntimeException)
+    throw(beans::UnknownPropertyException, beans::PropertyVetoException,
+          lang::IllegalArgumentException, lang::WrappedTargetException,
+          uno::RuntimeException)
 {
     throw beans::UnknownPropertyException();    //  everything is read-only
 }
 
 // XServiceInfo
 
-rtl::OUString SAL_CALL SvNumberFormatObj::getImplementationName()
-                            throw(uno::RuntimeException)
+OUString SAL_CALL SvNumberFormatObj::getImplementationName()
+    throw(uno::RuntimeException)
 {
-    return rtl::OUString("SvNumberFormatObj");
+    return OUString("SvNumberFormatObj");
 }
 
-sal_Bool SAL_CALL SvNumberFormatObj::supportsService( const rtl::OUString& ServiceName )
-                            throw(uno::RuntimeException)
+sal_Bool SAL_CALL SvNumberFormatObj::supportsService( const OUString& ServiceName )
+    throw(uno::RuntimeException)
 {
     return ( ServiceName.compareToAscii(SERVICENAME_NUMBERFORMAT) == 0 );
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL SvNumberFormatObj::getSupportedServiceNames()
-                            throw(uno::RuntimeException)
+uno::Sequence<OUString> SAL_CALL SvNumberFormatObj::getSupportedServiceNames()
+    throw(uno::RuntimeException)
 {
-    uno::Sequence<rtl::OUString> aRet(1);
-    rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString(SERVICENAME_NUMBERFORMAT);
+    uno::Sequence<OUString> aRet(1);
+    OUString* pArray = aRet.getArray();
+    pArray[0] = SERVICENAME_NUMBERFORMAT;
     return aRet;
 }
 
@@ -985,7 +976,7 @@ SvNumberFormatSettingsObj::~SvNumberFormatSettingsObj()
 // XPropertySet
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL SvNumberFormatSettingsObj::getPropertySetInfo()
-                            throw(uno::RuntimeException)
+    throw(uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     static uno::Reference<beans::XPropertySetInfo> aRef =
@@ -993,37 +984,36 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL SvNumberFormatSettingsObj::getP
     return aRef;
 }
 
-void SAL_CALL SvNumberFormatSettingsObj::setPropertyValue( const rtl::OUString& aPropertyName,
-                                                    const uno::Any& aValue )
-                throw(beans::UnknownPropertyException, beans::PropertyVetoException,
-                        lang::IllegalArgumentException, lang::WrappedTargetException,
-                        uno::RuntimeException)
+void SAL_CALL SvNumberFormatSettingsObj::setPropertyValue( const OUString& aPropertyName,
+                                                           const uno::Any& aValue )
+    throw(beans::UnknownPropertyException, beans::PropertyVetoException,
+          lang::IllegalArgumentException, lang::WrappedTargetException,
+          uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
     if (pFormatter)
     {
-        String aString = aPropertyName;
-        if (aString.EqualsAscii( PROPERTYNAME_NOZERO ))
+        if (aPropertyName.equalsAscii( PROPERTYNAME_NOZERO ))
         {
             //  operator >>= shouldn't be used for bool (?)
             if ( aValue.getValueTypeClass() == uno::TypeClass_BOOLEAN )
                 pFormatter->SetNoZero( *(sal_Bool*)aValue.getValue() );
         }
-        else if (aString.EqualsAscii( PROPERTYNAME_NULLDATE ))
+        else if (aPropertyName.equalsAscii( PROPERTYNAME_NULLDATE ))
         {
             util::Date aDate;
             if ( aValue >>= aDate )
                 pFormatter->ChangeNullDate( aDate.Day, aDate.Month, aDate.Year );
         }
-        else if (aString.EqualsAscii( PROPERTYNAME_STDDEC ))
+        else if (aPropertyName.equalsAscii( PROPERTYNAME_STDDEC ))
         {
             sal_Int16 nInt16 = sal_Int16();
             if ( aValue >>= nInt16 )
                 pFormatter->ChangeStandardPrec( nInt16 );
         }
-        else if (aString.EqualsAscii( PROPERTYNAME_TWODIGIT ))
+        else if (aPropertyName.equalsAscii( PROPERTYNAME_TWODIGIT ))
         {
             sal_Int16 nInt16 = sal_Int16();
             if ( aValue >>= nInt16 )
@@ -1038,9 +1028,9 @@ void SAL_CALL SvNumberFormatSettingsObj::setPropertyValue( const rtl::OUString& 
         throw uno::RuntimeException();
 }
 
-uno::Any SAL_CALL SvNumberFormatSettingsObj::getPropertyValue( const rtl::OUString& aPropertyName )
-                throw(beans::UnknownPropertyException, lang::WrappedTargetException,
-                        uno::RuntimeException)
+uno::Any SAL_CALL SvNumberFormatSettingsObj::getPropertyValue( const OUString& aPropertyName )
+    throw(beans::UnknownPropertyException, lang::WrappedTargetException,
+          uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -1048,13 +1038,12 @@ uno::Any SAL_CALL SvNumberFormatSettingsObj::getPropertyValue( const rtl::OUStri
     SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
     if (pFormatter)
     {
-        String aString = aPropertyName;
-        if (aString.EqualsAscii( PROPERTYNAME_NOZERO ))
+        if (aPropertyName.equalsAscii( PROPERTYNAME_NOZERO ))
         {
             sal_Bool bNoZero = pFormatter->GetNoZero();
             aRet.setValue( &bNoZero, getBooleanCppuType() );
         }
-        else if (aString.EqualsAscii( PROPERTYNAME_NULLDATE ))
+        else if (aPropertyName.equalsAscii( PROPERTYNAME_NULLDATE ))
         {
             Date* pDate = pFormatter->GetNullDate();
             if (pDate)
@@ -1063,9 +1052,9 @@ uno::Any SAL_CALL SvNumberFormatSettingsObj::getPropertyValue( const rtl::OUStri
                 aRet <<= aUnoDate;
             }
         }
-        else if (aString.EqualsAscii( PROPERTYNAME_STDDEC ))
+        else if (aPropertyName.equalsAscii( PROPERTYNAME_STDDEC ))
             aRet <<= (sal_Int16)( pFormatter->GetStandardPrec() );
-        else if (aString.EqualsAscii( PROPERTYNAME_TWODIGIT ))
+        else if (aPropertyName.equalsAscii( PROPERTYNAME_TWODIGIT ))
             aRet <<= (sal_Int16)( pFormatter->GetYear2000() );
         else
             throw beans::UnknownPropertyException();
@@ -1076,58 +1065,58 @@ uno::Any SAL_CALL SvNumberFormatSettingsObj::getPropertyValue( const rtl::OUStri
     return aRet;
 }
 
-void SAL_CALL SvNumberFormatSettingsObj::addPropertyChangeListener( const rtl::OUString&,
-                        const uno::Reference<beans::XPropertyChangeListener>&)
-                        throw(beans::UnknownPropertyException,
-                        lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL SvNumberFormatSettingsObj::addPropertyChangeListener( const OUString&,
+                                                                    const uno::Reference<beans::XPropertyChangeListener>&)
+    throw(beans::UnknownPropertyException,
+          lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_FAIL("not implemented");
 }
 
-void SAL_CALL SvNumberFormatSettingsObj::removePropertyChangeListener( const rtl::OUString&,
-                        const uno::Reference<beans::XPropertyChangeListener>&)
-                        throw(beans::UnknownPropertyException,
-                        lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL SvNumberFormatSettingsObj::removePropertyChangeListener( const OUString&,
+                                                                       const uno::Reference<beans::XPropertyChangeListener>&)
+    throw(beans::UnknownPropertyException,
+          lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_FAIL("not implemented");
 }
 
-void SAL_CALL SvNumberFormatSettingsObj::addVetoableChangeListener( const rtl::OUString&,
-                        const uno::Reference<beans::XVetoableChangeListener>&)
-                        throw(beans::UnknownPropertyException,
-                        lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL SvNumberFormatSettingsObj::addVetoableChangeListener( const OUString&,
+                                                                    const uno::Reference<beans::XVetoableChangeListener>&)
+    throw(beans::UnknownPropertyException,
+          lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_FAIL("not implemented");
 }
 
-void SAL_CALL SvNumberFormatSettingsObj::removeVetoableChangeListener( const rtl::OUString&,
-                        const uno::Reference<beans::XVetoableChangeListener>&)
-                        throw(beans::UnknownPropertyException,
-                        lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL SvNumberFormatSettingsObj::removeVetoableChangeListener( const OUString&,
+                                                                       const uno::Reference<beans::XVetoableChangeListener>&)
+    throw(beans::UnknownPropertyException,
+          lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_FAIL("not implemented");
 }
 
 // XServiceInfo
 
-rtl::OUString SAL_CALL SvNumberFormatSettingsObj::getImplementationName()
-                            throw(uno::RuntimeException)
+OUString SAL_CALL SvNumberFormatSettingsObj::getImplementationName()
+    throw(uno::RuntimeException)
 {
-    return rtl::OUString("SvNumberFormatSettingsObj");
+    return OUString("SvNumberFormatSettingsObj");
 }
 
-sal_Bool SAL_CALL SvNumberFormatSettingsObj::supportsService( const rtl::OUString& ServiceName )
-                            throw(uno::RuntimeException)
+sal_Bool SAL_CALL SvNumberFormatSettingsObj::supportsService( const OUString& ServiceName )
+    throw(uno::RuntimeException)
 {
     return ( ServiceName.compareToAscii(SERVICENAME_NUMBERSETTINGS) == 0 );
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL SvNumberFormatSettingsObj::getSupportedServiceNames()
-                            throw(uno::RuntimeException)
+uno::Sequence<OUString> SAL_CALL SvNumberFormatSettingsObj::getSupportedServiceNames()
+    throw(uno::RuntimeException)
 {
-    uno::Sequence<rtl::OUString> aRet(1);
-    rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString(SERVICENAME_NUMBERSETTINGS);
+    uno::Sequence<OUString> aRet(1);
+    OUString* pArray = aRet.getArray();
+    pArray[0] = SERVICENAME_NUMBERSETTINGS;
     return aRet;
 }
 

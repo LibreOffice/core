@@ -7608,7 +7608,7 @@ void ScInterpreter::ScCurrency()
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 2 ) )
     {
-        String aStr;
+        OUString aStr;
         double fDec;
         if (nParamCount == 2)
         {
@@ -7639,7 +7639,7 @@ void ScInterpreter::ScCurrency()
                                         ScGlobal::eLnge);
         if ( (sal_uInt16) fDec != pFormatter->GetFormatPrecision( nIndex ) )
         {
-            String sFormatString = pFormatter->GenerateFormat(
+            OUString sFormatString = pFormatter->GenerateFormat(
                                                    nIndex,
                                                    ScGlobal::eLnge,
                                                    true,        // mit Tausenderpunkt
@@ -7647,10 +7647,10 @@ void ScInterpreter::ScCurrency()
                                                   (sal_uInt16) fDec,// Nachkommastellen
                                                    1);          // 1 Vorkommanull
             if (!pFormatter->GetPreviewString(sFormatString,
-                                                  fVal,
-                                                  aStr,
-                                                  &pColor,
-                                                  ScGlobal::eLnge))
+                                              fVal,
+                                              aStr,
+                                              &pColor,
+                                              ScGlobal::eLnge))
                 SetError(errIllegalArgument);
         }
         else
@@ -7698,7 +7698,7 @@ void ScInterpreter::ScFixed()
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 3 ) )
     {
-        String aStr;
+        OUString aStr;
         double fDec;
         bool bThousand;
         if (nParamCount == 3)
@@ -7732,7 +7732,7 @@ void ScInterpreter::ScFixed()
         sal_uLong nIndex = pFormatter->GetStandardFormat(
                                             NUMBERFORMAT_NUMBER,
                                             ScGlobal::eLnge);
-        String sFormatString = pFormatter->GenerateFormat(
+        OUString sFormatString = pFormatter->GenerateFormat(
                                                nIndex,
                                                ScGlobal::eLnge,
                                                bThousand,   // mit Tausenderpunkt
@@ -7907,8 +7907,8 @@ void ScInterpreter::ScText()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScText" );
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
-        String sFormatString = GetString();
-        String aStr;
+        OUString sFormatString = GetString();
+        OUString aStr;
         bool bString = false;
         double fVal = 0.0;
         switch (GetStackType())
@@ -7946,7 +7946,7 @@ void ScInterpreter::ScText()
             PushError( nGlobalError);
         else
         {
-            String aResult;
+            OUString aResult;
             Color* pColor = NULL;
             LanguageType eCellLang;
             const ScPatternAttr* pPattern = pDok->GetPattern(

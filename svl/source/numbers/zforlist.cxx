@@ -1676,35 +1676,6 @@ bool SvNumberFormatter::GetPreviewString(const OUString& sFormatString,
     }
 }
 
-bool SvNumberFormatter::GetPreviewString(const String& sFormatString,
-                                         double fPreviewNumber,
-                                         String& sOutString,
-                                         Color** ppColor,
-                                         LanguageType eLnge,
-                                         bool bUseStarFormat )
-{
-    bool result;
-    OUString sTemp(sOutString);
-    result = GetPreviewString(OUString(sFormatString), fPreviewNumber, sTemp,
-                              ppColor, eLnge, bUseStarFormat );
-    sOutString = sTemp;
-    return result;
-}
-
-bool SvNumberFormatter::GetPreviewStringGuess( const String& sFormatString,
-                                         double fPreviewNumber,
-                                         String& sOutString,
-                                         Color** ppColor,
-                                         LanguageType eLnge )
-{
-    bool result;
-    OUString sTemp(sOutString);
-    result = GetPreviewStringGuess( OUString(sFormatString), fPreviewNumber,
-                                    sTemp, ppColor, eLnge );
-    sOutString = sTemp;
-    return result;
-}
-
 bool SvNumberFormatter::GetPreviewStringGuess( const OUString& sFormatString,
                                                double fPreviewNumber,
                                                OUString& sOutString,

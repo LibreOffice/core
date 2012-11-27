@@ -428,9 +428,11 @@ void SvxNumberFormatShell::MakePreviewString( const String& rFormatStr,
     if ( nExistingFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
     {
         //  real preview - not implemented in NumberFormatter for text formats
+        OUString sTempOut(rPreviewStr);
 
-        pFormatter->GetPreviewString( rFormatStr, nValNum, rPreviewStr,
+        pFormatter->GetPreviewString( rFormatStr, nValNum, sTempOut,
                                       &rpFontColor, eCurLanguage, bUseStarFormat );
+        rPreviewStr = sTempOut;
     }
     else
     {
@@ -1260,7 +1262,9 @@ void SvxNumberFormatShell::MakePrevStringFromVal(
         double  nValue)
 {
     rpFontColor = NULL;
-    pFormatter->GetPreviewString( rFormatStr, nValue, rPreviewStr, &rpFontColor, eCurLanguage );
+    OUString sTempOut(rPreviewStr);
+    pFormatter->GetPreviewString( rFormatStr, nValue, sTempOut, &rpFontColor, eCurLanguage );
+    rPreviewStr = sTempOut;
 }
 
 /*************************************************************************
