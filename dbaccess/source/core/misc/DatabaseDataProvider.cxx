@@ -58,7 +58,7 @@ DatabaseDataProvider::DatabaseDataProvider(uno::Reference< uno::XComponentContex
     ::cppu::PropertySetMixin< chart2::data::XDatabaseDataProvider >(
         context, static_cast< Implements >(
             IMPLEMENTS_PROPERTY_SET), uno::Sequence< ::rtl::OUString >()),
-    m_aParameterManager( m_aMutex, uno::Reference< lang::XMultiServiceFactory >(context->getServiceManager(),uno::UNO_QUERY) ),
+    m_aParameterManager( m_aMutex, context ),
     m_aFilterManager( uno::Reference< lang::XMultiServiceFactory >(context->getServiceManager(),uno::UNO_QUERY) ),
     m_xContext(context),
     m_CommandType(sdb::CommandType::COMMAND), // #i94114

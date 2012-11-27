@@ -50,8 +50,8 @@ namespace dbp
     //=====================================================================
     //---------------------------------------------------------------------
     OListComboWizard::OListComboWizard( Window* _pParent,
-            const Reference< XPropertySet >& _rxObjectModel, const Reference< XMultiServiceFactory >& _rxORB )
-        :OControlWizard(_pParent, ModuleRes(RID_DLG_LISTCOMBOWIZARD), _rxObjectModel, _rxORB)
+            const Reference< XPropertySet >& _rxObjectModel, const Reference< XComponentContext >& _rxContext )
+        :OControlWizard(_pParent, ModuleRes(RID_DLG_LISTCOMBOWIZARD), _rxObjectModel, _rxContext)
         ,m_bListBox(sal_False)
         ,m_bHadDataSelection(sal_True)
     {

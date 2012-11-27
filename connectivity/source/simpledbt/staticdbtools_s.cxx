@@ -90,10 +90,10 @@ namespace connectivity
     }
 
     //----------------------------------------------------------------
-    Reference< XConnection> ODataAccessStaticTools::connectRowset(const Reference< XRowSet>& _rxRowSet, const Reference< XMultiServiceFactory>& _rxFactory, sal_Bool _bSetAsActiveConnection) const
+    Reference< XConnection> ODataAccessStaticTools::connectRowset(const Reference< XRowSet>& _rxRowSet, const Reference< XComponentContext >& _rxContext, sal_Bool _bSetAsActiveConnection) const
         SAL_THROW ( (SQLException, WrappedTargetException, RuntimeException) )
     {
-        return ::dbtools::connectRowset( _rxRowSet, _rxFactory, _bSetAsActiveConnection);
+        return ::dbtools::connectRowset( _rxRowSet, _rxContext, _bSetAsActiveConnection);
     }
 
     // ------------------------------------------------

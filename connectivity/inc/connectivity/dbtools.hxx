@@ -151,7 +151,7 @@ namespace dbtools
     OOO_DLLPUBLIC_DBTOOLS
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> connectRowset(
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext,
         sal_Bool _bSetAsActiveConnection
     )   SAL_THROW ( ( ::com::sun::star::sdbc::SQLException
                     , ::com::sun::star::lang::WrappedTargetException
@@ -182,7 +182,7 @@ namespace dbtools
     */
     OOO_DLLPUBLIC_DBTOOLS SharedConnection    ensureRowSetConnection(
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext,
         bool _bUseAutoConnectionDisposer
     )   SAL_THROW ( ( ::com::sun::star::sdbc::SQLException
                     , ::com::sun::star::lang::WrappedTargetException
@@ -423,7 +423,7 @@ namespace dbtools
     */
     OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer > getCurrentSettingsComposer(
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxRowSetProps,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext
     );
 
     /** transfer and translate properties between two FormComponents

@@ -42,6 +42,7 @@
 #include <com/sun/star/sdb/XParametersSupplier.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
+#include <com/sun/star/sdbc/ConnectionPool.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
@@ -357,7 +358,7 @@ Reference< XConnection> getConnection(const Reference< XRowSet>& _rxRowSet) thro
 // helper function which allows to implement both the connectRowset and the ensureRowSetConnection semantics
 // if connectRowset (which is deprecated) is removed, this function and one of its parameters are
 // not needed anymore, the whole implementation can be moved into ensureRowSetConnection then)
-SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const Reference< XMultiServiceFactory>& _rxFactory,
+SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const Reference< XComponentContext >& _rxContext,
         bool _bSetAsActiveConnection, bool _bAttachAutoDisposer )
     SAL_THROW ( ( SQLException, WrappedTargetException, RuntimeException ) )
 {
@@ -410,13 +411,15 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
             if (hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD), xRowSetProps))
                 xRowSetProps->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD)) >>= sPwd;
 
-            xPureConnection = getConnection_allowException( sDataSourceName, sUser, sPwd, comphelper::getComponentContext(_rxFactory) );
+            xPureConnection = getConnection_allowException( sDataSourceName, sUser, sPwd, _rxContext );
         }
         else if (!sURL.isEmpty())
         {   // the row set has no data source, but a connection url set
             // -> try to connection with that url
-            Reference< XDriverManager > xDriverManager(
-                _rxFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.ConnectionPool"))), UNO_QUERY);
+            Reference< XDriverManager > xDriverManager;
+            try {
+                xDriverManager = ConnectionPool::create( _rxContext );
+            } catch( const Exception& ) {  }
             if (xDriverManager.is())
             {
                 ::rtl::OUString sUser, sPwd;
@@ -472,18 +475,18 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
 }
 
 //------------------------------------------------------------------------------
-Reference< XConnection> connectRowset(const Reference< XRowSet>& _rxRowSet, const Reference< XMultiServiceFactory>& _rxFactory,
+Reference< XConnection> connectRowset(const Reference< XRowSet>& _rxRowSet, const Reference< XComponentContext >& _rxContext,
     sal_Bool _bSetAsActiveConnection )  SAL_THROW ( ( SQLException, WrappedTargetException, RuntimeException ) )
 {
-    SharedConnection xConnection = lcl_connectRowSet( _rxRowSet, _rxFactory, _bSetAsActiveConnection, true );
+    SharedConnection xConnection = lcl_connectRowSet( _rxRowSet, _rxContext, _bSetAsActiveConnection, true );
     return xConnection.getTyped();
 }
 
 //------------------------------------------------------------------------------
-SharedConnection ensureRowSetConnection(const Reference< XRowSet>& _rxRowSet, const Reference< XMultiServiceFactory>& _rxFactory,
+SharedConnection ensureRowSetConnection(const Reference< XRowSet>& _rxRowSet, const Reference< XComponentContext>& _rxContext,
     bool _bUseAutoConnectionDisposer )  SAL_THROW ( ( SQLException, WrappedTargetException, RuntimeException ) )
 {
-    return lcl_connectRowSet( _rxRowSet, _rxFactory, true, _bUseAutoConnectionDisposer );
+    return lcl_connectRowSet( _rxRowSet, _rxContext, true, _bUseAutoConnectionDisposer );
 }
 
 //------------------------------------------------------------------------------
@@ -1266,13 +1269,13 @@ Reference< XDataSource> findDataSource(const Reference< XInterface >& _xParent)
 }
 
 //------------------------------------------------------------------------------
-Reference< XSingleSelectQueryComposer > getComposedRowSetStatement( const Reference< XPropertySet >& _rxRowSet, const Reference< XMultiServiceFactory>& _rxFactory )
+Reference< XSingleSelectQueryComposer > getComposedRowSetStatement( const Reference< XPropertySet >& _rxRowSet, const Reference< XComponentContext >& _rxContext )
     SAL_THROW( ( SQLException ) )
 {
     Reference< XSingleSelectQueryComposer > xComposer;
     try
     {
-        Reference< XConnection> xConn = connectRowset( Reference< XRowSet >( _rxRowSet, UNO_QUERY ), _rxFactory, sal_True );
+        Reference< XConnection> xConn = connectRowset( Reference< XRowSet >( _rxRowSet, UNO_QUERY ), _rxContext, sal_True );
         if ( xConn.is() )       // implies _rxRowSet.is()
         {
             // build the statement the row set is based on (can't use the ActiveCommand property of the set
@@ -1317,12 +1320,12 @@ Reference< XSingleSelectQueryComposer > getComposedRowSetStatement( const Refere
 //------------------------------------------------------------------------------
 Reference< XSingleSelectQueryComposer > getCurrentSettingsComposer(
                 const Reference< XPropertySet>& _rxRowSetProps,
-                const Reference< XMultiServiceFactory>& _rxFactory)
+                const Reference< XComponentContext>& _rxContext)
 {
     Reference< XSingleSelectQueryComposer > xReturn;
     try
     {
-        xReturn = getComposedRowSetStatement( _rxRowSetProps, _rxFactory );
+        xReturn = getComposedRowSetStatement( _rxRowSetProps, _rxContext );
     }
     catch( const SQLException& )
     {

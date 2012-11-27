@@ -48,8 +48,8 @@ namespace dbp
     //=====================================================================
     //---------------------------------------------------------------------
     OGroupBoxWizard::OGroupBoxWizard( Window* _pParent,
-            const Reference< XPropertySet >& _rxObjectModel, const Reference< XMultiServiceFactory >& _rxORB )
-        :OControlWizard(_pParent, ModuleRes(RID_DLG_GROUPBOXWIZARD), _rxObjectModel, _rxORB)
+            const Reference< XPropertySet >& _rxObjectModel, const Reference< XComponentContext >& _rxContext )
+        :OControlWizard(_pParent, ModuleRes(RID_DLG_GROUPBOXWIZARD), _rxObjectModel, _rxContext)
         ,m_bVisitedDefault(sal_False)
         ,m_bVisitedDB(sal_False)
     {
@@ -160,7 +160,7 @@ namespace dbp
     {
         try
         {
-            OOptionGroupLayouter aLayouter(comphelper::getComponentContext(getServiceFactory()));
+            OOptionGroupLayouter aLayouter( getComponentContext() );
             aLayouter.doLayout(getContext(), getSettings());
         }
         catch(const Exception&)

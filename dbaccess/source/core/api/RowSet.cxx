@@ -1459,7 +1459,7 @@ void SAL_CALL ORowSet::executeWithCompletion( const Reference< XInteractionHandl
         calcConnection( _rxHandler );
         m_bRebuildConnOnExecute = sal_False;
 
-        Reference< XSingleSelectQueryComposer > xComposer = getCurrentSettingsComposer( this, m_aContext.getLegacyServiceFactory() );
+        Reference< XSingleSelectQueryComposer > xComposer = getCurrentSettingsComposer( this, m_aContext.getUNOContext() );
         Reference<XParametersSupplier>  xParameters(xComposer, UNO_QUERY);
 
         Reference<XIndexAccess>  xParamsAsIndicies = xParameters.is() ? xParameters->getParameters() : Reference<XIndexAccess>();

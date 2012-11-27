@@ -76,7 +76,7 @@ namespace connectivity
         // ------------------------------------------------
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> connectRowset(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext,
             sal_Bool _bSetAsActiveConnection
         ) const SAL_THROW ( ( ::com::sun::star::sdbc::SQLException
                             , ::com::sun::star::lang::WrappedTargetException

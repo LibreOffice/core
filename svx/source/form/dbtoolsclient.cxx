@@ -210,12 +210,12 @@ namespace svxform
 
     //--------------------------------------------------------------------
     Reference< XConnection > OStaticDataAccessTools::connectRowset( const Reference< XRowSet >& _rxRowSet,
-        const Reference< XMultiServiceFactory >& _rxFactory, sal_Bool _bSetAsActiveConnection ) const
+        const Reference< XComponentContext >& _rxContext, sal_Bool _bSetAsActiveConnection ) const
         SAL_THROW ( ( SQLException, WrappedTargetException, RuntimeException ) )
     {
         Reference< XConnection > xReturn;
         if ( ensureLoaded() )
-            xReturn = m_xDataAccessTools->connectRowset( _rxRowSet, _rxFactory, _bSetAsActiveConnection );
+            xReturn = m_xDataAccessTools->connectRowset( _rxRowSet, _rxContext, _bSetAsActiveConnection );
         return xReturn;
     }
 

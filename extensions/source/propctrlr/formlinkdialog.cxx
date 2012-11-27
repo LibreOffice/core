@@ -31,6 +31,7 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
@@ -449,7 +450,7 @@ namespace pcr
             _rxConnection.set(_rxFormProps->getPropertyValue(PROPERTY_ACTIVE_CONNECTION),UNO_QUERY);
 
         if ( !_rxConnection.is() )
-            _rxConnection = ::dbtools::connectRowset( Reference< XRowSet >( _rxFormProps, UNO_QUERY ), m_xORB, sal_True );
+            _rxConnection = ::dbtools::connectRowset( Reference< XRowSet >( _rxFormProps, UNO_QUERY ), comphelper::getComponentContext(m_xORB), sal_True );
     }
 
     //------------------------------------------------------------------------
@@ -471,7 +472,7 @@ namespace pcr
         Reference< XPropertySet > xTable;
         try
         {
-            Reference< XTablesSupplier > xTablesInForm( ::dbtools::getCurrentSettingsComposer( _rxFormProps, m_xORB ), UNO_QUERY );
+            Reference< XTablesSupplier > xTablesInForm( ::dbtools::getCurrentSettingsComposer( _rxFormProps, comphelper::getComponentContext(m_xORB) ), UNO_QUERY );
             Reference< XNameAccess > xTables;
             if ( xTablesInForm.is() )
                 xTables = xTablesInForm->getTables();

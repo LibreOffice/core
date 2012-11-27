@@ -352,7 +352,7 @@ void FmFieldWin::UpdateContent(const ::com::sun::star::uno::Reference< ::com::su
         // get the connection of the form
         OStaticDataAccessTools aTools;
         m_aConnection.reset(
-            aTools.connectRowset( Reference< XRowSet >( xForm, UNO_QUERY ), ::comphelper::getProcessServiceFactory(), sal_True ),
+            aTools.connectRowset( Reference< XRowSet >( xForm, UNO_QUERY ), ::comphelper::getProcessComponentContext(), sal_True ),
             SharedConnection::NoTakeOwnership
         );
         // TODO: When incompatible changes (such as extending the "virtualdbtools" interface by ensureRowSetConnection)

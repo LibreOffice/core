@@ -292,7 +292,7 @@ ODatabaseForm::ODatabaseForm(const Reference<XMultiServiceFactory>& _rxFactory)
     ,m_aPropertyBagHelper( *this )
     ,m_pAggregatePropertyMultiplexer(NULL)
     ,m_pGroupManager( NULL )
-    ,m_aParameterManager( m_aMutex, _rxFactory )
+    ,m_aParameterManager( m_aMutex, comphelper::getComponentContext(_rxFactory) )
     ,m_aFilterManager( _rxFactory )
     ,m_pLoadTimer(NULL)
     ,m_pThread(NULL)
@@ -332,7 +332,7 @@ ODatabaseForm::ODatabaseForm( const ODatabaseForm& _cloneSource )
     ,m_aPropertyBagHelper( *this )
     ,m_pAggregatePropertyMultiplexer( NULL )
     ,m_pGroupManager( NULL )
-    ,m_aParameterManager( m_aMutex, _cloneSource.m_xServiceFactory )
+    ,m_aParameterManager( m_aMutex, comphelper::getComponentContext(_cloneSource.m_xServiceFactory) )
     ,m_aFilterManager( _cloneSource.m_xServiceFactory )
     ,m_pLoadTimer( NULL )
     ,m_pThread( NULL )
@@ -2844,7 +2844,7 @@ sal_Bool ODatabaseForm::implEnsureConnection()
         {
             Reference< XConnection >  xConnection = connectRowset(
                 Reference<XRowSet> (m_xAggregate, UNO_QUERY),
-                m_xServiceFactory,
+                comphelper::getComponentContext(m_xServiceFactory),
                 sal_True    // set a calculated connection as ActiveConnection
             );
             return xConnection.is();

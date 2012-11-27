@@ -273,9 +273,9 @@ namespace dbp
     //=====================================================================
     //---------------------------------------------------------------------
     OControlWizard::OControlWizard( Window* _pParent, const ResId& _rId,
-            const Reference< XPropertySet >& _rxObjectModel, const Reference< XMultiServiceFactory >& _rxORB )
+            const Reference< XPropertySet >& _rxObjectModel, const Reference< XComponentContext >& _rxContext )
         :OWizardMachine(_pParent, _rId, WZB_CANCEL | WZB_PREVIOUS | WZB_NEXT | WZB_FINISH)
-        ,m_xORB(_rxORB)
+        ,m_xContext(_rxContext)
     {
         m_aContext.xObjectModel = _rxObjectModel;
         initContext();
@@ -433,13 +433,11 @@ namespace dbp
     //---------------------------------------------------------------------
     void OControlWizard::implGetDSContext()
     {
-        Reference< XMultiServiceFactory > xORB = getServiceFactory();
         try
         {
-            DBG_ASSERT(xORB.is(), "OControlWizard::implGetDSContext: invalid service factory!");
+            DBG_ASSERT(m_xContext.is(), "OControlWizard::implGetDSContext: invalid service factory!");
 
-            m_aContext.xDatasourceContext =
-                DatabaseContext::create(comphelper::getComponentContext(xORB));
+            m_aContext.xDatasourceContext = DatabaseContext::create(m_xContext);
         }
         catch(const Exception&)
         {
@@ -509,7 +507,7 @@ namespace dbp
         Reference< XInteractionHandler > xHandler;
         try
         {
-            xHandler = Reference< XInteractionHandler >( InteractionHandler::createWithParent(comphelper::getComponentContext(getServiceFactory()), 0), UNO_QUERY_THROW );
+            xHandler = Reference< XInteractionHandler >( InteractionHandler::createWithParent(m_xContext, 0), UNO_QUERY_THROW );
         }
         catch(const Exception&) { }
         if (!xHandler.is())
@@ -567,7 +565,7 @@ namespace dbp
                 Reference< XConnection > xConnection;
                 m_aContext.bEmbedded = ::dbtools::isEmbeddedInDatabase( m_aContext.xForm, xConnection );
                 if ( !m_aContext.bEmbedded )
-                    xConnection = ::dbtools::connectRowset( m_aContext.xRowSet, getServiceFactory(), sal_True );
+                    xConnection = ::dbtools::connectRowset( m_aContext.xRowSet, m_xContext, sal_True );
 
                 // get the fields
                 if (xConnection.is())

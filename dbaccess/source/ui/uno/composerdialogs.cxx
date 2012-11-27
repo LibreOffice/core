@@ -101,7 +101,7 @@ namespace dbaui
 
             // fallback: if there is a connection and thus a row set, but no composer, create one
             if ( xConnection.is() && !m_xComposer.is() )
-                m_xComposer = ::dbtools::getCurrentSettingsComposer( Reference< XPropertySet >( m_xRowSet, UNO_QUERY ), m_aContext.getLegacyServiceFactory() );
+                m_xComposer = ::dbtools::getCurrentSettingsComposer( Reference< XPropertySet >( m_xRowSet, UNO_QUERY ), m_aContext.getUNOContext() );
 
             // the columns of the row set
             Reference< XColumnsSupplier > xSuppColumns( m_xRowSet, UNO_QUERY );

@@ -41,6 +41,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
+#include <com/sun/star/sdbc/ConnectionPool.hpp>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
 #include <com/sun/star/sdbc/XDriverManager.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
@@ -642,9 +643,12 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
     Reference< XConnection > xReturn;
 
     Reference< XDriverManager > xManager;
-    if ( !m_pImpl->m_aContext.createComponent( "com.sun.star.sdbc.ConnectionPool", xManager ) )
+    try {
+        xManager.set( ConnectionPool::create( m_pImpl->m_aContext.getUNOContext() ) );
+    } catch( const Exception& ) {  }
+    if ( !xManager.is() )
         // no connection pool installed, fall back to driver manager
-        m_pImpl->m_aContext.createComponent( "com.sun.star.sdbc.DriverManager", xManager );
+        xManager.set( m_pImpl->m_aContext.createComponent( "com.sun.star.sdbc.DriverManager" ), UNO_QUERY_THROW );
 
     ::rtl::OUString sUser(_rUid);
     ::rtl::OUString sPwd(_rPwd);

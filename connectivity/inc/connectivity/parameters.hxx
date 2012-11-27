@@ -23,11 +23,11 @@
 #include <vector>
 
 #include <com/sun/star/uno/XAggregation.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/form/XDatabaseParameterListener.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
@@ -101,8 +101,8 @@ namespace dbtools
         ::osl::Mutex&                       m_rMutex;
         ::cppu::OInterfaceContainerHelper   m_aParameterListeners;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                                            m_xORB;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+                                            m_xContext;
 
         ::com::sun::star::uno::WeakReference< ::com::sun::star::beans::XPropertySet >
                                             m_xComponent;                // the database component whose parameters we're handling
@@ -137,7 +137,7 @@ namespace dbtools
         */
         explicit ParameterManager(
             ::osl::Mutex& _rMutex,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext
         );
 
         /// late ctor

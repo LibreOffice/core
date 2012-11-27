@@ -63,15 +63,15 @@ namespace dbtools
     //= ParameterManager
     //====================================================================
     //--------------------------------------------------------------------
-    ParameterManager::ParameterManager( ::osl::Mutex& _rMutex, const Reference< XMultiServiceFactory >& _rxORB )
+    ParameterManager::ParameterManager( ::osl::Mutex& _rMutex, const Reference< XComponentContext >& _rxContext )
         :m_rMutex             ( _rMutex )
         ,m_aParameterListeners( _rMutex )
-        ,m_xORB               ( _rxORB  )
+        ,m_xContext           ( _rxContext  )
         ,m_pOuterParameters   ( NULL    )
         ,m_nInnerCount        ( 0       )
         ,m_bUpToDate          ( false   )
     {
-        OSL_ENSURE( m_xORB.is(), "ParameterManager::ParameterManager: no service factory!" );
+        OSL_ENSURE( m_xContext.is(), "ParameterManager::ParameterManager: no service factory!" );
     }
 
     //--------------------------------------------------------------------
@@ -147,7 +147,7 @@ namespace dbtools
         try
         {
             // get a query composer for the 's settings
-            m_xComposer.reset( getCurrentSettingsComposer( _rxComponent, m_xORB ), SharedQueryComposer::TakeOwnership );
+            m_xComposer.reset( getCurrentSettingsComposer( _rxComponent, m_xContext ), SharedQueryComposer::TakeOwnership );
 
             // see if the composer found parameters
             Reference< XParametersSupplier > xParamSupp( m_xComposer, UNO_QUERY );
@@ -817,7 +817,7 @@ namespace dbtools
                 // re-create the parent composer all the time. Else, we'd have to bother with
                 // being a listener at its properties, its loaded state, and event the parent-relationship.
                 m_xParentComposer.reset(
-                    getCurrentSettingsComposer( xParent, m_xORB ),
+                    getCurrentSettingsComposer( xParent, m_xContext ),
                     SharedQueryComposer::TakeOwnership
                 );
                 xParentColSupp = xParentColSupp.query( m_xParentComposer );

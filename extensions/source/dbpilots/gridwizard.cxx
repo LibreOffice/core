@@ -51,8 +51,8 @@ namespace dbp
     //=====================================================================
     //---------------------------------------------------------------------
     OGridWizard::OGridWizard( Window* _pParent,
-            const Reference< XPropertySet >& _rxObjectModel, const Reference< XMultiServiceFactory >& _rxORB )
-        :OControlWizard(_pParent, ModuleRes(RID_DLG_GRIDWIZARD), _rxObjectModel, _rxORB)
+            const Reference< XPropertySet >& _rxObjectModel, const Reference< XComponentContext >& _rxContext )
+        :OControlWizard(_pParent, ModuleRes(RID_DLG_GRIDWIZARD), _rxObjectModel, _rxContext)
         ,m_bHadDataSelection(sal_True)
     {
         initControlSettings(&m_aSettings);

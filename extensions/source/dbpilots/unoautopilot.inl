@@ -99,7 +99,7 @@ template <class TYPE, class SERVICEINFO>
 template <class TYPE, class SERVICEINFO>
 Dialog* OUnoAutoPilot<TYPE, SERVICEINFO>::createDialog(Window* _pParent)
 {
-    return new TYPE(_pParent, m_xObjectModel, m_aContext.getLegacyServiceFactory());
+    return new TYPE(_pParent, m_xObjectModel, m_aContext.getUNOContext());
 }
 
 //--------------------------------------------------------------------------

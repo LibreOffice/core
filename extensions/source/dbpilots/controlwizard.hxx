@@ -106,17 +106,15 @@ namespace dbp
     {
     private:
         OControlWizardContext   m_aContext;
-
-    protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                    m_xORB;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+                    m_xContext;
 
     public:
         OControlWizard(
             Window* _pParent,
             const ResId& _rId,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObjectModel,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext
         );
         ~OControlWizard();
 
@@ -124,8 +122,8 @@ namespace dbp
         sal_Bool    travelNext() { return OControlWizard_Base::travelNext(); }
 
     public:
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-            getServiceFactory() const { return m_xORB; }
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+            getComponentContext() const { return m_xContext; }
 
         const OControlWizardContext&    getContext() const { return m_aContext; }
         sal_Bool                        updateContext(const OAccessRegulator&);
