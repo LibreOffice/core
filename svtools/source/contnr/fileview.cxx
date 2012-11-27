@@ -138,27 +138,27 @@ namespace
 
 // -----------------------------------------------------------------------
 
-void FilterMatch::createWildCardFilterList(const String& _rFilterList,::std::vector< WildCard >& _rFilters)
+void FilterMatch::createWildCardFilterList(const OUString& _rFilterList,::std::vector< WildCard >& _rFilters)
 {
-    if( _rFilterList.Len() )
+    if( _rFilterList.getLength() )
     {
         // filter is given
-        xub_StrLen nIndex = 0;
+        sal_Int32 nIndex = 0;
         OUString sToken;
         do
         {
-            sToken = _rFilterList.GetToken( 0, ';', nIndex );
+            sToken = _rFilterList.getToken( 0, ';', nIndex );
             if ( !sToken.isEmpty() )
             {
                 _rFilters.push_back( WildCard( sToken.toAsciiUpperCase() ) );
             }
         }
-        while ( nIndex != STRING_NOTFOUND );
+        while ( nIndex >= 0 );
     }
     else
     {
         // no filter is given -> match all
-        _rFilters.push_back( WildCard(rtl::OUString("*")) );
+        _rFilters.push_back( WildCard(OUString("*")) );
     }
 }
 // class ViewTabListBox_Impl ---------------------------------------------

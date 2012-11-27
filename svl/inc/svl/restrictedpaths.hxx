@@ -22,7 +22,6 @@
 
 #include <svl/urlfilter.hxx>
 #include <svl/svldllapi.h>
-#include <tools/string.hxx>
 
 #include <vector>
 
@@ -31,7 +30,7 @@ namespace svt
     class SVL_DLLPUBLIC RestrictedPaths : public IUrlFilter
     {
     private:
-        ::std::vector< String >     m_aUnrestrictedURLs;
+        ::std::vector< OUString >     m_aUnrestrictedURLs;
         bool                        m_bFilterIsEnabled;
 
     public:
@@ -39,7 +38,7 @@ namespace svt
         virtual ~RestrictedPaths();
 
         inline bool hasFilter() const { return !m_aUnrestrictedURLs.empty(); }
-        inline const ::std::vector< String >& getFilter() const { return m_aUnrestrictedURLs; }
+        inline const ::std::vector< OUString >& getFilter() const { return m_aUnrestrictedURLs; }
 
         inline void enableFilter( bool _bEnable ) { m_bFilterIsEnabled = _bEnable; }
         inline bool isFilterEnabled() const { return m_bFilterIsEnabled; }
@@ -53,7 +52,7 @@ namespace svt
 
             <p>If no "access restriction" is effective, this method always returns <TRUE/>.</p>
         */
-        virtual bool                isUrlAllowed( const String& _rURL ) const;
+        virtual bool                isUrlAllowed( const OUString& _rURL ) const;
 
         /** checks URL access permissions
 
@@ -66,7 +65,7 @@ namespace svt
 
             <p>If no "access restriction" is effective, this method always returns <TRUE/>.</p>
         */
-        bool                        isUrlAllowed( const String& _rURL, bool allowParents ) const;
+        bool                        isUrlAllowed( const OUString& _rURL, bool allowParents ) const;
     };
 
 }   // namespace svt

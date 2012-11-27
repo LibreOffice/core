@@ -106,14 +106,14 @@ class SvAddressParser_Impl
 
     bool readToken();
 
-    static rtl::OUString reparse(sal_Unicode const * pBegin,
-                             sal_Unicode const * pEnd, bool bAddrSpec);
+    static OUString reparse(sal_Unicode const * pBegin,
+                            sal_Unicode const * pEnd, bool bAddrSpec);
 
-    static rtl::OUString reparseComment(sal_Unicode const * pBegin,
-                                    sal_Unicode const * pEnd);
+    static OUString reparseComment(sal_Unicode const * pBegin,
+                                   sal_Unicode const * pEnd);
 
 public:
-    SvAddressParser_Impl(SvAddressParser * pParser, const rtl::OUString& rIn);
+    SvAddressParser_Impl(SvAddressParser * pParser, const OUString& rIn);
 };
 
 inline void SvAddressParser_Impl::resetRealNameAndFirstComment()
@@ -229,7 +229,7 @@ bool SvAddressParser_Impl::readToken()
             m_pCurTokenContentBegin = 0;
             m_pCurTokenContentEnd = 0;
             bool bEscaped = false;
-            xub_StrLen nLevel = 0;
+            int nLevel = 0;
             for (;;)
             {
                 if (m_pInputPos >= m_pInputEnd)
@@ -318,112 +318,112 @@ bool SvAddressParser_Impl::readToken()
 
 //============================================================================
 // static
-rtl::OUString SvAddressParser_Impl::reparse(sal_Unicode const * pBegin,
-    sal_Unicode const * pEnd, bool bAddrSpec)
+OUString SvAddressParser_Impl::reparse(sal_Unicode const * pBegin,
+                                       sal_Unicode const * pEnd, bool bAddrSpec)
 {
-    rtl::OUStringBuffer aResult;
+    OUStringBuffer aResult;
     TokenType eMode = TOKEN_ATOM;
     bool bEscaped = false;
     bool bEndsWithSpace = false;
-    xub_StrLen nLevel = 0;
+    int nLevel = 0;
     while (pBegin < pEnd)
     {
         sal_Unicode cChar = *pBegin++;
         switch (eMode)
         {
-            case TOKEN_QUOTED:
-                if (bEscaped)
-                {
+        case TOKEN_QUOTED:
+            if (bEscaped)
+            {
+                aResult.append(cChar);
+                bEscaped = false;
+            }
+            else if (cChar == '"')
+            {
+                if (bAddrSpec)
                     aResult.append(cChar);
-                    bEscaped = false;
-                }
-                else if (cChar == '"')
-                {
-                    if (bAddrSpec)
-                        aResult.append(cChar);
+                eMode = TOKEN_ATOM;
+            }
+            else if (cChar == '\\')
+            {
+                if (bAddrSpec)
+                    aResult.append(cChar);
+                bEscaped = true;
+            }
+            else
+                aResult.append(cChar);
+            break;
+
+        case TOKEN_DOMAIN:
+            if (bEscaped)
+            {
+                aResult.append(cChar);
+                bEscaped = false;
+            }
+            else if (cChar == ']')
+            {
+                aResult.append(cChar);
+                eMode = TOKEN_ATOM;
+            }
+            else if (cChar == '\\')
+            {
+                if (bAddrSpec)
+                    aResult.append(cChar);
+                bEscaped = true;
+            }
+            else
+                aResult.append(cChar);
+            break;
+
+        case TOKEN_COMMENT:
+            if (bEscaped)
+                bEscaped = false;
+            else if (cChar == '(')
+                ++nLevel;
+            else if (cChar == ')')
+                if (nLevel)
+                    --nLevel;
+                else
                     eMode = TOKEN_ATOM;
+            else if (cChar == '\\')
+                bEscaped = true;
+            break;
+
+        case TOKEN_ATOM:
+            if (cChar <= ' ' || cChar == 0x7F) // DEL
+            {
+                if (!bAddrSpec && !bEndsWithSpace)
+                {
+                    aResult.append(' ');
+                    bEndsWithSpace = true;
                 }
-                else if (cChar == '\\')
+            }
+            else if (cChar == '(')
+            {
+                if (!bAddrSpec && !bEndsWithSpace)
+                {
+                    aResult.append(' ');
+                    bEndsWithSpace = true;
+                }
+                eMode = TOKEN_COMMENT;
+            }
+            else
+            {
+                bEndsWithSpace = false;
+                if (cChar == '"')
                 {
                     if (bAddrSpec)
                         aResult.append(cChar);
-                    bEscaped = true;
+                    eMode = TOKEN_QUOTED;
+                }
+                else if (cChar == '[')
+                {
+                    aResult.append(cChar);
+                    eMode = TOKEN_QUOTED;
                 }
                 else
                     aResult.append(cChar);
-                break;
-
-            case TOKEN_DOMAIN:
-                if (bEscaped)
-                {
-                    aResult.append(cChar);
-                    bEscaped = false;
-                }
-                else if (cChar == ']')
-                {
-                    aResult.append(cChar);
-                    eMode = TOKEN_ATOM;
-                }
-                else if (cChar == '\\')
-                {
-                    if (bAddrSpec)
-                        aResult.append(cChar);
-                    bEscaped = true;
-                }
-                else
-                    aResult.append(cChar);
-                break;
-
-            case TOKEN_COMMENT:
-                if (bEscaped)
-                    bEscaped = false;
-                else if (cChar == '(')
-                    ++nLevel;
-                else if (cChar == ')')
-                    if (nLevel)
-                        --nLevel;
-                    else
-                        eMode = TOKEN_ATOM;
-                else if (cChar == '\\')
-                    bEscaped = true;
-                break;
-
-            case TOKEN_ATOM:
-                if (cChar <= ' ' || cChar == 0x7F) // DEL
-                {
-                    if (!bAddrSpec && !bEndsWithSpace)
-                    {
-                        aResult.append(' ');
-                        bEndsWithSpace = true;
-                    }
-                }
-                else if (cChar == '(')
-                {
-                    if (!bAddrSpec && !bEndsWithSpace)
-                    {
-                        aResult.append(' ');
-                        bEndsWithSpace = true;
-                    }
-                    eMode = TOKEN_COMMENT;
-                }
-                else
-                {
-                    bEndsWithSpace = false;
-                    if (cChar == '"')
-                    {
-                        if (bAddrSpec)
-                            aResult.append(cChar);
-                        eMode = TOKEN_QUOTED;
-                    }
-                    else if (cChar == '[')
-                    {
-                        aResult.append(cChar);
-                        eMode = TOKEN_QUOTED;
-                    }
-                    else
-                        aResult.append(cChar);
-                }
-                break;
+            }
+            break;
         }
     }
     return aResult.makeStringAndClear();
@@ -431,10 +431,10 @@ rtl::OUString SvAddressParser_Impl::reparse(sal_Unicode const * pBegin,
 
 //============================================================================
 // static
-rtl::OUString SvAddressParser_Impl::reparseComment(sal_Unicode const * pBegin,
-    sal_Unicode const * pEnd)
+OUString SvAddressParser_Impl::reparseComment(sal_Unicode const * pBegin,
+                                              sal_Unicode const * pEnd)
 {
-    rtl::OUStringBuffer aResult;
+    OUStringBuffer aResult;
     while (pBegin < pEnd)
     {
         sal_Unicode cChar = *pBegin++;
@@ -447,7 +447,7 @@ rtl::OUString SvAddressParser_Impl::reparseComment(sal_Unicode const * pBegin,
 
 //============================================================================
 SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
-                                           const rtl::OUString& rInput)
+                                           const OUString& rInput)
 {
     m_pInputPos = rInput.getStr();
     m_pInputEnd = m_pInputPos + rInput.getLength();
@@ -469,272 +469,258 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
         }
         switch (m_nCurToken)
         {
-            case TOKEN_QUOTED:
-                if (m_pAddrSpec->m_eLastElem != ELEMENT_END)
+        case TOKEN_QUOTED:
+            if (m_pAddrSpec->m_eLastElem != ELEMENT_END)
+            {
+                if (m_pAddrSpec->m_bAtFound
+                    || m_pAddrSpec->m_eLastElem <= ELEMENT_DELIM)
+                    m_pAddrSpec->reset();
+                addTokenToAddrSpec(ELEMENT_ITEM);
+            }
+            if (!m_bRealNameFinished && m_eState != AFTER_LESS)
+            {
+                if (m_bCurTokenReparse)
                 {
-                    if (m_pAddrSpec->m_bAtFound
-                        || m_pAddrSpec->m_eLastElem <= ELEMENT_DELIM)
-                        m_pAddrSpec->reset();
-                    addTokenToAddrSpec(ELEMENT_ITEM);
+                    if (!m_pRealNameBegin)
+                        m_pRealNameBegin = m_pCurTokenBegin;
+                    m_pRealNameEnd = m_pCurTokenEnd;
+                    m_bRealNameReparse = true;
                 }
-                if (!m_bRealNameFinished && m_eState != AFTER_LESS)
+                else if (m_bRealNameReparse)
+                    m_pRealNameEnd = m_pCurTokenEnd;
+                else if (!m_pRealNameBegin)
                 {
-                    if (m_bCurTokenReparse)
+                    m_pRealNameBegin = m_pCurTokenBegin;
+                    m_pRealNameContentBegin = m_pCurTokenContentBegin;
+                    m_pRealNameEnd = m_pRealNameContentEnd = m_pCurTokenContentEnd;
+                }
+                else
+                {
+                    m_pRealNameEnd = m_pCurTokenEnd;
+                    m_bRealNameReparse = true;
+                }
+            }
+            m_eType = TOKEN_ATOM;
+            break;
+
+        case TOKEN_DOMAIN:
+            if (m_pAddrSpec->m_eLastElem != ELEMENT_END)
+            {
+                if (m_pAddrSpec->m_bAtFound && m_pAddrSpec->m_eLastElem == ELEMENT_DELIM)
+                    addTokenToAddrSpec(ELEMENT_ITEM);
+                else
+                    m_pAddrSpec->reset();
+            }
+            addTokenToRealName();
+            m_eType = TOKEN_ATOM;
+            break;
+
+        case TOKEN_COMMENT:
+            if (!m_bRealNameFinished && m_eState != AFTER_LESS
+                && !m_pFirstCommentBegin && m_pCurTokenContentBegin)
+            {
+                m_pFirstCommentBegin = m_pCurTokenContentBegin;
+                m_pFirstCommentEnd = m_pCurTokenContentEnd;
+                m_bFirstCommentReparse = m_bCurTokenReparse;
+            }
+            m_eType = TOKEN_ATOM;
+            break;
+
+        case TOKEN_ATOM:
+            if (m_pAddrSpec->m_eLastElem != ELEMENT_END)
+            {
+                if (m_pAddrSpec->m_eLastElem != ELEMENT_DELIM)
+                    m_pAddrSpec->reset();
+                addTokenToAddrSpec(ELEMENT_ITEM);
+            }
+            addTokenToRealName();
+            break;
+
+        case '(':
+            m_eType = TOKEN_COMMENT;
+            break;
+
+        case ')':
+        case '\\':
+        case ']':
+            m_pAddrSpec->finish();
+            addTokenToRealName();
+            break;
+
+        case '<':
+            switch (m_eState)
+            {
+            case BEFORE_COLON:
+            case BEFORE_LESS:
+                m_aOuterAddrSpec.finish();
+                if (m_pRealNameBegin)
+                    m_bRealNameFinished = true;
+                m_pAddrSpec = &m_aInnerAddrSpec;
+                m_eState = AFTER_LESS;
+                break;
+
+            case AFTER_LESS:
+                m_aInnerAddrSpec.finish();
+                break;
+
+            case AFTER_GREATER:
+                m_aOuterAddrSpec.finish();
+                addTokenToRealName();
+                break;
+            }
+            break;
+
+        case '>':
+            if (m_eState == AFTER_LESS)
+            {
+                m_aInnerAddrSpec.finish();
+                if (m_aInnerAddrSpec.isValid())
+                    m_aOuterAddrSpec.m_eLastElem = ELEMENT_END;
+                m_pAddrSpec = &m_aOuterAddrSpec;
+                m_eState = AFTER_GREATER;
+            }
+            else
+            {
+                m_aOuterAddrSpec.finish();
+                addTokenToRealName();
+            }
+            break;
+
+        case '@':
+            if (m_pAddrSpec->m_eLastElem != ELEMENT_END)
+            {
+                if (!m_pAddrSpec->m_bAtFound
+                    && m_pAddrSpec->m_eLastElem == ELEMENT_ITEM)
+                {
+                    addTokenToAddrSpec(ELEMENT_DELIM);
+                    m_pAddrSpec->m_bAtFound = true;
+                }
+                else
+                    m_pAddrSpec->reset();
+            }
+            addTokenToRealName();
+            break;
+
+        case ',':
+        case ';':
+            if (m_eState == AFTER_LESS)
+                if (m_nCurToken == ',')
+                {
+                    if (m_aInnerAddrSpec.m_eLastElem != ELEMENT_END)
+                        m_aInnerAddrSpec.reset();
+                }
+                else
+                    m_aInnerAddrSpec.finish();
+            else
+            {
+                if(m_aInnerAddrSpec.isValid() || (!m_aOuterAddrSpec.isValid() && m_aInnerAddrSpec.isPoorlyValid()))
+                {
+                    m_pAddrSpec = &m_aInnerAddrSpec;
+                }
+                else if(m_aOuterAddrSpec.isPoorlyValid())
+                {
+                    m_pAddrSpec = &m_aOuterAddrSpec;
+                }
+                else
+                {
+                    m_pAddrSpec = 0;
+                }
+
+                if (m_pAddrSpec)
+                {
+                    OUString aTheAddrSpec;
+                    if (m_pAddrSpec->m_bReparse)
+                        aTheAddrSpec = reparse(m_pAddrSpec->m_pBegin, m_pAddrSpec->m_pEnd, true);
+                    else
                     {
-                        if (!m_pRealNameBegin)
-                            m_pRealNameBegin = m_pCurTokenBegin;
-                        m_pRealNameEnd = m_pCurTokenEnd;
-                        m_bRealNameReparse = true;
+                        sal_Int32 nLen = ( m_pAddrSpec->m_pEnd - m_pAddrSpec->m_pBegin);
+                        if (nLen == rInput.getLength())
+                            aTheAddrSpec = rInput;
+                        else
+                            aTheAddrSpec = rInput.copy( (m_pAddrSpec->m_pBegin - rInput.getStr()),
+                                                        nLen);
+                    }
+                    OUString aTheRealName;
+                    if (!m_pRealNameBegin ||
+                        (m_pAddrSpec == &m_aOuterAddrSpec &&
+                         m_pRealNameBegin == m_aOuterAddrSpec.m_pBegin &&
+                         m_pRealNameEnd == m_aOuterAddrSpec.m_pEnd &&
+                         m_pFirstCommentBegin))
+                    {
+                        if (!m_pFirstCommentBegin)
+                            aTheRealName = aTheAddrSpec;
+                        else if (m_bFirstCommentReparse)
+                            aTheRealName = reparseComment(m_pFirstCommentBegin,
+                                                          m_pFirstCommentEnd);
+                        else
+                            aTheRealName = rInput.copy( (m_pFirstCommentBegin - rInput.getStr()),
+                                                        (m_pFirstCommentEnd - m_pFirstCommentBegin));
                     }
                     else if (m_bRealNameReparse)
-                        m_pRealNameEnd = m_pCurTokenEnd;
-                    else if (!m_pRealNameBegin)
-                    {
-                        m_pRealNameBegin = m_pCurTokenBegin;
-                        m_pRealNameContentBegin = m_pCurTokenContentBegin;
-                        m_pRealNameEnd = m_pRealNameContentEnd
-                            = m_pCurTokenContentEnd;
-                    }
+                        aTheRealName = reparse(m_pRealNameBegin, m_pRealNameEnd, false);
                     else
                     {
-                        m_pRealNameEnd = m_pCurTokenEnd;
-                        m_bRealNameReparse = true;
+                        sal_Int32 nLen = (m_pRealNameContentEnd - m_pRealNameContentBegin);
+                        if (nLen == rInput.getLength())
+                            aTheRealName = rInput;
+                        else
+                            aTheRealName = rInput.copy( (m_pRealNameContentBegin - rInput.getStr()), nLen);
+                    }
+                    if (pParser->m_bHasFirst)
+                        pParser->m_aRest.push_back(new SvAddressEntry_Impl( aTheAddrSpec,
+                                                                            aTheRealName) );
+                    else
+                    {
+                        pParser->m_bHasFirst = true;
+                        pParser->m_aFirst.m_aAddrSpec = aTheAddrSpec;
+                        pParser->m_aFirst.m_aRealName = aTheRealName;
                     }
                 }
-                m_eType = TOKEN_ATOM;
+                if (bDone)
+                    return;
+                reset();
+            }
+            break;
+
+        case ':':
+            switch (m_eState)
+            {
+            case BEFORE_COLON:
+                m_aOuterAddrSpec.reset();
+                resetRealNameAndFirstComment();
+                m_eState = BEFORE_LESS;
                 break;
 
-            case TOKEN_DOMAIN:
-                if (m_pAddrSpec->m_eLastElem != ELEMENT_END)
-                {
-                    if (m_pAddrSpec->m_bAtFound
-                        && m_pAddrSpec->m_eLastElem == ELEMENT_DELIM)
-                        addTokenToAddrSpec(ELEMENT_ITEM);
-                    else
-                        m_pAddrSpec->reset();
-                }
-                addTokenToRealName();
-                m_eType = TOKEN_ATOM;
-                break;
-
-            case TOKEN_COMMENT:
-                if (!m_bRealNameFinished && m_eState != AFTER_LESS
-                    && !m_pFirstCommentBegin && m_pCurTokenContentBegin)
-                {
-                    m_pFirstCommentBegin = m_pCurTokenContentBegin;
-                    m_pFirstCommentEnd = m_pCurTokenContentEnd;
-                    m_bFirstCommentReparse = m_bCurTokenReparse;
-                }
-                m_eType = TOKEN_ATOM;
-                break;
-
-            case TOKEN_ATOM:
-                if (m_pAddrSpec->m_eLastElem != ELEMENT_END)
-                {
-                    if (m_pAddrSpec->m_eLastElem != ELEMENT_DELIM)
-                        m_pAddrSpec->reset();
-                    addTokenToAddrSpec(ELEMENT_ITEM);
-                }
+            case BEFORE_LESS:
+            case AFTER_GREATER:
+                m_aOuterAddrSpec.finish();
                 addTokenToRealName();
                 break;
 
-            case '(':
-                m_eType = TOKEN_COMMENT;
+            case AFTER_LESS:
+                m_aInnerAddrSpec.reset();
                 break;
+            }
+            break;
 
-            case ')':
-            case '\\':
-            case ']':
-                m_pAddrSpec->finish();
-                addTokenToRealName();
-                break;
+        case '"':
+            m_eType = TOKEN_QUOTED;
+            break;
 
-            case '<':
-                switch (m_eState)
-                {
-                    case BEFORE_COLON:
-                    case BEFORE_LESS:
-                        m_aOuterAddrSpec.finish();
-                        if (m_pRealNameBegin)
-                            m_bRealNameFinished = true;
-                        m_pAddrSpec = &m_aInnerAddrSpec;
-                        m_eState = AFTER_LESS;
-                        break;
-
-                    case AFTER_LESS:
-                        m_aInnerAddrSpec.finish();
-                        break;
-
-                    case AFTER_GREATER:
-                        m_aOuterAddrSpec.finish();
-                        addTokenToRealName();
-                        break;
-                }
-                break;
-
-            case '>':
-                if (m_eState == AFTER_LESS)
-                {
-                    m_aInnerAddrSpec.finish();
-                    if (m_aInnerAddrSpec.isValid())
-                        m_aOuterAddrSpec.m_eLastElem = ELEMENT_END;
-                    m_pAddrSpec = &m_aOuterAddrSpec;
-                    m_eState = AFTER_GREATER;
-                }
+        case '.':
+            if (m_pAddrSpec->m_eLastElem != ELEMENT_END)
+            {
+                if (m_pAddrSpec->m_eLastElem != ELEMENT_DELIM)
+                    addTokenToAddrSpec(ELEMENT_DELIM);
                 else
-                {
-                    m_aOuterAddrSpec.finish();
-                    addTokenToRealName();
-                }
-                break;
+                    m_pAddrSpec->reset();
+            }
+            addTokenToRealName();
+            break;
 
-            case '@':
-                if (m_pAddrSpec->m_eLastElem != ELEMENT_END)
-                {
-                    if (!m_pAddrSpec->m_bAtFound
-                        && m_pAddrSpec->m_eLastElem == ELEMENT_ITEM)
-                    {
-                        addTokenToAddrSpec(ELEMENT_DELIM);
-                        m_pAddrSpec->m_bAtFound = true;
-                    }
-                    else
-                        m_pAddrSpec->reset();
-                }
-                addTokenToRealName();
-                break;
-
-            case ',':
-            case ';':
-                if (m_eState == AFTER_LESS)
-                    if (m_nCurToken == ',')
-                    {
-                        if (m_aInnerAddrSpec.m_eLastElem
-                             != ELEMENT_END)
-                            m_aInnerAddrSpec.reset();
-                    }
-                    else
-                        m_aInnerAddrSpec.finish();
-                else
-                {
-                    m_pAddrSpec = m_aInnerAddrSpec.isValid()
-                                  || (!m_aOuterAddrSpec.isValid()
-                                         && m_aInnerAddrSpec.isPoorlyValid()) ?
-                                      &m_aInnerAddrSpec :
-                                  m_aOuterAddrSpec.isPoorlyValid() ?
-                                      &m_aOuterAddrSpec : 0;
-                    if (m_pAddrSpec)
-                    {
-                        rtl::OUString aTheAddrSpec;
-                        if (m_pAddrSpec->m_bReparse)
-                            aTheAddrSpec = reparse(m_pAddrSpec->m_pBegin,
-                                                   m_pAddrSpec->m_pEnd, true);
-                        else
-                        {
-                            sal_Int32 nLen = (
-                                    m_pAddrSpec->m_pEnd
-                                    - m_pAddrSpec->m_pBegin);
-                            if (nLen == rInput.getLength())
-                                aTheAddrSpec = rInput;
-                            else
-                                aTheAddrSpec
-                                    = rInput.copy(
-                                        (m_pAddrSpec->m_pBegin
-                                            - rInput.getStr()),
-                                        nLen);
-                        }
-                        rtl::OUString aTheRealName;
-                        if (!m_pRealNameBegin
-                            || (m_pAddrSpec == &m_aOuterAddrSpec
-                               && m_pRealNameBegin
-                                      == m_aOuterAddrSpec.m_pBegin
-                               && m_pRealNameEnd == m_aOuterAddrSpec.m_pEnd
-                               && m_pFirstCommentBegin))
-                            if (!m_pFirstCommentBegin)
-                                aTheRealName = aTheAddrSpec;
-                            else if (m_bFirstCommentReparse)
-                                aTheRealName
-                                    = reparseComment(m_pFirstCommentBegin,
-                                                     m_pFirstCommentEnd);
-                            else
-                                aTheRealName
-                                    = rInput.copy(
-                                        (m_pFirstCommentBegin
-                                         - rInput.getStr()),
-                                        (m_pFirstCommentEnd
-                                         - m_pFirstCommentBegin));
-                        else if (m_bRealNameReparse)
-                            aTheRealName = reparse(m_pRealNameBegin,
-                                                   m_pRealNameEnd, false);
-                        else
-                        {
-                            sal_Int32 nLen =
-                                (m_pRealNameContentEnd
-                                 - m_pRealNameContentBegin);
-                            if (nLen == rInput.getLength())
-                                aTheRealName = rInput;
-                            else
-                                aTheRealName
-                                    = rInput.copy(
-                                        (m_pRealNameContentBegin
-                                         - rInput.getStr()), nLen);
-                        }
-                        if (pParser->m_bHasFirst)
-                            pParser->m_aRest.push_back(new SvAddressEntry_Impl(
-                                                            aTheAddrSpec,
-                                                            aTheRealName)
-                                                      );
-                        else
-                        {
-                            pParser->m_bHasFirst = true;
-                            pParser->m_aFirst.m_aAddrSpec = aTheAddrSpec;
-                            pParser->m_aFirst.m_aRealName = aTheRealName;
-                        }
-                    }
-                    if (bDone)
-                        return;
-                    reset();
-                }
-                break;
-
-            case ':':
-                switch (m_eState)
-                {
-                    case BEFORE_COLON:
-                        m_aOuterAddrSpec.reset();
-                        resetRealNameAndFirstComment();
-                        m_eState = BEFORE_LESS;
-                        break;
-
-                    case BEFORE_LESS:
-                    case AFTER_GREATER:
-                        m_aOuterAddrSpec.finish();
-                        addTokenToRealName();
-                        break;
-
-                    case AFTER_LESS:
-                        m_aInnerAddrSpec.reset();
-                        break;
-                }
-                break;
-
-            case '"':
-                m_eType = TOKEN_QUOTED;
-                break;
-
-            case '.':
-                if (m_pAddrSpec->m_eLastElem != ELEMENT_END)
-                {
-                    if (m_pAddrSpec->m_eLastElem != ELEMENT_DELIM)
-                        addTokenToAddrSpec(ELEMENT_DELIM);
-                    else
-                        m_pAddrSpec->reset();
-                }
-                addTokenToRealName();
-                break;
-
-            case '[':
-                m_eType = TOKEN_DOMAIN;
-                break;
+        case '[':
+            m_eType = TOKEN_DOMAIN;
+            break;
         }
     }
 }
@@ -745,7 +731,7 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
 //
 //============================================================================
 
-SvAddressParser::SvAddressParser(const rtl::OUString& rInput)
+SvAddressParser::SvAddressParser(const OUString& rInput)
     : m_bHasFirst(false)
 {
     SvAddressParser_Impl aDoParse(this, rInput);

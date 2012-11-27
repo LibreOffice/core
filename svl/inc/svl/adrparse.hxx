@@ -21,21 +21,20 @@
 #define _ADRPARSE_HXX
 
 #include "svl/svldllapi.h"
-#include <tools/string.hxx>
 #include <vector>
 
 //============================================================================
 struct SvAddressEntry_Impl
 {
-    rtl::OUString m_aAddrSpec;
-    rtl::OUString m_aRealName;
+    OUString m_aAddrSpec;
+    OUString m_aRealName;
 
     SvAddressEntry_Impl()
     {
     }
 
-    SvAddressEntry_Impl(const rtl::OUString& rTheAddrSpec,
-                        const rtl::OUString& rTheRealName)
+    SvAddressEntry_Impl(const OUString& rTheAddrSpec,
+                        const OUString& rTheRealName)
         : m_aAddrSpec(rTheAddrSpec)
         , m_aRealName(rTheRealName)
     {
@@ -55,19 +54,19 @@ class SVL_DLLPUBLIC SvAddressParser
     bool m_bHasFirst;
 
 public:
-    SvAddressParser(const rtl::OUString& rInput);
+    SvAddressParser(const OUString& rInput);
 
     ~SvAddressParser();
 
     sal_Int32 Count() const { return m_bHasFirst ? m_aRest.size() + 1 : 0; }
 
-    const rtl::OUString& GetEmailAddress(sal_Int32 nIndex) const
+    const OUString& GetEmailAddress(sal_Int32 nIndex) const
     {
         return nIndex == 0 ? m_aFirst.m_aAddrSpec :
                              m_aRest[ nIndex - 1 ]->m_aAddrSpec;
     }
 
-    const rtl::OUString& GetRealName(sal_Int32 nIndex) const
+    const OUString& GetRealName(sal_Int32 nIndex) const
     {
         return nIndex == 0 ? m_aFirst.m_aRealName :
                              m_aRest[ nIndex - 1 ]->m_aRealName;

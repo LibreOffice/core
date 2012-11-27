@@ -33,16 +33,16 @@ namespace svt
         /** retrieves the value of an environment variable
             @return <TRUE/> if and only if the retrieved string value is not empty
         */
-        bool lcl_getEnvironmentValue( const sal_Char* _pAsciiEnvName, ::rtl::OUString& _rValue )
+        bool lcl_getEnvironmentValue( const sal_Char* _pAsciiEnvName, OUString& _rValue )
         {
-            _rValue = ::rtl::OUString();
-            ::rtl::OUString sEnvName = ::rtl::OUString::createFromAscii( _pAsciiEnvName );
+            _rValue = OUString();
+            OUString sEnvName = OUString::createFromAscii( _pAsciiEnvName );
             osl_getEnvironment( sEnvName.pData, &_rValue.pData );
             return !_rValue.isEmpty();
         }
 
         //-----------------------------------------------------------------
-        void lcl_convertStringListToUrls( const rtl::OUString& _rColonSeparatedList, ::std::vector< String >& _rTokens )
+        void lcl_convertStringListToUrls( const OUString& _rColonSeparatedList, ::std::vector< OUString >& _rTokens )
         {
             const sal_Unicode cSeparator =
     #if defined(WNT)
@@ -55,12 +55,12 @@ namespace svt
             do
             {
                 // the current token in the list
-                rtl::OUString sCurrentToken = _rColonSeparatedList.getToken( 0, cSeparator, nIndex );
+                OUString sCurrentToken = _rColonSeparatedList.getToken( 0, cSeparator, nIndex );
                 if ( !sCurrentToken.isEmpty() )
                 {
                     INetURLObject aCurrentURL;
 
-                    rtl::OUString sURL;
+                    OUString sURL;
                     if ( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sCurrentToken, sURL ) )
                         aCurrentURL = INetURLObject( sURL );
                     else
@@ -87,10 +87,10 @@ namespace svt
     #ifdef WNT
         SvtSysLocale    m_aSysLocale;
     #endif
-        String          m_sCheckURL;    // the URL to check
+        OUString        m_sCheckURL;    // the URL to check
         bool            m_bAllowParent;
     public:
-        inline CheckURLAllowed( const String& _rCheckURL, bool bAllowParent = true )
+        inline CheckURLAllowed( const OUString& _rCheckURL, bool bAllowParent = true )
             :m_sCheckURL( _rCheckURL ), m_bAllowParent( bAllowParent )
         {
     #ifdef WNT
@@ -100,27 +100,27 @@ namespace svt
     #endif
         }
 
-        bool operator()( const String& _rApprovedURL )
+        bool operator()( const OUString& _rApprovedURL )
         {
     #ifdef WNT
             // on windows, assume that the relevant file systems are case insensitive,
             // thus normalize the URL
-            String sApprovedURL( m_aSysLocale.GetCharClass().lowercase( _rApprovedURL, 0, _rApprovedURL.Len() ) );
+            OUString sApprovedURL( m_aSysLocale.GetCharClass().lowercase( _rApprovedURL, 0, _rApprovedURL.getLength() ) );
     #else
-            String sApprovedURL( _rApprovedURL );
+            OUString sApprovedURL( _rApprovedURL );
     #endif
 
-            xub_StrLen nLenApproved = sApprovedURL.Len();
-            xub_StrLen nLenChecked  = m_sCheckURL.Len();
+            sal_Int32 nLenApproved = sApprovedURL.getLength();
+            sal_Int32 nLenChecked  = m_sCheckURL.getLength();
 
             if ( nLenApproved > nLenChecked )
             {
                 if ( m_bAllowParent )
                 {
-                    if ( sApprovedURL.Search( m_sCheckURL ) == 0 )
+                    if ( sApprovedURL.indexOf( m_sCheckURL ) == 0 )
                     {
-                        if ( ( m_sCheckURL.GetChar( nLenChecked - 1 ) == '/' )
-                            || ( sApprovedURL.GetChar( nLenChecked ) == '/' ) )
+                        if ( ( m_sCheckURL[ nLenChecked - 1 ] == '/' )
+                            || ( sApprovedURL[ nLenChecked ] == '/' ) )
                             return true;
                     }
                 }
@@ -128,17 +128,17 @@ namespace svt
                 {
                     // just a difference in final slash?
                     if ( ( nLenApproved == ( nLenChecked + 1 ) ) &&
-                        ( sApprovedURL.GetChar( nLenApproved - 1 ) == '/' ) )
+                        ( sApprovedURL[ nLenApproved - 1 ] == '/' ) )
                         return true;
                 }
                 return false;
             }
             else if ( nLenApproved < nLenChecked )
             {
-                if ( m_sCheckURL.Search( sApprovedURL ) == 0 )
+                if ( m_sCheckURL.indexOf( sApprovedURL ) == 0 )
                 {
-                    if ( ( sApprovedURL.GetChar( nLenApproved - 1 ) == '/' )
-                        || ( m_sCheckURL.GetChar( nLenApproved ) == '/' ) )
+                    if ( ( sApprovedURL[ nLenApproved - 1 ] == '/' )
+                        || ( m_sCheckURL[ nLenApproved ] == '/' ) )
                         return true;
                 }
                 return false;
@@ -158,7 +158,7 @@ namespace svt
     RestrictedPaths::RestrictedPaths()
         :m_bFilterIsEnabled( true )
     {
-        ::rtl::OUString sRestrictedPathList;
+        OUString sRestrictedPathList;
         if ( lcl_getEnvironmentValue( "RestrictedPath", sRestrictedPathList ) )
             // append a final slash. This ensures that when we later on check
             // for unrestricted paths, we don't allow paths like "/home/user35" just because
@@ -169,12 +169,12 @@ namespace svt
     RestrictedPaths::~RestrictedPaths() {}
 
     // --------------------------------------------------------------------
-    bool RestrictedPaths::isUrlAllowed( const String& _rURL ) const
+    bool RestrictedPaths::isUrlAllowed( const OUString& _rURL ) const
     {
         if ( m_aUnrestrictedURLs.empty() || !m_bFilterIsEnabled )
             return true;
 
-        ::std::vector< String >::const_iterator aApprovedURL = ::std::find_if(
+        ::std::vector< OUString >::const_iterator aApprovedURL = ::std::find_if(
             m_aUnrestrictedURLs.begin(),
             m_aUnrestrictedURLs.end(),
             CheckURLAllowed( _rURL, true )
@@ -184,12 +184,12 @@ namespace svt
     }
 
     // --------------------------------------------------------------------
-    bool RestrictedPaths::isUrlAllowed( const String& _rURL, bool allowParents ) const
+    bool RestrictedPaths::isUrlAllowed( const OUString& _rURL, bool allowParents ) const
     {
         if ( m_aUnrestrictedURLs.empty() || !m_bFilterIsEnabled )
             return true;
 
-        ::std::vector< String >::const_iterator aApprovedURL = ::std::find_if(
+        ::std::vector< OUString >::const_iterator aApprovedURL = ::std::find_if(
             m_aUnrestrictedURLs.begin(),
             m_aUnrestrictedURLs.end(),
             CheckURLAllowed( _rURL, allowParents )

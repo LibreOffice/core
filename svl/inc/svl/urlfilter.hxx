@@ -20,7 +20,6 @@
 #ifndef SVTOOLS_URL_FILTER_HXX
 #define SVTOOLS_URL_FILTER_HXX
 
-#include <tools/string.hxx>
 #include <tools/wldcrd.hxx>
 #include <functional>
 #include <vector>
@@ -29,7 +28,7 @@
 class IUrlFilter
 {
 public:
-    virtual bool isUrlAllowed( const String& _rURL ) const = 0;
+    virtual bool isUrlAllowed( const OUString& _rURL ) const = 0;
 
 protected:
     virtual inline ~IUrlFilter() = 0;
@@ -40,16 +39,16 @@ inline IUrlFilter::~IUrlFilter() {}
 struct FilterMatch : public ::std::unary_function< bool, WildCard >
 {
 private:
-    const String&   m_rCompareString;
+    const OUString&   m_rCompareString;
 public:
-    FilterMatch( const String& _rCompareString ) : m_rCompareString( _rCompareString ) { }
+    FilterMatch( const OUString& _rCompareString ) : m_rCompareString( _rCompareString ) { }
 
     bool operator()( const WildCard& _rMatcher )
     {
         return _rMatcher.Matches( m_rCompareString ) ? true : false;
     }
 
-    static void createWildCardFilterList(const String& _rFilterList,::std::vector< WildCard >& _rFilters);
+    static void createWildCardFilterList(const OUString& _rFilterList,::std::vector< WildCard >& _rFilters);
 };
 
 #endif // SVTOOLS_URL_FILTER_HXX
