@@ -317,7 +317,7 @@
 
 		<xsl:choose>
 			<!-- internal OOo URL used in content tables -->
-			<xsl:when test="contains($href, '%7Coutline')">
+			<xsl:when test="contains($href, '%7Coutline') or contains($href, '|outline')">
 				<!-- the simple workaround for content tables in a single document is to create create an anchor from every heading element
 					 work-around downside: Multiple identical headings won't refer always to the first.
 				-->
