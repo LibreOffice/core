@@ -366,37 +366,6 @@ const Size& SvLBoxItem::GetSize(const SvTreeListBox* pView, const SvTreeListEntr
     return pViewData->aSize;
 }
 
-DBG_NAME(SvViewDataItem);
-
-SvViewDataItem::SvViewDataItem()
-{
-    DBG_CTOR(SvViewDataItem,0);
-}
-
-SvViewDataItem::~SvViewDataItem()
-{
-    DBG_DTOR(SvViewDataItem,0);
-}
-
-// ***************************************************************
-// class SvLBoxViewData
-// ***************************************************************
-
-DBG_NAME(SvViewDataEntry);
-
-SvViewDataEntry::SvViewDataEntry()
-    : SvViewData()
-{
-    DBG_CTOR(SvViewDataEntry,0);
-    pItemData = 0;
-}
-
-SvViewDataEntry::~SvViewDataEntry()
-{
-    DBG_DTOR(SvViewDataEntry,0);
-    delete [] pItemData;
-}
-
 struct SvTreeListBoxImpl
 {
     bool m_bIsEmptyTextAllowed:1;

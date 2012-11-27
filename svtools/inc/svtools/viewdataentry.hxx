@@ -22,6 +22,7 @@
 
 #include "svtdllapi.h"
 #include "tools/solar.h"
+#include "tools/gen.hxx"
 
 // Entryflags that are attached to the View
 #define SVLISTENTRYFLAG_SELECTED        0x0001
@@ -29,6 +30,8 @@
 #define SVLISTENTRYFLAG_FOCUSED         0x0004
 #define SVLISTENTRYFLAG_CURSORED        0x0008
 #define SVLISTENTRYFLAG_NOT_SELECTABLE  0x0010
+
+class SvViewDataItem;
 
 class SVT_DLLPUBLIC SvViewData
 {
@@ -52,6 +55,28 @@ public:
     void SetCursored( sal_Bool bCursored );
     sal_uInt16 GetFlags() const;
     void SetSelectable( bool bSelectable );
+};
+
+// View-dependent data for an Entry is created in the virtual function
+// SvTreeListBox::CreateViewData. The View creation of Items cannot be
+// changed (because it's an array)
+class SvViewDataEntry : public SvViewData
+{
+public:
+    SvViewDataItem* pItemData; // An array of SvViewDataItems
+    sal_uInt16      nItmCnt;   // Item count for delete operator
+
+                    SvViewDataEntry();
+    virtual         ~SvViewDataEntry();
+};
+
+class SvViewDataItem
+{
+public:
+    Size aSize;
+
+    SvViewDataItem();
+    ~SvViewDataItem();
 };
 
 #endif

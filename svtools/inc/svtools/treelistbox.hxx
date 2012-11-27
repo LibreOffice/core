@@ -132,31 +132,6 @@ public:
 };
 
 // *********************************************************************
-// *********************** View-dependent data *************************
-// *********************************************************************
-
-class SvViewDataItem
-{
-public:
-    Size    aSize;
-            SvViewDataItem();
-            ~SvViewDataItem();
-};
-
-// View-dependent data for an Entry is created in the virtual function
-// SvTreeListBox::CreateViewData. The View creation of Items cannot be
-// changed (because it's an array)
-class SvViewDataEntry : public SvViewData
-{
-public:
-    SvViewDataItem* pItemData; // An array of SvViewDataItems
-    sal_uInt16      nItmCnt;   // Item count for delete operator
-
-                    SvViewDataEntry();
-    virtual         ~SvViewDataEntry();
-};
-
-// *********************************************************************
 // ****************************** Items ********************************
 // *********************************************************************
 

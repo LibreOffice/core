@@ -101,4 +101,31 @@ void SvViewData::SetSelectable( bool bSelectable )
         nFlags |= SVLISTENTRYFLAG_NOT_SELECTABLE;
 }
 
+DBG_NAME(SvViewDataEntry);
+
+SvViewDataEntry::SvViewDataEntry()
+    : SvViewData()
+{
+    DBG_CTOR(SvViewDataEntry,0);
+    pItemData = 0;
+}
+
+SvViewDataEntry::~SvViewDataEntry()
+{
+    DBG_DTOR(SvViewDataEntry,0);
+    delete [] pItemData;
+}
+
+DBG_NAME(SvViewDataItem);
+
+SvViewDataItem::SvViewDataItem()
+{
+    DBG_CTOR(SvViewDataItem,0);
+}
+
+SvViewDataItem::~SvViewDataItem()
+{
+    DBG_DTOR(SvViewDataItem,0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
