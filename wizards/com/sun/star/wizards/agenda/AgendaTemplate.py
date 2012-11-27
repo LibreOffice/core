@@ -294,7 +294,7 @@ class AgendaTemplate(TextDocument):
         self.initializeItemsSections()
         self.textSectionHandler = TextSectionHandler(
             self.xTextDocument, self.xTextDocument)
-        #self.topics = Topics(self)
+        self.topics = Topics(self)
 
     '''
     locates the titles (name, location, date, time)
@@ -812,57 +812,62 @@ class Topics(object):
         cell by cell, I check in this map to know
         if a cell contains a <*> or not.
         '''
-        items = {}
-        for i in self.agenda.allItems:
-            t = Helper.getUnoPropertyValue(i, "TextTable")
-            if t == Topics.table:
-                cell = Helper.getUnoPropertyValue(i, "Cell")
-                iText = cell.CellName
-                items[iText] = i
+        try:
+            items = {}
+            for i in self.agenda.allItems:
+                t = Helper.getUnoPropertyValue(i, "TextTable")
+                if t == Topics.table:
+                    cell = Helper.getUnoPropertyValue(i, "Cell")
+                    iText = cell.CellName
+                    items[iText] = i
 
-        '''
-        in the topics table, there are always one
-        title row and three topics defined.
-        So no mutter how many rows a topic takes - we
-        can restore its structure and format.
-        '''
-        rows = self.agenda.getRowCount(Topics.table)
-        Topics.rowsPerTopic = (rows - 1) / 3
-        firstCell = "A" + str(1 + Topics.rowsPerTopic + 1)
-        afterLastCell = "A" + str(1 + (Topics.rowsPerTopic * 2) + 1)
-        # go to the first row of the 2. topic
-        cursor = Topics.table.createCursorByCellName(firstCell)
-        # analyze the structure of the topic rows.
-        while not cursor.RangeName == afterLastCell:
-            cell = Topics.table.getCellByName(cursor.RangeName)
-            # if the cell contains a relevant <...>
-            # i add the text element to the hash,
-            # so it's text can be updated later.
-            try:
-                if items[cell.CellName] is not None:
-                    self.topicItems[cell.String.lower().lstrip()] = cell
-            except KeyError:
-                pass
+            '''
+            in the topics table, there are always one
+            title row and three topics defined.
+            So no mutter how many rows a topic takes - we
+            can restore its structure and format.
+            '''
+            rows = self.agenda.getRowCount(Topics.table)
+            Topics.rowsPerTopic = int((rows - 1) / 3)
 
-            Topics.topicCells.append(cell)
-            # goto next cell.
-            cursor.goRight(1, False)
-        '''
-        now - in which cell is every fillin?
-        '''
+            firstCell = "A" + str(1 + Topics.rowsPerTopic + 1)
+            afterLastCell = "A" + str(1 + (Topics.rowsPerTopic * 2) + 1)
+            # go to the first row of the 2. topic
 
-        Topics.numCell = Topics.topicCells.index(
-            self.topicItems[
-                self.agenda.templateConsts.FILLIN_TOPIC_NUMBER])
-        Topics.topicCell = Topics.topicCells.index(
-            self.topicItems[
-                self.agenda.templateConsts.FILLIN_TOPIC_TOPIC])
-        Topics.responsibleCell = Topics.topicCells.index(
-            self.topicItems[
-                self.agenda.templateConsts.FILLIN_TOPIC_RESPONSIBLE])
-        Topics.timeCell = Topics.topicCells.index(
-            self.topicItems[
-                self.agenda.templateConsts.FILLIN_TOPIC_TIME])
+            cursor = Topics.table.createCursorByCellName(firstCell)
+            # analyze the structure of the topic rows.
+            while not cursor.RangeName == afterLastCell:
+                cell = Topics.table.getCellByName(cursor.RangeName)
+                # if the cell contains a relevant <...>
+                # i add the text element to the hash,
+                # so it's text can be updated later.
+                try:
+                    if items[cell.CellName] is not None:
+                        self.topicItems[cell.String.lower().lstrip()] = cell
+                except KeyError:
+                    pass
+
+                Topics.topicCells.append(cell)
+                # goto next cell.
+                cursor.goRight(1, False)
+            '''
+            now - in which cell is every fillin?
+            '''
+
+            Topics.numCell = Topics.topicCells.index(
+                self.topicItems[
+                    self.agenda.templateConsts.FILLIN_TOPIC_NUMBER])
+            Topics.topicCell = Topics.topicCells.index(
+                self.topicItems[
+                    self.agenda.templateConsts.FILLIN_TOPIC_TOPIC])
+            Topics.responsibleCell = Topics.topicCells.index(
+                self.topicItems[
+                    self.agenda.templateConsts.FILLIN_TOPIC_RESPONSIBLE])
+            Topics.timeCell = Topics.topicCells.index(
+                self.topicItems[
+                    self.agenda.templateConsts.FILLIN_TOPIC_TIME])
+        except Exception:
+            traceback.print_exc()
 
     '''@param topic the topic number to write
     @param data the data of the topic.
