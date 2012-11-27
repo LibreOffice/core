@@ -364,7 +364,7 @@ sub resolving_archive_flag
 
                         if (( $use_internal_rights ) && ( ! $installer::globals::iswin ))
                         {
-                            $newfile{'UnixRights'} = sprintf("%o", ($zip->memberNamed($zipname)->unixFileAttributes() & 07777);
+                            $newfile{'UnixRights'} = sprintf("%o", ($zip->memberNamed($zipname)->unixFileAttributes() & 07777));
                             $infoline = "Setting unix rights for \"$newfile{'sourcepath'}\" to \"$newfile{'UnixRights'}\"\n";
                             push( @installer::globals::logfileinfo, $infoline);
                         }
