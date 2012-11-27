@@ -27,7 +27,7 @@
 #include <sal/types.h>
 #include <osl/diagnose.h>
 
-#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <cppuhelper/implbase1.hxx>
@@ -95,9 +95,9 @@ int SAL_CALL main(int /*nArgc*/, char* /*Argv[]*/, char* /*Env[]*/  )
     // try to get an Interface to a XFilePicker Service
     //-------------------------------------------------
 
-    Reference< XFolderPicker > xFolderPicker;
+    Reference< XFolderPicker2 > xFolderPicker;
 
-    xFolderPicker = Reference< XFolderPicker >(
+    xFolderPicker = Reference< XFolderPicker2 >(
         g_xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM ( FOLDER_PICKER_SERVICE_NAME ) ) ), UNO_QUERY );
 
     if ( xFolderPicker.is() == sal_False )

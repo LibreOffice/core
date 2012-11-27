@@ -126,7 +126,7 @@ public:
     virtual com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFilePicker2 >
         createFilePicker( const com::sun::star::uno::Reference<
                               com::sun::star::uno::XComponentContext >& );
-    virtual com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFolderPicker >
+    virtual com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFolderPicker2 >
         createFolderPicker( const com::sun::star::uno::Reference<
                                 com::sun::star::uno::XComponentContext >& );
 

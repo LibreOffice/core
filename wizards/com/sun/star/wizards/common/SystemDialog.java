@@ -36,7 +36,7 @@ public class SystemDialog
 
     Object systemDialog;
     XFilePicker xFilePicker;
-    XFolderPicker xFolderPicker;
+    XFolderPicker2 xFolderPicker;
     XFilterManager xFilterManager;
     XInitialization xInitialize;
     XExecutableDialog xExecutable;
@@ -59,7 +59,7 @@ public class SystemDialog
             this.xMSF = xMSF;
             systemDialog = xMSF.createInstance(ServiceName);
             xFilePicker = UnoRuntime.queryInterface(XFilePicker.class, systemDialog);
-            xFolderPicker = UnoRuntime.queryInterface(XFolderPicker.class, systemDialog);
+            xFolderPicker = UnoRuntime.queryInterface(XFolderPicker2.class, systemDialog);
             xFilterManager = UnoRuntime.queryInterface(XFilterManager.class, systemDialog);
             xInitialize = UnoRuntime.queryInterface(XInitialization.class, systemDialog);
             xExecutable = UnoRuntime.queryInterface(XExecutableDialog.class, systemDialog);

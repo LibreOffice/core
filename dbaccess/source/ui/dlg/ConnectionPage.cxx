@@ -41,7 +41,6 @@
 #include "dsselect.hxx"
 #include <svl/filenotation.hxx>
 #include "dbustrings.hrc"
-#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>

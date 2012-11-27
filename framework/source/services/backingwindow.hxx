@@ -41,7 +41,6 @@
 #include "com/sun/star/ui/dialogs/XFilePicker.hpp"
 #include "com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp"
 #include "com/sun/star/ui/dialogs/XFilterManager.hpp"
-#include "com/sun/star/ui/dialogs/XFolderPicker.hpp"
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #include "com/sun/star/ui/dialogs/ExecutableDialogResults.hpp"
 

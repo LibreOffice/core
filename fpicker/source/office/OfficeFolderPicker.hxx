@@ -20,7 +20,7 @@
 #define INCLUDED_SVT_FOLDERPICKER_HXX
 
 #include <cppuhelper/implbase3.hxx>
-#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -30,15 +30,14 @@
 
 class Dialog;
 
-// class SvtFolderPicker ---------------------------------------------------
+typedef
+    cppu::ImplInheritanceHelper3<
+        svt::OCommonPicker, com::sun::star::ui::dialogs::XFolderPicker2,
+        com::sun::star::ui::dialogs::XAsynchronousExecutableDialog,
+        com::sun::star::lang::XServiceInfo >
+    SvtFolderPicker_Base;
 
-typedef ::cppu::ImplHelper3 <   ::com::sun::star::ui::dialogs::XFolderPicker
-                            ,   ::com::sun::star::ui::dialogs::XAsynchronousExecutableDialog
-                            ,   ::com::sun::star::lang::XServiceInfo
-                            >   SvtFolderPicker_Base;
-
-class SvtFolderPicker   :public SvtFolderPicker_Base
-                        ,public ::svt::OCommonPicker
+class SvtFolderPicker: public SvtFolderPicker_Base
 {
 private:
     ::rtl::OUString         m_aDescription;
@@ -54,23 +53,16 @@ public:
     virtual                        ~SvtFolderPicker();
 
     //------------------------------------------------------------------------------------
-    // disambiguate XInterface
-    //------------------------------------------------------------------------------------
-    DECLARE_XINTERFACE( )
-
-    //------------------------------------------------------------------------------------
-    // disambiguate XTypeProvider
-    //------------------------------------------------------------------------------------
-    DECLARE_XTYPEPROVIDER( )
-
-    //------------------------------------------------------------------------------------
-    // XFolderPicker functions
+    // XFolderPicker2 functions
     //------------------------------------------------------------------------------------
 
     virtual void SAL_CALL           setDisplayDirectory( const ::rtl::OUString& aDirectory ) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
     virtual ::rtl::OUString SAL_CALL    getDisplayDirectory() throw( ::com::sun::star::uno::RuntimeException );
     virtual ::rtl::OUString SAL_CALL    getDirectory() throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL           setDescription( const ::rtl::OUString& aDescription ) throw ( ::com::sun::star::uno::RuntimeException );
+
+    virtual void SAL_CALL cancel()
+        throw (com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------------------------------------------
     // XExecutableDialog functions

@@ -63,7 +63,7 @@ namespace uno {
 namespace ui {
     namespace dialogs {
         class XFilePicker2;
-        class XFolderPicker;
+        class XFolderPicker2;
     }
 }
 namespace awt {
@@ -404,7 +404,7 @@ public:
     /** Create a platform specific folder picker, if one is available,
         otherwise return an empty reference
     */
-    static com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFolderPicker >
+    static com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFolderPicker2 >
         createFolderPicker( const com::sun::star::uno::Reference<
                               com::sun::star::uno::XComponentContext >& rServiceManager );
 

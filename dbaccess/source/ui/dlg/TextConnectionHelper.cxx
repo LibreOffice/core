@@ -40,7 +40,6 @@
 #include "dbadmin.hxx"
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
-#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <svl/filenotation.hxx>
 #include <unotools/localfilehelper.hxx>

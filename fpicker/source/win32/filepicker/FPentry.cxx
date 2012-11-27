@@ -46,7 +46,6 @@ using namespace ::com::sun::star::registry  ;
 using namespace ::cppu                      ;
 using ::com::sun::star::ui::dialogs::XFilePicker;
 using ::com::sun::star::ui::dialogs::XFilePicker2;
-using ::com::sun::star::ui::dialogs::XFolderPicker;
 
 //------------------------------------------------
 //
@@ -82,7 +81,7 @@ static Reference< XInterface > SAL_CALL createInstance(
 static Reference< XInterface > SAL_CALL
 createInstance_fop( const Reference< XMultiServiceFactory >& rServiceManager )
 {
-    return Reference< XInterface >( static_cast< XFolderPicker* >( new CFolderPicker( rServiceManager ) ) );
+    return Reference< XInterface >( static_cast< cppu::OWeakObject * >( new CFolderPicker( rServiceManager ) ) );
 }
 
 

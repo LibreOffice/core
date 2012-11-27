@@ -20,12 +20,12 @@
 #ifndef _SALAQUAFOLDERPICKER_HXX_
 #define _SALAQUAFOLDERPICKER_HXX_
 
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <com/sun/star/util/XCancellable.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 
 #include "SalAquaPicker.hxx"
 
@@ -41,11 +41,10 @@
 
 class SalAquaFolderPicker :
         public SalAquaPicker,
-    public cppu::WeakImplHelper4<
-    ::com::sun::star::ui::dialogs::XFolderPicker,
+    public cppu::WeakImplHelper3<
+    ::com::sun::star::ui::dialogs::XFolderPicker2,
     ::com::sun::star::lang::XServiceInfo,
-    ::com::sun::star::lang::XEventListener,
-        ::com::sun::star::util::XCancellable >
+    ::com::sun::star::lang::XEventListener >
 {
 public:
 

@@ -39,7 +39,6 @@
 #include "dbadmin.hxx"
 #include <comphelper/types.hxx>
 
-#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
 #include "dbustrings.hrc"

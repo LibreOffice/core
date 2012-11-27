@@ -36,17 +36,13 @@ using namespace     ::com::sun::star::uno;
 using namespace     ::com::sun::star::beans;
 
 SvtFolderPicker::SvtFolderPicker( const Reference < XMultiServiceFactory >& _rxFactory )
-    :OCommonPicker( _rxFactory )
+    :SvtFolderPicker_Base( _rxFactory )
 {
 }
 
 SvtFolderPicker::~SvtFolderPicker()
 {
 }
-
-IMPLEMENT_FORWARD_XINTERFACE2( SvtFolderPicker, OCommonPicker, SvtFolderPicker_Base )
-
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( SvtFolderPicker, OCommonPicker, SvtFolderPicker_Base )
 
 void SAL_CALL SvtFolderPicker::setTitle( const ::rtl::OUString& _rTitle ) throw (RuntimeException)
 {
@@ -149,6 +145,11 @@ void SAL_CALL SvtFolderPicker::setDescription( const ::rtl::OUString& aDescripti
     throw( RuntimeException )
 {
     m_aDescription = aDescription;
+}
+
+void SvtFolderPicker::cancel() throw (RuntimeException)
+{
+    OCommonPicker::cancel();
 }
 
 /* XServiceInfo */

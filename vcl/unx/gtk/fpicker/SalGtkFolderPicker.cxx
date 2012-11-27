@@ -176,10 +176,10 @@ void SAL_CALL SalGtkFolderPicker::cancel() throw( uno::RuntimeException )
     // TODO m_pImpl->cancel();
 }
 
-uno::Reference< ui::dialogs::XFolderPicker >
+uno::Reference< ui::dialogs::XFolderPicker2 >
 GtkInstance::createFolderPicker( const uno::Reference< uno::XComponentContext > &xMSF )
 {
-    return uno::Reference< ui::dialogs::XFolderPicker >(
+    return uno::Reference< ui::dialogs::XFolderPicker2 >(
                 new SalGtkFolderPicker( xMSF ) );
 }
 

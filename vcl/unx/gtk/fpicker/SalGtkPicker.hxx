@@ -22,11 +22,6 @@
 
 #include <osl/mutex.hxx>
 #include <cppuhelper/compbase2.hxx>
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
-#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/util/XCancellable.hpp>
 
 #include <com/sun/star/awt/XTopWindowListener.hpp>
 #include <com/sun/star/awt/XExtendedToolkit.hpp>

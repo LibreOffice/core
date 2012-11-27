@@ -25,7 +25,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
-#include <com/sun/star/util/XCancellable.hpp>
 
 #include <memory>
 

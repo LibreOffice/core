@@ -39,7 +39,7 @@ import com.sun.star.ui.dialogs.XExecutableDialog;
 import com.sun.star.ui.dialogs.XFilePicker;
 import com.sun.star.ui.dialogs.XFilePickerControlAccess;
 import com.sun.star.ui.dialogs.XFilterManager;
-import com.sun.star.ui.dialogs.XFolderPicker;
+import com.sun.star.ui.dialogs.XFolderPicker2;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 
@@ -157,7 +157,7 @@ public class SystemDialog  {
         try {
             // instantiate the folder picker and retrieve the necessary interfaces...
             Object oFolderPicker = m_xMCF.createInstanceWithContext("com.sun.star.ui.dialogs.FolderPicker", m_xContext);
-            XFolderPicker xFolderPicker = (XFolderPicker) UnoRuntime.queryInterface(XFolderPicker.class, oFolderPicker);
+            XFolderPicker2 xFolderPicker = UnoRuntime.queryInterface(XFolderPicker2.class, oFolderPicker);
             XExecutableDialog xExecutable = (XExecutableDialog) UnoRuntime.queryInterface(XExecutableDialog.class, oFolderPicker);
             xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, oFolderPicker);
             xFolderPicker.setDisplayDirectory(_sDisplayDirectory);

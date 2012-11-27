@@ -9,4 +9,4 @@
 "FolderPicker";"com::sun::star::ui::dialogs::XFolderPicker";"setDescription()"
 "FolderPicker";"com::sun::star::ui::dialogs::XExecutableDialog";"setTitle()"
 "FolderPicker";"com::sun::star::ui::dialogs::XExecutableDialog";"execute()"
-"FolderPicker";"com::sun::star::util::XCancellable#optional";"cancel()"
+"FolderPicker";"com::sun::star::util::XCancellable";"cancel()"

@@ -23,7 +23,7 @@
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/ui/dialogs/XFilePicker2.hpp"
-#include "com/sun/star/ui/dialogs/XFolderPicker.hpp"
+#include "com/sun/star/ui/dialogs/XFolderPicker2.hpp"
 
 #include "tools/solar.h"
 #include "vcl/displayconnectiondispatch.hxx"
@@ -168,10 +168,10 @@ public:
         createFilePicker( const com::sun::star::uno::Reference<
                               com::sun::star::uno::XComponentContext >& )
             { return com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFilePicker2 >(); }
-    virtual com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFolderPicker >
+    virtual com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFolderPicker2 >
         createFolderPicker( const com::sun::star::uno::Reference<
                               com::sun::star::uno::XComponentContext >& )
-            { return com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFolderPicker >(); }
+            { return com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFolderPicker2 >(); }
 
     // callbacks for printer updates
     virtual void updatePrinterUpdate() {}

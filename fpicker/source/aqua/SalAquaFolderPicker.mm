@@ -121,7 +121,7 @@ sal_Int16 SAL_CALL SalAquaFolderPicker::execute() throw( uno::RuntimeException )
         break;
 
     default:
-        throw uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The dialog returned with an unknown result!")), static_cast< XFolderPicker* >( this ));
+        throw uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The dialog returned with an unknown result!")), static_cast< cppu::OWeakObject * >( this ));
         break;
     }
 
@@ -173,7 +173,7 @@ rtl::OUString SAL_CALL SalAquaFolderPicker::getDirectory() throw( uno::RuntimeEx
     OSL_TRACE("# of items: %d", nFiles);
 
     if (nFiles < 1) {
-        throw uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("no directory selected")), static_cast< XFolderPicker* >( this ));
+        throw uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("no directory selected")), static_cast< cppu::OWeakObject * >( this ));
     }
 
     rtl::OUString aDirectory;
