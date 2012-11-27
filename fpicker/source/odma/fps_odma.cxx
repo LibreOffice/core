@@ -34,22 +34,11 @@ static cppu::ImplementationEntry g_entries[] =
     { 0, 0, 0, 0, 0, 0 }
 };
 
-extern "C"
-{
-SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
-    void * pServiceManager, void * pRegistryKey)
-{
-    return cppu::component_writeInfoHelper (
-        pServiceManager, pRegistryKey, g_entries);
-}
-
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL fps_odma_component_getFactory (
     const sal_Char * pImplementationName, void * pServiceManager, void * pRegistryKey)
 {
     return cppu::component_getFactoryHelper (
         pImplementationName, pServiceManager, pRegistryKey, g_entries);
 }
-
-} // extern "C"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

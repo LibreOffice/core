@@ -27,6 +27,8 @@
 
 $(eval $(call gb_Library_Library,fps_odma))
 
+$(eval $(call gb_Library_set_componentfile,fps_odma,fpicker/source/odma/fps_odma))
+
 $(eval $(call gb_Library_use_sdk_api,fps_odma))
 
 $(eval $(call gb_Library_use_libraries,fps_odma,\

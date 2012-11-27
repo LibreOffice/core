@@ -514,20 +514,9 @@ Sequence< rtl::OUString > SAL_CALL ODMAFilePicker::getSupportedServiceNames( )
 
 Sequence< rtl::OUString > ODMAFilePicker::impl_getStaticSupportedServiceNames( )
 {
-    Sequence< rtl::OUString > seqServiceNames( 2 );
-    rtl::OUString* pArray = seqServiceNames.getArray();
-    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.ODMAFilePicker" ));
-
-    // Super-ugly, but check the function sal_Bool
-    // lcl_isSystemFilePicker( const Reference< XFilePicker >& ) in
-    // sfx2/source/dialog/filedlghelper.cxx
-
-    // Lovely undocumented coupling right across abstraction layers,
-    // isn't it?  If we don't claim to implement this "service" (which
-    // is not defined in any IDL file, btw), we get hangs.
-
-    pArray[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.SystemFilePicker" ));
-    return seqServiceNames ;
+    Sequence< OUString > s(1);
+    s[0] = "com.sun.star.ui.dialogs.SystemFilePicker";
+    return s;
 }
 
 rtl::OUString ODMAFilePicker::impl_getStaticImplementationName( )
