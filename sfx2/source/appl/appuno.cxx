@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if defined(_MSC_VER) && (_MSC_VER >= 1300)
+#ifdef _MSC_VER
 #pragma warning( disable : 4290 )
 #endif
 #include <com/sun/star/document/UpdateDocMode.hpp>

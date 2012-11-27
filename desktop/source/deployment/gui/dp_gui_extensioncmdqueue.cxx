@@ -86,10 +86,6 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
 
-#if (defined(_MSC_VER) && (_MSC_VER < 1400))
-#define _WIN32_WINNT 0x0400
-#endif
-
 #ifdef WNT
 #define GradientStyle_RECT BLA_GradientStyle_RECT
 #include <windows.h>

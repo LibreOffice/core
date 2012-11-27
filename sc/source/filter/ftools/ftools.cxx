@@ -48,13 +48,6 @@
 // ============================================================================
 // ScFilterTools::ReadLongDouble()
 
-#ifdef _MSC_VER
-#if _MSC_VER <= 800
-#undef __SIMPLE_FUNC
-#define __SIMPLE_FUNC
-#endif
-#endif
-
 double ScfTools::ReadLongDouble( SvStream& rStrm )
 
 #ifdef __SIMPLE_FUNC                // for <=VC 1.5

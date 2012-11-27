@@ -19,7 +19,7 @@
 
 #ifndef _EMBEDDOC_HXX_
 #define _EMBEDDOC_HXX_
-#if defined(_MSC_VER) && (_MSC_VER > 1310)
+#ifdef _MSC_VER
 #pragma warning(disable : 4917 4555)
 #endif
 

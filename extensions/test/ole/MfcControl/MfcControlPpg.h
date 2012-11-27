@@ -19,9 +19,9 @@
 #if !defined(AFX_MFCCONTROLPPG_H__AC221FC5_A0D8_11D4_833B_005004526AB4__INCLUDED_)
 #define AFX_MFCCONTROLPPG_H__AC221FC5_A0D8_11D4_833B_005004526AB4__INCLUDED_
 
-#if _MSC_VER > 1000
+#ifdef _MSC_VER
 #pragma once
-#endif // _MSC_VER > 1000
+#endif
 
 // MfcControlPpg.h : Declaration of the CMfcControlPropPage property page class.
 

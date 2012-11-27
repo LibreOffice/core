@@ -25,7 +25,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-#if defined(_MSC_VER) && (_MSC_VER >= 1400)
+#ifdef _MSC_VER
 #pragma warning(disable:4273)       // inconsistent dll linkage
 #endif
 

@@ -726,9 +726,7 @@ int mscx_filterCppException(
             // MSVS9/crt/src/mtdll.h:
             // offsetof (_tiddata, _curexception) -
             // offsetof (_tiddata, _tpxcptinfoptrs):
-#if _MSC_VER < 1500
-            error, this compiler version is not supported
-#elif _MSC_VER < 1600
+#if _MSC_VER < 1600
             0x48 // msvcr90.dll
 #else
             error, please find value for this compiler version
@@ -792,12 +790,6 @@ int mscx_filterCppException(
                     uno_type_any_constructAndConvert(
                         pUnoExc, &exc,
                         ::getCppuType( &exc ).getTypeLibType(), pCpp2Uno );
-#if _MSC_VER < 1400 // msvcr80.dll cleans up, different from former msvcrs
-                    // if (! rethrow):
-                    // though this unknown exception leaks now, no user-defined
-                    // exception is ever thrown thru the binary C-UNO dispatcher
-                    // call stack.
-#endif
                 }
                 else
                 {
@@ -805,14 +797,6 @@ int mscx_filterCppException(
                     uno_any_constructAndConvert(
                         pUnoExc, (void *) pRecord->ExceptionInformation[1],
                         pExcTD, pCpp2Uno );
-#if _MSC_VER < 1400 // msvcr80.dll cleans up, different from former msvcrs
-                    if (! rethrow)
-                    {
-                        uno_destructData(
-                            (void *) pRecord->ExceptionInformation[1],
-                            pExcTD, cpp_release );
-                    }
-#endif
                     typelib_typedescription_release( pExcTD );
                 }
 

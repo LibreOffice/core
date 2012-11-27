@@ -20,9 +20,9 @@
 // cpptest.cpp : Defines the entry point for the console application.
 //
 
-#if _MSC_VER > 1000
+#ifdef _MSC_VER
 #pragma once
-#endif // _MSC_VER > 1000
+#endif
 #pragma warning(disable: 4917)
 #include <comdef.h>
 #include <tchar.h>

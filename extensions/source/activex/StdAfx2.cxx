@@ -30,7 +30,7 @@
 #include <statreg.h>
 #endif
 
-#if defined(_MSC_VER) && (_MSC_VER >= 1300)
+#ifdef _MSC_VER
 #undef _DEBUG
 #endif
 

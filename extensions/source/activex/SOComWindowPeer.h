@@ -22,16 +22,16 @@
 #ifndef __SOCOMWINDOWPEER_H_
 #define __SOCOMWINDOWPEER_H_
 
-#if _MSC_VER > 1000
+#ifdef _MSC_VER
 #pragma once
-#endif // _MSC_VER > 1000
+#endif
 
 #include "resource.h"       // main symbols
 #include <ExDispID.h>
 #include <ExDisp.h>
 #include <shlguid.h>
 
-#if defined(_MSC_VER) && (_MSC_VER >= 1300)
+#ifdef _MSC_VER
 #undef _DEBUG
 #endif
 #include <atlctl.h>

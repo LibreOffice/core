@@ -39,20 +39,6 @@
 #define _USE_MATH_DEFINES // needed by Visual C++ for math constants
 #endif
 
-/* warnings ought to be disabled using /wd:n option of msvc.net compiler */
-#if _MSC_VER < 1300
-/* no performance warning: int to bool */
-#pragma warning( disable : 4800 )
-
-/* No warning for: C++ Exception Specification ignored */
-#pragma warning( disable : 4290 )
-
-#if OSL_DEBUG_LEVEL > 0
-/* No warning for: identifier was truncated to '255' characters in the browser information */
-#pragma warning( disable : 4786 )
-#endif
-#endif /* defined _MSC_VER < 1300 */
-
 #endif /* defined _MSC_VER */
 
 /* Provide ISO C99 compatible versions of snprint and vsnprintf */

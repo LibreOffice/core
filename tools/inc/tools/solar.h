@@ -36,11 +36,7 @@ typedef sal_uIntPtr    sal_uLong; /* Replaces type ULONG */
 #define DELETEZ( p )    ( delete p,p = 0 )
 
 #ifdef WNT
-#if defined (_MSC_VER) && ( _MSC_VER < 1200 )
-#define __LOADONCALLAPI _cdecl
-#else
 #define __LOADONCALLAPI __cdecl
-#endif
 #else
 #define __LOADONCALLAPI
 #endif

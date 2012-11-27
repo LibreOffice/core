@@ -282,14 +282,12 @@
 #endif
 
 /* Define to 1 if you have the `vsnprintf' function. */
-#if defined( UNX ) || (defined(_MSC_VER) && (_MSC_VER > 1400))
+#if defined( UNX ) || defined(_MSC_VER)
 #define HAVE_VSNPRINTF 1
 #endif
 
-#ifdef WIN32
-#if (defined(_MSC_VER) && (_MSC_VER < 1500)) || defined(__MINGW32__)
+#ifdef __MINGW32__
 #define vsnprintf _vsnprintf
-#endif
 #endif
 
 /* Define to be location of localedir */

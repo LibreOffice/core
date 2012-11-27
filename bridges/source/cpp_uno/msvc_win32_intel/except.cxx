@@ -503,13 +503,9 @@ int msci_filterCppException(
     if (pRecord == 0 || pRecord->ExceptionCode != MSVC_ExceptionCode)
         return EXCEPTION_CONTINUE_SEARCH;
 
-#if _MSC_VER < 1300 // MSVC -6
-    bool rethrow = (pRecord->NumberParameters < 3 ||
-                    pRecord->ExceptionInformation[ 2 ] == 0);
-#else
     bool rethrow = __CxxDetectRethrow( &pRecord );
     OSL_ASSERT( pRecord == pPointers->ExceptionRecord );
-#endif
+
     if (rethrow && pRecord == pPointers->ExceptionRecord)
     {
         // hack to get msvcrt internal _curexception field:
@@ -521,15 +517,7 @@ int msci_filterCppException(
             // crt\src\mtdll.h:
             // offsetof (_tiddata, _curexception) -
             // offsetof (_tiddata, _tpxcptinfoptrs):
-#if _MSC_VER < 1300
-            0x18 // msvcrt,dll
-#elif _MSC_VER < 1310
-            0x20 // msvcr70.dll
-#elif _MSC_VER < 1400
-            0x24 // msvcr71.dll
-#else
-            0x28 // msvcr80.dll
-#endif
+            0x28 // msvcr80.dll (and later?)
             );
     }
     // rethrow: handle only C++ exceptions:
@@ -576,12 +564,11 @@ int msci_filterCppException(
                     uno_type_any_constructAndConvert(
                         pUnoExc, &exc,
                         ::getCppuType( &exc ).getTypeLibType(), pCpp2Uno );
-#if _MSC_VER < 1400 // msvcr80.dll cleans up, different from former msvcrs
+                    // msvcr80.dll cleans up, different from former msvcrs
                     // if (! rethrow):
                     // though this unknown exception leaks now, no user-defined
                     // exception is ever thrown thru the binary C-UNO dispatcher
                     // call stack.
-#endif
                 }
                 else
                 {
@@ -589,14 +576,6 @@ int msci_filterCppException(
                     uno_any_constructAndConvert(
                         pUnoExc, (void *) pRecord->ExceptionInformation[1],
                         pExcTypeDescr, pCpp2Uno );
-#if _MSC_VER < 1400 // msvcr80.dll cleans up, different from former msvcrs
-                    if (! rethrow)
-                    {
-                        uno_destructData(
-                            (void *) pRecord->ExceptionInformation[1],
-                            pExcTypeDescr, cpp_release );
-                    }
-#endif
                     typelib_typedescription_release( pExcTypeDescr );
                 }
 

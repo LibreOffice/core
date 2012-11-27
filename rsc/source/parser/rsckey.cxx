@@ -27,7 +27,7 @@
 #include <rschash.hxx>
 #include <rsckey.hxx>
 
-#if defined(_MSC_VER) && (_MSC_VER >= 1200 )
+#ifdef _MSC_VER
 #define _cdecl __cdecl
 #endif
 

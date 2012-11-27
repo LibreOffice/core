@@ -31,9 +31,6 @@
 
 #include "cli_bridge.h"
 #include "cli_proxy.h"
-#if defined(_MSC_VER) && (_MSC_VER < 1400)
-#include <_vcclrit.h>
-#endif
 
 namespace sri= System::Runtime::InteropServices;
 using ::rtl::OUString;
@@ -268,9 +265,10 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment( uno_Environment * uno_cl
     SAL_THROW_EXTERN_C()
 {
     //ToDo: remove when compiled with .NET 2
-#if defined(_MSC_VER) && (_MSC_VER < 1400)
-    __crt_dll_initialize();
-#endif
+
+    // Unclear whether the above comment refers to this whole function
+    // or a call to __crt_dll_initialize() that used to be here for
+    // _MSC_VER < 1400
 
     uno_cli_env->environmentDisposing= cli_env_disposing;
     uno_cli_env->pExtEnv = 0;

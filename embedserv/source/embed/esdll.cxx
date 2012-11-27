@@ -20,7 +20,7 @@
 #define STRICT
 #define _WIN32_WINNT 0x0403
 #define _WIN32_DCOM
-#if defined(_MSC_VER) && (_MSC_VER > 1310)
+#ifdef _MSC_VER
 #pragma warning(disable : 4917 4555)
 #endif
 

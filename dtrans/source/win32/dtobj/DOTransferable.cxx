@@ -30,11 +30,6 @@
 #include "FmtFilter.hxx"
 #include "Fetc.hxx"
 
-
-#if(_MSC_VER < 1300) && !defined(__MINGW32__)
-#include <olestd.h>
-#endif
-
 #define STR2(x) #x
 #define STR(x) STR2(x)
 #define PRAGMA_MSG( msg ) message( __FILE__ "(" STR(__LINE__) "): " #msg )

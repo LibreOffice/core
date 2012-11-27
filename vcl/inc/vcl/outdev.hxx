@@ -769,7 +769,7 @@ public:
                                             const Gradient& rGradient,
                                             GDIMetaFile& rMtf );
 
-#if defined(_MSC_VER) && (_MSC_VER >= 1400)
+#ifdef _MSC_VER
     void                DrawHatch( const PolyPolygon& rPolyPoly, const ::Hatch& rHatch );
     void                AddHatchActions( const PolyPolygon& rPolyPoly,
                                          const ::Hatch& rHatch,

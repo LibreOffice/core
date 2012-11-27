@@ -38,7 +38,7 @@
 #include <tools/presys.h>
 #define _WIN32_WINNT 0x0403
 
-#if defined(_MSC_VER) && (_MSC_VER >= 1300)
+#ifdef _MSC_VER
 #undef _DEBUG
 #endif
 #include <atlbase.h>

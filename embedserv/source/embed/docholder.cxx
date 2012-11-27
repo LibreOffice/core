@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#if defined(_MSC_VER) && (_MSC_VER > 1310)
+#ifdef _MSC_VER
 #pragma warning(disable : 4917 4555)
 #endif
 
@@ -1507,7 +1507,7 @@ void SAL_CALL DocumentHolder::modified( const lang::EventObject& /*aEvent*/ )
 // Fix strange warnings about some
 // ATL::CAxHostWindow::QueryInterface|AddRef|Releae functions.
 // warning C4505: 'xxx' : unreferenced local function has been removed
-#if defined(_MSC_VER)
+#ifdef _MSC_VER
 #pragma warning(disable: 4505)
 #endif
 

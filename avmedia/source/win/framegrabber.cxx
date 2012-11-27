@@ -26,11 +26,7 @@
 #include <objbase.h>
 #include <strmif.h>
 #include <Amvideo.h>
-#if defined(_MSC_VER) && (_MSC_VER < 1500)
-#include <Qedit.h>
-#else
 #include "interface.hxx"
-#endif
 #include <uuids.h>
 #if defined _MSC_VER
 #pragma warning(pop)

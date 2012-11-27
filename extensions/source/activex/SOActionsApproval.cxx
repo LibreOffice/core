@@ -37,7 +37,7 @@ STDMETHODIMP SOActionsApproval::InterfaceSupportsErrorInfo(REFIID riid)
 
     for (int i=0;i<SAL_N_ELEMENTS(arr);i++)
     {
-#if defined(_MSC_VER) && (_MSC_VER >= 1300)
+#ifdef _MSC_VER
         if (InlineIsEqualGUID(*arr[i],riid))
 #else
         if (::ATL::InlineIsEqualGUID(*arr[i],riid))

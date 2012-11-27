@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if defined _MSC_VER && ( _MSC_VER >= 1200 )
+#ifdef _MSC_VER
 #define _WIN32_WINNT  0x0400
 #endif
 

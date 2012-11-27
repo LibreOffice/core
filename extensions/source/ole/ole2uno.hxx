@@ -21,9 +21,9 @@
 #define _OLE2UNO_HXX
 
 
-#if _MSC_VER > 1000
+#ifdef _MSC_VER
 #pragma once
-#endif // _MSC_VER > 1000
+#endif
 
 #define STRICT
 #ifndef _WIN32_WINNT
@@ -41,9 +41,7 @@
 #pragma warning (disable:4548)
 
 #include <tchar.h>
-#if (_MSC_VER >= 1200) || defined(__MINGW32__)
 #include <dispex.h>
-#endif
 
 #include <tools/presys.h>
 #include <list>

@@ -33,9 +33,6 @@
 #pragma warning(disable:4917)
 #endif
 #include <windows.h>
-#if (_MSC_VER < 1300) && !defined(__MINGW32__)
-#include <olestd.h>
-#endif
 #include <shlobj.h>
 #if defined _MSC_VER
 #pragma warning(pop)

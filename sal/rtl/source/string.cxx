@@ -19,7 +19,7 @@
 
 #include "sal/config.h"
 
-#if defined(_MSC_VER) && (_MSC_VER >= 1400)
+#ifdef _MSC_VER
 #pragma warning(disable:4738) // storing 32-bit float result in memory, possible loss of performance
 #endif
 

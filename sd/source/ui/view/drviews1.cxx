@@ -84,12 +84,6 @@
 #include <sfx2/request.hxx>
 #include <boost/bind.hpp>
 
-#ifdef _MSC_VER
-#if (_MSC_VER < 1400)
-#pragma optimize ( "", off )
-#endif
-#endif
-
 using namespace com::sun::star;
 
 namespace sd {
@@ -1347,11 +1341,5 @@ sal_Int8 DrawViewShell::ExecuteDrop (
 }
 
 } // end of namespace sd
-
-#ifdef _MSC_VER
-#if (_MSC_VER < 1400)
-#pragma optimize ( "", on )
-#endif
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -19,9 +19,9 @@
 #if !defined(AFX_STDAFX_H__AC221FBA_A0D8_11D4_833B_005004526AB4__INCLUDED_)
 #define AFX_STDAFX_H__AC221FBA_A0D8_11D4_833B_005004526AB4__INCLUDED_
 
-#if _MSC_VER > 1000
+#ifdef _MSC_VER
 #pragma once
-#endif // _MSC_VER > 1000
+#endif
 
 // stdafx.h : include file for standard system include files,
 //      or project specific include files that are used frequently,

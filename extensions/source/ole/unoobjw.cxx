@@ -72,7 +72,7 @@ using namespace com::sun::star::reflection;
 
 using ::rtl::OUString;
 
-#if _MSC_VER < 1200
+#ifndef _MSC_VER
 extern "C" const GUID IID_IDispatchEx;
 #endif
 

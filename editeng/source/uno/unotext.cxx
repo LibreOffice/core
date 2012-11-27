@@ -1557,7 +1557,7 @@ uno::Reference< uno::XInterface > SvxUnoTextRange_NewInstance()
 {
     SvxUnoText aText;
     uno::Reference< text::XTextRange > xRange( new SvxUnoTextRange( aText ) );
-#if (_MSC_VER < 1300)
+#ifndef _MSC_VER
     return xRange;
 #else
     return (uno::Reference< uno::XInterface >)xRange;

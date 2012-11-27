@@ -54,11 +54,6 @@ struct LessString
     }
 };
 
-#if defined(_MSC_VER) &&  _MSC_VER < 1200
-typedef ::std::new_alloc NewAlloc;
-#endif
-
-
 typedef ::std::list< ::rtl::OString >               StringList;
 typedef ::std::vector< ::rtl::OString >             StringVector;
 typedef ::std::set< ::rtl::OString, LessString >    StringSet;

@@ -20,7 +20,7 @@
 #ifndef FPICKER_WIN32_VISTA_FILEPICKER_EVENTHANDLER_HXX
 #define FPICKER_WIN32_VISTA_FILEPICKER_EVENTHANDLER_HXX
 
-#if defined(_MSC_VER) && (_MSC_VER >= 1400)
+#ifdef _MSC_VER
 #pragma warning( disable : 4917 )
 #endif
 

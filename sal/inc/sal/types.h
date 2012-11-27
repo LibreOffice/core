@@ -84,7 +84,7 @@ typedef unsigned char       sal_uInt8;
      #error "Could not find 32-bit type, add support for your architecture"
 #endif
 
-#if defined _MSC_VER && _MSC_VER >= 1000
+#ifdef _MSC_VER
     typedef __int64                  sal_Int64;
     typedef unsigned __int64         sal_uInt64;
 

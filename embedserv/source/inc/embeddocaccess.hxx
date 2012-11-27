@@ -29,7 +29,7 @@
 
 #include <oleidl.h>
 #ifndef __MINGW32__
-#if defined(_MSC_VER) && (_MSC_VER > 1310)
+#ifdef _MSC_VER
 #pragma warning(disable : 4265)
 #include <atldbcli.h>
 #else

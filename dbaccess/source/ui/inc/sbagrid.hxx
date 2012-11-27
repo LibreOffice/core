@@ -138,13 +138,13 @@ namespace dbaui
 
     protected:
         virtual FmGridControl*  imp_CreateControl(Window* pParent, WinBits nStyle);
-#if defined(_MSC_VER) && (_MSC_VER >= 1310 )
+#ifdef _MSC_VER
         typedef ::com::sun::star::frame::XStatusListener xstlist_type;
         typedef ::com::sun::star::uno::Reference< xstlist_type > xlistener_type;
         void NotifyStatusChanged(const ::com::sun::star::util::URL& aUrl, const xlistener_type & xControl = xlistener_type() );
 #else
         void NotifyStatusChanged(const ::com::sun::star::util::URL& aUrl, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > ());
-#endif // # _MSC_VER>=1310
+#endif // # _MSC_VER
 
     private:
         // for asny execution of XDispatch::dispatch

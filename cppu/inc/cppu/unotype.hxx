@@ -107,11 +107,7 @@ getTypeFromTypeClass(::typelib_TypeClass tc) {
 
 }
 
-// For _MSC_VER 1310, define cppu_detail_getUnoType in the global namespace, to
-// avoid spurious compiler errors in code that calls cppu_detail_getUnoType:
-#if !defined _MSC_VER || _MSC_VER > 1310
 namespace cppu { namespace detail {
-#endif
 
 inline ::com::sun::star::uno::Type const &
 cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ::cppu::UnoVoidType const *) {
@@ -240,9 +236,7 @@ cppu_detail_getUnoType(
     return ::cppu::UnoType< T >::get();
 }
 
-#if !defined _MSC_VER || _MSC_VER > 1310
 } }
-#endif
 
 namespace cppu {
 
