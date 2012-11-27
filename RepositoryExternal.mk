@@ -1477,7 +1477,6 @@ endef
 
 endif # SYSTEM_CURL
 
-# strip because of gb_SPACE
 ifeq ($(ENABLE_VALGRIND),TRUE)
 
 define gb_LinkTarget__use_valgrind
