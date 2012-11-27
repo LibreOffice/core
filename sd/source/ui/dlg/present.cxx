@@ -230,7 +230,7 @@ void SdStartPresentationDlg::InitMonitorSettings()
                     nDefaultExternalIndex = nEntryIndex;
             }
 
-            if( !bUnifiedDisplay )
+            if( bUnifiedDisplay )
             {
                 maLBMonitor.InsertEntry( msAllMonitors );
                 const sal_uInt32 nEntryIndex (maLBMonitor.GetEntryCount()-1);
