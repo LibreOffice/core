@@ -131,6 +131,7 @@ bool passesPositiveList(OUString const & url) {
         { RTL_CONSTASCII_STRINGPARAM(
             "/dbaccess/source/ui/inc/toolbox_tmpl.hrc") },
         { RTL_CONSTASCII_STRINGPARAM("/description.xml") },
+        { RTL_CONSTASCII_STRINGPARAM("/android/sdremote/res/values/strings.xml") },
         { RTL_CONSTASCII_STRINGPARAM("/offmgr/inc/offmenu_tmpl.hrc") },
         { RTL_CONSTASCII_STRINGPARAM(
             "/offmgr/source/offapp/intro/intro_tmpl.hrc") },
@@ -305,7 +306,8 @@ void handleFile(
         { RTL_CONSTASCII_STRINGPARAM(".ulf"), "ulfex", false },
         { RTL_CONSTASCII_STRINGPARAM(".xcu"), "cfgex", false },
         { RTL_CONSTASCII_STRINGPARAM(".xrm"), "xrmex", false },
-        { RTL_CONSTASCII_STRINGPARAM(".xml"), "xrmex", true },
+        { RTL_CONSTASCII_STRINGPARAM("description.xml"), "xrmex", true },
+        { RTL_CONSTASCII_STRINGPARAM("strings.xml"), "stringex", true },
         { RTL_CONSTASCII_STRINGPARAM(".xhp"), "helpex", false },
         { RTL_CONSTASCII_STRINGPARAM(".properties"), "propex", false },
         { RTL_CONSTASCII_STRINGPARAM(".ui"), "uiex", false },
@@ -328,6 +330,7 @@ void handleFile(
 bool includeProject(OString const & project) {
     static OString projects[] = {
         "accessibility",
+        "android",
         "avmedia",
         "basctl",
         "basic",
