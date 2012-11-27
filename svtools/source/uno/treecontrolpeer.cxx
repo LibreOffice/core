@@ -1673,18 +1673,18 @@ void UnoTreeListItem::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
 
-    pViewData->aSize = maImage.GetSizePixel();
+    pViewData->maSize = maImage.GetSizePixel();
 
     const Size aTextSize(pView->GetTextWidth( maText ), pView->GetTextHeight());
-    if( pViewData->aSize.Width() )
+    if( pViewData->maSize.Width() )
     {
-        pViewData->aSize.Width() += 6 + aTextSize.Width();
-        if( pViewData->aSize.Height() < aTextSize.Height() )
-            pViewData->aSize.Height() = aTextSize.Height();
+        pViewData->maSize.Width() += 6 + aTextSize.Width();
+        if( pViewData->maSize.Height() < aTextSize.Height() )
+            pViewData->maSize.Height() = aTextSize.Height();
     }
     else
     {
-        pViewData->aSize = aTextSize;
+        pViewData->maSize = aTextSize;
     }
 }
 

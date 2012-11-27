@@ -31,7 +31,10 @@
 #define SVLISTENTRYFLAG_CURSORED        0x0008
 #define SVLISTENTRYFLAG_NOT_SELECTABLE  0x0010
 
-class SvViewDataItem;
+struct SvViewDataItem
+{
+    Size maSize;
+};
 
 class SVT_DLLPUBLIC SvViewData
 {
@@ -68,15 +71,6 @@ public:
 
                     SvViewDataEntry();
     virtual         ~SvViewDataEntry();
-};
-
-class SvViewDataItem
-{
-public:
-    Size aSize;
-
-    SvViewDataItem();
-    ~SvViewDataItem();
 };
 
 #endif

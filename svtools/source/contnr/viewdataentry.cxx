@@ -116,16 +116,4 @@ SvViewDataEntry::~SvViewDataEntry()
     delete [] pItemData;
 }
 
-DBG_NAME(SvViewDataItem);
-
-SvViewDataItem::SvViewDataItem()
-{
-    DBG_CTOR(SvViewDataItem,0);
-}
-
-SvViewDataItem::~SvViewDataItem()
-{
-    DBG_DTOR(SvViewDataItem,0);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

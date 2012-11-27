@@ -363,7 +363,7 @@ const Size& SvLBoxItem::GetSize(const SvTreeListBox* pView, const SvTreeListEntr
 {
     DBG_CHKTHIS(SvLBoxItem,0);
     const SvViewDataItem* pViewData = pView->GetViewDataItem( pEntry, this );
-    return pViewData->aSize;
+    return pViewData->maSize;
 }
 
 struct SvTreeListBoxImpl

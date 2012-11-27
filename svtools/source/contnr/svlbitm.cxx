@@ -245,7 +245,7 @@ void SvLBoxString::InitViewData(
     DBG_CHKTHIS(SvLBoxString,0);
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
-    pViewData->aSize = Size(pView->GetTextWidth(maText), pView->GetTextHeight());
+    pViewData->maSize = Size(pView->GetTextWidth(maText), pView->GetTextHeight());
 }
 
 // ***************************************************************
@@ -276,7 +276,7 @@ void SvLBoxBmp::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry,
     DBG_CHKTHIS(SvLBoxBmp,0);
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
-    pViewData->aSize = aBmp.GetSizePixel();
+    pViewData->maSize = aBmp.GetSizePixel();
 }
 
 void SvLBoxBmp::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 /* nFlags */,
@@ -447,7 +447,7 @@ void SvLBoxButton::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry,
     ControlType eCtrlType = (pData->IsRadio())? CTRL_RADIOBUTTON : CTRL_CHECKBOX;
     if ( eKind != SvLBoxButtonKind_staticImage && pView )
         ImplAdjustBoxSize( aSize, eCtrlType, pView );
-    pViewData->aSize = aSize;
+    pViewData->maSize = aSize;
 }
 
 bool SvLBoxButton::CheckModification() const
@@ -525,7 +525,7 @@ void SvLBoxContextBmp::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntr
     DBG_CHKTHIS(SvLBoxContextBmp,0);
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
-    pViewData->aSize = m_pImpl->m_aImage1.GetSizePixel();
+    pViewData->maSize = m_pImpl->m_aImage1.GetSizePixel();
 }
 
 void SvLBoxContextBmp::Paint( const Point& _rPos, SvTreeListBox& _rDev,

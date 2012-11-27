@@ -146,7 +146,7 @@ public:
     const Size&         GetSize(const SvViewDataEntry* pData, sal_uInt16 nItemPos) const
                         {
                             const SvViewDataItem* pIData = pData->pItemData + nItemPos;
-                            return pIData->aSize;
+                            return pIData->maSize;
                         }
 
     virtual void        Paint( const Point& rPos, SvTreeListBox& rOutDev,
