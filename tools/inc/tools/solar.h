@@ -152,36 +152,26 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
 #pragma warning(error : 4002 4003)
 #endif
 
-// dll file extensions
-
-#if defined WNT
-  #define __DLLEXTENSION "lo"
-#elif defined MACOSX
-  #define __DLLEXTENSION "lo.dylib"
-#elif defined UNX
-  #define __DLLEXTENSION "lo.so"
-#else
-  #error unknown platform
-#endif
-
 #define UniString       String
 #define XubString       String
 #define xub_StrLen      sal_uInt16
 
-#define LIBRARY_CONCAT3( s1, s2, s3 ) \
+#define STRING_CONCAT3( s1, s2, s3 ) \
     s1 s2 s3
-#define LIBRARY_CONCAT4( s1, s2, s3, s4 ) \
-    s1 s2 s3 s4
+
+// dll file extensions
 
 #if defined WNT
 #define SVLIBRARY( Base ) \
-    LIBRARY_CONCAT3( Base, __DLLEXTENSION, ".DLL" )
+    STRING_CONCAT3( Base, "lo", ".dll" )
+#elif defined MACOSX
+#define SVLIBRARY( Base ) \
+    STRING_CONCAT3( "lib", Base, "lo.dylib" )
 #elif defined UNX
 #define SVLIBRARY( Base ) \
-    LIBRARY_CONCAT3( "lib", Base, __DLLEXTENSION )
+    STRING_CONCAT3( "lib", Base, "lo.so" )
 #else
-#define SVLIBRARY( Base ) \
-    LIBRARY_CONCAT2( Base, __DLLEXTENSION )
+  #error unknown platform
 #endif
 
 #endif
