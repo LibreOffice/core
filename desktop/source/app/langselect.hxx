@@ -39,7 +39,6 @@ public:
         LS_STATUS_CONFIGURATIONACCESS_BROKEN
     };
 
-    static com::sun::star::lang::Locale IsoStringToLocale(const rtl::OUString& str);
     static rtl::OUString getLanguageString();
     static bool prepareLanguage();
     static LanguageSelectionStatus getStatus();

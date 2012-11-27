@@ -71,8 +71,8 @@ namespace desktop {
             // localize the provider to user selection
             Reference< XLocalizable > localizable(theConfigProvider, UNO_QUERY_THROW);
             OUString aUserLanguage = LanguageSelection::getLanguageString();
-            Locale aLocale = LanguageSelection::IsoStringToLocale(aUserLanguage);
-            localizable->setLocale(aLocale);
+            LanguageTag aLanguageTag(aUserLanguage);
+            localizable->setLocale(aLanguageTag.getLocale( false));
 
             return officecfg::Setup::Office::ooSetupInstCompleted::get();
         }

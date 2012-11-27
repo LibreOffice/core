@@ -105,16 +105,6 @@ static OUString locateSofficeIniFile()
     return aSofficeIniFileURL;
 }
 
-Locale LanguageSelection::IsoStringToLocale(const OUString& str)
-{
-    Locale l;
-    sal_Int32 index=0;
-    l.Language = str.getToken(0, '-', index);
-    if (index >= 0) l.Country = str.getToken(0, '-', index);
-    if (index >= 0) l.Variant = str.getToken(0, '-', index);
-    return l;
-}
-
 bool LanguageSelection::prepareLanguage()
 {
     m_eStatus = LS_STATUS_OK;
@@ -200,11 +190,11 @@ bool LanguageSelection::prepareLanguage()
     {
         try
         {
-            // prepare default config provider by localizing it to the selected locale
-            // this will ensure localized configuration settings to be selected accoring to the
-            // UI language.
-            Locale loc = LanguageSelection::IsoStringToLocale(aLocaleString);
-            theConfigProvider->setLocale(loc);
+            // prepare default config provider by localizing it to the selected
+            // locale this will ensure localized configuration settings to be
+            // selected according to the UI language.
+            LanguageTag aUILanguageTag(aLocaleString);
+            theConfigProvider->setLocale(aUILanguageTag.getLocale( false));
 
             Reference< XPropertySet > xProp(getConfigAccess("org.openoffice.Setup/L10N/", sal_True), UNO_QUERY_THROW);
             if ( !bCmdLanguage )
@@ -222,14 +212,14 @@ bool LanguageSelection::prepareLanguage()
                 Reference< XChangesBatch >(xProp2, UNO_QUERY_THROW)->commitChanges();
             }
 
-            MsLangId::setConfiguredSystemUILanguage( LanguageTag(loc).getLanguageType( false) );
+            MsLangId::setConfiguredSystemUILanguage( aUILanguageTag.getLanguageType( false) );
 
             OUString sLocale;
             xProp->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupSystemLocale"))) >>= sLocale;
             if ( !sLocale.isEmpty() )
             {
-                loc = LanguageSelection::IsoStringToLocale(sLocale);
-                MsLangId::setConfiguredSystemLanguage( LanguageTag(loc).getLanguageType( false) );
+                LanguageTag aLocaleLanguageTag(sLocale);
+                MsLangId::setConfiguredSystemLanguage( aLocaleLanguageTag.getLanguageType( false) );
             }
             else
                 MsLangId::setConfiguredSystemLanguage( MsLangId::getSystemLanguage() );
