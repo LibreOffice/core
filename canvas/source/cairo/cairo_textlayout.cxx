@@ -306,7 +306,7 @@ namespace cairocanvas
         rendering::FontRequest aFontRequest = mpFont->getFontRequest();
         rendering::FontInfo aFontInfo = aFontRequest.FontDescription;
 
-        cairo_select_font_face( pCairo, ::rtl::OUStringToOString( aFontInfo.FamilyName, RTL_TEXTENCODING_UTF8 ).getStr(), CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL );
+        cairo_select_font_face( pCairo, OUStringToOString( aFontInfo.FamilyName, RTL_TEXTENCODING_UTF8 ).getStr(), CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL );
         cairo_set_font_size( pCairo, aFontRequest.CellSize );
     }
 
@@ -400,8 +400,8 @@ namespace cairocanvas
                               aFontData.back().first.bAntialias ? "AA " : "",
                               aFontData.back().first.bFakeBold ? "FB " : "",
                               aFontData.back().first.bFakeItalic ? "FI " : "",
-                              ::rtl::OUStringToOString( maText.Text.copy( maText.StartPosition, maText.Length ),
-                                                        RTL_TEXTENCODING_UTF8 ).getStr());
+                              OUStringToOString( maText.Text.copy( maText.StartPosition, maText.Length ),
+                                                 RTL_TEXTENCODING_UTF8 ).getStr());
                     break;
                 }
             }
@@ -536,9 +536,9 @@ namespace cairocanvas
             cairo_set_font_matrix(pSCairo.get(), &m);
 
 #if (defined CAIRO_HAS_WIN32_SURFACE) && (OSL_DEBUG_LEVEL > 1)
-# define TEMP_TRACE_FONT ::rtl::OUStringToOString( reinterpret_cast<const sal_Unicode*> (logfont.lfFaceName), RTL_TEXTENCODING_UTF8 ).getStr()
+# define TEMP_TRACE_FONT OUStringToOString( reinterpret_cast<const sal_Unicode*> (logfont.lfFaceName), RTL_TEXTENCODING_UTF8 ).getStr()
 #else
-# define TEMP_TRACE_FONT ::rtl::OUStringToOString( aFont.GetName(), RTL_TEXTENCODING_UTF8 ).getStr()
+# define TEMP_TRACE_FONT OUStringToOString( aFont.GetName(), RTL_TEXTENCODING_UTF8 ).getStr()
 #endif
             OSL_TRACE("\r\n:cairocanvas::TextLayout::draw(S,O,p,v,r): Size:(%d,%d), Pos (%d,%d), G(%d,%d,%d) %s%s%s%s || Name:%s - %s",
                       aFont.GetWidth(),
@@ -553,7 +553,7 @@ namespace cairocanvas
                       rSysFontData.bFakeBold ? "FB " : "",
                       rSysFontData.bFakeItalic ? "FI " : "",
                       TEMP_TRACE_FONT,
-                      ::rtl::OUStringToOString( maText.Text.copy( maText.StartPosition, maText.Length ),
+                      OUStringToOString( maText.Text.copy( maText.StartPosition, maText.Length ),
                                                 RTL_TEXTENCODING_UTF8 ).getStr()
                 );
 #undef TEMP_TRACE_FONT
@@ -642,20 +642,20 @@ namespace cairocanvas
 #define SERVICE_NAME "com.sun.star.rendering.TextLayout"
 #define IMPLEMENTATION_NAME "CairoCanvas::TextLayout"
 
-    ::rtl::OUString SAL_CALL TextLayout::getImplementationName() throw( uno::RuntimeException )
+    OUString SAL_CALL TextLayout::getImplementationName() throw( uno::RuntimeException )
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ) );
+        return OUString( IMPLEMENTATION_NAME );
     }
 
-    sal_Bool SAL_CALL TextLayout::supportsService( const ::rtl::OUString& ServiceName ) throw( uno::RuntimeException )
+    sal_Bool SAL_CALL TextLayout::supportsService( const OUString& ServiceName ) throw( uno::RuntimeException )
     {
         return ServiceName == SERVICE_NAME;
     }
 
-    uno::Sequence< ::rtl::OUString > SAL_CALL TextLayout::getSupportedServiceNames()  throw( uno::RuntimeException )
+    uno::Sequence< OUString > SAL_CALL TextLayout::getSupportedServiceNames()  throw( uno::RuntimeException )
     {
-        uno::Sequence< ::rtl::OUString > aRet(1);
-        aRet[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
+        uno::Sequence< OUString > aRet(1);
+        aRet[0] = OUString( SERVICE_NAME );
 
         return aRet;
     }
