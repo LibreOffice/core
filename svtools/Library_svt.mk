@@ -97,6 +97,7 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/contnr/treelist \
     svtools/source/contnr/treelistbox \
     svtools/source/contnr/treelistentry \
+    svtools/source/contnr/viewdataentry \
     svtools/source/control/asynclink \
     svtools/source/control/calendar \
     svtools/source/control/collatorres \

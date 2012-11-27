@@ -44,71 +44,9 @@
 #define LISTACTION_RESORTED         10
 #define LISTACTION_CLEARED          11
 
-// Entryflags that are attached to the View
-#define SVLISTENTRYFLAG_SELECTED        0x0001
-#define SVLISTENTRYFLAG_EXPANDED        0x0002
-#define SVLISTENTRYFLAG_FOCUSED         0x0004
-#define SVLISTENTRYFLAG_CURSORED        0x0008
-#define SVLISTENTRYFLAG_NOT_SELECTABLE  0x0010
-
 class SvTreeListEntry;
 class SvListView;
-
-class SvViewData
-{
-friend class SvTreeList;
-friend class SvListView;
-
-    sal_uLong           nVisPos;
-protected:
-    sal_uInt16          nFlags;
-public:
-                        SvViewData();
-                        SvViewData( const SvViewData& );
-    virtual             ~SvViewData();
-
-    sal_Bool            IsSelected() const
-    { return (sal_Bool)(nFlags & SVLISTENTRYFLAG_SELECTED) != 0; }
-
-    sal_Bool            IsExpanded() const
-    { return (sal_Bool)(nFlags & SVLISTENTRYFLAG_EXPANDED) != 0; }
-
-    sal_Bool            HasFocus() const
-    { return (sal_Bool)(nFlags & SVLISTENTRYFLAG_FOCUSED) != 0; }
-
-    sal_Bool            IsCursored() const
-    { return (sal_Bool)(nFlags & SVLISTENTRYFLAG_CURSORED) != 0; }
-
-    bool                IsSelectable() const
-    { return (bool)(nFlags & SVLISTENTRYFLAG_NOT_SELECTABLE) == 0; }
-
-    void                SetFocus( sal_Bool bFocus)
-    {
-        if ( !bFocus )
-            nFlags &= (~SVLISTENTRYFLAG_FOCUSED);
-        else
-            nFlags |= SVLISTENTRYFLAG_FOCUSED;
-    }
-
-    void                SetCursored( sal_Bool bCursored )
-    {
-        if ( !bCursored )
-            nFlags &= (~SVLISTENTRYFLAG_CURSORED);
-        else
-            nFlags |= SVLISTENTRYFLAG_CURSORED;
-    }
-
-    sal_uInt16          GetFlags() const
-    { return nFlags; }
-
-    void                SetSelectable( bool bSelectable )
-    {
-        if( bSelectable )
-            nFlags &= (~SVLISTENTRYFLAG_NOT_SELECTABLE);
-        else
-            nFlags |= SVLISTENTRYFLAG_NOT_SELECTABLE;
-    }
-};
+class SvViewData;
 
 enum SvSortMode { SortAscending, SortDescending, SortNone };
 
@@ -426,52 +364,6 @@ public:
     virtual void        ModelHasRemoved( SvTreeListEntry* pEntry );
     virtual void        ModelHasEntryInvalidated( SvTreeListEntry* pEntry );
 };
-
-inline sal_Bool SvListView::IsExpanded( SvTreeListEntry* pEntry ) const
-{
-    DBG_ASSERT(pEntry,"IsExpanded:No Entry");
-    SvDataTable::const_iterator itr = maDataTable.find(pEntry);
-    DBG_ASSERT(itr != maDataTable.end(),"Entry not in Table");
-    return itr->second->IsExpanded();
-}
-
-inline sal_Bool SvListView::IsSelected( SvTreeListEntry* pEntry ) const
-{
-    DBG_ASSERT(pEntry,"IsExpanded:No Entry");
-    SvDataTable::const_iterator itr = maDataTable.find(pEntry );
-    DBG_ASSERT(itr != maDataTable.end(),"Entry not in Table");
-    return itr->second->IsSelected();
-}
-
-inline sal_Bool SvListView::HasEntryFocus( SvTreeListEntry* pEntry ) const
-{
-    DBG_ASSERT(pEntry,"IsExpanded:No Entry");
-    SvDataTable::const_iterator itr = maDataTable.find(pEntry );
-    DBG_ASSERT(itr != maDataTable.end(),"Entry not in Table");
-    return itr->second->HasFocus();
-}
-
-inline void SvListView::SetEntryFocus( SvTreeListEntry* pEntry, sal_Bool bFocus )
-{
-    DBG_ASSERT(pEntry,"SetEntryFocus:No Entry");
-    SvDataTable::iterator itr = maDataTable.find(pEntry);
-    DBG_ASSERT(itr != maDataTable.end(),"Entry not in Table");
-    itr->second->SetFocus(bFocus);
-}
-
-inline const SvViewData* SvListView::GetViewData( const SvTreeListEntry* pEntry ) const
-{
-    SvDataTable::const_iterator itr = maDataTable.find( const_cast<SvTreeListEntry*>(pEntry) );
-    DBG_ASSERT(itr != maDataTable.end(),"Entry not in model or wrong view");
-    return itr->second;
-}
-
-inline SvViewData* SvListView::GetViewData( SvTreeListEntry* pEntry )
-{
-    SvDataTable::iterator itr = maDataTable.find( pEntry );
-    DBG_ASSERT(itr != maDataTable.end(),"Entry not in model or wrong view");
-    return itr->second;
-}
 
 #endif
 

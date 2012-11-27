@@ -23,32 +23,6 @@
 
 #include <stdio.h>
 
-DBG_NAME(SvViewData);
-
-SvViewData::SvViewData()
-{
-    DBG_CTOR(SvViewData,0);
-    nFlags = 0;
-    nVisPos = 0;
-}
-
-SvViewData::SvViewData( const SvViewData& rData )
-{
-    DBG_CTOR(SvViewData,0);
-    nFlags  = rData.nFlags;
-    nFlags &= ~( SVLISTENTRYFLAG_SELECTED | SVLISTENTRYFLAG_FOCUSED );
-    nVisPos = rData.nVisPos;
-}
-
-SvViewData::~SvViewData()
-{
-    DBG_DTOR(SvViewData,0);
-#ifdef DBG_UTIL
-    nVisPos = 0x12345678;
-    nFlags = 0x1234;
-#endif
-}
-
 SvTreeList::SvTreeList()
 {
     nEntryCount = 0;
@@ -1505,6 +1479,52 @@ void SvListView::ModelNotification( sal_uInt16 nActionId, SvTreeListEntry* pEntr
 
 void SvListView::InitViewData( SvViewData*, SvTreeListEntry* )
 {
+}
+
+sal_Bool SvListView::IsExpanded( SvTreeListEntry* pEntry ) const
+{
+    DBG_ASSERT(pEntry,"IsExpanded:No Entry");
+    SvDataTable::const_iterator itr = maDataTable.find(pEntry);
+    DBG_ASSERT(itr != maDataTable.end(),"Entry not in Table");
+    return itr->second->IsExpanded();
+}
+
+sal_Bool SvListView::IsSelected( SvTreeListEntry* pEntry ) const
+{
+    DBG_ASSERT(pEntry,"IsExpanded:No Entry");
+    SvDataTable::const_iterator itr = maDataTable.find(pEntry );
+    DBG_ASSERT(itr != maDataTable.end(),"Entry not in Table");
+    return itr->second->IsSelected();
+}
+
+sal_Bool SvListView::HasEntryFocus( SvTreeListEntry* pEntry ) const
+{
+    DBG_ASSERT(pEntry,"IsExpanded:No Entry");
+    SvDataTable::const_iterator itr = maDataTable.find(pEntry );
+    DBG_ASSERT(itr != maDataTable.end(),"Entry not in Table");
+    return itr->second->HasFocus();
+}
+
+void SvListView::SetEntryFocus( SvTreeListEntry* pEntry, sal_Bool bFocus )
+{
+    DBG_ASSERT(pEntry,"SetEntryFocus:No Entry");
+    SvDataTable::iterator itr = maDataTable.find(pEntry);
+    DBG_ASSERT(itr != maDataTable.end(),"Entry not in Table");
+    itr->second->SetFocus(bFocus);
+}
+
+const SvViewData* SvListView::GetViewData( const SvTreeListEntry* pEntry ) const
+{
+    SvDataTable::const_iterator itr = maDataTable.find( const_cast<SvTreeListEntry*>(pEntry) );
+    DBG_ASSERT(itr != maDataTable.end(),"Entry not in model or wrong view");
+    return itr->second;
+}
+
+SvViewData* SvListView::GetViewData( SvTreeListEntry* pEntry )
+{
+    SvDataTable::iterator itr = maDataTable.find( pEntry );
+    DBG_ASSERT(itr != maDataTable.end(),"Entry not in model or wrong view");
+    return itr->second;
 }
 
 StringCompare SvTreeList::Compare(const SvTreeListEntry* pLeft, const SvTreeListEntry* pRight) const
