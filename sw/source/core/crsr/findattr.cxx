@@ -1107,7 +1107,7 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
                 aTmp.searchFlag |= (SearchFlags::REG_NOT_BEGINOFLINE |
                                     SearchFlags::REG_NOT_ENDOFLINE);
 
-                aTmp.Locale = LanguageTag( LANGUAGE_SYSTEM ).getLocale();
+                aTmp.Locale = SvtSysLocale().GetLanguageTag().getLocale();
 
                 pSTxt = new utl::TextSearch( aTmp );
             }

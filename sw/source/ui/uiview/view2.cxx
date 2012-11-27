@@ -1897,7 +1897,7 @@ bool SwView::JumpToSwMark( const String& rMark )
                 SearchOptions aSearchOpt(
                                     SearchAlgorithms_ABSOLUTE, 0,
                                     sName, rtl::OUString(),
-                                    LanguageTag( LANGUAGE_SYSTEM ).getLocale(),
+                                    SvtSysLocale().GetLanguageTag().getLocale(),
                                     0,0,0,
                                     TransliterationModules_IGNORE_CASE );
 

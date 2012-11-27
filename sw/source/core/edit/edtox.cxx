@@ -374,7 +374,7 @@ void SwEditShell::ApplyAutoMark()
         SearchOptions aSearchOpt(
                             SearchAlgorithms_ABSOLUTE, nSrchFlags,
                             sEmpty, sEmpty,
-                            LanguageTag( LANGUAGE_SYSTEM ).getLocale(),
+                            SvtSysLocale().GetLanguageTag().getLocale(),
                             nLEV_Other, nLEV_Longer, nLEV_Shorter,
                             nTransliterationFlags );
 

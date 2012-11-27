@@ -2518,7 +2518,7 @@ SwUnoCursorHelper::CreateSortDescriptor(const bool bFromTable)
     uno::Sequence< table::TableSortField > aFields(3);
     table::TableSortField* pFields = aFields.getArray();
 
-    lang::Locale aLang( LanguageTag( LANGUAGE_SYSTEM).getLocale());
+    lang::Locale aLang( SvtSysLocale().GetLanguageTag().getLocale());
     // get collator algorithm to be used for the locale
     uno::Sequence< OUString > aSeq(
             GetAppCollator().listCollatorAlgorithms( aLang ) );
