@@ -160,8 +160,8 @@ private:
 public:
 
                                 GalleryThemeCacheEntry( const GalleryThemeEntry* pThemeEntry, GalleryTheme* pTheme ) :
-                                    mpThemeEntry( pThemeEntry ), mpTheme( pTheme ) { DBG_CTOR( GalleryThemeCacheEntry, NULL ); }
-                                ~GalleryThemeCacheEntry() { delete mpTheme; DBG_DTOR( GalleryThemeCacheEntry, NULL ); }
+                                    mpThemeEntry( pThemeEntry ), mpTheme( pTheme ) {}
+                                ~GalleryThemeCacheEntry() { delete mpTheme; }
 
     const GalleryThemeEntry*        GetThemeEntry() const { return mpThemeEntry; }
     GalleryTheme*                           GetTheme() const { return mpTheme; }
