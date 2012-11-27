@@ -122,6 +122,7 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/control/marktree \
     dbaccess/source/ui/control/opendoccontrols \
     dbaccess/source/ui/control/RelationControl \
+    dbaccess/source/ui/control/ScrollHelper \
     dbaccess/source/ui/control/sqledit \
     dbaccess/source/ui/control/SqlNameEdit \
     dbaccess/source/ui/control/statusbarontroller \
@@ -227,6 +228,7 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/querydesign/TableConnection \
     dbaccess/source/ui/querydesign/TableConnectionData \
     dbaccess/source/ui/querydesign/TableFieldDescription \
+    dbaccess/source/ui/querydesign/TableFieldInfo \
     dbaccess/source/ui/querydesign/TableWindow \
     dbaccess/source/ui/querydesign/TableWindowAccess \
     dbaccess/source/ui/querydesign/TableWindowData \
@@ -264,11 +266,6 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/uno/unoDirectSql \
     dbaccess/source/ui/uno/unosqlmessage \
     dbaccess/source/ui/uno/UserSettingsDlg \
-))
-
-$(eval $(call gb_Library_add_noexception_objects,dbu,\
-    dbaccess/source/ui/control/ScrollHelper \
-    dbaccess/source/ui/querydesign/TableFieldInfo \
 ))
 
 ifeq ($(GUI),WNT)
