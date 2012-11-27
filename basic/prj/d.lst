@@ -13,10 +13,7 @@ mkdir: %COMMON_DEST%\res%_EXT%
 ..\%__SRC%\bin\sb?????.dll %_DEST%\bin%_EXT%\sb?????.dll
 ..\%__SRC%\bin\sb?????.sym %_DEST%\bin%_EXT%\sb?????.sym
 ..\%__SRC%\misc\sb?????.map %_DEST%\bin%_EXT%\sb?????.map
-..\%__SRC%\bin\stt*.res %_DEST%\bin%_EXT%\stt*.res
 ..\%__SRC%\bin\sb*.res %_DEST%\bin%_EXT%\sb*.res
-..\%__SRC%\lib\app.lib %_DEST%\lib%_EXT%\app.lib
-..\%__SRC%\lib\libapp.a %_DEST%\lib%_EXT%\libapp.a
 ..\%__SRC%\lib\sample.lib %_DEST%\lib%_EXT%\sample.lib
 ..\%__SRC%\lib\libsample.a %_DEST%\lib%_EXT%\libsample.a
 

@@ -80,7 +80,7 @@ STD_RES_FILE( gid_File_Res_Spa, spa )
 
 #endif
 
-STD_RES_FILE( gid_File_Res_Stt, stt )
+#STD_RES_FILE( gid_File_Res_Stt, stt )
 STD_RES_FILE( gid_File_Res_Sb, sb )
 
 STD_RES_FILE( gid_File_Res_Svl, svl )

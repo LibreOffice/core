@@ -130,18 +130,18 @@ DEF3DES         =Communication
 
 # --- TESTTOOL IDE ------------------------------------------------------
 
-APP1TARGET=testtool
+#APP1TARGET=testtool
 
-.IF "$(GUI)"=="UNX" || ("$(COM)"=="GCC" && "$(GUI)"=="WNT")
-APP1DEPN+=$(SHL2TARGETN) $(SHL3TARGETN)
-.ELSE
-APP1DEPN+=$(SHL2IMPLIBN) $(SHL3IMPLIBN)
-.ENDIF
-APP1STDLIBS= \
+#.IF "$(GUI)"=="UNX" || ("$(COM)"=="GCC" && "$(GUI)"=="WNT")
+#APP1DEPN+=$(SHL2TARGETN) $(SHL3TARGETN)
+#.ELSE
+#APP1DEPN+=$(SHL2IMPLIBN) $(SHL3IMPLIBN)
+#.ENDIF
+#APP1STDLIBS= \
         $(APP3RDLIB) \
         $(SAMPLE3RDLIB)
 
-APP1STDLIBS+= \
+#APP1STDLIBS+= \
             $(CPPUHELPERLIB) \
             $(TOOLSLIB) \
             $(UNOTOOLSLIB) \
@@ -156,54 +156,54 @@ APP1STDLIBS+= \
             $(SIMPLECMLIB) \
             $(COMMUNILIB)
 
-.IF "$(GUI)"=="UNX"
-APP1STDLIBS+= \
+#.IF "$(GUI)"=="UNX"
+#APP1STDLIBS+= \
             $(VOSLIB) $(SALLIB) $(BASICLIB)
-APP1STDLIBS+=$(CPPULIB)
-.ENDIF
-.IF "$(GUI)"=="WNT" || "$(COM)"=="GCC"
-APP1STDLIBS+=$(CPPULIB)
-.ENDIF
+#APP1STDLIBS+=$(CPPULIB)
+#.ENDIF
+#.IF "$(GUI)"=="WNT" || "$(COM)"=="GCC"
+#APP1STDLIBS+=$(CPPULIB)
+#.ENDIF
 
-.IF "$(GUI)"=="WNT"
-APP1STDLIBS += \
+#.IF "$(GUI)"=="WNT"
+#APP1STDLIBS += \
         $(SHELL32LIB) \
         $(ADVAPI32LIB)
-.ENDIF # "$(GUI)"=="WNT"
+#.ENDIF # "$(GUI)"=="WNT"
 
 
 
-.IF "$(OS)" == "SOLARIS"
-APP1STDLIBS+= -lXm
-.ENDIF
+#.IF "$(OS)" == "SOLARIS"
+#APP1STDLIBS+= -lXm
+#.ENDIF
 
-.IF "$(GUI)" == "UNX"
-.IF "$(OS)" == "LINUX"
-APP1STDLIBS+= -lXext -lX11 -lSM -lICE
-.ENDIF
-.IF "$(OS)"=="MACOSX"
-APP1STDLIBS+= -lapp -lsample
-.ENDIF
-.ENDIF
+#.IF "$(GUI)" == "UNX"
+#.IF "$(OS)" == "LINUX"
+#APP1STDLIBS+= -lXext -lX11 -lSM -lICE
+#.ENDIF
+#.IF "$(OS)"=="MACOSX"
+#APP1STDLIBS+= -lapp -lsample
+#.ENDIF
+#.ENDIF
 
 
 
-APP1LIBS=\
+#APP1LIBS=\
         $(LB)$/testtool.lib
 
-APP1OBJS=       $(OBJ)$/testbasi.obj \
+#APP1OBJS=       $(OBJ)$/testbasi.obj \
                 $(OBJ)$/cmdbasestream.obj \
                 $(OBJ)$/svcommstream.obj
 
 # --- TESTTOOL MINIAPP ------------------------------------------------------
 # ressources are linked here
 
-RESLIB1NAME=tma
-RESLIB1SRSFILES= \
+#RESLIB1NAME=tma
+#RESLIB1SRSFILES= \
                 $(SRS)$/miniapp.srs
 
-APP3TARGET=miniapp
-APP3STDLIBS= \
+#APP3TARGET=miniapp
+#APP3STDLIBS= \
             $(CPPULIB) \
             $(CPPUHELPERLIB) \
             $(UCBHELPERLIB) \
@@ -214,31 +214,31 @@ APP3STDLIBS= \
             $(SVTOOLLIB) \
             $(VCLLIB)
 
-.IF "$(GUI)"=="UNX"
-.IF "$(OS)"=="MACOSX"
-APP3STDLIBS+= \
+#.IF "$(GUI)"=="UNX"
+#.IF "$(OS)"=="MACOSX"
+#APP3STDLIBS+= \
             $(VOSLIB) $(SALLIB) $(LIBSTLPORT)
-.ELSE
-APP3STDLIBS+= \
+#.ELSE
+#APP3STDLIBS+= \
             $(VOSLIB) $(SALLIB)
-.ENDIF
-.ENDIF
+#.ENDIF
+#.ENDIF
 # $(AUTOMATIONLIB) is build in SHL1TARGET
-.IF "$(GUI)"=="UNX" || ("$(COM)"=="GCC" && "$(GUI)"=="WNT")
-APP3DEPN=$(SHL1TARGETN)
-.ELSE
-APP3DEPN=$(SHL1IMPLIBN)
-.ENDIF
+#.IF "$(GUI)"=="UNX" || ("$(COM)"=="GCC" && "$(GUI)"=="WNT")
+#APP3DEPN=$(SHL1TARGETN)
+#.ELSE
+#APP3DEPN=$(SHL1IMPLIBN)
+#.ENDIF
 
-APP3LIBS= \
+#APP3LIBS= \
         $(LB)$/miniapp.lib
 
-.IF "$(GUI)" != "UNX"
-.IF "$(COM)" != "GCC"
+#.IF "$(GUI)" != "UNX"
+#.IF "$(COM)" != "GCC"
 #		win16 braucht ein appobj
-APP3OBJS=		$(OBJ)$/testapp.obj
-.ENDIF
-.ENDIF
+#APP3OBJS=		$(OBJ)$/testapp.obj
+#.ENDIF
+#.ENDIF
 
 # --- Targets -----------------------------------------------------------
 

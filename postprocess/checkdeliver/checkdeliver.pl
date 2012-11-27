@@ -48,7 +48,6 @@ my @exceptionmodlist = (
                         "postprocess",
                         "instset.*native",
                         "smoketest.*native",
-                        "testautomation",
                         "testgraphical"
                        ); # modules not yet delivered
 

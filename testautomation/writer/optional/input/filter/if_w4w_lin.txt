@@ -1,6 +1,0 @@
-Ami Pro 1.x-3.1 (*.sam)
-Microsoft MacWord 5.x (*.doc)
-Microsoft WinWord 2.x (*.doc)
-Microsoft WinWord 5 (*.doc)
-Microsoft Word 6.x (*.txt)
-WordPerfect (Win) 6.0 - 7.0 (*.wpd)

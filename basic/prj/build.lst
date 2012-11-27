@@ -1,7 +1,6 @@
 sb	basic	:    L10N:l10n offuh oovbaapi svtools xmlscript framework salhelper LIBXSLT:libxslt NULL
 sb	basic									usr1	-	all	sb_mkout NULL
 sb	basic\inc								nmake	-	all	sb_inc NULL
-sb	basic\source\app						nmake	-	all	sb_app sb_class sb_inc NULL
 sb	basic\source\basmgr						nmake	-	all	sb_mgr sb_inc NULL
 sb	basic\source\classes					nmake	-	all	sb_class sb_inc NULL
 sb	basic\source\comp						nmake	-	all	sb_comp sb_inc NULL
@@ -9,5 +8,5 @@ sb	basic\source\runtime					nmake	-	all	sb_rt sb_inc sb_class NULL
 sb	basic\source\sample						nmake	-	all	sb_samp sb_inc NULL
 sb	basic\source\sbx						nmake	-	all	sb_sbx sb_inc NULL
 sb	basic\source\uno                        nmake	-	all	sb_uno sb_inc NULL
-sb	basic\util								nmake	-	all	sb_util sb_app sb_class sb_comp sb_mgr sb_rt sb_samp sb_sbx sb_uno NULL
+sb	basic\util								nmake	-	all	sb_util sb_class sb_comp sb_mgr sb_rt sb_samp sb_sbx sb_uno NULL
 
