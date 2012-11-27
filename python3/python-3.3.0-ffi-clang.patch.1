@@ -1,0 +1,40 @@
+fix clang build problem:
+
+python3/Modules/_ctypes/libffi/src/x86/sysv.S:389:17: error: invalid variant ´rel´
+Patch by: Rafael Avila de Espindola <respindola at mozilla dot com>
+https://417179.bugs.gentoo.org/attachment.cgi?id=313299
+
+diff -ru python3.old/Modules/_ctypes/libffi/configure.ac python3/Modules/_ctypes/libffi/configure.ac
+--- python3.old/Modules/_ctypes/libffi/configure.ac	2012-09-29 10:00:42.000000000 +0200
++++ python3/Modules/_ctypes/libffi/configure.ac	2012-11-27 16:12:44.421564130 +0100
+@@ -303,10 +303,10 @@
+ if test x$TARGET = xX86 || test x$TARGET = xX86_WIN32 || test x$TARGET = xX86_64; then
+     AC_CACHE_CHECK([assembler supports pc related relocs],
+ 	libffi_cv_as_x86_pcrel, [
+-	libffi_cv_as_x86_pcrel=yes
++	libffi_cv_as_x86_pcrel=no
+ 	echo '.text; foo: nop; .data; .long foo-.; .text' > conftest.s
+-	if $CC $CFLAGS -c conftest.s 2>&1 | $EGREP -i 'illegal|warning' > /dev/null; then
+-	    libffi_cv_as_x86_pcrel=no
++	if $CC $CFLAGS -c conftest.s > /dev/null; then
++	    libffi_cv_as_x86_pcrel=yes
+ 	fi
+ 	])
+     if test "x$libffi_cv_as_x86_pcrel" = xyes; then
+diff -ru python3.old/Modules/_ctypes/libffi/configure python3/Modules/_ctypes/libffi/configure
+--- python3.old/Modules/_ctypes/libffi/configure	2012-09-29 10:00:42.000000000 +0200
++++ python3/Modules/_ctypes/libffi/configure	2012-11-27 16:12:44.420564130 +0100
+@@ -14322,10 +14322,10 @@
+   $as_echo_n "(cached) " >&6
+ else
+ 
+-	libffi_cv_as_x86_pcrel=yes
++	libffi_cv_as_x86_pcrel=no
+ 	echo '.text; foo: nop; .data; .long foo-.; .text' > conftest.s
+-	if $CC $CFLAGS -c conftest.s 2>&1 | $EGREP -i 'illegal|warning' > /dev/null; then
+-	    libffi_cv_as_x86_pcrel=no
++	if $CC $CFLAGS -c conftest.s > /dev/null; then
++	    libffi_cv_as_x86_pcrel=yes
+ 	fi
+ 
+ fi
