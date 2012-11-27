@@ -621,8 +621,6 @@ void Clipboard::StartDrag (
 
 void Clipboard::DragFinished (sal_Int8 nDropAction)
 {
-    // SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
-
     if (mnDragFinishedUserEventId == 0)
     {
         if ( ! Application::PostUserEvent(
