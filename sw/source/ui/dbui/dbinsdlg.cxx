@@ -1765,6 +1765,9 @@ void SwInsertDBColAutoPilot::Load()
                 rtl::OUString sNumberFormatLocale;
                 pSubProps[5] >>= sNumberFormatLocale;
 
+                /* FIXME-BCP47: handle language tags, and cope with the wrong
+                 * Country-Language string that
+                 * SwInsertDBColAutoPilot::Commit() writes so far! */
                 lang::Locale aLocale;
                 aLocale.Language = sNumberFormatLocale.copy(0, 2);
                 aLocale.Country = sNumberFormatLocale.copy(3, 2);
