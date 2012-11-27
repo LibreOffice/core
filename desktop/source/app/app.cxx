@@ -349,18 +349,14 @@ ResMgr* Desktop::GetDesktopResManager()
             // Use VCL to get the correct language specific message as we
             // are in the bootstrap process and not able to get the installed
             // language!!
-            /* FIXME-BCP47: handle language tag! */
             OUString aUILocaleString = LanguageSelection::getLanguageString();
-            sal_Int32 nIndex = 0;
-            OUString aLanguage = aUILocaleString.getToken( 0, '-', nIndex);
-            OUString aCountry = aUILocaleString.getToken( 0, '-', nIndex);
-            OUString aVariant = aUILocaleString.getToken( 0, '-', nIndex);
-
-            ::com::sun::star::lang::Locale aLocale( aLanguage, aCountry, aVariant );
-
+            LanguageTag aLanguageTag( aUILocaleString);
+            //! ResMgr may modify the Locale for fallback!
+            ::com::sun::star::lang::Locale aLocale( aLanguageTag.getLocale());
             Desktop::pResMgr = ResMgr::SearchCreateResMgr( "dkt", aLocale);
+            aLanguageTag.reset( aLocale);
             AllSettings as = GetSettings();
-            as.SetUILanguageTag(LanguageTag(aLocale));
+            as.SetUILanguageTag(aLanguageTag);
             SetSettings(as);
         }
     }
