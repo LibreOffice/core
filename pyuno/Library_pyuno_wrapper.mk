@@ -37,23 +37,10 @@ $(eval $(call gb_Library_set_include,pyuno_wrapper,\
     $$(INCLUDE) \
 ))
 
-# not using here external
-# because we do not want to link here
-# against python!
-# we need only -Idirective
-ifeq ($(SYSTEM_PYTHON),YES)
-$(eval $(call gb_Library_set_include,pyuno_wrapper,\
-    $(PYTHON_CFLAGS) \
-    $$(INCLUDE) \
+# not using external "python" because we do not want to link against python
+$(eval $(call gb_Library_use_externals,pyuno_wrapper,\
+    python_headers \
 ))
-else
-$(eval $(call gb_Library_set_include,pyuno_wrapper,\
-	-I$(call gb_UnpackedTarball_get_dir,python3) \
-	-I$(call gb_UnpackedTarball_get_dir,python3)/PC \
-	-I$(call gb_UnpackedTarball_get_dir,python3)/Include \
-    $$(INCLUDE) \
-))
-endif
 
 ifneq ($(GUI)$(COM),WNTMSC)
 ifeq ($(filter DRAGONFLY FREEBSD NETBSD OPENBSD MACOSX,$(OS)),)

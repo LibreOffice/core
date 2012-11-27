@@ -1941,9 +1941,10 @@ endif # ENABLE_GCONF
 
 
 # PYTHON
+# extra python_headers external because pyuno wrapper must not link python
 ifeq ($(SYSTEM_PYTHON),YES)
 
-define gb_LinkTarget__use_python
+define gb_LinkTarget__use_python_headers
 $(call gb_LinkTarget_add_defs,$(1),\
 	$(filter-out -I%,$(PYTHON_CFLAGS)) \
 )
@@ -1953,6 +1954,11 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 
+endef
+
+define gb_LinkTarget__use_python
+$(call gb_LinkTarget__use_python_headers,$(1))
+
 $(call gb_LinkTarget_add_libs,$(1),\
 	$(PYTHON_LIBS) \
 )
@@ -1961,7 +1967,18 @@ endef
 
 else # !SYSTEM_PYTHON
 
+define gb_LinkTarget__use_python_headers
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,python3) \
+	-I$(call gb_UnpackedTarball_get_dir,python3)/PC \
+	-I$(call gb_UnpackedTarball_get_dir,python3)/Include \
+	$$(INCLUDE) \
+)
+
+endef
+
 define gb_LinkTarget__use_python
+$(call gb_LinkTarget__use_python_headers,$(1))
 
 ifeq ($(OS),WNT)
 $(call gb_LinkTarget_add_libs,$(1),\
@@ -1977,13 +1994,6 @@ $(call gb_LinkTarget_use_libraries,$(1),\
 	python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m \
 )
 endif
-
-$(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,python3) \
-	-I$(call gb_UnpackedTarball_get_dir,python3)/PC \
-	-I$(call gb_UnpackedTarball_get_dir,python3)/Include \
-	$$(INCLUDE) \
-)
 
 endef
 
