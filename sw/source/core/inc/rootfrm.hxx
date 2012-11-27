@@ -82,7 +82,7 @@ class SwRootFrm: public SwLayoutFrm
     bool    mbNeedGrammarCheck;     // true when sth needs to be checked (not necessarily started yet!)
 
     static SwLayVout     *pVout;
-    static sal_Bool           bInPaint;     //Schutz gegen doppelte Paints.
+    static bool           bInPaint;     //Schutz gegen doppelte Paints.
     static sal_Bool           bNoVirDev;    //Bei SystemPaints kein virt. Device
 
     sal_Bool    bCheckSuperfluous   :1; //Leere Seiten suchen?
@@ -291,7 +291,7 @@ public:
     const SwPageFrm *GetLastPage() const { return pLastPage; }
           SwPageFrm *GetLastPage()       { return pLastPage; }
 
-    static sal_Bool IsInPaint() { return bInPaint; }
+    static bool IsInPaint() { return bInPaint; }
 
     static void SetNoVirDev( const sal_Bool bNew ) { bNoVirDev = bNew; }
 

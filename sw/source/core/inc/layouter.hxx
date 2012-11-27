@@ -110,7 +110,7 @@ public:
     ~SwLayouter();
     void InsertEndnotes( SwSectionFrm* pSect );
     void CollectEndnote( SwFtnFrm* pFtn );
-    sal_Bool HasEndnotes() const;
+    bool HasEndnotes() const;
 
     void LoopControl( SwPageFrm* pPage, sal_uInt8 nLoop );
     void EndLoopControl();

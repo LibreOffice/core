@@ -2915,7 +2915,7 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
 
     PROTOCOL( this, PROT_FILE_INIT, 0, 0)
 
-    sal_Bool bResetRootPaint = sal_False;
+    bool bResetRootPaint = false;
     ViewShell *pSh = pCurrShell;
 
     if ( pSh->GetWin() )
@@ -2931,7 +2931,7 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
         }
     }
     else
-        SwRootFrm::bInPaint = bResetRootPaint = sal_True;
+        SwRootFrm::bInPaint = bResetRootPaint = true;
 
     SwSavePaintStatics *pStatics = 0;
     if ( pGlobalShell )
@@ -3250,7 +3250,7 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
     DELETEZ( pLines );
 
     if ( bResetRootPaint )
-        SwRootFrm::bInPaint = sal_False;
+        SwRootFrm::bInPaint = false;
     if ( pStatics )
         delete pStatics;
     else

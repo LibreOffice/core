@@ -100,11 +100,11 @@ void SwLayCacheImpl::Insert( sal_uInt16 nType, sal_uLong nIndex, xub_StrLen nOff
     aOffset.push_back( nOffset );
 }
 
-sal_Bool SwLayCacheImpl::Read( SvStream& rStream )
+bool SwLayCacheImpl::Read( SvStream& rStream )
 {
-    SwLayCacheIoImpl aIo( rStream, sal_False );
+    SwLayCacheIoImpl aIo( rStream, false );
     if( aIo.GetMajorVersion() > SW_LAYCACHE_IO_VERSION_MAJOR )
-        return sal_False;
+        return false;
 
     // Due to an evil bug in the layout cache (#102759#), we cannot trust the
     // sizes of fly frames which have been written using the "old" layout cache.
@@ -184,7 +184,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
 {
     if( rDoc.GetCurrentLayout() ) // the layout itself ..   //swmod 080218
     {
-        SwLayCacheIoImpl aIo( rStream, sal_True );
+        SwLayCacheIoImpl aIo( rStream, true );
         // We want to save the relative index, so we need the index
         // of the first content
         sal_uLong nStartOfContent = rDoc.GetNodes().GetEndOfContent().
@@ -506,7 +506,7 @@ SwActualSection::SwActualSection( SwActualSection *pUp,
 
 SwLayHelper::SwLayHelper( SwDoc *pD, SwFrm* &rpF, SwFrm* &rpP, SwPageFrm* &rpPg,
             SwLayoutFrm* &rpL, SwActualSection* &rpA, sal_Bool &rB,
-            sal_uLong nNodeIndex, sal_Bool bCache )
+            sal_uLong nNodeIndex, bool bCache )
     : rpFrm( rpF ), rpPrv( rpP ), rpPage( rpPg ), rpLay( rpL ),
       rpActualSection( rpA ), rbBreakAfter(rB), pDoc(pD), nMaxParaPerPage( 25 ),
       nParagraphCnt( bCache ? 0 : USHRT_MAX ), bFirst( bCache )
@@ -605,7 +605,7 @@ sal_uLong SwLayHelper::CalcPageCount()
 
 /*
  * SwLayHelper::CheckInsertPage()
- * inserts a page and return sal_True, if
+ * inserts a page and return true, if
  * - the break after flag is set
  * - the actual content wants a break before
  * - the maximum count of paragraph/rows is reached
@@ -614,9 +614,9 @@ sal_uLong SwLayHelper::CalcPageCount()
  * wants a break after.
  */
 
-sal_Bool SwLayHelper::CheckInsertPage()
+bool SwLayHelper::CheckInsertPage()
 {
-    sal_Bool bEnd = 0 == rpPage->GetNext();
+    bool bEnd = 0 == rpPage->GetNext();
     const SwAttrSet* pAttr = rpFrm->GetAttrSet();
     const SvxFmtBreakItem& rBrk = pAttr->GetBreak();
     const SwFmtPageDesc& rDesc = pAttr->GetPageDesc();
@@ -627,7 +627,7 @@ sal_Bool SwLayHelper::CheckInsertPage()
                               0 :
                               rDesc.GetPageDesc();
 
-    sal_Bool bBrk = nParagraphCnt > nMaxParaPerPage || rbBreakAfter;
+    bool bBrk = nParagraphCnt > nMaxParaPerPage || rbBreakAfter;
     rbBreakAfter = rBrk.GetBreak() == SVX_BREAK_PAGE_AFTER ||
                    rBrk.GetBreak() == SVX_BREAK_PAGE_BOTH;
     if ( !bBrk )
@@ -644,12 +644,12 @@ sal_Bool SwLayHelper::CheckInsertPage()
             if ( 0 != (nPgNum = rDesc.GetNumOffset()) )
                 ((SwRootFrm*)rpPage->GetUpper())->SetVirtPageNum(sal_True);
         }
-        sal_Bool bNextPageOdd = !rpPage->OnRightPage();
-        sal_Bool bInsertEmpty = sal_False;
+        bool bNextPageOdd = !rpPage->OnRightPage();
+        bool bInsertEmpty = false;
         if( nPgNum && bNextPageOdd != ( ( nPgNum % 2 ) != 0 ) )
         {
             bNextPageOdd = !bNextPageOdd;
-            bInsertEmpty = sal_True;
+            bInsertEmpty = true;
         }
         // If the page style is changing, we'll have a first page.
         bool bNextPageFirst = pDesc != rpPage->GetPageDesc();
@@ -675,9 +675,9 @@ sal_Bool SwLayHelper::CheckInsertPage()
         rpLay = rpPage->FindBodyCont();
         while( rpLay->Lower() )
             rpLay = (SwLayoutFrm*)rpLay->Lower();
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 /*
@@ -690,10 +690,10 @@ sal_Bool SwLayHelper::CheckInsertPage()
  *  one page, in this case the needed count of pages will inserted.
  */
 
-sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
+bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
 {
-    sal_Bool bRet = sal_False;
-    sal_Bool bLongTab = sal_False;
+    bool bRet = false;
+    bool bLongTab = false;
     sal_uLong nMaxRowPerPage( 0 );
     nNodeIndex -= nStartOfContent;
     sal_uInt16 nRows( 0 );
@@ -733,7 +733,7 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                 } while( pTmp );
                 nMaxRowPerPage = Max( sal_uLong(2), nMaxParaPerPage / nCnt );
             }
-            bLongTab = sal_True;
+            bLongTab = true;
         }
     }
     else
@@ -743,7 +743,7 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
         ( pImpl->GetBreakOfst( nIndex ) < STRING_LEN ||
           ( ++nIndex < pImpl->size() &&
           pImpl->GetBreakIndex( nIndex ) == nNodeIndex ) ) )
-        bFirst = sal_False;
+        bFirst = false;
 #if OSL_DEBUG_LEVEL > 1
     sal_uLong nBreakIndex = ( pImpl && nIndex < pImpl->size() ) ?
                         pImpl->GetBreakIndex(nIndex) : 0xffff;
@@ -787,12 +787,12 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
 
                 if( nOfst < STRING_LEN )
                 {
-                    sal_Bool bSplit = sal_False;
+                    bool bSplit = false;
                     sal_uInt16 nRepeat( 0 );
                     if( !bLongTab && rpFrm->IsTxtFrm() &&
                         SW_LAYCACHE_IO_REC_PARA == nType &&
                         nOfst<((SwTxtFrm*)rpFrm)->GetTxtNode()->GetTxt().Len() )
-                        bSplit = sal_True;
+                        bSplit = true;
                     else if( rpFrm->IsTabFrm() && nRowCount < nOfst &&
                              ( bLongTab || SW_LAYCACHE_IO_REC_TABLE == nType ) )
                     {
@@ -876,7 +876,7 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                 if( rpPrv && rpPrv->IsTxtFrm() && !rpPrv->GetValidSizeFlag() )
                     rpPrv->Frm().Height( rpPrv->GetUpper()->Prt().Height() );
 
-                bRet = sal_True;
+                bRet = true;
                 rpPrv = 0;
                 nParagraphCnt = 0;
 
@@ -913,7 +913,7 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
         } while( bLongTab || ( pImpl && nIndex < pImpl->size() &&
                  (*pImpl)[ nIndex ] == nNodeIndex ) );
     }
-    bFirst = sal_False;
+    bFirst = false;
     return bRet;
 }
 
@@ -1034,12 +1034,12 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
  * the rpPage parameter to the right page, if possible.
  */
 
-sal_Bool SwLayHelper::CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly )
+bool SwLayHelper::CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly )
 {
     if( !pFly->GetAnchorFrm() || !pFly->GetVirtDrawObj() ||
         pFly->GetAnchorFrm()->FindFooterOrHeader() )
-        return sal_False;
-    sal_Bool bRet = sal_False;
+        return false;
+    bool bRet = false;
     SwDoc* pDoc = rpPage->GetFmt()->GetDoc();
     SwLayCacheImpl *pCache = pDoc->GetLayoutCache() ?
                              pDoc->GetLayoutCache()->LockImpl() : NULL;
@@ -1082,7 +1082,7 @@ sal_Bool SwLayHelper::CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly )
                     pFly->Frm().Width( pFlyC->Width() );
                     pFly->Frm().Height( pFlyC->Height() );
                 }
-                bRet = sal_True;
+                bRet = true;
             }
         }
         pDoc->GetLayoutCache()->UnlockImpl();
@@ -1092,12 +1092,12 @@ sal_Bool SwLayHelper::CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly )
 
 // -----------------------------------------------------------------------------
 
-SwLayCacheIoImpl::SwLayCacheIoImpl( SvStream& rStrm, sal_Bool bWrtMd ) :
+SwLayCacheIoImpl::SwLayCacheIoImpl( SvStream& rStrm, bool bWrtMd ) :
     pStream( &rStrm ),
     nMajorVersion(SW_LAYCACHE_IO_VERSION_MAJOR),
     nMinorVersion(SW_LAYCACHE_IO_VERSION_MINOR),
     bWriteMode( bWrtMd ),
-    bError( sal_False  )
+    bError( false  )
 {
     if( bWriteMode )
         *pStream << nMajorVersion
@@ -1108,9 +1108,9 @@ SwLayCacheIoImpl::SwLayCacheIoImpl( SvStream& rStrm, sal_Bool bWrtMd ) :
                  >> nMinorVersion;
 }
 
-sal_Bool SwLayCacheIoImpl::OpenRec( sal_uInt8 cType )
+bool SwLayCacheIoImpl::OpenRec( sal_uInt8 cType )
 {
-    sal_Bool bRes = sal_True;
+    bool bRes = true;
     sal_uInt32 nPos = pStream->Tell();
     if( bWriteMode )
     {
@@ -1128,8 +1128,8 @@ sal_Bool SwLayCacheIoImpl::OpenRec( sal_uInt8 cType )
             OSL_ENSURE( nVal, "OpenRec: Record-Header is 0" );
             OSL_ENSURE( cRecTyp == cType, "OpenRec: Wrong Record Type" );
             aRecords.push_back( RecTypeSize(0, pStream->Tell()) );
-            bRes = sal_False;
-            bError = sal_True;
+            bRes = false;
+            bError = true;
         }
         else
         {
@@ -1142,9 +1142,9 @@ sal_Bool SwLayCacheIoImpl::OpenRec( sal_uInt8 cType )
 
 // Close record
 
-sal_Bool SwLayCacheIoImpl::CloseRec( sal_uInt8 )
+bool SwLayCacheIoImpl::CloseRec( sal_uInt8 )
 {
-    sal_Bool bRes = sal_True;
+    bool bRes = true;
     OSL_ENSURE( !aRecords.empty(), "CloseRec: no levels" );
     if( !aRecords.empty() )
     {
@@ -1158,7 +1158,7 @@ sal_Bool SwLayCacheIoImpl::CloseRec( sal_uInt8 )
             *pStream << nVal;
             pStream->Seek( nPos );
             if( pStream->GetError() != SVSTREAM_OK )
-                 bRes = sal_False;
+                 bRes = false;
         }
         else
         {
@@ -1168,16 +1168,16 @@ sal_Bool SwLayCacheIoImpl::CloseRec( sal_uInt8 )
             {
                 pStream->Seek( n );
                 if( n < nPos )
-                     bRes = sal_False;
+                     bRes = false;
             }
             if( pStream->GetErrorCode() != SVSTREAM_OK )
-                bRes = sal_False;
+                bRes = false;
         }
         aRecords.pop_back();
     }
 
     if( !bRes )
-        bError = sal_True;
+        bError = true;
 
     return bRes;
 }
@@ -1206,7 +1206,7 @@ sal_uInt8 SwLayCacheIoImpl::Peek()
         if( pStream->GetErrorCode() != SVSTREAM_OK )
         {
             c = 0;
-            bError = sal_True;
+            bError = true;
         }
     }
     return c;

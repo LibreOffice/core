@@ -1646,7 +1646,7 @@ void SwFtnBossFrm::AppendFtn( SwCntntFrm *pRef, SwTxtFtn *pAttr )
             {
                 SwPageDesc *pDesc = pDoc->GetEndNoteInfo().GetPageDesc( *pDoc );
                 pPage = ::InsertNewPage( *pDesc, pPage->GetUpper(),
-                        !pPage->OnRightPage(), false, sal_False, sal_True, 0 );
+                        !pPage->OnRightPage(), false, false, sal_True, 0 );
                 pPage->SetEndNotePage( sal_True );
                 bChgPage = true;
             }
@@ -1690,7 +1690,7 @@ void SwFtnBossFrm::AppendFtn( SwCntntFrm *pRef, SwTxtFtn *pAttr )
         {
             SwPageDesc *pDesc = pDoc->GetFtnInfo().GetPageDesc( *pDoc );
             pPage = ::InsertNewPage( *pDesc, pPage->GetUpper(),
-                !pPage->OnRightPage(), false, sal_False, sal_True, pPage->GetNext() );
+                !pPage->OnRightPage(), false, false, sal_True, pPage->GetNext() );
             bChgPage = true;
         }
         else

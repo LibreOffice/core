@@ -1128,7 +1128,7 @@ sal_Bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
 {
     sal_Bool bRet = sal_False;
     const ViewShell *pSh = pRoot->GetCurrShell();
-    const sal_Bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
+    const bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
 
     // If the page is not valid, we quickly format it, otherwise
     // there's gonna be no end of trouble
@@ -1139,7 +1139,7 @@ sal_Bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
             /// OD 15.10.2002 #103517# - format complete page
             /// Thus, loop on all lowers of the page <prPage>, instead of only
             /// format its first lower.
-            /// NOTE: In online layout (bBrowse == sal_True) a page can contain
+            /// NOTE: In online layout (bBrowse == true) a page can contain
             ///     a header frame and/or a footer frame beside the body frame.
             prPage->Calc();
             SwFrm* pPageLowerFrm = prPage->Lower();
@@ -1192,7 +1192,7 @@ sal_Bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
         }
         if ( pCntnt )
         {
-            sal_Bool bTstCnt = sal_True;
+            bool bTstCnt = true;
             if ( bBrowse )
             {
                 // Is the Cnt before already invisible?
@@ -1206,7 +1206,7 @@ sal_Bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
                      (pLst->Frm().Top() >= rVis.Bottom() ||
                       pLst->Frm().Left()>= rVis.Right()) )
                 {
-                    bTstCnt = sal_False;
+                    bTstCnt = false;
                 }
             }
 
@@ -1355,7 +1355,7 @@ sal_Bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, sal_Bool bAddRect )
         return sal_False;
 
     sal_Bool bChanged = sal_False;
-    sal_Bool bAlreadyPainted = sal_False;
+    bool bAlreadyPainted = false;
     // OD 11.11.2002 #104414# - remember frame at complete paint
     SwRect aFrmAtCompletePaint;
 
@@ -1375,7 +1375,7 @@ sal_Bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, sal_Bool bAddRect )
         if ( aOldFrame != pLay->Frm() )
             bChanged = sal_True;
 
-        sal_Bool bNoPaint = sal_False;
+        bool bNoPaint = false;
         if ( pLay->IsPageBodyFrm() &&
              pLay->Frm().Pos() == aOldRect.Pos() &&
              pLay->Lower() )
@@ -1384,7 +1384,7 @@ sal_Bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, sal_Bool bAddRect )
             // Limitations because of headers / footers
             if( pSh && pSh->GetViewOptions()->getBrowseMode() &&
                 !( pLay->IsCompletePaint() && pLay->FindPageFrm()->FindFtnCont() ) )
-                bNoPaint = sal_True;
+                bNoPaint = true;
         }
 
         if ( !bNoPaint && IsPaint() && bAddRect && (pLay->IsCompletePaint() || bChanged) )
@@ -1434,7 +1434,7 @@ sal_Bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, sal_Bool bAddRect )
             else
             {
                 pImp->GetShell()->AddPaintRect( aPaint );
-                bAlreadyPainted = sal_True;
+                bAlreadyPainted = true;
                 // OD 11.11.2002 #104414# - remember frame at complete paint
                 aFrmAtCompletePaint = pLay->Frm();
             }
@@ -1625,7 +1625,7 @@ sal_Bool SwLayAction::FormatLayoutTab( SwTabFrm *pTab, sal_Bool bAddRect )
     pTimerAccess->BlockIdling();
 
     sal_Bool bChanged = sal_False;
-    sal_Bool bPainted = sal_False;
+    bool bPainted = false;
 
     const SwPageFrm *pOldPage = pTab->FindPageFrm();
 
@@ -1698,7 +1698,7 @@ sal_Bool SwLayAction::FormatLayoutTab( SwTabFrm *pTab, sal_Bool bAddRect )
             {
                 pImp->GetShell()->AddPaintRect( aPaintFrm );
                 bAddRect = sal_False;
-                bPainted = sal_True;
+                bPainted = true;
             }
 
             if ( pTab->IsRetouche() && !pTab->GetNext() )
@@ -1772,23 +1772,23 @@ sal_Bool SwLayAction::FormatCntnt( const SwPageFrm *pPage )
 {
     const SwCntntFrm *pCntnt = pPage->ContainsCntnt();
     const ViewShell *pSh = pRoot->GetCurrShell();
-    const sal_Bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
+    const bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
 
     while ( pCntnt && pPage->IsAnLower( pCntnt ) )
     {
         // If the Cntnt didn't change, we can use a few shortcuts.
-        const sal_Bool bFull = !pCntnt->IsValid() || pCntnt->IsCompletePaint() ||
+        const bool bFull = !pCntnt->IsValid() || pCntnt->IsCompletePaint() ||
                            pCntnt->IsRetouche() || pCntnt->GetDrawObjs();
         if ( bFull )
         {
             // We do this so we don't have to search later on.
-            const sal_Bool bNxtCnt = IsCalcLayout() && !pCntnt->GetFollow();
+            const bool bNxtCnt = IsCalcLayout() && !pCntnt->GetFollow();
             const SwCntntFrm *pCntntNext = bNxtCnt ? pCntnt->GetNextCntntFrm() : 0;
             const SwCntntFrm *pCntntPrev = pCntnt->GetPrev() ? pCntnt->GetPrevCntntFrm() : 0;
 
             const SwLayoutFrm*pOldUpper  = pCntnt->GetUpper();
             const SwTabFrm *pTab = pCntnt->FindTabFrm();
-            const sal_Bool bInValid = !pCntnt->IsValid() || pCntnt->IsCompletePaint();
+            const bool bInValid = !pCntnt->IsValid() || pCntnt->IsCompletePaint();
             const sal_Bool bOldPaint = IsPaint();
             bPaint = bOldPaint && !(pTab && pTab == pOptTab);
             _FormatCntnt( pCntnt, pPage );
@@ -1860,7 +1860,7 @@ sal_Bool SwLayAction::FormatCntnt( const SwPageFrm *pPage )
             // the predecessor.
             // This way, we catch predecessors which are now responsible for
             // retouching, but the footers will be touched also.
-            sal_Bool bSetCntnt = sal_True;
+            bool bSetCntnt = true;
             if ( pCntntPrev )
             {
                 if ( !pCntntPrev->IsValid() && pPage->IsAnLower( pCntntPrev ) )
@@ -1869,7 +1869,7 @@ sal_Bool SwLayAction::FormatCntnt( const SwPageFrm *pPage )
                      pPage->GetPhyPageNum() < pCntnt->FindPageFrm()->GetPhyPageNum() )
                 {
                     pCntnt = pCntntPrev;
-                    bSetCntnt = sal_False;
+                    bSetCntnt = false;
                 }
             }
             if ( bSetCntnt )
@@ -2395,14 +2395,14 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
                 // solution would be disproportionally expensive.
                 //fix(18176):
                 SwViewImp *pViewImp = pSh->Imp();
-                sal_Bool bUnlock = sal_False;
+                bool bUnlock = false;
                 if ( pViewImp->GetRegion() )
                 {
                     pViewImp->DelRegion();
 
                     // Cause a repaint with virtual device.
                     pSh->LockPaint();
-                    bUnlock = sal_True;
+                    bUnlock = true;
                 }
 
                 if ( bCrsrShell )
@@ -2449,7 +2449,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
         const sal_Bool bSpell     = rVOpt.IsOnlineSpell();
         const sal_Bool bACmplWrd  = rVOpt.IsAutoCompleteWords();
         const sal_Bool bWordCount = pViewShell->getIDocumentStatistics()->GetDocStat().bModified;
-        const sal_Bool bSmartTags = !pViewShell->GetDoc()->GetDocShell()->IsHelpDocument() &&
+        const bool bSmartTags = !pViewShell->GetDoc()->GetDocShell()->IsHelpDocument() &&
                                 !pViewShell->GetDoc()->isXForms() &&
                                 SwSmartTagMgr::Get().IsSmartTagsEnabled(); // SMARTTAGS
 

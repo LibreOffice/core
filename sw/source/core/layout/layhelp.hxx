@@ -64,12 +64,12 @@ class SwLayCacheImpl : public std::vector<sal_uLong>
     std::deque<xub_StrLen> aOffset;
     std::vector<sal_uInt16> aType;
     SwPageFlyCache aFlyCache;
-    sal_Bool bUseFlyCache;
+    bool bUseFlyCache;
     void Insert( sal_uInt16 nType, sal_uLong nIndex, xub_StrLen nOffset );
 
 public:
     SwLayCacheImpl() {}
-    sal_Bool Read( SvStream& rStream );
+    bool Read( SvStream& rStream );
 
     sal_uLong GetBreakIndex( sal_uInt16 nIdx ) const { return std::vector<sal_uLong>::operator[]( nIdx ); }
     xub_StrLen GetBreakOfst( size_t nIdx ) const { return aOffset[ nIdx ]; }
@@ -78,7 +78,7 @@ public:
     sal_uInt16 GetFlyCount() const { return aFlyCache.size(); }
     SwFlyCache *GetFlyCache( sal_uInt16 nIdx ) { return &aFlyCache[ nIdx ]; }
 
-    sal_Bool IsUseFlyCache() const { return bUseFlyCache; }
+    bool IsUseFlyCache() const { return bUseFlyCache; }
 };
 
 /*************************************************************************
@@ -124,17 +124,17 @@ class SwLayHelper
     sal_uLong nStartOfContent;
     sal_uInt16 nIndex;                      // the index in the page break array
     sal_uInt16 nFlyIdx;                     // the index in the fly cache array
-    sal_Bool bFirst : 1;
+    bool bFirst : 1;
     void _CheckFlyCache( SwPageFrm* pPage );
 public:
     SwLayHelper( SwDoc *pD, SwFrm* &rpF, SwFrm* &rpP, SwPageFrm* &rpPg,
             SwLayoutFrm* &rpL, SwActualSection* &rpA, sal_Bool &rBrk,
-            sal_uLong nNodeIndex, sal_Bool bCache );
+            sal_uLong nNodeIndex, bool bCache );
     ~SwLayHelper();
     sal_uLong CalcPageCount();
-    sal_Bool CheckInsert( sal_uLong nNodeIndex );
+    bool CheckInsert( sal_uLong nNodeIndex );
 
-    sal_Bool CheckInsertPage();
+    bool CheckInsertPage();
 
     // Look for fresh text frames at this (new) page and set them to the right
     // position, if they are in the fly cache.
@@ -143,7 +143,7 @@ public:
 
     // Look for this text frame and set it to the right position,
     // if it's in the fly cache.
-    static sal_Bool CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly );
+    static bool CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly );
 };
 
 /*************************************************************************
@@ -177,21 +177,21 @@ private:
     sal_uInt16          nMajorVersion;
     sal_uInt16          nMinorVersion;
 
-    sal_Bool            bWriteMode : 1;
-    sal_Bool            bError : 1;
+    bool            bWriteMode : 1;
+    bool            bError : 1;
 
 public:
-    SwLayCacheIoImpl( SvStream& rStrm, sal_Bool bWrtMd );
+    SwLayCacheIoImpl( SvStream& rStrm, bool bWrtMd );
 
     // Get input or output stream
     SvStream& GetStream() const { return *pStream; }
 
     // Open a record of type "nType"
-    sal_Bool OpenRec( sal_uInt8 nType );
+    bool OpenRec( sal_uInt8 nType );
 
     // Close a record of type "nType". This skips any unread data that
     // remains in the record.
-    sal_Bool CloseRec( sal_uInt8 nType );
+    bool CloseRec( sal_uInt8 nType );
 
     // Return the number of bytes contained in the current record that
     // haven't been read by now.
@@ -214,7 +214,7 @@ public:
     // Close a flag record. Any bytes left are skipped.
     void CloseFlagRec();
 
-    sal_Bool HasError() const { return bError; }
+    bool HasError() const { return bError; }
 
     sal_uInt16 GetMajorVersion() const { return nMajorVersion; }
     sal_uInt16 GetMinorVersion() const { return nMinorVersion; }

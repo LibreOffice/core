@@ -2736,7 +2736,7 @@ sal_uLong SqRt( BigInt nX )
 /*************************************************************************/
 
 SwPageFrm * InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
-                          sal_Bool bOdd, bool bFirst, sal_Bool bInsertEmpty, sal_Bool bFtn,
+                          bool bOdd, bool bFirst, bool bInsertEmpty, sal_Bool bFtn,
                           SwFrm *pSibling )
 {
     SwPageFrm *pRet;

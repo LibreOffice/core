@@ -69,7 +69,7 @@ public:
     void CollectEndnote( SwFtnFrm* pFtn );
     const SwSectionFrm* GetSect() const { return pSect; }
     void InsertEndnotes();
-    sal_Bool HasEndnotes() const { return pEndArr && !pEndArr->empty(); }
+    bool HasEndnotes() const { return pEndArr && !pEndArr->empty(); }
 };
 
 void SwEndnoter::CollectEndnotes( SwSectionFrm* pSct )
@@ -194,7 +194,7 @@ void SwLooping::Control( SwPageFrm* pPage )
     else if( ++nCount > LOOP_DETECT )
     {
 #if OSL_DEBUG_LEVEL > 1
-        static sal_Bool bNoLouie = sal_False;
+        static bool bNoLouie = false;
         if( bNoLouie )
             return;
 
@@ -250,7 +250,7 @@ void SwLayouter::_CollectEndnotes( SwSectionFrm* pSect )
     pEndnoter->CollectEndnotes( pSect );
 }
 
-sal_Bool SwLayouter::HasEndnotes() const
+bool SwLayouter::HasEndnotes() const
 {
     return pEndnoter->HasEndnotes();
 }

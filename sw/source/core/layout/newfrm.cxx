@@ -57,7 +57,7 @@
 #include <set>
 
 SwLayVout     *SwRootFrm::pVout = 0;
-sal_Bool           SwRootFrm::bInPaint = sal_False;
+bool           SwRootFrm::bInPaint = false;
 sal_Bool           SwRootFrm::bNoVirDev = sal_False;
 
 SwCache *SwFrm::pCache = 0;
@@ -554,11 +554,11 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
         bIsVirtPageNum = sal_False;
     if ( !pDesc )
         pDesc = &pDoc->GetPageDesc( 0 );
-    const sal_Bool bOdd = !nPgNum || 0 != ( nPgNum % 2 );
+    const bool bOdd = !nPgNum || 0 != ( nPgNum % 2 );
     bool bFirst = !nPgNum || 1 == nPgNum;
 
     // Create a page and put it in the layout
-    SwPageFrm *pPage = ::InsertNewPage( *pDesc, this, bOdd, bFirst, sal_False, sal_False, 0 );
+    SwPageFrm *pPage = ::InsertNewPage( *pDesc, this, bOdd, bFirst, false, sal_False, 0 );
 
     // Find the first page in the Bodytext section.
     SwLayoutFrm *pLay = pPage->FindBodyCont();
