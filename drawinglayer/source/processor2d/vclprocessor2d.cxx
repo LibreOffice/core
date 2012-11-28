@@ -425,9 +425,10 @@ namespace drawinglayer
                 aLocalTransform.decompose(aScale, aTranslate, fRotate, fShearX);
 
                 // #121387# when mirrored and rotated, avoid the GraphicManager output which has low quality
-                const bool bRotated(basegfx::fTools::equalZero(fRotate));
-                const bool bSheared(basegfx::fTools::equalZero(fShearX));
-                const bool bMirroredAndRotated(bRotated && (aScale.getX() < 0.0 || aScale.getY() < 0.0));
+                const bool bRotated(!basegfx::fTools::equalZero(fRotate));
+                const bool bSheared(!basegfx::fTools::equalZero(fShearX));
+                const bool bMirrored(aScale.getX() < 0.0 || aScale.getY() < 0.0);
+                const bool bMirroredAndRotated(bRotated && bMirrored);
 
                 if(!bForceUseOfOwnTransformer && !bSheared && !bMirroredAndRotated)
                 {
