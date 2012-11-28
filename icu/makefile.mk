@@ -39,9 +39,6 @@ TARFILE_NAME=icu4c-49_1_1-src
 TARFILE_MD5=7c53f83e0327343f4060c0eb83842daf
 TARFILE_ROOTDIR=icu
 
-#icu4c.8320.freeserif.crash.patch, see
-#http://bugs.icu-project.org/trac/ticket/8320 for crash with FreeSerif
-
 #icu4c.7601.Indic-ccmp.patch
 #http://bugs.icu-project.org/trac/ticket/7601 ccmp feature for Indic Languages
 
@@ -51,7 +48,6 @@ TARFILE_ROOTDIR=icu
 PATCH_FILES=\
     icu4c-bsd.patch \
     icu4c-build.patch \
-    icu4c.8320.freeserif.crash.patch \
     icu4c.8198.revert.icu5431.patch \
     icu4c.7601.Indic-ccmp.patch \
     icu4c-aix.patch \
