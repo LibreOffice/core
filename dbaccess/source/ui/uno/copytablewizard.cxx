@@ -1351,8 +1351,8 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
                     {
                         ::rtl::OUString aMessage( String( ModuleRes( STR_CTW_UNSUPPORTED_COLUMN_TYPE ) ) );
 
-                        aMessage.replaceAt( aMessage.indexOfAsciiL( "$type$", 6 ), 6, ::rtl::OUString::valueOf( aSourceColTypes[ nSourceColumn ] ) );
-                        aMessage.replaceAt( aMessage.indexOfAsciiL( "$pos$", 5 ), 5, ::rtl::OUString::valueOf( nSourceColumn ) );
+                        aMessage = aMessage.replaceAt( aMessage.indexOfAsciiL( "$type$", 6 ), 6, ::rtl::OUString::valueOf( aSourceColTypes[ nSourceColumn ] ) );
+                        aMessage = aMessage.replaceAt( aMessage.indexOfAsciiL( "$pos$", 5 ), 5, ::rtl::OUString::valueOf( nSourceColumn ) );
 
                         ::dbtools::throwSQLException(
                             aMessage,
