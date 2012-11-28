@@ -223,15 +223,6 @@ public:
         return *this;
     }
 
-    /** Assign to this a copy of value.
-     */
-    OUStringBuffer& operator = ( const OUString& value )
-    {
-        remove();
-        append(value);
-        return *this;
-    }
-
     /**
         Release the string data.
      */
@@ -415,6 +406,8 @@ public:
 
         @param   str   a string.
         @return  this string buffer.
+
+        @since LibreOffice 4.0
      */
     OUStringBuffer & append(OUStringBuffer &str)
     {
@@ -945,6 +938,8 @@ public:
 
         @param  start       The beginning index, inclusive. default to 0
         @return this string buffer.
+
+        @since LibreOffice 4.0
      */
     OUStringBuffer & remove( sal_Int32 start = 0)
     {
