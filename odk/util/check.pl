@@ -305,7 +305,6 @@ if (-d "$StartDir") {
                 "sdbc",
                 "sdbcx",
                 "security",
-                "setup",
                 "sheet",
                 "smarttags",
                 "style",

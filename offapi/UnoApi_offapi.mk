@@ -1056,10 +1056,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/sdbcx,\
 	View \
 	ViewDescriptor \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/setup,\
-	ProductRegistration \
-	Setup \
-))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/sheet,\
 	AccessibleCell \
 	AccessibleCsvCell \
@@ -3263,36 +3259,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/security,\
 	XDocumentDigitalSignatures \
 	XSanExtension \
 	XSerialNumberAdapter \
-))
-$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/setup,\
-	ActionType \
-	BaseAction \
-	CopyFileAction \
-	DeleteDirAction \
-	DeleteFileAction \
-	DeleteFolderAction \
-	DeleteFolderItemAction \
-	DownloadAction \
-	FontAction \
-	InstallEnvironment \
-	InstallResponse \
-	InstallType \
-	MakeDirAction \
-	MakeFolderAction \
-	MakeFolderItemAction \
-	MakeShortcutAction \
-	MirrorEntry \
-	ModuleInfo \
-	ModuleState \
-	OSType \
-	ProfileItemAction \
-	ResponseErrorCode \
-	SizeInfo \
-	UnzipAction \
-	UpdateType \
-	VersionIdentifier \
-	WindowsRegistryAction \
-	XSetup \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/sheet,\
 	ActivationEvent \

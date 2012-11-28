@@ -148,9 +148,6 @@ module sdbc {};
 /// High-level database component interfaces.
 module sdbcx {};
 
-/// Interfaces to control the setup process.
-module setup {};
-
 /// Spreadsheet specific interfaces.
 module sheet {};
 
