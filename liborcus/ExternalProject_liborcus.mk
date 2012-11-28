@@ -40,6 +40,7 @@ endif
 	
 else
 
+# must be built with debug STL if --enable-dbgutil
 $(call gb_ExternalProject_get_state_target,liborcus,build) :
 	cd $(EXTERNAL_WORKDIR) \
 	&& $(if $(filter ANDROID,$(OS)),LIBS='-lgnustl_shared -lm') \
@@ -51,6 +52,7 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 		--disable-debug \
 		--disable-spreadsheet-model \
 		--disable-werror \
+		$(if $(filter LINUX FREEBSD OPENBSD NETBSD DRAGONFLY ANDROID,$(OS)),$(if $(gb_ENABLE_DBGUTIL),CPPFLAGS=-D_GLIBCXX_DEBUG)) \
 		$(if $(filter NO,$(SYSTEM_BOOST)),CXXFLAGS=-I$(OUTDIR)/inc/external) \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 	&& $(MAKE) \
