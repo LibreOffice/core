@@ -858,7 +858,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/graphic
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/i18n,\
 	ChapterCollator \
-	Collator \
 	IndexEntrySupplier \
 	InputSequenceChecker \
 	OrdinalSuffix \
@@ -2633,6 +2632,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/i18n,\
 	CalendarItem2 \
 	CharType \
 	CharacterIteratorMode \
+	Collator \
 	CollatorOptions \
 	Currency \
 	Currency2 \
