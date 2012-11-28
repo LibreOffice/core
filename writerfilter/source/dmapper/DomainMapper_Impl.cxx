@@ -3249,14 +3249,13 @@ void DomainMapper_Impl::PopFieldContext()
                         xToInsert = uno::Reference< text::XTextContent >(pContext->GetTextField(), uno::UNO_QUERY);
                     if( xToInsert.is() )
                     {
-                        uno::Reference< text::XTextAppendAndConvert > xTextAppendAndConvert( xTextAppend, uno::UNO_QUERY_THROW );
                         uno::Sequence<beans::PropertyValue> aValues;
                         // Character properties of the field show up here the
                         // last (always empty) run. Inherit character
                         // properties from there.
                         if (m_pLastCharacterContext.get())
                             aValues = m_pLastCharacterContext->GetPropertyValues();
-                        xTextAppendAndConvert->appendTextContent(xToInsert, aValues);
+                        appendTextContent(xToInsert, aValues);
                     }
                     else
                     {
