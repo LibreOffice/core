@@ -91,6 +91,8 @@ public:
 
     using ComboBox::GetEntryPos;
 
+    SwComboBox(Window* pParent,
+               sal_uInt16 nStyleBits = nsSwComboBoxStyle::CBS_ALL);
     SwComboBox(Window* pParent, const ResId& rId,
                sal_uInt16 nStyleBits = nsSwComboBoxStyle::CBS_ALL);
     ~SwComboBox();
