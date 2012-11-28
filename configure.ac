@@ -8997,8 +8997,22 @@ if test "$_os" = "WINNT"; then
                 WINDOWS_SDK_HOME=`cygpath -d "$WINDOWS_SDK_HOME"`
                 WINDOWS_SDK_HOME=`cygpath -u "$WINDOWS_SDK_HOME"`
 
-                #If this sdk is incomplete, lets see if the one
-                #recommended to be installed is available
+                # If this sdk is incomplete, lets see if the one
+                # recommended to be installed is available.
+
+                # This refers to the Windows SDK 8 (as distributed
+                # with Visual Studio 2012, or maybe also
+                # separately), I assume.
+
+                # I wouldn't say that it is "incomplete", it is
+                # just structured differtently. We do seem to try
+                # to adapt to that structure below (look for the
+                # Include/um etc stuff), so rejecting it here is a
+                # bit premature... *but* then one notices that
+                # compiling with MSVS2008 and trying to use SDK 8
+                # leads to horrible errors in ICU at least. Oh
+                # well.
+
                 if test ! -x "$WINDOWS_SDK_HOME/bin/msiinfo.exe"; then
                     WINDOWS_SDK7_HOME=`cat "/proc/registry/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v7.1/InstallationFolder" 2> /dev/null | tr '\000' '\n' | head -n 1`
                     if test -n "$WINDOWS_SDK7_HOME"; then
