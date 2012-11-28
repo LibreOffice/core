@@ -2,6 +2,7 @@
 # -*- tab-width: 4; cperl-indent-level: 4; indent-tabs-mode: nil -*-
 
 use File::Copy;
+use File::Glob;
 
 my $output_format = 'u';
 
@@ -25,17 +26,6 @@ sub reg_get_value($)
     }
 
     return $value;
-}
-
-sub reg_find_key($)
-{
-    # it is believed that the registry moves keys around
-    # depending on OS version, this will de-mangle that
-    my $key = shift;
-    $key =~ s| |\\ |;
-    $key = `cd /proc/registry/ ; ls $key 2>/dev/null`;
-
-    return $key;
 }
 
 sub print_syntax()
@@ -99,6 +89,7 @@ sub print_windows_sdk_home()
 {
     my ($value, $key);
 
+    # This is for the Windows SDK 8 distributed with MSVS 2012
     $value = reg_get_value ('HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot');
 	
 	if (!defined $value) {
@@ -108,10 +99,13 @@ sub print_windows_sdk_home()
         $value = reg_get_value ('HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/Directories/Install Dir');
     }
 	
-
     if (!defined $value) {
-        $key = reg_find_key ('HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/InstalledSDKs/*/Install Dir');
-        $value = reg_get_value ($key);
+        # Unclear whether we ever get here, don't the above match any
+        # recent Windows SDK?
+        foreach $key (File::Glob::bsd_glob('/proc/registry/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/InstalledSDKs/*/Install Dir')) {
+            $value = reg_get_value ($key);
+            last if defined $value;
+        }
     }
 
     defined $value || die "Windows SDK not found";
@@ -121,12 +115,32 @@ sub print_windows_sdk_home()
 
 sub print_al_home()
 {
+    # Called by configure only if al.exe is not in the Windows SDK's
+    # bin folder, where it AFAIK always is in any recent Windows SDK,
+    # so whether this will ever be called is unclear...
+
     my ($value, $key);
 
-        $key = reg_find_key ('HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/*/WinSDK-NetFx40Tools/InstallationFolder');
+    foreach $key (File::Glob::bsd_glob('/proc/registry/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/*/WinSDK-NetFx40Tools/InstallationFolder')) {
+        $key =~ s!^/proc/registry/!!;
         $value = reg_get_value ($key);
 
-    print cygpath ($value, 'w', $output_format);
+        # Sigh, the same test that configure does for al.exe
+        # being either directly in it, or in a "bin" subdir... But on
+        # the other hand we don't want to be mislead by a registry key
+        # that matches the above but points to a directory that does
+        # in fact not contain an al.exe. For me, 
+        # HKLM/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v7.0A/WinSDK-NetFx40Tools/InstallationFolder
+        # contains
+        # c:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\NETFX 4.0 Tools\
+        # but that then does not contain any al.exe.
+
+        if (-f "$value/bin/al.exe" || -f "$value/al.exe") {
+            print cygpath ($value, 'w', $output_format);
+            return;
+        }
+    }
+    die "Can't find al.exe";
 }
 
 my %msvs_2008 = (
