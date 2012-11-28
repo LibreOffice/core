@@ -20,11 +20,13 @@
 #  include <gdk/gdkkeysyms-compat.h>
 #endif
 
-#include <svtools/menuoptions.hxx>
-
-#include <framework/menuconfiguration.hxx>
-
 #include <sal/log.hxx>
+
+// FIXME Copied from framework/inc/framework/menuconfiguration.hxx to
+// avoid circular dependency between modules. It should be in a common
+// header (probably in vcl).
+const sal_uInt16 START_ITEMID_WINDOWLIST    = 4600;
+const sal_uInt16 END_ITEMID_WINDOWLIST      = 4699;
 
 static sal_Bool bMenuVisibility = sal_False;
 
