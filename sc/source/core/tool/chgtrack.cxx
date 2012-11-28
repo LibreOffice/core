@@ -772,7 +772,7 @@ void ScChangeActionIns::GetDescription(
         aBuf.append(GetRefString(GetBigRange(), pDoc));
         rtl::OUString aRangeStr = aBuf.makeStringAndClear();
 
-        aRsc.replaceAt(nPos, 2, aRangeStr); // replace '#1' with the range string.
+        aRsc = aRsc.replaceAt(nPos, 2, aRangeStr); // replace '#1' with the range string.
 
         aBuf.append(rStr).append(aRsc);
         rStr = aBuf.makeStringAndClear();
