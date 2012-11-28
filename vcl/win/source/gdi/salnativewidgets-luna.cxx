@@ -492,6 +492,26 @@ void impl_drawAeroToolbar( HDC hDC, RECT rc, bool bHorizontal )
         HBRUSH hbrush = CreateSolidBrush( RGB( 0xf0, 0xf0, 0xf0 ) );
         FillRect( hDC, &rc, hbrush );
         DeleteObject( hbrush );
+
+        // darker line to distinguish the toolbar and viewshell
+        // it is drawn only for the horizontal toolbars; it did not look well
+        // when done for the vertical ones too
+        if ( bHorizontal )
+        {
+            long from_x, from_y, to_x, to_y;
+
+            from_x = rc.left;
+            to_x = rc.right;
+            from_y = to_y = rc.top;
+
+            HPEN hpen = CreatePen( PS_SOLID, 1, RGB( 0xa0, 0xa0, 0xa0 ) );
+            SelectObject( hDC, hpen );
+
+            MoveToEx( hDC, from_x, from_y, NULL );
+            LineTo( hDC, to_x, to_y );
+
+            DeleteObject( hpen );
+        }
     }
 }
 
