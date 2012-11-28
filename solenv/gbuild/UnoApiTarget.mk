@@ -98,9 +98,11 @@ $(gb_UnoApiTarget_REGMERGECOMMAND) @$${RESPONSEFILE} && \
 rm -f $${RESPONSEFILE}
 endef
 
+# first delete target rdb file to detect problems when removing IDL files
 define gb_UnoApiTarget__command
 $(call gb_Output_announce,$(2),$(true),UNO,4)
 mkdir -p $(dir $(1)) && \
+rm -f $(1) && \
 $(call gb_UnoApiTarget__command_impl,$(1),$(UNOAPI_ROOT),$(if $(UNOAPI_FILES),$(UNOAPI_FILES),$(UNOAPI_MERGE))) \
 $(if $(UNOAPI_REFERENCE), \
 	$(call gb_Output_announce,$(2),$(true),DBc,3) \
