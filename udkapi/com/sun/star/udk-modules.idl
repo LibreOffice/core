@@ -33,9 +33,6 @@ module connection {};
 /// Interfaces for collections and containers.
 module container {};
 
-/// Modules for IOP, IIOP and GIOP.
-module corba {};
-
 /// General input/output interfaces.
 module io {};
 
@@ -59,9 +56,6 @@ module script {};
 
 /// Interface for authorisation and authentification.
 module security {};
-
-/// Test interfaces for core-reflection, introspection and marshalling.
-module test {};
 
 /// Basic UNO interfaces.
 module uno {};

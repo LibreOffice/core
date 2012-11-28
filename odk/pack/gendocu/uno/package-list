@@ -6,7 +6,6 @@ com.sun.star.chart
 com.sun.star.configuration
 com.sun.star.connection
 com.sun.star.container
-com.sun.star.corba
 com.sun.star.datatransfer
 com.sun.star.document
 com.sun.star.drawing
@@ -43,7 +42,6 @@ com.sun.star.sync2
 com.sun.star.system
 com.sun.star.table
 com.sun.star.task
-com.sun.star.test
 com.sun.star.text
 com.sun.star.ucb
 com.sun.star.ui
