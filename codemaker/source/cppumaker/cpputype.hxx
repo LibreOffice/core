@@ -387,13 +387,6 @@ bool produceType(RegistryKey& typeName, bool bIsExtraType,
                      CppuOptions* pOptions)
                  throw( CannotDumpException );
 
-/**
- * This function returns a C++ scoped name, represents the namespace
- * scoping of this type, e.g. com:.sun::star::uno::XInterface.
- */
-// ::rtl::OString scopedName(const ::rtl::OString& scope, const ::rtl::OString& type,
-//                 sal_Bool bNoNameSpace=sal_False);
-
 #endif // INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_CPPUTYPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

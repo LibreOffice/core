@@ -1102,15 +1102,9 @@ void CppuType::dumpCppuGetType(FileStream& o, const OString& type, sal_Bool bDec
                 m_typeMgr.getTypeClass(relType) == RT_TYPE_INTERFACE)
                 return;
 
-//          if (m_typeMgr.getTypeClass(type) == RT_TYPE_TYPEDEF)
-//          {
-//              o << indent() << "get_" << type.replace('/', '_') << "_Type()";
-//          } else
-//          {
-                o << indent() << "::cppu::UnoType< ";
-                dumpType(o, type, false, false, false, true);
-                o << " >::get()";
-//          }
+            o << indent() << "::cppu::UnoType< ";
+            dumpType(o, type, false, false, false, true);
+            o << " >::get()";
         }
         if (bDecl)
             o << ";\n";
@@ -1400,10 +1394,6 @@ sal_Bool InterfaceType::dumpHFile(
 void InterfaceType::dumpDeclaration(FileStream& o)
     throw( CannotDumpException )
 {
-//     rtl::OString cppName(translateUnoToCppIdentifier(
-//                              m_name, "interface", ITM_KEYWORDSONLY, &m_name));
-
-//  o << "\nclass SAL_NO_VTABLE " << cppName;
     o << "\nclass SAL_NO_VTABLE " << m_name;
 
     for (sal_Int16 i = 0; i < m_reader.getSuperTypeCount(); ++i) {
@@ -1444,9 +1434,6 @@ sal_Bool InterfaceType::dumpHxxFile(
     o << "\n";
 
     dumpGetCppuType(o);
-
-//     rtl::OString cppName(translateUnoToCppIdentifier(
-//                              m_name, "interface", ITM_KEYWORDSONLY, &m_name));
 
     o << "\n::com::sun::star::uno::Type const & "
       << scopedCppName(m_typeName)
@@ -1523,7 +1510,6 @@ void InterfaceType::dumpMethods(FileStream& o)
 
     sal_Bool bRef = sal_False;
     sal_Bool bConst = sal_False;
-    sal_Bool bWithRunTimeExcp = sal_True;
 
     for (sal_uInt16 i=0; i < methodCount; i++)
     {
@@ -1539,11 +1525,6 @@ void InterfaceType::dumpMethods(FileStream& o)
         returnType = rtl::OUStringToOString(
             m_reader.getMethodReturnTypeName(i), RTL_TEXTENCODING_UTF8);
         paramCount = m_reader.getMethodParameterCount(i);
-
-        if ( methodName.equals("acquire") || methodName.equals("release") )
-        {
-            bWithRunTimeExcp = sal_False;
-        }
 
         if (first)
         {
@@ -1584,8 +1565,6 @@ void InterfaceType::dumpMethods(FileStream& o)
             }
 
             dumpType(o, paramType, bConst, bRef);
-//          o << " " << translateUnoToCppIdentifier(
-//                 paramName, "param", ITM_KEYWORDSONLY, NULL);
             o << " " << paramName;
 
             if (j+1 < (sal_uInt16)paramCount) o << ", ";
@@ -2635,7 +2614,6 @@ sal_Bool StructureType::dumpHxxFile(
             } else {
                 dumpType(o, fieldType, sal_True, sal_True);
             }
-//          o << " __" << fieldName;
             o << " " << fieldName << "_";
         }
         o << ") // throw()\n";
@@ -2667,7 +2645,6 @@ sal_Bool StructureType::dumpHxxFile(
             } else
                 o << indent() << ", ";
 
-//          o << fieldName << "(__" << fieldName << ")\n";
             o << fieldName << "(" << fieldName << "_)\n";
         }
 
@@ -3085,7 +3062,6 @@ sal_Bool StructureType::dumpSuperMember(FileStream& o, const OString& superType,
                     dumpType(o, fieldType, sal_True, sal_True);
                     o << " ";
                 }
-//              o << "__" << fieldName;
                 o << fieldName << "_";
             }
         }
@@ -3256,7 +3232,6 @@ void ExceptionType::dumpDeclaration(FileStream& o)
                 superHasMember = sal_True;
 
             dumpType(o, fieldType, sal_True, sal_True);
-//          o << " __" << fieldName;
             o << " " << fieldName << "_";
         }
         o << "); // throw()\n\n";
@@ -3388,7 +3363,6 @@ sal_Bool ExceptionType::dumpHxxFile(
                 superHasMember = sal_True;
 
             dumpType(o, fieldType, sal_True, sal_True);
-//          o << " __" << fieldName;
             o << " " << fieldName << "_";
         }
         o << ") // throw()\n";
@@ -3420,7 +3394,6 @@ sal_Bool ExceptionType::dumpHxxFile(
             } else
                 o << indent() << ", ";
 
-//          o << fieldName << "(__" << fieldName << ")\n";
             o << fieldName << "(" << fieldName << "_)\n";
         }
 
@@ -3530,7 +3503,6 @@ sal_Bool ExceptionType::dumpSuperMember(FileStream& o, const OString& superType,
                     dumpType(o, fieldType, sal_True, sal_True);
                     o << " ";
                 }
-//              o << "__" << fieldName;
                 o << fieldName << "_";
             }
         }
@@ -3761,11 +3733,6 @@ sal_Bool TypeDefType::dumpHFile(
     if (codemaker::cppumaker::dumpNamespaceClose(o, m_typeName, false)) {
         o << "\n";
     }
-
-//  o << "\nnamespace com { namespace sun { namespace star { namespace uno {\n"
-//    << "class Type;\n} } } }\n\n";
-//  o << "inline const ::com::sun::star::uno::Type& SAL_CALL get_" << m_typeName.replace('/', '_')
-//    <<  "_Type( ) SAL_THROW(());\n\n";
 
     o << "#endif // "<< headerDefine << "\n";
 
