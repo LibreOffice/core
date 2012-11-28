@@ -34,4 +34,6 @@ $(eval $(call gb_Zip_add_files,fingerprint,\
 	LM/*.lm \
 ))
 
+$(eval $(call gb_Zip_add_commandoptions,fingerprint,-j))
+
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:
