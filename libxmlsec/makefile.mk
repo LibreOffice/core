@@ -117,7 +117,7 @@ CONF_ILIB=-L$(ILIB:s/;/ -L/)
 .ENDIF
 
 CONFIGURE_DIR=
-CONFIGURE_ACTION=autoreconf ; ./configure
+CONFIGURE_ACTION=autoreconf -i; ./configure
 
 BUILD_AND_HOST=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) MINGW_SYSROOT=$(MINGW_SYSROOT) OBJDUMP="$(OBJDUMP)"
 
@@ -176,7 +176,7 @@ LDFLAGS:=$(xmlsec_LDFLAGS)
 
 .ENDIF
 CONFIGURE_DIR=
-CONFIGURE_ACTION=autoreconf ; ./configure ADDCFLAGS="$(xmlsec_CFLAGS)" CPPFLAGS="$(xmlsec_CPPFLAGS)"
+CONFIGURE_ACTION=autoreconf -i; ./configure ADDCFLAGS="$(xmlsec_CFLAGS)" CPPFLAGS="$(xmlsec_CPPFLAGS)"
 
 .IF "$(OS)" == "MACOSX"
 .IF "$(ACLOCAL)" == ""
