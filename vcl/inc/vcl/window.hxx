@@ -331,7 +331,6 @@ enum WindowSizeType
 const char* ImplDbgCheckWindow( const void* pObj );
 #endif
 
-class BitmapEx; // FIXME: really the SetBackgroundBitmap belongs in a toplevel 'window'
 class Dialog;
 class WindowImpl;
 class VclBuilder;
@@ -925,8 +924,6 @@ public:
     // this may be the parent's background color; for controls
     // this may be a child's background color (e.g. ListBox)
     virtual const Wallpaper& GetDisplayBackground() const;
-
-    void                SetBackgroundBitmap( const BitmapEx& rBitmapEx );
 
     void                SetHelpText( const XubString& rHelpText );
     const XubString&    GetHelpText() const;

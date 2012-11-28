@@ -454,10 +454,6 @@ bool SvpSalFrame::SetPluginParent( SystemParentData* )
     return true;
 }
 
-void SvpSalFrame::SetBackgroundBitmap( SalBitmap* )
-{
-}
-
 void SvpSalFrame::ResetClipRegion()
 {
 }

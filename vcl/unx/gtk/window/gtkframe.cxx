@@ -2932,52 +2932,6 @@ bool GtkSalFrame::Dispatch( const XEvent* pEvent )
 }
 #endif
 
-void GtkSalFrame::SetBackgroundBitmap( SalBitmap* pBitmap )
-{
-#if !GTK_CHECK_VERSION(3,0,0)
-    if( m_hBackgroundPixmap )
-    {
-        XSetWindowBackgroundPixmap( getDisplay()->GetDisplay(),
-                                    widget_get_xid(m_pWindow),
-                                    None );
-        XFreePixmap( getDisplay()->GetDisplay(), m_hBackgroundPixmap );
-        m_hBackgroundPixmap = None;
-    }
-    if( pBitmap )
-    {
-        X11SalBitmap* pBM = static_cast<X11SalBitmap*>(pBitmap);
-        Size aSize = pBM->GetSize();
-        if( aSize.Width() && aSize.Height() )
-        {
-            m_hBackgroundPixmap =
-                limitXCreatePixmap( getDisplay()->GetDisplay(),
-                               widget_get_xid(m_pWindow),
-                               aSize.Width(),
-                               aSize.Height(),
-                               getDisplay()->GetVisual(m_nXScreen).GetDepth() );
-            if( m_hBackgroundPixmap )
-            {
-                SalTwoRect aTwoRect;
-                aTwoRect.mnSrcX = aTwoRect.mnSrcY = aTwoRect.mnDestX = aTwoRect.mnDestY = 0;
-                aTwoRect.mnSrcWidth = aTwoRect.mnDestWidth = aSize.Width();
-                aTwoRect.mnSrcHeight = aTwoRect.mnDestHeight = aSize.Height();
-                pBM->ImplDraw( m_hBackgroundPixmap,
-                               m_nXScreen,
-                               getDisplay()->GetVisual(m_nXScreen).GetDepth(),
-                               aTwoRect,
-                               getDisplay()->GetCopyGC(m_nXScreen) );
-                XSetWindowBackgroundPixmap( getDisplay()->GetDisplay(),
-                                            widget_get_xid(m_pWindow),
-                                            m_hBackgroundPixmap );
-            }
-        }
-    }
-#else
-    (void)pBitmap;
-#warning FIXME: no SetBackgroundBitmap impl. for gtk3
-#endif
-}
-
 gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer frame )
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;

@@ -141,7 +141,6 @@ public:
     virtual void                SetParent( SalFrame* pNewParent );
     virtual bool                SetPluginParent( SystemParentData* pNewParent );
     virtual void                SetExtendedFrameStyle( SalExtStyle );
-    virtual void                SetBackgroundBitmap( SalBitmap* );
     virtual void                SetScreenNumber(unsigned int);
     virtual void                SetApplicationID( const rtl::OUString &rApplicationID );
 

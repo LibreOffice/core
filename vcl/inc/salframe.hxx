@@ -208,12 +208,6 @@ public:
     // returns system data (most prominent: window handle)
     virtual const SystemEnvData*    GetSystemData() const = 0;
 
-    // sets a background bitmap on the frame; the implementation
-    // must not make assumptions about the lifetime of the passed SalBitmap
-    // but should copy its contents to an own buffer
-    virtual void                SetBackgroundBitmap( SalBitmap* ) = 0;
-
-
     // get current modifier, button mask and mouse position
     struct SalPointerState
     {

@@ -3005,12 +3005,6 @@ void WinSalFrame::SimulateKeyPress( sal_uInt16 nKeyCode )
 
 // -----------------------------------------------------------------------
 
-void WinSalFrame::SetBackgroundBitmap( SalBitmap* )
-{
-}
-
-// -----------------------------------------------------------------------
-
 void WinSalFrame::ResetClipRegion()
 {
     SetWindowRgn( mhWnd, 0, TRUE );

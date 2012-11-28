@@ -247,7 +247,6 @@ public:
     virtual void                SimulateKeyPress( sal_uInt16 nKeyCode );
     virtual void                SetParent( SalFrame* pNewParent );
     virtual bool                SetPluginParent( SystemParentData* pNewParent );
-    virtual void                SetBackgroundBitmap( SalBitmap* pBitmap );
 
     virtual void                SetScreenNumber( unsigned int );
     virtual void                SetApplicationID( const rtl::OUString &rWMClass );

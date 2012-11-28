@@ -306,8 +306,6 @@ SplashScreen::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::sta
 
         Application::AddEventListener(
             LINK( this, SplashScreen, AppEventListenerHdl ) );
-
-        SetBackgroundBitmap( _aIntroBmp );
     }
 }
 

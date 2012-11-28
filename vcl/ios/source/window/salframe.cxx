@@ -928,11 +928,6 @@ void IosSalFrame::SetExtendedFrameStyle( SalExtStyle /*nStyle*/ )
     // ???
 }
 
-void IosSalFrame::SetBackgroundBitmap( SalBitmap* )
-{
-    //TODO: implement
-}
-
 SalFrame* IosSalFrame::GetParent() const
 {
     return mpParent;

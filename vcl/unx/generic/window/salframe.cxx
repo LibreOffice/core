@@ -807,44 +807,6 @@ void X11SalFrame::SetExtendedFrameStyle( SalExtStyle nStyle )
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-void X11SalFrame::SetBackgroundBitmap( SalBitmap* pBitmap )
-{
-    if( mhBackgroundPixmap )
-    {
-        XSetWindowBackgroundPixmap( GetXDisplay(), GetWindow(), None );
-        XFreePixmap( GetXDisplay(), mhBackgroundPixmap );
-        mhBackgroundPixmap = None;
-    }
-    if( pBitmap )
-    {
-        X11SalBitmap* pBM = static_cast<X11SalBitmap*>(pBitmap);
-        Size aSize = pBM->GetSize();
-        if( aSize.Width() && aSize.Height() )
-        {
-            mhBackgroundPixmap =
-                limitXCreatePixmap( GetXDisplay(),
-                               GetWindow(),
-                               aSize.Width(),
-                               aSize.Height(),
-                               GetDisplay()->GetVisual( m_nXScreen ).GetDepth() );
-            if( mhBackgroundPixmap )
-            {
-                SalTwoRect aTwoRect;
-                aTwoRect.mnSrcX = aTwoRect.mnSrcY = aTwoRect.mnDestX = aTwoRect.mnDestY = 0;
-                aTwoRect.mnSrcWidth = aTwoRect.mnDestWidth = aSize.Width();
-                aTwoRect.mnSrcHeight = aTwoRect.mnDestHeight = aSize.Height();
-                pBM->ImplDraw( mhBackgroundPixmap,
-                               m_nXScreen,
-                               GetDisplay()->GetVisual( m_nXScreen ).GetDepth(),
-                               aTwoRect, GetDisplay()->GetCopyGC( m_nXScreen ) );
-                XSetWindowBackgroundPixmap( GetXDisplay(), GetWindow(), mhBackgroundPixmap );
-            }
-        }
-    }
-}
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
 const SystemChildData* X11SalFrame::GetSystemData() const
 {
     X11SalFrame *pFrame = const_cast<X11SalFrame*>(this);

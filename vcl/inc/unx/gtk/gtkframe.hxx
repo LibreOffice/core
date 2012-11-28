@@ -420,8 +420,6 @@ public:
     // return false to indicate failure
     virtual bool                SetPluginParent( SystemParentData* pNewParent );
 
-    virtual void                SetBackgroundBitmap( SalBitmap* );
-
     virtual void                SetScreenNumber( unsigned int );
     virtual void                SetApplicationID( const rtl::OUString &rWMClass );
 
