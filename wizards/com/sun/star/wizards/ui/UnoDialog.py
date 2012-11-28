@@ -15,11 +15,11 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
+import uno
 import traceback
 from .PeerConfig import PeerConfig
 from .UIConsts import UIConsts
 from ..common.PropertyNames import PropertyNames
-from ..common.Helper import Helper
 
 from com.sun.star.awt import Rectangle
 from com.sun.star.awt.PosSize import POS
@@ -72,23 +72,10 @@ class UnoDialog(object):
             traceback.print_exc()
             return None
 
-
-    def printControlProperties(self, ControlName):
-        try:
-            xControlModel = self.xDialogModel().getByName(ControlName)
-            allProps = xControlModel.PropertySetInfo.Properties
-            i = 0
-            while i < allProps.length:
-                sName = allProps[i].Name
-                i += 1
-        except Exception:
-            traceback.print_exc()
-
     def getMAPConversionFactor(self, ControlName):
         xControl2 = self.xUnoDialog.getControl(ControlName)
         aSize = xControl2.Size
-        dblMAPWidth = Helper.getUnoPropertyValue(xControl2.Model,
-            int(PropertyNames.PROPERTY_WIDTH))
+        dblMAPWidth = xControl2.Model.Width
         return (aSize.Width / dblMAPWidth)
 
     def getpreferredLabelSize(self, LabelName, sLabel):
@@ -111,24 +98,16 @@ class UnoDialog(object):
         # This function may look ugly, but this is the only way to check
         # the count of values in the model,which is always right.
         # the control is only a view and could be right or not.
-        fieldnames = Helper.getUnoPropertyValue(getModel(_xListBox),
-            "StringItemList")
+        fieldnames = getModel(_xListBox).StringItemList
         return fieldnames.length
 
     def getSelectedItemPos(self, _xListBox):
-        ipos = Helper.getUnoPropertyValue(getModel(_xListBox),
-            "SelectedItems")
+        ipos = getModel(_xListBox).SelectedItems
         return ipos[0]
 
     def isListBoxSelected(self, _xListBox):
-        ipos = Helper.getUnoPropertyValue(getModel(_xListBox),
-            "SelectedItems")
+        ipos = getModel(_xListBox).SelectedItems
         return ipos.length > 0
-
-    def addSingleItemtoListbox(self, xListBox, ListItem, iSelIndex):
-        xListBox.addItem(ListItem, xListBox.getItemCount())
-        if iSelIndex != -1:
-            xListBox.selectItemPos(iSelIndex, True)
 
     '''
     The problem with setting the visibility of controls is that
@@ -147,8 +126,7 @@ class UnoDialog(object):
         try:
             iCurControlStep = int(getControlProperty(
                 controlname, PropertyNames.PROPERTY_STEP))
-            iCurDialogStep = int(Helper.getUnoPropertyValue(
-                self.xDialogModel, PropertyNames.PROPERTY_STEP))
+            iCurDialogStep = int(self.xDialogModel.Step)
             if bIsVisible:
                 setControlProperty(
                     controlname, PropertyNames.PROPERTY_STEP, iCurDialogStep)
@@ -164,12 +142,9 @@ class UnoDialog(object):
 
     def repaintDialogStep(self):
         try:
-            ncurstep = int(Helper.getUnoPropertyValue(
-                self.xDialogModel, PropertyNames.PROPERTY_STEP))
-            Helper.setUnoPropertyValue(
-                self.xDialogModel, PropertyNames.PROPERTY_STEP, 99)
-            Helper.setUnoPropertyValue(
-                self.xDialogModel, PropertyNames.PROPERTY_STEP, ncurstep)
+            ncurstep = int(self.xDialogModel.Step)
+            self.xDialogModel.Step = 99
+            self.xDialogModel.Step = ncurstep
         except Exception:
             traceback.print_exc()
 
@@ -177,11 +152,10 @@ class UnoDialog(object):
         self, serviceName, componentName, sPropNames, oPropValues):
         try:
             xControlModel = self.xDialogModel.createInstance(serviceName)
-            Helper.setUnoPropertyValues(
-                xControlModel, sPropNames, oPropValues)
+            uno.invoke(xControlModel, "setPropertyValues",
+                    (sPropNames, oPropValues))
             self.xDialogModel.insertByName(componentName, xControlModel)
-            Helper.setUnoPropertyValue(xControlModel,
-                PropertyNames.PROPERTY_NAME, componentName)
+            xControlModel.Name = componentName
         except Exception:
             traceback.print_exc()
 
@@ -202,12 +176,11 @@ class UnoDialog(object):
                     xListBox.selectItemPos((short)(iFieldsSelIndex - 1), True)
 
     # deselects a Listbox. MultipleMode is not supported
-
     def deselectListBox(self, _xBasisListBox):
         oListBoxModel = getModel(_xBasisListBox)
-        sList = Helper.getUnoPropertyValue(oListBoxModel, "StringItemList")
-        Helper.setUnoPropertyValue(oListBoxModel, "StringItemList", [[],[]])
-        Helper.setUnoPropertyValue(oListBoxModel, "StringItemList", sList)
+        sList = oListBoxModel.StringItemList
+        oListBoxModel.StringItemList = [[],[]]
+        oListBoxModel.StringItemList = sList
 
     def calculateDialogPosition(self, FramePosSize):
         # Todo:check if it would be useful or possible to create a dialog peer
@@ -309,8 +282,7 @@ class UnoDialog(object):
 
     @classmethod
     def setEnabled(self, control, enabled):
-        Helper.setUnoPropertyValue(
-            control.Model, PropertyNames.PROPERTY_ENABLED, enabled)
+        control.Model.Enabled = enabled
 
     @classmethod
     def getControlModelType(self, xServiceInfo):

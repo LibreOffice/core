@@ -17,8 +17,7 @@
 #
 from .FaxWizardDialogResources import FaxWizardDialogResources
 from .FaxWizardDialogConst import FaxWizardDialogConst, HIDMAIN, HID
-from ..ui.WizardDialog import WizardDialog, uno, Helper, UIConsts, \
-    PropertyNames
+from ..ui.WizardDialog import WizardDialog, uno, UIConsts, PropertyNames
 
 from com.sun.star.awt.FontUnderline import SINGLE
 
@@ -31,14 +30,14 @@ class FaxWizardDialog(WizardDialog):
         self.resources = FaxWizardDialogResources(xmsf)
 
         #set dialog properties...
-        Helper.setUnoPropertyValues(self.xDialogModel,
-             ("Closeable", PropertyNames.PROPERTY_HEIGHT, "Moveable",
+        uno.invoke(self.xDialogModel, "setPropertyValues",
+             (("Closeable", PropertyNames.PROPERTY_HEIGHT, "Moveable",
                 PropertyNames.PROPERTY_POSITION_X,
                 PropertyNames.PROPERTY_POSITION_Y,
                 PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX,
                 "Title", PropertyNames.PROPERTY_WIDTH),
              (True, 210, True, 104, 52, 1, 1,
-                self.resources.resFaxWizardDialog_title, 310))
+                self.resources.resFaxWizardDialog_title, 310)))
 
         self.fontDescriptor1 = \
             uno.createUnoStruct('com.sun.star.awt.FontDescriptor')

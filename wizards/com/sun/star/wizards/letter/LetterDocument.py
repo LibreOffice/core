@@ -15,7 +15,7 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from ..text.TextDocument import TextDocument, traceback, Helper, \
+from ..text.TextDocument import TextDocument, traceback, \
     TextFieldHandler, Configuration
 from ..text.TextSectionHandler import TextSectionHandler
 from ..common.PropertyNames import PropertyNames
@@ -51,7 +51,7 @@ class LetterDocument(TextDocument):
                 self.xMSF, self.xTextDocument)
             oSection = \
                 mySectionHandler.xTextDocument.TextSections.getByName(sElement)
-            Helper.setUnoPropertyValue(oSection, "IsVisible", bState)
+            oSection.IsVisible = bState
         except Exception:
             traceback.print_exc()
 
@@ -68,9 +68,8 @@ class LetterDocument(TextDocument):
                 xPageStyleCollection = xNameAccess.getByName("PageStyles")
                 xPageStyle = xPageStyleCollection.getByName(sPageStyle)
                 if bState:
-                    Helper.setUnoPropertyValue(xPageStyle, "FooterIsOn", True)
-                    xFooterText = \
-                        Helper.getUnoPropertyValue(xPageStyle, "FooterText")
+                    xPageStyle.FooterIsOn = True
+                    xFooterText = xPageStyle.FooterText
                     xFooterText.String = sText
                     if bPageNumber:
                         #Adding the Page Number
@@ -89,8 +88,7 @@ class LetterDocument(TextDocument):
                             xPageNumberField, False)
 
                 else:
-                    Helper.setUnoPropertyValue(
-                        xPageStyle, "FooterIsOn", False)
+                    xPageStyle.FooterIsOn = False
 
                 self.xTextDocument.unlockControllers()
             except Exception:
@@ -118,17 +116,16 @@ class LetterDocument(TextDocument):
             oUserDataAccess = Configuration.getConfigurationRoot(
                 self.xMSF, "org.openoffice.UserProfile/Data", False)
             myFieldHandler.changeUserFieldContent(
-                "Company", Helper.getUnoObjectbyName(oUserDataAccess, "o"))
+                "Company", oUserDataAccess.getByName("o"))
             myFieldHandler.changeUserFieldContent(
-                "Street", Helper.getUnoObjectbyName(oUserDataAccess, "street"))
+                "Street", oUserDataAccess.getByName("street"))
             myFieldHandler.changeUserFieldContent(
-                "PostCode",
-                Helper.getUnoObjectbyName(oUserDataAccess, "postalcode"))
+                "PostCode", oUserDataAccess.getByName("postalcode"))
             myFieldHandler.changeUserFieldContent(
-                "City", Helper.getUnoObjectbyName(oUserDataAccess, "l"))
+                "City", oUserDataAccess.getByName("l"))
             myFieldHandler.changeUserFieldContent(
                 PropertyNames.PROPERTY_STATE,
-                Helper.getUnoObjectbyName(oUserDataAccess, "st"))
+                oUserDataAccess.getByName("st"))
         except Exception:
             traceback.print_exc()
 

@@ -18,7 +18,7 @@
 from .LetterWizardDialogConst import LetterWizardDialogConst, HIDMAIN, HID
 from .LetterWizardDialogResources import LetterWizardDialogResources
 from ..common.HelpIds import HelpIds
-from ..ui.WizardDialog import WizardDialog, uno, Helper, PropertyNames
+from ..ui.WizardDialog import WizardDialog, uno, PropertyNames
 
 from com.sun.star.awt.FontUnderline import SINGLE
 
@@ -28,9 +28,8 @@ class LetterWizardDialog(WizardDialog):
         super(LetterWizardDialog, self).__init__(xmsf, HIDMAIN )
 
         self.resources = LetterWizardDialogResources(xmsf)
-        Helper.setUnoPropertyValues(
-            self.xDialogModel,
-            ("Closeable",
+        uno.invoke(self.xDialogModel, "setPropertyValues",
+            (("Closeable",
                 PropertyNames.PROPERTY_HEIGHT,
                 "Moveable",
                 PropertyNames.PROPERTY_NAME,
@@ -42,7 +41,8 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (True, 210, True,
                 "LetterWizardDialog", 104, 52, 1, 1,
-                self.resources.resLetterWizardDialog_title, 310))
+                self.resources.resLetterWizardDialog_title, 310)))
+                
         self.fontDescriptor1 = \
             uno.createUnoStruct('com.sun.star.awt.FontDescriptor')
         self.fontDescriptor2 = \

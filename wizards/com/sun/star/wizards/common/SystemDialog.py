@@ -17,7 +17,6 @@
 #
 import traceback
 from .Desktop import Desktop
-from .Helper import Helper
 
 from com.sun.star.ui.dialogs.TemplateDescription import \
     FILESAVE_AUTOEXTENSION, FILEOPEN_SIMPLE
@@ -149,7 +148,7 @@ class SystemDialog(object):
         try:
             oFactory = self.xMSF.createInstance(
                 "com.sun.star.document.FilterFactory")
-            oObject = Helper.getUnoObjectbyName(oFactory, filterName)
+            oObject = oFactory.getByName(filterName)
             xPropertyValue = list(oObject)
             for i in xPropertyValue:
                 if i is not None and i.Name == "UIName":

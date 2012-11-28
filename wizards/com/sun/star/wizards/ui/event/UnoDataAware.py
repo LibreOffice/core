@@ -18,7 +18,6 @@
 import uno
 from .CommonListener import ItemListenerProcAdapter, TextListenerProcAdapter
 from .DataAware import DataAware, PropertyNames
-from ...common.Helper import Helper
 
 '''
 @author rpiterman
@@ -44,16 +43,15 @@ class UnoDataAware(DataAware):
 
     def enableControls(self, value):
         for i in self.disableObjects:
-            Helper.setUnoPropertyValue(
-                i.Model, PropertyNames.PROPERTY_ENABLED, bool(value))
+            i.Model.Enabled = bool(value)
 
     def setToUI(self, value):
         if self.isShort:
             value = uno.Any("[]short", (value,))
-        Helper.setUnoPropertyValue(self.unoModel, self.unoPropName, value)
+        setattr(self.unoModel, self.unoPropName, value)
 
     def getFromUI(self):
-        return Helper.getUnoPropertyValue(self.unoModel, self.unoPropName)
+        return getattr(self.unoModel, self.unoPropName)
 
     @classmethod
     def __attachTextControl(

@@ -17,7 +17,6 @@
 #
 import uno
 import traceback
-from ..common.Helper import Helper
 
 class TextSectionHandler(object):
     '''Creates a new instance of TextSectionHandler'''
@@ -86,8 +85,8 @@ class TextSectionHandler(object):
             oSectionLink = \
                 uno.createUnoStruct('com.sun.star.text.SectionFileLink')
             oSectionLink.FileURL = ""
-            Helper.setUnoPropertyValues(
-                oTextSection, ("FileLink", "LinkRegion"),(oSectionLink, ""))
+            oTextSection.FileLink = oSectionLink
+            oTextSection.LinkRegion =  ""
         except Exception:
             traceback.print_exc()
 
@@ -100,9 +99,8 @@ class TextSectionHandler(object):
             oSectionLink = \
                 uno.createUnoStruct('com.sun.star.text.SectionFileLink')
             oSectionLink.FileURL = TemplateName
-            Helper.setUnoPropertyValues(
-                oTextSection, ("FileLink", "LinkRegion"),
-                (oSectionLink, SectionName))
+            oTextSection.FileLink = oSectionLink
+            oTextSection.LinkRegion = SectionName
             NewSectionName = oTextSection.Name
             if NewSectionName is not SectionName:
                 oTextSection.Name = SectionName

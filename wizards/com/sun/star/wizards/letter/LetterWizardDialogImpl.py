@@ -17,8 +17,8 @@
 #
 import traceback
 import os.path
-from .LetterWizardDialog import LetterWizardDialog, Helper, \
-    PropertyNames, uno, HelpIds, HID
+from .LetterWizardDialog import LetterWizardDialog, PropertyNames, uno, \
+    HelpIds, HID
 from .LetterDocument import LetterDocument, BusinessPaperObject
 from .CGLetterWizard import CGLetterWizard
 from ..common.NoValidPathException import NoValidPathException
@@ -570,12 +570,9 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             try:
                 xReceiverFrame = self.myLetterDoc.getFrameByName(
                     "Receiver Address", self.myLetterDoc.xTextDocument)
-                iFrameWidth = int(Helper.getUnoPropertyValue(
-                    xReceiverFrame, PropertyNames.PROPERTY_WIDTH))
-                iFrameX = int(Helper.getUnoPropertyValue(
-                    xReceiverFrame, "HoriOrientPosition"))
-                iFrameY = int(Helper.getUnoPropertyValue(
-                    xReceiverFrame, "VertOrientPosition"))
+                iFrameWidth = int(xReceiverFrame.Width)
+                iFrameX = int(xReceiverFrame.HoriOrientPosition)
+                iFrameY = int(xReceiverFrame.VertOrientPosition)
                 iReceiverHeight = int(0.5 * 1000)
                 self.BusCompanyAddressReceiver = BusinessPaperObject(
                     self.myLetterDoc.xTextDocument, " ", iFrameWidth, iReceiverHeight,
@@ -689,8 +686,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
 
             BPaperItem = \
                 self.getRoadmapItemByID(LetterWizardDialogImpl.RM_FOOTER)
-            Helper.setUnoPropertyValue(
-                BPaperItem, PropertyNames.PROPERTY_ENABLED, bFooterPossible)
+            BPaperItem.Enabled = bFooterPossible
         except Exception:
             traceback.print_exc()
 
@@ -823,21 +819,18 @@ class LetterWizardDialogImpl(LetterWizardDialog):
     def enableSenderReceiver(self):
         BPaperItem = self.getRoadmapItemByID(
             LetterWizardDialogImpl.RM_SENDERRECEIVER)
-        Helper.setUnoPropertyValue(
-            BPaperItem, PropertyNames.PROPERTY_ENABLED, True)
+        BPaperItem.Enabled = True
 
     def disableSenderReceiver(self):
         BPaperItem = self.getRoadmapItemByID(
             LetterWizardDialogImpl.RM_SENDERRECEIVER)
-        Helper.setUnoPropertyValue(
-            BPaperItem, PropertyNames.PROPERTY_ENABLED, False)
+        BPaperItem.Enabled = False
 
     def enableBusinessPaper(self):
         try:
             BPaperItem = self.getRoadmapItemByID(
                 LetterWizardDialogImpl.RM_BUSINESSPAPER)
-            Helper.setUnoPropertyValue(
-                BPaperItem, PropertyNames.PROPERTY_ENABLED, True)
+            BPaperItem.Enabled = True
             self.chkPaperCompanyLogoItemChanged()
             self.chkPaperCompanyAddressItemChanged()
             self.chkPaperFooterItemChanged()
@@ -849,8 +842,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         try:
             BPaperItem = self.getRoadmapItemByID(
                 LetterWizardDialogImpl.RM_BUSINESSPAPER)
-            Helper.setUnoPropertyValue(
-                BPaperItem, PropertyNames.PROPERTY_ENABLED, False)
+            BPaperItem.Enabled = False
             if self.BusCompanyLogo != None:
                 self.BusCompanyLogo.removeFrame()
 

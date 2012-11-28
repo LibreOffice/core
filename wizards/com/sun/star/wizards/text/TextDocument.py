@@ -21,10 +21,10 @@ import time
 from datetime import date as dateTimeObject
 from .ViewHandler import ViewHandler
 from .TextFieldHandler import TextFieldHandler
-from ..common.Desktop import Desktop
-from ..common.Helper import Helper
 from ..document.OfficeDocument import OfficeDocument
+from ..common.Desktop import Desktop
 from ..common.Configuration import Configuration
+from ..common.NumberFormatter import NumberFormatter
 
 from com.sun.star.container import NoSuchElementException
 from com.sun.star.lang import WrappedTargetException
@@ -65,8 +65,7 @@ class TextDocument(object):
                     xFrame, URL, "_self", xArgs);
                 self.xWindowPeer = xFrame.getComponentWindow()
                 self.m_xDocProps = self.xTextDocument.DocumentProperties
-                CharLocale = Helper.getUnoStructValue(
-                    self.xTextDocument, "CharLocale");
+                CharLocale = self.xTextDocument.CharLocale
                 return
 
             else:
@@ -110,8 +109,7 @@ class TextDocument(object):
     def init(self):
         self.xWindowPeer = self.xFrame.getComponentWindow()
         self.m_xDocProps = self.xTextDocument.DocumentProperties
-        self.CharLocale = Helper.getUnoStructValue(
-            self.xTextDocument, "CharLocale")
+        self.CharLocale = self.xTextDocument.CharLocale
         self.xText = self.xTextDocument.Text
 
     def showStatusIndicator(self):
@@ -159,7 +157,7 @@ class TextDocument(object):
             xNameAccess = self.xTextDocument.StyleFamilies
             xPageStyleCollection = xNameAccess.getByName("PageStyles")
             xPageStyle = xPageStyleCollection.getByName("First Page")
-            return Helper.getUnoPropertyValue(xPageStyle, "Size")
+            return xPageStyle.Size
         except Exception:
             traceback.print_exc()
             return None
@@ -196,7 +194,7 @@ class TextDocument(object):
             day = time.strftime("%d", now)
 
             dateObject = dateTimeObject(int(year), int(month), int(day))
-            du = Helper.DateUtils(self.xMSF, self.xTextDocument)
+            du = self.DateUtils(self.xMSF, self.xTextDocument)
             ff = du.getFormat(DATE_SYS_DDMMYY)
             myDate = du.format(ff, dateObject)
             xDocProps2 = self.xTextDocument.DocumentProperties
@@ -248,3 +246,32 @@ class TextDocument(object):
             auxList.append(allItems.getByIndex(i))
             
         return auxList
+
+    class DateUtils(object):
+
+        def __init__(self, xmsf, document):
+            self.formatSupplier = document
+            formatSettings = self.formatSupplier.getNumberFormatSettings()
+            date = formatSettings.NullDate
+            self.calendar = dateTimeObject(date.Year, date.Month, date.Day)
+            self.formatter = NumberFormatter.createNumberFormatter(xmsf,
+                self.formatSupplier)
+
+        '''
+        @param format a constant of the enumeration NumberFormatIndex
+        @return
+        '''
+
+        def getFormat(self, format):
+            return NumberFormatter.getNumberFormatterKey(
+                self.formatSupplier, format)
+
+        '''
+        @param date a VCL date in form of 20041231
+        @return a document relative date
+        '''
+
+        def format(self, formatIndex, date):
+            difference =  date - self.calendar
+            return self.formatter.convertNumberToString(formatIndex,
+                difference.days)

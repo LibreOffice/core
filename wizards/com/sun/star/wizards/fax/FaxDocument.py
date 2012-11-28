@@ -15,7 +15,7 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from ..text.TextDocument import TextDocument, traceback, Helper, \
+from ..text.TextDocument import TextDocument, traceback, \
     TextFieldHandler, Configuration
 from ..text.TextSectionHandler import TextSectionHandler
 from ..common.PropertyNames import PropertyNames
@@ -39,7 +39,7 @@ class FaxDocument(TextDocument):
                 self.xTextDocument)
             oSection = \
                 mySectionHandler.xTextDocument.TextSections.getByName(sElement)
-            Helper.setUnoPropertyValue(oSection,"IsVisible",bState)
+            oSection.IsVisible = bState
         except Exception:
             traceback.print_exc()
 
@@ -58,8 +58,7 @@ class FaxDocument(TextDocument):
 
                 if bState:
                     xPageStyle.setPropertyValue("FooterIsOn", True)
-                    xFooterText = \
-                        Helper.getUnoPropertyValue(xPageStyle, "FooterText")
+                    xFooterText = xPageStyle.FooterText
                     xFooterText.String = sText
 
                     if bPageNumber:
@@ -78,8 +77,7 @@ class FaxDocument(TextDocument):
                         xFooterText.insertTextContent(xFooterText.End,
                             xPageNumberField, False)
                 else:
-                    Helper.setUnoPropertyValue(xPageStyle, "FooterIsOn",
-                        False)
+                    xPageStyle.FooterIsOn = False
 
                 self.xTextDocument.unlockControllers()
             except Exception:
@@ -108,19 +106,17 @@ class FaxDocument(TextDocument):
             oUserDataAccess = Configuration.getConfigurationRoot(
                 self.xMSF, "org.openoffice.UserProfile/Data", False)
             myFieldHandler.changeUserFieldContent("Company",
-                Helper.getUnoObjectbyName(oUserDataAccess, "o"))
+                oUserDataAccess.hasByName("o"))
             myFieldHandler.changeUserFieldContent("Street",
-                Helper.getUnoObjectbyName(oUserDataAccess, "street"))
+                oUserDataAccess.hasByName("street"))
             myFieldHandler.changeUserFieldContent("PostCode",
-                Helper.getUnoObjectbyName(oUserDataAccess, "postalcode"))
+                oUserDataAccess.hasByName("postalcode"))
             myFieldHandler.changeUserFieldContent(
-                PropertyNames.PROPERTY_STATE,
-                Helper.getUnoObjectbyName(oUserDataAccess, "st"))
+                PropertyNames.PROPERTY_STATE, oUserDataAccess.hasByName("st"))
             myFieldHandler.changeUserFieldContent("City",
-                Helper.getUnoObjectbyName(oUserDataAccess, "l"))
+                oUserDataAccess.hasByName("l"))
             myFieldHandler.changeUserFieldContent("Fax",
-                Helper.getUnoObjectbyName(oUserDataAccess,
-                "facsimiletelephonenumber"))
+                oUserDataAccess.hasByName("facsimiletelephonenumber"))
         except Exception:
             traceback.print_exc()
 

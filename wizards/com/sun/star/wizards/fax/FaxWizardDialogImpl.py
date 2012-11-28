@@ -17,7 +17,7 @@
 #
 import traceback
 import os.path
-from .FaxWizardDialog import FaxWizardDialog, Helper, PropertyNames, uno, HID
+from .FaxWizardDialog import FaxWizardDialog, PropertyNames, uno, HID
 from .CGFaxWizard import CGFaxWizard
 from .FaxDocument import FaxDocument
 from ..ui.PathSelection import PathSelection
@@ -613,8 +613,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             #enable/disable roadmap item for footer page
             BPaperItem = self.getRoadmapItemByID( \
                 FaxWizardDialogImpl.RM_FOOTER)
-            Helper.setUnoPropertyValue(BPaperItem,
-                PropertyNames.PROPERTY_ENABLED, bFooterPossible)
+            BPaperItem.Enabled = bFooterPossible
         except Exception:
             traceback.print_exc()
 
@@ -685,14 +684,12 @@ class FaxWizardDialogImpl(FaxWizardDialog):
     def __enableSenderReceiver(self):
         BPaperItem = self.getRoadmapItemByID( \
             FaxWizardDialogImpl.RM_SENDERRECEIVER)
-        Helper.setUnoPropertyValue(BPaperItem,
-            PropertyNames.PROPERTY_ENABLED, True)
+        BPaperItem.Enabled = True
 
     def __disableSenderReceiver(self):
         BPaperItem = self.getRoadmapItemByID( \
             FaxWizardDialogImpl.RM_SENDERRECEIVER)
-        Helper.setUnoPropertyValue(BPaperItem,
-            PropertyNames.PROPERTY_ENABLED, False)
+        BPaperItem.Enabled = False
 
     def validatePath(self):
         if self.myPathSelection.usedPathPicker:
