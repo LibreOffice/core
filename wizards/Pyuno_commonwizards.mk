@@ -37,7 +37,6 @@ $(eval $(call gb_Pyuno_add_files,wizards,\
     common/Resource.py \
     common/ConfigNode.py \
     common/DebugHelper.py \
-    common/Helper.py \
     common/NoValidPathException.py \
     common/PropertyNames.py \
     common/SystemDialog.py \
