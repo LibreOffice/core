@@ -39,4 +39,8 @@ $(eval $(call gb_InternalUnoApi_add_idlfiles,bridgetest,testtools/source/bridget
     bridgetest \
 ))
 
+$(eval $(call gb_InternalUnoApi_add_idlfiles,bridgetest,testtools/source/bridgetest/idl/com/sun/star/test/performance,\
+    XPerformanceTest \
+))
+
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
