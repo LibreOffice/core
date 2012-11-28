@@ -20,7 +20,6 @@ from .UnoDialog import UnoDialog
 from ..common.Desktop import Desktop
 from ..common.PropertyNames import PropertyNames
 from ..common.HelpIds import HelpIds
-from ..common.Helper import Helper
 
 from com.sun.star.awt.ScrollBarOrientation import HORIZONTAL, VERTICAL
 
@@ -116,8 +115,7 @@ class ControlScroller(object):
         if _ntotfieldcount is not None:
             self.setTotalFieldCount(_ntotfieldcount)
         if _nscrollvalue >= 0:
-            Helper.setUnoPropertyValue(
-                ControlScroller.xScrollBar.Model, "ScrollValue", _nscrollvalue)
+            ControlScroller.xScrollBar.Model.ScrollValue = _nscrollvalue
             self.scrollControls()
 
     @classmethod
@@ -132,13 +130,11 @@ class ControlScroller(object):
         self.ntotfieldcount = _ntotfieldcount
         self.setCurFieldCount()
         if self.ntotfieldcount > ControlScroller.nblockincrement:
-            Helper.setUnoPropertyValues(
-                ControlScroller.xScrollBar.Model,
-                (PropertyNames.PROPERTY_ENABLED, "ScrollValueMax"),
-                (True, self.ntotfieldcount - ControlScroller.nblockincrement))
+            ControlScroller.xScrollBar.Model.Enabled = True
+            ControlScroller.xScrollBar.Model.ScrollValueMax = \
+                self.ntotfieldcount - ControlScroller.nblockincrement
         else:
-            Helper.setUnoPropertyValue(ControlScroller.xScrollBar.Model,
-                PropertyNames.PROPERTY_ENABLED, False)
+            ControlScroller.xScrollBar.Model.Enabled = False
 
     def toggleComponent(self, _bdoenable):
         bdoenable = _bdoenable and \
@@ -162,8 +158,8 @@ class ControlScroller(object):
     @classmethod
     def scrollControls(self):
         try:
-            ControlScroller.nscrollvalue = int(Helper.getUnoPropertyValue(
-                    ControlScroller.xScrollBar.Model, "ScrollValue"))
+            ControlScroller.nscrollvalue = \
+                int(ControlScroller.xScrollBar.Model.ScrollValue)
             if ControlScroller.nscrollvalue + ControlScroller.nblockincrement \
                     >= self.ntotfieldcount:
                 ControlScroller.nscrollvalue = \

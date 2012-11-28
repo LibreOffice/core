@@ -15,8 +15,7 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from ..ui.WizardDialog import WizardDialog, uno, Helper, UIConsts, \
-    PropertyNames
+from ..ui.WizardDialog import WizardDialog, uno, UIConsts, PropertyNames
 from .AgendaWizardDialogConst import AgendaWizardDialogConst, HID
 from .AgendaWizardDialogResources import AgendaWizardDialogResources
 
@@ -31,8 +30,8 @@ class AgendaWizardDialog(WizardDialog):
         self.resources = AgendaWizardDialogResources(xmsf)
         
         #set dialog properties...
-        Helper.setUnoPropertyValues(
-            self.xDialogModel, ("Closeable", 
+        uno.invoke(self.xDialogModel, "setPropertyValues",
+            (("Closeable", 
                 PropertyNames.PROPERTY_HEIGHT,
                 "Moveable", PropertyNames.PROPERTY_POSITION_X,
                 PropertyNames.PROPERTY_POSITION_Y,
@@ -40,7 +39,7 @@ class AgendaWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 "Title", PropertyNames.PROPERTY_WIDTH),
             (True, 210, True, 200, 52, 1, 1,
-                self.resources.resAgendaWizardDialog_title,310))
+                self.resources.resAgendaWizardDialog_title,310)))
 
         self.PROPS_LIST = ("Dropdown",
                 PropertyNames.PROPERTY_HEIGHT,

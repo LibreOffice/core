@@ -21,7 +21,6 @@ from ..text.TextElement import TextElement
 from ..text.TextDocument import TextDocument
 from ..common.FileAccess import FileAccess
 from ..text.TextSectionHandler import TextSectionHandler
-from ..common.Helper import Helper
 
 from datetime import date as dateTimeObject
 
@@ -280,7 +279,7 @@ class AgendaTemplate(TextDocument):
         Get the default locale of the document,
         and create the date and time formatters.
         '''
-        AgendaTemplate.dateUtils = Helper.DateUtils(
+        AgendaTemplate.dateUtils = self.DateUtils(
             self.xMSF, self.xTextDocument)
         AgendaTemplate.formatter = AgendaTemplate.dateUtils.formatter
         AgendaTemplate.dateFormat = \
@@ -434,8 +433,7 @@ class AgendaTemplate(TextDocument):
         try:
             for i in allSections:
                 self.section = self.getSection(i)
-                visible = bool(Helper.getUnoPropertyValue(
-                    self.section, "IsVisible"))
+                visible = bool(self.section.IsVisible)
                 if not visible:
                     self.section.Anchor.String = ""
 
@@ -559,9 +557,9 @@ class AgendaTemplate(TextDocument):
     '''
 
     def fillMinutesItem(self, Range, text, placeholder):
-        paraStyle = Helper.getUnoPropertyValue(Range, "ParaStyleName")
+        paraStyle = Range.ParaStyleName
         Range.setString(text)
-        Helper.setUnoPropertyValue(Range, "ParaStyleName", paraStyle)
+        Range.ParaStyleName = paraStyle
         if text == None or text == "":
             if placeholder != None and not placeholder == "":
                 placeHolder = createPlaceHolder(
@@ -586,10 +584,9 @@ class AgendaTemplate(TextDocument):
             traceback.print_exc()
             return None
 
-        Helper.setUnoPropertyValue(placeHolder, "PlaceHolder", ph)
-        Helper.setUnoPropertyValue(placeHolder, "Hint", hint)
-        Helper.setUnoPropertyValue(
-           placeHolder, "PlaceHolderType", uno.Any("short",TEXT))
+        placeHolder.PlaceHolder = ph
+        placeHolder.Hint = hint
+        placeHolder.PlaceHolderType = uno.Any("short",TEXT)
         return placeHolder
 
     def getNamesWhichStartWith(self, allNames, prefix):
@@ -649,7 +646,7 @@ class ItemsTable(object):
         i = 0
         while i < len(self.agenda.allItems):
             workwith = self.agenda.allItems[i]
-            t = Helper.getUnoPropertyValue(workwith, "TextTable")
+            t = workwith.TextTable
             if t == ItemsTable.table:
                 iText = workwith.String.lower().lstrip()
                 ai = self.agenda.itemsCache[iText]
@@ -709,7 +706,7 @@ class ItemsTable(object):
             boolean = True
         else:
             boolean = False
-        Helper.setUnoPropertyValue(self.section, "IsVisible", boolean)
+        self.section.IsVisible = boolean
         if not visible:
             return
             '''
@@ -824,9 +821,9 @@ class Topics(object):
         try:
             items = {}
             for i in self.agenda.allItems:
-                t = Helper.getUnoPropertyValue(i, "TextTable")
+                t = i.TextTable
                 if t == Topics.table:
-                    cell = Helper.getUnoPropertyValue(i, "Cell")
+                    cell = i.Cell
                     iText = cell.CellName
                     items[iText] = i
 

@@ -17,7 +17,8 @@
 #
 import uno
 from .CGTopic import CGTopic
-from ..ui.ControlScroller import *
+from ..ui.ControlScroller import ControlScroller, PropertyNames, traceback, \
+    HelpIds, UnoDialog
 from .AgendaWizardDialogConst import HID
 from ..common.Properties import Properties
 from ..ui.event.CommonListener import FocusListenerProcAdapter, \
@@ -202,8 +203,7 @@ class TopicsControl(ControlScroller):
     def focusGained2(self, control):
         try:
             #calculate in which row we are...
-            name = Helper.getUnoPropertyValue(
-                control.Model, PropertyNames.PROPERTY_NAME)
+            name = control.Model.Name
             num = name[name.index("_") + 1:]
             TopicsControl.lastFocusRow = int(num) + ControlScroller.nscrollvalue
             TopicsControl.lastFocusControl = control
@@ -687,8 +687,7 @@ class TopicsControl(ControlScroller):
 
     @classmethod
     def getColumn(self, control):
-        name = Helper.getUnoPropertyValue(
-            control.Model, PropertyNames.PROPERTY_NAME)
+        name = control.Model.Name
         if name.startswith(TopicsControl.TOPIC):
             return 1
         if name.startswith(TopicsControl.RESP):
