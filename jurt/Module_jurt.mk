@@ -50,6 +50,7 @@ endif
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,jurt,\
     CustomTarget_test_urp \
+    InternalUnoApi_test_urp \
     JunitTest_bridgefactory \
     JunitTest_connections \
     JunitTest_java \
