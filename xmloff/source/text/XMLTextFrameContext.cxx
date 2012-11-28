@@ -1044,7 +1044,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
         case XML_TOK_TEXT_FRAME_TRANSFORM:
             {
                 OUString sValue( rValue );
-                sValue.trim();
+                sValue = sValue.trim();
                 const OUString aRotate(GetXMLToken(XML_ROTATE));
                 const sal_Int32 nRotateLen(aRotate.getLength());
                 sal_Int32 nLen = sValue.getLength();
@@ -1054,7 +1054,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
                     ')' == sValue[nLen-1] )
                 {
                     sValue = sValue.copy( nRotateLen+1, nLen-(nRotateLen+2) );
-                    sValue.trim();
+                    sValue = sValue.trim();
                     sal_Int32 nVal;
                     if (::sax::Converter::convertNumber( nVal, sValue ))
                         nRotation = (sal_Int16)(nVal % 360 );
