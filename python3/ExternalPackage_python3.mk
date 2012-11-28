@@ -13,10 +13,10 @@ $(eval $(call gb_ExternalPackage_use_external_project,python3,python3))
 
 ifeq ($(OS)-$(COM),WNT-MSC)
 $(eval $(call gb_ExternalPackage_add_file,python3,bin/python.exe,LO_lib/python.exe))
-$(eval $(call gb_ExternalPackage_add_file,python3,bin/python3.dll,LO_lib/python3.dll))
-$(eval $(call gb_ExternalPackage_add_file,python3,bin/python33.dll,LO_lib/python33.dll))
-$(eval $(call gb_ExternalPackage_add_file,python3,lib/python3.lib,LO_lib/python3.lib))
-$(eval $(call gb_ExternalPackage_add_file,python3,lib/python33.lib,LO_lib/python33.lib))
+$(eval $(call gb_ExternalPackage_add_file,python3,bin/python$(PYTHON_VERSION_MAJOR).dll,LO_lib/python$(PYTHON_VERSION_MAJOR).dll))
+$(eval $(call gb_ExternalPackage_add_file,python3,bin/python$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR).dll,LO_lib/python$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR).dll))
+$(eval $(call gb_ExternalPackage_add_file,python3,lib/python$(PYTHON_VERSION_MAJOR).lib,LO_lib/python$(PYTHON_VERSION_MAJOR).lib))
+$(eval $(call gb_ExternalPackage_add_file,python3,lib/python$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR).lib,LO_lib/python$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR).lib))
 $(eval $(call gb_ExternalPackage_add_files,python3,lib/python,\
 	LO_lib/_ctypes.pyd \
 	LO_lib/_ctypes_test.pyd \
@@ -37,11 +37,11 @@ $(eval $(call gb_ExternalPackage_add_files,python3,lib/python,\
 else ifeq ($(OS),WNT) # MinGW
 # TODO how are C modules called on this platform?
 $(eval $(call gb_ExternalPackage_add_file,python3,bin/python.exe,python.exe))
-$(eval $(call gb_ExternalPackage_add_file,python3,bin/python3.dll,python3.dll))
+$(eval $(call gb_ExternalPackage_add_file,python3,bin/python$(PYTHON_VERSION_MAJOR).dll,python$(PYTHON_VERSION_MAJOR).dll))
 else
 $(eval $(call gb_ExternalPackage_add_file,python3,bin/python,python))
-$(eval $(call gb_ExternalPackage_add_file,python3,lib/libpython3.so,libpython3.so))
-$(eval $(call gb_ExternalPackage_add_file,python3,lib/libpython3.3m.so,libpython3.3m.so))
+$(eval $(call gb_ExternalPackage_add_file,python3,lib/libpython$(PYTHON_VERSION_MAJOR).so,libpython$(PYTHON_VERSION_MAJOR).so))
+$(eval $(call gb_ExternalPackage_add_file,python3,lib/libpython$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so,libpython$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so))
 # versioned lib/libpython3.3m.so.1.0 appears to be unnecessary?
 
 # Unfortunately the python build system does not allow to explicitly enable or
@@ -52,54 +52,54 @@ $(eval $(call gb_ExternalPackage_add_file,python3,lib/libpython3.3m.so,libpython
 # that may not be available on baseline systems.
 
 $(eval $(call gb_ExternalPackage_add_files,python3,lib/python/lib-dynload,\
-	LO_lib/array.cpython-33m.so \
-	LO_lib/atexit.cpython-33m.so \
-	LO_lib/audioop.cpython-33m.so \
-	LO_lib/binascii.cpython-33m.so \
-	LO_lib/_bisect.cpython-33m.so \
-	LO_lib/cmath.cpython-33m.so \
-	LO_lib/_codecs_cn.cpython-33m.so \
-	LO_lib/_codecs_hk.cpython-33m.so \
-	LO_lib/_codecs_iso2022.cpython-33m.so \
-	LO_lib/_codecs_jp.cpython-33m.so \
-	LO_lib/_codecs_kr.cpython-33m.so \
-	LO_lib/_codecs_tw.cpython-33m.so \
-	LO_lib/_crypt.cpython-33m.so \
-	LO_lib/_csv.cpython-33m.so \
-	LO_lib/_ctypes.cpython-33m.so \
-	LO_lib/_ctypes_test.cpython-33m.so \
-	LO_lib/_datetime.cpython-33m.so \
-	LO_lib/_decimal.cpython-33m.so \
-	LO_lib/_elementtree.cpython-33m.so \
-	LO_lib/fcntl.cpython-33m.so \
-	LO_lib/grp.cpython-33m.so \
-	LO_lib/_hashlib.cpython-33m.so \
-	LO_lib/_heapq.cpython-33m.so \
-	LO_lib/_json.cpython-33m.so \
-	LO_lib/_lsprof.cpython-33m.so \
-	LO_lib/math.cpython-33m.so \
-	LO_lib/mmap.cpython-33m.so \
-	LO_lib/_multibytecodec.cpython-33m.so \
-	LO_lib/_multiprocessing.cpython-33m.so \
-	LO_lib/nis.cpython-33m.so \
-	LO_lib/ossaudiodev.cpython-33m.so \
-	LO_lib/parser.cpython-33m.so \
-	LO_lib/_pickle.cpython-33m.so \
-	LO_lib/_posixsubprocess.cpython-33m.so \
-	LO_lib/pyexpat.cpython-33m.so \
-	LO_lib/_random.cpython-33m.so \
-	LO_lib/resource.cpython-33m.so \
-	LO_lib/select.cpython-33m.so \
-	LO_lib/_socket.cpython-33m.so \
-	LO_lib/spwd.cpython-33m.so \
-	LO_lib/_ssl.cpython-33m.so \
-	LO_lib/_struct.cpython-33m.so \
-	LO_lib/syslog.cpython-33m.so \
-	LO_lib/termios.cpython-33m.so \
-	LO_lib/_testbuffer.cpython-33m.so \
-	LO_lib/_testcapi.cpython-33m.so \
-	LO_lib/time.cpython-33m.so \
-	LO_lib/zlib.cpython-33m.so \
+	LO_lib/array.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/atexit.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/audioop.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/binascii.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/_bisect.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/cmath.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/_codecs_cn.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/_codecs_hk.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/_codecs_iso2022.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/_codecs_jp.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/_codecs_kr.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/_codecs_tw.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/_crypt.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/_csv.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/_ctypes.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/_ctypes_test.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/_datetime.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/_decimal.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/_elementtree.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/fcntl.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/grp.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/_hashlib.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/_heapq.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/_json.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/_lsprof.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/math.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/mmap.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/_multibytecodec.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/_multiprocessing.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/nis.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/ossaudiodev.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/parser.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/_pickle.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/_posixsubprocess.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/pyexpat.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/_random.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/resource.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/select.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/_socket.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/spwd.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/_ssl.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/_struct.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/syslog.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/termios.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/_testbuffer.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/_testcapi.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/time.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
+	LO_lib/zlib.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
 ))
 endif
 
