@@ -389,19 +389,12 @@ public:
             nType contains the type of the format.
             nKey contains the index key of the format.
      */
-    bool PutEntry( String& rString, xub_StrLen& nCheckPos, short& nType, sal_uInt32& nKey,
-                   LanguageType eLnge = LANGUAGE_DONTKNOW );
-
     bool PutEntry( OUString& rString, sal_Int32& nCheckPos, short& nType, sal_uInt32& nKey,
                    LanguageType eLnge = LANGUAGE_DONTKNOW );
 
     /** Same as <method>PutEntry</method> but the format code string is
          considered to be of language/country eLnge and is converted to
         language/country eNewLnge */
-    bool PutandConvertEntry( String& rString, xub_StrLen& nCheckPos,
-                             short& nType, sal_uInt32& nKey,
-                             LanguageType eLnge, LanguageType eNewLnge );
-
     bool PutandConvertEntry( OUString& rString, sal_Int32& nCheckPos,
                              short& nType, sal_uInt32& nKey,
                              LanguageType eLnge, LanguageType eNewLnge );
@@ -411,10 +404,6 @@ public:
         converted to another System language/country eNewLnge. In this case
          the automatic currency is converted too. */
     bool PutandConvertEntrySystem( OUString& rString, sal_Int32& nCheckPos,
-                                   short& nType, sal_uInt32& nKey,
-                                   LanguageType eLnge, LanguageType eNewLnge );
-
-    bool PutandConvertEntrySystem( String& rString, xub_StrLen& nCheckPos,
                                    short& nType, sal_uInt32& nKey,
                                    LanguageType eLnge, LanguageType eNewLnge );
 

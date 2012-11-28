@@ -474,7 +474,7 @@ String SwValueFieldType::ExpandValue( const double& rVal,
     if (rVal >= DBL_MAX)        // FehlerString fuer Calculator
         return ViewShell::GetShellRes()->aCalc_Error;
 
-    String sExpand;
+    OUString sExpand;
     SvNumberFormatter* pFormatter = pDoc->GetNumberFormatter();
     Color* pCol = 0;
 
@@ -484,7 +484,7 @@ String SwValueFieldType::ExpandValue( const double& rVal,
     if( nFmt < SV_COUNTRY_LANGUAGE_OFFSET && LANGUAGE_SYSTEM != nFmtLng )
     {
         short nType = NUMBERFORMAT_DEFINED;
-        xub_StrLen nDummy;
+        sal_Int32 nDummy;
 
         const SvNumberformat* pEntry = pFormatter->GetEntry(nFmt);
 
@@ -496,7 +496,7 @@ String SwValueFieldType::ExpandValue( const double& rVal,
             if (nNewFormat == nFmt)
             {
                 // Warscheinlich benutzerdefiniertes Format
-                String sFmt(pEntry->GetFormatstring());
+                OUString sFmt(pEntry->GetFormatstring());
 
                 pFormatter->PutandConvertEntry(sFmt, nDummy, nType, nFmt,
                                         pEntry->GetLanguage(), nFmtLng );
@@ -512,9 +512,7 @@ String SwValueFieldType::ExpandValue( const double& rVal,
         String sValue;
         DoubleToString(sValue, rVal, nFmtLng);
         OUString sTempIn(sValue);
-        OUString sTempOut(sExpand);
-        pFormatter->GetOutputString(sTempIn, nFmt, sTempOut, &pCol);
-        sExpand = sTempOut;
+        pFormatter->GetOutputString(sTempIn, nFmt, sExpand, &pCol);
     }
     else
     {
@@ -608,13 +606,13 @@ sal_uInt32 SwValueField::GetSystemFormat(SvNumberFormatter* pFormatter, sal_uInt
         {
             // Warscheinlich benutzerdefiniertes Format
             short nType = NUMBERFORMAT_DEFINED;
-            xub_StrLen nDummy;
+            sal_Int32 nDummy;
 
-            String sFmt(pEntry->GetFormatstring());
+            OUString sFmt(pEntry->GetFormatstring());
 
             sal_uInt32 nFormat = nFmt;
             pFormatter->PutandConvertEntry(sFmt, nDummy, nType,
-                                nFormat, pEntry->GetLanguage(), nLng);
+                                           nFormat, pEntry->GetLanguage(), nLng);
             nFmt = nFormat;
         }
         else
@@ -654,8 +652,8 @@ void SwValueField::SetLanguage( sal_uInt16 nLng )
                 {
                     // Warscheinlich benutzerdefiniertes Format
                     short nType = NUMBERFORMAT_DEFINED;
-                    xub_StrLen nDummy;
-                    String sFmt( pEntry->GetFormatstring() );
+                    sal_Int32 nDummy;
+                    OUString sFmt( pEntry->GetFormatstring() );
                     pFormatter->PutandConvertEntry( sFmt, nDummy, nType,
                                                     nNewFormat,
                                                     pEntry->GetLanguage(),

@@ -734,7 +734,7 @@ namespace sw
             sal_uInt16 nDocLang)
         {
             // tell the Formatter about the new entry
-            sal_uInt16 nCheckPos = 0;
+            sal_Int32 nCheckPos = 0;
             short  nType = NUMBERFORMAT_DEFINED;
             sal_uInt32  nKey = 0;
 
@@ -949,7 +949,9 @@ namespace sw
             if (bHijri)
                 rParams.Insert(rtl::OUString("[~hijri]"), 0);
 
-            pFormatter->PutEntry(rParams, nCheckPos, nType, nKey, rLang);
+            OUString sTemp(rParams);
+            pFormatter->PutEntry(sTemp, nCheckPos, nType, nKey, rLang);
+            rParams = sTemp;
 
             return nKey;
         }

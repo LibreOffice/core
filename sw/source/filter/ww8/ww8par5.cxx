@@ -633,12 +633,14 @@ short SwWW8ImplReader::GetTimeDatePara(String& rStr, sal_uInt32& rFormat,
         if (bHijri)
             sParams.Insert(rtl::OUString("[~hijri]"), 0);
 
-        sal_uInt16 nCheckPos = 0;
-        sal_Int16 nType = NUMBERFORMAT_DEFINED;
+        sal_Int32 nCheckPos = 0;
+        short nType = NUMBERFORMAT_DEFINED;
         rFormat = 0;
 
-        pFormatter->PutandConvertEntry(sParams, nCheckPos, nType, rFormat,
-            LANGUAGE_ENGLISH_US, rLang);
+        OUString sTemp(sParams);
+        pFormatter->PutandConvertEntry(sTemp, nCheckPos, nType, rFormat,
+                                       LANGUAGE_ENGLISH_US, rLang);
+        sParams = sTemp;
 
         return bHasTime ? NUMBERFORMAT_DATETIME : NUMBERFORMAT_DATE;
     }

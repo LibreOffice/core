@@ -1340,10 +1340,10 @@ String GetNumberFormatCode(XclRoot& rRoot, const sal_uInt16 nScNumFmt, SvNumberF
             LanguageType eLang = pEntry->GetLanguage();
             if( eLang != LANGUAGE_ENGLISH_US )
             {
-                xub_StrLen nCheckPos;
+                sal_Int32 nCheckPos;
                 short nType = NUMBERFORMAT_DEFINED;
                 sal_uInt32 nKey;
-                String aTemp( pEntry->GetFormatstring() );
+                OUString aTemp( pEntry->GetFormatstring() );
                 xFormatter->PutandConvertEntry( aTemp, nCheckPos, nType, nKey, eLang, LANGUAGE_ENGLISH_US );
                 OSL_ENSURE( nCheckPos == 0, "XclExpNumFmtBuffer::WriteFormatRecord - format code not convertible" );
                 pEntry = xFormatter->GetEntry( nKey );

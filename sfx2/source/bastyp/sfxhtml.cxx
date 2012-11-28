@@ -335,8 +335,7 @@ double SfxHTMLParser::GetTableDataOptionsValNum( sal_uInt32& nNumForm,
         SvNumberFormatter& rFormatter )
 {
     LanguageType eParseLang = (LanguageType )aNumStr.ToInt32();
-    sal_uInt32 nParseForm =
-        rFormatter.GetFormatForLanguageIfBuiltIn( 0, eParseLang );
+    sal_uInt32 nParseForm = rFormatter.GetFormatForLanguageIfBuiltIn( 0, eParseLang );
     double fVal;
     rFormatter.IsNumberFormat( aValStr, nParseForm, fVal );
     if ( comphelper::string::getTokenCount(aNumStr, ';') > 2 )
@@ -344,14 +343,14 @@ double SfxHTMLParser::GetTableDataOptionsValNum( sal_uInt32& nNumForm,
         eNumLang = (LanguageType)aNumStr.GetToken( 1, ';' ).ToInt32();
         xub_StrLen nPos = aNumStr.Search( ';' );
         nPos = aNumStr.Search( ';', nPos + 1 );
-        String aFormat( aNumStr.Copy( nPos + 1 ) );
-        xub_StrLen nCheckPos;
+        OUString aFormat( aNumStr.Copy( nPos + 1 ) );
+        sal_Int32 nCheckPos;
         short nType;
         if ( eNumLang != LANGUAGE_SYSTEM )
             rFormatter.PutEntry( aFormat, nCheckPos, nType, nNumForm, eNumLang );
         else
             rFormatter.PutandConvertEntry( aFormat, nCheckPos, nType, nNumForm,
-                eParseLang, eNumLang );
+                                           eParseLang, eNumLang );
     }
     else
     {

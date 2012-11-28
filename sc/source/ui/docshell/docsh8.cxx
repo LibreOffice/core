@@ -282,13 +282,13 @@ static void lcl_setScalesToColumns(ScDocument& rDoc, const vector<long>& rScales
         pOldEntry->GetFormatSpecialInfo(bThousand, bNegRed, nPrecision, nLeading);
 
         nPrecision = static_cast<sal_uInt16>(rScales[i]);
-        String aNewPicture = pFormatter->GenerateFormat(nOldFormat, eLang,
-                                   bThousand, bNegRed, nPrecision, nLeading);
+        OUString aNewPicture = pFormatter->GenerateFormat(nOldFormat, eLang,
+                                                          bThousand, bNegRed, nPrecision, nLeading);
 
         sal_uInt32 nNewFormat = pFormatter->GetEntryKey(aNewPicture, eLang);
         if (nNewFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
         {
-            xub_StrLen nErrPos = 0;
+            sal_Int32 nErrPos = 0;
             short nNewType = 0;
             bool bOk = pFormatter->PutEntry(
                 aNewPicture, nErrPos, nNewType, nNewFormat, eLang);

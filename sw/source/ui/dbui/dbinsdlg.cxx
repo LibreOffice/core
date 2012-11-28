@@ -1850,12 +1850,10 @@ void SwInsertDBColAutoPilot::Load()
                                                                     rGet.eUsrNumFmtLng );
                             if( NUMBERFORMAT_ENTRY_NOT_FOUND == rSet.nUsrNumFmt )
                             {
-                                xub_StrLen nCheckPos;
+                                sal_Int32 nCheckPos;
                                 short nType;
-                                String sTmpFmt = rGet.sUsrNumFmt;
-                                rNFmtr.PutEntry( sTmpFmt, nCheckPos, nType,
+                                rNFmtr.PutEntry( rGet.sUsrNumFmt, nCheckPos, nType,
                                                 rSet.nUsrNumFmt, rGet.eUsrNumFmtLng );
-                                rGet.sUsrNumFmt = sTmpFmt;
                             }
                         }
                         break;

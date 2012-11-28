@@ -562,36 +562,6 @@ bool SvNumberFormatter::PutEntry(OUString& rString,
     return bCheck;
 }
 
-bool SvNumberFormatter::PutEntry(String& rString, xub_StrLen& nCheckPos,
-                                 short& nType, sal_uInt32& nKey,
-                                 LanguageType eLnge)
-{
-    // Wrapper to allow String to be used.
-    OUString aStr(rString);
-    sal_Int32 nPos = (nCheckPos == (xub_StrLen)0xFFFF) ? -1  : (sal_Int32)nCheckPos;
-    bool bRet = PutEntry(aStr, nPos, nType, nKey, eLnge);
-    rString = aStr;
-    nCheckPos = nPos < 0 ? (xub_StrLen)0xFFFF : (xub_StrLen)nPos;
-    return bRet;
-}
-
-bool SvNumberFormatter::PutandConvertEntry(String& rString,
-                                           xub_StrLen& nCheckPos,
-                                           short& nType,
-                                           sal_uInt32& nKey,
-                                           LanguageType eLnge,
-                                           LanguageType eNewLnge)
-{
-    bool bRes;
-    if (eNewLnge == LANGUAGE_DONTKNOW)
-        eNewLnge = IniLnge;
-
-    pFormatScanner->SetConvertMode(eLnge, eNewLnge);
-    bRes = PutEntry(rString, nCheckPos, nType, nKey, eLnge);
-    pFormatScanner->SetConvertMode(false);
-    return bRes;
-}
-
 bool SvNumberFormatter::PutandConvertEntry(OUString& rString,
                                            sal_Int32& nCheckPos,
                                            short& nType,
@@ -612,24 +582,6 @@ bool SvNumberFormatter::PutandConvertEntry(OUString& rString,
 
 bool SvNumberFormatter::PutandConvertEntrySystem(OUString& rString,
                                                  sal_Int32& nCheckPos,
-                                                 short& nType,
-                                                 sal_uInt32& nKey,
-                                                 LanguageType eLnge,
-                                                 LanguageType eNewLnge)
-{
-    bool bRes;
-    if (eNewLnge == LANGUAGE_DONTKNOW)
-    {
-        eNewLnge = IniLnge;
-    }
-    pFormatScanner->SetConvertMode(eLnge, eNewLnge, true);
-    bRes = PutEntry(rString, nCheckPos, nType, nKey, eLnge);
-    pFormatScanner->SetConvertMode(false);
-    return bRes;
-}
-
-bool SvNumberFormatter::PutandConvertEntrySystem(String& rString,
-                                                 xub_StrLen& nCheckPos,
                                                  short& nType,
                                                  sal_uInt32& nKey,
                                                  LanguageType eLnge,

@@ -1443,12 +1443,12 @@ void SwTableShell::ExecNumberFormat(SfxRequest& rReq)
         if( pItem )
         {
             //  Index fuer String bestimmen
-            String aCode( ((const SfxStringItem*)pItem)->GetValue() );
+            OUString aCode( ((const SfxStringItem*)pItem)->GetValue() );
             nNumberFormat = pFormatter->GetEntryKey( aCode, eLang );
             if( NUMBERFORMAT_ENTRY_NOT_FOUND == nNumberFormat )
             {
                 //  neu eintragen
-                xub_StrLen nErrPos;
+                sal_Int32 nErrPos;
                 short nType;
                 if( !pFormatter->PutEntry( aCode, nErrPos, nType,
                                             nNumberFormat, eLang ))

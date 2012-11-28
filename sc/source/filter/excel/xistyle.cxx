@@ -659,14 +659,14 @@ void XclImpNumFmtBuffer::CreateScFormats()
         const XclNumFmt& rNumFmt = aIt->second;
 
         // insert/convert the Excel number format
-        xub_StrLen nCheckPos;
+        sal_Int32 nCheckPos;
         short nType = NUMBERFORMAT_DEFINED;
         sal_uInt32 nKey;
         if( rNumFmt.maFormat.Len() )
         {
-            String aFormat( rNumFmt.maFormat );
+            OUString aFormat( rNumFmt.maFormat );
             rFormatter.PutandConvertEntry( aFormat, nCheckPos,
-                nType, nKey, LANGUAGE_ENGLISH_US, rNumFmt.meLanguage );
+                                           nType, nKey, LANGUAGE_ENGLISH_US, rNumFmt.meLanguage );
         }
         else
             nKey = rFormatter.GetFormatIndex( rNumFmt.meOffset, rNumFmt.meLanguage );

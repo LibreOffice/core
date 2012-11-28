@@ -667,9 +667,9 @@ sal_Bool FormattedField::SetFormat(const OUString& rFormatString, LanguageType e
     sal_uInt32 nNewKey = ImplGetFormatter()->TestNewString(rFormatString, eLang);
     if (nNewKey == NUMBERFORMAT_ENTRY_NOT_FOUND)
     {
-        sal_uInt16 nCheckPos;
+        sal_Int32 nCheckPos;
         short nType;
-        XubString rFormat(rFormatString);
+        OUString rFormat(rFormatString);
         if (!ImplGetFormatter()->PutEntry(rFormat, nCheckPos, nType, nNewKey, eLang))
             return sal_False;
         DBG_ASSERT(nNewKey != NUMBERFORMAT_ENTRY_NOT_FOUND, "FormattedField::SetFormatString : PutEntry returned an invalid key !");

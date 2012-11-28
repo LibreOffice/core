@@ -252,9 +252,14 @@ bool SvxNumberFormatShell::AddFormat( String& rFormat,  xub_StrLen& rErrPos,
     }
     else // neues Format
     {
-        bInserted = pFormatter->PutEntry( rFormat, rErrPos,
+        OUString sTemp(rFormat);
+        sal_Int32 nPos;
+        bInserted = pFormatter->PutEntry( sTemp, nPos,
                                           nCurCategory, nAddKey,
                                           eCurLanguage );
+        rErrPos = (nPos >= 0) ? (xub_StrLen)nPos : 0xFFFF;
+        rFormat = sTemp;
+
         if (bInserted)
         {
             // May be sorted under a different locale if LCID was parsed.

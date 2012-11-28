@@ -203,7 +203,7 @@ SfxUInt32Item* FormCache::NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt )
     // neues Format erzeugen
     sal_uInt8       nL, nH; // Low-/High-Nibble
     sal_uInt8       nForm = nFormat;
-    String          aFormString;
+    OUString          aFormString;
     sal_Int16       eType = NUMBERFORMAT_ALL;
     sal_uInt32      nIndex1;
     sal_uInt32      nHandle;
@@ -373,7 +373,7 @@ SfxUInt32Item* FormCache::NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt )
         nHandle = pFormTable->GetFormatIndex( eIndexTableOffset, eLanguage);
     else
     {
-        xub_StrLen  nDummy;
+        sal_Int32  nDummy;
         pFormTable->PutEntry( aFormString, nDummy, eType, nHandle, eLanguage );
     }
 

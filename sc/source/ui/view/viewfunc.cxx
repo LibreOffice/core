@@ -2614,8 +2614,8 @@ void ScViewFunc::SetNumFmtByStr( const String& rCode )
     {
         //  enter new
 
-        String      aFormat = rCode;    // will be changed
-        xub_StrLen  nErrPos = 0;
+        OUString    aFormat = rCode;    // will be changed
+        sal_Int32   nErrPos = 0;
         short       nType   = 0;        //! ???
         bOk = pFormatter->PutEntry( aFormat, nErrPos, nType, nNumberFormat, eLanguage );
     }
@@ -2724,13 +2724,14 @@ void ScViewFunc::ChangeNumFmtDecimals( sal_Bool bIncrement )
 
     if (!bError)
     {
-        String aNewPicture = pFormatter->GenerateFormat(nOldFormat, eLanguage,
-                                    bThousand, bNegRed, nPrecision, nLeading);
+        OUString aNewPicture = pFormatter->GenerateFormat(nOldFormat, eLanguage,
+                                                          bThousand, bNegRed,
+                                                          nPrecision, nLeading);
 
         nNewFormat = pFormatter->GetEntryKey( aNewPicture, eLanguage );
         if ( nNewFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
         {
-            xub_StrLen nErrPos = 0;
+            sal_Int32 nErrPos = 0;
             short nNewType = 0;
             sal_Bool bOk = pFormatter->PutEntry( aNewPicture, nErrPos,
                                                 nNewType, nNewFormat, eLanguage );
