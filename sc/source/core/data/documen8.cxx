@@ -898,6 +898,16 @@ void ScDocument::RepaintRange( const ScRange& rRange )
     }
 }
 
+void ScDocument::RepaintRange( const ScRangeList& rRange )
+{
+    if ( bIsVisible && pShell )
+    {
+        ScModelObj* pModel = ScModelObj::getImplementation( pShell->GetModel() );
+        if ( pModel )
+            pModel->RepaintRange( rRange );     // locked repaints are checked there
+    }
+}
+
 //------------------------------------------------------------------------
 
 bool ScDocument::IdleCheckLinks()           // true = demnaechst wieder versuchen

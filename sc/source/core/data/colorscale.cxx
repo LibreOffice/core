@@ -542,12 +542,7 @@ void ScColorScaleFormat::DataChanged(const ScRange& rRange)
     bool bNeedUpdate = CheckEntriesForRel(rRange);
     if(bNeedUpdate)
     {
-        size_t n = GetRange().size();
-        for(size_t i = 0; i < n; ++i)
-        {
-            const ScRange* pRange = GetRange()[i];
-            mpDoc->RepaintRange(*pRange);
-        }
+        mpDoc->RepaintRange(GetRange());
     }
 }
 
@@ -648,12 +643,7 @@ void ScDataBarFormat::DataChanged(const ScRange& rRange)
 
     if(bNeedUpdate)
     {
-        size_t n = GetRange().size();
-        for(size_t i = 0; i < n; ++i)
-        {
-            const ScRange* pRange = GetRange()[i];
-            mpDoc->RepaintRange(*pRange);
-        }
+        mpDoc->RepaintRange(GetRange());
     }
 }
 
@@ -929,7 +919,6 @@ condformat::ScFormatEntryType ScIconSetFormat::GetType() const
 
 void ScIconSetFormat::DataChanged( const ScRange& )
 {
-
 }
 
 void ScIconSetFormat::UpdateMoveTab( SCTAB nOldTab, SCTAB nNewTab )

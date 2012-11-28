@@ -136,6 +136,7 @@ public:
     ScSheetSaveData*        GetSheetSaveData();
 
     void                    RepaintRange( const ScRange& rRange );
+    void                    RepaintRange( const ScRangeList& rRange );
 
     bool                    HasChangesListeners() const;
 

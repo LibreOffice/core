@@ -1947,9 +1947,7 @@ void ScConditionalFormat::DoRepaint( const ScRange* pModified )
     else
     {
         // all conditional format cells
-        size_t n = maRanges.size();
-        for(size_t i = 0; i < n; ++i)
-            pDoc->RepaintRange(*maRanges[i]);
+        pDoc->RepaintRange( maRanges );
     }
 }
 

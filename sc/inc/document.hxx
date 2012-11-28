@@ -1523,6 +1523,7 @@ public:
     bool            ContinueOnlineSpelling();   // TRUE = found s.th.
 
     void            RepaintRange( const ScRange& rRange );
+    void            RepaintRange( const ScRangeList& rRange );
 
     bool        IsIdleDisabled() const      { return bIdleDisabled; }
     void            DisableIdle(bool bDo)   { bIdleDisabled = bDo; }

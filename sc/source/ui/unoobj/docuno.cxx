@@ -449,6 +449,12 @@ void ScModelObj::RepaintRange( const ScRange& rRange )
         pDocShell->PostPaint( rRange, PAINT_GRID );
 }
 
+void ScModelObj::RepaintRange( const ScRangeList& rRange )
+{
+    if (pDocShell)
+        pDocShell->PostPaint( rRange, PAINT_GRID );
+}
+
 uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )
                                                 throw(uno::RuntimeException)
 {
