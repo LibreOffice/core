@@ -1057,11 +1057,6 @@ AC_ARG_ENABLE(extra-font,
         [Add extra font content.]),
 ,)
 
-AC_ARG_ENABLE(oxygenoffice,
-    AS_HELP_STRING([--enable-oxygenoffice],
-        [Download OxygenOffice branding and set custom settings.]),
-,)
-
 AC_ARG_ENABLE(lomenubar,
     AS_HELP_STRING([--enable-lomenubar],
         [Enable global menu support.]),
@@ -11127,22 +11122,6 @@ else
 fi
 AC_SUBST(WITH_EXTRA_FONT)
 AC_SUBST(OOOP_FONTS_PACK)
-
-dnl ===================================================================
-dnl Test whether to download OxygenOffice branding and set custom settings
-dnl ===================================================================
-AC_MSG_CHECKING([whether to download OxygenOffice branding and set custom settings])
-if test "$enable_oxygenoffice" = "" -o "$enable_oxygenoffice" = "no"; then
-    AC_MSG_RESULT([no])
-    ENABLE_OXYGENOFFICE=NO
-else
-    AC_MSG_RESULT([yes])
-    ENABLE_OXYGENOFFICE=YES
-    OXYGENOFFICE_PACK="18bf204479ff641d99a88cd71f6f25f7-oxygenoffice-001.zip"
-    BUILD_TYPE="$BUILD_TYPE OXYGENOFFICE"
-fi
-AC_SUBST(ENABLE_OXYGENOFFICE)
-AC_SUBST(OXYGENOFFICE_PACK)
 
 dnl ===================================================================
 dnl Test whether to enable online update service
