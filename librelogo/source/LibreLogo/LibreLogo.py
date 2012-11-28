@@ -14,17 +14,18 @@ import threading, time as __time__
 
 try:
     unicode
+    next = lambda l: l.next() # python 2
 except:
     unicode, long = str, int # support python 3
 
 urebootstrap = os.environ["URE_BOOTSTRAP"]
 if "vnd.sun.star.pathname" in urebootstrap:
-    __lngpath__ = re.sub("^vnd.sun.star.pathname:(.*)program(/|\\)fundamental([.]ini|rc)$", "\\1", urebootstrap)
+    __lngpath__ = re.sub(r"^vnd.sun.star.pathname:(.*)program(/|\\)fundamental([.]ini|rc)$", "\\1", urebootstrap)
 else:
     __lngpath__ = unohelper.fileUrlToSystemPath(re.sub("program/(fundamental.ini|fundamentalrc)$", "", urebootstrap))
 __lngpath__ = __lngpath__ + "share/Scripts/python/LibreLogo/".replace("/", os.sep)
-print (__lngpath__)
-__translang__ = "cz|de|dk|en_US|es|fr|hu|it|nl|no|pl|pt|ru|se|sl" # FIXME supported languages for language guessing, expand this list, according to the localizations
+
+__translang__ = "cz|de|dk|el|en|es|fr|hu|it|nl|no|pl|pt|ru|se|sl" # FIXME supported languages for language guessing, expand this list, according to the localizations
 __lng__ = {}
 __docs__ = {}
 __prevcode__ = None
@@ -299,14 +300,17 @@ def __translate__(arg = None):
     guess.disableLanguages(guess.getEnabledLanguages())
     guess.enableLanguages(tuple([Locale(i, "", "") for i in __translang__.split("|")]))
     guess = guess.guessPrimaryLanguage(text, 0, len(text))
-    lang = __l12n__(guess.Language + "_" + guess.Country)
+    try:
+        l = {'cs': 'cs_CZ', 'el': 'el_GR', 'en': 'en_US'}[guess.Language]
+    except:
+        l = guess.Language + '_' + guess.Language.upper()
+    lang = __l12n__({'': 'en_US', 'hu': 'hu_HU'}[guess.Language])
     if not lang:
         lang = __l12n__(guess.Language)
         if not lang:
             lang = __l12n__(_.lng)
             if not lang:
                 lang = __l12n__("en_US")
-
     lq = '\'' + lang['LEFTSTRING'].replace("|", "")
     rq = '\'' + lang['RIGHTSTRING'].replace("|", "")
     __strings__ = []
@@ -475,9 +479,11 @@ def __visible__(shape, visible = -1): # for OOo 3.2 compatibility
 def hideturtle():
     turtle = __getshape__(__TURTLE__)
     if turtle:
-        __visible__(turtle, False)
+        z = turtle.getPosition()
         turtle.PolyPolygon = __TURTLESHAPE__[1]
+        __visible__(turtle, False)
         turtle.LineTransparence, turtle.FillTransparence = 100, 100 # for saved files
+        turtle.setPosition(z)
     __dispatcher__(".uno:Escape")
 
 def showturtle():
@@ -485,10 +491,12 @@ def showturtle():
     if turtle:
         if not turtle.Parent:
             _.drawpage.add(turtle)
+        z = turtle.getPosition()
+        turtle.PolyPolygon = __TURTLESHAPE__[0]
+        turtle.setPosition(z)
         pencolor(_.pencolor)
         fillcolor(_.areacolor)
         pensize(_.pensize/__PT_TO_TWIP__)
-        turtle.PolyPolygon = __TURTLESHAPE__[0]
         __visible__(turtle, True)
         _.doc.CurrentController.select(__getshape__(__TURTLE__))
     else:
@@ -1155,7 +1163,7 @@ def __loadlang__(lang, a):
     repcount = a['REPCOUNT'].split('|')[0]
     loopi = itertools.count()
     loop = lambda r: "%(i)s = 1\n%(orig)s%(j)s = %(i)s\n%(i)s += 1\n" % \
-        { "i": repcount + str(loopi.next()), "j": repcount, "orig": re.sub( r"(?ui)(?<!:)\b%s\b" % repcount, repcount + str(loopi.next()-1), r.group(0)) }
+        { "i": repcount + str(next(loopi)), "j": repcount, "orig": re.sub( r"(?ui)(?<!:)\b%s\b" % repcount, repcount + str(next(loopi)-1), r.group(0)) }
 
     __comp__[lang] = [
     [r"(?<!:)\b(?:%s) [[]" % a['GROUP'], "\n__groupstart__()\nfor __groupindex__ in range(2):\n[\nif __groupindex__ == 1:\n[\n__groupend__()\nbreak\n]\n"],
