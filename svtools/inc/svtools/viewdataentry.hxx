@@ -64,6 +64,7 @@ public:
     bool IsSelectable() const;
     void SetFocus( bool bFocus );
     void SetCursored( bool bCursored );
+    void SetSelected( bool bSelected );
     sal_uInt16 GetFlags() const;
     void SetSelectable( bool bSelectable );
 

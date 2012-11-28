@@ -86,6 +86,14 @@ void SvViewDataEntry::SetCursored( bool bCursored )
         nFlags |= SVLISTENTRYFLAG_CURSORED;
 }
 
+void SvViewDataEntry::SetSelected( bool bSelected )
+{
+    if ( !bSelected )
+        nFlags &= (~SVLISTENTRYFLAG_SELECTED);
+    else
+        nFlags |= SVLISTENTRYFLAG_SELECTED;
+}
+
 sal_uInt16 SvViewDataEntry::GetFlags() const
 {
     return nFlags;

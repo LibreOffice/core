@@ -979,7 +979,7 @@ sal_Bool SvTreeList::Select( SvListView* pView, SvTreeListEntry* pEntry, sal_Boo
             return sal_False;
         else
         {
-            pViewData->nFlags |= SVLISTENTRYFLAG_SELECTED;
+            pViewData->SetSelected(true);
             pView->nSelectionCount++;
         }
     }
@@ -989,7 +989,7 @@ sal_Bool SvTreeList::Select( SvListView* pView, SvTreeListEntry* pEntry, sal_Boo
             return sal_False;
         else
         {
-            pViewData->nFlags &= ~( SVLISTENTRYFLAG_SELECTED );
+            pViewData->SetSelected(false);
             pView->nSelectionCount--;
         }
     }
@@ -1054,11 +1054,7 @@ void SvTreeList::SelectAll( SvListView* pView, sal_Bool bSelect )
     while ( pEntry )
     {
         SvViewDataEntry* pViewData = pView->GetViewData( pEntry );
-        if ( bSelect )
-            pViewData->nFlags |= SVLISTENTRYFLAG_SELECTED;
-        else
-            pViewData->nFlags &= (~SVLISTENTRYFLAG_SELECTED);
-
+        pViewData->SetSelected(bSelect);
         pEntry = Next( pEntry );
     }
     if ( bSelect )
