@@ -98,16 +98,13 @@ class TextFieldHandler(object):
 
     def changeUserFieldContent(self, _FieldName, _FieldContent):
         try:
-            try:
-                DependentTextFields = \
-                    TextFieldHandler.dictTextFields[_FieldName]
-            except KeyError:
-                return None
-            if DependentTextFields is not None:
-                DependentTextFields.TextFieldMaster.Content = _FieldContent
-                self.refreshTextFields()
-        except Exception:
-            traceback.print_exc()
+            DependentTextFields = \
+                TextFieldHandler.dictTextFields[_FieldName]
+        except KeyError:
+            return None
+        if hasattr(DependentTextFields, "TextFieldMaster"):
+            DependentTextFields.TextFieldMaster.Content = _FieldContent
+            self.refreshTextFields()
 
     def updateDocInfoFields(self):
         try:
