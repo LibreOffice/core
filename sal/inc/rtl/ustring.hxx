@@ -1396,7 +1396,7 @@ public:
       @return   a string that represents the concatenation of this string
                 followed by the string argument.
     */
-    OUString concat( const OUString & str ) const SAL_THROW(())
+    SAL_WARN_UNUSED_RESULT OUString concat( const OUString & str ) const SAL_THROW(())
     {
         rtl_uString* pNew = 0;
         rtl_uString_newConcat( &pNew, pData, str.pData );
@@ -1421,7 +1421,7 @@ public:
       @param  newStr  the new substring.
       @return the new string.
     */
-    OUString replaceAt( sal_Int32 index, sal_Int32 count, const OUString& newStr ) const SAL_THROW(())
+    SAL_WARN_UNUSED_RESULT OUString replaceAt( sal_Int32 index, sal_Int32 count, const OUString& newStr ) const SAL_THROW(())
     {
         rtl_uString* pNew = 0;
         rtl_uString_newReplaceStrAt( &pNew, pData, index, count, newStr.pData );
@@ -1441,7 +1441,7 @@ public:
       @return   a string derived from this string by replacing every
                 occurrence of oldChar with newChar.
     */
-    OUString replace( sal_Unicode oldChar, sal_Unicode newChar ) const SAL_THROW(())
+    SAL_WARN_UNUSED_RESULT OUString replace( sal_Unicode oldChar, sal_Unicode newChar ) const SAL_THROW(())
     {
         rtl_uString* pNew = 0;
         rtl_uString_newReplace( &pNew, pData, oldChar, newChar );
@@ -1466,7 +1466,7 @@ public:
 
       @since LibreOffice 3.6
     */
-    OUString replaceFirst(
+    SAL_WARN_UNUSED_RESULT OUString replaceFirst(
         OUString const & from, OUString const & to, sal_Int32 * index = 0) const
     {
         rtl_uString * s = 0;
@@ -1495,8 +1495,8 @@ public:
       @since LibreOffice 3.6
     */
     template< typename T >
-    typename internal::ConstCharArrayDetector< T, OUString >::Type replaceFirst( T& from, OUString const & to,
-                           sal_Int32 * index = 0) const
+    SAL_WARN_UNUSED_RESULT typename internal::ConstCharArrayDetector< T, OUString >::Type replaceFirst( T& from, OUString const & to,
+                                                                                                        sal_Int32 * index = 0) const
     {
         rtl_uString * s = 0;
         sal_Int32 i = 0;
@@ -1524,7 +1524,7 @@ public:
       @since LibreOffice 3.6
     */
     template< typename T1, typename T2 >
-    typename internal::ConstCharArrayDetector< T1, typename internal::ConstCharArrayDetector< T2, OUString >::Type >::Type
+        SAL_WARN_UNUSED_RESULT typename internal::ConstCharArrayDetector< T1, typename internal::ConstCharArrayDetector< T2, OUString >::Type >::Type
         replaceFirst( T1& from, T2& to, sal_Int32 * index = 0) const
     {
         rtl_uString * s = 0;
@@ -1611,7 +1611,7 @@ public:
 
       @return   the string, converted to ASCII lowercase.
     */
-    OUString toAsciiLowerCase() const SAL_THROW(())
+    SAL_WARN_UNUSED_RESULT OUString toAsciiLowerCase() const SAL_THROW(())
     {
         rtl_uString* pNew = 0;
         rtl_uString_newToAsciiLowerCase( &pNew, pData );
@@ -1628,7 +1628,7 @@ public:
 
       @return   the string, converted to ASCII uppercase.
     */
-    OUString toAsciiUpperCase() const SAL_THROW(())
+    SAL_WARN_UNUSED_RESULT OUString toAsciiUpperCase() const SAL_THROW(())
     {
         rtl_uString* pNew = 0;
         rtl_uString_newToAsciiUpperCase( &pNew, pData );
@@ -1646,7 +1646,7 @@ public:
 
       @return   the string, with white space removed from the front and end.
     */
-    OUString trim() const SAL_THROW(())
+    SAL_WARN_UNUSED_RESULT OUString trim() const SAL_THROW(())
     {
         rtl_uString* pNew = 0;
         rtl_uString_newTrim( &pNew, pData );
