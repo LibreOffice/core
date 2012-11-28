@@ -96,9 +96,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/script,
 	InvocationAdapterFactory \
 	JavaScript \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/test,\
-	TestFactory \
-))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/util,\
 	BootstrapMacroExpander \
 	MacroExpander \
@@ -504,18 +501,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/task,\
 	XInteractionHandler2 \
 	XInteractionRequest \
 	XInteractionRetry \
-))
-$(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/test,\
-	TestEvent \
-	XSimpleTest \
-	XTest \
-	XTestListener \
-))
-$(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/test/bridge,\
-	XBridgeTest \
-))
-$(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/test/performance,\
-	XPerformanceTest \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/uno,\
 	DeploymentException \
