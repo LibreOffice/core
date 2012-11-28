@@ -22,7 +22,8 @@ String STR_ACTION_REFRESH
 
 String STR_ACTION_DEFAULT
 {
-    Text [ en-US ] = "Reset Default Template "; /* leave ending space */
+    Text [ x-comment ] = "leave ending space";
+    Text [ en-US ] = "Reset Default Template ";
 };
 
 String STR_MOVE_NEW
