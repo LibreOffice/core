@@ -35,8 +35,6 @@
 #include "stream/WPXSvStream.h"
 #include "WordPerfectImportFilter.hxx"
 
-using ::rtl::OString;
-using ::rtl::OUString;
 using ::ucbhelper::Content;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
@@ -126,9 +124,8 @@ throw (RuntimeException)
             aPasswdDlg.SetMinLen(0);
             if(!aPasswdDlg.Execute())
                 return sal_False;
-            String aPasswd = aPasswdDlg.GetPassword();
-            OUString aUniPasswd(aPasswd.GetBuffer() /*, aPasswd.Len(), RTL_TEXTENCODING_UCS2 */);
-            aUtf8Passwd = OUStringToOString(aUniPasswd, RTL_TEXTENCODING_UTF8);
+            OUString aPasswd = aPasswdDlg.GetPassword();
+            aUtf8Passwd = OUStringToOString(aPasswd, RTL_TEXTENCODING_UTF8);
             if (WPD_PASSWORD_MATCH_OK == WPDocument::verifyPassword(&input, aUtf8Passwd.getStr()))
                 break;
             else
@@ -211,17 +208,17 @@ throw( RuntimeException )
         }
         catch ( ... )
         {
-            return ::rtl::OUString();
+            return OUString();
         }
 
         if (!xInputStream.is())
-            return ::rtl::OUString();
+            return OUString();
     }
 
     WPXSvInputStream input( xInputStream );
 
     if (input.atEOS())
-        return ::rtl::OUString();
+        return OUString();
 
     confidence = WPDocument::isFileFormatSupported(&input);
 
@@ -320,7 +317,7 @@ WordPerfectImportFilterDialog::~WordPerfectImportFilterDialog()
 {
 }
 
-void SAL_CALL WordPerfectImportFilterDialog::setTitle( const ::rtl::OUString & )
+void SAL_CALL WordPerfectImportFilterDialog::setTitle( const OUString & )
 throw (RuntimeException)
 {
 }
@@ -376,7 +373,7 @@ throw(com::sun::star::beans::UnknownPropertyException, com::sun::star::beans::Pr
     for (long i = 0; i < nPropCount; i++)
     {
         const PropertyValue &rProp = pPropArray[i];
-        ::rtl::OUString aPropName = rProp.Name;
+        OUString aPropName = rProp.Name;
 
         if ( aPropName == "Password" )
             rProp.Value >>= msPassword;
