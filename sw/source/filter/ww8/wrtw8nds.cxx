@@ -1782,6 +1782,16 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
 
     ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo( mpTableInfo->getTableNodeInfo( &rNode ) );
 
+    //For i120928,identify the last node
+    bool bLastCR = false;
+    bool bExported = false;
+    {
+        SwNodeIndex aNextIdx(rNode,1);
+        SwNodeIndex aLastIdx(rNode.GetNodes().GetEndOfContent());
+        if (aNextIdx == aLastIdx)
+            bLastCR = true;
+    }
+
     AttrOutput().StartParagraph( pTextNodeInfo );
 
     bool bFlyInTable = mpParentFrame && IsInTable();
@@ -1957,6 +1967,13 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                         m_aCurrentCharPropStarts.pop();
                         AttrOutput().EndTOX( *pTOXSect ,false);
                     }
+            //For i120928,the position of the bullet's graphic is at end of doc
+            if (bLastCR && (!bExported))
+            {
+                ExportGrfBullet(rNode);
+                bExported = true;
+            }
+
                     WriteCR( pTextNodeInfoInner );
                 }
             }
@@ -1994,6 +2011,12 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 // insert final bookmarks if any before CR and after flys
                 AppendBookmarks( rNode, nEnd, 1 );
                 WriteCR( pTextNodeInfoInner );
+              //For i120928,the position of the bullet's graphic is at end of doc
+        if (bLastCR && (!bExported))
+        {
+            ExportGrfBullet(rNode);
+            bExported = true;
+        }
 
                 if ( pTOXSect )
                 {

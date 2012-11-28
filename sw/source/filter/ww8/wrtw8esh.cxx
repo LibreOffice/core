@@ -1351,6 +1351,57 @@ sal_uInt32 AddMirrorFlags(sal_uInt32 nFlags, const SwMirrorGrf &rMirror)
     }
     return nFlags;
 }
+//For i120928,this function is added to export graphic of bullet
+sal_Int32 SwBasicEscherEx::WriteGrfBullet(const Graphic& rGrf)
+{
+    OpenContainer( ESCHER_SpContainer );
+    AddShape(ESCHER_ShpInst_PictureFrame, 0xa00,0x401);
+    EscherPropertyContainer aPropOpt;
+    GraphicObject   aGraphicObject( rGrf );
+    ByteString      aUniqueId = aGraphicObject.GetUniqueID();
+    if ( aUniqueId.Len() )
+    {
+        const MapMode aMap100mm( MAP_100TH_MM );
+        Size    aSize( rGrf.GetPrefSize() );
+        if ( MAP_PIXEL == rGrf.GetPrefMapMode().GetMapUnit() )
+        {
+            aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, aMap100mm );
+        }
+        else
+        {
+            aSize = OutputDevice::LogicToLogic( aSize,rGrf.GetPrefMapMode(), aMap100mm );
+        }
+        Point aEmptyPoint = Point();
+        Rectangle aRect( aEmptyPoint, aSize );
+        sal_uInt32 nBlibId = mxGlobal->GetBlibID( *(mxGlobal->QueryPictureStream()), aUniqueId,aRect, NULL, 0 );
+        if (nBlibId)
+            aPropOpt.AddOpt(ESCHER_Prop_pib, nBlibId, sal_True);
+    }
+    aPropOpt.AddOpt( ESCHER_Prop_pibFlags, ESCHER_BlipFlagDefault );
+    aPropOpt.AddOpt( ESCHER_Prop_dyTextTop, DrawModelToEmu(0));
+    aPropOpt.AddOpt( ESCHER_Prop_dyTextBottom, DrawModelToEmu(0));
+    aPropOpt.AddOpt( ESCHER_Prop_dxTextLeft, DrawModelToEmu(0));
+    aPropOpt.AddOpt( ESCHER_Prop_dxTextRight, DrawModelToEmu(0));
+    aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x80000 );
+    aPropOpt.AddOpt( ESCHER_Prop_dyTextTop, 0 );
+    aPropOpt.AddOpt( ESCHER_Prop_dyTextBottom, 0 );
+    aPropOpt.AddOpt( ESCHER_Prop_dxTextLeft, 0 );
+    aPropOpt.AddOpt( ESCHER_Prop_dxTextRight, 0 );
+    const Color aTmpColor( COL_WHITE );
+    SvxBrushItem aBrush( aTmpColor, RES_BACKGROUND );
+    const SvxBrushItem *pRet = rWrt.GetCurrentPageBgBrush();
+    if (pRet && (pRet->GetGraphic() ||( pRet->GetColor() != COL_TRANSPARENT)))
+        aBrush = *pRet;
+    WriteBrushAttr(aBrush, aPropOpt);
+
+    aPropOpt.AddOpt( ESCHER_Prop_pictureActive, 0 );
+    aPropOpt.Commit( GetStream() );
+    AddAtom(4, ESCHER_ClientAnchor);
+    GetStream() << (sal_uInt32)0x80000000;
+    CloseContainer();
+
+    return 0;
+}
 
 sal_Int32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrmFmt& rFmt, sal_uInt32 nShapeId)
 {

@@ -193,6 +193,12 @@ void RtfExport::AppendBookmark( const OUString& rName, bool /*bSkip*/ )
     m_pAttrOutput->WriteBookmarks_Impl(aStarts, aEnds);
 }
 
+//For i120928,to export graphic of bullet for RTF filter
+void RtfExport::ExportGrfBullet(const SwTxtNode& rNd)
+{
+    //This is for RTF filter on the graphic bullets
+}
+
 void RtfExport::WriteChar( sal_Unicode )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);

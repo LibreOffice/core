@@ -1285,7 +1285,8 @@ void RtfAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
         sal_Int16 nIndentAt,
         sal_Int16 nFirstLineIndex,
         sal_Int16 /*nListTabPos*/,
-        const String &rNumberingString )
+        const String &rNumberingString,
+        const SvxBrushItem* pBrush)
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 

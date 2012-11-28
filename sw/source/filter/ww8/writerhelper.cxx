@@ -58,7 +58,9 @@
 #   include <unotools/streamwrap.hxx>
 #endif
 #include <numrule.hxx>
-
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>//For i120928
+#endif
 #ifdef DEBUGDUMP
 #       include <vcl/svapp.hxx>
 #   ifndef _TOOLS_URLOBJ_HXX
@@ -180,6 +182,32 @@ namespace
 
 namespace sw
 {
+    //For i120928,size conversion before exporting graphic of bullet
+    Frame::Frame(const Graphic&rGrf, const SwPosition &rPos)
+        :mpFlyFrm(NULL),
+        maPos(rPos),
+        maSize(),
+        maLayoutSize(),
+        mpStartFrameContent(0),
+        mbIsInline(true),
+        meWriterType(eBulletGrf),
+        maGrf(rGrf),
+        mbForBullet(true)
+    {
+        const MapMode aMap100mm( MAP_100TH_MM );
+        Size    aSize( rGrf.GetPrefSize() );
+        if ( MAP_PIXEL == rGrf.GetPrefMapMode().GetMapUnit() )
+        {
+            aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, aMap100mm );
+        }
+        else
+        {
+            aSize = OutputDevice::LogicToLogic( aSize,rGrf.GetPrefMapMode(), aMap100mm );
+        }
+        maSize = aSize;
+        maLayoutSize = maSize;
+    }
+
     Frame::Frame(const SwFrmFmt &rFmt, const SwPosition &rPos)
         : mpFlyFrm(&rFmt),
           maPos(rPos),
@@ -192,6 +220,9 @@ namespace sw
           // --> OD 2007-04-19 #i43447# - move to initialization list
           mbIsInline( (rFmt.GetAnchor().GetAnchorId() == FLY_AS_CHAR) )
           // <--
+          //For i120928,handle graphic of bullet within existing implementation
+          ,maGrf()
+          ,mbForBullet(false)
     {
         switch (rFmt.Which())
         {
