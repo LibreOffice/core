@@ -72,6 +72,9 @@ public:
     bool HasChildListPos() const;
     sal_uLong GetChildListPos() const;
 
+    SvTreeListEntries& GetChildEntries();
+    const SvTreeListEntries& GetChildEntries() const;
+
     void Clone(SvTreeListEntry* pSource);
 
     size_t ItemCount() const;

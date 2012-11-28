@@ -20,6 +20,7 @@
 #include "unotools/pathoptions.hxx"
 #include "tools/urlobj.hxx"
 #include "svtools/svlbitm.hxx"
+#include "svtools/treelistentry.hxx"
 #include "sfx2/objsh.hxx"
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
