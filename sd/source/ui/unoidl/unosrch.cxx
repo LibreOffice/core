@@ -644,8 +644,8 @@ sal_Bool SdUnoSearchReplaceShape::Search( const OUString& rText, sal_Int32& nSta
 
     if( !pDescr->IsCaseSensitive() )
     {
-        aText.toAsciiLowerCase();
-        aSearchStr.toAsciiLowerCase();
+        aText = aText.toAsciiLowerCase();
+        aSearchStr = aSearchStr.toAsciiLowerCase();
     }
 
     sal_Int32 nFound = aText.indexOf( aSearchStr, nStartPos );

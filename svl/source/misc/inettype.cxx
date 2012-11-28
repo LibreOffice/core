@@ -521,8 +521,7 @@ Registration::~Registration()
 // static
 TypeNameMapEntry * Registration::getExtensionEntry(OUString const & rTypeName)
 {
-    OUString aTheTypeName = rTypeName;
-    aTheTypeName.toAsciiLowerCase();
+    OUString aTheTypeName = rTypeName.toAsciiLowerCase();;
     Registration &rRegistration = theRegistration::get();
     TypeNameMap::iterator it = rRegistration.m_aTypeNameMap.find(aTheTypeName);
     if (it != rRegistration.m_aTypeNameMap.end())
@@ -543,8 +542,7 @@ INetContentType Registration::RegisterContentType(OUString const & rTypeName,
                "Registration::RegisterContentType(): Already registered");
 
     INetContentType eTypeID = INetContentType(rRegistration.m_nNextDynamicID++);
-    OUString aTheTypeName = rTypeName;
-    aTheTypeName.toAsciiLowerCase();
+    OUString aTheTypeName = rTypeName.toAsciiLowerCase();
 
     TypeIDMapEntry * pTypeIDMapEntry = new TypeIDMapEntry;
     pTypeIDMapEntry->m_aTypeName = aTheTypeName;
@@ -575,8 +573,7 @@ INetContentType Registration::GetContentType(OUString const & rTypeName)
 {
     Registration &rRegistration = theRegistration::get();
 
-    OUString aTheTypeName = rTypeName;
-    aTheTypeName.toAsciiLowerCase();
+    OUString aTheTypeName = rTypeName.toAsciiLowerCase();
     TypeNameMap::iterator it = rRegistration.m_aTypeNameMap.find(aTheTypeName);
     return it != rRegistration.m_aTypeNameMap.end()
         ? it->second->m_eTypeID
@@ -932,7 +929,7 @@ bool INetContentTypes::parse(OUString const & rMediaType,
         return false;
     rType = OUString(pToken, p - pToken);
     if (bDowncase)
-        rType.toAsciiLowerCase();
+        rType= rType.toAsciiLowerCase();
 
     p = INetMIME::skipLinearWhiteSpaceComment(p, pEnd);
     if (p == pEnd || *p++ != '/')
@@ -950,7 +947,7 @@ bool INetContentTypes::parse(OUString const & rMediaType,
         return false;
     rSubType = OUString(pToken, p - pToken);
     if (bDowncase)
-        rSubType.toAsciiLowerCase();
+        rSubType = rSubType.toAsciiLowerCase();
 
     return INetMIME::scanParameters(p, pEnd, pParameters) == pEnd;
 }

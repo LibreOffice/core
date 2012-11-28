@@ -195,8 +195,7 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
             sDesktopName = ::rtl::OUString("base");
         else
             sDesktopName = ::rtl::OUString("startcenter");
-        sApplicationID = utl::ConfigManager::getProductName().
-            toAsciiLowerCase();
+        sApplicationID = utl::ConfigManager::getProductName().toAsciiLowerCase();
         sApplicationID += ::rtl::OUString(sal_Unicode('-'));
         sApplicationID += sDesktopName;
     }

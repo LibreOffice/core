@@ -672,8 +672,7 @@ void SwCreateAddressListDialog::UpdateButtons()
 
 void SwCreateAddressListDialog::Find(const String& rSearch, sal_Int32 nColumn)
 {
-    OUString sSearch = rSearch;
-    sSearch.toAsciiLowerCase();
+    OUString sSearch = OUString(rSearch).toAsciiLowerCase();
     sal_uInt32 nCurrent = m_pAddressControl->GetCurrentDataSet();
     //search forward
     bool bFound = false;

@@ -450,8 +450,7 @@ ScFunctionList::ScFunctionList() :
         pAddInFuncData->getParamDesc( aArgName, aArgDesc, 0 );
         pDesc->nFIndex     = nNextId++; //  ??? OpCode vergeben
         pDesc->nCategory   = ID_FUNCTION_GRP_ADDINS;
-        pDesc->pFuncName   = new ::rtl::OUString(pAddInFuncData->GetInternalName());
-        pDesc->pFuncName->toAsciiUpperCase();
+        pDesc->pFuncName   = new OUString(pAddInFuncData->GetInternalName().toAsciiUpperCase());
 
         ::rtl::OUStringBuffer aBuf(aArgDesc);
         aBuf.append(sal_Unicode('\n'));
