@@ -61,7 +61,7 @@ ModelessDialog RID_SCDLG_XML_SOURCE
         Pos = MAP_APPFONT( 145, 55 );
         Size = MAP_APPFONT ( 100 , 8 ) ;
 
-        Text [ en-US ] = "Linked cell";
+        Text [ en-US ] = "Mapped cell";
     };
 
     Edit ED_MAPPED_CELL
