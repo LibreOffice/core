@@ -95,7 +95,7 @@ namespace sw
     class Frame
     {
     public:
-        enum WriterSource {eTxtBox, eGraphic, eOle, eDrawing, eFormControl};
+        enum WriterSource {eTxtBox, eGraphic, eOle, eDrawing, eFormControl,eBulletGrf};//For i120928,add Grf Bul Type
     private:
         const SwFrmFmt* mpFlyFrm;
         SwPosition maPos;
@@ -108,9 +108,12 @@ namespace sw
         WriterSource meWriterType;
         const SwNode *mpStartFrameContent;
         bool mbIsInline;
+        bool mbForBullet:1;
+        Graphic maGrf;
     public:
         Frame(const SwFrmFmt &rFlyFrm, const SwPosition &rPos);
-
+    Frame(const Graphic&, const SwPosition &);
+    //End
         /** Get the writer SwFrmFmt that this object describes
 
             @return
@@ -164,6 +167,8 @@ namespace sw
          the first node of content in the frame, might not be any at all.
         */
         const SwNode *GetContent() const { return mpStartFrameContent; }
+    const Graphic &GetGraphic() const { return maGrf; }
+    bool HasGraphic() const { return mbForBullet; }
 
 
         /** Does this sw::Frame refer to the same writer content as another
@@ -173,7 +178,12 @@ namespace sw
         */
         bool RefersToSameFrameAs(const Frame &rOther) const
         {
+        if (mbForBullet && rOther.mbForBullet)
+            return (maGrf == rOther.maGrf);
+        else if ((!mbForBullet) && (!rOther.mbForBullet))
             return (mpFlyFrm == rOther.mpFlyFrm);
+        else
+            return false;
         }
 
         /** The Size of the contained element

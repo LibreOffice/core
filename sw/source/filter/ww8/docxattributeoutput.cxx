@@ -3199,7 +3199,8 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
         sal_Int16 nIndentAt,
         sal_Int16 nFirstLineIndex,
         sal_Int16 nListTabPos,
-        const String &rNumberingString )
+        const String &rNumberingString,
+        const SvxBrushItem* )
 {
     m_pSerializer->startElementNS( XML_w, XML_lvl,
             FSNS( XML_w, XML_ilvl ), OString::valueOf( sal_Int32( nLevel ) ).getStr(),

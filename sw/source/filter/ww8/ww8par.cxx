@@ -34,6 +34,7 @@
 #include <comphelper/docpasswordrequest.hxx>
 #include <comphelper/string.hxx>
 
+#include <editeng/brushitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/langitem.hxx>
@@ -85,6 +86,11 @@
 
 #include "writerwordglue.hxx"
 
+#include "ndgrf.hxx"
+#include <editeng/editids.hrc>
+#include <txtflcnt.hxx>
+#include <fmtflcnt.hxx>
+#include <txatbase.hxx>
 
 #include "ww8par2.hxx"          // class WW8RStyle, class WW8AnchorPara
 
@@ -4686,7 +4692,8 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
     GrafikDtor();
     DELETEZ( pMSDffManager );
     DELETEZ( pHdFt );
-    DELETEZ( pLstManager );
+    //For i120928,delay the destruct action
+    //DELETEZ( pLstManager );
     DELETEZ( pSBase );
     delete pWDop;
     DELETEZ( pFonts );
@@ -4702,6 +4709,84 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
     delete mpRedlineStack;
     DeleteAnchorStk();
     DeleteRefStks();
+    //For i120928,achieve the graphics from the special bookmark with is for graphic bullet
+    {
+        std::vector<const SwGrfNode*> vecBulletGrf;
+        std::vector<SwFrmFmt*> vecFrmFmt;
+
+        IDocumentMarkAccess* const pMarkAccess =
+                                                rDoc.getIDocumentMarkAccess();
+        if ( pMarkAccess )
+        {
+                  IDocumentMarkAccess::const_iterator_t ppBkmk =
+                                        pMarkAccess->findBookmark( "_PictureBullets" );
+                  if ( ppBkmk != pMarkAccess->getBookmarksEnd() &&
+                             IDocumentMarkAccess::GetType( *(ppBkmk->get()) )
+                                == IDocumentMarkAccess::BOOKMARK )
+                    {
+                SwTxtNode* pTxtNode = ppBkmk->get()->GetMarkStart().nNode.GetNode().GetTxtNode();
+                         if ( pTxtNode )
+                {
+                    const SwpHints *pHints = pTxtNode->GetpSwpHints();
+                    for(int nHintPos = 0; pHints && nHintPos < pHints->Count(); ++nHintPos)
+                    {
+                        const SwTxtAttr *pHt = (*pHints)[nHintPos];
+                        xub_StrLen st = *(pHt->GetStart());
+                        if(pHt && pHt->Which() == RES_TXTATR_FLYCNT && (st >= ppBkmk->get()->GetMarkStart().nContent.GetIndex()))
+                        {
+                            SwFrmFmt *pFrmFmt = pHt->GetFlyCnt().GetFrmFmt();
+                            const SwNodeIndex *pNdIdx = pFrmFmt->GetCntnt().GetCntntIdx();
+                            const SwNodes &nos = pNdIdx->GetNodes();
+                            const SwGrfNode *pGrf = dynamic_cast<const SwGrfNode*>(nos[pNdIdx->GetIndex() + 1]);
+                            if (pGrf)
+                            {
+                                vecBulletGrf.push_back(pGrf);
+                                vecFrmFmt.push_back(pFrmFmt);
+                            }
+                        }
+                    }
+                    // update graphic bullet information
+                    int nCount = pLstManager->GetWW8LSTInfoNum();
+                    for (int i = 0; i < nCount; ++i)
+                    {
+                        SwNumRule* pRule = pLstManager->GetNumRule(i);
+                        for (int j = 0; j < MAXLEVEL; ++j)
+                        {
+                            SwNumFmt aNumFmt(pRule->Get(j));
+                            sal_Int16 nType = aNumFmt.GetNumberingType();
+                            sal_uInt16 nGrfBulletCP = aNumFmt.GetGrfBulletCP();
+                            if (nType == SVX_NUM_BITMAP && vecBulletGrf.size() > nGrfBulletCP)
+                            {
+                                Graphic aGraphic = vecBulletGrf[nGrfBulletCP]->GetGrf();
+                                SvxBrushItem aBrush(aGraphic, GPOS_AREA, SID_ATTR_BRUSH);
+                                Font aFont = numfunc::GetDefBulletFont();
+                                int nHeight = aFont.GetHeight() * 12;//20;
+                                Size aPrefSize( aGraphic.GetPrefSize());
+                                if (aPrefSize.Height() * aPrefSize.Width() != 0 )
+                                {
+                                    int nWidth = (nHeight * aPrefSize.Width()) / aPrefSize.Height();
+                                    Size aSize(nWidth, nHeight);
+                                    aNumFmt.SetGraphicBrush(&aBrush, &aSize);
+                                }
+                                else
+                                {
+                                    aNumFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
+                                    aNumFmt.SetBulletChar(0x2190);
+                                }
+                                pRule->Set( j, aNumFmt );
+                            }
+                        }
+                    }
+                    // Remove additional pictures
+                    for (sal_uInt16 i = 0; i < vecFrmFmt.size(); ++i)
+                    {
+                        rDoc.DelLayoutFmt(vecFrmFmt[i]);
+                    }
+                }
+            }
+            DELETEZ( pLstManager );
+        }
+    }
 
     //remove extra paragraphs after attribute ctrl
     //stacks etc. are destroyed, and before fields

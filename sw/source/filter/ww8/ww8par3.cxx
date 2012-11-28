@@ -503,6 +503,9 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
     SvxExtNumType   eType;              // Writer-Num-Typ
     SvxAdjust       eAdj;               // Ausrichtung (Links/rechts/zent.)
     sal_Unicode     cBullet(0x2190);    // default safe bullet
+
+    sal_Unicode     cGrfBulletCP(USHRT_MAX);
+
     String          sPrefix;
     String          sPostfix;
     WW8LVL          aLVL;
@@ -642,12 +645,28 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
     //
     // 3. ggfs. CHPx einlesen und
     //
+    sal_uInt16 nWitchPicIsBullet = USHRT_MAX;
+    bool bIsPicBullet = false;
+
     if( aLVL.nLenGrpprlChpx )
     {
         sal_uInt8 aGrpprlChpx[ 255 ];
         memset(&aGrpprlChpx, 0, sizeof( aGrpprlChpx ));
         if(aLVL.nLenGrpprlChpx != rSt.Read(&aGrpprlChpx, aLVL.nLenGrpprlChpx))
             return false;
+
+    //For i120928,parse the graphic info of bullets
+    sal_uInt8 *pSprmWhichPis = GrpprlHasSprm(0x6887,aGrpprlChpx[0],aLVL.nLenGrpprlChpx);
+    sal_uInt8 *pSprmIsPicBullet = GrpprlHasSprm(0x4888,aGrpprlChpx[0],aLVL.nLenGrpprlChpx);
+    if (pSprmWhichPis)
+    {
+        nWitchPicIsBullet = *pSprmWhichPis;
+    }
+    if (pSprmIsPicBullet)
+    {
+        bIsPicBullet = (*pSprmIsPicBullet) & 0x0001;
+    }
+
         // neues ItemSet fuer die Zeichenattribute anlegen
         rpItemSet = new SfxItemSet( rDoc.GetAttrPool(), RES_CHRATR_BEGIN,
             RES_CHRATR_END - 1 );
@@ -717,6 +736,12 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
         case 23:
         case 25:
             eType = SVX_NUM_CHAR_SPECIAL;
+            //For i120928,type info
+            if (bIsPicBullet)
+            {
+                eType = SVX_NUM_BITMAP;
+            }
+
             break;
         case 255:
             eType = SVX_NUM_NUMBER_NONE;
@@ -789,8 +814,10 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
 
         if (!cBullet)  // unsave control code?
             cBullet = 0x2190;
-    }
-    else
+    }   else if (SVX_NUM_BITMAP == eType)   //For i120928,position index info of graphic
+    {
+        cGrfBulletCP = nWitchPicIsBullet;       // This is a bullet picture ID
+    } else
     {
         /*
         #i173#
@@ -859,6 +886,11 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
         rNumFmt.SetBulletChar(cBullet);
         // Don't forget: unten, nach dem Bauen eventueller Styles auch noch
         // SetBulletFont() rufen !!!
+    }
+    //For i120928,position index info
+    else if (SVX_NUM_BITMAP == eType)
+    {
+        rNumFmt.SetGrfBulletCP(cGrfBulletCP);
     }
     else
     {
@@ -1036,6 +1068,14 @@ SwNumRule* WW8ListManager::CreateNextRule(bool bSimple)
     pMyNumRule->SetAutoRule(false);
     pMyNumRule->SetContinusNum(bSimple);
     return pMyNumRule;
+}
+
+SwNumRule* WW8ListManager::GetNumRule(int i)
+{
+    if ( i >= 0 && i < maLSTInfos.size() )
+        return maLSTInfos[i]->pNumRule;
+    else
+        return 0;
 }
 
 // oeffentliche Methoden /////////////////////////////////////////////////////

@@ -109,7 +109,9 @@
 #include <rtl/random.h>
 #include "WW8Sttbf.hxx"
 #include "WW8FibData.hxx"
-
+#ifndef _NUMRULE_HXX
+#include "numrule.hxx"//For i120928
+#endif
 using namespace sw::util;
 using namespace sw::types;
 
@@ -1402,6 +1404,125 @@ void WW8Export::AppendBookmark( const rtl::OUString& rName, bool bSkip )
 {
     sal_uLong nSttCP = Fc2Cp( Strm().Tell() ) + ( bSkip? 1: 0 );
     pBkmks->Append( nSttCP, rName );
+}
+
+// #i120928 collect all the graphics of bullets applied to paragraphs
+int WW8Export::CollectGrfsOfBullets() const
+{
+    m_vecBulletPic.clear();
+
+    if ( pDoc )
+    {
+        int nCountRule = pDoc->GetNumRuleTbl().size();
+        for (int n = 0; n < nCountRule; ++n)
+            {
+            const SwNumRule &rRule = *( pDoc->GetNumRuleTbl().at(n) );
+            sal_uInt16 nLevels = rRule.IsContinusNum() ? 1 : 9;
+            for (sal_uInt16 nLvl = 0; nLvl < nLevels; ++nLvl)
+                {
+                        const SwNumFmt &rFmt = rRule.Get(nLvl);
+                if (SVX_NUM_BITMAP != rFmt.GetNumberingType())
+                {
+                    continue;
+                }
+                const Graphic *pGraf = rFmt.GetBrush()? rFmt.GetBrush()->GetGraphic():0;
+                if ( pGraf )
+                {
+                    bool bHas = false;
+                    for (unsigned i = 0; i < m_vecBulletPic.size(); ++i)
+                    {
+                        if (m_vecBulletPic[i]->GetChecksum() == pGraf->GetChecksum())
+                        {
+                            bHas = true;
+                            break;
+                        }
+                    }
+                    if (!bHas)
+                    {
+                        m_vecBulletPic.push_back(pGraf);
+                    }
+                }
+            }
+        }
+    }
+
+    return m_vecBulletPic.size();
+}
+//Export Graphic of Bullets
+void WW8Export::ExportGrfBullet(const SwTxtNode& rNd)
+{
+    int nCount = CollectGrfsOfBullets();
+    if (nCount > 0)
+    {
+        SwPosition aPos(rNd);
+        OUString aPicBullets("_PictureBullets");
+        AppendBookmark(aPicBullets);
+        for (int i = 0; i < nCount; i++)
+        {
+            sw::Frame aFrame(*(m_vecBulletPic[i]), aPos);
+            OutGrfBullets(aFrame);
+        }
+        AppendBookmark(aPicBullets);
+    }
+}
+
+static sal_uInt8 nAttrMagicIdx = 0;
+void WW8Export::OutGrfBullets(const sw::Frame & rFrame)
+{
+    if ( !pGrf || !pChpPlc || !pO )
+        return;
+
+    pGrf->Insert(rFrame);
+    pChpPlc->AppendFkpEntry( Strm().Tell(), pO->size(), pO->data() );
+    pO->clear();
+    //if links...
+    WriteChar( (char)1 );
+
+    sal_uInt8 aArr[ 22 ];
+    sal_uInt8* pArr = aArr;
+
+    // sprmCFSpec
+    if( bWrtWW8 )
+        Set_UInt16( pArr, 0x855 );
+    else
+        Set_UInt8( pArr, 117 );
+    Set_UInt8( pArr, 1 );
+
+    Set_UInt16( pArr, 0x083c );
+    Set_UInt8( pArr, 0x81 );
+
+    // sprmCPicLocation
+    if( bWrtWW8 )
+        Set_UInt16( pArr, 0x6a03 );
+    else
+    {
+        Set_UInt8( pArr, 68 );
+        Set_UInt8( pArr, 4 );
+    }
+    Set_UInt32( pArr, GRF_MAGIC_321 );
+
+    //extern  nAttrMagicIdx;
+    --pArr;
+    Set_UInt8( pArr, nAttrMagicIdx++ );
+    pChpPlc->AppendFkpEntry( Strm().Tell(), static_cast< short >(pArr - aArr), aArr );
+}
+//Achieve the index position
+int WW8Export::GetGrfIndex(const SvxBrushItem& rBrush)
+{
+    int nIndex = -1;
+    if ( rBrush.GetGraphic() )
+    {
+        for (unsigned i = 0; i < m_vecBulletPic.size(); ++i)
+        {
+            if (m_vecBulletPic[i]->GetChecksum() == rBrush.GetGraphic()->GetChecksum())
+            {
+                nIndex = i;
+                break;
+            }
+        }
+    }
+
+    return nIndex;
 }
 
 void MSWordExportBase::AppendWordBookmark( const String& rName )

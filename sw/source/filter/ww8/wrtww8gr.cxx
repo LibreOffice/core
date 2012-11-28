@@ -716,6 +716,135 @@ void SwWW8WrGrf::WriteGrfFromGrfNode(SvStream& rStrm, const SwGrfNode &rGrfNd,
         }
     }
 }
+//For i120928,export graphic info of bullet
+void SwWW8WrGrf::WritePICBulletFHeader(SvStream& rStrm, const Graphic &rGrf,
+            sal_uInt16 mm, sal_uInt16 nWidth, sal_uInt16 nHeight)
+{
+    sal_Int16 nXSizeAdd = 0, nYSizeAdd = 0;
+    sal_Int16 nCropL = 0, nCropR = 0, nCropT = 0, nCropB = 0;
+
+    Size aGrTwipSz(rGrf.GetPrefSize());
+    bool bWrtWW8 = rWrt.bWrtWW8;
+    sal_uInt16 nHdrLen = bWrtWW8 ? 0x44 : 0x3A;
+
+    sal_uInt8 aArr[ 0x44 ] = { 0 };
+
+    sal_uInt8* pArr = aArr + 0x2E;  //Do borders first
+
+    sal_uInt8 aLnArr[4] = { BOX_LINE_TOP, BOX_LINE_LEFT,
+    BOX_LINE_BOTTOM, BOX_LINE_RIGHT };
+    for( sal_uInt8 i = 0; i < 4; ++i )
+    {
+        WW8_BRC aBrc;
+
+        short nSpacing;
+        short nThick = aBrc.DetermineBorderProperties(!bWrtWW8,
+        &nSpacing);
+        switch (aLnArr[ i ])
+        {
+            case BOX_LINE_TOP:
+            case BOX_LINE_BOTTOM:
+            nHeight -= nThick;
+            nHeight = nHeight - nSpacing;
+            break;
+            case BOX_LINE_LEFT:
+            case BOX_LINE_RIGHT:
+            default:
+            nWidth -= nThick;
+            nWidth = nWidth - nSpacing;
+            break;
+        }
+        memcpy( pArr, &aBrc.aBits1, 2);
+        pArr+=2;
+
+        if( bWrtWW8 )
+        {
+            memcpy( pArr, &aBrc.aBits2, 2);
+            pArr+=2;
+        }
+    }
+
+    pArr = aArr + 4;                                //skip lcb
+    Set_UInt16( pArr, nHdrLen );                    // set cbHeader
+
+    Set_UInt16( pArr, mm );                         // set mm
+
+    if ( (aGrTwipSz.Width() * 254L / 144 > USHRT_MAX) || (aGrTwipSz.Height()  * 254L / 144 > USHRT_MAX)
+        || (aGrTwipSz.Width() < 0 ) || (aGrTwipSz.Height() < 0) )
+    {
+        aGrTwipSz.Width() = nWidth;
+        aGrTwipSz.Height() = nHeight;
+    }
+    using namespace sw::types;
+    // set xExt & yExt
+    Set_UInt16(pArr, msword_cast<sal_uInt16>(aGrTwipSz.Width() * 254L / 144));
+    Set_UInt16(pArr, msword_cast<sal_uInt16>(aGrTwipSz.Height() * 254L / 144));
+    pArr += 16;
+    // skip hMF & rcWinMF
+    // set dxaGoal & dyaGoal
+    Set_UInt16(pArr, msword_cast<sal_uInt16>(aGrTwipSz.Width()));
+    Set_UInt16(pArr, msword_cast<sal_uInt16>(aGrTwipSz.Height()));
+
+    if( aGrTwipSz.Width() + nXSizeAdd )             // set mx
+    {
+        double fVal = nWidth * 1000.0 / (aGrTwipSz.Width() + nXSizeAdd);
+        Set_UInt16( pArr, (sal_uInt16)::rtl::math::round(fVal) );
+    }
+    else
+        pArr += 2;
+
+    if( aGrTwipSz.Height() + nYSizeAdd )            // set my
+    {
+        double fVal = nHeight * 1000.0 / (aGrTwipSz.Height() + nYSizeAdd);
+        Set_UInt16( pArr, (sal_uInt16)::rtl::math::round(fVal) );
+    }
+    else
+    pArr += 2;
+
+    Set_UInt16( pArr, nCropL );                     // set dxaCropLeft
+    Set_UInt16( pArr, nCropT );                     // set dyaCropTop
+    Set_UInt16( pArr, nCropR );                     // set dxaCropRight
+    Set_UInt16( pArr, nCropB );                     // set dyaCropBottom
+
+    rStrm.Write( aArr, nHdrLen );
+}
+void SwWW8WrGrf::WriteGrfForBullet(SvStream& rStrm,  const Graphic &rGrf, sal_uInt16 nWidth, sal_uInt16 nHeight)
+{
+    if (rWrt.bWrtWW8)
+    {
+        WritePICBulletFHeader(rStrm,rGrf, 0x64,nWidth,nHeight);
+        SwBasicEscherEx aInlineEscher(&rStrm, rWrt);
+        aInlineEscher.WriteGrfBullet(rGrf);
+        aInlineEscher.WritePictures();
+    }
+    else
+    {
+        bool bSwapped = rGrf.IsSwapOut() ? true : false;
+
+        GDIMetaFile aMeta;
+        switch (rGrf.GetType())
+        {
+            case GRAPHIC_BITMAP:        // Bitmap -> in Metafile abspielen
+            {
+                VirtualDevice aVirt;
+                aMeta.Record(&aVirt);
+                aVirt.DrawBitmap( Point( 0,0 ), rGrf.GetBitmap() );
+                aMeta.Stop();
+                aMeta.WindStart();
+                aMeta.SetPrefMapMode( rGrf.GetPrefMapMode());
+                aMeta.SetPrefSize( rGrf.GetPrefSize());
+            }
+            break;
+            case GRAPHIC_GDIMETAFILE :      // GDI ( =SV ) Metafile
+                aMeta = rGrf.GetGDIMetaFile();
+            break;
+            default:
+                return;
+        }
+        WritePICBulletFHeader(rStrm, rGrf, 8, nWidth, nHeight);
+        WriteWindowMetafileBits(rStrm, aMeta);
+    }
+}
 
 void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
 {
@@ -735,6 +864,17 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
                 WriteGrfFromGrfNode(rStrm, *pNd, rItem.maFly, nWidth, nHeight);
         }
         break;
+        //For i120928,add branch to export graphic of bullet
+        case sw::Frame::eBulletGrf:
+        {
+        if (rItem.maFly.HasGraphic())
+        {
+            const Graphic& rGrf = rItem.maFly.GetGraphic();
+            WriteGrfForBullet(rStrm, rGrf, nWidth, nHeight);
+        }
+        }
+        break;
+
         case sw::Frame::eOle:
         {
 #ifdef OLE_PREVIEW_AS_EMF

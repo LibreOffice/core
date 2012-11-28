@@ -329,7 +329,8 @@ public:
         sal_Int16 nIndentAt,
         sal_Int16 nFirstLineIndex,
         sal_Int16 nListTabPos,
-        const String &rNumberingString ) = 0;
+        const String &rNumberingString,
+        const SvxBrushItem* pBrush = 0) = 0; // #i120928 export graphic of bullet
 
 protected:
 

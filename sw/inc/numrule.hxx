@@ -49,7 +49,8 @@ const sal_Unicode cBulletChar = 0x2022; ///< Character for lists.
 class SW_DLLPUBLIC SwNumFmt : public SvxNumberFormat, public SwClient
 {
     SwFmtVertOrient* pVertOrient;
-
+    //For i120928,record the cp info of graphic within bullet
+    sal_Unicode     cGrfBulletCP;
     SW_DLLPRIVATE void UpdateNumNodes( SwDoc* pDoc );
     SW_DLLPRIVATE virtual void NotifyGraphicArrived();
 
@@ -73,6 +74,11 @@ public:
 
     SwCharFmt* GetCharFmt() const { return (SwCharFmt*)GetRegisteredIn(); }
     void SetCharFmt( SwCharFmt* );
+
+    //For i120928,access the cp info of graphic within bullet
+    void            SetGrfBulletCP(sal_Unicode cP){cGrfBulletCP = cP;}
+    sal_Unicode     GetGrfBulletCP()const {return cGrfBulletCP;}
+    void ForgetCharFmt();
 
     virtual void            SetCharFmtName(const String& rSet);
     virtual const String&   GetCharFmtName()const;

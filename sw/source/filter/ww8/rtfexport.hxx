@@ -73,6 +73,9 @@ public:
 
     virtual void AppendBookmark( const rtl::OUString& rName, bool bSkip = false );
 
+    //For i120928,add an interface to export graphic of bullet
+    virtual void ExportGrfBullet(const SwTxtNode& rNd);
+
     virtual void WriteCR( ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner = ww8::WW8TableNodeInfoInner::Pointer_t()*/ ) { /* no-op for rtf, most probably should not even be in MSWordExportBase */ }
     virtual void WriteChar( sal_Unicode );
 

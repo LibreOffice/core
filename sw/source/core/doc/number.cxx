@@ -178,6 +178,7 @@ SwNumFmt::SwNumFmt() :
     SvxNumberFormat(SVX_NUM_ARABIC),
     SwClient( 0 ),
     pVertOrient(new SwFmtVertOrient( 0, text::VertOrientation::NONE))
+    ,cGrfBulletCP(USHRT_MAX)//For i120928,record the cp info of graphic within bullet
 {
 }
 
@@ -185,6 +186,7 @@ SwNumFmt::SwNumFmt( const SwNumFmt& rFmt) :
     SvxNumberFormat(rFmt),
     SwClient( rFmt.GetRegisteredInNonConst() ),
     pVertOrient(new SwFmtVertOrient( 0, rFmt.GetVertOrient()))
+    ,cGrfBulletCP(rFmt.cGrfBulletCP)//For i120928,record the cp info of graphic within bullet
 {
     sal_Int16 eMyVertOrient = rFmt.GetVertOrient();
     SetGraphicBrush( rFmt.GetBrush(), &rFmt.GetGraphicSize(),
@@ -265,6 +267,8 @@ SwNumFmt& SwNumFmt::operator=( const SwNumFmt& rNumFmt)
         rNumFmt.GetRegisteredInNonConst()->Add( this );
     else if( GetRegisteredIn() )
         GetRegisteredInNonConst()->Remove( this );
+    //For i120928,record the cp info of graphic within bullet
+    cGrfBulletCP = rNumFmt.cGrfBulletCP;
     return *this;
 }
 

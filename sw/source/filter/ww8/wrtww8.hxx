@@ -38,6 +38,9 @@
 #include "../inc/msfilter.hxx"
 #include <expfld.hxx>
 
+#include <vcl/graph.hxx>
+class SvxBrushItem;
+
 // einige Forward Deklarationen
 class SwWW8AttrIter;
 namespace msfilter
@@ -643,6 +646,8 @@ public:
     virtual void AppendBookmarks( const SwTxtNode& rNd, xub_StrLen nAktPos, xub_StrLen nLen ) = 0;
 
     virtual void AppendBookmark( const rtl::OUString& rName, bool bSkip = false ) = 0;
+    //For i120928,add this interface to export graphic of bullet
+    virtual void ExportGrfBullet(const SwTxtNode& rNd) = 0;
 
     // FIXME probably a hack...
     virtual void WriteCR( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner = ww8::WW8TableNodeInfoInner::Pointer_t() ) = 0;
@@ -907,6 +912,9 @@ public:
 
     sal_uInt8 bWrtWW8 : 1;                   ///< Write WW95 (false) or WW97 (true) file format
 
+        //For i120928,this vector is to record all the graphics of bullets
+    mutable std::vector<const Graphic*> m_vecBulletPic;
+
 protected:
     SwWW8Writer        *m_pWriter;      ///< Pointer to the writer
     WW8AttributeOutput *m_pAttrOutput;  ///< Converting attributes to stream data
@@ -1000,6 +1008,12 @@ public:
 
     virtual void AppendBookmarks( const SwTxtNode& rNd, xub_StrLen nAktPos, xub_StrLen nLen );
     virtual void AppendBookmark( const rtl::OUString& rName, bool bSkip = false );
+
+    virtual void ExportGrfBullet(const SwTxtNode& rNd);
+    int CollectGrfsOfBullets() const;
+    void OutGrfBullets(const sw::Frame &rFrame);
+    int GetGrfIndex(const SvxBrushItem& rBrush);
+
     void MoveFieldMarks(sal_uLong nFrom, sal_uLong nTo);
 
     void WriteAsStringTable(const ::std::vector<rtl::OUString>&, sal_Int32& rfcSttbf,
@@ -1334,6 +1348,9 @@ private:
     void WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem);
     void WriteGrfFromGrfNode(SvStream& rStrm, const SwGrfNode &rNd,
         const sw::Frame &rFly, sal_uInt16 nWidth, sal_uInt16 nHeight);
+
+    void WritePICBulletFHeader(SvStream& rStrm, const Graphic &rGrf, sal_uInt16 mm, sal_uInt16 nWidth, sal_uInt16 nHeight);
+    void WriteGrfForBullet(SvStream& rStrm,  const Graphic &rGrf, sal_uInt16 nWidth, sal_uInt16 nHeight);
 
     //No copying
     SwWW8WrGrf(const SwWW8WrGrf&);
