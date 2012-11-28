@@ -184,7 +184,15 @@ sal_uLong SwRTFReader::Read( SwDoc &rDoc, const String& /*rBaseURL*/, SwPaM& rPa
     aDescriptor[1].Value <<= sal_False;
     aDescriptor[2].Name = "TextInsertModeRange";
     aDescriptor[2].Value <<= xInsertTextRange;
-    xFilter->filter(aDescriptor);
+    sal_uLong ret(0);
+    try {
+        xFilter->filter(aDescriptor);
+    }
+    catch (uno::Exception const& e)
+    {
+        SAL_WARN("sw.rtf", "SwRTFReader::Read(): exception: " << e.Message);
+        ret = ERR_SWG_READ_ERROR;
+    }
 
     // Clean up the fake paragraphs.
     SwUnoInternalPaM aPam(rDoc);
@@ -219,7 +227,7 @@ sal_uLong SwRTFReader::Read( SwDoc &rDoc, const String& /*rBaseURL*/, SwPaM& rPa
         }
     }
 
-    return 0;
+    return ret;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT Reader* SAL_CALL ImportRTF()
