@@ -179,9 +179,10 @@ class OGLTransitionerImpl : private cppu::BaseMutex, private boost::noncopyable,
 {
 public:
     OGLTransitionerImpl();
-    void setSlides( const Reference< rendering::XBitmap >& xLeavingSlide , const uno::Reference< rendering::XBitmap >& xEnteringSlide );
     void setTransition( boost::shared_ptr<OGLTransitionImpl> pOGLTransition );
-    bool initialize( const Reference< presentation::XSlideShowView >& xView );
+    bool initialize( const Reference< presentation::XSlideShowView >& xView,
+            const Reference< rendering::XBitmap >& xLeavingSlide,
+            const Reference< rendering::XBitmap >& xEnteringSlide );
 
     // XTransition
     virtual void SAL_CALL update( double nTime )
@@ -218,6 +219,9 @@ protected:
 private:
     static void impl_initializeOnce( bool const bGLXPresent );
 
+    void setSlides( const Reference< rendering::XBitmap >& xLeavingSlide , const uno::Reference< rendering::XBitmap >& xEnteringSlide );
+    void impl_prepareSlides();
+
     void impl_createTexture( bool useMipmap, uno::Sequence<sal_Int8>& data, const OGLFormat* pFormat );
 
     bool initWindowFromSlideShowView( const uno::Reference< presentation::XSlideShowView >& xView );
@@ -225,6 +229,8 @@ private:
     */
     void GLInitSlides();
 
+    void impl_prepareTransition();
+    void impl_finishTransition();
 
     /// Holds the information of our new child window
     struct GLWindow
@@ -351,11 +357,14 @@ float OGLTransitionerImpl::cnGLVersion;
 bool OGLTransitionerImpl::cbMesa;
 bool OGLTransitionerImpl::cbGLXPresent;
 
-bool OGLTransitionerImpl::initialize( const Reference< presentation::XSlideShowView >& xView )
+bool OGLTransitionerImpl::initialize( const Reference< presentation::XSlideShowView >& xView,
+        const Reference< rendering::XBitmap >& xLeavingSlide,
+        const Reference< rendering::XBitmap >& xEnteringSlide )
 {
-
     bool const bGLXPresent( initWindowFromSlideShowView( xView ) );
     impl_initializeOnce( bGLXPresent );
+
+    setSlides( xLeavingSlide, xEnteringSlide );
 
     return cbGLXPresent;
 }
@@ -749,19 +758,24 @@ void OGLTransitionerImpl::setSlides( const uno::Reference< rendering::XBitmap >&
 
     mxLeavingBitmap.set( xLeavingSlide , UNO_QUERY_THROW );
     mxEnteringBitmap.set( xEnteringSlide , UNO_QUERY_THROW );
-    Reference< XFastPropertySet > xLeavingSet( xLeavingSlide , UNO_QUERY );
-    Reference< XFastPropertySet > xEnteringSet( xEnteringSlide , UNO_QUERY );
+
+    SlideSize = mxLeavingBitmap->getSize();
+    SAL_INFO("slideshow.opengl", "leaving bitmap area: " << SlideSize.Width << "x" << SlideSize.Height);
+    SlideSize = mxEnteringBitmap->getSize();
+    SAL_INFO("slideshow.opengl", "entering bitmap area: " << SlideSize.Width << "x" << SlideSize.Height);
+}
+
+
+void OGLTransitionerImpl::impl_prepareSlides()
+{
+    Reference< XFastPropertySet > xLeavingSet( mxLeavingBitmap , UNO_QUERY );
+    Reference< XFastPropertySet > xEnteringSet( mxEnteringBitmap , UNO_QUERY );
 
     geometry::IntegerRectangle2D SlideRect;
-    SlideSize = mxLeavingBitmap->getSize();
     SlideRect.X1 = 0;
     SlideRect.X2 = SlideSize.Width;
     SlideRect.Y1 = 0;
     SlideRect.Y2 = SlideSize.Height;
-
-    SAL_INFO("slideshow.opengl", "leaving bitmap area: " << SlideSize.Width << "x" << SlideSize.Height);
-    SlideSize = mxEnteringBitmap->getSize();
-    SAL_INFO("slideshow.opengl", "entering bitmap area: " << SlideSize.Width << "x" << SlideSize.Height);
 
 #ifdef UNX
     unx::glXWaitGL();
@@ -874,12 +888,27 @@ void OGLTransitionerImpl::setSlides( const uno::Reference< rendering::XBitmap >&
 #endif
 }
 
-void OGLTransitionerImpl::setTransition( boost::shared_ptr<OGLTransitionImpl> const pNewTransition )
+void OGLTransitionerImpl::impl_prepareTransition()
 {
-    mpTransition = pNewTransition;
-
     if( mpTransition && mpTransition->getSettings().mnRequiredGLVersion <= cnGLVersion )
         mpTransition->prepare( GLleavingSlide, GLenteringSlide );
+}
+
+void OGLTransitionerImpl::impl_finishTransition()
+{
+    if( mpTransition && mpTransition->getSettings().mnRequiredGLVersion <= cnGLVersion )
+        mpTransition->finish();
+}
+
+void OGLTransitionerImpl::setTransition( boost::shared_ptr<OGLTransitionImpl> const pTransition )
+{
+    if ( mpTransition ) // already initialized
+        return;
+
+    mpTransition = pTransition;
+
+    impl_prepareSlides();
+    impl_prepareTransition();
 }
 
 void OGLTransitionerImpl::createTexture( unsigned int* texID,
@@ -1570,11 +1599,14 @@ void SAL_CALL OGLTransitionerImpl::viewChanged( const Reference< presentation::X
 {
     SAL_INFO("slideshow.opengl", "transitioner: view changed");
 
+    impl_finishTransition();
     disposeTextures();
     disposeContextAndWindow();
 
     initWindowFromSlideShowView( rView );
     setSlides( rLeavingBitmap, rEnteringBitmap );
+    impl_prepareSlides();
+    impl_prepareTransition();
 }
 
 void OGLTransitionerImpl::disposeContextAndWindow()
@@ -1674,10 +1706,8 @@ void OGLTransitionerImpl::disposing()
 #endif
 
     if( pWindow ) {
+        impl_finishTransition();
         disposeTextures();
-
-        if (mpTransition)
-            mpTransition->finish();
 
 #ifdef UNX
         if( mbRestoreSync ) {
@@ -1781,7 +1811,7 @@ public:
             return uno::Reference< presentation::XTransition >();
 
         rtl::Reference< OGLTransitionerImpl > xRes( new OGLTransitionerImpl() );
-        if ( !xRes->initialize( view ) )
+        if ( !xRes->initialize( view, leavingBitmap, enteringBitmap ) )
             return uno::Reference< presentation::XTransition >();
 
         if( OGLTransitionerImpl::cbMesa && (
@@ -1852,7 +1882,6 @@ public:
             return uno::Reference< presentation::XTransition >();
 
         xRes->setTransition( pTransition );
-        xRes->setSlides(leavingBitmap,enteringBitmap);
 
         return uno::Reference<presentation::XTransition>(xRes.get());
     }
