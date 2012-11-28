@@ -15,8 +15,8 @@
    inkscape:version="0.48.3.1 r9886"
    width="16"
    height="16"
-   sodipodi:docname="nc20002.svg"
-   inkscape:export-filename="/home/alexander/libo/icon-themes/tango_testing/sw/imglst/nc20002.png"
+   sodipodi:docname="nc20009.svg"
+   inkscape:export-filename="/home/alexander/libo/icon-themes/tango_testing/sw/imglst/nc20009.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <metadata
@@ -14734,20 +14734,19 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1366"
-     inkscape:window-height="721"
+     inkscape:window-width="576"
+     inkscape:window-height="421"
      id="namedview4"
      showgrid="false"
-     inkscape:zoom="1"
-     inkscape:cx="15.573174"
-     inkscape:cy="6.8904239"
-     inkscape:window-x="0"
-     inkscape:window-y="24"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="g10177"
+     inkscape:zoom="11.313708"
+     inkscape:cx="9.2535167"
+     inkscape:cy="3.4151468"
+     inkscape:window-x="657"
+     inkscape:window-y="181"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="g10576"
      showborder="false"
-     inkscape:showpageshadow="false"
-     inkscape:snap-global="false">
+     inkscape:showpageshadow="false">
     <inkscape:grid
        type="xygrid"
        id="grid3165"
@@ -14805,19 +14804,112 @@
                      id="rect5189" />
                 </g>
               </g>
-              <text
-                 xml:space="preserve"
-                 style="font-size:12px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-                 x="-28.05448"
-                 y="-1045.105"
-                 id="text6128"
-                 sodipodi:linespacing="125%"
-                 transform="scale(-1,-1)"><tspan
-                   sodipodi:role="line"
-                   id="tspan6130"
-                   x="-28.05448"
-                   y="-1045.105"
-                   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Serif;-inkscape-font-specification:Serif">T</tspan></text>
+              <g
+                 id="g5344"
+                 transform="matrix(-1,0,0,-1,13.016949,1055.967)">
+                <g
+                   style="fill:#3465a4;fill-opacity:1"
+                   id="g3474">
+                  <g
+                     id="g5365">
+                    <rect
+                       style="fill:#525252;fill-opacity:1;stroke:none"
+                       id="rect3487"
+                       width="8"
+                       height="1"
+                       x="-14"
+                       y="10.999966"
+                       ry="0.5"
+                       rx="0.5" />
+                    <rect
+                       rx="0.5"
+                       ry="0.5"
+                       y="10.999966"
+                       x="-16"
+                       height="1"
+                       width="0.99999982"
+                       id="rect5363"
+                       style="fill:#525252;fill-opacity:1;stroke:none" />
+                  </g>
+                  <g
+                     id="g5369"
+                     transform="translate(-1.9999993e-7,-2.9999997)">
+                    <rect
+                       rx="0.5"
+                       ry="0.5"
+                       y="10.999966"
+                       x="-14"
+                       height="1"
+                       width="8"
+                       id="rect5371"
+                       style="fill:#525252;fill-opacity:1;stroke:none" />
+                    <rect
+                       style="fill:#525252;fill-opacity:1;stroke:none"
+                       id="rect5373"
+                       width="0.99999982"
+                       height="1"
+                       x="-16"
+                       y="10.999966"
+                       ry="0.5"
+                       rx="0.5" />
+                  </g>
+                  <rect
+                     style="fill:#3465a4;fill-opacity:1;stroke:none"
+                     id="rect5947"
+                     width="12"
+                     height="3"
+                     x="2"
+                     y="5"
+                     transform="translate(-19,-1.000034)"
+                     rx="1"
+                     ry="1" />
+                  <g
+                     transform="translate(-1.9999993e-7,-5.9999997)"
+                     id="g5375"
+                     style="fill:#ffffff">
+                    <rect
+                       style="fill:#ffffff;fill-opacity:1;stroke:none"
+                       id="rect5377"
+                       width="8"
+                       height="1"
+                       x="-14"
+                       y="10.999966"
+                       ry="0.5"
+                       rx="0.5" />
+                    <rect
+                       rx="0.5"
+                       ry="0.5"
+                       y="10.999966"
+                       x="-16"
+                       height="1"
+                       width="0.99999982"
+                       id="rect5379"
+                       style="fill:#ffffff;fill-opacity:1;stroke:none" />
+                  </g>
+                  <g
+                     transform="translate(-1.9999993e-7,-8.9999997)"
+                     id="g5387">
+                    <rect
+                       style="fill:#525252;fill-opacity:1;stroke:none"
+                       id="rect5389"
+                       width="8"
+                       height="1"
+                       x="-14"
+                       y="10.999966"
+                       ry="0.5"
+                       rx="0.5" />
+                    <rect
+                       rx="0.5"
+                       ry="0.5"
+                       y="10.999966"
+                       x="-16"
+                       height="1"
+                       width="0.99999982"
+                       id="rect5391"
+                       style="fill:#525252;fill-opacity:1;stroke:none" />
+                  </g>
+                </g>
+              </g>
             </g>
           </g>
         </g>

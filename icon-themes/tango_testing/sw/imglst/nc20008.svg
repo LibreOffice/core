@@ -15,8 +15,8 @@
    inkscape:version="0.48.3.1 r9886"
    width="16"
    height="16"
-   sodipodi:docname="nc20006.svg"
-   inkscape:export-filename="/home/alexander/libo/icon-themes/tango_testing/sw/imglst/nc20006.png"
+   sodipodi:docname="nc20008.svg"
+   inkscape:export-filename="/home/alexander/libo/icon-themes/tango_testing/sw/imglst/nc20008.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <metadata
@@ -14571,19 +14571,20 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="576"
+     inkscape:window-width="750"
      inkscape:window-height="421"
      id="namedview4"
      showgrid="false"
      inkscape:zoom="1"
-     inkscape:cx="20.726444"
-     inkscape:cy="10.921355"
-     inkscape:window-x="649"
-     inkscape:window-y="178"
+     inkscape:cx="11.89562"
+     inkscape:cy="6.1212865"
+     inkscape:window-x="461"
+     inkscape:window-y="262"
      inkscape:window-maximized="0"
-     inkscape:current-layer="g5107"
+     inkscape:current-layer="g5009"
      showborder="false"
-     inkscape:showpageshadow="false">
+     inkscape:showpageshadow="false"
+     inkscape:snap-global="false">
     <inkscape:grid
        type="xygrid"
        id="grid3165"
@@ -14652,61 +14653,80 @@
                     <g
                        id="g5107"
                        transform="translate(0,-17)">
-                      <rect
-                         style="fill:#525252;fill-opacity:1;stroke:none"
-                         id="rect5095"
-                         width="8"
-                         height="1"
-                         x="-16"
-                         y="18.999966"
-                         ry="0.5"
-                         rx="0.5" />
-                      <rect
-                         rx="0.5"
-                         ry="0.5"
-                         y="20.999966"
-                         x="-16"
-                         height="1"
-                         width="8"
-                         id="rect5097"
-                         style="fill:#525252;fill-opacity:1;stroke:none" />
-                      <rect
-                         style="fill:#525252;fill-opacity:1;stroke:none"
-                         id="rect5099"
-                         width="8"
-                         height="1"
-                         x="-16"
-                         y="26.999966"
-                         ry="0.5"
-                         rx="0.5" />
-                      <rect
-                         style="fill:#ffffff;fill-opacity:1;stroke:none"
-                         id="rect5115"
-                         width="13"
-                         height="5"
-                         x="1"
-                         y="6"
-                         transform="translate(-19,15.999966)"
-                         rx="0.99999964"
-                         ry="0.99999964" />
-                      <rect
-                         style="fill:#3465a4;fill-opacity:1;stroke:none"
-                         id="rect5103"
-                         width="10"
-                         height="1"
-                         x="-16"
-                         y="24.999966"
-                         ry="0.5"
-                         rx="0.5" />
-                      <rect
-                         rx="0.5"
-                         ry="0.41161165"
-                         y="22.999966"
-                         x="-16"
-                         height="1"
-                         width="10"
-                         id="rect5105"
-                         style="fill:#3465a4;fill-opacity:1;stroke:none" />
+                      <g
+                         id="g5009"
+                         transform="translate(-1.9999993e-7,-0.99999967)">
+                        <rect
+                           rx="0.49999997"
+                           ry="0.5"
+                           y="18.999966"
+                           x="-16"
+                           height="1"
+                           width="3.9999995"
+                           id="rect5095"
+                           style="fill:#525252;fill-opacity:1;stroke:none" />
+                        <rect
+                           style="fill:#525252;fill-opacity:1;stroke:none"
+                           id="rect5097"
+                           width="3.9999998"
+                           height="1"
+                           x="-16"
+                           y="20.999966"
+                           ry="0.5"
+                           rx="0.49999997" />
+                        <rect
+                           rx="0.49999997"
+                           ry="0.5"
+                           y="26.999966"
+                           x="-16"
+                           height="1"
+                           width="3.9999998"
+                           id="rect5099"
+                           style="fill:#525252;fill-opacity:1;stroke:none" />
+                        <rect
+                           ry="0.99999964"
+                           rx="0.99999964"
+                           y="21.999966"
+                           x="-17"
+                           height="5.0000005"
+                           width="6"
+                           id="rect5115"
+                           style="fill:#ffffff;fill-opacity:1;stroke:none" />
+                        <rect
+                           rx="0.5"
+                           ry="0.5"
+                           y="24.999966"
+                           x="-16"
+                           height="1"
+                           width="3.9999998"
+                           id="rect5103"
+                           style="fill:#3465a4;fill-opacity:1;stroke:none" />
+                        <rect
+                           style="fill:#3465a4;fill-opacity:1;stroke:none"
+                           id="rect5105"
+                           width="3.9999998"
+                           height="1"
+                           x="-16"
+                           y="22.999966"
+                           ry="0.41161165"
+                           rx="0.5" />
+                        <rect
+                           rx="0.5"
+                           ry="0.41161165"
+                           y="28.999966"
+                           x="-9"
+                           height="1"
+                           width="3.9999998"
+                           id="rect5017"
+                           style="fill:#3465a4;fill-opacity:1;stroke:none" />
+                        <path
+                           style="fill:#525252;fill-opacity:1;stroke:none"
+                           d="m 8,6 5,0 0,3 1,0 -1.5,2 L 11,9 12,9 12,7 8,7 z"
+                           id="path5019"
+                           inkscape:connector-curvature="0"
+                           transform="translate(-19,16.999966)"
+                           sodipodi:nodetypes="cccccccccc" />
+                      </g>
                     </g>
                   </g>
                 </g>
