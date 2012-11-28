@@ -27,6 +27,9 @@
 #include <com/sun/star/uno/XReference.hpp>
 #include <tools/poly.hxx>
 #include <filter/msfilter/escherex.hxx>
+#ifndef PPTX_EXPORT_ROTATE_CLOCKWISIFY
+#define PPTX_EXPORT_ROTATE_CLOCKWISIFY(input) (21600000-input*600)
+#endif
 
 class Graphic;
 class String;
@@ -108,7 +111,7 @@ public:
     void WriteBlipMode( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
 
     void WriteShapeTransformation( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rXShape,
-                  sal_Int32 nXmlNamespace, sal_Bool bFlipH = false, sal_Bool bFlipV = false, sal_Int32 nRotation = 0 );
+                  sal_Int32 nXmlNamespace, sal_Bool bFlipH = false, sal_Bool bFlipV = false, sal_Bool bSuppressRotation = false );
     void WriteTransformation( const Rectangle& rRectangle,
                   sal_Int32 nXmlNamespace, sal_Bool bFlipH = false, sal_Bool bFlipV = false, sal_Int32 nRotation = 0 );
 
