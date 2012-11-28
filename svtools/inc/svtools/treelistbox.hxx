@@ -42,7 +42,7 @@
 class Application;
 class SvTreeListBox;
 class SvTreeListEntry;
-class SvViewDataItem;
+struct SvViewDataItem;
 class SvViewDataEntry;
 class SvInplaceEdit2;
 class SvLBoxString;
