@@ -61,6 +61,7 @@
 #define CMD_FID_INS_ROWBRK                          ".uno:InsertRowBreak"
 #define CMD_FID_INS_ROW                             ".uno:InsertRows"
 #define CMD_FID_MERGE_ON                            ".uno:MergeCells"
+#define CMD_FID_MERGE_OFF                           ".uno:SplitCell"
 #define CMD_SID_OBJECT_MIRROR                       ".uno:Mirror"
 #define CMD_FID_TAB_MOVE                            ".uno:Move"
 #define CMD_SID_PREVIEW_NEXT                        ".uno:NextPage"

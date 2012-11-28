@@ -82,6 +82,12 @@ Menu RID_POPUP_CELLS
             HelpId = CMD_FID_MERGE_ON ;
             Text [ en-US ] = "~Merge Cells..." ;
         };
+        MenuItem
+        {
+            Identifier = FID_MERGE_OFF ;
+            HelpId = CMD_FID_MERGE_OFF ;
+            Text [ en-US ] = "Split Cells..." ;
+        };
          //------------------------------
         MenuItem { Separator = TRUE ; };
          //------------------------------
