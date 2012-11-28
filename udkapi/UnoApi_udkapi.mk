@@ -188,7 +188,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/beans,\
 	XFastPropertySet \
 	XHierarchicalPropertySet \
 	XHierarchicalPropertySetInfo \
-	XIntroTest \
 	XIntrospection \
 	XIntrospectionAccess \
 	XMaterialHolder \
