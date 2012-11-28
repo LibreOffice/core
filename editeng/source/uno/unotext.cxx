@@ -2142,34 +2142,12 @@ void SvxPropertyValuesToItemSet(
     }
 }
 
-// com::sun::star::text::XParagraphAppend (new import API)
-uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::appendParagraph(
-        const uno::Sequence< beans::PropertyValue >& rCharAndParaProps )
+uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::finishParagraphInsert(
+        const uno::Sequence< beans::PropertyValue >& /*rCharAndParaProps*/,
+        const uno::Reference< text::XTextRange >& /*rTextRange*/ )
     throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
     uno::Reference< text::XTextRange > xRet;
-    SvxEditSource *pEditSource = GetEditSource();
-    SvxTextForwarder *pTextForwarder = pEditSource ? pEditSource->GetTextForwarder() : 0;
-    if (pTextForwarder)
-    {
-        sal_uInt16 nParaCount = pTextForwarder->GetParagraphCount();
-        DBG_ASSERT( nParaCount > 0, "paragraph count is 0 or negative" );
-        pTextForwarder->AppendParagraph();
-
-        // set properties for new appended (now last) paragraph
-        ESelection aSel( nParaCount, 0, nParaCount, 0 );
-        SfxItemSet aItemSet( *pTextForwarder->GetEmptyItemSetPtr() );
-        SvxPropertyValuesToItemSet( aItemSet, rCharAndParaProps,
-                            ImplGetSvxUnoOutlinerTextCursorSfxPropertySet(),
-                            pTextForwarder,
-                            nParaCount );
-        pTextForwarder->QuickSetAttribs( aItemSet, aSel );
-        pEditSource->UpdateData();
-        SvxUnoTextRange* pRange = new SvxUnoTextRange( *this );
-        xRet = pRange;
-        pRange->SetSelection( aSel );
-    }
     return xRet;
 }
 
@@ -2200,6 +2178,16 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::finishParagraph(
         xRet = pRange;
         pRange->SetSelection( aSel );
     }
+    return xRet;
+}
+
+uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::insertTextPortion(
+        const ::rtl::OUString& /*rText*/,
+        const uno::Sequence< beans::PropertyValue >& /*rCharAndParaProps*/,
+        const uno::Reference< text::XTextRange>& /*rTextRange*/ )
+    throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
+{
+    uno::Reference< text::XTextRange > xRet;
     return xRet;
 }
 

@@ -156,6 +156,7 @@ DomainMapper_Impl::DomainMapper_Impl(
             uno::Reference < uno::XComponentContext >  xContext,
             uno::Reference< lang::XComponent >  xModel,
             SourceDocumentType eDocumentType,
+            uno::Reference< text::XTextRange > xInsertTextRange,
             bool bIsNewDoc) :
         m_eDocumentType( eDocumentType ),
         m_rDMapper( rDMapper ),
@@ -184,12 +185,14 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bParaSectpr( false ),
         m_bUsingEnhancedFields( false ),
         m_bSdt(false),
+        m_xInsertTextRange(xInsertTextRange),
         m_bIsNewDoc(bIsNewDoc)
 {
     appendTableManager( );
     GetBodyText();
     uno::Reference< text::XTextAppend > xBodyTextAppend = uno::Reference< text::XTextAppend >( m_xBodyText, uno::UNO_QUERY );
-    m_aTextAppendStack.push(xBodyTextAppend);
+    m_aTextAppendStack.push(TextAppendContext(xBodyTextAppend,
+                m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : m_xBodyText->createTextCursorByRange(m_xInsertTextRange)));
 
     //todo: does it make sense to set the body text as static text interface?
     uno::Reference< text::XTextAppendAndConvert > xBodyTextAppendAndConvert( m_xBodyText, uno::UNO_QUERY );
@@ -268,8 +271,14 @@ void DomainMapper_Impl::RemoveLastParagraph( )
         return;
     try
     {
-        uno::Reference< text::XTextCursor > xCursor = xTextAppend->createTextCursor();
-        xCursor->gotoEnd(false);
+        uno::Reference< text::XTextCursor > xCursor;
+        if (m_bIsNewDoc)
+        {
+            xCursor = xTextAppend->createTextCursor();
+            xCursor->gotoEnd(false);
+        }
+        else
+            xCursor.set(m_aTextAppendStack.top().xCursor, uno::UNO_QUERY);
         xCursor->goLeft( 1, true );
         xCursor->setString(OUString());
     }
@@ -1043,13 +1052,22 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                     aProperties[nLength].Value <<= aDrop;
                     aProperties[nLength].Name = rPropNameSupplier.GetName(PROP_DROP_CAP_FORMAT);
                 }
-                uno::Reference< text::XTextRange > xTextRange =
-                    xTextAppend->finishParagraph( aProperties );
+                uno::Reference< text::XTextRange > xTextRange;
+                if (rAppendContext.xInsertPosition.is())
+                {
+                    xTextRange = xTextAppend->finishParagraphInsert( aProperties, rAppendContext.xInsertPosition );
+                    rAppendContext.xCursor->gotoNextParagraph(false);
+                }
+                else
+                    xTextRange = xTextAppend->finishParagraph( aProperties );
                 getTableManager( ).handle(xTextRange);
 
                 // Get the end of paragraph character inserted
                 uno::Reference< text::XTextCursor > xCur = xTextRange->getText( )->createTextCursor( );
-                xCur->gotoEnd( false );
+                if (rAppendContext.xInsertPosition.is())
+                    xCur->gotoRange( rAppendContext.xInsertPosition, false );
+                else
+                    xCur->gotoEnd( false );
                 xCur->goLeft( 1 , true );
                 uno::Reference< text::XTextRange > xParaEnd( xCur, uno::UNO_QUERY );
                 CheckParaRedline( xParaEnd );
@@ -1112,9 +1130,14 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, PropertyMapP
     {
         try
         {
-            uno::Reference< text::XTextRange > xTextRange =
-                xTextAppend->appendTextPortion
-                (rString, pPropertyMap->GetPropertyValues());
+            uno::Reference< text::XTextRange > xTextRange;
+            if (m_aTextAppendStack.top().xInsertPosition.is())
+            {
+                xTextRange = xTextAppend->insertTextPortion(rString, pPropertyMap->GetPropertyValues(), m_aTextAppendStack.top().xInsertPosition);
+                m_aTextAppendStack.top().xCursor->gotoRange(xTextRange->getEnd(), false);
+            }
+            else
+                xTextRange = xTextAppend->appendTextPortion(rString, pPropertyMap->GetPropertyValues());
             CheckRedline( xTextRange );
             m_bParaChanged = true;
 
@@ -1143,7 +1166,10 @@ void DomainMapper_Impl::appendTextContent(
     {
         try
         {
-            xTextAppendAndConvert->appendTextContent( xContent, xPropertyValues );
+            if (m_aTextAppendStack.top().xInsertPosition.is())
+                xTextAppendAndConvert->insertTextContentWithProperties( xContent, xPropertyValues, m_aTextAppendStack.top().xInsertPosition );
+            else
+                xTextAppendAndConvert->appendTextContent( xContent, xPropertyValues );
         }
         catch(const lang::IllegalArgumentException&)
         {
@@ -1249,7 +1275,10 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::appendTextSectionAfter(
                 xTextAppend->createTextCursorByRange( xBefore ), uno::UNO_QUERY_THROW);
             //the cursor has been moved to the end of the paragraph because of the appendTextPortion() calls
             xCursor->gotoStartOfParagraph( false );
-            xCursor->gotoEnd( true );
+            if (m_aTextAppendStack.top().xInsertPosition.is())
+                xCursor->gotoRange( m_aTextAppendStack.top().xInsertPosition, true );
+            else
+                xCursor->gotoEnd( true );
             //the paragraph after this new section is already inserted
             xCursor->goLeft(1, true);
             static const OUString sSectionService("com.sun.star.text.TextSection");
@@ -1299,7 +1328,8 @@ void DomainMapper_Impl::PushPageHeader(SectionPropertyMap::PageType eType)
             //set the interface
             uno::Reference< text::XText > xHeaderText;
             xPageStyle->getPropertyValue(rPropNameSupplier.GetName( bLeft ? PROP_HEADER_TEXT_LEFT : PROP_HEADER_TEXT) ) >>= xHeaderText;
-            m_aTextAppendStack.push( uno::Reference< text::XTextAppend >( xHeaderText, uno::UNO_QUERY_THROW));
+            m_aTextAppendStack.push( TextAppendContext(uno::Reference< text::XTextAppend >( xHeaderText, uno::UNO_QUERY_THROW),
+                        m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : m_xBodyText->createTextCursorByRange(xHeaderText->getStart())));
         }
         catch( const uno::Exception& )
         {
@@ -1339,7 +1369,8 @@ void DomainMapper_Impl::PushPageFooter(SectionPropertyMap::PageType eType)
             //set the interface
             uno::Reference< text::XText > xFooterText;
             xPageStyle->getPropertyValue(rPropNameSupplier.GetName( bLeft ? PROP_FOOTER_TEXT_LEFT : PROP_FOOTER_TEXT) ) >>= xFooterText;
-            m_aTextAppendStack.push(uno::Reference< text::XTextAppend >( xFooterText, uno::UNO_QUERY_THROW ));
+            m_aTextAppendStack.push(TextAppendContext(uno::Reference< text::XTextAppend >( xFooterText, uno::UNO_QUERY_THROW ),
+                        m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : m_xBodyText->createTextCursorByRange(xFooterText->getStart())));
         }
         catch( const uno::Exception& )
         {
@@ -1394,7 +1425,8 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
             aFontProperties = aFontProps->GetPropertyValues();
         }
         appendTextContent( uno::Reference< text::XTextContent >( xFootnoteText, uno::UNO_QUERY_THROW ), aFontProperties );
-        m_aTextAppendStack.push(uno::Reference< text::XTextAppend >( xFootnoteText, uno::UNO_QUERY_THROW ));
+        m_aTextAppendStack.push(TextAppendContext(uno::Reference< text::XTextAppend >( xFootnoteText, uno::UNO_QUERY_THROW ),
+                    m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : m_xBodyText->createTextCursorByRange(xFootnoteText->getStart())));
 
         // Redlines for the footnote anchor
         CheckRedline( xFootnote->getAnchor( ) );
@@ -1493,7 +1525,8 @@ void DomainMapper_Impl::PushAnnotation()
             uno::UNO_QUERY_THROW );
         uno::Reference< text::XText > xAnnotationText;
         m_xAnnotationField->getPropertyValue("TextRange") >>= xAnnotationText;
-        m_aTextAppendStack.push(uno::Reference< text::XTextAppend >( xAnnotationText, uno::UNO_QUERY_THROW ));
+        m_aTextAppendStack.push(TextAppendContext(uno::Reference< text::XTextAppend >( xAnnotationText, uno::UNO_QUERY_THROW ),
+                    m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : m_xBodyText->createTextCursorByRange(xAnnotationText->getStart())));
     }
     catch( const uno::Exception& )
     {
@@ -1548,8 +1581,10 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
     uno::Reference<text::XTextAppend> xTextAppend = m_aTextAppendStack.top().xTextAppend;
     try
     {
+        uno::Reference< text::XTextRange > xShapeText( xShape, uno::UNO_QUERY_THROW);
         // Add the shape to the text append stack
-        m_aTextAppendStack.push( uno::Reference< text::XTextAppend >( xShape, uno::UNO_QUERY_THROW ) );
+        m_aTextAppendStack.push( TextAppendContext(uno::Reference< text::XTextAppend >( xShape, uno::UNO_QUERY_THROW ),
+                    m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : m_xBodyText->createTextCursorByRange(xShapeText->getStart() )));
 
         // Add the shape to the anchored objects stack
         uno::Reference< text::XTextContent > xTxtContent( xShape, uno::UNO_QUERY_THROW );

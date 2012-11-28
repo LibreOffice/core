@@ -82,6 +82,7 @@ public:
                                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xModel,
                                 bool bRepairStorage,
                                 SourceDocumentType eDocumentType,
+                                ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > xInsertTextRange,
                                 bool bIsNewDoc = true);
     virtual ~DomainMapper();
 
