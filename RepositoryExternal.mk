@@ -1967,6 +1967,7 @@ endef
 else # !SYSTEM_PYTHON
 
 define gb_LinkTarget__use_python_headers
+$(call gb_LinkTarget_use_package,$(1),python3)
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,python3) \
 	-I$(call gb_UnpackedTarball_get_dir,python3)/PC \
