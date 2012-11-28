@@ -96,7 +96,7 @@ static void addPluginsFromPath( const TCHAR * pPluginsPath, PluginLocationMap & 
 
     while (hFind != INVALID_HANDLE_VALUE)
     {
-        OString aName = OUString( aFindData.cFileName ).toAsciiLowerCase();
+        OString aName = OString( aFindData.cFileName ).toAsciiLowerCase();
 
         // no netscape default plugin anymore...
         // and no double plugin dlls
