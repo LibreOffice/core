@@ -78,17 +78,17 @@ SwVbaField::getServiceNames()
     return aServiceNames;
 }
 
-// *** _ReadFieldParams ***********************************************
+// *** SwVbaReadFieldParams ***********************************************
 // the codes are copied from ww8par5.cxx
-class _ReadFieldParams
+class SwVbaReadFieldParams
 {
 private:
     String aData;
     xub_StrLen nLen, nFnd, nNext, nSavPtr;
     String aFieldName;
 public:
-    _ReadFieldParams( const String& rData );
-    ~_ReadFieldParams();
+    SwVbaReadFieldParams( const String& rData );
+    ~SwVbaReadFieldParams();
 
     xub_StrLen GoToTokenParam();
     long SkipToNextToken();
@@ -103,7 +103,7 @@ public:
 };
 
 
-_ReadFieldParams::_ReadFieldParams( const String& _rData )
+SwVbaReadFieldParams::SwVbaReadFieldParams( const String& _rData )
     : aData( _rData ), nLen( _rData.Len() ), nNext( 0 )
 {
     /*
@@ -129,12 +129,12 @@ _ReadFieldParams::_ReadFieldParams( const String& _rData )
 }
 
 
-_ReadFieldParams::~_ReadFieldParams()
+SwVbaReadFieldParams::~SwVbaReadFieldParams()
 {
 }
 
 
-String _ReadFieldParams::GetResult() const
+String SwVbaReadFieldParams::GetResult() const
 {
     return    (STRING_NOTFOUND == nFnd)
             ? aEmptyStr
@@ -142,7 +142,7 @@ String _ReadFieldParams::GetResult() const
 }
 
 
-xub_StrLen _ReadFieldParams::GoToTokenParam()
+xub_StrLen SwVbaReadFieldParams::GoToTokenParam()
 {
     xub_StrLen nOld = nNext;
     if( -2 == SkipToNextToken() )
@@ -152,7 +152,7 @@ xub_StrLen _ReadFieldParams::GoToTokenParam()
 }
 
 // ret: -2: NOT a '\' parameter but normal Text
-long _ReadFieldParams::SkipToNextToken()
+long SwVbaReadFieldParams::SkipToNextToken()
 {
     long nRet = -1;     // Ende
     if (
@@ -194,7 +194,7 @@ long _ReadFieldParams::SkipToNextToken()
 // Returnwert: 0 falls String-Ende erreicht,
 //             ansonsten Anfang des Paramters bzw. der Zeichenkette
 //
-xub_StrLen _ReadFieldParams::FindNextStringPiece(const xub_StrLen nStart)
+xub_StrLen SwVbaReadFieldParams::FindNextStringPiece(const xub_StrLen nStart)
 {
     xub_StrLen  n = ( STRING_NOTFOUND == nStart ) ? nFnd : nStart;  // Anfang
     xub_StrLen n2;          // Ende
@@ -250,7 +250,7 @@ xub_StrLen _ReadFieldParams::FindNextStringPiece(const xub_StrLen nStart)
 
 
 // read parameters "1-3" or 1-3 with both values between 1 and nMax
-bool _ReadFieldParams::GetTokenSttFromTo(sal_uInt16* pFrom, sal_uInt16* pTo, sal_uInt16 nMax)
+bool SwVbaReadFieldParams::GetTokenSttFromTo(sal_uInt16* pFrom, sal_uInt16* pTo, sal_uInt16 nMax)
 {
     sal_uInt16 nStart = 0;
     sal_uInt16 nEnd   = 0;
@@ -377,7 +377,7 @@ SwVbaFields::Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, 
     String sFieldName;
     if( ( nType == word::WdFieldType::wdFieldEmpty ) && !sText.isEmpty() )
     {
-        _ReadFieldParams aReadParam(sText);
+        SwVbaReadFieldParams aReadParam(sText);
         sFieldName = aReadParam.GetFieldName();
         OSL_TRACE("SwVbaFields::Add, the field name is %s ",rtl::OUStringToOString( sFieldName, RTL_TEXTENCODING_UTF8 ).getStr() );
     }
@@ -410,7 +410,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_FileName( const rtl
     if( !_text.isEmpty() )
     {
         long nRet;
-        _ReadFieldParams aReadParam( _text );
+        SwVbaReadFieldParams aReadParam( _text );
         while (-1 != (nRet = aReadParam.SkipToNextToken()))
         {
             switch (nRet)
@@ -475,7 +475,7 @@ static const DocPropertyTable aDocPropertyTables[] =
 uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const rtl::OUString _text ) throw (uno::RuntimeException)
 {
     String aDocProperty;
-    _ReadFieldParams aReadParam( _text );
+    SwVbaReadFieldParams aReadParam( _text );
     long nRet;
     while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
     {

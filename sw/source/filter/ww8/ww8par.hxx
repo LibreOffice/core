@@ -108,7 +108,7 @@ class SwAttrSet;
 class GDIMetaFile;
 struct ESelection;
 class SfxItemSet;
-class _ReadFieldParams;
+class WW8ReadFieldParams;
 class wwZOrderer;
 class OutlinerParaObject;
 
@@ -1691,8 +1691,8 @@ public:     // eigentlich private, geht aber leider nur public
     eF_ResT Read_F_DBNext( WW8FieldDesc*, String& );
     eF_ResT Read_F_DBNum( WW8FieldDesc*, String& );
     eF_ResT Read_F_Equation( WW8FieldDesc*, String& );
-    void Read_SubF_Ruby( _ReadFieldParams& rReadParam);
-    void Read_SubF_Combined( _ReadFieldParams& rReadParam);
+    void Read_SubF_Ruby( WW8ReadFieldParams& rReadParam);
+    void Read_SubF_Combined( WW8ReadFieldParams& rReadParam);
     eF_ResT Read_F_IncludePicture( WW8FieldDesc*, String& rStr );
     eF_ResT Read_F_IncludeText(    WW8FieldDesc*, String& rStr );
     eF_ResT Read_F_Seq( WW8FieldDesc*, String& rStr );

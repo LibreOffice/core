@@ -104,14 +104,14 @@ using namespace std; // #i24377#
 using namespace nsSwDocInfoSubType;
 
 
-class _ReadFieldParams
+class WW8ReadFieldParams
 {
 private:
     String aData;
     xub_StrLen nLen, nFnd, nNext, nSavPtr;
 public:
-    _ReadFieldParams( const String& rData );
-    ~_ReadFieldParams();
+    WW8ReadFieldParams( const String& rData );
+    ~WW8ReadFieldParams();
 
     xub_StrLen GoToTokenParam();
     long SkipToNextToken();
@@ -125,7 +125,7 @@ public:
 };
 
 
-_ReadFieldParams::_ReadFieldParams( const String& _rData )
+WW8ReadFieldParams::WW8ReadFieldParams( const String& _rData )
     : aData( _rData ), nLen( _rData.Len() ), nNext( 0 )
 {
     /*
@@ -150,13 +150,13 @@ _ReadFieldParams::_ReadFieldParams( const String& _rData )
 }
 
 
-_ReadFieldParams::~_ReadFieldParams()
+WW8ReadFieldParams::~WW8ReadFieldParams()
 {
 
 }
 
 
-String _ReadFieldParams::GetResult() const
+String WW8ReadFieldParams::GetResult() const
 {
     return    (STRING_NOTFOUND == nFnd)
             ? aEmptyStr
@@ -164,7 +164,7 @@ String _ReadFieldParams::GetResult() const
 }
 
 
-xub_StrLen _ReadFieldParams::GoToTokenParam()
+xub_StrLen WW8ReadFieldParams::GoToTokenParam()
 {
     xub_StrLen nOld = nNext;
     if( -2 == SkipToNextToken() )
@@ -174,7 +174,7 @@ xub_StrLen _ReadFieldParams::GoToTokenParam()
 }
 
 // ret: -2: NOT a '\' parameter but normal Text
-long _ReadFieldParams::SkipToNextToken()
+long WW8ReadFieldParams::SkipToNextToken()
 {
     long nRet = -1;     // Ende
     if (
@@ -216,7 +216,7 @@ long _ReadFieldParams::SkipToNextToken()
 // Returnwert: 0 falls String-Ende erreicht,
 //             ansonsten Anfang des Paramters bzw. der Zeichenkette
 //
-xub_StrLen _ReadFieldParams::FindNextStringPiece(const xub_StrLen nStart)
+xub_StrLen WW8ReadFieldParams::FindNextStringPiece(const xub_StrLen nStart)
 {
     xub_StrLen  n = ( STRING_NOTFOUND == nStart ) ? nFnd : nStart;  // Anfang
     xub_StrLen n2;          // Ende
@@ -281,7 +281,7 @@ xub_StrLen _ReadFieldParams::FindNextStringPiece(const xub_StrLen nStart)
 
 
 // read parameters "1-3" or 1-3 with both values between 1 and nMax
-bool _ReadFieldParams::GetTokenSttFromTo(sal_uInt16* pFrom, sal_uInt16* pTo, sal_uInt16 nMax)
+bool WW8ReadFieldParams::GetTokenSttFromTo(sal_uInt16* pFrom, sal_uInt16* pTo, sal_uInt16 nMax)
 {
     sal_uInt16 nStart = 0;
     sal_uInt16 nEnd   = 0;
@@ -1276,7 +1276,7 @@ eF_ResT SwWW8ImplReader::Read_F_Input( WW8FieldDesc* pF, String& rStr )
     String aDef;
     String aQ;
     long nRet;
-    _ReadFieldParams aReadParam( rStr );
+    WW8ReadFieldParams aReadParam( rStr );
     while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
     {
         switch( nRet )
@@ -1463,7 +1463,7 @@ eF_ResT SwWW8ImplReader::Read_F_InputVar( WW8FieldDesc* pF, String& rStr )
     String aQ;
     String aDef;
     long nRet;
-    _ReadFieldParams aReadParam( rStr );
+    WW8ReadFieldParams aReadParam( rStr );
     while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
     {
         switch( nRet )
@@ -1534,7 +1534,7 @@ eF_ResT SwWW8ImplReader::Read_F_Seq( WW8FieldDesc*, String& rStr )
     String sStart;
     SvxExtNumType eNumFormat = SVX_NUM_ARABIC;
     long nRet;
-    _ReadFieldParams aReadParam( rStr );
+    WW8ReadFieldParams aReadParam( rStr );
     while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
     {
         switch( nRet )
@@ -1601,7 +1601,7 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
     if( 85 == pF->nId )
     {
         String aDocProperty;
-        _ReadFieldParams aReadParam( rStr );
+        WW8ReadFieldParams aReadParam( rStr );
         long nRet;
         while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
         {
@@ -1789,7 +1789,7 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
     // Extract DOCVARIABLE varname
     if ( 64 == pF->nId )
     {
-        _ReadFieldParams aReadParam( rStr );
+        WW8ReadFieldParams aReadParam( rStr );
         long nRet;
         while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
         {
@@ -1842,7 +1842,7 @@ eF_ResT SwWW8ImplReader::Read_F_TemplName( WW8FieldDesc*, String& )
 eF_ResT SwWW8ImplReader::Read_F_DateTime( WW8FieldDesc*pF, String& rStr )
 {
     bool bHijri = false;
-    _ReadFieldParams aReadParam(rStr);
+    WW8ReadFieldParams aReadParam(rStr);
     long nTok;
     while (-1 != (nTok = aReadParam.SkipToNextToken()))
     {
@@ -1904,7 +1904,7 @@ eF_ResT SwWW8ImplReader::Read_F_FileName(WW8FieldDesc*, String &rStr)
 {
     SwFileNameFormat eType = FF_NAME;
     long nRet;
-    _ReadFieldParams aReadParam(rStr);
+    WW8ReadFieldParams aReadParam(rStr);
     while (-1 != (nRet = aReadParam.SkipToNextToken()))
     {
         switch (nRet)
@@ -1960,7 +1960,7 @@ eF_ResT SwWW8ImplReader::Read_F_Symbol( WW8FieldDesc*, String& rStr )
     String aName;
     sal_Int32 nSize = 0;
     long nRet;
-    _ReadFieldParams aReadParam( rStr );
+    WW8ReadFieldParams aReadParam( rStr );
     while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
     {
         switch( nRet )
@@ -2029,7 +2029,7 @@ eF_ResT SwWW8ImplReader::Read_F_Embedd( WW8FieldDesc*, String& rStr )
     String sHost;
 
     long nRet;
-    _ReadFieldParams aReadParam( rStr );
+    WW8ReadFieldParams aReadParam( rStr );
     while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
     {
         switch( nRet )
@@ -2057,7 +2057,7 @@ eF_ResT SwWW8ImplReader::Read_F_Set( WW8FieldDesc* pF, String& rStr )
     String sOrigName;
     String sVal;
     long nRet;
-    _ReadFieldParams aReadParam( rStr );
+    WW8ReadFieldParams aReadParam( rStr );
     while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
     {
         switch( nRet )
@@ -2092,7 +2092,7 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, String& rStr )
     REFERENCEMARK eFormat = REF_CONTENT;
 
     long nRet;
-    _ReadFieldParams aReadParam( rStr );
+    WW8ReadFieldParams aReadParam( rStr );
     while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
     {
         switch( nRet )
@@ -2164,7 +2164,7 @@ eF_ResT SwWW8ImplReader::Read_F_NoteReference( WW8FieldDesc*, String& rStr )
     bool bAboveBelow = false;
 
     long nRet;
-    _ReadFieldParams aReadParam( rStr );
+    WW8ReadFieldParams aReadParam( rStr );
     while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
     {
         switch( nRet )
@@ -2210,7 +2210,7 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, String& rStr )
 {
     String sOrigName;
     long nRet;
-    _ReadFieldParams aReadParam( rStr );
+    WW8ReadFieldParams aReadParam( rStr );
     while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
     {
         switch( nRet )
@@ -2251,7 +2251,7 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, String& rStr)
     long nRet;
     bool bNewVText = true;
     bool bBracket  = false;
-    _ReadFieldParams aReadParam( rStr );
+    WW8ReadFieldParams aReadParam( rStr );
 
     xub_StrLen nOffset = 0;
 
@@ -2342,7 +2342,7 @@ eF_ResT SwWW8ImplReader::Read_F_IncludePicture( WW8FieldDesc*, String& rStr )
     bool bEmbedded = true;
 
     long nRet;
-    _ReadFieldParams aReadParam( rStr );
+    WW8ReadFieldParams aReadParam( rStr );
     while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
     {
         switch( nRet )
@@ -2408,7 +2408,7 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* /*pF*/, String& rStr 
     String aPara;
     String aBook;
     long nRet;
-    _ReadFieldParams aReadParam( rStr );
+    WW8ReadFieldParams aReadParam( rStr );
     while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
     {
         switch( nRet )
@@ -2474,7 +2474,7 @@ eF_ResT SwWW8ImplReader::Read_F_DBField( WW8FieldDesc* pF, String& rStr )
 {
     String aName;
     long nRet;
-    _ReadFieldParams aReadParam( rStr );
+    WW8ReadFieldParams aReadParam( rStr );
     while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
     {
         switch( nRet )
@@ -2535,7 +2535,7 @@ eF_ResT SwWW8ImplReader::Read_F_DBNum( WW8FieldDesc*, String& )
 */
 eF_ResT SwWW8ImplReader::Read_F_Equation( WW8FieldDesc*, String& rStr )
 {
-    _ReadFieldParams aReadParam( rStr );
+    WW8ReadFieldParams aReadParam( rStr );
     long cChar = aReadParam.SkipToNextToken();
     if ('o' == cChar)
         Read_SubF_Combined(aReadParam);
@@ -2544,7 +2544,7 @@ eF_ResT SwWW8ImplReader::Read_F_Equation( WW8FieldDesc*, String& rStr )
     return FLD_OK;
 }
 
-void SwWW8ImplReader::Read_SubF_Combined( _ReadFieldParams& rReadParam)
+void SwWW8ImplReader::Read_SubF_Combined( WW8ReadFieldParams& rReadParam)
 {
     String sCombinedCharacters;
     if ((-2 == rReadParam.SkipToNextToken()) &&
@@ -2589,7 +2589,7 @@ void SwWW8ImplReader::Read_SubF_Combined( _ReadFieldParams& rReadParam)
     }
 }
 
-void SwWW8ImplReader::Read_SubF_Ruby( _ReadFieldParams& rReadParam)
+void SwWW8ImplReader::Read_SubF_Ruby( WW8ReadFieldParams& rReadParam)
 {
     sal_uInt16 nJustificationCode=0;
     String sFontName;
@@ -2755,7 +2755,7 @@ void SwWW8ImplReader::Read_SubF_Ruby( _ReadFieldParams& rReadParam)
 static void lcl_toxMatchACSwitch(  SwWW8ImplReader& /*rReader*/,
                             SwDoc& rDoc,
                             SwTOXBase& rBase,
-                            _ReadFieldParams& rParam,
+                            WW8ReadFieldParams& rParam,
                             SwCaptionDisplay eCaptionType)
 {
     xub_StrLen n = rParam.GoToTokenParam();
@@ -2825,7 +2825,7 @@ static void EnsureMaxLevelForTemplates(SwTOXBase& rBase)
 }
 
 static void lcl_toxMatchTSwitch(SwWW8ImplReader& rReader, SwTOXBase& rBase,
-    _ReadFieldParams& rParam)
+    WW8ReadFieldParams& rParam)
 {
     xub_StrLen n = rParam.GoToTokenParam();
     if( STRING_NOTFOUND != n )
@@ -2975,7 +2975,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
             // oder der Parameter \f existiert
             // oder GARKEINE Switches Parameter angegeben sind.
             long nRet;
-            _ReadFieldParams aReadParam( rStr );
+            WW8ReadFieldParams aReadParam( rStr );
             while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
             {
                 switch( nRet )
@@ -3076,7 +3076,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
             sal_uInt16 eCreateFrom = 0;
             sal_uInt16 nMaxLevel = 0;
             long nRet;
-            _ReadFieldParams aReadParam( rStr );
+            WW8ReadFieldParams aReadParam( rStr );
             while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
             {
                 switch( nRet )
@@ -3473,7 +3473,7 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, String& rStr )
     {
         bool bOptions = false;
         long nRet;
-        _ReadFieldParams aReadParam( rStr );
+        WW8ReadFieldParams aReadParam( rStr );
         while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
         {
             switch( nRet )
@@ -3540,7 +3540,7 @@ static void lcl_ImportTox(SwDoc &rDoc, SwPaM &rPaM, const String &rStr, bool bId
     xub_StrLen n;
     String sFldTxt;
     long nRet;
-    _ReadFieldParams aReadParam(rStr);
+    WW8ReadFieldParams aReadParam(rStr);
     while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
         switch( nRet )
         {
