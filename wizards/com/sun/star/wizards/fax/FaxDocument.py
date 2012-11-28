@@ -105,18 +105,18 @@ class FaxDocument(TextDocument):
                 self.xTextDocument)
             oUserDataAccess = Configuration.getConfigurationRoot(
                 self.xMSF, "org.openoffice.UserProfile/Data", False)
-            myFieldHandler.changeUserFieldContent("Company",
-                oUserDataAccess.hasByName("o"))
-            myFieldHandler.changeUserFieldContent("Street",
-                oUserDataAccess.hasByName("street"))
-            myFieldHandler.changeUserFieldContent("PostCode",
-                oUserDataAccess.hasByName("postalcode"))
             myFieldHandler.changeUserFieldContent(
-                PropertyNames.PROPERTY_STATE, oUserDataAccess.hasByName("st"))
-            myFieldHandler.changeUserFieldContent("City",
-                oUserDataAccess.hasByName("l"))
-            myFieldHandler.changeUserFieldContent("Fax",
-                oUserDataAccess.hasByName("facsimiletelephonenumber"))
+                "Company", oUserDataAccess.getByName("o"))
+            myFieldHandler.changeUserFieldContent(
+                "Street", oUserDataAccess.getByName("street"))
+            myFieldHandler.changeUserFieldContent(
+                "PostCode", oUserDataAccess.getByName("postalcode"))
+            myFieldHandler.changeUserFieldContent(
+                PropertyNames.PROPERTY_STATE, oUserDataAccess.getByName("st"))
+            myFieldHandler.changeUserFieldContent(
+                "City", oUserDataAccess.getByName("l"))
+            myFieldHandler.changeUserFieldContent(
+                "Fax", oUserDataAccess.getByName("facsimiletelephonenumber"))
         except Exception:
             traceback.print_exc()
 
