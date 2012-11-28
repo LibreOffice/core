@@ -129,7 +129,7 @@ void Locale::fromISO(const ::rtl::OUString& sISO)
     m_sVariant  = ::rtl::OUString();
 
     ::rtl::OUString sParser(sISO);
-    sParser.trim();
+    sParser = sParser.trim();
 
     sal_Int32 nStart = 0;
     sal_Int32 nEnd   = 0;
