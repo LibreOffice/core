@@ -11,5 +11,5 @@
 +CFLAGS+=/GF /nologo /Zc:wchar_t-
 +CXXFLAGS+=/GF /nologo /EHsc /Zc:wchar_t-
  CPPFLAGS+=-D_CRT_SECURE_NO_DEPRECATE
- DEFS+=-DWIN32
- DEFS+=-DCYGWINMSVC
+ DEFS+=-DWIN32 -DCYGWINMSVC
+ LDFLAGS+=/nologo
