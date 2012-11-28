@@ -110,7 +110,7 @@ BinaryOutputStream::writeCharArrayUC( const OUString& rString, rtl_TextEncoding 
 {
     OString sBuf( OUStringToOString( rString, eTextEnc ) );
     if( !bAllowNulChars )
-        sBuf.replace( '\0', '?' );
+        sBuf = sBuf.replace( '\0', '?' );
     writeMemory( static_cast< const void* >( sBuf.getStr() ), sBuf.getLength() );
 }
 
@@ -119,7 +119,7 @@ BinaryOutputStream::writeUnicodeArray( const ::rtl::OUString& rString, bool bAll
 {
     OUString sBuf( rString );
     if( !bAllowNulChars )
-        sBuf.replace( '\0', '?' );
+        sBuf = sBuf.replace( '\0', '?' );
 #ifdef OSL_BIGENDIAN
     // need a non-const buffer for swapping byte order
     sal_Unicode notConst[sBuf.getLength()];
