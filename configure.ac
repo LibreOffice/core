@@ -53,7 +53,7 @@ cat /dev/null > warn
 have_WARNINGS="no"
 add_warning()
 {
-    if test "$have_WARNINGS" = "no" ; then
+    if test "$have_WARNINGS" = "no"; then
         echo "*************************************" >> warn
         have_WARNINGS="yes"
         if which tput >/dev/null 2>/dev/null && test `tput colors` -ge 8; then
@@ -66,7 +66,7 @@ add_warning()
     echo "$COLORWARN $@" >> warn
 }
 
-if test -n "$SOLARENV" ; then
+if test -n "$SOLARENV"; then
     AC_MSG_ERROR([You have sourced config_host.mk in this shell.  This may lead to trouble, please run in a fresh (login) shell.])
 fi
 
@@ -3068,7 +3068,7 @@ if test "$_os" = "WINNT"; then
         dnl  Check for mspdb80.dll/mspdb100.dll/mspdb110.dll
         dnl ===========================================================
         dnl MSVS 2008/10/12 Compiler
-        if test -n "$with_mspdb_path";then
+        if test -n "$with_mspdb_path"; then
             with_mspdb_path=`cygpath -u "$with_mspdb_path"`
         fi
         if test -e "$with_mspdb_path/mspdb80.dll" -o -e "$with_mspdb_path/mspdb100.dll" -o -e "$with_mspdb_path/mspdb110.dll"; then
@@ -3091,7 +3091,7 @@ if test "$_os" = "WINNT"; then
             MSPDB_PATH="$with_cl_home/../Common7/IDE"
         fi
 
-        if test -z "$MSPDB_PATH";then
+        if test -z "$MSPDB_PATH"; then
             dnl AC_PATH_PROG only checks if MSPDB_PATH is still empty
             AC_PATH_PROG(MSPDB_PATH, mspdb80.dll)
             AC_PATH_PROG(MSPDB_PATH, mspdb100.dll)
@@ -4555,7 +4555,7 @@ all:
 
 EOF
 $GNUMAKE -C $TESTGMAKEFILEFUNC 2>/dev/null 1>&2
-if test -f $TESTGMAKEFILEFUNC/test.txt ; then
+if test -f $TESTGMAKEFILEFUNC/test.txt; then
     HAVE_GNUMAKE_FILE_FUNC="YES"
     AC_MSG_RESULT([yes])
 else
@@ -4722,12 +4722,12 @@ dnl ===================================================================
 if test "$build_os" = "cygwin"; then
     dnl Check midl.exe
     AC_PATH_PROG(MIDL_PATH, midl.exe)
-    if test -n "$MIDL_PATH";then
+    if test -n "$MIDL_PATH"; then
         MIDL_PATH=`dirname "$MIDL_PATH"`
     else
         AC_MSG_CHECKING([for midl.exe more thoroughly])
     fi
-    if test -n "$with_midl_path";then
+    if test -n "$with_midl_path"; then
         with_midl_path=`cygpath -u "$with_midl_path"`
     fi
     if test -x "$with_midl_path/midl.exe"; then
@@ -4761,10 +4761,10 @@ if test "$build_os" = "cygwin"; then
 
     dnl Check csc.exe
     AC_PATH_PROG(CSC_PATH, csc.exe)
-    if test -n "$CSC_PATH";then
+    if test -n "$CSC_PATH"; then
         CSC_PATH=`dirname "$CSC_PATH"`
     fi
-    if test -n "$with_csc_path";then
+    if test -n "$with_csc_path"; then
         with_csc_path=`cygpath -u "$with_csc_path"`
     else
         AC_MSG_CHECKING([for csc.exe more thoroughly])
@@ -4788,12 +4788,12 @@ if test "$build_os" = "cygwin"; then
 
     dnl Check al.exe
     AC_PATH_PROG(AL_PATH, al.exe)
-    if test -n "$AL_PATH";then
+    if test -n "$AL_PATH"; then
         AL_PATH=`dirname "$AL_PATH"`
     else
         AC_MSG_CHECKING([for al.exe more thoroughly])
     fi
-    if test -n "$with_al_path";then
+    if test -n "$with_al_path"; then
         with_al_path=`cygpath -u "$with_al_path"`
     fi
     if test -x "$with_al_path/al.exe"; then
@@ -5207,7 +5207,7 @@ using namespace std;
             if test -n "$MINGW_GXXDLL"; then
                 mingw_gxxdll_root=${MINGW_GXXDLL%.dll}
                 mingw_gxxdll_root=${mingw_gxxdll_root#lib}
-                if test "$CROSS_COMPILING" = "YES" ; then
+                if test "$CROSS_COMPILING" = "YES"; then
                     dnl m4 escaping!
                     mingw_gxxdll_root=${mingw_gxxdll_root%-[[0-9]]}
                 fi
@@ -6723,7 +6723,7 @@ dnl ===================================================================
 dnl We need winegcc when building MinGW build to be able to cross-build msi tools
 dnl ===================================================================
 WINEGCC=
-if test "$enable_winegcc" = "yes" ; then
+if test "$enable_winegcc" = "yes"; then
     AC_PATH_PROG(WINEGCC, winegcc)
     if test "$WINEGCC" = ""; then
         AC_MSG_ERROR([winegcc was not found, please install wine-devel, or wine-devel-32bit])
@@ -8198,7 +8198,7 @@ else
                 uwin=`cygpath -d "$WINDIR"`
                 uwin=`cygpath -u "$uwin"`
                 #if we have one we have all
-                if test -e $uwin/winsxs/x86_microsoft.vc80.crt_1fc8b3b9a1e18e3b_8.0.50727.4053* ; then
+                if test -e $uwin/winsxs/x86_microsoft.vc80.crt_1fc8b3b9a1e18e3b_8.0.50727.4053*; then
                     MSVC80_DLL_DIR=`cd $uwin/winsxs/; ls -d x86_microsoft.vc80.crt_1fc8b3b9a1e18e3b_8.0.50727.4053*`
                     MSVC80_MNFST=`ls $uwin/winsxs/Manifests/x86_microsoft.vc80.crt_1fc8b3b9a1e18e3b_8.0.50727.4053_*.manifest`
                     AC_MSG_RESULT([Found])
@@ -10517,9 +10517,9 @@ if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE"; then
     dnl Check for qmake
     AC_PATH_PROG( QMAKEQT4, qmake-qt4, no, [`dirname $qt_header_dir`/bin:$QT4DIR/bin:$PATH] )
     QMAKE4="$QMAKEQT4"
-    if test "$QMAKE4" = "no" ; then
+    if test "$QMAKE4" = "no"; then
         AC_PATH_PROG( QMAKE4, qmake, no, [`dirname $qt_header_dir`/bin:$QT4DIR/bin:$PATH] )
-        if test "$QMAKE4" = "no" ; then
+        if test "$QMAKE4" = "no"; then
             AC_MSG_ERROR([Qmake not found.  Please specify
 the root of your Qt installation by exporting QT4DIR before running "configure".])
         fi
@@ -11256,7 +11256,7 @@ if test "$GUIBASE" = "unx"; then
     test_cairo=yes
 fi
 
-if test "$test_cairo" = "yes" ; then
+if test "$test_cairo" = "yes"; then
     AC_MSG_CHECKING([whether to use the system cairo])
 
     if test "$with_system_cairo" = "yes"; then
@@ -11882,8 +11882,8 @@ fi
 AC_SUBST(INTRO_BITMAP)
 
 AC_MSG_CHECKING([for yet another 'about' svg])
-if test -z "$with_about_background_svg" -o "$with_about_background_svg" = "no" ; then
-    if test "$with_about_background_svg" = "no" ; then
+if test -z "$with_about_background_svg" -o "$with_about_background_svg" = "no"; then
+    if test "$with_about_background_svg" = "no"; then
         ABOUT_BACKGROUND_SVG=
     fi
     AC_MSG_RESULT([none])
@@ -11897,8 +11897,8 @@ fi
 AC_SUBST(ABOUT_BACKGROUND_SVG)
 
 AC_MSG_CHECKING([for yet another 'flat_logo' svg])
-if test -z "$with_flat_logo_svg" -o "$with_flat_logo_svg" = "no" ; then
-    if test "$with_flat_logo_svg" = "no" ; then
+if test -z "$with_flat_logo_svg" -o "$with_flat_logo_svg" = "no"; then
+    if test "$with_flat_logo_svg" = "no"; then
         FLAT_LOGO_SVG=
     fi
     AC_MSG_RESULT([none])
@@ -12213,7 +12213,7 @@ fi
 # ===================================================================
 AC_MSG_CHECKING([whether to create huge library])
 MERGELIBS=
-if test "$enable_mergelibs" = "yes" ; then
+if test "$enable_mergelibs" = "yes"; then
     if test $_os != Linux -a $_os != Android -a $_os != WINNT; then
         add_warning "--enable-mergelibs is not tested for this platform"
     fi
