@@ -19,6 +19,7 @@
 #ifndef INCLUDED_DMAPPER_DOMAINMAPPER_IMPL_HXX
 #define INCLUDED_DMAPPER_DOMAINMAPPER_IMPL_HXX
 
+#include <com/sun/star/text/XParagraphCursor.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XTextAppend.hpp>
@@ -167,10 +168,17 @@ public:
 struct TextAppendContext
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextAppend >       xTextAppend;
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >        xInsertPosition;
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XParagraphCursor >  xCursor;
     ParagraphPropertiesPtr                                                        pLastParagraphProperties;
 
-    TextAppendContext( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextAppend >& xAppend ) :
-        xTextAppend( xAppend ){}
+    TextAppendContext( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextAppend >& xAppend,
+           const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >& xCur ) :
+        xTextAppend( xAppend )
+    {
+        xCursor.set(xCur, uno::UNO_QUERY);
+        xInsertPosition.set(xCursor, uno::UNO_QUERY);
+    }
 };
 
 struct AnchoredContext
@@ -373,6 +381,9 @@ private:
 
     std::map< sal_Int32, com::sun::star::uno::Any > deferredCharacterProperties;
 
+public:
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > m_xInsertTextRange;
+private:
     bool m_bIsNewDoc;
 
 public:
@@ -381,6 +392,7 @@ public:
             uno::Reference < uno::XComponentContext >  xContext,
             uno::Reference< lang::XComponent >  xModel,
             SourceDocumentType eDocumentType,
+            uno::Reference< text::XTextRange > xInsertTextRange,
             bool bIsNewDoc );
     virtual ~DomainMapper_Impl();
 

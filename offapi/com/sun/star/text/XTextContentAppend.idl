@@ -55,6 +55,27 @@ interface XTextContentAppend : com::sun::star::uno::XInterface
                                 raises( com::sun::star::lang::IllegalArgumentException,
                                        com::sun::star::beans::UnknownPropertyException );
 
+        /** inserts a text content at the given position.
+
+        @param TextContent
+            contains the object to be inserted.
+        @param CharacterAndParagraphProperties
+            can contain all the properties defined by the service
+                      <type scope="com::sun::star::text">Paragraph.
+        @param TextRange
+            insert position
+        @return
+            the anchor text range of the inserted text content.
+
+        @since LibreOffice 4.0
+     */
+         com::sun::star::text::XTextRange insertTextContentWithProperties(
+             [in] com::sun::star::text::XTextContent TextContent,
+             [in] com::sun::star::beans::PropertyValues CharacterAndParagraphProperties,
+             [in] com::sun::star::text::XTextRange TextRange )
+                                raises( com::sun::star::lang::IllegalArgumentException,
+                                       com::sun::star::beans::UnknownPropertyException );
+
 };
 
 

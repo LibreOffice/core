@@ -108,7 +108,8 @@ public:
         finishOrAppendParagraph(
             const bool bFinish,
             const uno::Sequence< beans::PropertyValue >&
-                rCharacterAndParagraphProperties)
+                rCharacterAndParagraphProperties,
+            const uno::Reference< text::XTextRange >& xInsertPosition)
         throw (lang::IllegalArgumentException, uno::RuntimeException);
 
     sal_Int16 ComparePositions(
@@ -1251,29 +1252,31 @@ throw (uno::RuntimeException)
 }
 
 uno::Reference< text::XTextRange > SAL_CALL
-SwXText::appendParagraph(
-        const uno::Sequence< beans::PropertyValue > & rProperties)
-throw (lang::IllegalArgumentException, uno::RuntimeException)
-{
-    SolarMutexGuard g;
-
-    return m_pImpl->finishOrAppendParagraph(false, rProperties);
-}
-
-uno::Reference< text::XTextRange > SAL_CALL
 SwXText::finishParagraph(
         const uno::Sequence< beans::PropertyValue > & rProperties)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     SolarMutexGuard g;
 
-    return m_pImpl->finishOrAppendParagraph(true, rProperties);
+    return m_pImpl->finishOrAppendParagraph(true, rProperties, uno::Reference< text::XTextRange >());
+}
+
+uno::Reference< text::XTextRange > SAL_CALL
+SwXText::finishParagraphInsert(
+        const uno::Sequence< beans::PropertyValue > & rProperties,
+        const uno::Reference< text::XTextRange >& xInsertPosition)
+throw (lang::IllegalArgumentException, uno::RuntimeException)
+{
+    SolarMutexGuard g;
+
+    return m_pImpl->finishOrAppendParagraph(true, rProperties, xInsertPosition);
 }
 
 uno::Reference< text::XTextRange >
 SwXText::Impl::finishOrAppendParagraph(
         const bool bFinish,
-        const uno::Sequence< beans::PropertyValue > & rProperties)
+        const uno::Sequence< beans::PropertyValue > & rProperties,
+        const uno::Reference< text::XTextRange >& xInsertPosition)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     if (!m_bIsValid)
@@ -1298,6 +1301,15 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     SwPosition aInsertPosition(
             SwNodeIndex( *pStartNode->EndOfSectionNode(), -1 ) );
     SwPaM aPam(aInsertPosition);
+    // If we got a position reference, then the insert point is not the end of
+    // the document.
+    if (xInsertPosition.is())
+    {
+        SwUnoInternalPaM aStartPam(*m_rThis.GetDoc());
+        ::sw::XTextRangeToSwPaM(aStartPam, xInsertPosition);
+        aPam = aStartPam;
+        aPam.SetMark();
+    }
     m_pDoc->AppendTxtNode( *aPam.GetPoint() );
     // remove attributes from the previous paragraph
     m_pDoc->ResetAttrs(aPam);
@@ -1371,15 +1383,12 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     return xRet;
 }
 
-/*-------------------------------------------------------------------------
-    Append text portions at the end of the last paragraph of the text
-    interface. Support of import filters.
-  -----------------------------------------------------------------------*/
 uno::Reference< text::XTextRange > SAL_CALL
-SwXText::appendTextPortion(
+SwXText::insertTextPortion(
         const ::rtl::OUString& rText,
         const uno::Sequence< beans::PropertyValue > &
-            rCharacterAndParagraphProperties)
+            rCharacterAndParagraphProperties,
+        const uno::Reference<text::XTextRange>& xInsertPosition)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -1390,7 +1399,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     }
     uno::Reference< text::XTextRange > xRet;
     const uno::Reference< text::XTextCursor > xTextCursor = CreateCursor();
-    xTextCursor->gotoEnd(sal_False);
+    xTextCursor->gotoRange(xInsertPosition, sal_False);
 
     const uno::Reference< lang::XUnoTunnel > xRangeTunnel(
             xTextCursor, uno::UNO_QUERY_THROW );
@@ -1405,7 +1414,6 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 //        SwPaM aPam(*pStartNode->EndOfSectionNode());
     //aPam.Move( fnMoveBackward, fnGoNode );
     SwUnoCrsr *const pCursor = pTextCursor->GetCursor();
-    pCursor->MovePara( fnParaCurr, fnParaEnd );
     m_pImpl->m_pDoc->DontExpandFmt( *pCursor->Start() );
 
     if (!rText.isEmpty())
@@ -1477,14 +1485,32 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 }
 
 /*-------------------------------------------------------------------------
-    enable appending text contents like graphic objects, shapes and so on
+    Append text portions at the end of the last paragraph of the text
+    interface. Support of import filters.
+  -----------------------------------------------------------------------*/
+uno::Reference< text::XTextRange > SAL_CALL
+SwXText::appendTextPortion(
+        const ::rtl::OUString& rText,
+        const uno::Sequence< beans::PropertyValue > &
+            rCharacterAndParagraphProperties)
+throw (lang::IllegalArgumentException, uno::RuntimeException)
+{
+    // Right now this doesn't need a guard, as it's just calling the insert
+    // version, that has it already.
+    uno::Reference<text::XTextRange> xInsertPosition = getEnd();
+    return insertTextPortion(rText, rCharacterAndParagraphProperties, xInsertPosition);
+}
+
+/*-------------------------------------------------------------------------
+    enable inserting/appending text contents like graphic objects, shapes and so on
     to support import filters
   -----------------------------------------------------------------------*/
 uno::Reference< text::XTextRange > SAL_CALL
-SwXText::appendTextContent(
+SwXText::insertTextContentWithProperties(
     const uno::Reference< text::XTextContent >& xTextContent,
     const uno::Sequence< beans::PropertyValue >&
-        rCharacterAndParagraphProperties)
+        rCharacterAndParagraphProperties,
+    const uno::Reference< text::XTextRange >& xInsertPosition)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -1493,25 +1519,11 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     {
         throw  uno::RuntimeException();
     }
-    SwStartNode const*const pStartNode = GetStartNode();
-    if(!pStartNode)
-    {
-        throw  uno::RuntimeException();
-    }
 
-    uno::Reference< text::XTextRange > xRet;
     m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
-    // find end node, go backward - don't skip tables because the
-    // new paragraph has to be the last node
-    SwPaM aPam(*pStartNode->EndOfSectionNode());
-    aPam.Move( fnMoveBackward, fnGoNode );
-    // set cursor to the end of the last text node
-    SwCursor aCursor( *aPam.Start(), 0, false );
-    xRet = new SwXTextRange(aCursor, this);
-    aCursor.MovePara( fnParaCurr, fnParaEnd );
-    m_pImpl->m_pDoc->DontExpandFmt( *aCursor.Start() );
+
     // now attach the text content here
-    insertTextContent( xRet, xTextContent, false );
+    insertTextContent( xInsertPosition, xTextContent, false );
     // now apply the properties to the anchor
     if (rCharacterAndParagraphProperties.getLength())
     {
@@ -1536,7 +1548,20 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         }
     }
     m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
-    return xRet;
+    return xInsertPosition;
+}
+
+uno::Reference< text::XTextRange > SAL_CALL
+SwXText::appendTextContent(
+    const uno::Reference< text::XTextContent >& xTextContent,
+    const uno::Sequence< beans::PropertyValue >&
+        rCharacterAndParagraphProperties)
+throw (lang::IllegalArgumentException, uno::RuntimeException)
+{
+    // Right now this doesn't need a guard, as it's just calling the insert
+    // version, that has it already.
+    uno::Reference<text::XTextRange> xInsertPosition = getEnd();
+    return insertTextContentWithProperties(xTextContent, rCharacterAndParagraphProperties, xInsertPosition);
 }
 
 // move previously appended paragraphs into a text frames

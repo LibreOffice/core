@@ -35,19 +35,6 @@
  */
 interface XParagraphAppend : com::sun::star::uno::XInterface
 {
-        /** appends a new and empty paragraph at the end of the text.
-
-                <p>The properties are applied to the new paragraph.
-        </p>
-
-        @param
-            CharacterAndParagraphProperties can contain all the properties defined by the service
-                      <type scope="com::sun::star::text">Paragraph.
-
-     */
-         com::sun::star::text::XTextRange appendParagraph(  [in] com::sun::star::beans::PropertyValues CharacterAndParagraphProperties )
-                        raises( com::sun::star::lang::IllegalArgumentException,
-                                       com::sun::star::beans::UnknownPropertyException );
          /** appends a new and empty paragraph at the end of the text.
 
                 <p>The properties are applied to the last paragraph before the new paragraph is inserted.
@@ -59,6 +46,26 @@ interface XParagraphAppend : com::sun::star::uno::XInterface
 
          */
          com::sun::star::text::XTextRange finishParagraph(  [in] com::sun::star::beans::PropertyValues CharacterAndParagraphProperties )
+                        raises( com::sun::star::lang::IllegalArgumentException,
+                                       com::sun::star::beans::UnknownPropertyException );
+
+         /** inserts a new and empty paragraph to the text at a given position.
+
+                <p>The properties are applied to the last paragraph before the new paragraph is inserted.
+                </p>
+
+        @param
+            CharacterAndParagraphProperties can contain all the properties defined by the service
+                      <type scope="com::sun::star::text">Paragraph.
+
+        @param
+            TextRange specifies the position of the insertion.
+
+        @since LibreOffice 4.0
+
+         */
+         com::sun::star::text::XTextRange finishParagraphInsert(  [in] com::sun::star::beans::PropertyValues CharacterAndParagraphProperties,
+                                                                  [in] com::sun::star::text::XTextRange TextRange )
                         raises( com::sun::star::lang::IllegalArgumentException,
                                        com::sun::star::beans::UnknownPropertyException );
 
