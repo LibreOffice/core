@@ -192,7 +192,7 @@ sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
             {
                 aEntry = aLine.GetToken( (xub_StrLen) nC, '\t' );
                 sal_uInt32 nIndex = nStdFormat;
-                double fVal;
+                double fVal = double();
                 if ( nMode != SC_DDE_TEXT && pFormatter->IsNumberFormat( aEntry, nIndex, fVal ) )
                     pResult->PutDouble( fVal, nC, nR );
                 else if (aEntry.Len() == 0)
