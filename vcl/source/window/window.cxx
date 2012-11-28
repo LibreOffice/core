@@ -778,7 +778,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
     }
 
     if( pParent && ! mpWindowImpl->mbFrame )
-        mbEnableRTL = pParent->mbEnableRTL;
+        mbEnableRTL = Application::GetSettings().GetLayoutRTL();
 
     // test for frame creation
     if ( mpWindowImpl->mbFrame )
