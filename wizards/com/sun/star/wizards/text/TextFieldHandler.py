@@ -17,7 +17,6 @@
 #
 import traceback
 import time
-from ..common.PropertyNames import PropertyNames
 
 from com.sun.star.util import DateTime
 from com.sun.star.uno import RuntimeException
@@ -44,12 +43,12 @@ class TextFieldHandler(object):
     def getUserFieldContent(self, xTextCursor):
         try:
             xTextRange = xTextCursor.getEnd()
-            oTextField = Helper.getUnoPropertyValue(xTextRange, "TextField")
+            oTextField = xTextRange.TextField
             if com.sun.star.uno.AnyConverter.isVoid(oTextField):
                 return ""
             else:
                 xMaster = oTextField.getTextFieldMaster()
-                UserFieldContent = xMaster.getPropertyValue("Content")
+                UserFieldContent = xMaster.Content
                 return UserFieldContent
 
         except Exception:
@@ -78,8 +77,8 @@ class TextFieldHandler(object):
     def createUserField(self, FieldName, FieldTitle):
         xPSet = self.xMSFDoc.createInstance(
             "com.sun.star.text.FieldMaster.User")
-        xPSet.setPropertyValue(PropertyNames.PROPERTY_NAME, FieldName)
-        xPSet.setPropertyValue("Content", FieldTitle)
+        xPSet.Name = FieldName
+        xPSet.Content = FieldTitle
         return xPSet
 
     def __getTextFields(self):
@@ -97,30 +96,15 @@ class TextFieldHandler(object):
         except Exception:
             traceback.print_exc()
 
-    def __getTextFieldsByProperty(
-            self, _PropertyName, _aPropertyValue):
-        try:
-            xProperty = TextFieldHandler.dictTextFields[_aPropertyValue]
-            try:
-                xPropertySet = xProperty.TextFieldMaster
-            except UnknownPropertyException:
-                return
-            if xPropertySet.PropertySetInfo.hasPropertyByName(
-                    _PropertyName):
-                oValue = xPropertySet.getPropertyValue(_PropertyName)
-                if oValue == _aPropertyValue:
-                    return xProperty
-            return None
-        except KeyError:
-            return None
-
     def changeUserFieldContent(self, _FieldName, _FieldContent):
         try:
-            DependentTextFields = self.__getTextFieldsByProperty(
-                    PropertyNames.PROPERTY_NAME, _FieldName)
+            try:
+                DependentTextFields = \
+                    TextFieldHandler.dictTextFields[_FieldName]
+            except KeyError:
+                return None
             if DependentTextFields is not None:
-                DependentTextFields.TextFieldMaster.setPropertyValue(
-                    "Content", _FieldContent)
+                DependentTextFields.TextFieldMaster.Content = _FieldContent
                 self.refreshTextFields()
         except Exception:
             traceback.print_exc()
@@ -151,8 +135,8 @@ class TextFieldHandler(object):
                 if i.supportsService(
                     "com.sun.star.text.TextField.DateTime"):
                     try:
-                        i.setPropertyValue("IsFixed", False)
-                        i.setPropertyValue("DateTimeValue", dt)
+                        i.IsFixed = False
+                        i.DateTimeValue = dt
                     except RuntimeException:
                         pass
 
@@ -164,20 +148,18 @@ class TextFieldHandler(object):
             for i in TextFieldHandler.arrayTextFields:
                 if i.supportsService(
                     "com.sun.star.text.TextField.DateTime"):
-                    i.setPropertyValue("IsFixed", _bSetFixed)
+                    i.IsFixed = _bSetFixed
 
         except Exception:
             traceback.print_exc()
 
-    def removeUserFieldByContent(self, _FieldContent):
+    def removeUserFieldByContent(self):
+        #Remove userfield when its text is empty
         try:
-            xDependentTextFields = self.__getTextFieldsByProperty(
-                "Content", _FieldContent)
-            if xDependentTextFields != None:
-                i = 0
-                while i < xDependentTextFields.length:
-                    xDependentTextFields[i].dispose()
-                    i += 1
+            xDependentTextFields = TextFieldHandler.dictTextFields.values()
+            for i in xDependentTextFields:
+                if not i.TextFieldMaster.Content:
+                    i.dispose()
 
         except Exception:
             traceback.print_exc()

@@ -123,7 +123,7 @@ class FaxDocument(TextDocument):
     def killEmptyUserFields(self):
         myFieldHandler = TextFieldHandler(
             self.xMSF, self.xTextDocument)
-        myFieldHandler.removeUserFieldByContent("")
+        myFieldHandler.removeUserFieldByContent()
 
     def killEmptyFrames(self):
         try:
