@@ -165,7 +165,7 @@ OUString XMLFontAutoStylePool::Add(
         else if( nLen > 0 )
         {
             sName = rFamilyName.copy( 0, nLen );
-            sName.trim();
+            sName = sName.trim();
         }
 
         if( sName.isEmpty() )
