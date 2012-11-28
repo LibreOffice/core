@@ -101,11 +101,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/util,\
 	MacroExpander \
 	theMacroExpander \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/util/logging,\
-	Logger \
-	LoggerRemote \
-))
-
 
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/beans,\
 	Introspection \
@@ -534,11 +529,5 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/util,\
 	XMacroExpander \
 	XVeto \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/util/logging,\
-	LogLevel \
-	XLogger \
-	XLoggerRemote \
-))
-
 
 # vim: set noet sw=4 ts=4:
