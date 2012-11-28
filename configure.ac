@@ -4724,6 +4724,8 @@ if test "$build_os" = "cygwin"; then
     AC_PATH_PROG(MIDL_PATH, midl.exe)
     if test -n "$MIDL_PATH";then
         MIDL_PATH=`dirname "$MIDL_PATH"`
+    else
+        AC_MSG_CHECKING([for midl.exe more thoroughly])
     fi
     if test -n "$with_midl_path";then
         with_midl_path=`cygpath -u "$with_midl_path"`
@@ -4750,6 +4752,8 @@ if test "$build_os" = "cygwin"; then
     fi
     if test ! -x "$MIDL_PATH/midl.exe"; then
         AC_MSG_ERROR([midl.exe not found. Make sure it's in PATH or use --with-midl-path])
+    else
+        AC_MSG_RESULT([$MIDL_PATH/midl.exe])
     fi
     # Convert to posix path with 8.3 filename restrictions ( No spaces )
     MIDL_PATH=`cygpath -d "$MIDL_PATH"`
@@ -4762,6 +4766,8 @@ if test "$build_os" = "cygwin"; then
     fi
     if test -n "$with_csc_path";then
         with_csc_path=`cygpath -u "$with_csc_path"`
+    else
+        AC_MSG_CHECKING([for csc.exe more thoroughly])
     fi
     if test -x "$with_csc_path/csc.exe"; then
         CSC_PATH="$with_csc_path"
@@ -4773,6 +4779,8 @@ if test "$build_os" = "cygwin"; then
     fi
     if test ! -x "$CSC_PATH/csc.exe"; then
         AC_MSG_ERROR([csc.exe not found. Make sure it's in the path or use --with-csc-path])
+    else
+        AC_MSG_RESULT([$CSC_PATH/csc.exe])
     fi
     # Convert to posix path with 8.3 filename restrictions ( No spaces )
     CSC_PATH=`cygpath -d "$CSC_PATH"`
@@ -4782,6 +4790,8 @@ if test "$build_os" = "cygwin"; then
     AC_PATH_PROG(AL_PATH, al.exe)
     if test -n "$AL_PATH";then
         AL_PATH=`dirname "$AL_PATH"`
+    else
+        AC_MSG_CHECKING([for al.exe more thoroughly])
     fi
     if test -n "$with_al_path";then
         with_al_path=`cygpath -u "$with_al_path"`
@@ -4793,6 +4803,8 @@ if test "$build_os" = "cygwin"; then
         winsdktest=`./oowintool --windows-sdk-home`
         if test -x "$winsdktest/Bin/al.exe"; then
             AL_PATH="$winsdktest/Bin"
+        elif test -x "$winsdktest/Bin/$SDK_ARCH/al.exe"; then
+            AL_PATH="$winsdktest/Bin/$SDK_ARCH"
         fi
     fi
     if test -z "$AL_PATH"; then
@@ -4805,7 +4817,10 @@ if test "$build_os" = "cygwin"; then
     fi
     if test ! -x "$AL_PATH/al.exe"; then
         AC_MSG_ERROR([al.exe not found. Make sure it's in PATH or use --with-al-path])
+    else
+        AC_MSG_RESULT([$AL_PATH/al.exe])
     fi
+
     # Convert to posix path with 8.3 filename restrictions ( No spaces )
     AL_PATH=`cygpath -d "$AL_PATH"`
     AL_PATH=`cygpath -u "$AL_PATH"`
