@@ -91,12 +91,13 @@ namespace svt
         bool            m_bAllowParent;
     public:
         inline CheckURLAllowed( const OUString& _rCheckURL, bool bAllowParent = true )
-            :m_sCheckURL( _rCheckURL ), m_bAllowParent( bAllowParent )
+            : m_sCheckURL( _rCheckURL )
+            , m_bAllowParent( bAllowParent )
         {
     #ifdef WNT
             // on windows, assume that the relevant file systems are case insensitive,
             // thus normalize the URL
-            m_sCheckURL = m_aSysLocale.GetCharClass().lowercase( m_sCheckURL, 0, m_sCheckURL.Len() );
+            m_sCheckURL = m_aSysLocale.GetCharClass().lowercase( m_sCheckURL, 0, m_sCheckURL.getLength() );
     #endif
         }
 
