@@ -9757,6 +9757,7 @@ if test "x$enable_pdfimport" != "xno"; then
       CXXFLAGS=$save_CXXFLAGS
       CPPFLAGS=$save_CPPFLAGS
       AC_LANG_POP([C++])
+      libo_MINGW_CHECK_DLL([POPPLER], [libpoppler])
   else
       AC_MSG_RESULT([internal])
       SYSTEM_POPPLER=NO
@@ -9771,6 +9772,7 @@ AC_SUBST(ENABLE_PDFIMPORT)
 AC_SUBST(SYSTEM_POPPLER)
 AC_SUBST(POPPLER_CFLAGS)
 AC_SUBST(POPPLER_LIBS)
+AC_SUBST([MINGW_POPPLER_DLL])
 
 AC_MSG_CHECKING([whether to build the Wiki Publisher extension])
 if test "x$enable_ext_wiki_publisher" = "xyes" -a "x$enable_extension_integration" != "xno" -a "$with_java" != "no"; then

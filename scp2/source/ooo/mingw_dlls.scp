@@ -226,6 +226,12 @@ MINGW_DLL( gid_Brand_File_Lib_Mingw_Libboost_date_time, MINGW_BOOST_DATE_TIME_DL
 #endif
 #endif
 
+#ifdef SYSTEM_POPPLER
+#ifdef NEEDS_MINGW_POPPLER_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libpoppler, MINGW_POPPLER_DLL )
+#endif
+#endif
+
 #if defined(MINGW_GCCDLL)
 
 File gid_Brand_File_Lib_Mingw_GccS

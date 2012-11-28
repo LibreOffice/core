@@ -72,6 +72,7 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	SYSTEM_NSS \
 	SYSTEM_OPENSSL \
 	SYSTEM_PANGO \
+	SYSTEM_POPPLER \
 	SYSTEM_PORTAUDIO \
 	SYSTEM_REDLAND \
 	SYSTEM_SNDFILE \
@@ -119,6 +120,7 @@ $(eval $(call gb_InstallModule_define_mingw_dll_if_set,scp2/ooo,\
 	MINGW_PLC4_DLL \
 	MINGW_PLDS4_DLL \
 	MINGW_PNG15_DLL \
+	MINGW_POPPLER_DLL \
 	MINGW_RAPTOR_DLL \
 	MINGW_RASQAL_DLL \
 	MINGW_REDLAND_DLL \
