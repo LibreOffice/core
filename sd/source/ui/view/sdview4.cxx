@@ -130,7 +130,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
             }
             else
             {
-                pNewGrafObj = new SdrGrafObj( rGraphic, pPickObj->GetLogicRect() );
+                pNewGrafObj = new SdrGrafObj( rGraphic, pPickObj->GetSnapRect() );
                 pNewGrafObj->SetEmptyPresObj(sal_True);
             }
 
