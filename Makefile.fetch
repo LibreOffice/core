@@ -11,12 +11,12 @@ fetch_LOGFILE := $(TARFILE_LOCATION)/fetch.log
 
 ifneq (,$(WGET))
 define fetch_Download__wget_command
-&& $(WGET) --progress=dot:mega -Q 0 -P "." -l 0 -nd -nH -N $1/$2 2>&1 | tee -a $(fetch_LOGFILE)
+&& $(WGET) --progress=dot:mega -Q 0 -P "." -l 0 -nd -nH -N $1/$2 2>&1 | tee -a $(fetch_LOGFILE) && [ $$PIPESTATUS -eq 0 ]
 endef
 
 else
 define fetch_Download__wget_command
-&& echo fetching $2 && $(CURL) -O $1/$2 2>&1 | tee -a $(fetch_LOGFILE)
+&& echo fetching $2 && $(CURL) -O $1/$2 2>&1 | tee -a $(fetch_LOGFILE) && [ $$PIPESTATUS -eq 0 ]
 endef
 
 endif
@@ -39,7 +39,6 @@ endif
 define fetch__Download_item
 $(if $(wildcard $(TARFILE_LOCATION)/$2),, \
 cd $(TARFILE_LOCATION)/tmp \
-&& set -o pipefail \
 $(call fetch_Download__wget_command,$1,$2) \
 $(if $3,$(call fetch_Download__checksum_command,$2,$3)) \
 && mv $2 ../ \
