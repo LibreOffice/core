@@ -459,7 +459,7 @@ sal_Bool SwSectionFrm::HasToBreak( const SwFrm* pFrm ) const
             return sal_False;
         if( pTmp == pOtherFmt )
             return sal_True;
-    } while( sal_True ); // ( pTmp->GetSect().GetValue() );
+    } while( true ); // ( pTmp->GetSect().GetValue() );
 }
 
 /*************************************************************************
@@ -609,12 +609,12 @@ static SwCntntFrm* lcl_GetNextCntntFrm( const SwLayoutFrm* pLay, bool bFwd )
     // #100926#
     const SwFrm* pFrm = pLay;
     SwCntntFrm *pCntntFrm = 0;
-    sal_Bool bGoingUp = sal_True;
+    bool bGoingUp = true;
     do {
         const SwFrm *p = 0;
-        sal_Bool bGoingFwdOrBwd = sal_False;
+        bool bGoingFwdOrBwd = false;
 
-        sal_Bool bGoingDown = !bGoingUp && ( 0 !=  ( p = pFrm->IsLayoutFrm() ? ((SwLayoutFrm*)pFrm)->Lower() : 0 ) );
+        bool bGoingDown = !bGoingUp && ( 0 !=  ( p = pFrm->IsLayoutFrm() ? ((SwLayoutFrm*)pFrm)->Lower() : 0 ) );
         if ( !bGoingDown )
         {
             bGoingFwdOrBwd = ( 0 != ( p = pFrm->IsFlyFrm() ?
@@ -879,7 +879,7 @@ SwCntntFrm *SwSectionFrm::FindLastCntnt( sal_uInt8 nMode )
                 pSect = (SwSectionFrm*)pTmp;
             else
                 break;
-        } while( sal_True );
+        } while( true );
     }
     sal_Bool bFtnFound = nMode == FINDMODE_ENDNOTE;
     do
@@ -918,7 +918,7 @@ sal_Bool SwSectionFrm::CalcMinDiff( SwTwips& rMinDiff ) const
  *
  *************************************************************************/
 
-static SwFtnFrm* lcl_FindEndnote( SwSectionFrm* &rpSect, sal_Bool &rbEmpty,
+static SwFtnFrm* lcl_FindEndnote( SwSectionFrm* &rpSect, bool &rbEmpty,
     SwLayouter *pLayouter )
 {
     // if rEmpty is set, the rpSect is already searched
@@ -960,12 +960,12 @@ static SwFtnFrm* lcl_FindEndnote( SwSectionFrm* &rpSect, sal_Bool &rbEmpty,
         }
         rpSect = pSect;
         pSect = pLayouter ? pSect->GetFollow() : NULL;
-        rbEmpty = sal_True;
+        rbEmpty = true;
     }
     return NULL;
 }
 
-static void lcl_ColumnRefresh( SwSectionFrm* pSect, sal_Bool bFollow )
+static void lcl_ColumnRefresh( SwSectionFrm* pSect, bool bFollow )
 {
     while( pSect )
     {
@@ -1000,14 +1000,14 @@ void SwSectionFrm::CollectEndnotes( SwLayouter* pLayouter )
 
     SwSectionFrm* pSect = this;
     SwFtnFrm* pFtn;
-    sal_Bool bEmpty = sal_False;
+    bool bEmpty = false;
     // pSect is the last sectionfrm without endnotes or the this-pointer
     // the first sectionfrm with endnotes may be destroyed, when the endnotes
     // is cutted
     while( 0 != (pFtn = lcl_FindEndnote( pSect, bEmpty, pLayouter )) )
         pLayouter->CollectEndnote( pFtn );
     if( pLayouter->HasEndnotes() )
-        lcl_ColumnRefresh( this, sal_True );
+        lcl_ColumnRefresh( this, true );
 }
 
 /*************************************************************************
@@ -1056,7 +1056,7 @@ void SwSectionFrm::_CheckClipping( sal_Bool bGrow, sal_Bool bMaximize )
     if( !bCalc && !bGrow && IsAnyNoteAtEnd() && !IsInFtn() )
     {
         SwSectionFrm *pSect = this;
-        sal_Bool bEmpty = sal_False;
+        bool bEmpty = false;
         SwLayoutFrm* pFtn = IsEndnAtEnd() ?
             lcl_FindEndnote( pSect, bEmpty, NULL ) : NULL;
         if( pFtn )
@@ -1103,7 +1103,7 @@ void SwSectionFrm::_CheckClipping( sal_Bool bGrow, sal_Bool bMaximize )
         {
             if( Lower()->IsColumnFrm() )
             {
-                lcl_ColumnRefresh( this, sal_False );
+                lcl_ColumnRefresh( this, false );
                 ::CalcCntnt( this );
             }
             else
@@ -1143,7 +1143,7 @@ void SwSectionFrm::SimpleFormat()
             nTop = nHeight;
         (this->*fnRect->fnSetYMargins)( nTop, 0 );
     }
-    lcl_ColumnRefresh( this, sal_False );
+    lcl_ColumnRefresh( this, false );
     UnlockJoin();
 }
 
@@ -1470,13 +1470,13 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
                         pFrm = ((SwLayoutFrm*)pFrm)->Lower();
                         CalcFtnCntnt();
                     }
-                    sal_Bool bUnderSz = sal_False;
+                    bool bUnderSz = false;
                     while( pFrm )
                     {
                         if( pFrm->IsTxtFrm() && ((SwTxtFrm*)pFrm)->IsUndersized() )
                         {
                             pFrm->Prepare( PREP_ADJUST_FRM );
-                            bUnderSz = sal_True;
+                            bUnderSz = true;
                         }
                         pFrm = pFrm->GetNext();
                     }
@@ -1538,7 +1538,7 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
 // GetLeaf is called
 //  SwSectionFrm *pSect = GetUpper()->FindSctFrm();
     SwSectionFrm *pSect = FindSctFrm();
-    sal_Bool bWrongPage = sal_False;
+    bool bWrongPage = false;
     OSL_ENSURE( pSect, "GetNextSctLeaf: Missing SectionFrm" );
 
     // Shortcut for sections with Follows. That's ok,
@@ -1551,7 +1551,7 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
         {
             SwPageFrm *pPg = pSect->GetFollow()->FindPageFrm();
             if( WrongPageDesc( pPg ) )
-                bWrongPage = sal_True;
+                bWrongPage = true;
             else
                 return FIRSTLEAF( pSect->GetFollow() );
         }
@@ -1579,7 +1579,7 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
                     SwPageFrm* pNxtPg = pUp->IsPageFrm() ?
                                         (SwPageFrm*)pUp : pUp->FindPageFrm();
                     if( WrongPageDesc( pNxtPg ) )
-                        bWrongPage = sal_True;
+                        bWrongPage = true;
                     else
                         return FIRSTLEAF( pSect->GetFollow() );
                 }
@@ -1614,7 +1614,7 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
                                             // created pages, the search is
                                             // not started over at the beginning
 
-    while( sal_True )
+    while( true )
     {
         if( pLayLeaf )
         {
@@ -1644,7 +1644,7 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
                 if( bWrongPage )
                     break; // there's a column between me and my right page
                 pLayLeaf = 0;
-                bWrongPage = sal_True;
+                bWrongPage = true;
                 pOldLayLeaf = 0;
                 continue;
             }
@@ -1761,7 +1761,7 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType )
         pCol = GetUpper()->GetUpper();
     else
         pCol = NULL;
-    sal_Bool bJump = sal_False;
+    bool bJump = false;
     if( pCol )
     {
         if( pCol->GetPrev() )
@@ -1777,7 +1777,7 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType )
                         SwFlowFrm::SetMoveBwdJump( sal_True );
                     return (SwLayoutFrm*)pCol->Lower();  // The columnm body
                 }
-                bJump = sal_True;
+                bJump = true;
             } while( pCol->GetPrev() );
 
             // We get here when all columns are empty, pCol is now the
@@ -1987,7 +1987,7 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, sal_Bool bTst )
         if ( nDist <= 0L )
             return 0L;
 
-        sal_Bool bInCalcCntnt = GetUpper() && IsInFly() && FindFlyFrm()->IsLocked();
+        bool bInCalcCntnt = GetUpper() && IsInFly() && FindFlyFrm()->IsLocked();
         // OD 2004-03-15 #116561# - allow grow in online layout
         bool bGrow = !Lower() || !Lower()->IsColumnFrm() || !Lower()->GetNext() ||
              GetSection()->GetFmt()->GetBalancedColumns().GetValue();
@@ -2219,15 +2219,15 @@ sal_Bool SwSectionFrm::MoveAllowed( const SwFrm* pFrm) const
             // The first paragraph in the first footnote in the first column
             // in the sectionfrm at the top of the page is not moveable,
             // if the columnbody is empty.
-            sal_Bool bRet = sal_False;
+            bool bRet = false;
             if( pLay->GetIndPrev() || pFrm->GetIndPrev() ||
                 pFrm->FindFtnFrm()->GetPrev() )
-                bRet = sal_True;
+                bRet = true;
             else
             {
                 SwLayoutFrm* pBody = ((SwColumnFrm*)pLay)->FindBodyCont();
                 if( pBody && pBody->Lower() )
-                    bRet = sal_True;
+                    bRet = true;
             }
             if( bRet && ( IsFtnAtEnd() || !Growable() ) )
                 return sal_True;
@@ -2388,7 +2388,7 @@ void SwSectionFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
         SfxItemIter aOIter( *((SwAttrSetChg*)pOld)->GetChgSet() );
         SwAttrSetChg aOldSet( *(SwAttrSetChg*)pOld );
         SwAttrSetChg aNewSet( *(SwAttrSetChg*)pNew );
-        while( sal_True )
+        while( true )
         {
             _UpdateAttr( (SfxPoolItem*)aOIter.GetCurItem(),
                          (SfxPoolItem*)aNIter.GetCurItem(), nInvFlags,
@@ -2429,7 +2429,7 @@ void SwSectionFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew
                             sal_uInt8 &rInvFlags,
                             SwAttrSetChg *pOldSet, SwAttrSetChg *pNewSet )
 {
-    sal_Bool bClear = sal_True;
+    bool bClear = true;
     const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     switch( nWhich )
     {   // Suppress multi columns in foot notes
@@ -2464,7 +2464,7 @@ void SwSectionFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew
                 rInvFlags |= 0x10;
             }
             rInvFlags |= 0x01;
-            bClear = sal_False;
+            bClear = false;
         }
             break;
 
@@ -2522,7 +2522,7 @@ void SwSectionFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew
             break;
 
         default:
-            bClear = sal_False;
+            bClear = false;
     }
     if ( bClear )
     {

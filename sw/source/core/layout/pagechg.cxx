@@ -133,13 +133,13 @@ void SwBodyFrm::Format( const SwBorderAttrs * )
         Frm().Width( nWidth );
     }
 
-    sal_Bool bNoGrid = sal_True;
+    bool bNoGrid = true;
     if( GetUpper()->IsPageFrm() && ((SwPageFrm*)GetUpper())->HasGrid() )
     {
         GETGRID( ((SwPageFrm*)GetUpper()) )
         if( pGrid )
         {
-            bNoGrid = sal_False;
+            bNoGrid = false;
             long nSum = pGrid->GetBaseHeight() + pGrid->GetRubyHeight();
             SWRECTFN( this )
             long nSize = (Frm().*fnRect->fnGetWidth)();
@@ -446,7 +446,7 @@ static void lcl_MakeObjs( const SwFrmFmts &rTbl, SwPageFrm *pPage )
             }
 
             //Wird ein Rahmen oder ein SdrObject beschrieben?
-            sal_Bool bSdrObj = RES_DRAWFRMFMT == pFmt->Which();
+            bool bSdrObj = RES_DRAWFRMFMT == pFmt->Which();
             pSdrObj = 0;
             if ( bSdrObj  && 0 == (pSdrObj = pFmt->FindSdrObject()) )
             {
@@ -569,7 +569,7 @@ void SwPageFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
         SfxItemIter aOIter( *((SwAttrSetChg*)pOld)->GetChgSet() );
         SwAttrSetChg aOldSet( *(SwAttrSetChg*)pOld );
         SwAttrSetChg aNewSet( *(SwAttrSetChg*)pNew );
-        while( sal_True )
+        while( true )
         {
             _UpdateAttr( (SfxPoolItem*)aOIter.GetCurItem(),
                          (SfxPoolItem*)aNIter.GetCurItem(), nInvFlags,
@@ -607,7 +607,7 @@ void SwPageFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                              sal_uInt8 &rInvFlags,
                              SwAttrSetChg *pOldSet, SwAttrSetChg *pNewSet )
 {
-    sal_Bool bClear = sal_True;
+    bool bClear = true;
     const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     switch( nWhich )
     {
@@ -728,7 +728,7 @@ void SwPageFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             break;
 
         default:
-            bClear = sal_False;
+            bClear = false;
     }
     if ( bClear )
     {
@@ -1255,7 +1255,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields )
 
     //1. Keine zwei EmptyPages hintereinander.
     //2. Alle PageDescs richtig?
-    sal_Bool bEmpty = sal_False;
+    bool bEmpty = false;
     SwPageFrm *pPg = pStart;
     while ( pPg )
     {
@@ -1266,10 +1266,10 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields )
                 OSL_FAIL( "Doppelte Leerseiten." );
                 break;  //Einmal reicht.
             }
-            bEmpty = sal_True;
+            bEmpty = true;
         }
         else
-            bEmpty = sal_False;
+            bEmpty = false;
 
 //MA 21. Jun. 95: Kann zu testzwecken 'rein, ist aber bei zyklen durchaus
 //moeglich: Ein paar Seiten, auf der ersten 'erste Seite' anwenden,
@@ -1296,8 +1296,8 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, sal_Bool bFtn )
 
     pSibling = (SwPageFrm*)pPrevPage->GetNext();
         //Rechte (ungerade) oder linke (gerade) Seite einfuegen?
-    sal_Bool bNextOdd = !pPrevPage->OnRightPage();
-    sal_Bool bWishedOdd = bNextOdd;
+    bool bNextOdd = !pPrevPage->OnRightPage();
+    bool bWishedOdd = bNextOdd;
 
     //Welcher PageDesc gilt?
     //Bei CntntFrm der aus dem Format wenn einer angegeben ist,
@@ -1308,7 +1308,7 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, sal_Bool bFtn )
         pDesc = rDesc.GetPageDesc();
         if ( rDesc.GetNumOffset() )
         {
-            bWishedOdd = rDesc.GetNumOffset() % 2 ? sal_True : sal_False;
+            bWishedOdd = rDesc.GetNumOffset() % 2 ? true : false;
             //Die Gelegenheit nutzen wir um das Flag an der Root zu pflegen.
             pRoot->SetVirtPageNum( sal_True );
         }
@@ -1325,7 +1325,7 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, sal_Bool bFtn )
 
     SwDoc *pDoc = pPrevPage->GetFmt()->GetDoc();
     SwFrmFmt *pFmt;
-    sal_Bool bCheckPages = sal_False;
+    bool bCheckPages = false;
     //Wenn ich kein FrmFmt fuer die Seite gefunden habe, muss ich eben eine
     //Leerseite einfuegen.
     if( bWishedOdd != bNextOdd )
@@ -1347,7 +1347,7 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, sal_Bool bFtn )
             delete pDel;
         }
         else
-            bCheckPages = sal_True;
+            bCheckPages = true;
     }
     if (bWishedFirst && !pDesc->IsFirstShared())
         pFmt = pDesc->GetFirstFmt();
@@ -1370,7 +1370,7 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, sal_Bool bFtn )
         delete pDel;
     }
     else
-        bCheckPages = sal_True;
+        bCheckPages = true;
 
     if ( pSibling )
     {
