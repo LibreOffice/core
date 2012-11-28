@@ -36,6 +36,7 @@
 #include "rangelst.hxx"
 
 #include <rtl/math.hxx>
+#include <tools/date.hxx>
 
 #include <map>
 
@@ -375,8 +376,18 @@ public:
     virtual void dumpInfo(rtl::OUStringBuffer& rBuf) const;
 #endif
 
+    virtual void startRendering();
+    virtual void endRendering();
+
 private:
     condformat::ScCondFormatDateType meType;
+
+    struct ScCondDateFormatCache
+    {
+        Date aCachedDate;
+    };
+
+    boost::scoped_ptr<ScCondDateFormatCache> mpCache;
 
     rtl::OUString maStyleName;
 };

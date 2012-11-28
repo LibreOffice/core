@@ -1662,9 +1662,12 @@ bool ScCondDateFormatEntry::IsValid( const ScAddress& rPos ) const
     if(pBaseCell->GetCellType() != CELLTYPE_VALUE && pBaseCell->GetCellType() != CELLTYPE_FORMULA)
         return false;
 
-    Date aActDate( Date::SYSTEM );
+    if( !mpCache )
+        mpCache->aCachedDate = Date( Date::SYSTEM );
+
+    const Date& rActDate = mpCache->aCachedDate;
     SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
-    long nCurrentDate = aActDate - *(pFormatter->GetNullDate());
+    long nCurrentDate = rActDate - *(pFormatter->GetNullDate());
 
     double nVal = mpDoc->GetValue(rPos);
     long nCellDate = (long) ::rtl::math::approxFloor(nVal);
@@ -1690,57 +1693,57 @@ bool ScCondDateFormatEntry::IsValid( const ScAddress& rPos ) const
                 return true;
             break;
         case condformat::LASTWEEK:
-            if( aActDate.GetYear() == aCellDate.GetYear() && aActDate.GetMonth() == aCellDate.GetMonth() )
+            if( rActDate.GetYear() == aCellDate.GetYear() && rActDate.GetMonth() == aCellDate.GetMonth() )
             {
-                if( aActDate.GetWeekOfYear( SUNDAY ) == aCellDate.GetWeekOfYear( SUNDAY ) + 1 )
+                if( rActDate.GetWeekOfYear( SUNDAY ) == aCellDate.GetWeekOfYear( SUNDAY ) + 1 )
                     return true;
             }
             break;
         case condformat::THISWEEK:
-            if( aActDate.GetYear() == aCellDate.GetYear() && aActDate.GetMonth() == aCellDate.GetMonth() )
+            if( rActDate.GetYear() == aCellDate.GetYear() && rActDate.GetMonth() == aCellDate.GetMonth() )
             {
-                if( aActDate.GetWeekOfYear( SUNDAY ) == aCellDate.GetWeekOfYear( SUNDAY ) )
+                if( rActDate.GetWeekOfYear( SUNDAY ) == aCellDate.GetWeekOfYear( SUNDAY ) )
                     return true;
             }
             break;
         case condformat::NEXTWEEK:
-            if( aActDate.GetYear() == aCellDate.GetYear() && aActDate.GetMonth() == aCellDate.GetMonth() )
+            if( rActDate.GetYear() == aCellDate.GetYear() && rActDate.GetMonth() == aCellDate.GetMonth() )
             {
-                if( aActDate.GetWeekOfYear( SUNDAY ) == aCellDate.GetWeekOfYear( SUNDAY ) - 1 )
+                if( rActDate.GetWeekOfYear( SUNDAY ) == aCellDate.GetWeekOfYear( SUNDAY ) - 1 )
                     return true;
             }
             break;
         case condformat::LASTMONTH:
-            if( aActDate.GetYear() == aCellDate.GetYear() )
+            if( rActDate.GetYear() == aCellDate.GetYear() )
             {
-                if( aActDate.GetMonth() == aCellDate.GetMonth() + 1)
+                if( rActDate.GetMonth() == aCellDate.GetMonth() + 1)
                     return true;
             }
             break;
         case condformat::THISMONTH:
-            if( aActDate.GetYear() == aCellDate.GetYear() )
+            if( rActDate.GetYear() == aCellDate.GetYear() )
             {
-                if( aActDate.GetMonth() == aCellDate.GetMonth() )
+                if( rActDate.GetMonth() == aCellDate.GetMonth() )
                     return true;
             }
             break;
         case condformat::NEXTMONTH:
-            if( aActDate.GetYear() == aCellDate.GetYear() )
+            if( rActDate.GetYear() == aCellDate.GetYear() )
             {
-                if( aActDate.GetMonth() == aCellDate.GetMonth() - 1)
+                if( rActDate.GetMonth() == aCellDate.GetMonth() - 1)
                     return true;
             }
             break;
         case condformat::LASTYEAR:
-            if( aActDate.GetYear() == aCellDate.GetYear() + 1 )
+            if( rActDate.GetYear() == aCellDate.GetYear() + 1 )
                 return true;
             break;
         case condformat::THISYEAR:
-            if( aActDate.GetYear() == aCellDate.GetYear() )
+            if( rActDate.GetYear() == aCellDate.GetYear() )
                 return true;
             break;
         case condformat::NEXTYEAR:
-            if( aActDate.GetYear() == aCellDate.GetYear() - 1 )
+            if( rActDate.GetYear() == aCellDate.GetYear() - 1 )
                 return true;
             break;
     }
@@ -1789,6 +1792,16 @@ bool ScCondDateFormatEntry::operator==( const ScFormatEntry& r ) const
 void ScCondDateFormatEntry::dumpInfo( rtl::OUStringBuffer& rBuffer ) const
 {
     rBuffer.append("Date Format");
+}
+
+void ScCondDateFormatEntry::startRendering()
+{
+    mpCache.reset();
+}
+
+void ScCondDateFormatEntry::endRendering()
+{
+    mpCache.reset();
 }
 
 //------------------------------------------------------------------------
