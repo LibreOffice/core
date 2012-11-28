@@ -48,19 +48,18 @@
 #include "Handler.hxx"
 #include "ooxmlLoggers.hxx"
 
-static const sal_uInt8 s0x7[] = { 0x7, 0x0 };
-static const sal_uInt8 s0xd[] = { 0xd, 0x0 };
-static const sal_uInt8 sCR[] = { 0xd, 0x0 };
-static const sal_uInt8 sFtnEdnRef[] = { 0x2, 0x0 };
-static const sal_uInt8 sFtnEdnSep[] = { 0x3, 0x0 };
-static const sal_uInt8 sFtnEdnCont[] = { 0x4, 0x0 };
-static const sal_uInt8 sTab[] = { 0x9, 0x0 };
-static const sal_uInt8 sPgNum[] = { 0x0, 0x0 };
-static const sal_uInt8 sFieldStart[] = { 0x13  };
-static const sal_uInt8 sFieldSep[] = { 0x14 };
-static const sal_uInt8 sFieldEnd[] = { 0x15 };
-static const sal_uInt8 sNoBreakHyphen[] = { 0x1e, 0x0 };
-static const sal_uInt8 sSoftHyphen[] = { 0x1f, 0x0 };
+static const sal_Unicode uCR = 0xd;
+static const sal_Unicode uFtnEdnRef = 0x2;
+static const sal_Unicode uFtnEdnSep = 0x3;
+static const sal_Unicode uTab = 0x9;
+static const sal_Unicode uPgNum = 0x0;
+static const sal_Unicode uNoBreakHyphen = 0x1e;
+static const sal_Unicode uSoftHyphen = 0x1f;
+
+static const sal_uInt8 cFtnEdnCont = 0x4;
+static const sal_uInt8 cFieldStart = 0x13;
+static const sal_uInt8 cFieldSep = 0x14;
+static const sal_uInt8 cFieldEnd = 0x15;
 
 namespace writerfilter {
 namespace ooxml
@@ -693,7 +692,7 @@ void OOXMLFastContextHandler::startField()
 #endif
     startCharacterGroup();
     if (isForwardEvents())
-        mpStream->text(sFieldStart, 1);
+        mpStream->text(&cFieldStart, 1);
     endCharacterGroup();
 }
 
@@ -704,7 +703,7 @@ void OOXMLFastContextHandler::fieldSeparator()
 #endif
     startCharacterGroup();
     if (isForwardEvents())
-        mpStream->text(sFieldSep, 1);
+        mpStream->text(&cFieldSep, 1);
     endCharacterGroup();
 }
 
@@ -715,7 +714,7 @@ void OOXMLFastContextHandler::endField()
 #endif
     startCharacterGroup();
     if (isForwardEvents())
-        mpStream->text(sFieldEnd, 1);
+        mpStream->text(&cFieldEnd, 1);
     endCharacterGroup();
 }
 
@@ -725,7 +724,7 @@ void OOXMLFastContextHandler::ftnednref()
     debug_logger->element("contexthandler.ftnednref");
 #endif
     if (isForwardEvents())
-        mpStream->utext(sFtnEdnRef, 1);
+        mpStream->utext((const sal_uInt8*)&uFtnEdnRef, 1);
 }
 
 void OOXMLFastContextHandler::ftnednsep()
@@ -734,7 +733,7 @@ void OOXMLFastContextHandler::ftnednsep()
     debug_logger->element("contexthandler.ftnednsep");
 #endif
     if (isForwardEvents())
-        mpStream->utext(sFtnEdnSep, 1);
+        mpStream->utext((const sal_uInt8*)&uFtnEdnSep, 1);
 }
 
 void OOXMLFastContextHandler::ftnedncont()
@@ -743,7 +742,7 @@ void OOXMLFastContextHandler::ftnedncont()
     debug_logger->element("contexthandler.ftnedncont");
 #endif
     if (isForwardEvents())
-        mpStream->text(sFtnEdnCont, 1);
+        mpStream->text(&cFtnEdnCont, 1);
 }
 
 void OOXMLFastContextHandler::pgNum()
@@ -752,7 +751,7 @@ void OOXMLFastContextHandler::pgNum()
     debug_logger->element("contexthandler.pgNum");
 #endif
     if (isForwardEvents())
-        mpStream->utext((const sal_uInt8*)sPgNum, 1);
+        mpStream->utext((const sal_uInt8*)&uPgNum, 1);
 }
 
 void OOXMLFastContextHandler::tab()
@@ -761,7 +760,7 @@ void OOXMLFastContextHandler::tab()
     debug_logger->element("contexthandler.tab");
 #endif
     if (isForwardEvents())
-        mpStream->utext((const sal_uInt8*)sTab, 1);
+        mpStream->utext((const sal_uInt8*)&uTab, 1);
 }
 
 void OOXMLFastContextHandler::cr()
@@ -770,7 +769,7 @@ void OOXMLFastContextHandler::cr()
     debug_logger->element("contexthandler.cr");
 #endif
     if (isForwardEvents())
-        mpStream->utext((const sal_uInt8*)sCR, 1);
+        mpStream->utext((const sal_uInt8*)&uCR, 1);
 }
 
 void OOXMLFastContextHandler::noBreakHyphen()
@@ -779,7 +778,7 @@ void OOXMLFastContextHandler::noBreakHyphen()
     debug_logger->element("contexthandler.noBreakHyphen");
 #endif
     if (isForwardEvents())
-        mpStream->utext((const sal_uInt8*)sNoBreakHyphen, 1);
+        mpStream->utext((const sal_uInt8*)&uNoBreakHyphen, 1);
 }
 
 void OOXMLFastContextHandler::softHyphen()
@@ -788,7 +787,7 @@ void OOXMLFastContextHandler::softHyphen()
     debug_logger->element("contexthandler.softHyphen");
 #endif
     if (isForwardEvents())
-        mpStream->utext((const sal_uInt8*)sSoftHyphen, 1);
+        mpStream->utext((const sal_uInt8*)&uSoftHyphen, 1);
 }
 
 void OOXMLFastContextHandler::handleLastParagraphInSection()
@@ -812,7 +811,7 @@ void OOXMLFastContextHandler::endOfParagraph()
     if (! mpParserState->isInCharacterGroup())
         startCharacterGroup();
     if (isForwardEvents())
-        mpStream->utext((const sal_uInt8*)sCR, 1);
+        mpStream->utext((const sal_uInt8*)&uCR, 1);
 }
 
 void OOXMLFastContextHandler::startTxbxContent()
@@ -1852,7 +1851,7 @@ void OOXMLFastContextHandlerTextTableRow::endRow()
     startCharacterGroup();
 
     if (isForwardEvents())
-        mpStream->utext(s0xd, 1);
+        mpStream->utext((const sal_uInt8*)&uCR, 1);
 
     endCharacterGroup();
     endParagraphGroup();
