@@ -304,7 +304,7 @@ def __translate__(arg = None):
         l = {'cs': 'cs_CZ', 'el': 'el_GR', 'en': 'en_US'}[guess.Language]
     except:
         l = guess.Language + '_' + guess.Language.upper()
-    lang = __l12n__({'': 'en_US', 'hu': 'hu_HU'}[guess.Language])
+    lang = __l12n__(l)
     if not lang:
         lang = __l12n__(guess.Language)
         if not lang:
