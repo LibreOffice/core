@@ -855,7 +855,7 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
         {
             // valid separator -> replace
             rtl::OUString sChar( *pWordStt );
-            sChar = rCC.uppercase( sChar );
+            sChar = rCC.titlecase(sChar); //see fdo#56740
             return  !comphelper::string::equals(sChar, *pWordStt) &&
                     rDoc.ReplaceRange( xub_StrLen( pWordStt - pStart ), 1, sChar );
         }
@@ -1030,7 +1030,7 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
     sal_Unicode cSave = *pWordStt;
     nSttPos = sal::static_int_cast< xub_StrLen >( pWordStt - rTxt.GetBuffer() );
     rtl::OUString sChar( cSave );
-    sChar = rCC.uppercase( sChar );
+    sChar = rCC.titlecase(sChar); //see fdo#56740
     sal_Bool bRet = sChar[0] != cSave && rDoc.ReplaceRange( nSttPos, 1, sChar );
 
     // Parahaps someone wants to have the word
