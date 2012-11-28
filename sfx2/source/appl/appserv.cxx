@@ -424,7 +424,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_SEND_FEEDBACK:
         {
             ::rtl::OUString module = SfxHelp::GetCurrentModuleIdentifier();
-            ::rtl::OUString sURL("http://hub.libreoffice.org/file-a-bug/?version=" + utl::ConfigManager::getAboutBoxProductVersion() +
+            ::rtl::OUString sURL("http://hub.libreoffice.org/send-feedback/?version=" + utl::ConfigManager::getAboutBoxProductVersion() +
 				 "&locale=" + utl::ConfigManager::getLocale() + "&module=" + module.copy(module.lastIndexOf(".") + 1 )  );
             try
             {
