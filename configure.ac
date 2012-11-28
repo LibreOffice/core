@@ -7389,8 +7389,8 @@ if test $enable_python = system; then
                 # 2.6.2 currently on OpenSUSE 12.1?
                 # rpm -q mingw32-python => mingw32-python-2.6.2-17.17.noarch
                 PYTHON_VERSION=$python_version.2
-                PYTHON_MAJOR=${python_version%.*}
-                PYTHON_MINOR=${python_version#*.}
+                PYTHON_VERSION_MAJOR=${python_version%.*}
+                PYTHON_VERSION_MINOR=${python_version#*.}
                 break
             fi
         done
@@ -7403,18 +7403,19 @@ case $enable_python in
 system)
     SYSTEM_PYTHON=YES
 
-    dnl Check if the headers really work
-    save_CPPFLAGS="$CPPFLAGS"
-    CPPFLAGS="$CPPFLAGS $PYTHON_CFLAGS"
-    AC_CHECK_HEADER(Python.h, [],
-       [AC_MSG_ERROR([Python headers not found. You probably want to set both the PYTHON_CFLAGS and PYTHON_LIBS environment variables.])],
-       [])
-    CPPFLAGS="$save_CPPFLAGS"
+    if test "$CROSS_COMPILING" != YES; then
+        dnl Check if the headers really work
+        save_CPPFLAGS="$CPPFLAGS"
+        CPPFLAGS="$CPPFLAGS $PYTHON_CFLAGS"
+        AC_CHECK_HEADER(Python.h, [],
+           [AC_MSG_ERROR([Python headers not found. You probably want to set both the PYTHON_CFLAGS and PYTHON_LIBS environment variables.])],
+           [])
+        CPPFLAGS="$save_CPPFLAGS"
 
-    AC_LANG_PUSH(C)
-    CFLAGS="$CFLAGS $PYTHON_CFLAGS"
-    AC_MSG_CHECKING([for correct python library version])
-       AC_RUN_IFELSE([AC_LANG_SOURCE([[
+        AC_LANG_PUSH(C)
+        CFLAGS="$CFLAGS $PYTHON_CFLAGS"
+        AC_MSG_CHECKING([for correct python library version])
+           AC_RUN_IFELSE([AC_LANG_SOURCE([[
 #include <Python.h>
 
 int main(int argc, char **argv) {
@@ -7422,11 +7423,12 @@ int main(int argc, char **argv) {
            (PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION >= 3)) return 0;
        else return 1;
 }
-       ]])],[AC_MSG_RESULT([ok])],[AC_MSG_ERROR([Python >= 3.3 is needed when building with Python 3, or Python >= 2.6 when building with Python 2])],[])
-    CFLAGS=$save_CFLAGS
-    AC_LANG_POP(C)
+           ]])],[AC_MSG_RESULT([ok])],[AC_MSG_ERROR([Python >= 3.3 is needed when building with Python 3, or Python >= 2.6 when building with Python 2])],[])
+        CFLAGS=$save_CFLAGS
+        AC_LANG_POP(C)
 
-    dnl FIXME Check if the Python library can be linked with, too?
+        dnl FIXME Check if the Python library can be linked with, too?
+    fi
     ;;
 
 internal)
