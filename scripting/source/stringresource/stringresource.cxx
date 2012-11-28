@@ -200,7 +200,7 @@ void StringResourceImpl::removeModifyListener( const Reference< XModifyListener 
     if( !bSuccess )
     {
         ::rtl::OUString errorMsg("StringResourceImpl: No entry for ResourceID: ");
-        errorMsg.concat( ResourceID );
+        errorMsg = errorMsg.concat( ResourceID );
         throw ::com::sun::star::resource::MissingResourceException( errorMsg, Reference< XInterface >() );
     }
     return aRetStr;
@@ -448,7 +448,7 @@ void StringResourceImpl::implRemoveId( const ::rtl::OUString& ResourceID, Locale
         if( it == rHashMap.end() )
         {
             ::rtl::OUString errorMsg("StringResourceImpl: No entries for ResourceID: ");
-            errorMsg.concat( ResourceID );
+            errorMsg = errorMsg.concat( ResourceID );
             throw ::com::sun::star::resource::MissingResourceException( errorMsg, Reference< XInterface >() );
         }
         rHashMap.erase( it );
