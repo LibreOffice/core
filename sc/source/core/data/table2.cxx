@@ -740,7 +740,7 @@ void ScTable::CopyFromClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             aCol[i].CopyFromClip(nRow1, nRow2, nDy, nInsFlag, bAsLink, bSkipAttrForEmpty, pTable->aCol[i - nDx]);
 
         //remove old notes
-        if (nInsFlag & IDF_CONTENTS)
+        if (nInsFlag & (IDF_NOTE|IDF_ADDNOTES))
             maNotes.erase(nCol1, nRow1, nCol2, nRow2);
 
         bool bAddNotes = nInsFlag & (IDF_NOTE | IDF_ADDNOTES);
