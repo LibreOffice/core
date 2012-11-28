@@ -67,10 +67,13 @@ define gb_UnoApiPartTarget__command
 
 endef
 
+# If idlc changed, rebuild everything; otherwise just the changed files.
+# In order for this to work the .urd files need to have a dependency on
+# idlc as well so their dummy rule fires if that changes.
 $(call gb_UnoApiPartTarget_get_target,%.done) : \
 		$(gb_UnoApiPartTarget_IDLCTARGET) \
 		| $(gb_UCPPTARGET)
-	$(call gb_UnoApiPartTarget__command,$@,$*,$(filter-out $(gb_UnoApiPartTarget_IDLCTARGET),$^))
+	$(call gb_UnoApiPartTarget__command,$@,$*,$(filter-out $(gb_UnoApiPartTarget_IDLCTARGET),$(if $(filter $(gb_UnoApiPartTarget_IDLCTARGET),$?),$^,$?)))
 
 ifeq ($(gb_FULLDEPS),$(true))
 
@@ -179,8 +182,9 @@ define gb_UnoApiTarget__add_idlfile
 $(call gb_UnoApiPartTarget_get_target,$(2)/idl.done) : \
 	$(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd)
 $(call gb_UnoApiTarget__add_urdfile,$(1),$(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd))
-$(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd) :| \
-	$(call gb_UnoApiPartTarget_get_target,$(2)/.dir)
+$(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd) \
+	: $(gb_UnoApiPartTarget_IDLCTARGET) \
+	| $(call gb_UnoApiPartTarget_get_target,$(2)/.dir)
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_UnoApiTarget_get_dep_target,$(1)) : UNOAPI_IDLFILES += $(2)/$(3).idl
