@@ -1,8 +1,7 @@
 build with GCC on AIX
 
-diff -ru python3.old_/configure python3/configure
---- python3.old_/configure	2012-09-29 10:00:50.000000000 +0200
-+++ python3/configure	2012-11-13 19:28:25.869753237 +0100
+--- Python-3.3.0/configure	2012-11-28 09:05:45.990529603 +0000
++++ Python-3.3.0/configure	2012-11-28 09:06:23.037963934 +0000
 @@ -3426,8 +3426,6 @@
  else
  
@@ -34,7 +33,7 @@ diff -ru python3.old_/configure python3/configure
  	  INSTSONAME="$LDLIBRARY".$SOVERSION
  	  if test "$with_pydebug" != yes
            then
-@@ -6174,7 +6180,7 @@
+@@ -6169,7 +6175,7 @@
  		# debug builds.
  		OPT="-g -O0 -Wall $STRICT_PROTO"
  	    else
@@ -43,7 +42,7 @@ diff -ru python3.old_/configure python3/configure
  	    fi
  	    ;;
  	*)
-@@ -8306,8 +8312,13 @@
+@@ -8301,8 +8307,13 @@
  then
  	case $ac_sys_system/$ac_sys_release in
  	AIX*)
@@ -59,9 +58,8 @@ diff -ru python3.old_/configure python3/configure
  		;;
  	IRIX/5*) LDSHARED="ld -shared";;
  	IRIX*/6*) LDSHARED="ld ${SGI_ABI} -shared -all";;
-diff -ru python3.old_/configure.ac python3/configure.ac
---- python3.old_/configure.ac	2012-09-29 10:00:50.000000000 +0200
-+++ python3/configure.ac	2012-11-13 19:28:36.273753536 +0100
+--- Python-3.3.0/configure.ac	2012-11-28 09:05:45.990529603 +0000
++++ Python-3.3.0/configure.ac	2012-11-28 09:06:23.038963946 +0000
 @@ -545,8 +545,6 @@
  		without_gcc=$withval;;
  	esac], [
@@ -109,9 +107,8 @@ diff -ru python3.old_/configure.ac python3/configure.ac
  		;;
  	IRIX/5*) LDSHARED="ld -shared";;
  	IRIX*/6*) LDSHARED="ld ${SGI_ABI} -shared -all";;
-diff -ru python3.old_/Makefile.pre.in python3/Makefile.pre.in
---- python3.old_/Makefile.pre.in	2012-09-29 10:00:41.000000000 +0200
-+++ python3/Makefile.pre.in	2012-11-13 19:10:10.733742599 +0100
+--- Python-3.3.0/Makefile.pre.in	2012-11-28 09:05:45.861528086 +0000
++++ Python-3.3.0/Makefile.pre.in	2012-11-28 09:06:23.046964040 +0000
 @@ -493,7 +493,10 @@
  
  libpython$(LDVERSION).so: $(LIBRARY_OBJS)
@@ -133,9 +130,8 @@ diff -ru python3.old_/Makefile.pre.in python3/Makefile.pre.in
  	export EXE; EXE="$(BUILDEXE)"; \
  	cd $(srcdir)/Lib/$(PLATDIR); $(RUNSHARED) ./regen
  
-diff -ru python3.old_/Modules/_ctypes/libffi/fficonfig.py.in python3/Modules/_ctypes/libffi/fficonfig.py.in
---- python3.old_/Modules/_ctypes/libffi/fficonfig.py.in	2012-09-29 10:00:42.000000000 +0200
-+++ python3/Modules/_ctypes/libffi/fficonfig.py.in	2012-11-13 19:09:25.252740861 +0100
+--- Python-3.3.0/Modules/_ctypes/libffi/fficonfig.py.in	2012-11-28 09:05:45.889528418 +0000
++++ Python-3.3.0/Modules/_ctypes/libffi/fficonfig.py.in	2012-11-28 09:06:23.046964040 +0000
 @@ -16,7 +16,7 @@
      'M32R': ['src/m32r/sysv.S', 'src/m32r/ffi.c'],
      'M68K': ['src/m68k/ffi.c', 'src/m68k/sysv.S'],
@@ -145,9 +141,8 @@ diff -ru python3.old_/Modules/_ctypes/libffi/fficonfig.py.in python3/Modules/_ct
      'POWERPC_FREEBSD': ['src/powerpc/ffi.c', 'src/powerpc/sysv.S', 'src/powerpc/ppc_closure.S'],
      'ARM': ['src/arm/sysv.S', 'src/arm/ffi.c'],
      'LIBFFI_CRIS': ['src/cris/sysv.S', 'src/cris/ffi.c'],
-diff -ru python3.old_/Modules/Setup.dist python3/Modules/Setup.dist
---- python3.old_/Modules/Setup.dist	2012-09-29 10:00:42.000000000 +0200
-+++ python3/Modules/Setup.dist	2012-11-13 19:09:25.251740860 +0100
+--- Python-3.3.0/Modules/Setup.dist	2012-11-28 09:05:45.935528957 +0000
++++ Python-3.3.0/Modules/Setup.dist	2012-11-28 09:06:23.052964111 +0000
 @@ -177,7 +177,7 @@
  #_bisect _bisectmodule.c	# Bisection algorithms
  #_heapq _heapqmodule.c	# Heap queue algorithm

@@ -20,7 +20,7 @@ $(eval $(call gb_UnpackedTarball_fix_end_of_line,python3,\
 ))
 
 $(eval $(call gb_UnpackedTarball_add_patches,python3,\
-	python3/i100492-freebsd.patch.2 \
+	python3/i100492-freebsd.patch.1 \
 	python3/python-3.3.0-i42553.patch.2 \
 	python3/python-3.3.0-aix.patch.1 \
 	python3/python-3.3.0-darwin.patch.1 \
