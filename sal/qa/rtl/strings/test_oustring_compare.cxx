@@ -32,9 +32,12 @@ private:
 
     void compareToAscii();
 
+    void compareToIgnoreAsciiCase();
+
 CPPUNIT_TEST_SUITE(Compare);
 CPPUNIT_TEST(equalsIgnoreAsciiCaseAscii);
 CPPUNIT_TEST(compareToAscii);
+CPPUNIT_TEST(compareToIgnoreAsciiCase);
 CPPUNIT_TEST_SUITE_END();
 };
 
@@ -68,6 +71,18 @@ void test::oustring::Compare::compareToAscii()
     CPPUNIT_ASSERT(abc.compareToAscii("a") > 0);
     CPPUNIT_ASSERT_EQUAL(
         sal_Int32(0), abc.compareToAscii(RTL_CONSTASCII_STRINGPARAM("a")));
+}
+
+void test::oustring::Compare::compareToIgnoreAsciiCase()
+{
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int32(0),
+        rtl::OUString("abc").compareToIgnoreAsciiCase(rtl::OUString("ABC")));
+    CPPUNIT_ASSERT(
+        rtl::OUString("ABC").compareToIgnoreAsciiCase(rtl::OUString("abcdef"))
+        < 0);
+    CPPUNIT_ASSERT(
+        rtl::OUString("A").compareToIgnoreAsciiCase(rtl::OUString("_")) > 0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
