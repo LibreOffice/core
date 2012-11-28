@@ -1449,6 +1449,11 @@ void ShaderTransition::finishTransition_()
         OGLShaders::glDeleteProgram( m_nProgramObject );
         m_nProgramObject = 0;
     }
+    if ( m_nHelperTexture )
+    {
+        glDeleteTextures( 1, &m_nHelperTexture );
+        m_nHelperTexture = 0;
+    }
 #endif
 }
 
