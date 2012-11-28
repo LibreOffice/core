@@ -34,7 +34,7 @@ $(call gb_CustomTarget_get_target,jurt/test/com/sun/star/lib/uno/protocols/urp) 
 $(jurt_TESTURP)/done : $(jurt_TESTURP)/registry.rdb $(OUTDIR)/bin/types.rdb \
 		$(call gb_Executable_get_target_for_build,javamaker)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JVM,1)
-	rm -r $(jurt_TESTURP)/com && \
+	rm -rf $(jurt_TESTURP)/com && \
 	$(call gb_Helper_execute,javamaker -BUCR -O$(jurt_TESTURP) -nD $< -X$(OUTDIR)/bin/types.rdb) && \
 	touch $@
 
