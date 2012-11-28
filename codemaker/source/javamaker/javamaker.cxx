@@ -188,7 +188,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                         if (tmpName.isEmpty())
                             tmpName = "/";
                         else
-                            tmpName.replace('.', '/');
+                            tmpName = tmpName.replace('.', '/');
                     }
                     // related to task #116780# the scope is recursively
                     // generated.  bFullScope = true
