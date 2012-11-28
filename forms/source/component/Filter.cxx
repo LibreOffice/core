@@ -522,7 +522,7 @@ namespace frm
         {
             // check the text with the SQL-Parser
             ::rtl::OUString aNewText(aText);
-            aNewText.trim();
+            aNewText = aNewText.trim();
             if ( !aNewText.isEmpty() )
             {
                 ::dbtools::OPredicateInputController aPredicateInput( maContext.getUNOContext(), m_xConnection, getParseContext() );
