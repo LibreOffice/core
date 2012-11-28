@@ -347,9 +347,15 @@ lcl_setHelpText(
         const uno::Sequence<rtl::OUString>& i_rHelpTexts,
         const sal_Int32 i_nIndex)
 {
+#if GTK_CHECK_VERSION(2,12,0)
     if (i_nIndex >= 0 && i_nIndex < i_rHelpTexts.getLength())
         gtk_widget_set_tooltip_text(io_pWidget,
             rtl::OUStringToOString(i_rHelpTexts.getConstArray()[i_nIndex], RTL_TEXTENCODING_UTF8).getStr());
+#else
+    (void)io_pWidget;
+    (void)i_rHelpTexts;
+    (void)i_nIndex;
+#endif
 }
 
 
