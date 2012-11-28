@@ -57,18 +57,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/bridge/
 	BridgeSupplier \
 	Factory \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/corba,\
-	corba \
-))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/corba/giop,\
-	giop \
-))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/corba/iiop,\
-	iiop \
-))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/corba/iop,\
-	iop \
-))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/io,\
 	DataInputStream \
 	DataOutputStream \
