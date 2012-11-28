@@ -192,11 +192,10 @@ class MCD : public TBBase
     sal_uInt32 reserved6; //MUST be ignored.
     sal_uInt32 reserved7; //MUST be ignored
 
-    MCD(const MCD&);
-    MCD& operator = ( const MCD&);
 public:
     MCD();
-    ~MCD(){}
+    MCD(const MCD&);
+    MCD& operator = ( const MCD&);
     bool Read(SvStream &rS);
     void Print( FILE* );
 };
@@ -204,12 +203,11 @@ public:
 class PlfMcd : public Tcg255SubStruct
 {
     sal_Int32 iMac;
-    MCD* rgmcd; // array of MCD's
+    std::vector<MCD> rgmcd; // array of MCD's
     PlfMcd(const PlfMcd&);
     PlfMcd& operator = ( const PlfMcd&);
 public:
     PlfMcd( bool bReadId = true );
-    ~PlfMcd();
     bool Read(SvStream &rS);
     void Print( FILE* );
 };

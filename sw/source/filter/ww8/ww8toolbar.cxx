@@ -955,14 +955,10 @@ bool Tcg255SubStruct::Read(SvStream &rS)
     return true;
 }
 
-PlfMcd::PlfMcd( bool bReadId ): Tcg255SubStruct( bReadId ), iMac(0), rgmcd( NULL )
+PlfMcd::PlfMcd(bool bReadId)
+    : Tcg255SubStruct(bReadId)
+    , iMac(0)
 {
-}
-
-PlfMcd::~PlfMcd()
-{
-    if ( rgmcd )
-        delete[] rgmcd;
 }
 
 bool PlfMcd::Read(SvStream &rS)
@@ -973,7 +969,7 @@ bool PlfMcd::Read(SvStream &rS)
     rS >> iMac;
     if ( iMac )
     {
-        rgmcd = new MCD[ iMac ];
+        rgmcd.resize(iMac);
         for ( sal_Int32 index = 0; index < iMac; ++index )
         {
             if ( !rgmcd[ index ].Read( rS ) )
@@ -1312,7 +1308,37 @@ MCD::MCD() :  reserved1(0x56)
 {
 }
 
-bool  MCD::Read(SvStream &rS)
+MCD::MCD(const MCD& rO)
+    : reserved1(rO.reserved1)
+    , reserved2(rO.reserved2)
+    , ibst(rO.ibst)
+    , ibstName(rO.ibstName)
+    , reserved3(rO.reserved3)
+    , reserved4(rO.reserved4)
+    , reserved5(rO.reserved5)
+    , reserved6(rO.reserved6)
+    , reserved7(rO.reserved7)
+{
+}
+
+MCD& MCD::operator=(const MCD& rO)
+{
+    if (this != &rO)
+    {
+        reserved1 = rO.reserved1;
+        reserved2 = rO.reserved2;
+        ibst = rO.ibst;
+        ibstName = rO.ibstName;
+        reserved3 = rO.reserved3;
+        reserved4 = rO.reserved4;
+        reserved5 = rO.reserved5;
+        reserved6 = rO.reserved6;
+        reserved7 = rO.reserved7;
+    }
+    return *this;
+}
+
+bool MCD::Read(SvStream &rS)
 {
     OSL_TRACE("MCD::Read() stream pos 0x%x", rS.Tell() );
     nOffSet = rS.Tell();

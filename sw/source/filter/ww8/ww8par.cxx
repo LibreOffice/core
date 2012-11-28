@@ -4252,22 +4252,30 @@ WW8Customizations::WW8Customizations( SvStream* pTableStream, WW8Fib& rFib ) : m
 
 bool WW8Customizations::Import( SwDocShell* pShell )
 {
-    if ( mWw8Fib.lcbCmds == 0 )
+    if ( mWw8Fib.lcbCmds == 0 || !IsEightPlus(mWw8Fib.GetFIBVersion()) )
         return false;
-    Tcg aTCG;
-    long nCur = mpTableStream->Tell();
-    mpTableStream->Seek( mWw8Fib.fcCmds ); // point at tgc record
-    bool bReadResult = aTCG.Read( *mpTableStream );
-    mpTableStream->Seek( nCur ); // return to previous position, is that necessary?
-    if ( !bReadResult )
+    try
     {
-        OSL_TRACE("** Read of Customization data failed!!!! ");
+        Tcg aTCG;
+        long nCur = mpTableStream->Tell();
+        mpTableStream->Seek( mWw8Fib.fcCmds ); // point at tgc record
+        bool bReadResult = aTCG.Read( *mpTableStream );
+        mpTableStream->Seek( nCur ); // return to previous position, is that necessary?
+        if ( !bReadResult )
+        {
+            SAL_WARN("sw.ww8", "** Read of Customization data failed!!!! ");
+            return false;
+        }
+#if DEBUG
+        aTCG.Print( stderr );
+#endif
+        return aTCG.ImportCustomToolBar( *pShell );
+    }
+    catch(...)
+    {
+        SAL_WARN("sw.ww8", "** Read of Customization data failed!!!! epically");
         return false;
     }
-#if DEBUG
-    aTCG.Print( stderr );
-#endif
-    return aTCG.ImportCustomToolBar( *pShell );
 }
 
 bool SwWW8ImplReader::ReadGlobalTemplateSettings( const rtl::OUString& sCreatedFrom, const uno::Reference< container::XNameContainer >& xPrjNameCache )
