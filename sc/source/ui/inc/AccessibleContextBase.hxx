@@ -80,9 +80,6 @@ public:
 protected:
     virtual ~ScAccessibleContextBase(void);
 public:
-    using WeakAggComponentImplHelperBase::addEventListener;
-    using WeakAggComponentImplHelperBase::removeEventListener;
-
     ///=====  SfxListener  =====================================================
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -204,14 +201,14 @@ public:
           description and so on events.
     */
     virtual void SAL_CALL
-        addEventListener(
+        addAccessibleEventListener(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::accessibility::XAccessibleEventListener>& xListener)
         throw (com::sun::star::uno::RuntimeException);
 
     //  Remove an existing event listener.
     virtual void SAL_CALL
-        removeEventListener(
+        removeAccessibleEventListener(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::accessibility::XAccessibleEventListener>& xListener)
         throw (com::sun::star::uno::RuntimeException);

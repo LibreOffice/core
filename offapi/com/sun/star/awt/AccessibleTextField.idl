@@ -25,9 +25,9 @@
 
 module com { module sun { module star { module accessibility {
 
- published interface XAccessibleExtendedComponent;
- published interface XAccessibleComponent;
- published interface XAccessibleText;
+ interface XAccessibleExtendedComponent;
+ interface XAccessibleComponent;
+ interface XAccessibleText;
 
 }; }; }; };
 
@@ -44,7 +44,7 @@ module com { module sun { module star { module awt {
 
     @since OOo 1.1.2
 */
-published service AccessibleTextField
+service AccessibleTextField
 {
     /** This interface gives access to the structural information of a text filed:
 

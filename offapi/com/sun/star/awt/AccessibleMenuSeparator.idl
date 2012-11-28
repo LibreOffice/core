@@ -31,7 +31,7 @@ module com { module sun { module star { module awt {
 
     @since OOo 1.1.2
  */
-published service AccessibleMenuSeparator
+service AccessibleMenuSeparator
 {
     /** This interface gives access to the structural information of a
         menu separator:

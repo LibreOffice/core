@@ -405,7 +405,7 @@ namespace comphelper
         {
             Reference< XAccessibleEventBroadcaster > xBroadcaster( m_xInner, UNO_QUERY );
             if ( xBroadcaster.is() )
-                xBroadcaster->addEventListener( this );
+                xBroadcaster->addAccessibleEventListener( this );
         }
         osl_atomic_decrement( &_rRefCount );
     }
@@ -500,7 +500,7 @@ namespace comphelper
         Reference< XAccessibleEventBroadcaster > xBroadcaster( m_xInner, UNO_QUERY );
         OSL_ENSURE( xBroadcaster.is(), "OAccessibleContextWrapperHelper::disposing(): inner context is no broadcaster!" );
         if ( xBroadcaster.is() )
-            xBroadcaster->removeEventListener( this );
+            xBroadcaster->removeAccessibleEventListener( this );
 
         // dispose the child cache/map
         m_pChildMapper->dispose();
@@ -609,7 +609,7 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OAccessibleContextWrapper::addEventListener( const Reference< XAccessibleEventListener >& _rxListener ) throw (RuntimeException)
+    void SAL_CALL OAccessibleContextWrapper::addAccessibleEventListener( const Reference< XAccessibleEventListener >& _rxListener ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !m_nNotifierClient )
@@ -618,7 +618,7 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OAccessibleContextWrapper::removeEventListener( const Reference< XAccessibleEventListener >& _rxListener ) throw (RuntimeException)
+    void SAL_CALL OAccessibleContextWrapper::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& _rxListener ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( m_nNotifierClient )

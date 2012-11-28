@@ -32,7 +32,7 @@ module com {  module sun {  module star {  module sheet {
      @since OOo 1.1.2
 
  */
-published service AccessiblePageHeaderFooterAreasView
+service AccessiblePageHeaderFooterAreasView
 {
     /** This interface gives access to the three Header/Footer areas in the
         page preview.

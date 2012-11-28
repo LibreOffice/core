@@ -34,7 +34,7 @@ module com { module sun { module star { module accessibility {
 
     @since OOo 1.1.2
 */
-published constants AccessibleEventId
+constants AccessibleEventId
 {
     /** Use this event type to indicate a change of the name string
         of an accessible object.  The

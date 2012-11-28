@@ -35,8 +35,8 @@ import com.sun.star.uno.UnoRuntime;
  * com.sun.star.accessibility.XAccessibleEventBroadcaster</code>
  * interface methods :
  * <ul>
- *  <li><code> addEventListener()</code></li>
- *  <li><code> removeEventListener()</code></li>
+ *  <li><code> addAccessibleEventListener()</code></li>
+ *  <li><code> removeAccessibleEventListener()</code></li>
  * </ul> <p>
  *
  * This test needs the following object relations :
@@ -108,7 +108,7 @@ public class _XAccessibleEventBroadcaster extends MultiMethodTest {
      */
     public void _addEventListener() {
         log.println("adding listener");
-        oObj.addEventListener(list);
+        oObj.addAccessibleEventListener(list);
         boolean isTransient = chkTransient(tEnv.getTestObject());
         log.println("fire event");
         prod.fireEvent() ;
@@ -128,7 +128,7 @@ public class _XAccessibleEventBroadcaster extends MultiMethodTest {
             } else {
                 log.println("Object is Transient, listener isn't expected to be called");
             }
-            oObj.removeEventListener(list);
+            oObj.removeAccessibleEventListener(list);
         }
 
         if (EventMsg != null) {
@@ -157,7 +157,7 @@ public class _XAccessibleEventBroadcaster extends MultiMethodTest {
         list.notifiedEvent = null;
 
         log.println("remove listener");
-        oObj.removeEventListener(list);
+        oObj.removeAccessibleEventListener(list);
 
         log.println("fire event");
         prod.fireEvent() ;

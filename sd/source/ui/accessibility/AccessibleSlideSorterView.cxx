@@ -371,7 +371,7 @@ lang::Locale SAL_CALL AccessibleSlideSorterView::getLocale (void)
 
 
 
-void SAL_CALL AccessibleSlideSorterView::addEventListener(
+void SAL_CALL AccessibleSlideSorterView::addAccessibleEventListener(
     const Reference<XAccessibleEventListener >& rxListener)
     throw (RuntimeException)
 {
@@ -396,7 +396,7 @@ void SAL_CALL AccessibleSlideSorterView::addEventListener(
 
 
 
-void SAL_CALL AccessibleSlideSorterView::removeEventListener(
+void SAL_CALL AccessibleSlideSorterView::removeAccessibleEventListener(
     const Reference<XAccessibleEventListener >& rxListener)
     throw (RuntimeException)
 {

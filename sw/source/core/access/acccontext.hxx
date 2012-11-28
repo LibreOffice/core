@@ -271,11 +271,11 @@ public:
 
     //=====  XAccessibleEventBroadcaster  =====================================
 
-    virtual void SAL_CALL addEventListener(
+    virtual void SAL_CALL addAccessibleEventListener(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::accessibility::XAccessibleEventListener >& xListener )
         throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeEventListener(
+    virtual void SAL_CALL removeAccessibleEventListener(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::accessibility::XAccessibleEventListener >& xListener )
         throw (::com::sun::star::uno::RuntimeException);

@@ -34,7 +34,7 @@ module com {  module sun {  module star {  module accessibility {
 
     @since OOo 1.1.2
 */
-published exception IllegalAccessibleComponentStateException
+exception IllegalAccessibleComponentStateException
     : ::com::sun::star::uno::Exception
 {
 };

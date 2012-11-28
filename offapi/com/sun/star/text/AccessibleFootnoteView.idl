@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module text {
      @since OOo 1.1.2
 
  */
-published service AccessibleFootnoteView
+service AccessibleFootnoteView
 {
     /** This interface gives access to any paragraph fragment and table
         fragment that is contained in a footnote and is at least

@@ -690,7 +690,7 @@ sal_Int32 SAL_CALL AccessibleShape::getBackground (void)
 
 //=====  XAccessibleEventBroadcaster  =========================================
 
-void SAL_CALL AccessibleShape::addEventListener (
+void SAL_CALL AccessibleShape::addAccessibleEventListener (
     const Reference<XAccessibleEventListener >& rxListener)
     throw (uno::RuntimeException)
 {
@@ -702,7 +702,7 @@ void SAL_CALL AccessibleShape::addEventListener (
     }
     else
     {
-        AccessibleContextBase::addEventListener (rxListener);
+        AccessibleContextBase::addAccessibleEventListener (rxListener);
         if (mpText != NULL)
             mpText->AddEventListener (rxListener);
     }
@@ -711,11 +711,11 @@ void SAL_CALL AccessibleShape::addEventListener (
 
 
 
-void SAL_CALL AccessibleShape::removeEventListener (
+void SAL_CALL AccessibleShape::removeAccessibleEventListener (
     const Reference<XAccessibleEventListener >& rxListener)
     throw (uno::RuntimeException)
 {
-    AccessibleContextBase::removeEventListener (rxListener);
+    AccessibleContextBase::removeAccessibleEventListener (rxListener);
     if (mpText != NULL)
         mpText->RemoveEventListener (rxListener);
 }

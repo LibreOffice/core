@@ -29,7 +29,7 @@ module com { module sun { module star { module accessibility {
 
     @since OOo 2.0.4
 */
-published interface XAccessibleTextAttributes
+interface XAccessibleTextAttributes
 {
     /** Get the default attribute set for the text.
 

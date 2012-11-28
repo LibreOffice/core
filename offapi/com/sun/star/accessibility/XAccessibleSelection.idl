@@ -25,7 +25,7 @@
 
 module com { module sun { module star { module accessibility {
 
- published interface XAccessible;
+ interface XAccessible;
 
 /** Implement this interface to represent a selection of accessible objects.
 
@@ -42,7 +42,7 @@ module com { module sun { module star { module accessibility {
 
     @since OOo 1.1.2
 */
-published interface XAccessibleSelection : ::com::sun::star::uno::XInterface
+interface XAccessibleSelection : ::com::sun::star::uno::XInterface
 {
     /** Selects the specified <type>Accessible</type> child of the
         object.

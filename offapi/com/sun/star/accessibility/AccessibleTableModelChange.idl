@@ -34,7 +34,7 @@ module com { module sun { module star { module accessibility {
 
     @since OOo 1.1.2
 */
-published struct AccessibleTableModelChange
+struct AccessibleTableModelChange
 {
     /** The type of the event as defined in
             <type>AccessibleTableModelChangeType</type>.

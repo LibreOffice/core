@@ -25,11 +25,11 @@
 
 module com { module sun { module star { module accessibility {
 
- published interface XAccessibleAction;
- published interface XAccessibleText;
- published interface XAccessibleValue;
- published interface XAccessibleExtendedComponent;
- published interface XAccessibleComponent;
+ interface XAccessibleAction;
+ interface XAccessibleText;
+ interface XAccessibleValue;
+ interface XAccessibleExtendedComponent;
+ interface XAccessibleComponent;
 
 }; }; }; };
 
@@ -48,7 +48,7 @@ module com { module sun { module star { module awt {
 
     @since OOo 1.1.2
 */
-published service AccessibleToolBoxItem
+service AccessibleToolBoxItem
 {
     /** This interface gives access to the structural information of a tool box item:
 

@@ -107,9 +107,9 @@ public class RegistrationThread
             if (xBroadcaster != null)
             {
                 if (mbRegister)
-                    xBroadcaster.addEventListener (maListener);
+                    xBroadcaster.addAccessibleEventListener (maListener);
                 else
-                    xBroadcaster.removeEventListener (maListener);
+                    xBroadcaster.removeAccessibleEventListener (maListener);
                 nNodeCount += 1;
             }
 

@@ -31,7 +31,7 @@
 
 module com { module sun { module star { module accessibility {
 
- published interface XAccessible;
+ interface XAccessible;
 
 /** The <type>XAccessibleComponent</type> interface should be supported by
     any class that can be rendered on the screen.
@@ -76,7 +76,7 @@ module com { module sun { module star { module accessibility {
 
     @since OOo 1.1.2
 */
-published interface XAccessibleComponent : ::com::sun::star::uno::XInterface
+interface XAccessibleComponent : ::com::sun::star::uno::XInterface
 {
     /** Tests whether the specified point lies within this object's bounds.
 

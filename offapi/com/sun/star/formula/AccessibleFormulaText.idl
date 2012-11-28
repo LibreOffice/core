@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module formula {
 
      @since OOo 1.1.2
  */
-published service AccessibleFormulaText
+service AccessibleFormulaText
 {
     interface ::com::sun::star::accessibility::XAccessible;
     interface ::com::sun::star::accessibility::XAccessibleComponent;

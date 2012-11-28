@@ -25,8 +25,8 @@
 
 module com { module sun { module star { module accessibility {
 
- published interface XAccessibleText;
- published interface XAccessibleComponent;
+ interface XAccessibleText;
+ interface XAccessibleComponent;
 
 }; }; }; };
 
@@ -41,7 +41,7 @@ module com { module sun { module star { module awt {
 
     @since OOo 1.1.2
 */
-published service AccessibleIconChoiceControlEntry
+service AccessibleIconChoiceControlEntry
 {
     /** This interface gives access to the structural information of an icon choice control entry:
 

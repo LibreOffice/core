@@ -294,7 +294,7 @@ lang::Locale SAL_CALL AccessibleSlideSorterObject::getLocale (void)
 
 //===== XAccessibleEventBroadcaster ===========================================
 
-void SAL_CALL AccessibleSlideSorterObject::addEventListener(
+void SAL_CALL AccessibleSlideSorterObject::addAccessibleEventListener(
     const Reference<XAccessibleEventListener>& rxListener)
     throw (RuntimeException)
 {
@@ -319,7 +319,7 @@ void SAL_CALL AccessibleSlideSorterObject::addEventListener(
 
 
 
-void SAL_CALL AccessibleSlideSorterObject::removeEventListener(
+void SAL_CALL AccessibleSlideSorterObject::removeAccessibleEventListener(
     const Reference<XAccessibleEventListener>& rxListener)
     throw (uno::RuntimeException)
 {

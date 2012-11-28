@@ -86,7 +86,6 @@ protected:
     using ScAccessibleTableBase::IsDefunc;
 
 public:
-    using ScAccessibleTableBase::addEventListener;
     using ScAccessibleTableBase::disposing;
 
      virtual void SAL_CALL disposing();
@@ -238,7 +237,7 @@ public:
           description and so on events.
     */
     virtual void SAL_CALL
-        addEventListener(
+        addAccessibleEventListener(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::accessibility::XAccessibleEventListener>& xListener)
         throw (com::sun::star::uno::RuntimeException);

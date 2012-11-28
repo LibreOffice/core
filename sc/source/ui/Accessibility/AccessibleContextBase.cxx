@@ -86,7 +86,7 @@ void ScAccessibleContextBase::Init()
     {
         uno::Reference< XAccessibleEventBroadcaster > xBroadcaster (mxParent->getAccessibleContext(), uno::UNO_QUERY);
         if (xBroadcaster.is())
-            xBroadcaster->addEventListener(this);
+            xBroadcaster->addAccessibleEventListener(this);
     }
     msName = createAccessibleName();
     msDescription = createAccessibleDescription();
@@ -111,7 +111,7 @@ void SAL_CALL ScAccessibleContextBase::disposing()
     {
         uno::Reference< XAccessibleEventBroadcaster > xBroadcaster (mxParent->getAccessibleContext(), uno::UNO_QUERY);
         if (xBroadcaster.is())
-            xBroadcaster->removeEventListener(this);
+            xBroadcaster->removeAccessibleEventListener(this);
         mxParent = NULL;
     }
 
@@ -412,7 +412,7 @@ lang::Locale SAL_CALL
     //=====  XAccessibleEventBroadcaster  =====================================
 
 void SAL_CALL
-       ScAccessibleContextBase::addEventListener(
+       ScAccessibleContextBase::addAccessibleEventListener(
            const uno::Reference<XAccessibleEventListener>& xListener)
     throw (uno::RuntimeException)
 {
@@ -430,7 +430,7 @@ void SAL_CALL
 }
 
 void SAL_CALL
-       ScAccessibleContextBase::removeEventListener(
+       ScAccessibleContextBase::removeAccessibleEventListener(
         const uno::Reference<XAccessibleEventListener>& xListener)
     throw (uno::RuntimeException)
 {

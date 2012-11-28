@@ -638,7 +638,7 @@ ParagraphImpl::getRunAttributes(::sal_Int32 Index, const ::css::uno::Sequence< O
 
 
 // virtual
-void SAL_CALL ParagraphImpl::addEventListener(
+void SAL_CALL ParagraphImpl::addAccessibleEventListener(
     ::css::uno::Reference<
     ::css::accessibility::XAccessibleEventListener > const & rListener)
     throw (::css::uno::RuntimeException)
@@ -662,7 +662,7 @@ void SAL_CALL ParagraphImpl::addEventListener(
 }
 
 // virtual
-void SAL_CALL ParagraphImpl::removeEventListener(
+void SAL_CALL ParagraphImpl::removeAccessibleEventListener(
     ::css::uno::Reference<
     ::css::accessibility::XAccessibleEventListener > const & rListener)
     throw (::css::uno::RuntimeException)

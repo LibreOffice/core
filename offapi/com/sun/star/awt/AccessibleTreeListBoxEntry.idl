@@ -25,10 +25,10 @@
 
 module com { module sun { module star { module accessibility {
 
- published interface XAccessibleAction;
- published interface XAccessibleSelection;
- published interface XAccessibleText;
- published interface XAccessibleComponent;
+ interface XAccessibleAction;
+ interface XAccessibleSelection;
+ interface XAccessibleText;
+ interface XAccessibleComponent;
 
 }; }; }; };
 
@@ -45,7 +45,7 @@ module com { module sun { module star { module awt {
 
     @since OOo 1.1.2
 */
-published service AccessibleTreeListBoxEntry
+service AccessibleTreeListBoxEntry
 {
     /** This interface gives access to the structural information of a tree list box entry:
 

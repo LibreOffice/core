@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module text {
 
      @since OOo 1.1.2
  */
-published service AccessibleTextDocumentView
+service AccessibleTextDocumentView
 {
     /** This interface gives access to any text, table, graphic, embedded
           object and drawing that is at least partially visible on the screen.

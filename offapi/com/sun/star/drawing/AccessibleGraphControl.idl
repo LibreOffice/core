@@ -22,11 +22,11 @@
 
 // Declarations of interfaces to avoid inclusion of IDL files.
 module com {  module sun {  module star {  module accessibility {
-          published interface XAccessible;
-          published interface XAccessibleContext;
-          published interface XAccessibleComponent;
-          published interface XAccessibleEventBroadcaster;
-          published interface XAccessibleSelection;
+          interface XAccessible;
+          interface XAccessibleContext;
+          interface XAccessibleComponent;
+          interface XAccessibleEventBroadcaster;
+          interface XAccessibleSelection;
 }; }; }; };
 
 
@@ -42,7 +42,7 @@ module com {  module sun {  module star {  module drawing {
 
      @since OOo 1.1.2
  */
-published service AccessibleGraphControl
+service AccessibleGraphControl
 {
     /** Base interface for being accessible.  It gives access to the
         <type scope="::com::sun::star::accessibility">XAccessibleContext</type>

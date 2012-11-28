@@ -286,7 +286,7 @@ lang::Locale SAL_CALL ThumbnailViewAcc::getLocale()
     return aRet;
 }
 
-void SAL_CALL ThumbnailViewAcc::addEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
+void SAL_CALL ThumbnailViewAcc::addAccessibleEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
@@ -310,7 +310,7 @@ void SAL_CALL ThumbnailViewAcc::addEventListener( const uno::Reference< accessib
     }
 }
 
-void SAL_CALL ThumbnailViewAcc::removeEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
+void SAL_CALL ThumbnailViewAcc::removeAccessibleEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
@@ -826,7 +826,7 @@ lang::Locale SAL_CALL ThumbnailViewItemAcc::getLocale()
     return aRet;
 }
 
-void SAL_CALL ThumbnailViewItemAcc::addEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
+void SAL_CALL ThumbnailViewItemAcc::addAccessibleEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
     throw (uno::RuntimeException)
 {
     const ::osl::MutexGuard aGuard( maMutex );
@@ -849,7 +849,7 @@ void SAL_CALL ThumbnailViewItemAcc::addEventListener( const uno::Reference< acce
     }
 }
 
-void SAL_CALL ThumbnailViewItemAcc::removeEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
+void SAL_CALL ThumbnailViewItemAcc::removeAccessibleEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
     throw (uno::RuntimeException)
 {
     const ::osl::MutexGuard aGuard( maMutex );

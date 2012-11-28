@@ -37,7 +37,7 @@ module com {  module sun {  module star {  module drawing {
 
      @since OOo 1.1.2
 */
-published service AccessibleGraphicShape
+service AccessibleGraphicShape
 {
     /** Give access to information of generic shapes.
 

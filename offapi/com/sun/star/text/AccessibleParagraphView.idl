@@ -34,7 +34,7 @@ module com {  module sun {  module star {  module text {
 
      @since OOo 1.1.2
  */
-published service AccessibleParagraphView
+service AccessibleParagraphView
 {
     /** This interface gives access to a paragraph fragment that is at least
           partially visible on the screen. A paragraph fragment is the portion

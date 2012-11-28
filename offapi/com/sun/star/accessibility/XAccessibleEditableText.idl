@@ -35,7 +35,7 @@ module com { module sun { module star { module accessibility {
 
     @since OOo 1.1.2
 */
-published interface XAccessibleEditableText
+interface XAccessibleEditableText
     : ::com::sun::star::accessibility::XAccessibleText
 {
     /** Copies the text range into the clipboard.

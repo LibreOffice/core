@@ -40,7 +40,7 @@ public class Window extends java.awt.Window implements javax.accessibility.Acces
         XAccessibleEventBroadcaster broadcaster = UnoRuntime.queryInterface(XAccessibleEventBroadcaster.class,
         unoAccessibleComponent);
         if (broadcaster != null) {
-            broadcaster.addEventListener(new AccessibleWindowListener());
+            broadcaster.addAccessibleEventListener(new AccessibleWindowListener());
         }
     }
 

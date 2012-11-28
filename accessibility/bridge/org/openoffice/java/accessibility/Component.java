@@ -46,7 +46,7 @@ public abstract class Component extends java.awt.Component {
         XAccessibleEventBroadcaster broadcaster = UnoRuntime.queryInterface(XAccessibleEventBroadcaster.class,
         unoAccessibleComponent);
         if (broadcaster != null) {
-            broadcaster.addEventListener(createEventListener());
+            broadcaster.addAccessibleEventListener(createEventListener());
         }
     }
 

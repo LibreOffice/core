@@ -404,7 +404,7 @@ Locale SAL_CALL SmGraphicAccessible::getLocale()
 }
 
 
-void SAL_CALL SmGraphicAccessible::addEventListener(
+void SAL_CALL SmGraphicAccessible::addAccessibleEventListener(
         const Reference< XAccessibleEventListener >& xListener )
     throw (RuntimeException)
 {
@@ -420,7 +420,7 @@ void SAL_CALL SmGraphicAccessible::addEventListener(
     }
 }
 
-void SAL_CALL SmGraphicAccessible::removeEventListener(
+void SAL_CALL SmGraphicAccessible::removeAccessibleEventListener(
         const Reference< XAccessibleEventListener >& xListener )
     throw (RuntimeException)
 {
@@ -1923,14 +1923,14 @@ Locale SAL_CALL SmEditAccessible::getLocale(  )
 
 
 // XAccessibleEventBroadcaster
-void SAL_CALL SmEditAccessible::addEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
+void SAL_CALL SmEditAccessible::addAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
     throw (RuntimeException)
 {
     if (pTextHelper)   // not disposing (about to destroy view shell)
         pTextHelper->AddEventListener( xListener );
 }
 
-void SAL_CALL SmEditAccessible::removeEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
+void SAL_CALL SmEditAccessible::removeAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
     throw (RuntimeException)
 {
    if (pTextHelper)   // not disposing (about to destroy view shell)

@@ -47,7 +47,7 @@ module com { module sun { module star { module accessibility {
 
     @since OOo 1.1.2
 */
-published interface XAccessibleHyperlink :
+interface XAccessibleHyperlink :
     ::com::sun::star::accessibility::XAccessibleAction
 {
     /** Returns an object that represents the link anchor, as appropriate

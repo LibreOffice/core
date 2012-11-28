@@ -27,10 +27,10 @@
 
 module com { module sun { module star { module accessibility {
 
- published interface XAccessible;
- published interface XAccessibleRelationSet;
- published interface XAccessibleSelection;
- published interface XAccessibleStateSet;
+ interface XAccessible;
+ interface XAccessibleRelationSet;
+ interface XAccessibleSelection;
+ interface XAccessibleStateSet;
 
 /** Implement this interface for exposing various aspects of a class's
     content.
@@ -46,7 +46,7 @@ module com { module sun { module star { module accessibility {
 
     @since OOo 1.1.2
 */
-published interface XAccessibleContext : ::com::sun::star::uno::XInterface
+interface XAccessibleContext : ::com::sun::star::uno::XInterface
 {
     /** Return the number of children.
 

@@ -32,7 +32,7 @@ module com { module sun { module star { module awt {
 
     @since OOo 1.1.2
 */
-published service AccessibleListBoxList
+service AccessibleListBoxList
 {
     service AccessibleList;
 };

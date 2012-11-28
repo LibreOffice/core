@@ -50,7 +50,7 @@ public class Container extends java.awt.Container implements javax.accessibility
         XAccessibleEventBroadcaster broadcaster = UnoRuntime.queryInterface(XAccessibleEventBroadcaster.class,
         unoAccessibleContext);
         if (broadcaster != null) {
-            broadcaster.addEventListener(createEventListener());
+            broadcaster.addAccessibleEventListener(createEventListener());
         }
     }
 

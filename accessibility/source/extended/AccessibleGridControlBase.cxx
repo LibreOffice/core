@@ -238,7 +238,7 @@ sal_Bool SAL_CALL AccessibleGridControlBase::isFocusTraversable()
 }
 // XAccessibleEventBroadcaster ------------------------------------------------
 
-void SAL_CALL AccessibleGridControlBase::addEventListener(
+void SAL_CALL AccessibleGridControlBase::addAccessibleEventListener(
         const Reference< XAccessibleEventListener>& _rxListener )
     throw ( uno::RuntimeException )
 {
@@ -252,7 +252,7 @@ void SAL_CALL AccessibleGridControlBase::addEventListener(
     }
 }
 
-void SAL_CALL AccessibleGridControlBase::removeEventListener(
+void SAL_CALL AccessibleGridControlBase::removeAccessibleEventListener(
         const Reference< XAccessibleEventListener>& _rxListener )
     throw ( uno::RuntimeException )
 {

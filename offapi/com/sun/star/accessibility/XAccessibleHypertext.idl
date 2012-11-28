@@ -26,7 +26,7 @@
 
 module com { module sun { module star { module accessibility {
 
- published interface XAccessibleHyperlink;
+ interface XAccessibleHyperlink;
 
 
 /** Implement this interface to expose the hypertext structure of a document.
@@ -43,7 +43,7 @@ module com { module sun { module star { module accessibility {
 
     @since OOo 1.1.2
 */
-published interface XAccessibleHypertext
+interface XAccessibleHypertext
     : ::com::sun::star::accessibility::XAccessibleText
 {
     /** Returns the number of links and link groups contained within this

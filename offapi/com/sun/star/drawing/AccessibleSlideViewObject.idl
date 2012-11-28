@@ -35,7 +35,7 @@ module com {  module sun {  module star {  module drawing {
 
      @since OOo 1.1.2
 */
-published service AccessibleSlideViewObject
+service AccessibleSlideViewObject
 {
     interface ::com::sun::star::accessibility::XAccessible;
     interface ::com::sun::star::accessibility::XAccessibleContext;

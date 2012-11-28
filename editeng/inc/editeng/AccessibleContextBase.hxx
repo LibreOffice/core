@@ -234,21 +234,16 @@ public:
         throw (::com::sun::star::uno::RuntimeException,
             ::com::sun::star::accessibility::IllegalAccessibleComponentStateException);
 
-    //=====  XComponent  ========================================================
-
-    using WeakComponentImplHelperBase::addEventListener;
-    using WeakComponentImplHelperBase::removeEventListener;
-
     //=====  XAccessibleEventBroadcaster  ========================================
 
     virtual void SAL_CALL
-        addEventListener (
+        addAccessibleEventListener (
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::accessibility::XAccessibleEventListener >& xListener)
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL
-        removeEventListener (
+        removeAccessibleEventListener (
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::accessibility::XAccessibleEventListener >& xListener)
         throw (::com::sun::star::uno::RuntimeException);

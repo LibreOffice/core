@@ -314,7 +314,7 @@ void DocumentFocusListener::attachRecursive(
     uno::Reference< uno::XInterface > xInterface = xBroadcaster;
     if( m_aRefList.insert(xInterface).second )
     {
-        xBroadcaster->addEventListener(static_cast< accessibility::XAccessibleEventListener *>(this));
+        xBroadcaster->addAccessibleEventListener(static_cast< accessibility::XAccessibleEventListener *>(this));
 
         if( ! xStateSet->contains(accessibility::AccessibleStateType::MANAGES_DESCENDANTS ) )
         {
@@ -370,7 +370,7 @@ void DocumentFocusListener::detachRecursive(
 
     if( xBroadcaster.is() && 0 < m_aRefList.erase(xBroadcaster) )
     {
-        xBroadcaster->removeEventListener(static_cast< accessibility::XAccessibleEventListener *>(this));
+        xBroadcaster->removeAccessibleEventListener(static_cast< accessibility::XAccessibleEventListener *>(this));
 
         if( ! xStateSet->contains(accessibility::AccessibleStateType::MANAGES_DESCENDANTS ) )
         {

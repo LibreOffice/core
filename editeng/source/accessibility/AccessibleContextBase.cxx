@@ -424,7 +424,7 @@ lang::Locale SAL_CALL
 //=====  XAccessibleEventListener  ============================================
 
 void SAL_CALL
-    AccessibleContextBase::addEventListener (
+    AccessibleContextBase::addAccessibleEventListener (
         const uno::Reference<XAccessibleEventListener >& rxListener)
     throw (uno::RuntimeException)
 {
@@ -448,7 +448,7 @@ void SAL_CALL
 
 
 void SAL_CALL
-    AccessibleContextBase::removeEventListener (
+    AccessibleContextBase::removeAccessibleEventListener (
         const uno::Reference<XAccessibleEventListener >& rxListener )
     throw (uno::RuntimeException)
 {

@@ -33,7 +33,7 @@ module com { module sun { module star { module accessibility {
 
     @since OOo 1.1.2
 */
-published interface XAccessibleImage : ::com::sun::star::uno::XInterface
+interface XAccessibleImage : ::com::sun::star::uno::XInterface
 {
     /** Returns the localized description of the image.
 

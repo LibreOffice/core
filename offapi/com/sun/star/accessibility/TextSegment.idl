@@ -51,7 +51,7 @@ module com { module sun { module star { module accessibility {
     @since OOo 1.1.2
 */
 
-published struct TextSegment
+struct TextSegment
 {
     /** A copy of the text segment of the enclosing text delimited by the
         text indices <member>TextSegment::SegmentStart</member> and

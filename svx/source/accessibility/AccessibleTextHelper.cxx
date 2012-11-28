@@ -105,8 +105,8 @@ namespace accessibility
         uno::Reference< XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) SAL_THROW((lang::IndexOutOfBoundsException, uno::RuntimeException));
 
         // XAccessibleEventBroadcaster child related methods
-        void SAL_CALL addEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) SAL_THROW((uno::RuntimeException));
-        void SAL_CALL removeEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) SAL_THROW((uno::RuntimeException));
+        void SAL_CALL addAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) SAL_THROW((uno::RuntimeException));
+        void SAL_CALL removeAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) SAL_THROW((uno::RuntimeException));
 
         // XAccessibleComponent child related methods
         uno::Reference< XAccessible > SAL_CALL getAccessibleAtPoint( const awt::Point& aPoint ) SAL_THROW((uno::RuntimeException));
@@ -1645,7 +1645,7 @@ namespace accessibility
             return NULL;
     }
 
-    void SAL_CALL AccessibleTextHelper_Impl::addEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) SAL_THROW((uno::RuntimeException))
+    void SAL_CALL AccessibleTextHelper_Impl::addAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) SAL_THROW((uno::RuntimeException))
     {
         DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
@@ -1653,7 +1653,7 @@ namespace accessibility
             ::comphelper::AccessibleEventNotifier::addEventListener( getNotifierClientId(), xListener );
     }
 
-    void SAL_CALL AccessibleTextHelper_Impl::removeEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) SAL_THROW((uno::RuntimeException))
+    void SAL_CALL AccessibleTextHelper_Impl::removeAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) SAL_THROW((uno::RuntimeException))
     {
         DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
@@ -2006,11 +2006,11 @@ namespace accessibility
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
 
-        mpImpl->addEventListener( xListener );
+        mpImpl->addAccessibleEventListener( xListener );
 
         mpImpl->CheckInvariants();
 #else
-        mpImpl->addEventListener( xListener );
+        mpImpl->addAccessibleEventListener( xListener );
 #endif
     }
 
@@ -2019,11 +2019,11 @@ namespace accessibility
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
 
-        mpImpl->removeEventListener( xListener );
+        mpImpl->removeAccessibleEventListener( xListener );
 
         mpImpl->CheckInvariants();
 #else
-        mpImpl->removeEventListener( xListener );
+        mpImpl->removeAccessibleEventListener( xListener );
 #endif
     }
 

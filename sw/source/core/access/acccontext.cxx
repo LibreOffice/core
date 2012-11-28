@@ -706,7 +706,7 @@ lang::Locale SAL_CALL SwAccessibleContext::getLocale (void)
     return aLoc;
 }
 
-void SAL_CALL SwAccessibleContext::addEventListener(
+void SAL_CALL SwAccessibleContext::addAccessibleEventListener(
             const uno::Reference< XAccessibleEventListener >& xListener )
         throw (uno::RuntimeException)
 {
@@ -719,7 +719,7 @@ void SAL_CALL SwAccessibleContext::addEventListener(
     }
 }
 
-void SAL_CALL SwAccessibleContext::removeEventListener(
+void SAL_CALL SwAccessibleContext::removeAccessibleEventListener(
             const uno::Reference< XAccessibleEventListener >& xListener )
         throw (uno::RuntimeException)
 {

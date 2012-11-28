@@ -822,7 +822,7 @@ atk_object_wrapper_new( const ::com::sun::star::uno::Reference< ::com::sun::star
         {
             uno::Reference< accessibility::XAccessibleEventBroadcaster > xBroadcaster(xContext, uno::UNO_QUERY);
             if( xBroadcaster.is() )
-                xBroadcaster->addEventListener( static_cast< accessibility::XAccessibleEventListener * > ( new AtkListener(pWrap) ) );
+                xBroadcaster->addAccessibleEventListener( static_cast< accessibility::XAccessibleEventListener * > ( new AtkListener(pWrap) ) );
         else
                 OSL_ASSERT( false );
         }

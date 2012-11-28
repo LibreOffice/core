@@ -36,7 +36,7 @@ module com {  module sun {  module star {  module table {
     tables in the edit view of a spreadsheet.
     @since OOo 1.1.2
 */
-published service AccessibleTableView
+service AccessibleTableView
 {
     /** This interface gives access to any table cell that is contained in
           a table fragment that is at least partially visible. A table fragment

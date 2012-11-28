@@ -133,7 +133,7 @@ namespace comphelper
     }
 
     //---------------------------------------------------------------------
-    void SAL_CALL OAccessibleContextHelper::addEventListener( const Reference< XAccessibleEventListener >& _rxListener ) throw (RuntimeException)
+    void SAL_CALL OAccessibleContextHelper::addAccessibleEventListener( const Reference< XAccessibleEventListener >& _rxListener ) throw (RuntimeException)
     {
         OMutexGuard aGuard( getExternalLock() );
             // don't use the OContextEntryGuard - it will throw an exception if we're not alive
@@ -156,7 +156,7 @@ namespace comphelper
     }
 
     //---------------------------------------------------------------------
-    void SAL_CALL OAccessibleContextHelper::removeEventListener( const Reference< XAccessibleEventListener >& _rxListener ) throw (RuntimeException)
+    void SAL_CALL OAccessibleContextHelper::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& _rxListener ) throw (RuntimeException)
     {
         OMutexGuard aGuard( getExternalLock() );
             // don't use the OContextEntryGuard - it will throw an exception if we're not alive

@@ -593,7 +593,7 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     // XAccessibleEventBroadcaster
     // -----------------------------------------------------------------------------
-    void SAL_CALL AccessibleListBoxEntry::addEventListener( const Reference< XAccessibleEventListener >& xListener ) throw (RuntimeException)
+    void SAL_CALL AccessibleListBoxEntry::addAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener ) throw (RuntimeException)
     {
         if (xListener.is())
         {
@@ -604,7 +604,7 @@ namespace accessibility
         }
     }
     // -----------------------------------------------------------------------------
-    void SAL_CALL AccessibleListBoxEntry::removeEventListener( const Reference< XAccessibleEventListener >& xListener ) throw (RuntimeException)
+    void SAL_CALL AccessibleListBoxEntry::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener ) throw (RuntimeException)
     {
         if (xListener.is())
         {

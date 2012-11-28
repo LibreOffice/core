@@ -40,7 +40,7 @@ module com { module sun { module star { module accessibility {
 
     @since OOo 1.1.2
 */
-published interface XAccessibleRelationSet : ::com::sun::star::uno::XInterface
+interface XAccessibleRelationSet : ::com::sun::star::uno::XInterface
 {
     /** Returns the number of relations in this relation set.
 

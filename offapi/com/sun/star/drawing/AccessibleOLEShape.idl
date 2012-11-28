@@ -46,7 +46,7 @@ module com {  module sun {  module star {  module drawing {
 
      @since OOo 1.1.2
 */
-published service AccessibleOLEShape
+service AccessibleOLEShape
 {
     /** Give access to information of generic shapes.
 

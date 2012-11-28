@@ -209,7 +209,7 @@ namespace accessibility
         return LanguageTag(GetTextForwarder().GetLanguage( static_cast< sal_uInt16 >( GetParagraphIndex() ), 0 )).getLocale();
     }
 
-    void SAL_CALL AccessibleImageBullet::addEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException)
+    void SAL_CALL AccessibleImageBullet::addAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException)
     {
         DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
@@ -217,7 +217,7 @@ namespace accessibility
             ::comphelper::AccessibleEventNotifier::addEventListener( getNotifierClientId(), xListener );
     }
 
-    void SAL_CALL AccessibleImageBullet::removeEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException)
+    void SAL_CALL AccessibleImageBullet::removeAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException)
     {
         DBG_CHKTHIS( AccessibleImageBullet, NULL );
 

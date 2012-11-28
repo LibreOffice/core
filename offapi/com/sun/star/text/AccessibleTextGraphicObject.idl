@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module text {
 
      @since OOo 1.1.2
  */
-published service AccessibleTextGraphicObject
+service AccessibleTextGraphicObject
 {
     /** This interface comprises the basic accessibility of text graphics.
 

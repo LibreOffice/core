@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module text {
      @since OOo 1.1.2
 
  */
-published service AccessibleHeaderFooterView
+service AccessibleHeaderFooterView
 {
     /** This interface gives access to any paragraph and table that is
           contained in the header and footer and is at least partially visible

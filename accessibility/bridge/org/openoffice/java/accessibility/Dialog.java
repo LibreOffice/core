@@ -51,7 +51,7 @@ public class Dialog extends java.awt.Dialog implements javax.accessibility.Acces
         XAccessibleEventBroadcaster broadcaster = UnoRuntime.queryInterface(XAccessibleEventBroadcaster.class,
         xAccessibleComponent);
         if (broadcaster != null) {
-            broadcaster.addEventListener(new AccessibleDialogListener());
+            broadcaster.addAccessibleEventListener(new AccessibleDialogListener());
         }
     }
 

@@ -449,7 +449,7 @@ lang::Locale SAL_CALL SvxGraphCtrlAccessibleContext::getLocale( void ) throw( Il
 
 //=====  XAccessibleEventListener  ============================================
 
-void SAL_CALL SvxGraphCtrlAccessibleContext::addEventListener( const Reference< XAccessibleEventListener >& xListener )
+void SAL_CALL SvxGraphCtrlAccessibleContext::addAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )
     throw( RuntimeException )
 {
     if (xListener.is())
@@ -463,7 +463,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::addEventListener( const Reference< 
 
 //-----------------------------------------------------------------------------
 
-void SAL_CALL SvxGraphCtrlAccessibleContext::removeEventListener( const Reference< XAccessibleEventListener >& xListener )
+void SAL_CALL SvxGraphCtrlAccessibleContext::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )
     throw( RuntimeException )
 {
     if (xListener.is())

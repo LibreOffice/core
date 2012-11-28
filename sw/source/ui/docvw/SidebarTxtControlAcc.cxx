@@ -154,16 +154,13 @@ class SidebarTxtControlAccessibleContext : public VCLXAccessibleComponent
                 getAccessibleChild( sal_Int32 i )
                 throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 
-        using WeakAggComponentImplHelperBase::addEventListener;
-        using WeakAggComponentImplHelperBase::removeEventListener;
-
         virtual void SAL_CALL
-                addEventListener (
+                addAccessibleEventListener (
                     const ::com::sun::star::uno::Reference<
                         ::com::sun::star::accessibility::XAccessibleEventListener >& xListener)
                 throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL
-                removeEventListener (
+                removeAccessibleEventListener (
                     const ::com::sun::star::uno::Reference<
                         ::com::sun::star::accessibility::XAccessibleEventListener >& xListener)
                 throw (::com::sun::star::uno::RuntimeException);
@@ -233,7 +230,7 @@ css::uno::Reference< css::accessibility::XAccessible > SAL_CALL SidebarTxtContro
     return xChild;
 }
 
-void SAL_CALL SidebarTxtControlAccessibleContext::addEventListener (
+void SAL_CALL SidebarTxtControlAccessibleContext::addAccessibleEventListener (
     const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener)
     throw (css::uno::RuntimeException)
 {
@@ -245,7 +242,7 @@ void SAL_CALL SidebarTxtControlAccessibleContext::addEventListener (
     }
 }
 
-void SAL_CALL SidebarTxtControlAccessibleContext::removeEventListener (
+void SAL_CALL SidebarTxtControlAccessibleContext::removeAccessibleEventListener (
     const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener)
     throw (css::uno::RuntimeException)
 {

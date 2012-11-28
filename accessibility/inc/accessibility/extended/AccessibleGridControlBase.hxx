@@ -208,15 +208,13 @@ public:
     // XAccessibleEventBroadcaster --------------------------------------------
 
     /** Adds a new event listener */
-    using cppu::WeakAggComponentImplHelperBase::addEventListener;
-    virtual void SAL_CALL addEventListener(
+    virtual void SAL_CALL addAccessibleEventListener(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::accessibility::XAccessibleEventListener>& rxListener )
         throw ( ::com::sun::star::uno::RuntimeException );
 
     /** Removes an event listener. */
-    using cppu::WeakAggComponentImplHelperBase::removeEventListener;
-    virtual void SAL_CALL removeEventListener(
+    virtual void SAL_CALL removeAccessibleEventListener(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::accessibility::XAccessibleEventListener>& rxListener )
         throw ( ::com::sun::star::uno::RuntimeException );

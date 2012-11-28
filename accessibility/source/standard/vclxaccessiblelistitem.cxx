@@ -599,7 +599,7 @@ sal_Bool SAL_CALL VCLXAccessibleListItem::copyText( sal_Int32 nStartIndex, sal_I
 // -----------------------------------------------------------------------------
 // XAccessibleEventBroadcaster
 // -----------------------------------------------------------------------------
-void SAL_CALL VCLXAccessibleListItem::addEventListener( const Reference< XAccessibleEventListener >& xListener ) throw (RuntimeException)
+void SAL_CALL VCLXAccessibleListItem::addAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener ) throw (RuntimeException)
 {
     if (xListener.is())
     {
@@ -609,7 +609,7 @@ void SAL_CALL VCLXAccessibleListItem::addEventListener( const Reference< XAccess
     }
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL VCLXAccessibleListItem::removeEventListener( const Reference< XAccessibleEventListener >& xListener ) throw (RuntimeException)
+void SAL_CALL VCLXAccessibleListItem::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener ) throw (RuntimeException)
 {
     if ( xListener.is() && m_nClientId )
     {

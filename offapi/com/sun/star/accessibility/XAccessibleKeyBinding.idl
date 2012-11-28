@@ -41,7 +41,7 @@ module com { module sun { module star { module accessibility {
 
     @since OOo 1.1.2
 */
-published interface XAccessibleKeyBinding : ::com::sun::star::uno::XInterface
+interface XAccessibleKeyBinding : ::com::sun::star::uno::XInterface
 {
     /** Return the number of available key bindings.
         @return

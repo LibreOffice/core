@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module sheet {
 
      @since OOo 1.1.2
 */
-published service AccessibleSpreadsheet
+service AccessibleSpreadsheet
 {
     /** This interface gives access to any object in the currently visible table
         on the desktop.

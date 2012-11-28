@@ -404,7 +404,7 @@ lang::Locale SAL_CALL SvxRectCtlAccessibleContext::getLocale( void ) throw( Ille
     throw IllegalAccessibleComponentStateException();
 }
 
-void SAL_CALL SvxRectCtlAccessibleContext::addEventListener( const Reference< XAccessibleEventListener >& xListener )
+void SAL_CALL SvxRectCtlAccessibleContext::addAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )
     throw( RuntimeException )
 {
     if (xListener.is())
@@ -416,7 +416,7 @@ void SAL_CALL SvxRectCtlAccessibleContext::addEventListener( const Reference< XA
     }
 }
 
-void SAL_CALL SvxRectCtlAccessibleContext::removeEventListener( const Reference< XAccessibleEventListener >& xListener )
+void SAL_CALL SvxRectCtlAccessibleContext::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )
     throw( RuntimeException )
 {
     if (xListener.is())
@@ -968,7 +968,7 @@ lang::Locale SAL_CALL SvxRectCtlChildAccessibleContext::getLocale( void ) throw(
     throw IllegalAccessibleComponentStateException();
 }
 
-void SAL_CALL SvxRectCtlChildAccessibleContext::addEventListener( const Reference< XAccessibleEventListener >& xListener )
+void SAL_CALL SvxRectCtlChildAccessibleContext::addAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )
     throw( RuntimeException )
 {
     if (xListener.is())
@@ -983,7 +983,7 @@ void SAL_CALL SvxRectCtlChildAccessibleContext::addEventListener( const Referenc
 
 
 
-void SAL_CALL SvxRectCtlChildAccessibleContext::removeEventListener( const Reference< XAccessibleEventListener >& xListener )
+void SAL_CALL SvxRectCtlChildAccessibleContext::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )
     throw( RuntimeException )
 {
     if (xListener.is())

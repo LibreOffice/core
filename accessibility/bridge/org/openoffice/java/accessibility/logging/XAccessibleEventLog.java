@@ -46,7 +46,7 @@ public class XAccessibleEventLog implements XAccessibleEventListener {
     public static void addEventListener(XAccessibleContext xac, java.awt.Component c) {
         XAccessibleEventBroadcaster broadcaster = UnoRuntime.queryInterface(XAccessibleEventBroadcaster.class, xac);
         if (broadcaster != null) {
-            broadcaster.addEventListener(XAccessibleEventLog.get());
+            broadcaster.addAccessibleEventListener(XAccessibleEventLog.get());
 
             // remember the proxy objects
             synchronized (proxyList) {

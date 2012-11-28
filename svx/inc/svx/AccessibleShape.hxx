@@ -214,13 +214,6 @@ public:
     virtual sal_Int32 SAL_CALL getBackground (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-
-
-    //=====  XComponent  ========================================================
-
-    using WeakComponentImplHelperBase::addEventListener;
-    using WeakComponentImplHelperBase::removeEventListener;
-
     //=====  XAccessibleEventBroadcaster  =====================================
 
     /** This call is forwarded to a) the base class and b) to the
@@ -230,7 +223,7 @@ public:
             This listener is informed about accessibility events.
     */
     virtual void SAL_CALL
-        addEventListener (
+        addAccessibleEventListener (
             const ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleEventListener >& rxListener)
         throw (::com::sun::star::uno::RuntimeException);
@@ -243,7 +236,7 @@ public:
             anymore.
     */
     virtual void SAL_CALL
-        removeEventListener (
+        removeAccessibleEventListener (
             const ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleEventListener >& rxListener)
         throw (::com::sun::star::uno::RuntimeException);

@@ -169,7 +169,7 @@ void DocumentFocusListener::attachRecursive(
     // If not already done, add the broadcaster to the list and attach as listener.
     if( xBroadcaster.is() && m_aRefList.insert(xBroadcaster).second )
     {
-        xBroadcaster->addEventListener(static_cast< XAccessibleEventListener *>(this));
+        xBroadcaster->addAccessibleEventListener(static_cast< XAccessibleEventListener *>(this));
 
         if( ! xStateSet->contains(AccessibleStateType::MANAGES_DESCENDANTS ) )
         {
@@ -222,7 +222,7 @@ void DocumentFocusListener::detachRecursive(
 
     if( xBroadcaster.is() && 0 < m_aRefList.erase(xBroadcaster) )
     {
-        xBroadcaster->removeEventListener(static_cast< XAccessibleEventListener *>(this));
+        xBroadcaster->removeAccessibleEventListener(static_cast< XAccessibleEventListener *>(this));
 
         if( ! xStateSet->contains(AccessibleStateType::MANAGES_DESCENDANTS ) )
         {

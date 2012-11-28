@@ -24,9 +24,9 @@
 
 module com { module sun { module star { module accessibility {
 
- published interface XAccessibleSelection;
- published interface XAccessibleExtendedComponent;
- published interface XAccessibleComponent;
+ interface XAccessibleSelection;
+ interface XAccessibleExtendedComponent;
+ interface XAccessibleComponent;
 
 }; }; }; };
 
@@ -40,7 +40,7 @@ module com { module sun { module star { module awt {
 
     @since OOo 1.1.2
 */
-published service AccessibleListBox
+service AccessibleListBox
 {
     /** This interface gives access to the structural information of a list box:
 

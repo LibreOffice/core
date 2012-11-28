@@ -47,7 +47,7 @@ abstract class ListeningObjectView
             UnoRuntime.queryInterface(
             XAccessibleEventBroadcaster.class, xContext);
         if (xBroadcaster != null)
-            xBroadcaster.addEventListener (this);
+            xBroadcaster.addAccessibleEventListener (this);
     }
 
 
@@ -61,7 +61,7 @@ abstract class ListeningObjectView
             UnoRuntime.queryInterface(
             XAccessibleEventBroadcaster.class, mxContext);
         if (xBroadcaster != null)
-            xBroadcaster.removeEventListener (this);
+            xBroadcaster.removeAccessibleEventListener (this);
     }
 
     /** Derived classes have to implement this method to handle incoming

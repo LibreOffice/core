@@ -288,7 +288,7 @@ void SAL_CALL AccessibleBrowseBoxBase::focusLost( const ::com::sun::star::awt::F
 }
 // XAccessibleEventBroadcaster ------------------------------------------------
 
-void SAL_CALL AccessibleBrowseBoxBase::addEventListener(
+void SAL_CALL AccessibleBrowseBoxBase::addAccessibleEventListener(
         const Reference< XAccessibleEventListener>& _rxListener )
     throw ( uno::RuntimeException )
 {
@@ -302,7 +302,7 @@ void SAL_CALL AccessibleBrowseBoxBase::addEventListener(
     }
 }
 
-void SAL_CALL AccessibleBrowseBoxBase::removeEventListener(
+void SAL_CALL AccessibleBrowseBoxBase::removeAccessibleEventListener(
         const Reference< XAccessibleEventListener>& _rxListener )
     throw ( uno::RuntimeException )
 {

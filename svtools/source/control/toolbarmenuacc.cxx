@@ -301,7 +301,7 @@ Locale SAL_CALL ToolbarMenuAcc::getLocale() throw (IllegalAccessibleComponentSta
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL ToolbarMenuAcc::addEventListener( const Reference< XAccessibleEventListener >& rxListener ) throw (RuntimeException)
+void SAL_CALL ToolbarMenuAcc::addAccessibleEventListener( const Reference< XAccessibleEventListener >& rxListener ) throw (RuntimeException)
 {
     ThrowIfDisposed();
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -326,7 +326,7 @@ void SAL_CALL ToolbarMenuAcc::addEventListener( const Reference< XAccessibleEven
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL ToolbarMenuAcc::removeEventListener( const Reference< XAccessibleEventListener >& rxListener ) throw (RuntimeException)
+void SAL_CALL ToolbarMenuAcc::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& rxListener ) throw (RuntimeException)
 {
     ThrowIfDisposed();
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -810,7 +810,7 @@ Locale SAL_CALL ToolbarMenuEntryAcc::getLocale() throw (IllegalAccessibleCompone
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL ToolbarMenuEntryAcc::addEventListener( const Reference< XAccessibleEventListener >& rxListener ) throw (RuntimeException)
+void SAL_CALL ToolbarMenuEntryAcc::addAccessibleEventListener( const Reference< XAccessibleEventListener >& rxListener ) throw (RuntimeException)
 {
     const ::osl::MutexGuard aGuard( maMutex );
 
@@ -834,7 +834,7 @@ void SAL_CALL ToolbarMenuEntryAcc::addEventListener( const Reference< XAccessibl
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL ToolbarMenuEntryAcc::removeEventListener( const Reference< XAccessibleEventListener >& rxListener ) throw (RuntimeException)
+void SAL_CALL ToolbarMenuEntryAcc::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& rxListener ) throw (RuntimeException)
 {
     const ::osl::MutexGuard aGuard( maMutex );
 

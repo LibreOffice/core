@@ -140,14 +140,14 @@ uno::Reference<XAccessible> SAL_CALL
 
 //=====  XAccessibleEventBroadcaster  ========================================
 
-void SAL_CALL AccessibleOutlineView::addEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException)
+void SAL_CALL AccessibleOutlineView::addAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException)
 {
     // delegate listener handling to children manager.
     if ( ! IsDisposed())
         maTextHelper.AddEventListener(xListener);
 }
 
-void SAL_CALL AccessibleOutlineView::removeEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException)
+void SAL_CALL AccessibleOutlineView::removeAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException)
 {
     // forward
     if ( ! IsDisposed())

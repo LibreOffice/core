@@ -24,7 +24,7 @@
 
 module com { module sun { module star { module accessibility {
 
- published interface XAccessibleContext;
+ interface XAccessibleContext;
 
 /** This interface has to be implemented by any class that wants to be
     accessible.
@@ -51,7 +51,7 @@ module com { module sun { module star { module accessibility {
 
     @since OOo 1.1.2
 */
-published interface XAccessible : ::com::sun::star::uno::XInterface
+interface XAccessible : ::com::sun::star::uno::XInterface
 {
     /** Returns the AccessibleContext associated with this object.
 

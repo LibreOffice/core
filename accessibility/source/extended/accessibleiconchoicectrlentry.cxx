@@ -507,7 +507,7 @@ throw(RuntimeException)
     // -----------------------------------------------------------------------------
     // XAccessibleEventBroadcaster
     // -----------------------------------------------------------------------------
-    void SAL_CALL AccessibleIconChoiceCtrlEntry::addEventListener( const Reference< XAccessibleEventListener >& xListener ) throw (RuntimeException)
+    void SAL_CALL AccessibleIconChoiceCtrlEntry::addAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener ) throw (RuntimeException)
     {
         if (xListener.is())
         {
@@ -518,7 +518,7 @@ throw(RuntimeException)
         }
     }
     // -----------------------------------------------------------------------------
-    void SAL_CALL AccessibleIconChoiceCtrlEntry::removeEventListener( const Reference< XAccessibleEventListener >& xListener ) throw (RuntimeException)
+    void SAL_CALL AccessibleIconChoiceCtrlEntry::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener ) throw (RuntimeException)
     {
         if (xListener.is())
         {

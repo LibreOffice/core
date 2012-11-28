@@ -24,9 +24,9 @@
 
 module com { module sun { module star { module accessibility {
 
- published interface XAccessibleText;
- published interface XAccessibleExtendedComponent;
- published interface XAccessibleComponent;
+ interface XAccessibleText;
+ interface XAccessibleExtendedComponent;
+ interface XAccessibleComponent;
 
 }; }; }; };
 
@@ -39,7 +39,7 @@ module com { module sun { module star { module awt {
     @see com::sun::star::accessibility::XAccessibleExtendedComponent
     @since OOo 1.1.2
 */
-published service AccessibleComboBox
+service AccessibleComboBox
 {
     /** This interface gives access to the structural information of a combo box:
 

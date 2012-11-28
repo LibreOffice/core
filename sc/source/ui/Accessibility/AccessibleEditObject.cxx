@@ -256,7 +256,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     ///=====  XAccessibleEventBroadcaster  =====================================
 
 void SAL_CALL
-    ScAccessibleEditObject::addEventListener(const uno::Reference<XAccessibleEventListener>& xListener)
+    ScAccessibleEditObject::addAccessibleEventListener(const uno::Reference<XAccessibleEventListener>& xListener)
         throw (uno::RuntimeException)
 {
     if (!mpTextHelper)
@@ -264,11 +264,11 @@ void SAL_CALL
 
     mpTextHelper->AddEventListener(xListener);
 
-    ScAccessibleContextBase::addEventListener(xListener);
+    ScAccessibleContextBase::addAccessibleEventListener(xListener);
 }
 
 void SAL_CALL
-    ScAccessibleEditObject::removeEventListener(const uno::Reference<XAccessibleEventListener>& xListener)
+    ScAccessibleEditObject::removeAccessibleEventListener(const uno::Reference<XAccessibleEventListener>& xListener)
         throw (uno::RuntimeException)
 {
     if (!mpTextHelper)
@@ -276,7 +276,7 @@ void SAL_CALL
 
     mpTextHelper->RemoveEventListener(xListener);
 
-    ScAccessibleContextBase::removeEventListener(xListener);
+    ScAccessibleContextBase::removeAccessibleEventListener(xListener);
 }
 
     //=====  XServiceInfo  ====================================================

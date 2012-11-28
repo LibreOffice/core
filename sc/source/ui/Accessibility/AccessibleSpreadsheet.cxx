@@ -838,12 +838,12 @@ uno::Sequence<sal_Int8> SAL_CALL
 
 ///=====  XAccessibleEventBroadcaster  =====================================
 
-void SAL_CALL ScAccessibleSpreadsheet::addEventListener(const uno::Reference<XAccessibleEventListener>& xListener)
+void SAL_CALL ScAccessibleSpreadsheet::addAccessibleEventListener(const uno::Reference<XAccessibleEventListener>& xListener)
         throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    ScAccessibleTableBase::addEventListener(xListener);
+    ScAccessibleTableBase::addAccessibleEventListener(xListener);
 
     if (!mbIsFocusSend)
     {

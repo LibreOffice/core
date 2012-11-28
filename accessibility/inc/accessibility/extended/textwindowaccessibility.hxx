@@ -352,14 +352,12 @@ private:
     virtual ::sal_Int32 SAL_CALL getNumberOfLineWithCaret(  )
         throw (::com::sun::star::uno::RuntimeException);
 
-    using cppu::WeakAggComponentImplHelperBase::addEventListener;
-    virtual void SAL_CALL addEventListener(
+    virtual void SAL_CALL addAccessibleEventListener(
         ::css::uno::Reference<
         ::css::accessibility::XAccessibleEventListener > const & rListener)
         throw (::css::uno::RuntimeException);
 
-    using cppu::WeakAggComponentImplHelperBase::removeEventListener;
-    virtual void SAL_CALL removeEventListener(
+    virtual void SAL_CALL removeAccessibleEventListener(
         ::css::uno::Reference<
         ::css::accessibility::XAccessibleEventListener > const & rListener)
         throw (::css::uno::RuntimeException);

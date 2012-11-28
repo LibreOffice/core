@@ -56,7 +56,7 @@ module com { module sun { module star { module accessibility {
 
     @since OOo 1.1.2
 */
-published interface XAccessibleText : ::com::sun::star::uno::XInterface
+interface XAccessibleText : ::com::sun::star::uno::XInterface
 {
     /** Return the position of the caret.
 

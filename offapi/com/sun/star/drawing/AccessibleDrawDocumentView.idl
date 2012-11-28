@@ -57,7 +57,7 @@ module com {  module sun {  module star {  module drawing {
 
      @since OOo 1.1.2
 */
-published service AccessibleDrawDocumentView
+service AccessibleDrawDocumentView
 {
     /** Base interface for being accessible.  It gives access to the
         <type scope="::com::sun::star::accessibility">XAccessibleContext</type>

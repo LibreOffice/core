@@ -25,7 +25,7 @@
 
 module com { module sun { module star { module accessibility {
 
- published interface XAccessible;
+ interface XAccessible;
 
 /** Implement this interface to represent a set of states.
 
@@ -36,7 +36,7 @@ module com { module sun { module star { module accessibility {
 
     @since OOo 1.1.2
 */
-published interface XAccessibleStateSet : ::com::sun::star::uno::XInterface
+interface XAccessibleStateSet : ::com::sun::star::uno::XInterface
 {
     /** Checks whether the current state set is empty.
 

@@ -21,8 +21,8 @@
 
 module com { module sun { module star { module accessibility {
 
- published interface XAccessibleContext;
- published interface XAccessibleEventBroadcaster;
+ interface XAccessibleContext;
+ interface XAccessibleEventBroadcaster;
 
 /** Central service of the Accessibility API that gives access to various
     facets of an object's content.
@@ -41,7 +41,7 @@ module com { module sun { module star { module accessibility {
 
     @since OOo 1.1.2
 */
-published service AccessibleContext
+service AccessibleContext
 {
     interface XAccessibleContext;
 

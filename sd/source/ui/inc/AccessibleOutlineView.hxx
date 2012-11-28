@@ -75,19 +75,16 @@ public:
     //=====  XAccessibleEventBroadcaster  ========================================
 
     virtual void SAL_CALL
-        addEventListener (
+        addAccessibleEventListener (
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::accessibility::XAccessibleEventListener >& xListener)
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL
-        removeEventListener (
+        removeAccessibleEventListener (
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::accessibility::XAccessibleEventListener >& xListener)
         throw (::com::sun::star::uno::RuntimeException);
-
-    using cppu::WeakComponentImplHelperBase::addEventListener;
-    using cppu::WeakComponentImplHelperBase::removeEventListener;
 
     //=====  XServiceInfo  ====================================================
 

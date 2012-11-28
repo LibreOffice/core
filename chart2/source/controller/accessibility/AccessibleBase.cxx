@@ -940,7 +940,7 @@ void SAL_CALL AccessibleBase::disposing( const lang::EventObject& /*Source*/ )
 }
 
 // ________ XAccessibleEventBroadcasters ________
-void SAL_CALL AccessibleBase::addEventListener( const Reference< XAccessibleEventListener >& xListener )
+void SAL_CALL AccessibleBase::addAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )
     throw (RuntimeException)
 {
     MutexGuard aGuard( GetMutex() );
@@ -954,7 +954,7 @@ void SAL_CALL AccessibleBase::addEventListener( const Reference< XAccessibleEven
     }
 }
 
-void SAL_CALL AccessibleBase::removeEventListener( const Reference< XAccessibleEventListener >& xListener )
+void SAL_CALL AccessibleBase::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )
     throw (RuntimeException)
 {
     MutexGuard aGuard( GetMutex() );

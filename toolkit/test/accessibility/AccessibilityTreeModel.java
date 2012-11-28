@@ -449,7 +449,7 @@ public class AccessibilityTreeModel
         XAccessibleEventBroadcaster xBroadcaster = getBroadcaster( aObject );
         if (xBroadcaster != null)
         {
-            xBroadcaster.addEventListener( mxListener );
+            xBroadcaster.addAccessibleEventListener( mxListener );
         }
     }
 
@@ -458,7 +458,7 @@ public class AccessibilityTreeModel
         XAccessibleEventBroadcaster xBroadcaster = getBroadcaster( aObject );
         if (xBroadcaster != null)
         {
-            xBroadcaster.removeEventListener( mxListener );
+            xBroadcaster.removeAccessibleEventListener( mxListener );
         }
     }
 

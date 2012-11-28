@@ -520,7 +520,7 @@ sal_Int32 AccFrameSelector::getBackground(  )
 
 // ----------------------------------------------------------------------------
 
-void AccFrameSelector::addEventListener( const Reference< XAccessibleEventListener >& xListener ) throw (RuntimeException)
+void AccFrameSelector::addAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener ) throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -536,7 +536,7 @@ void AccFrameSelector::addEventListener( const Reference< XAccessibleEventListen
 
 // ----------------------------------------------------------------------------
 
-void AccFrameSelector::removeEventListener( const Reference< XAccessibleEventListener >& xListener ) throw (RuntimeException)
+void AccFrameSelector::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener ) throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
 

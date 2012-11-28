@@ -80,9 +80,9 @@ public:
         if (xBc.is())
         {
             if (mbAdd)
-                xBc->addEventListener(mxListener);
+                xBc->addAccessibleEventListener(mxListener);
             else
-                xBc->removeEventListener(mxListener);
+                xBc->removeAccessibleEventListener(mxListener);
         }
     }
 private:
@@ -174,21 +174,21 @@ OUString ScAccessibleFilterMenu::getImplementationName()
 
 // XAccessibleEventBroadcaster
 
-void ScAccessibleFilterMenu::addEventListener(
+void ScAccessibleFilterMenu::addAccessibleEventListener(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleEventListener>& xListener)
     throw (com::sun::star::uno::RuntimeException)
 {
-    ScAccessibleContextBase::addEventListener(xListener);
+    ScAccessibleContextBase::addAccessibleEventListener(xListener);
     for_each(maMenuItems.begin(), maMenuItems.end(), AddRemoveEventListener(xListener, true));
 }
 
-void ScAccessibleFilterMenu::removeEventListener(
+void ScAccessibleFilterMenu::removeAccessibleEventListener(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleEventListener>& xListener)
     throw (com::sun::star::uno::RuntimeException)
 {
-    ScAccessibleContextBase::removeEventListener(xListener);
+    ScAccessibleContextBase::removeAccessibleEventListener(xListener);
     for_each(maMenuItems.begin(), maMenuItems.end(), AddRemoveEventListener(xListener, false));
 }
 

@@ -339,7 +339,7 @@ lang::Locale SAL_CALL AccessibleTreeNode::getLocale (void)
 
 
 
-void SAL_CALL AccessibleTreeNode::addEventListener(
+void SAL_CALL AccessibleTreeNode::addAccessibleEventListener(
     const Reference<XAccessibleEventListener >& rxListener)
     throw (RuntimeException)
 {
@@ -365,7 +365,7 @@ void SAL_CALL AccessibleTreeNode::addEventListener(
 
 
 
-void SAL_CALL AccessibleTreeNode::removeEventListener(
+void SAL_CALL AccessibleTreeNode::removeAccessibleEventListener(
     const Reference<XAccessibleEventListener >& rxListener)
     throw (RuntimeException)
 {

@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module text {
 
      @since OOo 1.1.2
  */
-published service AccessiblePageView
+service AccessiblePageView
 {
     /** This interface gives access to any page that is visible in the
           page preview of a text document.

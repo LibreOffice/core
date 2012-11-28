@@ -24,10 +24,10 @@
 
 module com { module sun { module star { module accessibility {
 
- published interface XAccessible;
- published interface XAccessibleExtendedComponent;
- published interface XAccessibleComponent;
- published interface XAccessibleSelection;
+ interface XAccessible;
+ interface XAccessibleExtendedComponent;
+ interface XAccessibleComponent;
+ interface XAccessibleSelection;
 
 }; }; }; };
 
@@ -46,7 +46,7 @@ module com { module sun { module star { module awt {
 
     @since OOo 1.1.2
 */
-published service AccessibleList
+service AccessibleList
 {
     /** This interface gives access to the structural information of a list:
 

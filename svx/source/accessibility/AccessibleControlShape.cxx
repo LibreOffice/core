@@ -741,7 +741,7 @@ void AccessibleControlShape::startStateMultiplexing()
 
     if ( xBroadcaster.is() )
     {
-        xBroadcaster->addEventListener( this );
+        xBroadcaster->addAccessibleEventListener( this );
         m_bMultiplexingStates = sal_True;
     }
 }
@@ -757,7 +757,7 @@ void AccessibleControlShape::stopStateMultiplexing()
 
     if ( xBroadcaster.is() )
     {
-        xBroadcaster->removeEventListener( this );
+        xBroadcaster->removeAccessibleEventListener( this );
         m_bMultiplexingStates = sal_False;
     }
 }

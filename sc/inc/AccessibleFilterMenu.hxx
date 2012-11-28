@@ -91,19 +91,15 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     // XAccessibleEventBroadcaster
-
-    using ScAccessibleContextBase::addEventListener;
-    using ScAccessibleContextBase::removeEventListener;
-
     virtual void SAL_CALL
-        addEventListener(
+        addAccessibleEventListener(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::accessibility::XAccessibleEventListener>& xListener)
         throw (com::sun::star::uno::RuntimeException);
 
     ///  Remove an existing event listener.
     virtual void SAL_CALL
-        removeEventListener(
+        removeAccessibleEventListener(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::accessibility::XAccessibleEventListener>& xListener)
         throw (com::sun::star::uno::RuntimeException);

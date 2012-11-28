@@ -439,7 +439,7 @@ sal_Int32 SAL_CALL AccessibleCell::getBackground (void) throw (RuntimeException)
 // XAccessibleEventBroadcaster
 // --------------------------------------------------------------------
 
-void SAL_CALL AccessibleCell::addEventListener( const Reference<XAccessibleEventListener >& rxListener)  throw (RuntimeException)
+void SAL_CALL AccessibleCell::addAccessibleEventListener( const Reference<XAccessibleEventListener >& rxListener)  throw (RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard (maMutex);
@@ -451,7 +451,7 @@ void SAL_CALL AccessibleCell::addEventListener( const Reference<XAccessibleEvent
     }
     else
     {
-        AccessibleContextBase::addEventListener (rxListener);
+        AccessibleContextBase::addAccessibleEventListener (rxListener);
         if (mpText != NULL)
             mpText->AddEventListener (rxListener);
     }
@@ -459,10 +459,10 @@ void SAL_CALL AccessibleCell::addEventListener( const Reference<XAccessibleEvent
 
 // --------------------------------------------------------------------
 
-void SAL_CALL AccessibleCell::removeEventListener( const Reference<XAccessibleEventListener >& rxListener) throw (RuntimeException)
+void SAL_CALL AccessibleCell::removeAccessibleEventListener( const Reference<XAccessibleEventListener >& rxListener) throw (RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
-    AccessibleContextBase::removeEventListener(rxListener);
+    AccessibleContextBase::removeAccessibleEventListener(rxListener);
     if (mpText != NULL)
         mpText->RemoveEventListener (rxListener);
 }

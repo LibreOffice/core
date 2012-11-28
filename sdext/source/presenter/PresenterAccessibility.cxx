@@ -184,11 +184,11 @@ public:
 
     //-----  XAccessibleEventBroadcaster --------------------------------------
 
-    virtual void SAL_CALL addEventListener (
+    virtual void SAL_CALL addAccessibleEventListener (
             const cssu::Reference<cssa::XAccessibleEventListener>& rxListener)
         throw (cssu::RuntimeException);
 
-    virtual void SAL_CALL removeEventListener (
+    virtual void SAL_CALL removeAccessibleEventListener (
             const cssu::Reference<cssa::XAccessibleEventListener>& rxListener)
         throw (cssu::RuntimeException);
 
@@ -1105,7 +1105,7 @@ sal_Int32 SAL_CALL PresenterAccessible::AccessibleObject::getBackground (void)
 
 //----- XAccessibleEventBroadcaster -------------------------------------------
 
-void SAL_CALL PresenterAccessible::AccessibleObject::addEventListener (
+void SAL_CALL PresenterAccessible::AccessibleObject::addAccessibleEventListener (
     const Reference<XAccessibleEventListener>& rxListener)
     throw (RuntimeException)
 {
@@ -1125,7 +1125,7 @@ void SAL_CALL PresenterAccessible::AccessibleObject::addEventListener (
     }
 }
 
-void SAL_CALL PresenterAccessible::AccessibleObject::removeEventListener (
+void SAL_CALL PresenterAccessible::AccessibleObject::removeAccessibleEventListener (
     const Reference<XAccessibleEventListener>& rxListener)
     throw (RuntimeException)
 {
@@ -1309,7 +1309,7 @@ void PresenterAccessible::AccessibleObject::FireAccessibleEvent (
         {
             // Listener has been disposed and should have been removed
             // already.
-            removeEventListener(*iListener);
+            removeAccessibleEventListener(*iListener);
         }
         catch(Exception&)
         {

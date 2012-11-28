@@ -25,7 +25,7 @@
 
 module com { module sun { module star { module accessibility {
 
- published interface XAccessibleKeyBinding;
+ interface XAccessibleKeyBinding;
 
 /** Implement this interface to give access to actions that can be executed
     for accessible objects.
@@ -37,7 +37,7 @@ module com { module sun { module star { module accessibility {
 
     @since OOo 1.1.2
 */
-published interface XAccessibleAction : ::com::sun::star::uno::XInterface
+interface XAccessibleAction : ::com::sun::star::uno::XInterface
 {
     /** Returns the number of accessible actions available in this object.
 
