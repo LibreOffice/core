@@ -48,6 +48,7 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 		--without-libzip \
 		--disable-debug \
 		--disable-spreadsheet-model \
+		--disable-werror \
 		$(if $(filter NO,$(SYSTEM_BOOST)),CXXFLAGS=-I$(OUTDIR)/inc/external) \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 	&& $(MAKE) \
