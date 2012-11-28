@@ -18,7 +18,6 @@
 from ..text.TextDocument import TextDocument, traceback, \
     TextFieldHandler, Configuration
 from ..text.TextSectionHandler import TextSectionHandler
-from ..common.PropertyNames import PropertyNames
 
 from com.sun.star.text.ControlCharacter import PARAGRAPH_BREAK
 from com.sun.star.style.ParagraphAdjust import CENTER
@@ -112,7 +111,7 @@ class FaxDocument(TextDocument):
             myFieldHandler.changeUserFieldContent(
                 "PostCode", oUserDataAccess.getByName("postalcode"))
             myFieldHandler.changeUserFieldContent(
-                PropertyNames.PROPERTY_STATE, oUserDataAccess.getByName("st"))
+                "State", oUserDataAccess.getByName("st"))
             myFieldHandler.changeUserFieldContent(
                 "City", oUserDataAccess.getByName("l"))
             myFieldHandler.changeUserFieldContent(

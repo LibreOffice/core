@@ -49,29 +49,6 @@ class UnoDialog(object):
             self.m_oPeerConfig = PeerConfig(self)
         return self.m_oPeerConfig
 
-    def setControlProperty(self, ControlName, PropertyName, PropertyValue):
-        try:
-            if PropertyValue is not None:
-                if not self.xDialogModel.hasByName(ControlName):
-                    return
-                xPSet = self.xDialogModel.getByName(ControlName)
-                setattr(xPSet,PropertyName, PropertyValue)
-
-        except Exception:
-            traceback.print_exc()
-
-    def setControlProperties(
-            self, ControlName, PropertyNames, PropertyValues):
-        self.setControlProperty(ControlName, PropertyNames, PropertyValues)
-
-    def getControlProperty(self, ControlName, PropertyName):
-        try:
-            xPSet = self.xDialogModel.getByName(ControlName)
-            return xPSet.getPropertyValue(PropertyName)
-        except Exception:
-            traceback.print_exc()
-            return None
-
     def getMAPConversionFactor(self, ControlName):
         xControl2 = self.xUnoDialog.getControl(ControlName)
         aSize = xControl2.Size

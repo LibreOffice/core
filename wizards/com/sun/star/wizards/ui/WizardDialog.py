@@ -170,15 +170,11 @@ class WizardDialog(UnoDialog2):
         self.leaveStep(self.nOldStep, self.nNewStep)
         if self.nNewStep != self.nOldStep:
             if self.nNewStep == self.nMaxStep:
-                self.setControlProperty(
-                    "btnWizardNext", "DefaultButton", False)
-                self.setControlProperty(
-                    "btnWizardFinish", "DefaultButton", True)
+                self.xDialogModel.btnWizardNext.DefaultButton = False
+                self.xDialogModel.btnWizardFinish.DefaultButton = True
             else:
-                self.setControlProperty(
-                    "btnWizardNext", "DefaultButton", True)
-                self.setControlProperty(
-                    "btnWizardFinish", "DefaultButton", False)
+                self.xDialogModel.btnWizardNext.DefaultButton = True
+                self.xDialogModel.btnWizardFinish.DefaultButton = False
 
             self.changeToStep(self.nNewStep)
             self.enterStep(self.nOldStep, self.nNewStep)
@@ -287,7 +283,7 @@ class WizardDialog(UnoDialog2):
                     iCancelPosX, iBtnPosY, uno.Any("short",STANDARD), iCurStep,
                     uno.Any("short",(curtabindex + 1)),
                     iButtonWidth), self)
-            self.setControlProperty("btnWizardNext", "DefaultButton", True)
+            self.xDialogModel.btnWizardNext.DefaultButton = True
         except Exception:
             traceback.print_exc()
 
@@ -310,16 +306,13 @@ class WizardDialog(UnoDialog2):
         self.enableFinishButton(_bEnableFinish)
 
     def enableBackButton(self, enabled):
-        self.setControlProperty("btnWizardBack",
-                PropertyNames.PROPERTY_ENABLED, enabled)
+        self.xDialogModel.btnWizardBack.Enabled = enabled
 
     def enableNextButton(self, enabled):
-        self.setControlProperty("btnWizardNext",
-                PropertyNames.PROPERTY_ENABLED, enabled)
+        self.xDialogModel.btnWizardNext.Enabled = enabled
 
     def enableFinishButton(self, enabled):
-        self.setControlProperty("btnWizardFinish",
-                PropertyNames.PROPERTY_ENABLED, enabled)
+        self.xDialogModel.btnWizardFinish.Enabled = enabled
 
     def enablefromStep(self, _iStep, _bDoEnable):
         if _iStep <= self.nMaxStep:

@@ -17,8 +17,7 @@
 #
 import traceback
 import os.path
-from .LetterWizardDialog import LetterWizardDialog, PropertyNames, uno, \
-    HelpIds, HID
+from .LetterWizardDialog import LetterWizardDialog, uno, HelpIds, HID
 from .LetterDocument import LetterDocument, BusinessPaperObject
 from .CGLetterWizard import CGLetterWizard
 from ..common.NoValidPathException import NoValidPathException
@@ -266,20 +265,13 @@ class LetterWizardDialogImpl(LetterWizardDialog):
     def optBusinessLetterItemChanged(self):
         self.lstPrivateStylePos = None
         self.lstPrivOfficialStylePos = None
-        self.setControlProperty(
-            "lblBusinessStyle", PropertyNames.PROPERTY_ENABLED, True)
-        self.setControlProperty(
-            "lstBusinessStyle", PropertyNames.PROPERTY_ENABLED, True)
-        self.setControlProperty(
-            "chkBusinessPaper", PropertyNames.PROPERTY_ENABLED, True)
-        self.setControlProperty(
-            "lblPrivOfficialStyle", PropertyNames.PROPERTY_ENABLED, False)
-        self.setControlProperty(
-            "lstPrivOfficialStyle", PropertyNames.PROPERTY_ENABLED, False)
-        self.setControlProperty(
-            "lblPrivateStyle", PropertyNames.PROPERTY_ENABLED, False)
-        self.setControlProperty(
-            "lstPrivateStyle", PropertyNames.PROPERTY_ENABLED, False)
+        self.xDialogModel.lblBusinessStyle.Enabled = True
+        self.xDialogModel.lstBusinessStyle.Enabled = True
+        self.xDialogModel.chkBusinessPaper.Enabled = True
+        self.xDialogModel.lblPrivOfficialStyle.Enabled = False
+        self.xDialogModel.lstPrivOfficialStyle.Enabled = False
+        self.xDialogModel.lblPrivateStyle.Enabled = False
+        self.xDialogModel.lstPrivateStyle.Enabled = False
         self.lstBusinessStyleItemChanged()
         self.enableSenderReceiver()
         self.setPossibleFooter(True)
@@ -289,20 +281,13 @@ class LetterWizardDialogImpl(LetterWizardDialog):
     def optPrivOfficialLetterItemChanged(self):
         self.lstBusinessStylePos = None
         self.lstPrivateStylePos = None
-        self.setControlProperty(
-            "lblBusinessStyle", PropertyNames.PROPERTY_ENABLED, False)
-        self.setControlProperty(
-            "lstBusinessStyle", PropertyNames.PROPERTY_ENABLED, False)
-        self.setControlProperty(
-            "chkBusinessPaper", PropertyNames.PROPERTY_ENABLED, False)
-        self.setControlProperty(
-            "lblPrivOfficialStyle", PropertyNames.PROPERTY_ENABLED, True)
-        self.setControlProperty(
-            "lstPrivOfficialStyle", PropertyNames.PROPERTY_ENABLED, True)
-        self.setControlProperty(
-            "lblPrivateStyle", PropertyNames.PROPERTY_ENABLED, False)
-        self.setControlProperty(
-            "lstPrivateStyle", PropertyNames.PROPERTY_ENABLED, False)
+        self.xDialogModel.lblBusinessStyle.Enabled = False
+        self.xDialogModel.lstBusinessStyle.Enabled = False
+        self.xDialogModel.chkBusinessPaper.Enabled = False
+        self.xDialogModel.lblPrivOfficialStyle.Enabled = True
+        self.xDialogModel.lstPrivOfficialStyle.Enabled = True
+        self.xDialogModel.lblPrivateStyle.Enabled = False
+        self.xDialogModel.lstPrivateStyle.Enabled = False
         self.lstPrivOfficialStyleItemChanged()
         self.disableBusinessPaper()
         self.enableSenderReceiver()
@@ -313,20 +298,13 @@ class LetterWizardDialogImpl(LetterWizardDialog):
     def optPrivateLetterItemChanged(self):
         self.lstBusinessStylePos = None
         self.lstPrivOfficialStylePos = None
-        self.setControlProperty(
-            "lblBusinessStyle", PropertyNames.PROPERTY_ENABLED, False)
-        self.setControlProperty(
-            "lstBusinessStyle", PropertyNames.PROPERTY_ENABLED, False)
-        self.setControlProperty(
-            "chkBusinessPaper", PropertyNames.PROPERTY_ENABLED, False)
-        self.setControlProperty(
-            "lblPrivOfficialStyle", PropertyNames.PROPERTY_ENABLED, False)
-        self.setControlProperty(
-            "lstPrivOfficialStyle", PropertyNames.PROPERTY_ENABLED, False)
-        self.setControlProperty(
-            "lblPrivateStyle", PropertyNames.PROPERTY_ENABLED, True)
-        self.setControlProperty(
-            "lstPrivateStyle", PropertyNames.PROPERTY_ENABLED, True)
+        self.xDialogModel.lblBusinessStyle.Enabled = False
+        self.xDialogModel.lstBusinessStyle.Enabled = False
+        self.xDialogModel.chkBusinessPaper.Enabled = False
+        self.xDialogModel.lblPrivOfficialStyle.Enabled = False
+        self.xDialogModel.lstPrivOfficialStyle.Enabled = False
+        self.xDialogModel.lblPrivateStyle.Enabled = True
+        self.xDialogModel.lstPrivateStyle.Enabled = True
         self.lstPrivateStyleItemChanged()
         self.disableBusinessPaper()
         self.disableSenderReceiver()
@@ -335,41 +313,25 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             self.myPathSelection.initializePath()
 
     def optSenderPlaceholderItemChanged(self):
-        self.setControlProperty(
-            "lblSenderName", PropertyNames.PROPERTY_ENABLED, False)
-        self.setControlProperty(
-            "lblSenderStreet", PropertyNames.PROPERTY_ENABLED, False)
-        self.setControlProperty(
-            "lblPostCodeCity", PropertyNames.PROPERTY_ENABLED, False)
-        self.setControlProperty(
-            "txtSenderName", PropertyNames.PROPERTY_ENABLED, False)
-        self.setControlProperty(
-            "txtSenderStreet", PropertyNames.PROPERTY_ENABLED, False)
-        self.setControlProperty(
-            "txtSenderPostCode", PropertyNames.PROPERTY_ENABLED, False)
-        self.setControlProperty(
-            "txtSenderState", PropertyNames.PROPERTY_ENABLED, False)
-        self.setControlProperty(
-            "txtSenderCity", PropertyNames.PROPERTY_ENABLED, False)
+        self.xDialogModel.lblSenderName.Enabled = False
+        self.xDialogModel.lblSenderStreet.Enabled = False
+        self.xDialogModel.lblPostCodeCity.Enabled = False
+        self.xDialogModel.txtSenderName.Enabled = False
+        self.xDialogModel.txtSenderStreet.Enabled = False
+        self.xDialogModel.txtSenderPostCode.Enabled = False
+        self.xDialogModel.txtSenderState.Enabled = False
+        self.xDialogModel.txtSenderCity.Enabled = False
         self.myLetterDoc.fillSenderWithUserData()
 
     def optSenderDefineItemChanged(self):
-        self.setControlProperty(
-            "lblSenderName", PropertyNames.PROPERTY_ENABLED, True)
-        self.setControlProperty(
-            "lblSenderStreet", PropertyNames.PROPERTY_ENABLED, True)
-        self.setControlProperty(
-            "lblPostCodeCity", PropertyNames.PROPERTY_ENABLED, True)
-        self.setControlProperty(
-            "txtSenderName", PropertyNames.PROPERTY_ENABLED, True)
-        self.setControlProperty(
-            "txtSenderStreet", PropertyNames.PROPERTY_ENABLED, True)
-        self.setControlProperty(
-            "txtSenderPostCode", PropertyNames.PROPERTY_ENABLED, True)
-        self.setControlProperty(
-            "txtSenderState", PropertyNames.PROPERTY_ENABLED, True)
-        self.setControlProperty(
-            "txtSenderCity", PropertyNames.PROPERTY_ENABLED, True)
+        self.xDialogModel.lblSenderName.Enabled = True
+        self.xDialogModel.lblSenderStreet.Enabled = True
+        self.xDialogModel.lblPostCodeCity.Enabled = True
+        self.xDialogModel.txtSenderName.Enabled = True
+        self.xDialogModel.txtSenderStreet.Enabled = True
+        self.xDialogModel.txtSenderPostCode.Enabled = True
+        self.xDialogModel.txtSenderState.Enabled = True
+        self.xDialogModel.txtSenderCity.Enabled = True
         self.txtSenderNameTextChanged()
         self.txtSenderStreetTextChanged()
         self.txtSenderPostCodeTextChanged()
@@ -459,43 +421,19 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                 int(self.numLogoHeight.Value * 1000),
                 int(self.numLogoX.Value * 1000),
                 self.numLogoY.Value * 1000)
-            self.setControlProperty(
-            "numLogoHeight", PropertyNames.PROPERTY_ENABLED, True)
-            self.setControlProperty(
-            "lblCompanyLogoHeight", PropertyNames.PROPERTY_ENABLED, True)
-            self.setControlProperty(
-            "numLogoWidth", PropertyNames.PROPERTY_ENABLED, True)
-            self.setControlProperty(
-            "lblCompanyLogoWidth", PropertyNames.PROPERTY_ENABLED, True)
-            self.setControlProperty(
-            "numLogoX", PropertyNames.PROPERTY_ENABLED, True)
-            self.setControlProperty(
-            "lblCompanyLogoX", PropertyNames.PROPERTY_ENABLED, True)
-            self.setControlProperty(
-            "numLogoY", PropertyNames.PROPERTY_ENABLED, True)
-            self.setControlProperty(
-            "lblCompanyLogoY", PropertyNames.PROPERTY_ENABLED, True)
+            self.xDialogModel.numLogoHeight.Enabled = True
+            self.xDialogModel.numLogoWidth.Enabled = True
+            self.xDialogModel.numLogoX.Enabled = True
+            self.xDialogModel.numLogoY.Enabled = True
             self.setPossibleLogo(False)
         else:
             if self.BusCompanyLogo != None:
                 self.BusCompanyLogo.removeFrame()
 
-            self.setControlProperty(
-            "numLogoHeight", PropertyNames.PROPERTY_ENABLED, False)
-            self.setControlProperty(
-            "lblCompanyLogoHeight", PropertyNames.PROPERTY_ENABLED, False)
-            self.setControlProperty(
-            "numLogoWidth", PropertyNames.PROPERTY_ENABLED, False)
-            self.setControlProperty(
-            "lblCompanyLogoWidth", PropertyNames.PROPERTY_ENABLED, False)
-            self.setControlProperty(
-            "numLogoX", PropertyNames.PROPERTY_ENABLED, False)
-            self.setControlProperty(
-            "lblCompanyLogoX", PropertyNames.PROPERTY_ENABLED, False)
-            self.setControlProperty(
-            "numLogoY", PropertyNames.PROPERTY_ENABLED, False)
-            self.setControlProperty(
-            "lblCompanyLogoY", PropertyNames.PROPERTY_ENABLED, False)
+            self.xDialogModel.numLogoHeight.Enabled = False
+            self.xDialogModel.numLogoWidth.Enabled = False
+            self.xDialogModel.numLogoX.Enabled = False
+            self.xDialogModel.numLogoY.Enabled = False
             self.setPossibleLogo(True)
 
     def chkPaperCompanyAddressItemChanged(self):
@@ -512,22 +450,10 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                 int(self.numAddressHeight.Value * 1000),
                 int(self.numAddressX.Value * 1000),
                 int(self.numAddressY.Value * 1000))
-            self.setControlProperty(
-            "numAddressHeight", PropertyNames.PROPERTY_ENABLED, True)
-            self.setControlProperty(
-            "lblCompanyAddressHeight", PropertyNames.PROPERTY_ENABLED, True)
-            self.setControlProperty(
-            "numAddressWidth", PropertyNames.PROPERTY_ENABLED, True)
-            self.setControlProperty(
-            "lblCompanyAddressWidth", PropertyNames.PROPERTY_ENABLED, True)
-            self.setControlProperty(
-            "numAddressX", PropertyNames.PROPERTY_ENABLED, True)
-            self.setControlProperty(
-            "lblCompanyAddressX", PropertyNames.PROPERTY_ENABLED, True)
-            self.setControlProperty(
-            "numAddressY", PropertyNames.PROPERTY_ENABLED, True)
-            self.setControlProperty(
-            "lblCompanyAddressY", PropertyNames.PROPERTY_ENABLED, True)
+            self.xDialogModel.numAddressHeight.Enabled = True
+            self.xDialogModel.numAddressWidth.Enabled = True
+            self.xDialogModel.numAddressX.Enabled = True
+            self.xDialogModel.numAddressY.Enabled = True
             if self.myLetterDoc.hasElement("Sender Address"):
                 self.myLetterDoc.switchElement(
                 "Sender Address", False)
@@ -538,22 +464,10 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         else:
             if self.BusCompanyAddress is not None:
                 self.BusCompanyAddress.removeFrame()
-            self.setControlProperty(
-            "numAddressHeight", PropertyNames.PROPERTY_ENABLED, False)
-            self.setControlProperty(
-            "lblCompanyAddressHeight", PropertyNames.PROPERTY_ENABLED, False)
-            self.setControlProperty(
-            "numAddressWidth", PropertyNames.PROPERTY_ENABLED, False)
-            self.setControlProperty(
-            "lblCompanyAddressWidth", PropertyNames.PROPERTY_ENABLED, False)
-            self.setControlProperty(
-            "numAddressX", PropertyNames.PROPERTY_ENABLED, False)
-            self.setControlProperty(
-            "lblCompanyAddressX", PropertyNames.PROPERTY_ENABLED, False)
-            self.setControlProperty(
-            "numAddressY", PropertyNames.PROPERTY_ENABLED, False)
-            self.setControlProperty(
-            "lblCompanyAddressY", PropertyNames.PROPERTY_ENABLED, False)
+            self.xDialogModel.numAddressHeight.Enabled = False
+            self.xDialogModel.numAddressWidth.Enabled = False
+            self.xDialogModel.numAddressX.Enabled = False
+            self.xDialogModel.numAddressY.Enabled = False
             if self.myLetterDoc.hasElement("Sender Address"):
                 self.myLetterDoc.switchElement("Sender Address", True)
 
@@ -609,45 +523,38 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                 int(self.numFooterHeight.Value * 1000), 0,
                 int(self.myLetterDoc.DocSize.Height - \
                     (self.numFooterHeight.Value * 1000)))
-            self.setControlProperty(
-            "numFooterHeight", PropertyNames.PROPERTY_ENABLED, True)
-            self.setControlProperty(
-            "lblFooterHeight", PropertyNames.PROPERTY_ENABLED, True)
+            self.xDialogModel.numFooterHeight.Enabled = True
+            self.xDialogModel.lblFooterHeight.Enabled = True
             self.setPossibleFooter(False)
         else:
             if self.BusFooter != None:
                 self.BusFooter.removeFrame()
 
-            self.setControlProperty(
-            "numFooterHeight", PropertyNames.PROPERTY_ENABLED, False)
-            self.setControlProperty(
-            "lblFooterHeight", PropertyNames.PROPERTY_ENABLED, False)
+            self.xDialogModel.numFooterHeight.Enabled = False
+            self.xDialogModel.lblFooterHeight.Enabled = False
             self.setPossibleFooter(True)
 
     def chkUseLogoItemChanged(self):
         try:
             if self.myLetterDoc.hasElement("Company Logo"):
                 logostatus = \
-                    bool(self.getControlProperty(
-                        "chkUseLogo", PropertyNames.PROPERTY_ENABLED)) \
+                    bool(self.xDialogModel.chkUseLogo.Enabled) \
                     and (self.chkUseLogo.State != 0)
                 self.myLetterDoc.switchElement(
                 "Company Logo", logostatus)
-        except IllegalArgumentException:
+        except Exception:
             traceback.print_exc()
 
     def chkUseAddressReceiverItemChanged(self):
         try:
             if self.myLetterDoc.hasElement("Sender Address Repeated"):
                 rstatus = \
-                    bool(self.getControlProperty(
-                        "chkUseAddressReceiver",
-                        PropertyNames.PROPERTY_ENABLED)) \
+                    bool(self.xDialogModel.chkUseAddressReceiver.Enabled) \
                     and (self.chkUseAddressReceiver.State != 0)
                 self.myLetterDoc.switchElement(
                     "Sender Address Repeated", rstatus)
 
-        except IllegalArgumentException:
+        except Exception:
             traceback.print_exc()
 
     def chkUseSignsItemChanged(self):
@@ -668,8 +575,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
     def chkUseFooterItemChanged(self):
         try:
             bFooterPossible = (self.chkUseFooter.State != 0) \
-                and bool(self.getControlProperty(
-                    "chkUseFooter", PropertyNames.PROPERTY_ENABLED))
+                and bool(self.xDialogModel.chkUseFooter.Enabled)
             if self.chkFooterNextPages.State != 0:
                 self.myLetterDoc.switchFooter(
                     "First Page", False, self.chkFooterPageNumbers.State != 0,
@@ -697,20 +603,17 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         self.chkUseFooterItemChanged()
 
     def setPossibleFooter(self, bState):
-        self.setControlProperty(
-            "chkUseFooter", PropertyNames.PROPERTY_ENABLED, bState)
+        self.xDialogModel.chkUseFooter.Enabled = bState
         self.chkUseFooterItemChanged()
 
     def setPossibleAddressReceiver(self, bState):
         if self.myLetterDoc.hasElement("Sender Address Repeated"):
-            self.setControlProperty(
-            "chkUseAddressReceiver", PropertyNames.PROPERTY_ENABLED, bState)
+            self.xDialogModel.chkUseAddressReceiver.Enabled = bState
             self.chkUseAddressReceiverItemChanged()
 
     def setPossibleLogo(self, bState):
         if self.myLetterDoc.hasElement("Company Logo"):
-            self.setControlProperty(
-            "chkUseLogo", PropertyNames.PROPERTY_ENABLED, bState)
+            self.xDialogModel.chkUseLogo.Enabled = bState
             self.chkUseLogoItemChanged()
 
     def txtFooterTextChanged(self):
@@ -744,7 +647,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         myFieldHandler = TextFieldHandler(
             self.myLetterDoc.xMSF, self.myLetterDoc.xTextDocument)
         myFieldHandler.changeUserFieldContent(
-            PropertyNames.PROPERTY_STATE, self.txtSenderState.Text)
+            "State", self.txtSenderState.Text)
 
     def txtTemplateNameTextChanged(self):
         xDocProps = self.myLetterDoc.xTextDocument.DocumentProperties
@@ -755,9 +658,8 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         self.myLetterDoc.switchUserField(
             "Salutation", self.lstSalutation.Text,
             self.chkUseSalutation.State != 0)
-        self.setControlProperty(
-            "lstSalutation", PropertyNames.PROPERTY_ENABLED,
-            self.chkUseSalutation.State != 0)
+        self.xDialogModel.lstSalutation.Enabled = \
+            self.chkUseSalutation.State != 0
 
     def lstSalutationItemChanged(self):
         self.myLetterDoc.switchUserField(
@@ -767,9 +669,8 @@ class LetterWizardDialogImpl(LetterWizardDialog):
     def chkUseGreetingItemChanged(self):
         self.myLetterDoc.switchUserField(
             "Greeting", self.lstGreeting.Text, self.chkUseGreeting.State != 0)
-        self.setControlProperty(
-            "lstGreeting", PropertyNames.PROPERTY_ENABLED,
-            self.chkUseGreeting.State != 0)
+        self.xDialogModel.lstGreeting.Enabled = \
+            self.chkUseGreeting.State != 0
 
     def setDefaultForGreetingAndSalutation(self):
         if self.lstSalutation.Text:
@@ -790,31 +691,19 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             self.setPossibleSenderData(True)
 
     def setPossibleSenderData(self, bState):
-        self.setControlProperty(
-            "optSenderDefine", PropertyNames.PROPERTY_ENABLED, bState)
-        self.setControlProperty(
-            "optSenderPlaceholder", PropertyNames.PROPERTY_ENABLED, bState)
-        self.setControlProperty(
-            "lblSenderAddress", PropertyNames.PROPERTY_ENABLED, bState)
+        self.xDialogModel.optSenderDefine.Enabled = bState
+        self.xDialogModel.optSenderPlaceholder.Enabled = bState
+        self.xDialogModel.lblSenderAddress.Enabled = bState
         if not bState:
-            self.setControlProperty(
-            "txtSenderCity", PropertyNames.PROPERTY_ENABLED, bState)
-            self.setControlProperty(
-            "txtSenderName", PropertyNames.PROPERTY_ENABLED, bState)
-            self.setControlProperty(
-            "txtSenderPostCode", PropertyNames.PROPERTY_ENABLED, bState)
-            self.setControlProperty(
-            "txtSenderStreet", PropertyNames.PROPERTY_ENABLED, bState)
-            self.setControlProperty(
-            "txtSenderCity", PropertyNames.PROPERTY_ENABLED, bState)
-            self.setControlProperty(
-            "txtSenderState", PropertyNames.PROPERTY_ENABLED, bState)
-            self.setControlProperty(
-            "lblSenderName", PropertyNames.PROPERTY_ENABLED, bState)
-            self.setControlProperty(
-            "lblSenderStreet", PropertyNames.PROPERTY_ENABLED, bState)
-            self.setControlProperty(
-            "lblPostCodeCity", PropertyNames.PROPERTY_ENABLED, bState)
+            self.xDialogModel.txtSenderCity.Enabled = bState
+            self.xDialogModel.txtSenderName.Enabled = bState
+            self.xDialogModel.txtSenderPostCode.Enabled = bState
+            self.xDialogModel.txtSenderStreet.Enabled = bState
+            self.xDialogModel.txtSenderCity.Enabled = bState
+            self.xDialogModel.txtSenderState.Enabled = bState
+            self.xDialogModel.lblSenderName.Enabled = bState
+            self.xDialogModel.lblSenderStreet.Enabled = bState
+            self.xDialogModel.lblPostCodeCity.Enabled = bState
 
     def enableSenderReceiver(self):
         BPaperItem = self.getRoadmapItemByID(
@@ -865,14 +754,12 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             traceback.print_exc()
 
     def initializeSalutation(self):
-        self.setControlProperty(
-            "lstSalutation", "StringItemList",
-            tuple(self.resources.SalutationLabels))
+        self.xDialogModel.lstSalutation.StringItemList = \
+            tuple(self.resources.SalutationLabels)
 
     def initializeGreeting(self):
-        self.setControlProperty(
-            "lstGreeting", "StringItemList",
-            tuple(self.resources.GreetingLabels))
+        self.xDialogModel.lstGreeting.StringItemList = \
+            tuple(self.resources.GreetingLabels)
 
     def getCurrentLetter(self):
         if self.myConfig.cp_LetterType == 0:
@@ -906,39 +793,28 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         self.PrivateFiles = \
             FileAccess.getFolderTitles(
                 xMSF, "pri", sLetterPath, self.resources.dictPrivateTemplate)
-        self.setControlProperty(
-            "lstBusinessStyle", "StringItemList",
-            tuple(self.BusinessFiles[0]))
-        self.setControlProperty(
-            "lstPrivOfficialStyle", "StringItemList",
-            tuple(self.OfficialFiles[0]))
-        self.setControlProperty(
-            "lstPrivateStyle", "StringItemList",
-            tuple(self.PrivateFiles[0]))
-        self.setControlProperty(
-            "lstBusinessStyle", "SelectedItems", (0,))
-        self.setControlProperty(
-            "lstPrivOfficialStyle", "SelectedItems", (0,))
-        self.setControlProperty(
-            "lstPrivateStyle", "SelectedItems", (0,))
+        self.xDialogModel.lstBusinessStyle.StringItemList = \
+            tuple(self.BusinessFiles[0])
+        self.xDialogModel.lstPrivOfficialStyle.StringItemList = \
+            tuple(self.OfficialFiles[0])
+        self.xDialogModel.lstPrivateStyle.StringItemList = \
+            tuple(self.PrivateFiles[0])
+        self.xDialogModel.lstBusinessStyle.SelectedItems = (0,)
+        self.xDialogModel.lstPrivOfficialStyle.SelectedItems = (0,)
+        self.xDialogModel.lstPrivateStyle.SelectedItems = (0,)
         return True
 
     def initializeElements(self):
-        self.setControlProperty(
-            "chkUseLogo", PropertyNames.PROPERTY_ENABLED,
-            self.myLetterDoc.hasElement("Company Logo"))
-        self.setControlProperty(
-            "chkUseBendMarks", PropertyNames.PROPERTY_ENABLED,
-            self.myLetterDoc.hasElement("Bend Marks"))
-        self.setControlProperty(
-            "chkUseAddressReceiver", PropertyNames.PROPERTY_ENABLED,
-            self.myLetterDoc.hasElement("Sender Address Repeated"))
-        self.setControlProperty(
-            "chkUseSubject", PropertyNames.PROPERTY_ENABLED,
-            self.myLetterDoc.hasElement("Subject Line"))
-        self.setControlProperty(
-            "chkUseSigns", PropertyNames.PROPERTY_ENABLED,
-            self.myLetterDoc.hasElement("Letter Signs"))
+        self.xDialogModel.chkUseLogo.Enabled = \
+            self.myLetterDoc.hasElement("Company Logo")
+        self.xDialogModel.chkUseBendMarks.Enabled = \
+            self.myLetterDoc.hasElement("Bend Marks")
+        self.xDialogModel.chkUseAddressReceiver.Enabled = \
+            self.myLetterDoc.hasElement("Sender Address Repeated")
+        self.xDialogModel.chkUseSubject.Enabled = \
+            self.myLetterDoc.hasElement("Subject Line")
+        self.xDialogModel.chkUseSigns.Enabled = \
+            self.myLetterDoc.hasElement("Letter Signs")
         self.myLetterDoc.updateDateFields()
 
     def setConfiguration(self):

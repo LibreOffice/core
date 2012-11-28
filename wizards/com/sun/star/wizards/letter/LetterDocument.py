@@ -18,7 +18,6 @@
 from ..text.TextDocument import TextDocument, traceback, \
     TextFieldHandler, Configuration
 from ..text.TextSectionHandler import TextSectionHandler
-from ..common.PropertyNames import PropertyNames
 
 from com.sun.star.table import BorderLine
 from com.sun.star.text.ControlCharacter import PARAGRAPH_BREAK
@@ -124,8 +123,7 @@ class LetterDocument(TextDocument):
             myFieldHandler.changeUserFieldContent(
                 "City", oUserDataAccess.getByName("l"))
             myFieldHandler.changeUserFieldContent(
-                PropertyNames.PROPERTY_STATE,
-                oUserDataAccess.getByName("st"))
+                "State", oUserDataAccess.getByName("st"))
         except Exception:
             traceback.print_exc()
 
@@ -183,40 +181,20 @@ class BusinessPaperObject(object):
                 self.xTextDocument.createInstance(
                     "com.sun.star.text.TextFrame")
             self.setFramePosition()
-            Helper.setUnoPropertyValue(
-                self.xFrame,
-                "AnchorType", AT_PAGE)
-            Helper.setUnoPropertyValue(
-                self.xFrame,
-                "SizeType", FIX)
+            self.xFrame.AnchorType = AT_PAGE
+            self.xFrame.SizeType = FIX
 
-            Helper.setUnoPropertyValue(
-                self.xFrame,
-                "TextWrap", THROUGHT)
-            Helper.setUnoPropertyValue(
-                self.xFrame,
-                "Opaque", True);
-            Helper.setUnoPropertyValue(
-                self.xFrame,
-                "BackColor", 15790320)
+            self.xFrame.TextWrap = THROUGHT
+            self.xFrame.Opaque = True
+            self.xFrame.BackColor = 15790320
 
             myBorder = BorderLine()
             myBorder.OuterLineWidth = 0
-            Helper.setUnoPropertyValue(
-                self.xFrame,
-                "LeftBorder", myBorder)
-            Helper.setUnoPropertyValue(
-                self.xFrame,
-                "RightBorder", myBorder)
-            Helper.setUnoPropertyValue(
-                self.xFrame,
-                "TopBorder", myBorder)
-            Helper.setUnoPropertyValue(
-                self.xFrame,
-                "BottomBorder", myBorder)
-            Helper.setUnoPropertyValue(
-                self.xFrame,
-                "Print", False)
+            self.xFrame.LeftBorder = myBorder
+            self.xFrame.RightBorder = myBorder
+            self.xFrame.TopBorder = myBorder
+            self.xFrame.BottomBorder = myBorder
+            self.xFrame.Print = False
             xTextCursor = \
                 self.xTextDocument.Text.createTextCursor()
             xTextCursor.gotoEnd(True)
@@ -238,30 +216,14 @@ class BusinessPaperObject(object):
 
     def setFramePosition(self):
         try:
-            Helper.setUnoPropertyValue(
-                self.xFrame,
-                "HoriOrient", NONEHORI)
-            Helper.setUnoPropertyValue(
-                self.xFrame,
-                "VertOrient", NONEVERT)
-            Helper.setUnoPropertyValue(
-                self.xFrame,
-                PropertyNames.PROPERTY_HEIGHT, self.iHeight)
-            Helper.setUnoPropertyValue(
-                self.xFrame,
-                PropertyNames.PROPERTY_WIDTH, self.iWidth)
-            Helper.setUnoPropertyValue(
-                self.xFrame,
-                "HoriOrientPosition", self.iXPos)
-            Helper.setUnoPropertyValue(
-                self.xFrame,
-                "VertOrientPosition", self.iYPos)
-            Helper.setUnoPropertyValue(
-                self.xFrame,
-                "HoriOrientRelation", PAGE_FRAME)
-            Helper.setUnoPropertyValue(
-                self.xFrame,
-                "VertOrientRelation", PAGE_FRAME)
+            self.xFrame.HoriOrient = NONEHORI
+            self.xFrame.VertOrient = NONEVERT
+            self.xFrame.Height = self.iHeight
+            self.xFrame.Width = self.iWidth
+            self.xFrame.HoriOrientPosition = self.iXPos
+            self.xFrame.VertOrientPosition = self.iYPos
+            self.xFrame.HoriOrientRelation = PAGE_FRAME
+            self.xFrame.VertOrientRelation = PAGE_FRAME
         except Exception:
             traceback.print_exc()
 

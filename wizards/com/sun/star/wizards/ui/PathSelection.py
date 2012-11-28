@@ -71,8 +71,7 @@ class PathSelection(object):
             (Enabled, 12, TxtHelpURL, XPos, YPos + 10, DialogStep,
                 (CurTabIndex + 1), Width - 26), self)
 
-        self.CurUnoDialog.setControlProperty("txtSavePath",
-                PropertyNames.PROPERTY_ENABLED, False )
+        self.CurUnoDialog.xDialogModel.txtSavePath.Enabled = False
         self.CurUnoDialog.insertButton("cmdSelectPath", "triggerPathPicker",
             (PropertyNames.PROPERTY_ENABLED,
                 PropertyNames.PROPERTY_HEIGHT,

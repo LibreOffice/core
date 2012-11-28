@@ -17,7 +17,6 @@
 #
 import uno
 import traceback
-from .PropertyNames import PropertyNames
 
 class Configuration(object):
     '''This class gives access to the OO configuration api.'''

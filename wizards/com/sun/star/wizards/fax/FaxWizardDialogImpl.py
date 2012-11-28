@@ -17,7 +17,7 @@
 #
 import traceback
 import os.path
-from .FaxWizardDialog import FaxWizardDialog, PropertyNames, uno, HID
+from .FaxWizardDialog import FaxWizardDialog, uno, HID
 from .CGFaxWizard import CGFaxWizard
 from .FaxDocument import FaxDocument
 from ..ui.PathSelection import PathSelection
@@ -277,44 +277,41 @@ class FaxWizardDialogImpl(FaxWizardDialog):
                 self.sFaxPath, self.resources.dictBusinessTemplate)
             self.PrivateFiles = FileAccess.getFolderTitles(xMSF, "pri",
                 self.sFaxPath, self.resources.dictPrivateTemplate)
-            
-            self.setControlProperty("lstBusinessStyle", "StringItemList",
-                tuple(self.BusinessFiles[0]))
-            self.setControlProperty("lstPrivateStyle", "StringItemList",
-                tuple(self.PrivateFiles[0]))
-            self.setControlProperty("lstBusinessStyle", "SelectedItems", (0,))
-            self.setControlProperty("lstPrivateStyle", "SelectedItems" , (0,))
+                
+            self.xDialogModel.lstBusinessStyle.StringItemList = \
+                tuple(self.BusinessFiles[0])
+            self.xDialogModel.lstPrivateStyle.StringItemList = \
+                tuple(self.PrivateFiles[0])
+            self.xDialogModel.lstBusinessStyle.SelectedItems = (0,)
+            self.xDialogModel.lstPrivateStyle.SelectedItems = (0,)
             return True
         except NoValidPathException:
             traceback.print_exc()
             return False
 
     def initializeElements(self):
-        self.setControlProperty("chkUseLogo",
-            PropertyNames.PROPERTY_ENABLED,
-            self.myFaxDoc.hasElement("Company Logo"))
-        self.setControlProperty("chkUseSubject",
-            PropertyNames.PROPERTY_ENABLED,
-            self.myFaxDoc.hasElement("Subject Line"))
-        self.setControlProperty("chkUseDate",
-            PropertyNames.PROPERTY_ENABLED,
-            self.myFaxDoc.hasElement("Date"))
+        self.xDialogModel.chkUseLogo.Enabled = \
+            self.myFaxDoc.hasElement("Company Logo")
+        self.xDialogModel.chkUseSubject.Enabled = \
+            self.myFaxDoc.hasElement("Subject Line")
+        self.xDialogModel.chkUseDate.Enabled = \
+            self.myFaxDoc.hasElement("Date")
         self.myFaxDoc.updateDateFields()
 
     def initializeSalutation(self):
         #'Saludation' listbox
-        self.setControlProperty("lstSalutation", "StringItemList",
-            tuple(self.resources.SalutationLabels))
+        self.xDialogModel.lstSalutation.StringItemList = \
+            tuple(self.resources.SalutationLabels)
 
     def initializeGreeting(self):
         #'Complimentary Close' listbox
-        self.setControlProperty("lstGreeting", "StringItemList",
-            tuple(self.resources.GreetingLabels))
+        self.xDialogModel.lstGreeting.StringItemList = \
+            tuple(self.resources.GreetingLabels)
 
     def initializeCommunication(self):
         #'Type of message' listbox
-        self.setControlProperty("lstCommunicationType", "StringItemList",
-            tuple(self.resources.CommunicationLabels))
+        self.xDialogModel.lstCommunicationType.StringItemList = \
+            tuple(self.resources.CommunicationLabels)
 
     def __setDefaultForGreetingAndSalutationAndCommunication(self):
         if not self.lstSalutation.Text:
@@ -414,14 +411,11 @@ class FaxWizardDialogImpl(FaxWizardDialog):
 
     def optBusinessFaxItemChanged(self):
         self.lstPrivateStylePos = None
-        self.setControlProperty("lblBusinessStyle",
-            PropertyNames.PROPERTY_ENABLED, True)
-        self.setControlProperty("lstBusinessStyle",
-            PropertyNames.PROPERTY_ENABLED, True)
-        self.setControlProperty("lblPrivateStyle",
-            PropertyNames.PROPERTY_ENABLED, False)
-        self.setControlProperty("lstPrivateStyle",
-            PropertyNames.PROPERTY_ENABLED, False)
+        self.xDialogModel.lblBusinessStyle.Enabled = True
+        self.xDialogModel.lstBusinessStyle.Enabled = True
+        self.xDialogModel.lblPrivateStyle.Enabled = False
+        self.xDialogModel.lstPrivateStyle.Enabled = False
+
         self.lstBusinessStyleItemChanged()
         self.__enableSenderReceiver()
         self.__setPossibleFooter(True)
@@ -439,14 +433,11 @@ class FaxWizardDialogImpl(FaxWizardDialog):
 
     def optPrivateFaxItemChanged(self):
         self.lstBusinessStylePos = None
-        self.setControlProperty("lblBusinessStyle",
-            PropertyNames.PROPERTY_ENABLED, False)
-        self.setControlProperty("lstBusinessStyle",
-            PropertyNames.PROPERTY_ENABLED, False)
-        self.setControlProperty("lblPrivateStyle",
-            PropertyNames.PROPERTY_ENABLED, True)
-        self.setControlProperty("lstPrivateStyle",
-            PropertyNames.PROPERTY_ENABLED, True)
+        self.xDialogModel.lblBusinessStyle.Enabled = False
+        self.xDialogModel.lstBusinessStyle.Enabled = False
+        self.xDialogModel.lblPrivateStyle.Enabled = True
+        self.xDialogModel.lstPrivateStyle.Enabled = True
+
         self.lstPrivateStyleItemChanged()
         self.__disableSenderReceiver()
         self.__setPossibleFooter(False)
@@ -467,49 +458,29 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         xDocProps.Title = self.txtTemplateName.Text
 
     def optSenderPlaceholderItemChanged(self):
-        self.setControlProperty("lblSenderName",
-            PropertyNames.PROPERTY_ENABLED, False)
-        self.setControlProperty("lblSenderStreet",
-            PropertyNames.PROPERTY_ENABLED, False)
-        self.setControlProperty("lblPostCodeCity",
-            PropertyNames.PROPERTY_ENABLED, False)
-        self.setControlProperty("lblSenderFax",
-            PropertyNames.PROPERTY_ENABLED, False)
-        self.setControlProperty("txtSenderName",
-            PropertyNames.PROPERTY_ENABLED, False)
-        self.setControlProperty("txtSenderStreet",
-            PropertyNames.PROPERTY_ENABLED, False)
-        self.setControlProperty("txtSenderPostCode",
-            PropertyNames.PROPERTY_ENABLED, False)
-        self.setControlProperty("txtSenderState",
-            PropertyNames.PROPERTY_ENABLED, False)
-        self.setControlProperty("txtSenderCity",
-            PropertyNames.PROPERTY_ENABLED, False)
-        self.setControlProperty("txtSenderFax",
-            PropertyNames.PROPERTY_ENABLED, False)
+        self.xDialogModel.lblSenderName.Enabled = False
+        self.xDialogModel.lblSenderStreet.Enabled = False
+        self.xDialogModel.lblPostCodeCity.Enabled = False
+        self.xDialogModel.lblSenderFax.Enabled = False
+        self.xDialogModel.txtSenderName.Enabled = False
+        self.xDialogModel.txtSenderStreet.Enabled = False
+        self.xDialogModel.txtSenderPostCode.Enabled = False
+        self.xDialogModel.txtSenderState.Enabled = False
+        self.xDialogModel.txtSenderCity.Enabled = False
+        self.xDialogModel.txtSenderFax.Enabled = False
         self.myFaxDoc.fillSenderWithUserData()
 
     def optSenderDefineItemChanged(self):
-        self.setControlProperty("lblSenderName",
-            PropertyNames.PROPERTY_ENABLED, True)
-        self.setControlProperty("lblSenderStreet",
-            PropertyNames.PROPERTY_ENABLED, True)
-        self.setControlProperty("lblPostCodeCity",
-            PropertyNames.PROPERTY_ENABLED, True)
-        self.setControlProperty("lblSenderFax",
-            PropertyNames.PROPERTY_ENABLED, True)
-        self.setControlProperty("txtSenderName",
-            PropertyNames.PROPERTY_ENABLED, True)
-        self.setControlProperty("txtSenderStreet",
-            PropertyNames.PROPERTY_ENABLED, True)
-        self.setControlProperty("txtSenderPostCode",
-            PropertyNames.PROPERTY_ENABLED, True)
-        self.setControlProperty("txtSenderState",
-            PropertyNames.PROPERTY_ENABLED, True)
-        self.setControlProperty("txtSenderCity",
-            PropertyNames.PROPERTY_ENABLED, True)
-        self.setControlProperty("txtSenderFax",
-            PropertyNames.PROPERTY_ENABLED, True)
+        self.xDialogModel.lblSenderName.Enabled = True
+        self.xDialogModel.lblSenderStreet.Enabled = True
+        self.xDialogModel.lblPostCodeCity.Enabled = True
+        self.xDialogModel.lblSenderFax.Enabled = True
+        self.xDialogModel.txtSenderName.Enabled = True
+        self.xDialogModel.txtSenderStreet.Enabled = True
+        self.xDialogModel.txtSenderPostCode.Enabled = True
+        self.xDialogModel.txtSenderState.Enabled = True
+        self.xDialogModel.txtSenderCity.Enabled = True
+        self.xDialogModel.txtSenderFax.Enabled = True
 
         self.myFieldHandler = TextFieldHandler(self.myFaxDoc.xMSF,
             self.myFaxDoc.xTextDocument)
@@ -538,7 +509,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
 
     def txtSenderStateTextChanged(self):
         self.myFieldHandler.changeUserFieldContent(
-            PropertyNames.PROPERTY_STATE, self.txtSenderState.Text)
+            "State", self.txtSenderState.Text)
 
     def txtSenderFaxTextChanged(self):
         self.myFieldHandler.changeUserFieldContent(
@@ -593,8 +564,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
     def chkUseFooterItemChanged(self):
         try:
             bFooterPossible = bool(self.chkUseFooter.State) \
-                and bool(self.getControlProperty("chkUseFooter",
-                    PropertyNames.PROPERTY_ENABLED))
+                and bool(self.xDialogModel.chkUseFooter.Enabled)
             if bool(self.chkFooterNextPages.State):
                 self.myFaxDoc.switchFooter("First Page", False,
                     bool(self.chkFooterPageNumbers.State),
@@ -631,9 +601,8 @@ class FaxWizardDialogImpl(FaxWizardDialog):
     def chkUseSalutationItemChanged(self):
         self.myFaxDoc.switchUserField("Salutation",
             self.lstSalutation.Text, bool(self.chkUseSalutation.State))
-        self.setControlProperty("lstSalutation",
-            PropertyNames.PROPERTY_ENABLED,
-            bool(self.chkUseSalutation.State))
+        self.xDialogModel.lstSalutation.Enabled = \
+            bool(self.chkUseSalutation.State)
 
     def lstSalutationItemChanged(self):
         self.myFaxDoc.switchUserField("Salutation",
@@ -643,9 +612,8 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.myFaxDoc.switchUserField("CommunicationType",
             self.lstCommunicationType.Text,
             bool(self.chkUseCommunicationType.State))
-        self.setControlProperty("lstCommunicationType",
-            PropertyNames.PROPERTY_ENABLED,
-            bool(self.chkUseCommunicationType.State))
+        self.xDialogModel.lstCommunicationType.Enabled = \
+            bool(self.chkUseCommunicationType.State)
 
     def lstCommunicationItemChanged(self):
         self.myFaxDoc.switchUserField("CommunicationType",
@@ -655,17 +623,15 @@ class FaxWizardDialogImpl(FaxWizardDialog):
     def chkUseGreetingItemChanged(self):
         self.myFaxDoc.switchUserField("Greeting",
             self.lstGreeting.Text, bool(self.chkUseGreeting.State))
-        self.setControlProperty("lstGreeting",
-            PropertyNames.PROPERTY_ENABLED,
-            bool(self.chkUseGreeting.State))
+        self.xDialogModel.lstGreeting.Enabled = \
+            bool(self.chkUseGreeting.State)
 
     def lstGreetingItemChanged(self):
         self.myFaxDoc.switchUserField("Greeting", self.lstGreeting.Text,
             bool(self.chkUseGreeting.State))
 
     def __setPossibleFooter(self, bState):
-        self.setControlProperty("chkUseFooter",
-            PropertyNames.PROPERTY_ENABLED, bState)
+        self.xDialogModel.chkUseFooter.Enabled = bState
         if not bState:
             self.chkUseFooter.State = 0
 
