@@ -1056,7 +1056,7 @@ public:
       @return   a string that represents the concatenation of this string
                 followed by the string argument.
     */
-    OString concat( const OString & str ) const SAL_THROW(())
+    SAL_WARN_UNUSED_RESULT OString concat( const OString & str ) const SAL_THROW(())
     {
         rtl_String* pNew = 0;
         rtl_string_newConcat( &pNew, pData, str.pData );
@@ -1081,7 +1081,7 @@ public:
       @param  newStr  the new substring.
       @return the new string.
     */
-    OString replaceAt( sal_Int32 index, sal_Int32 count, const OString& newStr ) const SAL_THROW(())
+    SAL_WARN_UNUSED_RESULT OString replaceAt( sal_Int32 index, sal_Int32 count, const OString& newStr ) const SAL_THROW(())
     {
         rtl_String* pNew = 0;
         rtl_string_newReplaceStrAt( &pNew, pData, index, count, newStr.pData );
@@ -1101,7 +1101,7 @@ public:
       @return   a string derived from this string by replacing every
                 occurrence of oldChar with newChar.
     */
-    OString replace( sal_Char oldChar, sal_Char newChar ) const SAL_THROW(())
+    SAL_WARN_UNUSED_RESULT OString replace( sal_Char oldChar, sal_Char newChar ) const SAL_THROW(())
     {
         rtl_String* pNew = 0;
         rtl_string_newReplace( &pNew, pData, oldChar, newChar );
@@ -1126,7 +1126,7 @@ public:
 
       @since LibreOffice 3.6
     */
-    OString replaceFirst(
+    SAL_WARN_UNUSED_RESULT OString replaceFirst(
         OString const & from, OString const & to, sal_Int32 * index = 0) const
     {
         rtl_String * s = 0;
@@ -1150,7 +1150,7 @@ public:
 
       @since LibreOffice 3.6
     */
-    OString replaceAll(OString const & from, OString const & to) const {
+    SAL_WARN_UNUSED_RESULT OString replaceAll(OString const & from, OString const & to) const {
         rtl_String * s = 0;
         rtl_string_newReplaceAll(
             &s, pData, from.pData->buffer, from.pData->length,
@@ -1168,7 +1168,7 @@ public:
 
       @return   the string, converted to ASCII lowercase.
     */
-    OString toAsciiLowerCase() const SAL_THROW(())
+    SAL_WARN_UNUSED_RESULT OString toAsciiLowerCase() const SAL_THROW(())
     {
         rtl_String* pNew = 0;
         rtl_string_newToAsciiLowerCase( &pNew, pData );
@@ -1185,7 +1185,7 @@ public:
 
       @return   the string, converted to ASCII uppercase.
     */
-    OString toAsciiUpperCase() const SAL_THROW(())
+    SAL_WARN_UNUSED_RESULT OString toAsciiUpperCase() const SAL_THROW(())
     {
         rtl_String* pNew = 0;
         rtl_string_newToAsciiUpperCase( &pNew, pData );
@@ -1203,7 +1203,7 @@ public:
 
       @return   the string, with white space removed from the front and end.
     */
-    OString trim() const SAL_THROW(())
+    SAL_WARN_UNUSED_RESULT OString trim() const SAL_THROW(())
     {
         rtl_String* pNew = 0;
         rtl_string_newTrim( &pNew, pData );
