@@ -1733,15 +1733,6 @@ void Window::SetOutputSizePixel( const Size& rNewSize )
                         rNewSize.Height()+mpWindowImpl->mnTopBorder+mpWindowImpl->mnBottomBorder ) );
 }
 
-void Window::SetBackgroundBitmap( const BitmapEx& rBitmapEx )
-{
-    if( !rBitmapEx.IsEmpty() )
-    {
-        SalBitmap* pBmp = rBitmapEx.ImplGetBitmapImpBitmap()->ImplGetSalBitmap();
-        ImplGetFrame()->SetBackgroundBitmap( pBmp );
-    }
-}
-
 //When a widget wants to renegotiate layout, get toplevel parent dialog and call
 //resize on it. Mark all intermediate containers (or container-alike) widgets
 //as dirty for the size remains unchanged, but layout changed circumstances

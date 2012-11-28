@@ -1595,11 +1595,6 @@ void AquaSalFrame::SetExtendedFrameStyle( SalExtStyle nStyle )
     mnExtStyle = nStyle;
 }
 
-void AquaSalFrame::SetBackgroundBitmap( SalBitmap* )
-{
-    //TODO: implement
-}
-
 SalFrame* AquaSalFrame::GetParent() const
 {
     return mpParent;

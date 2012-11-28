@@ -112,7 +112,6 @@ public:
     virtual void                SimulateKeyPress( sal_uInt16 nKeyCode );
     virtual void                SetParent( SalFrame* pNewParent );
     virtual bool                SetPluginParent( SystemParentData* pNewParent );
-    virtual void                SetBackgroundBitmap( SalBitmap* pBitmap );
     virtual void                ResetClipRegion();
     virtual void                BeginSetClipRegion( sal_uLong nRects );
     virtual void                UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
