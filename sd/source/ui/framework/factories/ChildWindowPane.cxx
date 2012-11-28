@@ -90,7 +90,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
 
 
-ChildWindowPane::~ChildWindowPane (void) throw()
+ChildWindowPane::~ChildWindowPane (void)
 {
 }
 

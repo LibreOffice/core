@@ -49,7 +49,7 @@ Pane::Pane (
 
 
 
-Pane::~Pane (void) throw()
+Pane::~Pane (void)
 {
 }
 

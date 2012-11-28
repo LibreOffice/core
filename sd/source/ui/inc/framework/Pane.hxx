@@ -78,7 +78,7 @@ public:
             com::sun::star::drawing::framework::XResourceId>& rxPaneId,
         ::Window* pWindow)
         throw ();
-    virtual ~Pane (void) throw();
+    virtual ~Pane (void);
 
     virtual void SAL_CALL disposing (void);
 

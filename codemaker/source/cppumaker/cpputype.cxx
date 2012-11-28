@@ -268,7 +268,7 @@ void CppuType::dumpGetCppuTypePostamble(FileStream & out) {
             " getCppuType(SAL_UNUSED_PARAMETER ");
     dumpType(out, m_typeName);
     dumpTemplateParameters(out);
-    out << " const *) SAL_THROW(()) {\n";
+    out << " const *) { // throw()\n";
     inc();
     out << indent() << "return ::cppu::UnoType< ";
     dumpType(out, m_typeName);
@@ -537,7 +537,7 @@ void CppuType::dumpHFileContent(
     out << "inline ::com::sun::star::uno::Type const & SAL_CALL getCppuType(";
     dumpType(out, m_typeName, true);
     dumpTemplateParameters(out);
-    out << " *) SAL_THROW(());\n\n#endif\n";
+    out << " *); // throw()\n\n#endif\n";
 }
 
 void CppuType::dumpGetCppuType(FileStream & out) {
@@ -546,7 +546,7 @@ void CppuType::dumpGetCppuType(FileStream & out) {
             << ("inline ::com::sun::star::uno::Type const & SAL_CALL"
                 " getCppuType(SAL_UNUSED_PARAMETER ");
         dumpType(out, m_typeName, true, false);
-        out << " *) SAL_THROW(()) {\n";
+        out << " *) { // throw()\n";
         inc();
         out << indent()
             << ("return ::cppu::UnoType< ::com::sun::star::uno::XInterface"
@@ -558,7 +558,7 @@ void CppuType::dumpGetCppuType(FileStream & out) {
             << ("inline ::com::sun::star::uno::Type const & SAL_CALL"
                 " getCppuType(SAL_UNUSED_PARAMETER ");
         dumpType(out, m_typeName, true, false);
-        out << " *) SAL_THROW(()) {\n";
+        out << " *) { // throw()\n";
         inc();
         out << indent()
             << ("return ::cppu::UnoType< ::com::sun::star::uno::Exception"
@@ -1426,7 +1426,7 @@ void InterfaceType::dumpDeclaration(FileStream& o)
     o << "protected:\n";
     inc();
     o << indent() << "~" << m_name
-      << ("() throw () {} // avoid warnings about virtual members and"
+      << ("() {} // nothrow(); avoid warnings about virtual members and"
           " non-virtual dtor\n");
     dec();
     o << "};\n\n";
@@ -1496,7 +1496,6 @@ void InterfaceType::dumpAttributes(FileStream& o)
         o << "virtual ";
         dumpType(o, fieldType);
         o << " SAL_CALL get" << fieldName << "()";
-        dumpAttributeExceptionSpecification(o, name, RT_MODE_ATTRIBUTE_GET);
         o << " = 0;\n";
 
         if ((access & RT_ACCESS_READONLY) == 0)
@@ -1507,7 +1506,6 @@ void InterfaceType::dumpAttributes(FileStream& o)
             o << "virtual void SAL_CALL set" << fieldName << "( ";
             dumpType(o, fieldType, byRef, byRef);
             o << " _" << fieldName.toAsciiLowerCase() << " )";
-            dumpAttributeExceptionSpecification(o, name, RT_MODE_ATTRIBUTE_SET);
             o << " = 0;\n";
         }
     }
@@ -1593,7 +1591,6 @@ void InterfaceType::dumpMethods(FileStream& o)
             if (j+1 < (sal_uInt16)paramCount) o << ", ";
         }
         o << " )";
-        dumpExceptionSpecification(o, i, bWithRunTimeExcp);
         o << " = 0;\n";
     }
 }
@@ -2223,53 +2220,6 @@ void InterfaceType::dumpMethodsCppuDecl(FileStream& o, StringSet* pFinishedTypes
     }
 }
 
-void InterfaceType::dumpExceptionSpecification(
-    FileStream & out, sal_uInt32 methodIndex, bool runtimeException)
-{
-    out << " throw (";
-    bool first = true;
-    if (methodIndex <= SAL_MAX_UINT16) {
-        sal_uInt16 count = m_reader.getMethodExceptionCount(
-            static_cast< sal_uInt16 >(methodIndex));
-        for (sal_uInt16 i = 0; i < count; ++i) {
-            rtl::OUString name(
-                m_reader.getMethodExceptionTypeName(
-                    static_cast< sal_uInt16 >(methodIndex), i));
-            if ( name != "com/sun/star/uno/RuntimeException" )
-            {
-                if (!first) {
-                    out << ", ";
-                }
-                first = false;
-                out << scopedCppName(
-                    rtl::OUStringToOString(name, RTL_TEXTENCODING_UTF8));
-            }
-        }
-    }
-    if (runtimeException) {
-        if (!first) {
-            out << ", ";
-        }
-        out << "::com::sun::star::uno::RuntimeException";
-    }
-    out << ")";
-}
-
-void InterfaceType::dumpAttributeExceptionSpecification(
-    FileStream & out, rtl::OUString const & name, RTMethodMode sort)
-{
-    sal_uInt16 methodCount = m_reader.getMethodCount();
-    for (sal_uInt16 i = 0; i < methodCount; ++i) {
-        if (m_reader.getMethodFlags(i) == sort
-            && m_reader.getMethodName(i) == name)
-        {
-            dumpExceptionSpecification(out, i, true);
-            return;
-        }
-    }
-    dumpExceptionSpecification(out, 0xFFFFFFFF, true);
-}
-
 void InterfaceType::dumpExceptionTypeName(
     FileStream & out, char const * prefix, sal_uInt32 index, rtl::OUString name)
 {
@@ -2528,7 +2478,7 @@ void StructureType::dumpDeclaration(FileStream& o)
     }
     o << " {\n";
     inc();
-    o << indent() << "inline " << m_name << "() SAL_THROW(());\n";
+    o << indent() << "inline " << m_name << "(); // throw()\n";
     sal_uInt16 members = m_reader.getFieldCount();
     if (members > 0 || getInheritedMemberCount() > 0) {
         o << "\n" << indent() << "inline " << m_name << "(";
@@ -2553,7 +2503,7 @@ void StructureType::dumpDeclaration(FileStream& o)
                   m_reader.getFieldName(i), RTL_TEXTENCODING_UTF8)
               << "_";
         }
-        o << ") SAL_THROW(());\n";
+        o << "); // throw()\n";
     }
     if (members > 0) {
         o << "\n";
@@ -2608,7 +2558,7 @@ sal_Bool StructureType::dumpHxxFile(
     dumpTemplateHead(o);
     o << "inline " << m_name;
     dumpTemplateParameters(o);
-    o << "::" << m_name << "() SAL_THROW(())\n";
+    o << "::" << m_name << "() // throw()\n";
     inc();
     OString superType;
     if (m_reader.getSuperTypeCount() >= 1) {
@@ -2688,7 +2638,7 @@ sal_Bool StructureType::dumpHxxFile(
 //          o << " __" << fieldName;
             o << " " << fieldName << "_";
         }
-        o << ") SAL_THROW(())\n";
+        o << ") // throw()\n";
 
         inc();
         first = sal_True;
@@ -2754,7 +2704,7 @@ sal_Bool StructureType::dumpHxxFile(
                   m_reader.getFieldName(i), RTL_TEXTENCODING_UTF8)
               << "_";
         }
-        o << ") SAL_THROW(())\n";
+        o << ") // throw()\n";
         o << indent() << "{\n";
         inc();
         o << indent() << "return " << m_name;
@@ -3274,7 +3224,7 @@ void ExceptionType::dumpDeclaration(FileStream& o)
     o << "\n{\npublic:\n";
     inc();
     o << indent() << "inline CPPU_GCC_DLLPRIVATE " << m_name
-      << "() SAL_THROW(());\n\n";
+      << "(); // throw()\n\n";
 
     sal_uInt16      fieldCount = m_reader.getFieldCount();
     RTFieldAccess   access = RT_ACCESS_INVALID;
@@ -3309,7 +3259,7 @@ void ExceptionType::dumpDeclaration(FileStream& o)
 //          o << " __" << fieldName;
             o << " " << fieldName << "_";
         }
-        o << ") SAL_THROW(());\n\n";
+        o << "); // throw()\n\n";
     }
     o << indent() << "inline CPPU_GCC_DLLPRIVATE " << m_name << "(" << m_name
       << " const &);\n\n"
@@ -3361,7 +3311,7 @@ sal_Bool ExceptionType::dumpHxxFile(
     }
     o << "\n";
 
-    o << "inline " << m_name << "::" << m_name << "() SAL_THROW(())\n";
+    o << "inline " << m_name << "::" << m_name << "() // throw()\n";
     inc();
     OString superType;
     if (m_reader.getSuperTypeCount() >= 1) {
@@ -3441,7 +3391,7 @@ sal_Bool ExceptionType::dumpHxxFile(
 //          o << " __" << fieldName;
             o << " " << fieldName << "_";
         }
-        o << ") SAL_THROW(())\n";
+        o << ") // throw()\n";
 
         inc();
         first = sal_True;
