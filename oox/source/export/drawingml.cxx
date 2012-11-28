@@ -67,6 +67,8 @@
 #include <filter/msfilter/escherex.hxx>
 #include <filter/msfilter/util.hxx>
 #include <editeng/svxenum.hxx>
+#include <svx/unoapi.hxx>
+#include <svx/svdoashp.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -619,10 +621,11 @@ void DrawingML::WriteTransformation( const Rectangle& rRect,
     mpFS->endElementNS( nXmlNamespace, XML_xfrm );
 }
 
-void DrawingML::WriteShapeTransformation( Reference< XShape > rXShape, sal_Int32 nXmlNamespace, sal_Bool bFlipH, sal_Bool bFlipV, sal_Int32 nRotation )
+void DrawingML::WriteShapeTransformation( Reference< XShape > rXShape, sal_Int32 nXmlNamespace, sal_Bool bFlipH, sal_Bool bFlipV, sal_Bool bSuppressRotation  )
 {
     DBG(printf( "write shape transformation\n" ));
 
+    sal_Int32 nRotation=0;
     awt::Point aPos = rXShape->getPosition();
     awt::Size aSize = rXShape->getSize();
 
@@ -630,8 +633,14 @@ void DrawingML::WriteShapeTransformation( Reference< XShape > rXShape, sal_Int32
         aSize.Width = 1000;
     if ( aSize.Height < 0 )
         aSize.Height = 1000;
-
-    WriteTransformation( Rectangle( Point( aPos.X, aPos.Y ), Size( aSize.Width, aSize.Height ) ), nXmlNamespace, bFlipH, bFlipV, nRotation );
+    if (!bSuppressRotation)
+    {
+        SdrObject* pShape = (SdrObject*) GetSdrObjectFromXShape( rXShape );
+        nRotation=pShape->GetRotateAngle();
+        aPos.X-=(1-cos(nRotation*F_PI18000))*aSize.Width/2-sin(nRotation*F_PI18000)*aSize.Height/2;
+        aPos.Y-=(1-cos(nRotation*F_PI18000))*aSize.Height/2+sin(nRotation*F_PI18000)*aSize.Width/2;
+    }
+    WriteTransformation( Rectangle( Point( aPos.X, aPos.Y ), Size( aSize.Width, aSize.Height ) ), nXmlNamespace, bFlipH, bFlipV, PPTX_EXPORT_ROTATE_CLOCKWISIFY(nRotation) );
 }
 
 void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, sal_Bool bIsField )

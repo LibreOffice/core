@@ -735,7 +735,7 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
-    WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV );
+    WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV, false);
     if( nAdjustmentValuesIndex != -1 )
     {
         sal_Int32 nAdjustmentsWhichNeedsToBeConverted = 0;
@@ -782,7 +782,7 @@ ShapeExport& ShapeExport::WriteEllipseShape( Reference< XShape > xShape )
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
-    WriteShapeTransformation( xShape, XML_a );
+    WriteShapeTransformation( xShape, XML_a,0,0,false);
     WritePresetShape( "ellipse" );
     Reference< XPropertySet > xProps( xShape, UNO_QUERY );
     if( xProps.is() )
@@ -862,7 +862,7 @@ ShapeExport& ShapeExport::WriteGraphicObjectShape( Reference< XShape > xShape )
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
-    WriteShapeTransformation( xShape, XML_a );
+    WriteShapeTransformation( xShape, XML_a,0,0,false);
     WritePresetShape( "rect" );
     // graphic object can come with the frame (bnc#654525)
     WriteOutline( xShapeProps );
@@ -996,7 +996,7 @@ ShapeExport& ShapeExport::WriteLineShape( Reference< XShape > xShape )
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
-    WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV );
+    WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV, true);
     WritePresetShape( "line" );
     Reference< XPropertySet > xShapeProps( xShape, UNO_QUERY );
     if( xShapeProps.is() )
@@ -1060,7 +1060,7 @@ ShapeExport& ShapeExport::WriteRectangleShape( Reference< XShape > xShape )
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
-    WriteShapeTransformation( xShape, XML_a );
+    WriteShapeTransformation( xShape, XML_a,0,0,false);
     WritePresetShape( "rect" );
     Reference< XPropertySet > xProps( xShape, UNO_QUERY );
     if( xProps.is() )
@@ -1233,7 +1233,7 @@ ShapeExport& ShapeExport::WriteTableShape( Reference< XShape > xShape )
                           FSEND );
     pFS->endElementNS( mnXmlNamespace, XML_nvGraphicFramePr );
 
-    WriteShapeTransformation( xShape, mnXmlNamespace );
+    WriteShapeTransformation( xShape, mnXmlNamespace, false);
     WriteTable( xShape );
 
     pFS->endElementNS( mnXmlNamespace, XML_graphicFrame );
@@ -1256,7 +1256,7 @@ ShapeExport& ShapeExport::WriteTextShape( Reference< XShape > xShape )
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
-    WriteShapeTransformation( xShape, XML_a );
+    WriteShapeTransformation( xShape, XML_a,0,0,false);
     WritePresetShape( "rect" );
     WriteBlipFill( Reference< XPropertySet >(xShape, UNO_QUERY ), S( "GraphicURL" ) );
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
