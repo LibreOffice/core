@@ -116,6 +116,8 @@ protected:
 public:
     SwBasicEscherEx(SvStream* pStrm, WW8Export& rWrt);
     sal_Int32 WriteGrfFlyFrame(const SwFrmFmt& rFmt, sal_uInt32 nShapeId);
+    //For i120928,to export graphic of bullet
+    sal_Int32 WriteGrfBullet(const Graphic&);
     sal_Int32 WriteOLEFlyFrame(const SwFrmFmt& rFmt, sal_uInt32 nShapeId);
     void WriteEmptyFlyFrame(const SwFrmFmt& rFmt, sal_uInt32 nShapeId);
     virtual void WriteFrmExtraData(const SwFrmFmt&);

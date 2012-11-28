@@ -190,7 +190,8 @@ public:
         sal_Int16 nIndentAt,
         sal_Int16 nFirstLineIndex,
         sal_Int16 nListTabPos,
-        const String &rNumberingString );
+        const String &rNumberingString,
+        const SvxBrushItem* pBrush = 0); //For i120928,transfer graphic of bullet
 
 protected:
     /// Output frames - the implementation.
