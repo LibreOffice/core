@@ -67,12 +67,28 @@ namespace drawinglayer
         {
             // if rotated, create the unrotated output rectangle for the GraphicManager paint
             // #118824# Caution! When mirrored, adapt transformation accordingly
+            // #i121387# Also need to adapt position when mirror and rotation is combined
+            if(bMirrorX || bMirrorY)
+            {
+                const basegfx::B2DHomMatrix aRot(basegfx::tools::createRotateB2DHomMatrix(fRotate));
+
+                if(bMirrorX)
+                {
+                    aTranslate += aRot * basegfx::B2DVector(aScale.getX(), 0.0);
+                }
+
+                if(bMirrorY)
+                {
+                    aTranslate += aRot * basegfx::B2DVector(0.0, aScale.getY());
+                }
+            }
+
             const basegfx::B2DHomMatrix aSimpleObjectMatrix(
                 basegfx::tools::createScaleTranslateB2DHomMatrix(
                     fabs(aScale.getX()),
                     fabs(aScale.getY()),
-                    bMirrorX ? aTranslate.getX() - fabs(aScale.getX()): aTranslate.getX(),
-                    bMirrorY ? aTranslate.getY() - fabs(aScale.getY()): aTranslate.getY()));
+                    aTranslate.getX(),
+                    aTranslate.getY()));
 
             aOutlineRange.transform(aSimpleObjectMatrix);
         }

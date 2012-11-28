@@ -450,9 +450,14 @@ namespace drawinglayer
                 double fRotate, fShearX;
                 aLocalTransform.decompose(aScale, aTranslate, fRotate, fShearX);
 
-                if(!bForceUseOfOwnTransformer && basegfx::fTools::equalZero(fShearX))
+                // #i121387# when mirrored and rotated, avoid the GraphicManager output which has low quality
+                const bool bRotated(basegfx::fTools::equalZero(fRotate));
+                const bool bSheared(basegfx::fTools::equalZero(fShearX));
+                const bool bMirroredAndRotated(bRotated && (aScale.getX() < 0.0 || aScale.getY() < 0.0));
+
+                if(!bForceUseOfOwnTransformer && !bSheared && !bMirroredAndRotated)
                 {
-                    if(!bUseGraphicManager && basegfx::fTools::equalZero(fRotate))
+                    if(!bUseGraphicManager && !bRotated)
                     {
                         RenderBitmapPrimitive2D_BitmapEx(*mpOutputDevice, aBitmapEx, aLocalTransform);
                     }
@@ -463,7 +468,7 @@ namespace drawinglayer
                 }
                 else
                 {
-                    if(!aBitmapEx.IsTransparent() && (!basegfx::fTools::equalZero(fShearX) || !basegfx::fTools::equalZero(fRotate)))
+                    if(!aBitmapEx.IsTransparent() && (bSheared || bRotated))
                     {
                         // parts will be uncovered, extend aBitmapEx with a mask bitmap
                         const Bitmap aContent(aBitmapEx.GetBitmap());
