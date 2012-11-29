@@ -91,6 +91,7 @@ public class SelectorActivity extends SherlockActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.selector_activity, menu);
+        inflater.inflate(R.menu.actionbar_selector, menu);
         return true;
     }
 
@@ -134,6 +135,15 @@ public class SelectorActivity extends SherlockActivity {
             alertDialog = builder.create();
             alertDialog.show();
 
+            return true;
+        case R.id.actionbar_presentation_submenu_options:
+            Intent aIntent = new Intent(this, SettingsActivity.class);
+            startActivity(aIntent);
+            return true;
+        case R.id.actionbar_presentation_submenu_about:
+            AboutDialogBuilder aBuilder = new AboutDialogBuilder(this);
+            AlertDialog aDialog = aBuilder.create();
+            aDialog.show();
             return true;
         }
         return super.onOptionsItemSelected(item);
