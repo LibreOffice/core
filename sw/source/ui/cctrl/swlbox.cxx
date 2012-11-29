@@ -58,9 +58,21 @@ SwBoxEntry::SwBoxEntry(const SwBoxEntry& rOld) :
 {
 }
 
-SwComboBox::SwComboBox(Window* pParent, const ResId& rId, sal_uInt16 nStyleBits ):
+SwComboBox::SwComboBox(Window* pParent, sal_uInt16 nStyleBits) :
+    ComboBox(pParent),
+    nStyle(nStyleBits)
+{
+    Init();
+}
+
+SwComboBox::SwComboBox(Window* pParent, const ResId& rId, sal_uInt16 nStyleBits) :
     ComboBox(pParent, rId),
     nStyle(nStyleBits)
+{
+    Init();
+}
+
+void SwComboBox::Init()
 {
     // create administration for the resource's Stringlist
     sal_uInt16 nSize = GetEntryCount();

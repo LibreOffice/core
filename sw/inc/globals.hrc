@@ -65,6 +65,8 @@
 
 #define STR_FOOTNOTE_DIALOG_CHAR    (RC_GLOBALS_BEGIN + 39)
 
+#define STR_REMOVE_WARNING          (RC_GLOBALS_BEGIN + 40)
+
 // DIALOGS -----------------------------------------------------------
 
 #define DLG_THESAURUS               (RC_GLOBALS_BEGIN + 2)

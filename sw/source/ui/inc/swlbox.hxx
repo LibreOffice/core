@@ -80,8 +80,9 @@ class SW_DLLPUBLIC SwComboBox : public ComboBox
     SwBoxEntry              aDefault;
     sal_uInt16                  nStyle;
 
-    SW_DLLPRIVATE void                  InitComboBox();
-    SW_DLLPRIVATE void                  InsertSorted(SwBoxEntry* pEntry);
+    SW_DLLPRIVATE void InitComboBox();
+    SW_DLLPRIVATE void InsertSorted(SwBoxEntry* pEntry);
+    SW_DLLPRIVATE void Init();
 
     using ComboBox::InsertEntry;
     using ComboBox::RemoveEntry;
@@ -91,6 +92,8 @@ public:
 
     using ComboBox::GetEntryPos;
 
+    SwComboBox(Window* pParent,
+               sal_uInt16 nStyleBits = nsSwComboBoxStyle::CBS_ALL);
     SwComboBox(Window* pParent, const ResId& rId,
                sal_uInt16 nStyleBits = nsSwComboBoxStyle::CBS_ALL);
     ~SwComboBox();

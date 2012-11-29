@@ -28,7 +28,6 @@
 
 #include <swtypes.hxx>
 #include <globals.hrc>
-#include <misc.hrc>
 
 #include <utlui.hrc>
 #include <unotools.hrc>
