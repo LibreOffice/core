@@ -1393,10 +1393,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/text/te
 	Custom \
 	Description \
 	EditTime \
-	Info0 \
-	Info1 \
-	Info2 \
-	Info3 \
 	Keywords \
 	PrintAuthor \
 	PrintDateTime \

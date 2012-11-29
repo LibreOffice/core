@@ -3319,7 +3319,6 @@ com.sun.star.text.textfield.ReferencePageGet
 com.sun.star.text.textfield.ParagraphCount
 com.sun.star.text.textfield.Author
 com.sun.star.text.textfield.DatabaseNumberOfSet
-com.sun.star.text.textfield.docinfo.Info2
 com.sun.star.text.XTextFieldsSupplier
 com.sun.star.text.XDependentTextField
 com.sun.star.text.textfield.InputUser
@@ -3329,13 +3328,11 @@ com.sun.star.text.XTextField
 com.sun.star.text.textfield.docinfo.ChangeAuthor
 com.sun.star.text.textfield.DateTime
 com.sun.star.text.textfield.docinfo.Title
-com.sun.star.text.textfield.docinfo.Info0
 com.sun.star.text.textfield.Macro
 com.sun.star.container.XEnumerationAccess
 com.sun.star.text.TextFieldMasters
 com.sun.star.text.textfield.EmbeddedObjectCount
 com.sun.star.text.textfield.DatabaseName
-com.sun.star.text.textfield.docinfo.Info3
 com.sun.star.util.XUpdatable
 com.sun.star.text.TextContent
 com.sun.star.text.textfield.DatabaseSetNumber
@@ -3365,7 +3362,6 @@ com.sun.star.text.textfield.JumpEdit
 com.sun.star.text.textfield.PageCount
 com.sun.star.text.textfield.HiddenText
 com.sun.star.text.textfield.docinfo.Description
-com.sun.star.text.textfield.docinfo.Info1
 com.sun.star.text.textfield.DatabaseNextSet
 com.sun.star.text.textfield.docinfo.PrintDateTime
 TOPIC:
