@@ -65,7 +65,7 @@ sal_uLong SwFilterDetect::DetectFilter( SfxMedium& rMedium, const SfxFilter** pp
         String aPrefFlt = (*ppFilter)->GetUserData();
 
         // detection for TextFilter needs an additional checking
-        sal_Bool bDetected = SwIoSystem::IsFileFilter( rMedium, aPrefFlt );
+        sal_Bool bDetected = SwIoSystem::IsFileFilter(rMedium, aPrefFlt);
         return bDetected ? nRet : ERRCODE_ABORT;
     }
 
