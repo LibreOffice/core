@@ -145,7 +145,6 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/processor2d/vclhelperbitmaprender \
     drawinglayer/source/processor2d/vclhelperbitmaptransform \
     drawinglayer/source/processor2d/vclhelperbufferdevice \
-    drawinglayer/source/processor2d/vclhelpergradient \
     drawinglayer/source/processor2d/vclmetafileprocessor2d \
     drawinglayer/source/processor2d/vclpixelprocessor2d \
     drawinglayer/source/processor2d/vclprocessor2d \

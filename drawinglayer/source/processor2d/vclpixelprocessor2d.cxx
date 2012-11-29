@@ -188,7 +188,29 @@ namespace drawinglayer
                 case PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D :
                 {
                     // direct draw of gradient
-                    RenderPolyPolygonGradientPrimitive2D(static_cast< const primitive2d::PolyPolygonGradientPrimitive2D& >(rCandidate));
+                    const primitive2d::PolyPolygonGradientPrimitive2D& rPolygonCandidate = static_cast< const primitive2d::PolyPolygonGradientPrimitive2D& >(rCandidate);
+                    const attribute::FillGradientAttribute& rGradient(rPolygonCandidate.getFillGradient());
+                    basegfx::BColor aStartColor(maBColorModifierStack.getModifiedColor(rGradient.getStartColor()));
+                    basegfx::BColor aEndColor(maBColorModifierStack.getModifiedColor(rGradient.getEndColor()));
+                    basegfx::B2DPolyPolygon aLocalPolyPolygon(rPolygonCandidate.getB2DPolyPolygon());
+
+                    if(aLocalPolyPolygon.count())
+                    {
+                        aLocalPolyPolygon.transform(maCurrentTransformation);
+
+                        if(aStartColor == aEndColor)
+                        {
+                            // no gradient at all, draw as polygon in AA and non-AA case
+                            mpOutputDevice->SetLineColor();
+                            mpOutputDevice->SetFillColor(Color(aStartColor));
+                            mpOutputDevice->DrawPolyPolygon(aLocalPolyPolygon);
+                        }
+                        else
+                        {
+                            // use the primitive decomposition of the metafile
+                            process(rPolygonCandidate.get2DDecomposition(getViewInformation2D()));
+                        }
+                    }
                     break;
                 }
                 case PRIMITIVE2D_ID_POLYPOLYGONGRAPHICPRIMITIVE2D :
@@ -214,19 +236,8 @@ namespace drawinglayer
                         mpOutputDevice->SetAntialiasing(nOldAntiAliase | ANTIALIASING_PIXELSNAPHAIRLINE);
                     }
 
-                    const primitive2d::MetafilePrimitive2D& rMetafilePrimitive( static_cast< const primitive2d::MetafilePrimitive2D& >(rCandidate) );
-
-                    static bool bTestMetaFilePrimitiveDecomposition( true );
-                    if( bTestMetaFilePrimitiveDecomposition && !rMetafilePrimitive.getMetaFile().GetUseCanvas() )
-                    {
-                        // use new Metafile decomposition
-                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
-                    }
-                    else
-                    {
-                        // direct draw of MetaFile
-                        RenderMetafilePrimitive2D( rMetafilePrimitive );
-                    }
+                    // use new Metafile decomposition
+                    process(rCandidate.get2DDecomposition(getViewInformation2D()));
 
                     if(bForceLineSnap)
                     {

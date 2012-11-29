@@ -27,7 +27,6 @@
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
-#include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
@@ -1645,9 +1644,6 @@ namespace drawinglayer
                         impStartSvtGraphicFill(pSvtGraphicFill);
                         mpOutputDevice->DrawGradient(aToolsPolyPolygon, aVCLGradient);
                         impEndSvtGraphicFill(pSvtGraphicFill);
-
-                        // NO usage of common own gradient randerer, not used ATM for VCL MetaFile, see text above
-                        // RenderPolyPolygonGradientPrimitive2D(static_cast< const primitive2d::PolyPolygonGradientPrimitive2D& >(rCandidate));
                     }
 
                     break;
@@ -1708,24 +1704,6 @@ namespace drawinglayer
                     if(bSupportSvtGraphicFill)
                     {
                         impEndSvtGraphicFill(pSvtGraphicFill);
-                    }
-
-                    break;
-                }
-                case PRIMITIVE2D_ID_METAFILEPRIMITIVE2D :
-                {
-                    static bool bUseMetaFilePrimitiveDecomposition(true);
-                    const primitive2d::MetafilePrimitive2D& aMetafile = static_cast< const primitive2d::MetafilePrimitive2D& >(rCandidate);
-
-                    if(bUseMetaFilePrimitiveDecomposition && !aMetafile.getMetaFile().GetUseCanvas())
-                    {
-                        // use new Metafile decomposition
-                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
-                    }
-                    else
-                    {
-                        // direct draw of MetaFile, use default pocessing
-                        RenderMetafilePrimitive2D(aMetafile);
                     }
 
                     break;

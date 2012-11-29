@@ -31,7 +31,6 @@
 #include <drawinglayer/attribute/sdrfillgraphicattribute.hxx>
 #include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
-#include <vclhelpergradient.hxx>
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
@@ -696,44 +695,6 @@ namespace drawinglayer
             }
         }
 
-        // direct draw of gradient
-        void VclProcessor2D::RenderPolyPolygonGradientPrimitive2D(const primitive2d::PolyPolygonGradientPrimitive2D& rPolygonCandidate)
-        {
-            const attribute::FillGradientAttribute& rGradient(rPolygonCandidate.getFillGradient());
-            basegfx::BColor aStartColor(maBColorModifierStack.getModifiedColor(rGradient.getStartColor()));
-            basegfx::BColor aEndColor(maBColorModifierStack.getModifiedColor(rGradient.getEndColor()));
-            basegfx::B2DPolyPolygon aLocalPolyPolygon(rPolygonCandidate.getB2DPolyPolygon());
-
-            if(aLocalPolyPolygon.count())
-            {
-                aLocalPolyPolygon.transform(maCurrentTransformation);
-
-                if(aStartColor == aEndColor)
-                {
-                    // no gradient at all, draw as polygon in AA and non-AA case
-                    mpOutputDevice->SetLineColor();
-                    mpOutputDevice->SetFillColor(Color(aStartColor));
-                    mpOutputDevice->DrawPolyPolygon(aLocalPolyPolygon);
-                }
-                else if(getOptionsDrawinglayer().IsAntiAliasing())
-                {
-                    // For AA, direct render has to be avoided since it uses XOR maskings which will not
-                    // work with AA. Instead, the decompose which uses MaskPrimitive2D with fillings is
-                    // used
-                    process(rPolygonCandidate.get2DDecomposition(getViewInformation2D()));
-                }
-                else
-                {
-                    static bool bSimple = false; // allow testing simple paint in debugger
-
-                    impDrawGradientToOutDev(
-                        *mpOutputDevice, aLocalPolyPolygon, rGradient.getStyle(), rGradient.getSteps(),
-                        aStartColor, aEndColor, rGradient.getBorder(),
-                        rGradient.getAngle(), rGradient.getOffsetX(), rGradient.getOffsetY(), bSimple);
-                }
-            }
-        }
-
         // direct draw of Graphic
         void VclProcessor2D::RenderPolyPolygonGraphicPrimitive2D(const primitive2d::PolyPolygonGraphicPrimitive2D& rPolygonCandidate)
         {
@@ -918,97 +879,6 @@ namespace drawinglayer
                         mpOutputDevice->DrawPolyLine(aLocalPolyPolygon.getB2DPolygon(a), 0.0);
                     }
                 }
-            }
-        }
-
-        // direct draw of MetaFile
-        void VclProcessor2D::RenderMetafilePrimitive2D(const primitive2d::MetafilePrimitive2D& rMetaCandidate)
-        {
-            // decompose matrix to check for shear, rotate and mirroring
-            basegfx::B2DHomMatrix aLocalTransform(maCurrentTransformation * rMetaCandidate.getTransform());
-            basegfx::B2DVector aScale, aTranslate;
-            double fRotate, fShearX;
-            aLocalTransform.decompose(aScale, aTranslate, fRotate, fShearX);
-
-            if(basegfx::fTools::less(aScale.getX(), 0.0) && basegfx::fTools::less(aScale.getY(), 0.0))
-            {
-                // #i102175# handle special case: If scale is negative in (x,y) (3rd quadrant), it can
-                // be expressed as rotation by PI. This needs to be done for Metafiles since
-                // these can be rotated, but not really mirrored
-                aScale = basegfx::absolute(aScale);
-                fRotate += F_PI;
-            }
-
-            // get BoundRect
-            basegfx::B2DRange aOutlineRange(rMetaCandidate.getB2DRange(getViewInformation2D()));
-            aOutlineRange.transform(maCurrentTransformation);
-
-            // Due to the integer MapModes used from VCL aind inside MetaFiles errors of up to three
-            // pixels in size may happen. As long as there is no better way (e.g. convert the MetaFile
-            // to primitives) it is necessary to reduce maximum pixel size by 1 in X and Y and to use
-            // the inner pixel bounds accordingly (ceil resp. floor). This will also be done for logic
-            // units e.g. when creating a new MetaFile, but since much huger value ranges are used
-            // there typically will be okay for this compromize.
-            Rectangle aDestRectView(
-                // !!CAUTION!! Here, ceil and floor are exchanged BY PURPOSE, do NOT copy when
-                // looking for a standard conversion to rectangle (!)
-                (sal_Int32)ceil(aOutlineRange.getMinX()), (sal_Int32)ceil(aOutlineRange.getMinY()),
-                (sal_Int32)floor(aOutlineRange.getMaxX()), (sal_Int32)floor(aOutlineRange.getMaxY()));
-
-            // get metafile (copy it)
-            GDIMetaFile aMetaFile;
-
-            if(maBColorModifierStack.count())
-            {
-                const basegfx::BColor aRGBBaseColor(0, 0, 0);
-                const basegfx::BColor aRGBColor(maBColorModifierStack.getModifiedColor(aRGBBaseColor));
-                aMetaFile = rMetaCandidate.getMetaFile().GetMonochromeMtf(Color(aRGBColor));
-            }
-            else
-            {
-                aMetaFile = rMetaCandidate.getMetaFile();
-            }
-
-            // rotation
-            if(!basegfx::fTools::equalZero(fRotate))
-            {
-                // #i103530#
-                // MetaFile::Rotate has no input parameter check, so the parameter needs to be
-                // well-aligned to the old range [0..3600] 10th degrees with inverse orientation
-                sal_Int16 nRotation((sal_Int16)((fRotate / F_PI180) * -10.0));
-
-                while(nRotation < 0)
-                    nRotation += 3600;
-
-                while(nRotation >= 3600)
-                    nRotation -= 3600;
-
-                aMetaFile.Rotate(nRotation);
-            }
-
-            // Prepare target output size
-            Size aDestSize(aDestRectView.GetSize());
-
-            if(aDestSize.getWidth() && aDestSize.getHeight())
-            {
-                // Get preferred Metafile output size. When it's very equal to the output size, it's probably
-                // a rounding error somewhere, so correct it to get a 1:1 output without single pixel scalings
-                // of the Metafile (esp. for contaned Bitmaps, e.g 3D charts)
-                const Size aPrefSize(mpOutputDevice->LogicToPixel(aMetaFile.GetPrefSize(), aMetaFile.GetPrefMapMode()));
-
-                if(aPrefSize.getWidth() && (aPrefSize.getWidth() - 1 == aDestSize.getWidth() || aPrefSize.getWidth() + 1 == aDestSize.getWidth()))
-                {
-                    aDestSize.setWidth(aPrefSize.getWidth());
-                }
-
-                if(aPrefSize.getHeight() && (aPrefSize.getHeight() - 1 == aDestSize.getHeight() || aPrefSize.getHeight() + 1 == aDestSize.getHeight()))
-                {
-                    aDestSize.setHeight(aPrefSize.getHeight());
-                }
-
-                // paint it
-                aMetaFile.WindStart();
-                aMetaFile.Play(mpOutputDevice, aDestRectView.TopLeft(), aDestSize);
             }
         }
 
