@@ -365,6 +365,10 @@
 			<xsl:call-template name="insertbascode" />
 		</xsl:when>
 
+		<xsl:when test="@role='logocode'">
+			<xsl:call-template name="insertlogocode" />
+		</xsl:when>
+
 		<xsl:otherwise>
 			<xsl:call-template name="insertpara" />
 		</xsl:otherwise>
@@ -590,6 +594,11 @@
 
 <!-- Insert Basic code snippet  -->
 <xsl:template name="insertbascode">
+	<pre><xsl:apply-templates /></pre>
+</xsl:template>
+
+<!-- Insert Logo code snippet  -->
+<xsl:template name="insertlogocode">
 	<pre><xsl:apply-templates /></pre>
 </xsl:template>
 
