@@ -22,6 +22,8 @@
 
 #include "sal/config.h"
 
+#include <set>
+
 #include "com/sun/star/container/NoSuchElementException.hpp"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "rtl/ref.hxx"
@@ -44,7 +46,7 @@ public:
             com::sun::star::container::NoSuchElementException,
             com::sun::star::uno::RuntimeException));
 
-    bool parse();
+    bool parse(std::set< rtl::OUString > const * existingDependencies);
 
     enum { NAMESPACE_OOR = 1, NAMESPACE_XS = 2, NAMESPACE_XSI = 3 };
 

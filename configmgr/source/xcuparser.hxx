@@ -22,6 +22,7 @@
 
 #include "sal/config.h"
 
+#include <set>
 #include <stack>
 
 #include "rtl/ref.hxx"
@@ -61,7 +62,8 @@ private:
     virtual xmlreader::XmlReader::Text getTextMode();
 
     virtual bool startElement(
-        xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name);
+        xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name,
+        std::set< OUString > const * existingDependencies);
 
     virtual void endElement(xmlreader::XmlReader const & reader);
 

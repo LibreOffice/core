@@ -23,6 +23,7 @@
 #include <cassert>
 #include <cstddef>
 #include <list>
+#include <set>
 
 #include "com/sun/star/beans/Optional.hpp"
 #include "com/sun/star/beans/UnknownPropertyException.hpp"
@@ -92,7 +93,7 @@ void parseXcsFile(
     assert(partial == 0 && modifications == 0 && additions == 0);
     (void) partial; (void) modifications; (void) additions;
     bool ok = rtl::Reference< ParseManager >(
-        new ParseManager(url, new XcsParser(layer, data)))->parse();
+        new ParseManager(url, new XcsParser(layer, data)))->parse(0);
     assert(ok);
     (void) ok; // avoid warnings
 }
@@ -107,7 +108,7 @@ void parseXcuFile(
         new ParseManager(
             url,
             new XcuParser(layer, data, partial, modifications, additions)))->
-        parse();
+        parse(0);
     assert(ok);
     (void) ok; // avoid warnings
 }
@@ -724,7 +725,8 @@ void Components::parseXcdFiles(int layer, rtl::OUString const & url) {
             css::uno::Reference< css::uno::XInterface >());
     }
     UnresolvedList unres;
-    XcdParser::Dependencies deps;
+    std::set< OUString > existingDeps;
+    std::set< OUString > processedDeps;
     for (;;) {
         osl::DirectoryItem i;
         osl::FileBase::RC rc = dir.getNextItem(i, SAL_MAX_UINT32);
@@ -758,10 +760,12 @@ void Components::parseXcdFiles(int layer, rtl::OUString const & url) {
                 rtl::OUString name(
                     file.copy(
                         0, file.getLength() - RTL_CONSTASCII_LENGTH(".xcd")));
+                existingDeps.insert(name);
                 rtl::Reference< ParseManager > manager;
                 try {
                     manager = new ParseManager(
-                        stat.getFileURL(), new XcdParser(layer, deps, data_));
+                        stat.getFileURL(),
+                        new XcdParser(layer, processedDeps, data_));
                 } catch (css::container::NoSuchElementException & e) {
                     throw css::uno::RuntimeException(
                         (rtl::OUString(
@@ -770,8 +774,8 @@ void Components::parseXcdFiles(int layer, rtl::OUString const & url) {
                          e.Message),
                         css::uno::Reference< css::uno::XInterface >());
                 }
-                if (manager->parse()) {
-                    deps.insert(name);
+                if (manager->parse(0)) {
+                    processedDeps.insert(name);
                 } else {
                     unres.push_back(UnresolvedListItem(name, manager));
                 }
@@ -781,8 +785,8 @@ void Components::parseXcdFiles(int layer, rtl::OUString const & url) {
     while (!unres.empty()) {
         bool resolved = false;
         for (UnresolvedList::iterator i(unres.begin()); i != unres.end();) {
-            if (i->manager->parse()) {
-                deps.insert(i->name);
+            if (i->manager->parse(&existingDeps)) {
+                processedDeps.insert(i->name);
                 unres.erase(i++);
                 resolved = true;
             } else {

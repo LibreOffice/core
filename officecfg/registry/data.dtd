@@ -22,7 +22,8 @@
 
 <!ELEMENT dependency EMPTY>
 <!ATTLIST dependency
-    file CDATA #REQUIRED>
+    file CDATA #REQUIRED
+    optional (false | true) #IMPLIED>
 
 <!ENTITY % component-schema.dtd SYSTEM "component-schema.dtd">
 %component-schema.dtd;

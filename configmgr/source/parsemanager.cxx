@@ -20,6 +20,7 @@
 #include "sal/config.h"
 
 #include <cassert>
+#include <set>
 
 #include "com/sun/star/container/NoSuchElementException.hpp"
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -62,7 +63,7 @@ ParseManager::ParseManager(
     (void)id;
 }
 
-bool ParseManager::parse() {
+bool ParseManager::parse(std::set< OUString > const * existingDependencies) {
     for (;;) {
         switch (itemData_.is()
                 ? xmlreader::XmlReader::RESULT_BEGIN
@@ -70,7 +71,8 @@ bool ParseManager::parse() {
                     parser_->getTextMode(), &itemData_, &itemNamespaceId_))
         {
         case xmlreader::XmlReader::RESULT_BEGIN:
-            if (!parser_->startElement(reader_, itemNamespaceId_, itemData_))
+            if (!parser_->startElement(
+                    reader_, itemNamespaceId_, itemData_, existingDependencies))
             {
                 return false;
             }

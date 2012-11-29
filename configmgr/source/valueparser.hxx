@@ -22,6 +22,7 @@
 
 #include "sal/config.h"
 
+#include <set>
 #include <vector>
 
 #include "boost/noncopyable.hpp"
@@ -51,7 +52,8 @@ public:
     xmlreader::XmlReader::Text getTextMode() const;
 
     bool startElement(
-        xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name);
+        xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name,
+        std::set< OUString > const *);
 
     bool endElement();
 

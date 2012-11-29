@@ -21,6 +21,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <set>
 
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
@@ -77,9 +78,10 @@ xmlreader::XmlReader::Text XcuParser::getTextMode() {
 }
 
 bool XcuParser::startElement(
-    xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name)
+    xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name,
+    std::set< OUString > const * existingDependencies)
 {
-    if (valueParser_.startElement(reader, nsId, name)) {
+    if (valueParser_.startElement(reader, nsId, name, existingDependencies)) {
         return true;
     }
     if (state_.empty()) {

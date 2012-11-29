@@ -38,9 +38,9 @@ struct Data;
 
 class XcdParser: public Parser {
 public:
-    typedef std::set< rtl::OUString > Dependencies;
-
-    XcdParser(int layer, Dependencies const & dependencies, Data & data);
+    XcdParser(
+        int layer, std::set< OUString > const & processedDependencies,
+        Data & data);
 
 private:
     virtual ~XcdParser();
@@ -48,7 +48,8 @@ private:
     virtual xmlreader::XmlReader::Text getTextMode();
 
     virtual bool startElement(
-        xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name);
+        xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name,
+        std::set< OUString > const * existingDependencies);
 
     virtual void endElement(xmlreader::XmlReader const & reader);
 
@@ -58,10 +59,11 @@ private:
         STATE_START, STATE_DEPENDENCIES, STATE_DEPENDENCY, STATE_COMPONENTS };
 
     int layer_;
-    Dependencies const & dependencies_;
+    std::set< OUString > const & processedDependencies_;
     Data & data_;
     State state_;
-    rtl::OUString dependency_;
+    rtl::OUString dependencyFile_;
+    bool dependencyOptional_;
     rtl::Reference< Parser > nestedParser_;
     long nesting_;
 };
