@@ -681,7 +681,7 @@ Sequence< OUString > AxisWrapper::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 3 );
     aServices[ 0 ] = "com.sun.star.chart.ChartAxis";
-    aServices[ 1 ] = "com.sun.star.xml.UserDefinedAttributeSupplier";
+    aServices[ 1 ] = "com.sun.star.xml.UserDefinedAttributesSupplier";
     aServices[ 2 ] = "com.sun.star.style.CharacterProperties";
 
     return aServices;

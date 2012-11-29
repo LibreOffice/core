@@ -1,4 +1,4 @@
-"ChartLegend";"com::sun::star::xml::UserDefinedAttributeSupplier";"UserDefinedAttributes"
+"ChartLegend";"com::sun::star::xml::UserDefinedAttributesSupplier";"UserDefinedAttributes"
 "ChartLegend";"com::sun::star::lang::XComponent";"dispose()"
 "ChartLegend";"com::sun::star::lang::XComponent";"addEventListener()"
 "ChartLegend";"com::sun::star::lang::XComponent";"removeEventListener()"

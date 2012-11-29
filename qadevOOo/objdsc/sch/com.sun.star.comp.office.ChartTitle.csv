@@ -1,4 +1,4 @@
-"ChartTitle";"com::sun::star::xml::UserDefinedAttributeSupplier";"UserDefinedAttributes"
+"ChartTitle";"com::sun::star::xml::UserDefinedAttributesSupplier";"UserDefinedAttributes"
 "ChartTitle";"com::sun::star::lang::XComponent";"dispose()"
 "ChartTitle";"com::sun::star::lang::XComponent";"addEventListener()"
 "ChartTitle";"com::sun::star::lang::XComponent";"removeEventListener()"

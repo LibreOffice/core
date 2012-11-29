@@ -183,7 +183,7 @@ const std::vector< WrappedProperty* > AreaWrapper::createWrappedProperties()
 Sequence< ::rtl::OUString > AreaWrapper::getSupportedServiceNames_Static()
 {
     Sequence< ::rtl::OUString > aServices( 4 );
-    aServices[ 0 ] = "com.sun.star.xml.UserDefinedAttributeSupplier";
+    aServices[ 0 ] = "com.sun.star.xml.UserDefinedAttributesSupplier";
     aServices[ 1 ] = "com.sun.star.beans.PropertySet";
     aServices[ 2 ] = "com.sun.star.drawing.FillProperties";
     aServices[ 3 ] = "com.sun.star.drawing.LineProperties";

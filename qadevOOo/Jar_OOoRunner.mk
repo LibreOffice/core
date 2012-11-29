@@ -962,7 +962,7 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/view/_XSelectionSupplier \
     qadevOOo/tests/java/ifc/view/_XViewSettingsSupplier \
     qadevOOo/tests/java/ifc/xml/sax/_XDocumentHandler \
-    qadevOOo/tests/java/ifc/xml/_UserDefinedAttributeSupplier \
+    qadevOOo/tests/java/ifc/xml/_UserDefinedAttributesSupplier \
     qadevOOo/tests/java/mod/_acceptor/Acceptor \
     qadevOOo/tests/java/mod/_acceptor/uno/Acceptor \
     qadevOOo/tests/java/mod/_adabas/ODriver \

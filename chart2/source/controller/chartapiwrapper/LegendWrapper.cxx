@@ -436,7 +436,7 @@ Sequence< ::rtl::OUString > LegendWrapper::getSupportedServiceNames_Static()
     Sequence< ::rtl::OUString > aServices( 4 );
     aServices[ 0 ] = "com.sun.star.chart.ChartLegend";
     aServices[ 1 ] = "com.sun.star.drawing.Shape";
-    aServices[ 2 ] = "com.sun.star.xml.UserDefinedAttributeSupplier";
+    aServices[ 2 ] = "com.sun.star.xml.UserDefinedAttributesSupplier";
     aServices[ 3 ] = "com.sun.star.style.CharacterProperties";
 
     return aServices;

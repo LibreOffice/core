@@ -1,4 +1,4 @@
-"ChXChartAxis";"com::sun::star::xml::UserDefinedAttributeSupplier";"UserDefinedAttributes"
+"ChXChartAxis";"com::sun::star::xml::UserDefinedAttributesSupplier";"UserDefinedAttributes"
 "ChXChartAxis";"com::sun::star::chart::ChartAxis";"Max#optional"
 "ChXChartAxis";"com::sun::star::chart::ChartAxis";"Min#optional"
 "ChXChartAxis";"com::sun::star::chart::ChartAxis";"Origin#optional"

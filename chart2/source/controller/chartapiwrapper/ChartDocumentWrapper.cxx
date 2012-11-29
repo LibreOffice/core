@@ -1560,7 +1560,7 @@ uno::Sequence< ::rtl::OUString > ChartDocumentWrapper::getSupportedServiceNames_
     uno::Sequence< ::rtl::OUString > aServices( 4 );
     aServices[ 0 ] = "com.sun.star.chart.ChartDocument";
     aServices[ 1 ] = CHART_CHARTAPIWRAPPER_SERVICE_NAME;
-    aServices[ 2 ] = "com.sun.star.xml.UserDefinedAttributeSupplier";
+    aServices[ 2 ] = "com.sun.star.xml.UserDefinedAttributesSupplier";
     aServices[ 3 ] = "com.sun.star.beans.PropertySet";
     return aServices;
 }

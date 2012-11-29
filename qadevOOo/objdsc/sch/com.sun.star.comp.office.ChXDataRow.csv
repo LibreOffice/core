@@ -1,4 +1,4 @@
-"ChXDataRow";"com::sun::star::xml::UserDefinedAttributeSupplier#optional";"UserDefinedAttributes"
+"ChXDataRow";"com::sun::star::xml::UserDefinedAttributesSupplier#optional";"UserDefinedAttributes"
 "ChXDataRow";"com::sun::star::drawing::LineProperties";"LineStyle"
 "ChXDataRow";"com::sun::star::drawing::LineProperties";"LineDash"
 "ChXDataRow";"com::sun::star::drawing::LineProperties";"LineColor"

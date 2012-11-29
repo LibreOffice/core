@@ -1,4 +1,4 @@
-"ChXDataPoint";"com::sun::star::xml::UserDefinedAttributeSupplier";"UserDefinedAttributes"
+"ChXDataPoint";"com::sun::star::xml::UserDefinedAttributesSupplier";"UserDefinedAttributes"
 "ChXDataPoint";"com::sun::star::drawing::LineProperties";"LineStyle"
 "ChXDataPoint";"com::sun::star::drawing::LineProperties";"LineDash"
 "ChXDataPoint";"com::sun::star::drawing::LineProperties";"LineColor"

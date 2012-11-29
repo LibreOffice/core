@@ -2066,7 +2066,7 @@ uno::Sequence< OUString > DiagramWrapper::getSupportedServiceNames_Static()
 {
     uno::Sequence< OUString > aServices( 8 );
     aServices[ 0 ] = "com.sun.star.chart.Diagram";
-    aServices[ 1 ] = "com.sun.star.xml.UserDefinedAttributeSupplier";
+    aServices[ 1 ] = "com.sun.star.xml.UserDefinedAttributesSupplier";
     aServices[ 2 ] = "com.sun.star.chart.StackableDiagram";
     aServices[ 3 ] = "com.sun.star.chart.ChartAxisXSupplier";
     aServices[ 4 ] = "com.sun.star.chart.ChartAxisYSupplier";

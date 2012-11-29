@@ -22,7 +22,7 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.xml.AttributeData;
 
-public class _UserDefinedAttributeSupplier extends lib.MultiPropertyTest {
+public class _UserDefinedAttributesSupplier extends lib.MultiPropertyTest {
 
     public void _UserDefinedAttributes() {
         XNameContainer uda = null;

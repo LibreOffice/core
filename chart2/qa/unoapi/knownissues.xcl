@@ -42,15 +42,15 @@ sch.ChartLegend::com::sun::star::drawing::XShape
 sch.ChartTitle::com::sun::star::drawing::XShape
 
 #i78867
-sch.ChXChartDocument::com::sun::star::xml::UserDefinedAttributeSupplier
-sch.ChXChartAxis::com::sun::star::xml::UserDefinedAttributeSupplier
-sch.ChXDiagram::com::sun::star::xml::UserDefinedAttributeSupplier
-sch.ChartArea::com::sun::star::xml::UserDefinedAttributeSupplier
-sch.ChartGrid::com::sun::star::xml::UserDefinedAttributeSupplier
-sch.ChartLegend::com::sun::star::xml::UserDefinedAttributeSupplier
-sch.ChartLine::com::sun::star::xml::UserDefinedAttributeSupplier
-sch.ChartTitle::com::sun::star::xml::UserDefinedAttributeSupplier
-sch.ChXDataPoint::com::sun::star::xml::UserDefinedAttributeSupplier
+sch.ChXChartDocument::com::sun::star::xml::UserDefinedAttributesSupplier
+sch.ChXChartAxis::com::sun::star::xml::UserDefinedAttributesSupplier
+sch.ChXDiagram::com::sun::star::xml::UserDefinedAttributesSupplier
+sch.ChartArea::com::sun::star::xml::UserDefinedAttributesSupplier
+sch.ChartGrid::com::sun::star::xml::UserDefinedAttributesSupplier
+sch.ChartLegend::com::sun::star::xml::UserDefinedAttributesSupplier
+sch.ChartLine::com::sun::star::xml::UserDefinedAttributesSupplier
+sch.ChartTitle::com::sun::star::xml::UserDefinedAttributesSupplier
+sch.ChXDataPoint::com::sun::star::xml::UserDefinedAttributesSupplier
 
 #i83865
 sch.ChXDataPoint::com::sun::star::drawing::LineProperties

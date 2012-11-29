@@ -1,4 +1,4 @@
-"ChartGrid";"com::sun::star::xml::UserDefinedAttributeSupplier";"UserDefinedAttributes"
+"ChartGrid";"com::sun::star::xml::UserDefinedAttributesSupplier";"UserDefinedAttributes"
 "ChartGrid";"com::sun::star::drawing::LineProperties";"LineStyle"
 "ChartGrid";"com::sun::star::drawing::LineProperties";"LineDash"
 "ChartGrid";"com::sun::star::drawing::LineProperties";"LineColor"

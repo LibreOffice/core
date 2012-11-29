@@ -166,7 +166,7 @@ const std::vector< WrappedProperty* > WallFloorWrapper::createWrappedProperties(
 Sequence< OUString > WallFloorWrapper::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 4 );
-    aServices[ 0 ] = "com.sun.star.xml.UserDefinedAttributeSupplier";
+    aServices[ 0 ] = "com.sun.star.xml.UserDefinedAttributesSupplier";
     aServices[ 1 ] = "com.sun.star.drawing.FillProperties";
     aServices[ 2 ] = "com.sun.star.drawing.LineProperties";
     aServices[ 3 ] = "com.sun.star.beans.PropertySet";

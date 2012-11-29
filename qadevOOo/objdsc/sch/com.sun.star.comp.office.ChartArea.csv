@@ -1,4 +1,4 @@
-"ChartArea";"com::sun::star::xml::UserDefinedAttributeSupplier";"UserDefinedAttributes"
+"ChartArea";"com::sun::star::xml::UserDefinedAttributesSupplier";"UserDefinedAttributes"
 "ChartArea";"com::sun::star::drawing::LineProperties";"LineStyle"
 "ChartArea";"com::sun::star::drawing::LineProperties";"LineDash"
 "ChartArea";"com::sun::star::drawing::LineProperties";"LineColor"

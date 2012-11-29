@@ -383,7 +383,7 @@ Sequence< OUString > UpDownBarWrapper::getSupportedServiceNames_Static()
     aServices[ 0 ] = ::rtl::OUString("com.sun.star.chart.ChartArea");
     aServices[ 1 ] = ::rtl::OUString("com.sun.star.drawing.LineProperties");
     aServices[ 2 ] = ::rtl::OUString("com.sun.star.drawing.FillProperties");
-    aServices[ 3 ] = ::rtl::OUString("com.sun.star.xml.UserDefinedAttributeSupplier");
+    aServices[ 3 ] = ::rtl::OUString("com.sun.star.xml.UserDefinedAttributesSupplier");
 
     return aServices;
 }

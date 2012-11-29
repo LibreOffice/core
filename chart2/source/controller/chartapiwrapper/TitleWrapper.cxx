@@ -533,7 +533,7 @@ Sequence< OUString > TitleWrapper::getSupportedServiceNames_Static()
     Sequence< OUString > aServices( 4 );
     aServices[ 0 ] = "com.sun.star.chart.ChartTitle";
     aServices[ 1 ] = "com.sun.star.drawing.Shape";
-    aServices[ 2 ] = "com.sun.star.xml.UserDefinedAttributeSupplier";
+    aServices[ 2 ] = "com.sun.star.xml.UserDefinedAttributesSupplier";
     aServices[ 3 ] = "com.sun.star.style.CharacterProperties";
 
     return aServices;

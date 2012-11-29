@@ -1,4 +1,4 @@
-"ChartLine";"com::sun::star::xml::UserDefinedAttributeSupplier";"UserDefinedAttributes"
+"ChartLine";"com::sun::star::xml::UserDefinedAttributesSupplier";"UserDefinedAttributes"
 "ChartLine";"com::sun::star::drawing::LineProperties";"LineStyle"
 "ChartLine";"com::sun::star::drawing::LineProperties";"LineDash"
 "ChartLine";"com::sun::star::drawing::LineProperties";"LineColor"

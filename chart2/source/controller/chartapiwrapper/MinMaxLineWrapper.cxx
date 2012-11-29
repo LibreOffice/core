@@ -419,7 +419,7 @@ Sequence< OUString > MinMaxLineWrapper::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 3 );
     aServices[ 0 ] = "com.sun.star.chart.ChartLine";
-    aServices[ 1 ] = "com.sun.star.xml.UserDefinedAttributeSupplier";
+    aServices[ 1 ] = "com.sun.star.xml.UserDefinedAttributesSupplier";
     aServices[ 2 ] = "com.sun.star.drawing.LineProperties";
 
     return aServices;

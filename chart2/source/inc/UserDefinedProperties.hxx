@@ -29,7 +29,7 @@
 namespace chart
 {
 
-// implements service com.sun.star.xml.UserDefinedAttributeSupplier
+// implements service com.sun.star.xml.UserDefinedAttributesSupplier
 class OOO_DLLPUBLIC_CHARTTOOLS UserDefinedProperties
 {
 public:
@@ -40,7 +40,7 @@ public:
         PROP_XML_USERDEF_CHART = FAST_PROPERTY_ID_START_USERDEF_PROP,
         PROP_XML_USERDEF_TEXT,
         PROP_XML_USERDEF_PARA,
-        // com.sun.star.xml.UserDefinedAttributeSupplier
+        // com.sun.star.xml.UserDefinedAttributesSupplier
         // UserDefined attributes in the other properties-sections. (as long as
         // there is no reliable mechanism, properties may move between the
         // sections)

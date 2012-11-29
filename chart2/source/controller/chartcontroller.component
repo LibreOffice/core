@@ -30,7 +30,7 @@
     <service name="com.sun.star.beans.PropertySet"/>
     <service name="com.sun.star.chart.ChartDocument"/>
     <service name="com.sun.star.chart2.ChartDocumentWrapper"/>
-    <service name="com.sun.star.xml.UserDefinedAttributeSupplier"/>
+    <service name="com.sun.star.xml.UserDefinedAttributesSupplier"/>
   </implementation>
   <implementation name="com.sun.star.comp.chart2.ChartFrameLoader">
     <service name="com.sun.star.frame.SynchronousFrameLoader"/>

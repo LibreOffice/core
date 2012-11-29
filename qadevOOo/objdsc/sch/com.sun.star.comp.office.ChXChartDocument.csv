@@ -1,4 +1,4 @@
-"ChXChartDocument";"com::sun::star::xml::UserDefinedAttributeSupplier";"UserDefinedAttributes"
+"ChXChartDocument";"com::sun::star::xml::UserDefinedAttributesSupplier";"UserDefinedAttributes"
 "ChXChartDocument";"com::sun::star::chart::ChartDocument";"HasMainTitle"
 "ChXChartDocument";"com::sun::star::chart::ChartDocument";"HasSubTitle"
 "ChXChartDocument";"com::sun::star::chart::ChartDocument";"HasLegend"

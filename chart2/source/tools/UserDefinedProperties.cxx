@@ -50,7 +50,7 @@ void UserDefinedProperties::AddPropertiesToVector(
                   ::getCppuType( reinterpret_cast< const uno::Reference< container::XNameContainer > * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
-    // UserDefinedAttributeSupplier
+    // UserDefinedAttributesSupplier
     // ----------------------------
     rOutProperties.push_back(
         Property( C2U( "UserDefinedAttributes" ),

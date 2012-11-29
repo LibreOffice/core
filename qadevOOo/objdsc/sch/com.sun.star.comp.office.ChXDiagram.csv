@@ -1,4 +1,4 @@
-"ChXDiagram";"com::sun::star::xml::UserDefinedAttributeSupplier#optional";"UserDefinedAttributes"
+"ChXDiagram";"com::sun::star::xml::UserDefinedAttributesSupplier#optional";"UserDefinedAttributes"
 "ChXDiagram";"com::sun::star::chart::XDiagram";"getDiagramType()"
 "ChXDiagram";"com::sun::star::chart::XDiagram";"getDataRowProperties()"
 "ChXDiagram";"com::sun::star::chart::XDiagram";"getDataPointProperties()"

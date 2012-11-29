@@ -862,7 +862,7 @@ uno::Sequence< ::rtl::OUString > DataSeriesPointWrapper::getSupportedServiceName
     uno::Sequence< ::rtl::OUString > aServices( 7 );
     aServices[ 0 ] = "com.sun.star.chart.ChartDataRowProperties";
     aServices[ 1 ] = "com.sun.star.chart.ChartDataPointProperties";
-    aServices[ 2 ] = "com.sun.star.xml.UserDefinedAttributeSupplier";
+    aServices[ 2 ] = "com.sun.star.xml.UserDefinedAttributesSupplier";
     aServices[ 3 ] =  "com.sun.star.beans.PropertySet";
     aServices[ 4 ] = "com.sun.star.drawing.FillProperties";
     aServices[ 5 ] = "com.sun.star.drawing.LineProperties";
