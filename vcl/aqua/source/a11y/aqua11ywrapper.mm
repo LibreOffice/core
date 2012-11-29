@@ -117,7 +117,7 @@ static BOOL isPopupMenuOpen = NO;
                  * We intentionally do not hold a reference to the event listener in the wrapper object,
                  * but let the listener control the life cycle of the wrapper instead ..
                  */
-                xBroadcaster->addEventListener( new AquaA11yEventListener( self, rxAccessibleContext -> getAccessibleRole() ) );
+                xBroadcaster->addAccessibleEventListener( new AquaA11yEventListener( self, rxAccessibleContext -> getAccessibleRole() ) );
             }
         }
         // TABLE_CELL
