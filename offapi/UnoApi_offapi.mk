@@ -3465,7 +3465,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/style,\
 	XAutoStylesSupplier \
 	XDefaultsSupplier \
 	XStyle \
-	XStyleCondition \
 	XStyleFamiliesSupplier \
 	XStyleLoader \
 	XStyleSupplier \
