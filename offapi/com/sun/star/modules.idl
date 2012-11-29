@@ -97,7 +97,8 @@ module geometry {};
 /// Interfaces for graphic handling
 module graphic {};
 
-/// Interface for internationalization (deprecated draft).
+/** Interface for internationalization. Regard this as an internal API,
+    subject to change. */
 module i18n {};
 
 /// lightweight directory access protocol (LDAP)
