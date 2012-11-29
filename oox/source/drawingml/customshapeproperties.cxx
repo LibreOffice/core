@@ -85,6 +85,35 @@ void CustomShapeProperties::apply( const CustomShapePropertiesPtr& /* rSourceCus
     // not sure if this needs to be implemented
 }
 
+bool setOrCreatePropertyValue(
+    uno::Sequence< beans::PropertyValue >& rPropSeq,
+    const OUString& rName,
+    const uno::Any& rAny)
+{
+    const sal_Int32 nCount(rPropSeq.getLength());
+
+    for(sal_Int32 a(0); a < nCount; a++)
+    {
+        beans::PropertyValue& rEntry = rPropSeq[a];
+
+        if(rEntry.Name.equals(rName))
+        {
+            rEntry.Value = rAny;
+            return false;
+        }
+    }
+
+    beans::PropertyValue aNewValue;
+
+    aNewValue.Name = rName;
+    aNewValue.Value = rAny;
+
+    rPropSeq.realloc(nCount + 1);
+    rPropSeq[nCount] = aNewValue;
+
+    return true;
+}
+
 void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFilterBase */,
     const Reference < XPropertySet >& xPropSet, const Reference < XShape > & xShape ) const
 {
@@ -92,68 +121,101 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
     {
         //const uno::Reference < drawing::XShape > xShape( xPropSet, UNO_QUERY );
         Reference< drawing::XEnhancedCustomShapeDefaulter > xDefaulter( xShape, UNO_QUERY );
+        const OUString sCustomShapeGeometry( RTL_CONSTASCII_USTRINGPARAM( "CustomShapeGeometry" ) );
+        uno::Sequence< beans::PropertyValue > aGeoPropSeq;
+        uno::Any aGeoPropSet;
+        bool bValuesAdded(false);
+
         if( xDefaulter.is() )
-            xDefaulter->createCustomShapeDefaults( maShapePresetType );
-
-        PropertyMap aPropertyMap;
-
-        aPropertyMap[ PROP_MirroredX ] <<= Any( mbMirroredX );
-        aPropertyMap[ PROP_MirroredY ] <<= Any( mbMirroredY );
-
-        if(mnTextRotation)
         {
-            // #119920# Handle missing text rotation
-            aPropertyMap[ PROP_TextRotateAngle ] <<= Any(mnTextRotation);
+            xDefaulter->createCustomShapeDefaults( maShapePresetType );
         }
 
-        // converting the vector to a sequence
-        Sequence< PropertyValue > aSeq = aPropertyMap.makePropertyValueSequence();
-        PropertySet aPropSet( xPropSet );
-        aPropSet.setProperty( PROP_CustomShapeGeometry, aSeq );
+        if(mbMirroredX || mbMirroredY || mnTextRotation)
+        {
+            // #121371# set these values, but do *not* set a completely new
+            // "CustomShapeGeometry", this would reset the evtl. already created
+            // "Type" entry
+            aGeoPropSet = xPropSet->getPropertyValue(sCustomShapeGeometry);
+
+            if(aGeoPropSet >>= aGeoPropSeq)
+            {
+                uno::Any aAny;
+
+                if(mbMirroredX) // TTTT: remove again after aw080, make it part of object transformation
+                {
+                    const rtl::OUString sMirroredX(RTL_CONSTASCII_USTRINGPARAM("MirroredX"));
+                    aAny <<= mbMirroredX;
+                    bValuesAdded = setOrCreatePropertyValue(aGeoPropSeq, sMirroredX, aAny);
+                }
+
+                if(mbMirroredY) // TTTT: remove again after aw080, make it part of object transformation
+                {
+                    const rtl::OUString sMirroredY(RTL_CONSTASCII_USTRINGPARAM("MirroredY"));
+                    aAny <<= mbMirroredY;
+                    bValuesAdded = setOrCreatePropertyValue(aGeoPropSeq, sMirroredY, aAny);
+                }
+
+                if(mnTextRotation)
+                {
+                    const rtl::OUString sTextRotateAngle(RTL_CONSTASCII_USTRINGPARAM("TextRotateAngle"));
+                    aAny <<= (double)mnTextRotation;
+                    bValuesAdded = setOrCreatePropertyValue(aGeoPropSeq, sTextRotateAngle, aAny);
+                }
+            }
+        }
 
         if ( maAdjustmentGuideList.size() )
         {
-            const OUString sType = CREATE_OUSTRING( "Type" );
-            const OUString sCustomShapeGeometry( RTL_CONSTASCII_USTRINGPARAM( "CustomShapeGeometry" ) );
-            uno::Any aGeoPropSet = xPropSet->getPropertyValue( sCustomShapeGeometry );
-            uno::Sequence< beans::PropertyValue > aGeoPropSeq;
-            if ( aGeoPropSet >>= aGeoPropSeq )
+            if(!aGeoPropSeq.getLength())
             {
-                sal_Int32 i, nCount = aGeoPropSeq.getLength();
-                for ( i = 0; i < nCount; i++ )
+                aGeoPropSet = xPropSet->getPropertyValue( sCustomShapeGeometry );
+                aGeoPropSet >>= aGeoPropSeq;
+            }
+
+            sal_Int32 i, nCount = aGeoPropSeq.getLength();
+
+            for ( i = 0; i < nCount; i++ )
+            {
+                const rtl::OUString sAdjustmentValues( RTL_CONSTASCII_USTRINGPARAM( "AdjustmentValues" ) );
+                const OUString sType = CREATE_OUSTRING( "Type" );
+
+                if ( aGeoPropSeq[ i ].Name.equals( sAdjustmentValues ) )
                 {
-                    const rtl::OUString sAdjustmentValues( RTL_CONSTASCII_USTRINGPARAM( "AdjustmentValues" ) );
-                    if ( aGeoPropSeq[ i ].Name.equals( sAdjustmentValues ) )
+                    uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq;
+                    if ( aGeoPropSeq[ i ].Value >>= aAdjustmentSeq )
                     {
-                        uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq;
-                        if ( aGeoPropSeq[ i ].Value >>= aAdjustmentSeq )
+                        std::vector< CustomShapeGuide >::const_iterator aIter( maAdjustmentGuideList.begin() );
+                        while( aIter != maAdjustmentGuideList.end() )
                         {
-                            std::vector< CustomShapeGuide >::const_iterator aIter( maAdjustmentGuideList.begin() );
-                            while( aIter != maAdjustmentGuideList.end() )
+                            if ( (*aIter).maName.getLength() > 3 )
                             {
-                                if ( (*aIter).maName.getLength() > 3 )
+                                sal_Int32 nAdjustmentIndex = (*aIter).maName.copy( 3 ).toInt32() - 1;
+                                if ( ( nAdjustmentIndex >= 0 ) && ( nAdjustmentIndex < aAdjustmentSeq.getLength() ) )
                                 {
-                                    sal_Int32 nAdjustmentIndex = (*aIter).maName.copy( 3 ).toInt32() - 1;
-                                    if ( ( nAdjustmentIndex >= 0 ) && ( nAdjustmentIndex < aAdjustmentSeq.getLength() ) )
-                                    {
-                                        EnhancedCustomShapeAdjustmentValue aAdjustmentVal;
-                                        aAdjustmentVal.Value <<= (*aIter).maFormula.toInt32();
-                                        aAdjustmentVal.State = PropertyState_DIRECT_VALUE;
-                                        aAdjustmentSeq[ nAdjustmentIndex ] = aAdjustmentVal;
-                                    }
+                                    EnhancedCustomShapeAdjustmentValue aAdjustmentVal;
+                                    aAdjustmentVal.Value <<= (*aIter).maFormula.toInt32();
+                                    aAdjustmentVal.State = PropertyState_DIRECT_VALUE;
+                                    aAdjustmentSeq[ nAdjustmentIndex ] = aAdjustmentVal;
                                 }
-                                aIter++;
                             }
-                            aGeoPropSeq[ i ].Value <<= aAdjustmentSeq;
-                            xPropSet->setPropertyValue( sCustomShapeGeometry, Any( aGeoPropSeq ) );
+                            aIter++;
                         }
-                    }
-                    else if ( aGeoPropSeq[ i ].Name.equals( sType ) )
-                    {
-                        aGeoPropSeq[ i ].Value <<= maShapePresetType;
+                        aGeoPropSeq[ i ].Value <<= aAdjustmentSeq;
+                        xPropSet->setPropertyValue( sCustomShapeGeometry, Any( aGeoPropSeq ) );
                     }
                 }
+                else if ( aGeoPropSeq[ i ].Name.equals( sType ) )
+                {
+                    aGeoPropSeq[ i ].Value <<= maShapePresetType;
+                }
             }
+        }
+
+        if(bValuesAdded)
+        {
+            aGeoPropSet <<= aGeoPropSeq;
+            xPropSet->setPropertyValue(sCustomShapeGeometry, aGeoPropSet);
         }
     }
     else
