@@ -141,7 +141,6 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/index/multmrk.src \
     sw/source/ui/lingu/olmenu.src \
     sw/source/ui/misc/autocorr.src \
-    sw/source/ui/misc/bookmark.src \
     sw/source/ui/misc/docfnote.src \
     sw/source/ui/misc/glosbib.src \
     sw/source/ui/misc/glossary.src \

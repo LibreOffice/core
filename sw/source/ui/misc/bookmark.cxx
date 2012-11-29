@@ -29,8 +29,7 @@
 #include "cmdid.h"
 #include "bookmark.hxx"     // SwInsertBookmarkDlg
 #include "IMark.hxx"
-#include "bookmark.hrc"
-#include "misc.hrc"
+#include "globals.hrc"
 
 const String BookmarkCombo::aForbiddenChars = rtl::OUString("/\\@:*?\";,.#");
 
@@ -62,8 +61,8 @@ IMPL_LINK( SwInsertBookmarkDlg, ModifyHdl, BookmarkCombo *, pBox )
 
     }
 
-    aOkBtn.Enable(!bSelEntries);    // new text mark
-    aDeleteBtn.Enable(bSelEntries); // deletable?
+    m_pOkBtn->Enable(!bSelEntries);    // new text mark
+    m_pDeleteBtn->Enable(bSelEntries); // deletable?
 
     return 0;
 }
@@ -75,13 +74,13 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, DeleteHdl)
 {
     // remove text marks from the ComboBox
 
-    for (sal_uInt16 i = aBookmarkBox.GetSelectEntryCount(); i; i-- )
-        aBookmarkBox.RemoveEntry(aBookmarkBox.GetSelectEntryPos(i - 1));
+    for (sal_uInt16 i = m_pBookmarkBox->GetSelectEntryCount(); i; i-- )
+        m_pBookmarkBox->RemoveEntry(m_pBookmarkBox->GetSelectEntryPos(i - 1));
 
-    aBookmarkBox.SetText(aEmptyStr);
-    aDeleteBtn.Enable(sal_False);   // no further entries there
+    m_pBookmarkBox->SetText(aEmptyStr);
+    m_pDeleteBtn->Enable(sal_False);   // no further entries there
 
-    aOkBtn.Enable();            // the OK handler deletes
+    m_pOkBtn->Enable();            // the OK handler deletes
     return 0;
 }
 
@@ -93,9 +92,9 @@ void SwInsertBookmarkDlg::Apply()
 {
     //at first remove deleted bookmarks to prevent multiple bookmarks with the same
     //name
-    for (sal_uInt16 nCount = aBookmarkBox.GetRemovedCount(); nCount > 0; nCount--)
+    for (sal_uInt16 nCount = m_pBookmarkBox->GetRemovedCount(); nCount > 0; nCount--)
     {
-        String sRemoved = aBookmarkBox.GetRemovedEntry( nCount -1 ).GetName();
+        String sRemoved = m_pBookmarkBox->GetRemovedEntry( nCount -1 ).GetName();
         IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
         pMarkAccess->deleteMark( pMarkAccess->findMark(sRemoved) );
         SfxRequest aReq( rSh.GetView().GetViewFrame(), FN_DELETE_BOOKMARK );
@@ -104,13 +103,13 @@ void SwInsertBookmarkDlg::Apply()
     }
 
     // insert text mark
-    sal_uInt16      nLen = aBookmarkBox.GetText().Len();
-    SwBoxEntry  aTmpEntry(aBookmarkBox.GetText(), 0 );
+    sal_uInt16      nLen = m_pBookmarkBox->GetText().Len();
+    SwBoxEntry  aTmpEntry(m_pBookmarkBox->GetText(), 0 );
 
-    if ( nLen && (aBookmarkBox.GetEntryPos(aTmpEntry) == COMBOBOX_ENTRY_NOTFOUND) )
+    if ( nLen && (m_pBookmarkBox->GetEntryPos(aTmpEntry) == COMBOBOX_ENTRY_NOTFOUND) )
     {
-        String sEntry(comphelper::string::remove(aBookmarkBox.GetText(),
-            aBookmarkBox.GetMultiSelectionSeparator()));
+        String sEntry(comphelper::string::remove(m_pBookmarkBox->GetText(),
+            m_pBookmarkBox->GetMultiSelectionSeparator()));
 
         rSh.SetBookmark( KeyCode(), sEntry, aEmptyStr );
         rReq.AppendItem( SfxStringItem( FN_INSERT_BOOKMARK, sEntry ) );
@@ -122,25 +121,20 @@ void SwInsertBookmarkDlg::Apply()
 
 }
 
-/*------------------------------------------------------------------------
-     Description: CTOR
- -----------------------------------------------------------------------*/
 SwInsertBookmarkDlg::SwInsertBookmarkDlg( Window *pParent, SwWrtShell &rS, SfxRequest& rRequest ) :
-
-    SvxStandardDialog(pParent,SW_RES(DLG_INSERT_BOOKMARK)),
-    aBookmarkFl(this,SW_RES(FL_BOOKMARK)),
-    aBookmarkBox(this,SW_RES(CB_BOOKMARK)),
-    aOkBtn(this,SW_RES(BT_OK)),
-    aCancelBtn(this,SW_RES(BT_CANCEL)),
-    aDeleteBtn(this,SW_RES(BT_DELETE)),
+    SvxStandardDialog(pParent, "InsertBookmarkDialog", "modules/swriter/ui/insertbookmark.ui"),
     rSh( rS ),
     rReq( rRequest )
 {
-    aBookmarkBox.SetModifyHdl(LINK(this, SwInsertBookmarkDlg, ModifyHdl));
-    aBookmarkBox.EnableMultiSelection(sal_True);
-    aBookmarkBox.EnableAutocomplete( sal_True, sal_True );
+    get(m_pBookmarkBox, "bookmarks");
+    get(m_pOkBtn, "ok");
+    get(m_pDeleteBtn, "delete");
 
-    aDeleteBtn.SetClickHdl(LINK(this, SwInsertBookmarkDlg, DeleteHdl));
+    m_pBookmarkBox->SetModifyHdl(LINK(this, SwInsertBookmarkDlg, ModifyHdl));
+    m_pBookmarkBox->EnableMultiSelection(sal_True);
+    m_pBookmarkBox->EnableAutocomplete( sal_True, sal_True );
+
+    m_pDeleteBtn->SetClickHdl(LINK(this, SwInsertBookmarkDlg, DeleteHdl));
 
     // fill Combobox with existing bookmarks
     IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
@@ -150,13 +144,18 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg( Window *pParent, SwWrtShell &rS, SfxRe
         ++ppBookmark)
     {
         if(IDocumentMarkAccess::BOOKMARK == IDocumentMarkAccess::GetType(**ppBookmark))
-            aBookmarkBox.InsertEntry( SwBoxEntry( ppBookmark->get()->GetName(), nId++ ) );
+            m_pBookmarkBox->InsertEntry( SwBoxEntry( ppBookmark->get()->GetName(), nId++ ) );
     }
-    FreeResource();
+
     sRemoveWarning = String(SW_RES(STR_REMOVE_WARNING));
 }
 
 SwInsertBookmarkDlg::~SwInsertBookmarkDlg()
+{
+}
+
+BookmarkCombo::BookmarkCombo(Window* pWin) :
+    SwComboBox(pWin)
 {
 }
 
@@ -241,6 +240,11 @@ long BookmarkCombo::PreNotify( NotifyEvent& rNEvt )
     if(!nHandled)
         nHandled = SwComboBox::PreNotify( rNEvt );
     return nHandled;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeBookmarkCombo(Window* pParent)
+{
+    return new BookmarkCombo(pParent);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

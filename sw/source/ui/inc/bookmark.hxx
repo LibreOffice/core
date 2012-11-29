@@ -37,6 +37,7 @@ class BookmarkCombo : public SwComboBox
 
     virtual long    PreNotify(NotifyEvent& rNEvt);
 public:
+    BookmarkCombo( Window* pWin );
     BookmarkCombo( Window* pWin, const ResId& rResId );
 
     sal_uInt16          GetSelectEntryCount() const;
@@ -47,23 +48,21 @@ public:
 
 class SwInsertBookmarkDlg: public SvxStandardDialog
 {
-    FixedLine       aBookmarkFl;
-    BookmarkCombo   aBookmarkBox;
-    OKButton        aOkBtn;
-    CancelButton    aCancelBtn;
-    PushButton      aDeleteBtn;
+    BookmarkCombo*  m_pBookmarkBox;
+    OKButton*       m_pOkBtn;
+    PushButton*     m_pDeleteBtn;
 
     String          sRemoveWarning;
     SwWrtShell      &rSh;
     SfxRequest&     rReq;
 
-    DECL_LINK( ModifyHdl, BookmarkCombo * );
+    DECL_LINK(ModifyHdl, BookmarkCombo *);
     DECL_LINK(DeleteHdl, void *);
 
     virtual void Apply();
 
 public:
-    SwInsertBookmarkDlg( Window *pParent, SwWrtShell &rSh, SfxRequest& rReq );
+    SwInsertBookmarkDlg(Window *pParent, SwWrtShell &rSh, SfxRequest& rReq);
     ~SwInsertBookmarkDlg();
 };
 

@@ -225,6 +225,11 @@ String STR_FOOTNOTE_DIALOG_CHAR
     Text [ en-US ] = "Character" ;
 };
 
+String STR_REMOVE_WARNING
+{
+    Text [ en-US ] = "The following characters are not valid and have been removed: ";
+};
+
 InfoBox MSG_ERROR_SEND_MAIL
 {
     BUTTONS = WB_OK ;
