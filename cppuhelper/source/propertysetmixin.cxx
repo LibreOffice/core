@@ -625,7 +625,12 @@ void PropertySetMixinImpl::Impl::setProperty(
                         & css::beans::PropertyAttribute::CONSTRAINED)
                        != 0))
         {
-            throw css::beans::PropertyVetoException("Invalid " + name, object);
+            css::beans::PropertyVetoException exc;
+            e.TargetException >>= exc;
+            if (exc.Message.isEmpty() )
+                throw css::beans::PropertyVetoException("Invalid " + name, object);
+            else
+                throw exc;
         } else {
             throw css::lang::WrappedTargetException(
                 e.Message, object, e.TargetException);
