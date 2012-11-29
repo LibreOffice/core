@@ -524,7 +524,7 @@ awt::Size SAL_CALL OFixedLine::getSize(  ) throw (uno::RuntimeException)
 void SAL_CALL OFixedLine::setSize( const awt::Size& aSize ) throw (beans::PropertyVetoException, uno::RuntimeException)
 {
     if ( (aSize.Width < MIN_WIDTH && m_nOrientation == 1) || (aSize.Height < MIN_HEIGHT && m_nOrientation == 0) )
-        throw beans::PropertyVetoException();
+        throw uno::RuntimeException("Too small height or width for FixedLine", *this);
     OShapeHelper::setSize(aSize,this);
 }
 // -----------------------------------------------------------------------------
