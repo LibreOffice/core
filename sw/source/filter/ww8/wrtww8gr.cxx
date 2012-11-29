@@ -867,7 +867,7 @@ void SwWW8WrGrf::WriteGrfForBullet(SvStream& rStrm,  const Graphic &rGrf, sal_uI
     }
     else
     {
-        bool bSwapped = rGrf.IsSwapOut() ? true : false;
+        /* bool bSwapped = rGrf.IsSwapOut() ? true : false; */
 
         GDIMetaFile aMeta;
         switch (rGrf.GetType())
