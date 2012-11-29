@@ -874,14 +874,15 @@ void SvxSearchTabPage::InitControls_Impl()
     }
 
     // resize all labels
-    nLabelTextWidth = nLabelTextWidth * 120 / 100; // additional space looks better
+    const Size aSpace = aSearchNameFT.LogicToPixel( Size( RSC_SP_CTRL_DESC_Y, RSC_SP_CTRL_DESC_Y ), MAP_APPFONT );
+    nLabelTextWidth += aSpace.Width();
     const long nLabelWidth = aSearchNameFT.GetSizePixel().Width();
     const long nDelta = nLabelWidth - nLabelTextWidth;
     pLabel = pLabels;
     for ( i = 0; i < nLabelCount; ++i, ++pLabel )
     {
         Size aNewSize = (*pLabel)->GetSizePixel();
-        aNewSize.Width() += nDelta;
+        aNewSize.Width() = nLabelTextWidth;
         (*pLabel)->SetSizePixel( aNewSize );
     }
 
