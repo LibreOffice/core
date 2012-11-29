@@ -19,6 +19,7 @@
 #include "orcusxml.hxx"
 
 #include <set>
+#include <vector>
 #include <boost/scoped_ptr.hpp>
 
 class ScDocument;
@@ -55,6 +56,7 @@ class ScXMLSourceDlg : public ScAnyRefDlg
     ScOrcusXMLTreeParam maXMLParam;
     std::set<const SvTreeListEntry*> maCellLinks;
     std::set<const SvTreeListEntry*> maRangeLinks;
+    std::vector<SvTreeListEntry*> maSelectedEntries;
 
     boost::scoped_ptr<ScOrcusXMLContext> mpXMLContext;
 
@@ -88,6 +90,7 @@ private:
     void SetNonLinkable();
     void SetSingleLinkable();
     void SetRangeLinkable();
+    void SelectAllChildEntries(SvTreeListEntry& rEntry);
 
     /**
      * Check if any of its parents is linked or repeated.  The passed entry is

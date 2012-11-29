@@ -21,6 +21,7 @@
 #include "tools/urlobj.hxx"
 #include "svtools/svlbitm.hxx"
 #include "svtools/treelistentry.hxx"
+#include "svtools/viewdataentry.hxx"
 #include "sfx2/objsh.hxx"
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -236,11 +237,43 @@ void ScXMLSourceDlg::HandleLoseFocus(Control* /*pCtrl*/)
 {
 }
 
+namespace {
+
+class UnselectEntry : std::unary_function<SvTreeListEntry*, void>
+{
+    SvTreeListBox& mrTree;
+    const SvTreeListEntry* mpCurrent;
+public:
+    UnselectEntry(SvTreeListBox& rTree, const SvTreeListEntry* pCur) : mrTree(rTree), mpCurrent(pCur) {}
+
+    void operator() (SvTreeListEntry* p)
+    {
+        if (p == mpCurrent)
+            return;
+
+        SvViewDataEntry* pView = mrTree.GetViewDataEntry(p);
+        if (!pView)
+            return;
+
+        pView->SetSelected(false);
+        mrTree.PaintEntry(p);
+    }
+};
+
+}
+
 void ScXMLSourceDlg::TreeItemSelected()
 {
     SvTreeListEntry* pEntry = maLbTree.GetCurEntry();
     if (!pEntry)
         return;
+
+    if (!maSelectedEntries.empty())
+    {
+        // Unselect highlighted entries that are not currently selected.
+        std::for_each(maSelectedEntries.begin(), maSelectedEntries.end(), UnselectEntry(maLbTree, pEntry));
+        maSelectedEntries.clear();
+    }
 
     ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*pEntry);
     OSL_ASSERT(pUserData);
@@ -330,6 +363,7 @@ void ScXMLSourceDlg::RepeatElementSelected(SvTreeListEntry& rEntry)
         return;
     }
 
+    SelectAllChildEntries(rEntry);
     SetRangeLinkable();
 }
 
@@ -379,6 +413,21 @@ void ScXMLSourceDlg::SetRangeLinkable()
     maFtMappedCellTitle.Enable();
     maRefEdit.Enable();
     maRefBtn.Enable();
+}
+
+void ScXMLSourceDlg::SelectAllChildEntries(SvTreeListEntry& rEntry)
+{
+    SvTreeListEntries& rChildren = rEntry.GetChildEntries();
+    SvTreeListEntries::iterator it = rChildren.begin(), itEnd = rChildren.end();
+    for (; it != itEnd; ++it)
+    {
+        SvTreeListEntry& r = *it;
+        SelectAllChildEntries(r); // select recursively.
+        SvViewDataEntry* p = maLbTree.GetViewDataEntry(&r);
+        p->SetSelected(true);
+        maLbTree.PaintEntry(&r);
+        maSelectedEntries.push_back(&r);
+    }
 }
 
 bool ScXMLSourceDlg::IsParentDirty(SvTreeListEntry* pEntry) const
