@@ -244,8 +244,7 @@ sal_Bool SwIoSystem::IsFileFilter( SfxMedium& rMedium, const String& rFmtName,
                 if ( xStor.is() )
                     bRet = IsValidStgFilter( xStor, *pFltr );
                 else if ( xStg.Is() )
-                    bRet = xStg.Is() && IsValidStgFilter( *xStg, *pFltr );
-                bRet = bRet && (pFltr->GetUserData() == rFmtName);
+                    bRet = IsValidStgFilter( *xStg, *pFltr );
             }
             else if( !xStg.Is() && !xStor.is() )
             {
