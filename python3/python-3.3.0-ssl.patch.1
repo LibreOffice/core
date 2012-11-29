@@ -1,3 +1,5 @@
+-*- Mode: diff -*-
+
 Tweak SSL build to find OpenSSL in solver & not build it itself in "ssl.vcproj" etc.
 
 diff -ru python3.old_/Modules/Setup.dist python3/Modules/Setup.dist
@@ -327,6 +329,17 @@ diff -ru python3.old_/PCbuild/_ssl.vcxproj python3/PCbuild/_ssl.vcxproj
        <TargetMachine>MachineX64</TargetMachine>
      </Link>
    </ItemDefinitionGroup>
+@@ -271,10 +271,6 @@
+       <Project>{cf7ac3d1-e2df-41d2-bea6-1e2556cdea26}</Project>
+       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+     </ProjectReference>
+-    <ProjectReference Include="ssl.vcxproj">
+-      <Project>{e5b04cc0-eb4c-42ab-b4dc-18ef95f864b0}</Project>
+-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+-    </ProjectReference>
+     <ProjectReference Include="_socket.vcxproj">
+       <Project>{86937f53-c189-40ef-8ce8-8759d8e7d480}</Project>
+       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
 diff -ru python3.old_/setup.py python3/setup.py
 --- python3.old_/setup.py	2012-09-29 10:00:50.000000000 +0200
 +++ python3/setup.py	2012-11-13 14:18:23.484158149 +0100
