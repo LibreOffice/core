@@ -66,6 +66,7 @@ public:
     void testMathRuns();
     void testFdo53113();
     void testFdo55939();
+    void testTextFrames();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -107,6 +108,7 @@ void Test::run()
         {"math-runs.rtf", &Test::testMathRuns},
         {"fdo53113.odt", &Test::testFdo53113},
         {"fdo55939.odt", &Test::testFdo55939},
+        {"textframes.odt", &Test::testTextFrames},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -437,6 +439,14 @@ void Test::testFdo55939()
     CPPUNIT_ASSERT_EQUAL(OUString("Footnote text."),
             getProperty< uno::Reference<text::XTextRange> >(getRun(xParagraph, 2), "Footnote")->getText()->getString().replaceAll("\t", ""));
     getRun(xParagraph, 3, " Text after the footnote."); // However, this leading space is intentional and OK.
+}
+
+void Test::testTextFrames()
+{
+    // The output was simply invalid, so let's check if all 3 frames were imported back.
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xIndexAccess->getCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

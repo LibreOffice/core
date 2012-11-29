@@ -386,7 +386,7 @@ void RtfAttributeOutput::EndParagraphProperties()
 
 void RtfAttributeOutput::StartRun( const SwRedlineData* pRedlineData, bool bSingleEmptyRun )
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
+    SAL_INFO("sw.rtf", OSL_THIS_FUNC << ", bSingleEmptyRun: " << bSingleEmptyRun);
 
     m_bInRun = true;
     m_bSingleEmptyRun = bSingleEmptyRun;
@@ -424,7 +424,7 @@ void RtfAttributeOutput::EndRunProperties( const SwRedlineData* /*pRedlineData*/
 
 void RtfAttributeOutput::RunText( const String& rText, rtl_TextEncoding /*eCharSet*/ )
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
+    SAL_INFO("sw.rtf", OSL_THIS_FUNC << ", rText: " << rText);
     RawText( rText, 0, m_rExport.eCurrentEncoding );
 }
 
@@ -1515,6 +1515,11 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
                  * would be there, causing a problem later.
                  */
                 OString aSave = m_aRun.makeStringAndClear();
+                // Also back m_bInRun and m_bSingleEmptyRun up.
+                bool bInRunOrig = m_bInRun;
+                m_bInRun = false;
+                bool bSingleEmptyRunOrig = m_bSingleEmptyRun;
+                m_bSingleEmptyRun = false;
                 m_rExport.bRTFFlySyntax = true;
 
                 const SwFrmFmt& rFrmFmt = rFrame.GetFrmFmt( );
@@ -1530,6 +1535,8 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
                 m_rExport.bRTFFlySyntax = false;
                 m_aRun->append(aSave);
                 m_aRunText.clear();
+                m_bInRun = bInRunOrig;
+                m_bSingleEmptyRun = bSingleEmptyRunOrig;
             }
 
             m_rExport.mpParentFrame = NULL;
