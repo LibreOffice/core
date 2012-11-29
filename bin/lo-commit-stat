@@ -6,6 +6,7 @@
 use strict;
 use LWP::UserAgent;
 use utf8;
+use File::Temp;
 
 my $main_repo="core";
 my @pieces=("binfilter", "dictionaries", "help", "translations");
@@ -87,11 +88,53 @@ sub standardize_summary($)
     return $line;
 }
 
-sub load_git_log($$$$$) 
+sub generate_git_cherry_ids_log($$$$$) 
 {
-    my ($pdata, $repo_dir, $piece, $branch_name, $git_command) = @_;
+    my ($pdata, $repo_dir, $piece, $branch_name, $git_args) = @_;
 
-    my $cmd = "cd $repo_dir; $git_command";
+    my $commit_ids_log;
+    my $commit_ids_log_fh;
+    $commit_ids_log_fh = File::Temp->new(TEMPLATE => 'lo-commit-stat-ids-XXXXXX',
+                                         DIR => '/tmp',
+                                         UNLINK => 0);
+    $commit_ids_log = $commit_ids_log_fh->filename;
+
+    print STDERR "Filtering cherry-picked commits in the git repo: $piece...\n";
+
+    my $cmd = "cd $repo_dir; git cherry $git_args";
+    open (GIT, "$cmd 2>&1|") || die "Can't run $cmd: $!";
+
+    while (my $line = <GIT>) {
+
+        # skip cherry-picked commits
+        next if ( $line =~ m/^\-/ );
+    
+        if ( $line =~ m/^\+ / ) {
+            $line =~ s/^\+ //;
+            print $commit_ids_log_fh $line;
+        }
+    }
+    
+    close GIT;
+    close $commit_ids_log_fh;
+    
+    return $commit_ids_log;
+}
+
+sub load_git_log($$$$$$$) 
+{
+    my ($pdata, $repo_dir, $piece, $branch_name, $git_command, $git_cherry, $git_args) = @_;
+
+    my $cmd = "cd $repo_dir;";
+    my $commit_ids_log;
+    
+    if ($git_cherry) {
+        $commit_ids_log = generate_git_cherry_ids_log($pdata, $repo_dir, $piece, $branch_name, $git_args);
+        $cmd .= " cat $commit_ids_log | xargs -n 1 $git_command -1";
+    } else {
+        $cmd .= " $git_command $git_args";
+    }
+
     my $commit_id;
     my $summary;
 
@@ -149,6 +192,7 @@ sub load_git_log($$$$$)
     }
 
     close GIT;
+    unlink $commit_ids_log if ($git_cherry);
 }
 
 sub get_repo_name($)
@@ -170,9 +214,9 @@ sub get_repo_name($)
     die "Error: can't find repo name in \"$$repo_dir/.git/config\"\n";
 }
 
-sub load_data($$$$$)
+sub load_data($$$$$$$)
 {
-    my ($pdata, $top_dir, $piece, $branch_name, $git_command) = @_;
+    my ($pdata, $top_dir, $piece, $branch_name, $git_command, $git_cherry, $git_args) = @_;
 
     if (defined $piece) {
         my $piece_dir;
@@ -181,11 +225,11 @@ sub load_data($$$$$)
         } else {
             $piece_dir = "$top_dir/clone/$piece";
         }
-        load_git_log($pdata, $piece_dir, $piece, $branch_name, $git_command);
+        load_git_log($pdata, $piece_dir, $piece, $branch_name, $git_command, $git_cherry, $git_args);
     } else {
-        load_git_log($pdata, $top_dir, $main_repo, $branch_name, $git_command);
-        foreach my $piece (@pieces) {
-            load_git_log($pdata, "$top_dir/clone/$piece", $piece, $branch_name, $git_command);
+        load_git_log($pdata, $top_dir, $main_repo, $branch_name, $git_command, $git_cherry, $git_args);
+        foreach my $piece (sort { $a cmp $b } @pieces) {
+            load_git_log($pdata, "$top_dir/clone/$piece", $piece, $branch_name, $git_command, $git_cherry, $git_args);
         }
     }
 }
@@ -420,13 +464,17 @@ sub usage()
           "     --bugs-numbers  generate log with bugzilla numbers\n" .
           "     --rev-list      use \"git rev-list\" instead of \"git log\"; useful to check\n" .
           "                     differences between branches\n" .
+          "     --cherry        use \"git cherry\" instead of \"git log\"; detects cherry-picked\n" .
+          "                     commits between branches\n" .
           "      topdir         directory with the libreoffice/core clone; the piece repos\n" .
           "                     must be cloned in the main-repo-root/clone/<piece> subdirectories\n" .
           "      git_arg        extra parameters passed to the git command to define\n" .
           "                     the area of interest; The default command is \"git log\" and\n" .
           "                     parameters might be, for example, --after=\"2010-09-27\" or\n" .
           "                     TAG..HEAD; with the option --rev-list, useful might be, for\n" .
-          "                     example origin/master ^origin/libreoffice-3-3\n";
+          "                     example origin/master ^origin/libreoffice-3-3; with the option\n" .
+          "                     --rev-list, useful might be, for example libreoffice-3.6.3.2\n" .
+          "                     libreoffice-3.6.4.1\n";
 }
 
 
@@ -446,8 +494,9 @@ my $log_suffix;
 my $log;
 my $branch_name;
 my $git_command = "git log";
+my $git_cherry;
+my $git_args = "";
 my $branch_name;
-my @git_args;
 my %data;
 my $print_mode = "normal";
 
@@ -482,11 +531,14 @@ foreach my $arg (@ARGV) {
         $generate_log{"bugs-numbers"} = 1;
     } elsif ($arg eq '--rev-list') {
         $git_command = "git rev-list --pretty=medium"
+    } elsif ($arg eq '--cherry') {
+        $git_command = "git log";
+        $git_cherry = 1;
     } else {
         if (! defined $top_dir) {
             $top_dir=$arg;
         } else {
-            push @git_args, $arg;
+            $git_args .= " $arg";
         }
     }
 }
@@ -495,8 +547,6 @@ foreach my $arg (@ARGV) {
 if (%generate_log == 0) {
     $generate_log{"commits"} = 1;
 }
-
-$git_command .= " " . join ' ', @git_args if (@git_args);
 
 (defined $top_dir) || die "Error: top directory is not defined\n";
 (-d "$top_dir") || die "Error: not a directory: $top_dir\n";
@@ -508,7 +558,7 @@ $git_command .= " " . join ' ', @git_args if (@git_args);
 
 $branch_name = get_branch_name($top_dir);
 
-load_data(\%data, $top_dir, $piece, $branch_name, $git_command);
+load_data(\%data, $top_dir, $piece, $branch_name, $git_command, $git_cherry, $git_args);
 
 generate_log(\%data, \&print_commits,    $log_dir, "commits",     $log_suffix, $top_dir, $branch_name, 0) if (defined $generate_log{"commits"});
 generate_log(\%data, \&print_bugs,       $log_dir, "bugs",        $log_suffix, $top_dir, $branch_name, 0) if (defined $generate_log{"bugs"});
