@@ -37,7 +37,6 @@
 
 #include <new>
 
-namespace css = com::sun::star;
 using stoc::registry_tdprovider::StructTypeDescription;
 
 StructTypeDescription::StructTypeDescription(

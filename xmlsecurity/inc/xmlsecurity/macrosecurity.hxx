@@ -37,7 +37,6 @@ namespace xml { namespace crypto {
     class XSecurityEnvironment; }}
 }}}
 
-namespace css = com::sun::star;
 namespace cssu = com::sun::star::uno;
 namespace dcss = ::com::sun::star;
 

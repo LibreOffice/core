@@ -27,8 +27,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <boost/scoped_ptr.hpp>
 
-namespace css = ::com::sun::star;
-
 namespace sd {
 
 namespace {

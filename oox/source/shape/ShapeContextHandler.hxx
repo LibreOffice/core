@@ -30,8 +30,6 @@
 #include "oox/core/xmlfilterbase.hxx"
 #include "ShapeFilterBase.hxx"
 
-namespace css = ::com::sun::star;
-
 namespace oox { namespace shape {
 
 class ShapeFragmentHandler : public core::FragmentHandler

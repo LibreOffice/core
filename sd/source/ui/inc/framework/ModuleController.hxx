@@ -32,8 +32,6 @@
 #include <boost/scoped_ptr.hpp>
 #include <set>
 
-namespace css = ::com::sun::star;
-
 namespace {
 
 typedef ::cppu::WeakComponentImplHelper2 <

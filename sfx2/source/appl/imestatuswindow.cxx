@@ -80,8 +80,6 @@ class WeakPropertyChangeListener : public ::cppu::WeakImplHelper1<com::sun::star
         }
 };
 
-namespace css = com::sun::star;
-
 using sfx2::appl::ImeStatusWindow;
 
 ImeStatusWindow::ImeStatusWindow(

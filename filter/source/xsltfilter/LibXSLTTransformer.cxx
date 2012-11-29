@@ -80,8 +80,6 @@ using ::std::list;
 using ::std::map;
 using ::std::pair;
 
-namespace css = com::sun::star;
-
 #define _INPUT_BUFFER_SIZE 4096
 #define _OUTPUT_BUFFER_SIZE 4096
 

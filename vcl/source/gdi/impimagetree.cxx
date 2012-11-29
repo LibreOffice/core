@@ -63,8 +63,6 @@
 
 namespace {
 
-namespace css = com::sun::star;
-
 rtl::OUString createPath(
     rtl::OUString const & name, sal_Int32 pos, rtl::OUString const & locale)
 {

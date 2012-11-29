@@ -62,8 +62,6 @@ namespace com { namespace sun { namespace star {
     class XEventListener;
 } } }
 
-namespace css = com::sun::star;
-
 namespace {
 
 class Empty1:

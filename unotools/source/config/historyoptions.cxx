@@ -50,8 +50,6 @@ using namespace ::osl     ;
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::beans ;
 
-namespace css = ::com::sun::star;
-
 namespace {
     static const ::sal_Int32 s_nOffsetURL               = 0;
     static const ::sal_Int32 s_nOffsetFilter            = 1;

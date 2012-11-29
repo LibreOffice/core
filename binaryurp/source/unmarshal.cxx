@@ -55,8 +55,6 @@ namespace binaryurp {
 
 namespace {
 
-namespace css = com::sun::star;
-
 void * allocate(sal_Size size) {
     void * p = rtl_allocateMemory(size);
     if (p == 0) {

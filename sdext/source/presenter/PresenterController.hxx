@@ -50,8 +50,6 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
 
-namespace css = ::com::sun::star;
-
 namespace sdext { namespace presenter {
 
 class PresenterCanvasHelper;

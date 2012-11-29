@@ -32,8 +32,6 @@
 
 namespace framework{
 
-namespace css = ::com::sun::star;
-
 /** @short  internal helper to bind e.g. MAC-Menu events to our internal dispatch API.
 
     @descr  On e.g. MAC platform system menus are merged together with some fix entries as

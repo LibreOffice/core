@@ -37,12 +37,6 @@
 
 #include <tools/debug.hxx>
 
-//-----------------------------------------------
-// namespaces
-
-namespace css = ::com::sun::star;
-
-
 namespace svtools {
 //-----------------------------------------------
 ItemHolder2::ItemHolder2()

@@ -28,8 +28,6 @@
 #define ARLEN(x) (sizeof (x) / sizeof *(x))
 
 
-namespace css = ::com::sun::star;
-
 namespace stoc_tdmgr
 {
     extern rtl_StandardModuleCount g_moduleCount;

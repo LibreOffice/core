@@ -36,8 +36,6 @@
 #include <osl/mutex.h>
 
 
-namespace css = ::com::sun::star;
-
 namespace svt
 {
 

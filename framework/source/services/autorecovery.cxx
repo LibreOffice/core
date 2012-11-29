@@ -90,10 +90,6 @@
 //_______________________________________________
 // namespaces
 
-#ifndef css
-namespace css = ::com::sun::star;
-#endif
-
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;

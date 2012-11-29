@@ -101,12 +101,6 @@
 
 namespace configmgr {
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
-
 oslInterlockedCount Access::acquireCounting() {
     return osl_atomic_increment(&m_refCount);
 }

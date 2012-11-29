@@ -56,7 +56,6 @@
 
 namespace {
 
-namespace css = ::com::sun::star;
 using css::uno::Reference;
 using ::rtl::OUString;
 

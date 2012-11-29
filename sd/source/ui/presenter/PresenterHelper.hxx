@@ -27,8 +27,6 @@
 #include <cppuhelper/compbase2.hxx>
 #include <boost/noncopyable.hpp>
 
-namespace css = ::com::sun::star;
-
 namespace sd { namespace presenter {
 
 namespace {

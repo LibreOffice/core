@@ -32,8 +32,6 @@
 #include <drafts/com/sun/star/script/framework/provider/XScript.hpp>
 #include <drafts/com/sun/star/script/framework/runtime/XScriptInvocation.hpp>
 
-namespace css = ::com::sun::star;
-
 namespace func_provider
 {
 

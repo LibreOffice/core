@@ -49,8 +49,6 @@
 
 namespace {
 
-namespace css = com::sun::star;
-
 typedef void (* Function)(void *);
 
 Function toFunction(void * pointer) {

@@ -38,7 +38,6 @@ namespace kdeaccess {
 
 namespace {
 
-namespace css = com::sun::star ;
 namespace uno = css::uno ;
 
 }

@@ -29,14 +29,12 @@
 #define MYLISTENER_IMPLEMENTATIONNAME  "vnd.My.impl.NewDocListener"
 #define MYLISTENER_SERVICENAME         "vnd.My.NewDocListener"
 
-namespace css = ::com::sun::star;
-
 /*---------------------------------------------------
  * Registriert sich in der Office Konfiguration als Job.
- * Dieser wird dann für alle neu geöffneten Dokumente automatisch
- * gerufen. Man bekommt eine Reference auf das geöffnete Dokument
- * überreicht und kann dann prüfen, ob es ein unterstütztes Format
- * hat. (Wir interessieren uns ja schließlich nur für Writer/Calc Dokumente.)
+ * Dieser wird dann fÃ¼r alle neu geÃ¶ffneten Dokumente automatisch
+ * gerufen. Man bekommt eine Reference auf das geÃ¶ffnete Dokument
+ * Ã¼berreicht und kann dann prÃ¼fen, ob es ein unterstÃ¼tztes Format
+ * hat. (Wir interessieren uns ja schlieÃŸlich nur fÃ¼r Writer/Calc Dokumente.)
  *
  * @see CalcListener
  * @see WriterListener

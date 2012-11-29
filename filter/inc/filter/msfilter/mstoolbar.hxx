@@ -45,8 +45,6 @@
 #include <vcl/bitmap.hxx>
 #include <cppuhelper/implbase1.hxx>
 
-namespace css = ::com::sun::star;
-
 class TBCHeader;
 
 

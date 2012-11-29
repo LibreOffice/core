@@ -40,8 +40,6 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <osl/interlck.h>
 
-namespace css = ::com::sun::star;
-
 namespace fpicker{
 namespace win32{
 namespace vista{

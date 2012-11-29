@@ -57,7 +57,6 @@
 #include "so_closelistener.hxx"
 #include <osl/process.h>
 
-namespace css=com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::connection;

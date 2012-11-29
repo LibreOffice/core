@@ -28,8 +28,6 @@
 #include <vector>
 #include <boost/function.hpp>
 
-namespace css = ::com::sun::star;
-
 namespace sdext { namespace presenter {
 
 /** This class gives access to the configuration.  Create an object of this

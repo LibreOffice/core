@@ -32,8 +32,6 @@
 
 namespace {
 
-namespace css = ::com::sun::star;
-
 struct MutexHolder
 {
     ::osl::Mutex m_mutex;

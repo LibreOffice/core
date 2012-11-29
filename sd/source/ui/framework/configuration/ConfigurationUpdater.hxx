@@ -28,8 +28,6 @@
 #include <vector>
 #include <boost/shared_ptr.hpp>
 
-namespace css = ::com::sun::star;
-
 namespace sd { namespace framework {
 
 class ConfigurationClassifier;

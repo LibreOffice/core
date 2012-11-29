@@ -55,8 +55,6 @@
 #include "jvmaccess/unovirtualmachine.hxx"
 #include "jvmaccess/virtualmachine.hxx"
 
-namespace css = com::sun::star;
-
 using namespace ::com::sun::star::java;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::loader;

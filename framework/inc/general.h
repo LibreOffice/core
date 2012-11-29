@@ -29,16 +29,6 @@
 
 #include <rtl/ustring.hxx>
 
-
-//-----------------------------------------------------------------------------
-/** will make our code more readable if we can use such short name css instead
-    of typing ::com::sun::star everytimes.
-
-    On the other side we had so many problems with "using namespace" so we dont use
-    it here any longer.
- */
-namespace css = ::com::sun::star;
-
 #endif // #ifndef __FRAMEWORK_GENERAL_H_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

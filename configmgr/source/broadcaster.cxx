@@ -44,8 +44,6 @@ namespace configmgr {
 
 namespace {
 
-namespace css = com::sun::star;
-
 void appendMessage(
     rtl::OUStringBuffer & buffer, css::uno::Exception const & exception)
 {

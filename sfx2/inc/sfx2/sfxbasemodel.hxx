@@ -161,8 +161,6 @@
 #define XTITLECHANGEBROADCASTER ::com::sun::star::frame::XTitleChangeBroadcaster
 #define XUNTITLEDNUMBERS ::com::sun::star::frame::XUntitledNumbers
 
-namespace css = ::com::sun::star;
-
 //________________________________________________________________________________________________________
 //  forwards
 //________________________________________________________________________________________________________

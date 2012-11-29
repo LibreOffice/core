@@ -29,7 +29,6 @@
 #include "uno/lbnames.h"
 
 
-namespace css = ::com::sun::star;
 using namespace ::std;
 using namespace ::osl;
 using namespace ::rtl;

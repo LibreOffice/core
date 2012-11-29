@@ -27,12 +27,6 @@
 #include "rtl/ustring.hxx"
 #include "unotest/toabsolutefileurl.hxx"
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
-
 namespace test {
 
 rtl::OUString toAbsoluteFileUrl(rtl::OUString const & relativePathname) {

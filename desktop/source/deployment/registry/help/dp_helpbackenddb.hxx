@@ -25,8 +25,6 @@
 #include "boost/optional.hpp"
 #include "dp_backenddb.hxx"
 
-namespace css = ::com::sun::star;
-
 namespace com { namespace sun { namespace star {
         namespace uno {
         class XComponentContext;

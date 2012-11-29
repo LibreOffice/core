@@ -123,7 +123,6 @@ using namespace drawing;
 using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
-namespace css = ::com::sun::star;
 
 using sdb::application::XDatabaseDocumentUI;
 namespace DatabaseObject = sdb::application::DatabaseObject;

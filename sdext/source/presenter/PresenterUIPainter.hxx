@@ -26,8 +26,6 @@
 #include <com/sun/star/rendering/XBitmap.hpp>
 #include <boost/noncopyable.hpp>
 
-namespace css = ::com::sun::star;
-
 namespace sdext { namespace presenter {
 
 /** Functions for painting UI elements.

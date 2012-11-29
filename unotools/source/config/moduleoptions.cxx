@@ -40,14 +40,6 @@
 
 #include "itemholder1.hxx"
 
-//_________________________________________________________________________________________________________________
-//  namespaces
-//_________________________________________________________________________________________________________________
-
-#ifndef css
-namespace css = ::com::sun::star;
-#endif
-
 /*-************************************************************************************************************//**
     @descr          These values are used to define neccessary keys from our configuration management to support
                     all functionality of these implementation.

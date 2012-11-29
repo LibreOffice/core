@@ -29,12 +29,6 @@
 
 namespace binaryurp {
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
-
 OutgoingRequests::OutgoingRequests() {}
 
 OutgoingRequests::~OutgoingRequests() {}

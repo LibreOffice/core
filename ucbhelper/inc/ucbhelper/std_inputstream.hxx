@@ -24,8 +24,6 @@
 
 namespace ucbhelper
 {
-    namespace css = com::sun::star;
-
     /** Implements a seekable InputStream
      *  working on an std::istream
      */

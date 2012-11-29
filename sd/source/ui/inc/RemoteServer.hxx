@@ -25,15 +25,12 @@
 
 #include "sddllapi.h"
 
-namespace css = ::com::sun::star;
-
 /**
 * The port for use for the main communication between LibO and remote control app.
 */
 #define PORT 1599
 
 #define CHARSET RTL_TEXTENCODING_UTF8
-namespace css = ::com::sun::star;
 
 namespace sd
 {

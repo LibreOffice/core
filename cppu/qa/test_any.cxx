@@ -59,8 +59,6 @@
 
 namespace {
 
-namespace css = com::sun::star;
-
 class Base {
 public:
     Base(): m_count(0) {}

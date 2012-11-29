@@ -21,8 +21,6 @@
 
 namespace ucbhelper
 {
-    namespace css = com::sun::star;
-
     /** Implements a OutputStream
      *  working on an std::ostream
      */

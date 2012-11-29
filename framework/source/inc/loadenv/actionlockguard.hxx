@@ -29,11 +29,6 @@
 
 namespace framework{
 
-#ifndef css
-namespace css = ::com::sun::star;
-#endif
-
-
 /** @short  implements a guard, which can use the interface
             <type scope="com::sun::star::document">XActionLockable</type>.
 

@@ -46,8 +46,6 @@
 #include "uno/environment.h"
 #include "uno/lbnames.h"
 
-namespace css = com::sun::star;
-
 namespace {
 
 class Service: public cppu::WeakImplHelper2<

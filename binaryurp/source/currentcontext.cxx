@@ -32,12 +32,6 @@
 
 namespace binaryurp {
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
-
 namespace current_context {
 
 css::uno::UnoInterfaceReference get() {

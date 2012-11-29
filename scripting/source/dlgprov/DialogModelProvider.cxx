@@ -26,7 +26,6 @@
 // component helper namespace
 namespace comp_DialogModelProvider {
 
-namespace css = ::com::sun::star;
 using namespace ::com::sun::star;
 using namespace awt;
 using namespace lang;
@@ -47,7 +46,6 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL _create( css::uno::Referenc
 /// anonymous implementation namespace
 namespace dlgprov {
 
-namespace css = ::com::sun::star;
 using namespace ::com::sun::star;
 using namespace awt;
 using namespace lang;

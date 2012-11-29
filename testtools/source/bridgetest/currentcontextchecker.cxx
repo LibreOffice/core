@@ -47,8 +47,6 @@
 
 namespace {
 
-namespace css = ::com::sun::star;
-
 static char const KEY[] = "testtools.bridgetest.Key";
 static char const VALUE[] = "good";
 

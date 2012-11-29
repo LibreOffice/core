@@ -54,8 +54,6 @@
 #include <osl/conditn.hxx>
 #include <rtl/ustring.hxx>
 
-namespace css = ::com::sun::star;
-
 namespace fpicker{
 namespace win32{
 namespace vista{

@@ -49,12 +49,6 @@
 
 #include "app.hrc"
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
-
 bool sfx2::openUriExternally(
     rtl::OUString const & uri, bool handleSystemShellExecuteException)
 {

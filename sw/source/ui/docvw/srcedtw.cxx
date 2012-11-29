@@ -46,12 +46,6 @@
 #include <helpid.h>
 #include <deque>
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
-
 struct SwTextPortion
 {
     sal_uInt16 nLine;

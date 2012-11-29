@@ -51,8 +51,6 @@ namespace configmgr {
 
 namespace {
 
-namespace css = com::sun::star;
-
 // Conservatively merge a template or component (and its recursive parts) into
 // an existing instance:
 void merge(

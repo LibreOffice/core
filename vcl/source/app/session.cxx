@@ -36,12 +36,6 @@
 
 #include <list>
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
-
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;

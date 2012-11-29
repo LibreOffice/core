@@ -31,7 +31,6 @@
 namespace lang  = com::sun::star::lang;
 namespace ucb = com::sun::star::ucb;
 namespace uno = com::sun::star::uno;
-namespace css = com::sun::star;
 
 #define OUSTR(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
 

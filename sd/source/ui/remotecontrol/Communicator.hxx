@@ -25,8 +25,6 @@
 #include "BufferedStreamSocket.hxx"
 
 #define CHARSET RTL_TEXTENCODING_UTF8
-namespace css = ::com::sun::star;
-
 namespace sd
 {
 

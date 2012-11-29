@@ -49,8 +49,6 @@ namespace configmgr {
 
 namespace {
 
-namespace css = com::sun::star;
-
 bool parseHexDigit(char c, int * value) {
     assert(value != 0);
     if (c >= '0' && c <= '9') {

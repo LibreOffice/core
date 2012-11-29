@@ -113,8 +113,6 @@ using namespace ::com::sun::star::container;
 using namespace ::cppu;
 using namespace ::sfx2;
 
-namespace css = ::com::sun::star;
-
 //=========================================================================
 
 class SfxOpenDocStatusListener_Impl : public WeakImplHelper1< XDispatchResultListener >

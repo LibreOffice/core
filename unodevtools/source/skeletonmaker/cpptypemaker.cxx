@@ -93,7 +93,7 @@ void printType(std::ostream & o,
 
     o << scopedCppName(codemaker::cpp::translateUnoToCppType(
                            sort, typeClass, name, false),
-                       false, options.shortnames && referenceType > 0);
+                       options.shortnames && referenceType > 0);
 
     if (typeClass == RT_TYPE_INTERFACE && referenceType > 0)
         o << " >";
@@ -391,17 +391,17 @@ void printMethods(std::ostream & o,
         if ( type.equals("com/sun/star/beans/XPropertySet")) {
             generated.add(type);
             generateXPropertySetBodies(
-                o, classname, scopedCppName(propertyhelper, false, true));
+                o, classname, scopedCppName(propertyhelper));
             return;
         } else if ( type.equals("com/sun/star/beans/XFastPropertySet")) {
             generated.add(type);
             generateXFastPropertySetBodies(
-                o, classname, scopedCppName(propertyhelper, false, true));
+                o, classname, scopedCppName(propertyhelper));
             return;
         } else if ( type.equals("com/sun/star/beans/XPropertyAccess")) {
             generated.add(type);
             generateXPropertyAccessBodies(
-                o, classname, scopedCppName(propertyhelper, false, true));
+                o, classname, scopedCppName(propertyhelper));
             return;
         }
     }

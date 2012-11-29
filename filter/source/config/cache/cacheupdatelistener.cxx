@@ -31,11 +31,6 @@
 namespace filter{
     namespace config{
 
-namespace css = ::com::sun::star;
-
-
-
-
 CacheUpdateListener::CacheUpdateListener(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR,
                                          FilterCache &rFilterCache,
                                          const css::uno::Reference< css::uno::XInterface >& xConfigAccess,

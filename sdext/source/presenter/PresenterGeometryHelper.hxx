@@ -28,8 +28,6 @@
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
 #include <vector>
 
-namespace css = ::com::sun::star;
-
 namespace sdext { namespace presenter {
 
 /** Collection of geometry related convenience functions.

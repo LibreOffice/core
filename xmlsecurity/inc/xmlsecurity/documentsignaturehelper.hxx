@@ -38,8 +38,6 @@ namespace embed {
     class XStorage; }
 }}}
 
-namespace css = com::sun::star;
-
 
 /**********************************************************
  DocumentSignatureHelper

@@ -27,8 +27,6 @@
 // component helper namespace
 namespace comp_CBlankNode {
 
-namespace css = ::com::sun::star;
-
 // component and service helper functions:
 ::rtl::OUString SAL_CALL _getImplementationName();
 css::uno::Sequence< ::rtl::OUString > SAL_CALL _getSupportedServiceNames();
@@ -40,8 +38,6 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL _create( css::uno::Referenc
 // component helper namespace
 namespace comp_CURI {
 
-namespace css = ::com::sun::star;
-
 // component and service helper functions:
 ::rtl::OUString SAL_CALL _getImplementationName();
 css::uno::Sequence< ::rtl::OUString > SAL_CALL _getSupportedServiceNames();
@@ -52,8 +48,6 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL _create( css::uno::Referenc
 
 // component helper namespace
 namespace comp_CLiteral {
-
-namespace css = ::com::sun::star;
 
 // component and service helper functions:
 ::rtl::OUString SAL_CALL _getImplementationName();

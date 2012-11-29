@@ -29,8 +29,6 @@
 #include <tools/link.hxx>
 #include <vector>
 
-namespace css = ::com::sun::star;
-
 namespace sd { namespace presenter {
 
 /** Each UpdateRequester handles update requests (calls to

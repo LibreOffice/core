@@ -36,8 +36,6 @@ class SdrPage;
 
 namespace sd { namespace slidesorter { namespace model {
 
-namespace css = ::com::sun::star;
-
 /** Each PageDescriptor object represents the preview of one draw page,
     slide, or master page of a Draw or Impress document as they are displayed
     in the slide sorter.  This class gives access to some associated

@@ -33,10 +33,6 @@
 
 #include <rtl/ustrbuf.hxx>
 
-#ifndef css
-namespace css = ::com::sun::star;
-#endif
-
 namespace framework{
     namespace pattern{
         namespace configuration{

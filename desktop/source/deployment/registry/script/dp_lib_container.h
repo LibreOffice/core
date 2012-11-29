@@ -35,8 +35,6 @@ namespace rtl {
     class OUString;
 }
 
-namespace css = ::com::sun::star;
-
 namespace dp_registry {
 namespace backend {
 namespace script {

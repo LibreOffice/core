@@ -118,7 +118,6 @@ static const char aMenuSeparatorStr[] = " | ";
 #endif
 
 using rtl::OUString;
-namespace css = com::sun::star;
 namespace uno = com::sun::star::uno;
 namespace frame = com::sun::star::frame;
 namespace lang = com::sun::star::lang;

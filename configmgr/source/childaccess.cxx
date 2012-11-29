@@ -61,12 +61,6 @@
 
 namespace configmgr {
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
-
 namespace
 {
     class theChildAccessUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theChildAccessUnoTunnelId > {};

@@ -31,8 +31,6 @@
 #include <boost/function.hpp>
 #include <vector>
 
-namespace css = ::com::sun::star;
-
 namespace slideshow { namespace internal {
 
 class EventMultiplexer;

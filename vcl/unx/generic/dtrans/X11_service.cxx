@@ -29,12 +29,6 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/compbase1.hxx>
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
-
 using namespace cppu;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::datatransfer::clipboard;

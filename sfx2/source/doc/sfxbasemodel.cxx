@@ -115,7 +115,6 @@
 //  namespaces
 //________________________________________________________________________________________________________
 
-namespace css = ::com::sun::star;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using ::com::sun::star::beans::PropertyValue;

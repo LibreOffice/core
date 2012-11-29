@@ -31,11 +31,6 @@
 namespace filter{
     namespace config{
 
-namespace css = ::com::sun::star;
-
-
-
-
 ContentHandlerFactory::ContentHandlerFactory(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
 {
     BaseContainer::init(xSMGR                                                 ,

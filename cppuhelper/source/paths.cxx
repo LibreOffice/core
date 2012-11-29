@@ -38,12 +38,6 @@
 
 #include "paths.hxx"
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
-
 rtl::OUString cppu::get_this_libpath() {
     static rtl::OUString s_uri;
     if (s_uri.isEmpty()) {

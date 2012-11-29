@@ -30,8 +30,6 @@
 /// anonymous implementation namespace
 namespace {
 
-namespace css = ::com::sun::star;
-
 class CBlankNode:
     public ::cppu::WeakImplHelper3<
         css::lang::XServiceInfo,

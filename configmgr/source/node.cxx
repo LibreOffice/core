@@ -34,12 +34,6 @@
 
 namespace configmgr {
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
-
 NodeMap & Node::getMembers() {
     assert(false);
     throw css::uno::RuntimeException(

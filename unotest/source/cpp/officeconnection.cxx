@@ -36,12 +36,6 @@
 
 #include "getargument.hxx"
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
-
 namespace test {
 
 OfficeConnection::OfficeConnection(): process_(0) {}

@@ -26,8 +26,6 @@
 #include <rtl/ref.hxx>
 #include <boost/function.hpp>
 
-namespace css = ::com::sun::star;
-
 namespace sdext { namespace presenter {
 
 class PresenterPaneContainer;

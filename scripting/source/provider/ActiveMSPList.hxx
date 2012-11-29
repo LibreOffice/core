@@ -36,8 +36,6 @@
 
 #include <comphelper/stl_types.hxx>
 
-namespace css = ::com::sun::star;
-
 namespace func_provider
 {
 

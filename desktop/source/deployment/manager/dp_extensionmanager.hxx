@@ -33,8 +33,6 @@
 #include <list>
 #include <boost/unordered_map.hpp>
 
-namespace css = ::com::sun::star;
-
 namespace dp_manager {
 
 typedef ::boost::unordered_map<

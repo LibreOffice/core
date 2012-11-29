@@ -37,8 +37,7 @@
 
 namespace codemaker { namespace cpp {
 
-rtl::OString scopedCppName(rtl::OString const & type, bool bNoNameSpace,
-                           bool shortname)
+rtl::OString scopedCppName(rtl::OString const & type, bool ns_alias)
 {
     char c('/');
     sal_Int32 nPos = type.lastIndexOf( c );
@@ -49,8 +48,6 @@ rtl::OString scopedCppName(rtl::OString const & type, bool bNoNameSpace,
 
         c = '.';
     }
-    if (bNoNameSpace)
-        return type.copy(nPos+1);
 
     rtl::OStringBuffer tmpBuf(type.getLength()*2);
     nPos = 0;
@@ -60,15 +57,13 @@ rtl::OString scopedCppName(rtl::OString const & type, bool bNoNameSpace,
         tmpBuf.append(type.getToken(0, c, nPos));
     } while( nPos != -1 );
 
-    if (shortname) {
-        rtl::OString s(tmpBuf.makeStringAndClear());
-        if (s.indexOf("::com::sun::star") == 0)
-            return s.replaceAt(0, 16, "css");
-        else
-            return s;
+    rtl::OString s(tmpBuf.makeStringAndClear());
+    if (ns_alias && s.indexOf("::com::sun::star::") == 0)
+    {
+        return s.replaceAt(0, 18, "css::"); // nicer shorthand
     }
 
-    return tmpBuf.makeStringAndClear();
+    return s;
 }
 
 

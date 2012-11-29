@@ -29,8 +29,6 @@
 #include <com/sun/star/util/Color.hpp>
 #include <boost/shared_ptr.hpp>
 
-namespace css = ::com::sun::star;
-
 namespace sdext { namespace presenter {
 
 /** A theme is a set of properties describing fonts, colors, and bitmaps to be used to draw

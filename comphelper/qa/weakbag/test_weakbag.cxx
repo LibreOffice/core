@@ -28,8 +28,6 @@
 
 namespace {
 
-namespace css = com::sun::star;
-
 class Test: public CppUnit::TestFixture {
 public:
     void test() {

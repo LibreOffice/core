@@ -50,9 +50,6 @@
 
 namespace comphelper{
 
-namespace css = ::com::sun::star;
-
-
 const ::rtl::OUString& MediaDescriptor::PROP_ABORTED()
 {
     static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("Aborted"));

@@ -43,8 +43,6 @@
 
 #include <new>
 
-namespace css = com::sun::star;
-
 namespace {
 
 class Translator: public cppu::WeakImplHelper2<

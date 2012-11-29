@@ -63,8 +63,6 @@ namespace com { namespace sun { namespace star {
 namespace scripting_protocolhandler
 {
 
-namespace css = ::com::sun::star;
-
 class ScriptProtocolHandler :
 public ::cppu::WeakImplHelper4< css::frame::XDispatchProvider,
     css::frame::XNotifyingDispatch, css::lang::XServiceInfo, css::lang::XInitialization >

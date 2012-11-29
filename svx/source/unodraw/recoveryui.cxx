@@ -39,7 +39,6 @@
 namespace svx
 {
 
-namespace css   = ::com::sun::star;
 namespace svxdr = ::svx::DocRecovery;
 
 using namespace ::rtl;

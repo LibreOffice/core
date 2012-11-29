@@ -25,8 +25,6 @@
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XTabBar.hpp>
 
-namespace css = ::com::sun::star;
-
 namespace sd { namespace framework {
 
 /** This module is responsible for showing the slide sorter bar and the the

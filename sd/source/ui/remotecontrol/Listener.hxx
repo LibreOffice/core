@@ -21,8 +21,6 @@
 #include "Communicator.hxx"
 #include "Transmitter.hxx"
 
-namespace css = ::com::sun::star;
-
 namespace sd {
 /**
  * Slide show listener. This class can also be used for anything else that is

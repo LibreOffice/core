@@ -29,8 +29,6 @@
 
 namespace framework{
 
-namespace css = ::com::sun::star;
-
 /** @short      implements a dispatch object which can be used to load
                 non-visible components (by using the mechanism of ContentHandler)
                 or visible-components (by using the mechanism of FrameLoader).

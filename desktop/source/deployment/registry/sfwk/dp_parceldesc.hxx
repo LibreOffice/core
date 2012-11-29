@@ -27,7 +27,6 @@
 
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-namespace css = ::com::sun::star;
 namespace dp_registry
 {
 namespace backend

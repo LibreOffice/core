@@ -39,7 +39,6 @@
 
 namespace extensions { namespace config { namespace ldap {
 
-namespace css = com::sun::star ;
 namespace uno = css::uno ;
 namespace lang = css::lang ;
 namespace ldap = css::ldap ;

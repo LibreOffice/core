@@ -28,8 +28,6 @@
 #include <comphelper/stl_types.hxx>
 #include <boost/unordered_map.hpp>
 
-namespace css = ::com::sun::star;
-
 namespace sd { namespace framework {
 
 /** Container of resource factories of the drawing framework.

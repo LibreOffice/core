@@ -43,7 +43,6 @@ namespace rtl { class OUString; }
 
 namespace connectivity { namespace mork {
 class ProfileAccess;
-namespace css = com::sun::star;
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL
 create(css::uno::Reference< css::uno::XComponentContext > const &);

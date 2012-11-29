@@ -27,8 +27,6 @@
 #include "com/sun/star/task/XAbortChannel.hpp"
 #include "dp_misc_api.hxx"
 
-namespace css = ::com::sun::star;
-
 namespace dp_misc
 {
 

@@ -44,8 +44,6 @@
 #include <framework/fwedllapi.h>
 
 
-namespace css = ::com::sun::star;
-
 namespace framework{
 
 

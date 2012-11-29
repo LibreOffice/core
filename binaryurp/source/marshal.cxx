@@ -50,8 +50,6 @@ namespace binaryurp {
 
 namespace {
 
-namespace css = com::sun::star;
-
 void write64(std::vector< unsigned char > * buffer, sal_uInt64 value) {
     Marshal::write8(buffer, value >> 56);
     Marshal::write8(buffer, (value >> 48) & 0xFF);

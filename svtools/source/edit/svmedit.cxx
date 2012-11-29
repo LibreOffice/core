@@ -33,8 +33,6 @@ MultiLineEdit::MultiLineEdit( Window* pParent, const ResId& rResId )
 {
 }
 
-namespace css = ::com::sun::star;
-
 // virtual
 ::css::uno::Reference< ::css::awt::XWindowPeer >
 MultiLineEdit::GetComponentInterface(sal_Bool bCreate)

@@ -70,12 +70,6 @@
 //-----------------------------------------------
 // namespaces
 
-#ifdef css
-    #error "ambigous praeprozessor directive for css ..."
-#else
-    namespace css = ::com::sun::star;
-#endif
-
 using namespace com::sun::star;
 
 

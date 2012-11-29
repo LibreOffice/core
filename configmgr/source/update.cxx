@@ -49,8 +49,6 @@ namespace configmgr { namespace update {
 
 namespace {
 
-namespace css = com::sun::star;
-
 std::set< rtl::OUString > seqToSet(
     css::uno::Sequence< rtl::OUString > const & sequence)
 {

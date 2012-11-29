@@ -48,8 +48,6 @@
 #include <boost/function.hpp>
 #include <boost/noncopyable.hpp>
 
-namespace css = ::com::sun::star;
-
 namespace {
     typedef cppu::WeakComponentImplHelper5<
         css::awt::XWindowListener,

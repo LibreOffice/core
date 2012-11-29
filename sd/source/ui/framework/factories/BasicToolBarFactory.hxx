@@ -33,8 +33,6 @@
 #include <cppuhelper/basemutex.hxx>
 
 
-namespace css = ::com::sun::star;
-
 namespace {
 
 typedef ::cppu::WeakComponentImplHelper3 <

@@ -38,8 +38,6 @@
 #include <osl/mutex.hxx>
 
 
-namespace  css = ::com::sun::star;
-
 namespace svt
 {
 

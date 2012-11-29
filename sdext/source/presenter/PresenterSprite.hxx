@@ -24,8 +24,6 @@
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <boost/noncopyable.hpp>
 
-namespace css = ::com::sun::star;
-
 namespace sdext { namespace presenter {
 
 /** A wrapper around a com::sun::star::rendering::XCustomSprite that allows

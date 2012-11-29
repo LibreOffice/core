@@ -24,8 +24,6 @@
 #include "ucbhelper/content.hxx"
 #include "com/sun/star/uno/Type.hxx"
 
-namespace css = ::com::sun::star;
-
 namespace dp_manager {
 
 /**

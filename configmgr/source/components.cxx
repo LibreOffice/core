@@ -70,8 +70,6 @@ namespace configmgr {
 
 namespace {
 
-namespace css = com::sun::star;
-
 struct UnresolvedListItem {
     rtl::OUString name;
     rtl::Reference< ParseManager > manager;

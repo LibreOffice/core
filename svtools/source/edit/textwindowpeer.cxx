@@ -22,8 +22,6 @@
 #include <vcl/textview.hxx>
 #include "svtaccessiblefactory.hxx"
 
-namespace css = ::com::sun::star;
-
 namespace svt
 {
     TextWindowPeer::TextWindowPeer(::TextView & rView, bool bCompoundControlChild):

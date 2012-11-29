@@ -25,8 +25,6 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include "smarttag.hxx"
 
-namespace css = ::com::sun::star;
-
 namespace sd {
 
 class View;

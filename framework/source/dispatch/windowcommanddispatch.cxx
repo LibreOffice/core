@@ -39,8 +39,6 @@
 
 namespace framework{
 
-namespace css = ::com::sun::star;
-
 //-----------------------------------------------
 WindowCommandDispatch::WindowCommandDispatch(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR ,
                          const css::uno::Reference< css::frame::XFrame >&              xFrame)

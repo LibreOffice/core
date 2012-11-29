@@ -32,7 +32,6 @@
 
 class Window;
 
-namespace css = ::com::sun::star;
 namespace cssu = ::com::sun::star::uno;
 
 namespace {

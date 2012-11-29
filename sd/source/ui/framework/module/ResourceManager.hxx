@@ -27,8 +27,6 @@
 #include <cppuhelper/compbase1.hxx>
 #include <boost/scoped_ptr.hpp>
 
-namespace css = ::com::sun::star;
-
 namespace {
 
 typedef ::cppu::WeakComponentImplHelper1 <

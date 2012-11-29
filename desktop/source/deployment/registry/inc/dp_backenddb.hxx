@@ -24,8 +24,6 @@
 #include <list>
 #include <vector>
 
-namespace css = ::com::sun::star;
-
 namespace com { namespace sun { namespace star {
         namespace uno {
         class XComponentContext;

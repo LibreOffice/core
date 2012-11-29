@@ -35,7 +35,6 @@
 #include "QueryDesignView.hxx"
 #include <svl/smplhint.hxx>
 
-namespace css = ::com::sun::star;
 using namespace dbaui;
 
 class OSqlEdit::ChangesListener:

@@ -40,7 +40,6 @@
 #include <memory>
 #include "vbaaccesshelper.hxx"
 
-namespace css = ::com::sun::star;
 namespace ooo
 {
     namespace vba

@@ -109,9 +109,6 @@
 /// anonymous implementation namespace
 namespace {
 
-namespace css = ::com::sun::star;
-
-
 /// a list of attribute-lists, where attribute means name and content
 typedef std::vector<std::vector<std::pair<const char*, ::rtl::OUString> > >
         AttrVector;

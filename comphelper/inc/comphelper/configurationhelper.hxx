@@ -34,15 +34,6 @@
 //_______________________________________________
 // namespaces
 
-// no panic .. this define will be reseted at the end of this file.
-// BUT doing so it's neccessary to add all includes BEFORE this css-value
-// will be defined :_)
-#ifdef css
-#error "Who use css? I need it as namespace alias."
-#else
-#define css ::com::sun::star
-#endif
-
 namespace comphelper{
 
 
@@ -243,8 +234,6 @@ class COMPHELPER_DLLPUBLIC ConfigurationHelper
 };
 
 } // namespace comphelper
-
-#undef css // important!
 
 #endif // _COMPHELPER_CONFIGURATIONHELPER_HXX_
 

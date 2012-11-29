@@ -26,8 +26,6 @@
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 
-namespace css = ::com::sun::star;
-
 namespace sw { namespace sidebarwindows {
 
 // =============================================================================

@@ -37,8 +37,6 @@ namespace configmgr {
 
 namespace {
 
-namespace css = com::sun::star;
-
 bool parseSegment(
     rtl::OUString const & path, sal_Int32 * index, rtl::OUString * segment)
 {

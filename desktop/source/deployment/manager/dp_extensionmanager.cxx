@@ -66,7 +66,6 @@ namespace ucb = com::sun::star::ucb;
 namespace uno = com::sun::star::uno;
 namespace beans = com::sun::star::beans;
 namespace util = com::sun::star::util;
-namespace css = com::sun::star;
 
 using ::com::sun::star::uno::Reference;
 using ::rtl::OUString;

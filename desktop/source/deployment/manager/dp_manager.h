@@ -33,8 +33,6 @@
 #include <memory>
 
 
-namespace css = ::com::sun::star;
-
 namespace dp_manager {
 
 typedef ::cppu::WeakComponentImplHelper1<

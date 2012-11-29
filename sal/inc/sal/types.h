@@ -411,6 +411,14 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 
 }
 
+namespace com { namespace sun { namespace star { } } }
+
+/** short-circuit extra-verbose API namespaces
+
+ @since LibreOffice 4.0
+*/
+namespace css = ::com::sun::star;
+
 #else /* __cplusplus */
 
 /**

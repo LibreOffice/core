@@ -33,8 +33,6 @@
 #include <boost/scoped_ptr.hpp>
 #include <map>
 
-namespace css = ::com::sun::star;
-
 namespace sdext { namespace presenter {
 
 class PresenterController;

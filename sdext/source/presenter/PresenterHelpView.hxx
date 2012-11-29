@@ -30,8 +30,6 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 
-namespace css = ::com::sun::star;
-
 namespace {
     typedef cppu::WeakComponentImplHelper3<
         css::drawing::framework::XView,

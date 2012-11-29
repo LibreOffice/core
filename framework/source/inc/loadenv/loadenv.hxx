@@ -43,7 +43,6 @@
 
 namespace framework {
 
-namespace css = ::com::sun::star;
 class QuietInteraction;
 
 /** @short  implements general mechainsm for loading documents.

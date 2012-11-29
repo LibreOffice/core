@@ -45,8 +45,6 @@ namespace configmgr {
 
 namespace {
 
-namespace css = com::sun::star;
-
 bool decode(
     rtl::OUString const & encoded, sal_Int32 begin, sal_Int32 end,
     rtl::OUString * decoded)

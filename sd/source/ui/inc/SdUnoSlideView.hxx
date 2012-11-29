@@ -24,8 +24,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 
-namespace css = ::com::sun::star;
-
 namespace sd { namespace slidesorter {
 class SlideSorter;
 } }

@@ -37,7 +37,6 @@ namespace xml { namespace crypto {
 #include <com/sun/star/uno/Sequence.hxx>
 #include <xmlsecurity/sigstruct.hxx>
 
-namespace css = com::sun::star;
 namespace cssu = com::sun::star::uno;
 namespace dcss = ::com::sun::star;
 

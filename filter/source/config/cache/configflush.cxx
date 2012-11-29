@@ -24,8 +24,6 @@
 #include <osl/diagnose.h>
 
 
-namespace css = ::com::sun::star;
-
 namespace filter{
     namespace config{
 

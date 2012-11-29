@@ -28,7 +28,6 @@
 // FIXME: stdio.h only for debugging...
 #include <stdio.h>
 
-namespace css = com::sun::star;
 namespace uno = css::uno;
 namespace lang = css::lang;
 

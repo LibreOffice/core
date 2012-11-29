@@ -27,8 +27,6 @@
 #include <boost/function.hpp>
 #include <boost/noncopyable.hpp>
 
-namespace css = ::com::sun::star;
-
 namespace sdext { namespace presenter {
 
 typedef ::cppu::WeakComponentImplHelper1 <

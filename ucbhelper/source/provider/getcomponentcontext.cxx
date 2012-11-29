@@ -25,8 +25,6 @@
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "ucbhelper/getcomponentcontext.hxx"
 
-namespace { namespace css = com::sun::star; }
-
 css::uno::Reference< css::uno::XComponentContext >
 ucbhelper::getComponentContext(
     css::uno::Reference< css::lang::XMultiServiceFactory > const & factory)

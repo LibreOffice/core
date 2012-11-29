@@ -59,8 +59,6 @@ extern rtl_StandardModuleCount g_moduleCount;
 
 namespace {
 
-namespace css = com::sun::star;
-
 class SimpleRegistry:
     public cppu::WeakImplHelper2<
         css::registry::XSimpleRegistry, css::lang::XServiceInfo >

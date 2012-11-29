@@ -32,8 +32,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <rtl/strbuf.hxx>
 
-namespace css = ::com::sun::star;
-
 // Helper to share code between activators with a fallback MSF.
 // Potentially this may also needs to find the library the component
 // is implemented inside, but at least centralises this.

@@ -35,8 +35,6 @@ namespace ucbhelper
     /** Implements a seekable InputStream
      *  working on a buffer.
      */
-    namespace css = com::sun::star;
-
     class UCBHELPER_DLLPUBLIC FdInputStream
         : public cppu::OWeakObject,
           public com::sun::star::io::XInputStream,

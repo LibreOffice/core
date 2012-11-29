@@ -44,8 +44,6 @@
 
 namespace {
 
-namespace css = com::sun::star;
-
 rtl::OUString toString(css::lang::Locale const & locale) {
     SAL_WARN_IF(
         locale.Language.indexOf('-') != -1, "svl",

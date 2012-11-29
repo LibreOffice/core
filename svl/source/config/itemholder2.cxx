@@ -32,12 +32,6 @@
 #include <tools/debug.hxx>
 
 //-----------------------------------------------
-// namespaces
-
-namespace css = ::com::sun::star;
-
-
-//-----------------------------------------------
 ItemHolder2::ItemHolder2()
     : ItemHolderMutexBase()
 {

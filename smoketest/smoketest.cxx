@@ -54,8 +54,6 @@
 
 namespace {
 
-namespace css = com::sun::star;
-
 struct Result: private boost::noncopyable {
     osl::Condition condition;
     bool success;

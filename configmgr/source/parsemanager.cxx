@@ -33,12 +33,6 @@
 
 namespace configmgr {
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
-
 ParseManager::ParseManager(
     rtl::OUString const & url, rtl::Reference< Parser > const & parser)
     SAL_THROW((

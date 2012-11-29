@@ -31,10 +31,6 @@
 
 // namespaces
 
-#ifndef css
-namespace css = ::com::sun::star;
-#endif
-
 namespace framework{
     namespace pattern{
         namespace frame{

@@ -28,8 +28,6 @@
 #include <vector>
 #include <boost/unordered_map.hpp>
 
-namespace css = ::com::sun::star;
-
 namespace sd { namespace framework {
 
 /** This class manages the set of XConfigurationChangeListeners and

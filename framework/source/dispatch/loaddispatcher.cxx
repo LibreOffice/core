@@ -25,8 +25,6 @@
 
 namespace framework{
 
-namespace css = ::com::sun::star;
-
 LoadDispatcher::LoadDispatcher(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR       ,
                                const css::uno::Reference< css::frame::XFrame >&              xOwnerFrame ,
                                const ::rtl::OUString                                         sTargetName ,

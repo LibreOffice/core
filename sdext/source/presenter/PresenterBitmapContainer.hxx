@@ -34,8 +34,6 @@
 #include <vector>
 #include <boost/shared_ptr.hpp>
 
-namespace css = ::com::sun::star;
-
 namespace sdext { namespace presenter {
 
 /** Manage a set of bitmap groups as they are used for buttons: three

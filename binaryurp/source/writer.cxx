@@ -38,12 +38,6 @@
 
 namespace binaryurp {
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
-
 Writer::Item::Item() {}
 
 Writer::Item::Item(

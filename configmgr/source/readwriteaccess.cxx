@@ -62,8 +62,6 @@ namespace configmgr { namespace read_write_access {
 
 namespace {
 
-namespace css = com::sun::star;
-
 class Service:
     public cppu::WeakImplHelper3<
         css::lang::XServiceInfo, css::lang::XInitialization,

@@ -26,7 +26,6 @@
 #include <rtl/string.hxx>
 
 
-namespace css = com::sun::star ;
 namespace uno = css::uno ;
 namespace lang = css::lang ;
 

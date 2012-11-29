@@ -124,8 +124,6 @@ using org::libreoffice::touch::ByteBufferWrapper;
 #include <comphelper/processfactory.hxx>
 #include <toolkit/awt/scrollabledialog.hxx>
 
-namespace css = ::com::sun::star;
-
 #define VCLWINDOW_FRAMEWINDOW               0x1000
 #define VCLWINDOW_SYSTEMCHILDWINDOW         0x1001
 

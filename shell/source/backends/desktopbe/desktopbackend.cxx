@@ -54,8 +54,6 @@
 
 namespace {
 
-namespace css = com::sun::star;
-
 rtl::OUString SAL_CALL getDefaultImplementationName() {
     return rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM(

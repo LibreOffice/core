@@ -29,8 +29,6 @@
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
 #include <com/sun/star/script/browse/XBrowseNodeFactory.hpp>
 
-namespace css = ::com::sun::star;
-
 namespace browsenodefactory
 {
 

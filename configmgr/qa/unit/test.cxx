@@ -57,8 +57,6 @@
 
 namespace {
 
-namespace css = com::sun::star;
-
 void normalize(
     rtl::OUString const & path, rtl::OUString const & relative,
     rtl::OUString * normalizedPath, rtl::OUString * name)

@@ -22,9 +22,6 @@
 
 namespace ucbhelper{
 
-namespace css = ::com::sun::star;
-
-
 InterceptedInteraction::InterceptedInteraction()
 {
 }

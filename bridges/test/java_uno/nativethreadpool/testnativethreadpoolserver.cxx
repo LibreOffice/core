@@ -41,8 +41,6 @@
 #include "sal/types.h"
 #include "uno/lbnames.h"
 
-namespace css = com::sun::star;
-
 namespace {
 
 class Server:

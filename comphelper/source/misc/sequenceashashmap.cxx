@@ -22,9 +22,6 @@
 
 namespace comphelper{
 
-namespace css = ::com::sun::star;
-
-
 SequenceAsHashMap::SequenceAsHashMap()
     : SequenceAsHashMapBase()
 {

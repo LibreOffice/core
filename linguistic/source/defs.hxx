@@ -33,9 +33,6 @@ class SvStream;
 
 typedef boost::shared_ptr< SvStream > SvStreamPtr;
 
-namespace css = ::com::sun::star;
-
-
 struct LangSvcEntries
 {
     css::uno::Sequence< ::rtl::OUString >   aSvcImplNames;

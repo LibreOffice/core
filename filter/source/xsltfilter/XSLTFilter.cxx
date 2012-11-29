@@ -89,8 +89,6 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::task;
 
-namespace css = com::sun::star;
-
 namespace XSLT
 {
     /*

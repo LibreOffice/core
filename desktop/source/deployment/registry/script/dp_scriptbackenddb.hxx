@@ -23,7 +23,6 @@
 #include "rtl/ustring.hxx"
 #include "dp_backenddb.hxx"
 #include "boost/optional.hpp"
-namespace css = ::com::sun::star;
 
 namespace com { namespace sun { namespace star {
         namespace uno {

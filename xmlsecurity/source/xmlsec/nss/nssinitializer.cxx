@@ -69,7 +69,6 @@
 #include <secmod.h>
 #include <nssckbi.h>
 
-namespace css = ::com::sun::star;
 namespace cssu = css::uno;
 namespace cssl = css::lang;
 

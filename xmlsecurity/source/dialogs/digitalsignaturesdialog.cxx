@@ -69,7 +69,6 @@
 using namespace ::com::sun::star::security;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
-namespace css = ::com::sun::star;
 
 namespace
 {

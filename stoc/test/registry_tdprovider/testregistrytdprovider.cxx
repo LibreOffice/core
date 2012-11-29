@@ -56,8 +56,6 @@
 #include <iostream>
 #include <ostream>
 
-namespace css = com::sun::star;
-
 namespace {
 
 class Service: public cppu::WeakImplHelper1< css::lang::XMain > {

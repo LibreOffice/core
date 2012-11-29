@@ -23,8 +23,6 @@
 
 namespace {
 
-namespace css = com::sun::star;
-
 class RestartDialog: public ModalDialog {
 public:
     RestartDialog(Window * parent, svtools::RestartReason reason):

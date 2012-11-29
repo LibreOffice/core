@@ -47,8 +47,6 @@ using namespace ::com::sun::star::uno;
 
 namespace {
 
-namespace css = com::sun::star;
-
 class  SplashScreen
     : public ::cppu::WeakImplHelper2< XStatusIndicator, XInitialization >
     , public IntroWindow

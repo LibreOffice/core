@@ -35,12 +35,6 @@
 
 namespace configmgr {
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
-
 PropertyNode::PropertyNode(
     int layer, Type staticType, bool nillable, css::uno::Any const & value,
     bool extension):

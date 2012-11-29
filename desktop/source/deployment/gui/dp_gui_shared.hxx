@@ -24,8 +24,6 @@
 #include "tools/resmgr.hxx"
 
 
-namespace css = ::com::sun::star;
-
 namespace dp_gui {
 
 struct DeploymentGuiResMgr :

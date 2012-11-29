@@ -33,8 +33,6 @@ namespace ucbhelper
 class Content;
 }
 
-namespace css = ::com::sun::star;
-
 namespace dp_misc
 {
 

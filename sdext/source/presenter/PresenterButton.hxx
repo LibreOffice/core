@@ -35,8 +35,6 @@
 #include <boost/noncopyable.hpp>
 #include <rtl/ref.hxx>
 
-namespace css = ::com::sun::star;
-
 namespace sdext { namespace presenter {
 
 class PresenterController;

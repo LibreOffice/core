@@ -30,11 +30,6 @@
 namespace filter{
     namespace config{
 
-namespace css = ::com::sun::star;
-
-
-
-
 CacheItem::CacheItem()
     : SequenceAsHashMap()
 {

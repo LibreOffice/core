@@ -56,8 +56,6 @@ namespace binaryurp {
 
 namespace {
 
-namespace css = com::sun::star;
-
 css::uno::Sequence< sal_Int8 > read(
     css::uno::Reference< css::connection::XConnection > const & connection,
     sal_uInt32 size, bool eofOk)

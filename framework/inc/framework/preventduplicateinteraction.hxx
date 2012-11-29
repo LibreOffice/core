@@ -30,8 +30,6 @@
 
 #include <cppuhelper/implbase1.hxx>
 
-namespace css = ::com::sun::star;
-
 namespace framework{
 
 /**

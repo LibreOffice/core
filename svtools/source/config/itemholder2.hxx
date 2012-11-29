@@ -24,11 +24,6 @@
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>
 
-//-----------------------------------------------
-// namespaces
-
-namespace css = ::com::sun::star;
-
 namespace svtools {
 
 

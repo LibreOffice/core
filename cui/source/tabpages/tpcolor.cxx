@@ -49,8 +49,6 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 
-namespace css = ::com::sun::star;
-
 
 // Load save embed functionality
 SvxLoadSaveEmbed::SvxLoadSaveEmbed( Window *pParent, Window *pDialog,

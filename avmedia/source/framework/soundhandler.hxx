@@ -40,8 +40,6 @@
 #include <avmedia/mediawindow.hxx>
 #include <osl/mutex.hxx>
 
-namespace css = ::com::sun::star;
-
 namespace avmedia{
 
 struct ThreadHelpBase

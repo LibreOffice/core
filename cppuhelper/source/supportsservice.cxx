@@ -17,12 +17,6 @@
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
-
 bool cppu::supportsService(
     css::lang::XServiceInfo * implementation, rtl::OUString const & name)
 {

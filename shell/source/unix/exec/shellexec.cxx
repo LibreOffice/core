@@ -64,8 +64,6 @@ using namespace cppu;
 
 namespace // private
 {
-    namespace css = com::sun::star;
-
     Sequence< OUString > SAL_CALL ShellExec_getSupportedServiceNames()
     {
         Sequence< OUString > aRet(1);

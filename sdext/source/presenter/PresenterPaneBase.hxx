@@ -38,7 +38,6 @@
 #include <rtl/ref.hxx>
 #include <boost/noncopyable.hpp>
 
-namespace css = ::com::sun::star;
 namespace cssu = ::com::sun::star::uno;
 
 namespace sdext { namespace presenter {

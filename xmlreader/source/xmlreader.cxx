@@ -41,8 +41,6 @@ namespace xmlreader {
 
 namespace {
 
-namespace css = com::sun::star;
-
 bool isSpace(char c) {
     switch (c) {
     case '\x09':

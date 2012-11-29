@@ -34,8 +34,6 @@ class SdDrawDocument;
 #include <vector>
 #include <functional>
 
-namespace css = ::com::sun::star;
-
 class SdrPage;
 class SdPage;
 

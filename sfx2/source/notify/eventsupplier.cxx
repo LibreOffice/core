@@ -57,7 +57,6 @@
 #define PROPERTYVALUE       ::com::sun::star::beans::PropertyValue
 #define UNO_QUERY           ::com::sun::star::uno::UNO_QUERY
 
-namespace css = ::com::sun::star;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::PropertyValue;
 

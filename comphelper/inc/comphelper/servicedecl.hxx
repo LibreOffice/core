@@ -37,7 +37,6 @@ namespace service_decl {
 class ServiceDecl;
 
 namespace detail {
-namespace css = ::com::sun::star;
 typedef ::boost::function3<
     css::uno::Reference<css::uno::XInterface> /* return */,
     ServiceDecl const&,

@@ -26,8 +26,6 @@
 
 class SdXImpressDocument;
 
-namespace css = ::com::sun::star;
-
 namespace com { namespace sun { namespace star { namespace drawing {
 class XLayer;
 } } } }

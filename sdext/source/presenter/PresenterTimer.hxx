@@ -32,8 +32,6 @@
 #include <boost/function.hpp>
 #include <vector>
 
-namespace css = ::com::sun::star;
-
 namespace sdext { namespace presenter {
 
 /** The timer allows tasks to be scheduled for execution at a specified time

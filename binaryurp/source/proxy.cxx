@@ -41,8 +41,6 @@ namespace binaryurp {
 
 namespace {
 
-namespace css = com::sun::star;
-
 extern "C" void SAL_CALL proxy_acquireInterface(uno_Interface * pInterface) {
     assert(pInterface != 0);
     static_cast< Proxy * >(pInterface)->do_acquire();

@@ -31,12 +31,6 @@
 #include "jobqueue.hxx"
 #include "threadpool.hxx"
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
-
 using namespace osl;
 
 namespace cppu_threadpool {

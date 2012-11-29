@@ -38,8 +38,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-namespace css = ::com::sun::star;
-
 
 namespace
 {

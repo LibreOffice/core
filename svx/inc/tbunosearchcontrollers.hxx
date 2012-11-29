@@ -39,7 +39,6 @@
 #include <map>
 #include <vector>
 
-namespace css = ::com::sun::star        ;
 namespace svx
 {
 

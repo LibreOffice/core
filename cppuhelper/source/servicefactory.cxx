@@ -69,7 +69,6 @@ using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-namespace css = com::sun::star;
 
 namespace cppu
 {

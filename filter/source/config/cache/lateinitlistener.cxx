@@ -31,11 +31,6 @@
 namespace filter{
     namespace config{
 
-namespace css = ::com::sun::star;
-
-
-
-
 LateInitListener::LateInitListener(const css::uno::Reference< css::uno::XComponentContext >& rxContext)
     : BaseLock(     )
 {

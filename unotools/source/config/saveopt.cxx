@@ -36,8 +36,6 @@ using namespace com::sun::star::uno;
 
 using ::rtl::OUString;
 
-namespace css = ::com::sun::star;
-
 class SvtSaveOptions_Impl;
 class SvtLoadOptions_Impl;
 

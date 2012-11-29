@@ -60,8 +60,6 @@
 namespace svx{
     namespace DocRecovery{
 
-namespace css = ::com::sun::star;
-
 using namespace ::rtl;
 using namespace ::osl;
 

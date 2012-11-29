@@ -45,8 +45,6 @@
 
 #include <new>
 
-namespace css = com::sun::star;
-
 namespace {
 
 class Factory: public cppu::WeakImplHelper2<

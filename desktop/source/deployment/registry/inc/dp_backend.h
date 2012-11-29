@@ -43,8 +43,6 @@ namespace dp_registry
 namespace backend
 {
 
-namespace css = ::com::sun::star;
-
 class PackageRegistryBackend;
 
 #define BACKEND_SERVICE_NAME "com.sun.star.deployment.PackageRegistryBackend"

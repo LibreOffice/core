@@ -27,10 +27,6 @@
 
 namespace framework{
 
-#ifndef css // conflict with define :-(
-namespace css = ::com::sun::star;
-#endif
-
 /** @short  specify an exception, which can be used inside the
             load environment only.
 

@@ -41,8 +41,6 @@
 #include <vector>
 #include <boost/scoped_ptr.hpp>
 
-namespace css = ::com::sun::star;
-
 namespace sd {
 
 typedef ::cppu::ImplInheritanceHelper7 <

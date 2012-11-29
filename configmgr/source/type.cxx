@@ -38,12 +38,6 @@
 
 namespace configmgr {
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
-
 bool isListType(Type type) {
     return type >= TYPE_BOOLEAN_LIST;
 }

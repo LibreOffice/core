@@ -24,12 +24,6 @@
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>
 
-//-----------------------------------------------
-// namespaces
-
-namespace css = ::com::sun::star;
-
-
 class ItemHolder2 : private ItemHolderMutexBase
                   , public  ::cppu::WeakImplHelper1< css::lang::XEventListener >
 {

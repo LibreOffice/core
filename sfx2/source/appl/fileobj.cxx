@@ -42,8 +42,6 @@
 #include "fileobj.hxx"
 #include "app.hrc"
 
-namespace css = ::com::sun::star;
-
 #define FILETYPE_TEXT       1
 #define FILETYPE_GRF        2
 #define FILETYPE_OBJECT     3

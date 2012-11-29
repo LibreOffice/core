@@ -32,8 +32,6 @@
 #include <rtl/ref.hxx>
 #include <boost/scoped_ptr.hpp>
 
-namespace css = ::com::sun::star;
-
 namespace sdext { namespace presenter {
 
 namespace {

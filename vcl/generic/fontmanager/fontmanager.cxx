@@ -79,12 +79,6 @@
 
 #define PRINTER_METRICDIR "fontmetric"
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
-
 using namespace vcl;
 using namespace utl;
 using namespace psp;

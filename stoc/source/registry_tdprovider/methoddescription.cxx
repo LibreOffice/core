@@ -35,8 +35,6 @@
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 
-namespace css = com::sun::star;
-
 using stoc::registry_tdprovider::MethodDescription;
 
 namespace {

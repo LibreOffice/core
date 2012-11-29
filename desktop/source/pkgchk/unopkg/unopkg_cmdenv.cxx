@@ -43,7 +43,6 @@
 #include "deployment.hrc"
 #include "dp_version.hxx"
 
-namespace css = ::com::sun::star;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;

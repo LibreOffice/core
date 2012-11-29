@@ -35,7 +35,6 @@ namespace srrm = System::Runtime::Remoting::Messaging;
 namespace srr = System::Runtime::Remoting;
 namespace srrp = System::Runtime::Remoting::Proxies;
 namespace sd = System::Diagnostics;
-namespace css = com::sun::star;
 namespace ucss = unoidl::com::sun::star;
 
 using namespace cli_uno;

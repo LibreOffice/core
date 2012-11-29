@@ -34,8 +34,6 @@
 #include <rtl/ref.hxx>
 #include <boost/noncopyable.hpp>
 
-namespace css = ::com::sun::star;
-
 namespace sdext { namespace presenter {
 
 /** Pane used by the presenter screen.  Pane objects are stored in the

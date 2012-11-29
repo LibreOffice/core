@@ -23,7 +23,6 @@
 #include "cli_bridge.h"
 
 namespace sr=System::Reflection;
-namespace css=com::sun::star;
 
 using ::rtl::OUStringBuffer;
 

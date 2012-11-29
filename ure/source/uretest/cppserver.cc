@@ -39,8 +39,6 @@
 #include "test/types/Data.hpp"
 #include "test/types/XServer.hpp"
 
-namespace css = ::com::sun::star;
-
 namespace {
 
 class Service: public ::cppu::WeakImplHelper1< ::test::types::XServer > {

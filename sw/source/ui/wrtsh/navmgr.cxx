@@ -38,8 +38,6 @@
 
 #include <com/sun/star/frame/XLayoutManager.hpp>
 
-namespace css = ::com::sun::star;
-
 /**
  * If SMART is defined, the navigation history has recency with temporal ordering enhancement,
  * as described on http://zing.ncsl.nist.gov/hfweb/proceedings/greenberg/

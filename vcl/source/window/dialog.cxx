@@ -474,8 +474,6 @@ Dialog::Dialog( WindowType nType )
 
 rtl::OUString VclBuilderContainer::getUIRootDir()
 {
-    namespace css = ::com::sun::star;
-
     /*to-do, check if user config has an override before using shared one, etc*/
     css::uno::Reference< css::beans::XPropertySet > xPathSettings(
         ::comphelper::getProcessServiceFactory()->createInstance(SERVICENAME_PATHSETTINGS),

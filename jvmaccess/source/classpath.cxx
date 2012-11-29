@@ -40,12 +40,6 @@
 #include "jni.h"
 #endif
 
-namespace {
-
-namespace css = ::com::sun::star;
-
-}
-
 void * ::jvmaccess::ClassPath::doTranslateToUrls(
     css::uno::Reference< css::uno::XComponentContext > const & context,
     void * environment, ::rtl::OUString const & classPath)

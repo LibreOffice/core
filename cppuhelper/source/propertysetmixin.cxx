@@ -92,8 +92,6 @@
 
 using cppu::PropertySetMixinImpl;
 
-namespace css = com::sun::star;
-
 namespace {
 
 template< typename T > struct AutoDispose {

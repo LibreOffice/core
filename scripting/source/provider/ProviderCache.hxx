@@ -35,8 +35,6 @@
 
 #include "ScriptingContext.hxx"
 
-namespace css = ::com::sun::star;
-
 namespace func_provider
 {
 

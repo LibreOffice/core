@@ -79,7 +79,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::beans;
-namespace css = com::sun::star;
 
 #define CBCOL_FIRST     0
 #define CBCOL_SECOND    1

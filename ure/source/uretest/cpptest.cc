@@ -37,8 +37,6 @@
 #include "test/types/TestException.hpp"
 #include "test/types/XTest.hpp"
 
-namespace css = com::sun::star;
-
 namespace {
 
 class Service: public cppu::WeakImplHelper1< test::types::XTest > {

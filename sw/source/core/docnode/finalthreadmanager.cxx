@@ -26,8 +26,6 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 
-namespace css = ::com::sun::star;
-
 /** thread to cancel a give list of cancellable jobs
 
     helper class for FinalThreadManager

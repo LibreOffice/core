@@ -41,12 +41,6 @@
 
 namespace svtools {
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
-
 ODocumentInfoPreview::ODocumentInfoPreview(Window * pParent, WinBits nBits):
     Window(pParent, WB_DIALOGCONTROL), m_pEditWin(this, nBits),
     m_pInfoTable(new SvtDocInfoTable_Impl),

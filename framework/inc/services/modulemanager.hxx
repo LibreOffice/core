@@ -36,8 +36,6 @@ namespace com { namespace sun { namespace star { namespace lang {
     class XSingleServiceFactory;
 } } } }
 
-namespace css = com::sun::star;
-
 //_______________________________________________
 // definition
 

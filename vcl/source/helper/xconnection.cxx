@@ -24,12 +24,6 @@
 #include "svdata.hxx"
 #include "salinst.hxx"
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
-
 using namespace osl;
 using namespace vcl;
 using namespace com::sun::star::uno;

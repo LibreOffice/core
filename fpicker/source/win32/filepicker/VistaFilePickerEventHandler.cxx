@@ -41,8 +41,6 @@
 // namespace directives
 //------------------------------------------------------------------------
 
-namespace css = ::com::sun::star;
-
 namespace fpicker{
 namespace win32{
 namespace vista{

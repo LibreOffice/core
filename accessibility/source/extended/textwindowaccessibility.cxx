@@ -28,8 +28,6 @@
 #include <vector>
 #include <boost/unordered_map.hpp>
 
-namespace css = ::com::sun::star;
-
 namespace accessibility
 {
 

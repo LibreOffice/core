@@ -31,8 +31,6 @@
 /// anonymous implementation namespace
 namespace {
 
-namespace css = ::com::sun::star;
-
 class CURI:
     public ::cppu::WeakImplHelper3<
         css::lang::XServiceInfo,

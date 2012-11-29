@@ -77,8 +77,6 @@
 
 namespace {
 
-namespace css = com::sun::star;
-
 bool nextDirectoryItem(osl::Directory & directory, rtl::OUString * url) {
     assert(url != 0);
     for (;;) {

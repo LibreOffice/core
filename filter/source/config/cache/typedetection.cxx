@@ -38,8 +38,6 @@
 namespace filter{
     namespace config{
 
-namespace css = ::com::sun::star;
-
 TypeDetection::TypeDetection(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
 {
     BaseContainer::init(xSMGR                                         ,

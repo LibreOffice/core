@@ -18,8 +18,6 @@
 #include <rtl/ref.hxx>
 #include <osl/thread.hxx>
 
-namespace css = ::com::sun::star;
-
 /**
 * The port for use for the main communication between LibO and remote control app.
 */

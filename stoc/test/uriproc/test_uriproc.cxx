@@ -48,8 +48,6 @@
 
 #include <cstdlib>
 
-namespace css = com::sun::star;
-
 namespace {
 
 #define TEST_ASSERT_EQUAL(token1, token2, token3, expected, actual) \

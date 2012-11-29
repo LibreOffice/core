@@ -48,7 +48,6 @@ namespace xml { namespace dom {
     class XDocumentBuilder; } }
 }}}
 
-namespace css = com::sun::star;
 namespace cssu = com::sun::star::uno;
 
 class HeaderBar;

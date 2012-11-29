@@ -38,8 +38,6 @@
 
 namespace framework{
 
-namespace css = ::com::sun::star;
-
 //-----------------------------------------------
 TitleHelper::TitleHelper(const css::uno::Reference< css::uno::XComponentContext >& rxContext)
     : ::cppu::BaseMutex ()

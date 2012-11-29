@@ -30,8 +30,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 
-namespace css = ::com::sun::star;
-
 namespace framework
 {
 

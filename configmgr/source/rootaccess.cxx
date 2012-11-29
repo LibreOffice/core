@@ -57,12 +57,6 @@
 
 namespace configmgr {
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
-
 RootAccess::RootAccess(
     Components & components, rtl::OUString const & pathRepresentation,
     rtl::OUString const & locale, bool update):

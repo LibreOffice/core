@@ -127,8 +127,6 @@ using namespace ::com::sun::star::system;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::container;
 
-namespace css = ::com::sun::star;
-
 ResMgr* desktop::Desktop::pResMgr = 0;
 
 namespace desktop

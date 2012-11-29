@@ -32,12 +32,6 @@
 
 namespace xmlreader {
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
-
 rtl::OUString Span::convertFromUtf8() const {
     assert(is());
     rtl_uString * s = 0;

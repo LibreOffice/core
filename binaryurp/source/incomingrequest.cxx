@@ -40,12 +40,6 @@
 
 namespace binaryurp {
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
-
 IncomingRequest::IncomingRequest(
     rtl::Reference< Bridge > const & bridge, rtl::ByteSequence const & tid,
     OUString const & oid, css::uno::UnoInterfaceReference const & object,

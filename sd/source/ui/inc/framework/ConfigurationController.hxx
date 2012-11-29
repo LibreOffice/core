@@ -39,8 +39,6 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/noncopyable.hpp>
 
-namespace css = ::com::sun::star;
-
 namespace {
 
 typedef ::cppu::WeakComponentImplHelper2 <

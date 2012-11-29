@@ -47,8 +47,6 @@ namespace com { namespace sun { namespace star { namespace uno {
 
 namespace {
 
-namespace css = com::sun::star;
-
 struct DerivedStruct1: css::lang::EventObject {};
 
 struct DerivedStruct2: css::beans::PropertyChangeEvent {};

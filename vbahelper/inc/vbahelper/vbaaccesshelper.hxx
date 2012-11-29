@@ -27,7 +27,7 @@
 //#define VBAHELPER_DLLIMPLEMENTATION
 #include <vbahelper/vbadllapi.h>
 #include <memory>
-namespace css = ::com::sun::star;
+
 namespace ooo
 {
     namespace vba

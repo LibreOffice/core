@@ -130,8 +130,6 @@ using namespace ::com::sun::star::system;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::document;
 
-namespace css = com::sun::star;
-
 /// Find the correct location of the document (LICENSE.odt, etc.), and return
 /// it in rURL if found.
 static sal_Bool checkURL( const char *pName, const char *pExt, rtl::OUString &rURL )

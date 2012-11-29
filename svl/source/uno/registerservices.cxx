@@ -25,7 +25,6 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <svl/svldllapi.h>
 
-namespace css = com::sun::star;
 using css::uno::Reference;
 using css::uno::Sequence;
 using rtl::OUString;

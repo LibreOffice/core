@@ -52,8 +52,6 @@
 
 namespace {
 
-namespace css = com::sun::star;
-
 struct TheConfigurationWrapper:
     public rtl::StaticWithArg<
         comphelper::detail::ConfigurationWrapper,

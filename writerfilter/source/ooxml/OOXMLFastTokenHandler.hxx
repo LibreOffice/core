@@ -25,8 +25,6 @@
 #include "cppuhelper/implbase1.hxx"
 #include "com/sun/star/xml/sax/XFastTokenHandler.hpp"
 
-namespace css = ::com::sun::star;
-
 namespace writerfilter {
 namespace ooxml
 {

@@ -30,8 +30,6 @@
 
 namespace framework{
 
-namespace css = ::com::sun::star;
-
 DEFINE_XINTERFACE_1(DispatchInformationProvider                               ,
                     OWeakObject                                               ,
                     DIRECT_INTERFACE(css::frame::XDispatchInformationProvider))

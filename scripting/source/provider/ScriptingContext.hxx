@@ -36,8 +36,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/broadcasthelper.hxx>
 
-namespace css = ::com::sun::star;
-
 namespace func_provider
 {
 

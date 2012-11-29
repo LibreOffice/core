@@ -40,8 +40,6 @@
 using namespace utl;
 using namespace com::sun::star::uno;
 
-namespace css = com::sun::star;
-
 #define HELP_TIP_TIMEOUT 0xffff     // max. timeout setting to pretend a non-timeout
 
 namespace

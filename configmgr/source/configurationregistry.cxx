@@ -67,8 +67,6 @@ namespace configmgr { namespace configuration_registry {
 
 namespace {
 
-namespace css = com::sun::star;
-
 class Service:
     public cppu::WeakImplHelper3<
         css::lang::XServiceInfo, css::registry::XSimpleRegistry,

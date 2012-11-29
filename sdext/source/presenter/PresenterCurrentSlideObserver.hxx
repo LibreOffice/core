@@ -29,8 +29,6 @@
 #include <rtl/ref.hxx>
 #include <salhelper/timer.hxx>
 
-namespace css = ::com::sun::star;
-
 namespace sdext { namespace presenter {
 
 namespace {

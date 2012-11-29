@@ -39,8 +39,6 @@
 
 namespace {
 
-namespace css = com::sun::star;
-
 class RegisterConfigItemHelper: private boost::noncopyable {
 public:
     RegisterConfigItemHelper(

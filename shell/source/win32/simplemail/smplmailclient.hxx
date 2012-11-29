@@ -25,8 +25,6 @@
 
 #include <com/sun/star/system/XSimpleMailClient.hpp>
 
-namespace css = ::com::sun::star;
-
 class CSmplMailClient : public cppu::WeakImplHelper1<css::system::XSimpleMailClient>
 {
 public:

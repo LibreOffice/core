@@ -76,7 +76,6 @@
 class Window;
 
 namespace cssu = ::com::sun::star::uno;
-namespace css = ::com::sun::star;
 
 using dp_misc::StrTitle;
 using ::rtl::OUString;

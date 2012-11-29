@@ -32,9 +32,7 @@
 #include "rtl/uri.hxx"
 
 using namespace ::com::sun::star::uno;
-namespace css = ::com::sun::star;
 using rtl::OUString;
-
 
 namespace
 {

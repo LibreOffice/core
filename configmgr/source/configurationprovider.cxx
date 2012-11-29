@@ -66,8 +66,6 @@ namespace configmgr { namespace configuration_provider {
 
 namespace {
 
-namespace css = com::sun::star;
-
 char const accessServiceName[] =
     "com.sun.star.configuration.ConfigurationAccess";
 char const updateAccessServiceName[] =

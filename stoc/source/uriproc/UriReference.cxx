@@ -27,7 +27,6 @@
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 
-namespace css = com::sun::star;
 using stoc::uriproc::UriReference;
 
 UriReference::UriReference(

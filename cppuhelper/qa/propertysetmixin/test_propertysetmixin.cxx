@@ -77,8 +77,6 @@ namespace com { namespace sun { namespace star {
     struct EventObject;
 } } }
 
-namespace css = com::sun::star;
-
 namespace {
 
 std::ostream & operator <<(std::ostream & out, rtl::OUString const & value) {

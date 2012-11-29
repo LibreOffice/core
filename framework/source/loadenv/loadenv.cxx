@@ -1,4 +1,4 @@
-/* -*- Mode: C++; eval:(c-set-style "bsd"); tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -83,10 +83,6 @@ const char PROP_NAME[] = "Name";
 
 namespace framework {
 
-// may there exist already a define .-(
-#ifndef css
-namespace css = ::com::sun::star;
-#endif
 using namespace com::sun::star;
 
 

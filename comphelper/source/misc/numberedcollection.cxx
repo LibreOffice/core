@@ -25,9 +25,6 @@
 
 namespace comphelper{
 
-namespace css = ::com::sun::star;
-
-
 static const char ERRMSG_INVALID_COMPONENT_PARAM[] = "NULL as component reference not allowed.";
 
 //-----------------------------------------------

@@ -39,8 +39,6 @@
 
 #include "util.hxx"
 
-namespace css = ::com::sun::star;
-
 namespace sf_misc
 {
 

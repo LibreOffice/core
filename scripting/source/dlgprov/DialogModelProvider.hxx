@@ -27,8 +27,6 @@
 /// anonymous implementation namespace
 namespace dlgprov{
 
-namespace css = ::com::sun::star;
-
 class DialogModelProvider:
     public ::cppu::WeakImplHelper4<
         css::lang::XInitialization,

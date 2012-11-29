@@ -31,8 +31,6 @@ class SdrPage;
 
 namespace sd { namespace slidesorter { namespace cache {
 
-namespace css = ::com::sun::star;
-
 class BitmapCache;
 
 

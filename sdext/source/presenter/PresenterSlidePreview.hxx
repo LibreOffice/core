@@ -38,8 +38,6 @@
 #include <cppuhelper/compbase4.hxx>
 #include <rtl/ref.hxx>
 
-namespace css = ::com::sun::star;
-
 namespace sdext { namespace presenter {
 
 namespace {

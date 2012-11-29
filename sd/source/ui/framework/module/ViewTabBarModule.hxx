@@ -29,8 +29,6 @@
 #include <osl/mutex.hxx>
 #include <cppuhelper/compbase1.hxx>
 
-namespace css = ::com::sun::star;
-
 namespace {
 
 typedef ::cppu::WeakComponentImplHelper1 <

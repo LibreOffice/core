@@ -99,7 +99,6 @@ using ::com::sun::star::awt::XWindow;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::document::XViewDataSupplier;
 using ::com::sun::star::container::XIndexContainer;
-namespace css = ::com::sun::star;
 
 // Due to ViewFrame::Current
 #include "appdata.hxx"

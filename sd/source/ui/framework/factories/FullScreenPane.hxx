@@ -26,8 +26,6 @@
 #include <vcl/vclevent.hxx>
 #include <boost/scoped_ptr.hpp>
 
-namespace css = ::com::sun::star;
-
 class WorkWindow;
 
 namespace sd { class ViewShellBase; }

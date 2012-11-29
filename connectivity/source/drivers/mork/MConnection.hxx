@@ -31,8 +31,6 @@ namespace connectivity
 {
     namespace mork
     {
-        namespace css = com::sun::star;
-
         class MorkDriver;
         class ProfileAccess;
         class ErrorDescriptor;

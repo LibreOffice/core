@@ -39,7 +39,6 @@
 #include <rtl/ref.hxx>
 #include <boost/shared_ptr.hpp>
 
-namespace css = ::com::sun::star;
 namespace cssu = ::com::sun::star::uno;
 namespace cssa = ::com::sun::star::accessibility;
 

@@ -61,7 +61,6 @@
 
 #include <boost/scoped_ptr.hpp>
 
-namespace css = ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 

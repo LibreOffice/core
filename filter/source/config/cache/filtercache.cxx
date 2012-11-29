@@ -56,8 +56,6 @@
 namespace filter{
     namespace config{
 
-namespace css = ::com::sun::star;
-
 FilterCache::FilterCache()
     : BaseLock    (                                        )
     , m_xSMGR     (::comphelper::getProcessServiceFactory())

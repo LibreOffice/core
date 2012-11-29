@@ -36,8 +36,6 @@
 
 class SfxMacroInfoItem;
 
-namespace css = ::com::sun::star;
-
 struct SfxStyleInfo_Impl
 {
     ::rtl::OUString sFamily;

@@ -40,8 +40,6 @@
 
 namespace {
 
-namespace css = com::sun::star;
-
 static char const namespaceLibreOffice[] =
     "http://libreoffice.org/extensions/description/2011";
 

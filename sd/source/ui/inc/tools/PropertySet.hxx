@@ -26,8 +26,6 @@
 #include <boost/scoped_ptr.hpp>
 #include <map>
 
-namespace css = ::com::sun::star;
-
 namespace sd { namespace tools {
 
 namespace {

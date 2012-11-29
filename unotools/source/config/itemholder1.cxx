@@ -53,12 +53,6 @@
 #include <unotools/syslocaleoptions.hxx>
 
 //-----------------------------------------------
-// namespaces
-
-namespace css = ::com::sun::star;
-
-
-//-----------------------------------------------
 ItemHolder1::ItemHolder1()
     : ItemHolderMutexBase()
 {

@@ -64,8 +64,6 @@ namespace com { namespace sun { namespace star { namespace ucb {
 
 namespace {
 
-namespace css = com::sun::star;
-
 // This class only implements that subset of functionality of a proper
 // css::ucb::Content that is known to be needed here:
 class Content:

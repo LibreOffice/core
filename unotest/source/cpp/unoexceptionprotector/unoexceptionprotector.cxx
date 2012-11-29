@@ -36,8 +36,6 @@
 
 namespace {
 
-namespace css = com::sun::star;
-
 // Best effort conversion:
 std::string convert(rtl::OUString const & s16) {
     rtl::OString s8(rtl::OUStringToOString(s16, osl_getThreadTextEncoding()));

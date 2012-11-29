@@ -36,8 +36,6 @@
 
 namespace {
 
-namespace css = com::sun::star;
-
 class Test: public CppUnit::TestFixture {
 private:
     CPPUNIT_TEST_SUITE(Test);

@@ -35,9 +35,7 @@ namespace security {
 #include <com/sun/star/uno/Sequence.hxx>
 
 
-namespace css = com::sun::star;
 namespace cssu = com::sun::star::uno;
-namespace css = ::com::sun::star;
 
 class MacroWarning : public ModalDialog
 {

@@ -70,8 +70,6 @@ using namespace ::dp_misc;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-namespace css = ::com::sun::star;
-
 using ::rtl::OUString;
 
 namespace dp_registry {

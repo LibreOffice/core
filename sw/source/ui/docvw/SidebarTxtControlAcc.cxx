@@ -31,8 +31,6 @@
 #include <editeng/outliner.hxx>
 
 
-namespace css = ::com::sun::star;
-
 namespace sw { namespace sidebarwindows {
 
 // =============================================================================

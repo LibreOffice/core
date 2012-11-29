@@ -39,8 +39,6 @@
 #include <rtl/ref.hxx>
 #include <boost/shared_ptr.hpp>
 
-namespace css = ::com::sun::star;
-
 namespace {
     typedef cppu::WeakComponentImplHelper5<
         css::awt::XWindowListener,

@@ -85,7 +85,6 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::system;
 using namespace ::rtl;
 
-namespace css = ::com::sun::star;
 // - class PrepareListener_Impl ------------------------------------------
 class PrepareListener_Impl : public ::cppu::WeakImplHelper1< css::frame::XStatusListener >
 {

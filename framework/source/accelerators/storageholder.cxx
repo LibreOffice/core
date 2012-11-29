@@ -50,8 +50,6 @@
 namespace framework
 {
 
-namespace css = ::com::sun::star;
-
 //-----------------------------------------------
 StorageHolder::StorageHolder()
     : ThreadHelpBase(                                        )

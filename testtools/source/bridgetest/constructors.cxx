@@ -58,7 +58,6 @@
 
 namespace {
 
-namespace css = ::com::sun::star;
 namespace ttb = ::test::testtools::bridgetest;
 class Impl: public ::cppu::WeakImplHelper1< css::lang::XInitialization > {
 public:

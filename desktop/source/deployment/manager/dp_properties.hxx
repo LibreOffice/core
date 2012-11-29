@@ -27,8 +27,6 @@
 #include "boost/optional.hpp"
 
 
-namespace css = ::com::sun::star;
-
 namespace dp_manager {
 
 

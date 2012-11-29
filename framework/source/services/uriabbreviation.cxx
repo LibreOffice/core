@@ -26,14 +26,9 @@
 
 #include "tools/urlobj.hxx"
 
-// component helper namespace
-namespace css = ::com::sun::star;
-
 // framework namespace
 namespace framework
 {
-
-namespace css = ::com::sun::star;
 
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo

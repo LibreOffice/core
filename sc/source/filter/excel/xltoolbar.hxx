@@ -33,8 +33,6 @@
 
 #include <filter/msfilter/mstoolbar.hxx>
 
-namespace css = ::com::sun::star;
-
 class ScCTBWrapper;
 // hmm I don't normally use these packed structures
 // but.. hey always good to do something different

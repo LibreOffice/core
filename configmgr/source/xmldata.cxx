@@ -54,12 +54,6 @@ namespace configmgr {
 
 namespace xmldata {
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
-
 Type parseType(
     xmlreader::XmlReader const & reader, xmlreader::Span const & text)
 {

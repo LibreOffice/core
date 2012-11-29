@@ -27,8 +27,6 @@
 #include <vcl/menu.hxx>
 #include <sfx2/mnuitem.hxx>
 
-namespace css = ::com::sun::star;
-
 class SfxThesSubMenuHelper
 {
     css::uno::Reference< css::linguistic2::XLinguServiceManager2 >  m_xLngMgr;

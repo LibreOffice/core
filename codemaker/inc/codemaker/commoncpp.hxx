@@ -24,8 +24,16 @@
 
 namespace codemaker { namespace cpp {
 
-rtl::OString scopedCppName(rtl::OString const & type, bool bNoNameSpace=false,
-                           bool shortname=false);
+/** Stick a namespace scope to c++ type
+
+    @param type
+    Undecorated type
+
+    @param ns_alias
+    Use common namespace aliases instead of fully specified (nested)
+    namespace. currently replaces com::sun::star with css.
+ */
+rtl::OString scopedCppName(rtl::OString const & type, bool ns_alias=true);
 
 rtl::OString translateUnoToCppType(
     codemaker::UnoType::Sort sort, RTTypeClass typeClass,

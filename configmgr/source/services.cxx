@@ -38,8 +38,6 @@
 
 namespace {
 
-namespace css = com::sun::star;
-
 css::uno::Reference< css::uno::XInterface > SAL_CALL dummy(
     SAL_UNUSED_PARAMETER css::uno::Reference< css::uno::XComponentContext >
         const &)

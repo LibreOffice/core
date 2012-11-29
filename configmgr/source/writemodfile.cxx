@@ -57,8 +57,6 @@ class Components;
 
 namespace {
 
-namespace css = com::sun::star;
-
 rtl::OString convertToUtf8(
     rtl::OUString const & text, sal_Int32 offset, sal_Int32 length)
 {

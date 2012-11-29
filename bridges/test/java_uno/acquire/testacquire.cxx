@@ -50,8 +50,6 @@
 #include <iostream>
 #include <cstdlib>
 
-namespace css = com::sun::star;
-
 namespace {
 
 class WaitCondition {

@@ -51,7 +51,6 @@ using ::rtl::OUString;
 #define ENABLE_JAVA     1
 #define USER_CLASS_PATH 2
 
-namespace css = com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;

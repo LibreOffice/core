@@ -30,8 +30,6 @@
 
 #include <set>
 
-namespace css = com::sun::star;
-
 namespace com { namespace sun { namespace star { namespace container {
     class XStringKeyMap;
 } } } }

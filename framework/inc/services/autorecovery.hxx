@@ -51,10 +51,6 @@
 //_______________________________________________
 // definition
 
-#ifndef css
-namespace css = ::com::sun::star;
-#endif
-
 namespace framework
 {
 

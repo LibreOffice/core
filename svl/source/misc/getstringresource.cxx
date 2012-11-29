@@ -35,8 +35,6 @@
 
 namespace {
 
-namespace css = com::sun::star;
-
 class ResMgrMap: private boost::noncopyable {
 public:
     ~ResMgrMap();

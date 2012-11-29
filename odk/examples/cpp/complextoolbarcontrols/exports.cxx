@@ -22,8 +22,6 @@
 #include "MyProtocolHandler.h"
 #include "MyListener.h"
 
-namespace css = ::com::sun::star;
-
 extern "C"
 {
 

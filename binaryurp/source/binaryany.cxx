@@ -29,12 +29,6 @@
 
 namespace binaryurp {
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
-
 BinaryAny::BinaryAny() throw () {
     uno_any_construct(&data_, 0, 0, 0);
 }

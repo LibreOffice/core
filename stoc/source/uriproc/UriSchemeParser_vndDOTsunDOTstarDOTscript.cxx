@@ -43,8 +43,6 @@
 
 #include <new>
 
-namespace css = com::sun::star;
-
 namespace {
 
 int getHexWeight(sal_Unicode c) {

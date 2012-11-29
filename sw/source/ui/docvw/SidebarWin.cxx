@@ -70,8 +70,6 @@
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
 
-namespace css = ::com::sun::star;
-
 namespace sw { namespace sidebarwindows {
 
 #define METABUTTON_WIDTH        16

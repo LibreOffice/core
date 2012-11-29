@@ -53,7 +53,6 @@
 
 #include <assert.h>
 
-namespace css = ::com::sun::star;
 using namespace ::com::sun::star;
 
 //========================================================================

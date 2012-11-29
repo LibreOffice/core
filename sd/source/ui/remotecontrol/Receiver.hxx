@@ -21,8 +21,6 @@
 
 #include "Transmitter.hxx"
 
-namespace css = ::com::sun::star;
-
 namespace sd
 {
 

@@ -37,8 +37,6 @@
 
 #undef VOID
 
-namespace css = com::sun::star;
-
 namespace sri = System::Runtime::InteropServices;
 namespace sr = System::Reflection;
 namespace st = System::Text;
@@ -542,7 +540,7 @@ System::String^ mapUnoTypeName(rtl_uString const * typeName)
     The values in the type list
     are uno types and are replaced by cli types, such as System.Char,
     System.Int32, etc.
-    The pr‰fix unoidl is not added.
+    The pr√§fix unoidl is not added.
  */
 inline System::String^ mapUnoPolymorphicName(System::String^ unoName)
 {
@@ -553,7 +551,7 @@ inline System::String^ mapUnoPolymorphicName(System::String^ unoName)
     The values in the type list
     are CLI types and are replaced by uno types, such as char,
     long, etc.
-    The pr‰fix unoidl remains.
+    The pr√§fix unoidl remains.
  */
 inline System::String^ mapCliPolymorphicName(System::String^ unoName)
 {

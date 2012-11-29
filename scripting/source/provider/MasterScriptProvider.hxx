@@ -36,8 +36,6 @@
 
 #include "ProviderCache.hxx"
 
-namespace css = ::com::sun::star;
-
 namespace func_provider
 {
 

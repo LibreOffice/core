@@ -141,8 +141,6 @@ using namespace ::com::sun::star::document;
 using namespace ::rtl;
 using namespace ::cppu;
 
-namespace css = ::com::sun::star;
-
 //=========================================================================
 void impl_addToModelCollection(const css::uno::Reference< css::frame::XModel >& xModel)
 {

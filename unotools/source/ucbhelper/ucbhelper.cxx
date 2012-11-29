@@ -60,8 +60,6 @@
 
 namespace {
 
-namespace css = com::sun::star;
-
 rtl::OUString canonic(rtl::OUString const & url) {
     INetURLObject o(url);
     SAL_WARN_IF(o.HasError(), "unotools", "Invalid URL \"" << url << '"');

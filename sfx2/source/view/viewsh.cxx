@@ -84,7 +84,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::cppu;
-namespace css = ::com::sun::star;
 
 //=========================================================================
 DBG_NAME(SfxViewShell)

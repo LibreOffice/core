@@ -35,7 +35,6 @@
 
 #include <cppuhelper/implbase1.hxx>
 
-namespace css = com::sun::star ;
 namespace container = css::container ;
 namespace deployment = css::deployment ;
 namespace lang = css::lang ;

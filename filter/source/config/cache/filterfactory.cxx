@@ -33,9 +33,6 @@
 namespace filter{
     namespace config{
 
-namespace css = ::com::sun::star;
-
-
 /** @short  define all possible parts of a filter query.
 
     @descr  syntax: "<query>[:<param>[=<value>]]"

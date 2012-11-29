@@ -31,10 +31,6 @@
 
 #include "dp_identifier.hxx"
 
-namespace {
-    namespace css = ::com::sun::star;
-}
-
 namespace dp_misc {
 
 ::rtl::OUString generateIdentifier(

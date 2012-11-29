@@ -51,8 +51,6 @@
 #include <new>
 #include <vector>
 
-namespace css = com::sun::star;
-
 namespace {
 
 //TODO: move comphelper::string::misc into something like

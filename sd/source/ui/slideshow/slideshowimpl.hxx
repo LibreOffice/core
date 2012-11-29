@@ -81,8 +81,6 @@
 class SfxViewFrame;
 class SfxRequest;
 
-namespace css = ::com::sun::star;
-
 namespace sd
 {
 class SlideShowView;

@@ -23,8 +23,6 @@
 #include <osl/file.hxx>
 #include <unotools/configmgr.hxx>
 
-namespace css = com::sun::star;
-
 OTempFileService::OTempFileService(::css::uno::Reference< ::css::uno::XComponentContext > const & context)
 : ::cppu::PropertySetMixin< ::css::io::XTempFile >(
     context

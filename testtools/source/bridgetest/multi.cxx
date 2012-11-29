@@ -37,8 +37,6 @@
 
 #include <sstream>
 
-namespace css = com::sun::star;
-
 namespace {
 
 struct CheckFailed {

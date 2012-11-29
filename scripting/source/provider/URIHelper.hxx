@@ -31,8 +31,6 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase3.hxx>
 
-namespace css = ::com::sun::star;
-
 namespace func_provider
 {
 

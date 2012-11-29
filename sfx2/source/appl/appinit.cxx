@@ -70,7 +70,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star;
-namespace css = ::com::sun::star;
 
 class SfxTerminateListener_Impl : public ::cppu::WeakImplHelper2< XTerminateListener, XServiceInfo >
 {

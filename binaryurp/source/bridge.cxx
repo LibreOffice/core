@@ -73,8 +73,6 @@ namespace binaryurp {
 
 namespace {
 
-namespace css = com::sun::star;
-
 sal_Int32 random() {
     sal_Int32 n;
     rtlRandomPool pool = rtl_random_createPool();

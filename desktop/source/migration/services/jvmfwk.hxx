@@ -29,8 +29,6 @@
 #include "com/sun/star/task/XJob.hpp"
 
 
-namespace css = com::sun::star;
-
 namespace migration
 {
 

@@ -282,7 +282,7 @@ void generateXPropertyAccessBodies(std::ostream& o,
 
     o << "css::uno::Sequence< css::beans::PropertyValue > SAL_CALL "
       << classname << "getPropertyValues(  ) throw ("
-        "::com::sun::star::uno::RuntimeException)\n{\n"
+        "css::uno::RuntimeException)\n{\n"
         "    return ::cppu::PropertySetMixin< "
       << propertyhelper << " >::getPropertyValues();\n}\n\n";
 
@@ -297,7 +297,7 @@ void generateXPropertyAccessBodies(std::ostream& o,
 
 void generateXLocalizable(std::ostream& o, const OString & classname)
 {
-    o << "// ::com::sun::star::lang::XLocalizable:\n"
+    o << "// css::lang::XLocalizable:\n"
         "void SAL_CALL " << classname << "setLocale(const css::lang::"
         "Locale & eLocale) throw (css::uno::RuntimeException)\n{\n"
         "     m_locale = eLocale;\n}\n\n"
@@ -307,7 +307,7 @@ void generateXLocalizable(std::ostream& o, const OString & classname)
 
 void generateXAddInBodies(std::ostream& o, const OString & classname)
 {
-    o << "// ::com::sun::star::sheet::XAddIn:\n";
+    o << "// css::sheet::XAddIn:\n";
 
     o << "::rtl::OUString SAL_CALL " << classname << "getProgrammaticFuntionName("
         "const ::rtl::OUString & aDisplayName) throw (css::uno::RuntimeException)"
@@ -362,7 +362,7 @@ void generateXAddInBodies(std::ostream& o, const OString & classname)
 
 void generateXCompatibilityNamesBodies(std::ostream& o, const OString & classname)
 {
-    o << "// ::com::sun::star::sheet::XCompatibilityNames:\n"
+    o << "// css::sheet::XCompatibilityNames:\n"
         "css::uno::Sequence< css::sheet::LocalizedName > SAL_CALL " << classname
       << "getCompatibilityNames(const ::rtl::OUString & aProgrammaticName) throw "
         "(css::uno::RuntimeException)\n{\n    css::uno::Sequence< "
@@ -401,7 +401,7 @@ void generateXCompatibilityNamesBodies(std::ostream& o, const OString & classnam
 
 void generateXInitialization(std::ostream& o, const OString & classname)
 {
-    o << "// ::com::sun::star::lang::XInitialization:\n"
+    o << "// css::lang::XInitialization:\n"
         "void SAL_CALL " << classname << "initialize( const css::uno::Sequence< "
         "css::uno::Any >& aArguments ) "
         "throw (css::uno::Exception, css::uno::RuntimeException)\n{\n"
@@ -416,7 +416,7 @@ void generateXDispatch(std::ostream& o,
 {
     // com.sun.star.frame.XDispatch
     // dispatch
-    o << "// ::com::sun::star::frame::XDispatch:\n"
+    o << "// css::frame::XDispatch:\n"
         "void SAL_CALL " << classname << "dispatch( const css::util::URL& aURL, const "
         "css::uno::Sequence< css::beans::PropertyValue >& aArguments ) throw"
         "(css::uno::RuntimeException)\n{\n";
@@ -458,7 +458,7 @@ void generateXDispatchProvider(std::ostream& o,
 
     // com.sun.star.frame.XDispatchProvider
     // queryDispatch
-    o << "// ::com::sun::star::frame::XDispatchProvider:\n"
+    o << "// css::frame::XDispatchProvider:\n"
         "css::uno::Reference< css::frame::XDispatch > SAL_CALL " << classname
       << "queryDispatch( const css::util::URL& aURL,"
         " const ::rtl::OUString& sTargetFrameName, sal_Int32 nSearchFlags ) "
@@ -645,7 +645,7 @@ OString generateClassDefinition(std::ostream& o,
             interfaces.begin();
         while (iter != interfaces.end())
         {
-            o << "\n        " << scopedCppName(*iter, false, true);
+            o << "\n        " << scopedCppName(*iter);
             ++iter;
             if (iter != interfaces.end())
                 o << ",";
@@ -656,7 +656,7 @@ OString generateClassDefinition(std::ostream& o,
 
     if (propertyhelper.getLength() > 1) {
         o << ",\n    public ::cppu::PropertySetMixin< "
-          << scopedCppName(propertyhelper, false, true) << " >";
+          << scopedCppName(propertyhelper) << " >";
     }
 
     o << "\n{\npublic:\n"
@@ -674,7 +674,7 @@ OString generateClassDefinition(std::ostream& o,
 
     // overload queryInterface
     if (propertyhelper.getLength() > 1) {
-        o << "    // ::com::sun::star::uno::XInterface:\n"
+        o << "    // css::uno::XInterface:\n"
             "    virtual css::uno::Any SAL_CALL queryInterface("
             "css::uno::Type const & type) throw ("
             "css::uno::RuntimeException);\n";
@@ -686,7 +686,7 @@ OString generateClassDefinition(std::ostream& o,
             interfaces.begin();
         while (iter != interfaces.end())
         {
-            buffer.append(scopedCppName(*iter, false, true));
+            buffer.append(scopedCppName(*iter));
             ++iter;
             if (iter != interfaces.end())
                 buffer.append(", ");
@@ -797,7 +797,7 @@ OString generateClassDefinition(std::ostream& o,
             boost::unordered_set< OString, OStringHash >::const_iterator iter =
                 interfaces.begin();
             while (iter != interfaces.end()) {
-                o << "\n        " << scopedCppName(*iter, false, true);
+                o << "\n        " << scopedCppName(*iter);
                 ++iter;
                 if (iter != interfaces.end())
                     o << ",";
@@ -807,7 +807,7 @@ OString generateClassDefinition(std::ostream& o,
         }
         if (propertyhelper.getLength() > 1) {
             o << "    ::cppu::PropertySetMixin< "
-              << scopedCppName(propertyhelper, false, true) << " >(\n"
+              << scopedCppName(propertyhelper) << " >(\n"
               << "        context, static_cast< Implements >(\n            ";
             OStringBuffer buffer(128);
             if (propinterfaces.find("com/sun/star/beans/XPropertySet")
@@ -928,7 +928,7 @@ void generateQueryInterface(std::ostream& o,
         interfaces.begin();
     while (iter != interfaces.end())
     {
-        o << "\n        " << scopedCppName(*iter, false, true);
+        o << "\n        " << scopedCppName(*iter);
         ++iter;
         if (iter != interfaces.end())
             o << ",";

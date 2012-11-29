@@ -80,8 +80,6 @@
 #define DLG_RET_OK_AUTOLUNCH                            101
 
 
-namespace css = ::com::sun::star;
-
 namespace svx{
     namespace DocRecovery{
 

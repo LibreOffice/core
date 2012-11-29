@@ -48,8 +48,6 @@
 #include <map>
 #include <set>
 
-namespace css = ::com::sun::star;
-
 #if defined SAL_LOG_INFO
 namespace
 {

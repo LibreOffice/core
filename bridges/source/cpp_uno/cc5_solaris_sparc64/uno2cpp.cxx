@@ -46,8 +46,6 @@
 
 namespace {
 
-namespace css = com::sun::star;
-
 void storeFpRegsToStruct(typelib_TypeDescription * type, void * data) {
     for (typelib_CompoundTypeDescription * t =
              reinterpret_cast< typelib_CompoundTypeDescription * >(type);

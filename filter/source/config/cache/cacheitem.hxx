@@ -35,8 +35,6 @@
 namespace filter{
     namespace config{
 
-namespace css = ::com::sun::star;
-
 
 /** @short  Must be used as first derived base class
             to get a full initialized mutex member,

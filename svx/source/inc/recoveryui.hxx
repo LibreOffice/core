@@ -32,8 +32,6 @@
 namespace svx
 {
 
-// Dont export this header ... Otherwise you have to remove this namespace alias!
-namespace css   = ::com::sun::star;
 namespace svxdr = ::svx::DocRecovery;
 
 

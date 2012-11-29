@@ -26,8 +26,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <boost/noncopyable.hpp>
 
-namespace css = ::com::sun::star;
-
 namespace sdext { namespace presenter {
 
 /** Collection of helper functions that do not fit in anywhere else.

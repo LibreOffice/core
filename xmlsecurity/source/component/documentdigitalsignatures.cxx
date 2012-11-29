@@ -52,7 +52,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-namespace css = ::com::sun::star;
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 

@@ -46,8 +46,6 @@
 #include <sfx2/minarray.hxx>
 #include "cfgutil.hxx"
 
-namespace css = ::com::sun::star;
-
 class SfxMacroInfoItem;
 class SfxConfigGroupListBox_Impl;
 class SfxConfigFunctionListBox_Impl;

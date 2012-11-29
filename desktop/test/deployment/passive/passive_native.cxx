@@ -55,8 +55,6 @@
 
 namespace {
 
-namespace css = com::sun::star;
-
 class Provider:
     public cppu::WeakImplHelper2<
         css::lang::XServiceInfo, css::frame::XDispatchProvider >,

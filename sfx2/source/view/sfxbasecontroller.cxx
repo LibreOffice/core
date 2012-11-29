@@ -112,7 +112,6 @@ using ::com::sun::star::frame::XFrameActionListener;
 using ::com::sun::star::util::XCloseListener;
 using ::com::sun::star::task::XStatusIndicator;
 using ::com::sun::star::frame::XTitle;
-namespace css = ::com::sun::star;
 
 struct GroupIDToCommandGroup
 {

@@ -81,7 +81,6 @@ using namespace ::cppu;
 using namespace ::osl;
 using namespace ::dbtools;
 using namespace ::comphelper;
-namespace css = ::com::sun::star;
 
 namespace dbaccess
 {

@@ -27,8 +27,6 @@
 
 namespace comphelper{
 
-    namespace css = ::com::sun::star;
-
 StillReadWriteInteraction::StillReadWriteInteraction(const css::uno::Reference< css::task::XInteractionHandler >& xHandler)
              : m_bUsed                    (sal_False)
              , m_bHandledByMySelf         (sal_False)

@@ -51,8 +51,6 @@ namespace embed {
     class XEmbeddedObject;
 }}}}
 
-namespace css = ::com::sun::star;
-
 namespace sd {
 
 class DrawDocShell;

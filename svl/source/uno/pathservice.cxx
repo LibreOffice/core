@@ -25,7 +25,6 @@
 #include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-namespace css = com::sun::star;
 using rtl::OUString;
 
 // -----------------------------------------------------------------------

@@ -66,8 +66,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::dom::events;
 using namespace ::svx;
 
-namespace css = ::com::sun::star;
-
 #define CFGNAME_DATANAVIGATOR       DEFINE_CONST_UNICODE("DataNavigator")
 #define CFGNAME_SHOWDETAILS         DEFINE_CONST_UNICODE("ShowDetails")
 #define MSG_VARIABLE                DEFINE_CONST_UNICODE("%1")

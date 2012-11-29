@@ -29,8 +29,6 @@
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <cppuhelper/compbase2.hxx>
 
-namespace css = ::com::sun::star;
-
 namespace {
 
 typedef ::cppu::WeakComponentImplHelper2 <

@@ -32,8 +32,6 @@
 /// anonymous implementation namespace
 namespace {
 
-namespace css = ::com::sun::star;
-
 class CLiteral:
     public ::cppu::WeakImplHelper3<
         css::lang::XServiceInfo,

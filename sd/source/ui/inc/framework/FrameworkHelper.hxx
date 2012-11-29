@@ -43,8 +43,6 @@ namespace rtl {
 class OUString;
 }
 
-namespace css = ::com::sun::star;
-
 namespace sd { namespace framework {
 
 /** The FrameworkHelper is a convenience class that simplifies the

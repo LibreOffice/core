@@ -22,8 +22,6 @@
 #include "cppuhelper/implbase1.hxx"
 #include "com/sun/star/office/XAnnotationAccess.hpp"
 
-namespace css = ::com::sun::star;
-
 class AnnotationAccess:
     public ::cppu::WeakImplHelper1<
         css::office::XAnnotationAccess>

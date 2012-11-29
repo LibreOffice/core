@@ -49,8 +49,6 @@ namespace stoc { namespace simpleregistry {
 
 namespace {
 
-namespace css = com::sun::star;
-
 struct Implementation {
     rtl::OUString uri;
     rtl::OUString loader;

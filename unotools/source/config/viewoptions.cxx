@@ -32,12 +32,6 @@
 
 #include <itemholder1.hxx>
 
-//_________________________________________________________________________________________________________________
-//  namespaces
-//_________________________________________________________________________________________________________________
-
-namespace css = ::com::sun::star;
-
 #ifdef CONST_ASCII
     #error  "Who define CONST_ASCII before! I use it to create const ascii strings ..."
 #else

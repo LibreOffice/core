@@ -29,8 +29,6 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include "basicdllapi.h"
 
-namespace css = ::com::sun::star;
-
 // Basic-Module for excel object.
 
 class BASIC_DLLPUBLIC SbObjModule : public SbModule

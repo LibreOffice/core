@@ -37,13 +37,6 @@
 
 namespace comphelper{
 
-#ifdef css
-    #error "Ambigious namespace definition of css."
-#else
-    #define css ::com::sun::star
-#endif
-
-
 /** @short  defines a collection of UNO components, where every component will get it's own unique number.
 
     @descr  Such number will be unique at runtime only ... but it supports fragmentation.
@@ -175,8 +168,6 @@ class COMPHELPER_DLLPUBLIC NumberedCollection : private ::cppu::BaseMutex
         /// used as source of broadcasted messages or exceptions (can be null !)
         css::uno::WeakReference< css::uno::XInterface > m_xOwner;
 };
-
-#undef css
 
 } // namespace comphelper
 

@@ -33,8 +33,6 @@
 
 #include <filter/msfilter/mstoolbar.hxx>
 
-namespace css = ::com::sun::star;
-
 class Xst : public TBBase
 {
     rtl::OUString sString;

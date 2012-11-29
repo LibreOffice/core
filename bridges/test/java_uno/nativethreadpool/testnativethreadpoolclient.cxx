@@ -46,8 +46,6 @@
 
 #include <iostream>
 
-namespace css = com::sun::star;
-
 namespace {
 
 class Client: public cppu::WeakImplHelper2<

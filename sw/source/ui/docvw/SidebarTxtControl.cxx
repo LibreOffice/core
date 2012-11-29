@@ -51,8 +51,6 @@
 #include <shellres.hxx>
 #include <SwRewriter.hxx>
 
-namespace css = ::com::sun::star;
-
 namespace sw { namespace sidebarwindows {
 
 SidebarTxtControl::SidebarTxtControl( SwSidebarWin& rSidebarWin,

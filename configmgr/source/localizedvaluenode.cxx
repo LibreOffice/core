@@ -29,12 +29,6 @@
 
 namespace configmgr {
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
-
 LocalizedValueNode::LocalizedValueNode(int layer, css::uno::Any const & value):
     Node(layer), value_(value)
 {}

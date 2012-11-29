@@ -31,8 +31,6 @@
 #include <vector>
 
 
-namespace css = ::com::sun::star;
-
 namespace xmlscript
 {
 

@@ -107,8 +107,6 @@ public Ifc31, public Ifc32
 
 __DEF_IMPLHELPER_EX( 32 )
 
-namespace css = ::com::sun::star;
-
 class SwDoc;
 class SwDocShell;
 class UnoActionContext;

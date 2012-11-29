@@ -641,8 +641,6 @@ void SAL_CALL VCLXMenu::setHelpCommand( sal_Int16 nItemId, const ::rtl::OUString
 // BEGIN ANONYMOUS NAMESPACE
 namespace
 {
-    namespace css = ::com::sun::star;
-
     Image lcl_XGraphic2VCLImage(
                                 const css::uno::Reference< css::graphic::XGraphic >& xGraphic,
                                 sal_Bool bResize )

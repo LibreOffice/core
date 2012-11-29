@@ -34,8 +34,6 @@
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
 
-namespace css = ::com::sun::star;
-
 namespace climaker
 {
 

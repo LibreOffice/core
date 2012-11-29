@@ -40,12 +40,6 @@
 
 namespace configmgr {
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
-
 XcdParser::XcdParser(
     int layer, std::set< OUString > const & processedDependencies, Data & data):
     layer_(layer), processedDependencies_(processedDependencies), data_(data),

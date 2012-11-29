@@ -28,8 +28,6 @@
 
 namespace filter{ namespace config {
 
-namespace css = ::com::sun::star;
-
 
 //_______________________________________________
 

@@ -46,7 +46,6 @@ namespace basctl
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-namespace css = ::com::sun::star;
 
 Reference< view::XRenderable > Shell::GetRenderable()
 {

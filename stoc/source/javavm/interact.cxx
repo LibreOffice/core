@@ -28,8 +28,6 @@
 #include "cppuhelper/implbase1.hxx"
 #include "osl/mutex.hxx"
 
-namespace css = com::sun::star;
-
 using stoc_javavm::InteractionRequest;
 
 namespace {

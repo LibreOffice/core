@@ -26,7 +26,6 @@
 #include "com/sun/star/office/XAnnotationEnumeration.hpp"
 
 #include "sdpage.hxx"
-namespace css = ::com::sun::star;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::office;

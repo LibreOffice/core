@@ -54,12 +54,6 @@
 
 namespace configmgr {
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
-
 XcuParser::XcuParser(
     int layer, Data & data, Partial const * partial,
     Modifications * broadcastModifications, Additions * additions):

@@ -44,8 +44,6 @@
 
 namespace {
 
-namespace css = com::sun::star;
-
 class Reference: public cppu::WeakImplHelper1< css::uno::XReference > {
 public:
     Reference(): m_disposed(false) {}

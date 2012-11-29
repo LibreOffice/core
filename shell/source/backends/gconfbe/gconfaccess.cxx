@@ -39,7 +39,6 @@ namespace gconfaccess {
 
 namespace {
 
-namespace css = com::sun::star ;
 namespace uno = css::uno ;
 
 using ::rtl::OUString;

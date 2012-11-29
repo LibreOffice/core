@@ -28,9 +28,6 @@
 
 namespace comphelper{
 
-namespace css = ::com::sun::star;
-
-
 //-----------------------------------------------
 css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                                                             const ::rtl::OUString&                                    sPackage,

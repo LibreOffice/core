@@ -117,8 +117,6 @@
  * com.sun.star.uno.RuntimeException.
  */
 
-namespace css = com::sun::star;
-
 using stoc_javavm::JavaVirtualMachine;
 
 namespace {

@@ -36,8 +36,6 @@
 
 #include <vcl/window.hxx>
 
-namespace css = ::com::sun::star;
-
 namespace sw { namespace access {
 
 SwAccessibleChild::SwAccessibleChild()

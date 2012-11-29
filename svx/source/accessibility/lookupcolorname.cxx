@@ -35,8 +35,6 @@
 
 namespace {
 
-namespace css = com::sun::star;
-
 class ColorNameMap: private boost::noncopyable {
 public:
     ColorNameMap();

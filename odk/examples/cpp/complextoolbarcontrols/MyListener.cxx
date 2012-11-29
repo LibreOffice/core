@@ -24,9 +24,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 
-namespace css = ::com::sun::star;
-
-
 MyListener::MyListener(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
     : m_xSMGR(xSMGR)
 {}

@@ -51,9 +51,6 @@ using namespace ::rtl;
 
 using ::com::sun::star::uno::XInterface;
 
-namespace css = ::com::sun::star;
-
-
 //------------------------------------------------------------------------
 // SvxTextEditSourceImpl
 //------------------------------------------------------------------------

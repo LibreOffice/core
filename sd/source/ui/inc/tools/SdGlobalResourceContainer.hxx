@@ -25,8 +25,6 @@
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 
-namespace css = ::com::sun::star;
-
 namespace sd {
 
 class SdGlobalResource

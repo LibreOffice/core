@@ -43,8 +43,6 @@ namespace sd { namespace slidesorter { namespace model {
 class SlideSorterModel;
 } } }
 
-namespace css = ::com::sun::star;
-
 namespace sd { namespace slidesorter { namespace controller {
 
 class Animator;

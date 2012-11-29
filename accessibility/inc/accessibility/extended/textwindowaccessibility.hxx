@@ -55,8 +55,6 @@
 class TextEngine;
 class TextView;
 
-namespace css = ::com::sun::star;
-
 namespace accessibility
 {
 

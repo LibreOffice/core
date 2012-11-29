@@ -41,8 +41,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <boost/noncopyable.hpp>
 
-namespace css = ::com::sun::star;
-
 namespace sdext { namespace presenter {
 
 namespace {

@@ -38,8 +38,6 @@
 #include <vector>
 #include <boost/shared_ptr.hpp>
 
-namespace css = ::com::sun::star;
-
 namespace xmlscript
 {
 

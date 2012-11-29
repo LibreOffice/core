@@ -85,7 +85,6 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::embed;
-namespace css = ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
 using ::com::sun::star::awt::XWindow;
 using ::com::sun::star::sdb::application::NamedDatabaseObject;

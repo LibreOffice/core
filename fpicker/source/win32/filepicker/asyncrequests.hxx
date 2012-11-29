@@ -28,8 +28,6 @@
 #include <queue>
 #include <boost/shared_ptr.hpp>
 
-namespace css = ::com::sun::star;
-
 namespace fpicker{
 namespace win32{
 namespace vista{

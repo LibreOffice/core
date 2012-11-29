@@ -50,7 +50,6 @@
 #include <rtl/logfile.hxx>
 
 using namespace ::com::sun::star;
-namespace css = ::com::sun::star;
 
 // Property names of a menu/menu item ItemDescriptor
 static const char ITEM_DESCRIPTOR_COMMANDURL[]  = "CommandURL";

@@ -28,8 +28,6 @@
 
 #define APP_NAME "unopkg"
 
-namespace css = ::com::sun::star;
-
 namespace unopkg {
 
     inline ::com::sun::star::lang::Locale toLocale( ::rtl::OUString const & slang )

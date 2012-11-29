@@ -16,8 +16,6 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/localfilehelper.hxx>
 
-namespace css = ::com::sun::star;
-
 ScCollaboration::ScCollaboration( ScDocShell* pScDocShell ) :
     mpScDocShell( pScDocShell )
 {

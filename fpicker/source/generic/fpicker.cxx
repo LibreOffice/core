@@ -35,8 +35,6 @@
 #include <odma_lib.hxx>
 #endif
 
-namespace css = com::sun::star;
-
 using css::uno::Reference;
 using css::uno::Sequence;
 using rtl::OUString;

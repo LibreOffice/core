@@ -29,8 +29,6 @@
 #include <docary.hxx>
 #include <redline.hxx>
 
-namespace css = com::sun::star;
-
 namespace {
     void initChangeTrackTextMarkupLists( const SwTxtFrm& rTxtFrm,
                                          SwWrongList*& opChangeTrackInsertionTextMarkupList,

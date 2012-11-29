@@ -27,8 +27,6 @@
 // component helper namespace
 namespace comp_librdf_Repository {
 
-namespace css = ::com::sun::star;
-
 // component and service helper functions:
 ::rtl::OUString SAL_CALL _getImplementationName();
 css::uno::Sequence< ::rtl::OUString > SAL_CALL _getSupportedServiceNames();

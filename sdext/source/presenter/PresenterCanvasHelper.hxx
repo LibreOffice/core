@@ -30,8 +30,6 @@
 #include <rtl/ref.hxx>
 #include <boost/noncopyable.hpp>
 
-namespace css = ::com::sun::star;
-
 namespace sdext { namespace presenter {
 
 /** Collection of functions to ease the life of a canvas user.
