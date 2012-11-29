@@ -130,8 +130,9 @@
 	<!-- *** References  *** -->
 	<!-- ******************* -->
 
-	<xsl:template match="text:reference-ref | text:sequence-ref">
+	<xsl:template match="text:reference-ref | text:sequence-ref | text:bookmark-ref">
 		<xsl:param name="globalData"/>
+		<xsl:if test="*|text()">
 		<xsl:element namespace="{$namespace}" name="a">
 			<xsl:attribute name="href">
 				<xsl:text>#</xsl:text>
@@ -150,7 +151,9 @@
 			<xsl:apply-templates select="@* | node()">
 				<xsl:with-param name="globalData" select="$globalData"/>
 			</xsl:apply-templates>
+				
 		</xsl:element>
+		</xsl:if>
 	</xsl:template>
 
     <xsl:template match="@text:name">
