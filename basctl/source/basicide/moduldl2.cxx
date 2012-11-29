@@ -122,12 +122,12 @@ public:
     LibLBoxString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const String& rTxt ) :
         SvLBoxString( pEntry, nFlags, rTxt ) {}
 
-    virtual void Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvTreeListEntry* pEntry );
+    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
 };
 
 //----------------------------------------------------------------------------
 
-void LibLBoxString::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16, SvTreeListEntry* pEntry )
+void LibLBoxString::Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
 {
     // Change text color if library is read only:
     bool bReadOnly = false;
@@ -137,8 +137,7 @@ void LibLBoxString::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16, S
             static_cast<LibUserData*>(pEntry->GetUserData())->
             GetDocument() );
 
-        OUString aLibName(
-            static_cast< SvLBoxString * >(pEntry->GetItem(1))->GetText());
+        OUString aLibName = static_cast<const SvLBoxString*>(pEntry->GetItem(1))->GetText();
         Reference< script::XLibraryContainer2 > xModLibContainer(
             aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY);
         Reference< script::XLibraryContainer2 > xDlgLibContainer(

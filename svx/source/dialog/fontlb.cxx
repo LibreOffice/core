@@ -56,12 +56,13 @@ SvLBoxItem* SvLBoxFontString::Create() const
     return new SvLBoxFontString;
 }
 
-void SvLBoxFontString::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvTreeListEntry* pEntry )
+void SvLBoxFontString::Paint(
+    const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry)
 {
     DBG_CHKTHIS( SvLBoxFontString, 0 );
     Font aOldFont( rDev.GetFont() );
     Font aNewFont( maFont );
-    bool bSel = (nFlags & SVLISTENTRYFLAG_SELECTED) != 0;
+    bool bSel = pView->IsSelected();
     if( !mbUseColor || bSel )       // selection always gets highlight color
     {
         const StyleSettings& rSett = Application::GetSettings().GetStyleSettings();
@@ -69,7 +70,7 @@ void SvLBoxFontString::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16
     }
 
     rDev.SetFont( aNewFont );
-    SvLBoxString::Paint( rPos, rDev, nFlags, pEntry );
+    SvLBoxString::Paint(rPos, rDev, pView, pEntry);
     rDev.SetFont( aOldFont );
 }
 

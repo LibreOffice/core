@@ -117,14 +117,14 @@ sal_Bool SwContentTree::bIsInDrag = sal_False;
 
 namespace
 {
-    static sal_Bool lcl_IsContent(SvTreeListEntry* pEntry)
+    static sal_Bool lcl_IsContent(const SvTreeListEntry* pEntry)
     {
-        return ((SwTypeNumber*)pEntry->GetUserData())->GetTypeId() == CTYPE_CNT;
+        return ((const SwTypeNumber*)pEntry->GetUserData())->GetTypeId() == CTYPE_CNT;
     }
 
-    static sal_Bool lcl_IsContentType(SvTreeListEntry* pEntry)
+    static sal_Bool lcl_IsContentType(const SvTreeListEntry* pEntry)
     {
-        return ((SwTypeNumber*)pEntry->GetUserData())->GetTypeId() == CTYPE_CTT;
+        return ((const SwTypeNumber*)pEntry->GetUserData())->GetTypeId() == CTYPE_CTT;
     }
 
     static sal_Bool lcl_FindShell(SwWrtShell* pShell)
@@ -162,7 +162,7 @@ SwContent::SwContent(const SwContentType* pCnt, const String& rName, long nYPos)
 {
 }
 
-sal_uInt8   SwTypeNumber::GetTypeId()
+sal_uInt8 SwTypeNumber::GetTypeId() const
 {
     return nTypeId;
 }
@@ -3131,8 +3131,9 @@ public:
     SwContentLBoxString( SvTreeListEntry* pEntry, sal_uInt16 nFlags,
         const String& rStr ) : SvLBoxString(pEntry,nFlags,rStr) {}
 
-    virtual void Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags,
-        SvTreeListEntry* pEntry);
+    virtual void Paint(
+        const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView,
+        const SvTreeListEntry* pEntry);
 };
 
 void SwContentTree::InitEntry(SvTreeListEntry* pEntry,
@@ -3146,8 +3147,9 @@ void SwContentTree::InitEntry(SvTreeListEntry* pEntry,
     pEntry->ReplaceItem( pStr, nColToHilite );
 }
 
-void SwContentLBoxString::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags,
-    SvTreeListEntry* pEntry )
+void SwContentLBoxString::Paint(
+    const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView,
+    const SvTreeListEntry* pEntry)
 {
     if(lcl_IsContent(pEntry) &&
             ((SwContent *)pEntry->GetUserData())->IsInvisible())
@@ -3161,7 +3163,7 @@ void SwContentLBoxString::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uIn
         rDev.SetFont( aOldFont );
     }
     else
-        SvLBoxString::Paint( rPos, rDev, nFlags, pEntry);
+        SvLBoxString::Paint( rPos, rDev, pView, pEntry);
 }
 
 void    SwContentTree::DataChanged( const DataChangedEvent& rDCEvt )

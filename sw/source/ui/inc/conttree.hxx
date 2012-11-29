@@ -220,8 +220,9 @@ public:
     {
     }
 
-    virtual void Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags,
-        SvTreeListEntry* pEntry);
+    virtual void Paint(
+        const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView,
+        const SvTreeListEntry* pEntry);
 };
 
 namespace sfx2 { class DocumentInserter; }

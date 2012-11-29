@@ -550,24 +550,18 @@ class SaveProgressDialog : public ModalDialog
 //===============================================
 class RecovDocListEntry : public SvLBoxString
 {
-    //-------------------------------------------
-    // interface
-    private:
+public:
 
-    //-------------------------------------------
-    // interface
-    public:
+    //---------------------------------------
+    /** @short TODO */
+    RecovDocListEntry(      SvTreeListEntry* pEntry,
+                            sal_uInt16       nFlags,
+                      const String&      sText );
 
-        //---------------------------------------
-        /** @short TODO */
-        RecovDocListEntry(      SvTreeListEntry* pEntry,
-                                sal_uInt16       nFlags,
-                          const String&      sText );
-
-        //---------------------------------------
-        /** @short TODO */
-        virtual void Paint(
-            const Point& aPos, SvTreeListBox& aDevice, sal_uInt16 nFlags, SvTreeListEntry* pEntry);
+    //---------------------------------------
+    /** @short TODO */
+    virtual void Paint(
+        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
 };
 
 //===============================================

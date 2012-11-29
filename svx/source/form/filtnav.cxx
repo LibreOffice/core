@@ -1036,13 +1036,14 @@ public:
     FmFilterItemsString( SvTreeListEntry* pEntry, sal_uInt16 nFlags,    const XubString& rStr )
         :SvLBoxString(pEntry,nFlags,rStr){}
 
-    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvTreeListEntry* pEntry);
+    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
     virtual void InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry, SvViewDataItem* pViewData);
 };
 
 const int nxDBmp = 12;
 //------------------------------------------------------------------------
-void FmFilterItemsString::Paint(const Point& rPos, SvTreeListBox& rDev, sal_uInt16 /*nFlags*/, SvTreeListEntry* pEntry )
+void FmFilterItemsString::Paint(
+    const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
 {
     FmFilterItems* pRow = (FmFilterItems*)pEntry->GetUserData();
     FmFormItem* pForm = (FmFormItem*)pRow->GetParent();
@@ -1100,7 +1101,7 @@ public:
         m_aName.AppendAscii(": ");
     }
 
-    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvTreeListEntry* pEntry);
+    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
     virtual void InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry, SvViewDataItem* pViewData);
 };
 
@@ -1124,7 +1125,8 @@ void FmFilterString::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry,
 }
 
 //------------------------------------------------------------------------
-void FmFilterString::Paint(const Point& rPos, SvTreeListBox& rDev, sal_uInt16 /*nFlags*/, SvTreeListEntry* /*pEntry*/ )
+void FmFilterString::Paint(
+    const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* /*pEntry*/)
 {
     Font aOldFont( rDev.GetFont());
     Font aFont( aOldFont );

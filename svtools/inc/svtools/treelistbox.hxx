@@ -149,9 +149,8 @@ public:
                             return pIData->maSize;
                         }
 
-    virtual void        Paint( const Point& rPos, SvTreeListBox& rOutDev,
-                            sal_uInt16 nViewDataEntryFlags,
-                            SvTreeListEntry* pEntry ) = 0;
+    virtual void Paint(
+        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) = 0;
 
     virtual void        InitViewData( SvTreeListBox* pView, SvTreeListEntry* pEntry,
                             // If != 0: this Pointer must be used!
@@ -647,8 +646,8 @@ public:
 
     virtual String  GetEntryText( SvTreeListEntry* pEntry ) const;
     String          SearchEntryText( SvTreeListEntry* pEntry ) const;
-    const Image&    GetExpandedEntryBmp(SvTreeListEntry* _pEntry ) const;
-    const Image&    GetCollapsedEntryBmp(SvTreeListEntry* _pEntry ) const;
+    const Image&    GetExpandedEntryBmp(const SvTreeListEntry* _pEntry ) const;
+    const Image&    GetCollapsedEntryBmp(const SvTreeListEntry* _pEntry ) const;
 
     void            SetCheckButtonHdl( const Link& rLink )  { aCheckButtonHdl=rLink; }
     Link            GetCheckButtonHdl() const { return aCheckButtonHdl; }

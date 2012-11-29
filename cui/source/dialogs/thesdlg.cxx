@@ -139,9 +139,8 @@ AlternativesString::AlternativesString(
 }
 
 void AlternativesString::Paint(
-    const Point& rPos,
-    SvTreeListBox& rDev, sal_uInt16,
-    SvTreeListEntry* pEntry )
+    const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/,
+    const SvTreeListEntry* pEntry)
 {
     AlternativesExtraData* pData = m_rControlImpl.GetExtraData( pEntry );
     Point aPos( rPos );

@@ -1782,20 +1782,20 @@ String SvTreeListBox::SearchEntryText( SvTreeListEntry* pEntry ) const
     return sRet;
 }
 
-const Image& SvTreeListBox::GetExpandedEntryBmp(SvTreeListEntry* pEntry) const
+const Image& SvTreeListBox::GetExpandedEntryBmp(const SvTreeListEntry* pEntry) const
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     DBG_ASSERT(pEntry,"Entry?");
-    SvLBoxContextBmp* pItem = (SvLBoxContextBmp*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
+    const SvLBoxContextBmp* pItem = static_cast<const SvLBoxContextBmp*>(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
     DBG_ASSERT(pItem,"GetContextBmp:Item not found");
     return pItem->GetBitmap2( );
 }
 
-const Image& SvTreeListBox::GetCollapsedEntryBmp( SvTreeListEntry* pEntry ) const
+const Image& SvTreeListBox::GetCollapsedEntryBmp( const SvTreeListEntry* pEntry ) const
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     DBG_ASSERT(pEntry,"Entry?");
-    SvLBoxContextBmp* pItem = (SvLBoxContextBmp*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
+    const SvLBoxContextBmp* pItem = static_cast<const SvLBoxContextBmp*>(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
     DBG_ASSERT(pItem,"GetContextBmp:Item not found");
     return pItem->GetBitmap1( );
 }
@@ -3073,7 +3073,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nT
             // draw item
             // center vertically
             aEntryPos.Y() += ( nTempEntryHeight - aSize.Height() ) / 2;
-            pItem->Paint( aEntryPos, *this, pViewDataEntry->GetFlags(), pEntry );
+            pItem->Paint(aEntryPos, *this, pViewDataEntry, pEntry);
 
             // division line between tabs
             if (pNextTab && pItem->GetType() == SV_ITEM_ID_LBOXSTRING &&

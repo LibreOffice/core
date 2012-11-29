@@ -112,8 +112,9 @@ SvLBoxItem* SvLBoxColorString::Create() const
     return new SvLBoxColorString;
 }
 
-void SvLBoxColorString::Paint( const Point& rPos, SvTreeListBox& rDev,
-                             sal_uInt16 nFlags, SvTreeListEntry* pEntry )
+void SvLBoxColorString::Paint(
+    const Point& rPos, SvTreeListBox& rDev,
+    const SvViewDataEntry* pView, const SvTreeListEntry* pEntry)
 /* [Description]
 
    Paint function of the SvLBoxColorString class. The relevant text with the
@@ -123,11 +124,11 @@ void SvLBoxColorString::Paint( const Point& rPos, SvTreeListBox& rDev,
 {
     Color aColor=rDev.GetTextColor();
     Color a2Color=aColor;
-    if(!(nFlags & SVLISTENTRYFLAG_SELECTED))
+    if (!pView->IsSelected())
     {
         rDev.SetTextColor(aPrivColor);
     }
-    SvLBoxString::Paint(rPos,rDev,nFlags,pEntry );
+    SvLBoxString::Paint(rPos, rDev, pView, pEntry);
     rDev.SetTextColor(a2Color);
 }
 

@@ -884,10 +884,8 @@ RecovDocListEntry::RecovDocListEntry(      SvTreeListEntry* pEntry,
 }
 
 //===============================================
-void RecovDocListEntry::Paint(const Point&       aPos   ,
-                                    SvTreeListBox&      aDevice,
-                                    sal_uInt16       /*nFlags */,
-                                    SvTreeListEntry* pEntry )
+void RecovDocListEntry::Paint(
+    const Point& aPos, SvTreeListBox& aDevice, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
 {
     const Image*        pImg  = 0;
     const OUString*     pTxt  = 0;

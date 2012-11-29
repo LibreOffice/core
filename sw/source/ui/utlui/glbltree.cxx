@@ -1235,8 +1235,9 @@ void SwGlobalTree::InitEntry(SvTreeListEntry* pEntry,
     pEntry->ReplaceItem( pStr, nColToHilite );
 }
 
-void SwLBoxString::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags,
-    SvTreeListEntry* pEntry )
+void SwLBoxString::Paint(
+    const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView,
+    const SvTreeListEntry* pEntry)
 {
     SwGlblDocContent* pCont = (SwGlblDocContent*)pEntry->GetUserData();
     if(pCont->GetType() == GLBLDOC_SECTION &&
@@ -1251,7 +1252,7 @@ void SwLBoxString::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFl
         rDev.SetFont( aOldFont );
     }
     else
-        SvLBoxString::Paint( rPos, rDev, nFlags, pEntry);
+        SvLBoxString::Paint( rPos, rDev, pView, pEntry);
 }
 
 void    SwGlobalTree::DataChanged( const DataChangedEvent& rDCEvt )

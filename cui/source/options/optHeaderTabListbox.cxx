@@ -33,12 +33,14 @@ public:
     OptLBoxString_Impl( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const String& rTxt ) :
         SvLBoxString( pEntry, nFlags, rTxt ) {}
 
-    virtual void Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvTreeListEntry* pEntry );
+    virtual void Paint(
+        const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
 };
 
 // -----------------------------------------------------------------------
 
-void OptLBoxString_Impl::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16, SvTreeListEntry* pEntry )
+void OptLBoxString_Impl::Paint(
+    const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
 {
     Font aOldFont( rDev.GetFont() );
     Font aFont( aOldFont );

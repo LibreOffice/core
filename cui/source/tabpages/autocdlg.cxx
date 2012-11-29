@@ -333,12 +333,14 @@ public:
     OfaImpBrwString( SvTreeListEntry* pEntry, sal_uInt16 nFlags,
         const String& rStr ) : SvLBoxString(pEntry,nFlags,rStr){}
 
-    virtual void Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags,
-                                            SvTreeListEntry* pEntry);
+    virtual void Paint(
+        const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView,
+        const SvTreeListEntry* pEntry);
 };
 
-void OfaImpBrwString::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 /*nFlags*/,
-    SvTreeListEntry* pEntry )
+void OfaImpBrwString::Paint(
+    const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/,
+    const SvTreeListEntry* pEntry)
 {
     rDev.DrawText( rPos, GetText() );
     if(pEntry->GetUserData())

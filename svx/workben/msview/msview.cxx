@@ -487,7 +487,8 @@ public:
 
     ~AtomBoxString() { }
 
-    void Paint( const Point& rPos, SvLBox& rOutDev, USHORT nViewDataEntryFlags, SvTreeListEntry* pEntry )
+    virtual void Paint(
+        const Point& rPos, SvLBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry)
     {
         Color aOldTextColor = rOutDev.GetTextColor();
 
@@ -497,7 +498,7 @@ public:
             rOutDev.SetTextColor( Color( gColors[ pAtom->getCompareStatus() ] ) );
         }
 
-        SvLBoxString::Paint( rPos, rOutDev, nViewDataEntryFlags, pEntry );
+        SvLBoxString::Paint(rPos, rOutDev, pView, pEntry);
 
         rOutDev.SetTextColor( aOldTextColor );
     }

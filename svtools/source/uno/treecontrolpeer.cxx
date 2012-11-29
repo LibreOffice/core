@@ -115,7 +115,8 @@ public:
     void            SetImage( const Image& rImage );
     OUString        GetGraphicURL() const;
     void            SetGraphicURL( const OUString& rGraphicURL );
-    void            Paint( const Point&, SvTreeListBox& rDev, sal_uInt16 nFlags,SvTreeListEntry* );
+    virtual void Paint(
+        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
     SvLBoxItem*     Create() const;
     void            Clone( SvLBoxItem* pSource );
 
@@ -1600,12 +1601,13 @@ UnoTreeListItem::~UnoTreeListItem()
 
 // --------------------------------------------------------------------
 
-void UnoTreeListItem::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 /* nFlags */, SvTreeListEntry* _pEntry)
+void UnoTreeListItem::Paint(
+    const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
 {
     Point aPos( rPos );
-    if( _pEntry )
+    if (pEntry)
     {
-        Size aSize( GetSize(&rDev,_pEntry) );
+        Size aSize( GetSize(&rDev, pEntry) );
         if( !!maImage )
         {
             rDev.DrawImage( aPos, maImage, rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE );

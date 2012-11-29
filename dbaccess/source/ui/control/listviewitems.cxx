@@ -48,7 +48,9 @@ namespace dbaui
         return SV_ITEM_ID_BOLDLBSTRING;
     }
 
-    void OBoldListboxString::Paint(const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvTreeListEntry* pEntry )
+    void OBoldListboxString::Paint(
+        const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView,
+        const SvTreeListEntry* pEntry)
     {
         if (m_bEmphasized)
         {
@@ -61,7 +63,7 @@ namespace dbaui
             rDev.Pop();
         }
         else
-            SvLBoxString::Paint(rPos, rDev, nFlags, pEntry);
+            SvLBoxString::Paint(rPos, rDev, pView, pEntry);
     }
 
 //........................................................................

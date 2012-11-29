@@ -211,16 +211,17 @@ sal_uInt16 SvLBoxString::GetType() const
     return SV_ITEM_ID_LBOXSTRING;
 }
 
-void SvLBoxString::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 /* nFlags */,
-    SvTreeListEntry* _pEntry)
+void SvLBoxString::Paint(
+    const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/,
+    const SvTreeListEntry* pEntry)
 {
     DBG_CHKTHIS(SvLBoxString,0);
-    if ( _pEntry )
+    if (pEntry)
     {
         sal_uInt16 nStyle = rDev.IsEnabled() ? 0 : TEXT_DRAW_DISABLE;
         if ( rDev.IsEntryMnemonicsEnabled() )
             nStyle |= TEXT_DRAW_MNEMONIC;
-        rDev.DrawText(Rectangle(rPos, GetSize(&rDev,_pEntry)), maText, nStyle);
+        rDev.DrawText(Rectangle(rPos, GetSize(&rDev, pEntry)), maText, nStyle);
     }
     else
         rDev.DrawText(rPos, maText);
@@ -279,8 +280,9 @@ void SvLBoxBmp::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry,
     pViewData->maSize = aBmp.GetSizePixel();
 }
 
-void SvLBoxBmp::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 /* nFlags */,
-                        SvTreeListEntry* )
+void SvLBoxBmp::Paint(
+    const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/,
+    const SvTreeListEntry* /*pEntry*/)
 {
     DBG_CHKTHIS(SvLBoxBmp,0);
     sal_uInt16 nStyle = rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE;
@@ -351,8 +353,9 @@ sal_Bool SvLBoxButton::ClickHdl( SvTreeListBox*, SvTreeListEntry* pEntry )
     return sal_False;
 }
 
-void SvLBoxButton::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 /* nFlags */,
-                            SvTreeListEntry* /*pEntry*/ )
+void SvLBoxButton::Paint(
+    const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/,
+    const SvTreeListEntry* /*pEntry*/)
 {
     DBG_CHKTHIS(SvLBoxButton,0);
     sal_uInt16 nIndex = eKind == SvLBoxButtonKind_staticImage
@@ -528,15 +531,16 @@ void SvLBoxContextBmp::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntr
     pViewData->maSize = m_pImpl->m_aImage1.GetSizePixel();
 }
 
-void SvLBoxContextBmp::Paint( const Point& _rPos, SvTreeListBox& _rDev,
-    sal_uInt16 _nViewDataEntryFlags, SvTreeListEntry* _pEntry )
+void SvLBoxContextBmp::Paint(
+    const Point& _rPos, SvTreeListBox& _rDev,
+    const SvViewDataEntry* pView, const SvTreeListEntry* pEntry)
 {
     DBG_CHKTHIS(SvLBoxContextBmp,0);
 
-    // get the image
-    const Image& rImage = implGetImageStore( 0 == ( _nViewDataEntryFlags & m_pImpl->m_nB2IndicatorFlags ) );
+    // get the image (TODO: Avoid directly referencing the flags).
+    const Image& rImage = implGetImageStore( 0 == (pView->GetFlags() & m_pImpl->m_nB2IndicatorFlags ) );
 
-    sal_Bool _bSemiTransparent = _pEntry && ( 0 != ( SV_ENTRYFLAG_SEMITRANSPARENT  & _pEntry->GetFlags( ) ) );
+    sal_Bool _bSemiTransparent = pEntry && ( 0 != ( SV_ENTRYFLAG_SEMITRANSPARENT  & pEntry->GetFlags( ) ) );
     // draw
     sal_uInt16 nStyle = _rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE;
     if ( _bSemiTransparent )

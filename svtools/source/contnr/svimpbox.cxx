@@ -38,6 +38,48 @@
 #define NODE_BMP_TABDIST_NOTVALID   -2000000
 #define FIRST_ENTRY_TAB             1
 
+#include <stdio.h>
+#include <string>
+#include <sys/time.h>
+
+namespace {
+
+class stack_printer
+{
+public:
+    explicit stack_printer(const char *msg) :
+        msMsg(msg)
+    {
+        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
+        mfStartTime = getTime();
+    }
+
+    ~stack_printer()
+    {
+        double fEndTime = getTime();
+        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime - mfStartTime));
+    }
+
+    void printTime(int line) const
+    {
+        double fEndTime = getTime();
+        fprintf(stdout, "%s: --(%d) (duration: %g sec)\n", msMsg.c_str(), line, (fEndTime - mfStartTime));
+    }
+
+private:
+    double getTime() const
+    {
+        timeval tv;
+        gettimeofday(&tv, NULL);
+        return tv.tv_sec + tv.tv_usec / 1000000.0;
+    }
+
+    ::std::string msMsg;
+    double mfStartTime;
+};
+
+}
+
 // #i27063# (pl), #i32300# (pb) never access VCL after DeInitVCL - also no destructors
 Image*  SvImpLBox::s_pDefCollapsed      = NULL;
 Image*  SvImpLBox::s_pDefExpanded       = NULL;
@@ -599,6 +641,7 @@ void SvImpLBox::RecalcFocusRect()
 
 void SvImpLBox::SetCursor( SvTreeListEntry* pEntry, bool bForceNoSelect )
 {
+    stack_printer __stack_printer__("SvImpLBox::SetCursor");
     SvViewDataEntry* pViewDataNewCur = 0;
     if( pEntry )
         pViewDataNewCur= pView->GetViewDataEntry(pEntry);
@@ -607,6 +650,7 @@ void SvImpLBox::SetCursor( SvTreeListEntry* pEntry, bool bForceNoSelect )
         pViewDataNewCur->HasFocus() &&
         pViewDataNewCur->IsSelected())
     {
+        fprintf(stdout, "SvImpLBox::SetCursor:   nothing to do\n");
         return;
     }
 
@@ -628,9 +672,11 @@ void SvImpLBox::SetCursor( SvTreeListEntry* pEntry, bool bForceNoSelect )
     pCursor = pEntry;
     if( pCursor )
     {
+        fprintf(stdout, "SvImpLBox::SetCursor:   cp (%d)\n", __LINE__);
         pViewDataNewCur->SetFocus( true );
         if(!bForceNoSelect && bSimpleTravel && !(nFlags & F_DESEL_ALL) && GetUpdateMode())
         {
+            fprintf(stdout, "SvImpLBox::SetCursor:   cp (%d)\n", __LINE__);
             pView->Select( pCursor, true );
         }
         // multiple selection: select in cursor move if we're not in
@@ -640,10 +686,12 @@ void SvImpLBox::SetCursor( SvTreeListEntry* pEntry, bool bForceNoSelect )
                  !(nFlags & F_DESEL_ALL) && !aSelEng.IsAddMode() &&
                  !bForceNoSelect )
         {
+            fprintf(stdout, "SvImpLBox::SetCursor:   cp (%d)\n", __LINE__);
             pView->Select( pCursor, true );
         }
         else
         {
+            fprintf(stdout, "SvImpLBox::SetCursor:   cp (%d)\n", __LINE__);
             ShowCursor( true );
         }
 

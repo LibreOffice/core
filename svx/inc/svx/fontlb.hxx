@@ -51,11 +51,8 @@ public:
     void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* );
 
     /** Paints this entry to the specified position, using the own font settings. */
-    void                        Paint(
-                                    const Point& rPos,
-                                    SvTreeListBox& rDev,
-                                    sal_uInt16 nFlags,
-                                    SvTreeListEntry* pEntry );
+    virtual void Paint(
+        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
 };
 
 

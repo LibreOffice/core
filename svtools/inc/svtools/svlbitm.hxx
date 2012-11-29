@@ -117,7 +117,10 @@ public:
     virtual void    InitViewData(SvTreeListBox*, SvTreeListEntry*, SvViewDataItem*);
     rtl::OUString   GetText() const { return maText; }
     void            SetText( const rtl::OUString& rText ) { maText = rText; }
-    virtual void    Paint( const Point&, SvTreeListBox& rDev, sal_uInt16 nFlags,SvTreeListEntry* );
+
+    virtual void Paint(
+        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
+
     virtual SvLBoxItem* Create() const;
     virtual void    Clone( SvLBoxItem* pSource );
 };
@@ -130,7 +133,8 @@ public:
     virtual         ~SvLBoxBmp();
     virtual sal_uInt16 GetType() const;
     virtual void    InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* );
-    virtual void    Paint( const Point&, SvTreeListBox& rView, sal_uInt16 nFlags,SvTreeListEntry* );
+    virtual void Paint(
+        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
     virtual SvLBoxItem* Create() const;
     virtual void    Clone( SvLBoxItem* pSource );
 };
@@ -164,7 +168,8 @@ public:
     virtual void    InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* );
     virtual sal_uInt16 GetType() const;
     virtual sal_Bool    ClickHdl(SvTreeListBox* pView, SvTreeListEntry* );
-    virtual void    Paint( const Point&, SvTreeListBox& rView, sal_uInt16 nFlags,SvTreeListEntry* );
+    virtual void Paint(
+        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
     virtual SvLBoxItem* Create() const;
     virtual void    Clone( SvLBoxItem* pSource );
     sal_uInt16          GetButtonFlags() const { return nItemFlags; }
@@ -222,7 +227,8 @@ public:
     virtual         ~SvLBoxContextBmp();
     virtual sal_uInt16 GetType() const;
     virtual void    InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* );
-    virtual void    Paint( const Point&, SvTreeListBox& rView, sal_uInt16 nFlags,SvTreeListEntry* );
+    virtual void Paint(
+        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
     virtual SvLBoxItem* Create() const;
     virtual void    Clone( SvLBoxItem* pSource );
 

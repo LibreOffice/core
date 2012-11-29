@@ -433,10 +433,11 @@ class IconLBoxString : public SvLBoxString
     Image* m_pComponentImg;
     int m_nxImageOffset;
 
-    public:
-        IconLBoxString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const String& sText,
-            Image* pMacroImg, Image* pComponentImg );
-        virtual void Paint(const Point& aPos, SvTreeListBox& aDevice, sal_uInt16 nFlags, SvTreeListEntry* pEntry );
+public:
+    IconLBoxString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const String& sText,
+        Image* pMacroImg, Image* pComponentImg );
+    virtual void Paint(
+        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
 };
 
 
@@ -450,8 +451,9 @@ IconLBoxString::IconLBoxString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, cons
 }
 
 //===============================================
-void IconLBoxString::Paint( const Point& aPos, SvTreeListBox& aDevice,
-                               sal_uInt16 /*nFlags*/, SvTreeListEntry* /*pEntry*/ )
+void IconLBoxString::Paint(
+    const Point& aPos, SvTreeListBox& aDevice, const SvViewDataEntry* /*pView*/,
+    const SvTreeListEntry* /*pEntry*/)
 {
     String aTxt( GetText() );
     if( aTxt.Len() )

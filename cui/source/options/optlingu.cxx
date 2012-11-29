@@ -286,12 +286,13 @@ public:
     BrwStringDic_Impl( SvTreeListEntry* pEntry, sal_uInt16 nFlags,
         const String& rStr ) : SvLBoxString( pEntry, nFlags, rStr ) {}
 
-    virtual void Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags,
-                                            SvTreeListEntry* pEntry);
+    virtual void Paint(
+        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
 };
 
-void BrwStringDic_Impl::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16,
-    SvTreeListEntry* pEntry )
+void BrwStringDic_Impl::Paint(
+    const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/,
+    const SvTreeListEntry* pEntry)
 {
     ModuleUserData_Impl* pData = (ModuleUserData_Impl*)pEntry->GetUserData();
     Point aPos(rPos);
@@ -451,12 +452,13 @@ public:
     BrwString_Impl( SvTreeListEntry* pEntry, sal_uInt16 nFlags,
         const String& rStr ) : SvLBoxString( pEntry, nFlags, rStr ) {}
 
-    virtual void Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags,
-                                            SvTreeListEntry* pEntry);
+    virtual void Paint(
+        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
 };
 
-void BrwString_Impl::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16,
-    SvTreeListEntry* pEntry )
+void BrwString_Impl::Paint(
+    const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/,
+    const SvTreeListEntry* pEntry)
 {
     Point aPos(rPos);
     aPos.X() += 20;

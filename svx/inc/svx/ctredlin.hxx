@@ -79,7 +79,9 @@ public:
                     SvLBoxColorString();
                     ~SvLBoxColorString();
 
-    void            Paint( const Point&, SvTreeListBox& rDev, sal_uInt16 nFlags,SvTreeListEntry* );
+    virtual void Paint(
+        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
+
     SvLBoxItem*     Create() const;
 };
 
