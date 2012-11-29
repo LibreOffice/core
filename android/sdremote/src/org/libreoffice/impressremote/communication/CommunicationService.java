@@ -23,6 +23,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Binder;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 
 public class CommunicationService extends Service implements Runnable {
@@ -125,7 +126,10 @@ public class CommunicationService extends Service implements Runnable {
     private boolean mBluetoothPreviouslyEnabled;
 
     public void startSearching() {
-        mNetworkFinder.startFinding();
+        SharedPreferences aPref = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean bEnableWifi = aPref.getBoolean("option_enablewifi", false);
+        if (bEnableWifi)
+            mNetworkFinder.startFinding();
         BluetoothAdapter aAdapter = BluetoothAdapter.getDefaultAdapter();
         if (aAdapter != null) {
             mBluetoothPreviouslyEnabled = aAdapter.isEnabled();
