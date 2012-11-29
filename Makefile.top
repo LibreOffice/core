@@ -57,14 +57,8 @@ $(1).all: bootstrap fetch
 	) \
 	$(SOLARENV)/bin/build.pl -P$(PARALLELISM) --all -- -P$(PARALLELISM)
 
-$(1).build:
-	cd $(1) && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) build gb_PARTIALBUILD=T
-
-$(1).check:
-	cd $(1) && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) check gb_PARTIALBUILD=T
-
-$(1).clean:
-	cd $(1) && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) clean gb_PARTIALBUILD=T
+$(1).build $(1).check $(1).clean:
+	cd $(1) && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) $$(patsubst $(1).%,%,$$@) gb_PARTIALBUILD=T
 
 $(1).subsequentcheck:
 	cd $(1) && $(GNUMAKE) -j $(CHECK_PARALLELISM) $(GMAKE_OPTIONS) subsequentcheck gb_PARTIALBUILD=T
@@ -385,13 +379,7 @@ check: dev-install subsequentcheck
 subsequentcheck :| $(if $(filter-out subsequentcheck,$(MAKECMDGOALS)),dev-install)
 	$(GNUMAKE) -j $(CHECK_PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post $@
 
-unitcheck:
-	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post $@
-
-slowcheck:
-	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post $@
-
-debugrun:
+unitcheck slowcheck debugrun:
 	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post $@
 
 endif # not clean or distclean
