@@ -139,6 +139,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	padmin \
 	$(call gb_Helper_optional,POSTGRESQL,postgresql) \
 	psprint_config \
+	$(call gb_Helper_optional,PYTHON,python3) \
 	$(call gb_Helper_optional,PYUNO,pyuno) \
 	$(call gb_Helper_optional,QADEVOOO,qadevOOo) \
 	readlicense_oo \
