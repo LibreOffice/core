@@ -402,6 +402,11 @@ rtl::OUString AboutDialog::GetVersionString()
         sVersion += m_sBuildStr.replaceAll("$BUILDID", sBuildId);
     }
 
+#ifdef EXTRA_BUILDID
+    sVersion += "\n";
+    sVersion += EXTRA_BUILDID;
+#endif
+
     return sVersion;
 }
 

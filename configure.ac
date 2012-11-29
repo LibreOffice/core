@@ -1997,6 +1997,15 @@ AC_ARG_WITH(startcenter-space-bitmap,
                           Usage: --with-startcenter-space-bitmap=/path/my_backing_space.png
 ],,)
 
+AC_ARG_WITH(extra-buildid,
+    AS_HELP_STRING([--with-extra-buildid],
+        [Show addition build identification in about dialog.])
+    [
+                          Usage:     --with-extra-buildid="Tinderbox: Win-x86@6, Branch:master, Date:2012-11-26_00.29.34"
+    ],
+,)
+
+
 AC_ARG_WITH(vendor,
     AS_HELP_STRING([--with-vendor],
         [Set vendor of the build.])
@@ -11995,6 +12004,16 @@ else
    AC_MSG_RESULT([$STARTCENTER_SPACE_BITMAP])
 fi
 AC_SUBST(STARTCENTER_SPACE_BITMAP)
+
+EXTRA_BUILDID=
+AC_MSG_CHECKING([for extra build ID])
+if test -n "$with_extra_buildid" -a "$with_extra_buildid" != "yes" ; then
+    EXTRA_BUILDID="$with_extra_buildid"
+    AC_MSG_RESULT([$EXTRA_BUILDID])
+else
+    AC_MSG_RESULT([not set])
+fi
+AC_SUBST(EXTRA_BUILDID)
 
 OOO_VENDOR=
 AC_MSG_CHECKING([for vendor])
