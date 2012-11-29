@@ -12,6 +12,7 @@
 
 #include "orcusfilters.hxx"
 
+#define __ORCUS_STATIC_LIB
 #include <orcus/xml_namespace.hpp>
 
 class ScOrcusFiltersImpl : public ScOrcusFilters

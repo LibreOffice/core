@@ -14,7 +14,6 @@
 
 #include "tools/urlobj.hxx"
 
-#define __ORCUS_STATIC_LIB
 #include <orcus/spreadsheet/import_interface.hpp>
 #include <orcus/orcus_csv.hpp>
 #include <orcus/global.hpp>

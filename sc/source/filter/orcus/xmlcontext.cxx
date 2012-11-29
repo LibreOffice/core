@@ -15,7 +15,6 @@
 #include "svtools/treelistbox.hxx"
 #include "svtools/treelistentry.hxx"
 
-#define __ORCUS_STATIC_LIB
 #include <orcus/spreadsheet/import_interface.hpp>
 #include <orcus/xml_structure_tree.hpp>
 #include <orcus/xml_namespace.hpp>
