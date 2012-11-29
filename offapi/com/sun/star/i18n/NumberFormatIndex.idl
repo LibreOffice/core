@@ -91,17 +91,17 @@ published constants NumberFormatIndex
 {
     /// Start of simple numerical formats (first format)
     const short NUMBER_START                = 0;
-    /// The "General" standard format
+    /// The "General" standard format <br/> formatindex="0"
     const short NUMBER_STANDARD             = NUMBER_START;
-    /// 0           <br/>Integer number
+    /// 0           <br/>Integer number <br/> formatindex="1"
     const short NUMBER_INT                  = NUMBER_START+1;
-    /// 0.00        <br/>Decimal number with 2 decimals
+    /// 0.00        <br/>Decimal number with 2 decimals <br/> formatindex="2"
     const short NUMBER_DEC2                 = NUMBER_START+2;
-    /// #,##0       <br/>Integer number with group separator
+    /// #,##0       <br/>Integer number with group separator <br/> formatindex="3"
     const short NUMBER_1000INT              = NUMBER_START+3;
-    /// #,##0.00    <br/>Decimal number with group separator
+    /// #,##0.00    <br/>Decimal number with group separator <br/> formatindex="4"
     const short NUMBER_1000DEC2             = NUMBER_START+4;
-    /// #,##0.00    <br/> In SO5/Win this format was retrieved from the Regional Settings
+    /// #,##0.00    <br/> In SO5/Win this format was retrieved from the Regional Settings <br/> formatindex="5"
     const short NUMBER_SYSTEM               = NUMBER_START+5;
     /// End of simple numerical formats (last format)
     const short NUMBER_END                  = NUMBER_SYSTEM ;
@@ -109,9 +109,9 @@ published constants NumberFormatIndex
 
     /// Start of Scientific formats (first format)
     const short SCIENTIFIC_START            = NUMBER_END+1;
-    /// 0.00E+000   <br/>Number in scientific notation with exponent in 3 digit placeholders
+    /// 0.00E+000   <br/>Number in scientific notation with exponent in 3 digit placeholders <br/> formatindex="6"
     const short SCIENTIFIC_000E000          = SCIENTIFIC_START;
-    /// 0.00E+00    <br/>Number in scientific notation with exponent in 2 digit placeholders
+    /// 0.00E+00    <br/>Number in scientific notation with exponent in 2 digit placeholders <br/> formatindex="7"
     const short SCIENTIFIC_000E00           = SCIENTIFIC_START+1;
     /// End of Scientific formats (last format)
     const short SCIENTIFIC_END              = SCIENTIFIC_000E00;
@@ -119,9 +119,9 @@ published constants NumberFormatIndex
 
     /// Start of Percent formats (first format)
     const short PERCENT_START               = SCIENTIFIC_END+1;
-    /// 0%          <br/>Percentage format, rounded to integer
+    /// 0%          <br/>Percentage format, rounded to integer <br/> formatindex="8"
     const short PERCENT_INT                 = PERCENT_START;
-    /// 0.00%       <br/>Percentage format, rounded to 2 decimals
+    /// 0.00%       <br/>Percentage format, rounded to 2 decimals <br/> formatindex="9"
     const short PERCENT_DEC2                = PERCENT_START+1;
     /// End of Percent formats (last format)
     const short PERCENT_END                 = PERCENT_DEC2;
@@ -129,9 +129,9 @@ published constants NumberFormatIndex
 
     /// Start of Fraction formats (first format)
     const short FRACTION_START              = PERCENT_END+1;
-    /// # ?/?       <br/>Number with decimal in fraction in 1 digit placeholder
+    /// # ?/?       <br/>Number with decimal in fraction in 1 digit placeholder <br/> formatindex="10"
     const short FRACTION_1                  = FRACTION_START;
-    /// # ??/??     <br/>Number with decimal in fraction in 2 digit placeholders
+    /// # ??/??     <br/>Number with decimal in fraction in 2 digit placeholders <br/> formatindex="11"
     const short FRACTION_2                  = FRACTION_START+1;
     /// End of Fraction formats (last format)
     const short FRACTION_END                = FRACTION_2;
@@ -139,17 +139,17 @@ published constants NumberFormatIndex
 
     /// Start of Currency formats (first format)
     const short CURRENCY_START              = FRACTION_END+1;
-    /// #,##0 DM    <br/>Integer currency format with group separator
+    /// #,##0 DM    <br/>Integer currency format with group separator <br/> formatindex="12"
     const short CURRENCY_1000INT            = CURRENCY_START;
-    /// #,##0.00 DM <br/>Decimal currency format with group separator
+    /// #,##0.00 DM <br/>Decimal currency format with group separator <br/> formatindex="13"
     const short CURRENCY_1000DEC2           = CURRENCY_START+1;
-    /// #,##0 DM    <br/>Integer currency format with negative in red
+    /// #,##0 DM    <br/>Integer currency format with negative in red <br/> formatindex="14"
     const short CURRENCY_1000INT_RED        = CURRENCY_START+2;
-    /// #,##0.00 DM <br/>Decimal currency format with negative in red
+    /// #,##0.00 DM <br/>Decimal currency format with negative in red <br/> formatindex="15"
     const short CURRENCY_1000DEC2_RED       = CURRENCY_START+3;
-    /// #,##0.00 DEM <br/>Currency in ISO-4217 abbreviation format
+    /// #,##0.00 DEM <br/>Currency in ISO-4217 abbreviation format <br/> formatindex="16"
     const short CURRENCY_1000DEC2_CCC       = CURRENCY_START+4;
-    /// #,##0.-- DM <br/>Currency format with dash representing 0 in decimals
+    /// #,##0.-- DM <br/>Currency format with dash representing 0 in decimals <br/> formatindex="17"
     const short CURRENCY_1000DEC2_DASHED    = CURRENCY_START+5;
     /// End of Currency formats (last format)
     const short CURRENCY_END                = CURRENCY_1000DEC2_DASHED;
@@ -157,49 +157,51 @@ published constants NumberFormatIndex
 
     /// Start of Date formats (first format)
     const short DATE_START                  = CURRENCY_END+1;
-    /// 08.10.97        <br/> see also DATE_SYSTEM_... <a href="#SYSTEM">explanation</a>
+    /// 08.10.97        <br/> see also DATE_SYSTEM_... <a href="#SYSTEM">explanation</a> <br/> formatindex="18"
     const short DATE_SYSTEM_SHORT           = DATE_START;
-    /// Wednesday, 8. October 1997  <br/> see also DATE_SYSTEM_... <a href="#SYSTEM">explanation</a>
+    /** Wednesday, 8. October 1997  <br/> see also DATE_SYSTEM_... <a href="#SYSTEM">explanation</a>
+         <br/> formatindex="19" */
     const short DATE_SYSTEM_LONG            = DATE_START+1;
-    /// 08.10.97        <br/> see also DATE_SYS_... <a href="#SYS">explanation</a>
+    /// 08.10.97        <br/> see also DATE_SYS_... <a href="#SYS">explanation</a> <br/> formatindex="20"
     const short DATE_SYS_DDMMYY             = DATE_START+2;
     /** 08.10.1997      <br/> see also DATE_SYS_... <a href="#SYS">explanation</a>
         <br/><b>Note:</b> When editing already existing date data this
-        format is forced in order to always edit the full century.  */
+        format is forced in order to always edit the full century.
+        <br/> formatindex="21" */
     const short DATE_SYS_DDMMYYYY           = DATE_START+3;
-    /// 8. Oct 97       <br/> see also DATE_SYS_... <a href="#SYS">explanation</a>
+    /// 8. Oct 97       <br/> see also DATE_SYS_... <a href="#SYS">explanation</a> <br/> formatindex="22"
     const short DATE_SYS_DMMMYY             = DATE_START+4;
-    /// 8. Oct 1997     <br/> see also DATE_SYS_... <a href="#SYS">explanation</a>
+    /// 8. Oct 1997     <br/> see also DATE_SYS_... <a href="#SYS">explanation</a> <br/> formatindex="23"
     const short DATE_SYS_DMMMYYYY           = DATE_START+5;
-    /// 8. Oct. 1997    <br/> DIN/EN
+    /// 8. Oct. 1997    <br/> DIN/EN <br/> formatindex="24"
     const short DATE_DIN_DMMMYYYY           = DATE_START+6;
-    /// 8. October 1997 <br/> see also DATE_SYS_... <a href="#SYS">explanation</a>
+    /// 8. October 1997 <br/> see also DATE_SYS_... <a href="#SYS">explanation</a> <br/> formatindex="25"
     const short DATE_SYS_DMMMMYYYY          = DATE_START+7;
-    /// 8. October 1997 <br/> DIN/EN
+    /// 8. October 1997 <br/> DIN/EN <br/> formatindex="26"
     const short DATE_DIN_DMMMMYYYY          = DATE_START+8;
-    /// Wed, 8. Oct 97  <br/> see also DATE_SYS_... <a href="#SYS">explanation</a>
+    /// Wed, 8. Oct 97  <br/> see also DATE_SYS_... <a href="#SYS">explanation</a> <br/> formatindex="27"
     const short DATE_SYS_NNDMMMYY           = DATE_START+9;
-    /// Wed 08.Oct 97   <br/> see also DATE_DEF_... <a href="#DEF">explanation</a>
+    /// Wed 08.Oct 97   <br/> see also DATE_DEF_... <a href="#DEF">explanation</a> <br/> formatindex="28"
     const short DATE_DEF_NNDDMMMYY          = DATE_START+10;
-    /// Wed, 8. October 1997    <br/> see also DATE_SYS_... <a href="#SYS">explanation</a>
+    /// Wed, 8. October 1997    <br/> see also DATE_SYS_... <a href="#SYS">explanation</a> <br/> formatindex="29"
     const short DATE_SYS_NNDMMMMYYYY        = DATE_START+11;
-    /// Wednesday, 8. October 1997
+    /// Wednesday, 8. October 1997 <br/> formatindex="30"
     const short DATE_SYS_NNNNDMMMMYYYY      = DATE_START+12;
-    /// 10-08           <br/> DIN/EN
+    /// 10-08           <br/> DIN/EN <br/> formatindex="31"
     const short DATE_DIN_MMDD               = DATE_START+13;
-    /// 97-10-08        <br/> DIN/EN
+    /// 97-10-08        <br/> DIN/EN <br/> formatindex="32"
     const short DATE_DIN_YYMMDD             = DATE_START+14;
-    /// 1997-10-08      <br/> DIN/EN/ISO
+    /// 1997-10-08      <br/> DIN/EN/ISO <br/> formatindex="33"
     const short DATE_DIN_YYYYMMDD           = DATE_START+15;
-    /// 10.97           <br/> see also DATE_SYS_... <a href="#SYS">explanation</a>
+    /// 10.97           <br/> see also DATE_SYS_... <a href="#SYS">explanation</a> <br/> formatindex="34"
     const short DATE_SYS_MMYY               = DATE_START+16;
-    /// 08.Oct          <br/> see also DATE_SYS_... <a href="#SYS">explanation</a>
+    /// 08.Oct          <br/> see also DATE_SYS_... <a href="#SYS">explanation</a> <br/> formatindex="35"
     const short DATE_SYS_DDMMM              = DATE_START+17;
-    /// October
+    /// October         <br/> formatindex="36"
     const short DATE_MMMM                   = DATE_START+18;
-    /// 4th quarter 97
+    /// 4th quarter 97  <br/> formatindex="37"
     const short DATE_QQJJ                   = DATE_START+19;
-    /// week of year
+    /// week of year    <br/> formatindex="38"
     const short DATE_WW                     = DATE_START+20;
     /// End of Date formats (last format)
     const short DATE_END                    = DATE_WW;
@@ -207,19 +209,19 @@ published constants NumberFormatIndex
 
     /// Start of Time formats (first format)
     const short TIME_START                  = DATE_END+1;
-    /// HH:MM           <br/>Time format with hour and minute
+    /// HH:MM           <br/>Time format with hour and minute <br/> formatindex="39"
     const short TIME_HHMM                   = TIME_START;
-    /// HH:MM:SS        <br/>Time format with hour, minute and second
+    /// HH:MM:SS        <br/>Time format with hour, minute and second <br/> formatindex="40"
     const short TIME_HHMMSS                 = TIME_START+1;
-    /// HH:MM AM/PM     <br/>Time format with hour, minute and morning/afternoon notation
+    /// HH:MM AM/PM     <br/>Time format with hour, minute and morning/afternoon notation <br/> formatindex="41"
     const short TIME_HHMMAMPM               = TIME_START+2;
-    /// HH:MM:SS AM/PM  <br/>Time format with hour, minute, second and morning/afternoon notation
+    /// HH:MM:SS AM/PM  <br/>Time format with hour, minute, second and morning/afternoon notation <br/> formatindex="42"
     const short TIME_HHMMSSAMPM             = TIME_START+3;
-    /// [HH]:MM:SS      <br/>Time format with amount of hours
+    /// [HH]:MM:SS      <br/>Time format with amount of hours <br/> formatindex="43"
     const short TIME_HH_MMSS                = TIME_START+4;
-    /// MM:SS,00        <br/>Time format with second in fraction
+    /// MM:SS,00        <br/>Time format with second in fraction <br/> formatindex="44"
     const short TIME_MMSS00                 = TIME_START+5;
-    /// [HH]:MM:SS,00   <br/>Time format with amount of hours and seconds with fraction
+    /// [HH]:MM:SS,00   <br/>Time format with amount of hours and seconds with fraction <br/> formatindex="45"
     const short TIME_HH_MMSS00              = TIME_START+6;
     /// End of Time formats (last format)
     const short TIME_END                    = TIME_HH_MMSS00;
@@ -227,11 +229,12 @@ published constants NumberFormatIndex
 
     /// Start of DateTime formats (first format)
     const short DATETIME_START              = TIME_END + 1;
-    /// 08.10.97 01:23 Date/time format
+    /// 08.10.97 01:23 Date/time format <br/> formatindex="46"
     const short DATETIME_SYSTEM_SHORT_HHMM  = DATETIME_START;
     /** 08.10.1997 01:23:45 Date/time format with second
         <br/><b>Note:</b> When editing already existing date/time data this
-        format is forced in order to always edit the full century.  */
+        format is forced in order to always edit the full century.
+        <br/> formatindex="47" */
     const short DATETIME_SYS_DDMMYYYY_HHMMSS= DATETIME_START+1;
     /// End of DateTime formats (last format)
     const short DATETIME_END                = DATETIME_SYS_DDMMYYYY_HHMMSS;
@@ -245,6 +248,7 @@ published constants NumberFormatIndex
              formatter. If you want to access this format you <b>MUST</b>
             do it via <member scope="com::sun::star::util">XNumberFormatTypes::getFormatIndex()</member>
             instead of <member>XNumberFormatCode::getFormatCode()</member>.
+            <br/> reserved formatindex="48"
     */
     const short BOOLEAN                     = DATETIME_END+1;
 
@@ -256,6 +260,7 @@ published constants NumberFormatIndex
              formatter. If you want to access this format you <b>MUST</b>
             do it via <member scope="com::sun::star::util">XNumberFormatTypes::getFormatIndex()</member>
             instead of <member>XNumberFormatCode::getFormatCode()</member>
+            <br/> reserved formatindex="49"
     */
     const short TEXT                        = BOOLEAN+1;
 
