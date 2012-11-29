@@ -273,7 +273,6 @@ if (-d "$StartDir") {
                 "i18n",
                 "image",
                 "inspection",
-                "installation",
                 "io",
                 "java",
                 "lang",

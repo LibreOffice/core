@@ -100,9 +100,6 @@ module graphic {};
 /// Interface for internationalization (deprecated draft).
 module i18n {};
 
-/// Interfaces to control installations.
-module installation {};
-
 /// lightweight directory access protocol (LDAP)
 module ldap {};
 

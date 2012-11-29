@@ -869,13 +869,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/image,\
 	ImageMapPolygonObject \
 	ImageMapRectangleObject \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/installation,\
-	InstallationCheck \
-	InstallationCheckService \
-	InternetSettings \
-	ProtocolHandlerCheck \
-	ProtocolHandlerCheckService \
-))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/linguistic2,\
 	ConversionDictionary \
 	ConversionDictionaryList \
@@ -2707,12 +2700,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/inspection,\
 	XPropertyHandler \
 	XStringListControl \
 	XStringRepresentation \
-))
-$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/installation,\
-	ProtDlgRes \
-	XInstallationCheck \
-	XProtocolHandlerCheck \
-	protocols \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/ldap,\
 	LdapConnectionException \
