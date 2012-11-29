@@ -716,8 +716,8 @@ void CppuType::dumpComprehensiveGetCppuType(FileStream& o)
     o << indent() << "{\n";
     inc();
 
-    o << indent() << "::rtl::OUString sTypeName( RTL_CONSTASCII_USTRINGPARAM(\""
-      << m_typeName.replace('/', '.') << "\") );\n\n";
+    o << indent() << "::rtl::OUString sTypeName( \""
+      << m_typeName.replace('/', '.') << "\" );\n\n";
 
     o << indent() << "// Start inline typedescription generation\n"
       << indent() << "typelib_TypeDescription * pTD = 0;\n";
@@ -762,11 +762,11 @@ void CppuType::dumpComprehensiveGetCppuType(FileStream& o)
                 sal_True);
 
             o << indent() << "::rtl::OUString sMemberType" << i
-              << "( RTL_CONSTASCII_USTRINGPARAM(\""
-              << fieldType.replace('/', '.') << "\") );\n";
+              << "( \""
+              << fieldType.replace('/', '.') << "\" );\n";
             o << indent() << "::rtl::OUString sMemberName" << i
-              << "( RTL_CONSTASCII_USTRINGPARAM(\"";
-            o << fieldName << "\") );\n";
+              << "( \"";
+            o << fieldName << "\" );\n";
             o << indent() << "aMembers[" << i << "].eTypeClass = "
               << "(typelib_TypeClass)" << getTypeClass(fieldType) << ";\n"
               << indent() << "aMembers[" << i << "].pTypeName = sMemberType"
@@ -1318,7 +1318,7 @@ void CppuType::dumpConstantValue(FileStream& o, sal_uInt16 index)
             {
                 ::rtl::OUString aUStr(constValue.m_value.aString);
                 ::rtl::OString aStr = ::rtl::OUStringToOString(aUStr, RTL_TEXTENCODING_ASCII_US);
-                o << "::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\"" << aStr.getStr() << "\"))";
+                o << "::rtl::OUString( \"" << aStr.getStr() << "\" )";
             }
             break;
     }
@@ -1539,37 +1539,45 @@ void InterfaceType::dumpMethods(FileStream& o)
              || isDocumentedDeprecated(m_reader.getMethodDocumentation(i))));
         o << "virtual ";
         dumpType(o, returnType);
-        o << " SAL_CALL " << methodName << "( ";
-        for (sal_uInt16 j=0; j < paramCount; j++)
+        if ( !paramCount )
         {
-            paramName = rtl::OUStringToOString(
-                m_reader.getMethodParameterName(i, j), RTL_TEXTENCODING_UTF8);
-            paramType = rtl::OUStringToOString(
-                m_reader.getMethodParameterTypeName(i, j),
-                RTL_TEXTENCODING_UTF8);
-            paramMode = m_reader.getMethodParameterFlags(i, j);
-
-            switch (paramMode)
-            {
-                case RT_PARAM_IN:
-                    bConst = passByReference(paramType);
-                    bRef = bConst;
-                    break;
-                case RT_PARAM_OUT:
-                case RT_PARAM_INOUT:
-                    bConst = sal_False;
-                    bRef = sal_True;
-                    break;
-                default:
-                    break;
-            }
-
-            dumpType(o, paramType, bConst, bRef);
-            o << " " << paramName;
-
-            if (j+1 < (sal_uInt16)paramCount) o << ", ";
+            // prettier output for nullary methods
+            o << " SAL_CALL " << methodName << "()";
         }
-        o << " )";
+        else
+        {
+            o << " SAL_CALL " << methodName << "( ";
+            for (sal_uInt16 j=0; j < paramCount; j++)
+            {
+                paramName = rtl::OUStringToOString(
+                    m_reader.getMethodParameterName(i, j), RTL_TEXTENCODING_UTF8);
+                paramType = rtl::OUStringToOString(
+                    m_reader.getMethodParameterTypeName(i, j),
+                    RTL_TEXTENCODING_UTF8);
+                paramMode = m_reader.getMethodParameterFlags(i, j);
+
+                switch (paramMode)
+                {
+                    case RT_PARAM_IN:
+                        bConst = passByReference(paramType);
+                        bRef = bConst;
+                        break;
+                    case RT_PARAM_OUT:
+                    case RT_PARAM_INOUT:
+                        bConst = sal_False;
+                        bRef = sal_True;
+                        break;
+                    default:
+                        break;
+                }
+
+                dumpType(o, paramType, bConst, bRef);
+                o << " " << paramName;
+
+                if (j+1 < (sal_uInt16)paramCount) o << ", ";
+            }
+            o << " )";
+        }
         o << " = 0;\n";
     }
 }
@@ -1640,8 +1648,8 @@ void InterfaceType::dumpComprehensiveGetCppuType(FileStream& o)
     o << indent() << "{\n";
 
     inc();
-    o << indent() << "::rtl::OUString sTypeName( RTL_CONSTASCII_USTRINGPARAM(\""
-      << m_typeName.replace('/', '.') << "\") );\n\n";
+    o << indent() << "::rtl::OUString sTypeName( \""
+      << m_typeName.replace('/', '.') << "\" );\n\n";
 
     o << indent() << "// Start inline typedescription generation\n"
       << indent() << "typelib_InterfaceTypeDescription * pTD = 0;\n\n";
@@ -1790,8 +1798,8 @@ void InterfaceType::dumpCppuAttributeRefs(FileStream& o, sal_uInt32& index)
         fieldName = rtl::OUStringToOString(
             m_reader.getFieldName(i), RTL_TEXTENCODING_UTF8);
 
-        o << indent() << "::rtl::OUString sAttributeName" << i << "( RTL_CONSTASCII_USTRINGPARAM(\""
-          << scope.replace('/', '.') << "::" << fieldName << "\") );\n";
+        o << indent() << "::rtl::OUString sAttributeName" << i << "( \""
+          << scope.replace('/', '.') << "::" << fieldName << "\" );\n";
         o << indent() << "typelib_typedescriptionreference_new( &pMembers["
           << index << "],\n";
         inc(38);
@@ -1818,8 +1826,8 @@ void InterfaceType::dumpCppuMethodRefs(FileStream& o, sal_uInt32& index)
         methodName = rtl::OUStringToOString(
             m_reader.getMethodName(i), RTL_TEXTENCODING_UTF8);
 
-        o << indent() << "::rtl::OUString sMethodName" << i << "( RTL_CONSTASCII_USTRINGPARAM(\""
-          << scope.replace('/', '.') << "::" << methodName << "\") );\n";
+        o << indent() << "::rtl::OUString sMethodName" << i << "( \""
+          << scope.replace('/', '.') << "::" << methodName << "\" );\n";
         o << indent() << "typelib_typedescriptionreference_new( &pMembers["
           << index << "],\n";
         inc(38);
@@ -1975,11 +1983,11 @@ void InterfaceType::dumpCppuAttributes(FileStream& o, sal_uInt32& index)
 
             o << indent() << "{\n";
             inc();
-            o << indent() << "::rtl::OUString sAttributeType" << i << "( RTL_CONSTASCII_USTRINGPARAM(\""
-              << fieldType.replace('/', '.') << "\") );\n";
+            o << indent() << "::rtl::OUString sAttributeType" << i << "( \""
+              << fieldType.replace('/', '.') << "\" );\n";
 
-            o << indent() << "::rtl::OUString sAttributeName" << i << "( RTL_CONSTASCII_USTRINGPARAM(\""
-              << scope.replace('/', '.') << "::" << fieldName << "\") );\n";
+            o << indent() << "::rtl::OUString sAttributeName" << i << "( \""
+              << scope.replace('/', '.') << "::" << fieldName << "\" );\n";
 
             sal_Int32 getExceptions = dumpAttributeExceptionTypeNames(
                 o, "get", name, RT_MODE_ATTRIBUTE_GET);
@@ -2067,10 +2075,10 @@ void InterfaceType::dumpCppuMethods(FileStream& o, sal_uInt32& index)
                     sal_True);
                 paramMode = m_reader.getMethodParameterFlags(i, j);
 
-                o << indent() << "::rtl::OUString sParamName" << j << "( RTL_CONSTASCII_USTRINGPARAM(\""
-                  << paramName << "\") );\n";
-                o << indent() << "::rtl::OUString sParamType" << j << "( RTL_CONSTASCII_USTRINGPARAM(\""
-                  << paramType.replace('/', '.') << "\") );\n";
+                o << indent() << "::rtl::OUString sParamName" << j << "( \""
+                  << paramName << "\" );\n";
+                o << indent() << "::rtl::OUString sParamType" << j << "( \""
+                  << paramType.replace('/', '.') << "\" );\n";
                 o << indent() << "aParameters[" << j << "].pParamName = sParamName" << j << ".pData;\n";
                 o << indent() << "aParameters[" << j << "].eTypeClass = (typelib_TypeClass)"
                   << getTypeClass(paramType) << ";\n";
@@ -2090,11 +2098,11 @@ void InterfaceType::dumpCppuMethods(FileStream& o, sal_uInt32& index)
             sal_Int32 excCount = dumpExceptionTypeNames(
                 o, "", i, bWithRuntimeException);
 
-            o << indent() << "::rtl::OUString sReturnType" << i << "( RTL_CONSTASCII_USTRINGPARAM(\""
-              << returnType.replace('/', '.') << "\") );\n";
+            o << indent() << "::rtl::OUString sReturnType" << i << "( \""
+              << returnType.replace('/', '.') << "\" );\n";
             o << indent() << "::rtl::OUString sMethodName" << i <<
-                "( RTL_CONSTASCII_USTRINGPARAM(\""
-              << scope.replace('/', '.') << "::" << methodName << "\") );\n";
+                "( \""
+              << scope.replace('/', '.') << "::" << methodName << "\" );\n";
             o << indent() << "typelib_typedescription_newInterfaceMethod( &pMethod,\n";
             inc();
             o << indent() << absoluteIndex++ << ", ";
@@ -2203,9 +2211,9 @@ void InterfaceType::dumpExceptionTypeName(
     FileStream & out, char const * prefix, sal_uInt32 index, rtl::OUString name)
 {
     out << indent() << "::rtl::OUString the_" << prefix << "ExceptionName"
-        << index << "(RTL_CONSTASCII_USTRINGPARAM(\""
+        << index << "( \""
         << rtl::OUStringToOString(name, RTL_TEXTENCODING_UTF8).replace('/', '.')
-        << "\"));\n";
+        << "\" );\n";
 }
 
 sal_Int32 InterfaceType::dumpExceptionTypeNames(
@@ -2224,9 +2232,7 @@ sal_Int32 InterfaceType::dumpExceptionTypeNames(
     if (runtimeException) {
         dumpExceptionTypeName(
             out, prefix, count++,
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "com/sun/star/uno/RuntimeException")));
+            rtl::OUString("com/sun/star/uno/RuntimeException"));
     }
     if (count > 0) {
         out << indent() << "rtl_uString * the_" << prefix << "Exceptions[] = {";
@@ -2897,8 +2903,8 @@ void StructureType::dumpComprehensiveGetCppuType(FileStream & out)
             << "::rtl::OUString the_name(the_buffer.makeStringAndClear());\n";
     } else {
         out << indent()
-            << "::rtl::OUString the_name(RTL_CONSTASCII_USTRINGPARAM(\""
-            << m_typeName.replace('/', '.') << "\"));\n";
+            << "::rtl::OUString the_name( \""
+            << m_typeName.replace('/', '.') << "\" );\n";
     }
     sal_uInt16 fields = m_reader.getFieldCount();
     typedef std::map< rtl::OString, sal_uInt32 > Map;
@@ -2947,15 +2953,15 @@ void StructureType::dumpComprehensiveGetCppuType(FileStream & out)
             // needed, as the header for the typedef includes it already:
             out << indent() << "::rtl::OUString the_tname"
                 << static_cast< sal_uInt32 >(types.size() - 1)
-                << "(RTL_CONSTASCII_USTRINGPARAM(\""
-                << checkRealBaseType(type, true).replace('/', '.') << "\"));\n";
+                << "( \""
+                << checkRealBaseType(type, true).replace('/', '.') << "\" );\n";
         }
         out << indent() << "::rtl::OUString the_name" << i
-            << "(RTL_CONSTASCII_USTRINGPARAM(\""
+            << "( \""
             << rtl::OUStringToOString(
                 m_reader.getFieldName(i), RTL_TEXTENCODING_UTF8).replace(
                     '/', '.')
-            << "\"));\n";
+            << "\" );\n";
     }}
     out << indent() << "::typelib_StructMember_Init the_members[] = {\n";
     inc();
@@ -3629,8 +3635,8 @@ void EnumType::dumpComprehensiveGetCppuType(FileStream& o)
     o << indent() << "{\n";
 
     inc();
-    o << indent() << "::rtl::OUString sTypeName( RTL_CONSTASCII_USTRINGPARAM(\""
-      << m_typeName.replace('/', '.') << "\") );\n\n";
+    o << indent() << "::rtl::OUString sTypeName( \""
+      << m_typeName.replace('/', '.') << "\" );\n\n";
 
     o << indent() << "// Start inline typedescription generation\n"
       << indent() << "typelib_TypeDescription * pTD = 0;\n\n";
@@ -3641,10 +3647,10 @@ void EnumType::dumpComprehensiveGetCppuType(FileStream& o)
     for (i = 0; i < count; i++)
     {
         o << indent() << "::rtl::OUString sEnumValue" << i
-          << "( RTL_CONSTASCII_USTRINGPARAM(\""
+          << "( \""
           << rtl::OUStringToOString(
               m_reader.getFieldName(i), RTL_TEXTENCODING_UTF8)
-          << "\") );\n";
+          << "\" );\n";
         o << indent() << "enumValueNames[" << i << "] = sEnumValue" << i
           << ".pData;\n";
     }
@@ -3905,9 +3911,9 @@ sal_Bool ServiceType::dumpHxxFile(
                   << scopedBaseName
                   << (" >(the_context->getServiceManager()->"
                       "createInstanceWithContext(::rtl::OUString("
-                      "RTL_CONSTASCII_USTRINGPARAM(\"")
+                      " \"")
                   << fullName
-                  << "\")), the_context), ::com::sun::star::uno::UNO_QUERY);\n";
+                  << "\" ), the_context), ::com::sun::star::uno::UNO_QUERY);\n";
                 dec();
                 o << indent()
                   << "} catch (::com::sun::star::uno::RuntimeException &) {\n";
@@ -3920,20 +3926,20 @@ sal_Bool ServiceType::dumpHxxFile(
                 inc();
                 o << indent()
                   << ("throw ::com::sun::star::uno::DeploymentException("
-                      "::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("
+                      "::rtl::OUString( "
                       "\"component context fails to supply service ")
                   << fullName << " of type " << fullBaseName
-                  << ": \")) + the_exception.Message, the_context);\n";
+                  << ": \" ) + the_exception.Message, the_context);\n";
                 dec();
                 o << indent() << "}\n" << indent()
                   << "if (!the_instance.is()) {\n";
                 inc();
                 o << indent()
                   << ("throw ::com::sun::star::uno::DeploymentException("
-                      "::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("
+                      "::rtl::OUString( "
                       "\"component context fails to supply service ")
                   << fullName << " of type " << fullBaseName
-                  << "\")), the_context);\n";
+                  << "\" ), the_context);\n";
                 dec();
                 o << indent() << "}\n" << indent() << "return the_instance;\n";
                 dec();
@@ -4034,8 +4040,8 @@ sal_Bool ServiceType::dumpHxxFile(
                   << scopedBaseName
                   << (" >(the_context->getServiceManager()->"
                       "createInstanceWithArgumentsAndContext(::rtl::OUString("
-                      "RTL_CONSTASCII_USTRINGPARAM(\"")
-                  << fullName << "\")), ";
+                      " \"")
+                  << fullName << "\" ), ";
                 if (rest) {
                     o << translateUnoToCppIdentifier(
                         rtl::OUStringToOString(
@@ -4064,10 +4070,10 @@ sal_Bool ServiceType::dumpHxxFile(
                     inc();
                     o << indent()
                       << ("throw ::com::sun::star::uno::DeploymentException("
-                          "::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("
+                          "::rtl::OUString( "
                           "\"component context fails to supply service ")
                       << fullName << " of type " << fullBaseName
-                      << ": \")) + the_exception.Message, the_context);\n";
+                      << ": \" ) + the_exception.Message, the_context);\n";
                     dec();
                     o << indent() << "}\n";
                 }
@@ -4075,10 +4081,10 @@ sal_Bool ServiceType::dumpHxxFile(
                 inc();
                 o << indent()
                   << ("throw ::com::sun::star::uno::DeploymentException("
-                      "::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("
+                      "::rtl::OUString( "
                       "\"component context fails to supply service ")
                   << fullName << " of type " << fullBaseName
-                  << "\")), the_context);\n";
+                  << "\" ), the_context);\n";
                 dec();
                 o << indent() << "}\n" << indent() << "return the_instance;\n";
                 dec();
@@ -4191,14 +4197,14 @@ sal_Bool SingletonType::dumpHxxFile(
       << "::com::sun::star::uno::Reference< " << scopedBaseName
       << " > instance;\n" << indent()
       << ("if (!(the_context->getValueByName("
-          "::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\"/singletons/")
-      << fullName << "\"))) >>= instance) || !instance.is()) {\n";
+          "::rtl::OUString( \"/singletons/")
+      << fullName << "\" )) >>= instance) || !instance.is()) {\n";
     inc();
     o << indent()
       << ("throw ::com::sun::star::uno::DeploymentException("
-          "::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\"component context"
+          "::rtl::OUString( \"component context"
           " fails to supply singleton ")
-      << fullName << " of type " << fullBaseName << "\")), the_context);\n";
+      << fullName << " of type " << fullBaseName << "\" ), the_context);\n";
     dec();
     o << indent() << "}\n" << indent() << "return instance;\n";
     dec();
