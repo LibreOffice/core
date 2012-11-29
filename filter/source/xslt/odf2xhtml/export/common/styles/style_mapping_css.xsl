@@ -297,9 +297,17 @@
 	<xsl:template match="@table:align">
 		<xsl:choose>
 			<xsl:when test=".='left'">
-				<xsl:text>margin-left:0px; margin-right:auto;</xsl:text></xsl:when>
+				<xsl:if test="not(../@fo:margin-left)">margin-left:0px; </xsl:if>
+				<xsl:text>margin-right:auto;</xsl:text></xsl:when>
 			<xsl:when test=".='right'">
-				<xsl:text>margin-left:auto; margin-right: 0px;</xsl:text></xsl:when>
+				<xsl:text>margin-left:auto</xsl:text>
+				<xsl:if test="not(../@fo:margin-right)">
+					; margin-right: 0px;
+				</xsl:if>
+			</xsl:when>
+			<xsl:when test=".='center'">
+				margin-left:auto;margin-right:auto;
+			</xsl:when>
 			<xsl:otherwise>
 				<xsl:text>float:none; </xsl:text>
 			</xsl:otherwise>
