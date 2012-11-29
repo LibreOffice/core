@@ -7362,11 +7362,35 @@ else
             AM_PATH_PYTHON([3.3])
         fi
     elif test $enable_python = auto; then
-        dnl This allows lack of system Python
+        # We should not come here in a MSVC build, I think?
+        if test $build_os = cygwin; then
+            AC_MSG_ERROR([Assertion failed - should not be here in a MSVC build])
+        fi
+
+        # This allows a lack of system Python 3.3 with no error, we check below for a system Python of
+        # earlier version.
         AM_PATH_PYTHON([3.3],, [:])
 
         if test "$PYTHON" = :; then
             enable_python=internal
+
+            if test $_os = Darwin; then
+                 # See the fixme in gbuild.mk
+
+                 # There must be a system Python, 2.6 should be fine (?), to run build-time Python scripts
+                 # like filter/source/svg/js2hxx.py. (Is that the only build-time Python script?) If we
+                 # don't do this, PYTHON will stay with the value ":" which of course makes runing
+                 # build-time Python scripts rather ineffective.
+
+                 # Unset variables set by the above AM_PATH_PYTHON so that we acutally do check anew
+                 # Finding an (old) system Python should not confuse our already decided intent to build an
+                 # internal Python 3.3, that is directed by enable_python = internal.
+                 unset PYTHON am_cv_pathless_PYTHON ac_cv_path_PYTHON
+                 AM_PATH_PYTHON([2.6])
+             else
+                 # For Linux it works to use the internally built Python, see gbuild.mk
+                 :
+             fi
         else
             enable_python=system
         fi
