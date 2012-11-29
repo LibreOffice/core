@@ -264,7 +264,6 @@ public:
 
 void ScXMLSourceDlg::TreeItemSelected()
 {
-    fprintf(stdout, "ScXMLSourceDlg::TreeItemSelected:   called\n");
     SvTreeListEntry* pEntry = maLbTree.GetCurEntry();
     if (!pEntry)
         return;
