@@ -356,7 +356,6 @@ And here is an autogen.lastrun for Android when cross-compiling from Linux:
 --with-android-ndk=/home/tml/android-ndk-r8b
 --with-android-ndk-toolchain-version=4.6
 --with-android-sdk=/home/tml/android-sdk-linux
---with-java-target-version=1.5
 
 And here is an autogen.lastrun for Android when cross-compiling to x86 from Linux:
 

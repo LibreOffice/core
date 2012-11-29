@@ -1724,18 +1724,6 @@ AC_ARG_WITH(java,
     [ with_java=java ]
 )
 
-AC_ARG_WITH(java-target-version,
-    AS_HELP_STRING([--with-java-target-version],
-        [Generate class files that will work on JVMs with the specified version.
-         For example, use --with-java-target-version=1.5 to make sure that the
-         application will work with JVM 1.5 even when compiled with JDK 1.6.])
-    [
-                          This option is ignored when you compile with gcj/gij.
-
-                          Usage:     --with-java-target-version=<jvm version>
-    ],
-,)
-
 AC_ARG_WITH(jvm-path,
     AS_HELP_STRING([--with-jvm-path],
         [Use a specific JVM search path at runtime.])
@@ -5979,25 +5967,10 @@ else
 fi
 
 dnl ===================================================================
-dnl Check for target Java bytecode version
+dnl Set target Java bytecode version
 dnl ===================================================================
 if test "$SOLAR_JAVA" != ""; then
-    AC_MSG_CHECKING([for target Java bytecode version])
-    if test "$JDK" = "gcj" -o "$JDK" = "kaffe"; then
-        _java_target_ver="1.5"
-        AC_MSG_RESULT([default by $JDK])
-        if test -n "$with_java_target_version" -a "$with_java_target_version" != "no"; then
-            AC_MSG_WARN([Value defined by --with-java-target-version is ignored!])
-        fi
-    elif test -n "$with_java_target_version" -a "$with_java_target_version" != "no"; then
-        _java_target_ver="$with_java_target_version"
-        AC_MSG_RESULT([$_java_target_ver])
-    elif test $_jdk_ver -gt 10000; then
-        _java_target_ver=`echo "$_jdk_ver" | $AWK '{ maj=substr($0,1,1); min=substr($0,2,2); print int(maj)"."int(min) }'`
-        AC_MSG_RESULT([$_java_target_ver])
-    else
-        AC_MSG_ERROR([Unable to guess Java bytecode version from Java version!])
-    fi
+    _java_target_ver="1.5"
 
     JAVA_SOURCE_VER="$_java_target_ver"
     JAVA_TARGET_VER="$_java_target_ver"
