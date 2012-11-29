@@ -1035,7 +1035,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 //now apply this break at the first paragraph of this section
                 uno::Reference<beans::XPropertySet> xRangeProperties(lcl_GetRangeProperties(m_bIsFirstSection, rDM_Impl, m_xStartingRange));
             /* break type
-            0 - No break 1 - New Colunn 2 - New page 3 - Even page 4 - odd page */
+            0 - No break 1 - New Column 2 - New page 3 - Even page 4 - odd page */
                 if ((m_bTitlePage && m_bIsFirstSection) || !m_bTitlePage)
                 {
                     if (xRangeProperties.is())

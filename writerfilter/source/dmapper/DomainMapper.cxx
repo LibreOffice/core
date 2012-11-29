@@ -2424,7 +2424,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_sprm::LN_SBkc: // sprmSBkc
         /* break type
           0 - No break
-          1 - New Colunn
+          1 - New Column
           2 - New page
           3 - Even page
           4 - odd page
