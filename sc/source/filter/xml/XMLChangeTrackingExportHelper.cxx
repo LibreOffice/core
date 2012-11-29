@@ -240,8 +240,8 @@ void ScChangeTrackingExportHelper::SetValueAttributes(const double& fValue, cons
     bool bSetAttributes(false);
     if (sValue.Len())
     {
-        sal_uInt32 nIndex;
-        double fTempValue;
+        sal_uInt32 nIndex = 0;
+        double fTempValue = 0.0;
         if (rExport.GetDocument() && rExport.GetDocument()->GetFormatTable()->IsNumberFormat(sValue, nIndex, fTempValue))
         {
             sal_uInt16 nType = rExport.GetDocument()->GetFormatTable()->GetType(nIndex);
