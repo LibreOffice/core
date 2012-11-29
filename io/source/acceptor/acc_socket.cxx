@@ -85,7 +85,7 @@ namespace io_acceptor {
         virtual void SAL_CALL close(  )
             throw(::com::sun::star::io::IOException,
                   ::com::sun::star::uno::RuntimeException);
-        virtual ::rtl::OUString SAL_CALL getDescription(  )
+        virtual OUString SAL_CALL getDescription(  )
             throw(::com::sun::star::uno::RuntimeException);
 
         // XConnectionBroadcaster
@@ -100,7 +100,7 @@ namespace io_acceptor {
         ::osl::StreamSocket m_socket;
         ::osl::SocketAddr m_addr;
         oslInterlockedCount m_nStatus;
-        ::rtl::OUString m_sDescription;
+        OUString m_sDescription;
 
         ::osl::Mutex _mutex;
         sal_Bool     _started;
@@ -164,7 +164,7 @@ namespace io_acceptor {
     {
         g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
         // make it unique
-        m_sDescription += OUString( RTL_CONSTASCII_USTRINGPARAM( ",uniqueValue=" ) );
+        m_sDescription += OUString( ",uniqueValue=" ) ;
         m_sDescription += OUString::valueOf(
             sal::static_int_cast< sal_Int64 >(
                 reinterpret_cast< sal_IntPtr >(&m_socket)),
@@ -210,7 +210,7 @@ namespace io_acceptor {
 
             if(i != nBytesToRead)
             {
-                OUString message(RTL_CONSTASCII_USTRINGPARAM("acc_socket.cxx:SocketConnection::read: error - "));
+                OUString message("acc_socket.cxx:SocketConnection::read: error - ");
                 message +=  m_socket.getErrorAsString();
 
                 IOException ioException(message, Reference<XInterface>(static_cast<XConnection *>(this)));
@@ -227,7 +227,7 @@ namespace io_acceptor {
         }
         else
         {
-            OUString message(RTL_CONSTASCII_USTRINGPARAM("acc_socket.cxx:SocketConnection::read: error - connection already closed"));
+            OUString message("acc_socket.cxx:SocketConnection::read: error - connection already closed");
 
             IOException ioException(message, Reference<XInterface>(static_cast<XConnection *>(this)));
 
@@ -248,7 +248,7 @@ namespace io_acceptor {
         {
             if( m_socket.write( seq.getConstArray() , seq.getLength() ) != seq.getLength() )
             {
-                OUString message(RTL_CONSTASCII_USTRINGPARAM("acc_socket.cxx:SocketConnection::write: error - "));
+                OUString message("acc_socket.cxx:SocketConnection::write: error - ");
                 message += m_socket.getErrorAsString();
 
                 IOException ioException(message, Reference<XInterface>(static_cast<XConnection *>(this)));
@@ -263,7 +263,7 @@ namespace io_acceptor {
         }
         else
         {
-            OUString message(RTL_CONSTASCII_USTRINGPARAM("acc_socket.cxx:SocketConnection::write: error - connection already closed"));
+            OUString message("acc_socket.cxx:SocketConnection::write: error - connection already closed");
 
             IOException ioException(message, Reference<XInterface>(static_cast<XConnection *>(this)));
 
