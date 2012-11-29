@@ -650,6 +650,10 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         else
             pWindow = new VclHBox(pParent);
     }
+    else if (name == "GtkHBox")
+        pWindow = new VclHBox(pParent);
+    else if (name == "GtkVBox")
+        pWindow = new VclVBox(pParent);
     else if (name == "GtkButtonBox")
     {
         bVertical = extractOrientation(rMap);
