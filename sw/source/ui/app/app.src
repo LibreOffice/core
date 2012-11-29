@@ -220,6 +220,10 @@ String STR_JAVA_EDIT
     Text [ en-US ] = "Edit Script" ;
 };
 
+String STR_FOOTNOTE_DIALOG_CHAR
+{
+    Text [ en-US ] = "Character" ;
+};
 
 InfoBox MSG_ERROR_SEND_MAIL
 {
