@@ -20,7 +20,7 @@
 #define __com_sun_star_chart_ChartTitle_idl__
 
 #include <com/sun/star/drawing/Shape.idl>
-#include <com/sun/star/xml/UserDefinedAttributeSupplier.idl>
+#include <com/sun/star/xml/UserDefinedAttributesSupplier.idl>
 
 
  module com {  module sun {  module star {  module chart {
@@ -49,7 +49,7 @@ published service ChartTitle
 
     @since OOo 1.1.2
      */
-    [optional] service com::sun::star::xml::UserDefinedAttributeSupplier;
+    [optional] service com::sun::star::xml::UserDefinedAttributesSupplier;
 
 
     /** specifies the rotation of the shape in 100th of degrees.

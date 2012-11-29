@@ -24,7 +24,7 @@
 #include <com/sun/star/style/CharacterProperties.idl>
 
 #include <com/sun/star/chart/ChartLegendPosition.idl>
-#include <com/sun/star/xml/UserDefinedAttributeSupplier.idl>
+#include <com/sun/star/xml/UserDefinedAttributesSupplier.idl>
 
 
 
@@ -60,7 +60,7 @@ published service ChartLegend
 
     @since OOo 1.1.2
      */
-    [optional] service com::sun::star::xml::UserDefinedAttributeSupplier;
+    [optional] service com::sun::star::xml::UserDefinedAttributesSupplier;
 
 
     /** determines the alignment of the legend relative

@@ -24,7 +24,7 @@
 #include <com/sun/star/drawing/LineProperties.idl>
 
 #include <com/sun/star/beans/XPropertySet.idl>
-#include <com/sun/star/xml/UserDefinedAttributeSupplier.idl>
+#include <com/sun/star/xml/UserDefinedAttributesSupplier.idl>
 
 
  module com {  module sun {  module star {  module chart {
@@ -45,7 +45,7 @@ published service ChartArea
 
     @since OOo 1.1.2
      */
-    [optional] service com::sun::star::xml::UserDefinedAttributeSupplier;
+    [optional] service com::sun::star::xml::UserDefinedAttributesSupplier;
 
     interface com::sun::star::beans::XPropertySet;
 };

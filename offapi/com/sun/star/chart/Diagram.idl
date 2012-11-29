@@ -28,7 +28,7 @@
 
 #include <com/sun/star/chart/ChartDataRowSource.idl>
 
-#include <com/sun/star/xml/UserDefinedAttributeSupplier.idl>
+#include <com/sun/star/xml/UserDefinedAttributesSupplier.idl>
 
 
  module com {  module sun {  module star {  module chart {
@@ -88,7 +88,7 @@ published service Diagram
 
     @since OOo 1.1.2
      */
-    [optional] service com::sun::star::xml::UserDefinedAttributeSupplier;
+    [optional] service com::sun::star::xml::UserDefinedAttributesSupplier;
 
 
     /** determines if the data for a data row is contained in the

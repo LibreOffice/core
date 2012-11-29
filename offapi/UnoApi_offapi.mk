@@ -1494,7 +1494,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/xml,\
 	NamespaceContainer \
 	ParaUserDefinedAttributesSupplier \
 	TextUserDefinedAttributesSupplier \
-	UserDefinedAttributeSupplier \
 	UserDefinedAttributesSupplier \
 	XMLExportFilter \
 	XMLImportFilter \
