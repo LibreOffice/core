@@ -526,4 +526,10 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text [ en-US ] = "FACTDOUBLE";
     };
 
+
+    String ANALYSIS_FUNCNAME_Opt_barrier
+    {
+        Text [ en-US ] = "OPT_BARRIER";
+    };
+
 };

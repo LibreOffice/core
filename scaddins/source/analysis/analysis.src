@@ -3698,4 +3698,132 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text [ en-US ] = "The schedule";
         };
     };
+
+
+    Resource ANALYSIS_Opt_barrier
+    {
+        String 1    // description Opt_barrier
+        {
+            Text [ en-US ] = "pricing of a barrier option";
+        };
+
+        String 2 // name of parameter 1  Opt_barrier
+        {
+            Text [ en-US ] = "spot";
+        };
+
+        String 3 // description of parameter 1  Opt_barrier
+        {
+            Text [ en-US ] = "price/value of the underlying asset";
+        };
+        String 4 // name of parameter 2  Opt_barrier
+        {
+            Text [ en-US ] = "vol";
+        };
+
+        String 5 // description of parameter 2  Opt_barrier
+        {
+            Text [ en-US ] = "annual volatility of the underlying asset";
+        };
+        String 6 // name of parameter 3  Opt_barrier
+        {
+            Text [ en-US ] = "r";
+        };
+
+        String 7 // description of parameter 3  Opt_barrier
+        {
+            Text [ en-US ] = "interest rate (continuously compounted)";
+        };
+        String 8 // name of parameter 4  Opt_barrier
+        {
+            Text [ en-US ] = "rf";
+        };
+
+        String 9 // description of parameter 4  Opt_barrier
+        {
+            Text [ en-US ] = "foreign interest rate (continuously compounted)";
+        };
+        String 10 // name of parameter 5  Opt_barrier
+        {
+            Text [ en-US ] = "T";
+        };
+
+        String 11 // description of parameter 5  Opt_barrier
+        {
+            Text [ en-US ] = "time to maturity of the option in years";
+        };
+        String 12 // name of parameter 6  Opt_barrier
+        {
+            Text [ en-US ] = "strike";
+        };
+
+        String 13 // description of parameter 6  Opt_barrier
+        {
+            Text [ en-US ] = "strike level of the option";
+        };
+        String 14 // name of parameter 7  Opt_barrier
+        {
+            Text [ en-US ] = "barrier_low";
+        };
+
+        String 15 // description of parameter 7  Opt_barrier
+        {
+            Text [ en-US ] = "lower barrier (set to 0 if non-existent)";
+        };
+        String 16 // name of parameter 8  Opt_barrier
+        {
+            Text [ en-US ] = "barrier_up";
+        };
+
+        String 17 // description of parameter 8  Opt_barrier
+        {
+            Text [ en-US ] = "uppwer barrier (set to 0 if non-existent)";
+        };
+        String 18 // name of parameter 9  Opt_barrier
+        {
+            Text [ en-US ] = "rebate";
+        };
+
+        String 19 // description of parameter 9  Opt_barrier
+        {
+            Text [ en-US ] = "amount of money paid at maturity if barrier was hit";
+        };
+        String 20 // name of parameter 10 Opt_barrier
+        {
+            Text [ en-US ] = "put/call";
+        };
+
+        String 21 // description of parameter 10 Opt_barrier
+        {
+            Text [ en-US ] = "string to define if the option is a (p)ut or a (c)all";
+        };
+        String 22 // name of parameter 11 Opt_barrier
+        {
+            Text [ en-US ] = "knock in/out";
+        };
+
+        String 23 // description of parameter 11 Opt_barrier
+        {
+            Text [ en-US ] = "string to define if the option is of type knock-(i)n or knock-(o)ut";
+        };
+        String 24 // name of parameter 12 Opt_barrier
+        {
+            Text [ en-US ] = "barrier_type";
+        };
+
+        String 25 // description of parameter 12 Opt_barrier
+        {
+            Text [ en-US ] = "string to define whether the barrier is observed (c)ontinuously or only at the (e)nd/maturity";
+        };
+        String 26 // name of parameter 13 Opt_barrier
+        {
+            Text [ en-US ] = "greek";
+        };
+
+        String 27 // description of parameter 13 Opt_barrier
+        {
+            Text [ en-US ] = "optional parameter, if left out then the function simply returns the option price; if set, the function returns price sensitivities (Greeks) to one of the input parameters; possible values are value, delta, gamma, theta, vega, volga, vanna, rho, rhof";
+        };
+    };
+
 };

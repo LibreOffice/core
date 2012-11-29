@@ -146,7 +146,8 @@ const FuncDataBase pFuncDatas[] =
     FUNCDATA( Coupdaybs,        UNIQUE,     INTPAR,     4,          FDCat_Finance ),
     FUNCDATA( Couppcd,          UNIQUE,     INTPAR,     4,          FDCat_Finance ),
     FUNCDATA( Coupnum,          UNIQUE,     INTPAR,     4,          FDCat_Finance ),
-    FUNCDATA( Fvschedule,       UNIQUE,     STDPAR,     2,          FDCat_Finance )
+    FUNCDATA( Fvschedule,       UNIQUE,     STDPAR,     2,          FDCat_Finance ),
+    FUNCDATA( Opt_barrier,      UNIQUE,     STDPAR,     13,         FDCat_Finance )
 };
 #undef FUNCDATA
 

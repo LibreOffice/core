@@ -232,6 +232,15 @@ public:
     virtual double SAL_CALL     getCouppcd( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const ANY& rOptBase ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getCoupnum( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const ANY& rOptBase ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getFvschedule( double fPrinc, const SEQSEQ( double )& rSchedule ) THROWDEF_RTE_IAE;
+
+    virtual double SAL_CALL getOpt_barrier( double spot, double vol,
+            double r, double rf, double T, double strike,
+            double barrier_low, double barrier_up, double rebate,
+            const STRING& put_call, const STRING& in_out,
+            const STRING& continuous, const ANY& greek ) THROWDEF_RTE_IAE;
+
+
+
 };
 
 //------------------------------------------------------------------

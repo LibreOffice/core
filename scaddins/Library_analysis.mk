@@ -50,6 +50,7 @@ $(eval $(call gb_Library_add_exception_objects,analysis,\
 	scaddins/source/analysis/analysishelper \
 	scaddins/source/analysis/bessel \
 	scaddins/source/analysis/financial \
+	scaddins/source/analysis/black_scholes \
 ))
 
 # Runtime dependency for unit-tests

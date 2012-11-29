@@ -19,9 +19,10 @@
 
 #include "analysis.hxx"
 #include "analysishelper.hxx"
+#include "black_scholes.hxx"
 #include <rtl/math.hxx>
 
-
+using namespace sca::analysis;
 
 double SAL_CALL AnalysisAddIn::getAmordegrc( constREFXPS& xOpt,
     double fCost, sal_Int32 nDate, sal_Int32 nFirstPer, double fRestVal,
@@ -650,5 +651,114 @@ double SAL_CALL AnalysisAddIn::getFvschedule( double fPrinc, const SEQSEQ( doubl
     RETURN_FINITE( fPrinc );
 }
 
+
+
+
+// ---------------------------------------------------------------------
+// option pricing functions
+// ------------------------
+
+bool opt_getinput_putcall(bs::types::PutCall& pc, const STRING& str) {
+    if(str.compareToAscii("c",1)==0) {
+        pc=bs::types::Call;
+    } else if(str.compareToAscii("p",1)==0) {
+        pc=bs::types::Put;
+    } else {
+        return false;
+    }
+    return true;
+}
+bool opt_getinput_inout(bs::types::BarrierKIO& kio, const STRING& str) {
+    if(str.compareToAscii("i",1)==0) {
+        kio=bs::types::KnockIn;
+    } else if(str.compareToAscii("o",1)==0) {
+        kio=bs::types::KnockOut;
+    } else {
+        return false;
+    }
+    return true;
+}
+bool opt_getinput_barrier(bs::types::BarrierActive& cont, const STRING& str) {
+    if(str.compareToAscii("c",1)==0) {
+        cont=bs::types::Continuous;
+    } else if(str.compareToAscii("e",1)==0) {
+        cont=bs::types::Maturity;
+    } else {
+        return false;
+    }
+    return true;
+}
+bool opt_getinput_fordom(bs::types::ForDom& fd, const STRING& str) {
+    if(str.compareToAscii("f",1)==0) {
+        fd=bs::types::Foreign;
+    } else if(str.compareToAscii("d",1)==0) {
+        fd=bs::types::Domestic;
+    } else {
+        return false;
+    }
+    return true;
+}
+bool opt_getinput_greek(bs::types::Greeks& greek, const ANY& anyval) {
+    STRING str;
+    if(anyval.getValueTypeClass() == ::com::sun::star::uno::TypeClass_STRING) {
+        anyval >>= str;
+    } else if(anyval.getValueTypeClass() == ::com::sun::star::uno::TypeClass_VOID) {
+        str="value";
+    } else {
+        return false;
+    }
+
+    if(str.compareToAscii("value")==0 || str.compareToAscii("price")==0 ) {
+        greek=bs::types::Value;
+    } else if(str.compareToAscii("delta")==0) {
+        greek=bs::types::Delta;
+    } else if(str.compareToAscii("gamma")==0) {
+        greek=bs::types::Gamma;
+    } else if(str.compareToAscii("theta")==0) {
+        greek=bs::types::Theta;
+    } else if(str.compareToAscii("vega")==0) {
+        greek=bs::types::Vega;
+    } else if(str.compareToAscii("volga")==0) {
+        greek=bs::types::Volga;
+    } else if(str.compareToAscii("vanna")==0) {
+        greek=bs::types::Vanna;
+    } else if(str.compareToAscii("rho")==0) {
+        greek=bs::types::Rho_d;
+    } else if(str.compareToAscii("rhof")==0) {
+        greek=bs::types::Rho_f;
+    } else {
+        return false;
+    }
+    return true;
+}
+
+// OPT_BARRIER(...)
+double SAL_CALL AnalysisAddIn::getOpt_barrier( double spot, double vol,
+            double r, double rf, double T, double strike,
+            double barrier_low, double barrier_up, double rebate,
+            const STRING& put_call, const STRING& in_out,
+            const STRING& barriercont, const ANY& greekstr ) THROWDEF_RTE_IAE
+{
+
+    bs::types::PutCall pc;
+    bs::types::BarrierKIO kio;
+    bs::types::BarrierActive bcont;
+    bs::types::Greeks greek;
+    // read and check input values
+    if( spot<=0.0 || vol<=0.0 || T<0.0 || strike<0.0 ||
+                !opt_getinput_putcall(pc,put_call) ||
+                !opt_getinput_inout(kio,in_out) ||
+                !opt_getinput_barrier(bcont,barriercont) ||
+                !opt_getinput_greek(greek,greekstr) ){
+        THROW_IAE;
+    }
+
+    double fRet=bs::barrier(spot,vol,r,rf,T,strike, barrier_low,barrier_up,
+                            rebate,pc,kio,bcont,greek);
+
+    RETURN_FINITE( fRet );
+}
+
+// ---------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

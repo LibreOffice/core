@@ -595,7 +595,18 @@ module addin
         /// fvschedule.
         double getFvschedule( [in] double Principal, [in] sequence< sequence< double > > Schedule )
             raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// opt_barrier.
+        double getOpt_barrier( [in] double spot, [in] double vol,
+            [in] double r, [in] double rf, [in] double T, [in] double strike,
+            [in] double barrier_low, [in] double barrier_up,
+            [in] double rebate,
+            [in] string put_call, [in] string in_out,
+            [in] string continuous, [in] any greek  )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
     };
+
 };
 };
 };
