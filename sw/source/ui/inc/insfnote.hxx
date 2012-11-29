@@ -37,6 +37,8 @@
 
 class SwWrtShell;
 
+class VclFrame;
+
 class SwInsFootNoteDlg: public SvxStandardDialog
 {
     SwWrtShell     &rSh;
@@ -46,28 +48,26 @@ class SwInsFootNoteDlg: public SvxStandardDialog
     CharSet         eCharSet;
     sal_Bool        bExtCharAvailable;
     sal_Bool        bEdit;
-    FixedLine       aNumberFL;
-    RadioButton     aNumberAutoBtn;
-    RadioButton     aNumberCharBtn;
-    Edit            aNumberCharEdit;
-    PushButton      aNumberExtChar;
+
+    VclFrame*       m_pNumberFrame;
+    RadioButton*    m_pNumberAutoBtn;
+    RadioButton*    m_pNumberCharBtn;
+    Edit*           m_pNumberCharEdit;
+    PushButton*     m_pNumberExtChar;
 
     // everything for the selection footnote/endnote
-    FixedLine        aTypeFL;
-    RadioButton     aFtnBtn;
-    RadioButton     aEndNoteBtn;
+    RadioButton*    m_pFtnBtn;
+    RadioButton*    m_pEndNoteBtn;
 
-    OKButton        aOkBtn;
-    CancelButton    aCancelBtn;
-    HelpButton      aHelpBtn;
-    ImageButton     aPrevBT;
-    ImageButton     aNextBT;
+    PushButton*     m_pOkBtn;
+    PushButton*     m_pPrevBT;
+    PushButton*     m_pNextBT;
 
     DECL_LINK(NumberCharHdl, void *);
-    DECL_LINK( NumberEditHdl, void * );
+    DECL_LINK(NumberEditHdl, void *);
     DECL_LINK(NumberAutoBtnHdl, void *);
     DECL_LINK(NumberExtCharHdl, void *);
-    DECL_LINK( NextPrevHdl, Button * );
+    DECL_LINK(NextPrevHdl, Button *);
 
     virtual void    Apply();
 
@@ -78,13 +78,13 @@ public:
     ~SwInsFootNoteDlg();
 
     CharSet         GetCharSet() { return eCharSet; }
-    sal_Bool            IsExtCharAvailable() { return bExtCharAvailable; }
+    sal_Bool        IsExtCharAvailable() { return bExtCharAvailable; }
     String          GetFontName() { return aFontName; }
-    sal_Bool            IsEndNote() { return aEndNoteBtn.IsChecked(); }
+    sal_Bool        IsEndNote() { return m_pEndNoteBtn->IsChecked(); }
     String          GetStr()
                     {
-                        if ( aNumberCharBtn.IsChecked() )
-                            return aNumberCharEdit.GetText();
+                        if ( m_pNumberCharBtn->IsChecked() )
+                            return m_pNumberCharEdit->GetText();
                         else
                             return String();
                     }
