@@ -35,8 +35,8 @@ import com.sun.star.uno.UnoRuntime;
  * com.sun.star.accessibility.XAccessibleEventBroadcaster</code>
  * interface methods :
  * <ul>
- *  <li><code> addAccessibleEventEventListener()</code></li>
- *  <li><code> removeAccessibleEventEventListener()</code></li>
+ *  <li><code> addAccessibleEventListener()</code></li>
+ *  <li><code> removeAccessibleEventListener()</code></li>
  * </ul> <p>
  *
  * This test needs the following object relations :
@@ -115,7 +115,7 @@ public class _XAccessibleEventBroadcaster {
      */
     public boolean _addEventListener() {
         System.out.println("adding two listeners");
-        oObj.addAccessibleEventEventListener(list);
+        oObj.addAccessibleEventListener(list);
         boolean isTransient = chkTransient(oObj);
         System.out.println("fire event");
         prod.fireEvent() ;
@@ -135,7 +135,7 @@ public class _XAccessibleEventBroadcaster {
             } else {
                 System.out.println("Object is Transient, listener isn't expected to be called");
             }
-            oObj.removeAccessibleEventEventListener(list);
+            oObj.removeAccessibleEventListener(list);
         }
 
         return works;
@@ -158,7 +158,7 @@ public class _XAccessibleEventBroadcaster {
         list.notifiedEvent = null;
 
         System.out.println("remove first listener");
-        oObj.removeAccessibleEventEventListener(list);
+        oObj.removeAccessibleEventListener(list);
 
         System.out.println("fire event");
         prod.fireEvent() ;
