@@ -60,7 +60,8 @@ public:
     sal_Int16   GetReducedBitmapMode() const;
     sal_Int16   GetReducedBitmapResolution() const;
     sal_Bool    IsReducedBitmapIncludesTransparency() const;
-       sal_Bool IsConvertToGreyscales() const;
+    sal_Bool    IsConvertToGreyscales() const;
+    sal_Bool    IsPDFAsStandardPrintJobFormat() const;
 
     void        SetReduceTransparency( sal_Bool bState );
     void        SetReducedTransparencyMode( sal_Int16 nMode );
@@ -71,7 +72,8 @@ public:
     void        SetReducedBitmapMode( sal_Int16   bState );
     void        SetReducedBitmapResolution( sal_Int16 nResolution );
     void        SetReducedBitmapIncludesTransparency( sal_Bool bState );
-       void        SetConvertToGreyscales( sal_Bool bState );
+    void        SetConvertToGreyscales( sal_Bool bState );
+    void        SetPDFAsStandardPrintJobFormat( sal_Bool bState );
 
 public:
 

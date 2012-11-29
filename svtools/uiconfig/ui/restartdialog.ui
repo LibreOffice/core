@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- * This file is part of the LibreOffice project.
- *
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- *
--->
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkDialog" id="RestartDialog">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
+    <property name="title" translatable="yes">Restart %PRODUCTNAME</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -26,9 +19,13 @@
             <child>
               <object class="GtkButton" id="yes">
                 <property name="label" translatable="yes">Restart now</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -39,9 +36,11 @@
             <child>
               <object class="GtkButton" id="no">
                 <property name="label" translatable="yes">Restart later</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -62,10 +61,14 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
+            <property name="spacing">16</property>
             <child>
               <object class="GtkLabel" id="reason_java">
                 <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
                 <property name="label" translatable="yes">For the selected Java runtime environment to work properly, %PRODUCTNAME must be restarted.</property>
+                <property name="wrap">True</property>
+                <property name="max_width_chars">30</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -74,15 +77,30 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="label">
-                <property name="visible">True</property>
+              <object class="GtkLabel" id="reason_pdf">
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Do you want to restart %PRODUCTNAME now?</property>
+                <property name="no_show_all">True</property>
+                <property name="label" translatable="yes">For the modified default print job format to take effect, %PRODUCTNAME must be restarted.</property>
+                <property name="wrap">True</property>
+                <property name="max_width_chars">50</property>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Do you want to restart %PRODUCTNAME now?</property>
+                <property name="wrap">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>

@@ -210,9 +210,20 @@ TabPage TP_COMMONPRINTOPTIONS
 
     // -----------
 
+    CheckBox CB_PDF
+    {
+        HelpID = "sfx2:CheckBox:TP_COMMONPRINTOPTIONS:CB_REDUCEBITMAPS";
+        TabStop = TRUE;
+        Pos = MAP_APPFONT ( 18, 146 ) ;
+        Size = MAP_APPFONT ( 115, 10 ) ;
+        Text [ en-US ] = "PDF as Standard Print Job Format";
+    };
+
+    // -----------
+
     FixedLine GB_PRINT_WARN
     {
-        Pos = MAP_APPFONT ( 6, 148 ) ;
+        Pos = MAP_APPFONT ( 6, 162 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ en-US ] = "Printer warnings" ;
     };
@@ -220,7 +231,7 @@ TabPage TP_COMMONPRINTOPTIONS
     {
         HelpID = "sfx2:CheckBox:TP_COMMONPRINTOPTIONS:CB_PAPERSIZE";
         TabStop = TRUE;
-        Pos = MAP_APPFONT ( 12, 159 ) ;
+        Pos = MAP_APPFONT ( 12, 173 ) ;
         Size = MAP_APPFONT ( 123, 10 ) ;
         Text [ en-US ] = "P~aper size" ;
     };
@@ -228,7 +239,7 @@ TabPage TP_COMMONPRINTOPTIONS
     {
         HelpID = "sfx2:CheckBox:TP_COMMONPRINTOPTIONS:CB_PAPERORIENTATION";
         TabStop = TRUE;
-        Pos = MAP_APPFONT ( 12, 172 ) ;
+        Pos = MAP_APPFONT ( 12, 186 ) ;
         Size = MAP_APPFONT ( 123 , 10 ) ;
         Text [ en-US ] = "Pap~er orientation" ;
     };
@@ -236,7 +247,7 @@ TabPage TP_COMMONPRINTOPTIONS
     {
         HelpID = "sfx2:CheckBox:TP_COMMONPRINTOPTIONS:CB_TRANSPARENCY";
         TabStop = TRUE;
-        Pos = MAP_APPFONT ( 136, 159 ) ;
+        Pos = MAP_APPFONT ( 136, 173 ) ;
         Size = MAP_APPFONT ( 123, 10 ) ;
         Text [ en-US ] = "~Transparency";
     };

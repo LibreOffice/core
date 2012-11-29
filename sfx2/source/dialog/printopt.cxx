@@ -22,8 +22,10 @@
 #include <vcl/msgbox.hxx>
 #include <unotools/printwarningoptions.hxx>
 #include <svtools/printoptions.hxx>
+#include <svtools/restartdialog.hxx>
 #include <svl/flagitem.hxx>
 
+#include <comphelper/processfactory.hxx>
 
 #include "printopt.hrc"
 #include "dialog.hrc"
@@ -58,12 +60,36 @@ SfxCommonPrintOptionsTabPage::SfxCommonPrintOptionsTabPage( Window* pParent, con
     aReduceBitmapsResolutionLB( this, SfxResId( LB_REDUCEBITMAPS_RESOLUTION ) ),
     aReduceBitmapsTransparencyCB( this, SfxResId( CB_REDUCEBITMAPS_TRANSPARENCY ) ),
     aConvertToGreyscalesCB( this, SfxResId( CB_CONVERTTOGREYSCALES ) ),
+    aPDFCB( this, SfxResId( CB_PDF ) ),
     aWarnGB( this, SfxResId( GB_PRINT_WARN ) ),
     aPaperSizeCB( this, SfxResId( CB_PAPERSIZE ) ),
     aPaperOrientationCB( this, SfxResId( CB_PAPERORIENTATION ) ),
     aTransparencyCB( this, SfxResId( CB_TRANSPARENCY ) )
 {
     FreeResource();
+
+#ifndef ENABLE_CUPS
+    long nDiff = aWarnGB.GetPosPixel().Y() - aPDFCB.GetPosPixel().Y();
+    aPDFCB.Hide();
+
+    Point aPoint;
+
+    aPoint = aWarnGB.GetPosPixel();
+    aPoint.Y() -= nDiff;
+    aWarnGB.SetPosPixel(aPoint);
+
+    aPoint = aPaperSizeCB.GetPosPixel();
+    aPoint.Y() -= nDiff;
+    aPaperSizeCB.SetPosPixel(aPoint);
+
+    aPoint = aPaperOrientationCB.GetPosPixel();
+    aPoint.Y() -= nDiff;
+    aPaperOrientationCB.SetPosPixel(aPoint);
+
+    aPoint = aTransparencyCB.GetPosPixel();
+    aPoint.Y() -= nDiff;
+    aTransparencyCB.SetPosPixel(aPoint);
+#endif
 
     aOutputGB.SetStyle( aOutputGB.GetStyle() | WB_NOLABEL );
 
@@ -76,6 +102,7 @@ SfxCommonPrintOptionsTabPage::SfxCommonPrintOptionsTabPage( Window* pParent, con
     {
         aPrintFileOutputRB.Check( sal_True );
         aOutputGB.SetText( OutputDevice::GetNonMnemonicString( aPrintFileOutputRB.GetText() ) );
+        aPDFCB.Disable();
     }
 
     aPrinterOutputRB.SetToggleHdl( LINK( this, SfxCommonPrintOptionsTabPage, ToggleOutputPrinterRBHdl ) );
@@ -237,6 +264,7 @@ void SfxCommonPrintOptionsTabPage::ImplUpdateControls( const PrinterOptions* pCu
 
     aReduceBitmapsTransparencyCB.Check( pCurrentOptions->IsReducedBitmapIncludesTransparency() );
     aConvertToGreyscalesCB.Check( pCurrentOptions->IsConvertToGreyscales() );
+    aPDFCB.Check( pCurrentOptions->IsPDFAsStandardPrintJobFormat() );
 
     ClickReduceTransparencyCBHdl( &aReduceTransparencyCB );
     ClickReduceGradientsCBHdl( &aReduceGradientsCB );
@@ -355,6 +383,14 @@ void SfxCommonPrintOptionsTabPage::ImplSaveControls( PrinterOptions* pCurrentOpt
                                                             (sal_uInt16)( (sizeof (aDPIArray) / sizeof (aDPIArray[0])) - 1 ) ) ] );
     pCurrentOptions->SetReducedBitmapIncludesTransparency( aReduceBitmapsTransparencyCB.IsChecked() );
     pCurrentOptions->SetConvertToGreyscales( aConvertToGreyscalesCB.IsChecked() );
+    sal_Bool bOrigBackEnd = pCurrentOptions->IsPDFAsStandardPrintJobFormat();
+    if (bOrigBackEnd != aPDFCB.IsChecked())
+    {
+        pCurrentOptions->SetPDFAsStandardPrintJobFormat( aPDFCB.IsChecked() );
+            svtools::executeRestartDialog(
+                comphelper::getProcessComponentContext(), 0,
+                svtools::RESTART_REASON_PDF_AS_STANDARD_JOB_FORMAT);
+    }
 }
 
 IMPL_LINK( SfxCommonPrintOptionsTabPage, ClickReduceTransparencyCBHdl, CheckBox*, pBox )
@@ -445,9 +481,13 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleOutputPrintFileRBHdl, RadioButton
         bOutputForPrinter = sal_False;
         // #i63982#
         ImplSetAccessibleNames();
+        aPDFCB.Disable();
     }
     else
+    {
         ImplSaveControls( &maPrintFileOptions );
+        aPDFCB.Enable();
+    }
 
     return 0;
 }

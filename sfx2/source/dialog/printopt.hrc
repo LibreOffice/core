@@ -46,3 +46,5 @@
 #define CB_PAPERSIZE                    51
 #define CB_PAPERORIENTATION             52
 #define CB_TRANSPARENCY                 53
+
+#define CB_PDF                          54

@@ -23,9 +23,12 @@ namespace com { namespace sun { namespace star { namespace uno {
 namespace svtools {
 
 enum RestartReason {
-    RESTART_REASON_JAVA
+    RESTART_REASON_JAVA,
         // "For the selected Java runtime environment to work properly,
         // %PRODUCTNAME must be restarted."
+    RESTART_REASON_PDF_AS_STANDARD_JOB_FORMAT
+        // For the modified default print job format to take effect,
+        // %PRODUCTNAME must be restarted.
 };
 
 SVT_DLLPUBLIC void executeRestartDialog(

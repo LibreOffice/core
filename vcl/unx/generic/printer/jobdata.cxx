@@ -269,4 +269,10 @@ bool JobData::constructFromStreamBuffer( void* pData, int bytes, JobData& rJobDa
     return bVersion && bPrinter && bOrientation && bCopies && bContext && bMargin && bPSLevel && bPDFDevice && bColorDevice && bColorDepth;
 }
 
+void JobData::setDefaultBackend(bool bUsePDF)
+{
+    if (bUsePDF && m_nPSLevel == 0 && m_nPDFDevice == 0)
+        m_nPDFDevice = 1;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

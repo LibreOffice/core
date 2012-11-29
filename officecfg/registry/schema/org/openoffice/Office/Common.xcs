@@ -3805,6 +3805,19 @@
             </info>
             <value>false</value>
           </prop>
+          <prop
+              oor:name="PDFAsStandardPrintJobFormat" oor:type="xs:boolean"
+              oor:nillable="false">
+            <!-- UIHints: Tools  Options - General  Print  [Section]
+                 PrintFileOptions -->
+            <info>
+              <author>CMC</author>
+              <desc>Indicates whether PDF should be the Standard Print Job
+              format</desc>
+              <label>(PrinterOptions) PDFAsStandardPrintJobFormat</label>
+            </info>
+            <value>true</value>
+          </prop>
         </group>
         <group oor:name="File">
           <info>
@@ -3942,6 +3955,19 @@
               <label>(PrintFileOptions) ConvertToGreyscales</label>
             </info>
             <value>false</value>
+          </prop>
+          <prop
+              oor:name="PDFAsStandardPrintJobFormat" oor:type="xs:boolean"
+              oor:nillable="false">
+            <!-- UIHints: Tools  Options - General  Print  [Section]
+                 PrintFileOptions -->
+            <info>
+              <author>CMC</author>
+              <desc>Indicates whether PDF should be the Standard Print Job
+              format</desc>
+              <label>(PrintFileOptions) PDFAsStandardPrintJobFormat</label>
+            </info>
+            <value>true</value>
           </prop>
         </group>
       </group>

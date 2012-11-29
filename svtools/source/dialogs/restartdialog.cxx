@@ -30,16 +30,19 @@ public:
     RestartDialog(Window * parent, svtools::RestartReason reason):
         ModalDialog(parent, "RestartDialog", "svt/ui/restartdialog.ui")
     {
-        get(reasonJava_, "reason_java");
         get(btnYes_, "yes");
         get(btnNo_, "no");
         switch (reason) {
         case svtools::RESTART_REASON_JAVA:
-            reasonJava_->Show();
+            get(reason_, "reason_java");
+            break;
+        case svtools::RESTART_REASON_PDF_AS_STANDARD_JOB_FORMAT:
+            get(reason_, "reason_pdf");
             break;
         default:
             assert(false); // this cannot happen
         }
+        reason_->Show();
         btnYes_->SetClickHdl(LINK(this, RestartDialog, hdlYes));
         btnNo_->SetClickHdl(LINK(this, RestartDialog, hdlNo));
     }
@@ -48,7 +51,7 @@ private:
     DECL_LINK(hdlYes, void *);
     DECL_LINK(hdlNo, void *);
 
-    Window * reasonJava_;
+    Window * reason_;
     PushButton * btnYes_;
     PushButton * btnNo_;
 };

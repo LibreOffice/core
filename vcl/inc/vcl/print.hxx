@@ -161,6 +161,7 @@ private:
     sal_uInt16                      mnReducedBitmapResolution;
     sal_Bool                        mbReducedBitmapsIncludeTransparency;
     sal_Bool                        mbConvertToGreyscales;
+    sal_Bool                        mbPDFAsStandardPrintJobFormat;
 
 public:
 
@@ -196,6 +197,9 @@ public:
 
     sal_Bool                        IsConvertToGreyscales() const { return mbConvertToGreyscales; }
     void                        SetConvertToGreyscales( sal_Bool bSet ) { mbConvertToGreyscales = bSet; }
+
+    sal_Bool                        IsPDFAsStandardPrintJobFormat() const { return mbPDFAsStandardPrintJobFormat; }
+    void                        SetPDFAsStandardPrintJobFormat( sal_Bool bSet ) { mbPDFAsStandardPrintJobFormat = bSet; }
 
     // read printer options from configuration, parameter decides whether the set for
     // print "to printer" or "to file" should be read.

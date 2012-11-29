@@ -67,6 +67,8 @@ private:
 
     CheckBox            aConvertToGreyscalesCB;
 
+    CheckBox            aPDFCB;
+
     FixedLine           aWarnGB;
 
     CheckBox            aPaperSizeCB;

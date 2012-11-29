@@ -40,6 +40,10 @@ $(eval $(call gb_Library_set_include,sfx,\
 
 $(eval $(call gb_Library_add_defs,sfx,-DSFX2_DLLIMPLEMENTATION))
 
+$(eval $(call gb_Library_add_defs,sfx,\
+    $(if $(filter TRUE,$(ENABLE_CUPS)),-DENABLE_CUPS) \
+))
+
 ifeq ($(ENABLE_SYSTRAY_GTK),TRUE)
 $(eval $(call gb_Library_add_defs,sfx,\
     -DENABLE_QUICKSTART_APPLET \

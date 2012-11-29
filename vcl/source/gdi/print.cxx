@@ -117,7 +117,8 @@ PrinterOptions::PrinterOptions() :
     meReducedBitmapMode( PRINTER_BITMAP_NORMAL ),
     mnReducedBitmapResolution( 200 ),
     mbReducedBitmapsIncludeTransparency( sal_True ),
-    mbConvertToGreyscales( sal_False )
+    mbConvertToGreyscales( sal_False ),
+    mbPDFAsStandardPrintJobFormat( sal_False )
 {
 }
 
@@ -137,6 +138,7 @@ PrinterOptions::~PrinterOptions()
 #define PROPERTYNAME_REDUCEDBITMAPRESOLUTION            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedBitmapResolution"))
 #define PROPERTYNAME_REDUCEDBITMAPINCLUDESTRANSPARENCY  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedBitmapIncludesTransparency"))
 #define PROPERTYNAME_CONVERTTOGREYSCALES                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ConvertToGreyscales"))
+#define PROPERTYNAME_PDFASSTANDARDPRINTJOBFORMAT        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PDFAsStandardPrintJobFormat"))
 
 bool PrinterOptions::ReadFromConfig( bool i_bFile )
 {
@@ -195,6 +197,8 @@ bool PrinterOptions::ReadFromConfig( bool i_bFile )
                         SetReducedBitmapIncludesTransparency( bValue );
                     if( xSet->getPropertyValue(PROPERTYNAME_CONVERTTOGREYSCALES) >>= bValue )
                         SetConvertToGreyscales( bValue );
+                    if( xSet->getPropertyValue(PROPERTYNAME_PDFASSTANDARDPRINTJOBFORMAT) >>= bValue )
+                        SetPDFAsStandardPrintJobFormat( bValue );
 
                     bSuccess = true;
                 }

@@ -64,6 +64,7 @@ static sal_uInt16 aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
 #define PROPERTYNAME_REDUCEDBITMAPRESOLUTION            OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedBitmapResolution"))
 #define PROPERTYNAME_REDUCEDBITMAPINCLUDESTRANSPARENCY  OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedBitmapIncludesTransparency"))
 #define PROPERTYNAME_CONVERTTOGREYSCALES                OUString(RTL_CONSTASCII_USTRINGPARAM("ConvertToGreyscales"))
+#define PROPERTYNAME_PDFASSTANDARDPRINTJOBFORMAT        OUString(RTL_CONSTASCII_USTRINGPARAM("PDFAsStandardPrintJobFormat"))
 
 // --------------
 // - Namespaces -
@@ -116,7 +117,8 @@ public:
     sal_Int16   GetReducedBitmapMode() const ;
     sal_Int16   GetReducedBitmapResolution() const ;
     sal_Bool    IsReducedBitmapIncludesTransparency() const ;
-       sal_Bool IsConvertToGreyscales() const;
+    sal_Bool    IsConvertToGreyscales() const;
+    sal_Bool    IsPDFAsStandardPrintJobFormat() const;
 
     void        SetReduceTransparency( sal_Bool bState ) ;
     void        SetReducedTransparencyMode( sal_Int16 nMode ) ;
@@ -127,7 +129,8 @@ public:
     void        SetReducedBitmapMode( sal_Int16 nMode ) ;
     void        SetReducedBitmapResolution( sal_Int16 nResolution ) ;
     void        SetReducedBitmapIncludesTransparency( sal_Bool bState ) ;
-       void        SetConvertToGreyscales( sal_Bool bState ) ;
+    void        SetConvertToGreyscales( sal_Bool bState ) ;
+    void        SetPDFAsStandardPrintJobFormat( sal_Bool bState ) ;
 
 //-------------------------------------------------------------------------------------------------------------
 //  private API
@@ -393,6 +396,28 @@ sal_Bool SvtPrintOptions_Impl::IsConvertToGreyscales() const
 
 }
 
+sal_Bool SvtPrintOptions_Impl::IsPDFAsStandardPrintJobFormat() const
+{
+    sal_Bool bRet = sal_True;
+    try
+    {
+        if (m_xNode.is())
+        {
+            css::uno::Reference<css::beans::XPropertySet> xSet(m_xNode, css::uno::UNO_QUERY);
+            if (xSet.is())
+            {
+                xSet->getPropertyValue(PROPERTYNAME_PDFASSTANDARDPRINTJOBFORMAT) >>= bRet;
+            }
+        }
+    }
+    catch (const css::uno::Exception& ex)
+    {
+        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+    }
+
+    return  bRet;
+}
+
 void SvtPrintOptions_Impl::SetReduceTransparency(sal_Bool bState)
 {
     impl_setValue(PROPERTYNAME_REDUCETRANSPARENCY, bState);
@@ -441,6 +466,11 @@ void SvtPrintOptions_Impl::SetReducedBitmapIncludesTransparency(sal_Bool bState 
 void SvtPrintOptions_Impl::SetConvertToGreyscales(sal_Bool bState)
 {
     impl_setValue(PROPERTYNAME_CONVERTTOGREYSCALES, bState);
+}
+
+void SvtPrintOptions_Impl::SetPDFAsStandardPrintJobFormat(sal_Bool bState)
+{
+    impl_setValue(PROPERTYNAME_PDFASSTANDARDPRINTJOBFORMAT, bState);
 }
 
 SvtPrintOptions_Impl::~SvtPrintOptions_Impl()
@@ -628,6 +658,14 @@ sal_Bool SvtBasePrintOptions::IsConvertToGreyscales() const
 
 // -----------------------------------------------------------------------------
 
+sal_Bool SvtBasePrintOptions::IsPDFAsStandardPrintJobFormat() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->IsPDFAsStandardPrintJobFormat();
+}
+
+// -----------------------------------------------------------------------------
+
 void SvtBasePrintOptions::SetReduceTransparency( sal_Bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
@@ -708,6 +746,14 @@ void SvtBasePrintOptions::SetConvertToGreyscales( sal_Bool bState )
 
 // -----------------------------------------------------------------------------
 
+void SvtBasePrintOptions::SetPDFAsStandardPrintJobFormat( sal_Bool bState )
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    m_pDataContainer->SetPDFAsStandardPrintJobFormat( bState );
+}
+
+// -----------------------------------------------------------------------------
+
 void SvtBasePrintOptions::GetPrinterOptions( PrinterOptions& rOptions ) const
 {
     rOptions.SetReduceTransparency( IsReduceTransparency() );
@@ -720,6 +766,7 @@ void SvtBasePrintOptions::GetPrinterOptions( PrinterOptions& rOptions ) const
     rOptions.SetReducedBitmapResolution( aDPIArray[ Min( (sal_uInt16) GetReducedBitmapResolution(), (sal_uInt16)( DPI_COUNT - 1 ) ) ] );
     rOptions.SetReducedBitmapIncludesTransparency( IsReducedBitmapIncludesTransparency() );
     rOptions.SetConvertToGreyscales( IsConvertToGreyscales() );
+    rOptions.SetPDFAsStandardPrintJobFormat( IsPDFAsStandardPrintJobFormat() );
 }
 
 // -----------------------------------------------------------------------------
@@ -739,6 +786,7 @@ void SvtBasePrintOptions::SetPrinterOptions( const PrinterOptions& rOptions )
         sal::static_int_cast< sal_Int16 >(rOptions.GetReducedBitmapMode()) );
     SetReducedBitmapIncludesTransparency( rOptions.IsReducedBitmapIncludesTransparency() );
     SetConvertToGreyscales( rOptions.IsConvertToGreyscales() );
+    SetPDFAsStandardPrintJobFormat( rOptions.IsPDFAsStandardPrintJobFormat() );
 
     const sal_uInt16 nDPI = rOptions.GetReducedBitmapResolution();
 
