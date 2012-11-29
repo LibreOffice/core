@@ -676,10 +676,11 @@ void lcl_MoveBorderPropertiesToFrame(uno::Sequence<beans::PropertyValue>& rFrame
 void lcl_AddRangeAndStyle(
     ParagraphPropertiesPtr& pToBeSavedProperties,
     uno::Reference< text::XTextAppend > xTextAppend,
-    PropertyMapPtr pPropertyMap)
+    PropertyMapPtr pPropertyMap,
+    TextAppendContext& rAppendContext)
 {
     uno::Reference<text::XParagraphCursor> xParaCursor(
-        xTextAppend->createTextCursorByRange( xTextAppend->getEnd()), uno::UNO_QUERY_THROW );
+        xTextAppend->createTextCursorByRange( rAppendContext.xInsertPosition.is() ? rAppendContext.xInsertPosition : xTextAppend->getEnd()), uno::UNO_QUERY_THROW );
     pToBeSavedProperties->SetEndingRange(xParaCursor->getStart());
     xParaCursor->gotoStartOfParagraph( false );
 
@@ -1023,7 +1024,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                     if ( !bIsDropCap && pParaContext->IsFrameMode() )
                     {
                         pToBeSavedProperties.reset( new ParagraphProperties(*pParaContext) );
-                        lcl_AddRangeAndStyle(pToBeSavedProperties, xTextAppend, pPropertyMap);
+                        lcl_AddRangeAndStyle(pToBeSavedProperties, xTextAppend, pPropertyMap, rAppendContext);
                     }
                 }
 
@@ -1035,7 +1036,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                 if( !bIsDropCap && pParaContext->IsFrameMode() )
                 {
                     pToBeSavedProperties.reset( new ParagraphProperties(*pParaContext) );
-                    lcl_AddRangeAndStyle(pToBeSavedProperties, xTextAppend, pPropertyMap);
+                    lcl_AddRangeAndStyle(pToBeSavedProperties, xTextAppend, pPropertyMap, rAppendContext);
                 }
             }
             uno::Sequence< beans::PropertyValue > aProperties;
