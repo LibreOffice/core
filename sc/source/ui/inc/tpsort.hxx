@@ -75,9 +75,9 @@ protected:
     virtual int         DeactivatePage  ( SfxItemSet* pSet = 0);
 
 private:
-    rtl::OUString          aStrUndefined;
-    rtl::OUString          aStrColumn;
-    rtl::OUString          aStrRow;
+    OUString            aStrUndefined;
+    OUString            aStrColumn;
+    OUString            aStrRow;
 
     const sal_uInt16    nWhichSort;
     ScSortDlg*          pDlg;
@@ -135,31 +135,29 @@ protected:
 
 private:
 
-    CheckBox            aBtnCase;
-    CheckBox            aBtnHeader;
-    CheckBox            aBtnFormats;
-    CheckBox            aBtnNaturalSort;
+    CheckBox*           m_pBtnCase;
+    CheckBox*           m_pBtnHeader;
+    CheckBox*           m_pBtnFormats;
+    CheckBox*           m_pBtnNaturalSort;
 
-    CheckBox            aBtnCopyResult;
-    ListBox             aLbOutPos;
-    Edit                aEdOutPos;
+    CheckBox*           m_pBtnCopyResult;
+    ListBox*            m_pLbOutPos;
+    Edit*               m_pEdOutPos;
 
-    CheckBox            aBtnSortUser;
-    ListBox             aLbSortUser;
+    CheckBox*           m_pBtnSortUser;
+    ListBox*            m_pLbSortUser;
 
-    FixedText           aFtLanguage;
-    SvxLanguageBox      aLbLanguage;
-    FixedText           aFtAlgorithm;
-    ListBox             aLbAlgorithm;
+    SvxLanguageBox*     m_pLbLanguage;
+    FixedText*          m_pFtAlgorithm;
+    ListBox*            m_pLbAlgorithm;
 
-    FixedLine           aLineDirection;
-    RadioButton         aBtnTopDown;
-    RadioButton         aBtnLeftRight;
+    RadioButton*        m_pBtnTopDown;
+    RadioButton*        m_pBtnLeftRight;
 
-    rtl::OUString              aStrRowLabel;
-    rtl::OUString              aStrColLabel;
-    rtl::OUString              aStrUndefined;
-    rtl::OUString              aStrAreaLabel;
+    OUString            aStrRowLabel;
+    OUString            aStrColLabel;
+    OUString            aStrUndefined;
+    OUString            aStrAreaLabel;
 
     const sal_uInt16    nWhichSort;
     ScSortParam         aSortData;
