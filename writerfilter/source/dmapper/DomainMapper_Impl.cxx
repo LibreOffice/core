@@ -1012,7 +1012,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                 else if(*rAppendContext.pLastParagraphProperties == *pParaContext )
                 {
                     //handles (7)
-                    rAppendContext.pLastParagraphProperties->SetEndingRange(xTextAppend->getEnd());
+                    rAppendContext.pLastParagraphProperties->SetEndingRange(rAppendContext.xInsertPosition.is() ? rAppendContext.xInsertPosition : xTextAppend->getEnd());
                     bKeepLastParagraphProperties = true;
                 }
                 else
@@ -1058,6 +1058,8 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                 {
                     xTextRange = xTextAppend->finishParagraphInsert( aProperties, rAppendContext.xInsertPosition );
                     rAppendContext.xCursor->gotoNextParagraph(false);
+                    if (rAppendContext.pLastParagraphProperties.get())
+                        rAppendContext.pLastParagraphProperties->SetEndingRange(xTextRange->getEnd());
                 }
                 else
                     xTextRange = xTextAppend->finishParagraph( aProperties );
