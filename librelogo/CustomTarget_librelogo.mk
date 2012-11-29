@@ -25,6 +25,7 @@ $(call gb_CustomTarget_get_target,librelogo/locproperties) : $(librelogo_LOCPROP
 
 $(librelogo_DIR)/LibreLogo_%.properties : \
 		$(SRCDIR)/librelogo/source/pythonpath/LibreLogo_en_US.properties \
+		$(librelogo_PROPMERGETARGET) \
 		| $(librelogo_DIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRP,1)
 	$(call gb_Helper_abbreviate_dirs, \
