@@ -133,14 +133,14 @@ public:
 //public:
 //    SwCrsrOszControl() : pStk1( 0 ), pStk2( 0 ) {}; // ; <- ????
 
-    sal_Bool ChkOsz( const SwFlyFrm *pFly )
+    bool ChkOsz( const SwFlyFrm *pFly )
         {
-            sal_Bool bRet = sal_True;
+            bool bRet = true;
             if ( pFly != pStk1 && pFly != pStk2 )
             {
                 pStk1 = pStk2;
                 pStk2 = pFly;
-                bRet  = sal_False;
+                bRet  = false;
             }
             return bRet;
         }
@@ -638,7 +638,7 @@ static const SwCntntFrm *lcl_GetPrvCnt( const SwCntntFrm* pCnt )
 typedef const SwCntntFrm *(*GetNxtPrvCnt)( const SwCntntFrm* );
 
 //Frame in wiederholter Headline?
-static sal_Bool lcl_IsInRepeatedHeadline( const SwFrm *pFrm,
+static bool lcl_IsInRepeatedHeadline( const SwFrm *pFrm,
                                     const SwTabFrm** ppTFrm = 0 )
 {
     const SwTabFrm *pTab = pFrm->FindTabFrm();
@@ -1244,7 +1244,7 @@ const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
     Point aPoint = rPoint;
     sal_uLong nDistance = ULONG_MAX;
 
-    while ( sal_True )  //Sicherheitsschleifchen, damit immer einer gefunden wird.
+    while ( true )  //Sicherheitsschleifchen, damit immer einer gefunden wird.
     {
         while ( pCntnt &&
                 ((!bDontLeave || IsAnLower( pCntnt )) &&

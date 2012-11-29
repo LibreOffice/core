@@ -172,7 +172,7 @@ public:
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
         const String& rMimeType, const ::com::sun::star::uno::Any & rValue );
 
-    sal_Bool            Connect() { return GetRealObject() != NULL; }
+    bool            Connect() { return GetRealObject() != NULL; }
 };
 
 // -----------------------------------------------------------------------------
@@ -840,7 +840,7 @@ sal_Bool SwOLEObj::UnloadObject( uno::Reference< embed::XEmbeddedObject > xObj, 
 
     sal_Bool bRet = sal_True;
        sal_Int32 nState = xObj.is() ? xObj->getCurrentState() : embed::EmbedStates::LOADED;
-       sal_Bool bIsActive = ( nState != embed::EmbedStates::LOADED && nState != embed::EmbedStates::RUNNING );
+       bool bIsActive = ( nState != embed::EmbedStates::LOADED && nState != embed::EmbedStates::RUNNING );
     sal_Int64 nMiscStatus = xObj->getStatus( nAspect );
 
        if( nState != embed::EmbedStates::LOADED && !pDoc->IsInDtor() && !bIsActive &&

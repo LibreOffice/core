@@ -227,7 +227,7 @@ void SwFrm::CheckDirChange()
     sal_Bool bOldR2L = GetRightToLeftFlag();
     SetInvalidVert( sal_True );
     SetInvalidR2L( sal_True );
-    sal_Bool bChg = bOldR2L != IsRightToLeft();
+    bool bChg = bOldR2L != IsRightToLeft();
     //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     sal_Bool bOldVertL2R = IsVertLR();
     if( ( IsVertical() != bOldVert ) || bChg || IsReverse() != bOldRev || bOldVertL2R != IsVertLR() )
@@ -675,8 +675,8 @@ const SwRect SwFrm::PaintArea() const
     long nRight = (aRect.*fnRect->fnGetRight)();
     long nLeft  = (aRect.*fnRect->fnGetLeft)();
     const SwFrm* pTmp = this;
-    sal_Bool bLeft = sal_True;
-    sal_Bool bRight = sal_True;
+    bool bLeft = true;
+    bool bRight = true;
     long nRowSpan = 0;
     while( pTmp )
     {
@@ -706,8 +706,8 @@ const SwRect SwFrm::PaintArea() const
                 nRight = nTmpRight;
             if( pTmp->IsPageFrm() || pTmp->IsFlyFrm() || pTmp->IsRootFrm() )
                 break;
-            bLeft = sal_False;
-            bRight = sal_False;
+            bLeft = false;
+            bRight = false;
         }
         else if( pTmp->IsColumnFrm() )  // nobody enters neightbour columns
         {
@@ -717,14 +717,14 @@ const SwRect SwFrm::PaintArea() const
             {
                 if( bLeft || nLeft < nTmpLeft )
                     nLeft = nTmpLeft;
-                bLeft = sal_False;
+                bLeft = false;
             }
              // the last column has _no_ influence to the right range
             if( bR2L ? pTmp->GetPrev() : pTmp->GetNext() )
             {
                 if( bRight || nTmpRight < nRight )
                     nRight = nTmpRight;
-                bRight = sal_False;
+                bRight = false;
             }
         }
         else if( bVert && pTmp->IsBodyFrm() )
@@ -738,14 +738,14 @@ const SwRect SwFrm::PaintArea() const
             if( pTmp->GetPrev() && ( bLeft || nLeft < nTmpLeft ) )
             {
                 nLeft = nTmpLeft;
-                bLeft = sal_False;
+                bLeft = false;
             }
             if( pTmp->GetNext() &&
                 ( pTmp->GetNext()->IsFooterFrm() || pTmp->GetNext()->GetNext() )
                 && ( bRight || nTmpRight < nRight ) )
             {
                 nRight = nTmpRight;
-                bRight = sal_False;
+                bRight = false;
             }
         }
         pTmp = pTmp->GetUpper();

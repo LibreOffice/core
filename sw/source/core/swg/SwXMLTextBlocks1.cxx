@@ -609,7 +609,7 @@ sal_uLong SwXMLTextBlocks::SetMacroTable(
             xRoot = xBlkRoot->openStorageElement( aPackageName, embed::ElementModes::WRITE );
             OUString sStreamName( RTL_CONSTASCII_USTRINGPARAM("atevent.xml") );
             long nTmp = SOT_FORMATSTR_ID_STARWRITER_60;
-            sal_Bool bOasis = ( SotStorage::GetVersion( xRoot ) > nTmp );
+            bool bOasis = ( SotStorage::GetVersion( xRoot ) > nTmp );
 
             uno::Reference < io::XStream > xDocStream = xRoot->openStreamElement( sStreamName,
                         embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );

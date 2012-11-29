@@ -404,12 +404,12 @@ sal_uInt16 SwTextBlocks::Rename( sal_uInt16 n, const String* s, const String* l 
 sal_uLong SwTextBlocks::CopyBlock( SwTextBlocks& rSource, String& rSrcShort,
                                 const String& rLong )
 {
-    sal_Bool bIsOld = sal_False;
+    bool bIsOld = false;
     if (rSource.pImp)
     {
         short nType = rSource.pImp->GetFileType();
         if (SWBLK_SW2 == nType || SWBLK_SW3 == nType )
-            bIsOld = sal_True;
+            bIsOld = true;
     }
     if( bIsOld ) //rSource.IsOld() )
         nErr = ERR_SWG_OLD_GLOSSARY;

@@ -258,7 +258,7 @@ void SwFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
     {
         SfxItemIter aNIter( *((SwAttrSetChg*)pNew)->GetChgSet() );
         SfxItemIter aOIter( *((SwAttrSetChg*)pOld)->GetChgSet() );
-        while( sal_True )
+        while( true )
         {
             _UpdateAttrFrm( (SfxPoolItem*)aOIter.GetCurItem(),
                          (SfxPoolItem*)aNIter.GetCurItem(), nInvFlags );
@@ -339,7 +339,7 @@ void SwFrm::_UpdateAttrFrm( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
         {
             if ( IsRowFrm() )
             {
-                sal_Bool bInFollowFlowRow = 0 != IsInFollowFlowRow();
+                bool bInFollowFlowRow = 0 != IsInFollowFlowRow();
                 if ( bInFollowFlowRow || 0 != IsInSplitTableRow() )
                 {
                     SwTabFrm* pTab = FindTabFrm();
@@ -1364,7 +1364,7 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
         return 0L;
 
     const ViewShell *pSh = getRootFrm()->GetCurrShell();
-    const sal_Bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
+    const bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
 
     //The (Page-)Body only changes in BrowseMode, but only if it does not
     //contain columns.
@@ -1522,13 +1522,13 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
                 SwFtnContFrm* pCont = (SwFtnContFrm*)GetNext();
                 SwTwips nMinH = 0;
                 SwFtnFrm* pFtn = (SwFtnFrm*)pCont->Lower();
-                sal_Bool bFtn = sal_False;
+                bool bFtn = false;
                 while( pFtn )
                 {
                     if( !pFtn->GetAttr()->GetFtn().IsEndNote() )
                     {
                         nMinH += (pFtn->Frm().*fnRect->fnGetHeight)();
-                        bFtn = sal_True;
+                        bFtn = true;
                     }
                     pFtn = (SwFtnFrm*)pFtn->GetNext();
                 }
@@ -1849,7 +1849,7 @@ SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
         nDist = LONG_MAX - nFrmHeight;
 
     const ViewShell *pSh = getRootFrm()->GetCurrShell();
-    const sal_Bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
+    const bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
     const sal_uInt16 nTmpType = bBrowse ? 0x2084: 0x2004; //Row+Cell, Browse with Body
     if( !(GetUpper()->GetType() & nTmpType) && GetUpper()->HasFixSize() )
     {
@@ -2078,7 +2078,7 @@ void SwCntntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
         SfxItemIter aOIter( *((SwAttrSetChg*)pOld)->GetChgSet() );
         SwAttrSetChg aOldSet( *(SwAttrSetChg*)pOld );
         SwAttrSetChg aNewSet( *(SwAttrSetChg*)pNew );
-        while( sal_True )
+        while( true )
         {
             _UpdateAttr( (SfxPoolItem*)aOIter.GetCurItem(),
                          (SfxPoolItem*)aNIter.GetCurItem(), nInvFlags,
@@ -2145,7 +2145,7 @@ void SwCntntFrm::_UpdateAttr( const SfxPoolItem* pOld, const SfxPoolItem* pNew,
                               sal_uInt8 &rInvFlags,
                             SwAttrSetChg *pOldSet, SwAttrSetChg *pNewSet )
 {
-    sal_Bool bClear = sal_True;
+    bool bClear = true;
     sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     switch ( nWhich )
     {
@@ -2276,7 +2276,7 @@ void SwCntntFrm::_UpdateAttr( const SfxPoolItem* pOld, const SfxPoolItem* pNew,
             /* no break here */
 
         default:
-            bClear = sal_False;
+            bClear = false;
     }
     if ( bClear )
     {
@@ -2358,7 +2358,7 @@ SwTwips SwLayoutFrm::InnerHeight() const
 SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 {
     const ViewShell *pSh = getRootFrm()->GetCurrShell();
-    const sal_Bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
+    const bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
     const sal_uInt16 nTmpType = bBrowse ? 0x2084: 0x2004; //Row+Cell, Browse with Body
     if( !(GetType() & nTmpType) && HasFixSize() )
         return 0;
@@ -2384,16 +2384,16 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
     }
 
     SwRect aOldFrm( Frm() );
-    sal_Bool bMoveAccFrm = sal_False;
+    bool bMoveAccFrm = false;
 
-    sal_Bool bChgPos = IsVertical() && !IsReverse();
+    bool bChgPos = IsVertical() && !IsReverse();
     if ( !bTst )
     {
         (Frm().*fnRect->fnSetHeight)( nFrmHeight + nDist );
         //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
         if( bChgPos && !IsVertLR() )
             Frm().Pos().X() -= nDist;
-        bMoveAccFrm = sal_True;
+        bMoveAccFrm = true;
     }
 
     SwTwips nReal = nDist - nMin;
@@ -2475,7 +2475,7 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
             //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
             if( bChgPos && !IsVertLR() )
                 Frm().Pos().X() = nFrmPos - nReal;
-            bMoveAccFrm = sal_True;
+            bMoveAccFrm = true;
         }
 
         if ( nReal )
@@ -2524,7 +2524,7 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 {
     const ViewShell *pSh = getRootFrm()->GetCurrShell();
-    const sal_Bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
+    const bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
     const sal_uInt16 nTmpType = bBrowse ? 0x2084: 0x2004; //Row+Cell, Browse mit Body
     if( !(GetType() & nTmpType) && HasFixSize() )
         return 0;
@@ -2536,7 +2536,7 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
         nDist = nFrmHeight;
 
     SwTwips nMin = 0;
-    sal_Bool bChgPos = IsVertical() && !IsReverse();
+    bool bChgPos = IsVertical() && !IsReverse();
     if ( Lower() )
     {
         if( !Lower()->IsNeighbourFrm() )
@@ -2556,7 +2556,7 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
         return nDist;
 
     SwRect aOldFrm( Frm() );
-    sal_Bool bMoveAccFrm = sal_False;
+    bool bMoveAccFrm = false;
 
     SwTwips nRealDist = nReal;
     if ( !bTst )
@@ -2565,7 +2565,7 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
         //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
         if( bChgPos && !IsVertLR() )
             Frm().Pos().X() += nReal;
-        bMoveAccFrm = sal_True;
+        bMoveAccFrm = true;
     }
 
     sal_uInt8 nAdjust = GetUpper() && GetUpper()->IsFtnBossFrm() ?
@@ -2743,7 +2743,7 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
                 pLowerFrm = pLowerFrm->GetNext();
             else
                 break;
-        } while( sal_True );
+        } while( true );
         // If found last lower is a section frame containing no section
         // (section frame isn't valid and will be deleted in the future),
         // travel backwards.
@@ -3199,7 +3199,7 @@ static void InvaPercentFlys( SwFrm *pFrm, SwTwips nDiff )
             const SwFmtFrmSize &rSz = pFly->GetFmt()->GetFrmSize();
             if ( rSz.GetWidthPercent() || rSz.GetHeightPercent() )
             {
-                sal_Bool bNotify = sal_True;
+                bool bNotify = true;
                 // If we've a fly with more than 90% relative height...
                 if( rSz.GetHeightPercent() > 90 && pFly->GetAnchorFrm() &&
                     rSz.GetHeightPercent() != 0xFF && nDiff )
@@ -3214,7 +3214,7 @@ static void InvaPercentFlys( SwFrm *pFrm, SwTwips nDiff )
                         ( nDiff + pRel->Prt().Height() )*9 &&
                         pFly->GetFmt()->GetSurround().GetSurround() !=
                         SURROUND_THROUGHT )
-                       bNotify = sal_False;
+                       bNotify = false;
                 }
                 if( bNotify )
                     pFly->InvalidateSize();
@@ -3267,7 +3267,7 @@ long SwLayoutFrm::CalcRel( const SwFmtFrmSize &rSz, sal_Bool ) const
         const SwFrm *pRel = GetUpper();
         long nRel = LONG_MAX;
         const ViewShell *pSh = getRootFrm()->GetCurrShell();
-        const sal_Bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
+        const bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
         if( pRel->IsPageBodyFrm() && pSh && bBrowseMode && pSh->VisArea().Width() )
         {
             nRel = pSh->GetBrowseWidth();
@@ -3315,7 +3315,7 @@ static long lcl_CalcMinColDiff( SwLayoutFrm *pLayFrm )
     return nDiff ? nDiff : nFirstDiff ? nFirstDiff : 240;
 }
 
-static sal_Bool lcl_IsFlyHeightClipped( SwLayoutFrm *pLay )
+static bool lcl_IsFlyHeightClipped( SwLayoutFrm *pLay )
 {
     SwFrm *pFrm = pLay->ContainsCntnt();
     while ( pFrm )
@@ -3334,13 +3334,13 @@ static sal_Bool lcl_IsFlyHeightClipped( SwLayoutFrm *pLay )
                     SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
                     if ( pFly->IsHeightClipped() &&
                          ( !pFly->IsFlyFreeFrm() || pFly->GetPageFrm() ) )
-                        return sal_True;
+                        return true;
                 }
             }
         }
         pFrm = pFrm->FindNextCnt();
     }
-    return sal_False;
+    return false;
 }
 
 /*************************************************************************
@@ -3363,8 +3363,8 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
     const SwFmtCol &rCol = rAttrs.GetAttrSet().GetCol();
     const sal_uInt16 nNumCols = rCol.GetNumCols();
 
-    sal_Bool bEnd = sal_False;
-    sal_Bool bBackLock = sal_False;
+    bool bEnd = false;
+    bool bBackLock = false;
     ViewShell *pSh = getRootFrm()->GetCurrShell();
     SwViewImp *pImp = pSh ? pSh->Imp() : 0;
     {
@@ -3439,7 +3439,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                     SwFrm* pFtnAny = pFtnCont->ContainsAny();
                     if( pFtnAny && pFtnAny->IsValid() )
                     {
-                        bBackLock = sal_True;
+                        bBackLock = true;
                         ((SwSectionFrm*)this)->SetFtnLock( sal_True );
                     }
                 }
@@ -3497,7 +3497,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
             pCol = (SwLayoutFrm*)Lower();
             OSL_ENSURE( pCol && pCol->GetNext(), ":-( column making holidays?");
             // set bMinDiff if no empty columns exist
-            sal_Bool bMinDiff = sal_True;
+            bool bMinDiff = true;
             // OD 28.03.2003 #108446# - check for all column content and all columns
             while ( bMinDiff && pCol )
             {
@@ -3511,7 +3511,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
             SwTwips nMaxFree = 0;
             SwTwips nAllFree = LONG_MAX;
             // set bFoundLower if there is at least one non-empty column
-            sal_Bool bFoundLower = sal_False;
+            bool bFoundLower = false;
             while( pCol )
             {
                 SwLayoutFrm* pLay = (SwLayoutFrm*)pCol->Lower();
@@ -3519,7 +3519,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                                        (pLay->Prt().*fnRect->fnGetHeight)();
                 if( pLay->Lower() )
                 {
-                    bFoundLower = sal_True;
+                    bFoundLower = true;
                     nInnerHeight += pLay->InnerHeight();
                 }
                 else if( nInnerHeight < 0 )
@@ -3527,7 +3527,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
 
                 if( pLay->GetNext() )
                 {
-                    bFoundLower = sal_True;
+                    bFoundLower = true;
                     pLay = (SwLayoutFrm*)pLay->GetNext();
                     OSL_ENSURE( pLay->IsFtnContFrm(),"FtnContainer exspected" );
                     nInnerHeight += pLay->InnerHeight();
@@ -3684,10 +3684,10 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                     }
                 }
                 else
-                    bEnd = sal_True;
+                    bEnd = true;
             }
             else
-                bEnd = sal_True;
+                bEnd = true;
 
         } while ( !bEnd || !bValidSize );
     }

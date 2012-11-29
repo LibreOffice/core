@@ -356,7 +356,7 @@ sal_uLong SwXMLTextBlocks::PutBlock( SwPaM& , const String& )
     // Save OLE objects if there are some
     SwDocShell *pDocSh = pDoc->GetDocShell();
 
-    sal_Bool bHasChildren = pDocSh && pDocSh->GetEmbeddedObjectContainer().HasEmbeddedObjects();
+    bool bHasChildren = pDocSh && pDocSh->GetEmbeddedObjectContainer().HasEmbeddedObjects();
     if( !nRes && bHasChildren )
     {
         // we have to write to the temporary storage first, since the used below functions are optimized
