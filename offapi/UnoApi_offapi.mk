@@ -269,7 +269,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/smarttags,
 	SmartTagRecognizer \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/system,\
-	ProxySettings \
 	SimpleCommandMail \
 	SimpleSystemMail \
 	SystemShellExecute \
@@ -1179,10 +1178,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/style,\
 	Style \
 	StyleFamilies \
 	StyleFamily \
-))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/system,\
-	SOffice52ProxySettings \
-	SystemProxySettings \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/table,\
 	AccessibleCellView \
@@ -3477,7 +3472,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/system,\
 	SimpleMailClientFlags \
 	SystemShellExecuteException \
 	SystemShellExecuteFlags \
-	XProxySettings \
 	XSimpleMailClient \
 	XSimpleMailClientSupplier \
 	XSimpleMailMessage \

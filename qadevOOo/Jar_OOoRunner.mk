@@ -788,7 +788,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/style/_Style \
     qadevOOo/tests/java/ifc/style/_XStyle \
     qadevOOo/tests/java/ifc/style/_XStyleFamiliesSupplier \
-    qadevOOo/tests/java/ifc/system/_XProxySettings \
     qadevOOo/tests/java/ifc/system/_XSimpleMailClientSupplier \
     qadevOOo/tests/java/ifc/system/_XSystemShellExecute \
     qadevOOo/tests/java/ifc/table/_CellProperties \
@@ -1127,8 +1126,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_pcr/ObjectInspectorModel \
     qadevOOo/tests/java/mod/_proxyfac/ProxyFactory \
     qadevOOo/tests/java/mod/_proxyfac/uno/ProxyFactory \
-    qadevOOo/tests/java/mod/_proxyset/SOffice52ProxySettings \
-    qadevOOo/tests/java/mod/_proxyset/SystemProxySettings \
     qadevOOo/tests/java/mod/_qadevOOo/SelfTest \
     qadevOOo/tests/java/mod/_rdbtdp/RegistryTypeDescriptionProvider \
     qadevOOo/tests/java/mod/_regtypeprov/uno/RegistryTypeDescriptionProvider \

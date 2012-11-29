@@ -64,7 +64,6 @@ job63=mcnttype.MimeContentTypeFactory
 job64=namingservice.uno.NamingService
 job65=nestedreg.uno.NestedRegistry
 job66=proxyfac.uno.ProxyFactory
-job67=proxyset.SOffice52ProxySettings
 job68=regtypeprov.uno.RegistryTypeDescriptionProvider
 job69=remotebridge.uno.various
 job70=sc.AccessibleEditableTextPara_HeaderFooter
