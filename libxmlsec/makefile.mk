@@ -74,7 +74,8 @@ PATCH_FILES=\
    xmlsec1-vc10.patch \
    xmlsec1-1.2.14_fix_extern_c.patch \
    xmlsec1-android.patch \
-   xmlsec1-1.2.14-ansi.patch
+   xmlsec1-1.2.14-ansi.patch \
+   xmlsec1-oldlibtool.patch
 
 .IF "$(GUI)$(COM)"=="WNTGCC"
    PATCH_FILES+=xmlsec1-mingw32.patch
@@ -117,7 +118,7 @@ CONF_ILIB=-L$(ILIB:s/;/ -L/)
 .ENDIF
 
 CONFIGURE_DIR=
-CONFIGURE_ACTION=autoreconf -i; ./configure
+CONFIGURE_ACTION=autoreconf; ./configure
 
 BUILD_AND_HOST=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) MINGW_SYSROOT=$(MINGW_SYSROOT) OBJDUMP="$(OBJDUMP)"
 
@@ -175,11 +176,8 @@ LDFLAGS:=$(xmlsec_LDFLAGS)
 .EXPORT: LDFLAGS
 
 .ENDIF
-.IF "$(OS)" != "MACOSX"
-AUTOCONFINSTALLFLAG=-i
-.ENDIF
 CONFIGURE_DIR=
-CONFIGURE_ACTION=autoreconf $(AUTOCONFINSTALLFLAG); ./configure ADDCFLAGS="$(xmlsec_CFLAGS)" CPPFLAGS="$(xmlsec_CPPFLAGS)"
+CONFIGURE_ACTION=autoreconf; ./configure ADDCFLAGS="$(xmlsec_CFLAGS)" CPPFLAGS="$(xmlsec_CPPFLAGS)"
 
 .IF "$(OS)" == "MACOSX"
 .IF "$(ACLOCAL)" == ""
