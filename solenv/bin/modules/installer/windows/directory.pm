@@ -170,6 +170,7 @@ sub create_unique_directorynames
         $uniquename =~ s/_frame/_frm/g;
         $uniquename =~ s/_table/_tbl/g;
         $uniquename =~ s/_chart/_crt/g;
+        $uniquename =~ s/_plat-linux/_plx/g;
 
         my $startlength = 5;
 
