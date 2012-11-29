@@ -266,6 +266,12 @@ sal_Bool SwIoSystem::IsFileFilter(SfxMedium& rMedium, const String& rFmtName)
                     }
                 }
             }
+            //The same underlying filter can appear multiple times in the
+            //filter list, e.g. CWW8 filter twice, once for .doc and once for
+            //.dot.  We just care here if its either, not enforce that it's
+            //both which would be a bit of an odd requirement
+            if (bRet)
+                break;
         }
 
         pFltr = aIter.Next();
