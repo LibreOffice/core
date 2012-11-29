@@ -119,6 +119,14 @@ String RID_GALLERYSTR_THEME_SURFACES
 
 // -----------------------------------------------------------------------------
 
+String RID_GALLERYSTR_THEME_HTMLBUTTONS
+{
+    // !!! Don't translate, please !!!
+    Text = "private://gallery/hidden/HtmlExportButtons";
+};
+
+// -----------------------------------------------------------------------------
+
 String RID_GALLERYSTR_THEME_POWERPOINT
 {
     // !!! Don't translate, please !!!
