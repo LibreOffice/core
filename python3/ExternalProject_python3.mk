@@ -28,19 +28,19 @@ ifeq ($(VCVER),110)
 	cd $(EXTERNAL_WORKDIR)/PCbuild \
 	&& MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build /p:Configuration=Release /p:PlatformToolset=v110 \
 	&& cd $(EXTERNAL_WORKDIR) \
-	&& ln -s $(if $(filter 90,$(VCVER)),PC/VS9.0,PCbuild) LO_lib \
+	&& ln -s PCbuild LO_lib \
 	&& touch $@
 else ifeq ($(VCVER),100)
 	cd $(EXTERNAL_WORKDIR)/PCbuild \
-	&& MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build /p:Configuration=Release /ToolsVersion:4.0 \
+	&& MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build /p:Configuration=Release /p:PlatformToolset=Windows7.1SDK /ToolsVersion:4.0 \
 	&& cd $(EXTERNAL_WORKDIR) \
-	&& ln -s $(if $(filter 90,$(VCVER)),PC/VS9.0,PCbuild) LO_lib \
+	&& ln -s PCbuild LO_lib \
 	&& touch $@
 else ifeq ($(VCVER),90)
 	cd $(EXTERNAL_WORKDIR)/PC/VS9.0 \
 	&& MAKEFLAGS= $(COMPATH)/vcpackages/vcbuild.exe pcbuild.sln "Release|$(if $(filter INTEL,$(CPUNAME)),Win32,x64)" \
 	&& cd $(EXTERNAL_WORKDIR) \
-	&& ln -s $(if $(filter 90,$(VCVER)),PC/VS9.0,PCbuild) LO_lib \
+	&& ln -s PC/VS9.0 LO_lib \
 	&& touch $@
 endif
 
