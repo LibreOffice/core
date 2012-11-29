@@ -221,9 +221,10 @@ class SVT_DLLPUBLIC SvLBoxContextBmp : public SvLBoxItem
 {
     SvLBoxContextBmp_Impl*  m_pImpl;
 public:
-                    SvLBoxContextBmp( SvTreeListEntry*,sal_uInt16 nFlags,Image,Image,
-                                    sal_uInt16 nEntryFlagsBmp1);
-                    SvLBoxContextBmp();
+    SvLBoxContextBmp(
+        SvTreeListEntry* pEntry, sal_uInt16 nItemFlags, Image aBmp1, Image aBmp2, bool bExpanded);
+    SvLBoxContextBmp();
+
     virtual         ~SvLBoxContextBmp();
     virtual sal_uInt16 GetType() const;
     virtual void    InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* );

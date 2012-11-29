@@ -393,6 +393,7 @@ SvTreeListBox::SvTreeListBox(Window* pParent, WinBits nWinStyle) :
     DropTargetHelper(this),
     DragSourceHelper(this),
     mpImpl(new SvTreeListBoxImpl(*this)),
+    mbContextBmpExpanded(false),
     eSelMode(NO_SELECTION)
 {
     DBG_CTOR(SvTreeListBox,0);
@@ -421,6 +422,7 @@ SvTreeListBox::SvTreeListBox(Window* pParent, const ResId& rResId) :
     DropTargetHelper(this),
     DragSourceHelper(this),
     mpImpl(new SvTreeListBoxImpl(*this)),
+    mbContextBmpExpanded(false),
     eSelMode(NO_SELECTION)
 {
     DBG_CTOR(SvTreeListBox,0);
@@ -1499,7 +1501,7 @@ void SvTreeListBox::InitTreeView()
     nEntryHeightOffs = SV_ENTRYHEIGHTOFFS_PIXEL;
     pImp = new SvImpLBox( this, GetModel(), GetStyle() );
 
-    aContextBmpMode = SVLISTENTRYFLAG_EXPANDED;
+    mbContextBmpExpanded = true;
     nContextBmpWidthMax = 0;
     SetFont( GetFont() );
     SetSpaceBetweenEntries( 0 );
@@ -1744,8 +1746,8 @@ void SvTreeListBox::InitEntry(SvTreeListEntry* pEntry,
         pEntry->AddItem( pButton );
     }
 
-    pContextBmp= new SvLBoxContextBmp( pEntry,0, aCollEntryBmp,aExpEntryBmp,
-                                     aContextBmpMode );
+    pContextBmp= new SvLBoxContextBmp(
+        pEntry,0, aCollEntryBmp,aExpEntryBmp, mbContextBmpExpanded);
     pEntry->AddItem( pContextBmp );
 
     pString = new SvLBoxString( pEntry, 0, aStr );

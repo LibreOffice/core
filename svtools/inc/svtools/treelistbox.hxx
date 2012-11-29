@@ -234,9 +234,8 @@ class SVT_DLLPUBLIC SvTreeListBox
     short           nFocusWidth;
     sal_uInt16      nFirstSelTab;
     sal_uInt16      nLastSelTab;
-    sal_uInt16      aContextBmpMode;
-
     long mnCheckboxItemWidth;
+    bool mbContextBmpExpanded;
 
     SvTreeListEntry*    pHdlEntry;
     SvLBoxItem*     pHdlItem;
@@ -637,8 +636,6 @@ public:
 
     void            SetCheckButtonState( SvTreeListEntry*, SvButtonState );
     SvButtonState   GetCheckButtonState( SvTreeListEntry* ) const;
-
-    sal_Bool            IsExpandBitmapOnCursor() const  { return (sal_Bool)(aContextBmpMode & SVLISTENTRYFLAG_FOCUSED)!=0; }
 
     void            SetEntryText(SvTreeListEntry*, const XubString& );
     void            SetExpandedEntryBmp( SvTreeListEntry* _pEntry, const Image& _rImage );

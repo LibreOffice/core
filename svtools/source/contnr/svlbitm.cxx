@@ -467,20 +467,21 @@ struct SvLBoxContextBmp_Impl
     Image       m_aImage1;
     Image       m_aImage2;
 
-    sal_uInt16      m_nB2IndicatorFlags;
+    bool        m_bExpanded;
 };
 
 // ***************************************************************
 DBG_NAME(SvLBoxContextBmp)
 
-SvLBoxContextBmp::SvLBoxContextBmp( SvTreeListEntry* pEntry, sal_uInt16 nItemFlags,
-    Image aBmp1, Image aBmp2, sal_uInt16 nEntryFlags )
+SvLBoxContextBmp::SvLBoxContextBmp(
+    SvTreeListEntry* pEntry, sal_uInt16 nItemFlags, Image aBmp1, Image aBmp2,
+    bool bExpanded)
     :SvLBoxItem( pEntry, nItemFlags )
     ,m_pImpl( new SvLBoxContextBmp_Impl )
 {
     DBG_CTOR(SvLBoxContextBmp,0);
 
-    m_pImpl->m_nB2IndicatorFlags = nEntryFlags;
+    m_pImpl->m_bExpanded = bExpanded;
     SetModeImages( aBmp1, aBmp2 );
 }
 
@@ -488,7 +489,7 @@ SvLBoxContextBmp::SvLBoxContextBmp()
     :SvLBoxItem( )
     ,m_pImpl( new SvLBoxContextBmp_Impl )
 {
-    m_pImpl->m_nB2IndicatorFlags = 0;
+    m_pImpl->m_bExpanded = false;
     DBG_CTOR(SvLBoxContextBmp,0);
 }
 
@@ -537,8 +538,8 @@ void SvLBoxContextBmp::Paint(
 {
     DBG_CHKTHIS(SvLBoxContextBmp,0);
 
-    // get the image (TODO: Avoid directly referencing the flags).
-    const Image& rImage = implGetImageStore( 0 == (pView->GetFlags() & m_pImpl->m_nB2IndicatorFlags ) );
+    // get the image.
+    const Image& rImage = implGetImageStore(pView->IsExpanded() != m_pImpl->m_bExpanded);
 
     sal_Bool _bSemiTransparent = pEntry && ( 0 != ( SV_ENTRYFLAG_SEMITRANSPARENT  & pEntry->GetFlags( ) ) );
     // draw
@@ -559,7 +560,7 @@ void SvLBoxContextBmp::Clone( SvLBoxItem* pSource )
     DBG_CHKTHIS(SvLBoxContextBmp,0);
     m_pImpl->m_aImage1 = static_cast< SvLBoxContextBmp* >( pSource )->m_pImpl->m_aImage1;
     m_pImpl->m_aImage2 = static_cast< SvLBoxContextBmp* >( pSource )->m_pImpl->m_aImage2;
-    m_pImpl->m_nB2IndicatorFlags = static_cast< SvLBoxContextBmp* >( pSource )->m_pImpl->m_nB2IndicatorFlags;
+    m_pImpl->m_bExpanded = static_cast<SvLBoxContextBmp*>(pSource)->m_pImpl->m_bExpanded;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
