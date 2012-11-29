@@ -25,6 +25,7 @@
 #include <com/sun/star/inspection/LineDescriptor.idl>
 #include <com/sun/star/lang/NullPointerException.idl>
 #include <com/sun/star/beans/UnknownPropertyException.idl>
+#include <com/sun/star/beans/PropertyVetoException.idl>
 #include <com/sun/star/lang/XComponent.idl>
 #include <com/sun/star/inspection/InteractiveSelectionResult.idl>
 
@@ -86,7 +87,8 @@ interface XPropertyHandler
     */
     void
         setPropertyValue( [in] string PropertyName, [in] any Value )
-        raises (::com::sun::star::beans::UnknownPropertyException);
+        raises (::com::sun::star::beans::UnknownPropertyException,
+                ::com::sun::star::beans::PropertyVetoException);
 
     /** returns the state of a property
 

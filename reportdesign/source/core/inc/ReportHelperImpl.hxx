@@ -33,7 +33,7 @@ void SAL_CALL clazz::setName( const ::rtl::OUString& _name ) throw (uno::Runtime
 { \
     return getSize().Height; \
 } \
-void SAL_CALL clazz::setHeight( ::sal_Int32 _height ) throw (uno::RuntimeException) \
+void SAL_CALL clazz::setHeight( ::sal_Int32 _height ) throw (uno::RuntimeException,beans::PropertyVetoException) \
 { \
     awt::Size aSize = getSize(); \
     aSize.Height = _height; \
@@ -63,7 +63,7 @@ void SAL_CALL clazz::setPositionY( ::sal_Int32 _positiony ) throw (uno::RuntimeE
 { \
     return getSize().Width; \
 } \
-void SAL_CALL clazz::setWidth( ::sal_Int32 _width ) throw (uno::RuntimeException) \
+void SAL_CALL clazz::setWidth( ::sal_Int32 _width ) throw (uno::RuntimeException,beans::PropertyVetoException) \
 { \
     awt::Size aSize = getSize(); \
     aSize.Width = _width; \

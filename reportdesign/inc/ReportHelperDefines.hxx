@@ -38,13 +38,13 @@
     virtual ::rtl::OUString SAL_CALL getName() throw (::com::sun::star::uno::RuntimeException); \
     virtual void SAL_CALL setName(const ::rtl::OUString & the_value) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::PropertyVetoException); \
     virtual ::sal_Int32 SAL_CALL getHeight() throw (::com::sun::star::uno::RuntimeException); \
-    virtual void SAL_CALL setHeight(::sal_Int32 the_value) throw (::com::sun::star::uno::RuntimeException); \
+    virtual void SAL_CALL setHeight(::sal_Int32 the_value) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::PropertyVetoException); \
     virtual ::sal_Int32 SAL_CALL getPositionX() throw (::com::sun::star::uno::RuntimeException); \
     virtual void SAL_CALL setPositionX(::sal_Int32 the_value) throw (::com::sun::star::uno::RuntimeException); \
     virtual ::sal_Int32 SAL_CALL getPositionY() throw (::com::sun::star::uno::RuntimeException); \
     virtual void SAL_CALL setPositionY(::sal_Int32 the_value) throw (::com::sun::star::uno::RuntimeException); \
     virtual ::sal_Int32 SAL_CALL getWidth() throw (::com::sun::star::uno::RuntimeException); \
-    virtual void SAL_CALL setWidth(::sal_Int32 the_value) throw (::com::sun::star::uno::RuntimeException); \
+    virtual void SAL_CALL setWidth(::sal_Int32 the_value) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::PropertyVetoException); \
     virtual ::sal_Int16 SAL_CALL getControlBorder() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException); \
     virtual void SAL_CALL setControlBorder(::sal_Int16 the_value) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::beans::UnknownPropertyException); \
     virtual ::sal_Int32 SAL_CALL getControlBorderColor() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException); \

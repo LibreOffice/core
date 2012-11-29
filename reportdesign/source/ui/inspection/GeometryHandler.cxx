@@ -469,7 +469,7 @@ uno::Any SAL_CALL GeometryHandler::getPropertyValue(const ::rtl::OUString & Prop
     return aPropertyValue;
 }
 
-void SAL_CALL GeometryHandler::setPropertyValue(const ::rtl::OUString & PropertyName, const uno::Any & Value) throw (uno::RuntimeException, beans::UnknownPropertyException)
+void SAL_CALL GeometryHandler::setPropertyValue(const ::rtl::OUString & PropertyName, const uno::Any & Value) throw (uno::RuntimeException, beans::UnknownPropertyException, beans::PropertyVetoException)
 {
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
     uno::Any aNewValue = Value;

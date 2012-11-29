@@ -64,7 +64,10 @@ interface XReportComponent
 
     /** specifies the height of the control.
      */
-    [attribute,bound] long Height;
+    [attribute,bound] long Height
+    {
+        set raises ( com::sun::star::beans::PropertyVetoException );
+    };
 
     /** specifies the horizontal position of the control.
      */
@@ -76,7 +79,10 @@ interface XReportComponent
 
     /** specifies the width of the control.
      */
-    [attribute,bound] long Width;
+    [attribute,bound] long Width
+    {
+        set raises ( com::sun::star::beans::PropertyVetoException );
+    };
 
     /** specifies the border style of the control.
 
