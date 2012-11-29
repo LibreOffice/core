@@ -48,6 +48,7 @@
 #include "optpath.hxx"
 #include "optsave.hxx"
 #include "optupdt.hxx"
+#include "personalization.hxx"
 #include "treeopt.hxx"
 
 #include <com/sun/star/awt/XContainerWindowEventHandler.hpp>
@@ -303,6 +304,7 @@ SfxTabPage* CreateGeneralTabPage( sal_uInt16 nId, Window* pParent, const SfxItem
         case RID_SVXPAGE_INET_PROXY:                fnCreate = &SvxProxyTabPage::Create; break;
         case RID_SVXPAGE_INET_SECURITY:             fnCreate = &SvxSecurityTabPage::Create; break;
         case RID_SVXPAGE_INET_MAIL:                 fnCreate = &SvxEMailTabPage::Create; break;
+        case RID_SVXPAGE_PERSONALIZATION:           fnCreate = &SvxPersonalizationTabPage::Create; break;
         case RID_SVXPAGE_COLORCONFIG:               fnCreate = &SvxColorOptionsTabPage::Create; break;
         case RID_OFAPAGE_HTMLOPT:                   fnCreate = &OfaHtmlTabPage::Create; break;
         case SID_OPTFILTER_MSOFFICE:                fnCreate = &OfaMSFilterTabPage::Create; break;
@@ -342,6 +344,7 @@ static OptionsMapping_Impl const OptionsMap_Impl[] =
     { "ProductName",        "Colors",               RID_SVXPAGE_COLOR },
     { "ProductName",        "Fonts",                RID_SVX_FONT_SUBSTITUTION },
     { "ProductName",        "Security",             RID_SVXPAGE_INET_SECURITY },
+    { "ProductName",        "Personalization",      RID_SVXPAGE_PERSONALIZATION },
     { "ProductName",        "Appearance",           RID_SVXPAGE_COLORCONFIG },
     { "ProductName",        "Accessibility",        RID_SVXPAGE_ACCESSIBILITYCONFIG },
     { "ProductName",        "Java",                 RID_SVXPAGE_OPTIONS_JAVA },
