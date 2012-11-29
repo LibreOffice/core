@@ -44,7 +44,7 @@ published constants PropertyAttribute
 
     /** indicates that a <type>PropertyChangeEvent</type> will be fired
         to all registered <type>XVetoableChangeListener</type>s whenever the
-        value of this property changes.
+        value of this property is about to change.
 
             <p>This always implies that the property is <em>bound</em>, too. </p>
      */
