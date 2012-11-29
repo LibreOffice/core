@@ -27,7 +27,7 @@ endif
 
 # This list tells which modules are gbuild ones. It does *not* tell which modules to build. That is directed
 # by the module being mentioned in packimages/prj/build.lst, etc, recursively.
-$(WORKDIR)/modules.mk:
+$(WORKDIR)/modules.mk: $(wildcard */Module_*.mk) $(wildcard */prj/dmake)
 	echo -n "gbuild_modules:=" > $@
 	for m in */Module_*.mk; do echo $$m | sed -e 's/\/.*$$/ \\/'; done >> $@
 	echo >> $@
