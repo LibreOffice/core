@@ -20,6 +20,7 @@ $(eval $(call gb_UI_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/indexentry \
 	sw/uiconfig/swriter/ui/insertbookmark \
 	sw/uiconfig/swriter/ui/insertbreak \
+	sw/uiconfig/swriter/ui/insertfootnote \
 	sw/uiconfig/swriter/ui/insertscript \
 	sw/uiconfig/swriter/ui/inserttable \
 	sw/uiconfig/swriter/ui/linenumbering \
