@@ -382,12 +382,7 @@ public:
 private:
     condformat::ScCondFormatDateType meType;
 
-    struct ScCondDateFormatCache
-    {
-        Date aCachedDate;
-    };
-
-    boost::scoped_ptr<ScCondDateFormatCache> mpCache;
+    mutable boost::scoped_ptr<Date> mpCache;
 
     rtl::OUString maStyleName;
 };

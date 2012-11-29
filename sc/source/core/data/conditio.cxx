@@ -1663,9 +1663,9 @@ bool ScCondDateFormatEntry::IsValid( const ScAddress& rPos ) const
         return false;
 
     if( !mpCache )
-        mpCache->aCachedDate = Date( Date::SYSTEM );
+        mpCache.reset( new Date( Date::SYSTEM ) );
 
-    const Date& rActDate = mpCache->aCachedDate;
+    const Date& rActDate = *mpCache;
     SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
     long nCurrentDate = rActDate - *(pFormatter->GetNullDate());
 
