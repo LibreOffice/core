@@ -46,7 +46,14 @@ void SAL_CALL clazz::setHeight( ::sal_Int32 _height ) throw (uno::RuntimeExcepti
 { \
     awt::Size aSize = getSize(); \
     aSize.Height = _height; \
-    setSize(aSize); \
+    try \
+    { \
+        setSize(aSize); \
+    } \
+    catch (const beans::PropertyVetoException &)      \
+    { \
+        throw uno::RuntimeException("Unacceptable height", static_cast<cppu::OWeakObject*>(this)); \
+    } \
 } \
 ::sal_Int32 SAL_CALL clazz::getPositionX() throw (uno::RuntimeException) \
 { \
@@ -76,7 +83,14 @@ void SAL_CALL clazz::setWidth( ::sal_Int32 _width ) throw (uno::RuntimeException
 { \
     awt::Size aSize = getSize(); \
     aSize.Width = _width; \
-    setSize(aSize); \
+    try \
+    { \
+        setSize(aSize); \
+    } \
+    catch (const beans::PropertyVetoException &)      \
+    { \
+        throw uno::RuntimeException("Unacceptable width", static_cast<cppu::OWeakObject*>(this)); \
+    } \
 } \
 uno::Reference< report::XSection > SAL_CALL clazz::getSection() throw (uno::RuntimeException) \
 { \
