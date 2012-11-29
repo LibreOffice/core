@@ -186,6 +186,8 @@ private:
     VectorOfNodes   LoadNodes( Module* pModule, const rtl::OUString& rExtensionId );
     void            InsertNodes( const VectorOfNodes& rNodeList );
 
+    void SetPaneSize(Window *pPane);
+
 protected:
     DECL_LINK(ExpandedHdl_Impl, SvTreeListBox* );
     DECL_LINK(ShowPageHdl_Impl, void *);

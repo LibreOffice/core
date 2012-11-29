@@ -913,6 +913,18 @@ long    OfaTreeOptionsDialog::Notify( NotifyEvent& rNEvt )
 }
 
 // --------------------------------------------------------------------
+void OfaTreeOptionsDialog::SetPaneSize(Window *pPane)
+{
+    //The OfaTreeOptionsDialog is not fully widget layout enabled
+    //yet so it's a classic fixed dimension dialog, but to make
+    //it possible to incrementally convert it over each pane
+    //can be converted to .ui layout format and the fixed area
+    //size reserved for panes is allocated to them here
+    Point aPos(aSeparatorFL.GetPosPixel().X(), aTreeLB.GetPosPixel().Y());
+    Size aSize(aSeparatorFL.GetSizePixel().Width(),
+               aSeparatorFL.GetPosPixel().Y() - aTreeLB.GetPosPixel().Y());
+    pPane->SetPosSizePixel( aPos, aSize );
+}
 
 void OfaTreeOptionsDialog::SelectHdl_Impl()
 {
@@ -1050,6 +1062,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
 
             if(!pPageInfo->m_pPage && pGroupInfo->m_pModule)
                 pPageInfo->m_pPage = pGroupInfo->m_pModule->CreateTabPage(pPageInfo->m_nPageId, this, *pGroupInfo->m_pInItemSet);
+
         }
 
         DBG_ASSERT( pPageInfo->m_pPage, "tabpage could not created");
@@ -1069,6 +1082,8 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
             {
                 pPageInfo->m_pPage->Reset( *pGroupInfo->m_pInItemSet );
             }
+            if (pPageInfo->m_pPage->isLayoutEnabled())
+                SetPaneSize(pPageInfo->m_pPage);
         }
     }
     else if ( 0 == pPageInfo->m_nPageId && !pPageInfo->m_pExtPage )
@@ -1085,10 +1100,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
         pPageInfo->m_pExtPage = new ExtensionsTabPage(
             this, 0, pPageInfo->m_sPageURL, pPageInfo->m_sEventHdl, m_xContainerWinProvider );
 
-        Point aPos(aSeparatorFL.GetPosPixel().X(), aTreeLB.GetPosPixel().Y());
-        Size aSize(aSeparatorFL.GetSizePixel().Width(),
-                   aSeparatorFL.GetPosPixel().Y() - aTreeLB.GetPosPixel().Y());
-        pPageInfo->m_pExtPage->SetPosSizePixel( aPos, aSize );
+        SetPaneSize(pPageInfo->m_pExtPage);
     }
 
     if ( pPageInfo->m_pPage )

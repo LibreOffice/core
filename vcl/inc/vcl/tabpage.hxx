@@ -38,8 +38,6 @@ private:
     SAL_DLLPRIVATE void ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void ImplInitSettings();
 
-    bool isLayoutEnabled() const;
-
 public:
                     TabPage( Window* pParent, WinBits nStyle = 0 );
                     TabPage(Window *pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription);
@@ -54,6 +52,8 @@ public:
 
     virtual void    ActivatePage();
     virtual void    DeactivatePage();
+
+    bool isLayoutEnabled() const;
 
     //To-Do, consider inheriting from VclContainer
     virtual void    SetPosSizePixel(const Point& rNewPos, const Size& rNewSize);
