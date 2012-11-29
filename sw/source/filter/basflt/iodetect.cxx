@@ -211,8 +211,7 @@ void TerminateBuffer(sal_Char *pBuffer, sal_uLong nBytesRead, sal_uLong nBufferL
 
 /* Feststellen ob das File in dem entsprechenden Format vorliegt. */
 /* Z.z werden nur unsere eigene Filter unterstuetzt               */
-sal_Bool SwIoSystem::IsFileFilter( SfxMedium& rMedium, const String& rFmtName,
-        const SfxFilter** ppFilter )
+sal_Bool SwIoSystem::IsFileFilter(SfxMedium& rMedium, const String& rFmtName)
 {
     sal_Bool bRet = sal_False;
 
@@ -267,9 +266,6 @@ sal_Bool SwIoSystem::IsFileFilter( SfxMedium& rMedium, const String& rFmtName,
                     }
                 }
             }
-
-            if( bRet && ppFilter  )
-                *ppFilter = pFltr;
         }
 
         pFltr = aIter.Next();

@@ -111,8 +111,7 @@ public:
 
     // Detect whether the given file is in the given format.
     // For now, only our own filters are supported!
-    static sal_Bool IsFileFilter( SfxMedium& rMedium, const String& rFmtName,
-            const SfxFilter** ppFlt = 0 );
+    static sal_Bool IsFileFilter(SfxMedium& rMedium, const String& rFmtName);
 
     static sal_Bool IsValidStgFilter( SotStorage& , const SfxFilter& );
     static sal_Bool IsValidStgFilter( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const SfxFilter& rFilter);
