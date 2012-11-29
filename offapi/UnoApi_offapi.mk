@@ -1180,10 +1180,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/style,\
 	StyleFamilies \
 	StyleFamily \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/sync,\
-	SyncCollector \
-	Synchronizer \
-))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/system,\
 	SOffice52ProxySettings \
 	SystemProxySettings \
@@ -3478,22 +3474,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/style,\
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/svg,\
 	XSVGPrinter \
 	XSVGWriter \
-))
-$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/sync,\
-	FilterData \
-	SyncAction \
-	SyncElement \
-	SyncEvent \
-	SyncInfo \
-	SyncMode \
-	SyncOptions \
-	SyncScheme \
-	SyncType \
-	XSyncCollector \
-	XSynchronizer \
-))
-$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/sync2,\
-	BadPartnershipException \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/system,\
 	SimpleMailClientFlags \

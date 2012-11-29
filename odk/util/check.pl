@@ -308,8 +308,6 @@ if (-d "$StartDir") {
                 "smarttags",
                 "style",
                 "svg",
-                "sync",
-                "sync2",
                 "system",
                 "table",
                 "task",

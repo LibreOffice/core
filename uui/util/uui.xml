@@ -58,7 +58,6 @@
     <type>com.sun.star.lang.XServiceInfo</type>
     <type>com.sun.star.lang.XTypeProvider</type>
     <type>com.sun.star.registry.XRegistryKey</type>
-    <type>com.sun.star.sync2.BadPartnershipException</type>
     <type>com.sun.star.task.InteractionClassification</type>
     <type>com.sun.star.task.NoMasterException</type>
     <type>com.sun.star.task.PasswordRequest</type>

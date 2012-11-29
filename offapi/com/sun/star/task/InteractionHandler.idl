@@ -39,7 +39,6 @@ module com { module sun { module star { module task {
     <UL>
         <LI><type scope="com::sun::star::ucb">AuthenticationRequest</type></LI>
         <LI><type scope="com::sun::star::ucb">CertificateValidationRequest</type></LI>
-        <LI><type scope="com::sun::star::sync2">BadPartnershipException</type>*</LI>
         <LI><type scope="com::sun::star::ucb">HandleCookiesRequest</type></LI>
         <LI><type scope="com::sun::star::ucb">InteractiveAugmentedIOException</type>*</LI>
         <LI><type scope="com::sun::star::ucb">InteractiveCHAOSException</type>*</LI>

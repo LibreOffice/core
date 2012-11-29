@@ -151,12 +151,6 @@ module style {};
 /// Interfaces for import/export of Scaleable Vector Format.
 module svg {};
 
-/// Data synchronization interfaces (deprecated).
-module sync {};
-
-/// Data synchronization interfaces (deprecated).
-module sync2 {};
-
 /// Table specific interfaces (for text and spreadsheet).
 module table {};
 
