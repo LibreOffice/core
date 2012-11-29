@@ -15,7 +15,7 @@
           <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="can_focus">False</property>
             <property name="homogeneous">True</property>
-            <property name="layout_style">center</property>
+            <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="yes">
                 <property name="label" translatable="yes">Restart now</property>
