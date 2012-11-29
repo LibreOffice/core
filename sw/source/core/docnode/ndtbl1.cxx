@@ -1213,18 +1213,6 @@ sal_Bool SwDoc::GetBoxAttr( const SwCursor& rCursor, SfxPoolItem& rToFill ) cons
                     else if( rToFill != rDir )
                         bRet = sal_False;
                 }
-                case RES_VERT_ORIENT:
-                {
-                    const SwFmtVertOrient& rOrient =
-                                    aBoxes[i]->GetFrmFmt()->GetVertOrient();
-                    if( !bOneFound )
-                    {
-                        (SwFmtVertOrient&)rToFill = rOrient;
-                        bOneFound = true;
-                    }
-                    else if( rToFill != rOrient )
-                        bRet = sal_False;
-                }
             }
 
             if ( sal_False == bRet )
