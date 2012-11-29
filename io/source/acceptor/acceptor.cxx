@@ -109,7 +109,7 @@ namespace io_acceptor
             {
                   if( *m_pFlag )
                   {
-                      OUString sMessage( RTL_CONSTASCII_USTRINGPARAM( "AlreadyAcceptingException :" ) );
+                      OUString sMessage( "AlreadyAcceptingException :" );
                       sMessage += sConnectionDescription;
                       throw AlreadyAcceptingException( sMessage , Reference< XInterface > () );
                   }
@@ -140,8 +140,7 @@ namespace io_acceptor
             m_sLastDescription != sConnectionDescription )
         {
             // instantiate another acceptor for different ports
-            OUString sMessage = OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "acceptor::accept called multiple times with different conncetion strings\n" ) );
+            OUString sMessage = OUString("acceptor::accept called multiple times with different conncetion strings\n" );
             throw ConnectionSetupException( sMessage, Reference< XInterface > () );
         }
 
@@ -153,10 +152,9 @@ namespace io_acceptor
                 cppu::UnoUrlDescriptor aDesc(sConnectionDescription);
                 if ( aDesc.getName() == "pipe" )
                 {
-                    rtl::OUString aName(
+                    OUString aName(
                         aDesc.getParameter(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                              "name"))));
+                            OUString("name")));
 
                     m_pPipe = new PipeAcceptor(aName, sConnectionDescription);
 
@@ -176,22 +174,20 @@ namespace io_acceptor
                 }
                 else if ( aDesc.getName() == "socket" )
                 {
-                    rtl::OUString aHost;
+                    OUString aHost;
                     if (aDesc.hasParameter(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("host"))))
+                            OUString("host")))
                         aHost = aDesc.getParameter(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("host")));
+                            OUString("host"));
                     else
-                        aHost = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                  "localhost"));
+                        aHost = OUString("localhost");
                     sal_uInt16 nPort = static_cast< sal_uInt16 >(
                         aDesc.getParameter(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("port"))).
+                            OUString("port")).
                         toInt32());
                     bool bTcpNoDelay
                         = aDesc.getParameter(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                              "tcpnodelay"))).toInt32() != 0;
+                            OUString("tcpnodelay")).toInt32() != 0;
 
                     m_pSocket = new SocketAcceptor(
                         aHost, nPort, bTcpNoDelay, sConnectionDescription);
@@ -212,7 +208,7 @@ namespace io_acceptor
                 }
                 else
                 {
-                    OUString delegatee = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.connection.Acceptor."));
+                    OUString delegatee = OUString("com.sun.star.connection.Acceptor.");
                     delegatee += aDesc.getName();
 
                     OSL_TRACE(
@@ -224,7 +220,7 @@ namespace io_acceptor
 
                     if(!_xAcceptor.is())
                     {
-                        OUString message(RTL_CONSTASCII_USTRINGPARAM("Acceptor: unknown delegatee "));
+                        OUString message("Acceptor: unknown delegatee ");
                         message += delegatee;
 
                         throw ConnectionSetupException(message, Reference<XInterface>());
@@ -278,7 +274,7 @@ namespace io_acceptor
 
     OUString acceptor_getImplementationName()
     {
-        return OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ) );
+        return OUString( IMPLEMENTATION_NAME );
     }
 
     Reference< XInterface > SAL_CALL acceptor_CreateInstance( const Reference< XComponentContext > & xCtx)
@@ -289,7 +285,7 @@ namespace io_acceptor
     Sequence< OUString > acceptor_getSupportedServiceNames()
     {
         Sequence< OUString > seqNames(1);
-        seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICE_NAME));
+        seqNames.getArray()[0] = OUString(SERVICE_NAME);
         return seqNames;
     }
 

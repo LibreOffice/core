@@ -30,7 +30,7 @@ namespace io_acceptor {
     class PipeAcceptor
     {
     public:
-        PipeAcceptor( const ::rtl::OUString &sPipeName , const ::rtl::OUString &sConnectionDescription );
+        PipeAcceptor( const OUString &sPipeName , const OUString &sConnectionDescription );
 
         void init();
         ::com::sun::star::uno::Reference < ::com::sun::star::connection::XConnection >  accept(  );
@@ -39,18 +39,18 @@ namespace io_acceptor {
 
         ::osl::Mutex m_mutex;
         ::osl::Pipe m_pipe;
-        ::rtl::OUString m_sPipeName;
-        ::rtl::OUString m_sConnectionDescription;
+        OUString m_sPipeName;
+        OUString m_sConnectionDescription;
         sal_Bool m_bClosed;
     };
 
     class SocketAcceptor
     {
     public:
-        SocketAcceptor( const ::rtl::OUString & sSocketName ,
+        SocketAcceptor( const OUString & sSocketName ,
                         sal_uInt16 nPort,
                         sal_Bool bTcpNoDelay,
-                        const ::rtl::OUString &sConnectionDescription );
+                        const OUString &sConnectionDescription );
 
         void init();
         ::com::sun::star::uno::Reference < ::com::sun::star::connection::XConnection > accept();
@@ -59,8 +59,8 @@ namespace io_acceptor {
 
         ::osl::SocketAddr m_addr;
         ::osl::AcceptorSocket m_socket;
-        ::rtl::OUString m_sSocketName;
-        ::rtl::OUString m_sConnectionDescription;
+        OUString m_sSocketName;
+        OUString m_sConnectionDescription;
         sal_uInt16 m_nPort;
         sal_Bool m_bTcpNoDelay;
         sal_Bool m_bClosed;
