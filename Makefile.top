@@ -37,7 +37,7 @@ $(WORKDIR)/modules.mk: $(wildcard */Module_*.mk) $(wildcard */prj/dmake) $(SRCDI
 
 include $(WORKDIR)/modules.mk
 include $(SRCDIR)/solenv/gbuild/Output.mk
-$(if $(filter $(gbuild_modules),$(dmake_modules)),$(eval $(call gb_Output_error,The following modules claim to be both dmake and gbuild: $(filter $(gbuild_modules),$(dmake_modules)))))
+$(if $(filter $(gbuild_modules),$(dmake_modules)),$(eval $(call gb_Output_warn,The following modules claim to be both dmake and gbuild: $(filter $(gbuild_modules),$(dmake_modules)))))
 
 export gb_TAILBUILDTARGET=all slowcheck
 
