@@ -10,5 +10,6 @@
 $(eval $(call gb_Package_Package,pdfimport_xcu,$(SRCDIR)/sdext))
 
 $(eval $(call gb_Package_add_file,pdfimport_xcu,xml/pdfimport/pdf_import_filter.xcu,source/pdfimport/config/pdf_import_filter.xcu))
+$(eval $(call gb_Package_add_file,pdfimport_xcu,xml/pdfimport/pdf_types.xcu,source/pdfimport/config/pdf_types.xcu))
 
 # vim: set noet sw=4 ts=4:

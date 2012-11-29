@@ -302,7 +302,7 @@ my_components += \
 my_components += component/extensions/source/plugin/pl
 .END
 
-.IF "$(ENABLE_PDFIMPORT)" == "YES"
+.IF "$(ENABLE_PDFIMPORT)" == "TRUE"
 my_components += component/sdext/source/pdfimport/pdfimport
 .END
 

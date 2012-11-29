@@ -342,9 +342,6 @@ MY_FILES_main += \
     $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-jdbc.xcu
 MY_DRIVERS += hsqldb jdbc
 .END
-.IF "$(ENABLE_PDFIMPORT)" == "YES"
-MY_FILES_main += pdfimport/pdf_import_filter.xcu
-.END
 .IF "$(ENABLE_TDEAB)" == "TRUE"
 MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-tdeab.xcu
 .END
@@ -470,6 +467,16 @@ MY_FILES_ogltrans = \
     $(MY_MOD)/org/openoffice/Office/Impress-ogltrans.xcu
 .END
 
+.IF "$(ENABLE_PDFIMPORT)" == "TRUE"
+MY_XCDS += $(MISC)/pdfimport.xcd
+MY_OPTDEPS_pdfimport = calc draw impress math writer
+    # HACK: for all fcfg_X_types.xcu in filter/Configuration_filter.mk that
+    # include pdf_Portable_Document_Format (i.e., X in calc, draw, global,
+    # impress, math, web, writer), add optional dependencies on those XCDS that
+    # include those fcfg_X_types.xcu
+MY_FILES_pdfimport = pdfimport/pdf_import_filter.xcu pdfimport/pdf_types.xcu
+.END
+
 .IF "$(GUIBASE)" == "WIN"
 MY_XCDS += $(MISC)/forcedefault.xcd
 MY_DEPS_forcedefault = main
@@ -497,6 +504,8 @@ $(MISC)/%.xcd .ERRREMOVE : $(MISC)/%.list
 $(MISC)/%.list : makefile.mk
     - $(RM) $@
     echo '<list>' $(foreach,i,$(MY_DEPS_$(@:b)) '<dependency file="$i"/>') \
+        $(foreach,i,$(MY_OPTDEPS_$(@:b)) \
+            '<dependency file="$i" optional="true"/>') \
         $(foreach,i,$(MY_FILES_$(@:b)) '<filename>$i</filename>') '</list>' > $@
 
 $(MISC)/lang/Langpack-{$(alllangiso)}.xcd : $(SOLARXMLDIR)/$(MY_MOD)/$$(@:b).xcu

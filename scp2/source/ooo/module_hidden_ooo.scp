@@ -180,8 +180,6 @@ Module gid_Module_Root_Files_4
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
 	Files = (gid_File_Dat_Root4,
-        gid_File_Dat_XpdfimportErrPdf,
-        gid_File_Exe_Xpdfimport,
 	gid_File_Filter_Eme,
 	gid_File_Filter_Sdfilt,
 	gid_File_Filter_Svgio,
@@ -237,7 +235,6 @@ Module gid_Module_Root_Files_4
 	gid_File_Lib_Oox,
 	gid_File_Lib_Pcr,
 	gid_File_Lib_Pdffilter,
-        gid_File_Lib_PdfImport,
 	gid_File_Lib_Pk,
 	gid_File_Lib_Pl,
 	gid_File_Lib_Sf_Prothdlr,

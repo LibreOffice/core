@@ -40,7 +40,7 @@ $(eval $(call gb_Module_add_targets,sdext,\
 ))
 endif
 
-ifeq ($(ENABLE_PDFIMPORT),YES)
+ifeq ($(ENABLE_PDFIMPORT),TRUE)
 $(eval $(call gb_Module_add_targets,sdext,\
     Executable_xpdfimport \
     Library_pdfimport \

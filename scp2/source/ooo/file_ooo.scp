@@ -115,29 +115,6 @@ File gid_File_Exe_Nsplugin
 End
 #endif
 
-#if !defined WITHOUT_PDFIMPORT
-
-Directory gid_Dir_Share_Xpdfimport
-    ParentID = gid_Brand_Dir_Share;
-    DosName = "xpdfimport";
-End
-
-File gid_File_Dat_XpdfimportErrPdf
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Share_Xpdfimport;
-    Name = "xpdfimport_err.pdf";
-    Styles = (PACKED);
-End
-
-File gid_File_Exe_Xpdfimport
-    BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = EXENAME(xpdfimport);
-    Styles = (PACKED);
-End
-
-#endif
-
 File gid_File_Bin_Gengal
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;

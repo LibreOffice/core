@@ -1,0 +1,72 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+// This module is normally included unconditionally in the core installation, it
+// provides various import filters for both plain PDF and hybrid PDF/ODF.  For
+// --with-system-poppler builds it can be advantageous though to package this
+// module as an individual, optional part, so that the core installation does
+// not feature a dependency on a poppler package.
+//
+// The
+// /org.openoffice.TypeDetection.Types/Types/pdf_Portable_Document_Format
+// configuration node contained in pdfimport.xcd needs to override a
+// node with the same name but which lacks import functionality and
+// which is duplicated across calc, draw, impress, math, writer .xcd
+// files.  For this to work, there is a hack in
+// postprocess/packregistry/makefile.mk to make pdfimport.xcd depend
+// on all those other .xcd files (optinally, as not all of the other
+// .xcd files need to be present in a given installation).
+
+#include "macros.inc"
+
+Module gid_Module_Pdfimport
+    ParentID = gid_Module_Root_Brand;
+    Styles = (HIDDEN_ROOT);
+    Dirs = (gid_Dir_Share_Xpdfimport);
+    Files = (
+        gid_File_Dat_XpdfimportErrPdf,
+        gid_File_Exe_Xpdfimport,
+        gid_File_Lib_PdfimportUno,
+        gid_File_Xcd_Pdfimport);
+End
+
+Directory gid_Dir_Share_Xpdfimport
+    ParentID = gid_Brand_Dir_Share;
+    DosName = "xpdfimport";
+End
+
+File gid_File_Dat_XpdfimportErrPdf
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Xpdfimport;
+    Name = "xpdfimport_err.pdf";
+    Styles = (PACKED);
+End
+
+File gid_File_Exe_Xpdfimport
+    BIN_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Name = EXENAME(xpdfimport);
+    Styles = (PACKED);
+End
+
+File gid_File_Lib_PdfimportUno
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Name = SCP2_URE_DL_BARE("pdfimport.uno");
+    Styles = (PACKED);
+End
+
+File gid_File_Xcd_Pdfimport
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Share_Registry;
+    Name = "pdfimport.xcd";
+    Styles = (PACKED);
+End
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -565,11 +565,6 @@ AC_ARG_ENABLE(extensions,
         [Disable all add-on extension functionality. Work in progress, use only if you are hacking on it.])
 )
 
-AC_ARG_ENABLE(pdfimport,
-    AS_HELP_STRING([--disable-pdfimport],
-        [Disable PDF import.])
-)
-
 AC_ARG_ENABLE(scripting,
     AS_HELP_STRING([--disable-scripting],
         [Disable BASIC, Java and Python. Work in progress, use only if you are hacking on it.])
@@ -4157,11 +4152,11 @@ if test "$cross_compiling" = "yes"; then
     ./configure \
         --disable-graphite \
         --disable-build-mozilla \
-        --disable-pdfimport \
         --disable-postgresql-sdbc \
         --disable-zenity \
         --with-parallelism="$with_parallelism" \
         --without-doxygen \
+        ENABLE_PDFIMPORT=FALSE \
         $sub_conf_opts \
         2>&1 | sed -e 's/^/    /'
     test -f ./config_host.mk 2>/dev/null || exit
@@ -9795,9 +9790,9 @@ AC_SUBST(ENABLE_MINIMIZER)
 
 # pdf import?
 AC_MSG_CHECKING([whether to build the PDF import])
-if test "x$enable_pdfimport" != "xno"; then
+if test "$_os" != Android -a "$_os" != iOS -a "$ENABLE_PDFIMPORT" != FALSE; then
   AC_MSG_RESULT([yes])
-  ENABLE_PDFIMPORT=YES
+  ENABLE_PDFIMPORT=TRUE
 
   dnl ===================================================================
   dnl Check for system poppler
@@ -9825,8 +9820,7 @@ if test "x$enable_pdfimport" != "xno"; then
   fi
 else
   AC_MSG_RESULT([no])
-  ENABLE_PDFIMPORT=NO
-  SCPDEFS="$SCPDEFS -DWITHOUT_PDFIMPORT"
+  ENABLE_PDFIMPORT=FALSE
 fi
 AC_SUBST(ENABLE_PDFIMPORT)
 AC_SUBST(SYSTEM_POPPLER)

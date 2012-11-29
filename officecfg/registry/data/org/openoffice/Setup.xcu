@@ -795,6 +795,9 @@
               <value>
                 <it>com.sun.PresenterScreen-*</it>
                 <it>com.sun.star.PDFImport-*</it>
+                    <!-- arguably, dropping PDFImport extensions should be
+                         conditional on having in-core PDF import actually built
+                         and installed -->
               </value>
             </prop>
           </node>

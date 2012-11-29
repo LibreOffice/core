@@ -329,6 +329,7 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu,filter
 	generic_Text \
 	writer_MIZI_Hwp_97 \
 	writer_StarOffice_XML_Writer_Template \
+	pdf_Portable_Document_Format \
 	writer8_template \
 	writer8 \
 	writer_MS_Word_2003_XML \
@@ -338,15 +339,6 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu,filter
 	writer_OOXML_Template \
 	writer_layout_dump_xml \
 )
-ifeq ($(ENABLE_PDFIMPORT),YES)
-$(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu,filter/source/config/fragments/types,\
-	pdf_Portable_Document_Format_import \
-)
-else
-$(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu,filter/source/config/fragments/types,\
-	pdf_Portable_Document_Format \
-)
-endif
 
 $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters.xcu,filter/source/config/fragments/filters,\
 	HTML__StarWriter_ \
@@ -401,17 +393,9 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_web_types.xcu,filter/so
 	writer_web_HTML_help \
 	writer_StarOffice_XML_Writer \
 	writer_web_StarOffice_XML_Writer_Web_Template \
+	pdf_Portable_Document_Format \
 	writerweb8_writer_template \
 )
-ifeq ($(ENABLE_PDFIMPORT),YES)
-$(call filter_Configuration_add_types,fcfg_langpack,fcfg_web_types.xcu,filter/source/config/fragments/types,\
-	pdf_Portable_Document_Format_import \
-)
-else
-$(call filter_Configuration_add_types,fcfg_langpack,fcfg_web_types.xcu,filter/source/config/fragments/types,\
-	pdf_Portable_Document_Format \
-)
-endif
 
 $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_web_filters.xcu,filter/source/config/fragments/filters,\
 	HTML \
@@ -440,17 +424,9 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_global_types.xcu,filter
 	generic_Text \
 	writer_StarOffice_XML_Writer \
 	writer_globaldocument_StarOffice_XML_Writer_GlobalDocument \
+	pdf_Portable_Document_Format \
 	writerglobal8 \
 )
-ifeq ($(ENABLE_PDFIMPORT),YES)
-$(call filter_Configuration_add_types,fcfg_langpack,fcfg_global_types.xcu,filter/source/config/fragments/types,\
-	pdf_Portable_Document_Format_import \
-)
-else
-$(call filter_Configuration_add_types,fcfg_langpack,fcfg_global_types.xcu,filter/source/config/fragments/types,\
-	pdf_Portable_Document_Format \
-)
-endif
 
 $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_global_filters.xcu,filter/source/config/fragments/filters,\
 	Text__encoded___StarWriter_GlobalDocument_ \
@@ -489,6 +465,7 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_calc_types.xcu,filter/s
 	calc_SYLK \
 	calc_StarOffice_XML_Calc \
 	calc_StarOffice_XML_Calc_Template \
+	pdf_Portable_Document_Format \
 	calc_dBase\
 	calc8 \
 	calc8_template \
@@ -499,15 +476,6 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_calc_types.xcu,filter/s
 	calc_OOXML \
 	calc_OOXML_Template \
 )
-ifeq ($(ENABLE_PDFIMPORT),YES)
-$(call filter_Configuration_add_types,fcfg_langpack,fcfg_calc_types.xcu,filter/source/config/fragments/types,\
-	pdf_Portable_Document_Format_import \
-)
-else
-$(call filter_Configuration_add_types,fcfg_langpack,fcfg_calc_types.xcu,filter/source/config/fragments/types,\
-	pdf_Portable_Document_Format \
-)
-endif
 
 $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calc_filters.xcu,filter/source/config/fragments/filters,\
 	DIF \
@@ -564,6 +532,7 @@ $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fr
 $(call filter_Configuration_add_types,fcfg_langpack,fcfg_draw_types.xcu,filter/source/config/fragments/types,\
 	draw_StarOffice_XML_Draw \
 	draw_StarOffice_XML_Draw_Template \
+	pdf_Portable_Document_Format \
 	draw8 \
 	draw8_template \
 	draw_WordPerfect_Graphics \
@@ -572,15 +541,6 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_draw_types.xcu,filter/s
 	draw_CorelDraw_Document \
 	draw_Corel_Presentation_Exchange \
 )
-ifeq ($(ENABLE_PDFIMPORT),YES)
-$(call filter_Configuration_add_types,fcfg_langpack,fcfg_draw_types.xcu,filter/source/config/fragments/types,\
-	pdf_Portable_Document_Format_import \
-)
-else
-$(call filter_Configuration_add_types,fcfg_langpack,fcfg_draw_types.xcu,filter/source/config/fragments/types,\
-	pdf_Portable_Document_Format \
-)
-endif
 
 $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_draw_filters.xcu,filter/source/config/fragments/filters,\
 	StarOffice_XML__Draw_ \
@@ -610,6 +570,7 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_impress_types.xcu,filte
 	impress_MS_PowerPoint_97_Vorlage \
 	impress_StarOffice_XML_Impress \
 	impress_StarOffice_XML_Impress_Template \
+	pdf_Portable_Document_Format \
 	pwp_PlaceWare \
 	impress8 \
 	impress8_template \
@@ -621,15 +582,6 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_impress_types.xcu,filte
 	impress_OOXML_Presentation_Template \
 	impress_OOXML_Presentation_AutoPlay \
 )
-ifeq ($(ENABLE_PDFIMPORT),YES)
-$(call filter_Configuration_add_types,fcfg_langpack,fcfg_impress_types.xcu,filter/source/config/fragments/types,\
-	pdf_Portable_Document_Format_import \
-)
-else
-$(call filter_Configuration_add_types,fcfg_langpack,fcfg_impress_types.xcu,filter/source/config/fragments/types,\
-	pdf_Portable_Document_Format \
-)
-endif
 
 $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_impress_filters.xcu,filter/source/config/fragments/filters,\
 	MS_PowerPoint_97 \
@@ -690,17 +642,9 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_math_types.xcu,filter/s
 	math_MathML_XML_Math \
 	math_MathType_3x \
 	math_StarOffice_XML_Math \
+	pdf_Portable_Document_Format \
 	math8 \
 )
-ifeq ($(ENABLE_PDFIMPORT),YES)
-$(call filter_Configuration_add_types,fcfg_langpack,fcfg_math_types.xcu,filter/source/config/fragments/types,\
-	pdf_Portable_Document_Format_import \
-)
-else
-$(call filter_Configuration_add_types,fcfg_langpack,fcfg_math_types.xcu,filter/source/config/fragments/types,\
-	pdf_Portable_Document_Format \
-)
-endif
 
 $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_math_filters.xcu,filter/source/config/fragments/filters,\
 	MathML_XML__Math_ \

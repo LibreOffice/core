@@ -33,7 +33,7 @@ TESTFILES=\
     verticaltext.pdf
 
 # --- Fake uno bootstrap ------------------------
-.IF "$(ENABLE_PDFIMPORT)" != "NO"
+.IF "$(ENABLE_PDFIMPORT)" == "TRUE"
 
 $(BIN)$/pdfi_unittest_test.ini : makefile.mk
     rm -f $@
