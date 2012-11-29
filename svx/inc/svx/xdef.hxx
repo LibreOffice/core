@@ -20,16 +20,16 @@
 #ifndef _XDEF_HXX
 #define _XDEF_HXX
 
+
 /*************************************************************************
 |*
-|* Attribut einfuegen: Zeile kopieren, VOR welcher eingefuegt werden
-|* soll, Bezeichnung aendern und diese auch am Ende der darauffolgenden
-|* Zeile eintragen
+|* Adding an attribute: Copy line, above which you want to add something,
+|* change the label and add it at the end of the following line, too
 |*
 \************************************************************************/
 
-#define COL_DEFAULT_SHAPE_FILLING  RGB_COLORDATA( 0xCF, 0xE7, 0xF5 )
-#define COL_DEFAULT_SHAPE_STROKE    RGB_COLORDATA( 128, 128, 128 )
+#define COL_DEFAULT_SHAPE_FILLING  RGB_COLORDATA( 0x72, 0x9F, 0xCF )
+#define COL_DEFAULT_SHAPE_STROKE    RGB_COLORDATA( 52, 101, 175 )
 
 #define XATTR_START             1000
 
