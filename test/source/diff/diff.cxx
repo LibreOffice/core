@@ -327,7 +327,9 @@ bool XMLDiff::compareAttributes(xmlNodePtr node1, xmlNodePtr node2)
             else
             {
 #if USE_CPPUNIT
-            CPPUNIT_ASSERT_DOUBLES_EQUAL(dVal1, dVal2, 1e-08);
+                CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
+                    reinterpret_cast< char const * >(attr1->name), dVal1, dVal2,
+                    1e-08);
 #else
                 if (dVal1 != dVal2)
                     return false;
