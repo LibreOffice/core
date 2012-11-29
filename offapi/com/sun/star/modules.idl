@@ -115,9 +115,6 @@ module media {};
 /// Interfaces for Mozilla integration.
 module mozilla {};
 
-/// Pretty Good Privacy (deprecated).
-module pgp {};
-
 /// Netscape-like plugin interfaces.
 module plugin {};
 
@@ -165,9 +162,6 @@ module table {};
 
 /// Task management interfaces.
 module task {};
-
-/// Test interfaces for core-reflection, introspection and marshalling.
-module test {};
 
 /// Text specific interfaces.
 module text {};
