@@ -43,7 +43,6 @@
 #include "com/sun/star/task/XInteractionRequest.hpp"
 #include "com/sun/star/task/XInteractionRetry.hpp"
 #include "com/sun/star/ucb/InteractiveAppException.hpp"
-#include "com/sun/star/ucb/InteractiveCHAOSException.hpp"
 #include "com/sun/star/ucb/InteractiveLockingLockedException.hpp"
 #include "com/sun/star/ucb/InteractiveLockingNotLockedException.hpp"
 #include "com/sun/star/ucb/InteractiveLockingLockExpiredException.hpp"
@@ -592,28 +591,6 @@ UUIInteractionHelper::handleRequest_impl(
 
             handleErrorHandlerRequest(aNetworkException.Classification,
                                       nErrorCode,
-                                      aArguments,
-                                      rRequest->getContinuations(),
-                                      bObtainErrorStringOnly,
-                                      bHasErrorString,
-                                      rErrorString);
-            return true;
-        }
-
-        ucb::InteractiveCHAOSException aChaosException;
-        if (aAnyRequest >>= aChaosException)
-        {
-            std::vector< rtl::OUString > aArguments;
-            sal_Int32 nCount
-                = std::min< sal_Int32 >(aChaosException.Arguments.getLength(),
-                                        2);
-            aArguments.
-                reserve(static_cast< std::vector< rtl::OUString >::size_type >(
-                    nCount));
-            for (sal_Int32 i = 0; i < nCount; ++i)
-                aArguments.push_back(aChaosException.Arguments[i]);
-            handleErrorHandlerRequest(aChaosException.Classification,
-                                      aChaosException.ID,
                                       aArguments,
                                       rRequest->getContinuations(),
                                       bObtainErrorStringOnly,

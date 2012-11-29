@@ -41,7 +41,6 @@ module com { module sun { module star { module task {
         <LI><type scope="com::sun::star::ucb">CertificateValidationRequest</type></LI>
         <LI><type scope="com::sun::star::ucb">HandleCookiesRequest</type></LI>
         <LI><type scope="com::sun::star::ucb">InteractiveAugmentedIOException</type>*</LI>
-        <LI><type scope="com::sun::star::ucb">InteractiveCHAOSException</type>*</LI>
         <LI><type scope="com::sun::star::ucb">InteractiveFileIOException</type>*</LI>
         <LI><type scope="com::sun::star::ucb">InteractiveIOException</type>*</LI>
         <LI><type scope="com::sun::star::ucb">InteractiveNetworkConnectException</type>*</LI>

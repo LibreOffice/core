@@ -3690,7 +3690,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/text,\
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/ucb,\
 	AlreadyInitializedException \
 	AuthenticationRequest \
-	CHAOSProgressStart \
 	CheckinArgument \
 	CertificateValidationRequest \
 	Command \
@@ -3734,7 +3733,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/ucb,\
 	InteractiveAppException \
 	InteractiveAugmentedIOException \
 	InteractiveBadTransferURLException \
-	InteractiveCHAOSException \
 	InteractiveFileIOException \
 	InteractiveIOException \
 	InteractiveLockingException \

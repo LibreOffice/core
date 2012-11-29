@@ -70,7 +70,6 @@
     <type>com.sun.star.task.XPasswordContainer</type>
     <type>com.sun.star.ucb.AuthenticationRequest</type>
     <type>com.sun.star.ucb.InteractiveAugmentedIOException</type>
-    <type>com.sun.star.ucb.InteractiveCHAOSException</type>
     <type>com.sun.star.ucb.InteractiveNetworkConnectException</type>
     <type>com.sun.star.ucb.InteractiveNetworkException</type>
     <type>com.sun.star.ucb.InteractiveNetworkGeneralException</type>
