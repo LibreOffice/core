@@ -35,12 +35,12 @@ published interface XProgressBar: com::sun::star::uno::XInterface
 
     /** sets the foreground color (RGB) of the control.
      */
-    [oneway] void setForegroundColor( [in] com::sun::star::util::Color Color );
+    void setForegroundColor( [in] com::sun::star::util::Color Color );
 
 
     /** sets the background color (RGB) of the control.
      */
-    [oneway] void setBackgroundColor( [in] com::sun::star::util::Color Color );
+    void setBackgroundColor( [in] com::sun::star::util::Color Color );
 
 
     /** sets the minimum and the maximum progress value of the progress bar.
@@ -48,13 +48,13 @@ published interface XProgressBar: com::sun::star::uno::XInterface
         <p>If the minimum value is greater than the maximum value, the method
         exchanges the values automatically.</p>
      */
-    [oneway] void setRange( [in] long Min,
+    void setRange( [in] long Min,
              [in] long Max );
 
 
     /** sets the progress value of the progress bar.
      */
-    [oneway] void setValue( [in] long Value );
+    void setValue( [in] long Value );
 
 
     /** returns the current progress value of the progress bar.

@@ -38,39 +38,39 @@ published interface XListBox: com::sun::star::uno::XInterface
 
     /** registers a listener for item events.
      */
-    [oneway] void addItemListener( [in] com::sun::star::awt::XItemListener l );
+    void addItemListener( [in] com::sun::star::awt::XItemListener l );
 
 
     /** unregisters a listener for item events.
      */
-    [oneway] void removeItemListener( [in] com::sun::star::awt::XItemListener l );
+    void removeItemListener( [in] com::sun::star::awt::XItemListener l );
 
 
     /** registers a listener for action events.
      */
-    [oneway] void addActionListener( [in] com::sun::star::awt::XActionListener l );
+    void addActionListener( [in] com::sun::star::awt::XActionListener l );
 
 
     /** unregisters a listener for action events.
      */
-    [oneway] void removeActionListener( [in] com::sun::star::awt::XActionListener l );
+    void removeActionListener( [in] com::sun::star::awt::XActionListener l );
 
 
     /** adds an item at the specified position.
      */
-    [oneway] void addItem( [in] string aItem,
+    void addItem( [in] string aItem,
              [in] short nPos );
 
 
     /** adds multiple items at the specified position.
      */
-    [oneway] void addItems( [in] sequence<string> aItems,
+    void addItems( [in] sequence<string> aItems,
              [in] short nPos );
 
 
     /** removes a number of items at the specified position.
      */
-    [oneway] void removeItems( [in] short nPos,
+    void removeItems( [in] short nPos,
              [in] short nCount );
 
 
@@ -111,19 +111,19 @@ published interface XListBox: com::sun::star::uno::XInterface
 
     /** selects/deselects the item at the specified position.
      */
-    [oneway] void selectItemPos( [in] short nPos,
+    void selectItemPos( [in] short nPos,
              [in] boolean bSelect );
 
 
     /** selects/deselects multiple items at the specified positions.
      */
-    [oneway] void selectItemsPos( [in] sequence<short> aPositions,
+    void selectItemsPos( [in] sequence<short> aPositions,
              [in] boolean bSelect );
 
 
     /** selects/deselects the specified item.
      */
-    [oneway] void selectItem( [in] string aItem,
+    void selectItem( [in] string aItem,
              [in] boolean bSelect );
 
 
@@ -135,7 +135,7 @@ published interface XListBox: com::sun::star::uno::XInterface
 
     /** determines if only a single item or multiple items can be selected.
      */
-    [oneway] void setMultipleMode( [in] boolean bMulti );
+    void setMultipleMode( [in] boolean bMulti );
 
 
     /** returns the number of visible lines in drop down mode.
@@ -145,12 +145,12 @@ published interface XListBox: com::sun::star::uno::XInterface
 
     /** sets the number of visible lines for drop down mode.
      */
-    [oneway] void setDropDownLineCount( [in] short nLines );
+    void setDropDownLineCount( [in] short nLines );
 
 
     /** makes the item at the specified position visible by scrolling.
      */
-    [oneway] void makeVisible( [in] short nEntry );
+    void makeVisible( [in] short nEntry );
 
 };
 

@@ -39,7 +39,7 @@ published interface XPluginWindowPeer: com::sun::star::uno::XInterface
         @param SystemWindowData [in]:   platform dependent window data
 
      */
-    [oneway] void setChildWindow( [in] any SystemWindowData );
+    void setChildWindow( [in] any SystemWindowData );
 };
 
 

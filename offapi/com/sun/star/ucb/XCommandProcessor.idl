@@ -119,7 +119,7 @@ published interface XCommandProcessor : com::sun::star::uno::XInterface
         passed to <member>XCommandProcessor::execute</member> for the command
         to abort.
     */
-    [oneway] void abort( [in] long CommandId );
+    void abort( [in] long CommandId );
 };
 
 

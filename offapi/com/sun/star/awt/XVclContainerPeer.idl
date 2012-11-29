@@ -37,19 +37,19 @@ published interface XVclContainerPeer: com::sun::star::uno::XInterface
 
     /** enable as dialog control.
      */
-    [oneway] void enableDialogControl( [in] boolean bEnable );
+    void enableDialogControl( [in] boolean bEnable );
 
 
     /** sets the tab order.
      */
-    [oneway] void setTabOrder( [in] sequence<com::sun::star::awt::XWindow> WindowOrder,
+    void setTabOrder( [in] sequence<com::sun::star::awt::XWindow> WindowOrder,
              [in] sequence<any> Tabs,
              [in] boolean GroupControl );
 
 
     /** sets a group.
      */
-    [oneway] void setGroup( [in] sequence<com::sun::star::awt::XWindow> Windows );
+    void setGroup( [in] sequence<com::sun::star::awt::XWindow> Windows );
 
 };
 

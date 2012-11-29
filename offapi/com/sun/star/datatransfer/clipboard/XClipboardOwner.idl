@@ -47,7 +47,7 @@ published interface XClipboardOwner: com::sun::star::uno::XInterface
         @see com::sun::star::datatransfer::clipboard::XClipboard
         @see com::sun::star::datatransfer::XTransferable
     */
-    [oneway] void lostOwnership( [in] XClipboard xClipboard, [in] com::sun::star::datatransfer::XTransferable xTrans );
+    void lostOwnership( [in] XClipboard xClipboard, [in] com::sun::star::datatransfer::XTransferable xTrans );
 };
 
 

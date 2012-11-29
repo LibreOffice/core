@@ -72,14 +72,14 @@ published interface XTabPageContainer
         @param listener
             the listener to add.
     */
-    [oneway] void addTabPageContainerListener( [in] XTabPageContainerListener  listener);
+    void addTabPageContainerListener( [in] XTabPageContainerListener  listener);
 
 
     /** Removes a listener previously added with <method>addTabPageListener()</method>.
         @param listener
             the listener to remove.
     */
-    [oneway] void removeTabPageContainerListener( [in] XTabPageContainerListener listener);
+    void removeTabPageContainerListener( [in] XTabPageContainerListener listener);
 
     /** Specifies the ID of the current active tab page.
     */

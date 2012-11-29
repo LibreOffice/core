@@ -80,7 +80,7 @@ module ModuleC
     interface XInterfaceA : com::sun::star::uno::XInterface
     {
         void methodA();
-        [oneway] void methodB([in] short aShort);
+        void methodB([in] short aShort);
         sequence<ModuleA::StructB> methodC([in] ModuleA::StructC aStructC, [inout] ModuleA::StructA aStructA);
     };
 

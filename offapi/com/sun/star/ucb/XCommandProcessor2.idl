@@ -49,7 +49,7 @@ published interface XCommandProcessor2: com::sun::star::ucb::XCommandProcessor
         handed to <member>XCommandProcessor2::releaseCommandIdentifier</member>
         before), the behavior is undefined.
      */
-    [oneway] void releaseCommandIdentifier([in] long CommandId);
+    void releaseCommandIdentifier([in] long CommandId);
 };
 
 }; }; }; };

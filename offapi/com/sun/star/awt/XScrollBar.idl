@@ -36,23 +36,23 @@ published interface XScrollBar: com::sun::star::uno::XInterface
 
     /** registers an adjustment event listener.
      */
-    [oneway] void addAdjustmentListener( [in] com::sun::star::awt::XAdjustmentListener l );
+    void addAdjustmentListener( [in] com::sun::star::awt::XAdjustmentListener l );
 
 
     /** unregisters an adjustment event listener.
      */
-    [oneway] void removeAdjustmentListener( [in] com::sun::star::awt::XAdjustmentListener l );
+    void removeAdjustmentListener( [in] com::sun::star::awt::XAdjustmentListener l );
 
 
     /** sets the scroll value of the scroll bar.
      */
-    [oneway] void setValue( [in] long n );
+    void setValue( [in] long n );
 
 
     /** sets the scroll value, visible area and maximum scroll value
         of the scroll bar.
      */
-    [oneway] void setValues( [in] long nValue,
+    void setValues( [in] long nValue,
              [in] long nVisible,
              [in] long nMax );
 
@@ -64,7 +64,7 @@ published interface XScrollBar: com::sun::star::uno::XInterface
 
     /** sets the maximum scroll value of the scroll bar.
      */
-    [oneway] void setMaximum( [in] long n );
+    void setMaximum( [in] long n );
 
 
     /** returns the currently set maximum scroll value of the scroll bar.
@@ -74,7 +74,7 @@ published interface XScrollBar: com::sun::star::uno::XInterface
 
     /** sets the increment for a single line move.
      */
-    [oneway] void setLineIncrement( [in] long n );
+    void setLineIncrement( [in] long n );
 
 
     /** returns the currently set increment for a single line move.
@@ -84,7 +84,7 @@ published interface XScrollBar: com::sun::star::uno::XInterface
 
     /** sets the increment for a block move.
      */
-    [oneway] void setBlockIncrement( [in] long n );
+    void setBlockIncrement( [in] long n );
 
 
     /** returns the currently set increment for a block move.
@@ -94,7 +94,7 @@ published interface XScrollBar: com::sun::star::uno::XInterface
 
     /** sets the visible size of the scroll bar.
      */
-    [oneway] void setVisibleSize( [in] long n );
+    void setVisibleSize( [in] long n );
 
 
     /** returns the currently visible size of the scroll bar.
@@ -104,7 +104,7 @@ published interface XScrollBar: com::sun::star::uno::XInterface
 
     /** sets the <type>ScrollBarOrientation</type> of the scroll bar.
      */
-    [oneway] void setOrientation( [in] long n );
+    void setOrientation( [in] long n );
 
 
     /** returns the currently set <type>ScrollBarOrientation</type> of the

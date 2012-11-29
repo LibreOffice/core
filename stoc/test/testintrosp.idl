@@ -193,13 +193,13 @@ interface XIntroTest: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /**Add a PropertiesChangeListener
     */
-    [oneway] void addPropertiesChangeListener( [in] sequence< string > PropertyNames,
+    void addPropertiesChangeListener( [in] sequence< string > PropertyNames,
              [in] com::sun::star::beans::XPropertiesChangeListener Listener );
 
     //-------------------------------------------------------------------------
     /**Remove a PropertiesChangeListener
     */
-    [oneway] void removePropertiesChangeListener( [in] com::sun::star::beans::XPropertiesChangeListener Listener );
+    void removePropertiesChangeListener( [in] com::sun::star::beans::XPropertiesChangeListener Listener );
 
 };
 

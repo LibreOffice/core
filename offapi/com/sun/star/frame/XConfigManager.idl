@@ -50,7 +50,7 @@ published interface XConfigManager: com::sun::star::uno::XInterface
 
         @deprecated
     */
-    [oneway] void addPropertyChangeListener(
+    void addPropertyChangeListener(
         [in] string KeyName,
         [in] com::sun::star::beans::XPropertyChangeListener Listener );
 
@@ -66,7 +66,7 @@ published interface XConfigManager: com::sun::star::uno::XInterface
 
         @deprecated
      */
-    [oneway] void removePropertyChangeListener(
+    void removePropertyChangeListener(
         [in] string KeyName,
         [in] com::sun::star::beans::XPropertyChangeListener Listener);
 
@@ -88,7 +88,7 @@ published interface XConfigManager: com::sun::star::uno::XInterface
         and make no sense without that
         @deprecated
      */
-    [oneway] void flush();
+    void flush();
 
 }; //XConfigManager
 }; //frame

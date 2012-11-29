@@ -44,7 +44,7 @@ published interface XReference: com::sun::star::uno::XInterface
         Otherwise, the adapted object will be destroyed, but the
         adapter will be alive.</p>
      */
-    [oneway] void dispose();
+    void dispose();
 
 };
 

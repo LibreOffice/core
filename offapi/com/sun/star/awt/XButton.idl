@@ -35,22 +35,22 @@ published interface XButton: com::sun::star::uno::XInterface
 
     /** registers an event handler for button action events.
      */
-    [oneway] void addActionListener( [in] com::sun::star::awt::XActionListener l );
+    void addActionListener( [in] com::sun::star::awt::XActionListener l );
 
 
     /** unregisters an event handler for button action events.
      */
-    [oneway] void removeActionListener( [in] com::sun::star::awt::XActionListener l );
+    void removeActionListener( [in] com::sun::star::awt::XActionListener l );
 
 
     /** sets the label of the button.
      */
-    [oneway] void setLabel( [in] string Label );
+    void setLabel( [in] string Label );
 
 
     /** sets a command string for pushing the button.
      */
-    [oneway] void setActionCommand( [in] string Command );
+    void setActionCommand( [in] string Command );
 
 };
 

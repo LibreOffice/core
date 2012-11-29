@@ -132,7 +132,7 @@ static void SAL_CALL predefineXInterface(AstModule* pRoot)
     pParentScope->addDeclaration(pInterface);
 
     // define XInterface::queryInterface
-    AstOperation* pOp = new AstOperation(0, (AstType*)(pRoot->lookupPrimitiveType(ET_any)),
+    AstOperation* pOp = new AstOperation((AstType*)(pRoot->lookupPrimitiveType(ET_any)),
                                          OString("queryInterface"), pInterface);
     AstParameter* pParam = new AstParameter(DIR_IN, false,
                                             (AstType*)(pRoot->lookupPrimitiveType(ET_type)),
@@ -141,13 +141,13 @@ static void SAL_CALL predefineXInterface(AstModule* pRoot)
     pInterface->addMember(pOp);
 
     // define XInterface::acquire
-    pOp = new AstOperation(1, (AstType*)(pRoot->lookupPrimitiveType(ET_void)),
-                                         OString("acquire"), pInterface);
+    pOp = new AstOperation((AstType*)(pRoot->lookupPrimitiveType(ET_void)),
+                           OString("acquire"), pInterface);
     pInterface->addMember(pOp);
 
     // define XInterface::release
-    pOp = new AstOperation(1, (AstType*)(pRoot->lookupPrimitiveType(ET_void)),
-                                         OString("release"), pInterface);
+    pOp = new AstOperation((AstType*)(pRoot->lookupPrimitiveType(ET_void)),
+                           OString("release"), pInterface);
     pInterface->addMember(pOp);
 }
 

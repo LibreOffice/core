@@ -56,7 +56,7 @@ module com {  module sun {  module star {  module frame {
         @see XSessionManagerClient
         @see XSessionManagerClient::saveDone()
         */
-        [oneway] void doSave( [in] boolean bShutdown, [in] boolean bCancelable );
+        void doSave( [in] boolean bShutdown, [in] boolean bCancelable );
 
         /** approveInteraction is called when an outstanding
             interaction request was processed by the session manager
@@ -71,7 +71,7 @@ module com {  module sun {  module star {  module frame {
         @see XSessionManagerClient
         @see XSessionManagerClient::interactionDone()
         */
-        [oneway] void approveInteraction( [in] boolean bInteractionGranted );
+        void approveInteraction( [in] boolean bInteractionGranted );
 
         /** shutdownCanceled is called when a shutdown was canceled by the user
             The listener can cancel his saving operations. No
@@ -79,7 +79,7 @@ module com {  module sun {  module star {  module frame {
             on the session manager client service object will
             be ignored.
         */
-        [oneway] void shutdownCanceled();
+        void shutdownCanceled();
 
         /** returns true, if a session was restored
         */

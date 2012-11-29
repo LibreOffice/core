@@ -46,7 +46,7 @@ published interface XBoundControl: com::sun::star::uno::XInterface
         @param bLock
             the new lock state.
      */
-    [oneway] void setLock( [in] boolean bLock );
+    void setLock( [in] boolean bLock );
 
 };
 

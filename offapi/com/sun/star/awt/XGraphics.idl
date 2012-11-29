@@ -56,32 +56,32 @@ published interface XGraphics: com::sun::star::uno::XInterface
 
     /** sets the font used by text operations.
      */
-    [oneway] void setFont( [in] XFont xNewFont );
+    void setFont( [in] XFont xNewFont );
 
 
     /** creates a new font and sets the font.
      */
-    [oneway] void selectFont( [in] FontDescriptor aDescription );
+    void selectFont( [in] FontDescriptor aDescription );
 
 
     /** sets the text color used by text operations.
      */
-    [oneway] void setTextColor( [in] com::sun::star::util::Color nColor );
+    void setTextColor( [in] com::sun::star::util::Color nColor );
 
 
     /** sets the fill color used by text operations.
      */
-    [oneway] void setTextFillColor( [in] com::sun::star::util::Color nColor );
+    void setTextFillColor( [in] com::sun::star::util::Color nColor );
 
 
     /** sets the line color.
      */
-    [oneway] void setLineColor( [in] com::sun::star::util::Color nColor );
+    void setLineColor( [in] com::sun::star::util::Color nColor );
 
 
     /** sets the fill color.
      */
-    [oneway] void setFillColor( [in] com::sun::star::util::Color nColor );
+    void setFillColor( [in] com::sun::star::util::Color nColor );
 
 
     /** sets the raster operation.
@@ -89,33 +89,33 @@ published interface XGraphics: com::sun::star::uno::XInterface
         <p>If the device does not support raster operations
         then this call is ignored.</p>
      */
-    [oneway] void setRasterOp( [in] RasterOperation ROP );
+    void setRasterOp( [in] RasterOperation ROP );
 
 
     /** sets the clip region to specified clipping.
      */
-    [oneway] void setClipRegion( [in] XRegion Clipping );
+    void setClipRegion( [in] XRegion Clipping );
 
 
     /** builds the intersection with the current region.
      */
-    [oneway] void intersectClipRegion( [in] XRegion xClipping );
+    void intersectClipRegion( [in] XRegion xClipping );
 
 
     /** saves all current settings (Font, TextColor, TextFillColor,
         LineColor, FillColor, RasterOp, ClipRegion).
      */
-    [oneway] void push();
+    void push();
 
 
     /** restores all previous saved settings.
      */
-    [oneway] void pop();
+    void pop();
 
 
     /** copies a rectangle of pixels from another device into this one.
      */
-    [oneway] void copy( [in] XDevice xSource,
+    void copy( [in] XDevice xSource,
              [in] long nSourceX,
              [in] long nSourceY,
              [in] long nSourceWidth,
@@ -128,7 +128,7 @@ published interface XGraphics: com::sun::star::uno::XInterface
 
     /** draws a part of the specified bitmap to the output device.
      */
-    [oneway] void draw( [in] XDisplayBitmap xBitmapHandle,
+    void draw( [in] XDisplayBitmap xBitmapHandle,
              [in] long SourceX,
              [in] long SourceY,
              [in] long SourceWidth,
@@ -141,13 +141,13 @@ published interface XGraphics: com::sun::star::uno::XInterface
 
     /** sets a single pixel in the output device.
      */
-    [oneway] void drawPixel( [in] long X,
+    void drawPixel( [in] long X,
              [in] long Y );
 
 
     /** draws a line in the output device.
      */
-    [oneway] void drawLine( [in] long X1,
+    void drawLine( [in] long X1,
              [in] long Y1,
              [in] long X2,
              [in] long Y2 );
@@ -155,7 +155,7 @@ published interface XGraphics: com::sun::star::uno::XInterface
 
     /** draws a rectangle in the output device.
      */
-    [oneway] void drawRect( [in] long X,
+    void drawRect( [in] long X,
              [in] long Y,
              [in] long Width,
              [in] long Height );
@@ -163,7 +163,7 @@ published interface XGraphics: com::sun::star::uno::XInterface
 
     /** draws a rectangle with rounded corners in the output device.
      */
-    [oneway] void drawRoundedRect( [in] long X,
+    void drawRoundedRect( [in] long X,
              [in] long Y,
              [in] long Width,
              [in] long Height,
@@ -173,25 +173,25 @@ published interface XGraphics: com::sun::star::uno::XInterface
 
     /** draws multiple lines in the output device at once.
      */
-    [oneway] void drawPolyLine( [in] sequence<long> DataX,
+    void drawPolyLine( [in] sequence<long> DataX,
              [in] sequence<long> DataY );
 
 
     /** draws a polygon line in the output device.
      */
-    [oneway] void drawPolygon( [in] sequence<long> DataX,
+    void drawPolygon( [in] sequence<long> DataX,
              [in] sequence<long> DataY );
 
 
     /** draws multiple polygons in the output device at once.
      */
-    [oneway] void drawPolyPolygon( [in] sequence< sequence<long> > DataX,
+    void drawPolyPolygon( [in] sequence< sequence<long> > DataX,
              [in] sequence< sequence<long> > DataY );
 
 
     /** draws an ellipse in the output device.
      */
-    [oneway] void drawEllipse( [in] long X,
+    void drawEllipse( [in] long X,
              [in] long Y,
              [in] long Width,
              [in] long Height );
@@ -199,7 +199,7 @@ published interface XGraphics: com::sun::star::uno::XInterface
 
     /** draws an arc (part of a circle) in the output device.
      */
-    [oneway] void drawArc( [in] long X,
+    void drawArc( [in] long X,
              [in] long Y,
              [in] long Width,
              [in] long Height,
@@ -211,7 +211,7 @@ published interface XGraphics: com::sun::star::uno::XInterface
 
     /** draws a circular area in the output device.
      */
-    [oneway] void drawPie( [in] long X,
+    void drawPie( [in] long X,
              [in] long Y,
              [in] long Width,
              [in] long Height,
@@ -227,7 +227,7 @@ published interface XGraphics: com::sun::star::uno::XInterface
         circle if you intersect the circle with a straight line
         joining two points on the circle.</p>
      */
-    [oneway] void drawChord( [in] long nX,
+    void drawChord( [in] long nX,
              [in] long nY,
              [in] long nWidth,
              [in] long nHeight,
@@ -239,7 +239,7 @@ published interface XGraphics: com::sun::star::uno::XInterface
 
     /** draws a color dispersion in the output device.
      */
-    [oneway] void drawGradient( [in] long nX,
+    void drawGradient( [in] long nX,
              [in] long nY,
              [in] long nWidth,
              [in] long Height,
@@ -248,14 +248,14 @@ published interface XGraphics: com::sun::star::uno::XInterface
 
     /** draws text in the output device.
      */
-    [oneway] void drawText( [in] long X,
+    void drawText( [in] long X,
              [in] long Y,
              [in] string Text );
 
 
     /** draws texts in the output device using an explicit kerning table.
      */
-    [oneway] void drawTextArray( [in] long X,
+    void drawTextArray( [in] long X,
              [in] long Y,
              [in] string Text,
              [in] sequence<long> Longs );

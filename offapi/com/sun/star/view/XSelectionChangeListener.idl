@@ -41,7 +41,7 @@ published interface XSelectionChangeListener: com::sun::star::lang::XEventListen
         <member scope="com::sun::star::lang">EventObject::Source</member>.
 
      */
-    [oneway] void selectionChanged( [in] com::sun::star::lang::EventObject aEvent );
+    void selectionChanged( [in] com::sun::star::lang::EventObject aEvent );
 
 };
 

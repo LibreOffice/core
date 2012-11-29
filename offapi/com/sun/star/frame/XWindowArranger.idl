@@ -35,7 +35,7 @@ published interface XWindowArranger: com::sun::star::uno::XInterface
 
     /** @deprecated
      */
-    [oneway] void arrange( [in] short nCommand );
+    void arrange( [in] short nCommand );
 };
 
 

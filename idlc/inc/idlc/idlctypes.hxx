@@ -235,7 +235,6 @@ enum ParseState
     PS_ExceptQsSeen,        // Seen '}' for exception
     PS_ExceptBodySeen,      // Seen complete exception body
 
-    PS_OpHeadSeen,          // Seen the operation head
     PS_OpTypeSeen,          // Seen operation return type
     PS_OpIDSeen,            // Seen operation ID
     PS_OpParsCompleted,     // Completed operation param list
@@ -246,7 +245,6 @@ enum ParseState
     PS_OpParDirSeen,        // Seen parameter direction
     PS_OpParTypeSeen,       // Seen parameter type
     PS_OpParDeclSeen,       // Seen parameter declaration
-    PS_OpOnewaySeen,        // Seen ONEWAY keyword
 
     PS_RaiseSeen,           // Seen RAISES keyword
     PS_RaiseSqSeen,         // Seen '(' for RAISES

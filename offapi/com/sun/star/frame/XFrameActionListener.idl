@@ -44,7 +44,7 @@ published interface XFrameActionListener: com::sun::star::lang::XEventListener
         @param Action
             describes the detected frame action for which the listener can react
      */
-    [oneway] void frameAction( [in] FrameActionEvent Action );
+    void frameAction( [in] FrameActionEvent Action );
 };
 
 

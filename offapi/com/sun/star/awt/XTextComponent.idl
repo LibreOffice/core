@@ -38,22 +38,22 @@ published interface XTextComponent: com::sun::star::uno::XInterface
 
     /** registers a text event listener.
      */
-    [oneway] void addTextListener( [in] com::sun::star::awt::XTextListener l );
+    void addTextListener( [in] com::sun::star::awt::XTextListener l );
 
 
     /** unregisters a text event listener.
      */
-    [oneway] void removeTextListener( [in] com::sun::star::awt::XTextListener l );
+    void removeTextListener( [in] com::sun::star::awt::XTextListener l );
 
 
     /** sets the text of the component.
      */
-    [oneway] void setText( [in] string aText );
+    void setText( [in] string aText );
 
 
     /** inserts text at the specified position.
      */
-    [oneway] void insertText( [in] com::sun::star::awt::Selection Sel,
+    void insertText( [in] com::sun::star::awt::Selection Sel,
              [in] string Text );
 
 
@@ -69,7 +69,7 @@ published interface XTextComponent: com::sun::star::uno::XInterface
 
     /** sets the user selection.
      */
-    [oneway] void setSelection( [in] com::sun::star::awt::Selection aSelection );
+    void setSelection( [in] com::sun::star::awt::Selection aSelection );
 
 
     /** returns the current user selection.
@@ -84,12 +84,12 @@ published interface XTextComponent: com::sun::star::uno::XInterface
 
     /** makes the text editable for the user or read-only.
      */
-    [oneway] void setEditable( [in] boolean bEditable );
+    void setEditable( [in] boolean bEditable );
 
 
     /** sets the maximum text length.
      */
-    [oneway] void setMaxTextLen( [in] short nLen );
+    void setMaxTextLen( [in] short nLen );
 
 
     /** returns the currently set maximum text length.

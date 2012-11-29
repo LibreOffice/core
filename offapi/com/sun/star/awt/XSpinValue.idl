@@ -35,17 +35,17 @@ interface XSpinValue : com::sun::star::uno::XInterface
 
     /** registers an adjustment event listener.
      */
-    [oneway] void addAdjustmentListener( [in] com::sun::star::awt::XAdjustmentListener listener );
+    void addAdjustmentListener( [in] com::sun::star::awt::XAdjustmentListener listener );
 
 
     /** unregisters an adjustment event listener.
      */
-    [oneway] void removeAdjustmentListener( [in] com::sun::star::awt::XAdjustmentListener listener );
+    void removeAdjustmentListener( [in] com::sun::star::awt::XAdjustmentListener listener );
 
 
     /** sets the current value of the control
      */
-    [oneway] void setValue( [in] long value );
+    void setValue( [in] long value );
 
 
     /** sets the value and value range of the control
@@ -54,7 +54,7 @@ interface XSpinValue : com::sun::star::uno::XInterface
         @see setMinimum
         @see setMaximum
      */
-    [oneway] void setValues( [in] long minValue, [in] long maxValue, [in] long currentValue );
+    void setValues( [in] long minValue, [in] long maxValue, [in] long currentValue );
 
 
     /** returns the current value of the control.
@@ -64,12 +64,12 @@ interface XSpinValue : com::sun::star::uno::XInterface
 
     /** sets the  minimum value which can be set on the control
      */
-    [oneway] void setMinimum( [in] long minValue );
+    void setMinimum( [in] long minValue );
 
 
     /** sets the  maximum value which can be set on the control
      */
-    [oneway] void setMaximum( [in] long maxValue );
+    void setMaximum( [in] long maxValue );
 
 
     /** returns the currently set minimum value of the control
@@ -85,7 +85,7 @@ interface XSpinValue : com::sun::star::uno::XInterface
     /** sets the value by which the current value of the control
         should be incremented or decremented upon spinning.
      */
-    [oneway] void setSpinIncrement( [in] long spinIncrement );
+    void setSpinIncrement( [in] long spinIncrement );
 
 
     /** returns the value by which the current value of the control

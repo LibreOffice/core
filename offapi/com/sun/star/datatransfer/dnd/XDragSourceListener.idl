@@ -43,7 +43,7 @@ published interface XDragSourceListener: com::sun::star::lang::XEventListener
         The <type>DragSourceDropEvent</type>
     */
 
-    [oneway] void dragDropEnd( [in] DragSourceDropEvent dsde );
+    void dragDropEnd( [in] DragSourceDropEvent dsde );
 
     /** Called as the hotspot enters a platform dependent drop site.
 
@@ -54,7 +54,7 @@ published interface XDragSourceListener: com::sun::star::lang::XEventListener
         The <type>DragSourceDragEvent</type>.
     */
 
-    [oneway] void dragEnter( [in] DragSourceDragEvent dsde );
+    void dragEnter( [in] DragSourceDragEvent dsde );
 
     /** Called as the hotspot exits a platform dependent drop site.
 
@@ -65,7 +65,7 @@ published interface XDragSourceListener: com::sun::star::lang::XEventListener
         The <type>DragSourceEvent</type>.
     */
 
-    [oneway] void dragExit( [in] DragSourceEvent dse );
+    void dragExit( [in] DragSourceEvent dse );
 
     /** Called as the hotspot moves over a platform dependent drop site.
 
@@ -73,7 +73,7 @@ published interface XDragSourceListener: com::sun::star::lang::XEventListener
         The <type>DragSourceEvent</type>
     */
 
-    [oneway] void dragOver( [in] DragSourceDragEvent dsde );
+    void dragOver( [in] DragSourceDragEvent dsde );
 
     /** Called when the user has modified the drop gesture.
 
@@ -81,7 +81,7 @@ published interface XDragSourceListener: com::sun::star::lang::XEventListener
         The <type>DragSourceEvent</type>.
     */
 
-    [oneway] void dropActionChanged( [in] DragSourceDragEvent dsde );
+    void dropActionChanged( [in] DragSourceDragEvent dsde );
 };
 
 

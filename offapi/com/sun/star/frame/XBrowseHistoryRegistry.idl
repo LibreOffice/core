@@ -32,11 +32,11 @@ published interface XBrowseHistoryRegistry: com::sun::star::uno::XInterface
 {
     /** @deprecated
     */
-    [oneway] void updateViewData( [in] any Value );
+    void updateViewData( [in] any Value );
 
     /** @deprecated
     */
-    [oneway] void createNewEntry(
+    void createNewEntry(
         [in] string URL,
         [in] sequence<com::sun::star::beans::PropertyValue> Arguments,
         [in] string Title);

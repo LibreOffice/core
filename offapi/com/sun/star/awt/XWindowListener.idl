@@ -42,22 +42,22 @@ published interface XWindowListener: com::sun::star::lang::XEventListener
 
     /** is invoked when the window has been resized.
      */
-    [oneway] void windowResized( [in] com::sun::star::awt::WindowEvent e );
+    void windowResized( [in] com::sun::star::awt::WindowEvent e );
 
 
     /** is invoked when the window has been moved.
      */
-    [oneway] void windowMoved( [in] com::sun::star::awt::WindowEvent e );
+    void windowMoved( [in] com::sun::star::awt::WindowEvent e );
 
 
     /** is invoked when the window has been shown.
      */
-    [oneway] void windowShown( [in] com::sun::star::lang::EventObject e );
+    void windowShown( [in] com::sun::star::lang::EventObject e );
 
 
     /** is invoked when the window has been hidden.
      */
-    [oneway] void windowHidden( [in] com::sun::star::lang::EventObject e );
+    void windowHidden( [in] com::sun::star::lang::EventObject e );
 
 };
 

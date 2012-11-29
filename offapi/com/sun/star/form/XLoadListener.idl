@@ -45,7 +45,7 @@ published interface XLoadListener: com::sun::star::lang::XEventListener
         @param aEvent
             the event happened.
      */
-    [oneway] void loaded( [in] com::sun::star::lang::EventObject aEvent );
+    void loaded( [in] com::sun::star::lang::EventObject aEvent );
 
 
     /** is invoked when the object is about to be unloaded.
@@ -55,7 +55,7 @@ published interface XLoadListener: com::sun::star::lang::XEventListener
         @param aEvent
             the event happened.
      */
-    [oneway] void unloading( [in] com::sun::star::lang::EventObject aEvent );
+    void unloading( [in] com::sun::star::lang::EventObject aEvent );
 
 
     /** is invoked after the object has disconnected from a datasource.
@@ -63,7 +63,7 @@ published interface XLoadListener: com::sun::star::lang::XEventListener
         @param aEvent
             the event happened.
      */
-    [oneway] void unloaded( [in] com::sun::star::lang::EventObject aEvent );
+    void unloaded( [in] com::sun::star::lang::EventObject aEvent );
 
 
     /** is invoked when the object is about to be reloaded.
@@ -74,7 +74,7 @@ published interface XLoadListener: com::sun::star::lang::XEventListener
         @param aEvent
             the event happened.
      */
-    [oneway] void reloading( [in] com::sun::star::lang::EventObject aEvent );
+    void reloading( [in] com::sun::star::lang::EventObject aEvent );
 
 
     /** is invoked when the object has been reloaded.
@@ -82,7 +82,7 @@ published interface XLoadListener: com::sun::star::lang::XEventListener
         @param aEvent
             the event happened.
      */
-    [oneway] void reloaded( [in] com::sun::star::lang::EventObject aEvent );
+    void reloaded( [in] com::sun::star::lang::EventObject aEvent );
 };
 
 

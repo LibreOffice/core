@@ -41,7 +41,7 @@ published interface XImageProducer: com::sun::star::uno::XInterface
         interface immediately, or when the next available image reconstruction
         is triggered by a call to the startProduction method.</p>
      */
-    [oneway] void addConsumer( [in] com::sun::star::awt::XImageConsumer xConsumer );
+    void addConsumer( [in] com::sun::star::awt::XImageConsumer xConsumer );
 
 
     /** removes the given <type scope="com::sun::star::awt">XImageConsumer</type>
@@ -52,7 +52,7 @@ published interface XImageProducer: com::sun::star::uno::XInterface
         currently registered. The image producer should stop sending data
         to this consumer as soon as it is feasible.</p>
      */
-    [oneway] void removeConsumer( [in] com::sun::star::awt::XImageConsumer xConsumer );
+    void removeConsumer( [in] com::sun::star::awt::XImageConsumer xConsumer );
 
 
     /** registers the given image consumer as a consumer
@@ -63,7 +63,7 @@ published interface XImageProducer: com::sun::star::uno::XInterface
         This method differs from the addConsumer method in that a reproduction of
         the image data should be triggered as soon as possible.</p>
      */
-    [oneway] void startProduction();
+    void startProduction();
 
 };
 

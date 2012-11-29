@@ -36,7 +36,7 @@ published interface XDateField: com::sun::star::uno::XInterface
         <p>The date value must be specified in the format
         YYYYMMDD.</p>
      */
-    [oneway] void setDate( [in] long Date );
+    void setDate( [in] long Date );
 
 
     /** returns the date value which is currently displayed in the date field.
@@ -46,7 +46,7 @@ published interface XDateField: com::sun::star::uno::XInterface
 
     /** sets the minimum date value that can be entered by the user.
      */
-    [oneway] void setMin( [in] long Date );
+    void setMin( [in] long Date );
 
 
     /** returns the currently set minimum date value that can be entered by
@@ -57,7 +57,7 @@ published interface XDateField: com::sun::star::uno::XInterface
 
     /** sets the maximum date value that can be entered by the user.
      */
-    [oneway] void setMax( [in] long Date );
+    void setMax( [in] long Date );
 
 
     /** returns the currently set maximum date value that can be entered by
@@ -68,7 +68,7 @@ published interface XDateField: com::sun::star::uno::XInterface
 
     /** sets the first value to be set on POS1 key.
      */
-    [oneway] void setFirst( [in] long Date );
+    void setFirst( [in] long Date );
 
 
     /** returns the currently set first value which is set on POS1 key.
@@ -78,7 +78,7 @@ published interface XDateField: com::sun::star::uno::XInterface
 
     /** sets the last value to be set on END key.
      */
-    [oneway] void setLast( [in] long Date );
+    void setLast( [in] long Date );
 
 
     /** returns the currently set last value which is set on END key.
@@ -88,7 +88,7 @@ published interface XDateField: com::sun::star::uno::XInterface
 
     /** determines if the long date format is to be used.
      */
-    [oneway] void setLongFormat( [in] boolean bLong );
+    void setLongFormat( [in] boolean bLong );
 
 
     /** determines if the long date format is currently used.
@@ -108,7 +108,7 @@ published interface XDateField: com::sun::star::uno::XInterface
 
     /** determines if the format is checked during user input.
      */
-    [oneway] void setStrictFormat( [in] boolean bStrict );
+    void setStrictFormat( [in] boolean bStrict );
 
 
     /** returns whether the format is currently checked during user input.

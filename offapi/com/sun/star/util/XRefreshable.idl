@@ -38,11 +38,11 @@ published interface XRefreshable: com::sun::star::uno::XInterface
 
     /** adds the specified listener to receive the event "refreshed."
      */
-    [oneway] void addRefreshListener( [in] com::sun::star::util::XRefreshListener l );
+    void addRefreshListener( [in] com::sun::star::util::XRefreshListener l );
 
     /** removes the specified listener.
      */
-    [oneway] void removeRefreshListener( [in] com::sun::star::util::XRefreshListener l );
+    void removeRefreshListener( [in] com::sun::star::util::XRefreshListener l );
 
 };
 

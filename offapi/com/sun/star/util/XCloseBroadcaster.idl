@@ -46,14 +46,14 @@ published interface XCloseBroadcaster: com::sun::star::uno::XInterface
         @param Listener
             the listener which is interest on closing events
      */
-    [oneway] void addCloseListener( [in] XCloseListener Listener );
+    void addCloseListener( [in] XCloseListener Listener );
 
     /** removes the specified listener
 
         @param Listener
             the listener which isn't interest on closing events any longer
      */
-    [oneway] void removeCloseListener( [in] XCloseListener Listener );
+    void removeCloseListener( [in] XCloseListener Listener );
 };
 
 

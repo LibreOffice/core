@@ -52,7 +52,7 @@ published interface XSubmit: com::sun::star::uno::XInterface
 
         @see com::sun::star::awt::MouseEvent
      */
-    [oneway] void submit( [in] com::sun::star::awt::XControl aControl,
+    void submit( [in] com::sun::star::awt::XControl aControl,
              [in] com::sun::star::awt::MouseEvent aMouseEvt );
 
 
@@ -63,7 +63,7 @@ published interface XSubmit: com::sun::star::uno::XInterface
 
         @see com::sun::star::form::XSubmitListener
      */
-    [oneway] void addSubmitListener( [in] com::sun::star::form::XSubmitListener aListener );
+    void addSubmitListener( [in] com::sun::star::form::XSubmitListener aListener );
 
 
     /** removes the specified listener.
@@ -71,7 +71,7 @@ published interface XSubmit: com::sun::star::uno::XInterface
             the listener to remove.
         @see com::sun::star::form::XSubmitListener
      */
-    [oneway] void removeSubmitListener( [in] com::sun::star::form::XSubmitListener aListener );
+    void removeSubmitListener( [in] com::sun::star::form::XSubmitListener aListener );
 
 };
 

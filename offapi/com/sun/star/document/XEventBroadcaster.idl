@@ -38,14 +38,14 @@ published interface XEventBroadcaster: com::sun::star::uno::XInterface
         @param Listener
             listener which is interested on such events
      */
-    [oneway] void addEventListener( [in] XEventListener Listener );
+    void addEventListener( [in] XEventListener Listener );
 
     /** unregisters the given listener
 
         @param Listener
             listener which isn't interested on such events any longer
      */
-    [oneway] void removeEventListener( [in] XEventListener Listener );
+    void removeEventListener( [in] XEventListener Listener );
 };
 
 

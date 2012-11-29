@@ -82,7 +82,7 @@ interface XAccessibleSelection : ::com::sun::star::uno::XInterface
     /** Clears the selection, so that no children of the
         object are selected.
     */
-    [oneway] void clearAccessibleSelection ();
+    void clearAccessibleSelection ();
 
     /** Select all children.
 
@@ -91,7 +91,7 @@ interface XAccessibleSelection : ::com::sun::star::uno::XInterface
         supported then the first child, if it exists, is selected and all
         other children are deselected.</p>
     */
-    [oneway] void selectAllAccessibleChildren ();
+    void selectAllAccessibleChildren ();
 
     /** Returns the number of Accessible children that are currently
         selected.

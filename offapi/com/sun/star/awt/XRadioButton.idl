@@ -36,12 +36,12 @@ published interface XRadioButton: com::sun::star::uno::XInterface
 
     /** registers a listener for item events.
      */
-    [oneway] void addItemListener( [in] com::sun::star::awt::XItemListener l );
+    void addItemListener( [in] com::sun::star::awt::XItemListener l );
 
 
     /** unregisters a listener for item events.
      */
-    [oneway] void removeItemListener( [in] com::sun::star::awt::XItemListener l );
+    void removeItemListener( [in] com::sun::star::awt::XItemListener l );
 
 
     /** returns <true/> if the button is checked, <false/> otherwise.
@@ -51,12 +51,12 @@ published interface XRadioButton: com::sun::star::uno::XInterface
 
     /** sets the state of the radio button.
      */
-    [oneway] void setState( [in] boolean b );
+    void setState( [in] boolean b );
 
 
     /** sets the label of the radio button.
      */
-    [oneway] void setLabel( [in] string Label );
+    void setLabel( [in] string Label );
 
 };
 

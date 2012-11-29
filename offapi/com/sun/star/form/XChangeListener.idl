@@ -44,7 +44,7 @@ published interface XChangeListener: com::sun::star::lang::XEventListener
         @param rEvent
             A descriptor specifying the source of the event.
      */
-    [oneway] void changed( [in] com::sun::star::lang::EventObject rEvent );
+    void changed( [in] com::sun::star::lang::EventObject rEvent );
 
 };
 

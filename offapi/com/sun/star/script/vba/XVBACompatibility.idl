@@ -36,10 +36,10 @@ interface XVBACompatibility
     [attribute, readonly] long RunningVBAScripts;
 
 
-    [oneway] void addVBAScriptListener( [in] XVBAScriptListener Listener );
+    void addVBAScriptListener( [in] XVBAScriptListener Listener );
 
 
-    [oneway] void removeVBAScriptListener( [in] XVBAScriptListener Listener );
+    void removeVBAScriptListener( [in] XVBAScriptListener Listener );
 
 
     void broadcastVBAScriptEvent( [in] long Identifier, [in] string ModuleName );

@@ -63,7 +63,7 @@ published interface XClipboard: com::sun::star::uno::XInterface
         @see com::sun::star::datatransfer::XTransferable
         @see com::sun::star::datatransfer::clipboard::XClipboardOwner
     */
-    [oneway] void setContents( [in] com::sun::star::datatransfer::XTransferable xTrans, [in] XClipboardOwner xClipboardOwner );
+    void setContents( [in] com::sun::star::datatransfer::XTransferable xTrans, [in] XClipboardOwner xClipboardOwner );
 
     /** To get the name of the clipboard instance.
 

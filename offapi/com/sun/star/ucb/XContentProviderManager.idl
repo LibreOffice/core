@@ -128,7 +128,7 @@ published interface XContentProviderManager: com::sun::star::uno::XInterface
         <member>registerContentProvider</member> for a discussion of URL
         templates).
     */
-    [oneway] void deregisterContentProvider(
+    void deregisterContentProvider(
                 [in] com::sun::star::ucb::XContentProvider Provider,
                  [in] string Scheme );
 

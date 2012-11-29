@@ -99,7 +99,7 @@ published interface XInterface
         <p> Every call to acquire must be followed by a corresponding call to release
         some time later, which may eventually lead to the destruction of the object.
      */
-    [oneway] void acquire();
+    void acquire();
 
 
     // DocMerge from xml: method com::sun::star::uno::XInterface::release
@@ -108,7 +108,7 @@ published interface XInterface
         <p>Calling release() on the object is often called releasing
         or clearing the reference to an object.
      */
-    [oneway] void release();
+    void release();
 
 };
 

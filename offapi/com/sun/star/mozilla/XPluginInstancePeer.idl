@@ -60,7 +60,7 @@ published interface XPluginInstancePeer: com::sun::star::uno::XInterface
 
         @param message  [in]: the string to be displayed
      */
-    [oneway] void showStatusMessage( [in] string message );
+    void showStatusMessage( [in] string message );
 
 
 
@@ -72,7 +72,7 @@ published interface XPluginInstancePeer: com::sun::star::uno::XInterface
         @param servicemanager   [in]: the office servicemanager
 
      */
-    [oneway] void enableScripting( [in] com::sun::star::uno::XInterface document, [in] com::sun::star::lang::XMultiServiceFactory servicemanager );
+    void enableScripting( [in] com::sun::star::uno::XInterface document, [in] com::sun::star::lang::XMultiServiceFactory servicemanager );
 
 
 
@@ -85,7 +85,7 @@ published interface XPluginInstancePeer: com::sun::star::uno::XInterface
         @param data     [in]:   on success the output stream will be    associated with this instance
 
      */
-    [oneway] void newStream(
+    void newStream(
         [in] string MIMEDesc,
         [in] string target,
         [in] com::sun::star::io::XActiveDataSource data
@@ -104,7 +104,7 @@ published interface XPluginInstancePeer: com::sun::star::uno::XInterface
         @param sink             [in]: the sink is notified on success
 
      */
-    [oneway] void getURL (
+    void getURL (
         [in] string aURL,
         [in] string target,
         [in] string alternativeHost,
@@ -127,7 +127,7 @@ published interface XPluginInstancePeer: com::sun::star::uno::XInterface
         @param sink             [in]: the sink is notified on success
 
      */
-    [oneway] void postURL (
+    void postURL (
         [in] string aURL,
         [in] com::sun::star::io::XInputStream postData,
         [in] string target,

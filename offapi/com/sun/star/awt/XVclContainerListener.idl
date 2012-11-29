@@ -41,13 +41,13 @@ published interface XVclContainerListener: com::sun::star::lang::XEventListener
 
     /** is invoked when a window has been added to the VCL container window.
      */
-    [oneway] void windowAdded( [in] com::sun::star::awt::VclContainerEvent e );
+    void windowAdded( [in] com::sun::star::awt::VclContainerEvent e );
 
 
     /** is invoked when a window has been removed from the VCL container
         window.
      */
-    [oneway] void windowRemoved( [in] com::sun::star::awt::VclContainerEvent e );
+    void windowRemoved( [in] com::sun::star::awt::VclContainerEvent e );
 
 };
 

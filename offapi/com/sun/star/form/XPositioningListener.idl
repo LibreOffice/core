@@ -41,7 +41,7 @@ published interface XPositioningListener: com::sun::star::lang::XEventListener
 
     /** is invoked when the database form has been positioned on a data record.
      */
-    [oneway] void positioned( [in] com::sun::star::lang::EventObject aEvent );
+    void positioned( [in] com::sun::star::lang::EventObject aEvent );
 
 };
 

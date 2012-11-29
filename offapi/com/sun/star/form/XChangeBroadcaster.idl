@@ -45,7 +45,7 @@ published interface XChangeBroadcaster: com::sun::star::uno::XInterface
 
         @see com::sun::star::form::XChangeListener
      */
-    [oneway] void addChangeListener( [in] com::sun::star::form::XChangeListener aListener );
+    void addChangeListener( [in] com::sun::star::form::XChangeListener aListener );
 
 
     /** removes the specified listener.
@@ -55,7 +55,7 @@ published interface XChangeBroadcaster: com::sun::star::uno::XInterface
 
         @see com::sun::star::form::XChangeListener
      */
-    [oneway] void removeChangeListener( [in] com::sun::star::form::XChangeListener aListener );
+    void removeChangeListener( [in] com::sun::star::form::XChangeListener aListener );
 
 };
 

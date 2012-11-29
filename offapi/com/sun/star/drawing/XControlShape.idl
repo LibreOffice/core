@@ -55,7 +55,7 @@ published interface XControlShape: com::sun::star::drawing::XShape
             of a <type>ControlShape</type>
 
      */
-    [oneway] void setControl( [in] com::sun::star::awt::XControlModel xControl );
+    void setControl( [in] com::sun::star::awt::XControlModel xControl );
 
 };
 

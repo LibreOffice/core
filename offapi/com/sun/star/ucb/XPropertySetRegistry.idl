@@ -53,7 +53,7 @@ published interface XPropertySetRegistry : com::sun::star::uno::XInterface
         @param key
         The key to use for addressing the property set.
       */
-    [oneway] void removePropertySet( [in] string key );
+    void removePropertySet( [in] string key );
 };
 
 

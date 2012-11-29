@@ -112,7 +112,7 @@ published interface XMultiPropertySet: com::sun::star::uno::XInterface
 
         @see removePropertiesChangeListener
      */
-    [oneway] void addPropertiesChangeListener( [in] sequence<string> aPropertyNames,
+    void addPropertiesChangeListener( [in] sequence<string> aPropertyNames,
              [in] com::sun::star::beans::XPropertiesChangeListener xListener );
 
 
@@ -128,7 +128,7 @@ published interface XMultiPropertySet: com::sun::star::uno::XInterface
 
         @see addPropertiesChangeListener
      */
-    [oneway] void removePropertiesChangeListener( [in] com::sun::star::beans::XPropertiesChangeListener xListener );
+    void removePropertiesChangeListener( [in] com::sun::star::beans::XPropertiesChangeListener xListener );
 
 
     /** fires a sequence of <type>PropertyChangeEvent</type>s to the specified
@@ -140,7 +140,7 @@ published interface XMultiPropertySet: com::sun::star::uno::XInterface
         @param xListener
             contains the listener for the property change events.
      */
-    [oneway] void firePropertiesChangeEvent( [in] sequence<string> aPropertyNames,
+    void firePropertiesChangeEvent( [in] sequence<string> aPropertyNames,
              [in] com::sun::star::beans::XPropertiesChangeListener xListener );
 
 };

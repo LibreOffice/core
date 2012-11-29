@@ -52,14 +52,14 @@ published interface XDropTargetDropContext : com::sun::star::uno::XInterface
         @see DropTargetDragEvent
     */
 
-    [oneway] void acceptDrop( [in] byte dragOperation );
+    void acceptDrop( [in] byte dragOperation );
 
     /** Reject the drop as a result of examining the available
         <type scope="com::sun::star::datatransfer">DataFlavor</type> types
         received in the <member>XDropTargetListener::dragEnter()</member> method.
     */
 
-    [oneway] void rejectDrop();
+    void rejectDrop();
 
     /** Signals that the drop is completed and if it was successful or not.
 
@@ -68,7 +68,7 @@ published interface XDropTargetDropContext : com::sun::star::uno::XInterface
         <p>A value of <FALSE/> means the drop completed unsuccessfully.</p>
     */
 
-    [oneway] void dropComplete( [in] boolean success );
+    void dropComplete( [in] boolean success );
 };
 
 

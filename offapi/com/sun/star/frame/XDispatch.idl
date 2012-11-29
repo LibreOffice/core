@@ -89,7 +89,7 @@ published interface XDispatch: com::sun::star::uno::XInterface
             }
             </listing>
      */
-    [oneway] void dispatch(
+    void dispatch(
         [in] com::sun::star::util::URL URL,
         [in] sequence<com::sun::star::beans::PropertyValue> Arguments);
 
@@ -112,7 +112,7 @@ published interface XDispatch: com::sun::star::uno::XInterface
         @see XStatusListener
         @see XDispatch::removeStatusListener()
      */
-    [oneway] void addStatusListener(
+    void addStatusListener(
         [in] XStatusListener Control,
         [in] com::sun::star::util::URL URL);
 
@@ -128,7 +128,7 @@ published interface XDispatch: com::sun::star::uno::XInterface
         @see XStatusListener
         @see XDispatch::addStatusListener()
      */
-    [oneway] void removeStatusListener(
+    void removeStatusListener(
         [in] XStatusListener Control,
         [in] com::sun::star::util::URL URL);
 };

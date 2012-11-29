@@ -37,14 +37,14 @@ published interface XLoadEventListener: com::sun::star::lang::XEventListener
         @param Loader
             the source of this event
      */
-    [oneway] void loadFinished( [in] XFrameLoader Loader );
+    void loadFinished( [in] XFrameLoader Loader );
 
     /** is called when a frame load is canceled or failed.
 
         @param Loader
             the source of this event
      */
-    [oneway] void loadCancelled( [in] XFrameLoader Loader );
+    void loadCancelled( [in] XFrameLoader Loader );
 };
 
 

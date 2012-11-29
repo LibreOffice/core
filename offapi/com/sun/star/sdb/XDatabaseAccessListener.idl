@@ -29,9 +29,9 @@
  */
 published interface XDatabaseAccessListener: com::sun::star::lang::XEventListener
 {
-    [oneway] void connectionChanged([in]com::sun::star::lang::EventObject event);
+    void connectionChanged([in]com::sun::star::lang::EventObject event);
     boolean approveConnectionClosing([in]com::sun::star::lang::EventObject event);
-    [oneway] void connectionClosing([in]com::sun::star::lang::EventObject event);
+    void connectionClosing([in]com::sun::star::lang::EventObject event);
 };
 
 

@@ -39,7 +39,7 @@ published interface XClipboardListener: com::sun::star::lang::XEventListener
 
         @see com::sun::star::datatransfer::clipboard::ClipboardEvent
     */
-    [oneway] void changedContents( [in] ClipboardEvent event );
+    void changedContents( [in] ClipboardEvent event );
 };
 
 

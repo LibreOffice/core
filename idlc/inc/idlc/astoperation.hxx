@@ -25,7 +25,6 @@
 namespace typereg { class Writer; }
 
 #define OP_NONE         0x0000
-#define OP_ONEWAY       0x0001
 
 class AstType;
 
@@ -33,16 +32,12 @@ class AstOperation : public AstDeclaration
                    , public AstScope
 {
 public:
-    AstOperation(sal_uInt32 flags, AstType* pReturnType, const ::rtl::OString& name, AstScope* pScope)
+    AstOperation(AstType* pReturnType, const ::rtl::OString& name, AstScope* pScope)
         : AstDeclaration(NT_operation, name, pScope)
         , AstScope(NT_operation)
-        , m_flags(flags)
         , m_pReturnType(pReturnType)
         {}
     virtual ~AstOperation() {}
-
-    sal_Bool isOneway()
-        { return ((m_flags & OP_ONEWAY) == OP_ONEWAY); }
 
     bool isVariadic() const;
 
@@ -59,7 +54,6 @@ public:
     // scope management
     virtual AstDeclaration* addDeclaration(AstDeclaration* pDecl);
 private:
-    sal_uInt32  m_flags;
     AstType*    m_pReturnType;
     DeclList    m_exceptions;
 };

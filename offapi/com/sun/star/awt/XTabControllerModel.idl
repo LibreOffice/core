@@ -40,12 +40,12 @@ published interface XTabControllerModel: com::sun::star::uno::XInterface
 
     /** determines if the control models are grouped together.
      */
-    [oneway] void setGroupControl( [in] boolean GroupControl );
+    void setGroupControl( [in] boolean GroupControl );
 
 
     /** sets the control models.
      */
-    [oneway] void setControlModels( [in] sequence<com::sun::star::awt::XControlModel> Controls );
+    void setControlModels( [in] sequence<com::sun::star::awt::XControlModel> Controls );
 
 
     /** returns the control models.
@@ -55,7 +55,7 @@ published interface XTabControllerModel: com::sun::star::uno::XInterface
 
     /** sets a control model group.
      */
-    [oneway] void setGroup( [in] sequence<com::sun::star::awt::XControlModel> Group,
+    void setGroup( [in] sequence<com::sun::star::awt::XControlModel> Group,
              [in] string GroupName );
 
 

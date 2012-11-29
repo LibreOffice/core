@@ -80,7 +80,7 @@ interface XLBTestBase : com::sun::star::uno::XInterface
     /**
      * in parameter test, tests by calls reference also (complex types)
      */
-    [oneway] void setValues( [in] boolean bBool, [in] char cChar, [in] byte nByte,
+    void setValues( [in] boolean bBool, [in] char cChar, [in] byte nByte,
                              [in] short nShort, [in] unsigned short nUShort,
                              [in] long nLong, [in] unsigned long nULong,
                              [in] hyper nHyper, [in] unsigned hyper nUHyper,

@@ -44,22 +44,22 @@ published interface XMouseListener: com::sun::star::lang::XEventListener
         the latter, the <member>MouseEvent::PopupTrigger</member> member of the
         event will be set to <TRUE/>.</p>
     */
-    [oneway] void mousePressed( [in] com::sun::star::awt::MouseEvent e );
+    void mousePressed( [in] com::sun::star::awt::MouseEvent e );
 
 
     /** is invoked when a mouse button has been released on a window.
      */
-    [oneway] void mouseReleased( [in] com::sun::star::awt::MouseEvent e );
+    void mouseReleased( [in] com::sun::star::awt::MouseEvent e );
 
 
     /** is invoked when the mouse enters a window.
      */
-    [oneway] void mouseEntered( [in] com::sun::star::awt::MouseEvent e );
+    void mouseEntered( [in] com::sun::star::awt::MouseEvent e );
 
 
     /** is invoked when the mouse exits a window.
      */
-    [oneway] void mouseExited( [in] com::sun::star::awt::MouseEvent e );
+    void mouseExited( [in] com::sun::star::awt::MouseEvent e );
 
 };
 

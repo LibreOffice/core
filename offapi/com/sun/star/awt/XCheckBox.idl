@@ -36,12 +36,12 @@ published interface XCheckBox: com::sun::star::uno::XInterface
 
     /** registers a listener for item events.
      */
-    [oneway] void addItemListener( [in] com::sun::star::awt::XItemListener l );
+    void addItemListener( [in] com::sun::star::awt::XItemListener l );
 
 
     /** unregisters a listener for item events.
      */
-    [oneway] void removeItemListener( [in] com::sun::star::awt::XItemListener l );
+    void removeItemListener( [in] com::sun::star::awt::XItemListener l );
 
 
     /** returns the state of the check box.
@@ -51,17 +51,17 @@ published interface XCheckBox: com::sun::star::uno::XInterface
 
     /** sets the state of the check box.
      */
-    [oneway] void setState( [in] short n );
+    void setState( [in] short n );
 
 
     /** sets the label of the check box.
      */
-    [oneway] void setLabel( [in] string Label );
+    void setLabel( [in] string Label );
 
 
     /** enables or disables the tri state mode.
      */
-    [oneway] void enableTriState( [in] boolean b );
+    void enableTriState( [in] boolean b );
 
 };
 

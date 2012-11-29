@@ -45,7 +45,7 @@ published interface XDatabaseParameterBroadcaster: com::sun::star::uno::XInterfa
             the listener to add.
         @see com::sun::star::form::XDatabaseParameterListener
      */
-    [oneway] void addParameterListener( [in] com::sun::star::form::XDatabaseParameterListener aListener );
+    void addParameterListener( [in] com::sun::star::form::XDatabaseParameterListener aListener );
 
 
     /** removes the specified listener.
@@ -53,7 +53,7 @@ published interface XDatabaseParameterBroadcaster: com::sun::star::uno::XInterfa
             the listener to remove.
         @see com::sun::star::form::XDatabaseParameterListener
      */
-    [oneway] void removeParameterListener( [in] com::sun::star::form::XDatabaseParameterListener aListener );
+    void removeParameterListener( [in] com::sun::star::form::XDatabaseParameterListener aListener );
 
 };
 

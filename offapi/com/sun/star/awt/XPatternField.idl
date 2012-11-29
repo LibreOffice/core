@@ -33,7 +33,7 @@ published interface XPatternField: com::sun::star::uno::XInterface
 
     /** sets the pattern mask.
      */
-    [oneway] void setMasks( [in] string EditMask,
+    void setMasks( [in] string EditMask,
              [in] string LiteralMask );
 
 
@@ -45,7 +45,7 @@ published interface XPatternField: com::sun::star::uno::XInterface
 
     /** sets the string value of the pattern field.
      */
-    [oneway] void setString( [in] string Str );
+    void setString( [in] string Str );
 
 
     /** returns the currently set string value of the pattern field.
@@ -55,7 +55,7 @@ published interface XPatternField: com::sun::star::uno::XInterface
 
     /** determines if the format is checked during user input.
      */
-    [oneway] void setStrictFormat( [in] boolean bStrict );
+    void setStrictFormat( [in] boolean bStrict );
 
 
     /** returns whether the format is currently checked during user input.

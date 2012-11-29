@@ -36,7 +36,7 @@ published interface XControlContainer: com::sun::star::uno::XInterface
 
     /** sets the status text in the status bar of the container.
      */
-    [oneway] void setStatusText( [in] string StatusText );
+    void setStatusText( [in] string StatusText );
 
 
     /** returns all controls.
@@ -51,13 +51,13 @@ published interface XControlContainer: com::sun::star::uno::XInterface
 
     /** adds the given control with the specified name to the container.
      */
-    [oneway] void addControl( [in] string Name,
+    void addControl( [in] string Name,
              [in] com::sun::star::awt::XControl Control );
 
 
     /** removes the given control from the container.
      */
-    [oneway] void removeControl( [in] com::sun::star::awt::XControl Control );
+    void removeControl( [in] com::sun::star::awt::XControl Control );
 
 };
 

@@ -33,7 +33,7 @@ published interface XFixedText: com::sun::star::uno::XInterface
 
     /** sets the text of the control.
      */
-    [oneway] void setText( [in] string Text );
+    void setText( [in] string Text );
 
 
     /** returns the text of the control.
@@ -49,7 +49,7 @@ published interface XFixedText: com::sun::star::uno::XInterface
         2: right
         </pre>
      */
-    [oneway] void setAlignment( [in] short nAlign );
+    void setAlignment( [in] short nAlign );
 
 
     /** returns the alignment of the text in the control.

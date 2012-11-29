@@ -37,7 +37,7 @@ published interface XTimeField: com::sun::star::uno::XInterface
         where HH are hours, MM are minutes, SS are seconds and hh are
         hundredth seconds.</p>
      */
-    [oneway] void setTime( [in] long Time );
+    void setTime( [in] long Time );
 
 
     /** returns the time value which is currently displayed in the time field.
@@ -47,7 +47,7 @@ published interface XTimeField: com::sun::star::uno::XInterface
 
     /** sets the minimum time value that can be entered by the user.
      */
-    [oneway] void setMin( [in] long Time );
+    void setMin( [in] long Time );
 
 
     /** returns the currently set minimum time value that can be entered by
@@ -58,7 +58,7 @@ published interface XTimeField: com::sun::star::uno::XInterface
 
     /** sets the maximum time value that can be entered by the user.
      */
-    [oneway] void setMax( [in] long Time );
+    void setMax( [in] long Time );
 
 
     /** returns the currently set maximum time value that can be entered by
@@ -69,7 +69,7 @@ published interface XTimeField: com::sun::star::uno::XInterface
 
     /** sets the first value to be set on POS1 key.
      */
-    [oneway] void setFirst( [in] long Time );
+    void setFirst( [in] long Time );
 
 
     /** returns the currently set first value which is set on POS1 key.
@@ -79,7 +79,7 @@ published interface XTimeField: com::sun::star::uno::XInterface
 
     /** sets the last value to be set on END key.
      */
-    [oneway] void setLast( [in] long Time );
+    void setLast( [in] long Time );
 
 
     /** returns the currently set last value which is set on END key.
@@ -99,7 +99,7 @@ published interface XTimeField: com::sun::star::uno::XInterface
 
     /** determines if the format is checked during user input.
      */
-    [oneway] void setStrictFormat( [in] boolean bStrict );
+    void setStrictFormat( [in] boolean bStrict );
 
 
     /** returns whether the format is currently checked during user input.

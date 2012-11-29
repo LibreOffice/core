@@ -36,8 +36,8 @@
 published interface XFormController: com::sun::star::awt::XTabController
 {
     ::com::sun::star::awt::XControl getCurrentControl();
-    [oneway] void addActivateListener( [in] ::com::sun::star::form::XFormControllerListener l );
-    [oneway] void removeActivateListener( [in] ::com::sun::star::form::XFormControllerListener l );
+    void addActivateListener( [in] ::com::sun::star::form::XFormControllerListener l );
+    void removeActivateListener( [in] ::com::sun::star::form::XFormControllerListener l );
 
 };
 

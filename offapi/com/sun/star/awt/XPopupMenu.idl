@@ -36,12 +36,12 @@ published interface XPopupMenu: XMenu
 
     /** inserts a separator at the specified position.
      */
-    [oneway] void insertSeparator( [in] short nPos );
+    void insertSeparator( [in] short nPos );
 
 
     /** sets the menu default item.
      */
-    [oneway] void setDefaultItem( [in] short nItemId );
+    void setDefaultItem( [in] short nItemId );
 
 
     /** returns the menu default item.
@@ -51,7 +51,7 @@ published interface XPopupMenu: XMenu
 
     /** sets the state of the item to be checked or unchecked.
      */
-    [oneway] void checkItem( [in] short nItemId,
+    void checkItem( [in] short nItemId,
              [in] boolean bCheck );
 
 

@@ -48,7 +48,7 @@ published interface XDropTarget: com::sun::star::uno::XInterface
         The listener to add to the notification list.
     */
 
-    [oneway] void addDropTargetListener( [in] XDropTargetListener dtl );
+    void addDropTargetListener( [in] XDropTargetListener dtl );
 
     /** Remove a drop target listener.
 
@@ -56,7 +56,7 @@ published interface XDropTarget: com::sun::star::uno::XInterface
         The listener to remove from notification list.
     */
 
-    [oneway] void removeDropTargetListener( [in] XDropTargetListener dtl );
+    void removeDropTargetListener( [in] XDropTargetListener dtl );
 
     /** Indicates either a drop target object is active or not.
 
@@ -99,7 +99,7 @@ published interface XDropTarget: com::sun::star::uno::XInterface
 
         @see com::sun::star::datatransfer::dnd::DNDConstants
     */
-    [oneway] void setDefaultActions( [in] byte actions );
+    void setDefaultActions( [in] byte actions );
 };
 
 

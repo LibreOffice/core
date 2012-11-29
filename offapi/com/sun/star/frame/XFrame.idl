@@ -91,7 +91,7 @@ published interface XFrame: com::sun::star::lang::XComponent
 
         @see XFrame::getCreator()
      */
-    [oneway] void setCreator( [in] XFramesSupplier Creator );
+    void setCreator( [in] XFramesSupplier Creator );
 
     /** provides access to the creator (parent) of this frame
 
@@ -134,7 +134,7 @@ published interface XFrame: com::sun::star::lang::XComponent
         @see XDispatchProvider
         @see XComponentLoader
      */
-    [oneway] void setName( [in] string aName );
+    void setName( [in] string aName );
 
     /** searches for a frame with the specified name.
 
@@ -217,7 +217,7 @@ published interface XFrame: com::sun::star::lang::XComponent
         @see XFrame::deactivate()
         @see XFrame::isActive()
     */
-    [oneway] void activate();
+    void activate();
 
     /** is called by the creator frame when another sub-frame gets activated.
 
@@ -230,7 +230,7 @@ published interface XFrame: com::sun::star::lang::XComponent
         @see XFrame::activate()
         @see XFrame::isActive()
      */
-    [oneway] void deactivate();
+    void deactivate();
 
     /** determines if the frame is active.
 
@@ -337,7 +337,7 @@ published interface XFrame: com::sun::star::lang::XComponent
 
         @see XFrame::removeFrameActionListener()
      */
-    [oneway] void addFrameActionListener( [in]XFrameActionListener xListener );
+    void addFrameActionListener( [in]XFrameActionListener xListener );
 
     /** unregisters an event listener
 
@@ -346,7 +346,7 @@ published interface XFrame: com::sun::star::lang::XComponent
 
         @see XFrame::addFrameActionListener()
      */
-    [oneway] void removeFrameActionListener( [in] XFrameActionListener xListener );
+    void removeFrameActionListener( [in] XFrameActionListener xListener );
 };
 
 

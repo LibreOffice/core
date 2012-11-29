@@ -187,7 +187,7 @@ interface XAccessibleComponent : ::com::sun::star::uno::XInterface
         has the focus.  This method is called <code>requestFocus</code> in
         the Java Accessibility API 1.4.</p>
     */
-    [oneway] void grabFocus ();
+    void grabFocus ();
 
     /** Returns the foreground color of this object.
 

@@ -35,17 +35,17 @@ published interface XContainerListener: com::sun::star::lang::XEventListener
 
     /** is invoked when a container has inserted an element.
      */
-    [oneway] void elementInserted( [in] com::sun::star::container::ContainerEvent Event );
+    void elementInserted( [in] com::sun::star::container::ContainerEvent Event );
 
 
     /** is invoked when a container has removed an element.
      */
-    [oneway] void elementRemoved( [in] com::sun::star::container::ContainerEvent Event );
+    void elementRemoved( [in] com::sun::star::container::ContainerEvent Event );
 
 
     /** is invoked when a container has replaced an element.
      */
-    [oneway] void elementReplaced( [in] com::sun::star::container::ContainerEvent Event );
+    void elementReplaced( [in] com::sun::star::container::ContainerEvent Event );
 
 };
 

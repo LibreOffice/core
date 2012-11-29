@@ -45,7 +45,7 @@ published interface XDragGestureRecognizer: com::sun::star::uno::XInterface
         <type>XDragGestureRecognizer</type>.
     */
 
-    [oneway] void addDragGestureListener( [in] XDragGestureListener dgl );
+    void addDragGestureListener( [in] XDragGestureListener dgl );
 
     /** Unregisters the specified <type>XDragGestureListener</type>.
 
@@ -54,7 +54,7 @@ published interface XDragGestureRecognizer: com::sun::star::uno::XInterface
         <type>XDragGestureRecognizer</type>.
     */
 
-    [oneway] void removeDragGestureListener( [in] XDragGestureListener dgl );
+    void removeDragGestureListener( [in] XDragGestureListener dgl );
 
     /** Reset the recognizer. If it is currently recognizing a gesture, ignore it.
     */

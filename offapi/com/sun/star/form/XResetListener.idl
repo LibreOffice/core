@@ -61,7 +61,7 @@ published interface XResetListener: com::sun::star::lang::XEventListener
         @param rEvent
             the event happened.
      */
-    [oneway] void resetted( [in] com::sun::star::lang::EventObject rEvent );
+    void resetted( [in] com::sun::star::lang::EventObject rEvent );
 
 };
 

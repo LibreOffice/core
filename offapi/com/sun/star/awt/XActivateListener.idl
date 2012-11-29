@@ -42,7 +42,7 @@ published interface XActivateListener: com::sun::star::lang::XEventListener
 
         @see XFocusListener::focusGained
      */
-    [oneway] void windowActivated( [in] com::sun::star::lang::EventObject e );
+    void windowActivated( [in] com::sun::star::lang::EventObject e );
 
 
     /** is invoked when a window is deactivated.
@@ -51,7 +51,7 @@ published interface XActivateListener: com::sun::star::lang::XEventListener
 
         @see XFocusListener::focusLost
      */
-    [oneway] void windowDeactivated( [in] com::sun::star::lang::EventObject e );
+    void windowDeactivated( [in] com::sun::star::lang::EventObject e );
 
 };
 

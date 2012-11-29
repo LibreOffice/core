@@ -37,39 +37,39 @@ published interface XTopWindowListener: com::sun::star::lang::XEventListener
 
     /** is invoked when a window has been opened.
      */
-    [oneway] void windowOpened( [in] com::sun::star::lang::EventObject e );
+    void windowOpened( [in] com::sun::star::lang::EventObject e );
 
 
     /** is invoked when a window is in the process of being closed.
 
         <p>The close operation can be overridden at this point.</p>
      */
-    [oneway] void windowClosing( [in] com::sun::star::lang::EventObject e );
+    void windowClosing( [in] com::sun::star::lang::EventObject e );
 
 
     /** is invoked when a window has been closed.
      */
-    [oneway] void windowClosed( [in] com::sun::star::lang::EventObject e );
+    void windowClosed( [in] com::sun::star::lang::EventObject e );
 
 
     /** is invoked when a window is iconified.
      */
-    [oneway] void windowMinimized( [in] com::sun::star::lang::EventObject e );
+    void windowMinimized( [in] com::sun::star::lang::EventObject e );
 
 
     /** is invoked when a window is deiconified.
      */
-    [oneway] void windowNormalized( [in] com::sun::star::lang::EventObject e );
+    void windowNormalized( [in] com::sun::star::lang::EventObject e );
 
 
     /** is invoked when a window is activated.
      */
-    [oneway] void windowActivated( [in] com::sun::star::lang::EventObject e );
+    void windowActivated( [in] com::sun::star::lang::EventObject e );
 
 
     /** is invoked when a window is deactivated.
      */
-    [oneway] void windowDeactivated( [in] com::sun::star::lang::EventObject e );
+    void windowDeactivated( [in] com::sun::star::lang::EventObject e );
 
 };
 

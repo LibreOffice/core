@@ -35,12 +35,12 @@ published interface XKeyListener: com::sun::star::lang::XEventListener
 
     /** is invoked when a key has been pressed.
      */
-    [oneway] void keyPressed( [in] com::sun::star::awt::KeyEvent e );
+    void keyPressed( [in] com::sun::star::awt::KeyEvent e );
 
 
     /** is invoked when a key has been released.
      */
-    [oneway] void keyReleased( [in] com::sun::star::awt::KeyEvent e );
+    void keyReleased( [in] com::sun::star::awt::KeyEvent e );
 
 };
 

@@ -44,7 +44,7 @@ published interface XDragGestureListener: com::sun::star::lang::XEventListener
         The DragGestureEvent describing the gesture that has just occurred.
 
     */
-    [oneway] void dragGestureRecognized( [in] DragGestureEvent dge );
+    void dragGestureRecognized( [in] DragGestureEvent dge );
 };
 
 

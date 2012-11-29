@@ -38,11 +38,11 @@ published interface XModifyBroadcaster: com::sun::star::uno::XInterface
 {
     /** adds the specified listener to receive events "modified."
      */
-    [oneway] void addModifyListener( [in] com::sun::star::util::XModifyListener aListener );
+    void addModifyListener( [in] com::sun::star::util::XModifyListener aListener );
 
     /** removes the specified listener.
      */
-    [oneway] void removeModifyListener( [in] com::sun::star::util::XModifyListener aListener );
+    void removeModifyListener( [in] com::sun::star::util::XModifyListener aListener );
 
 };
 

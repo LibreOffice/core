@@ -408,8 +408,6 @@ static const sal_Char* parseStateToMessage(ParseState state)
         return "Illegal syntax after exception '}' closer";
     case PS_ExceptBodySeen:
         return "Illegal syntax after exception member(s)";
-    case PS_OpHeadSeen:
-        return "Illegasl syntax after operation header";
     case PS_OpTypeSeen:
         return "Illegal syntax or missing identifier after operation type";
     case PS_OpIDSeen:
@@ -430,8 +428,6 @@ static const sal_Char* parseStateToMessage(ParseState state)
         return "Illegal syntax or missing declarator in parameter declaration";
     case PS_OpParDeclSeen:
         return "Illegal syntax following parameter declarator";
-    case PS_OpOnewaySeen:
-        return "Illegal syntax after ONEWAY keyword";
     case PS_RaiseSeen:
         return "Illegal syntax or missing '(' after RAISES keyword";
     case PS_RaiseSqSeen:

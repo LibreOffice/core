@@ -59,7 +59,7 @@ published interface XFrameLoader: com::sun::star::uno::XInterface
 
         @see XLoadEventListener
      */
-    [oneway] void load(
+    void load(
         [in] XFrame Frame,
         [in] string URL,
         [in] sequence< com::sun::star::beans::PropertyValue > Arguments,
@@ -76,7 +76,7 @@ published interface XFrameLoader: com::sun::star::uno::XInterface
         <type>XLoadEventListener</type> here.
         </p>
      */
-    [oneway] void cancel();
+    void cancel();
 };
 
 

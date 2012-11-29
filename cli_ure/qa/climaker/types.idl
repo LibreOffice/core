@@ -62,7 +62,7 @@ interface XTest {
         get raises (com::sun::star::uno::DeploymentException);
     };
 
-    [oneway] void testOneway();
+    void testOneway();
 
     void testExceptions()
         raises( com::sun::star::uno::Exception,

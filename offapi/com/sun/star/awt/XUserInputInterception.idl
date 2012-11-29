@@ -43,7 +43,7 @@ published interface XUserInputInterception : ::com::sun::star::uno::XInterface
             same handler twice (otherwise that listener will be called
             twice.)
     */
-    [oneway] void addKeyHandler (
+    void addKeyHandler (
         [in] ::com::sun::star::awt::XKeyHandler xHandler);
 
 
@@ -53,7 +53,7 @@ published interface XUserInputInterception : ::com::sun::star::uno::XInterface
             handler has been registered twice (or more) then all references
             will be removed.
     */
-    [oneway] void removeKeyHandler (
+    void removeKeyHandler (
         [in] ::com::sun::star::awt::XKeyHandler xHandler);
 
     /** Add a new listener that is called on <type
@@ -66,7 +66,7 @@ published interface XUserInputInterception : ::com::sun::star::uno::XInterface
             same handler twice (otherwise that listener will be called
             twice.)
     */
-    [oneway] void addMouseClickHandler (
+    void addMouseClickHandler (
         [in] ::com::sun::star::awt::XMouseClickHandler xHandler);
 
     /** Remove the specified listener from the list of listeners.
@@ -75,7 +75,7 @@ published interface XUserInputInterception : ::com::sun::star::uno::XInterface
             handler has been registered twice (or more) then all references
             will be removed.
     */
-    [oneway] void removeMouseClickHandler (
+    void removeMouseClickHandler (
         [in] ::com::sun::star::awt::XMouseClickHandler xHandler);
 };
 

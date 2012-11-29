@@ -34,7 +34,7 @@ published interface XGridSelectionListener: com::sun::star::lang::XEventListener
 {
     /** Invoked after a selection was changed.
      */
-    [oneway] void selectionChanged( [in] GridSelectionEvent gridSelectionEvent);
+    void selectionChanged( [in] GridSelectionEvent gridSelectionEvent);
 
 };
 

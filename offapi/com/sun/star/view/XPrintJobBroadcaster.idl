@@ -39,11 +39,11 @@ published interface XPrintJobBroadcaster : com::sun::star::uno::XInterface
 {
     /** adds an <type>XPrintJobListener</type> to be notified about print progress.
      */
-    [oneway] void addPrintJobListener( [in] XPrintJobListener xListener );
+    void addPrintJobListener( [in] XPrintJobListener xListener );
 
     /** removes an <type>XPrintJobListener</type>.
      */
-    [oneway] void removePrintJobListener( [in] XPrintJobListener xListener );
+    void removePrintJobListener( [in] XPrintJobListener xListener );
 };
 
 }; }; }; };

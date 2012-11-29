@@ -55,7 +55,7 @@ published interface XContainer: com::sun::star::uno::XInterface
 
         @see XContainerListener
      */
-    [oneway] void addContainerListener( [in] com::sun::star::container::XContainerListener xListener );
+    void addContainerListener( [in] com::sun::star::container::XContainerListener xListener );
 
 
     /** removes the specified listener so it does not receive
@@ -66,7 +66,7 @@ published interface XContainer: com::sun::star::uno::XInterface
 
         @see XContainerListener
      */
-    [oneway] void removeContainerListener( [in] com::sun::star::container::XContainerListener xListener );
+    void removeContainerListener( [in] com::sun::star::container::XContainerListener xListener );
 
 };
 

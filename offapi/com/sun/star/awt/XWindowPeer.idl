@@ -43,24 +43,24 @@ published interface XWindowPeer: com::sun::star::lang::XComponent
 
     /** sets the mouse pointer.
      */
-    [oneway] void setPointer( [in] XPointer Pointer );
+    void setPointer( [in] XPointer Pointer );
 
 
     /** sets the background color.
      */
-    [oneway] void setBackground( [in] com::sun::star::util::Color Color );
+    void setBackground( [in] com::sun::star::util::Color Color );
 
 
     /** invalidates the whole window with the specified
         <type>InvalidateStyle</type>.
      */
-    [oneway] void invalidate( [in] short Flags );
+    void invalidate( [in] short Flags );
 
 
     /** invalidates a rectangular area of the window with the specified
         <type>InvalidateStyle</type>.
      */
-    [oneway] void invalidateRect( [in] Rectangle Rect, [in] short Flags );
+    void invalidateRect( [in] Rectangle Rect, [in] short Flags );
 
 };
 

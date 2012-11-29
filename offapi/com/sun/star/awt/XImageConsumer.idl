@@ -39,14 +39,14 @@ published interface XImageConsumer: com::sun::star::uno::XInterface
 
     /** initializes the consumer with image dimensions.
      */
-    [oneway] void init( [in] long Width,
+    void init( [in] long Width,
              [in] long Height );
 
 
     /** changes color model for next pixels
         typically called once after initialization.
      */
-    [oneway] void setColorModel( [in] short BitCount,
+    void setColorModel( [in] short BitCount,
              [in] sequence<long> RGBAPal,
              [in] long RedMask,
              [in] long GreenMask,
@@ -64,7 +64,7 @@ published interface XImageConsumer: com::sun::star::uno::XInterface
         (m,n) is stored in the pixels array at index (n * <var>nScanSize</var>
         + m + nOffset).</p>
      */
-    [oneway] void setPixelsByBytes( [in] long nX,
+    void setPixelsByBytes( [in] long nX,
              [in] long nY,
              [in] long nWidth,
              [in] long nHeight,
@@ -83,7 +83,7 @@ published interface XImageConsumer: com::sun::star::uno::XInterface
         (m,n) is stored in the pixels array at index (n * <var>nScanSize</var>
         + m + nOffset).</p>
      */
-    [oneway] void setPixelsByLongs( [in] long nX,
+    void setPixelsByLongs( [in] long nX,
              [in] long nY,
              [in] long nWidth,
              [in] long nHeight,
@@ -103,7 +103,7 @@ published interface XImageConsumer: com::sun::star::uno::XInterface
         list of consumers registered with the image producer
         at this time, unless it is interested in successive frames.</p>
      */
-    [oneway] void complete( [in] long Status,
+    void complete( [in] long Status,
              [in] XImageProducer xProducer );
 
 };

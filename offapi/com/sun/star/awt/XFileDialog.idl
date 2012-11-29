@@ -35,7 +35,7 @@ published interface XFileDialog: com::sun::star::uno::XInterface
 
     /** sets the path.
      */
-    [oneway] void setPath( [in] string Path );
+    void setPath( [in] string Path );
 
 
     /** returns the path.
@@ -45,13 +45,13 @@ published interface XFileDialog: com::sun::star::uno::XInterface
 
     /** sets the filters.
      */
-    [oneway] void setFilters( [in] sequence<string> rFilterNames,
+    void setFilters( [in] sequence<string> rFilterNames,
              [in] sequence<string> rMasks );
 
 
     /** sets the current filter.
      */
-    [oneway] void setCurrentFilter( [in] string Filter );
+    void setCurrentFilter( [in] string Filter );
 
 
     /** returns the currently selected filter.

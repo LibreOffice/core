@@ -344,7 +344,6 @@ False           return IDL_FALSE;
 in              return IDL_IN;
 out             return IDL_OUT;
 inout           return IDL_INOUT;
-oneway          return IDL_ONEWAY;
 
 get             return IDL_GET;
 set             return IDL_SET;

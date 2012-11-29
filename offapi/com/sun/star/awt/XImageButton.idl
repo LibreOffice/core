@@ -36,17 +36,17 @@ published interface XImageButton: com::sun::star::uno::XInterface
 
     /** registers a listener for action events.
      */
-    [oneway] void addActionListener( [in] com::sun::star::awt::XActionListener l );
+    void addActionListener( [in] com::sun::star::awt::XActionListener l );
 
 
     /** unregisters a listener for action events.
      */
-    [oneway] void removeActionListener( [in] com::sun::star::awt::XActionListener l );
+    void removeActionListener( [in] com::sun::star::awt::XActionListener l );
 
 
     /** sets the action command string.
      */
-    [oneway] void setActionCommand( [in] string Command );
+    void setActionCommand( [in] string Command );
 
 };
 

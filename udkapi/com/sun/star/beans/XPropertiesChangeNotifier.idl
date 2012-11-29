@@ -35,7 +35,7 @@ published interface XPropertiesChangeNotifier: com::sun::star::uno::XInterface
     /** adds an <type>XPropertiesChangeListener</type> to the
         specified properties with the specified names.
      */
-    [oneway] void addPropertiesChangeListener(
+    void addPropertiesChangeListener(
             [in] sequence<string> PropertyNames,
             [in] com::sun::star::beans::XPropertiesChangeListener Listener );
 
@@ -43,7 +43,7 @@ published interface XPropertiesChangeNotifier: com::sun::star::uno::XInterface
     /** removes an <type>XPropertiesChangeListener</type> from the
         listener list.
      */
-    [oneway] void removePropertiesChangeListener(
+    void removePropertiesChangeListener(
             [in] sequence<string> PropertyNames,
             [in] com::sun::star::beans::XPropertiesChangeListener Listener );
 };

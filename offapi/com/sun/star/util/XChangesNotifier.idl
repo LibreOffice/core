@@ -35,11 +35,11 @@ published interface XChangesNotifier: com::sun::star::uno::XInterface
 {
     /** adds the specified listener to receive events when changes occurred.
      */
-    [oneway] void addChangesListener( [in] com::sun::star::util::XChangesListener aListener );
+    void addChangesListener( [in] com::sun::star::util::XChangesListener aListener );
 
     /** removes the specified listener.
      */
-    [oneway] void removeChangesListener( [in] com::sun::star::util::XChangesListener aListener );
+    void removeChangesListener( [in] com::sun::star::util::XChangesListener aListener );
 
 };
 

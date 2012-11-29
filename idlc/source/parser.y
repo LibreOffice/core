@@ -342,7 +342,6 @@ bool includes(AstDeclaration const * type1, AstDeclaration const * type2) {
 %token 			IDL_IN
 %token 			IDL_OUT
 %token 			IDL_INOUT
-%token 			IDL_ONEWAY
 
 %token IDL_GET
 %token IDL_SET
@@ -394,7 +393,7 @@ bool includes(AstDeclaration const * type1, AstDeclaration const * type2) {
 
 %type <ihval>	exception_header structure_header interfaceheader
 
-%type <ulval> 	flag_header opt_attrflags opt_attrflag operation_head
+%type <ulval> 	flag_header opt_attrflags opt_attrflag
 %type <ulval>	direction service_interface_header service_service_header
 
 %type <llval>	case_labels at_least_one_case_label
@@ -995,7 +994,6 @@ attribute_set_raises:
     ;
 
 operation :
-	operation_head
 	op_type_spec
 	{
 		idlc()->setParseState(PS_OpTypeSeen);
@@ -1003,7 +1001,7 @@ operation :
 	identifier
 	{
 		idlc()->setParseState(PS_OpIDSeen);
-       checkIdentifier($4);
+       checkIdentifier($3);
 
 		AstInterface * pScope = static_cast< AstInterface * >(
             idlc()->scopes()->top());
@@ -1013,15 +1011,15 @@ operation :
 		 * Create a node representing an operation on an interface
 		 * and add it to its enclosing scope
 		 */
-		if ( pScope && $2 )
+		if ( pScope && $1 )
 		{
-			AstType *pType = (AstType*)$2;
+			AstType *pType = (AstType*)$1;
 			if ( !pType || (pType->getNodeType() == NT_exception) )
 			{
 				// type ERROR 
 			} else 
 			{
-				pOp = new AstOperation($1, pType, *$4, pScope);
+				pOp = new AstOperation(pType, *$3, pScope);
 
                 AstInterface::DoubleMemberDeclarations doubleMembers(
                     pScope->checkMemberClashes(pOp));
@@ -1032,7 +1030,7 @@ operation :
                 }
 			}
 		}
-		delete $4;
+		delete $3;
 		/*
 		 * Push the operation scope onto the scopes stack
 		 */
@@ -1062,30 +1060,13 @@ operation :
 			pOp = (AstOperation*)pScope;
 
 			if ( pOp )
-				pOp->setExceptions($12);
+				pOp->setExceptions($11);
 		}
-        delete $12;
+        delete $11;
 		/*
 		 * Done with this operation. Pop its scope from the scopes stack
 		 */
 		idlc()->scopes()->pop();
-	}
-	;
-
-operation_head :
-	'['
-	IDL_ONEWAY
-	{
-		idlc()->setParseState(PS_OpOnewaySeen);
-	}
-	']'
-	{
-		idlc()->setParseState(PS_OpHeadSeen);
-		$$ = OP_ONEWAY;
-	}
-	| /* EMPTY */
-	{
-		$$ = OP_NONE;
 	}
 	;
 
@@ -2006,7 +1987,7 @@ constructor:
     {
         checkIdentifier($1);
         AstScope * scope = idlc()->scopes()->top();
-        AstOperation * ctor = new AstOperation(OP_NONE, 0, *$1, scope);
+        AstOperation * ctor = new AstOperation(0, *$1, scope);
         delete $1;
         scope->addDeclaration(ctor);
 		idlc()->scopes()->push(ctor);

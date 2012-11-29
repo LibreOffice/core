@@ -38,7 +38,7 @@ published interface XChangesListener: com::sun::star::lang::XEventListener
 {
     /** is invoked when a batch of changes occurred.
      */
-    [oneway] void changesOccurred( [in] com::sun::star::util::ChangesEvent Event );
+    void changesOccurred( [in] com::sun::star::util::ChangesEvent Event );
 
 };
 

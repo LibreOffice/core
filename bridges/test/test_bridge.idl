@@ -48,11 +48,11 @@ exception TestBridgeException : com::sun::star::uno::Exception
 interface XCallMe : com::sun::star::uno::XInterface
 {
     void call( [in] string s , [in] long nToDo ) raises( TestBridgeException );
-    [oneway] void callOneway( [in] string s , [in] long nToDo );
+    void callOneway( [in] string s , [in] long nToDo );
     [attribute] string sAttribute;
     void callAgain( [in] XCallMe callAgain, [in] long nToCall );
     TestTypes transport( [in] TestTypes types );
-    [oneway] void drawLine( [in] long x1 , [in] long y1, [in] long x2, [in] long y2 );
+    void drawLine( [in] long x1 , [in] long y1, [in] long x2, [in] long y2 );
 };
 
 interface XInterfaceTest : com::sun::star::uno::XInterface

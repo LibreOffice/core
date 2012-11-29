@@ -43,7 +43,7 @@ published interface XDataImporter: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::io::XDataImporter::importData
     /** imports data for a component from an active data source.
      */
-    [oneway] void importData( [in] com::sun::star::io::XActiveDataSource aActiveSource,
+    void importData( [in] com::sun::star::io::XActiveDataSource aActiveSource,
              [in] com::sun::star::lang::XComponent Component,
              [in] com::sun::star::io::XDataTransferEventListener aListener );
 
@@ -51,7 +51,7 @@ published interface XDataImporter: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::io::XDataImporter::cancel
     /** cancels the import process.
      */
-    [oneway] void cancel();
+    void cancel();
 
 };
 

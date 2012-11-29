@@ -99,7 +99,7 @@ published interface XDragSource: com::sun::star::uno::XInterface
         @see com::sun::star::datatransfer::XTransferable
     */
 
-    [oneway] void startDrag(
+    void startDrag(
         [in] DragGestureEvent trigger,
         [in] byte sourceActions,
         [in] long cursor,

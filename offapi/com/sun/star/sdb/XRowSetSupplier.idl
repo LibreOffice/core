@@ -44,7 +44,7 @@ published interface XRowSetSupplier: com::sun::star::uno::XInterface
         @param xDataSource
             the RowSet object to set
      */
-    [oneway] void setRowSet( [in] com::sun::star::sdbc::XRowSet xDataSource );
+    void setRowSet( [in] com::sun::star::sdbc::XRowSet xDataSource );
 
 };
 

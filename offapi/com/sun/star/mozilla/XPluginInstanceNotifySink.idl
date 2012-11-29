@@ -42,7 +42,7 @@ published interface XPluginInstanceNotifySink: com::sun::star::uno::XInterface
         @param theURL   [in]:   name of the URL that was used during a previous getURL or postURL call
 
      */
-    [oneway] void notifyURL( [in] string theURL );
+    void notifyURL( [in] string theURL );
 };
 
 

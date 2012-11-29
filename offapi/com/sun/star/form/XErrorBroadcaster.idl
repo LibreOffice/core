@@ -40,12 +40,12 @@ published interface XErrorBroadcaster: com::sun::star::uno::XInterface
 
     /** adds the specified listener to be notified of errors.
      */
-    [oneway] void addErrorListener( [in] com::sun::star::form::XErrorListener aListener );
+    void addErrorListener( [in] com::sun::star::form::XErrorListener aListener );
 
 
     /** removes the specified listener.
      */
-    [oneway] void removeErrorListener( [in] com::sun::star::form::XErrorListener aListener );
+    void removeErrorListener( [in] com::sun::star::form::XErrorListener aListener );
 
 };
 

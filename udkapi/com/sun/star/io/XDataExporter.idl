@@ -44,7 +44,7 @@ published interface XDataExporter: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::io::XDataExporter::exportData
     /** exports data for a component into an output stream.
      */
-    [oneway] void exportData( [in] com::sun::star::io::XOutputStream aOutputStream,
+    void exportData( [in] com::sun::star::io::XOutputStream aOutputStream,
              [in] com::sun::star::lang::XComponent Component,
              [in] com::sun::star::io::XDataTransferEventListener aListener );
 
@@ -52,7 +52,7 @@ published interface XDataExporter: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::io::XDataExporter::cancel
     /** cancels the export process.
      */
-    [oneway] void cancel();
+    void cancel();
 
 };
 

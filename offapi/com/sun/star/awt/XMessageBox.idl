@@ -35,7 +35,7 @@ published interface XMessageBox: com::sun::star::uno::XInterface
 
     /** sets the caption text.
      */
-    [oneway] void setCaptionText( [in] string aText );
+    void setCaptionText( [in] string aText );
 
 
     /** returns the caption text.
@@ -45,7 +45,7 @@ published interface XMessageBox: com::sun::star::uno::XInterface
 
     /** sets the message text.
      */
-    [oneway] void setMessageText( [in] string aText );
+    void setMessageText( [in] string aText );
 
 
     /** returns the message text.

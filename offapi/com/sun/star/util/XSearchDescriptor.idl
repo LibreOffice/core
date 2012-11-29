@@ -37,7 +37,7 @@ published interface XSearchDescriptor: com::sun::star::beans::XPropertySet
 
     /** sets the string of characters to look for.
      */
-    [oneway] void setSearchString( [in] string aString );
+    void setSearchString( [in] string aString );
 
 };
 

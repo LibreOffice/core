@@ -30,9 +30,6 @@ using namespace ::rtl;
 void AstOperation::setExceptions(DeclList const * pExceptions)
 {
     if (pExceptions != 0) {
-        if (isOneway()) {
-            idlc()->error()->error1(EIDL_ONEWAY_RAISE_CONFLICT, this);
-        }
         m_exceptions = *pExceptions;
     }
 }
@@ -48,9 +45,6 @@ sal_Bool AstOperation::dumpBlob(typereg::Writer & rBlob, sal_uInt16 index)
     sal_uInt16      nParam = getNodeCount(NT_parameter);
     sal_uInt16      nExcep = nExceptions();
     RTMethodMode    methodMode = RT_MODE_TWOWAY;
-
-    if ( isOneway() )
-        methodMode = RT_MODE_ONEWAY;
 
     rtl::OUString returnTypeName;
     if (m_pReturnType == 0) {
@@ -129,16 +123,6 @@ sal_Bool AstOperation::dumpBlob(typereg::Writer & rBlob, sal_uInt16 index)
 
 AstDeclaration* AstOperation::addDeclaration(AstDeclaration* pDecl)
 {
-    if ( pDecl->getNodeType() == NT_parameter )
-    {
-        AstParameter* pParam = (AstParameter*)pDecl;
-        if ( isOneway() &&
-             (pParam->getDirection() == DIR_OUT || pParam->getDirection() == DIR_INOUT) )
-        {
-            idlc()->error()->error2(EIDL_ONEWAY_CONFLICT, pDecl, this);
-            return NULL;
-        }
-    }
     return AstScope::addDeclaration(pDecl);
 }
 

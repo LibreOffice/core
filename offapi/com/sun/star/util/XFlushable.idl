@@ -38,11 +38,11 @@ published interface XFlushable: com::sun::star::uno::XInterface
 
     /** adds the specified listener to receive event "flushed."
      */
-    [oneway] void addFlushListener( [in] com::sun::star::util::XFlushListener l );
+    void addFlushListener( [in] com::sun::star::util::XFlushListener l );
 
     /** removes the specified listener.
      */
-    [oneway] void removeFlushListener( [in] com::sun::star::util::XFlushListener l );
+    void removeFlushListener( [in] com::sun::star::util::XFlushListener l );
 
 };
 

@@ -57,7 +57,7 @@ published interface XAutoscroll: com::sun::star::uno::XInterface
         Y location of the cursor in pixel.
     */
 
-    [oneway] void autoscroll( [in] long cursorLocationX, [in] long cursorLocationY );
+    void autoscroll( [in] long cursorLocationX, [in] long cursorLocationY );
 
     /** Returns the regions describing the autoscrolling region.
 

@@ -105,7 +105,7 @@ published interface XSimpleText: com::sun::star::text::XTextRange
             xText.insertString( xTextCursor, "more text ...", false )
             </listing>
      */
-    [oneway] void insertString( [in] com::sun::star::text::XTextRange xRange,
+    void insertString( [in] com::sun::star::text::XTextRange xRange,
              [in] string aString,
              [in] boolean bAbsorb );
 

@@ -40,7 +40,7 @@ published interface XEventListener: com::sun::star::lang::XEventListener
         @param Event
             specifies the event type
      */
-    [oneway] void notifyEvent( [in] EventObject Event );
+    void notifyEvent( [in] EventObject Event );
 };
 
 

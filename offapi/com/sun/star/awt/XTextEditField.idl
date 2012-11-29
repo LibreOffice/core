@@ -33,7 +33,7 @@ published interface XTextEditField: com::sun::star::uno::XInterface
 
     /** sets the character to display as a substitute on user input.
      */
-    [oneway] void setEchoChar( [in] char cEcho );
+    void setEchoChar( [in] char cEcho );
 
 };
 

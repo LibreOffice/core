@@ -59,7 +59,7 @@ published interface XContent: com::sun::star::uno::XInterface
 
         @see ContentEvent
     */
-    [oneway] void addContentEventListener(
+    void addContentEventListener(
                     [in] com::sun::star::ucb::XContentEventListener Listener );
 
     /** removes a listener for content events.
@@ -69,7 +69,7 @@ published interface XContent: com::sun::star::uno::XInterface
 
         @see ContentEvent
     */
-    [oneway] void removeContentEventListener(
+    void removeContentEventListener(
                     [in] com::sun::star::ucb::XContentEventListener Listener );
 
 };

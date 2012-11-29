@@ -39,14 +39,14 @@ published interface XClipboardNotifier: com::sun::star::uno::XInterface
         @param listener
         The object receiving the notifications.
     */
-    [oneway] void addClipboardListener( [in] XClipboardListener listener );
+    void addClipboardListener( [in] XClipboardListener listener );
 
     /** Removes listener from notification list.
 
         @param listener
         The object to remove from notification list.
     */
-    [oneway] void removeClipboardListener( [in] XClipboardListener listener );
+    void removeClipboardListener( [in] XClipboardListener listener );
 };
 
 

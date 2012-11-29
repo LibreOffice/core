@@ -44,8 +44,8 @@ published interface XDatabaseAccess: com::sun::star::sdbc::XDataSource
     com::sun::star::sdbc::XConnection getIsolatedConnection([in]string user, [in]string password)
       raises (com::sun::star::sdbc::SQLException);
     boolean suspendConnections() raises (com::sun::star::sdbc::SQLException);
-    [oneway] void addDatabaseAccessListener([in]XDatabaseAccessListener listener);
-    [oneway] void removeDatabaseAccessListener([in]XDatabaseAccessListener listener);
+    void addDatabaseAccessListener([in]XDatabaseAccessListener listener);
+    void removeDatabaseAccessListener([in]XDatabaseAccessListener listener);
 };
 
 

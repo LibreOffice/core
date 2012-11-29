@@ -34,7 +34,7 @@ published interface XRowSetListener: com::sun::star::lang::XEventListener
         @param event
             contains information about the event
      */
-    [oneway] void cursorMoved([in]com::sun::star::lang::EventObject event);
+    void cursorMoved([in]com::sun::star::lang::EventObject event);
 
     /** is called when a row is inserted, updated, or deleted.
         @param event
@@ -42,14 +42,14 @@ published interface XRowSetListener: com::sun::star::lang::XEventListener
         @deprecated
         @see com.sun.star.sdb.XRowsChangeListener
      */
-    [oneway] void rowChanged([in]com::sun::star::lang::EventObject event);
+    void rowChanged([in]com::sun::star::lang::EventObject event);
 
     /** is called when the row set has changed, or in other words, when the row set has
         been reexecuted.
         @param event
             contains information about the event
      */
-    [oneway] void rowSetChanged([in]com::sun::star::lang::EventObject event);
+    void rowSetChanged([in]com::sun::star::lang::EventObject event);
 };
 
 

@@ -53,7 +53,7 @@ published interface XJobExecutor : com::sun::star::uno::XInterface
         @param Event
                 describe the event for which jobs can be registered and should be started
     */
-    [oneway] void trigger( [in] string Event );
+    void trigger( [in] string Event );
 };
 
 }; }; }; };

@@ -43,7 +43,7 @@ published interface XVclWindowPeer: com::sun::star::awt::XWindowPeer
 
     /** sets the design mode for use in a design editor.
      */
-    [oneway] void setDesignMode( [in] boolean bOn );
+    void setDesignMode( [in] boolean bOn );
 
 
     /** returns <true/> if the window peer is in design mode,
@@ -54,17 +54,17 @@ published interface XVclWindowPeer: com::sun::star::awt::XWindowPeer
 
     /** enables clipping of sibling windows.
      */
-    [oneway] void enableClipSiblings( [in] boolean bClip );
+    void enableClipSiblings( [in] boolean bClip );
 
 
     /** sets the foreground color.
      */
-    [oneway] void setForeground( [in] com::sun::star::util::Color Color );
+    void setForeground( [in] com::sun::star::util::Color Color );
 
 
     /** sets the control font.
      */
-    [oneway] void setControlFont( [in] com::sun::star::awt::FontDescriptor aFont );
+    void setControlFont( [in] com::sun::star::awt::FontDescriptor aFont );
 
 
     /** returns the font, foreground and background color for the specified

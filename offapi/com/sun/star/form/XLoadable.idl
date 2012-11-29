@@ -41,12 +41,12 @@ published interface XLoadable: com::sun::star::uno::XInterface
         <p>If the data is already loaded (->isLoaded), then the method returns silently.
         In this case, you should use ->reload.</p>
      */
-    [oneway] void load();
+    void load();
 
 
     /** unloads the data.
      */
-    [oneway] void unload();
+    void unload();
 
 
     /** does a smart refresh of the object.
@@ -54,7 +54,7 @@ published interface XLoadable: com::sun::star::uno::XInterface
         <p>The final state will be the same as if unload and load were called, but reload
         is the more efficient way to do the same. If the object isn't loaded, nothing happens.</p>
      */
-    [oneway] void reload();
+    void reload();
 
 
     /** returns if the object is in loaded state.
@@ -67,7 +67,7 @@ published interface XLoadable: com::sun::star::uno::XInterface
         @param aListener
             the listener to add.
      */
-    [oneway] void addLoadListener( [in] com::sun::star::form::XLoadListener aListener );
+    void addLoadListener( [in] com::sun::star::form::XLoadListener aListener );
 
 
     /** removes the specified listener.
@@ -75,7 +75,7 @@ published interface XLoadable: com::sun::star::uno::XInterface
         @param aListener
             the listener to remove.
      */
-    [oneway] void removeLoadListener( [in] com::sun::star::form::XLoadListener aListener );
+    void removeLoadListener( [in] com::sun::star::form::XLoadListener aListener );
 };
 
 }; }; }; };

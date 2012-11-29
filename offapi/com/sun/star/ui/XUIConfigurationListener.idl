@@ -41,7 +41,7 @@ interface XUIConfigurationListener : com::sun::star::lang::XEventListener
         @param Event
             provides information about the element which has been inserted.
      */
-    [oneway] void elementInserted( [in] ::com::sun::star::ui::ConfigurationEvent Event );
+    void elementInserted( [in] ::com::sun::star::ui::ConfigurationEvent Event );
 
 
     /** is invoked when a configuration has removed an user interface element.
@@ -49,7 +49,7 @@ interface XUIConfigurationListener : com::sun::star::lang::XEventListener
         @param Event
             provides information about the element which has been removed.
      */
-    [oneway] void elementRemoved( [in] ::com::sun::star::ui::ConfigurationEvent Event );
+    void elementRemoved( [in] ::com::sun::star::ui::ConfigurationEvent Event );
 
 
     /** is invoked when a configuration has replaced an user interface element.
@@ -58,7 +58,7 @@ interface XUIConfigurationListener : com::sun::star::lang::XEventListener
             provides information about the element which has been
             inserted/replaced.
      */
-    [oneway] void elementReplaced( [in] ::com::sun::star::ui::ConfigurationEvent Event );
+    void elementReplaced( [in] ::com::sun::star::ui::ConfigurationEvent Event );
 
 };
 

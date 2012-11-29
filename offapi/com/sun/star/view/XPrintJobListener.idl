@@ -41,7 +41,7 @@ published interface XPrintJobListener : com::sun::star::lang::XEventListener
         @param Event
         contains the <type>XPrintJob</type> having changed state and the new state.
     */
-    [oneway] void printJobEvent( [in] PrintJobEvent Event );
+    void printJobEvent( [in] PrintJobEvent Event );
 };
 
 }; }; }; };

@@ -46,7 +46,7 @@ published interface XConfirmDeleteBroadcaster: com::sun::star::uno::XInterface
 
         @see com::sun::star::form::XConfirmDeleteListener
      */
-    [oneway] void addConfirmDeleteListener( [in] com::sun::star::form::XConfirmDeleteListener aListener );
+    void addConfirmDeleteListener( [in] com::sun::star::form::XConfirmDeleteListener aListener );
 
 
     /** removes the specified listener.
@@ -56,7 +56,7 @@ published interface XConfirmDeleteBroadcaster: com::sun::star::uno::XInterface
 
         @see com::sun::star::form::XConfirmDeleteListener
      */
-    [oneway] void removeConfirmDeleteListener( [in] com::sun::star::form::XConfirmDeleteListener aListener );
+    void removeConfirmDeleteListener( [in] com::sun::star::form::XConfirmDeleteListener aListener );
 
 };
 

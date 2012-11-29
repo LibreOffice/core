@@ -67,7 +67,7 @@ published interface XCalculatable: com::sun::star::uno::XInterface
         @param bEnabled
             <TRUE/> to enable automatic calculation, <FALSE/> to disable.
      */
-    [oneway] void enableAutomaticCalculation( [in] boolean bEnabled );
+    void enableAutomaticCalculation( [in] boolean bEnabled );
 
 };
 

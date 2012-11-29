@@ -181,7 +181,7 @@ published interface XDocumentTemplates:  com::sun::star::uno::XInterface
         wrong links.
         </p>
      */
-    [oneway] void update();
+    void update();
 };
 
 

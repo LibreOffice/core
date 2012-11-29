@@ -41,7 +41,7 @@ interface XPropertyControlObserver
         @param Control
             denotes the control whose UI representation gained the focus
     */
-    [oneway] void   focusGained( [in] XPropertyControl Control );
+    void   focusGained( [in] XPropertyControl Control );
 
     /** notifies the observer that a certain <type>XPropertyControl</type>'s value
         changed.
@@ -51,7 +51,7 @@ interface XPropertyControlObserver
 
         @see XPropertyControl::Value
     */
-    [oneway] void   valueChanged( [in] XPropertyControl Control );
+    void   valueChanged( [in] XPropertyControl Control );
 };
 
 

@@ -37,11 +37,11 @@ published interface XPrintableBroadcaster : com::sun::star::uno::XInterface
 {
     /** adds an <type>XPrintableListener</type> to be notified about print progress.
      */
-    [oneway] void addPrintableListener( [in] XPrintableListener xListener );
+    void addPrintableListener( [in] XPrintableListener xListener );
 
     /** removes an <type>XPrintableListener</type>.
      */
-    [oneway] void removePrintableListener( [in] XPrintableListener xListener );
+    void removePrintableListener( [in] XPrintableListener xListener );
 };
 
 }; }; }; };

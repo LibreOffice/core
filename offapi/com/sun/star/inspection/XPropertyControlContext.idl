@@ -37,7 +37,7 @@ interface XPropertyControlContext : XPropertyControlObserver
         @param CurrentControl
             denotes the control which initiated the request.
     */
-    [oneway] void   activateNextControl( [in] XPropertyControl CurrentControl );
+    void   activateNextControl( [in] XPropertyControl CurrentControl );
 };
 
 

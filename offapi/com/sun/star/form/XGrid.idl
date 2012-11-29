@@ -51,7 +51,7 @@ published interface XGrid: com::sun::star::uno::XInterface
 
     /** sets the current column position.
      */
-    [oneway] void setCurrentColumnPosition( [in] short nPos );
+    void setCurrentColumnPosition( [in] short nPos );
 
 };
 

@@ -63,7 +63,7 @@ published interface XDragSourceContext: com::sun::star::uno::XInterface
         The identifier the drag source returned when registering the cursor.
     */
 
-    [oneway] void setCursor( [in] long cursorId );
+    void setCursor( [in] long cursorId );
 
     /** This method sets the current drag image.
 
@@ -72,7 +72,7 @@ published interface XDragSourceContext: com::sun::star::uno::XInterface
         Invalid identifier will be ignored.
     */
 
-    [oneway] void setImage( [in] long imageId );
+    void setImage( [in] long imageId );
 
     /** This method notifies the context that the
         <type scope="com::sun::star::datatransfer">DataFlavor</type> types
@@ -81,7 +81,7 @@ published interface XDragSourceContext: com::sun::star::uno::XInterface
         @see com::sun::star::datatransfer::XTransferable
     */
 
-    [oneway] void transferablesFlavorsChanged();
+    void transferablesFlavorsChanged();
 };
 
 

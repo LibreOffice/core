@@ -35,17 +35,17 @@ published interface XProgressMonitor: com::sun::star::awt::XProgressBar
 
     /** adds a new text line to the control.
      */
-    [oneway] void addText ( [in] string Topic, [in] string Text, [in] boolean beforeProgress ) ;
+    void addText ( [in] string Topic, [in] string Text, [in] boolean beforeProgress ) ;
 
 
     /** removes a text line from the control.
      */
-    [oneway] void removeText ( [in] string Topic, [in] boolean beforeProgress ) ;
+    void removeText ( [in] string Topic, [in] boolean beforeProgress ) ;
 
 
     /** updates an existing text line at the control.
      */
-    [oneway] void updateText ( [in] string Topic, [in] string Text, [in] boolean beforeProgress ) ;
+    void updateText ( [in] string Topic, [in] string Text, [in] boolean beforeProgress ) ;
 
 };
 

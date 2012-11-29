@@ -39,12 +39,12 @@ interface XAccessibleEventBroadcaster: ::com::sun::star::uno::XInterface
 
     /** registers the given <type>XAccessibleEventListener</type>.
      */
-    [oneway] void addAccessibleEventListener( [in] XAccessibleEventListener xListener );
+    void addAccessibleEventListener( [in] XAccessibleEventListener xListener );
 
 
     /** unregisters the given <type>XAccessibleEventListener</type>.
      */
-    [oneway] void removeAccessibleEventListener( [in] XAccessibleEventListener xListener );
+    void removeAccessibleEventListener( [in] XAccessibleEventListener xListener );
 };
 
 }; }; }; };

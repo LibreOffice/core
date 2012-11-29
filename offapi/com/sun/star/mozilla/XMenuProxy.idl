@@ -52,7 +52,7 @@ published interface XMenuProxy: com::sun::star::lang::XComponent
         @param xListener    [in]:   the listener to be set
 
      */
-    [oneway] void addMenuProxyListener([in] XMenuProxyListener xListener );
+    void addMenuProxyListener([in] XMenuProxyListener xListener );
 
 
     // DocMerge from xml: method com::sun::star::mozilla::XMenuProxy::removeMenuProxyListener
@@ -62,7 +62,7 @@ published interface XMenuProxy: com::sun::star::lang::XComponent
         @param xListener    [in]:   the listener to be removed
 
      */
-    [oneway] void removeMenuProxyListener([in] XMenuProxyListener xListener );
+    void removeMenuProxyListener([in] XMenuProxyListener xListener );
 };
 
 

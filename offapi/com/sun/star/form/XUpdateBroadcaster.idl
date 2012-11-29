@@ -46,7 +46,7 @@ published interface XUpdateBroadcaster: com::sun::star::uno::XInterface
             the listener to add.
         @see com::sun::star::form::XUpdateListener
      */
-    [oneway] void addUpdateListener( [in] com::sun::star::form::XUpdateListener aListener );
+    void addUpdateListener( [in] com::sun::star::form::XUpdateListener aListener );
 
 
     /** removes the specified listener.
@@ -54,7 +54,7 @@ published interface XUpdateBroadcaster: com::sun::star::uno::XInterface
             the listener to remove.
         @see com::sun::star::form::XUpdateListener
      */
-    [oneway] void removeUpdateListener( [in] com::sun::star::form::XUpdateListener aListener );
+    void removeUpdateListener( [in] com::sun::star::form::XUpdateListener aListener );
 
 };
 

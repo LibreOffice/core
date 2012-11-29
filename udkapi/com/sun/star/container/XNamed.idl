@@ -40,7 +40,7 @@ published interface XNamed: com::sun::star::uno::XInterface
 
     /** sets the programmatic name of the object.
      */
-    [oneway] void setName( [in] string aName );
+    void setName( [in] string aName );
 
 };
 

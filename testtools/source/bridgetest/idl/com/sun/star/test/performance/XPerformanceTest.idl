@@ -75,13 +75,13 @@ published struct ComplexTypes : SimpleTypes
 */
 published interface XPerformanceTest : com::sun::star::uno::XInterface
 {
-    [oneway] void async();
+    void async();
     void sync();
 
     ComplexTypes complex_in( [in] ComplexTypes aVal );
     ComplexTypes complex_inout( [inout] ComplexTypes aVal );
 
-    [oneway] void complex_oneway( [in] ComplexTypes aVal );
+    void complex_oneway( [in] ComplexTypes aVal );
     void complex_noreturn( [in] ComplexTypes aVal );
 
     XPerformanceTest createObject();

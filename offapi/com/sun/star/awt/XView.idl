@@ -60,7 +60,7 @@ published interface XView: com::sun::star::uno::XInterface
         <p>If the output should be clipped, the caller has to set the
         clipping region.</p>
      */
-    [oneway] void draw( [in] long nX,
+    void draw( [in] long nX,
              [in] long nY );
 
 
@@ -68,7 +68,7 @@ published interface XView: com::sun::star::uno::XInterface
 
         <p>The zoom factor only affects the content of the view, not the size.</p>
      */
-    [oneway] void setZoom( [in] float fZoomX,
+    void setZoom( [in] float fZoomX,
              [in] float fZoomY );
 
 };

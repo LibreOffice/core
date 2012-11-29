@@ -41,7 +41,7 @@ interface XBroadcaster: com::sun::star::uno::XInterface
         sent to registered listeners.
         </p>
      */
-    [oneway] void lockBroadcasts();
+    void lockBroadcasts();
 
     /** resumes the broadcasts which were suspended by
         <member>XBroadcaster::lockBroadcasts()</member>.
@@ -61,7 +61,7 @@ interface XBroadcaster: com::sun::star::uno::XInterface
         order or batch them in single broadcasts.
         </p>
     */
-    [oneway] void unlockBroadcasts();
+    void unlockBroadcasts();
 };
 
 

@@ -39,15 +39,15 @@ published interface XTask: XFrame
 
     /** @deprecated
      */
-    [oneway] void tileWindows();
+    void tileWindows();
 
     /** @deprecated
      */
-    [oneway] void arrangeWindowsVertical();
+    void arrangeWindowsVertical();
 
     /** @deprecated
      */
-    [oneway] void arrangeWindowsHorizontal();
+    void arrangeWindowsHorizontal();
 };
 
 

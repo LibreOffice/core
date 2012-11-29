@@ -38,7 +38,7 @@ published interface XFilePickerNotifier: com::sun::star::uno::XInterface
         wants to receive events of type <type>FilePickerEvent</type>.
         <p>Invalid interfaces or NULL values will be ignored.</p>
     */
-    [oneway] void addFilePickerListener( [in] XFilePickerListener xListener );
+    void addFilePickerListener( [in] XFilePickerListener xListener );
 
     /** Interface for clients to unregister as XFilePickerListener.
 
@@ -47,7 +47,7 @@ published interface XFilePickerNotifier: com::sun::star::uno::XInterface
         wants to receive events of type <type>FilePickerEvent</type>.
         <p>Invalid interfaces or NULL values will be ignored.</p>
     */
-    [oneway] void removeFilePickerListener( [in] XFilePickerListener xListener );
+    void removeFilePickerListener( [in] XFilePickerListener xListener );
 };
 
 

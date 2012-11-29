@@ -36,13 +36,13 @@ published interface XRowSetApproveBroadcaster: com::sun::star::uno::XInterface
         "approveRowChange", and "appproveRowSetChange".
         @param com::sun::star::sdb::XRowSetApproveListener
      */
-    [oneway] void addRowSetApproveListener(
+    void addRowSetApproveListener(
             [in]XRowSetApproveListener listener );
 
     /** removes the specified listener.
         @param com::sun::star::sdb::XRowSetApproveListener
      */
-    [oneway] void removeRowSetApproveListener(
+    void removeRowSetApproveListener(
             [in]XRowSetApproveListener listener );
 };
 

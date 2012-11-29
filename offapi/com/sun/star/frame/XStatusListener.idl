@@ -44,7 +44,7 @@ published interface XStatusListener: com::sun::star::lang::XEventListener
         @param State
             provides information about changes of the requested feature
      */
-    [oneway] void statusChanged( [in] FeatureStateEvent State );
+    void statusChanged( [in] FeatureStateEvent State );
 };
 
 

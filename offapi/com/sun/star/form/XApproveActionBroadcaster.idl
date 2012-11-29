@@ -43,7 +43,7 @@ published interface XApproveActionBroadcaster: com::sun::star::uno::XInterface
         @param aListener
              the listener to be added
      */
-    [oneway] void addApproveActionListener( [in] com::sun::star::form::XApproveActionListener aListener );
+    void addApproveActionListener( [in] com::sun::star::form::XApproveActionListener aListener );
 
 
     /** removes the specified listener
@@ -51,7 +51,7 @@ published interface XApproveActionBroadcaster: com::sun::star::uno::XInterface
         @param aListener
              the listener to be removed
      */
-    [oneway] void removeApproveActionListener( [in] com::sun::star::form::XApproveActionListener aListener );
+    void removeApproveActionListener( [in] com::sun::star::form::XApproveActionListener aListener );
 
 };
 

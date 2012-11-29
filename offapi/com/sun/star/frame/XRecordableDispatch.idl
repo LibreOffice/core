@@ -82,7 +82,7 @@ published interface XRecordableDispatch: com::sun::star::uno::XInterface
             object which can be used to record the request
             (available on <member>XDispatchRecorderSupplier::getDispatchRecorder()</member>)
      */
-    [oneway] void dispatchAndRecord(
+    void dispatchAndRecord(
         [in] com::sun::star::util::URL URL,
         [in] sequence<com::sun::star::beans::PropertyValue> Arguments,
         [in] XDispatchRecorder Recorder);

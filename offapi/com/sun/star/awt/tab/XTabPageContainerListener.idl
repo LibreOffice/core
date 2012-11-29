@@ -35,7 +35,7 @@ published interface XTabPageContainerListener: com::sun::star::lang::XEventListe
 {
     /** Invoked after a tab page was activated.
      */
-    [oneway] void tabPageActivated( [in] TabPageActivatedEvent tabPageActivatedEvent);
+    void tabPageActivated( [in] TabPageActivatedEvent tabPageActivatedEvent);
 
 };
 

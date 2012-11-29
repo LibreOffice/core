@@ -44,7 +44,7 @@ published interface XFormControllerListener: com::sun::star::lang::XEventListene
         @param rEvent
             the event happened.
      */
-    [oneway] void formActivated( [in] com::sun::star::lang::EventObject rEvent );
+    void formActivated( [in] com::sun::star::lang::EventObject rEvent );
 
 
     /** is invoked when a control of the "XFormController" lost the focus
@@ -54,7 +54,7 @@ published interface XFormControllerListener: com::sun::star::lang::XEventListene
         @param rEvent
             the event happened.
      */
-    [oneway] void formDeactivated( [in] com::sun::star::lang::EventObject rEvent );
+    void formDeactivated( [in] com::sun::star::lang::EventObject rEvent );
 
 };
 

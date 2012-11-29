@@ -36,7 +36,7 @@ published interface XItemListener: com::sun::star::lang::XEventListener
 
     /** is invoked when an item changes its state.
      */
-    [oneway] void itemStateChanged( [in] com::sun::star::awt::ItemEvent rEvent );
+    void itemStateChanged( [in] com::sun::star::awt::ItemEvent rEvent );
 
 };
 

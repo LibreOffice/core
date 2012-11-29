@@ -35,7 +35,7 @@ published interface XUnoControlContainer: com::sun::star::uno::XInterface
 
     /** sets a set of tab controllers.
      */
-    [oneway] void setTabControllers( [in] sequence<com::sun::star::awt::XTabController> TabControllers );
+    void setTabControllers( [in] sequence<com::sun::star::awt::XTabController> TabControllers );
 
 
     /** returns all currently specified tab controllers.
@@ -45,12 +45,12 @@ published interface XUnoControlContainer: com::sun::star::uno::XInterface
 
     /** adds a single tab controller.
      */
-    [oneway] void addTabController( [in] com::sun::star::awt::XTabController TabController );
+    void addTabController( [in] com::sun::star::awt::XTabController TabController );
 
 
     /** removes a single tab controller.
      */
-    [oneway] void removeTabController( [in] com::sun::star::awt::XTabController TabController );
+    void removeTabController( [in] com::sun::star::awt::XTabController TabController );
 
 };
 

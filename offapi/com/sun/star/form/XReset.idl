@@ -37,7 +37,7 @@ published interface XReset: com::sun::star::uno::XInterface
 
     /** resets a component to some default value.
      */
-    [oneway] void reset();
+    void reset();
 
 
     /** adds the specified listener to receive events related to resetting the
@@ -46,7 +46,7 @@ published interface XReset: com::sun::star::uno::XInterface
         @param aListener
             the listener to add.
      */
-    [oneway] void addResetListener( [in] com::sun::star::form::XResetListener aListener );
+    void addResetListener( [in] com::sun::star::form::XResetListener aListener );
 
 
     /** removes the specified listener
@@ -54,7 +54,7 @@ published interface XReset: com::sun::star::uno::XInterface
         @param aListener
             the listener to remove
      */
-    [oneway] void removeResetListener( [in] com::sun::star::form::XResetListener aListener );
+    void removeResetListener( [in] com::sun::star::form::XResetListener aListener );
 
 };
 

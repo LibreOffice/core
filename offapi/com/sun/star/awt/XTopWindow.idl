@@ -38,30 +38,30 @@ published interface XTopWindow: com::sun::star::uno::XInterface
     /** adds the specified top window listener to receive window events from
         this window.
      */
-    [oneway] void addTopWindowListener( [in] com::sun::star::awt::XTopWindowListener xListener );
+    void addTopWindowListener( [in] com::sun::star::awt::XTopWindowListener xListener );
 
 
     /** removes the specified top window listener so that it no longer
         receives window events from this window.
      */
-    [oneway] void removeTopWindowListener( [in] com::sun::star::awt::XTopWindowListener xListener );
+    void removeTopWindowListener( [in] com::sun::star::awt::XTopWindowListener xListener );
 
 
     /** places this window at the top of the stacking order and
         shows it in front of any other windows.
      */
-    [oneway] void toFront();
+    void toFront();
 
 
     /** places this window at the bottom of the stacking order and
         makes the corresponding adjustment to other visible windows.
      */
-    [oneway] void toBack();
+    void toBack();
 
 
     /** sets a menu bar.
      */
-    [oneway] void setMenuBar( [in] com::sun::star::awt::XMenuBar xMenu );
+    void setMenuBar( [in] com::sun::star::awt::XMenuBar xMenu );
 
 };
 

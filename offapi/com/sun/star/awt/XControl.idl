@@ -52,7 +52,7 @@ published interface XControl: com::sun::star::lang::XComponent
 
     /** sets the context of the control.
      */
-    [oneway] void setContext( [in] com::sun::star::uno::XInterface Context );
+    void setContext( [in] com::sun::star::uno::XInterface Context );
 
 
     /** gets the context of the control.
@@ -65,7 +65,7 @@ published interface XControl: com::sun::star::lang::XComponent
         <p>If the parent is NULL, then the desktop window of the toolkit
         is the parent.</p>
      */
-    [oneway] void createPeer( [in] com::sun::star::awt::XToolkit Toolkit,
+    void createPeer( [in] com::sun::star::awt::XToolkit Toolkit,
              [in] com::sun::star::awt::XWindowPeer Parent );
 
 
@@ -93,7 +93,7 @@ published interface XControl: com::sun::star::lang::XComponent
 
         <p>Normally the control will be painted directly without a peer.</p>
      */
-    [oneway] void setDesignMode( [in] boolean bOn );
+    void setDesignMode( [in] boolean bOn );
 
 
     /** returns <true/> if the control is in design mode, <false/> otherwise.

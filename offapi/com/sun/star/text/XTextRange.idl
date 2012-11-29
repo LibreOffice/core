@@ -76,7 +76,7 @@ published interface XTextRange: com::sun::star::uno::XInterface
 
         </p>
      */
-    [oneway] void setString( [in] string aString );
+    void setString( [in] string aString );
 
 };
 

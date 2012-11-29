@@ -106,7 +106,7 @@ published interface XModel: com::sun::star::lang::XComponent
 
         @see XModel::disconnectController()
      */
-    [oneway] void connectController( [in] XController Controller );
+    void connectController( [in] XController Controller );
 
     /** is called whenever an existing controller should be deregistered at this model.
 
@@ -120,7 +120,7 @@ published interface XModel: com::sun::star::lang::XComponent
 
         @see XModel::connectController()
      */
-    [oneway] void disconnectController( [in] XController Controller );
+    void disconnectController( [in] XController Controller );
 
     /** suspends some notifications to the controllers which are used
         for display updates.
@@ -133,7 +133,7 @@ published interface XModel: com::sun::star::lang::XComponent
         for display updates are not broadcasted.
         </p>
      */
-    [oneway] void lockControllers();
+    void lockControllers();
 
     /** resumes the notifications which were suspended by
         <member>XModel::lockControllers()</member>.
@@ -146,7 +146,7 @@ published interface XModel: com::sun::star::lang::XComponent
         display updates are not broadcasted.
         </p>
     */
-    [oneway] void unlockControllers();
+    void unlockControllers();
 
     /** determines if there is at least one lock remaining.
 

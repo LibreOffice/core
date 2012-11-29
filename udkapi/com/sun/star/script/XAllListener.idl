@@ -39,12 +39,12 @@ published interface XAllListener: com::sun::star::lang::XEventListener
 {
     /** gets called when an event occurs at the object.
      */
-    [oneway] void firing( [in] com::sun::star::script::AllEventObject iaEvent );
+    void firing( [in] com::sun::star::script::AllEventObject iaEvent );
 
     /** gets called when a "vetoable event" occurs at the object.
 
         <p>That happens when the listener method raises an exception,
-        has a return value declared, or is not "oneway".</p>
+        or has a return value declared.</p>
      */
     any approveFiring( [in] com::sun::star::script::AllEventObject aEvent )
             raises( com::sun::star::reflection::InvocationTargetException );

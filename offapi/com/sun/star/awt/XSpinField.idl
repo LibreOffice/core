@@ -36,37 +36,37 @@ published interface XSpinField: com::sun::star::uno::XInterface
 
     /** registers a listener for spin events.
      */
-    [oneway] void addSpinListener( [in] com::sun::star::awt::XSpinListener l );
+    void addSpinListener( [in] com::sun::star::awt::XSpinListener l );
 
 
     /** unregisters a listener for spin events.
      */
-    [oneway] void removeSpinListener( [in] com::sun::star::awt::XSpinListener l );
+    void removeSpinListener( [in] com::sun::star::awt::XSpinListener l );
 
 
     /** increases the value by one step.
      */
-    [oneway] void up();
+    void up();
 
 
     /** decreases the value by one step.
      */
-    [oneway] void down();
+    void down();
 
 
     /** sets the value to the previously set lower value.
      */
-    [oneway] void first();
+    void first();
 
 
     /** sets the value to the previously set upper value.
      */
-    [oneway] void last();
+    void last();
 
 
     /** enables/disables automatic repeat mode.
      */
-    [oneway] void enableRepeat( [in] boolean bRepeat );
+    void enableRepeat( [in] boolean bRepeat );
 
 };
 

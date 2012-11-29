@@ -33,12 +33,12 @@ published interface XTextCursor: com::sun::star::text::XTextRange
 
     /** sets the end of the position to the start.
      */
-    [oneway] void collapseToStart();
+    void collapseToStart();
 
 
     /** sets the start of the position to the end.
      */
-    [oneway] void collapseToEnd();
+    void collapseToEnd();
 
 
     /** determines if the start and end positions are the same.

@@ -36,7 +36,7 @@ published interface XPaintListener: com::sun::star::lang::XEventListener
     /** is invoked when a region of the window became invalid, e.g. when
         another window has been moved away.
      */
-    [oneway] void windowPaint( [in] com::sun::star::awt::PaintEvent e );
+    void windowPaint( [in] com::sun::star::awt::PaintEvent e );
 
 };
 

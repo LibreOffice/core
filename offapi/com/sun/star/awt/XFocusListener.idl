@@ -40,14 +40,14 @@ published interface XFocusListener: com::sun::star::lang::XEventListener
 
         @see XActivateListener::windowActivated
      */
-    [oneway] void focusGained( [in] com::sun::star::awt::FocusEvent e );
+    void focusGained( [in] com::sun::star::awt::FocusEvent e );
 
 
     /** is invoked when a window loses the keyboard focus.
 
         @see XActivateListener::windowDeactivated
      */
-    [oneway] void focusLost( [in] com::sun::star::awt::FocusEvent e );
+    void focusLost( [in] com::sun::star::awt::FocusEvent e );
 
 };
 

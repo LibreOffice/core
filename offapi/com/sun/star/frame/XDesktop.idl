@@ -72,7 +72,7 @@ published interface XDesktop: com::sun::star::uno::XInterface
 
         @see XDesktop::removeTerminateListener()
      */
-    [oneway] void addTerminateListener( [in] XTerminateListener Listener );
+    void addTerminateListener( [in] XTerminateListener Listener );
 
     /** unregisters an event listener for termination events.
 
@@ -81,7 +81,7 @@ published interface XDesktop: com::sun::star::uno::XInterface
 
         @see XDesktop::addTerminateListener()
      */
-    [oneway] void removeTerminateListener( [in] XTerminateListener Listener );
+    void removeTerminateListener( [in] XTerminateListener Listener );
 
     /** provides read access to collection of all currently loaded components
         inside the frame tree

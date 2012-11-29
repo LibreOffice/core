@@ -40,7 +40,7 @@ interface XBackendChangesNotifier: com::sun::star::uno::XInterface
              The name of the component the listener is monitoring changes for.
 
      */
-    [oneway] void addChangesListener( [in] com::sun::star::configuration::backend::XBackendChangesListener aListener,
+    void addChangesListener( [in] com::sun::star::configuration::backend::XBackendChangesListener aListener,
                                       [in] string component);
 
     /** removes the specified listener.
@@ -51,7 +51,7 @@ interface XBackendChangesNotifier: com::sun::star::uno::XInterface
              The name of the component the listener is monitoring changes for.
 
      */
-    [oneway] void removeChangesListener( [in] com::sun::star::configuration::backend::XBackendChangesListener aListener,
+    void removeChangesListener( [in] com::sun::star::configuration::backend::XBackendChangesListener aListener,
                                          [in] string component);
 
 };

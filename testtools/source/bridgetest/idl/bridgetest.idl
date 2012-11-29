@@ -235,7 +235,7 @@ interface XBridgeTestBase : com::sun::star::uno::XInterface
     /**
      * in parameter test, tests by calls reference also (complex types)
      */
-    [oneway] void setValues( [in] boolean bBool, [in] char cChar, [in] byte nByte,
+    void setValues( [in] boolean bBool, [in] char cChar, [in] byte nByte,
                              [in] short nShort, [in] unsigned short nUShort,
                              [in] long nLong, [in] unsigned long nULong,
                              [in] hyper nHyper, [in] unsigned hyper nUHyper,
@@ -375,7 +375,7 @@ interface XBridgeTestBase : com::sun::star::uno::XInterface
         @see testSequencePassed
      ***/
     void call( [in] long nCallId, [in] long nWaitMUSEC );
-    [oneway] void callOneway( [in] long nCallId, [in] long nWaitMUSEC );
+    void callOneway( [in] long nCallId, [in] long nWaitMUSEC );
     boolean sequenceOfCallTestPassed();
 
     /****
@@ -410,8 +410,8 @@ interface XBridgeTest : XBridgeTestBase
      * Note that on client side the execption may fly or not. When it flies, it should
      * have the proper message and context.
      ***/
-    [oneway] void raiseRuntimeExceptionOneway(  [in] string Message,
-                                                [in] com::sun::star::uno::XInterface Context );
+    void raiseRuntimeExceptionOneway(  [in] string Message,
+                                       [in] com::sun::star::uno::XInterface Context );
 
     /**
      * raises runtime exception;

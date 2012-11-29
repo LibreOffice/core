@@ -37,7 +37,7 @@ published interface XContentTransmitter: com::sun::star::uno::XInterface
 {
     /**
     */
-    [oneway] void transmit( [in] string Source,
+    void transmit( [in] string Source,
                             [in] string Destination,
                             [in] long   Flags );
 

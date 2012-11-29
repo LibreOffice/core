@@ -53,7 +53,7 @@ published interface XStatusIndicator: com::sun::star::uno::XInterface
             means the maximum value of the progress which can be set by
             calling <member>XStatusIndicator::setValue()</member>.
      */
-    [oneway] void start(
+    void start(
         [in] string Text,
         [in] long Range);
 
@@ -69,7 +69,7 @@ published interface XStatusIndicator: com::sun::star::uno::XInterface
         The instance must be gone by using ref count or disposing.
         </p>
      */
-    [oneway] void end();
+    void end();
 
     /** update progress description
 
@@ -82,7 +82,7 @@ published interface XStatusIndicator: com::sun::star::uno::XInterface
         @param Text
             new value for progress description which should be shown now
      */
-    [oneway] void setText( [in] string Text );
+    void setText( [in] string Text );
 
     /** update progress value
 
@@ -96,7 +96,7 @@ published interface XStatusIndicator: com::sun::star::uno::XInterface
             Must fit the range [0..Range] which was set during
             <member>XStatusIndicator::start()</member>.
      */
-    [oneway] void setValue( [in] long Value );
+    void setValue( [in] long Value );
 
     /** clear progress value and description
 
@@ -105,7 +105,7 @@ published interface XStatusIndicator: com::sun::star::uno::XInterface
         Stopped indicators must ignore this call.
         </p>
      */
-    [oneway] void reset();
+    void reset();
 };
 
 }; }; }; };

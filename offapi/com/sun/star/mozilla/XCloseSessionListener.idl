@@ -39,7 +39,7 @@ published interface XCloseSessionListener: com::sun::star::uno::XInterface
         @param sessionData  [in]:   the data identifying the session that was closed
 
      */
-    [oneway] void sessionClosed( [in] any sessionData );
+    void sessionClosed( [in] any sessionData );
 };
 
 

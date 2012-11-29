@@ -52,7 +52,7 @@ published interface XTest1 {
 
     void f1([out] any p) raises (com::sun::star::uno::RuntimeException);
 
-    [oneway] void f2();
+    void f2();
 
     [attribute, bound] short a1;
 

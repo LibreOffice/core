@@ -50,7 +50,7 @@ published interface XGridPeer: com::sun::star::uno::XInterface
 
     /** sets the column definition for the peer.
      */
-    [oneway] void setColumns( [in] com::sun::star::container::XIndexContainer aColumns );
+    void setColumns( [in] com::sun::star::container::XIndexContainer aColumns );
 
 };
 

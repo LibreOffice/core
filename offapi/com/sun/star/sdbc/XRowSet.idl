@@ -55,13 +55,13 @@ published interface XRowSet: XResultSet
         @param listener
             the listener which should be registered
      */
-    [oneway] void addRowSetListener([in]XRowSetListener listener );
+    void addRowSetListener([in]XRowSetListener listener );
 
     /** removes the specified listener.
         @param listener
             the listener which should be registered
      */
-    [oneway] void removeRowSetListener([in]XRowSetListener listener );
+    void removeRowSetListener([in]XRowSetListener listener );
 };
 
 

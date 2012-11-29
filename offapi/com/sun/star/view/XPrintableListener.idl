@@ -41,7 +41,7 @@ published interface XPrintableListener : com::sun::star::lang::XEventListener
         @param Event
             contains the <type>XPrintable</type> having changed state and the new state.
     */
-    [oneway] void stateChanged( [in] PrintableStateEvent Event );
+    void stateChanged( [in] PrintableStateEvent Event );
 };
 
 }; }; }; };

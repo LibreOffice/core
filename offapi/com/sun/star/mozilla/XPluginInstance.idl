@@ -39,7 +39,7 @@ published interface XPluginInstance: com::sun::star::uno::XInterface
     /** Starts plugin operation. This is called after a plugin instance is
         created.
      */
-    [oneway] void start();
+    void start();
 
 
 
@@ -48,7 +48,7 @@ published interface XPluginInstance: com::sun::star::uno::XInterface
         page. The <member>XPluginInstance::destroy</member> method is directly called
         afterwards.
      */
-    [oneway] void stop();
+    void stop();
 
 
 
@@ -57,7 +57,7 @@ published interface XPluginInstance: com::sun::star::uno::XInterface
         longer possible to return to the plugin instance, because it was
         destroyed by the browser (e.g., window close).
      */
-    [oneway] void destroy();
+    void destroy();
 
 
 
@@ -68,7 +68,7 @@ published interface XPluginInstance: com::sun::star::uno::XInterface
         @param embedded             [in]:   selects embedded or full page plugin mode
 
      */
-    [oneway] void createWindow( [in] any PlatformParentData, [in] boolean embedded );
+    void createWindow( [in] any PlatformParentData, [in] boolean embedded );
 
 
 
@@ -82,7 +82,7 @@ published interface XPluginInstance: com::sun::star::uno::XInterface
         @param sessiondata  [in]:   the data specifying the current session
 
      */
-    [oneway] void newStream(
+    void newStream(
         [in] string MIMEDesc,
         [in] string theURL,
         [in] string filter,
@@ -101,7 +101,7 @@ published interface XPluginInstance: com::sun::star::uno::XInterface
         @param sessiondata  [in]:   the data specifying the current session
 
      */
-    [oneway] void newURL( [in] string MIMEDesc, [in] string theURL, [in] string filter, [in] any sessionData );
+    void newURL( [in] string MIMEDesc, [in] string theURL, [in] string filter, [in] any sessionData );
 
 
 
