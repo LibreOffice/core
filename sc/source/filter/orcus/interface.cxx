@@ -10,6 +10,7 @@
 #include "orcusinterface.hxx"
 
 #include "document.hxx"
+#include "cell.hxx"
 
 using orcus::spreadsheet::row_t;
 using orcus::spreadsheet::col_t;
@@ -24,7 +25,7 @@ orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::append_sheet(const char
         return NULL;
 
     SCTAB nTab = mrDoc.GetTableCount() - 1;
-    maSheets.push_back(new ScOrcusSheet(mrDoc, nTab));
+    maSheets.push_back(new ScOrcusSheet(mrDoc, nTab, maSharedStrings));
     return &maSheets.back();
 }
 
@@ -56,14 +57,13 @@ orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::get_sheet(const char* s
         return &(*it);
 
     // Create a new orcus sheet instance for this.
-    maSheets.push_back(new ScOrcusSheet(mrDoc, nTab));
+    maSheets.push_back(new ScOrcusSheet(mrDoc, nTab, maSharedStrings));
     return &maSheets.back();
 }
 
 orcus::spreadsheet::iface::import_shared_strings* ScOrcusFactory::get_shared_strings()
 {
-    // We don't support it yet.
-    return NULL;
+    return &maSharedStrings;
 }
 
 orcus::spreadsheet::iface::import_styles* ScOrcusFactory::get_styles()
@@ -72,8 +72,8 @@ orcus::spreadsheet::iface::import_styles* ScOrcusFactory::get_styles()
     return NULL;
 }
 
-ScOrcusSheet::ScOrcusSheet(ScDocument& rDoc, SCTAB nTab) :
-    mrDoc(rDoc), mnTab(nTab) {}
+ScOrcusSheet::ScOrcusSheet(ScDocument& rDoc, SCTAB nTab, ScOrcusSharedStrings& rSharedStrings) :
+    mrDoc(rDoc), mnTab(nTab), mrSharedStrings(rSharedStrings) {}
 
 void ScOrcusSheet::set_auto(row_t row, col_t col, const char* p, size_t n)
 {
@@ -86,12 +86,40 @@ void ScOrcusSheet::set_format(row_t /*row*/, col_t /*col*/, size_t /*xf_index*/)
 }
 
 void ScOrcusSheet::set_formula(
-    row_t /*row*/, col_t /*col*/, formula_grammar_t /*grammar*/, const char* /*p*/, size_t /*n*/)
+    row_t row, col_t col, formula_grammar_t grammar, const char* p, size_t n)
 {
+    OUString aFormula(p, n, RTL_TEXTENCODING_UTF8);
+    formula::FormulaGrammar::Grammar eGrammar;
+    switch(grammar)
+    {
+        case orcus::spreadsheet::ods:
+            eGrammar = formula::FormulaGrammar::GRAM_ODFF;
+            break;
+        case orcus::spreadsheet::xlsx_2007:
+        case orcus::spreadsheet::xlsx_2010:
+            eGrammar = formula::FormulaGrammar::GRAM_ENGLISH_XL_A1;
+            break;
+        case orcus::spreadsheet::gnumeric:
+            eGrammar = formula::FormulaGrammar::GRAM_ENGLISH_XL_A1;
+            break;
+    }
+
+    ScFormulaCell* pCell = new ScFormulaCell(&mrDoc, ScAddress(col, row, mnTab), aFormula, eGrammar);
+    mrDoc.PutCell(col, row, mnTab, pCell);
 }
 
-void ScOrcusSheet::set_formula_result(row_t /*row*/, col_t /*col*/, const char* /*p*/, size_t /*n*/)
+void ScOrcusSheet::set_formula_result(row_t row, col_t col, const char* p, size_t n)
 {
+    ScBaseCell* pCell;
+    mrDoc.GetCell( col, row, mnTab, pCell );
+    if(!pCell || pCell->GetCellType() != CELLTYPE_FORMULA)
+    {
+        SAL_WARN("sc", "trying to set formula result for non formula \
+                cell! Col: " << col << ";Row: " << row << ";Tab: " << mnTab);
+        return;
+    }
+    OUString aResult( p, n, RTL_TEXTENCODING_UTF8);
+    static_cast<ScFormulaCell*>(pCell)->SetHybridString(aResult);
 }
 
 void ScOrcusSheet::set_shared_formula(
@@ -110,12 +138,65 @@ void ScOrcusSheet::set_shared_formula(row_t /*row*/, col_t /*col*/, size_t /*sin
 {
 }
 
-void ScOrcusSheet::set_string(row_t /*row*/, col_t /*col*/, size_t /*sindex*/)
+void ScOrcusSheet::set_string(row_t row, col_t col, size_t sindex)
+{
+    // Calc does not yet support shared strings so we have to
+    // workaround by importing shared strings into a temporary
+    // shared string container and writing into calc model as
+    // normal string
+
+    const OUString& rSharedString = mrSharedStrings.getByIndex(sindex);
+    ScBaseCell* pCell = ScBaseCell::CreateTextCell( rSharedString, &mrDoc );
+    mrDoc.PutCell(col, row, mnTab, pCell);
+}
+
+void ScOrcusSheet::set_value(row_t row, col_t col, double value)
+{
+    mrDoc.SetValue( col, row, mnTab, value );
+}
+
+size_t ScOrcusSharedStrings::append(const char* s, size_t n)
+{
+    OUString aNewString(s, n, RTL_TEXTENCODING_UTF8);
+    maSharedStrings.push_back(aNewString);
+
+    return maSharedStrings.size() - 1;
+}
+
+size_t ScOrcusSharedStrings::add(const char* s, size_t n)
+{
+    OUString aNewString(s, n, RTL_TEXTENCODING_UTF8);
+    maSharedStrings.push_back(aNewString);
+
+    return maSharedStrings.size() - 1;
+}
+
+const OUString& ScOrcusSharedStrings::getByIndex(size_t nIndex) const
+{
+    if(nIndex < maSharedStrings.size())
+        return maSharedStrings[nIndex];
+
+    throw std::exception();
+}
+
+void ScOrcusSharedStrings::set_segment_bold(bool /*b*/)
+{
+}
+void ScOrcusSharedStrings::set_segment_italic(bool /*b*/)
+{
+}
+void ScOrcusSharedStrings::set_segment_font_name(const char* /*s*/, size_t /*n*/)
+{
+}
+void ScOrcusSharedStrings::set_segment_font_size(double /*point*/)
+{
+}
+void ScOrcusSharedStrings::append_segment(const char* /*s*/, size_t /*n*/)
 {
 }
 
-void ScOrcusSheet::set_value(row_t /*row*/, col_t /*col*/, double /*value*/)
+size_t ScOrcusSharedStrings::commit_segments()
 {
+    return 0;
 }
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

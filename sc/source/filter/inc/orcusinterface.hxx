@@ -20,10 +20,30 @@
 class ScDocument;
 class ScOrcusSheet;
 
+class ScOrcusSharedStrings : public orcus::spreadsheet::iface::import_shared_strings
+{
+    std::vector<OUString> maSharedStrings;
+
+public:
+    virtual size_t append(const char* s, size_t n);
+    virtual size_t add(const char* s, size_t n);
+
+    virtual void set_segment_bold(bool b);
+    virtual void set_segment_italic(bool b);
+    virtual void set_segment_font_name(const char* s, size_t n);
+    virtual void set_segment_font_size(double point);
+    virtual void append_segment(const char* s, size_t n);
+
+    virtual size_t commit_segments();
+
+    const OUString& getByIndex(size_t index) const;
+};
+
 class ScOrcusFactory : public orcus::spreadsheet::iface::import_factory
 {
     ScDocument& mrDoc;
     boost::ptr_vector<ScOrcusSheet> maSheets;
+    ScOrcusSharedStrings maSharedStrings;
 
 public:
     ScOrcusFactory(ScDocument& rDoc);
@@ -38,8 +58,9 @@ class ScOrcusSheet : public orcus::spreadsheet::iface::import_sheet
 {
     ScDocument& mrDoc;
     SCTAB mnTab;
+    ScOrcusSharedStrings& mrSharedStrings;
 public:
-    ScOrcusSheet(ScDocument& rDoc, SCTAB nTab);
+    ScOrcusSheet(ScDocument& rDoc, SCTAB nTab, ScOrcusSharedStrings& rSharedStrings);
 
     // Orcus import interface
     virtual void set_auto(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, const char* p, size_t n);
