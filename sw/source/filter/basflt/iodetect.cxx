@@ -230,16 +230,15 @@ sal_Bool SwIoSystem::IsFileFilter( SfxMedium& rMedium, const String& rFmtName,
     const SfxFilter* pFltr = aIter.First();
     while ( pFltr )
     {
-        if( pFltr->GetUserData().equals(rFmtName) )
+        const rtl::OUString& rUserData = pFltr->GetUserData();
+        if (rUserData.equals(rFmtName))
         {
-            const rtl::OUString& rUserData = pFltr->GetUserData();
             if( 'C' == rUserData[0] )
             {
                 if ( xStor.is() )
                     bRet = IsValidStgFilter( xStor, *pFltr );
                 else if ( xStg.Is() )
-                    bRet = xStg.Is() && IsValidStgFilter( *xStg, *pFltr );
-                bRet = bRet && (pFltr->GetUserData().equals(rFmtName));
+                    bRet = IsValidStgFilter( *xStg, *pFltr );
             }
             else if( !xStg.Is() && !xStor.is() )
             {
