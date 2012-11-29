@@ -68,9 +68,9 @@ define fetch_Optional
 $(if $(filter ALL,$(DO_FETCH_TARBALLS))$(filter $1,$(fetch_BUILD_TYPE)),$2)
 endef
 
-download: $(fetch_LOGFILE)
+download: $(WORKDIR)/download
 
-$(fetch_LOGFILE): $(SRCDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)/Makefile.fetch
+$(WORKDIR)/download: $(SRCDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)/Makefile.fetch
 	@mkdir -p $(TARFILE_LOCATION)/tmp
 	@date >> $(fetch_LOGFILE)
 	$(foreach item, \
@@ -193,5 +193,6 @@ $(fetch_LOGFILE): $(SRCDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)/Make
 		$(call fetch_Optional,MOZ,$(MOZ_ZIP_LIB)) \
 		$(call fetch_Optional,MOZ,$(MOZ_ZIP_RUNTIME)) \
 	,$(call fetch_Download_item,http://dev-www.libreoffice.org/mozilla,$(item),no-sum))
+	@mkdir -p $(dir $@) && touch $@
 
 # vim: set noet sw=4 ts=4:
