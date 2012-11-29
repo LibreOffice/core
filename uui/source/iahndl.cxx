@@ -31,7 +31,6 @@
 #include "com/sun/star/lang/XInitialization.hpp"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/script/ModuleSizeExceededRequest.hpp"
-#include "com/sun/star/sync2/BadPartnershipException.hpp"
 #include "com/sun/star/task/ErrorCodeIOException.hpp"
 #include "com/sun/star/task/ErrorCodeRequest.hpp"
 #include "com/sun/star/task/FutureDocumentVersionProductUpdateRequest.hpp"
@@ -664,28 +663,6 @@ UUIInteractionHelper::handleRequest_impl(
                 aArguments.reserve(2);
                 aArguments.push_back(aWrongJavaVersionException.DetectedVersion);
                 aArguments.push_back(aWrongJavaVersionException.LowestSupportedVersion);
-            }
-            handleErrorHandlerRequest(task::InteractionClassification_ERROR,
-                                      nErrorCode,
-                                      aArguments,
-                                      rRequest->getContinuations(),
-                                      bObtainErrorStringOnly,
-                                      bHasErrorString,
-                                      rErrorString);
-            return true;
-        }
-
-        sync2::BadPartnershipException aBadPartnershipException;
-        if (aAnyRequest >>= aBadPartnershipException)
-        {
-            ErrCode nErrorCode;
-            std::vector< rtl::OUString > aArguments;
-            if (aBadPartnershipException.Partnership.getLength() == 0)
-                nErrorCode = ERRCODE_UUI_BADPARTNERSHIP;
-            else
-            {
-                nErrorCode = ERRCODE_UUI_BADPARTNERSHIP_NAME;
-                aArguments.push_back(aBadPartnershipException.Partnership);
             }
             handleErrorHandlerRequest(task::InteractionClassification_ERROR,
                                       nErrorCode,
