@@ -65,6 +65,7 @@ public:
     void SetFocus( bool bFocus );
     void SetCursored( bool bCursored );
     void SetSelected( bool bSelected );
+    void SetExpanded( bool bExpanded );
     sal_uInt16 GetFlags() const;
     void SetSelectable( bool bSelectable );
 

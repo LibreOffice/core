@@ -940,7 +940,7 @@ void SvTreeList::Expand( SvListView* pView, SvTreeListEntry* pEntry )
     DBG_ASSERT(!pEntry->maChildren.empty(), "SvTreeList::Expand: We expected to have child entries.");
 
     SvViewDataEntry* pViewData = pView->GetViewData(pEntry);
-    pViewData->nFlags |= SVLISTENTRYFLAG_EXPANDED;
+    pViewData->SetExpanded(true);
     SvTreeListEntry* pParent = pEntry->pParent;
     // if parent is visible, invalidate status data
     if ( pView->IsExpanded( pParent ) )
@@ -959,7 +959,7 @@ void SvTreeList::Collapse( SvListView* pView, SvTreeListEntry* pEntry )
     DBG_ASSERT(!pEntry->maChildren.empty(), "SvTreeList::Collapse: We expected have child entries.");
 
     SvViewDataEntry* pViewData = pView->GetViewData( pEntry );
-    pViewData->nFlags &=(~SVLISTENTRYFLAG_EXPANDED);
+    pViewData->SetExpanded(false);
 
     SvTreeListEntry* pParent = pEntry->pParent;
     if ( pView->IsExpanded(pParent) )
@@ -1198,7 +1198,7 @@ void SvListView::InitTable()
     // insert root entry
     pEntry = pModel->pRootItem;
     pViewData = new SvViewDataEntry;
-    pViewData->nFlags = SVLISTENTRYFLAG_EXPANDED;
+    pViewData->SetExpanded(true);
     maDataTable.insert( pEntry, pViewData );
     // now all the other entries
     pEntry = pModel->First();
@@ -1229,7 +1229,7 @@ void SvListView::Clear()
         // insert root entry
         SvTreeListEntry* pEntry = pModel->pRootItem;
         SvViewDataEntry* pViewData = new SvViewDataEntry;
-        pViewData->nFlags = SVLISTENTRYFLAG_EXPANDED;
+        pViewData->SetExpanded(true);
         maDataTable.insert( pEntry, pViewData );
     }
 }
@@ -1304,7 +1304,7 @@ void SvListView::ActionMoving( SvTreeListEntry* pEntry,SvTreeListEntry*,sal_uLon
     if (pParent != pModel->pRootItem && pParent->maChildren.size() == 1)
     {
         SvViewDataEntry* pViewData = maDataTable.find( pParent )->second;
-        pViewData->nFlags &= (~SVLISTENTRYFLAG_EXPANDED);
+        pViewData->SetExpanded(false);
     }
     // vorlaeufig
     nVisibleCount = 0;
@@ -1408,7 +1408,7 @@ void SvListView::ActionRemoving( SvTreeListEntry* pEntry )
     if (pCurEntry && pCurEntry != pModel->pRootItem && pCurEntry->maChildren.size() == 1)
     {
         pViewData = maDataTable.find(pCurEntry)->second;
-        pViewData->nFlags &= (~SVLISTENTRYFLAG_EXPANDED);
+        pViewData->SetExpanded(false);
     }
 }
 
