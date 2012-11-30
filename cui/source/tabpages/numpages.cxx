@@ -1283,7 +1283,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
             aLevelLB.InsertEntry( OUString::valueOf(i));
         if(pSaveNum->GetLevelCount() > 1)
         {
-            String sEntry( OUString("1 - ") );
+            OUString sEntry( "1 - " );
             sEntry += OUString::valueOf( pSaveNum->GetLevelCount() );
             aLevelLB.InsertEntry(sEntry);
             aLevelLB.SelectEntry(sEntry);
@@ -2504,7 +2504,7 @@ void    SvxNumberingPreview::Paint( const Rectangle& /*rRect*/ )
         else
         {
             //#i5153# painting gray or black rectangles as 'normal' numbering text
-            String sMsg( "Preview" );
+            OUString sMsg( "Preview" );
             long nWidth = pVDev->GetTextWidth(sMsg);
             long nTextHeight = pVDev->GetTextHeight();
             long nRectHeight = nTextHeight * 2 / 3;
@@ -2708,7 +2708,7 @@ SvxNumPositionTabPage::SvxNumPositionTabPage(Window* pParent,
     Point aPos(250,0);
 
     pDebugFixedText->SetPosSizePixel(aPos, aSize);
-    pDebugFixedText->SetText( OUString("Das ist ein Debug-Text") );
+    pDebugFixedText->SetText( "Das ist ein Debug-Text" );
 #endif
 
     aStandardPB.SetAccessibleRelationMemberOf(&aPositionFL);
@@ -3047,8 +3047,8 @@ void SvxNumPositionTabPage::Reset( const SfxItemSet& rSet )
             aLevelLB.InsertEntry( OUString::valueOf(i) );
         if(pSaveNum->GetLevelCount() > 1)
         {
-            String sEntry( OUString("1 - ") );
-            sEntry.Append( OUString::valueOf( pSaveNum->GetLevelCount() ) );
+            OUString sEntry( "1 - " );
+            sEntry += OUString::valueOf( pSaveNum->GetLevelCount() );
             aLevelLB.InsertEntry(sEntry);
             aLevelLB.SelectEntry(sEntry);
         }
