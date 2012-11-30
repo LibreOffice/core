@@ -40,6 +40,7 @@
 #include <deque>
 #include <map>
 #include <utility>
+#include <limits.h>
 
 #include "tracer.hxx"
 #include "ww8struc.hxx"     // WW8_BRC
