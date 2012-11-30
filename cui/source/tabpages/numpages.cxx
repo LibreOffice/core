@@ -1283,7 +1283,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
             aLevelLB.InsertEntry( OUString::valueOf(i));
         if(pSaveNum->GetLevelCount() > 1)
         {
-            String sEntry( OUString("1 - ") );
+            OUString sEntry( "1 - " );
             sEntry += OUString::valueOf( pSaveNum->GetLevelCount() );
             aLevelLB.InsertEntry(sEntry);
             aLevelLB.SelectEntry(sEntry);
