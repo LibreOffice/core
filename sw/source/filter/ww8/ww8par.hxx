@@ -26,6 +26,10 @@
 #include <editeng/frmdir.hxx>
 #include <fltshell.hxx>
 
+#include <svx/svdobj.hxx>
+#define SW_DRAWLAYER 0x30334353
+#define SW_UD_IMAPDATA      2
+
 #include <vector>
 #include <stack>
 #include <deque>
@@ -458,6 +462,48 @@ private:
     SwWW8FltRefStack& operator=(const SwWW8FltRefStack&);
 };
 
+template< typename Type >
+inline bool get_flag( Type nBitField, Type nMask )
+{ return (nBitField & nMask) != 0; }
+
+template< typename ReturnType, typename Type >
+inline ReturnType ulimit_cast( Type nValue, ReturnType nMax )
+{ return static_cast< ReturnType >( ::std::min< Type >( nValue, nMax ) ); }
+
+
+template< typename ReturnType, typename Type >
+inline ReturnType ulimit_cast( Type nValue )
+{ return ulimit_cast( nValue, ::std::numeric_limits< ReturnType >::max() ); }
+
+class SwMacroInfo : public SdrObjUserData
+{
+public:
+    SwMacroInfo();
+    virtual ~SwMacroInfo();
+
+    virtual SdrObjUserData* Clone( SdrObject* pObj ) const;
+
+    void SetHlink( const OUString& rHlink ) { maHlink = rHlink; }
+    const OUString& GetHlink() const { return maHlink; }
+    void SetTarFrm( const OUString& rTarFrm ) { maTarFrm = rTarFrm; }
+    const OUString& GetTarFrm() const { return maTarFrm; }
+    void SetShapeId( const sal_Int32& rShapeId ) { mnShapeId = rShapeId; }
+    const sal_Int32& GetShapeId() const { return mnShapeId; }
+    void SetName( const OUString& rName ) { maNameStr = rName; }
+    const OUString& GetName() const { return maNameStr; }
+
+private:
+    sal_Int32 mnShapeId;
+    OUString maHlink;
+    OUString maNameStr;
+    OUString maTarFrm;
+};
+
+struct HyperLinksTable
+{
+    OUString hLinkAddr;
+    OUString tarFrm;
+};
 
 namespace sw
 {
@@ -1844,6 +1890,8 @@ public:     // eigentlich private, geht aber leider nur public
     rtl_TextEncoding GetCurrentCJKCharSet();
 
     void PostProcessAttrs();
+    static void ReadEmbeddedData(SvMemoryStream& rStrm, SwDocShell* pDocShell, struct HyperLinksTable& hlStr);
+    static OUString ReadRawUniString(SvMemoryStream& rStrm, sal_uInt16 nChars, bool b16Bit);
 };
 
 bool CanUseRemoteLink(const OUString &rGrfName);

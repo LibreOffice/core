@@ -123,6 +123,13 @@ public:
     virtual void WriteFrmExtraData(const SwFrmFmt&);
     virtual void WritePictures();
     virtual ~SwBasicEscherEx();
+    //i120927,this function is added to export hyperlink info,such as graphic/frame/OLE
+    bool IsRelUrl();
+    OUString GetBasePath();
+    OUString BuildFileName(sal_uInt16& rnLevel, bool& rbRel, const OUString& rUrl);
+    void WriteHyperlinkWithinFly( SvMemoryStream& rStrm, const SwFmtURL* pINetFmtArg);
+    void PreWriteHyperlinkWithinFly(const SwFrmFmt& rFmt,EscherPropertyContainer& rPropOpt);
+
 private:
     //No copying
     SwBasicEscherEx(const SwBasicEscherEx&);

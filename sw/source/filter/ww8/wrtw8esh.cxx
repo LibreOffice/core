@@ -92,12 +92,233 @@
 #include <oox/ole/olehelper.hxx>
 #include <fstream>
 #include <unotools/streamwrap.hxx>
+#include <editeng/shaditem.hxx>
+#include <svx/unoapi.hxx>
+#include <escher.hxx>
+#include <fmtinfmt.hxx>
+#include <fmturl.hxx>
+#include "sfx2/sfxsids.hrc"
+#include <svl/urihelper.hxx>
+#include <unotools/saveopt.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace com::sun::star;
 using namespace sw::util;
 using namespace sw::types;
 using namespace nsFieldFlags;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::drawing::XShape;
+
+bool SwBasicEscherEx::IsRelUrl()
+{
+    SvtSaveOptions aSaveOpt;
+    bool bRelUrl = false;
+    SfxMedium * pMedium = rWrt.GetWriter().GetMedia();
+    if ( pMedium )
+        bRelUrl = pMedium->IsRemote() ? aSaveOpt.IsSaveRelINet() : aSaveOpt.IsSaveRelFSys();
+    return bRelUrl;
+}
+
+OUString SwBasicEscherEx::GetBasePath()
+{
+    OUString sDocUrl;
+    SfxMedium * pMedium = rWrt.GetWriter().GetMedia();
+    if (pMedium)
+    {
+        const SfxItemSet* pPItemSet = pMedium->GetItemSet();
+        if( pPItemSet )
+        {
+            const SfxStringItem* pPItem = dynamic_cast< const SfxStringItem* >( pPItemSet->GetItem( SID_FILE_NAME ) );
+            if ( pPItem )
+                sDocUrl = pPItem->GetValue();
+        }
+    }
+
+    return sDocUrl.copy(0, sDocUrl.lastIndexOf('/') + 1);
+}
+
+OUString SwBasicEscherEx::BuildFileName(sal_uInt16& rnLevel, bool& rbRel, const OUString& rUrl)
+{
+    OUString aDosName( INetURLObject( rUrl ).getFSysPath( INetURLObject::FSYS_DOS ) );
+    rnLevel = 0;
+    rbRel = IsRelUrl();
+
+    if (rbRel)
+    {
+        // try to convert to relative file name
+        OUString aTmpName( aDosName );
+        aDosName = INetURLObject::GetRelURL( GetBasePath(), rUrl,
+        INetURLObject::WAS_ENCODED, INetURLObject::DECODE_WITH_CHARSET );
+
+        if (aDosName.startsWith(INET_FILE_SCHEME))
+        {
+            // not converted to rel -> back to old, return absolute flag
+            aDosName = aTmpName;
+            rbRel = false;
+        }
+        else if (aDosName.startsWith("./"))
+        {
+            aDosName = aDosName.copy(2);
+        }
+        else
+        {
+            while (aDosName.startsWith("../"))
+            {
+                ++rnLevel;
+                aDosName = aDosName.copy(3);
+            }
+        }
+    }
+    return aDosName;
+}
+
+void SwBasicEscherEx::WriteHyperlinkWithinFly( SvMemoryStream& rStrm, const SwFmtURL* pINetFmtArg)
+{
+    if ( !pINetFmtArg ) return;
+
+    sal_uInt8 maGuidStdLink[ 16 ] ={
+        0xD0, 0xC9, 0xEA, 0x79, 0xF9, 0xBA, 0xCE, 0x11, 0x8C, 0x82, 0x00, 0xAA, 0x00, 0x4B, 0xA9, 0x0B };
+    sal_uInt8 maGuidUrlMoniker[ 16 ] = {
+        0xE0, 0xC9, 0xEA, 0x79, 0xF9, 0xBA, 0xCE, 0x11, 0x8C, 0x82, 0x00, 0xAA, 0x00, 0x4B, 0xA9, 0x0B };
+
+    sal_uInt8 maGuidFileMoniker[ 16 ] = {
+        0x03, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46 };
+    sal_uInt8 maGuidFileTail[] = {
+            0xFF, 0xFF, 0xAD, 0xDE, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+        };
+    //const sal_uInt18 WW8_ID_HLINK               = 0x01B8;
+    const sal_uInt32 WW8_HLINK_BODY             = 0x00000001;   /// Contains file link or URL.
+    const sal_uInt32 WW8_HLINK_ABS              = 0x00000002;   /// Absolute path.
+    //const sal_uInt32 WW8_HLINK_DESCR            = 0x00000014;   /// Description.
+    const sal_uInt32 WW8_HLINK_MARK             = 0x00000008;   /// Text mark.
+    const sal_uInt32 WW8_HLINK_FRAME            = 0x00000080;   /// Target frame.
+    //const sal_uInt32 WW8_HLINK_UNC              = 0x00000100;   /// UNC path.
+    SvMemoryStream tmpStrm;
+    OUString tmpTextMark;
+
+    OUString rUrl = pINetFmtArg->GetURL();
+    OUString rTarFrm = pINetFmtArg->GetTargetFrameName();
+    sal_uInt32          mnFlags = 0;
+
+    INetURLObject aUrlObj( rUrl );
+    const INetProtocol eProtocol = aUrlObj.GetProtocol();
+
+    //Target Frame
+    if (!rTarFrm.isEmpty())
+    {
+        SwWW8Writer::WriteLong(tmpStrm, rTarFrm.getLength()+1);
+        SwWW8Writer::WriteString16(tmpStrm, rTarFrm, false);
+
+        tmpStrm << sal_uInt16( 0 );
+
+        mnFlags |= WW8_HLINK_FRAME;
+    }
+
+    // file link or URL
+    if (eProtocol == INET_PROT_FILE || (eProtocol == INET_PROT_NOT_VALID && rUrl[0] != '#'))
+    {
+        sal_uInt16 nLevel;
+        bool bRel;
+        OUString aFileName( BuildFileName( nLevel, bRel, rUrl ));
+
+        if( !bRel )
+            mnFlags |= WW8_HLINK_ABS;
+
+        mnFlags |= WW8_HLINK_BODY;
+
+        tmpStrm.Write( maGuidFileMoniker,sizeof(maGuidFileMoniker) );
+        tmpStrm << nLevel;
+        SwWW8Writer::WriteLong(tmpStrm, aFileName.getLength()+1);
+        SwWW8Writer::WriteString8( tmpStrm, aFileName, true, RTL_TEXTENCODING_MS_1252 );
+        tmpStrm.Write( maGuidFileTail,sizeof(maGuidFileTail) );
+
+        //For UNICODE
+        SwWW8Writer::WriteLong(tmpStrm, 2*aFileName.getLength()+6);
+        SwWW8Writer::WriteLong(tmpStrm, 2*aFileName.getLength());
+        tmpStrm << sal_uInt16(0x0003);
+        SwWW8Writer::WriteString16(tmpStrm, aFileName, false);
+    }
+    else if( eProtocol != INET_PROT_NOT_VALID )
+    {
+        tmpStrm.Write( maGuidUrlMoniker,sizeof(maGuidUrlMoniker) );
+            SwWW8Writer::WriteLong(tmpStrm, 2*(rUrl.getLength()+1));
+
+            SwWW8Writer::WriteString16(tmpStrm, rUrl, true);
+            mnFlags |= WW8_HLINK_BODY | WW8_HLINK_ABS;
+    }
+    else if (rUrl[0] == '#' )
+    {
+        OUString aTextMark(rUrl.copy( 1 ));
+        aTextMark = aTextMark.replaceFirst(".", "!");
+        tmpTextMark = aTextMark;
+    }
+
+    if (tmpTextMark.isEmpty() && aUrlObj.HasMark())
+    {
+        tmpTextMark = aUrlObj.GetMark();
+    }
+
+    if (!tmpTextMark.isEmpty())
+    {
+        SwWW8Writer::WriteLong(tmpStrm, tmpTextMark.getLength()+1);
+            SwWW8Writer::WriteString16(tmpStrm, tmpTextMark, true);
+
+        mnFlags |= WW8_HLINK_MARK;
+    }
+
+    rStrm.Write( maGuidStdLink,16 );
+    rStrm  << sal_uInt32( 2 )
+           << mnFlags;
+    tmpStrm.Seek( STREAM_SEEK_TO_BEGIN );
+    sal_uInt32 nStrmPos = tmpStrm.Tell();
+    tmpStrm.Seek( STREAM_SEEK_TO_END );
+    sal_uInt32 nStrmSize = tmpStrm.Tell();
+    tmpStrm.Seek( nStrmPos );
+    sal_uInt32 nLen;
+    nLen = nStrmSize - nStrmPos;
+    if(nLen >0)
+    {
+        sal_uInt8* pBuffer = new sal_uInt8[ nLen ];
+        tmpStrm.Read(pBuffer, nLen);
+        rStrm.Write( pBuffer, nLen );
+        delete[] pBuffer;
+    }
+}
+void SwBasicEscherEx::PreWriteHyperlinkWithinFly(const SwFrmFmt& rFmt,EscherPropertyContainer& rPropOpt)
+{
+    const SfxPoolItem* pItem;
+    const SwAttrSet& rAttrSet = rFmt.GetAttrSet();
+    if (SFX_ITEM_SET == rAttrSet.GetItemState(RES_URL, true, &pItem))
+    {
+        const SwFmtURL *pINetFmt = dynamic_cast<const SwFmtURL*>(pItem);
+        if (pINetFmt && !pINetFmt->GetURL().isEmpty())
+        {
+            SvMemoryStream *rStrm = new SvMemoryStream ;
+            OUString tmpstr = pINetFmt->GetURL();
+            WriteHyperlinkWithinFly( *rStrm, pINetFmt );
+            sal_uInt8* pBuf = (sal_uInt8*) rStrm->GetData();
+            sal_uInt32 nSize = rStrm->Seek( STREAM_SEEK_TO_END );
+            rPropOpt.AddOpt( ESCHER_Prop_pihlShape, sal_True, nSize, pBuf, nSize );
+            sal_uInt32 nValue;
+            OUString aNamestr = pINetFmt->GetName();
+            if (!aNamestr.isEmpty())
+            {
+                rPropOpt.AddOpt(ESCHER_Prop_wzName, aNamestr );
+            }
+            if(rPropOpt.GetOpt( ESCHER_Prop_fPrint, nValue))
+            {
+                nValue|=0x03080008;
+                rPropOpt.AddOpt(ESCHER_Prop_fPrint, nValue );
+            }
+            else
+                rPropOpt.AddOpt(ESCHER_Prop_fPrint, 0x03080008 );
+        }
+    }
+}
 
 namespace
 {
@@ -1883,6 +2104,8 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt,
         rPropOpt.AddOpt( ESCHER_Prop_fPrint, 0x200020 );
     }
 
+    PreWriteHyperlinkWithinFly(rFmt,rPropOpt);
+
     return nLineWidth;
 }
 
@@ -1975,6 +2198,8 @@ sal_Int32 SwEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeType
             }
         }
     }
+
+    PreWriteHyperlinkWithinFly(rFmt,rPropOpt);
 
     return nLineWidth;
 }

@@ -896,6 +896,8 @@ public:
 
     using StgWriter::Write;
     virtual sal_uLong Write( SwPaM&, SfxMedium&, const OUString* = 0 );
+    //Seems not an expected to provide method to access the private member
+    SfxMedium* GetMedia() { return mpMedium; }
 
 private:
     /// No copying.
