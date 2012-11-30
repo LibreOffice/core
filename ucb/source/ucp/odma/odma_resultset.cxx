@@ -80,9 +80,9 @@ void DynamicResultSet::initStatic()
 void DynamicResultSet::initDynamic()
 {
     m_xResultSet1
-        = new ::ucbhelper::ResultSet( comphelper::getComponentContext(m_xSMgr),
+        = new ::ucbhelper::ResultSet( m_xContext,
                                       m_aCommand.Properties,
-                                      new DataSupplier( m_xSMgr,
+                                      new DataSupplier( Reference<XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW),
                                                         m_xContent,
                                                         m_aCommand.Mode ),
                                       m_xEnv );
