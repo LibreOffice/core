@@ -23,6 +23,7 @@
 #include <com/sun/star/form/binding/ValueBinding.idl>
 #include <com/sun/star/form/binding/ListEntrySource.idl>
 #include <com/sun/star/form/validation/XValidator.idl>
+#include <com/sun/star/xml/NamespaceContainer.idl>
 
 
 module com {  module sun {  module star {  module xforms {
@@ -61,6 +62,18 @@ service Binding
     @see com::sun::star::form::binding::ValidatableControlModel
     */
     interface com::sun::star::form::validation::XValidator;
+
+    /** among other properties, there is this one
+
+        <p>It is unclear to me whether this is an implementation detail
+        or a supported interface.</p>
+        <p>The value supports the service
+            com::sun::star::xml::NamespaceContainer</p>
+
+        @see com::sun::star::xml::NamespaceContainer
+     */
+    [optional, property] com::sun::star::container::XNameContainer
+        BindingNamespaces;
 };
 
 

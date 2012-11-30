@@ -28,7 +28,7 @@ module com { module sun { module star { module xml {
 
     <p>Each namespace is accessed with its prefix and the URL is stored as a string.
 
-    @deprecated This appears to be unused.
+    @see com::sun::star::xforms::Binding
 */
 published service NamespaceContainer
 {
