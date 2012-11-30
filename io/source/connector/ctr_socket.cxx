@@ -86,7 +86,7 @@ namespace stoc_connector {
     {
         // make it unique
         g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-        m_sDescription += OUString( RTL_CONSTASCII_USTRINGPARAM( ",uniqueValue=" ) );
+        m_sDescription += ",uniqueValue=";
         m_sDescription += OUString::valueOf(
             sal::static_int_cast< sal_Int64 >(
                 reinterpret_cast< sal_IntPtr >(&m_socket)),
@@ -134,7 +134,7 @@ namespace stoc_connector {
 
             if(i != nBytesToRead && m_socket.getError() != osl_Socket_E_None)
             {
-                OUString message(RTL_CONSTASCII_USTRINGPARAM("ctr_socket.cxx:SocketConnection::read: error - "));
+                OUString message("ctr_socket.cxx:SocketConnection::read: error - ");
                 message += m_socket.getErrorAsString();
 
                 IOException ioException(message, Reference<XInterface>(static_cast<XConnection *>(this)));
@@ -151,7 +151,7 @@ namespace stoc_connector {
         }
         else
         {
-            OUString message(RTL_CONSTASCII_USTRINGPARAM("ctr_socket.cxx:SocketConnection::read: error - connection already closed"));
+            OUString message("ctr_socket.cxx:SocketConnection::read: error - connection already closed");
 
             IOException ioException(message, Reference<XInterface>(static_cast<XConnection *>(this)));
 
@@ -172,7 +172,7 @@ namespace stoc_connector {
         {
             if( m_socket.write( seq.getConstArray() , seq.getLength() ) != seq.getLength() )
             {
-                OUString message(RTL_CONSTASCII_USTRINGPARAM("ctr_socket.cxx:SocketConnection::write: error - "));
+                OUString message("ctr_socket.cxx:SocketConnection::write: error - ");
                 message += m_socket.getErrorAsString();
 
                 IOException ioException(message, Reference<XInterface>(static_cast<XConnection *>(this)));
@@ -187,7 +187,7 @@ namespace stoc_connector {
         }
         else
         {
-            OUString message(RTL_CONSTASCII_USTRINGPARAM("ctr_socket.cxx:SocketConnection::write: error - connection already closed"));
+            OUString message("ctr_socket.cxx:SocketConnection::write: error - connection already closed");
 
             IOException ioException(message, Reference<XInterface>(static_cast<XConnection *>(this)));
 

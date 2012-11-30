@@ -94,9 +94,9 @@ namespace stoc_connector
             Reference< XConnection > r;
             if ( aDesc.getName() == "pipe" )
             {
-                rtl::OUString aName(
+                OUString aName(
                     aDesc.getParameter(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("name"))));
+                        OUString("name")));
 
                 PipeConnection *pConn = new PipeConnection( sConnectionDescription );
 
@@ -106,43 +106,41 @@ namespace stoc_connector
                 }
                 else
                 {
-                    OUString sMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("Connector : couldn't connect to pipe "));
+                    OUString sMessage("Connector : couldn't connect to pipe ");
                     sMessage += aName;
-                    sMessage += OUString(RTL_CONSTASCII_USTRINGPARAM("("));
+                    sMessage += "(";
                     sMessage += OUString::valueOf( (sal_Int32 ) pConn->m_pipe.getError() );
-                    sMessage += OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
+                    sMessage += ")";
                     delete pConn;
                     throw NoConnectException( sMessage ,Reference< XInterface > () );
                 }
             }
             else if ( aDesc.getName() == "socket" )
             {
-                rtl::OUString aHost;
+                OUString aHost;
                 if (aDesc.hasParameter(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("host"))))
+                        OUString("host")))
                     aHost = aDesc.getParameter(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("host")));
+                        OUString("host"));
                 else
-                    aHost = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                              "localhost"));
+                    aHost = OUString("localhost");
                 sal_uInt16 nPort = static_cast< sal_uInt16 >(
                     aDesc.getParameter(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("port"))).
+                        OUString("port")).
                     toInt32());
                 bool bTcpNoDelay
                     = aDesc.getParameter(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                          "tcpnodelay"))).toInt32() != 0;
+                        OUString("tcpnodelay")).toInt32() != 0;
 
                 SocketConnection *pConn = new SocketConnection( sConnectionDescription);
 
                 SocketAddr AddrTarget( aHost.pData, nPort );
                 if(pConn->m_socket.connect(AddrTarget) != osl_Socket_Ok)
                 {
-                    OUString sMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("Connector : couldn't connect to socket ("));
+                    OUString sMessage("Connector : couldn't connect to socket (");
                     OUString sError = pConn->m_socket.getErrorAsString();
                     sMessage += sError;
-                    sMessage += OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
+                    sMessage += ")";
                     delete pConn;
                     throw NoConnectException( sMessage, Reference < XInterface > () );
                 }
@@ -157,7 +155,7 @@ namespace stoc_connector
             }
             else
             {
-                OUString delegatee = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.connection.Connector."));
+                OUString delegatee("com.sun.star.connection.Connector.");
                 delegatee += aDesc.getName();
 
                 OSL_TRACE(
@@ -169,7 +167,7 @@ namespace stoc_connector
 
                 if(!xConnector.is())
                 {
-                    OUString message(RTL_CONSTASCII_USTRINGPARAM("Connector: unknown delegatee "));
+                    OUString message("Connector: unknown delegatee ");
                     message += delegatee;
 
                     throw ConnectionSetupException(message, Reference<XInterface>());
@@ -191,13 +189,13 @@ namespace stoc_connector
     Sequence< OUString > connector_getSupportedServiceNames()
     {
         Sequence< OUString > seqNames(1);
-        seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICE_NAME));
+        seqNames.getArray()[0] = SERVICE_NAME;
         return seqNames;
     }
 
     OUString connector_getImplementationName()
     {
-        return OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ) );
+        return OUString( IMPLEMENTATION_NAME );
     }
 
         OUString OConnector::getImplementationName() throw()
