@@ -1,1 +1,0 @@
-Add support for Python via the Scripting Framework to enable Python scripts in the user and share directories of a LibreOffice installation, and also in loaded documents.

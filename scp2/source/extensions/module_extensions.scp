@@ -334,14 +334,15 @@ End
 
 /* ** Script provider for Python ** */
 
-#ifndef WITHOUT_EXTENSION_SCRIPTING_PYTHON
+#ifndef WITHOUT_SCRIPTING_PYTHON
 
 Module gid_Module_Optional_Extensions_Script_Provider_For_Python
     PackageInfo = "packinfo_extensions.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_SCRIPT_PROVIDER_FOR_PYTHON);
     ParentID = gid_Module_Optional_Extensions;
     Files = (
-        gid_File_Oxt_Script_Provider_For_Python );
+        gid_File_Py_Pythonscript,
+        gid_File_Rdb_Scriptproviderforpython );
     Minimal = NO;
     Default = YES;
     Styles = ( );

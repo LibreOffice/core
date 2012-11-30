@@ -798,6 +798,7 @@
                     <!-- arguably, dropping PDFImport extensions should be
                          conditional on having in-core PDF import actually built
                          and installed -->
+                <it>com.sun.star.script.provider.ScriptProviderForPython</it>
               </value>
             </prop>
           </node>

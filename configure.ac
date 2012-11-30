@@ -10182,7 +10182,7 @@ dnl Scripting provider for Python extension?
 dnl We always provide this unless we have disabled Python completely
 if test $enable_python = no; then
     ENABLE_SCRIPTING_PYTHON=NO
-    SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_SCRIPTING_PYTHON"
+    SCPDEFS="$SCPDEFS -DWITHOUT_SCRIPTING_PYTHON"
 else
     ENABLE_SCRIPTING_PYTHON=YES
 fi

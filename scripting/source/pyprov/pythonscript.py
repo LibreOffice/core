@@ -137,7 +137,7 @@ CALLABLE_CONTAINER_NAME =  "g_exportedScripts"
 
 # pythonloader looks for a static g_ImplementationHelper variable
 g_ImplementationHelper = unohelper.ImplementationHelper()
-g_implName = "org.openoffice.pyuno.LanguageScriptProviderFor"+LANGUAGENAME
+g_implName = "org.libreoffice.pyuno.LanguageScriptProviderFor"+LANGUAGENAME
 
 
 
