@@ -280,7 +280,8 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_aHexBuffer(),
     m_bIgnoreNextContSectBreak(false),
     m_bNeedSect(true),
-    m_bWasInFrame(false)
+    m_bWasInFrame(false),
+    m_bHadPicture(false)
 {
     OSL_ASSERT(xInputStream.is());
     m_pInStream.reset(utl::UcbStreamHelper::CreateStream(xInputStream, sal_True));
@@ -479,6 +480,8 @@ void RTFDocumentImpl::parBreak()
     runBreak();
     Mapper().endCharacterGroup();
     Mapper().endParagraphGroup();
+
+    m_bHadPicture = false;
 
     // start new one
     Mapper().startParagraphGroup();
@@ -789,6 +792,8 @@ int RTFDocumentImpl::resolvePict(bool bInline)
         m_pCurrentBuffer->push_back(make_pair(BUFFER_PROPS, pValue));
     }
 
+    // Make sure we don't loose these properties with a too early reset.
+    m_bHadPicture = true;
     return 0;
 }
 
@@ -1926,6 +1931,8 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             }
             break;
         case RTF_PARD:
+            if (m_bHadPicture)
+                dispatchSymbol(RTF_PAR);
             m_aStates.top().aParagraphSprms = m_aDefaultState.aParagraphSprms;
             m_aStates.top().aParagraphAttributes = m_aDefaultState.aParagraphAttributes;
             m_aStates.top().resetFrame();
