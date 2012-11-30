@@ -38,6 +38,7 @@ $(eval $(call gb_Library_set_include,xsec_xmlsec,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/xmlsecurity/inc \
 	-I$(SRCDIR)/xmlsecurity/source/xmlsec \
+	-I$(call gb_UnpackedTarball_get_dir,xmlsec/include) \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,xsec_xmlsec))
@@ -68,6 +69,9 @@ $(eval $(call gb_Library_use_libraries,xsec_xmlsec,\
 	$(gb_UWINAPI) \
 ))
 
+$(eval $(call gb_Library_use_packages,xsec_xmlsec,\
+	xmlsec \
+))
 $(eval $(call gb_Library_use_externals,xsec_xmlsec,\
 	libxml2 \
 	nss3 \

@@ -1,5 +1,5 @@
---- misc/build/xmlsec1-1.2.14/config.sub
-+++ misc/build/xmlsec1-1.2.14/config.sub
+--- build/xmlsec1-1.2.14/config.sub
++++ build/xmlsec1-1.2.14/config.sub
 @@ -120,7 +120,7 @@
  # Here we must recognize all the valid KERNEL-OS combinations.
  maybe_os=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\2/'`

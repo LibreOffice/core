@@ -107,6 +107,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	libwpd \
 	libwpg \
 	libwps \
+	libxmlsec \
 	lingucomponent \
 	linguistic \
 	lotuswordpro \
