@@ -126,6 +126,7 @@ public:
     void testFdo52989();
     void testFdo48442();
     void testFdo55525();
+    void testFdo57708();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -202,6 +203,7 @@ void Test::run()
         {"fdo52989.rtf", &Test::testFdo52989},
         {"fdo48442.rtf", &Test::testFdo48442},
         {"fdo55525.rtf", &Test::testFdo55525},
+        {"fdo57708.rtf", &Test::testFdo57708},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -927,6 +929,16 @@ void Test::testFdo55525()
     // Cell width of A1 was 3332 (e.g. not set, 30% percent of total width)
     uno::Reference<table::XTableRows> xTableRows(xTable->getRows(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1016), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators")[0].Position);
+}
+
+void Test::testFdo57708()
+{
+    // There were two issues: the doc was of 2 pages and the picture was missing.
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    // Two objects: a picture and a textframe.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xDraws->getCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
