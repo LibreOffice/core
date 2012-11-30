@@ -157,7 +157,7 @@ $ENV{AUTOMAKE_EXTRA_FLAGS} = '--warnings=no-portability' if (!($system eq 'Darwi
 system ("$aclocal $aclocal_flags") && die "Failed to run aclocal";
 unlink ("configure");
 system ("autoconf") && die "Failed to run autoconf";
-die "failed to generate configure" if (! -x "configure");
+die "failed to generate configure" if (! -f "configure");
 
 if (defined $ENV{NOCONFIGURE}) {
     print "Skipping configure process.";
