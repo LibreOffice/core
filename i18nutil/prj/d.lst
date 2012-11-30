@@ -11,4 +11,5 @@ mkdir: %_DEST%\inc%_EXT%\i18nutil
 ..\%__SRC%\lib\libi18nutil*.so %_DEST%\lib%_EXT%\libi18nutil*.so
 ..\%__SRC%\lib\libi18nutil*.dylib %_DEST%\lib%_EXT%\libi18nutil*.dylib
 ..\%__SRC%\lib\ii18nutil.lib %_DEST%\lib%_EXT%\ii18nutil.lib
+..\%__SRC%\lib\i18nutil.lib %_DEST%\lib%_EXT%\i18nutil.lib
 ..\%__SRC%\lib\ii18nutil.lib %_DEST%\lib%_EXT%\i18nutilgcc3.lib

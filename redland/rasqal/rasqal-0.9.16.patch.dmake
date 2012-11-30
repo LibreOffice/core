@@ -1,6 +1,6 @@
 --- misc/rasqal-0.9.16/src/makefile.mk	Thu Nov  6 15:56:45 2008
 +++ misc/build/rasqal-0.9.16/src/makefile.mk	Thu Nov  6 15:55:09 2008
-@@ -1,1 +1,91 @@
+@@ -1,1 +1,96 @@
 -dummy
 +#**************************************************************
 +#  
@@ -82,8 +82,13 @@
 +SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 +DEF1NAME=$(SHL1TARGET)
 +
++.IF "$(GUI)"=="OS2"
 +SHL1STDLIBS= \
-+    $(PRJ)$/$(INPATH)$/lib$/libraptor.lib \
++    $(PRJ)$/$(INPATH)$/lib$/raptor.lib
++.ELSE
++SHL1STDLIBS= \
++    $(PRJ)$/$(INPATH)$/lib$/libraptor.lib
++.ENDIF
 +
 +
 +#$(LIBXML2LIB) \

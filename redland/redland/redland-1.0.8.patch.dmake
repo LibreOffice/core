@@ -1,6 +1,6 @@
 --- misc/redland-1.0.8/librdf/makefile.mk	Mon Jun 16 19:32:46 2008
 +++ misc/build/redland-1.0.8/librdf/makefile.mk	Mon Jun 16 19:26:20 2008
-@@ -1,1 +1,108 @@
+@@ -1,1 +1,115 @@
 -dummy
 +#**************************************************************
 +#  
@@ -97,10 +97,17 @@
 +SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 +DEF1NAME=$(SHL1TARGET)
 +
++.IF "$(GUI)"=="OS2"
++SHL1STDLIBS= \
++    $(OPENSSLLIB) \
++    $(PRJ)$/$(INPATH)$/lib$/raptor.lib \
++    $(PRJ)$/$(INPATH)$/lib$/rasqal.lib
++.ELSE
 +SHL1STDLIBS= \
 +    $(OPENSSLLIB) \
 +    $(PRJ)$/$(INPATH)$/lib$/libraptor.lib \
-+    $(PRJ)$/$(INPATH)$/lib$/librasqal.lib \
++    $(PRJ)$/$(INPATH)$/lib$/librasqal.lib
++.ENDIF
 +
 +
 +#$(LIBXML2LIB) \

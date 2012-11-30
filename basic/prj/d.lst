@@ -16,6 +16,7 @@ mkdir: %COMMON_DEST%\res%_EXT%
 ..\%__SRC%\bin\sb*.res %_DEST%\bin%_EXT%\sb*.res
 ..\%__SRC%\lib\sample.lib %_DEST%\lib%_EXT%\sample.lib
 ..\%__SRC%\lib\libsample.a %_DEST%\lib%_EXT%\libsample.a
+..\%__SRC%\lib\sb.lib %_DEST%\lib%_EXT%\sb.lib
 
 mkdir: %_DEST%\inc%_EXT%\basic
 ..\inc\basic\*.hxx %_DEST%\inc%_EXT%\basic\*.hxx
