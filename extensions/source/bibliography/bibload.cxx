@@ -245,8 +245,11 @@ namespace
             // and the bibliography is assumed to work
             return com::sun::star::sdbc::DriverManager::create(comphelper::getProcessComponentContext()).is();
         }
-        catch(...)
+        catch (Exception & e)
         {
+            SAL_INFO(
+                "extensions.bibliography",
+                "assuming Base to be missing; caught " << e.Message);
             return false;
         }
     }
