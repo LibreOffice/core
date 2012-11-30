@@ -32,7 +32,6 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
-#include <com/sun/star/sdbc/DriverManager.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/frame/XFrameLoader.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -44,7 +43,6 @@
 #include <com/sun/star/form/XLoadListener.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/uno/XAggregation.hpp>
-#include <org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <vcl/window.hxx>
 #include <vcl/edit.hxx>
@@ -233,53 +231,10 @@ void BibliographyLoader::cancel(void) throw (::com::sun::star::uno::RuntimeExcep
     //!
 }
 
-// -----------------------------------------------------------------------
-namespace
-{
-    // lp#527938, debian#602953, fdo#33266, i#105408
-    static bool lcl_isBaseAvailable()
-    {
-        try
-        {
-            // if we get com::sun::star::sdbc::DriverManager, libsdbc2 is there
-            // and the bibliography is assumed to work
-            return com::sun::star::sdbc::DriverManager::create(comphelper::getProcessComponentContext()).is();
-        }
-        catch (Exception & e)
-        {
-            SAL_INFO(
-                "extensions.bibliography",
-                "assuming Base to be missing; caught " << e.Message);
-            return false;
-        }
-    }
-}
 void BibliographyLoader::load(const Reference< XFrame > & rFrame, const rtl::OUString& rURL,
         const Sequence< PropertyValue >& rArgs,
         const Reference< XLoadEventListener > & rListener) throw (::com::sun::star::uno::RuntimeException)
 {
-    // lp#527938, debian#602953, fdo#33266, i#105408
-    // make sure we actually can instanciate services from base first
-    if(!lcl_isBaseAvailable())
-    {
-        try
-        {
-            using namespace org::freedesktop::PackageKit;
-            Reference< XSyncDbusSessionHelper > xSyncDbusSessionHelper(SyncDbusSessionHelper::create(comphelper::getProcessComponentContext()));
-            Sequence< ::rtl::OUString > vPackages(1);
-            vPackages[0] = "libreoffice-base";
-            ::rtl::OUString sInteraction;
-            xSyncDbusSessionHelper->InstallPackageNames(0, vPackages, sInteraction);
-            // FIXME: notify user to restart here
-        }
-        catch (Exception & e)
-        {
-            SAL_INFO(
-                "extensions.bibliography",
-                "trying to install LibreOffice Base, caught " << e.Message);
-        }
-        return;
-    }
 
     SolarMutexGuard aGuard;
     
