@@ -2309,8 +2309,9 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
                     else
                         ASSERT( !this, "Where is the SDR-Object?" );
 #endif
-        default:
-          ;
+            break;
+            default:
+            break;
                 }
 
             if( !nShapeId )
