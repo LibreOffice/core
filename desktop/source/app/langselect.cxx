@@ -40,7 +40,6 @@
 #include <com/sun/star/lang/XLocalizable.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include "com/sun/star/util/XFlushable.hpp"
-#include <rtl/locale.hxx>
 #include <rtl/instance.hxx>
 #include <osl/process.h>
 #include <osl/file.hxx>

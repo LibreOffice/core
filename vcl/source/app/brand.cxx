@@ -19,7 +19,6 @@
 
 #include <rtl/ustring.hxx>
 #include <rtl/bootstrap.hxx>
-#include <rtl/locale.hxx>
 #include <osl/process.h>
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>

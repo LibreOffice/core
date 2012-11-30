@@ -48,18 +48,6 @@ public:
     {
     }
 
-    // insert your test code here.
-    void getDefault_000()
-    {
-        // this is demonstration code
-        // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
-
-        // due to the fact, we set the default locale at first, this test is no longer possible
-       // ::rtl::OLocale aLocale = ::rtl::OLocale::getDefault();
-        // CPPUNIT_ASSERT_MESSAGE("locale must be null", aLocale.getData() == NULL);
-
-    }
-
     void getDefault_001()
     {
         rtl_Locale* pData = rtl_locale_getDefault();
@@ -71,7 +59,6 @@ public:
     // because these macros are need by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(getDefault);
-    CPPUNIT_TEST(getDefault_000);
     CPPUNIT_TEST(getDefault_001);
     CPPUNIT_TEST_SUITE_END();
 }; // class getDefault

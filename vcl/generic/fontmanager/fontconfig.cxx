@@ -87,7 +87,6 @@ using namespace psp;
 #include "osl/process.h"
 
 #include "rtl/ustrbuf.hxx"
-#include "rtl/locale.hxx"
 
 #include "sal/alloca.h"
 
