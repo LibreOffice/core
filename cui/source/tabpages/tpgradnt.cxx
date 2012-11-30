@@ -195,7 +195,7 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
 
             // determining (and possibly cutting) the name and
             // displaying it in the GroupBox
-            String          aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+            String          aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( ": " );
             INetURLObject   aURL( pGradientList->GetPath() );
 
             aURL.Append( pGradientList->GetName() );
@@ -204,7 +204,7 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
             if ( aURL.getBase().getLength() > 18 )
             {
                 aString += String(aURL.getBase()).Copy( 0, 15 );
-                aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
+                aString.AppendAscii( "..." );
             }
             else
                 aString += String(aURL.getBase());
@@ -420,7 +420,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl)
     {
         aName  = aNewName;
         aName += sal_Unicode(' ');
-        aName += UniString::CreateFromInt32( j++ );
+        aName += OUString::valueOf( j++ );
         bDifferent = sal_True;
 
         for( long i = 0; i < nCount && bDifferent; i++ )
@@ -634,7 +634,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickLoadHdl_Impl)
         ::sfx2::FileDialogHelper aDlg(
             com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
             0 );
-        String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.sog" ) );
+        String aStrFilterType( "*.sog" );
         aDlg.AddFilter( aStrFilterType, aStrFilterType );
         INetURLObject aFile( SvtPathOptions().GetPalettePath() );
         aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
@@ -669,12 +669,12 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickLoadHdl_Impl)
                 // determining (possibly cutting) the name
                 // and displaying it in the GroupBox
                 String aString( ResId( RID_SVXSTR_TABLE, rMgr ) );
-                aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+                aString.AppendAscii( ": " );
 
                 if ( aURL.getBase().getLength() > 18 )
                 {
                     aString += String(aURL.getBase()).Copy( 0, 15 );
-                    aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
+                    aString.AppendAscii( "..." );
                 }
                 else
                     aString += String(aURL.getBase());
@@ -714,7 +714,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickSaveHdl_Impl)
 {
     ::sfx2::FileDialogHelper aDlg(
         com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
-    String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.sog" ) );
+    String aStrFilterType( "*.sog" );
     aDlg.AddFilter( aStrFilterType, aStrFilterType );
 
     INetURLObject aFile( SvtPathOptions().GetPalettePath() );
@@ -725,7 +725,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickSaveHdl_Impl)
         aFile.Append( pGradientList->GetName() );
 
         if( aFile.getExtension().isEmpty() )
-            aFile.SetExtension(rtl::OUString("sog"));
+            aFile.SetExtension( OUString("sog") );
     }
 
     aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
@@ -745,12 +745,12 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickSaveHdl_Impl)
             // determining (possibly cutting) the name
             // and displaying it in the GroupBox
             String aString( CUI_RES( RID_SVXSTR_TABLE ) );
-            aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+            aString.AppendAscii( ": " );
 
             if ( aURL.getBase().getLength() > 18 )
             {
                 aString += String(aURL.getBase()).Copy( 0, 15 );
-                aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
+                aString.AppendAscii( "..." );
             }
             else
                 aString += String(aURL.getBase());

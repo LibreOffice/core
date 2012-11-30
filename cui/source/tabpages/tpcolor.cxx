@@ -131,7 +131,7 @@ void SvxLoadSaveEmbed::UpdateTableName()
 {
     // Truncate the name if necessary ...
     String aString( CUI_RES( RID_SVXSTR_TABLE ) );
-    aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+    aString.AppendAscii( ": " );
 
     XPropertyListRef pList = GetList();
     if( !pList.is() )
@@ -143,7 +143,7 @@ void SvxLoadSaveEmbed::UpdateTableName()
     if ( aURL.getBase().getLength() > 18 )
     {
         aString += String(aURL.getBase()).Copy( 0, 15 );
-        aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
+        aString.AppendAscii( "..." );
     }
     else
         aString += String (aURL.getBase());
@@ -1049,7 +1049,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectColorModelHdl_Impl)
 
                 // handle CMYK-values (0..100%)
                 // and adjust MetricFields respectively
-                String aStrUnit( RTL_CONSTASCII_USTRINGPARAM( " %" ) );
+                String aStrUnit( " %" );
 
                 aMtrFldColorModel1.SetUnit(FUNIT_CUSTOM);
                 aMtrFldColorModel1.SetCustomUnitText( aStrUnit );
@@ -1223,7 +1223,7 @@ sal_uInt16 SvxColorTabPage::PercentToColor_Impl( sal_uInt16 nPercent )
 void SvxColorTabPage::FillUserData()
 {
     // the color model is saved in the Ini-file
-    SetUserData( UniString::CreateFromInt32( eCM ) );
+    SetUserData( OUString::valueOf( eCM ) );
 }
 
 //------------------------------------------------------------------------

@@ -1559,7 +1559,7 @@ IMPL_LINK_NOARG(SvxPositionSizeTabPage, ClickAutoHdl)
 void SvxPositionSizeTabPage::FillUserData()
 {
     // matching is saved in the Ini-file
-    UniString aStr = UniString::CreateFromInt32( (sal_Int32) maCbxScale.IsChecked() );
+    OUString aStr = OUString::valueOf( (sal_Int32) maCbxScale.IsChecked() );
     SetUserData( aStr );
 }
 
