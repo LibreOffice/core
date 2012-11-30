@@ -204,30 +204,31 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
             }
 
             const ScConditionalFormat* pCondFormat = pDoc->GetCondFormat(aPos.Col(), aPos.Row(), aPos.Tab());
+            condformat::dialog::ScCondFormatDialogType eType = condformat::dialog::NONE;
+            switch(nSlotId)
+            {
+                case SID_OPENDLG_CONDFRMT:
+                    eType = condformat::dialog::CONDITION;
+                    break;
+                case SID_OPENDLG_COLORSCALE:
+                    eType = condformat::dialog::COLORSCALE;
+                    break;
+                case SID_OPENDLG_DATABAR:
+                    eType = condformat::dialog::DATABAR;
+                    break;
+                default:
+                    break;
+            }
+
             if(pCondFormat)
             {
                 const ScRangeList& rCondFormatRange = pCondFormat->GetRange();
                 if(rCondFormatRange == aRangeList)
-                    pResult = new ScCondFormatDlg( pB, pCW, pParent, pDoc, pCondFormat, rCondFormatRange, aPos, condformat::dialog::NONE );
+                    pResult = new ScCondFormatDlg( pB, pCW, pParent, pDoc, pCondFormat, rCondFormatRange, aPos, eType );
             }
 
             if(!pResult)
             {
-                condformat::dialog::ScCondFormatDialogType eType = condformat::dialog::NONE;
-                switch(nSlotId)
-                {
-                    case SID_OPENDLG_CONDFRMT:
-                        eType = condformat::dialog::CONDITION;
-                        break;
-                    case SID_OPENDLG_COLORSCALE:
-                        eType = condformat::dialog::COLORSCALE;
-                        break;
-                    case SID_OPENDLG_DATABAR:
-                        eType = condformat::dialog::DATABAR;
-                        break;
-                    default:
-                        break;
-                }
                 pResult = new ScCondFormatDlg( pB, pCW, pParent, pDoc, NULL, aRangeList, aRangeList.GetTopLeftCorner(), eType );
             }
         }
