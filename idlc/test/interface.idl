@@ -35,7 +35,6 @@ interface XBase
 interface XTestBaseTypes : XBase
 {
     void voidFunc();
-    void onewayFunc();
 
     short shortFunc( [in] short inparam, [out] short outparam, [inout] short inoutparam);
     unsigned short uShortFunc( [in] unsigned short inparam, [out] unsigned short outparam, [inout] unsigned short inoutparam);

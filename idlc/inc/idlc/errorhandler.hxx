@@ -36,7 +36,6 @@ enum ErrorCode
     EIDL_MULTIPLE_BRANCH,   // More than one union branch with this label
     EIDL_COERCION_FAILURE,  // Coercion failure
     EIDL_SCOPE_CONFLICT,    // Between fwd declare and full declare
-    EIDL_ONEWAY_CONFLICT,   // Between op decl and argument direction
     EIDL_DISC_TYPE,         // Illegal discriminator type in union
     EIDL_LABEL_TYPE,        // Mismatch with discriminator type in union
     EIDL_ILLEGAL_ADD,       // Illegal add action
@@ -54,13 +53,11 @@ enum ErrorCode
     EIDL_DECL_NOT_DEFINED,  // Forward declared but never defined
     EIDL_FWD_DECL_LOOKUP,   // Tried to lookup in fwd declared intf
     EIDL_RECURSIVE_TYPE,    // Illegal recursive use of type
-    EIDL_NONVOID_ONEWAY,    // Non-void return type in oneway operation
     EIDL_NOT_A_TYPE,        // Not a type
     EIDL_TYPE_NOT_VALID,    // Type is not valid in this context
     EIDL_INTERFACEMEMBER_LOOKUP,    // interface is not defined or a fwd declaration not exists
     EIDL_SERVICEMEMBER_LOOKUP,
     EIDL_TYPE_IDENT_CONFLICT,   // type and identifier has equal names
-    EIDL_ONEWAY_RAISE_CONFLICT, // oneway function raised excpetion conflict
     EIDL_WRONGATTRIBUTEFLAG,
     EIDL_DEFINED_ATTRIBUTEFLAG,
     EIDL_WRONGATTRIBUTEKEYWORD,

@@ -42,8 +42,6 @@ static const sal_Char* errorCodeToMessage(ErrorCode eCode)
         return "coercion failure ";
     case EIDL_SCOPE_CONFLICT:
         return "definition scope is different than fwd declare scope, ";
-    case EIDL_ONEWAY_CONFLICT:
-        return "oneway operation with OUT|INOUT parameters or raises exceptions, ";
     case EIDL_DISC_TYPE:
         return "union with illegal discriminator type, ";
     case EIDL_LABEL_TYPE:
@@ -78,8 +76,6 @@ static const sal_Char* errorCodeToMessage(ErrorCode eCode)
         return "";
     case EIDL_RECURSIVE_TYPE:
         return "illegal recursive use of type: ";
-    case EIDL_NONVOID_ONEWAY:
-        return "non-void return type in oneway operation: ";
     case EIDL_NOT_A_TYPE:
         return "specified symbol is not a type: ";
     case EIDL_TYPE_NOT_VALID:
@@ -90,8 +86,6 @@ static const sal_Char* errorCodeToMessage(ErrorCode eCode)
         return "error in lookup of symbol, expected service is not defined: ";
     case EIDL_TYPE_IDENT_CONFLICT:
         return "type and parameter/member name are equal: ";
-    case EIDL_ONEWAY_RAISE_CONFLICT:
-        return "oneway operation cannot raises exceptions: ";
     case EIDL_WRONGATTRIBUTEFLAG:
         return "the used flag is not valid in this context: ";
     case EIDL_DEFINED_ATTRIBUTEFLAG:

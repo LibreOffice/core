@@ -24,8 +24,6 @@
 
 namespace typereg { class Writer; }
 
-#define OP_NONE         0x0000
-
 class AstType;
 
 class AstOperation : public AstDeclaration
