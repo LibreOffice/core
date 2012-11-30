@@ -685,6 +685,12 @@ en-US = "Amharic"
 [STR_DESC_MODULE_LANGPACK_AM]
 en-US = "Installs the Amharic user interface"
 
+[STR_NAME_MODULE_LANGPACK_SID]
+en-US = "Sidama"
+
+[STR_DESC_MODULE_LANGPACK_SID]
+en-US = "Installs the Sidama user interface"
+
 [STR_NAME_MODULE_LANGPACK_QTZ]
 en-US = "KeyID"
 

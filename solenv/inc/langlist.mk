@@ -110,6 +110,7 @@ sat \
 sd \
 sh \
 si \
+sid \
 sk \
 sl \
 sq \

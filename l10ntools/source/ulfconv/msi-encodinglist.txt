@@ -134,6 +134,7 @@ sc       0  3047
 sd       0  1113   # Sindhi
 sh       0  2074   # Serbian Latin
 si       0  2133
+sid      0  1669   # Sidama, fake LCID
 sk       0  1051   # Slovak
 sl       0  1060   # Slovenian
 sq       0  1052   # Albanian

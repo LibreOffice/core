@@ -156,6 +156,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Serbian Latin (Serbia)" ; LANGUAGE_USER_SERBIAN_LATIN_SERBIA ; > ;
         < "Serbian Cyrillic (Montenegro)" ; LANGUAGE_USER_SERBIAN_CYRILLIC_MONTENEGRO ; > ;
         < "Serbian Latin (Montenegro)" ; LANGUAGE_USER_SERBIAN_LATIN_MONTENEGRO ; > ;
+        < "Sidama" ; LANGUAGE_USER_SIDAMA ; > ;
         < "Sindhi" ; LANGUAGE_SINDHI ; > ;
         < "Slovak" ; LANGUAGE_SLOVAK ; > ;
         < "Slovenian" ; LANGUAGE_SLOVENIAN ; > ;
