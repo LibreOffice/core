@@ -110,7 +110,7 @@ DBG_NAME(OParameterDialog)
                 if (!pValues->Value.hasValue())
                     // it won't have a value, 'cause it's default constructed. But may be later we support
                     // initializing this dialog with values
-                    pValues->Value = makeAny(::rtl::OUString());
+                    pValues->Value = makeAny( OUString()) ;
                     // default the values to an empty string
 
                 m_aVisitedParams.push_back(0);
@@ -182,14 +182,14 @@ DBG_NAME(OParameterDialog)
         }
 
         // transform the current string according to the param field type
-        ::rtl::OUString sTransformedText(m_aParam.GetText());
+        OUString sTransformedText(m_aParam.GetText());
         Reference< XPropertySet >  xParamAsSet;
         m_xParams->getByIndex(m_nCurrentlySelected) >>= xParamAsSet;
         if (xParamAsSet.is())
         {
             if (m_xConnection.is() && m_xFormatter.is())
             {
-                ::rtl::OUString sParamValue( m_aParam.GetText() );
+                OUString sParamValue( m_aParam.GetText() );
                 sal_Bool bValid = m_aPredicateInput.normalizePredicateString( sParamValue, xParamAsSet );
                 m_aParam.SetText( sParamValue );
                 if ( bValid )
@@ -205,7 +205,7 @@ DBG_NAME(OParameterDialog)
 
                     m_bNeedErrorOnCurrent = sal_False;  // will be reset in OnValueModified
 
-                    ::rtl::OUString sName;
+                    OUString sName;
                     try
                     {
                         sName = ::comphelper::getString(xParamAsSet->getPropertyValue(PROPERTY_NAME));
@@ -220,7 +220,7 @@ DBG_NAME(OParameterDialog)
                         LocalResourceAccess aDummy(DLG_PARAMETERS, RSC_MODALDIALOG);
                         sMessage = String(ModuleRes(STR_COULD_NOT_CONVERT_PARAM));
                     }
-                    sMessage.SearchAndReplaceAll(rtl::OUString("$name$"), sName);
+                    sMessage.SearchAndReplaceAll( OUString("$name$"), sName );
                     ErrorBox(NULL, WB_OK, sMessage).Execute();
                     m_aParam.GrabFocus();
                     return 1L;
@@ -265,9 +265,9 @@ DBG_NAME(OParameterDialog)
                         Reference< XPropertySet >  xParamAsSet;
                         m_xParams->getByIndex(i) >>= xParamAsSet;
 
-                        ::rtl::OUString sValue;
+                        OUString sValue;
                         pValues->Value >>= sValue;
-                        pValues->Value <<= ::rtl::OUString( m_aPredicateInput.getPredicateValue( sValue, xParamAsSet, sal_False ) );
+                        pValues->Value <<= OUString( m_aPredicateInput.getPredicateValue( sValue, xParamAsSet, sal_False ) );
                     }
                 }
                 catch(Exception&)
@@ -324,7 +324,7 @@ DBG_NAME(OParameterDialog)
                 return 1L;
             }
 
-            m_aFinalValues[m_nCurrentlySelected].Value <<= ::rtl::OUString(m_aParam.GetText());
+            m_aFinalValues[m_nCurrentlySelected].Value <<= OUString(m_aParam.GetText());
         }
 
         // initialize the controls with the new values
