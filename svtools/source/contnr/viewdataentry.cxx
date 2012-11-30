@@ -31,16 +31,25 @@
 DBG_NAME(SvViewDataEntry);
 
 SvViewDataEntry::SvViewDataEntry() :
-    nVisPos(0), nFlags(0)
+    nVisPos(0),
+    mbSelected(false),
+    mbExpanded(false),
+    mbFocused(false),
+    mbCursored(false),
+    mbSelectable(true)
 {
     DBG_CTOR(SvViewDataEntry,0);
 }
 
 SvViewDataEntry::SvViewDataEntry( const SvViewDataEntry& rData ) :
-    nVisPos(rData.nVisPos), nFlags(rData.nFlags)
+    nVisPos(rData.nVisPos),
+    mbSelected(false),
+    mbExpanded(rData.mbExpanded),
+    mbFocused(false),
+    mbCursored(rData.mbCursored),
+    mbSelectable(rData.mbSelectable)
 {
     DBG_CTOR(SvViewDataEntry,0);
-    nFlags &= ~( SVLISTENTRYFLAG_SELECTED | SVLISTENTRYFLAG_FOCUSED );
 }
 
 SvViewDataEntry::~SvViewDataEntry()
@@ -48,73 +57,57 @@ SvViewDataEntry::~SvViewDataEntry()
     DBG_DTOR(SvViewDataEntry,0);
 #ifdef DBG_UTIL
     nVisPos = 0x12345678;
-    nFlags = 0x1234;
 #endif
 }
 
 bool SvViewDataEntry::IsSelected() const
 {
-    return (nFlags & SVLISTENTRYFLAG_SELECTED) != 0;
+    return mbSelected;
 }
 
 bool SvViewDataEntry::IsExpanded() const
 {
-    return (nFlags & SVLISTENTRYFLAG_EXPANDED) != 0;
+    return mbExpanded;
 }
 
 bool SvViewDataEntry::HasFocus() const
 {
-    return (nFlags & SVLISTENTRYFLAG_FOCUSED) != 0;
+    return mbFocused;
 }
 
 bool SvViewDataEntry::IsCursored() const
 {
-    return (nFlags & SVLISTENTRYFLAG_CURSORED) != 0;
+    return mbCursored;
 }
 
 bool SvViewDataEntry::IsSelectable() const
 {
-    return (nFlags & SVLISTENTRYFLAG_NOT_SELECTABLE) == 0;
+    return mbSelectable;
 }
 
 void SvViewDataEntry::SetFocus( bool bFocus )
 {
-    if ( !bFocus )
-        nFlags &= (~SVLISTENTRYFLAG_FOCUSED);
-    else
-        nFlags |= SVLISTENTRYFLAG_FOCUSED;
+    mbFocused = bFocus;
 }
 
 void SvViewDataEntry::SetCursored( bool bCursored )
 {
-    if ( !bCursored )
-        nFlags &= (~SVLISTENTRYFLAG_CURSORED);
-    else
-        nFlags |= SVLISTENTRYFLAG_CURSORED;
+    mbCursored = bCursored;
 }
 
 void SvViewDataEntry::SetSelected( bool bSelected )
 {
-    if ( !bSelected )
-        nFlags &= (~SVLISTENTRYFLAG_SELECTED);
-    else
-        nFlags |= SVLISTENTRYFLAG_SELECTED;
+    mbSelected = bSelected;
 }
 
 void SvViewDataEntry::SetExpanded( bool bExpanded )
 {
-    if ( !bExpanded )
-        nFlags &= (~SVLISTENTRYFLAG_EXPANDED);
-    else
-        nFlags |= SVLISTENTRYFLAG_EXPANDED;
+    mbExpanded = bExpanded;
 }
 
 void SvViewDataEntry::SetSelectable( bool bSelectable )
 {
-    if( bSelectable )
-        nFlags &= (~SVLISTENTRYFLAG_NOT_SELECTABLE);
-    else
-        nFlags |= SVLISTENTRYFLAG_NOT_SELECTABLE;
+    mbSelectable;
 }
 
 void SvViewDataEntry::Init(size_t nSize)

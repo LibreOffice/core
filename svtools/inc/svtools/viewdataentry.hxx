@@ -42,7 +42,11 @@ class SVT_DLLPUBLIC SvViewDataEntry
 
     std::vector<SvViewDataItem> maItems;
     sal_uLong nVisPos;
-    sal_uInt16 nFlags;
+    bool mbSelected:1;
+    bool mbExpanded:1;
+    bool mbFocused:1;
+    bool mbCursored:1;
+    bool mbSelectable:1;
 
 public:
     SvViewDataEntry();
