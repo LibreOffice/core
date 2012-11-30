@@ -271,16 +271,16 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
         GalleryExplorer::FillObjList(GALLERY_THEME_BULLETS, aGrfNames);
 
         PopupMenu* pPopup = new PopupMenu;
-        rtl::OUString aEmptyStr;
-        const rtl::OUString *pUIName = NULL;
+        OUString aEmptyStr;
+        const OUString *pUIName = NULL;
         sal_uInt32 i = 0;
         nNumMenuGalleryItems = aGrfNames.size();
-        for(std::vector<rtl::OUString>::iterator it = aGrfNames.begin(); it != aGrfNames.end(); ++it, ++i)
+        for(std::vector<OUString>::iterator it = aGrfNames.begin(); it != aGrfNames.end(); ++it, ++i)
         {
             pUIName = &(*it);
 
             // Convert URL encodings to UI characters (e.g. %20 for spaces)
-            rtl::OUString aPhysicalName;
+            OUString aPhysicalName;
             if (utl::LocalFileHelper::ConvertURLToPhysicalName(*it, aPhysicalName))
             {
                 pUIName = &aPhysicalName;
@@ -344,7 +344,7 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
         pView->ShowSdrPage(pPage);
 
         PopupMenu* pPopup = new PopupMenu;
-        rtl::OUString aEmptyStr;
+        OUString aEmptyStr;
 
         // Generate invisible square to give all symbols a
         // bitmap size, which is independent from specific glyph
@@ -1800,7 +1800,7 @@ void SvxLineTabPage::PointChanged( Window*, RECT_POINT eRcPt )
 void SvxLineTabPage::FillUserData()
 {
     // Write the synched value to the INI file
-    UniString aStrUserData = UniString::CreateFromInt32( (sal_Int32) aCbxSynchronize.IsChecked() );
+    OUString aStrUserData = OUString::valueOf( (sal_Int32) aCbxSynchronize.IsChecked() );
     SetUserData( aStrUserData );
 }
 
