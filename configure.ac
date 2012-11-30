@@ -5821,7 +5821,7 @@ fi
 AC_SUBST([JITC_PROCESSOR_TYPE])
 
 if test $_os = "WINNT"; then
-    AC_MSG_CHECKING([for Microsoft_VC"$VCVER"_CRT_x86.msm])
+    AC_MSG_CHECKING([for Microsoft_VC${VCVER}_CRT_x86.msm])
     if ./oowintool --msvc-find-msms; then
         AC_MSG_RESULT([yes])
         SCPDEFS="$SCPDEFS -DWITH_VC"$VCVER"_REDIST"
