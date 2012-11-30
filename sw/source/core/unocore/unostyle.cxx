@@ -1505,6 +1505,41 @@ void SwXStyle::setParentStyle(const OUString& rParentStyle)
         throw uno::RuntimeException();
 }
 
+sal_Bool SAL_CALL SwXStyle::isHidden( ) throw( uno::RuntimeException )
+{
+    sal_Bool bHidden = sal_False;
+    SolarMutexGuard aGuard;
+    if( pBasePool )
+    {
+        pBasePool->SetSearchMask( eFamily );
+        SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
+        if(pBase)
+        {
+            rtl::Reference< SwDocStyleSheet > xBase( new SwDocStyleSheet(*(SwDocStyleSheet*)pBase) );
+            bHidden = xBase->IsHidden();
+        }
+    }
+    return bHidden;
+}
+
+void SAL_CALL SwXStyle::setHidden( sal_Bool bHidden )
+            throw( uno::RuntimeException )
+{
+    SolarMutexGuard aGuard;
+    if( pBasePool )
+    {
+        pBasePool->SetSearchMask( eFamily );
+        SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
+        if(pBase)
+        {
+            rtl::Reference< SwDocStyleSheet > xBase( new SwDocStyleSheet(*(SwDocStyleSheet*)pBase) );
+            //make it a 'real' style - necessary for pooled styles
+            xBase->GetItemSet();
+            xBase->SetHidden( bHidden );
+        }
+    }
+}
+
 static uno::Reference< beans::XPropertySetInfo > lcl_getPropertySetInfo( SfxStyleFamily eFamily, sal_Bool bIsConditional )
 {
     uno::Reference< beans::XPropertySetInfo >  xRet;

@@ -84,6 +84,8 @@ public:
     virtual ::sal_Bool SAL_CALL isInUse() throw (RuntimeException);
     virtual OUString SAL_CALL getParentStyle() throw (RuntimeException);
     virtual void SAL_CALL setParentStyle( const OUString& aParentStyle ) throw (NoSuchElementException, RuntimeException);
+    virtual ::sal_Bool SAL_CALL isHidden() throw (RuntimeException) { return false; };
+    virtual void SAL_CALL setHidden( ::sal_Bool ) throw (RuntimeException) { };
 
     // XNamed
     virtual OUString SAL_CALL getName() throw (RuntimeException);

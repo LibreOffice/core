@@ -256,6 +256,8 @@ public:
     virtual void SAL_CALL   setParentStyle( const ::rtl::OUString& aParentStyle )
                                 throw(::com::sun::star::container::NoSuchElementException,
                                     ::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isHidden() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setHidden( sal_Bool bHidden ) throw(::com::sun::star::uno::RuntimeException);
 
                             // XNamed
     virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);

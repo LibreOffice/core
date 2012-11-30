@@ -1246,6 +1246,23 @@ void SAL_CALL ScStyleObj::setParentStyle( const rtl::OUString& rParentStyle )
     }
 }
 
+sal_Bool SAL_CALL ScStyleObj::isHidden( ) throw (uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+    SfxStyleSheetBase* pStyle = GetStyle_Impl();
+    if (pStyle)
+        return pStyle->IsHidden();
+    return false;
+}
+
+void SAL_CALL ScStyleObj::setHidden( sal_Bool bHidden ) throw (uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+    SfxStyleSheetBase* pStyle = GetStyle_Impl();
+    if (pStyle)
+        pStyle->SetHidden( bHidden );
+}
+
 // container::XNamed
 
 rtl::OUString SAL_CALL ScStyleObj::getName() throw(uno::RuntimeException)

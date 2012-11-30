@@ -213,6 +213,8 @@ public:
     virtual sal_Bool SAL_CALL isInUse(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual rtl::OUString SAL_CALL getParentStyle(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL setParentStyle(const rtl::OUString& aParentStyle) throw( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL isHidden() throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL setHidden(sal_Bool bHidden) throw( ::com::sun::star::uno::RuntimeException );
 
     //XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);

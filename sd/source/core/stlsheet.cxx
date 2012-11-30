@@ -1024,6 +1024,22 @@ void SAL_CALL SdStyleSheet::setParentStyle( const OUString& rParentName  ) throw
     }
 }
 
+sal_Bool SAL_CALL SdStyleSheet::isHidden() throw(RuntimeException)
+{
+    SolarMutexGuard aGuard;
+    throwIfDisposed();
+
+    return IsHidden();
+}
+
+void SAL_CALL SdStyleSheet::setHidden( sal_Bool bHidden ) throw(RuntimeException)
+{
+    SolarMutexGuard aGuard;
+    throwIfDisposed();
+
+    return SetHidden( bHidden );
+}
+
 // --------------------------------------------------------------------
 // XPropertySet
 // --------------------------------------------------------------------
