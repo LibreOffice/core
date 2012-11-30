@@ -19,13 +19,31 @@ class SvxPersonalizationTabPage : public SfxTabPage
     using SfxTabPage::DeactivatePage;
 
 private:
-    RadioButton *m_pNoPersona; ///< Just the default look, without any bitmap
+    RadioButton *m_pNoBackground;           ///< Just the default look, without any bitmap
+    RadioButton *m_pDefaultBackground;      ///< Use the built-in bitmap for Writer background
+    RadioButton *m_pOwnBackground;          ///< Use the user-defined bitmap
+    PushButton *m_pSelectBackground;        ///< Let the user select in the 'own' case
+
+    RadioButton *m_pNoPersona;              ///< Just the default look, without any bitmap
+    RadioButton *m_pDefaultPersona;         ///< Use the built-in bitmap
+    RadioButton *m_pOwnPersona;             ///< Use the user-defined bitmap
+    PushButton *m_pSelectPersona;           ///< Let the user select in the 'own' case
 
 public:
     SvxPersonalizationTabPage( Window *pParent, const SfxItemSet &rSet );
     ~SvxPersonalizationTabPage();
 
     static SfxTabPage* Create( Window *pParent, const SfxItemSet &rSet );
+
+private:
+    /// Maintain sane behavior of the m_pSelect(Background|Persona) buttons
+    DECL_LINK( EnableDisableSelectionButtons, RadioButton* );
+
+    /// Handle the bacground selection
+    DECL_LINK( SelectBackground, PushButton* );
+
+    /// Handle the Persona selection
+    DECL_LINK( SelectPersona, PushButton* );
 };
 
 #endif // SVX_PERSONALIZATION_HXX
