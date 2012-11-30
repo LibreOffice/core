@@ -866,7 +866,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/text/_XTextContent \
     qadevOOo/tests/java/ifc/text/_XTextCursor \
     qadevOOo/tests/java/ifc/text/_XTextDocument \
-    qadevOOo/tests/java/ifc/text/_XTextEmbeddedObject \
     qadevOOo/tests/java/ifc/text/_XTextEmbeddedObjectsSupplier \
     qadevOOo/tests/java/ifc/text/_XTextField \
     qadevOOo/tests/java/ifc/text/_XTextFieldsSupplier \

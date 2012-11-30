@@ -50,7 +50,6 @@ import com.sun.star.util.XCloseable;
  * @see com.sun.star.lang.XComponent
  * @see com.sun.star.text.TextEmbeddedObject
  * @see com.sun.star.text.XTextContent
- * @see com.sun.star.text.XTextEmbeddedObject
  *
  */
 public class SwXTextEmbeddedObject extends TestCase {

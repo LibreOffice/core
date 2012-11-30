@@ -39,7 +39,6 @@
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
-#include <com/sun/star/text/XTextEmbeddedObject.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <comphelper/string.hxx>
