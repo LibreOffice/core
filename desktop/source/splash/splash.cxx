@@ -31,7 +31,6 @@
 #include <cppuhelper/implbase2.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/logfile.hxx>
-#include <rtl/locale.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/math.hxx>
 #include <vcl/introwin.hxx>
