@@ -92,7 +92,8 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             StyleFamily = SFX_STYLE_FAMILY_PARA ;
             FilterList [ en-US ] =
             {
-                < "All Styles"          ; SFXSTYLEBIT_ALL       ; > ;
+                < "All Styles"          ; SFXSTYLEBIT_ALL_VISIBLE ; > ;
+                < "Hidden Styles"       ; SFXSTYLEBIT_HIDDEN    ; > ;
                 < "Applied Styles"      ; SFXSTYLEBIT_USED      ; > ;
                 < "Custom Styles"       ; SFXSTYLEBIT_USERDEF   ; > ;
                 < "Automatic"           ; SFXSTYLEBIT_AUTO      ; > ;
@@ -111,7 +112,8 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             StyleFamily = SFX_STYLE_FAMILY_CHAR ;
             FilterList [ en-US ] =
             {
-                < "All"             ; SFXSTYLEBIT_ALL       ; > ;
+                < "All"             ; SFXSTYLEBIT_ALL_VISIBLE ; > ;
+                < "Hidden Styles"   ; SFXSTYLEBIT_HIDDEN    ; > ;
                 < "Applied Styles"  ; SFXSTYLEBIT_USED      ; > ;
                 < "Custom Styles"   ; SFXSTYLEBIT_USERDEF   ; > ;
             };
@@ -122,7 +124,8 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             StyleFamily = SFX_STYLE_FAMILY_FRAME ;
             FilterList [ en-US ] =
             {
-                < "All"             ; SFXSTYLEBIT_ALL       ; > ;
+                < "All"             ; SFXSTYLEBIT_ALL_VISIBLE ; > ;
+                < "Hidden Styles"   ; SFXSTYLEBIT_HIDDEN    ; > ;
                 < "Applied Styles"  ; SFXSTYLEBIT_USED      ; > ;
                 < "Custom Styles"   ; SFXSTYLEBIT_USERDEF   ; > ;
             };
@@ -133,7 +136,8 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             StyleFamily = SFX_STYLE_FAMILY_PAGE ;
             FilterList [ en-US ] =
             {
-                < "All"             ; SFXSTYLEBIT_ALL       ; > ;
+                < "All"             ; SFXSTYLEBIT_ALL_VISIBLE ; > ;
+                < "Hidden Styles"   ; SFXSTYLEBIT_HIDDEN    ; > ;
                 < "Applied Styles"  ; SFXSTYLEBIT_USED      ; > ;
                 < "Custom Styles"   ; SFXSTYLEBIT_USERDEF   ; > ;
             };
@@ -143,7 +147,8 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             StyleFamily = SFX_STYLE_FAMILY_PSEUDO ;
             FilterList [ en-US ] =
             {
-                < "All"             ; SFXSTYLEBIT_ALL       ; > ;
+                < "All"             ; SFXSTYLEBIT_ALL_VISIBLE ; > ;
+                < "Hidden Styles"   ; SFXSTYLEBIT_HIDDEN    ; > ;
                 < "Applied Styles"  ; SFXSTYLEBIT_USED      ; > ;
                 < "Custom Styles"   ; SFXSTYLEBIT_USERDEF   ; > ;
             };

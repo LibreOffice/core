@@ -1064,7 +1064,7 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const String &rStr)
     if ( !pItem )
         return;
     const SfxStyleFamily eFam = pItem->GetFamily();
-    SfxStyleSheetBase* pStyle = pStyleSheetPool->Find( rStr, eFam, SFXSTYLEBIT_ALL | SFXSTYLEBIT_HIDDEN );
+    SfxStyleSheetBase* pStyle = pStyleSheetPool->Find( rStr, eFam, SFXSTYLEBIT_ALL );
     if( pStyle )
     {
         bool bReadWrite = !(pStyle->GetMask() & SFXSTYLEBIT_READONLY);
@@ -1170,7 +1170,7 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
     if(pStyleSheetPool && nActFamily != 0xffff)
     {
         const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
-        pStyleSheetPool->SetSearchMask(pItem->GetFamily(), SFXSTYLEBIT_ALL);
+        pStyleSheetPool->SetSearchMask(pItem->GetFamily(), SFXSTYLEBIT_ALL_VISIBLE);
         StyleTreeArr_Impl aArr;
         SfxStyleSheetBase *pStyle = pStyleSheetPool->First();
         if(pStyle && pStyle->HasParentSupport() && bTreeDrag )
@@ -1589,7 +1589,7 @@ void SfxCommonTemplateDialog_Impl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint
                         const SfxStyleFamily eFam = pItem->GetFamily();
                         SfxStyleSheetBase *pStyle =
                             pStyleSheetPool->Find(
-                                aStr, eFam, SFXSTYLEBIT_ALL | SFXSTYLEBIT_HIDDEN );
+                                aStr, eFam, SFXSTYLEBIT_ALL );
                         if( pStyle )
                         {
                             bool bReadWrite = !(pStyle->GetMask() & SFXSTYLEBIT_READONLY);
@@ -2090,7 +2090,7 @@ void    SfxCommonTemplateDialog_Impl::EnableDelete()
         if(!nFilter)    // automatic
             nFilter = nAppFilter;
         const SfxStyleSheetBase *pStyle =
-            pStyleSheetPool->Find(aTemplName,eFam, pTreeBox? SFXSTYLEBIT_ALL | SFXSTYLEBIT_HIDDEN : nFilter);
+            pStyleSheetPool->Find(aTemplName,eFam, pTreeBox? SFXSTYLEBIT_ALL : nFilter);
 
         OSL_ENSURE(pStyle, "Style ot found");
         if(pStyle && pStyle->IsUserDefined())

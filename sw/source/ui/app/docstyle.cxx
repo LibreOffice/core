@@ -2518,6 +2518,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
     bool bSearchHidden = ( nMask & SFXSTYLEBIT_HIDDEN );
 
     const sal_Bool bOrganizer = ((SwDocStyleSheetPool*)pBasePool)->IsOrganizerMode();
+    bool bAll = ( nSrchMask & SFXSTYLEBIT_ALL_VISIBLE ) == SFXSTYLEBIT_ALL_VISIBLE;
 
     if( nSearchFamily == SFX_STYLE_FAMILY_CHAR
      || nSearchFamily == SFX_STYLE_FAMILY_ALL )
@@ -2561,7 +2562,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
 
         // PoolFormate
         //
-        if( nSrchMask == SFXSTYLEBIT_ALL )
+        if( bAll )
         {
             if( !rDoc.get(IDocumentSettingAccess::HTML_MODE) )
                 AppendStyleList(SwStyleNameMapper::GetChrFmtUINameArray(),
@@ -2589,7 +2590,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
         if( rDoc.get(IDocumentSettingAccess::HTML_MODE) )
         {
             // then only HTML-Template are of interest
-            if( SFXSTYLEBIT_ALL == nSMask )
+            if( SFXSTYLEBIT_ALL_VISIBLE == ( nSMask & SFXSTYLEBIT_ALL_VISIBLE ) )
                 nSMask = SWSTYLEBIT_HTML | SFXSTYLEBIT_USERDEF |
                             SFXSTYLEBIT_USED;
             else
@@ -2675,7 +2676,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
             aLst.Append( cPARA, pColl->GetName() );
         }
 
-        const sal_Bool bAll = nSMask == SFXSTYLEBIT_ALL;
+        bAll = ( nSMask & SFXSTYLEBIT_ALL_VISIBLE ) == SFXSTYLEBIT_ALL_VISIBLE;
         if ( bAll || (nSMask & ~SFXSTYLEBIT_USED) == SWSTYLEBIT_TEXT )
             AppendStyleList(SwStyleNameMapper::GetTextUINameArray(),
                             bIsSearchUsed, bSearchHidden, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, cPARA );
@@ -2770,7 +2771,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
 
         // PoolFormate
         //
-        if ( nSrchMask == SFXSTYLEBIT_ALL )
+        if ( bAll )
             AppendStyleList(SwStyleNameMapper::GetFrmFmtUINameArray(),
                                     bIsSearchUsed, bSearchHidden, nsSwGetPoolIdFromName::GET_POOLID_FRMFMT, cFRAME);
     }
@@ -2796,7 +2797,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
 
             aLst.Append( cPAGE, rDesc.GetName() );
         }
-        if ( nSrchMask == SFXSTYLEBIT_ALL )
+        if ( bAll )
             AppendStyleList(SwStyleNameMapper::GetPageDescUINameArray(),
                             bIsSearchUsed, bSearchHidden, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, cPAGE);
     }
@@ -2824,7 +2825,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                 aLst.Append( cNUMRULE, rRule.GetName() );
             }
         }
-        if ( nSrchMask == SFXSTYLEBIT_ALL )
+        if ( bAll )
             AppendStyleList(SwStyleNameMapper::GetNumRuleUINameArray(),
                             bIsSearchUsed, bSearchHidden, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE, cNUMRULE);
     }

@@ -369,7 +369,8 @@ SfxStyleFamily SfxStyleSheetIterator::GetSearchFamily() const
 
 inline bool SfxStyleSheetIterator::IsTrivialSearch()
 {
-    return nMask == SFXSTYLEBIT_ALL && GetSearchFamily() == SFX_STYLE_FAMILY_ALL;
+    return ( nMask & SFXSTYLEBIT_ALL_VISIBLE ) == SFXSTYLEBIT_ALL_VISIBLE
+        && GetSearchFamily() == SFX_STYLE_FAMILY_ALL;
 }
 
 bool SfxStyleSheetIterator::DoesStyleMatch(SfxStyleSheetBase *pStyle)
@@ -381,7 +382,7 @@ bool SfxStyleSheetIterator::DoesStyleMatch(SfxStyleSheetBase *pStyle)
             ( pStyle->GetFamily() == GetSearchFamily() ))
         && (( pStyle->GetMask() & ( GetSearchMask() & ~SFXSTYLEBIT_USED )) ||
             ( bSearchUsed ? pStyle->IsUsed() : false ) ||
-            GetSearchMask() == SFXSTYLEBIT_ALL )
+            ( GetSearchMask() & SFXSTYLEBIT_ALL_VISIBLE ) == SFXSTYLEBIT_ALL_VISIBLE )
         && bMatchVisibility;
     return bMatches;
 }
@@ -393,7 +394,8 @@ SfxStyleSheetIterator::SfxStyleSheetIterator(SfxStyleSheetBasePool *pBase,
     pBasePool=pBase;
     nSearchFamily=eFam;
     bSearchUsed=sal_False;
-        if((n != SFXSTYLEBIT_ALL ) && ((n & SFXSTYLEBIT_USED) == SFXSTYLEBIT_USED))
+        if( (( n & SFXSTYLEBIT_ALL_VISIBLE ) != SFXSTYLEBIT_ALL_VISIBLE )
+                && ((n & SFXSTYLEBIT_USED) == SFXSTYLEBIT_USED))
     {
         bSearchUsed = sal_True;
         n &= ~SFXSTYLEBIT_USED;
