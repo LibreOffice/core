@@ -31,6 +31,10 @@
 #include <editeng/frmdir.hxx>
 #include <fltshell.hxx>         // fuer den Attribut Stack
 
+#include <svx/svdobj.hxx>
+#define SW_DRAWLAYER 0x30334353
+#define SW_UD_IMAPDATA      2
+
 #include <vector>
 #include <stack>
 #include <deque>
@@ -365,6 +369,48 @@ private:
     SwWW8FltRefStack& operator=(const SwWW8FltRefStack&);
 };
 
+template< typename Type >
+inline bool get_flag( Type nBitField, Type nMask )
+{ return (nBitField & nMask) != 0; }
+
+template< typename ReturnType, typename Type >
+inline ReturnType ulimit_cast( Type nValue, ReturnType nMax )
+{ return static_cast< ReturnType >( ::std::min< Type >( nValue, nMax ) ); }
+
+
+template< typename ReturnType, typename Type >
+inline ReturnType ulimit_cast( Type nValue )
+{ return ulimit_cast( nValue, ::std::numeric_limits< ReturnType >::max() ); }
+
+class SwMacroInfo : public SdrObjUserData
+{
+public:
+                    SwMacroInfo();
+    virtual         ~SwMacroInfo();
+
+    virtual SdrObjUserData* Clone( SdrObject* pObj ) const;
+
+
+    void            SetHlink( const rtl::OUString& rHlink ) { maHlink = rHlink; }
+    const rtl::OUString& GetHlink() const { return maHlink; }
+     void            SetTarFrm( const rtl::OUString& rTarFrm ) { maTarFrm = rTarFrm; }
+    const rtl::OUString& GetTarFrm() const { return maTarFrm; }
+    void            SetShapeId( const sal_uInt32& rShapeId ) { maShapeId = rShapeId; }
+    const sal_uInt32& GetShapeId() const { return maShapeId; }
+    void            SetName( const rtl::OUString& rName ) { maNameStr = rName; }
+    const rtl::OUString& GetName() const { return maNameStr; }
+
+private:
+    sal_uInt32   maShapeId;
+    rtl::OUString   maHlink;
+    rtl::OUString maNameStr;
+    rtl::OUString maTarFrm;
+};
+struct HyperLinksTable
+{
+    String hLinkAddr;
+    String tarFrm;
+};
 
 namespace sw
 {
@@ -1667,6 +1713,8 @@ public:     // eigentlich private, geht aber leider nur public
     CharSet GetCurrentCJKCharSet();
 
     void PostProcessAttrs();
+    static void       ReadEmbeddedData(SvMemoryStream& rStrm, SwDocShell* pDocShell ,struct HyperLinksTable& hlStr);
+    static String ReadRawUniString( SvMemoryStream& rStrm,sal_uInt16 nChars, bool b16Bit );
 };
 
 bool CanUseRemoteLink(const String &rGrfName);

@@ -99,6 +99,11 @@
 
 #include <math.h>
 
+#include <fmturl.hxx>
+#include <svx/hlnkitem.hxx>
+#include <svl/whiter.hxx>
+#include "ww8par2.hxx"
+
 using namespace ::com::sun::star;
 using namespace sw::types;
 using namespace sw::util;
@@ -2727,6 +2732,39 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     //Some shapes are set to *hidden*, don't import those ones.
     if (pRecord->bHidden)
         return 0;
+
+    if(pObject)
+    {
+        sal_uInt16 nCount = pObject ? pObject->GetUserDataCount() : 0;
+        if(nCount)
+        {
+            String lnName, aObjName, aTarFrm;
+            for (sal_uInt16 i = 0; i < nCount; i++ )
+            {
+                SdrObjUserData* pData = pObject->GetUserData( i );
+                if( pData && pData->GetInventor() == SW_DRAWLAYER
+                        && pData->GetId() == SW_UD_IMAPDATA)
+                {
+                    SwMacroInfo* macInf = dynamic_cast<SwMacroInfo*>(pData);
+                    if( macInf->GetShapeId() == pF->nSpId)
+                    {
+                        lnName = macInf->GetHlink();
+                        aObjName = macInf->GetName();
+                        aTarFrm = macInf->GetTarFrm();
+                        break;
+                    }
+                }
+            }
+            SwFmtURL* pFmtURL = new SwFmtURL();
+            pFmtURL->SetURL( lnName, false );
+            if(aObjName.Len() > 0)
+                pFmtURL->SetName(aObjName);
+            if(aTarFrm.Len()>0)
+                pFmtURL->SetTargetFrameName(aTarFrm);
+            pFmtURL->SetMap(0);
+            aFlySet.Put(*pFmtURL);
+        }
+    }
 
     // If we are to be "below text" then we are not to be opaque
     // #i14045# MM If we are in a header or footer then make the object transparent
