@@ -155,7 +155,6 @@ public:
     long            GetEntryFlags( sal_uInt16 nPos ) const;
 
     void            SetTopEntry( sal_uInt16 nPos );
-    void            SetTopEntryStr( const XubString& rStr );
     sal_uInt16          GetTopEntry() const;
 
     void            SaveValue() { mnSaveValue = GetSelectEntryPos(); }
