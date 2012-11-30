@@ -20,15 +20,14 @@
 #ifndef _CONNECTIVITY_DRIVERMANAGER_HXX_
 #define _CONNECTIVITY_DRIVERMANAGER_HXX_
 
-#include <com/sun/star/sdbc/XDriverManager.hpp>
+#include <com/sun/star/sdbc/XDriverManager2.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase4.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/logging.hxx>
 #include <comphelper/componentcontext.hxx>
@@ -55,9 +54,8 @@ namespace drivermanager
     //==========================================================================
     //= OSDBCDriverManager - the one-instance service for managing SDBC drivers
     //==========================================================================
-    typedef ::cppu::WeakImplHelper5 <   ::com::sun::star::sdbc::XDriverManager
+    typedef ::cppu::WeakImplHelper4 <   ::com::sun::star::sdbc::XDriverManager2
                                     ,   ::com::sun::star::sdbc::XDriverAccess
-                                    ,   ::com::sun::star::container::XEnumerationAccess
                                     ,   ::com::sun::star::lang::XServiceInfo
                                     ,   ::com::sun::star::uno::XNamingService
                                     >   OSDBCDriverManager_Base;
