@@ -1,3 +1,21 @@
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# This file incorporates work covered by the following license notice:
+#
+#   Licensed to the Apache Software Foundation (ASF) under one or more
+#   contributor license agreements. See the NOTICE file distributed
+#   with this work for additional information regarding copyright
+#   ownership. The ASF licenses this file to you under the Apache
+#   License, Version 2.0 (the "License"); you may not use this file
+#   except in compliance with the License. You may obtain a copy of
+#   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+#
+
 ### i84702 ###
 sc.AccessibleEditableTextPara_PreviewCell::com::sun::star::accessibility::XAccessibleEditableText
 
@@ -232,3 +250,33 @@ sc.ScTableSheetObj::com::sun::star::util::XSearchable
 sc.ScTableSheetObj::com::sun::star::util::XReplaceable
 sc.ScTableSheetsObj::com::sun::star::container::XNamedContainer
 sc.ScTableSheetsObj::com::sun::star::sheet::XSpreadsheet2
+
+## completely disable during re-base.
+#
+# FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
+#
+sc.ScAnnotationObj::com::sun::star::text::XSimpleText
+sc.ScAnnotationObj::com::sun::star::text::XTextRange
+sc.ScAnnotationObj::com::sun::star::sheet::XSheetAnnotationShapeSupplier
+sc.ScAnnotationObj::com::sun::star::sheet::XSheetAnnotation
+sc.ScAnnotationObj::com::sun::star::container::XChild
+sc.ScAnnotationShapeObj::com::sun::star::style::CharacterPropertiesAsian
+sc.ScAnnotationShapeObj::com::sun::star::lang::XComponent
+sc.ScAnnotationShapeObj::com::sun::star::style::ParagraphProperties
+sc.ScAnnotationShapeObj::com::sun::star::drawing::Shape
+sc.ScAnnotationShapeObj::com::sun::star::style::CharacterPropertiesComplex
+sc.ScAnnotationShapeObj::com::sun::star::drawing::XShapeDescriptor
+sc.ScAnnotationShapeObj::com::sun::star::drawing::RotationDescriptor
+sc.ScAnnotationShapeObj::com::sun::star::drawing::LineProperties
+sc.ScAnnotationShapeObj::com::sun::star::text::XSimpleText
+sc.ScAnnotationShapeObj::com::sun::star::drawing::TextProperties
+sc.ScAnnotationShapeObj::com::sun::star::drawing::XGluePointsSupplier
+sc.ScAnnotationShapeObj::com::sun::star::drawing::FillProperties
+sc.ScAnnotationShapeObj::com::sun::star::drawing::ShadowProperties
+sc.ScAnnotationShapeObj::com::sun::star::text::XTextRange
+sc.ScAnnotationShapeObj::com::sun::star::drawing::CaptionShape
+sc.ScAnnotationShapeObj::com::sun::star::style::CharacterProperties
+sc.ScAnnotationShapeObj::com::sun::star::beans::XPropertySet
+sc.ScAnnotationShapeObj::com::sun::star::drawing::XShape
+sc.ScAnnotationShapeObj::com::sun::star::text::XText
+sc.ScAnnotationShapeObj::com::sun::star::style::ParagraphPropertiesAsian

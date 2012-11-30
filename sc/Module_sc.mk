@@ -54,12 +54,13 @@ $(eval $(call gb_Module_add_slowcheck_targets,sc, \
 ))
 
 # Disabled to allow the check tinderbox execute the sd tests
-#CppunitTest_sc_chart_regression_test \
+# CppunitTest_sc_chart_regression_test \
+# FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
+# CppunitTest_sc_annotationshapeobj \
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
     JunitTest_sc_complex \
     JunitTest_sc_unoapi \
-    CppunitTest_sc_annotationshapeobj \
     CppunitTest_sc_cellrangeobj \
     $(if $(filter-out $(OS),IOS), \
 	    CppunitTest_sc_databaserangeobj) \

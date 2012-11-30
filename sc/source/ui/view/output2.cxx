@@ -1,34 +1,24 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
-
 
 #include <editeng/adjitem.hxx>
 #include <svx/algitem.hxx>
@@ -154,6 +144,8 @@ public:
     const String&           GetString() const       { return aString; }
     const Size&             GetTextSize() const     { return aTextSize; }
     long                    GetOriginalWidth() const { return nOriginalWidth; }
+
+    sal_uLong   GetResultValueFormat( const ScBaseCell* pCell ) const;
 
     sal_uLong   GetValueFormat() const                  { return nValueFormat; }
     sal_Bool    GetLineBreak() const                    { return bLineBreak; }
@@ -609,7 +601,7 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScBaseCell* pCell, long nWidth )
         }
     }
 
-    sal_uLong nFormat = GetValueFormat();
+    sal_uLong nFormat = GetResultValueFormat(pCell);
     if ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) != 0)
     {
         // Not 'General' number format.  Set hash text and bail out.
@@ -794,6 +786,17 @@ sal_Bool ScDrawStringsVars::HasEditCharacters() const
         CHAR_NBSP, CHAR_SHY, CHAR_ZWSP, CHAR_LRM, CHAR_RLM, CHAR_NBHY, CHAR_ZWNBSP, 0
     };
     return aString.SearchChar( pChars ) != STRING_NOTFOUND;
+}
+
+sal_uLong ScDrawStringsVars::GetResultValueFormat( const ScBaseCell* pCell ) const
+{
+    // Get the effective number format, including formula result types.
+    // This assumes that a formula cell has already been calculated.
+
+    if ( (nValueFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 && pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
+        return static_cast<const ScFormulaCell*>(pCell)->GetStandardFormat(*pOutput->mpDoc->GetFormatTable(), nValueFormat);
+    else
+        return nValueFormat;
 }
 
 //==================================================================
@@ -1656,6 +1659,10 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                         eOutHorJust = SVX_HOR_JUSTIFY_LEFT;     // repeat is not yet implemented
 
                     sal_Bool bBreak = ( aVars.GetLineBreak() || aVars.GetHorJust() == SVX_HOR_JUSTIFY_BLOCK );
+                    // #i111387# #o11817313# disable automatic line breaks only for "General" number format
+                    if ( bBreak && bCellIsValue && ( aVars.GetResultValueFormat(pCell) % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 )
+                        bBreak = sal_False;
+
                     sal_Bool bRepeat = aVars.IsRepeat() && !bBreak;
                     sal_Bool bShrink = aVars.IsShrink() && !bBreak && !bRepeat;
 

@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include "vbarange.hxx"
 
@@ -515,7 +506,7 @@ public:
     uno::Reference< beans::XPropertySet > getNumberProps()
     {
         long nIndexKey = 0;
-        uno::Any aValue = mxRangeProps->getPropertyValue(rtl::OUString( "NumberFormat"));
+        uno::Any aValue = mxRangeProps->getPropertyValue( "NumberFormat" );
         aValue >>= nIndexKey;
 
         if ( mxFormats.is() )
@@ -559,7 +550,7 @@ public:
 
         uno::Reference< beans::XPropertySet > xNumberProps( getNumberProps(), uno::UNO_QUERY_THROW );
         ::rtl::OUString aFormatString;
-        uno::Any aString = xNumberProps->getPropertyValue(rtl::OUString( "FormatString"));
+        uno::Any aString = xNumberProps->getPropertyValue( "FormatString" );
         aString >>= aFormatString;
         return aFormatString;
     }
@@ -568,7 +559,7 @@ public:
     {
         uno::Reference< beans::XPropertySet > xNumberProps = getNumberProps();
         sal_Int16 nType = ::comphelper::getINT16(
-            xNumberProps->getPropertyValue( ::rtl::OUString( "Type" ) ) );
+            xNumberProps->getPropertyValue( "Type" ) );
         return nType;
     }
 
@@ -580,12 +571,12 @@ public:
         {
             lang::Locale aLocale;
             uno::Reference< beans::XPropertySet > xNumProps = getNumberProps();
-            xNumProps->getPropertyValue( ::rtl::OUString(  "Locale"  ) ) >>= aLocale;
+            xNumProps->getPropertyValue( "Locale" ) >>= aLocale;
             nNewIndex = mxFormats->queryKey( rFormat, aLocale, false );
             if ( nNewIndex == -1 ) // format not defined
                 nNewIndex = mxFormats->addNew( rFormat, aLocale );
         }
-        mxRangeProps->setPropertyValue( rtl::OUString( "NumberFormat" ), uno::makeAny( nNewIndex ) );
+        mxRangeProps->setPropertyValue( "NumberFormat", uno::makeAny( nNewIndex ) );
         return true;
     }
 
@@ -593,12 +584,12 @@ public:
     {
         uno::Reference< beans::XPropertySet > xNumberProps = getNumberProps();
         lang::Locale aLocale;
-        xNumberProps->getPropertyValue( ::rtl::OUString( "Locale" ) ) >>= aLocale;
+        xNumberProps->getPropertyValue( "Locale" ) >>= aLocale;
         uno::Reference<util::XNumberFormatTypes> xTypes( mxFormats, uno::UNO_QUERY );
         if ( xTypes.is() )
         {
             sal_Int32 nNewIndex = xTypes->getStandardFormat( nType, aLocale );
-               mxRangeProps->setPropertyValue( rtl::OUString( "NumberFormat" ), uno::makeAny( nNewIndex ) );
+               mxRangeProps->setPropertyValue( "NumberFormat", uno::makeAny( nNewIndex ) );
             return true;
         }
         return false;
@@ -840,7 +831,7 @@ void CellValueGetter::visitNode( sal_Int32 x, sal_Int32 y, const uno::Reference<
 
                 table::CellContentType eFormulaType = table::CellContentType_VALUE;
                 // some formulas give textual results
-                xProp->getPropertyValue( rtl::OUString( "FormulaResultType"  ) ) >>= eFormulaType;
+                xProp->getPropertyValue( "FormulaResultType" ) >>= eFormulaType;
 
                 if ( eFormulaType == table::CellContentType_TEXT )
                 {
@@ -1177,7 +1168,7 @@ bool getScRangeListForAddress( const rtl::OUString& sName, ScDocShell* pDocSh, S
 {
     // see if there is a match with a named range
     uno::Reference< beans::XPropertySet > xProps( pDocSh->GetModel(), uno::UNO_QUERY_THROW );
-    uno::Reference< container::XNameAccess > xNameAccess( xProps->getPropertyValue( rtl::OUString( "NamedRanges" ) ), uno::UNO_QUERY_THROW );
+    uno::Reference< container::XNameAccess > xNameAccess( xProps->getPropertyValue( "NamedRanges" ), uno::UNO_QUERY_THROW );
     // Strangly enough you can have Range( "namedRange1, namedRange2, etc," )
     // loop around each ',' seperated name
     std::vector< rtl::OUString > vNames;
@@ -1644,18 +1635,18 @@ ScVbaRange::ClearComments() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaRange::ClearContents() throw (uno::RuntimeException)
 {
-    sal_Int32 nClearFlags = ( sheet::CellFlags::VALUE |
-        sheet::CellFlags::STRING |  sheet::CellFlags::DATETIME |
-        sheet::CellFlags::FORMULA );
-    ClearContents( nClearFlags, true );
+    using namespace ::com::sun::star::sheet::CellFlags;
+    sal_Int32 nFlags = VALUE | DATETIME | STRING | FORMULA | HARDATTR | EDITATTR | FORMATTED;
+    ClearContents( nFlags, true );
 }
 
 void SAL_CALL
 ScVbaRange::ClearFormats() throw (uno::RuntimeException)
 {
-    //FIXME: need to check if we need to combine sheet::CellFlags::FORMATTED
-    sal_Int32 nClearFlags = sheet::CellFlags::HARDATTR | sheet::CellFlags::FORMATTED | sheet::CellFlags::EDITATTR;
-    ClearContents( nClearFlags, false );
+	// FIXME: need to check if we need to combine FORMATTED
+    using namespace ::com::sun::star::sheet::CellFlags;
+	sal_Int32 nFlags = HARDATTR | FORMATTED | EDITATTR;
+	ClearContents( nFlags, false );
 }
 
 void
@@ -2621,7 +2612,7 @@ ScVbaRange::setWrapText( const uno::Any& aIsWrapped ) throw (script::BasicErrorE
 
     uno::Reference< beans::XPropertySet > xProps(mxRange, ::uno::UNO_QUERY_THROW );
     bool bIsWrapped = extractBoolFromAny( aIsWrapped );
-    xProps->setPropertyValue( rtl::OUString(  "IsTextWrapped"  ), uno::Any( bIsWrapped ) );
+    xProps->setPropertyValue( "IsTextWrapped", uno::Any( bIsWrapped ) );
 }
 
 uno::Any
@@ -2649,7 +2640,7 @@ ScVbaRange::getWrapText() throw (script::BasicErrorException, uno::RuntimeExcept
         return aNULL();
 
     uno::Reference< beans::XPropertySet > xProps(mxRange, ::uno::UNO_QUERY_THROW );
-    uno::Any aValue = xProps->getPropertyValue( rtl::OUString(  "IsTextWrapped"  ) );
+    uno::Any aValue = xProps->getPropertyValue( "IsTextWrapped" );
     return aValue;
 }
 
@@ -3038,7 +3029,7 @@ ScVbaRange::Replace( const ::rtl::OUString& What, const ::rtl::OUString& Replace
             xReplace->createReplaceDescriptor();
 
         xDescriptor->setSearchString( sWhat);
-        xDescriptor->setPropertyValue( rtl::OUString(  SC_UNO_SRCHREGEXP  ), uno::makeAny( sal_True ) );
+        xDescriptor->setPropertyValue( SC_UNO_SRCHREGEXP, uno::makeAny( sal_True ) );
         xDescriptor->setReplaceString( Replacement);
         if ( LookAt.hasValue() )
         {
@@ -3054,7 +3045,7 @@ ScVbaRange::Replace( const ::rtl::OUString& What, const ::rtl::OUString& Replace
             // set global search props ( affects the find dialog
             // and of course the defaults for this method
             newOptions.SetWordOnly( bSearchWords );
-            xDescriptor->setPropertyValue( rtl::OUString(  SC_UNO_SRCHWORDS  ), uno::makeAny( bSearchWords ) );
+            xDescriptor->setPropertyValue( SC_UNO_SRCHWORDS, uno::makeAny( bSearchWords ) );
         }
         // sets SearchByRow ( true for Rows )
         if ( SearchOrder.hasValue() )
@@ -3069,13 +3060,13 @@ ScVbaRange::Replace( const ::rtl::OUString& What, const ::rtl::OUString& Replace
                 throw uno::RuntimeException( rtl::OUString( "Range::Replace, illegal value for SearchOrder" ) , uno::Reference< uno::XInterface >() );
 
             newOptions.SetRowDirection( bSearchByRow );
-            xDescriptor->setPropertyValue( rtl::OUString(  SC_UNO_SRCHBYROW  ), uno::makeAny( bSearchByRow ) );
+            xDescriptor->setPropertyValue( SC_UNO_SRCHBYROW, uno::makeAny( bSearchByRow ) );
         }
         if ( MatchCase.hasValue() )
         {
             // SearchCaseSensitive
             MatchCase >>= bMatchCase;
-            xDescriptor->setPropertyValue( rtl::OUString(  SC_UNO_SRCHCASE  ), uno::makeAny( bMatchCase ) );
+            xDescriptor->setPropertyValue( SC_UNO_SRCHCASE, uno::makeAny( bMatchCase ) );
         }
 
         ScGlobal::SetSearchItem( newOptions );
@@ -3126,7 +3117,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
     {
         uno::Reference< util::XSearchDescriptor > xDescriptor = xSearch->createSearchDescriptor();
         xDescriptor->setSearchString( sSearch );
-        xDescriptor->setPropertyValue( rtl::OUString(  SC_UNO_SRCHREGEXP  ), uno::Any( true ) );
+        xDescriptor->setPropertyValue( SC_UNO_SRCHREGEXP, uno::Any( true ) );
 
         uno::Reference< excel::XRange > xAfterRange;
         uno::Reference< table::XCellRange > xStartCell;
@@ -3163,7 +3154,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
                         throw uno::RuntimeException( rtl::OUString( "Range::Replace, illegal value for LookIn." ) , uno::Reference< uno::XInterface >() );
                 }
                 newOptions.SetCellType( nSearchType );
-                xDescriptor->setPropertyValue( rtl::OUString( "SearchType" ), uno::makeAny( nSearchType ) );
+                xDescriptor->setPropertyValue( "SearchType", uno::makeAny( nSearchType ) );
             }
         }
 
@@ -3179,7 +3170,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
             else
                 throw uno::RuntimeException( rtl::OUString( "Range::Replace, illegal value for LookAt" ) , uno::Reference< uno::XInterface >() );
             newOptions.SetWordOnly( bSearchWords );
-            xDescriptor->setPropertyValue( rtl::OUString(  SC_UNO_SRCHWORDS  ), uno::makeAny( bSearchWords ) );
+            xDescriptor->setPropertyValue( SC_UNO_SRCHWORDS, uno::makeAny( bSearchWords ) );
         }
 
         // SearchOrder
@@ -3195,7 +3186,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
                 throw uno::RuntimeException( rtl::OUString( "Range::Replace, illegal value for SearchOrder" ) , uno::Reference< uno::XInterface >() );
 
             newOptions.SetRowDirection( bSearchByRow );
-            xDescriptor->setPropertyValue( rtl::OUString(  SC_UNO_SRCHBYROW  ), uno::makeAny( bSearchByRow ) );
+            xDescriptor->setPropertyValue( SC_UNO_SRCHBYROW, uno::makeAny( bSearchByRow ) );
         }
 
         // SearchDirection
@@ -3212,7 +3203,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
                 else
                     throw uno::RuntimeException( rtl::OUString( "Range::Replace, illegal value for SearchDirection" ) , uno::Reference< uno::XInterface >() );
                 newOptions.SetBackward( bSearchBackwards );
-                xDescriptor->setPropertyValue( rtl::OUString( "SearchBackwards" ), uno::makeAny( bSearchBackwards ) );
+                xDescriptor->setPropertyValue( "SearchBackwards", uno::makeAny( bSearchBackwards ) );
             }
         }
 
@@ -3224,7 +3215,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
             if( !( MatchCase >>= bMatchCase ) )
                 throw uno::RuntimeException( rtl::OUString( "Range::Replace, illegal value for MatchCase" ) , uno::Reference< uno::XInterface >() );
         }
-        xDescriptor->setPropertyValue( rtl::OUString(  SC_UNO_SRCHCASE  ), uno::makeAny( bMatchCase ) );
+        xDescriptor->setPropertyValue( SC_UNO_SRCHCASE, uno::makeAny( bMatchCase ) );
 
         // MatchByte
         // SearchFormat
@@ -3699,16 +3690,6 @@ ScVbaRange::getDefaultMethodName(  ) throw (uno::RuntimeException)
     return sName;
 }
 
-
-uno::Reference< awt::XDevice >
-getDeviceFromDoc( const uno::Reference< frame::XModel >& xModel ) throw( uno::RuntimeException )
-{
-    uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
-    uno::Reference< frame::XFrame> xFrame( xController->getFrame(), uno::UNO_QUERY_THROW );
-    uno::Reference< awt::XDevice > xDevice( xFrame->getComponentWindow(), uno::UNO_QUERY_THROW );
-    return xDevice;
-}
-
 // returns calc internal col. width ( in points )
 double
 ScVbaRange::getCalcColWidth( const table::CellRangeAddress& rAddress) throw (uno::RuntimeException)
@@ -3731,31 +3712,6 @@ ScVbaRange::getCalcRowHeight( const table::CellRangeAddress& rAddress ) throw (u
 }
 
 // return Char Width in points
-double getDefaultCharWidth( const uno::Reference< frame::XModel >& xModel ) throw ( uno::RuntimeException )
-{
-    const static rtl::OUString sDflt( "Default");
-    const static rtl::OUString sCharFontName( "CharFontName");
-    const static rtl::OUString sPageStyles( "PageStyles");
-    // get the font from the default style
-    uno::Reference< style::XStyleFamiliesSupplier > xStyleSupplier( xModel, uno::UNO_QUERY_THROW );
-    uno::Reference< container::XNameAccess > xNameAccess( xStyleSupplier->getStyleFamilies(), uno::UNO_QUERY_THROW );
-    uno::Reference< container::XNameAccess > xNameAccess2( xNameAccess->getByName( sPageStyles ), uno::UNO_QUERY_THROW );
-    uno::Reference< beans::XPropertySet > xProps( xNameAccess2->getByName( sDflt ), uno::UNO_QUERY_THROW );
-    rtl::OUString sFontName;
-    xProps->getPropertyValue( sCharFontName ) >>= sFontName;
-
-    uno::Reference< awt::XDevice > xDevice = getDeviceFromDoc( xModel );
-    awt::FontDescriptor aDesc;
-    aDesc.Name = sFontName;
-    uno::Reference< awt::XFont > xFont( xDevice->getFont( aDesc ), uno::UNO_QUERY_THROW );
-    double nCharPixelWidth =  xFont->getCharWidth( (sal_Int8)'0' );
-
-    double nPixelsPerMeter = xDevice->getInfo().PixelPerMeterX;
-    double nCharWidth = nCharPixelWidth /  nPixelsPerMeter;
-    nCharWidth = nCharWidth * (double)56700;// in twips
-    return lcl_TwipsToPoints( (sal_uInt16)nCharWidth );
-}
-
 double getDefaultCharWidth( ScDocShell* pDocShell )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
@@ -3764,7 +3720,7 @@ double getDefaultCharWidth( ScDocShell* pDocShell )
     ::Font aDefFont;
     pAttr->GetFont( aDefFont, SC_AUTOCOL_BLACK, pRefDevice );
     pRefDevice->SetFont( aDefFont );
-    long nCharWidth = pRefDevice->GetTextWidth( rtl::OUString('0') );        // 1/100th mm
+    long nCharWidth = pRefDevice->GetTextWidth( String( '0' ) );        // 1/100th mm
     return lcl_hmmToPoints( nCharWidth );
 }
 
@@ -3782,8 +3738,7 @@ ScVbaRange::getColumnWidth() throw (uno::RuntimeException)
     ScDocShell* pShell = getScDocShell();
     if ( pShell )
     {
-        uno::Reference< frame::XModel > xModel = pShell->GetModel();
-        double defaultCharWidth = getDefaultCharWidth( xModel );
+        double defaultCharWidth = getDefaultCharWidth( pShell );
         RangeHelper thisRange( mxRange );
         table::CellRangeAddress thisAddress = thisRange.getCellRangeAddressable()->getRangeAddress();
         sal_Int32 nStartCol = thisAddress.StartColumn;
@@ -4098,7 +4053,7 @@ ScVbaRange::getPosition() throw ( uno::RuntimeException )
         xProps.set( mxRange, uno::UNO_QUERY_THROW );
     else
         xProps.set( mxRanges, uno::UNO_QUERY_THROW );
-    xProps->getPropertyValue(POSITION) >>= aPoint;
+    xProps->getPropertyValue( POSITION ) >>= aPoint;
     return aPoint;
 }
 uno::Any SAL_CALL
@@ -4271,7 +4226,7 @@ static void lcl_setTableFieldsFromCriteria( rtl::OUString& sCriteria1, uno::Refe
             sCriteria1 = VBAToRegexp( sCriteria1 );
             // UseRegularExpressions
             if ( xDescProps.is() )
-                xDescProps->setPropertyValue( rtl::OUString(  "UseRegularExpressions"  ), uno::Any( sal_True ) );
+                xDescProps->setPropertyValue( "UseRegularExpressions", uno::Any( sal_True ) );
         }
 
     }
@@ -4286,7 +4241,7 @@ static void lcl_setTableFieldsFromCriteria( rtl::OUString& sCriteria1, uno::Refe
             sCriteria1 = VBAToRegexp( sCriteria1 );
             // UseRegularExpressions
             if ( xDescProps.is() )
-                xDescProps->setPropertyValue( rtl::OUString(  "UseRegularExpressions"  ), uno::Any( sal_True ) );
+                xDescProps->setPropertyValue( "UseRegularExpressions", uno::Any( sal_True ) );
         }
     }
     else if ( ( nPos = sCriteria1.indexOf( GREATERTHAN ) ) == 0 )
@@ -4399,14 +4354,14 @@ ScVbaRange::AutoFilter( const uno::Any& Field, const uno::Any& Criteria1, const 
 
         uno::Reference< beans::XPropertySet > xDBRangeProps( xDataBaseRange, uno::UNO_QUERY_THROW );
         // set autofilt
-        xDBRangeProps->setPropertyValue( rtl::OUString( "AutoFilter" ), uno::Any(sal_True) );
-        // set header
+        xDBRangeProps->setPropertyValue( "AutoFilter", uno::Any(sal_True) );
+		// set header (autofilter always need column headers)
         uno::Reference< beans::XPropertySet > xFiltProps( xDataBaseRange->getFilterDescriptor(), uno::UNO_QUERY_THROW );
         sal_Bool bHasColHeader = false;
         ScDocument* pDoc = pShell ? pShell->GetDocument() : NULL;
 
         bHasColHeader = pDoc->HasColHeader(  static_cast< SCCOL >( autoFiltAddress.StartColumn ), static_cast< SCROW >( autoFiltAddress.StartRow ), static_cast< SCCOL >( autoFiltAddress.EndColumn ), static_cast< SCROW >( autoFiltAddress.EndRow ), static_cast< SCTAB >( autoFiltAddress.Sheet ) ) ? sal_True : false;
-        xFiltProps->setPropertyValue( rtl::OUString( "ContainsHeader" ), uno::Any( bHasColHeader ) );
+        xFiltProps->setPropertyValue( "ContainsHeader", uno::Any( bHasColHeader ) );
     }
 
 
@@ -4562,7 +4517,7 @@ ScVbaRange::AutoFilter( const uno::Any& Field, const uno::Any& Criteria1, const 
             if( xSheetFilterDescriptor.is() )
                 xSheetFilterDescriptor->setFilterFields2( uno::Sequence< sheet::TableFilterField2 >() );
         }
-        xDBRangeProps->setPropertyValue( rtl::OUString( "AutoFilter" ), uno::Any(!bHasAuto) );
+        xDBRangeProps->setPropertyValue( "AutoFilter", uno::Any(!bHasAuto) );
 
     }
 }
@@ -5216,7 +5171,7 @@ ScVbaRange::getStyle() throw (uno::RuntimeException)
     }
     uno::Reference< beans::XPropertySet > xProps( mxRange, uno::UNO_QUERY_THROW );
     rtl::OUString sStyleName;
-    xProps->getPropertyValue(CELLSTYLE) >>= sStyleName;
+    xProps->getPropertyValue( CELLSTYLE ) >>= sStyleName;
     ScDocShell* pShell = getScDocShell();
     uno::Reference< frame::XModel > xModel( pShell->GetModel() );
     uno::Reference< excel::XStyle > xStyle = new ScVbaStyle( this, mxContext,  sStyleName, xModel );
@@ -5234,7 +5189,7 @@ ScVbaRange::setStyle( const uno::Any& _style ) throw (uno::RuntimeException)
     uno::Reference< beans::XPropertySet > xProps( mxRange, uno::UNO_QUERY_THROW );
     uno::Reference< excel::XStyle > xStyle;
     _style >>= xStyle;
-    xProps->setPropertyValue(CELLSTYLE, uno::makeAny(xStyle->getName()));
+    xProps->setPropertyValue( CELLSTYLE, uno::makeAny( xStyle->getName() ) );
 }
 
 uno::Reference< excel::XRange >

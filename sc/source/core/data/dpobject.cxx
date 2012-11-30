@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include "dpobject.hxx"
 #include "dptabsrc.hxx"
@@ -265,7 +256,7 @@ void DBConnector::getValue(long nCol, ScDPItemData &rData, short& rNumType) cons
 
 }
 
-static sal_uInt16 lcl_GetDataGetOrientation( const uno::Reference<sheet::XDimensionsSupplier>& xSource )
+sal_uInt16 lcl_GetDataGetOrientation( const uno::Reference<sheet::XDimensionsSupplier>& xSource )
 {
     long nRet = sheet::DataPilotFieldOrientation_HIDDEN;
     if ( xSource.is() )
@@ -414,7 +405,7 @@ void ScDPObject::SetOutRange(const ScRange& rRange)
         pOutput->SetPosition( rRange.aStart );
 }
 
-void ScDPObject::SetSheetDesc(const ScSheetSourceDesc& rDesc)
+void ScDPObject::SetSheetDesc(const ScSheetSourceDesc& rDesc, bool /*bFromRefUpdate*/)
 {
     if ( pSheetDesc && rDesc == *pSheetDesc )
         return;             // nothing to do
@@ -584,9 +575,7 @@ ScDPTableData* ScDPObject::GetTableData()
     if (!mpTableData)
     {
         shared_ptr<ScDPTableData> pData;
-        const ScDPDimensionSaveData* pDimData = NULL;
-        if (pSaveData)
-            pDimData = pSaveData->GetExistingDimensionData();
+        const ScDPDimensionSaveData* pDimData = pSaveData ? pSaveData->GetExistingDimensionData() : NULL;
 
         if ( pImpDesc )
         {
@@ -852,7 +841,6 @@ void ScDPObject::BuildAllDimensionMembers()
         return;
 
     // #i111857# don't always create empty mpTableData for external service.
-    // Ideally, xSource should be used instead of mpTableData.
     if (pServDesc)
         return;
 
@@ -1016,7 +1004,7 @@ void ScDPObject::WriteRefsTo( ScDPObject& r ) const
 {
     r.SetOutRange( aOutRange );
     if ( pSheetDesc )
-        r.SetSheetDesc( *pSheetDesc );
+        r.SetSheetDesc( *pSheetDesc, true );
 }
 
 void ScDPObject::GetPositionData(const ScAddress& rPos, DataPilotTablePositionData& rPosData)
@@ -1921,13 +1909,13 @@ static sal_uInt16 lcl_FirstSubTotal( const uno::Reference<beans::XPropertySet>& 
 
 namespace {
 
-class FindByColumn : public std::unary_function<PivotField, bool>
+class FindByColumn : public std::unary_function<ScPivotField, bool>
 {
     SCsCOL mnCol;
     sal_uInt16 mnMask;
 public:
     FindByColumn(SCsCOL nCol, sal_uInt16 nMask) : mnCol(nCol), mnMask(nMask) {}
-    bool operator() (const PivotField& r) const
+    bool operator() (const ScPivotField& r) const
     {
         return r.nCol == mnCol && r.nFuncMask == mnMask;
     }
@@ -1935,12 +1923,11 @@ public:
 
 }
 
-static void lcl_FillOldFields(
-    vector<PivotField>& rFields,
+void lcl_FillOldFields( ScPivotFieldVector& rFields,
     const uno::Reference<sheet::XDimensionsSupplier>& xSource,
     sal_uInt16 nOrient, bool bAddData )
 {
-    vector<PivotField> aFields;
+    ScPivotFieldVector aFields;
 
     bool bDataFound = false;
 
@@ -2016,13 +2003,13 @@ static void lcl_FillOldFields(
                 else
                     nCompCol = static_cast<SCsCOL>(nDupSource);     //! seek source column from name
 
-                vector<PivotField>::iterator it = std::find_if(aFields.begin(), aFields.end(), FindByColumn(nCompCol, nMask));
+                ScPivotFieldVector::iterator it = std::find_if(aFields.begin(), aFields.end(), FindByColumn(nCompCol, nMask));
                 if (it != aFields.end())
                     nDupCount = it->mnDupCount + 1;
             }
 
-            aFields.push_back(PivotField());
-            PivotField& rField = aFields.back();
+            aFields.push_back(ScPivotField());
+            ScPivotField& rField = aFields.back();
             if (bDataLayout)
             {
                 rField.nCol = PIVOT_DATA_FIELD;
@@ -2071,7 +2058,7 @@ static void lcl_FillOldFields(
     }
 
     if (bAddData && !bDataFound)
-        aFields.push_back(PivotField(PIVOT_DATA_FIELD, 0));
+        aFields.push_back(ScPivotField(PIVOT_DATA_FIELD, 0));
 
     rFields.swap(aFields);
 }
@@ -2383,12 +2370,12 @@ rtl::OUString lcl_GetDimName( const uno::Reference<sheet::XDimensionsSupplier>& 
     return aName;
 }
 
-bool hasFieldColumn(const vector<PivotField>* pRefFields, SCCOL nCol)
+bool hasFieldColumn(const vector<ScPivotField>* pRefFields, SCCOL nCol)
 {
     if (!pRefFields)
         return false;
 
-    vector<PivotField>::const_iterator itr = pRefFields->begin(), itrEnd = pRefFields->end();
+    vector<ScPivotField>::const_iterator itr = pRefFields->begin(), itrEnd = pRefFields->end();
     for (; itr != itrEnd; ++itr)
     {
         if (itr->nCol == nCol)
@@ -2398,12 +2385,12 @@ bool hasFieldColumn(const vector<PivotField>* pRefFields, SCCOL nCol)
     return false;
 }
 
-class FindByOriginalDim : public std::unary_function<PivotField, bool>
+class FindByOriginalDim : public std::unary_function<ScPivotField, bool>
 {
     long mnDim;
 public:
     FindByOriginalDim(long nDim) : mnDim(nDim) {}
-    bool operator() (const PivotField& r) const
+    bool operator() (const ScPivotField& r) const
     {
         return mnDim == r.getOriginalDim();
     }
@@ -2412,18 +2399,17 @@ public:
 }
 
 void ScDPObject::ConvertOrientation(
-    ScDPSaveData& rSaveData, const vector<PivotField>& rFields, sal_uInt16 nOrient,
+    ScDPSaveData& rSaveData, const ScPivotFieldVector& rFields, sal_uInt16 nOrient,
     const Reference<XDimensionsSupplier>& xSource,
-    const ScDPLabelDataVec& rLabels,
-    vector<PivotField>* pRefColFields, vector<PivotField>* pRefRowFields, vector<PivotField>* pRefPageFields )
+    const ScDPLabelDataVector& rLabels,
+    const ScPivotFieldVector* pRefColFields,
+    const ScPivotFieldVector* pRefRowFields,
+    const ScPivotFieldVector* pRefPageFields )
 {
-    //  xSource must be set
-    OSL_ENSURE( xSource.is(), "missing string source" );
-
-    vector<PivotField>::const_iterator itr, itrBeg = rFields.begin(), itrEnd = rFields.end();
+    ScPivotFieldVector::const_iterator itr, itrBeg = rFields.begin(), itrEnd = rFields.end();
     for (itr = itrBeg; itr != itrEnd; ++itr)
     {
-        const PivotField& rField = *itr;
+        const ScPivotField& rField = *itr;
 
         long nCol = rField.getOriginalDim();
         sal_uInt16 nFuncs = rField.nFuncMask;

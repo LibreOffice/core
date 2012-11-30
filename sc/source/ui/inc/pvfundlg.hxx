@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #ifndef SC_PVFUNDLG_HXX
 #define SC_PVFUNDLG_HXX
@@ -71,14 +62,14 @@ class ScDPFunctionDlg : public ModalDialog
 {
     typedef ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash > NameMapType;
 public:
-    explicit            ScDPFunctionDlg( Window* pParent, const ScDPLabelDataVec& rLabelVec,
-                            const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData );
+    explicit            ScDPFunctionDlg( Window* pParent, const ScDPLabelDataVector& rLabelVec,
+                            const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData );
 
     sal_uInt16              GetFuncMask() const;
     ::com::sun::star::sheet::DataPilotFieldReference GetFieldRef() const;
 
 private:
-    void                Init( const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData );
+    void                Init( const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData );
 
     const ::rtl::OUString& GetBaseFieldName(const ::rtl::OUString& rLayoutName) const;
     const ::rtl::OUString& GetBaseItemName(const ::rtl::OUString& rLayoutName) const;
@@ -111,7 +102,7 @@ private:
 
     ScDPListBoxWrapper  maLbTypeWrp;        /// Wrapper for direct usage of API constants.
 
-    const ScDPLabelDataVec& mrLabelVec;  /// Data of all labels.
+    const ScDPLabelDataVector& mrLabelVec;  /// Data of all labels.
     bool                mbEmptyItem;        /// true = Empty base item in listbox.
 };
 
@@ -121,7 +112,7 @@ class ScDPSubtotalDlg : public ModalDialog
 {
 public:
     explicit            ScDPSubtotalDlg( Window* pParent, ScDPObject& rDPObj,
-                            const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData,
+                            const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData,
                             const ScDPNameVec& rDataFields, bool bEnableLayout );
 
     sal_uInt16              GetFuncMask() const;
@@ -129,7 +120,7 @@ public:
     void                FillLabelData( ScDPLabelData& rLabelData ) const;
 
 private:
-    void                Init( const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData );
+    void                Init( const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData );
 
     DECL_LINK(DblClickHdl, void *);
     DECL_LINK( RadioClickHdl, RadioButton* );

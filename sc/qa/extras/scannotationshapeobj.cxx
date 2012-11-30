@@ -87,6 +87,7 @@ void ScAnnotationShapeObj::tearDown()
 
 uno::Reference<uno::XInterface> ScAnnotationShapeObj::init()
 {
+#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
     if (!mxComponent.is())
         // Load an empty document.
         mxComponent = loadFromDesktop("private:factory/scalc");
@@ -106,15 +107,20 @@ uno::Reference<uno::XInterface> ScAnnotationShapeObj::init()
     uno::Reference<drawing::XShape> xShape = xShapeSupp->getAnnotationShape();
 
     return xShape;
+#else
+    return uno::Reference<drawing::XShape>();
+#endif
 }
 
 uno::Reference<text::XTextContent> ScAnnotationShapeObj::getTextContent()
 {
+#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
     if (!mxField.is())
     {
         uno::Reference<lang::XMultiServiceFactory> xSM(mxComponent, UNO_QUERY_THROW);
         mxField.set(xSM->createInstance("com.sun.star.text.TextField.DateTime"), UNO_QUERY_THROW);
     }
+#endif
     return mxField;
 }
 

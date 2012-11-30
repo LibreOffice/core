@@ -61,14 +61,14 @@ interface XApplication
     [attribute] boolean DisplayExcel4Menus;
     [attribute] boolean DisplayNoteIndicator;
     [attribute] boolean ShowWindowsInTaskbar;
+    [attribute, readonly] string LibraryPath;
+    [attribute, readonly] string TemplatesPath;
+    [attribute, readonly] string PathSeparator;
 
     void setDefaultFilePath([in] string DefaultFilePath) raises(com::sun::star::script::BasicErrorException);
 
     string getDefaultFilePath() raises(com::sun::star::script::BasicErrorException);
 
-    string LibraryPath() raises(com::sun::star::script::BasicErrorException);
-    string TemplatesPath() raises(com::sun::star::script::BasicErrorException);
-    string PathSeparator() raises(com::sun::star::script::BasicErrorException);
     //any CommandBars( [in] any Index );
     any Workbooks( [in] any Index );
     any Worksheets( [in] any Index );

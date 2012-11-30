@@ -24,17 +24,26 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  ************************************************************************/
 
+#include "fieldwnd.hxx"
 
 #include <comphelper/string.hxx>
-#include <vcl/virdev.hxx>
 #include <vcl/decoview.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/mnemonic.hxx>
 #include <vcl/help.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/mnemonic.hxx>
 
-#include "fieldwnd.hxx"
 #include "pvlaydlg.hxx"
 #include "dpuiglobal.hxx"
 #include "AccessibleDataPilotControl.hxx"
@@ -48,6 +57,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::WeakReference;
 using ::com::sun::star::accessibility::XAccessible;
 
+const size_t PIVOTFIELD_INVALID = static_cast< size_t >(-1);
 const size_t INVALID_INDEX = static_cast<size_t>(-1);
 
 ScDPFieldControlBase::FieldName::FieldName(const rtl::OUString& rText, bool bFits, sal_uInt8 nDupCount) :
@@ -75,39 +85,34 @@ void ScDPFieldControlBase::ScrollBar::Command( const CommandEvent& rCEvt )
     mpParent->Command(rCEvt);
 }
 
-ScDPFieldControlBase::ScDPFieldControlBase( ScDPLayoutDlg* pParent, const ResId& rResId, FixedText* pCaption ) :
+ScDPFieldControlBase::AccessRef::AccessRef( const com::sun::star::uno::WeakReference< ::com::sun::star::accessibility::XAccessible > & rAccessible ) : mxRef( rAccessible ) {}
+
+// easy, safe access to the backing accessible for the lifetime of AccessRef
+ScAccessibleDataPilotControl *ScDPFieldControlBase::AccessRef::operator -> () const
+{
+    if (!mxRef.is())
+        return NULL;
+    return static_cast< ScAccessibleDataPilotControl * >( mxRef.get() );
+}
+
+ScDPFieldControlBase::ScDPFieldControlBase(
+    ScPivotLayoutDlg* pParent, const ResId& rResId, FixedText* pCaption, const char* pcHelpId) :
     Control(pParent, rResId),
     mpDlg(pParent),
     mpCaption(pCaption),
-    mnFieldSelected(0),
-    pAccessible(NULL)
+    mnFieldSelected(0)
 {
+    SetHelpId( pcHelpId );
+
     if (pCaption)
         maName = MnemonicGenerator::EraseAllMnemonicChars( pCaption->GetText() );
 }
 
 ScDPFieldControlBase::~ScDPFieldControlBase()
 {
-    if (pAccessible)
-    {
-        com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
-        if (xTempAcc.is())
-            pAccessible->dispose();
-    }
-}
-
-void ScDPFieldControlBase::UseMnemonic()
-{
-    // Now the FixedText has its mnemonic char. Grab the text and hide the
-    // FixedText to be able to handle tabstop and mnemonics separately.
-    if (mpCaption)
-    {
-        SetText(mpCaption->GetText());
-        mpCaption->Hide();
-    }
-
-    // after reading the mnemonics, tab stop style bits can be updated
-    UpdateStyle();
+    AccessRef aRef( mxAccessible );
+    if( aRef.is() )
+        aRef->dispose();
 }
 
 OUString ScDPFieldControlBase::GetName() const
@@ -132,22 +137,17 @@ void ScDPFieldControlBase::AddField( const rtl::OUString& rText, size_t nNewInde
     {
         sal_uInt8 nDupCount = GetNextDupCount(rText);
         maFieldNames.push_back(FieldName(rText, true, nDupCount));
-        if (pAccessible)
-        {
-            com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
-            if (xTempAcc.is())
-                pAccessible->AddField(nNewIndex);
-            else
-                pAccessible = NULL;
-        }
+        AccessRef xRef(mxAccessible);
+        if ( xRef.is() )
+            xRef->AddField(nNewIndex);
     }
 }
 
 bool ScDPFieldControlBase::AddField(
     const rtl::OUString& rText, const Point& rPos, size_t& rnIndex, sal_uInt8& rnDupCount)
 {
-    size_t nNewIndex = 0;
-    if( GetFieldIndex( rPos, nNewIndex ) )
+    size_t nNewIndex = GetFieldIndex(rPos);
+    if (nNewIndex != PIVOTFIELD_INVALID)
     {
         if( nNewIndex > maFieldNames.size() )
             nNewIndex = maFieldNames.size();
@@ -156,18 +156,13 @@ bool ScDPFieldControlBase::AddField(
         maFieldNames.insert(maFieldNames.begin() + nNewIndex, FieldName(rText, true, nDupCount));
         mnFieldSelected = nNewIndex;
         ResetScrollBar();
-        Redraw();
+        Invalidate();
         rnIndex = nNewIndex;
         rnDupCount = nDupCount;
 
-        if (pAccessible)
-        {
-            com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
-            if (xTempAcc.is())
-                pAccessible->AddField(nNewIndex);
-            else
-                pAccessible = NULL;
-        }
+        AccessRef xRef( mxAccessible );
+        if ( xRef.is() )
+            xRef->AddField(nNewIndex);
 
         return true;
     }
@@ -181,8 +176,8 @@ bool ScDPFieldControlBase::MoveField(size_t nCurPos, const Point& rPos, size_t& 
         // out-of-bound
         return false;
 
-    size_t nNewIndex = 0;
-    if (!GetFieldIndex(rPos, nNewIndex))
+    size_t nNewIndex = GetFieldIndex(rPos);
+    if (nNewIndex == PIVOTFIELD_INVALID)
         return false;
 
     if (nNewIndex == nCurPos)
@@ -209,16 +204,11 @@ bool ScDPFieldControlBase::MoveField(size_t nCurPos, const Point& rPos, size_t& 
     }
 
     ResetScrollBar();
-    Redraw();
+    Invalidate();
 
-    if (pAccessible)
-    {
-        uno::Reference<accessibility::XAccessible> xTempAcc = xAccessible;
-        if (xTempAcc.is())
-            pAccessible->MoveField(nCurPos, nNewIndex);
-        else
-            pAccessible = NULL;
-    }
+    AccessRef xRef( mxAccessible );
+    if ( xRef.is() )
+        xRef->MoveField(nCurPos, nNewIndex);
 
     return true;
 }
@@ -232,7 +222,7 @@ bool ScDPFieldControlBase::AppendField(const rtl::OUString& rText, size_t& rnInd
     maFieldNames.push_back(FieldName(rText, true, nDupCount));
     mnFieldSelected = maFieldNames.size() - 1;
     ResetScrollBar();
-    Redraw();
+    Invalidate();
 
     rnIndex = mnFieldSelected;
     return true;
@@ -242,20 +232,18 @@ void ScDPFieldControlBase::DelField( size_t nDelIndex )
 {
     if ( IsExistingIndex(nDelIndex) )
     {
-        if (pAccessible) // before decrement fieldcount
         {
-            com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
-            if (xTempAcc.is())
-                pAccessible->RemoveField(nDelIndex);
-            else
-                pAccessible = NULL;
+            AccessRef xRef( mxAccessible );
+            if ( xRef.is() )
+                xRef->RemoveField(nDelIndex);
         }
+
         maFieldNames.erase( maFieldNames.begin() + nDelIndex );
         if (mnFieldSelected >= maFieldNames.size())
             mnFieldSelected = maFieldNames.size() - 1;
 
         ResetScrollBar();
-        Redraw();
+        Invalidate();
     }
 }
 
@@ -271,12 +259,10 @@ bool ScDPFieldControlBase::IsEmpty() const
 
 void ScDPFieldControlBase::ClearFields()
 {
-    com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
-    if (!xTempAcc.is() && pAccessible)
-        pAccessible = NULL;
-    if (pAccessible)
+    AccessRef xRef( mxAccessible );
+    if ( xRef.is() )
         for( size_t nIdx = maFieldNames.size(); nIdx > 0; --nIdx )
-            pAccessible->RemoveField( nIdx - 1 );
+            xRef->RemoveField( nIdx - 1 );
 
     maFieldNames.clear();
 }
@@ -286,16 +272,11 @@ void ScDPFieldControlBase::SetFieldText(const rtl::OUString& rText, size_t nInde
     if( IsExistingIndex( nIndex ) )
     {
         maFieldNames[nIndex] = FieldName(rText, true, nDupCount);
-        Redraw();
+        Invalidate();
 
-        if (pAccessible)
-        {
-            com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
-            if (xTempAcc.is())
-                pAccessible->FieldNameChange(nIndex);
-            else
-                pAccessible = NULL;
-        }
+        AccessRef xRef( mxAccessible );
+        if ( xRef.is() )
+            xRef->FieldNameChange(nIndex);
     }
 }
 
@@ -308,12 +289,14 @@ rtl::OUString ScDPFieldControlBase::GetFieldText( size_t nIndex ) const
 
 void ScDPFieldControlBase::GetExistingIndex( const Point& rPos, size_t& rnIndex )
 {
-    if( !maFieldNames.empty() && (GetFieldType() != TYPE_SELECT) && GetFieldIndex( rPos, rnIndex ) )
+    if (maFieldNames.empty() || GetFieldType() == PIVOTFIELDTYPE_SELECT)
     {
-        if( rnIndex >= maFieldNames.size() )
-            rnIndex = maFieldNames.size() - 1;
+        rnIndex = 0;
+        return;
     }
-    else
+
+    rnIndex = GetFieldIndex(rPos);
+    if (rnIndex == PIVOTFIELD_INVALID)
         rnIndex = 0;
 }
 
@@ -338,13 +321,35 @@ void ScDPFieldControlBase::Paint( const Rectangle& /* rRect */ )
     Redraw();
 }
 
+void ScDPFieldControlBase::StateChanged( StateChangedType nStateChange )
+{
+    Control::StateChanged( nStateChange );
+
+    if( nStateChange == STATE_CHANGE_INITSHOW )
+    {
+        /*  After the fixed text associated to this control has received its
+            unique mnemonic from VCL dialog initialization code, put this text
+            into the field windows.
+            #124828# Hiding the FixedTexts and clearing the tab stop style bits
+            has to be done after assigning the mnemonics, but Paint() is too
+            late, because the test tool may send key events to the dialog when
+            it isn't visible. Mnemonics are assigned in Dialog::StateChanged()
+            for STATE_CHANGE_INITSHOW, so this can be done immediately
+            afterwards. */
+
+        if ( mpCaption )
+        {
+            SetText( mpCaption->GetText() );
+            mpCaption->Hide();
+        }
+    }
+}
+
 void ScDPFieldControlBase::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    if( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
-    {
-        Redraw();
-    }
     Control::DataChanged( rDCEvt );
+    if( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+        Invalidate();
 }
 
 void ScDPFieldControlBase::Command( const CommandEvent& rCEvt )
@@ -365,19 +370,20 @@ void ScDPFieldControlBase::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if( rMEvt.IsLeft() )
     {
-        size_t nIndex = 0;
-        if( GetFieldIndex( rMEvt.GetPosPixel(), nIndex ) && IsExistingIndex( nIndex ) )
+        size_t nNewSelectIndex = GetFieldIndex( rMEvt.GetPosPixel() );
+        if (nNewSelectIndex != PIVOTFIELD_INVALID && IsExistingIndex(nNewSelectIndex))
         {
-            GrabFocusWithSel( nIndex );
+            // grabbing after GetFieldIndex() will prevent to focus empty window
+            GrabFocusAndSelect( nNewSelectIndex );
 
             if( rMEvt.GetClicks() == 1 )
             {
-                PointerStyle ePtr = mpDlg->NotifyMouseButtonDown( GetFieldType(), nIndex );
+                PointerStyle ePtr = mpDlg->NotifyMouseButtonDown( GetFieldType(), nNewSelectIndex );
                 CaptureMouse();
                 SetPointer( Pointer( ePtr ) );
             }
             else
-                mpDlg->NotifyDoubleClick( GetFieldType(), nIndex );
+                mpDlg->NotifyDoubleClick( GetFieldType(), nNewSelectIndex );
         }
     }
 }
@@ -388,7 +394,10 @@ void ScDPFieldControlBase::MouseButtonUp( const MouseEvent& rMEvt )
     {
         if( rMEvt.GetClicks() == 1 )
         {
-            mpDlg->NotifyMouseButtonUp( OutputToScreenPixel( rMEvt.GetPosPixel() ) );
+            Point aScrPos = OutputToScreenPixel(rMEvt.GetPosPixel());
+            ScPivotFieldType eToType = mpDlg->GetFieldTypeAtPoint(aScrPos);
+
+            mpDlg->DropFieldItem(aScrPos, eToType);
             SetPointer( Pointer( POINTER_ARROW ) );
         }
 
@@ -401,11 +410,15 @@ void ScDPFieldControlBase::MouseMove( const MouseEvent& rMEvt )
 {
     if( IsMouseCaptured() )
     {
-        PointerStyle ePtr = mpDlg->NotifyMouseMove( OutputToScreenPixel( rMEvt.GetPosPixel() ) );
+        Point aScrPos = OutputToScreenPixel(rMEvt.GetPosPixel());
+        ScPivotFieldType eFieldType = mpDlg->GetFieldTypeAtPoint(aScrPos);
+        PointerStyle ePtr = mpDlg->GetPointerStyleAtPoint(aScrPos, eFieldType);
         SetPointer( Pointer( ePtr ) );
     }
-    size_t nIndex = 0;
-    if( GetFieldIndex( rMEvt.GetPosPixel(), nIndex ) && IsShortenedText( nIndex ) )
+    const FieldNames& rFields = GetFieldNames();
+    size_t nIndex = GetFieldIndex(rMEvt.GetPosPixel());
+    // does the string not fit on the screen ? show a helpful helptext instead
+    if (nIndex != PIVOTFIELD_INVALID && (nIndex < rFields.size()) && !rFields[nIndex].mbFits)
     {
         Point aPos = OutputToScreenPixel( rMEvt.GetPosPixel() );
         Rectangle   aRect( aPos, GetSizePixel() );
@@ -418,46 +431,52 @@ void ScDPFieldControlBase::KeyInput( const KeyEvent& rKEvt )
 {
     const KeyCode& rKeyCode = rKEvt.GetKeyCode();
     sal_uInt16 nCode = rKeyCode.GetCode();
-    bool bKeyEvaluated = false;
+
 
     const FieldNames& rFields = GetFieldNames();
-    if( rKeyCode.IsMod1() && (GetFieldType() != TYPE_SELECT) )
-    {
-        bKeyEvaluated = true;
-        switch( nCode )
-        {
-            case KEY_UP:    MoveFieldRel( 0, -1 );              break;
-            case KEY_DOWN:  MoveFieldRel( 0, 1 );               break;
-            case KEY_LEFT:  MoveFieldRel( -1, 0 );              break;
-            case KEY_RIGHT: MoveFieldRel( 1, 0 );               break;
-            case KEY_HOME:  MoveField( 0 );                     break;
-            case KEY_END:   MoveField( rFields.size() - 1 );  break;
-            default:        bKeyEvaluated = false;
-        }
-    }
+    bool bFieldMove = ( rKeyCode.IsMod1() && (GetFieldType() != PIVOTFIELDTYPE_SELECT) );
+    bool bKeyEvaluated = true;
+    void (ScDPFieldControlBase::*pMoveXY) (SCsCOL nDX, SCsROW nDY);
+    if (bFieldMove)
+        pMoveXY = &ScDPFieldControlBase::MoveFieldRel;
     else
+        pMoveXY = &ScDPFieldControlBase::MoveSelection;
+    switch( nCode )
     {
-        bKeyEvaluated = true;
-        switch( nCode )
+    case KEY_UP:    (this->*pMoveXY)(  0, -1 ); break;
+    case KEY_DOWN:  (this->*pMoveXY)(  0,  1 ); break;
+    case KEY_LEFT:  (this->*pMoveXY)( -1,  0 ); break;
+    case KEY_RIGHT: (this->*pMoveXY)(  1,  0 ); break;
+    case KEY_HOME:
+        if (bFieldMove)
+            MoveField( 0 );
+        else
         {
-            case KEY_UP:    MoveSelection( 0, -1 ); break;
-            case KEY_DOWN:  MoveSelection( 0, 1 ); break;
-            case KEY_LEFT:  MoveSelection( -1, 0 ); break;
-            case KEY_RIGHT: MoveSelection( 1, 0 ); break;
-            case KEY_HOME:  SetSelectionHome();     break;
-            case KEY_END:   SetSelectionEnd();      break;
-            case KEY_DELETE:
-                mpDlg->NotifyRemoveField( GetFieldType(), mnFieldSelected );
-            break;
-            default:
-                bKeyEvaluated = false;
+            if( !rFields.empty() )
+                MoveSelection( 0 );
         }
+        break;
+    case KEY_END:
+        if (bFieldMove)
+            MoveField( rFields.size() - 1 );
+        else
+        {
+            if( !rFields.empty() )
+                MoveSelection( rFields.size() - 1 );
+        }
+        break;
+    default:
+        if ( !bFieldMove && nCode == KEY_DELETE )
+            mpDlg->NotifyRemoveField( GetFieldType(), mnFieldSelected );
+        else
+            bKeyEvaluated = false;
+        break;
     }
 
     if (bKeyEvaluated)
     {
         ScrollToShowSelection();
-        Redraw();
+        Invalidate();
     }
     else
         Control::KeyInput( rKEvt );
@@ -466,8 +485,8 @@ void ScDPFieldControlBase::KeyInput( const KeyEvent& rKEvt )
 void ScDPFieldControlBase::GetFocus()
 {
     Control::GetFocus();
-    Redraw();
-    if( GetGetFocusFlags() & GETFOCUS_MNEMONIC )    // move field on shortcut
+    Invalidate();
+    if( GetGetFocusFlags() & GETFOCUS_MNEMONIC )
     {
         size_t nOldCount = GetFieldCount();
         mpDlg->NotifyMoveFieldToEnd( GetFieldType() );
@@ -475,62 +494,53 @@ void ScDPFieldControlBase::GetFocus()
             // Scroll to the end only when a new field is inserted.
             ScrollToEnd();
     }
-    else                                            // else change focus
+    else // notify change focus
         mpDlg->NotifyFieldFocus( GetFieldType(), true );
 
-    AccessibleSetFocus(true);
+    AccessRef xRef( mxAccessible );
+    if( xRef.is() )
+        xRef->GotFocus();
 }
 
 void ScDPFieldControlBase::LoseFocus()
 {
     Control::LoseFocus();
-    Redraw();
+    Invalidate();
     mpDlg->NotifyFieldFocus( GetFieldType(), false );
 
-    AccessibleSetFocus(false);
+    AccessRef xRef( mxAccessible );
+    if( xRef.is() )
+        xRef->LostFocus();
 }
 
 Reference<XAccessible> ScDPFieldControlBase::CreateAccessible()
 {
-    pAccessible =
-        new ScAccessibleDataPilotControl(GetAccessibleParentWindow()->GetAccessible(), this);
+    com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessible > xReturn(new ScAccessibleDataPilotControl(GetAccessibleParentWindow()->GetAccessible(), this));
 
-    com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessible > xReturn = pAccessible;
-
-    pAccessible->Init();
-    xAccessible = xReturn;
+    mxAccessible = xReturn;
+    AccessRef xRef( mxAccessible );
+    xRef->Init();
 
     return xReturn;
 }
 
 void ScDPFieldControlBase::FieldFocusChanged(size_t nOldSelected, size_t nFieldSelected)
 {
-    if (!pAccessible)
-        return;
-
-    com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
-    if (xTempAcc.is())
-        pAccessible->FieldFocusChange(nOldSelected, nFieldSelected);
-    else
-        pAccessible = NULL;
+    AccessRef xRef( mxAccessible );
+    if ( xRef.is() )
+        xRef->FieldFocusChange(nOldSelected, nFieldSelected);
 }
 
 void ScDPFieldControlBase::AccessibleSetFocus(bool bOn)
 {
-    if (!pAccessible)
+    AccessRef xRef( mxAccessible );
+    if ( !xRef.is() )
         return;
-
-    com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
-    if (!xTempAcc.is())
-    {
-        pAccessible = NULL;
-        return;
-    }
 
     if (bOn)
-        pAccessible->GotFocus();
+        xRef->GotFocus();
     else
-        pAccessible->LostFocus();
+        xRef->LostFocus();
 }
 
 void ScDPFieldControlBase::UpdateStyle()
@@ -675,12 +685,6 @@ Size ScDPFieldControlBase::GetStdFieldBtnSize() const
     return mpDlg->GetStdFieldBtnSize();
 }
 
-bool ScDPFieldControlBase::IsShortenedText( size_t nIndex ) const
-{
-    const FieldNames& rFields = GetFieldNames();
-    return (nIndex < rFields.size()) && !rFields[nIndex].mbFits;
-}
-
 void ScDPFieldControlBase::MoveField( size_t nDestIndex )
 {
     if (nDestIndex != mnFieldSelected)
@@ -695,7 +699,7 @@ void ScDPFieldControlBase::MoveFieldRel( SCsCOL nDX, SCsROW nDY )
     MoveField( CalcNewFieldIndex( nDX, nDY ) );
 }
 
-void ScDPFieldControlBase::SetSelection(size_t nIndex)
+void ScDPFieldControlBase::MoveSelection(size_t nIndex)
 {
     FieldNames& rFields = GetFieldNames();
     if (rFields.empty())
@@ -709,7 +713,7 @@ void ScDPFieldControlBase::SetSelection(size_t nIndex)
     {
         size_t nOldSelected = mnFieldSelected;
         mnFieldSelected = nIndex;
-        Redraw();
+        Invalidate();
 
         if (HasFocus())
             FieldFocusChanged(nOldSelected, mnFieldSelected);
@@ -718,28 +722,10 @@ void ScDPFieldControlBase::SetSelection(size_t nIndex)
     ScrollToShowSelection();
 }
 
-void ScDPFieldControlBase::SetSelectionHome()
-{
-    const FieldNames& rFields = GetFieldNames();
-    if( !rFields.empty() )
-    {
-        SetSelection( 0 );
-    }
-}
-
-void ScDPFieldControlBase::SetSelectionEnd()
-{
-    const FieldNames& rFields = GetFieldNames();
-    if( !rFields.empty() )
-    {
-        SetSelection( rFields.size() - 1 );
-    }
-}
-
 void ScDPFieldControlBase::MoveSelection(SCsCOL nDX, SCsROW nDY)
 {
     size_t nNewIndex = CalcNewFieldIndex( nDX, nDY );
-    SetSelection( nNewIndex );
+    MoveSelection( nNewIndex );
 }
 
 sal_uInt8 ScDPFieldControlBase::GetNextDupCount(const rtl::OUString& rFieldText) const
@@ -760,12 +746,12 @@ sal_uInt8 ScDPFieldControlBase::GetNextDupCount(const rtl::OUString& rFieldText)
 
 void ScDPFieldControlBase::SelectNext()
 {
-    SetSelection(mnFieldSelected + 1);
+    MoveSelection(mnFieldSelected + 1);
 }
 
-void ScDPFieldControlBase::GrabFocusWithSel( size_t nIndex )
+void ScDPFieldControlBase::GrabFocusAndSelect( size_t nIndex )
 {
-    SetSelection( nIndex );
+    MoveSelection( nIndex );
     if( !HasFocus() )
         GrabFocus();
 }
@@ -773,8 +759,8 @@ void ScDPFieldControlBase::GrabFocusWithSel( size_t nIndex )
 //=============================================================================
 
 ScDPHorFieldControl::ScDPHorFieldControl(
-    ScDPLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption) :
-    ScDPFieldControlBase(pDialog, rResId, pCaption),
+    ScPivotLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption, const char* pcHelpId) :
+    ScDPFieldControlBase(pDialog, rResId, pCaption, pcHelpId),
     maScroll(this, WB_HORZ | WB_DRAG),
     mnFieldBtnRowCount(0),
     mnFieldBtnColCount(0)
@@ -803,15 +789,14 @@ Size ScDPHorFieldControl::GetFieldSize() const
     return GetStdFieldBtnSize();
 }
 
-bool ScDPHorFieldControl::GetFieldIndex( const Point& rPos, size_t& rnIndex )
+size_t ScDPHorFieldControl::GetFieldIndex( const Point& rPos )
 {
-    rnIndex = INVALID_INDEX;
     if (rPos.X() < 0 || rPos.Y() < 0)
-        return false;
+        return PIVOTFIELD_INVALID;
 
     Size aWndSize = GetSizePixel();
     if (rPos.X() > aWndSize.Width() || rPos.Y() > aWndSize.Height())
-        return false;
+        return PIVOTFIELD_INVALID;
 
     size_t nX = rPos.X();
     size_t nY = rPos.Y();
@@ -836,11 +821,11 @@ bool ScDPHorFieldControl::GetFieldIndex( const Point& rPos, size_t& rnIndex )
 
     size_t nOffset = maScroll.GetThumbPos();
     nCol += nOffset; // convert to logical column ID.
-    rnIndex = nCol * mnFieldBtnRowCount + nRow;
+    size_t nIndex = nCol * mnFieldBtnRowCount + nRow;
     size_t nFldCount = GetFieldCount();
-    if (rnIndex > nFldCount)
-        rnIndex = nFldCount;
-    return IsValidIndex(rnIndex);
+    if (nIndex > nFldCount)
+        nIndex = nFldCount;
+    return IsValidIndex(nIndex) ? nIndex : PIVOTFIELD_INVALID;
 }
 
 void ScDPHorFieldControl::Redraw()
@@ -1034,8 +1019,8 @@ IMPL_LINK_NOARG(ScDPHorFieldControl, EndScrollHdl)
 //=============================================================================
 
 ScDPPageFieldControl::ScDPPageFieldControl(
-    ScDPLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption) :
-    ScDPHorFieldControl(pDialog, rResId, pCaption)
+    ScPivotLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption, const char* pcHelpId) :
+    ScDPHorFieldControl(pDialog, rResId, pCaption, pcHelpId)
 {
 }
 
@@ -1043,9 +1028,9 @@ ScDPPageFieldControl::~ScDPPageFieldControl()
 {
 }
 
-ScDPFieldType ScDPPageFieldControl::GetFieldType() const
+ScPivotFieldType ScDPPageFieldControl::GetFieldType() const
 {
-    return TYPE_PAGE;
+    return PIVOTFIELDTYPE_PAGE;
 }
 
 String ScDPPageFieldControl::GetDescription() const
@@ -1056,8 +1041,8 @@ String ScDPPageFieldControl::GetDescription() const
 //=============================================================================
 
 ScDPColFieldControl::ScDPColFieldControl(
-    ScDPLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption) :
-    ScDPHorFieldControl(pDialog, rResId, pCaption)
+    ScPivotLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption, const char* pcHelpId) :
+    ScDPHorFieldControl(pDialog, rResId, pCaption, pcHelpId)
 {
 }
 
@@ -1065,9 +1050,9 @@ ScDPColFieldControl::~ScDPColFieldControl()
 {
 }
 
-ScDPFieldType ScDPColFieldControl::GetFieldType() const
+ScPivotFieldType ScDPColFieldControl::GetFieldType() const
 {
-    return TYPE_COL;
+    return PIVOTFIELDTYPE_COL;
 }
 
 String ScDPColFieldControl::GetDescription() const
@@ -1078,8 +1063,8 @@ String ScDPColFieldControl::GetDescription() const
 //=============================================================================
 
 ScDPRowFieldControl::ScDPRowFieldControl(
-    ScDPLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption ) :
-    ScDPFieldControlBase( pDialog, rResId, pCaption ),
+    ScPivotLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption, const char* pcHelpId) :
+    ScDPFieldControlBase(pDialog, rResId, pCaption, pcHelpId),
     maScroll(this, WB_VERT | WB_DRAG),
     mnColumnBtnCount(0)
 {
@@ -1109,11 +1094,10 @@ Size ScDPRowFieldControl::GetFieldSize() const
     return GetStdFieldBtnSize();
 }
 
-bool ScDPRowFieldControl::GetFieldIndex( const Point& rPos, size_t& rnIndex )
+size_t ScDPRowFieldControl::GetFieldIndex( const Point& rPos )
 {
-    rnIndex = INVALID_INDEX;
     if (rPos.X() < 0 || rPos.Y() < 0)
-        return false;
+        return PIVOTFIELD_INVALID;
 
     long nFldH = GetFieldSize().Height();
     long nThreshold = OUTER_MARGIN_VER + nFldH + ROW_FIELD_BTN_GAP / 2;
@@ -1131,8 +1115,7 @@ bool ScDPRowFieldControl::GetFieldIndex( const Point& rPos, size_t& rnIndex )
         nIndex = mnColumnBtnCount - 1;
 
     nIndex += maScroll.GetThumbPos();
-    rnIndex = nIndex;
-    return IsValidIndex(rnIndex);
+    return IsValidIndex(nIndex) ? nIndex : PIVOTFIELD_INVALID;
 }
 
 void ScDPRowFieldControl::Redraw()
@@ -1230,9 +1213,9 @@ String ScDPRowFieldControl::GetDescription() const
     return ScResId(STR_ACC_DATAPILOT_ROW_DESCR);
 }
 
-ScDPFieldType ScDPRowFieldControl::GetFieldType() const
+ScPivotFieldType ScDPRowFieldControl::GetFieldType() const
 {
-    return TYPE_ROW;
+    return PIVOTFIELDTYPE_ROW;
 }
 
 void ScDPRowFieldControl::ScrollToEnd()
@@ -1310,8 +1293,8 @@ IMPL_LINK_NOARG(ScDPRowFieldControl, EndScrollHdl)
 //=============================================================================
 
 ScDPSelectFieldControl::ScDPSelectFieldControl(
-        ScDPLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption) :
-    ScDPHorFieldControl(pDialog, rResId, pCaption)
+        ScPivotLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption, const char* pcHelpId) :
+    ScDPHorFieldControl(pDialog, rResId, pCaption, pcHelpId)
 {
     SetName(String(ScResId(STR_SELECT)));
 }
@@ -1320,9 +1303,9 @@ ScDPSelectFieldControl::~ScDPSelectFieldControl()
 {
 }
 
-ScDPFieldType ScDPSelectFieldControl::GetFieldType() const
+ScPivotFieldType ScDPSelectFieldControl::GetFieldType() const
 {
-    return TYPE_SELECT;
+    return PIVOTFIELDTYPE_SELECT;
 }
 
 String ScDPSelectFieldControl::GetDescription() const
@@ -1333,8 +1316,8 @@ String ScDPSelectFieldControl::GetDescription() const
 //=============================================================================
 
 ScDPDataFieldControl::ScDPDataFieldControl(
-    ScDPLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption) :
-    ScDPHorFieldControl(pDialog, rResId, pCaption)
+    ScPivotLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption, const char* pcHelpId) :
+    ScDPHorFieldControl(pDialog, rResId, pCaption, pcHelpId)
 {
 }
 
@@ -1342,9 +1325,9 @@ ScDPDataFieldControl::~ScDPDataFieldControl()
 {
 }
 
-ScDPFieldType ScDPDataFieldControl::GetFieldType() const
+ScPivotFieldType ScDPDataFieldControl::GetFieldType() const
 {
-    return TYPE_DATA;
+    return PIVOTFIELDTYPE_DATA;
 }
 
 Size ScDPDataFieldControl::GetFieldSize() const

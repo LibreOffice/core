@@ -223,9 +223,9 @@ void XSpreadsheets2::testImportNamedRangeRedefinedInSource()
 void XSpreadsheets2::testImportNewNamedRange()
 {
 /**
-    in Soucre file, new_rangename range named is defined outside the copied sheet
-    it does not exists in target file
-    test that new_rangename is created and its content points to source file as an external reference
+    in Source file, new_rangename range named is defined outside the copied sheet
+    it does not exists in target file test that new_rangename is created and its
+    content points to source file as an external reference
 */
     importSheetToCopy();
 

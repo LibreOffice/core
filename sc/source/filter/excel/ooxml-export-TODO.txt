@@ -1,11 +1,29 @@
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# This file incorporates work covered by the following license notice:
+#
+#   Licensed to the Apache Software Foundation (ASF) under one or more
+#   contributor license agreements. See the NOTICE file distributed
+#   with this work for additional information regarding copyright
+#   ownership. The ASF licenses this file to you under the Apache
+#   License, Version 2.0 (the "License"); you may not use this file
+#   except in compliance with the License. You may obtain a copy of
+#   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+#
+
 TODO/Unimplemented Calc OOXML Export Features:
 =============================================
 
 Partially implemented features are not mentioned here; grep for OOXTODO within
 sc/source/filter/*.
 
-In updated OfficeFileFormatsProtocols.zip [MS-XLS].pdf, 
-Section §2.3.1 (p.154) provides the record name :: record number mapping, and 
+In updated OfficeFileFormatsProtocols.zip [MS-XLS].pdf,
+Section §2.3.1 (p.154) provides the record name :: record number mapping, and
 Section §2.3.2 (p.165) provides the record number :: record name mapping.
 
 Elements:
@@ -36,7 +54,7 @@ Elements:
         - cfRule (§3.3.1.9)             [ CF 1B1h ]
         - cfvo (§3.3.1.10)              [ CF12 87Ah ]
         - chartsheet (§3.3.1.11)        [ CHARTFRTINFO 850h, FRTWRAPPER 851h...]
-        - color (§3.3.1.14)             [ DXF 88Dh xfpropBorder? 
+        - color (§3.3.1.14)             [ DXF 88Dh xfpropBorder?
                                           XFEXT 87Dh xclrType? ]
         - colorScale (§3.3.1.15)        [ DXF 88Dh? ]
         - control (§3.3.1.18)           [ ??? ]
@@ -95,14 +113,14 @@ Elements:
         - webPublishItem (§3.3.1.94)    [ WebPub 801h ]
         - webPublishItems (§3.3.1.95)
     - AutoFilter Settings (§3.3.2):
-        - colorFilter (§3.3.2.1)        [ AutoFilter12 87Eh, 
+        - colorFilter (§3.3.2.1)        [ AutoFilter12 87Eh,
                                           DXFN12NoCB struct ]
-        - dateGroupItem (§3.3.2.4)      [ AutoFilter12 87Eh, 
+        - dateGroupItem (§3.3.2.4)      [ AutoFilter12 87Eh,
                                           AF12DateInfo struct ]
         - dynamicFilter (§3.3.2.5)      [ AutoFilter12 87Eh, cft field ]
         - filter (§3.3.2.6)             [ AutoFilter12 87Eh, rgCriteria? ]
         - filters (§3.3.2.9)            [ AutoFilter12 87Eh, rgCriteria? ]
-        - iconFilter (§3.3.2.9)         [ AutoFilter12 87Eh, 
+        - iconFilter (§3.3.2.9)         [ AutoFilter12 87Eh,
                                           AF12CellIcon struct ]
     - Shared String Table (§3.4):
         - phoneticPr (§3.4.3)

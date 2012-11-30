@@ -31,8 +31,9 @@
 -o sc.ScAccessiblePreviewHeaderCell
 -o sc.ScAccessiblePreviewTable
 # fdo#45337 -o sc.ScAccessibleSpreadsheet
--o sc.ScAnnotationObj
--o sc.ScAnnotationShapeObj
+# FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
+# -o sc.ScAnnotationObj
+# -o sc.ScAnnotationShapeObj
 -o sc.ScAnnotationsObj
 -o sc.ScAreaLinkObj
 -o sc.ScAreaLinksObj

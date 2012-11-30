@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 
 #ifdef _MSC_VER
@@ -109,7 +100,7 @@ OUString ScDPLabelData::getDisplayName() const
     return maName;
 }
 
-PivotField::PivotField(SCCOL nNewCol, sal_uInt16 nNewFuncMask) :
+ScPivotField::ScPivotField(SCCOL nNewCol, sal_uInt16 nNewFuncMask) :
     nCol( nNewCol ),
     mnOriginalDim(-1),
     nFuncMask( nNewFuncMask ),
@@ -117,19 +108,19 @@ PivotField::PivotField(SCCOL nNewCol, sal_uInt16 nNewFuncMask) :
 {
 }
 
-PivotField::PivotField( const PivotField& r ) :
+ScPivotField::ScPivotField( const ScPivotField& r ) :
     nCol(r.nCol),
     mnOriginalDim(r.mnOriginalDim),
     nFuncMask(r.nFuncMask),
     mnDupCount(r.mnDupCount),
     maFieldRef(r.maFieldRef) {}
 
-long PivotField::getOriginalDim() const
+long ScPivotField::getOriginalDim() const
 {
     return mnOriginalDim >= 0 ? mnOriginalDim : static_cast<long>(nCol);
 }
 
-bool PivotField::operator==( const PivotField& r ) const
+bool ScPivotField::operator==( const ScPivotField& r ) const
 {
     return (nCol          == r.nCol)
         && (mnOriginalDim == r.mnOriginalDim)
@@ -162,11 +153,11 @@ ScPivotParam::~ScPivotParam()
 {
 }
 
-void ScPivotParam::SetLabelData(const ScDPLabelDataVec& r)
+void ScPivotParam::SetLabelData(const ScDPLabelDataVector& r)
 {
-    ScDPLabelDataVec aNewArray;
+    ScDPLabelDataVector aNewArray;
     aNewArray.reserve(r.size());
-    for (ScDPLabelDataVec::const_iterator itr = r.begin(), itrEnd = r.end();
+    for (ScDPLabelDataVector::const_iterator itr = r.begin(), itrEnd = r.end();
          itr != itrEnd; ++itr)
         aNewArray.push_back(new ScDPLabelData(*itr));
 
@@ -211,7 +202,7 @@ bool ScPivotParam::operator==( const ScPivotParam& r ) const
 
 // ============================================================================
 
-ScDPFuncData::ScDPFuncData( SCCOL nCol, sal_uInt16 nFuncMask ) :
+ScPivotFuncData::ScPivotFuncData( SCCOL nCol, sal_uInt16 nFuncMask ) :
     mnCol( nCol ),
     mnOriginalDim(-1),
     mnFuncMask( nFuncMask ),
@@ -219,7 +210,7 @@ ScDPFuncData::ScDPFuncData( SCCOL nCol, sal_uInt16 nFuncMask ) :
 {
 }
 
-ScDPFuncData::ScDPFuncData(
+ScPivotFuncData::ScPivotFuncData(
     SCCOL nCol, long nOriginalDim, sal_uInt16 nFuncMask, sal_uInt8 nDupCount,
     const DataPilotFieldReference& rFieldRef) :
     mnCol( nCol ),
@@ -230,7 +221,7 @@ ScDPFuncData::ScDPFuncData(
 {
 }
 
-bool ScDPFuncData::operator== (const ScDPFuncData& r) const
+bool ScPivotFuncData::operator== (const ScPivotFuncData& r) const
 {
     if (mnCol != r.mnCol || mnOriginalDim != r.mnOriginalDim || mnFuncMask != r.mnFuncMask || mnDupCount != r.mnDupCount)
         return false;

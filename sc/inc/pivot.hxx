@@ -1,30 +1,22 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
 /*
     IMPORTANT:
     Strictly adhere to the following sequence when creating a pivot table:
@@ -59,54 +51,6 @@
 #include <com/sun/star/sheet/DataPilotFieldLayoutInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
 
-struct ScDPLabelData;
-
-// -----------------------------------------------------------------------
-
-struct PivotField
-{
-    SCCOL               nCol; /// 0-based dimension index (not source column index)
-    long                mnOriginalDim; /// >= 0 for duplicated field.
-    sal_uInt16          nFuncMask;
-    sal_uInt8           mnDupCount;
-    ::com::sun::star::sheet::DataPilotFieldReference maFieldRef;
-
-    explicit PivotField( SCCOL nNewCol = 0, sal_uInt16 nNewFuncMask = PIVOT_FUNC_NONE );
-    PivotField( const PivotField& r );
-
-    long getOriginalDim() const;
-    bool                operator==( const PivotField& r ) const;
-};
-
-// -----------------------------------------------------------------------
-
-typedef boost::ptr_vector<ScDPLabelData> ScDPLabelDataVec;
-
-struct ScPivotParam
-{
-    SCCOL           nCol;           // cursor position /
-    SCROW           nRow;           // or start of destination area
-    SCTAB           nTab;
-    ScDPLabelDataVec maLabelArray;
-    ::std::vector<PivotField> maPageFields;
-    ::std::vector<PivotField> maColFields;
-    ::std::vector<PivotField> maRowFields;
-    ::std::vector<PivotField> maDataFields;
-    bool            bIgnoreEmptyRows;
-    bool            bDetectCategories;
-    bool            bMakeTotalCol;
-    bool            bMakeTotalRow;
-
-    ScPivotParam();
-    ScPivotParam( const ScPivotParam& r );
-    ~ScPivotParam();
-
-    ScPivotParam&   operator=       ( const ScPivotParam& r );
-    bool            operator==      ( const ScPivotParam& r ) const;
-    void SetLabelData(const ScDPLabelDataVec& r);
-};
-
-//------------------------------------------------------------------------
 
 struct ScDPName
 {
@@ -163,23 +107,50 @@ struct ScDPLabelData
     ::rtl::OUString SC_DLLPUBLIC getDisplayName() const;
 };
 
-// ============================================================================
+typedef boost::ptr_vector<ScDPLabelData> ScDPLabelDataVector;
 
 struct ScPivotField
 {
-    SCCOL               nCol;
+    SCCOL               nCol; /// 0-based dimension index (not source column index)
+    long                mnOriginalDim; /// >= 0 for duplicated field.
     sal_uInt16          nFuncMask;
-    sal_uInt16          nFuncCount;
+    sal_uInt8           mnDupCount;
     ::com::sun::star::sheet::DataPilotFieldReference maFieldRef;
 
-    explicit            ScPivotField( SCCOL nNewCol = 0, sal_uInt16 nNewFuncMask = PIVOT_FUNC_NONE );
+    explicit ScPivotField( SCCOL nNewCol = 0, sal_uInt16 nNewFuncMask = PIVOT_FUNC_NONE );
+    ScPivotField( const ScPivotField& r );
 
+    long getOriginalDim() const;
     bool                operator==( const ScPivotField& r ) const;
 };
 
-// ============================================================================
+typedef ::std::vector< ScPivotField > ScPivotFieldVector;
 
-struct ScDPFuncData
+struct ScPivotParam
+{
+    SCCOL           nCol;           // Cursor Position /
+    SCROW           nRow;           // or start of destination area
+    SCTAB           nTab;
+    ScDPLabelDataVector maLabelArray;
+    ScPivotFieldVector maPageFields;
+    ScPivotFieldVector maColFields;
+    ScPivotFieldVector maRowFields;
+    ScPivotFieldVector maDataFields;
+    bool            bIgnoreEmptyRows;
+    bool            bDetectCategories;
+    bool            bMakeTotalCol;
+    bool            bMakeTotalRow;
+
+    ScPivotParam();
+    ScPivotParam( const ScPivotParam& r );
+    ~ScPivotParam();
+
+    ScPivotParam&   operator=       ( const ScPivotParam& r );
+    bool            operator==      ( const ScPivotParam& r ) const;
+    void SetLabelData(const ScDPLabelDataVector& r);
+};
+
+struct ScPivotFuncData
 {
     SCCOL               mnCol;
     long                mnOriginalDim;
@@ -187,16 +158,15 @@ struct ScDPFuncData
     sal_uInt8           mnDupCount;
     ::com::sun::star::sheet::DataPilotFieldReference maFieldRef;
 
-    explicit ScDPFuncData( SCCOL nNewCol, sal_uInt16 nNewFuncMask );
-    explicit ScDPFuncData(
-        SCCOL nNewCol, long nOriginalDim, sal_uInt16 nNewFuncMask, sal_uInt8 nDupCount,
+    explicit ScPivotFuncData( SCCOL nCol, sal_uInt16 nFuncMask );
+    explicit ScPivotFuncData(
+        SCCOL nCol, long nOriginalDim, sal_uInt16 nFuncMask, sal_uInt8 nDupCount,
         const ::com::sun::star::sheet::DataPilotFieldReference& rFieldRef );
 
-    bool operator== (const ScDPFuncData& r) const;
+    bool operator== (const ScPivotFuncData& r) const;
 };
 
-// ============================================================================
-
+typedef ::std::vector< ScPivotFuncData > ScPivotFuncDataVector;
 typedef std::vector<ScDPName> ScDPNameVec;
 
 #endif

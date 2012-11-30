@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include "colrowst.hxx"
 
@@ -86,37 +77,37 @@ void XclImpColRowSettings::SetDefWidth( sal_uInt16 nDefWidth, bool bStdWidthRec 
     }
 }
 
-void XclImpColRowSettings::SetWidthRange( SCCOL nScCol1, SCCOL nScCol2, sal_uInt16 nWidth )
+void XclImpColRowSettings::SetWidthRange( SCCOL nCol1, SCCOL nCol2, sal_uInt16 nWidth )
 {
-    nScCol2 = ::std::min( nScCol2, MAXCOL );
-    if (nScCol2 == 256)
+    nCol2 = ::std::min( nCol2, MAXCOL );
+    if (nCol2 == 256)
         // In BIFF8, the column range is 0-255, and the use of 256 probably
         // means the range should extend to the max column if the loading app
         // support columns beyond 255.
-        nScCol2 = MAXCOL;
+        nCol2 = MAXCOL;
 
-    nScCol1 = ::std::min( nScCol1, nScCol2 );
-    maColWidths.insert_back(nScCol1, nScCol2+1, nWidth);
+    nCol1 = ::std::min( nCol1, nCol2 );
+    maColWidths.insert_back(nCol1, nCol2+1, nWidth);
 
     // We need to apply flag values individually since all flag values are aggregated for each column.
-    for (SCCOL nCol = nScCol1; nCol <= nScCol2; ++nCol)
+    for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
         ApplyColFlag(nCol, EXC_COLROW_USED);
 }
 
-void XclImpColRowSettings::HideCol( SCCOL nScCol )
+void XclImpColRowSettings::HideCol( SCCOL nCol )
 {
-    if (!ValidCol(nScCol))
+    if (!ValidCol(nCol))
         return;
 
-    ApplyColFlag(nScCol, EXC_COLROW_HIDDEN);
+    ApplyColFlag(nCol, EXC_COLROW_HIDDEN);
 }
 
-void XclImpColRowSettings::HideColRange( SCCOL nScCol1, SCCOL nScCol2 )
+void XclImpColRowSettings::HideColRange( SCCOL nCol1, SCCOL nCol2 )
 {
-    nScCol2 = ::std::min( nScCol2, MAXCOL );
-    nScCol1 = ::std::min( nScCol1, nScCol2 );
+    nCol2 = ::std::min( nCol2, MAXCOL );
+    nCol1 = ::std::min( nCol1, nCol2 );
 
-    for (SCCOL nCol = nScCol1; nCol <= nScCol2; ++nCol)
+    for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
         ApplyColFlag(nCol, EXC_COLROW_HIDDEN);
 }
 
@@ -189,16 +180,16 @@ void XclImpColRowSettings::SetManualRowHeight( SCROW nScRow )
     maRowFlags.insert_back(nScRow, nScRow+1, nFlagVal);
 }
 
-void XclImpColRowSettings::SetDefaultXF( SCCOL nScCol1, SCCOL nScCol2, sal_uInt16 nXFIndex )
+void XclImpColRowSettings::SetDefaultXF( SCCOL nCol1, SCCOL nCol2, sal_uInt16 nXFIndex )
 {
     /*  assign the default column formatting here to ensure that
         explicit cell formatting is not overwritten. */
-    OSL_ENSURE( (nScCol1 <= nScCol2) && ValidCol( nScCol2 ), "XclImpColRowSettings::SetDefaultXF - invalid column index" );
-    nScCol2 = ::std::min( nScCol2, MAXCOL );
-    nScCol1 = ::std::min( nScCol1, nScCol2 );
+    OSL_ENSURE( (nCol1 <= nCol2) && ValidCol( nCol2 ), "XclImpColRowSettings::SetDefaultXF - invalid column index" );
+    nCol2 = ::std::min( nCol2, MAXCOL );
+    nCol1 = ::std::min( nCol1, nCol2 );
     XclImpXFRangeBuffer& rXFRangeBuffer = GetXFRangeBuffer();
-    for( SCCOL nScCol = nScCol1; nScCol <= nScCol2; ++nScCol )
-        rXFRangeBuffer.SetColumnDefXF( nScCol, nXFIndex );
+    for( SCCOL nCol = nCol1; nCol <= nCol2; ++nCol )
+        rXFRangeBuffer.SetColumnDefXF( nCol, nXFIndex );
 }
 
 void XclImpColRowSettings::Convert( SCTAB nScTab )
@@ -211,13 +202,13 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
     // column widths ----------------------------------------------------------
 
     maColWidths.build_tree();
-    for( SCCOL nScCol = 0; nScCol <= MAXCOL; ++nScCol )
+    for( SCCOL nCol = 0; nCol <= MAXCOL; ++nCol )
     {
         sal_uInt16 nWidth = mnDefWidth;
-        if (GetColFlag(nScCol, EXC_COLROW_USED))
+        if (GetColFlag(nCol, EXC_COLROW_USED))
         {
             sal_uInt16 nTmp;
-            if (maColWidths.search_tree(nScCol, nTmp))
+            if (maColWidths.search_tree(nCol, nTmp))
                 nWidth = nTmp;
         }
 
@@ -226,10 +217,10 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
             document, until filters and outlines are inserted. */
         if( nWidth == 0 )
         {
-            ApplyColFlag(nScCol, EXC_COLROW_HIDDEN);
+            ApplyColFlag(nCol, EXC_COLROW_HIDDEN);
             nWidth = mnDefWidth;
         }
-        rDoc.SetColWidthOnly( nScCol, nScTab, nWidth );
+        rDoc.SetColWidthOnly( nCol, nScTab, nWidth );
     }
 
     // row heights ------------------------------------------------------------
@@ -305,9 +296,9 @@ void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
     ScDocument& rDoc = GetDoc();
 
     // hide the columns
-    for( SCCOL nScCol = 0; nScCol <= MAXCOL; ++nScCol )
-        if (GetColFlag(nScCol, EXC_COLROW_HIDDEN))
-            rDoc.ShowCol( nScCol, nScTab, false );
+    for( SCCOL nCol = 0; nCol <= MAXCOL; ++nCol )
+        if (GetColFlag(nCol, EXC_COLROW_HIDDEN))
+            rDoc.ShowCol( nCol, nScTab, false );
 
     // #i38093# rows hidden by filter need extra flag
     SCROW nFirstFilterScRow = SCROW_MAX;

@@ -24,24 +24,34 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  ************************************************************************/
 
 #ifndef SC_PVLAYDLG_HXX
 #define SC_PVLAYDLG_HXX
 
-#include <vector>
 #include <memory>
+#include <vector>
+
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/scoped_ptr.hpp>
 
-#include <vcl/lstbox.hxx>
-#include <vcl/scrbar.hxx>
+#include <formula/funcutl.hxx>
 #include <svtools/stdctrl.hxx>
+#include <vcl/lstbox.hxx>
 #include <vcl/morebtn.hxx>
-#include "pivot.hxx"
+#include <vcl/scrbar.hxx>
+
 #include "anyrefdg.hxx"
 #include "fieldwnd.hxx"
-#include "formula/funcutl.hxx"
 
 /*==========================================================================*\
 
@@ -63,17 +73,15 @@
 
 \*==========================================================================*/
 
-//============================================================================
-
 class ScViewData;
 class ScDocument;
-struct ScDPFuncData;
+struct ScPivotFuncData;
 class ScDPObject;
 
-//============================================================================
-
-class ScDPLayoutDlg : public ScAnyRefDlg
+class ScPivotLayoutDlg : public ScAnyRefDlg
 {
+    typedef boost::ptr_vector<ScPivotFuncData> ScDPFuncDataVec;
+
     /** data source type */
     enum DataSrcType {
         SRC_REF,     /// range reference
@@ -81,175 +89,204 @@ class ScDPLayoutDlg : public ScAnyRefDlg
         SRC_INVALID  /// invalid range
     };
 public:
-                            ScDPLayoutDlg(
-                                SfxBindings* pB,
-                                SfxChildWindow* pCW,
-                                Window* pParent,
-                                const ScDPObject& rDPObject,
-                                bool bNewOutput );
-    virtual                 ~ScDPLayoutDlg();
+                        ScPivotLayoutDlg(
+                            SfxBindings* pB,
+                            SfxChildWindow* pCW,
+                            Window* pParent,
+                            const ScDPObject& rDPObject,
+                            bool bNewOutput );
+    virtual             ~ScPivotLayoutDlg();
 
-    virtual void            SetReference( const ScRange& rRef, ScDocument* pDoc );
-    virtual sal_Bool            IsRefInputMode() const { return bRefInputMode; }
-    virtual void            SetActive();
-    virtual sal_Bool            Close();
-    virtual void            StateChanged( StateChangedType nStateChange );
-
-    void                    NotifyDoubleClick    ( ScDPFieldType eType, size_t nFieldIndex );
-    PointerStyle            NotifyMouseButtonDown( ScDPFieldType eType, size_t nFieldIndex );
-    void                    NotifyMouseButtonUp  ( const Point& rAt );
-    PointerStyle            NotifyMouseMove      ( const Point& rAt );
-    void                    NotifyFieldFocus     ( ScDPFieldType eType, bool bGotFocus );
-    void                    NotifyMoveFieldToEnd      ( ScDPFieldType eToType );
-    void                    NotifyRemoveField    ( ScDPFieldType eType, size_t nFieldIndex );
+    void                    NotifyDoubleClick    ( ScPivotFieldType eType, size_t nFieldIndex );
+    PointerStyle            NotifyMouseButtonDown( ScPivotFieldType eType, size_t nFieldIndex );
+    void                    NotifyFieldFocus     ( ScPivotFieldType eType, bool bGotFocus );
+    void                    NotifyMoveFieldToEnd      ( ScPivotFieldType eToType );
+    void                    NotifyRemoveField    ( ScPivotFieldType eType, size_t nFieldIndex );
 
     Size                    GetStdFieldBtnSize() const;
 
+    /**
+     * Drop currently dragged field item into specified position.
+     *
+     * @param rScrPos screen position of mouse cursor.
+     * @param eToType type of field at mouse cursor position.
+     */
+    void DropFieldItem( const Point& rScrPos, ScPivotFieldType eToType );
+
+    /**
+     * Get pointer style at current mouse position during dragging of field
+     * item.
+     */
+    PointerStyle GetPointerStyleAtPoint( const Point& rScrPos, ScPivotFieldType eFieldType );
+
+    /**
+     * Determine the type of field at mouse cursor position.
+     *
+     * @param rScrPos mouse cursor position (screen position).
+     */
+    ScPivotFieldType GetFieldTypeAtPoint( const Point& rScrPos ) const;
+
 protected:
-    virtual void            Deactivate();
+    virtual void        Deactivate();
+    virtual void        SetReference( const ScRange& rRef, ScDocument* pDoc );
+    virtual sal_Bool    IsRefInputMode() const;
+    virtual void        SetActive();
+    virtual sal_Bool    Close();
 
 private:
-    typedef boost::ptr_vector<ScDPFuncData> ScDPFuncDataVec;
-    typedef boost::scoped_ptr<ScDPObject> ScDPObjectPtr;
+    /** Returns the localized function name for the specified (1-based) resource index. */
+    inline const rtl::OUString& GetFuncName( sal_uInt16 nFuncIdx ) const { return maFuncNames[nFuncIdx-1]; }
 
-    FixedLine               aFlLayout;
-    FixedText               aFtPage;
-    ScDPPageFieldControl    aWndPage;
-    FixedText               aFtCol;
-    ScDPColFieldControl     aWndCol;
-    FixedText               aFtRow;
-    ScDPRowFieldControl     aWndRow;
-    FixedText               aFtData;
-    ScDPDataFieldControl    aWndData;
-    ScDPSelectFieldControl  aWndSelect;
-    FixedInfo               aFtInfo;
+    /** Fills the field windows from the current pivot table settings. */
+    void                InitFieldWindows();
+    /** Sets focus to the specified field control, if it is not empty. */
+    void                GrabFieldFocus( ScDPFieldControlBase& rFieldWindow );
 
-    FixedLine               aFlAreas;
-
-    // DP source selection
-    FixedText               aFtInArea;
-    ::formula::RefEdit      aEdInPos;
-    ::formula::RefButton    aRbInPos;
-
-    // DP output location
-    ListBox                 aLbOutPos;
-    FixedText               aFtOutArea;
-    formula::RefEdit        aEdOutPos;
-    formula::RefButton      aRbOutPos;
-
-    CheckBox                aBtnIgnEmptyRows;
-    CheckBox                aBtnDetectCat;
-    CheckBox                aBtnTotalCol;
-    CheckBox                aBtnTotalRow;
-    CheckBox                aBtnFilter;
-    CheckBox                aBtnDrillDown;
-
-    OKButton                aBtnOk;
-    CancelButton            aBtnCancel;
-    HelpButton              aBtnHelp;
-    PushButton              aBtnRemove;
-    PushButton              aBtnOptions;
-    MoreButton              aBtnMore;
-
-    const rtl::OUString     aStrUndefined;
-    const rtl::OUString     aStrNewTable;
-    std::vector<rtl::OUString> aFuncNameArr;
-
-    ScDPFieldType           eDnDFromType;
-    size_t                  nDnDFromIndex;
-    bool                    bIsDrag;
-
-    ::formula::RefEdit*     pEditActive;
-
-    Rectangle               aRectPage;
-    Rectangle               aRectRow;
-    Rectangle               aRectCol;
-    Rectangle               aRectData;
-    Rectangle               aRectSelect;
-
-    ScDPLabelDataVec        aLabelDataArr; // (nCol, Field name, Number/Text)
-
-    ScDPFieldType           eLastActiveType;        /// Type of last active area.
-    size_t                  nOffset;                /// Offset of first field in TYPE_SELECT area.
-
-    ScDPFuncDataVec         aSelectArr;
-    ScDPFuncDataVec         aPageArr;
-    ScDPFuncDataVec         aColArr;
-    ScDPFuncDataVec         aRowArr;
-    ScDPFuncDataVec         aDataArr;
-
-    ScDPObjectPtr           xDlgDPObject;
-    ScRange                 aOldRange;
-    ScPivotParam            thePivotData;
-    ScViewData*             pViewData;
-    ScDocument*             pDoc;
-    bool                    bRefInputMode;
-
-private:
-    void                    Init            (bool bNewOutput);
-    void InitWndSelect(const ScDPLabelDataVec& rLabels);
-    void InitWndData(const std::vector<PivotField>& rFields);
-    void                    InitFieldWindow ( const ::std::vector<PivotField>& rFields, ScDPFieldType eType );
-    void                    InitFocus       ();
-    void                    InitFields      ();
-    void                    CalcWndSizes    ();
+    void InitWndSelect(const ScDPLabelDataVector& rLabels);
+    void InitWndData(const std::vector<ScPivotField>& rFields);
+    void                    InitFieldWindow ( const ::std::vector<ScPivotField>& rFields, ScPivotFieldType eType );
     void                    AdjustDlgSize();
     Point                   DlgPos2WndPos   ( const Point& rPt, Window& rWnd );
     ScDPLabelData*          GetLabelData    ( SCsCOL nCol, size_t* pPos = NULL );
     rtl::OUString GetLabelString(SCsCOL nCol);
-    bool                    IsOrientationAllowed( SCsCOL nCol, ScDPFieldType eType );
+    bool                    IsOrientationAllowed( SCsCOL nCol, ScPivotFieldType eType );
     rtl::OUString GetFuncString( sal_uInt16& rFuncMask, bool bIsValue = true );
-    bool Contains( ScDPFuncDataVec* pArr, const ScDPFuncData& rData, size_t& nAt );
+    bool Contains( ScDPFuncDataVec* pArr, const ScPivotFuncData& rData, size_t& nAt );
     void                    Remove          ( ScDPFuncDataVec* pArr, size_t nAt );
-    void                    Insert          ( ScDPFuncDataVec* pArr, const ScDPFuncData& rFData, size_t nAt );
+    void                    Insert          ( ScDPFuncDataVec* pArr, const ScPivotFuncData& rFData, size_t nAt );
 
     void                    AddField        ( size_t nFromIndex,
-                                              ScDPFieldType eToType, const Point& rAtPos );
-    void                    AppendField(size_t nFromIndex, ScDPFieldType eToType);
-    void                    MoveField       ( ScDPFieldType eFromType, size_t nFromIndex,
-                                              ScDPFieldType eToType, const Point&  rAtPos );
-    void                    MoveFieldToEnd(ScDPFieldType eFromType, size_t nFromIndex, ScDPFieldType eToType);
-    void                    RemoveField     ( ScDPFieldType eRemType, size_t nRemIndex );
+                                              ScPivotFieldType eToType, const Point& rAtPos );
+    void                    AppendField(size_t nFromIndex, ScPivotFieldType eToType);
+    void                    MoveField       ( ScPivotFieldType eFromType, size_t nFromIndex,
+                                              ScPivotFieldType eToType, const Point&  rAtPos );
+    void                    MoveFieldToEnd(ScPivotFieldType eFromType, size_t nFromIndex, ScPivotFieldType eToType);
+    void                    RemoveField     ( ScPivotFieldType eRemType, size_t nRemIndex );
 
-    bool                    GetPivotArrays( ::std::vector<PivotField>& rPageFields,
-                                            ::std::vector<PivotField>& rColFields,
-                                            ::std::vector<PivotField>& rRowFields,
-                                            ::std::vector<PivotField>& rDataFields );
+    bool                    GetPivotArrays( ::std::vector<ScPivotField>& rPageFields,
+                                            ::std::vector<ScPivotField>& rColFields,
+                                            ::std::vector<ScPivotField>& rRowFields,
+                                            ::std::vector<ScPivotField>& rDataFields );
 
     void                    UpdateSrcRange();
     void                    RepaintFieldWindows();
 
-    ScDPFieldControlBase* GetFieldWindow(ScDPFieldType eType);
+    /**
+     * Initialize control sizes and the dialog size which depends on them.
+     */
+    void InitControlAndDlgSizes();
+
+    ScDPFieldControlBase* GetFieldWindow(ScPivotFieldType eType);
 
     /**
      * Get pointers to field windows that are <b>not</b> the window of
      * specified type.  The select window type is not included.
      */
     void GetOtherFieldWindows(
-        ScDPFieldType eType, ScDPFieldControlBase*& rpWnd1, ScDPFieldControlBase*& rpWnd2);
+        ScPivotFieldType eType, ScDPFieldControlBase*& rpWnd1, ScDPFieldControlBase*& rpWnd2);
 
-    ScDPFuncDataVec* GetFieldDataArray(ScDPFieldType eType);
+    ScDPFuncDataVec* GetFieldDataArray(ScPivotFieldType eType);
 
     /**
      * Like GetOtherFieldWindows(), get pointers to data arrays of the fields
      * that are <b>not</b> the specified field type.
      */
     void GetOtherDataArrays(
-        ScDPFieldType eType, ScDPFuncDataVec*& rpArr1, ScDPFuncDataVec*& rpArr2);
+        ScPivotFieldType eType, ScDPFuncDataVec*& rpArr1, ScDPFuncDataVec*& rpArr2);
 
-    sal_uInt8 GetNextDupCount(const ScDPFuncDataVec& rArr, const ScDPFuncData& rData, size_t nDataIndex) const;
+    sal_uInt8 GetNextDupCount(const ScDPFuncDataVec& rArr, const ScPivotFuncData& rData, size_t nDataIndex) const;
 
     // Handler
     DECL_LINK( ClickHdl, PushButton * );
-    DECL_LINK( SelAreaHdl, void * );
-    DECL_LINK( MoreClickHdl, void * );
-    DECL_LINK( EdModifyHdl, void * );
-    DECL_LINK( EdInModifyHdl, void * );
     DECL_LINK( OkHdl, void * );
     DECL_LINK( CancelHdl, void * );
+    DECL_LINK( MoreClickHdl, void * );
+    DECL_LINK( EdOutModifyHdl, void * );
+    DECL_LINK( EdInModifyHdl, void * );
+    DECL_LINK( SelAreaHdl, void * );
     DECL_LINK( GetFocusHdl, Control* );
+
+private:
+    struct FieldRect
+    {
+        const Rectangle* mpRect;
+        ScPivotFieldType meType;
+
+        FieldRect(const Rectangle* pRect, ScPivotFieldType eType);
+    };
+
+    typedef boost::scoped_ptr<ScDPObject> ScDPObjectPtr;
+
+    FixedLine               maFlLayout;
+    FixedText               maFtPage;
+    ScDPPageFieldControl    maWndPage;
+    FixedText               maFtCol;
+    ScDPColFieldControl     maWndCol;
+    FixedText               maFtRow;
+    ScDPRowFieldControl     maWndRow;
+    FixedText               maFtData;
+    ScDPDataFieldControl    maWndData;
+    ScDPSelectFieldControl  maWndSelect;
+    FixedInfo               maFtInfo;
+
+    FixedLine               maFlAreas;
+    FixedText               maFtInArea;
+    ::formula::RefEdit      maEdInPos;
+    ::formula::RefButton    maRbInPos;
+    ListBox                 maLbOutPos;
+    FixedText               maFtOutArea;
+    formula::RefEdit        maEdOutPos;
+    formula::RefButton      maRbOutPos;
+    CheckBox                maBtnIgnEmptyRows;
+    CheckBox                maBtnDetectCat;
+    CheckBox                maBtnTotalCol;
+    CheckBox                maBtnTotalRow;
+    CheckBox                maBtnFilter;
+    CheckBox                maBtnDrillDown;
+
+    OKButton                maBtnOk;
+    CancelButton            maBtnCancel;
+    HelpButton              maBtnHelp;
+    PushButton              maBtnRemove;
+    PushButton              maBtnOptions;
+    MoreButton              maBtnMore;
+    std::vector<rtl::OUString> maFuncNames;     /// Localized function names from resource.
+    ScDPObjectPtr           mxDlgDPObject;      /// Clone of the pivot table object this dialog is based on.
+    ScPivotParam            maPivotData;        /// The pivot table field configuration.
+    ScDPLabelDataVector     maLabelData;        /// Information about all dimensions.
+
+    ScViewData*             mpViewData;
+    ScDocument*             mpDoc;
+    ::formula::RefEdit*     mpActiveEdit;
+
+    const rtl::OUString     maStrUndefined;
+    const rtl::OUString     maStrNewTable;
+
+    ScPivotFieldType           meDnDFromType;
+    size_t                  mnDnDFromIndex;
+    bool                    mbIsDrag;
+
+    Rectangle               maRectPage;
+    Rectangle               maRectRow;
+    Rectangle               maRectCol;
+    Rectangle               maRectData;
+    Rectangle               maRectSelect;
+    std::vector<FieldRect> maFieldRects;
+
+    ScPivotFieldType           meLastActiveType;        /// Type of last active area.
+    size_t                  mnOffset;                /// Offset of first field in TYPE_SELECT area.
+
+    ScDPFuncDataVec         maSelectArr;
+    ScDPFuncDataVec         maPageArr;
+    ScDPFuncDataVec         maColArr;
+    ScDPFuncDataVec         maRowArr;
+    ScDPFuncDataVec         maDataArr;
+
+    ScRange                 maOldRange;
+    bool                    mbRefInputMode;
 };
 
-#endif // SC_PVLAYDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+
+#endif
