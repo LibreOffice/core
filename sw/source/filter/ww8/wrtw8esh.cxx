@@ -2282,37 +2282,38 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
                 case sw::Frame::eFormControl:
                     WriteOCXControl(rFmt, nShapeId = GenerateShapeId());
                     break;
-                case sw::Frame::eDrawing:
-                    aWinwordAnchoring.SetAnchoring(rFmt);
-                    const SdrObject* pSdrObj = rFmt.FindRealSdrObject();
-                    if (pSdrObj)
-                    {
-                        bool bSwapInPage = false;
-                        if (!pSdrObj->GetPage())
+                case sw::Frame::eDrawing: {
+                        aWinwordAnchoring.SetAnchoring(rFmt);
+                        const SdrObject* pSdrObj = rFmt.FindRealSdrObject();
+                        if (pSdrObj)
                         {
-                            if (SdrModel* pModel = rWrt.pDoc->GetDrawModel())
+                            bool bSwapInPage = false;
+                            if (!pSdrObj->GetPage())
                             {
-                                if (SdrPage *pPage = pModel->GetPage(0))
+                                if (SdrModel* pModel = rWrt.pDoc->GetDrawModel())
                                 {
-                                    bSwapInPage = true;
-                                    (const_cast<SdrObject*>(pSdrObj))->SetPage(pPage);
+                                    if (SdrPage *pPage = pModel->GetPage(0))
+                                    {
+                                        bSwapInPage = true;
+                                        (const_cast<SdrObject*>(pSdrObj))->SetPage(pPage);
+                                    }
                                 }
                             }
+
+                            nShapeId = AddSdrObject(*pSdrObj);
+
+                            if (bSwapInPage)
+                                (const_cast<SdrObject*>(pSdrObj))->SetPage(0);
                         }
-
-                        nShapeId = AddSdrObject(*pSdrObj);
-
-                        if (bSwapInPage)
-                            (const_cast<SdrObject*>(pSdrObj))->SetPage(0);
-                    }
 #ifdef DBG_UTIL
-                    else
-                        ASSERT( !this, "Where is the SDR-Object?" );
+                        else
+                            ASSERT( !this, "Where is the SDR-Object?" );
 #endif
-            break;
-            default:
-            break;
-                }
+                    }
+                    break;
+                default:
+                    break;
+            }
 
             if( !nShapeId )
             {
