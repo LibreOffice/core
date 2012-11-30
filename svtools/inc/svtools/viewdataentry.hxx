@@ -36,9 +36,9 @@ struct SvViewDataItem
  * SvTreeListBox::CreateViewData(). The item array contains the same number
  * of items as that of the items in its corresponding tree list entry.
  *
- * When an entry is selected, it is both logically and visually selected.
- * When an entry is highlighted, it appears selected visually, but it's not
- * logically selected.
+ * When an entry is selected, it is logically selected and visually
+ * highlighted. When an entry is only highlighted, it looks visually
+ * highlighted, but not logically selected.
  */
 class SVT_DLLPUBLIC SvViewDataEntry
 {

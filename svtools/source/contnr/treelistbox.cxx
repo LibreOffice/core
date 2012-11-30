@@ -3007,9 +3007,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nT
             int bSelTab = nFlags & SV_LBOXTAB_SHOW_SELECTION;
             sal_uInt16 nItemType = pItem->GetType();
 
-            bool bHighlighted = pViewDataEntry->IsHighlighted() || pViewDataEntry->IsSelected();
-
-            if (bHighlighted && bSelTab && !pViewDataEntry->IsCursored())
+            if (pViewDataEntry->IsHighlighted() && bSelTab && !pViewDataEntry->IsCursored())
             {
                 Color aNewWallColor = rSettings.GetHighlightColor();
                 if ( !bInUse || nItemType != SV_ITEM_ID_LBOXCONTEXTBMP )

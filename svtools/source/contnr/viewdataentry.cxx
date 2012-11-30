@@ -45,7 +45,7 @@ SvViewDataEntry::SvViewDataEntry() :
 SvViewDataEntry::SvViewDataEntry( const SvViewDataEntry& rData ) :
     nVisPos(rData.nVisPos),
     mbSelected(false),
-    mbHighlighted(rData.mbHighlighted),
+    mbHighlighted(false),
     mbExpanded(rData.mbExpanded),
     mbFocused(false),
     mbCursored(rData.mbCursored),
@@ -105,6 +105,7 @@ void SvViewDataEntry::SetCursored( bool bCursored )
 void SvViewDataEntry::SetSelected( bool bSelected )
 {
     mbSelected = bSelected;
+    mbHighlighted = bSelected;
 }
 
 void SvViewDataEntry::SetHighlighted( bool bHighlighted )
