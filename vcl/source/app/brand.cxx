@@ -74,13 +74,12 @@ bool Application::LoadBrandBitmap (const char* pName, BitmapEx &rBitmap)
 
     rtl_Locale *pLoc = NULL;
     osl_getProcessLocale (&pLoc);
-    rtl::OLocale aLoc( pLoc );
+    LanguageTag aLanguageTag( *pLoc);
 
     rtl::OUString aName = aBaseName + aPng;
     rtl::OUString aLocaleName = ( aBaseName + rtl::OUString("-") +
-                                  aLoc.getLanguage() +
-                                  rtl::OUString("_") +
-                                  aLoc.getCountry() + aPng );
+                                  aLanguageTag.getBcp47() +
+                                  aPng );
 
     return ( loadPng ("$BRAND_BASE_DIR/program/edition", aLocaleName, rBitmap) ||
              loadPng ("$BRAND_BASE_DIR/program", aLocaleName, rBitmap) ||
@@ -97,13 +96,12 @@ vcl::RenderGraphicRasterizer Application::LoadBrandSVG (const char* pName)
 
     rtl_Locale *pLoc = NULL;
     osl_getProcessLocale (&pLoc);
-    rtl::OLocale aLoc( pLoc );
+    LanguageTag aLanguageTag( *pLoc);
 
     rtl::OUString aName = aBaseName + aSvg;
     rtl::OUString aLocaleName = ( aBaseName + rtl::OUString("-") +
-                                  aLoc.getLanguage() +
-                                  rtl::OUString("_") +
-                                  aLoc.getCountry() + aSvg );
+                                  aLanguageTag.getBcp47() +
+                                  aSvg );
 
     vcl::RenderGraphicRasterizer aRasterizer = loadSvg ("$BRAND_BASE_DIR/program/edition", aLocaleName);
     if (!aRasterizer.GetRenderGraphic().IsEmpty())

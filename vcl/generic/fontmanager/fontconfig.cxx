@@ -283,9 +283,9 @@ namespace
 {
     class localizedsorter
     {
-            rtl::OLocale maLoc;
+            LanguageTag maLoc;
         public:
-            localizedsorter(rtl_Locale* pLoc) : maLoc(pLoc) {}
+            localizedsorter(const LanguageTag& rLanguageTag) : maLoc(rLanguageTag) {}
             FcChar8* bestname(const std::vector<lang_and_element> &elements);
     };
 
@@ -380,9 +380,9 @@ FcResult FontCfgWrapper::LocalizedElementFromPattern(FcPattern* pPattern, FcChar
             }
 
             //possible to-do, sort by UILocale instead of process locale
-            rtl_Locale* pLoc;
+            rtl_Locale* pLoc = NULL;
             osl_getProcessLocale(&pLoc);
-            localizedsorter aSorter(pLoc);
+            localizedsorter aSorter( *pLoc);
             *element = aSorter.bestname(lang_and_elements);
 
             //if this element is a fontname, map the other names to this best-name

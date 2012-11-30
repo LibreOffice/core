@@ -33,8 +33,6 @@
 
 #include <rtl/string.hxx>
 
-#include <rtl/locale.hxx>
-
 #include <testshl/simpleheader.hxx>
 
 #define TEST_ENSURE(c, m) CPPUNIT_ASSERT_MESSAGE((m), (c))
