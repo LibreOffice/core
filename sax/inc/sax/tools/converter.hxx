@@ -95,9 +95,14 @@ public:
     static void convertMeasurePx( ::rtl::OUStringBuffer& rBuffer,
                                   sal_Int32 nValue );
 
-    /** convert string to color */
+    /** convert string to rgb color */
     static bool convertColor( sal_Int32& rColor,
                               const ::rtl::OUString&rValue );
+
+    /** convert string to argb color */
+    static bool convertColor( sal_Int32& rColor,
+                              const ::rtl::OUString&rValue,
+                              const double alpha);
 
     /** convert color to string */
     static void convertColor( ::rtl::OUStringBuffer &rBuffer,
