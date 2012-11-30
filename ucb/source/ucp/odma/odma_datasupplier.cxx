@@ -22,6 +22,7 @@
 #include <windows.h>
 #endif
 #include <vector>
+#include <comphelper/processfactory.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/providerhelper.hxx>
 #include "odma_datasupplier.hxx"
@@ -408,7 +409,7 @@ Reference< XRow > DataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
     if ( getResult( nIndex ) )
     {
         Reference< XRow > xRow = Content::getPropertyValues(
-                                    m_pImpl->m_xSMgr,
+                                    comphelper::getComponentContext(m_pImpl->m_xSMgr),
                                     getResultSet()->getProperties(),
                                     m_pImpl->m_aResults[ nIndex ]->rData,
                                     m_pImpl->m_xContent->getProvider(),

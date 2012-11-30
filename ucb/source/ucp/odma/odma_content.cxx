@@ -31,7 +31,6 @@
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/ucb/XPersistentPropertySet.hpp>
-#include <comphelper/processfactory.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
@@ -66,11 +65,11 @@ using namespace odma;
 //=========================================================================
 //=========================================================================
 
-Content::Content( const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+Content::Content( const uno::Reference< uno::XComponentContext >& rxContext,
                   ContentProvider* pProvider,
                   const uno::Reference< ucb::XContentIdentifier >& Identifier,
                   const ::rtl::Reference<ContentProperties>& _rProps)
-    : ContentImplHelper( rxSMgr, pProvider, Identifier )
+    : ContentImplHelper( rxContext, pProvider, Identifier )
     ,m_aProps(_rProps)
     ,m_pProvider(pProvider)
     ,m_pContent(NULL)
@@ -310,7 +309,7 @@ uno::Any SAL_CALL Content::execute(
             // open as folder - return result set
 
             uno::Reference< ucb::XDynamicResultSet > xSet
-                            = new DynamicResultSet( comphelper::getComponentContext(m_xSMgr),
+                            = new DynamicResultSet( m_xContext,
                                                     this,
                                                     aOpenCommand,
                                                     Environment );
@@ -341,9 +340,7 @@ uno::Any SAL_CALL Content::execute(
             rtl::OUString aURL = m_xIdentifier->getContentIdentifier();
             rtl::OUString sFileURL = openDoc();
             delete m_pContent;
-            m_pContent = new ::ucbhelper::Content
-                                (sFileURL,NULL,
-                                 comphelper::getComponentContext(m_xSMgr));
+            m_pContent = new ::ucbhelper::Content( sFileURL, NULL, m_xContext );
             if(!m_pContent->isDocument())
             {
                 rtl::OUString sErrorMsg("File: ");
@@ -501,8 +498,7 @@ uno::Any SAL_CALL Content::execute(
         sal_Int32 nLastIndex = sFileURL.lastIndexOf( sal_Unicode('/') );
         // Create a new Content object for the "shadow" file
         // corresponding to the opened document from the DMS.
-        ::ucbhelper::Content aContent(sFileURL.copy(0,nLastIndex),NULL,
-                                      comphelper::getComponentContext(m_xSMgr));
+        ::ucbhelper::Content aContent(sFileURL.copy(0,nLastIndex),NULL, m_xContext);
         //  aTransferInfo.NameClash = ucb::NameClash::OVERWRITE;
         aTransferInfo.NewTitle = sFileURL.copy( 1 + nLastIndex );
         // Copy our saved backup copy to the "shadow" file.
@@ -768,7 +764,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             const uno::Reference< ucb::XCommandEnvironment >& /*xEnv*/ )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
-    return getPropertyValues( comphelper::getComponentContext(m_xSMgr),
+    return getPropertyValues( m_xContext,
                               rProperties,
                               m_aProps,
                               rtl::Reference<
