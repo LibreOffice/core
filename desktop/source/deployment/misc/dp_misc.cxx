@@ -36,7 +36,7 @@
 #include "com/sun/star/bridge/UnoUrlResolver.hpp"
 #include "com/sun/star/bridge/XUnoUrlResolver.hpp"
 #include "com/sun/star/deployment/ExtensionManager.hpp"
-#include "com/sun/star/task/XRestartManager.hpp"
+#include "com/sun/star/task/OfficeRestartManager.hpp"
 #include "boost/scoped_array.hpp"
 #include "boost/shared_ptr.hpp"
 #include <comphelper/processfactory.hxx>
@@ -566,9 +566,7 @@ void syncRepositories(
 
     if (bModified)
     {
-        Reference<task::XRestartManager> restarter(
-            comphelper_getProcessComponentContext()->getValueByName(
-                OUSTR( "/singletons/com.sun.star.task.OfficeRestartManager") ), UNO_QUERY );
+        Reference<task::XRestartManager> restarter(task::OfficeRestartManager::get(comphelper::getProcessComponentContext()));
         if (restarter.is())
         {
             OSL_TRACE( "Request restart for modified extensions manager" );
