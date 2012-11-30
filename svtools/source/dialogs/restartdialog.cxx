@@ -37,6 +37,9 @@ public:
         case svtools::RESTART_REASON_PDF_AS_STANDARD_JOB_FORMAT:
             get(reason_, "reason_pdf");
             break;
+        case svtools::RESTART_REASON_BIBLIOGRAPHY_INSTALL:
+            get(reason_, "reason_bibliography_install");
+            break;
         default:
             assert(false); // this cannot happen
         }

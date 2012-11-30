@@ -36,6 +36,8 @@
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/system/SystemShellExecuteException.hpp>
+#include <com/sun/star/sdbc/DriverManager.hpp>
+#include <org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp>
 
 #include <com/sun/star/frame/XComponentLoader.hpp>
 
@@ -45,6 +47,7 @@
 
 #include <svtools/addresstemplate.hxx>
 #include <svtools/miscopt.hxx>
+#include <svtools/restartdialog.hxx>
 #include <svl/visitem.hxx>
 #include <unotools/intlwrapper.hxx>
 
@@ -130,6 +133,66 @@ using namespace ::com::sun::star::system;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::document;
 
+namespace
+{
+    struct BaseInstallerPhoenix : osl::Thread
+    {
+        BaseInstallerPhoenix() {};
+        virtual void run()
+        {
+            try
+            {
+                using namespace org::freedesktop::PackageKit;
+                using namespace svtools;
+                Reference< XSyncDbusSessionHelper > xSyncDbusSessionHelper(SyncDbusSessionHelper::create(comphelper::getProcessComponentContext()));
+                Sequence< ::rtl::OUString > vPackages(1);
+                vPackages[0] = "libreoffice-base";
+                ::rtl::OUString sInteraction;
+                xSyncDbusSessionHelper->InstallPackageNames(0, vPackages, sInteraction);
+                // Ill be back (hopefully)!
+                executeRestartDialog(comphelper::getProcessComponentContext(), NULL, RESTART_REASON_BIBLIOGRAPHY_INSTALL);
+            }
+            catch (Exception & e)
+            {
+                SAL_INFO(
+                    "sfx2.bibliography",
+                    "trying to install LibreOffice Base, caught " << e.Message);
+            }
+        }
+    };
+    // lp#527938, debian#602953, fdo#33266, i#105408
+    static bool lcl_isBaseAvailable()
+    {
+        try
+        {
+            // if we get com::sun::star::sdbc::DriverManager, libsdbc2 is there
+            // and the bibliography is assumed to work
+            return com::sun::star::sdbc::DriverManager::create(comphelper::getProcessComponentContext()).is();
+        }
+        catch (Exception & e)
+        {
+            SAL_INFO(
+                "sfx2.bibliography",
+                "assuming Base to be missing; caught " << e.Message);
+            return false;
+        }
+    }
+    static void lcl_tryLoadBibliography()
+    {
+        // lp#527938, debian#602953, fdo#33266, i#105408
+        // make sure we actually can instanciate services from base first
+        //if(!lcl_isBaseAvailable())
+        {
+            BaseInstallerPhoenix *pBaseInstallerPhoenix = new BaseInstallerPhoenix();
+            pBaseInstallerPhoenix->create();
+            return;
+        }
+        SfxStringItem aURL(SID_FILE_NAME, rtl::OUString(".component:Bibliography/View1"));
+        SfxStringItem aRef(SID_REFERER, rtl::OUString("private:user"));
+        SfxStringItem aTarget(SID_TARGETNAME, rtl::OUString("_blank"));
+        SfxViewFrame::Current()->GetDispatcher()->Execute( SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, &aURL, &aRef, &aTarget, 0L);
+    }
+}
 /// Find the correct location of the document (LICENSE.odt, etc.), and return
 /// it in rURL if found.
 static sal_Bool checkURL( const char *pName, const char *pExt, rtl::OUString &rURL )
@@ -1408,12 +1471,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         break;
 
         case SID_COMP_BIBLIOGRAPHY:
-        {
-            SfxStringItem aURL(SID_FILE_NAME, rtl::OUString(".component:Bibliography/View1"));
-            SfxStringItem aRef(SID_REFERER, rtl::OUString("private:user"));
-            SfxStringItem aTarget(SID_TARGETNAME, rtl::OUString("_blank"));
-            SfxViewFrame::Current()->GetDispatcher()->Execute( SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, &aURL, &aRef, &aTarget, 0L);
-        }
+            lcl_tryLoadBibliography();
         break;
     }
 }
