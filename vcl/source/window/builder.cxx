@@ -238,6 +238,10 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
 
     //drop maps, etc. that we don't need again
     delete m_pParserState;
+
+    SAL_WARN_IF(!m_sID.isEmpty() && !get_by_name(m_sID), "vcl.layout",
+        "Requested top level widget \"" << m_sID.getStr() <<
+        "\" not found in " << sUIFile);
 }
 
 VclBuilder::~VclBuilder()
