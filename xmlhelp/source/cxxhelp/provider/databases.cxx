@@ -583,7 +583,7 @@ helpdatafileproxy::Hdf* Databases::getHelpDataFile( const rtl::OUString& Databas
         key = *pExtensionPath + Language + dbFileName;      // make unique, don't change language
 
     std::pair< DatabasesTable::iterator,bool > aPair =
-        m_aDatabases.insert( DatabasesTable::value_type( key, 0 ) );
+        m_aDatabases.insert( DatabasesTable::value_type( key, reinterpret_cast<helpdatafileproxy::Hdf *>(0) ) );
 
     DatabasesTable::iterator it = aPair.first;
 
