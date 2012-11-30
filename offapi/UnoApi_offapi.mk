@@ -3701,9 +3701,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/ucb,\
 	ContentInfoAttribute \
 	ContentProviderInfo \
 	ContentResultSetCapability \
-	Cookie \
-	CookiePolicy \
-	CookieRequest \
 	CrossReference \
 	DocumentHeaderField \
 	DocumentStoreMode \
@@ -3719,7 +3716,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/ucb,\
 	FolderListEntry \
 	GlobalTransferCommandArgument \
 	GlobalTransferCommandArgument2 \
-	HandleCookiesRequest \
 	IOErrorCode \
 	IllegalIdentifierException \
 	InsertCommandArgument \
@@ -3827,7 +3823,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/ucb,\
 	XFetchProvider \
 	XFetchProviderForContentAccess \
 	XFileIdentifierConverter \
-	XInteractionCookieHandling \
 	XInteractionHandlerSupplier \
 	XInteractionReplaceExistingData \
 	XInteractionSupplyAuthentication \
