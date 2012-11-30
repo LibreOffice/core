@@ -24,6 +24,7 @@
 #include <boost/function.hpp>
 #include <boost/enable_shared_from_this.hpp>
 #include <set>
+#include <iterator>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
