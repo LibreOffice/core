@@ -32,9 +32,13 @@ struct SvViewDataItem
 };
 
 /**
- * View-dependent data for an Entry is created in the virtual function
- * SvTreeListBox::CreateViewData. The View creation of Items should not be
- * changed.
+ * View-dependent data for a tree list entry created in the virtual function
+ * SvTreeListBox::CreateViewData(). The item array contains the same number
+ * of items as that of the items in its corresponding tree list entry.
+ *
+ * When an entry is selected, it is both logically and visually selected.
+ * When an entry is highlighted, it appears selected visually, but it's not
+ * logically selected.
  */
 class SVT_DLLPUBLIC SvViewDataEntry
 {
@@ -43,6 +47,7 @@ class SVT_DLLPUBLIC SvViewDataEntry
     std::vector<SvViewDataItem> maItems;
     sal_uLong nVisPos;
     bool mbSelected:1;
+    bool mbHighlighted:1;
     bool mbExpanded:1;
     bool mbFocused:1;
     bool mbCursored:1;
@@ -54,6 +59,7 @@ public:
     ~SvViewDataEntry();
 
     bool IsSelected() const;
+    bool IsHighlighted() const;
     bool IsExpanded() const;
     bool HasFocus() const;
     bool IsCursored() const;
@@ -61,6 +67,7 @@ public:
     void SetFocus( bool bFocus );
     void SetCursored( bool bCursored );
     void SetSelected( bool bSelected );
+    void SetHighlighted( bool bHighlighted );
     void SetExpanded( bool bExpanded );
     void SetSelectable( bool bSelectable );
 

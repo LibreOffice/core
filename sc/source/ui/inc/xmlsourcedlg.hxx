@@ -56,7 +56,7 @@ class ScXMLSourceDlg : public ScAnyRefDlg
     ScOrcusXMLTreeParam maXMLParam;
     std::set<const SvTreeListEntry*> maCellLinks;
     std::set<const SvTreeListEntry*> maRangeLinks;
-    std::vector<SvTreeListEntry*> maSelectedEntries;
+    std::vector<SvTreeListEntry*> maHighlightedEntries;
 
     boost::scoped_ptr<ScOrcusXMLContext> mpXMLContext;
 

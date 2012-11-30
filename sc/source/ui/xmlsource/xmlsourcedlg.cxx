@@ -239,23 +239,19 @@ void ScXMLSourceDlg::HandleLoseFocus(Control* /*pCtrl*/)
 
 namespace {
 
-class UnselectEntry : std::unary_function<SvTreeListEntry*, void>
+class UnhighlightEntry : std::unary_function<SvTreeListEntry*, void>
 {
     SvTreeListBox& mrTree;
-    const SvTreeListEntry* mpCurrent;
 public:
-    UnselectEntry(SvTreeListBox& rTree, const SvTreeListEntry* pCur) : mrTree(rTree), mpCurrent(pCur) {}
+    UnhighlightEntry(SvTreeListBox& rTree) : mrTree(rTree) {}
 
     void operator() (SvTreeListEntry* p)
     {
-        if (p == mpCurrent)
-            return;
-
         SvViewDataEntry* pView = mrTree.GetViewDataEntry(p);
         if (!pView)
             return;
 
-        pView->SetSelected(false);
+        pView->SetHighlighted(false);
         mrTree.PaintEntry(p);
     }
 };
@@ -268,11 +264,11 @@ void ScXMLSourceDlg::TreeItemSelected()
     if (!pEntry)
         return;
 
-    if (!maSelectedEntries.empty())
+    if (!maHighlightedEntries.empty())
     {
-        // Unselect highlighted entries that are not currently selected.
-        std::for_each(maSelectedEntries.begin(), maSelectedEntries.end(), UnselectEntry(maLbTree, pEntry));
-        maSelectedEntries.clear();
+        // Remove highlights from all previously highlighted entries (if any).
+        std::for_each(maHighlightedEntries.begin(), maHighlightedEntries.end(), UnhighlightEntry(maLbTree));
+        maHighlightedEntries.clear();
     }
 
     ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*pEntry);
@@ -424,9 +420,9 @@ void ScXMLSourceDlg::SelectAllChildEntries(SvTreeListEntry& rEntry)
         SvTreeListEntry& r = *it;
         SelectAllChildEntries(r); // select recursively.
         SvViewDataEntry* p = maLbTree.GetViewDataEntry(&r);
-        p->SetSelected(true);
+        p->SetHighlighted(true);
         maLbTree.PaintEntry(&r);
-        maSelectedEntries.push_back(&r);
+        maHighlightedEntries.push_back(&r);
     }
 }
 
