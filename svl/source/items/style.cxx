@@ -375,15 +375,19 @@ inline bool SfxStyleSheetIterator::IsTrivialSearch()
 
 bool SfxStyleSheetIterator::DoesStyleMatch(SfxStyleSheetBase *pStyle)
 {
-    bool bSearchHidden = ( GetSearchMask() & SFXSTYLEBIT_HIDDEN );
-    bool bMatchVisibility = bSearchHidden || !pStyle->IsHidden();
+    bool bMatchFamily = ((GetSearchFamily() == SFX_STYLE_FAMILY_ALL) ||
+            ( pStyle->GetFamily() == GetSearchFamily() ));
 
-    bool bMatches = ((GetSearchFamily() == SFX_STYLE_FAMILY_ALL) ||
-            ( pStyle->GetFamily() == GetSearchFamily() ))
+    bool bUsed = bSearchUsed ? pStyle->IsUsed( ) : false;
+
+    bool bSearchHidden = ( GetSearchMask() & SFXSTYLEBIT_HIDDEN );
+    bool bMatchVisibility = !( !bSearchHidden && pStyle->IsHidden() && !bUsed );
+    bool bOnlyHidden = GetSearchMask( ) == SFXSTYLEBIT_HIDDEN && pStyle->IsHidden( );
+
+    bool bMatches = bMatchFamily && bMatchVisibility
         && (( pStyle->GetMask() & ( GetSearchMask() & ~SFXSTYLEBIT_USED )) ||
-            ( bSearchUsed ? pStyle->IsUsed() : false ) ||
-            ( GetSearchMask() & SFXSTYLEBIT_ALL_VISIBLE ) == SFXSTYLEBIT_ALL_VISIBLE )
-        && bMatchVisibility;
+            bUsed || bOnlyHidden ||
+            ( GetSearchMask() & SFXSTYLEBIT_ALL_VISIBLE ) == SFXSTYLEBIT_ALL_VISIBLE );
     return bMatches;
 }
 

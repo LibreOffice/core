@@ -2532,6 +2532,9 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
             if( ( !bSearchHidden && pFmt->IsHidden() && !bUsed ) || ( pFmt->IsDefault() && pFmt != rDoc.GetDfltCharFmt() ) )
                 continue;
 
+            if ( nSrchMask == SFXSTYLEBIT_HIDDEN && !pFmt->IsHidden( ) )
+                continue;
+
             if( !bUsed )
             {
                 // Standard is no User template
@@ -2607,6 +2610,9 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
 
             const bool bUsed = bOrganizer || rDoc.IsUsed(*pColl);
             if ( ( !bSearchHidden && pColl->IsHidden( ) && !bUsed ) || pColl->IsDefault() )
+                continue;
+
+            if ( nSMask == SFXSTYLEBIT_HIDDEN && !pColl->IsHidden( ) )
                 continue;
 
             if( !(bIsSearchUsed && bUsed ))
@@ -2750,9 +2756,10 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
 
             bool bUsed = bIsSearchUsed && ( bOrganizer || rDoc.IsUsed(*pFmt));
             if( ( !bSearchHidden && pFmt->IsHidden( ) && !bUsed ) || pFmt->IsDefault() || pFmt->IsAuto() )
-            {
                 continue;
-            }
+
+            if ( nSrchMask == SFXSTYLEBIT_HIDDEN && !pFmt->IsHidden( ) )
+                continue;
 
             const sal_uInt16 nId = pFmt->GetPoolFmtId();
             if( !bUsed )
@@ -2795,6 +2802,9 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                     continue;
             }
 
+            if ( nSrchMask == SFXSTYLEBIT_HIDDEN && !rDesc.IsHidden( ) )
+                continue;
+
             aLst.Append( cPAGE, rDesc.GetName() );
         }
         if ( bAll )
@@ -2811,6 +2821,9 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
             const SwNumRule& rRule = *rNumTbl[ i ];
             if( !rRule.IsAutoRule() )
             {
+                if ( nSrchMask == SFXSTYLEBIT_HIDDEN && !rRule.IsHidden( ) )
+                    continue;
+
                 bool bUsed = bIsSearchUsed && ( bOrganizer || rDoc.IsUsed(rRule) );
                 if( !bUsed )
                 {
