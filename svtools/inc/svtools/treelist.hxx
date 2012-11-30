@@ -22,6 +22,7 @@
 
 #include "svtools/svtdllapi.h"
 #include "svtools/treelistentries.hxx"
+#include "svtools/viewdataentry.hxx"
 
 #include <tools/solar.h>
 #include <tools/link.hxx>
@@ -46,7 +47,6 @@
 
 class SvTreeListEntry;
 class SvListView;
-class SvViewDataEntry;
 
 enum SvSortMode { SortAscending, SortDescending, SortNone };
 
