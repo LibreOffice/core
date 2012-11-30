@@ -382,7 +382,8 @@ FcResult FontCfgWrapper::LocalizedElementFromPattern(FcPattern* pPattern, FcChar
             //possible to-do, sort by UILocale instead of process locale
             rtl_Locale* pLoc = NULL;
             osl_getProcessLocale(&pLoc);
-            localizedsorter aSorter( *pLoc);
+            LanguageTag aTag(*pLoc);
+            localizedsorter aSorter(aTag);
             *element = aSorter.bestname(lang_and_elements);
 
             //if this element is a fontname, map the other names to this best-name
