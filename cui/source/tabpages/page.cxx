@@ -944,7 +944,7 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperBinHdl_Impl)
         {
             aName = aPaperBin;
             aName.Append( sal_Unicode(' ') );
-            aName.Append( OUString::valueOf( i+1 ) );
+            aName.Append( OUString::valueOf( static_cast<sal_Int32>(i+1) ) );
         }
         nEntryPos = aPaperTrayBox.InsertEntry( aName );
         aPaperTrayBox.SetEntryData( nEntryPos, (void*)(sal_uLong)i );
