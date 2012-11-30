@@ -662,6 +662,10 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         else
             pWindow = new VclHButtonBox(pParent);
     }
+    else if (name == "GtkHButtonBox")
+        pWindow = new VclHButtonBox(pParent);
+    else if (name == "GtkVButtonBox")
+        pWindow = new VclVButtonBox(pParent);
     else if (name == "GtkGrid")
         pWindow = new VclGrid(pParent);
     else if (name == "GtkFrame")
