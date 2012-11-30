@@ -421,8 +421,8 @@ namespace writerfilter {
                 void replayBuffer(RTFBuffer_t& rBuffer);
                 /// If we have some unicode or hex characters to send.
                 void checkUnicode(bool bUnicode = true, bool bHex = true);
-                /// If we have a pending continous section break.
-                void checkDeferredContSectBreak();
+                /// If we need a final section break at the end of the document.
+                void setNeedSect(bool bNeedSect = true);
 
                 uno::Reference<uno::XComponentContext> const& m_xContext;
                 uno::Reference<io::XInputStream> const& m_xInputStream;
@@ -514,7 +514,12 @@ namespace writerfilter {
                 rtl::OUStringBuffer m_aUnicodeBuffer;
                 /// Same for hex characters.
                 rtl::OStringBuffer m_aHexBuffer;
-                bool m_bDeferredContSectBreak;
+                /// If the next continous section break should be ignored.
+                bool m_bIgnoreNextContSectBreak;
+                /// If a section break is needed before the end of the doc (false right after a section break).
+                bool m_bNeedSect;
+                /// If aFrame.inFrame() was true in the previous state.
+                bool m_bWasInFrame;
         };
     } // namespace rtftok
 } // namespace writerfilter
