@@ -365,7 +365,6 @@ bool includeProject(OString const & project) {
         "scaddins",
         "sccomp",
         "scp2",
-        "scripting",
         "sd",
         "sdext",
         "setup_native",
