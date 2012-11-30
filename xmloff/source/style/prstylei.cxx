@@ -341,6 +341,8 @@ void XMLPropStyleContext::Finish( sal_Bool bOverwrite )
         if( !xFamilies.is() )
             return;
 
+        mxStyle->setHidden( IsHidden( ) );
+
         // connect parent
         OUString sParent( GetParentName() );
         if( !sParent.isEmpty() )

@@ -65,6 +65,7 @@ class XMLOFF_DLLPUBLIC SvXMLStyleContext : public SvXMLImportContext
     ::rtl::OUString     maAutoName;
     ::rtl::OUString     maParentName;// Will be moved to XMLPropStyle soon!!!!
     ::rtl::OUString     maFollow;   // Will be moved to XMLPropStyle soon!!!!
+    sal_Bool            mbHidden;
 
     ::rtl::OUString     maHelpFile; // Will be removed very soon!!!!
 
@@ -124,6 +125,8 @@ public:
 
     sal_Bool IsNew() const { return mbNew; }
     void SetNew( sal_Bool b ) { mbNew = b; }
+
+    sal_Bool IsHidden() const { return mbHidden; }
 
     // This method is called for every default style
     virtual void SetDefaults();

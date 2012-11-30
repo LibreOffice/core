@@ -280,6 +280,8 @@ void XMLTextStyleContext::Finish( sal_Bool bOverwrite )
          !( bOverwrite || IsNew() ) )
         return;
 
+    xStyle->setHidden( IsHidden( ) );
+
     Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo =
                 xPropSet->getPropertySetInfo();

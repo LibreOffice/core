@@ -86,7 +86,7 @@ public:
                        XMLTextListAutoStylePool *pPool,
                        sal_Bool bExportChapterNumbering = sal_True );
     void exportNumberingRule(
-            const ::rtl::OUString& rName,
+            const ::rtl::OUString& rName, sal_Bool bIsHidden,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::container::XIndexReplace > & xNumRule );
 };

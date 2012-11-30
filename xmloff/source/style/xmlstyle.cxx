@@ -138,6 +138,10 @@ void SvXMLStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
                 (nTmp < 0L) ? 0U : ( (nTmp > USHRT_MAX) ? USHRT_MAX
                                                         : (sal_uInt16)nTmp );
         }
+        else if( IsXMLToken( rLocalName, XML_HIDDEN ) )
+        {
+            mbHidden = rValue.toBoolean();
+        }
     }
 }
 
@@ -149,6 +153,7 @@ SvXMLStyleContext::SvXMLStyleContext(
         const uno::Reference< xml::sax::XAttributeList >&,
         sal_uInt16 nFam, sal_Bool bDefault ) :
     SvXMLImportContext( rImp, nPrfx, rLName ),
+    mbHidden( sal_False ),
     mnHelpId( UCHAR_MAX ),
     mnFamily( nFam ),
     mbValid( sal_True ),

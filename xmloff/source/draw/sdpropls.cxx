@@ -1567,7 +1567,7 @@ void XMLShapeExportPropertyMapper::handleElementItem(
                 {
                     uno::Reference< container::XIndexReplace > xNumRule( rProperty.maValue, uno::UNO_QUERY );
                     if( xNumRule.is() )
-                        const_cast<XMLShapeExportPropertyMapper*>(this)->maNumRuleExp.exportNumberingRule( maStyleName, xNumRule );
+                        const_cast<XMLShapeExportPropertyMapper*>(this)->maNumRuleExp.exportNumberingRule( maStyleName, sal_False, xNumRule );
                 }
             }
             break;

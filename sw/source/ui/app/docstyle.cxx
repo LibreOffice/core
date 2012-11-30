@@ -523,39 +523,36 @@ sal_Bool SwDocStyleSheet::IsHidden( ) const
 {
     sal_Bool bRet = sal_False;
 
-    if(!bPhysical)
+    SwFmt* pFmt = 0;
+    switch(nFamily)
     {
-        SwFmt* pFmt = 0;
-        switch(nFamily)
-        {
-            case SFX_STYLE_FAMILY_CHAR:
-                pFmt = rDoc.FindCharFmtByName( aName );
-                bRet = pFmt && pFmt->IsHidden( );
-                break;
+        case SFX_STYLE_FAMILY_CHAR:
+            pFmt = rDoc.FindCharFmtByName( aName );
+            bRet = pFmt && pFmt->IsHidden( );
+            break;
 
-            case SFX_STYLE_FAMILY_PARA:
-                pFmt = rDoc.FindTxtFmtCollByName( aName );
-                bRet = pFmt && pFmt->IsHidden( );
-                break;
+        case SFX_STYLE_FAMILY_PARA:
+            pFmt = rDoc.FindTxtFmtCollByName( aName );
+            bRet = pFmt && pFmt->IsHidden( );
+            break;
 
-            case SFX_STYLE_FAMILY_FRAME:
-                pFmt = rDoc.FindFrmFmtByName( aName );
-                bRet = pFmt && pFmt->IsHidden( );
-                break;
+        case SFX_STYLE_FAMILY_FRAME:
+            pFmt = rDoc.FindFrmFmtByName( aName );
+            bRet = pFmt && pFmt->IsHidden( );
+            break;
 
-            case SFX_STYLE_FAMILY_PAGE:
-                {
-                    SwPageDesc* pPgDesc = rDoc.FindPageDescByName( aName );
-                    bRet = pPgDesc && pPgDesc->IsHidden( );
-                }
-                break;
-            case SFX_STYLE_FAMILY_PSEUDO:
-                {
-                    SwNumRule* pRule = rDoc.FindNumRulePtr( aName );
-                    bRet = pRule && pRule->IsHidden( );
-                }
-            default:;
-        }
+        case SFX_STYLE_FAMILY_PAGE:
+            {
+                SwPageDesc* pPgDesc = rDoc.FindPageDescByName( aName );
+                bRet = pPgDesc && pPgDesc->IsHidden( );
+            }
+            break;
+        case SFX_STYLE_FAMILY_PSEUDO:
+            {
+                SwNumRule* pRule = rDoc.FindNumRulePtr( aName );
+                bRet = pRule && pRule->IsHidden( );
+            }
+        default:;
     }
 
     return bRet;

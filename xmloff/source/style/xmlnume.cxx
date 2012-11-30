@@ -682,7 +682,7 @@ SvxXMLNumRuleExport::~SvxXMLNumRuleExport()
 }
 
 void SvxXMLNumRuleExport::exportNumberingRule(
-        const OUString& rName,
+        const OUString& rName, sal_Bool bIsHidden,
         const Reference< XIndexReplace >& rNumRule )
 {
     Reference< XPropertySet > xPropSet( rNumRule, UNO_QUERY );
@@ -702,6 +702,10 @@ void SvxXMLNumRuleExport::exportNumberingRule(
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_DISPLAY_NAME,
                                  rName);
     }
+
+    // style:hidden="..."
+    if ( bIsHidden && GetExport( ).getDefaultVersion( ) == SvtSaveOptions::ODFVER_LATEST )
+        GetExport( ).AddAttribute( XML_NAMESPACE_STYLE, XML_HIDDEN, "true" );
 
     // text:consecutive-numbering="..."
     sal_Bool bContNumbering = sal_False;
@@ -747,7 +751,7 @@ sal_Bool SvxXMLNumRuleExport::exportStyle( const Reference< XStyle >& rStyle )
 
     OUString sName = rStyle->getName();
 
-    exportNumberingRule( sName, xNumRule );
+    exportNumberingRule( sName, rStyle->isHidden(), xNumRule );
 
     return sal_True;
 }
@@ -784,7 +788,7 @@ void SvxXMLNumRuleExport::exportOutline()
                    nODFVersion == SvtSaveOptions::ODFVER_011 ) &&
                  GetExport().writeOutlineStyleAsNormalListStyle() )
             {
-                exportNumberingRule( sOutlineStyleName, xNumRule );
+                exportNumberingRule( sOutlineStyleName, sal_False, xNumRule );
             }
             else
             {
