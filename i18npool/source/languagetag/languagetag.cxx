@@ -70,7 +70,6 @@ public:
         if (mnRef != SAL_MAX_UINT32 && mnRef && !--mnRef)
             teardown();
     }
-    void presetDataPath( const rtl::OUString& rPath );
 private:
     rtl::OString maDataPath;   // path to liblangtag data, "|" if system
     sal_uInt32   mnRef;
@@ -110,15 +109,6 @@ void LiblantagDataRef::setup()
 void LiblantagDataRef::teardown()
 {
     lt_db_finalize();
-}
-
-void LiblantagDataRef::presetDataPath( const rtl::OUString& rPath )
-{
-    if (maDataPath.isEmpty())
-    {
-        maDataPath = OUStringToOString( rPath, RTL_TEXTENCODING_UTF8);
-        lt_db_set_datadir( maDataPath.getStr());
-    }
 }
 
 void LiblantagDataRef::setupDataPath()

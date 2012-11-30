@@ -1,6 +1,5 @@
 FontSelectPattern::FontSelectPattern(PhysicalFontFace const&, Size const&, float, int, bool)
 GraphicObject::SwapIn(SvStream*)
-LiblantagDataRef::presetDataPath(rtl::OUString const&)
 Line::GetLength() const
 Line::Intersection(Rectangle const&, Line&) const
 PoHeader::getLanguage() const
