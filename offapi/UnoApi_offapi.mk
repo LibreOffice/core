@@ -1217,7 +1217,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/text,\
 	AccessibleTextEmbeddedObject \
 	AccessibleTextFrameView \
 	AccessibleTextGraphicObject \
-	AdvancedTextDocument \
 	AutoTextContainer \
 	AutoTextEntry \
 	AutoTextGroup \
@@ -1253,7 +1252,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/text,\
 	GenericTextDocument \
 	GlobalDocument \
 	GlobalSettings \
-	HypertextDocument \
 	IllustrationsIndex \
 	InContentMetadata \
 	LineNumberingProperties \
