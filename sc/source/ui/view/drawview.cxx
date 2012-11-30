@@ -769,7 +769,9 @@ void ScDrawView::SyncForGrid( SdrObject* pObj )
     {
         SdrObjList *pLst = ((SdrObjGroup*)pObj)->GetSubList();
         for ( sal_uLong i = 0, nCount = pLst->GetObjCount(); i < nCount; ++i )
-            SyncForGrid( pLst->GetObj( i ) ); }
+            SyncForGrid( pLst->GetObj( i ) );
+    }
+
     ScSplitPos eWhich = pViewData->GetActivePart();
     ScGridWindow* pGridWin = (ScGridWindow*)pViewData->GetActiveWin();
     ScDrawObjData* pData = ScDrawLayer::GetObjDataTab( pObj, nTab );
