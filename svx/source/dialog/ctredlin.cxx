@@ -445,8 +445,7 @@ void SvxRedlinTable::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
         pEntry->AddItem( pButton );
     }
 
-    pContextBmp= new SvLBoxContextBmp( pEntry,0, rColl,rExp,
-                                     SVLISTENTRYFLAG_EXPANDED);
+    pContextBmp= new SvLBoxContextBmp(pEntry,0, rColl,rExp, true);
     pEntry->AddItem( pContextBmp );
 
     pString = new SvLBoxColorString( pEntry, 0, rStr ,aEntryColor);

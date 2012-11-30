@@ -586,8 +586,8 @@ void AtomContainerTreeListBox::SetTabs()
 void AtomContainerTreeListBox::InitEntry(SvTreeListEntry* pEntry, const OUString& aStr,
     const Image& aCollEntryBmp, const Image& aExpEntryBmp)
 {
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry,0, aCollEntryBmp,aExpEntryBmp, SVLISTENTRYFLAG_EXPANDED ) );
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry,0, maImgAtom, maImgAtom, SVLISTENTRYFLAG_EXPANDED ) );
+    pEntry->AddItem( new SvLBoxContextBmp(pEntry,0, aCollEntryBmp,aExpEntryBmp, true) );
+    pEntry->AddItem( new SvLBoxContextBmp(pEntry,0, maImgAtom, maImgAtom, true) );
     pEntry->AddItem( new AtomBoxString( pEntry, aStr ) );
 }
 

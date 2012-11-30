@@ -140,7 +140,7 @@ void SvxFontListBox::InitEntry(
         if( nTreeFlags & TREEFLAG_CHKBTN )
             pEntry->AddItem( new SvLBoxButton( pEntry, eButtonKind, 0,
                                                pCheckButtonData ) );
-        pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, rCollImg, rExpImg, SVLISTENTRYFLAG_EXPANDED ) );
+        pEntry->AddItem( new SvLBoxContextBmp(pEntry, 0, rCollImg, rExpImg, true) );
         pEntry->AddItem( new SvLBoxFontString( pEntry, 0, rEntryText, maEntryFont, mpEntryColor ) );
     }
     else
