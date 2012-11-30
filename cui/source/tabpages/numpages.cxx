@@ -78,7 +78,6 @@ using namespace com::sun::star::i18n;
 using namespace com::sun::star::text;
 using namespace com::sun::star::container;
 using namespace com::sun::star::style;
-using rtl::OUString;
 
 #define NUM_PAGETYPE_BULLET         0
 #define NUM_PAGETYPE_SINGLENUM      1
@@ -170,7 +169,7 @@ static sal_Bool lcl_IsNumFmtSet(SvxNumRule* pNum, sal_uInt16 nLevelMask)
 static Font& lcl_GetDefaultBulletFont()
 {
     static sal_Bool bInit = 0;
-    static Font aDefBulletFont( rtl::OUString("StarSymbol"),
+    static Font aDefBulletFont( OUString("StarSymbol"),
                                 String(), Size( 0, 14 ) );
     if(!bInit)
     {
@@ -504,8 +503,8 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, NumSelectHdl_Impl)
                 SvxNumberFormat aFmt(pActNum->GetLevel(i));
                 aFmt.SetNumberingType( SVX_NUM_CHAR_SPECIAL );
                 // #i93908# clear suffix for bullet lists
-                aFmt.SetPrefix(::rtl::OUString());
-                aFmt.SetSuffix(::rtl::OUString());
+                aFmt.SetPrefix( OUString() );
+                aFmt.SetSuffix( OUString() );
                 aFmt.SetBulletFont(&rActBulletFont);
                 aFmt.SetBulletChar(cChar );
                 aFmt.SetCharFmtName(sBulletCharFmtName);
@@ -716,8 +715,8 @@ IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl)
             if(aFmt.GetNumberingType() == SVX_NUM_CHAR_SPECIAL)
             {
                 // #i93908# clear suffix for bullet lists
-                aFmt.SetPrefix(::rtl::OUString());
-                aFmt.SetSuffix(::rtl::OUString());
+                aFmt.SetPrefix(OUString());
+                aFmt.SetSuffix(OUString());
                 if( !pLevelSettings->sBulletFont.isEmpty() &&
                     pLevelSettings->sBulletFont.compareTo(
                             rActBulletFont.GetName()))
@@ -1281,11 +1280,11 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
     if(!aLevelLB.GetEntryCount())
     {
         for(sal_uInt16 i = 1; i <= pSaveNum->GetLevelCount(); i++)
-            aLevelLB.InsertEntry( UniString::CreateFromInt32(i));
+            aLevelLB.InsertEntry( OUString::valueOf(i));
         if(pSaveNum->GetLevelCount() > 1)
         {
-            String sEntry(rtl::OUString("1 - "));
-            sEntry += UniString::CreateFromInt32( pSaveNum->GetLevelCount() );
+            String sEntry( OUString("1 - ") );
+            sEntry += OUString::valueOf( pSaveNum->GetLevelCount() );
             aLevelLB.InsertEntry(sEntry);
             aLevelLB.SelectEntry(sEntry);
         }
@@ -2302,7 +2301,7 @@ static sal_uInt16 lcl_DrawBullet(VirtualDevice* pVDev,
         aBulletColor.Invert();
     aFont.SetColor(aBulletColor);
     pVDev->SetFont( aFont );
-    rtl::OUString aText(rFmt.GetBulletChar());
+    OUString aText(rFmt.GetBulletChar());
     long nY = nYStart;
     nY -= ((aTmpSize.Height() - rSize.Height())/ 2);
     pVDev->DrawText( Point(nXStart, nY), aText );
@@ -2454,7 +2453,7 @@ void    SvxNumberingPreview::Paint( const Rectangle& /*rRect*/ )
                      rFmt.GetLabelFollowedBy() == SvxNumberFormat::SPACE )
                 {
                     pVDev->SetFont(aStdFont);
-                    rtl::OUString aText(' ');
+                    OUString aText(' ');
                     pVDev->DrawText( Point(nNumberXPos, nYStart), aText );
                     nBulletWidth = nBulletWidth + (sal_uInt16)pVDev->GetTextWidth(aText);
                 }
@@ -2505,7 +2504,7 @@ void    SvxNumberingPreview::Paint( const Rectangle& /*rRect*/ )
         else
         {
             //#i5153# painting gray or black rectangles as 'normal' numbering text
-            String sMsg( RTL_CONSTASCII_USTRINGPARAM( "Preview") );
+            String sMsg( "Preview" );
             long nWidth = pVDev->GetTextWidth(sMsg);
             long nTextHeight = pVDev->GetTextHeight();
             long nRectHeight = nTextHeight * 2 / 3;
@@ -2709,7 +2708,7 @@ SvxNumPositionTabPage::SvxNumPositionTabPage(Window* pParent,
     Point aPos(250,0);
 
     pDebugFixedText->SetPosSizePixel(aPos, aSize);
-    pDebugFixedText->SetText(rtl::OUString("Das ist ein Debug-Text"));
+    pDebugFixedText->SetText( OUString("Das ist ein Debug-Text") );
 #endif
 
     aStandardPB.SetAccessibleRelationMemberOf(&aPositionFL);
@@ -2734,20 +2733,20 @@ void lcl_PrintDebugOutput(FixedText& rFixed, const SvxNumberFormat& rNumFmt)
     sal_Char const sHash[] = " # ";
     if ( rNumFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
     {
-        String sDebugText( UniString::CreateFromInt32( TWIP_TO_MM100(rNumFmt.GetAbsLSpace() ) ) );
-        sDebugText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( sHash ) );
-        sDebugText += UniString::CreateFromInt32( TWIP_TO_MM100(rNumFmt.GetCharTextDistance() ) );
-        sDebugText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( sHash ) );
-        sDebugText += UniString::CreateFromInt32( TWIP_TO_MM100(rNumFmt.GetFirstLineOffset() ) );
+        String sDebugText( OUString::valueOf( TWIP_TO_MM100(rNumFmt.GetAbsLSpace() ) ) );
+        sDebugText.AppendAscii( sHash );
+        sDebugText += OUString::valueOf( TWIP_TO_MM100(rNumFmt.GetCharTextDistance() ) );
+        sDebugText.AppendAscii( sHash );
+        sDebugText += OUString::valueOf( TWIP_TO_MM100(rNumFmt.GetFirstLineOffset() ) );
         rFixed.SetText(sDebugText);
     }
     else if ( rNumFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
     {
-        String sDebugText( UniString::CreateFromInt32( TWIP_TO_MM100(rNumFmt.GetListtabPos() ) ) );
-        sDebugText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( sHash ) );
-        sDebugText += UniString::CreateFromInt32( TWIP_TO_MM100(rNumFmt.GetFirstLineIndent() ) );
-        sDebugText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( sHash ) );
-        sDebugText += UniString::CreateFromInt32( TWIP_TO_MM100(rNumFmt.GetIndentAt() ) );
+        String sDebugText( OUString::valueOf( TWIP_TO_MM100(rNumFmt.GetListtabPos() ) ) );
+        sDebugText.AppendAscii( sHash );
+        sDebugText += OUString::valueOf( TWIP_TO_MM100(rNumFmt.GetFirstLineIndent() ) );
+        sDebugText.AppendAscii( sHash );
+        sDebugText += OUString::valueOf( TWIP_TO_MM100(rNumFmt.GetIndentAt() ) );
         rFixed.SetText(sDebugText);
     }
 
@@ -3045,11 +3044,11 @@ void SvxNumPositionTabPage::Reset( const SfxItemSet& rSet )
     if(!aLevelLB.GetEntryCount())
     {
         for(sal_uInt16 i = 1; i <= pSaveNum->GetLevelCount(); i++)
-            aLevelLB.InsertEntry(UniString::CreateFromInt32(i));
+            aLevelLB.InsertEntry( OUString::valueOf(i) );
         if(pSaveNum->GetLevelCount() > 1)
         {
-            String sEntry(rtl::OUString("1 - "));
-            sEntry.Append( UniString::CreateFromInt32( pSaveNum->GetLevelCount() ) );
+            String sEntry( OUString("1 - ") );
+            sEntry.Append( OUString::valueOf( pSaveNum->GetLevelCount() ) );
             aLevelLB.InsertEntry(sEntry);
             aLevelLB.SelectEntry(sEntry);
         }
