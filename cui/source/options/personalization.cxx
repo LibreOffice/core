@@ -9,7 +9,21 @@
 
 #include "personalization.hxx"
 
-#include <vcl/fixed.hxx>
+/** Dialog that will allow the user to choose a Persona to use.
+
+So far there is no better possibility than just to paste the URL from
+http://www.getpersona.com ...
+*/
+class SelectPersonaDialog : public ModalDialog
+{
+public:
+    SelectPersonaDialog( Window *pParent );
+};
+
+SelectPersonaDialog::SelectPersonaDialog( Window *pParent )
+    : ModalDialog( pParent, "SelectPersonaDialog", "cui/ui/select_persona_dialog.ui" )
+{
+}
 
 SvxPersonalizationTabPage::SvxPersonalizationTabPage( Window *pParent, const SfxItemSet &rSet )
     : SfxTabPage( pParent, "PersonalizationTabPage", "cui/ui/personalization_tab.ui", rSet )
@@ -84,6 +98,9 @@ IMPL_LINK( SvxPersonalizationTabPage, SelectBackground, PushButton*, /*pButton*/
 
 IMPL_LINK( SvxPersonalizationTabPage, SelectPersona, PushButton*, /*pButton*/ )
 {
+    SelectPersonaDialog aDialog( NULL );
+    /* TODO handle the ret val sal_Int16 nReturn =*/ aDialog.Execute();
+
     return 0;
 }
 
