@@ -587,6 +587,8 @@ namespace writerfilter {
                 bool m_bNeedSect;
                 /// If aFrame.inFrame() was true in the previous state.
                 bool m_bWasInFrame;
+                /// A picture was seen in the current paragraph.
+                bool m_bHadPicture;
         };
     } // namespace rtftok
 } // namespace writerfilter
