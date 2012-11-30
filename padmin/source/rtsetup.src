@@ -186,6 +186,7 @@ TabPage RID_RTS_DEVICEPAGE
         Size = MAP_APPFONT( 105, 200 );
         StringList [en-US] =
         {
+            < "Automatic : %s" ; 0; > ;
             < "PostScript (Level from driver)" ; 1; > ;
             < "PostScript Level 1" ; 2; > ;
             < "PostScript Level 2"; 3; > ;

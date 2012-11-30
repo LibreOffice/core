@@ -26,6 +26,8 @@
 
 #include "osl/thread.h"
 
+#include <officecfg/Office/Common.hxx>
+
 #define LSCAPE_STRING String( RTL_CONSTASCII_USTRINGPARAM( "Landscape" ) )
 #define PORTRAIT_STRING String( RTL_CONSTASCII_USTRINGPARAM( "Portrait" ) )
 
@@ -381,11 +383,25 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent ) :
         case  1: m_aSpaceBox.SelectEntry( m_aSpaceColor );break;
     }
 
-    sal_uLong nLevelEntryData = 0;
-    if( m_pParent->m_aJobData.m_nPDFDevice > 0 )
+    sal_uLong nLevelEntryData = 0; //automatic
+    if( m_pParent->m_aJobData.m_nPDFDevice == 2 ) //explicitly PDF
         nLevelEntryData = 10;
-    else
+    else if (m_pParent->m_aJobData.m_nPSLevel > 0) //explicit PS Level
         nLevelEntryData = m_pParent->m_aJobData.m_nPSLevel+1;
+    else if (m_pParent->m_aJobData.m_nPDFDevice == 1) //automatically PDF
+        nLevelEntryData = 0;
+    else if (m_pParent->m_aJobData.m_nPDFDevice == -1) //explicitly PS from driver
+        nLevelEntryData = 1;
+
+    bool bAutoIsPDF = officecfg::Office::Common::Print::Option::Printer::PDFAsStandardPrintJobFormat::get();
+
+    assert(nLevelEntryData != 0 || bAutoIsPDF == m_pParent->m_aJobData.m_nPDFDevice);
+
+    OUString sStr = m_aLevelBox.GetEntry(0);
+    m_aLevelBox.InsertEntry(sStr.replaceAll("%s", bAutoIsPDF ? m_aLevelBox.GetEntry(5) : m_aLevelBox.GetEntry(1)), 0);
+    m_aLevelBox.SetEntryData(0, m_aLevelBox.GetEntryData(1));
+    m_aLevelBox.RemoveEntry(1);
+
     for( sal_uInt16 i = 0; i < m_aLevelBox.GetEntryCount(); i++ )
     {
         if( (sal_uLong)m_aLevelBox.GetEntryData( i ) == nLevelEntryData )
@@ -435,6 +451,8 @@ void RTSDevicePage::update()
 sal_uLong RTSDevicePage::getLevel()
 {
     sal_uLong nLevel = (sal_uLong)m_aLevelBox.GetEntryData( m_aLevelBox.GetSelectEntryPos() );
+    if (nLevel == 0)
+        return 0;   //automatic
     return nLevel < 10 ? nLevel-1 : 0;
 }
 
@@ -443,7 +461,11 @@ sal_uLong RTSDevicePage::getLevel()
 sal_uLong RTSDevicePage::getPDFDevice()
 {
     sal_uLong nLevel = (sal_uLong)m_aLevelBox.GetEntryData( m_aLevelBox.GetSelectEntryPos() );
-    return nLevel > 9 ? 1 : 0;
+    if (nLevel > 9)
+        return 2;   //explictly PDF
+    else if (nLevel == 0)
+        return 0;   //automatic
+    return -1;      //explicitly PS
 }
 
 // ------------------------------------------------------------------
