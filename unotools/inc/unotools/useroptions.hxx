@@ -49,7 +49,7 @@
 
 // class SvtUserOptions --------------------------------------------------
 
-class UNOTOOLS_DLLPUBLIC SvtUserOptions : public utl::detail::Options
+class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtUserOptions : public utl::detail::Options
 {
 public:
     SvtUserOptions ();

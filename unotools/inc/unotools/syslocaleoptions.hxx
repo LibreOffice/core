@@ -42,7 +42,7 @@ class SvtSysLocaleOptions_Impl;
 class SvtListener;
 namespace osl { class Mutex; }
 
-class UNOTOOLS_DLLPUBLIC SvtSysLocaleOptions: public utl::detail::Options
+class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSysLocaleOptions : public utl::detail::Options
 {
     static  SvtSysLocaleOptions_Impl*   pOptions;
     static  sal_Int32                   nRefCount;

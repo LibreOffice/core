@@ -48,7 +48,7 @@ class SvtWorkingSetOptions_Impl;
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class SvtWorkingSetOptions: public utl::detail::Options
+class SAL_WARN_UNUSED SvtWorkingSetOptions : public utl::detail::Options
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods

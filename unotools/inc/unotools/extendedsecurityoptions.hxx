@@ -47,7 +47,7 @@ class SvtExtendedSecurityOptions_Impl;
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class UNOTOOLS_DLLPUBLIC SvtExtendedSecurityOptions: public utl::detail::Options
+class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtExtendedSecurityOptions : public utl::detail::Options
 {
     public:
         // Must be zero based!

@@ -29,7 +29,7 @@
 // class SvtPathOptions --------------------------------------------------
 
 class SvtPathOptions_Impl;
-class UNOTOOLS_DLLPUBLIC SvtPathOptions: public utl::detail::Options
+class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtPathOptions : public utl::detail::Options
 {
 private:
     SvtPathOptions_Impl*    pImp;

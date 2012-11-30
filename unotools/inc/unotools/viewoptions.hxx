@@ -103,7 +103,7 @@ enum EViewType
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class UNOTOOLS_DLLPUBLIC SvtViewOptions: public utl::detail::Options
+class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Options
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods

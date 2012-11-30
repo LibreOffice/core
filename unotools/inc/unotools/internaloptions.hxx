@@ -48,7 +48,7 @@ class SvtInternalOptions_Impl;
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class UNOTOOLS_DLLPUBLIC SvtInternalOptions: public utl::detail::Options
+class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtInternalOptions : public utl::detail::Options
 {
     public:
 

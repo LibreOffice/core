@@ -67,7 +67,7 @@ class SvtHistoryOptions_Impl;
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class UNOTOOLS_DLLPUBLIC SvtHistoryOptions: public utl::detail::Options
+class UNOTOOLS_DLLPUBLIC SvtHistoryOptions SAL_WARN_UNUSED : public utl::detail::Options
 {
     public:
         /*-****************************************************************************************************//**

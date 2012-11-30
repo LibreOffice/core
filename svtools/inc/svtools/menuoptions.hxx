@@ -44,7 +44,7 @@ class SvtMenuOptions_Impl;
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class SVT_DLLPUBLIC SvtMenuOptions: public utl::detail::Options
+class SVT_DLLPUBLIC SAL_WARN_UNUSED SvtMenuOptions: public utl::detail::Options
 {
     public:
 
