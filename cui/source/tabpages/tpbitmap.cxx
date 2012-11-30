@@ -182,7 +182,7 @@ void SvxBitmapTabPage::ActivatePage( const SfxItemSet&  )
 
             // determining (possibly cutting) the name and
             // displaying it in the GroupBox
-            String          aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+            String          aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( ": " );
             INetURLObject   aURL( pBitmapList->GetPath() );
 
             aURL.Append( pBitmapList->GetName() );
@@ -191,7 +191,7 @@ void SvxBitmapTabPage::ActivatePage( const SfxItemSet&  )
             if( aURL.getBase().getLength() > 18 )
             {
                 aString += String(aURL.getBase()).Copy( 0, 15 );
-                aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
+                aString.AppendAscii( "..." );
             }
             else
                 aString += String(aURL.getBase());
@@ -570,7 +570,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
     {
         aName  = aNewName;
         aName += sal_Unicode(' ');
-        aName += UniString::CreateFromInt32( j++ );
+        aName += OUString::valueOf( j++ );
         bDifferent = sal_True;
 
         for( long i = 0; i < nCount && bDifferent; i++ )
@@ -686,7 +686,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
 {
     ResMgr& rMgr = CUI_MGR();
-    SvxOpenGraphicDialog aDlg(rtl::OUString("Import"));
+    SvxOpenGraphicDialog aDlg( OUString("Import") );
     aDlg.EnableLink(sal_False);
 
     if( !aDlg.Execute() )
@@ -906,7 +906,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickLoadHdl_Impl)
         ::sfx2::FileDialogHelper aDlg(
             com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
             0 );
-        String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.sob" ) );
+        String aStrFilterType( "*.sob" );
         aDlg.AddFilter( aStrFilterType, aStrFilterType );
         INetURLObject aFile( SvtPathOptions().GetPalettePath() );
         aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
@@ -938,12 +938,12 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickLoadHdl_Impl)
                 // determining (possibly cutting) the name
                 // displaying it in the GroupBox
                 String aString( ResId( RID_SVXSTR_TABLE, rMgr ) );
-                aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+                aString.AppendAscii( ": " );
 
                 if ( aURL.getBase().getLength() > 18 )
                 {
                     aString += String(aURL.getBase()).Copy( 0, 15 );
-                    aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
+                    aString.AppendAscii( "..." );
                 }
                 else
                     aString += String(aURL.getBase());
@@ -983,7 +983,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickSaveHdl_Impl)
 {
        ::sfx2::FileDialogHelper aDlg(
         com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
-    String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.sob" ) );
+    String aStrFilterType( "*.sob" );
     aDlg.AddFilter( aStrFilterType, aStrFilterType );
 
     INetURLObject aFile( SvtPathOptions().GetPalettePath() );
@@ -994,7 +994,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickSaveHdl_Impl)
         aFile.Append( pBitmapList->GetName() );
 
         if( aFile.getExtension().isEmpty() )
-            aFile.SetExtension(rtl::OUString("sob"));
+            aFile.SetExtension( OUString("sob") );
     }
 
     aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
@@ -1014,12 +1014,12 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickSaveHdl_Impl)
             // determining (possibly cutting) the name
             // displaying it in the GroupBox
             String aString( CUI_RES( RID_SVXSTR_TABLE ) );
-            aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+            aString.AppendAscii( ": " );
 
             if ( aURL.getBase().getLength() > 18 )
             {
                 aString += String(aURL.getBase()).Copy( 0, 15 );
-                aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
+                aString.AppendAscii( "..." );
             }
             else
                 aString += String(aURL.getBase());

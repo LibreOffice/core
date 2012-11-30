@@ -1014,8 +1014,8 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( sal_Bool bCheckCatChange /*= sa
             aEdLeadZeroes.Enable();
             aBtnNegRed.Enable();
             aBtnThousand.Enable();
-            aEdDecimals  .SetText( UniString::CreateFromInt32( nDecimals ) );
-            aEdLeadZeroes.SetText( UniString::CreateFromInt32( nZeroes ) );
+            aEdDecimals  .SetText( OUString::valueOf( nDecimals ) );
+            aEdLeadZeroes.SetText( OUString::valueOf( nZeroes ) );
             aBtnNegRed   .Check( bNegRed );
             aBtnThousand .Check( bThousand );
             break;
@@ -1036,8 +1036,8 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( sal_Bool bCheckCatChange /*= sa
             aEdLeadZeroes   .Disable();
             aBtnNegRed      .Disable();
             aBtnThousand    .Disable();
-            aEdDecimals     .SetText( UniString::CreateFromInt32( 0 ) );
-            aEdLeadZeroes   .SetText( UniString::CreateFromInt32( 0 ) );
+            aEdDecimals     .SetText( OUString::valueOf( 0 ) );
+            aEdLeadZeroes   .SetText( OUString::valueOf( 0 ) );
             aBtnNegRed      .Check( sal_False );
             aBtnThousand    .Check( sal_False );
     }

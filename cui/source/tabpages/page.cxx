@@ -663,7 +663,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
 void SvxPageDescPage::FillUserData()
 {
     if ( SVX_PAGE_MODE_PRESENTATION == eMode )
-        SetUserData( UniString::CreateFromInt32( (sal_Int32)aAdaptBox.IsChecked() ) );
+        SetUserData( OUString::valueOf( (sal_Int32)aAdaptBox.IsChecked() ) );
 }
 
 // -----------------------------------------------------------------------
@@ -944,7 +944,7 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperBinHdl_Impl)
         {
             aName = aPaperBin;
             aName.Append( sal_Unicode(' ') );
-            aName.Append( UniString::CreateFromInt32( i+1 ) );
+            aName.Append( OUString::valueOf( i+1 ) );
         }
         nEntryPos = aPaperTrayBox.InsertEntry( aName );
         aPaperTrayBox.SetEntryData( nEntryPos, (void*)(sal_uLong)i );
