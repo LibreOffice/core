@@ -22,7 +22,6 @@
 
 #include <stdio.h>
 #include <svtools/ehdl.hxx>
-#include <unotools/startoptions.hxx>
 #include <svl/itempool.hxx>
 #include <svl/urihelper.hxx>
 #include <svtools/helpopt.hxx>

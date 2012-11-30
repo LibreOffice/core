@@ -36,7 +36,6 @@
 #include <unotools/useroptions.hxx>
 #include <unotools/fontoptions.hxx>
 #include <svtools/menuoptions.hxx>
-#include <unotools/startoptions.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svtools/miscopt.hxx>
 #include <unotools/syslocaleoptions.hxx>

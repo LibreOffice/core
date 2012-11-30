@@ -1447,7 +1447,7 @@ int Desktop::Main()
     Reference< XDesktop > xDesktop;
     try
     {
-        RegisterServices();
+        RegisterServices(comphelper::getProcessComponentContext());
 
         SetSplashScreenProgress(25);
 

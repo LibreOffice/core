@@ -38,6 +38,7 @@
 #include <uno/current_context.hxx>
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
+#include <officecfg/Setup.hxx>
 #include <osl/file.hxx>
 #include <osl/module.h>
 #include <rtl/uri.hxx>
@@ -53,7 +54,6 @@
 #include <unotools/ucbhelper.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/svapp.hxx>
-#include <unotools/startoptions.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/internaloptions.hxx>
 
@@ -119,7 +119,7 @@ void Desktop::InitApplicationServiceManager()
     comphelper::setProcessServiceFactory(sm);
 }
 
-void Desktop::RegisterServices()
+void Desktop::RegisterServices(Reference< XComponentContext > const & context)
 {
     if( !m_bServicesRegistered )
     {
@@ -137,7 +137,8 @@ void Desktop::RegisterServices()
             Application::EnableHeadlessMode(false);
 
         // read accept string from configuration
-        rtl::OUString conDcpCfg(SvtStartOptions().GetConnectionURL());
+        OUString conDcpCfg(
+            officecfg::Setup::Office::ooSetupConnectionURL::get(context));
         if (!conDcpCfg.isEmpty()) {
             createAcceptor(conDcpCfg);
         }

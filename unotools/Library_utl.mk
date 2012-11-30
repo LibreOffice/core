@@ -100,7 +100,6 @@ $(eval $(call gb_Library_add_exception_objects,utl,\
     unotools/source/config/saveopt \
     unotools/source/config/searchopt \
     unotools/source/config/securityoptions \
-    unotools/source/config/startoptions \
     unotools/source/config/syslocaleoptions \
     unotools/source/config/useroptions \
     unotools/source/config/viewoptions \

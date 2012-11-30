@@ -83,7 +83,6 @@ $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/saveopt.hxx,unotools
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/searchopt.hxx,unotools/searchopt.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/securityoptions.hxx,unotools/securityoptions.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/sharedunocomponent.hxx,unotools/sharedunocomponent.hxx))
-$(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/startoptions.hxx,unotools/startoptions.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/streamhelper.hxx,unotools/streamhelper.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/streamsection.hxx,unotools/streamsection.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/streamwrap.hxx,unotools/streamwrap.hxx))

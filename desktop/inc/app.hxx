@@ -32,6 +32,10 @@
 #include <com/sun/star/uno/Reference.h>
 #include <osl/mutex.hxx>
 
+namespace com { namespace sun { namespace star { namespace uno {
+    class XComponentContext;
+} } } }
+
 using namespace com::sun::star::task;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -131,7 +135,9 @@ class Desktop : public Application
             // throws an exception upon failure
 
     private:
-        void                    RegisterServices();
+        void RegisterServices(
+            com::sun::star::uno::Reference<
+                com::sun::star::uno::XComponentContext > const & context);
         void                    DeregisterServices();
 
         void                    CreateTemporaryDirectory();

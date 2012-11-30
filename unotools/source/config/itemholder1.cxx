@@ -46,7 +46,6 @@
 #include <unotools/saveopt.hxx>
 #include <unotools/searchopt.hxx>
 #include <unotools/securityoptions.hxx>
-#include <unotools/startoptions.hxx>
 #include <unotools/viewoptions.hxx>
 #include <unotools/workingsetoptions.hxx>
 #include <unotools/xmlaccelcfg.hxx>
@@ -240,10 +239,6 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
 
         case E_SECURITYOPTIONS :
             rItem.pItem = new SvtSecurityOptions();
-            break;
-
-        case E_STARTOPTIONS :
-            rItem.pItem = new SvtStartOptions();
             break;
 
         case E_VIEWOPTIONS_DIALOG :
