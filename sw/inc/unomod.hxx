@@ -19,7 +19,6 @@
 #ifndef _UNOMOD_HXX
 #define _UNOMOD_HXX
 
-#include <com/sun/star/text/XModule.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/view/XPrintSettingsSupplier.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
@@ -27,7 +26,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 #include <cppuhelper/implbase3.hxx> // helper for implementations
-#include <cppuhelper/implbase4.hxx> // helper for implementations
 #include <comphelper/ChainablePropertySet.hxx>
 #include <comphelper/SettingsHelper.hxx>
 #include <usrpref.hxx>
@@ -39,9 +37,8 @@ class SwDoc;
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL SwXModule_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & );
 
-class SwXModule : public cppu::WeakImplHelper4
+class SwXModule : public cppu::WeakImplHelper3
 <
-    ::com::sun::star::text::XModule,
     ::com::sun::star::view::XViewSettingsSupplier,
     ::com::sun::star::view::XPrintSettingsSupplier,
     ::com::sun::star::lang::XServiceInfo

@@ -27,7 +27,6 @@
 #include <com/sun/star/style/TabAlign.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/style/BreakType.hpp>
-#include <com/sun/star/text/XModule.hpp>
 #include <com/sun/star/text/XTextRangeMover.hpp>
 #include <com/sun/star/text/XFootnotesSettingsSupplier.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
