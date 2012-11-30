@@ -59,6 +59,7 @@ $(filter_GEN_svg_Tokens_cxx) : $(filter_GEN_svg_Tokens_gperf)
 			 > $(filter_GEN_svg_Tokens_cxx))
 
 $(filter_GEN_svg_Script_hxx) : \
+			$(gb_PYTHONTARGET) \
 			$(filter_SRC_svg_PresentationEngine) $(filter_SRC_svg_Js2Hxx) \
 			| $(filter_SVGWORK)/.dir
 	$(call gb_Output_announce,$@,build,PY ,1)
