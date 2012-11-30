@@ -35,7 +35,6 @@
 #include <unotools/useroptions.hxx>
 #include <unotools/fontoptions.hxx>
 #include <svtools/menuoptions.hxx>
-#include <unotools/startoptions.hxx>
 #include <svl/languageoptions.hxx>
 #include <svtools/miscopt.hxx>
 #include <unotools/printwarningoptions.hxx>
@@ -858,7 +857,6 @@ sal_Bool OfaViewTabPage::FillItemSet( SfxItemSet& )
 {
     SvtFontOptions aFontOpt;
     SvtMenuOptions aMenuOpt;
-    SvtStartOptions aStartOpt;
 
     sal_Bool bModified = sal_False;
     sal_Bool bMenuOptModified = sal_False;
