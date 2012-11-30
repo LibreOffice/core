@@ -304,17 +304,6 @@ void ScXMLSourceDlg::TreeItemSelected()
     }
 
     mpCurRefEntry = getReferenceEntry(maLbTree, pEntry);
-    if (mpCurRefEntry != pEntry)
-    {
-        // Highlight the reference entry if it differs from the current entry.
-        SvViewDataEntry* pView = maLbTree.GetViewDataEntry(mpCurRefEntry);
-        if (pView)
-        {
-            pView->SetHighlighted(true);
-            maLbTree.PaintEntry(mpCurRefEntry);
-            maHighlightedEntries.push_back(mpCurRefEntry);
-        }
-    }
 
     ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*mpCurRefEntry);
     OSL_ASSERT(pUserData);
@@ -402,6 +391,16 @@ void ScXMLSourceDlg::RepeatElementSelected(SvTreeListEntry& rEntry)
     {
         SetNonLinkable();
         return;
+    }
+
+    SvViewDataEntry* p = maLbTree.GetViewDataEntry(&rEntry);
+    if (!p->IsHighlighted())
+    {
+        // Highlight the entry if not highlighted already.  This can happen
+        // when the current entry is a child entry of a repeat element entry.
+        p->SetHighlighted(true);
+        maLbTree.PaintEntry(&rEntry);
+        maHighlightedEntries.push_back(&rEntry);
     }
 
     SelectAllChildEntries(rEntry);
