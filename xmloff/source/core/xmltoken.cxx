@@ -882,6 +882,8 @@ namespace xmloff { namespace token {
         TOKEN( "full",                            XML_FULL ),
         TOKEN( "full-screen",                     XML_FULL_SCREEN ),
         TOKEN( "function",                        XML_FUNCTION ),
+        TOKEN( "fx",                              XML_FX ),
+        TOKEN( "fy",                              XML_FY ),
         TOKEN( "g",                               XML_G ),
         TOKEN( "gamma",                           XML_GAMMA ),
         TOKEN( "gap",                             XML_GAP ),
@@ -901,6 +903,7 @@ namespace xmloff { namespace token {
         TOKEN( "radial",                          XML_GRADIENTSTYLE_RADIAL ),
         TOKEN( "rectangular",                     XML_GRADIENTSTYLE_RECTANGULAR ),
         TOKEN( "square",                          XML_GRADIENTSTYLE_SQUARE ),
+        TOKEN( "gradientTransform",               XML_GRADIENTTRANSFORM ),
         TOKEN( "grand-total",                     XML_GRAND_TOTAL ),
         TOKEN( "graphic",                         XML_GRAPHIC ),
         TOKEN( "gray",                            XML_GRAY ),
@@ -1671,6 +1674,7 @@ namespace xmloff { namespace token {
         TOKEN( "split-position",                  XML_SPLIT_POSITION ),
         TOKEN( "split-row",                       XML_SPLIT_ROW ),
         TOKEN( "spreadsheet",                     XML_SPREADSHEET ),
+        TOKEN( "spreadMethod",                    XML_SPREADMETHOD ),
         TOKEN( "sql-statement",                   XML_SQL_STATEMENT ),
         TOKEN( "stacked",                         XML_STACKED ),
         TOKEN( "stagger-even",                    XML_STAGGER_EVEN ),
@@ -1706,6 +1710,8 @@ namespace xmloff { namespace token {
         TOKEN( "stock-updown-bars",               XML_STOCK_UPDOWN_BARS ),
         TOKEN( "stock-with-volume",               XML_STOCK_WITH_VOLUME ),
         TOKEN( "stop",                            XML_STOP ),
+        TOKEN( "stop-color",                      XML_STOPCOLOR ),
+        TOKEN( "stop-opacity",                    XML_STOPOPACITY ),
         TOKEN( "stretch",                         XML_STRETCH ),
         TOKEN( "stretch-from-bottom",             XML_STRETCH_FROM_BOTTOM ),
         TOKEN( "stretch-from-left",               XML_STRETCH_FROM_LEFT ),
@@ -1739,6 +1745,7 @@ namespace xmloff { namespace token {
         TOKEN( "subtotal-rules",                  XML_SUBTOTAL_RULES ),
         TOKEN( "suffix",                          XML_SUFFIX ),
         TOKEN( "sum",                             XML_SUM ),
+        TOKEN( "linearGradient",                  XML_SVGLINEARGRADIENT ),
         TOKEN( "swiss",                           XML_SWISS ),
         TOKEN( "symbol",                          XML_SYMBOL ),
         TOKEN( "symbol-height",                   XML_SYMBOL_HEIGHT ),
@@ -3194,8 +3201,8 @@ namespace xmloff { namespace token {
 
         XMLTokenEntry* pToken = &aTokenList[(sal_uInt16)eToken];
         if (!pToken->pOUString)
-            pToken->pOUString = new OUString( pToken->pChar, pToken->nLength,
-                                RTL_TEXTENCODING_ASCII_US );
+           pToken->pOUString = new OUString( pToken->pChar, pToken->nLength,
+                                             RTL_TEXTENCODING_ASCII_US );
         return *pToken->pOUString;
     }
 
