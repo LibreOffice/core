@@ -16,6 +16,8 @@
 #include <i18npool/i18npooldllapi.h>
 #include <i18npool/lang.h>
 
+typedef struct _rtl_Locale rtl_Locale;  // as in rtl/locale.h
+
 
 /** Wrapper for liblangtag BCP 47 language tags, MS-LangIDs, locales and
     conversions in between.
@@ -56,6 +58,12 @@ public:
         use in new code.
      */
     explicit LanguageTag( const rtl::OUString& rLanguage, const rtl::OUString& rCountry );
+
+    /** Init LanguageTag with rtl_Locale.
+
+        This is a convenience ctor.
+     */
+    explicit LanguageTag( const rtl_Locale & rLocale );
 
     LanguageTag( const LanguageTag & rLanguageTag );
     ~LanguageTag();

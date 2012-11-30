@@ -13,6 +13,7 @@
 #include <rtl/bootstrap.hxx>
 #include <osl/file.hxx>
 #include <rtl/instance.hxx>
+#include <rtl/locale.h>
 
 //#define erDEBUG
 
@@ -217,6 +218,27 @@ LanguageTag::LanguageTag( const rtl::OUString& rLanguage, const rtl::OUString& r
         meIsIsoLocale( DECISION_DONTKNOW),
         meIsIsoODF( DECISION_DONTKNOW),
         mbSystemLocale( rLanguage.isEmpty()),
+        mbInitializedBcp47( false),
+        mbInitializedLocale( !mbSystemLocale),
+        mbInitializedLangID( false),
+        mbCachedLanguage( false),
+        mbCachedScript( false),
+        mbCachedCountry( false),
+        mbIsFallback( false)
+{
+    theDataRef::get().incRef();
+}
+
+
+LanguageTag::LanguageTag( const rtl_Locale & rLocale )
+    :
+        maLocale( rLocale.Language, rLocale.Country, rLocale.Variant),
+        mpImplLangtag( NULL),
+        mnLangID( LANGUAGE_DONTKNOW),
+        meIsValid( DECISION_DONTKNOW),
+        meIsIsoLocale( DECISION_DONTKNOW),
+        meIsIsoODF( DECISION_DONTKNOW),
+        mbSystemLocale( maLocale.Language.isEmpty()),
         mbInitializedBcp47( false),
         mbInitializedLocale( !mbSystemLocale),
         mbInitializedLangID( false),
