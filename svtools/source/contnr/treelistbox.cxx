@@ -37,6 +37,7 @@
 #include <svtools/svmedit.hxx>
 #include <svtools/svlbitm.hxx>
 #include "svtools/treelistentry.hxx"
+#include "svtools/viewdataentry.hxx"
 #include "svimpbox.hxx"
 
 #include <set>
@@ -364,6 +365,12 @@ const Size& SvLBoxItem::GetSize(const SvTreeListBox* pView, const SvTreeListEntr
     DBG_CHKTHIS(SvLBoxItem,0);
     const SvViewDataItem* pViewData = pView->GetViewDataItem( pEntry, this );
     return pViewData->maSize;
+}
+
+const Size& SvLBoxItem::GetSize(const SvViewDataEntry* pData, sal_uInt16 nItemPos) const
+{
+    const SvViewDataItem* pIData = pData->GetItem(nItemPos);
+    return pIData->maSize;
 }
 
 struct SvTreeListBoxImpl

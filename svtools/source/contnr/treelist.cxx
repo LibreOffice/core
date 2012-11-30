@@ -19,6 +19,7 @@
 
 #include "svtools/treelist.hxx"
 #include "svtools/treelistentry.hxx"
+#include "svtools/viewdataentry.hxx"
 #include "osl/diagnose.h"
 
 #include <stdio.h>

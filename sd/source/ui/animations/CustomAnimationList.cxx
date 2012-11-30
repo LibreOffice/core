@@ -38,6 +38,7 @@
 
 #include "svtools/svlbitm.hxx"
 #include "svtools/treelistentry.hxx"
+#include "svtools/viewdataentry.hxx"
 
 #include "res_bmp.hrc"
 #include "glob.hrc"

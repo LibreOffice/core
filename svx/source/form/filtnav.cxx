@@ -56,6 +56,7 @@
 #include <tools/diagnose_ex.h>
 #include <svtools/svlbitm.hxx>
 #include "svtools/treelistentry.hxx"
+#include "svtools/viewdataentry.hxx"
 
 #include <functional>
 

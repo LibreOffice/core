@@ -28,6 +28,7 @@
 #include <svtools/svlbitm.hxx>
 #include <svtools/treelistbox.hxx>
 #include "svtools/treelistentry.hxx"
+#include "svtools/viewdataentry.hxx"
 #include <vcl/wrkwin.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>

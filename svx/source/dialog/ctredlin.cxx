@@ -23,6 +23,7 @@
 #include <sfx2/module.hxx>
 #include <svtools/txtcmp.hxx>
 #include <svtools/svlbitm.hxx>
+#include "svtools/viewdataentry.hxx"
 #include <unotools/charclass.hxx>
 
 #include <editeng/unolingu.hxx>

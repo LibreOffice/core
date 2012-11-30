@@ -109,11 +109,6 @@ void SvViewDataEntry::SetExpanded( bool bExpanded )
         nFlags |= SVLISTENTRYFLAG_EXPANDED;
 }
 
-sal_uInt16 SvViewDataEntry::GetFlags() const
-{
-    return nFlags;
-}
-
 void SvViewDataEntry::SetSelectable( bool bSelectable )
 {
     if( bSelectable )

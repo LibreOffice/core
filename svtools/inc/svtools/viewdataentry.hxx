@@ -39,7 +39,6 @@ struct SvViewDataItem
 class SVT_DLLPUBLIC SvViewDataEntry
 {
     friend class SvTreeList;
-    friend class SvListView;
 
     std::vector<SvViewDataItem> maItems;
     sal_uLong nVisPos;
@@ -59,7 +58,6 @@ public:
     void SetCursored( bool bCursored );
     void SetSelected( bool bSelected );
     void SetExpanded( bool bExpanded );
-    sal_uInt16 GetFlags() const;
     void SetSelectable( bool bSelectable );
 
     void Init(size_t nSize);

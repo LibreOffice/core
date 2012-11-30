@@ -20,6 +20,7 @@
 #include "svx/fontlb.hxx"
 #include <vcl/svapp.hxx>
 #include "svtools/treelistentry.hxx"
+#include "svtools/viewdataentry.hxx"
 
 // ============================================================================
 

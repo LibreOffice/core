@@ -19,6 +19,8 @@
 
 
 #include "listviewitems.hxx"
+#include "svtools/viewdataentry.hxx"
+
 //........................................................................
 namespace dbaui
 {

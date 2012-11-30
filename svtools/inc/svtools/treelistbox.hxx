@@ -37,7 +37,6 @@
 #include <tools/contnr.hxx>
 #include <svtools/treelist.hxx>
 #include <svtools/transfer.hxx>
-#include "svtools/viewdataentry.hxx"
 
 class Application;
 class SvTreeListBox;
@@ -143,11 +142,7 @@ public:
     virtual             ~SvLBoxItem();
     virtual sal_uInt16 GetType() const = 0;
     const Size&         GetSize(const SvTreeListBox* pView, const SvTreeListEntry* pEntry) const;
-    const Size&         GetSize(const SvViewDataEntry* pData, sal_uInt16 nItemPos) const
-                        {
-                            const SvViewDataItem* pIData = pData->GetItem(nItemPos);
-                            return pIData->maSize;
-                        }
+    const Size&         GetSize(const SvViewDataEntry* pData, sal_uInt16 nItemPos) const;
 
     virtual void Paint(
         const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) = 0;
@@ -347,7 +342,7 @@ public:
     SvTreeListBox( Window* pParent, const ResId& rResId );
     virtual ~SvTreeListBox();
 
-    SvTreeList* GetModel() const { return (SvTreeList*)pModel; }
+    SvTreeList* GetModel() const { return pModel; }
     using SvListView::SetModel;
     void SetModel(SvTreeList* pNewModel);
 
