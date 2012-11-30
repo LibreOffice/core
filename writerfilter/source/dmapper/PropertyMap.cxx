@@ -800,13 +800,13 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
 uno::Reference<beans::XPropertySet> lcl_GetRangeProperties(bool bIsFirstSection, DomainMapper_Impl& rDM_Impl, uno::Reference<text::XTextRange> xStartingRange)
 {
     uno::Reference< beans::XPropertySet > xRangeProperties;
-    if (bIsFirstSection)
+    if (bIsFirstSection && rDM_Impl.GetBodyText().is())
     {
         uno::Reference<container::XEnumerationAccess> xEnumAccess(rDM_Impl.GetBodyText(), uno::UNO_QUERY_THROW);
         uno::Reference<container::XEnumeration> xEnum = xEnumAccess->createEnumeration();
         xRangeProperties = uno::Reference<beans::XPropertySet>(xEnum->nextElement(), uno::UNO_QUERY_THROW);
     }
-    else
+    else if (xStartingRange.is())
         xRangeProperties = uno::Reference<beans::XPropertySet>(xStartingRange, uno::UNO_QUERY_THROW);
     return xRangeProperties;
 }
@@ -851,7 +851,8 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         if( m_nColumnCount > 0 && xSection.is())
             ApplyColumnProperties( xSection );
         uno::Reference<beans::XPropertySet> xRangeProperties(lcl_GetRangeProperties(m_bIsFirstSection, rDM_Impl, m_xStartingRange));
-        xRangeProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_PAGE_DESC_NAME), uno::makeAny(m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName));
+        if (xRangeProperties.is())
+            xRangeProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_PAGE_DESC_NAME), uno::makeAny(m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName));
     }
     // If the section is of type "New column" (0x01), then simply insert a column break.
     // But only if there actually are columns on the page, otherwise a column break
@@ -1010,8 +1011,9 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 uno::Reference<beans::XPropertySet> xRangeProperties(lcl_GetRangeProperties(m_bIsFirstSection, rDM_Impl, m_xStartingRange));
             /* break type
             0 - No break 1 - New Colunn 2 - New page 3 - Even page 4 - odd page */
-                xRangeProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_PAGE_DESC_NAME ),
-                    uno::makeAny( m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName ));
+                if (xRangeProperties.is())
+                    xRangeProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_PAGE_DESC_NAME ),
+                            uno::makeAny( m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName ));
                 // handle page breaks with odd/even page numbering
                 style::PageStyleLayout nPageStyleLayout(style::PageStyleLayout_ALL);
                 if (m_nBreakType == 3)
