@@ -32,16 +32,12 @@ using namespace ::rtl                   ;
 using namespace ::osl                   ;
 using namespace ::com::sun::star::uno   ;
 
-#define DEFAULT_SHOWINTRO               sal_True
-
 #define ROOTNODE_START                  OUString(RTL_CONSTASCII_USTRINGPARAM("Setup/Office" ))
-#define PROPERTYNAME_SHOWINTRO          OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupShowIntro" ))
 #define PROPERTYNAME_CONNECTIONURL      OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupConnectionURL" ))
 
-#define PROPERTYHANDLE_SHOWINTRO        0
-#define PROPERTYHANDLE_CONNECTIONURL    1
+#define PROPERTYHANDLE_CONNECTIONURL    0
 
-#define PROPERTYCOUNT                   2
+#define PROPERTYCOUNT                   1
 
 class SvtStartOptions_Impl : public ConfigItem
 {
@@ -120,7 +116,6 @@ class SvtStartOptions_Impl : public ConfigItem
 
     private:
 
-        sal_Bool    m_bShowIntro        ;   /// cache "ShowIntro" of Start section
         OUString    m_sConnectionURL    ;   /// cache "Connection" of Start section
 };
 
@@ -130,8 +125,6 @@ class SvtStartOptions_Impl : public ConfigItem
 SvtStartOptions_Impl::SvtStartOptions_Impl()
     // Init baseclasses first
     :   ConfigItem          ( ROOTNODE_START    )
-    // Init member then.
-    ,   m_bShowIntro        ( DEFAULT_SHOWINTRO )
 {
     // Use our static list of configuration keys to get his values.
     Sequence< OUString >    seqNames    = impl_GetPropertyNames();
@@ -152,12 +145,6 @@ SvtStartOptions_Impl::SvtStartOptions_Impl()
         DBG_ASSERT( !(seqValues[nProperty].hasValue()==sal_False), "SvtStartOptions_Impl::SvtStartOptions_Impl()\nInvalid property value for property detected!\n" );
         switch( nProperty )
         {
-            case PROPERTYHANDLE_SHOWINTRO       :   {
-                                                            DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtStartOptions_Impl::SvtStartOptions_Impl()\nWho has changed the value type of \"Office.Common\\Start\\ShowIntro\"?" );
-                                                        seqValues[nProperty] >>= m_bShowIntro;
-                                                    }
-                                                    break;
-
             case PROPERTYHANDLE_CONNECTIONURL   :   {
                                                          DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_STRING), "SvtStartOptions_Impl::SvtStartOptions_Impl()\nWho has changed the value type of \"Office.Common\\Start\\Connection\"?" );
                                                         seqValues[nProperty] >>= m_sConnectionURL;
@@ -196,12 +183,6 @@ void SvtStartOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames 
     sal_Int32 nCount = seqPropertyNames.getLength();
     for( sal_Int32 nProperty=0; nProperty<nCount; ++nProperty )
     {
-        if( seqPropertyNames[nProperty] == PROPERTYNAME_SHOWINTRO )
-        {
-            DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtStartOptions_Impl::Notify()\nWho has changed the value type of \"Office.Common\\Start\\ShowIntro\"?" );
-            seqValues[nProperty] >>= m_bShowIntro;
-        }
-        else
         if( seqPropertyNames[nProperty] == PROPERTYNAME_CONNECTIONURL )
         {
             DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_STRING), "SvtStartOptions_Impl::Notify()\nWho has changed the value type of \"Office.Common\\Start\\Connection\"?" );
@@ -226,10 +207,6 @@ void SvtStartOptions_Impl::Commit()
     {
         switch( nProperty )
         {
-            case PROPERTYHANDLE_SHOWINTRO       :   {
-                                                         seqValues[nProperty] <<= m_bShowIntro;
-                                                     }
-                                                     break;
             case PROPERTYHANDLE_CONNECTIONURL   :   {
                                                          seqValues[nProperty] <<= m_sConnectionURL;
                                                      }
@@ -256,7 +233,6 @@ Sequence< OUString > SvtStartOptions_Impl::impl_GetPropertyNames()
     // Build list of configuration key names.
     const OUString pProperties[] =
     {
-        PROPERTYNAME_SHOWINTRO      ,
         PROPERTYNAME_CONNECTIONURL  ,
     };
     // Initialize return sequence with these list ...

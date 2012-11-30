@@ -48,14 +48,6 @@ public class _XLayerHandler extends MultiMethodTest {
                                   new Type(java.lang.String.class), false);
             oObj.setPropertyValue(new Boolean(false));
             oObj.endProperty();
-            oObj.overrideProperty("ooSetupShowIntro", (short) 0,
-                                  new Type(java.lang.String.class), false);
-            oObj.setPropertyValue(new Boolean(true));
-            oObj.endProperty();
-            oObj.overrideProperty("ooSetupLocales", (short) 0,
-                                  new Type(java.lang.String.class), false);
-            oObj.setPropertyValue("en-US");
-            oObj.endProperty();
             oObj.overrideNode("Factories", (short) 0, false);
             oObj.addOrReplaceNode("com.sun.star.chart.ChartDocument",
                                   (short) 0);
@@ -214,12 +206,6 @@ public class _XLayerHandler extends MultiMethodTest {
         expected += ("overrideNode(Office,0,false);" + ls);
         expected += ("overrideProperty(ooSetupInstCompleted,0,Type[string],false);" + ls);
         expected += ("setPropertyValue(false);" + ls);
-        expected += ("endProperty();" + ls);
-        expected += ("overrideProperty(ooSetupShowIntro,0,Type[string],false);" + ls);
-        expected += ("setPropertyValue(true);" + ls);
-        expected += ("endProperty();" + ls);
-        expected += ("overrideProperty(ooSetupLocales,0,Type[string],false);" + ls);
-        expected += ("setPropertyValue(en-US);" + ls);
         expected += ("endProperty();" + ls);
         expected += ("overrideNode(Factories,0,false);" + ls);
         expected += ("addOrReplace(com.sun.star.chart.ChartDocument,0);" + ls);

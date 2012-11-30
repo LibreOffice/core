@@ -355,59 +355,15 @@
         factories for creating documents.</desc>
       </info>
       <prop
-          oor:name="ooSetupInstallPath" oor:type="xs:string"
-          oor:nillable="false">
-	<!-- OldPath: Service User/[username] -->
-	<!-- OldLocation: userdb.ini -->
-	<info>
-	  <deprecated/>
-	  <author>AS/BEI</author>
-	  <desc>Specifies the path to where the user data is installed. User
-          data can only be installed in a valid directory.</desc>
-	</info>
-	<value/>
-	<!-- JB: Empty default inserted into empty property node. Remove if NIL
-             was intended -->
-      </prop>
-      <prop
-          oor:name="ooSetupInstallURL" oor:type="xs:string"
-          oor:nillable="false">
-	<!-- OldPath: Service User/[username] -->
-	<!-- OldLocation: userdb.ini -->
-	<info>
-	  <deprecated/>
-	  <author>AS/BEI</author>
-	  <desc>Specifies the user install path as a URL. The path must match
-          the UCB configuration.</desc>
-	</info>
-	<value/>
-	<!-- JB: Empty default inserted into empty property node. Remove if NIL
-             was intended -->
-      </prop>
-      <prop
           oor:name="ooSetupInstCompleted" oor:type="xs:boolean"
           oor:nillable="false">
 	<!-- OldPath: Service User/[username] -->
 	<!-- OldLocation: userdb.ini -->
 	<info>
-	  <deprecated/>
 	  <author>IS/BEI</author>
 	  <desc>Indicates if the user data is copied successfully.</desc>
 	</info>
         <value>false</value>
-      </prop>
-      <prop oor:name="ooSetupLocales" oor:type="oor:string-list">
-	<!-- OldLocation: setup.inf-->
-	<!-- UIHints: setup -->
-	<!--The default list must be deleted, as soon as the setup writes the
-            values (#79254).-->
-	<info>
-          <deprecated>This list value was replaced by the Installedlanguages
-          set.</deprecated>
-	  <author>PB / IS</author>
-	  <desc>Specifies the application languages that are installed, if a
-          multilingual version is used.</desc>
-	</info>
       </prop>
       <set oor:name="InstalledLocales" oor:node-type="InstalledLocale">
 	<info>
@@ -416,21 +372,6 @@
           multilingual version is used.</desc>
 	</info>
       </set>
-      <prop
-          oor:name="ooSetupShowIntro" oor:type="xs:boolean"
-          oor:nillable="false">
-	<!-- OldPath: Common/Show-Intro -->
-	<!-- OldLocation: soffice.ini -->
-	<!-- UIHints: Tools - Options - General - View -->
-	<info>
-	  <deprecated>This feature is controlled by an entry in the soffice.ini
-          or the -nologo command line parameter.</deprecated>
-	  <author>CD</author>
-	  <desc>Specifies whether the splash screen is displayed during
-          startup.</desc>
-	</info>
-        <value>true</value>
-      </prop>
       <prop
           oor:name="ooSetupConnectionURL" oor:type="xs:string"
           oor:nillable="false">
@@ -444,24 +385,6 @@
 	<value/>
 	<!-- JB: Empty default inserted into empty property node. Remove if NIL
              was intended -->
-      </prop>
-      <prop oor:name="LicenseAcceptDate" oor:type="xs:string">
-	<info>
-	  <author>LO</author>
-	  <desc>The xsd:datetime (YYYY-MM-DDTHH:MM:SS) on which the user has
-          accepted the license. If the current installation has a license that
-          is newer then this date, the license has to be accepted again.</desc>
-	</info>
-      </prop>
-      <prop
-          oor:name="FirstStartWizardCompleted" oor:type="xs:boolean"
-          oor:nillable="false">
-	<info>
-	  <author>LO</author>
-	  <desc>is set to true, when the FirstStartWizard has been
-          completed</desc>
-	</info>
-	<value>false</value>
       </prop>
       <prop
           oor:name="MigrationCompleted" oor:type="xs:boolean"
@@ -585,23 +508,6 @@
           ooSetupSystemLocale are used.</desc>
 	</info>
 	<value/>
-      </prop>
-    </group>
-    <group oor:name="Configuration">
-      <info>
-	<author>JB</author>
-	<desc>Contains settings that control configuration data access.</desc>
-      </info>
-      <prop
-          oor:name="TransferUserSettingsOnce" oor:type="xs:boolean"
-          oor:nillable="false">
-	<info>
-          <deprecated>This feature is not supported any more since
-          OOo 2.0</deprecated>
-	  <author>JB</author>
-          <desc>Deprecated</desc>
-	</info>
-        <value>true</value>
       </prop>
     </group>
     <group oor:name="Migration">

@@ -43,16 +43,6 @@ public class _XUpdateHandler extends MultiMethodTest {
                                            false);
             xLayerHandler.setPropertyValue(new Boolean(false));
             xLayerHandler.endProperty();
-            xLayerHandler.overrideProperty("ooSetupShowIntro", (short) 0,
-                                           new Type(java.lang.String.class),
-                                           false);
-            xLayerHandler.setPropertyValue(new Boolean(true));
-            xLayerHandler.endProperty();
-            xLayerHandler.overrideProperty("ooSetupLocales", (short) 0,
-                                           new Type(java.lang.String.class),
-                                           false);
-            xLayerHandler.setPropertyValue("en-US");
-            xLayerHandler.endProperty();
             xLayerHandler.overrideNode("Factories", (short) 0, false);
             xLayerHandler.addOrReplaceNode("com.sun.star.chart.ChartDocument",
                                            (short) 0);
@@ -216,7 +206,6 @@ public class _XUpdateHandler extends MultiMethodTest {
             oObj.setPropertyValue("newValue");
             oObj.setPropertyValueForLocale("newValue-US", "de-DE");
             oObj.endProperty();
-            oObj.removeProperty("ooSetupShowIntro");
             oObj.modifyNode("org.openoffice.Setup", (short) 0, (short) 0, true);
             oObj.removeNode("whatever");
             oObj.resetProperty("prop");
