@@ -233,7 +233,8 @@ void handleCommand(
                 if (osl::FileBase::getFileURLFromSystemPath(outDir, outDirUrl)
                     != osl::FileBase::E_None)
                 {
-                    cerr << "Error: Cannot convert pathname to URL\n";
+                    cerr << "Error: Cannot convert pathname to URL in " << __FILE__ << ", in line " << __LINE__ << "\n"
+                         << "       outDir: " << OUStringToOString(outDir, RTL_TEXTENCODING_ASCII_US).getStr() << "\n";
                     throw false; //TODO
                 }
                 osl::Directory::createPath(outDirUrl);
@@ -530,7 +531,8 @@ void handleProjects(char * sourceRoot, char const * destRoot)
     if (osl::FileBase::getFileURLFromSystemPath(root16, rootUrl)
         != osl::FileBase::E_None)
     {
-        cerr << "Error: Cannot convert pathname to URL\n";
+        cerr << "Error: Cannot convert pathname to URL in " << __FILE__ << ", in line " << __LINE__ << "\n"
+             << "       root16: " << OUStringToOString(root16, RTL_TEXTENCODING_ASCII_US).getStr() << "\n";
         throw false; //TODO
     }
     handleDirectory(rootUrl, 0, OString(), OString(), OString(destRoot));
