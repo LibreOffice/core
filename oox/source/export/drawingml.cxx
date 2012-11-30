@@ -617,7 +617,7 @@ void DrawingML::WriteTransformation( const Rectangle& rRect,
     mpFS->startElementNS( nXmlNamespace, XML_xfrm,
                           XML_flipH, bFlipH ? "1" : NULL,
                           XML_flipV, bFlipV ? "1" : NULL,
-                          XML_rot, nRotation ? I32S( nRotation ) : NULL,
+                          XML_rot, (nRotation % 21600000) ? I32S( nRotation ) : NULL,
                           FSEND );
 
     mpFS->singleElementNS( XML_a, XML_off, XML_x, IS( MM100toEMU( rRect.Left() ) ), XML_y, IS( MM100toEMU( rRect.Top() ) ), FSEND );
