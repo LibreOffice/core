@@ -87,8 +87,8 @@ public:
         @param  _eType      determines the image to use. AUTO is disallowed in this constructor version
     */
     OSQLMessageBox(Window* pParent,
-                const UniString& rTitle,
-                const UniString& rMessage,
+                const OUString& rTitle,
+                const OUString& rMessage,
                 WinBits nStyle = WB_OK | WB_DEF_OK,
                 MessageType _eType = Info,
                 const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo = NULL );
@@ -114,7 +114,7 @@ class OSQLWarningBox : public OSQLMessageBox
 {
 public:
     OSQLWarningBox( Window* _pParent,
-                    const UniString& _rMessage,
+                    const OUString& _rMessage,
                     WinBits _nStyle = WB_OK | WB_DEF_OK,
                     const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo = NULL );
 };

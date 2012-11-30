@@ -716,7 +716,7 @@ OSQLMessageBox::OSQLMessageBox(Window* _pParent, const SQLExceptionInfo& _rExcep
 }
 
 //------------------------------------------------------------------------------
-OSQLMessageBox::OSQLMessageBox( Window* _pParent, const UniString& _rTitle, const UniString& _rMessage, WinBits _nStyle, MessageType _eType, const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo )
+OSQLMessageBox::OSQLMessageBox( Window* _pParent, const OUString& _rTitle, const OUString& _rMessage, WinBits _nStyle, MessageType _eType, const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo )
     :ButtonDialog( _pParent, WB_HORZ | WB_STDDIALOG )
     ,m_aInfoImage( this )
     ,m_aTitle( this, WB_WORDBREAK | WB_LEFT )
@@ -749,7 +749,7 @@ IMPL_LINK( OSQLMessageBox, ButtonClickHdl, Button *, /*pButton*/ )
 //==================================================================
 // OSQLWarningBox
 //==================================================================
-OSQLWarningBox::OSQLWarningBox( Window* _pParent, const UniString& _rMessage, WinBits _nStyle,
+OSQLWarningBox::OSQLWarningBox( Window* _pParent, const OUString& _rMessage, WinBits _nStyle,
     const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo )
     :OSQLMessageBox( _pParent, String( ModuleRes( STR_STAT_WARNING ) ), _rMessage, _nStyle, OSQLMessageBox::Warning, _pAdditionalErrorInfo )
 {
