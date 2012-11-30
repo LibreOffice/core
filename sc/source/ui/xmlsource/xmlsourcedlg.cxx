@@ -83,6 +83,7 @@ ScXMLSourceDlg::ScXMLSourceDlg(
     maBtnOk(this, ScResId(BTN_OK)),
     maBtnCancel(this, ScResId(BTN_CANCEL)),
     maImgFileOpen(ScResId(IMG_FILE_OPEN)),
+    mpCurRefEntry(NULL),
     mpDoc(pDoc),
     mpActiveEdit(&maRefEdit),
     mbDlgLostFocus(false)
@@ -256,6 +257,37 @@ public:
     }
 };
 
+/**
+ * When the current entry is a direct or indirect child of a mappable
+ * repeat element entry, that entry becomes the reference entry.
+ * Otherwise the reference entry equals the current entry.  A reference
+ * entry is the entry that stores mapped cell position.
+ */
+SvTreeListEntry* getReferenceEntry(SvTreeListBox& rTree, SvTreeListEntry* pCurEntry)
+{
+    SvTreeListEntry* pParent = rTree.GetParent(pCurEntry);
+    SvTreeListEntry* pRefEntry = NULL;
+    while (pParent)
+    {
+        ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*pParent);
+        OSL_ASSERT(pUserData);
+        if (pUserData->meType == ScOrcusXMLTreeParam::ElementRepeat)
+        {
+            // This is a repeat element.
+            if (pRefEntry)
+            {
+                // Second repeat element encountered. Not good.
+                return pCurEntry;
+            }
+
+            pRefEntry = pParent;
+        }
+        pParent = rTree.GetParent(pParent);
+    }
+
+    return pRefEntry ? pRefEntry : pCurEntry;
+}
+
 }
 
 void ScXMLSourceDlg::TreeItemSelected()
@@ -271,7 +303,20 @@ void ScXMLSourceDlg::TreeItemSelected()
         maHighlightedEntries.clear();
     }
 
-    ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*pEntry);
+    mpCurRefEntry = getReferenceEntry(maLbTree, pEntry);
+    if (mpCurRefEntry != pEntry)
+    {
+        // Highlight the reference entry if it differs from the current entry.
+        SvViewDataEntry* pView = maLbTree.GetViewDataEntry(mpCurRefEntry);
+        if (pView)
+        {
+            pView->SetHighlighted(true);
+            maLbTree.PaintEntry(mpCurRefEntry);
+            maHighlightedEntries.push_back(mpCurRefEntry);
+        }
+    }
+
+    ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*mpCurRefEntry);
     OSL_ASSERT(pUserData);
 
     const ScAddress& rPos = pUserData->maLinkedPos;
@@ -287,13 +332,13 @@ void ScXMLSourceDlg::TreeItemSelected()
     switch (pUserData->meType)
     {
         case ScOrcusXMLTreeParam::Attribute:
-            AttributeSelected(*pEntry);
+            AttributeSelected(*mpCurRefEntry);
         break;
         case ScOrcusXMLTreeParam::ElementDefault:
-            DefaultElementSelected(*pEntry);
+            DefaultElementSelected(*mpCurRefEntry);
         break;
         case ScOrcusXMLTreeParam::ElementRepeat:
-            RepeatElementSelected(*pEntry);
+            RepeatElementSelected(*mpCurRefEntry);
         break;
         default:
             ;
@@ -599,13 +644,12 @@ void ScXMLSourceDlg::RefEditModified()
     if (!bValid)
         aLinkedPos.SetInvalid();
 
-    // Set this address to currently selected tree item.
-    SvTreeListEntry* pEntry = maLbTree.GetCurEntry();
-    if (!pEntry)
+    // Set this address to the current reference entry.
+    if (!mpCurRefEntry)
         // This should never happen.
         return;
 
-    ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*pEntry);
+    ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*mpCurRefEntry);
     if (!pUserData)
         // This should never happen either.
         return;
@@ -617,16 +661,16 @@ void ScXMLSourceDlg::RefEditModified()
     if (bRepeatElem)
     {
         if (bValid)
-            maRangeLinks.insert(pEntry);
+            maRangeLinks.insert(mpCurRefEntry);
         else
-            maRangeLinks.erase(pEntry);
+            maRangeLinks.erase(mpCurRefEntry);
     }
     else
     {
         if (bValid)
-            maCellLinks.insert(pEntry);
+            maCellLinks.insert(mpCurRefEntry);
         else
-            maCellLinks.erase(pEntry);
+            maCellLinks.erase(mpCurRefEntry);
     }
 
     // Enable the import button only when at least one link exists.
