@@ -28,7 +28,6 @@
 #include <com/sun/star/util/XReplaceable.idl>
 #include <com/sun/star/text/XPagePrintable.idl>
 #include <com/sun/star/text/XReferenceMarksSupplier.idl>
-#include <com/sun/star/text/XLineNumberingSupplier.idl>
 #include <com/sun/star/text/XChapterNumberingSupplier.idl>
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.idl>
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.idl>
@@ -86,8 +85,6 @@ published service GenericTextDocument
     [optional] interface com::sun::star::text::XPagePrintable;
 
     [optional] interface com::sun::star::text::XReferenceMarksSupplier;
-
-    [optional] interface com::sun::star::text::XLineNumberingSupplier;
 
     [optional] interface com::sun::star::text::XChapterNumberingSupplier;
 

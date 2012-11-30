@@ -3628,7 +3628,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/text,\
 	XHeaderFooter \
 	XHeaderFooterPageStyle \
 	XLineNumberingProperties \
-	XLineNumberingSupplier \
 	XMailMergeBroadcaster \
 	XMailMergeListener \
 	XMultiTextMarkup \

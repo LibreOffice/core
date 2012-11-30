@@ -36,8 +36,6 @@
 "SwXTextDocument";"com::sun::star::frame::XStorable";"store()"
 "SwXTextDocument";"com::sun::star::frame::XStorable";"storeAsURL()"
 "SwXTextDocument";"com::sun::star::frame::XStorable";"storeToURL()"
-"SwXTextDocument";"com::sun::star::text::XLineNumberingSupplier#optional";"getLineNumberingRules()"
-"SwXTextDocument";"com::sun::star::text::XLineNumberingSupplier#optional";"setLineNumberingRules()"
 "SwXTextDocument";"com::sun::star::document::XEventsSupplier#optional";"getEvents()"
 "SwXTextDocument";"com::sun::star::text::XPagePrintable#optional";"getPagePrintSettings()"
 "SwXTextDocument";"com::sun::star::text::XPagePrintable#optional";"setPagePrintSettings()"

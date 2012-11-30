@@ -852,7 +852,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/text/_XFootnotesSettingsSupplier \
     qadevOOo/tests/java/ifc/text/_XFootnotesSupplier \
     qadevOOo/tests/java/ifc/text/_XLineNumberingProperties \
-    qadevOOo/tests/java/ifc/text/_XLineNumberingSupplier \
     qadevOOo/tests/java/ifc/text/_XMailMergeBroadcaster \
     qadevOOo/tests/java/ifc/text/_XPageCursor \
     qadevOOo/tests/java/ifc/text/_XPagePrintable \
