@@ -1802,7 +1802,7 @@ bool WW8_WrPlcSepx::WriteKFTxt( WW8Export& rWrt )
 
 void WW8_WrPlcSepx::WriteSepx( SvStream& rStrm ) const
 {
-    OSL_ENSURE(m_SectionAttributes.size() == static_cast<size_t>(aSects.Count())
+    OSL_ENSURE(m_SectionAttributes.size() == static_cast<size_t>(aSects.size())
         , "WriteSepx(): arrays out of sync!");
     for (size_t i = 0; i < m_SectionAttributes.size(); i++) // all sections
     {
@@ -1820,7 +1820,7 @@ void WW8_WrPlcSepx::WriteSepx( SvStream& rStrm ) const
 
 void WW8_WrPlcSepx::WritePlcSed( WW8Export& rWrt ) const
 {
-    OSL_ENSURE(m_SectionAttributes.size() == static_cast<size_t>(aSects.Count())
+    OSL_ENSURE(m_SectionAttributes.size() == static_cast<size_t>(aSects.size())
         , "WritePlcSed(): arrays out of sync!");
     OSL_ENSURE( aCps.size() == aSects.size() + 1, "WrPlcSepx: DeSync" );
     sal_uLong nFcStart = rWrt.pTableStrm->Tell();
