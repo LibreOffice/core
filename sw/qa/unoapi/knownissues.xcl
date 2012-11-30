@@ -113,9 +113,6 @@ sw.SwXFieldMaster::com::sun::star::text::TextFieldMaster
 sw.SwAccessibleTableView
 # -> disabled in sw.sce
 
-### i85635 ###
-sw.DocumentSettings::com::sun::star::text::PrintPreviewSettings
-
 ### i85638 ###
 sw.SwXTextDocument::com::sun::star::frame::XStorable
 

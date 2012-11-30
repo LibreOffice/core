@@ -1265,7 +1265,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/text,\
 	PagePrintSettings \
 	Paragraph \
 	ParagraphEnumeration \
-	PrintPreviewSettings \
 	PrintSettings \
 	RedlinePortion \
 	ReferenceMark \

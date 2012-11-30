@@ -1228,11 +1228,10 @@ sal_Bool SAL_CALL SwXDocumentSettings::supportsService( const OUString& ServiceN
 Sequence< OUString > SAL_CALL SwXDocumentSettings::getSupportedServiceNames(  )
     throw(RuntimeException)
 {
-    Sequence< OUString > aSeq( 4 );
+    Sequence< OUString > aSeq( 3 );
     aSeq[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.Settings") );
     aSeq[1] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.DocumentSettings") );
     aSeq[2] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.PrintSettings") );
-    aSeq[3] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.PrintPreviewSettings") );
     return aSeq;
 }
 

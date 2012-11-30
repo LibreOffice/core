@@ -22,7 +22,6 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #include <com/sun/star/document/Settings.idl>
 #include <com/sun/star/text/PrintSettings.idl>
-#include <com/sun/star/text/PrintPreviewSettings.idl>
 
 
 module com { module sun { module star { module text {
@@ -35,8 +34,6 @@ published service DocumentSettings
     service com::sun::star::document::Settings;
 
     [optional] service com::sun::star::text::PrintSettings;
-
-    [optional] service com::sun::star::text::PrintPreviewSettings;
 
     /** gives access to the properties implemented by this service.
      */

@@ -824,7 +824,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/text/_MailMerge \
     qadevOOo/tests/java/ifc/text/_NumberingLevel \
     qadevOOo/tests/java/ifc/text/_NumberingRules \
-    qadevOOo/tests/java/ifc/text/_PrintPreviewSettings \
     qadevOOo/tests/java/ifc/text/_PrintSettings \
     qadevOOo/tests/java/ifc/text/_Text \
     qadevOOo/tests/java/ifc/text/_TextColumns \
