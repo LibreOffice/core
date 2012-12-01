@@ -180,7 +180,7 @@ OUString OTextInputStream::implReadString( const Sequence< sal_Unicode >& Delimi
     OUString aRetStr;
     if( !mbEncodingInitialized )
     {
-        OUString aUtf8Str( RTL_CONSTASCII_USTRINGPARAM("utf8") );
+        OUString aUtf8Str("utf8");
         setEncoding( aUtf8Str );
     }
     if( !mbEncodingInitialized )
@@ -439,13 +439,13 @@ Reference< XInterface > SAL_CALL TextInputStream_CreateInstance(
 
 OUString TextInputStream_getImplementationName()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ) );
+    return OUString ( IMPLEMENTATION_NAME );
 }
 
 Sequence< OUString > TextInputStream_getSupportedServiceNames()
 {
     Sequence< OUString > seqNames(1);
-    seqNames.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ) );
+    seqNames.getArray()[0] = SERVICE_NAME;
     return seqNames;
 }
 

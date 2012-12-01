@@ -496,13 +496,13 @@ Reference< XInterface > SAL_CALL ODataInputStream_CreateInstance(
 
 OUString ODataInputStream_getImplementationName()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.io.stm.DataInputStream" ) );
+    return OUString("com.sun.star.comp.io.stm.DataInputStream");
 }
 
 Sequence<OUString> ODataInputStream_getSupportedServiceNames(void)
 {
     Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.DataInputStream" ) );
+    aRet.getArray()[0] = "com.sun.star.io.DataInputStream";
     return aRet;
 }
 
@@ -904,13 +904,13 @@ Reference< XInterface > SAL_CALL ODataOutputStream_CreateInstance(
 
 OUString ODataOutputStream_getImplementationName()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.io.stm.DataOutputStream" ) );
+    return OUString("com.sun.star.comp.io.stm.DataOutputStream");
 }
 
 Sequence<OUString> ODataOutputStream_getSupportedServiceNames(void)
 {
     Sequence<OUString> aRet(1);
-    aRet.getArray()[0] =  OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.DataOutputStream" ) );
+    aRet.getArray()[0] =  "com.sun.star.io.DataOutputStream";
     return aRet;
 }
 
@@ -1182,13 +1182,13 @@ Reference< XInterface > SAL_CALL OObjectOutputStream_CreateInstance(
 
 OUString OObjectOutputStream_getImplementationName()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.io.stm.ObjectOutputStream" ) );
+    return OUString("com.sun.star.comp.io.stm.ObjectOutputStream");
 }
 
 Sequence<OUString> OObjectOutputStream_getSupportedServiceNames(void)
 {
     Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.ObjectOutputStream" ) );
+    aRet.getArray()[0] = "com.sun.star.io.ObjectOutputStream";
     return aRet;
 }
 
@@ -1505,13 +1505,13 @@ Reference< XInterface > SAL_CALL OObjectInputStream_CreateInstance( const Refere
 
 OUString OObjectInputStream_getImplementationName()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.io.stm.ObjectInputStream" ) );
+    return OUString("com.sun.star.comp.io.stm.ObjectInputStream");
 }
 
 Sequence<OUString> OObjectInputStream_getSupportedServiceNames(void)
 {
     Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.ObjectInputStream" ) );
+    aRet.getArray()[0] = "com.sun.star.io.ObjectInputStream";
     return aRet;
 }
 

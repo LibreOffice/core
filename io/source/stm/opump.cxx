@@ -272,7 +272,7 @@ void Pump::run()
             if( ! rInput.is() )
             {
                 NotConnectedException exception(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("no input stream set")) , Reference<XInterface>((OWeakObject*)this) );
+                    OUString("no input stream set") , Reference<XInterface>((OWeakObject*)this) );
                 throw exception;
             }
             Sequence< sal_Int8 > aData;
@@ -281,7 +281,7 @@ void Pump::run()
                 if( ! rOutput.is() )
                 {
                     NotConnectedException exception(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("no output stream set")) , Reference<XInterface>( (OWeakObject*)this) );
+                        OUString("no output stream set") , Reference<XInterface>( (OWeakObject*)this) );
                     throw exception;
                 }
                 rOutput->writeBytes( aData );
@@ -382,7 +382,7 @@ void Pump::start() throw( RuntimeException )
     else
     {
         throw RuntimeException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "Pump::start Couldn't create worker thread" )),
+            OUString("Pump::start Couldn't create worker thread"),
             *this);
     }
 }
@@ -485,12 +485,12 @@ Reference< XInterface > SAL_CALL OPumpImpl_CreateInstance(
 
 OUString OPumpImpl_getImplementationName()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.io.Pump") );
+    return OUString("com.sun.star.comp.io.Pump");
 }
 
 Sequence<OUString> OPumpImpl_getSupportedServiceNames(void)
 {
-    OUString s( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.Pump" ) );
+    OUString s("com.sun.star.io.Pump");
     Sequence< OUString > seq( &s , 1 );
     return seq;
 }
