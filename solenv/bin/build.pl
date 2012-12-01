@@ -1570,10 +1570,8 @@ sub cancel_build {
         print STDERR " please re-run build inside each one to isolate the problem.\n";
     } else {
         print STDERR " it seems that the error is inside '$module', please re-run build\n";
-        print STDERR " inside this module to isolate the error and/or test your fix:\n";
+        print STDERR " inside this module to isolate the error and/or test your fix.\n";
     }
-    print STDERR "\n";
-    print STDERR "build_error.log should contain the captured output of the failed module(s)\n";
     print STDERR "\n";
     print STDERR "-----------------------------------------------------------------------\n";
     print STDERR "To rebuild a specific module:\n";
@@ -1887,10 +1885,6 @@ sub run_job {
     chdir $path;
     getcwd();
 
-    my $log_file = $jobs_hash{$registered_name}->{LONG_LOG_PATH};
-
-    my $log_dir = File::Basename::dirname($log_file);
-
     if ( $source_config->is_gbuild($jobs_hash{$registered_name}->{MODULE}) )
     {
         if ( $job eq 'deliver' )
@@ -1900,7 +1894,6 @@ sub run_job {
         else
         {
             return 1 if (! $path =~ /prj$/ );
-            mkpath("$workdir/Logs");
             my $gbuild_flags = '-j' . $ENV{PARALLELISM};
             my $gbuild_target = 'all slowcheck';
             if ($registered_name =~ /tail_build\/prj$/ )
@@ -1916,26 +1909,8 @@ sub run_job {
             print "gbuild module $make_path: $job_to_do\n";
         }
     }
-    else
-    {
-        if (!-d $log_dir)
-        {
-            system("$perl $mkout");
-        };
-    }
-    open (MAKE, "$job_to_do 2>&1 |") or return 8;
-    open (LOGFILE, "> $log_file") or return 8;
-    while (<MAKE>) { print LOGFILE $_; print $_ }
-    close MAKE;
-    $error_code = $?;
-    close LOGFILE;
-    if ( $error_code != 0)
-    {
-        system("echo \"log for $path\" >> $build_error_log");
-        system("cat $log_file >> $build_error_log");
-    }
-
-    return $error_code;
+    system("$job_to_do");
+    return $?;
 };
 
 sub do_custom_job {
