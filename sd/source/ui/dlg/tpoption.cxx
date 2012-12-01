@@ -623,6 +623,9 @@ void SdTpOptionsMisc::SetImpressMode (void)
     // Move the printer-independent-metrics check box up two lines to change
     // places with spacing-between-paragraphs check box.
     lcl_MoveWin (aCbxUsePrinterMetrics, -2*nLineHeight);
+#ifndef ENABLE_SDREMOTE_BLUETOOTH
+    aCbxEnableSdremote.Hide();
+#endif
 }
 
 void    SdTpOptionsMisc::SetDrawMode()
