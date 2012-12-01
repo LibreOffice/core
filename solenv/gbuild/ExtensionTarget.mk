@@ -236,7 +236,9 @@ endef
 # source file is copied to $(WORKDIR)
 define gb_ExtensionTarget_localize_properties
 ifneq ($(filter-out en-US,$(gb_ExtensionTarget_ALL_LANGS)),)
+ifneq ($(ENABLE_RELEASE_BUILD),TRUE)
 $(call gb_ExtensionTarget_localize_properties_onelang,$(1),$(subst en_US,qtz,$(2)),$(3),qtz,$(firstword $(filter-out en-US,$(gb_ExtensionTarget_ALL_LANGS))))
+endif
 endif
 $(foreach lang,$(gb_ExtensionTarget_ALL_LANGS),\
 	$(call gb_ExtensionTarget_localize_properties_onelang,$(1),$(subst en_US,$(subst -,_,$(lang)),$(2)),$(3),$(lang)))
