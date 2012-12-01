@@ -13,8 +13,10 @@ $(eval $(call gb_ExternalPackage_use_external_project,xmlsec,xmlsec))
 
 ifeq ($(OS),WNT)
 ifeq ($(COM),GCC)
-$(eval $(call gb_ExternalPackage_add_file,xmlsec,lib/libxmlsec1.dll.a,src/nss/.libs/libxmlsec1-nss.dll.a))
-$(eval $(call gb_ExternalPackage_add_file,xmlsec,lib/libxmlsec1.dll,src/nss/.libs/libxmlsec1-nss.dll))
+$(eval $(call gb_ExternalPackage_add_file,xmlsec,lib/libxmlsec1.dll.a,src/.libs/libxmlsec1.dll.a))
+$(eval $(call gb_ExternalPackage_add_file,xmlsec,lib/libxmlsec1.dll,src/.libs/libxmlsec1.dll))
+$(eval $(call gb_ExternalPackage_add_file,xmlsec,lib/libxmlsec1-nss.dll.a,src/nss/.libs/libxmlsec1-nss.dll.a))
+$(eval $(call gb_ExternalPackage_add_file,xmlsec,lib/libxmlsec1-nss.dll,src/nss/.libs/libxmlsec1-nss.dll))
 else
 $(eval $(call gb_ExternalPackage_add_file,xmlsec,lib/libxmlsec-mscrypto.lib,win32/binaries/libxmlsec-mscrypto.lib))
 $(eval $(call gb_ExternalPackage_add_file,xmlsec,lib/libxmlsec.lib,win32/binaries/libxmlsec.lib))
