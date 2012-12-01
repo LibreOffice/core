@@ -26,8 +26,8 @@ $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 	$(if $(filter NO,$(SYSTEM_NSS)),--disable-pkgconfig) \
 	CC="$(CC) -mthreads $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
 	LDFLAGS="-Wl,--no-undefined $(ILIB:;= -L)" \
-	LIBS="$(if $(filter YES,$(MINGW_SHARED_GXXLIB)),$(MINGW_SHARED__LIBSTDCPP))"
-	$(MAKE) \
+	LIBS="$(if $(filter YES,$(MINGW_SHARED_GXXLIB)),$(MINGW_SHARED__LIBSTDCPP))" \
+	&& $(MAKE) \
 	&& touch $@
 
 else
