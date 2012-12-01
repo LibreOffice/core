@@ -50,7 +50,7 @@ private:
 public:
     MediaDescriptorHelper( const ::com::sun::star::uno::Sequence<
                             ::com::sun::star::beans::PropertyValue > & rMediaDescriptor );
-    virtual ~MediaDescriptorHelper();
+    ~MediaDescriptorHelper();
 
     ::com::sun::star::uno::Sequence<
                 ::com::sun::star::beans::PropertyValue > getReducedForModel();
