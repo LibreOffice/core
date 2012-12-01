@@ -1,3 +1,17 @@
+--- misc/xmlsec1-1.2.14/Makefile.am
++++ misc/build/xmlsec1-1.2.14/Makefile.am
+@@ -1,8 +1,9 @@
+ NULL =
+ 
+ SAFE_VERSION	= @XMLSEC_VERSION_SAFE@
+-SUBDIRS 	= include src apps man docs
+-TEST_APP 	= apps/xmlsec1$(EXEEXT)
++#Do not build xmlsec1 app. It is not needed. Also the libtool includes 
++#a -L/path_to_lib_dir which may contain an incompatible lixbml2.
++SUBDIRS = include src man docs
+ DEFAULT_CRYPTO	= @XMLSEC_CRYPTO@
+ 
+ bin_SCRIPTS 	= xmlsec1-config
 --- misc/xmlsec1-1.2.14/Makefile.in	2009-06-25 22:53:34.000000000 +0200
 +++ misc/build/xmlsec1-1.2.14/Makefile.in	2009-10-01 10:32:48.708515261 +0200
 @@ -341,8 +341,9 @@
