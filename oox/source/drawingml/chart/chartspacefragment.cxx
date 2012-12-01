@@ -33,8 +33,6 @@ namespace chart {
 
 using namespace ::oox::core;
 
-using OUString;
-
 // ============================================================================
 
 ChartSpaceFragment::ChartSpaceFragment( XmlFilterBase& rFilter, const OUString& rFragmentPath, ChartSpaceModel& rModel ) :

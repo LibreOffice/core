@@ -25,11 +25,6 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
-
-using OUString;
-
-// ============================================================================
 
 NumberFormat::NumberFormat() :
     mbSourceLinked( true )

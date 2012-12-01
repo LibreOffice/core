@@ -27,7 +27,6 @@
 
 using ::oox::drawingml::chart::DataSequenceModel;
 using ::com::sun::star::uno::Any;
-using OUStringBuffer;
 namespace oox {
 namespace drawingml {
 namespace chart {
@@ -41,7 +40,6 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
 
 using ::oox::core::XmlFilterBase;
-using OUString;
 
 // ============================================================================
 

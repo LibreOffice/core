@@ -44,7 +44,6 @@ using namespace ::com::sun::star::chart2::data;
 using namespace ::com::sun::star::uno;
 
 using ::oox::core::XmlFilterBase;
-using OUString;
 
 // ============================================================================
 

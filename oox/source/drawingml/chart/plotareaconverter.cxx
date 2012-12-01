@@ -41,8 +41,6 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::chart2;
 using namespace ::com::sun::star::uno;
 
-using OUString;
-
 // ============================================================================
 
 namespace {

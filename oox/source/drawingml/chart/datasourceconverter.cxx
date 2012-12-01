@@ -33,8 +33,6 @@ namespace chart {
 using namespace ::com::sun::star::chart2::data;
 using namespace ::com::sun::star::uno;
 
-using OUString;
-
 // ============================================================================
 
 DataSequenceConverter::DataSequenceConverter( const ConverterRoot& rParent, DataSequenceModel& rModel ) :
