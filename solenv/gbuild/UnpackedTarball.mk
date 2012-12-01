@@ -131,6 +131,10 @@ $(call gb_Output_announce,$(2),$(true),PAT,2)
 $(call gb_Helper_abbreviate_dirs,\
 	( \
 		cd $(3) && \
+		$(if $(UNPACKED_FILES),\
+			mkdir -p $(sort $(dir $(UNPACKED_DESTFILES))) && \
+			$(call gb_UnpackedTarball__copy_files,$(UNPACKED_FILES),$(UNPACKED_DESTFILES)) && \
+		) \
 		$(foreach file,$(UNPACKED_FIX_EOL),$(call gb_UnpackedTarball_CONVERTTOUNIX,$(file)) && ) \
 		$(if $(UNPACKED_PATCHES),\
 			for p in $(UNPACKED_PATCHES); do \
@@ -141,10 +145,6 @@ $(call gb_Helper_abbreviate_dirs,\
 			done && \
 		) \
 		$(foreach file,$(UNPACKED_FIX_EOL),$(call gb_UnpackedTarball_CONVERTTODOS,$(file)) && ) \
-		$(if $(UNPACKED_FILES),\
-			mkdir -p $(sort $(dir $(UNPACKED_DESTFILES))) && \
-			$(call gb_UnpackedTarball__copy_files,$(UNPACKED_FILES),$(UNPACKED_DESTFILES)) && \
-		) \
 		$(if $(UNPACKED_SUBDIRS),\
 			cp -rf $(UNPACKED_SUBDIRS) $(gb_EXTERNAL_HEADERS_DIR) && \
 		) \
