@@ -466,13 +466,13 @@ Reference< XInterface > SAL_CALL OMarkableOutputStream_CreateInstance(
 
 OUString    OMarkableOutputStream_getImplementationName()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.io.stm.MarkableOutputStream" ));
+    return OUString("com.sun.star.comp.io.stm.MarkableOutputStream");
 }
 
 Sequence<OUString> OMarkableOutputStream_getSupportedServiceNames(void)
 {
     Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.MarkableOutputStream" ) );
+    aRet.getArray()[0] = "com.sun.star.io.MarkableOutputStream";
 
     return aRet;
 }
@@ -643,7 +643,7 @@ sal_Int32 OMarkableInputStream::readBytes(Sequence< sal_Int8 >& aData, sal_Int32
     }
     else {
         throw NotConnectedException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("MarkableInputStream::readBytes NotConnectedException")) ,
+            OUString("MarkableInputStream::readBytes NotConnectedException") ,
             *this );
     }
     return nBytesRead;
@@ -705,7 +705,7 @@ sal_Int32 OMarkableInputStream::readSomeBytes(Sequence< sal_Int8 >& aData, sal_I
     else
     {
         throw NotConnectedException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("MarkableInputStream::readSomeBytes NotConnectedException")) ,
+            OUString("MarkableInputStream::readSomeBytes NotConnectedException") ,
             *this );
     }
     return nBytesRead;
@@ -721,7 +721,7 @@ void OMarkableInputStream::skipBytes(sal_Int32 nBytesToSkip)
 {
     if ( nBytesToSkip < 0 )
         throw BufferSizeExceededException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("precondition not met: XInputStream::skipBytes: non-negative integer required!")),
+            OUString("precondition not met: XInputStream::skipBytes: non-negative integer required!"),
             *this
         );
 
@@ -740,7 +740,7 @@ sal_Int32 OMarkableInputStream::available(void) throw (NotConnectedException, Ru
     else
     {
         throw NotConnectedException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "MarkableInputStream::available NotConnectedException" ) ) ,
+            OUString("MarkableInputStream::available NotConnectedException") ,
             *this );
     }
 
@@ -766,7 +766,7 @@ void OMarkableInputStream::closeInput(void) throw (NotConnectedException, Runtim
     }
     else {
         throw NotConnectedException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "MarkableInputStream::closeInput NotConnectedException" ) ) ,
+            OUString("MarkableInputStream::closeInput NotConnectedException") ,
             *this );
     }
 }
@@ -993,13 +993,13 @@ Reference < XInterface > SAL_CALL OMarkableInputStream_CreateInstance(
 
 OUString    OMarkableInputStream_getImplementationName()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.io.stm.MarkableInputStream" ));
+    return OUString("com.sun.star.comp.io.stm.MarkableInputStream");
 }
 
 Sequence<OUString> OMarkableInputStream_getSupportedServiceNames(void)
 {
     Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.MarkableInputStream" ));
+    aRet.getArray()[0] = "com.sun.star.io.MarkableInputStream";
     return aRet;
 }
 
