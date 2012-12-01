@@ -21,9 +21,6 @@
   <implementation name="com.sun.star.comp.Writer.RtfExport">
     <service name="com.sun.star.comp.Writer.RtfExport"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Writer.RtfImport">
-    <service name="com.sun.star.comp.Writer.RtfImport"/>
-  </implementation>
   <implementation name="com.sun.star.comp.Writer.DocxExport">
     <service name="com.sun.star.comp.Writer.DocxExport"/>
   </implementation>

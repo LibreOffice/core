@@ -19,7 +19,6 @@
 
 #include "docxexportfilter.hxx"
 #include "rtfexportfilter.hxx"
-#include "rtfimportfilter.hxx"
 #include "docxexport.hxx"
 
 #include <docsh.hxx>
@@ -128,11 +127,6 @@ extern "C"
     {
         RtfExport_createInstance, RtfExport_getImplementationName,
         RtfExport_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
-        0, 0
-    },
-    {
-        RtfImport_createInstance, RtfImport_getImplementationName,
-        RtfImport_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
         0, 0
     },
     { 0, 0, 0, 0, 0, 0 }
