@@ -32,7 +32,7 @@
 #include "oox/drawingml/chart/plotareaconverter.hxx"
 #include "oox/drawingml/chart/titleconverter.hxx"
 
-using ::rtl::OUString;
+using OUString;
 using ::com::sun::star::awt::Point;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
@@ -60,7 +60,7 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
-using ::rtl::OUString;
+using OUString;
 
 // ============================================================================
 

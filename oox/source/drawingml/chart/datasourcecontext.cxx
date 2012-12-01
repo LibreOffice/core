@@ -29,7 +29,7 @@ namespace chart {
 
 using ::oox::core::ContextHandler2Helper;
 using ::oox::core::ContextHandlerRef;
-using ::rtl::OUString;
+using OUString;
 
 // ============================================================================
 

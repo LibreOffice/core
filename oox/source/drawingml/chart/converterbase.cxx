@@ -50,7 +50,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
 using ::oox::core::XmlFilterBase;
-using ::rtl::OUString;
+using OUString;
 
 // ============================================================================
 
