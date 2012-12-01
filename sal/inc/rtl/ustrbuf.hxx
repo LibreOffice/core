@@ -409,7 +409,7 @@ public:
 
         @since LibreOffice 4.0
      */
-    OUStringBuffer & append(OUStringBuffer &str)
+    OUStringBuffer & append(const OUStringBuffer &str)
     {
         if(str.getLength() > 0)
         {
