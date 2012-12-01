@@ -1014,8 +1014,8 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( sal_Bool bCheckCatChange /*= sa
             aEdLeadZeroes.Enable();
             aBtnNegRed.Enable();
             aBtnThousand.Enable();
-            aEdDecimals  .SetText( OUString::valueOf( nDecimals ) );
-            aEdLeadZeroes.SetText( OUString::valueOf( nZeroes ) );
+            aEdDecimals  .SetText( OUString::valueOf( static_cast<sal_Int32>(nDecimals) ) );
+            aEdLeadZeroes.SetText( OUString::valueOf( static_cast<sal_Int32>(nZeroes) ) );
             aBtnNegRed   .Check( bNegRed );
             aBtnThousand .Check( bThousand );
             break;

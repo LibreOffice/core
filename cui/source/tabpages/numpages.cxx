@@ -1280,11 +1280,11 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
     if(!aLevelLB.GetEntryCount())
     {
         for(sal_uInt16 i = 1; i <= pSaveNum->GetLevelCount(); i++)
-            aLevelLB.InsertEntry( OUString::valueOf(i));
+            aLevelLB.InsertEntry( OUString::valueOf(static_cast<sal_Int32>(i)));
         if(pSaveNum->GetLevelCount() > 1)
         {
             OUString sEntry( "1 - " );
-            sEntry += OUString::valueOf( pSaveNum->GetLevelCount() );
+            sEntry += OUString::valueOf( static_cast<sal_Int32>(pSaveNum->GetLevelCount()) );
             aLevelLB.InsertEntry(sEntry);
             aLevelLB.SelectEntry(sEntry);
         }
@@ -3044,11 +3044,11 @@ void SvxNumPositionTabPage::Reset( const SfxItemSet& rSet )
     if(!aLevelLB.GetEntryCount())
     {
         for(sal_uInt16 i = 1; i <= pSaveNum->GetLevelCount(); i++)
-            aLevelLB.InsertEntry( OUString::valueOf(i) );
+            aLevelLB.InsertEntry( OUString::valueOf(static_cast<sal_Int32>(i)) );
         if(pSaveNum->GetLevelCount() > 1)
         {
             OUString sEntry( "1 - " );
-            sEntry += OUString::valueOf( pSaveNum->GetLevelCount() );
+            sEntry += OUString::valueOf( static_cast<sal_Int32>(pSaveNum->GetLevelCount()) );
             aLevelLB.InsertEntry(sEntry);
             aLevelLB.SelectEntry(sEntry);
         }
