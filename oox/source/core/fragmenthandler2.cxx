@@ -67,7 +67,7 @@ bool FragmentHandler2::prepareMceContext( sal_Int32 nElement, const AttributeLis
 
         case MCE_TOKEN( Choice ):
             {
-                OUString aRequires = rAttribs.getString( ( XML_Requires ), OUString(RTL_CONSTASCII_USTRINGPARAM("none")) );
+                OUString aRequires = rAttribs.getString( ( XML_Requires ), OUString("none") );
                 aRequires = getFilter().getNamespaceURL( aRequires );
                 if( getFilter().getNamespaceId( aRequires ) > 0 && !aMceState.empty() && aMceState.back() == MCE_STARTED )
                     aMceState.back() = MCE_FOUND_CHOICE;
