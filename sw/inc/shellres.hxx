@@ -95,7 +95,7 @@ struct SW_DLLPUBLIC ShellResource : public Resource
 
 private:
     void _GetAutoFmtNameLst() const;
-    std::vector<String> *pAutoFmtNameLst;
+    mutable std::vector<String> *pAutoFmtNameLst;
     String          sPageDescFirstName;
     String          sPageDescFollowName;
     String          sPageDescName;

@@ -238,10 +238,10 @@ struct ImpAutoFmtNameListLoader : public Resource
 
 void ShellResource::_GetAutoFmtNameLst() const
 {
-    std::vector<String>* pLst(pAutoFmtNameLst);
-    pLst = new std::vector<String>;
-    pLst->reserve(STR_AUTOFMTREDL_END);
-    ImpAutoFmtNameListLoader aTmp( *pLst );
+    assert(!pAutoFmtNameLst);
+    pAutoFmtNameLst = new std::vector<String>;
+    pAutoFmtNameLst->reserve(STR_AUTOFMTREDL_END);
+    ImpAutoFmtNameListLoader aTmp(*pAutoFmtNameLst);
 }
 
 ImpAutoFmtNameListLoader::ImpAutoFmtNameListLoader( std::vector<String>& rLst )
