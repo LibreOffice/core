@@ -165,7 +165,6 @@ void test::ostring::StringLiterals::checkUsage()
     rtl::OString FooBaRfoo( "FooBaRfoo" );
     rtl::OString FooBaR( "FooBaR" );
     rtl::OString bar( "bar" );
-    rtl::OString test( "test" );
 
     rtl_string_unittest_const_literal = false; // start checking for OString conversions
     rtl_string_unittest_non_const_literal_function = false; // and check for non-const variants
@@ -232,7 +231,6 @@ void test::ostring::StringLiterals::checkNonConstUsage()
     rtl::OString FooBaRfoo( "FooBaRfoo" );
     rtl::OString FooBaR( "FooBaR" );
     rtl::OString bar( "bar" );
-    rtl::OString test( "test" );
     char foo_c[] = "foo";
     char bar_c[] = "bar";
     char fOo_c[] = "fOo";
