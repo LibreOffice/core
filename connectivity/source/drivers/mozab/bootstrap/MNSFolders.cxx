@@ -85,7 +85,7 @@ namespace
     #else
         { ".mozilla/seamonkey/", NULL, NULL, NULL },
         { ".mozilla/firefox/", NULL, NULL, NULL },
-        { ".thunderbird/", ".mozilla-thunderbird/", ".mozilla/thunderbird/", ".icedove" }
+        { ".thunderbird/", ".mozilla-thunderbird/", ".mozilla/thunderbird/", ".icedove/" }
     #endif
     };
 
