@@ -207,40 +207,6 @@ int macxp_resolveAlias(char *path, int buflen)
 
 #endif /* NO_PTHREAD_RTL */
 
-#if defined(LINUX) && defined (__GLIBC__) && __GLIBC__ == 2 && __GLIBC_MINOR__ < 4
-/* The linux kernel 2.4 getpid implemention always return the pid of the
-   thread subprocess and not of the main process, the NPTL implementation
-   with a Linux kernel 2.6 kernel return the pid. So when possibly
-   there is the wrong implementation of getpid, we save the pid at startup.
-   FIXME: when our Linux base-line is above:
-        + Linux kernel version 2.6 or higher; -> clone() for NTPL
-        + glibc2 version 2.4 or higher; -> No longer LinuxThreads, only NPTL
-   Then we get a working getpid() and can remove this hack.
-   FIXME: getppid is also wrong in this situation
-*/
-
-// Directly from libc.so.6, obviously missing from some unistd.h:
-extern __pid_t __getpid(void);
-
-static pid_t pid = -1;
-
-static void savePid(void) __attribute__((constructor));
-
-static void savePid(void)
-{
-    if (pid == -1)
-        pid = __getpid();
-}
-
-pid_t getpid(void)
-{
-    if (pid == -1)
-        savePid();
-
-    return (pid);
-}
-#endif /*  defined LINUX */
-
 #ifdef NO_PTHREAD_SEMAPHORES
 int sem_init(sem_t* sem, int pshared, unsigned int value)
 {
