@@ -272,7 +272,7 @@ void lclAppendString32( String& rString, SvMemoryStream& rStrm, bool b16Bit )
 void SwWW8ImplReader::ReadEmbeddedData( SvMemoryStream& rStrm, SwDocShell* pDocShell, struct HyperLinksTable& hlStr)
 {
     // (0x01B8) HLINK -------------------------------------------------------------
-    const sal_uInt16 WW8_ID_HLINK               = 0x01B8;
+    // const sal_uInt16 WW8_ID_HLINK               = 0x01B8;
     const sal_uInt32 WW8_HLINK_BODY             = 0x00000001;   /// Contains file link or URL.
     const sal_uInt32 WW8_HLINK_ABS              = 0x00000002;   /// Absolute path.
     const sal_uInt32 WW8_HLINK_DESCR            = 0x00000014;   /// Description.
@@ -280,8 +280,8 @@ void SwWW8ImplReader::ReadEmbeddedData( SvMemoryStream& rStrm, SwDocShell* pDocS
     const sal_uInt32 WW8_HLINK_FRAME            = 0x00000080;   /// Target frame.
     const sal_uInt32 WW8_HLINK_UNC              = 0x00000100;   /// UNC path.
 
-    sal_uInt8 maGuidStdLink[ 16 ] ={
-        0xD0, 0xC9, 0xEA, 0x79, 0xF9, 0xBA, 0xCE, 0x11, 0x8C, 0x82, 0x00, 0xAA, 0x00, 0x4B, 0xA9, 0x0B };
+    //  sal_uInt8 maGuidStdLink[ 16 ] ={
+    //      0xD0, 0xC9, 0xEA, 0x79, 0xF9, 0xBA, 0xCE, 0x11, 0x8C, 0x82, 0x00, 0xAA, 0x00, 0x4B, 0xA9, 0x0B };
 
     sal_uInt8 maGuidUrlMoniker[ 16 ] = {
         0xE0, 0xC9, 0xEA, 0x79, 0xF9, 0xBA, 0xCE, 0x11, 0x8C, 0x82, 0x00, 0xAA, 0x00, 0x4B, 0xA9, 0x0B };
