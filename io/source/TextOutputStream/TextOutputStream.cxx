@@ -167,7 +167,7 @@ void OTextOutputStream::writeString( const OUString& aString )
 {
     if( !mbEncodingInitialized )
     {
-        OUString aUtf8Str( RTL_CONSTASCII_USTRINGPARAM("utf8") );
+        OUString aUtf8Str("utf8");
         setEncoding( aUtf8Str );
     }
     if( !mbEncodingInitialized )
@@ -236,14 +236,14 @@ Reference< XInterface > SAL_CALL TextOutputStream_CreateInstance(
 
 OUString TextOutputStream_getImplementationName() SAL_THROW(  () )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ) );
+    return OUString( IMPLEMENTATION_NAME );
 }
 
 
 Sequence< OUString > TextOutputStream_getSupportedServiceNames()
 {
     Sequence< OUString > seqNames(1);
-    seqNames.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ) );
+    seqNames.getArray()[0] =  SERVICE_NAME;
     return seqNames;
 }
 
