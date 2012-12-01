@@ -140,7 +140,7 @@
  };
  
 +#ifndef __MINGW32__
- /** 
+ /**
   * xmlSecNssTransformKWAes128GetKlass:
   *
 @@ -1160,6 +1161,7 @@
@@ -156,7 +156,7 @@
  };
  
 +#ifndef __MINGW32__
- /** 
+ /**
   * xmlSecNssTransformKWDes3GetKlass:
   * 
 @@ -1208,6 +1211,7 @@
