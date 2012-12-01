@@ -32,6 +32,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,langtag,\
 	liblangtag/liblangtag-0.4.0-windows2.patch \
 	liblangtag/liblangtag-0.4.0-msvcprojects.patch \
 	liblangtag/liblangtag-0.4.0-ppc.patch \
+	liblangtag/liblangtag-0.4.0-vsnprintf.patch \
 ))
 endif
 
