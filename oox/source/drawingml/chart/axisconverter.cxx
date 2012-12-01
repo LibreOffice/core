@@ -45,7 +45,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::chart2;
 using namespace ::com::sun::star::uno;
 
-using ::rtl::OUString;
+using OUString;
 
 // ============================================================================
 
@@ -360,4 +360,4 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
 } // namespace drawingml
 } // namespace oox
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:n:set shiftwidth=4 softtabstop=4 expandtab: */

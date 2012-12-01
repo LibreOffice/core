@@ -47,9 +47,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
 using ::oox::core::XmlFilterBase;
-using ::rtl::OStringBuffer;
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
+using OStringBuffer;
+using OUString;
+using OUStringToOString;
 
 // ============================================================================
 
@@ -1124,7 +1124,7 @@ void ObjectFormatter::convertNumberFormat( PropertySet& rPropSet, const NumberFo
         }
         else try
         {
-            sal_Int32 nIndex = rNumberFormat.maFormatCode.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("general")) ?
+            sal_Int32 nIndex = rNumberFormat.maFormatCode.equalsIgnoreAsciiCaseAsciiL("general") ?
                 mxData->mxNumTypes->getStandardIndex( mxData->maFromLocale ) :
                 mxData->mxNumFmts->addNewConverted( rNumberFormat.maFormatCode, mxData->maEnUsLocale, mxData->maFromLocale );
             if( nIndex >= 0 )

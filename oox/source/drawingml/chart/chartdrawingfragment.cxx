@@ -36,7 +36,7 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
 using namespace ::oox::core;
 
-using ::rtl::OUString;
+using OUString;
 
 // ============================================================================
 
