@@ -197,7 +197,7 @@ endif
 
 # TODO: This should be really in external/ module, I think.
 $(SRCDIR)/src.downloaded : $(SRCDIR)/download $(SRCDIR)/config_host.mk | download
-ifneq ($(COM),MSC)
+ifeq ($(COM),MSC)
 	$< && touch $@
 endif
 
