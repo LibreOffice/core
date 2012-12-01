@@ -1181,10 +1181,9 @@ void ScInterpreter::ScB()
         else
         {
             double q = 1.0 - p;
-            double fFactor = pow(q, n);
-            if (fFactor == 0.0)
+            if (p > 0.5)
             {
-                fFactor = pow(p, n);
+                double fFactor = pow(p, n);
                 if (fFactor == 0.0)
                     PushNoValue();
                 else
@@ -1197,10 +1196,16 @@ void ScInterpreter::ScB()
             }
             else
             {
-                sal_uLong max = (sal_uLong) x;
-                for (sal_uLong i = 0; i < max && fFactor > 0.0; i++)
-                    fFactor *= (n-i)/(i+1)*p/q;
-                PushDouble(fFactor);
+                double fFactor = pow(q, n);
+                if (fFactor == 0.0)
+                    PushNoValue();
+                else
+                {
+                    sal_uLong max = (sal_uLong) x;
+                    for (sal_uLong i = 0; i < max && fFactor > 0.0; i++)
+                        fFactor *= (n-i)/(i+1)*p/q;
+                    PushDouble(fFactor);
+                }
             }
         }
     }
@@ -1224,10 +1229,9 @@ void ScInterpreter::ScB()
         if ( bIsValidX && 0.0 < p && p < 1.0 )
         {
             double q = 1.0 - p;
-            double fFactor = pow(q, n);
-            if (fFactor == 0.0)
+            if (p > 0.5)
             {
-                fFactor = pow(p, n);
+                double fFactor = pow(p, n);
                 if (fFactor == 0.0)
                     PushNoValue();
                 else
@@ -1255,31 +1259,37 @@ void ScInterpreter::ScB()
             }
             else
             {
-                sal_uLong max;
-                double fSum;
-                if ( (sal_uLong) xs == 0)
-                {
-                    fSum = fFactor;
-                    max = 0;
-                }
+                double fFactor = pow(q, n);
+                if (fFactor == 0.0)
+                    PushNoValue();
                 else
                 {
-                    max = (sal_uLong) xs-1;
-                    fSum = 0.0;
+                    sal_uLong max;
+                    double fSum;
+                    if ( (sal_uLong) xs == 0)
+                    {
+                        fSum = fFactor;
+                        max = 0;
+                    }
+                    else
+                    {
+                        max = (sal_uLong) xs-1;
+                        fSum = 0.0;
+                    }
+                    sal_uLong i;
+                    for (i = 0; i < max && fFactor > 0.0; i++)
+                        fFactor *= (n-i)/(i+1)*p/q;
+                    if ((sal_uLong)xe == 0)                     // beide 0
+                        fSum = fFactor;
+                    else
+                        max = (sal_uLong) xe;
+                    for (; i < max && fFactor > 0.0; i++)
+                    {
+                        fFactor *= (n-i)/(i+1)*p/q;
+                        fSum += fFactor;
+                    }
+                    PushDouble(fSum);
                 }
-                sal_uLong i;
-                for (i = 0; i < max && fFactor > 0.0; i++)
-                    fFactor *= (n-i)/(i+1)*p/q;
-                if ((sal_uLong)xe == 0)                     // beide 0
-                    fSum = fFactor;
-                else
-                    max = (sal_uLong) xe;
-                for (; i < max && fFactor > 0.0; i++)
-                {
-                    fFactor *= (n-i)/(i+1)*p/q;
-                    fSum += fFactor;
-                }
-                PushDouble(fSum);
             }
         }
         else
@@ -1299,23 +1309,25 @@ void ScInterpreter::ScB()
     }
 }
 
+#include <stdlib.h>
+#include <stdio.h>
+
 void ScInterpreter::ScBinomDist()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScBinomDist" );
     if ( MustHaveParamCount( GetByte(), 4 ) )
     {
-        double kum    = GetDouble();                    // 0 oder 1
+        double kum    = GetDouble();                    // 0 or 1
         double p      = GetDouble();                    // p
         double n      = ::rtl::math::approxFloor(GetDouble());              // n
         double x      = ::rtl::math::approxFloor(GetDouble());              // x
         double fFactor, q;
         if (n < 0.0 || x < 0.0 || x > n || p < 0.0 || p > 1.0)
             PushIllegalArgument();
-        else if (kum == 0.0)                        // Dichte
+        else if (kum == 0.0)                        // Probability mass function
         {
             q = 1.0 - p;
-            fFactor = pow(q, n);
-            if (fFactor == 0.0)
+            if (p > 0.5)
             {
                 fFactor = pow(p, n);
                 if (fFactor == 0.0)
@@ -1330,13 +1342,19 @@ void ScInterpreter::ScBinomDist()
             }
             else
             {
-                sal_uLong max = (sal_uLong) x;
-                for (sal_uLong i = 0; i < max && fFactor > 0.0; i++)
-                    fFactor *= (n-i)/(i+1)*p/q;
-                PushDouble(fFactor);
+                fFactor = pow(q, n);
+                if (fFactor == 0.0)
+                    PushNoValue();
+                else
+                {
+                    sal_uLong max = (sal_uLong) x;
+                    for (sal_uLong i = 0; i < max && fFactor > 0.0; i++)
+                        fFactor *= (n-i)/(i+1)*p/q;
+                    PushDouble(fFactor);
+                }
             }
         }
-        else                                        // Verteilung
+        else                                        // Cumulative distribution function
         {
             if (n == x)
                 PushDouble(1.0);
@@ -1344,8 +1362,7 @@ void ScInterpreter::ScBinomDist()
             {
                 double fSum;
                 q = 1.0 - p;
-                fFactor = pow(q, n);
-                if (fFactor == 0.0)
+                if (p > 0.5)
                 {
                     fFactor = pow(p, n);
                     if (fFactor == 0.0)
@@ -1367,14 +1384,20 @@ void ScInterpreter::ScBinomDist()
                 }
                 else
                 {
-                    fSum = fFactor;
-                    sal_uLong max = (sal_uLong) x;
-                    for (sal_uLong i = 0; i < max && fFactor > 0.0; i++)
+                    fFactor = pow(q, n);
+                    if (fFactor == 0.0)
+                        PushNoValue();
+                    else
                     {
-                        fFactor *= (n-i)/(i+1)*p/q;
-                        fSum += fFactor;
+                        fSum = fFactor;
+                        sal_uLong max = (sal_uLong) x;
+                        for (sal_uLong i = 0; i < max && fFactor > 0.0; i++)
+                        {
+                            fFactor *= (n-i)/(i+1)*p/q;
+                            fSum += fFactor;
+                        }
+                        PushDouble(fSum);
                     }
-                    PushDouble(fSum);
                 }
             }
         }
@@ -1394,15 +1417,15 @@ void ScInterpreter::ScCritBinom()
         else
         {
             double q = 1.0 - p;
-            double fFactor = pow(q,n);
-            if (fFactor == 0.0)
+            if (p > 0.5)
             {
-                fFactor = pow(p, n);
+                double fFactor = pow(p, n);
                 if (fFactor == 0.0)
                     PushNoValue();
                 else
                 {
-                    double fSum = 1.0 - fFactor; sal_uLong max = (sal_uLong) n;
+                    double fSum = 1.0 - fFactor;
+                    sal_uLong max = (sal_uLong) n;
                     sal_uLong i;
 
                     for ( i = 0; i < max && fSum >= alpha; i++)
@@ -1415,15 +1438,22 @@ void ScInterpreter::ScCritBinom()
             }
             else
             {
-                double fSum = fFactor; sal_uLong max = (sal_uLong) n;
-                sal_uLong i;
-
-                for ( i = 0; i < max && fSum < alpha; i++)
+                double fFactor = pow(q,n);
+                if (fFactor == 0.0)
+                    PushNoValue();
+                else
                 {
-                    fFactor *= (n-i)/(i+1)*p/q;
-                    fSum += fFactor;
+                    double fSum = fFactor; 
+                    sal_uLong max = (sal_uLong) n;
+                    sal_uLong i;
+
+                    for ( i = 0; i < max && fSum < alpha; i++)
+                    {
+                        fFactor *= (n-i)/(i+1)*p/q;
+                        fSum += fFactor;
+                    }
+                    PushDouble(i);
                 }
-                PushDouble(i);
             }
         }
     }
