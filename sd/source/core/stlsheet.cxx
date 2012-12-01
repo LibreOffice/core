@@ -1032,12 +1032,12 @@ sal_Bool SAL_CALL SdStyleSheet::isHidden() throw(RuntimeException)
     return IsHidden();
 }
 
-void SAL_CALL SdStyleSheet::setHidden( sal_Bool bHidden ) throw(RuntimeException)
+void SAL_CALL SdStyleSheet::setHidden( sal_Bool rbHidden ) throw(RuntimeException)
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
 
-    return SetHidden( bHidden );
+    return SetHidden( rbHidden );
 }
 
 // --------------------------------------------------------------------
