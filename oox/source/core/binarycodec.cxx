@@ -179,15 +179,15 @@ bool BinaryCodec_XOR::initCodec( const uno::Sequence< beans::NamedValue >& aData
     bool bResult = sal_False;
 
     ::comphelper::SequenceAsHashMap aHashData( aData );
-    uno::Sequence< sal_Int8 > aKey = aHashData.getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XOR95EncryptionKey" ) ), uno::Sequence< sal_Int8 >() );
+    uno::Sequence< sal_Int8 > aKey = aHashData.getUnpackedValueOrDefault("XOR95EncryptionKey", uno::Sequence< sal_Int8 >() );
 
     if ( aKey.getLength() == 16 )
     {
         (void)memcpy( mpnKey, aKey.getConstArray(), 16 );
         bResult = sal_True;
 
-        mnBaseKey = (sal_uInt16)aHashData.getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XOR95BaseKey" ) ), (sal_Int16)0 );
-        mnHash = (sal_uInt16)aHashData.getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XOR95PasswordHash" ) ), (sal_Int16)0 );
+        mnBaseKey = (sal_uInt16)aHashData.getUnpackedValueOrDefault("XOR95BaseKey", (sal_Int16)0 );
+        mnHash = (sal_uInt16)aHashData.getUnpackedValueOrDefault("XOR95PasswordHash", (sal_Int16)0 );
     }
     else
         OSL_FAIL( "Unexpected key size!\n" );
@@ -198,9 +198,9 @@ bool BinaryCodec_XOR::initCodec( const uno::Sequence< beans::NamedValue >& aData
 uno::Sequence< beans::NamedValue > BinaryCodec_XOR::getEncryptionData()
 {
     ::comphelper::SequenceAsHashMap aHashData;
-    aHashData[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XOR95EncryptionKey" ) ) ] <<= uno::Sequence<sal_Int8>( (sal_Int8*)mpnKey, 16 );
-    aHashData[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XOR95BaseKey" ) ) ] <<= (sal_Int16)mnBaseKey;
-    aHashData[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XOR95PasswordHash" ) ) ] <<= (sal_Int16)mnHash;
+    aHashData[ OUString("XOR95EncryptionKey") ] <<= uno::Sequence<sal_Int8>( (sal_Int8*)mpnKey, 16 );
+    aHashData[ OUString("XOR95BaseKey") ] <<= (sal_Int16)mnBaseKey;
+    aHashData[ OUString("XOR95PasswordHash") ] <<= (sal_Int16)mnHash;
 
     return aHashData.getAsConstNamedValueList();
 }
@@ -286,12 +286,12 @@ bool BinaryCodec_RCF::initCodec( const uno::Sequence< beans::NamedValue >& aData
     bool bResult = sal_False;
 
     ::comphelper::SequenceAsHashMap aHashData( aData );
-    uno::Sequence< sal_Int8 > aKey = aHashData.getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "STD97EncryptionKey" ) ), uno::Sequence< sal_Int8 >() );
+    uno::Sequence< sal_Int8 > aKey = aHashData.getUnpackedValueOrDefault("STD97EncryptionKey", uno::Sequence< sal_Int8 >() );
 
     if ( aKey.getLength() == RTL_DIGEST_LENGTH_MD5 )
     {
         (void)memcpy( mpnDigestValue, aKey.getConstArray(), RTL_DIGEST_LENGTH_MD5 );
-        uno::Sequence< sal_Int8 > aUniqueID = aHashData.getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "STD97UniqueID" ) ), uno::Sequence< sal_Int8 >() );
+        uno::Sequence< sal_Int8 > aUniqueID = aHashData.getUnpackedValueOrDefault("STD97UniqueID", uno::Sequence< sal_Int8 >() );
         if ( aUniqueID.getLength() == 16 )
         {
             (void)memcpy( mpnUnique, aUniqueID.getConstArray(), 16 );
@@ -309,8 +309,8 @@ bool BinaryCodec_RCF::initCodec( const uno::Sequence< beans::NamedValue >& aData
 uno::Sequence< beans::NamedValue > BinaryCodec_RCF::getEncryptionData()
 {
     ::comphelper::SequenceAsHashMap aHashData;
-    aHashData[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "STD97EncryptionKey" ) ) ] <<= uno::Sequence< sal_Int8 >( (sal_Int8*)mpnDigestValue, RTL_DIGEST_LENGTH_MD5 );
-    aHashData[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "STD97UniqueID" ) ) ] <<= uno::Sequence< sal_Int8 >( (sal_Int8*)mpnUnique, 16 );
+    aHashData[ OUString("STD97EncryptionKey") ] <<= uno::Sequence< sal_Int8 >( (sal_Int8*)mpnDigestValue, RTL_DIGEST_LENGTH_MD5 );
+    aHashData[ OUString("STD97UniqueID") ] <<= uno::Sequence< sal_Int8 >( (sal_Int8*)mpnUnique, 16 );
 
     return aHashData.getAsConstNamedValueList();
 }

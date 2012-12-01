@@ -171,7 +171,7 @@ namespace
             Sequence< Pair< OUString, sal_Int32 > > aRet(STATIC_ARRAY_SIZE(namespaceIds));
             for( sal_Int32 i=0; i<aRet.getLength(); ++i )
                 aRet[i] = make_Pair(
-                    ::rtl::OUString::createFromAscii(namespaceURIs[i]),
+                    OUString::createFromAscii(namespaceURIs[i]),
                     namespaceIds[i]);
             return aRet;
         }
@@ -218,7 +218,7 @@ void XmlFilterBase::importDocumentProperties()
     Reference< XStorage > xDocumentStorage (
             ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream( OFOPXML_STORAGE_FORMAT_STRING, xInputStream ) );
     Reference< XInterface > xTemp = xContext->getServiceManager()->createInstanceWithContext(
-            ::rtl::OUString("com.sun.star.document.OOXMLDocumentPropertiesImporter"),
+            "com.sun.star.document.OOXMLDocumentPropertiesImporter",
             xContext);
     Reference< XOOXMLDocumentPropertiesImporter > xImporter( xTemp, UNO_QUERY );
     Reference< XDocumentPropertiesSupplier > xPropSupplier( xModel, UNO_QUERY);
@@ -311,7 +311,7 @@ sal_Int32 XmlFilterBase::getNamespaceId( const OUString& rUrl )
      return mxImpl->maFastParser.getNamespaceId( rUrl );
 }
 
-Reference<XDocument> XmlFilterBase::importFragment( const ::rtl::OUString& aFragmentPath )
+Reference<XDocument> XmlFilterBase::importFragment( const OUString& aFragmentPath )
 {
     Reference<XDocument> xRet;
 
@@ -628,7 +628,7 @@ XmlFilterBase& XmlFilterBase::exportDocumentProperties( Reference< XDocumentProp
         for( sal_Int32 i = 0, end = aStats.getLength(); i < end; ++i )
         {
             ::com::sun::star::uno::Any aValue = aStats[ i ].Value;
-            ::rtl::OUString sValue;
+            OUString sValue;
             bool bHaveString = aValue >>= sValue;
             OSL_TRACE ("#\t%s=%s [%s]\n",
                     OUStringToOString( aStats[ i ].Name, RTL_TEXTENCODING_UTF8 ).getStr(),
