@@ -162,7 +162,7 @@ void FilterDetectDocHandler::parseRelationship( const AttributeList& rAttribs )
         {
              // use '/' to representent the root of the zip package ( and provide a 'file' scheme to
              // keep the XUriReference implementation happy )
-             Reference< com::sun::star::uri::XUriReference > xBase = xFac->parse( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("file:///" ) ) );
+             Reference< com::sun::star::uri::XUriReference > xBase = xFac->parse( OUString("file:///") );
 
              Reference< com::sun::star::uri::XUriReference > xPart = xFac->parse(  rAttribs.getString( XML_Target, OUString() ) );
              Reference< com::sun::star::uri::XUriReference > xAbs = xFac->makeAbsolute(  xBase, xPart, sal_True, com::sun::star::uri::RelativeUriExcessParentSegments_RETAIN );
@@ -178,35 +178,35 @@ void FilterDetectDocHandler::parseRelationship( const AttributeList& rAttribs )
 
 OUString FilterDetectDocHandler::getFilterNameFromContentType( const OUString& rContentType ) const
 {
-    if( rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml" ) ) ||
-        rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.ms-word.document.macroEnabled.main+xml" ) ) )
+    if( rContentType.equalsAscii("application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml" ) ||
+        rContentType.equalsAscii("application/vnd.ms-word.document.macroEnabled.main+xml" ) )
         return CREATE_OUSTRING( "writer_MS_Word_2007" );
 
-    if( rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml" ) ) ||
-        rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.ms-word.template.macroEnabledTemplate.main+xml" ) ) )
+    if( rContentType.equalsAscii("application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml") ||
+        rContentType.equalsAscii("application/vnd.ms-word.template.macroEnabledTemplate.main+xml") )
         return CREATE_OUSTRING( "writer_MS_Word_2007_Template" );
 
-    if( rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml" ) ) ||
-        rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.ms-excel.sheet.macroEnabled.main+xml" ) ) )
+    if( rContentType.equalsAscii("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml") ||
+        rContentType.equalsAscii("application/vnd.ms-excel.sheet.macroEnabled.main+xml") )
         return CREATE_OUSTRING( "MS Excel 2007 XML" );
 
-    if( rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml" ) ) ||
-        rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.ms-excel.template.macroEnabled.main+xml" ) ) )
+    if( rContentType.equalsAscii("application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml") ||
+        rContentType.equalsAscii("application/vnd.ms-excel.template.macroEnabled.main+xml") )
         return CREATE_OUSTRING( "MS Excel 2007 XML Template" );
 
     if ( rContentType == "application/vnd.ms-excel.sheet.binary.macroEnabled.main" )
         return CREATE_OUSTRING( "MS Excel 2007 Binary" );
 
-    if( rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml" ) ) ||
-        rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.ms-powerpoint.presentation.macroEnabled.main+xml" ) ) )
+    if( rContentType.equalsAscii("application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml") ||
+        rContentType.equalsAscii("application/vnd.ms-powerpoint.presentation.macroEnabled.main+xml") )
         return CREATE_OUSTRING( "MS PowerPoint 2007 XML" );
 
-    if( rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.openxmlformats-officedocument.presentationml.slideshow.main+xml" ) ) ||
-        rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.ms-powerpoint.slideshow.macroEnabled.main+xml" ) ) )
+    if( rContentType.equalsAscii("application/vnd.openxmlformats-officedocument.presentationml.slideshow.main+xml") ||
+        rContentType.equalsAscii("application/vnd.ms-powerpoint.slideshow.macroEnabled.main+xml") )
         return CREATE_OUSTRING( "MS PowerPoint 2007 XML AutoPlay" );
 
-    if( rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.openxmlformats-officedocument.presentationml.template.main+xml" ) ) ||
-        rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.ms-powerpoint.template.macroEnabled.main+xml" ) ) )
+    if( rContentType.equalsAscii("application/vnd.openxmlformats-officedocument.presentationml.template.main+xml") ||
+        rContentType.equalsAscii("application/vnd.ms-powerpoint.template.macroEnabled.main+xml") )
         return CREATE_OUSTRING( "MS PowerPoint 2007 XML Template" );
 
     return OUString();
