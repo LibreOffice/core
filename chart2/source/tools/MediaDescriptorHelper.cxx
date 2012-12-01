@@ -198,11 +198,6 @@ void MediaDescriptorHelper::impl_init()
     ISSET_Stream = sal_False;
 }
 
-MediaDescriptorHelper::~MediaDescriptorHelper()
-{
-
-}
-
     uno::Sequence< beans::PropertyValue > MediaDescriptorHelper
 ::getReducedForModel()
 {
