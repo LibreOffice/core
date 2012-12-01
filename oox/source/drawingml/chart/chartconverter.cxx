@@ -27,7 +27,7 @@
 
 using ::oox::drawingml::chart::DataSequenceModel;
 using ::com::sun::star::uno::Any;
-using ::rtl::OUStringBuffer;
+using OUStringBuffer;
 namespace oox {
 namespace drawingml {
 namespace chart {
@@ -41,7 +41,7 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
 
 using ::oox::core::XmlFilterBase;
-using ::rtl::OUString;
+using OUString;
 
 // ============================================================================
 
@@ -60,7 +60,7 @@ static OUString lclGenerateApiString( const OUString& rString )
     return OUStringBuffer().append( sal_Unicode( '"' ) ).append( aRetString ).append( sal_Unicode( '"' ) ).makeStringAndClear();
 }
 
-static ::rtl::OUString lclGenerateApiArray( const Matrix< Any >& rMatrix )
+static OUString lclGenerateApiArray( const Matrix< Any >& rMatrix )
 {
     OSL_ENSURE( !rMatrix.empty(), "ChartConverter::lclGenerateApiArray - missing matrix values" );
     OUStringBuffer aBuffer;
@@ -72,7 +72,7 @@ static ::rtl::OUString lclGenerateApiArray( const Matrix< Any >& rMatrix )
         for( Matrix< Any >::const_iterator aBeg = rMatrix.row_begin( nRow ), aIt = aBeg, aEnd = rMatrix.row_end( nRow ); aIt != aEnd; ++aIt )
         {
             double fValue = 0.0;
-            ::rtl::OUString aString;
+            OUString aString;
             if( aIt != aBeg )
                 aBuffer.append( API_TOKEN_ARRAY_COLSEP );
             if( *aIt >>= fValue )
@@ -127,7 +127,7 @@ Reference< XDataSequence > ChartConverter::createDataSequence( const Reference< 
     Reference< XDataSequence > xDataSeq;
     if( rxDataProvider.is() )
     {
-        ::rtl::OUString aRangeRep;
+        OUString aRangeRep;
         if( !rDataSeq.maData.empty() )
         {
             // create a single-row array from constant source data

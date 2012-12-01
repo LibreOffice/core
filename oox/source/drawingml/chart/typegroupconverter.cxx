@@ -45,7 +45,7 @@ using namespace ::com::sun::star::chart2;
 using namespace ::com::sun::star::chart2::data;
 using namespace ::com::sun::star::uno;
 
-using ::rtl::OUString;
+using OUString;
 
 // ============================================================================
 

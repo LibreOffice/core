@@ -33,7 +33,7 @@ namespace chart {
 
 using namespace ::oox::core;
 
-using ::rtl::OUString;
+using OUString;
 
 // ============================================================================
 

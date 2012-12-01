@@ -41,7 +41,7 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::chart2;
 using namespace ::com::sun::star::uno;
 
-using ::rtl::OUString;
+using OUString;
 
 // ============================================================================
 
@@ -79,7 +79,7 @@ public:
                             bool bSupportsVaryColorsByPoint );
 
     /** Returns the automatic chart title if the axes set contains only one series. */
-    inline const ::rtl::OUString& getAutomaticTitle() const { return maAutoTitle; }
+    inline const OUString& getAutomaticTitle() const { return maAutoTitle; }
     /** Returns true, if the chart is three-dimensional. */
     inline bool         is3dChart() const { return mb3dChart; }
     /** Returns true, if chart type supports wall and floor format in 3D mode. */
@@ -88,7 +88,7 @@ public:
     inline bool         isPieChart() const { return mbPieChart; }
 
 private:
-    ::rtl::OUString     maAutoTitle;
+    OUString     maAutoTitle;
     bool                mb3dChart;
     bool                mbWall3dChart;
     bool                mbPieChart;
