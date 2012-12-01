@@ -272,7 +272,7 @@ LIBMGR=emxomfar -p2048
 .ENDIF
 
 # tool for generating import libraries
-IMPLIB=emximp
+IMPLIB=emximp -p2048
 IMPLIBFLAGS=-o
 
 MAPSYM=mapsym

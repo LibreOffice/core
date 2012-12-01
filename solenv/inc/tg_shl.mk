@@ -53,7 +53,7 @@ SHL$(TNR)RPATH*=OOO
 LINKFLAGSRUNPATH_$(SHL$(TNR)RPATH)*=/ERROR:/Bad_SHL$(TNR)RPATH_value
 SHL$(TNR)LINKFLAGS+=$(LINKFLAGSRUNPATH_$(SHL$(TNR)RPATH))
 
-.IF "$(SHL$(TNR)USE_EXPORTS)"==""
+.IF "$(SHL$(TNR)USE_EXPORTS)"=="" || "$(GUI)"=="OS2"
 SHL$(TNR)DEF*=$(MISC)/$(SHL$(TNR)TARGET).def
 .ENDIF			# "$(SHL$(TNR)USE_EXPORTS)"==""
 
@@ -549,8 +549,11 @@ $(SHL$(TNR)TARGETN) : \
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
 
-    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(SHL$(TNR)IMPLIBN) $@
-    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(LB)/$(SHL$(TNR)TARGET).lib $@
+.IF "$(SHL$(TNR)USE_EXPORTS)"=="name"
+#03/11/2012  if 'name' is used, export from DLL file (only names, no ordinals)
+    @echo Build import library from DLL file.
+    $(COMMAND_ECHO)+$(IMPLIB) $(IMPLIBFLAGS) $(LB)/$(SHL$(TNR)TARGETN:b).lib $@
+.ENDIF			# "$(SHL$(TNR)USE_EXPORTS)"==""
 
 .IF "$(SHL$(TNR)TARGET8)" != "$(SHL$(TNR)TARGET)"
     $(COMMAND_ECHO)+$(COPY) $@ $(@:d)$(SHL$(TNR)TARGET8).dll
@@ -609,10 +612,10 @@ $(SHL$(TNR)IMPLIBN):	\
 
 .ELIF "$(GUI)" == "OS2"
 
-# touch creates an empty file, but this is not good for emxomfar, so
-# create a dummy lib here
-    $(COMMAND_ECHO)-$(LIBMGR) $(LIBFLAGS) $@ $(SHL$(TNR)VERSIONOBJ)
-    +@echo build of $(SHL$(TNR)TARGETN) creates $@
+    @echo Import libs generated with .def file or with .dll file.
+# make 'dmake' happy
+    @-$(RM) $@
+    @$(TOUCH) $@
 
 .ELSE
     @echo no ImportLibs on Mac and *ix
