@@ -61,7 +61,7 @@ namespace stoc_connector
 
     {
     public:
-        PipeConnection( const ::rtl::OUString &sConnectionDescription );
+        PipeConnection( const OUString &sConnectionDescription );
         virtual ~PipeConnection();
 
         virtual sal_Int32 SAL_CALL read( ::com::sun::star::uno::Sequence< sal_Int8 >& aReadBytes,
@@ -77,12 +77,12 @@ namespace stoc_connector
         virtual void SAL_CALL close(  )
             throw(::com::sun::star::io::IOException,
                   ::com::sun::star::uno::RuntimeException);
-        virtual ::rtl::OUString SAL_CALL getDescription(  )
+        virtual OUString SAL_CALL getDescription(  )
             throw(::com::sun::star::uno::RuntimeException);
     public:
         ::osl::StreamPipe m_pipe;
         oslInterlockedCount m_nStatus;
-        ::rtl::OUString m_sDescription;
+        OUString m_sDescription;
     };
 
     class SocketConnection :
@@ -90,7 +90,7 @@ namespace stoc_connector
 
     {
     public:
-        SocketConnection( const ::rtl::OUString & sConnectionDescription  );
+        SocketConnection( const OUString & sConnectionDescription  );
         virtual ~SocketConnection();
 
         virtual sal_Int32 SAL_CALL read( ::com::sun::star::uno::Sequence< sal_Int8 >& aReadBytes,
@@ -106,7 +106,7 @@ namespace stoc_connector
         virtual void SAL_CALL close(  )
             throw(::com::sun::star::io::IOException,
                   ::com::sun::star::uno::RuntimeException);
-        virtual ::rtl::OUString SAL_CALL getDescription(  )
+        virtual OUString SAL_CALL getDescription(  )
             throw(::com::sun::star::uno::RuntimeException);
 
 
@@ -122,7 +122,7 @@ namespace stoc_connector
         ::osl::ConnectorSocket m_socket;
         ::osl::SocketAddr m_addr;
         oslInterlockedCount m_nStatus;
-        ::rtl::OUString m_sDescription;
+        OUString m_sDescription;
 
         ::osl::Mutex _mutex;
         sal_Bool     _started;
