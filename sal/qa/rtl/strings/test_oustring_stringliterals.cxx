@@ -181,6 +181,8 @@ void test::oustring::StringLiterals::checkBuffer()
     buf.insert( 3, "baz" );
     CPPUNIT_ASSERT_EQUAL( rtl::OUString( "foobazbar" ), buf.toString());
     char d[] = "d";
+    CPPUNIT_ASSERT( !VALID_CONVERSION( buf.append( rtl::OUString( d ))));
+    CPPUNIT_ASSERT( !VALID_CONVERSION( buf.append( rtl::OUStringBuffer( d ))));
     CPPUNIT_ASSERT( !VALID_CONVERSION( buf.insert( 0, d )));
 }
 
