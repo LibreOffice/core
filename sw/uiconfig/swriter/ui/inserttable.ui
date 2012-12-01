@@ -170,7 +170,7 @@
                             <property name="can_focus">False</property>
                             <property name="margin_left">6</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Rows </property>
+                            <property name="label" translatable="yes">_Rows</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -346,7 +346,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="margin_left">5</property>
-                                <property name="label" translatable="yes">Heading _Rows</property>
+                                <property name="label" translatable="yes">Heading Ro_ws</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -394,7 +394,7 @@
                 <property name="left_padding">12</property>
                 <child>
                   <object class="GtkButton" id="autoformat">
-                    <property name="label" translatable="yes">Table St_yles</property>
+                    <property name="label" translatable="yes">Auto_Format</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
