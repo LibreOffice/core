@@ -177,11 +177,11 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
 
 
-bool MasterPageDescriptor::UpdatePageObject (
+int MasterPageDescriptor::UpdatePageObject (
     sal_Int32 nCostThreshold,
     SdDrawDocument* pDocument)
 {
-    bool bModified (false);
+    int bModified = 0;
 
     // Update the page object when that is not yet known.
     if (mpMasterPage == NULL
@@ -221,9 +221,10 @@ bool MasterPageDescriptor::UpdatePageObject (
         else
         {
             DBG_ASSERT(false, "UpdatePageObject: master page is NULL");
+            return -1;
         }
 
-        bModified = true;
+        bModified = 1;
     }
 
     return bModified;
