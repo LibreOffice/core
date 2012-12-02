@@ -931,7 +931,7 @@ sal_Bool SdrOle2Obj::UpdateLinkURL_Impl()
                     catch( ::com::sun::star::uno::Exception& )
                     {
                         OSL_FAIL(
-                            (OString("SdrOle2Obj::UpdateLinkURL_Impl(), "
+                            OString(OString("SdrOle2Obj::UpdateLinkURL_Impl(), "
                                     "exception caught: ") +
                             rtl::OUStringToOString(
                                 comphelper::anyToString( cppu::getCaughtException() ),
@@ -973,7 +973,7 @@ void SdrOle2Obj::BreakFileLink_Impl()
             catch( ::com::sun::star::uno::Exception& )
             {
                 OSL_FAIL(
-                    (OString("SdrOle2Obj::BreakFileLink_Impl(), "
+                    OString(OString("SdrOle2Obj::BreakFileLink_Impl(), "
                             "exception caught: ") +
                     rtl::OUStringToOString(
                         comphelper::anyToString( cppu::getCaughtException() ),
@@ -1024,7 +1024,7 @@ void SdrOle2Obj::CheckFileLink_Impl()
         catch( ::com::sun::star::uno::Exception& )
         {
             OSL_FAIL(
-                (OString("SdrOle2Obj::CheckFileLink_Impl(), "
+                OString(OString("SdrOle2Obj::CheckFileLink_Impl(), "
                         "exception caught: ") +
                 rtl::OUStringToOString(
                     comphelper::anyToString( cppu::getCaughtException() ),
@@ -1108,7 +1108,7 @@ void SdrOle2Obj::Connect_Impl()
         catch( ::com::sun::star::uno::Exception& )
         {
             OSL_FAIL(
-                (OString("SdrOle2Obj::Connect_Impl(), "
+                OString(OString("SdrOle2Obj::Connect_Impl(), "
                         "exception caught: ") +
                 rtl::OUStringToOString(
                     comphelper::anyToString( cppu::getCaughtException() ),
@@ -1195,7 +1195,7 @@ void SdrOle2Obj::RemoveListeners_Impl()
         catch( ::com::sun::star::uno::Exception& )
         {
             OSL_FAIL(
-                (OString("SdrOle2Obj::RemoveListeners_Impl(), "
+                OString(OString("SdrOle2Obj::RemoveListeners_Impl(), "
                         "exception caught: ") +
                 rtl::OUStringToOString(
                     comphelper::anyToString( cppu::getCaughtException() ),
@@ -1277,7 +1277,7 @@ void SdrOle2Obj::Disconnect_Impl()
     catch( ::com::sun::star::uno::Exception& )
     {
         OSL_FAIL(
-            (OString("SdrOle2Obj::Disconnect_Impl(), "
+            OString(OString("SdrOle2Obj::Disconnect_Impl(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),
@@ -1412,7 +1412,7 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
         catch( ::com::sun::star::uno::Exception& )
         {
             OSL_FAIL(
-                (OString("SdrOle2Obj::SetModel(), "
+                OString(OString("SdrOle2Obj::SetModel(), "
                         "exception caught: ") +
                 rtl::OUStringToOString(
                     comphelper::anyToString( cppu::getCaughtException() ),
@@ -1935,7 +1935,7 @@ sal_Bool SdrOle2Obj::Unload( const uno::Reference< embed::XEmbeddedObject >& xOb
         catch( ::com::sun::star::uno::Exception& )
         {
             OSL_FAIL(
-                (OString("SdrOle2Obj::Unload=(), "
+                OString(OString("SdrOle2Obj::Unload=(), "
                         "exception caught: ") +
                 rtl::OUStringToOString(
                     comphelper::anyToString( cppu::getCaughtException() ),

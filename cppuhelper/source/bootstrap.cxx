@@ -180,7 +180,7 @@ Reference< XComponentContext > SAL_CALL bootstrap()
         // start office process
         oslProcess hProcess = 0;
         oslProcessError rc = osl_executeProcess(
-            (path + OUSTR("soffice")).pData, ar_args, ARLEN( ar_args ),
+            OUString(path + "soffice").pData, ar_args, ARLEN( ar_args ),
             osl_Process_DETACHED,
             sec.getHandle(),
             0, // => current working dir

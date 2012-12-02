@@ -210,7 +210,7 @@ void PropParser::Merge( const OString &rMergeSrc, const OString &rDestinationFil
             {
                 OString sNewText;
                 pEntrys->GetText( sNewText, STRING_TYP_TEXT, m_sLang );
-                aDestination << (sID + OString("=")).getStr();
+                aDestination << OString(sID + "=").getStr();
                 lcl_PrintJavaStyle( sNewText, aDestination );
                 aDestination << std::endl;
             }

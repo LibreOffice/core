@@ -2526,7 +2526,7 @@ void DocxAttributeOutput::StartStyle( const String& rName, bool bPapFmt,
 
     m_pSerializer->startElementNS( XML_w, XML_style,
             FSNS( XML_w, XML_type ), bPapFmt? "paragraph": "character", // FIXME is this correct?
-            FSNS( XML_w, XML_styleId ), ( aStyle + OString::valueOf( sal_Int32( nId ) ) ).getStr(),
+            FSNS( XML_w, XML_styleId ), OString( aStyle + OString::valueOf( sal_Int32( nId ) ) ).getStr(),
             FSEND );
 
     m_pSerializer->singleElementNS( XML_w, XML_name,
@@ -2536,12 +2536,12 @@ void DocxAttributeOutput::StartStyle( const String& rName, bool bPapFmt,
     if ( nBase != 0x0FFF )
     {
         m_pSerializer->singleElementNS( XML_w, XML_basedOn,
-                FSNS( XML_w, XML_val ), ( aStyle + OString::valueOf( sal_Int32( nBase ) ) ).getStr(),
+                FSNS( XML_w, XML_val ), OString( aStyle + OString::valueOf( sal_Int32( nBase ) ) ).getStr(),
                 FSEND );
     }
 
     m_pSerializer->singleElementNS( XML_w, XML_next,
-            FSNS( XML_w, XML_val ), ( aStyle + OString::valueOf( sal_Int32( nNext ) ) ).getStr(),
+            FSNS( XML_w, XML_val ), OString( aStyle + OString::valueOf( sal_Int32( nNext ) ) ).getStr(),
             FSEND );
 
     if ( bAutoUpdate )

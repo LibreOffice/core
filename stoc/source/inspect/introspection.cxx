@@ -2155,7 +2155,7 @@ rtl::Reference< IntrospectionAccessStatic_Impl > ImplIntrospection::implInspect(
                 else
                 {
                     OSL_FAIL(
-                        ( ::rtl::OString( "Introspection: Property \"" ) +
+                        OString( ::rtl::OString( "Introspection: Property \"" ) +
                         ::rtl::OUStringToOString( aPropName, RTL_TEXTENCODING_UTF8 ) +
                         ::rtl::OString( "\" found more than once in PropertySet" ) ).getStr() );
                 }

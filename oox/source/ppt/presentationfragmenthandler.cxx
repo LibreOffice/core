@@ -286,7 +286,7 @@ void PresentationFragmentHandler::finalizeImport()
     }
     catch( uno::Exception& )
     {
-        OSL_FAIL( (rtl::OString("oox::ppt::PresentationFragmentHandler::EndDocument(), "
+        OSL_FAIL( OString(rtl::OString("oox::ppt::PresentationFragmentHandler::EndDocument(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),

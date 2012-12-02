@@ -176,7 +176,7 @@ UpdateCheckROModel::getUpdateEntry(UpdateInfo& rInfo) const
     for(sal_Int32 n=1; n < 6; ++n )
     {
         rtl::OUString aUStr = getStringValue(
-            (aStr + rtl::OString::valueOf(n)).getStr());
+            OString(aStr + rtl::OString::valueOf(n)).getStr());
         if( !aUStr.isEmpty() )
             rInfo.ReleaseNotes.push_back(ReleaseNote((sal_Int8) n, aUStr));
     }

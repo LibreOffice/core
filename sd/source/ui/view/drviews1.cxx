@@ -241,7 +241,7 @@ void DrawViewShell::SelectionHasChanged (void)
     catch( ::com::sun::star::uno::Exception& )
     {
         OSL_FAIL(
-            (rtl::OString("sd::DrawViewShell::SelectionHasChanged(), "
+            OString(rtl::OString("sd::DrawViewShell::SelectionHasChanged(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),

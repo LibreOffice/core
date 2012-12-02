@@ -1349,8 +1349,8 @@ void DrawingML::WritePresetShape( const char* pShape, MSO_SPT eShapeType, sal_Bo
         for( sal_Int32 i=0; i < nLength; i++ )
             if( EscherPropertyContainer::GetAdjustmentValue( aAdjustmentSeq[ i ], i, nAdjustmentsWhichNeedsToBeConverted, nValue ) )
                 mpFS->singleElementNS( XML_a, XML_gd,
-                                       XML_name, aAdjustmentSeq[ i ].Name.getLength() > 0 ? USS(aAdjustmentSeq[ i ].Name) : (nLength > 1 ? ( OString( "adj" ) + OString::valueOf( i + 1 ) ).getStr() : "adj"),
-                                       XML_fmla, (OString("val ") + OString::valueOf( nValue )).getStr(),
+                                       XML_name, aAdjustmentSeq[ i ].Name.getLength() > 0 ? USS(aAdjustmentSeq[ i ].Name) : (nLength > 1 ? OString( "adj" + OString::valueOf( i + 1 ) ).getStr() : "adj"),
+                                       XML_fmla, OString("val " + OString::valueOf( nValue )).getStr(),
                                        FSEND );
     }
 

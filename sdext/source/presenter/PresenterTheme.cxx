@@ -382,8 +382,8 @@ bool PresenterTheme::ConvertToColor (
 
     // Get configuration node for the view style container of the current
     // theme.
-    if (pConfiguration->GoToChild(
-        A2S("Presenter/Themes/") + mpTheme->msConfigurationNodeName + A2S("/ViewStyles")))
+    if (pConfiguration->GoToChild( OUString(
+        "Presenter/Themes/" + mpTheme->msConfigurationNodeName + "/ViewStyles")))
     {
         pConfiguration->GoToChild(
             ::boost::bind(&PresenterConfigurationAccess::IsStringPropertyEqual,

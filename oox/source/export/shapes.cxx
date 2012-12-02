@@ -112,7 +112,7 @@ using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::sax_fastparser::FSHelperPtr;
 
-#define IDS(x) (OString(#x " ") + OString::valueOf( mnShapeIdMax++ )).getStr()
+#define IDS(x) OString(OStringLiteral(#x " ") + OString::valueOf( mnShapeIdMax++ )).getStr()
 
 struct CustomShapeTypeTranslationTable
 {
@@ -859,7 +859,7 @@ void ShapeExport::WriteGraphicObjectShapePart( Reference< XShape > xShape, Graph
 
     pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
                           XML_id,     I32S( GetNewShapeID( xShape ) ),
-                          XML_name,   bHaveName ? USS( sName ) : (OString("Picture ") + OString::valueOf( mnPictureIdMax++ )).getStr(),
+                          XML_name,   bHaveName ? USS( sName ) : OString( "Picture " + OString::valueOf( mnPictureIdMax++ )).getStr(),
                           XML_descr,  bHaveDesc ? USS( sDescr ) : NULL,
                           FSEND );
     // OOXTODO: //cNvPr children: XML_extLst, XML_hlinkClick, XML_hlinkHover

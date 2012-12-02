@@ -120,7 +120,7 @@ ScVbaName::getValue() throw (css::uno::RuntimeException)
         if ( sTmpValue.toChar() == '$' )
         {
             ::rtl::OUString sTmp = sTmpValue.copy( 1 );
-            sTmp = sTmp.replaceAt(0, (sSheetName + ::rtl::OUString::createFromAscii(".")).getLength(), sSheetName + ::rtl::OUString::createFromAscii("!"));
+            sTmp = sTmp.replaceAt(0, OUString(sSheetName + ::rtl::OUString::createFromAscii(".")).getLength(), sSheetName + ::rtl::OUString::createFromAscii("!"));
             sResult += sTmp;
             sResult += sNewSegmentation;
         }
@@ -131,7 +131,7 @@ ScVbaName::getValue() throw (css::uno::RuntimeException)
     if ( sTmpValue.toChar() == '$' )
     {
         ::rtl::OUString sTmp = sTmpValue.copy(1);
-        sTmp = sTmp.replaceAt(0, (sSheetName + ::rtl::OUString::createFromAscii(".")).getLength(), sSheetName + ::rtl::OUString::createFromAscii("!"));
+        sTmp = sTmp.replaceAt(0, OUString(sSheetName + ::rtl::OUString::createFromAscii(".")).getLength(), sSheetName + ::rtl::OUString::createFromAscii("!"));
         sResult += sTmp;
     }
     if (sResult.indexOf('=') != 0)
@@ -160,7 +160,7 @@ ScVbaName::setValue( const ::rtl::OUString & rValue ) throw (css::uno::RuntimeEx
     while ( nTo != -1 )
     {
         ::rtl::OUString sTmpValue = sValue.copy( nFrom, nTo - nFrom );
-        sTmpValue = sTmpValue.replaceAt(0, (sSheetName + ::rtl::OUString::createFromAscii("!")).getLength(), sSheetName + ::rtl::OUString::createFromAscii("."));
+        sTmpValue = sTmpValue.replaceAt(0, OUString(sSheetName + ::rtl::OUString::createFromAscii("!")).getLength(), sSheetName + ::rtl::OUString::createFromAscii("."));
         if (sTmpValue.copy(0, sSheetName.getLength()).equals(sSheetName))
         {
             sTmpValue = ::rtl::OUString::createFromAscii("$") + sTmpValue;
@@ -171,7 +171,7 @@ ScVbaName::setValue( const ::rtl::OUString & rValue ) throw (css::uno::RuntimeEx
         nTo = sValue.indexOf( sSegmentation, nFrom );
     }
     ::rtl::OUString sTmpValue = sValue.copy( nFrom );
-    sTmpValue = sTmpValue.replaceAt(0, (sSheetName + ::rtl::OUString::createFromAscii("!")).getLength(), sSheetName + ::rtl::OUString::createFromAscii("."));
+    sTmpValue = sTmpValue.replaceAt(0, OUString(sSheetName + ::rtl::OUString::createFromAscii("!")).getLength(), sSheetName + ::rtl::OUString::createFromAscii("."));
     if (sTmpValue.copy(0, sSheetName.getLength()).equals(sSheetName))
     {
         sTmpValue = ::rtl::OUString::createFromAscii("$") + sTmpValue;

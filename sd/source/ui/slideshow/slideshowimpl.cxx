@@ -332,7 +332,7 @@ bool AnimationSlideController::getSlideAPI( sal_Int32 nSlideNumber, Reference< X
     catch( Exception& )
     {
         OSL_FAIL(
-            (OString("sd::AnimationSlideController::getSlideAPI(), "
+            OString(OString("sd::AnimationSlideController::getSlideAPI(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),
@@ -656,7 +656,7 @@ void SAL_CALL SlideshowImpl::disposing()
     catch( Exception& )
     {
         OSL_FAIL(
-            (OString("sd::SlideshowImpl::stop(), "
+            OString(OString("sd::SlideshowImpl::stop(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),
@@ -884,7 +884,7 @@ bool SlideshowImpl::startPreview(
     catch( Exception& )
     {
         OSL_FAIL(
-            (OString("sd::SlideshowImpl::startPreview(), "
+            OString(OString("sd::SlideshowImpl::startPreview(), "
                      "exception caught: ") +
              rtl::OUStringToOString(
                  comphelper::anyToString( cppu::getCaughtException() ),
@@ -1127,7 +1127,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
     catch( Exception& )
     {
         OSL_FAIL(
-            (OString("sd::SlideshowImpl::startShow(), "
+            OString(OString("sd::SlideshowImpl::startShow(), "
                      "exception caught: ") +
              rtl::OUStringToOString(
                  comphelper::anyToString( cppu::getCaughtException() ),
@@ -1188,7 +1188,7 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
     catch( Exception& )
     {
         OSL_FAIL(
-            (OString("sd::SlideshowImpl::startShowImpl(), "
+            OString(OString("sd::SlideshowImpl::startShowImpl(), "
                      "exception caught: ") +
              rtl::OUStringToOString(
                  comphelper::anyToString( cppu::getCaughtException() ),
@@ -1226,7 +1226,7 @@ void SlideshowImpl::paint( const Rectangle& /* rRect */ )
     catch( Exception& )
     {
         OSL_FAIL(
-            (OString("sd::SlideshowImpl::paint(), "
+            OString(OString("sd::SlideshowImpl::paint(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),
@@ -1280,7 +1280,7 @@ void SlideshowImpl::removeShapeEvents()
     catch( Exception& )
     {
         OSL_FAIL(
-            (OString("sd::SlideshowImpl::removeShapeEvents(), "
+            OString(OString("sd::SlideshowImpl::removeShapeEvents(), "
                      "exception caught: ") +
              rtl::OUStringToOString(
                  comphelper::anyToString( cppu::getCaughtException() ),
@@ -1315,7 +1315,7 @@ void SlideshowImpl::registerShapeEvents(sal_Int32 nSlideNumber)
     catch( Exception& )
     {
         OSL_FAIL(
-            (OString("sd::SlideshowImpl::registerShapeEvents(), "
+            OString(OString("sd::SlideshowImpl::registerShapeEvents(), "
                      "exception caught: ") +
              rtl::OUStringToOString(
                  comphelper::anyToString( cppu::getCaughtException() ),
@@ -1393,7 +1393,7 @@ void SlideshowImpl::registerShapeEvents( Reference< XShapes >& xShapes ) throw( 
     catch( Exception& )
     {
         OSL_FAIL(
-            (OString("sd::SlideshowImpl::registerShapeEvents(), "
+            OString(OString("sd::SlideshowImpl::registerShapeEvents(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),
@@ -1464,7 +1464,7 @@ void SAL_CALL SlideshowImpl::pause() throw (RuntimeException)
     catch( Exception& )
     {
         OSL_FAIL(
-            (OString("sd::SlideshowImpl::pause(), "
+            OString(OString("sd::SlideshowImpl::pause(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),
@@ -1500,7 +1500,7 @@ void SAL_CALL SlideshowImpl::resume() throw (RuntimeException)
     catch( Exception& )
     {
         OSL_FAIL(
-            (OString("sd::SlideshowImpl::resume(), "
+            OString(OString("sd::SlideshowImpl::resume(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),
@@ -1925,7 +1925,7 @@ sal_Int32 SlideshowImpl::updateSlideShow (void)
     catch( Exception& )
     {
         OSL_FAIL(
-            (OString("sd::SlideshowImpl::updateSlideShow(), exception caught: ")
+            OString(OString("sd::SlideshowImpl::updateSlideShow(), exception caught: ")
                 + rtl::OUStringToOString(
                     comphelper::anyToString( cppu::getCaughtException() ),
                     RTL_TEXTENCODING_UTF8 )).getStr() );
@@ -2056,7 +2056,7 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
     {
         bRet = false;
         OSL_FAIL(
-            (OString("sd::SlideshowImpl::keyInput(), "
+            OString(OString("sd::SlideshowImpl::keyInput(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),
@@ -2448,7 +2448,7 @@ Reference< XSlideShow > SlideshowImpl::createSlideShow() const
     catch( uno::Exception& )
     {
         OSL_FAIL(
-            (OString("sd::SlideshowImpl::createSlideShow(), "
+            OString(OString("sd::SlideshowImpl::createSlideShow(), "
                      "exception caught: ") +
              rtl::OUStringToOString(
                  comphelper::anyToString( cppu::getCaughtException() ),
@@ -2658,7 +2658,7 @@ void SlideshowImpl::resize( const Size& rSize )
     catch( Exception& )
     {
         OSL_FAIL(
-            (OString("sd::SlideshowImpl::resize(), "
+            OString(OString("sd::SlideshowImpl::resize(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),
@@ -3014,7 +3014,7 @@ void SAL_CALL SlideshowImpl::setUsePen( sal_Bool bMouseAsPen ) throw (RuntimeExc
     catch( Exception& )
     {
         OSL_FAIL(
-            (OString("sd::SlideshowImpl::setUsePen(), "
+            OString(OString("sd::SlideshowImpl::setUsePen(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),
@@ -3087,12 +3087,8 @@ void SAL_CALL SlideshowImpl::setEraseAllInk(bool bEraseAllInk) throw (RuntimeExc
         }
         catch( Exception& )
         {
-            OSL_TRACE(
-                (OString("sd::SlideshowImpl::setEraseAllInk(), "
-                        "exception caught: ") +
-                rtl::OUStringToOString(
-                    comphelper::anyToString( cppu::getCaughtException() ),
-                    RTL_TEXTENCODING_UTF8 )).getStr() );
+            SAL_WARN( "sd.slideshow", "sd::SlideshowImpl::setEraseAllInk(), "
+                "exception caught: " << comphelper::anyToString( cppu::getCaughtException() ));
         }
     }
 }
@@ -3308,7 +3304,7 @@ void SlideshowImpl::gotoPreviousSlide (const bool bSkipAllMainSequenceEffects)
     catch( Exception& )
     {
         OSL_FAIL(
-            (OString("sd::SlideshowImpl::gotoPreviousSlide(), "
+            OString(OString("sd::SlideshowImpl::gotoPreviousSlide(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),
@@ -3408,7 +3404,7 @@ void SAL_CALL SlideshowImpl::stopSound(  ) throw (RuntimeException)
     catch( Exception& )
     {
         OSL_FAIL(
-            (OString("sd::SlideshowImpl::stopSound(), "
+            OString(OString("sd::SlideshowImpl::stopSound(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),

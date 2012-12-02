@@ -214,7 +214,7 @@ void SlideFragmentHandler::finalizeImport()
     }
     catch( uno::Exception& )
     {
-        OSL_FAIL( (rtl::OString("oox::ppt::SlideFragmentHandler::EndElement(), "
+        OSL_FAIL( OString(rtl::OString("oox::ppt::SlideFragmentHandler::EndElement(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),

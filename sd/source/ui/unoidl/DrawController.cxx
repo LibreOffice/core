@@ -515,7 +515,7 @@ void DrawController::FireSwitchCurrentPage (SdPage* pNewCurrentPage) throw()
         catch (const uno::Exception&)
         {
             OSL_FAIL(
-                ("sd::SdUnoDrawView::FireSwitchCurrentPage(), exception caught: " +
+                OString("sd::SdUnoDrawView::FireSwitchCurrentPage(), exception caught: " +
                     ::rtl::OUStringToOString(
                         comphelper::anyToString( cppu::getCaughtException() ),
                         RTL_TEXTENCODING_UTF8 )).getStr() );

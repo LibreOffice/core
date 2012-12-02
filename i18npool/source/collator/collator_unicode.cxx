@@ -131,9 +131,9 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                     OUString func_base = aBuf.makeStringAndClear();
                     if (OUString("TW HK MO").indexOf(rLocale.Country) >= 0)
                         func=(const sal_uInt8* (*)()) osl_getFunctionSymbol(hModule,
-                                    (func_base + OUString("TW_") + rAlgorithm).pData);
+                                    OUString(func_base + "TW_" + rAlgorithm).pData);
                     if (!func)
-                        func=(const sal_uInt8* (*)()) osl_getFunctionSymbol(hModule, (func_base + rAlgorithm).pData);
+                        func=(const sal_uInt8* (*)()) osl_getFunctionSymbol(hModule, OUString(func_base + rAlgorithm).pData);
                 } else {
                     if ( rLocale.Language == "ja" ) {
                         // replace algrithm name to implementation name.

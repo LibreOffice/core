@@ -129,7 +129,7 @@ namespace sd
         catch( Exception& )
         {
             OSL_FAIL(
-                (OString("sd::CustomAnimationClonerImpl::Clone(), "
+                OString(OString("sd::CustomAnimationClonerImpl::Clone(), "
                         "exception caught: ") +
                 rtl::OUStringToOString(
                     comphelper::anyToString( cppu::getCaughtException() ),
@@ -213,7 +213,7 @@ namespace sd
         catch( Exception& )
         {
             OSL_FAIL(
-                (OString("sd::CustomAnimationClonerImpl::transformNode(), "
+                OString(OString("sd::CustomAnimationClonerImpl::transformNode(), "
                         "exception caught: ") +
                 rtl::OUStringToOString(
                     comphelper::anyToString( cppu::getCaughtException() ),
@@ -287,7 +287,7 @@ namespace sd
         catch( Exception& )
         {
             OSL_FAIL(
-                (OString("sd::CustomAnimationClonerImpl::transformValue(), "
+                OString(OString("sd::CustomAnimationClonerImpl::transformValue(), "
                         "exception caught: ") +
                 rtl::OUStringToOString(
                     comphelper::anyToString( cppu::getCaughtException() ),

@@ -3100,7 +3100,7 @@ bool HtmlExport::checkFileExists( Reference< ::com::sun::star::ucb::XSimpleFileA
     }
     catch( com::sun::star::uno::Exception& )
     {
-        OSL_FAIL((OString("sd::HtmlExport::checkFileExists(), exception caught: ") +
+        OSL_FAIL(OString(OString("sd::HtmlExport::checkFileExists(), exception caught: ") +
              rtl::OUStringToOString( comphelper::anyToString( cppu::getCaughtException() ), RTL_TEXTENCODING_UTF8 )).getStr() );
     }
 
@@ -3162,7 +3162,7 @@ bool HtmlExport::checkForExistingFiles()
     }
     catch( Exception& )
     {
-        OSL_FAIL((OString("sd::HtmlExport::checkForExistingFiles(), exception caught: ") +
+        OSL_FAIL(OString(OString("sd::HtmlExport::checkForExistingFiles(), exception caught: ") +
              rtl::OUStringToOString( comphelper::anyToString( cppu::getCaughtException() ), RTL_TEXTENCODING_UTF8 )).getStr() );
         bFound = false;
     }

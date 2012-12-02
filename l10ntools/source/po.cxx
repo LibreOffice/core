@@ -420,7 +420,7 @@ PoEntry::PoEntry(const OString& rSDFLine, const TYPE eType)
 
     OString sMsgCtxt =
         vParts[GROUPID] + "\n" +
-        (vParts[LOCALID].isEmpty() ? "" : vParts[LOCALID] + "\n") +
+        (vParts[LOCALID].isEmpty() ? OString( "" ) : vParts[LOCALID] + "\n") +
         vParts[RESOURCETYPE];
     switch(eType){
     case TTEXT:
@@ -433,7 +433,7 @@ PoEntry::PoEntry(const OString& rSDFLine, const TYPE eType)
       only three element*/
     }
     m_pGenPo->setExtractCom(
-        ( !vParts[HELPTEXT].isEmpty() ?  vParts[HELPTEXT] + "\n" : "" ) +
+        ( !vParts[HELPTEXT].isEmpty() ?  vParts[HELPTEXT] + "\n" : OString( "" )) +
         lcl_GenKeyId(
             vParts[SOURCEFILE] + sMsgCtxt + vParts[eType] ) );
     m_pGenPo->setMsgCtxt(sMsgCtxt);
@@ -827,7 +827,7 @@ void PoIfstream::readEntry( PoEntry& rPoEntry )
                     sExtractCom.indexOf("\n") == -1 ) )
             {
                 aGenPo.setExtractCom(
-                    ( !sExtractCom.isEmpty() ? sExtractCom + "\n" : "" ) +
+                    ( !sExtractCom.isEmpty() ? sExtractCom + "\n" : OString( "" )) +
                     lcl_GenKeyId(
                         aGenPo.getReference() + sMsgCtxt +
                         aGenPo.getMsgId() ) );

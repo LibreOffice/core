@@ -98,7 +98,7 @@ using ::sax_fastparser::FSHelperPtr;
 
 void dump_pset(Reference< XPropertySet > rXPropSet);
 
-#define IDS(x) (OString(#x " ") + OString::valueOf( mnShapeIdMax++ )).getStr()
+#define IDS(x) OString(OStringLiteral(#x " ") + OString::valueOf( mnShapeIdMax++ )).getStr()
 
 namespace oox {
     using namespace drawingml;

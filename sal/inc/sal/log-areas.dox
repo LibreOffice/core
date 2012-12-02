@@ -64,6 +64,7 @@ certain functionality.
 @li @c sd.sls
 @li @c sd.tools
 @li @c sd.view
+@li @c sd.slideshow
 @li @c sdremote
 @li @c sdremote.bluetooth
 
