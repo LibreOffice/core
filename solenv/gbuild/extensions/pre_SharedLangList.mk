@@ -26,4 +26,8 @@ else
 gb_WITH_LANG=$(completelangiso)
 endif
 
+ifneq ($(ENABLE_RELEASE_BUILD),TRUE)
+gb_WITH_LANG += qtz
+endif
+
 # vim: set noet ts=4 sw=4:

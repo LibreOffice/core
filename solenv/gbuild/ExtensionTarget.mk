@@ -148,10 +148,10 @@ $(call gb_ExtensionTarget_get_workdir,$(1))/description.xml :| \
 
 ifneq ($(strip $(gb_WITH_LANG)),)
 $(call gb_ExtensionTarget_get_target,$(1)) : \
-	POFILES := $(foreach lang,$(gb_ExtensionTarget_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(2).po)
+	POFILES := $(foreach lang,$(filter-out qtz,$(gb_ExtensionTarget_TRANS_LANGS)),$(gb_POLOCATION)/$(lang)/$(2).po)
 $(call gb_ExtensionTarget_get_workdir,$(1))/description.xml : \
-	$(foreach lang,$(gb_ExtensionTarget_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(2).po)
-$(foreach lang,$(gb_ExtensionTarget_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(2).po) :
+	$(foreach lang,$(filter-out qtz,$(gb_ExtensionTarget_TRANS_LANGS)),$(gb_POLOCATION)/$(lang)/$(2).po)
+$(foreach lang,$(filter-out qtz,$(gb_ExtensionTarget_TRANS_LANGS)),$(gb_POLOCATION)/$(lang)/$(2).po) :
 endif
 
 $(foreach lang,$(gb_ExtensionTarget_ALL_LANGS), \
@@ -240,7 +240,7 @@ ifneq ($(ENABLE_RELEASE_BUILD),TRUE)
 $(call gb_ExtensionTarget_localize_properties_onelang,$(1),$(subst en_US,qtz,$(2)),$(3),qtz,$(firstword $(filter-out en-US,$(gb_ExtensionTarget_ALL_LANGS))))
 endif
 endif
-$(foreach lang,$(gb_ExtensionTarget_ALL_LANGS),\
+$(foreach lang,$(filter-out qtz,$(gb_ExtensionTarget_ALL_LANGS)),\
 	$(call gb_ExtensionTarget_localize_properties_onelang,$(1),$(subst en_US,$(subst -,_,$(lang)),$(2)),$(3),$(lang)))
 endef
 
@@ -280,7 +280,7 @@ endef
 #     (i.e., if $(4) is empty the en-US source file is $(2)/$(3), otherwise it
 #     is $(2)/$(4))
 define gb_ExtensionTarget_add_helpfile
-$(foreach lang,$(gb_ExtensionTarget_ALL_LANGS), \
+$(foreach lang,$(filter-out qtz,$(gb_ExtensionTarget_ALL_LANGS)), \
     $(call gb_ExtensionTarget__localize_helpfile_onelang,$(1),$(2),$(3),$(4),$(lang)) \
     $(call gb_ExtensionTarget__add_compiled_help_dependency_onelang,$(1),$(lang)))
 endef
@@ -294,7 +294,7 @@ endef
 # $(4): relative path of source help.tree file
 # $(5): relative path of localized xhp files (PlatformID included) 
 define gb_ExtensionTarget_add_helptreefile
-$(foreach lang,$(gb_ExtensionTarget_ALL_LANGS), \
+$(foreach lang,$(filter-out qtz,$(gb_ExtensionTarget_ALL_LANGS)), \
     $(call gb_ExtensionTarget__localize_helptreefile_onelang,$(1),$(2),$(3),$(4),$(lang),$(5)) \
     $(call gb_ExtensionTarget__add_compiled_help_dependency_onelang,$(1),$(lang)))
 endef

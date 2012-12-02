@@ -36,12 +36,12 @@ readlicense_oo_README_XRM := $(readlicense_oo_DIR)/readme.xrm
 $(readlicense_oo_DIR)/readme.xrm : \
 		$(SRCDIR)/readlicense_oo/docs/readme.xrm \
 		$(readlicense_XRMEXTARGET) \
-		$(foreach lang,$(filter-out en-US,$(gb_WITH_LANG)),$(gb_POLOCATION)/$(lang)/readlicense_oo/docs.po) \
+		$(foreach lang,$(filter-out qtz,$(filter-out en-US,$(gb_WITH_LANG))),$(gb_POLOCATION)/$(lang)/readlicense_oo/docs.po) \
 		| $(readlicense_oo_DIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XRM,1)
 	$(call gb_Helper_abbreviate_dirs, \
         MERGEINPUT=`$(gb_MKTEMP)` && \
-        echo $(foreach lang,$(filter-out en-US,$(gb_WITH_LANG)),$(gb_POLOCATION)/$(lang)/readlicense_oo/docs.po) > $${MERGEINPUT} && \
+        echo $(foreach lang,$(filter-out qtz,$(filter-out en-US,$(gb_WITH_LANG))),$(gb_POLOCATION)/$(lang)/readlicense_oo/docs.po) > $${MERGEINPUT} && \
 		$(readlicense_XRMEXCOMMAND) \
 			-p readlicense_oo \
 			-i $< \
