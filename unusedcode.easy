@@ -47,7 +47,6 @@ connectivity::file::OStatement_Base::reset()
 connectivity::mork::OColumnAlias::OColumnAlias()
 connectivity::sdbcx::OGroup::OGroup(rtl::OUString const&, unsigned char)
 connectivity::sdbcx::OGroup::OGroup(unsigned char)
-desktop::Lockfile::clean()
 framework::OReadMenuDocumentHandler::getServiceFactory()
 jfw_plugin::VendorBase::createInstance()
 oox::drawingml::TextListStyle::dump() const
