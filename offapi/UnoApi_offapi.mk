@@ -3920,11 +3920,9 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/util,\
 	Date \
 	DateTime \
 	DateTimeRange \
-	DiskFullException \
 	Duration \
 	ElementChange \
 	Endianness \
-	FileIOException \
 	InvalidStateException \
 	Language \
 	MalformedNumberFormatException \
