@@ -40,6 +40,7 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/logfile.hxx>
+#include <rtl/random.h>
 #include <unicode/uchar.h>
 
 #include "interpre.hxx"
@@ -1542,7 +1543,46 @@ void ScInterpreter::ScPi()
 void ScInterpreter::ScRandom()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScRandom" );
-    PushDouble((double)rand() / ((double)RAND_MAX+1.0));
+
+    static sal_Int32 aScRandomIx = 0, aScRandomIy = 0, aScRandomIz = 0, aScRandomIt = 0;
+    static rtlRandomPool aPool = rtl_random_createPool();
+
+    // Seeding for the PRNG: should be good enough but we
+    // monitor the values to keep things under control.
+    if (aScRandomIx <= 0)
+    rtl_random_getBytes(aPool, &aScRandomIx, sizeof(aScRandomIx));
+    if (aScRandomIy <= 0)
+    rtl_random_getBytes(aPool, &aScRandomIy, sizeof(aScRandomIy));
+    if (aScRandomIz <= 0)
+    rtl_random_getBytes(aPool, &aScRandomIz, sizeof(aScRandomIz));
+    if (aScRandomIt <= 0)
+    rtl_random_getBytes(aPool, &aScRandomIt, sizeof(aScRandomIt));
+
+    // Basically unmodified algorithm from
+    // Wichman and Hill, "Generating good pseudo-random numbers",
+    //      December 5, 2005.
+
+    double aScRandomW;
+
+    aScRandomIx = 11600L * (aScRandomIx % 185127L) - 10379L * (aScRandomIx / 185127L);
+    aScRandomIy = 47003L * (aScRandomIy %  45688L) - 10479L * (aScRandomIy /  45688L);
+    aScRandomIz = 23000L * (aScRandomIz %  93368L) - 19423L * (aScRandomIz /  93368L);
+    aScRandomIt = 33000L * (aScRandomIt %  65075L) -  8123L * (aScRandomIt /  65075L);
+    if (aScRandomIx < 0)
+    aScRandomIx += 2147483579L;
+    if (aScRandomIy < 0)
+    aScRandomIy += 2147483543L;
+    if (aScRandomIz < 0)
+    aScRandomIz += 2147483123L;
+    if (aScRandomIt < 0)
+    aScRandomIt += 2147483123L;
+
+    aScRandomW = (double)aScRandomIx*0.0000000004656613022697297188506231646486 +
+            (double)aScRandomIy*0.0000000004656613100759859932486569933169 +
+        (double)aScRandomIz*0.0000000004656613360968421314794009471615 +
+        (double)aScRandomIt*0.0000000004656614011489951998100056779817;
+
+    PushDouble(aScRandomW - (sal_Int64)aScRandomW);
 }
 
 
