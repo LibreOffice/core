@@ -22,6 +22,7 @@
 
 // stl includes first
 #include <map>
+#include <boost/scoped_ptr.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
@@ -193,7 +194,7 @@ class Desktop : public Application
         OUString                        m_aBootstrapErrorMessage;
         BootstrapStatus                 m_aBootstrapStatus;
 
-        Lockfile *m_pLockfile;
+        boost::scoped_ptr<Lockfile> m_xLockfile;
         Timer    m_firstRunTimer;
 
         static ResMgr*                  pResMgr;
