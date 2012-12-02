@@ -188,6 +188,23 @@ inline Any SAL_CALL makeAny( bool const & value ) SAL_THROW(())
 }
 
 //__________________________________________________________________________________________________
+#ifdef RTL_FAST_STRING
+template< class C1, class C2 >
+inline Any SAL_CALL makeAny( const rtl::OStringConcat< C1, C2 >& value ) SAL_THROW(())
+{
+    const rtl::OString str( value );
+    return Any( &str, ::cppu::getTypeFavourUnsigned(&str) );
+}
+
+//__________________________________________________________________________________________________
+template< class C1, class C2 >
+inline Any SAL_CALL makeAny( const rtl::OUStringConcat< C1, C2 >& value ) SAL_THROW(())
+{
+    const rtl::OUString str( value );
+    return Any( &str, ::cppu::getTypeFavourUnsigned(&str) );
+}
+#endif
+//__________________________________________________________________________________________________
 template< class C >
 inline void SAL_CALL operator <<= ( Any & rAny, const C & value ) SAL_THROW(())
 {
@@ -208,6 +225,31 @@ inline void SAL_CALL operator <<= ( Any & rAny, bool const & value )
         (uno_AcquireFunc) cpp_acquire, (uno_ReleaseFunc) cpp_release );
 }
 
+//______________________________________________________________________________
+#ifdef RTL_FAST_STRING
+template< class C1, class C2 >
+inline void SAL_CALL operator <<= ( Any & rAny, const rtl::OStringConcat< C1, C2 >& value )
+    SAL_THROW(())
+{
+    const rtl::OString str( value );
+    const Type & rType = ::cppu::getTypeFavourUnsigned(&str);
+    ::uno_type_any_assign(
+        &rAny, const_cast< rtl::OString * >( &str ), rType.getTypeLibType(),
+        (uno_AcquireFunc)cpp_acquire, (uno_ReleaseFunc)cpp_release );
+}
+
+//______________________________________________________________________________
+template< class C1, class C2 >
+inline void SAL_CALL operator <<= ( Any & rAny, const rtl::OUStringConcat< C1, C2 >& value )
+    SAL_THROW(())
+{
+    const rtl::OUString str( value );
+    const Type & rType = ::cppu::getTypeFavourUnsigned(&str);
+    ::uno_type_any_assign(
+        &rAny, const_cast< rtl::OUString * >( &str ), rType.getTypeLibType(),
+        (uno_AcquireFunc)cpp_acquire, (uno_ReleaseFunc)cpp_release );
+}
+#endif
 //__________________________________________________________________________________________________
 template< class C >
 inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, C & value ) SAL_THROW(())
