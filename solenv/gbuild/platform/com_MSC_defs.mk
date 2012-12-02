@@ -108,15 +108,13 @@ gb_AFLAGS := /c /Cp
 # C4265: 'class' : class has virtual functions, but destructor is not
 #   virtual
 
-# C4275: non – DLL-interface classkey 'identifier' used as base for
+# C4275: non-DLL-interface classkey 'identifier' used as base for
 #   DLL-interface classkey 'identifier'
 
 # C4290: C++ exception specification ignored except to indicate a
 #   function is not __declspec(nothrow)
 
 # C4350: behavior change: 'member1' called instead of 'member2'
-
-# C4355: 'this' : used in base member initializer list
 
 # C4351: new behavior: elements of array 'array' will be default
 #   initialized
@@ -125,6 +123,10 @@ gb_AFLAGS := /c /Cp
 
 # C4365: 'action' : conversion from 'type_1' to 'type_2',
 #   signed/unsigned mismatch
+
+# C4373: '%$S': virtual function overrides '%$pS', previous versions
+#   of the compiler did not override when parameters only differed by
+#   const/volatile qualifiers.
 
 # C4503: 'identifier' : decorated name length exceeded, name was
 #   truncated
@@ -209,11 +211,9 @@ gb_CFLAGS := \
 	-wd4255 \
 	-wd4275 \
 	-wd4290 \
-	-wd4294 \
 	-wd4350 \
 	-wd4355 \
 	-wd4365 \
-	-wd4373 \
 	-wd4503 \
 	-wd4505 \
 	-wd4511 \
@@ -266,6 +266,7 @@ gb_CXXFLAGS := \
 	-wd4351 \
 	-wd4355 \
 	-wd4365 \
+	-wd4373 \
 	-wd4503 \
 	-wd4505 \
 	-wd4511 \
