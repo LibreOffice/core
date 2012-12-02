@@ -3988,7 +3988,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/util,\
 	XReplaceable \
 	XSearchDescriptor \
 	XSearchable \
-	XSimpleErrorHandler \
 	XSortable \
 	XStringAbbreviation \
 	XStringEscape \
