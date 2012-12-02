@@ -81,7 +81,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
                 std::cerr << "Helpex error: cannot open input file\n";
                 return 1;
             }
-            MergeDataFile aMergeDataFile( aArgs.m_sMergeSrc, OString(), false);
+            MergeDataFile aMergeDataFile(
+                aArgs.m_sMergeSrc, OString(), false, false );
             std::string sTemp;
             aInput >> sTemp;
             while( !aInput.eof() )
@@ -104,7 +105,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
         {
             HelpParser aParser( aArgs.m_sInputFile );
             MergeDataFile aMergeDataFile(
-                aArgs.m_sMergeSrc, aArgs.m_sInputFile, false );
+                aArgs.m_sMergeSrc, aArgs.m_sInputFile, false, false );
             hasNoError =
                 aParser.Merge(
                     aArgs.m_sMergeSrc, aArgs.m_sOutputFile,

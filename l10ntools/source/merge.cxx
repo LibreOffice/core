@@ -151,7 +151,7 @@ sal_Bool MergeData::operator==( ResData *pData )
 
 MergeDataFile::MergeDataFile(
     const rtl::OString &rFileName, const rtl::OString &rFile,
-    bool bCaseSensitive)
+    bool bCaseSensitive, bool bWithQtz )
 {
     std::ifstream aInputStream( rFileName.getStr() );
     if ( !aInputStream.is_open() )
@@ -261,7 +261,8 @@ MergeDataFile::MergeDataFile(
                 aActPo.getLocalId(), sHack, sLang, sText,
                 sQHText, sTitle, aActPo.getSourceFile(), bCaseSensitive );
 
-            if( bFirstLang && ( strcmp(getenv("ENABLE_RELEASE_BUILD"),"TRUE") ) )
+            if( bFirstLang && bWithQtz &&
+                ( strcmp(getenv("ENABLE_RELEASE_BUILD"),"TRUE") ) )
             {
                 aLanguageSet.insert("qtz");
                 InsertEntry(

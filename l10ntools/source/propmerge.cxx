@@ -180,7 +180,8 @@ void PropParser::Merge( const OString &rMergeSrc, const OString &rDestinationFil
         return;
     }
 
-    MergeDataFile aMergeDataFile( rMergeSrc, m_sSource, false );
+    MergeDataFile aMergeDataFile(
+        rMergeSrc, m_sSource, false, m_sLang == "qtz" );
 
     const std::vector<OString> vLanguages = aMergeDataFile.GetLanguages();
     if( m_sLang != "qtz" && vLanguages.size()>=2 &&

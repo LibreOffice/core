@@ -184,7 +184,7 @@ sal_Bool LngParser::Merge(
     }
     nError = LNG_OK;
 
-    MergeDataFile aMergeDataFile( rSDFFile, sSource, false );
+    MergeDataFile aMergeDataFile( rSDFFile, sSource, false, false );
     rtl::OString sTmp( Export::sLanguages );
     if( sTmp.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("ALL")) )
         Export::SetLanguages( aMergeDataFile.GetLanguages() );

@@ -280,7 +280,7 @@ void TreeParser::Merge(
     else
     {
         MergeDataFile aMergeDataFile(
-            rMergeSrc, static_cast<OString>( m_pSource->name ), false );
+            rMergeSrc, static_cast<OString>( m_pSource->name ), false, false );
         const std::vector<OString> vLanguages = aMergeDataFile.GetLanguages();
         if( vLanguages.size()>=2 &&
             vLanguages[vLanguages[0]=="qtz" ? 0 : 1] != m_sLang )
