@@ -1093,6 +1093,10 @@ namespace
             }
 
             // and now all inner joins
+            // these are implemented as
+            // "FROM tbl1, tbl2 WHERE tbl1.col1=tlb2.col2"
+            // rather than
+            // "FROM tbl1 INNER JOIN tbl2 ON tbl1.col1=tlb2.col2"
             aIter = pConnList->begin();
             for(;aIter != aEnd;++aIter)
             {
