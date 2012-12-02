@@ -69,6 +69,140 @@ gb_RCFLAGS := \
 
 gb_AFLAGS := /c /Cp
 
+# Do we really need to disable to many warnings? It seems to me that
+# many of these warnings are for custructs that we have been actively
+# cleaning away from the code, to avoid warnings when building with
+# gcc or Clang and -Wall -Werror.
+
+# C4005: 'identifier' : macro redefinition
+
+# C4061: enumerator 'identifier' in switch of enum 'enumeration' is
+#   not explicitly handled by a case label
+
+# C4127: conditional expression is constant
+
+# C4180: qualifier applied to function type has no meaning; ignored
+
+# C4189: 'identifier' : local variable is initialized but not referenced
+
+# C4191: 'operator/operation' : unsafe conversion from 'type of
+#   expression' to 'type required'
+
+# C4217: 'operator' : member template functions cannot be used for
+#   copy-assignment or copy-construction. FIXME: This warning is not
+#   listed for VS2008 or later.
+
+# C4242: 'identifier' : conversion from 'type1' to 'type2', possible
+#   loss of data
+
+# C4244: nonstandard extension used : formal parameter 'identifier'
+#   was previously defined as a type
+
+# C4245: 'conversion' : conversion from 'type1' to 'type2',
+#   signed/unsigned mismatch
+
+# C4250: 'class1' : inherits 'class2::member' via dominance
+
+# C4251: 'identifier' : class 'type' needs to have dll-interface to be
+#   used by clients of class 'type2'
+
+# C4255: 'function' : no function prototype given: converting '()' to
+#   '(void)'
+
+# C4265: 'class' : class has virtual functions, but destructor is not
+#   virtual
+
+# C4275: non – DLL-interface classkey 'identifier' used as base for
+#   DLL-interface classkey 'identifier'
+
+# C4290: C++ exception specification ignored except to indicate a
+#   function is not __declspec(nothrow)
+
+# C4294: FIXME: not documented at all
+
+# C4350: behavior change: 'member1' called instead of 'member2'
+
+# C4355: 'this' : used in base member initializer list
+
+# C4351: new behavior: elements of array 'array' will be default
+#   initialized
+
+# C4355: 'this' : used in base member initializer list
+
+# C4365: 'action' : conversion from 'type_1' to 'type_2',
+#   signed/unsigned mismatch
+
+# C4373: FIXME: not documented at all
+
+# C4435: FIXME: not documented at all
+
+# C4503: 'identifier' : decorated name length exceeded, name was
+#   truncated
+
+# C4505: 'function' : unreferenced local function has been removed
+
+# C4511: 'class' : copy constructor could not be generated
+
+# C4512: 'class' : assignment operator could not be generated
+
+# C4514: 'function' : unreferenced inline function has been removed
+
+# C4555: expression has no effect; expected expression with
+#   side-effect
+
+# C4611: interaction between 'function' and C++ object destruction is
+#   non-portable
+
+# C4619: #pragma warning : there is no warning number 'number'
+
+# C4625: 'derived class' : copy constructor could not be generated
+#   because a base class copy constructor is inaccessible
+
+# C4626: 'derived class' : assignment operator could not be generated
+#   because a base class assignment operator is inaccessible
+
+# C4628: digraphs not supported with -Ze. Character sequence 'digraph'
+#   not interpreted as alternate token for 'char'
+
+# C4640: 'instance' : construction of local static object is not thread-safe
+
+# C4668: 'symbol' is not defined as a preprocessor macro, replacing
+#   with '0' for 'directives'
+
+# C4675: 'function' : resolved overload was found by
+#   argument-dependent lookup. FIXME: This warning is not listed for
+#   VS2008 or later.
+
+# C4686: ' user-defined type ' : possible change in behavior, change
+#   in UDT return calling convention
+
+# C4692: 'function': signature of non-private member contains assembly
+#   private native type 'native_type'
+
+# C4706: assignment within conditional expression
+
+# C4710: 'function' : function not inlined
+
+# C4711: function 'function' selected for inline expansion
+
+# C4738: storing 32-bit float result in memory, possible loss of
+#   performance
+
+# C4786: FIXME: Not in supported compiler versions
+
+# C4800: 'type' : forcing value to bool 'true' or 'false' (performance
+#   warning)
+
+# C4820: 'bytes' bytes padding added after construct 'member_name'
+
+# C4826: Conversion from 'type1 ' to 'type_2' is sign-extended. This
+#   may cause unexpected runtime behavior.
+
+# C4917: 'declarator' : a GUID can only be associated with a class,
+#   interface or namespace
+
+# C4996: 'function': was declared deprecated
+
 gb_CFLAGS := \
 	-Gd \
 	-GR \
@@ -96,6 +230,7 @@ gb_CFLAGS := \
 	-wd4350 \
 	-wd4355 \
 	-wd4365 \
+	-wd4373 \
 	-wd4503 \
 	-wd4505 \
 	-wd4511 \
@@ -114,7 +249,6 @@ gb_CFLAGS := \
 	-wd4706 \
 	-wd4710 \
 	-wd4711 \
-	-wd4373 \
 	-wd4738 \
 	-wd4786 \
 	-wd4800 \
@@ -153,6 +287,7 @@ gb_CXXFLAGS := \
 	-wd4351 \
 	-wd4355 \
 	-wd4365 \
+	-wd4373 \
 	-wd4435 \
 	-wd4503 \
 	-wd4505 \
@@ -173,7 +308,6 @@ gb_CXXFLAGS := \
 	-wd4706 \
 	-wd4710 \
 	-wd4711 \
-	-wd4373 \
 	-wd4738 \
 	-wd4786 \
 	-wd4800 \
