@@ -463,12 +463,15 @@ namespace
         OQueryTableConnectionData data(*pData);
         switch (data.GetJoinType())
         {
-            case LEFT_JOIN:
-                data.SetJoinType(RIGHT_JOIN);
-                break;
-            case RIGHT_JOIN:
-                data.SetJoinType(LEFT_JOIN);
-                break;
+        case LEFT_JOIN:
+            data.SetJoinType(RIGHT_JOIN);
+            break;
+        case RIGHT_JOIN:
+            data.SetJoinType(LEFT_JOIN);
+            break;
+        default:
+            // the other join types are symmetric, so nothing to change
+            break;
         }
         return BuildJoin(_xConnection, rRh, BuildTable(_xConnection,pLh), &data);
     }
