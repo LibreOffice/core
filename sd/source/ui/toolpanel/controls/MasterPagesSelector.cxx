@@ -432,6 +432,12 @@ void MasterPagesSelector::NotifyContainerChangeEvent (const MasterPageContainerC
         }
         break;
 
+        case MasterPageContainerChangeEvent::CHILD_REMOVED:
+        {
+            int nIndex (GetIndexForToken(rEvent.maChildToken));
+            SetItem(nIndex, MasterPageContainer::NIL_TOKEN);
+        }
+
         default:
             break;
    }
