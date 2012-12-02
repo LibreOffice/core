@@ -120,7 +120,7 @@ static sal_Bool cleanPath()
 
 void removeIfExists(const OString& pathname)
 {
-    unlink(pathname.getStr());
+    osl::File::remove(OStringToOUString(pathname, RTL_TEXTENCODING_UTF8));
 }
 
 sal_Int32 SAL_CALL
