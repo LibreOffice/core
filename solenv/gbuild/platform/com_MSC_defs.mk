@@ -88,10 +88,6 @@ gb_AFLAGS := /c /Cp
 # C4191: 'operator/operation' : unsafe conversion from 'type of
 #   expression' to 'type required'
 
-# C4217: 'operator' : member template functions cannot be used for
-#   copy-assignment or copy-construction. FIXME: This warning is not
-#   listed for VS2008 or later.
-
 # C4242: 'identifier' : conversion from 'type1' to 'type2', possible
 #   loss of data
 
@@ -118,8 +114,6 @@ gb_AFLAGS := /c /Cp
 # C4290: C++ exception specification ignored except to indicate a
 #   function is not __declspec(nothrow)
 
-# C4294: FIXME: not documented at all
-
 # C4350: behavior change: 'member1' called instead of 'member2'
 
 # C4355: 'this' : used in base member initializer list
@@ -131,10 +125,6 @@ gb_AFLAGS := /c /Cp
 
 # C4365: 'action' : conversion from 'type_1' to 'type_2',
 #   signed/unsigned mismatch
-
-# C4373: FIXME: not documented at all
-
-# C4435: FIXME: not documented at all
 
 # C4503: 'identifier' : decorated name length exceeded, name was
 #   truncated
@@ -169,10 +159,6 @@ gb_AFLAGS := /c /Cp
 # C4668: 'symbol' is not defined as a preprocessor macro, replacing
 #   with '0' for 'directives'
 
-# C4675: 'function' : resolved overload was found by
-#   argument-dependent lookup. FIXME: This warning is not listed for
-#   VS2008 or later.
-
 # C4686: ' user-defined type ' : possible change in behavior, change
 #   in UDT return calling convention
 
@@ -187,8 +173,6 @@ gb_AFLAGS := /c /Cp
 
 # C4738: storing 32-bit float result in memory, possible loss of
 #   performance
-
-# C4786: FIXME: Not in supported compiler versions
 
 # C4800: 'type' : forcing value to bool 'true' or 'false' (performance
 #   warning)
@@ -217,7 +201,6 @@ gb_CFLAGS := \
 	-wd4180 \
 	-wd4189 \
 	-wd4191 \
-	-wd4217 \
 	-wd4242 \
 	-wd4244 \
 	-wd4245 \
@@ -243,14 +226,12 @@ gb_CFLAGS := \
 	-wd4626 \
 	-wd4640 \
 	-wd4668 \
-	-wd4675 \
 	-wd4686 \
 	-wd4692 \
 	-wd4706 \
 	-wd4710 \
 	-wd4711 \
 	-wd4738 \
-	-wd4786 \
 	-wd4800 \
 	-wd4820 \
 	-wd4826 \
@@ -273,7 +254,6 @@ gb_CXXFLAGS := \
 	-wd4180 \
 	-wd4189 \
 	-wd4191 \
-	-wd4217 \
 	-wd4242 \
 	-wd4244 \
 	-wd4245 \
@@ -282,13 +262,10 @@ gb_CXXFLAGS := \
 	-wd4265 \
 	-wd4275 \
 	-wd4290 \
-	-wd4294 \
 	-wd4350 \
 	-wd4351 \
 	-wd4355 \
 	-wd4365 \
-	-wd4373 \
-	-wd4435 \
 	-wd4503 \
 	-wd4505 \
 	-wd4511 \
@@ -302,14 +279,12 @@ gb_CXXFLAGS := \
 	-wd4628 \
 	-wd4640 \
 	-wd4668 \
-	-wd4675 \
 	-wd4686 \
 	-wd4692 \
 	-wd4706 \
 	-wd4710 \
 	-wd4711 \
 	-wd4738 \
-	-wd4786 \
 	-wd4800 \
 	-wd4820 \
 	-wd4826 \
