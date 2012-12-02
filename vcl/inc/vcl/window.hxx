@@ -811,6 +811,8 @@ public:
     */
     sal_Bool                IsInModalMode() const;
 
+    virtual bool        IsInRefMode() const;
+
     void                SetActivateMode( sal_uInt16 nMode );
     sal_uInt16              GetActivateMode() const;
 

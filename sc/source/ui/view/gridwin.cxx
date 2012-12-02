@@ -1727,6 +1727,7 @@ bool ScGridWindow::TestMouse( const MouseEvent& rMEvt, bool bAction )
 
 void ScGridWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
+    std::cout << "MouseButtonDown" << std::endl;
     nNestedButtonState = SC_NESTEDBUTTON_DOWN;
 
     HandleMouseButtonDown( rMEvt );
@@ -2042,6 +2043,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt )
 
 void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
+    std::cout << "MouseButtonUp" << std::endl;
     aCurMousePos = rMEvt.GetPosPixel();
     ScDocument* pDoc = pViewData->GetDocument();
     ScMarkData& rMark = pViewData->GetMarkData();
@@ -2470,8 +2472,14 @@ void ScGridWindow::FakeButtonUp()
     }
 }
 
+#include <stdio.h>
+
 void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
 {
+    fprintf( stderr, "MouseMove: %s %d %d %d\n",
+            rMEvt.IsSynthetic() ? "synthetic" : "real",
+            rMEvt.GetMode(), rMEvt.GetModifier(), rMEvt.GetButtons() );
+
     aCurMousePos = rMEvt.GetPosPixel();
 
     if ( rMEvt.IsLeaveWindow() && pNoteMarker && !pNoteMarker->IsByKeyboard() )
@@ -2749,7 +2757,7 @@ void ScGridWindow::Tracking( const TrackingEvent& rTEvt )
 
     if ( rTEvt.IsTrackingCanceled() )       // alles abbrechen...
     {
-        if (!pViewData->GetView()->IsInActivatePart())
+        if (!pViewData->GetView()->IsInActivatePart() && !SC_MOD()->IsRefDialogOpen())
         {
             if (bDPMouse)
                 bDPMouse = false;               // gezeichnet wird per bDragRect

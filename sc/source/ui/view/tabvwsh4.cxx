@@ -210,7 +210,7 @@ void ScTabViewShell::Activate(sal_Bool bMDI)
             if ( pChildWnd )
             {
                 IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
-                pRefDlg->ViewShellChanged(this);
+                pRefDlg->ViewShellChanged();
             }
         }
     }

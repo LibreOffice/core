@@ -190,8 +190,21 @@ public:
 
 //============================================================================
 
+
+class ScRefHdlModalImpl : public ModalDialog, public ScRefHandler
+{
+public:
+
+    virtual long        PreNotify( NotifyEvent& rNEvt );
+    virtual void        StateChanged( StateChangedType nStateChange );
+protected:
+    ScRefHdlModalImpl( Window* pParent, ResId& rResId );
+
+private:
+};
+
 template<  class TWindow, bool bBindRef = true >
-class ScRefHdlrImplBase:public TWindow, public ScRefHandler
+class ScRefHdlrImplBase: public TWindow, public ScRefHandler
 {
 public:
     //Overwrite TWindow
@@ -238,14 +251,20 @@ void ScRefHdlrImplBase<TWindow, bBindRef>::StateChanged( StateChangedType nState
     ScRefHandler::stateChanged( nStateChange, bBindRef );
 }
 
+class ScAnyRefModalDlg : public ScRefHdlModalImpl
+{
+public:
+    ScAnyRefModalDlg(Window* pParent, ResId rResId);
+};
+
 //============================================================================
 template<class TDerived, class TBase, bool bBindRef = true>
-struct ScRefHdlrImpl: ScRefHdlrImplBase<TBase, bBindRef >
+struct ScRefHdlrImpl: ScRefHdlrImplBase< TBase, bBindRef >
 {
     enum { UNKNOWN_SLOTID = 0U, SLOTID = UNKNOWN_SLOTID };
 
     template<class T1, class T2, class T3, class T4>
-    ScRefHdlrImpl( const T1 & rt1, const T2 & rt2, const T3 & rt3, const T4 & rt4 ):ScRefHdlrImplBase<TBase, bBindRef >(rt1, rt2, rt3, rt4 )
+    ScRefHdlrImpl( const T1 & rt1, const T2 & rt2, const T3& rt3, const T4& rt4 ):ScRefHdlrImplBase<TBase, bBindRef >(rt1, rt2, rt3, rt4 )
     {
         SC_MOD()->RegisterRefWindow( static_cast<sal_uInt16>( static_cast<TDerived*>(this)->SLOTID ), this );
     }
@@ -259,7 +278,7 @@ struct ScRefHdlrImpl: ScRefHdlrImplBase<TBase, bBindRef >
 struct ScAnyRefDlg : ::ScRefHdlrImpl< ScAnyRefDlg, SfxModelessDialog>
 {
     template<class T1, class T2, class T3, class T4>
-    ScAnyRefDlg( const T1 & rt1, const T2 & rt2, const T3 & rt3, const T4 & rt4 ):ScRefHdlrImpl< ScAnyRefDlg, SfxModelessDialog>(rt1, rt2, rt3, rt4){}
+    ScAnyRefDlg( const T1 & rt1, const T2 & rt2, const T3& rt3, const T4& rt4 ):ScRefHdlrImpl< ScAnyRefDlg, SfxModelessDialog>(rt1, rt2, rt3, rt4){}
 };
 //============================================================================
 

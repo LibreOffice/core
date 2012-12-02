@@ -831,7 +831,7 @@ void ScRefHandler::SetDispatcherLock( bool bLock )
 
 //----------------------------------------------------------------------------
 
-void ScRefHandler::ViewShellChanged(ScTabViewShell*  pScViewShell )
+void ScRefHandler::ViewShellChanged()
 {
     m_aHelper.ViewShellChanged(pScViewShell);
 }
@@ -936,5 +936,26 @@ void ScRefHandler::RefInputDone( sal_Bool bForced )
 {
     m_aHelper.RefInputDone( bForced );
 }
+
+//-------------------------------------------------------------------------------
+
+ScRefHdlModalImpl::ScRefHdlModalImpl( Window* pParent, ResId& rResId ):
+    ModalDialog( pParent, rResId ),
+    ScRefHandler(dynamic_cast<Window&>(*this), NULL, true) {}
+
+long ScRefHdlModalImpl::PreNotify( NotifyEvent& rNEvt )
+{
+    ScRefHandler::preNotify( rNEvt, true );
+    return ModalDialog::PreNotify( rNEvt );
+}
+
+void ScRefHdlModalImpl::StateChanged( StateChangedType nStateChange )
+{
+    ModalDialog::StateChanged( nStateChange );
+    ScRefHandler::stateChanged( nStateChange, true );
+}
+
+ScAnyRefModalDlg::ScAnyRefModalDlg( Window* pParent, ResId aResId ):
+    ScRefHdlModalImpl( pParent, aResId ) {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

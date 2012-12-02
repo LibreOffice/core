@@ -355,9 +355,9 @@ IMPL_LINK_NOARG( ScCondFormatList, ScrollHdl )
 //ScCondFormatDlg
 //---------------------------------------------------
 
-ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pParent, ScDocument* pDoc, const ScConditionalFormat* pFormat, const ScRangeList& rRange,
+ScCondFormatDlg::ScCondFormatDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormat* pFormat, const ScRangeList& rRange,
                                     const ScAddress& rPos, condformat::dialog::ScCondFormatDialogType eType):
-    ScAnyRefDlg(pB, pCW, pParent, RID_SCDLG_CONDFORMAT ),
+    ScAnyRefModalDlg(pParent, ScResId(RID_SCDLG_CONDFORMAT) ),
     maBtnAdd( this, ScResId( BTN_ADD ) ),
     maBtnRemove( this, ScResId( BTN_REMOVE ) ),
     maBtnOk( this, ScResId( BTN_OK ) ),
@@ -388,10 +388,13 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* p
     FreeResource();
 
     maEdRange.SetText(aRangeString);
+
+    SC_MOD()->PushNewAnyRefDlg(this);
 }
 
 ScCondFormatDlg::~ScCondFormatDlg()
 {
+    SC_MOD()->PopAnyRefDlg();
 }
 
 void ScCondFormatDlg::SetActive()
@@ -406,7 +409,7 @@ void ScCondFormatDlg::SetActive()
 
 void ScCondFormatDlg::RefInputDone( sal_Bool bForced )
 {
-    ScAnyRefDlg::RefInputDone(bForced);
+    ScAnyRefModalDlg::RefInputDone(bForced);
 }
 
 sal_Bool ScCondFormatDlg::IsTableLocked() const
@@ -483,21 +486,8 @@ IMPL_LINK( ScCondFormatDlg, EdRangeModifyHdl, Edit*, pEdit )
 
 sal_Bool ScCondFormatDlg::Close()
 {
-    sal_uInt16 nId = 0;
-    switch(meType)
-    {
-        case condformat::dialog::NONE:
-        case condformat::dialog::CONDITION:
-            nId = ScCondFormatConditionDlgWrapper::GetChildWindowId();
-            break;
-        case condformat::dialog::COLORSCALE:
-            nId = ScCondFormatColorScaleDlgWrapper::GetChildWindowId();
-            break;
-        case condformat::dialog::DATABAR:
-            nId = ScCondFormatDataBarDlgWrapper::GetChildWindowId();
-            break;
-    }
-
+    sal_uInt16 nId = 1;
+    EndDialog();
     return DoClose(nId);
 }
 

@@ -1741,7 +1741,7 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
             if ( pChildWnd )
             {
                 IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
-                pRefDlg->ViewShellChanged(NULL);
+                pRefDlg->ViewShellChanged();
             }
         }
     }

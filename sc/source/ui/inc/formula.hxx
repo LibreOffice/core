@@ -110,7 +110,7 @@ public:
     virtual sal_Bool IsDocAllowed( SfxObjectShell* pDocSh ) const;
     virtual void AddRefEntry();
     virtual void SetActive();
-    virtual void ViewShellChanged( ScTabViewShell* pScViewShell );
+    virtual void ViewShellChanged();
 protected:
 
     virtual void RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );

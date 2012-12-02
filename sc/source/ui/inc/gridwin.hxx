@@ -392,6 +392,8 @@ public:
     void            UpdateShrinkOverlay();
     void            UpdateAllOverlays();
 
+    virtual bool    IsInRefMode() const { return true; }
+
 protected:
     // #114409#
     void ImpCreateOverlayObjects();

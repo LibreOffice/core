@@ -96,7 +96,7 @@ public:
     DECL_LINK( ColFormatTypeHdl, ListBox*);
 };
 
-class ScCondFormatDlg : public ScAnyRefDlg
+class ScCondFormatDlg : public ScAnyRefModalDlg
 {
 private:
     PushButton maBtnAdd;
@@ -129,7 +129,7 @@ protected:
 
 
 public:
-    ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pSW, Window* pWindow, ScDocument* pDoc, const ScConditionalFormat* pFormat,
+    ScCondFormatDlg(Window* pWindow, ScDocument* pDoc, const ScConditionalFormat* pFormat,
             const ScRangeList& rRange, const ScAddress& rPos, condformat::dialog::ScCondFormatDialogType eType);
     virtual ~ScCondFormatDlg();
 

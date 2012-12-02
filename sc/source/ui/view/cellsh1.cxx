@@ -83,6 +83,7 @@
 #include "cliputil.hxx"
 #include "markdata.hxx"
 #include "docpool.hxx"
+#include "condformatdlg.hxx"
 
 #include "globstr.hrc"
 #include "scui_def.hxx"
@@ -1769,25 +1770,58 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_OPENDLG_COLORSCALE:
         case SID_OPENDLG_DATABAR:
             {
-                sal_uInt16 nId = 0;
-                switch( nSlot )
-                {
-                    case SID_OPENDLG_CONDFRMT:
-                        nId = ScCondFormatConditionDlgWrapper::GetChildWindowId();
-                        break;
-                    case SID_OPENDLG_COLORSCALE:
-                        nId = ScCondFormatColorScaleDlgWrapper::GetChildWindowId();
-                        break;
-                    case SID_OPENDLG_DATABAR:
-                        nId = ScCondFormatDataBarDlgWrapper::GetChildWindowId();
-                        break;
-                    default:
-                        break;
-                }
-                SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
-                SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
+                sal_uInt16 nId = 1;
 
-                pScMod->SetRefDialog( nId, pWnd ? false : sal_True );
+                pScMod->SetRefDialog( nId, true );
+
+                ScRangeList aRangeList;
+                ScViewData* pData = GetViewData();
+                pData->GetMarkData().FillRangeListWithMarks(&aRangeList, false);
+
+                ScDocument* pDoc = GetViewData()->GetDocument();
+                if(pDoc->IsTabProtected(pData->GetTabNo()))
+                {
+                    //ErrorMessage( STR_ERR_CONDFORMAT_PROTECTED );
+                    break;
+                }
+
+                ScAddress aPos(pData->GetCurX(), pData->GetCurY(), pData->GetTabNo());
+                if(aRangeList.empty())
+                {
+                    ScRange* pRange = new ScRange(aPos);
+                    aRangeList.push_back(pRange);
+                }
+
+                const ScConditionalFormat* pCondFormat = pDoc->GetCondFormat(aPos.Col(), aPos.Row(), aPos.Tab());
+                ScCondFormatDlg* pCondFormatDlg = NULL;
+                if(pCondFormat)
+                {
+                    const ScRangeList& rCondFormatRange = pCondFormat->GetRange();
+                    if(rCondFormatRange == aRangeList)
+                        pCondFormatDlg = new ScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, pCondFormat, rCondFormatRange, aPos, condformat::dialog::NONE );
+                }
+
+                if(!pCondFormatDlg)
+                {
+                    condformat::dialog::ScCondFormatDialogType eType = condformat::dialog::NONE;
+                    switch(nSlot)
+                    {
+                        case SID_OPENDLG_CONDFRMT:
+                            eType = condformat::dialog::CONDITION;
+                            break;
+                        case SID_OPENDLG_COLORSCALE:
+                            eType = condformat::dialog::COLORSCALE;
+                            break;
+                        case SID_OPENDLG_DATABAR:
+                            eType = condformat::dialog::DATABAR;
+                            break;
+                        default:
+                            break;
+                    }
+                    pCondFormatDlg = new ScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, NULL, aRangeList, aRangeList.GetTopLeftCorner(), eType );
+                    pCondFormatDlg->Execute();
+                }
+
             }
             break;
 

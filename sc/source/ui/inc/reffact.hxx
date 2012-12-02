@@ -45,9 +45,6 @@
 
 DECL_WRAPPER_WITHID(ScNameDlgWrapper)
 DECL_WRAPPER_WITHID(ScNameDefDlgWrapper)
-DECL_WRAPPER_WITHID(ScCondFormatConditionDlgWrapper)
-DECL_WRAPPER_WITHID(ScCondFormatColorScaleDlgWrapper)
-DECL_WRAPPER_WITHID(ScCondFormatDataBarDlgWrapper)
 DECL_WRAPPER_WITHID(ScSolverDlgWrapper)
 DECL_WRAPPER_WITHID(ScOptSolverDlgWrapper)
 DECL_WRAPPER_WITHID(ScXMLSourceDlgWrapper)

@@ -41,6 +41,7 @@
 #include <map>
 #include <list>
 #include <algorithm>
+#include <stack>
 
 
 class KeyEvent;
@@ -81,6 +82,7 @@ class ScFormEditData;
 class ScMarkData;
 struct ScDragData;
 struct ScClipData;
+class ScAnyRefModalDlg;
 
 //==================================================================
 
@@ -124,6 +126,7 @@ class ScModule: public SfxModule, public SfxListener, utl::ConfigurationListener
     bool                mbIsInSharedDocSaving:1;
 
     std::map<sal_uInt16, std::list<Window*> > m_mapRefWindow;
+    std::stack<ScAnyRefModalDlg*> maAnyRefDlgStack;
 public:
                     SFX_DECL_INTERFACE(SCID_APP)
 
@@ -262,6 +265,10 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     SC_DLLPUBLIC sal_Bool   UnregisterRefWindow( sal_uInt16 nSlotId, Window *pWnd );
     SC_DLLPUBLIC sal_Bool   IsAliveRefDlg( sal_uInt16 nSlotId, Window *pWnd );
     SC_DLLPUBLIC Window * Find1RefWindow( sal_uInt16 nSlotId, Window *pWndAncestor );
+
+    ScAnyRefModalDlg* GetCurrentAnyRefDlg();
+    void PushNewAnyRefDlg( ScAnyRefModalDlg* pDlg );
+    void PopAnyRefDlg();
 };
 
 #define SC_MOD() ( *(ScModule**) GetAppData(SHL_CALC) )

@@ -42,6 +42,7 @@
 #include <sfx2/objface.hxx>
 
 #include "IAnyRefDialog.hxx"
+#include "anyrefdg.hxx"
 
 #include <svtools/ehdl.hxx>
 #include <svtools/accessibilityoptions.hxx>
@@ -1656,11 +1657,16 @@ sal_Bool ScModule::IsModalMode(SfxObjectShell* pDocSh)
     if ( nCurRefDlgId )
     {
         SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
+        ScAnyRefModalDlg* pModalDlg = GetCurrentAnyRefDlg();
         if ( pChildWnd )
         {
             IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
             bIsModal = pChildWnd->IsVisible() &&
                 !( pRefDlg->IsRefInputMode() && pRefDlg->IsDocAllowed(pDocSh) );
+        }
+        else if(pModalDlg)
+        {
+            bIsModal = pModalDlg->IsVisible() && !(pModalDlg->IsRefInputMode() && pModalDlg->IsDocAllowed(pDocSh) );
         }
         else
         {
@@ -1695,8 +1701,11 @@ sal_Bool ScModule::IsTableLocked()
     if ( nCurRefDlgId )
     {
         SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
+        ScAnyRefModalDlg* pModalDlg = GetCurrentAnyRefDlg();
         if ( pChildWnd )
             bLocked = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow())->IsTableLocked();
+        else if( pModalDlg )
+            bLocked = pModalDlg->IsTableLocked();
         else
             bLocked = sal_True;     // for other views, see IsModalMode
     }
@@ -1714,8 +1723,11 @@ sal_Bool ScModule::IsRefDialogOpen()
     if ( nCurRefDlgId )
     {
         SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
+        ScAnyRefModalDlg* pModalDlg = GetCurrentAnyRefDlg();
         if ( pChildWnd )
             bIsOpen = pChildWnd->IsVisible();
+        else if(pModalDlg)
+            bIsOpen = pModalDlg->IsVisible();
         else
             bIsOpen = sal_True;     // for other views, see IsModalMode
     }
@@ -1733,11 +1745,18 @@ sal_Bool ScModule::IsFormulaMode()
     if ( nCurRefDlgId )
     {
         SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
+        ScAnyRefModalDlg* pModalDlg = GetCurrentAnyRefDlg();
         if ( pChildWnd )
         {
             IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
             bIsFormula = pChildWnd->IsVisible() && pRefDlg->IsRefInputMode();
         }
+        else if(pModalDlg)
+        {
+            bIsFormula = pModalDlg->IsVisible() && pModalDlg->IsRefInputMode();
+        }
+        else
+            bIsFormula = true;
     }
     else
     {
@@ -1776,7 +1795,8 @@ void ScModule::SetReference( const ScRange& rRef, ScDocument* pDoc,
     if( nCurRefDlgId )
     {
         SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
-        OSL_ENSURE( pChildWnd, "NoChildWin" );
+        ScAnyRefModalDlg* pModalDlg = GetCurrentAnyRefDlg();
+        OSL_ENSURE( pChildWnd || pModalDlg, "NoChildWin" );
         if ( pChildWnd )
         {
             if ( nCurRefDlgId == SID_OPENDLG_CONSOLIDATE && pMarkData )
@@ -1794,6 +1814,13 @@ void ScModule::SetReference( const ScRange& rRef, ScDocument* pDoc,
             //  don't abort the ref input that causes this call (bDoneRefMode = sal_False)
             pRefDlg->HideReference( false );
             pRefDlg->SetReference( aNew, pDoc );
+        }
+        else if(pModalDlg)
+        {
+            //  hide the (color) selection now instead of later from LoseFocus,
+            //  don't abort the ref input that causes this call (bDoneRefMode = sal_False)
+            pModalDlg->HideReference( false );
+            pModalDlg->SetReference( aNew, pDoc );
         }
     }
     else
@@ -1816,12 +1843,15 @@ void ScModule::AddRefEntry()                        // "Mehrfachselektion"
     if ( nCurRefDlgId )
     {
         SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
-        OSL_ENSURE( pChildWnd, "NoChildWin" );
+        ScAnyRefModalDlg* pModalDlg = GetCurrentAnyRefDlg();
+        OSL_ENSURE( pChildWnd || pModalDlg, "NoChildWin" );
         if ( pChildWnd )
         {
             IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
             pRefDlg->AddRefEntry();
         }
+        else if(pModalDlg)
+            pModalDlg->AddRefEntry();
     }
     else
     {
@@ -1843,12 +1873,15 @@ void ScModule::EndReference()
     if ( nCurRefDlgId )
     {
         SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
-        OSL_ENSURE( pChildWnd, "NoChildWin" );
+        ScAnyRefModalDlg* pModalDlg = GetCurrentAnyRefDlg();
+        OSL_ENSURE( pChildWnd || pModalDlg, "NoChildWin" );
         if ( pChildWnd )
         {
             IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
             pRefDlg->SetActive();
         }
+        else
+            pModalDlg->SetActive();
     }
 }
 
@@ -2279,6 +2312,24 @@ Window *  ScModule::Find1RefWindow( sal_uInt16 nSlotId, Window *pWndAncestor )
             return *i;
 
     return NULL;
+}
+
+ScAnyRefModalDlg* ScModule::GetCurrentAnyRefDlg()
+{
+    if(!maAnyRefDlgStack.empty())
+        return maAnyRefDlgStack.top();
+
+    return NULL;
+}
+
+void ScModule::PushNewAnyRefDlg( ScAnyRefModalDlg* pNewDlg )
+{
+    maAnyRefDlgStack.push( pNewDlg );
+}
+
+void ScModule::PopAnyRefDlg()
+{
+    maAnyRefDlgStack.pop();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

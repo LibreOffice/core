@@ -182,59 +182,6 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         }
         break;
 
-        case SID_OPENDLG_CONDFRMT:
-        case SID_OPENDLG_COLORSCALE:
-        case SID_OPENDLG_DATABAR:
-        {
-            ScRangeList aRangeList;
-            ScViewData* pData = GetViewData();
-            pData->GetMarkData().FillRangeListWithMarks(&aRangeList, false);
-
-            if(pDoc->IsTabProtected(pData->GetTabNo()))
-            {
-                ErrorMessage( STR_ERR_CONDFORMAT_PROTECTED );
-                break;
-            }
-
-            ScAddress aPos(pData->GetCurX(), pData->GetCurY(), pData->GetTabNo());
-            if(aRangeList.empty())
-            {
-                ScRange* pRange = new ScRange(aPos);
-                aRangeList.push_back(pRange);
-            }
-
-            const ScConditionalFormat* pCondFormat = pDoc->GetCondFormat(aPos.Col(), aPos.Row(), aPos.Tab());
-            condformat::dialog::ScCondFormatDialogType eType = condformat::dialog::NONE;
-            switch(nSlotId)
-            {
-                case SID_OPENDLG_CONDFRMT:
-                    eType = condformat::dialog::CONDITION;
-                    break;
-                case SID_OPENDLG_COLORSCALE:
-                    eType = condformat::dialog::COLORSCALE;
-                    break;
-                case SID_OPENDLG_DATABAR:
-                    eType = condformat::dialog::DATABAR;
-                    break;
-                default:
-                    break;
-            }
-
-            if(pCondFormat)
-            {
-                const ScRangeList& rCondFormatRange = pCondFormat->GetRange();
-                if(rCondFormatRange == aRangeList)
-                    pResult = new ScCondFormatDlg( pB, pCW, pParent, pDoc, pCondFormat, rCondFormatRange, aPos, eType );
-            }
-
-            if(!pResult)
-            {
-                pResult = new ScCondFormatDlg( pB, pCW, pParent, pDoc, NULL, aRangeList, aRangeList.GetTopLeftCorner(), eType );
-            }
-        }
-
-        break;
-
         case SID_DEFINE_COLROWNAMERANGES:
         {
             pResult = new ScColRowNameRangesDlg( pB, pCW, pParent, GetViewData() );

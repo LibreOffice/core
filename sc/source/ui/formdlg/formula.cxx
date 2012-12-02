@@ -526,9 +526,9 @@ void ScFormulaDlg::HideReference( sal_Bool bDoneRefMode )
 {
     m_aHelper.HideReference(bDoneRefMode);
 }
-void ScFormulaDlg::ViewShellChanged( ScTabViewShell* pScViewShell )
+void ScFormulaDlg::ViewShellChanged()
 {
-    m_aHelper.ViewShellChanged( pScViewShell );
+    m_aHelper.ViewShellChanged();
 }
 void ScFormulaDlg::AddRefEntry( )
 {

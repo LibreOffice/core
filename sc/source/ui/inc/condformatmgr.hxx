@@ -87,6 +87,8 @@ public:
 
     bool CondFormatsChanged();
 
+    virtual bool IsInRefMode() const;
+
 private:
     PushButton maBtnAdd;
     PushButton maBtnRemove;
