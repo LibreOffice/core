@@ -32,6 +32,10 @@
 #include <rtl/textenc.h>
 #include "sal/log.hxx"
 
+#ifdef RTL_FAST_STRING
+#include <rtl/stringconcat.hxx>
+#endif
+
 #if defined EXCEPTIONS_OFF
 #include <stdlib.h>
 #else
@@ -314,6 +318,20 @@ public:
 #endif
         }
     }
+
+#ifdef RTL_FAST_STRING
+    template< typename T1, typename T2 >
+    OUString( const OUStringConcat< T1, T2 >& c )
+    {
+        const int l = c.length();
+        rtl_uString* buffer = NULL;
+        rtl_uString_new_WithLength( &buffer, l ); // TODO this clears, not necessary
+        sal_Unicode* end = c.addData( buffer->buffer );
+        buffer->length = end - buffer->buffer;
+        // TODO realloc in case buffer->length is noticeably smaller than l ?
+        pData = buffer;
+    }
+#endif
 
     /**
       Release the string data.
@@ -1400,10 +1418,12 @@ public:
         return OUString( pNew, (DO_NOT_ACQUIRE*)0 );
     }
 
+#ifndef RTL_FAST_STRING
     friend OUString operator+( const OUString& rStr1, const OUString& rStr2  ) SAL_THROW(())
     {
         return rStr1.concat( rStr2 );
     }
+#endif
 
     /**
       Returns a new string resulting from replacing n = count characters
@@ -2055,9 +2075,58 @@ public:
         rtl_uString_newFromAscii( &pNew, value );
         return OUString( pNew, (DO_NOT_ACQUIRE*)0 );
     }
+
+    template< typename T1, typename T2 >
+    friend struct OUStringConcat;
 };
 
 /* ======================================================================= */
+
+#ifdef RTL_FAST_STRING
+/**
+A simple wrapper around string literal. It is usually not necessary to use, can
+be mostly used to force OUString operator+ working with operands that otherwise would
+not trigger it.
+
+This class is not part of public API and is meant to be used only in LibreOffice code.
+@since LibreOffice 4.0
+*/
+struct SAL_WARN_UNUSED OUStringLiteral
+{
+    template< int N >
+    OUStringLiteral( const char (&str)[ N ] ) : size( N - 1 ), data( str ) {}
+    int size;
+    const char* data;
+};
+
+template<>
+struct ToStringHelper< OUString >
+    {
+    static int length( const OUString& s ) { return s.getLength(); }
+    static sal_Unicode* addData( sal_Unicode* buffer, const OUString& s ) { return addDataHelper( buffer, s.getStr(), s.getLength()); }
+    static const bool allowOStringConcat = false;
+    static const bool allowOUStringConcat = true;
+    };
+
+template<>
+struct ToStringHelper< OUStringLiteral >
+    {
+    static int length( const OUStringLiteral& str ) { return str.size; }
+    static sal_Unicode* addData( sal_Unicode* buffer, const OUStringLiteral& str ) { return addDataLiteral( buffer, str.data, str.size ); }
+    static const bool allowOStringConcat = false;
+    static const bool allowOUStringConcat = true;
+    };
+
+template< typename charT, typename traits, typename T1, typename T2 >
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, const OUStringConcat< T1, T2 >& concat)
+{
+    return stream << OUString( concat );
+}
+#else
+// non-RTL_FAST_CODE needs this to compile
+typedef OUString OUStringLiteral;
+#endif
 
 } /* Namespace */
 
@@ -2183,6 +2252,7 @@ using ::rtl::OUString;
 using ::rtl::OUStringHash;
 using ::rtl::OStringToOUString;
 using ::rtl::OUStringToOString;
+using ::rtl::OUStringLiteral;
 #endif
 
 #endif /* _RTL_USTRING_HXX */

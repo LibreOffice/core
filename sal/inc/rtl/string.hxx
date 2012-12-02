@@ -30,6 +30,10 @@
 #include <rtl/string.h>
 #include <rtl/stringutils.hxx>
 
+#ifdef RTL_FAST_STRING
+#include <rtl/stringconcat.hxx>
+#endif
+
 #include "sal/log.hxx"
 
 #if !defined EXCEPTIONS_OFF
@@ -249,6 +253,19 @@ public:
 #endif
         }
     }
+
+#ifdef RTL_FAST_STRING
+    template< typename T1, typename T2 >
+    OString( const OStringConcat< T1, T2 >& c )
+    {
+        const int l = c.length();
+        rtl_String* buffer = NULL;
+        rtl_string_new_WithLength( &buffer, l );
+        char* end = c.addData( buffer->buffer );
+        buffer->length = end - buffer->buffer;
+        pData = buffer;
+    }
+#endif
 
     /**
       Release the string data.
@@ -1063,10 +1080,12 @@ public:
         return OString( pNew, (DO_NOT_ACQUIRE*)0 );
     }
 
+#ifndef RTL_FAST_STRING
     friend OString operator+( const OString & str1, const OString & str2  ) SAL_THROW(())
     {
         return str1.concat( str2 );
     }
+#endif
 
     /**
       Returns a new string resulting from replacing n = count characters
@@ -1435,6 +1454,52 @@ public:
 
 /* ======================================================================= */
 
+#ifdef RTL_FAST_STRING
+/**
+A simple wrapper around string literal. It is usually not necessary to use, can
+be mostly used to force OString operator+ working with operands that otherwise would
+not trigger it.
+
+This class is not part of public API and is meant to be used only in LibreOffice code.
+@since LibreOffice 4.0
+*/
+struct SAL_WARN_UNUSED OStringLiteral
+{
+    template< int N >
+    OStringLiteral( const char (&str)[ N ] ) : size( N - 1 ), data( str ) {}
+    int size;
+    const char* data;
+};
+
+template<>
+struct ToStringHelper< OString >
+    {
+    static int length( const OString& s ) { return s.getLength(); }
+    static char* addData( char* buffer, const OString& s ) { return addDataHelper( buffer, s.getStr(), s.getLength()); }
+    static const bool allowOStringConcat = true;
+    static const bool allowOUStringConcat = false;
+    };
+
+template<>
+struct ToStringHelper< OStringLiteral >
+    {
+    static int length( const OStringLiteral& str ) { return str.size; }
+    static char* addData( char* buffer, const OStringLiteral& str ) { return addDataHelper( buffer, str.data, str.size ); }
+    static const bool allowOStringConcat = true;
+    static const bool allowOUStringConcat = false;
+    };
+
+template< typename charT, typename traits, typename T1, typename T2 >
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, const OStringConcat< T1, T2 >& concat)
+{
+    return stream << OString( concat );
+}
+#else
+// non-RTL_FAST_CODE needs this to compile
+typedef OString OStringLiteral;
+#endif
+
 } /* Namespace */
 
 #ifdef RTL_STRING_UNITTEST
@@ -1489,6 +1554,7 @@ operator <<(
 #ifdef RTL_USING
 using ::rtl::OString;
 using ::rtl::OStringHash;
+using ::rtl::OStringLiteral;
 #endif
 
 #endif /* _RTL_STRING_HXX_ */

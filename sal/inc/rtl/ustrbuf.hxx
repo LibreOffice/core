@@ -29,6 +29,10 @@
 #include <rtl/ustring.hxx>
 #include <rtl/stringutils.hxx>
 
+#ifdef RTL_FAST_STRING
+#include <rtl/stringconcat.hxx>
+#endif
+
 // The unittest uses slightly different code to help check that the proper
 // calls are made. The class is put into a different namespace to make
 // sure the compiler generates a different (if generating also non-inline)
@@ -209,6 +213,20 @@ public:
     }
 #endif
 
+#ifdef RTL_FAST_STRING
+    template< typename T1, typename T2 >
+    OUStringBuffer( const OUStringConcat< T1, T2 >& c )
+    {
+        const int l = c.length();
+        rtl_uString* buffer = NULL;
+        rtl_uString_new_WithLength( &buffer, l ); // TODO this clears, not necessary
+        sal_Unicode* end = c.addData( buffer->buffer );
+        buffer->length = end - buffer->buffer;
+        // TODO realloc in case buffer->length is noticeably smaller than l ?
+        pData = buffer;
+        nCapacity = l + 16;
+    }
+#endif
     /** Assign to this a copy of value.
      */
     OUStringBuffer& operator = ( const OUStringBuffer& value )
@@ -1222,6 +1240,17 @@ private:
      */
     sal_Int32       nCapacity;
 };
+
+#ifdef RTL_FAST_STRING
+template<>
+struct ToStringHelper< OUStringBuffer >
+    {
+    static int length( const OUStringBuffer& s ) { return s.getLength(); }
+    static sal_Unicode* addData( sal_Unicode* buffer, const OUStringBuffer& s ) { return addDataHelper( buffer, s.getStr(), s.getLength()); }
+    static const bool allowOStringConcat = false;
+    static const bool allowOUStringConcat = true;
+    };
+#endif
 
 }
 

@@ -28,6 +28,10 @@
 #include <rtl/string.hxx>
 #include <rtl/stringutils.hxx>
 
+#ifdef RTL_FAST_STRING
+#include <rtl/stringconcat.hxx>
+#endif
+
 #ifdef __cplusplus
 
 // The unittest uses slightly different code to help check that the proper
@@ -217,6 +221,20 @@ public:
     {
         rtl_stringbuffer_newFromStr_WithLength( &pData, value, length );
     }
+
+#ifdef RTL_FAST_STRING
+    template< typename T1, typename T2 >
+    OStringBuffer( const OStringConcat< T1, T2 >& c )
+    {
+        const int l = c.length();
+        rtl_String* buffer = NULL;
+        rtl_string_new_WithLength( &buffer, l );
+        char* end = c.addData( buffer->buffer );
+        buffer->length = end - buffer->buffer;
+        pData = buffer;
+        nCapacity = l + 16;
+    }
+#endif
 
     /** Assign to this a copy of value.
      */
@@ -829,6 +847,18 @@ private:
      */
     sal_Int32       nCapacity;
 };
+
+#ifdef RTL_FAST_STRING
+template<>
+struct ToStringHelper< OStringBuffer >
+    {
+    static int length( const OStringBuffer& s ) { return s.getLength(); }
+    static char* addData( char* buffer, const OStringBuffer& s ) { return addDataHelper( buffer, s.getStr(), s.getLength()); }
+    static const bool allowOStringConcat = true;
+    static const bool allowOUStringConcat = false;
+    };
+#endif
+
 
 }
 

@@ -31,6 +31,16 @@
 
 #include "sal/config.h"
 
+// Manually defining RTL_DISABLE_FAST_STRING allows to force turning fast string concatenation off
+// (e.g. for debugging).
+#ifndef RTL_DISABLE_FAST_STRING
+#ifndef HAVE_SFINAE_ANONYMOUS_BROKEN
+// Enable fast string concatenation.
+// This feature is not part of public API and is meant to be used only internally by LibreOffice.
+#define RTL_FAST_STRING
+#endif
+#endif
+
 // The unittest uses slightly different code to help check that the proper
 // calls are made. The class is put into a different namespace to make
 // sure the compiler generates a different (if generating also non-inline)
@@ -46,6 +56,7 @@ namespace rtl
 #ifdef RTL_STRING_UNITTEST
 #undef rtl
 #endif
+
 namespace internal
 {
 /*
@@ -114,12 +125,14 @@ struct NonConstCharArrayDetector< const char[], T >
 template< typename T1, typename T2 >
 struct ConstCharArrayDetector
 {
+    static const bool ok = false;
 };
 template< int N, typename T >
 struct ConstCharArrayDetector< const char[ N ], T >
 {
     typedef T Type;
     static const int size = N;
+    static const bool ok = true;
 };
 
 // this one is used to rule out only const char[N]
@@ -149,6 +162,19 @@ template< int N >
 struct ExceptCharArrayDetector< const char[ N ] >
 {
 };
+
+// SFINAE helper class
+template< typename T, bool >
+struct Enable
+    {
+    };
+
+template< typename T >
+struct Enable< T, true >
+    {
+    typedef T Type;
+    };
+
 
 } /* Namespace */
 
