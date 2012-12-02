@@ -1256,6 +1256,10 @@ ScIconSetFrmtEntry::ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry( Window* pPar
                 assert(false);
         }
     }
+    else
+    {
+        maLbEntryType.SelectEntryPos(1);
+    }
     FreeResource();
 }
 
@@ -1300,6 +1304,7 @@ ScIconSetFrmtEntry::ScIconSetFrmtEntry( Window* pParent, ScDocument* pDoc, const
 {
     Init();
     FreeResource();
+    maLbColorFormat.SetSelectHdl( LINK( pParent, ScCondFormatList, ColFormatTypeHdl ) );
 
     if(pFormat)
     {
