@@ -33,11 +33,11 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach component,$(COMPONENTS),echo "<filename>$(call gb_ComponentTarget_get_outdir_target,$(component))</filename>" &&) \
 		echo '</list>' \
 	) > $(1).input && \
-	$(gb_XSLTPROC) --nonet -o $(1) $(SOLARENV)/bin/packcomponents.xslt $(1).input && \
+	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet -o $(1) $(SOLARENV)/bin/packcomponents.xslt $(1).input && \
 	rm $(1).input)
 endef
 
-$(call gb_Rdb_get_target,%) :
+$(call gb_Rdb_get_target,%) :| $(call gb_ExternalExecutable_get_deps,xsltproc)
 	$(call gb_Output_announce,$*,$(true),RDB,1)
 	$(call gb_Rdb__command,$@,$*,$?,$^)
 

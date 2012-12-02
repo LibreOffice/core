@@ -159,6 +159,7 @@ ifneq ($(strip $(ENVCFLAGSCXX)),)
 gb__ENV_CXXFLAGS := $(ENVCFLAGSCXX)
 endif
 
+include $(GBUILDDIR)/ExternalExecutable.mk
 include $(GBUILDDIR)/Helper.mk
 include $(GBUILDDIR)/TargetLocations.mk
 include $(GBUILDDIR)/Tempfile.mk
@@ -167,6 +168,7 @@ $(eval $(call gb_Helper_init_registries))
 include $(SRCDIR)/Repository.mk
 include $(SRCDIR)/RepositoryExternal.mk
 $(eval $(call gb_Helper_collect_knownlibs))
+$(eval $(call gb_ExternalExecutable_collect_registrations))
 
 gb_Library_DLLPOSTFIX := lo
 
@@ -174,52 +176,6 @@ gb_Library_DLLPOSTFIX := lo
 include $(GBUILDDIR)/platform/$(OS)_$(CPUNAME)_$(COM).mk
 
 include $(SRCDIR)/RepositoryFixes.mk
-
-# Set up build tools that can be either internal or system. It is
-# necessary to do it before we start including gbuild class makefiles,
-# so the classes can add dependencies on them.
-#
-# TODO: As more external modules are converted, we would need more of
-# these (e.g., ICU tools). Maybe the definitions should be moved to
-# RepositoryExternal.mk ?
-ifeq ($(SYSTEM_LIBXSLT_FOR_BUILD),YES)
-gb_XSLTPROCTARGET :=
-gb_XSLTPROC := $(ICECREAM_RUN) xsltproc
-else
-gb_XSLTPROCTARGET := $(call gb_Executable_get_target_for_build,xsltproc)
-gb_XSLTPROC := $(gb_Helper_set_ld_path) $(ICECREAM_RUN) $(gb_XSLTPROCTARGET)
-endif
-
-ifeq ($(SYSTEM_LIBXML_FOR_BUILD),YES)
-gb_XMLLINTTARGET :=
-gb_XMLLINT := $(ICECREAM_RUN) xsltproc
-else
-gb_XMLLINTTARGET := $(call gb_Executable_get_target_for_build,xsltproc)
-gb_XMLLINT := $(gb_Helper_set_ld_path) $(ICECREAM_RUN) $(gb_XMLLINTTARGET)
-endif
-
-ifeq ($(SYSTEM_PYTHON),YES)
-gb_PYTHONTARGET :=
-gb_PYTHON := $(PYTHON)
-else ifeq ($(OS),MACOSX)
-#fixme: remove this MACOSX ifeq branch by filling in gb_PYTHON_PRECOMMAND in
-#gbuild/platform/macosx.mk correctly for mac, e.g. PYTHONPATH and PYTHONHOME
-#dirs for in-tree internal python
-gb_PYTHONTARGET :=
-gb_PYTHON := $(PYTHON)
-else ifeq ($(DISABLE_PYTHON),TRUE)
-# Build-time python
-gb_PYTHON := python
-else
-gb_PYTHONTARGET := $(call gb_Executable_get_target_for_build,python)
-gb_PYTHON := $(gb_PYTHON_PRECOMMAND) $(gb_PYTHONTARGET)
-endif
-
-ifneq (,$(SYSTEM_UCPP))
-gb_UCPPTARGET :=
-else
-gb_UCPPTARGET := $(call gb_Executable_get_target_for_build,ucpp)
-endif
 
 # add user-supplied flags
 ifneq ($(strip gb__ENV_CFLAGS),)

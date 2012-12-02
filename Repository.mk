@@ -759,4 +759,12 @@ $(eval $(call gb_Helper_register_jars,OXT, \
 	sun-report-builder \
 ))
 
+# External executables
+$(eval $(call gb_ExternalExecutable_register_executables,\
+	python \
+	ucpp \
+	xmllint \
+	xsltproc \
+))
+
 # vim: set noet sw=4 ts=4:

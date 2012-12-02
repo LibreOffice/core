@@ -53,10 +53,11 @@ $(i18npool_LDDIR)/localedata_%.cxx : \
 		rm $@.tmp)
 
 $(i18npool_LDDIR)/saxparser.rdb : $(i18npool_LDDIR)/saxparser.input \
-		$(gb_XSLTPROCTARGET) $(SOLARENV)/bin/packcomponents.xslt
+		$(SOLARENV)/bin/packcomponents.xslt \
+		| $(call gb_ExternalExecutable_get_deps,xsltproc)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),RDB,1)
 	$(call gb_Helper_abbreviate_dirs, \
-		$(gb_XSLTPROC) --nonet --stringparam prefix $(OUTDIR_FOR_BUILD)/xml/ \
+		$(call gb_ExternalExecutable_get_command,xsltproc) --nonet --stringparam prefix $(OUTDIR_FOR_BUILD)/xml/ \
 			-o $@ $(SOLARENV)/bin/packcomponents.xslt $<)
 
 $(i18npool_LDDIR)/saxparser.input : $(call gb_ComponentTarget_get_outdir_target,sax/source/expatwrap/expwrap) | $(i18npool_LDDIR)/.dir

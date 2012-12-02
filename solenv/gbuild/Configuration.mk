@@ -57,6 +57,9 @@ gb_Configuration__get_source = $(SRCDIR)/$(2)
 # The main LibreOffice registry
 gb_Configuration_PRIMARY_REGISTRY_NAME := registry
 
+gb_Configuration_XSLTCOMMAND = $(call gb_ExternalExecutable_get_command,xsltproc)
+gb_Configuration_XSLTCOMMAND_DEPS = $(call gb_ExternalExecutable_get_deps,xsltproc)
+
 # XcsTarget class
 
 # need to locate a schema file corresponding to some XCU file in the outdir
@@ -75,18 +78,18 @@ define gb_XcsTarget__command
 $(call gb_Output_announce,$(2),$(true),XCS,1)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
-	$(gb_XSLTPROC) --nonet \
+	$(gb_Configuration_XSLTCOMMAND) --nonet \
 		--noout \
 		--stringparam componentName $(subst /,.,$(basename $(XCSFILE))) \
 		--stringparam root $(subst $(XCSFILE),,$(3)) \
 		$(if $(PRIMARY_REGISTRY),,--stringparam schemaRoot $(call gb_XcsTarget_get_outdir_target,)) \
 		$(gb_XcsTarget_XSLT_SchemaVal) \
 		$(3) && \
-	$(gb_XSLTPROC) --nonet \
+	$(gb_Configuration_XSLTCOMMAND) --nonet \
 		--noout \
 		$(gb_XcsTarget_XSLT_Sanity) \
 		$(3) && \
-	$(gb_XSLTPROC) --nonet \
+	$(gb_Configuration_XSLTCOMMAND) --nonet \
 		-o $(1) \
 		$(gb_XcsTarget_XSLT_SchemaTrim) \
 		$(3))
@@ -94,7 +97,8 @@ endef
 
 $(call gb_XcsTarget_get_target,%) : \
 	    $(gb_XcsTarget_XSLT_SchemaVal) $(gb_XcsTarget_XSLT_Sanity) \
-		$(gb_XcsTarget_XSLT_SchemaTrim) $(gb_XcsTarget_DTD_Schema)
+		$(gb_XcsTarget_XSLT_SchemaTrim) $(gb_XcsTarget_DTD_Schema) \
+		| $(gb_Configuration_XSLTCOMMAND_DEPS)
 	$(call gb_XcsTarget__command,$@,$*,$(filter %.xcs,$^))
 
 $(call gb_XcsTarget_get_clean_target,%) :
@@ -124,14 +128,14 @@ define gb_XcuDataTarget__command
 $(call gb_Output_announce,$(2),$(true),XCU,2)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
-	$(gb_XSLTPROC) --nonet \
+	$(gb_Configuration_XSLTCOMMAND) --nonet \
 		--noout \
 		--stringparam xcs $(call gb_XcsTarget_for_XcuTarget,$(XCUFILE)) \
 		--stringparam schemaRoot $(call gb_XcsTarget_get_outdir_target,) \
 		--path $(gb_Configuration_registry) \
 		$(gb_XcuDataTarget_XSLT_DataVal) \
 		$(3) && \
-	$(gb_XSLTPROC) --nonet \
+	$(gb_Configuration_XSLTCOMMAND) --nonet \
 		-o $(1) \
 		--stringparam xcs $(call gb_XcsTarget_for_XcuTarget,$(XCUFILE)) \
 		--stringparam schemaRoot $(call gb_XcsTarget_get_outdir_target,) \
@@ -141,7 +145,8 @@ $(call gb_Helper_abbreviate_dirs,\
 endef
 
 $(call gb_XcuDataTarget_get_target,%) : $(gb_XcuDataTarget_XSLT_DataVal) \
-		$(gb_XcuTarget_XSLT_AllLang) $(gb_XcuDataTarget_DTD_ComponentUpdate)
+		$(gb_XcuTarget_XSLT_AllLang) $(gb_XcuDataTarget_DTD_ComponentUpdate) \
+		| $(gb_Configuration_XSLTCOMMAND_DEPS)
 	$(call gb_XcuDataTarget__command,$@,$*,$(filter %.xcu,$^))
 
 $(call gb_XcuDataTarget_get_clean_target,%) :
@@ -175,7 +180,7 @@ define gb_XcuModuleTarget__command
 $(call gb_Output_announce,$(2),$(true),XCU,3)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
-	$(gb_XSLTPROC) --nonet \
+	$(gb_Configuration_XSLTCOMMAND) --nonet \
 		-o $(1) \
 		--stringparam xcs $(4) \
 		--stringparam schemaRoot $(call gb_XcsTarget_get_outdir_target,) \
@@ -184,7 +189,8 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(3))
 endef
 
-$(call gb_XcuModuleTarget_get_target,%) : $(gb_XcuTarget_XSLT_AllLang)
+$(call gb_XcuModuleTarget_get_target,%) : $(gb_XcuTarget_XSLT_AllLang) \
+		| $(gb_Configuration_XSLTCOMMAND_DEPS)
 	$(call gb_XcuModuleTarget__command,$@,$*,$(filter %.xcu,$^),$(filter %.xcs,$^))
 
 $(call gb_XcuModuleTarget_get_clean_target,%) :
@@ -294,7 +300,7 @@ define gb_XcuResTarget__command
 $(call gb_Output_announce,$(2),$(true),XCU,6)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
-	$(gb_XSLTPROC) --nonet \
+	$(gb_Configuration_XSLTCOMMAND) --nonet \
 		-o $(1) \
 		--stringparam xcs $(call gb_XcsTarget_for_XcuTarget,$(XCUFILE)) \
 		--stringparam schemaRoot $(call gb_XcsTarget_get_outdir_target,) \
@@ -304,7 +310,8 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(3))
 endef
 
-$(call gb_XcuResTarget_get_target,%) : $(gb_XcuTarget_XSLT_AllLang)
+$(call gb_XcuResTarget_get_target,%) : $(gb_XcuTarget_XSLT_AllLang) \
+		| $(gb_Configuration_XSLTCOMMAND_DEPS)
 	$(call gb_XcuResTarget__command,$@,$*,$(filter %.xcu,$^))
 
 $(call gb_XcuResTarget_get_clean_target,%) :

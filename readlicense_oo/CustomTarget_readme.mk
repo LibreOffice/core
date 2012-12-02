@@ -55,10 +55,11 @@ endif
 $(readlicense_oo_README_PATTERN) : \
 		$(SRCDIR)/readlicense_oo/docs/readme.xsl \
 		$(readlicense_oo_README_XRM) \
-		| $(readlicense_oo_DIR)/.dir
+		| $(readlicense_oo_DIR)/.dir \
+		  $(call gb_ExternalExecutable_get_deps,xsltproc)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XSL,1)
 	$(call gb_Helper_abbreviate_dirs, \
-		$(gb_XSLTPROC) --nonet --novalid -o $@.out \
+		$(call gb_ExternalExecutable_get_command,xsltproc) --nonet --novalid -o $@.out \
 			--stringparam com1 $(COM) \
 			--stringparam cp1 $(CPUNAME) \
 			--stringparam gui1 $(GUI) \

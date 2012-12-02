@@ -2398,4 +2398,85 @@ endef
 
 endif # SYSTEM_JFREEREPORT
 
+
+# Executables
+
+ifneq ($(SYSTEM_LIBXML_FOR_BUILD),YES)
+
+gb_ExternalExecutable__register_xmllint :=
+
+else # ! SYSTEM_LIBXML_FOR_BUILD
+
+define gb_ExternalExecutable__register_xmllint
+gb_ExternalExecutable__xmllint_TARGET := $(call gb_Executable_get_target_for_build,xmllint)
+gb_ExternalExecutable__xmllint_COMMAND := $(gb_Helper_set_ld_path) $(ICECREAM_RUN) $(gb_ExternalExecutable__xmllint_TARGET)
+
+endef
+
+endif # SYSTEM_LIBXML_FOR_BUILD
+
+ifeq ($(SYSTEM_LIBXSLT_FOR_BUILD),YES)
+
+gb_ExternalExecutable__register_xsltproc :=
+
+else # ! SYSTEM_LIBXSLT_FOR_BUILD
+
+define gb_ExternalExecutable__register_xsltproc
+gb_ExternalExecutable__xsltproc_TARGET := $(call gb_Executable_get_target_for_build,xsltproc)
+gb_ExternalExecutable__xsltproc_COMMAND := $(gb_Helper_set_ld_path) $(ICECREAM_RUN) $(gb_ExternalExecutable__xsltproc_TARGET)
+
+endef
+
+endif # SYSTEM_LIBXSLT_FOR_BUILD
+
+ifneq (,$(SYSTEM_UCPP))
+
+gb_ExternalExecutable__register_ucpp :=
+
+else # ! SYSTEM_UCPP
+
+define gb_ExternalExecutable__register_ucpp
+gb_ExternalExecutable__ucpp_TARGET := $(call gb_Executable_get_target_for_build,ucpp)
+
+endef
+
+endif # SYSTEM_UCPP
+
+# TODO what do do with gb_PYTHON_PRECOMMAND? Move here?
+ifeq ($(SYSTEM_PYTHON),YES)
+
+define gb_ExternalExecutable__register_python
+gb_ExternalExecutable__python_COMMAND := $(ICECREAM_RUN) $(PYTHON)
+
+endef
+
+else ifeq ($(OS),MACOSX)
+
+#fixme: remove this MACOSX ifeq branch by filling in gb_PYTHON_PRECOMMAND in
+#gbuild/platform/macosx.mk correctly for mac, e.g. PYTHONPATH and PYTHONHOME
+#dirs for in-tree internal python
+define gb_ExternalExecutable__register_python
+gb_ExternalExecutable__python_COMMAND := $(ICECREAM_RUN) $(PYTHON)
+
+endef
+
+else ifeq ($(DISABLE_PYTHON),TRUE)
+
+# Build-time python
+gb_ExternalExecutable__register_python :=
+
+else # ! SYSTEM_PYTHON
+
+# internal python
+define gb_ExternalExecutable__register_python
+gb_ExternalExecutable__python_TARGET := $(call gb_Executable_get_target_for_build,python)
+gb_ExternalExecutable__python_PRECOMMAND := $(gb_PYTHON_PRECOMMAND)
+gb_ExternalExecutable__python_DEPS := \
+	$(call gb_Executable_get_target_for_build,python) \
+	$(call gb_Package_get_target,python3)
+
+endef
+
+endif # SYSTEM_PYTHON
+
 # vim: set noet sw=4 ts=4:

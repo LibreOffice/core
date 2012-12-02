@@ -46,9 +46,10 @@ officecfg_xsltparams=$(if $(filter-out $(lastword $1),$1),$(call officecfg_xsltp
 
 $(call gb_CustomTarget_get_workdir,officecfg/registry)/%.hxx: \
             $(SRCDIR)/officecfg/registry/schema/org/openoffice/%.xcs \
-            $(SRCDIR)/officecfg/registry/cppheader.xsl | $(gb_XSLTPROCTARGET)
+            $(SRCDIR)/officecfg/registry/cppheader.xsl\
+	    | $(call gb_ExternalExecutable_get_deps,xsltproc)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XSL,1)
 	$(call gb_Helper_abbreviate_dirs, \
 	mkdir -p $(dir $@) && \
-	$(gb_XSLTPROC) --nonet $(call officecfg_xsltparams,$(subst /, ,$*)) \
+	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet $(call officecfg_xsltparams,$(subst /, ,$*)) \
 	    -o $@ $(SRCDIR)/officecfg/registry/cppheader.xsl $<)

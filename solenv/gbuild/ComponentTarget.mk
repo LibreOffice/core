@@ -39,7 +39,7 @@ $(call gb_Output_announce,$(3),$(true),CMP,1)
 $(if $(LIBFILENAME),,$(call gb_Output_error,No LIBFILENAME set at component target: $(1)))
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
-	$(gb_XSLTPROC) --nonet --stringparam uri \
+	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet --stringparam uri \
 		'$(if $(filter TRUE,$(DISABLE_DYNLOADING)),,$(subst \d,$$,$(COMPONENTPREFIX)))$(LIBFILENAME)' -o $(1) \
 		$(gb_ComponentTarget_XSLTCOMMANDFILE) $(2))
 endef
@@ -52,7 +52,8 @@ $(call gb_ComponentTarget_get_clean_target,%) :
 
 
 $(call gb_ComponentTarget_get_target,%) : \
-		$(call gb_ComponentTarget_get_source,%) $(gb_XSLTPROCTARGET)
+		$(call gb_ComponentTarget_get_source,%) \
+		| $(call gb_ExternalExecutable_get_deps,xsltproc)
 	$(call gb_ComponentTarget__command,$@,$<,$*)
 
 # the .dir is for make 3.81, which ignores trailing /

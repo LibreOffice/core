@@ -22,9 +22,9 @@
 # semi-integrated with the stuff from Configuration.mk; not exactly pretty...
 
 ifeq ($(SOLAR_JAVA),)
-filter_MERGE_TARGET := $(gb_PYTHONTARGET) \
+filter_MERGE_TARGET := $(call gb_ExternalExecutable_get_deps,python) \
 	$(SRCDIR)/filter/source/config/tools/merge/pyAltFCFGMerge
-filter_MERGE := $(gb_PYTHON) \
+filter_MERGE := $(call gb_ExternalExecutable_get_command,python) \
 	$(SRCDIR)/filter/source/config/tools/merge/pyAltFCFGMerge
 else # SOLAR_JAVA
 filter_MERGE_TARGET := $(OUTDIR_FOR_BUILD)/bin/FCFGMerge.jar
@@ -229,11 +229,12 @@ $(call gb_Configuration_get_clean_target,fcfg_langpack) : \
 # so generate non-pattern rules which have higher priority even in GNUmake 3.81
 define filter_XcuResTarget__rule
 $$(call filter_XcuResTarget_get_target,$(1)) : \
-		$(filter_XSLT_langfilter) $(filter_XcuFilterUiTarget)
+		$(filter_XSLT_langfilter) $(filter_XcuFilterUiTarget) \
+		| $(call gb_ExternalExecutable_get_deps,xsltproc)
 	$$(call gb_Output_announce,$(1),$(true),XCU,1)
 	$$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $$(dir $$@) && \
-		$(gb_XSLTPROC) --nonet --stringparam lang $(1) \
+		$(call gb_ExternalExecutable_get_command,xsltproc) --nonet --stringparam lang $(1) \
 			$(filter_XSLT_langfilter) \
 			$(filter_XcuFilterUiTarget) > $$@)
 endef

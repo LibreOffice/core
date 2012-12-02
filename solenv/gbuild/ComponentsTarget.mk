@@ -47,12 +47,13 @@ $(call gb_ComponentsTarget_get_target,$(1)).input: COMPONENTFILES += $(2)
 endef
 
 $(call gb_ComponentsTarget_get_target,%): \
-            $(call gb_ComponentsTarget_get_target,%).input
+            $(call gb_ComponentsTarget_get_target,%).input \
+            | $(call gb_ExternalExecutable_get_deps,xsltproc)
 	$(call gb_Output_announce,$*,$(true),CPS,1)
 	$(call gb_Helper_abbreviate_dirs, \
             mkdir -p $(dir $@))
 	$(call gb_Helper_abbreviate_dirs, \
-            $(gb_XSLTPROC) --nonet --stringparam prefix $(WORKDIR) -o $@ \
+            $(call gb_ExternalExecutable_get_command,xsltproc) --nonet --stringparam prefix $(WORKDIR) -o $@ \
             $(SOLARENV)/bin/packcomponents.xslt $@.input)
 
 $(call gb_ComponentsTarget_get_clean_target,%): \
