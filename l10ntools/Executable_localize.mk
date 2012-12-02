@@ -45,7 +45,7 @@ $(eval $(call gb_Executable_add_exception_objects,localize,\
 
 $(eval $(call gb_Executable_use_externals,localize,\
     icuuc \
-    $(if $(filter MSC,$(COM)),icuin,icui18n) \
+    icui18n \
 ))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

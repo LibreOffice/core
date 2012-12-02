@@ -32,7 +32,7 @@ $(eval $(call gb_Executable_use_externals,uiex,\
     libxslt \
     boost_headers \
     icuuc \
-    $(if $(filter MSC,$(COM)),icuin,icui18n) \
+    icui18n \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -871,18 +871,15 @@ ifeq ($(OS)$(COM),WNTMSC)
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	icudt \
 	icuin \
-	icule \
-	icutu \
-	icuuc \
 ))
 
-define gb_LinkTarget__use_icudt
+define gb_LinkTarget__use_icudata
 $(call gb_LinkTarget_use_libraries,$(1),\
 	icudt \
 )
 
 endef
-define gb_LinkTarget__use_icuin
+define gb_LinkTarget__use_icui18n
 $(call gb_LinkTarget_use_libraries,$(1),\
 	icuin \
 )
@@ -892,9 +889,6 @@ else
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	icudata$(gb_ICU_suffix) \
 	icui18n$(gb_ICU_suffix) \
-	icule$(gb_ICU_suffix) \
-	icutu$(gb_ICU_suffix) \
-	icuuc$(gb_ICU_suffix) \
 ))
 
 define gb_LinkTarget__use_icudata
@@ -910,6 +904,12 @@ $(call gb_LinkTarget_use_libraries,$(1),\
 
 endef
 endif
+
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+	icule$(gb_ICU_suffix) \
+	icutu$(gb_ICU_suffix) \
+	icuuc$(gb_ICU_suffix) \
+))
 
 define gb_LinkTarget__use_icule
 $(call gb_LinkTarget_use_libraries,$(1),\

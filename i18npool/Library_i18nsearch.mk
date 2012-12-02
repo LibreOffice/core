@@ -39,7 +39,7 @@ $(eval $(call gb_Library_set_include,i18nsearch,\
 $(eval $(call gb_Library_use_sdk_api,i18nsearch))
 
 $(eval $(call gb_Library_use_externals,i18nsearch,\
-	$(if $(filter MSC,$(COM)),icuin,icui18n) \
+	icui18n \
 	icuuc \
 ))
 

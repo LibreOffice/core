@@ -51,7 +51,7 @@ $(eval $(call gb_Executable_add_exception_objects,transex3,\
 
 $(eval $(call gb_Executable_use_externals,transex3,\
     icuuc \
-    $(if $(filter MSC,$(COM)),icuin,icui18n) \
+    icui18n \
     libxml2 \
 ))
 

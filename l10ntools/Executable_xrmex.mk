@@ -52,7 +52,7 @@ $(eval $(call gb_Executable_add_exception_objects,xrmex,\
 $(eval $(call gb_Executable_use_externals,xrmex,\
     libxml2 \
     icuuc \
-    $(if $(filter MSC,$(COM)),icuin,icui18n) \
+    icui18n \
 ))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

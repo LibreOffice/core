@@ -26,7 +26,7 @@ $(eval $(call gb_CppunitTest_use_components,i18npool_test_textsearch,\
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,i18npool_test_textsearch,\
-	$(if $(filter MSC,$(COM)),icuin,icui18n) \
+	icui18n \
 	icuuc \
 ))
 

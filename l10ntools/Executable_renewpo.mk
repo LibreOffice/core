@@ -30,7 +30,7 @@ $(eval $(call gb_Executable_add_exception_objects,renewpo,\
 
 $(eval $(call gb_Executable_use_externals,renewpo,\
     icuuc \
-    $(if $(filter MSC,$(COM)),icuin,icui18n) \
+    icui18n \
 ))
 
 # vim: set noet sw=4 ts=4:

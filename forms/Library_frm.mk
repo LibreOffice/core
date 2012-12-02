@@ -60,19 +60,11 @@ $(eval $(call gb_Library_use_libraries,frm,\
 	$(gb_UWINAPI) \
 ))
 
-ifeq ($(OS)$(COM),WNTMSC)
-$(eval $(call gb_Library_use_externals,frm,\
-    icuin \
-    icuuc \
-    libxml2 \
-))
-else
 $(eval $(call gb_Library_use_externals,frm,\
     icui18n \
     icuuc \
     libxml2 \
 ))
-endif
 
 $(eval $(call gb_Library_set_componentfile,frm,forms/util/frm))
 

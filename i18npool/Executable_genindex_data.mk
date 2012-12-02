@@ -37,19 +37,11 @@ $(eval $(call gb_Executable_use_libraries,genindex_data,\
 	$(gb_UWINAPI) \
 ))
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_Executable_use_externals,gencoll_rule,\
-	icudt \
-	icuin \
-	icuuc \
-))
-else
 $(eval $(call gb_Executable_use_externals,genindex_data,\
 	icudata \
 	icui18n \
 	icuuc \
 ))
-endif
 
 $(eval $(call gb_Executable_add_exception_objects,genindex_data,\
 	i18npool/source/indexentry/genindex_data \
