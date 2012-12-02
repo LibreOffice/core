@@ -1224,4 +1224,95 @@ IMPL_LINK_NOARG( ScDateFrmtEntry, StyleSelectHdl )
     return 0;
 }
 
+ScIconSetFrmtEntry::ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry( Window* pParent, ScIconSetType eType, sal_Int32 i ):
+    Control( pParent, ScResId( RID_ICON_SET_ENTRY ) ),
+    maImgIcon( this, ScResId( IMG_ICON ) ),
+    maFtEntry( this, ScResId( FT_ICON_SET_ENTRY_TEXT ) ),
+    maEdEntry( this, ScResId( ED_ICON_SET_ENTRY_VALUE ) ),
+    maLbEntryType( this, ScResId( LB_ICON_SET_ENTRY_TYPE ) )
+{
+    maImgIcon.SetImage(ScIconSetFormat::getBitmap( eType, i ));
+    FreeResource();
+}
+
+ScIconSetFrmtEntry::ScIconSetFrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScIconSetFormat* pFormat ):
+        ScCondFrmtEntry( pParent, pDoc, rPos ),
+        maLbColorFormat( this, ScResId( LB_COLOR_FORMAT ) ),
+        maLbIconSetType( this, ScResId( LB_ICONSET_TYPE ) )
+{
+    Init();
+    FreeResource();
+
+    if(pFormat)
+    {
+
+    }
+
+    IconSetTypeHdl(NULL);
+}
+
+void ScIconSetFrmtEntry::Init()
+{
+    maLbColorFormat.SelectEntryPos(3);
+    maLbType.SelectEntryPos(0);
+    maLbIconSetType.SelectEntryPos(0);
+
+    maLbIconSetType.SetSelectHdl( LINK( this, ScIconSetFrmtEntry, IconSetTypeHdl ) );
+}
+
+IMPL_LINK_NOARG( ScIconSetFrmtEntry, IconSetTypeHdl )
+{
+    ScIconSetMap* pMap = ScIconSetFormat::getIconSetMap();
+
+    sal_Int32 nPos = maLbIconSetType.GetSelectEntryPos();
+    sal_uInt32 nElements = pMap[nPos].nElements;
+    maEntries.clear();
+
+    for(size_t i = 0; i < nElements; ++i)
+    {
+        maEntries.push_back( new ScIconSetFrmtDataEntry( this, static_cast<ScIconSetType>(nPos), i ) );
+        Point aPos = maEntries[0].GetPosPixel();
+        aPos.Y() += maEntries[0].GetSizePixel().Height() * i * 1.2;
+        maEntries[i].SetPosPixel( aPos );
+    }
+
+    return 0;
+}
+
+OUString ScIconSetFrmtEntry::GetExpressionString()
+{
+    return OUString("");
+}
+
+void ScIconSetFrmtEntry::SetActive()
+{
+    maLbColorFormat.Show();
+    maLbIconSetType.Show();
+    for(ScIconSetFrmtDateEntriesType::iterator itr = maEntries.begin(),
+            itrEnd = maEntries.end(); itr != itrEnd; ++itr)
+    {
+        maEntries[0].Show();
+    }
+
+    Select();
+}
+
+void ScIconSetFrmtEntry::SetInactive()
+{
+    maLbColorFormat.Hide();
+    maLbIconSetType.Hide();
+    for(ScIconSetFrmtDateEntriesType::iterator itr = maEntries.begin(),
+            itrEnd = maEntries.end(); itr != itrEnd; ++itr)
+    {
+        maEntries[0].Hide();
+    }
+
+    Deselect();
+}
+
+ScFormatEntry* ScIconSetFrmtEntry::GetEntry() const
+{
+    return NULL;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

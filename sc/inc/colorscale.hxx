@@ -44,6 +44,7 @@ class ScDocument;
 class ScFormulaCell;
 class ScTokenArray;
 struct ScDataBarInfo;
+class BitmapEx;
 
 // don't change the order
 // they are also used in the dialog to determine the position
@@ -335,6 +336,7 @@ public:
     virtual condformat::ScFormatEntryType GetType() const;
 
     static ScIconSetMap* getIconSetMap();
+    static BitmapEx& getBitmap( ScIconSetType eType, sal_Int32 nIndex );
 
     typedef boost::ptr_vector<ScColorScaleEntry>::iterator iterator;
     typedef boost::ptr_vector<ScColorScaleEntry>::const_iterator const_iterator;

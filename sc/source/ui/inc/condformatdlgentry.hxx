@@ -22,6 +22,7 @@ enum ScCondFrmtEntryType
     COLORSCALE2,
     COLORSCALE3,
     DATABAR,
+    ICONSET,
     DATE
 };
 
@@ -237,6 +238,43 @@ private:
     FixedText maFtStyle;
     ListBox maLbStyle;
     SvxFontPrevWindow maWdPreview;
+};
+
+class ScIconSetFrmtEntry : public ScCondFrmtEntry
+{
+    //color format ui elements
+    ListBox maLbColorFormat;
+
+    // icon set ui elements
+    ListBox maLbIconSetType;
+
+    class ScIconSetFrmtDataEntry : public Control
+    {
+    private:
+        FixedImage maImgIcon;
+        FixedText maFtEntry;
+        Edit maEdEntry;
+        ListBox maLbEntryType;
+
+    public:
+        ScIconSetFrmtDataEntry( Window* pParent, ScIconSetType eType, sal_Int32 i );
+    };
+    typedef boost::ptr_vector<ScIconSetFrmtDataEntry> ScIconSetFrmtDateEntriesType;
+    ScIconSetFrmtDateEntriesType maEntries;
+
+    ScFormatEntry* createIconSetEntry();
+    virtual rtl::OUString GetExpressionString();
+
+    void Init();
+
+    DECL_LINK( IconSetTypeHdl, void* );
+
+public:
+    ScIconSetFrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScIconSetFormat* pFormat = NULL );
+    virtual ScFormatEntry* GetEntry() const;
+    virtual void SetActive();
+    virtual void SetInactive();
+    virtual condformat::entry::ScCondFrmtEntryType GetType() { return condformat::entry::ICONSET; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -72,7 +72,6 @@
 #include "postit.hxx"
 
 #include "scresid.hxx"
-#include "iconsets.hrc"
 #include "colorscale.hxx"
 
 #include <math.h>
@@ -93,103 +92,6 @@ static ColorData nAuthorColor[ SC_AUTHORCOLORCOUNT ] = {
                     COL_GREEN,          COL_RED,            COL_BLUE,
                     COL_BROWN,          COL_MAGENTA,        COL_CYAN };
 
-sal_Int32 a3TrafficLights1[] = {
-    BMP_ICON_SET_CIRCLES1_RED, BMP_ICON_SET_CIRCLES1_YELLOW, BMP_ICON_SET_CIRCLES1_GREEN
-};
-
-sal_Int32 a3TrafficLights2[] = {
-    BMP_ICON_SET_TRAFFICLIGHTS_RED, BMP_ICON_SET_TRAFFICLIGHTS_YELLOW, BMP_ICON_SET_TRAFFICLIGHTS_GREEN
-};
-
-sal_Int32 a3Arrows[] = {
-    BMP_ICON_SET_COLORARROWS_DOWN, BMP_ICON_SET_COLORARROWS_SAME, BMP_ICON_SET_COLORARROWS_UP
-};
-
-sal_Int32 a3ArrowsGray[] = {
-    BMP_ICON_SET_GRAYARROWS_DOWN, BMP_ICON_SET_GRAYARROWS_SAME, BMP_ICON_SET_GRAYARROWS_UP
-};
-
-sal_Int32 a3Flags[] = {
-    BMP_ICON_SET_FLAGS_RED, BMP_ICON_SET_FLAGS_YELLOW, BMP_ICON_SET_FLAGS_GREEN
-};
-
-sal_Int32 a4Arrows[] = {
-    BMP_ICON_SET_COLORARROWS_DOWN, BMP_ICON_SET_COLORARROWS_SLIGHTLY_DOWN, BMP_ICON_SET_COLORARROWS_SLIGHTLY_UP, BMP_ICON_SET_COLORARROWS_UP
-};
-
-sal_Int32 a4ArrowsGray[] = {
-    BMP_ICON_SET_GRAYARROWS_DOWN, BMP_ICON_SET_GRAYARROWS_SLIGHTLY_DOWN, BMP_ICON_SET_GRAYARROWS_SLIGHTLY_UP, BMP_ICON_SET_GRAYARROWS_UP
-};
-
-sal_Int32 a5Arrows[] = {
-    BMP_ICON_SET_COLORARROWS_DOWN, BMP_ICON_SET_COLORARROWS_SLIGHTLY_DOWN,
-    BMP_ICON_SET_COLORARROWS_SAME, BMP_ICON_SET_COLORARROWS_SLIGHTLY_UP, BMP_ICON_SET_COLORARROWS_UP
-};
-
-sal_Int32 a5ArrowsGray[] = {
-    BMP_ICON_SET_GRAYARROWS_DOWN, BMP_ICON_SET_GRAYARROWS_SLIGHTLY_DOWN,
-    BMP_ICON_SET_GRAYARROWS_SAME, BMP_ICON_SET_GRAYARROWS_SLIGHTLY_UP, BMP_ICON_SET_GRAYARROWS_UP
-};
-
-sal_Int32 a4TrafficLights[] = {
-    BMP_ICON_SET_CIRCLES1_GRAY, BMP_ICON_SET_CIRCLES1_RED,
-    BMP_ICON_SET_CIRCLES1_YELLOW, BMP_ICON_SET_CIRCLES1_GREEN
-};
-
-sal_Int32 a5Quarters[] = {
-    BMP_ICON_SET_PIES_EMPTY, BMP_ICON_SET_PIES_ONE_QUARTER, BMP_ICON_SET_PIES_HALF,
-    BMP_ICON_SET_PIES_THREE_QUARTER, BMP_ICON_SET_PIES_FULL,
-};
-
-sal_Int32 a3Symbols1[] = {
-    BMP_ICON_SET_SYMBOLS1_CHECK, BMP_ICON_SET_SYMBOLS1_EXCLAMATION_MARK, BMP_ICON_SET_SYMBOLS1_CROSS
-};
-
-sal_Int32 a3Signs[] = {
-    BMP_ICON_SET_SHAPES_DIAMOND, BMP_ICON_SET_SHAPES_TRIANGLE, BMP_ICON_SET_SHAPES_CIRCLE
-};
-
-sal_Int32 a4RedToBlack[] = {
-    BMP_ICON_SET_CIRCLES2_DARK_GRAY, BMP_ICON_SET_CIRCLES2_LIGHT_GRAY,
-    BMP_ICON_SET_CIRCLES2_LIGHT_RED, BMP_ICON_SET_CIRCLES2_DARK_RED
-};
-
-sal_Int32 a4Ratings[] = {
-    BMP_ICON_SET_BARS_ONE_QUARTER, BMP_ICON_SET_BARS_HALF,
-    BMP_ICON_SET_BARS_THREE_QUARTER, BMP_ICON_SET_BARS_FULL
-};
-
-sal_Int32 a5Ratings[] = {
-    BMP_ICON_SET_BARS_EMPTY, BMP_ICON_SET_BARS_ONE_QUARTER, BMP_ICON_SET_BARS_HALF,
-    BMP_ICON_SET_BARS_THREE_QUARTER, BMP_ICON_SET_BARS_FULL
-};
-
-struct ScIconSetBitmapMap {
-    ScIconSetType eType;
-    sal_Int32* nBitmaps;
-};
-
-static ScIconSetBitmapMap aBitmapMap[] = {
-    { IconSet_3Arrows, a3Arrows },
-    { IconSet_3ArrowsGray, a3ArrowsGray },
-    { IconSet_3Flags, a3Flags },
-    { IconSet_3Signs, a3Signs },
-    { IconSet_3Symbols, a3Symbols1 },
-    { IconSet_3Symbols2, a3Symbols1 },
-    { IconSet_3TrafficLights1, a3TrafficLights1 },
-    { IconSet_3TrafficLights2, a3TrafficLights2 },
-    { IconSet_4Arrows, a4Arrows },
-    { IconSet_4ArrowsGray, a4ArrowsGray },
-    { IconSet_4Rating, a4Ratings },
-    { IconSet_4RedToBlack, a4RedToBlack },
-    { IconSet_4TrafficLights, a4TrafficLights },
-    { IconSet_5Arrows, a5Arrows },
-    { IconSet_5ArrowsGray, a5ArrowsGray },
-    { IconSet_5Quarters, a5Quarters },
-    { IconSet_5Ratings, a5Ratings }
-};
-
-static std::map< sal_Int32, BitmapEx > aIconSetBitmaps;
 
 //  Hilfsklasse, fuer die Farbzuordnung,
 //  um nicht mehrfach hintereinander denselben User aus der Liste zu suchen
@@ -984,28 +886,7 @@ void drawDataBars( const ScDataBarInfo* pOldDataBarInfo, OutputDevice* pDev, con
 
 BitmapEx& getIcon( ScIconSetType eType, sal_Int32 nIndex )
 {
-    sal_Int32 nBitmap = -1;
-
-    for(size_t i = 0; i < SAL_N_ELEMENTS(aBitmapMap); ++i)
-    {
-        if(aBitmapMap[i].eType == eType)
-        {
-            nBitmap = *(aBitmapMap[i].nBitmaps + nIndex);
-        }
-    }
-
-    assert( nBitmap != -1 );
-
-    std::map<sal_Int32, BitmapEx>::iterator itr = aIconSetBitmaps.find( nBitmap );
-    if(itr != aIconSetBitmaps.end())
-        return itr->second;
-
-    BitmapEx aBitmap = BitmapEx(ScResId(nBitmap));
-    std::pair<sal_Int32, BitmapEx> aPair( nBitmap, aBitmap );
-    std::pair<std::map<sal_Int32, BitmapEx>::iterator, bool> itrNew = aIconSetBitmaps.insert(aPair);
-    assert(itrNew.second);
-
-    return itrNew.first->second;
+    return ScIconSetFormat::getBitmap( eType, nIndex );
 }
 
 void drawIconSets( const ScIconSetInfo* pOldIconSetInfo, OutputDevice* pDev, const Rectangle& rRect )

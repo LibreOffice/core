@@ -90,6 +90,7 @@ ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId, ScDocum
                     maEntries.push_back(new ScDataBarFrmtEntry( this, mpDoc, maPos, static_cast<const ScDataBarFormat*>( pEntry ) ) );
                     break;
                 case condformat::ICONSET:
+                    maEntries.push_back(new ScIconSetFrmtEntry( this, mpDoc, maPos, static_cast<const ScIconSetFormat*>( pEntry ) ) );
                     break;
                 case condformat::DATE:
                     maEntries.push_back(new ScDateFrmtEntry( this, mpDoc, static_cast<const ScCondDateFormatEntry*>( pEntry ) ) );
@@ -224,6 +225,12 @@ IMPL_LINK(ScCondFormatList, ColFormatTypeHdl, ListBox*, pBox)
 
             maEntries.replace( itr, new ScDataBarFrmtEntry( this, mpDoc, maPos ) );
             break;
+        case 3:
+            if(itr->GetType() == condformat::entry::ICONSET)
+                return 0;
+
+            maEntries.replace( itr, new ScIconSetFrmtEntry( this, mpDoc, maPos ) );
+            break;
         default:
             break;
     }
@@ -257,6 +264,7 @@ IMPL_LINK(ScCondFormatList, TypeListHdl, ListBox*, pBox)
                 case condformat::entry::COLORSCALE2:
                 case condformat::entry::COLORSCALE3:
                 case condformat::entry::DATABAR:
+                case condformat::entry::ICONSET:
                     return 0;
             }
             maEntries.replace( itr, new ScColorScale3FrmtEntry(this, mpDoc, maPos));
@@ -287,6 +295,7 @@ IMPL_LINK(ScCondFormatList, TypeListHdl, ListBox*, pBox)
             static_cast<ScCondFormatDlg*>(GetParent())->InvalidateRefData();
             itr->SetActive();
             break;
+
     }
     RecalcAll();
     return 0;

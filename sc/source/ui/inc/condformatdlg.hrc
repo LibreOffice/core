@@ -69,4 +69,11 @@
 #define LB_TYPE_COL_SCALE_MAX 44
 
 #define LB_DATE_TYPE 45
+
+#define IMG_ICON 46
+#define LB_ICONSET_TYPE 47
+#define LB_ICON_SET_ENTRY_TYPE 48
+#define FT_ICON_SET_ENTRY_TEXT 49
+#define ED_ICON_SET_ENTRY_VALUE 50
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
