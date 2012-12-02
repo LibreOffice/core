@@ -290,14 +290,14 @@ namespace
     }
     //------------------------------------------------------------------------------
     ::rtl::OUString BuildJoinCriteria(  const Reference< XConnection>& _xConnection,
-                                        OConnectionLineDataVec* pLineDataList,
-                                        OQueryTableConnectionData* pData)
+                                        const OConnectionLineDataVec* pLineDataList,
+                                        const OQueryTableConnectionData* pData)
     {
         ::rtl::OUStringBuffer aCondition;
         if ( _xConnection.is() )
         {
-            OConnectionLineDataVec::iterator aIter = pLineDataList->begin();
-            OConnectionLineDataVec::iterator aEnd = pLineDataList->end();
+            OConnectionLineDataVec::const_iterator aIter = pLineDataList->begin();
+            OConnectionLineDataVec::const_iterator aEnd = pLineDataList->end();
             try
             {
                 const Reference< XDatabaseMetaData >  xMetaData = _xConnection->getMetaData();
@@ -392,7 +392,7 @@ namespace
     ::rtl::OUString BuildJoin(  const Reference< XConnection>& _xConnection,
                                 const ::rtl::OUString& rLh,
                                 const ::rtl::OUString& rRh,
-                                OQueryTableConnectionData* pData)
+                                const OQueryTableConnectionData* pData)
     {
 
         String aErg(rLh);
@@ -430,9 +430,9 @@ namespace
     }
     //------------------------------------------------------------------------------
     ::rtl::OUString BuildJoin(  const Reference< XConnection>& _xConnection,
-                                OQueryTableWindow* pLh,
-                                OQueryTableWindow* pRh,
-                                OQueryTableConnectionData* pData
+                                const OQueryTableWindow* pLh,
+                                const OQueryTableWindow* pRh,
+                                const OQueryTableConnectionData* pData
                                 )
     {
         bool bForce = pData->GetJoinType() == CROSS_JOIN || pData->isNatural();
@@ -441,20 +441,36 @@ namespace
     //------------------------------------------------------------------------------
     ::rtl::OUString BuildJoin(  const Reference< XConnection>& _xConnection,
                                 const ::rtl::OUString &rLh,
-                                OQueryTableWindow* pRh,
-                                OQueryTableConnectionData* pData
+                                const OQueryTableWindow* pRh,
+                                const OQueryTableConnectionData* pData
                                 )
     {
         return BuildJoin(_xConnection,rLh,BuildTable(_xConnection,pRh),pData);
     }
     //------------------------------------------------------------------------------
     ::rtl::OUString BuildJoin(  const Reference< XConnection>& _xConnection,
-                                OQueryTableWindow* pLh,
+                                const OQueryTableWindow* pLh,
                                 const ::rtl::OUString &rRh,
-                                OQueryTableConnectionData* pData
+                                const OQueryTableConnectionData* pData
                                 )
     {
-        return BuildJoin(_xConnection,BuildTable(_xConnection,pLh),rRh,pData);
+        // strict ANSI SQL:
+        // - does not support any bracketing of JOINS
+        // - supports nested joins only in the LEFT HAND SIDE
+        // In this case, we are trying to build a join with a nested join
+        // in the right hand side.
+        // So switch the direction of the join and both hand sides.
+        OQueryTableConnectionData data(*pData);
+        switch (data.GetJoinType())
+        {
+            case LEFT_JOIN:
+                data.SetJoinType(RIGHT_JOIN);
+                break;
+            case RIGHT_JOIN:
+                data.SetJoinType(LEFT_JOIN);
+                break;
+        }
+        return BuildJoin(_xConnection, rRh, BuildTable(_xConnection,pLh), &data);
     }
     //------------------------------------------------------------------------------
     void GetNextJoin(   const Reference< XConnection>& _xConnection,
