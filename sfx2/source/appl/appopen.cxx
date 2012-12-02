@@ -399,7 +399,7 @@ sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String
     const SfxFilter* pFilter = NULL;
     SfxMedium aMedium( rFileName,  ( STREAM_READ | STREAM_SHARE_DENYNONE ) );
 
-    if ( !aMedium.GetStorage( sal_True ).is() )
+    if ( !aMedium.GetStorage( sal_False ).is() )
         aMedium.GetInStream();
 
     if ( aMedium.GetError() )
