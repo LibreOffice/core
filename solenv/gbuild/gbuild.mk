@@ -168,7 +168,6 @@ $(eval $(call gb_Helper_init_registries))
 include $(SRCDIR)/Repository.mk
 include $(SRCDIR)/RepositoryExternal.mk
 $(eval $(call gb_Helper_collect_knownlibs))
-$(eval $(call gb_ExternalExecutable_collect_registrations))
 
 gb_Library_DLLPOSTFIX := lo
 
@@ -176,6 +175,9 @@ gb_Library_DLLPOSTFIX := lo
 include $(GBUILDDIR)/platform/$(OS)_$(CPUNAME)_$(COM).mk
 
 include $(SRCDIR)/RepositoryFixes.mk
+
+# after platform; at least currently python depends on variable set in platform
+$(eval $(call gb_ExternalExecutable_collect_registrations))
 
 # add user-supplied flags
 ifneq ($(strip gb__ENV_CFLAGS),)
