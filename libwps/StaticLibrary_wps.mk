@@ -17,6 +17,7 @@ $(eval $(call gb_StaticLibrary_use_package,wpslib,libwps_inc))
 
 $(eval $(call gb_StaticLibrary_use_externals,wpslib,\
 	wpd \
+	boost_headers \
 ))
 
 $(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,wpslib,cpp))
