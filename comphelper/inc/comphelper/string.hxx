@@ -479,6 +479,22 @@ struct COMPHELPER_DLLPUBLIC ConstAsciiString
 
 } }
 
+#ifdef RTL_FAST_STRING
+// TODO The whole ConstAsciiString class should probably be dumped
+// and replaced with plain 'const char[]'.
+namespace rtl
+{
+template<>
+struct ToStringHelper< comphelper::string::ConstAsciiString >
+    {
+    static int length( const comphelper::string::ConstAsciiString& str ) { return str.length; }
+    static sal_Unicode* addData( sal_Unicode* buffer, const comphelper::string::ConstAsciiString& str ) { return addDataLiteral( buffer, str.ascii, str.length ); }
+    static const bool allowOStringConcat = false;
+    static const bool allowOUStringConcat = true;
+    };
+}
+#endif
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
