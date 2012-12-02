@@ -121,9 +121,10 @@ public:
             a page object with or store one in.
         @return
             When the master page object is successfully provided then
-            <TRUE/> is returned.
+            1 is returned, on no change then a 0 is provided,
+            on a masterpage-error a -1 is provided.
     */
-    bool UpdatePageObject (
+    int UpdatePageObject (
         sal_Int32 nCostThreshold,
         SdDrawDocument* pDocument);
 
