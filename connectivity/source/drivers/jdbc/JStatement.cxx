@@ -39,6 +39,7 @@
 #include <comphelper/sequence.hxx>
 #include "TConnection.hxx"
 #include <comphelper/types.hxx>
+#include <tools/diagnose_ex.h>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/FetchDirection.hpp>
@@ -632,8 +633,10 @@ sal_Bool java_sql_Statement_Base::convertFastPropertyValue(
                             const Any& rValue )
                                 throw (::com::sun::star::lang::IllegalArgumentException)
 {
-    switch(nHandle)
+    try
     {
+        switch(nHandle)
+        {
         case PROPERTY_ID_QUERYTIMEOUT:
             return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getQueryTimeOut());
         case PROPERTY_ID_MAXFIELDSIZE:
@@ -656,6 +659,15 @@ sal_Bool java_sql_Statement_Base::convertFastPropertyValue(
             //  return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bAsLink);
         default:
             ;
+        }
+    }
+    catch(const ::com::sun::star::lang::IllegalArgumentException&)
+    {
+        throw;
+    }
+    catch(const ::com::sun::star::uno::Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION();
     }
     return sal_False;
 }
