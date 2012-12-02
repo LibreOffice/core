@@ -89,7 +89,7 @@ void ScOrcusSheet::set_formula(
     row_t row, col_t col, formula_grammar_t grammar, const char* p, size_t n)
 {
     OUString aFormula(p, n, RTL_TEXTENCODING_UTF8);
-    formula::FormulaGrammar::Grammar eGrammar;
+    formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_ODFF;
     switch(grammar)
     {
         case orcus::spreadsheet::ods:
