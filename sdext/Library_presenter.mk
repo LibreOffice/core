@@ -29,6 +29,10 @@ $(eval $(call gb_Library_Library,PresenterScreen))
 
 $(eval $(call gb_Library_set_componentfile,PresenterScreen,sdext/source/presenter/presenter))
 
+$(eval $(call gb_Library_use_externals,PresenterScreen,\
+	boost_headers \
+))
+
 $(eval $(call gb_Library_use_sdk_api,PresenterScreen))
 
 $(eval $(call gb_Library_use_libraries,PresenterScreen,\

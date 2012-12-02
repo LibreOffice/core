@@ -30,6 +30,7 @@ $(eval $(call gb_Executable_Executable,pdf2xml))
 $(eval $(call gb_Executable_use_sdk_api,pdf2xml))
 
 $(eval $(call gb_Executable_use_externals,pdf2xml,\
+    boost_headers \
     zlib \
 ))
 

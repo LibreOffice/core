@@ -33,12 +33,9 @@ $(eval $(call gb_Executable_use_packages,xpdfimport,\
 ))
 
 $(eval $(call gb_Executable_use_externals,xpdfimport,\
+    boost_headers \
     poppler \
     zlib \
-))
-
-$(eval $(call gb_Executable_set_include,xpdfimport,\
-    $$(INCLUDE) \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,xpdfimport,\

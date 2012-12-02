@@ -29,6 +29,10 @@ $(eval $(call gb_Library_Library,SunPresentationMinimizer))
 
 $(eval $(call gb_Library_set_componentfile,SunPresentationMinimizer,sdext/source/minimizer/minimizer))
 
+$(eval $(call gb_Library_use_externals,SunPresentationMinimizer,\
+	boost_headers \
+))
+
 $(eval $(call gb_Library_use_sdk_api,SunPresentationMinimizer))
 
 $(eval $(call gb_Library_use_libraries,SunPresentationMinimizer,\
