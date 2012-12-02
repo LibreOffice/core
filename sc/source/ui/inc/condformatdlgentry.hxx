@@ -266,7 +266,6 @@ class ScIconSetFrmtEntry : public ScCondFrmtEntry
     typedef boost::ptr_vector<ScIconSetFrmtDataEntry> ScIconSetFrmtDateEntriesType;
     ScIconSetFrmtDateEntriesType maEntries;
 
-    ScFormatEntry* createIconSetEntry();
     virtual rtl::OUString GetExpressionString();
 
     void Init();
