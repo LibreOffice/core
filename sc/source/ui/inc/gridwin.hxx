@@ -372,6 +372,8 @@ public:
     void            UpdateDPFromFieldPopupMenu();
     void            UpdateVisibleRange();
 
+    void            SetInRefMode( bool bRefMode );
+
     // #114409#
     void CursorChanged();
     void DrawLayerCreated();
@@ -391,8 +393,6 @@ public:
     void            DeleteShrinkOverlay();
     void            UpdateShrinkOverlay();
     void            UpdateAllOverlays();
-
-    virtual bool    IsInRefMode() const { return true; }
 
 protected:
     // #114409#

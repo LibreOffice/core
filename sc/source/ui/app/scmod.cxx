@@ -2325,11 +2325,40 @@ ScAnyRefModalDlg* ScModule::GetCurrentAnyRefDlg()
 void ScModule::PushNewAnyRefDlg( ScAnyRefModalDlg* pNewDlg )
 {
     maAnyRefDlgStack.push( pNewDlg );
+
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while(pViewShell)
+    {
+        if ( pViewShell->ISA(ScTabViewShell) )
+        {
+            ScTabViewShell* pViewSh = (ScTabViewShell*)pViewShell;
+            pViewSh->SetInRefMode( true );
+        }
+        pViewShell = SfxViewShell::GetNext( *pViewShell );
+    }
 }
 
 void ScModule::PopAnyRefDlg()
 {
     maAnyRefDlgStack.pop();
+
+    if(maAnyRefDlgStack.empty())
+    {
+        // no modal ref dlg any more
+        // disable the flag in ScGridWindow
+
+        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+        while(pViewShell)
+        {
+            if ( pViewShell->ISA(ScTabViewShell) )
+            {
+                ScTabViewShell* pViewSh = (ScTabViewShell*)pViewShell;
+                pViewSh->SetInRefMode( false );
+            }
+            pViewShell = SfxViewShell::GetNext( *pViewShell );
+        }
+
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

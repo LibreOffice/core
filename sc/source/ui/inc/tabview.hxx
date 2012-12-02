@@ -527,6 +527,8 @@ public:
     void            SetBrushDocument( ScDocument* pNew, bool bLock );
     void            SetDrawBrushSet( SfxItemSet* pNew, bool bLock );
     void            ResetBrushDocument();
+
+    void            SetInRefMode( bool bRefMode );
 };
 
 

@@ -3974,7 +3974,7 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
     }
 
     // If the Window is disabled, then we don't change the focus
-    if ( !IsEnabled() || !IsInputEnabled() /*|| IsInModalMode()*/ )
+    if ( !IsEnabled() || !IsInputEnabled() || IsInModalNonRefMode() )
         return;
 
     // we only need to set the focus if it is not already set
@@ -9275,9 +9275,12 @@ sal_Bool Window::IsInModalMode() const
     return (mpWindowImpl->mpFrameWindow->mpWindowImpl->mpFrameData->mnModalMode != 0);
 }
 
-bool Window::IsInRefMode() const
+bool Window::IsInModalNonRefMode() const
 {
-    return false;
+    if(mpWindowImpl->mnStyle & WB_REFMODE)
+        return false;
+
+    return IsInModalMode();
 }
 
 void Window::ImplIncModalCount()

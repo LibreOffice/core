@@ -811,7 +811,10 @@ public:
     */
     sal_Bool                IsInModalMode() const;
 
-    virtual bool        IsInRefMode() const;
+    /**
+     *  Necessary for calc ref input handling from modal dialogs
+     */
+    bool                IsInModalNonRefMode() const;
 
     void                SetActivateMode( sal_uInt16 nMode );
     sal_uInt16              GetActivateMode() const;

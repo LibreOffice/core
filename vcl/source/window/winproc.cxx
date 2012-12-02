@@ -238,7 +238,7 @@ static void ImplHandleMouseHelpRequest( Window* pChild, const Point& rMousePos )
             nHelpMode |= HELPMODE_BALLOON;
         if ( nHelpMode )
         {
-            if ( pChild->IsInputEnabled() /*&& ! pChild->IsInModalMode() */)
+            if ( pChild->IsInputEnabled() && !pChild->IsInModalNonRefMode() )
             {
                 HelpEvent aHelpEvent( rMousePos, nHelpMode );
                 pSVData->maHelpData.mbRequestingHelp = sal_True;
@@ -449,7 +449,7 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
 
         // no mouse messages to disabled windows
         // #106845# if the window was disabed during capturing we have to pass the mouse events to release capturing
-        if ( pSVData->maWinData.mpCaptureWin != pChild && (!pChild->IsEnabled() || !pChild->IsInputEnabled() /*|| (pChild->IsInModalMode() && !pChild->IsInRefMode())*/ ) )
+        if ( pSVData->maWinData.mpCaptureWin != pChild && (!pChild->IsEnabled() || !pChild->IsInputEnabled() || pChild->IsInModalNonRefMode() ) )
         {
             ImplHandleMouseFloatMode( pChild, aMousePos, nCode, nSVEvent, bMouseLeave );
             if ( nSVEvent == EVENT_MOUSEMOVE )
