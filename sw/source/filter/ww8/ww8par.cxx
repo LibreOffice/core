@@ -371,8 +371,6 @@ void SwWW8ImplReader::ReadEmbeddedData( SvMemoryStream& rStrm, SwDocShell* pDocS
             lclAppendString32( *xTextMark, rStrm, true );
         }
 
-        DBG_ASSERT( rStrm.GetRecLeft() == 0, "WW8Hyperlink::ReadEmbeddedData - record size mismatch" );
-
     if( !xLongName.get() && xShortName.get() )
     {
         xLongName.reset( new String );
