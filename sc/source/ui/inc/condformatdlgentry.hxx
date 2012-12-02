@@ -257,7 +257,7 @@ class ScIconSetFrmtEntry : public ScCondFrmtEntry
         ListBox maLbEntryType;
 
     public:
-        ScIconSetFrmtDataEntry( Window* pParent, ScIconSetType eType, sal_Int32 i );
+        ScIconSetFrmtDataEntry( Window* pParent, ScIconSetType eType, sal_Int32 i, const ScColorScaleEntry* pEntry = NULL );
     };
     typedef boost::ptr_vector<ScIconSetFrmtDataEntry> ScIconSetFrmtDateEntriesType;
     ScIconSetFrmtDateEntriesType maEntries;

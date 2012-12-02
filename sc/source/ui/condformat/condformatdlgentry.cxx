@@ -1224,7 +1224,7 @@ IMPL_LINK_NOARG( ScDateFrmtEntry, StyleSelectHdl )
     return 0;
 }
 
-ScIconSetFrmtEntry::ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry( Window* pParent, ScIconSetType eType, sal_Int32 i ):
+ScIconSetFrmtEntry::ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry( Window* pParent, ScIconSetType eType, sal_Int32 i, const ScColorScaleEntry* pEntry ):
     Control( pParent, ScResId( RID_ICON_SET_ENTRY ) ),
     maImgIcon( this, ScResId( IMG_ICON ) ),
     maFtEntry( this, ScResId( FT_ICON_SET_ENTRY_TEXT ) ),
@@ -1232,6 +1232,30 @@ ScIconSetFrmtEntry::ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry( Window* pPar
     maLbEntryType( this, ScResId( LB_ICON_SET_ENTRY_TYPE ) )
 {
     maImgIcon.SetImage(ScIconSetFormat::getBitmap( eType, i ));
+    if(pEntry)
+    {
+        switch(pEntry->GetType())
+        {
+            case COLORSCALE_VALUE:
+                maLbEntryType.SelectEntryPos(0);
+                maEdEntry.SetText(OUString::valueOf(pEntry->GetValue()));
+                break;
+            case COLORSCALE_PERCENTILE:
+                maLbEntryType.SelectEntryPos(2);
+                maEdEntry.SetText(OUString::valueOf(pEntry->GetValue()));
+                break;
+            case COLORSCALE_PERCENT:
+                maLbEntryType.SelectEntryPos(1);
+                maEdEntry.SetText(OUString::valueOf(pEntry->GetValue()));
+                break;
+            case COLORSCALE_FORMULA:
+                maLbEntryType.SelectEntryPos(3);
+                maEdEntry.SetText(pEntry->GetFormula(formula::FormulaGrammar::GRAM_DEFAULT));
+                break;
+            default:
+                assert(false);
+        }
+    }
     FreeResource();
 }
 
@@ -1245,10 +1269,22 @@ ScIconSetFrmtEntry::ScIconSetFrmtEntry( Window* pParent, ScDocument* pDoc, const
 
     if(pFormat)
     {
+        const ScIconSetFormatData* pIconSetFormatData = pFormat->GetIconSetData();
+        ScIconSetType eType = pIconSetFormatData->eIconSetType;
+        sal_Int32 nType = static_cast<sal_Int32>(eType);
+        maLbIconSetType.SelectEntryPos(nType);
 
+        for(size_t i = 0, n = pIconSetFormatData->maEntries.size();
+                i < n; ++i)
+        {
+            maEntries.push_back( new ScIconSetFrmtDataEntry( this, eType, i, &pIconSetFormatData->maEntries[i] ) );
+            Point aPos = maEntries[0].GetPosPixel();
+            aPos.Y() += maEntries[0].GetSizePixel().Height() * i * 1.2;
+            maEntries[i].SetPosPixel( aPos );
+        }
     }
-
-    IconSetTypeHdl(NULL);
+    else
+        IconSetTypeHdl(NULL);
 }
 
 void ScIconSetFrmtEntry::Init()
@@ -1291,7 +1327,7 @@ void ScIconSetFrmtEntry::SetActive()
     for(ScIconSetFrmtDateEntriesType::iterator itr = maEntries.begin(),
             itrEnd = maEntries.end(); itr != itrEnd; ++itr)
     {
-        maEntries[0].Show();
+        itr->Show();
     }
 
     Select();
@@ -1304,7 +1340,7 @@ void ScIconSetFrmtEntry::SetInactive()
     for(ScIconSetFrmtDateEntriesType::iterator itr = maEntries.begin(),
             itrEnd = maEntries.end(); itr != itrEnd; ++itr)
     {
-        maEntries[0].Hide();
+        itr->Hide();
     }
 
     Deselect();
