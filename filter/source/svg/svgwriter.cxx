@@ -1520,6 +1520,27 @@ void SVGTextWriter::startTextPosition( sal_Bool bExportX, sal_Bool bExportY )
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, ::rtl::OUString::valueOf( maTextPos.X() ) );
     if( bExportY )
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, ::rtl::OUString::valueOf( maTextPos.Y() ) );
+
+    // if text is rotated, set transform matrix at new tspan element
+    const Font& rFont = mpVDev->GetFont();
+    if( rFont.GetOrientation() )
+    {
+        Point   aRot( maTextPos );
+        OUString aTransform( "translate(" );
+        aTransform += OUString::valueOf( aRot.X() ) + ",";
+        aTransform += OUString::valueOf( aRot.Y() ) + ")";
+
+        aTransform += " rotate(";
+        aTransform += OUString::valueOf( rFont.GetOrientation() * -0.1 );
+        aTransform += ")";
+
+        aTransform += " translate(";
+        aTransform += OUString::valueOf( -aRot.X() ) + ",";
+        aTransform += OUString::valueOf( -aRot.Y() ) + ")";
+
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTransform, aTransform );
+    }
+
     mpTextPositionElem = new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
 }
 
