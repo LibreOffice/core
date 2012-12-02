@@ -258,6 +258,8 @@ class ScIconSetFrmtEntry : public ScCondFrmtEntry
 
     public:
         ScIconSetFrmtDataEntry( Window* pParent, ScIconSetType eType, sal_Int32 i, const ScColorScaleEntry* pEntry = NULL );
+
+        ScColorScaleEntry* CreateEntry(ScDocument* pDoc, const ScAddress& rPos) const;
     };
     typedef boost::ptr_vector<ScIconSetFrmtDataEntry> ScIconSetFrmtDateEntriesType;
     ScIconSetFrmtDateEntriesType maEntries;

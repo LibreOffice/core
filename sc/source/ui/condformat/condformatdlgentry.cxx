@@ -1259,6 +1259,40 @@ ScIconSetFrmtEntry::ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry( Window* pPar
     FreeResource();
 }
 
+ScColorScaleEntry* ScIconSetFrmtEntry::ScIconSetFrmtDataEntry::CreateEntry(ScDocument* pDoc, const ScAddress& rPos) const
+{
+    sal_Int32 nPos = maLbEntryType.GetSelectEntryPos();
+    rtl::OUString aText = maEdEntry.GetText();
+    ScColorScaleEntry* pEntry = new ScColorScaleEntry();
+
+    sal_uInt32 nIndex = 0;
+    double nVal = 0;
+    SvNumberFormatter* pNumberFormatter = pDoc->GetFormatTable();
+    pNumberFormatter->IsNumberFormat(aText, nIndex, nVal);
+    pEntry->SetValue(nVal);
+
+    switch(nPos)
+    {
+        case 0:
+            pEntry->SetType(COLORSCALE_VALUE);
+            break;
+        case 1:
+            pEntry->SetType(COLORSCALE_PERCENT);
+            break;
+        case 2:
+            pEntry->SetType(COLORSCALE_PERCENTILE);
+            break;
+        case 3:
+            pEntry->SetType(COLORSCALE_FORMULA);
+            pEntry->SetFormula(aText, pDoc, rPos, pDoc->GetGrammar());
+            break;
+        default:
+            assert(false);
+    }
+
+    return pEntry;
+}
+
 ScIconSetFrmtEntry::ScIconSetFrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScIconSetFormat* pFormat ):
         ScCondFrmtEntry( pParent, pDoc, rPos ),
         maLbColorFormat( this, ScResId( LB_COLOR_FORMAT ) ),
@@ -1317,7 +1351,7 @@ IMPL_LINK_NOARG( ScIconSetFrmtEntry, IconSetTypeHdl )
 
 OUString ScIconSetFrmtEntry::GetExpressionString()
 {
-    return OUString("");
+    return ScCondFormatHelper::GetExpression(ICONSET, 0);
 }
 
 void ScIconSetFrmtEntry::SetActive()
@@ -1348,7 +1382,18 @@ void ScIconSetFrmtEntry::SetInactive()
 
 ScFormatEntry* ScIconSetFrmtEntry::GetEntry() const
 {
-    return NULL;
+    ScIconSetFormat* pFormat = new ScIconSetFormat(mpDoc);
+
+    ScIconSetFormatData* pData = new ScIconSetFormatData;
+    pData->eIconSetType = static_cast<ScIconSetType>(maLbIconSetType.GetSelectEntryPos());
+    for(ScIconSetFrmtDateEntriesType::const_iterator itr = maEntries.begin(),
+            itrEnd = maEntries.end(); itr != itrEnd; ++itr)
+    {
+        pData->maEntries.push_back(itr->CreateEntry(mpDoc, maPos));
+    }
+    pFormat->SetIconSetData(pData);
+
+    return pFormat;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
