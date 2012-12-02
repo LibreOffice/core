@@ -285,7 +285,6 @@ include $(SOLARENV)/inc/minor.mk
 
 include $(foreach class, \
 	ComponentTarget \
-	ComponentsTarget \
 	AllLangResTarget \
 	WinResTarget \
 	LinkTarget \

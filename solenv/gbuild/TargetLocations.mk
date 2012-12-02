@@ -92,7 +92,6 @@ gb_CliNativeLibraryTarget_get_external_target = $(WORKDIR)/CliNativeLibraryTarge
 gb_CliNativeLibraryTarget_get_target = $(WORKDIR)/CliNativeLibraryTarget/$(1)$(gb_CliNativeLibraryTarget_EXT)
 gb_CliUnoApiTarget_get_target = $(WORKDIR)/CliUnoApiTarget/$(1)$(gb_CliUnoApiTarget_EXT)
 gb_ComponentTarget_get_target = $(WORKDIR)/ComponentTarget/$(1).component
-gb_ComponentsTarget_get_target = $(WORKDIR)/ComponentsTarget/$(1).components
 gb_Configuration_get_preparation_target = $(WORKDIR)/Configuration/$(1).prepared
 gb_CppunitTest_get_target = $(WORKDIR)/CppunitTest/$(1).test
 gb_CppunitTestFakeExecutable_get_target = \
@@ -234,7 +233,6 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	CliNativeLibraryTarget \
 	CliUnoApiTarget \
 	ComponentTarget \
-	ComponentsTarget \
 	ExternalPackage \
 	ExtensionTarget \
 	InstallModule \
