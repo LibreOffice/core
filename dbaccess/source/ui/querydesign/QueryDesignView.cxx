@@ -1028,8 +1028,8 @@ namespace
             for(;aIter != aEnd;++aIter)
             {
                 static_cast<OQueryTableConnection*>(*aIter)->SetVisited(sal_False);
-                aConnectionCount[(*aIter)->GetSourceWin()]++;
-                aConnectionCount[(*aIter)->GetDestWin()]++;
+                ++aConnectionCount[(*aIter)->GetSourceWin()];
+                ++aConnectionCount[(*aIter)->GetDestWin()];
             }
             ::std::multimap<sal_Int32 , OTableWindow*> aMulti;
             ::std::map<OTableWindow*,sal_Int32>::iterator aCountIter = aConnectionCount.begin();
