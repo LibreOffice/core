@@ -154,6 +154,18 @@ public:
                                 reinterpret_cast<rtl_uString*>(mpData)), SAL_NO_ACQUIRE );
     }
 
+#ifdef RTL_FAST_STRING
+    template< typename T1, typename T2 >
+    UniString( const rtl::OUStringConcat< T1, T2 >& concat )
+        : mpData(NULL) { Assign( rtl::OUString( concat )); }
+    template< typename T1, typename T2 >
+    UniString&          operator =( const rtl::OUStringConcat< T1, T2 >& concat )
+                            { return Assign( rtl::OUString( concat )); }
+    template< typename T1, typename T2 >
+    UniString&          operator +=( const rtl::OUStringConcat< T1, T2 >& concat )
+                            { return Append( UniString( concat ) ); }
+#endif
+
     static UniString    CreateFromInt32( sal_Int32 n, sal_Int16 nRadix = 10 );
     static const UniString& EmptyString();
     sal_Int32           ToInt32() const;
@@ -307,6 +319,21 @@ operator <<(
         // best effort; potentially loses data due to conversion failures
         // (stray surrogate halves) and embedded null characters
 }
+
+#ifdef RTL_FAST_STRING
+namespace rtl
+{
+template<>
+struct ToStringHelper< UniString >
+    {
+    static int length( const UniString& s ) { return s.Len(); }
+    static sal_Unicode* addData( sal_Unicode* buffer, const UniString& s ) { return addDataHelper( buffer, s.GetBuffer(), s.Len()); }
+    static const bool allowOStringConcat = false;
+    static const bool allowOUStringConcat = true;
+    };
+}
+
+#endif
 
 #endif
 

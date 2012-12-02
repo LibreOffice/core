@@ -73,7 +73,8 @@ UniString& UniString::Assign( const rtl::OUString& rStr )
 
     if (rStr.pData->length < STRING_MAXLEN)
     {
-        STRING_RELEASE((STRING_TYPE *)mpData);
+        if( mpData != NULL )
+            STRING_RELEASE((STRING_TYPE *)mpData);
         mpData = reinterpret_cast< UniStringData * >(const_cast< rtl::OUString & >(rStr).pData);
         STRING_ACQUIRE((STRING_TYPE *)mpData);
     }
