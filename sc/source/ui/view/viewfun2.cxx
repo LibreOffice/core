@@ -1634,11 +1634,7 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
     DoneBlockMode(true);                // don't delete mark
     InitOwnBlockMode();
 
-    //  If search starts at the beginning don't ask again whether it shall start at the beginning
     bool bFirst = true;
-    if ( nCol == 0 && nRow == 0 && nTab == nStartTab && !pSearchItem->GetBackward()  )
-        bFirst = false;
-
     bool bFound = false;
     while (true)
     {
@@ -1676,28 +1672,36 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
                 nRetVal = RET_NO;
             else
             {
-                //  search dialog as parent (if available)
-                Window* pParent = GetParentOrChild(SID_SEARCH_DLG);
-                sal_uInt16 nStrId;
-                if ( pSearchItem->GetBackward() )
+                //  If search starts at the beginning don't ask again whether it shall start at the beginning
+                if ( nCol == 0 && nRow == 0 && nTab == nStartTab && !pSearchItem->GetBackward()  )
                 {
-                    if ( nStartTab == nEndTab )
-                        nStrId = STR_MSSG_SEARCHANDREPLACE_1;
-                    else
-                        nStrId = STR_MSSG_SEARCHANDREPLACE_4;
+                    nRetVal = RET_YES;
                 }
                 else
                 {
-                    if ( nStartTab == nEndTab )
-                        nStrId = STR_MSSG_SEARCHANDREPLACE_2;
+                    //  search dialog as parent (if available)
+                    Window* pParent = GetParentOrChild(SID_SEARCH_DLG);
+                    sal_uInt16 nStrId;
+                    if ( pSearchItem->GetBackward() )
+                    {
+                        if ( nStartTab == nEndTab )
+                            nStrId = STR_MSSG_SEARCHANDREPLACE_1;
+                        else
+                            nStrId = STR_MSSG_SEARCHANDREPLACE_4;
+                    }
                     else
-                        nStrId = STR_MSSG_SEARCHANDREPLACE_5;
+                    {
+                        if ( nStartTab == nEndTab )
+                            nStrId = STR_MSSG_SEARCHANDREPLACE_2;
+                        else
+                            nStrId = STR_MSSG_SEARCHANDREPLACE_5;
+                    }
+                    MessBox aBox( pParent, WinBits(WB_YES_NO | WB_DEF_YES),
+                                    ScGlobal::GetRscString( STR_MSSG_SEARCHANDREPLACE_3 ),
+                                    ScGlobal::GetRscString( nStrId ) );
+                    nRetVal = aBox.Execute();
                 }
-                MessBox aBox( pParent, WinBits(WB_YES_NO | WB_DEF_YES),
-                                ScGlobal::GetRscString( STR_MSSG_SEARCHANDREPLACE_3 ),
-                                ScGlobal::GetRscString( nStrId ) );
-                nRetVal = aBox.Execute();
-            }
+           }
 
             if ( nRetVal == RET_YES )
             {
