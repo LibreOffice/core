@@ -4019,7 +4019,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/view,\
 	XPrintJob \
 	XPrintJobBroadcaster \
 	XPrintJobListener \
-	XPrintPreview \
 	XPrintSettingsSupplier \
 	XPrintable \
 	XPrintableBroadcaster \
