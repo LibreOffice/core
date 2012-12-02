@@ -2409,7 +2409,6 @@ else # ! SYSTEM_LIBXML_FOR_BUILD
 
 define gb_ExternalExecutable__register_xmllint
 gb_ExternalExecutable__xmllint_TARGET := $(call gb_Executable_get_target_for_build,xmllint)
-gb_ExternalExecutable__xmllint_COMMAND := $(gb_Helper_set_ld_path) $(ICECREAM_RUN) $(gb_ExternalExecutable__xmllint_TARGET)
 
 endef
 
@@ -2423,7 +2422,6 @@ else # ! SYSTEM_LIBXSLT_FOR_BUILD
 
 define gb_ExternalExecutable__register_xsltproc
 gb_ExternalExecutable__xsltproc_TARGET := $(call gb_Executable_get_target_for_build,xsltproc)
-gb_ExternalExecutable__xsltproc_COMMAND := $(gb_Helper_set_ld_path) $(ICECREAM_RUN) $(gb_ExternalExecutable__xsltproc_TARGET)
 
 endef
 
