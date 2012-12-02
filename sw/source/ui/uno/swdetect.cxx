@@ -55,7 +55,6 @@
 #include <sfx2/brokenpackageint.hxx>
 #include <svtools/FilterConfigItem.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <com/sun/star/util/XArchiver.hpp>
 #include <comphelper/ihwrapnofilter.hxx>
 
 #include <swdll.hxx>

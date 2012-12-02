@@ -61,7 +61,6 @@
 #include <svtools/FilterConfigItem.hxx>
 #include <sot/storage.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <com/sun/star/util/XArchiver.hpp>
 
 #include "strmname.h"
 

@@ -40,7 +40,6 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <svtools/FilterConfigItem.hxx>
-#include <com/sun/star/util/XArchiver.hpp>
 #include <comphelper/processfactory.hxx>
 
 using namespace ::rtl;

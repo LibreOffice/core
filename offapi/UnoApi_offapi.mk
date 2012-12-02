@@ -3942,7 +3942,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/util,\
 	TriState \
 	URL \
 	VetoException \
-	XArchiver \
 	XAtomServer \
 	XBroadcaster \
 	XCancelManager \
