@@ -37,21 +37,15 @@ pyuno_PYTHON_LIB_DIR=$(OUTDIR)/lib/python
 endif
 
 pyuno_PYTHON_ARCHIVE_NAME:=python-core-$(PYTHON_VERSION).zip
-FIND=find
-GREP=grep
 
 $(call gb_CustomTarget_get_target,pyuno/zipcore) : \
     $(call gb_CustomTarget_get_workdir,pyuno/zipcore)/$(pyuno_PYTHON_ARCHIVE_NAME)
 
-# capture the files to have them in prerequisite list
-pyuno_zipcore_FINDLIBFILES:=\
-    $(shell $(FIND) $(pyuno_PYTHON_LIB_DIR) -type f| $(GREP) -v "\.pyc" | $(GREP) -v "\.py~" | $(GREP) -v .orig | $(GREP) -v _failed)
-
 # create zip archive
-$(call gb_CustomTarget_get_workdir,pyuno/zipcore)/$(pyuno_PYTHON_ARCHIVE_NAME) : $(pyuno_zipcore_FINDLIBFILES) | \
-    $(call gb_CustomTarget_get_workdir,pyuno/zipcore)/.dir \
-    $(call gb_ExternalPackage_get_target,python3)
+$(call gb_CustomTarget_get_workdir,pyuno/zipcore)/$(pyuno_PYTHON_ARCHIVE_NAME) \
+		: $(call gb_ExternalPackage_get_target,python3) \
+		| $(call gb_CustomTarget_get_workdir,pyuno/zipcore)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ZIP,1)
-	cd $(pyuno_PYTHON_LIB_DIR) && zip $@ $(shell cd $(pyuno_PYTHON_LIB_DIR) && $(FIND) . -type f | $(GREP) -v "\.pyc" | $(GREP) -v "\.py~" | $(GREP) -v .orig | $(GREP) -v _failed)
+	cd $(pyuno_PYTHON_LIB_DIR) && zip $@ $(shell cd $(pyuno_PYTHON_LIB_DIR) && find . -type f | grep -v "\.pyc" | grep -v "\.py~" | grep -v .orig | grep -v _failed)
 
 # vim: set noet sw=4 ts=4:
