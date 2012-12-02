@@ -194,6 +194,12 @@ protected:
     bool        m_isDeprecated;
 
 private:
+    void dumpExceptionSpecification(
+        FileStream & out, sal_uInt32 methodIndex, bool runtimeException);
+
+    void dumpAttributeExceptionSpecification(
+        FileStream & out, rtl::OUString const & name, RTMethodMode sort);
+
     void dumpExceptionTypeName(
         FileStream & out, char const * prefix, sal_uInt32 index,
         rtl::OUString name);

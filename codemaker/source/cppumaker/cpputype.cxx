@@ -1483,6 +1483,7 @@ void InterfaceType::dumpAttributes(FileStream& o)
         o << "virtual ";
         dumpType(o, fieldType);
         o << " SAL_CALL get" << fieldName << "()";
+        dumpAttributeExceptionSpecification(o, name, RT_MODE_ATTRIBUTE_GET);
         o << " = 0;\n";
 
         if ((access & RT_ACCESS_READONLY) == 0)
@@ -1493,6 +1494,7 @@ void InterfaceType::dumpAttributes(FileStream& o)
             o << "virtual void SAL_CALL set" << fieldName << "( ";
             dumpType(o, fieldType, byRef, byRef);
             o << " _" << fieldName.toAsciiLowerCase() << " )";
+            dumpAttributeExceptionSpecification(o, name, RT_MODE_ATTRIBUTE_SET);
             o << " = 0;\n";
         }
     }
@@ -1510,6 +1512,7 @@ void InterfaceType::dumpMethods(FileStream& o)
 
     sal_Bool bRef = sal_False;
     sal_Bool bConst = sal_False;
+    sal_Bool bWithRunTimeExcp = sal_True;
 
     for (sal_uInt16 i=0; i < methodCount; i++)
     {
@@ -1525,6 +1528,11 @@ void InterfaceType::dumpMethods(FileStream& o)
         returnType = rtl::OUStringToOString(
             m_reader.getMethodReturnTypeName(i), RTL_TEXTENCODING_UTF8);
         paramCount = m_reader.getMethodParameterCount(i);
+
+        if ( methodName.equals("acquire") || methodName.equals("release") )
+        {
+            bWithRunTimeExcp = sal_False;
+        }
 
         if (first)
         {
@@ -1578,6 +1586,7 @@ void InterfaceType::dumpMethods(FileStream& o)
             }
             o << " )";
         }
+        dumpExceptionSpecification(o, i, bWithRunTimeExcp);
         o << " = 0;\n";
     }
 }
@@ -2205,6 +2214,62 @@ void InterfaceType::dumpMethodsCppuDecl(FileStream& o, StringSet* pFinishedTypes
             }
         }
     }
+}
+
+void InterfaceType::dumpExceptionSpecification(
+    FileStream & out, sal_uInt32 methodIndex, bool runtimeException)
+{
+    // exception specifications are undesirable in production code, but make
+    // for useful assertions in debug builds (on platforms where they are
+    // enforced at runtime)
+#ifndef DBG_UTIL
+    (void) out;
+    (void) methodIndex;
+    (void) runtimeException;
+#else
+    out << " throw (";
+    bool first = true;
+    if (methodIndex <= SAL_MAX_UINT16) {
+        sal_uInt16 count = m_reader.getMethodExceptionCount(
+            static_cast< sal_uInt16 >(methodIndex));
+        for (sal_uInt16 i = 0; i < count; ++i) {
+            rtl::OUString name(
+                m_reader.getMethodExceptionTypeName(
+                    static_cast< sal_uInt16 >(methodIndex), i));
+            if ( name != "com/sun/star/uno/RuntimeException" )
+            {
+                if (!first) {
+                    out << ", ";
+                }
+                first = false;
+                out << scopedCppName(
+                    rtl::OUStringToOString(name, RTL_TEXTENCODING_UTF8));
+            }
+        }
+    }
+    if (runtimeException) {
+        if (!first) {
+            out << ", ";
+        }
+        out << "::com::sun::star::uno::RuntimeException";
+    }
+    out << ")";
+#endif
+}
+
+void InterfaceType::dumpAttributeExceptionSpecification(
+    FileStream & out, rtl::OUString const & name, RTMethodMode sort)
+{
+    sal_uInt16 methodCount = m_reader.getMethodCount();
+    for (sal_uInt16 i = 0; i < methodCount; ++i) {
+        if (m_reader.getMethodFlags(i) == sort
+            && m_reader.getMethodName(i) == name)
+        {
+            dumpExceptionSpecification(out, i, true);
+            return;
+        }
+    }
+    dumpExceptionSpecification(out, 0xFFFFFFFF, true);
 }
 
 void InterfaceType::dumpExceptionTypeName(
