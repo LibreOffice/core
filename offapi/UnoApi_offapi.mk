@@ -3944,7 +3944,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/util,\
 	VetoException \
 	XAtomServer \
 	XBroadcaster \
-	XCancelManager \
 	XCancellable \
 	XChainable \
 	XChangesBatch \
