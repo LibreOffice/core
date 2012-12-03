@@ -356,11 +356,12 @@ namespace comphelper
             ::com::sun::star::uno::Sequence< VALUE_TYPE > aValues;
             *this >>= aValues;
             ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aWrappedValues( aValues.getLength() );
+            ::com::sun::star::uno::Any (* const makeAny)(const VALUE_TYPE&) = ::com::sun::star::uno::makeAny< VALUE_TYPE >;
             ::std::transform(
                 aValues.getConstArray(),
                 aValues.getConstArray() + aValues.getLength(),
                 aWrappedValues.getArray(),
-                ::com::sun::star::uno::makeAny< VALUE_TYPE >
+                makeAny
             );
             return aWrappedValues;
         }
