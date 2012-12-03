@@ -16,17 +16,18 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _UNOIDX_HXX
-#define _UNOIDX_HXX
+#ifndef SW_UNOIDX_HXX
+#define SW_UNOIDX_HXX
 
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/text/XDocumentIndexMark.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 
 #include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase6.hxx>
 
 #include <sfx2/Metadatable.hxx>
 
@@ -38,12 +39,13 @@ class SwTOXBaseSection;
 class SwTOXMark;
 class SwTOXType;
 
-typedef ::cppu::ImplInheritanceHelper5
+typedef ::cppu::ImplInheritanceHelper6
 <   ::sfx2::MetadatableMixin
 ,   ::com::sun::star::lang::XUnoTunnel
 ,   ::com::sun::star::lang::XServiceInfo
 ,   ::com::sun::star::beans::XPropertySet
 ,   ::com::sun::star::container::XNamed
+,   ::com::sun::star::util::XRefreshable
 ,   ::com::sun::star::text::XDocumentIndex
 > SwXDocumentIndex_Base;
 
@@ -157,6 +159,18 @@ public:
     virtual ::rtl::OUString SAL_CALL getName()
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setName(const ::rtl::OUString& rName)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // XRefreshable
+    virtual void SAL_CALL refresh()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addRefreshListener(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::util::XRefreshListener>& xListener)
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeRefreshListener(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::util::XRefreshListener>& xListener)
         throw (::com::sun::star::uno::RuntimeException);
 
     // XTextContent

@@ -27,6 +27,7 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 
 #include <osl/mutex.hxx>
+#include <cppuhelper/interfacecontainer.h>
 #include <vcl/svapp.hxx>
 #include <editeng/unolingu.hxx>
 #include <hints.hxx>
@@ -320,9 +321,12 @@ class SwXDocumentIndex::Impl
 
 public:
 
+    SwXDocumentIndex &          m_rThis;
     SfxItemPropertySet const&   m_rPropSet;
     const TOXTypes              m_eTOXType;
     SwEventListenerContainer    m_ListenerContainer;
+    osl::Mutex                  m_Mutex; // just for OInterfaceContainerHelper
+    ::cppu::OInterfaceContainerHelper m_RefreshListeners;
     bool                        m_bIsDescriptor;
     SwDoc *                     m_pDoc;
     ::std::auto_ptr<SwDocIndexDescriptorProperties_Impl> m_pProps;
@@ -334,10 +338,12 @@ public:
             const TOXTypes eType,
             SwTOXBaseSection const*const pBaseSection)
         : SwClient((pBaseSection) ? pBaseSection->GetFmt() : 0)
+        , m_rThis(rThis)
         , m_rPropSet(
             *aSwMapProvider.GetPropertySet(lcl_TypeToPropertyMap_Index(eType)))
         , m_eTOXType(eType)
         , m_ListenerContainer(static_cast< ::cppu::OWeakObject* >(&rThis))
+        , m_RefreshListeners(m_Mutex)
         // #i111177# unxsols4 (Sun C++ 5.9 SunOS_sparc) may generate wrong code
         , m_bIsDescriptor((0 == pBaseSection) ? true : false)
         , m_pDoc(&rDoc)
@@ -388,6 +394,8 @@ void SwXDocumentIndex::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *
     if (!GetRegisteredIn())
     {
         m_ListenerContainer.Disposing();
+        lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(m_rThis));
+        m_RefreshListeners.disposeAndClear(ev);
     }
 }
 
@@ -528,18 +536,7 @@ throw (uno::RuntimeException)
 
 void SAL_CALL SwXDocumentIndex::update() throw (uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
-
-    SwSectionFmt *const pFmt = m_pImpl->GetSectionFmt();
-    SwTOXBaseSection *const pTOXBase = (pFmt) ?
-        static_cast<SwTOXBaseSection*>(pFmt->GetSection()) : 0;
-    if(!pTOXBase)
-    {
-        throw uno::RuntimeException();
-    }
-    pTOXBase->Update();
-    // page numbers
-    pTOXBase->UpdatePageNum();
+    return refresh(); // update is from deprecated XDocumentIndex
 }
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
@@ -1243,6 +1240,47 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
     OSL_FAIL("SwXDocumentIndex::removeVetoableChangeListener(): not implemented");
+}
+
+// XRefreshable
+void SAL_CALL SwXDocumentIndex::refresh() throw (uno::RuntimeException)
+{
+    {
+        SolarMutexGuard g;
+
+        SwSectionFmt *const pFmt = m_pImpl->GetSectionFmt();
+        SwTOXBaseSection *const pTOXBase = (pFmt) ?
+            static_cast<SwTOXBaseSection*>(pFmt->GetSection()) : 0;
+        if (!pTOXBase)
+        {
+            throw uno::RuntimeException(
+                    "SwXDocumentIndex::refresh: must be in attached state",
+                     static_cast< ::cppu::OWeakObject*>(this));
+        }
+        pTOXBase->Update();
+        // page numbers
+        pTOXBase->UpdatePageNum();
+    }
+
+    lang::EventObject const event(static_cast< ::cppu::OWeakObject*>(this));
+    m_pImpl->m_RefreshListeners.notifyEach(
+            & util::XRefreshListener::refreshed, event);
+}
+
+void SAL_CALL SwXDocumentIndex::addRefreshListener(
+        const uno::Reference<util::XRefreshListener>& xListener)
+throw (uno::RuntimeException)
+{
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_pImpl->m_RefreshListeners.addInterface(xListener);
+}
+
+void SAL_CALL SwXDocumentIndex::removeRefreshListener(
+        const uno::Reference<util::XRefreshListener>& xListener)
+throw (uno::RuntimeException)
+{
+    // no need to lock here as m_pImpl is const and container threadsafe
+    m_pImpl->m_RefreshListeners.removeInterface(xListener);
 }
 
 void SAL_CALL

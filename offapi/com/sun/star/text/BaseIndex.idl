@@ -22,6 +22,7 @@
 #define __com_sun_star_text_BaseIndex_idl__
 
 #include <com/sun/star/util/Color.idl>
+#include <com/sun/star/util/XRefreshable.idl>
 #include <com/sun/star/text/XDocumentIndex.idl>
 #include <com/sun/star/container/XIndexReplace.idl>
 #include <com/sun/star/text/XTextColumns.idl>
@@ -45,6 +46,9 @@ published service BaseIndex
 {
     // DocMerge: empty anyway
     interface com::sun::star::text::XDocumentIndex;
+
+    /** @since LibreOffice 4.0 */
+    [optional] interface com::sun::star::util::XRefreshable;
 
     /** contains the title of the index.*/
 
