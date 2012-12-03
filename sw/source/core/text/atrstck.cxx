@@ -171,7 +171,7 @@ const SfxPoolItem* GetItem( const SwTxtAttr& rAttr, sal_uInt16 nWhich )
 
        bool bInParent = RES_TXTATR_AUTOFMT != rAttr.Which();
        const SfxPoolItem* pItem;
-       sal_Bool bRet = SFX_ITEM_SET == pSet->GetItemState( nWhich, bInParent, &pItem );
+       bool bRet = SFX_ITEM_SET == pSet->GetItemState( nWhich, bInParent, &pItem );
 
        return bRet ? pItem : 0;
     }
@@ -184,9 +184,9 @@ const SfxPoolItem* GetItem( const SwTxtAttr& rAttr, sal_uInt16 nWhich )
  * checks if item is included in character/inet/auto style
  *************************************************************************/
 
-sal_Bool IsItemIncluded( const sal_uInt16 nWhich, const SwTxtAttr *pAttr )
+bool IsItemIncluded( const sal_uInt16 nWhich, const SwTxtAttr *pAttr )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     const SfxItemSet* pItemSet = CharFmt::GetItemSet( pAttr->GetAttr() );
     if ( pItemSet )
@@ -424,7 +424,7 @@ void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet* pAS,
         SfxItemIter aIter( *pAS );
         sal_uInt16 nWhich;
         const SfxPoolItem* pItem = aIter.GetCurItem();
-        while( sal_True )
+        while( true )
         {
             nWhich = pItem->Which();
             if (isCHRATR(nWhich))
@@ -470,7 +470,7 @@ void SwAttrHandler::PushAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
         for ( sal_uInt16 i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; i++)
         {
             const SfxPoolItem* pItem;
-            sal_Bool bRet = SFX_ITEM_SET == pSet->GetItemState( i, rAttr.Which() != RES_TXTATR_AUTOFMT, &pItem );
+            bool bRet = SFX_ITEM_SET == pSet->GetItemState( i, rAttr.Which() != RES_TXTATR_AUTOFMT, &pItem );
 
             if ( bRet )
             {
@@ -553,7 +553,7 @@ void SwAttrHandler::PopAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
         for ( sal_uInt16 i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; i++)
         {
             const SfxPoolItem* pItem;
-            sal_Bool bRet = SFX_ITEM_SET == pSet->GetItemState( i, RES_TXTATR_AUTOFMT != rAttr.Which(), &pItem );
+            bool bRet = SFX_ITEM_SET == pSet->GetItemState( i, RES_TXTATR_AUTOFMT != rAttr.Which(), &pItem );
             if ( bRet )
             {
                 // we remove rAttr from the appropriate stack
@@ -864,7 +864,7 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
         }
         case RES_CHRATR_TWO_LINES :
         {
-            sal_Bool bRuby = 0 !=
+            bool bRuby = 0 !=
                     aAttrStack[ StackPos[ RES_TXTATR_CJK_RUBY ] ].Count();
             sal_Bool bTwoLineAct = sal_False;
 

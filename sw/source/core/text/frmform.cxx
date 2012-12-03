@@ -60,7 +60,7 @@ public:
     inline FormatLevel()  { ++nLevel; }
     inline ~FormatLevel() { --nLevel; }
     inline MSHORT GetLevel() const { return nLevel; }
-    static sal_Bool LastLevel() { return 10 < nLevel; }
+    static bool LastLevel() { return 10 < nLevel; }
 };
 MSHORT FormatLevel::nLevel = 0;
 
@@ -238,7 +238,7 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
         if ( !pMyFollow->GetNext() && !pMyFollow->HasFtn() )
             nOldBottom = bVert ? 0 : LONG_MAX;
 
-        while( sal_True )
+        while( true )
         {
             if( !FormatLevel::LastLevel() )
             {
@@ -558,7 +558,7 @@ void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
     if( GetFollow() )
     {
 #if OSL_DEBUG_LEVEL > 1
-        static sal_Bool bTest = sal_False;
+        static bool bTest = false;
         if( !bTest || ( nMode & 1 ) )
 #endif
         if ( nMode )
@@ -979,7 +979,7 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
     // If the current values have been calculated, show that they
     // are valid now
     *(pPara->GetReformat()) = SwCharRange();
-    sal_Bool bDelta = *pPara->GetDelta() != 0;
+    bool bDelta = *pPara->GetDelta() != 0;
     *(pPara->GetDelta()) = 0;
 
     if( rLine.IsStop() )
@@ -1124,7 +1124,7 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
     // The current line break object
     const SwLineLayout *pNew = rLine.GetCurr();
 
-    sal_Bool bUnChg = nOldLen == pNew->GetLen() &&
+    bool bUnChg = nOldLen == pNew->GetLen() &&
                   bOldHyph == pNew->IsEndHyph();
     if ( bUnChg && !bPrev )
     {
@@ -1289,7 +1289,7 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
     // of) would not trigger a reformatting of the previous line. Adding 1
     // to the result of FindBrk() does not solve the problem in all cases,
     // nevertheless it should be sufficient.
-    sal_Bool bPrev = rLine.GetPrev() &&
+    bool bPrev = rLine.GetPrev() &&
                      ( FindBrk( rString, rLine.GetStart(), rReformat.Start() + 1 )
                        // #i46560#
                        + 1
@@ -1312,7 +1312,7 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
             {
                 ++nNew;
                 rLine.Next();
-                bPrev = sal_False;
+                bPrev = false;
             }
         }
         rReformat.Len()  += rReformat.Start() - nNew;
@@ -1333,7 +1333,7 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
     // The bFirst flag makes sure that Next() is not called.
     // The whole thing looks weird, but we need to make sure that
     // rLine stops at the last non-fitting line when calling IsBreakNow.
-    sal_Bool bFirst  = sal_True;
+    bool bFirst  = true;
     sal_Bool bFormat = sal_True;
 
     // The CharToLine() can also get us into the danger zone.
@@ -1345,7 +1345,7 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
                     && aFrmBreak.IsBreakNowWidAndOrp( rLine );
     if( bBreak )
     {
-        sal_Bool bPrevDone = 0 != rLine.Prev();
+        bool bPrevDone = 0 != rLine.Prev();
         while( bPrevDone && aFrmBreak.IsBreakNowWidAndOrp(rLine) )
             bPrevDone = 0 != rLine.Prev();
         if( bPrevDone )
@@ -1380,7 +1380,7 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
          bWatchMidHyph = sal_False;
 
     const SwAttrSet& rAttrSet = GetTxtNode()->GetSwAttrSet();
-    sal_Bool bMaxHyph = ( 0 !=
+    bool bMaxHyph = ( 0 !=
         ( rInf.MaxHyph() = rAttrSet.GetHyphenZone().GetMaxHyphens() ) );
     if ( bMaxHyph )
         rLine.InitCntHyph();
@@ -1418,7 +1418,7 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
     do
     {
         if( bFirst )
-            bFirst = sal_False;
+            bFirst = false;
         else
         {
             if ( bMaxHyph )
@@ -1755,8 +1755,8 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
         // We do not want to be interrupted during formatting
         SwTxtFrmLocker aLock(this);
         SwTxtLineAccess aAccess( this );
-        const sal_Bool bNew = !aAccess.SwTxtLineAccess::IsAvailable();
-        const sal_Bool bSetOfst = ( GetOfst() && GetOfst() > GetTxtNode()->GetTxt().Len() );
+        const bool bNew = !aAccess.SwTxtLineAccess::IsAvailable();
+        const bool bSetOfst = ( GetOfst() && GetOfst() > GetTxtNode()->GetTxt().Len() );
 
         if( CalcPreps() )
             ; // nothing

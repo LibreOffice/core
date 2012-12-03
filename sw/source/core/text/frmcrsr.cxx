@@ -103,7 +103,7 @@ SwTxtFrm *GetAdjFrmAtPos( SwTxtFrm *pFrm, const SwPosition &rPos,
     return pFrmAtPos ? pFrmAtPos : pFrm;
 }
 
-sal_Bool sw_ChangeOffset( SwTxtFrm* pFrm, xub_StrLen nNew )
+bool sw_ChangeOffset( SwTxtFrm* pFrm, xub_StrLen nNew )
 {
     // Do not scroll in areas and outside of flies
     OSL_ENSURE( !pFrm->IsFollow(), "Illegal Scrolling by Follow!" );
@@ -123,7 +123,7 @@ sal_Bool sw_ChangeOffset( SwTxtFrm* pFrm, xub_StrLen nNew )
                     ( pFrm->GetDrawObjs() && pFrm->GetDrawObjs()->Count() ) )
                 {
                     if( !pFrm->GetOfst() )
-                        return sal_False;
+                        return false;
                     nNew = 0;
                 }
                 pFrm->SetOfst( nNew );
@@ -131,11 +131,11 @@ sal_Bool sw_ChangeOffset( SwTxtFrm* pFrm, xub_StrLen nNew )
                 pFrm->GetFormatted();
                 if( pFrm->Frm().HasArea() )
                     pFrm->getRootFrm()->GetCurrShell()->InvalidateWindows( pFrm->Frm() );
-                return sal_True;
+                return true;
             }
         }
     }
-    return sal_False;
+    return false;
 }
 
 /*************************************************************************
@@ -269,7 +269,7 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
         if ( bVert )
             nMaxY = pFrm->SwitchVerticalToHorizontal( nMaxY );
 
-        sal_Bool bGoOn = sal_True;
+        bool bGoOn = true;
         xub_StrLen nOffset = rPos.nContent.GetIndex();
         xub_StrLen nNextOfst;
 
@@ -298,7 +298,7 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
                 pFrm->GetTxtNode()->GetTxt().Len() != nNextOfst )
                 bGoOn = sw_ChangeOffset( pFrm, nNextOfst );
             else
-                bGoOn = sal_False;
+                bGoOn = false;
         } while ( bGoOn );
 
         if ( pCMS )
@@ -531,14 +531,14 @@ struct SwFillData
     SwPosition* pPos;
     const Point& rPoint;
     SwTwips nLineWidth;
-    sal_Bool bFirstLine : 1;
-    sal_Bool bInner     : 1;
-    sal_Bool bColumn    : 1;
-    sal_Bool bEmpty     : 1;
+    bool bFirstLine : 1;
+    bool bInner     : 1;
+    bool bColumn    : 1;
+    bool bEmpty     : 1;
     SwFillData( const SwCrsrMoveState *pC, SwPosition* pP, const SwRect& rR,
         const Point& rPt ) : aFrm( rR ), pCMS( pC ), pPos( pP ), rPoint( rPt ),
-        nLineWidth( 0 ), bFirstLine( sal_True ), bInner( sal_False ), bColumn( sal_False ),
-        bEmpty( sal_True ){}
+        nLineWidth( 0 ), bFirstLine( true ), bInner( false ), bColumn( false ),
+        bEmpty( true ){}
     SwFillMode Mode() const { return pCMS->pFill->eMode; }
     long X() const { return rPoint.X(); }
     long Y() const { return rPoint.Y(); }
@@ -627,21 +627,21 @@ sal_Bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
             {
                 if( pTxtNd->GetTxt().Len() > nOffset ||
                     rPoint.Y() < Frm().Top() )
-                    pFillData->bInner = sal_True;
+                    pFillData->bInner = true;
                 pFillData->bFirstLine = aLine.GetLineNr() < 2;
                 if( pTxtNd->GetTxt().Len() )
                 {
-                    pFillData->bEmpty = sal_False;
+                    pFillData->bEmpty = false;
                     pFillData->nLineWidth = aLine.GetCurr()->Width();
                 }
             }
         }
     }
-    sal_Bool bChgFillData = sal_False;
+    bool bChgFillData = false;
     if( pFillData && FindPageFrm()->Frm().IsInside( aOldPoint ) )
     {
         FillCrsrPos( *pFillData );
-        bChgFillData = sal_True;
+        bChgFillData = true;
     }
 
     if ( IsVertical() )
@@ -827,8 +827,8 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
             const xub_StrLen nStart = aLine.GetStart();
             aLine.GetCharRect( &aCharBox, nPos );
 
-            sal_Bool bSecondOfDouble = ( aInf.IsMulti() && ! aInf.IsFirstMulti() );
-            sal_Bool bPrevLine = ( pPrevLine && pPrevLine != aLine.GetCurr() );
+            bool bSecondOfDouble = ( aInf.IsMulti() && ! aInf.IsFirstMulti() );
+            bool bPrevLine = ( pPrevLine && pPrevLine != aLine.GetCurr() );
 
             if( !pPrevLine && !bSecondOfDouble && GetOfst() && !IsFollow() )
             {
@@ -1005,7 +1005,7 @@ static void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, xub_StrLen n
     }
     else
     {
-        sal_Bool bRecurse = pPor && pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->IsBidi();
+        bool bRecurse = pPor && pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->IsBidi();
 
         // 1. special case: at beginning of bidi portion
         if ( bRecurse && nIdx == nPos )
@@ -1013,7 +1013,7 @@ static void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, xub_StrLen n
             // leave bidi portion
             if ( nCrsrLevel == nDefaultDir )
             {
-                bRecurse = sal_False;
+                bRecurse = false;
             }
         }
 
@@ -1026,7 +1026,7 @@ static void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, xub_StrLen n
             // enter bidi portion
             if ( nCrsrLevel % 2 == nDefaultDir % 2 )
             {
-                bRecurse = sal_True;
+                bRecurse = true;
                 nIdx = nIdx - pLast->GetLen();
                 pPor = pLast;
 
@@ -1111,7 +1111,7 @@ void SwTxtFrm::PrepareVisualMove( xub_StrLen& nPos, sal_uInt8& nCrsrLevel,
     }
 
     const sal_uInt8 nDefaultDir = static_cast<sal_uInt8>(IsRightToLeft() ? UBIDI_RTL : UBIDI_LTR);
-    const sal_Bool bVisualRight = ( nDefaultDir == UBIDI_LTR && bForward ) ||
+    const bool bVisualRight = ( nDefaultDir == UBIDI_LTR && bForward ) ||
                                   ( nDefaultDir == UBIDI_RTL && ! bForward );
 
     //
@@ -1125,7 +1125,7 @@ void SwTxtFrm::PrepareVisualMove( xub_StrLen& nPos, sal_uInt8& nCrsrLevel,
     ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(pLineString), nLen, nDefaultDir, NULL, &nError ); // UChar != sal_Unicode in MinGW
 
     xub_StrLen nTmpPos;
-    sal_Bool bOutOfBounds = sal_False;
+    bool bOutOfBounds = false;
 
     if ( nPos < nStt + nLen )
     {
@@ -1139,7 +1139,7 @@ void SwTxtFrm::PrepareVisualMove( xub_StrLen& nPos, sal_uInt8& nCrsrLevel,
             else
             {
                 nPos = nDefaultDir == UBIDI_RTL ? 0 : nStt + nLen;
-                bOutOfBounds = sal_True;
+                bOutOfBounds = true;
             }
         }
         else
@@ -1149,7 +1149,7 @@ void SwTxtFrm::PrepareVisualMove( xub_StrLen& nPos, sal_uInt8& nCrsrLevel,
             else
             {
                 nPos = nDefaultDir == UBIDI_RTL ? nStt + nLen : 0;
-                bOutOfBounds = sal_True;
+                bOutOfBounds = true;
             }
         }
     }
@@ -1222,7 +1222,7 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
             const xub_StrLen nStart = aLine.GetStart();
             aLine.GetCharRect( &aCharBox, nPos );
 
-            sal_Bool bFirstOfDouble = ( aInf.IsMulti() && aInf.IsFirstMulti() );
+            bool bFirstOfDouble = ( aInf.IsMulti() && aInf.IsFirstMulti() );
 
             if( pNextLine || bFirstOfDouble )
             {
@@ -1385,7 +1385,7 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
             if( pFrm->IsTxtFrm() )
             {
                 rFill.Fill().nColumnCnt = nNextCol;
-                rFill.bColumn = sal_True;
+                rFill.bColumn = true;
                 if( rFill.pPos )
                 {
                     SwTxtNode* pTxtNd = ((SwTxtFrm*)pFrm)->GetTxtNode();
@@ -1461,8 +1461,8 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
             nDiff /= nDist;
             rFill.Fill().nParaCnt = static_cast<sal_uInt16>(nDiff + 1);
             rFill.nLineWidth = 0;
-            rFill.bInner = sal_False;
-            rFill.bEmpty = sal_True;
+            rFill.bInner = false;
+            rFill.bEmpty = true;
             rFill.SetOrient( text::HoriOrientation::LEFT );
         }
         else

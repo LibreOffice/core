@@ -489,18 +489,18 @@ static void lcl_SortedTabColInsert( SwTabCols &rToFill, const SwTableBox *pBox,
         pLine = pCur ? pCur->GetUpper() : 0;
     }
 
-    sal_Bool bInsert = !bRefreshHidden;
+    bool bInsert = !bRefreshHidden;
     for ( sal_uInt16 j = 0; bInsert && (j < rToFill.Count()); ++j )
     {
         long nCmp = rToFill[j];
         if ( (nPos >= ((nCmp >= COLFUZZY) ? nCmp - COLFUZZY : nCmp)) &&
              (nPos <= (nCmp + COLFUZZY)) )
         {
-            bInsert = sal_False;        // Already has it.
+            bInsert = false;        // Already has it.
         }
         else if ( nPos < nCmp )
         {
-            bInsert = sal_False;
+            bInsert = false;
             rToFill.Insert( nPos, bHidden, j );
         }
     }
@@ -840,7 +840,7 @@ static void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm )
 }
 
 static void lcl_ProcessBoxPtr( SwTableBox *pBox, std::deque<SwTableBox*> &rBoxArr,
-                           sal_Bool bBefore )
+                           bool bBefore )
 {
     if ( !pBox->GetTabLines().empty() )
     {
@@ -986,7 +986,7 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
             // in a PtrArray.
             const SwTableBoxes &rBoxes = pStart->GetUpper()->GetTabBoxes();
             for ( sal_uInt16 i = 0; i < rBoxes.size(); ++i )
-                ::lcl_ProcessBoxPtr( rBoxes[i], aParm.aBoxArr, sal_False );
+                ::lcl_ProcessBoxPtr( rBoxes[i], aParm.aBoxArr, false );
 
             const SwTableLine *pLine = pStart->GetUpper()->GetUpper() ?
                                     pStart->GetUpper()->GetUpper()->GetUpper() : 0;
@@ -994,13 +994,13 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
             while ( pLine )
             {
                 const SwTableBoxes &rBoxes2 = pLine->GetTabBoxes();
-                sal_Bool bBefore = sal_True;
+                bool bBefore = true;
                 for ( sal_uInt16 i = 0; i < rBoxes2.size(); ++i )
                 {
                     if ( rBoxes2[i] != pExcl )
                         ::lcl_ProcessBoxPtr( rBoxes2[i], aParm.aBoxArr, bBefore );
                     else
-                        bBefore = sal_False;
+                        bBefore = false;
                 }
                 pExcl = pLine->GetUpper();
                 pLine = pLine->GetUpper() ? pLine->GetUpper()->GetUpper() : 0;
@@ -1340,15 +1340,15 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
 |*
 |*************************************************************************/
 
-sal_Bool IsValidRowName( const String& rStr )
+bool IsValidRowName( const String& rStr )
 {
-    sal_Bool bIsValid = sal_True;
+    bool bIsValid = true;
     xub_StrLen nLen = rStr.Len();
     for (xub_StrLen i = 0;  i < nLen && bIsValid;  ++i)
     {
         const sal_Unicode cChar = rStr.GetChar(i);
         if (cChar < '0' || cChar > '9')
-            bIsValid = sal_False;
+            bIsValid = false;
     }
     return bIsValid;
 }
@@ -1364,7 +1364,7 @@ sal_uInt16 SwTable::_GetBoxNum( String& rStr, sal_Bool bFirstPart,
     {
         // the first one uses letters for addressing!
         sal_Unicode cChar;
-        sal_Bool bFirst = sal_True;
+        bool bFirst = true;
         while( 0 != ( cChar = rStr.GetChar( nPos )) &&
                ( (cChar >= 'A' && cChar <= 'Z') ||
                  (cChar >= 'a' && cChar <= 'z') ) )
@@ -1372,7 +1372,7 @@ sal_uInt16 SwTable::_GetBoxNum( String& rStr, sal_Bool bFirstPart,
             if( (cChar -= 'A') >= 26 )
                 cChar -= 'a' - '[';
             if( bFirst )
-                bFirst = sal_False;
+                bFirst = false;
             else
                 ++nRet;
             nRet = nRet * 52 + cChar;
@@ -2315,12 +2315,12 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                     //          - align left for horizontal alignment, if RIGHT
                     //          - align top for vertical alignment, if BOTTOM is set
                     SvNumberFormatter* pNumFmtr = GetDoc()->GetNumberFormatter();
-                    sal_Bool bNewIsTxtFmt = pNumFmtr->IsTextFormat( nNewFmt ) ||
+                    bool bNewIsTxtFmt = pNumFmtr->IsTextFormat( nNewFmt ) ||
                                         NUMBERFORMAT_TEXT == nNewFmt;
 
                     if( (!bNewIsTxtFmt && nOldFmt != nNewFmt) || pNewFml )
                     {
-                        sal_Bool bChgTxt = sal_True;
+                        bool bChgTxt = true;
                         double fVal = 0;
                         if( !pNewVal && SFX_ITEM_SET != GetItemState(
                             RES_BOXATR_VALUE, sal_False, (const SfxPoolItem**)&pNewVal ))
@@ -2333,7 +2333,7 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                                 String aTxt( GetDoc()->GetNodes()[ nNdPos ]
                                                 ->GetTxtNode()->GetRedlineTxt());
                                 if( !aTxt.Len() )
-                                    bChgTxt = sal_False;
+                                    bChgTxt = false;
                                 else
                                 {
                                     // Keep Tabs
