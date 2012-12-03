@@ -2708,7 +2708,7 @@ SvxNumPositionTabPage::SvxNumPositionTabPage(Window* pParent,
     Point aPos(250,0);
 
     pDebugFixedText->SetPosSizePixel(aPos, aSize);
-    pDebugFixedText->SetText( "Das ist ein Debug-Text" );
+    pDebugFixedText->SetText(OUString("Das ist ein Debug-Text"));
 #endif
 
     aStandardPB.SetAccessibleRelationMemberOf(&aPositionFL);
