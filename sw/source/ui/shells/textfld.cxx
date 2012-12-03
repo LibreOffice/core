@@ -514,8 +514,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 {
                     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "Dialogdiet fail!");
-                    AbstractJavaEditDialog* pDlg = pFact->CreateJavaEditDialog( DLG_JAVAEDIT,
-                                                            pMDI, &rSh);
+                    AbstractJavaEditDialog* pDlg = pFact->CreateJavaEditDialog(pMDI, &rSh);
                     OSL_ENSURE(pDlg, "Dialogdiet fail!");
                     if ( pDlg->Execute() )
                     {

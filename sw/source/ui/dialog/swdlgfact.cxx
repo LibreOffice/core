@@ -1163,21 +1163,11 @@ AbstractFldInputDlg* SwAbstractDialogFactory_Impl::CreateFldInputDlg( int nResId
     return 0;
 }
 
-AbstractInsFootNoteDlg* SwAbstractDialogFactory_Impl::CreateInsFootNoteDlg( int nResId,
-                                                Window * pParent, SwWrtShell &rSh, sal_Bool bEd ) //add for SwInsFootNoteDlg
+AbstractInsFootNoteDlg* SwAbstractDialogFactory_Impl::CreateInsFootNoteDlg(
+    Window * pParent, SwWrtShell &rSh, sal_Bool bEd ) //add for SwInsFootNoteDlg
 {
-    SwInsFootNoteDlg* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_INS_FOOTNOTE :
-            pDlg = new SwInsFootNoteDlg( pParent, rSh, bEd );
-            break;
-        default:
-            break;
-    }
-    if ( pDlg )
-        return new AbstractInsFootNoteDlg_Impl( pDlg );
-    return 0;
+    SwInsFootNoteDlg* pDlg = new SwInsFootNoteDlg(pParent, rSh, bEd);
+    return new AbstractInsFootNoteDlg_Impl( pDlg );
 }
 
 VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateTitlePageDlg ( Window *pParent )
@@ -1212,21 +1202,11 @@ AbstractInsTableDlg * SwAbstractDialogFactory_Impl::CreateInsTableDlg(SwView& rV
     return new AbstractInsTableDlg_Impl( pDlg );
 }
 
-AbstractJavaEditDialog * SwAbstractDialogFactory_Impl::CreateJavaEditDialog( int nResId,
-                                                Window* pParent, SwWrtShell* pWrtSh ) //add for SwJavaEditDialog
+AbstractJavaEditDialog * SwAbstractDialogFactory_Impl::CreateJavaEditDialog(
+    Window* pParent, SwWrtShell* pWrtSh) //add for SwJavaEditDialog
 {
-    SwJavaEditDialog* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_JAVAEDIT :
-            pDlg = new SwJavaEditDialog( pParent, pWrtSh );
-            break;
-        default:
-            break;
-    }
-    if ( pDlg )
-        return new AbstractJavaEditDialog_Impl( pDlg );
-    return 0;
+    SwJavaEditDialog* pDlg = new SwJavaEditDialog(pParent, pWrtSh);
+    return new AbstractJavaEditDialog_Impl( pDlg );
 }
 
 AbstractMailMergeDlg * SwAbstractDialogFactory_Impl::CreateMailMergeDlg( int nResId,

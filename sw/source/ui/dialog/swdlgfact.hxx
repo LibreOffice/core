@@ -498,14 +498,14 @@ public:
     virtual AbstractFldInputDlg*        CreateFldInputDlg( int nResId,
                                                 Window *pParent, SwWrtShell &rSh,
                                                 SwField* pField, sal_Bool bNextButton = sal_False ); //add for SwFldInputDlg
-    virtual AbstractInsFootNoteDlg*     CreateInsFootNoteDlg( int nResId,
-                                                Window * pParent, SwWrtShell &rSh, sal_Bool bEd = sal_False); //add for SwInsFootNoteDlg
+    virtual AbstractInsFootNoteDlg*     CreateInsFootNoteDlg(
+        Window * pParent, SwWrtShell &rSh, sal_Bool bEd = sal_False); //add for SwInsFootNoteDlg
    virtual VclAbstractDialog *         CreateTitlePageDlg ( Window * pParent );
     virtual VclAbstractDialog *         CreateVclSwViewDialog( int nResId,
                                                 SwView& rView, sal_Bool bCol = sal_False ); //add for SwInsRowColDlg, SwLineNumberingDlg
     virtual AbstractInsTableDlg*        CreateInsTableDlg(SwView& rView); //add for SwInsTableDlg
-    virtual AbstractJavaEditDialog*     CreateJavaEditDialog( int nResId,
-                                                Window* pParent, SwWrtShell* pWrtSh ); //add for SwJavaEditDialog
+    virtual AbstractJavaEditDialog*     CreateJavaEditDialog(Window* pParent,
+        SwWrtShell* pWrtSh); //add for SwJavaEditDialog
     virtual AbstractMailMergeDlg*       CreateMailMergeDlg( int nResId,
                                                 Window* pParent, SwWrtShell& rSh,
                                                  const String& rSourceName,

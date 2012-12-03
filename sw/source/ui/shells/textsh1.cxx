@@ -436,8 +436,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialogdiet fail!");
-            AbstractInsFootNoteDlg* pDlg = pFact->CreateInsFootNoteDlg( DLG_INS_FOOTNOTE,
-                                                        GetView().GetWindow(), rWrtSh, sal_False );
+            AbstractInsFootNoteDlg* pDlg = pFact->CreateInsFootNoteDlg(
+                GetView().GetWindow(), rWrtSh, sal_False);
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->SetHelpId(GetStaticInterface()->GetSlot(nSlot)->GetCommand());
             if ( pDlg->Execute() == RET_OK )
