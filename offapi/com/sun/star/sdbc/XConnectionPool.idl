@@ -16,29 +16,22 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_sdbc_ConnectionPool_idl__
-#define __com_sun_star_sdbc_ConnectionPool_idl__
+#ifndef __com_sun_star_sdbc_XConnectionPool_idl__
+#define __com_sun_star_sdbc_XConnectionPool_idl__
 
- module com {  module sun {  module star {  module sdbc {
+#include <com/sun/star/sdbc/XDriverManager.idl>
+#include <com/sun/star/sdbc/XDriverAccess.idl>
 
- published interface XConnectionPool;
+module com {  module sun {  module star {  module sdbc {
 
-
-/** is the basic service for pooling SDBC connections.
-
-    <p>
-    When the method
-    <member scope="com::sun::star::sdbc">XPooledConnection::getConnection()</member>
-    is called,
-    the ConnectionPool will attempt to locate a suitable pooled connection
-    or create a new connection from the DriverManager. When the connection
-    will be released it will move to the pool of unused connections.
-
-    </p>
-    @see com::sun::star::sdbc::XDriver
-    @see com::sun::star::sdbc::XConnection
- */
-published service ConnectionPool: XConnectionPool;
+/*
+  @since LibreOffice 4.1
+*/
+published interface XConnectionPool
+{
+    interface XDriverManager;
+    interface XDriverAccess;
+};
 
 
 }; }; }; };

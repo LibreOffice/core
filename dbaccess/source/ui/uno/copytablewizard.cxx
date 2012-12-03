@@ -129,6 +129,7 @@ namespace dbaui
     using ::com::sun::star::sdbc::SQLException;
     using ::com::sun::star::sdb::SQLContext;
     using ::com::sun::star::sdbc::ConnectionPool;
+    using ::com::sun::star::sdbc::XConnectionPool;
     using ::com::sun::star::sdbc::XDriverManager;
     using ::com::sun::star::beans::PropertyValue;
     /** === end UNO using === **/
@@ -953,7 +954,7 @@ SharedConnection CopyTableWizard::impl_extractConnection_throw( const Reference<
     if ( xPSI->hasPropertyByName( PROPERTY_CONNECTION_INFO ) )
         OSL_VERIFY( _rxDataSourceDescriptor->getPropertyValue( PROPERTY_CONNECTION_INFO ) >>= aConnectionInfo );
 
-    Reference< XDriverManager > xDriverManager;
+    Reference< XConnectionPool > xDriverManager;
     try {
         xDriverManager.set( ConnectionPool::create( m_aContext.getUNOContext() ) );
     } catch( const Exception& ) {  }

@@ -641,7 +641,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::buildLowLevelConnection" );
     Reference< XConnection > xReturn;
 
-    Reference< XDriverManager > xManager;
+    Reference< XConnectionPool > xManager;
     try {
         xManager.set( ConnectionPool::create( m_pImpl->m_aContext.getUNOContext() ) );
     } catch( const Exception& ) {  }

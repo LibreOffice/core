@@ -43,6 +43,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
+#include <com/sun/star/sdbc/ConnectionPool.hpp>
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
@@ -388,14 +389,14 @@ Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver()
 Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver(const ::rtl::OUString& _sURL)
 {
     // get the global DriverManager
-    Reference< XDriverAccess > xDriverManager;
+    Reference< XConnectionPool > xDriverManager;
+
     String sCurrentActionError = String(ModuleRes(STR_COULDNOTCREATE_DRIVERMANAGER));
-        // in case an error occures
-    sCurrentActionError.SearchAndReplaceAscii("#servicename#", (::rtl::OUString)SERVICE_SDBC_CONNECTIONPOOL);
+    sCurrentActionError.SearchAndReplaceAscii("#servicename#", OUString("com.sun.star.sdbc.ConnectionPool"));
+
     try
     {
-        xDriverManager = Reference< XDriverAccess >(getORB()->createInstance(SERVICE_SDBC_CONNECTIONPOOL), UNO_QUERY);
-        OSL_ENSURE(xDriverManager.is(), "ODbDataSourceAdministrationHelper::getDriver: could not instantiate the driver manager, or it does not provide the necessary interface!");
+        xDriverManager.set( ConnectionPool::create( comphelper::getComponentContext(getORB()) ) );
     }
     catch (const Exception& e)
     {
@@ -403,8 +404,6 @@ Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver(const ::rtl::O
         SQLException aSQLWrapper(e.Message, getORB(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")), 0, Any());
         throw SQLException(sCurrentActionError, getORB(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")), 0, makeAny(aSQLWrapper));
     }
-    if (!xDriverManager.is())
-        throw SQLException(sCurrentActionError, getORB(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")), 0, Any());
 
 
     Reference< XDriver > xDriver = xDriverManager->getDriverByURL(_sURL);

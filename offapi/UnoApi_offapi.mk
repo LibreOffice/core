@@ -3150,6 +3150,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/sdbc,\
 	XCloseable \
 	XColumnLocate \
 	XConnection \
+	XConnectionPool \
 	XDataSource \
 	XDatabaseMetaData \
 	XDatabaseMetaData2 \

@@ -417,7 +417,7 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
         else if (!sURL.isEmpty())
         {   // the row set has no data source, but a connection url set
             // -> try to connection with that url
-            Reference< XDriverManager > xDriverManager;
+            Reference< XConnectionPool > xDriverManager;
             try {
                 xDriverManager = ConnectionPool::create( _rxContext );
             } catch( const Exception& ) {  }

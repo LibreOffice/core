@@ -19,11 +19,10 @@
 #ifndef CONNECTIVITY_POOLCOLLECTION_HXX
 #define CONNECTIVITY_POOLCOLLECTION_HXX
 
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase4.hxx>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#include <com/sun/star/sdbc/XDriverManager.hpp>
 #include <com/sun/star/sdbc/XDriver.hpp>
-#include <com/sun/star/sdbc/XDriverAccess.hpp>
+#include <com/sun/star/sdbc/XConnectionPool.hpp>
 #include <com/sun/star/sdbc/XPooledConnection.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -42,8 +41,7 @@ namespace connectivity
     //= OPoolCollection - the one-instance service for PooledConnections
     //= manages the active connections and the connections in the pool
     //==========================================================================
-    typedef ::cppu::WeakImplHelper5<    ::com::sun::star::sdbc::XDriverManager,
-                                        ::com::sun::star::sdbc::XDriverAccess,
+    typedef ::cppu::WeakImplHelper4<    ::com::sun::star::sdbc::XConnectionPool,
                                         ::com::sun::star::lang::XServiceInfo,
                                         ::com::sun::star::frame::XTerminateListener,
                                         ::com::sun::star::beans::XPropertyChangeListener
