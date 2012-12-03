@@ -135,31 +135,6 @@ using namespace ::com::sun::star::document;
 
 namespace
 {
-    struct BaseInstallerPhoenix : osl::Thread
-    {
-        BaseInstallerPhoenix() {};
-        virtual void run()
-        {
-            try
-            {
-                using namespace org::freedesktop::PackageKit;
-                using namespace svtools;
-                Reference< XSyncDbusSessionHelper > xSyncDbusSessionHelper(SyncDbusSessionHelper::create(comphelper::getProcessComponentContext()));
-                Sequence< ::rtl::OUString > vPackages(1);
-                vPackages[0] = "libreoffice-base";
-                ::rtl::OUString sInteraction;
-                xSyncDbusSessionHelper->InstallPackageNames(0, vPackages, sInteraction);
-                // Ill be back (hopefully)!
-                executeRestartDialog(comphelper::getProcessComponentContext(), NULL, RESTART_REASON_BIBLIOGRAPHY_INSTALL);
-            }
-            catch (Exception & e)
-            {
-                SAL_INFO(
-                    "sfx2.appl",
-                    "trying to install LibreOffice Base, caught " << e.Message);
-            }
-        }
-    };
     // lp#527938, debian#602953, fdo#33266, i#105408
     static bool lcl_isBaseAvailable()
     {
@@ -181,10 +156,26 @@ namespace
     {
         // lp#527938, debian#602953, fdo#33266, i#105408
         // make sure we actually can instanciate services from base first
-        //if(!lcl_isBaseAvailable())
+        if(!lcl_isBaseAvailable())
         {
-            BaseInstallerPhoenix *pBaseInstallerPhoenix = new BaseInstallerPhoenix();
-            pBaseInstallerPhoenix->create();
+            try
+            {
+                using namespace org::freedesktop::PackageKit;
+                using namespace svtools;
+                Reference< XSyncDbusSessionHelper > xSyncDbusSessionHelper(SyncDbusSessionHelper::create(comphelper::getProcessComponentContext()));
+                Sequence< ::rtl::OUString > vPackages(1);
+                vPackages[0] = "libreoffice-base";
+                ::rtl::OUString sInteraction;
+                xSyncDbusSessionHelper->InstallPackageNames(0, vPackages, sInteraction);
+                // Ill be back (hopefully)!
+                executeRestartDialog(comphelper::getProcessComponentContext(), NULL, RESTART_REASON_BIBLIOGRAPHY_INSTALL);
+            }
+            catch (Exception & e)
+            {
+                SAL_INFO(
+                    "sfx2.appl",
+                    "trying to install LibreOffice Base, caught " << e.Message);
+            }
             return;
         }
         SfxStringItem aURL(SID_FILE_NAME, rtl::OUString(".component:Bibliography/View1"));
