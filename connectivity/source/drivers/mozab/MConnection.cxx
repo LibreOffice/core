@@ -38,6 +38,7 @@
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
 
 #include <comphelper/officeresourcebundle.hxx>
+#include <comphelper/processfactory.hxx>
 
 #if OSL_DEBUG_LEVEL > 0
 # define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
@@ -571,7 +572,7 @@ void OConnection::throwSQLException( const ErrorDescriptor& _rError, const Refer
 
     if ( _rError.getErrorCondition() != 0 )
     {
-        SQLError aErrorHelper( getDriver()->getMSFactory() );
+        SQLError aErrorHelper( comphelper::getComponentContext(getDriver()->getMSFactory()) );
         ::rtl::OUString sParameter( _rError.getParameter() );
         if ( !sParameter.isEmpty() )
             aErrorHelper.raiseException( _rError.getErrorCondition(), _rxContext, sParameter );

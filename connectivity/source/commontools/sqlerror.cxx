@@ -42,6 +42,7 @@ namespace connectivity
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::XInterface;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::sdbc::SQLException;
     using ::com::sun::star::uno::Type;
     /** === end UNO using === **/
@@ -58,7 +59,7 @@ namespace connectivity
     class SQLError_Impl
     {
     public:
-        SQLError_Impl( const ::comphelper::ComponentContext& _rContext );
+        SQLError_Impl( const Reference<XComponentContext> & _rxContext );
         ~SQLError_Impl();
 
         // versions of the public SQLError methods which are just delegated to this impl-class
@@ -90,7 +91,7 @@ namespace connectivity
 
     private:
         ::osl::Mutex                                            m_aMutex;
-        ::comphelper::ComponentContext                          m_aContext;
+        Reference<XComponentContext>                            m_aContext;
         ::std::auto_ptr< ::comphelper::OfficeResourceBundle >   m_pResources;
         bool                                                    m_bAttemptedInit;
     };
@@ -99,8 +100,8 @@ namespace connectivity
     //= SQLError_Impl - implementation
     //====================================================================
     //--------------------------------------------------------------------
-    SQLError_Impl::SQLError_Impl( const ::comphelper::ComponentContext& _rContext )
-        :m_aContext( _rContext )
+    SQLError_Impl::SQLError_Impl( const Reference<XComponentContext> & _rxContext )
+        :m_aContext( _rxContext )
         ,m_pResources( )
         ,m_bAttemptedInit( false )
     {
@@ -278,7 +279,7 @@ namespace connectivity
         ::osl::MutexGuard aGuard( m_aMutex );
         m_bAttemptedInit = true;
 
-        m_pResources.reset( new ::comphelper::OfficeResourceBundle( m_aContext.getUNOContext(), "sdberr" ) );
+        m_pResources.reset( new ::comphelper::OfficeResourceBundle( m_aContext, "sdberr" ) );
         return m_pResources.get() != NULL;
     }
 
@@ -286,8 +287,8 @@ namespace connectivity
     //= SQLError
     //====================================================================
     //--------------------------------------------------------------------
-    SQLError::SQLError( const ::comphelper::ComponentContext& _rContext )
-        :m_pImpl( new SQLError_Impl( _rContext ) )
+    SQLError::SQLError( const Reference<XComponentContext> & _rxContext )
+        :m_pImpl( new SQLError_Impl( _rxContext ) )
     {
     }
 

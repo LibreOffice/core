@@ -34,6 +34,7 @@
 #include "datasource.hxx"
 #include <comphelper/classids.hxx>
 #include <comphelper/mimeconfighelper.hxx>
+#include <comphelper/processfactory.hxx>
 #include <connectivity/sqlerror.hxx>
 #include "core_resource.hxx"
 #include "core_resource.hrc"
@@ -66,8 +67,8 @@ class LocalNameApproval : public IContainerApprove
     ::connectivity::SQLError    m_aErrors;
 
 public:
-    LocalNameApproval( const Reference< XMultiServiceFactory >& _rxFactory )
-        :m_aErrors( ::comphelper::ComponentContext( _rxFactory ) )
+    LocalNameApproval( const Reference< XComponentContext >& _rxContext )
+        :m_aErrors( _rxContext )
     {
     }
     virtual ~LocalNameApproval()
@@ -105,7 +106,7 @@ ODocumentContainer::ODocumentContainer(const Reference< XMultiServiceFactory >& 
     registerProperty(PROPERTY_NAME, PROPERTY_ID_NAME, PropertyAttribute::BOUND | PropertyAttribute::READONLY | PropertyAttribute::CONSTRAINED,
                     &m_pImpl->m_aProps.aTitle, ::getCppuType(&m_pImpl->m_aProps.aTitle));
 
-    setElementApproval( PContainerApprove( new LocalNameApproval ( _xORB ) ) );
+    setElementApproval( PContainerApprove( new LocalNameApproval ( comphelper::getComponentContext(_xORB) ) ) );
 }
 
 ODocumentContainer::~ODocumentContainer()

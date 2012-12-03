@@ -124,8 +124,8 @@ namespace connectivity
         ::com::sun::star::lang::Locale  aLocale;
         ::connectivity::SQLError        aErrors;
 
-        OSQLParser_Data( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceFactory )
-            :aErrors( _xServiceFactory )
+        OSQLParser_Data( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext )
+            :aErrors( _rxContext )
         {
         }
     };

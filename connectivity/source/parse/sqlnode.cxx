@@ -571,7 +571,7 @@ bool OSQLParseNode::impl_parseTableNameNodeToString_throw( ::rtl::OUStringBuffer
             }
             else
             {
-                SQLError aErrors( ::comphelper::getProcessServiceFactory() );
+                SQLError aErrors( ::comphelper::getProcessComponentContext() );
                 aErrors.raiseException( sdb::ErrorCondition::PARSER_CYCLIC_SUB_QUERIES );
             }
         }
@@ -1263,7 +1263,7 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
 OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, const IParseContext* _pContext)
     :m_pContext(_pContext)
     ,m_pParseTree(NULL)
-    ,m_pData( new OSQLParser_Data( uno::Reference<lang::XMultiServiceFactory>(rxContext->getServiceManager(), uno::UNO_QUERY_THROW) ) )
+    ,m_pData( new OSQLParser_Data( rxContext ) )
     ,m_nFormatKey(0)
     ,m_nDateFormatKey(0)
     ,m_xContext(rxContext)

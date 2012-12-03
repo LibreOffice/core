@@ -519,7 +519,7 @@ void OEvoabResultSet::construct( const QueryData& _rData )
         case eFilterNone:
             if ( !isLocal( pBook ) )
             {
-                SQLError aErrorFactory( m_pConnection->getDriver().getMSFactory() );
+                SQLError aErrorFactory( comphelper::getComponentContext(m_pConnection->getDriver().getMSFactory()) );
                 SQLException aAsException = aErrorFactory.getSQLException( ErrorCondition::DATA_CANNOT_SELECT_UNFILTERED, *this );
                 m_aWarnings.appendWarning( SQLWarning(
                     aAsException.Message,

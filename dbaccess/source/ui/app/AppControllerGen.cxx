@@ -449,7 +449,7 @@ void OApplicationController::impl_validateObjectTypeAndName_throw( const sal_Int
     // ensure we're connected
     if ( !isConnected() )
     {
-        SQLError aError( getORB() );
+        SQLError aError( comphelper::getComponentContext(getORB()) );
         aError.raiseException( ErrorCondition::DB_NOT_CONNECTED, *this );
     }
 

@@ -69,7 +69,7 @@ OContentHelper::OContentHelper(const Reference< XMultiServiceFactory >& _xORB
     ,m_aPropertyChangeListeners(m_aMutex)
     ,m_xParentContainer(_xParentContainer)
     ,m_aContext( _xORB )
-    ,m_aErrorHelper( m_aContext )
+    ,m_aErrorHelper( m_aContext.getUNOContext() )
     ,m_pImpl(_pImpl)
     ,m_nCommandId(0)
 {

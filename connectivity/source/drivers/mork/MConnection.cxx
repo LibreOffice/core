@@ -28,6 +28,7 @@
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
 
 #include <comphelper/officeresourcebundle.hxx>
+#include <comphelper/processfactory.hxx>
 
 using namespace dbtools;
 
@@ -382,7 +383,7 @@ void OConnection::throwSQLException( const ErrorDescriptor& _rError, const Refer
 
     if ( _rError.getErrorCondition() != 0 )
     {
-        SQLError aErrorHelper( getDriver()->getFactory() );
+        SQLError aErrorHelper( comphelper::getComponentContext(getDriver()->getFactory()) );
         ::rtl::OUString sParameter( _rError.getParameter() );
         if ( !sParameter.isEmpty() )
             aErrorHelper.raiseException( _rError.getErrorCondition(), _rxContext, sParameter );

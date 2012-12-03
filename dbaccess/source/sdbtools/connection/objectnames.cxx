@@ -108,7 +108,7 @@ namespace sdbtools
             if ( validateName( _rName ) )
                 return;
 
-            ::connectivity::SQLError aErrors( m_aContext );
+            ::connectivity::SQLError aErrors( m_aContext.getUNOContext() );
             SQLException aError( aErrors.getSQLException( ErrorCondition::DB_OBJECT_NAME_IS_USED, m_xConnection, _rName ) );
 
             ::dbtools::DatabaseMetaData aMeta( m_xConnection );
@@ -162,7 +162,7 @@ namespace sdbtools
             if ( validateName( _rName ) )
                 return;
 
-            ::connectivity::SQLError aErrors( m_aContext );
+            ::connectivity::SQLError aErrors( m_aContext.getUNOContext() );
             aErrors.raiseException( ErrorCondition::DB_INVALID_SQL_NAME, m_xConnection, _rName );
         }
     };
@@ -211,7 +211,7 @@ namespace sdbtools
             ::connectivity::ErrorCondition nErrorCondition = validateName_getErrorCondition( _rName );
             if ( nErrorCondition != 0 )
             {
-                ::connectivity::SQLError aErrors( m_aContext );
+                ::connectivity::SQLError aErrors( m_aContext.getUNOContext() );
                 aErrors.raiseException( nErrorCondition, m_xConnection );
             }
         }

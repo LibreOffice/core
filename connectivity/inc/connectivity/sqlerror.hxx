@@ -21,8 +21,7 @@
 #define CONNECTIVITY_SQLERROR_HXX
 
 #include <com/sun/star/sdbc/SQLException.hpp>
-
-#include <comphelper/componentcontext.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/optional.hpp>
@@ -82,7 +81,7 @@ namespace connectivity
 
 
     public:
-        explicit        SQLError( const ::comphelper::ComponentContext& _rContext );
+        explicit        SQLError( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & _rxContext );
                         ~SQLError();
 
         /** returns the message associated with a given error condition, after (optionally) replacing
