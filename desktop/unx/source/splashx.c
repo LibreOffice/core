@@ -798,14 +798,17 @@ struct splash
 /* Stubs that will never be called in this case */
 void splash_draw_progress( struct splash* splash, int progress )
 {
+    (void)splash; (void)progress;
 }
 
 void splash_destroy(struct splash* splash)
 {
+    (void)splash;
 }
 
 struct splash* splash_create(rtl_uString* pAppPath, int argc, char** argv)
 {
+    (void)pAppPath; (void)argc; (void)argv;
     return NULL;
 }
 
