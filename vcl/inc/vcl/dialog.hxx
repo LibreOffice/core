@@ -154,11 +154,13 @@ public:
                     ModalDialog( Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription );
                     ModalDialog( Window* pParent, const ResId& rResId );
 
-private:
+protected:
     using Window::Show;
     void            Show( sal_Bool bVisible = sal_True );
     using Window::Hide;
     void            Hide();
+
+private:
 
     // Copy assignment is forbidden and not implemented.
     SAL_DLLPRIVATE         ModalDialog (const ModalDialog &);

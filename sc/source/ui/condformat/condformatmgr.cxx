@@ -226,7 +226,7 @@ IMPL_LINK_NOARG(ScCondFormatManagerDlg, EditBtnHdl)
     pScMod->SetRefDialog( nId, true );
     boost::scoped_ptr<ScCondFormatDlg> pDlg(new ScCondFormatDlg(this, mpDoc, pFormat, pFormat->GetRange(),
                                                pFormat->GetRange().GetTopLeftCorner(), condformat::dialog::NONE));
-    Disable();
+    Show(false, 0);
     if(pDlg->Execute() == RET_OK)
     {
         sal_Int32 nKey = pFormat->GetKey();
@@ -241,7 +241,7 @@ IMPL_LINK_NOARG(ScCondFormatManagerDlg, EditBtnHdl)
         maCtrlManager.Update();
         mbModified = true;
     }
-    Enable();
+    Show(true, 0);
 
     pScMod->SetRefDialog( nId, false );
 
@@ -272,7 +272,7 @@ IMPL_LINK_NOARG(ScCondFormatManagerDlg, AddBtnHdl)
     pScMod->SetRefDialog( nId, true );
     boost::scoped_ptr<ScCondFormatDlg> pDlg(new ScCondFormatDlg(this, mpDoc, NULL, ScRangeList(),
                                                maPos, condformat::dialog::CONDITION));
-    Disable();
+    Show(false, 0);
     if(pDlg->Execute() == RET_OK)
     {
         ScConditionalFormat* pNewFormat = pDlg->GetConditionalFormat();
@@ -285,7 +285,7 @@ IMPL_LINK_NOARG(ScCondFormatManagerDlg, AddBtnHdl)
 
         mbModified = true;
     }
-    Enable();
+    Show(true, 0);
     pScMod->SetRefDialog( nId, false );
 
     return 0;
