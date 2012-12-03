@@ -210,13 +210,9 @@ ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Refer
     {
         m_xDatabaseContext = DatabaseContext::create(comphelper::getComponentContext(m_xORB));
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
-    }
-
-    if ( !m_xDatabaseContext.is() )
-    {
-        ShowServiceNotAvailableError(_pParent->GetParent(), String(SERVICE_SDB_DATABASECONTEXT), sal_True);
+        ShowServiceNotAvailableError(_pParent->GetParent(), String("com.sun.star.sdb.DatabaseContext"), sal_True);
     }
 }
     //-------------------------------------------------------------------------

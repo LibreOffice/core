@@ -258,15 +258,13 @@ sal_Bool OGenericUnoController::Construct(Window* /*pParent*/)
     {
         m_xDatabaseContext = DatabaseContext::create(comphelper::getComponentContext(getORB()));
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         OSL_FAIL("OGenericUnoController::Construct: could not create (or start listening at) the database context!");
+        // at least notify the user. Though the whole component does not make any sense without the database context ...
+        ShowServiceNotAvailableError(getView(), String("com.sun.star.sdb.DatabaseContext"), sal_True);
     }
 
-    if (!m_xDatabaseContext.is())
-    {       // at least notify the user. Though the whole component does not make any sense without the database context ...
-        ShowServiceNotAvailableError(getView(), String(SERVICE_SDB_DATABASECONTEXT), sal_True);
-    }
     return sal_True;
 }
 //------------------------------------------------------------------------------

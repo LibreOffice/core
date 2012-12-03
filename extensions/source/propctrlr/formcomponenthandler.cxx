@@ -45,6 +45,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/form/XGridColumnFactory.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
@@ -527,9 +528,8 @@ namespace pcr
 
             if ( !sControlValue.isEmpty() )
             {
-                Reference< XNameAccess > xDatabaseContext;
-                m_aContext.createComponent( (::rtl::OUString)SERVICE_DATABASE_CONTEXT, xDatabaseContext );
-                if ( !xDatabaseContext.is() || !xDatabaseContext->hasByName( sControlValue ) )
+                Reference< XDatabaseContext > xDatabaseContext = sdb::DatabaseContext::create( m_aContext.getUNOContext() );
+                if ( !xDatabaseContext->hasByName( sControlValue ) )
                 {
                     ::svt::OFileNotation aTransformer(sControlValue);
                     aPropertyValue <<= ::rtl::OUString( aTransformer.get( ::svt::OFileNotation::N_URL ) );
@@ -1360,15 +1360,11 @@ namespace pcr
 
                 ::std::vector< ::rtl::OUString > aListEntries;
 
-                Reference< XNameAccess > xDatabaseContext;
-                m_aContext.createComponent( (rtl::OUString)SERVICE_DATABASE_CONTEXT, xDatabaseContext );
-                if (xDatabaseContext.is())
-                {
-                    Sequence< ::rtl::OUString > aDatasources = xDatabaseContext->getElementNames();
-                    aListEntries.resize( aDatasources.getLength() );
-                    ::std::copy( aDatasources.getConstArray(), aDatasources.getConstArray() + aDatasources.getLength(),
-                        aListEntries.begin() );
-                }
+                Reference< XDatabaseContext > xDatabaseContext = sdb::DatabaseContext::create( m_aContext.getUNOContext() );
+                Sequence< ::rtl::OUString > aDatasources = xDatabaseContext->getElementNames();
+                aListEntries.resize( aDatasources.getLength() );
+                ::std::copy( aDatasources.getConstArray(), aDatasources.getConstArray() + aDatasources.getLength(),
+                    aListEntries.begin() );
                 aDescriptor.Control = PropertyHandlerHelper::createComboBoxControl(
                     _rxControlFactory, aListEntries, sal_False, sal_True );
             }

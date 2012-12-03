@@ -280,7 +280,6 @@ namespace pcr
     PCR_CONSTASCII_STRING( SERVICE_COMPONENT_GROUPBOX,      "com.sun.star.form.component.GroupBox" );
     PCR_CONSTASCII_STRING( SERVICE_COMPONENT_FIXEDTEXT,     "com.sun.star.form.component.FixedText" );
     PCR_CONSTASCII_STRING( SERVICE_COMPONENT_FORMATTEDFIELD,"com.sun.star.form.component.FormattedField" );
-    PCR_CONSTASCII_STRING( SERVICE_DATABASE_CONTEXT,        "com.sun.star.sdb.DatabaseContext" );
 
     PCR_CONSTASCII_STRING( SERVICE_TEXT_DOCUMENT,           "com.sun.star.text.TextDocument" );
     PCR_CONSTASCII_STRING( SERVICE_WEB_DOCUMENT,            "com.sun.star.text.WebDocument" );

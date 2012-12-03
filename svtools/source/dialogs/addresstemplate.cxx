@@ -793,8 +793,7 @@ void AssignmentPersistentData::Commit()
             {
                 m_xDatabaseContext = DatabaseContext::create(comphelper::getComponentContext(m_xORB));
             }
-            catch(Exception&) { }
-            if (!m_xDatabaseContext.is())
+            catch(const Exception&)
             {
                 const rtl::OUString sContextServiceName("com.sun.star.sdb.DatabaseContext");
                 ShowServiceNotAvailableError( this, sContextServiceName, sal_False);
