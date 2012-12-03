@@ -26,16 +26,31 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Module_Module,scaddins))
+$(eval $(call gb_Library_Library,pricing))
 
-$(eval $(call gb_Module_add_targets,scaddins,\
-    AllLangResTarget_analysis \
-    AllLangResTarget_date \
-    AllLangResTarget_pricing \
-	InternalUnoApi_scaddins \
-    Library_analysis \
-    Library_date \
-    Library_pricing \
+$(eval $(call gb_Library_set_componentfile,pricing,scaddins/source/pricing/pricing))
+
+$(eval $(call gb_Library_use_internal_comprehensive_api,pricing,\
+	offapi \
+	scaddins \
+	udkapi \
 ))
+
+$(eval $(call gb_Library_use_libraries,pricing,\
+	cppu \
+	cppuhelper \
+	sal \
+	tl \
+	$(gb_UWINAPI) \
+))
+
+$(eval $(call gb_Library_add_exception_objects,pricing,\
+	scaddins/source/pricing/pricing \
+	scaddins/source/pricing/black_scholes \
+))
+
+# Runtime dependency for unit-tests
+$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,pricing)) :| \
+	$(call gb_AllLangResTarget_get_target,pricing)
 
 # vim: set noet sw=4 ts=4:

@@ -54,7 +54,7 @@ Module gid_Module_Prg_Calc_Addins
     ParentID = gid_Module_Prg_Calc_Bin;
     Sortkey = "700";
     Default = YES;
-    Files = (gid_File_Lib_Date,gid_File_Zip_Addin,gid_File_Lib_Rot,gid_File_Lib_Dfa,gid_File_Lib_Analysis);
+    Files = (gid_File_Lib_Date,gid_File_Zip_Addin,gid_File_Lib_Rot,gid_File_Lib_Dfa,gid_File_Lib_Analysis,gid_File_Lib_Pricing);
 End
 
 Module gid_Module_Brand_Prg_Calc
@@ -77,6 +77,7 @@ Module gid_Module_Langpack_Calc_Template
     Styles = (TEMPLATEMODULE);
     Files = (gid_File_Res_Analysis,
              gid_File_Res_Date,
+             gid_File_Res_Pricing,
              gid_File_Res_Sc,
              gid_File_Res_Solver);
 End

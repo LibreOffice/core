@@ -38,6 +38,8 @@ End
 
 STD_LIB_FILE( gid_File_Lib_Analysis, analysis)
 
+STD_LIB_FILE( gid_File_Lib_Pricing, pricing)
+
 File gid_File_Share_Registry_Calc_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -62,6 +64,8 @@ STD_RES_FILE( gid_File_Res_Solver, solver)
 STD_RES_FILE( gid_File_Res_Analysis, analysis)
 
 STD_RES_FILE( gid_File_Res_Date, date)
+
+STD_RES_FILE( gid_File_Res_Pricing, pricing)
 
 STD_RES_FILE( gid_File_Res_Sc, sc )
 
