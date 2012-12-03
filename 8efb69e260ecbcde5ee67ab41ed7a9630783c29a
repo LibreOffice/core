@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAARH///44\u003d",
+        "filename": "sfx2/source/appl/appserv.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2012-12-03T13:42:15Z",
+      "side": 1,
+      "message": "must be called with the solar mutex locked",
+      "revId": "8efb69e260ecbcde5ee67ab41ed7a9630783c29a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAARH///40\u003d",
+        "filename": "svtools/uiconfig/ui/restartdialog.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2012-12-03T13:42:15Z",
+      "side": 1,
+      "message": "no idea whether you get away with this, but at least in principle this should be position 2 and the following GtkLabel bumped to position 3",
+      "revId": "8efb69e260ecbcde5ee67ab41ed7a9630783c29a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
