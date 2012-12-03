@@ -268,7 +268,7 @@ void CppuType::dumpGetCppuTypePostamble(FileStream & out) {
             " getCppuType(SAL_UNUSED_PARAMETER ");
     dumpType(out, m_typeName);
     dumpTemplateParameters(out);
-    out << " const *) { // throw()\n";
+    out << " const *) SAL_THROW(()) {\n";
     inc();
     out << indent() << "return ::cppu::UnoType< ";
     dumpType(out, m_typeName);
@@ -537,7 +537,7 @@ void CppuType::dumpHFileContent(
     out << "inline ::com::sun::star::uno::Type const & SAL_CALL getCppuType(";
     dumpType(out, m_typeName, true);
     dumpTemplateParameters(out);
-    out << " *); // throw()\n\n#endif\n";
+    out << " *) SAL_THROW(());\n\n#endif\n";
 }
 
 void CppuType::dumpGetCppuType(FileStream & out) {
@@ -546,7 +546,7 @@ void CppuType::dumpGetCppuType(FileStream & out) {
             << ("inline ::com::sun::star::uno::Type const & SAL_CALL"
                 " getCppuType(SAL_UNUSED_PARAMETER ");
         dumpType(out, m_typeName, true, false);
-        out << " *) { // throw()\n";
+        out << " *) SAL_THROW(()) {\n";
         inc();
         out << indent()
             << ("return ::cppu::UnoType< ::com::sun::star::uno::XInterface"
@@ -558,7 +558,7 @@ void CppuType::dumpGetCppuType(FileStream & out) {
             << ("inline ::com::sun::star::uno::Type const & SAL_CALL"
                 " getCppuType(SAL_UNUSED_PARAMETER ");
         dumpType(out, m_typeName, true, false);
-        out << " *) { // throw()\n";
+        out << " *) SAL_THROW(()) {\n";
         inc();
         out << indent()
             << ("return ::cppu::UnoType< ::com::sun::star::uno::Exception"
@@ -1416,7 +1416,7 @@ void InterfaceType::dumpDeclaration(FileStream& o)
     o << "protected:\n";
     inc();
     o << indent() << "~" << m_name
-      << ("() {} // nothrow(); avoid warnings about virtual members and"
+      << ("() throw () {} // avoid warnings about virtual members and"
           " non-virtual dtor\n");
     dec();
     o << "};\n\n";
@@ -2528,7 +2528,7 @@ void StructureType::dumpDeclaration(FileStream& o)
     }
     o << " {\n";
     inc();
-    o << indent() << "inline " << m_name << "(); // throw()\n";
+    o << indent() << "inline " << m_name << "() SAL_THROW(());\n";
     sal_uInt16 members = m_reader.getFieldCount();
     if (members > 0 || getInheritedMemberCount() > 0) {
         o << "\n" << indent() << "inline " << m_name << "(";
@@ -2553,7 +2553,7 @@ void StructureType::dumpDeclaration(FileStream& o)
                   m_reader.getFieldName(i), RTL_TEXTENCODING_UTF8)
               << "_";
         }
-        o << "); // throw()\n";
+        o << ") SAL_THROW(());\n";
     }
     if (members > 0) {
         o << "\n";
@@ -2608,7 +2608,7 @@ sal_Bool StructureType::dumpHxxFile(
     dumpTemplateHead(o);
     o << "inline " << m_name;
     dumpTemplateParameters(o);
-    o << "::" << m_name << "() // throw()\n";
+    o << "::" << m_name << "() SAL_THROW(())\n";
     inc();
     OString superType;
     if (m_reader.getSuperTypeCount() >= 1) {
@@ -2687,7 +2687,7 @@ sal_Bool StructureType::dumpHxxFile(
             }
             o << " " << fieldName << "_";
         }
-        o << ") // throw()\n";
+        o << ") SAL_THROW(())\n";
 
         inc();
         first = sal_True;
@@ -2752,7 +2752,7 @@ sal_Bool StructureType::dumpHxxFile(
                   m_reader.getFieldName(i), RTL_TEXTENCODING_UTF8)
               << "_";
         }
-        o << ") // throw()\n";
+        o << ") SAL_THROW(())\n";
         o << indent() << "{\n";
         inc();
         o << indent() << "return " << m_name;
@@ -3271,7 +3271,7 @@ void ExceptionType::dumpDeclaration(FileStream& o)
     o << "\n{\npublic:\n";
     inc();
     o << indent() << "inline CPPU_GCC_DLLPRIVATE " << m_name
-      << "(); // throw()\n\n";
+      << "() SAL_THROW(());\n\n";
 
     sal_uInt16      fieldCount = m_reader.getFieldCount();
     RTFieldAccess   access = RT_ACCESS_INVALID;
@@ -3305,7 +3305,7 @@ void ExceptionType::dumpDeclaration(FileStream& o)
             dumpType(o, fieldType, sal_True, sal_True);
             o << " " << fieldName << "_";
         }
-        o << "); // throw()\n\n";
+        o << ") SAL_THROW(());\n\n";
     }
     o << indent() << "inline CPPU_GCC_DLLPRIVATE " << m_name << "(" << m_name
       << " const &);\n\n"
@@ -3357,7 +3357,7 @@ sal_Bool ExceptionType::dumpHxxFile(
     }
     o << "\n";
 
-    o << "inline " << m_name << "::" << m_name << "() // throw()\n";
+    o << "inline " << m_name << "::" << m_name << "() SAL_THROW(())\n";
     inc();
     OString superType;
     if (m_reader.getSuperTypeCount() >= 1) {
@@ -3436,7 +3436,7 @@ sal_Bool ExceptionType::dumpHxxFile(
             dumpType(o, fieldType, sal_True, sal_True);
             o << " " << fieldName << "_";
         }
-        o << ") // throw()\n";
+        o << ") SAL_THROW(())\n";
 
         inc();
         first = sal_True;
