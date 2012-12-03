@@ -35,6 +35,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
+#include <com/sun/star/sdb/ReportDesign.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/frame/XModule.hpp>
 
@@ -53,11 +54,11 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
-using ::com::sun::star::sdbc::XDataSource;
 using namespace dbaui;
 
 class DBContentLoader : public ::cppu::WeakImplHelper2< XFrameLoader, XServiceInfo>
@@ -67,9 +68,9 @@ private:
     Sequence< PropertyValue>            m_aArgs;
     Reference< XLoadEventListener >     m_xListener;
     Reference< XFrame >                 m_xFrame;
-    Reference< XMultiServiceFactory >   m_xServiceFactory;
+    Reference< XComponentContext >      m_xContext;
 public:
-    DBContentLoader(const Reference< XMultiServiceFactory >&);
+    DBContentLoader(const Reference< XComponentContext >&);
     ~DBContentLoader();
 
     // XServiceInfo
@@ -94,8 +95,8 @@ public:
 };
 DBG_NAME(DBContentLoader)
 
-DBContentLoader::DBContentLoader(const Reference< XMultiServiceFactory >& _rxFactory)
-    :m_xServiceFactory(_rxFactory)
+DBContentLoader::DBContentLoader(const Reference< XComponentContext >& _rxContext)
+    :m_xContext(_rxContext)
 {
     DBG_CTOR(DBContentLoader,NULL);
 
@@ -116,7 +117,7 @@ extern "C" void SAL_CALL createRegistryInfo_DBContentLoader()
 // -------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL DBContentLoader::Create( const Reference< XMultiServiceFactory >  & rSMgr )
 {
-    return *(new DBContentLoader(rSMgr));
+    return *(new DBContentLoader(comphelper::getComponentContext(rSMgr)));
 }
 // -------------------------------------------------------------------------
 // XServiceInfo
@@ -181,8 +182,6 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     m_aURL      = rURL;
     m_aArgs     = rArgs;
 
-    ::comphelper::ComponentContext aContext( m_xServiceFactory );
-
     struct ServiceNameToImplName
     {
         const sal_Char*     pAsciiServiceName;
@@ -209,7 +208,8 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     {
         if ( sComponentURL.equalsAscii( aImplementations[i].pAsciiServiceName ) )
         {
-            aContext.createComponent( aImplementations[i].pAsciiImplementationName, xController );
+            xController.set( m_xContext->getServiceManager()->
+               createInstanceWithContext( ::rtl::OUString::createFromAscii( aImplementations[i].pAsciiImplementationName ), m_xContext), UNO_QUERY_THROW );
             break;
         }
     }
@@ -250,14 +250,10 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         Reference< XModel > xReportModel( aLoadArgs.getOrDefault( "Model", Reference< XModel >() ) );
         if ( xReportModel.is() )
         {
-            xController.set( m_xServiceFactory->createInstance(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.ReportDesign" ) ) ), UNO_QUERY );
-            if ( xController.is() )
-            {
-                xController->attachModel( xReportModel );
-                xReportModel->connectController( xController.get() );
-                xReportModel->setCurrentController( xController.get() );
-            }
+            xController.set( ReportDesign::create( m_xContext ) );
+            xController->attachModel( xReportModel );
+            xReportModel->connectController( xController.get() );
+            xReportModel->setCurrentController( xController.get() );
         }
     }
 
@@ -275,7 +271,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         else if ( !sDataSourceName.isEmpty() )
         {
             ::dbtools::SQLExceptionInfo aError;
-            xDataSource.set( getDataSourceByName( sDataSourceName, NULL, comphelper::getComponentContext(m_xServiceFactory), &aError ) );
+            xDataSource.set( getDataSourceByName( sDataSourceName, NULL, m_xContext, &aError ) );
             xDatabaseDocument.set( getDataSourceOrModel( xDataSource ), UNO_QUERY );
         }
         else if ( xConnection.is() )
