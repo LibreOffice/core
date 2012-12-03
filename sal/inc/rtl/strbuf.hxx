@@ -229,11 +229,12 @@ public:
     {
         const int l = c.length();
         rtl_String* buffer = NULL;
-        rtl_string_new_WithLength( &buffer, l );
+        nCapacity = l + 16;
+        rtl_string_new_WithLength( &buffer, nCapacity );
         char* end = c.addData( buffer->buffer );
+        *end = '\0';
         buffer->length = end - buffer->buffer;
         pData = buffer;
-        nCapacity = l + 16;
     }
 #endif
 
