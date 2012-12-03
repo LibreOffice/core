@@ -2883,6 +2883,12 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::getPropertyDefaults( const uno::Seq
                     if ( !pEntry )
                         throw beans::UnknownPropertyException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pNames[i], static_cast < cppu::OWeakObject * > ( this ) );
 
+                    if (pEntry->nWID >= RES_UNKNOWNATR_END)
+                    {
+                        // these cannot be in an item set, especially not the
+                        // parent set, so the default value is void
+                        continue;
+                    }
                     if( pParentSet )
                         aSwMapProvider.GetPropertySet(nPropSetId)->getPropertyValue(pNames[i], *pParentSet, pRet[i]);
                     else if( pEntry->nWID != rSet.GetPool()->GetSlotId(pEntry->nWID) )

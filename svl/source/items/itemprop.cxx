@@ -203,7 +203,8 @@ void SfxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry& rEn
             rItem.QueryValue( rAny, rEntry.nMemberId );
         }
         else if(0 == (rEntry.nFlags & PropertyAttribute::MAYBEVOID))
-            throw RuntimeException();
+            throw RuntimeException(
+                    "Property not found in ItemSet but not MAYBEVOID?", 0);
     }
 
 
