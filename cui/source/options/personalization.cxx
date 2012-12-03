@@ -14,6 +14,8 @@
 #include <vcl/msgbox.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
@@ -31,11 +33,27 @@ class SelectPersonaDialog : public ModalDialog
 {
 public:
     SelectPersonaDialog( Window *pParent );
+
+private:
+    /// Handle the [Visit Firefox Personas] button
+    DECL_LINK( VisitPersonas, PushButton* );
 };
 
 SelectPersonaDialog::SelectPersonaDialog( Window *pParent )
     : ModalDialog( pParent, "SelectPersonaDialog", "cui/ui/select_persona_dialog.ui" )
 {
+    PushButton *pButton;
+    get( pButton, "visit_personas" );
+    pButton->SetClickHdl( LINK( this, SelectPersonaDialog, VisitPersonas ) );
+}
+
+IMPL_LINK( SelectPersonaDialog, VisitPersonas, PushButton*, /*pButton*/ )
+{
+    uno::Reference< system::XSystemShellExecute > xSystemShell( system::SystemShellExecute::create( ::comphelper::getProcessComponentContext() ) );
+
+    xSystemShell->execute( "http://www.getpersonas.com", OUString(), system::SystemShellExecuteFlags::URIS_ONLY );
+
+    return 0;
 }
 
 SvxPersonalizationTabPage::SvxPersonalizationTabPage( Window *pParent, const SfxItemSet &rSet )
