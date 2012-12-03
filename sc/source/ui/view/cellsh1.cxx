@@ -1792,13 +1792,17 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     aRangeList.push_back(pRange);
                 }
 
+                sal_Int32 nKey = 0;
                 const ScConditionalFormat* pCondFormat = pDoc->GetCondFormat(aPos.Col(), aPos.Row(), aPos.Tab());
-                ScCondFormatDlg* pCondFormatDlg = NULL;
+                boost::scoped_ptr<ScCondFormatDlg> pCondFormatDlg;
                 if(pCondFormat)
                 {
                     const ScRangeList& rCondFormatRange = pCondFormat->GetRange();
                     if(rCondFormatRange == aRangeList)
-                        pCondFormatDlg = new ScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, pCondFormat, rCondFormatRange, aPos, condformat::dialog::NONE );
+                    {
+                        nKey = pCondFormat->GetKey();
+                        pCondFormatDlg.reset( new ScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, pCondFormat, rCondFormatRange, aPos, condformat::dialog::NONE ) );
+                    }
                 }
 
                 if(!pCondFormatDlg)
@@ -1818,9 +1822,13 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         default:
                             break;
                     }
-                    pCondFormatDlg = new ScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, NULL, aRangeList, aRangeList.GetTopLeftCorner(), eType );
+                    pCondFormatDlg.reset( new ScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, NULL, aRangeList, aRangeList.GetTopLeftCorner(), eType ) );
                 }
-                pCondFormatDlg->Execute();
+                if( pCondFormatDlg->Execute() == RET_OK )
+                {
+                    ScConditionalFormat* pFormat = pCondFormatDlg->GetConditionalFormat();
+                    pData->GetDocShell()->GetDocFunc().ReplaceConditionalFormat(nKey, pFormat, aPos.Tab(), pFormat->GetRange());
+                }
 
                 pScMod->SetRefDialog( nId, false );
 

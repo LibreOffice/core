@@ -381,8 +381,6 @@ ScCondFormatDlg::ScCondFormatDlg(Window* pParent, ScDocument* pDoc, const ScCond
     maBtnAdd.SetClickHdl( LINK( &maCondFormList, ScCondFormatList, AddBtnHdl ) );
     maBtnRemove.SetClickHdl( LINK( &maCondFormList, ScCondFormatList, RemoveBtnHdl ) );
     maEdRange.SetModifyHdl( LINK( this, ScCondFormatDlg, EdRangeModifyHdl ) );
-    maBtnOk.SetClickHdl( LINK( this, ScCondFormatDlg, OkBtnHdl ) );
-    maBtnCancel.SetClickHdl( LINK( this, ScCondFormatDlg, CancelBtnHdl ) );
     maEdRange.SetGetFocusHdl( LINK( this, ScCondFormatDlg, RangeGetFocusHdl ) );
     maEdRange.SetLoseFocusHdl( LINK( this, ScCondFormatDlg, RangeLoseFocusHdl ) );
     FreeResource();
@@ -481,34 +479,6 @@ IMPL_LINK( ScCondFormatDlg, EdRangeModifyHdl, Edit*, pEdit )
         pEdit->SetControlBackground(GetSettings().GetStyleSettings().GetWindowColor());
     else
         pEdit->SetControlBackground(COL_LIGHTRED);
-    return 0;
-}
-
-sal_Bool ScCondFormatDlg::Close()
-{
-    sal_uInt16 nId = 1;
-    EndDialog();
-    return DoClose(nId);
-}
-
-IMPL_LINK_NOARG( ScCondFormatDlg, OkBtnHdl )
-{
-    ScConditionalFormat* pFormat = GetConditionalFormat();
-    SfxObjectShell* pObjectShell = mpDoc->GetDocumentShell();
-    sal_Int32 nKey = 0;
-    if(mpFormat)
-        nKey = mpFormat->GetKey();
-
-    static_cast<ScDocShell*>(pObjectShell)->GetDocFunc().ReplaceConditionalFormat(nKey, pFormat, maPos.Tab(), pFormat->GetRange());
-
-    Close();
-    return 0;
-}
-
-IMPL_LINK_NOARG( ScCondFormatDlg, CancelBtnHdl )
-{
-    Close();
-
     return 0;
 }
 

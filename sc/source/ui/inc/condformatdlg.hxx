@@ -119,10 +119,6 @@ private:
     condformat::dialog::ScCondFormatDialogType meType;
 
     DECL_LINK( EdRangeModifyHdl, Edit* );
-    DECL_LINK( OkBtnHdl, void* );
-    DECL_LINK( CancelBtnHdl, void* );
-
-    virtual sal_Bool Close();
 protected:
 
     virtual void RefInputDone( sal_Bool bForced = false );
