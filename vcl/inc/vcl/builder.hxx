@@ -151,9 +151,9 @@ public:
     template <typename T> T* get(T*& ret, OString sID)
     {
         Window *w = get_by_name(sID);
-        SAL_WARN_IF(!w, "vcl.layout", "widget " << sID.getStr() << " not found in .ui");
+        SAL_WARN_IF(!w, "vcl.layout", "widget \"" << sID.getStr() << "\" not found in .ui");
         SAL_WARN_IF(!dynamic_cast<T*>(w),
-            "vcl.layout", "widget " << sID.getStr() << " needs to have type " << typeid(T).name());
+            "vcl.layout", ".ui widget \"" << sID.getStr() << "\" needs to correspond to vcl type " << typeid(T).name());
         assert(w && dynamic_cast<T*>(w));
         ret = static_cast<T*>(w);
         return ret;
@@ -163,7 +163,7 @@ public:
     {
         Window *w = get_by_name(sID);
         SAL_WARN_IF(w && !dynamic_cast<T*>(w),
-            "vcl.layout", "widget " << sID.getStr() << " needs to have type " << typeid(T).name());
+            "vcl.layout", ".ui widget \"" << sID.getStr() << "\" needs to correspond to vcl type " << typeid(T).name());
         assert(!w || dynamic_cast<T*>(w));
         return static_cast<T*>(w);
     }
