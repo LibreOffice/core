@@ -36,7 +36,7 @@ Globals
             OOOVENDOR The Document Foundation
             OOODOWNLOADNAME 1
             BUILDIDCWS {buildidcws}
-            STARTCENTER_HIDE_EXTERNAL_LINKS 0
+            STARTCENTER_HIDE_EXTERNAL_LINKS 1
         }
     }
 }
@@ -81,7 +81,7 @@ LibreOffice
             STARTCENTER_INFO_URL http://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
-            STARTCENTER_HIDE_EXTERNAL_LINKS 0
+            STARTCENTER_HIDE_EXTERNAL_LINKS 1
         }
         active          1
         compression     5
@@ -141,7 +141,7 @@ LibreOffice_Dev
             STARTCENTER_INFO_URL http://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
-            STARTCENTER_HIDE_EXTERNAL_LINKS 0
+            STARTCENTER_HIDE_EXTERNAL_LINKS 1
         }
         active          1
         compression     5
@@ -179,7 +179,7 @@ URE
             ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
             PACKAGEMAP package_names_ext.txt
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
-            STARTCENTER_HIDE_EXTERNAL_LINKS 0
+            STARTCENTER_HIDE_EXTERNAL_LINKS 1
         }
         active 1
         compression 5
@@ -220,7 +220,7 @@ LibreOffice_SDK
             STARTCENTER_INFO_URL http://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
-            STARTCENTER_HIDE_EXTERNAL_LINKS 0
+            STARTCENTER_HIDE_EXTERNAL_LINKS 1
         }
         active 1
         compression 5
@@ -267,7 +267,7 @@ LibreOffice_Dev_SDK
             STARTCENTER_INFO_URL http://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
-            STARTCENTER_HIDE_EXTERNAL_LINKS 0
+            STARTCENTER_HIDE_EXTERNAL_LINKS 1
         }
         active 1
         compression 5
@@ -308,7 +308,7 @@ LibreOffice_Test
             STARTCENTER_INFO_URL http://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
-            STARTCENTER_HIDE_EXTERNAL_LINKS 0
+            STARTCENTER_HIDE_EXTERNAL_LINKS 1
         }
         active 1
         compression 5
@@ -355,7 +355,7 @@ LibreOffice_Dev_Test
             STARTCENTER_INFO_URL http://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
-            STARTCENTER_HIDE_EXTERNAL_LINKS 0
+            STARTCENTER_HIDE_EXTERNAL_LINKS 1
         }
         active 1
         compression 5
@@ -409,7 +409,7 @@ OxygenOffice
             STARTCENTER_INFO_URL http://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
-            STARTCENTER_HIDE_EXTERNAL_LINKS 0
+            STARTCENTER_HIDE_EXTERNAL_LINKS 1
         }
         active          1
         compression     5
