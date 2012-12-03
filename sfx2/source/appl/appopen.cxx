@@ -566,37 +566,16 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
         sal_Bool bNewWin = sal_False;
         Window* pTopWin = GetTopWindow();
 
-        SvtMiscOptions aMiscOptions;
-        if ( !aMiscOptions.IsExperimentalMode() )
+        SfxTemplateManagerDlg aTemplDlg(NULL);
+        int nRet = aTemplDlg.Execute();
+        if ( nRet == RET_OK )
         {
-            SvtDocumentTemplateDialog* pDocTemplDlg = new SvtDocumentTemplateDialog( NULL );
-            int nRet = pDocTemplDlg->Execute();
-            if ( nRet == RET_OK )
+            rReq.Done();
+            if ( pTopWin != GetTopWindow() )
             {
-                rReq.Done();
-                if ( pTopWin != GetTopWindow() )
-                {
-                    // the dialogue opens a document -> a new TopWindow appears
-                    pTopWin = GetTopWindow();
-                    bNewWin = sal_True;
-                }
-            }
-
-            delete pDocTemplDlg;
-        }
-        else
-        {
-            SfxTemplateManagerDlg aTemplDlg(NULL);
-            int nRet = aTemplDlg.Execute();
-            if ( nRet == RET_OK )
-            {
-                rReq.Done();
-                if ( pTopWin != GetTopWindow() )
-                {
-                    // the dialogue opens a document -> a new TopWindow appears
-                    pTopWin = GetTopWindow();
-                    bNewWin = sal_True;
-                }
+                // the dialogue opens a document -> a new TopWindow appears
+                pTopWin = GetTopWindow();
+                bNewWin = sal_True;
             }
         }
 

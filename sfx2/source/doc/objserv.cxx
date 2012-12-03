@@ -863,91 +863,10 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         case SID_DOCTEMPLATE:
         {
             // save as document templates
-            SvtMiscOptions aMiscOptions;
-            if ( aMiscOptions.IsExperimentalMode() )
-            {
-                SfxTemplateManagerDlg aDlg(NULL);
-                aDlg.setDocumentModel(GetModel());
-                aDlg.setSaveMode(true);
-                aDlg.Execute();
-            }
-            else
-            {
-                SfxDocumentTemplateDlg *pDlg = 0;
-                SfxErrorContext aEc(ERRCTX_SFX_DOCTEMPLATE,GetTitle());
-                SfxDocumentTemplates *pTemplates =  new SfxDocumentTemplates;
-
-                if ( !rReq.GetArgs() )
-                {
-                    pDlg = new SfxDocumentTemplateDlg(0, pTemplates);
-                    if ( RET_OK == pDlg->Execute() && pDlg->GetTemplateName().Len())
-                    {
-                        rReq.AppendItem(SfxStringItem(
-                            SID_TEMPLATE_NAME, pDlg->GetTemplateName()));
-                        rReq.AppendItem(SfxStringItem(
-                            SID_TEMPLATE_REGIONNAME, pDlg->GetRegionName()));
-                    }
-                    else
-                    {
-                        delete pDlg;
-                        rReq.Ignore();
-                        return;
-                    }
-                }
-
-                SFX_REQUEST_ARG(rReq, pRegionItem, SfxStringItem, SID_TEMPLATE_REGIONNAME, sal_False);
-                SFX_REQUEST_ARG(rReq, pNameItem, SfxStringItem, SID_TEMPLATE_NAME, sal_False);
-                SFX_REQUEST_ARG(rReq, pRegionNrItem, SfxUInt16Item, SID_TEMPLATE_REGION, sal_False);
-                if ( (!pRegionItem && !pRegionNrItem ) || !pNameItem )
-                {
-                    DBG_ASSERT( rReq.IsAPI(), "non-API call without Arguments" );
-    #ifndef DISABLE_SCRIPTING
-                    SbxBase::SetError( SbxERR_WRONG_ARGS );
-    #endif
-                    rReq.Ignore();
-                    return;
-                }
-
-                ::rtl::OUString aTemplateName = pNameItem->GetValue();
-                ::rtl::OUString aTemplateGroup;
-                if ( pRegionItem )
-                    aTemplateGroup = pRegionItem->GetValue();
-                else
-                    // pRegionNrItem must not be NULL, it was just checked
-                    aTemplateGroup = pTemplates->GetFullRegionName( pRegionNrItem->GetValue() );
-                // check Group and Name
-                delete pTemplates;
-
-                sal_Bool bOk = sal_False;
-                try
-                {
-                    uno::Reference< frame::XStorable > xStorable( GetModel(), uno::UNO_QUERY_THROW );
-                    uno::Reference< frame::XDocumentTemplates > xTemplates(
-                                    frame::DocumentTemplates::create(comphelper::getProcessComponentContext()) );
-
-                    bOk = xTemplates->storeTemplate( aTemplateGroup, aTemplateName, xStorable );
-                }
-                catch( uno::Exception& )
-                {
-                }
-
-                DELETEX(pDlg);
-
-                rReq.SetReturnValue( SfxBoolItem( 0, bOk ) );
-                if ( bOk )
-                {
-                    // update the Organizer runtime cache from the template
-                    // component if the cache has already been created
-                    // TODO/LATER: get rid of this cache duplication
-                    SfxDocumentTemplates aTemplates;
-                    aTemplates.ReInitFromComponent();
-                }
-                else
-                {
-                    ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
-                    return;
-                }
-            }
+            SfxTemplateManagerDlg aDlg(NULL);
+            aDlg.setDocumentModel(GetModel());
+            aDlg.setSaveMode(true);
+            aDlg.Execute();
 
             break;
         }
