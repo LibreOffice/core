@@ -958,15 +958,16 @@ namespace sfx2
     TaskPaneController_Impl::~TaskPaneController_Impl()
     {
         m_rTaskPane.GetPanelDeck().RemoveListener( *this );
+        int i = 0;
 
         // remove the panels which are not under the control of the panel deck currently
         for (   PanelDescriptors::iterator panelPos = m_aPanelRepository.begin();
                 panelPos != m_aPanelRepository.end();
-                ++panelPos
+                ++panelPos, ++i
             )
         {
             if ( panelPos->bHidden )
-                panelPos->pPanel->Dispose();
+                impl_togglePanelVisibility( i );
         }
         m_aPanelRepository.clear();
     }
