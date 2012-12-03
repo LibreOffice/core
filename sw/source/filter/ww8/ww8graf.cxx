@@ -2578,7 +2578,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
     if(pObject)
     {
-        sal_uInt16 nCount = pObject ? pObject->GetUserDataCount() : 0;
+        sal_uInt16 nCount = pObject->GetUserDataCount();
         if(nCount)
         {
             OUString lnName, aObjName, aTarFrm;
@@ -2589,7 +2589,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                         && pData->GetId() == SW_UD_IMAPDATA)
                 {
                     SwMacroInfo* macInf = dynamic_cast<SwMacroInfo*>(pData);
-                    if( macInf->GetShapeId() == pF->nSpId)
+                    if( macInf && macInf->GetShapeId() == pF->nSpId)
                     {
                         lnName = macInf->GetHlink();
                         aObjName = macInf->GetName();
