@@ -52,8 +52,8 @@ const sal_uInt8 EXC_COLROW_MAN          = 0x08;
 
 XclImpColRowSettings::XclImpColRowSettings( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
-    maWidths( MAXCOLCOUNT, 0 ),
-    maColFlags( MAXCOLCOUNT, 0 ),
+    maColWidths(0, MAXCOLCOUNT, 0),
+    maColFlags(0, MAXCOLCOUNT, 0),
     maRowHeights(0, MAXROWCOUNT, 0),
     maRowFlags(0, MAXROWCOUNT, 0),
     maHiddenRows(0, MAXROWCOUNT, false),
@@ -88,7 +88,6 @@ void XclImpColRowSettings::SetDefWidth( sal_uInt16 nDefWidth, bool bStdWidthRec 
 
 void XclImpColRowSettings::SetWidthRange( SCCOL nScCol1, SCCOL nScCol2, sal_uInt16 nWidth )
 {
-    OSL_ENSURE( (nScCol1 <= nScCol2) && ValidCol( nScCol2 ), "XclImpColRowSettings::SetColWidthRange - invalid column range" );
     nScCol2 = ::std::min( nScCol2, MAXCOL );
     if (nScCol2 == 256)
         // In BIFF8, the column range is 0-255, and the use of 256 probably
@@ -97,24 +96,28 @@ void XclImpColRowSettings::SetWidthRange( SCCOL nScCol1, SCCOL nScCol2, sal_uInt
         nScCol2 = MAXCOL;
 
     nScCol1 = ::std::min( nScCol1, nScCol2 );
-    ::std::fill( maWidths.begin() + nScCol1, maWidths.begin() + nScCol2 + 1, nWidth );
-    for( ScfUInt8Vec::iterator aIt = maColFlags.begin() + nScCol1, aEnd = maColFlags.begin() + nScCol2 + 1; aIt != aEnd; ++aIt )
-        ::set_flag( *aIt, EXC_COLROW_USED );
+    maColWidths.insert_back(nScCol1, nScCol2+1, nWidth);
+
+    // We need to apply flag values individually since all flag values are aggregated for each column.
+    for (SCCOL nCol = nScCol1; nCol <= nScCol2; ++nCol)
+        ApplyColFlag(nCol, EXC_COLROW_USED);
 }
 
 void XclImpColRowSettings::HideCol( SCCOL nScCol )
 {
-    if( ValidCol( nScCol ) )
-        ::set_flag( maColFlags[ nScCol ], EXC_COLROW_HIDDEN );
+    if (!ValidCol(nScCol))
+        return;
+
+    ApplyColFlag(nScCol, EXC_COLROW_HIDDEN);
 }
 
 void XclImpColRowSettings::HideColRange( SCCOL nScCol1, SCCOL nScCol2 )
 {
-    OSL_ENSURE( (nScCol1 <= nScCol2) && ValidCol( nScCol2 ), "XclImpColRowSettings::HideColRange - invalid column range" );
     nScCol2 = ::std::min( nScCol2, MAXCOL );
     nScCol1 = ::std::min( nScCol1, nScCol2 );
-    for( ScfUInt8Vec::iterator aIt = maColFlags.begin() + nScCol1, aEnd = maColFlags.begin() + nScCol2 + 1; aIt != aEnd; ++aIt )
-        ::set_flag( *aIt, EXC_COLROW_HIDDEN );
+
+    for (SCCOL nCol = nScCol1; nCol <= nScCol2; ++nCol)
+        ApplyColFlag(nCol, EXC_COLROW_HIDDEN);
 }
 
 void XclImpColRowSettings::SetDefHeight( sal_uInt16 nDefHeight, sal_uInt16 nFlags )
@@ -207,15 +210,23 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
 
     // column widths ----------------------------------------------------------
 
+    maColWidths.build_tree();
     for( SCCOL nScCol = 0; nScCol <= MAXCOL; ++nScCol )
     {
-        sal_uInt16 nWidth = ::get_flag( maColFlags[ nScCol ], EXC_COLROW_USED ) ? maWidths[ nScCol ] : mnDefWidth;
+        sal_uInt16 nWidth = mnDefWidth;
+        if (GetColFlag(nScCol, EXC_COLROW_USED))
+        {
+            sal_uInt16 nTmp;
+            if (maColWidths.search_tree(nScCol, nTmp))
+                nWidth = nTmp;
+        }
+
         /*  Hidden columns: remember hidden state, but do not set hidden state
             in document here. Needed for #i11776#, no HIDDEN flags in the
             document, until filters and outlines are inserted. */
         if( nWidth == 0 )
         {
-            ::set_flag( maColFlags[ nScCol ], EXC_COLROW_HIDDEN );
+            ApplyColFlag(nScCol, EXC_COLROW_HIDDEN);
             nWidth = mnDefWidth;
         }
         rDoc.SetColWidthOnly( nScCol, nScTab, nWidth );
@@ -233,7 +244,7 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
     if (!maRowHeights.is_tree_valid())
         return;
 
-    RowFlagsType::const_iterator itrFlags = maRowFlags.begin(), itrFlagsEnd = maRowFlags.end();
+    ColRowFlagsType::const_iterator itrFlags = maRowFlags.begin(), itrFlagsEnd = maRowFlags.end();
     SCROW nPrevRow = -1;
     sal_uInt8 nPrevFlags = 0;
     for (; itrFlags != itrFlagsEnd; ++itrFlags)
@@ -295,7 +306,7 @@ void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
 
     // hide the columns
     for( SCCOL nScCol = 0; nScCol <= MAXCOL; ++nScCol )
-        if( ::get_flag( maColFlags[ nScCol ], EXC_COLROW_HIDDEN ) )
+        if (GetColFlag(nScCol, EXC_COLROW_HIDDEN))
             rDoc.ShowCol( nScCol, nScTab, false );
 
     // #i38093# rows hidden by filter need extra flag
@@ -335,7 +346,7 @@ void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
         {
             if (bPrevHidden)
             {
-                rDoc.SetRowHidden(nPrevRow, nRow-1, nScTab, true);        // #i116460# SetRowHidden instead of ShowRow
+                rDoc.ShowRows(nPrevRow, nRow-1, nScTab, false);
                 // #i38093# rows hidden by filter need extra flag
                 if (nFirstFilterScRow <= nPrevRow && nPrevRow <= nLastFilterScRow)
                 {
@@ -352,6 +363,31 @@ void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
     // #i47438# if default row format is hidden, hide remaining rows
     if( ::get_flag( mnDefRowFlags, EXC_DEFROW_HIDDEN ) && (mnLastScRow < MAXROW) )
         rDoc.ShowRows( mnLastScRow + 1, MAXROW, nScTab, false );
+}
+
+void XclImpColRowSettings::ApplyColFlag(SCCOL nCol, sal_uInt8 nNewVal)
+{
+    // Get the original flag value.
+    sal_uInt8 nFlagVal = 0;
+    std::pair<ColRowFlagsType::const_iterator,bool> r = maColFlags.search(nCol, nFlagVal);
+    if (!r.second)
+        // Search failed.
+        return;
+
+    ::set_flag(nFlagVal, nNewVal);
+
+    // Re-insert the flag value.
+    maColFlags.insert(r.first, nCol, nCol+1, nFlagVal);
+}
+
+bool XclImpColRowSettings::GetColFlag(SCCOL nCol, sal_uInt8 nMask) const
+{
+    sal_uInt8 nFlagVal = 0;
+    if (!maColFlags.search(nCol, nFlagVal).second)
+        return false;
+        // Search failed.
+
+    return ::get_flag(nFlagVal, nMask);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

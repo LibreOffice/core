@@ -57,15 +57,19 @@ public:
     void                ConvertHiddenFlags( SCTAB nScTab );
 
 private:
-    ScfUInt16Vec        maWidths;           /// Column widths in twips.
-    ScfUInt8Vec         maColFlags;         /// Flags for all columns.
-                                            ///
-    typedef ::mdds::flat_segment_tree<SCROW, sal_uInt16> RowHeightsType;
-    typedef ::mdds::flat_segment_tree<SCROW, sal_uInt8>  RowFlagsType;
+    void ApplyColFlag(SCCOL nCol, sal_uInt8 nNewVal);
+    bool GetColFlag(SCCOL nCol, sal_uInt8 nMask) const;
+
+private:
+    typedef ::mdds::flat_segment_tree<SCROW, sal_uInt16> WidthHeightStoreType;
+    typedef ::mdds::flat_segment_tree<SCROW, sal_uInt8>  ColRowFlagsType;
     typedef ::mdds::flat_segment_tree<SCROW, bool>       RowHiddenType;
-    RowHeightsType      maRowHeights;
-    RowFlagsType        maRowFlags;
-    RowHiddenType       maHiddenRows;
+
+    WidthHeightStoreType maColWidths;
+    ColRowFlagsType      maColFlags;
+    WidthHeightStoreType maRowHeights;
+    ColRowFlagsType      maRowFlags;
+    RowHiddenType        maHiddenRows;
 
     SCROW               mnLastScRow;
 
