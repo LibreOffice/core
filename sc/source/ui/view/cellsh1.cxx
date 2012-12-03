@@ -1819,8 +1819,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             break;
                     }
                     pCondFormatDlg = new ScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, NULL, aRangeList, aRangeList.GetTopLeftCorner(), eType );
-                    pCondFormatDlg->Execute();
                 }
+                pCondFormatDlg->Execute();
 
             }
             break;
