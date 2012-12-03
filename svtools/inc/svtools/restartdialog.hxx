@@ -34,6 +34,7 @@ enum RestartReason {
         // %PRODUCTNAME must be restarted."
 };
 
+// Must be called with the solar mutex locked:
 SVT_DLLPUBLIC void executeRestartDialog(
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
         const & context,
