@@ -13,6 +13,13 @@
 #include <officecfg/Office/Common.hxx>
 #include <vcl/msgbox.hxx>
 
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
+#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
+
 using namespace com::sun::star;
 
 /** Dialog that will allow the user to choose a Persona to use.
@@ -134,8 +141,37 @@ void SvxPersonalizationTabPage::Reset( const SfxItemSet & )
 
 IMPL_LINK( SvxPersonalizationTabPage, SelectBackground, PushButton*, /*pButton*/ )
 {
-    // TODO m_pOwnBackground->Check(); if something selected
-    // TODO parse the results
+    uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+    if ( !xFactory.is() )
+        return 0;
+
+    uno::Reference< ui::dialogs::XFilePicker > xFilePicker( xFactory->createInstance( "com.sun.star.ui.dialogs.FilePicker" ), uno::UNO_QUERY );
+    if ( !xFilePicker.is() )
+        return 0;
+
+    xFilePicker->setMultiSelectionMode( false );
+
+    uno::Reference< ui::dialogs::XFilePickerControlAccess > xController( xFilePicker, uno::UNO_QUERY );
+    if ( xController.is() )
+        xController->setValue( ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, uno::makeAny( sal_True ) );
+
+    uno::Reference< ui::dialogs::XFilterManager > xFilterMgr( xFilePicker, uno::UNO_QUERY );
+    if ( xFilterMgr.is() )
+        xFilterMgr->appendFilter( "Background images (*.jpg;*.png)", "*.jpg;*.png" ); // TODO localize
+
+    while ( xFilePicker->execute() == ui::dialogs::ExecutableDialogResults::OK )
+    {
+        OUString aFile( xFilePicker->getFiles()[0] );
+
+        if ( aFile.startsWith( "file:///" ) && ( aFile.endsWith( ".png" ) || aFile.endsWith( ".jpg" ) ) )
+        {
+            m_aBackgroundURL = aFile;
+            m_pOwnBackground->Check();
+            break;
+        }
+
+        // TODO display what is wrong (not a file:// or not .png / .jpg)
+    }
 
     return 0;
 }
