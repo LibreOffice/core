@@ -1522,13 +1522,16 @@ static uno::Reference< beans::XPropertySetInfo > lcl_getPropertySetInfo( SfxStyl
         break;
         case SFX_STYLE_FAMILY_PARA:
         {
+            static uno::Reference< beans::XPropertySetInfo > xCondParaRef;
             static uno::Reference< beans::XPropertySetInfo >  xParaRef;
             if(!xParaRef.is())
             {
-                sal_uInt16 nMapId = bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : PROPERTY_MAP_PARA_STYLE;
-                xParaRef = aSwMapProvider.GetPropertySet(nMapId)->getPropertySetInfo();
+                xCondParaRef = aSwMapProvider.GetPropertySet(
+                    PROPERTY_MAP_CONDITIONAL_PARA_STYLE)->getPropertySetInfo();
+                xParaRef = aSwMapProvider.GetPropertySet(
+                    PROPERTY_MAP_PARA_STYLE)->getPropertySetInfo();
             }
-            xRet = xParaRef;
+            xRet = bIsConditional ? xCondParaRef : xParaRef;
         }
         break;
         case SFX_STYLE_FAMILY_PAGE     :
