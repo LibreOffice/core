@@ -1822,6 +1822,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 }
                 pCondFormatDlg->Execute();
 
+                pScMod->SetRefDialog( nId, false );
+
+
             }
             break;
 
