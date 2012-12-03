@@ -1,0 +1,54 @@
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef _SCA_PRICING_HRC
+#define _SCA_PRICING_HRC
+
+
+#define PRICING_RESOURCE_START                 1000
+
+#define RID_PRICING_FUNCTION_DESCRIPTIONS   PRICING_RESOURCE_START
+#define RID_PRICING_FUNCTION_NAMES          (PRICING_RESOURCE_START+1000)
+#define RID_PRICING_DEFFUNCTION_NAMES       (PRICING_RESOURCE_START+2000)
+
+
+#define PRICING_FUNCDESC_START              (RID_PRICING_FUNCTION_DESCRIPTIONS+1)
+
+#define PRICING_FUNCDESC_Opt_barrier        (PRICING_FUNCDESC_START)
+#define PRICING_FUNCDESC_Opt_touch          (PRICING_FUNCDESC_START+1)
+#define PRICING_FUNCDESC_Opt_prob_hit       (PRICING_FUNCDESC_START+2)
+#define PRICING_FUNCDESC_Opt_prob_inmoney   (PRICING_FUNCDESC_START+3)
+
+
+#define PRICING_FUNCNAME_START              (RID_PRICING_FUNCTION_NAMES+1)
+
+#define PRICING_FUNCNAME_Opt_barrier        (PRICING_FUNCNAME_START)
+#define PRICING_FUNCNAME_Opt_touch          (PRICING_FUNCNAME_START+1)
+#define PRICING_FUNCNAME_Opt_prob_hit       (PRICING_FUNCNAME_START+2)
+#define PRICING_FUNCNAME_Opt_prob_inmoney   (PRICING_FUNCNAME_START+3)
+
+
+#define PRICING_DEFFUNCNAME_START           (RID_PRICING_DEFFUNCTION_NAMES+1)
+
+#define PRICING_DEFFUNCNAME_Opt_barrier      (PRICING_DEFFUNCNAME_START)
+#define PRICING_DEFFUNCNAME_Opt_touch        (PRICING_DEFFUNCNAME_START+1)
+#define PRICING_DEFFUNCNAME_Opt_prob_hit     (PRICING_DEFFUNCNAME_START+2)
+#define PRICING_DEFFUNCNAME_Opt_prob_inmoney (PRICING_DEFFUNCNAME_START+3)
+
+
+#endif
