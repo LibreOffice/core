@@ -2481,29 +2481,42 @@ sal_Bool Bitmap::ImplScaleConvolution(
     {
         const sal_uInt32 nInBetweenSizeHorFirst(nHeight * nNewWidth);
         const sal_uInt32 nInBetweenSizeVerFirst(nNewHeight * nWidth);
+        Bitmap aSource(*this);
 
         if(nInBetweenSizeHorFirst < nInBetweenSizeVerFirst)
         {
             if(bScaleHor)
             {
-                bResult = ImplScaleConvolutionHor(*this, aResult, fScaleX, aKernel);
+                bResult = ImplScaleConvolutionHor(aSource, aResult, fScaleX, aKernel);
             }
 
             if(bResult && bScaleVer)
             {
-                bResult = ImplScaleConvolutionVer(*this, aResult, fScaleY, aKernel);
+                if(bScaleHor)
+                {
+                    // copy partial result, independent of color depth
+                    aSource = aResult;
+                }
+
+                bResult = ImplScaleConvolutionVer(aSource, aResult, fScaleY, aKernel);
             }
         }
         else
         {
             if(bScaleVer)
             {
-                bResult = ImplScaleConvolutionVer(*this, aResult, fScaleY, aKernel);
+                bResult = ImplScaleConvolutionVer(aSource, aResult, fScaleY, aKernel);
             }
 
             if(bResult && bScaleHor)
             {
-                bResult = ImplScaleConvolutionHor(*this, aResult, fScaleX, aKernel);
+                if(bScaleVer)
+                {
+                    // copy partial result, independent of color depth
+                    aSource = aResult;
+                }
+
+                bResult = ImplScaleConvolutionHor(aSource, aResult, fScaleX, aKernel);
             }
         }
     }
