@@ -125,7 +125,7 @@ protected:
 
 
 public:
-    ScCondFormatDlg(Window* pWindow, ScDocument* pDoc, const ScConditionalFormat* pFormat,
+    SC_DLLPUBLIC ScCondFormatDlg(Window* pWindow, ScDocument* pDoc, const ScConditionalFormat* pFormat,
             const ScRangeList& rRange, const ScAddress& rPos, condformat::dialog::ScCondFormatDialogType eType);
     virtual ~ScCondFormatDlg();
 

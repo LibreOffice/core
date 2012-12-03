@@ -1771,7 +1771,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_OPENDLG_DATABAR:
             {
                 sal_uInt16 nId = 1;
-
                 pScMod->SetRefDialog( nId, true );
 
                 ScRangeList aRangeList;

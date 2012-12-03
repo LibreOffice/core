@@ -183,9 +183,6 @@ ScCondFormatManagerDlg::ScCondFormatManagerDlg(Window* pParent, ScDocument* pDoc
     maBtnEdit.SetClickHdl(LINK(this, ScCondFormatManagerDlg, EditBtnHdl));
     maBtnAdd.SetClickHdl(LINK(this, ScCondFormatManagerDlg, AddBtnHdl));
     maCtrlManager.GetListControl().SetDoubleClickHdl(LINK(this, ScCondFormatManagerDlg, EditBtnHdl));
-
-    maBtnAdd.Disable();
-    maBtnEdit.Disable();
 }
 
 ScCondFormatManagerDlg::~ScCondFormatManagerDlg()
@@ -224,21 +221,29 @@ IMPL_LINK_NOARG(ScCondFormatManagerDlg, EditBtnHdl)
     if(!pFormat)
         return 0;
 
-    boost::scoped_ptr<ScCondFormatDlg> pDlg;//(new ScCondFormatDlg(this, mpDoc, pFormat, pFormat->GetRange(),
-                                              //  pFormat->GetRange().GetTopLeftCorner(), condformat::dialog::NONE));
-    /*
+    sal_uInt16 nId = 1;
+    ScModule* pScMod = SC_MOD();
+    pScMod->SetRefDialog( nId, true );
+    boost::scoped_ptr<ScCondFormatDlg> pDlg(new ScCondFormatDlg(this, mpDoc, pFormat, pFormat->GetRange(),
+                                               pFormat->GetRange().GetTopLeftCorner(), condformat::dialog::NONE));
+    Disable();
     if(pDlg->Execute() == RET_OK)
     {
         sal_Int32 nKey = pFormat->GetKey();
         mpFormatList->erase(nKey);
         ScConditionalFormat* pNewFormat = pDlg->GetConditionalFormat();
-        pNewFormat->SetKey(nKey);
-        mpFormatList->InsertNew(pNewFormat);
-        maCtrlManager.Update();
-    }
-    */
+        if(pNewFormat)
+        {
+            pNewFormat->SetKey(nKey);
+            mpFormatList->InsertNew(pNewFormat);
+        }
 
-    mbModified = true;
+        maCtrlManager.Update();
+        mbModified = true;
+    }
+    Enable();
+
+    pScMod->SetRefDialog( nId, false );
 
     return 0;
 }
@@ -262,8 +267,12 @@ sal_uInt32 FindKey(ScConditionalFormatList* pFormatList)
 
 IMPL_LINK_NOARG(ScCondFormatManagerDlg, AddBtnHdl)
 {
-    boost::scoped_ptr<ScCondFormatDlg> pDlg;//(new ScCondFormatDlg(this, mpDoc, NULL, ScRangeList(),
-                                              //  maPos, condformat::dialog::CONDITION));
+    sal_uInt16 nId = 1;
+    ScModule* pScMod = SC_MOD();
+    pScMod->SetRefDialog( nId, true );
+    boost::scoped_ptr<ScCondFormatDlg> pDlg(new ScCondFormatDlg(this, mpDoc, NULL, ScRangeList(),
+                                               maPos, condformat::dialog::CONDITION));
+    Disable();
     if(pDlg->Execute() == RET_OK)
     {
         ScConditionalFormat* pNewFormat = pDlg->GetConditionalFormat();
@@ -276,6 +285,8 @@ IMPL_LINK_NOARG(ScCondFormatManagerDlg, AddBtnHdl)
 
         mbModified = true;
     }
+    Enable();
+    pScMod->SetRefDialog( nId, false );
 
     return 0;
 }
