@@ -26,16 +26,21 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Module_Module,scaddins))
+$(eval $(call gb_AllLangResTarget_AllLangResTarget,pricing))
 
-$(eval $(call gb_Module_add_targets,scaddins,\
-    AllLangResTarget_analysis \
-    AllLangResTarget_date \
-    AllLangResTarget_pricing \
-	InternalUnoApi_scaddins \
-    Library_analysis \
-    Library_date \
-    Library_pricing \
+$(eval $(call gb_AllLangResTarget_add_srs,pricing,\
+    scaddins/pricing \
+))
+
+$(eval $(call gb_SrsTarget_SrsTarget,scaddins/pricing))
+
+$(eval $(call gb_SrsTarget_set_include,scaddins/pricing,\
+    $$(INCLUDE) \
+    -I$(SRCDIR)/scaddins/source/pricing \
+))
+
+$(eval $(call gb_SrsTarget_add_files,scaddins/pricing,\
+    scaddins/source/pricing/pricing.src \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -84,6 +84,7 @@ gb_MERGEDLIBS += \
 	hwp \
 	hyphen \
 	lnth \
+	pricing \
 	spell \
 	xstor \
 

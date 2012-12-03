@@ -323,6 +323,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     pcr \
     pdffilter \
     placeware \
+    pricing \
     protocolhandler \
     qstart_gtk \
     res \

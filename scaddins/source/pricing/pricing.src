@@ -1,0 +1,436 @@
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+#include "pricing.hrc"
+
+
+// function and parameter description
+Resource RID_PRICING_FUNCTION_DESCRIPTIONS
+{
+    Resource PRICING_FUNCDESC_Opt_barrier
+    {
+        String 1    // description
+        {
+            Text [ en-US ] = "pricing of a barrier option";
+        };
+
+        String 2 // name of parameter 1
+        {
+            Text [ en-US ] = "spot";
+        };
+        String 3 // description of parameter 1
+        {
+            Text [ en-US ] = "price/value of the underlying asset";
+        };
+
+        String 4 // name of parameter 2
+        {
+            Text [ en-US ] = "vol";
+        };
+        String 5 // description of parameter 2
+        {
+            Text [ en-US ] = "annual volatility of the underlying asset";
+        };
+
+        String 6 // name of parameter 3
+        {
+            Text [ en-US ] = "r";
+        };
+        String 7 // description of parameter 3
+        {
+            Text [ en-US ] = "interest rate (continuously compounded)";
+        };
+
+        String 8 // name of parameter 4
+        {
+            Text [ en-US ] = "rf";
+        };
+        String 9 // description of parameter 4
+        {
+            Text [ en-US ] = "foreign interest rate (continuously compounded)";
+        };
+
+        String 10 // name of parameter 5
+        {
+            Text [ en-US ] = "T";
+        };
+        String 11 // description of parameter 5
+        {
+            Text [ en-US ] = "time to maturity of the option in years";
+        };
+
+        String 12 // name of parameter 6
+        {
+            Text [ en-US ] = "strike";
+        };
+        String 13 // description of parameter 6
+        {
+            Text [ en-US ] = "strike level of the option";
+        };
+
+        String 14 // name of parameter 7
+        {
+            Text [ en-US ] = "barrier_low";
+        };
+        String 15 // description of parameter 7
+        {
+            Text [ en-US ] = "lower barrier (set to 0 for no lower barrier)";
+        };
+
+        String 16 // name of parameter 8
+        {
+            Text [ en-US ] = "barrier_up";
+        };
+        String 17 // description of parameter 8
+        {
+            Text [ en-US ] = "upper barrier (set to 0 for no upper barrier)";
+        };
+
+        String 18 // name of parameter 8
+        {
+            Text [ en-US ] = "rebate";
+        };
+        String 19 // description of parameter 8
+        {
+            Text [ en-US ] = "amount of money paid at maturity if barrier was hit";
+        };
+
+        String 20 // name of parameter 10
+        {
+            Text [ en-US ] = "put/call";
+        };
+        String 21 // description of parameter 10
+        {
+            Text [ en-US ] = "string to define if the option is a (p)ut or a (c)all";
+        };
+
+        String 22 // name of parameter 11
+        {
+            Text [ en-US ] = "knock in/out";
+        };
+        String 23 // description of parameter 11
+        {
+            Text [ en-US ] = "string to define if the option is of type knock-(i)n or knock-(o)ut";
+        };
+
+        String 24 // name of parameter 12
+        {
+            Text [ en-US ] = "barrier_type";
+        };
+        String 25 // description of parameter 12
+        {
+            Text [ en-US ] = "string to define whether the barrier is observed (c)ontinuously or only at the (e)nd/maturity";
+        };
+
+        String 26 // name of parameter 13
+        {
+            Text [ en-US ] = "greek";
+        };
+        String 27 // description of parameter 13
+        {
+            Text [ en-US ] = "optional parameter, if left out then the function simply returns the option price; if set, the function returns price sensitivities (Greeks) to one of the input parameters; possible values are (d)elta, (g)amma, (t)heta, v(e)ga, v(o)lga, v(a)nna, (r)ho, rho(f)";
+        };
+    };
+
+
+
+    Resource PRICING_FUNCDESC_Opt_touch
+    {
+        String 1    // description
+        {
+            Text [ en-US ] = "pricing of a touch/no-touch option";
+        };
+
+        String 2 // name of parameter 1
+        {
+            Text [ en-US ] = "spot";
+        };
+        String 3 // description of parameter 1
+        {
+            Text [ en-US ] = "price/value of the underlying asset";
+        };
+
+        String 4 // name of parameter 2
+        {
+            Text [ en-US ] = "vol";
+        };
+        String 5 // description of parameter 2
+        {
+            Text [ en-US ] = "annual volatility of the underlying asset";
+        };
+
+        String 6 // name of parameter 3
+        {
+            Text [ en-US ] = "r";
+        };
+        String 7 // description of parameter 3
+        {
+            Text [ en-US ] = "interest rate (continuously compounded)";
+        };
+
+        String 8 // name of parameter 4
+        {
+            Text [ en-US ] = "rf";
+        };
+        String 9 // description of parameter 4
+        {
+            Text [ en-US ] = "foreign interest rate (continuously compounded)";
+        };
+
+        String 10 // name of parameter 5
+        {
+            Text [ en-US ] = "T";
+        };
+        String 11 // description of parameter 5
+        {
+            Text [ en-US ] = "time to maturity of the option in years";
+        };
+
+        String 12 // name of parameter 6
+        {
+            Text [ en-US ] = "barrier_low";
+        };
+        String 13 // description of parameter 6
+        {
+            Text [ en-US ] = "lower barrier (set to 0 for no lower barrier)";
+        };
+
+        String 14 // name of parameter 7
+        {
+            Text [ en-US ] = "barrier_up";
+        };
+        String 15 // description of parameter 7
+        {
+            Text [ en-US ] = "upper barrier (set to 0 for no upper barrier)";
+        };
+
+        String 16 // name of parameter 8
+        {
+            Text [ en-US ] = "foreign/domestic";
+        };
+        String 17 // description of parameter 8
+        {
+            Text [ en-US ] = "string to define if the option pays one unit of (d)omestic currency (cash or nothing) or (f)oreign currency (asset or nothing)";
+        };
+
+        String 18 // name of parameter 9
+        {
+            Text [ en-US ] = "knock in/out";
+        };
+        String 19 // description of parameter 9
+        {
+            Text [ en-US ] = "string to define if the option is of type knock-(i)n (touch) or knock-(o)ut (no-touch)";
+        };
+
+        String 20 // name of parameter 10
+        {
+            Text [ en-US ] = "barrier_type";
+        };
+        String 21 // description of parameter 10
+        {
+            Text [ en-US ] = "string to define whether the barrier is observed (c)ontinuously or only at the (e)nd/maturity";
+        };
+
+        String 22 // name of parameter 11
+        {
+            Text [ en-US ] = "greek";
+        };
+        String 23 // description of parameter 11
+        {
+            Text [ en-US ] = "optional parameter, if left out then the function simply returns the option price; if set, the function returns price sensitivities (Greeks) to one of the input parameters; possible values are (d)elta, (g)amma, (t)heta, v(e)ga, v(o)lga, v(a)nna, (r)ho, rho(f)";
+        };
+    };
+
+
+    Resource PRICING_FUNCDESC_Opt_prob_hit
+    {
+        String 1    // description
+        {
+            Text [ en-US ] = "probability that an asset hits a barrier assuming it follows dS/S = mu dt + vol dW";
+        };
+
+        String 2 // name of parameter 1
+        {
+            Text [ en-US ] = "spot";
+        };
+        String 3 // description of parameter 1
+        {
+            Text [ en-US ] = "price/value S of the underlying asset";
+        };
+
+        String 4 // name of parameter 2
+        {
+            Text [ en-US ] = "vol";
+        };
+        String 5 // description of parameter 2
+        {
+            Text [ en-US ] = "annual volatility of the underlying asset";
+        };
+
+        String 6 // name of parameter 3
+        {
+            Text [ en-US ] = "drift";
+        };
+        String 7 // description of parameter 3
+        {
+            Text [ en-US ] = "parameter mu in dS/S = mu dt + vol dW";
+        };
+
+        String 8 // name of parameter 4
+        {
+            Text [ en-US ] = "T";
+        };
+        String 9 // description of parameter 4
+        {
+            Text [ en-US ] = "time to maturity";
+        };
+
+        String 10 // name of parameter 5
+        {
+            Text [ en-US ] = "barrier_low";
+        };
+        String 11 // description of parameter 5
+        {
+            Text [ en-US ] = "lower barrier (set to 0 for no lower barrier)";
+        };
+
+        String 12 // name of parameter 6
+        {
+            Text [ en-US ] = "barrier_up";
+        };
+        String 13 // description of parameter 6
+        {
+            Text [ en-US ] = "upper barrier (set to 0 for no upper barrier)";
+        };
+    };
+
+
+    Resource PRICING_FUNCDESC_Opt_prob_inmoney
+    {
+        String 1    // description
+        {
+            Text [ en-US ] = "probability that an asset will at maturity end up between two barrier levels, assuming it follows dS/S = mu dt + vol dW (if the last two optional parameters (strike, put/call) are specified, the probability of S_T in [strike, upper barrier] for a call and S_T in [lower barrier, strike] for a put will be returned)";
+        };
+
+        String 2 // name of parameter 1
+        {
+            Text [ en-US ] = "spot";
+        };
+        String 3 // description of parameter 1
+        {
+            Text [ en-US ] = "price/value of the asset";
+        };
+
+        String 4 // name of parameter 2
+        {
+            Text [ en-US ] = "vol";
+        };
+        String 5 // description of parameter 2
+        {
+            Text [ en-US ] = "annual volatility of the asset";
+        };
+
+        String 6 // name of parameter 3
+        {
+            Text [ en-US ] = "drift";
+        };
+        String 7 // description of parameter 3
+        {
+            Text [ en-US ] = "parameter mu from dS/S = mu dt + vol dW";
+        };
+
+        String 8 // name of parameter 4
+        {
+            Text [ en-US ] = "T";
+        };
+        String 9 // description of parameter 4
+        {
+            Text [ en-US ] = "time to maturity in years";
+        };
+
+        String 10 // name of parameter 5
+        {
+            Text [ en-US ] = "barrier_low";
+        };
+        String 11 // description of parameter 5
+        {
+            Text [ en-US ] = "lower barrier (set to 0 for no lower barrier)";
+        };
+
+        String 12 // name of parameter 6
+        {
+            Text [ en-US ] = "barrier_up";
+        };
+        String 13 // description of parameter 6
+        {
+            Text [ en-US ] = "upper barrier (set to 0 for no upper barrier)";
+        };
+
+        String 14 // name of parameter 7
+        {
+            Text [ en-US ] = "put/call";
+        };
+        String 15 // description of parameter 7
+        {
+            Text [ en-US ] = "optional (p)ut/(c)all indicator";
+        };
+
+        String 16 // name of parameter 8
+        {
+            Text [ en-US ] = "strike";
+        };
+        String 17 // description of parameter 8
+        {
+            Text [ en-US ] = "optional strike level";
+        };
+    };
+
+
+
+
+};
+
+
+// function names as accessible from cells
+Resource RID_PRICING_FUNCTION_NAMES
+{
+    String PRICING_FUNCNAME_Opt_barrier
+    {
+        Text [ en-US ] = "OPT_BARRIER";
+    };
+    String PRICING_FUNCNAME_Opt_touch
+    {
+        Text [ en-US ] = "OPT_TOUCH";
+    };
+    String PRICING_FUNCNAME_Opt_prob_hit
+    {
+        Text [ en-US ] = "OPT_PROB_HIT";
+    };
+    String PRICING_FUNCNAME_Opt_prob_inmoney
+    {
+        Text [ en-US ] = "OPT_PROB_INMONEY";
+    };
+
+};
+
+// for translating function names
+Resource RID_PRICING_DEFFUNCTION_NAMES
+{
+
+};

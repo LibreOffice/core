@@ -45,9 +45,11 @@ $(eval $(call gb_InternalUnoApi_set_include,scaddins,\
 $(eval $(call gb_InternalUnoApi_add_idlfiles,scaddins,scaddins/idl/com/sun/star/sheet/addin,\
     Analysis \
     DateFunctions \
+    PricingFunctions \
     XAnalysis \
     XCompatibilityNames \
     XDateFunctions \
+    XPricingFunctions \
     XMiscFunctions \
 ))
 
