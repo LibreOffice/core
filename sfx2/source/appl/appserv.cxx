@@ -155,7 +155,7 @@ namespace
             catch (Exception & e)
             {
                 SAL_INFO(
-                    "sfx2.bibliography",
+                    "sfx2.appl",
                     "trying to install LibreOffice Base, caught " << e.Message);
             }
         }
@@ -172,7 +172,7 @@ namespace
         catch (Exception & e)
         {
             SAL_INFO(
-                "sfx2.bibliography",
+                "sfx2.appl",
                 "assuming Base to be missing; caught " << e.Message);
             return false;
         }
