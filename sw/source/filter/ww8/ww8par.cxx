@@ -5194,7 +5194,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
                     for (size_t i = 0; i < nCount; ++i)
                     {
                         SwNumRule* pRule = pLstManager->GetNumRule(i);
-                        for (int j = 0; j < MAXLEVEL; ++j)
+                        for (sal_uInt16 j = 0; j < MAXLEVEL; ++j)
                         {
                             SwNumFmt aNumFmt(pRule->Get(j));
                             const sal_Int16 nType = aNumFmt.GetNumberingType();
