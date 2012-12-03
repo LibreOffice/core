@@ -2918,10 +2918,20 @@ void ImplWin::ImplDraw( bool bLayout )
             else
             {
                 Color aColor;
-                if( bNativeOK && (nState & CTRL_STATE_ROLLOVER) )
-                    aColor = rStyleSettings.GetFieldRolloverTextColor();
+                if( ImplGetSVData()->maNWFData.mbDDListBoxNoTextArea )
+                {
+                    if( bNativeOK && (nState & CTRL_STATE_ROLLOVER) )
+                        aColor = rStyleSettings.GetButtonRolloverTextColor();
+                    else
+                        aColor = rStyleSettings.GetButtonTextColor();
+                }
                 else
-                    aColor = rStyleSettings.GetFieldTextColor();
+                {
+                    if( bNativeOK && (nState & CTRL_STATE_ROLLOVER) )
+                        aColor = rStyleSettings.GetFieldRolloverTextColor();
+                    else
+                        aColor = rStyleSettings.GetFieldTextColor();
+                }
                 if( IsControlForeground() )
                     aColor = GetControlForeground();
                 SetTextColor( aColor );

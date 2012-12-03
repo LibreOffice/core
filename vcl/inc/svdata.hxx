@@ -295,6 +295,9 @@ struct ImplSVNWFData
                                                             // window background before drawing the native
                                                             // checkbox
     bool                    mbCanDrawWidgetAnySize:1;       // set to true currently on gtk
+
+    /// entire drop down listbox resembles a button, no textarea/button parts (as currently on Windows)
+    bool                    mbDDListBoxNoTextArea:1;
 };
 
 

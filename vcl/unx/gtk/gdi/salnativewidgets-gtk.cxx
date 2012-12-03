@@ -428,6 +428,8 @@ void GtkData::initNWF( void )
     // omit GetNativeControl while painting (see brdwin.cxx)
     pSVData->maNWFData.mbCanDrawWidgetAnySize = true;
 
+    pSVData->maNWFData.mbDDListBoxNoTextArea = true;
+
     int nScreens = GetGtkSalData()->GetGtkDisplay()->GetXScreenCount();
     gWidgetData = WidgetDataVector( nScreens );
     for( int i = 0; i < nScreens; i++ )
