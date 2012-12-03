@@ -35,9 +35,11 @@
 // (e.g. for debugging).
 #ifndef RTL_DISABLE_FAST_STRING
 #ifndef HAVE_SFINAE_ANONYMOUS_BROKEN
-// Enable fast string concatenation.
 // This feature is not part of public API and is meant to be used only internally by LibreOffice.
+#ifdef LIBO_INTERNAL_ONLY
+// Enable fast string concatenation.
 #define RTL_FAST_STRING
+#endif
 #endif
 #endif
 
