@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAARH///5s\u003d",
+        "filename": "sfx2/source/appl/appserv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2012-12-03T13:06:04Z",
+      "side": 1,
+      "message": "always use salhelper::Thread instead of naked osl::Thread in new code",
+      "revId": "a8bc7593feade375a5f714e564f59e8656a4bcd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAARH///5o\u003d",
+        "filename": "sfx2/source/appl/appserv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2012-12-03T13:06:04Z",
+      "side": 1,
+      "message": "unconditionally terminating LO here looks broken",
+      "revId": "a8bc7593feade375a5f714e564f59e8656a4bcd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAARH///5c\u003d",
+        "filename": "sfx2/source/appl/appserv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2012-12-03T13:06:04Z",
+      "side": 1,
+      "message": "there is no \"sfx2.bibliography\" area (cf. sal/inc/sal/log-areas.dox)",
+      "revId": "a8bc7593feade375a5f714e564f59e8656a4bcd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAARH///5g\u003d",
+        "filename": "sfx2/source/appl/appserv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2012-12-03T13:06:04Z",
+      "side": 1,
+      "message": "see above",
+      "revId": "a8bc7593feade375a5f714e564f59e8656a4bcd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAARH///5k\u003d",
+        "filename": "sfx2/source/appl/appserv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2012-12-03T13:06:04Z",
+      "side": 1,
+      "message": "you always need to join spawned threads, to avoid crashes during exit\n\nalso, this would leak the BaseInstallerPhoenix instance",
+      "revId": "a8bc7593feade375a5f714e564f59e8656a4bcd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
