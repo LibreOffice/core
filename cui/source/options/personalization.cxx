@@ -9,6 +9,12 @@
 
 #include "personalization.hxx"
 
+#include <comphelper/processfactory.hxx>
+#include <officecfg/Office/Common.hxx>
+#include <vcl/msgbox.hxx>
+
+using namespace com::sun::star;
+
 /** Dialog that will allow the user to choose a Persona to use.
 
 So far there is no better possibility than just to paste the URL from
@@ -26,24 +32,21 @@ SelectPersonaDialog::SelectPersonaDialog( Window *pParent )
 }
 
 SvxPersonalizationTabPage::SvxPersonalizationTabPage( Window *pParent, const SfxItemSet &rSet )
-    : SfxTabPage( pParent, "PersonalizationTabPage", "cui/ui/personalization_tab.ui", rSet )
+    : SfxTabPage( pParent, "PersonalizationTabPage", "cui/ui/personalization_tab.ui", rSet ),
+      m_aBackgroundURL()
 {
+    // background image
     get( m_pNoBackground, "no_background" );
     get( m_pDefaultBackground, "default_background" );
     get( m_pOwnBackground, "own_background" );
-    m_pNoBackground->SetClickHdl( LINK( this, SvxPersonalizationTabPage, EnableDisableSelectionButtons ) );
-    m_pDefaultBackground->SetClickHdl( LINK( this, SvxPersonalizationTabPage, EnableDisableSelectionButtons ) );
-    m_pOwnBackground->SetClickHdl( LINK( this, SvxPersonalizationTabPage, EnableDisableSelectionButtons ) );
 
     get( m_pSelectBackground, "select_background" );
     m_pSelectBackground->SetClickHdl( LINK( this, SvxPersonalizationTabPage, SelectBackground ) );
 
+    // persona
     get( m_pNoPersona, "no_persona" );
     get( m_pDefaultPersona, "default_persona" );
     get( m_pOwnPersona, "own_persona" );
-    m_pNoPersona->SetClickHdl( LINK( this, SvxPersonalizationTabPage, EnableDisableSelectionButtons ) );
-    m_pDefaultPersona->SetClickHdl( LINK( this, SvxPersonalizationTabPage, EnableDisableSelectionButtons ) );
-    m_pOwnPersona->SetClickHdl( LINK( this, SvxPersonalizationTabPage, EnableDisableSelectionButtons ) );
 
     get( m_pSelectPersona, "select_persona" );
     LINK( this, SvxPersonalizationTabPage, SelectPersona );
@@ -59,47 +62,93 @@ SfxTabPage* SvxPersonalizationTabPage::Create( Window *pParent, const SfxItemSet
     return new SvxPersonalizationTabPage( pParent, rSet );
 }
 
-IMPL_LINK( SvxPersonalizationTabPage, EnableDisableSelectionButtons, RadioButton*, pButton )
+sal_Bool SvxPersonalizationTabPage::FillItemSet( SfxItemSet & )
 {
-    PushButton *pPushButton = NULL;
-    RadioButton *pRadioButton = NULL;
+    // background image
+    OUString aBackground( "default" );
+    if ( m_pNoBackground->IsChecked() )
+        aBackground = "no";
+    else if ( m_pOwnBackground->IsChecked() )
+        aBackground = "own";
 
-    if ( pButton == m_pNoBackground || pButton == m_pDefaultBackground || pButton == m_pOwnBackground )
+    // persona
+    OUString aPersona( "default" );
+    if ( m_pNoPersona->IsChecked() )
+        aPersona = "no";
+    else if ( m_pOwnPersona->IsChecked() )
+        aPersona = "own";
+
+    bool bModified = false;
+    uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+    if ( xContext.is() &&
+            ( aBackground != officecfg::Office::Common::Misc::BackgroundImage::get( xContext ) ||
+              m_aBackgroundURL != officecfg::Office::Common::Misc::BackgroundImageURL::get( xContext ) ||
+              aPersona != officecfg::Office::Common::Misc::Persona::get( xContext ) ) )
     {
-        pPushButton = m_pSelectBackground;
-        pRadioButton = m_pOwnBackground;
+        bModified = true;
     }
-    else if ( pButton == m_pNoPersona || pButton == m_pDefaultPersona || pButton == m_pOwnPersona )
+
+    // write
+    boost::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
+
+    officecfg::Office::Common::Misc::BackgroundImage::set( aBackground, batch );
+    officecfg::Office::Common::Misc::BackgroundImageURL::set( m_aBackgroundURL, batch );
+    officecfg::Office::Common::Misc::Persona::set( aPersona, batch );
+
+    batch->commit();
+
+    return bModified;
+}
+
+void SvxPersonalizationTabPage::Reset( const SfxItemSet & )
+{
+    uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+
+    // background image
+    OUString aBackground( "default" );
+    if ( xContext.is() )
     {
-        pPushButton = m_pSelectPersona;
-        pRadioButton = m_pOwnPersona;
+        aBackground = officecfg::Office::Common::Misc::BackgroundImage::get( xContext );
+        m_aBackgroundURL = officecfg::Office::Common::Misc::BackgroundImageURL::get( xContext );
     }
+
+    if ( aBackground == "no" )
+        m_pNoBackground->Check();
+    else if ( aBackground == "own" )
+        m_pOwnBackground->Check();
     else
-        return 0;
+        m_pDefaultBackground->Check();
 
-    if ( pRadioButton->IsChecked() && !pPushButton->IsEnabled() )
-    {
-        pPushButton->Enable();
-        pPushButton->Invalidate();
-    }
-    else if ( !pRadioButton->IsChecked() && pPushButton->IsEnabled() )
-    {
-        pPushButton->Disable();
-        pPushButton->Invalidate();
-    }
+    // persona
+    OUString aPersona( "default" );
+    if ( xContext.is() )
+        aPersona = officecfg::Office::Common::Misc::Persona::get( xContext );
 
-    return 0;
+    if ( aPersona == "no" )
+        m_pNoPersona->Check();
+    else if ( aPersona == "own" )
+        m_pOwnPersona->Check();
+    else
+        m_pDefaultPersona->Check();
 }
 
 IMPL_LINK( SvxPersonalizationTabPage, SelectBackground, PushButton*, /*pButton*/ )
 {
+    // TODO m_pOwnBackground->Check(); if something selected
+    // TODO parse the results
+
     return 0;
 }
 
 IMPL_LINK( SvxPersonalizationTabPage, SelectPersona, PushButton*, /*pButton*/ )
 {
     SelectPersonaDialog aDialog( NULL );
-    /* TODO handle the ret val sal_Int16 nReturn =*/ aDialog.Execute();
+
+    if ( aDialog.Execute() == RET_OK )
+    {
+        m_pOwnPersona->Check();
+        // TODO parse the results
+    }
 
     return 0;
 }

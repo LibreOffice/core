@@ -23,6 +23,7 @@ private:
     RadioButton *m_pDefaultBackground;      ///< Use the built-in bitmap for Writer background
     RadioButton *m_pOwnBackground;          ///< Use the user-defined bitmap
     PushButton *m_pSelectBackground;        ///< Let the user select in the 'own' case
+    OUString m_aBackgroundURL;              ///< URL of the the background image in the 'own' case
 
     RadioButton *m_pNoPersona;              ///< Just the default look, without any bitmap
     RadioButton *m_pDefaultPersona;         ///< Use the built-in bitmap
@@ -35,10 +36,13 @@ public:
 
     static SfxTabPage* Create( Window *pParent, const SfxItemSet &rSet );
 
-private:
-    /// Maintain sane behavior of the m_pSelect(Background|Persona) buttons
-    DECL_LINK( EnableDisableSelectionButtons, RadioButton* );
+    /// Apply the settings ([OK] button).
+    virtual sal_Bool FillItemSet( SfxItemSet &rSet );
 
+    /// Reset to default settings ([Revert] button).
+    virtual void Reset( const SfxItemSet &rSet );
+
+private:
     /// Handle the bacground selection
     DECL_LINK( SelectBackground, PushButton* );
 
