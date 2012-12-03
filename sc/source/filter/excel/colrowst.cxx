@@ -346,7 +346,7 @@ void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
         {
             if (bPrevHidden)
             {
-                rDoc.ShowRows(nPrevRow, nRow-1, nScTab, false);
+                rDoc.SetRowHidden(nPrevRow, nRow-1, nScTab, true);
                 // #i38093# rows hidden by filter need extra flag
                 if (nFirstFilterScRow <= nPrevRow && nPrevRow <= nLastFilterScRow)
                 {
