@@ -1255,7 +1255,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/text,\
 	IllustrationsIndex \
 	InContentMetadata \
 	LineNumberingProperties \
-	LineNumberingSettings \
 	MailMerge \
 	NumberingLevel \
 	NumberingRules \
