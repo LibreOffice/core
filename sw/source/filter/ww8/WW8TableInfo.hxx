@@ -50,7 +50,7 @@ typedef ::std::vector<const SwTableBox *> TableBoxVector;
 typedef boost::shared_ptr<TableBoxVector> TableBoxVectorPtr;
 typedef ::std::vector<sal_uInt32> GridCols;
 typedef boost::shared_ptr<GridCols> GridColsPtr;
-typedef ::std::vector<sal_uInt32> RowSpans;
+typedef ::std::vector<sal_Int32> RowSpans;
 typedef boost::shared_ptr<RowSpans> RowSpansPtr;
 typedef ::std::vector<sal_uInt32> Widths;
 typedef boost::shared_ptr<Widths> WidthsPtr;
