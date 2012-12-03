@@ -17,6 +17,7 @@ $(eval $(call gb_StaticLibrary_use_externals,mspublib,\
 	wpd \
 	wpg \
 	zlib \
+	boost_headers \
 ))
 
 $(eval $(call gb_StaticLibrary_set_warnings_not_errors,mspublib))
