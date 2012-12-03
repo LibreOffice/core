@@ -49,7 +49,6 @@ PathFormat()
     fi
 }
 
-cat /dev/null > warn
 have_WARNINGS="no"
 add_warning()
 {
@@ -12334,6 +12333,8 @@ $GNUMAKE check
 _EOF
 fi
 
-cat warn
+if test -f warn; then
+	cat warn
+fi
 
 dnl vim:set shiftwidth=4 softtabstop=4 expandtab:
