@@ -1237,7 +1237,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/text,\
 	Defaults \
 	DependentTextField \
 	DocumentIndex \
-	DocumentIndexFormat \
 	DocumentIndexLevelFormat \
 	DocumentIndexMark \
 	DocumentIndexMarkAsian \
