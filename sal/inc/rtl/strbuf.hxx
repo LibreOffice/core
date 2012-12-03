@@ -196,6 +196,7 @@ public:
         : pData(NULL)
         , nCapacity( internal::ConstCharArrayDetector< T, void >::size - 1 + 16 )
     {
+        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
         rtl_string_newFromLiteral( &pData, literal, internal::ConstCharArrayDetector< T, void >::size - 1, 16 );
 #ifdef RTL_STRING_UNITTEST
         rtl_string_unittest_const_literal = true;
@@ -463,6 +464,7 @@ public:
     typename internal::ConstCharArrayDetector< T, OStringBuffer& >::Type append( T& literal )
     {
         RTL_STRING_CONST_FUNCTION
+        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
         rtl_stringbuffer_insert( &pData, &nCapacity, getLength(), literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
         return *this;
     }
@@ -652,6 +654,7 @@ public:
     typename internal::ConstCharArrayDetector< T, OStringBuffer& >::Type insert( sal_Int32 offset, T& literal )
     {
         RTL_STRING_CONST_FUNCTION
+        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
         rtl_stringbuffer_insert( &pData, &nCapacity, offset, literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
         return *this;
     }

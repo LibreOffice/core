@@ -124,7 +124,7 @@ struct NonConstCharArrayDetector< const char[], T >
 };
 #endif
 
-template< typename T1, typename T2 >
+template< typename T1, typename T2 = void >
 struct ConstCharArrayDetector
 {
     static const bool ok = false;

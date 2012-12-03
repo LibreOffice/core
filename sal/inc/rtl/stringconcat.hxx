@@ -128,7 +128,7 @@ struct ToStringHelper< char[ N ] >
 template< int N >
 struct ToStringHelper< const char[ N ] >
     {
-    static int length( const char[ N ] ) { return N - 1; }
+    static int length( const char str[ N ] ) { assert( strlen( str ) == N - 1 ); return N - 1; }
     static char* addData( char* buffer, const char str[ N ] ) { return addDataHelper( buffer, str, N - 1 ); }
     static sal_Unicode* addData( sal_Unicode* buffer, const char str[ N ] ) { return addDataLiteral( buffer, str, N - 1 ); }
     static const bool allowOStringConcat = true;

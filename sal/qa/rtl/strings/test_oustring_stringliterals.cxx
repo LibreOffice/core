@@ -89,18 +89,21 @@ void test::oustring::StringLiterals::checkCtors()
     testcall( good1 );
 
 // This one is technically broken, since the first element is 6 characters test\0\0,
-// but there does not appear a way to detect this by compile time (runtime will complain).
+// but there does not appear a way to detect this by compile time (runtime will assert()).
 // RTL_CONSTASCII_USTRINGPARAM() has the same flaw.
     const char bad5[][ 6 ] = { "test", "test2" };
 //    CPPUNIT_ASSERT( VALID_CONVERSION( bad5[ 0 ] ));
     CPPUNIT_ASSERT( VALID_CONVERSION( bad5[ 1 ] ));
 
 // Check that contents are correct and equal to the case when RTL_CONSTASCII_USTRINGPARAM is used.
-// Also check that embedded \0 is included.
     CPPUNIT_ASSERT_EQUAL( rtl::OUString( "" ), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "" )));
-    CPPUNIT_ASSERT_EQUAL( rtl::OUString( "\0" ), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "\0" )));
     CPPUNIT_ASSERT_EQUAL( rtl::OUString( "ab" ), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ab" )));
+#if 0
+// Also check that embedded \0 is included.
+// In fact, allowing this is probably just trouble, so this now asserts.
+    CPPUNIT_ASSERT_EQUAL( rtl::OUString( "\0" ), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "\0" )));
     CPPUNIT_ASSERT_EQUAL( rtl::OUString( "a\0b" ), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "a\0b" )));
+#endif
 }
 
 void test::oustring::StringLiterals::testcall( const char str[] )

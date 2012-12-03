@@ -114,10 +114,10 @@ void test::ostring::StringLiterals::checkCtors()
 #endif
 
 // This one is technically broken, since the first element is 6 characters test\0\0,
-// but there does not appear a way to detect this by compile time (runtime will complain).
+// but there does not appear a way to detect this by compile time (runtime will assert()).
 // RTL_CONSTASCII_USTRINGPARAM() has the same flaw.
     const char bad7[][ 6 ] = { "test", "test2" };
-    CPPUNIT_ASSERT( CONST_CTOR_USED( bad7[ 0 ] ));
+//    CPPUNIT_ASSERT( CONST_CTOR_USED( bad7[ 0 ] ));
     CPPUNIT_ASSERT( CONST_CTOR_USED( bad7[ 1 ] ));
 
 // Check that contents are correct and equal to the case when const char* ctor is used.

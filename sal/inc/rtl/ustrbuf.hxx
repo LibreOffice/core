@@ -150,6 +150,7 @@ public:
         : pData(NULL)
         , nCapacity( N - 1 + 16 )
     {
+        assert( strlen( literal ) == N - 1 );
         rtl_uString_newFromLiteral( &pData, literal, N - 1, 16 );
 #ifdef RTL_STRING_UNITTEST
         rtl_string_unittest_const_literal = true;
@@ -179,6 +180,7 @@ public:
         : pData(NULL)
         , nCapacity( internal::ConstCharArrayDetector< T, void >::size - 1 + 16 )
     {
+        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
         rtl_uString_newFromLiteral( &pData, literal, internal::ConstCharArrayDetector< T, void >::size - 1, 16 );
 #ifdef RTL_STRING_UNITTEST
         rtl_string_unittest_const_literal = true;
@@ -480,6 +482,7 @@ public:
     template< typename T >
     typename internal::ConstCharArrayDetector< T, OUStringBuffer& >::Type append( T& literal )
     {
+        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
         rtl_uStringbuffer_insert_ascii( &pData, &nCapacity, getLength(), literal,
             internal::ConstCharArrayDetector< T, void >::size - 1 );
         return *this;
@@ -740,6 +743,7 @@ public:
     template< typename T >
     typename internal::ConstCharArrayDetector< T, OUStringBuffer& >::Type insert( sal_Int32 offset, T& literal )
     {
+        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
         rtl_uStringbuffer_insert_ascii( &pData, &nCapacity, offset, literal,
             internal::ConstCharArrayDetector< T, void >::size - 1 );
         return *this;
@@ -1097,6 +1101,7 @@ public:
     template< typename T >
     typename internal::ConstCharArrayDetector< T, sal_Int32 >::Type indexOf( T& literal, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
     {
+        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
         sal_Int32 ret = rtl_ustr_indexOfAscii_WithLength(
             pData->buffer + fromIndex, pData->length - fromIndex, literal,
             internal::ConstCharArrayDetector< T, void >::size - 1);
@@ -1159,6 +1164,7 @@ public:
     template< typename T >
     typename internal::ConstCharArrayDetector< T, sal_Int32 >::Type lastIndexOf( T& literal ) const SAL_THROW(())
     {
+        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
         return rtl_ustr_lastIndexOfAscii_WithLength(
             pData->buffer, pData->length, literal, internal::ConstCharArrayDetector< T, void >::size - 1);
     }

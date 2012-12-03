@@ -198,6 +198,9 @@ public:
     template< int N >
     OUString( const char (&literal)[ N ] )
     {
+        // Check that the string literal is in fact N - 1 long (no embedded \0's),
+        // any decent compiler should optimize out calls to strlen with literals.
+        assert( strlen( literal ) == N - 1 );
         pData = 0;
         rtl_uString_newFromLiteral( &pData, literal, N - 1, 0 );
 #ifdef RTL_STRING_UNITTEST
@@ -225,6 +228,7 @@ public:
     template< typename T >
     OUString( T& literal, typename internal::ConstCharArrayDetector< T, internal::Dummy >::Type = internal::Dummy() )
     {
+        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
         pData = 0;
         rtl_uString_newFromLiteral( &pData, literal, internal::ConstCharArrayDetector< T, void >::size - 1, 0 );
 #ifdef RTL_STRING_UNITTEST
@@ -381,6 +385,7 @@ public:
     template< typename T >
     typename internal::ConstCharArrayDetector< T, OUString& >::Type operator=( T& literal )
     {
+        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
         rtl_uString_newFromLiteral( &pData, literal, internal::ConstCharArrayDetector< T, void >::size - 1, 0 );
         return *this;
     }
@@ -571,6 +576,7 @@ public:
     template< typename T >
     typename internal::ConstCharArrayDetector< T, bool >::Type equalsIgnoreAsciiCase( T& literal ) const SAL_THROW(())
     {
+        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
         if ( pData->length != internal::ConstCharArrayDetector< T, void >::size - 1 )
             return sal_False;
 
@@ -606,6 +612,7 @@ public:
     template< typename T >
     typename internal::ConstCharArrayDetector< T, bool >::Type match( T& literal, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
     {
+        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
         return rtl_ustr_ascii_shortenedCompare_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
             literal, internal::ConstCharArrayDetector< T, void >::size - 1 ) == 0;
     }
@@ -643,6 +650,7 @@ public:
     template< typename T >
     typename internal::ConstCharArrayDetector< T, bool >::Type matchIgnoreAsciiCase( T& literal, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
     {
+        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
         return rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
             literal, internal::ConstCharArrayDetector< T, void >::size - 1 ) == 0;
     }
@@ -933,6 +941,7 @@ public:
     template< typename T >
     typename internal::ConstCharArrayDetector< T, bool >::Type startsWith( T& literal ) const
     {
+        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
         return internal::ConstCharArrayDetector< T, void >::size - 1 <= pData->length
             && rtl_ustr_asciil_reverseEquals_WithLength( pData->buffer, literal,
                 internal::ConstCharArrayDetector< T, void >::size - 1);
@@ -964,6 +973,7 @@ public:
     template< typename T >
     typename internal::ConstCharArrayDetector< T, bool >::Type startsWithIgnoreAsciiCase( T& literal ) const SAL_THROW(())
     {
+        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
         return (rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
                     pData->buffer,
                     internal::ConstCharArrayDetector< T, void >::size - 1, literal,
@@ -994,6 +1004,7 @@ public:
     template< typename T >
     typename internal::ConstCharArrayDetector< T, bool >::Type endsWith( T& literal ) const
     {
+        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
         return internal::ConstCharArrayDetector< T, void >::size - 1 <= pData->length
             && rtl_ustr_asciil_reverseEquals_WithLength(
                 pData->buffer + pData->length - ( internal::ConstCharArrayDetector< T, void >::size - 1 ), literal,
@@ -1047,6 +1058,7 @@ public:
     template< typename T >
     typename internal::ConstCharArrayDetector< T, bool >::Type endsWithIgnoreAsciiCase( T& literal ) const SAL_THROW(())
     {
+        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
         return internal::ConstCharArrayDetector< T, void >::size - 1 <= pData->length
             && (rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
                     pData->buffer + pData->length - ( internal::ConstCharArrayDetector< T, void >::size - 1 ),
@@ -1108,6 +1120,7 @@ public:
     template< typename T >
     friend inline typename internal::ConstCharArrayDetector< T, bool >::Type operator==( const OUString& string, T& literal )
     {
+        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
         return string.equalsAsciiL( literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
     }
     /**
@@ -1120,6 +1133,7 @@ public:
     template< typename T >
     friend inline typename internal::ConstCharArrayDetector< T, bool >::Type operator==( T& literal, const OUString& string )
     {
+        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
         return string.equalsAsciiL( literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
     }
     /**
@@ -1132,6 +1146,7 @@ public:
     template< typename T >
     friend inline typename internal::ConstCharArrayDetector< T, bool >::Type operator!=( const OUString& string, T& literal )
     {
+        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
         return !string.equalsAsciiL( literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
     }
     /**
@@ -1144,6 +1159,7 @@ public:
     template< typename T >
     friend inline typename internal::ConstCharArrayDetector< T, bool >::Type operator!=( T& literal, const OUString& string )
     {
+        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
         return !string.equalsAsciiL( literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
     }
 
@@ -1239,6 +1255,7 @@ public:
     template< typename T >
     typename internal::ConstCharArrayDetector< T, sal_Int32 >::Type indexOf( T& literal, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
     {
+        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
         sal_Int32 ret = rtl_ustr_indexOfAscii_WithLength(
             pData->buffer + fromIndex, pData->length - fromIndex, literal,
             internal::ConstCharArrayDetector< T, void >::size - 1);
@@ -1337,6 +1354,7 @@ public:
     template< typename T >
     typename internal::ConstCharArrayDetector< T, sal_Int32 >::Type lastIndexOf( T& literal ) const SAL_THROW(())
     {
+        assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
         return rtl_ustr_lastIndexOfAscii_WithLength(
             pData->buffer, pData->length, literal, internal::ConstCharArrayDetector< T, void >::size - 1);
     }
@@ -1517,6 +1535,7 @@ public:
     {
         rtl_uString * s = 0;
         sal_Int32 i = 0;
+        assert( strlen( from ) == internal::ConstCharArrayDetector< T >::size - 1 );
         rtl_uString_newReplaceFirstAsciiL(
             &s, pData, from, internal::ConstCharArrayDetector< T, void >::size - 1, to.pData, index == 0 ? &i : index);
         return OUString(s, SAL_NO_ACQUIRE);
@@ -1546,6 +1565,8 @@ public:
     {
         rtl_uString * s = 0;
         sal_Int32 i = 0;
+        assert( strlen( from ) == internal::ConstCharArrayDetector< T1 >::size - 1 );
+        assert( strlen( to ) == internal::ConstCharArrayDetector< T2 >::size - 1 );
         rtl_uString_newReplaceFirstAsciiLAsciiL(
             &s, pData, from, internal::ConstCharArrayDetector< T1, void >::size - 1, to,
             internal::ConstCharArrayDetector< T2, void >::size - 1, index == 0 ? &i : index);
@@ -1590,6 +1611,7 @@ public:
     typename internal::ConstCharArrayDetector< T, OUString >::Type replaceAll( T& from, OUString const & to) const
     {
         rtl_uString * s = 0;
+        assert( strlen( from ) == internal::ConstCharArrayDetector< T >::size - 1 );
         rtl_uString_newReplaceAllAsciiL(&s, pData, from, internal::ConstCharArrayDetector< T, void >::size - 1, to.pData);
         return OUString(s, SAL_NO_ACQUIRE);
     }
@@ -1612,6 +1634,8 @@ public:
         replaceAll( T1& from, T2& to ) const
     {
         rtl_uString * s = 0;
+        assert( strlen( from ) == internal::ConstCharArrayDetector< T1 >::size - 1 );
+        assert( strlen( to ) == internal::ConstCharArrayDetector< T2 >::size - 1 );
         rtl_uString_newReplaceAllAsciiLAsciiL(
             &s, pData, from, internal::ConstCharArrayDetector< T1, void >::size - 1,
             to, internal::ConstCharArrayDetector< T2, void >::size - 1);
@@ -2094,7 +2118,7 @@ This class is not part of public API and is meant to be used only in LibreOffice
 struct SAL_WARN_UNUSED OUStringLiteral
 {
     template< int N >
-    OUStringLiteral( const char (&str)[ N ] ) : size( N - 1 ), data( str ) {}
+    OUStringLiteral( const char (&str)[ N ] ) : size( N - 1 ), data( str ) { assert( strlen( str ) == N - 1 ); }
     int size;
     const char* data;
 };
