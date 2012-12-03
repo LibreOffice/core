@@ -176,7 +176,7 @@ public class ConditionalParagraphStyle extends TestCase {
         tEnv.addObjRelation("PoolStyle", oStyle);
 
         XPropertySet xStyleProp = UnoRuntime.queryInterface(XPropertySet.class, oMyStyle);
-        short exclude = PropertyAttribute.MAYBEVOID + PropertyAttribute.READONLY;
+        short exclude = PropertyAttribute.READONLY;
         String[] names = utils.getFilteredPropertyNames(xStyleProp, (short)0, exclude);
         tEnv.addObjRelation("PropertyNames", names);
 

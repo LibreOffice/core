@@ -51,10 +51,6 @@ sw.PageStyle::com::sun::star::style::XStyle
 ### i85584 ###
 sw.CharacterStyle::com::sun::star::style::CharacterPropertiesAsian
 
-### i25473 ###
-sw.ConditionalParagraphStyle::com::sun::star::beans::XMultiPropertyStates
-sw.ParagraphStyle::com::sun::star::beans::XMultiPropertyStates
-
 ### i34456 ###
 sw.SwXTextDocument::com::sun::star::view::XPrintJobBroadcaster
 
