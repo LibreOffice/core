@@ -24,6 +24,7 @@
 #include <vcl/menubtn.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/layout.hxx>
 #include <svtools/stdctrl.hxx>
 #include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
@@ -50,38 +51,37 @@ struct SwBmpItemInfo
 
 class SwNumPositionTabPage : public SfxTabPage
 {
-        FixedLine       aLevelFL;
-    MultiListBox    aLevelLB;
+    ListBox* m_pLevelLB;
+    VclFrame* m_pPositionFrame;
 
     // former set of controls shown for numbering rules containing list level
     // attributes in SvxNumberFormat::SvxNumPositionAndSpaceMode == LABEL_WIDTH_AND_POSITION
-    FixedLine       aPositionFL;
-    FixedText           aDistBorderFT;
-    MetricField         aDistBorderMF;
-    CheckBox            aRelativeCB;
-    FixedText           aIndentFT;
-    MetricField         aIndentMF;
-    FixedText           aDistNumFT;
-    MetricField         aDistNumMF;
-    FixedText           aAlignFT;
-    ListBox             aAlignLB;
+    FixedText*          m_pDistBorderFT;
+    MetricField*        m_pDistBorderMF;
+    CheckBox*           m_pRelativeCB;
+    FixedText*          m_pIndentFT;
+    MetricField*        m_pIndentMF;
+    FixedText*          m_pDistNumFT;
+    MetricField*        m_pDistNumMF;
+    FixedText*          m_pAlignFT;
+    ListBox*            m_pAlignLB;
 
     // new set of controls shown for numbering rules containing list level
     // attributes in SvxNumberFormat::SvxNumPositionAndSpaceMode == LABEL_ALIGNMENT
-    FixedText           aLabelFollowedByFT;
-    ListBox             aLabelFollowedByLB;
-    FixedText           aListtabFT;
-    MetricField         aListtabMF;
-    FixedText           aAlign2FT;
-    ListBox             aAlign2LB;
-    FixedText           aAlignedAtFT;
-    MetricField         aAlignedAtMF;
-    FixedText           aIndentAtFT;
-    MetricField         aIndentAtMF;
+    FixedText*          m_pLabelFollowedByFT;
+    ListBox*            m_pLabelFollowedByLB;
+    FixedText*          m_pListtabFT;
+    MetricField*        m_pListtabMF;
+    FixedText*          m_pAlign2FT;
+    ListBox*            m_pAlign2LB;
+    FixedText*          m_pAlignedAtFT;
+    MetricField*        m_pAlignedAtMF;
+    FixedText*          m_pIndentAtFT;
+    MetricField*        m_pIndentAtMF;
 
-    PushButton          aStandardPB;
+    PushButton*         m_pStandardPB;
 
-    NumberingPreview    aPreviewWIN;
+    NumberingPreview*   m_pPreviewWIN;
 
     SwNumRule*          pActNum;
     SwNumRule*          pSaveNum;

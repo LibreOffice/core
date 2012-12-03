@@ -16,31 +16,4 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#define FL_LEVEL            1
-#define LB_LEVEL        2
-#define FL_POSITION     3
-#define FT_BORDERDIST   4
-#define MF_BORDERDIST   5
-#define CB_RELATIVE     6
-#define FT_INDENT       7
-#define MF_INDENT       8
-#define FT_NUMDIST      9
-#define MF_NUMDIST      10
-#define FT_ALIGN        11
-#define LB_ALIGN        12
-#define PB_STANDARD     13
-#define WIN_PREVIEW     15
-#define ST_RESET        16
-
-#define FT_LABEL_FOLLOWED_BY    17
-#define LB_LABEL_FOLLOWED_BY    18
-#define FT_LISTTAB              19
-#define MF_LISTTAB              20
-#define FT_ALIGN_2              21
-#define LB_ALIGN_2              22
-#define FT_ALIGNED_AT           23
-#define MF_ALIGNED_AT           24
-#define FT_INDENT_AT            25
-#define MF_INDENT_AT            26
-
+#define ST_RESET        1

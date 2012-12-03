@@ -906,6 +906,11 @@ static sal_uInt16 lcl_DrawGraphic(VirtualDevice* pVDev, const SwNumFmt &rFmt, sa
 
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeNumberingPreview(Window *pParent, VclBuilder::stringmap &)
+{
+    return new NumberingPreview(pParent);
+}
+
 /*--------------------------------------------------
     paint numbering's preview
 --------------------------------------------------*/

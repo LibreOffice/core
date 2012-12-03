@@ -38,9 +38,20 @@ class NumberingPreview : public Window
         virtual void        Paint( const Rectangle& rRect );
 
     public:
-        NumberingPreview(Window* pParent, const ResId& rResId ) :
-            Window(pParent, rResId),
-            pActNum(0),nPageWidth(0), pOutlineNames(0), bPosition(sal_False), nActLevel(USHRT_MAX) {}
+        NumberingPreview(Window* pParent, const ResId& rResId)
+        : Window(pParent, rResId),
+            pActNum(0),nPageWidth(0), pOutlineNames(0),
+            bPosition(sal_False), nActLevel(USHRT_MAX)
+        {
+        }
+
+        NumberingPreview(Window* pParent)
+            : Window(pParent)
+            , pActNum(0),nPageWidth(0), pOutlineNames(0),
+            bPosition(sal_False), nActLevel(USHRT_MAX)
+        {
+        }
+
         ~NumberingPreview();
 
         void    SetNumRule(const SwNumRule* pNum)
