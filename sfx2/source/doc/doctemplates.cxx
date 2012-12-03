@@ -1857,7 +1857,9 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
             throw uno::RuntimeException();
 
         // find the mediatype and extension
-        uno::Reference< container::XNameAccess > xTypeDetection =
+        uno::Reference< container::XNameAccess > xTypeDetection;
+
+        xTypeDetection =
             mxType.is() ?
                 uno::Reference< container::XNameAccess >( mxType, uno::UNO_QUERY_THROW ) :
                 uno::Reference< container::XNameAccess >(
