@@ -168,6 +168,7 @@ namespace
                 ::rtl::OUString sInteraction;
                 xSyncDbusSessionHelper->InstallPackageNames(0, vPackages, sInteraction);
                 // Ill be back (hopefully)!
+                SolarMutexGuard aGuard;
                 executeRestartDialog(comphelper::getProcessComponentContext(), NULL, RESTART_REASON_BIBLIOGRAPHY_INSTALL);
             }
             catch (Exception & e)
