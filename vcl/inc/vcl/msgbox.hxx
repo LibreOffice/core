@@ -36,8 +36,8 @@ class CheckBox;
 // Return-Werte von Execute
 //!!! bei Aenderungen \basic\source\runtime\methods.cxx msgbox anpassen
 
-#define RET_OK               sal_True
-#define RET_CANCEL           sal_False
+#define RET_CANCEL           0
+#define RET_OK               1
 #define RET_YES              2
 #define RET_NO               3
 #define RET_RETRY            4
