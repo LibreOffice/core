@@ -162,8 +162,8 @@ void FillStyleListBox( ScDocument* pDoc, ListBox& rLbStyle )
 ScConditionFrmtEntry::ScConditionFrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScCondFormatEntry* pFormatEntry ):
     ScCondFrmtEntry( pParent, pDoc, rPos ),
     maLbCondType( this, ScResId( LB_CELLIS_TYPE ) ),
-    maEdVal1( this, static_cast<ScAnyRefDlg*>(pParent->GetParent()), ScResId( ED_VAL1 ) ),
-    maEdVal2( this, static_cast<ScAnyRefDlg*>(pParent->GetParent()), ScResId( ED_VAL2 ) ),
+    maEdVal1( this, NULL, ScResId( ED_VAL1 ) ),
+    maEdVal2( this, NULL, ScResId( ED_VAL2 ) ),
     maFtStyle( this, ScResId( FT_STYLE ) ),
     maLbStyle( this, ScResId( LB_STYLE ) ),
     maWdPreview( this, ScResId( WD_PREVIEW ) )
