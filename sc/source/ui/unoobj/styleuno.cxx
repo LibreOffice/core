@@ -167,6 +167,7 @@ static const SfxItemPropertySet* lcl_GetCellStyleSet()
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   &::getCppuType((const sal_Int32*)0),    0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS_METHOD), ATTR_VER_JUSTIFY_METHOD, &::getCppuType((const sal_Int32*)0),   0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    &getCppuType((sal_Int16*)0),            0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_HIDDEN),   ATTR_HIDDEN,        &getCppuType((sal_Bool*)0),             0, 0 },
         {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aCellStyleSet_Impl( aCellStyleMap_Impl );
@@ -287,6 +288,7 @@ static const SfxItemPropertySet * lcl_GetPageStyleSet()
         {MAP_CHAR_LEN(SC_UNONAME_USERDEF),      ATTR_USERDEF,       &getCppuType((uno::Reference<container::XNameContainer>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_WIDTH),       ATTR_PAGE_SIZE,     &::getCppuType((const sal_Int32*)0),            0, MID_SIZE_WIDTH | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_WRITING),      ATTR_WRITINGDIR,    &getCppuType((sal_Int16*)0),            0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_HIDDEN),       ATTR_HIDDEN,        &getCppuType((sal_Bool*)0),             0, 0 },
         {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aPageStyleSet_Impl( aPageStyleMap_Impl );
@@ -1246,23 +1248,6 @@ void SAL_CALL ScStyleObj::setParentStyle( const rtl::OUString& rParentStyle )
     }
 }
 
-sal_Bool SAL_CALL ScStyleObj::isHidden( ) throw (uno::RuntimeException)
-{
-    SolarMutexGuard aGuard;
-    SfxStyleSheetBase* pStyle = GetStyle_Impl();
-    if (pStyle)
-        return pStyle->IsHidden();
-    return false;
-}
-
-void SAL_CALL ScStyleObj::setHidden( sal_Bool bHidden ) throw (uno::RuntimeException)
-{
-    SolarMutexGuard aGuard;
-    SfxStyleSheetBase* pStyle = GetStyle_Impl();
-    if (pStyle)
-        pStyle->SetHidden( bHidden );
-}
-
 // container::XNamed
 
 rtl::OUString SAL_CALL ScStyleObj::getName() throw(uno::RuntimeException)
@@ -1897,6 +1882,13 @@ void ScStyleObj::SetOnePropertyValue( const ::rtl::OUString& rPropertyName, cons
                                     }
                                 }
                                 break;
+                            case ATTR_HIDDEN:
+                                {
+                                    sal_Bool bHidden = sal_False;
+                                    if ( *pValue >>= bHidden )
+                                        pStyle->SetHidden( bHidden );
+                                }
+                                break;
                             default:
                                 //  Default-Items mit falscher Slot-ID
                                 //  funktionieren im SfxItemPropertySet3 nicht
@@ -2079,6 +2071,15 @@ uno::Any SAL_CALL ScStyleObj::getPropertyValue( const rtl::OUString& aPropertyNa
                                 aAny = uno::makeAny(static_cast<sal_Int16>(aItem.GetWidth()));
                             else
                                 aAny = uno::makeAny(static_cast<sal_Int16>(aItem.GetHeight()));
+                        }
+                        break;
+                    case ATTR_HIDDEN:
+                        {
+                            sal_Bool bHidden = sal_False;
+                            SfxStyleSheetBase* pStyle = GetStyle_Impl();
+                            if ( pStyle )
+                                bHidden = pStyle->IsHidden();
+                            aAny = uno::makeAny( bHidden );
                         }
                         break;
                     default:

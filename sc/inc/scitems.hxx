@@ -164,7 +164,9 @@
 
 #define ATTR_PAGE_SCALETO       190     // #i8868# scale printout to width/height
 
-#define ATTR_ENDINDEX           ATTR_PAGE_SCALETO        // end of pool-range
+#define ATTR_HIDDEN             191
+
+#define ATTR_ENDINDEX           ATTR_HIDDEN        // end of pool-range
 
 //--------------------------------
 // Dummy Slot-IDs for dialogs

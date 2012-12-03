@@ -815,8 +815,9 @@ enum SwPropNameIds
 /* 0754 */  UNO_NAME_TABLE_BORDER2,
 
 /* 0755 */  UNO_NAME_REPLACEMENT_GRAPHIC_URL,
+/* 0756 */  UNO_NAME_HIDDEN,
 
-/* 0756 */  SW_PROPNAME_END
+/* 0757 */  SW_PROPNAME_END
 
 // new items in this array must match SwPropNameTab aPropNameTab
 };

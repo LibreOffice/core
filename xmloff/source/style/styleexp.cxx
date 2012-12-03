@@ -121,8 +121,13 @@ sal_Bool XMLStyleExport::exportStyle(
     if( !rXMLFamily.isEmpty() )
         GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_FAMILY, rXMLFamily);
 
-    if ( rStyle->isHidden( ) && GetExport( ).getDefaultVersion( ) == SvtSaveOptions::ODFVER_LATEST )
-        GetExport( ).AddAttribute( XML_NAMESPACE_STYLE, XML_HIDDEN, "true" );
+    if ( xPropSetInfo->hasPropertyByName( "Hidden" ) )
+    {
+        aAny = xPropSet->getPropertyValue( "Hidden" );
+        sal_Bool bHidden = sal_False;
+        if ( ( aAny >>= bHidden ) && bHidden && GetExport( ).getDefaultVersion( ) == SvtSaveOptions::ODFVER_LATEST )
+            GetExport( ).AddAttribute( XML_NAMESPACE_STYLE, XML_HIDDEN, "true" );
+    }
 
     // style:parent-style-name="..."
     OUString sParentString(rStyle->getParentStyle());

@@ -269,8 +269,6 @@ public:
     ::sal_Bool SAL_CALL isInUse(  ) throw (uno::RuntimeException);
     ::rtl::OUString SAL_CALL getParentStyle(  ) throw (uno::RuntimeException);
     void SAL_CALL setParentStyle( const ::rtl::OUString& aParentStyle ) throw (container::NoSuchElementException, uno::RuntimeException);
-    ::sal_Bool SAL_CALL isHidden( ) throw (uno::RuntimeException) { return false; }
-    void SAL_CALL setHidden( ::sal_Bool ) throw (uno::RuntimeException) { };
 
     // XNamed
     ::rtl::OUString SAL_CALL getName(  ) throw (uno::RuntimeException);

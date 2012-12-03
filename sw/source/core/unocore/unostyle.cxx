@@ -1505,41 +1505,6 @@ void SwXStyle::setParentStyle(const OUString& rParentStyle)
         throw uno::RuntimeException();
 }
 
-sal_Bool SAL_CALL SwXStyle::isHidden( ) throw( uno::RuntimeException )
-{
-    sal_Bool bHidden = sal_False;
-    SolarMutexGuard aGuard;
-    if( pBasePool )
-    {
-        pBasePool->SetSearchMask( eFamily );
-        SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
-        if(pBase)
-        {
-            rtl::Reference< SwDocStyleSheet > xBase( new SwDocStyleSheet(*(SwDocStyleSheet*)pBase) );
-            bHidden = xBase->IsHidden();
-        }
-    }
-    return bHidden;
-}
-
-void SAL_CALL SwXStyle::setHidden( sal_Bool bHidden )
-            throw( uno::RuntimeException )
-{
-    SolarMutexGuard aGuard;
-    if( pBasePool )
-    {
-        pBasePool->SetSearchMask( eFamily );
-        SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
-        if(pBase)
-        {
-            rtl::Reference< SwDocStyleSheet > xBase( new SwDocStyleSheet(*(SwDocStyleSheet*)pBase) );
-            //make it a 'real' style - necessary for pooled styles
-            xBase->GetItemSet();
-            xBase->SetHidden( bHidden );
-        }
-    }
-}
-
 static uno::Reference< beans::XPropertySetInfo > lcl_getPropertySetInfo( SfxStyleFamily eFamily, sal_Bool bIsConditional )
 {
     uno::Reference< beans::XPropertySetInfo >  xRet;
@@ -1715,6 +1680,18 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
 {
     switch(rEntry.nWID)
     {
+        case FN_UNO_HIDDEN:
+        {
+            sal_Bool bHidden = sal_False;
+            if ( rValue >>= bHidden )
+            {
+                //make it a 'real' style - necessary for pooled styles
+                rBase.mxNewBase->GetItemSet();
+                rBase.mxNewBase->SetHidden( bHidden );
+            }
+        }
+        break;
+
         case RES_PAPER_BIN:
         {
             SfxPrinter *pPrinter = pDoc->getPrinter( true );
@@ -2209,6 +2186,16 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                 bPhys = sal_False;
         }
         aRet.setValue(&bPhys, ::getBooleanCppuType());
+    }
+    else if (FN_UNO_HIDDEN == rEntry.nWID)
+    {
+        sal_Bool bHidden = sal_False;
+        if(pBase)
+        {
+            rtl::Reference< SwDocStyleSheet > xBase( new SwDocStyleSheet(*(SwDocStyleSheet*)pBase) );
+            bHidden = xBase->IsHidden();
+        }
+        aRet.setValue(&bHidden, ::getBooleanCppuType());
     }
     else if(pBase)
     {

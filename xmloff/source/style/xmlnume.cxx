@@ -751,7 +751,14 @@ sal_Bool SvxXMLNumRuleExport::exportStyle( const Reference< XStyle >& rStyle )
 
     OUString sName = rStyle->getName();
 
-    exportNumberingRule( sName, rStyle->isHidden(), xNumRule );
+    sal_Bool bHidden = sal_False;
+    if ( xPropSetInfo->hasPropertyByName( "Hidden" ) )
+    {
+        aAny = xPropSet->getPropertyValue( "Hidden" );
+        aAny >>= bHidden;
+    }
+
+    exportNumberingRule( sName, bHidden, xNumRule );
 
     return sal_True;
 }

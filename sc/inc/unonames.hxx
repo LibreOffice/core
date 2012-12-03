@@ -125,6 +125,7 @@
 #define SC_UNONAME_ROTREF           "RotateReference"
 #define SC_UNONAME_ASIANVERT        "AsianVerticalMode"
 #define SC_UNONAME_WRITING          "WritingMode"
+#define SC_UNONAME_HIDDEN           "Hidden"
 
 #define SC_UNONAME_BOTTBORDER       "BottomBorder"
 #define SC_UNONAME_LEFTBORDER       "LeftBorder"

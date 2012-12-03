@@ -54,15 +54,6 @@ published interface XStyle: com::sun::star::container::XNamed
      */
     void setParentStyle( [in] string aParentStyle )
             raises( com::sun::star::container::NoSuchElementException );
-
-
-    /** tells whether the style is hidden in the UI.
-     */
-    boolean isHidden();
-
-    /** sets whether a style should be hidden in the UI.
-     */
-    void setHidden( [in] boolean hidden );
 };
 
 

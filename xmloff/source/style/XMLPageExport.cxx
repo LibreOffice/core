@@ -117,8 +117,13 @@ sal_Bool XMLPageExport::exportStyle(
         GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NAME,
                           GetExport().EncodeStyleName( sName, &bEncoded ) );
 
-        if ( rStyle->isHidden( ) && GetExport( ).getDefaultVersion( ) == SvtSaveOptions::ODFVER_LATEST )
-            GetExport( ).AddAttribute( XML_NAMESPACE_STYLE, XML_HIDDEN, "true" );
+        if ( xPropSetInfo->hasPropertyByName( "Hidden" ) )
+        {
+            uno::Any aValue = xPropSet->getPropertyValue( "Hidden" );
+            sal_Bool bHidden = sal_False;
+            if ( ( aValue >>= bHidden ) && bHidden && GetExport( ).getDefaultVersion( ) == SvtSaveOptions::ODFVER_LATEST )
+                GetExport( ).AddAttribute( XML_NAMESPACE_STYLE, XML_HIDDEN, "true" );
+        }
 
         if( bEncoded )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_DISPLAY_NAME,

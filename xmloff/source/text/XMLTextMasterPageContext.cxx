@@ -292,6 +292,11 @@ void XMLTextMasterPageContext::Finish( sal_Bool bOverwrite )
                 xPropSet->setPropertyValue( sFollowStyle, aAny );
             }
         }
+
+        if ( xPropSetInfo->hasPropertyByName( "Hidden" ) )
+        {
+            xPropSet->setPropertyValue( "Hidden", uno::makeAny( IsHidden( ) ) );
+        }
     }
 }
 

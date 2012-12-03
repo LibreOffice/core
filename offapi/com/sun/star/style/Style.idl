@@ -135,6 +135,10 @@ published service Style
      */
     [optional, property] sequence< com::sun::star::beans::NamedValue > ParaStyleConditions;
 
+    /** Flag indicating whether to hide the style in the UI.
+        @since LibreOffice 4.0
+     */
+    [optional, property] boolean Hidden;
 };
 
 

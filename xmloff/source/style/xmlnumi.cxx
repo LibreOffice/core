@@ -1257,6 +1257,10 @@ void SvxXMLListStyleContext::CreateAndInsertLate( sal_Bool bOverwrite )
             Any aAny = xPropSet->getPropertyValue( sIsPhysical );
             bNew = !*(sal_Bool *)aAny.getValue();
         }
+
+        if ( xPropSetInfo->hasPropertyByName( "Hidden" ) )
+            xPropSet->setPropertyValue( "Hidden", uno::makeAny( IsHidden( ) ) );
+
         if( rName != GetName() )
             GetImport().AddStyleDisplayName( XML_STYLE_FAMILY_TEXT_LIST,
                                              GetName(), rName );

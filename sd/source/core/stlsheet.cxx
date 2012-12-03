@@ -66,6 +66,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::drawing;
 
+#define WID_STYLE_HIDDEN    7997
 #define WID_STYLE_DISPNAME  7998
 #define WID_STYLE_FAMILY    7999
 
@@ -76,6 +77,7 @@ static SvxItemPropertySet& GetStylePropertySet()
         { RTL_CONSTASCII_STRINGPARAM("Family"),                 WID_STYLE_FAMILY,       &::getCppuType((const OUString*)0), PropertyAttribute::READONLY,    0},
         { RTL_CONSTASCII_STRINGPARAM("UserDefinedAttributes"),  SDRATTR_XMLATTRIBUTES,  &XNameContainer::static_type(), 0,     0},
         { RTL_CONSTASCII_STRINGPARAM("DisplayName"),            WID_STYLE_DISPNAME,     &::getCppuType((const OUString*)0), PropertyAttribute::READONLY,    0},
+        { RTL_CONSTASCII_STRINGPARAM("Hidden"),                 WID_STYLE_HIDDEN,       &::getCppuType((bool*)0),       0,     0},
 
         SVX_UNOEDIT_NUMBERING_PROPERTIE,
         SHADOW_PROPERTIES
@@ -1024,22 +1026,6 @@ void SAL_CALL SdStyleSheet::setParentStyle( const OUString& rParentName  ) throw
     }
 }
 
-sal_Bool SAL_CALL SdStyleSheet::isHidden() throw(RuntimeException)
-{
-    SolarMutexGuard aGuard;
-    throwIfDisposed();
-
-    return IsHidden();
-}
-
-void SAL_CALL SdStyleSheet::setHidden( sal_Bool rbHidden ) throw(RuntimeException)
-{
-    SolarMutexGuard aGuard;
-    throwIfDisposed();
-
-    return SetHidden( rbHidden );
-}
-
 // --------------------------------------------------------------------
 // XPropertySet
 // --------------------------------------------------------------------
@@ -1067,6 +1053,13 @@ void SAL_CALL SdStyleSheet::setPropertyValue( const OUString& aPropertyName, con
     }
     else
     {
+        if( pEntry->nWID == WID_STYLE_HIDDEN )
+        {
+            sal_Bool bValue = sal_False;
+            if ( aValue >>= bValue )
+                SetHidden( bValue );
+            return;
+        }
         if( pEntry->nWID == SDRATTR_TEXTDIRECTION )
             return; // not yet implemented for styles
 
@@ -1187,6 +1180,10 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName ) thro
                 else
                     aAny <<= BitmapMode_NO_REPEAT;
             }
+        }
+        else if( pEntry->nWID == WID_STYLE_HIDDEN )
+        {
+            aAny <<= IsHidden( );
         }
         else
         {

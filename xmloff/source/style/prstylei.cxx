@@ -267,6 +267,7 @@ void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
         if( rName != GetName() )
             GetImport().AddStyleDisplayName( GetFamily(), GetName(), rName );
 
+
         if( bOverwrite || bNew )
         {
             Reference< XPropertyState > xPropState( xPropSet, uno::UNO_QUERY );
@@ -341,8 +342,6 @@ void XMLPropStyleContext::Finish( sal_Bool bOverwrite )
         if( !xFamilies.is() )
             return;
 
-        mxStyle->setHidden( IsHidden( ) );
-
         // connect parent
         OUString sParent( GetParentName() );
         if( !sParent.isEmpty() )
@@ -402,6 +401,12 @@ void XMLPropStyleContext::Finish( sal_Bool bOverwrite )
                 xPropSet->setPropertyValue( msFollowStyle, aAny );
             }
         }
+
+        if ( xPropSetInfo->hasPropertyByName( "Hidden" ) )
+        {
+            xPropSet->setPropertyValue( "Hidden", uno::makeAny( IsHidden( ) ) );
+        }
+
     }
 }
 

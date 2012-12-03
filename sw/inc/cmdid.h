@@ -659,6 +659,7 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_UNO_TABLE_BORDER2                (FN_EXTRA2 + 120)
 
 #define FN_UNO_REPLACEMENT_GRAPHIC_U_R_L    (FN_EXTRA2 + 121)
+#define FN_UNO_HIDDEN                       (FN_EXTRA2 + 122)
 
 /*------------------------------------------------ --------------------
     Area: Help
