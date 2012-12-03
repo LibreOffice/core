@@ -2054,15 +2054,13 @@ SfxDocumentMetaData::loadFromMedium(const ::rtl::OUString & URL,
         md[ ::comphelper::MediaDescriptor::PROP_INPUTSTREAM() ] >>= xIn;
     }
     css::uno::Reference<css::embed::XStorage> xStorage;
-    css::uno::Reference<css::lang::XMultiServiceFactory> xMsf (
-        m_xContext->getServiceManager(), css::uno::UNO_QUERY_THROW);
     try {
         if (xIn.is()) {
             xStorage = ::comphelper::OStorageHelper::GetStorageFromInputStream(
-                            xIn, xMsf);
+                            xIn, m_xContext);
         } else { // fallback to url parameter
             xStorage = ::comphelper::OStorageHelper::GetStorageFromURL(
-                            URL, css::embed::ElementModes::READ, xMsf);
+                            URL, css::embed::ElementModes::READ, m_xContext);
         }
     } catch (const css::uno::RuntimeException &) {
         throw;

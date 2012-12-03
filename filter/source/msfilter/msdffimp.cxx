@@ -2702,47 +2702,44 @@ void DffPropertyReader::CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItem
                     ( new ::comphelper::SequenceInputStream( aXMLDataSeq ) );
                 try
                 {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-                    if ( xFactory.is() )
+                    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+                    ::com::sun::star::uno::Reference< com::sun::star::embed::XStorage > xStorage
+                        ( ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(
+                            OFOPXML_STORAGE_FORMAT_STRING, xInputStream, xContext, sal_True ) );
+                    if ( xStorage.is() )
                     {
-                        ::com::sun::star::uno::Reference< com::sun::star::embed::XStorage > xStorage
-                            ( ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(
-                                OFOPXML_STORAGE_FORMAT_STRING, xInputStream, xFactory, sal_True ) );
-                        if ( xStorage.is() )
+                        const rtl::OUString sDRS( RTL_CONSTASCII_USTRINGPARAM ( "drs" ) );
+                        ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
+                            xStorageDRS( xStorage->openStorageElement( sDRS, ::com::sun::star::embed::ElementModes::SEEKABLEREAD ) );
+                        if ( xStorageDRS.is() )
                         {
-                            const rtl::OUString sDRS( RTL_CONSTASCII_USTRINGPARAM ( "drs" ) );
-                            ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
-                                xStorageDRS( xStorage->openStorageElement( sDRS, ::com::sun::star::embed::ElementModes::SEEKABLEREAD ) );
-                            if ( xStorageDRS.is() )
+                            const rtl::OUString sShapeXML( RTL_CONSTASCII_USTRINGPARAM ( "shapexml.xml" ) );
+                            ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > xShapeXMLStream( xStorageDRS->openStreamElement( sShapeXML, ::com::sun::star::embed::ElementModes::SEEKABLEREAD ) );
+                            if ( xShapeXMLStream.is() )
                             {
-                                const rtl::OUString sShapeXML( RTL_CONSTASCII_USTRINGPARAM ( "shapexml.xml" ) );
-                                ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > xShapeXMLStream( xStorageDRS->openStreamElement( sShapeXML, ::com::sun::star::embed::ElementModes::SEEKABLEREAD ) );
-                                if ( xShapeXMLStream.is() )
+                                ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xShapeXMLInputStream( xShapeXMLStream->getInputStream() );
+                                if ( xShapeXMLInputStream.is() )
                                 {
-                                    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xShapeXMLInputStream( xShapeXMLStream->getInputStream() );
-                                    if ( xShapeXMLInputStream.is() )
-                                    {
-                                        ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
-                                        sal_Int32 nBytesRead = xShapeXMLInputStream->readBytes( aSeq, 0x7fffffff );
-                                        if ( nBytesRead )
-                                        {    // for only one property I spare to use a XML parser at this point, this
-                                            // should be enhanced if needed
+                                    ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
+                                    sal_Int32 nBytesRead = xShapeXMLInputStream->readBytes( aSeq, 0x7fffffff );
+                                    if ( nBytesRead )
+                                    {    // for only one property I spare to use a XML parser at this point, this
+                                        // should be enhanced if needed
 
-                                            bRotateTextWithShape = sal_True;    // using the correct xml default
-                                            const char* pArry = reinterpret_cast< char* >( aSeq.getArray() );
-                                            const char* pUpright = "upright=";
-                                            const char* pEnd = pArry + nBytesRead;
-                                            const char* pPtr = pArry;
-                                            while( ( pPtr + 12 ) < pEnd )
+                                        bRotateTextWithShape = sal_True;    // using the correct xml default
+                                        const char* pArry = reinterpret_cast< char* >( aSeq.getArray() );
+                                        const char* pUpright = "upright=";
+                                        const char* pEnd = pArry + nBytesRead;
+                                        const char* pPtr = pArry;
+                                        while( ( pPtr + 12 ) < pEnd )
+                                        {
+                                            if ( !memcmp( pUpright, pPtr, 8 ) )
                                             {
-                                                if ( !memcmp( pUpright, pPtr, 8 ) )
-                                                {
-                                                    bRotateTextWithShape = ( pPtr[ 9 ] != '1' ) && ( pPtr[ 9 ] != 't' );
-                                                    break;
-                                                }
-                                                else
-                                                    pPtr++;
+                                                bRotateTextWithShape = ( pPtr[ 9 ] != '1' ) && ( pPtr[ 9 ] != 't' );
+                                                break;
                                             }
+                                            else
+                                                pPtr++;
                                         }
                                     }
                                 }

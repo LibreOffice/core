@@ -45,7 +45,7 @@ namespace tdoc_ucp {
     public:
         StorageElementFactory(
             const com::sun::star::uno::Reference<
-                com::sun::star::lang::XMultiServiceFactory > & xSMgr,
+                com::sun::star::uno::XComponentContext > & rxContext,
             const rtl::Reference< OfficeDocumentsManager > & xDocsMgr );
         ~StorageElementFactory();
 
@@ -156,7 +156,7 @@ namespace tdoc_ucp {
         osl::Mutex m_aMutex;
         rtl::Reference< OfficeDocumentsManager > m_xDocsMgr;
         com::sun::star::uno::Reference<
-            com::sun::star::lang::XMultiServiceFactory > m_xSMgr;
+            com::sun::star::uno::XComponentContext > m_xContext;
     };
 
 } // namespace tdoc_ucp

@@ -1640,7 +1640,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                 try
                 {
                     uno::Reference < embed::XStorage > xStorage =
-                            ::comphelper::OStorageHelper::GetStorageFromInputStream( xStrm, ::comphelper::getProcessServiceFactory() );
+                            ::comphelper::OStorageHelper::GetStorageFromInputStream( xStrm, ::comphelper::getProcessComponentContext() );
                     uno::Reference < beans::XPropertySet > xProps( xStorage, uno::UNO_QUERY );
                     SfxMedium aMedium( xStorage, OUString() );
                     Insert( aMedium );

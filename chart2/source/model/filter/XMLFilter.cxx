@@ -43,6 +43,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/embed/StorageFactory.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
@@ -101,10 +102,7 @@ uno::Reference< embed::XStorage > lcl_getWriteStorage(
         }
         else
         {
-            Reference< lang::XSingleServiceFactory > xStorageFact(
-                xContext->getServiceManager()->createInstanceWithContext(
-                    C2U("com.sun.star.embed.StorageFactory"),
-                    xContext ), uno::UNO_QUERY_THROW );
+            Reference< lang::XSingleServiceFactory > xStorageFact( embed::StorageFactory::create( xContext ) );
 
             ::std::vector< beans::PropertyValue > aPropertiesForStorage;
 
@@ -188,11 +186,7 @@ uno::Reference< embed::XStorage > lcl_getReadStorage(
                 return xStorage;
 
             // convert XInputStream to XStorage via the storage factory
-            Reference< lang::XSingleServiceFactory > xStorageFact(
-                xContext->getServiceManager()->createInstanceWithContext(
-                    C2U("com.sun.star.embed.StorageFactory"),
-                    xContext ),
-                uno::UNO_QUERY_THROW );
+            Reference< lang::XSingleServiceFactory > xStorageFact( embed::StorageFactory::create( xContext ) );
             Sequence< uno::Any > aStorageArgs( 3 );
             aStorageArgs[0] <<= xStream;
             aStorageArgs[1] <<= (embed::ElementModes::READ | embed::ElementModes::NOCREATE);

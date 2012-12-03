@@ -62,9 +62,8 @@ ZipStorage::ZipStorage( const Reference< XComponentContext >& rxContext, const R
             TODO: #i105410# switch to 'OFOPXMLFormat' and use its
             implementation of relations handling.
          */
-        Reference< XMultiServiceFactory > xFactory( rxContext->getServiceManager(), UNO_QUERY_THROW );
         mxStorage = ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(
-            ZIP_STORAGE_FORMAT_STRING, rxInStream, xFactory,
+            ZIP_STORAGE_FORMAT_STRING, rxInStream, rxContext,
             sal_False );    // DEV300_m80: Was sal_True, but DOCX and others did not load
     }
     catch (Exception const& e)
@@ -81,10 +80,9 @@ ZipStorage::ZipStorage( const Reference< XComponentContext >& rxContext, const R
     // create base storage object
     if( rxContext.is() ) try
     {
-        Reference< XMultiServiceFactory > xFactory( rxContext->getServiceManager(), UNO_QUERY_THROW );
         const sal_Int32 nOpenMode = ElementModes::READWRITE | ElementModes::TRUNCATE;
         mxStorage = ::comphelper::OStorageHelper::GetStorageOfFormatFromStream(
-            OFOPXML_STORAGE_FORMAT_STRING, rxStream, nOpenMode, xFactory, sal_True );
+            OFOPXML_STORAGE_FORMAT_STRING, rxStream, nOpenMode, rxContext, sal_True );
     }
     catch (Exception const& e)
     {

@@ -60,7 +60,7 @@ ORptTypeDetection::ORptTypeDetection(Reference< XComponentContext > const & xCon
         {
             try
             {
-                Reference<XPropertySet> xProp(::comphelper::OStorageHelper::GetStorageFromURL(sTemp,ElementModes::READ,Reference< XMultiServiceFactory >(m_xContext->getServiceManager(),UNO_QUERY)),UNO_QUERY);
+                Reference<XPropertySet> xProp(::comphelper::OStorageHelper::GetStorageFromURL(sTemp,ElementModes::READ, m_xContext),UNO_QUERY);
                 if ( xProp.is() )
                 {
                     ::rtl::OUString sMediaType;

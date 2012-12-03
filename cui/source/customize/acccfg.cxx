@@ -31,6 +31,7 @@
 #include <sfx2/sfxresid.hxx>
 #include <svl/stritem.hxx>
 #include "svtools/treelistentry.hxx"
+#include <com/sun/star/embed/StorageFactory.hpp>
 
 #include <sal/macros.h>
 
@@ -74,7 +75,6 @@ using namespace com::sun::star;
 
 
 //-----------------------------------------------
-static ::rtl::OUString SERVICE_STORAGEFACTORY           (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.StorageFactory"                        ));
 static ::rtl::OUString SERVICE_UICONFIGMGR              (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.UIConfigurationManager"              ));
 static ::rtl::OUString SERVICE_DESKTOP                  (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"                               ));
 static ::rtl::OUString SERVICE_GLOBALACCCFG             (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.GlobalAcceleratorConfiguration"      ));
@@ -1232,7 +1232,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl)
         {
             // URL doesn't point to a loaded document, try to access it as a single storage
             // dont forget to release the storage afterwards!
-            css::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory(m_xSMGR->createInstance(SERVICE_STORAGEFACTORY), css::uno::UNO_QUERY_THROW);
+            css::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory( css::embed::StorageFactory::create( comphelper::getComponentContext(m_xSMGR) ) );
             css::uno::Sequence< css::uno::Any >                     lArgs(2);
             lArgs[0] <<= sCfgName;
             lArgs[1] <<= css::embed::ElementModes::READ;
@@ -1315,7 +1315,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl)
         else
         {
             // URL doesn't point to a loaded document, try to access it as a single storage
-            css::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory(m_xSMGR->createInstance(SERVICE_STORAGEFACTORY), css::uno::UNO_QUERY_THROW);
+            css::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory( css::embed::StorageFactory::create( comphelper::getComponentContext(m_xSMGR) ) );
             css::uno::Sequence< css::uno::Any >                     lArgs(2);
             lArgs[0] <<= sCfgName;
             lArgs[1] <<= css::embed::ElementModes::WRITE;

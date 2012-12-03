@@ -538,7 +538,7 @@ void SAL_CALL ODatabaseDocument::initNew(  ) throw (DoubleInitializationExceptio
 
     // create a temporary storage
     Reference< XStorage > xTempStor( ::comphelper::OStorageHelper::GetTemporaryStorage(
-        m_pImpl->m_aContext.getLegacyServiceFactory() ) );
+        m_pImpl->m_aContext.getUNOContext() ) );
 
     // store therein
     impl_storeToStorage_throw( xTempStor, Sequence< PropertyValue >(), aGuard );

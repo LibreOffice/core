@@ -64,7 +64,7 @@ class ContentProvider :
 {
 public:
     ContentProvider( const com::sun::star::uno::Reference<
-                        com::sun::star::lang::XMultiServiceFactory >& rXSMgr );
+                        com::sun::star::uno::XComponentContext >& rxContext );
     virtual ~ContentProvider();
 
     // XInterface

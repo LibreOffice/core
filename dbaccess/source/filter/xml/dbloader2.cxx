@@ -136,7 +136,7 @@ DBTypeDetection::DBTypeDetection(const Reference< XMultiServiceFactory >& _rxFac
         {
             bStreamFromDescr = sal_True;
             xStorageProperties.set( ::comphelper::OStorageHelper::GetStorageFromInputStream(
-                xInStream, m_aContext.getLegacyServiceFactory() ), UNO_QUERY );
+                xInStream, m_aContext.getUNOContext() ), UNO_QUERY );
         }
         else
         {
@@ -146,7 +146,7 @@ DBTypeDetection::DBTypeDetection(const Reference< XMultiServiceFactory >& _rxFac
             if ( !sFileLocation.isEmpty() )
             {
                 xStorageProperties.set( ::comphelper::OStorageHelper::GetStorageFromURL(
-                    sFileLocation, ElementModes::READ, m_aContext.getLegacyServiceFactory() ), UNO_QUERY );
+                    sFileLocation, ElementModes::READ, m_aContext.getUNOContext() ), UNO_QUERY );
             }
         }
 

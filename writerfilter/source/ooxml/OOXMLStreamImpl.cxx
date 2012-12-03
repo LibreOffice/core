@@ -40,10 +40,9 @@ OOXMLStreamImpl::OOXMLStreamImpl
  StreamType_t nType, bool bRepairStorage)
 : mxContext(xContext), mxStorageStream(xStorageStream), mnStreamType(nType)
 {
-    uno::Reference< lang::XMultiServiceFactory > xFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW);
     mxStorage.set
         (comphelper::OStorageHelper::GetStorageOfFormatFromInputStream
-         (OFOPXML_STORAGE_FORMAT_STRING, mxStorageStream, xFactory, bRepairStorage));
+         (OFOPXML_STORAGE_FORMAT_STRING, mxStorageStream, xContext, bRepairStorage));
     mxRelationshipAccess.set(mxStorage, uno::UNO_QUERY_THROW);
 
     init();

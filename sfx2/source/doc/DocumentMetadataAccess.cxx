@@ -1290,12 +1290,12 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     }
     uno::Reference<embed::XStorage> xStorage;
     try {
-        const uno::Reference<lang::XMultiServiceFactory> xMsf (
-            m_pImpl->m_xContext->getServiceManager(), uno::UNO_QUERY_THROW);
         if (xIn.is()) {
             xStorage = ::comphelper::OStorageHelper::GetStorageFromInputStream(
-                            xIn, xMsf);
+                            xIn, m_pImpl->m_xContext);
         } else { // fallback to url
+            const uno::Reference<lang::XMultiServiceFactory> xMsf (
+                m_pImpl->m_xContext->getServiceManager(), uno::UNO_QUERY_THROW);
             xStorage = ::comphelper::OStorageHelper::GetStorageFromURL2(
                             URL, embed::ElementModes::READ, xMsf);
         }

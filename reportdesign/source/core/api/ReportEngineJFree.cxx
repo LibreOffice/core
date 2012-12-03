@@ -178,7 +178,7 @@ void SAL_CALL OReportEngineJFree::setStatusIndicator( const uno::Reference< task
             else
                 sExt = rtl::OUString(".rpt");
 
-            uno::Reference< embed::XStorage > xTemp = OStorageHelper::GetTemporaryStorage(/*sFileTemp,embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE,*/uno::Reference< lang::XMultiServiceFactory >(m_xContext->getServiceManager(),uno::UNO_QUERY));
+            uno::Reference< embed::XStorage > xTemp = OStorageHelper::GetTemporaryStorage(/*sFileTemp,embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE,*/ m_xContext);
             utl::DisposableComponent aTemp(xTemp);
             uno::Sequence< beans::PropertyValue > aEmpty;
             uno::Reference< beans::XPropertySet> xStorageProp(xTemp,uno::UNO_QUERY);
@@ -210,7 +210,7 @@ void SAL_CALL OReportEngineJFree::setStatusIndicator( const uno::Reference< task
                     sFileURL = aTestFile.GetURL();
             }
 
-            uno::Reference< embed::XStorage > xOut = OStorageHelper::GetStorageFromURL(sFileURL,embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE,uno::Reference< lang::XMultiServiceFactory >(m_xContext->getServiceManager(),uno::UNO_QUERY));
+            uno::Reference< embed::XStorage > xOut = OStorageHelper::GetStorageFromURL(sFileURL,embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE, m_xContext);
             utl::DisposableComponent aOut(xOut);
             xStorageProp.set(xOut,uno::UNO_QUERY);
             if ( xStorageProp.is() )

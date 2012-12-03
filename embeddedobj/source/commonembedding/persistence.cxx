@@ -27,6 +27,7 @@
 #include <com/sun/star/embed/XOptimizedStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/EmbedUpdateModes.hpp>
+#include <com/sun/star/embed/StorageFactory.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -119,18 +120,15 @@ uno::Sequence< beans::PropertyValue > addAsTemplate( const uno::Sequence< beans:
 //------------------------------------------------------
 uno::Reference< io::XInputStream > createTempInpStreamFromStor(
                                                             const uno::Reference< embed::XStorage >& xStorage,
-                                                            const uno::Reference< lang::XMultiServiceFactory >& xFactory )
+                                                            const uno::Reference< uno::XComponentContext >& xContext )
 {
     OSL_ENSURE( xStorage.is(), "The storage can not be empty!" );
 
     uno::Reference< io::XInputStream > xResult;
 
-    uno::Reference < io::XStream > xTempStream( io::TempFile::create(comphelper::getComponentContext(xFactory)),
-                                                            uno::UNO_QUERY_THROW );
+    uno::Reference < io::XStream > xTempStream( io::TempFile::create(xContext), uno::UNO_QUERY_THROW );
 
-    uno::Reference < lang::XSingleServiceFactory > xStorageFactory(
-                xFactory->createInstance ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.StorageFactory" )) ),
-                uno::UNO_QUERY );
+    uno::Reference < lang::XSingleServiceFactory > xStorageFactory( embed::StorageFactory::create(xContext) );
 
     uno::Sequence< uno::Any > aArgs( 2 );
     aArgs[0] <<= xTempStream;
@@ -509,7 +507,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
     uno::Reference< io::XInputStream > xTempInpStream;
     if ( !xDoc.is() )
     {
-        xTempInpStream = createTempInpStreamFromStor( xSourceStorage, m_xFactory );
+        xTempInpStream = createTempInpStreamFromStor( xSourceStorage, comphelper::getComponentContext(m_xFactory) );
         if ( !xTempInpStream.is() )
             throw uno::RuntimeException();
 

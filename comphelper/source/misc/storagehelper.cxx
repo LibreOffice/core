@@ -21,6 +21,7 @@
 #include <com/sun/star/embed/XEncryptionProtectedSource2.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/embed/StorageFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -49,26 +50,12 @@ namespace comphelper {
 
 // ----------------------------------------------------------------------
 uno::Reference< lang::XSingleServiceFactory > OStorageHelper::GetStorageFactory(
-                            const uno::Reference< lang::XMultiServiceFactory >& xSF )
+                            const uno::Reference< uno::XComponentContext >& rxContext )
         throw ( uno::Exception )
 {
-    uno::Reference< lang::XMultiServiceFactory > xFactory = xSF.is() ? xSF : ::comphelper::getProcessServiceFactory();
-    if ( !xFactory.is() )
-        throw uno::RuntimeException();
+    uno::Reference< uno::XComponentContext> xContext = rxContext.is() ? rxContext : ::comphelper::getProcessComponentContext();
 
-    rtl::OUString sService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.StorageFactory"));
-
-    uno::Reference < lang::XSingleServiceFactory > xStorageFactory(
-                    xFactory->createInstance(sService), uno::UNO_QUERY);
-
-    if ( !xStorageFactory.is() )
-    {
-        throw uno::RuntimeException(rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("Could not load: ")) + sService,
-            uno::Reference< uno::XInterface >());
-    }
-
-    return xStorageFactory;
+    return embed::StorageFactory::create( xContext );
 }
 
 // ----------------------------------------------------------------------
@@ -97,10 +84,10 @@ uno::Reference< lang::XSingleServiceFactory > OStorageHelper::GetFileSystemStora
 
 // ----------------------------------------------------------------------
 uno::Reference< embed::XStorage > OStorageHelper::GetTemporaryStorage(
-            const uno::Reference< lang::XMultiServiceFactory >& xFactory )
+            const uno::Reference< uno::XComponentContext >& rxContext )
     throw ( uno::Exception )
 {
-    uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( xFactory )->createInstance(),
+    uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( rxContext )->createInstance(),
                                                     uno::UNO_QUERY );
     if ( !xTempStorage.is() )
         throw uno::RuntimeException();
@@ -112,14 +99,14 @@ uno::Reference< embed::XStorage > OStorageHelper::GetTemporaryStorage(
 uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromURL(
             const ::rtl::OUString& aURL,
             sal_Int32 nStorageMode,
-            const uno::Reference< lang::XMultiServiceFactory >& xFactory )
+            const uno::Reference< uno::XComponentContext >& rxContext )
     throw ( uno::Exception )
 {
     uno::Sequence< uno::Any > aArgs( 2 );
     aArgs[0] <<= aURL;
     aArgs[1] <<= nStorageMode;
 
-    uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( xFactory )->createInstanceWithArguments( aArgs ),
+    uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( rxContext )->createInstanceWithArguments( aArgs ),
                                                     uno::UNO_QUERY );
     if ( !xTempStorage.is() )
         throw uno::RuntimeException();
@@ -144,7 +131,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromURL2(
             uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > (),
             getProcessComponentContext() );
         if (aCntnt.isDocument()) {
-            xFact = GetStorageFactory( xFactory );
+            xFact = GetStorageFactory( comphelper::getComponentContext(xFactory) );
         } else {
             xFact = GetFileSystemStorageFactory( xFactory );
         }
@@ -163,14 +150,14 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromURL2(
 // ----------------------------------------------------------------------
 uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromInputStream(
             const uno::Reference < io::XInputStream >& xStream,
-            const uno::Reference< lang::XMultiServiceFactory >& xFactory )
+            const uno::Reference< uno::XComponentContext >& rxContext )
         throw ( uno::Exception )
 {
     uno::Sequence< uno::Any > aArgs( 2 );
     aArgs[0] <<= xStream;
     aArgs[1] <<= embed::ElementModes::READ;
 
-    uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( xFactory )->createInstanceWithArguments( aArgs ),
+    uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( rxContext )->createInstanceWithArguments( aArgs ),
                                                     uno::UNO_QUERY );
     if ( !xTempStorage.is() )
         throw uno::RuntimeException();
@@ -182,14 +169,14 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromInputStream(
 uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromStream(
             const uno::Reference < io::XStream >& xStream,
             sal_Int32 nStorageMode,
-            const uno::Reference< lang::XMultiServiceFactory >& xFactory )
+            const uno::Reference< uno::XComponentContext >& rxContext )
         throw ( uno::Exception )
 {
     uno::Sequence< uno::Any > aArgs( 2 );
     aArgs[0] <<= xStream;
     aArgs[1] <<= nStorageMode;
 
-    uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( xFactory )->createInstanceWithArguments( aArgs ),
+    uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( rxContext )->createInstanceWithArguments( aArgs ),
                                                     uno::UNO_QUERY );
     if ( !xTempStorage.is() )
         throw uno::RuntimeException();
@@ -311,7 +298,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromURL(
             const ::rtl::OUString& aFormat,
             const ::rtl::OUString& aURL,
             sal_Int32 nStorageMode,
-            const uno::Reference< lang::XMultiServiceFactory >& xFactory,
+            const uno::Reference< uno::XComponentContext >& rxContext,
             sal_Bool bRepairStorage )
     throw ( uno::Exception )
 {
@@ -330,7 +317,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromURL(
     aArgs[1] <<= nStorageMode;
     aArgs[2] <<= aProps;
 
-    uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( xFactory )->createInstanceWithArguments( aArgs ),
+    uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( rxContext )->createInstanceWithArguments( aArgs ),
                                                     uno::UNO_QUERY );
     if ( !xTempStorage.is() )
         throw uno::RuntimeException();
@@ -342,7 +329,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromURL(
 uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromInputStream(
             const ::rtl::OUString& aFormat,
             const uno::Reference < io::XInputStream >& xStream,
-            const uno::Reference< lang::XMultiServiceFactory >& xFactory,
+            const uno::Reference< uno::XComponentContext >& rxContext,
             sal_Bool bRepairStorage )
         throw ( uno::Exception )
 {
@@ -361,7 +348,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromInputStr
     aArgs[1] <<= embed::ElementModes::READ;
     aArgs[2] <<= aProps;
 
-    uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( xFactory )->createInstanceWithArguments( aArgs ),
+    uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( rxContext )->createInstanceWithArguments( aArgs ),
                                                     uno::UNO_QUERY );
     if ( !xTempStorage.is() )
         throw uno::RuntimeException();
@@ -374,7 +361,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromStream(
             const ::rtl::OUString& aFormat,
             const uno::Reference < io::XStream >& xStream,
             sal_Int32 nStorageMode,
-            const uno::Reference< lang::XMultiServiceFactory >& xFactory,
+            const uno::Reference< uno::XComponentContext >& rxContext,
             sal_Bool bRepairStorage )
         throw ( uno::Exception )
 {
@@ -393,7 +380,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromStream(
     aArgs[1] <<= nStorageMode;
     aArgs[2] <<= aProps;
 
-    uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( xFactory )->createInstanceWithArguments( aArgs ),
+    uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( rxContext )->createInstanceWithArguments( aArgs ),
                                                     uno::UNO_QUERY );
     if ( !xTempStorage.is() )
         throw uno::RuntimeException();

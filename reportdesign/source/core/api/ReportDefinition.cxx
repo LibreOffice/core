@@ -51,6 +51,7 @@
 #include <com/sun/star/embed/EntryInitModes.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/embed/StorageFactory.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
@@ -1813,12 +1814,7 @@ void SAL_CALL OReportDefinition::load( const uno::Sequence< beans::PropertyValue
             1
         );
 
-    uno::Reference< lang::XSingleServiceFactory > xStorageFactory(
-        m_aProps->m_xContext->getServiceManager()->createInstanceWithContext(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.StorageFactory" ) ),
-            m_aProps->m_xContext ),
-        uno::UNO_QUERY_THROW
-    );
+    uno::Reference< lang::XSingleServiceFactory > xStorageFactory( embed::StorageFactory::create( m_aProps->m_xContext ) );
 
     // open read-write per default, unless told otherwise in the MediaDescriptor
     uno::Reference< embed::XStorage > xDocumentStorage;

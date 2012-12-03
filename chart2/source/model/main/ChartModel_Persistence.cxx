@@ -37,6 +37,7 @@
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/embed/StorageFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -118,11 +119,7 @@ Reference< embed::XStorage > lcl_createStorage(
             ::ucbhelper::Content( rURL, Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext()).openStream(),
             uno::UNO_QUERY );
 
-        Reference< lang::XSingleServiceFactory > xStorageFact(
-            xContext->getServiceManager()->createInstanceWithContext(
-                C2U("com.sun.star.embed.StorageFactory"),
-                xContext ),
-            uno::UNO_QUERY_THROW );
+        Reference< lang::XSingleServiceFactory > xStorageFact( embed::StorageFactory::create( xContext ) );
         Sequence< uno::Any > aStorageArgs( 3 );
         aStorageArgs[0] <<= xStream;
         aStorageArgs[1] <<= embed::ElementModes::READWRITE;
@@ -311,13 +308,12 @@ void SAL_CALL ChartModel::storeToURL(
         {
             if( m_xContext.is() && aMediaDescriptorHelper.ISSET_OutputStream )
             {
-                Reference< lang::XMultiServiceFactory > xFact( m_xContext->getServiceManager(), uno::UNO_QUERY_THROW );
                 Reference< io::XStream > xStream(
                     io::TempFile::create(m_xContext), uno::UNO_QUERY_THROW );
                 Reference< io::XInputStream > xInputStream( xStream->getInputStream());
 
                 Reference< embed::XStorage > xStorage(
-                    ::comphelper::OStorageHelper::GetStorageFromStream( xStream, embed::ElementModes::READWRITE, xFact ));
+                    ::comphelper::OStorageHelper::GetStorageFromStream( xStream, embed::ElementModes::READWRITE, m_xContext ));
                 if( xStorage.is())
                 {
                     impl_store( aReducedMediaDescriptor, xStorage );
@@ -528,11 +524,7 @@ void SAL_CALL ChartModel::load(
                 return;
             }
 
-            Reference< lang::XSingleServiceFactory > xStorageFact(
-                m_xContext->getServiceManager()->createInstanceWithContext(
-                    C2U("com.sun.star.embed.StorageFactory"),
-                    m_xContext ),
-                uno::UNO_QUERY_THROW );
+            Reference< lang::XSingleServiceFactory > xStorageFact( embed::StorageFactory::create(m_xContext) );
 
             if( aMDHelper.ISSET_Stream )
             {

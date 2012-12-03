@@ -50,10 +50,10 @@ using namespace tdoc_ucp;
 //=========================================================================
 
 ContentProvider::ContentProvider(
-            const uno::Reference< lang::XMultiServiceFactory >& xSMgr )
-: ::ucbhelper::ContentProviderImplHelper( comphelper::getComponentContext(xSMgr) ),
-  m_xDocsMgr( new OfficeDocumentsManager( comphelper::getComponentContext(xSMgr), this ) ),
-  m_xStgElemFac( new StorageElementFactory( xSMgr, m_xDocsMgr ) )
+            const uno::Reference< uno::XComponentContext >& rxContext )
+: ::ucbhelper::ContentProviderImplHelper( rxContext ),
+  m_xDocsMgr( new OfficeDocumentsManager( rxContext, this ) ),
+  m_xStgElemFac( new StorageElementFactory( rxContext, m_xDocsMgr ) )
 {
 }
 
@@ -95,7 +95,7 @@ XTYPEPROVIDER_IMPL_4( ContentProvider,
 //
 //=========================================================================
 
-XSERVICEINFO_IMPL_1(
+XSERVICEINFO_IMPL_1_CTX(
     ContentProvider,
     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
         "com.sun.star.comp.ucb.TransientDocumentsContentProvider" ) ),

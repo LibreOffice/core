@@ -17,6 +17,7 @@
 
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/embed/StorageFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -176,92 +177,84 @@ BitmapEx TemplateAbstractView::fetchThumbnail (const OUString &msURL, long width
     // Load the thumbnail from a template document.
     uno::Reference<io::XInputStream> xIStream;
 
-    uno::Reference< lang::XMultiServiceFactory > xServiceManager (comphelper::getProcessServiceFactory());
+    uno::Reference< uno::XComponentContext > xContext (comphelper::getProcessComponentContext());
 
-    if (xServiceManager.is())
+    try
     {
+        uno::Reference<lang::XSingleServiceFactory> xStorageFactory = embed::StorageFactory::create( xContext );
+
+        uno::Sequence<uno::Any> aArgs (2);
+        aArgs[0] <<= msURL;
+        aArgs[1] <<= embed::ElementModes::READ;
+        uno::Reference<embed::XStorage> xDocStorage (
+            xStorageFactory->createInstanceWithArguments(aArgs),
+            uno::UNO_QUERY);
+
         try
         {
-            uno::Reference<lang::XSingleServiceFactory> xStorageFactory(
-                xServiceManager->createInstance( "com.sun.star.embed.StorageFactory"),
-                uno::UNO_QUERY);
-
-            if (xStorageFactory.is())
+            if (xDocStorage.is())
             {
-                uno::Sequence<uno::Any> aArgs (2);
-                aArgs[0] <<= msURL;
-                aArgs[1] <<= embed::ElementModes::READ;
-                uno::Reference<embed::XStorage> xDocStorage (
-                    xStorageFactory->createInstanceWithArguments(aArgs),
-                    uno::UNO_QUERY);
-
-                try
+                uno::Reference<embed::XStorage> xStorage (
+                    xDocStorage->openStorageElement(
+                        "Thumbnails",
+                        embed::ElementModes::READ));
+                if (xStorage.is())
                 {
-                    if (xDocStorage.is())
-                    {
-                        uno::Reference<embed::XStorage> xStorage (
-                            xDocStorage->openStorageElement(
-                                "Thumbnails",
-                                embed::ElementModes::READ));
-                        if (xStorage.is())
-                        {
-                            uno::Reference<io::XStream> xThumbnailCopy (
-                                xStorage->cloneStreamElement("thumbnail.png"));
-                            if (xThumbnailCopy.is())
-                                xIStream = xThumbnailCopy->getInputStream();
-                        }
-                    }
-                }
-                catch (const uno::Exception& rException)
-                {
-                    OSL_TRACE (
-                        "caught exception while trying to access Thumbnail/thumbnail.png of %s: %s",
-                        ::rtl::OUStringToOString(msURL,
-                            RTL_TEXTENCODING_UTF8).getStr(),
-                        ::rtl::OUStringToOString(rException.Message,
-                            RTL_TEXTENCODING_UTF8).getStr());
-                }
-
-                try
-                {
-                    // An (older) implementation had a bug - The storage
-                    // name was "Thumbnail" instead of "Thumbnails".  The
-                    // old name is still used as fallback but this code can
-                    // be removed soon.
-                    if ( ! xIStream.is())
-                    {
-                        uno::Reference<embed::XStorage> xStorage (
-                            xDocStorage->openStorageElement( "Thumbnail",
-                                embed::ElementModes::READ));
-                        if (xStorage.is())
-                        {
-                            uno::Reference<io::XStream> xThumbnailCopy (
-                                xStorage->cloneStreamElement("thumbnail.png"));
-                            if (xThumbnailCopy.is())
-                                xIStream = xThumbnailCopy->getInputStream();
-                        }
-                    }
-                }
-                catch (const uno::Exception& rException)
-                {
-                    OSL_TRACE (
-                        "caught exception while trying to access Thumbnails/thumbnail.png of %s: %s",
-                        ::rtl::OUStringToOString(msURL,
-                            RTL_TEXTENCODING_UTF8).getStr(),
-                        ::rtl::OUStringToOString(rException.Message,
-                            RTL_TEXTENCODING_UTF8).getStr());
+                    uno::Reference<io::XStream> xThumbnailCopy (
+                        xStorage->cloneStreamElement("thumbnail.png"));
+                    if (xThumbnailCopy.is())
+                        xIStream = xThumbnailCopy->getInputStream();
                 }
             }
         }
         catch (const uno::Exception& rException)
         {
             OSL_TRACE (
-                "caught exception while trying to access tuhmbnail of %s: %s",
+                "caught exception while trying to access Thumbnail/thumbnail.png of %s: %s",
                 ::rtl::OUStringToOString(msURL,
                     RTL_TEXTENCODING_UTF8).getStr(),
                 ::rtl::OUStringToOString(rException.Message,
                     RTL_TEXTENCODING_UTF8).getStr());
         }
+
+        try
+        {
+            // An (older) implementation had a bug - The storage
+            // name was "Thumbnail" instead of "Thumbnails".  The
+            // old name is still used as fallback but this code can
+            // be removed soon.
+            if ( ! xIStream.is())
+            {
+                uno::Reference<embed::XStorage> xStorage (
+                    xDocStorage->openStorageElement( "Thumbnail",
+                        embed::ElementModes::READ));
+                if (xStorage.is())
+                {
+                    uno::Reference<io::XStream> xThumbnailCopy (
+                        xStorage->cloneStreamElement("thumbnail.png"));
+                    if (xThumbnailCopy.is())
+                        xIStream = xThumbnailCopy->getInputStream();
+                }
+            }
+        }
+        catch (const uno::Exception& rException)
+        {
+            OSL_TRACE (
+                "caught exception while trying to access Thumbnails/thumbnail.png of %s: %s",
+                ::rtl::OUStringToOString(msURL,
+                    RTL_TEXTENCODING_UTF8).getStr(),
+                ::rtl::OUStringToOString(rException.Message,
+                    RTL_TEXTENCODING_UTF8).getStr());
+        }
+    }
+    catch (const uno::Exception& rException)
+    {
+        OSL_TRACE (
+            "caught exception while trying to access tuhmbnail of %s: %s",
+            ::rtl::OUStringToOString(msURL,
+                RTL_TEXTENCODING_UTF8).getStr(),
+            ::rtl::OUStringToOString(rException.Message,
+                RTL_TEXTENCODING_UTF8).getStr());
     }
 
     // Extract the image from the stream.

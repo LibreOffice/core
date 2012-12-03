@@ -35,6 +35,7 @@
 #include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/XTransactionBroadcaster.hpp>
+#include <com/sun/star/embed/StorageFactory.hpp>
 #include <com/sun/star/sdb/BooleanComparisonMode.hpp>
 #include <com/sun/star/script/DocumentScriptLibraryContainer.hpp>
 #include <com/sun/star/script/DocumentDialogLibraryContainer.hpp>
@@ -816,7 +817,7 @@ void ODatabaseModelImpl::disposeStorages() SAL_THROW(())
 
 Reference< XSingleServiceFactory > ODatabaseModelImpl::createStorageFactory() const
 {
-    return Reference< XSingleServiceFactory >( m_aContext.createComponent( "com.sun.star.embed.StorageFactory" ), UNO_QUERY_THROW );
+    return StorageFactory::create( m_aContext.getUNOContext() );
 }
 
 void ODatabaseModelImpl::commitRootStorage()
@@ -834,46 +835,43 @@ Reference< XStorage > ODatabaseModelImpl::getOrCreateRootStorage()
 {
     if ( !m_xDocumentStorage.is() )
     {
-        Reference< XSingleServiceFactory> xStorageFactory = createStorageFactory();
-        if ( xStorageFactory.is() )
+        Reference< XSingleServiceFactory> xStorageFactory = StorageFactory::create( m_aContext.getUNOContext() );
+        Any aSource;
+        aSource = m_aMediaDescriptor.get( "Stream" );
+        if ( !aSource.hasValue() )
+            aSource = m_aMediaDescriptor.get( "InputStream" );
+        if ( !aSource.hasValue() && !m_sDocFileLocation.isEmpty() )
+            aSource <<= m_sDocFileLocation;
+        // TODO: shouldn't we also check URL?
+
+        OSL_ENSURE( aSource.hasValue(), "ODatabaseModelImpl::getOrCreateRootStorage: no source to create the storage from!" );
+
+        if ( aSource.hasValue() )
         {
-            Any aSource;
-            aSource = m_aMediaDescriptor.get( "Stream" );
-            if ( !aSource.hasValue() )
-                aSource = m_aMediaDescriptor.get( "InputStream" );
-            if ( !aSource.hasValue() && !m_sDocFileLocation.isEmpty() )
-                aSource <<= m_sDocFileLocation;
-            // TODO: shouldn't we also check URL?
+            Sequence< Any > aStorageCreationArgs(2);
+            aStorageCreationArgs[0] = aSource;
+            aStorageCreationArgs[1] <<= ElementModes::READWRITE;
 
-            OSL_ENSURE( aSource.hasValue(), "ODatabaseModelImpl::getOrCreateRootStorage: no source to create the storage from!" );
-
-            if ( aSource.hasValue() )
+            Reference< XStorage > xDocumentStorage;
+            try
             {
-                Sequence< Any > aStorageCreationArgs(2);
-                aStorageCreationArgs[0] = aSource;
-                aStorageCreationArgs[1] <<= ElementModes::READWRITE;
-
-                Reference< XStorage > xDocumentStorage;
+                xDocumentStorage.set( xStorageFactory->createInstanceWithArguments( aStorageCreationArgs ), UNO_QUERY_THROW );
+            }
+            catch( const Exception& )
+            {
+                m_bDocumentReadOnly = sal_True;
+                aStorageCreationArgs[1] <<= ElementModes::READ;
                 try
                 {
                     xDocumentStorage.set( xStorageFactory->createInstanceWithArguments( aStorageCreationArgs ), UNO_QUERY_THROW );
                 }
                 catch( const Exception& )
                 {
-                    m_bDocumentReadOnly = sal_True;
-                    aStorageCreationArgs[1] <<= ElementModes::READ;
-                    try
-                    {
-                        xDocumentStorage.set( xStorageFactory->createInstanceWithArguments( aStorageCreationArgs ), UNO_QUERY_THROW );
-                    }
-                    catch( const Exception& )
-                    {
-                        DBG_UNHANDLED_EXCEPTION();
-                    }
+                    DBG_UNHANDLED_EXCEPTION();
                 }
-
-                impl_switchToStorage_throw( xDocumentStorage );
             }
+
+            impl_switchToStorage_throw( xDocumentStorage );
         }
     }
     return m_xDocumentStorage.getTyped();
