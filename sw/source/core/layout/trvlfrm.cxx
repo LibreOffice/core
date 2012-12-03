@@ -294,10 +294,13 @@ sal_Bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
                 // FIXME There are still cases were we don't have the proper node here.
                 SwCntntFrm* pBackFrm = pBackNd->getLayoutFrm( getRootFrm( ) );
                 SwRect rBackRect;
-                pBackFrm->GetCharRect( rBackRect, aBackPos );
+                if (pBackFrm)
+                {
+                    pBackFrm->GetCharRect( rBackRect, aBackPos );
 
-                nBackDistance = lcl_getDistance( rBackRect, rPoint );
-                bValidBackDistance = true;
+                    nBackDistance = lcl_getDistance( rBackRect, rPoint );
+                    bValidBackDistance = true;
+                }
             }
 
             if ( bValidTextDistance && bValidBackDistance && basegfx::fTools::more( nTextDistance, nBackDistance ) )
