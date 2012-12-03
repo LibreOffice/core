@@ -1340,7 +1340,7 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
 |*
 |*************************************************************************/
 
-bool IsValidRowName( const String& rStr )
+static bool lcl_IsValidRowName( const String& rStr )
 {
     bool bIsValid = true;
     xub_StrLen nLen = rStr.Len();
@@ -1383,7 +1383,7 @@ sal_uInt16 SwTable::_GetBoxNum( String& rStr, sal_Bool bFirstPart,
     else if( STRING_NOTFOUND == ( nPos = rStr.Search( aDotStr ) ))
     {
         nRet = 0;
-        if ( !bPerformValidCheck || IsValidRowName( rStr ) )
+        if ( !bPerformValidCheck || lcl_IsValidRowName( rStr ) )
         {
             nRet = static_cast<sal_uInt16>(rStr.ToInt32());
         }
@@ -1393,7 +1393,7 @@ sal_uInt16 SwTable::_GetBoxNum( String& rStr, sal_Bool bFirstPart,
     {
         nRet = 0;
         String aTxt( rStr.Copy( 0, nPos ) );
-        if ( !bPerformValidCheck || IsValidRowName( aTxt ) )
+        if ( !bPerformValidCheck || lcl_IsValidRowName( aTxt ) )
         {
             nRet = static_cast<sal_uInt16>(aTxt.ToInt32());
         }
