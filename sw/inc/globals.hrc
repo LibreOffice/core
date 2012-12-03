@@ -67,6 +67,8 @@
 
 #define STR_REMOVE_WARNING          (RC_GLOBALS_BEGIN + 40)
 
+#define STR_NO_COLL                 (RC_GLOBALS_BEGIN + 41)
+
 // DIALOGS -----------------------------------------------------------
 
 #define DLG_THESAURUS               (RC_GLOBALS_BEGIN + 2)

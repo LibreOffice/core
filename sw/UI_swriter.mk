@@ -24,7 +24,8 @@ $(eval $(call gb_UI_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/insertscript \
 	sw/uiconfig/swriter/ui/inserttable \
 	sw/uiconfig/swriter/ui/linenumbering \
-    sw/uiconfig/swriter/ui/numberingpositionpage \
+    sw/uiconfig/swriter/ui/outlinenumberingpage \
+    sw/uiconfig/swriter/ui/outlinepositionpage \
 	sw/uiconfig/swriter/ui/printeroptions \
 	sw/uiconfig/swriter/ui/sortdialog \
 	sw/uiconfig/swriter/ui/splittable \

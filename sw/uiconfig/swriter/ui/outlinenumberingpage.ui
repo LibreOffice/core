@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkBox" id="20876">
+  <object class="GtkBox" id="OutlineNumberingPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="margin_left">10</property>
@@ -18,7 +18,7 @@
             <property name="can_focus">False</property>
             <property name="left_padding">12</property>
             <child>
-              <object class="GtkTreeView" id="131">
+              <object class="GtkTreeView" id="level">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="headers_visible">False</property>
@@ -31,7 +31,7 @@
           </object>
         </child>
         <child type="label">
-          <object class="GtkLabel" id="130">
+          <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Level</property>
@@ -75,7 +75,7 @@
                         <property name="row_spacing">6</property>
                         <property name="column_spacing">10</property>
                         <child>
-                          <object class="GtkLabel" id="20">
+                          <object class="GtkLabel" id="label3">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
@@ -90,7 +90,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkComboBox" id="21">
+                          <object class="GtkComboBox" id="style">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                           </object>
@@ -102,7 +102,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="22">
+                          <object class="GtkLabel" id="label4">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
@@ -116,7 +116,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="141">
+                          <object class="GtkLabel" id="label5">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
@@ -130,7 +130,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="108">
+                          <object class="GtkLabel" id="sublevelsft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
@@ -144,7 +144,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="24">
+                          <object class="GtkLabel" id="label7">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
@@ -158,7 +158,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkComboBox" id="23">
+                          <object class="swlo:SwNumberingTypeListBox" id="numbering">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                           </object>
@@ -170,7 +170,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkComboBox" id="142">
+                          <object class="GtkComboBox" id="charstyle">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                           </object>
@@ -182,7 +182,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="109">
+                          <object class="GtkSpinButton" id="sublevelsnf">
                             <property name="visible">True</property>
                             <property name="sensitive">False</property>
                             <property name="can_focus">True</property>
@@ -197,7 +197,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEntry" id="137">
+                          <object class="GtkEntry" id="prefix">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="invisible_char">●</property>
@@ -211,7 +211,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEntry" id="135">
+                          <object class="GtkEntry" id="suffix">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="invisible_char">●</property>
@@ -225,7 +225,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="41">
+                          <object class="GtkSpinButton" id="startat">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="invisible_char">●</property>
@@ -244,7 +244,7 @@
                             <property name="can_focus">False</property>
                             <property name="left_padding">20</property>
                             <child>
-                              <object class="GtkLabel" id="136">
+                              <object class="GtkLabel" id="label8">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
@@ -265,7 +265,7 @@
                             <property name="can_focus">False</property>
                             <property name="left_padding">20</property>
                             <child>
-                              <object class="GtkLabel" id="134">
+                              <object class="GtkLabel" id="label9">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
@@ -281,7 +281,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="40">
+                          <object class="GtkLabel" id="label10">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
@@ -309,7 +309,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkDrawingArea" id="132">
+                  <object class="swuilo:NumberingPreview" id="preview">
                     <property name="width_request">150</property>
                     <property name="height_request">300</property>
                     <property name="visible">True</property>
@@ -326,7 +326,7 @@
           </object>
         </child>
         <child type="label">
-          <object class="GtkLabel" id="30">
+          <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Numbering</property>

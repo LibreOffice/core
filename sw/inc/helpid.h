@@ -197,7 +197,6 @@
 #define HID_EDIT_FLD_FUNC                                       "SW_HID_EDIT_FLD_FUNC"
 #define HID_EDIT_FLD_REF                                        "SW_HID_EDIT_FLD_REF"
 #define HID_REDLINE_CTRL                                        "SW_HID_REDLINE_CTRL"
-#define HID_TP_OUTLINE_NUM                                      "SW_HID_TP_OUTLINE_NUM"
 #define HID_OPTCAPTION_PAGE                                     "SW_HID_OPTCAPTION_PAGE"
 #define HID_OPTLOAD_PAGE                                        "SW_HID_OPTLOAD_PAGE"
 #define HID_INSERT_SECTION_PAGE                                 "SW_HID_INSERT_SECTION_PAGE"

@@ -59,8 +59,8 @@ static sal_Bool bLastRelative = sal_False;
 
 SwNumPositionTabPage::SwNumPositionTabPage(Window* pParent,
                                const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "NumberingPositionPage",
-        "modules/swriter/ui/numberingpositionpage.ui", rSet)
+    : SfxTabPage(pParent, "OutlinePositionPage",
+        "modules/swriter/ui/outlinepositionpage.ui", rSet)
     , pActNum(0)
     , pSaveNum(0)
     , pWrtSh(0)

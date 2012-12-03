@@ -137,8 +137,8 @@ public:
                             {   bModified = sal_True;
                                 if(bRepaint)
                                 {
-                                    aPreviewWIN.SetLevel(nActNumLvl);
-                                    aPreviewWIN.Invalidate();
+                                    m_pPreviewWIN->SetLevel(nActNumLvl);
+                                    m_pPreviewWIN->Invalidate();
                                 }
                             }
 #endif

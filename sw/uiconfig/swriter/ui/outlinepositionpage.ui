@@ -12,7 +12,7 @@
     <property name="step_increment">0.050000000000000003</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkBox" id="NumberingPositionPage">
+  <object class="GtkBox" id="OutlinePositionPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="margin_left">10</property>

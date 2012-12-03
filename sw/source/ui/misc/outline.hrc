@@ -55,16 +55,4 @@
 #define MN_FORM8        118
 #define MN_FORM9        119
 #define MN_SAVE         120
-
-#define FL_LEVEL        130
-#define LB_LEVEL        131
-#define WIN_PREVIEW     132
-#define FT_SUFFIX       134
-#define ED_SUFFIX       135
-#define FT_PREFIX       136
-#define ED_PREFIX       137
-#define ST_NO_COLL      138
-
-#define ST_FORM         140
-#define FT_CHARFMT      141
-#define LB_CHARFMT      142
+#define ST_FORM         121

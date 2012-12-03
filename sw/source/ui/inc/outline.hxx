@@ -81,26 +81,17 @@ class SwOutlineTabDialog : public SfxTabDialog
 
 class SwOutlineSettingsTabPage : public SfxTabPage
 {
-    FixedLine       aLevelFL;
-    ListBox         aLevelLB;
+    ListBox*        m_pLevelLB;
 
-    FixedLine        aNumberFL;
-    FixedText       aCollLbl;
-    ListBox         aCollBox;
-    FixedText       aNumberLbl;
-    SwNumberingTypeListBox  aNumberBox;
-    FixedText       aCharFmtFT;
-    ListBox         aCharFmtLB;
-    FixedText       aAllLevelFT;
-    NumericField    aAllLevelNF;
-    FixedText       aDelim;
-    FixedText       aPrefixFT;
-    Edit            aPrefixED;
-    FixedText       aSuffixFT;
-    Edit            aSuffixED;
-    FixedText       aStartLbl;
-    NumericField    aStartEdit;
-    NumberingPreview aPreviewWIN;
+    ListBox*        m_pCollBox;
+    SwNumberingTypeListBox* m_pNumberBox;
+    ListBox*        m_pCharFmtLB;
+    FixedText*      m_pAllLevelFT;
+    NumericField*   m_pAllLevelNF;
+    Edit*           m_pPrefixED;
+    Edit*           m_pSuffixED;
+    NumericField*   m_pStartEdit;
+    NumberingPreview* m_pPreviewWIN;
 
     String              aNoFmtName;
     String              aSaveCollNames[MAXLEVEL];
@@ -120,7 +111,7 @@ class SwOutlineSettingsTabPage : public SfxTabPage
 
     void    Update();
 
-    void    SetModified(){aPreviewWIN.Invalidate();}
+    void    SetModified(){m_pPreviewWIN->Invalidate();}
     void    CheckForStartValue_Impl(sal_uInt16 nNumberingType);
 
     using SfxTabPage::ActivatePage;

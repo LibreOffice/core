@@ -235,6 +235,11 @@ String STR_REMOVE_WARNING
     Text [ en-US ] = "The following characters are not valid and have been removed: ";
 };
 
+String STR_NO_COLL
+{
+    Text [ en-US ] = "(none)" ;
+};
+
 InfoBox MSG_ERROR_SEND_MAIL
 {
     BUTTONS = WB_OK ;
