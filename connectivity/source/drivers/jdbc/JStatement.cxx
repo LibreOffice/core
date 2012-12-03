@@ -652,11 +652,11 @@ sal_Bool java_sql_Statement_Base::convertFastPropertyValue(
             ;
         }
     }
-    catch(::com::sun::star::lang::IllegalArgumentException)
+    catch(const ::com::sun::star::lang::IllegalArgumentException&)
     {
         throw;
     }
-    catch(::com::sun::star::uno::Exception)
+    catch(const ::com::sun::star::uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
