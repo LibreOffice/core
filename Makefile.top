@@ -145,7 +145,7 @@ ifeq ($(BUILD_DMAKE),YES)
 endif
 	rm -fr config_host.mk config_build.mk aclocal.m4 autom4te.cache \
 	config.log config.status configure \
-	config_host.mk.last config_host.mk.stamp src.downloaded warn
+	config_host.mk.last config_host.mk.stamp warn
 	find $(SOLARENV)/gdb -name "*.pyc" -exec rm {} \;
 
 #
@@ -165,7 +165,6 @@ ifneq ($(DO_FETCH_TARBALLS),NO)
 include $(SRCDIR)/Makefile.fetch
 fetch: download
 fetch: get-submodules
-fetch: $(SRCDIR)/src.downloaded
 
 ifneq (,$(wildcard .git))
 get-submodules:
@@ -193,12 +192,6 @@ ifneq ($(foreach i,$(subst helpcontent2,help,$(GIT_NEEDED_SUBMODULES)),$(SRCDIR)
 		$(TARFILE_LOCATION)/libreoffice-$(i)-$(gb_LO_VER).tar.xz)
 endif
 
-endif
-
-# TODO: This should be really in external/ module, I think.
-$(SRCDIR)/src.downloaded : $(SRCDIR)/download $(SRCDIR)/config_host.mk | download
-ifeq ($(COM),MSC)
-	$< && touch $@
 endif
 
 else
