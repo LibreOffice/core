@@ -4712,11 +4712,11 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
                         }
                     }
                     // update graphic bullet information
-                    int nCount = pLstManager->GetWW8LSTInfoNum();
-                    for (int i = 0; i < nCount; ++i)
+                    sal_uInt16 nCount = pLstManager->GetWW8LSTInfoNum();
+                    for (sal_uInt16 i = 0; i < nCount; ++i)
                     {
                         SwNumRule* pRule = pLstManager->GetNumRule(i);
-                        for (int j = 0; j < MAXLEVEL; ++j)
+                        for (sal_uInt16 j = 0; j < MAXLEVEL; ++j)
                         {
                             SwNumFmt aNumFmt(pRule->Get(j));
                             sal_Int16 nType = aNumFmt.GetNumberingType();

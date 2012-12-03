@@ -1120,7 +1120,7 @@ SwNumRule* WW8ListManager::CreateNextRule(bool bSimple)
     return pMyNumRule;
 }
 
-SwNumRule* WW8ListManager::GetNumRule(int i)
+SwNumRule* WW8ListManager::GetNumRule(sal_uInt16 i)
 {
     if ( i >= 0 && i < maLSTInfos.size() )
         return maLSTInfos[i]->pNumRule;

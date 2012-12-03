@@ -191,8 +191,8 @@ public:
         std::vector<sal_uInt8> &rParaSprms, SwTxtNode *pNode=0);
     SwNumRule* CreateNextRule(bool bSimple);
     ~WW8ListManager();
-    SwNumRule* GetNumRule(int i);
-    int GetWW8LSTInfoNum() const{return maLSTInfos.size();}
+    SwNumRule* GetNumRule(sal_uInt16 i);
+    sal_uInt16 GetWW8LSTInfoNum() const{return maLSTInfos.size();}
 private:
     wwSprmParser maSprmParser;
     SwWW8ImplReader& rReader;

@@ -199,13 +199,13 @@ void SwBasicEscherEx::WriteHyperlinkWithinFly( SvMemoryStream& rStrm, const SwFm
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
         };
-    const sal_uInt16 WW8_ID_HLINK               = 0x01B8;
+    //const sal_uInt16 WW8_ID_HLINK               = 0x01B8;
     const sal_uInt32 WW8_HLINK_BODY             = 0x00000001;   /// Contains file link or URL.
     const sal_uInt32 WW8_HLINK_ABS              = 0x00000002;   /// Absolute path.
-    const sal_uInt32 WW8_HLINK_DESCR            = 0x00000014;   /// Description.
+    //const sal_uInt32 WW8_HLINK_DESCR            = 0x00000014;   /// Description.
     const sal_uInt32 WW8_HLINK_MARK             = 0x00000008;   /// Text mark.
     const sal_uInt32 WW8_HLINK_FRAME            = 0x00000080;   /// Target frame.
-    const sal_uInt32 WW8_HLINK_UNC              = 0x00000100;   /// UNC path.
+    //const sal_uInt32 WW8_HLINK_UNC              = 0x00000100;   /// UNC path.
     SvMemoryStream tmpStrm;
     String tmpTextMark;
 
@@ -263,7 +263,7 @@ void SwBasicEscherEx::WriteHyperlinkWithinFly( SvMemoryStream& rStrm, const SwFm
         {
         String aTextMark( rUrl.Copy( 1 ) );
             aTextMark.SearchAndReplace( '.', '!' );
-        sal_uInt8 tmpLen = aTextMark.Len();
+        //sal_uInt8 tmpLen = aTextMark.Len();
         tmpTextMark = aTextMark;
         }
 
