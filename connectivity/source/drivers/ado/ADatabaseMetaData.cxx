@@ -916,7 +916,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMinorVersion(  ) throw(RuntimeExc
             WpOLEAppendCollection<ADOFields, ADOField, WpADOField>  aFields(aRecordset.GetFields());
             WpADOField aField(aFields.GetItem(0));
             aField.get_Value(aValue);
-            aRet = aRet + OUString( aValue ) + aComma;
+            aRet = aRet + (aValue.operator OUString()) + aComma;
             aRecordset.MoveNext();
         }
         aRecordset.Close();
