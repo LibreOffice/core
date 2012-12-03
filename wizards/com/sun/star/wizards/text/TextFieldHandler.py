@@ -102,9 +102,12 @@ class TextFieldHandler(object):
                 TextFieldHandler.dictTextFields[_FieldName]
         except KeyError:
             return None
-        if hasattr(DependentTextFields, "TextFieldMaster"):
-            DependentTextFields.TextFieldMaster.Content = _FieldContent
-            self.refreshTextFields()
+        try:
+            if hasattr(DependentTextFields, "TextFieldMaster"):
+                DependentTextFields.TextFieldMaster.Content = _FieldContent
+                self.refreshTextFields()
+        except UnknownPropertyException:
+            pass
 
     def updateDocInfoFields(self):
         try:
