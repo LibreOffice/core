@@ -77,6 +77,7 @@ my_components = \
     component/sc/util/scfilt \
     component/scaddins/source/analysis/analysis \
     component/scaddins/source/datefunc/date \
+    component/scaddins/source/pricing/pricing \
     component/sd/util/sd \
     component/sd/util/sdd \
     component/sd/util/sdfilt \
