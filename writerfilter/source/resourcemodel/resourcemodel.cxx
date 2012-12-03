@@ -41,11 +41,6 @@ public:
 
 ResourceModelOutputWithDepth output;
 
-Stream::Pointer_t createStreamHandler()
-{
-    return Stream::Pointer_t(new WW8StreamHandler());
-}
-
 void dump(OutputWithDepth<string> & /*o*/, const char * /*name*/,
           writerfilter::Reference<Properties>::Pointer_t /*props*/)
 {
