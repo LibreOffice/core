@@ -426,7 +426,6 @@ inline void createTestDirectory( const ::rtl::OUString dirname )
 inline void createTestDirectory( const ::rtl::OUString basename, const ::rtl::OUString dirname )
 {
     ::rtl::OUString     aBaseURL   = basename.copy( 0 );
-    ::rtl::OString      aString;
 
     concatURL( aBaseURL, dirname );
     createTestDirectory( aBaseURL );
@@ -518,29 +517,8 @@ inline sal_Bool checkFile( const ::rtl::OUString & str, oslCheckMode nCheckMode 
 //check if the file exist
 inline sal_Bool ifFileExist( const ::rtl::OUString & str )
 {
-    sal_Bool  bCheckResult = sal_False;
-
-/*#ifdef WNT
-    ::rtl::OUString  aUStr  = str.copy( 0 );
-    if ( isURL( str ) )
-        ::osl::FileBase::getSystemPathFromFileURL( str, aUStr );
-
-    ::rtl::OString aString = ::rtl::OUStringToOString( aUStr, RTL_TEXTENCODING_ASCII_US );
-    const char *path = aString.getStr();
-    if (( _access( path, 0 ) ) != -1 )
-         bCheckResult = sal_True;
-#else*/
-    ::rtl::OString aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    // const char *path = aString.getStr();
     ::osl::File testFile( str );
-    bCheckResult = ( osl::FileBase::E_None == testFile.open( osl_File_OpenFlag_Read ) );
-    //if (bCheckResult)
-    //printf("%s exist!\n", path);
-    //else
-    //printf("%s not exist!\n", path);
-//#endif
-    return bCheckResult;
-
+    return ( osl::FileBase::E_None == testFile.open( osl_File_OpenFlag_Read ) );
 }
 
 //check if the file can be writen
@@ -788,7 +766,7 @@ namespace osl_FileBase
   void getAbsoluteFileURL::getAbsoluteFileURL_002()
   {
 #if ( defined UNX )     //Link is not defined in Windows
-        ::rtl::OUString aUStr_AbsURL, aUStr_LnkFileSys( aTempDirectorySys ), aUStr_SrcFileSys( aTempDirectorySys );
+        ::rtl::OUString aUStr_LnkFileSys( aTempDirectorySys ), aUStr_SrcFileSys( aTempDirectorySys );
         ( ( aUStr_LnkFileSys += aSlashURL ) += getCurrentPID() ) += ::rtl::OUString("/link.file");
         ( ( aUStr_SrcFileSys += aSlashURL ) += getCurrentPID() ) += ::rtl::OUString("/canonical.name");
 
@@ -5501,7 +5479,6 @@ namespace osl_Directory
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
             //check the file name
-            ::rtl::OUString     strFilename;
             sal_Bool            bOk1 = sal_False;
             sal_Bool bOk2 = sal_False;
             sal_Bool bOk3 = sal_False;

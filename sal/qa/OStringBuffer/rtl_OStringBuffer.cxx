@@ -137,6 +137,7 @@ namespace rtl_OStringBuffer
             rtl::OStringBuffer b1;
             b1.makeStringAndClear();
             rtl::OStringBuffer b2(b1);
+            (void)b2;
         }
 
         void ctor_006()
