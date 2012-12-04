@@ -1890,6 +1890,8 @@
             <node oor:name=".uno:CheckOut" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Check-Out</value>
+                    <value xml_lang="x-comment">This is the action to create a private working copy
+                      of the document on a server</value>
                 </prop>
             </node>
             <node oor:name=".uno:CancelCheckOut" oor:op="replace">
@@ -1899,7 +1901,10 @@
             </node>
             <node oor:name=".uno:CheckIn" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Check-In...</value>
+                  <value xml:lang="en-US">Check-In...</value>
+                  <value xml_lang="x-comment">This is the action to merge a private working copy
+                    of the document on a server. It shows a dialog to input some informations on
+                    the new version to create on the server.</value>
                 </prop>
             </node>
             <node oor:name=".uno:CloseDoc" oor:op="replace">
