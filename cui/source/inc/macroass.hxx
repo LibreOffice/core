@@ -67,6 +67,8 @@ public:
 
     virtual void                ScriptChanged();
     virtual void                PageCreated (SfxAllItemSet aSet);
+    using TabPage::ActivatePage; // FIXME WTF is this nonsense?
+    virtual void                ActivatePage( const SfxItemSet& );
 
     // --------- inherit from the base -------------
     virtual sal_Bool                FillItemSet( SfxItemSet& rSet );
