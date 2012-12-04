@@ -200,8 +200,10 @@ ScDocShellRef ScExportTest::saveAndReload(ScDocShell* pShell, const rtl::OUStrin
     pFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
 
     ScDocShellRef xDocShRef = new ScDocShell;
+    xDocShRef->GetDocument()->EnableUserInteraction(false);
     SfxMedium* pSrcMed = new SfxMedium(aTempFile.GetURL(), STREAM_STD_READ);
     pSrcMed->SetFilter(pFilter);
+    pSrcMed->UseInteractionHandler(false);
     if (!xDocShRef->DoLoad(pSrcMed))
     {
         xDocShRef->DoClose();
@@ -240,8 +242,10 @@ ScDocShellRef ScExportTest::loadDocument(const rtl::OUString& rFileName, sal_Int
     pFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
 
     ScDocShellRef xDocShRef = new ScDocShell;
+    xDocShRef->GetDocument()->EnableUserInteraction(false);
     SfxMedium* pSrcMed = new SfxMedium(aFileName, STREAM_STD_READ);
     pSrcMed->SetFilter(pFilter);
+    pSrcMed->UseInteractionHandler(false);
     if (!xDocShRef->DoLoad(pSrcMed))
     {
         xDocShRef->DoClose();
