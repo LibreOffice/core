@@ -687,10 +687,10 @@ AC_ARG_ENABLE(pch,
         [DEPRECATED : is ignored])
 )
 
-AC_ARG_ENABLE(mozilla,
-    AS_HELP_STRING([--enable-mozilla],
-        [LibreOffice can include a strangely hacked up Mozilla binary for your
-         platform, to build with this version, use this option.])
+AC_ARG_ENABLE(win-mozab-driver,
+    AS_HELP_STRING([--enable-win-mozab-driver],
+        [LibreOffice includes a driver to connect to Mozilla 
+         address books under Windows, to build with this version, use this option.])
 )
 
 AC_ARG_ENABLE(epm,
@@ -886,10 +886,11 @@ AC_ARG_ENABLE(telepathy,
         [Determines whether to enable Telepathy for collaboration.]),
 ,enable_telepathy=no)
 
-AC_ARG_ENABLE(build-mozilla,
-    AS_HELP_STRING([--disable-build-mozilla],
-        [Use this option if you do not want to build the Mozilla components from
-         the Mozilla source code but take precompiled zips.]),
+AC_ARG_ENABLE(build-mozab,
+    AS_HELP_STRING([--disable-build-mozab],
+        [Use this option if you do not want to build the Mozilla address book
+         components from the Mozilla source code but take precompiled zips.
+         Meaningful only after --enable-win-mozab-driver.]),
 ,)
 
 AC_ARG_ENABLE(tde,
@@ -1252,7 +1253,7 @@ AC_ARG_WITH(system-nss,
 
 AC_ARG_WITH(mozilla-toolkit,
     AS_HELP_STRING([--with-mozilla-toolkit],
-        [Choose which GUI toolkit to use while building Mozilla components. (default=gtk2)]),
+        [DEPRECATED : is ignored]),
 ,)
 
 AC_ARG_WITH(myspell-dicts,
@@ -1653,12 +1654,8 @@ AC_ARG_WITH(system-liblangtag,
 
 AC_ARG_WITH(system-mozilla,
     AS_HELP_STRING([--with-system-mozilla],
-        [Use Mozilla already on system. Note that some components cannot be built
-         against a contemporary Mozilla. The flavour used can be specified by
-         --with-system-mozilla=<flavour>. Supported are: libxul (default),
-         xulrunner, firefox, seamonkey, mozilla, iceape.]),
-    WITH_SYSTEM_MOZILLA=$withval ,
-WITH_SYSTEM_MOZILLA=no)
+        [DEPRECATED : is ignored]),,
+)
 
 AC_ARG_WITH(system-npapi-headers,
     AS_HELP_STRING([--with-system-npapi-headers],
@@ -1847,19 +1844,19 @@ AC_ARG_WITH(directx-home,
     ],
 ,)
 
-AC_ARG_WITH(mozilla-build,
-    AS_HELP_STRING([--with-mozilla-build],
-        [For Windows users, please supply the path to the Mozilla build tools.])
+AC_ARG_WITH(nss-build-tools,
+    AS_HELP_STRING([--with-nss-build-tools],
+        [For Windows users, please supply the path to the nss build tools.])
     [
-                          Usage:     --with-mozilla-build=<absolute path to
-                                                          Mozilla build tools>
+                          Usage:     --with-nss-build=<absolute path to
+                                                          nss build tools>
 
                           At the moment of this writing, an installer for the
                           mozilla build tools can be obtained from http://ftp.
                           mozilla.org/pub/mozilla.org/mozilla/libraries/win32.
     ],
-    MOZILLABUILD=$withval ,
-)
+    NSSBUILDTOOLS=$withval ,
+) # NSSBUILDTOOLS
 
 AC_ARG_WITH(lang,
     AS_HELP_STRING([--with-lang],
@@ -4231,20 +4228,7 @@ SOURCEVERSION="OOO$UPD"
 AC_SUBST(UPD)
 AC_SUBST(SOURCEVERSION)
 
-dnl ===================================================================
-dnl Set the WITH_MOZILLA variable.
-dnl ===================================================================
 
-AC_MSG_CHECKING([whether to enable build of Mozilla])
-if test "$enable_mozilla" = "yes"; then
-    AC_MSG_RESULT([yes])
-    WITH_MOZILLA=YES
-else
-    AC_MSG_RESULT([no])
-    WITH_MOZILLA=NO
-    enable_mozilla=no
-fi
-AC_SUBST(WITH_MOZILLA)
 
 dnl ===================================================================
 dnl Set the ENABLE_CRASHDUMP variable.
@@ -4689,10 +4673,9 @@ AC_SUBST(WINDRES)
 
 dnl ===================================================================
 dnl pkg-config checks on Mac OS X
-dnl (but --enable-mozilla /does/ require a carefully crafted pkg-config)
 dnl ===================================================================
 
-if test $_os = Darwin -a "$enable_mozilla" = no; then
+if test $_os = Darwin; then
     AC_MSG_CHECKING([for bogus pkg-config])
     if test -n "$PKG_CONFIG"; then
         if test "$PKG_CONFIG" = /usr/bin/pkg-config && ls -l /usr/bin/pkg-config | $GREP -q Mono.framework; then
@@ -8009,21 +7992,6 @@ else
 fi
 AC_SUBST(SYSTEM_ODBC_HEADERS)
 
-AC_MSG_CHECKING([whether to build Mozilla addressbook connectivity])
-if test "$_os" = "WINNT"; then
-   if test "$enable_mozilla" = "no"; then
-      AC_MSG_RESULT([no])
-   elif test "$with_system_mozilla" = "yes"; then
-      AC_MSG_RESULT([no, not possible with system-mozilla])
-   else
-      AC_MSG_RESULT([yes (old mozab driver)])
-   fi
-else
-# on all other platforms Mozilla addressbook connectivity
-# is unconditionally built
-# new and shiny mork driver
-   AC_MSG_RESULT([yes (new mork driver)])
-fi
 
 dnl ===================================================================
 dnl Check for system openldap
@@ -8046,199 +8014,71 @@ fi
 AC_SUBST(SYSTEM_OPENLDAP)
 
 dnl ===================================================================
-dnl Check for system mozilla
+dnl Check for mozilla ab connectivity for windows
 dnl ===================================================================
 
-AC_MSG_CHECKING([which Mozilla to use])
-if test -n "$with_system_mozilla" -a "$with_system_mozilla" != "no"; then
-    AC_MSG_RESULT([external])
-    SYSTEM_MOZILLA=YES
-    AC_MSG_CHECKING([which Mozilla flavour to use])
-    if test -n "$with_system_mozilla" -a "$with_system_mozilla" = "libxul"; then
-        MOZ_FLAVOUR=libxul
-    elif test -n "$with_system_mozilla" -a "$with_system_mozilla" = "xulrunner"; then
-        MOZ_FLAVOUR=xulrunner
-    elif test -n "$with_system_mozilla" -a "$with_system_mozilla" = "seamonkey"; then
-        MOZ_FLAVOUR=seamonkey
-    elif test -n "$with_system_mozilla" -a "$with_system_mozilla" = "iceape"; then
-        MOZ_FLAVOUR=iceape
-    elif test -n "$with_system_mozilla" -a "$with_system_mozilla" = "firefox"; then
-        MOZ_FLAVOUR=firefox
-    elif test -n "$with_system_mozilla" -a "$with_system_mozilla" = "mozilla"; then
-        MOZ_FLAVOUR=mozilla
-    else
-        MOZ_FLAVOUR=libxul
+AC_MSG_CHECKING([whether to enable build of Mozilla addressbook connectivity driver for Windows])
+if test "$enable_win_mozab_driver" = "yes" -a "$_os" = "WINNT" -a "$WITH_MINGW" != "YES" ; then
+    AC_MSG_RESULT([yes])
+    WITH_MOZAB4WIN=YES
+    BUILD_MOZAB=YES
+    if test "$enable_build_mozab" = "no" ; then
+        BUILD_MOZAB=NO
     fi
-    tmp=`echo $MOZ_FLAVOUR | $PERL -e 'print ucfirst(<STDIN>);'`
-    AC_MSG_RESULT($tmp)
-
-    if test "$MOZ_FLAVOUR" != "libxul"; then
-        PKG_CHECK_MODULES( MOZILLAXPCOM, $MOZ_FLAVOUR-xpcom, HASXPCOM="TRUE", HASXPCOM="" )
-        MOZ_INC=`$PKG_CONFIG --variable=includedir $MOZ_FLAVOUR-xpcom`
-        MOZ_LIB=`$PKG_CONFIG --variable=libdir $MOZ_FLAVOUR-xpcom`
-    fi
-
-    if test -z "$HASXPCOM"; then
-        PKG_CHECK_MODULES( MOZILLAXPCOM, libxul )
-        MOZ_INC=`$PKG_CONFIG --variable=includedir libxul`
-        MOZ_LIB=`$PKG_CONFIG --variable=libdir libxul`
-        if ! test -e "$MOZ_LIB/libxul.so"; then
-            MOZ_LIB=`$PKG_CONFIG --variable=sdkdir libxul`
-            if test -e "$MOZ_LIB/sdk/lib/libxul.so"; then
-                MOZ_LIB="$MOZ_LIB/sdk/lib"
-            fi
-        fi
-    fi
-
-    MOZ_LIB_XPCOM=$MOZILLAXPCOM_LIBS
-
-    #e.g. http://fedoraproject.org/wiki/Releases/FeatureXULRunnerAPIChanges
-    #the plugin pkg-config etc. reverts to "mozilla-plugin" with libxul
-    if test "$MOZ_FLAVOUR" = "libxul"; then
-        MOZ_FLAVOUR="mozilla"
-    fi
-
-elif test "$enable_mozilla" = "no"; then
-    AC_MSG_RESULT([none])
-    WITH_MOZILLA=NO
 else
-    AC_MSG_RESULT([internal])
-    SYSTEM_MOZILLA=NO
-    BUILD_TYPE="$BUILD_TYPE MOZ"
-    MOZILLA_VERSION=1.1.14
-    AC_SUBST(MOZILLA_VERSION)
+    AC_MSG_RESULT([no])
+    WITH_MOZAB4WIN=NO
+fi
+AC_SUBST(WITH_MOZAB4WIN)
+AC_SUBST(BUILD_MOZAB)
 
-    AC_MSG_CHECKING([for toolkit Mozilla should use])
-    if test -z "$with_mozilla_toolkit"; then
-        if test "$_os" != "WINNT"; then
-            if test "$_os" = "Darwin"; then
-                MOZILLA_TOOLKIT=mac
-                AC_MSG_RESULT([mac])
-            else
-                MOZILLA_TOOLKIT=gtk2
-                AC_MSG_RESULT([gtk2])
-            fi
-        fi
-    else
-        MOZILLA_TOOLKIT=$with_mozilla_toolkit
-        enable_build_mozilla=1
-        AC_MSG_RESULT([$MOZILLA_TOOLKIT])
-    fi
-
-    AC_SUBST(MOZILLA_TOOLKIT)
-
-    # default to enabling build mozilla
-    if test "$enable_build_mozilla" != "no"; then
-        enable_build_mozilla=yes
-    else
-        enable_build_mozilla=
-    fi
-
-    AC_MSG_CHECKING([whether to build Mozilla/SeaMonkey])
-    if test -n "$enable_build_mozilla"; then
-        BUILD_MOZAB="TRUE"
-        AC_MSG_RESULT([yes])
-    else
-        BUILD_MOZAB=""
+if test "$_os" != "WINNT"; then
+# on all other platforms Mozilla addressbook connectivity
+# is unconditionally built
+# new and shiny mork driver
+   AC_MSG_RESULT([yes (new mork driver)])
+else
+    if test "WITH_MOZAB4WIN" = "NO"; then
         AC_MSG_RESULT([no])
-    fi
-
-    if test "$BUILD_MOZAB" = "TRUE"; then
-        if test "$_os" = "WINNT"; then
-            if test "$WITH_MINGW" != "yes"; then
-                # compiling with MSVC. Only supported platform here is MSVS2005 at the moment.
-                if test "$MSVSVER" != "2005"; then
-                    AC_MSG_ERROR([Building SeaMonkey is supported with Microsoft Visual Studio 2005 only.])
-                fi
-            else
-                AC_MSG_WARN([Building SeaMonkey with MinGW is not tested, and likely to break.])
-                add_warning "Building SeaMonkey with MinGW is not tested, and likely to break."
-            fi
-        fi
-
-        if test "$_os" = "WINNT"; then
-            AC_MSG_CHECKING([for moztools binaries])
-            if test ! -e "$TARFILE_LOCATION/vc8-moztools.zip"; then
-                AC_MSG_ERROR([The following file is missing in $TARFILE_LOCATION: vc8-moztools.zip
-(from ftp://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/historic/vc8/)])
-            else
-                AC_MSG_RESULT([ok])
-            fi
-        elif test "$_os" = "Darwin"; then
-            PKG_CHECK_MODULES(MOZLIBREQ, libIDL-2.0 >= 0.6.3,  MOZIDL="TRUE", MOZIDL="")
-            if test -z "$MOZIDL"; then
-                AC_MSG_ERROR([libIDL 0.6.3 or newer is needed to build Mozilla with Mac toolkit.])
-            fi
-        else
-            # Generic Unix/Linux section
-            if test "$MOZILLA_TOOLKIT" = "gtk2"; then
-                PKG_CHECK_MODULES(MOZLIBREQ, gtk+-2.0, MOZGTK="TRUE", MOZGTK="")
-                if test -z "$MOZGTK"; then
-                    AC_MSG_ERROR([GTK2 is needed to build Mozilla.])
-                fi
-                PKG_CHECK_MODULES(MOZLIBREQ, libIDL-2.0 >= 0.8.0, MOZIDL="TRUE", MOZIDL="")
-                if test -z "$MOZIDL"; then
-                    AC_MSG_ERROR([libIDL >= 0.8.0 is needed when using GTK2 to build Mozilla.])
-                fi
-            else
-                PKG_CHECK_MODULES(MOZLIBREQ, gtk+ >= 1.2.3, MOZGTK="TRUE", MOZGTK="")
-                if test -z "$MOZGTK"; then
-                    AC_MSG_ERROR([GTK+ 1.2 is needed when not using GTK2 to build Mozilla.])
-                fi
-                PKG_CHECK_MODULES(MOZLIBREQ, libidl >= 0.6.3 libidl <= 0.6.8, MOZIDL="TRUE", MOZIDL="")
-                if test -z "$MOZIDL"; then
-                    AC_MSG_ERROR([libIDL 0.6.3 - 0.6.8 is needed when not using GTK2 to build Mozilla.])
-                fi
-            fi
-        fi
     else
-        PREBUILD_MOZAB="YES"
-        if test "$_os" = "WINNT"; then
-            AC_MSG_CHECKING([for MSVC 2005 runtime needed for prebuilt Mozilla])
-            if test -e "$SRC_ROOT/external/msvcp80/Microsoft.VC80.CRT.manifest" -a \
-                    -e "$SRC_ROOT/external/msvcp80/msvcp80.dll" -a \
-                    -e "$SRC_ROOT/external/msvcp80/msvcr80.dll"; then
+        AC_MSG_RESULT([yes, internal (old windows mozab driver)])
+        BUILD_TYPE="$BUILD_TYPE MOZ"
+        EXTMSV80=`cygpath  -u "$SRC_ROOT/external/msvcp80"`
+        AC_MSG_CHECKING([for MSVC 2005 runtime needed for prebuilt Mozilla])
+        if test -e "$EXTMSV80/Microsoft.VC80.CRT.manifest" -a \
+                -e "$EXTMSV80/msvcp80.dll" -a \
+                -e "$EXTMSV80/msvcr80.dll"; then
+            AC_MSG_RESULT([Found])
+            EXTMSV80=
+        else
+            #uwin-prefixed paths are with no quotes to allow for mask, and uwin to not have spaces, btw
+            uwin=`cygpath -d "$WINDIR"`
+            uwin=`cygpath -u "$uwin"`
+            #if we have one we have all
+            if test -e $uwin/winsxs/x86_microsoft.vc80.crt_1fc8b3b9a1e18e3b_8.0.50727.4053* ; then
+                MSVC80_DLL_DIR=`ls -d $uwin/winsxs/x86_microsoft.vc80.crt_1fc8b3b9a1e18e3b_8.0.50727.4053*`
+                MSVC80_MNFST=`ls $uwin/winsxs/Manifests/x86_microsoft.vc80.crt_1fc8b3b9a1e18e3b_8.0.50727.4053_*.manifest`
                 AC_MSG_RESULT([Found])
             else
-                #uwin-prefixed paths are with no quotes to allow for mask, and uwin to not have spaces, btw
-                uwin=`cygpath -d "$WINDIR"`
-                uwin=`cygpath -u "$uwin"`
-                #if we have one we have all
-                if test -e $uwin/winsxs/x86_microsoft.vc80.crt_1fc8b3b9a1e18e3b_8.0.50727.4053*; then
-                    MSVC80_DLL_DIR=`cd $uwin/winsxs/; ls -d x86_microsoft.vc80.crt_1fc8b3b9a1e18e3b_8.0.50727.4053*`
-                    MSVC80_MNFST=`ls $uwin/winsxs/Manifests/x86_microsoft.vc80.crt_1fc8b3b9a1e18e3b_8.0.50727.4053_*.manifest`
-                    AC_MSG_RESULT([Found])
-                else
-                    MSVC80_DLL_DIR=
-                    MSVC80_MNFST=
-                    AC_MSG_RESULT([Not Found])
-                    AC_MSG_ERROR([For the pre-built Mozilla libraries, you need MSVC 2005 runtime files
-Microsoft.VC80.CRT.manifest, msvcp80.dll, and msvcr80.dll
-in external/msvcp80.
+                EXTMSV80=
+                AC_MSG_RESULT([Not Found])
+                AC_MSG_ERROR([For the pre-built Mozilla libraries, you need MSVC 2005 runtime files
+    Microsoft.VC80.CRT.manifest, msvcp80.dll, and msvcr80.dll
+    in external/msvcp80.
 
-You can get them by installing:
-<http://download.microsoft.com/download/8/B/4/8B42259F-5D70-43F4-AC2E-4B208FD8D66A/vcredist_x86.EXE>
-and relaunch ./autogen.sh])
-                fi
+    You can get them by installing:
+    <http://download.microsoft.com/download/8/B/4/8B42259F-5D70-43F4-AC2E-4B208FD8D66A/vcredist_x86.EXE>
+    and relaunch ./autogen.sh])
             fi
         fi
     fi
 fi
 
-if test "$SYSTEM_MOZILLA" = "YES"; then
-    SOLARLIB="$SOLARLIB -L$MOZ_LIB"
-fi
 
-AC_SUBST(BUILD_MOZAB)
-AC_SUBST(PREBUILD_MOZAB)
-AC_SUBST(MOZILLABUILD)
-AC_SUBST(SYSTEM_MOZILLA)
-AC_SUBST(MOZ_FLAVOUR)
-AC_SUBST(MOZ_INC)
-AC_SUBST(MOZ_LIB)
-AC_SUBST(MOZ_LIB_XPCOM)
 AC_SUBST(MSVC80_DLL_DIR)
 AC_SUBST(MSVC80_MNFST)
+AC_SUBST(EXTMSV80)
+AC_SUBST(EXTMSV80)
 
 dnl ===================================================================
 dnl Check for system NSS
@@ -8260,25 +8100,18 @@ else
     BUILD_TYPE="$BUILD_TYPE NSS"
     AC_MSG_RESULT([internal])
     if test "$build_os" = "cygwin"; then
-        AC_MSG_CHECKING([for Mozilla build tooling. Required for nss and/or mozilla])
-        if test -z "$MOZILLABUILD"; then
-            AC_MSG_ERROR([Mozilla build tooling not found.
-Use the --with-mozilla-build option after installing the tools obtained
+        AC_MSG_CHECKING([for nss build tooling]) # coming from mozilla
+        if test -z "$NSSBUILDTOOLS"; then
+            AC_MSG_ERROR([nss build tooling not provided
+Use the --with-nss-build option after installing the tools obtained
 from http://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32])
         else
-            if test \( "$WITH_MINGW" = "yes" \); then
-                if test ! -d "$MOZILLABUILD"; then
-                    AC_MSG_ERROR([Mozilla build tooling incomplete!])
-                else
-                    AC_MSG_RESULT([ok])
-                fi
+            if test \( "$WITH_MINGW" = "yes" -a  ! -d "$NSSBUILDTOOLS" \) \
+                    -o ! -d "$NSSBUILDTOOLS/moztools" \
+                    -o ! -d "$NSSBUILDTOOLS/msys" ; then
+                AC_MSG_ERROR([nss build tooling incomplete!])
             else
-                if test ! -d "$MOZILLABUILD/moztools" \
-                        -o ! -d "$MOZILLABUILD/msys"; then
-                    AC_MSG_ERROR([Mozilla build tooling incomplete!])
-                else
-                    AC_MSG_RESULT([ok])
-                fi
+                AC_MSG_RESULT([ok])
             fi
         fi
     fi
@@ -8286,7 +8119,8 @@ fi # system nss
 AC_SUBST(SYSTEM_NSS)
 AC_SUBST(NSS_CFLAGS)
 AC_SUBST(NSS_LIBS)
-AC_SUBST([MINGW_SMIME3_DLL])
+AC_SUBST(NSSBUILDTOOLS)
+AC_SUBST(MINGW_SMIME3_DLL)
 
 dnl ===================================================================
 dnl Check for system mozilla headers
