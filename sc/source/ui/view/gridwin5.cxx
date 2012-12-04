@@ -207,7 +207,7 @@ bool ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, bool bKeyboard )
             pNoteMarker = new ScNoteMarker(  pLeft, pRight, pBottom, pDiagonal,
                                             pDoc, aCellPos, aTrackText,
                                             aMapMode, bLeftEdge, bFast, bKeyboard );
-            if ( ScDrawView* pDrawView = pViewData->GetScDrawView() )
+            if ( pViewData->GetScDrawView() )
             {
                 // get position for aCellPos
                 if ( pDoc )
