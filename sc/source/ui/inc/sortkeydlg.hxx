@@ -36,6 +36,7 @@
 
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/ctrl.hxx>
@@ -44,61 +45,61 @@
 
 // =======================================================================
 
-struct ScSortKeyItem
+struct ScSortKeyItem : public VclBuilderContainer
 {
-    FixedLine       aFlSort;
-    ListBox         aLbSort;
-    RadioButton     aBtnUp;
-    RadioButton     aBtnDown;
+    VclFrame*       m_pFrame;
+    FixedText*      m_pFlSort;
+    ListBox*        m_pLbSort;
+    RadioButton*    m_pBtnUp;
+    RadioButton*    m_pBtnDown;
 
-    ScSortKeyItem ( Window* pParent );
+    ScSortKeyItem(Window* pParent);
 
     void DisableField();
     void EnableField();
+
+    long getItemHeight() const;
 };
 
 typedef boost::ptr_vector<ScSortKeyItem> ScSortKeyItems;
 
 // =======================================================================
 
-class ScSortKeyWindow : public Window
+class ScSortKeyWindow
 {
 private:
-    FixedLine       aFlSort;
-    ListBox         aLbSort;
-    RadioButton     aBtnUp;
-    RadioButton     aBtnDown;
-
+    VclBox*         m_pBox;
     sal_Int32       nScrollPos;
     sal_Int32       nItemHeight;
 
     ScSortKeyItems& mrSortKeyItems;
 
 public:
-    ScSortKeyWindow( Window* pParent, const ResId& rResId, ScSortKeyItems& mrSortKeyItems );
+    ScSortKeyWindow(SfxTabPage* pParent, ScSortKeyItems& mrSortKeyItems);
     ~ScSortKeyWindow();
 
     void AddSortKey( sal_uInt16 nItem );
     void DoScroll( sal_Int32 nNewPos );
     sal_Int32 GetItemHeight() const { return nItemHeight; }
+    sal_Int32 GetTotalHeight() const { return m_pBox->GetSizePixel().Height(); }
 };
 
 // =======================================================================
 
-class ScSortKeyCtrl : public Control
+class ScSortKeyCtrl
 {
 private:
-    ScSortKeyWindow  aSortWin;
-    ScrollBar        aVertScroll;
+    ScSortKeyWindow  m_aSortWin;
+    VclScrolledWindow& m_rScrolledWindow;
+    ScrollBar&       m_rVertScroll;
 
     sal_Int32        nThumbPos;
 
-    DECL_LINK( ScrollHdl, ScrollBar* );
+    DECL_LINK(ScrollHdl, ScrollBar*);
 
 public:
-    ScSortKeyCtrl( Window* pParent, const ScResId& rResId, ScSortKeyItems& mrSortKeyItems );
-    ~ScSortKeyCtrl();
-
+    ScSortKeyCtrl(SfxTabPage* pParent, ScSortKeyItems& mrSortKeyItems);
+    void setScrollRange();
     void AddSortKey( sal_uInt16 nItem );
 };
 

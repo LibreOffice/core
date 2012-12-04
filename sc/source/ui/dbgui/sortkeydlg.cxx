@@ -32,54 +32,47 @@
 
 // =======================================================================
 
-ScSortKeyItem::ScSortKeyItem( Window* pParent ) :
-    //
-    aFlSort        ( pParent, ScResId( FL_SORT  ) ),
-    aLbSort        ( pParent, ScResId( LB_SORT  ) ),
-    aBtnUp         ( pParent, ScResId( BTN_UP   ) ),
-    aBtnDown       ( pParent, ScResId( BTN_DOWN ) )
+ScSortKeyItem::ScSortKeyItem(Window* pParent)
 {
+    m_pUIBuilder = new VclBuilder(pParent, getUIRootDir(), "modules/scalc/ui/sortkey.ui");
+
+    get(m_pFrame, "SortKeyFrame");
+    get(m_pFlSort, "sortft");
+    get(m_pLbSort, "sortlb");
+    get(m_pBtnUp, "up");
+    get(m_pBtnDown, "down");
 }
 
-// -----------------------------------------------------------------------
+long ScSortKeyItem::getItemHeight() const
+{
+    return m_pFrame->get_preferred_size().Height();
+}
 
 void ScSortKeyItem::DisableField()
 {
-    aFlSort.Disable();
-    aLbSort.Disable();
-    aBtnUp.Disable();
-    aBtnDown.Disable();
+    m_pFrame->Disable();
 }
 
 // -----------------------------------------------------------------------
 
 void ScSortKeyItem::EnableField()
 {
-    aFlSort.Enable();
-    aLbSort.Enable();
-    aBtnUp.Enable();
-    aBtnDown.Enable();
+    m_pFrame->Enable();
 }
 
 // =======================================================================
 
-ScSortKeyWindow::ScSortKeyWindow( Window* pParent, const ResId& rResId, ScSortKeyItems& rSortKeyItems ) :
-    Window( pParent, rResId ),
-    //
-    aFlSort        ( this, ScResId( FL_SORT  ) ),
-    aLbSort        ( this, ScResId( LB_SORT  ) ),
-    aBtnUp         ( this, ScResId( BTN_UP   ) ),
-    aBtnDown       ( this, ScResId( BTN_DOWN ) ),
-    //
-    nScrollPos     ( 0 ),
-    mrSortKeyItems( rSortKeyItems )
+ScSortKeyWindow::ScSortKeyWindow(SfxTabPage* pParent, ScSortKeyItems& rSortKeyItems)
+    : mrSortKeyItems(rSortKeyItems)
 {
-    aFlSort.Hide();
-    aLbSort.Hide();
-    aBtnUp.Hide();
-    aBtnDown.Hide();
-
-    nItemHeight = aBtnDown.GetPosPixel().Y() + aBtnDown.GetSizePixel().Height();
+    pParent->get(m_pBox, "SortKeyWindow");
+    if (!mrSortKeyItems.empty())
+        nItemHeight = mrSortKeyItems.front().getItemHeight();
+    else
+    {
+        ScSortKeyItem aTemp(m_pBox);
+        nItemHeight = aTemp.getItemHeight();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -93,95 +86,56 @@ ScSortKeyWindow::~ScSortKeyWindow()
 
 void ScSortKeyWindow::AddSortKey( sal_uInt16 nItemNumber )
 {
-    ScSortKeyItem* pSortKeyItem = new ScSortKeyItem( this );
+    ScSortKeyItem* pSortKeyItem = new ScSortKeyItem(m_pBox);
 
     // Set Sort key number
-    String aLine = pSortKeyItem->aFlSort.GetText();
+    String aLine = pSortKeyItem->m_pFlSort->GetText();
     aLine += String::CreateFromInt32( nItemNumber );
-    pSortKeyItem->aFlSort.SetText( aLine );
+    pSortKeyItem->m_pFlSort->SetText( aLine );
 
-    mrSortKeyItems.push_back( pSortKeyItem );
-
-    Window* pWindows[] = {  &aFlSort, &aLbSort, &aBtnUp, &aBtnDown, NULL };
-
-    Window* pNewWindows[] = { &pSortKeyItem->aFlSort, &pSortKeyItem->aLbSort,
-                              &pSortKeyItem->aBtnUp,  &pSortKeyItem->aBtnDown, NULL };
-    Window** pCurrent = pWindows;
-    Window** pNewCurrent = pNewWindows;
-    while ( *pCurrent )
-    {
-        Size aSize = (*pCurrent)->GetSizePixel();
-        Point aPos = (*pCurrent)->GetPosPixel();
-        aPos.Y() += ( nItemNumber - 1 ) * GetItemHeight();
-        aPos.Y() += nScrollPos;
-        (*pNewCurrent)->SetPosSizePixel( aPos, aSize );
-        (*pNewCurrent)->Show();
-        pCurrent++;
-        pNewCurrent++;
-    }
+    mrSortKeyItems.push_back(pSortKeyItem);
 }
 
 // -----------------------------------------------------------------------
 
-void ScSortKeyWindow::DoScroll( sal_Int32 nNewPos )
+void ScSortKeyWindow::DoScroll(sal_Int32 nNewPos)
 {
-    nScrollPos += nNewPos;
-    ScSortKeyItems::iterator pIter;
-    for ( pIter = mrSortKeyItems.begin(); pIter != mrSortKeyItems.end(); ++pIter )
-    {
-        Window* pNewWindows[] = { &pIter->aFlSort, &pIter->aLbSort,
-                                  &pIter->aBtnUp,  &pIter->aBtnDown, NULL };
-
-        Window** pCurrent = pNewWindows;
-        while ( *pCurrent )
-        {
-            Point aPos = (*pCurrent)->GetPosPixel();
-            aPos.Y() += nNewPos;
-            (*pCurrent)->SetPosPixel( aPos );
-            pCurrent++;
-        }
-    }
+    m_pBox->SetPosPixel(Point(0, nNewPos));
 }
 
 // =======================================================================
 
-ScSortKeyCtrl::ScSortKeyCtrl( Window* pParent, const ScResId& rResId, ScSortKeyItems& rItems ):
-    Control( pParent, rResId),
-    //
-    aSortWin    ( this, ResId( WIN_MANAGESORTKEY, *rResId.GetResMgr() ), rItems ),
-    aVertScroll ( this, ResId( SB_SORT, *rResId.GetResMgr() ) ),
-    nThumbPos   ( 0 )
+ScSortKeyCtrl::ScSortKeyCtrl(SfxTabPage* pParent, ScSortKeyItems& rItems)
+    : m_aSortWin(pParent, rItems)
+    , m_rScrolledWindow(*pParent->get<VclScrolledWindow>("SortCriteriaPage"))
+    , m_rVertScroll(m_rScrolledWindow.getVertScrollBar())
+    , nThumbPos(0)
 {
-    aVertScroll.EnableDrag();
-    aVertScroll.Show();
+    m_rVertScroll.EnableDrag();
+    m_rVertScroll.Show();
 
-    FreeResource();
-
-    aVertScroll.SetRangeMin( 0 );
-    sal_Int32 nScrollOffset = aSortWin.GetItemHeight();
-    sal_Int32 nVisibleItems = aSortWin.GetSizePixel().Height() / nScrollOffset;
-    aVertScroll.SetRangeMax( nVisibleItems );
-    aVertScroll.SetPageSize( nVisibleItems - 1 );
-    aVertScroll.SetVisibleSize( nVisibleItems );
+    m_rVertScroll.SetRangeMin( 0 );
+    m_rVertScroll.SetVisibleSize( 0xFFFF );
 
     Link aScrollLink = LINK( this, ScSortKeyCtrl, ScrollHdl );
-    aVertScroll.SetScrollHdl( aScrollLink );
+    m_rVertScroll.SetScrollHdl( aScrollLink );
 }
 
-// -----------------------------------------------------------------------
-
-ScSortKeyCtrl::~ScSortKeyCtrl()
+void ScSortKeyCtrl::setScrollRange()
 {
+    sal_Int32 nScrollOffset = m_aSortWin.GetItemHeight();
+    sal_Int32 nVisibleItems = m_rScrolledWindow.getVisibleChildSize().Height() / nScrollOffset;
+    m_rVertScroll.SetPageSize( nVisibleItems - 1 );
+    m_rVertScroll.SetVisibleSize( nVisibleItems );
 }
 
 // -----------------------------------------------------------------------
 
 IMPL_LINK( ScSortKeyCtrl, ScrollHdl, ScrollBar*, pScrollBar )
 {
-    sal_Int32 nOffset = aSortWin.GetItemHeight();
-    nOffset *= ( nThumbPos - pScrollBar->GetThumbPos() );
-    nThumbPos = pScrollBar->GetThumbPos();
-    aSortWin.DoScroll( nOffset );
+    sal_Int32 nOffset = m_aSortWin.GetItemHeight();
+    nOffset *= pScrollBar->GetThumbPos();
+    m_aSortWin.DoScroll( -nOffset );
     return 0;
 }
 
@@ -189,9 +143,9 @@ IMPL_LINK( ScSortKeyCtrl, ScrollHdl, ScrollBar*, pScrollBar )
 
 void ScSortKeyCtrl::AddSortKey( sal_uInt16 nItem )
 {
-    aVertScroll.SetRangeMax( nItem );
-    aVertScroll.DoScroll( nItem );
-    aSortWin.AddSortKey( nItem );
+    m_rVertScroll.SetRangeMax( nItem );
+    m_rVertScroll.DoScroll( nItem );
+    m_aSortWin.AddSortKey( nItem );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
