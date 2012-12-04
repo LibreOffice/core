@@ -81,6 +81,7 @@ TabDialog RID_SCDLG_SORT
     Size = MAP_APPFONT ( 220 , 175 ) ;
     Text [ en-US ] = "Sort" ;
     Moveable = TRUE ;
+    Sizeable = TRUE ;
     Closeable = FALSE ;
     TabControl 1
     {
