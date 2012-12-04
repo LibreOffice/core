@@ -349,12 +349,9 @@ void osl_interlockedCountCheckForSingleCPU(void)
 //java. Quite possibly also required/helpful for s390x/s390 and maybe some
 //others. Without it the dlopen of libjvm.so will fail with __data_start
 //not found
-#pragma weak __data_start
-extern int __data_start[];
-#pragma weak data_start
-extern int data_start[];
-#pragma weak _end
-extern int _end[];
+extern int __data_start[] __attribute__((weak));
+extern int data_start[] __attribute__((weak));
+extern int _end[] __attribute__((weak));
 static void *dummy[] __attribute__((used)) = {__data_start, data_start, _end};
 #endif
 
