@@ -192,7 +192,6 @@ endif
         $(BUILDDIR)/config.status \
         $(BUILDDIR)/config_build.mk \
         $(BUILDDIR)/config_host.mk \
-        $(BUILDDIR)/config_host.mk.last \
         $(BUILDDIR)/config_host.mk.stamp \
         $(BUILDDIR)/config_host/*.h \
         $(BUILDDIR)/configure \
