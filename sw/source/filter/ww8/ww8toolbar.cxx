@@ -1309,7 +1309,8 @@ MCD::MCD() :  reserved1(0x56)
 }
 
 MCD::MCD(const MCD& rO)
-    : reserved1(rO.reserved1)
+    : TBBase(rO)
+    , reserved1(rO.reserved1)
     , reserved2(rO.reserved2)
     , ibst(rO.ibst)
     , ibstName(rO.ibstName)
