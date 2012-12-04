@@ -41,6 +41,7 @@
 
 #include <basic/sbx.hxx>
 #include <basic/sbstar.hxx>
+#include <basic/sbuno.hxx>
 #include <rtl/math.hxx>
 
 #include <math.h>
@@ -55,9 +56,6 @@ using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
 #define POINTTO100THMILLIMETERFACTOR 35.27778
-void unoToSbxValue( SbxVariable* pVar, const uno::Any& aValue );
-
-uno::Any sbxToUnoValue( SbxVariable* pVar );
 
 
 namespace ooo

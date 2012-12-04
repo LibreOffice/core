@@ -24,6 +24,7 @@
 #include <basic/sbstar.hxx>
 #include <basic/sbmod.hxx>
 #include <basic/sbmeth.hxx>
+#include <basic/sbuno.hxx>
 #include <basic/basmgr.hxx>
 #include <com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>
 #include "bcholder.hxx"
@@ -39,9 +40,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::beans;
-
-extern ::com::sun::star::uno::Any sbxToUnoValue( SbxVariable* pVar );
-extern void unoToSbxValue( SbxVariable* pVar, const ::com::sun::star::uno::Any& aValue );
 
 
 //.........................................................................

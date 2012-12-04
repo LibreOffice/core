@@ -57,6 +57,7 @@
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>
 #include <basic/sbmeth.hxx>
+#include <basic/sbuno.hxx>
 #include <rtl/math.hxx>
 #include <sfx2/viewsh.hxx>
 #include <math.h>
@@ -75,10 +76,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
-
-void unoToSbxValue( SbxVariable* pVar, const uno::Any& aValue );
-
-uno::Any sbxToUnoValue( SbxVariable* pVar );
 
 
 namespace ooo

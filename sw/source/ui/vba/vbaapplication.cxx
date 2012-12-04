@@ -29,6 +29,7 @@
 #include "vbaaddins.hxx"
 #include "vbadialogs.hxx"
 #include <ooo/vba/word/WdEnableCancelKey.hpp>
+#include <basic/sbuno.hxx>
 #include <editeng/acorrcfg.hxx>
 #include "wordvbahelper.hxx"
 #include <docsh.hxx>
@@ -52,7 +53,6 @@ using ::rtl::OUString;
 
 #define EXCELVERSION "11.0"
 
-uno::Any sbxToUnoValue( SbxVariable* pVar );
 
 SwVbaApplication::SwVbaApplication( uno::Reference<uno::XComponentContext >& xContext ): SwVbaApplication_BASE( xContext )
 {
