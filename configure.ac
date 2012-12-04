@@ -1848,7 +1848,7 @@ AC_ARG_WITH(nss-build-tools,
     AS_HELP_STRING([--with-nss-build-tools],
         [For Windows users, please supply the path to the nss build tools.])
     [
-                          Usage:     --with-nss-build=<absolute path to
+                          Usage:     --with-nss-build-tools=<absolute path to
                                                           nss build tools>
 
                           At the moment of this writing, an installer for the
@@ -8038,7 +8038,7 @@ if test "$_os" != "WINNT"; then
 # new and shiny mork driver
    AC_MSG_RESULT([yes (new mork driver)])
 else
-    if test "WITH_MOZAB4WIN" = "NO"; then
+    if test "$WITH_MOZAB4WIN" = "NO"; then
         AC_MSG_RESULT([no])
     else
         AC_MSG_RESULT([yes, internal (old windows mozab driver)])
@@ -8103,7 +8103,7 @@ else
         AC_MSG_CHECKING([for nss build tooling]) # coming from mozilla
         if test -z "$NSSBUILDTOOLS"; then
             AC_MSG_ERROR([nss build tooling not provided
-Use the --with-nss-build option after installing the tools obtained
+Use the --with-nss-build-tools option after installing the tools obtained
 from http://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32])
         else
             if test \( "$WITH_MINGW" = "yes" -a  ! -d "$NSSBUILDTOOLS" \) \
