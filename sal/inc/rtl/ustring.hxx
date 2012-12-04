@@ -2156,18 +2156,6 @@ inline std::basic_ostream<charT, traits> & operator <<(
 typedef OUString OUStringLiteral;
 #endif
 
-} /* Namespace */
-
-#ifdef RTL_STRING_UNITTEST
-namespace rtl
-{
-typedef rtlunittest::OUString OUString;
-}
-#endif
-
-namespace rtl
-{
-
 /** A helper to use OUStrings with hash maps.
 
     Instances of this class are unary function objects that can be used as
@@ -2240,17 +2228,6 @@ inline OString OUStringToOString( const OUString & rUnicode,
 
 /* ======================================================================= */
 
-} /* Namespace */
-
-#ifdef RTL_STRING_UNITTEST
-#define rtl rtlunittest
-#endif
-namespace rtl
-{
-#ifdef RTL_STRING_UNITTEST
-#undef rtl
-#endif
-
 /**
     Support for rtl::OUString in std::ostream (and thus in
     CPPUNIT_ASSERT or SAL_INFO macros, for example).
@@ -2264,12 +2241,19 @@ inline std::basic_ostream<charT, traits> & operator <<(
     std::basic_ostream<charT, traits> & stream, OUString const & string)
 {
     return stream <<
-        rtl::OUStringToOString(string, RTL_TEXTENCODING_UTF8).getStr();
+        OUStringToOString(string, RTL_TEXTENCODING_UTF8).getStr();
         // best effort; potentially loses data due to conversion failures
         // (stray surrogate halves) and embedded null characters
 }
 
 } // namespace
+
+#ifdef RTL_STRING_UNITTEST
+namespace rtl
+{
+typedef rtlunittest::OUString OUString;
+}
+#endif
 
 // RTL_USING is defined by gbuild for all modules except those with stable public API
 // (as listed in ure/source/README). It allows to use classes like OUString without

@@ -1513,18 +1513,6 @@ inline std::basic_ostream<charT, traits> & operator <<(
 typedef OString OStringLiteral;
 #endif
 
-} /* Namespace */
-
-#ifdef RTL_STRING_UNITTEST
-namespace rtl
-{
-typedef rtlunittest::OString OString;
-}
-#undef RTL_STRING_CONST_FUNCTION
-#endif
-
-namespace rtl
-{
 
 /** A helper to use OStrings with hash maps.
 
@@ -1556,13 +1544,21 @@ struct OStringHash
  */
 template< typename charT, typename traits > std::basic_ostream<charT, traits> &
 operator <<(
-    std::basic_ostream<charT, traits> & stream, rtl::OString const & string)
+    std::basic_ostream<charT, traits> & stream, OString const & string)
 {
     return stream << string.getStr();
         // best effort; potentially loses data due to embedded null characters
 }
 
 } /* Namespace */
+
+#ifdef RTL_STRING_UNITTEST
+namespace rtl
+{
+typedef rtlunittest::OString OString;
+}
+#undef RTL_STRING_CONST_FUNCTION
+#endif
 
 #ifdef RTL_USING
 using ::rtl::OString;
