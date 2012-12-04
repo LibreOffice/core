@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAARH///4M\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2012-12-04T05:40:18Z",
+      "side": 1,
+      "message": "s/First //",
+      "revId": "d3e718a31b7ea01c7acafc5cba11449c563286a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAARH///4I\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 8021,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2012-12-04T05:40:18Z",
+      "side": 1,
+      "message": "Did we actually ever support mozab an mingw?",
+      "revId": "d3e718a31b7ea01c7acafc5cba11449c563286a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
