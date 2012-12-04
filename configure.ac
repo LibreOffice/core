@@ -11720,8 +11720,7 @@ if test "$MD5SUM" = "md5"; then
 fi
 
 if test -z "$MD5SUM"; then
-    AC_MSG_WARN([no md5sum: found!])
-    add_warning "no md5sum: found!"
+    AC_MSG_ERROR([no md5sum: found!])
 fi
 
 AC_SUBST(WGET)
@@ -12418,14 +12417,9 @@ fi
 
 AC_SUBST(LO_PATH)
 
-# make sure config.guess is +x; we execute config.guess, so it has to be so
-chmod +x ./config.guess
-
-# Generate a configuration timestamp we can use for deps
+# Generate a configuration md5 we can use for deps
 if test -f config_host.mk; then
-    mv -f config_host.mk config_host.mk.last
-else
-    echo > config_host.mk.last
+    config_md5=`$MD5SUM config_host.mk`
 fi
 
 AC_CONFIG_FILES([config_host.mk])
@@ -12434,7 +12428,7 @@ AC_OUTPUT
 # touch the config timestamp file
 if test ! -f config_host.mk.stamp; then
     echo > config_host.mk.stamp
-elif diff config_host.mk config_host.mk.last >/dev/null 2>&1; then
+elif test "$config_md5" == `$MD5SUM config_host.mk`; then
     echo "Configuration unchanged - avoiding scp2 stamp update"
 else
     echo > config_host.mk.stamp
