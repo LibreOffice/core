@@ -257,6 +257,11 @@
     Command = ".uno:ImageMapDialog" ; \
     Text [ en-US ] = "ImageMap" ; \
 
+#define ITEM_CHANGE_PICTURE \
+    Identifier = SID_CHANGE_PICTURE ; \
+    Command = ".uno:ChangePicture" ; \
+    Text [ en-US ] = "Change Picture..." ; \
+
 #define ITEM_VIEW_ATTR_ZOOM \
     Identifier = SID_ATTR_ZOOM ; \
     Command = ".uno:Zoom" ; \

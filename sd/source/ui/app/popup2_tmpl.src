@@ -659,6 +659,7 @@
         MN_STYLEDT
         SEPARATOR
         MN_SAVEGRAPHIC
+        MenuItem { ITEM_CHANGE_PICTURE };
     };
 };
 
