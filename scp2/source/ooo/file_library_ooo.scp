@@ -827,7 +827,7 @@ End
 
 #if defined(WNT)
 
-#if !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA)
+#if defined WITH_MOZAB4WIN
 
 STD_LIB_FILE(gid_File_Lib_Mozab,mozab2)
 STD_LIB_FILE(gid_File_Lib_Mozabdrv,mozabdrv)
@@ -1565,7 +1565,7 @@ File gid_File_Lib_Unopkgapp
     Styles = (PACKED);
 End
 
-#if defined WNT && !defined _gcc3 && !defined SYSTEM_MOZILLA && !defined WITHOUT_MOZILLA
+#if defined WNT && !defined _gcc3 && defined WITH_MOZAB4WIN
         // see common_brand.scp gid_Brand_File_Lib_Msvcp80 and
         // gid_Brand_File_Lib_Msvcr80
 File gid_File_Moz_Msvcp80
