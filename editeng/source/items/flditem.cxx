@@ -557,7 +557,6 @@ static rtl::OUString read_unicode( SvPersistStream & rStm )
     rStm >> nL;
     if ( nL )
     {
-        using comphelper::string::rtl_uString_alloc;
         pStr = rtl_uString_alloc(nL);
         //endian specific?, yipes!
         rStm.Read(pStr->buffer, nL*sizeof(sal_Unicode));

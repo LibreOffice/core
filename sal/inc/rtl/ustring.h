@@ -1151,6 +1151,31 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uString_new(
 
 /** Allocate a new string containing space for a given number of characters.
 
+    The reference count of the new string will be 1. The length of the string
+    will be nLen. This function throws std::bad_alloc on out-of-memory
+    conditions.
+
+    The characters of the capacity are not cleared, and the length is set to
+    nLen, unlike the similar method of rtl_uString_new_WithLength which
+    zeros out the buffer, and sets the length to 0. So should be somewhat
+    more efficient for allocating a new string.
+
+    call rtl_uString_release to release the string
+    alternatively pass ownership to an OUString with
+    rtl::OUString(newStr, SAL_NO_ACQUIRE);
+
+    @param newStr
+    pointer to the new string.
+
+    @param len
+    the number of characters.
+
+    @since LibreOffice 4.1
+ */
+SAL_DLLPUBLIC rtl_uString * SAL_CALL rtl_uString_alloc(sal_Int32 nLen) SAL_THROW_EXTERN_C();
+
+/** Allocate a new string containing space for a given number of characters.
+
     If len is greater than zero, the reference count of the new string will be
     1.  The values of all characters are set to 0 and the length of the string
     is 0.  This function does not handle out-of-memory conditions.

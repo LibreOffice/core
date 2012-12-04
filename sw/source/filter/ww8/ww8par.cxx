@@ -2567,7 +2567,7 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
         RTL_TEXTENCODING_MS_1252;
 
     // allocate unicode string data
-    rtl_uString *pStr = comphelper::string::rtl_uString_alloc(nStrLen);
+    rtl_uString *pStr = rtl_uString_alloc(nStrLen);
     sal_Unicode* pBuffer = pStr->buffer;
     sal_Unicode* pWork = pBuffer;
 

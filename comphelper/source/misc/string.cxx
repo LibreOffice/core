@@ -377,43 +377,6 @@ bool isdigitAsciiString(const rtl::OUString &rString)
 
 namespace
 {
-    template <typename T, typename U> T* string_alloc(sal_Int32 nLen)
-    {
-        //Clearly this is somewhat cosy with the sal implmentation
-
-        //rtl_[u]String contains U buffer[1], so an input of nLen
-        //allocates a buffer of nLen + 1 and we'll ensure a null termination
-
-        T* newStr =
-            (sal::static_int_cast< sal_uInt32 >(nLen)
-               <= ((SAL_MAX_UINT32 - sizeof (T))
-                   / sizeof (U)))
-            ? (T*) rtl_allocateMemory(
-                sizeof (T) + nLen * sizeof (U))
-            : NULL;
-
-        if (!newStr)
-            throw std::bad_alloc();
-
-        newStr->refCount = 1;
-        newStr->length = nLen;
-        newStr->buffer[nLen] = 0;
-        return newStr;
-    }
-}
-
-rtl_uString * SAL_CALL rtl_uString_alloc(sal_Int32 nLen)
-{
-    return string_alloc<rtl_uString, sal_Unicode>(nLen);
-}
-
-rtl_String * SAL_CALL rtl_string_alloc(sal_Int32 nLen)
-{
-    return string_alloc<rtl_String, sal_Char>(nLen);
-}
-
-namespace
-{
     template <typename T, typename O> T tmpl_reverseString(const T &rIn)
     {
         if (rIn.isEmpty())

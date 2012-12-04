@@ -126,7 +126,7 @@ transliteration_Ignore::folding( const OUString& inStr, sal_Int32 startPos,
 {
     // Create a string buffer which can hold nCount + 1 characters.
     // The reference count is 1 now.
-    rtl_uString * newStr = comphelper::string::rtl_uString_alloc(nCount);
+    rtl_uString * newStr = rtl_uString_alloc(nCount);
     sal_Unicode * dst = newStr->buffer;
     const sal_Unicode * src = inStr.getStr() + startPos;
 

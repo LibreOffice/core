@@ -1435,8 +1435,6 @@ void BinTextObject::CreateData( SvStream& rIStream )
         rIStream >> bUnicodeStrings;
         if ( bUnicodeStrings )
         {
-            using comphelper::string::rtl_uString_alloc;
-
             for ( sal_uInt16 nPara = 0; nPara < nParagraphs; nPara++ )
             {
                 ContentInfo& rC = aContents[nPara];

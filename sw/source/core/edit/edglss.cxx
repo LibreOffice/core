@@ -339,7 +339,6 @@ sal_Bool SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
                     rBuf = rtl::OUString(p);
                 else
                 {
-                    using comphelper::string::rtl_uString_alloc;
                     rtl_uString *pStr = rtl_uString_alloc(lLen / sizeof( sal_Unicode ));
                     aStream.Seek( 0 );
                     aStream.ResetError();

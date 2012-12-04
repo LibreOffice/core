@@ -119,7 +119,7 @@ Transliteration_body::transliterate(
             const Mapping &map = casefolding::getValue( in, i, nCount, aLocale, nTmpMappingType );
             nOffCount += map.nmap;
         }
-        rtl_uString* pStr = comphelper::string::rtl_uString_alloc(nOffCount);
+        rtl_uString* pStr = rtl_uString_alloc(nOffCount);
         sal_Unicode* out = pStr->buffer;
 
         if ( nOffCount != offset.getLength() )
@@ -189,7 +189,7 @@ OUString SAL_CALL
 Transliteration_body::transliterateChar2String( sal_Unicode inChar ) throw(RuntimeException)
 {
         const Mapping &map = casefolding::getValue(&inChar, 0, 1, aLocale, nMappingType);
-        rtl_uString* pStr = comphelper::string::rtl_uString_alloc(map.nmap);
+        rtl_uString* pStr = rtl_uString_alloc(map.nmap);
         sal_Unicode* out = pStr->buffer;
         sal_Int32 i;
 

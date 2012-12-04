@@ -68,7 +68,7 @@ transliteration_Numeric::transliterateBullet( const OUString& inStr, sal_Int32 s
         if (endPos >  inStr.getLength())
             endPos = inStr.getLength();
 
-        rtl_uString* pStr = comphelper::string::rtl_uString_alloc(nCount);
+        rtl_uString* pStr = rtl_uString_alloc(nCount);
         sal_Unicode* out = pStr->buffer;
 
         if (useOffset)

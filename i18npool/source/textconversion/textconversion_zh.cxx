@@ -110,7 +110,7 @@ TextConversion_zh::getCharConversion(const OUString& aText, sal_Int32 nStartPos,
     }
 #endif
 
-    rtl_uString * newStr = comphelper::string::rtl_uString_alloc(nLength);
+    rtl_uString * newStr = rtl_uString_alloc(nLength);
     for (sal_Int32 i = 0; i < nLength; i++)
         newStr->buffer[i] =
             getOneCharConversion(aText[nStartPos+i], Data, Index);

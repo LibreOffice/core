@@ -1970,8 +1970,6 @@ void SvDataCopyStream::Assign( const SvDataCopyStream& )
 //Create a OString of nLen bytes from rStream
 rtl::OString read_uInt8s_ToOString(SvStream& rStrm, sal_Size nLen)
 {
-    using comphelper::string::rtl_string_alloc;
-
     rtl_String *pStr = NULL;
     if (nLen)
     {
@@ -1997,8 +1995,6 @@ rtl::OString read_uInt8s_ToOString(SvStream& rStrm, sal_Size nLen)
 //Create a OUString of nLen sal_Unicodes from rStream
 rtl::OUString read_uInt16s_ToOUString(SvStream& rStrm, sal_Size nLen)
 {
-    using comphelper::string::rtl_uString_alloc;
-
     rtl_uString *pStr = NULL;
     if (nLen)
     {

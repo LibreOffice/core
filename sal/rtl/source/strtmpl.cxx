@@ -1066,6 +1066,17 @@ void SAL_CALL IMPL_RTL_STRINGNAME( new )( IMPL_RTL_STRINGDATA** ppThis )
 
 /* ----------------------------------------------------------------------- */
 
+IMPL_RTL_STRINGDATA* SAL_CALL IMPL_RTL_STRINGNAME( alloc )( sal_Int32 nLen )
+    SAL_THROW_EXTERN_C()
+{
+    if ( nLen <= 0 )
+        return (IMPL_RTL_STRINGDATA*) (&IMPL_RTL_EMPTYSTRING);
+    else
+        return IMPL_RTL_STRINGNAME( ImplAlloc )( nLen );
+}
+
+/* ----------------------------------------------------------------------- */
+
 void SAL_CALL IMPL_RTL_STRINGNAME( new_WithLength )( IMPL_RTL_STRINGDATA** ppThis, sal_Int32 nLen )
     SAL_THROW_EXTERN_C()
 {

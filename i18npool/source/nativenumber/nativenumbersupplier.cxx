@@ -68,7 +68,7 @@ OUString SAL_CALL AsciiToNativeChar( const OUString& inStr, sal_Int32 startPos, 
         Sequence< sal_Int32 >& offset, sal_Bool useOffset, sal_Int16 number ) throw(RuntimeException)
 {
         const sal_Unicode *src = inStr.getStr() + startPos;
-        rtl_uString *newStr = comphelper::string::rtl_uString_alloc(nCount);
+        rtl_uString *newStr = rtl_uString_alloc(nCount);
         if (useOffset)
             offset.realloc(nCount);
 
