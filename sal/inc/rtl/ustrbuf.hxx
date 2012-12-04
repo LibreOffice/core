@@ -138,7 +138,7 @@ public:
 
         @param   value   the initial contents of the buffer.
      */
-    OUStringBuffer(OUString value)
+    OUStringBuffer(const OUString& value)
         : pData(NULL)
         , nCapacity( value.getLength() + 16 )
     {

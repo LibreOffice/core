@@ -143,7 +143,7 @@ public:
 
         @param   value   the initial string value.
      */
-    OStringBuffer(OString value)
+    OStringBuffer(const OString& value)
         : pData(NULL)
         , nCapacity( value.getLength() + 16 )
     {
