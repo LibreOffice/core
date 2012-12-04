@@ -48,10 +48,19 @@ GBUILDDIR:=$(SRCDIR)/solenv/gbuild
 
 .DELETE_ON_ERROR:
 
+# do not use built-in rules
+# DO NOT TOUCH THIS LINE UNLESS YOU REALLY KNOW WHAT YOU ARE DOING
+# REMOVING THIS MAKES e.g. MODULE SW ALONE SLOWER BY SOME 300%
+# FOR TAIL_BUILD THE IMPACT IS HUGE!
+# (unless you are doing make -r, which we should explicitly NOT require from
+# users)
+MAKEFLAGS+=-r
+
 # by default gbuild use /bin/sh
 # if you want to use a particular shell
 # you can export gb_SHELL=<path_to_shell>
 #
+
 ifdef gb_SHELL
 SHELL := $(gb_SHELL)
 else
