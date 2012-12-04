@@ -159,6 +159,7 @@ class SwStyleSheetIterator : public SfxStyleSheetIterator, public SfxListener
     void                AppendStyleList(const boost::ptr_vector<String>& rLst,
                                         sal_Bool    bUsed,
                                         sal_Bool    bTestHidden,
+                                        bool        bOnlyHidden,
                                         sal_uInt16  nSection,
                                         char    cType);
 
