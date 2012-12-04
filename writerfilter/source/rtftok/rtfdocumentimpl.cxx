@@ -2438,7 +2438,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().aParagraphAttributes.set(NS_rtf::LN_ISTD, pIntValue);
             break;
         case RTF_CS:
-            if (m_aStates.top().nDestinationState == DESTINATION_STYLESHEET)
+            if (m_aStates.top().nDestinationState == DESTINATION_STYLESHEET || m_aStates.top().nDestinationState == DESTINATION_STYLEENTRY)
             {
                 m_nCurrentStyleIndex = nParam;
                 m_aStates.top().aTableAttributes.set(NS_rtf::LN_ISTD, pIntValue);
