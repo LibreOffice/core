@@ -202,6 +202,11 @@ ModelessDialog DLG_TEMPLATE_MANAGER
             {
                 Identifier = TBI_TEMPLATE_REPOSITORY;
                 Text [ en-US ] = "Repository";
+
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "actionview026.png" ; };
+                };
             };
 
             ToolBoxItem
@@ -212,7 +217,7 @@ ModelessDialog DLG_TEMPLATE_MANAGER
 
                 ItemImage = Image
                 {
-                    ImageBitmap = Bitmap { File = "import.png" ; };
+                    ImageBitmap = Bitmap { File = "actionview010.png" ; };
                 };
             };
 
@@ -221,6 +226,11 @@ ModelessDialog DLG_TEMPLATE_MANAGER
                 Identifier = TBI_TEMPLATE_FOLDER_DEL;
                 Hide = TRUE;
                 Text [ en-US ] = "Delete";
+
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "actionview025.png" ; };
+                };
             };
 
             ToolBoxItem
@@ -228,6 +238,11 @@ ModelessDialog DLG_TEMPLATE_MANAGER
                 Identifier = TBI_TEMPLATE_SAVE;
                 Hide = TRUE;
                 Text [ en-US ] = "Save";
+
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "actionview028.png" ; };
+                };
             };
         };
     };
@@ -277,36 +292,66 @@ ModelessDialog DLG_TEMPLATE_MANAGER
             {
                 Identifier = TBI_TEMPLATE_EDIT;
                 Text [ en-US ] = "Edit";
+
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "actiontemplates019.png" ; };
+                };
             };
 
             ToolBoxItem
             {
                 Identifier = TBI_TEMPLATE_PROPERTIES;
                 Text [ en-US ] = "Properties";
+
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "actiontemplates016.png" ; };
+                };
             };
 
             ToolBoxItem
             {
                 Identifier = TBI_TEMPLATE_DEFAULT;
                 Text [ en-US ] = "Set as default";
+
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "actiontemplates015.png" ; };
+                };
             };
 
             ToolBoxItem
             {
                 Identifier = TBI_TEMPLATE_MOVE;
                 Text [ en-US ] = "Move to folder" ;
+
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "actiontemplates017.png" ; };
+                };
             };
 
             ToolBoxItem
             {
                 Identifier = TBI_TEMPLATE_EXPORT;
                 Text [ en-US ] = "Export";
+
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "actiontemplates020.png" ; };
+                };
             };
 
             ToolBoxItem
             {
                 Identifier = TBI_TEMPLATE_DELETE;
                 Text [ en-US ] = "Delete";
+
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "actiontemplates018.png" ; };
+                };
             };
         };
     };
