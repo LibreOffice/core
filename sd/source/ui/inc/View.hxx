@@ -42,6 +42,7 @@
 #include "smarttag.hxx"
 
 class SdDrawDocument;
+class SdPage;
 class SdrOle2Obj;
 class SdrGrafObj;
 class SdrMediaObj;
@@ -218,6 +219,9 @@ public:
     void SetMarkedSegmentsKindPossible( bool bSet ) { bSetMarkedSegmentsKindPossible = bSet; }
 
     SdrObject* GetEmptyPresentationObject( PresObjKind eKind );
+    SdPage* GetPage();
+    SdrObject* GetSelectedSingleObject(SdPage* pPage);
+
 protected:
     DECL_LINK( OnParagraphInsertedHdl, ::Outliner * );
     DECL_LINK( OnParagraphRemovingHdl, ::Outliner * );
