@@ -124,4 +124,28 @@ uno::Reference< uno::XInterface > SAL_CALL SIDEModel_createInstance(
     return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
 
+//  XStorable
+void SAL_CALL SIDEModel::store() throw (io::IOException, uno::RuntimeException)
+{
+    notImplemented();
+}
+
+void SAL_CALL SIDEModel::storeAsURL( const ::rtl::OUString&, const uno::Sequence< PROPERTYVALUE >& )
+        throw (io::IOException, uno::RuntimeException)
+{
+    notImplemented();
+}
+
+void SAL_CALL SIDEModel::storeToURL( const ::rtl::OUString&,
+        const uno::Sequence< PROPERTYVALUE >& )
+        throw (io::IOException, uno::RuntimeException)
+{
+    notImplemented();
+}
+
+void  SIDEModel::notImplemented() throw ( io::IOException )
+{
+    throw io::IOException("Can't store IDE model", uno::Reference< uno::XInterface >() );
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
