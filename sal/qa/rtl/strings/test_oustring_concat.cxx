@@ -60,7 +60,6 @@ void test::oustring::StringConcat::check()
     CPPUNIT_ASSERT_EQUAL( OUString( "fooxyz" ), OUString( OUString( "foo" ) + d1 ));
     TYPES_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, const char[ 4 ] > )), typeid( OUString( "foo" ) + d1 ));
 }
-#undef typeid
 
 }} // namespace
 
