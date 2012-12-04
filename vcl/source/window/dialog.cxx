@@ -540,41 +540,12 @@ Dialog::Dialog( Window* pParent, WinBits nStyle )
     ImplInit( pParent, nStyle );
 }
 
-VclBuilder* VclBuilderContainer::overrideResourceWithUIXML(Window *pWindow, const ResId& rResId)
-{
-    sal_Int32 nUIid = static_cast<sal_Int32>(rResId.GetId());
-
-    rtl::OUString sRoot = getUIRootDir();
-    rtl::OUString sPath = rtl::OUStringBuffer(
-        rResId.GetResMgr()->getPrefixName()).
-        append("/ui/").
-        append(nUIid).
-        appendAscii(".ui").
-        makeStringAndClear();
-
-    osl::File aUIFile(sRoot + sPath);
-    osl::File::RC error = aUIFile.open(osl_File_OpenFlag_Read);
-    //good, use the preferred GtkBuilder xml
-    if (error == osl::File::E_None)
-        return new VclBuilder(pWindow, sRoot, sPath, rtl::OString::valueOf(nUIid));
-    return NULL;
-}
-
 WinBits Dialog::init(Window *pParent, const ResId& rResId)
 {
     WinBits nStyle = ImplInitRes( rResId );
 
     ImplInit( pParent, nStyle );
-
-    m_pUIBuilder = overrideResourceWithUIXML(this, rResId);
-
-    if (m_pUIBuilder)
-        loadAndSetJustHelpID(rResId);
-    else
-    {
-        //fallback to using the binary resource file
-        ImplLoadRes( rResId );
-    }
+    ImplLoadRes( rResId );
 
     return nStyle;
 }
@@ -1252,46 +1223,6 @@ VclBuilderContainer::VclBuilderContainer()
 VclBuilderContainer::~VclBuilderContainer()
 {
     delete m_pUIBuilder;
-}
-
-bool VclBuilderContainer::replace_buildable(Window *pParent, const ResId& rResId, Window &rReplacement)
-{
-    if (!pParent)
-        return false;
-
-    VclBuilderContainer *pBuilderContainer = dynamic_cast<VclBuilderContainer*>(pParent);
-    if (!pBuilderContainer)
-        return false;
-
-    VclBuilder *pUIBuilder = pBuilderContainer->m_pUIBuilder;
-    if (!pUIBuilder)
-        return false;
-
-    sal_Int32 nID = rResId.GetId();
-
-    bool bFound = pUIBuilder->replace(rtl::OString::valueOf(nID), rReplacement);
-    if (bFound)
-    {
-        rReplacement.loadAndSetJustHelpID(rResId);
-    }
-    else
-    {
-        SAL_WARN("vcl.layout", "widget " << nID << " " << &rReplacement << " not found, hiding");
-        //move "missing" elements into the action area (just to have
-        //a known container as an owner) and hide it
-        Window* pArbitraryParent;
-        if (pParent->IsDialog())
-        {
-            Dialog *pDialog = static_cast<Dialog*>(pParent);
-            pArbitraryParent = getActionArea(pDialog);
-        }
-        else
-            pArbitraryParent = pParent->GetWindow(WINDOW_FIRSTCHILD);
-        rReplacement.ImplInit(pArbitraryParent, 0, NULL);
-        rReplacement.Hide();
-    }
-
-    return true;
 }
 
 // -----------------------------------------------------------------------

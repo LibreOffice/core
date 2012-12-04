@@ -72,21 +72,6 @@ Control::Control( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
-void Control::take_properties(Window &rOther)
-{
-    if (!GetParent())
-    {
-        ImplInitControlData();
-        ImplInit(rOther.GetParent(), rOther.GetStyle(), NULL);
-    }
-
-    Window::take_properties(rOther);
-
-    Control &rOtherControl = static_cast<Control&>(rOther);
-    std::swap(mpControlData, rOtherControl.mpControlData);
-    mbHasControlFocus = rOtherControl.mbHasControlFocus;
-}
-
 // -----------------------------------------------------------------------
 
 Control::~Control()

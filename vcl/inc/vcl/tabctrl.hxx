@@ -186,9 +186,6 @@ public:
     // returns the rectangle of the tab for page nPageId
     Rectangle GetTabBounds( sal_uInt16 nPageId ) const;
 
-    // rename nOldId to nNewId);
-    void ReassignPageId(sal_uInt16 nOldId, sal_uInt16 nNewId);
-
     virtual void SetPosPixel(const Point& rPos);
     virtual void SetSizePixel(const Size& rNewSize);
     virtual void SetPosSizePixel(const Point& rNewPos, const Size& rNewSize);

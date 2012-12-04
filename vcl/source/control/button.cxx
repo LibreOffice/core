@@ -96,13 +96,6 @@ Button::Button( WindowType nType ) :
     mpButtonData = new ImplCommonButtonData;
 }
 
-void Button::take_properties(Window &rOther)
-{
-    Control::take_properties(rOther);
-    Button &rOtherButton = static_cast<Button&>(rOther);
-    *mpButtonData = *rOtherButton.mpButtonData;
-}
-
 // -----------------------------------------------------------------------
 
 Button::~Button()
@@ -1209,27 +1202,12 @@ PushButton::PushButton( Window* pParent, const ResId& rResId ) :
 {
     rResId.SetRT( RSC_PUSHBUTTON );
     WinBits nStyle = ImplInitRes( rResId );
-
-    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
-        return;
-
     ImplInitPushButtonData();
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 
     if ( !(nStyle & WB_HIDE) )
         Show();
-}
-
-void PushButton::take_properties(Window &rOther)
-{
-    if (!GetParent())
-    {
-        ImplInitPushButtonData();
-        ImplInit(rOther.GetParent(), rOther.GetStyle());
-    }
-
-    Button::take_properties(rOther);
 }
 
 // -----------------------------------------------------------------------
@@ -1781,22 +1759,11 @@ OKButton::OKButton( Window* pParent, const ResId& rResId ) :
 {
     rResId.SetRT( RSC_OKBUTTON );
     WinBits nStyle = ImplInitRes( rResId );
-
-    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
-        return;
-
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 
     if ( !(nStyle & WB_HIDE) )
         Show();
-}
-
-void OKButton::take_properties(Window &rOther)
-{
-    if (!GetParent())
-        ImplInit(rOther.GetParent(), rOther.GetStyle());
-    PushButton::take_properties(rOther);
 }
 
 // -----------------------------------------------------------------------
@@ -1858,22 +1825,11 @@ CancelButton::CancelButton( Window* pParent, const ResId& rResId ) :
 {
     rResId.SetRT( RSC_CANCELBUTTON );
     WinBits nStyle = ImplInitRes( rResId );
-
-    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
-        return;
-
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 
     if ( !(nStyle & WB_HIDE) )
         Show();
-}
-
-void CancelButton::take_properties(Window &rOther)
-{
-    if (!GetParent())
-        ImplInit(rOther.GetParent(), rOther.GetStyle());
-    PushButton::take_properties(rOther);
 }
 
 // -----------------------------------------------------------------------
@@ -1935,22 +1891,11 @@ HelpButton::HelpButton( Window* pParent, const ResId& rResId ) :
 {
     rResId.SetRT( RSC_HELPBUTTON );
     WinBits nStyle = ImplInitRes( rResId );
-
-    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
-        return;
-
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 
     if ( !(nStyle & WB_HIDE) )
         Show();
-}
-
-void HelpButton::take_properties(Window &rOther)
-{
-    if (!GetParent())
-        ImplInit(rOther.GetParent(), rOther.GetStyle());
-    PushButton::take_properties(rOther);
 }
 
 // -----------------------------------------------------------------------
@@ -2512,40 +2457,12 @@ RadioButton::RadioButton( Window* pParent, const ResId& rResId ) :
 {
     rResId.SetRT( RSC_RADIOBUTTON );
     WinBits nStyle = ImplInitRes( rResId );
-
-    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
-        return;
-
     ImplInitRadioButtonData();
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 
     if ( !(nStyle & WB_HIDE) )
         Show();
-}
-
-void RadioButton::take_properties(Window &rOther)
-{
-    if (!GetParent())
-    {
-        ImplInitRadioButtonData();
-        ImplInit(rOther.GetParent(), rOther.GetStyle());
-    }
-
-    Button::take_properties(rOther);
-
-    RadioButton &rOtherRadio = static_cast<RadioButton&>(rOther);
-    if (rOtherRadio.m_xGroup.get())
-    {
-        rOtherRadio.m_xGroup->erase(std::remove(rOtherRadio.m_xGroup->begin(), rOtherRadio.m_xGroup->end(), &rOtherRadio),
-            rOtherRadio.m_xGroup->end());
-        rOtherRadio.m_xGroup->push_back(this);
-    }
-    std::swap(m_xGroup, rOtherRadio.m_xGroup);
-    mbChecked = rOtherRadio.mbChecked;
-    mbSaveValue = rOtherRadio.mbSaveValue;
-    mbRadioCheck = rOtherRadio.mbRadioCheck;
-    mbStateChanged = rOtherRadio.mbStateChanged;
 }
 
 // -----------------------------------------------------------------------
@@ -3487,32 +3404,12 @@ CheckBox::CheckBox( Window* pParent, const ResId& rResId ) :
 {
     rResId.SetRT( RSC_CHECKBOX );
     WinBits nStyle = ImplInitRes( rResId );
-
-    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
-        return;
-
     ImplInitCheckBoxData();
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 
     if ( !(nStyle & WB_HIDE) )
         Show();
-}
-
-void CheckBox::take_properties(Window &rOther)
-{
-    if (!GetParent())
-    {
-        ImplInitCheckBoxData();
-        ImplInit(rOther.GetParent(), rOther.GetStyle());
-    }
-
-    Button::take_properties(rOther);
-
-    CheckBox &rOtherCheck = static_cast<CheckBox&>(rOther);
-    meState = rOtherCheck.meState;
-    meSaveValue = rOtherCheck.meSaveValue;
-    mbTriState = rOtherCheck.mbTriState;
 }
 
 // -----------------------------------------------------------------------

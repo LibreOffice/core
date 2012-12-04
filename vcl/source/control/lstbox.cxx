@@ -60,37 +60,12 @@ ListBox::ListBox( Window* pParent, const ResId& rResId ) :
 {
     rResId.SetRT( RSC_LISTBOX );
     WinBits nStyle = ImplInitRes( rResId );
-
-    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
-        return;
-
     ImplInitListBoxData();
     ImplInit( pParent, nStyle );
-
     ImplLoadRes( rResId );
 
     if ( !(nStyle & WB_HIDE ) )
         Show();
-}
-
-void ListBox::take_properties(Window &rOther)
-{
-    if (!GetParent())
-    {
-        ImplInitListBoxData();
-        ImplInit(rOther.GetParent(), rOther.GetStyle());
-    }
-
-    Control::take_properties(rOther);
-
-    ListBox &rOtherListBox = static_cast<ListBox&>(rOther);
-    mnDDHeight = rOtherListBox.mnDDHeight;
-    mnSaveValue = rOtherListBox.mnSaveValue;
-    EnableAutoSize(rOtherListBox.mbDDAutoSize);
-    SetDropDownLineCount(rOtherListBox.GetDropDownLineCount());
-    mpImplLB->take_properties(*rOtherListBox.mpImplLB);
-    if (mpImplWin && rOtherListBox.mpImplWin)
-        mpImplWin->take_properties(*rOtherListBox.mpImplWin);
 }
 
 // -----------------------------------------------------------------------
@@ -1580,10 +1555,6 @@ MultiListBox::MultiListBox( Window* pParent, const ResId& rResId ) :
 {
     rResId.SetRT( RSC_MULTILISTBOX );
     WinBits nStyle = ImplInitRes( rResId );
-
-    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
-        return;
-
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 

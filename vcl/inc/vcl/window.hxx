@@ -1226,11 +1226,6 @@ public:
      */
     void reorderWithinParent(sal_uInt16 nNewPosition);
 
-    /*
-     * Takes ownership of the rOther properties
-     */
-    virtual void take_properties(Window &rOther);
-
     //-------------------------------------
     //  Native Widget Rendering functions
     //-------------------------------------

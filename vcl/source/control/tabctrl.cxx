@@ -2218,22 +2218,4 @@ Size TabControl::GetOptimalSize(WindowSizeType eType) const
     return calculateRequisition();
 }
 
-// -----------------------------------------------------------------------
-
-void TabControl::ReassignPageId(sal_uInt16 nOldId, sal_uInt16 nNewId)
-{
-    for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
-         it != mpTabCtrlData->maItemList.end(); ++it )
-    {
-        if( it->mnId == nOldId )
-            it->mnId = nNewId;
-    }
-
-    if (mnActPageId == nOldId)
-        mnActPageId = nNewId;
-
-    if (mnCurPageId == nOldId)
-        mnCurPageId = nOldId;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

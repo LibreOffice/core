@@ -187,8 +187,6 @@ public:
         first selectable entry after nPos is bForward is false.
         */
     sal_uInt16          FindFirstSelectable( sal_uInt16 nPos, bool bForward = true );
-
-    void take_properties(ImplEntryList &rOther);
 };
 
 // ---------------------
@@ -381,11 +379,6 @@ public:
     inline void     EnableMirroring()       { mbMirroring = sal_True; }
     inline sal_Bool     IsMirroring() const { return mbMirroring; }
 
-    /*
-     * Takes ownership of the rOther properties
-     */
-    virtual void take_properties(Window &rOther);
-
 protected:
     // ISearchableStringList
     virtual ::vcl::StringEntryIdentifier    CurrentEntry( String& _out_entryText ) const;
@@ -513,8 +506,6 @@ public:
     // pb: #106948# explicit mirroring for calc
     inline void     EnableMirroring()   { maLBWindow.EnableMirroring(); }
     inline void     SetDropTraget(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& i_xDNDListenerContainer){ mxDNDListenerContainer= i_xDNDListenerContainer; }
-
-    virtual void take_properties(Window &rOther);
 };
 
 // -----------------------------
@@ -620,7 +611,6 @@ public:
     sal_Bool            IsUserDrawEnabled() const           { return mbUserDrawEnabled; }
 
     void            DrawEntry( sal_Bool bDrawImage, sal_Bool bDrawText, sal_Bool bDrawTextAtImagePos = sal_False, bool bLayout = false );
-    virtual void take_properties(Window &rOther);
 };
 
 // -----------

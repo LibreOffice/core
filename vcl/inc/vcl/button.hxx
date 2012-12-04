@@ -86,7 +86,6 @@ public:
 
     void                SetFocusRect( const Rectangle& rFocusRect );
     bool IsSmallSymbol () const;
-    virtual void take_properties(Window &rOther);
 };
 
 // --------------------
@@ -192,7 +191,6 @@ public:
     void            SetToggleHdl( const Link& rLink ) { maToggleHdl = rLink; }
     const Link&     GetToggleHdl() const { return maToggleHdl; }
     virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
-    virtual void take_properties(Window &rOther);
 };
 
 inline void PushButton::Check( sal_Bool bCheck )
@@ -225,7 +223,6 @@ public:
                     OKButton( Window* pParent, const ResId& rResId );
 
     virtual void    Click();
-    virtual void take_properties(Window &rOther);
 };
 
 // ----------------
@@ -248,7 +245,6 @@ public:
                     CancelButton( Window* pParent, const ResId& rResId );
 
     virtual void    Click();
-    virtual void take_properties(Window &rOther);
 };
 
 // --------------
@@ -271,7 +267,6 @@ public:
                     HelpButton( Window* pParent, const ResId& rResId );
 
     virtual void    Click();
-    virtual void take_properties(Window &rOther);
 };
 
 // ---------------
@@ -403,7 +398,6 @@ public:
      * Group this RadioButton with another
      */
     void group(RadioButton &rOther);
-    virtual void take_properties(Window &rOther);
 };
 
 // ------------
@@ -455,7 +449,6 @@ protected:
     SAL_DLLPRIVATE const Rectangle& GetStateRect() const { return maStateRect; }
     SAL_DLLPRIVATE const Rectangle& GetMouseRect() const { return maMouseRect; }
 
-    virtual void take_properties(Window &rOther);
 public:
     SAL_DLLPRIVATE void         ImplCheck();
     SAL_DLLPRIVATE void         ImplSetMinimumNWFSize();

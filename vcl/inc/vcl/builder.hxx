@@ -169,11 +169,6 @@ public:
     }
     OString get_by_window(const Window *pWindow) const;
     void delete_by_window(const Window *pWindow);
-    //for the purposes of retrofitting this to the existing code
-    //look up sID, clone its properties into replacement and
-    //splice replacement into the tree instead of it, without
-    //taking ownership of it
-    bool replace(OString sID, Window &rReplacement);
 private:
     Window *insertObject(Window *pParent, const OString &rClass, const OString &rID,
         stringmap &rProps, stringmap &rPangoAttributes);
@@ -205,14 +200,12 @@ private:
     PackingData get_window_packing_data(const Window *pWindow) const;
     void set_window_packing_position(const Window *pWindow, sal_Int32 nPosition);
 
-    //Helpers to retrofit all the existing code the the builder
-    static void swapGuts(Window &rOrig, Window &rReplacement);
-    static sal_uInt16 getPositionWithinParent(Window &rWindow);
+    //Helpers to retrofit all the existing code to the builder
     static void reorderWithinParent(Window &rWindow, sal_uInt16 nNewPosition);
 };
 
 
-//allows retro fitting existing dialogs/tabpages that load a resource
+//helper baseclass to ease retro fitting dialogs/tabpages that load a resource
 //to load a .ui file instead
 //
 //vcl requires the Window Children of a Parent Window to be destroyed before
@@ -222,7 +215,6 @@ private:
 //
 //i.e.  class Dialog : public SystemWindow, public VclBuilderContainer
 //not   class Dialog : public VclBuilderContainer, public SystemWindow
-class ResId;
 
 class VCL_DLLPUBLIC VclBuilderContainer
 {
@@ -232,8 +224,6 @@ public:
     VclBuilderContainer();
     virtual ~VclBuilderContainer();
     static OUString getUIRootDir();
-    static VclBuilder* overrideResourceWithUIXML(Window *pWindow, const ResId& rResId);
-    static bool replace_buildable(Window *pParent, const ResId& rResId, Window &rReplacement);
     template <typename T> T* get(T*& ret, OString sID)
     {
         return m_pUIBuilder->get<T>(ret, sID);

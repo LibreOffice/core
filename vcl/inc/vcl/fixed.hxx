@@ -73,7 +73,6 @@ public:
     static Size     getTextDimensions(Control const *pControl, const OUString &rTxt, long nMaxWidth);
     Size            CalcMinimumSize(long nMaxWidth = 0x7fffffff) const;
     virtual Size    GetOptimalSize(WindowSizeType eType) const;
-    virtual void take_properties(Window &rOther);
     virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
 };
 
@@ -109,7 +108,6 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
     virtual Size    GetOptimalSize(WindowSizeType eType) const;
-    virtual void take_properties(Window &rOther);
 };
 
 // ---------------

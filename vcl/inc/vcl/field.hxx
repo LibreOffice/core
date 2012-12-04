@@ -210,8 +210,6 @@ public:
 
     sal_Int64               Normalize( sal_Int64 nValue ) const;
     sal_Int64               Denormalize( sal_Int64 nValue ) const;
-
-    void take_properties(NumericFormatter &rOther);
 };
 
 // -------------------
@@ -271,8 +269,6 @@ public:
 
     void                    SetCustomConvertHdl( const Link& rLink ) { maCustomConvertLink = rLink; }
     const Link&             GetCustomConvertHdl() const { return maCustomConvertLink; }
-
-    void take_properties(MetricFormatter &rOther);
 };
 
 
@@ -594,7 +590,6 @@ public:
     { return ConvertDoubleValue( static_cast<double>(nValue), nDecDigits, eInUnit, eOutUnit ); }
 
     virtual bool            set_property(const rtl::OString &rKey, const rtl::OString &rValue);
-    virtual void            take_properties(Window &rOther);
 };
 
 

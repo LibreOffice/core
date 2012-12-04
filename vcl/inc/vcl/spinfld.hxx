@@ -104,7 +104,6 @@ public:
     virtual Size    CalcMinimumSizeForText(const rtl::OUString &rString) const;
     virtual Size    GetOptimalSize(WindowSizeType eType) const;
     virtual Size    CalcSize( sal_uInt16 nChars ) const;
-    virtual void    take_properties(Window &rOther);
 };
 
 #endif // _SV_SPINFLD_HXX

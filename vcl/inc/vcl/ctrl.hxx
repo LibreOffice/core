@@ -188,7 +188,6 @@ public:
             aFont.Merge( GetControlFont() );
         return aFont;
     }
-    virtual void take_properties(Window &rOther);
 };
 
 #endif  // _SV_CTRL_HXX

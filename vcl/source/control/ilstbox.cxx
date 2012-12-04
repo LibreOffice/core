@@ -531,16 +531,6 @@ sal_uInt16 ImplEntryList::FindFirstSelectable( sal_uInt16 nPos, bool bForward /*
     return LISTBOX_ENTRY_NOTFOUND;
 }
 
-void ImplEntryList::take_properties(ImplEntryList &rOther)
-{
-    mnLastSelected = rOther.mnLastSelected;
-    mnSelectionAnchor = rOther.mnSelectionAnchor;
-    mnImages = rOther.mnImages;
-    mnMRUCount = rOther.mnMRUCount;
-    mnMaxMRUCount = rOther.mnMaxMRUCount;
-    maEntries.swap(rOther.maEntries);
-}
-
 // =======================================================================
 
 ImplListBoxWindow::ImplListBoxWindow( Window* pParent, WinBits nWinStyle ) :
@@ -586,52 +576,6 @@ ImplListBoxWindow::ImplListBoxWindow( Window* pParent, WinBits nWinStyle ) :
 
     ImplInitSettings( sal_True, sal_True, sal_True );
     ImplCalcMetrics();
-}
-
-void ImplListBoxWindow::take_properties(Window &rOther)
-{
-    Control::take_properties(rOther);
-
-    ImplListBoxWindow &rOtherListBoxWindow = static_cast<ImplListBoxWindow&>(rOther);
-    mpEntryList->take_properties(*rOtherListBoxWindow.mpEntryList);
-
-    maFocusRect = rOtherListBoxWindow.maFocusRect;
-    maUserItemSize = rOtherListBoxWindow.maUserItemSize;
-    mnMaxTxtHeight = rOtherListBoxWindow.mnMaxTxtHeight;
-    mnMaxTxtWidth = rOtherListBoxWindow.mnMaxTxtWidth;
-    mnMaxImgTxtWidth = rOtherListBoxWindow.mnMaxImgTxtWidth;
-    mnMaxImgWidth = rOtherListBoxWindow.mnMaxImgWidth;
-    mnMaxImgHeight = rOtherListBoxWindow.mnMaxImgHeight;
-    mnMaxWidth = rOtherListBoxWindow.mnMaxWidth;
-    mnMaxHeight = rOtherListBoxWindow.mnMaxHeight;
-    mnCurrentPos = rOtherListBoxWindow.mnCurrentPos;
-    mnTrackingSaveSelection = rOtherListBoxWindow.mnTrackingSaveSelection;
-    mnSeparatorPos = rOtherListBoxWindow.mnSeparatorPos;
-    mnUserDrawEntry = rOtherListBoxWindow.mnUserDrawEntry;
-    mnTop = rOtherListBoxWindow.mnTop;
-    mnLeft = rOtherListBoxWindow.mnLeft;
-    mnBorder = rOtherListBoxWindow.mnBorder;
-    mnTextHeight = rOtherListBoxWindow.mnTextHeight;
-    meProminentType = rOtherListBoxWindow.meProminentType;
-    mnSelectModifier = rOtherListBoxWindow.mnSelectModifier;
-    mbHasFocusRect = rOtherListBoxWindow.mbHasFocusRect;
-    mbSort = rOtherListBoxWindow.mbSort;
-    mbTrack = rOtherListBoxWindow.mbTrack;
-    mbMulti = rOtherListBoxWindow.mbMulti;
-    mbStackMode = rOtherListBoxWindow.mbStackMode;
-    mbSimpleMode = rOtherListBoxWindow.mbSimpleMode;
-    mbImgsDiffSz = rOtherListBoxWindow.mbImgsDiffSz;
-    mbTravelSelect = rOtherListBoxWindow.mbTravelSelect;
-    mbTrackingSelect = rOtherListBoxWindow.mbTrackingSelect;
-    mbSelectionChanged = rOtherListBoxWindow.mbSelectionChanged;
-    mbMouseMoveSelect = rOtherListBoxWindow.mbMouseMoveSelect;
-    mbGrabFocus = rOtherListBoxWindow.mbGrabFocus;
-    mbUserDrawEnabled = rOtherListBoxWindow.mbUserDrawEnabled;
-    mbInUserDraw = rOtherListBoxWindow.mbInUserDraw;
-    mbReadOnly = rOtherListBoxWindow.mbReadOnly;
-    mbMirroring = rOtherListBoxWindow.mbMirroring;
-    mbRight = rOtherListBoxWindow.mbRight;
-    mbCenter = rOtherListBoxWindow.mbCenter;
 }
 
 // -----------------------------------------------------------------------
@@ -2298,14 +2242,6 @@ ImplListBox::ImplListBox( Window* pParent, WinBits nWinStyle ) :
     maLBWindow.Show();
 }
 
-void ImplListBox::take_properties(Window &rOther)
-{
-    Control::take_properties(rOther);
-
-    ImplListBox &rOtherListBoxWindow = static_cast<ImplListBox&>(rOther);
-    maLBWindow.take_properties(rOtherListBoxWindow.maLBWindow);
-}
-
 // -----------------------------------------------------------------------
 
 ImplListBox::~ImplListBox()
@@ -2786,18 +2722,6 @@ ImplWin::ImplWin( Window* pParent, WinBits nWinStyle ) :
     mbUserDrawEnabled = sal_False;
     mnItemPos = LISTBOX_ENTRY_NOTFOUND;
 }
-
-void ImplWin::take_properties(Window &rOther)
-{
-    Control::take_properties(rOther);
-
-    ImplWin &rOtherImplWin = static_cast<ImplWin&>(rOther);
-    mnItemPos = rOtherImplWin.mnItemPos;
-    maString = rOtherImplWin.maString;
-    maImage = rOtherImplWin.maImage;
-    maFocusRect = rOtherImplWin.maFocusRect;
-    maUserItemSize = rOtherImplWin.maUserItemSize;
-};
 
 // -----------------------------------------------------------------------
 

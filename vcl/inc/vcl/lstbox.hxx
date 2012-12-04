@@ -217,7 +217,6 @@ public:
      */
     using Control::GetIndexForPoint;
     long GetIndexForPoint( const Point& rPoint, sal_uInt16& rPos ) const;
-    virtual void take_properties(Window &rOther);
 };
 
 // ----------------

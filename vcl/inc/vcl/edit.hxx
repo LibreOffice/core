@@ -247,7 +247,6 @@ public:
 
     virtual rtl::OUString GetSurroundingText() const;
     virtual Selection GetSurroundingTextSelection() const;
-    virtual void take_properties(Window &rOther);
     virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
 
     // returns the minimum size a bordered Edit should have given the current

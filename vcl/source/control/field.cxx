@@ -778,23 +778,6 @@ void NumericFormatter::ImplNewFieldValue( sal_Int64 nNewValue )
     }
 }
 
-void NumericFormatter::take_properties(NumericFormatter &rOther)
-{
-    mnFieldValue = rOther.mnFieldValue;
-    mnLastValue = rOther.mnLastValue;
-    mnMin = rOther.mnMin;
-    mnMax = rOther.mnMax;
-    mnCorrectedValue = rOther.mnCorrectedValue;
-    mnType = rOther.mnType;
-    mnDecimalDigits = rOther.mnDecimalDigits;
-    mbThousandSep = rOther.mbThousandSep;
-    mbShowTrailingZeros = rOther.mbThousandSep;
-
-    mnSpinSize = rOther.mnSpinSize;
-    mnFirst = rOther.mnFirst;
-    mnLast = rOther.mnLast;
-}
-
 // -----------------------------------------------------------------------
 
 NumericField::NumericField( Window* pParent, WinBits nWinStyle ) :
@@ -811,13 +794,6 @@ NumericField::NumericField( Window* pParent, const ResId& rResId ) :
 {
     rResId.SetRT( RSC_NUMERICFIELD );
     WinBits nStyle = ImplInitRes( rResId ) ;
-
-    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
-    {
-        SetField( this );
-        return;
-    }
-
     SpinField::ImplInit( pParent, nStyle );
     SetField( this );
     ImplLoadRes( rResId );
@@ -1730,10 +1706,6 @@ MetricField::MetricField( Window* pParent, const ResId& rResId ) :
 {
     rResId.SetRT( RSC_METRICFIELD );
     WinBits nStyle = ImplInitRes( rResId ) ;
-
-    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
-        return;
-
     SpinField::ImplInit( pParent, nStyle );
     SetField( this );
     ImplLoadRes( rResId );
@@ -1745,29 +1717,6 @@ MetricField::MetricField( Window* pParent, const ResId& rResId ) :
 Size MetricField::CalcMinimumSize() const
 {
     return calcMinimumSize(*this, *this);
-}
-
-void MetricFormatter::take_properties(MetricFormatter &rOtherField)
-{
-    maCustomUnitText = rOtherField.maCustomUnitText;
-    maCurUnitText = rOtherField.maCurUnitText;
-    mnBaseValue = rOtherField.mnBaseValue;
-    meUnit = rOtherField.meUnit;
-    NumericFormatter::take_properties(rOtherField);
-}
-
-void MetricField::take_properties(Window &rOther)
-{
-    if (!GetParent())
-    {
-        SpinField::ImplInit(rOther.GetParent(), rOther.GetStyle());
-        SetField( this );
-    }
-
-    SpinField::take_properties(rOther);
-
-    MetricField &rOtherField = static_cast<MetricField&>(rOther);
-    MetricFormatter::take_properties(rOtherField);
 }
 
 bool MetricField::set_property(const rtl::OString &rKey, const rtl::OString &rValue)

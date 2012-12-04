@@ -586,13 +586,10 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     {
         //We have to add a page
 
-        //make default pageid == -position. Partitioning the
-        //id space into negative numbers for auto-generated
-        //ids and positive numbers for the handleTabChild
-        //derived ids
+        //make default pageid == position
         TabControl *pTabControl = static_cast<TabControl*>(pParent);
         sal_uInt16 nNewPageCount = pTabControl->GetPageCount()+1;
-        sal_uInt16 nNewPageId = -nNewPageCount;
+        sal_uInt16 nNewPageId = nNewPageCount;
         pTabControl->InsertPage(nNewPageId, OUString());
         pTabControl->SetCurPageId(nNewPageId);
 
@@ -944,31 +941,6 @@ Window *VclBuilder::insertObject(Window *pParent, const OString &rClass,
     return pCurrentChild;
 }
 
-sal_uInt16 VclBuilder::getPositionWithinParent(Window &rWindow)
-{
-    if (rWindow.mpWindowImpl->mpParent != rWindow.mpWindowImpl->mpRealParent)
-    {
-        assert(rWindow.mpWindowImpl->mpBorderWindow ==
-            rWindow.mpWindowImpl->mpParent);
-        assert(rWindow.mpWindowImpl->mpBorderWindow->mpWindowImpl->mpParent ==
-            rWindow.mpWindowImpl->mpRealParent);
-        return getPositionWithinParent(*rWindow.mpWindowImpl->mpBorderWindow);
-    }
-
-    assert(rWindow.GetParent() == rWindow.mpWindowImpl->mpRealParent);
-
-    sal_uInt16 nPosition = 0;
-    Window* pChild = rWindow.GetParent()->mpWindowImpl->mpFirstChild;
-    while (pChild)
-    {
-        if (pChild == &rWindow)
-            break;
-        pChild = pChild->mpWindowImpl->mpNext;
-        ++nPosition;
-    }
-    return nPosition;
-}
-
 void VclBuilder::reorderWithinParent(Window &rWindow, sal_uInt16 nNewPosition)
 {
     if (rWindow.mpWindowImpl->mpParent != rWindow.mpWindowImpl->mpRealParent)
@@ -1036,24 +1008,8 @@ void VclBuilder::handleTabChild(Window *pParent, xmlreader::XmlReader &reader)
     VclBuilder::stringmap::iterator aFind = aProperties.find(OString("label"));
     if (aFind != aProperties.end())
     {
-        pTabControl->SetPageText(pTabControl->GetCurPageId(), OStringToOUString(aFind->second, RTL_TEXTENCODING_UTF8));
-
-        sal_Int32 nID = 0;
-        //To make it easier to retro fit pre-builder dialog code we take the
-        //notebook child id (falling back to notebook label id) and if its a
-        //positive number use that as the page id so existing code can find the
-        //right tabpage by id
-        TabPage *pPage = pTabControl->GetTabPage(pTabControl->GetCurPageId());
-        if (pPage)
-        {
-            VclBin *pContainer = static_cast<VclBin*>(pPage->GetWindow(WINDOW_FIRSTCHILD));
-            Window *pChild = pContainer->get_child();
-            nID = pChild ? get_by_window(pChild).toInt32() : 0;
-        }
-        if (nID == 0)
-            nID = sID.toInt32();
-        if (nID > 0)
-            pTabControl->ReassignPageId(pTabControl->GetCurPageId(), nID);
+        pTabControl->SetPageText(pTabControl->GetCurPageId(),
+            OStringToOUString(aFind->second, RTL_TEXTENCODING_UTF8));
     }
     else
         pTabControl->RemovePage(pTabControl->GetCurPageId());
@@ -1699,37 +1655,6 @@ const VclBuilder::Adjustment *VclBuilder::get_adjustment_by_name(OString sID) co
     if (aI != m_pParserState->m_aAdjustments.end())
         return &(aI->second);
     return NULL;
-}
-
-void VclBuilder::swapGuts(Window &rOrig, Window &rReplacement)
-{
-    sal_uInt16 nPosition = getPositionWithinParent(rOrig);
-
-    rReplacement.take_properties(rOrig);
-
-    reorderWithinParent(rReplacement, nPosition);
-
-    assert(nPosition == getPositionWithinParent(rReplacement));
-}
-
-bool VclBuilder::replace(OString sID, Window &rReplacement)
-{
-    for (std::vector<WinAndId>::iterator aI = m_aChildren.begin(),
-         aEnd = m_aChildren.end(); aI != aEnd; ++aI)
-    {
-        if (aI->m_sID.equals(sID))
-        {
-            Window *pOrig = aI->m_pWindow;
-            swapGuts(*pOrig, rReplacement);
-            delete pOrig;
-
-            aI->m_pWindow = &rReplacement;
-            aI->m_bOwned = false;
-            return true;
-        }
-    }
-    SAL_WARN("vcl.layout", "no sign of :" << sID.getStr());
-    return false;
 }
 
 void VclBuilder::mungeModel(ListBox &rTarget, const ListStore &rStore)

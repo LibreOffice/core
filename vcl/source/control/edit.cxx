@@ -196,10 +196,6 @@ Edit::Edit( Window* pParent, const ResId& rResId ) :
 {
     rResId.SetRT( RSC_EDIT );
     WinBits nStyle = ImplInitRes( rResId );
-
-    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
-        return;
-
     ImplInitEditData();
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
@@ -243,39 +239,6 @@ bool Edit::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
     else
         return Control::set_property(rKey, rValue);
     return true;
-}
-
-void Edit::take_properties(Window &rOther)
-{
-    if (!GetParent())
-    {
-        ImplInitEditData();
-        ImplInit(rOther.GetParent(), rOther.GetStyle());
-    }
-
-    Control::take_properties(rOther);
-
-    Edit &rOtherEdit = static_cast<Edit&>(rOther);
-    maText = rOtherEdit.maText;
-    maPlaceholderText = rOtherEdit.maPlaceholderText;
-    maSaveValue = rOtherEdit.maSaveValue;
-    maUndoText = rOtherEdit.maUndoText;
-    maRedoText = rOtherEdit.maRedoText;
-    mnXOffset = rOtherEdit.mnXOffset;
-    maSelection = rOtherEdit.maSelection;
-    mnAlign = rOtherEdit.mnAlign;
-    mnMaxTextLen = rOtherEdit.mnMaxTextLen;
-    mnWidthInChars = rOtherEdit.mnWidthInChars;
-    meAutocompleteAction = rOtherEdit.meAutocompleteAction;
-    mcEchoChar = rOtherEdit.mcEchoChar;
-    mbModified = rOtherEdit.mbModified;
-    mbInternModified = rOtherEdit.mbInternModified;
-    mbReadOnly = rOtherEdit.mbReadOnly;
-    mbInsertMode = rOtherEdit.mbInsertMode;
-    mbClickedInSelection = rOtherEdit.mbClickedInSelection;
-    mbIsSubEdit = rOtherEdit.mbIsSubEdit;
-    mbInMBDown = rOtherEdit.mbInMBDown;
-    mbActivePopup = rOtherEdit.mbActivePopup;
 }
 
 // -----------------------------------------------------------------------

@@ -4207,10 +4207,6 @@ Window::Window( Window* pParent, const ResId& rResId )
 
     rResId.SetRT( RSC_WINDOW );
     WinBits nStyle = ImplInitRes( rResId );
-
-    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
-        return;
-
     ImplInitWindowData( WINDOW_WINDOW );
     ImplInit( pParent, nStyle, NULL );
     ImplLoadRes( rResId );

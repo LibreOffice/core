@@ -162,23 +162,11 @@ FixedText::FixedText( Window* pParent, const ResId& rResId )
 {
     rResId.SetRT( RSC_TEXT );
     WinBits nStyle = ImplInitRes( rResId );
-
-    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
-        return;
-
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 
     if ( !(nStyle & WB_HIDE) )
         Show();
-}
-
-void FixedText::take_properties(Window &rOther)
-{
-    if (!GetParent())
-        ImplInit(rOther.GetParent(), rOther.GetStyle());
-
-    Control::take_properties(rOther);
 }
 
 // -----------------------------------------------------------------------
@@ -647,23 +635,11 @@ FixedLine::FixedLine( Window* pParent, const ResId& rResId ) :
 {
     rResId.SetRT( RSC_FIXEDLINE );
     WinBits nStyle = ImplInitRes( rResId );
-
-    if (VclBuilderContainer::replace_buildable(pParent, rResId, *this))
-        return;
-
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 
     if ( !(nStyle & WB_HIDE) )
         Show();
-}
-
-void FixedLine::take_properties(Window &rOther)
-{
-    if (!GetParent())
-        ImplInit(rOther.GetParent(), rOther.GetStyle());
-
-    Control::take_properties(rOther);
 }
 
 // -----------------------------------------------------------------------
