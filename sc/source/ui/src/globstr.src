@@ -1946,5 +1946,15 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Conditional Formats can not be created, deleted or changed in protected sheets!";
     };
+
+    String STR_QUERY_FORMULA_RECALC_ONLOAD_ODS
+    {
+        Text [ en-US ] = "This document was last saved by application other than LibreOffice.  Some formula cells may produce different results when recalculated.\n\nDo you want to recalculate all formula cells in this document now?";
+    };
+
+    String STR_QUERY_FORMULA_RECALC_ONLOAD_XLS
+    {
+        Text [ en-US ] = "This document was last saved by Excel.  Some formula cells may produce different results when recalculated.\n\nDo you want to recalculate all formula cells now?";
+    };
 };
 

@@ -112,8 +112,6 @@
 #include <vector>
 #include <boost/shared_ptr.hpp>
 
-#define SC_LIBO_PROD_NAME "LibreOffice"
-
 using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
@@ -426,10 +424,24 @@ sal_Bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::un
     //did not use cached formula results.
     uno::Reference<document::XDocumentPropertiesSupplier> xDPS(GetModel(), uno::UNO_QUERY_THROW);
     uno::Reference<document::XDocumentProperties> xDocProps = xDPS->getDocumentProperties();
-    rtl::OUString sGenerator(xDocProps->getGenerator());
-    if(sGenerator.indexOf(SC_LIBO_PROD_NAME) == -1)
+    rtl::OUString sGenerator = xDocProps->getGenerator();
+
+    bool bHardRecalc = false;
+    if (aDocument.IsUserInteractionEnabled() && xDocProps->getGenerator().indexOf("LibreOffice") == -1)
+    {
+        // Generator is not LibreOffice.  Ask if the user wants to perform
+        // full re-calculation.
+        QueryBox aBox(
+            GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+            ScGlobal::GetRscString(STR_QUERY_FORMULA_RECALC_ONLOAD_ODS));
+
+        bHardRecalc = aBox.Execute() == RET_YES;
+    }
+
+    if (bHardRecalc)
         DoHardRecalc(false);
-    else //still need to recalc volatile formula cells
+    else
+        // still need to recalc volatile formula cells.
         aDocument.CalcFormulaTree(false, false, false);
 
     aDocument.EnableAdjustHeight(false);

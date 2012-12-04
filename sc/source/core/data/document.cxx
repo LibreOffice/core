@@ -5668,6 +5668,16 @@ void ScDocument::EnableUndo( bool bVal )
     mbUndoEnabled = bVal;
 }
 
+bool ScDocument::IsUserInteractionEnabled() const
+{
+    return mbUserInteractionEnabled;
+}
+
+void ScDocument::EnableUserInteraction( bool bVal )
+{
+    mbUserInteractionEnabled = bVal;
+}
+
 bool ScDocument::IsInVBAMode() const
 {
     if (!pShell)
