@@ -11,6 +11,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <vcl/edit.hxx>
 #include <vcl/msgbox.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -31,8 +32,14 @@ http://www.getpersona.com ...
 */
 class SelectPersonaDialog : public ModalDialog
 {
+private:
+    Edit *m_pEdit;                          ///< The input line for the Persona URL
+
 public:
     SelectPersonaDialog( Window *pParent );
+
+    /// Get the URL from the Edit field.
+    OUString GetPersonaURL() const;
 
 private:
     /// Handle the [Visit Firefox Personas] button
@@ -45,6 +52,19 @@ SelectPersonaDialog::SelectPersonaDialog( Window *pParent )
     PushButton *pButton;
     get( pButton, "visit_personas" );
     pButton->SetClickHdl( LINK( this, SelectPersonaDialog, VisitPersonas ) );
+
+    get( m_pEdit, "persona_url" );
+    m_pEdit->SetPlaceholderText( "http://www.getpersonas.com/persona/" );
+}
+
+OUString SelectPersonaDialog::GetPersonaURL() const
+{
+    OUString aText( m_pEdit->GetText() );
+
+    if ( !aText.startsWith( "http://www.getpersonas.com/" ) )
+        return OUString();
+
+    return aText;
 }
 
 IMPL_LINK( SelectPersonaDialog, VisitPersonas, PushButton*, /*pButton*/ )
@@ -198,10 +218,16 @@ IMPL_LINK( SvxPersonalizationTabPage, SelectPersona, PushButton*, /*pButton*/ )
 {
     SelectPersonaDialog aDialog( NULL );
 
-    if ( aDialog.Execute() == RET_OK )
+    while ( aDialog.Execute() == RET_OK )
     {
-        m_pOwnPersona->Check();
-        // TODO parse the results
+        OUString aURL( aDialog.GetPersonaURL() );
+        if ( aURL != "" )
+        {
+            // TODO parse the results
+            m_pOwnPersona->Check();
+            break;
+        }
+        // else TODO msgbox that the URL did not match
     }
 
     return 0;
