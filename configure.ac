@@ -861,9 +861,8 @@ AC_ARG_ENABLE(sdremote,
 
 AC_ARG_ENABLE(sdremote-bluetooth,
     AS_HELP_STRING([--disable-sdremote-bluetooth],
-        [Determines whether to build sdremote with bluetooth support
-         Requires: dbus]),
-,enable_sdremote_bluetooth=yes)
+        [Determines whether to build sdremote with bluetooth support.
+         Requires dbus on Linux.]))
 
 AC_ARG_ENABLE(gconf,
     AS_HELP_STRING([--disable-gconf],
@@ -9335,12 +9334,28 @@ else
 fi
 AC_SUBST(ENABLE_PACKAGEKIT)
 
-AC_MSG_CHECKING([whether to enable sd remotecontrol])
+AC_MSG_CHECKING([whether to enable Impress remote control])
 if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
     AC_MSG_RESULT([yes])
     ENABLE_SDREMOTE=YES
-    AC_MSG_CHECKING([whether to enable bluetooth support in sdremote])
-    if test -n "$enable_sdremote_bluetooth" -a "$enable_sdremote_bluetooth" != "no"; then
+    AC_MSG_CHECKING([whether to enable Bluetooth support in Impress remote control])
+
+    # If not explicitly enabled or disabled, default
+    if test -z "$enable_sdremote_bluetooth"; then
+        case "$OS" in
+        LINUX|WNT)
+            # Default to yes for these
+            enable_sdremote_bluetooth=yes
+            ;;
+        *)
+            # otherwise no
+            enable_sdremote_bluetooth=no
+            ;;
+        esac
+    fi
+    # $enable_sdremote_bluetooth is guaranteed non-empty now
+
+    if test "$enable_sdremote_bluetooth" != "no"; then
         if test "$OS" = "LINUX"; then
             if test "$ENABLE_DBUS" = "TRUE"; then
                 AC_MSG_RESULT([yes])
@@ -9348,7 +9363,7 @@ if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
                 dnl ===================================================================
                 dnl Check for system bluez
                 dnl ===================================================================
-                AC_MSG_CHECKING([which bluetooth header to use])
+                AC_MSG_CHECKING([which Bluetooth header to use])
                 if test "$with_system_bluez" = "yes"; then
                     AC_MSG_RESULT([external])
                     AC_CHECK_HEADER(bluetooth/bluetooth.h, [],
@@ -9362,9 +9377,8 @@ if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
                 ENABLE_SDREMOTE_BLUETOOTH=NO
             fi
         else
-            # FIXME: should this really be disabled in everything non-Linux?
-            AC_MSG_RESULT([no])
-            ENABLE_SDREMOTE_BLUETOOTH=NO
+            AC_MSG_RESULT([yes])
+            ENABLE_SDREMOTE_BLUETOOTH=YES
         fi
     else
         AC_MSG_RESULT([no])
