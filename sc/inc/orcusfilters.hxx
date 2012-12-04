@@ -14,7 +14,6 @@
 
 class ScDocument;
 class SvTreeListBox;
-class Image;
 struct ScOrcusXMLTreeParam;
 struct ScOrcusImportXMLParam;
 class ScOrcusXMLContext;
