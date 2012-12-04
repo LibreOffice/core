@@ -127,6 +127,7 @@ public:
     void testFdo48442();
     void testFdo55525();
     void testFdo57708();
+    void testFdo54473();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -204,6 +205,7 @@ void Test::run()
         {"fdo48442.rtf", &Test::testFdo48442},
         {"fdo55525.rtf", &Test::testFdo55525},
         {"fdo57708.rtf", &Test::testFdo57708},
+        {"fdo54473.rtf", &Test::testFdo54473},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -939,6 +941,13 @@ void Test::testFdo57708()
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     // Two objects: a picture and a textframe.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xDraws->getCount());
+}
+
+void Test::testFdo54473()
+{
+    // The problem was that character styles were not imported due to a typo.
+    CPPUNIT_ASSERT_EQUAL(OUString("Anot"), getProperty<OUString>(getRun(getParagraph(1), 1, "Text "), "CharStyleName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("ForeignTxt"), getProperty<OUString>(getRun(getParagraph(1), 3, "character "), "CharStyleName"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
