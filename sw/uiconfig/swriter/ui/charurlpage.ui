@@ -203,9 +203,6 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Hyperlink</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-            </attributes>
           </object>
         </child>
       </object>
@@ -292,9 +289,6 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Character styles</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-            </attributes>
           </object>
         </child>
       </object>
