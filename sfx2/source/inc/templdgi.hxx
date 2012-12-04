@@ -159,6 +159,7 @@ protected:
                                 bCanDel                 :1,
                                 bCanNew                 :1,
                                 bCanHide                :1,
+                                bCanShow                :1,
                                 bWaterDisabled          :1,
                                 bNewByExampleDisabled   :1,
                                 bUpdateByExampleDisabled:1,
@@ -188,6 +189,7 @@ protected:
     void                EditHdl( void* );
     void                DeleteHdl( void* );
     void                HideHdl( void* );
+    void                ShowHdl( void* );
 
     sal_Bool                Execute_Impl( sal_uInt16 nId, const String& rStr, const String& rRefStr,
                                       sal_uInt16 nFamily, sal_uInt16 nMask = 0,
@@ -237,6 +239,7 @@ public:
     virtual void        EnableDel( sal_Bool b = sal_True )  { bCanDel = b; }
     virtual void        EnableNew( sal_Bool b = sal_True )  { bCanNew = b; }
     virtual void        EnableHide( sal_Bool b = sal_True )  { bCanHide = b; }
+    virtual void        EnableShow( sal_Bool b = sal_True )  { bCanShow = b; }
 
     ISfxTemplateCommon* GetISfxTemplateCommon() { return &aISfxTemplateCommon; }
     Window*             GetWindow() { return pWindow; }
@@ -254,6 +257,7 @@ public:
     inline sal_Bool         CanDel( void ) const    { return bCanDel; }
     inline sal_Bool         CanNew( void ) const    { return bCanNew; }
     inline sal_Bool         CanHide( void ) const    { return bCanHide; }
+    inline sal_Bool         CanShow( void ) const    { return bCanShow; }
 
     // normaly for derivates from SvTreeListBoxes, but in this case the dialog handles context menus
     virtual PopupMenu*  CreateContextMenu( void );

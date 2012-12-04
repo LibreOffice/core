@@ -764,6 +764,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Sfx
     bCanDel                 ( sal_False ),
     bCanNew                 ( sal_True ),
     bCanHide                ( sal_True ),
+    bCanShow                ( sal_False ),
     bWaterDisabled          ( sal_False ),
     bNewByExampleDisabled   ( sal_False ),
     bUpdateByExampleDisabled( sal_False ),
@@ -810,6 +811,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Mod
     bCanDel                 ( sal_False ),
     bCanNew                 ( sal_True ),
     bCanHide                ( sal_True ),
+    bCanShow                ( sal_False ),
     bWaterDisabled          ( sal_False ),
     bNewByExampleDisabled   ( sal_False ),
     bUpdateByExampleDisabled( sal_False ),
@@ -1070,11 +1072,13 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const String &rStr)
         bool bReadWrite = !(pStyle->GetMask() & SFXSTYLEBIT_READONLY);
         EnableEdit( bReadWrite );
         EnableHide( bReadWrite && !pStyle->IsHidden( ) && !pStyle->IsUsed( ) );
+        EnableShow( bReadWrite && pStyle->IsHidden( ) );
     }
     else
     {
         EnableEdit( sal_False );
         EnableHide( sal_False );
+        EnableShow( sal_False );
     }
 
     if ( pTreeBox )
@@ -1120,6 +1124,7 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const String &rStr)
             aFmtLb.SelectAll( sal_False );
             EnableEdit(sal_False);
             EnableHide( sal_False );
+            EnableShow( sal_False );
         }
     }
 }
@@ -1595,11 +1600,13 @@ void SfxCommonTemplateDialog_Impl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint
                             bool bReadWrite = !(pStyle->GetMask() & SFXSTYLEBIT_READONLY);
                             EnableEdit( bReadWrite );
                             EnableHide( bReadWrite && !pStyle->IsUsed( ) && !pStyle->IsHidden( ) );
+                            EnableShow( bReadWrite && pStyle->IsHidden( ) );
                         }
                         else
                         {
                             EnableEdit(sal_False);
                             EnableHide(sal_False);
+                            EnableShow(sal_False);
                         }
                     }
                 }
@@ -2074,6 +2081,20 @@ void SfxCommonTemplateDialog_Impl::HideHdl(void *)
     }
 }
 
+void SfxCommonTemplateDialog_Impl::ShowHdl(void *)
+{
+    if ( IsInitialized() && HasSelectedStyle() )
+    {
+        const String aTemplName( GetSelectedEntry() );
+        SfxStyleSheetBase* pStyle = GetSelectedStyle();
+        if ( pStyle )
+        {
+            Execute_Impl( SID_STYLE_SHOW, aTemplName,
+                          String(), (sal_uInt16)GetFamilyItem_Impl()->GetFamily() );
+        }
+    }
+}
+
 //-------------------------------------------------------------------------
 
 void    SfxCommonTemplateDialog_Impl::EnableDelete()
@@ -2191,6 +2212,7 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, MenuSelectHdl, Menu *, pMenu )
     case ID_EDIT: EditHdl(0); break;
     case ID_DELETE: DeleteHdl(0); break;
     case ID_HIDE: HideHdl(0); break;
+    case ID_SHOW: ShowHdl(0); break;
     default: return sal_False;
     }
     return sal_True;
@@ -2250,6 +2272,7 @@ PopupMenu* SfxCommonTemplateDialog_Impl::CreateContextMenu( void )
     pMenu->EnableItem( ID_DELETE, bCanDel );
     pMenu->EnableItem( ID_NEW, bCanNew );
     pMenu->EnableItem( ID_HIDE, bCanHide );
+    pMenu->EnableItem( ID_SHOW, bCanShow );
 
     return pMenu;
 }

@@ -121,6 +121,9 @@ void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eSta
         case SID_STYLE_HIDE:
             rTemplateDlg.EnableHide( SFX_ITEM_DISABLED != eState );
             break;
+        case SID_STYLE_SHOW:
+            rTemplateDlg.EnableShow( SFX_ITEM_DISABLED != eState );
+            break;
         case SID_STYLE_NEW_BY_EXAMPLE:
 
             rTemplateDlg.EnableExample_Impl(

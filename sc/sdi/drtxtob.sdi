@@ -46,6 +46,7 @@ interface TableDrawText
     SID_STYLE_EDIT              [ StateMethod = StateDisableItems; Export = FALSE; ]
     SID_STYLE_DELETE            [ StateMethod = StateDisableItems; Export = FALSE; ]
     SID_STYLE_HIDE              [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_STYLE_SHOW              [ StateMethod = StateDisableItems; Export = FALSE; ]
 
      //----------------------------------------------------------------------------
     SID_CUT             [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]

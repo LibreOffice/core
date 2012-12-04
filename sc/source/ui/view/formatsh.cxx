@@ -225,6 +225,7 @@ void ScFormatShell::GetStyleState( SfxItemSet& rSet )
             case SID_STYLE_EDIT:
             case SID_STYLE_DELETE:
             case SID_STYLE_HIDE:
+            case SID_STYLE_SHOW:
             {
                 ISfxTemplateCommon* pDesigner = SFX_APP()->
                         GetCurrentTemplateCommon(pTabViewShell->GetViewFrame()->GetBindings());
@@ -271,6 +272,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
         || (nSlotId == SID_STYLE_EDIT)
         || (nSlotId == SID_STYLE_DELETE)
         || (nSlotId == SID_STYLE_HIDE)
+        || (nSlotId == SID_STYLE_SHOW)
         || (nSlotId == SID_STYLE_APPLY)
         || (nSlotId == SID_STYLE_WATERCAN)
         || (nSlotId == SID_STYLE_FAMILY)
@@ -356,6 +358,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
             case SID_STYLE_EDIT:
             case SID_STYLE_DELETE:
             case SID_STYLE_HIDE:
+            case SID_STYLE_SHOW:
             case SID_STYLE_NEW_BY_EXAMPLE:
                 {
                     const SfxPoolItem* pNameItem;
@@ -440,10 +443,11 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                     break;
 
                     case SID_STYLE_HIDE:
+                    case SID_STYLE_SHOW:
                     {
                         if ( pStyleSheet )
                         {
-                            pStyleSheet->SetHidden( true );
+                            pStyleSheet->SetHidden( nSlotId == SID_STYLE_HIDE );
                             pTabViewShell->InvalidateAttribs();
                             rReq.Done();
                         }
@@ -610,11 +614,12 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                     break;
 
                     case SID_STYLE_HIDE:
+                    case SID_STYLE_SHOW:
                     {
                         nRetMask = ( NULL != pStyleSheet );
                         if ( pStyleSheet )
                         {
-                            pStyleSheet->SetHidden( true );
+                            pStyleSheet->SetHidden( nSlotId == SID_STYLE_HIDE );
                             rBindings.Invalidate( SID_STYLE_FAMILY4 );
                             pDocSh->SetDocumentModified();
                             rReq.Done();

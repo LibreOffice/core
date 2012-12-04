@@ -136,6 +136,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
         case SID_STYLE_EDIT:
         case SID_STYLE_DELETE:
         case SID_STYLE_HIDE:
+        case SID_STYLE_SHOW:
         case SID_STYLE_FAMILY:
         case SID_STYLE_NEW_BY_EXAMPLE:
         {
@@ -227,8 +228,9 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
         break;
 
         case SID_STYLE_HIDE:
+        case SID_STYLE_SHOW:
             pStyleSheet = pSSPool->Find( aStyleName, (SfxStyleFamily) nFamily);
-            pStyleSheet->SetHidden( true );
+            pStyleSheet->SetHidden( nSId == SID_STYLE_HIDE );
             nRetMask = sal_True;
         break;
 

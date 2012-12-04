@@ -540,6 +540,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
         case SID_STYLE_EDIT:
         case SID_STYLE_DELETE:
         case SID_STYLE_HIDE:
+        case SID_STYLE_SHOW:
         case SID_STYLE_FAMILY:
         case SID_STYLE_WATERCAN:
         case SID_STYLE_UPDATE_BY_EXAMPLE:

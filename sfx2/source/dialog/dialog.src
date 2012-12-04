@@ -82,7 +82,12 @@ Menu MN_CONTEXT_TEMPLDLG
         MenuItem
         {
             Identifier = ID_HIDE ;
-            Text [ en-US ] = "Hide..." ;
+            Text [ en-US ] = "Hide" ;
+        };
+        MenuItem
+        {
+            Identifier = ID_SHOW ;
+            Text [ en-US ] = "Show" ;
         };
         MenuItem
         {

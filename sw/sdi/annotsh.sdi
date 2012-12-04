@@ -351,6 +351,12 @@ interface Annotation : _Annotation
     [
         StateMethod = StateDisableItems ;
     ]
+
+    SID_STYLE_SHOW
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
     FN_STAT_SELMODE
     [
         StateMethod = StateStatusLine ;

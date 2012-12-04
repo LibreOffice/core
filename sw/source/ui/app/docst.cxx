@@ -326,6 +326,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
         case SID_STYLE_EDIT:
         case SID_STYLE_DELETE:
         case SID_STYLE_HIDE:
+        case SID_STYLE_SHOW:
         case SID_STYLE_WATERCAN:
         case SID_STYLE_FAMILY:
         case SID_STYLE_UPDATE_BY_EXAMPLE:
@@ -452,7 +453,8 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                         nRet = Delete(aParam, nFamily);
                         break;
                     case SID_STYLE_HIDE:
-                        nRet = Hide(aParam, nFamily, true);
+                    case SID_STYLE_SHOW:
+                        nRet = Hide(aParam, nFamily, nSlot == SID_STYLE_HIDE);
                         break;
                     case SID_STYLE_APPLY:
                         // Shell-switch in ApplyStyles
