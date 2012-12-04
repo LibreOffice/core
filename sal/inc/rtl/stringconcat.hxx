@@ -100,7 +100,9 @@ sal_Unicode* addDataUString( sal_Unicode* buffer, const sal_Unicode* str )
 template<>
 struct ToStringHelper< const char* >
     {
-    static int length( const char* str ) { return strlen( str ); }
+    static int length( const char* str ) {
+        return sal::static_int_cast<int>(strlen( str ));
+    }
     static char* addData( char* buffer, const char* str ) { return addDataCString( buffer, str ); }
     static const bool allowOStringConcat = true;
     static const bool allowOUStringConcat = false;
@@ -109,7 +111,9 @@ struct ToStringHelper< const char* >
 template<>
 struct ToStringHelper< char* >
     {
-    static int length( const char* str ) { return strlen( str ); }
+    static int length( const char* str ) {
+        return sal::static_int_cast<int>(strlen( str ));
+    }
     static char* addData( char* buffer, const char* str ) { return addDataCString( buffer, str ); }
     static const bool allowOStringConcat = true;
     static const bool allowOUStringConcat = false;
@@ -118,7 +122,9 @@ struct ToStringHelper< char* >
 template< int N >
 struct ToStringHelper< char[ N ] >
     {
-    static int length( const char str[ N ] ) { return strlen( str ); }
+    static int length( const char str[ N ] ) {
+        return sal::static_int_cast<int>(strlen( str ));
+    }
     static char* addData( char* buffer, const char str[ N ] ) { return addDataCString( buffer, str ); }
     static sal_Unicode* addData( sal_Unicode* buffer, const char str[ N ] ) { return addDataLiteral( buffer, str, N - 1 ); }
     static const bool allowOStringConcat = true;

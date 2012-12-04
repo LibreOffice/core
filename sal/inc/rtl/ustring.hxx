@@ -328,7 +328,7 @@ public:
     template< typename T1, typename T2 >
     OUString( const OUStringConcat< T1, T2 >& c )
     {
-        const int l = c.length();
+        const sal_Int32 l = c.length();
         rtl_uString* buffer = NULL;
         rtl_uString_new_WithLength( &buffer, l ); // TODO this clears, not necessary
         if (l != 0)
@@ -1592,7 +1592,7 @@ public:
 
       @since LibreOffice 4.0
     */
-    OUString replaceAll(OUString const & from, OUString const & to, int fromIndex = 0) const {
+    OUString replaceAll(OUString const & from, OUString const & to, sal_Int32 fromIndex = 0) const {
         rtl_uString * s = 0;
         rtl_uString_newReplaceAllFromIndex(&s, pData, from.pData, to.pData, fromIndex);
         return OUString(s, SAL_NO_ACQUIRE);

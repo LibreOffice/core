@@ -228,7 +228,7 @@ public:
     template< typename T1, typename T2 >
     OStringBuffer( const OStringConcat< T1, T2 >& c )
     {
-        const int l = c.length();
+        const sal_Int32 l = c.length();
         rtl_String* buffer = NULL;
         nCapacity = l + 16;
         rtl_string_new_WithLength( &buffer, nCapacity );
