@@ -16,6 +16,7 @@
 
 #include <orcus/spreadsheet/import_interface.hpp>
 #include <orcus/orcus_csv.hpp>
+#include <orcus/orcus_gnumeric.hpp>
 #include <orcus/global.hpp>
 
 #ifdef WNT
@@ -47,6 +48,26 @@ bool ScOrcusFiltersImpl::importCSV(ScDocument& rDoc, const OUString& rPath) cons
         rDoc.SetString(0, 0, 0, "Failed to load!!!");
         return false;
     }
+    return true;
+}
+
+bool ScOrcusFiltersImpl::importGnumeric(ScDocument& rDoc, const OUString& rPath) const
+{
+    ScOrcusFactory aFactory(rDoc);
+    OString aSysPath = toSystemPath(rPath);
+    const char* path = aSysPath.getStr();
+
+    try
+    {
+        orcus::orcus_gnumeric filter(&aFactory);
+        filter.read_file(path);
+    }
+    catch (const std::exception& e)
+    {
+        SAL_WARN("sc", "Unable to load gnumeric file! " << e.what());
+        return false;
+    }
+
     return true;
 }
 

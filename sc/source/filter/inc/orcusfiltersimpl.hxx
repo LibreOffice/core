@@ -21,6 +21,7 @@ public:
     static rtl::OString toSystemPath(const rtl::OUString& rPath);
 
     virtual bool importCSV(ScDocument& rDoc, const rtl::OUString& rPath) const;
+    virtual bool importGnumeric(ScDocument& rDoc, const rtl::OUString& rPath) const;
 
     virtual ScOrcusXMLContext* createXMLContext(ScDocument& rDoc, const rtl::OUString& rPath) const;
 };

@@ -17,6 +17,8 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
+#include <map>
+
 class ScDocument;
 class ScOrcusSheet;
 class ScRangeData;

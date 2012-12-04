@@ -1426,7 +1426,7 @@ bool ScDocShell::LoadExternal(SfxMedium& rMed, const OUString& rProvider)
         if (!pOrcus)
             return false;
 
-        if (!pOrcus->importCSV(aDocument, rMed.GetName()))
+        if (!pOrcus->importGnumeric(aDocument, rMed.GetName()))
             return false;
 
         FinishedLoading(SFX_LOADED_MAINDOCUMENT | SFX_LOADED_IMAGES);

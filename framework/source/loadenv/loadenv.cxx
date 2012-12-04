@@ -32,6 +32,9 @@
 #include <services.h>
 #include <comphelper/interaction.hxx>
 #include <framework/interaction.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/configuration.hxx>
+#include "officecfg/Office/Common.hxx"
 
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -703,15 +706,22 @@ LoadEnv::EContentType LoadEnv::classifyContent(const ::rtl::OUString&           
 
 namespace {
 
-#if 1
+#if 0
+// TODO: We will reinstate this function later, so don't remove this!
 bool queryOrcusTypeAndFilter(const uno::Sequence<beans::PropertyValue>&, OUString&, OUString&)
 {
     return false;
 }
 #else
-// TODO: We will reinstate this function later, so don't remove this!
 bool queryOrcusTypeAndFilter(const uno::Sequence<beans::PropertyValue>& rDescriptor, OUString& rType, OUString& rFilter)
 {
+    // depending on the experimental mode
+    uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+    if (!xContext.is() || !officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
+    {
+        return false;
+    }
+
     OUString aURL;
     sal_Int32 nSize = rDescriptor.getLength();
     for (sal_Int32 i = 0; i < nSize; ++i)
@@ -727,13 +737,21 @@ bool queryOrcusTypeAndFilter(const uno::Sequence<beans::PropertyValue>& rDescrip
     if (aURL.isEmpty() || aURL.copy(0,8).equalsIgnoreAsciiCase("private:"))
         return false;
 
-    if (aURL.endsWith(".csv"))
+    if(aURL.endsWith(".gnumeric"))
+    {
+        rType = "generic_Text";
+        rFilter = "orcus-gnumeric";
+        return true;
+    }
+#if 0
+    else if (aURL.endsWith(".csv"))
     {
         // Use .csv as the first test file type.
         rType = "generic_Text";
         rFilter = "orcus-test-filter";
         return true;
     }
+#endif
 
     return false;
 }
