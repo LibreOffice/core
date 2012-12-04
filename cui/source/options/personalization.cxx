@@ -69,9 +69,9 @@ OUString SelectPersonaDialog::GetPersonaURL() const
 
 IMPL_LINK( SelectPersonaDialog, VisitPersonas, PushButton*, /*pButton*/ )
 {
-    uno::Reference< system::XSystemShellExecute > xSystemShell( system::SystemShellExecute::create( ::comphelper::getProcessComponentContext() ) );
+    uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShell( com::sun::star::system::SystemShellExecute::create( ::comphelper::getProcessComponentContext() ) );
 
-    xSystemShell->execute( "http://www.getpersonas.com", OUString(), system::SystemShellExecuteFlags::URIS_ONLY );
+    xSystemShell->execute( "http://www.getpersonas.com", OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
 
     return 0;
 }
