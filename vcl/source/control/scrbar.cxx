@@ -323,7 +323,7 @@ void ScrollBar::ImplCalc( sal_Bool bUpdate )
     Rectangle& maTrackRect = mpData->maTrackRect;  // TODO: remove when maTrackRect is no longer in mpData
     if ( mbCalcSize )
     {
-        Size aOldSize = GetOptimalSize(WINDOWSIZE_PREFERRED);
+        Size aOldSize = getCurrentCalcSize();
 
         const Rectangle aControlRegion( Point(0,0), aSize );
         Rectangle aBtn1Region, aBtn2Region, aTrackRegion, aBoundingRegion;
@@ -416,7 +416,7 @@ void ScrollBar::ImplCalc( sal_Bool bUpdate )
 
         mbCalcSize = sal_False;
 
-        Size aNewSize = GetOptimalSize(WINDOWSIZE_PREFERRED);
+        Size aNewSize = getCurrentCalcSize();
         if (aOldSize != aNewSize)
         {
             queue_resize();
@@ -1508,6 +1508,13 @@ void ScrollBar::SetVisibleSize( long nNewSize )
 }
 
 Size ScrollBar::GetOptimalSize(WindowSizeType) const
+{
+    if (mbCalcSize)
+        const_cast<ScrollBar*>(this)->ImplCalc(sal_False);
+    return getCurrentCalcSize();
+}
+
+Size ScrollBar::getCurrentCalcSize() const
 {
     Rectangle aCtrlRegion;
     aCtrlRegion.Union(maBtn1Rect);
