@@ -98,7 +98,10 @@ IMPL_LINK_NOARG(ScNoteMarker, TimeHdl)
         {
             pObject = ScNoteUtil::CreateTempCaption( *pDoc, aDocPos, *pPage, aUserText, aVisRect, bLeft );
             if( pObject )
+            {
+                pObject->SetGridOffset( aGridOff );
                 aRect = pObject->GetCurrentBoundRect();
+            }
 
             // Page einfuegen damit das Model sie kennt und auch deleted
             pModel->InsertPage( pPage );

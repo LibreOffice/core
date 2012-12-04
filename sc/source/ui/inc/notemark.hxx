@@ -48,7 +48,7 @@ private:
     SdrModel*       pModel;
     SdrObject*      pObject;
     sal_Bool            bVisible;
-
+    Point       aGridOff;
     DECL_LINK( TimeHdl, void* );
 
 public:
@@ -62,6 +62,7 @@ public:
 
     ScAddress   GetDocPos() const       { return aDocPos; }
     sal_Bool        IsByKeyboard() const    { return bByKeyboard; }
+    void        SetGridOff( const Point& rOff ) { aGridOff = rOff; }
 };
 
 

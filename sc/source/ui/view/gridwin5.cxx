@@ -204,9 +204,27 @@ bool ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, bool bKeyboard )
                 aOrigin.Y() += aLeftSize.Height();
             aMapMode.SetOrigin( aOrigin );
 
-            pNoteMarker = new ScNoteMarker( pLeft, pRight, pBottom, pDiagonal,
+            pNoteMarker = new ScNoteMarker(  pLeft, pRight, pBottom, pDiagonal,
                                             pDoc, aCellPos, aTrackText,
                                             aMapMode, bLeftEdge, bFast, bKeyboard );
+            if ( ScDrawView* pDrawView = pViewData->GetScDrawView() )
+            {
+                // get position for aCellPos
+                if ( pDoc )
+                {
+                    // get draw position in hmm for aCellPos
+                    Point aOldPos( pDoc->GetColOffset( aCellPos.Col(), aCellPos.Tab() ), pDoc->GetRowOffset( aCellPos.Row(), aCellPos.Tab() ) );
+                    aOldPos.X() = sc::TwipsToHMM( aOldPos.X() );
+                    aOldPos.Y() = sc::TwipsToHMM( aOldPos.Y() );
+                    // get screen pos in hmm for aCellPos
+                    // and equiv screen pos
+                    Point aScreenPos = pViewData->GetScrPos( aCellPos.Col(), aCellPos.Row(), eWhich, sal_True );
+                    MapMode aDrawMode = GetDrawMapMode();
+                    Point aCurPosHmm = PixelToLogic(aScreenPos, aDrawMode );
+                    Point aGridOff = aCurPosHmm -aOldPos;
+                    pNoteMarker->SetGridOff( aGridOff );
+                }
+            }
         }
 
         bDone = true;       // something is shown (old or new)

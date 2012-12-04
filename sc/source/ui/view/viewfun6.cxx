@@ -42,6 +42,7 @@
 #include "externalrefmgr.hxx"
 #include "cell.hxx"
 #include "markdata.hxx"
+#include "drawview.hxx"
 
 #include <vector>
 
@@ -313,6 +314,8 @@ void ScViewFunc::EditNote()
             return a caption object. */
         if( SdrCaptionObj* pCaption = pNote->GetCaption() )
         {
+            if ( ScDrawView* pScDrawView = GetScDrawView() )
+               pScDrawView->SyncForGrid( pCaption );
             // #i33764# enable the resize handles before starting edit mode
             if( FuPoor* pDraw = GetDrawFuncPtr() )
                 static_cast< FuSelection* >( pDraw )->ActivateNoteHandles( pCaption );
