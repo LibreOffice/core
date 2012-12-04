@@ -389,23 +389,23 @@ public:
     //  methods from own interfaces start here
     // ----------------------------------------
 
-    virtual double SAL_CALL getOpt_barrier( double spot, double vol,
+    virtual double SAL_CALL getOptBarrier( double spot, double vol,
             double r, double rf, double T, double strike,
             double barrier_low, double barrier_up, double rebate,
             const STRING& put_call, const STRING& in_out,
             const STRING& continuous, const ANY& greek ) THROWDEF_RTE_IAE;
 
-   virtual double SAL_CALL getOpt_touch( double spot, double vol,
+   virtual double SAL_CALL getOptTouch( double spot, double vol,
             double r, double rf, double T,
             double barrier_low, double barrier_up,
             const STRING& for_dom, const STRING& in_out,
             const STRING& barriercont, const ANY& greekstr ) THROWDEF_RTE_IAE;
 
-   virtual double SAL_CALL getOpt_prob_hit( double spot, double vol,
+   virtual double SAL_CALL getOptProbHit( double spot, double vol,
             double mu, double T,
             double barrier_low, double barrier_up ) THROWDEF_RTE_IAE;
 
-   virtual double SAL_CALL getOpt_prob_inmoney( double spot, double vol,
+   virtual double SAL_CALL getOptProbInMoney( double spot, double vol,
             double mu, double T,
             double barrier_low, double barrier_up,
             const ANY& strikeval, const ANY& put_call ) THROWDEF_RTE_IAE;

@@ -110,10 +110,10 @@ ScaResId::ScaResId( sal_uInt16 nId, ResMgr& rResMgr ) :
 
 const ScaFuncDataBase pFuncDataArr[] =
 {
-   FUNCDATA( Opt_barrier,       13, ScaCat_Finance,    UNIQUE,  STDPAR),
-   FUNCDATA( Opt_touch,         11, ScaCat_Finance,    UNIQUE,  STDPAR),
-   FUNCDATA( Opt_prob_hit,       6, ScaCat_Finance,    UNIQUE,  STDPAR),
-   FUNCDATA( Opt_prob_inmoney,   8, ScaCat_Finance,    UNIQUE,  STDPAR)
+   FUNCDATA( OptBarrier,       13, ScaCat_Finance,    UNIQUE,  STDPAR),
+   FUNCDATA( OptTouch,         11, ScaCat_Finance,    UNIQUE,  STDPAR),
+   FUNCDATA( OptProbHit,        6, ScaCat_Finance,    UNIQUE,  STDPAR),
+   FUNCDATA( OptProbInMoney,    8, ScaCat_Finance,    UNIQUE,  STDPAR)
 };
 
 #undef FUNCDATA
@@ -645,7 +645,7 @@ bool getinput_greek(bs::types::Greeks& greek, const ANY& anyval) {
 
 
 // OPT_BARRIER(...)
-double SAL_CALL ScaPricingAddIn::getOpt_barrier( double spot, double vol,
+double SAL_CALL ScaPricingAddIn::getOptBarrier( double spot, double vol,
             double r, double rf, double T, double strike,
             double barrier_low, double barrier_up, double rebate,
             const STRING& put_call, const STRING& in_out,
@@ -671,7 +671,7 @@ double SAL_CALL ScaPricingAddIn::getOpt_barrier( double spot, double vol,
 }
 
 // OPT_TOUCH(...)
-double SAL_CALL ScaPricingAddIn::getOpt_touch( double spot, double vol,
+double SAL_CALL ScaPricingAddIn::getOptTouch( double spot, double vol,
             double r, double rf, double T,
             double barrier_low, double barrier_up,
             const STRING& for_dom, const STRING& in_out,
@@ -697,7 +697,7 @@ double SAL_CALL ScaPricingAddIn::getOpt_touch( double spot, double vol,
 }
 
 // OPT_PRB_HIT(...)
-double SAL_CALL ScaPricingAddIn::getOpt_prob_hit( double spot, double vol,
+double SAL_CALL ScaPricingAddIn::getOptProbHit( double spot, double vol,
             double mu, double T,
             double barrier_low, double barrier_up ) THROWDEF_RTE_IAE
 {
@@ -711,13 +711,13 @@ double SAL_CALL ScaPricingAddIn::getOpt_prob_hit( double spot, double vol,
     RETURN_FINITE( fRet );
 }
 
-// OPT_PRB_INMONEY(...)
-double SAL_CALL ScaPricingAddIn::getOpt_prob_inmoney( double spot, double vol,
+// OPT_PROB_INMONEY(...)
+double SAL_CALL ScaPricingAddIn::getOptProbInMoney( double spot, double vol,
             double mu, double T,
             double barrier_low, double barrier_up,
             const ANY& strikeval, const ANY& put_call ) THROWDEF_RTE_IAE
 {
-    bs::types::PutCall pc;
+    bs::types::PutCall pc=bs::types::Call;
     double  K;
 
     // read and check input values
