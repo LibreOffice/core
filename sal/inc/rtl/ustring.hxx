@@ -330,9 +330,12 @@ public:
         const int l = c.length();
         rtl_uString* buffer = NULL;
         rtl_uString_new_WithLength( &buffer, l ); // TODO this clears, not necessary
-        sal_Unicode* end = c.addData( buffer->buffer );
-        buffer->length = end - buffer->buffer;
-        // TODO realloc in case buffer->length is noticeably smaller than l ?
+        if (l != 0)
+        {
+            sal_Unicode* end = c.addData( buffer->buffer );
+            buffer->length = end - buffer->buffer;
+            // TODO realloc in case buffer->length is noticeably smaller than l?
+        }
         pData = buffer;
     }
 #endif

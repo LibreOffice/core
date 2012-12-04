@@ -47,6 +47,7 @@ CPPUNIT_TEST_SUITE_END();
 void test::ostring::StringConcat::check()
 {
 // All the extra () are to protect commas againsts being treated as separators of macro arguments.
+    CPPUNIT_ASSERT_EQUAL( OString(), OString(OString() + OString()) );
     CPPUNIT_ASSERT_EQUAL( OString( "foobar" ), OString( OString( "foo" ) + OString( "bar" )));
     TYPES_ASSERT_EQUAL(( typeid( OStringConcat< OString, OString > )), typeid( OString( "foo" ) + OString( "bar" )));
     CPPUNIT_ASSERT_EQUAL( OString( "foobar" ), OString( OString( "foo" ) + "bar" ));

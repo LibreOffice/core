@@ -262,8 +262,11 @@ public:
         const int l = c.length();
         rtl_String* buffer = NULL;
         rtl_string_new_WithLength( &buffer, l );
-        char* end = c.addData( buffer->buffer );
-        buffer->length = end - buffer->buffer;
+        if (l != 0)
+        {
+            char* end = c.addData( buffer->buffer );
+            buffer->length = end - buffer->buffer;
+        }
         pData = buffer;
     }
 #endif
