@@ -25,7 +25,6 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <osl/mutex.h>
-#include <osl/semaphor.h>
 #include <osl/conditn.h>
 #include <osl/interlck.h>
 #include <osl/process.h>

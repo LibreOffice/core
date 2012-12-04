@@ -53,7 +53,6 @@ osl/socket    ; osl_AcceptorSocket
 
 osl/mutex     ; osl_Mutex
 osl/pipe      ; osl_Pipe
-osl/semaphore ; osl_Semaphore
 osl/condition ; osl_Condition
 osl/module    ; osl_Module
 osl/security  ; osl_Security

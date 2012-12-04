@@ -188,7 +188,6 @@ $(eval $(call gb_Library_add_cobjects,sal,\
 	sal/osl/unx/profile \
 	sal/osl/unx/readwrite_helper \
 	sal/osl/unx/security \
-	sal/osl/unx/semaphor \
 	sal/osl/unx/socket \
 	sal/osl/unx/system \
 	sal/osl/unx/tempfile \
@@ -258,7 +257,6 @@ $(eval $(call gb_Library_add_cobjects,sal,\
 	sal/osl/w32/nlsupport \
 	sal/osl/w32/pipe \
 	sal/osl/w32/security \
-	sal/osl/w32/semaphor \
 	sal/osl/w32/thread \
 	sal/osl/w32/time \
 	sal/osl/w32/util \

@@ -25,7 +25,6 @@ UDK_3_0_0 {
         osl_acquireSocket;
         osl_acquirePipe;
         osl_acquireMutex;
-        osl_acquireSemaphore;
         osl_addSignalHandler;
         osl_addToSocketSet;
         osl_assertFailedLine;
@@ -47,7 +46,6 @@ UDK_3_0_0 {
         osl_createInetSocketAddr;
         osl_createMutex;
         osl_createPipe;
-        osl_createSemaphore;
         osl_createSocket;
         osl_createSocketSet;
         osl_createSuspendedThread;
@@ -58,7 +56,6 @@ UDK_3_0_0 {
         osl_destroyCondition;
         osl_destroyHostAddr;
         osl_destroyMutex;
-        osl_destroySemaphore;
         osl_destroySocketAddr;
         osl_destroySocketSet;
         osl_destroyThread;
@@ -144,7 +141,6 @@ UDK_3_0_0 {
         osl_releaseDirectoryItem;
         osl_releaseMutex;
         osl_releasePipe;
-        osl_releaseSemaphore;
         osl_releaseSocket;
         osl_removeFromSocketSet;
         osl_removeProfileEntry;
@@ -173,7 +169,6 @@ UDK_3_0_0 {
         osl_terminateThread;
         osl_trace;
         osl_tryToAcquireMutex;
-        osl_tryToAcquireSemaphore;
         osl_unloadModule;
         osl_waitCondition;
         osl_waitThread;

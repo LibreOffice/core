@@ -73,7 +73,6 @@
 #   include <dlfcn.h>
 #   include <endian.h>
 #   include <sys/time.h>
-#   include <semaphore.h>
 #   if __BYTE_ORDER == __LITTLE_ENDIAN
 #       define _LITTLE_ENDIAN
 #   elif __BYTE_ORDER == __BIG_ENDIAN
@@ -103,7 +102,6 @@
 #   include <dlfcn.h>
 #   include <endian.h>
 #   include <sys/time.h>
-#   include <semaphore.h>
 #   define  IORESOURCE_TRANSFER_BSD
 #   define  IOCHANNEL_TRANSFER_BSD_RENO
 #   define  pthread_testcancel()
@@ -118,7 +116,6 @@
 #   define  ETIME ETIMEDOUT
 #   include <pthread.h>
 #   include <sys/sem.h>
-#   include <semaphore.h>
 #   include <dlfcn.h>
 #   include <sys/filio.h>
 #   include <sys/ioctl.h>
@@ -148,7 +145,6 @@
 #   define  ETIME ETIMEDOUT
 #   include <pthread.h>
 #   include <sys/sem.h>
-#   include <semaphore.h>
 #   include <dlfcn.h>
 #   include <sys/filio.h>
 #   include <sys/ioctl.h>
@@ -173,7 +169,6 @@
 #   define  ETIME ETIMEDOUT
 #   include <pthread.h>
 #   include <sys/sem.h>
-#   include <semaphore.h>
 #   include <dlfcn.h>
 #   include <sys/filio.h>
 #   include <sys/ioctl.h>
@@ -208,7 +203,6 @@
 #   endif
 #   define  SLEEP_TIMESPEC(timespec)    nsleep(&timespec, 0)
 #   define  LIBPATH "LIBPATH"
-#   define  NO_PTHREAD_SEMAPHORES
 #endif
 
 #ifdef SOLARIS
@@ -216,7 +210,6 @@
 #   include <sys/un.h>
 #   include <stropts.h>
 #   include <pthread.h>
-#   include <semaphore.h>
 #   include <netinet/tcp.h>
 #   include <sys/filio.h>
 #   include <dlfcn.h>
@@ -243,7 +236,6 @@
 #   include <netinet/tcp.h>
 #   include <machine/endian.h>
 #   include <sys/time.h>
-#   include <sys/semaphore.h>
 /* fixme are premac and postmac still needed here? */
 #   include <premac.h>
 #   include <mach-o/dyld.h>
@@ -283,7 +275,6 @@ int macxp_resolveAlias(char *path, int buflen);
 #   include <netinet/tcp.h>
 #   include <machine/endian.h>
 #   include <sys/time.h>
-#   include <sys/semaphore.h>
 #   if BYTE_ORDER == LITTLE_ENDIAN
 #       ifndef _LITTLE_ENDIAN
 #       define _LITTLE_ENDIAN
@@ -402,22 +393,6 @@ typedef struct sockaddr_ipx {
 #define NSPROTO_SPXII    1257
 
 /* END HACK */
-
-#ifdef NO_PTHREAD_SEMAPHORES
-
-typedef struct
-{
-    pthread_mutex_t mutex;
-    pthread_cond_t  increased;
-    int             value;
-} sem_t;
-extern int sem_init(sem_t* sem, int pshared, unsigned int value);
-extern int sem_destroy(sem_t* sem);
-extern int sem_wait(sem_t* sem);
-extern int sem_trywait(sem_t* sem);
-extern int sem_post(sem_t* sem);
-
-#endif
 
 #ifdef NO_PTHREAD_RTL
 #if !defined FREEBSD || (__FreeBSD_version < 500112)

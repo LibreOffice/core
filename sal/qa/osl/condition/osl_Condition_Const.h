@@ -29,10 +29,6 @@
 #include <osl/mutex.hxx>
 #include <osl/pipe.hxx>
 
-#ifndef _OSL_SEMAPHOR_HXX_
-#include <osl/semaphor.hxx>
-#endif
-
 #ifndef _OSL_CONDITION_HXX_
 #include <osl/conditn.hxx>
 #endif
