@@ -1062,7 +1062,6 @@ void SAL_CALL IMPL_RTL_STRINGNAME( new )( IMPL_RTL_STRINGDATA** ppThis )
         IMPL_RTL_STRINGNAME( release )( *ppThis );
 
     *ppThis = (IMPL_RTL_STRINGDATA*) (&IMPL_RTL_EMPTYSTRING);
-    IMPL_RTL_AQUIRE( *ppThis );
 }
 
 /* ----------------------------------------------------------------------- */
