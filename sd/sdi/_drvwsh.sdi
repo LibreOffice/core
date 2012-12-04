@@ -61,6 +61,11 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    SID_CHANGE_PICTURE
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
     SID_SAVE_GRAPHIC
     [
         ExecMethod = FuTemporary ;
