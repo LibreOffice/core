@@ -23,6 +23,7 @@
 #include "sal/config.h"
 
 #include <cassert>
+#include <string.h>
 
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.h>

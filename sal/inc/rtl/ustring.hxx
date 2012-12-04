@@ -24,6 +24,7 @@
 
 #include <cassert>
 #include <ostream>
+#include <string.h>
 
 #include "osl/diagnose.h"
 #include <rtl/ustring.h>
