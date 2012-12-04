@@ -367,7 +367,7 @@ void SwDoubleLinePortion::PaintBracket( SwTxtPaintInfo &rInf,
         rInf.X( rInf.X() + Width() - PostWidth() +
             ( nSpaceAdd > 0 ? CalcSpacing( nSpaceAdd, rInf ) : 0 ) );
 
-    SwBlankPortion aBlank( cCh, sal_True );
+    SwBlankPortion aBlank( cCh, true );
     aBlank.SetAscent( pBracket->nAscent );
     aBlank.Width( nChWidth );
     aBlank.Height( pBracket->nHeight );
@@ -1365,7 +1365,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     }
 
     // do not allow grid mode for first line in ruby portion
-    const sal_Bool bRubyInGrid = bHasGrid && rMulti.IsRuby();
+    const bool bRubyInGrid = bHasGrid && rMulti.IsRuby();
 
     const sal_uInt16 nOldHeight = rMulti.Height();
     const sal_Bool bOldGridModeAllowed = GetInfo().SnapToGrid();
@@ -1851,7 +1851,7 @@ sal_Bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     SwTxtFormatInfo aInf( rInf, rMulti.GetRoot(), nActWidth );
     // Do we allow break cuts? The FirstMulti-Flag is evaluated during
     // line break determination.
-    sal_Bool bFirstMulti = rInf.GetIdx() != rInf.GetLineStart();
+    bool bFirstMulti = rInf.GetIdx() != rInf.GetLineStart();
 
     SwLinePortion *pNextFirst = NULL;
     SwLinePortion *pNextSecond = NULL;
@@ -1976,7 +1976,7 @@ sal_Bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
             if ( nActWidth == nMaxWidth && rInf.GetLineStart() == rInf.GetIdx() )
             // we have too less space, we must allow break cuts
             // ( the first multi flag is considered during TxtPortion::_Format() )
-                bFirstMulti = sal_False;
+                bFirstMulti = false;
             if( nActWidth <= nMinWidth )
                 break;
         }
@@ -1993,7 +1993,7 @@ sal_Bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
             if( nActWidth >= nMaxWidth )
                 break;
             // we do not allow break cuts during formatting
-            bFirstMulti = sal_True;
+            bFirstMulti = true;
         }
         delete pNextFirst;
         pNextFirst = NULL;

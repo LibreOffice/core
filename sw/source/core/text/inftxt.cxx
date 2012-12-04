@@ -303,10 +303,10 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
 
     nIdx = nNewIdx;
     nLen = nNewLen;
-    bNotEOL = sal_False;
-    bStopUnderFlow = bFtnInside = bOtherThanFtnInside = sal_False;
+    bNotEOL = false;
+    bStopUnderFlow = bFtnInside = bOtherThanFtnInside = false;
     bMulti = bFirstMulti = bRuby = bHanging = bScriptSpace =
-        bForbiddenChars = sal_False;
+        bForbiddenChars = false;
 
     SetLen( GetMinLen( *this ) );
 }
@@ -712,7 +712,7 @@ void SwTxtPaintInfo::CalcRect( const SwLinePortion& rPor,
 
     // Adjust x coordinate if we are inside a bidi portion
     const sal_Bool bFrmDir = GetTxtFrm()->IsRightToLeft();
-    sal_Bool bCounterDir = ( ! bFrmDir && DIR_RIGHT2LEFT == GetDirection() ) ||
+    bool bCounterDir = ( ! bFrmDir && DIR_RIGHT2LEFT == GetDirection() ) ||
                        (   bFrmDir && DIR_LEFT2RIGHT == GetDirection() );
 
     if ( bCounterDir )
@@ -758,8 +758,8 @@ static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rP
                       SwRect& rRect, const Color* pCol, sal_Unicode cChar,
                       sal_uInt8 nOptions )
 {
-    sal_Bool bCenter = 0 != ( nOptions & DRAW_SPECIAL_OPTIONS_CENTER );
-    sal_Bool bRotate = 0 != ( nOptions & DRAW_SPECIAL_OPTIONS_ROTATE );
+    bool bCenter = 0 != ( nOptions & DRAW_SPECIAL_OPTIONS_CENTER );
+    bool bRotate = 0 != ( nOptions & DRAW_SPECIAL_OPTIONS_ROTATE );
 
     // rRect is given in absolute coordinates
     if ( rInf.GetTxtFrm()->IsRightToLeft() )
@@ -1161,7 +1161,7 @@ void SwTxtPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
 {
     if( OnWin() && !IsMulti() )
     {
-        sal_Bool bDraw = sal_False;
+        bool bDraw = false;
         switch( nWhich )
         {
             case POR_FTN:
@@ -1179,11 +1179,11 @@ void SwTxtPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
                      SwViewOption::IsFieldShadings() &&
                      (POR_NUMBER != nWhich ||
                       pFrm->GetTxtNode()->HasMarkedLabel())) // #i27615#
-                    bDraw = sal_True;
+                    bDraw = true;
             break;
-            case POR_TAB:       if ( GetOpt().IsTab() )     bDraw = sal_True; break;
-            case POR_SOFTHYPH:  if ( GetOpt().IsSoftHyph() )bDraw = sal_True; break;
-            case POR_BLANK:     if ( GetOpt().IsHardBlank())bDraw = sal_True; break;
+            case POR_TAB:       if ( GetOpt().IsTab() )     bDraw = true; break;
+            case POR_SOFTHYPH:  if ( GetOpt().IsSoftHyph() )bDraw = true; break;
+            case POR_BLANK:     if ( GetOpt().IsHardBlank())bDraw = true; break;
             default:
             {
                 OSL_ENSURE( !this, "SwTxtPaintInfo::DrawViewOpt: don't know how to draw this" );
@@ -1725,13 +1725,13 @@ SwFontSave::~SwFontSave()
 SwDefFontSave::SwDefFontSave( const SwTxtSizeInfo &rInf )
         : pFnt( ((SwTxtSizeInfo&)rInf).GetFont()  )
 {
-    const sal_Bool bTmpAlter = pFnt->GetFixKerning() ||
+    const bool bTmpAlter = pFnt->GetFixKerning() ||
          ( RTL_TEXTENCODING_SYMBOL == pFnt->GetCharSet(pFnt->GetActual()) )
         ;
 
-    const sal_Bool bFamily = bTmpAlter &&
+    const bool bFamily = bTmpAlter &&
           pFnt->GetName( pFnt->GetActual() ) != numfunc::GetDefBulletFontname();
-    const sal_Bool bRotation = (sal_Bool)pFnt->GetOrientation() &&
+    const bool bRotation = pFnt->GetOrientation() &&
                                 ! rInf.GetTxtFrm()->IsVertical();
 
     if( bFamily || bRotation )

@@ -213,7 +213,7 @@ void SwTxtFrmInfo::GetSpaces( SwPaM &rPam, sal_Bool bWithLineBreak ) const
     SwTxtSizeInfo aInf( (SwTxtFrm*)pFrm );
     SwTxtMargin aLine( (SwTxtFrm*)pFrm, &aInf );
     SwPaM *pPam = &rPam;
-    sal_Bool bFirstLine = sal_True;
+    bool bFirstLine = true;
     do {
 
         if( aLine.GetCurr()->GetLen() )
@@ -240,7 +240,7 @@ void SwTxtFrmInfo::GetSpaces( SwPaM &rPam, sal_Bool bWithLineBreak ) const
                 }
             }
         }
-        bFirstLine = sal_False;
+        bFirstLine = false;
     }
     while( aLine.Next() );
 }

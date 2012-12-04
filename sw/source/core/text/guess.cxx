@@ -90,7 +90,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
     KSHORT nItalic = 0;
     if( ITALIC_NONE != rInf.GetFont()->GetItalic() && !rInf.NotEOL() )
     {
-        sal_Bool bAddItalic = sal_True;
+        bool bAddItalic = true;
 
         // do not add extra italic value if we have an active character grid
         if ( rInf.SnapToGrid() )
@@ -102,7 +102,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         // do not add extra italic value for an isolated blank:
         if ( 1 == rInf.GetLen() &&
              CH_BLANK == rInf.GetTxt().GetChar( rInf.GetIdx() ) )
-            bAddItalic = sal_False;
+            bAddItalic = false;
 
         nItalic = bAddItalic ? nPorHeight / 12 : 0;
 
@@ -144,7 +144,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         }
     }
 
-    sal_Bool bHyph = rInf.IsHyphenate() && !rInf.IsHyphForbud();
+    bool bHyph = rInf.IsHyphenate() && !rInf.IsHyphForbud();
     xub_StrLen nHyphPos = 0;
 
     // nCutPos is the first character not fitting to the current line
@@ -527,7 +527,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 // returns true if word at position nPos has a diffenrent spelling
 // if hyphenated at this position (old german spelling)
 
-sal_Bool SwTxtGuess::AlternativeSpelling( const SwTxtFormatInfo &rInf,
+bool SwTxtGuess::AlternativeSpelling( const SwTxtFormatInfo &rInf,
     const xub_StrLen nPos )
 {
     // get word boundaries

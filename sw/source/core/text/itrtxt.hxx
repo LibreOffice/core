@@ -292,7 +292,7 @@ class SwHookOut
 {
     SwTxtSizeInfo* pInf;
     OutputDevice* pOut;
-    sal_Bool bOnWin;
+    bool bOnWin;
 public:
     SwHookOut( SwTxtSizeInfo& rInfo );
     ~SwHookOut();

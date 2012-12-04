@@ -50,14 +50,14 @@ public:
 class SwBlankPortion : public SwExpandPortion
 {
     sal_Unicode cChar;
-    sal_Bool bMulti;        // For multiportion brackets
+    bool bMulti;        // For multiportion brackets
 public:
-    inline  SwBlankPortion( sal_Unicode cCh, sal_Bool bMult = sal_False )
+    inline  SwBlankPortion( sal_Unicode cCh, bool bMult = false )
         : cChar( cCh ), bMulti( bMult )
         { cChar = cCh; SetLen(1); SetWhichPor( POR_BLANK ); }
 
-    sal_Bool IsMulti() const { return bMulti; }
-    void SetMulti( sal_Bool bNew ) { bMulti = bNew; }
+    bool IsMulti() const { return bMulti; }
+    void SetMulti( bool bNew ) { bMulti = bNew; }
 
     virtual SwLinePortion *Compress();
     virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;

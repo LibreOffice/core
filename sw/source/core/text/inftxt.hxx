@@ -102,7 +102,7 @@ public:
 
     // vertical alignment
     inline sal_uInt16 GetVertAlign() const { return nVertAlign; }
-    inline sal_Bool HasSpecialAlign( sal_Bool bVert ) const
+    inline bool HasSpecialAlign( sal_Bool bVert ) const
         { return bVert ?
                  ( SvxParaVertAlignItem::BASELINE  != nVertAlign ) :
                  ( SvxParaVertAlignItem::BASELINE  != nVertAlign &&
@@ -175,23 +175,23 @@ protected:
     const XubString *pTxt;
     xub_StrLen nIdx, nLen;
     sal_uInt16 nKanaIdx;
-    sal_Bool bOnWin     : 1;
-    sal_Bool bNotEOL    : 1;
-    sal_Bool bURLNotify : 1;
-    sal_Bool bStopUnderFlow : 1; // Underflow was stopped e.g. by a FlyPortion
-    sal_Bool bFtnInside : 1;     // the current line contains a footnote
-    sal_Bool bOtherThanFtnInside : 1; // the current line contains another portion than a footnote portion.
+    bool bOnWin     : 1;
+    bool bNotEOL    : 1;
+    bool bURLNotify : 1;
+    bool bStopUnderFlow : 1; // Underflow was stopped e.g. by a FlyPortion
+    bool bFtnInside : 1;     // the current line contains a footnote
+    bool bOtherThanFtnInside : 1; // the current line contains another portion than a footnote portion.
                                       // needed for checking keep together of footnote portion with previous portion
-    sal_Bool bMulti : 1;        // inside a multiportion
-    sal_Bool bFirstMulti : 1;   // this flag is used for two purposes:
+    bool bMulti : 1;        // inside a multiportion
+    bool bFirstMulti : 1;   // this flag is used for two purposes:
                                 // - the multiportion is the first lineportion
                                 // - indicates, if we are currently in second
                                 //   line of multi portion
-    sal_Bool bRuby : 1;         // during the formatting of a phonetic line
-    sal_Bool bHanging : 1;      // formatting of hanging punctuation allowed
-    sal_Bool bScriptSpace : 1;  // space between different scripts (Asian/Latin)
-    sal_Bool bForbiddenChars : 1; // Forbidden start/endline characters
-    sal_Bool bSnapToGrid : 1;   // paragraph snaps to grid
+    bool bRuby : 1;         // during the formatting of a phonetic line
+    bool bHanging : 1;      // formatting of hanging punctuation allowed
+    bool bScriptSpace : 1;  // space between different scripts (Asian/Latin)
+    bool bForbiddenChars : 1; // Forbidden start/endline characters
+    bool bSnapToGrid : 1;   // paragraph snaps to grid
     sal_uInt8 nDirection : 2;       // writing direction: 0/90/180/270 degree
 
 protected:
@@ -215,32 +215,32 @@ public:
     // rPos will set to the end of the multi-line part.
     SwMultiCreator* GetMultiCreator( xub_StrLen &rPos, SwMultiPortion* pM ) const;
 
-    inline sal_Bool OnWin() const { return bOnWin; }
-    inline void SetOnWin( const sal_Bool bNew ) { bOnWin = bNew; }
-    inline sal_Bool NotEOL() const { return bNotEOL; }
-    inline void SetNotEOL( const sal_Bool bNew ) { bNotEOL = bNew; }
-    inline sal_Bool URLNotify() const { return bURLNotify; }
-    inline void SetURLNotify( const sal_Bool bNew ) { bURLNotify = bNew; }
-    inline sal_Bool StopUnderFlow() const { return bStopUnderFlow; }
-    inline void SetStopUnderFlow( const sal_Bool bNew ) { bStopUnderFlow = bNew; }
-    inline sal_Bool IsFtnInside() const { return bFtnInside; }
-    inline void SetFtnInside( const sal_Bool bNew ) { bFtnInside = bNew; }
-    inline sal_Bool IsOtherThanFtnInside() const { return bOtherThanFtnInside; }
-    inline void SetOtherThanFtnInside( const sal_Bool bNew ) { bOtherThanFtnInside = bNew; }
-    inline sal_Bool IsMulti() const { return bMulti; }
-    inline void SetMulti( const sal_Bool bNew ) { bMulti = bNew; }
-    inline sal_Bool IsFirstMulti() const { return bFirstMulti; }
-    inline void SetFirstMulti( const sal_Bool bNew ) { bFirstMulti = bNew; }
-    inline sal_Bool IsRuby() const { return bRuby; }
-    inline void SetRuby( const sal_Bool bNew ) { bRuby = bNew; }
-    inline sal_Bool IsHanging() const { return bHanging; }
-    inline void SetHanging( const sal_Bool bNew ) { bHanging = bNew; }
-    inline sal_Bool HasScriptSpace() const { return bScriptSpace; }
-    inline void SetScriptSpace( const sal_Bool bNew ) { bScriptSpace = bNew; }
-    inline sal_Bool HasForbiddenChars() const { return bForbiddenChars; }
-    inline void SetForbiddenChars( const sal_Bool bN ) { bForbiddenChars = bN; }
-    inline sal_Bool SnapToGrid() const { return bSnapToGrid; }
-    inline void SetSnapToGrid( const sal_Bool bN ) { bSnapToGrid = bN; }
+    inline bool OnWin() const { return bOnWin; }
+    inline void SetOnWin( const bool bNew ) { bOnWin = bNew; }
+    inline bool NotEOL() const { return bNotEOL; }
+    inline void SetNotEOL( const bool bNew ) { bNotEOL = bNew; }
+    inline bool URLNotify() const { return bURLNotify; }
+    inline void SetURLNotify( const bool bNew ) { bURLNotify = bNew; }
+    inline bool StopUnderFlow() const { return bStopUnderFlow; }
+    inline void SetStopUnderFlow( const bool bNew ) { bStopUnderFlow = bNew; }
+    inline bool IsFtnInside() const { return bFtnInside; }
+    inline void SetFtnInside( const bool bNew ) { bFtnInside = bNew; }
+    inline bool IsOtherThanFtnInside() const { return bOtherThanFtnInside; }
+    inline void SetOtherThanFtnInside( const bool bNew ) { bOtherThanFtnInside = bNew; }
+    inline bool IsMulti() const { return bMulti; }
+    inline void SetMulti( const bool bNew ) { bMulti = bNew; }
+    inline bool IsFirstMulti() const { return bFirstMulti; }
+    inline void SetFirstMulti( const bool bNew ) { bFirstMulti = bNew; }
+    inline bool IsRuby() const { return bRuby; }
+    inline void SetRuby( const bool bNew ) { bRuby = bNew; }
+    inline bool IsHanging() const { return bHanging; }
+    inline void SetHanging( const bool bNew ) { bHanging = bNew; }
+    inline bool HasScriptSpace() const { return bScriptSpace; }
+    inline void SetScriptSpace( const bool bNew ) { bScriptSpace = bNew; }
+    inline bool HasForbiddenChars() const { return bForbiddenChars; }
+    inline void SetForbiddenChars( const bool bN ) { bForbiddenChars = bN; }
+    inline bool SnapToGrid() const { return bSnapToGrid; }
+    inline void SetSnapToGrid( const bool bN ) { bSnapToGrid = bN; }
     inline sal_uInt8 GetDirection() const { return nDirection; }
     inline void SetDirection( const sal_uInt8 nNew ) { nDirection = nNew; }
     inline sal_Bool IsRotated() const { return 0 != ( 1 & nDirection ); }

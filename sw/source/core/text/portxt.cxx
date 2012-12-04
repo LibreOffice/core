@@ -184,8 +184,8 @@ static sal_uInt16 lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr
         // next character is inside a field?
         if ( CH_TXTATR_BREAKWORD == rInf.GetChar( nPos ) && pPor->InExpGrp() )
         {
-            sal_Bool bOldOnWin = rInf.OnWin();
-            ((SwTxtSizeInfo &)rInf).SetOnWin( sal_False );
+            bool bOldOnWin = rInf.OnWin();
+            ((SwTxtSizeInfo &)rInf).SetOnWin( false );
 
             XubString aStr( aEmptyStr );
             pPor->GetExpTxt( rInf, aStr );
@@ -612,8 +612,8 @@ xub_StrLen SwTxtPortion::GetSpaceCnt( const SwTxtSizeInfo &rInf,
         {
             // OnWin() likes to return a blank instead of an empty string from
             // time to time. We cannot use that here at all, however.
-            sal_Bool bOldOnWin = rInf.OnWin();
-            ((SwTxtSizeInfo &)rInf).SetOnWin( sal_False );
+            bool bOldOnWin = rInf.OnWin();
+            ((SwTxtSizeInfo &)rInf).SetOnWin( false );
 
             XubString aStr( aEmptyStr );
             GetExpTxt( rInf, aStr );
@@ -642,8 +642,8 @@ long SwTxtPortion::CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) cons
         {
             // OnWin() likes to return a blank instead of an empty string from
             // time to time. We cannot use that here at all, however.
-            sal_Bool bOldOnWin = rInf.OnWin();
-            ((SwTxtSizeInfo &)rInf).SetOnWin( sal_False );
+            bool bOldOnWin = rInf.OnWin();
+            ((SwTxtSizeInfo &)rInf).SetOnWin( false );
 
             XubString aStr( aEmptyStr );
             GetExpTxt( rInf, aStr );

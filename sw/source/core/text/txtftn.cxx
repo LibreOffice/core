@@ -971,7 +971,7 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
     // Endlich: FtnPortion anlegen und raus hier...
     SwFtnPortion *pRet = new SwFtnPortion( rFtn.GetViewNumStr( *pDoc ),
                                             pFrm, pFtn, nReal );
-    rInf.SetFtnInside( sal_True );
+    rInf.SetFtnInside( true );
 
     UNDO_SWAP( pFrm )
 

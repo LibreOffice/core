@@ -484,7 +484,7 @@ SwHookOut::SwHookOut( SwTxtSizeInfo& rInfo ) :
 
     // set new values
     rInfo.SetOut( rInfo.GetRefDev() );
-    rInfo.SetOnWin( sal_False );
+    rInfo.SetOnWin( false );
 }
 
 SwHookOut::~SwHookOut()

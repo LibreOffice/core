@@ -171,7 +171,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     GetInfo().SetIdx( GetStart() );
     GetInfo().SetPos( GetTopLeft() );
 
-    const sal_Bool bDrawInWindow = GetInfo().OnWin();
+    const bool bDrawInWindow = GetInfo().OnWin();
 
     // 6882: Leerzeilen duerfen nicht wegoptimiert werden bei Paragraphzeichen.
     const sal_Bool bEndPor = GetInfo().GetOpt().IsParagraph() && !GetInfo().GetTxt().Len();
@@ -253,7 +253,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     // if no special vertical alignment is used,
     // we calculate Y value for the whole line
     GETGRID( GetTxtFrm()->FindPageFrm() )
-    const sal_Bool bAdjustBaseLine =
+    const bool bAdjustBaseLine =
         GetLineInfo().HasSpecialAlign( GetTxtFrm()->IsVertical() ) ||
         ( 0 != pGrid );
     const SwTwips nLineBaseLine = GetInfo().GetPos().Y() + nTmpAscent;

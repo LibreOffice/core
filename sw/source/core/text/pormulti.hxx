@@ -86,7 +86,7 @@ class SwMultiPortion : public SwLinePortion
     sal_Bool bTab1      :1; // First line tabulator
     sal_Bool bTab2      :1; // Second line includes tabulator
     sal_Bool bDouble    :1; // Double line
-    sal_Bool bRuby      :1; // Phonetics
+    bool bRuby      :1; // Phonetics
     sal_Bool bBidi      :1;
     sal_Bool bTop       :1; // Phonetic position
     sal_Bool bFormatted :1; // Already formatted
@@ -95,12 +95,12 @@ class SwMultiPortion : public SwLinePortion
     sal_Bool bFlyInCntnt:1; // Fly as character inside
 protected:
     SwMultiPortion( xub_StrLen nEnd ) : pFldRest( 0 ), bTab1( sal_False ),
-        bTab2( sal_False ), bDouble( sal_False ), bRuby( sal_False ),
+        bTab2( sal_False ), bDouble( sal_False ), bRuby( false ),
         bBidi( sal_False ), bFormatted( sal_False ), bFollowFld( sal_False ),
         nDirection( 0 ), bFlyInCntnt( sal_False )
         { SetWhichPor( POR_MULTI ); SetLen( nEnd ); }
     inline void SetDouble() { bDouble = sal_True; }
-    inline void SetRuby() { bRuby = sal_True; }
+    inline void SetRuby() { bRuby = true; }
     inline void SetBidi() { bBidi = sal_True; }
     inline void SetTop( sal_Bool bNew ) { bTop = bNew; }
     inline void SetTab1( sal_Bool bNew ) { bTab1 = bNew; }
@@ -123,7 +123,7 @@ public:
     inline sal_Bool HasFlyInCntnt() const { return bFlyInCntnt; }
     inline void SetFlyInCntnt( sal_Bool bNew ) { bFlyInCntnt = bNew; }
     inline sal_Bool IsDouble() const { return bDouble; }
-    inline sal_Bool IsRuby() const { return bRuby; }
+    inline bool IsRuby() const { return bRuby; }
     inline sal_Bool IsBidi() const { return bBidi; }
     inline sal_Bool OnTop() const { return bTop; }
     void ActualizeTabulator();

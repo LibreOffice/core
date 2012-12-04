@@ -68,7 +68,7 @@ using namespace ::com::sun::star;
 
 ////////////////////////////////////////////////////////////
 
-sal_Bool bInitFont = sal_True;
+bool bInitFont = true;
 
 class SwExtraPainter
 {
@@ -82,28 +82,28 @@ class SwExtraPainter
     SwTwips nRedX;
     sal_uLong nLineNr;
     MSHORT nDivider;
-    sal_Bool bGoLeft;
-    sal_Bool bLineNum;
+    bool bGoLeft;
+    bool bLineNum;
     inline sal_Bool IsClipChg() { return aClip.IsChg(); }
 public:
     SwExtraPainter( const SwTxtFrm *pFrm, ViewShell *pVwSh,
         const SwLineNumberInfo &rLnInf, const SwRect &rRct,
-        sal_Int16 eHor, sal_Bool bLnNm );
+        sal_Int16 eHor, bool bLnNm );
     ~SwExtraPainter() { delete pFnt; }
     inline SwFont* GetFont() const { return pFnt; }
     inline void IncLineNr() { ++nLineNr; }
-    inline sal_Bool HasNumber() { return !( nLineNr % rLineInf.GetCountBy() ); }
-    inline sal_Bool HasDivider() { if( !nDivider ) return sal_False;
+    inline bool HasNumber() { return !( nLineNr % rLineInf.GetCountBy() ); }
+    inline bool HasDivider() { if( !nDivider ) return false;
         return !(nLineNr % rLineInf.GetDividerCountBy()); }
 
-    void PaintExtra( SwTwips nY, long nAsc, long nMax, sal_Bool bRed );
+    void PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed );
     void PaintRedline( SwTwips nY, long nMax );
 };
 
 
 SwExtraPainter::SwExtraPainter( const SwTxtFrm *pFrm, ViewShell *pVwSh,
     const SwLineNumberInfo &rLnInf, const SwRect &rRct,
-    sal_Int16 eHor, sal_Bool bLnNm )
+    sal_Int16 eHor, bool bLnNm )
     : aClip( pVwSh->GetWin() || pFrm->IsUndersized() ? pVwSh->GetOut() : 0 ),
       aRect( rRct ), pTxtFrm( pFrm ), pSh( pVwSh ), pFnt( 0 ), rLineInf( rLnInf ),
       nLineNr( 1L ), bLineNum( bLnNm )
@@ -151,17 +151,17 @@ SwExtraPainter::SwExtraPainter( const SwTxtFrm *pFrm, ViewShell *pVwSh,
         }
         if( LINENUMBER_POS_LEFT == ePos )
         {
-            bGoLeft = sal_True;
+            bGoLeft = true;
             nX -= rLineInf.GetPosFromLeft();
             if( nX < aRect.Left() )
-                bLineNum = sal_False;
+                bLineNum = false;
         }
         else
         {
-            bGoLeft = sal_False;
+            bGoLeft = false;
             nX += pFrm->Frm().Width() + rLineInf.GetPosFromLeft();
             if( nX > aRect.Right() )
-                bLineNum = sal_False;
+                bLineNum = false;
         }
     }
     if( eHor != text::HoriOrientation::NONE )
@@ -183,7 +183,7 @@ SwExtraPainter::SwExtraPainter( const SwTxtFrm *pFrm, ViewShell *pVwSh,
     }
 }
 
-void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, sal_Bool bRed )
+void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed )
 {
   // Line number is stronger than the divider
     const XubString aTmp( HasNumber() ? rLineInf.GetNumType().GetNumStr( nLineNr )
@@ -204,7 +204,7 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, sal_Bool bRed
     aDrawInf.SetSnapToGrid( sal_False );
     aDrawInf.SetIgnoreFrmRTL( sal_True );
 
-    sal_Bool bTooBig = pFnt->GetSize( pFnt->GetActual() ).Height() > nMax &&
+    bool bTooBig = pFnt->GetSize( pFnt->GetActual() ).Height() > nMax &&
                 pFnt->GetHeight( pSh, *pSh->GetOut() ) > nMax;
     SwFont* pTmpFnt;
     if( bTooBig )
@@ -221,7 +221,7 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, sal_Bool bRed
         pTmpFnt = GetFont();
     Point aTmpPos( nX, nY );
     aTmpPos.Y() += nAsc;
-    sal_Bool bPaint = sal_True;
+    bool bPaint = true;
     if( !IsClipChg() )
     {
         Size aSize = pTmpFnt->_GetTxtSize( aDrawInf );
@@ -234,7 +234,7 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, sal_Bool bRed
         if( !aRect.IsInside( aRct ) )
         {
             if( aRct.Intersection( aRect ).IsEmpty() )
-                bPaint = sal_False;
+                bPaint = false;
             else
                 aClip.ChgClip( aRect, pTxtFrm );
         }
@@ -292,12 +292,12 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
     const IDocumentRedlineAccess* pIDRA = rTxtNode.getIDocumentRedlineAccess();
     const SwLineNumberInfo &rLineInf = rTxtNode.getIDocumentLineNumberAccess()->GetLineNumberInfo();
     const SwFmtLineNumber &rLineNum = GetAttrSet()->GetLineNumber();
-    sal_Bool bLineNum = !IsInTab() && rLineInf.IsPaintLineNumbers() &&
+    bool bLineNum = !IsInTab() && rLineInf.IsPaintLineNumbers() &&
                ( !IsInFly() || rLineInf.IsCountInFlys() ) && rLineNum.IsCount();
     sal_Int16 eHor = (sal_Int16)SW_MOD()->GetRedlineMarkPos();
     if( eHor != text::HoriOrientation::NONE && !IDocumentRedlineAccess::IsShowChanges( pIDRA->GetRedlineMode() ) )
         eHor = text::HoriOrientation::NONE;
-    sal_Bool bRedLine = eHor != text::HoriOrientation::NONE;
+    bool bRedLine = eHor != text::HoriOrientation::NONE;
     if ( bLineNum || bRedLine )
     {
         if( IsLocked() || IsHiddenNow() || !Prt().Height() )
@@ -330,7 +330,7 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
             aLayoutModeModifier.Modify( sal_False );
 
             SwTxtPainter  aLine( (SwTxtFrm*)this, &aInf );
-            sal_Bool bNoDummy = !aLine.GetNext(); // Only one empty line!
+            bool bNoDummy = !aLine.GetNext(); // Only one empty line!
 
             while( aLine.Y() + aLine.GetLineHeight() <= rRect.Top() )
             {
@@ -348,7 +348,7 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
 
             long nBottom = rRect.Bottom();
 
-            sal_Bool bNoPrtLine = 0 == GetMinPrtLine();
+            bool bNoPrtLine = 0 == GetMinPrtLine();
             if( !bNoPrtLine )
             {
                 while ( aLine.Y() < GetMinPrtLine() )
@@ -367,7 +367,7 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
                 {
                     if( bNoDummy || !aLine.GetCurr()->IsDummy() )
                     {
-                        sal_Bool bRed = bRedLine && aLine.GetCurr()->HasRedline();
+                        bool bRed = bRedLine && aLine.GetCurr()->HasRedline();
                         if( rLineInf.IsCountBlankLines() || aLine.GetCurr()->HasCntnt() )
                         {
                             if( bLineNum &&
@@ -377,7 +377,7 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
                                 aLine.CalcAscentAndHeight( nTmpAscent, nTmpHeight );
                                 aExtra.PaintExtra( aLine.Y(), nTmpAscent,
                                     nTmpHeight, bRed );
-                                bRed = sal_False;
+                                bRed = false;
                             }
                             aExtra.IncLineNr();
                         }
@@ -389,7 +389,8 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
         }
         else
         {
-            bRedLine &= ( MSHRT_MAX!= pIDRA->GetRedlinePos(rTxtNode, USHRT_MAX) );
+            if ( MSHRT_MAX == pIDRA->GetRedlinePos(rTxtNode, USHRT_MAX) )
+                bRedLine = false;
 
             if( bLineNum && rLineInf.IsCountBlankLines() &&
                 ( aExtra.HasNumber() || aExtra.HasDivider() ) )
@@ -454,7 +455,7 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
     ViewShell *pSh = getRootFrm()->GetCurrShell();
     if( pSh && ( pSh->GetViewOptions()->IsParagraph() || bInitFont ) )
     {
-        bInitFont = sal_False;
+        bInitFont = false;
         SwTxtFly aTxtFly( this );
         aTxtFly.SetTopRule();
         SwRect aRect;
@@ -662,7 +663,7 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         aInf.GetTxtFly()->Relax();
 
         OutputDevice* pOut = aInf.GetOut();
-        const sal_Bool bOnWin = pSh->GetWin() != 0;
+        const bool bOnWin = pSh->GetWin() != 0;
 
         SwSaveClip aClip( bOnWin || IsUndersized() ? pOut : 0 );
 
@@ -672,7 +673,7 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         aLine.TwipsToLine( rRect.Top() + 1 );
         long nBottom = rRect.Bottom();
 
-        sal_Bool bNoPrtLine = 0 == GetMinPrtLine();
+        bool bNoPrtLine = 0 == GetMinPrtLine();
         if( !bNoPrtLine )
         {
             while ( aLine.Y() < GetMinPrtLine() && aLine.Next() )

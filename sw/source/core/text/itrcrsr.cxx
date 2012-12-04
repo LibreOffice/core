@@ -805,7 +805,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
 
                             if ( pCurr == &((SwMultiPortion*)pPor)->GetRoot() )
                             {
-                                GetInfo().SetFirstMulti( sal_True );
+                                GetInfo().SetFirstMulti( true );
 
                                 // we want to treat a double line portion like a
                                 // single line portion, if there is no text in
@@ -901,8 +901,8 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                         if( nX || !pPor->InNumberGrp() )
                         {
                             SeekAndChg( aInf );
-                            const sal_Bool bOldOnWin = aInf.OnWin();
-                            aInf.SetOnWin( sal_False ); // keine BULLETs!
+                            const bool bOldOnWin = aInf.OnWin();
+                            aInf.SetOnWin( false ); // keine BULLETs!
                             SwTwips nTmp = nX;
                             aInf.SetKanaComp( pKanaComp );
                             aInf.SetKanaIdx( nKanaIdx );
@@ -914,7 +914,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                             {
                                 pPor->SetLen( pPor->GetLen() + 1 );
                                 aInf.SetLen( pPor->GetLen() );
-                                aInf.SetOnWin( sal_False ); // keine BULLETs!
+                                aInf.SetOnWin( false ); // keine BULLETs!
                                 nTmp += pPor->GetTxtSize( aInf ).Width();
                                 aInf.SetOnWin( bOldOnWin );
                                 if ( pPor->InSpaceGrp() && nSpaceAdd )
@@ -1062,12 +1062,12 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                     }
                     else
                     {
-                        const sal_Bool bOldOnWin = aInf.OnWin();
+                        const bool bOldOnWin = aInf.OnWin();
                         xub_StrLen nOldLen = pPor->GetLen();
                         pPor->SetLen( 1 );
                         aInf.SetLen( pPor->GetLen() );
                         SeekAndChg( aInf );
-                        aInf.SetOnWin( sal_False ); // keine BULLETs!
+                        aInf.SetOnWin( false ); // keine BULLETs!
                         aInf.SetKanaComp( pKanaComp );
                         aInf.SetKanaIdx( nKanaIdx );
                         nTmp = pPor->GetTxtSize( aInf ).Width();

@@ -224,7 +224,7 @@ SwLinePortion *SwTxtFormatter::UnderFlow( SwTxtFormatInfo &rInf )
         {
             pPor->Move( rInf );
             rInf.SetLast( pPor );
-            rInf.SetStopUnderFlow( sal_True );
+            rInf.SetStopUnderFlow( true );
             pPor = pUnderFlow;
         }
     }
@@ -1143,7 +1143,7 @@ static sal_Bool lcl_OldFieldRest( const SwLineLayout* pCurr )
 SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
 {
     // Underflow takes precedence
-    rInf.SetStopUnderFlow( sal_False );
+    rInf.SetStopUnderFlow( false );
     if( rInf.GetUnderFlow() )
     {
         OSL_ENSURE( rInf.IsFull(), "SwTxtFormatter::NewPortion: underflow but not full" );
@@ -1517,8 +1517,8 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStartPos )
     // Hier folgt bald die Unterlaufpruefung.
     while( bBuild )
     {
-        GetInfo().SetFtnInside( sal_False );
-        GetInfo().SetOtherThanFtnInside( sal_False );
+        GetInfo().SetFtnInside( false );
+        GetInfo().SetOtherThanFtnInside( false );
 
         // These values must not be reset by FormatReset();
         sal_Bool bOldNumDone = GetInfo().IsNumDone();
@@ -2636,7 +2636,7 @@ namespace {
 
             // Note: GetChareRect is not const. It definitely changes the
             // bMulti flag. We have to save and resore the old value.
-            sal_Bool bOldMulti = txtFmtInfo.IsMulti();
+            bool bOldMulti = txtFmtInfo.IsMulti();
             rThis.GetCharRect( &aRect, nReformat );
             txtFmtInfo.SetMulti( bOldMulti );
 

@@ -49,7 +49,7 @@ public:
     // true, if current portion still fits to current line
     sal_Bool Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
                     const KSHORT nHeight );
-    sal_Bool AlternativeSpelling( const SwTxtFormatInfo &rInf, const xub_StrLen nPos );
+    bool AlternativeSpelling( const SwTxtFormatInfo &rInf, const xub_StrLen nPos );
 
     inline SwHangingPortion* GetHangingPortion() const { return pHanging; }
     inline void ClearHangingPortion() { pHanging = NULL; }

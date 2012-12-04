@@ -356,7 +356,7 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
             // the ascent and height must be known
             SetAscent( rInf.GetAscent() );
             bFull = SwTxtPortion::Format( rInf );
-            rInf.SetNotEOL( sal_False );
+            rInf.SetNotEOL( false );
             rInf.SetLineStart( nOldLineStart );
         }
         xub_StrLen nTmpLen = GetLen();
