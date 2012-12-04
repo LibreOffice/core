@@ -123,7 +123,7 @@ Window * nextLogicalChildOfParent(Window *pTopLevel, Window *pChild)
 {
     Window *pLastChild = pChild;
 
-    if (pChild->GetType() == WINDOW_CONTAINER)
+    if (isContainerWindow(*pChild))
         pChild = pChild->GetWindow(WINDOW_FIRSTCHILD);
     else
         pChild = pChild->GetWindow(WINDOW_NEXT);
@@ -139,7 +139,7 @@ Window * nextLogicalChildOfParent(Window *pTopLevel, Window *pChild)
         pChild = pParent->GetWindow(WINDOW_NEXT);
     }
 
-    if (pChild && pChild->GetType() == WINDOW_CONTAINER)
+    if (pChild && isContainerWindow(*pChild))
         pChild = nextLogicalChildOfParent(pTopLevel, pChild);
 
     return pChild;
@@ -149,7 +149,7 @@ Window * prevLogicalChildOfParent(Window *pTopLevel, Window *pChild)
 {
     Window *pLastChild = pChild;
 
-    if (pChild->GetType() == WINDOW_CONTAINER)
+    if (isContainerWindow(*pChild))
         pChild = pChild->GetWindow(WINDOW_LASTCHILD);
     else
         pChild = pChild->GetWindow(WINDOW_PREV);
@@ -165,7 +165,7 @@ Window * prevLogicalChildOfParent(Window *pTopLevel, Window *pChild)
         pChild = pParent->GetWindow(WINDOW_PREV);
     }
 
-    if (pChild && pChild->GetType() == WINDOW_CONTAINER)
+    if (pChild && isContainerWindow(*pChild))
         pChild = prevLogicalChildOfParent(pTopLevel, pChild);
 
     return pChild;
@@ -1170,7 +1170,7 @@ bool Dialog::isLayoutEnabled() const
 {
     //pre dtor called, and single child is a container => we're layout enabled
     const Window *pChild = mpDialogImpl ? GetWindow(WINDOW_FIRSTCHILD) : NULL;
-    return pChild && pChild->GetType() == WINDOW_CONTAINER && !pChild->GetWindow(WINDOW_NEXT);
+    return pChild && isContainerWindow(*pChild) && !pChild->GetWindow(WINDOW_NEXT);
 }
 
 Size Dialog::GetOptimalSize(WindowSizeType eType) const

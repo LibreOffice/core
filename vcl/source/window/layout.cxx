@@ -11,11 +11,11 @@
 #include <vcl/layout.hxx>
 #include "window.h"
 
-VclContainer::VclContainer(Window *pParent)
+VclContainer::VclContainer(Window *pParent, WinBits nStyle)
     : Window(WINDOW_CONTAINER)
     , m_bLayoutDirty(true)
 {
-    ImplInit(pParent, WB_HIDE, NULL);
+    ImplInit(pParent, nStyle, NULL);
     EnableChildTransparentMode();
     SetPaintTransparent(sal_True);
     SetBackground();
@@ -1195,6 +1195,93 @@ IMPL_LINK( VclExpander, ClickHdl, DisclosureButton*, pBtn )
     return 0;
 }
 
+const Window *VclScrolledWindow::get_child() const
+{
+    assert(GetChildCount() == 3);
+    const WindowImpl* pWindowImpl = ImplGetWindowImpl();
+    return pWindowImpl->mpLastChild;
+}
+
+Window *VclScrolledWindow::get_child()
+{
+    return const_cast<Window*>(const_cast<const VclScrolledWindow*>(this)->get_child());
+}
+
+Size VclScrolledWindow::calculateRequisition() const
+{
+    Size aRet(0, 0);
+
+    const Window *pChild = get_child();
+    if (pChild && pChild->IsVisible())
+        aRet = getLayoutRequisition(*pChild);
+
+    if (m_aVScroll.IsVisible())
+        aRet.Width() += getLayoutRequisition(m_aVScroll).Width();
+
+    if (m_aHScroll.IsVisible())
+        aRet.Height() += getLayoutRequisition(m_aVScroll).Height();
+
+    return aRet;
+}
+
+void VclScrolledWindow::setAllocation(const Size &rAllocation)
+{
+    Size aChildAllocation(rAllocation);
+    Size aChildReq;
+
+    Window *pChild = get_child();
+    if (pChild && pChild->IsVisible())
+        aChildReq = getLayoutRequisition(*pChild);
+
+    if (m_aVScroll.IsVisible())
+    {
+        long nScrollBarWidth = getLayoutRequisition(m_aVScroll).Width();
+        Point aScrollPos(rAllocation.Width() - nScrollBarWidth, 0);
+        Size aScrollSize(nScrollBarWidth, rAllocation.Height());
+        setLayoutAllocation(m_aVScroll, aScrollPos, aScrollSize);
+        aChildAllocation.Width() -= nScrollBarWidth;
+        aChildAllocation.Height() = aChildReq.Height();
+    }
+
+    if (m_aHScroll.IsVisible())
+    {
+        long nScrollBarHeight = getLayoutRequisition(m_aHScroll).Height();
+        Point aScrollPos(0, rAllocation.Height() - nScrollBarHeight);
+        Size aScrollSize(rAllocation.Width(), nScrollBarHeight);
+        setLayoutAllocation(m_aHScroll, aScrollPos, aScrollSize);
+        aChildAllocation.Height() -= nScrollBarHeight;
+        aChildAllocation.Width() = aChildReq.Width();
+    }
+
+    if (pChild && pChild->IsVisible())
+    {
+        Point aChildPos(pChild->GetPosPixel());
+        if (!m_aHScroll.IsVisible())
+            aChildPos.X() = 0;
+        if (!m_aVScroll.IsVisible())
+            aChildPos.Y() = 0;
+        setLayoutAllocation(*pChild, aChildPos, aChildAllocation);
+    }
+}
+
+Size VclScrolledWindow::getVisibleChildSize() const
+{
+    Size aRet(GetSizePixel());
+    if (m_aVScroll.IsVisible())
+        aRet.Width() -= m_aVScroll.GetSizePixel().Width();
+    if (m_aHScroll.IsVisible())
+        aRet.Height() -= m_aHScroll.GetSizePixel().Height();
+    return aRet;
+}
+
+bool VclScrolledWindow::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+{
+    bool bRet = VclBin::set_property(rKey, rValue);
+    m_aVScroll.Show(GetStyle() & WB_VERT);
+    m_aHScroll.Show(GetStyle() & WB_HORZ);
+    return bRet;
+}
+
 Size getLegacyBestSizeForChildren(const Window &rWindow)
 {
     Rectangle aBounds;
@@ -1225,7 +1312,7 @@ Window* getNonLayoutParent(Window *pWindow)
     while (pWindow)
     {
         pWindow = pWindow->GetParent();
-        if (!pWindow || pWindow->GetType() != WINDOW_CONTAINER)
+        if (!pWindow || !isContainerWindow(*pWindow))
             break;
     }
     return pWindow;
@@ -1236,7 +1323,7 @@ Window* getNonLayoutRealParent(Window *pWindow)
     while (pWindow)
     {
         pWindow = pWindow->ImplGetParent();
-        if (!pWindow || pWindow->GetType() != WINDOW_CONTAINER)
+        if (!pWindow || !isContainerWindow(*pWindow))
             break;
     }
     return pWindow;
@@ -1249,7 +1336,7 @@ bool isVisibleInLayout(const Window *pWindow)
     {
         bVisible = pWindow->IsVisible();
         pWindow = pWindow->GetParent();
-        if (!pWindow || pWindow->GetType() != WINDOW_CONTAINER)
+        if (!pWindow || !isContainerWindow(*pWindow))
             break;
     }
     return bVisible;
@@ -1262,7 +1349,7 @@ bool isEnabledInLayout(const Window *pWindow)
     {
         bEnabled = pWindow->IsEnabled();
         pWindow = pWindow->GetParent();
-        if (!pWindow || pWindow->GetType() != WINDOW_CONTAINER)
+        if (!pWindow || !isContainerWindow(*pWindow))
             break;
     }
     return bEnabled;

@@ -1746,7 +1746,7 @@ void Window::queue_resize()
 
     while( pWindow )
     {
-        if (pWindow->GetType() == WINDOW_CONTAINER)
+        if (isContainerWindow(*pWindow))
         {
             VclContainer *pContainer = static_cast<VclContainer*>(pWindow);
             pContainer->markLayoutDirty();

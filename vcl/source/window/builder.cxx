@@ -573,21 +573,6 @@ bool VclBuilder::extractImage(const OString &id, stringmap &rMap)
     return false;
 }
 
-//This doesn't actually do anything yet, so hide it down here in builder.cxx as
-//merely a temporary storage for scrolling information for vcl controls which
-//actually manage their own scrolling. If you want to put something inside
-//a scrolled window that doesn't handle its own scrolling, then you
-//need to implement this fully and move into a top-level header
-class VclScrolledWindow : public Window
-{
-public:
-    VclScrolledWindow(Window *pParent)
-        : Window(WINDOW_SCROLLWINDOW)
-    {
-        ImplInit(pParent, WB_HIDE | WB_AUTOHSCROLL | WB_AUTOVSCROLL, NULL);
-    }
-};
-
 #ifndef DISABLE_DYNLOADING
 extern "C" { static void SAL_CALL thisModule() {} }
 #endif

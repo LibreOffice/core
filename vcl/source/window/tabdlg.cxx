@@ -18,6 +18,7 @@
  */
 
 #include <vcl/fixed.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabdlg.hxx>
 #include <tools/rc.h>
@@ -51,8 +52,7 @@ void TabDialog::ImplPosControls()
     {
         if ( pChild->IsVisible() && (pChild != mpViewWindow) )
         {
-            WindowType eChildType = pChild->GetType();
-            if ( eChildType == WINDOW_TABCONTROL || eChildType == WINDOW_CONTAINER )
+            if (pChild->GetType() == WINDOW_TABCONTROL || isContainerWindow(*pChild))
                 pTabControl = pChild;
             else if ( pTabControl )
             {
@@ -85,7 +85,7 @@ void TabDialog::ImplPosControls()
 
         Point   aTabOffset( IMPL_DIALOG_OFFSET, IMPL_DIALOG_OFFSET+nOffY );
 
-        if (pTabControl->GetType() == WINDOW_CONTAINER)
+        if (isContainerWindow(*pTabControl))
             pTabControl->SetSizePixel(pTabControl->GetOptimalSize(WINDOWSIZE_PREFERRED));
 
         Size    aTabSize = pTabControl->GetSizePixel();
