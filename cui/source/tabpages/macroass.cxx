@@ -64,6 +64,7 @@ public:
     sal_Bool                            bReadOnly;
     Timer                           maFillGroupTimer;
     sal_Bool                            bGotEvents;
+    bool m_bDummyActivated; ///< has this tab page already been activated
 };
 
 _SfxMacroTabPage_Impl::_SfxMacroTabPage_Impl( void ) :
@@ -79,6 +80,7 @@ _SfxMacroTabPage_Impl::_SfxMacroTabPage_Impl( void ) :
     pMacroStr( NULL ),
     bReadOnly( sal_False ),
     bGotEvents( sal_False )
+    , m_bDummyActivated(false)
 {
 }
 
@@ -212,6 +214,22 @@ sal_Bool _SfxMacroTabPage::FillItemSet( SfxItemSet& rSet )
         return sal_True;
     }
     return sal_False;
+}
+
+void _SfxMacroTabPage::ActivatePage( const SfxItemSet& )
+{
+    // fdo#57553 lazily init script providers, because it is annoying if done
+    // on dialog open (SfxTabDialog::Start_Impl activates all tab pages once!)
+    if (!mpImpl->m_bDummyActivated)
+    {
+        mpImpl->m_bDummyActivated = true;
+    }
+    else if (!mpImpl->maFillGroupTimer.GetTimeoutHdl().IsSet())
+    {
+        mpImpl->maFillGroupTimer.SetTimeoutHdl( STATIC_LINK( this, _SfxMacroTabPage, TimeOut_Impl ) );
+        mpImpl->maFillGroupTimer.SetTimeout( 0 );
+        mpImpl->maFillGroupTimer.Start();
+    }
 }
 
 void _SfxMacroTabPage::PageCreated (SfxAllItemSet aSet)
@@ -398,9 +416,6 @@ void _SfxMacroTabPage::InitAndSetHandler()
 
     mpImpl->pGroupLB->SetFunctionListBox( mpImpl->pMacroLB );
 
-    mpImpl->maFillGroupTimer.SetTimeoutHdl( STATIC_LINK( this, _SfxMacroTabPage, TimeOut_Impl ) );
-    mpImpl->maFillGroupTimer.SetTimeout( 0 );
-    mpImpl->maFillGroupTimer.Start();
 }
 
 void _SfxMacroTabPage::FillMacroList()
