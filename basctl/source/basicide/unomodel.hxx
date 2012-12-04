@@ -36,6 +36,7 @@
 class SIDEModel : public SfxBaseModel,
                 public com::sun::star::lang::XServiceInfo
 {
+    void notImplemented() throw ( ::com::sun::star::io::IOException );
 public:
     SIDEModel( SfxObjectShell *pObjSh = 0 );
     virtual ~SIDEModel();
@@ -55,6 +56,17 @@ public:
             throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void)
             throw( ::com::sun::star::uno::RuntimeException );
+    // XStorable2
+    virtual void SAL_CALL storeSelf( const  ::com::sun::star::uno::Sequence< PROPERTYVALUE >& )
+        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException) { notImplemented(); }
+    //  XStorable
+    virtual void SAL_CALL store() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL storeAsURL(   const   ::rtl::OUString& sURL,
+        const   ::com::sun::star::uno::Sequence< PROPERTYVALUE >&   seqArguments    )
+        throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL storeToURL(   const   ::rtl::OUString& sURL,
+        const   ::com::sun::star::uno::Sequence< PROPERTYVALUE >&   seqArguments    )
+        throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
     static ::com::sun::star::uno::Sequence< rtl::OUString > getSupportedServiceNames_Static();
     static ::rtl::OUString getImplementationName_Static();
