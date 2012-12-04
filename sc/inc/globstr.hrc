@@ -616,6 +616,9 @@
 
 #define STR_ERR_CONDFORMAT_PROTECTED 491
 
-#define STR_COUNT                   492
+#define STR_QUERY_FORMULA_RECALC_ONLOAD_ODS 492
+#define STR_QUERY_FORMULA_RECALC_ONLOAD_XLS 493
+
+#define STR_COUNT                   494
 
 #endif

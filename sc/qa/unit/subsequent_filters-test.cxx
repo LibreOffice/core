@@ -244,7 +244,9 @@ ScDocShellRef ScFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUStr
     pFilter->SetVersion(nFilterVersion);
 
     ScDocShellRef xDocShRef = new ScDocShell;
+    xDocShRef->GetDocument()->EnableUserInteraction(false);
     SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ);
+    pSrcMed->UseInteractionHandler(false);
     pSrcMed->SetFilter(pFilter);
     if (!xDocShRef->DoLoad(pSrcMed))
     {

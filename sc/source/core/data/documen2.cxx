@@ -205,6 +205,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         mbExecuteLinkEnabled( true ),
         mbChangeReadOnlyEnabled( false ),
         mbStreamValidLocked( false ),
+        mbUserInteractionEnabled(true),
         mnNamedRangesLockCount( 0 ),
         mbIsInTest( false )
 {

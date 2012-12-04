@@ -391,11 +391,12 @@ private:
 
     mutable bool        bStyleSheetUsageInvalid;
 
-    bool                mbUndoEnabled;
-    bool                mbAdjustHeightEnabled;
-    bool                mbExecuteLinkEnabled;
-    bool                mbChangeReadOnlyEnabled;    // allow changes in read-only document (for API import filters)
-    bool                mbStreamValidLocked;
+    bool                mbUndoEnabled:1;
+    bool                mbAdjustHeightEnabled:1;
+    bool                mbExecuteLinkEnabled:1;
+    bool                mbChangeReadOnlyEnabled:1;    // allow changes in read-only document (for API import filters)
+    bool                mbStreamValidLocked:1;
+    bool                mbUserInteractionEnabled:1;  // whether or not to launch any kind of interactive dialogs.
 
     sal_Int16           mnNamedRangesLockCount;
 
@@ -996,6 +997,8 @@ public:
     void            EnableExecuteLink( bool bVal )              { mbExecuteLinkEnabled = bVal; }
     bool            IsChangeReadOnlyEnabled() const             { return mbChangeReadOnlyEnabled; }
     void            EnableChangeReadOnly( bool bVal )           { mbChangeReadOnlyEnabled = bVal; }
+    SC_DLLPUBLIC bool IsUserInteractionEnabled() const;
+    SC_DLLPUBLIC void EnableUserInteraction( bool bVal );
     SC_DLLPUBLIC sal_Int16       GetNamedRangesLockCount() const             { return mnNamedRangesLockCount; }
     void            SetNamedRangesLockCount( sal_Int16 nCount ) { mnNamedRangesLockCount = nCount; }
     SC_DLLPUBLIC void           ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks );

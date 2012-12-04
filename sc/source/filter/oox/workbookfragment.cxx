@@ -27,6 +27,8 @@
 #include "oox/helper/progressbar.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/ole/olestorage.hxx"
+#include "vcl/msgbox.hxx"
+
 #include "biffinputstream.hxx"
 #include "chartsheetfragment.hxx"
 #include "connectionsfragment.hxx"
@@ -42,6 +44,10 @@
 #include "workbooksettings.hxx"
 #include "worksheetbuffer.hxx"
 #include "worksheetfragment.hxx"
+
+#include "document.hxx"
+#include "docsh.hxx"
+#include "globstr.hrc"
 
 namespace oox {
 namespace xls {
@@ -309,10 +315,29 @@ void WorkbookFragment::finalizeImport()
     // final conversions, e.g. calculation settings and view settings
     finalizeWorkbookImport();
 
-    // Recalculate (only changed ones)
+    // Recalculate formula cells.
     Reference< XCalculatable > xCalculatable( getDocument(), UNO_QUERY );
     if( xCalculatable.is() )
-        xCalculatable->calculate();
+    {
+        bool bHardRecalc = false;
+        ScDocument& rDoc = getScDocument();
+        if (rDoc.IsUserInteractionEnabled())
+        {
+            // Ask the user if full re-calculation is desired.
+            ScDocShell* pDocSh = static_cast<ScDocShell*>(rDoc.GetDocumentShell());
+
+            QueryBox aBox(
+                pDocSh->GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+                ScGlobal::GetRscString(STR_QUERY_FORMULA_RECALC_ONLOAD_XLS));
+
+            bHardRecalc = aBox.Execute() == RET_YES;
+        }
+
+        if (bHardRecalc)
+            xCalculatable->calculateAll();
+        else
+            xCalculatable->calculate();
+    }
 }
 
 // private --------------------------------------------------------------------
