@@ -257,6 +257,10 @@ public:
     }
 
 #ifdef RTL_FAST_STRING
+    /**
+     @overload
+     @internal
+    */
     template< typename T1, typename T2 >
     OString( const OStringConcat< T1, T2 >& c )
     {
@@ -1484,6 +1488,9 @@ struct SAL_WARN_UNUSED OStringLiteral
     const char* data;
 };
 
+/**
+ @internal
+*/
 template<>
 struct ToStringHelper< OString >
     {
@@ -1493,6 +1500,9 @@ struct ToStringHelper< OString >
     static const bool allowOUStringConcat = false;
     };
 
+/**
+ @internal
+*/
 template<>
 struct ToStringHelper< OStringLiteral >
     {
@@ -1502,6 +1512,9 @@ struct ToStringHelper< OStringLiteral >
     static const bool allowOUStringConcat = false;
     };
 
+/**
+ @internal
+*/
 template< typename charT, typename traits, typename T1, typename T2 >
 inline std::basic_ostream<charT, traits> & operator <<(
     std::basic_ostream<charT, traits> & stream, const OStringConcat< T1, T2 >& concat)

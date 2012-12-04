@@ -225,6 +225,10 @@ public:
     }
 
 #ifdef RTL_FAST_STRING
+    /**
+     @overload
+     @internal
+    */
     template< typename T1, typename T2 >
     OStringBuffer( const OStringConcat< T1, T2 >& c )
     {
@@ -854,6 +858,9 @@ private:
 };
 
 #ifdef RTL_FAST_STRING
+/**
+ @internal
+*/
 template<>
 struct ToStringHelper< OStringBuffer >
     {
