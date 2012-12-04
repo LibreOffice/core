@@ -292,100 +292,44 @@ void SvXMLImport::_InitCtor()
     if( mnImportFlags != 0 )
     {
         // implicit "xml" namespace prefix
-        mpNamespaceMap->Add( GetXMLToken(XML_XML), GetXMLToken(XML_N_XML),
-                            XML_NAMESPACE_XML );
-        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__office ) ),
-                            GetXMLToken(XML_N_OFFICE),
-                            XML_NAMESPACE_OFFICE );
-        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__office_ext ) ),
-                            GetXMLToken(XML_N_OFFICE_EXT),
-                            XML_NAMESPACE_OFFICE_EXT );
-        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__ooo ) ), GetXMLToken(XML_N_OOO), XML_NAMESPACE_OOO );
-        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__style) ),
-                            GetXMLToken(XML_N_STYLE),
-                            XML_NAMESPACE_STYLE );
-        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__text) ),
-                            GetXMLToken(XML_N_TEXT),
-                            XML_NAMESPACE_TEXT );
-        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__table ) ),
-                            GetXMLToken(XML_N_TABLE),
-                            XML_NAMESPACE_TABLE );
-        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__table_ext ) ),
-                            GetXMLToken(XML_N_TABLE_EXT),
-                            XML_NAMESPACE_TABLE_EXT );
-        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__draw ) ),
-                            GetXMLToken(XML_N_DRAW),
-                            XML_NAMESPACE_DRAW );
-        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__draw_ext ) ),
-                            GetXMLToken(XML_N_DRAW_EXT),
-                            XML_NAMESPACE_DRAW_EXT );
-        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM (sXML_np__dr3d ) ),
-                            GetXMLToken(XML_N_DR3D),
-                            XML_NAMESPACE_DR3D );
-        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__fo) ),
-                            GetXMLToken(XML_N_FO_COMPAT),
-                            XML_NAMESPACE_FO );
-        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__xlink) ),
-                            GetXMLToken(XML_N_XLINK),
-                            XML_NAMESPACE_XLINK );
-        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__dc) ),
-                            GetXMLToken(XML_N_DC),
-                            XML_NAMESPACE_DC );
-        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__dom ) ),
-                            GetXMLToken(XML_N_DOM),
-                            XML_NAMESPACE_DOM );
-        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__meta) ),
-                            GetXMLToken(XML_N_META),
-                            XML_NAMESPACE_META );
-        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__number) ),
-                            GetXMLToken(XML_N_NUMBER),
-                            XML_NAMESPACE_NUMBER );
-        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__svg) ),
-                            GetXMLToken(XML_N_SVG_COMPAT),
-                            XML_NAMESPACE_SVG );
-        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__chart) ),
-                            GetXMLToken(XML_N_CHART),
-                            XML_NAMESPACE_CHART );
-        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__math) ),
-                            GetXMLToken(XML_N_MATH),
-                            XML_NAMESPACE_MATH );
-        mpNamespaceMap->Add(OUString(RTL_CONSTASCII_USTRINGPARAM( sXML_np__form )),
-                            GetXMLToken(XML_N_FORM),
-                            XML_NAMESPACE_FORM );
-        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__script) ),
-                            GetXMLToken(XML_N_SCRIPT),
-                            XML_NAMESPACE_SCRIPT );
-        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__config) ),
-                            GetXMLToken(XML_N_CONFIG),
-                            XML_NAMESPACE_CONFIG );
-        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__xforms) ),
-                            GetXMLToken(XML_N_XFORMS_1_0),
-                            XML_NAMESPACE_XFORMS );
-        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__formx) ),
-                            GetXMLToken( XML_N_FORMX ),
-                            XML_NAMESPACE_FORMX );
-        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__xsd) ),
-                            GetXMLToken(XML_N_XSD),
-                            XML_NAMESPACE_XSD );
-        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__xsi) ),
-                            GetXMLToken(XML_N_XSI),
-                            XML_NAMESPACE_XFORMS );
-        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__ooow ) ), GetXMLToken(XML_N_OOOW), XML_NAMESPACE_OOOW );
-        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__oooc ) ), GetXMLToken(XML_N_OOOC), XML_NAMESPACE_OOOC );
-        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__field ) ), GetXMLToken(XML_N_FIELD), XML_NAMESPACE_FIELD );
-        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__of ) ),
-                            GetXMLToken(XML_N_OF), XML_NAMESPACE_OF );
-        mpNamespaceMap->Add(
-            OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__xhtml ) ),
-            GetXMLToken(XML_N_XHTML), XML_NAMESPACE_XHTML );
-        mpNamespaceMap->Add(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_np__css3text ) ),
-            GetXMLToken(XML_N_CSS3TEXT), XML_NAMESPACE_CSS3TEXT );
+        mpNamespaceMap->Add( GetXMLToken(XML_XML), GetXMLToken(XML_N_XML), XML_NAMESPACE_XML );
+        mpNamespaceMap->Add( OUString( sXML_np__office ), GetXMLToken(XML_N_OFFICE), XML_NAMESPACE_OFFICE );
+        mpNamespaceMap->Add( OUString( sXML_np__office_ext ), GetXMLToken(XML_N_OFFICE_EXT), XML_NAMESPACE_OFFICE_EXT );
+        mpNamespaceMap->Add( OUString( sXML_np__ooo ), GetXMLToken(XML_N_OOO), XML_NAMESPACE_OOO );
+        mpNamespaceMap->Add( OUString( sXML_np__style ), GetXMLToken(XML_N_STYLE), XML_NAMESPACE_STYLE );
+        mpNamespaceMap->Add( OUString( sXML_np__text ), GetXMLToken(XML_N_TEXT), XML_NAMESPACE_TEXT );
+        mpNamespaceMap->Add( OUString( sXML_np__table ), GetXMLToken(XML_N_TABLE), XML_NAMESPACE_TABLE );
+        mpNamespaceMap->Add( OUString( sXML_np__table_ext ), GetXMLToken(XML_N_TABLE_EXT), XML_NAMESPACE_TABLE_EXT );
+        mpNamespaceMap->Add( OUString( sXML_np__draw ), GetXMLToken(XML_N_DRAW), XML_NAMESPACE_DRAW );
+        mpNamespaceMap->Add( OUString( sXML_np__draw_ext ), GetXMLToken(XML_N_DRAW_EXT), XML_NAMESPACE_DRAW_EXT );
+        mpNamespaceMap->Add( OUString( sXML_np__dr3d ), GetXMLToken(XML_N_DR3D), XML_NAMESPACE_DR3D );
+        mpNamespaceMap->Add( OUString( sXML_np__fo ), GetXMLToken(XML_N_FO_COMPAT), XML_NAMESPACE_FO );
+        mpNamespaceMap->Add( OUString( sXML_np__xlink ), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
+        mpNamespaceMap->Add( OUString( sXML_np__dc ), GetXMLToken(XML_N_DC), XML_NAMESPACE_DC );
+        mpNamespaceMap->Add( OUString( sXML_np__dom ), GetXMLToken(XML_N_DOM), XML_NAMESPACE_DOM );
+        mpNamespaceMap->Add( OUString( sXML_np__meta ), GetXMLToken(XML_N_META), XML_NAMESPACE_META );
+        mpNamespaceMap->Add( OUString( sXML_np__number ), GetXMLToken(XML_N_NUMBER), XML_NAMESPACE_NUMBER );
+        mpNamespaceMap->Add( OUString( sXML_np__svg ), GetXMLToken(XML_N_SVG_COMPAT), XML_NAMESPACE_SVG );
+        mpNamespaceMap->Add( OUString( sXML_np__chart ), GetXMLToken(XML_N_CHART), XML_NAMESPACE_CHART );
+        mpNamespaceMap->Add( OUString( sXML_np__math ), GetXMLToken(XML_N_MATH), XML_NAMESPACE_MATH );
+        mpNamespaceMap->Add(OUString( sXML_np__form ), GetXMLToken(XML_N_FORM), XML_NAMESPACE_FORM );
+        mpNamespaceMap->Add( OUString( sXML_np__script ), GetXMLToken(XML_N_SCRIPT), XML_NAMESPACE_SCRIPT );
+        mpNamespaceMap->Add( OUString( sXML_np__config ), GetXMLToken(XML_N_CONFIG), XML_NAMESPACE_CONFIG );
+        mpNamespaceMap->Add( OUString( sXML_np__xforms ), GetXMLToken(XML_N_XFORMS_1_0), XML_NAMESPACE_XFORMS );
+        mpNamespaceMap->Add( OUString( sXML_np__formx ), GetXMLToken( XML_N_FORMX ), XML_NAMESPACE_FORMX );
+        mpNamespaceMap->Add( OUString( sXML_np__xsd ), GetXMLToken(XML_N_XSD), XML_NAMESPACE_XSD );
+        mpNamespaceMap->Add( OUString( sXML_np__xsi ), GetXMLToken(XML_N_XSI), XML_NAMESPACE_XFORMS );
+        mpNamespaceMap->Add( OUString( sXML_np__ooow ), GetXMLToken(XML_N_OOOW), XML_NAMESPACE_OOOW );
+        mpNamespaceMap->Add( OUString( sXML_np__oooc ), GetXMLToken(XML_N_OOOC), XML_NAMESPACE_OOOC );
+        mpNamespaceMap->Add( OUString( sXML_np__field ), GetXMLToken(XML_N_FIELD), XML_NAMESPACE_FIELD );
+        mpNamespaceMap->Add( OUString( sXML_np__of ), GetXMLToken(XML_N_OF), XML_NAMESPACE_OF );
+        mpNamespaceMap->Add( OUString( sXML_np__xhtml ), GetXMLToken(XML_N_XHTML), XML_NAMESPACE_XHTML );
+        mpNamespaceMap->Add( OUString( sXML_np__css3text ), GetXMLToken(XML_N_CSS3TEXT), XML_NAMESPACE_CSS3TEXT );
 
-        mpNamespaceMap->Add( OUString("_calc_libo"), GetXMLToken(XML_N_CALC_EXT), XML_NAMESPACE_CALC_EXT);
+        mpNamespaceMap->Add( "_calc_libo", GetXMLToken(XML_N_CALC_EXT), XML_NAMESPACE_CALC_EXT);
     }
 
-    msPackageProtocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package:" ) );
+    msPackageProtocol = "vnd.sun.star.Package:";
 
     if (mxNumberFormatsSupplier.is())
         mpNumImport = new SvXMLNumFmtHelper(mxNumberFormatsSupplier, getServiceFactory());
@@ -502,9 +446,8 @@ void SAL_CALL SvXMLImport::startDocument( void )
                 {
                     mxGraphicResolver = Reference< XGraphicObjectResolver >::query(
                         xFactory->createInstance(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM(
                                 // #99870# Import... instead of Export...
-                                "com.sun.star.document.ImportGraphicObjectResolver"))));
+                                "com.sun.star.document.ImportGraphicObjectResolver"));
                     mpImpl->mbOwnGraphicResolver = mxGraphicResolver.is();
                 }
 
@@ -512,9 +455,8 @@ void SAL_CALL SvXMLImport::startDocument( void )
                 {
                     mxEmbeddedResolver = Reference< XEmbeddedObjectResolver >::query(
                         xFactory->createInstance(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM(
                                 // #99870# Import... instead of Export...
-                                "com.sun.star.document.ImportEmbeddedObjectResolver"))));
+                                "com.sun.star.document.ImportEmbeddedObjectResolver"));
                     mpImpl->mbOwnEmbeddedResolver = mxEmbeddedResolver.is();
                 }
             }
@@ -555,9 +497,9 @@ void SAL_CALL SvXMLImport::endDocument( void )
         {
             if (mpProgressBarHelper)
             {
-                OUString sProgressMax(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSMAX));
-                OUString sProgressCurrent(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSCURRENT));
-                OUString sRepeat(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSREPEAT));
+                OUString sProgressMax(XML_PROGRESSMAX);
+                OUString sProgressCurrent(XML_PROGRESSCURRENT);
+                OUString sRepeat(XML_PROGRESSREPEAT);
                 if (xPropertySetInfo->hasPropertyByName(sProgressMax) &&
                     xPropertySetInfo->hasPropertyByName(sProgressCurrent))
                 {
@@ -573,7 +515,7 @@ void SAL_CALL SvXMLImport::endDocument( void )
                     mxImportInfo->setPropertyValue(sRepeat, cppu::bool2any(mpProgressBarHelper->GetRepeat()));
                 // pProgressBarHelper is deleted in dtor
             }
-            OUString sNumberStyles(RTL_CONSTASCII_USTRINGPARAM(XML_NUMBERSTYLES));
+            OUString sNumberStyles(XML_NUMBERSTYLES);
             if (mxNumberStyles.is() && xPropertySetInfo->hasPropertyByName(sNumberStyles))
             {
                 uno::Any aAny;
@@ -629,7 +571,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
     throw(xml::sax::SAXException, uno::RuntimeException)
 {
     SvXMLNamespaceMap *pRewindMap = 0;
-
+    //    SAL_INFO("svg", "startElement " << rName);
     // Process namespace attributes. This must happen before creating the
     // context, because namespace decaration apply to the element name itself.
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -643,14 +585,10 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
             // the ODF version in content.xml and manifest.xml must be the same starting from ODF1.2
             if ( mpImpl->mStreamName == "content.xml" && !IsODFVersionConsistent( mpImpl->aODFVersion ) )
             {
-                throw xml::sax::SAXException(
-                        ::rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM( "Inconsistent ODF versions in content.xml and manifest.xml!" ) ),
+                throw xml::sax::SAXException("Inconsistent ODF versions in content.xml and manifest.xml!",
                         uno::Reference< uno::XInterface >(),
                         uno::makeAny(
-                            packages::zip::ZipIOException(
-                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                    "Inconsistent ODF versions in content.xml and manifest.xml!" ) ),
+                            packages::zip::ZipIOException("Inconsistent ODF versions in content.xml and manifest.xml!",
                                 Reference< XInterface >() ) ) );
             }
         }
@@ -717,7 +655,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
         if( (nPrefix & XML_NAMESPACE_UNKNOWN_FLAG) != 0 &&
             IS_TYPE( SvXMLImportContext, pContext ) )
         {
-            OUString aMsg( RTL_CONSTASCII_USTRINGPARAM( "Root element unknown" ) );
+            OUString aMsg( "Root element unknown" );
             Reference<xml::sax::XLocator> xDummyLocator;
             Sequence < OUString > aParams(1);
             aParams.getArray()[0] = rName;
@@ -914,14 +852,14 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
             uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = mxImportInfo->getPropertySetInfo();
             if (xPropertySetInfo.is())
             {
-                OUString sPropName(RTL_CONSTASCII_USTRINGPARAM(XML_NUMBERSTYLES));
+                OUString sPropName(XML_NUMBERSTYLES);
                 if (xPropertySetInfo->hasPropertyByName(sPropName))
                 {
                     uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
                     aAny >>= mxNumberStyles;
                 }
 
-                sPropName = OUString( RTL_CONSTASCII_USTRINGPARAM("PrivateData" ) );
+                sPropName = "PrivateData";
                 if (xPropertySetInfo->hasPropertyByName(sPropName))
                 {
                     Reference < XInterface > xIfc;
@@ -936,7 +874,7 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
                     }
                 }
                 OUString sBaseURI;
-                sPropName = OUString( RTL_CONSTASCII_USTRINGPARAM("BaseURI" ) );
+                sPropName = "BaseURI";
                 if (xPropertySetInfo->hasPropertyByName(sPropName))
                 {
                     uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
@@ -945,14 +883,14 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
                     mpImpl->aDocBase.SetURL( sBaseURI );
                 }
                 OUString sRelPath;
-                sPropName = OUString( RTL_CONSTASCII_USTRINGPARAM("StreamRelPath" ) );
+                sPropName = "StreamRelPath";
                 if( xPropertySetInfo->hasPropertyByName(sPropName) )
                 {
                     uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
                     aAny >>= sRelPath;
                 }
                 OUString sName;
-                sPropName = OUString( RTL_CONSTASCII_USTRINGPARAM("StreamName" ) );
+                sPropName = "StreamName";
                 if( xPropertySetInfo->hasPropertyByName(sPropName) )
                 {
                     uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
@@ -966,20 +904,20 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
                 }
                 mpImpl->mStreamName = sName; // Note: may be empty (XSLT)
                 // Retrieve property <ShapePositionInHoriL2R> (#i28749#)
-                sPropName = OUString( RTL_CONSTASCII_USTRINGPARAM("ShapePositionInHoriL2R" ) );
+                sPropName = "ShapePositionInHoriL2R";
                 if( xPropertySetInfo->hasPropertyByName(sPropName) )
                 {
                     uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
                     aAny >>= (mpImpl->mbShapePositionInHoriL2R);
                 }
-                sPropName = OUString( RTL_CONSTASCII_USTRINGPARAM("TextDocInOOoFileFormat" ) );
+                sPropName = "TextDocInOOoFileFormat";
                 if( xPropertySetInfo->hasPropertyByName(sPropName) )
                 {
                     uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
                     aAny >>= (mpImpl->mbTextDocInOOoFileFormat);
                 }
 
-                sPropName = OUString( RTL_CONSTASCII_USTRINGPARAM("SourceStorage" ) );
+                sPropName = "SourceStorage";
                 if( xPropertySetInfo->hasPropertyByName(sPropName) )
                     mxImportInfo->getPropertyValue(sPropName) >>= mpImpl->mxSourceStorage;
             }
@@ -999,22 +937,16 @@ sal_Bool SAL_CALL SvXMLImport::supportsService( const OUString& rServiceName )
     throw(::com::sun::star::uno::RuntimeException)
 {
     return
-        rServiceName.equalsAsciiL(
-            "com.sun.star.document.ImportFilter",
-            sizeof("com.sun.star.document.ImportFilter")-1 ) ||
-        rServiceName.equalsAsciiL(
-            "com.sun.star.xml.XMLImportFilter",
-            sizeof("com.sun.star.xml.XMLImportFilter")-1);
+        (rServiceName == "com.sun.star.document.ImportFilter") ||
+        (rServiceName == "com.sun.star.xml.XMLImportFilter");
 }
 
 uno::Sequence< OUString > SAL_CALL SvXMLImport::getSupportedServiceNames(  )
     throw(uno::RuntimeException)
 {
     uno::Sequence<OUString> aSeq(2);
-    aSeq[0] = OUString(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ImportFilter"));
-    aSeq[1] = OUString(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.XMLImportFilter"));
+    aSeq[0] = "com.sun.star.document.ImportFilter";
+    aSeq[1] = "com.sun.star.xml.XMLImportFilter";
     return aSeq;
 }
 
@@ -1058,7 +990,7 @@ const Reference< container::XNameContainer > & SvXMLImport::GetGradientHelper()
                 try
                 {
                     mxGradientHelper =  Reference< container::XNameContainer >( xServiceFact->createInstance(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GradientTable" ) ) ), UNO_QUERY);
+                        "com.sun.star.drawing.GradientTable" ), UNO_QUERY);
                 }
                 catch( lang::ServiceNotRegisteredException& )
                 {}
@@ -1081,7 +1013,7 @@ const Reference< container::XNameContainer > & SvXMLImport::GetHatchHelper()
                 try
                 {
                     mxHatchHelper =  Reference< container::XNameContainer >( xServiceFact->createInstance(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.HatchTable" ) ) ), UNO_QUERY);
+                        "com.sun.star.drawing.HatchTable" ), UNO_QUERY);
                 }
                 catch( lang::ServiceNotRegisteredException& )
                 {}
@@ -1104,7 +1036,7 @@ const Reference< container::XNameContainer > & SvXMLImport::GetBitmapHelper()
                 try
                 {
                     mxBitmapHelper =  Reference< container::XNameContainer >( xServiceFact->createInstance(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.BitmapTable" ) ) ), UNO_QUERY);
+                        "com.sun.star.drawing.BitmapTable" ), UNO_QUERY);
                 }
                 catch( lang::ServiceNotRegisteredException& )
                 {}
@@ -1127,7 +1059,7 @@ const Reference< container::XNameContainer > & SvXMLImport::GetTransGradientHelp
                 try
                 {
                     mxTransGradientHelper =  Reference< container::XNameContainer >( xServiceFact->createInstance(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.TransparencyGradientTable" ) ) ), UNO_QUERY);
+                        "com.sun.star.drawing.TransparencyGradientTable" ), UNO_QUERY);
                 }
                 catch( lang::ServiceNotRegisteredException& )
                 {}
@@ -1150,7 +1082,7 @@ const Reference< container::XNameContainer > & SvXMLImport::GetMarkerHelper()
                 try
                 {
                     mxMarkerHelper =  Reference< container::XNameContainer >( xServiceFact->createInstance(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.MarkerTable" ) ) ), UNO_QUERY);
+                        "com.sun.star.drawing.MarkerTable" ), UNO_QUERY);
                 }
                 catch( lang::ServiceNotRegisteredException& )
                 {}
@@ -1173,7 +1105,7 @@ const Reference< container::XNameContainer > & SvXMLImport::GetDashHelper()
                 try
                 {
                     mxDashHelper =  Reference< container::XNameContainer >( xServiceFact->createInstance(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DashTable" ) ) ), UNO_QUERY);
+                        "com.sun.star.drawing.DashTable" ), UNO_QUERY);
                 }
                 catch( lang::ServiceNotRegisteredException& )
                 {}
@@ -1319,7 +1251,7 @@ Reference < XOutputStream >
         Reference< XNameAccess > xNA( mxEmbeddedResolver, UNO_QUERY );
         if( xNA.is() )
         {
-            OUString aURL( RTL_CONSTASCII_USTRINGPARAM( "Obj12345678" ) );
+            OUString aURL( "Obj12345678" );
             Any aAny = xNA->getByName( aURL );
             aAny >>= xOLEStream;
         }
@@ -1334,7 +1266,7 @@ Reference < XOutputStream >
 
     if( mxEmbeddedResolver.is() )
     {
-        OUString aURL( RTL_CONSTASCII_USTRINGPARAM( "Obj12345678" ) );
+        OUString aURL( "Obj12345678" );
         sRet = mxEmbeddedResolver->resolveEmbeddedObjectURL( aURL );
     }
 
@@ -1351,8 +1283,7 @@ void SvXMLImport::AddStyleDisplayName( sal_uInt16 nFamily,
         mpStyleMap->acquire();
         if( mxImportInfo.is() )
         {
-            OUString sPrivateData(
-                    RTL_CONSTASCII_USTRINGPARAM("PrivateData" ) );
+            OUString sPrivateData( "PrivateData" );
             Reference< beans::XPropertySetInfo > xPropertySetInfo =
                 mxImportInfo->getPropertySetInfo();
             if( xPropertySetInfo.is() &&
@@ -1415,10 +1346,10 @@ ProgressBarHelper*  SvXMLImport::GetProgressBarHelper()
             uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = mxImportInfo->getPropertySetInfo();
             if (xPropertySetInfo.is())
             {
-                OUString sProgressRange(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSRANGE));
-                OUString sProgressMax(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSMAX));
-                OUString sProgressCurrent(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSCURRENT));
-                OUString sRepeat(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSREPEAT));
+                OUString sProgressRange(XML_PROGRESSRANGE);
+                OUString sProgressMax(XML_PROGRESSMAX);
+                OUString sProgressCurrent(XML_PROGRESSCURRENT);
+                OUString sRepeat(XML_PROGRESSREPEAT);
                 if (xPropertySetInfo->hasPropertyByName(sProgressMax) &&
                     xPropertySetInfo->hasPropertyByName(sProgressCurrent) &&
                     xPropertySetInfo->hasPropertyByName(sProgressRange))
@@ -1490,7 +1421,7 @@ XMLEventImportHelper& SvXMLImport::GetEventImport()
         mpEventImportHelper->AddTranslationTable(aStandardEventTable);
 
         // register StarBasic event handler with capitalized spelling
-        OUString sStarBasicCap(RTL_CONSTASCII_USTRINGPARAM("StarBasic"));
+        OUString sStarBasicCap( "StarBasic" );
         mpEventImportHelper->RegisterFactory(sStarBasicCap,
                                             new XMLStarBasicContextFactory());
     }
@@ -1608,13 +1539,13 @@ sal_Bool SvXMLImport::IsODFVersionConsistent( const ::rtl::OUString& aODFVersion
 
             // the check should be done only for OASIS format
             ::rtl::OUString aMediaType;
-            xStorProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ) ) >>= aMediaType;
+            xStorProps->getPropertyValue( "MediaType" ) >>= aMediaType;
             if ( ::comphelper::OStorageHelper::GetXStorageFormat( xStor ) >= SOFFICE_FILEFORMAT_8 )
             {
                 sal_Bool bRepairPackage = sal_False;
                 try
                 {
-                    xStorProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RepairPackage" ) ) )
+                    xStorProps->getPropertyValue( "RepairPackage" )
                         >>= bRepairPackage;
                 } catch ( uno::Exception& )
                 {}
@@ -1623,7 +1554,7 @@ sal_Bool SvXMLImport::IsODFVersionConsistent( const ::rtl::OUString& aODFVersion
                 if ( !bRepairPackage )
                 {
                     ::rtl::OUString aStorVersion;
-                    xStorProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ) )
+                    xStorProps->getPropertyValue( "Version" )
                         >>= aStorVersion;
 
                     // if the storage version is set in manifest.xml, it must be the same as in content.xml
@@ -1633,13 +1564,13 @@ sal_Bool SvXMLImport::IsODFVersionConsistent( const ::rtl::OUString& aODFVersion
                     if ( !aStorVersion.isEmpty() )
                         bResult = aODFVersion.equals( aStorVersion );
                     else
-                        xStorProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ),
+                        xStorProps->setPropertyValue( "Version",
                                                       uno::makeAny( aODFVersion ) );
 
                     if ( bResult )
                     {
                         sal_Bool bInconsistent = sal_False;
-                        xStorProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsInconsistent" ) ) )
+                        xStorProps->getPropertyValue( "IsInconsistent" )
                             >>= bInconsistent;
                         bResult = !bInconsistent;
                     }
@@ -1678,7 +1609,7 @@ sal_Unicode SvXMLImport::ConvStarBatsCharToStarSymbol( sal_Unicode c )
     sal_Unicode cNew = c;
     if( !mpImpl->hBatsFontConv )
     {
-        OUString sStarBats( RTL_CONSTASCII_USTRINGPARAM( "StarBats" ) );
+        OUString sStarBats( "StarBats" );
         mpImpl->hBatsFontConv = CreateFontToSubsFontConverter( sStarBats,
                  FONTTOSUBSFONT_IMPORT|FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS );
         OSL_ENSURE( mpImpl->hBatsFontConv, "Got no symbol font converter" );
@@ -1696,7 +1627,7 @@ sal_Unicode SvXMLImport::ConvStarMathCharToStarSymbol( sal_Unicode c )
     sal_Unicode cNew = c;
     if( !mpImpl->hMathFontConv )
     {
-        OUString sStarMath( RTL_CONSTASCII_USTRINGPARAM( "StarMath" ) );
+        OUString sStarMath( "StarMath" );
         mpImpl->hMathFontConv = CreateFontToSubsFontConverter( sStarMath,
                  FONTTOSUBSFONT_IMPORT|FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS );
         OSL_ENSURE( mpImpl->hMathFontConv, "Got no symbol font converter" );
@@ -1840,7 +1771,7 @@ bool SvXMLImport::getBuildIds( sal_Int32& rUPD, sal_Int32& rBuild ) const
     bool bRet = false;
     if( mxImportInfo.is() ) try
     {
-        const OUString aPropName(RTL_CONSTASCII_USTRINGPARAM("BuildId"));
+        const OUString aPropName( "BuildId" );
         Reference< XPropertySetInfo > xSetInfo( mxImportInfo->getPropertySetInfo() );
         if( xSetInfo.is() && xSetInfo->hasPropertyByName( aPropName ) )
         {

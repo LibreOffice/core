@@ -186,7 +186,7 @@ XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
     if( nPrfx == XML_NAMESPACE_MATH &&
         IsXMLToken( rLName, XML_MATH ) )
     {
-        sFilterService = OUString( RTL_CONSTASCII_USTRINGPARAM(XML_IMPORT_FILTER_MATH) );
+        sFilterService = OUString( XML_IMPORT_FILTER_MATH );
         aName = SvGlobalName(SO3_SM_CLASSID);
     }
     else if( nPrfx == XML_NAMESPACE_OFFICE &&

@@ -46,13 +46,13 @@ using namespace ::xmloff::token;
 
 XMLSettingsExportHelper::XMLSettingsExportHelper( ::xmloff::XMLSettingsExportContext& i_rContext )
 : m_rContext( i_rContext )
-, msPrinterIndependentLayout( RTL_CONSTASCII_USTRINGPARAM( "PrinterIndependentLayout" ) )
-, msColorTableURL( RTL_CONSTASCII_USTRINGPARAM( "ColorTableURL" ) )
-, msLineEndTableURL( RTL_CONSTASCII_USTRINGPARAM( "LineEndTableURL" ) )
-, msHatchTableURL( RTL_CONSTASCII_USTRINGPARAM( "HatchTableURL" ) )
-, msDashTableURL( RTL_CONSTASCII_USTRINGPARAM( "DashTableURL" ) )
-, msGradientTableURL( RTL_CONSTASCII_USTRINGPARAM( "GradientTableURL" ) )
-, msBitmapTableURL( RTL_CONSTASCII_USTRINGPARAM( "BitmapTableURL" ) )
+, msPrinterIndependentLayout( "PrinterIndependentLayout" )
+, msColorTableURL( "ColorTableURL" )
+, msLineEndTableURL( "LineEndTableURL" )
+, msHatchTableURL( "HatchTableURL" )
+, msDashTableURL( "DashTableURL" )
+, msGradientTableURL( "GradientTableURL" )
+, msBitmapTableURL( "BitmapTableURL" )
 {
 }
 
@@ -297,20 +297,20 @@ void XMLSettingsExportHelper::exportSymbolDescriptors(
 
     if( xServiceFactory.is() )
     {
-        uno::Reference< container::XIndexContainer > xBox(xServiceFactory->createInstance(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.document.IndexedPropertyValues") ) ), uno::UNO_QUERY);
+        uno::Reference< container::XIndexContainer > xBox(xServiceFactory->createInstance( "com.sun.star.document.IndexedPropertyValues" ), uno::UNO_QUERY);
         DBG_ASSERT( xBox.is(), "could not create service com.sun.star.document.IndexedPropertyValues" );
         if (xBox.is() )
         {
-            const rtl::OUString sName     ( RTL_CONSTASCII_USTRINGPARAM ( "Name" ) );
-            const rtl::OUString sExportName ( RTL_CONSTASCII_USTRINGPARAM ( "ExportName" ) );
-            const rtl::OUString sSymbolSet ( RTL_CONSTASCII_USTRINGPARAM ( "SymbolSet" ) );
-            const rtl::OUString sCharacter ( RTL_CONSTASCII_USTRINGPARAM ( "Character" ) );
-            const rtl::OUString sFontName ( RTL_CONSTASCII_USTRINGPARAM ( "FontName" ) );
-            const rtl::OUString sCharSet  ( RTL_CONSTASCII_USTRINGPARAM ( "CharSet" ) );
-            const rtl::OUString sFamily   ( RTL_CONSTASCII_USTRINGPARAM ( "Family" ) );
-            const rtl::OUString sPitch    ( RTL_CONSTASCII_USTRINGPARAM ( "Pitch" ) );
-            const rtl::OUString sWeight   ( RTL_CONSTASCII_USTRINGPARAM ( "Weight" ) );
-            const rtl::OUString sItalic   ( RTL_CONSTASCII_USTRINGPARAM ( "Italic" ) );
+            const rtl::OUString sName     ( "Name" );
+            const rtl::OUString sExportName ( "ExportName" );
+            const rtl::OUString sSymbolSet ( "SymbolSet" );
+            const rtl::OUString sCharacter ( "Character" );
+            const rtl::OUString sFontName ( "FontName" );
+            const rtl::OUString sCharSet  ( "CharSet" );
+            const rtl::OUString sFamily   ( "Family" );
+            const rtl::OUString sPitch    ( "Pitch" );
+            const rtl::OUString sWeight   ( "Weight" );
+            const rtl::OUString sItalic   ( "Italic" );
 
             sal_Int32 nCount = rProps.getLength();
             const formula::SymbolDescriptor *pDescriptor = rProps.getConstArray();
@@ -446,7 +446,7 @@ void XMLSettingsExportHelper::exportForbiddenCharacters(
 
     if( xServiceFactory.is() )
     {
-        uno::Reference< container::XIndexContainer > xBox(xServiceFactory->createInstance(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.document.IndexedPropertyValues") ) ), uno::UNO_QUERY);
+        uno::Reference< container::XIndexContainer > xBox(xServiceFactory->createInstance( "com.sun.star.document.IndexedPropertyValues" ), uno::UNO_QUERY);
         DBG_ASSERT( xBox.is(), "could not create service com.sun.star.document.IndexedPropertyValues" );
         if (xBox.is() )
         {
@@ -455,11 +455,11 @@ void XMLSettingsExportHelper::exportForbiddenCharacters(
 
             const sal_Int32 nCount = aLocales.getLength();
 
-            const rtl::OUString sLanguage  ( RTL_CONSTASCII_USTRINGPARAM ( "Language" ) );
-            const rtl::OUString sCountry   ( RTL_CONSTASCII_USTRINGPARAM ( "Country" ) );
-            const rtl::OUString sVariant   ( RTL_CONSTASCII_USTRINGPARAM ( "Variant" ) );
-            const rtl::OUString sBeginLine ( RTL_CONSTASCII_USTRINGPARAM ( "BeginLine" ) );
-            const rtl::OUString sEndLine   ( RTL_CONSTASCII_USTRINGPARAM ( "EndLine" ) );
+            const rtl::OUString sLanguage  ( "Language" );
+            const rtl::OUString sCountry   ( "Country" );
+            const rtl::OUString sVariant   ( "Variant" );
+            const rtl::OUString sBeginLine ( "BeginLine" );
+            const rtl::OUString sEndLine   ( "EndLine" );
 
             sal_Int32 nPos = 0;
             for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++, pLocales++ )
@@ -513,11 +513,11 @@ void XMLSettingsExportHelper::ManipulateSetting( uno::Any& rAny, const rtl::OUSt
         if( rAny >>= nTmp )
         {
             if( nTmp == document::PrinterIndependentLayout::LOW_RESOLUTION )
-                rAny <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("low-resolution"));
+                rAny <<= rtl::OUString("low-resolution");
             else if( nTmp == document::PrinterIndependentLayout::DISABLED )
-                rAny <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("disabled"));
+                rAny <<= rtl::OUString("disabled");
             else if( nTmp == document::PrinterIndependentLayout::HIGH_RESOLUTION )
-                rAny <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("high-resolution"));
+                rAny <<= rtl::OUString("high-resolution");
         }
     }
     else if( (rName == msColorTableURL) || (rName == msLineEndTableURL) || (rName == msHatchTableURL) ||

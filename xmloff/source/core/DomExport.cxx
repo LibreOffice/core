@@ -208,9 +208,7 @@ void DomExport::addNamespace( const OUString& sPrefix, const OUString& sURI )
     {
         // add prefix to map, and add declaration
         rMap.Add( sPrefix, sURI );
-        mrExport.AddAttribute(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "xmlns:" ) ) + sPrefix,
-            sURI );
+        mrExport.AddAttribute( "xmlns:" + sPrefix, sURI );
     }
 }
 

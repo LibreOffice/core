@@ -106,7 +106,7 @@ uno::Reference<container::XNameContainer> XMLMyList::GetNameContainer()
 
     if( mxServiceFactory.is() )
     {
-        rtl::OUString sName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.NamedPropertyValues"));
+        rtl::OUString sName("com.sun.star.document.NamedPropertyValues");
         xNameContainer = uno::Reference<container::XNameContainer>(mxServiceFactory->createInstance(sName), uno::UNO_QUERY);
         if (xNameContainer.is())
         {
@@ -128,7 +128,7 @@ uno::Reference<container::XIndexContainer> XMLMyList::GetIndexContainer()
 
     if( mxServiceFactory.is() )
     {
-        rtl::OUString sName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.IndexedPropertyValues"));
+        rtl::OUString sName("com.sun.star.document.IndexedPropertyValues");
         xIndexContainer = uno::Reference<container::XIndexContainer>(mxServiceFactory->createInstance(sName), uno::UNO_QUERY);
         if (xIndexContainer.is())
         {
@@ -683,16 +683,14 @@ void XMLConfigItemContext::EndElement()
  * manipulate the values accordingly. */
 void XMLConfigItemContext::ManipulateConfigItem()
 {
-    if( mrItemName.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM( "PrinterIndependentLayout" ) ) )
+    if( mrItemName == "PrinterIndependentLayout" )
     {
         rtl::OUString sValue;
         mrAny >>= sValue;
 
         sal_Int16 nTmp = document::PrinterIndependentLayout::HIGH_RESOLUTION;
 
-        if( sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("enabled")) ||
-            sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("low-resolution")) )
+        if( sValue == "enabled" || sValue == "low-resolution" )
         {
             nTmp = document::PrinterIndependentLayout::LOW_RESOLUTION;
         }
@@ -797,7 +795,7 @@ void XMLConfigItemMapIndexedContext::EndElement()
             uno::Reference< lang::XMultiServiceFactory > xFac( GetImport().GetModel(), uno::UNO_QUERY );
             if( xFac.is() )
             {
-                uno::Reference< beans::XPropertySet > xProps( xFac->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.Settings" ) ) ), uno::UNO_QUERY );
+                uno::Reference< beans::XPropertySet > xProps( xFac->createInstance( "com.sun.star.document.Settings" ), uno::UNO_QUERY );
                 if( xProps.is() && xProps->getPropertySetInfo()->hasPropertyByName( maConfigItemName ) )
                 {
                     xProps->getPropertyValue( maConfigItemName ) >>= xForbChars;
@@ -818,11 +816,11 @@ void XMLConfigItemMapIndexedContext::EndElement()
                         beans::PropertyValue *pForChar = aProps.getArray();
                         i18n::ForbiddenCharacters aForbid;
                         lang::Locale aLocale;
-                        const rtl::OUString sLanguage  ( RTL_CONSTASCII_USTRINGPARAM ( "Language" ) );
-                        const rtl::OUString sCountry   ( RTL_CONSTASCII_USTRINGPARAM ( "Country" ) );
-                        const rtl::OUString sVariant   ( RTL_CONSTASCII_USTRINGPARAM ( "Variant" ) );
-                        const rtl::OUString sBeginLine ( RTL_CONSTASCII_USTRINGPARAM ( "BeginLine" ) );
-                        const rtl::OUString sEndLine   ( RTL_CONSTASCII_USTRINGPARAM ( "EndLine" ) );
+                        const rtl::OUString sLanguage  ( "Language" );
+                        const rtl::OUString sCountry   ( "Country" );
+                        const rtl::OUString sVariant   ( "Variant" );
+                        const rtl::OUString sBeginLine ( "BeginLine" );
+                        const rtl::OUString sEndLine   ( "EndLine" );
                         sal_Bool bHaveLanguage = sal_False, bHaveCountry = sal_False, bHaveVariant = sal_False,
                                  bHaveBegin = sal_False, bHaveEnd = sal_False;
 
@@ -886,16 +884,16 @@ void XMLConfigItemMapIndexedContext::EndElement()
 
             formula::SymbolDescriptor *pDescriptor = aSymbolList.getArray();
 
-            const rtl::OUString sName     ( RTL_CONSTASCII_USTRINGPARAM ( "Name" ) );
-            const rtl::OUString sExportName ( RTL_CONSTASCII_USTRINGPARAM ( "ExportName" ) );
-            const rtl::OUString sFontName ( RTL_CONSTASCII_USTRINGPARAM ( "FontName" ) );
-            const rtl::OUString sSymbolSet ( RTL_CONSTASCII_USTRINGPARAM ( "SymbolSet" ) );
-            const rtl::OUString sCharacter ( RTL_CONSTASCII_USTRINGPARAM ( "Character" ) );
-            const rtl::OUString sCharSet  ( RTL_CONSTASCII_USTRINGPARAM ( "CharSet" ) );
-            const rtl::OUString sFamily   ( RTL_CONSTASCII_USTRINGPARAM ( "Family" ) );
-            const rtl::OUString sPitch    ( RTL_CONSTASCII_USTRINGPARAM ( "Pitch" ) );
-            const rtl::OUString sWeight   ( RTL_CONSTASCII_USTRINGPARAM ( "Weight" ) );
-            const rtl::OUString sItalic   ( RTL_CONSTASCII_USTRINGPARAM ( "Italic" ) );
+            const rtl::OUString sName     ( "Name" );
+            const rtl::OUString sExportName ( "ExportName" );
+            const rtl::OUString sFontName ( "FontName" );
+            const rtl::OUString sSymbolSet ( "SymbolSet" );
+            const rtl::OUString sCharacter ( "Character" );
+            const rtl::OUString sCharSet  ( "CharSet" );
+            const rtl::OUString sFamily   ( "Family" );
+            const rtl::OUString sPitch    ( "Pitch" );
+            const rtl::OUString sWeight   ( "Weight" );
+            const rtl::OUString sItalic   ( "Italic" );
             sal_Int16 nNumFullEntries = 0;
 
             for ( sal_Int32 i = 0; i < nCount; i++ )

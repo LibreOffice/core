@@ -906,12 +906,8 @@ OUString SAL_CALL SvXMLExport::getImplementationName(  ) throw(uno::RuntimeExcep
 sal_Bool SAL_CALL SvXMLExport::supportsService( const OUString& rServiceName ) throw(uno::RuntimeException)
 {
     return
-        rServiceName.equalsAsciiL(
-            "com.sun.star.document.ExportFilter",
-            sizeof("com.sun.star.document.ExportFilter")-1 ) ||
-        rServiceName.equalsAsciiL(
-            "com.sun.star.xml.XMLExportFilter",
-            sizeof("com.sun.star.xml.XMLExportFilter")-1);
+        (rServiceName == "com.sun.star.document.ExportFilter") ||
+        (rServiceName == "com.sun.star.xml.XMLExportFilter");
 }
 
 uno::Sequence< OUString > SAL_CALL SvXMLExport::getSupportedServiceNames(  )
@@ -2140,7 +2136,7 @@ sal_Bool SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent >& rComp )
     {
         static ::comphelper::PropertyMapEntry aInfoMap[] =
         {
-            { RTL_CONSTASCII_STRINGPARAM("ExportTableNumberList"), 0, &::getBooleanCppuType(), PropertyAttribute::MAYBEVOID, 0},
+            { "ExportTableNumberList", 21, 0, &::getBooleanCppuType(), PropertyAttribute::MAYBEVOID, 0},
             { NULL, 0, 0, NULL, 0, 0 }
         };
         Reference< XPropertySet > xInfoProp(
