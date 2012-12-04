@@ -496,6 +496,25 @@ public:
         return *this;
     }
 
+#ifdef RTL_FAST_STRING
+    /**
+     @overload
+     @internal
+    */
+    template< typename T1, typename T2 >
+    OStringBuffer& append( const OStringConcat< T1, T2 >& c )
+    {
+        const int l = c.length();
+        if( l == 0 )
+            return *this;
+        rtl_stringbuffer_ensureCapacity( &pData, &nCapacity, pData->length + l );
+        char* end = c.addData( pData->buffer + pData->length );
+        *end = '\0';
+        pData->length = end - pData->buffer;
+        return *this;
+    }
+#endif
+
     /**
         Appends the string representation of the <code>sal_Bool</code>
         argument to the string buffer.

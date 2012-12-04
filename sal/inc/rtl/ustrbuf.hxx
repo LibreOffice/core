@@ -494,6 +494,25 @@ public:
         return *this;
     }
 
+#ifdef RTL_FAST_STRING
+    /**
+     @overload
+     @internal
+    */
+    template< typename T1, typename T2 >
+    OUStringBuffer& append( const OUStringConcat< T1, T2 >& c )
+    {
+        const int l = c.length();
+        if( l == 0 )
+            return *this;
+        rtl_uStringbuffer_ensureCapacity( &pData, &nCapacity, pData->length + l );
+        sal_Unicode* end = c.addData( pData->buffer + pData->length );
+        *end = '\0';
+        pData->length = end - pData->buffer;
+        return *this;
+    }
+#endif
+
     /**
         Appends a 8-Bit ASCII character string to this string buffer.
 

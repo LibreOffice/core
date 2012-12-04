@@ -12,6 +12,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 
 #include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <typeinfo>
 
@@ -32,12 +33,14 @@ namespace test { namespace oustring {
 class StringConcat : public CppUnit::TestFixture
 {
 private:
-    void check();
+    void checkConcat();
     void checkEnsureCapacity();
+    void checkAppend();
 
 CPPUNIT_TEST_SUITE(StringConcat);
-CPPUNIT_TEST(check);
+CPPUNIT_TEST(checkConcat);
 CPPUNIT_TEST(checkEnsureCapacity);
+CPPUNIT_TEST(checkAppend);
 CPPUNIT_TEST_SUITE_END();
 };
 
@@ -46,7 +49,7 @@ CPPUNIT_TEST_SUITE_END();
 #else
 #define TYPES_ASSERT_EQUAL( a, b )
 #endif
-void test::oustring::StringConcat::check()
+void test::oustring::StringConcat::checkConcat()
 {
 // All the extra () are to protect commas againsts being treated as separators of macro arguments.
     CPPUNIT_ASSERT_EQUAL( OUString(), OUString(OUString() + OUString()) );
@@ -105,6 +108,15 @@ void test::oustring::StringConcat::checkEnsureCapacity()
     rtl_uString_release( oldStr );
 }
 
+void test::oustring::StringConcat::checkAppend()
+{
+    OUString str( "foo" );
+    str += OUStringLiteral( "bar" ) + "baz";
+    CPPUNIT_ASSERT_EQUAL( OUString( "foobarbaz" ), str );
+    OUStringBuffer buf( "foo" );
+    buf.append( OUStringLiteral( "bar" ) + "baz" );
+    CPPUNIT_ASSERT_EQUAL( OUString( "foobarbaz" ), buf.makeStringAndClear());
+}
 
 }} // namespace
 
