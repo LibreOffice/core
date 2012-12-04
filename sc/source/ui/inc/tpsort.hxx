@@ -59,6 +59,10 @@ public:
     virtual sal_Bool    FillItemSet ( SfxItemSet& rArgSet );
     virtual void        Reset       ( const SfxItemSet& rArgSet );
 
+    virtual void SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation);
+    virtual void SetSizePixel(const Size& rAllocation);
+    virtual void SetPosPixel(const Point& rAllocPos);
+
 protected:
     virtual void        ActivatePage    ( const SfxItemSet& rSet );
     using SfxTabPage::ActivatePage;

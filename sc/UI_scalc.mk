@@ -11,7 +11,9 @@ $(eval $(call gb_UI_UI,modules/scalc))
 
 $(eval $(call gb_UI_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/printeroptions \
-	sc/uiconfig/scalc/ui/sortpage \
+	sc/uiconfig/scalc/ui/sortcriteriapage \
+	sc/uiconfig/scalc/ui/sortkey \
+	sc/uiconfig/scalc/ui/sortoptionspage \
 	sc/uiconfig/scalc/ui/textimportoptions \
 ))
 
