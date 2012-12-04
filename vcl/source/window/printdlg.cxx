@@ -476,6 +476,7 @@ PrintDialog::JobTabPage::JobTabPage( VclBuilder* pUIBuilder )
     , mnCollateUIMode( 0 )
 {
     pUIBuilder->get(mpPrinters, "printers");
+    mpPrinters->SetStyle(mpPrinters->GetStyle() | WB_SORT);
     pUIBuilder->get(mpStatusTxt, "status");
     pUIBuilder->get(mpLocationTxt, "location");
     pUIBuilder->get(mpCommentTxt, "comment");
