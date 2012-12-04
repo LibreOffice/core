@@ -153,7 +153,9 @@ ScDocShellRef ScExportTest::saveAndReloadPassword(ScDocShell* pShell, const rtl:
     pFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
 
     ScDocShellRef xDocShRef = new ScDocShell;
+    xDocShRef->GetDocument()->EnableUserInteraction(false);
     SfxMedium* pSrcMed = new SfxMedium(aTempFile.GetURL(), STREAM_STD_READ);
+    pSrcMed->UseInteractionHandler(false);
     SfxItemSet* pSet = pSrcMed->GetItemSet();
     pSet->Put(SfxStringItem(SID_PASSWORD, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("test"))));
     pSrcMed->SetFilter(pFilter);
