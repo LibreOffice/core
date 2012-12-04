@@ -76,7 +76,6 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	SYSTEM_REDLAND \
 	SYSTEM_SNDFILE \
 	SYSTEM_STDLIBS \
-	WITH_MOZAB4WIN \
 ))
 
 $(eval $(call gb_InstallModule_define_value_if_set,scp2/ooo,\
@@ -148,6 +147,9 @@ $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
 	) \
 	$(if $(filter YES,$(SYSTEM_HSQLDB)),\
 		-DHSQLDB_JAR=\""$(call gb_Helper_make_path,$(HSQLDB_JAR))"\" \
+	) \
+	$(if $(filter YES,$(WITH_MOZAB4WIN)),\
+		-DWITH_MOZAB4WIN \
 	) \
 	$(if $(filter-out YES,$(WITH_MYSPELL_DICTS)),\
 		-DWITHOUT_MYSPELL_DICTS \
