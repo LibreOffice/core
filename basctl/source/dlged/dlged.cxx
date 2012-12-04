@@ -35,6 +35,7 @@
 #include <com/sun/star/awt/XDialog.hpp>
 #include <com/sun/star/resource/XStringResourcePersistence.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
+#include <com/sun/star/util/NumberFormatsSupplier.hpp>
 #include <comphelper/types.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/itempool.hxx>
@@ -434,9 +435,8 @@ Reference< util::XNumberFormatsSupplier > const & DlgEditor::GetNumberFormatsSup
 {
     if ( !m_xSupplier.is() )
     {
-        Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        Reference< util::XNumberFormatsSupplier > xSupplier( xMSF->createInstance(
-            "com.sun.star.util.NumberFormatsSupplier" ), UNO_QUERY );
+        Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        Reference< util::XNumberFormatsSupplier > xSupplier( util::NumberFormatsSupplier::createWithDefaultLocale(xContext) );
 
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         if ( !m_xSupplier.is() )

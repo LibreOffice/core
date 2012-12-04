@@ -29,6 +29,7 @@
 #include <comphelper/uno3.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include "UITools.hxx"
+#include <comphelper/processfactory.hxx>
 
 
 namespace dbaui
@@ -128,7 +129,7 @@ namespace dbaui
 
         if ( xConnection.is() && i_rORB.is() )
         {
-            Reference< XNumberFormatter > xFormatter( getNumberFormatter( xConnection, i_rORB ) );
+            Reference< XNumberFormatter > xFormatter( getNumberFormatter( xConnection, comphelper::getComponentContext(i_rORB) ) );
             if ( xFormatter.is() )
             {
                 m_pHtml.set( new OHTMLImportExport( getDescriptor(), i_rORB, xFormatter ) );

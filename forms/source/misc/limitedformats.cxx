@@ -23,6 +23,7 @@
 #include <comphelper/types.hxx>
 #include <comphelper/extract.hxx>
 #include <com/sun/star/form/FormComponentType.hpp>
+#include <com/sun/star/util/NumberFormatsSupplier.hpp>
 
 //.........................................................................
 namespace frm
@@ -132,12 +133,12 @@ namespace frm
     //= OLimitedFormats
     //=====================================================================
     //---------------------------------------------------------------------
-    OLimitedFormats::OLimitedFormats(const Reference< XMultiServiceFactory >& _rxORB, const sal_Int16 _nClassId)
+    OLimitedFormats::OLimitedFormats(const Reference< XComponentContext >& _rxContext, const sal_Int16 _nClassId)
         :m_nFormatEnumPropertyHandle(-1)
         ,m_nTableId(_nClassId)
     {
-        OSL_ENSURE(_rxORB.is(), "OLimitedFormats::OLimitedFormats: invalid service factory!");
-        acquireSupplier(_rxORB);
+        OSL_ENSURE(_rxContext.is(), "OLimitedFormats::OLimitedFormats: invalid service factory!");
+        acquireSupplier(_rxContext);
         ensureTableInitialized(m_nTableId);
     }
 
@@ -355,20 +356,12 @@ namespace frm
     }
 
     //---------------------------------------------------------------------
-    void OLimitedFormats::acquireSupplier(const Reference< XMultiServiceFactory >& _rxORB)
+    void OLimitedFormats::acquireSupplier(const Reference< XComponentContext >& _rxContext)
     {
         ::osl::MutexGuard aGuard(s_aMutex);
-        if ((1 == ++s_nInstanceCount) && _rxORB.is())
+        if (1 == ++s_nInstanceCount)
         {   // create the standard formatter
-
-            Sequence< Any > aInit(1);
-            aInit[0] <<= getLocale(ltEnglishUS);
-
-            Reference< XInterface > xSupplier = _rxORB->createInstanceWithArguments(FRM_NUMBER_FORMATS_SUPPLIER, aInit);
-            OSL_ENSURE(xSupplier.is(), "OLimitedFormats::OLimitedFormats: could not create a formats supplier!");
-
-            s_xStandardFormats = Reference< XNumberFormatsSupplier >(xSupplier, UNO_QUERY);
-            OSL_ENSURE(s_xStandardFormats.is() || !xSupplier.is(), "OLimitedFormats::OLimitedFormats: missing an interface!");
+            s_xStandardFormats = NumberFormatsSupplier::createWithLocale(_rxContext, getLocale(ltEnglishUS));
         }
     }
 

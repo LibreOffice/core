@@ -40,11 +40,13 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
+#include <com/sun/star/util/NumberFormatsSupplier.hpp>
 #include "eventexport.hxx"
 #include <xmloff/XMLEventExport.hxx>
 #include "formevents.hxx"
 #include <xmloff/xmlnumfe.hxx>
 #include "xmloff/xformsexport.hxx"
+#include "comphelper/processfactory.hxx"
 
 #include <com/sun/star/text/XText.hpp>
 
@@ -760,22 +762,12 @@ namespace xmloff
             {
                 // create it for en-US (does not really matter, as we will specify a locale for every
                 // concrete language to use)
-                Sequence< Any > aSupplierArgs(1);
-                aSupplierArgs[0] <<= Locale (   ::rtl::OUString("en"),
-                                                ::rtl::OUString("US"),
-                                                ::rtl::OUString()
-                                            );
-
-                Reference< XInterface > xFormatsSupplierUntyped =
-                    m_rContext.getServiceFactory()->createInstanceWithArguments(
-                        SERVICE_NUMBERFORMATSSUPPLIER,
-                        aSupplierArgs
-                    );
-                OSL_ENSURE(xFormatsSupplierUntyped.is(), "OFormLayerXMLExport_Impl::getControlNumberStyleExport: could not instantiate a number formats supplier!");
-
-                xFormatsSupplier = Reference< XNumberFormatsSupplier >(xFormatsSupplierUntyped, UNO_QUERY);
-                if (xFormatsSupplier.is())
-                    m_xControlNumberFormats = xFormatsSupplier->getNumberFormats();
+                Locale aLocale (  ::rtl::OUString("en"),
+                                                 ::rtl::OUString("US"),
+                                                 ::rtl::OUString()
+                                             );
+                xFormatsSupplier = NumberFormatsSupplier::createWithLocale( comphelper::getComponentContext(m_rContext.getServiceFactory()), aLocale );
+                m_xControlNumberFormats = xFormatsSupplier->getNumberFormats();
             }
             catch(const Exception&)
             {

@@ -23,7 +23,7 @@
 
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/util/NumberFormatter.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#include <com/sun/star/util/NumberFormatsSupplier.hpp>
 
 #include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
@@ -74,11 +74,7 @@ namespace toolkit
             if ( !rDefaultFormats.is() && !rbTriedCreation )
             {
                 rbTriedCreation = true;
-                rDefaultFormats = Reference< XNumberFormatsSupplier >(
-                    ::comphelper::getProcessServiceFactory()->createInstance(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.NumberFormatsSupplier" ) ) ),
-                    UNO_QUERY_THROW
-                );
+                rDefaultFormats = NumberFormatsSupplier::createWithDefaultLocale( ::comphelper::getProcessComponentContext() );
             }
             if ( !rDefaultFormats.is() )
                 throw RuntimeException();

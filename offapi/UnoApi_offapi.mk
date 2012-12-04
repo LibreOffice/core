@@ -311,6 +311,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ui/dialogs
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/util,\
 	JobManager \
 	NumberFormatter \
+	NumberFormatsSupplier \
 	PathSubstitution \
 	TextSearch \
 	UriAbbreviation \
@@ -1457,7 +1458,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/util,\
 	NumberFormatProperties \
 	NumberFormatSettings \
 	NumberFormats \
-	NumberFormatsSupplier \
 	OfficeInstallationDirectories \
 	PathSettings \
 	ReplaceDescriptor \

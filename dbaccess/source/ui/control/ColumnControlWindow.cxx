@@ -41,9 +41,9 @@ using namespace ::com::sun::star::lang;
 DBG_NAME(OColumnControlWindow)
 //========================================================================
 OColumnControlWindow::OColumnControlWindow(Window* pParent
-                                           ,const Reference<XMultiServiceFactory>& _rxFactory)
+                                           ,const Reference<XComponentContext>& _rxContext)
             : OFieldDescControl(pParent,NULL)
-            , m_xORB(_rxFactory)
+            , m_xContext(_rxContext)
             , m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
             , m_bAutoIncrementEnabled(sal_True)
 {
@@ -100,12 +100,12 @@ Reference< XNumberFormatter > OColumnControlWindow::GetFormatter() const
     if ( !m_xFormatter.is() )
         try
         {
-            Reference< XNumberFormatsSupplier >  xSupplier(::dbtools::getNumberFormats(m_xConnection, sal_True,m_xORB));
+            Reference< XNumberFormatsSupplier >  xSupplier(::dbtools::getNumberFormats(m_xConnection, sal_True, m_xContext));
 
             if ( xSupplier.is() )
             {
                 // create a new formatter
-                m_xFormatter.set( NumberFormatter::create(comphelper::getComponentContext(m_xORB)), UNO_QUERY_THROW);
+                m_xFormatter.set( NumberFormatter::create(m_xContext), UNO_QUERY_THROW);
                 m_xFormatter->attachNumberFormatsSupplier(xSupplier);
             }
         }

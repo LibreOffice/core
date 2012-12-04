@@ -836,7 +836,7 @@ void SbaGridControl::PreExecuteRowContextMenu(sal_uInt16 nRow, PopupMenu& rMenu)
 //------------------------------------------------------------------------------
 SvNumberFormatter* SbaGridControl::GetDatasourceFormatter()
 {
-    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = ::dbtools::getNumberFormats(::dbtools::getConnection(Reference< XRowSet > (getDataSource(),UNO_QUERY)), sal_True,getServiceManager());
+    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = ::dbtools::getNumberFormats(::dbtools::getConnection(Reference< XRowSet > (getDataSource(),UNO_QUERY)), sal_True, comphelper::getComponentContext(getServiceManager()));
 
     SvNumberFormatsSupplierObj* pSupplierImpl = SvNumberFormatsSupplierObj::getImplementation( xSupplier );
     if ( !pSupplierImpl )

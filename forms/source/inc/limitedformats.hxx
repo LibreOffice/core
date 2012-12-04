@@ -22,7 +22,7 @@
 
 #include <osl/mutex.hxx>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 
 //.........................................................................
@@ -57,7 +57,7 @@ namespace frm
             pass the same value here share one table.</p>
         */
         OLimitedFormats(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
             const sal_Int16 _nClassId
             );
         ~OLimitedFormats();
@@ -82,7 +82,7 @@ namespace frm
                     getFormatsSupplier() const { return s_xStandardFormats; }
 
     private:
-        void acquireSupplier(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
+        void acquireSupplier(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
         void releaseSupplier();
 
         static void ensureTableInitialized(const sal_Int16 _nTableId);

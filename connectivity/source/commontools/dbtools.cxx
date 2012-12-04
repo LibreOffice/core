@@ -61,7 +61,7 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#include <com/sun/star/util/NumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 
 #include <comphelper/extract.hxx>
@@ -948,7 +948,7 @@ void qualifiedNameComponents(const Reference< XDatabaseMetaData >& _rxConnMetaDa
 Reference< XNumberFormatsSupplier> getNumberFormats(
             const Reference< XConnection>& _rxConn,
             sal_Bool _bAlloweDefault,
-            const Reference< XMultiServiceFactory>& _rxFactory)
+            const Reference< XComponentContext>& _rxContext)
 {
     // ask the parent of the connection (should be an DatabaseAccess)
     Reference< XNumberFormatsSupplier> xReturn;
@@ -960,9 +960,9 @@ Reference< XNumberFormatsSupplier> getNumberFormats(
         if (xConnParentProps.is() && hasProperty(sPropFormatsSupplier, xConnParentProps))
             xConnParentProps->getPropertyValue(sPropFormatsSupplier) >>= xReturn;
     }
-    else if(_bAlloweDefault && _rxFactory.is())
+    else if(_bAlloweDefault && _rxContext.is())
     {
-        xReturn = Reference< XNumberFormatsSupplier>(_rxFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatsSupplier"))),UNO_QUERY);
+        xReturn = NumberFormatsSupplier::createWithDefaultLocale( _rxContext );
     }
     return xReturn;
 }

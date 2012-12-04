@@ -65,7 +65,7 @@ void SAL_CALL OColumnControl::createPeer(const Reference< XToolkit >& /*rToolkit
                 pParentWin = pParent->GetWindow();
         }
 
-        OColumnPeer* pPeer = new OColumnPeer( pParentWin, maContext.getLegacyServiceFactory() );
+        OColumnPeer* pPeer = new OColumnPeer( pParentWin, maContext.getUNOContext() );
         OSL_ENSURE(pPeer != NULL, "FmXGridControl::createPeer : imp_CreatePeer didn't return a peer !");
         setPeer( pPeer );
 

@@ -120,7 +120,8 @@ namespace frm
         if ( !m_xFormatter.is() )
         {
             // we can create one from the connection, if it's an SDB connection
-            Reference< XNumberFormatsSupplier > xFormatSupplier = ::dbtools::getNumberFormats( m_xConnection, sal_True, maContext.getLegacyServiceFactory() );
+
+            Reference< XNumberFormatsSupplier > xFormatSupplier = ::dbtools::getNumberFormats( m_xConnection, sal_True, maContext.getUNOContext() );
 
             if ( xFormatSupplier.is() )
             {

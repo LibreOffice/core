@@ -548,7 +548,7 @@ namespace
 //------------------------------------------------------------------------
 OCopyTableWizard::OCopyTableWizard( Window * pParent, const ::rtl::OUString& _rDefaultName, sal_Int16 _nOperation,
         const ICopyTableSourceObject& _rSourceObject, const Reference< XConnection >& _xSourceConnection,
-        const Reference< XConnection >& _xConnection, const Reference< XMultiServiceFactory >& _rxORB,
+        const Reference< XConnection >& _xConnection, const Reference< XComponentContext >& _rxContext,
         const Reference< XInteractionHandler>&   _xInteractionHandler)
     : WizardDialog( pParent, ModuleRes(WIZ_RTFCOPYTABLE))
     ,m_pbHelp( this , ModuleRes(PB_HELP))
@@ -559,8 +559,8 @@ OCopyTableWizard::OCopyTableWizard( Window * pParent, const ::rtl::OUString& _rD
     ,m_mNameMapping(_xConnection->getMetaData().is() && _xConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers())
     ,m_xDestConnection( _xConnection )
     ,m_rSourceObject( _rSourceObject )
-    ,m_xFormatter( getNumberFormatter( _xConnection, _rxORB ) )
-    ,m_xFactory(_rxORB)
+    ,m_xFormatter( getNumberFormatter( _xConnection, _rxContext ) )
+    ,m_xContext(_rxContext)
     ,m_xInteractionHandler(_xInteractionHandler)
     ,m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
     ,m_nPageCount(0)
@@ -649,7 +649,7 @@ OCopyTableWizard::OCopyTableWizard( Window * pParent, const ::rtl::OUString& _rD
 OCopyTableWizard::OCopyTableWizard( Window* pParent, const ::rtl::OUString& _rDefaultName, sal_Int16 _nOperation,
         const ODatabaseExport::TColumns& _rSourceColumns, const ODatabaseExport::TColumnVector& _rSourceColVec,
         const Reference< XConnection >& _xConnection, const Reference< XNumberFormatter >&  _xFormatter,
-        TypeSelectionPageFactory _pTypeSelectionPageFactory, SvStream& _rTypeSelectionPageArg, const Reference< XMultiServiceFactory >& _rM )
+        TypeSelectionPageFactory _pTypeSelectionPageFactory, SvStream& _rTypeSelectionPageArg, const Reference< XComponentContext >& _rxContext )
     :WizardDialog( pParent, ModuleRes(WIZ_RTFCOPYTABLE))
     ,m_vSourceColumns(_rSourceColumns)
     ,m_pbHelp( this , ModuleRes(PB_HELP))
@@ -661,7 +661,7 @@ OCopyTableWizard::OCopyTableWizard( Window* pParent, const ::rtl::OUString& _rDe
     ,m_xDestConnection( _xConnection )
     ,m_rSourceObject( DummyCopySource::Instance() )
     ,m_xFormatter(_xFormatter)
-    ,m_xFactory(_rM)
+    ,m_xContext(_rxContext)
     ,m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
     ,m_nPageCount(0)
     ,m_bDeleteSourceColumns(sal_False)
@@ -684,7 +684,7 @@ OCopyTableWizard::OCopyTableWizard( Window* pParent, const ::rtl::OUString& _rDe
     ::dbaui::fillTypeInfo( _xConnection, m_sTypeNames, m_aTypeInfo, m_aTypeInfoIndex );
     ::dbaui::fillTypeInfo( _xConnection, m_sTypeNames, m_aDestTypeInfo, m_aDestTypeInfoIndex );
 
-    m_xInteractionHandler.set( InteractionHandler::createWithParent(comphelper::getComponentContext(m_xFactory), 0), UNO_QUERY );
+    m_xInteractionHandler.set( InteractionHandler::createWithParent(m_xContext, 0), UNO_QUERY );
 
     OCopyTable* pPage1( new OCopyTable( this ) );
     pPage1->disallowViews();
@@ -1339,7 +1339,7 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
         {
             xSuppDestinationColumns.set( xTable, UNO_QUERY_THROW );
             // insert new table name into table filter
-            ::dbaui::appendToFilter( m_xDestConnection, m_sName, comphelper::getComponentContext(GetFactory()), this );
+            ::dbaui::appendToFilter( m_xDestConnection, m_sName, GetComponentContext(), this );
 
             // copy ui settings
             m_rSourceObject.copyUISettingsTo( xTable );

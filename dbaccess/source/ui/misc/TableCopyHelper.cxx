@@ -40,6 +40,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 #include <com/sun/star/sdb/XQueryDefinitionsSupplier.hpp>
@@ -246,9 +247,9 @@ sal_Bool OTableCopyHelper::copyTagTable(OTableCopyHelper::DropDescriptor& _rDesc
     Reference<XEventListener> xEvt;
     ODatabaseImportExport* pImport = NULL;
     if ( _rDesc.bHtml )
-        pImport = new OHTMLImportExport(_xConnection,getNumberFormatter(_xConnection,m_pController->getORB()),m_pController->getORB());
+        pImport = new OHTMLImportExport(_xConnection,getNumberFormatter(_xConnection, comphelper::getComponentContext(m_pController->getORB())),m_pController->getORB());
     else
-        pImport = new ORTFImportExport(_xConnection,getNumberFormatter(_xConnection,m_pController->getORB()),m_pController->getORB());
+        pImport = new ORTFImportExport(_xConnection,getNumberFormatter(_xConnection, comphelper::getComponentContext(m_pController->getORB())),m_pController->getORB());
 
     xEvt = pImport;
     SvStream* pStream = (SvStream*)(SotStorageStream*)_rDesc.aHtmlRtfStorage;

@@ -21,6 +21,7 @@
 #include "AppController.hxx"
 #include <comphelper/sequence.hxx>
 #include <comphelper/property.hxx>
+#include <comphelper/processfactory.hxx>
 #include "dbustrings.hrc"
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <com/sun/star/sdbcx/XAppend.hpp>
@@ -505,11 +506,11 @@ TransferableHelper* OApplicationController::copyObject()
 
                     if ( eType == E_TABLE )
                     {
-                        pData = new ODataClipboard(sDataSource, CommandType::TABLE, sName, xConnection, getNumberFormatter(xConnection,getORB()), getORB());
+                        pData = new ODataClipboard(sDataSource, CommandType::TABLE, sName, xConnection, getNumberFormatter(xConnection, comphelper::getComponentContext(getORB())), getORB());
                     }
                     else
                     {
-                        pData = new ODataClipboard(sDataSource, CommandType::QUERY, sName, getNumberFormatter(xConnection,getORB()), getORB());
+                        pData = new ODataClipboard(sDataSource, CommandType::QUERY, sName, getNumberFormatter(xConnection, comphelper::getComponentContext(getORB())), getORB());
                     }
                 }
             }

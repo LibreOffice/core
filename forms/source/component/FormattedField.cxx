@@ -654,7 +654,7 @@ Reference<XNumberFormatsSupplier>  OFormattedModel::calcFormFormatsSupplier() co
     Reference< XRowSet > xRowSet( xNextParentForm, UNO_QUERY );
     Reference< XNumberFormatsSupplier > xSupplier;
     if (xRowSet.is())
-        xSupplier = getNumberFormats( getConnection(xRowSet), sal_True, getContext().getLegacyServiceFactory() );
+        xSupplier = getNumberFormats( getConnection(xRowSet), sal_True, getContext().getUNOContext() );
     return xSupplier;
 }
 

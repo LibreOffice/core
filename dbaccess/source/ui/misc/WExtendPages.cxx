@@ -23,6 +23,7 @@
 #include "WCopyTable.hxx"
 
 using namespace dbaui;
+using namespace com::sun::star;
 //========================================================================
 SvParser* OWizHTMLExtend::createReader(sal_Int32 _nRows)
 {
@@ -30,7 +31,7 @@ SvParser* OWizHTMLExtend::createReader(sal_Int32 _nRows)
                             _nRows,
                             m_pParent->GetColumnPositions(),
                             m_pParent->GetFormatter(),
-                            m_pParent->GetFactory(),
+                            uno::Reference<lang::XMultiServiceFactory>(m_pParent->GetComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW),
                             m_pParent->getDestVector(),
                             m_pParent->getTypeInfo(),
                             m_pParent->shouldCreatePrimaryKey());
@@ -42,7 +43,7 @@ SvParser* OWizRTFExtend::createReader(sal_Int32 _nRows)
                             _nRows,
                             m_pParent->GetColumnPositions(),
                             m_pParent->GetFormatter(),
-                            m_pParent->GetFactory(),
+                            uno::Reference<lang::XMultiServiceFactory>(m_pParent->GetComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW),
                             m_pParent->getDestVector(),
                             m_pParent->getTypeInfo(),
                             m_pParent->shouldCreatePrimaryKey());

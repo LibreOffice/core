@@ -410,7 +410,7 @@ namespace dbtools
     OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier> getNumberFormats(
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConn,
         sal_Bool _bAllowDefault = sal_False,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>()
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>()
     );
 
     /** create an <type scope="com::sun::star::sdb">XSingleSelectQueryComposer</type> which represents

@@ -715,7 +715,7 @@ sal_Bool ODatabaseExport::executeWizard(const ::rtl::OUString& _rTableName,const
         m_xFormatter,
         getTypeSelectionPageFactory(),
         m_rInputStream,
-        m_xFactory
+        comphelper::getComponentContext(m_xFactory)
     );
 
     sal_Bool bError = sal_False;

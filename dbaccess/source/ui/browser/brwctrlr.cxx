@@ -773,7 +773,7 @@ void SbaXDataBrowserController::initFormatter()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::initFormatter" );
     // ---------------------------------------------------------------
     // create a formatter working with the connections format supplier
-    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), sal_True,getORB()));
+    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), sal_True, comphelper::getComponentContext(getORB())));
 
     if(xSupplier.is())
     {
@@ -2004,7 +2004,7 @@ void SbaXDataBrowserController::ExecuteSearch()
     xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AlwaysShowCursor")), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
     xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CursorColor")), makeAny(sal_Int32(COL_LIGHTRED)));
 
-    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xNFS(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), sal_True,getORB()));
+    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xNFS(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), sal_True, comphelper::getComponentContext(getORB())));
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     AbstractFmSearchDialog* pDialog = NULL;

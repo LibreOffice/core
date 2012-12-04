@@ -40,6 +40,7 @@
 #include <com/sun/star/script/DocumentDialogLibraryContainer.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
+#include <com/sun/star/util/NumberFormatsSupplier.hpp>
 
 #include <comphelper/interaction.hxx>
 #include <comphelper/mediadescriptor.hxx>
@@ -760,12 +761,9 @@ const Reference< XNumberFormatsSupplier > & ODatabaseModelImpl::getNumberFormats
     {
         // the arguments : the locale of the current user
         UserInformation aUserInfo;
-        Sequence< Any > aArguments(1);
-        aArguments.getArray()[0] <<= aUserInfo.getUserLanguage();
+        Locale aLocale = aUserInfo.getUserLanguage();
 
-        m_xNumberFormatsSupplier.set(
-            m_aContext.createComponentWithArguments( "com.sun.star.util.NumberFormatsSupplier", aArguments ), UNO_QUERY_THROW );
-        OSL_ENSURE(m_xNumberFormatsSupplier.is(), "ODatabaseModelImpl::getNumberFormatsSupplier : could not instantiate the formats supplier !");
+        m_xNumberFormatsSupplier.set( NumberFormatsSupplier::createWithLocale( m_aContext.getUNOContext(), aLocale ) );
     }
     return m_xNumberFormatsSupplier;
 }

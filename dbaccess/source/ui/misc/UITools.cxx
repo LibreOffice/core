@@ -1604,7 +1604,7 @@ sal_Bool insertHierachyElement( Window* _pParent, const Reference< XMultiService
     return sal_True;
 }
 // -----------------------------------------------------------------------------
-Reference< XNumberFormatter > getNumberFormatter(const Reference< XConnection >& _rxConnection,const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rMF )
+Reference< XNumberFormatter > getNumberFormatter(const Reference< XConnection >& _rxConnection, const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext )
 {
     // ---------------------------------------------------------------
     // create a formatter working with the connections format supplier
@@ -1612,13 +1612,13 @@ Reference< XNumberFormatter > getNumberFormatter(const Reference< XConnection >&
 
     try
     {
-        Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier(::dbtools::getNumberFormats(_rxConnection, sal_True,_rMF));
+        Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier(::dbtools::getNumberFormats(_rxConnection, sal_True, _rxContext));
 
         if ( xSupplier.is() )
         {
             // create a new formatter
             xFormatter = Reference< util::XNumberFormatter > (
-                util::NumberFormatter::create(comphelper::getComponentContext(_rMF)), UNO_QUERY_THROW);
+                util::NumberFormatter::create( _rxContext ), UNO_QUERY_THROW);
             xFormatter->attachNumberFormatsSupplier(xSupplier);
         }
     }

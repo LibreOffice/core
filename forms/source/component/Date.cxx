@@ -22,6 +22,7 @@
 #include <tools/date.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
+#include <comphelper/processfactory.hxx>
 
 using namespace dbtools;
 
@@ -91,7 +92,7 @@ DBG_NAME( ODateModel )
 ODateModel::ODateModel(const Reference<XMultiServiceFactory>& _rxFactory)
             :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_DATEFIELD, FRM_SUN_CONTROL_DATEFIELD, sal_True, sal_True )
                         // use the old control name for compytibility reasons
-            ,OLimitedFormats( _rxFactory, FormComponentType::DATEFIELD )
+            ,OLimitedFormats( comphelper::getComponentContext(_rxFactory), FormComponentType::DATEFIELD )
 {
     DBG_CTOR( ODateModel, NULL );
 
@@ -116,7 +117,7 @@ ODateModel::ODateModel(const Reference<XMultiServiceFactory>& _rxFactory)
 //------------------------------------------------------------------------------
 ODateModel::ODateModel( const ODateModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
     :OEditBaseModel( _pOriginal, _rxFactory )
-    ,OLimitedFormats( _rxFactory, FormComponentType::DATEFIELD )
+    ,OLimitedFormats( comphelper::getComponentContext(_rxFactory), FormComponentType::DATEFIELD )
 {
     DBG_CTOR( ODateModel, NULL );
 

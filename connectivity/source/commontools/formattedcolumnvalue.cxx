@@ -197,7 +197,7 @@ namespace dbtools
             {
                 // get the number formats supplier of the connection of the form
                 Reference< XConnection > xConnection( getConnection( i_rRowSet ), UNO_QUERY_THROW );
-                Reference< XNumberFormatsSupplier > xSupplier( getNumberFormats( xConnection, sal_True, i_rContext.getLegacyServiceFactory() ), UNO_SET_THROW );
+                Reference< XNumberFormatsSupplier > xSupplier( getNumberFormats( xConnection, sal_True, i_rContext.getUNOContext() ), UNO_SET_THROW );
 
                 // create a number formatter for it
                 xNumberFormatter.set( NumberFormatter::create(i_rContext.getUNOContext()), UNO_QUERY_THROW );

@@ -38,6 +38,7 @@
 #include "flat/EDriver.hxx"
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/NumberFormatter.hpp>
+#include <com/sun/star/util/NumberFormatsSupplier.hpp>
 #include <unotools/configmgr.hxx>
 #include <i18npool/languagetag.hxx>
 #include "connectivity/dbconversion.hxx"
@@ -58,6 +59,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::util;
 
 // -------------------------------------------------------------------------
 void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
@@ -419,12 +421,9 @@ void OFlatTable::construct()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "flat", "Ocke.Janssen@sun.com", "OFlatTable::construct" );
     SvtSysLocale aLocale;
     ::com::sun::star::lang::Locale aAppLocale(aLocale.GetLanguageTag().getLocale());
-    Sequence< ::com::sun::star::uno::Any > aArg(1);
-    aArg[0] <<= aAppLocale;
 
-    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier(m_pConnection->getDriver()->getFactory()->createInstanceWithArguments(::rtl::OUString("com.sun.star.util.NumberFormatsSupplier"),aArg),UNO_QUERY);
-    m_xNumberFormatter = Reference< ::com::sun::star::util::XNumberFormatter >(
-          ::com::sun::star::util::NumberFormatter::create(
+    Reference< XNumberFormatsSupplier > xSupplier = NumberFormatsSupplier::createWithLocale( getComponentContext(m_pConnection->getDriver()->getFactory()), aAppLocale );
+    m_xNumberFormatter = Reference< XNumberFormatter >( NumberFormatter::create(
              comphelper::getComponentContext(m_pConnection->getDriver()->getFactory())),
           UNO_QUERY_THROW);
     m_xNumberFormatter->attachNumberFormatsSupplier(xSupplier);

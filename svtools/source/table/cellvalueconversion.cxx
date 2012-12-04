@@ -20,7 +20,7 @@
 #include "cellvalueconversion.hxx"
 
 #include <com/sun/star/util/NumberFormatter.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#include <com/sun/star/util/NumberFormatsSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
@@ -50,7 +50,9 @@ namespace svt
     using ::com::sun::star::util::NumberFormatter;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::util::XNumberFormatsSupplier;
+    using ::com::sun::star::util::NumberFormatsSupplier;
     using ::com::sun::star::beans::XPropertySet;
+    using ::com::sun::star::lang::Locale;
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::util::DateTime;
@@ -340,13 +342,10 @@ namespace svt
                 Reference< XNumberFormatter > const xFormatter( NumberFormatter::create( io_data.aContext.getUNOContext() ), UNO_QUERY_THROW );
 
                 // a supplier of number formats
-                Sequence< Any > aInitArgs(1);
-                aInitArgs[0] <<= SvtSysLocale().GetLanguageTag().getLocale();
+                Locale aLocale = SvtSysLocale().GetLanguageTag().getLocale();
 
-                Reference< XNumberFormatsSupplier > const xSupplier(
-                    io_data.aContext.createComponentWithArguments( "com.sun.star.util.NumberFormatsSupplier", aInitArgs ),
-                    UNO_QUERY_THROW
-                );
+                Reference< XNumberFormatsSupplier > const xSupplier =
+                    NumberFormatsSupplier::createWithLocale( io_data.aContext.getUNOContext(), aLocale );
 
                 // ensure a NullDate we will assume later on
                 UnoDate const aNullDate( 1, 1, 1900 );

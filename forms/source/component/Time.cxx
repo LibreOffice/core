@@ -22,6 +22,7 @@
 #include <tools/time.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
+#include <comphelper/processfactory.hxx>
 
 using namespace dbtools;
 
@@ -124,7 +125,7 @@ DBG_NAME( OTimeModel )
 OTimeModel::OTimeModel(const Reference<XMultiServiceFactory>& _rxFactory)
             :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_TIMEFIELD, FRM_SUN_CONTROL_TIMEFIELD, sal_True, sal_True )
                                     // use the old control name for compytibility reasons
-            ,OLimitedFormats(_rxFactory, FormComponentType::TIMEFIELD)
+            ,OLimitedFormats( comphelper::getComponentContext(_rxFactory), FormComponentType::TIMEFIELD)
 {
     DBG_CTOR( OTimeModel, NULL );
 
@@ -137,7 +138,7 @@ OTimeModel::OTimeModel(const Reference<XMultiServiceFactory>& _rxFactory)
 //------------------------------------------------------------------------------
 OTimeModel::OTimeModel( const OTimeModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
     :OEditBaseModel( _pOriginal, _rxFactory )
-    ,OLimitedFormats( _rxFactory, FormComponentType::TIMEFIELD )
+    ,OLimitedFormats( comphelper::getComponentContext(_rxFactory), FormComponentType::TIMEFIELD )
 {
     DBG_CTOR( OTimeModel, NULL );
 

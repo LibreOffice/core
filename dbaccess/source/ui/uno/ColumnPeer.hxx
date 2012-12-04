@@ -22,7 +22,7 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 //.........................................................................
 namespace dbaui
@@ -31,13 +31,12 @@ namespace dbaui
     class OFieldDescription;
     class OColumnPeer   :   public VCLXWindow
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xORB;
         OFieldDescription*                                                              m_pActFieldDescr;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>        m_xColumn;
     public:
 
         OColumnPeer(Window* _pParent
-                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext);
 
         void setColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn);
         void setConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xCon);

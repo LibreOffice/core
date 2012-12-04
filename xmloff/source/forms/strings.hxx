@@ -158,7 +158,6 @@ namespace xmloff
 
     // services
     XMLFORM_CONSTASCII_STRING( SERVICE_FORMSCOLLECTION,         "com.sun.star.form.Forms" );
-    XMLFORM_CONSTASCII_STRING( SERVICE_NUMBERFORMATSSUPPLIER,   "com.sun.star.util.NumberFormatsSupplier" );
     XMLFORM_CONSTASCII_STRING( SERVICE_SPREADSHEET_DOCUMENT,    "com.sun.star.sheet.SpreadsheetDocument");
     XMLFORM_CONSTASCII_STRING( SERVICE_CELLVALUEBINDING,        "com.sun.star.table.CellValueBinding" );
     XMLFORM_CONSTASCII_STRING( SERVICE_LISTINDEXCELLBINDING,    "com.sun.star.table.ListPositionCellBinding" );

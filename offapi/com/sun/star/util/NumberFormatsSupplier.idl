@@ -21,10 +21,10 @@
 #define __com_sun_star_util_NumberFormatsSupplier_idl__
 
 #include <com/sun/star/util/XNumberFormatsSupplier.idl>
-#include <com/sun/star/lang/XInitialization.idl>
+#include <com/sun/star/lang/Locale.idl>
 
 
- module com {  module sun {  module star {  module util {
+module com {  module sun {  module star {  module util {
 
 
 /** provides an supplier of number formats
@@ -34,24 +34,20 @@
 
     @since OOo 1.1.2
 */
-published service NumberFormatsSupplier
+published service NumberFormatsSupplier : XNumberFormatsSupplier
 {
-    /** used to initialize the component when instantiating.
 
-        <p>In the <member scope="com::sun::star::lang">XInitialization::initialize</member> method, you can
-        pass a <type scope="com::sun::star::lang">Locale</type> to specify the default locale of the
-        number formats supplier.</p>
+    /**
+        Create using specific locale.
 
-        <p>The component should be initialized only once, after it has been instantiated, and before it
-        has been used.<br/>
-        If you initialize it a second time (or after you used it), it is up to implementation
-        how this is handled.</p>
+        @param aLocale the locale of the number formats supplier
     */
-    interface com::sun::star::lang::XInitialization;
+    createWithLocale([in] com::sun::star::lang::Locale locale);
 
-    /** allows access to the number formats supplied by the component.
+    /**
+        Create using default locale.
     */
-    interface XNumberFormatsSupplier;
+    createWithDefaultLocale();
 };
 
 

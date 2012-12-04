@@ -21,7 +21,7 @@
 
 #include "FieldDescControl.hxx"
 #include "TypeInfo.hxx"
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 
 //.........................................................................
@@ -34,7 +34,7 @@ namespace dbaui
     class OColumnControlWindow : public OFieldDescControl
     {
         ::com::sun::star::lang::Locale      m_aLocale;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xORB;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>          m_xConnection;
         mutable ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
 
@@ -58,7 +58,7 @@ namespace dbaui
 
     public:
         OColumnControlWindow(Window* pParent
-                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext);
         virtual ~OColumnControlWindow();
 
         void setConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xCon);

@@ -50,6 +50,7 @@
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/script/DocumentScriptLibraryContainer.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
+#include <com/sun/star/util/NumberFormatsSupplier.hpp>
 
 #include <comphelper/componentcontext.hxx>
 
@@ -1752,9 +1753,7 @@ Reference< util::XNumberFormatsSupplier > const & DialogImport::getNumberFormats
 {
     if (! _xSupplier.is())
     {
-        Reference< XComponentContext > xContext( getComponentContext() );
-        Reference< util::XNumberFormatsSupplier > xSupplier(
-            xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.util.NumberFormatsSupplier", xContext ), UNO_QUERY );
+        Reference< util::XNumberFormatsSupplier > xSupplier = util::NumberFormatsSupplier::createWithDefaultLocale( getComponentContext() );
 
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         if (! _xSupplier.is())

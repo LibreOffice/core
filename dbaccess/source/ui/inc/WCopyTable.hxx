@@ -25,6 +25,7 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/stl_types.hxx>
 #include "TypeInfo.hxx"
@@ -264,7 +265,7 @@ namespace dbaui
         const ICopyTableSourceObject&                                                   m_rSourceObject;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xFactory;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>     m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler>  m_xInteractionHandler;
 
         String                  m_sTypeNames;       // these type names are the ones out of the resource file
@@ -310,7 +311,7 @@ namespace dbaui
             const ICopyTableSourceObject&                                                           _rSourceObject,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >&          _xSourceConnection,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >&          _xConnection,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&     _rxContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler>&   _xInteractionHandler
         );
 
@@ -325,7 +326,7 @@ namespace dbaui
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _xFormatter,
             TypeSelectionPageFactory _pTypeSelectionPageFactory,
             SvStream& _rTypeSelectionPageArg,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext
         );
 
         virtual ~OCopyTableWizard();
@@ -382,7 +383,7 @@ namespace dbaui
 
         ::com::sun::star::lang::Locale  GetLocale() const { return m_aLocale; }
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > GetFormatter() const { return m_xFormatter; }
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> GetFactory() const { return m_xFactory; }
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> GetComponentContext() const { return m_xContext; }
 
         const ODatabaseExport::TColumns*        getSourceColumns() const{ return &m_vSourceColumns; }
         const ODatabaseExport::TColumnVector*   getSrcVector() const    { return &m_vSourceVec; }

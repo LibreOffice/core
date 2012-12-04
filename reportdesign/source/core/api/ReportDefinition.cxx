@@ -72,6 +72,7 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
+#include <com/sun/star/util/NumberFormatsSupplier.hpp>
 #include <com/sun/star/xml/AttributeData.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 
@@ -1300,11 +1301,7 @@ void OReportDefinition::fillArgs(::comphelper::MediaDescriptor& _aDescriptor)
     }
     if ( !m_pImpl->m_xNumberFormatsSupplier.is() )
     {
-        m_pImpl->m_xNumberFormatsSupplier.set(
-                    m_aProps->m_xContext->getServiceManager()->createInstanceWithContext(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.NumberFormatsSupplier")) ,m_aProps->m_xContext),
-                        uno::UNO_QUERY_THROW
-                );
+        m_pImpl->m_xNumberFormatsSupplier.set( util::NumberFormatsSupplier::createWithDefaultLocale( m_aProps->m_xContext ) );
     }
     lcl_stripLoadArguments( _aDescriptor, m_pImpl->m_aArgs );
     ::rtl::OUString sCaption;

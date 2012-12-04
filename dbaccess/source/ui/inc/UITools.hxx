@@ -415,7 +415,7 @@ namespace dbaui
         @param  _rMF
             The multi service factory
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > getNumberFormatter(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rMF );
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > getNumberFormatter(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext );
 
     // this completes a help url with the system parameters "Language" and "System"
     // detect installed locale

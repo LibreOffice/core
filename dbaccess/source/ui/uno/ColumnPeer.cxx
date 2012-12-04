@@ -33,13 +33,12 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 
-OColumnPeer::OColumnPeer(Window* _pParent,const Reference<XMultiServiceFactory>& _rxFactory)
-    :m_xORB(_rxFactory)
-    ,m_pActFieldDescr(NULL)
+OColumnPeer::OColumnPeer(Window* _pParent,const Reference<XComponentContext>& _rxContext)
+    :m_pActFieldDescr(NULL)
 {
     osl_atomic_increment( &m_refCount );
     {
-        OColumnControlWindow* pFieldControl = new OColumnControlWindow(_pParent,m_xORB);
+        OColumnControlWindow* pFieldControl = new OColumnControlWindow(_pParent, _rxContext);
         pFieldControl->SetComponentInterface(this);
         pFieldControl->Show();
     }
