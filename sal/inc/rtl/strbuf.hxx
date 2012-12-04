@@ -233,13 +233,11 @@ public:
     OStringBuffer( const OStringConcat< T1, T2 >& c )
     {
         const sal_Int32 l = c.length();
-        rtl_String* buffer = NULL;
         nCapacity = l + 16;
-        rtl_string_new_WithLength( &buffer, nCapacity );
-        char* end = c.addData( buffer->buffer );
+        pData = rtl_string_alloc( nCapacity );
+        char* end = c.addData( pData->buffer );
         *end = '\0';
-        buffer->length = end - buffer->buffer;
-        pData = buffer;
+        pData->length = end - pData->buffer;
     }
 #endif
 

@@ -265,14 +265,13 @@ public:
     OString( const OStringConcat< T1, T2 >& c )
     {
         const sal_Int32 l = c.length();
-        rtl_String* buffer = NULL;
-        rtl_string_new_WithLength( &buffer, l );
+        pData = rtl_string_alloc( l );
         if (l != 0)
         {
-            char* end = c.addData( buffer->buffer );
-            buffer->length = end - buffer->buffer;
+            char* end = c.addData( pData->buffer );
+            pData->length = end - pData->buffer;
+            *end = '\0';
         }
-        pData = buffer;
     }
 #endif
 

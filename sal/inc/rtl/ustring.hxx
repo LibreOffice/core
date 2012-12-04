@@ -333,15 +333,14 @@ public:
     OUString( const OUStringConcat< T1, T2 >& c )
     {
         const sal_Int32 l = c.length();
-        rtl_uString* buffer = NULL;
-        rtl_uString_new_WithLength( &buffer, l ); // TODO this clears, not necessary
+        pData = rtl_uString_alloc( l );
         if (l != 0)
         {
-            sal_Unicode* end = c.addData( buffer->buffer );
-            buffer->length = end - buffer->buffer;
-            // TODO realloc in case buffer->length is noticeably smaller than l?
+            sal_Unicode* end = c.addData( pData->buffer );
+            pData->length = end - pData->buffer;
+            *end = '\0';
+            // TODO realloc in case pData->length is noticeably smaller than l?
         }
-        pData = buffer;
     }
 #endif
 

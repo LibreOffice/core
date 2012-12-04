@@ -225,14 +225,12 @@ public:
     OUStringBuffer( const OUStringConcat< T1, T2 >& c )
     {
         const sal_Int32 l = c.length();
-        rtl_uString* buffer = NULL;
         nCapacity = l + 16;
-        rtl_uString_new_WithLength( &buffer, nCapacity ); // TODO this clears, not necessary
-        sal_Unicode* end = c.addData( buffer->buffer );
+        pData = rtl_uString_alloc( nCapacity );
+        sal_Unicode* end = c.addData( pData->buffer );
         *end = '\0';
-        buffer->length = end - buffer->buffer;
-        // TODO realloc in case buffer->length is noticeably smaller than l ?
-        pData = buffer;
+        pData->length = end - pData->buffer;
+        // TODO realloc in case pData->>length is noticeably smaller than l ?
     }
 #endif
     /** Assign to this a copy of value.
