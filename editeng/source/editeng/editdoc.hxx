@@ -417,7 +417,7 @@ public:
     void        SetLen( sal_uInt16 nL )         { nLen = nL; }
 
     Size&       GetSize()                   { return aOutSz; }
-    Size        GetSize() const             { return aOutSz; }
+    const Size& GetSize() const             { return aOutSz; }
 
     sal_uInt8&      GetKind()                   { return nKind; }
     sal_uInt8       GetKind() const             { return nKind; }

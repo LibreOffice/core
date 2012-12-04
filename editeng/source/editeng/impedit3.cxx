@@ -1157,7 +1157,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
                     nW = nMaxW;
                     aCurrentTab.bValid = sal_False;
                 }
-                const TextPortion* pTabPortion = pParaPortion->GetTextPortions()[aCurrentTab.nTabPortion];
+                TextPortion* const pTabPortion = pParaPortion->GetTextPortions()[aCurrentTab.nTabPortion];
                 pTabPortion->GetSize().Width() = aCurrentTab.nTabPos - aCurrentTab.nStartPosX - nW - nStartX;
                 nTmpWidth = aCurrentTab.nStartPosX + pTabPortion->GetSize().Width() + nWidthAfterTab;
             }
@@ -1400,7 +1400,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
             // Width from HangingPunctuation was set to 0 in ImpBreakLine,
             // check for rel width now, maybe create compression...
             long n = nMaxLineWidth - aTextSize.Width();
-            const TextPortion* pTP = pParaPortion->GetTextPortions()[pLine->GetEndPortion()];
+            TextPortion* const pTP = pParaPortion->GetTextPortions()[pLine->GetEndPortion()];
             sal_uInt16 nPosInArray = pLine->GetEnd()-1-pLine->GetStart();
             long nNewValue = ( nPosInArray ? pLine->GetCharPosArray()[ nPosInArray-1 ] : 0 ) + n;
             pLine->GetCharPosArray()[ nPosInArray ] = nNewValue;
@@ -1942,7 +1942,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
 
     if ( bCompressBlank || bHangingPunctuation )
     {
-        const TextPortion* pTP = pParaPortion->GetTextPortions()[nEndPortion];
+        TextPortion* const pTP = pParaPortion->GetTextPortions()[nEndPortion];
         DBG_ASSERT( pTP->GetKind() == PORTIONKIND_TEXT, "BlankRubber: No TextPortion!" );
         DBG_ASSERT( nBreakPos > pLine->GetStart(), "SplitTextPortion at the beginning of the line?" );
         sal_uInt16 nPosInArray = nBreakPos - 1 - pLine->GetStart();
