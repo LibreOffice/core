@@ -30,7 +30,7 @@ DBG_NAMEEX(SfxEnumItemInterface)
 class SVL_DLLPUBLIC SfxEnumItemInterface: public SfxPoolItem
 {
 protected:
-    SfxEnumItemInterface(sal_uInt16 which): SfxPoolItem(which) {}
+    explicit SfxEnumItemInterface(sal_uInt16 which): SfxPoolItem(which) {}
 
     SfxEnumItemInterface(const SfxEnumItemInterface & rItem):
         SfxPoolItem(rItem) {}
@@ -89,7 +89,7 @@ class SVL_DLLPUBLIC CntEnumItem: public SfxEnumItemInterface
     sal_uInt16 m_nValue;
 
 protected:
-    CntEnumItem(sal_uInt16 which = 0, sal_uInt16 nTheValue = 0):
+    explicit CntEnumItem(sal_uInt16 which = 0, sal_uInt16 nTheValue = 0):
         SfxEnumItemInterface(which), m_nValue(nTheValue) {}
 
     CntEnumItem(sal_uInt16 which, SvStream & rStream);
@@ -127,7 +127,7 @@ class SVL_DLLPUBLIC CntBoolItem: public SfxPoolItem
 public:
     TYPEINFO();
 
-    CntBoolItem(sal_uInt16 which = 0, sal_Bool bTheValue = sal_False):
+    explicit CntBoolItem(sal_uInt16 which = 0, sal_Bool bTheValue = sal_False):
         SfxPoolItem(which), m_bValue(bTheValue) {}
 
     CntBoolItem(sal_uInt16 nWhich, SvStream & rStream);

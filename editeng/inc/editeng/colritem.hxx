@@ -46,7 +46,7 @@ private:
 public:
     TYPEINFO();
 
-    SvxColorItem( const sal_uInt16 nId );
+    explicit SvxColorItem( const sal_uInt16 nId );
     SvxColorItem( const Color& aColor, const sal_uInt16 nId  );
     SvxColorItem( SvStream& rStrm, const sal_uInt16 nId  );
     SvxColorItem( const SvxColorItem& rCopy );

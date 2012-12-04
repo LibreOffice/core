@@ -37,7 +37,7 @@ protected:
 public:
     TYPEINFO();
                             SfxAllEnumItem();
-                            SfxAllEnumItem( sal_uInt16 nWhich);
+    explicit                SfxAllEnumItem( sal_uInt16 nWhich);
                             SfxAllEnumItem( sal_uInt16 nWhich, sal_uInt16 nVal );
                             SfxAllEnumItem( sal_uInt16 nWhich, SvStream &rStream );
                             SfxAllEnumItem( const SfxAllEnumItem & );

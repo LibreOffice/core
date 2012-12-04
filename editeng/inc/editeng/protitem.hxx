@@ -45,7 +45,7 @@ class EDITENG_DLLPUBLIC SvxProtectItem : public SfxPoolItem
 public:
     TYPEINFO();
 
-    inline SvxProtectItem( const sal_uInt16 nId  );
+    explicit inline SvxProtectItem( const sal_uInt16 nId  );
     inline SvxProtectItem &operator=( const SvxProtectItem &rCpy );
 
     // "pure virtual Methods" from SfxPoolItem

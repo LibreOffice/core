@@ -67,7 +67,7 @@ class EDITENG_DLLPUBLIC SvxLRSpaceItem : public SfxPoolItem
 public:
     TYPEINFO();
 
-    SvxLRSpaceItem( const sal_uInt16 nId  );
+    explicit SvxLRSpaceItem( const sal_uInt16 nId  );
     SvxLRSpaceItem( const long nLeft, const long nRight,
                     const long nTLeft /*= 0*/, const short nOfset /*= 0*/,
                     const sal_uInt16 nId  );

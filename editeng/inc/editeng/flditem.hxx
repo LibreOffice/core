@@ -115,7 +115,7 @@ public:
     SV_DECL_PERSIST1( SvxDateField, SvxFieldData, com::sun::star::text::textfield::Type::DATE )
 
                             SvxDateField();
-                            SvxDateField( const Date& rDate,
+    explicit                SvxDateField( const Date& rDate,
                                 SvxDateType eType = SVXDATETYPE_VAR,
                                 SvxDateFormat eFormat = SVXDATEFORMAT_STDSMALL );
 
@@ -227,7 +227,7 @@ class EDITENG_DLLPUBLIC SvxTableField : public SvxFieldData
 public:
     SV_DECL_PERSIST1( SvxTableField, SvxFieldData, com::sun::star::text::textfield::Type::TABLE )
     SvxTableField();
-    SvxTableField(int nTab);
+    explicit SvxTableField(int nTab);
 
     void SetTab(int nTab);
     int GetTab() const;
@@ -262,7 +262,7 @@ private:
 public:
     SV_DECL_PERSIST1( SvxExtTimeField, SvxFieldData, com::sun::star::text::textfield::Type::EXTENDED_TIME )
                             SvxExtTimeField();
-                            SvxExtTimeField( const Time& rTime,
+    explicit                SvxExtTimeField( const Time& rTime,
                                 SvxTimeType eType = SVXTIMETYPE_VAR,
                                 SvxTimeFormat eFormat = SVXTIMEFORMAT_STANDARD );
 
@@ -306,7 +306,7 @@ private:
 public:
     SV_DECL_PERSIST1( SvxExtFileField, SvxFieldData, com::sun::star::text::textfield::Type::EXTENDED_FILE )
                             SvxExtFileField();
-                            SvxExtFileField( const rtl::OUString& rString,
+    explicit                SvxExtFileField( const rtl::OUString& rString,
                                 SvxFileType eType = SVXFILETYPE_VAR,
                                 SvxFileFormat eFormat = SVXFILEFORMAT_FULLPATH );
 

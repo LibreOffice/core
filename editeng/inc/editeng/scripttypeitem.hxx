@@ -40,7 +40,7 @@ class EDITENG_DLLPUBLIC SvxScriptTypeItem : public SfxUInt16Item
 public:
     TYPEINFO();
 
-    SvxScriptTypeItem( sal_uInt16 nType = SCRIPTTYPE_LATIN );
+    explicit SvxScriptTypeItem( sal_uInt16 nType = SCRIPTTYPE_LATIN );
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
 
 };

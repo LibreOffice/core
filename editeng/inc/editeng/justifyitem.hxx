@@ -30,7 +30,7 @@ class EDITENG_DLLPUBLIC SvxHorJustifyItem: public SfxEnumItem
 public:
     TYPEINFO();
 
-    SvxHorJustifyItem( const sal_uInt16 nId );
+    explicit SvxHorJustifyItem( const sal_uInt16 nId );
 
     SvxHorJustifyItem(
         const SvxCellHorJustify eJustify /*= SVX_HOR_JUSTIFY_STANDARD*/,
@@ -63,7 +63,7 @@ class EDITENG_DLLPUBLIC SvxVerJustifyItem: public SfxEnumItem
 public:
     TYPEINFO();
 
-    SvxVerJustifyItem( const sal_uInt16 nId  );
+    explicit SvxVerJustifyItem( const sal_uInt16 nId  );
 
     SvxVerJustifyItem(
         const SvxCellVerJustify eJustify /*= SVX_VER_JUSTIFY_STANDARD*/,

@@ -40,7 +40,7 @@ public:
         \
         public: \
             TYPEINFO(); \
-            Name( Type* Object, bool bOwnedByHint = false ); \
+            explicit Name( Type* Object, bool bOwnedByHint = false ); \
             ~Name(); \
         \
             Type* GetObject() const { return pObj; } \

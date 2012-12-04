@@ -45,7 +45,7 @@ class EDITENG_DLLPUBLIC SvxULSpaceItem : public SfxPoolItem
 public:
     TYPEINFO();
 
-    SvxULSpaceItem( const sal_uInt16 nId  );
+    explicit SvxULSpaceItem( const sal_uInt16 nId  );
     SvxULSpaceItem( const sal_uInt16 nUp, const sal_uInt16 nLow,
                     const sal_uInt16 nId  );
     inline SvxULSpaceItem& operator=( const SvxULSpaceItem &rCpy );

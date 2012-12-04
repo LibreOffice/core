@@ -68,7 +68,7 @@ class EDITENG_DLLPUBLIC SvxNumberType
     sal_Bool        bShowSymbol;        // Also show Symbol ?
 
 public:
-    SvxNumberType(sal_Int16 nType = com::sun::star::style::NumberingType::ARABIC);
+    explicit SvxNumberType(sal_Int16 nType = com::sun::star::style::NumberingType::ARABIC);
     SvxNumberType(const SvxNumberType& rType);
     ~SvxNumberType();
 
@@ -154,7 +154,7 @@ private:
     DECL_STATIC_LINK( SvxNumberFormat, GraphicArrived, void * );
     virtual void NotifyGraphicArrived();
 public:
-    SvxNumberFormat( sal_Int16 nNumberingType,
+    explicit SvxNumberFormat( sal_Int16 nNumberingType,
                      SvxNumPositionAndSpaceMode ePositionAndSpaceMode = LABEL_WIDTH_AND_POSITION );
     SvxNumberFormat(const SvxNumberFormat& rFormat);
 
@@ -288,7 +288,7 @@ class EDITENG_DLLPUBLIC SvxNumBulletItem : public SfxPoolItem
 {
     SvxNumRule*             pNumRule;
 public:
-    SvxNumBulletItem(SvxNumRule& rRule);
+    explicit SvxNumBulletItem(SvxNumRule& rRule);
     SvxNumBulletItem(SvxNumRule& rRule, sal_uInt16 nWhich );
     SvxNumBulletItem(const SvxNumBulletItem& rCopy);
     virtual ~SvxNumBulletItem();
@@ -313,7 +313,7 @@ class SvxNodeNum
     sal_Bool bStartNum;                     // Restart numbering
 
 public:
-    inline SvxNodeNum( sal_uInt8 nLevel = SVX_NO_NUM, sal_uInt16 nSetVal = USHRT_MAX );
+    explicit inline SvxNodeNum( sal_uInt8 nLevel = SVX_NO_NUM, sal_uInt16 nSetVal = USHRT_MAX );
     inline SvxNodeNum& operator=( const SvxNodeNum& rCpy );
 
     sal_uInt8 GetLevel() const                  { return nMyLevel; }

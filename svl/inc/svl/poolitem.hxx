@@ -187,7 +187,7 @@ private:
     SVL_DLLPRIVATE long      Delete_Impl(void*);
 
 protected:
-                             SfxPoolItem( sal_uInt16 nWhich = 0 );
+                             explicit SfxPoolItem( sal_uInt16 nWhich = 0 );
                              SfxPoolItem( const SfxPoolItem& );
 
 public:
@@ -341,7 +341,7 @@ class SVL_DLLPUBLIC SfxVoidItem: public SfxPoolItem
     SfxVoidItem & operator=( const SfxVoidItem& ); // not implemented.
 public:
                             TYPEINFO();
-                            SfxVoidItem( sal_uInt16 nWhich );
+                            explicit SfxVoidItem( sal_uInt16 nWhich );
                             SfxVoidItem( sal_uInt16 nWhich, SvStream & );
                             SfxVoidItem( const SfxVoidItem& );
                             ~SfxVoidItem();
@@ -401,7 +401,7 @@ class SVL_DLLPUBLIC SfxItemHandle
     sal_uInt16      *pRef;
     SfxPoolItem *pItem;
 public:
-    SfxItemHandle( SfxPoolItem& );
+    explicit SfxItemHandle( SfxPoolItem& );
     SfxItemHandle( const SfxItemHandle& );
     ~SfxItemHandle();
 

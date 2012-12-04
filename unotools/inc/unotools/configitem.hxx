@@ -104,7 +104,7 @@ namespace utl
                                         GetTree();
 
         protected:
-            ConfigItem(const OUString &rSubTree,
+            explicit ConfigItem(const OUString &rSubTree,
                         sal_Int16 nMode = CONFIG_MODE_DELAYED_UPDATE);
 
             void                    SetModified  (); // mark item as modified

@@ -36,7 +36,7 @@ class EDITENG_DLLPUBLIC SvxCharSetColorItem : public SvxColorItem
 public:
     TYPEINFO();
 
-    SvxCharSetColorItem( const sal_uInt16 nId  );
+    explicit SvxCharSetColorItem( const sal_uInt16 nId  );
     SvxCharSetColorItem( const Color& aColor, const rtl_TextEncoding eFrom,
                      const sal_uInt16 nId  );
 

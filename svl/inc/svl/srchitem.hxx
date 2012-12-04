@@ -78,7 +78,7 @@ class SVL_DLLPUBLIC SvxSearchItem :
 public:
     TYPEINFO();
 
-    SvxSearchItem( const sal_uInt16 nId );
+    explicit SvxSearchItem( const sal_uInt16 nId );
     SvxSearchItem( const SvxSearchItem& rItem );
     virtual ~SvxSearchItem();
 

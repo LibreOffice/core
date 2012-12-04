@@ -50,7 +50,7 @@ class EDITENG_DLLPUBLIC SvxFontItem : public SfxPoolItem
 public:
     TYPEINFO();
 
-    SvxFontItem( const sal_uInt16 nId  );
+    explicit SvxFontItem( const sal_uInt16 nId  );
     SvxFontItem( const FontFamily eFam, const String& rFamilyName,
         const String& rStyleName,
         const FontPitch eFontPitch /*= PITCH_DONTKNOW*/,

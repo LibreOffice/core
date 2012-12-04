@@ -82,8 +82,8 @@ class EDITENG_DLLPUBLIC SvxBulletItem : public SfxPoolItem
 public:
     TYPEINFO();
 
-    SvxBulletItem( sal_uInt16 nWhich = 0 );
-    SvxBulletItem( SvStream& rStrm, sal_uInt16 nWhich = 0 );
+    explicit SvxBulletItem( sal_uInt16 nWhich = 0 );
+    explicit SvxBulletItem( SvStream& rStrm, sal_uInt16 nWhich = 0 );
     SvxBulletItem( const SvxBulletItem& );
     ~SvxBulletItem();
 

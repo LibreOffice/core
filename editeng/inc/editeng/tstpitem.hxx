@@ -47,7 +47,7 @@ private:
 
 public:
     SvxTabStop();
-    SvxTabStop( const sal_Int32 nPos,
+    explicit SvxTabStop( const sal_Int32 nPos,
                 const SvxTabAdjust eAdjst = SVX_TAB_ADJUST_LEFT,
                 const sal_Unicode cDec = cDfltDecimalChar,
                 const sal_Unicode cFil = cDfltFillChar );
@@ -107,7 +107,7 @@ class EDITENG_DLLPUBLIC SvxTabStopItem : public SfxPoolItem
 public:
     TYPEINFO();
 
-    SvxTabStopItem( sal_uInt16 nWhich  );
+    explicit SvxTabStopItem( sal_uInt16 nWhich  );
     SvxTabStopItem( const sal_uInt16 nTabs,
                     const sal_uInt16 nDist,
                     const SvxTabAdjust eAdjst /*= SVX_TAB_ADJUST_DEFAULT*/,

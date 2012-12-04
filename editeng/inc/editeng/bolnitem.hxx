@@ -41,7 +41,7 @@ class EDITENG_DLLPUBLIC SvxLineItem : public SfxPoolItem
 public:
     TYPEINFO();
 
-    SvxLineItem( const sal_uInt16 nId );
+    explicit SvxLineItem( const sal_uInt16 nId );
     SvxLineItem( const SvxLineItem& rCpy );
     ~SvxLineItem();
     SvxLineItem &operator=( const SvxLineItem& rLine );

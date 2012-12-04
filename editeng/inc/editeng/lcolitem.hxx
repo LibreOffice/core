@@ -32,7 +32,7 @@ class EDITENG_DLLPUBLIC SvxLineColorItem : public SvxColorItem
 public:
     TYPEINFO();
 
-    SvxLineColorItem( const sal_uInt16 nId  );
+    explicit SvxLineColorItem( const sal_uInt16 nId  );
     SvxLineColorItem( const SvxLineColorItem& rCopy );
     ~SvxLineColorItem();
 

@@ -64,7 +64,7 @@ class EDITENG_DLLPUBLIC SvxBoxItem : public SfxPoolItem
 public:
     TYPEINFO();
 
-    SvxBoxItem( const sal_uInt16 nId );
+    explicit SvxBoxItem( const sal_uInt16 nId );
     SvxBoxItem( const SvxBoxItem &rCpy );
     ~SvxBoxItem();
     SvxBoxItem &operator=( const SvxBoxItem& rBox );
@@ -174,7 +174,7 @@ class EDITENG_DLLPUBLIC SvxBoxInfoItem : public SfxPoolItem
 public:
     TYPEINFO();
 
-    SvxBoxInfoItem( const sal_uInt16 nId );
+    explicit SvxBoxInfoItem( const sal_uInt16 nId );
     SvxBoxInfoItem( const SvxBoxInfoItem &rCpy );
     ~SvxBoxInfoItem();
     SvxBoxInfoItem &operator=( const SvxBoxInfoItem &rCpy );

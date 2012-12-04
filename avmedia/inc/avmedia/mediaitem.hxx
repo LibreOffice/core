@@ -65,7 +65,7 @@ class AVMEDIA_DLLPUBLIC MediaItem : public SfxPoolItem
 public:
                             TYPEINFO();
 
-                            MediaItem( sal_uInt16 const i_nWhich = 0,
+    explicit                MediaItem( sal_uInt16 const i_nWhich = 0,
                             sal_uInt32 const nMaskSet = AVMEDIA_SETMASK_NONE );
                             MediaItem( const MediaItem& rMediaItem );
     virtual                 ~MediaItem();

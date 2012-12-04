@@ -27,7 +27,7 @@
 class SVL_DLLPUBLIC SfxEnumItem: public CntEnumItem
 {
 protected:
-    SfxEnumItem(sal_uInt16 which = 0, sal_uInt16 nValue = 0):
+    explicit SfxEnumItem(sal_uInt16 which = 0, sal_uInt16 nValue = 0):
         CntEnumItem(which, nValue) {}
 
     SfxEnumItem(sal_uInt16 which, SvStream & rStream):
@@ -44,7 +44,7 @@ class SVL_DLLPUBLIC SfxBoolItem: public CntBoolItem
 public:
     TYPEINFO();
 
-    SfxBoolItem(sal_uInt16 which = 0, sal_Bool bValue = sal_False):
+    explicit SfxBoolItem(sal_uInt16 which = 0, sal_Bool bValue = sal_False):
         CntBoolItem(which, bValue) {}
 
     SfxBoolItem(sal_uInt16 which, SvStream & rStream):
