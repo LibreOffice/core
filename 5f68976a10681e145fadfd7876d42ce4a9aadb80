@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAARH///20\u003d",
+        "filename": "sd/source/ui/toolpanel/controls/MasterPageContainer.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1162,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2012-12-04T11:10:04Z",
+      "side": 1,
+      "message": "Rename to nPageObject..., I suggest",
+      "revId": "5f68976a10681e145fadfd7876d42ce4a9aadb80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAARH///2w\u003d",
+        "filename": "sd/source/ui/toolpanel/controls/MasterPageDescriptor.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2012-12-04T11:10:04Z",
+      "side": 1,
+      "message": "again, better have it nModified here",
+      "revId": "5f68976a10681e145fadfd7876d42ce4a9aadb80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAARH///2c\u003d",
+        "filename": "sfx2/source/appl/appopen.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2012-12-04T11:10:04Z",
+      "side": 1,
+      "message": "Why is that necessary? To properly fail?",
+      "revId": "5f68976a10681e145fadfd7876d42ce4a9aadb80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
