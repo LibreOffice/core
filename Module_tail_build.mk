@@ -22,9 +22,9 @@
 # instead of those above.
 
 
-$(eval $(call gb_Module_Module,tail_end))
+$(eval $(call gb_Module_Module,tail_build))
 
-$(eval $(call gb_Module_add_moduledirs,tail_end,\
+$(eval $(call gb_Module_add_moduledirs,tail_build,\
 	accessibility \
 	$(call gb_Helper_optional,AFMS,afms) \
 	animations \
@@ -205,7 +205,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 ))
 
 ifeq ($(MERGELIBS),TRUE)
-$(eval $(call gb_Module_add_targets,tail_end,\
+$(eval $(call gb_Module_add_targets,tail_build,\
 	Library_merged \
 ))
 endif
