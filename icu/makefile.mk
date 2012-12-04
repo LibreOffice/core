@@ -56,6 +56,7 @@ PATCH_FILES=\
     icu4c.9313.cygwin.patch \
     icu4c-macosx.patch \
     icu4c-solarisgcc.patch \
+    icu4c-mkdir.patch \
 
 .IF "$(OS)"=="ANDROID"
 PATCH_FILES+=\

@@ -1,0 +1,10 @@
+--- misc/icu/source/dataMakefile.in.sav	2012-04-05 22:49:20.000000000 +0200
++++ misc/build/icu/source/data/Makefile.in	2012-12-04 14:24:40.548026700 +0100
+@@ -346,6 +346,7 @@
+ ifeq ($(PKGDATA_MODE),dll)
+ SO_VERSION_DATA = $(OUTTMPDIR)/icudata.res
+ $(SO_VERSION_DATA) : $(MISCSRCDIR)/icudata.rc
++	mkdir -p $(OUTTMPDIR)
+ 	rc.exe /i$(srcdir)/../common /i$(top_builddir)/common /fo$@ $(CPPFLAGS) $(SOURCE_FILE)
+ endif
+ endif
