@@ -83,8 +83,9 @@ private:
     SAL_DLLPRIVATE long         ImplDoAction( sal_Bool bCallEndScroll );
     SAL_DLLPRIVATE void         ImplDoMouseAction( const Point& rPos, sal_Bool bCallAction = sal_True );
     SAL_DLLPRIVATE void         ImplInvert();
-    SAL_DLLPRIVATE sal_Bool         ImplDrawNative( sal_uInt16 nDrawFlags );
+    SAL_DLLPRIVATE sal_Bool     ImplDrawNative( sal_uInt16 nDrawFlags );
     SAL_DLLPRIVATE void         ImplDragThumb( const Point& rMousePos );
+    SAL_DLLPRIVATE Size         getCurrentCalcSize() const;
     DECL_DLLPRIVATE_LINK(       ImplTimerHdl, Timer* );
     DECL_DLLPRIVATE_LINK(       ImplAutoTimerHdl, void* );
 
