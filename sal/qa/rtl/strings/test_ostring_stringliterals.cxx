@@ -40,18 +40,6 @@ bool rtl_string_unittest_non_const_literal_function;
 #include "rtl/string.hxx"
 #include "rtl/strbuf.hxx"
 
-namespace rtlunittest {
-
-template< typename charT, typename traits > std::basic_ostream<charT, traits> &
-operator <<(
-    std::basic_ostream<charT, traits> & stream, rtl::OString const & string)
-{
-    return stream << string.getStr();
-        // best effort; potentially loses data due to embedded null characters
-}
-
-}
-
 namespace test { namespace ostring {
 
 class StringLiterals: public CppUnit::TestFixture
