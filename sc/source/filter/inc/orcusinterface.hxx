@@ -19,6 +19,7 @@
 
 class ScDocument;
 class ScOrcusSheet;
+class ScRangeData;
 
 class ScOrcusSharedStrings : public orcus::spreadsheet::iface::import_shared_strings
 {
@@ -59,6 +60,9 @@ class ScOrcusSheet : public orcus::spreadsheet::iface::import_sheet
     ScDocument& mrDoc;
     SCTAB mnTab;
     ScOrcusSharedStrings& mrSharedStrings;
+
+    typedef std::map<size_t, ScRangeData*> SharedFormulaContainer;
+    SharedFormulaContainer maSharedFormulas;
 public:
     ScOrcusSheet(ScDocument& rDoc, SCTAB nTab, ScOrcusSharedStrings& rSharedStrings);
 
@@ -78,6 +82,67 @@ public:
     virtual void set_value(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, double value);
 
     SCTAB getIndex() const { return mnTab; }
+};
+
+class ScOrcusStyles : public orcus::spreadsheet::iface::import_styles
+{
+
+public:
+    // font
+
+    virtual void set_font_count(size_t n);
+    virtual void set_font_bold(bool b);
+    virtual void set_font_italic(bool b);
+    virtual void set_font_name(const char* s, size_t n);
+    virtual void set_font_size(double point);
+    virtual void set_font_underline(orcus::spreadsheet::underline_t e);
+    virtual size_t commit_font();
+
+    // fill
+
+    virtual void set_fill_count(size_t n);
+    virtual void set_fill_pattern_type(const char* s, size_t n);
+    virtual void set_fill_fg_color(orcus::spreadsheet::color_elem_t alpha, orcus::spreadsheet::color_elem_t red, orcus::spreadsheet::color_elem_t green, orcus::spreadsheet::color_elem_t blue);
+    virtual void set_fill_bg_color(orcus::spreadsheet::color_elem_t alpha, orcus::spreadsheet::color_elem_t red, orcus::spreadsheet::color_elem_t green, orcus::spreadsheet::color_elem_t blue);
+    virtual size_t commit_fill();
+
+    // border
+
+    virtual void set_border_count(size_t n);
+    virtual void set_border_style(orcus::spreadsheet::border_direction_t dir, const char* s, size_t n);
+    virtual size_t commit_border();
+
+    // cell protection
+    virtual void set_cell_hidden(bool b);
+    virtual void set_cell_locked(bool b);
+    virtual size_t commit_cell_protection();
+
+    // cell style xf
+
+    virtual void set_cell_style_xf_count(size_t n);
+    virtual size_t commit_cell_style_xf();
+
+    // cell xf
+
+    virtual void set_cell_xf_count(size_t n);
+    virtual size_t commit_cell_xf();
+
+    // xf (cell format) - used both by cell xf and cell style xf.
+
+    virtual void set_xf_number_format(size_t index);
+    virtual void set_xf_font(size_t index);
+    virtual void set_xf_fill(size_t index);
+    virtual void set_xf_border(size_t index);
+    virtual void set_xf_protection(size_t index);
+    virtual void set_xf_style_xf(size_t index);
+
+    // cell style entry
+
+    virtual void set_cell_style_count(size_t n);
+    virtual void set_cell_style_name(const char* s, size_t n);
+    virtual void set_cell_style_xf(size_t index);
+    virtual void set_cell_style_builtin(size_t index);
+    virtual size_t commit_cell_style();
 };
 
 #endif

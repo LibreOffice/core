@@ -11,6 +11,10 @@
 
 #include "document.hxx"
 #include "cell.hxx"
+#include "rangenam.hxx"
+#include "tokenarray.hxx"
+#include <formula/token.hxx>
+
 
 using orcus::spreadsheet::row_t;
 using orcus::spreadsheet::col_t;
@@ -69,7 +73,7 @@ orcus::spreadsheet::iface::import_shared_strings* ScOrcusFactory::get_shared_str
 orcus::spreadsheet::iface::import_styles* ScOrcusFactory::get_styles()
 {
     // We don't support it yet.
-    return NULL;
+    return new ScOrcusStyles;
 }
 
 ScOrcusSheet::ScOrcusSheet(ScDocument& rDoc, SCTAB nTab, ScOrcusSharedStrings& rSharedStrings) :
@@ -85,10 +89,10 @@ void ScOrcusSheet::set_format(row_t /*row*/, col_t /*col*/, size_t /*xf_index*/)
 {
 }
 
-void ScOrcusSheet::set_formula(
-    row_t row, col_t col, formula_grammar_t grammar, const char* p, size_t n)
+namespace {
+
+formula::FormulaGrammar::Grammar getCalcGrammarFromOrcus( formula_grammar_t grammar )
 {
-    OUString aFormula(p, n, RTL_TEXTENCODING_UTF8);
     formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_ODFF;
     switch(grammar)
     {
@@ -103,6 +107,17 @@ void ScOrcusSheet::set_formula(
             eGrammar = formula::FormulaGrammar::GRAM_ENGLISH_XL_A1;
             break;
     }
+
+    return eGrammar;
+}
+
+}
+
+void ScOrcusSheet::set_formula(
+    row_t row, col_t col, formula_grammar_t grammar, const char* p, size_t n)
+{
+    OUString aFormula(p, n, RTL_TEXTENCODING_UTF8);
+    formula::FormulaGrammar::Grammar eGrammar = getCalcGrammarFromOrcus( grammar );
 
     ScFormulaCell* pCell = new ScFormulaCell(&mrDoc, ScAddress(col, row, mnTab), aFormula, eGrammar);
     mrDoc.PutCell(col, row, mnTab, pCell);
@@ -123,19 +138,57 @@ void ScOrcusSheet::set_formula_result(row_t row, col_t col, const char* p, size_
 }
 
 void ScOrcusSheet::set_shared_formula(
-    row_t /*row*/, col_t /*col*/, formula_grammar_t /*grammar*/, size_t /*sindex*/,
-    const char* /*p_formula*/, size_t /*n_formula*/)
+    row_t row, col_t col, formula_grammar_t grammar, size_t sindex,
+    const char* p_formula, size_t n_formula)
 {
+    OUString aFormula( p_formula, n_formula, RTL_TEXTENCODING_UTF8 );
+    formula::FormulaGrammar::Grammar eGrammar =  getCalcGrammarFromOrcus( grammar );
+    ScRangeName* pRangeName = mrDoc.GetRangeName();
+
+    OUString aName("shared_");
+    aName += OUString::valueOf(sal_Int32(pRangeName->size()));
+    ScRangeData* pSharedFormula = new ScRangeData( &mrDoc, aName, aFormula, ScAddress(col, row, mnTab), RT_SHARED, eGrammar);
+    if(pRangeName->insert(pSharedFormula))
+    {
+        maSharedFormulas.insert( std::pair<size_t, ScRangeData*>(sindex, pSharedFormula) );
+        ScTokenArray aArr;
+        aArr.AddToken( formula::FormulaIndexToken( ocName, pSharedFormula->GetIndex() ) );
+        ScFormulaCell* pCell = new ScFormulaCell( &mrDoc, ScAddress( row, col, mnTab ), &aArr );
+        mrDoc.PutCell( col, row, mnTab, pCell );
+    }
 }
 
 void ScOrcusSheet::set_shared_formula(
-    row_t /*row*/, col_t /*col*/, formula_grammar_t /*grammar*/, size_t /*sindex*/,
-    const char* /*p_formula*/, size_t /*n_formula*/, const char* /*p_range*/, size_t /*n_range*/)
+    row_t row, col_t col, formula_grammar_t grammar, size_t sindex,
+    const char* p_formula, size_t n_formula, const char* /*p_range*/, size_t /*n_range*/)
 {
+    OUString aFormula( p_formula, n_formula, RTL_TEXTENCODING_UTF8 );
+    formula::FormulaGrammar::Grammar eGrammar = getCalcGrammarFromOrcus( grammar );
+    ScRangeName* pRangeName = mrDoc.GetRangeName();
+
+    OUString aName("shared_");
+    aName += OUString::valueOf(sal_Int32(pRangeName->size()));
+    ScRangeData* pSharedFormula = new ScRangeData( &mrDoc, aName, aFormula, ScAddress(col, row, mnTab), RT_SHARED, eGrammar);
+    if(pRangeName->insert(pSharedFormula))
+    {
+        maSharedFormulas.insert( std::pair<size_t, ScRangeData*>(sindex, pSharedFormula) );
+        ScTokenArray aArr;
+        aArr.AddToken( formula::FormulaIndexToken( ocName, pSharedFormula->GetIndex() ) );
+        ScFormulaCell* pCell = new ScFormulaCell( &mrDoc, ScAddress( row, col, mnTab ), &aArr );
+        mrDoc.PutCell( col, row, mnTab, pCell );
+    }
 }
 
-void ScOrcusSheet::set_shared_formula(row_t /*row*/, col_t /*col*/, size_t /*sindex*/)
+void ScOrcusSheet::set_shared_formula(row_t row, col_t col, size_t sindex)
 {
+    if(maSharedFormulas.find(sindex) == maSharedFormulas.end())
+        return;
+
+    ScRangeData* pSharedFormula = maSharedFormulas.find(sindex)->second;
+    ScTokenArray aArr;
+    aArr.AddToken( formula::FormulaIndexToken( ocName, pSharedFormula->GetIndex() ) );
+    ScFormulaCell* pCell = new ScFormulaCell( &mrDoc, ScAddress( row, col, mnTab ), &aArr );
+    mrDoc.PutCell( col, row, mnTab, pCell );
 }
 
 void ScOrcusSheet::set_string(row_t row, col_t col, size_t sindex)
@@ -199,4 +252,175 @@ size_t ScOrcusSharedStrings::commit_segments()
 {
     return 0;
 }
+
+void ScOrcusStyles::set_font_count(size_t /*n*/)
+{
+    // needed at all?
+}
+
+void ScOrcusStyles::set_font_bold(bool /*b*/)
+{
+}
+
+void ScOrcusStyles::set_font_italic(bool /*b*/)
+{
+}
+
+void ScOrcusStyles::set_font_name(const char* /*s*/, size_t /*n*/)
+{
+}
+
+void ScOrcusStyles::set_font_size(double /*point*/)
+{
+}
+
+void ScOrcusStyles::set_font_underline(orcus::spreadsheet::underline_t /*e*/)
+{
+}
+
+size_t ScOrcusStyles::commit_font()
+{
+    return 0;
+}
+
+
+// fill
+
+void ScOrcusStyles::set_fill_count(size_t /*n*/)
+{
+    // needed at all?
+}
+
+void ScOrcusStyles::set_fill_pattern_type(const char* /*s*/, size_t /*n*/)
+{
+}
+
+void ScOrcusStyles::set_fill_fg_color(orcus::spreadsheet::color_elem_t /*alpha*/, orcus::spreadsheet::color_elem_t /*red*/, orcus::spreadsheet::color_elem_t /*green*/, orcus::spreadsheet::color_elem_t /*blue*/)
+{
+}
+
+void ScOrcusStyles::set_fill_bg_color(orcus::spreadsheet::color_elem_t /*alpha*/, orcus::spreadsheet::color_elem_t /*red*/, orcus::spreadsheet::color_elem_t /*green*/, orcus::spreadsheet::color_elem_t /*blue*/)
+{
+}
+
+size_t ScOrcusStyles::commit_fill()
+{
+    return 0;
+}
+
+
+// border
+
+void ScOrcusStyles::set_border_count(size_t /*n*/)
+{
+    // needed at all?
+}
+
+void ScOrcusStyles::set_border_style(orcus::spreadsheet::border_direction_t /*dir*/, const char* /*s*/, size_t /*n*/)
+{
+    // implement later
+}
+
+size_t ScOrcusStyles::commit_border()
+{
+    return 0;
+}
+
+
+// cell protection
+void ScOrcusStyles::set_cell_hidden(bool /*b*/)
+{
+}
+
+void ScOrcusStyles::set_cell_locked(bool /*b*/)
+{
+}
+
+size_t ScOrcusStyles::commit_cell_protection()
+{
+    return 0;
+}
+
+
+// cell style xf
+
+void ScOrcusStyles::set_cell_style_xf_count(size_t /*n*/)
+{
+    // needed at all?
+}
+
+size_t ScOrcusStyles::commit_cell_style_xf()
+{
+    return 0;
+}
+
+
+// cell xf
+
+void ScOrcusStyles::set_cell_xf_count(size_t /*n*/)
+{
+    // needed at all?
+}
+
+size_t ScOrcusStyles::commit_cell_xf()
+{
+    return 0;
+}
+
+
+// xf (cell format) - used both by cell xf and cell style xf.
+
+void ScOrcusStyles::set_xf_number_format(size_t /*index*/)
+{
+    // no number format interfaces implemented yet
+}
+
+void ScOrcusStyles::set_xf_font(size_t /*index*/)
+{
+}
+
+void ScOrcusStyles::set_xf_fill(size_t /*index*/)
+{
+}
+
+void ScOrcusStyles::set_xf_border(size_t /*index*/)
+{
+}
+
+void ScOrcusStyles::set_xf_protection(size_t /*index*/)
+{
+}
+
+void ScOrcusStyles::set_xf_style_xf(size_t /*index*/)
+{
+}
+
+
+// cell style entry
+// not needed for now for gnumeric
+
+void ScOrcusStyles::set_cell_style_count(size_t /*n*/)
+{
+    // needed at all?
+}
+
+void ScOrcusStyles::set_cell_style_name(const char* /*s*/, size_t /*n*/)
+{
+}
+
+void ScOrcusStyles::set_cell_style_xf(size_t /*index*/)
+{
+}
+
+void ScOrcusStyles::set_cell_style_builtin(size_t /*index*/)
+{
+    // not needed for gnumeric
+}
+
+size_t ScOrcusStyles::commit_cell_style()
+{
+    return 0;
+}
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
