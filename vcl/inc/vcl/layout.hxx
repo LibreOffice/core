@@ -12,13 +12,14 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/button.hxx>
+#include <vcl/scrbar.hxx>
 #include <vcl/window.hxx>
 #include <boost/multi_array.hpp>
 
 class VCL_DLLPUBLIC VclContainer : public Window
 {
 public:
-    VclContainer(Window *pParent);
+    VclContainer(Window *pParent, WinBits nStyle = WB_HIDE);
     virtual Size GetOptimalSize(WindowSizeType eType) const;
     virtual void SetPosSizePixel(const Point& rNewPos, const Size& rNewSize);
     virtual void SetPosPixel(const Point& rAllocPos);
@@ -426,7 +427,10 @@ VCL_DLLPUBLIC void setGridAttach(Window &rWidget, sal_Int32 nLeft, sal_Int32 nTo
 class VCL_DLLPUBLIC VclBin : public VclContainer
 {
 public:
-    VclBin(Window *pParent) : VclContainer(pParent) {}
+    VclBin(Window *pParent, WinBits nStyle = WB_HIDE)
+        : VclContainer(pParent, nStyle)
+    {
+    }
     virtual Window *get_child();
     virtual const Window *get_child() const;
     virtual Size calculateRequisition() const;
@@ -498,6 +502,32 @@ private:
     DECL_DLLPRIVATE_LINK(ClickHdl, DisclosureButton* pBtn);
 };
 
+//This is a work in progress, so if you want to put something inside a
+//scrolled window that doesn't handle its own scrolling, then you may need to
+//implement this fully
+class VCL_DLLPUBLIC VclScrolledWindow : public VclBin
+{
+public:
+    VclScrolledWindow(Window *pParent, WinBits nStyle = WB_HIDE | WB_AUTOHSCROLL | WB_AUTOVSCROLL)
+        : VclBin(pParent, nStyle)
+        , m_aVScroll(this, WB_HIDE | WB_VERT)
+        , m_aHScroll(this, WB_HIDE | WB_HORZ)
+    {
+        SetType(WINDOW_SCROLLWINDOW);
+    }
+    virtual Window *get_child();
+    virtual const Window *get_child() const;
+    virtual bool set_property(const OString &rKey, const OString &rValue);
+    ScrollBar& getVertScrollBar() { return m_aVScroll; }
+    ScrollBar& getHorzScrollBar() { return m_aHScroll; }
+    Size getVisibleChildSize() const;
+protected:
+    virtual Size calculateRequisition() const;
+    virtual void setAllocation(const Size &rAllocation);
+private:
+    ScrollBar m_aVScroll;
+    ScrollBar m_aHScroll;
+};
 
 // retro-fitting utilities //
 
@@ -524,6 +554,12 @@ bool isEnabledInLayout(const Window *pWindow);
 //of children
 Window* nextLogicalChildOfParent(Window *pTopLevel, Window *pChild);
 Window* prevLogicalChildOfParent(Window *pTopLevel, Window *pChild);
+
+inline bool isContainerWindow(const Window &rWindow)
+{
+    WindowType eType = rWindow.GetType();
+    return (eType == WINDOW_CONTAINER || eType == WINDOW_SCROLLWINDOW);
+}
 
 #endif
 
