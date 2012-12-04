@@ -181,7 +181,7 @@ PATCH_FILES += \
 	       nss.patch.mingw \
 
 
-PATH!:=$(MOZILLABUILD)/bin:$(PATH)
+PATH!:=$(NSSBUILDTOOLS)/bin:$(PATH)
 
 nss_CC=$(CC)
 nss_CXX=$(CXX)
@@ -217,7 +217,7 @@ OUT2LIB= \
 .ELSE			# "$(COM)"=="GCC"
 MOZ_MSVCVERSION= 9
 .EXPORT : MOZ_MSVCVERSION
-moz_build:=$(shell cygpath -p $(MOZILLABUILD))
+nss_build:=$(shell cygpath -p $(NSSBUILDTOOLS))
 
 #Using WINNT will cause at least that nspr4.dll, plc4.dll, plds4.dll 
 #become libnspr4.dll, libplc4.dll, libplds4.dll
@@ -234,7 +234,7 @@ PASS_USE_64=USE_64=1
 .ENDIF
 
 NSS_BUILD_DIR=$(ABS_PACKAGE_DIR)/$(TARFILE_ROOTDIR)/mozilla/security/nss
-BUILD_ACTION= PATH="$(moz_build)/msys/bin:$(moz_build)/moztools/bin:$(PATH)" && $(MOZILLABUILD)/msys/bin/bash -i \
+BUILD_ACTION= PATH="$(nss_build)/msys/bin:$(nss_build)/moztools/bin:$(PATH)" && $(NSSBUILDTOOLS)/msys/bin/bash -i \
     -c "cd $(NSS_BUILD_DIR) && make $(PASS_USE_64) nss_build_all"
 
 OUT2LIB= \

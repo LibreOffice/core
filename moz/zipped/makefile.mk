@@ -36,7 +36,7 @@ TARGET=moz_unzip
 
 # --- Files --------------------------------------------------------
 
-.IF "$(PREBUILD_MOZAB)" == "" || "$(SYSTEM_MOZILLA)" == "YES" || "$(WITH_MOZILLA)" == "NO"
+.IF "$(WITH_MOZAB4WIN)" == "NO"
 
 dummy:
     @echo "No need to unpack the prebuilt mozab packages"
@@ -44,7 +44,7 @@ dummy:
 .ELSE # unpack mozab zips
 .INCLUDE :  target.mk
 
-.IF "$(BUILD_MOZAB)"=="TRUE"
+.IF "$(BUILD_MOZAB)"=="NO"
 ALLTAR:
     @echo "Does not need build mozab zipped!"
 .ELSE
@@ -53,18 +53,7 @@ ALLTAR: \
     $(MISC)$/unpacked_$(TARGET)_lib \
     $(BIN)$/mozruntime.zip \
     $(MISC)$/remove_old_nss_libs
-.ENDIF
-.IF "$(GUI)" == "UNX"
-
-$(MISC)$/unpacked_%_lib : $(OS)$(COM)$(CPU)lib.zip '$(OS)$(COM)$(CPU)runtime.zip'
-    unzip -o -d $(LB) $(OS)$(COM)$(CPU)lib.zip && unzip -o -d $(LB) $(OS)$(COM)$(CPU)runtime.zip && $(TOUCH) $@
-    chmod -R 775 $(LB)
-
-$(MISC)$/unpacked_%_inc : $(OS)$(COM)$(CPU)inc.zip
-    unzip -o -d $(INCCOM) $(OS)$(COM)$(CPU)inc.zip && $(TOUCH)	$@
-    chmod -R 775 $(INCCOM)
-
-.ELSE
+.ENDIF # BUILD_MOZAB 
 
 $(MISC)$/unpacked_$(TARGET)_lib : $(OS)$(COM)$(CPU)lib.zip
     unzip -o -d $(LB) $(OS)$(COM)$(CPU)lib.zip && \
@@ -73,51 +62,14 @@ $(MISC)$/unpacked_$(TARGET)_lib : $(OS)$(COM)$(CPU)lib.zip
 $(MISC)$/unpacked_$(TARGET)_inc : $(OS)$(COM)$(CPU)inc.zip
     unzip -o -d $(INCCOM) $(OS)$(COM)$(CPU)inc.zip && $(TOUCH)	$@
 
-.ENDIF
+.ENDIF # WITH_MOZAB4WIN
 
 $(BIN)$/mozruntime%zip : $(OS)$(COM)$(CPU)runtime.zip
     $(COPY) $(OS)$(COM)$(CPU)runtime.zip $(BIN)$/mozruntime.zip
 
-# add alternative rules for universal binary moz-zips
-.IF "$(GUIBASE)" == "aqua"
-$(MISC)$/unpacked_%_lib : $(OS)$(COM)UBlib.zip '$(OS)$(COM)UBruntime.zip'
-    unzip -o -d $(LB) $(OS)$(COM)UBlib.zip && unzip -o -d $(LB) $(OS)$(COM)UBruntime.zip && $(TOUCH) $@
-    chmod -R 775 $(LB)
-  
-$(MISC)$/unpacked_%_inc : $(OS)$(COM)UBinc.zip
-    unzip -o -d $(INCCOM) $(OS)$(COM)UBinc.zip && $(TOUCH)	$@
-    chmod -R 775 $(INCCOM)
-
-$(BIN)$/mozruntime%zip : $(OS)$(COM)UBruntime.zip
-    $(COPY) $(OS)$(COM)UBruntime.zip $(BIN)$/mozruntime.zip
-
-.ENDIF # "$(GUIBASE)"=="aqua"
-
-LIBLIST =
 
 # The old prebuilt moz files include all the old NSS stuff from moz but we
 # always build the toplevel nss module, so we must delete all these
-NSS_RUNTIMELIST= \
-    freebl3 \
-    nspr4 \
-    plc4 \
-    plds4 \
-    nss3 \
-    ssl3 \
-    softokn3 \
-    smime3
-
-.IF "$(GUI)"=="WNT"
-.IF "$(COM)"=="GCC"
-LIBLIST= \
-    libnspr4.a \
-    libnss3.a \
-    libsmime3.a \
-    libplc4.a \
-    libplds4.a \
-    libssl3.a
-
-.ELSE
 LIBLIST= \
     nspr4.lib \
     plc4.lib \
@@ -125,19 +77,6 @@ LIBLIST= \
     nss3.lib \
     ssl3.lib\
     smime3.lib
-.ENDIF
-.ELSE   #"$(GUI)"=="WNT"
-LIBLIST= \
-    libfreebl3$(DLLPOST) \
-    libnspr4$(DLLPOST) \
-    libsoftokn3$(DLLPOST) \
-    libplc4$(DLLPOST) \
-    libplds4$(DLLPOST) \
-    libnss3$(DLLPOST) \
-    libssl3$(DLLPOST) \
-    libsmime3$(DLLPOST)
-
-.ENDIF # .IF "$(GUI)"=="WNT"
 
 NSS_RUNTIMELIST:= \
     freebl3 \
@@ -165,5 +104,3 @@ $(MISC)$/unpacked_$(TARGET)_inc $(BIN)$/mozruntime.zip
     rm -r -f $(INCCOM)$/nspr && \
         echo >& $(NULLDEV)
     $(TOUCH) $@
-
-.ENDIF   # unpack mozab zips

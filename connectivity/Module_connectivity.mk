@@ -118,11 +118,7 @@ endif
 
 ifeq ($(OS),WNT)
 
-ifeq ($(if $(or $(filter-out YES,$(WITH_MOZILLA)),$(filter YES,$(SYSTEM_MOZILLA))),YES),YES)
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Library_mozbootstrap \
-))
-else
+ifeq ($(WITH_MOZAB4WIN),YES)
 $(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_mozab \
 	Library_mozab \

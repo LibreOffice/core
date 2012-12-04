@@ -35,23 +35,12 @@ INCLUDE_DIR=$(INCCOM)
 BIN_RUNTIMELIST= \
     xpcom \
     xpcom_core \
-    xpcom_compat	
-
-.IF "$(GUI)"=="WNT"
-BIN_RUNTIMELIST+=	\
+    xpcom_compat \
     js3250 	\
     mozz	\
     msgbsutl	\
     nsldap32v50		\
     nsldappr32v50
-.ELSE	#"$(GUI)"=="WNT"
-BIN_RUNTIMELIST+=	\
-    mozjs	\
-    mozz	\
-    msgbaseutil	\
-    ldap50	\
-    prldap50
-.ENDIF
 
 COMPONENT_RUNTIMELIST=	\
     addrbook	\
@@ -64,17 +53,9 @@ COMPONENT_RUNTIMELIST=	\
     uconv	\
     vcard	\
     i18n 	\
-    pipnss
-
-.IF "$(GUI)"=="WNT"
-COMPONENT_RUNTIMELIST+=	\
+    pipnss  \
     xppref32	\
     xpc3250
-.ELSE	#"$(GUI)"=="WNT"
-COMPONENT_RUNTIMELIST+=	\
-    pref	\
-    xpconnect
-.ENDIF
 
 COMREGISTRY_FILELIST=	\
     necko_dns.xpt	\
@@ -86,13 +67,8 @@ COMREGISTRY_FILELIST=	\
     xpcom_xpti.xpt	\
     addrbook.xpt	\
     mozldap.xpt \
-    pref.xpt
-
-.IF "$(GUI)"=="WNT"
-COMREGISTRY_FILELIST+=	xpcom_thread.xpt
-.ELSE	#"$(GUI)"=="WNT"
-COMREGISTRY_FILELIST+=	xpcom_threads.xpt
-.ENDIF
+    pref.xpt  \
+	xpcom_thread.xpt
 
 DEFAULTS_RUNTIMELIST=	\
     defaults$/pref$/browser-prefs.js	\
@@ -104,18 +80,6 @@ DEFAULTS_RUNTIMELIST=	\
     greprefs$/all.js	\
     greprefs$/security-prefs.js
 
-.IF "$(GUI)"=="WNT"
-.IF "$(COM)"=="GCC"
-
-LIBLIST=	\
-    libembed_base_s.a	\
-    libmozreg_s.a	\
-    libnslber32v50.a	\
-    libnsldap32v50.a	\
-    libxpcom_core.dll.a	\
-    libxpcom.dll.a
-
-.ELSE
 
 LIBLIST=	\
     embed_base_s.lib	\
@@ -125,30 +89,11 @@ LIBLIST=	\
     xpcom_core.lib	\
     xpcom.lib
 
-.ENDIF
-
-.ELSE   #"$(GUI)"=="WNT"
-
-LIBLIST=	\
-    libembed_base_s.a	\
-    libmozreg_s.a	\
-    liblber50.a	\
-    libxpcom_core$(DLLPOST)	\
-    libxpcom$(DLLPOST)	\
-    libmsgbaseutil$(DLLPOST)	\
-    libldap50$(DLLPOST)
-
-.ENDIF #"$(GUI)"=="WNT"
-
 INCLUDE_PATH=$(MOZ_DIST_DIR)$/include$/
 PUBLIC_PATH=$(MOZ_DIST_DIR)$/public$/
 
 
-.IF "$(GUI)"=="WNT"
 REG_SUBFIX=	.exe
-.ELSE	#"$(GUI)"=="WNT"
-REG_SUBFIX=
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 
@@ -177,18 +122,6 @@ $(MISC)$/build$/so_moz_runtime_files: 	$(OUT)$/bin$/mozruntime.zip
     $(foreach,file,$(BIN_RUNTIMELIST) $(COPY) $(MOZ_BIN_DIR)$/$(DLLPRE)$(file)$(DLLPOST) \
     $(RUNTIME_DIR)$/$(DLLPRE)$(file)$(DLLPOST) &&) \
     echo >& $(NULLDEV)
-.IF "$(GUI)" == "UNX"
-    $(foreach,file,$(BIN_RUNTIMELIST) $(COPY) $(MOZ_BIN_DIR)$/$(DLLPRE)$(file)$(DLLPOST) \
-    $(LIB_DIR)$/$(DLLPRE)$(file)$(DLLPOST) &&) \
-    echo >& $(NULLDEV)
-.ENDIF # .IF "$(GUI)" == "UNX"
-
-# copy files in RES_FILELIST
-.IF "$(OS)"=="SOLARIS"
-    @$(COPY) $(MOZ_BIN_DIR)$/res$/charsetalias.properties $(RUNTIME_DIR)$/res$/charsetalias.properties
-.ELSE
-    @echo No Res Files to copy.
-.ENDIF
 
 # copy files in COMPONENT_RUNTIMELIST
     $(foreach,file,$(COMPONENT_RUNTIMELIST) $(COPY) $(MOZ_BIN_DIR)$/components$/$(DLLPRE)$(file)$(DLLPOST) \
@@ -207,34 +140,6 @@ $(MISC)$/build$/so_moz_runtime_files: 	$(OUT)$/bin$/mozruntime.zip
     $(foreach,file,$(DEFAULTS_RUNTIMELIST) $(COPY) $(MOZ_BIN_DIR)$/$(file) $(RUNTIME_DIR)$/$(file) &&) \
     echo >& $(NULLDEV)
 
-.IF "$(GUI)"=="UNX"
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="AIX"
-    cd $(RUNTIME_DIR) && strip *$(DLLPOST)
-    cd $(RUNTIME_DIR)$/components && strip *$(DLLPOST)
-.ENDIF
-.ENDIF
-.IF "$(OS)"=="MACOSX"
-    $(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl shl OOO \
-        $(RUNTIME_DIR)$/*$(DLLPOST)
-# A crude hack to adapt all the absolute ("@executable_path") dependencies to
-# relative ("@loader_path") ones:
-    $(foreach,file,$(shell ls $(RUNTIME_DIR)$/components$/*$(DLLPOST)) \
-        install_name_tool \
-        -change @executable_path/libldap50.dylib \
-            @loader_path/../libldap50.dylib \
-        -change @executable_path/libmozjs.dylib @loader_path/../libmozjs.dylib \
-        -change @executable_path/libmozz.dylib @loader_path/../libmozz.dylib \
-        -change @executable_path/libmsgbaseutil.dylib \
-            @loader_path/../libmsgbaseutil.dylib \
-        -change @executable_path/libprldap50.dylib \
-            @loader_path/../libprldap50.dylib \
-        -change @executable_path/libxpcom.dylib @loader_path/../libxpcom.dylib \
-        -change @executable_path/libxpcom_compat.dylib \
-            @loader_path/../libxpcom_compat.dylib \
-        -change @executable_path/libxpcom_core.dylib \
-            @loader_path/../libxpcom_core.dylib \
-        $(file) &&) true
-.ENDIF
 
 # zip runtime files to mozruntime.zip
     cd $(RUNTIME_DIR) && zip -r ..$/..$/bin$/mozruntime.zip *
@@ -246,17 +151,8 @@ $(INCCOM)$/nsBuildID.h: $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
 
 
 $(MISC)$/build$/so_moz_include_files: $(INCCOM)$/nsBuildID.h
-.IF "$(OS)"!="SOLARIS"
-    $(GNUCOPY) -pRL $(INCLUDE_PATH)* $(INCLUDE_DIR)
-    $(GNUCOPY) -pRL $(PUBLIC_PATH)* $(INCLUDE_DIR)
-.ELSE			# "$(OS)"!="SOLARIS"
     $(COPY) -pr $(INCLUDE_PATH)* $(INCLUDE_DIR)
     $(COPY) -pr $(PUBLIC_PATH)* $(INCLUDE_DIR)
-.ENDIF			# "$(OS)"!="SOLARIS"
-
-.IF "$(GUI)"=="UNX"
-    chmod -R 775 $(INCCOM)
-.ENDIF
     $(TOUCH) $@
 
 # On UNX the rules for so_moz_runtime_files copy files into the same directory
@@ -267,13 +163,6 @@ $(MISC)$/build$/so_moz_lib_files:		$(foreach,file,$(LIBLIST) $(LIB_DIR)$/$(file)
     $(foreach,file,$(LIBLIST) $(COPY) $(MOZ_DIST_DIR)$/lib$/$(file) \
     $(LIB_DIR)$/$(file) &&) \
     echo >& $(NULLDEV)
-.IF "$(OS)"=="MACOSX"
-    $(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl shl OOO \
-        $(LIB_DIR)$/*$(DLLPOST)
-.ENDIF
-.IF "$(GUI)"=="UNX"
-    chmod -R 775 $(LB)
-.ENDIF
     $(TOUCH) $@
 
 $(BIN_RUNTIMELIST): $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) 
@@ -288,23 +177,11 @@ $(COMREGISTRY_FILELIST): $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
 $(DEFAULTS_RUNTIMELIST): $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) 
     @$(COPY) $(MOZ_BIN_DIR)$/$@ $(RUNTIME_DIR)$/$@
 
-RES_FILELIST: $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) 
-.IF "$(OS)"=="SOLARIS"
-    @$(COPY) $(MOZ_BIN_DIR)$/res$/charsetalias.properties $(RUNTIME_DIR)$/res$/charsetalias.properties
-.ELSE
-    @echo No Res Files to copy.
-.ENDIF
-
 $(LIB_DIR)$/%: $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
     noop
 
 $(MISC)$/CREATETARBALL:	extract_mozab_files
     @@-$(MKDIR)	$(OUT)$/zipped
     $(COPY) $(BIN)$/mozruntime.zip $(OUT)$/zipped$/$(MOZTARGET)runtime.zip
-.IF "$(GUI)"=="UNX"
-.IF "$(OS)"!="MACOSX"
-    cd $(LB) && strip *$(DLLPOST)
-.ENDIF
-.ENDIF
     cd $(LB) && zip -r ..$/zipped$/$(MOZTARGET)lib.zip *
     cd $(INCCOM) && zip -r ..$/zipped$/$(MOZTARGET)inc.zip *
