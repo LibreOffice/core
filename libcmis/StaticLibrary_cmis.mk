@@ -24,6 +24,7 @@ $(eval $(call gb_StaticLibrary_use_unpacked,cmislib,cmis))
 $(eval $(call gb_StaticLibrary_use_package,cmislib,libcmis_inc))
 
 $(eval $(call gb_StaticLibrary_use_externals,cmislib,\
+	boost_headers \
 	curl \
 	libxml2 \
 ))

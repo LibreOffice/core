@@ -16,6 +16,7 @@ $(eval $(call gb_ExternalProject_register_targets,libvisio,\
 ))
 
 $(eval $(call gb_ExternalProject_use_externals,libvisio,\
+	boost_headers \
 	wpd \
 	wpg \
 ))
