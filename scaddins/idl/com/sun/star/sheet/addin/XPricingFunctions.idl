@@ -38,34 +38,36 @@ module addin
      */
     interface XPricingFunctions : com::sun::star::uno::XInterface
     {
-        /// opt_barrier()
-        double getOpt_barrier( [in] double spot, [in] double vol,
-            [in] double r, [in] double rf, [in] double T, [in] double strike,
-            [in] double barrier_low, [in] double barrier_up,
+        /// OPT_BARRIER(), pricing of a barrier option.
+        double getOptBarrier( [in] double spot, [in] double vol,
+            [in] double rate, [in] double rateForeign,
+            [in] double maturity, [in] double strike,
+            [in] double barrierLow, [in] double barrierUp,
             [in] double rebate,
-            [in] string put_call, [in] string in_out,
+            [in] string putCall, [in] string inOut,
             [in] string continuous, [in] any greek  )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-        /// opt_touch()
-        double getOpt_touch( [in] double spot, [in] double vol,
-            [in] double r, [in] double rf, [in] double T,
-            [in] double barrier_low, [in] double barrier_up,
-            [in] string for_dom, [in] string in_out,
+        /// OPT_TOUCH(), pricing of a touch/no-touch option.
+        double getOptTouch( [in] double spot, [in] double vol,
+            [in] double rate, [in] double rateForeign,
+            [in] double maturity,
+            [in] double barrierLow, [in] double barrierUp,
+            [in] string foreignDomestic, [in] string inOut,
             [in] string continuous, [in] any greek  )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-        /// opt_prob_hit()
-        double getOpt_prob_hit( [in] double spot, [in] double vol,
-            [in] double mu, [in] double T,
-            [in] double barrier_low, [in] double barrier_up )
+        /// OPT_PROB_HIT(), probability of hitting a barrier.
+        double getOptProbHit( [in] double spot, [in] double vol,
+            [in] double mu, [in] double maturity,
+            [in] double barrierLow, [in] double barrierUp )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-        /// opt_prob_inmoney()
-        double getOpt_prob_inmoney( [in] double spot, [in] double vol,
-            [in] double mu, [in] double T,
-            [in] double barrier_low, [in] double barrier_up,
-            [in] any strike, [in] any put_call )
+        /// OPT_PROB_INMONEY(), probability of ending up in-the-money.
+        double getOptProbInMoney( [in] double spot, [in] double vol,
+            [in] double mu, [in] double maturity,
+            [in] double barrierLow, [in] double barrierUp,
+            [in] any strike, [in] any putCall )
             raises( com::sun::star::lang::IllegalArgumentException );
 
     };
