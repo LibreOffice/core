@@ -28,7 +28,6 @@
 #include "oox/helper/propertyset.hxx"
 #include "oox/ole/olestorage.hxx"
 #include "vcl/msgbox.hxx"
-#include <vcl/svapp.hxx>
 
 #include "biffinputstream.hxx"
 #include "chartsheetfragment.hxx"
@@ -331,11 +330,7 @@ void WorkbookFragment::finalizeImport()
                 pDocSh->GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
                 ScGlobal::GetRscString(STR_QUERY_FORMULA_RECALC_ONLOAD_XLS));
 
-            try
-            {
-                bHardRecalc = aBox.Execute() == RET_YES;
-            }
-            catch (Application::DialogCancelledException const&) {/* ignore */}
+            bHardRecalc = aBox.Execute() == RET_YES;
         }
 
         if (bHardRecalc)
