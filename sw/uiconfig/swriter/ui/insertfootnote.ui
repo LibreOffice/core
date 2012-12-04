@@ -227,9 +227,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Numbering</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"/>
-                    </attributes>
                   </object>
                 </child>
               </object>
@@ -301,9 +298,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Type</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"/>
-                    </attributes>
                   </object>
                 </child>
               </object>
