@@ -1,0 +1,11 @@
+--- a/python3/setup.py	2012-12-04 00:40:57.000000000 +0100
++++ b/python3/setup.py	2012-12-04 00:53:49.000000000 +0100
+@@ -1289,6 +1279,8 @@
+             # Building with the system-suppied combined libncurses/libpanel
+             curses_defines.append(('HAVE_NCURSESW', '1'))
+             curses_defines.append(('_XOPEN_SOURCE_EXTENDED', '1'))
++        elif curses_library == 'ncurses':
++            curses_includes.append('/usr/include/ncurses')
+ 
+         if curses_library.startswith('ncurses'):
+             curses_libs = [curses_library]
