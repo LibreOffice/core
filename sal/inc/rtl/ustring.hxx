@@ -2103,9 +2103,6 @@ public:
         rtl_uString_newFromAscii( &pNew, value );
         return OUString( pNew, (DO_NOT_ACQUIRE*)0 );
     }
-
-    template< typename T1, typename T2 >
-    friend struct OUStringConcat;
 };
 
 /* ======================================================================= */
