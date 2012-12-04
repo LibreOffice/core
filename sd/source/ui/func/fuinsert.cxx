@@ -129,8 +129,9 @@ void FuInsertGraphic::DoExecute( SfxRequest&  )
             if( mpViewShell && mpViewShell->ISA(DrawViewShell))
             {
                 sal_Int8    nAction = DND_ACTION_COPY;
-                SdrObject* pPickObj = mpView->GetEmptyPresentationObject( PRESOBJ_GRAPHIC );
-                if( pPickObj )
+                SdrObject* pPickObj;
+
+                if( ( pPickObj = mpView->GetSelectedSingleObject( mpView->GetPage() ) ) || ( pPickObj = mpView->GetEmptyPresentationObject( PRESOBJ_GRAPHIC ) ) )
                     nAction = DND_ACTION_LINK;
 
                 Point aPos;
