@@ -49,7 +49,7 @@ $(1): bootstrap fetch
 	cd $(1) && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) gb_PARTIALBUILD=T
 
 $(1).all: bootstrap fetch
-	$$(if $$(filter $(1),$$(shell $(GNUMAKE) -r -f $(SRCDIR)/tail_build/Makefile showmodules) tail_build), \
+	$$(if $$(filter $(1),$$(shell $(GNUMAKE) -r -f $(SRCDIR)/tail_build/Makefile showmodules)), \
 		cd tail_build && unset MAKEFLAGS && \
 		export gb_TAILBUILDTARGET="$(WORKDIR)/Module/$(1) $(WORKDIR)/Module/check/$(1) $(WORKDIR)/Module/slowcheck/$(1)" && \
 	, \
