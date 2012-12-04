@@ -33,9 +33,11 @@ class StringConcat : public CppUnit::TestFixture
 {
 private:
     void check();
+    void checkEnsureCapacity();
 
 CPPUNIT_TEST_SUITE(StringConcat);
 CPPUNIT_TEST(check);
+CPPUNIT_TEST(checkEnsureCapacity);
 CPPUNIT_TEST_SUITE_END();
 };
 
@@ -72,6 +74,44 @@ void test::ostring::StringConcat::check()
     TYPES_ASSERT_EQUAL(( typeid( OStringConcat< OString, char* > )), typeid( OString( "foo" ) + d4 ));
 }
 #undef typeid
+
+void test::ostring::StringConcat::checkEnsureCapacity()
+{
+    rtl_String* str = NULL;
+    rtl_string_newFromLiteral( &str, "test", strlen( "test" ), 0 );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 4 ), str->length );
+    CPPUNIT_ASSERT_EQUAL( 1, str->refCount );
+
+    rtl_String* oldStr = str;
+    rtl_string_ensureCapacity( &str, 4 ); // should be no-op
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 4 ), str->length );
+    CPPUNIT_ASSERT_EQUAL( 1, str->refCount );
+    CPPUNIT_ASSERT( oldStr == str );
+
+    rtl_string_acquire( oldStr );
+    CPPUNIT_ASSERT_EQUAL( 2, str->refCount );
+    rtl_string_ensureCapacity( &str, 4 );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 4 ), str->length );
+    CPPUNIT_ASSERT_EQUAL( 1, str->refCount );
+    // a copy was forced because of refcount
+    CPPUNIT_ASSERT( oldStr != str );
+    CPPUNIT_ASSERT( strcmp( oldStr->buffer, str->buffer ) == 0 );
+    CPPUNIT_ASSERT_EQUAL( 1, oldStr->refCount );
+    rtl_string_release( str );
+    str = oldStr;
+
+    rtl_string_acquire( oldStr );
+    rtl_string_ensureCapacity( &str, 1024 );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 4 ), str->length ); // size is still 4
+    CPPUNIT_ASSERT_EQUAL( 1, str->refCount );
+    CPPUNIT_ASSERT( oldStr != str );
+    CPPUNIT_ASSERT( strcmp( oldStr->buffer, str->buffer ) == 0 );
+    CPPUNIT_ASSERT_EQUAL( 1, oldStr->refCount );
+    strcpy( str->buffer, "01234567890123456789" ); // but there should be extra capacity
+    str->length += 20;
+    rtl_string_release( str );
+    rtl_string_release( oldStr );
+}
 
 }} // namespace
 

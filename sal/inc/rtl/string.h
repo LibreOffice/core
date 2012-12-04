@@ -1313,6 +1313,24 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_convertUStringToString(
                                              sal_uInt32 nFlags)
     SAL_THROW_EXTERN_C();
 
+/** Ensure a string has enough space for a given number of characters.
+
+ If the given string is large enough and has refcount of 1, it is not altered in any way.
+ Otherwise it is replaced by a copy that has enough space for the given number of characters,
+ data from the source string is copied to the beginning of it, the content of the remaining
+ capacity undefined, the string has refcount of 1, and refcount of the original string is decreased.
+
+ @param str
+ pointer to the string.  The pointed-to data must be a valid string.
+
+ @param size
+ the number of characters
+
+ @since LibreOffice 4.1
+ @internal
+ */
+SAL_DLLPUBLIC void SAL_CALL rtl_string_ensureCapacity( rtl_String ** str, sal_Int32 size ) SAL_THROW_EXTERN_C();
+
 #ifdef __cplusplus
 }
 #endif

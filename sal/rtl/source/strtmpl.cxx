@@ -1318,6 +1318,29 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newConcat )( IMPL_RTL_STRINGDATA** ppThis,
 
 /* ----------------------------------------------------------------------- */
 
+void SAL_CALL IMPL_RTL_STRINGNAME( ensureCapacity )( IMPL_RTL_STRINGDATA** ppThis,
+                                                     sal_Int32 size )
+    SAL_THROW_EXTERN_C()
+{
+    IMPL_RTL_STRINGDATA* const pOrg = *ppThis;
+    if ( pOrg->refCount == 1 && pOrg->length >= size )
+        return;
+    assert( pOrg->length <= size ); // do not truncate
+    IMPL_RTL_STRINGDATA* pTempStr = IMPL_RTL_STRINGNAME( ImplAlloc )( size );
+    rtl_str_ImplCopy( pTempStr->buffer, pOrg->buffer, pOrg->length );
+    // right now the length is still the same as of the original
+    pTempStr->length = pOrg->length;
+    pTempStr->buffer[ pOrg->length ] = '\0';
+    *ppThis = pTempStr;
+    RTL_LOG_STRING_NEW( *ppThis );
+
+    /* must be done last, if pStr == *ppThis */
+    if ( pOrg )
+        IMPL_RTL_STRINGNAME( release )( pOrg );
+}
+
+/* ----------------------------------------------------------------------- */
+
 void SAL_CALL IMPL_RTL_STRINGNAME( newReplaceStrAt )( IMPL_RTL_STRINGDATA** ppThis,
                                                       IMPL_RTL_STRINGDATA* pStr,
                                                       sal_Int32 nIndex,
