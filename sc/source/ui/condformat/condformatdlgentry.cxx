@@ -500,7 +500,7 @@ ScFormulaFrmtEntry::ScFormulaFrmtEntry( Window* pParent, ScDocument* pDoc, const
     maFtStyle( this, ScResId( FT_STYLE ) ),
     maLbStyle( this, ScResId( LB_STYLE ) ),
     maWdPreview( this, ScResId( WD_PREVIEW ) ),
-    maEdFormula( this, static_cast<ScAnyRefDlg*>(pParent->GetParent()), ScResId( ED_FORMULA ) )
+    maEdFormula( this, NULL, ScResId( ED_FORMULA ) )
 {
     Init();
 
