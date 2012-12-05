@@ -465,7 +465,7 @@ void ScConditionEntry::CompileXML()
 void ScConditionEntry::SetSrcString( const rtl::OUString& rNew )
 {
     // aSrcString is only evaluated in CompileXML
-    OSL_ENSURE( mpDoc->IsImportingXML(), "SetSrcString is only valid for XML import" );
+    SAL_WARN_IF( !mpDoc->IsImportingXML(), "sc", "SetSrcString is only valid for XML import" );
 
     aSrcString = rNew;
 }
@@ -1138,7 +1138,7 @@ bool ScConditionEntry::IsValid( double nArg, const ScAddress& rPos ) const
                 bValid = !bValid;
             break;
         default:
-            OSL_FAIL("unbekannte Operation bei ScConditionEntry");
+            SAL_WARN("sc", "unbekannte Operation bei ScConditionEntry");
             break;
     }
     return bValid;
@@ -1246,7 +1246,7 @@ bool ScConditionEntry::IsValidStr( const rtl::OUString& rArg, const ScAddress& r
                     break;
                 //  SC_COND_DIRECT schon oben abgefragt
                 default:
-                    OSL_FAIL("unbekannte Operation bei ScConditionEntry");
+                    SAL_WARN("sc", "unbekannte Operation bei ScConditionEntry");
                     bValid = false;
                     break;
             }
@@ -1317,7 +1317,7 @@ rtl::OUString ScConditionEntry::GetExpression( const ScAddress& rCursor, sal_uIn
     }
     else
     {
-        OSL_FAIL("GetExpression: falscher Index");
+        SAL_WARN("sc", "GetExpression: falscher Index");
     }
 
     return aRet;
@@ -1356,7 +1356,7 @@ ScTokenArray* ScConditionEntry::CreateTokenArry( sal_uInt16 nIndex ) const
     }
     else
     {
-        OSL_FAIL("GetExpression: falscher Index");
+        SAL_WARN("sc", "GetExpression: falscher Index");
     }
 
     return pRet;
@@ -2110,7 +2110,7 @@ ScConditionalFormat* ScConditionalFormatList::GetFormat( sal_uInt32 nKey )
         if (itr->GetKey() == nKey)
             return &(*itr);
 
-    OSL_FAIL("ScConditionalFormatList: Eintrag nicht gefunden");
+    SAL_WARN("sc", "ScConditionalFormatList: Eintrag nicht gefunden");
     return NULL;
 }
 
