@@ -1681,11 +1681,13 @@ struct SvxStyleToolBoxControl::Impl
                     xParaStyles;
                 static const sal_Char* aWriterStyles[] =
                 {
-                    "Standard",
+                    "Text body",
+                    "Quotations",
+                    "Title",
+                    "Subtitle",
                     "Heading 1",
                     "Heading 2",
-                    "Heading 3",
-                    "Text body"
+                    "Heading 3"
                 };
                 for( sal_uInt32 nStyle = 0; nStyle < sizeof( aWriterStyles ) / sizeof( sal_Char*); ++nStyle )
                 {
@@ -1946,6 +1948,11 @@ void SvxStyleToolBoxControl::FillStyleBox()
 
             if( pImpl->bSpecModeWriter || pImpl->bSpecModeCalc )
             {
+                // disable sort to preserve special order
+                WinBits nWinBits = pBox->GetStyle();
+                nWinBits &= ~WB_SORT;
+                pBox->SetStyle( nWinBits );
+
                 // insert default styles
                 sal_uInt16  _i;
                 sal_uInt32  nCnt = pImpl->aDefaultStyles.size();
@@ -1955,11 +1962,6 @@ void SvxStyleToolBoxControl::FillStyleBox()
                     pBox->InsertEntry( pImpl->aDefaultStyles[_i], nPos );
                     ++nPos;
                 }
-
-                // disable sort to preserve special order
-                WinBits nWinBits = pBox->GetStyle();
-                nWinBits &= ~WB_SORT;
-                pBox->SetStyle( nWinBits );
 
                 pBox->InsertEntry( pImpl->aClearForm, 0 );
                 pBox->SetSeparatorPos( 0 );
