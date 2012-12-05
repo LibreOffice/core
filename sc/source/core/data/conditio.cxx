@@ -1547,7 +1547,11 @@ void ScConditionalFormat::CompileXML()
 void ScConditionalFormat::UpdateReference( UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
-    maRanges.UpdateReference( eUpdateRefMode, pDoc, rRange, nDx, nDy, nDz );
+    if( eUpdateRefMode == URM_COPY && nDz != 0 )
+        maRanges.UpdateReference( URM_MOVE, pDoc, rRange, nDx, nDy, nDz );
+    else
+        maRanges.UpdateReference( eUpdateRefMode, pDoc, rRange, nDx, nDy, nDz );
+
     for(CondFormatContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
         itr->UpdateReference(eUpdateRefMode, rRange, nDx, nDy, nDz);
 }
