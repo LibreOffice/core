@@ -891,6 +891,40 @@ Directory gid_Dir_Gallery_Bullets
     DosName = "bullets";
 End
 
+//////////////////////////////////////////////////////////////////////////////
+
+Directory gid_Dir_Gallery_Computers
+    ParentID = gid_Dir_Gallery;
+    DosName = "computers";
+End
+
+Directory gid_Dir_Gallery_Diagrams
+    ParentID = gid_Dir_Gallery;
+    DosName = "diagrams";
+End
+
+Directory gid_Dir_Gallery_Environment
+    ParentID = gid_Dir_Gallery;
+    DosName = "environment";
+End
+
+Directory gid_Dir_Gallery_Finance
+    ParentID = gid_Dir_Gallery;
+    DosName = "finance";
+End
+
+Directory gid_Dir_Gallery_Transport
+    ParentID = gid_Dir_Gallery;
+    DosName = "transport";
+End
+
+Directory gid_Dir_Gallery_Txtshapes
+    ParentID = gid_Dir_Gallery;
+    DosName = "textshapes";
+End
+
+//////////////////////////////////////////////////////////////////////////////
+
 Directory gid_Dir_Gallery_Flags
     ParentID = gid_Dir_Gallery;
     DosName = "flags";

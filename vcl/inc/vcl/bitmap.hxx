@@ -456,7 +456,7 @@ public:
     inline void             SetPrefSize( const Size& rSize );
 
     Size                    GetSizePixel() const;
-    void                    SetSizePixel( const Size& rNewSize );
+    void                    SetSizePixel( const Size& rNewSize, sal_uInt32 nScaleFlag = BMP_SCALE_FASTESTINTERPOLATE );
 
     /**
      * The pixel size of a bitmap's source (e.g. an image file)
@@ -654,7 +654,7 @@ public:
 
         @return sal_True, if the operation was completed successfully.
      */
-    sal_Bool                    Scale( const Size& rNewSize, sal_uLong nScaleFlag = BMP_SCALE_FASTESTINTERPOLATE );
+    sal_Bool                    Scale( const Size& rNewSize, sal_uInt32 nScaleFlag = BMP_SCALE_FASTESTINTERPOLATE );
 
     /** Scale the bitmap
 
@@ -666,7 +666,7 @@ public:
 
         @return sal_True, if the operation was completed successfully.
      */
-    sal_Bool                    Scale( const double& rScaleX, const double& rScaleY, sal_uLong nScaleFlag = BMP_SCALE_FASTESTINTERPOLATE );
+    sal_Bool                    Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag = BMP_SCALE_FASTESTINTERPOLATE );
 
     // Adapt the BitCount of rNew to BitCount of lolal, including grey or color paltette
     // Can be used to create alpha/mask bitmaps after their processing in 24bit

@@ -282,7 +282,7 @@ sal_Bool AlphaMask::Mirror( sal_uLong nMirrorFlags )
 
 // -----------------------------------------------------------------------------
 
-sal_Bool AlphaMask::Scale( const Size& rNewSize, sal_uLong nScaleFlag )
+sal_Bool AlphaMask::Scale( const Size& rNewSize, sal_uInt32 nScaleFlag )
 {
     sal_Bool bRet = Bitmap::Scale( rNewSize, nScaleFlag );
 
@@ -294,7 +294,7 @@ sal_Bool AlphaMask::Scale( const Size& rNewSize, sal_uLong nScaleFlag )
 
 // -----------------------------------------------------------------------------
 
-sal_Bool AlphaMask::Scale( const double& rScaleX, const double& rScaleY, sal_uLong nScaleFlag )
+sal_Bool AlphaMask::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag )
 {
     sal_Bool bRet = Bitmap::Scale( rScaleX, rScaleY, nScaleFlag );
 

@@ -66,7 +66,10 @@ public:
     void                    SetPrefSize( const Size& rSize ) { Bitmap::SetPrefSize( rSize ); }
 
     Size                    GetSizePixel() const { return Bitmap::GetSizePixel(); }
-    void                    SetSizePixel( const Size& rNewSize ) { Bitmap::SetSizePixel( rNewSize ); }
+    void                    SetSizePixel( const Size& rNewSize, sal_uInt32 nScaleFlag = BMP_SCALE_FASTESTINTERPOLATE )
+    {
+        Bitmap::SetSizePixel( rNewSize, nScaleFlag );
+    }
 
     sal_uLong                   GetSizeBytes() const { return Bitmap::GetSizeBytes(); }
     sal_uLong                   GetChecksum() const { return Bitmap::GetChecksum(); }
@@ -81,8 +84,8 @@ public:
     sal_Bool                    Erase( sal_uInt8 cTransparency );
     sal_Bool                    Invert();
     sal_Bool                    Mirror( sal_uLong nMirrorFlags );
-    sal_Bool                    Scale( const Size& rNewSize, sal_uLong nScaleFlag = BMP_SCALE_FASTESTINTERPOLATE );
-    sal_Bool                    Scale( const double& rScaleX, const double& rScaleY, sal_uLong nScaleFlag = BMP_SCALE_FASTESTINTERPOLATE );
+    sal_Bool                    Scale( const Size& rNewSize, sal_uInt32 nScaleFlag = BMP_SCALE_FASTESTINTERPOLATE );
+    sal_Bool                    Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag = BMP_SCALE_FASTESTINTERPOLATE );
     sal_Bool                    Rotate( long nAngle10, sal_uInt8 cFillTransparency );
     sal_Bool                    Replace( const Bitmap& rMask, sal_uInt8 rReplaceTransparency );
     sal_Bool                    Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransparency, sal_uLong nTol = 0UL );
