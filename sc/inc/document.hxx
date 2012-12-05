@@ -1646,9 +1646,9 @@ public:
                                             SvtListener* pListener );
     void                PutInFormulaTree( ScFormulaCell* pCell );
     void                RemoveFromFormulaTree( ScFormulaCell* pCell );
-    void                CalcFormulaTree( bool bOnlyForced = false,
-                                         bool bNoProgressBar = false,
-                                         bool bDirtyFlag=true );
+    SC_DLLPUBLIC void CalcFormulaTree( bool bOnlyForced = false,
+                                       bool bNoProgressBar = false,
+                                       bool bDirtyFlag=true );
     void                ClearFormulaTree();
     void                AppendToFormulaTrack( ScFormulaCell* pCell );
     void                RemoveFromFormulaTrack( ScFormulaCell* pCell );

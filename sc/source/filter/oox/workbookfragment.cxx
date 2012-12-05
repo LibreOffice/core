@@ -20,7 +20,6 @@
 #include "workbookfragment.hxx"
 
 #include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/sheet/XCalculatable.hpp>
 #include "oox/core/filterbase.hxx"
 #include "oox/drawingml/themefragmenthandler.hxx"
 #include "oox/helper/attributelist.hxx"
@@ -316,28 +315,23 @@ void WorkbookFragment::finalizeImport()
     finalizeWorkbookImport();
 
     // Recalculate formula cells.
-    Reference< XCalculatable > xCalculatable( getDocument(), UNO_QUERY );
-    if( xCalculatable.is() )
+    bool bHardRecalc = false;
+    ScDocument& rDoc = getScDocument();
+    ScDocShell* pDocSh = static_cast<ScDocShell*>(rDoc.GetDocumentShell());
+    if (rDoc.IsUserInteractionEnabled())
     {
-        bool bHardRecalc = false;
-        ScDocument& rDoc = getScDocument();
-        if (rDoc.IsUserInteractionEnabled())
-        {
-            // Ask the user if full re-calculation is desired.
-            ScDocShell* pDocSh = static_cast<ScDocShell*>(rDoc.GetDocumentShell());
+        // Ask the user if full re-calculation is desired.
+        QueryBox aBox(
+            pDocSh->GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+            ScGlobal::GetRscString(STR_QUERY_FORMULA_RECALC_ONLOAD_XLS));
 
-            QueryBox aBox(
-                pDocSh->GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
-                ScGlobal::GetRscString(STR_QUERY_FORMULA_RECALC_ONLOAD_XLS));
-
-            bHardRecalc = aBox.Execute() == RET_YES;
-        }
-
-        if (bHardRecalc)
-            xCalculatable->calculateAll();
-        else
-            xCalculatable->calculate();
+        bHardRecalc = aBox.Execute() == RET_YES;
     }
+
+    if (bHardRecalc)
+        pDocSh->DoHardRecalc(false);
+    else
+        rDoc.CalcFormulaTree(false, false, false);
 }
 
 // private --------------------------------------------------------------------
