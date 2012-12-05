@@ -140,7 +140,7 @@ namespace connectivity
             sal_Bool                                    m_bLastRecord;
             sal_Bool                                    m_bFreeHandle;
             sal_Bool                                    m_bInserting;
-            sal_Bool                                    m_bFetchData;           // true when SQLGetaData can be called in any order or when fetching data for m_aRow
+            sal_Bool                                    m_bFetchData;           // false when SQLGetData can be called in any order or when fetching data for m_aRow
             sal_Bool                                    m_bRowInserted;
             sal_Bool                                    m_bRowDeleted;
             sal_Bool                                    m_bUseFetchScroll;
