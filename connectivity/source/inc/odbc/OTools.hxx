@@ -97,7 +97,7 @@ namespace connectivity
         class OOO_DLLPUBLIC_ODBCBASE OTools
         {
         public:
-            static void ThrowException( OConnection* _pConnection,
+            static void ThrowException( const OConnection* _pConnection,
                                         SQLRETURN _rRetCode,
                                         SQLHANDLE _pContext,
                                         SQLSMALLINT _nHandleType,
@@ -191,7 +191,7 @@ namespace connectivity
                                                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
                                                     rtl_TextEncoding _nTextEncoding) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
-            static  ::com::sun::star::uno::Sequence<sal_Int8> getBytesValue(OConnection* _pConnection,
+            static  ::com::sun::star::uno::Sequence<sal_Int8> getBytesValue(const OConnection* _pConnection,
                                                                             SQLHANDLE _aStatementHandle,
                                                                             sal_Int32 columnIndex,
                                                                             SQLSMALLINT _fSqlType,
