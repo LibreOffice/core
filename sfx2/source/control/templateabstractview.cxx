@@ -137,10 +137,33 @@ BitmapEx TemplateAbstractView::scaleImg (const BitmapEx &rImg, long width, long 
 {
     BitmapEx aImg = rImg;
 
-    int sWidth = std::min(aImg.GetSizePixel().getWidth(),width);
-    int sHeight = std::min(aImg.GetSizePixel().getHeight(),height);
+    if ( !rImg.IsEmpty() )
+    {
 
-    aImg.Scale(Size(sWidth,sHeight),BMP_SCALE_INTERPOLATE);
+        const Size& aImgSize = aImg.GetSizePixel();
+        double nRatio = double(aImgSize.getWidth()) / double(aImgSize.getHeight());
+
+        long nDestWidth = aImgSize.getWidth();
+        long nDestHeight = aImgSize.getHeight();
+
+        // Which one side is the overflowing most?
+        long nDistW = aImgSize.getWidth() - width;
+        long nDistH = aImgSize.getHeight() - height;
+
+        // Use the biggest overflow side to make it fit the destination
+        if ( nDistW >= nDistH && nDistW > 0 )
+        {
+            nDestWidth = width;
+            nDestHeight = width / nRatio;
+        }
+        else if ( nDistW < nDistH && nDistH > 0 )
+        {
+            nDestHeight = height;
+            nDestWidth = height * nRatio;
+        }
+
+        aImg.Scale(Size(nDestWidth,nDestHeight));
+    }
 
     return aImg;
 }
