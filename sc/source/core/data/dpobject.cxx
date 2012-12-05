@@ -567,8 +567,18 @@ void ScDPObject::ReloadGroupTableData()
 
     const ScDPDimensionSaveData* pDimData = pSaveData->GetExistingDimensionData();
     if (!pDimData || !pDimData->HasGroupDimensions())
-        // No group dimensions exist.
+    {
+        // No group dimensions exist.  Check if it currently has group
+        // dimensions, and if so, remove all of them.
+        ScDPGroupTableData* pData = dynamic_cast<ScDPGroupTableData*>(mpTableData.get());
+        if (pData)
+        {
+            // Replace the existing group table data with the source data.
+            shared_ptr<ScDPTableData> pSource = pData->GetSourceTableData();
+            mpTableData = pSource;
+        }
         return;
+    }
 
     ScDPGroupTableData* pData = dynamic_cast<ScDPGroupTableData*>(mpTableData.get());
     if (pData)

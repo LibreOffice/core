@@ -973,52 +973,23 @@ void ScDBFunc::DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nPar
     if (aEntries.empty())
         return;
 
+    std::vector<rtl::OUString> aDeletedNames;
     bool bIsDataLayout;
     OUString aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
 
     ScDPSaveData aData( *pDPObj->GetSaveData() );
     ScDPDimensionSaveData* pDimData = aData.GetDimensionData();     // created if not there
 
-    // find original base
+    // find the source dimension name.
     rtl::OUString aBaseDimName = aDimName;
     if( const ScDPSaveGroupDimension* pBaseGroupDim = pDimData->GetNamedGroupDim( aDimName ) )
         aBaseDimName = pBaseGroupDim->GetSourceDimName();
 
-    // remove all existing parts (the grouping is built completely new)
-
-    /*  Remove numeric group dimension (exists once at most). No need
-        to delete anything in save data (grouping was done inplace in
-        an existing base dimension). */
-    pDimData->RemoveNumGroupDimension( aBaseDimName );
-
-    /*  Remove named group dimension(s). Collect deleted dimension
-        names which may be reused while recreating the groups.
-        Dimensions have to be removed from dimension save data and from
-        save data too. */
-    std::vector<rtl::OUString> aDeletedNames;
-    const ScDPSaveGroupDimension* pExistingGroup = pDimData->GetGroupDimForBase( aBaseDimName );
-    while ( pExistingGroup )
-    {
-        rtl::OUString aGroupDimName = pExistingGroup->GetGroupDimName();
-        pDimData->RemoveGroupDimension( aGroupDimName );     // pExistingGroup is deleted
-
-        // also remove SaveData settings for the dimension that no longer exists
-        aData.RemoveDimensionByName( aGroupDimName );
-
-        /*  The name can be used for the new group dimensions, although
-            it is still in use with the DataPilotSource. */
-        aDeletedNames.push_back( aGroupDimName );
-
-        // see if there are more group dimensions
-        pExistingGroup = pDimData->GetGroupDimForBase( aBaseDimName );
-
-        if ( pExistingGroup && pExistingGroup->GetGroupDimName() == aGroupDimName )
-        {
-            // still get the same group dimension?
-            OSL_FAIL("couldn't remove group dimension");
-            pExistingGroup = NULL;      // avoid endless loop
-        }
-    }
+    // Remove all group dimensions associated with this source dimension. For
+    // date grouping, we need to remove all existing groups for the affected
+    // source dimension and build new one(s) from scratch.  Keep the deleted
+    // names so that they can be reused during re-construction.
+    aData.RemoveAllGroupDimensions(aBaseDimName, &aDeletedNames);
 
     if ( nParts )
     {

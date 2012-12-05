@@ -2688,6 +2688,35 @@ void Test::testPivotTableDateGrouping()
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
+    // Remove all date grouping. The source dimension "Date" has two
+    // external dimensions ("Years" and "Quarters") and one internal ("Date"
+    // the same name but different hierarchy).  Remove all of them.
+    pSaveData = pDPObj->GetSaveData();
+    pSaveData->RemoveAllGroupDimensions(aBaseDimName);
+    pDPObj->SetSaveData(*pSaveData);
+    pDPObj->ReloadGroupTableData();
+    pDPObj->InvalidateData();
+
+    aOutRange = refresh(pDPObj);
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][2] = {
+            { "Date", 0 },
+            { "2011-01-01", "1" },
+            { "2011-03-02", "2" },
+            { "2011-09-03", "7" },
+            { "2012-01-04", "3" },
+            { "2012-02-23", "4" },
+            { "2012-02-24", "5" },
+            { "2012-03-15", "6" },
+            { "2012-12-25", "8" },
+            { "Total Result", "36" }
+        };
+
+        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Remove all date grouping.");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
     pDPs->FreeTable(pDPObj);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
