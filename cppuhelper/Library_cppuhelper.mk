@@ -69,7 +69,6 @@ $(eval $(call gb_Library_add_exception_objects,cppuhelper,\
 	cppuhelper/source/propshlp \
 	cppuhelper/source/servicefactory \
 	cppuhelper/source/shlib \
-	cppuhelper/source/stdidlclass \
 	cppuhelper/source/supportsservice \
 	cppuhelper/source/tdmgr \
 	cppuhelper/source/typeprovider \
