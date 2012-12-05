@@ -334,6 +334,7 @@ void OPreparedStatement::setParameter(const sal_Int32 parameterIndex, const sal_
          * Our internal OUString storage is always UTF-16, so no conversion to do here.
          */
         BOOST_STATIC_ASSERT( sizeof(sal_Unicode) == 2 );
+        BOOST_STATIC_ASSERT( sizeof(SQLWCHAR)    == 2 );
         nCharLen = _sData.getLength();
         nByteLen = nCharLen * sizeof(sal_Unicode);
         pData = allocBindBuf(parameterIndex, nByteLen);
