@@ -1700,8 +1700,8 @@ Size PushButton::CalcMinimumSize( long nMaxWidth ) const
     // cf. ImplDrawPushButton ...
     if( (GetStyle() & WB_SMALLSTYLE) == 0 )
     {
-        aSize.Width() += 8;
-        aSize.Height() += 8;
+        aSize.Width() += 12;
+        aSize.Height() += 12;
     }
 
     return CalcWindowSize( aSize );
