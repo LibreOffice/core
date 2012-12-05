@@ -349,6 +349,8 @@ namespace sw
             const SwColumns& rFollowColumns = rFollowCols.GetColumns();
             const SvxLRSpaceItem &rOneLR = rTitleFmt.GetLRSpace();
             const SvxLRSpaceItem &rTwoLR= rFollowFmt.GetLRSpace();
+            const SwFmtFrmSize& rFirstFrmSize = rTitleFmt.GetFrmSize();
+            const SwFmtFrmSize& rFollowFrmSize = rFollowFmt.GetFrmSize();
 
             if (rFirstColumns.size() != rFollowColumns.size())
             {
@@ -356,6 +358,8 @@ namespace sw
                 bPlausableTitlePage = false;
             }
             else if (rOneLR != rTwoLR)
+                bPlausableTitlePage = false;
+            else if (rFirstFrmSize != rFollowFrmSize)
                 bPlausableTitlePage = false;
             else
             {
