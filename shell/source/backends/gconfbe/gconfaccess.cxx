@@ -236,7 +236,7 @@ uno::Any makeAnyOfGconfValue( GConfValue *pGconfValue )
 static void splitFontName( GConfValue *pGconfValue, rtl::OUString &rName, sal_Int16 &rHeight)
 {
    rtl::OString aFont( gconf_value_get_string( pGconfValue ) );
-   aFont.trim();
+   aFont = aFont.trim();
    sal_Int32 nIdx = aFont.lastIndexOf( ' ' );
    if (nIdx < 1) { // urk
        rHeight = 12;
