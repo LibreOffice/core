@@ -748,9 +748,9 @@ static void lcl_updateThumbnails (TemplateLocalViewItem *pItem)
     pItem->maPreview2.Clear();
 
     // Update folder thumbnails
-    for (size_t i = 0, n = pItem->maTemplates.size(); i < 2 && i < n; ++i)
+    for (size_t i = 0, n = pItem->maTemplates.size(); i < n && ( pItem->maPreview1.IsEmpty() || pItem->maPreview2.IsEmpty( ) ); ++i)
     {
-        if (i == 0)
+        if ( pItem->maPreview1.IsEmpty( ) )
         {
             pItem->maPreview1 = TemplateAbstractView::scaleImg(pItem->maTemplates[i].aThumbnail,
                                                                TEMPLATE_THUMBNAIL_MAX_WIDTH*0.75,
