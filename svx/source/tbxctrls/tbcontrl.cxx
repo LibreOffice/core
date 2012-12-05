@@ -133,7 +133,7 @@ public:
     ~SvxStyleBox_Impl();
 
     void            SetFamily( SfxStyleFamily eNewFamily );
-    inline sal_Bool     IsVisible() { return bVisible; }
+    inline sal_Bool IsVisible() { return bVisible; }
 
     virtual long    PreNotify( NotifyEvent& rNEvt );
     virtual long    Notify( NotifyEvent& rNEvt );
@@ -153,18 +153,18 @@ protected:
 
 private:
     SfxStyleFamily                  eStyleFamily;
-    sal_uInt16                          nCurSel;
-    sal_Bool                            bRelease;
+    sal_uInt16                      nCurSel;
+    sal_Bool                        bRelease;
     Size                            aLogicalSize;
     Link                            aVisibilityListener;
-    sal_Bool                            bVisible;
+    sal_Bool                        bVisible;
     Reference< XDispatchProvider >  m_xDispatchProvider;
     Reference< XFrame >             m_xFrame;
     OUString                        m_aCommand;
     String                          aClearFormatKey;
     String                          aMoreKey;
     String                          sDefaultStyle;
-    sal_Bool                            bInSpecialMode;
+    sal_Bool                        bInSpecialMode;
 
     void            ReleaseFocus();
 };
@@ -184,8 +184,8 @@ private:
     Font                           aCurFont;
     Size                           aLogicalSize;
     String                         aCurText;
-    sal_uInt16                         nFtCount;
-    sal_Bool                           bRelease;
+    sal_uInt16                     nFtCount;
+    sal_Bool                       bRelease;
     Reference< XDispatchProvider > m_xDispatchProvider;
     Reference< XFrame >            m_xFrame;
 
@@ -203,7 +203,7 @@ public:
 
     void            FillList();
     void            Update( const SvxFontItem* pFontItem );
-    sal_uInt16          GetListCount() { return nFtCount; }
+    sal_uInt16      GetListCount() { return nFtCount; }
     void            Clear() { FontNameBox::Clear(); nFtCount = 0; }
     void            Fill( const FontList* pList )
                         { FontNameBox::Fill( pList );
@@ -220,8 +220,7 @@ public:
 // class SvxFrameWindow_Impl --------------------------------------------------
 //========================================================================
 
-// fuer den SelectHdl werden die Modifier gebraucht, also
-// muss man sie im MouseButtonUp besorgen
+// SelectHdl needs the Modifiers, get them in MouseButtonUp
 
 class SvxFrmValueSet_Impl : public ValueSet
 {
@@ -292,7 +291,7 @@ public:
 };
 
 //########################################################################
-// Hilfsklassen:
+// Helper classes:
 //========================================================================
 // class SfxStyleControllerItem ------------------------------------------
 //========================================================================
@@ -705,23 +704,23 @@ sal_Bool GetDocFontList_Impl( const FontList** ppFontList, SvxFontNameBox_Impl* 
         const FontList* pNewFontList = pFontListItem->GetFontList();
         DBG_ASSERT( pNewFontList, "Doc-FontList not available!" );
 
-        // keine alte Liste, aber neue Liste
+        // No old list, but a new list
         if ( !*ppFontList && pNewFontList )
         {
-            // => "ubernehmen
+            // => take over
             *ppFontList = pNewFontList;
             bChanged = sal_True;
         }
         else
         {
-            // Vergleich der Fontlisten ist nicht vollkommen
-            // wird die Fontliste am Doc geaendert, kann man hier
-            // nur ueber die Listbox Aenderungen feststellen, weil
-            // ppFontList dabei schon upgedatet wurde
+            // Comparing the font lists is not perfect.
+            // When you change the font list in the Doc, you can track
+            // changes here only on the Listbox, because ppFontList
+            // has already been updated.
             bChanged =
                 ( ( *ppFontList != pNewFontList ) ||
                   pBox->GetListCount() != pNewFontList->GetFontNameCount() );
-            // HACK(vergleich ist unvollstaendig) ???
+            // HACK: Comparing is incomplete
 
             if ( bChanged )
                 *ppFontList = pNewFontList;
@@ -742,7 +741,7 @@ sal_Bool GetDocFontList_Impl( const FontList** ppFontList, SvxFontNameBox_Impl* 
         pBox->Disable();
     }
 
-    // in die FontBox ggf. auch die neue Liste f"ullen
+    // Fill the FontBox, also the new list if neccessary
     if ( pBox && bChanged )
     {
         if ( *ppFontList )
@@ -774,9 +773,9 @@ SvxFontNameBox_Impl::SvxFontNameBox_Impl( Window* pParent, const Reference< XDis
 
 void SvxFontNameBox_Impl::FillList()
 {
-    // alte Selektion merken, und am Ende wieder setzen
+    // Save old Selection, set back in the end
     Selection aOldSel = GetSelection();
-    // hat sich Doc-Fontlist geaendert?
+    // Did Doc-Fontlist change?
     GetDocFontList_Impl( &pFontList, this );
     aCurText = GetText();
     SetSelection( aOldSel );
@@ -1153,7 +1152,7 @@ void SvxColorWindow_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
                 ::Color aColWhite( COL_WHITE );
                 String aStrWhite( SVX_RES( RID_SVXITEMS_COLOR_WHITE ) );
 
-                // ScrollBar an oder aus
+                // ScrollBar on or off
                 WinBits nBits = aColorSet.GetStyle();
                 if ( nCount > PALETTE_SIZE )
                     nBits &= ~WB_VSCROLL;
@@ -1200,8 +1199,7 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl( sal_uInt16 nId, const Reference< XFram
      *  NONE    LEFT     RIGHT     LEFTRIGHT
      *  TOP     BOTTOM   TOPBOTTOM OUTER
      *  -------------------------------------
-     *  HOR     HORINNER VERINNER   ALL         <- kann ueber bParagraphMode
-     *                                             abgeschaltet werden
+     *  HOR     HORINNER VERINNER   ALL         <- can be switched of via bParagraphMode
      */
 
     sal_uInt16 i = 0;
@@ -1232,7 +1230,7 @@ SvxFrameWindow_Impl::~SvxFrameWindow_Impl()
 
 SfxPopupWindow* SvxFrameWindow_Impl::Clone() const
 {
-    //! HACK: wie bekomme ich den Paragraph-Mode ??
+    //! HACK: How do I get the Paragraph mode?
     return new SvxFrameWindow_Impl( GetId(), GetFrame(), GetParent() );
 }
 
@@ -1271,10 +1269,9 @@ void SvxFrameWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 #define FRM_VALID_OUTER     0x0f
 #define FRM_VALID_ALL       0xff
 
-//
-// Per default bleiben ungesetzte Linien unveraendert
-// Mit Shift werden ungesetzte Linien zurueckgsetzt
-//
+// By default unset lines remain unchanged.
+// Via Shift unset lines are reset
+
 IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl)
 {
     ::Color             aColBlack( COL_BLACK );
@@ -1317,7 +1314,7 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl)
                 nValidFlags |= FRM_VALID_OUTER;
         break;  // OUTER
 
-        // Tabelle innen:
+        // Inner Table:
         case 9: // HOR
             pTop = pBottom = &theDefLine;
             aBorderInner.SetLine( &theDefLine, BOXINFO_LINE_HORI );
@@ -1881,10 +1878,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
 
         pStyleSheetPool->SetSearchMask( eFamily, SFXSTYLEBIT_USED );
 
-        //------------------------------
-        // Ueberpruefen, ob Fill noetig:
-        //------------------------------
-
+        // Check whether fill is neccessary
         pStyle = pStyleSheetPool->First();
         //!!! TODO: This condition isn't right any longer, because we always show some default entries
         //!!! so the list doesn't show the count
@@ -2031,8 +2025,7 @@ void SvxStyleToolBoxControl::Update()
     const SfxTemplateItem* pItem = NULL;
 
     if ( nActFamily == 0xffff || 0 == (pItem = pFamilyState[nActFamily-1]) )
-        // aktueller Bereich nicht innerhalb der erlaubten Bereiche
-        // oder Default
+    // Current range not within allowed ranges or default
     {
         pStyleSheetPool = pPool;
         nActFamily      = 2;
@@ -2052,7 +2045,7 @@ void SvxStyleToolBoxControl::Update()
     else if ( pPool != pStyleSheetPool )
         pStyleSheetPool = pPool;
 
-    FillStyleBox(); // entscheidet selbst, ob gefuellt werden muss
+    FillStyleBox(); // Decides by itself whether Fill is needed
 
     if ( pItem )
         SelectStyle( pItem->GetStyleName() );
