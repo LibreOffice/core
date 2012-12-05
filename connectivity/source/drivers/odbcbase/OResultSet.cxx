@@ -36,6 +36,7 @@
 #include "connectivity/dbexception.hxx"
 #include "diagnose_ex.h"
 #include <rtl/logfile.hxx>
+#include <boost/static_assert.hpp>
 
 #include <o3tl/compat_functional.hxx>
 
@@ -53,6 +54,10 @@ using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 
 #define ODBC_SQL_NOT_DEFINED    99UL
+BOOST_STATIC_ASSERT( ODBC_SQL_NOT_DEFINED != SQL_UB_OFF );
+BOOST_STATIC_ASSERT( ODBC_SQL_NOT_DEFINED != SQL_UB_ON );
+BOOST_STATIC_ASSERT( ODBC_SQL_NOT_DEFINED != SQL_UB_FIXED );
+BOOST_STATIC_ASSERT( ODBC_SQL_NOT_DEFINED != SQL_UB_VARIABLE );
 
 //------------------------------------------------------------------------------
 //  IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.OResultSet","com.sun.star.sdbc.ResultSet");
