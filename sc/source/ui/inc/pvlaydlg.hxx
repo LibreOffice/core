@@ -204,7 +204,7 @@ private:
     DECL_LINK( EdOutModifyHdl, void * );
     DECL_LINK( EdInModifyHdl, void * );
     DECL_LINK( SelAreaHdl, void * );
-    DECL_LINK( GetFocusHdl, Control* );
+    DECL_LINK( GetFocusHdl, formula::RefEdit* );
 
 private:
     struct FieldRect
@@ -257,7 +257,7 @@ private:
 
     ScViewData*             mpViewData;
     ScDocument*             mpDoc;
-    ::formula::RefEdit*     mpActiveEdit;
+    formula::RefEdit*       mpRefInputEdit;
 
     const rtl::OUString     maStrUndefined;
     const rtl::OUString     maStrNewTable;
