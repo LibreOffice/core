@@ -92,7 +92,8 @@ private:
 
     ScDocShellRef load(
         const OUString& rURL, const OUString& rFilter, const OUString &rUserData,
-        const OUString& rTypeName, sal_Int32 nFormat, sal_uLong nFormatType );
+        const OUString& rTypeName, sal_Int32 nFormat, sal_uLong nFormatType,
+        const OUString* pPassword = NULL );
 
     ScDocShellRef saveAndReload( ScDocShell* pShell, sal_Int32 nFormat );
     ScDocShellRef loadDocument( const rtl::OUString& rFileNameBase, sal_Int32 nFormat );
@@ -120,7 +121,6 @@ void ScExportTest::createCSVPath(const rtl::OUString& aFileBase, rtl::OUString& 
 ScDocShellRef ScExportTest::saveAndReloadPassword(ScDocShell* pShell, const rtl::OUString &rFilter,
     const rtl::OUString &rUserData, const rtl::OUString& rTypeName, sal_uLong nFormatType)
 {
-
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
     SfxMedium aStoreMedium( aTempFile.GetURL(), STREAM_STD_WRITE );
@@ -151,7 +151,8 @@ ScDocShellRef ScExportTest::saveAndReloadPassword(ScDocShell* pShell, const rtl:
     if (nFormatType)
         nFormat = SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS;
 
-    return load(aTempFile.GetURL(), rFilter, rUserData, rTypeName, nFormat, nFormatType);
+    OUString aPass("test");
+    return load(aTempFile.GetURL(), rFilter, rUserData, rTypeName, nFormat, nFormatType, &aPass);
 }
 
 ScDocShellRef ScExportTest::saveAndReload(ScDocShell* pShell, const rtl::OUString &rFilter,
@@ -184,7 +185,7 @@ ScDocShellRef ScExportTest::saveAndReload(ScDocShell* pShell, const rtl::OUStrin
 
 ScDocShellRef ScExportTest::load(
     const OUString& rURL, const OUString& rFilter, const OUString &rUserData,
-    const OUString& rTypeName, sal_Int32 nFormat, sal_uLong nFormatType )
+    const OUString& rTypeName, sal_Int32 nFormat, sal_uLong nFormatType, const OUString* pPassword )
 {
     SfxFilter* pFilter = new SfxFilter(
         rFilter,
@@ -197,6 +198,11 @@ ScDocShellRef ScExportTest::load(
     SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ);
     pSrcMed->SetFilter(pFilter);
     pSrcMed->UseInteractionHandler(false);
+    if (pPassword)
+    {
+        SfxItemSet* pSet = pSrcMed->GetItemSet();
+        pSet->Put(SfxStringItem(SID_PASSWORD, *pPassword));
+    }
     if (!xDocShRef->DoLoad(pSrcMed))
     {
         xDocShRef->DoClose();
