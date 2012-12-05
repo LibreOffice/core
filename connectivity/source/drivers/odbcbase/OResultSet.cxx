@@ -1690,8 +1690,10 @@ sal_Bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32
         }
     }
     else if ( IResultSetHelper::PRIOR == _eCursorPosition && m_nCurrentFetchState == SQL_NO_DATA )
+        // we went beforeFirst
         m_nRowPos = 0;
     else if(IResultSetHelper::NEXT == _eCursorPosition && m_nCurrentFetchState == SQL_NO_DATA && nOldFetchStatus != SQL_NO_DATA)
+        // we went afterLast
         ++m_nRowPos;
 
     return bSuccess;
