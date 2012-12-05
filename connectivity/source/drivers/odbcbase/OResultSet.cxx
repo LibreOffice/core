@@ -1495,7 +1495,6 @@ void OResultSet::fillRow(const sal_Int32 _nToColumn)
     if((sal_Int32)m_aRow.size() <= _nToColumn)
     {
         m_aRow.resize(_nToColumn+1);
-        m_aRow[_nToColumn].setBound(sal_True);
     }
     m_bFetchData = sal_False;
 
