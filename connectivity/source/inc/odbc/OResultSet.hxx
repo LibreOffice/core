@@ -119,10 +119,18 @@ namespace connectivity
             TVoidVector                                 m_aBindVector;
             ::std::vector<SQLLEN>                       m_aLengthVector;
             ::std::map<sal_Int32,SWORD>                 m_aODBCColumnTypes;
-            ::com::sun::star::uno::Sequence<sal_Int8>   m_aBookmark;
 
-            TDataRow                                    m_aRow; // only used when SQLGetData can't be called in any order
-            ORowSetValue                                m_aEmptyValue;  // needed for the getValue method when no prefetch is used
+            // In baseline ODBC, SQLGetData can only be called on monotonically increasing column numbers.
+            // additionally, any variable-length data can be fetched only once (possibly in parts);
+            // after that, SQLGetData returns SQL_NO_DATA.
+            // In order to insulate our callers from these restrictions,
+            // we cache the current row in m_aRow.
+            // If the driver claims to support the GD_ANY_ORDER extension,
+            // we read and cache only the columns requested by a caller.
+            // Else, we read and cache all columns whose number is <= a requested column.
+            // m_aRow[colNumber].getBound() says if it contains an up-to-date value or not.
+            TDataRow                                    m_aRow;
+            sal_Bool                                    m_bFetchDataInOrder;
             SQLHANDLE                                   m_aStatementHandle;
             SQLHANDLE                                   m_aConnectionHandle;
             OStatement_Base*                            m_pStatement;
@@ -132,7 +140,6 @@ namespace connectivity
             SQLUSMALLINT*                               m_pRowStatusArray;
             rtl_TextEncoding                            m_nTextEncoding;
             sal_Int32                                   m_nRowPos;
-            sal_Int32                                   m_nLastColumnPos;       // used for m_aRow just to know where we are
             mutable sal_uInt32                          m_nUseBookmarks;
             SQLRETURN                                   m_nCurrentFetchState;
             sal_Bool                                    m_bWasNull;
@@ -140,7 +147,6 @@ namespace connectivity
             sal_Bool                                    m_bLastRecord;
             sal_Bool                                    m_bFreeHandle;
             sal_Bool                                    m_bInserting;
-            sal_Bool                                    m_bFetchData;           // false when SQLGetData can be called in any order or when fetching data for m_aRow
             sal_Bool                                    m_bRowInserted;
             sal_Bool                                    m_bRowDeleted;
             sal_Bool                                    m_bUseFetchScroll;
@@ -158,16 +164,33 @@ namespace connectivity
             template < typename T, SQLINTEGER BufferLength > SQLRETURN setStmtOption (SQLINTEGER fOption, T value) const;
 
 
-            void fillRow(sal_Int32 _nToColumn);
+            void ensureCacheForColumn(sal_Int32 columnIndex);
+            void invalidateCache();
+            void fillColumn(sal_Int32 _nToColumn);
             void allocBuffer();
             void releaseBuffer();
             void updateValue(sal_Int32 columnIndex,SQLSMALLINT _nType,void* _pValue) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             void fillNeededData(SQLRETURN _nRet);
-            const ORowSetValue& getValue(sal_Int32 _nColumnIndex,SQLSMALLINT _nType,void* _pValue,SQLINTEGER _rSize);
             sal_Bool moveImpl(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset, sal_Bool _bRetrieveData);
             TVoidPtr allocBindColumn(sal_Int32 _nType,sal_Int32 _nColumnIndex);
             SQLRETURN unbind(sal_Bool _bUnbindHandle = sal_True);
             SWORD impl_getColumnType_nothrow(sal_Int32 columnIndex);
+
+            // helper to implement XRow::getXXX in simple cases
+            template < typename T > T getValue( sal_Int32 columnIndex );
+            // impl_getXXX are the functions that do the actual fetching from ODBC, ignoring the cache
+            // for simple cases
+            template < typename T > T impl_getValue( const sal_Int32 _nColumnIndex, SQLSMALLINT nType );
+            // these cases need some special treatment
+            sal_Bool impl_getBoolean( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            ::com::sun::star::uno::Sequence< sal_Int8 > impl_getBytes( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            ::com::sun::star::util::Date impl_getDate( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            ::com::sun::star::util::Time impl_getTime( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            ::com::sun::star::util::DateTime impl_getTimestamp( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            sal_Int64 SAL_CALL impl_getLong( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            ::rtl::OUString SAL_CALL impl_getString( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL impl_getBookmark(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
 
             // OPropertyArrayUsageHelper
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;

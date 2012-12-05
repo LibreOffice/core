@@ -60,6 +60,11 @@ BOOST_STATIC_ASSERT( ODBC_SQL_NOT_DEFINED != SQL_UB_ON );
 BOOST_STATIC_ASSERT( ODBC_SQL_NOT_DEFINED != SQL_UB_FIXED );
 BOOST_STATIC_ASSERT( ODBC_SQL_NOT_DEFINED != SQL_UB_VARIABLE );
 
+namespace
+{
+    const SQLLEN nMaxBookmarkLen = 20;
+}
+
 //------------------------------------------------------------------------------
 //  IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.OResultSet","com.sun.star.sdbc.ResultSet");
 ::rtl::OUString SAL_CALL OResultSet::getImplementationName(  ) throw ( RuntimeException)
@@ -89,6 +94,7 @@ sal_Bool SAL_CALL OResultSet::supportsService( const ::rtl::OUString& _rServiceN
 // -------------------------------------------------------------------------
 OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   OResultSet_BASE(m_aMutex)
                         ,OPropertySetHelper(OResultSet_BASE::rBHelper)
+                        ,m_bFetchDataInOrder(sal_True)
                         ,m_aStatementHandle(_pStatementHandle)
                         ,m_aConnectionHandle(pStmt->getConnectionHandle())
                         ,m_pStatement(pStmt)
@@ -98,7 +104,6 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
                         ,m_pRowStatusArray( NULL )
                         ,m_nTextEncoding(pStmt->getOwnConnection()->getTextEncoding())
                         ,m_nRowPos(0)
-                        ,m_nLastColumnPos(0)
                         ,m_nUseBookmarks(ODBC_SQL_NOT_DEFINED)
                         ,m_nCurrentFetchState(0)
                         ,m_bWasNull(sal_True)
@@ -106,7 +111,6 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
                         ,m_bLastRecord(sal_False)
                         ,m_bFreeHandle(sal_False)
                         ,m_bInserting(sal_False)
-                        ,m_bFetchData(sal_True)
                         ,m_bRowInserted(sal_False)
                         ,m_bRowDeleted(sal_False)
                         ,m_bUseFetchScroll(sal_False)
@@ -145,14 +149,12 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
         // If !SQL_GD_ANY_ORDER, cache the whole row so that callers can access columns in any order.
         // In other words, isolate them from ODBC restrictions.
         // TODO: we assume SQL_GD_BLOCK, unless fetchSize is 1
-        // TODO: not sure that forcing m_bFetchData for SQL_CURSOR_FORWARD_ONLY is sufficient.
-        //       the spec says SQLGetData should not be called *at* *all* if the fetch size is > 1 (for forward-only cursor)
         OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,SQL_GETDATA_EXTENSIONS,nValueLen,NULL);
-        m_bFetchData = !((SQL_GD_ANY_ORDER & nValueLen) == SQL_GD_ANY_ORDER && nCurType != SQL_CURSOR_FORWARD_ONLY);
+        m_bFetchDataInOrder = !((SQL_GD_ANY_ORDER & nValueLen) == SQL_GD_ANY_ORDER);
     }
     catch(const Exception&)
-    { // we don't want our result destroy here
-        m_bFetchData = sal_True;
+    {
+        m_bFetchDataInOrder = sal_True;
     }
     try
     {
@@ -347,10 +349,14 @@ void OResultSet::allocBuffer()
     m_aBindVector.push_back(TVoidPtr(0,0)); // the first is reserved for the bookmark
     m_aRow.resize(nLen+1);
 
+    m_aRow[0].setTypeKind(DataType::VARBINARY);
+    m_aRow[0].setBound( false );
+
     for(sal_Int32 i = 1;i<=nLen;++i)
     {
         sal_Int32 nType = xMeta->getColumnType(i);
         m_aRow[i].setTypeKind( nType );
+        m_aRow[i].setBound( false );
     }
     m_aLengthVector.resize(nLen + 1);
 }
@@ -396,13 +402,43 @@ sal_Int32 SAL_CALL OResultSet::findColumn( const ::rtl::OUString& columnName ) t
     return i;
 }
 // -------------------------------------------------------------------------
+void OResultSet::ensureCacheForColumn(sal_Int32 columnIndex)
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "lionel@mamane.lu", "OResultSet::ensureCacheForColumn" );
+
+    assert(columnIndex >= 0);
+
+    const TDataRow::size_type oldCacheSize = m_aRow.size();
+    const TDataRow::size_type uColumnIndex = static_cast<TDataRow::size_type>(columnIndex);
+
+    if (oldCacheSize > uColumnIndex)
+        // nothing to do
+        return;
+
+    m_aRow.resize(columnIndex + 1);
+    TDataRow::iterator i (m_aRow.begin() + uColumnIndex);
+    const TDataRow::const_iterator end(m_aRow.end());
+    for (; i != end; ++i)
+    {
+        i->setBound(false);
+    }
+}
+void OResultSet::invalidateCache()
+{
+    const TDataRow::const_iterator end = m_aRow.end();
+    for(TDataRow::iterator i=m_aRow.begin(); i!=end; ++i)
+    {
+        i->setBound(false);
+    }
+}
+// -------------------------------------------------------------------------
 Reference< XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
+    ::dbtools::throwFunctionNotSupportedException( "XRow::getBinaryStream", *this );
 
-    // TODO use getBytes instead of
     return NULL;
 }
 // -------------------------------------------------------------------------
@@ -411,135 +447,141 @@ Reference< XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 /*c
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
+    ::dbtools::throwFunctionNotSupportedException( "XRow::getBinaryStream", *this );
 
-    // TODO use getBytes instead of
     return NULL;
 }
 // -----------------------------------------------------------------------------
-const ORowSetValue& OResultSet::getValue(sal_Int32 _nColumnIndex,SQLSMALLINT _nType,void* _pValue,SQLINTEGER _rSize)
+template < typename T > T OResultSet::impl_getValue( const sal_Int32 _nColumnIndex, SQLSMALLINT nType )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::getValue" );
+    T val;
+
+    OTools::getValue(m_pStatement->getOwnConnection(), m_aStatementHandle, _nColumnIndex, nType, m_bWasNull, **this, &val, sizeof(val));
+
+    return val;
+}
+// -------------------------------------------------------------------------
+// this function exists for the implicit conversion to sal_Bool (compared to a direct call to impl_getValue)
+sal_Bool SAL_CALL OResultSet::impl_getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    return impl_getValue<sal_Int8>(columnIndex, SQL_C_BIT);
+}
+// -------------------------------------------------------------------------
+template < typename T > T OResultSet::getValue( sal_Int32 columnIndex )
+{
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-    if(m_bFetchData)
-    {
-        if(_nColumnIndex > m_nLastColumnPos)
-            fillRow(_nColumnIndex);
-        return m_aRow[_nColumnIndex];
-    }
-    else
-        OTools::getValue(m_pStatement->getOwnConnection(),m_aStatementHandle,_nColumnIndex,_nType,m_bWasNull,**this,_pValue,_rSize);
-
-    return m_aEmptyValue;
+    fillColumn(columnIndex);
+    m_bWasNull = m_aRow[columnIndex].isNull();
+    return m_aRow[columnIndex];
 }
-// -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    sal_Int8 nVal(0);
-    const ORowSetValue& aValue = getValue(columnIndex,SQL_C_BIT,&nVal,sizeof nVal);
-    return (&aValue == &m_aEmptyValue) ? (sal_Bool)nVal : (sal_Bool)aValue;
+    return getValue<sal_Bool>( columnIndex );
 }
 // -------------------------------------------------------------------------
-
 sal_Int8 SAL_CALL OResultSet::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    sal_Int8 nRet(0);
-    const ORowSetValue& aValue = getValue(columnIndex,SQL_C_TINYINT,&nRet,sizeof nRet);
-    return (&aValue == &m_aEmptyValue) ? nRet : (sal_Int8)aValue;
+    return getValue<sal_Int8>( columnIndex );
 }
 // -------------------------------------------------------------------------
 
 Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::getBytes" );
-
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    fillColumn(columnIndex);
+    m_bWasNull = m_aRow[columnIndex].isNull();
 
-
-    if(m_bFetchData)
+    Sequence< sal_Int8 > nRet;
+    switch(m_aRow[columnIndex].getTypeKind())
     {
-        if(columnIndex > m_nLastColumnPos)
-            fillRow(columnIndex);
-        Sequence< sal_Int8 > nRet;
-        switch(m_aRow[columnIndex].getTypeKind())
-        {
-            case DataType::BINARY:
-            case DataType::VARBINARY:
-            case DataType::LONGVARBINARY:
-                nRet = m_aRow[columnIndex];
-                break;
-            default:
-            {
-                ::rtl::OUString sRet;
-                sRet = m_aRow[columnIndex].getString();
-                nRet = Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(sRet.getStr()),sizeof(sal_Unicode)*sRet.getLength());
-            }
-        }
-        return nRet;
+    case DataType::BINARY:
+    case DataType::VARBINARY:
+    case DataType::LONGVARBINARY:
+        nRet = m_aRow[columnIndex];
+        break;
+    default:
+    {
+        rtl::OUString sRet;
+        sRet = m_aRow[columnIndex].getString();
+        nRet = Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(sRet.getStr()),sizeof(sal_Unicode)*sRet.getLength());
     }
-
+    }
+    return nRet;
+}
+Sequence< sal_Int8 > SAL_CALL OResultSet::impl_getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
     const SWORD nColumnType = impl_getColumnType_nothrow(columnIndex);
 
     switch(nColumnType)
     {
-        case SQL_WVARCHAR:
-        case SQL_WCHAR:
-        case SQL_WLONGVARCHAR:
-        case SQL_VARCHAR:
-        case SQL_CHAR:
-        case SQL_LONGVARCHAR:
-        {
-            ::rtl::OUString aRet = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,nColumnType,m_bWasNull,**this,m_nTextEncoding);
-            return Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aRet.getStr()),sizeof(sal_Unicode)*aRet.getLength());
-        }
-        default:
-            ;
+    case SQL_WVARCHAR:
+    case SQL_WCHAR:
+    case SQL_WLONGVARCHAR:
+    case SQL_VARCHAR:
+    case SQL_CHAR:
+    case SQL_LONGVARCHAR:
+    {
+        rtl::OUString aRet = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,nColumnType,m_bWasNull,**this,m_nTextEncoding);
+        return Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aRet.getStr()),sizeof(sal_Unicode)*aRet.getLength());
     }
-    return OTools::getBytesValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_C_BINARY,m_bWasNull,**this);
+    default:
+        return OTools::getBytesValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_C_BINARY,m_bWasNull,**this);
+    }
 }
 // -------------------------------------------------------------------------
+Date SAL_CALL OResultSet::impl_getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    DATE_STRUCT aDate = impl_getValue< DATE_STRUCT> ( columnIndex,
+                                                      m_pStatement->getOwnConnection()->useOldDateFormat() ? SQL_C_DATE : SQL_C_TYPE_DATE  );
 
+    return Date(aDate.day, aDate.month, aDate.year);
+}
+// -------------------------------------------------------------------------
 Date SAL_CALL OResultSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::getDate" );
-    DATE_STRUCT aDate;
-    aDate.day   = 0;
-    aDate.month = 0;
-    aDate.year  = 0;
-
-    const ORowSetValue& aValue = getValue(  columnIndex,
-                            m_pStatement->getOwnConnection()->useOldDateFormat() ? SQL_C_DATE : SQL_C_TYPE_DATE,
-                                            &aDate,sizeof aDate);
-    return (&aValue == &m_aEmptyValue)  ? Date(aDate.day,aDate.month,aDate.year) : (Date)aValue;
+    return getValue<Date>( columnIndex );
 }
 // -------------------------------------------------------------------------
 
 double SAL_CALL OResultSet::getDouble( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    double nRet(0);
-    const ORowSetValue& aValue = getValue(columnIndex,SQL_C_DOUBLE,&nRet,sizeof nRet);
-    return (&aValue == &m_aEmptyValue) ? nRet : (double)aValue;
+    return getValue<double>( columnIndex );
 }
 // -------------------------------------------------------------------------
 
 float SAL_CALL OResultSet::getFloat( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    float nRet(0);
-    const ORowSetValue& aValue = getValue(columnIndex,SQL_C_FLOAT,&nRet,sizeof nRet);
-    return (&aValue == &m_aEmptyValue) ? nRet : (float)aValue;
+    return getValue<float>( columnIndex );
 }
 // -------------------------------------------------------------------------
-
+sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    return getValue<sal_Int16>( columnIndex );
+}
+// -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OResultSet::getInt( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nRet(0);
-    const ORowSetValue& aValue = getValue(columnIndex,SQL_C_LONG,&nRet,sizeof nRet);
-    return (&aValue == &m_aEmptyValue) ? nRet : (sal_Int32)aValue;
+    return getValue<sal_Int32>( columnIndex );
 }
 // -------------------------------------------------------------------------
-
+sal_Int64 SAL_CALL OResultSet::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    return getValue<sal_Int64>( columnIndex );
+}
+sal_Int64 SAL_CALL OResultSet::impl_getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    try
+    {
+        return impl_getValue<sal_Int64>(columnIndex, SQL_C_SBIGINT);
+    }
+    catch(const SQLException&)
+    {
+        return getString(columnIndex).toInt64();
+    }
+}
+// -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OResultSet::getRow(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -548,23 +590,6 @@ sal_Int32 SAL_CALL OResultSet::getRow(  ) throw(SQLException, RuntimeException)
     return m_pSkipDeletedSet ? m_pSkipDeletedSet->getMappedPosition(getDriverPos()) : getDriverPos();
 }
 // -------------------------------------------------------------------------
-
-sal_Int64 SAL_CALL OResultSet::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
-{
-    sal_Int64 nRet(0);
-    try
-    {
-        const ORowSetValue& aValue = getValue(columnIndex,SQL_C_SBIGINT,&nRet,sizeof nRet);
-        return (&aValue == &m_aEmptyValue) ? nRet : (sal_Int64)aValue;
-    }
-    catch(const SQLException&)
-    {
-        nRet = getString(columnIndex).toInt64();
-    }
-    return nRet;
-}
-// -------------------------------------------------------------------------
-
 Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::getMetaData" );
@@ -607,69 +632,50 @@ Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 /*columnIndex*/ ) throw
 
 Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::getObject" );
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-    fillRow(columnIndex);
-    return m_aRow[columnIndex].makeAny();
+    return getValue<ORowSetValue>( columnIndex ).makeAny();
 }
 // -------------------------------------------------------------------------
-
-sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+::rtl::OUString SAL_CALL OResultSet::impl_getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    sal_Int16 nRet(0);
-    const ORowSetValue& aValue = getValue(columnIndex,SQL_C_SHORT,&nRet,sizeof nRet);
-    return (&aValue == &m_aEmptyValue) ? nRet : (sal_Int16)aValue;
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    const SWORD nColumnType = impl_getColumnType_nothrow(columnIndex);
+    return OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,nColumnType,m_bWasNull,**this,m_nTextEncoding);
 }
-// -------------------------------------------------------------------------
-
-
 ::rtl::OUString SAL_CALL OResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::getString" );
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    ::rtl::OUString nRet;
-    if ( m_bFetchData )
-        nRet = getValue(columnIndex,0,NULL,0);
-    else
-    {
-        checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-        const SWORD nColumnType = impl_getColumnType_nothrow(columnIndex);
-        nRet = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,nColumnType,m_bWasNull,**this,m_nTextEncoding);
-    }
-    return nRet;
+    return getValue<rtl::OUString>( columnIndex );
 }
 // -------------------------------------------------------------------------
+Time SAL_CALL OResultSet::impl_getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    TIME_STRUCT aTime = impl_getValue< TIME_STRUCT > ( columnIndex,
+                                                      m_pStatement->getOwnConnection()->useOldDateFormat() ? SQL_C_TIME : SQL_C_TYPE_TIME );
 
+    return Time(0,aTime.second,aTime.minute,aTime.hour);
+}
 Time SAL_CALL OResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::getTime" );
-    TIME_STRUCT aTime={0,0,0};
-    const ORowSetValue& aValue = getValue(columnIndex,
-        m_pStatement->getOwnConnection()->useOldDateFormat() ? SQL_C_TIME : SQL_C_TYPE_TIME,
-        &aTime,sizeof aTime);
-    return (&aValue == &m_aEmptyValue) ? Time(0,aTime.second,aTime.minute,aTime.hour) : (Time)aValue;
+    return getValue<Time>( columnIndex );
 }
 // -------------------------------------------------------------------------
+DateTime SAL_CALL OResultSet::impl_getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    TIMESTAMP_STRUCT aTime = impl_getValue< TIMESTAMP_STRUCT > ( columnIndex,
+                                                                 m_pStatement->getOwnConnection()->useOldDateFormat() ? SQL_C_TIMESTAMP : SQL_C_TYPE_TIMESTAMP );
 
-
+    return DateTime(static_cast<sal_uInt16>(aTime.fraction/ODBC_FRACTION_UNITS_PER_HSECOND),
+                    aTime.second,
+                    aTime.minute,
+                    aTime.hour,
+                    aTime.day,
+                    aTime.month,
+                    aTime.year);
+}
 DateTime SAL_CALL OResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::getTimestamp" );
-    TIMESTAMP_STRUCT aTime={0,0,0,0,0,0,0};
-    const ORowSetValue& aValue = getValue(columnIndex,
-        m_pStatement->getOwnConnection()->useOldDateFormat() ? SQL_C_TIMESTAMP : SQL_C_TYPE_TIMESTAMP,
-        &aTime,sizeof aTime);
-    return (&aValue == &m_aEmptyValue)
-            ?
-            DateTime(static_cast<sal_uInt16>(aTime.fraction/ODBC_FRACTION_UNITS_PER_HSECOND),aTime.second,aTime.minute,aTime.hour,aTime.day,aTime.month,aTime.year)
-            :
-            (DateTime)aValue;
+    return getValue<DateTime>( columnIndex );
 }
 // -------------------------------------------------------------------------
-
 sal_Bool SAL_CALL OResultSet::isBeforeFirst(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -824,8 +830,7 @@ sal_Bool SAL_CALL OResultSet::wasNull(  ) throw(SQLException, RuntimeException)
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-
-    return m_bFetchData ? m_aRow[m_nLastColumnPos].isNull() : m_bWasNull;
+    return m_bWasNull;
 }
 // -------------------------------------------------------------------------
 
@@ -854,20 +859,19 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    const SQLLEN nMaxLen = 20;
     SQLLEN nRealLen = 0;
-    Sequence<sal_Int8> aBookmark(nMaxLen);
-    assert (static_cast<size_t>(nMaxLen) >= sizeof(SQLLEN));
+    Sequence<sal_Int8> aBookmark(nMaxBookmarkLen);
+    BOOST_STATIC_ASSERT(static_cast<size_t>(nMaxBookmarkLen) >= sizeof(SQLLEN));
 
     SQLRETURN nRet = N3SQLBindCol(m_aStatementHandle,
                                 0,
                                 SQL_C_VARBOOKMARK,
                                 aBookmark.getArray(),
-                                nMaxLen,
+                                nMaxBookmarkLen,
                                 &nRealLen
                                 );
-    //  Sequence<sal_Int8> aRealBookmark(nMaxLen);
 
+    aBookmark.realloc(nRealLen);
     sal_Bool bPositionByBookmark = ( NULL != getOdbcFunction( ODBC3SQLBulkOperations ) );
     if ( bPositionByBookmark )
     {
@@ -907,7 +911,6 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
 
     if(m_pSkipDeletedSet)
     {
-        aBookmark.realloc(nRealLen);
         if(moveToBookmark(makeAny(aBookmark)))
         {
             sal_Int32 nRowPos = getDriverPos();
@@ -935,19 +938,21 @@ void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException)
     SQLRETURN nRet;
 
     sal_Bool bPositionByBookmark = ( NULL != getOdbcFunction( ODBC3SQLBulkOperations ) );
+    Sequence<sal_Int8> aBookmark(nMaxBookmarkLen);
     if ( bPositionByBookmark )
     {
         SQLLEN nRealLen = 0;
         nRet = N3SQLBindCol(m_aStatementHandle,
                             0,
                             SQL_C_VARBOOKMARK,
-                            m_aBookmark.getArray(),
-                            m_aBookmark.getLength(),
+                            aBookmark.getArray(),
+                            aBookmark.getLength(),
                             &nRealLen
                             );
         fillNeededData(nRet = N3SQLBulkOperations(m_aStatementHandle, SQL_UPDATE_BY_BOOKMARK));
-        // LEM TODO: need to allow for change of not only bookmark value, but also bookmark length
-        assert(nRealLen == m_aBookmark.getLength());
+        aBookmark.realloc(nRealLen);
+        m_aRow[0]=aBookmark;
+        m_aRow[0].setBound(true);
     }
     else
         fillNeededData(nRet = N3SQLSetPos(m_aStatementHandle,1,SQL_UPDATE,SQL_LOCK_NO_CHANGE));
@@ -996,7 +1001,7 @@ void SAL_CALL OResultSet::moveToInsertRow(  ) throw(SQLException, RuntimeExcepti
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    m_nLastColumnPos = 0;
+    invalidateCache();
     // first unbound all columns
     OSL_VERIFY_EQUALS( unbind(), SQL_SUCCESS, "Could not unbind columns!" );
     //  SQLRETURN nRet = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_ARRAY_SIZE ,(SQLPOINTER)1,SQL_IS_INTEGER);
@@ -1006,7 +1011,7 @@ void SAL_CALL OResultSet::moveToInsertRow(  ) throw(SQLException, RuntimeExcepti
 
 void SAL_CALL OResultSet::moveToCurrentRow(  ) throw(SQLException, RuntimeException)
 {
-    m_nLastColumnPos = 0;
+    invalidateCache();
 }
 // -------------------------------------------------------------------------
 void OResultSet::updateValue(sal_Int32 columnIndex,SQLSMALLINT _nType,void* _pValue) throw(SQLException, RuntimeException)
@@ -1085,6 +1090,7 @@ void SAL_CALL OResultSet::updateString( sal_Int32 columnIndex, const ::rtl::OUSt
     SQLSMALLINT nOdbcType = OTools::jdbcTypeToOdbc(nType);
     m_aRow[columnIndex] = x;
     m_aRow[columnIndex].setTypeKind(nType); // OJ: otherwise longvarchar will be recognized by fillNeededData
+    m_aRow[columnIndex].setBound(true);
     updateValue(columnIndex,nOdbcType,(void*)&x);
 }
 // -------------------------------------------------------------------------
@@ -1094,6 +1100,7 @@ void SAL_CALL OResultSet::updateBytes( sal_Int32 columnIndex, const Sequence< sa
     SQLSMALLINT nOdbcType = OTools::jdbcTypeToOdbc(nType);
     m_aRow[columnIndex] = x;
     m_aRow[columnIndex].setTypeKind(nType); // OJ: otherwise longvarbinary will be recognized by fillNeededData
+    m_aRow[columnIndex].setBound(true);
     updateValue(columnIndex,nOdbcType,(void*)&x);
 }
 // -------------------------------------------------------------------------
@@ -1161,8 +1168,14 @@ void SAL_CALL OResultSet::updateNumericObject( sal_Int32 columnIndex, const Any&
 // XRowLocate
 Any SAL_CALL OResultSet::getBookmark(  ) throw( SQLException,  RuntimeException)
 {
+    fillColumn(0);
+    if(m_aRow[0].isNull())
+        throw SQLException();
+    return m_aRow[0].makeAny();
+}
+Sequence<sal_Int8> SAL_CALL OResultSet::impl_getBookmark(  ) throw( SQLException,  RuntimeException)
+{
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::getBookmark" );
-     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     TBookmarkPosMap::iterator aFind = ::std::find_if(m_aPosToBookmarks.begin(),m_aPosToBookmarks.end(),
@@ -1177,13 +1190,16 @@ Any SAL_CALL OResultSet::getBookmark(  ) throw( SQLException,  RuntimeException)
         if(m_nUseBookmarks == SQL_UB_OFF)
             throw SQLException();
 
-        m_aBookmark = OTools::getBytesValue(m_pStatement->getOwnConnection(),m_aStatementHandle,0,SQL_C_VARBOOKMARK,m_bWasNull,**this);
-        m_aPosToBookmarks[m_aBookmark] = m_nRowPos;
-        OSL_ENSURE(m_aBookmark.getLength(),"Invalid bookmark from length 0!");
+        fillColumn(0);
+        Sequence<sal_Int8> bookmark = OTools::getBytesValue(m_pStatement->getOwnConnection(),m_aStatementHandle,0,SQL_C_VARBOOKMARK,m_bWasNull,**this);
+        m_aPosToBookmarks[bookmark] = m_nRowPos;
+        OSL_ENSURE(bookmark.getLength(),"Invalid bookmark from length 0!");
+        return bookmark;
     }
     else
-        m_aBookmark = aFind->first;
-    return makeAny(m_aBookmark);
+    {
+        return aFind->first;
+    }
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::moveToBookmark( const  Any& bookmark ) throw( SQLException,  RuntimeException)
@@ -1192,18 +1208,19 @@ sal_Bool SAL_CALL OResultSet::moveToBookmark( const  Any& bookmark ) throw( SQLE
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    m_nLastColumnPos = 0;
-    bookmark >>= m_aBookmark;
-    OSL_ENSURE(m_aBookmark.getLength(),"Invalid bookmark from length 0!");
-    if(m_aBookmark.getLength())
+    invalidateCache();
+    Sequence<sal_Int8> aBookmark;
+    bookmark >>= aBookmark;
+    OSL_ENSURE(aBookmark.getLength(),"Invalid bookmark from length 0!");
+    if(aBookmark.getLength())
     {
-        SQLRETURN nReturn = setStmtOption<SQLLEN*, SQL_IS_POINTER>(SQL_ATTR_FETCH_BOOKMARK_PTR, reinterpret_cast<SQLLEN*>(m_aBookmark.getArray()));
+        SQLRETURN nReturn = setStmtOption<SQLLEN*, SQL_IS_POINTER>(SQL_ATTR_FETCH_BOOKMARK_PTR, reinterpret_cast<SQLLEN*>(aBookmark.getArray()));
 
         if ( SQL_INVALID_HANDLE != nReturn && SQL_ERROR != nReturn )
         {
             m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_BOOKMARK,0);
             OTools::ThrowException(m_pStatement->getOwnConnection(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
-            TBookmarkPosMap::iterator aFind = m_aPosToBookmarks.find(m_aBookmark);
+            TBookmarkPosMap::iterator aFind = m_aPosToBookmarks.find(aBookmark);
             if(aFind != m_aPosToBookmarks.end())
                 m_nRowPos = aFind->second;
             else
@@ -1221,9 +1238,10 @@ sal_Bool SAL_CALL OResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    m_nLastColumnPos = 0;
-    bookmark >>= m_aBookmark;
-    SQLRETURN nReturn = setStmtOption<SQLLEN*, SQL_IS_POINTER>(SQL_ATTR_FETCH_BOOKMARK_PTR, reinterpret_cast<SQLLEN*>(m_aBookmark.getArray()));
+    invalidateCache();
+    Sequence<sal_Int8> aBookmark;
+    bookmark >>= aBookmark;
+    SQLRETURN nReturn = setStmtOption<SQLLEN*, SQL_IS_POINTER>(SQL_ATTR_FETCH_BOOKMARK_PTR, reinterpret_cast<SQLLEN*>(aBookmark.getArray()));
     OSL_UNUSED( nReturn );
 
     m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_BOOKMARK,rows);
@@ -1383,6 +1401,8 @@ sal_Bool  OResultSet::isBookmarkable() const
 //------------------------------------------------------------------------------
 void OResultSet::setFetchDirection(sal_Int32 _par0)
 {
+    ::dbtools::throwFunctionNotSupportedException( "setFetchDirection", *this );
+
     OSL_ENSURE(_par0>0,"Illegal fetch direction!");
     if ( _par0 > 0 )
     {
@@ -1395,7 +1415,7 @@ void OResultSet::setFetchSize(sal_Int32 _par0)
     OSL_ENSURE(_par0>0,"Illegal fetch size!");
     if ( _par0 != 1 )
     {
-        throw ::com::sun::star::beans::PropertyVetoException("SDBC/ODBC layer not prepared for fetchSize > 1", this);
+        throw ::com::sun::star::beans::PropertyVetoException("SDBC/ODBC layer not prepared for fetchSize > 1", *this);
     }
     if ( _par0 > 0 )
     {
@@ -1503,85 +1523,124 @@ void OResultSet::getFastPropertyValue(
     }
 }
 // -------------------------------------------------------------------------
-void OResultSet::fillRow(const sal_Int32 _nToColumn)
+void OResultSet::fillColumn(const sal_Int32 _nColumn)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::fillRow" );
-    if((sal_Int32)m_aRow.size() <= _nToColumn)
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::fillColumn" );
+
+    ensureCacheForColumn(_nColumn);
+
+    if (m_aRow[_nColumn].isBound())
+        return;
+
+    sal_Int32 curCol;
+    if(m_bFetchDataInOrder)
     {
-        m_aRow.resize(_nToColumn+1);
+        // m_aRow necessarily has a prefix of bound values, then all unbound values
+        // EXCEPT for column 0
+        // so use binary search to find the earliest unbound value before or at _nColumn
+        sal_Int32 lower=0;
+        sal_Int32 upper=_nColumn;
+
+        while (lower < upper)
+        {
+            const sal_Int32 middle=(upper-lower)/2 + lower;
+            if(m_aRow[middle].isBound())
+            {
+                lower=middle+1;
+            }
+            else
+            {
+                upper=middle;
+            }
+        }
+
+        curCol = upper;
     }
-    m_bFetchData = sal_False;
+    else
+    {
+        curCol = _nColumn;
+    }
 
-    sal_Int32          nColumn      = m_nLastColumnPos + 1;
-    TDataRow::iterator pColumn      = m_aRow.begin() + nColumn;
-    TDataRow::iterator pColumnEnd   = m_aRow.begin() + _nToColumn + 1;
+    TDataRow::iterator pColumn      = m_aRow.begin() + curCol;
+    TDataRow::iterator pColumnEnd   = m_aRow.begin() + _nColumn + 1;
 
-    for (; pColumn < pColumnEnd; ++nColumn, ++pColumn)
+    if(curCol==0)
+    {
+        try
+        {
+            *pColumn=impl_getBookmark();
+        }
+        catch (SQLException &)
+        {
+            pColumn->setNull();
+        }
+        pColumn->setBound(true);
+        ++curCol;
+        ++pColumn;
+    }
+
+    for (; pColumn != pColumnEnd; ++curCol, ++pColumn)
     {
         const sal_Int32 nType = pColumn->getTypeKind();
         switch (nType)
         {
-            case DataType::CHAR:
-            case DataType::VARCHAR:
-            case DataType::DECIMAL:
-            case DataType::NUMERIC:
-            case DataType::LONGVARCHAR:
-            case DataType::CLOB:
-                {
-                    const SWORD nColumnType = impl_getColumnType_nothrow(nColumn);
-                    *pColumn = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,nColumn,nColumnType,m_bWasNull,**this,m_nTextEncoding);
-                }
-                break;
-            case DataType::BIGINT:
-                *pColumn = getLong(nColumn);
-                break;
-            case DataType::REAL:
-            case DataType::DOUBLE:
-                *pColumn = getDouble(nColumn);
-                break;
-            case DataType::LONGVARBINARY:
-            case DataType::BLOB:
-                *pColumn = getBytes(nColumn);
-                break;
-            case DataType::DATE:
-                *pColumn = getDate(nColumn);
-                break;
-            case DataType::TIME:
-                *pColumn = getTime(nColumn);
-                break;
-            case DataType::TIMESTAMP:
-                *pColumn = getTimestamp(nColumn);
-                break;
-            case DataType::BIT:
-                *pColumn = getBoolean(nColumn);
-                break;
-            case DataType::TINYINT:
-                *pColumn = getByte(nColumn);
-                break;
-            case DataType::SMALLINT:
-                *pColumn = getShort(nColumn);
-                break;
-            case DataType::INTEGER:
-                *pColumn = getInt(nColumn);
-                break;
-            case DataType::FLOAT:
-                *pColumn = getFloat(nColumn);
-                break;
-            case DataType::BINARY:
-            case DataType::VARBINARY:
-                *pColumn = getBytes(nColumn);
-                break;
+        case DataType::CHAR:
+        case DataType::VARCHAR:
+        case DataType::DECIMAL:
+        case DataType::NUMERIC:
+        case DataType::LONGVARCHAR:
+        case DataType::CLOB:
+            *pColumn=impl_getString(curCol);
+            break;
+        case DataType::FLOAT:
+            *pColumn = impl_getValue<float>(curCol, SQL_C_FLOAT);
+            break;
+        case DataType::REAL:
+        case DataType::DOUBLE:
+            *pColumn = impl_getValue<double>(curCol, SQL_C_DOUBLE);
+            break;
+        case DataType::BINARY:
+        case DataType::VARBINARY:
+        case DataType::LONGVARBINARY:
+        case DataType::BLOB:
+            *pColumn = impl_getBytes(curCol);
+            break;
+        case DataType::DATE:
+            *pColumn = impl_getDate(curCol);
+            break;
+        case DataType::TIME:
+            *pColumn = impl_getTime(curCol);
+            break;
+        case DataType::TIMESTAMP:
+            *pColumn = impl_getTimestamp(curCol);
+            break;
+        case DataType::BIT:
+            *pColumn = impl_getBoolean(curCol);
+            break;
+        case DataType::TINYINT:
+            *pColumn = impl_getValue<sal_Int8>(curCol, SQL_C_TINYINT);
+            break;
+        case DataType::SMALLINT:
+            *pColumn = impl_getValue<sal_Int16>(curCol, SQL_C_SHORT);
+            break;
+        case DataType::INTEGER:
+            *pColumn = impl_getValue<sal_Int32>(curCol, SQL_C_LONG);
+            break;
+        case DataType::BIGINT:
+            *pColumn = impl_getLong(curCol);
+            break;
+        default:
+            OSL_FAIL("Unknown DataType");
         }
 
         if ( m_bWasNull )
             pColumn->setNull();
+        pColumn->setBound(true);
         if(nType != pColumn->getTypeKind())
         {
             pColumn->setTypeKind(nType);
         }
     }
-    m_nLastColumnPos = _nToColumn;
-    m_bFetchData = sal_True;
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OResultSet::acquire() throw()
@@ -1638,7 +1697,7 @@ sal_Bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32
     }
 
     m_bEOF = sal_False;
-    m_nLastColumnPos = 0;
+    invalidateCache();
 
     SQLRETURN nOldFetchStatus = m_nCurrentFetchState;
     // TODO FIXME: both of these will misbehave for
@@ -1681,13 +1740,19 @@ sal_Bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32
         {
             m_nUseBookmarks = getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_USE_BOOKMARKS, SQL_UB_OFF);
         }
-        if ( m_nUseBookmarks != SQL_UB_OFF )
+        if ( m_nUseBookmarks == SQL_UB_OFF )
         {
-            RTL_LOGFILE_CONTEXT_TRACE( aLogger, "OTools::getBytesValue" );
-            m_aBookmark = OTools::getBytesValue(m_pStatement->getOwnConnection(),m_aStatementHandle,0,SQL_C_VARBOOKMARK,m_bWasNull,**this);
-            m_aPosToBookmarks[m_aBookmark] = m_nRowPos;
-            OSL_ENSURE(m_aBookmark.getLength(),"Invalid bookmark from length 0!");
+            m_aRow[0].setNull();
         }
+        else
+        {
+            ensureCacheForColumn(0);
+            Sequence<sal_Int8> bookmark  = OTools::getBytesValue(m_pStatement->getOwnConnection(),m_aStatementHandle,0,SQL_C_VARBOOKMARK,m_bWasNull,**this);
+            m_aPosToBookmarks[bookmark] = m_nRowPos;
+            OSL_ENSURE(bookmark.getLength(),"Invalid bookmark from length 0!");
+            m_aRow[0] = bookmark;
+        }
+        m_aRow[0].setBound(true);
     }
     else if ( IResultSetHelper::PRIOR == _eCursorPosition && m_nCurrentFetchState == SQL_NO_DATA )
         // we went beforeFirst
