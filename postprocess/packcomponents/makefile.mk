@@ -337,7 +337,6 @@ my_components += \
     component/dtrans/util/dnd \
     component/dtrans/util/ftransl \
     component/dtrans/util/sysdtrans \
-    component/fpicker/source/odma/fps_odma \
     component/fpicker/source/win32/fps \
     component/shell/source/backends/wininetbe/wininetbe1 \
     component/shell/source/win32/simplemail/smplmail \

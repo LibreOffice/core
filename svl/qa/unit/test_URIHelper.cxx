@@ -377,7 +377,6 @@ void Test::testFindFirstURLInText() {
         { "vnd.sun.star.cmd:", 0, 0, 0 },
         { "vnd.sun.star.help:", 0, 0, 0 },
         { "vnd.sun.star.hier:", 0, 0, 0 },
-        { "vnd.sun.star.odma:", 0, 0, 0 },
         { "vnd.sun.star.pkg:", 0, 0, 0 },
         { "vnd.sun.star.script:", 0, 0, 0 },
         { "vnd.sun.star.webdav:", 0, 0, 0 },

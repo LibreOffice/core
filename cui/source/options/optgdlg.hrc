@@ -186,7 +186,6 @@
 #define FT_GRAPHICOBJECTTIME_UNIT   58
 #define FL_DOCSTATUS                60
 #define CB_DOCSTATUS                61
-#define CB_ODMADLG                  62
 #define CB_SAVE_ALWAYS              74
 #endif // #ifndef _SVX_OPTGDLG_HRC
 

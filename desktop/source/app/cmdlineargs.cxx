@@ -325,15 +325,6 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                     }
                     else
                     {
-                        if( bOpenEvent || bViewEvent || bForceNewEvent || bForceOpenEvent )
-                        {
-                            if( aArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("::ODMA")) )
-                            {
-                                ::rtl::OUString sArg("vnd.sun.star.odma:/");
-                                sArg += aArg;
-                                aArg = sArg;
-                            }
-                        }
                         // handle this argument as a filename
                         if ( bOpenEvent )
                         {

@@ -41,12 +41,6 @@ $(eval $(call gb_Library_use_libraries,fpicker,\
 	$(gb_UWINAPI) \
 ))
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_Library_use_static_libraries,fpicker,\
-	odma_lib \
-))
-endif
-
 $(eval $(call gb_Library_add_exception_objects,fpicker,\
 	fpicker/source/generic/fpicker \
 ))

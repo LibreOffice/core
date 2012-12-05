@@ -35,10 +35,6 @@ COMID_WITH_VERSION = $(UDK_MAJOR)$(COMID)
 COMID_WITH_VERSION = $(COMID)
 .ENDIF
 
-.IF "$(GUI)" == "WNT"
-ODMA_LIB_LIB=-lodma_lib
-.ENDIF
-
 #
 #externe libs in plattform.mk
 #
@@ -323,7 +319,6 @@ CURLLIB+=$(ZLIB3RDLIB)
 
 .ELSE				# ("$(GUI)"=="UNX" || "$(COM)"=="GCC")
 
-ODMA_LIB_LIB=odma_lib.lib
 AWTLIB*=jawt.lib
 AVMEDIALIB=iavmedia.lib
 ICUINLIB=icuin.lib

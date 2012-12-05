@@ -32,7 +32,6 @@
 #define GradientStyle_RECT BLA_GradientStyle_RECT
 #include <windows.h>
 #undef GradientStyle_RECT
-#include <odma_lib.hxx>
 #endif
 
 using css::uno::Reference;
@@ -58,9 +57,6 @@ static OUString FilePicker_getSystemPickerServiceName()
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.SystemFilePicker"));
 #endif
 #ifdef WNT
-    if (SvtMiscOptions().TryODMADialog() && ::odma::DMSsAvailable()) {
-        return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.ODMAFilePicker"));
-    }
     return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.Win32FilePicker"));
 #endif
 }

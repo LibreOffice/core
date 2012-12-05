@@ -41,7 +41,6 @@ endif
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,fpicker,\
-	Library_fps_odma \
 	Library_fps \
 	WinResTarget_fps \
 ))

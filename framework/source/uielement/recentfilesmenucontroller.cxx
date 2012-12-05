@@ -42,7 +42,6 @@
 #define GradientStyle_RECT BLA_GradientStyle_RECT
 #include <windows.h>
 #undef GradientStyle_RECT
-#include <odma_lib.hxx>
 #endif
 #include <osl/mutex.hxx>
 
@@ -188,44 +187,6 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
                     else
                         aMenuTitle = aSystemPath;
                 }
-#if 0 // Please don't remove this commented-out code just yet,
-      // we can try to resurrect it later in case somebody complains
-#ifdef WNT
-                else if ( aURL.GetProtocol() == INET_PROT_VND_SUN_STAR_ODMA && ::odma::DMSsAvailable ())
-                {
-                    String aShortTitle = m_aRecentFilesItems.at( i ).aTitle;
-
-                    // This is against all rules for using
-                    // proper abstraction layers and whatnot.
-                    // But figuring out how to do it "right"
-                    // would have taken the whole week.
-                    // So just call the odma_lib functions...
-                    // (odma_lib is a thin layer on
-                    // top of the ODMA32 DLL)
-
-                    static ODMHANDLE handle = NULL;
-                    static sal_Bool beenhere = sal_False;
-                    ODMSTATUS status;
-
-                    if ( ! beenhere )
-                    {
-                        status = NODMRegisterApp( &handle, ODM_API_VERSION, "sodma", NULL, NULL );
-                        beenhere = sal_True;
-                    }
-
-                    if ( handle != NULL )
-                    {
-                        rtl::OUString s = aURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET, RTL_TEXTENCODING_MS_1252 );
-                        s = s.copy( strlen ( "vnd.sun.star.odma:/" ) );
-                        char title[47];
-                        status = NODMGetDocInfo( handle, rtl::OUStringToOString( s, RTL_TEXTENCODING_MS_1252 ).pData->buffer, ODM_NAME, title, sizeof ( title ) );
-                        aShortTitle = String::CreateFromAscii( title );
-                    }
-                    aMenuTitle += aShortTitle;
-                    aTipHelpText = aURLString;
-                }
-#endif
-#endif
                 else
                 {
                     // Use INetURLObject to abbreviate all other URLs
