@@ -185,7 +185,7 @@ ScRangeList::~ScRangeList()
 
 sal_uInt16 ScRangeList::Parse( const String& rStr, ScDocument* pDoc, sal_uInt16 nMask,
                            formula::FormulaGrammar::AddressConvention eConv,
-                           sal_Unicode cDelimiter )
+                           SCTAB nDefaultTab, sal_Unicode cDelimiter )
 {
     if ( rStr.Len() )
     {
@@ -199,8 +199,7 @@ sal_uInt16 ScRangeList::Parse( const String& rStr, ScDocument* pDoc, sal_uInt16 
         SCTAB nTab = 0;
         if ( pDoc )
         {
-            //! erste markierte Tabelle gibts nicht mehr am Dokument
-            //! -> uebergeben? oder spaeter an den Ranges setzen
+            nTab = nDefaultTab;
         }
         else
             nTab = 0;
