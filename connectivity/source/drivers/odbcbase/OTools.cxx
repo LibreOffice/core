@@ -358,7 +358,7 @@ Sequence<sal_Int8> OTools::getBytesValue(const OConnection* _pConnection,
                                          const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OTools::getBytesValue" );
-    char aCharArray[2048];
+    sal_Int8 aCharArray[2048];
     // First try to fetch the data with the little Buffer:
     SQLLEN nMaxLen = sizeof aCharArray - 1;
     //  GETDATA(SQL_C_CHAR,aCharArray,nMaxLen);
