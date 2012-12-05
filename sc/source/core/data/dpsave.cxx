@@ -1221,6 +1221,43 @@ bool ScDPSaveData::IsEmpty() const
     return true; // no entries that are not hidden
 }
 
+void ScDPSaveData::RemoveAllGroupDimensions( const OUString& rSrcDimName, std::vector<OUString>* pDeletedNames )
+{
+    if (!pDimensionData)
+        // No group dimensions exist.  Nothing to do.
+        return;
+
+    // Remove numeric group dimension (exists once at most). No need to delete
+    // anything in save data (grouping was done inplace in an existing base
+    // dimension).
+    pDimensionData->RemoveNumGroupDimension(rSrcDimName);
+
+    // Remove named group dimension(s). Dimensions have to be removed from
+    // dimension save data and from save data too.
+    const ScDPSaveGroupDimension* pExistingGroup = pDimensionData->GetGroupDimForBase(rSrcDimName);
+    while ( pExistingGroup )
+    {
+        rtl::OUString aGroupDimName = pExistingGroup->GetGroupDimName();
+        pDimensionData->RemoveGroupDimension(aGroupDimName);     // pExistingGroup is deleted
+
+        // also remove SaveData settings for the dimension that no longer exists
+        RemoveDimensionByName(aGroupDimName);
+
+        if (pDeletedNames)
+            pDeletedNames->push_back(aGroupDimName);
+
+        // see if there are more group dimensions
+        pExistingGroup = pDimensionData->GetGroupDimForBase(rSrcDimName);
+
+        if ( pExistingGroup && pExistingGroup->GetGroupDimName() == aGroupDimName )
+        {
+            // still get the same group dimension?
+            OSL_FAIL("couldn't remove group dimension");
+            pExistingGroup = NULL;      // avoid endless loop
+        }
+    }
+}
+
 ScDPDimensionSaveData* ScDPSaveData::GetDimensionData()
 {
     if (!pDimensionData)
