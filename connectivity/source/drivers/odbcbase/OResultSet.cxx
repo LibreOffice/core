@@ -134,6 +134,13 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
     try
     {
         SQLUINTEGER nValueLen = 0;
+        // LibreOffice ODBC binds columns only on update, so we don't care about SQL_GD_ANY_COLUMN / SQL_GD_BOUND
+        // TODO: maybe a problem if a column is updated, then an earlier column fetched?
+        // TODO: aren't we assuming SQL_GD_OUTPUT_PARAMS?
+        //       If yes, we should at least OSL_ENSURE it,
+        //       even better throw an exception any OUT parameter registration if !SQL_GD_OUTPUT_PARAMS.
+        // If !SQL_GD_ANY_ORDER, cache the whole row so that callers can access columns in any order.
+        // In other words, isolate them from ODBC restrictions.
         OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,SQL_GETDATA_EXTENSIONS,nValueLen,NULL);
         m_bFetchData = !((SQL_GD_ANY_ORDER & nValueLen) == SQL_GD_ANY_ORDER && nCurType != SQL_CURSOR_FORWARD_ONLY);
     }
