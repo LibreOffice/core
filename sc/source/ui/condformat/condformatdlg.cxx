@@ -456,7 +456,7 @@ ScConditionalFormat* ScCondFormatDlg::GetConditionalFormat() const
 {
     rtl::OUString aRangeStr = maEdRange.GetText();
     ScRangeList aRange;
-    sal_uInt16 nFlags = aRange.Parse(aRangeStr, mpDoc, SCA_VALID, mpDoc->GetAddressConvention());
+    sal_uInt16 nFlags = aRange.Parse(aRangeStr, mpDoc, SCA_VALID, mpDoc->GetAddressConvention(), maPos.Tab());
     ScConditionalFormat* pFormat = maCondFormList.GetConditionalFormat();
 
     if(nFlags & SCA_VALID && !aRange.empty() && pFormat)
