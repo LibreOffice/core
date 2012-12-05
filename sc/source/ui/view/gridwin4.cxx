@@ -1236,6 +1236,8 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCROW /*nY1*/, SCCOL nX2, SCROW /*nY2
                     aCellBtn.setDrawBaseButton(true);
                     aCellBtn.setDrawPopupButton(pInfo->bPopupButton);
                     aCellBtn.setHasHiddenMember(pInfo->bFilterActive);
+
+                    aCellBtn.setFieldPattern( pDoc->GetPattern( nCol, nRow, nTab ) );
                     aCellBtn.draw();
                 }
             }
