@@ -16,6 +16,7 @@
 #define TEMPLATE_VIEW               7
 
 #define TBX_ACTION_VIEW             8
+#define TOOLBARS                    9
 #define TBI_TEMPLATE_IMPORT         10
 
 #define TBX_ACTION_ACTION           11

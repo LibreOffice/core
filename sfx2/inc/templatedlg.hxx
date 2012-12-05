@@ -125,6 +125,7 @@ private:
     PushButton aButtonSheets;
     PushButton aButtonDraws;
     ImageButton maButtonSelMode;
+    Control *mpToolbars;
 
     Edit *mpSearchEdit;
     ToolBox *mpViewBar;

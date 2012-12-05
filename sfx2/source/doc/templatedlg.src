@@ -189,12 +189,18 @@ ModelessDialog DLG_TEMPLATE_MANAGER
         };
     };
 
+    Control TOOLBARS
+    {
+        Pos = MAP_APPFONT( 0 , 22 );
+        Size = MAP_APPFONT( 290 , 20 );
+        TabStop = False;
+    };
 
     ToolBox TBX_ACTION_VIEW
     {
         SVLook = TRUE ;
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 4 , 22 ) ;
+        Pos = MAP_APPFONT ( 4 , 0 ) ;
 
         ItemList =
         {
@@ -251,7 +257,7 @@ ModelessDialog DLG_TEMPLATE_MANAGER
     {
         SVLook = TRUE ;
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 4 , 22 ) ;
+        Pos = MAP_APPFONT ( 4 , 0 ) ;
 
         ItemList =
         {
@@ -283,7 +289,7 @@ ModelessDialog DLG_TEMPLATE_MANAGER
     {
         SVLook = TRUE ;
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 4 , 22 ) ;
+        Pos = MAP_APPFONT ( 4 , 0 ) ;
         Hide = TRUE;
 
         ItemList =
