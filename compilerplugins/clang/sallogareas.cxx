@@ -10,6 +10,7 @@
 
 #include "sallogareas.hxx"
 
+#include <clang/AST/ASTContext.h>
 #include <clang/Basic/SourceManager.h>
 #include <clang/Lex/Lexer.h>
 
