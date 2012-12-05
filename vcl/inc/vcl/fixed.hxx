@@ -186,7 +186,7 @@ public:
 
     sal_Bool        SetModeImage( const Image& rImage );
     const Image&    GetModeImage( ) const;
-;
+    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
 };
 
 #endif  // _SV_FIXED_HXX

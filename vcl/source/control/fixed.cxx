@@ -24,8 +24,10 @@
 #include "vcl/dialog.hxx"
 #include "vcl/event.hxx"
 #include "vcl/fixed.hxx"
+#include "vcl/svapp.hxx"
 #include <comphelper/string.hxx>
 #include "controldata.hxx"
+#include "impimagetree.hxx"
 #include "window.h"
 
 // =======================================================================
@@ -1191,6 +1193,25 @@ sal_Bool FixedImage::SetModeImage( const Image& rImage )
 const Image& FixedImage::GetModeImage( ) const
 {
     return maImage;
+}
+
+bool FixedImage::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+{
+    if (rKey == "pixbuf")
+    {
+        static ImplImageTreeSingletonRef aImageTree;
+        OUString sCurrentSymbolsStyle =
+            Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyleName();
+        const OUString sFileName(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+        BitmapEx aBitmap;
+        bool bSuccess = aImageTree->loadImage(sFileName, sCurrentSymbolsStyle, aBitmap, true);
+        SAL_WARN_IF(!bSuccess, "vcl.layout", "Unable to load " << sFileName
+            << " from theme " << sCurrentSymbolsStyle);
+        SetImage(Image(aBitmap));
+    }
+    else
+        return Control::set_property(rKey, rValue);
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
