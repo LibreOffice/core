@@ -260,6 +260,23 @@ typename internal::Enable< OUStringConcat< T1, T2 >, ToStringHelper< T1 >::allow
     return OUStringConcat< T1, T2 >( left, right );
     }
 
+#ifdef RTL_STRING_UNITTEST_CONCAT
+// Special overload to catch the remaining invalid combinations. The helper struct must
+// be used to make this operator+ overload a worse choice than all the existing overloads above.
+struct StringConcatInvalid
+    {
+    template< typename T >
+    StringConcatInvalid( const T& ) {}
+    };
+template< typename T >
+inline
+int operator+( const StringConcatInvalid&, const T& )
+    {
+    rtl_string_unittest_invalid_concat = true;
+    return 0; // doesn't matter
+    }
+#endif
+
 } // namespace
 
 #endif

@@ -7,12 +7,18 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+// activate support for detecting errors instead of getting compile errors
+#define RTL_STRING_UNITTEST_CONCAT
+bool rtl_string_unittest_invalid_concat = false;
+
 #include <sal/types.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
+#include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <typeinfo>
 
@@ -36,11 +42,13 @@ private:
     void checkConcat();
     void checkEnsureCapacity();
     void checkAppend();
+    void checkInvalid();
 
 CPPUNIT_TEST_SUITE(StringConcat);
 CPPUNIT_TEST(checkConcat);
 CPPUNIT_TEST(checkEnsureCapacity);
 CPPUNIT_TEST(checkAppend);
+CPPUNIT_TEST(checkInvalid);
 CPPUNIT_TEST_SUITE_END();
 };
 
@@ -75,6 +83,8 @@ void test::ostring::StringConcat::checkConcat()
     TYPES_ASSERT_EQUAL(( typeid( OStringConcat< OString, const char* > )), typeid( OString( "foo" ) + d3 ));
     CPPUNIT_ASSERT_EQUAL( OString( "fooabc" ), OString( OString( "foo" ) + d4 ));
     TYPES_ASSERT_EQUAL(( typeid( OStringConcat< OString, char* > )), typeid( OString( "foo" ) + d4 ));
+    CPPUNIT_ASSERT_EQUAL( OString( "foobar" ), OString( OStringBuffer( "foo" ) + OString( "bar" )));
+    TYPES_ASSERT_EQUAL(( typeid( OStringConcat< OStringBuffer, OString > )), typeid( OStringBuffer( "foo" ) + OString( "bar" )));
 }
 #undef typeid
 
@@ -124,6 +134,27 @@ void test::ostring::StringConcat::checkAppend()
     OStringBuffer buf( "foo" );
     buf.append( OStringLiteral( "bar" ) + "baz" );
     CPPUNIT_ASSERT_EQUAL( OString( "foobarbaz" ), buf.makeStringAndClear());
+}
+
+#define INVALID_CONCAT( expression ) \
+    ( \
+    rtl_string_unittest_invalid_concat = false, \
+    ( void ) OString( expression ), \
+    rtl_string_unittest_invalid_concat )
+
+void test::ostring::StringConcat::checkInvalid()
+{
+#ifdef RTL_FAST_STRING
+    CPPUNIT_ASSERT( !INVALID_CONCAT( OString() + OString()));
+    CPPUNIT_ASSERT( INVALID_CONCAT( OString( "a" ) + OUString( "b" )));
+    CPPUNIT_ASSERT( INVALID_CONCAT( OString( "a" ) + OUStringBuffer( "b" )));
+    CPPUNIT_ASSERT( INVALID_CONCAT( OString( "a" ) + OUStringLiteral( "b" )));
+    CPPUNIT_ASSERT( INVALID_CONCAT( OString( "a" ) + 1 ));
+    rtl_String* rs = NULL;
+    rtl_uString* rus = NULL;
+    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "b" ) + rs ));
+    CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "b" ) + rus ));
+#endif
 }
 
 }} // namespace
