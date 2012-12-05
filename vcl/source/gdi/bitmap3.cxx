@@ -853,81 +853,87 @@ sal_Bool Bitmap::ImplConvertGhosted()
     return bRet;
 }
 
-sal_Bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uLong nScaleFlag )
+sal_Bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag )
 {
-    if(basegfx::fTools::equalZero(rScaleX) && basegfx::fTools::equalZero(rScaleY))
+    if(basegfx::fTools::equalZero(rScaleX) || basegfx::fTools::equalZero(rScaleY))
     {
         // no scale
         return true;
     }
-    else
+
+    if(basegfx::fTools::equal(rScaleX, 1.0) && basegfx::fTools::equal(rScaleY, 1.0))
     {
-        switch(nScaleFlag)
+        // no scale
+        return true;
+    }
+
+    switch(nScaleFlag)
+    {
+        case BMP_SCALE_NONE :
         {
-            case BMP_SCALE_NONE :
+            return false;
+            break;
+        }
+        case BMP_SCALE_FAST :
+        {
+            return ImplScaleFast( rScaleX, rScaleY );
+            break;
+        }
+        case BMP_SCALE_INTERPOLATE :
+        {
+            return ImplScaleInterpolate( rScaleX, rScaleY );
+            break;
+        }
+        case BMP_SCALE_SUPER :
+        {
+            if(GetSizePixel().Width() < 2 || GetSizePixel().Height() < 2)
             {
-                return false;
-                break;
-            }
-            case BMP_SCALE_FAST :
-            {
+                // fallback to ImplScaleFast
                 return ImplScaleFast( rScaleX, rScaleY );
-                break;
             }
-            case BMP_SCALE_INTERPOLATE :
+            else
             {
-                return ImplScaleInterpolate( rScaleX, rScaleY );
-                break;
+                // #i121233# use method from symphony
+                return ImplScaleSuper( rScaleX, rScaleY );
             }
-            case BMP_SCALE_SUPER :
-            {
-                if(GetSizePixel().Width() < 2 || GetSizePixel().Height() < 2)
-                {
-                    // fallback to ImplScaleFast
-                    return ImplScaleFast( rScaleX, rScaleY );
-                }
-                else
-                {
-                    // #i121233# use method from symphony
-                    return ImplScaleSuper( rScaleX, rScaleY );
-                }
-                break;
-            }
-            case BMP_SCALE_LANCZOS :
-            {
-                const Lanczos3Kernel kernel;
+            break;
+        }
+        case BMP_SCALE_LANCZOS :
+        {
+            const Lanczos3Kernel kernel;
 
-                return ImplScaleConvolution( rScaleX, rScaleY, kernel );
-                break;
-            }
-            case BMP_SCALE_BICUBIC :
-            {
-                const BicubicKernel kernel;
+            return ImplScaleConvolution( rScaleX, rScaleY, kernel );
+            break;
+        }
+        case BMP_SCALE_BICUBIC :
+        {
+            const BicubicKernel kernel;
 
-                return ImplScaleConvolution( rScaleX, rScaleY, kernel );
-                break;
-            }
-            case BMP_SCALE_BILINEAR :
-            {
-                const BilinearKernel kernel;
+            return ImplScaleConvolution( rScaleX, rScaleY, kernel );
+            break;
+        }
+        case BMP_SCALE_BILINEAR :
+        {
+            const BilinearKernel kernel;
 
-                return ImplScaleConvolution( rScaleX, rScaleY, kernel );
-                break;
-            }
-            case BMP_SCALE_BOX :
-            {
-                const BoxKernel kernel;
+            return ImplScaleConvolution( rScaleX, rScaleY, kernel );
+            break;
+        }
+        case BMP_SCALE_BOX :
+        {
+            const BoxKernel kernel;
 
-                return ImplScaleConvolution( rScaleX, rScaleY, kernel );
-                break;
-            }
+            return ImplScaleConvolution( rScaleX, rScaleY, kernel );
+            break;
         }
     }
 
     return false;
 }
 
-sal_Bool Bitmap::Scale( const Size& rNewSize, sal_uLong nScaleFlag )
+// ------------------------------------------------------------------------
+
+sal_Bool Bitmap::Scale( const Size& rNewSize, sal_uInt32 nScaleFlag )
 {
     const Size  aSize( GetSizePixel() );
     bool        bRet;

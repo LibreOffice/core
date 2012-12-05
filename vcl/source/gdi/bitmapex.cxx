@@ -309,9 +309,14 @@ sal_uLong BitmapEx::GetChecksum() const
     return nCrc;
 }
 
-void BitmapEx::SetSizePixel( const Size& rNewSize )
+// ------------------------------------------------------------------
+
+void BitmapEx::SetSizePixel( const Size& rNewSize, sal_uInt32 nScaleFlag )
 {
-    Scale( rNewSize );
+    if(GetSizePixel() != rNewSize)
+    {
+        Scale( rNewSize, nScaleFlag );
+    }
 }
 
 sal_Bool BitmapEx::Invert()
@@ -344,7 +349,9 @@ sal_Bool BitmapEx::Mirror( sal_uLong nMirrorFlags )
     return bRet;
 }
 
-sal_Bool BitmapEx::Scale( const double& rScaleX, const double& rScaleY, sal_uLong nScaleFlag )
+// ------------------------------------------------------------------
+
+sal_Bool BitmapEx::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag )
 {
     sal_Bool bRet = sal_False;
 
@@ -366,7 +373,9 @@ sal_Bool BitmapEx::Scale( const double& rScaleX, const double& rScaleY, sal_uLon
     return bRet;
 }
 
-sal_Bool BitmapEx::Scale( const Size& rNewSize, sal_uLong nScaleFlag )
+// ------------------------------------------------------------------------
+
+sal_Bool BitmapEx::Scale( const Size& rNewSize, sal_uInt32 nScaleFlag )
 {
     sal_Bool bRet;
 

@@ -161,6 +161,76 @@ File gid_File_Extra_Gallroot
     Name = "extras_gallroot.filelist";
 End
 
+File gid_File_Extra_Gallarrows
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_gallarrows.filelist";
+End
+
+File gid_File_Extra_Gallcomputers
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_gallcomputers.filelist";
+End
+
+File gid_File_Extra_Galldiagrams
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_galldiagrams.filelist";
+End
+
+File gid_File_Extra_Galleducation
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_galleducation.filelist";
+End
+
+File gid_File_Extra_Gallenvironment
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_gallenvironment.filelist";
+End
+
+File gid_File_Extra_Gallfinance
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_gallfinance.filelist";
+End
+
+File gid_File_Extra_Gallpeople
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_gallpeople.filelist";
+End
+
+File gid_File_Extra_Gallsymbols
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_gallsymbols.filelist";
+End
+
+File gid_File_Extra_Galltransport
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_galltransport.filelist";
+End
+
+File gid_File_Extra_Galltxtshapes
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_galltxtshapes.filelist";
+End
+
 File gid_File_Extra_Gallsound
     Dir = FILELIST_DIR;
     USER_FILE_BODY;

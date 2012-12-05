@@ -498,6 +498,36 @@ OUString Gallery::GetThemeName( sal_uIntPtr nThemeId ) const
             case( GALLERY_THEME_SOUNDS ):
                 aFallback = "Sounds";
                 break;
+            case( RID_GALLERYSTR_THEME_ARROWS ):
+                aFallback = "Arrows";
+                break;
+            case( RID_GALLERYSTR_THEME_COMPUTERS ):
+                aFallback = "Computers";
+                break;
+            case( RID_GALLERYSTR_THEME_DIAGRAMS ):
+                aFallback = "Diagrams";
+                break;
+            case( RID_GALLERYSTR_THEME_EDUCATION ):
+                aFallback = "Education";
+                break;
+            case( RID_GALLERYSTR_THEME_ENVIRONMENT ):
+                aFallback = "Environment";
+                break;
+            case( RID_GALLERYSTR_THEME_FINANCE ):
+                aFallback = "Finance";
+                break;
+            case( RID_GALLERYSTR_THEME_PEOPLE ):
+                aFallback = "People";
+                break;
+            case( RID_GALLERYSTR_THEME_SYMBOLS ):
+                aFallback = "Symbols";
+                break;
+            case( RID_GALLERYSTR_THEME_TRANSPORT ):
+                aFallback = "Transport";
+                break;
+            case( RID_GALLERYSTR_THEME_TXTSHAPES ):
+                aFallback = "Textshapes";
+                break;
             default:
                 break;
         }

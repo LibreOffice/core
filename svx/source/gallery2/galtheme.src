@@ -135,6 +135,38 @@ String RID_GALLERYSTR_THEME_POWERPOINT
 
 // -----------------------------------------------------------------------------
 
+String RID_GALLERYSTR_THEME_COMPUTERS
+{
+       Text [ en-US ] = "Computers";
+};
+
+String RID_GALLERYSTR_THEME_DIAGRAMS
+{
+       Text [ en-US ] = "Diagrams";
+};
+
+String RID_GALLERYSTR_THEME_ENVIRONMENT
+{
+       Text [ en-US ] = "Environment";
+};
+
+String RID_GALLERYSTR_THEME_FINANCE
+{
+       Text [ en-US ] = "Finance";
+};
+
+String RID_GALLERYSTR_THEME_TRANSPORT
+{
+       Text [ en-US ] = "Transport";
+};
+
+String RID_GALLERYSTR_THEME_TXTSHAPES
+{
+       Text [ en-US ] = "Textshapes";
+};
+
+// -----------------------------------------------------------------------------
+
 String RID_GALLERYSTR_THEME_SOUNDS
 {
     Text [ en-US ] = "Sounds";

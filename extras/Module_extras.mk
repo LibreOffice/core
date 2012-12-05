@@ -21,12 +21,22 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Package_database \
 	Package_databasebiblio \
 	Package_fonts \
+	Package_gallarrows \
 	Package_gallbullets \
+	Package_gallcomputers \
+	Package_galldiagrams \
+	Package_galleducation \
+	Package_gallenvironment \
+	Package_gallfinance \
 	Package_gallhtmlexpo \
+	Package_gallpeople \
 	Package_gallroot \
 	Package_gallsound \
 	Package_gallsounds \
+	Package_gallsymbols \
 	Package_gallsystem \
+	Package_galltransport \
+	Package_galltxtshapes \
 	Package_gallwwwback \
 	Package_gallwwwgraf \
 	Package_glade \

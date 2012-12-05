@@ -84,7 +84,7 @@ sal_Bool SgaObject::CreateThumb( const Graphic& rGraphic )
                     else
                         aBmpSize.Height() = FRound( aBmpSize.Width() / fFactorLog );
 
-                    aBmpEx.SetSizePixel( aBmpSize );
+                    aBmpEx.SetSizePixel( aBmpSize, BMP_SCALE_BESTQUALITY );
                 }
             }
 
@@ -101,8 +101,10 @@ sal_Bool SgaObject::CreateThumb( const Graphic& rGraphic )
                 const Size  aNewSize( std::max( (long) (fFactor < 1. ? S_THUMB * fFactor : S_THUMB), 8L ),
                                       std::max( (long) (fFactor < 1. ? S_THUMB : S_THUMB / fFactor), 8L ) );
 
-                if( aThumbBmp.Scale( (double) aNewSize.Width() / aBmpSize.Width(),
-                                     (double) aNewSize.Height() / aBmpSize.Height(), BMP_SCALE_BESTQUALITY ) )
+                if(aThumbBmp.Scale(
+                    (double) aNewSize.Width() / aBmpSize.Width(),
+                    (double) aNewSize.Height() / aBmpSize.Height(),
+                    BMP_SCALE_BESTQUALITY ) )
                 {
                     aThumbBmp.Convert( BMP_CONVERSION_8BIT_COLORS );
                     bRet = sal_True;
@@ -120,7 +122,7 @@ sal_Bool SgaObject::CreateThumb( const Graphic& rGraphic )
         else
             aSize.Height() = (sal_Int32)( S_THUMB / fFactor );
 
-        const GraphicConversionParameters aParameters(aSize);
+        const GraphicConversionParameters aParameters(aSize, false, true, true /*TODO: extra ", true" post-#i121194#*/);
         aThumbBmp = rGraphic.GetBitmap(aParameters);
 
         if( !aThumbBmp.IsEmpty() )
