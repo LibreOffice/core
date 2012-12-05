@@ -22,6 +22,7 @@
 #include "odbc/OResultSetMetaData.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/PropertyVetoException.hpp>
 #include <com/sun/star/sdbcx/CompareBookmark.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/FetchDirection.hpp>
@@ -134,13 +135,18 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
     try
     {
         SQLUINTEGER nValueLen = 0;
+        // Reference: http://msdn.microsoft.com/en-us/library/windows/desktop/ms715441%28v=vs.85%29.aspx
         // LibreOffice ODBC binds columns only on update, so we don't care about SQL_GD_ANY_COLUMN / SQL_GD_BOUND
         // TODO: maybe a problem if a column is updated, then an earlier column fetched?
+        //       an updated column is bound...
         // TODO: aren't we assuming SQL_GD_OUTPUT_PARAMS?
         //       If yes, we should at least OSL_ENSURE it,
         //       even better throw an exception any OUT parameter registration if !SQL_GD_OUTPUT_PARAMS.
         // If !SQL_GD_ANY_ORDER, cache the whole row so that callers can access columns in any order.
         // In other words, isolate them from ODBC restrictions.
+        // TODO: we assume SQL_GD_BLOCK, unless fetchSize is 1
+        // TODO: not sure that forcing m_bFetchData for SQL_CURSOR_FORWARD_ONLY is sufficient.
+        //       the spec says SQLGetData should not be called *at* *all* if the fetch size is > 1 (for forward-only cursor)
         OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,SQL_GETDATA_EXTENSIONS,nValueLen,NULL);
         m_bFetchData = !((SQL_GD_ANY_ORDER & nValueLen) == SQL_GD_ANY_ORDER && nCurType != SQL_CURSOR_FORWARD_ONLY);
     }
@@ -150,6 +156,10 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
     }
     try
     {
+        // TODO: this does *not* do what it appears.
+        //       We use SQLFetchScroll unconditionally in several places
+        //       the *only* difference this makes is whether ::next() uses SQLFetchScroll or SQLFetch
+        //       so this test seems pointless
         if ( getOdbcFunction(ODBC3SQLGetFunctions) )
         {
             SQLUSMALLINT nSupported = 0;
@@ -1383,6 +1393,10 @@ void OResultSet::setFetchDirection(sal_Int32 _par0)
 void OResultSet::setFetchSize(sal_Int32 _par0)
 {
     OSL_ENSURE(_par0>0,"Illegal fetch size!");
+    if ( _par0 != 1 )
+    {
+        throw ::com::sun::star::beans::PropertyVetoException("SDBC/ODBC layer not prepared for fetchSize > 1", this);
+    }
     if ( _par0 > 0 )
     {
         setStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_ROW_ARRAY_SIZE, _par0);
@@ -1627,12 +1641,15 @@ sal_Bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32
     m_nLastColumnPos = 0;
 
     SQLRETURN nOldFetchStatus = m_nCurrentFetchState;
+    // TODO FIXME: both of these will misbehave for
+    // _eCursorPosition == IResultSetHelper::NEXT/PREVIOUS
+    // when fetchSize > 1
     if ( !m_bUseFetchScroll && _eCursorPosition == IResultSetHelper::NEXT )
         m_nCurrentFetchState = N3SQLFetch(m_aStatementHandle);
     else
         m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,nFetchOrientation,_nOffset);
 
-    OSL_TRACE( __FILE__": OSkipDeletedSet::OResultSet::move(%d,%d), FetchState = %d",nFetchOrientation,_nOffset,m_nCurrentFetchState);
+    OSL_TRACE( __FILE__": OResultSet::move(%d,%d), FetchState = %d",nFetchOrientation,_nOffset,m_nCurrentFetchState);
     OTools::ThrowException(m_pStatement->getOwnConnection(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 
     const bool bSuccess = m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
