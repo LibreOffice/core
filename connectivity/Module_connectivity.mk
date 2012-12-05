@@ -124,6 +124,10 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 	Library_mozab \
 	Library_mozabdrv \
 ))
+else
+$(eval $(call gb_Module_add_targets,connectivity,\
+	Library_mozbootstrap \
+))
 endif
 
 else ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
