@@ -25,6 +25,7 @@
 #include "diagnose_ex.h"
 #include <rtl/logfile.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <boost/static_assert.hpp>
 
 
 #include <string.h>
@@ -360,49 +361,48 @@ Sequence<sal_Int8> OTools::getBytesValue(const OConnection* _pConnection,
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OTools::getBytesValue" );
     sal_Int8 aCharArray[2048];
     // First try to fetch the data with the little Buffer:
-    SQLLEN nMaxLen = sizeof aCharArray - 1;
-    //  GETDATA(SQL_C_CHAR,aCharArray,nMaxLen);
-    SQLLEN pcbValue = 0;
-    OTools::ThrowException(_pConnection,(*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
-                                        (SQLUSMALLINT)columnIndex,
-                                        _fSqlType,
-                                        (SQLPOINTER)aCharArray,
-                                        nMaxLen,
-                                        &pcbValue),
-                            _aStatementHandle,SQL_HANDLE_STMT,_xInterface);
+    const SQLLEN nMaxLen = sizeof aCharArray;
+    SQLLEN pcbValue = SQL_NO_TOTAL;
+    Sequence<sal_Int8> aData;
 
-    _bWasNull = pcbValue == SQL_NULL_DATA;
-    if(_bWasNull)
-        return Sequence<sal_Int8>();
-
-    SQLINTEGER nBytes = pcbValue != SQL_NO_TOTAL ? std::min(pcbValue, nMaxLen) : nMaxLen;
-    if ( ((pcbValue == SQL_NO_TOTAL) || pcbValue > nMaxLen) && aCharArray[nBytes-1] == 0  && nBytes > 0 )
-        --nBytes;
-    Sequence<sal_Int8> aData((sal_Int8*)aCharArray, nBytes);
-
-    // It is about Binariy Data, a String, that for StarView is to long or
-    // the driver kan't predict the length of the data - as well as save the
-    // MemoryStream.
-    while ((pcbValue == SQL_NO_TOTAL) || pcbValue > nMaxLen)
+    // >= because if the data is nMaxLen long, our buffer is actually ONE byte short,
+    // for the null byte terminator!
+    while (pcbValue == SQL_NO_TOTAL || pcbValue >= nMaxLen)
     {
-        // At Strings the Buffer won't be completly used
-        // (The last Byte is always a NULL-Byte, however it won't be counted with pcbValue)
-        if (pcbValue != SQL_NO_TOTAL && (pcbValue - nMaxLen) < nMaxLen)
-            nBytes = pcbValue - nMaxLen;
-        else
-            nBytes = nMaxLen;
+        OTools::ThrowException(_pConnection,
+                               (*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(
+                                   _aStatementHandle,
+                                   (SQLUSMALLINT)columnIndex,
+                                   _fSqlType,
+                                   (SQLPOINTER)aCharArray,
+                                   nMaxLen,
+                                   &pcbValue),
+                               _aStatementHandle,SQL_HANDLE_STMT,_xInterface);
 
-        // While there is a "truncation"-Warning, proceed with fetching Data.
-        OTools::ThrowException(_pConnection,(*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
-                                        (SQLUSMALLINT)columnIndex,
-                                        SQL_C_BINARY,
-                                        &aCharArray,
-                                        (SQLINTEGER)nBytes,
-                                        &pcbValue),
-                            _aStatementHandle,SQL_HANDLE_STMT,_xInterface);
-        sal_Int32 nLen = aData.getLength();
-        aData.realloc(nLen + nBytes);
-        memcpy(aData.getArray() + nLen, aCharArray, nBytes);
+        _bWasNull = pcbValue == SQL_NULL_DATA;
+        if(_bWasNull)
+            return Sequence<sal_Int8>();
+
+        SQLLEN nReadBytes;
+        // After the SQLGetData that wrote out to aCharArray the last byte of the data,
+        // pcbValue will not be SQL_NO_TOTAL -> we have a reliable count
+        if ( (pcbValue == SQL_NO_TOTAL) || (pcbValue >= nMaxLen) )
+        {
+            // we filled the buffer; remove the terminating null byte
+            nReadBytes = nMaxLen-1;
+            if ( aCharArray[nReadBytes] != 0)
+            {
+                OSL_FAIL("Buggy ODBC driver? Did not null-terminate (variable length) data!");
+                ++nReadBytes;
+            }
+        }
+        else
+        {
+            nReadBytes = pcbValue;
+        }
+        const sal_Int32 nLen = aData.getLength();
+        aData.realloc(nLen + nReadBytes);
+        memcpy(aData.getArray() + nLen, aCharArray, nReadBytes);
     }
     return aData;
 }
@@ -422,106 +422,94 @@ Sequence<sal_Int8> OTools::getBytesValue(const OConnection* _pConnection,
     case SQL_WVARCHAR:
     case SQL_WCHAR:
     case SQL_WLONGVARCHAR:
-        {
-            sal_Unicode waCharArray[2048];
-            // read the unicode data
-            SQLLEN nMaxLen = (sizeof(waCharArray) / sizeof(sal_Unicode)) - 1;
+    {
+        sal_Unicode waCharArray[2048];
+        // we assume everyone (LibO & ODBC) uses UTF-16; see OPreparedStatement::setParameter
+        BOOST_STATIC_ASSERT(sizeof(sal_Unicode) == 2);
+        BOOST_STATIC_ASSERT(sizeof(SQLWCHAR)    == 2);
+        // read the unicode data
+        const SQLLEN nMaxLen = sizeof(waCharArray) / sizeof(sal_Unicode);
+        SQLLEN pcbValue = SQL_NO_TOTAL;
 
-            SQLLEN pcbValue=0;
-            OTools::ThrowException(_pConnection,(*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
-                                                (SQLUSMALLINT)columnIndex,
-                                                SQL_C_WCHAR,
-                                                &waCharArray,
-                                                (SQLLEN)nMaxLen*sizeof(sal_Unicode),
-                                                &pcbValue),
-                                    _aStatementHandle,SQL_HANDLE_STMT,_xInterface);
+        while ((pcbValue == SQL_NO_TOTAL ) || (pcbValue >= nMaxLen) )
+        {
+            OTools::ThrowException(_pConnection,
+                                   (*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(
+                                       _aStatementHandle,
+                                       (SQLUSMALLINT)columnIndex,
+                                       SQL_C_WCHAR,
+                                       &waCharArray,
+                                       (SQLLEN)nMaxLen*sizeof(sal_Unicode),
+                                       &pcbValue),
+                                   _aStatementHandle,SQL_HANDLE_STMT,_xInterface);
             _bWasNull = pcbValue == SQL_NULL_DATA;
             if(_bWasNull)
                 return ::rtl::OUString();
-            // at failure the GETDATA-Makro will stop with returning,
-            // at NULL with break!
-            SQLLEN nRealSize = 0;
-            if ( pcbValue > -1 )
-                nRealSize = pcbValue / sizeof(sal_Unicode);
-            SQLLEN nLen = pcbValue != SQL_NO_TOTAL ? std::min(nRealSize, nMaxLen) : (nMaxLen-1);
-            waCharArray[nLen] = 0;
-            aData.append(waCharArray,nLen);
 
-            // It is about Binariy Data, a String, that for StarView is to long or
-            // the driver kan't predict the length of the data - as well as save the
-            // MemoryStream.
-            while ((pcbValue == SQL_NO_TOTAL ) || nLen > nMaxLen)
+            SQLLEN nReadChars;
+            if ( (pcbValue == SQL_NO_TOTAL) || (pcbValue >= nMaxLen) )
             {
-                // At Strings the Buffer won't be completly used
-                // (The last Byte is always a NULL-Byte, however it won't be counted with pcbValue)
-                if (pcbValue != SQL_NO_TOTAL && (pcbValue - nMaxLen) < nMaxLen)
-                    nLen = pcbValue - nMaxLen;
-                else
-                    nLen = nMaxLen;
-
-                // While there is a "truncation"-Warning, proceed with fetching Data.
-                OTools::ThrowException(_pConnection,(*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
-                                                (SQLUSMALLINT)columnIndex,
-                                                SQL_C_WCHAR,
-                                                &waCharArray,
-                                                (SQLLEN)nLen+1,
-                                                &pcbValue),
-                                    _aStatementHandle,SQL_HANDLE_STMT,_xInterface);
-                nRealSize = 0;
-                if ( pcbValue > -1 )
-                    nRealSize = pcbValue / sizeof(sal_Unicode);
-                nLen = pcbValue != SQL_NO_TOTAL ? std::min(nRealSize, nMaxLen) : (nMaxLen-1);
-                waCharArray[nLen] = 0;
-
-                aData.append(::rtl::OUString(waCharArray));
+                // we filled the buffer; remove the terminating null character
+                nReadChars = nMaxLen-1;
+                if ( waCharArray[nReadChars] != 0)
+                {
+                    OSL_FAIL("Buggy ODBC driver? Did not null-terminate (variable length) data!");
+                    ++nReadChars;
+                }
             }
+            else
+            {
+                nReadChars = pcbValue;
+            }
+
+            aData.append(waCharArray, nReadChars);
+
         }
         break;
-        default:
+    }
+    default:
+    {
+        char aCharArray[2048];
+        // read the unicode data
+        const SQLLEN nMaxLen = sizeof(aCharArray);
+        SQLLEN pcbValue = SQL_NO_TOTAL;
+
+        while ((pcbValue == SQL_NO_TOTAL ) || (pcbValue >= nMaxLen) )
         {
-            char aCharArray[2048];
-            // First try to fetch the data with the little Buffer:
-            SQLLEN nMaxLen = sizeof aCharArray - 1;
-            SQLLEN pcbValue = 0;
-            OTools::ThrowException(_pConnection,(*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
-                                                (SQLUSMALLINT)columnIndex,
-                                                SQL_C_CHAR,
-                                                &aCharArray,
-                                                nMaxLen,
-                                                &pcbValue),
-                                    _aStatementHandle,SQL_HANDLE_STMT,_xInterface);
+            OTools::ThrowException(_pConnection,
+                                   (*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(
+                                       _aStatementHandle,
+                                       (SQLUSMALLINT)columnIndex,
+                                       SQL_C_CHAR,
+                                       &aCharArray,
+                                       nMaxLen,
+                                       &pcbValue),
+                                   _aStatementHandle,SQL_HANDLE_STMT,_xInterface);
             _bWasNull = pcbValue == SQL_NULL_DATA;
             if(_bWasNull)
                 return ::rtl::OUString();
 
-            SQLLEN nLen = pcbValue != SQL_NO_TOTAL ? std::min(pcbValue, nMaxLen) : (nMaxLen-1);
-            aCharArray[nLen] = 0;
-            if ( ((pcbValue == SQL_NO_TOTAL) || pcbValue > nMaxLen) && aCharArray[nLen-1] == 0 && nLen > 0 )
-                --nLen;
-            aData.append(::rtl::OUString((const sal_Char*)aCharArray,nLen, _nTextEncoding));
-
-            // It is about Binary Data, a String, that for StarView is too long or
-            // the driver can't predict the length of the data - as well as save the
-            // MemoryStream.
-            while ((pcbValue == SQL_NO_TOTAL) || pcbValue > nMaxLen)
+            SQLLEN nReadChars;
+            if ( (pcbValue == SQL_NO_TOTAL) || (pcbValue >= nMaxLen) )
             {
-                // While there is a "truncation"-Warning, proceed with fetching Data.
-                OTools::ThrowException(_pConnection,(*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
-                                                (SQLUSMALLINT)columnIndex,
-                                                SQL_C_CHAR,
-                                                &aCharArray,
-                                                (SQLINTEGER)nMaxLen,
-                                                &pcbValue),
-                                    _aStatementHandle,SQL_HANDLE_STMT,_xInterface);
-                nLen = pcbValue != SQL_NO_TOTAL ? std::min(pcbValue, nMaxLen) : (nMaxLen-1);
-                if ( ((pcbValue == SQL_NO_TOTAL) || pcbValue > nMaxLen) && aCharArray[nLen-1] == 0 && nLen > 0 )
-                    --nLen;
-                aCharArray[nLen] = 0;
-
-                aData.append(::rtl::OUString((const sal_Char*)aCharArray,nLen,_nTextEncoding));
+                // we filled the buffer; remove the terminating null character
+                nReadChars = nMaxLen-1;
+                if ( aCharArray[nReadChars] != 0)
+                {
+                    OSL_FAIL("Buggy ODBC driver? Did not null-terminate (variable length) data!");
+                    ++nReadChars;
+                }
+            }
+            else
+            {
+                nReadChars = pcbValue;
             }
 
+            aData.append(::rtl::OUString(aCharArray, nReadChars, _nTextEncoding));
+
         }
+        break;
+    }
     }
 
     return aData.makeStringAndClear();
