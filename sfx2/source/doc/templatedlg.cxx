@@ -54,7 +54,6 @@
 #define INIT_FOLDER_COLS 3
 #define INIT_FOLDER_LINES 2
 
-#define PADDING_TOOLBAR_VIEW    15
 #define PADDING_DLG_BORDER      10
 
 using namespace ::com::sun::star;
@@ -106,10 +105,11 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
       aButtonSheets(this,SfxResId(BTN_SELECT_SHEETS)),
       aButtonDraws(this,SfxResId(BTN_SELECT_DRAWS)),
       maButtonSelMode(this,SfxResId(BTN_SELECTION_MODE)),
+      mpToolbars( new Control(this,SfxResId(TOOLBARS))),
       mpSearchEdit(new Edit(this,WB_HIDE | WB_BORDER)),
-      mpViewBar( new ToolBox(this, SfxResId(TBX_ACTION_VIEW))),
-      mpActionBar( new ToolBox(this, SfxResId(TBX_ACTION_ACTION))),
-      mpTemplateBar( new ToolBox(this, SfxResId(TBX_ACTION_TEMPLATES))),
+      mpViewBar( new ToolBox(mpToolbars, SfxResId(TBX_ACTION_VIEW))),
+      mpActionBar( new ToolBox(mpToolbars, SfxResId(TBX_ACTION_ACTION))),
+      mpTemplateBar( new ToolBox(mpToolbars, SfxResId(TBX_ACTION_TEMPLATES))),
       mpSearchView(new TemplateSearchView(this)),
       maView(new TemplateLocalView(this,SfxResId(TEMPLATE_VIEW))),
       mpOnlineView(new TemplateRemoteView(this, WB_VSCROLL,false)),
@@ -177,7 +177,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
 
     // Set view position below toolbox
     Point aViewPos = maView->GetPosPixel();
-    aViewPos.setY(aActionPos.Y() + aActionSize.getHeight() + PADDING_TOOLBAR_VIEW);
+    aViewPos.setY(mpToolbars->GetPosPixel().Y() + mpToolbars->GetSizePixel().getHeight());
     aViewPos.setX((aWinSize.getWidth() - aThumbSize.getWidth())/2);     // Center the view
     maView->SetPosPixel(aViewPos);
 
@@ -273,6 +273,7 @@ SfxTemplateManagerDlg::~SfxTemplateManagerDlg ()
     delete mpActionMenu;
     delete mpRepositoryMenu;
     delete mpTemplateDefaultMenu;
+    delete mpToolbars;
 }
 
 void SfxTemplateManagerDlg::setSaveMode(bool bMode)
