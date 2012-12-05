@@ -351,7 +351,7 @@ MY_DRIVERS += kab
 .END
 
 .IF "$(OS)" == "WNT"
-.IF "$(WITH_MOZAB4WIN)" == "YES"
+.IF "$(SYSTEM_MOZILLA)" != "YES" && "$(WITH_MOZILLA)" != "NO"
 MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-mozab.xcu
 MY_DRIVERS += mozab
 .END

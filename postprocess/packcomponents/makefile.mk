@@ -337,6 +337,7 @@ my_components += \
     component/dtrans/util/dnd \
     component/dtrans/util/ftransl \
     component/dtrans/util/sysdtrans \
+    component/fpicker/source/odma/fps_odma \
     component/fpicker/source/win32/fps \
     component/shell/source/backends/wininetbe/wininetbe1 \
     component/shell/source/win32/simplemail/smplmail \
@@ -373,7 +374,7 @@ my_components += \
 .END
 
 .IF "$(OS)" == "WNT"
-.IF "$(WITH_MOZAB4WIN)" == "YES"
+.IF "$(SYSTEM_MOZILLA)" != "YES" && "$(WITH_MOZILLA)" != "NO"
 my_components += component/connectivity/source/drivers/mozab/mozab
 .ELSE
 my_components += component/connectivity/source/drivers/mozab/bootstrap/mozbootstrap
