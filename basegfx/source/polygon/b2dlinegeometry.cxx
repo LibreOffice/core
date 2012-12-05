@@ -720,7 +720,7 @@ namespace basegfx
 
                     if(0.0 != fCutPos)
                     {
-                        const B2DPoint aCutPoint(interpolate(aStartPoint, aStartPoint + rTangentPrev, fCutPos));
+                        const B2DPoint aCutPoint(aStartPoint + (rTangentPrev * fCutPos));
                         aEdgePolygon.append(aCutPoint);
                     }
 
