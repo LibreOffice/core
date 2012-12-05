@@ -63,9 +63,12 @@ IMPL_LINK_NOARG(RemoteDialog, HandleConnectButton)
         return CloseHdl( 0 );
     }
     else
+    {
         return 1;
+    }
+#else
+    return 0;
 #endif
-        return 0;
 }
 
 IMPL_LINK_NOARG( RemoteDialog, CloseHdl )
