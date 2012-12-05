@@ -32,12 +32,6 @@
 #define WIN_MANAGESORTKEY   2
 #define SB_SORT             3
 
-// SORT_KEY_FIELDS:
-#define FL_SORT             278
-#define LB_SORT             279
-#define BTN_UP              280
-#define BTN_DOWN            281
-
 #define FT_TEXT             1
 #define FT_TIP              2
 #define BTN_EXTSORT         3

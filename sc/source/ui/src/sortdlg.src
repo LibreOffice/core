@@ -17,63 +17,6 @@
  */
 #include "sortdlg.hrc"
 
-TabPage RID_SCPAGE_SORT_FIELDS
-{
-    Hide = TRUE ;
-    SVLook = TRUE ;
-    HelpId = HID_SCPAGE_SORT_FIELDS ;
-    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT );
-    Control CTRL_MANAGESORTKEY
-    {
-        Pos = MAP_APPFONT( 2, 2 );
-        Size = MAP_APPFONT( 256, 181 );
-        Border = FALSE;
-        DialogControl = TRUE;
-        Window WIN_MANAGESORTKEY
-        {
-            OutputSize = TRUE ;
-            Pos = MAP_APPFONT ( 2 , 2 );
-            Size = MAP_APPFONT ( 240 , 181 );
-            DialogControl = TRUE;
-        };
-        ScrollBar SB_SORT
-        {
-            Pos = MAP_APPFONT ( 246 , 2 );
-            Size = MAP_APPFONT ( 8 , 181 );
-            VScroll = TRUE;
-        };
-    };
-};
-
-ListBox LB_SORT
-{
-    Border = TRUE ;
-    Pos = MAP_APPFONT ( 12 , 16 ) ;
-    Size = MAP_APPFONT ( 154 , 90 ) ;
-    TabStop = TRUE ;
-    DropDown = TRUE ;
-};
-RadioButton BTN_UP
-{
-    Pos = MAP_APPFONT ( 172 , 11 ) ;
-    Size = MAP_APPFONT ( 79 , 10 ) ;
-    Text [ en-US ] = "~Ascending" ;
-    TabStop = TRUE ;
-};
-RadioButton BTN_DOWN
-{
-    Pos = MAP_APPFONT ( 172 , 25 ) ;
-    Size = MAP_APPFONT ( 79 , 10 ) ;
-    Text [ en-US ] = "~Descending" ;
-    TabStop = TRUE ;
-};
-FixedLine FL_SORT
-{
-    Pos = MAP_APPFONT ( 6 , 0 ) ;
-    Size = MAP_APPFONT ( 240 , 8 ) ;
-    Text [ en-US ] = "Sort ~key " ;
-};
-
 TabDialog RID_SCDLG_SORT
 {
     OutputSize = TRUE ;

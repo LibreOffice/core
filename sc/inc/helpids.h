@@ -71,7 +71,6 @@
 #define HID_SC_PIVOTFILTER                                      "SC_HID_SC_PIVOTFILTER"
 #define HID_SC_INPORTOPT                                        "SC_HID_SC_INPORTOPT"
 #define HID_SC_PIVOTSUBT                                        "SC_HID_SC_PIVOTSUBT"
-#define HID_SCPAGE_SORT_FIELDS                                  "SC_HID_SCPAGE_SORT_FIELDS"
 #define HID_SCPAGE_SUBT_OPTIONS                                 "SC_HID_SCPAGE_SUBT_OPTIONS"
 #define HID_SCPAGE_SUBT_GROUP                                   "SC_HID_SCPAGE_SUBT_GROUP"
 #define HID_SCPAGE_PROTECTION                                   "SC_HID_SCPAGE_PROTECTION"
