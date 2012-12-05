@@ -233,6 +233,7 @@ void BluetoothServer::setDiscoverable( bool aDiscoverable )
     g_object_unref( G_OBJECT( aAdapter ));
     dbus_g_connection_unref( aConnection );
 #else // defined(LINUX) && defined(ENABLE_DBUS)
+    (void) aDiscoverable; // avoid warnings
     return;
 #endif
 }
