@@ -1278,11 +1278,7 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Configuration_Layers
     ModuleID = gid_Module_Root_Brand;
     Section = "Bootstrap";
     Key = "CONFIGURATION_LAYERS";
-    Value = "xcsxcu:${BRAND_BASE_DIR}/share/registry res:${BRAND_BASE_DIR}/share/registry bundledext:${${BRAND_BASE_DIR}/program/" PROFILENAME(uno) ":BUNDLED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini sharedext:${${BRAND_BASE_DIR}/program/" PROFILENAME(uno) ":SHARED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini xcsxcu:${${BRAND_BASE_DIR}/program/" PROFILENAME(uno) ":UNO_USER_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/registry userext:${${BRAND_BASE_DIR}/program/" PROFILENAME(uno) ":UNO_USER_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini user:${$BRAND_BASE_DIR/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/registrymodifications.xcu";
-        // "xcsxcu:${${BRAND_BASE_DIR}/program/"PROFILENAME(uno)
-        // ":UNO_USER_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment."
-        // "configuration.PackageRegistryBackend/registry" can be dropped once
-        // old UserInstallation format can no longer exist (probably OOo 4)
+    Value = "xcsxcu:${BRAND_BASE_DIR}/share/registry res:${BRAND_BASE_DIR}/share/registry bundledext:${${BRAND_BASE_DIR}/program/" PROFILENAME(uno) ":BUNDLED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini sharedext:${${BRAND_BASE_DIR}/program/" PROFILENAME(uno) ":SHARED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini userext:${${BRAND_BASE_DIR}/program/" PROFILENAME(uno) ":UNO_USER_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini user:${$BRAND_BASE_DIR/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/registrymodifications.xcu";
 End
 
 #if !defined MACOSX
