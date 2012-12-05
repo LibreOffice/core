@@ -1489,7 +1489,7 @@ void OResultSet::getFastPropertyValue(
     }
 }
 // -------------------------------------------------------------------------
-void OResultSet::fillRow(sal_Int32 _nToColumn)
+void OResultSet::fillRow(const sal_Int32 _nToColumn)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::fillRow" );
     if((sal_Int32)m_aRow.size() <= _nToColumn)
