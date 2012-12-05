@@ -120,6 +120,7 @@ void FindTextFieldControl::SetTextToSelected_Impl()
     if ( aString.getLength() != 0 )
     {
         SetText( aString );
+        GetModifyHdl().Call(this); // FIXME why SetText doesn't trigger this?
     }
 }
 
