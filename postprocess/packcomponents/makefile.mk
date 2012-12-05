@@ -374,7 +374,7 @@ my_components += \
 .END
 
 .IF "$(OS)" == "WNT"
-.IF "$(SYSTEM_MOZILLA)" != "YES" && "$(WITH_MOZILLA)" != "NO"
+.IF "$(WITH_MOZAB4WIN)" == "YES"
 my_components += component/connectivity/source/drivers/mozab/mozab
 .ELSE
 my_components += component/connectivity/source/drivers/mozab/bootstrap/mozbootstrap
