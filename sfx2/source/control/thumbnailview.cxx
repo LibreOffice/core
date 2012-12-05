@@ -202,6 +202,9 @@ void ThumbnailView::DrawItem (ThumbnailViewItem *pItem)
 
 void ThumbnailView::OnSelectionMode (bool bMode)
 {
+    if ( !bMode )
+        deselectItems();
+
     for (size_t i = 0, n = mItemList.size(); i < n; ++i)
     {
         mItemList[i]->setSelectionMode(bMode);
@@ -211,7 +214,7 @@ void ThumbnailView::OnSelectionMode (bool bMode)
     }
 }
 
-void ThumbnailView::OnItemDblClicked (ThumbnailViewItem*)
+void ThumbnailView::OnItemClicked (ThumbnailViewItem*)
 {
 }
 
@@ -508,7 +511,19 @@ IMPL_LINK (ThumbnailView, OnItemSelected, ThumbnailViewItem*, pItem)
 
 void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if ( rMEvt.IsLeft() )
+    bool bProcessClick = rMEvt.IsLeft();
+
+    if ( rMEvt.IsRight( ) )
+    {
+        // Set selection mode with right click
+        if (!mbSelectionMode)
+        {
+            setSelectionMode( true );
+            bProcessClick = true;
+        }
+    }
+
+    if ( bProcessClick )
     {
         ThumbnailViewItem* pItem = ImplGetItem( ImplGetItem( rMEvt.GetPosPixel() ) );
 
@@ -530,36 +545,17 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
                     else
                     {
                         Rectangle aRect(pItem->getDrawArea());
-                        aRect.setY(aRect.getY()+mnItemPadding+mnThumbnailHeight);
-                        aRect.SetSize(Size(mnItemWidth,mnDisplayHeight+mnItemPadding));
+                        aRect.SetSize(Size(mnItemWidth,mnThumbnailHeight));
 
-                        if (aRect.IsInside(rMEvt.GetPosPixel()))
-                        {
-                            pItem->setSelection(!pItem->isSelected());
-
-                            if (!pItem->isHighlighted())
-                                DrawItem(pItem);
-
-                            maItemStateHdl.Call(pItem);
-                        }
-
-                        //StartTracking( STARTTRACK_SCROLLREPEAT );
+                        if (!mbSelectionMode && aRect.IsInside(rMEvt.GetPosPixel()))
+                            OnItemClicked(pItem);
                     }
-                }
-                else if ( rMEvt.GetClicks() == 2 )
-                {
-                    Rectangle aRect(pItem->getDrawArea());
-                    aRect.SetSize(Size(mnItemWidth,mnThumbnailHeight));
-
-                    if (!mbSelectionMode && aRect.IsInside(rMEvt.GetPosPixel()))
-                        OnItemDblClicked(pItem);
                 }
             }
 
             return;
         }
     }
-
     Control::MouseButtonDown( rMEvt );
 }
 
@@ -1059,8 +1055,8 @@ long ThumbnailView::GetScrollWidth() const
 void ThumbnailView::setSelectionMode (bool mode)
 {
     mbSelectionMode = mode;
-
     OnSelectionMode(mode);
+    maSelectionModeHdl.Call(&mode);
 }
 
 void ThumbnailView::filterItems (const boost::function<bool (const ThumbnailViewItem*) > &func)

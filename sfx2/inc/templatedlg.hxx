@@ -58,6 +58,7 @@ private:
     DECL_LINK(CloseOverlayHdl, void*);
 
     DECL_LINK(OnClickSelectionMode, ImageButton*);
+    DECL_LINK(SelectionModeHdl, bool*);
 
     DECL_LINK(TBXViewHdl, void*);
     DECL_LINK(TBXActionHdl, void*);
@@ -141,6 +142,7 @@ private:
     std::set<const ThumbnailViewItem*> maSelFolders;
 
     bool mbIsSaveMode;  ///< Flag that indicates if we are in save mode or not.
+    bool mbInSelectionModeHdl; ///< Flag avoiding selection mode handler loop
     com::sun::star::uno::Reference< com::sun::star::frame::XModel > m_xModel;
     com::sun::star::uno::Reference< com::sun::star::frame::XComponentLoader > mxDesktop;
 };

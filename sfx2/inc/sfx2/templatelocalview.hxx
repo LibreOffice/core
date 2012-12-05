@@ -75,7 +75,7 @@ public:
 
 private:
 
-    virtual void OnItemDblClicked (ThumbnailViewItem *pRegionItem);
+    virtual void OnItemClicked (ThumbnailViewItem *pRegionItem);
 
     DECL_LINK(ChangeNameHdl, TemplateView*);
 

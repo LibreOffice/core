@@ -702,7 +702,7 @@ bool TemplateLocalView::isTemplateNameUnique(const sal_uInt16 nRegionItemId, con
     return true;
 }
 
-void TemplateLocalView::OnItemDblClicked (ThumbnailViewItem *pRegionItem)
+void TemplateLocalView::OnItemClicked (ThumbnailViewItem *pRegionItem)
 {
     // Fill templates
     sal_uInt16 nRegionId = pRegionItem->mnId-1;

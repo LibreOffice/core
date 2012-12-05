@@ -114,6 +114,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
       maView(new TemplateLocalView(this,SfxResId(TEMPLATE_VIEW))),
       mpOnlineView(new TemplateRemoteView(this, WB_VSCROLL,false)),
       mbIsSaveMode(false),
+      mbInSelectionModeHdl(false),
       mxDesktop(comphelper::getProcessServiceFactory()->createInstance( "com.sun.star.frame.Desktop" ),uno::UNO_QUERY )
 {
     maButtonSelMode.SetStyle(maButtonSelMode.GetStyle() | WB_TOGGLE);
@@ -202,8 +203,9 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
 
     maView->setItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVFolderStateHdl));
     maView->setOverlayItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVTemplateStateHdl));
-    maView->setOverlayDblClickHdl(LINK(this,SfxTemplateManagerDlg,OpenTemplateHdl));
+    maView->setOverlayClickHdl(LINK(this,SfxTemplateManagerDlg,OpenTemplateHdl));
     maView->setOverlayCloseHdl(LINK(this,SfxTemplateManagerDlg,CloseOverlayHdl));
+    maView->setSelectionModeHdl(LINK(this,SfxTemplateManagerDlg,SelectionModeHdl));
 
     // Set online view position and dimensions
     mpOnlineView->SetPosSizePixel(aViewPos,aThumbSize);
@@ -214,9 +216,10 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
                                     TEMPLATE_ITEM_PADDING);
 
     mpOnlineView->setOverlayItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVTemplateStateHdl));
-    mpOnlineView->setOverlayDblClickHdl(LINK(this,SfxTemplateManagerDlg,OpenTemplateHdl));
+    mpOnlineView->setOverlayClickHdl(LINK(this,SfxTemplateManagerDlg,OpenTemplateHdl));
     mpOnlineView->setOverlayCloseHdl(LINK(this,SfxTemplateManagerDlg,CloseOverlayHdl));
     mpOnlineView->setOverlayChangeNameHdl(LINK(this,SfxTemplateManagerDlg,RepositoryChangeNameHdl));
+    mpOnlineView->setSelectionModeHdl(LINK(this,SfxTemplateManagerDlg,SelectionModeHdl));
 
     mpSearchView->SetSizePixel(aThumbSize);
     mpSearchView->setItemMaxTextLength(TEMPLATE_ITEM_MAX_TEXT_LENGTH);
@@ -226,6 +229,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
                                     TEMPLATE_ITEM_PADDING);
 
     mpSearchView->setItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVTemplateStateHdl));
+    mpSearchView->setSelectionModeHdl(LINK(this,SfxTemplateManagerDlg,SelectionModeHdl));
 
     aButtonAll.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewAllHdl));
     aButtonDocs.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewDocsHdl));
@@ -353,7 +357,16 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, CloseOverlayHdl)
 
 IMPL_LINK (SfxTemplateManagerDlg, OnClickSelectionMode, ImageButton*, pButton)
 {
-    maView->setSelectionMode(pButton->GetState() == STATE_CHECK);
+    if (!mbInSelectionModeHdl)
+        maView->setSelectionMode(pButton->GetState() == STATE_CHECK);
+    return 0;
+}
+
+IMPL_LINK (SfxTemplateManagerDlg, SelectionModeHdl, bool*, pMode)
+{
+    mbInSelectionModeHdl = true;
+    maButtonSelMode.SetState( *pMode ? STATE_CHECK : STATE_NOCHECK );
+    mbInSelectionModeHdl = false;
     return 0;
 }
 
