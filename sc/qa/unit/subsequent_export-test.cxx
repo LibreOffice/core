@@ -90,6 +90,10 @@ private:
     rtl::OUString m_aBaseString;
     uno::Reference<uno::XInterface> m_xCalcComponent;
 
+    ScDocShellRef load(
+        const OUString& rURL, const OUString& rFilter, const OUString &rUserData,
+        const OUString& rTypeName, sal_Int32 nFormat, sal_uLong nFormatType );
+
     ScDocShellRef saveAndReload( ScDocShell* pShell, sal_Int32 nFormat );
     ScDocShellRef loadDocument( const rtl::OUString& rFileNameBase, sal_Int32 nFormat );
     void createFileURL( const rtl::OUString& aFileBase, const rtl::OUString& rFileExtension, rtl::OUString& rFilePath);
@@ -146,27 +150,8 @@ ScDocShellRef ScExportTest::saveAndReloadPassword(ScDocShell* pShell, const rtl:
     sal_uInt32 nFormat = 0;
     if (nFormatType)
         nFormat = SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS;
-    SfxFilter* pFilter = new SfxFilter(
-        rFilter,
-        rtl::OUString(), nFormatType, nFormat, rTypeName, 0, rtl::OUString(),
-        rUserData, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/scalc*")) );
-    pFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
 
-    ScDocShellRef xDocShRef = new ScDocShell;
-    xDocShRef->GetDocument()->EnableUserInteraction(false);
-    SfxMedium* pSrcMed = new SfxMedium(aTempFile.GetURL(), STREAM_STD_READ);
-    pSrcMed->UseInteractionHandler(false);
-    SfxItemSet* pSet = pSrcMed->GetItemSet();
-    pSet->Put(SfxStringItem(SID_PASSWORD, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("test"))));
-    pSrcMed->SetFilter(pFilter);
-    if (!xDocShRef->DoLoad(pSrcMed))
-    {
-        xDocShRef->DoClose();
-        // load failed.
-        xDocShRef.Clear();
-    }
-
-    return xDocShRef;
+    return load(aTempFile.GetURL(), rFilter, rUserData, rTypeName, nFormat, nFormatType);
 }
 
 ScDocShellRef ScExportTest::saveAndReload(ScDocShell* pShell, const rtl::OUString &rFilter,
@@ -193,15 +178,23 @@ ScDocShellRef ScExportTest::saveAndReload(ScDocShell* pShell, const rtl::OUStrin
     sal_uInt32 nFormat = 0;
     if (nFormatType)
         nFormat = SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS;
+
+    return load(aTempFile.GetURL(), rFilter, rUserData, rTypeName, nFormat, nFormatType);
+}
+
+ScDocShellRef ScExportTest::load(
+    const OUString& rURL, const OUString& rFilter, const OUString &rUserData,
+    const OUString& rTypeName, sal_Int32 nFormat, sal_uLong nFormatType )
+{
     SfxFilter* pFilter = new SfxFilter(
         rFilter,
         rtl::OUString(), nFormatType, nFormat, rTypeName, 0, rtl::OUString(),
-        rUserData, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/scalc*")) );
+        rUserData, OUString("private:factory/scalc*"));
     pFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
 
     ScDocShellRef xDocShRef = new ScDocShell;
     xDocShRef->GetDocument()->EnableUserInteraction(false);
-    SfxMedium* pSrcMed = new SfxMedium(aTempFile.GetURL(), STREAM_STD_READ);
+    SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ);
     pSrcMed->SetFilter(pFilter);
     pSrcMed->UseInteractionHandler(false);
     if (!xDocShRef->DoLoad(pSrcMed))
@@ -235,25 +228,7 @@ ScDocShellRef ScExportTest::loadDocument(const rtl::OUString& rFileName, sal_Int
     unsigned int nFormatType = aFileFormats[nFormat].nFormatType;
     unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
 
-    SfxFilter* pFilter = new SfxFilter(
-        aFilterName,
-        rtl::OUString(), nFormatType, nClipboardId, aFilterType, 0, rtl::OUString(),
-        rtl::OUString(), rtl::OUString("private:factory/scalc*") );
-    pFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
-
-    ScDocShellRef xDocShRef = new ScDocShell;
-    xDocShRef->GetDocument()->EnableUserInteraction(false);
-    SfxMedium* pSrcMed = new SfxMedium(aFileName, STREAM_STD_READ);
-    pSrcMed->SetFilter(pFilter);
-    pSrcMed->UseInteractionHandler(false);
-    if (!xDocShRef->DoLoad(pSrcMed))
-    {
-        xDocShRef->DoClose();
-        // load failed.
-        xDocShRef.Clear();
-    }
-
-    return xDocShRef;
+    return load(aFileName, aFilterName, OUString(), aFilterType, nClipboardId, nFormatType);
 }
 
 void ScExportTest::test()
