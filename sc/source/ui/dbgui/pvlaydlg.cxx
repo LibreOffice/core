@@ -116,7 +116,7 @@ ScPivotLayoutDlg::ScPivotLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
     mxDlgDPObject( new ScDPObject( rDPObject ) ),
     mpViewData( ((ScTabViewShell*)SfxViewShell::Current())->GetViewData() ),
     mpDoc( ((ScTabViewShell*)SfxViewShell::Current())->GetViewData()->GetDocument() ),
-    mpActiveEdit(NULL),
+    mpRefInputEdit(NULL),
 
     maStrUndefined(SC_RESSTR(SCSTR_UNDEFINED)),
     maStrNewTable(SC_RESSTR(SCSTR_NEWTABLE)),
@@ -184,6 +184,12 @@ ScPivotLayoutDlg::ScPivotLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
     maEdInPos.SetModifyHdl( LINK( this, ScPivotLayoutDlg, EdInModifyHdl ) );
     maBtnOk.SetClickHdl( LINK( this, ScPivotLayoutDlg, OkHdl ) );
     maBtnCancel.SetClickHdl( LINK( this, ScPivotLayoutDlg, CancelHdl ) );
+
+    // Set focus handler for the reference edit text boxes.
+    Link aGetFocusLink = LINK(this, ScPivotLayoutDlg, GetFocusHdl);
+    if (maEdInPos.IsEnabled())
+        maEdInPos.SetGetFocusHdl(aGetFocusLink);
+    maEdOutPos.SetGetFocusHdl(aGetFocusLink);
 
     if ( mpViewData && mpDoc )
     {
@@ -1597,23 +1603,23 @@ sal_uInt8 ScPivotLayoutDlg::GetNextDupCount(
 
 void ScPivotLayoutDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
 {
-    if ( !mbRefInputMode || !mpActiveEdit )
+    if (!mbRefInputMode || !mpRefInputEdit)
         return;
 
     if ( rRef.aStart != rRef.aEnd )
-        RefInputStart( mpActiveEdit );
+        RefInputStart(mpRefInputEdit);
 
-    if ( mpActiveEdit == &maEdInPos )
+    if (mpRefInputEdit == &maEdInPos)
     {
         rtl::OUString aRefStr;
         rRef.Format( aRefStr, SCR_ABS_3D, pDoc, pDoc->GetAddressConvention() );
-        mpActiveEdit->SetRefString( aRefStr );
+        mpRefInputEdit->SetRefString(aRefStr);
     }
-    else if ( mpActiveEdit == &maEdOutPos )
+    else if (mpRefInputEdit == &maEdOutPos)
     {
         rtl::OUString aRefStr;
         rRef.aStart.Format( aRefStr, STD_FORMAT, pDoc, pDoc->GetAddressConvention() );
-        mpActiveEdit->SetRefString( aRefStr );
+        mpRefInputEdit->SetRefString(aRefStr);
     }
 }
 
@@ -1626,12 +1632,12 @@ void ScPivotLayoutDlg::SetActive()
 {
     if ( mbRefInputMode )
     {
-        if ( mpActiveEdit )
-            mpActiveEdit->GrabFocus();
+        if (mpRefInputEdit)
+            mpRefInputEdit->GrabFocus();
 
-        if ( mpActiveEdit == &maEdInPos )
+        if (mpRefInputEdit == &maEdInPos)
             EdInModifyHdl( NULL );
-        else if ( mpActiveEdit == &maEdOutPos )
+        else if (mpRefInputEdit == &maEdOutPos)
             EdOutModifyHdl( NULL );
     }
     else
@@ -1906,13 +1912,13 @@ IMPL_LINK_NOARG(ScPivotLayoutDlg, SelAreaHdl)
     return 0;
 }
 
-IMPL_LINK( ScPivotLayoutDlg, GetFocusHdl, Control*, pCtrl )
+IMPL_LINK( ScPivotLayoutDlg, GetFocusHdl, formula::RefEdit*, pEdit )
 {
-    mpActiveEdit = NULL;
-    if ( pCtrl == &maEdInPos )
-        mpActiveEdit = &maEdInPos;
-    else if ( pCtrl == &maEdOutPos )
-        mpActiveEdit = &maEdOutPos;
+    if (pEdit == &maEdInPos)
+        mpRefInputEdit = &maEdInPos;
+    else if (pEdit == &maEdOutPos)
+        mpRefInputEdit = &maEdOutPos;
+    else mpRefInputEdit = NULL;
 
     return 0;
 }
