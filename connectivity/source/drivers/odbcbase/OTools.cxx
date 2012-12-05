@@ -290,13 +290,13 @@ void OTools::bindValue( OConnection* _pConnection,
     OTools::ThrowException(_pConnection,nRetcode,_aStatementHandle,SQL_HANDLE_STMT,_xInterface);
 }
 // -----------------------------------------------------------------------------
-void OTools::ThrowException(OConnection* _pConnection,
-                            SQLRETURN _rRetCode,
-                            SQLHANDLE _pContext,
-                            SQLSMALLINT _nHandleType,
+void OTools::ThrowException(const OConnection* _pConnection,
+                            const SQLRETURN _rRetCode,
+                            const SQLHANDLE _pContext,
+                            const SQLSMALLINT _nHandleType,
                             const Reference< XInterface >& _xInterface,
-                            sal_Bool _bNoFound,
-                            rtl_TextEncoding _nTextEncoding) throw(SQLException)
+                            const sal_Bool _bNoFound,
+                            const rtl_TextEncoding _nTextEncoding) throw(SQLException)
 {
     switch(_rRetCode)
     {
@@ -350,10 +350,10 @@ void OTools::ThrowException(OConnection* _pConnection,
 
 }
 // -------------------------------------------------------------------------
-Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
-                                         SQLHANDLE _aStatementHandle,
-                                         sal_Int32 columnIndex,
-                                         SQLSMALLINT _fSqlType,
+Sequence<sal_Int8> OTools::getBytesValue(const OConnection* _pConnection,
+                                         const SQLHANDLE _aStatementHandle,
+                                         const sal_Int32 columnIndex,
+                                         const SQLSMALLINT _fSqlType,
                                          sal_Bool &_bWasNull,
                                          const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
 {
