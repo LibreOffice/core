@@ -208,9 +208,9 @@ void TemplateView::MouseButtonDown (const MouseEvent &rMEvt)
     ThumbnailView::MouseButtonDown(rMEvt);
 }
 
-void TemplateView::OnItemDblClicked(ThumbnailViewItem *pItem)
+void TemplateView::OnItemClicked(ThumbnailViewItem *pItem)
 {
-    maDblClickHdl.Call(pItem);
+    maClickHdl.Call(pItem);
 }
 
 IMPL_LINK_NOARG(TemplateView, ChangeNameHdl)

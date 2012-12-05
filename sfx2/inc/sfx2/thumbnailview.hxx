@@ -241,6 +241,7 @@ public:
                                                 const ThumbnailViewItem*) > &func);
 
     void setItemStateHdl (const Link &aLink) { maItemStateHdl = aLink; }
+    void setSelectionModeHdl (const Link &aLink) { maSelectionModeHdl = aLink; }
 
 protected:
 
@@ -276,7 +277,7 @@ protected:
 
     virtual void OnSelectionMode (bool bMode);
 
-    virtual void OnItemDblClicked (ThumbnailViewItem *pItem);
+    virtual void OnItemClicked (ThumbnailViewItem *pItem);
 
 protected:
 
@@ -330,6 +331,7 @@ protected:
     Color maColor;
 
     Link maItemStateHdl;
+    Link maSelectionModeHdl;
     ThumbnailItemAttributes *mpItemAttrs;
     drawinglayer::processor2d::BaseProcessor2D *mpProcessor;
     boost::function<bool (const ThumbnailViewItem*) > maFilterFunc;

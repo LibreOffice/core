@@ -106,7 +106,7 @@ public:
 
     void setOverlayItemStateHdl (const Link &aLink) { maOverlayItemStateHdl = aLink; }
 
-    void setOverlayDblClickHdl (const Link &rLink);
+    void setOverlayClickHdl (const Link &rLink);
 
     void setOverlayCloseHdl (const Link &rLink);
 
@@ -125,10 +125,12 @@ protected:
     virtual void OnSelectionMode (bool bMode);
 
     DECL_LINK(OverlayItemStateHdl, const ThumbnailViewItem*);
+    DECL_LINK(OverlaySelectionModeHdl, bool*);
 
 protected:
 
     TemplateView *mpItemView;
+    bool mbInSelectionModeHdl;
     Link maOverlayItemStateHdl;
 };
 
