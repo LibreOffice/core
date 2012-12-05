@@ -38,7 +38,6 @@
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
-#include <boost/static_assert.hpp>
 #include <list>
 #include <algorithm>
 #include <string.h>
@@ -1432,23 +1431,10 @@ sal_Bool OKeySet::fetchRow()
         bRet = m_xDriverSet->next();
     if ( bRet )
     {
-        const int cc = m_xSetMetaData->getColumnCount();
-
         ORowSetRow aKeyRow = new connectivity::ORowVector< ORowSetValue >((*m_pKeyColumnNames).size() + m_pForeignColumnNames->size());
-        ORowSetRow aFullRow = new connectivity::ORowVector< ORowSetValue >(cc);
-
-        // Fetch the columns only once and in order, to satisfy restrictive backends such as ODBC
-        connectivity::ORowVector< ORowSetValue >::Vector::iterator aFRIter = aFullRow->get().begin();
-        // Column 0 is reserved for the bookmark; unused here.
-        ++aFRIter;
-        BOOST_STATIC_ASSERT(sizeof(int) >= sizeof(sal_Int32)); // "At least a 32 bit word expected"
-        for (int i = 1; i <= cc; ++i, ++aFRIter )
-        {
-            aFRIter->fill(i, m_xSetMetaData->getColumnType(i), m_xDriverRow);
-        }
 
         ::comphelper::disposeComponent(m_xSet);
-        m_xRow.set(new OPrivateRow(aFullRow->get()));
+        m_xRow.set(m_xDriverRow, UNO_QUERY_THROW);
 
         connectivity::ORowVector< ORowSetValue >::Vector::iterator aIter = aKeyRow->get().begin();
         // copy key columns
