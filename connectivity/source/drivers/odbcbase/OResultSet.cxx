@@ -1499,7 +1499,7 @@ void OResultSet::fillRow(sal_Int32 _nToColumn)
     }
     m_bFetchData = sal_False;
 
-    sal_Int32           nColumn     = m_nLastColumnPos + 1;
+    sal_Int32          nColumn      = m_nLastColumnPos + 1;
     TDataRow::iterator pColumn      = m_aRow.begin() + nColumn;
     TDataRow::iterator pColumnEnd   = m_aRow.begin() + _nToColumn + 1;
 
