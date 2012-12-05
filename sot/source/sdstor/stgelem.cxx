@@ -405,7 +405,7 @@ sal_Bool StgEntry::Load( const void* pFrom, sal_uInt32 nBufSize )
     if (n > nMaxLegalStr)
         return sal_False;
 
-    if ((nSize < 0 && cType != STG_STORAGE) || (nPage1 < 0 && !isKnownSpecial(nPage1)))
+    if ((cType != STG_STORAGE) && ((nSize < 0) || (nPage1 < 0 && !isKnownSpecial(nPage1))))
     {
         // the size makes no sense for the substorage
         // TODO/LATER: actually the size should be an unsigned value, but in this case it would mean a stream of more than 2Gb
