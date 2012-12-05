@@ -214,19 +214,6 @@ void removeTree(OUString const & url) {
 // to old junk.  Later on in Desktop::SynchronizeExtensionRepositories, the
 // removed cache data is recreated.
 //
-// As a special case, if you create a UserInstallation with LO >= 3.6.1, then
-// run an old LO <= 3.5.x using share/prereg/bundled on the same
-// UserInstallation (so that it partially overwrites user/extensions/bundled,
-// potentially duplicating component information, but not touching
-// user/extensions/bundled/buildid), and then run the new LO >= 3.6.1 on the
-// same UserInstallation again, it can fail to start (due to the duplicated
-// component information).  Even though such downgrading scenarios at best work
-// by luck in general, the special token LIBO_NON_PREREG_BUNDLED_EXTENSIONS=TRUE
-// is used to detect and fix that problem:  The assumption is that if an old LO
-// <= 3.5.x messed with user/extensions/bundled in the meantime, then it would
-// have rewritten the unorc (dropping the token), and LO >= 3.6.1 can detect
-// that.
-//
 // Multiple instances of soffice.bin can execute this code in parallel for a
 // single UserInstallation, as it is called before OfficeIPCThread is set up.
 // Therefore, any errors here only lead to SAL_WARNs.
@@ -243,59 +230,47 @@ bool cleanExtensionCache() {
     rtl::Bootstrap::expandMacros(extDir); //TODO: detect failure
     OUString bundledDir = extDir + "/bundled";
     OUString buildIdFile(bundledDir + "/buildid");
-    OUString bundledRcFile(
-        "$BUNDLED_EXTENSIONS_USER/registry/"
-        "com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc");
-    rtl::Bootstrap::expandMacros(bundledRcFile); //TODO: detect failure
-    rtl::Bootstrap bundledRc(bundledRcFile);
-    OUString nonPrereg;
-    if (bundledRc.getHandle() == 0
-        || (bundledRc.getFrom("LIBO_NON_PREREG_BUNDLED_EXTENSIONS", nonPrereg)
-            && nonPrereg == "TRUE"))
-    {
-        osl::File f(buildIdFile);
-        osl::FileBase::RC rc = f.open(osl_File_OpenFlag_Read);
-        switch (rc) {
-        case osl::FileBase::E_None:
-            {
-                rtl::ByteSequence s1;
-                rc = f.readLine(s1);
-                osl::FileBase::RC rc2 = f.close();
-                SAL_WARN_IF(
-                    rc2 != osl::FileBase::E_None, "desktop",
-                    "cannot close " << buildIdFile << " after reading: "
-                        << +rc2);
-                if (rc != osl::FileBase::E_None) {
-                    SAL_WARN(
-                        "desktop",
-                        "cannot read from " << buildIdFile << ": " << +rc);
-                    break;
-                }
-                OUString s2(
-                    reinterpret_cast< char const * >(s1.getConstArray()),
-                    s1.getLength(), RTL_TEXTENCODING_ISO_8859_1);
-                    // using ISO 8859-1 avoids any and all conversion errors;
-                    // the content should only be a subset of ASCII, anyway
-                if (s2 == buildId) {
-                    return false;
-                }
+    osl::File fr(buildIdFile);
+    osl::FileBase::RC rc = fr.open(osl_File_OpenFlag_Read);
+    switch (rc) {
+    case osl::FileBase::E_None:
+        {
+            rtl::ByteSequence s1;
+            rc = fr.readLine(s1);
+            osl::FileBase::RC rc2 = fr.close();
+            SAL_WARN_IF(
+                rc2 != osl::FileBase::E_None, "desktop",
+                "cannot close " << buildIdFile << " after reading: " << +rc2);
+            if (rc != osl::FileBase::E_None) {
+                SAL_WARN(
+                    "desktop",
+                    "cannot read from " << buildIdFile << ": " << +rc);
                 break;
             }
-        case osl::FileBase::E_NOENT:
-            break;
-        default:
-            SAL_WARN(
-                "desktop",
-                "cannot open " << buildIdFile << " for reading: " << +rc);
+            OUString s2(
+                reinterpret_cast< char const * >(s1.getConstArray()),
+                s1.getLength(), RTL_TEXTENCODING_ISO_8859_1);
+                // using ISO 8859-1 avoids any and all conversion errors; the
+                // content should only be a subset of ASCII, anyway
+            if (s2 == buildId) {
+                return false;
+            }
             break;
         }
+    case osl::FileBase::E_NOENT:
+        break;
+    default:
+        SAL_WARN(
+            "desktop",
+            "cannot open " << buildIdFile << " for reading: " << +rc);
+        break;
     }
     removeTree(extDir);
     OUString userRcFile(
         "$UNO_USER_PACKAGES_CACHE/registry/"
         "com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc");
     rtl::Bootstrap::expandMacros(userRcFile); //TODO: detect failure
-    osl::FileBase::RC rc = osl::File::remove(userRcFile);
+    rc = osl::File::remove(userRcFile);
     SAL_WARN_IF(
         rc != osl::FileBase::E_None && rc != osl::FileBase::E_NOENT, "desktop",
         "cannot remove file " << userRcFile << ": " << +rc);
@@ -303,8 +278,8 @@ bool cleanExtensionCache() {
     SAL_WARN_IF(
         rc != osl::FileBase::E_None && rc != osl::FileBase::E_EXIST, "desktop",
         "cannot create path " << bundledDir << ": " << +rc);
-    osl::File f(buildIdFile);
-    rc = f.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Create);
+    osl::File fw(buildIdFile);
+    rc = fw.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Create);
     if (rc != osl::FileBase::E_None) {
         SAL_WARN(
             "desktop",
@@ -316,13 +291,13 @@ bool cleanExtensionCache() {
         // containing single surrogate halves should never happen, anyway); the
         // content should only be a subset of ASCII, anyway
     sal_uInt64 n = 0;
-    rc = f.write(buf.getStr(), buf.getLength(), n);
+    rc = fw.write(buf.getStr(), buf.getLength(), n);
     SAL_WARN_IF(
         (rc != osl::FileBase::E_None
          || n != static_cast< sal_uInt32 >(buf.getLength())),
         "desktop",
         "cannot write to " << buildIdFile << ": " << +rc << ", " << n);
-    rc = f.close();
+    rc = fw.close();
     SAL_WARN_IF(
         rc != osl::FileBase::E_None, "desktop",
         "cannot close " << buildIdFile << " after writing: " << +rc);
