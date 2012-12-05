@@ -386,7 +386,7 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
           false },
         { "vnd.sun.star.cmd", "vnd.sun.star.cmd:", 0, false, false, false,
           false, false, false, false, false },
-        { "", "", 0, false, false, false, false, true, true, true, false }, // Placeholder for removed 25: ODMA
+        { "", "", 0, false, false, false, false, true, true, true, false }, // Placeholder for removed 26: ODMA
         { "telnet", "telnet://", 23, true, true, false, true, true, true, true,
           false },
         { "vnd.sun.star.expand", "vnd.sun.star.expand:", 0, false, false, false,
