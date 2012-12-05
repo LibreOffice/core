@@ -204,17 +204,22 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
     {
         PushButton *pTarget = get<PushButton>(aI->m_sID);
         FixedImage *pImage = get<FixedImage>(aI->m_sValue);
-        aImagesToBeRemoved.insert(aI->m_sValue);
-        const OString &rImage = m_pParserState->m_aStockMap[aI->m_sValue];
-        SymbolType eType = mapStockToSymbol(rImage);
-        SAL_WARN_IF(!pTarget || !pImage || eType == SYMBOL_NOSYMBOL,
+        SAL_WARN_IF(!pTarget || !pImage,
             "vcl", "missing elements of button/image/stock");
-        if (!pTarget || eType == SYMBOL_NOSYMBOL)
+        if (!pTarget || !pImage)
             continue;
+        aImagesToBeRemoved.insert(aI->m_sValue);
 
-        //to-do, situation where image isn't a stock image
-        if (pTarget && eType != SYMBOL_NOSYMBOL)
+        VclBuilder::stringmap::iterator aFind = m_pParserState->m_aStockMap.find(aI->m_sValue);
+        if (aFind == m_pParserState->m_aStockMap.end())
+            pTarget->SetModeImage(pImage->GetImage());
+        else
         {
+            const OString &rImage = aFind->second;
+            SymbolType eType = mapStockToSymbol(rImage);
+            SAL_WARN_IF(eType == SYMBOL_NOSYMBOL, "vcl", "missing stock image element for button");
+            if (eType == SYMBOL_NOSYMBOL)
+                continue;
             pTarget->SetSymbol(eType);
             if (eType == SYMBOL_IMAGE)
                 pTarget->SetModeImage(Bitmap(VclResId(mapStockToImageResource(rImage))));
