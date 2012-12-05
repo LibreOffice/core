@@ -11,6 +11,7 @@
 #include "unusedvariablecheck.hxx"
 
 #include <clang/AST/ASTContext.h>
+#include <clang/AST/Attr.h>
 #include <clang/Basic/SourceManager.h>
 
 namespace loplugin
