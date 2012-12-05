@@ -642,8 +642,14 @@ void DrawingML::WriteShapeTransformation( Reference< XShape > rXShape, sal_Int32
     {
         SdrObject* pShape = (SdrObject*) GetSdrObjectFromXShape( rXShape );
         nRotation=pShape->GetRotateAngle();
-        aPos.X-=(1-cos(nRotation*F_PI18000))*aSize.Width/2-sin(nRotation*F_PI18000)*aSize.Height/2;
-        aPos.Y-=(1-cos(nRotation*F_PI18000))*aSize.Height/2+sin(nRotation*F_PI18000)*aSize.Width/2;
+        int faccos=bFlipV ? -1 : 1;
+        int facsin=bFlipH ? -1 : 1;
+        aPos.X-=(1-faccos*cos(nRotation*F_PI18000))*aSize.Width/2-facsin*sin(nRotation*F_PI18000)*aSize.Height/2;
+        aPos.Y-=(1-faccos*cos(nRotation*F_PI18000))*aSize.Height/2+facsin*sin(nRotation*F_PI18000)*aSize.Width/2;
+    }
+    if (!bSuppressRotation)
+    {
+        if (bFlipV) {nRotation=(nRotation+18000)%36000;}
     }
     WriteTransformation( Rectangle( Point( aPos.X, aPos.Y ), Size( aSize.Width, aSize.Height ) ), nXmlNamespace, bFlipH, bFlipV, PPTX_EXPORT_ROTATE_CLOCKWISIFY(nRotation) );
 }
