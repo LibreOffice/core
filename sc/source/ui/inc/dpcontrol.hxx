@@ -42,6 +42,7 @@ class Size;
 class StyleSettings;
 class Window;
 class ScDocument;
+class ScPatternAttr;
 
 /**
  * This class takes care of physically drawing field button controls inside
@@ -61,6 +62,7 @@ public:
     void setHasHiddenMember(bool b);
     void setPopupPressed(bool b);
     void setPopupLeft(bool b);
+    void setFieldPattern(const ScPatternAttr* pPattern){ mpPattern = pPattern; }
     void draw();
 
     void getPopupBoundingBox(Point& rPos, Size& rSize) const;
@@ -77,6 +79,7 @@ private:
     ScDocument*             mpDoc;
     OutputDevice*           mpOutDev;
     const StyleSettings*    mpStyle;
+    const ScPatternAttr*    mpPattern;
     bool                    mbBaseButton;
     bool                    mbPopupButton;
     bool                    mbHasHiddenMember;

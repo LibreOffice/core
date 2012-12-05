@@ -38,6 +38,8 @@
 #include "document.hxx"
 #include "docpool.hxx"
 #include "patattr.hxx"
+#include <editeng/brshitem.hxx>
+#include <editeng/colritem.hxx>
 
 using rtl::OUString;
 
@@ -45,6 +47,7 @@ ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pSt
     mpDoc(pDoc),
     mpOutDev(pOutDev),
     mpStyle(pStyle),
+    mpPattern(NULL),
     mbBaseButton(true),
     mbPopupButton(false),
     mbHasHiddenMember(false),
@@ -117,8 +120,15 @@ void ScDPFieldButton::draw()
     {
         // Background
         Rectangle aRect(maPos, maSize);
-        mpOutDev->SetLineColor(mpStyle->GetFaceColor());
-        mpOutDev->SetFillColor(mpStyle->GetFaceColor());
+        Color aBackCol = mpStyle->GetFaceColor();
+        if ( mpPattern )
+        {
+            const SvxBrushItem&  rBrushItem = (const SvxBrushItem&)mpPattern->GetItemSet().Get( ATTR_BACKGROUND );
+            if ( rBrushItem.GetColor() != COL_TRANSPARENT )
+                aBackCol = rBrushItem.GetColor();
+        }
+        mpOutDev->SetFillColor(aBackCol);
+        mpOutDev->SetLineColor(aBackCol);
         mpOutDev->DrawRect(aRect);
 
         // Border lines
@@ -135,16 +145,27 @@ void ScDPFieldButton::draw()
         // Field name.
         // Get the font and size the same way as in scenario selection (lcl_DrawOneFrame in gridwin4.cxx)
         Font aTextFont( mpStyle->GetAppFont() );
+        Color aButTextCol = mpStyle->GetButtonTextColor();
         if ( mpDoc )
         {
-            //  use ScPatternAttr::GetFont only for font size
             Font aAttrFont;
-            static_cast<const ScPatternAttr&>(mpDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).
+            if ( mpPattern )
+            {
+               mpPattern->GetFont( aAttrFont, SC_AUTOCOL_DISPLAY, mpOutDev, &maZoomY );
+               const SvxColorItem& rColorItem = (const SvxColorItem&)mpPattern->GetItemSet().Get( ATTR_FONT_COLOR );
+               if ( rColorItem.GetValue().GetColor() != COL_TRANSPARENT )
+                   aButTextCol =  rColorItem.GetValue();
+            }
+            else
+            {
+                //  use ScPatternAttr::GetFont only for font size
+                static_cast<const ScPatternAttr&>(mpDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).
                 GetFont( aAttrFont, SC_AUTOCOL_BLACK, mpOutDev, &maZoomY );
+            }
             aTextFont.SetSize( aAttrFont.GetSize() );
         }
         mpOutDev->SetFont(aTextFont);
-        mpOutDev->SetTextColor(mpStyle->GetButtonTextColor());
+        mpOutDev->SetTextColor( aButTextCol );
 
         Point aTextPos = maPos;
         long nTHeight = mpOutDev->GetTextHeight();
