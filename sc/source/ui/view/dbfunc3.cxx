@@ -1238,8 +1238,6 @@ void ScDBFunc::UngroupDataPilot()
 
     ScDPDimensionSaveData* pDimData = aData.GetDimensionData();
 
-    bool bApply = false;
-
     ScDPSaveGroupDimension* pGroupDim = pDimData->GetNamedGroupDimAcc( aDimName );
     const ScDPSaveNumGroupDimension* pNumGroupDim = pDimData->GetNumGroupDim( aDimName );
     if ( ( pGroupDim && pGroupDim->GetDatePart() != 0 ) ||
@@ -1249,10 +1247,10 @@ void ScDBFunc::UngroupDataPilot()
         // This is done using DateGroupDataPilot with nParts=0.
 
         DateGroupDataPilot( ScDPNumGroupInfo(), 0 );
-        // bApply remains FALSE
-        // dimension pointers become invalid
+        return;
     }
-    else if ( pGroupDim )
+
+    if ( pGroupDim )
     {
         ScDPUniqueStringSet::const_iterator it = aEntries.begin(), itEnd = aEntries.end();
         for (; it != itEnd; ++it)
@@ -1275,26 +1273,21 @@ void ScDBFunc::UngroupDataPilot()
             // also remove SaveData settings for the dimension that no longer exists
             aData.RemoveDimensionByName( aDimName );
         }
-        bApply = true;
     }
     else if ( pNumGroupDim )
     {
         // remove the numerical grouping
         pDimData->RemoveNumGroupDimension( aDimName );
         // SaveData settings can remain unchanged - the same dimension still exists
-        bApply = true;
     }
 
-    if ( bApply )
-    {
-        // apply changes
-        ScDBDocFunc aFunc( *GetViewData()->GetDocShell() );
-        pDPObj->SetSaveData( aData );
-        aFunc.RefreshPivotTableGroups(pDPObj);
+    // apply changes
+    ScDBDocFunc aFunc( *GetViewData()->GetDocShell() );
+    pDPObj->SetSaveData( aData );
+    aFunc.RefreshPivotTableGroups(pDPObj);
 
-        // unmark cell selection
-        Unmark();
-    }
+    // unmark cell selection
+    Unmark();
 }
 
 static OUString lcl_replaceMemberNameInSubtotal(const OUString& rSubtotal, const OUString& rMemberName)
