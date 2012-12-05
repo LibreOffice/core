@@ -121,6 +121,7 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
     , m_sHelpRoot(OUStringToOString(sUIFile, RTL_TEXTENCODING_UTF8))
     , m_sProductName(OUStringToOString(utl::ConfigManager::getProductName(), RTL_TEXTENCODING_UTF8))
     , m_pParent(pParent)
+    , m_bToplevelParentFound(false)
     , m_pParserState(new ParserState)
 {
     m_bToplevelHasDeferredInit = (pParent && pParent->IsDialog()) ? ((Dialog*)pParent)->isDeferredInit() : false;
@@ -239,7 +240,7 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
     //drop maps, etc. that we don't need again
     delete m_pParserState;
 
-    SAL_WARN_IF(!m_sID.isEmpty() && !get_by_name(m_sID), "vcl.layout",
+    SAL_WARN_IF(!m_sID.isEmpty() && (!m_bToplevelParentFound && !get_by_name(m_sID)), "vcl.layout",
         "Requested top level widget \"" << m_sID.getStr() <<
         "\" not found in " << sUIFile);
 }
@@ -249,8 +250,7 @@ VclBuilder::~VclBuilder()
     for (std::vector<WinAndId>::reverse_iterator aI = m_aChildren.rbegin(),
          aEnd = m_aChildren.rend(); aI != aEnd; ++aI)
     {
-        if (aI->m_bOwned)
-            delete aI->m_pWindow;
+        delete aI->m_pWindow;
     }
 }
 
@@ -905,6 +905,7 @@ Window *VclBuilder::insertObject(Window *pParent, const OString &rClass,
                 rID.getStr() << ", set helpid " <<
                 pCurrentChild->GetHelpId().getStr());
         }
+        m_bToplevelParentFound = true;
     }
     else
     {

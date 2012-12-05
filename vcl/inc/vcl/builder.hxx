@@ -47,12 +47,10 @@ private:
         OString m_sID;
         Window *m_pWindow;
         PackingData m_aPackingData;
-        bool m_bOwned;
         WinAndId(const OString &rId, Window *pWindow, bool bVertical)
             : m_sID(rId)
             , m_pWindow(pWindow)
             , m_aPackingData(bVertical)
-            , m_bOwned(true)
         {
         }
     };
@@ -127,6 +125,7 @@ private:
     OString m_sProductName;
     Window *m_pParent;
     bool m_bToplevelHasDeferredInit;
+    bool m_bToplevelParentFound;
     ParserState *m_pParserState;
 
     Window *get_by_name(OString sID);
