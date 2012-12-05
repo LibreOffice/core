@@ -177,17 +177,6 @@
                 <value/>
               </prop>
             </node>
-            <node oor:name="Provider42" oor:op="replace" install:module="win">
-              <prop oor:name="ServiceName">
-                <value>com.sun.star.ucb.ODMAContentProvider</value>
-              </prop>
-              <prop oor:name="URLTemplate">
-                <value>vnd.sun.star.odma</value>
-              </prop>
-              <prop oor:name="Arguments">
-                <value/>
-              </prop>
-            </node>
             <node oor:name="Provider43" oor:op="replace">
               <prop oor:name="ServiceName">
                 <value>com.sun.star.ucb.CmisContentProvider</value>

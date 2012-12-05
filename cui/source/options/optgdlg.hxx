@@ -45,7 +45,6 @@ private:
     FixedLine           aFileDlgFL;
     ReadOnlyImage       aFileDlgROImage;
     CheckBox            aFileDlgCB;
-    CheckBox            aODMADlgCB;
 
     FixedLine           aPrintDlgFL;
     CheckBox            aPrintDlgCB;

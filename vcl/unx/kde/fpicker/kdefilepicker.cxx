@@ -601,7 +601,7 @@ bool KDEFileDialog::isSupportedProtocol( const QString &rProtocol ) const
         "https", "slot", "macro", "javascript", "imap", "pop3", "data",
         "cid", "out", "vnd.sun.star.wfs", "vnd.sun.star.hier", "vim",
         ".uno", ".component", "vnd.sun.star.pkg", "ldap", "db",
-        "vnd.sun.star.cmd", "vnd.sun.star.script", "vnd.sun.star.odma",
+        "vnd.sun.star.cmd", "vnd.sun.star.script",
         "telnet",
         NULL };
 

@@ -42,14 +42,6 @@ $(eval $(call gb_Module_add_targets,ucb,\
 	Library_ucptdoc1 \
 ))
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_Module_add_targets,ucb,\
-	Library_ucpodma1 \
-	Package_odma_inc \
-	StaticLibrary_odma_lib \
-))
-endif
-
 ifneq ($(DISABLE_NEON),TRUE)
 $(eval $(call gb_Module_add_targets,ucb,\
 	Library_ucpdav1 \

@@ -498,7 +498,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
         lo-bootstrap \
     ) \
     $(if $(filter $(OS),WNT), \
-        ucpodma1 \
         uwinapi \
     ) \
 ))
@@ -595,9 +594,6 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     $(if $(filter $(GUIBASE),aqua), \
         fps_aqua \
     ) \
-    $(if $(filter $(OS),WNT), \
-        fps_odma \
-    ) \
 ))
 
 ifeq ($(OS),WNT)
@@ -682,9 +678,6 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     ) \
     $(if $(filter $(OS),IOS), \
         uno \
-    ) \
-    $(if $(filter $(OS),WNT), \
-        odma_lib \
     ) \
 ))
 

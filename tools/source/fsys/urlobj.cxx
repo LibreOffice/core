@@ -216,8 +216,6 @@ using namespace com::sun;
    uric_no_slash = unreserved / escaped / ";" / "?" / ":" / "@" / "&" / "=" / "+" / "$" / ","
 
 
-   ; private
-   vnd-sun-star-url = "VND.SUN.STAR.ODMA:" ["/" *uric_no_slash]
    uric_no_slash = unreserved / escaped / ";" / "?" / ":" / "@" / "&" / "=" / "+" / "$" / ","
 
 
@@ -388,8 +386,7 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
           false },
         { "vnd.sun.star.cmd", "vnd.sun.star.cmd:", 0, false, false, false,
           false, false, false, false, false },
-        { "vnd.sun.star.odma", "vnd.sun.star.odma:", 0, false, false, false,
-          false, false, false, true, false },
+        { "", "", 0, false, false, false, false, true, true, true, false }, // Placeholder for removed 25: ODMA
         { "telnet", "telnet://", 23, true, true, false, true, true, true, true,
           false },
         { "vnd.sun.star.expand", "vnd.sun.star.expand:", 0, false, false, false,
@@ -2189,8 +2186,6 @@ INetURLObject::PrefixInfo const * INetURLObject::getPrefix(sal_Unicode const *& 
               PrefixInfo::OFFICIAL },
             { "vnd.sun.star.hier:", 0, INET_PROT_VND_SUN_STAR_HIER,
               PrefixInfo::OFFICIAL },
-            { "vnd.sun.star.odma:", 0, INET_PROT_VND_SUN_STAR_ODMA,
-              PrefixInfo::OFFICIAL },
             { "vnd.sun.star.pkg:", 0, INET_PROT_VND_SUN_STAR_PKG,
               PrefixInfo::OFFICIAL },
             { "vnd.sun.star.tdoc:", 0, INET_PROT_VND_SUN_STAR_TDOC,
@@ -3337,26 +3332,6 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             }
             break;
         }
-
-        case INET_PROT_VND_SUN_STAR_ODMA:
-            if (pPos < pEnd)
-            {
-                if (*pPos == '/')
-                    ++pPos;
-                else
-                    return false;
-            }
-            aTheSynPath.append(sal_Unicode('/'));
-            while (pPos < pEnd && *pPos != nFragmentDelimiter)
-            {
-                EscapeType eEscapeType;
-                sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
-                                             '%', eMechanism,
-                                             eCharset, eEscapeType);
-                appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
-                           PART_URIC_NO_SLASH, '%', eCharset, true);
-            }
-            break;
 
         case INET_PROT_TELNET:
             if (pPos < pEnd)

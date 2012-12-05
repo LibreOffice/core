@@ -192,7 +192,6 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aFileDlgFL          ( this, CUI_RES( FL_FILEDLG ) ),
     aFileDlgROImage     ( this, CUI_RES( FI_FILEDLG_RO ) ),
     aFileDlgCB          ( this, CUI_RES( CB_FILEDLG ) ),
-    aODMADlgCB          ( this, CUI_RES( CB_ODMADLG ) ),
     aPrintDlgFL         ( this, CUI_RES( FL_PRINTDLG ) ),
     aPrintDlgCB         ( this, CUI_RES( CB_PRINTDLG ) ),
     aDocStatusFL        ( this, CUI_RES( FL_DOCSTATUS ) ),
@@ -215,33 +214,6 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aPrintDlgFL.Hide();
     aPrintDlgCB.Hide();
 #endif
-
-#ifdef WNT
-    aFileDlgCB.SetToggleHdl( LINK( this, OfaMiscTabPage, OnFileDlgToggled ) );
-#else
-    aODMADlgCB.Hide();
-#endif
-
-    if (!aODMADlgCB.IsVisible())
-    {
-        // rearrange the following controls
-        Point aNewPos = aPrintDlgFL.GetPosPixel();
-        long nDelta = aNewPos.Y() - aODMADlgCB.GetPosPixel().Y();
-
-        Window* pWins[] =
-        {
-            &aPrintDlgFL, &aPrintDlgCB, &aDocStatusFL, &aDocStatusCB, &aSaveAlwaysCB,
-            &aTwoFigureFL, &aInterpretFT, &aYearValueField, &aToYearFT
-        };
-        Window** pCurrent = pWins;
-        const sal_Int32 nCount = SAL_N_ELEMENTS( pWins );
-        for ( sal_Int32 i = 0; i < nCount; ++i, ++pCurrent )
-        {
-            aNewPos = (*pCurrent)->GetPosPixel();
-            aNewPos.Y() -= nDelta;
-            (*pCurrent)->SetPosPixel( aNewPos );
-        }
-    }
 
     if ( !aFileDlgCB.IsVisible() )
     {
@@ -316,14 +288,6 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aHelpAgentResetBtn.SetClickHdl( LINK( this, OfaMiscTabPage, HelpAgentResetHdl_Impl ) );
 }
 
-#ifdef WNT
-IMPL_LINK_NOARG(OfaMiscTabPage, OnFileDlgToggled)
-{
-    aODMADlgCB.Enable( !aFileDlgCB.IsChecked() );
-    return 0;
-}
-#endif
-
 // -----------------------------------------------------------------------
 
 OfaMiscTabPage::~OfaMiscTabPage()
@@ -365,13 +329,6 @@ sal_Bool OfaMiscTabPage::FillItemSet( SfxItemSet& rSet )
     {
         SvtMiscOptions aMiscOpt;
         aMiscOpt.SetUseSystemPrintDialog( !aPrintDlgCB.IsChecked() );
-        bModified = sal_True;
-    }
-
-    if ( aODMADlgCB.IsChecked() != aODMADlgCB.GetSavedValue() )
-    {
-        SvtMiscOptions aMiscOpt;
-        aMiscOpt.SetTryODMADialog( aODMADlgCB.IsChecked() );
         bModified = sal_True;
     }
 
@@ -422,9 +379,6 @@ void OfaMiscTabPage::Reset( const SfxItemSet& rSet )
     aPrintDlgCB.SaveValue();
     aSaveAlwaysCB.Check( aMiscOpt.IsSaveAlwaysAllowed() );
     aSaveAlwaysCB.SaveValue();
-
-    aODMADlgCB.Check( aMiscOpt.TryODMADialog() );
-    aODMADlgCB.SaveValue();
 
     SvtPrintWarningOptions aPrintOptions;
     aDocStatusCB.Check(aPrintOptions.IsModifyDocumentOnPrintingAllowed());
