@@ -1290,7 +1290,7 @@ End
 
 // Dictionary extensions
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Af
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Af;
 	Name = "dict-af.oxt";
@@ -1299,7 +1299,7 @@ File gid_File_Extension_Dictionary_Af
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_An
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_An;
 	Name = "dict-an.oxt";
@@ -1308,7 +1308,7 @@ File gid_File_Extension_Dictionary_An
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Ar
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Ar;
 	Name = "dict-ar.oxt";
@@ -1317,7 +1317,7 @@ File gid_File_Extension_Dictionary_Ar
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Be
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Be;
 	Name = "dict-be.oxt";
@@ -1326,7 +1326,7 @@ File gid_File_Extension_Dictionary_Be
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Bg
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Bg;
 	Name = "dict-bg.oxt";
@@ -1335,7 +1335,7 @@ File gid_File_Extension_Dictionary_Bg
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Bn
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Bn;
 	Name = "dict-bn.oxt";
@@ -1344,7 +1344,7 @@ File gid_File_Extension_Dictionary_Bn
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Br
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Br;
 	Name = "dict-br.oxt";
@@ -1353,7 +1353,7 @@ File gid_File_Extension_Dictionary_Br
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Ca
     Dir = gid_Brand_Dir_Share_Extensions_Dict_Ca;
     Name = "dict-ca.oxt";
@@ -1362,7 +1362,7 @@ File gid_File_Extension_Dictionary_Ca
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Cs
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Cs;
 	Name = "dict-cs.oxt";
@@ -1371,7 +1371,7 @@ File gid_File_Extension_Dictionary_Cs
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Da
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Da;
 	Name = "dict-da.oxt";
@@ -1380,7 +1380,7 @@ File gid_File_Extension_Dictionary_Da
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_De
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_De;
 	Name = "dict-de.oxt";
@@ -1389,7 +1389,7 @@ File gid_File_Extension_Dictionary_De
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_En
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_En;
 	Name = "dict-en.oxt";
@@ -1398,7 +1398,7 @@ File gid_File_Extension_Dictionary_En
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_El
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_El;
 	Name = "dict-el.oxt";
@@ -1407,7 +1407,7 @@ File gid_File_Extension_Dictionary_El
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Es
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Es;
 	Name = "dict-es.oxt";
@@ -1416,7 +1416,7 @@ File gid_File_Extension_Dictionary_Es
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Et
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Et;
 	Name = "dict-et.oxt";
@@ -1425,7 +1425,7 @@ File gid_File_Extension_Dictionary_Et
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Fr
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Fr;
 	Name = "dict-fr.oxt";
@@ -1434,7 +1434,7 @@ File gid_File_Extension_Dictionary_Fr
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Gd
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Gd;
 	Name = "dict-gd.oxt";
@@ -1443,7 +1443,7 @@ File gid_File_Extension_Dictionary_Gd
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Gl
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Gl;
 	Name = "dict-gl.oxt";
@@ -1452,7 +1452,7 @@ File gid_File_Extension_Dictionary_Gl
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Gu
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Gu;
 	Name = "dict-gu.oxt";
@@ -1461,7 +1461,7 @@ File gid_File_Extension_Dictionary_Gu
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_He
     Dir = gid_Brand_Dir_Share_Extensions_Dict_He;
     Name = "dict-he.oxt";
@@ -1470,7 +1470,7 @@ File gid_File_Extension_Dictionary_He
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Hi
     Dir = gid_Brand_Dir_Share_Extensions_Dict_Hi;
     Name = "dict-hi.oxt";
@@ -1479,7 +1479,7 @@ File gid_File_Extension_Dictionary_Hi
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Hu
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Hu;
 	Name = "dict-hu.oxt";
@@ -1488,7 +1488,7 @@ File gid_File_Extension_Dictionary_Hu
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Hr
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Hr;
 	Name = "dict-hr.oxt";
@@ -1497,7 +1497,7 @@ File gid_File_Extension_Dictionary_Hr
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_It
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_It;
 	Name = "dict-it.oxt";
@@ -1506,7 +1506,7 @@ File gid_File_Extension_Dictionary_It
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Ku_Tr
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Ku_Tr;
 	Name = "dict-ku-TR.oxt";
@@ -1515,7 +1515,7 @@ File gid_File_Extension_Dictionary_Ku_Tr
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Lt
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Lt;
 	Name = "dict-lt.oxt";
@@ -1524,7 +1524,7 @@ File gid_File_Extension_Dictionary_Lt
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Lv
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Lv;
 	Name = "dict-lv.oxt";
@@ -1533,7 +1533,7 @@ File gid_File_Extension_Dictionary_Lv
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Ne
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Ne;
 	Name = "dict-ne.oxt";
@@ -1542,7 +1542,7 @@ File gid_File_Extension_Dictionary_Ne
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Nl
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Nl;
 	Name = "dict-nl.oxt";
@@ -1551,7 +1551,7 @@ File gid_File_Extension_Dictionary_Nl
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_No
     Dir = gid_Brand_Dir_Share_Extensions_Dict_No;
     Name = "dict-no.oxt";
@@ -1560,7 +1560,7 @@ File gid_File_Extension_Dictionary_No
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Oc
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Oc;
 	Name = "dict-oc.oxt";
@@ -1569,7 +1569,7 @@ File gid_File_Extension_Dictionary_Oc
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Pl
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Pl;
 	Name = "dict-pl.oxt";
@@ -1578,7 +1578,7 @@ File gid_File_Extension_Dictionary_Pl
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Pt_Br
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Pt_Br;
 	Name = "dict-pt-BR.oxt";
@@ -1587,7 +1587,7 @@ File gid_File_Extension_Dictionary_Pt_Br
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Pt_Pt
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Pt_Pt;
 	Name = "dict-pt-PT.oxt";
@@ -1596,7 +1596,7 @@ File gid_File_Extension_Dictionary_Pt_Pt
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Ro
     Dir = gid_Brand_Dir_Share_Extensions_Dict_Ro;
     Name = "dict-ro.oxt";
@@ -1605,7 +1605,7 @@ File gid_File_Extension_Dictionary_Ro
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Ru
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Ru;
 	Name = "dict-ru.oxt";
@@ -1614,7 +1614,7 @@ File gid_File_Extension_Dictionary_Ru
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Si
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Si;
 	Name = "dict-si.oxt";
@@ -1623,7 +1623,7 @@ File gid_File_Extension_Dictionary_Si
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Sk
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Sk;
 	Name = "dict-sk.oxt";
@@ -1632,7 +1632,7 @@ File gid_File_Extension_Dictionary_Sk
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Sl
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Sl;
 	Name = "dict-sl.oxt";
@@ -1641,7 +1641,7 @@ File gid_File_Extension_Dictionary_Sl
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Sr
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Sr;
 	Name = "dict-sr.oxt";
@@ -1650,7 +1650,7 @@ File gid_File_Extension_Dictionary_Sr
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Sv
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Sv;
 	Name = "dict-sv.oxt";
@@ -1659,7 +1659,7 @@ File gid_File_Extension_Dictionary_Sv
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Sw
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Sw;
 	Name = "dict-sw.oxt";
@@ -1668,7 +1668,7 @@ File gid_File_Extension_Dictionary_Sw
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Te
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Te;
 	Name = "dict-te.oxt";
@@ -1677,7 +1677,7 @@ File gid_File_Extension_Dictionary_Te
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Th
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Th;
 	Name = "dict-th.oxt";
@@ -1686,7 +1686,7 @@ File gid_File_Extension_Dictionary_Th
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Uk
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Uk;
 	Name = "dict-uk.oxt";
@@ -1695,7 +1695,7 @@ File gid_File_Extension_Dictionary_Uk
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Vi
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Vi;
 	Name = "dict-vi.oxt";
@@ -1704,7 +1704,7 @@ File gid_File_Extension_Dictionary_Vi
 End
 #endif
 
-#ifndef WITHOUT_MYSPELL_DICTS
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Zu
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Zu;
 	Name = "dict-zu.oxt";

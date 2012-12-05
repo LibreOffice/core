@@ -33,6 +33,8 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	ENABLE_CAIRO_CANVAS \
 	ENABLE_DIRECTX \
 	ENABLE_EVOAB2 \
+	ENABLE_GSTREAMER \
+	ENABLE_GSTREAMER_0_10 \
 	ENABLE_GTK \
 	ENABLE_GTK3 \
 	ENABLE_KAB \
@@ -76,6 +78,8 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	SYSTEM_REDLAND \
 	SYSTEM_SNDFILE \
 	SYSTEM_STDLIBS \
+	WITH_MOZAB4WIN \
+	WITH_MYSPELL_DICTS \
 ))
 
 $(eval $(call gb_InstallModule_define_value_if_set,scp2/ooo,\
@@ -133,26 +137,11 @@ $(eval $(call gb_InstallModule_define_mingw_dll_if_set,scp2/ooo,\
 ))
 
 $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
-	$(if $(filter gcj,$(JDK)),\
-		-DGCJ \
-	) \
-	$(if $(filter TRUE,$(ENABLE_GSTREAMER)),\
-		-DGSTREAMER \
-	) \
-	$(if $(filter TRUE,$(ENABLE_GSTREAMER_0_10)),\
-		-DGSTREAMER_0_10 \
-	) \
 	$(if $(WINDOWS_SDK_HOME),\
 		-DHAVE_WINDOWS_SDK \
 	) \
 	$(if $(filter YES,$(SYSTEM_HSQLDB)),\
 		-DHSQLDB_JAR=\""$(call gb_Helper_make_path,$(HSQLDB_JAR))"\" \
-	) \
-	$(if $(filter YES,$(WITH_MOZAB4WIN)),\
-		-DWITH_MOZAB4WIN \
-	) \
-	$(if $(filter-out YES,$(WITH_MYSPELL_DICTS)),\
-		-DWITHOUT_MYSPELL_DICTS \
 	) \
 ))
 
