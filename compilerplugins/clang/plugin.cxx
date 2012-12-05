@@ -16,7 +16,6 @@
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Frontend/FrontendAction.h>
 #include <clang/Frontend/FrontendPluginRegistry.h>
-#include <clang/Rewrite/Rewriter.h>
 
 #include "bodynotinblock.hxx"
 #include "lclstaticfix.hxx"

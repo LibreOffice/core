@@ -10,6 +10,7 @@
 
 #include "bodynotinblock.hxx"
 
+#include <clang/AST/ASTContext.h>
 #include <clang/Basic/SourceManager.h>
 
 namespace loplugin
