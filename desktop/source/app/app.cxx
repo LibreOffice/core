@@ -206,9 +206,9 @@ void removeTree(OUString const & url) {
 // com.sun.star.comp.deployment.component.PackageRegistryBackend/*.rdb files
 // contained data nevertheless.
 //
-// When a LO upgrade is detected (i.e., no user/extensions/bundled/buildid or
-// one containing an old build ID), then user/extensions/bundled,
-// user/extensions/shared, and user/uno_packages/cache/registry/
+// When a LO upgrade is detected (i.e., no user/extensions/buildid or one
+// containing an old build ID), then user/extensions and
+// user/uno_packages/cache/registry/
 // com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc are
 // removed.  That should prevent any problems starting the service manager due
 // to old junk.  Later on in Desktop::SynchronizeExtensionRepositories, the
@@ -228,8 +228,7 @@ bool cleanExtensionCache() {
         "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("bootstrap")
         ":UserInstallation}/user/extensions");
     rtl::Bootstrap::expandMacros(extDir); //TODO: detect failure
-    OUString bundledDir = extDir + "/bundled";
-    OUString buildIdFile(bundledDir + "/buildid");
+    OUString buildIdFile(extDir + "/buildid");
     osl::File fr(buildIdFile);
     osl::FileBase::RC rc = fr.open(osl_File_OpenFlag_Read);
     switch (rc) {
@@ -274,10 +273,10 @@ bool cleanExtensionCache() {
     SAL_WARN_IF(
         rc != osl::FileBase::E_None && rc != osl::FileBase::E_NOENT, "desktop",
         "cannot remove file " << userRcFile << ": " << +rc);
-    rc = osl::Directory::createPath(bundledDir);
+    rc = osl::Directory::createPath(extDir);
     SAL_WARN_IF(
         rc != osl::FileBase::E_None && rc != osl::FileBase::E_EXIST, "desktop",
-        "cannot create path " << bundledDir << ": " << +rc);
+        "cannot create path " << extDir << ": " << +rc);
     osl::File fw(buildIdFile);
     rc = fw.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Create);
     if (rc != osl::FileBase::E_None) {
