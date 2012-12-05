@@ -41,10 +41,6 @@ size_t sqlTypeLen ( SQLSMALLINT _nType )
 {
     switch (_nType)
     {
-    case SQL_C_CHAR:
-        return sizeof(SQLCHAR *);
-    case SQL_C_WCHAR:
-        return sizeof(SQLWCHAR *);
     case SQL_C_SSHORT:
     case SQL_C_SHORT:
         return sizeof(SQLSMALLINT);
@@ -74,10 +70,6 @@ size_t sqlTypeLen ( SQLSMALLINT _nType )
     /* UnixODBC gives this the same value as SQL_C_UBIGINT
     case SQL_C_BOOKMARK:
         return sizeof(BOOKMARK); */
-    case SQL_C_BINARY:
-    // UnixODBC gives these the same value
-    //case SQL_C_VARBOOKMARK:
-        return sizeof(SQLCHAR*);
     case SQL_C_TYPE_DATE:
     case SQL_C_DATE:
         return sizeof(SQL_DATE_STRUCT);
@@ -105,6 +97,13 @@ size_t sqlTypeLen ( SQLSMALLINT _nType )
     case SQL_C_INTERVAL_HOUR_TO_SECOND:
     case SQL_C_INTERVAL_MINUTE_TO_SECOND:
         return sizeof(SQL_INTERVAL_STRUCT);
+    // ** Variable-sized datatypes -> cannot predict length
+    case SQL_C_CHAR:
+    case SQL_C_WCHAR:
+    case SQL_C_BINARY:
+    // UnixODBC gives this the same value as SQL_C_BINARY
+    //case SQL_C_VARBOOKMARK:
+    // Unknown datatype -> cannot predict length
     default:
         return static_cast<size_t>(-1);
     }
