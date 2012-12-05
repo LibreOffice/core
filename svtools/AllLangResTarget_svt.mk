@@ -52,7 +52,6 @@ $(eval $(call gb_SrsTarget_add_files,svt/res,\
     svtools/source/dialogs/addresstemplate.src \
     svtools/source/dialogs/filedlg2.src \
     svtools/source/dialogs/formats.src \
-    svtools/source/dialogs/prnsetup.src \
     svtools/source/dialogs/so3res.src \
     svtools/source/dialogs/wizardmachine.src \
     svtools/source/java/javaerror.src \

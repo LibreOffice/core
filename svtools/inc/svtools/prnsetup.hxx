@@ -40,23 +40,13 @@ class QueueInfo;
 class SVT_DLLPUBLIC PrinterSetupDialog : public ModalDialog
 {
 private:
-    FixedLine       maFlPrinter;
-    FixedText       maFtName;
-    ListBox         maLbName;
-    PushButton      maBtnProperties;
-    PushButton      maBtnOptions;
-    FixedText       maFtStatus;
-    FixedInfo       maFiStatus;
-    FixedText       maFtType;
-    FixedInfo       maFiType;
-    FixedText       maFtLocation;
-    FixedInfo       maFiLocation;
-    FixedText       maFtComment;
-    FixedInfo       maFiComment;
-    FixedLine       maFlSepButton;
-    OKButton        maBtnOK;
-    CancelButton    maBtnCancel;
-    HelpButton      maBtnHelp;
+    ListBox*        m_pLbName;
+    PushButton*     m_pBtnProperties;
+    PushButton*     m_pBtnOptions;
+    FixedText*      m_pFiStatus;
+    FixedText*      m_pFiType;
+    FixedText*      m_pFiLocation;
+    FixedText*      m_pFiComment;
     AutoTimer       maStatusTimer;
     Printer*        mpPrinter;
     Printer*        mpTempPrinter;

@@ -12,6 +12,7 @@ $(eval $(call gb_UI_UI,svt))
 $(eval $(call gb_UI_add_uifiles,svt,\
 	svtools/uiconfig/ui/graphicexport \
 	svtools/uiconfig/ui/placeedit \
+	svtools/uiconfig/ui/printersetupdialog \
 	svtools/uiconfig/ui/restartdialog \
 ))
 

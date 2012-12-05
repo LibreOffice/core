@@ -17,11 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/print.hxx>
-
-#include <svtools/svtresid.hxx>
-#include "prnsetup.hrc"
 #include <svtools/prnsetup.hxx>
+#include <svtools/svtools.hrc>
+#include <svtools/svtresid.hxx>
+#include <vcl/print.hxx>
 
 // =======================================================================
 
@@ -217,45 +216,36 @@ XubString ImplPrnDlgGetStatusText( const QueueInfo& rInfo )
 
 // =======================================================================
 
-PrinterSetupDialog::PrinterSetupDialog( Window* pWindow ) :
-    ModalDialog     ( pWindow, SvtResId( DLG_SVT_PRNDLG_PRNSETUPDLG ) ),
-    maFlPrinter     ( this, SvtResId( FL_PRINTER ) ),
-    maFtName        ( this, SvtResId( FT_NAME ) ),
-    maLbName        ( this, SvtResId( LB_NAMES ) ),
-    maBtnProperties ( this, SvtResId( BTN_PROPERTIES ) ),
-    maBtnOptions    ( this, SvtResId( BTN_OPTIONS ) ),
-    maFtStatus      ( this, SvtResId( FT_STATUS ) ),
-    maFiStatus      ( this, SvtResId( FI_STATUS ) ),
-    maFtType        ( this, SvtResId( FT_TYPE ) ),
-    maFiType        ( this, SvtResId( FI_TYPE ) ),
-    maFtLocation    ( this, SvtResId( FT_LOCATION ) ),
-    maFiLocation    ( this, SvtResId( FI_LOCATION ) ),
-    maFtComment     ( this, SvtResId( FT_COMMENT ) ),
-    maFiComment     ( this, SvtResId( FI_COMMENT ) ),
-    maFlSepButton   ( this, SvtResId( FL_SEPBUTTON ) ),
-    maBtnOK         ( this, SvtResId( BTN_OK ) ),
-    maBtnCancel     ( this, SvtResId( BTN_CANCEL ) ),
-    maBtnHelp       ( this, SvtResId( BTN_HELP ) )
+PrinterSetupDialog::PrinterSetupDialog(Window* pParent)
+    : ModalDialog(pParent, "PrinterSetupDialog",
+        "svt/ui/printersetupdialog.ui")
 {
-    FreeResource();
+    get(m_pLbName, "name");
+    m_pLbName->SetStyle(m_pLbName->GetStyle() | WB_SORT);
+    get(m_pBtnProperties, "properties");
+    get(m_pBtnOptions, "options");
+    get(m_pFiStatus, "status");
+    get(m_pFiType, "type");
+    get(m_pFiLocation, "location");
+    get(m_pFiComment, "comment");
 
     // show options button only if link is set
-    maBtnOptions.Hide();
+    m_pBtnOptions->Hide();
 
     mpPrinter       = NULL;
     mpTempPrinter   = NULL;
 
     maStatusTimer.SetTimeout( IMPL_PRINTDLG_STATUS_UPDATE );
     maStatusTimer.SetTimeoutHdl( LINK( this, PrinterSetupDialog, ImplStatusHdl ) );
-    maBtnProperties.SetClickHdl( LINK( this, PrinterSetupDialog, ImplPropertiesHdl ) );
-    maLbName.SetSelectHdl( LINK( this, PrinterSetupDialog, ImplChangePrinterHdl ) );
+    m_pBtnProperties->SetClickHdl( LINK( this, PrinterSetupDialog, ImplPropertiesHdl ) );
+    m_pLbName->SetSelectHdl( LINK( this, PrinterSetupDialog, ImplChangePrinterHdl ) );
 }
 
 // -----------------------------------------------------------------------
 
 PrinterSetupDialog::~PrinterSetupDialog()
 {
-    ImplFreePrnDlgListBox( &maLbName, sal_False );
+    ImplFreePrnDlgListBox(m_pLbName, sal_False);
     delete mpTempPrinter;
 }
 
@@ -263,27 +253,27 @@ PrinterSetupDialog::~PrinterSetupDialog()
 
 void PrinterSetupDialog::SetOptionsHdl( const Link& rLink )
 {
-    maBtnOptions.SetClickHdl( rLink );
-    maBtnOptions.Show( rLink.IsSet() );
+    m_pBtnOptions->SetClickHdl( rLink );
+    m_pBtnOptions->Show( rLink.IsSet() );
 }
 
 void PrinterSetupDialog::ImplSetInfo()
 {
-    const QueueInfo* pInfo = Printer::GetQueueInfo(maLbName.GetSelectEntry(), true);
+    const QueueInfo* pInfo = Printer::GetQueueInfo(m_pLbName->GetSelectEntry(), true);
     if ( pInfo )
     {
-        maFiType.SetText( pInfo->GetDriver() );
-        maFiLocation.SetText( pInfo->GetLocation() );
-        maFiComment.SetText( pInfo->GetComment() );
-        maFiStatus.SetText( ImplPrnDlgGetStatusText( *pInfo ) );
+        m_pFiType->SetText( pInfo->GetDriver() );
+        m_pFiLocation->SetText( pInfo->GetLocation() );
+        m_pFiComment->SetText( pInfo->GetComment() );
+        m_pFiStatus->SetText( ImplPrnDlgGetStatusText( *pInfo ) );
     }
     else
     {
         XubString aTempStr;
-        maFiType.SetText( aTempStr );
-        maFiLocation.SetText( aTempStr );
-        maFiComment.SetText( aTempStr );
-        maFiStatus.SetText( aTempStr );
+        m_pFiType->SetText( aTempStr );
+        m_pFiLocation->SetText( aTempStr );
+        m_pFiComment->SetText( aTempStr );
+        m_pFiStatus->SetText( aTempStr );
     }
 }
 
@@ -292,8 +282,8 @@ void PrinterSetupDialog::ImplSetInfo()
 IMPL_LINK_NOARG(PrinterSetupDialog, ImplStatusHdl)
 {
     QueueInfo aInfo;
-    ImplPrnDlgUpdateQueueInfo( &maLbName, aInfo );
-    maFiStatus.SetText( ImplPrnDlgGetStatusText( aInfo ) );
+    ImplPrnDlgUpdateQueueInfo(m_pLbName, aInfo);
+    m_pFiStatus->SetText( ImplPrnDlgGetStatusText( aInfo ) );
 
     return 0;
 }
@@ -313,7 +303,7 @@ IMPL_LINK_NOARG(PrinterSetupDialog, ImplPropertiesHdl)
 
 IMPL_LINK_NOARG(PrinterSetupDialog, ImplChangePrinterHdl)
 {
-    mpTempPrinter = ImplPrnDlgListBoxSelect( &maLbName, &maBtnProperties,
+    mpTempPrinter = ImplPrnDlgListBoxSelect(m_pLbName, m_pBtnProperties,
                                              mpPrinter, mpTempPrinter );
     ImplSetInfo();
     return 0;
@@ -341,7 +331,7 @@ void PrinterSetupDialog::DataChanged( const DataChangedEvent& rDCEvt )
             pPrn = mpTempPrinter;
         else
             pPrn = mpPrinter;
-        ImplFillPrnDlgListBox( pPrn, &maLbName, &maBtnProperties );
+        ImplFillPrnDlgListBox(pPrn, m_pLbName, m_pBtnProperties);
         ImplSetInfo();
     }
 
@@ -360,7 +350,7 @@ short PrinterSetupDialog::Execute()
 
     Printer::updatePrinters();
 
-    ImplFillPrnDlgListBox( mpPrinter, &maLbName, &maBtnProperties );
+    ImplFillPrnDlgListBox(mpPrinter, m_pLbName, m_pBtnProperties);
     ImplSetInfo();
     maStatusTimer.Start();
 
