@@ -57,6 +57,8 @@ var oo_sdk_ure_home=office_home + "\\URE";
 
 var oo_sdk_make_home=getMakeHome();
 var oo_sdk_zip_home=getZipHome();
+var oo_sdk_cat_home=getCatHome();
+var oo_sdk_sed_home=getSedHome();
 var oo_sdk_manifest_used="";
 var oo_sdk_windowssdk="";
 var oo_sdk_cpp_home=getCppHome();
@@ -311,6 +313,110 @@ function getZipHome()
             stdout.WriteLine("\n Error: Could not find \"" + sZipPath +
                              "\". zip is required, please specify a zip tools " +
 							 "directory.");
+            continue;
+        }
+        return sHome;
+    }
+}
+
+function getCatHome()
+{
+    var sSuggestedHome = WshSysEnv("OO_SDK_CAT_HOME");
+
+    while(true)
+    {
+        stdout.Write("\n Enter a cat (2.0 or higher) tools directory [" +
+                     sSuggestedHome + "]:");
+        var sHome = stdin.ReadLine();
+        if (sHome.length == 0)
+        {
+            //No user input, use default.
+            if ( ! aFileSystemObject.FolderExists(sSuggestedHome))
+            {
+                stdout.WriteLine("\n Error: Could not find directory \"" +
+                                 sSuggestedHome + "\". cat is required, please " +
+                                 "specify a cat tools directory." +
+                                 "\nYou can get cat from " +
+                                 "http://sourceforge.net/projects/unxutils/files/latest/download");
+                sSuggestedHome = "";
+                continue;
+            }
+            sHome = sSuggestedHome;
+        }
+        else
+        {
+            //validate the user input
+            if ( ! aFileSystemObject.FolderExists(sHome))
+            {
+                stdout.WriteLine("\n Error: The directory \"" + sHome +
+                                 "\" does not exist. cat is required, please " +
+                                 "specify a cat tools directory." +
+                                 "\nYou can get cat from " +
+                                 "http://sourceforge.net/projects/unxutils/files/latest/download");
+                continue;
+            }
+        }
+        //Check for the make executable
+        var sCatPath = sHome + "\\cat.exe";
+        if (! aFileSystemObject.FileExists(sCatPath))
+        {
+            stdout.WriteLine("\n Error: Could not find \"" + sCatPath +
+                             "\". cat is required, please specify a cat tools " +
+                             "directory." +
+                             "\nYou can get cat from " +
+                             "http://sourceforge.net/projects/unxutils/files/latest/download");
+            continue;
+        }
+        return sHome;
+    }
+}
+
+function getSedHome()
+{
+    var sSuggestedHome = WshSysEnv("OO_SDK_SED_HOME");
+
+    while(true)
+    {
+        stdout.Write("\n Enter a sed (3.02 or higher) tools directory [" +
+                     sSuggestedHome + "]:");
+        var sHome = stdin.ReadLine();
+        if (sHome.length == 0)
+        {
+            //No user input, use default.
+            if ( ! aFileSystemObject.FolderExists(sSuggestedHome))
+            {
+                stdout.WriteLine("\n Error: Could not find directory \"" +
+                                 sSuggestedHome + "\". sed is required, please " +
+                                 "specify a sed tools directory." +
+                                 "\nYou can get sed from " +
+                                 "http://sourceforge.net/projects/unxutils/files/latest/download");
+                sSuggestedHome = "";
+                continue;
+            }
+            sHome = sSuggestedHome;
+        }
+        else
+        {
+            //validate the user input
+            if ( ! aFileSystemObject.FolderExists(sHome))
+            {
+                stdout.WriteLine("\n Error: The directory \"" + sHome +
+                                 "\" does not exist. sed is required, please " +
+                                 "specify a sed tools directory." +
+                                 "\nYou can get sed from " +
+                                 "http://sourceforge.net/projects/unxutils/files/latest/download");
+                continue;
+            }
+        }
+        //Check for the make executable
+        var sSedPath = sHome + "\\sed.exe";
+        if (! aFileSystemObject.FileExists(sSedPath))
+        {
+            stdout.WriteLine("\n Error: Could not find \"" + sSedPath +
+                             "\". sed is required, please specify a sed tools " +
+                             "directory." +
+                             "\nYou can get sed from " +
+                             "http://sourceforge.net/projects/unxutils/files/latest/download");
             continue;
         }
         return sHome;
@@ -760,6 +866,14 @@ function writeBatFile(fdir, file)
 		"REM Example: set OO_SDK_ZIP_HOME=D:\\infozip\\bin\n" +
 		"set OO_SDK_ZIP_HOME=" + oo_sdk_zip_home +
         "\n\n" +
+        "REM Directory of the cat tool.\n" +
+        "REM Example: set OO_SDK_CAT_HOME=C:\\UnxUtils\\usr\\local\\wbin\n" +
+        "set OO_SDK_CAT_HOME=" + oo_sdk_cat_home +
+        "\n\n" +
+        "REM Directory of the sed tool.\n" +
+        "REM Example: set OO_SDK_SED_HOME=C:\\UnxUtils\\usr\\local\\wbin\n" +
+        "set OO_SDK_SED_HOME=" + oo_sdk_sed_home +
+        "\n\n" +
         "REM Directory of the C++ compiler.\n" +
         "REM Example:set OO_SDK_CPP_HOME=C:\\Program Files\\Microsoft Visual Studio 9.0\\VC\\bin\n" +
         "set OO_SDK_CPP_HOME=" + oo_sdk_cpp_home +
@@ -806,6 +920,18 @@ function writeBatFile(fdir, file)
         "REM Check installation path for the zip tool.\n" +
         "if not defined OO_SDK_ZIP_HOME (\n" +
         "   echo Error: the variable OO_SDK_ZIP_HOME is missing!\n" +
+        "   goto :error\n" +
+        " )\n" +
+        "\n" +
+        "REM Check installation path for the cat tool.\n" +
+        "if not defined OO_SDK_CAT_HOME (\n" +
+        "   echo Error: the variable OO_SDK_CAT_HOME is missing!\n" +
+        "   goto :error\n" +
+        " )\n" +
+        "\n" +
+        "REM Check installation path for the sed tool.\n" +
+        "if not defined OO_SDK_SED_HOME (\n" +
+        "   echo Error: the variable OO_SDK_SED_HOME is missing!\n" +
         "   goto :error\n" +
         " )\n" +
         "\n" +
@@ -856,8 +982,14 @@ function writeBatFile(fdir, file)
         "REM Add directory of the command make to the path, if necessary.\n" +
         "if defined OO_SDK_MAKE_HOME set PATH=%OO_SDK_MAKE_HOME%;%PATH%\n" +
         "\n" +
-	"REM Add directory of the zip tool to the path, if necessary.\n" +
-	"if defined OO_SDK_ZIP_HOME set PATH=%OO_SDK_ZIP_HOME%;%PATH%\n" +
+        "REM Add directory of the zip tool to the path, if necessary.\n" +
+        "if defined OO_SDK_ZIP_HOME set PATH=%OO_SDK_ZIP_HOME%;%PATH%\n" +
+        "\n" +
+        "REM Add directory of the cat tool to the path, if necessary.\n" +
+        "if defined OO_SDK_CAT_HOME set PATH=%OO_SDK_CAT_HOME%;%PATH%\n" +
+        "\n" +
+        "REM Add directory of the sed tool to the path, if necessary.\n" +
+        "if defined OO_SDK_SED_HOME set PATH=%OO_SDK_SED_HOME%;%PATH%\n" +
         "\n" +
         "REM Add directory of the C++ compiler to the path, if necessary.\n" +
         "if defined OO_SDK_CPP_HOME set PATH=%OO_SDK_CPP_HOME%;%PATH%\n" +
@@ -889,6 +1021,8 @@ function writeBatFile(fdir, file)
         "echo  * URE = %OO_SDK_URE_HOME%\n" +
         "echo  * Make = %OO_SDK_MAKE_HOME%\n" +
         "echo  * Zip = %OO_SDK_ZIP_HOME%\n" +
+        "echo  * cat = %OO_SDK_CAT_HOME%\n" +
+        "echo  * sed = %OO_SDK_SED_HOME%\n" +
         "echo  * C++ Compiler = %OO_SDK_CPP_HOME%\n" +
         "echo  * C# and VB.NET compilers = %OO_SDK_CLI_HOME%\n" +
         "echo  * Java = %OO_SDK_JAVA_HOME%\n" +

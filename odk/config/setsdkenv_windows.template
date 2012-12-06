@@ -44,6 +44,14 @@ REM Directory of the zip tool.
 REM Example: set OO_SDK_ZIP_HOME=D:\infozip\bin
 set OO_SDK_ZIP_HOME=
 
+REM Directory of the cat tool.
+REM Example: set OO_SDK_CAT_HOME=C:\UnxUtils\usr\local\wbin\
+set OO_SDK_CAT_HOME=
+
+REM Directory of the sed tool.
+REM Example: set OO_SDK_SED_HOME=C:\UnxUtils\usr\local\wbin\
+set OO_SDK_SED_HOME=
+
 REM Directory of the C++ compiler.
 REM Example:set OO_SDK_CPP_HOME=C:\Program Files\Microsoft Visual Studio 9.0\VC\bin
 REM Example:set CPP_WINDOWS_SDK=C:\Program Files\\Microsoft SDKs\Windows\v6.0A\
@@ -91,6 +99,18 @@ if not defined OO_SDK_MAKE_HOME (
 REM Check installation path for the zip tool.
 if not defined OO_SDK_ZIP_HOME (
    echo Error: the variable OO_SDK_ZIP_HOME is missing!
+   goto :error
+ )
+
+REM Check installation path for the cat tool.
+if not defined OO_SDK_CAT_HOME (
+   echo Error: the variable OO_SDK_CAT_HOME is missing!
+   goto :error
+ )
+
+REM Check installation path for the sed tool.
+if not defined OO_SDK_SED_HOME (
+   echo Error: the variable OO_SDK_SED_HOME is missing!
    goto :error
  )
 
@@ -144,6 +164,12 @@ if defined OO_SDK_MAKE_HOME set PATH=%OO_SDK_MAKE_HOME%;%PATH%
 REM Add directory of the zip tool to the path, if necessary.
 if defined OO_SDK_ZIP_HOME set PATH=%OO_SDK_ZIP_HOME%;%PATH%
 
+REM Add directory of the cat tool to the path, if necessary.
+if defined OO_SDK_CAT_HOME set PATH=%OO_SDK_CAT_HOME%;%PATH%
+
+REM Add directory of the sed tool to the path, if necessary.
+if defined OO_SDK_SED_HOME set PATH=%OO_SDK_SED_HOME%;%PATH%
+
 REM Add directory of the C++ compiler to the path, if necessary.
 if defined OO_SDK_CPP_HOME set PATH=%OO_SDK_CPP_HOME%;%PATH%
 
@@ -170,6 +196,8 @@ echo  * Office = %OFFICE_HOME%
 echo  * URE = %OO_SDK_URE_HOME%
 echo  * Make = %OO_SDK_MAKE_HOME%
 echo  * Zip = %OO_SDK_ZIP_HOME%
+echo  * cat = %OO_SDK_CAT_HOME%
+echo  * sed = %OO_SDK_SED_HOME%
 echo  * C++ Compiler = %OO_SDK_CPP_HOME%
 echo  * C# and VB.NET compilers = %OO_SDK_CLI_HOME%
 echo  * Java = %OO_SDK_JAVA_HOME%

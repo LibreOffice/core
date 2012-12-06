@@ -46,6 +46,14 @@ OO_SDK_MAKE_HOME=@OO_SDK_MAKE_HOME@
 # Example: OO_SDK_ZIP_HOME=/usr/bin
 OO_SDK_ZIP_HOME=@OO_SDK_ZIP_HOME@
 
+# Directory of the cat command.
+# Example: OO_SDK_CAT_HOME=/usr/bin
+OO_SDK_CAT_HOME=@OO_SDK_CAT_HOME@
+
+# Directory of the sed command.
+# Example: OO_SDK_SED_HOME=/usr/bin
+OO_SDK_SED_HOME=@OO_SDK_SED_HOME@
+
 # Directory of the C++ compiler.
 # Example: OO_SDK_CPP_HOME=/usr/bin
 OO_SDK_CPP_HOME=@OO_SDK_CPP_HOME@
@@ -234,6 +242,20 @@ then
     export OO_SDK_ZIP_HOME
 fi
 
+# Add directory of the sed tool to the path, if necessary.
+if [ -n "${OO_SDK_SED_HOME}" ]
+then
+    PATH=${OO_SDK_SED_HOME}:${PATH}
+    export OO_SDK_SED_HOME
+fi
+
+# Add directory of the cat tool to the path, if necessary.
+if [ -n "${OO_SDK_CAT_HOME}" ]
+then
+    PATH=${OO_SDK_CAT_HOME}:${PATH}
+    export OO_SDK_CAT_HOME
+fi
+
 # Add directory of the C++ tools to the path, if necessary.
 if [ -n "${OO_SDK_CPP_HOME}" ]
 then
@@ -301,6 +323,8 @@ echo " * Office = $OFFICE_HOME"
 echo " * URE = $OO_SDK_URE_HOME"
 echo " * Make = $OO_SDK_MAKE_HOME"
 echo " * Zip = $OO_SDK_ZIP_HOME"
+echo " * cat = $OO_SDK_CAT_HOME"
+echo " * sed = $OO_SDK_SED_HOME"
 echo " * C++ Compiler = $OO_SDK_CPP_HOME"
 echo " * Java = $OO_SDK_JAVA_HOME"
 echo " * SDK Output directory = $OO_SDK_OUT"

@@ -131,6 +131,16 @@
 		  If you do not have these already, you can download them from <a target="_blank" href="http://www.info-zip.org" title="link to www.ubfi-zip.org (online)">http://www.info-zip.org</a>. Note: The cygwin zip.exe does not work for the build under
 		  the 4NT shell. You have to use the native w32 version.</td>
           </tr>
+          <tr valign="middle">
+            <td colspan="2"><img class="line" src="images/sdk_line-1.gif"></td>
+          </tr>
+          <tr valign="top">
+          <td><b>cat and sed tools<b></td>
+          <td class="content80">The cat and set tools are used to create some extensions.
+          <p><b>Note for Windows users</b>: If you do not have these already, you can download them from
+          <a target="_blank" href="http://sourceforge.net/projects/unxutils/files/latest/downloadg" title="link to UnxUtils (online)">http://sourceforge.net/projects/unxutils/files/latest/download</a>.</p>
+          </td>
+          </tr>
 		  <tr valign="middle">
             <td colspan="2"><img class="line" src="images/sdk_line-1.gif"/></td>
           </tr>
@@ -138,8 +148,8 @@
           <td colspan="2">
 		  <p>The SDK provides an implicit configuration mechanism, which
 		  configures the SDK build environment to your personal needs the first
-		  time you use the SDK environment. This configuration step creates one
-		  new setsdkenv_XXX script in the user's home directory:</p>
+          time you use the SDK environment. This configuration step creates a
+          new setsdkenv_XXX script in the user's home directory:</p>
 		  <ul>
 		    <li><b>$HOME/$OO_SDK_NAME/setsdkenv_unix.sh</b>&nbsp;&nbsp;-&gt; for Unix</li>
             <li><b>C:\Documents and Settings\&lt;username&gt;\Application Data\%OO_SDK_NAME%\setsdkenv_windows.bat</b>&nbsp;&nbsp;-&gt; for Windows2000/XP or later</li>
@@ -222,6 +232,14 @@
 		  <td class="cell20"><b>OO_SDK_ZIP_HOME</b></td>
 		  <td class="cell80">Path to the 'zip' tool.</td>
 		  </tr>
+          <tr>
+          <td class="cell20"><b>OO_SDK_CAT_HOME</b></td>
+          <td class="cell80">Path to the 'cat' tool.</td>
+          </tr>
+          <tr>
+          <td class="cell20"><b>OO_SDK_SED_HOME</b></td>
+          <td class="cell80">Path to the 'sed' tool.</td>
+          </tr>
 		  <tr>
 		  <td class="cell20"><b>OO_SDK_OUTPUT_DIR</b></td>
 		  <td class="cell80">Path to an existing directory where the example output
