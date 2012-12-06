@@ -109,7 +109,6 @@ ScSortKeyCtrl::ScSortKeyCtrl(SfxTabPage* pParent, ScSortKeyItems& rItems)
     : m_aSortWin(pParent, rItems)
     , m_rScrolledWindow(*pParent->get<VclScrolledWindow>("SortCriteriaPage"))
     , m_rVertScroll(m_rScrolledWindow.getVertScrollBar())
-    , nThumbPos(0)
 {
     m_rVertScroll.EnableDrag();
     m_rVertScroll.Show();

@@ -37,12 +37,11 @@
 #define ITEMID_CONDITION 2
 
 
-ScCondFormatManagerWindow::ScCondFormatManagerWindow(Window* pParent, ScDocument* pDoc, ScConditionalFormatList* pFormatList, const ScAddress& rPos):
+ScCondFormatManagerWindow::ScCondFormatManagerWindow(Window* pParent, ScDocument* pDoc, ScConditionalFormatList* pFormatList):
     SvTabListBox(pParent, WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP),
     maHeaderBar( pParent, WB_BUTTONSTYLE | WB_BOTTOMBORDER ),
     mpDoc(pDoc),
-    mpFormatList(pFormatList),
-    mrPos(rPos)
+    mpFormatList(pFormatList)
 {
     Size aBoxSize( pParent->GetOutputSizePixel() );
 
@@ -142,9 +141,9 @@ IMPL_LINK_NOARG(ScCondFormatManagerWindow, HeaderEndDragHdl)
     return 0;
 }
 
-ScCondFormatManagerCtrl::ScCondFormatManagerCtrl(Window* pParent, ScDocument* pDoc, ScConditionalFormatList* pFormatList, const ScAddress& rPos):
+ScCondFormatManagerCtrl::ScCondFormatManagerCtrl(Window* pParent, ScDocument* pDoc, ScConditionalFormatList* pFormatList):
     Control(pParent, ScResId(CTRL_TABLE)),
-    maWdManager(this, pDoc, pFormatList, rPos)
+    maWdManager(this, pDoc, pFormatList)
 {
 }
 
@@ -172,7 +171,7 @@ ScCondFormatManagerDlg::ScCondFormatManagerDlg(Window* pParent, ScDocument* pDoc
     maBtnCancel(this, ScResId(BTN_CANCEL)),
     maFlLine(this, ScResId(FL_LINE)),
     mpFormatList( pFormatList ? new ScConditionalFormatList(*pFormatList) : NULL),
-    maCtrlManager(this, pDoc, mpFormatList, rPos),
+    maCtrlManager(this, pDoc, mpFormatList),
     mpDoc(pDoc),
     maPos(rPos),
     mbModified(false)

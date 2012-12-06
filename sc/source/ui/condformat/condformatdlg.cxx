@@ -368,9 +368,7 @@ ScCondFormatDlg::ScCondFormatDlg(Window* pParent, ScDocument* pDoc, const ScCond
     maCondFormList( this, ScResId( CTRL_LIST ), pDoc, pFormat, rRange, rPos, eType ),
     maPos(rPos),
     mpDoc(pDoc),
-    mpFormat(pFormat),
-    mpLastEdit(NULL),
-    meType(eType)
+    mpLastEdit(NULL)
 {
     rtl::OUStringBuffer aTitle( GetText() );
     aTitle.append(rtl::OUString(" "));

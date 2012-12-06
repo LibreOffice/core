@@ -50,13 +50,12 @@ private:
     HeaderBar maHeaderBar;
     ScDocument* mpDoc;
     ScConditionalFormatList* mpFormatList;
-    const ScAddress& mrPos;
     std::map<SvTreeListEntry*, sal_Int32> maMapLBoxEntryToCondIndex;
 
     DECL_LINK( HeaderEndDragHdl, void* );
 
 public:
-    ScCondFormatManagerWindow( Window* pParent, ScDocument* pDoc, ScConditionalFormatList* pFormatList, const ScAddress& rPos );
+    ScCondFormatManagerWindow( Window* pParent, ScDocument* pDoc, ScConditionalFormatList* pFormatList );
 
     void DeleteSelection();
     ScConditionalFormat* GetSelection();
@@ -66,7 +65,7 @@ public:
 class ScCondFormatManagerCtrl : Control
 {
 public:
-    ScCondFormatManagerCtrl(Window* pParent, ScDocument* pDoc, ScConditionalFormatList* pFormatList, const ScAddress& rPos);
+    ScCondFormatManagerCtrl(Window* pParent, ScDocument* pDoc, ScConditionalFormatList* pFormatList);
 
     ScConditionalFormat* GetSelection();
     void DeleteSelection();

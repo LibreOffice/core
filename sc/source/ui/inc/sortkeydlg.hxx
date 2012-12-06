@@ -69,7 +69,6 @@ class ScSortKeyWindow
 {
 private:
     VclBox*         m_pBox;
-    sal_Int32       nScrollPos;
     sal_Int32       nItemHeight;
 
     ScSortKeyItems& mrSortKeyItems;
@@ -92,8 +91,6 @@ private:
     ScSortKeyWindow  m_aSortWin;
     VclScrolledWindow& m_rScrolledWindow;
     ScrollBar&       m_rVertScroll;
-
-    sal_Int32        nThumbPos;
 
     DECL_LINK(ScrollHdl, ScrollBar*);
 

@@ -112,11 +112,7 @@ private:
     ScAddress maPos;
     ScDocument* mpDoc;
 
-    const ScConditionalFormat* mpFormat;
-
     formula::RefEdit* mpLastEdit;
-
-    condformat::dialog::ScCondFormatDialogType meType;
 
     DECL_LINK( EdRangeModifyHdl, Edit* );
 protected:
