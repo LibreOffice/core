@@ -46,6 +46,7 @@ define gb_ExternalPackage_ExternalPackage
 $(call gb_ExternalPackage_ExternalPackage_internal,$(1),$(2))
 
 $$(eval $$(call gb_Module_register_target,$(call gb_ExternalPackage_get_target,$(1)),$(call gb_ExternalPackage_get_clean_target,$(1))))
+$(call gb_Helper_make_userfriendly_targets,$(1),ExternalPackage)
 
 endef
 

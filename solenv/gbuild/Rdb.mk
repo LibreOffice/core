@@ -63,6 +63,7 @@ $(call gb_Rdb_get_outdir_target,$(1)) : $(call gb_Rdb_get_target,$(1)) \
 $(call gb_Deliver_add_deliverable,$(call gb_ResTarget_get_outdir_target,$(1)),$(call gb_Rdb_get_target,$(1)),$(1))
 
 $$(eval $$(call gb_Module_register_target,$(call gb_Rdb_get_outdir_target,$(1)),$(call gb_Rdb_get_clean_target,$(1))))
+$(call gb_Helper_make_userfriendly_targets,$(1),Rdb)
 endef
 
 define gb_Rdb_add_component

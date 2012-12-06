@@ -37,6 +37,7 @@ $(call gb_Pyuno_get_clean_target,%) :
 define gb_Pyuno_Pyuno
 $(call gb_Zip_Zip,Pyuno/$(1),$(2))
 $$(eval $$(call gb_Module_register_target,$(call gb_Pyuno_get_target,$(1)),$(call gb_Pyuno_get_clean_target,$(1))))
+$(call gb_Helper_make_userfriendly_targets,$(1),Pyuno)
 $(call gb_Pyuno_get_target,$(1)) : $(call gb_Pyuno_get_outdir_target,$(1))
 $(call gb_Pyuno_get_outdir_target,$(1)) : $(call gb_Zip_get_target,Pyuno/$(1))
 $(call gb_Pyuno_get_clean_target,$(1)) : $(call gb_Zip_get_clean_target,Pyuno/$(1))

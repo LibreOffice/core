@@ -95,6 +95,13 @@ define gb_Helper_get_outdir_clean_target
 $$(subst $(OUTDIR)/,$(WORKDIR)/Clean/OutDir/,$(1))
 endef
 
+# e.g. 'make CppunitTest_sw_macros_test'
+define gb_Helper_make_userfriendly_targets
+.PHONY: $(2)_$(1) $(2)_$(1)_clean
+$(2)_$(1) : $(call gb_$(2)_get_target,$(1))
+$(2)_$(1).clean :  $(call gb_$(2)_get_clean_target,$(1))
+endef
+
 define gb_Helper_init_registries
 gb_Executable_VALIDGROUPS := UREBIN SDK OOO NONE
 gb_Library_VALIDGROUPS := OOOLIBS PLAINLIBS_NONE PLAINLIBS_URE PLAINLIBS_OOO RTLIBS RTVERLIBS UNOLIBS_URE UNOLIBS_OOO UNOVERLIBS EXTENSIONLIBS

@@ -124,6 +124,7 @@ $(call gb_CliUnoApi_get_clean_target,$(1)) : $(call gb_CliAssembly_get_clean_tar
 $(call gb_Deliver_add_deliverable,$(call gb_CliUnoApi_get_target,$(1)),$(call gb_CliUnoApiTarget_get_target,$(1)),$(1))
 
 $$(eval $$(call gb_Module_register_target,$(call gb_CliUnoApiTarget_get_target,$(1)),$(call gb_CliUnoApiTarget_get_clean_target,$(1))))
+$(call gb_Helper_make_userfriendly_targets,$(1),CliUnoApiTarget)
 
 endef
 
