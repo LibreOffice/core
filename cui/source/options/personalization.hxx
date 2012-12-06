@@ -50,6 +50,9 @@ private:
     /// Handle the Persona selection
     DECL_LINK( SelectPersona, PushButton* );
 
+    /// When 'own' is chosen, but the background image or Persona is not chosen yet.
+    DECL_LINK( ForceSelect, RadioButton* );
+
     /// Download the bitmaps + color settings, and copy them to user's profile.
     bool CopyPersonaToGallery( const OUString &rURL );
 };
