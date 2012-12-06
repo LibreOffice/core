@@ -2191,6 +2191,7 @@ ScChart2DataProvider::createDataSequenceByFormulaTokens(
                 }
             }
             break;
+            case svString:
             case svSingleRef:
             case svDoubleRef:
             case svExternalSingleRef:
