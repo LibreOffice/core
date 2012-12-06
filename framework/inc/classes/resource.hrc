@@ -33,7 +33,7 @@
 #define STR_SAVECOPYDOC                         (RID_STR_START+5)
 #define STR_NODOCUMENT                          (RID_STR_START+6)
 #define STR_TOOLBAR_TITLE_ADDON                 (RID_STR_START+7)
-#define STR_STATUSBAR_LOGOTEXT                  (RID_STR_START+8)
+
 #define STR_FULL_DISC_RETRY_BUTTON              (RID_STR_START+9)  // used by AuotSave to show error state: full disc
 #define STR_FULL_DISC_MSG                       (RID_STR_START+10) // used by AuotSave to show error state: full disc
 #define STR_RESTORE_TOOLBARS                    (RID_STR_START+11)
@@ -59,8 +59,6 @@
 #define MENUITEM_TOOLBAR_DOCKALLTOOLBAR         4
 #define MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION    5
 #define MENUITEM_TOOLBAR_CLOSE                  6
-
-#define RID_IMAGE_STATUSBAR_LOGO                (RID_IMAGE_START+0)
 
 // License Dialog
 #define DLG_LICENSE                             (RID_FWK_DIALOG_START+256)

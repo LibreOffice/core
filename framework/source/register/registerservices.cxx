@@ -66,6 +66,7 @@
 #include <uiconfiguration/uicategorydescription.hxx>
 #include <services/sessionlistener.hxx>
 #include <services/taskcreatorsrv.hxx>
+
 #include <uielement/langselectionstatusbarcontroller.hxx>
 #include <uiconfiguration/imagemanager.hxx>
 #include <uifactory/windowcontentfactorymanager.hxx>
