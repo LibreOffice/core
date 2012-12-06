@@ -60,6 +60,7 @@ $(call gb_UnoApiTarget_get_external_headers_target,$(1)) : $(call gb_UnoApiTarge
 $(call gb_Deliver_add_deliverable,$(call gb_InternalUnoApi_get_target,$(1)),$(call gb_UnoApiTarget_get_target,$(1)_out),$(1))
 
 $$(eval $$(call gb_Module_register_target,$(call gb_InternalUnoApi_get_target,$(1)),$(call gb_InternalUnoApi_get_clean_target,$(1))))
+$(call gb_Helper_make_userfriendly_targets,$(1),InternalUnoApi)
 
 endef
 

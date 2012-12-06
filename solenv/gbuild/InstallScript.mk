@@ -106,6 +106,7 @@ $(call gb_InstallScript_get_clean_target,$(1)) : $(call gb_InstallScriptTarget_g
 $(call gb_Deliver_add_deliverable,$(call gb_InstallScript_get_target,$(1)),$(call gb_InstallScriptTarget_get_target,$(1)),$(1))
 
 $$(eval $$(call gb_Module_register_target,$(call gb_InstallScript_get_target,$(1)),$(call gb_InstallScript_get_clean_target,$(1))))
+$(call gb_Helper_make_userfriendly_targets,$(1),InstallScript)
 
 endef
 

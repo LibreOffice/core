@@ -71,6 +71,7 @@ $(call gb_Dictionary_get_clean_target,$(1)) : $(call gb_ExtensionTarget_get_clea
 $(call gb_Deliver_add_deliverable,$(call gb_Dictionary_get_target,$(1)),$(call gb_ExtensionTarget_get_target,$(call gb_Dictionary_extensionname,$(1))),$(1))
 
 $$(eval $$(call gb_Module_register_target,$(call gb_Dictionary_get_target,$(1)),$(call gb_Dictionary_get_clean_target,$(1))))
+$(call gb_Helper_make_userfriendly_targets,$(1),Dictionary)
 
 endef
 

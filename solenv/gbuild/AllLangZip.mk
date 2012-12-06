@@ -40,6 +40,7 @@ $(foreach lang,$(gb_AllLangZip_LANGS),$(call gb_Zip_Zip_internal,$(1)_$(lang),$(
 $(call gb_AllLangZip_get_target,$(1)) :| $(dir $(call gb_AllLangZip_get_target,$(1))).dir
 
 $$(eval $$(call gb_Module_register_target,$(call gb_AllLangZip_get_target,$(1)),$(call gb_AllLangZip_get_clean_target,$(1))))
+$(call gb_Helper_make_userfriendly_targets,$(1),AllLangZip)
 
 endef
 

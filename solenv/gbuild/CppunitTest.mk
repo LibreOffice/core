@@ -128,6 +128,7 @@ $(call gb_CppunitTest_get_target,$(1)) : UNO_TYPES :=
 $(call gb_CppunitTest_get_target,$(1)) : DBGSV_ERROR_OUT := shell
 $(call gb_CppunitTest_get_target,$(1)) : SAL_DIAGNOSE_ABORT :=
 $$(eval $$(call gb_Module_register_target,$(call gb_CppunitTest_get_target,$(1)),$(call gb_CppunitTest_get_clean_target,$(1))))
+$(call gb_Helper_make_userfriendly_targets,$(1),CppunitTest)
 
 endef
 

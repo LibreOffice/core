@@ -158,6 +158,8 @@ $(call gb_UI_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(1)_ui
 endif
 
 $$(eval $$(call gb_Module_register_target,$(call gb_UI_get_target,$(1)),$(call gb_UI_get_clean_target,$(1))))
+$(call gb_Helper_make_userfriendly_targets,$(1),UI)
+
 endef
 
 # gb_UI__get_outdir_filename target file lang?

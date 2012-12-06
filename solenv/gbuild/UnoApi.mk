@@ -53,6 +53,7 @@ $(call gb_Package_get_preparation_target,$(1)_inc) : $(call gb_UnoApiHeadersTarg
 $(call gb_Deliver_add_deliverable,$(call gb_UnoApi_get_target,$(1)),$(call gb_UnoApiTarget_get_target,$(1)),$(1))
 
 $$(eval $$(call gb_Module_register_target,$(call gb_UnoApi_get_target,$(1)),$(call gb_UnoApi_get_clean_target,$(1))))
+$(call gb_Helper_make_userfriendly_targets,$(1),UnoApi)
 
 endef
 

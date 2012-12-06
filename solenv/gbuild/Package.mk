@@ -78,6 +78,7 @@ endef
 define gb_Package_Package
 $(call gb_Package_Package_internal,$(1),$(2))
 $$(eval $$(call gb_Module_register_target,$(call gb_Package_get_target,$(1)),$(call gb_Package_get_clean_target,$(1))))
+$(call gb_Helper_make_userfriendly_targets,$(1),Package)
 
 endef
 

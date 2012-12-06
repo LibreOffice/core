@@ -354,6 +354,7 @@ $(call gb_Configuration_get_preparation_target,%) :
 # TODO: ?
 define gb_Configuration_Configuration_nozip
 $$(eval $$(call gb_Module_register_target,$(call gb_Configuration_get_target,$(1)),$(call gb_Configuration_get_clean_target,$(1))))
+$(call gb_Helper_make_userfriendly_targets,$(1),Configuration)
 endef
 
 # $(call gb_Configuration_Configuration,zipfile,repo,nodeliver)
@@ -371,6 +372,7 @@ $(foreach lang,$(gb_Configuration_LANGS),$(eval \
 	 $(call gb_Zip_get_clean_target,$(1)_$(lang))))
 
 $$(eval $$(call gb_Module_register_target,$(call gb_Configuration_get_target,$(1)),$(call gb_Configuration_get_clean_target,$(1))))
+$(call gb_Helper_make_userfriendly_targets,$(1),Configuration)
 
 endef
 
