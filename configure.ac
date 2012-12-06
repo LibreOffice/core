@@ -1845,110 +1845,37 @@ dnl Branding
 dnl ===================================================================
 
 AC_ARG_WITH(branding,
-[  --with-branding        Use given path to retrieve all branding images.
-                          Expects /path/intro.png ...
-                          /path/backing_rtl_right.png to be there. Individual
-                          images can be overridden via --with-intro-bitmap ...
-                          --with-startcenter-rtl-left-bitmap switches.
+    AS_HELP_STRING([--with-branding],
+        [Use given path to retrieve branding images set.])
+    [
+                          Search for intro.png about.svg flat_logo.svg 
+                          backing_left.png backing_right.png 
+                          backing_rtl_left.png backing_rtl_right.png 
+                          backing_space.png. If any is missing, default
+                          ones will be used instead.
+
+                          Search also progress.conf for progress 
+                          settings on intro screen :
+
+                          PROGRESSBARCOLOR="255,255,255" Set color of 
+                          progress bar. Comma separated RGB decimal values.
+                          PROGRESSSIZE="407,6" Set size of progress bar. 
+                          Comma separated decimal values (width, height).
+                          PROGRESSPOSITION="61,317" Set position of progress
+                          bar from left,top. Comma separated decimal values.
+                          PROGRESSFRAMECOLOR="20,136,3" Set color of progress
+                          bar frame. Comma separated RGB decimal values.
+                          PROGRESSTEXTCOLOR="255,255,255" Set color of progress 
+                          bar text. Comma separated RGB decimal values.
+                          PROGRESSTEXTBASELINE="287" Set vertical position of 
+                          progress bar text from top. Decimal value.
+
+                          Default values will be used if not found.
 
                           Usage:     --with-branding=/path/to/images
-],,)
+    ],
+,)
 
-AC_ARG_WITH(intro-bitmap,
-[  --with-intro-bitmap    Prefer the specified intro bitmap over the
-                          the default one.
-
-                          Usage:     --with-intro-bitmap=/path/my_ooo_intro.png
-],,)
-
-AC_ARG_WITH(intro-progressbar-color,
-[  --with-intro-progressbar-color    Set color of progress bar on intro screen.
-                                     Comma separated RGB values in decimal format.
-
-                          Usage: --with-intro-progressbar-color=126,170,23
-],,)
-
-AC_ARG_WITH(intro-progressbar-size,
-[  --with-intro-progressbar-size     Set size of progress bar on intro screen.
-                                     Comma separated values in decimal format.
-
-                          Usage: --with-intro-progressbar-size=319,10
-],,)
-
-AC_ARG_WITH(intro-progressbar-position,
-[  --with-intro-progressbar-position Set position of progress bar on intro screen.
-                                     Comma separated values in decimal format.
-
-                          Usage: --with-intro-progressbar-position=164,225
-],,)
-
-AC_ARG_WITH(intro-progressbar-frame-color,
-[  --with-intro-progressbar-frame-color    Set color of progress bar frame on intro screen.
-                                           Comma separated RGB values in decimal format.
-
-                          Usage: --with-intro-progressbar-frame-color=207,208,211
-],,)
-
-AC_ARG_WITH(intro-progressbar-text-color,
-    AS_HELP_STRING([--with-intro-progressbar-text-color],
-        [Set color of progress bar text on intro screen. Comma separated RGB values in decimal format.])
-    [
-                          Usage: --with-intro-progressbar-text-color=207,208,211
-],,)
-
-AC_ARG_WITH(intro-progressbar-text-baseline,
-    AS_HELP_STRING([--with-intro-progressbar-text-baseline],
-        [Set vertical position of progress bar text on intro screen. Value in decimal format.])
-    [
-                          Usage: --with-intro-progressbar-text-baseline=250
-],,)
-
-AC_ARG_WITH(flat-logo-svg,
-[  --with-flat-logo-svg    Allows specification of the flat Logo SVG.
-
-                          Usage:     --with-flat-logo-svg=/path/my_flat_logo.svg
-],,)
-
-AC_ARG_WITH(about-background-svg,
-[  --with-about-background-svg    Allows specification of the background SVG for the About dialog.
-
-                          Usage:     --with-about-background-svg=/path/my_libo_about.svg
-],,)
-
-AC_ARG_WITH(startcenter-left-bitmap,
-[  --with-startcenter-left-bitmap    Similarly to --with-intro-bitmap, this allows
-                                     specification of bitmap for the Start center.
-
-                          Usage: --with-startcenter-left-bitmap=/path/my_backing_left.png
-],,)
-
-AC_ARG_WITH(startcenter-right-bitmap,
-[  --with-startcenter-right-bitmap    Similarly to --with-intro-bitmap, this allows
-                                      specification of bitmap for the Start center.
-
-                          Usage: --with-startcenter-right-bitmap=/path/my_backing_right.png
-],,)
-
-AC_ARG_WITH(startcenter-rtl-left-bitmap,
-[  --with-startcenter-rtl-left-bitmap    Similarly to --with-intro-bitmap, this allows
-                                         specification of bitmap for the Start center.
-
-                          Usage: --with-startcenter-rtl-left-bitmap=/path/my_backing_rtl_left.png
-],,)
-
-AC_ARG_WITH(startcenter-rtl-right-bitmap,
-[  --with-startcenter-rtl-right-bitmap    Similarly to --with-intro-bitmap, this allows
-                                          specification of bitmap for the Start center.
-
-                          Usage: --with-startcenter-rtl-right-bitmap=/path/my_backing_rtl_right.png
-],,)
-
-AC_ARG_WITH(startcenter-space-bitmap,
-[  --with-startcenter-space-bitmap    Similarly to --with-intro-bitmap, this allows
-                                      specification of bitmap for the Start center.
-
-                          Usage: --with-startcenter-space-bitmap=/path/my_backing_space.png
-],,)
 
 AC_ARG_WITH(extra-buildid,
     AS_HELP_STRING([--with-extra-buildid],
@@ -11822,224 +11749,73 @@ if test -n "${GIT_LINK_SRC}"; then
 fi
 AC_SUBST(GIT_LINK_SRC)
 
-AC_MSG_CHECKING([for custom 'intro' progress bar color])
-PROGRESSBARCOLOR=
-if test -z "$with_intro_progressbar_color"; then
-   PROGRESSBARCOLOR="255,255,255"
-   AC_MSG_RESULT([none])
-else
-   PROGRESSBARCOLOR="$with_intro_progressbar_color"
-   AC_MSG_RESULT([$PROGRESSBARCOLOR])
-fi
-AC_SUBST(PROGRESSBARCOLOR)
-
-AC_MSG_CHECKING([for custom 'intro' progress bar size])
-PROGRESSSIZE=
-if test -z "$with_intro_progressbar_size"; then
-   PROGRESSSIZE="407,6"
-   AC_MSG_RESULT([none])
-else
-   PROGRESSSIZE="$with_intro_progressbar_size"
-   AC_MSG_RESULT([$PROGRESSSIZE])
-fi
-AC_SUBST(PROGRESSSIZE)
-
-AC_MSG_CHECKING([for custom 'intro' progress bar position])
-PROGRESSPOSITION=
-if test -z "$with_intro_progressbar_position"; then
-   PROGRESSPOSITION="61,317"
-   AC_MSG_RESULT([none])
-else
-   PROGRESSPOSITION="$with_intro_progressbar_position"
-   AC_MSG_RESULT([$PROGRESSPOSITION])
-fi
-AC_SUBST(PROGRESSPOSITION)
-
-AC_MSG_CHECKING([for custom 'intro' progress bar frame color])
-PROGRESSFRAMECOLOR=
-if test -z "$with_intro_progressbar_frame_color"; then
-   PROGRESSFRAMECOLOR="20,136,3"
-   AC_MSG_RESULT([none])
-else
-   PROGRESSFRAMECOLOR="$with_intro_progressbar_frame_color"
-   AC_MSG_RESULT([$PROGRESSFRAMECOLOR])
-fi
-AC_SUBST(PROGRESSFRAMECOLOR)
-
-AC_MSG_CHECKING([for custom 'intro' progress text color])
-PROGRESSTEXTCOLOR=
-if test -z "$with_intro_progressbar_text_color"; then
-   PROGRESSTEXTCOLOR="255,255,255"
-   AC_MSG_RESULT([none])
-else
-   PROGRESSTEXTCOLOR="$with_intro_progressbar_text_color"
-   AC_MSG_RESULT([$PROGRESSTEXTCOLOR])
-fi
-AC_SUBST(PROGRESSTEXTCOLOR)
-
-AC_MSG_CHECKING([for custom 'intro' progress text baseline])
-PROGRESSTEXTBASELINE=
-if test -z "$with_intro_progressbar_text_baseline"; then
-   PROGRESSTEXTBASELINE="287"
-   AC_MSG_RESULT([none])
-else
-   PROGRESSTEXTBASELINE="$with_intro_progressbar_text_baseline"
-   AC_MSG_RESULT([$PROGRESSTEXTBASELINE])
-fi
-AC_SUBST(PROGRESSTEXTBASELINE)
-
+dnl branding
+dnl ===================================================================
 AC_MSG_CHECKING([for alternative branding images directory])
-INTRO_BITMAP=
-ABOUT_BACKGROUND_SVG=
-FLAT_LOGO_SVG=
-STARTCENTER_LEFT_BITMAP=
-STARTCENTER_RIGHT_BITMAP=
-STARTCENTER_RTL_LEFT_BITMAP=
-STARTCENTER_RTL_RIGHT_BITMAP=
-STARTCENTER_SPACE_BITMAP=
+# initialize mapped arrays
+brand_vars=(INTRO_BITMAP ABOUT_BACKGROUND_SVG FLAT_LOGO_SVG \
+    STARTCENTER_LEFT_BITMAP STARTCENTER_RIGHT_BITMAP \
+    STARTCENTER_RTL_LEFT_BITMAP STARTCENTER_RTL_RIGHT_BITMAP \
+    STARTCENTER_SPACE_BITMAP)
+brand_files=(intro.png about.svg flat_logo.svg backing_left.png \
+    backing_rtl_left.png backing_rtl_right.png backing_space.png)
+
+for i in $(echo ${brand_vars[@]})
+do
+     declare $i=
+done
+
 if test -z "$with_branding" -o "$with_branding" = "no"; then
     AC_MSG_RESULT([none])
 else
-    INTRO_BITMAP="$with_branding/intro.png"
-    FLAT_LOGO_SVG="$with_branding/flat_logo.svg"
-    STARTCENTER_LEFT_BITMAP="$with_branding/backing_left.png"
-    STARTCENTER_RIGHT_BITMAP="$with_branding/backing_right.png"
-    STARTCENTER_RTL_LEFT_BITMAP="$with_branding/backing_rtl_left.png"
-    STARTCENTER_RTL_RIGHT_BITMAP="$with_branding/backing_rtl_right.png"
-    STARTCENTER_SPACE_BITMAP="$with_branding/backing_space.png"
-    for i in $INTRO_BITMAP \
-             $FLAT_LOGO_SVG \
-             $STARTCENTER_LEFT_BITMAP \
-             $STARTCENTER_RIGHT_BITMAP \
-             $STARTCENTER_RTL_LEFT_BITMAP \
-             $STARTCENTER_RTL_RIGHT_BITMAP \
-             $STARTCENTER_SPACE_BITMAP; do
-        if test ! -f $i; then
-            AC_MSG_WARN([Required file $i does not exist!])
+    idx=0
+    while [ $idx -lt ${#brand_vars[@]} ]
+    do
+        if [ ! -f $with_branding/${brand_files[$idx]} ]
+        then
+            AC_MSG_WARN([Branded file $i does not exist, using the default one])
+        else
+            declare ${brand_vars[$idx]}="$with_branding/${brand_files[$idx]}"
         fi
+        let "idx=$idx + 1"
     done
+    check_for_progress="yes"
     AC_MSG_RESULT([$with_branding])
 fi
-
-AC_MSG_CHECKING([for yet another 'intro' bitmap])
-if test -z "$with_intro_bitmap" -o "$with_intro_bitmap" = "no"; then
-    if test "$with_intro_bitmap" = "no"; then
-        INTRO_BITMAP=
-    fi
-    AC_MSG_RESULT([none])
-else
-    case "$with_intro_bitmap" in
-    *.png) INTRO_BITMAP="$with_intro_bitmap" ;;
-    *)     AC_MSG_WARN([Intro bitmap should be a .png file!]) ;;
-    esac
-    AC_MSG_RESULT([$INTRO_BITMAP])
-fi
 AC_SUBST(INTRO_BITMAP)
-
-AC_MSG_CHECKING([for yet another 'about' svg])
-if test -z "$with_about_background_svg" -o "$with_about_background_svg" = "no"; then
-    if test "$with_about_background_svg" = "no"; then
-        ABOUT_BACKGROUND_SVG=
-    fi
-    AC_MSG_RESULT([none])
-else
-   case "$with_about_background_svg" in
-   *.svg) ABOUT_BACKGROUND_SVG="$with_about_background_svg" ;;
-   *)     AC_MSG_WARN([About background SVG should be a .svg file!]) ;;
-   esac
-   AC_MSG_RESULT([$ABOUT_BACKGROUND_SVG])
-fi
 AC_SUBST(ABOUT_BACKGROUND_SVG)
-
-AC_MSG_CHECKING([for yet another 'flat_logo' svg])
-if test -z "$with_flat_logo_svg" -o "$with_flat_logo_svg" = "no"; then
-    if test "$with_flat_logo_svg" = "no"; then
-        FLAT_LOGO_SVG=
-    fi
-    AC_MSG_RESULT([none])
-else
-   case "$with_flat_logo_svg" in
-   *.svg) FLAT_LOGO_SVG="$with_flat_logo_svg" ;;
-   *)     AC_MSG_WARN([Flat logo SVG should be a .svg file!]) ;;
-   esac
-   AC_MSG_RESULT([$ABOUT_BITMAP])
-fi
 AC_SUBST(FLAT_LOGO_SVG)
-
-AC_MSG_CHECKING([for yet another 'start center left' bitmap])
-if test -z "$with_startcenter_left_bitmap" -o "$with_startcenter_left_bitmap" = "no"; then
-   if test "$with_startcenter_left_bitmap" = "no"; then
-      STARTCENTER_LEFT_BITMAP=
-   fi
-   AC_MSG_RESULT([none])
-else
-   case "$with_startcenter_left_bitmap" in
-      *.png) STARTCENTER_LEFT_BITMAP="$with_startcenter_left_bitmap" ;;
-      *)     AC_MSG_WARN([Startcenter left bitmap should be a .png file!]) ;;
-   esac
-   AC_MSG_RESULT([$STARTCENTER_LEFT_BITMAP])
-fi
 AC_SUBST(STARTCENTER_LEFT_BITMAP)
-
-AC_MSG_CHECKING([for yet another 'start center right' bitmap])
-if test -z "$with_startcenter_right_bitmap" -o "$with_startcenter_right_bitmap" = "no"; then
-   if test "$with_startcenter_right_bitmap" = "no"; then
-      STARTCENTER_RIGHT_BITMAP=
-   fi
-   AC_MSG_RESULT([none])
-else
-   case "$with_startcenter_right_bitmap" in
-      *.png) STARTCENTER_RIGHT_BITMAP="$with_startcenter_right_bitmap" ;;
-      *)     AC_MSG_WARN([Startcenter right bitmap should be a .png file!]) ;;
-   esac
-   AC_MSG_RESULT([$STARTCENTER_RIGHT_BITMAP])
-fi
 AC_SUBST(STARTCENTER_RIGHT_BITMAP)
-
-AC_MSG_CHECKING([for yet another 'start center rtl left' bitmap])
-if test -z "$with_startcenter_rtl_left_bitmap" -o "$with_startcenter_rtl_left_bitmap" = "no"; then
-   if test "$with_startcenter_rtl_left_bitmap" = "no"; then
-      STARTCENTER_RTL_LEFT_BITMAP=
-   fi
-   AC_MSG_RESULT([none])
-else
-   case "$with_startcenter_rtl_left_bitmap" in
-      *.png) STARTCENTER_RTL_LEFT_BITMAP="$with_startcenter_rtl_left_bitmap" ;;
-      *)     AC_MSG_WARN([Startcenter rtl left bitmap should be a .png file!]) ;;
-   esac
-   AC_MSG_RESULT([$STARTCENTER_RTL_LEFT_BITMAP])
-fi
 AC_SUBST(STARTCENTER_RTL_LEFT_BITMAP)
-
-AC_MSG_CHECKING([for yet another 'start center rtl right' bitmap])
-if test -z "$with_startcenter_rtl_right_bitmap" -o "$with_startcenter_rtl_right_bitmap" = "no"; then
-   if test "$with_startcenter_rtl_right_bitmap" = "no"; then
-      STARTCENTER_RTL_RIGHT_BITMAP=
-   fi
-   AC_MSG_RESULT([none])
-else
-   case "$with_startcenter_rtl_right_bitmap" in
-      *.png) STARTCENTER_RTL_RIGHT_BITMAP="$with_startcenter_rtl_right_bitmap" ;;
-      *)     AC_MSG_WARN([Startcenter rtl right bitmap should be a .png file!]) ;;
-   esac
-   AC_MSG_RESULT([$STARTCENTER_RTL_RIGHT_BITMAP])
-fi
 AC_SUBST(STARTCENTER_RTL_RIGHT_BITMAP)
-
-AC_MSG_CHECKING([for yet another 'start center space' bitmap])
-if test -z "$with_startcenter_space_bitmap" -o "$with_startcenter_space_bitmap" = "no"; then
-   if test "$with_startcenter_space_bitmap" = "no"; then
-      STARTCENTER_SPACE_BITMAP=
-   fi
-   AC_MSG_RESULT([none])
-else
-   case "$with_startcenter_space_bitmap" in
-      *.png) STARTCENTER_SPACE_BITMAP="$with_startcenter_space_bitmap" ;;
-      *)     AC_MSG_WARN([Startcenter left bitmap should be a .png file!]) ;;
-   esac
-   AC_MSG_RESULT([$STARTCENTER_SPACE_BITMAP])
-fi
 AC_SUBST(STARTCENTER_SPACE_BITMAP)
+
+
+AC_MSG_CHECKING([for 'intro' progress settings])
+PROGRESSBARCOLOR=
+PROGRESSSIZE=
+PROGRESSPOSITION=
+PROGRESSFRAMECOLOR=
+PROGRESSTEXTCOLOR=
+PROGRESSTEXTBASELINE=
+            
+if test check_for_progress = "yes" -a -s "$with_branding/progress.conf" ; then
+    while read setting ; do
+        eval $setting
+    done < "$with_branding/progress.conf"
+       AC_MSG_RESULT([settings found in $with_branding/progress.conf])
+else
+       AC_MSG_RESULT([none])
+fi
+   
+AC_SUBST(PROGRESSBARCOLOR)
+AC_SUBST(PROGRESSSIZE)
+AC_SUBST(PROGRESSPOSITION)
+AC_SUBST(PROGRESSFRAMECOLOR)
+AC_SUBST(PROGRESSTEXTCOLOR)
+AC_SUBST(PROGRESSTEXTBASELINE)
+
 
 EXTRA_BUILDID=
 AC_MSG_CHECKING([for extra build ID])
