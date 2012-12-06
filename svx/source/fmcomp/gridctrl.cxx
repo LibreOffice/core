@@ -2447,9 +2447,19 @@ sal_Bool DbGridControl::SeekCursor(long nRow, sal_Bool bAbsolute)
             if (!bSuccess)
             {
                 if (bAbsolute || nSteps > 0)
-                    bSuccess = m_pSeekCursor->last();
+                {
+                    if (m_pSeekCursor->isLast())
+                        bSuccess=sal_True;
+                    else
+                        bSuccess = m_pSeekCursor->last();
+                }
                 else
-                    bSuccess = m_pSeekCursor->first();
+                {
+                    if (m_pSeekCursor->isFirst())
+                        bSuccess = sal_True;
+                    else
+                        bSuccess = m_pSeekCursor->first();
+                }
             }
 
             if (bSuccess)
