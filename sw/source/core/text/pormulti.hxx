@@ -135,9 +135,9 @@ public:
     // Summarize the internal lines to calculate the (external) size
     void CalcSize( SwTxtFormatter& rLine, SwTxtFormatInfo &rInf );
 
-    inline sal_Bool HasBrackets() const;
-    inline sal_Bool HasRotation() const { return 0 != (1 & nDirection); }
-    inline sal_Bool IsRevers() const { return 0 != (2 & nDirection); }
+    inline bool HasBrackets() const;
+    inline bool HasRotation() const { return 0 != (1 & nDirection); }
+    inline bool IsRevers() const { return 0 != (2 & nDirection); }
     inline sal_uInt8 GetDirection() const { return nDirection; }
     inline sal_uInt16 GetFontRotation() const
         { return ( HasRotation() ? ( IsRevers() ? 2700 : 900 ) : 0 ); }
@@ -248,11 +248,9 @@ public:
  *                  inline - Implementations
  *************************************************************************/
 
-inline sal_Bool SwMultiPortion::HasBrackets() const
+inline bool SwMultiPortion::HasBrackets() const
 {
-    return sal::static_int_cast< sal_Bool >( IsDouble() ?
-                                             0 != ((SwDoubleLinePortion*)this)->GetBrackets() :
-                                             sal_False );
+    return IsDouble() ? 0 != ((SwDoubleLinePortion*)this)->GetBrackets() : false;
 }
 
 CLASSIO( SwMultiPortion )

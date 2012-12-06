@@ -816,7 +816,7 @@ void SwRubyPortion::CalcRubyOffset()
  * the 2-line-formats has the same brackets.
  * --------------------------------------------------*/
 
-static sal_Bool lcl_Has2Lines( const SwTxtAttr& rAttr, const SvxTwoLinesItem* &rpRef,
+static bool lcl_Has2Lines( const SwTxtAttr& rAttr, const SvxTwoLinesItem* &rpRef,
     sal_Bool &rValue )
 {
     const SfxPoolItem* pItem = CharFmt::GetItem( rAttr, RES_CHRATR_TWO_LINES );
@@ -830,9 +830,9 @@ static sal_Bool lcl_Has2Lines( const SwTxtAttr& rAttr, const SvxTwoLinesItem* &r
                     ((SvxTwoLinesItem*)pItem)->GetStartBracket() !=
                     rpRef->GetStartBracket() )
             rValue = sal_False;
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 /*--------------------------------------------------
@@ -846,7 +846,7 @@ static sal_Bool lcl_Has2Lines( const SwTxtAttr& rAttr, const SvxTwoLinesItem* &r
  * to the charrotate-format's value.
  * --------------------------------------------------*/
 
-static sal_Bool lcl_HasRotation( const SwTxtAttr& rAttr,
+static bool lcl_HasRotation( const SwTxtAttr& rAttr,
     const SvxCharRotateItem* &rpRef, sal_Bool &rValue )
 {
     const SfxPoolItem* pItem = CharFmt::GetItem( rAttr, RES_CHRATR_ROTATE );
@@ -858,10 +858,10 @@ static sal_Bool lcl_HasRotation( const SwTxtAttr& rAttr,
         else if( ((SvxCharRotateItem*)pItem)->GetValue() !=
                     rpRef->GetValue() )
             rValue = sal_False;
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
@@ -883,11 +883,11 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
 
     // check if there is a field at rPos:
     sal_uInt8 nNextLevel = nCurrLevel;
-    sal_Bool bFldBidi = sal_False;
+    bool bFldBidi = false;
 
     if ( CH_TXTATR_BREAKWORD == GetChar( rPos ) )
     {
-        bFldBidi = sal_True;
+        bFldBidi = true;
 /*
         // examining the script of the field text should be sufficient
         // for 99% of all cases
@@ -895,13 +895,13 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
 
         if ( pBreakIt->GetBreakIter().is() && aTxt.Len() )
         {
-            sal_Bool bFldDir = ( i18n::ScriptType::COMPLEX ==
+            bool bFldDir = ( i18n::ScriptType::COMPLEX ==
                                  pBreakIt->GetRealScriptOfText( aTxt, 0 ) );
-            sal_Bool bCurrDir = ( 0 != ( nCurrLevel % 2 ) );
+            bool bCurrDir = ( 0 != ( nCurrLevel % 2 ) );
             if ( bFldDir != bCurrDir )
             {
                 nNextLevel = nCurrLevel + 1;
-                bFldBidi = sal_True;
+                bFldBidi = true;
             }
         }*/
     }
@@ -1354,9 +1354,9 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     SwMultiPortion& rMulti, const SwMultiPortion* pEnvPor )
 {
     GETGRID( pFrm->FindPageFrm() )
-    const sal_Bool bHasGrid = pGrid && GetInfo().SnapToGrid();
+    const bool bHasGrid = pGrid && GetInfo().SnapToGrid();
     sal_uInt16 nRubyHeight = 0;
-    sal_Bool bRubyTop = sal_False;
+    bool bRubyTop = false;
 
     if ( bHasGrid )
     {
@@ -1533,13 +1533,13 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
         else
             GetInfo().Y( nOfst + AdjustBaseLine( *pLay, pPor ) );
 
-        sal_Bool bSeeked = sal_True;
+        bool bSeeked = true;
         GetInfo().SetLen( pPor->GetLen() );
 
         if( bRest && pPor->InFldGrp() && !pPor->GetLen() )
         {
             if( ((SwFldPortion*)pPor)->HasFont() )
-                 bSeeked = sal_False;
+                 bSeeked = false;
             else
                 SeekAndChgBefore( GetInfo() );
         }
@@ -1553,7 +1553,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
                 SeekAndChgBefore( GetInfo() );
         }
         else
-            bSeeked = sal_False;
+            bSeeked = false;
 
         SwLinePortion *pNext = pPor->GetPortion();
         if(GetInfo().OnWin() && pNext && !pNext->Width() )
@@ -1675,7 +1675,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     SetPropFont( 0 );
 }
 
-static sal_Bool lcl_ExtractFieldFollow( SwLineLayout* pLine, SwLinePortion* &rpFld )
+static bool lcl_ExtractFieldFollow( SwLineLayout* pLine, SwLinePortion* &rpFld )
 {
     SwLinePortion* pLast = pLine;
     rpFld = pLine->GetPortion();
@@ -1684,7 +1684,7 @@ static sal_Bool lcl_ExtractFieldFollow( SwLineLayout* pLine, SwLinePortion* &rpF
         pLast = rpFld;
         rpFld = rpFld->GetPortion();
     }
-    sal_Bool bRet = rpFld != 0;
+    bool bRet = rpFld != 0;
     if( bRet )
     {
         if( ((SwFldPortion*)rpFld)->IsFollow() )
@@ -1858,9 +1858,9 @@ sal_Bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     sal_Bool bRet = sal_False;
 
     GETGRID( pFrm->FindPageFrm() )
-    const sal_Bool bHasGrid = pGrid && GRID_LINES_CHARS == pGrid->GetGridType();
+    const bool bHasGrid = pGrid && GRID_LINES_CHARS == pGrid->GetGridType();
 
-    sal_Bool bRubyTop = sal_False;
+    bool bRubyTop = false;
 
     if ( bHasGrid )
         bRubyTop = ! pGrid->GetRubyTextBelow();
@@ -1997,7 +1997,7 @@ sal_Bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         }
         delete pNextFirst;
         pNextFirst = NULL;
-    } while ( sal_True );
+    } while ( true );
 
     pMulti = pOldMulti;
 

@@ -98,18 +98,18 @@ public:
     const SwLineLayout *TwipsToLine(const SwTwips);
 
     // Truncates all after pCurr
-    void TruncLines( sal_Bool bNoteFollow = sal_False );
+    void TruncLines( bool bNoteFollow = false );
 
     inline KSHORT GetLineHeight() const { return pCurr->GetRealHeight(); }
     void CalcAscentAndHeight( KSHORT &rAscent, KSHORT &rHeight ) const;
 
     // Lots of trouble for querying pCurr == pPara
-    inline sal_Bool IsFirstTxtLine() const
+    inline bool IsFirstTxtLine() const
     { return nStart == GetInfo().GetTxtStart() &&
         !( pCurr->IsDummy() && GetNextLine() ); }
 
     // Replacement for the old IsFirstLine()
-    inline sal_Bool IsParaLine() const
+    inline bool IsParaLine() const
         { return pCurr == pInf->GetParaPortion(); }
 
     const SwLineInfo &GetLineInfo() const { return aLineInf; }
@@ -169,7 +169,7 @@ public:
     inline KSHORT GetLineWidth() const
            { return KSHORT( Right() - GetLeftMargin() + 1 ); }
     inline SwTwips GetLeftMin() const { return nFirst < nLeft ? nFirst : nLeft; }
-    inline sal_Bool HasNegFirst() const { return nFirst < nLeft; }
+    inline bool HasNegFirst() const { return nFirst < nLeft; }
 
     // #i91133#
     inline SwTwips GetTabLeft() const

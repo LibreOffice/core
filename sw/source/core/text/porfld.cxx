@@ -299,7 +299,7 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
     // Scope wegen aDiffTxt::DTOR!
     xub_StrLen nRest;
     sal_Bool bFull;
-    sal_Bool bEOL = sal_False;
+    bool bEOL = false;
     long nTxtRest = rInf.GetTxt().Len() - rInf.GetIdx();
     {
         SwFldSlot aDiffTxt( &rInf, this );
@@ -618,7 +618,7 @@ sal_Bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
         // fieser Sonderfall: FlyFrm liegt in dem Bereich,
         // den wir uns gerade unter den Nagel reissen wollen.
         // Die NumberPortion wird als verborgen markiert.
-        const sal_Bool bFly = rInf.GetFly() ||
+        const bool bFly = rInf.GetFly() ||
             ( rInf.GetLast() && rInf.GetLast()->IsFlyPortion() );
         if( nDiff > rInf.Width() )
         {
@@ -704,7 +704,7 @@ void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
     if( aExpand.Len() )
     {
         const SwFont *pTmpFnt = rInf.GetFont();
-        sal_Bool bPaintSpace = ( UNDERLINE_NONE != pTmpFnt->GetUnderline() ||
+        bool bPaintSpace = ( UNDERLINE_NONE != pTmpFnt->GetUnderline() ||
                                  UNDERLINE_NONE != pTmpFnt->GetOverline()  ||
                                  STRIKEOUT_NONE != pTmpFnt->GetStrikeout() ) &&
                                  !pTmpFnt->IsWordLineMode();
@@ -867,7 +867,7 @@ sal_Bool SwGrfNumPortion::Format( SwTxtFormatInfo &rInf )
     }
     Width( nFixWidth + nFollowedByWidth );
     const sal_Bool bFull = rInf.Width() < rInf.X() + Width();
-    const sal_Bool bFly = rInf.GetFly() ||
+    const bool bFly = rInf.GetFly() ||
         ( rInf.GetLast() && rInf.GetLast()->IsFlyPortion() );
     SetAscent( static_cast<sal_uInt16>(GetRelPos() > 0 ? GetRelPos() : 0) );
     if( GetAscent() > Height() )
@@ -933,7 +933,7 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
     long nTmpWidth = Max( (long)0, (long)(nFixWidth - 2 * GRFNUM_SECURE) );
     Size aSize( nTmpWidth, GetGrfHeight() - 2 * GRFNUM_SECURE );
 
-    const sal_Bool bTmpLeft = mbLabelAlignmentPosAndSpaceModeActive ||
+    const bool bTmpLeft = mbLabelAlignmentPosAndSpaceModeActive ||
                               ( IsLeft() && ! rInf.GetTxtFrm()->IsRightToLeft() ) ||
                               ( ! IsLeft() && ! IsCenter() && rInf.GetTxtFrm()->IsRightToLeft() );
 
@@ -964,7 +964,7 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
     }
     SwRect aTmp( aPos, aSize );
 
-    sal_Bool bDraw = sal_True;
+    bool bDraw = true;
 
     if ( IsAnimated() )
     {
@@ -1000,7 +1000,7 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
             // pdf export, printing, preview, stop animations...
             else
-                bDraw = sal_True;
+                bDraw = true;
         }
         if( bDraw )
             ( (Graphic*) pBrush->GetGraphic() )->StopAnimation( 0, nId );

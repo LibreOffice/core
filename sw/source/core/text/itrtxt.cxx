@@ -386,7 +386,7 @@ static sal_Bool lcl_NeedsFieldRest( const SwLineLayout* pCurr )
  *                      SwTxtIter::TruncLines()
  *************************************************************************/
 
-void SwTxtIter::TruncLines( sal_Bool bNoteFollow )
+void SwTxtIter::TruncLines( bool bNoteFollow )
 {
     SwLineLayout *pDel = pCurr->GetNext();
     const xub_StrLen nEnd = nStart + pCurr->GetLen();

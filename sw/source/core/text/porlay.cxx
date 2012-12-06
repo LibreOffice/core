@@ -79,7 +79,7 @@ using namespace i18n::ScriptType;
 #endif
 #define isSeenOrSadChar(c)  (IS_JOINING_GROUP((c), SAD) || IS_JOINING_GROUP((c), SEEN))
 
-sal_Bool isTransparentChar ( sal_Unicode cCh )
+bool isTransparentChar ( sal_Unicode cCh )
 {
     return u_getIntPropertyValue( cCh, UCHAR_JOINING_TYPE ) == U_JT_TRANSPARENT;
 }
@@ -90,7 +90,7 @@ sal_Bool isTransparentChar ( sal_Unicode cCh )
  * Checks if cCh + cNectCh builds a ligature (used for Kashidas)
  *************************************************************************/
 
-static sal_Bool lcl_IsLigature( sal_Unicode cCh, sal_Unicode cNextCh )
+static bool lcl_IsLigature( sal_Unicode cCh, sal_Unicode cNextCh )
 {
             // Lam + Alef
     return ( isLamChar ( cCh ) && isAlefChar ( cNextCh ));
@@ -102,10 +102,10 @@ static sal_Bool lcl_IsLigature( sal_Unicode cCh, sal_Unicode cNextCh )
  * Checks if cCh is connectable to cPrevCh (used for Kashidas)
  *************************************************************************/
 
-static sal_Bool lcl_ConnectToPrev( sal_Unicode cCh, sal_Unicode cPrevCh )
+static bool lcl_ConnectToPrev( sal_Unicode cCh, sal_Unicode cPrevCh )
 {
     const int32_t nJoiningType = u_getIntPropertyValue( cPrevCh, UCHAR_JOINING_TYPE );
-    sal_Bool bRet = nJoiningType != U_JT_RIGHT_JOINING && nJoiningType != U_JT_NON_JOINING;
+    bool bRet = nJoiningType != U_JT_RIGHT_JOINING && nJoiningType != U_JT_NON_JOINING;
 
     // check for ligatures cPrevChar + cChar
     if( bRet )
@@ -291,7 +291,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
     KSHORT nFlyAscent = 0;
     KSHORT nFlyHeight = 0;
     KSHORT nFlyDescent = 0;
-    sal_Bool bOnlyPostIts = sal_True;
+    bool bOnlyPostIts = true;
     SetHanging( sal_False );
 
     sal_Bool bTmpDummy = ( 0 == GetLen() );
@@ -391,7 +391,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                 // to reformat.
                 if ( !pPos->IsBreakPortion() || !Height() )
                 {
-                    bOnlyPostIts &= pPos->IsPostItsPortion();
+                    if (!pPos->IsPostItsPortion()) bOnlyPostIts = false;
 
                     if( bTmpDummy && !nLineLength )
                     {
@@ -716,7 +716,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     const SwCharCompressType aCompEnum = rNode.getIDocumentSettingAccess()->getCharacterCompressionType();
 
     // justification type
-    const sal_Bool bAdjustBlock = SVX_ADJUST_BLOCK ==
+    const bool bAdjustBlock = SVX_ADJUST_BLOCK ==
                                   rNode.GetSwAttrSet().GetAdjust().GetAdjust();
 
     //
@@ -1155,13 +1155,13 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
 #if OSL_DEBUG_LEVEL > 0
     // check kashida data
     long nTmpKashidaPos = -1;
-    sal_Bool bWrongKash = sal_False;
+    bool bWrongKash = false;
     for (i = 0; i < aKashida.size(); ++i )
     {
         long nCurrKashidaPos = GetKashida( i );
         if ( nCurrKashidaPos <= nTmpKashidaPos )
         {
-            bWrongKash = sal_True;
+            bWrongKash = true;
             break;
         }
         nTmpKashidaPos = nCurrKashidaPos;
@@ -2143,7 +2143,7 @@ void SwLineLayout::Init( SwLinePortion* pNextPortion )
 SwTwips SwLineLayout::_GetHangingMargin() const
 {
     SwLinePortion* pPor = GetPortion();
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     SwTwips nDiff = 0;
     while( pPor)
     {
@@ -2151,7 +2151,7 @@ SwTwips SwLineLayout::_GetHangingMargin() const
         {
             nDiff = ((SwHangingPortion*)pPor)->GetInnerWidth() - pPor->Width();
             if( nDiff )
-                bFound = sal_True;
+                bFound = true;
         }
         // the last post its portion
         else if ( pPor->IsPostItsPortion() && ! pPor->GetPortion() )

@@ -984,7 +984,7 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
 
     if( rLine.IsStop() )
     {
-        rLine.TruncLines( sal_True );
+        rLine.TruncLines( true );
         nNew = 1;
     }
 

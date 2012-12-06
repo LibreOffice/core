@@ -360,7 +360,7 @@ sal_Bool WidowsAndOrphans::FindBreak( SwTxtFrm *pFrame, SwTxtMargin &rLine,
             ( ( bHasToFit && bRet ) || IsBreakNow( rLine ) ) )
             rLine.Top();
 
-        rLine.TruncLines( sal_True );
+        rLine.TruncLines( true );
         bRet = bBack;
     }
     nOrphLines = nOldOrphans;

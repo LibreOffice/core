@@ -28,7 +28,7 @@
 #include "blink.hxx"
 #if OSL_DEBUG_LEVEL > 0
 
-sal_Bool ChkChain( SwLinePortion *pStart )
+bool ChkChain( SwLinePortion *pStart )
 {
     SwLinePortion *pPor = pStart->GetPortion();
     MSHORT nCount = 0;
@@ -44,11 +44,11 @@ sal_Bool ChkChain( SwLinePortion *pStart )
             pStart->SetPortion(0);
             pPor->Truncate();
             pStart->SetPortion( pPor );
-            return sal_False;
+            return false;
         }
         pPor = pPor->GetPortion();
     }
-    return sal_True;
+    return true;
 }
 #endif
 
@@ -104,7 +104,7 @@ void SwLinePortion::PrePaint( const SwTxtPaintInfo& rInf,
     KSHORT nPos;
     SwTxtPaintInfo aInf( rInf );
 
-    const sal_Bool bBidiPor = ( rInf.GetTxtFrm()->IsRightToLeft() ) !=
+    const bool bBidiPor = ( rInf.GetTxtFrm()->IsRightToLeft() ) !=
                           ( 0 != ( TEXT_LAYOUT_BIDI_RTL & rInf.GetOut()->GetLayoutMode() ) );
 
     sal_uInt16 nDir = bBidiPor ?
@@ -326,9 +326,9 @@ void SwLinePortion::FormatEOL( SwTxtFormatInfo & )
 
 void SwLinePortion::Move( SwTxtPaintInfo &rInf )
 {
-    sal_Bool bB2T = rInf.GetDirection() == DIR_BOTTOM2TOP;
-    const sal_Bool bFrmDir = rInf.GetTxtFrm()->IsRightToLeft();
-    sal_Bool bCounterDir = ( ! bFrmDir && DIR_RIGHT2LEFT == rInf.GetDirection() ) ||
+    bool bB2T = rInf.GetDirection() == DIR_BOTTOM2TOP;
+    const bool bFrmDir = rInf.GetTxtFrm()->IsRightToLeft();
+    bool bCounterDir = ( ! bFrmDir && DIR_RIGHT2LEFT == rInf.GetDirection() ) ||
                        (   bFrmDir && DIR_LEFT2RIGHT == rInf.GetDirection() );
 
     if ( InSpaceGrp() && rInf.GetSpaceAdd() )

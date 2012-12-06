@@ -83,7 +83,7 @@ public:
     // Access methods
     inline SwLinePortion *GetPortion() const { return( pPortion ); }
     inline SwLinePortion &operator=(const SwLinePortion &rPortion);
-    inline sal_Bool operator==( const SwLinePortion &rPortion ) const;
+    inline bool operator==( const SwLinePortion &rPortion ) const;
     inline xub_StrLen GetLen() const { return nLineLength; }
     inline void SetLen( const xub_StrLen nLen ) { nLineLength = nLen; }
     inline void SetPortion( SwLinePortion *pNew ){ pPortion = pNew; }
@@ -204,7 +204,7 @@ inline SwLinePortion &SwLinePortion::operator=(const SwLinePortion &rPortion)
     return *this;
 }
 
-inline sal_Bool SwLinePortion::operator==(const SwLinePortion &rPortion ) const
+inline bool SwLinePortion::operator==(const SwLinePortion &rPortion ) const
 {
     return( Height() == rPortion.Height() &&
             Width() == rPortion.Width() &&

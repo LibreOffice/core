@@ -50,11 +50,11 @@ protected:
     sal_Bool bNoPaint : 1;          // Used by SwGrfNumPortion
     sal_Bool bReplace : 1;          // Used by SwGrfNumPortion
     const bool bPlaceHolder : 1;
-    sal_Bool m_bNoLength : 1;       // HACK for meta suffix (no CH_TXTATR)
+    bool m_bNoLength : 1;       // HACK for meta suffix (no CH_TXTATR)
 
     inline void SetFont( SwFont *pNew ) { pFnt = pNew; }
     inline bool IsNoLength() const  { return m_bNoLength; }
-    inline void SetNoLength()       { m_bNoLength = sal_True; }
+    inline void SetNoLength()       { m_bNoLength = true; }
 
 public:
     SwFldPortion( const SwFldPortion& rFld );
@@ -63,7 +63,7 @@ public:
 
     void TakeNextOffset( const SwFldPortion* pFld );
     void CheckScript( const SwTxtSizeInfo &rInf );
-    inline sal_Bool HasFont() const { return 0 != pFnt; }
+    inline bool HasFont() const { return 0 != pFnt; }
     // #i89179# - made public
     inline const SwFont *GetFont() const { return pFnt; }
 

@@ -1421,7 +1421,7 @@ void SwTxtFrm::PrepWidows( const MSHORT nNeed, sal_Bool bNotify )
         if( bSplit )
         {
             GetFollow()->SetOfst( aLine.GetEnd() );
-            aLine.TruncLines( sal_True );
+            aLine.TruncLines( true );
             if( pPara->IsFollowField() )
                 GetFollow()->SetFieldFollow( sal_True );
         }

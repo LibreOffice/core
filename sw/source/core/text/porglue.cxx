@@ -201,7 +201,7 @@ SwMarginPortion::SwMarginPortion( const KSHORT nFixedWidth )
 void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
 {
     SwGluePortion *pRight = 0;
-    sal_Bool bNoMove = 0 != pCurr->GetpKanaComp();
+    bool bNoMove = 0 != pCurr->GetpKanaComp();
     while( pRight != this )
     {
 

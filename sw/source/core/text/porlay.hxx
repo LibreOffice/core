@@ -53,11 +53,11 @@ public:
                 { return nStart + nLen; }
     inline xub_StrLen &Len() { return nLen; }
     inline const xub_StrLen &Len() const { return nLen; }
-    inline sal_Bool operator<(const SwCharRange &rRange) const
+    inline bool operator<(const SwCharRange &rRange) const
                 { return nStart < rRange.nStart; }
-    inline sal_Bool operator>(const SwCharRange &rRange) const
+    inline bool operator>(const SwCharRange &rRange) const
                 { return nStart + nLen > rRange.nStart + rRange.nLen; }
-    inline sal_Bool operator!=(const SwCharRange &rRange) const
+    inline bool operator!=(const SwCharRange &rRange) const
                 { return *this < rRange || *this > rRange; }
     SwCharRange &operator+=(const SwCharRange &rRange);
 };
@@ -180,7 +180,7 @@ public:
     //
     // STUFF FOR JUSTIFIED ALIGNMENT
     //
-    inline sal_Bool IsSpaceAdd() { return pLLSpaceAdd != NULL; }
+    inline bool IsSpaceAdd() { return pLLSpaceAdd != NULL; }
     void InitSpaceAdd();     // Creates pLLSpaceAdd if necessary
     void CreateSpaceAdd( const long nInit = 0 );
     inline void FinishSpaceAdd() { delete pLLSpaceAdd; pLLSpaceAdd = NULL; }
