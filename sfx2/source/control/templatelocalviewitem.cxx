@@ -12,8 +12,8 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/attribute/fillbitmapattribute.hxx>
-#include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
 #include <drawinglayer/primitive2d/fillbitmapprimitive2d.hxx>
+#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
@@ -42,10 +42,10 @@ void TemplateLocalViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *p
     int nSeqSize = 2;
 
     if (!maPreview1.IsEmpty())
-        nSeqSize += 5;
+        nSeqSize += 3;
 
     if (!maPreview2.IsEmpty())
-        nSeqSize += 5;
+        nSeqSize += 3;
 
     BColor aFillColor = pAttrs->aFillColor;
     Primitive2DSequence aSeq(nSeqSize);
@@ -70,6 +70,20 @@ void TemplateLocalViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *p
         fScaleX = 0.8f;
         fScaleY = 0.8f;
 
+        float fWidth = aImageSize.Width()*fScaleX;
+        float fHeight = aImageSize.Height()*fScaleY;
+        float fPosX = aPos.getX()+35*fScaleX;
+        float fPosY = aPos.getY()+20*fScaleY;
+
+        B2DPolygon aBounds;
+        aBounds.append(B2DPoint(fPosX,fPosY));
+        aBounds.append(B2DPoint(fPosX+fWidth,fPosY));
+        aBounds.append(B2DPoint(fPosX+fWidth,fPosY+fHeight));
+        aBounds.append(B2DPoint(fPosX,fPosY+fHeight));
+        aBounds.setClosed(true);
+
+        aSeq[nCount++] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
+                                            B2DPolyPolygon(aBounds), Color(COL_WHITE).getBColor()));
         aSeq[nCount++] = Primitive2DReference( new FillBitmapPrimitive2D(
                                             createScaleTranslateB2DHomMatrix(fScaleX,fScaleY,aPos.X(),aPos.Y()),
                                             FillBitmapAttribute(maPreview2,
@@ -79,23 +93,26 @@ void TemplateLocalViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *p
                                             ));
 
         // draw thumbnail borders
-        float fWidth = aImageSize.Width()*fScaleX;
-        float fHeight = aImageSize.Height()*fScaleY;
-        float fPosX = aPos.getX()+35*fScaleX;
-        float fPosY = aPos.getY()+20*fScaleY;
-
-        aSeq[nCount++] = Primitive2DReference(createBorderLine(B2DPoint(fPosX,fPosY),
-                                                               B2DPoint(fPosX+fWidth,fPosY)));
-        aSeq[nCount++] = Primitive2DReference(createBorderLine(B2DPoint(fPosX+fWidth,fPosY),
-                                                               B2DPoint(fPosX+fWidth,fPosY+fHeight)));
-        aSeq[nCount++] = Primitive2DReference(createBorderLine(B2DPoint(fPosX+fWidth,fPosY+fHeight),
-                                                               B2DPoint(fPosX,fPosY+fHeight)));
-        aSeq[nCount++] = Primitive2DReference(createBorderLine(B2DPoint(fPosX,fPosY+fHeight),
-                                                               B2DPoint(fPosX,fPosY)));
+        aSeq[nCount++] = Primitive2DReference(createBorderLine(aBounds));
     }
 
     if (!maPreview1.IsEmpty())
     {
+        // draw thumbnail borders
+        float fWidth = aImageSize.Width()*fScaleX;
+        float fHeight = aImageSize.Height()*fScaleY;
+        float fPosX = aPos.getX();
+        float fPosY = aPos.getY();
+
+        B2DPolygon aBounds;
+        aBounds.append(B2DPoint(fPosX,fPosY));
+        aBounds.append(B2DPoint(fPosX+fWidth,fPosY));
+        aBounds.append(B2DPoint(fPosX+fWidth,fPosY+fHeight));
+        aBounds.append(B2DPoint(fPosX,fPosY+fHeight));
+        aBounds.setClosed(true);
+
+        aSeq[nCount++] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
+                                            B2DPolyPolygon(aBounds), Color(COL_WHITE).getBColor()));
         aSeq[nCount++] = Primitive2DReference( new FillBitmapPrimitive2D(
                                             createScaleTranslateB2DHomMatrix(fScaleX,fScaleY,aPos.X(),aPos.Y()),
                                             FillBitmapAttribute(maPreview1,
@@ -104,20 +121,7 @@ void TemplateLocalViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *p
                                                                 false)
                                             ));
 
-        // draw thumbnail borders
-        float fWidth = aImageSize.Width()*fScaleX;
-        float fHeight = aImageSize.Height()*fScaleY;
-        float fPosX = aPos.getX();
-        float fPosY = aPos.getY();
-
-        aSeq[nCount++] = Primitive2DReference(createBorderLine(B2DPoint(fPosX,fPosY),
-                                                               B2DPoint(fPosX+fWidth,fPosY)));
-        aSeq[nCount++] = Primitive2DReference(createBorderLine(B2DPoint(fPosX+fWidth,fPosY),
-                                                               B2DPoint(fPosX+fWidth,fPosY+fHeight)));
-        aSeq[nCount++] = Primitive2DReference(createBorderLine(B2DPoint(fPosX+fWidth,fPosY+fHeight),
-                                                               B2DPoint(fPosX,fPosY+fHeight)));
-        aSeq[nCount++] = Primitive2DReference(createBorderLine(B2DPoint(fPosX,fPosY+fHeight),
-                                                               B2DPoint(fPosX,fPosY)));
+        aSeq[nCount++] = Primitive2DReference(createBorderLine(aBounds));
     }
 
     // Draw centered text below thumbnail

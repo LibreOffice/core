@@ -36,7 +36,7 @@ class Window;
 class ThumbnailView;
 
 namespace basegfx {
-    class B2DPoint;
+    class B2DPolygon;
 }
 
 namespace drawinglayer {
@@ -45,7 +45,7 @@ namespace drawinglayer {
     }
 
     namespace primitive2d {
-        class BorderLinePrimitive2D;
+        class PolygonHairlinePrimitive2D;
     }
 }
 
@@ -107,8 +107,8 @@ public:
     virtual void Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,
                         const ThumbnailItemAttributes *pAttrs);
 
-    static drawinglayer::primitive2d::BorderLinePrimitive2D*
-        createBorderLine (const basegfx::B2DPoint &rStart, const basegfx::B2DPoint &rEnd);
+    static drawinglayer::primitive2d::PolygonHairlinePrimitive2D*
+        createBorderLine (const basegfx::B2DPolygon &rPolygon);
 
 protected:
 
