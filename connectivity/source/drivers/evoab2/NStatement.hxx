@@ -47,7 +47,6 @@ namespace connectivity
 {
     namespace evoab
     {
-        class OEvoabResultSet;
         class OEvoabConnection;
         typedef ::cppu::WeakComponentImplHelper2    <   ::com::sun::star::sdbc::XWarningsSupplier
                                                     ,   ::com::sun::star::sdbc::XCloseable
@@ -148,7 +147,6 @@ namespace connectivity
 
         private:
             ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
-            OEvoabResultSet                      *m_pResultSet;
             OEvoabConnection                     *m_pConnection;
             connectivity::OSQLParser              m_aParser;
             connectivity::OSQLParseTreeIterator   m_aSQLIterator;
@@ -165,8 +163,6 @@ namespace connectivity
             sal_Int32                                   m_nResultSetConcurrency;
             sal_Bool                                    m_bEscapeProcessing;
             // </properties>
-
-            ::cppu::OBroadcastHelper& rBHelper;
 
         protected:
 
