@@ -713,7 +713,6 @@ sal_Bool SAL_CALL ORowSetBase::isFirst(  ) throw(SQLException, RuntimeException)
     if ( impl_rowDeleted() )
         return ( m_nDeletedPosition == 1 );
 
-    positionCache( MOVE_NONE_REFRESH_ONLY );
     sal_Bool bIsFirst = m_pCache->isFirst();
 
     OSL_TRACE("DBACCESS ORowSetBase::isFirst() = %i Clone = %i",bIsFirst,m_bClone);
@@ -745,7 +744,6 @@ sal_Bool SAL_CALL ORowSetBase::isLast(  ) throw(SQLException, RuntimeException)
             return ( m_nDeletedPosition == impl_getRowCount() );
     }
 
-    positionCache( MOVE_NONE_REFRESH_ONLY );
     sal_Bool bIsLast = m_pCache->isLast();
 
     OSL_TRACE("DBACCESS ORowSetBase::isLast() = %i Clone = %i",bIsLast,m_bClone);
@@ -1111,14 +1109,6 @@ void ORowSetBase::setCurrentRow( sal_Bool _bMoved, sal_Bool _bDoNotify, const OR
         OSL_ENSURE(m_aCurrentRow->is(),"Currentrow isn't valid");
         OSL_ENSURE(m_aBookmark.hasValue(),"Bookmark has no value!");
 
-#if OSL_DEBUG_LEVEL > 0
-        sal_Int32 nOldRow = m_pCache->getRow();
-#endif
-        positionCache( MOVE_NONE_REFRESH_ONLY );
-#if OSL_DEBUG_LEVEL > 0
-        sal_Int32 nNewRow = m_pCache->getRow();
-        OSL_ENSURE(nOldRow == nNewRow,"Old position is not equal to new postion");
-#endif
         m_aCurrentRow   = m_pCache->m_aMatrixIter;
         m_bIsInsertRow  = sal_False;
         OSL_ENSURE(!m_aCurrentRow.isNull(),"CurrentRow is nul after positionCache!");
@@ -1328,7 +1318,11 @@ void ORowSetBase::positionCache( CursorMoveDirection _ePrepareForDirection )
     sal_Bool bSuccess = sal_False;
     if ( m_aBookmark.hasValue() )
     {
-        bSuccess = m_pCache->moveToBookmark( m_aBookmark );
+        if ( _ePrepareForDirection == MOVE_NONE_REFRESH_ONLY ||
+             m_pCache->compareBookmarks( m_aBookmark, m_pCache->getBookmark() ) != CompareBookmark::EQUAL )
+            bSuccess = m_pCache->moveToBookmark( m_aBookmark );
+        else
+            bSuccess = sal_True;
     }
     else
     {
