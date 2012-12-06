@@ -30,7 +30,7 @@
 #include <vcl/status.hxx>
 #include <svtools/imgdef.hxx>
 #include <svtools/miscopt.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/processfactory.hxx>
 
 using namespace ::cppu;
@@ -153,6 +153,8 @@ throw ( Exception, RuntimeException )
                     aPropValue.Value >>= m_xParentWindow;
                 else if ( aPropValue.Name == "Identifier" )
                     aPropValue.Value >>= m_nID;
+                else if ( aPropValue.Name == "StatusbarItem" )
+                    aPropValue.Value >>= m_xStatusbarItem;
             }
         }
 
@@ -220,6 +222,7 @@ throw (::com::sun::star::uno::RuntimeException)
     m_xServiceManager.clear();
     m_xFrame.clear();
     m_xParentWindow.clear();
+    m_xStatusbarItem.clear();
 
     m_bDisposed = sal_True;
 }
@@ -240,26 +243,31 @@ throw ( RuntimeException )
 void SAL_CALL StatusbarController::disposing( const EventObject& Source )
 throw ( RuntimeException )
 {
-    Reference< XInterface > xSource( Source.Source );
-
     SolarMutexGuard aSolarMutexGuard;
 
     if ( m_bDisposed )
+        return;
+
+    Reference< XFrame > xFrame( Source.Source, UNO_QUERY );
+    if ( xFrame.is() )
+    {
+        if ( xFrame == m_xFrame )
+            m_xFrame.clear();
+        return;
+    }
+
+    Reference< XDispatch > xDispatch( Source.Source, UNO_QUERY );
+    if ( !xDispatch.is() )
         return;
 
     URLToDispatchMap::iterator pIter = m_aListenerMap.begin();
     while ( pIter != m_aListenerMap.end() )
     {
         // Compare references and release dispatch references if they are equal.
-        Reference< XInterface > xIfac( pIter->second, UNO_QUERY );
-        if ( xSource == xIfac )
+        if ( xDispatch == pIter->second )
             pIter->second.clear();
         ++pIter;
     }
-
-    Reference< XInterface > xIfac( m_xFrame, UNO_QUERY );
-    if ( xIfac == xSource )
-        m_xFrame.clear();
 }
 
 // XStatusListener
@@ -318,18 +326,17 @@ throw (::com::sun::star::uno::RuntimeException)
 void SAL_CALL StatusbarController::paint(
     const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >&,
     const ::com::sun::star::awt::Rectangle&,
-    ::sal_Int32,
     ::sal_Int32 )
 throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
-void SAL_CALL StatusbarController::click()
+void SAL_CALL StatusbarController::click( const ::com::sun::star::awt::Point& )
 throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
-void SAL_CALL StatusbarController::doubleClick() throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL StatusbarController::doubleClick( const ::com::sun::star::awt::Point& ) throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -465,37 +472,29 @@ void StatusbarController::bindListener()
     }
 
     // Call without locked mutex as we are called back from dispatch implementation
-    if ( xStatusListener.is() )
+    if ( !xStatusListener.is() )
+        return;
+
+    for ( sal_uInt32 i = 0; i < aDispatchVector.size(); i++ )
     {
         try
         {
-            for ( sal_uInt32 i = 0; i < aDispatchVector.size(); i++ )
+            Listener& rListener = aDispatchVector[i];
+            if ( rListener.xDispatch.is() )
+                rListener.xDispatch->addStatusListener( xStatusListener, rListener.aURL );
+            else if ( rListener.aURL.Complete == m_aCommandURL )
             {
-                Listener& rListener = aDispatchVector[i];
-                if ( rListener.xDispatch.is() )
-                    rListener.xDispatch->addStatusListener( xStatusListener, rListener.aURL );
-                else if ( rListener.aURL.Complete == m_aCommandURL )
-                {
-                    try
-                    {
-                        // Send status changed for the main URL, if we cannot get a valid dispatch object.
-                        // UI disables the button. Catch exception as we release our mutex, it is possible
-                        // that someone else already disposed this instance!
-                        FeatureStateEvent aFeatureStateEvent;
-                        aFeatureStateEvent.IsEnabled = sal_False;
-                        aFeatureStateEvent.FeatureURL = rListener.aURL;
-                        aFeatureStateEvent.State = Any();
-                        xStatusListener->statusChanged( aFeatureStateEvent );
-                    }
-                    catch ( Exception& )
-                    {
-                    }
-                }
+                // Send status changed for the main URL, if we cannot get a valid dispatch object.
+                // UI disables the button. Catch exception as we release our mutex, it is possible
+                // that someone else already disposed this instance!
+                FeatureStateEvent aFeatureStateEvent;
+                aFeatureStateEvent.IsEnabled = sal_False;
+                aFeatureStateEvent.FeatureURL = rListener.aURL;
+                aFeatureStateEvent.State = Any();
+                xStatusListener->statusChanged( aFeatureStateEvent );
             }
         }
-        catch ( Exception& )
-        {
-        }
+        catch ( ... ){}
     }
 }
 
