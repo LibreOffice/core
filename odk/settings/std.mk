@@ -35,6 +35,7 @@ OUT_SLB=$(OUT)/slb
 OUT_MISC=$(OUT)/misc
 OUT_OBJ=$(OUT)/obj
 OUT_CLASS=$(OUT)/class
+OUT_DEPLOY=$(OUT)/deploy
 IDL_DIR=$(PRJ)/idl
 BIN_DIR=$(PRJ)/bin
 CLASSES_DIR=$(PRJ)/classes

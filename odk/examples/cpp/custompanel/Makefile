@@ -43,9 +43,6 @@ COMP_TYPEFLAG = $(OUT_MISC)/cpp_$(COMP_NAME)_types.flag
 
 # Allow deploying the extension when running it
 
-#this should be in odk/settings/std.mk
-OUT_DEPLOY=$(OUT)/deploy
-
 OUT_COMP_DEPLOY=$(OUT_DEPLOY)/$(COMP_NAME)
 OUT_DEPLOY_DIR=$(subst /,$(PS),$(OUT_COMP_DEPLOY))
 OUT_DEPLOY_URL=$(URLPREFIX)$(OUT_COMP_DEPLOY)
