@@ -33,25 +33,11 @@ using ::std::vector;
 using ::std::auto_ptr;
 using ::rtl::OUString;
 
-static bool lcl_mayBeRangeConstString( const OUString &aRangeStr )
-{
-    if( aRangeStr.getLength() >= 3 && aRangeStr.endsWithAsciiL( "\"", 1 ) )
-    {
-        if( aRangeStr[0] == '"' )
-            return true;
-        else if( aRangeStr[0] == '=' && aRangeStr[1] == '"' )
-            return true;
-    }
-
-    return false;
-}
-
 void ScRefTokenHelper::compileRangeRepresentation(
     vector<ScTokenRef>& rRefTokens, const OUString& rRangeStr, ScDocument* pDoc,
     const sal_Unicode cSep, FormulaGrammar::Grammar eGrammar)
 {
     const sal_Unicode cQuote = '\'';
-    bool bMayBeConstString = lcl_mayBeRangeConstString( rRangeStr );
 
     // #i107275# ignore parentheses
     OUString aRangeStr = rRangeStr;
@@ -77,48 +63,49 @@ void ScRefTokenHelper::compileRangeRepresentation(
         if (!nLen)
             continue;   // Should a missing range really be allowed?
         if (nLen != 1)
-            bFailure = true;
-        else
         {
-            pArray->Reset();
-            const FormulaToken* p = pArray->Next();
-            if (!p)
-                bFailure = true;
-            else
-            {
-                const ScToken* pT = static_cast<const ScToken*>(p);
-                switch (pT->GetType())
-                {
-                    case svSingleRef:
-                        if (!pT->GetSingleRef().Valid())
-                            bFailure = true;
-                        break;
-                    case svDoubleRef:
-                        if (!pT->GetDoubleRef().Valid())
-                            bFailure = true;
-                        break;
-                    case svExternalSingleRef:
-                        if (!pT->GetSingleRef().ValidExternal())
-                            bFailure = true;
-                        break;
-                    case svExternalDoubleRef:
-                        if (!pT->GetDoubleRef().ValidExternal())
-                            bFailure = true;
-                        break;
-                    case svString:
-                        if (!bMayBeConstString)
-                            bFailure = true;
-                        bMayBeConstString = false;
-                        break;
-                    default:
-                        bFailure = true;
-                        break;
-                }
-                if (!bFailure)
-                    rRefTokens.push_back(
-                            ScTokenRef(static_cast<ScToken*>(p->Clone())));
-            }
+            bFailure = true;
+            break;
         }
+
+        pArray->Reset();
+        const FormulaToken* p = pArray->Next();
+        if (!p)
+        {
+            bFailure = true;
+            break;
+        }
+
+        const ScToken* pT = static_cast<const ScToken*>(p);
+        switch (pT->GetType())
+        {
+            case svSingleRef:
+                if (!pT->GetSingleRef().Valid())
+                    bFailure = true;
+                break;
+            case svDoubleRef:
+                if (!pT->GetDoubleRef().Valid())
+                    bFailure = true;
+                break;
+            case svExternalSingleRef:
+                if (!pT->GetSingleRef().ValidExternal())
+                    bFailure = true;
+                break;
+            case svExternalDoubleRef:
+                if (!pT->GetDoubleRef().ValidExternal())
+                    bFailure = true;
+                break;
+            case svString:
+                if (!pT->GetString().Len())
+                    bFailure = true;
+                break;
+            default:
+                bFailure = true;
+                break;
+        }
+        if (!bFailure)
+            rRefTokens.push_back(
+                    ScTokenRef(static_cast<ScToken*>(p->Clone())));
 
     }
     if (bFailure)

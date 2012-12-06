@@ -24,6 +24,8 @@
 #include "oox/drawingml/chart/datasourcecontext.hxx"
 #include "oox/drawingml/chart/titlemodel.hxx"
 
+#include "rtl/ustrbuf.hxx"
+
 namespace oox {
 namespace drawingml {
 namespace chart {
@@ -65,9 +67,13 @@ ContextHandlerRef TextContext::onCreateContext( sal_Int32 nElement, const Attrib
 
 void TextContext::onCharacters( const OUString& rChars )
 {
-    // store as single string sequence element
     if( isCurrentElement( C_TOKEN( v ) ) )
-        mrModel.mxDataSeq.create().maData[ 0 ] <<= rChars;
+    {
+        // Static text is stored as a single string formula token.
+        OUStringBuffer aBuf;
+        aBuf.append('"').append(rChars).append('"');
+        mrModel.mxDataSeq.create().maFormula = aBuf.makeStringAndClear();
+    }
 }
 
 // ============================================================================
