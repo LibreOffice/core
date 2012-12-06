@@ -53,9 +53,8 @@ then
     echo ""
     echo " options:"
     echo "   --force-configure : force a new configuration of your SDK environment."
-    echo "                       Alternatively can you edit your SDK environment scripts directly:"
+    echo "                       Alternatively can you edit your SDK environment script directly:"
     echo "                        $HOME/$OO_SDK_NAME/setsdkenv_unix.sh"
-    echo "                        $HOME/$OO_SDK_NAME/setsdkenv_unix.csh"
     echo "   -h, --help        : print this help and exit"
     echo
     exit 1

@@ -159,8 +159,7 @@ INSTALLSCRIPT= \
     $(DESTDIR)/config.sub \
     $(DESTDIR)/configure.pl \
     $(DESTDIR)/setsdkenv_unix \
-    $(DESTDIR)/setsdkenv_unix.sh.in \
-    $(DESTDIR)/setsdkenv_unix.csh.in
+    $(DESTDIR)/setsdkenv_unix.sh.in
 .ELSE
 INSTALLSCRIPT= \
     $(DESTDIR)/setsdkenv_windows.bat \
