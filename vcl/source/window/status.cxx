@@ -1439,6 +1439,25 @@ void StatusBar::SetItemData( sal_uInt16 nItemId, void* pNewData )
     }
 }
 
+void StatusBar::RedrawItem( sal_uInt16 nItemId )
+{
+    if ( mbFormat )
+        return;
+
+    sal_uInt16 nPos = GetItemPos( nItemId );
+    if ( nPos == STATUSBAR_ITEM_NOTFOUND )
+        return;
+
+    ImplStatusItem* pItem = mpItemList->GetObject( nPos );
+    if ( pItem && (pItem->mnBits & SIB_USERDRAW) &&
+         pItem->mbVisible && ImplIsItemUpdate() )
+    {
+        Update();
+        ImplDrawItem( sal_True, nPos, sal_False, sal_False );
+        Flush();
+    }
+}
+
 // -----------------------------------------------------------------------
 
 void* StatusBar::GetItemData( sal_uInt16 nItemId ) const
