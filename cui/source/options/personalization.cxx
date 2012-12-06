@@ -90,7 +90,9 @@ SvxPersonalizationTabPage::SvxPersonalizationTabPage( Window *pParent, const Sfx
     // background image
     get( m_pNoBackground, "no_background" );
     get( m_pDefaultBackground, "default_background" );
+
     get( m_pOwnBackground, "own_background" );
+    m_pOwnBackground->SetClickHdl( LINK( this, SvxPersonalizationTabPage, ForceSelect ) );
 
     get( m_pSelectBackground, "select_background" );
     m_pSelectBackground->SetClickHdl( LINK( this, SvxPersonalizationTabPage, SelectBackground ) );
@@ -98,10 +100,11 @@ SvxPersonalizationTabPage::SvxPersonalizationTabPage( Window *pParent, const Sfx
     // persona
     get( m_pNoPersona, "no_persona" );
     get( m_pDefaultPersona, "default_persona" );
+
     get( m_pOwnPersona, "own_persona" );
+    m_pOwnPersona->SetClickHdl( LINK( this, SvxPersonalizationTabPage, ForceSelect ) );
 
     get( m_pSelectPersona, "select_persona" );
-    LINK( this, SvxPersonalizationTabPage, SelectPersona );
     m_pSelectPersona->SetClickHdl( LINK( this, SvxPersonalizationTabPage, SelectPersona ) );
 }
 
@@ -241,6 +244,16 @@ IMPL_LINK( SvxPersonalizationTabPage, SelectPersona, PushButton*, /*pButton*/ )
         }
         // else TODO msgbox that the URL did not match
     }
+
+    return 0;
+}
+
+IMPL_LINK( SvxPersonalizationTabPage, ForceSelect, RadioButton*, pButton )
+{
+    if ( pButton == m_pOwnBackground && m_aBackgroundURL.isEmpty() )
+        SelectBackground( m_pSelectBackground );
+    else if ( pButton == m_pOwnPersona && m_aPersonaSettings.isEmpty() )
+        SelectPersona( m_pSelectPersona );
 
     return 0;
 }
