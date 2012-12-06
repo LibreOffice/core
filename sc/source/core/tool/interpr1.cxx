@@ -44,6 +44,7 @@
 #include "globstr.hrc"
 #include "attrib.hxx"
 #include "jumpmatrix.hxx"
+#include "random.hxx"
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
@@ -1711,7 +1712,7 @@ void ScInterpreter::ScPi()
 void ScInterpreter::ScRandom()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScRandom" );
-    PushDouble((double)rand() / ((double)RAND_MAX+1.0));
+    PushDouble(sc::rng::uniform());
 }
 
 
