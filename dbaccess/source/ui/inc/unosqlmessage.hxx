@@ -64,7 +64,7 @@ public:
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
 protected:
-    virtual void initialize(com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > const & args) throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL initialize(com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > const & args) throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
 
 // OPropertySetHelper overridables
     // (overwrittin these three, because we have some special handling for our property)
