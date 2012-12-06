@@ -2823,12 +2823,12 @@ dnl ===================================================================
 
 reg_get_value()
 {
-	unset regvalue
-	_regvalue=`cat "/proc/registry/$1" 2> /dev/null`
+    unset regvalue
+    _regvalue=`cat "/proc/registry/$1" 2> /dev/null`
 
-	if test $? -eq 0; then
-		regvalue=$_regvalue
-	fi
+    if test $? -eq 0; then
+        regvalue=$_regvalue
+    fi
 }
 
 
@@ -3032,36 +3032,38 @@ AC_SUBST(HAVE_LD_BSYMBOLIC_FUNCTIONS)
 dnl ===================================================================
 dnl  Check which Microsoft C/C++ or MinGW compiler is used for WINNT
 dnl ===================================================================
-find_msvs() {
-# find Visual Studio 2012/2010/2008
-for ver in 11.0 10.0 9.0; do
-	reg_get_value HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VS/ProductDir
-	if test -n "$regvalue"; then
-		vstest=$regvalue
-		break
-	fi
-	reg_get_value HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VCExpress/$ver/Setup/VS/ProductDir
-	if test -n "$regvalue"; then
-		vstest=$regvalue
-		break
-	fi
-done
+find_msvs()
+{
+    # find Visual Studio 2012/2010/2008
+    for ver in 11.0 10.0 9.0; do
+            reg_get_value HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VS/ProductDir
+            if test -n "$regvalue"; then
+                    vstest=$regvalue
+                    break
+            fi
+            reg_get_value HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VCExpress/$ver/Setup/VS/ProductDir
+            if test -n "$regvalue"; then
+                    vstest=$regvalue
+                    break
+            fi
+    done
 }
 
-find_msvc() {
-# find Visual Studio 2012/2010/2008
-for ver in 11.0 10.0 9.0; do
-	reg_get_value HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VC/ProductDir
-		if test -n "$regvalue"; then
-			vctest=$regvalue
-			break
-		fi
-	reg_get_value HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VCExpress/$ver/Setup/VC/ProductDir
-		if test -n "$regvalue"; then
-			vctest=$regvalue
-			break
-		fi
-done
+find_msvc()
+{
+    # find Visual Studio 2012/2010/2008
+    for ver in 11.0 10.0 9.0; do
+            reg_get_value HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VC/ProductDir
+                    if test -n "$regvalue"; then
+                            vctest=$regvalue
+                            break
+                    fi
+            reg_get_value HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VCExpress/$ver/Setup/VC/ProductDir
+                    if test -n "$regvalue"; then
+                            vctest=$regvalue
+                            break
+                    fi
+    done
 }
 
 SHOWINCLUDES_PREFIX=
@@ -3069,7 +3071,7 @@ if test "$_os" = "WINNT"; then
     if test "$WITH_MINGW" != "yes"; then
         AC_MSG_CHECKING([for a friendly Microsoft C/C++ compiler installation path])
         if test -z "$with_cl_home"; then
-			find_msvc
+                        find_msvc
             if test "$BITNESS_OVERRIDE" = ""; then
                 if test -x "$vctest/bin/cl.exe"; then
                     with_cl_home=$vctest
@@ -4731,145 +4733,151 @@ dnl that to mean Visual Studio .NET 2003 ? And does this also
 dnl in fact apply equally to what we actually support, i.e.
 dnl Visual Studio 2008 and 2010?)
 dnl ===================================================================
-find_csc() {
-if test $VCVER -eq 90; then
-	reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/NET Framework Setup/NDP/v3.5/InstallPath"
-	if test -n "$regvalue"; then
-		csctest=$regvalue
-		return
-	fi
-	reg_get_value HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/.NETFramework/InstallRoot
-	if test -n "$regvalue"; then
-		csctest=${regvalue}"v2.0.50727"
-	fi
-else
-	reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/NET Framework Setup/NDP/v4/Client/InstallPath"
-	if test -n "$regvalue"; then
-		csctest=$regvalue
-		break
-	fi
-fi
+find_csc()
+{
+    if test $VCVER -eq 90; then
+            reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/NET Framework Setup/NDP/v3.5/InstallPath"
+            if test -n "$regvalue"; then
+                    csctest=$regvalue
+                    return
+            fi
+            reg_get_value HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/.NETFramework/InstallRoot
+            if test -n "$regvalue"; then
+                    csctest=${regvalue}"v2.0.50727"
+            fi
+    else
+            reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/NET Framework Setup/NDP/v4/Client/InstallPath"
+            if test -n "$regvalue"; then
+                    csctest=$regvalue
+                    break
+            fi
+    fi
 }
 
-find_al() {
-for x in `ls /proc/registry/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft\ SDKs/Windows`; do
-		reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/$x/WinSDK-NetFx40Tools/InstallationFolder"
-		if test -n "$regvalue" -a \( -f "$regvalue/al.exe" -o -f "$regvalue/bin/al.exe" \); then
-			altest=$regvalue
-			break
-		fi
-done
+find_al()
+{
+    for x in `ls /proc/registry/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft\ SDKs/Windows`; do
+                    reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/$x/WinSDK-NetFx40Tools/InstallationFolder"
+                    if test -n "$regvalue" -a \( -f "$regvalue/al.exe" -o -f "$regvalue/bin/al.exe" \); then
+                            altest=$regvalue
+                            break
+                    fi
+    done
 }
 
-find_dotnetsdk() {
-for ver in 1.1 2.0; do
-	reg_get_value HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/.NETFramework/sdkInstallRootv$ver
-	if test -n "$regvalue"; then
-		frametest=$regvalue
-		break
-	fi
-done
+find_dotnetsdk()
+{
+    for ver in 1.1 2.0; do
+            reg_get_value HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/.NETFramework/sdkInstallRootv$ver
+            if test -n "$regvalue"; then
+                    frametest=$regvalue
+                    break
+            fi
+    done
 }
 
-find_winsdk() {
-reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot"
-if test -n "$regvalue"; then
-	winsdktest=$regvalue
-	return
-fi
-reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/CurrentInstallFolder"
-if test -n "$regvalue"; then
-	winsdktest=$regvalue
-	return
-fi
-reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/Directories/Install Dir"
-if test -n "$regvalue"; then
-	winsdktest=$regvalue
-	return
-fi
-for x in `ls /proc/registry/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/InstalledSDKs`; do
-	reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/InstalledSDKs/$x/Install Dir"
-	if test -n "$regvalue"; then
-		winsdktest=$regvalue
-		break
-	fi
-done
+find_winsdk()
+{
+    reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot"
+    if test -n "$regvalue"; then
+            winsdktest=$regvalue
+            return
+    fi
+    reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/CurrentInstallFolder"
+    if test -n "$regvalue"; then
+            winsdktest=$regvalue
+            return
+    fi
+    reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/Directories/Install Dir"
+    if test -n "$regvalue"; then
+            winsdktest=$regvalue
+            return
+    fi
+    for x in `ls /proc/registry/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/InstalledSDKs`; do
+            reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/InstalledSDKs/$x/Install Dir"
+            if test -n "$regvalue"; then
+                    winsdktest=$regvalue
+                    break
+            fi
+    done
 }
 
 #TODO: move copy_* functions to external/ module once gbuildified
-copy_msms() {
-for ver in 9.0 10.0 11.0; do
-	reg_get_value HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VS/MSMDir
-	if test -n "$regvalue"; then
-		if test -e "$regvalue/Microsoft_VC${VCVER}_CRT_x86.msm"; then
-			msmdir=$regvalue
-			break
-		fi
-	fi
-done
-msmdir=`cygpath -d "$msmdir"`
-msmdir=`cygpath -u "$msmdir"`
-if test -z "$msmdir"; then
-	AC_MSG_ERROR([Merge modules not found])
-fi
+copy_msms()
+{
+    for ver in 9.0 10.0 11.0; do
+            reg_get_value HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VS/MSMDir
+            if test -n "$regvalue"; then
+                    if test -e "$regvalue/Microsoft_VC${VCVER}_CRT_x86.msm"; then
+                            msmdir=$regvalue
+                            break
+                    fi
+            fi
+    done
+    msmdir=`cygpath -d "$msmdir"`
+    msmdir=`cygpath -u "$msmdir"`
+    if test -z "$msmdir"; then
+            AC_MSG_ERROR([Merge modules not found])
+    fi
 
-if test $VCVER -eq 90; then
-	cp $msmdir/policy_9_0_Microsoft_VC90_CRT_x86.msm ./external/msm90
-	if test $? -ne 0; then
-		AC_MSG_ERROR([Failed to copy merge modules])
-	fi
-fi
-cp $msmdir/Microsoft_VC${VCVER}_CRT_x86.msm ./external/msm${VCVER}
-if test $? -ne 0; then
-	AC_MSG_ERROR([Failed to copy merge modules])
-fi
-cp $msmdir/Microsoft_VC${VCVER}_CRT_x64.msm ./external/msm${VCVER}
-if test $? -ne 0; then
-	AC_MSG_WARN([Failed to copy x64 merge modules, installation will lack the 64-bit Explorer extension])
-fi
+    if test $VCVER -eq 90; then
+            cp $msmdir/policy_9_0_Microsoft_VC90_CRT_x86.msm ./external/msm90
+            if test $? -ne 0; then
+                    AC_MSG_ERROR([Failed to copy merge modules])
+            fi
+    fi
+    cp $msmdir/Microsoft_VC${VCVER}_CRT_x86.msm ./external/msm${VCVER}
+    if test $? -ne 0; then
+            AC_MSG_ERROR([Failed to copy merge modules])
+    fi
+    cp $msmdir/Microsoft_VC${VCVER}_CRT_x64.msm ./external/msm${VCVER}
+    if test $? -ne 0; then
+            AC_MSG_WARN([Failed to copy x64 merge modules, installation will lack the 64-bit Explorer extension])
+    fi
 }
 
-copy_msvc_dlls() {
+copy_msvc_dlls()
+{
+    if test $CPUNAME == INTEL; then
+            vsarch=x86
+    else
+            vsarch=amd64
+    fi
 
-if test $CPUNAME == INTEL; then
-	vsarch=x86
-else
-	vsarch=amd64
-fi
+    if test -f $with_cl_home/redist/$vsarch/Microsoft.VC${VCVER}.CRT/msvcp${VCVER}.dll; then
+            vsdlldir=$with_cl_home/redist/$vsarch/Microsoft.VC${VCVER}.CRT
+    else
+            AC_MSG_ERROR([can not find VS dll $with_cl_home/redist/$vsarch/Microsoft.VC${VCVER}.CRT/msvcp${VCVER}.dll])
+    fi
 
-if test -f $with_cl_home/redist/$vsarch/Microsoft.VC${VCVER}.CRT/msvcp${VCVER}.dll; then
-	vsdlldir=$with_cl_home/redist/$vsarch/Microsoft.VC${VCVER}.CRT
-else
-	AC_MSG_ERROR([can't find VS dll $with_cl_home/redist/$vsarch/Microsoft.VC${VCVER}.CRT/msvcp${VCVER}.dll])
-fi
+    cp $vsdlldir/msvcp${VCVER}.dll $vsdlldir/msvcr${VCVER}.dll ./external/msvcp${VCVER}
 
-cp $vsdlldir/msvcp${VCVER}.dll $vsdlldir/msvcr${VCVER}.dll ./external/msvcp${VCVER}
-
-if test $VCVER == 90; then
-	cp $vsdlldir/msvcm${VCVER}.dll $vsdlldir/Microsoft.VC90.CRT.manifest ./external/msvcp${VCVER}
-	if test $? -ne 0; then
-		AC_MSG_ERROR([Failed to copy VS dlls])
-	fi
-fi
+    if test $VCVER == 90; then
+            cp $vsdlldir/msvcm${VCVER}.dll $vsdlldir/Microsoft.VC90.CRT.manifest ./external/msvcp${VCVER}
+            if test $? -ne 0; then
+                    AC_MSG_ERROR([Failed to copy VS dlls])
+            fi
+    fi
 }
 
-copy_dbghelp_dll() {
-if test ! -f ./external/dbghelp/dbghelp.dll -a -f $TARFILE_LOCATION/$DBGHELP_DLL; then
-	cp $TARFILE_LOCATION/$DBGHELP_DLL ./external/dbghelp/dbghelp.dll;
-fi
-if test ! -f ./external/dbghelp/dbghelp.dll; then
-	echo "dbghelp.dll is missing in external/dbghelp/."
-    echo "Get it from the Microsoft site and put it there."
-    echo "(Note: Microsoft seems to enjoy changing the exact location of this file."
-    echo "You may have to search Microsoft's website.) Last time it was seen at:"
-    echo "<http://www.microsoft.com/downloads/release.asp?releaseid=30682>."
-    exit 1
-fi
+copy_dbghelp_dll()
+{
+    if test ! -f ./external/dbghelp/dbghelp.dll -a -f $TARFILE_LOCATION/$DBGHELP_DLL; then
+            cp $TARFILE_LOCATION/$DBGHELP_DLL ./external/dbghelp/dbghelp.dll;
+    fi
+    if test ! -f ./external/dbghelp/dbghelp.dll; then
+            echo "dbghelp.dll is missing in external/dbghelp/."
+        echo "Get it from the Microsoft site and put it there."
+        echo "(Note: Microsoft seems to enjoy changing the exact location of this file."
+        echo "You may have to search Microsoft's website.) Last time it was seen at:"
+        echo "<http://www.microsoft.com/downloads/release.asp?releaseid=30682>."
+        exit 1
+    fi
 }
 
 if test "$build_os" = "cygwin"; then
-	copy_msvc_dlls
-	copy_dbghelp_dll
+        copy_msvc_dlls
+        copy_dbghelp_dll
 
     dnl Check midl.exe
     AC_PATH_PROG(MIDL_PATH, midl.exe)
@@ -4894,7 +4902,7 @@ if test "$build_os" = "cygwin"; then
         fi
     fi
     if test -z "$MIDL_PATH"; then
-		find_winsdk
+                find_winsdk
         if test -x "$winsdktest/Bin/midl.exe"; then
             MIDL_PATH="$winsdktest/Bin"
         elif test -x "$winsdktest/Bin/$SDK_ARCH/midl.exe"; then
@@ -4923,7 +4931,7 @@ if test "$build_os" = "cygwin"; then
     if test -x "$with_csc_path/csc.exe"; then
         CSC_PATH="$with_csc_path"
     else
-	   find_csc
+           find_csc
        if test -x "$csctest/csc.exe"; then
            CSC_PATH="$csctest"
        fi
@@ -4985,11 +4993,11 @@ if test "$build_os" = "cygwin"; then
         DOTNET_FRAMEWORK_HOME="$with_dotnet_framework_home"
     fi
     if test -z "$DOTNET_FRAMEWORK_HOME"; then
-		find_dotnetsdk
+                find_dotnetsdk
         if test -f "$frametest/lib/mscoree.lib"; then
             DOTNET_FRAMEWORK_HOME="$frametest"
         else
-			find_winsdk
+                        find_winsdk
             if test -f "$winsdktest/lib/mscoree.lib" -o -f "$winsdktest/lib/win8/um/$SDK_ARCH/mscoree.lib"; then
                 DOTNET_FRAMEWORK_HOME="$winsdktest"
             fi
@@ -5976,7 +5984,7 @@ AC_SUBST([JITC_PROCESSOR_TYPE])
 
 if test $_os = "WINNT" -a "$WITH_MINGW" != yes; then
     AC_MSG_CHECKING([for Microsoft_VC${VCVER}_CRT_x86.msm])
-	copy_msms
+        copy_msms
     if test -n $msms_copied ; then
         AC_MSG_RESULT([yes])
         SCPDEFS="$SCPDEFS -DWITH_VC${VCVER}_REDIST"
@@ -6002,13 +6010,13 @@ if test "$SOLAR_JAVA" != ""; then
 
         if test -z "$with_jdk_home"; then
             # Currently only auto-detects 32-bit JDK
-			for ver in 1.7 1.6 1.5 1.4 1.3; do
-			reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java Development Kit/$ver/JavaHome"
-			if test -n "$regvalue"; then
-				_jdk_home=$regvalue
-				break
-			fi
-			done
+                        for ver in 1.7 1.6 1.5 1.4 1.3; do
+                        reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java Development Kit/$ver/JavaHome"
+                        if test -n "$regvalue"; then
+                                _jdk_home=$regvalue
+                                break
+                        fi
+                        done
             if test -f "$_jdk_home/lib/jvm.lib" -a -f "$_jdk_home/bin/java.exe"; then
                 with_jdk_home="$_jdk_home"
                 howfound="found automatically"
@@ -9001,7 +9009,7 @@ if test "$_os" = "WINNT"; then
     if test "$build_os" = "cygwin"; then
         if test -z "$with_windows_sdk_home"; then
             # This first line will detect a February 2003 Microsoft Platform SDK
-			find_winsdk
+                        find_winsdk
             WINDOWS_SDK_HOME=$winsdktest
             # But there might be also an April 2005 PSDK, unfortunately MS changed
             # the registry entry. (we prefer the old version!?)
