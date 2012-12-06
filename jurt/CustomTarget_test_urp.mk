@@ -37,7 +37,7 @@ $(jurt_TESTURP)/done : \
 		$(call gb_Executable_get_target_for_build,javamaker)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JVM,1)
 	rm -rf $(jurt_TESTURP) && \
-	$(call gb_Helper_execute,javamaker -BUCR -O$(jurt_TESTURP) -nD $< -X$(OUTDIR)/bin/types.rdb) && \
+	$(call gb_Helper_execute,javamaker -BUCR -O$(jurt_TESTURP) -nD $< -X$(OUTDIR)/bin/udkapi.rdb) && \
 	touch $@
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:
