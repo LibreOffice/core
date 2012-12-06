@@ -1,5 +1,5 @@
 --- /dev/null	2012-11-27 15:14:41.892226008 +0100
-+++ /build/xmlsec1-1.2.14/compile	2012-11-29 12:27:14.000000000 +0100
++++ misc/xmlsec1-1.2.14/compile	2012-11-29 12:27:14.000000000 +0100
 @@ -0,0 +1,142 @@
 +#! /bin/sh
 +# Wrapper for compilers which do not understand `-c -o'.
