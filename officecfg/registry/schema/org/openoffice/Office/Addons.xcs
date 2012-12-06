@@ -192,6 +192,103 @@
         </info>
       </prop>
     </group>
+    <group oor:name="MergeStatusBarInstruction">
+      <info>
+        <desc>Describes a merge status bar instruction of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes. A merge instruction describes how the attached status bar items should be merged into the Office status bar.</desc>
+      </info>
+      <prop oor:name="MergePoint" oor:type="xs:string">
+        <info>
+          <desc>Describes the command that should be used as a reference point for the merge command.</desc>
+        </info>
+      </prop>
+      <prop oor:name="MergeCommand" oor:type="xs:string">
+        <info>
+          <desc>A command to be processed for this merge instruction.</desc>
+        </info>
+      </prop>
+      <prop oor:name="MergeCommandParameter" oor:type="xs:string">
+        <info>
+          <desc>Optional parameters for a merge command. Interpretation depends on the individual command.</desc>
+        </info>
+      </prop>
+      <prop oor:name="MergeFallback" oor:type="xs:string">
+        <info>
+          <desc>A fallback command to be used if MergeCommand cannot be applied.</desc>
+        </info>
+      </prop>
+      <prop oor:name="MergeContext" oor:type="xs:string">
+        <info>
+          <desc>A property to define the context of this merge instruction. It can be empty or a colon separated list of the supported application modules.</desc>
+        </info>
+      </prop>
+      <set oor:name="StatusBarItems" oor:node-type="StatusBarItem">
+        <info>
+          <desc>Contains a list of status bar items used by an Add-On.</desc>
+        </info>
+      </set>
+    </group>
+    <group oor:name="StatusBarItem">
+      <info>
+        <desc>Describes a status bar item representing a function of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
+      </info>
+      <prop oor:name="Context" oor:type="xs:string">
+        <info>
+          <desc>A property to define the context of a status bar item. It can be empty or a colon separated list of the supported application modules.</desc>
+        </info>
+      </prop>
+      <prop oor:name="URL" oor:type="xs:string">
+        <info>
+          <desc>A command URL which represents the function to execute.</desc>
+        </info>
+      </prop>
+      <prop oor:name="Title" oor:type="xs:string" oor:localized="true">
+        <info>
+          <desc>A localized string used as the status bar item label.</desc>
+        </info>
+        <value></value>
+      </prop>
+      <prop oor:name="Alignment" oor:type="xs:string">
+        <info>
+          <desc>The alignment of the status bar item.</desc>
+        </info>
+        <constraints>
+          <enumeration oor:value="left">
+            <info>
+              <desc>The status bar control is aligned to the left</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="center">
+            <info>
+              <desc>The status bar control is aligned in the center</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="right">
+            <info>
+              <desc>The status bar control is aligned to the right</desc>
+            </info>
+          </enumeration>
+        </constraints>
+        <value>left</value>
+      </prop>
+      <prop oor:name="AutoSize" oor:type="xs:boolean">
+        <info>
+          <desc>Specifies whether the size of the status bar item is fixed (false) or not (true).</desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="OwnerDraw" oor:type="xs:boolean">
+        <info>
+          <desc>Specifies whether the contents of the status bar item are drawn by the client (true) or by the internal implemenetation (false).</desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="Width" oor:type="xs:long">
+        <info>
+          <desc>A property to define the size of a status bar item.</desc>
+        </info>
+        <value>0</value>
+      </prop>
+    </group>
     <group oor:name="UserDefinedImages">
       <info>
         <desc>A group of optional user-defined images. There are two ways to define image - 1. Embed the image data directly into the configuration. 2. Use file URLs to address external bitmap files. Embedded image data has a higher priority than file URLs.</desc>
@@ -267,6 +364,11 @@
         <desc>Contains a list of merge toolbar instructions defined by an Add-On which specify how to merge toolbar items into an existing toolbar.</desc>
       </info>
     </set>
+    <set oor:name="MergeStatusBarItems" oor:node-type="MergeStatusBarInstruction">
+      <info>
+        <desc>Contains a list of merge status bar instructions defined by an Add-On which specify how to merge status bar items into an existing status bar.</desc>
+      </info>
+    </set>
   </templates>
   <component>
     <group oor:name="AddonUI">
@@ -301,6 +403,11 @@
       <set oor:name="OfficeToolbarMerging" oor:node-type="MergeToolBarItems">
         <info>
           <desc>Contains a list of toolbar merging instructions of different add-ons. </desc>
+        </info>
+      </set>
+      <set oor:name="OfficeStatusbarMerging" oor:node-type="MergeStatusBarItems">
+        <info>
+          <desc>Contains a list of status bar merging instructions of different add-ons. </desc>
         </info>
       </set>
       <set oor:name="OfficeHelp" oor:node-type="MenuItem">
