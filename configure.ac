@@ -11866,7 +11866,17 @@ AC_SUBST(EXTRA_BUILDID)
 OOO_VENDOR=
 AC_MSG_CHECKING([for vendor])
 if test -z "$with_vendor" -o "$with_vendor" = "no"; then
-    AC_MSG_RESULT([not set])
+    OOO_VENDOR="$USERNAME"
+
+    if test -z "$OOO_VENDOR"; then
+        OOO_VENDOR="$USER"
+    fi
+
+    if test -z "$OOO_VENDOR"; then
+        OOO_VENDOR="`id -u -n`"
+    fi
+
+    AC_MSG_RESULT([not set, using $OOO_VENDOR])
 else
     OOO_VENDOR="$with_vendor"
     AC_MSG_RESULT([$OOO_VENDOR])
