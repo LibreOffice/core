@@ -26,8 +26,8 @@
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/attribute/fillbitmapattribute.hxx>
-#include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
 #include <drawinglayer/primitive2d/fillbitmapprimitive2d.hxx>
+#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
@@ -122,7 +122,7 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
                                const ThumbnailItemAttributes *pAttrs)
 {
     BColor aFillColor = pAttrs->aFillColor;
-    Primitive2DSequence aSeq(7);
+    Primitive2DSequence aSeq(4);
 
     // Draw background
     if ( mbSelected || mbHover )
@@ -150,14 +150,14 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
     float fPosX = maPrev1Pos.getX();
     float fPosY = maPrev1Pos.getY();
 
-    aSeq[2] = Primitive2DReference(createBorderLine(B2DPoint(fPosX,fPosY),
-                                                           B2DPoint(fPosX+fWidth,fPosY)));
-    aSeq[3] = Primitive2DReference(createBorderLine(B2DPoint(fPosX+fWidth,fPosY),
-                                                           B2DPoint(fPosX+fWidth,fPosY+fHeight)));
-    aSeq[4] = Primitive2DReference(createBorderLine(B2DPoint(fPosX+fWidth,fPosY+fHeight),
-                                                           B2DPoint(fPosX,fPosY+fHeight)));
-    aSeq[5] = Primitive2DReference(createBorderLine(B2DPoint(fPosX,fPosY+fHeight),
-                                                           B2DPoint(fPosX,fPosY)));
+    B2DPolygon aBounds;
+    aBounds.append(B2DPoint(fPosX,fPosY));
+    aBounds.append(B2DPoint(fPosX+fWidth,fPosY));
+    aBounds.append(B2DPoint(fPosX+fWidth,fPosY+fHeight));
+    aBounds.append(B2DPoint(fPosX,fPosY+fHeight));
+    aBounds.setClosed(true);
+
+    aSeq[2] = Primitive2DReference(createBorderLine(aBounds));
 
     // Draw centered text below thumbnail
     aPos = maTextPos;
@@ -167,7 +167,7 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
                 pAttrs->aFontSize.getX(), pAttrs->aFontSize.getY(),
                 double( aPos.X() ), double( aPos.Y() ) ) );
 
-    aSeq[6] = Primitive2DReference(
+    aSeq[3] = Primitive2DReference(
                 new TextSimplePortionPrimitive2D(aTextMatrix,
                                                  maTitle,0,pAttrs->nMaxTextLenght,
                                                  std::vector< double >( ),
@@ -178,12 +178,10 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
     pProcessor->process(aSeq);
 }
 
-drawinglayer::primitive2d::BorderLinePrimitive2D*
-ThumbnailViewItem::createBorderLine (const basegfx::B2DPoint &rStart, const basegfx::B2DPoint &rEnd)
+drawinglayer::primitive2d::PolygonHairlinePrimitive2D*
+ThumbnailViewItem::createBorderLine (const basegfx::B2DPolygon& rPolygon)
 {
-    return new BorderLinePrimitive2D(rStart,rEnd,0.5,0,0,0,0,0,0,
-                                     BColor(),Color(COL_BLACK).getBColor(),BColor(),
-                                     false,STYLE_SOLID);
+    return new PolygonHairlinePrimitive2D(rPolygon, Color(186,186,186).getBColor());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
