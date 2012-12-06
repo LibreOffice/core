@@ -2,4 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
   <item android:id="@+id/go_to_page"
         android:title="@string/go_to_page"/>
+  <item android:id="@+id/select_document"
+        android:title="@string/select_document"/>
+  <item android:id="@+id/quit_application"
+        android:title="@string/quit_application"/>
 </menu>

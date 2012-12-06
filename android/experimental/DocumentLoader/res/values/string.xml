@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="go_to_page">Go to page</string>
+    <string name="select_document">Select a document</string>
+    <string name="quit_application">Quit</string>
 </resources>

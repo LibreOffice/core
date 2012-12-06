@@ -11,12 +11,15 @@
                  android:hardwareAccelerated="true">
         <activity android:name=".DocumentLoader"
                   android:label="LO DocumentLoader"
+                  android:launchMode="singleTop"
                   android:configChanges="keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".SelectDocumentActivity"
+                  android:label="@string/select_document"/>
     </application>
 </manifest>
 <!-- vim:set expandtab: -->

@@ -59,6 +59,7 @@ package org.libreoffice.android.examples;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -117,6 +118,7 @@ import java.nio.ByteOrder;
 import java.util.ArrayList;
 
 import org.libreoffice.android.Bootstrap;
+import org.libreoffice.android.SelectDocumentAdapter;
 
 public class DocumentLoader
     extends Activity
@@ -1058,6 +1060,15 @@ public class DocumentLoader
         alert.show();
     }
 
+    private void selectDocument()
+    {
+                // TODO Multiple instances of DocumentLoader activity are created
+                //      Change so that only one instance exists
+                Log.i("LO", "Entered selectDocument method");
+                Intent i = new Intent(this, SelectDocumentActivity.class);
+                startActivity(i);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -1130,6 +1141,12 @@ public class DocumentLoader
         switch (item.getItemId()) {
             case R.id.go_to_page:
                 askPageNumber();
+                return true;
+            case R.id.select_document:
+                selectDocument();
+                return true;
+            case R.id.quit_application:
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
