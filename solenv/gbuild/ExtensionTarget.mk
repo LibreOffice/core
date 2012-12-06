@@ -428,6 +428,7 @@ $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(2).done : \
             $$(HELPFILES)) && \
         $(gb_ExtensionTarget_HELPINDEXERCOMMAND) -lang $(2) -mod help \
             -dir $$(basename $$@) && \
+            rm -fr $$(basename $$@)/caption $$(basename $$@)/content && \
         touch $$@)
 
 endef
