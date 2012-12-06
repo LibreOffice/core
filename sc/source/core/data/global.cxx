@@ -75,6 +75,7 @@
 #include "sc.hrc"
 #include "scmod.hxx"
 #include "appoptio.hxx"
+#include "random.hxx"
 
 // -----------------------------------------------------------------------
 
@@ -557,6 +558,7 @@ void ScGlobal::Init()
     // names from the compiler.
     ScParameterClassification::Init();
     srand( (unsigned) time( NULL ) );       // Random Seed Init fuer Interpreter
+    sc::rng::seed( time( NULL ) );          // seed for libc rand() replacement
 
     InitAddIns();
 
