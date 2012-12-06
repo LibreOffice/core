@@ -93,7 +93,7 @@ namespace connectivity
             QueryData( const QueryData& _rhs )
                 :pQuery( NULL )
                 ,sTable()
-                ,eFilterType( eFilterType )
+                ,eFilterType( eFilterOther )
                 ,xSelectColumns()
                 ,aSortOrder()
             {
