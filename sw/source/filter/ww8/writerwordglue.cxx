@@ -46,7 +46,7 @@
 #include <breakit.hxx>           //pBreakIt
 #include <i18npool/mslangid.hxx>
 
-#define ASSIGN_CONST_ASC(s) AssignAscii(RTL_CONSTASCII_STRINGPARAM(s))
+#define ASSIGN_CONST_ASC(s) AssignAscii(s)
 
 namespace myImplHelpers
 {

@@ -245,8 +245,7 @@ void RtfExport::WriteRevTab()
         return;
 
     // RTF always seems to use Unknown as the default first entry
-    String sUnknown(RTL_CONSTASCII_USTRINGPARAM("Unknown"));
-    GetRedline(sUnknown);
+    GetRedline(OUString("Unknown"));
 
     for( sal_uInt16 i = 0; i < pDoc->GetRedlineTbl().size(); ++i )
     {

@@ -38,13 +38,6 @@
 
 #include <unomid.h>
 
-#define APPEND_CONST_ASC(s) AppendAscii(RTL_CONSTASCII_STRINGPARAM(s))
-#define ASSIGN_CONST_ASC(s) AssignAscii(RTL_CONSTASCII_STRINGPARAM(s))
-#define CREATE_CONST_ASC(s) String::CreateFromAscii( \
-    RTL_CONSTASCII_STRINGPARAM(s))
-
-
-
 //--Line below which the code has meaningful comments
 
 //Commonly used string literals for stream and storage names in word docs

@@ -884,7 +884,7 @@ String MSWordExportBase::GetBookmarkName( sal_uInt16 nTyp, const rtl::OUString* 
         case REF_SETREFATTR:
             if ( pName )
             {
-                sRet.APPEND_CONST_ASC( "Ref_" );
+                sRet.AppendAscii( "Ref_" );
                 sRet += *pName;
             }
             break;
@@ -897,11 +897,11 @@ String MSWordExportBase::GetBookmarkName( sal_uInt16 nTyp, const rtl::OUString* 
         case REF_OUTLINE:
             break;      // ???
         case REF_FOOTNOTE:
-            sRet.APPEND_CONST_ASC( "_RefF" );
+            sRet.AppendAscii( "_RefF" );
             sRet += String::CreateFromInt32( nSeqNo );
             break;
         case REF_ENDNOTE:
-            sRet.APPEND_CONST_ASC( "_RefE" );
+            sRet.AppendAscii( "_RefE" );
             sRet += String::CreateFromInt32( nSeqNo );
             break;
     }
@@ -1907,9 +1907,9 @@ void WW8Export::OutputField( const SwField* pFld, ww::eField eFldType,
 void WW8Export::StartCommentOutput(const String& rName)
 {
     String sStr(FieldString(ww::eQUOTE));
-    sStr.APPEND_CONST_ASC("[");
+    sStr.AppendAscii("[");
     sStr += rName;
-    sStr.APPEND_CONST_ASC("] ");
+    sStr.AppendAscii("] ");
     OutputField(0, ww::eQUOTE, sStr, WRITEFIELD_START | WRITEFIELD_CMD_START);
 }
 
@@ -1917,7 +1917,7 @@ void WW8Export::EndCommentOutput(const String& rName)
 {
     String sStr(rtl::OUString(" ["));
     sStr += rName;
-    sStr.APPEND_CONST_ASC("] ");
+    sStr.AppendAscii("] ");
     OutputField(0, ww::eQUOTE, sStr, WRITEFIELD_CMD_END | WRITEFIELD_END |
         WRITEFIELD_CLOSE);
 }
@@ -2036,10 +2036,10 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
             sStr = FieldString(eCode);
 
             if (pTOX->GetTOXForm().IsCommaSeparated())
-                sStr.APPEND_CONST_ASC("\\r ");
+                sStr.AppendAscii("\\r ");
 
             if (nsSwTOIOptions::TOI_ALPHA_DELIMITTER & pTOX->GetOptions())
-                sStr.APPEND_CONST_ASC("\\h \"A\" ");
+                sStr.AppendAscii("\\h \"A\" ");
 
             {
                 String aFillTxt;
@@ -2055,7 +2055,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                     else
                         aFillTxt.Erase();
                 }
-                sStr.APPEND_CONST_ASC("\\e \"");
+                sStr.AppendAscii("\\e \"");
                 sStr += aFillTxt;
                 sStr.AppendAscii(sEntryEnd);
             }
@@ -2068,17 +2068,17 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
             {
                 sStr = FieldString(eCode);
 
-                sStr.APPEND_CONST_ASC("\\c \"");
+                sStr.AppendAscii("\\c \"");
                 sStr += pTOX->GetSequenceName();
                 sStr.AppendAscii(sEntryEnd);
 
                 String aTxt;
                 int nRet = ::lcl_CheckForm( pTOX->GetTOXForm(), 1, aTxt );
                 if (1 == nRet)
-                    sStr.APPEND_CONST_ASC("\\n ");
+                    sStr.AppendAscii("\\n ");
                 else if( 3 == nRet || 4 == nRet )
                 {
-                    sStr.APPEND_CONST_ASC("\\p \"");
+                    sStr.AppendAscii("\\p \"");
                     sStr += aTxt;
                     sStr.AppendAscii(sEntryEnd);
                 }
@@ -2096,7 +2096,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
 
                 if( nsSwTOXElement::TOX_MARK & pTOX->GetCreateType() )
                 {
-                    sStr.APPEND_CONST_ASC( "\\f " );
+                    sStr.AppendAscii( "\\f " );
 
                     if( TOX_USER == pTOX->GetType() )
                     {
@@ -2115,7 +2115,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         if (nTmpLvl > WW8ListManager::nMaxLevel)
                             nTmpLvl = WW8ListManager::nMaxLevel;
 
-                        sStr.APPEND_CONST_ASC( "\\o \"1-" );
+                        sStr.AppendAscii( "\\o \"1-" );
                         sStr += String::CreateFromInt32( nTmpLvl );
                         sStr.AppendAscii(sEntryEnd);
 
@@ -2173,7 +2173,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
             if (nMaxMSAutoEvaluate > WW8ListManager::nMaxLevel)
               nMaxMSAutoEvaluate = WW8ListManager::nMaxLevel;
 
-            sStr.APPEND_CONST_ASC( "\\o \"1-" );
+            sStr.AppendAscii( "\\o \"1-" );
             sStr += String::CreateFromInt32( nMaxMSAutoEvaluate );
             sStr.AppendAscii(sEntryEnd);
                       }
@@ -2264,7 +2264,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                     {
                         if (WW8ListManager::nMaxLevel < nNoPgEnd)
                             nNoPgEnd = WW8ListManager::nMaxLevel;
-                        sStr.APPEND_CONST_ASC( "\\n " );
+                        sStr.AppendAscii( "\\n " );
                         sStr += String::CreateFromInt32( nNoPgStt );
                         sStr += '-';
                         sStr += String::CreateFromInt32( nNoPgEnd  );
@@ -2272,7 +2272,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                     }
                     if( bOnlyText )
                     {
-                        sStr.APPEND_CONST_ASC( "\\p \"" );
+                        sStr.AppendAscii( "\\p \"" );
                         sStr += aFillTxt;
                         sStr.AppendAscii(sEntryEnd);
                     }
@@ -2280,13 +2280,13 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
 
                 if( sTOption.Len() )
                 {
-                    sStr.APPEND_CONST_ASC( "\\t \"" );
+                    sStr.AppendAscii( "\\t \"" );
                     sStr += sTOption;
                     sStr.AppendAscii(sEntryEnd);
                 }
 
                 if (lcl_IsHyperlinked(pTOX->GetTOXForm(), nTOXLvl))
-                    sStr.APPEND_CONST_ASC("\\h");
+                    sStr.AppendAscii("\\h");
             }
             break;
             }
@@ -2334,9 +2334,9 @@ bool MSWordExportBase::GetNumberFmt(const SwField& rFld, String& rStr)
         {
             sw::ms::SwapQuotesInField(sFmt);
 
-            rStr.APPEND_CONST_ASC( "\\@\"" );
+            rStr.AppendAscii( "\\@\"" );
             rStr += sFmt;
-            rStr.APPEND_CONST_ASC( "\" " );
+            rStr.AppendAscii( "\" " );
             bHasFmt = true;
         }
     }
@@ -2349,23 +2349,23 @@ void AttributeOutputBase::GetNumberPara( String& rStr, const SwField& rFld )
     {
         case SVX_NUM_CHARS_UPPER_LETTER:
         case SVX_NUM_CHARS_UPPER_LETTER_N:
-            rStr.APPEND_CONST_ASC( "\\*ALPHABETIC ");
+            rStr.AppendAscii( "\\*ALPHABETIC ");
             break;
         case SVX_NUM_CHARS_LOWER_LETTER:
         case SVX_NUM_CHARS_LOWER_LETTER_N:
-            rStr.APPEND_CONST_ASC("\\*alphabetic ");
+            rStr.AppendAscii("\\*alphabetic ");
             break;
         case SVX_NUM_ROMAN_UPPER:
-            rStr.APPEND_CONST_ASC("\\*ROMAN ");
+            rStr.AppendAscii("\\*ROMAN ");
             break;
         case SVX_NUM_ROMAN_LOWER:
-            rStr.APPEND_CONST_ASC("\\*roman ");
+            rStr.AppendAscii("\\*roman ");
             break;
         default:
             OSL_ENSURE(rFld.GetFormat() == SVX_NUM_ARABIC,
                 "Unknown numbering type exported as default\n");
         case SVX_NUM_ARABIC:
-            rStr.APPEND_CONST_ASC("\\*Arabic ");
+            rStr.AppendAscii("\\*Arabic ");
             break;
         case SVX_NUM_PAGEDESC:
             //Nothing, use word's default
@@ -2490,9 +2490,9 @@ bool WW8AttributeOutput::DropdownField( const SwField* pFld )
 void WW8AttributeOutput::RefField( const SwField &rFld, const String &rRef)
 {
     String sStr( FieldString( ww::eREF ) );
-    sStr.APPEND_CONST_ASC( "\"" );
+    sStr.AppendAscii( "\"" );
     sStr += rRef;
-    sStr.APPEND_CONST_ASC( "\" " );
+    sStr.AppendAscii( "\" " );
     m_rWW8Export.OutputField( &rFld, ww::eREF, sStr, WRITEFIELD_START |
         WRITEFIELD_CMD_START | WRITEFIELD_CMD_END );
     String sVar = lcl_GetExpandedField( rFld );
@@ -2543,9 +2543,9 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
         if (nsSwGetSetExpType::GSE_SEQ == nSubType)
         {
             sStr = FieldString(ww::eSEQ);
-            sStr.APPEND_CONST_ASC("\"");
+            sStr.AppendAscii("\"");
             sStr += pFld->GetTyp()->GetName();
-            sStr.APPEND_CONST_ASC( "\" " );
+            sStr.AppendAscii( "\" " );
 
             GetNumberPara( sStr, *pFld );
             GetExport().OutputField(pFld, ww::eSEQ, sStr);
@@ -2559,11 +2559,11 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
             if (pSet->GetInputFlag())
             {
                 sStr = FieldString(ww::eASK);
-                sStr.APPEND_CONST_ASC("\"");
+                sStr.AppendAscii("\"");
                 sStr += pSet->GetPar1();
-                sStr.APPEND_CONST_ASC( "\" " );
+                sStr.AppendAscii( "\" " );
                 sStr += pSet->GetPromptText();
-                sStr.APPEND_CONST_ASC( " \\d " );
+                sStr.AppendAscii( " \\d " );
                 sStr += rVar;
                 eFieldNo = ww::eASK;
             }
@@ -2571,9 +2571,9 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
             {
                 sStr = FieldString(ww::eSET);
                 sStr += pSet->GetPar1();
-                sStr.APPEND_CONST_ASC(" \"");
+                sStr.AppendAscii(" \"");
                 sStr += rVar;
-                sStr.APPEND_CONST_ASC("\" ");
+                sStr.AppendAscii("\" ");
                 eFieldNo = ww::eSET;
                 bShowAsWell = (nSubType & nsSwExtendedSubType::SUB_INVISIBLE) ? false : true;
             }
@@ -2594,7 +2594,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
     case RES_FILENAMEFLD:
         sStr = FieldString(ww::eFILENAME);
         if (pFld->GetFormat() == FF_PATHNAME)
-            sStr.APPEND_CONST_ASC("\\p ");
+            sStr.AppendAscii("\\p ");
         GetExport().OutputField(pFld, ww::eFILENAME, sStr);
         break;
     case RES_DBNAMEFLD:
@@ -2782,7 +2782,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
             {
                 sStr = FieldString(ww::eFILLIN);
 
-                sStr.APPEND_CONST_ASC("\"");
+                sStr.AppendAscii("\"");
                 sStr += pFld->GetPar2();
                 sStr += '\"';
 
@@ -2814,13 +2814,13 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
                     switch (pFld->GetFormat())
                     {
                         case REF_NUMBER:
-                            sStr.APPEND_CONST_ASC(" \\r");
+                            sStr.AppendAscii(" \\r");
                             break;
                         case REF_NUMBER_NO_CONTEXT:
-                            sStr.APPEND_CONST_ASC(" \\n");
+                            sStr.AppendAscii(" \\n");
                             break;
                         case REF_NUMBER_FULL_CONTEXT:
-                            sStr.APPEND_CONST_ASC(" \\w");
+                            sStr.AppendAscii(" \\w");
                             break;
                     }
                     break;
@@ -2851,15 +2851,15 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
                 switch (pFld->GetFormat())
                 {
                     case REF_UPDOWN:
-                        sStr.APPEND_CONST_ASC(" \\p");
+                        sStr.AppendAscii(" \\p");
                         break;
                     case REF_CHAPTER:
-                        sStr.APPEND_CONST_ASC(" \\n");
+                        sStr.AppendAscii(" \\n");
                         break;
                     default:
                         break;
                 }
-                sStr.APPEND_CONST_ASC(" \\h ");       // insert hyperlink
+                sStr.AppendAscii(" \\h ");       // insert hyperlink
                 GetExport().OutputField(pFld, eFld, sStr);
             }
             else
@@ -2899,17 +2899,17 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
         */
         xub_StrLen nAbove = (pFld->GetPar1().getLength()+1)/2;
         sStr = FieldString(ww::eEQ);
-        sStr.APPEND_CONST_ASC("\\o (\\s\\up ");
+        sStr.AppendAscii("\\o (\\s\\up ");
         sStr += String::CreateFromInt32(nHeight/2);
 
         sStr.Append('(');
         sStr += String(pFld->GetPar1(),0,nAbove);
-        sStr.APPEND_CONST_ASC("), \\s\\do ");
+        sStr.AppendAscii("), \\s\\do ");
         sStr += String::CreateFromInt32(nHeight/5);
 
         sStr.Append('(');
         sStr += String(pFld->GetPar1(),nAbove,pFld->GetPar1().getLength()-nAbove);
-        sStr.APPEND_CONST_ASC("))");
+        sStr.AppendAscii("))");
         GetExport().OutputField(pFld, ww::eEQ, sStr);
         }
         break;

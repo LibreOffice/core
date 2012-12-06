@@ -627,7 +627,7 @@ const SfxPoolItem& SwWW8AttrIter::GetItem(sal_uInt16 nWhich) const
 void WW8AttributeOutput::StartRuby( const SwTxtNode& rNode, xub_StrLen /*nPos*/, const SwFmtRuby& rRuby )
 {
     String aStr( FieldString( ww::eEQ ) );
-    aStr.APPEND_CONST_ASC( "\\* jc" );
+    aStr.AppendAscii( "\\* jc" );
     sal_Int32 nJC = 0;
     sal_Char cDirective = 0;
     switch ( rRuby.GetAdjustment() )
@@ -701,17 +701,17 @@ void WW8AttributeOutput::StartRuby( const SwTxtNode& rNode, xub_StrLen /*nPos*/,
     }
     nHeight = (nHeight + 5)/10;
 
-    aStr.APPEND_CONST_ASC( " \\* \"Font:" );
+    aStr.AppendAscii( " \\* \"Font:" );
     aStr.Append( sFamilyName );
-    aStr.APPEND_CONST_ASC( "\" \\* hps" );
+    aStr.AppendAscii( "\" \\* hps" );
     aStr += String::CreateFromInt32( nHeight );
-    aStr.APPEND_CONST_ASC( " \\o" );
+    aStr.AppendAscii( " \\o" );
     if ( cDirective )
     {
-        aStr.APPEND_CONST_ASC( "\\a" );
+        aStr.AppendAscii( "\\a" );
         aStr.Append( cDirective );
     }
-    aStr.APPEND_CONST_ASC( "(\\s\\up " );
+    aStr.AppendAscii( "(\\s\\up " );
 
 
     if ( pBreakIt->GetBreakIter().is() )
@@ -728,13 +728,13 @@ void WW8AttributeOutput::StartRuby( const SwTxtNode& rNode, xub_StrLen /*nPos*/,
     aStr += String::CreateFromInt32(nHeight);
     aStr += '(';
     aStr += rRuby.GetText();
-    aStr.APPEND_CONST_ASC( ")" );
+    aStr.AppendAscii( ")" );
 
     // The parameter separator depends on the FIB.lid
     if ( m_rWW8Export.pFib->getNumDecimalSep() == '.' )
-        aStr.APPEND_CONST_ASC( "," );
+        aStr.AppendAscii( "," );
     else
-        aStr.APPEND_CONST_ASC( ";" );
+        aStr.AppendAscii( ";" );
 
     m_rWW8Export.OutputField( 0, ww::eEQ, aStr,
             WRITEFIELD_START | WRITEFIELD_CMD_START );
@@ -820,16 +820,16 @@ bool WW8AttributeOutput::AnalyzeURL( const String& rUrl, const String& rTarget, 
     else
     {
         String sFld( FieldString( ww::eHYPERLINK ) );
-        sFld.APPEND_CONST_ASC( "\"" );
+        sFld.AppendAscii( "\"" );
         sURL.Insert( sFld, 0 );
         sURL += '\"';
     }
 
     if ( sMark.Len() )
-        ( ( sURL.APPEND_CONST_ASC( " \\l \"" ) ) += sMark ) += '\"';
+        ( ( sURL.AppendAscii( " \\l \"" ) ) += sMark ) += '\"';
 
     if ( rTarget.Len() )
-        ( sURL.APPEND_CONST_ASC( " \\n " ) ) += rTarget;
+        ( sURL.AppendAscii( " \\n " ) ) += rTarget;
 
     *pLinkURL = sURL;
     *pMark = sMark;
@@ -1097,7 +1097,7 @@ void AttributeOutputBase::TOXMark( const SwTxtNode& rNode, const SwTOXMark& rAtt
             break;
 
         case TOX_USER:
-            ( sTxt.APPEND_CONST_ASC( "\" \\f \"" ) )
+            ( sTxt.AppendAscii( "\" \\f \"" ) )
                 += (sal_Char)( 'A' + GetExport( ).GetId( *rAttr.GetTOXType() ) );
             // fall through - no break;
         case TOX_CONTENT:
@@ -1108,7 +1108,7 @@ void AttributeOutputBase::TOXMark( const SwTxtNode& rNode, const SwTOXMark& rAtt
                 if (nLvl > WW8ListManager::nMaxLevel)
                     nLvl = WW8ListManager::nMaxLevel;
 
-                ((sTxt.APPEND_CONST_ASC( "\" \\l " ))
+                ((sTxt.AppendAscii( "\" \\l " ))
                  += String::CreateFromInt32( nLvl )) += ' ';
             }
             break;

@@ -608,11 +608,11 @@ short SwWW8ImplReader::GetTimeDatePara(String& rStr, sal_uInt32& rFormat,
             case ww::ePRINTDATE:
             case ww::eSAVEDATE:
                 sParams = GetWordDefaultDateStringAsUS(pFormatter, rLang);
-                sParams.APPEND_CONST_ASC(" HH:MM:SS AM/PM");
+                sParams.AppendAscii(" HH:MM:SS AM/PM");
                 bHasTime = true;
                 break;
             case ww::eCREATEDATE:
-                sParams.ASSIGN_CONST_ASC("DD/MM/YYYY HH:MM:SS");
+                sParams.AssignAscii("DD/MM/YYYY HH:MM:SS");
                 bHasTime = true;
                 break;
             default:
@@ -1483,7 +1483,7 @@ eF_ResT SwWW8ImplReader::Read_F_InputVar( WW8FieldDesc* pF, String& rStr )
     if (aDef.Len())
     {
         if (aQ.Len())
-            aQ.APPEND_CONST_ASC(" - ");
+            aQ.AppendAscii(" - ");
         aQ.Append(aDef);
     }
 
@@ -3475,7 +3475,7 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, String& rStr )
                     break;
 
                 case 'n':
-                    sTarget.ASSIGN_CONST_ASC( "_blank" );
+                    sTarget.AssignAscii( "_blank" );
                     bOptions = true;
                     break;
 

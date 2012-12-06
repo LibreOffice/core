@@ -6350,7 +6350,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
                          && !p->sFontname.EqualsAscii("Symbol")
                        )
                     {
-                        p->sFontname.APPEND_CONST_ASC(";Symbol");
+                        p->sFontname.AppendAscii(";Symbol");
                     }
                 }
                 pVer6 = (WW8_FFN_Ver6*)( ((sal_uInt8*)pVer6) + pVer6->cbFfnM1 + 1 );

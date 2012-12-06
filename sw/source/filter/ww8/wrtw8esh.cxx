@@ -2844,9 +2844,9 @@ bool SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrObject *pOb
     Set_UInt32(pData,nObjId );
 
     String sFld(FieldString(ww::eCONTROL));
-    sFld.APPEND_CONST_ASC("Forms.");
+    sFld.AppendAscii("Forms.");
     sFld += sName;
-    sFld.APPEND_CONST_ASC(".1 \\s ");
+    sFld.AppendAscii(".1 \\s ");
 
     rWW8Wrt.OutputField(0, ww::eCONTROL, sFld,
         WRITEFIELD_START|WRITEFIELD_CMD_START|WRITEFIELD_CMD_END);

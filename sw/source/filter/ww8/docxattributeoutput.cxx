@@ -847,9 +847,9 @@ void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
             m_pSerializer->endElementNS( XML_w, XML_r );
 
             rInfos.sCmd = FieldString( ww::eREF );
-            rInfos.sCmd.APPEND_CONST_ASC( "\"" );
+            rInfos.sCmd.AppendAscii( "\"" );
             rInfos.sCmd += m_sFieldBkm;
-            rInfos.sCmd.APPEND_CONST_ASC( "\" " );
+            rInfos.sCmd.AppendAscii( "\" " );
 
             // Clean the field bookmark data to avoid infinite loop
             m_sFieldBkm = String( );
@@ -1166,16 +1166,16 @@ bool DocxAttributeOutput::AnalyzeURL( const String& rUrl, const String& rTarget,
         else
         {
             String sFld( FieldString( ww::eHYPERLINK ) );
-            sFld.APPEND_CONST_ASC( "\"" );
+            sFld.AppendAscii( "\"" );
             sURL.Insert( sFld, 0 );
             sURL += '\"';
         }
 
         if ( sMark.Len() )
-            ( ( sURL.APPEND_CONST_ASC( " \\l \"" ) ) += sMark ) += '\"';
+            ( ( sURL.AppendAscii( " \\l \"" ) ) += sMark ) += '\"';
 
         if ( rTarget.Len() )
-            ( sURL.APPEND_CONST_ASC( " \\n " ) ) += rTarget;
+            ( sURL.AppendAscii( " \\n " ) ) += rTarget;
     }
 
     *pLinkURL = sURL;
@@ -3545,9 +3545,9 @@ void DocxAttributeOutput::RefField( const SwField&  rFld, const String& rRef )
     if ( nType == RES_GETEXPFLD )
     {
         String sCmd = FieldString( ww::eREF );
-        sCmd.APPEND_CONST_ASC( "\"" );
+        sCmd.AppendAscii( "\"" );
         sCmd += rRef;
-        sCmd.APPEND_CONST_ASC( "\" " );
+        sCmd.AppendAscii( "\" " );
 
         m_rExport.OutputField( &rFld, ww::eREF, sCmd );
     }
