@@ -142,6 +142,7 @@ $(WORKDIR)/download: $(SRCDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)/M
 		$(call fetch_Optional,MYTHES,$(MYTHES_TARBALL)) \
 		$(call fetch_Optional,NEON,$(NEON_TARBALL)) \
 		$(call fetch_Optional,NSS,$(NSS_TARBALL)) \
+		$(NUMBERTEXT_EXTENSION_PACK) \
 		$(call fetch_Optional,OPENLDAP,$(OPENLDAP_TARBALL)) \
 		$(call fetch_Optional,OPENSSL,$(OPENSSL_TARBALL)) \
 		$(call fetch_Optional,ORCUS,$(ORCUS_TARBALL)) \
@@ -172,7 +173,6 @@ $(WORKDIR)/download: $(SRCDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)/M
 		$(BARCODE_EXTENSION_PACK) \
 		$(DIAGRAM_EXTENSION_PACK) \
 		$(HUNART_EXTENSION_PACK) \
-		$(NUMBERTEXT_EXTENSION_PACK) \
 		$(OOOP_FONTS_PACK) \
 		$(OOOP_GALLERY_PACK) \
 		$(OOOP_SAMPLES_PACK) \
