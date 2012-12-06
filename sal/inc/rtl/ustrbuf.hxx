@@ -986,7 +986,7 @@ public:
 
         @since LibreOffice 4.0
      */
-    OUStringBuffer & remove( sal_Int32 start = 0)
+    OUStringBuffer & truncate( sal_Int32 start = 0 )
     {
         rtl_uStringbuffer_remove( &pData, start, getLength() - start );
         return *this;
@@ -1240,7 +1240,7 @@ public:
         }
         if(index < getLength())
         {
-            remove(index);
+            truncate(index);
         }
         return result - getLength();
     }

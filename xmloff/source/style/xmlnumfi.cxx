@@ -906,7 +906,7 @@ static void lcl_EnquoteIfNecessary( rtl::OUStringBuffer& rContent, const SvXMLNu
                  rContent[nLen - 1] == (sal_Unicode) '"' &&
                  rContent[nLen - 2] == (sal_Unicode) '"' )
             {
-                rContent.remove(nLen - 2);
+                rContent.truncate(nLen - 2);
             }
         }
     }
