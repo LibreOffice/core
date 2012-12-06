@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAARH///x8\u003d",
+        "filename": "postprocess/CustomTarget_registry.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-12-06T12:16:25Z",
+      "side": 1,
+      "message": "please prefix all of these variables with \"postprocess\" (much better than \"MY\" anyway)",
+      "revId": "13dd9e61998a5381f70358234c6aa934bc8f6579",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
