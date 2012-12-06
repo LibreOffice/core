@@ -49,7 +49,6 @@
 #include <fmtfsize.hxx>
 
 using namespace ::com::sun::star;
-extern sal_Bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt );
 
 /*--------------------------------------------------
  *  class SwMultiPortion
