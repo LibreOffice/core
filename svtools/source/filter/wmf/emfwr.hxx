@@ -46,7 +46,9 @@ private:
     sal_uLong               mnLastPercent;
     sal_uLong               mnRecordCount;
     sal_uLong               mnRecordPos;
+    sal_uLong               mnRecordPlusPos;
     sal_Bool                mbRecordOpen;
+    sal_Bool                mbRecordPlusOpen;
     sal_Bool                mbLineChanged;
     sal_uInt32          mnLineHandle;
     sal_Bool                mbFillChanged;
@@ -57,6 +59,11 @@ private:
 
     void                ImplBeginRecord( sal_uInt32 nType );
     void                ImplEndRecord();
+    void                ImplBeginPlusRecord( sal_uInt16 nType, sal_uInt16 nFlags );
+    void                ImplEndPlusRecord();
+    void                ImplPlusRecord( sal_uInt16 nType, sal_uInt16 nFlags );
+    void                ImplBeginCommentRecord( sal_Int32 nCommentType );
+    void                ImplEndCommentRecord();
 
     sal_uLong               ImplAcquireHandle();
     void                ImplReleaseHandle( sal_uLong nHandle );
@@ -80,6 +87,11 @@ private:
 
     void                Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx::B2DPolygon& rLinePolygon);
     void                ImplWrite( const GDIMetaFile& rMtf );
+    void                WriteEMFPlusHeader( const Size &rMtfSizePix, const Size &rMtfSizeLog );
+    void                ImplWritePlusEOF();
+    void                ImplWritePlusFillPolygonRecord( const Polygon& rPoly, const sal_uInt32& nTrans );
+    void                ImplWritePlusColor( const Color& rColor, const sal_uInt32& nTrans );
+    void                ImplWritePlusPoint( const Point& rPoint );
 
 public:
 
