@@ -93,11 +93,8 @@
 #include <uifactory/statusbarfactory.hxx>
 #include <uiconfiguration/uicategorydescription.hxx>
 #include <services/sessionlistener.hxx>
-//#include <uielement/logoimagestatusbarcontroller.hxx>
-//#include <uielement/logotextstatusbarcontroller.hxx>
 //#include <uielement/newmenucontroller.hxx>
 #include <services/taskcreatorsrv.hxx>
-//#include <uielement/simpletextstatusbarcontroller.hxx>
 //#include <services/uriabbreviation.hxx>
 
 #include <uielement/langselectionstatusbarcontroller.hxx>
@@ -154,11 +151,8 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  
                         IFFACTORY( ::framework::SessionListener                         )   else
                         IFFACTORY( ::framework::StatusbarControllerFactory              )   else
                         IFFACTORY( ::framework::SessionListener                         )   else
-                        //IFFACTORY( ::framework::LogoImageStatusbarController            )   else
-                        //IFFACTORY( ::framework::LogoTextStatusbarController             ) else
                         IFFACTORY( ::framework::TaskCreatorService                      )   else
                         //IFFACTORY( ::framework::NewMenuController                       )   else
-                        //IFFACTORY( ::framework::SimpleTextStatusbarController           )   else
                         //IFFACTORY( ::framework::UriAbbreviation                         )   else
                         //IFFACTORY( ::framework::PopupMenuDispatcher                     )   else
                         IFFACTORY( ::framework::ImageManager                            )   else

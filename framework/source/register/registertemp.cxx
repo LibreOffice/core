@@ -58,9 +58,6 @@
 #include <recording/dispatchrecordersupplier.hxx>
 #include <services/license.hxx>
 #include <services/uriabbreviation.hxx>
-#include <uielement/simpletextstatusbarcontroller.hxx>
-#include <uielement/logoimagestatusbarcontroller.hxx>
-#include <uielement/logotextstatusbarcontroller.hxx>
 #include <uielement/fontmenucontroller.hxx>
 #include <uielement/fontsizemenucontroller.hxx>
 #include <uielement/footermenucontroller.hxx>
@@ -76,14 +73,11 @@ COMPONENTGETIMPLEMENTATIONENVIRONMENT
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::MediaTypeDetectionHelper        )
                         IFFACTORY( ::framework::MailToDispatcher                        ) else
                         IFFACTORY( ::framework::ServiceHandler                          )   else
-                        IFFACTORY( ::framework::LogoTextStatusbarController             )   else
-                        IFFACTORY( ::framework::LogoImageStatusbarController            )   else
                         IFFACTORY( ::framework::License                                 )   else
                         IFFACTORY( ::framework::PopupMenuDispatcher                     )   else
                         IFFACTORY( ::framework::DispatchHelper                          )   else
                         IFFACTORY( ::framework::DispatchRecorder                        )   else
                         IFFACTORY( ::framework::DispatchRecorderSupplier                )   else
-                        IFFACTORY( ::framework::SimpleTextStatusbarController           )   else
                         IFFACTORY( ::framework::ToolbarsMenuController                  )   else
                         IFFACTORY( ::framework::FontMenuController                      )   else
                         IFFACTORY( ::framework::MacrosMenuController                    )   else
