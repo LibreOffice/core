@@ -1,0 +1,110 @@
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#ifndef __com_sun_star_ui_XStatusbarItem_idl__
+#define __com_sun_star_ui_XStatusbarItem_idl__
+
+#include <com/sun/star/awt/Rectangle.idl>
+
+module com {  module sun {  module star {  module ui {
+
+/** Represents an item in a status bar
+
+    @see <type scope="com::sun::star::frame">XStatusbarController</type>
+
+    @since LibreOffice 4.1
+*/
+interface XStatusbarItem
+{
+    /** the command of the status bar item
+     */
+    [attribute, readonly] string Command;
+
+    /** the unique ID of the control within the status bar
+     */
+    [attribute, readonly] unsigned short ItemId;
+
+    /** the width of the status bar item
+     */
+    [attribute, readonly] unsigned long Width;
+
+    /** the style of the status bar item
+
+        <p>The following values apply for a status bar item:</p>
+        <ul>
+            <li>Alignment
+                <ul>
+                    <li><member scope="com::sun::star::ui">ItemStyle::ALIGN_LEFT</member></li>
+                    <li><member scope="com::sun::star::ui">ItemStyle::ALIGN_CENTER</member></li>
+                    <li><member scope="com::sun::star::ui">ItemStyle::ALIGN_RIGHT</member></li>
+                </ul>
+            </li>
+            <li>Drawing
+                <ul>
+                    <li><member scope="com::sun::star::ui">ItemStyle::DRAW_OUT3D</member></li>
+                    <li><member scope="com::sun::star::ui">ItemStyle::DRAW_IN3D</member></li>
+                    <li><member scope="com::sun::star::ui">ItemStyle::DRAW_FLAT</member></li>
+                </ul>
+            </li>
+            <li><member scope="com::sun::star::ui">ItemStyle::AUTO_SIZE</member></li>
+            <li><member scope="com::sun::star::ui">ItemStyle::OWNER_DRAW</member></li>
+        </ul>
+
+        @see <type scope="com::sun::star::ui">ItemStyle</type>
+     */
+    [attribute, readonly] unsigned short Style;
+
+    /** the offset between this status bar item and the following
+     */
+    [attribute, readonly] long Offset;
+
+    /** the rectangle on the status bar device onto which the item is drawn
+
+        @see <member scope="com::sun::star::frame">XStatusbarController::paint()</member>
+     */
+    [attribute, readonly] com::sun::star::awt::Rectangle ItemRect;
+
+    /** the text of status bar item
+     */
+    [attribute] string Text;
+
+    /** the help text of the status bar item when extended help tips are on
+     */
+    [attribute] string HelpText;
+
+    /** the help text of the status bar item when help tips are on
+     */
+    [attribute] string QuickHelpText;
+
+    /** the accesible name of the status bar item
+     */
+    [attribute] string AccessibleName;
+
+    /** whether the item is visible or not
+     */
+    [attribute] boolean Visible;
+
+    /** forces repainting the item onto the status bar device
+
+        @see <member scope="com::sun::star::frame">XStatusbarController::paint()</member>
+     */
+    void repaint();
+};
+
+}; }; }; };
+
+#endif
