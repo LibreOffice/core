@@ -206,7 +206,7 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
     // Separator style
     aLineTypeBox.SetSourceUnit( FUNIT_TWIP );
 
-    aLineTypeBox.SetNone( String( SW_RES( STR_NONE ) ) );
+    aLineTypeBox.SetNone(SW_RESSTR(SW_STR_NONE));
     aLineTypeBox.InsertEntry(
         ::editeng::SvxBorderLine::getWidthImpl(table::BorderLineStyle::SOLID),
         table::BorderLineStyle::SOLID );

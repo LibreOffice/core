@@ -98,7 +98,6 @@
 #define FT_FIELDS               5
 #define LB_FIELDS               6
 #define FT_PREVIEW              7
-#define ST_NONE                 8
 #define WIN_DATA                9
 
 #endif

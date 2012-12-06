@@ -80,7 +80,7 @@
 #define RB_ONLY            81
 #define RB_END             82
 #define RB_PAGEEND         83
-#define ST_NONE            84
+
 #define LB_FAX             86
 #define CB_BLACK_FONT      87
 #define LB_HMETRIC         88

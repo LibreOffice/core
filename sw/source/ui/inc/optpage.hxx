@@ -87,38 +87,29 @@ public:
 --------------------------------------------------------- */
 class SwAddPrinterTabPage : public SfxTabPage
 {
-    FixedLine       aFL1;
-    CheckBox        aGrfCB;
-//  CheckBox        aTabCB;
-//  CheckBox        aDrawCB;
-    CheckBox        aCtrlFldCB;
-    CheckBox        aBackgroundCB;
-    CheckBox        aBlackFontCB;
-    CheckBox        aPrintHiddenTextCB;
-    CheckBox        aPrintTextPlaceholderCB;
+    CheckBox*       m_pGrfCB;
+    CheckBox*       m_pCtrlFldCB;
+    CheckBox*       m_pBackgroundCB;
+    CheckBox*       m_pBlackFontCB;
+    CheckBox*       m_pPrintHiddenTextCB;
+    CheckBox*       m_pPrintTextPlaceholderCB;
 
-    FixedLine       aSeparatorLFL;
+    VclFrame*       m_pPagesFrame;
+    CheckBox*       m_pLeftPageCB;
+    CheckBox*       m_pRightPageCB;
+    CheckBox*       m_pProspectCB;
+    CheckBox*       m_pProspectCB_RTL;
 
-    FixedLine       aFL2;
-    CheckBox        aLeftPageCB;
-    CheckBox        aRightPageCB;
-//  CheckBox        aReverseCB;
-    CheckBox        aProspectCB;
-    CheckBox        aProspectCB_RTL;
+    VclFrame*       m_pCommentsFrame;
+    RadioButton*    m_pNoRB;
+    RadioButton*    m_pOnlyRB;
+    RadioButton*    m_pEndRB;
+    RadioButton*    m_pEndPageRB;
 
-    FixedLine       aSeparatorRFL;
+    CheckBox*       m_pPrintEmptyPagesCB;
+    CheckBox*       m_pPaperFromSetupCB;
+    ListBox*        m_pFaxLB;
 
-    FixedLine        aFL3;
-    RadioButton     aNoRB;
-    RadioButton     aOnlyRB;
-    RadioButton     aEndRB;
-    RadioButton     aEndPageRB;
-    FixedLine        aFL4;
-    CheckBox        aPrintEmptyPagesCB;
-//    CheckBox        aSingleJobsCB;
-    CheckBox        aPaperFromSetupCB;
-    FixedText       aFaxFT;
-    ListBox         aFaxLB;
     String          sNone;
 
     sal_Bool        bAttrModified;

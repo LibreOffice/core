@@ -34,6 +34,7 @@
 #include <vector>
 #include <boost/scoped_ptr.hpp>
 #include <mmaddressblockpage.hrc>
+#include <globals.hrc>
 #include <dbui.hrc>
 #include <helpid.h>
 
@@ -1252,7 +1253,7 @@ SwAssignFieldsDialog::SwAssignFieldsDialog(
 #ifdef MSC
 #pragma warning (default : 4355)
 #endif
-    m_sNone(SW_RES(ST_NONE)),
+    m_sNone(SW_RESSTR(SW_STR_NONE)),
     m_rPreviewString(rPreview),
     m_rConfigItem(rConfigItem)
 {

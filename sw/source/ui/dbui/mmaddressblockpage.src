@@ -630,8 +630,4 @@ ModalDialog DLG_MM_ASSIGNFIELDS
     {
         Text[ en-US ] = "Preview" ;
     };
-    String ST_NONE
-    {
-        Text [en-US] = "< none >";
-    };
 };

@@ -191,7 +191,7 @@ void SwContentOptPage::Reset(const SfxItemSet& rSet)
     if(pElemAttr)
     {
         aTblCB      .Check  (pElemAttr->bTable                );
-        aGrfCB      .Check  (pElemAttr->bGraphic              );
+        aGrfCB.Check  (pElemAttr->bGraphic              );
         aDrwCB      .Check  (pElemAttr->bDrawing              );
         aFldNameCB  .Check  (pElemAttr->bFieldName            );
         aPostItCB   .Check  (pElemAttr->bNotes                );
@@ -220,7 +220,7 @@ sal_Bool SwContentOptPage::FillItemSet(SfxItemSet& rSet)
     if(pOldAttr)
         aElem = *pOldAttr;
     aElem.bTable                = aTblCB        .IsChecked();
-    aElem.bGraphic              = aGrfCB        .IsChecked();
+    aElem.bGraphic              = aGrfCB.IsChecked();
     aElem.bDrawing              = aDrwCB        .IsChecked();
     aElem.bFieldName            = aFldNameCB    .IsChecked();
     aElem.bNotes                = aPostItCB     .IsChecked();
@@ -285,105 +285,83 @@ IMPL_LINK( SwContentOptPage, AnyRulerHdl, CheckBox*, pBox)
 /*------------------------------------------------------
  TabPage Printer additional settings
 -------------------------------------------------------*/
-SwAddPrinterTabPage::SwAddPrinterTabPage( Window* pParent,
-                                      const SfxItemSet& rCoreSet) :
-    SfxTabPage( pParent, SW_RES( TP_OPTPRINT_PAGE ), rCoreSet),
-    aFL1          (this, SW_RES(FL_1)),
-    aGrfCB           (this, SW_RES(CB_PGRF)),
-    aCtrlFldCB       (this, SW_RES(CB_CTRLFLD)),
-    aBackgroundCB    (this, SW_RES(CB_BACKGROUND)),
-    aBlackFontCB     (this, SW_RES(CB_BLACK_FONT)),
-    aPrintHiddenTextCB(this, SW_RES(CB_HIDDEN_TEXT)),
-    aPrintTextPlaceholderCB(this, SW_RES(CB_TEXT_PLACEHOLDER)),
-    aSeparatorLFL    (this, SW_RES(FL_SEP_PRT_LEFT )),
-    aFL2          (this, SW_RES(FL_2)),
-    aLeftPageCB      (this, SW_RES(CB_LEFTP)),
-    aRightPageCB     (this, SW_RES(CB_RIGHTP)),
-    aProspectCB      (this, SW_RES(CB_PROSPECT)),
-    aProspectCB_RTL      (this, SW_RES(CB_PROSPECT_RTL)),
-    aSeparatorRFL    (this, SW_RES(FL_SEP_PRT_RIGHT)),
-    aFL3          (this, SW_RES(FL_3)),
-    aNoRB            (this, SW_RES(RB_NO)),
-    aOnlyRB          (this, SW_RES(RB_ONLY)),
-    aEndRB           (this, SW_RES(RB_END)),
-    aEndPageRB       (this, SW_RES(RB_PAGEEND)),
-    aFL4          (this, SW_RES(FL_4)),
-    aPrintEmptyPagesCB(this, SW_RES(CB_PRINTEMPTYPAGES)),
-    aPaperFromSetupCB(this, SW_RES(CB_PAPERFROMSETUP)),
-    aFaxFT           (this, SW_RES(FT_FAX)),
-    aFaxLB           (this, SW_RES(LB_FAX)),
-    sNone(SW_RES(ST_NONE)),
-    bAttrModified( sal_False ),
-    bPreview  ( sal_False )
+SwAddPrinterTabPage::SwAddPrinterTabPage(Window* pParent,
+    const SfxItemSet& rCoreSet)
+    : SfxTabPage(pParent, "PrintOptionsPage",
+        "modules/swriter/ui/printoptionspage.ui", rCoreSet)
+    , sNone(SW_RESSTR(SW_STR_NONE))
+    , bAttrModified(sal_False)
+    , bPreview(sal_False)
 {
+    get(m_pGrfCB, "graphics");
+    get(m_pCtrlFldCB, "formcontrols");
+    get(m_pBackgroundCB, "background");
+    get(m_pBlackFontCB, "inblack");
+    get(m_pPrintHiddenTextCB, "hiddentext");
+    get(m_pPrintTextPlaceholderCB, "textplaceholder");
+
+    get(m_pPagesFrame, "pagesframe");
+    get(m_pLeftPageCB, "leftpages");
+    get(m_pRightPageCB, "rightpages");
+    get(m_pProspectCB, "brochure");
+    get(m_pProspectCB_RTL, "rtl");
+
+    get(m_pCommentsFrame, "commentsframe");
+    get(m_pNoRB, "none");
+    get(m_pOnlyRB, "only");
+    get(m_pEndRB, "end");
+    get(m_pEndPageRB, "endpage");
+    get(m_pPrintEmptyPagesCB, "blankpages");
+    get(m_pPaperFromSetupCB, "papertray");
+    get(m_pFaxLB, "fax");
+
     Init();
-    FreeResource();
+
     Link aLk = LINK( this, SwAddPrinterTabPage, AutoClickHdl);
-    aGrfCB.SetClickHdl( aLk );
-    aRightPageCB.SetClickHdl( aLk );
-    aLeftPageCB.SetClickHdl( aLk );
-    aCtrlFldCB.SetClickHdl( aLk );
-    aBackgroundCB.SetClickHdl( aLk );
-    aBlackFontCB.SetClickHdl( aLk );
-    aPrintHiddenTextCB.SetClickHdl( aLk );
-    aPrintTextPlaceholderCB.SetClickHdl( aLk );
-    aProspectCB.SetClickHdl( aLk );
-    aProspectCB_RTL.SetClickHdl( aLk );
-    aPaperFromSetupCB.SetClickHdl( aLk );
-    aPrintEmptyPagesCB.SetClickHdl( aLk );
-    aEndPageRB.SetClickHdl( aLk );
-    aEndRB.SetClickHdl( aLk );
-    aOnlyRB.SetClickHdl( aLk );
-    aNoRB.SetClickHdl( aLk );
-    aFaxLB.SetSelectHdl( LINK( this, SwAddPrinterTabPage, SelectHdl ) );
+    m_pGrfCB->SetClickHdl( aLk );
+    m_pRightPageCB->SetClickHdl( aLk );
+    m_pLeftPageCB->SetClickHdl( aLk );
+    m_pCtrlFldCB->SetClickHdl( aLk );
+    m_pBackgroundCB->SetClickHdl( aLk );
+    m_pBlackFontCB->SetClickHdl( aLk );
+    m_pPrintHiddenTextCB->SetClickHdl( aLk );
+    m_pPrintTextPlaceholderCB->SetClickHdl( aLk );
+    m_pProspectCB->SetClickHdl( aLk );
+    m_pProspectCB_RTL->SetClickHdl( aLk );
+    m_pPaperFromSetupCB->SetClickHdl( aLk );
+    m_pPrintEmptyPagesCB->SetClickHdl( aLk );
+    m_pEndPageRB->SetClickHdl( aLk );
+    m_pEndRB->SetClickHdl( aLk );
+    m_pOnlyRB->SetClickHdl( aLk );
+    m_pNoRB->SetClickHdl( aLk );
+    m_pFaxLB->SetSelectHdl( LINK( this, SwAddPrinterTabPage, SelectHdl ) );
 
     const SfxPoolItem* pItem;
     if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_HTML_MODE, sal_False, &pItem )
         && ((SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON)
     {
-        aLeftPageCB  .Hide();
-        aRightPageCB .Hide();
-        aPrintHiddenTextCB.Hide();
-        aPrintTextPlaceholderCB.Hide();
-        aProspectCB.SetPosPixel(aLeftPageCB.GetPosPixel());
-        Point aPt( aRightPageCB.GetPosPixel() );
+        m_pLeftPageCB->Hide();
+        m_pRightPageCB->Hide();
+        m_pPrintHiddenTextCB->Hide();
+        m_pPrintTextPlaceholderCB->Hide();
+        m_pProspectCB->SetPosPixel(m_pLeftPageCB->GetPosPixel());
+        Point aPt( m_pRightPageCB->GetPosPixel() );
         aPt.setX(aPt.getX() + 15); // indent
-        aProspectCB_RTL.SetPosPixel(aPt);
+        m_pProspectCB_RTL->SetPosPixel(aPt);
 
-        // hide aPrintEmptyPagesCB and move everything below up accordingly
-        long nDeltaY = aPaperFromSetupCB.GetPosPixel().getY() - aPrintEmptyPagesCB.GetPosPixel().getY();
-        aPrintEmptyPagesCB.Hide();
-        aPt = aPaperFromSetupCB.GetPosPixel();
-        aPt.setY( aPt.getY() - nDeltaY );
-        aPaperFromSetupCB.SetPosPixel( aPt );
-        aPt = aFaxFT.GetPosPixel();
-        aPt.setY( aPt.getY() - nDeltaY );
-        aFaxFT.SetPosPixel( aPt );
-        aPt = aFaxLB.GetPosPixel();
-        aPt.setY( aPt.getY() - nDeltaY );
-        aFaxLB.SetPosPixel( aPt );
+        // hide m_pPrintEmptyPagesCB
+        m_pPrintEmptyPagesCB->Hide();
     }
-    aProspectCB_RTL.Disable();
+    m_pProspectCB_RTL->Disable();
     SvtCTLOptions aCTLOptions;
-    aProspectCB_RTL.Show(aCTLOptions.IsCTLFontEnabled());
+    m_pProspectCB_RTL->Show(aCTLOptions.IsCTLFontEnabled());
 }
 
 void SwAddPrinterTabPage::SetPreview(sal_Bool bPrev)
 {
     bPreview = bPrev;
-
-    if (bPreview)
-    {
-        aLeftPageCB.Disable();
-        aRightPageCB.Disable();
-        aProspectCB.Disable();
-        aProspectCB_RTL.Disable();
-        aFL3.Disable();
-        aNoRB.Disable();
-        aOnlyRB.Disable();
-        aEndRB.Disable();
-        aEndPageRB.Disable();
-    }
+    m_pCommentsFrame->Enable(!bPreview);
+    m_pPagesFrame->Enable(!bPreview);
 }
 
 SfxTabPage* SwAddPrinterTabPage::Create( Window* pParent,
@@ -397,34 +375,34 @@ sal_Bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet& rCoreSet )
     if ( bAttrModified )
     {
         SwAddPrinterItem aAddPrinterAttr (FN_PARAM_ADDPRINTER);
-        aAddPrinterAttr.bPrintGraphic   = aGrfCB.IsChecked();
+        aAddPrinterAttr.bPrintGraphic   = m_pGrfCB->IsChecked();
         aAddPrinterAttr.bPrintTable     = sal_True; // always enabled since CWS printerpullgpages /*aTabCB.IsChecked();*/
-        aAddPrinterAttr.bPrintDraw      = aGrfCB.IsChecked(); // UI merged with aGrfCB in CWS printerpullgpages /*aDrawCB.IsChecked()*/;
-        aAddPrinterAttr.bPrintControl   = aCtrlFldCB.IsChecked();
-        aAddPrinterAttr.bPrintPageBackground = aBackgroundCB.IsChecked();
-        aAddPrinterAttr.bPrintBlackFont = aBlackFontCB.IsChecked();
-        aAddPrinterAttr.bPrintHiddenText = aPrintHiddenTextCB.IsChecked();
-        aAddPrinterAttr.bPrintTextPlaceholder = aPrintTextPlaceholderCB.IsChecked();
+        aAddPrinterAttr.bPrintDraw      = m_pGrfCB->IsChecked(); // UI merged with m_pGrfCB in CWS printerpullgpages
+        aAddPrinterAttr.bPrintControl   = m_pCtrlFldCB->IsChecked();
+        aAddPrinterAttr.bPrintPageBackground = m_pBackgroundCB->IsChecked();
+        aAddPrinterAttr.bPrintBlackFont = m_pBlackFontCB->IsChecked();
+        aAddPrinterAttr.bPrintHiddenText = m_pPrintHiddenTextCB->IsChecked();
+        aAddPrinterAttr.bPrintTextPlaceholder = m_pPrintTextPlaceholderCB->IsChecked();
 
-        aAddPrinterAttr.bPrintLeftPages     = aLeftPageCB.IsChecked();
-        aAddPrinterAttr.bPrintRightPages    = aRightPageCB.IsChecked();
+        aAddPrinterAttr.bPrintLeftPages     = m_pLeftPageCB->IsChecked();
+        aAddPrinterAttr.bPrintRightPages    = m_pRightPageCB->IsChecked();
         aAddPrinterAttr.bPrintReverse       = sal_False; // handled by vcl itself since CWS printerpullpages /*aReverseCB.IsChecked()*/;
-        aAddPrinterAttr.bPrintProspect      = aProspectCB.IsChecked();
-        aAddPrinterAttr.bPrintProspectRTL   = aProspectCB_RTL.IsChecked();
-        aAddPrinterAttr.bPaperFromSetup     = aPaperFromSetupCB.IsChecked();
-        aAddPrinterAttr.bPrintEmptyPages    = aPrintEmptyPagesCB.IsChecked();
+        aAddPrinterAttr.bPrintProspect      = m_pProspectCB->IsChecked();
+        aAddPrinterAttr.bPrintProspectRTL   = m_pProspectCB_RTL->IsChecked();
+        aAddPrinterAttr.bPaperFromSetup     = m_pPaperFromSetupCB->IsChecked();
+        aAddPrinterAttr.bPrintEmptyPages    = m_pPrintEmptyPagesCB->IsChecked();
         aAddPrinterAttr.bPrintSingleJobs    = sal_True; // handled by vcl in new print dialog since CWS printerpullpages /*aSingleJobsCB.IsChecked()*/;
 
-        if (aNoRB.IsChecked())  aAddPrinterAttr.nPrintPostIts =
+        if (m_pNoRB->IsChecked())  aAddPrinterAttr.nPrintPostIts =
                                                         POSTITS_NONE;
-        if (aOnlyRB.IsChecked()) aAddPrinterAttr.nPrintPostIts =
+        if (m_pOnlyRB->IsChecked()) aAddPrinterAttr.nPrintPostIts =
                                                         POSTITS_ONLY;
-        if (aEndRB.IsChecked()) aAddPrinterAttr.nPrintPostIts =
+        if (m_pEndRB->IsChecked()) aAddPrinterAttr.nPrintPostIts =
                                                         POSTITS_ENDDOC;
-        if (aEndPageRB.IsChecked()) aAddPrinterAttr.nPrintPostIts =
+        if (m_pEndPageRB->IsChecked()) aAddPrinterAttr.nPrintPostIts =
                                                         POSTITS_ENDPAGE;
 
-        String sFax = aFaxLB.GetSelectEntry();
+        String sFax = m_pFaxLB->GetSelectEntry();
         aAddPrinterAttr.sFaxName = sNone == sFax ? aEmptyStr : sFax;
         rCoreSet.Put(aAddPrinterAttr);
     }
@@ -439,35 +417,35 @@ void    SwAddPrinterTabPage::Reset( const SfxItemSet&  )
     if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_ADDPRINTER , sal_False,
                                     (const SfxPoolItem**)&pAddPrinterAttr ))
     {
-        aGrfCB.Check(           pAddPrinterAttr->bPrintGraphic || pAddPrinterAttr->bPrintDraw );
-        aCtrlFldCB.Check(       pAddPrinterAttr->bPrintControl);
-        aBackgroundCB.Check(    pAddPrinterAttr->bPrintPageBackground);
-        aBlackFontCB.Check(     pAddPrinterAttr->bPrintBlackFont);
-        aPrintHiddenTextCB.Check( pAddPrinterAttr->bPrintHiddenText);
-        aPrintTextPlaceholderCB.Check(pAddPrinterAttr->bPrintTextPlaceholder);
-        aLeftPageCB.Check(      pAddPrinterAttr->bPrintLeftPages);
-        aRightPageCB.Check(     pAddPrinterAttr->bPrintRightPages);
-        aPaperFromSetupCB.Check(pAddPrinterAttr->bPaperFromSetup);
-        aPrintEmptyPagesCB.Check(pAddPrinterAttr->bPrintEmptyPages);
-        aProspectCB.Check(      pAddPrinterAttr->bPrintProspect);
-        aProspectCB_RTL.Check(      pAddPrinterAttr->bPrintProspectRTL);
+        m_pGrfCB->Check(pAddPrinterAttr->bPrintGraphic || pAddPrinterAttr->bPrintDraw);
+        m_pCtrlFldCB->Check(       pAddPrinterAttr->bPrintControl);
+        m_pBackgroundCB->Check(    pAddPrinterAttr->bPrintPageBackground);
+        m_pBlackFontCB->Check(     pAddPrinterAttr->bPrintBlackFont);
+        m_pPrintHiddenTextCB->Check( pAddPrinterAttr->bPrintHiddenText);
+        m_pPrintTextPlaceholderCB->Check(pAddPrinterAttr->bPrintTextPlaceholder);
+        m_pLeftPageCB->Check(      pAddPrinterAttr->bPrintLeftPages);
+        m_pRightPageCB->Check(     pAddPrinterAttr->bPrintRightPages);
+        m_pPaperFromSetupCB->Check(pAddPrinterAttr->bPaperFromSetup);
+        m_pPrintEmptyPagesCB->Check(pAddPrinterAttr->bPrintEmptyPages);
+        m_pProspectCB->Check(      pAddPrinterAttr->bPrintProspect);
+        m_pProspectCB_RTL->Check(      pAddPrinterAttr->bPrintProspectRTL);
 
-        aNoRB.Check (pAddPrinterAttr->nPrintPostIts== POSTITS_NONE ) ;
-        aOnlyRB.Check (pAddPrinterAttr->nPrintPostIts== POSTITS_ONLY ) ;
-        aEndRB.Check (pAddPrinterAttr->nPrintPostIts== POSTITS_ENDDOC ) ;
-        aEndPageRB.Check (pAddPrinterAttr->nPrintPostIts== POSTITS_ENDPAGE ) ;
-        aFaxLB.SelectEntry( pAddPrinterAttr->sFaxName );
+        m_pNoRB->Check (pAddPrinterAttr->nPrintPostIts== POSTITS_NONE ) ;
+        m_pOnlyRB->Check (pAddPrinterAttr->nPrintPostIts== POSTITS_ONLY ) ;
+        m_pEndRB->Check (pAddPrinterAttr->nPrintPostIts== POSTITS_ENDDOC ) ;
+        m_pEndPageRB->Check (pAddPrinterAttr->nPrintPostIts== POSTITS_ENDPAGE ) ;
+        m_pFaxLB->SelectEntry( pAddPrinterAttr->sFaxName );
     }
-    if (aProspectCB.IsChecked())
+    if (m_pProspectCB->IsChecked())
     {
-        aProspectCB_RTL.Enable(sal_True);
-        aNoRB.Enable( sal_False );
-        aOnlyRB.Enable( sal_False );
-        aEndRB.Enable( sal_False );
-        aEndPageRB.Enable( sal_False );
+        m_pProspectCB_RTL->Enable(sal_True);
+        m_pNoRB->Enable( sal_False );
+        m_pOnlyRB->Enable( sal_False );
+        m_pEndRB->Enable( sal_False );
+        m_pEndPageRB->Enable( sal_False );
     }
     else
-        aProspectCB_RTL.Enable( sal_False );
+        m_pProspectCB_RTL->Enable( sal_False );
 }
 
 void    SwAddPrinterTabPage::Init()
@@ -478,26 +456,26 @@ void    SwAddPrinterTabPage::Init()
 IMPL_LINK_NOARG_INLINE_START(SwAddPrinterTabPage, AutoClickHdl)
 {
     bAttrModified = sal_True;
-    bool bIsProspect = aProspectCB.IsChecked();
+    bool bIsProspect = m_pProspectCB->IsChecked();
     if (!bIsProspect)
-        aProspectCB_RTL.Check( sal_False );
-    aProspectCB_RTL.Enable( bIsProspect );
-    aNoRB.Enable( !bIsProspect );
-    aOnlyRB.Enable( !bIsProspect );
-    aEndRB.Enable( !bIsProspect );
-    aEndPageRB.Enable( !bIsProspect );
+        m_pProspectCB_RTL->Check( sal_False );
+    m_pProspectCB_RTL->Enable( bIsProspect );
+    m_pNoRB->Enable( !bIsProspect );
+    m_pOnlyRB->Enable( !bIsProspect );
+    m_pEndRB->Enable( !bIsProspect );
+    m_pEndPageRB->Enable( !bIsProspect );
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(SwAddPrinterTabPage, AutoClickHdl)
 
 void  SwAddPrinterTabPage::SetFax( const std::vector<String>& rFaxLst )
 {
-    aFaxLB.InsertEntry(sNone);
+    m_pFaxLB->InsertEntry(sNone);
     for(size_t i = 0; i < rFaxLst.size(); ++i)
     {
-        aFaxLB.InsertEntry(rFaxLst[i]);
+        m_pFaxLB->InsertEntry(rFaxLst[i]);
     }
-    aFaxLB.SelectEntryPos(0);
+    m_pFaxLB->SelectEntryPos(0);
 }
 
 IMPL_LINK_NOARG_INLINE_START(SwAddPrinterTabPage, SelectHdl)

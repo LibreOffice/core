@@ -369,10 +369,6 @@ TabPage TP_OPTPRINT_PAGE
         DropDown = TRUE ;
         Group = TRUE ;
     };
-    String ST_NONE
-    {
-        Text [ en-US ] = "<None>";
-    };
 };
 
 TabPage TP_STD_FONT

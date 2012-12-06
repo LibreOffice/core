@@ -25,10 +25,6 @@ String STR_PAGEFMT_HEADER
 {
     Text [ en-US ] = "(Page Style: " ;
 };
-String SW_STR_NONE
-{
-    Text [ en-US ] = "[None]" ;
-};
 InfoBox MSG_ILLEGAL_PAGENUM
 {
     BUTTONS = WB_OK ;
