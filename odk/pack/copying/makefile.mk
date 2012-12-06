@@ -106,6 +106,7 @@ DESTCLASSESLIST= \
 
 SETTINGSLIST= \
     $(DESTDIRSETTINGS)/settings.mk \
+    $(DESTDIRSETTINGS)/platform.mk \
     $(DESTDIRSETTINGS)/std.mk \
     $(DESTDIRSETTINGS)/stdtarget.mk \
     $(DESTDIRSETTINGS)/dk.mk
