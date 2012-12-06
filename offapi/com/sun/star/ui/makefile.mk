@@ -70,6 +70,7 @@ IDLFILES=\
     XImageManager.idl                           \
     XModuleUIConfigurationManager.idl           \
     XModuleUIConfigurationManagerSupplier.idl   \
+    XStatusbarItem.idl                          \
     XUIConfiguration.idl                        \
     XUIConfigurationListener.idl                \
     XUIConfigurationManager.idl                 \
