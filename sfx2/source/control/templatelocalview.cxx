@@ -106,7 +106,7 @@ TemplateLocalView::TemplateLocalView ( Window* pParent, const ResId& rResId, boo
       meFilterOption(FILTER_APP_NONE),
       mpDocTemplates(new SfxDocumentTemplates)
 {
-    mpItemView->SetColor(Color(COL_WHITE));
+    mpItemView->SetColor(GetSettings().GetStyleSettings().GetFieldColor());
     mpItemView->setChangeNameHdl(LINK(this,TemplateLocalView,ChangeNameHdl));
 }
 
@@ -716,7 +716,7 @@ void TemplateLocalView::OnItemClicked (ThumbnailViewItem *pRegionItem)
 
     mpItemView->filterItems(ViewFilter_Application(meFilterOption));
 
-    mpItemView->Show();
+    showOverlay(true);
 }
 
 IMPL_LINK(TemplateLocalView, ChangeNameHdl, TemplateView*, pView)
