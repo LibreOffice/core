@@ -14,7 +14,7 @@ ifeq ($(OS),WNT)
 ifeq ($(COM),MSC)
 $(eval $(call gb_ExternalPackage_add_file,cppunit,bin/cppunit_dll.dll,src/cppunit/ReleaseDll/cppunit_dll.dll))
 $(eval $(call gb_ExternalPackage_add_file,cppunit,lib/icppunit_dll.lib,src/cppunit/ReleaseDll/cppunit_dll.lib))
-$(eval $(call gb_ExternalPackage_add_file,cppunit,bin/DllPlugInTester_dll.exe,src/DllPlugInTester/ReleaseDll/DllPlugInTester_dll.exe))
+$(eval $(call gb_ExternalPackage_add_file,cppunit,bin/DllPlugInTester.exe,src/DllPlugInTester/ReleaseDll/DllPlugInTester.exe))
 else
 $(eval $(call gb_ExternalPackage_add_file,cppunit,bin/libcppunit-1-13-0.dll,src/cppunit/.libs/libcppunit-1-13-0.dll))
 $(eval $(call gb_ExternalPackage_add_file,cppunit,lib/cppunit.dll.a,src/cppunit/.libs/cppunit.dll.a))
