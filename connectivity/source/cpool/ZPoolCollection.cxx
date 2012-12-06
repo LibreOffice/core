@@ -25,6 +25,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
+#include <com/sun/star/sdbc/DriverManager.hpp>
 #include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -75,9 +76,7 @@ OPoolCollection::OPoolCollection(const Reference< XMultiServiceFactory >&   _rxF
     :m_xServiceFactory(_rxFactory)
 {
     // bootstrap all objects supporting the .sdb.Driver service
-    m_xManager = Reference< XDriverManager >(m_xServiceFactory->createInstance(::rtl::OUString("com.sun.star.sdbc.DriverManager") ), UNO_QUERY);
-    m_xDriverAccess = Reference< XDriverAccess >(m_xManager, UNO_QUERY);
-    OSL_ENSURE(m_xDriverAccess.is(), "have no (or an invalid) driver manager!");
+    m_xManager = DriverManager::create( comphelper::getComponentContext(m_xServiceFactory) );
 
     m_xProxyFactory = ProxyFactory::create( comphelper::getComponentContext(m_xServiceFactory) );
 
@@ -277,20 +276,17 @@ sal_Bool OPoolCollection::isPoolingEnabledByUrl(const ::rtl::OUString& _sUrl,
                                                 Reference< XInterface >& _rxDriverNode)
 {
     sal_Bool bEnabled = sal_False;
-    if (m_xDriverAccess.is())
+    _rxDriver = m_xManager->getDriverByURL(_sUrl);
+    if (_rxDriver.is() && isPoolingEnabled())
     {
-        _rxDriver = m_xDriverAccess->getDriverByURL(_sUrl);
-        if (_rxDriver.is() && isPoolingEnabled())
-        {
-            Reference< XServiceInfo > xSerivceInfo(_rxDriver,UNO_QUERY);
-            OSL_ENSURE(xSerivceInfo.is(),"Each driver should have a XServiceInfo interface!");
+        Reference< XServiceInfo > xSerivceInfo(_rxDriver,UNO_QUERY);
+        OSL_ENSURE(xSerivceInfo.is(),"Each driver should have a XServiceInfo interface!");
 
-            if(xSerivceInfo.is())
-            {
-                // look for the implementation name of the driver
-                _rsImplName = xSerivceInfo->getImplementationName();
-                bEnabled = isDriverPoolingEnabled(_rsImplName,_rxDriverNode);
-            }
+        if(xSerivceInfo.is())
+        {
+            // look for the implementation name of the driver
+            _rsImplName = xSerivceInfo->getImplementationName();
+            bEnabled = isDriverPoolingEnabled(_rsImplName,_rxDriverNode);
         }
     }
     return bEnabled;

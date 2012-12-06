@@ -21,9 +21,11 @@
 #include "mysql/YCatalog.hxx"
 #include <osl/diagnose.h>
 #include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/processfactory.hxx>
 #include "connectivity/dbexception.hxx"
 #include <connectivity/dbcharset.hxx>
-#include <com/sun/star/sdbc/XDriverAccess.hpp>
+#include <com/sun/star/sdbc/DriverManager.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include "TConnection.hxx"
 #include "resource/common_res.hrc"
 #include "resource/sharedresources.hxx"
@@ -43,7 +45,7 @@ namespace connectivity
     {
         Reference< XInterface >  SAL_CALL ODriverDelegator_CreateInstance(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFac) throw( Exception )
         {
-            return *(new ODriverDelegator(_rxFac));
+            return *(new ODriverDelegator( comphelper::getComponentContext(_rxFac) ));
         }
     }
 
@@ -52,9 +54,9 @@ namespace connectivity
     //= ODriverDelegator
     //====================================================================
     //--------------------------------------------------------------------
-    ODriverDelegator::ODriverDelegator(const Reference< XMultiServiceFactory >& _rxFactory)
+    ODriverDelegator::ODriverDelegator(const Reference< XComponentContext >& _rxContext)
         : ODriverDelegator_BASE(m_aMutex)
-        ,m_xFactory(_rxFactory)
+        ,m_xContext(_rxContext)
     {
     }
 
@@ -140,13 +142,10 @@ namespace connectivity
             return sNewUrl;
         }
         //--------------------------------------------------------------------
-        Reference< XDriver > lcl_loadDriver(const Reference< XMultiServiceFactory >& _rxFactory,const ::rtl::OUString& _sUrl)
+        Reference< XDriver > lcl_loadDriver(const Reference< XComponentContext >& _rxContext,const ::rtl::OUString& _sUrl)
         {
-            Reference<XDriverAccess> xDriverAccess(_rxFactory->createInstance(::rtl::OUString("com.sun.star.sdbc.DriverManager") ),UNO_QUERY);
-            OSL_ENSURE(xDriverAccess.is(),"Could not load driver manager!");
-            Reference< XDriver > xDriver;
-            if ( xDriverAccess.is() )
-                xDriver = xDriverAccess->getDriverByURL(_sUrl);
+            Reference<XDriverManager2> xDriverAccess = DriverManager::create(_rxContext);
+            Reference< XDriver > xDriver = xDriverAccess->getDriverByURL(_sUrl);
             return xDriver;
         }
         //--------------------------------------------------------------------
@@ -219,13 +218,13 @@ namespace connectivity
         if ( eType == D_ODBC )
         {
             if ( !m_xODBCDriver.is() )
-                m_xODBCDriver = lcl_loadDriver(m_xFactory,sCuttedUrl);
+                m_xODBCDriver = lcl_loadDriver(m_xContext,sCuttedUrl);
             xDriver = m_xODBCDriver;
         } // if ( bIsODBC )
         else if ( eType == D_NATIVE )
         {
             if ( !m_xNativeDriver.is() )
-                m_xNativeDriver = lcl_loadDriver(m_xFactory,sCuttedUrl);
+                m_xNativeDriver = lcl_loadDriver(m_xContext,sCuttedUrl);
             xDriver = m_xNativeDriver;
         }
         else
@@ -236,7 +235,7 @@ namespace connectivity
 
             TJDBCDrivers::iterator aFind = m_aJdbcDrivers.find(sDriverClass);
             if ( aFind == m_aJdbcDrivers.end() )
-                aFind = m_aJdbcDrivers.insert(TJDBCDrivers::value_type(sDriverClass,lcl_loadDriver(m_xFactory,sCuttedUrl))).first;
+                aFind = m_aJdbcDrivers.insert(TJDBCDrivers::value_type(sDriverClass,lcl_loadDriver(m_xContext,sCuttedUrl))).first;
             xDriver = aFind->second;
         }
 

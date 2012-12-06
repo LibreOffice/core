@@ -22,6 +22,7 @@
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/compbase3.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/stl_types.hxx>
@@ -37,7 +38,7 @@ namespace connectivity
 
     namespace mysql
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ODriverDelegator_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception );
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ODriverDelegator_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxMSF) throw( ::com::sun::star::uno::Exception );
 
         typedef ::cppu::WeakComponentImplHelper3<   ::com::sun::star::sdbc::XDriver
                                                 ,   ::com::sun::star::sdbcx::XDataDefinitionSupplier
@@ -61,7 +62,7 @@ namespace connectivity
                                                                                                 //  for this Driver
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >                 m_xODBCDriver;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >                 m_xNativeDriver;
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xFactory;
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
             ::rtl::OUString     m_sOldDriverClass;
 
             /** load the driver we want to delegate.
@@ -78,7 +79,7 @@ namespace connectivity
         public:
             /** creates a new delegator for a mysql driver
             */
-            ODriverDelegator(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
+            ODriverDelegator(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
 
             // XServiceInfo
             DECLARE_SERVICE_INFO();

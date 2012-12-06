@@ -52,7 +52,7 @@
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
-#include <com/sun/star/sdbc/XDriverManager.hpp>
+#include <com/sun/star/sdbc/DriverManager.hpp>
 #include <com/sun/star/sdbc/ConnectionPool.hpp>
 
 #include <comphelper/componentcontext.hxx>
@@ -131,6 +131,7 @@ namespace dbaui
     using ::com::sun::star::sdbc::ConnectionPool;
     using ::com::sun::star::sdbc::XConnectionPool;
     using ::com::sun::star::sdbc::XDriverManager;
+    using ::com::sun::star::sdbc::DriverManager;
     using ::com::sun::star::beans::PropertyValue;
     /** === end UNO using === **/
     namespace CopyTableOperation = ::com::sun::star::sdb::application::CopyTableOperation;
@@ -954,13 +955,13 @@ SharedConnection CopyTableWizard::impl_extractConnection_throw( const Reference<
     if ( xPSI->hasPropertyByName( PROPERTY_CONNECTION_INFO ) )
         OSL_VERIFY( _rxDataSourceDescriptor->getPropertyValue( PROPERTY_CONNECTION_INFO ) >>= aConnectionInfo );
 
-    Reference< XConnectionPool > xDriverManager;
+    Reference< XDriverManager > xDriverManager;
     try {
-        xDriverManager.set( ConnectionPool::create( m_aContext.getUNOContext() ) );
+        xDriverManager.set( ConnectionPool::create( m_aContext.getUNOContext() ), UNO_QUERY_THROW );
     } catch( const Exception& ) {  }
     if ( !xDriverManager.is() )
         // no connection pool installed
-        xDriverManager.set( m_aContext.createComponent( "com.sun.star.sdbc.DriverManager" ), UNO_QUERY_THROW );
+        xDriverManager.set( DriverManager::create(m_aContext.getUNOContext() ), UNO_QUERY_THROW );
 
     if ( aConnectionInfo.getLength() )
         xConnection.set( xDriverManager->getConnectionWithInfo( sConnectionResource, aConnectionInfo ), UNO_SET_THROW );

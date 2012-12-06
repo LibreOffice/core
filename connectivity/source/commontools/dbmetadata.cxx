@@ -34,6 +34,7 @@
 #include <com/sun/star/sdbcx/XUsersSupplier.hpp>
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
+#include <com/sun/star/sdbc/DriverManager.hpp>
 
 #include <tools/diagnose_ex.h>
 #include <comphelper/namedvaluecollection.hxx>
@@ -67,6 +68,8 @@ namespace dbtools
     using ::com::sun::star::sdbcx::XUsersSupplier;
     using ::com::sun::star::sdbcx::XDataDefinitionSupplier;
     using ::com::sun::star::sdbc::XDriverAccess;
+    using ::com::sun::star::sdbc::DriverManager;
+    using ::com::sun::star::sdbc::XDriverManager2;
     using ::com::sun::star::uno::UNO_SET_THROW;
     /** === end UNO using === **/
     namespace BooleanComparisonMode = ::com::sun::star::sdb::BooleanComparisonMode;
@@ -376,8 +379,7 @@ namespace dbtools
             if ( !xUsersSupp.is() )
             {
                 // - or at the driver manager
-                Reference< XDriverAccess > xDriverManager(
-                    _rContext.createComponent( "com.sun.star.sdbc.DriverManager" ), UNO_QUERY_THROW );
+                Reference< XDriverManager2 > xDriverManager = DriverManager::create( _rContext.getUNOContext() );
                 Reference< XDataDefinitionSupplier > xDriver( xDriverManager->getDriverByURL( m_pImpl->xConnectionMetaData->getURL() ), UNO_QUERY );
                 if ( xDriver.is() )
                     xUsersSupp.set( xDriver->getDataDefinitionByConnection( m_pImpl->xConnection ), UNO_QUERY );

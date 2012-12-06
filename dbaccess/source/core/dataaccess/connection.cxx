@@ -717,7 +717,7 @@ Reference< XTablesSupplier > OConnection::getMasterTables()
         {
             Reference<XDatabaseMetaData> xMeta = getMetaData();
             if ( xMeta.is() )
-                m_xMasterTables = ::dbtools::getDataDefinitionByURLAndConnection( xMeta->getURL(), m_xMasterConnection, m_aContext.getLegacyServiceFactory() );
+                m_xMasterTables = ::dbtools::getDataDefinitionByURLAndConnection( xMeta->getURL(), m_xMasterConnection, m_aContext.getUNOContext() );
         }
         catch(const SQLException&)
         {

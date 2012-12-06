@@ -27,7 +27,7 @@
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/logging.hxx>
 #include <comphelper/componentcontext.hxx>
@@ -54,8 +54,7 @@ namespace drivermanager
     //==========================================================================
     //= OSDBCDriverManager - the one-instance service for managing SDBC drivers
     //==========================================================================
-    typedef ::cppu::WeakImplHelper4 <   ::com::sun::star::sdbc::XDriverManager2
-                                    ,   ::com::sun::star::sdbc::XDriverAccess
+    typedef ::cppu::WeakImplHelper3 <   ::com::sun::star::sdbc::XDriverManager2
                                     ,   ::com::sun::star::lang::XServiceInfo
                                     ,   ::com::sun::star::uno::XNamingService
                                     >   OSDBCDriverManager_Base;

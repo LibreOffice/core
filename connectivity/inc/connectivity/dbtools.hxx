@@ -716,7 +716,7 @@ namespace dbtools
             The URL used to connect to the database.
         @param  _xConnection
             The connection used to find the correct driver.
-        @param  _rxFactory
+        @param  _rxContext
             Used to create the drivermanager.
         @return
             The datadefintion object.
@@ -724,7 +724,7 @@ namespace dbtools
     OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier> getDataDefinitionByURLAndConnection(
             const ::rtl::OUString& _rsUrl,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext);
 
     /** returns the table privileges to the given parameters
         @param  _xMetaData

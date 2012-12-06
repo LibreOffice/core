@@ -22,6 +22,7 @@
 #include <cppuhelper/implbase4.hxx>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/sdbc/XDriver.hpp>
+#include <com/sun/star/sdbc/XDriverManager2.hpp>
 #include <com/sun/star/sdbc/XConnectionPool.hpp>
 #include <com/sun/star/sdbc/XPooledConnection.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -65,8 +66,7 @@ namespace connectivity
         ::osl::Mutex                                                                        m_aMutex;
         OConnectionPools                                                                    m_aPools;          // the driver pools
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriverManager >          m_xManager;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriverAccess >           m_xDriverAccess;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriverManager2 >         m_xManager;
         ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XProxyFactory >     m_xProxyFactory;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xConfigNode;      // config node for generel connection pooling
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop>                m_xDesktop;

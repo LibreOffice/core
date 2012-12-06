@@ -22,6 +22,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/sdbc/DriverManager.hpp>
 #include <vcl/stdtext.hxx>
 #include <toolkit/unohlp.hxx>
 #include "abpresid.hrc"
@@ -39,19 +40,20 @@ namespace abp
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::ui::dialogs;
+    using namespace ::com::sun::star::sdbc;
 
     //=====================================================================
     //= OAdminDialogInvokation
     //=====================================================================
     //---------------------------------------------------------------------
-    OAdminDialogInvokation::OAdminDialogInvokation(const Reference< XMultiServiceFactory >& _rxORB
+    OAdminDialogInvokation::OAdminDialogInvokation(const Reference< XComponentContext >& _rxContext
                     , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _xDataSource
                     , Window* _pMessageParent)
-        :m_xORB(_rxORB)
+        :m_xContext(_rxContext)
         ,m_xDataSource(_xDataSource)
         ,m_pMessageParent(_pMessageParent)
     {
-        DBG_ASSERT(m_xORB.is(), "OAdminDialogInvokation::OAdminDialogInvokation: invalid service factory!");
+        DBG_ASSERT(m_xContext.is(), "OAdminDialogInvokation::OAdminDialogInvokation: invalid service factory!");
         DBG_ASSERT(m_xDataSource.is(), "OAdminDialogInvokation::OAdminDialogInvokation: invalid preferred name!");
         DBG_ASSERT(m_pMessageParent, "OAdminDialogInvokation::OAdminDialogInvokation: invalid message parent!");
     }
@@ -59,7 +61,7 @@ namespace abp
     //---------------------------------------------------------------------
     sal_Bool OAdminDialogInvokation::invokeAdministration( sal_Bool _bFixedType )
     {
-        if (!m_xORB.is())
+        if (!m_xContext.is())
             return sal_False;
 
         try
@@ -89,7 +91,7 @@ namespace abp
                 // creating the dialog service is potentially expensive (if all the libraries invoked need to be loaded)
                 // so we display a wait cursor
                 WaitObject aWaitCursor(m_pMessageParent);
-                xDialog = Reference< XExecutableDialog >( m_xORB->createInstanceWithArguments( _bFixedType ? s_sAdministrationServiceName : s_sDataSourceTypeChangeDialog, aArguments ), UNO_QUERY );
+                xDialog = Reference< XExecutableDialog >( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(_bFixedType ? s_sAdministrationServiceName : s_sDataSourceTypeChangeDialog, aArguments, m_xContext), UNO_QUERY );
 
                 // just for a smoother UI: What the dialog does upon execution, is (amongst other things) creating
                 // the DriverManager service
@@ -99,7 +101,7 @@ namespace abp
                 // context needs to be freshly created
                 // Thus, we access the context here (within the WaitCursor), which means the user sees a waitcursor
                 // while his/her office blocks a few seconds ....
-                m_xORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdbc.DriverManager" )) );
+                DriverManager::create( m_xContext );
             }
 
             if (xDialog.is())

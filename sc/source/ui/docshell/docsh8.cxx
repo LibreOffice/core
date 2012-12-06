@@ -35,7 +35,7 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
-#include <com/sun/star/sdbc/XDriverManager.hpp>
+#include <com/sun/star/sdbc/DriverManager.hpp>
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
@@ -82,7 +82,6 @@ using ::std::vector;
 // -----------------------------------------------------------------------
 
 #define SC_SERVICE_ROWSET           "com.sun.star.sdb.RowSet"
-#define SC_SERVICE_DRVMAN           "com.sun.star.sdbc.DriverManager"
 
 //! move to a header file?
 #define SC_DBPROP_ACTIVECONNECTION  "ActiveConnection"
@@ -102,7 +101,7 @@ using ::std::vector;
 
 namespace
 {
-    sal_uLong lcl_getDBaseConnection(uno::Reference<sdbc::XDriverManager>& _rDrvMgr,uno::Reference<sdbc::XConnection>& _rConnection,String& _rTabName,const String& rFullFileName,rtl_TextEncoding eCharSet)
+    sal_uLong lcl_getDBaseConnection(uno::Reference<sdbc::XDriverManager2>& _rDrvMgr,uno::Reference<sdbc::XConnection>& _rConnection,String& _rTabName,const String& rFullFileName,rtl_TextEncoding eCharSet)
     {
         INetURLObject aURL;
         aURL.SetSmartProtocol( INET_PROT_FILE );
@@ -113,14 +112,9 @@ namespace
         aURL.removeSegment();
         aURL.removeFinalSlash();
         String aPath = aURL.GetMainURL(INetURLObject::NO_DECODE);
-        uno::Reference<lang::XMultiServiceFactory> xFactory = comphelper::getProcessServiceFactory();
-        if (!xFactory.is()) return SCERR_EXPORT_CONNECT;
+        uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
 
-        _rDrvMgr.set( xFactory->createInstance(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_SERVICE_DRVMAN )) ),
-                            uno::UNO_QUERY);
-        OSL_ENSURE( _rDrvMgr.is(), "can't get DriverManager" );
-        if (!_rDrvMgr.is()) return SCERR_EXPORT_CONNECT;
+        _rDrvMgr.set( sdbc::DriverManager::create( xContext ) );
 
         // get connection
 
@@ -320,7 +314,7 @@ sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet
     try
     {
         String aTabName;
-        uno::Reference<sdbc::XDriverManager> xDrvMan;
+        uno::Reference<sdbc::XDriverManager2> xDrvMan;
         uno::Reference<sdbc::XConnection> xConnection;
         sal_uLong nRet = lcl_getDBaseConnection(xDrvMan,xConnection,aTabName,rFullFileName,eCharSet);
         if ( !xConnection.is() || !xDrvMan.is() )
@@ -847,7 +841,7 @@ sal_uLong ScDocShell::DBaseExport( const rtl::OUString& rFullFileName, CharSet e
 
     try
     {
-        uno::Reference<sdbc::XDriverManager> xDrvMan;
+        uno::Reference<sdbc::XDriverManager2> xDrvMan;
         uno::Reference<sdbc::XConnection> xConnection;
         sal_uLong nRet = lcl_getDBaseConnection(xDrvMan,xConnection,aTabName,rFullFileName,eCharSet);
         if ( !xConnection.is() || !xDrvMan.is() )

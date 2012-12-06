@@ -20,9 +20,9 @@
 #include "sdbcdriverenum.hxx"
 #include <comphelper/stl_types.hxx>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/sdbc/DriverManager.hpp>
 
 //........................................................................
 namespace offapp
@@ -32,6 +32,7 @@ namespace offapp
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::container;
+    using namespace ::com::sun::star::sdbc;
 
     //====================================================================
     //= ODriverEnumerationImpl
@@ -52,25 +53,19 @@ namespace offapp
     {
         try
         {
-            Reference< XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
-            Reference< XInterface > xDM = xORB->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.DriverManager") ) );
-            OSL_ENSURE(xDM.is(), "ODriverEnumerationImpl::ODriverEnumerationImpl: no access to the SDBC driver manager!");
+            Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+            Reference< XDriverManager2 > xEnumAccess = DriverManager::create( xContext );
 
-            Reference< XEnumerationAccess > xEnumAccess(xDM, UNO_QUERY);
-            OSL_ENSURE(xEnumAccess.is() || !xDM.is(), "ODriverEnumerationImpl::ODriverEnumerationImpl: can't enumerate SDBC drivers (missing the interface)!");
-            if (xEnumAccess.is())
+            Reference< XEnumeration > xEnumDrivers = xEnumAccess->createEnumeration();
+            OSL_ENSURE(xEnumDrivers.is(), "ODriverEnumerationImpl::ODriverEnumerationImpl: invalid enumeration object!");
+
+            Reference< XServiceInfo > xDriverSI;
+            while (xEnumDrivers->hasMoreElements())
             {
-                Reference< XEnumeration > xEnumDrivers = xEnumAccess->createEnumeration();
-                OSL_ENSURE(xEnumDrivers.is(), "ODriverEnumerationImpl::ODriverEnumerationImpl: invalid enumeration object!");
-
-                Reference< XServiceInfo > xDriverSI;
-                while (xEnumDrivers->hasMoreElements())
-                {
-                    xEnumDrivers->nextElement() >>= xDriverSI;
-                    OSL_ENSURE(xDriverSI.is(), "ODriverEnumerationImpl::ODriverEnumerationImpl: driver without service info!");
-                    if (xDriverSI.is())
-                        m_aImplNames.push_back(xDriverSI->getImplementationName());
-                }
+                xEnumDrivers->nextElement() >>= xDriverSI;
+                OSL_ENSURE(xDriverSI.is(), "ODriverEnumerationImpl::ODriverEnumerationImpl: driver without service info!");
+                if (xDriverSI.is())
+                    m_aImplNames.push_back(xDriverSI->getImplementationName());
             }
         }
         catch(const Exception&)

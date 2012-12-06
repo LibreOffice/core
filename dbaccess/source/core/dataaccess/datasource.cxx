@@ -44,6 +44,7 @@
 #include <com/sun/star/sdbc/ConnectionPool.hpp>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
 #include <com/sun/star/sdbc/XDriverManager.hpp>
+#include <com/sun/star/sdbc/DriverManager.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/ucb/AuthenticationRequest.hpp>
 #include <com/sun/star/ucb/XInteractionSupplyAuthentication.hpp>
@@ -641,13 +642,13 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::buildLowLevelConnection" );
     Reference< XConnection > xReturn;
 
-    Reference< XConnectionPool > xManager;
+    Reference< XDriverManager > xManager;
     try {
-        xManager.set( ConnectionPool::create( m_pImpl->m_aContext.getUNOContext() ) );
+        xManager.set( ConnectionPool::create( m_pImpl->m_aContext.getUNOContext() ), UNO_QUERY_THROW );
     } catch( const Exception& ) {  }
     if ( !xManager.is() )
         // no connection pool installed, fall back to driver manager
-        xManager.set( m_pImpl->m_aContext.createComponent( "com.sun.star.sdbc.DriverManager" ), UNO_QUERY_THROW );
+        xManager.set( DriverManager::create(m_pImpl->m_aContext.getUNOContext() ), UNO_QUERY_THROW );
 
     ::rtl::OUString sUser(_rUid);
     ::rtl::OUString sPwd(_rPwd);

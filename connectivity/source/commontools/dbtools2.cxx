@@ -27,6 +27,7 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/sdbc/DriverManager.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
@@ -636,14 +637,12 @@ sal_Bool isDataSourcePropertyEnabled(const Reference<XInterface>& _xProp,const :
 Reference< XTablesSupplier> getDataDefinitionByURLAndConnection(
             const ::rtl::OUString& _rsUrl,
             const Reference< XConnection>& _xConnection,
-            const Reference< XMultiServiceFactory>& _rxFactory)
+            const Reference< XComponentContext >& _rxContext)
 {
     Reference< XTablesSupplier> xTablesSup;
     try
     {
-        Reference< XDriverAccess> xManager(
-            _rxFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.DriverManager")) ),
-            UNO_QUERY_THROW );
+        Reference< XDriverManager2 > xManager = DriverManager::create( _rxContext );
         Reference< XDataDefinitionSupplier > xSupp( xManager->getDriverByURL( _rsUrl ), UNO_QUERY );
 
         if ( xSupp.is() )

@@ -21,7 +21,9 @@
 #include "addresssettings.hxx"
 #include "abspilot.hxx"
 #include <vcl/msgbox.hxx>
-#include <com/sun/star/sdbc/XDriverAccess.hpp>
+#include <com/sun/star/sdbc/XDriver.hpp>
+#include <com/sun/star/sdbc/DriverManager.hpp>
+#include <comphelper/processfactory.hxx>
 
 //.........................................................................
 namespace abp
@@ -98,7 +100,7 @@ namespace abp
         bWithMozilla = true;
 #endif
 
-        Reference< XDriverAccess> xManager(_pParent->getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.DriverManager"))), UNO_QUERY);
+        Reference< XDriverManager2 > xManager = DriverManager::create( comphelper::getComponentContext( _pParent->getORB() ) );
 
         try
         {

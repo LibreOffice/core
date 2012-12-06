@@ -20,7 +20,7 @@
 #ifndef EXTENSIONS_ABP_ADMININVOKATIONIMPL_HXX
 #define EXTENSIONS_ABP_ADMININVOKATIONIMPL_HXX
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 
@@ -39,14 +39,14 @@ namespace abp
     class OAdminDialogInvokation
     {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                        m_xORB;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+                        m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > m_xDataSource;
         Window*         m_pMessageParent;
 
     public:
         OAdminDialogInvokation(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _xDataSource,
             Window* _pMessageParent
         );

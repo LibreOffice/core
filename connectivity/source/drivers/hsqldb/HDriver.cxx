@@ -22,6 +22,7 @@
 #include <osl/diagnose.h>
 #include "connectivity/dbexception.hxx"
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <com/sun/star/sdbc/DriverManager.hpp>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -130,10 +131,8 @@ namespace connectivity
         if ( !m_xDriver.is() )
         {
             ::rtl::OUString sURL("jdbc:hsqldb:db");
-            Reference<XDriverAccess> xDriverAccess(m_xFactory->createInstance(::rtl::OUString("com.sun.star.sdbc.DriverManager") ),UNO_QUERY);
-            OSL_ENSURE(xDriverAccess.is(),"Could not load driver manager!");
-            if ( xDriverAccess.is() )
-                m_xDriver = xDriverAccess->getDriverByURL(sURL);
+            Reference<XDriverManager2> xDriverAccess = DriverManager::create( comphelper::getComponentContext(m_xFactory) );
+            m_xDriver = xDriverAccess->getDriverByURL(sURL);
         }
 
         return m_xDriver;

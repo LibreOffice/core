@@ -80,24 +80,29 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL mysql_component_getFactory(
                     void* pServiceManager,
                     void* /*pRegistryKey*/)
 {
-    void* pRet = 0;
-    if (pServiceManager)
+    if (!pServiceManager)
     {
-        ProviderRequest aReq(pServiceManager,pImplementationName);
-
-        aReq.CREATE_PROVIDER(
-            ODriverDelegator::getImplementationName_Static(),
-            ODriverDelegator::getSupportedServiceNames_Static(),
-            ODriverDelegator_CreateInstance, ::cppu::createSingleFactory)
-        ;
-
-        if(aReq.xRet.is())
-            aReq.xRet->acquire();
-
-        pRet = aReq.getProvider();
+        return 0;
     }
 
-    return pRet;
+    Reference< XSingleServiceFactory > xRet;
+    const Reference< XMultiServiceFactory > xServiceManager( reinterpret_cast<XMultiServiceFactory*>(pServiceManager) );
+    const OUString sImplementationName( OUString::createFromAscii(pImplementationName) );
+
+    if( ODriverDelegator::getImplementationName_Static() == sImplementationName )
+        try
+        {
+            xRet = ::cppu::createSingleFactory( xServiceManager, sImplementationName, ODriverDelegator_CreateInstance,
+                       ODriverDelegator::getSupportedServiceNames_Static(), 0);
+        }
+        catch(...)
+        {
+        }
+
+    if(xRet.is())
+        xRet->acquire();
+
+    return xRet.get();
 };
 
 

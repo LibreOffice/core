@@ -1013,7 +1013,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/sdbc,\
 	ConnectionProperties \
 	DBASEConnectionProperties \
 	Driver \
-	DriverManager \
 	FILEConnectionProperties \
 	FLATConnectionProperties \
 	JDBCConnectionProperties \
