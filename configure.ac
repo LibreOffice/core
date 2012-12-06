@@ -49,11 +49,12 @@ PathFormat()
     fi
 }
 
+rm -f warn
 have_WARNINGS="no"
 add_warning()
 {
     if test "$have_WARNINGS" = "no"; then
-        echo "*************************************" >> warn
+        echo "*************************************" > warn
         have_WARNINGS="yes"
         if which tput >/dev/null 2>/dev/null && test `tput colors` -ge 8; then
             dnl <esc> as actual byte (U+1b), [ escaped using quadrigraph @<:@
@@ -12492,7 +12493,8 @@ _EOF
 fi
 
 if test -f warn; then
-	cat warn
+    cat warn
+    rm warn
 fi
 
 dnl vim:set shiftwidth=4 softtabstop=4 expandtab:

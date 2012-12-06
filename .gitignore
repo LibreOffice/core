@@ -74,7 +74,6 @@
 # misc
 /file-lists
 /cross-build-toolset.built
-/warn
 /build.log
 /build_error.log
 /install
