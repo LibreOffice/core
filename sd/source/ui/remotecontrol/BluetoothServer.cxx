@@ -14,6 +14,7 @@
 #if (defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)
   #include <glib.h>
   #include <dbus/dbus-glib.h>
+  #include <errno.h>
   #include <sys/unistd.h>
   #include <sys/socket.h>
   #include <bluetooth/bluetooth.h>
