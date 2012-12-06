@@ -316,16 +316,17 @@ void SAL_CALL BluetoothServer::run()
     socklen_t  aRemoteAddrLen = sizeof(aRemoteAddr);
     while ( true )
     {
-        SOCKET socket;
+        int bSocket;
         SAL_INFO( "sdremote.bluetooth", "waiting on accept" );
-        if ( (socket = accept(aSocket, (sockaddr*) &aRemoteAddr, &aRemoteAddrLen)) == INVALID_SOCKET )
+        if ( (bSocket = accept(aSocket, (sockaddr*) &aRemoteAddr, &aRemoteAddrLen)) < 0 )
         {
-            SAL_WARN( "sdremote.bluetooth", "accept failed with error " << WSAGetLastError() );
+            int err = errno;
+            SAL_WARN( "sdremote.bluetooth", "accept failed with errno " << err );
             close( aSocket );
             return;
         } else {
             SAL_INFO( "sdremote.bluetooth", "connection accepted" );
-            Communicator* pCommunicator = new Communicator( new BufferedStreamSocket( socket ) );
+            Communicator* pCommunicator = new Communicator( new BufferedStreamSocket( bSocket ) );
             mpCommunicators->push_back( pCommunicator );
             pCommunicator->launch();
         }
