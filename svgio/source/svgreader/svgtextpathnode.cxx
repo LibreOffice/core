@@ -40,7 +40,6 @@ namespace svgio
         private:
             const basegfx::B2DPolygon&      mrPolygon;
             const double                    mfBasegfxPathLength;
-            const double                    mfUserToBasegfx;
             double                          mfPosition;
             const basegfx::B2DPoint&        mrTextStart;
 
@@ -65,7 +64,6 @@ namespace svgio
                 const drawinglayer::primitive2d::TextSimplePortionPrimitive2D& rSource,
                 const basegfx::B2DPolygon& rPolygon,
                 const double fBasegfxPathLength,
-                const double fUserToBasegfx,
                 double fPosition,
                 const basegfx::B2DPoint& rTextStart);
             virtual ~pathTextBreakupHelper();
@@ -118,13 +116,11 @@ namespace svgio
             const drawinglayer::primitive2d::TextSimplePortionPrimitive2D& rSource,
             const basegfx::B2DPolygon& rPolygon,
             const double fBasegfxPathLength,
-            const double fUserToBasegfx,
             double fPosition,
             const basegfx::B2DPoint& rTextStart)
         :   drawinglayer::primitive2d::TextBreakupHelper(rSource),
             mrPolygon(rPolygon),
             mfBasegfxPathLength(fBasegfxPathLength),
-            mfUserToBasegfx(fUserToBasegfx),
             mfPosition(0.0),
             mrTextStart(rTextStart),
             mnMaxIndex(rPolygon.isClosed() ? rPolygon.count() : rPolygon.count() - 1),
@@ -462,7 +458,6 @@ namespace svgio
                                             *pCandidate,
                                             aPolygon,
                                             fBasegfxPathLength,
-                                            fUserToBasegfx,
                                             fPosition,
                                             rTextStart);
 
