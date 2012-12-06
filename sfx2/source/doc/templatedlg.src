@@ -152,20 +152,6 @@ ModelessDialog DLG_TEMPLATE_MANAGER
         Text [en-US] = "Drawings";
     };
 
-    ImageButton BTN_SELECTION_MODE
-    {
-        Pos = MAP_APPFONT(260,5);
-        Size = MAP_APPFONT(20,14);
-        TabStop = TRUE;
-
-        ButtonImage = Image
-        {
-            ImageBitmap = Bitmap { File = "select.png" ; };
-        };
-
-        QuickHelpText [en-US] = "Enables selecting items by just clicking in the thumbnail or title.";
-    };
-
     Control TEMPLATE_VIEW
     {
         Pos = MAP_APPFONT(5,30);

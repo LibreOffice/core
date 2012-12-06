@@ -104,7 +104,6 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
       aButtonPresents(this,SfxResId(BTN_SELECT_PRESENTATIONS)),
       aButtonSheets(this,SfxResId(BTN_SELECT_SHEETS)),
       aButtonDraws(this,SfxResId(BTN_SELECT_DRAWS)),
-      maButtonSelMode(this,SfxResId(BTN_SELECTION_MODE)),
       mpToolbars( new Control(this,SfxResId(TOOLBARS))),
       mpSearchEdit(new Edit(this,WB_HIDE | WB_BORDER)),
       mpViewBar( new ToolBox(mpToolbars, SfxResId(TBX_ACTION_VIEW))),
@@ -114,11 +113,8 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
       maView(new TemplateLocalView(this,SfxResId(TEMPLATE_VIEW))),
       mpOnlineView(new TemplateRemoteView(this, WB_VSCROLL,false)),
       mbIsSaveMode(false),
-      mbInSelectionModeHdl(false),
       mxDesktop(comphelper::getProcessServiceFactory()->createInstance( "com.sun.star.frame.Desktop" ),uno::UNO_QUERY )
 {
-    maButtonSelMode.SetStyle(maButtonSelMode.GetStyle() | WB_TOGGLE);
-
     // Create popup menus
     mpActionMenu = new PopupMenu;
     mpActionMenu->InsertItem(MNI_ACTION_SORT_NAME,SfxResId(STR_ACTION_SORT_NAME).toString(),SfxResId(IMG_ACTION_SORT));
@@ -197,9 +193,8 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
 
     maView->setItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVFolderStateHdl));
     maView->setOverlayItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVTemplateStateHdl));
-    maView->setOverlayClickHdl(LINK(this,SfxTemplateManagerDlg,OpenTemplateHdl));
+    maView->setOverlayDblClickHdl(LINK(this,SfxTemplateManagerDlg,OpenTemplateHdl));
     maView->setOverlayCloseHdl(LINK(this,SfxTemplateManagerDlg,CloseOverlayHdl));
-    maView->setSelectionModeHdl(LINK(this,SfxTemplateManagerDlg,SelectionModeHdl));
 
     // Set online view position and dimensions
     mpOnlineView->SetPosSizePixel(aViewPos,aThumbSize);
@@ -210,10 +205,9 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
                                     TEMPLATE_ITEM_PADDING);
 
     mpOnlineView->setOverlayItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVTemplateStateHdl));
-    mpOnlineView->setOverlayClickHdl(LINK(this,SfxTemplateManagerDlg,OpenTemplateHdl));
+    mpOnlineView->setOverlayDblClickHdl(LINK(this,SfxTemplateManagerDlg,OpenTemplateHdl));
     mpOnlineView->setOverlayCloseHdl(LINK(this,SfxTemplateManagerDlg,CloseOverlayHdl));
     mpOnlineView->setOverlayChangeNameHdl(LINK(this,SfxTemplateManagerDlg,RepositoryChangeNameHdl));
-    mpOnlineView->setSelectionModeHdl(LINK(this,SfxTemplateManagerDlg,SelectionModeHdl));
 
     mpSearchView->SetSizePixel(aThumbSize);
     mpSearchView->setItemMaxTextLength(TEMPLATE_ITEM_MAX_TEXT_LENGTH);
@@ -223,14 +217,12 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
                                     TEMPLATE_ITEM_PADDING);
 
     mpSearchView->setItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVTemplateStateHdl));
-    mpSearchView->setSelectionModeHdl(LINK(this,SfxTemplateManagerDlg,SelectionModeHdl));
 
     aButtonAll.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewAllHdl));
     aButtonDocs.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewDocsHdl));
     aButtonPresents.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewPresentsHdl));
     aButtonSheets.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewSheetsHdl));
     aButtonDraws.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewDrawsHdl));
-    maButtonSelMode.SetClickHdl(LINK(this,SfxTemplateManagerDlg,OnClickSelectionMode));
 
     // Set dialog to correct dimensions
     SetSizePixel(aWinSize);
@@ -347,21 +339,6 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, CloseOverlayHdl)
     else
         switchMainView(true);
 
-    return 0;
-}
-
-IMPL_LINK (SfxTemplateManagerDlg, OnClickSelectionMode, ImageButton*, pButton)
-{
-    if (!mbInSelectionModeHdl)
-        maView->setSelectionMode(pButton->GetState() == STATE_CHECK);
-    return 0;
-}
-
-IMPL_LINK (SfxTemplateManagerDlg, SelectionModeHdl, bool*, pMode)
-{
-    mbInSelectionModeHdl = true;
-    maButtonSelMode.SetState( *pMode ? STATE_CHECK : STATE_NOCHECK );
-    mbInSelectionModeHdl = false;
     return 0;
 }
 
@@ -1221,11 +1198,10 @@ void SfxTemplateManagerDlg::centerTopButtons()
 {
     Point aFirstBtnPos = aButtonAll.GetPosPixel();
 
-    Size aSelBtnSize = maButtonSelMode.GetOutputSize(); // Last button in the list
     Size aBtnSize = aButtonAll.GetOutputSize();
     Size aWinSize = GetOutputSize();
 
-    long nTotalWidth = aSelBtnSize.getWidth() + aBtnSize.getWidth()*5;
+    long nTotalWidth = aBtnSize.getWidth()*5;
     long nSpace = (aWinSize.getWidth() - nTotalWidth)/2;
 
     Point aBtnPos(nSpace,aFirstBtnPos.getY());
@@ -1242,9 +1218,6 @@ void SfxTemplateManagerDlg::centerTopButtons()
 
     aBtnPos.setX(aBtnPos.getX() + aBtnSize.getWidth());
     aButtonDraws.SetPosPixel(aBtnPos);
-
-    aBtnPos.setX(aBtnPos.getX() + aBtnSize.getWidth());
-    maButtonSelMode.SetPosPixel(aBtnPos);
 }
 
 void SfxTemplateManagerDlg::createRepositoryMenu()

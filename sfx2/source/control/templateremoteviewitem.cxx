@@ -9,8 +9,8 @@
 
 #include <sfx2/templateremoteviewitem.hxx>
 
-TemplateRemoteViewItem::TemplateRemoteViewItem (ThumbnailView &rView, Window *pParent)
-    : ThumbnailViewItem(rView,pParent)
+TemplateRemoteViewItem::TemplateRemoteViewItem (ThumbnailView &rView)
+    : ThumbnailViewItem(rView)
 {
 }
 

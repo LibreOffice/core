@@ -14,8 +14,8 @@
 
 struct TemplateSearchViewItem : public TemplateViewItem
 {
-    TemplateSearchViewItem (ThumbnailView &rView, Window *pParent)
-        : TemplateViewItem(rView,pParent)
+    TemplateSearchViewItem (ThumbnailView &rView)
+        : TemplateViewItem(rView)
     {}
 
     virtual ~TemplateSearchViewItem ()

@@ -22,7 +22,7 @@ public:
     BitmapEx maPreview2;
     std::vector<TemplateItemProperties> maTemplates;
 
-    TemplateLocalViewItem (ThumbnailView &rView, Window *pParent);
+    TemplateLocalViewItem (ThumbnailView &rView);
 
     virtual ~TemplateLocalViewItem ();
 

@@ -17,7 +17,7 @@ class TemplateRemoteViewItem : public ThumbnailViewItem
 {
 public:
 
-    TemplateRemoteViewItem (ThumbnailView &rView, Window *pParent);
+    TemplateRemoteViewItem (ThumbnailView &rView);
 
     virtual ~TemplateRemoteViewItem ();
 

@@ -27,8 +27,8 @@ using namespace basegfx::tools;
 using namespace drawinglayer::attribute;
 using namespace drawinglayer::primitive2d;
 
-TemplateViewItem::TemplateViewItem (ThumbnailView &rView, Window *pParent)
-    : ThumbnailViewItem(rView,pParent)
+TemplateViewItem::TemplateViewItem (ThumbnailView &rView)
+    : ThumbnailViewItem(rView)
 {
 }
 
@@ -136,9 +136,6 @@ void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProces
     }
 
     pProcessor->process(aSeq);
-
-    if (mbMode || mbHover || mbSelected)
-        mpSelectBox->Paint(maDrawArea);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

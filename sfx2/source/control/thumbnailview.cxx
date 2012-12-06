@@ -98,7 +98,6 @@ void ThumbnailView::ImplInit()
     mnSpacing           = 0;
     mbScroll            = false;
     mbHasVisibleItems   = false;
-    mbSelectionMode = false;
     maFilterFunc = ViewFilterAll();
     maColor = GetSettings().GetStyleSettings().GetFieldColor();
 
@@ -197,21 +196,7 @@ void ThumbnailView::DrawItem (ThumbnailViewItem *pItem)
     }
 }
 
-void ThumbnailView::OnSelectionMode (bool bMode)
-{
-    if ( !bMode )
-        deselectItems();
-
-    for (size_t i = 0, n = mItemList.size(); i < n; ++i)
-    {
-        mItemList[i]->setSelectionMode(bMode);
-
-        if (mItemList[i]->isVisible())
-            DrawItem(mItemList[i]);
-    }
-}
-
-void ThumbnailView::OnItemClicked (ThumbnailViewItem*)
+void ThumbnailView::OnItemDblClicked (ThumbnailViewItem*)
 {
 }
 
@@ -508,107 +493,46 @@ IMPL_LINK (ThumbnailView, OnItemSelected, ThumbnailViewItem*, pItem)
 
 void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    bool bProcessClick = rMEvt.IsLeft();
-
-    if ( rMEvt.IsRight( ) )
-    {
-        // Set selection mode with right click
-        if (!mbSelectionMode)
-        {
-            setSelectionMode( true );
-            bProcessClick = true;
-        }
-    }
-
-    if ( bProcessClick )
+    if ( rMEvt.IsLeft() )
     {
         ThumbnailViewItem* pItem = ImplGetItem( ImplGetItem( rMEvt.GetPosPixel() ) );
 
         if (pItem && pItem->isVisible())
         {
-            if ( !rMEvt.IsMod2() )
+            if ( rMEvt.GetClicks() == 1 )
             {
-                if ( rMEvt.GetClicks() == 1 )
-                {
-                    if (mbSelectionMode)
-                    {
-                        pItem->setSelection(!pItem->isSelected());
+                if (!pItem->isSelected() && !rMEvt.IsMod1())
+                    deselectItems( );
+                pItem->setSelection(!pItem->isSelected());
 
-                        if (!pItem->isHighlighted())
-                            DrawItem(pItem);
+                if (!pItem->isHighlighted())
+                    DrawItem(pItem);
 
-                        maItemStateHdl.Call(pItem);
-                    }
-                    else
-                    {
-                        Rectangle aRect(pItem->getDrawArea());
-                        aRect.SetSize(Size(mnItemWidth,mnThumbnailHeight));
+                maItemStateHdl.Call(pItem);
+            }
+            else if ( rMEvt.GetClicks() == 2 )
+            {
+                // The mouse button down event 1 click right before is pointless
+                pItem->setSelection(!pItem->isSelected());
+                maItemStateHdl.Call(pItem);
 
-                        if (!mbSelectionMode && aRect.IsInside(rMEvt.GetPosPixel()))
-                            OnItemClicked(pItem);
-                    }
-                }
+                Rectangle aRect(pItem->getDrawArea());
+                aRect.SetSize(Size(mnItemWidth,mnThumbnailHeight));
+
+                if (aRect.IsInside(rMEvt.GetPosPixel()))
+                    OnItemDblClicked(pItem);
             }
 
             return;
         }
     }
+
     Control::MouseButtonDown( rMEvt );
 }
 
 void ThumbnailView::MouseButtonUp( const MouseEvent& rMEvt )
 {
     Control::MouseButtonUp( rMEvt );
-}
-
-void ThumbnailView::MouseMove( const MouseEvent& rMEvt )
-{
-    ThumbnailViewItem* pItem = ImplGetItem( ImplGetItem( rMEvt.GetPosPixel() ) );
-
-    if (pItem)
-    {
-        if (mnHighItemId != pItem->mnId && pItem->isVisible())
-        {
-            size_t nPos = GetItemPos(mnHighItemId);
-
-            if (nPos != THUMBNAILVIEW_ITEM_NOTFOUND)
-            {
-                ThumbnailViewItem *pOld = mItemList[nPos];
-
-                pOld->setHighlight(false);
-
-                if (!pOld->isSelected())
-                    DrawItem(pOld);
-            }
-
-            mnHighItemId = pItem->mnId;
-            pItem->setHighlight(true);
-
-            if (!pItem->isSelected())
-                DrawItem(pItem);
-        }
-    }
-    else
-    {
-        if (mnHighItemId)
-        {
-            size_t nPos = GetItemPos(mnHighItemId);
-
-            if (nPos != THUMBNAILVIEW_ITEM_NOTFOUND)
-            {
-                ThumbnailViewItem *pOld = mItemList[nPos];
-
-                pOld->setHighlight(false);
-
-                if (!pOld->isSelected())
-                    DrawItem(pOld);
-            }
-
-            mnHighItemId = 0;
-        }
-    }
-
-    Control::MouseMove( rMEvt );
 }
 
 void ThumbnailView::Command( const CommandEvent& rCEvt )
@@ -1047,13 +971,6 @@ long ThumbnailView::GetScrollWidth() const
     }
     else
         return 0;
-}
-
-void ThumbnailView::setSelectionMode (bool mode)
-{
-    mbSelectionMode = mode;
-    OnSelectionMode(mode);
-    maSelectionModeHdl.Call(&mode);
 }
 
 void ThumbnailView::filterItems (const boost::function<bool (const ThumbnailViewItem*) > &func)

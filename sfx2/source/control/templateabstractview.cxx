@@ -59,20 +59,16 @@ bool ViewFilter_Keyword::operator ()(const ThumbnailViewItem *pItem)
 
 TemplateAbstractView::TemplateAbstractView (Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
     : ThumbnailView(pParent,nWinStyle,bDisableTransientChildren),
-      mpItemView(new TemplateView(this)),
-      mbInSelectionModeHdl(false)
+      mpItemView(new TemplateView(this))
 {
     mpItemView->setItemStateHdl(LINK(this,TemplateAbstractView,OverlayItemStateHdl));
-    mpItemView->setSelectionModeHdl(LINK(this,TemplateAbstractView,OverlaySelectionModeHdl));
 }
 
 TemplateAbstractView::TemplateAbstractView(Window *pParent, const ResId &rResId, bool bDisableTransientChildren)
     : ThumbnailView(pParent,rResId,bDisableTransientChildren),
-      mpItemView(new TemplateView(this)),
-      mbInSelectionModeHdl(false)
+      mpItemView(new TemplateView(this))
 {
     mpItemView->setItemStateHdl(LINK(this,TemplateAbstractView,OverlayItemStateHdl));
-    mpItemView->setSelectionModeHdl(LINK(this,TemplateAbstractView,OverlaySelectionModeHdl));
 }
 
 TemplateAbstractView::~TemplateAbstractView ()
@@ -124,9 +120,9 @@ void TemplateAbstractView::filterTemplatesByKeyword(const OUString &rKeyword)
         mpItemView->filterItems(ViewFilter_Keyword(rKeyword));
 }
 
-void TemplateAbstractView::setOverlayClickHdl(const Link &rLink)
+void TemplateAbstractView::setOverlayDblClickHdl(const Link &rLink)
 {
-    mpItemView->setClickHdl(rLink);
+    mpItemView->setDblClickHdl(rLink);
 }
 
 void TemplateAbstractView::setOverlayCloseHdl(const Link &rLink)
@@ -287,35 +283,9 @@ void TemplateAbstractView::DrawItem(ThumbnailViewItem *pItem)
         ThumbnailView::DrawItem(pItem);
 }
 
-void TemplateAbstractView::OnSelectionMode (bool bMode)
-{
-    if (!mbInSelectionModeHdl)
-    {
-        if (mpItemView->IsVisible())
-        {
-            mbSelectionMode = bMode;
-            mpItemView->setSelectionMode(bMode);
-        }
-        else
-            ThumbnailView::OnSelectionMode(bMode);
-    }
-}
-
 IMPL_LINK(TemplateAbstractView, OverlayItemStateHdl, const ThumbnailViewItem*, pItem)
 {
     maOverlayItemStateHdl.Call((void*)pItem);
-    return 0;
-}
-
-IMPL_LINK(TemplateAbstractView, OverlaySelectionModeHdl, bool*, pMode)
-{
-    mbInSelectionModeHdl = true;
-    setSelectionMode(*pMode);
-    if (!*pMode)
-    {
-        deselectOverlayItems();
-    }
-    mbInSelectionModeHdl = false;
     return 0;
 }
 
