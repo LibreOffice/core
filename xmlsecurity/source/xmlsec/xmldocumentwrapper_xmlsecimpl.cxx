@@ -19,7 +19,6 @@
 
 
 #include "xmldocumentwrapper_xmlsecimpl.hxx"
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <xmloff/attrlist.hxx>
 #include "xmlelementwrapper_xmlsecimpl.hxx"
@@ -1076,7 +1075,7 @@ cssu::Sequence< rtl::OUString > SAL_CALL XMLDocumentWrapper_XmlSecImpl_getSuppor
 #undef SERVICE_NAME
 
 cssu::Reference< cssu::XInterface > SAL_CALL XMLDocumentWrapper_XmlSecImpl_createInstance(
-    const cssu::Reference< cssl::XMultiServiceFactory > &)
+    const cssu::Reference< cssu::XComponentContext > &)
     throw( cssu::Exception )
 {
     return (cppu::OWeakObject*) new XMLDocumentWrapper_XmlSecImpl( );

@@ -23,7 +23,6 @@
 #include <cppuhelper/typeprovider.hxx>
 
 namespace cssu = com::sun::star::uno;
-namespace cssl = com::sun::star::lang;
 
 #define SERVICE_NAME "com.sun.star.xml.wrapper.XMLElementWrapper"
 #define IMPLEMENTATION_NAME "com.sun.star.xml.security.bridge.xmlsec.XMLElementWrapper_XmlSecImpl"
@@ -95,7 +94,7 @@ cssu::Sequence< rtl::OUString > SAL_CALL XMLElementWrapper_XmlSecImpl_getSupport
 
 cssu::Reference< cssu::XInterface > SAL_CALL
     XMLElementWrapper_XmlSecImpl_createInstance(
-        const cssu::Reference< cssl::XMultiServiceFactory > &)
+        const cssu::Reference< cssu::XComponentContext > &)
     throw( cssu::Exception )
 {
     return (cppu::OWeakObject*) new XMLElementWrapper_XmlSecImpl(NULL);

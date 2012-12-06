@@ -28,6 +28,10 @@
 
 #include <libxml/tree.h>
 
+namespace com { namespace sun { namespace star { namespace uno {
+    class XComponentContext;
+} } } }
+
 class XMLElementWrapper_XmlSecImpl : public cppu::WeakImplHelper3
 <
     com::sun::star::xml::wrapper::XXMLElementWrapper,
@@ -89,7 +93,7 @@ com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL XMLElementWrapper_XmlSec
 com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
 SAL_CALL XMLElementWrapper_XmlSecImpl_createInstance(
     const com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory > & rSMgr)
+        com::sun::star::uno::XComponentContext > &)
     throw ( com::sun::star::uno::Exception );
 
 #endif

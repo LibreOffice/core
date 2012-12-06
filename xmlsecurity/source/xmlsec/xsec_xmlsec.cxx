@@ -21,7 +21,6 @@
 #include <sal/config.h>
 
 #include <cppuhelper/factory.hxx>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include "serialnumberadapter.hxx"
 #include "xmlelementwrapper_xmlsecimpl.hxx"
@@ -45,20 +44,20 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL xsec_xmlsec_component_getFactory( const sal_
     void* pRet = 0;
     Reference< XInterface > xFactory ;
 
-    if( pImplName != NULL && pServiceManager != NULL ) {
+    if( pImplName != NULL ) {
         if( XMLElementWrapper_XmlSecImpl_getImplementationName().equals( OUString::createFromAscii( pImplName ) ) )
         {
-            xFactory = Reference< XSingleServiceFactory >( createSingleFactory(
-                reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+            xFactory = cppu::createSingleComponentFactory(
+                XMLElementWrapper_XmlSecImpl_createInstance,
                 OUString::createFromAscii( pImplName ),
-                XMLElementWrapper_XmlSecImpl_createInstance, XMLElementWrapper_XmlSecImpl_getSupportedServiceNames() ) );
+                XMLElementWrapper_XmlSecImpl_getSupportedServiceNames() );
         }
         else if( XMLDocumentWrapper_XmlSecImpl_getImplementationName().equals( OUString::createFromAscii( pImplName ) ) )
         {
-            xFactory = Reference< XSingleServiceFactory >( createSingleFactory(
-                reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+            xFactory = cppu::createSingleComponentFactory(
+                XMLDocumentWrapper_XmlSecImpl_createInstance,
                 OUString::createFromAscii( pImplName ),
-                XMLDocumentWrapper_XmlSecImpl_createInstance, XMLDocumentWrapper_XmlSecImpl_getSupportedServiceNames() ) );
+                XMLDocumentWrapper_XmlSecImpl_getSupportedServiceNames() );
         }
         else if( xml_security::serial_number_adapter::implementationName().equals( OUString::createFromAscii( pImplName ) ) )
         {
