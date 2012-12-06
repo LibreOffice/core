@@ -198,25 +198,20 @@ void SfxPrinter::SetOptions( const SfxItemSet &rNewOptions )
 
 //--------------------------------------------------------------------
 
-SfxPrintOptionsDialog::SfxPrintOptionsDialog( Window *pParent,
+SfxPrintOptionsDialog::SfxPrintOptionsDialog(Window *pParent,
                                               SfxViewShell *pViewShell,
-                                              const SfxItemSet *pSet ) :
+                                              const SfxItemSet *pSet)
 
-    ModalDialog( pParent, WinBits( WB_STDMODAL | WB_3DLOOK ) ),
-
-    aOkBtn      ( this ),
-    aCancelBtn  ( this ),
-    aHelpBtn    ( this ),
-    pDlgImpl    ( new SfxPrintOptDlg_Impl ),
-    pViewSh     ( pViewShell ),
-    pOptions    ( pSet->Clone() ),
-    pPage       ( NULL )
-
+    : ModalDialog(pParent, "PrinterOptionsDialog",
+        "sfx/ui/printeroptionsdialog.ui")
+    , pDlgImpl(new SfxPrintOptDlg_Impl)
+    , pViewSh(pViewShell)
+    , pOptions(pSet->Clone())
 {
-    SetText( SfxResId(STR_PRINT_OPTIONS_TITLE).toString() );
+    VclContainer *pVBox = m_pUIBuilder->get<VclVBox>("dialog-vbox1");
 
     // Insert TabPage
-    pPage = pViewSh->CreatePrintOptionsPage( this, *pOptions );
+    pPage = pViewSh->CreatePrintOptionsPage(pVBox, *pOptions);
     DBG_ASSERT( pPage, "CreatePrintOptions != SFX_VIEW_HAS_PRINTOPTIONS" );
     if( pPage )
     {
@@ -224,31 +219,6 @@ SfxPrintOptionsDialog::SfxPrintOptionsDialog( Window *pParent,
         SetHelpId( pPage->GetHelpId() );
         pPage->Show();
     }
-
-    // Set dialog size
-    Size a6Sz = LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
-    Size aBtnSz = LogicToPixel( Size( 50, 14 ), MAP_APPFONT );
-    Size aOutSz( pPage ? pPage->GetSizePixel() : Size() );
-    aOutSz.Height() += 6;
-    long nWidth = aBtnSz.Width();
-    nWidth += a6Sz.Width();
-    aOutSz.Width() += nWidth;
-    if ( aOutSz.Height() < 90 )
-        // at least the height of the 3 buttons
-        aOutSz.Height() = 90;
-    SetOutputSizePixel( aOutSz );
-
-    // set position and size of the buttons
-    Point aBtnPos( aOutSz.Width() - aBtnSz.Width() - a6Sz.Width(), a6Sz.Height() );
-    aOkBtn.SetPosSizePixel( aBtnPos, aBtnSz );
-    aBtnPos.Y() += aBtnSz.Height() + ( a6Sz.Height() / 2 );
-    aCancelBtn.SetPosSizePixel( aBtnPos, aBtnSz );
-    aBtnPos.Y() += aBtnSz.Height() + a6Sz.Height();
-    aHelpBtn.SetPosSizePixel( aBtnPos, aBtnSz );
-
-    aCancelBtn.Show();
-    aOkBtn.Show();
-    aHelpBtn.Show();
 }
 
 //--------------------------------------------------------------------
@@ -294,7 +264,7 @@ void SfxPrintOptionsDialog::DisableHelp()
 {
     pDlgImpl->mbHelpDisabled = sal_True;
 
-    aHelpBtn.Disable();
+    get<HelpButton>("help")->Disable();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

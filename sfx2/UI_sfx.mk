@@ -12,6 +12,7 @@ $(eval $(call gb_UI_UI,sfx))
 $(eval $(call gb_UI_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/checkin \
 	sfx2/uiconfig/ui/password \
+	sfx2/uiconfig/ui/printeroptionsdialog \
 ))
 
 # vim: set noet sw=4 ts=4:

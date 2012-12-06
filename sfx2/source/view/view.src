@@ -38,10 +38,6 @@ String STR_PRINT_OPTIONS
 {
     Text [ en-US ] = "Options..." ;
 };
-String STR_PRINT_OPTIONS_TITLE
-{
-    Text [ en-US ] = "Printer Options" ;
-};
 String STR_ERROR_PRINTER_BUSY
 {
     Text [ en-US ] = "Printer busy" ;

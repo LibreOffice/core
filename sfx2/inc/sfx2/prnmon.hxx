@@ -35,9 +35,6 @@ struct SfxPrintOptDlg_Impl;
 class SfxPrintOptionsDialog : public ModalDialog
 {
 private:
-    OKButton                aOkBtn;
-    CancelButton            aCancelBtn;
-    HelpButton              aHelpBtn;
     SfxPrintOptDlg_Impl*    pDlgImpl;
     SfxViewShell*           pViewSh;
     SfxItemSet*             pOptions;
