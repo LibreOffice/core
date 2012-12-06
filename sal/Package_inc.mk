@@ -81,7 +81,6 @@ $(eval $(call gb_Package_add_file,sal_inc,inc/rtl/malformeduriexception.hxx,rtl/
 $(eval $(call gb_Package_add_file,sal_inc,inc/rtl/math.h,rtl/math.h))
 $(eval $(call gb_Package_add_file,sal_inc,inc/rtl/math.hxx,rtl/math.hxx))
 $(eval $(call gb_Package_add_file,sal_inc,inc/rtl/memory.h,rtl/memory.h))
-$(eval $(call gb_Package_add_file,sal_inc,inc/rtl/oustringostreaminserter.hxx,rtl/oustringostreaminserter.hxx))
 $(eval $(call gb_Package_add_file,sal_inc,inc/rtl/process.h,rtl/process.h))
 $(eval $(call gb_Package_add_file,sal_inc,inc/rtl/random.h,rtl/random.h))
 $(eval $(call gb_Package_add_file,sal_inc,inc/rtl/ref.hxx,rtl/ref.hxx))
