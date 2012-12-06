@@ -135,13 +135,6 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
 
     Size aWinSize = GetOutputSize();
 
-    // Calculate thumbnail view minimum size
-    Size aThumbSize = maView->CalcWindowSizePixel(INIT_FOLDER_COLS,INIT_FOLDER_LINES,
-                                                  TEMPLATE_ITEM_MAX_WIDTH,TEMPLATE_ITEM_MAX_HEIGHT,TEMPLATE_ITEM_SPACE);
-
-    if (aWinSize.getWidth() < aThumbSize.getWidth() + 2*PADDING_DLG_BORDER)
-        aWinSize.setWidth(aThumbSize.getWidth() + 2*PADDING_DLG_BORDER);
-
     // Calculate toolboxs size and positions
     Size aViewSize = mpViewBar->CalcMinimumWindowSizePixel();
     Size aActionSize = mpActionBar->CalcMinimumWindowSizePixel();
@@ -178,8 +171,9 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     // Set view position below toolbox
     Point aViewPos = maView->GetPosPixel();
     aViewPos.setY(mpToolbars->GetPosPixel().Y() + mpToolbars->GetSizePixel().getHeight());
-    aViewPos.setX((aWinSize.getWidth() - aThumbSize.getWidth())/2);     // Center the view
-    maView->SetPosPixel(aViewPos);
+    aViewPos.setX(0);
+    Size aThumbSize(aWinSize.getWidth(), aWinSize.getHeight() - aViewPos.getY());
+    maView->SetPosSizePixel(aViewPos, aThumbSize);
 
     if (aWinSize.getHeight() < aViewPos.getY() + aThumbSize.getHeight() + PADDING_DLG_BORDER)
         aWinSize.setHeight(aViewPos.getY() + aThumbSize.getHeight() + PADDING_DLG_BORDER);

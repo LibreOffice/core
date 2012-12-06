@@ -100,7 +100,7 @@ void ThumbnailView::ImplInit()
     mbHasVisibleItems   = false;
     mbSelectionMode = false;
     maFilterFunc = ViewFilterAll();
-    maColor = GetSettings().GetStyleSettings().GetDialogColor();
+    maColor = GetSettings().GetStyleSettings().GetFieldColor();
 
     // Create the processor and process the primitives
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
@@ -156,13 +156,10 @@ void ThumbnailView::ImplInitSettings( bool bFont, bool bForeground, bool bBackgr
 
     if ( bBackground )
     {
-        Color aColor;
-        if ( IsControlBackground() )
-            aColor = GetControlBackground();
-        else
-            aColor = rStyleSettings.GetFaceColor();
+        Color aColor = rStyleSettings.GetFieldColor();
         SetBackground( aColor );
     }
+
 
     mpItemAttrs = new ThumbnailItemAttributes;
     mpItemAttrs->aFillColor = maColor.getBColor();

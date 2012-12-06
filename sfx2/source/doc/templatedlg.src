@@ -192,7 +192,7 @@ ModelessDialog DLG_TEMPLATE_MANAGER
     Control TOOLBARS
     {
         Pos = MAP_APPFONT( 0 , 22 );
-        Size = MAP_APPFONT( 290 , 20 );
+        Size = MAP_APPFONT( 290 , 15 );
         TabStop = False;
     };
 
