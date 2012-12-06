@@ -13,6 +13,7 @@ $(eval $(call gb_Package_set_outdir,odk_settings,$(INSTDIR)))
 
 $(eval $(call gb_Package_add_files,odk_settings,$(gb_Package_SDKDIRNAME)/settings,\
 	$(if $(filter WNT,$(OS)),component.uno.def) \
+	platform.mk \
 	settings.mk \
 	std.mk \
 	stdtarget.mk \
