@@ -561,7 +561,6 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     kde4be1 \
     ldapbe2 \
     localebe1 \
-    lomenubar \
     losessioninstall \
     macbe1 \
     migrationoo2 \

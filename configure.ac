@@ -1046,11 +1046,6 @@ AC_ARG_ENABLE(extra-font,
         [Add extra font content.]),
 ,)
 
-AC_ARG_ENABLE(lomenubar,
-    AS_HELP_STRING([--enable-lomenubar],
-        [Enable global menu support.]),
-,)
-
 AC_ARG_ENABLE(online-update,
     AS_HELP_STRING([--enable-online-update],
         [Enable the online update service that will check for new versions of
