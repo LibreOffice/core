@@ -1,0 +1,1 @@
+This extension enhances Apache OpenOffice status bar by adding a status bar item in Apache OpenOffice Writer's status bar that displays the word count.
