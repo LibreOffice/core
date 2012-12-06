@@ -54,7 +54,8 @@ GBUILDDIR:=$(SRCDIR)/solenv/gbuild
 # FOR TAIL_BUILD THE IMPACT IS HUGE!
 # (unless you are doing make -r, which we should explicitly NOT require from
 # users)
-MAKEFLAGS+=-r
+MAKEFLAGS += r
+.SUFFIXES:
 
 # by default gbuild use /bin/sh
 # if you want to use a particular shell
