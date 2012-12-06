@@ -5983,7 +5983,7 @@ if test "$_os" = "Linux" -a "$host_cpu" = "powerpc"; then
 fi
 AC_SUBST([JITC_PROCESSOR_TYPE])
 
-if test $_os = "WINNT"; then
+if test $_os = "WINNT" -a "$WITH_MINGW" != yes; then
     AC_MSG_CHECKING([for Microsoft_VC${VCVER}_CRT_x86.msm])
 	copy_msms
     if test -n $msms_copied ; then
