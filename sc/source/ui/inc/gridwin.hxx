@@ -93,6 +93,8 @@ private:
 
     boost::scoped_ptr<Rectangle> mpAutoFillRect;
 
+    struct MouseEventState;
+
     /**
      * Stores current visible column and row ranges, used to avoid expensive
      * operations on objects that are outside visible area.
@@ -228,7 +230,7 @@ private:
     sal_Int8        DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPosX, SCROW nDestPosY,
                                      const Point& rLogicPos, sal_Int8 nDndAction );
 
-    void            HandleMouseButtonDown( const MouseEvent& rMEvt );
+    void            HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventState& rState );
 
     bool            DrawMouseButtonDown(const MouseEvent& rMEvt);
     bool            DrawMouseButtonUp(const MouseEvent& rMEvt);
