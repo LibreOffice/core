@@ -119,11 +119,6 @@ String STR_TOOLBAR_TITLE_ADDON
     Text [ en-US ] = "Add-On %num%";
 };
 
-String STR_STATUSBAR_LOGOTEXT
-{
-    Text [ en-US ] = "A %PRODUCTNAME product by %OOOVENDOR";
-};
-
 // ***********************************************************************
 //       License Dialog
 // ***********************************************************************
@@ -271,12 +266,6 @@ ModalDialog DLG_LICENSE
         Size = MAP_APPFONT ( PD_WIDTH , PB_HEIGHT ) ;
     };
 
-};
-
-Image RID_IMAGE_STATUSBAR_LOGO
-{
-    ImageBitmap = Bitmap { File = "logo.png" ; };
-    MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; };
 };
 
 String STR_FULL_DISC_RETRY_BUTTON

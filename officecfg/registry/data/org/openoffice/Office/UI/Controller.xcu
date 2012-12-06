@@ -587,28 +587,6 @@
       </node>
       <node oor:name="c5" oor:op="replace">
         <prop oor:name="Command">
-          <value>.uno:StatusbarLogo</value>
-        </prop>
-        <prop oor:name="Module">
-          <value/>
-        </prop>
-        <prop oor:name="Controller">
-          <value>com.sun.star.comp.framework.LogoImageStatusbarController</value>
-        </prop>
-      </node>
-      <node oor:name="c6" oor:op="replace">
-        <prop oor:name="Command">
-          <value>.uno:StatusbarLogoText</value>
-        </prop>
-        <prop oor:name="Module">
-          <value/>
-        </prop>
-        <prop oor:name="Controller">
-          <value>com.sun.star.comp.framework.LogoTextStatusbarController</value>
-        </prop>
-      </node>
-      <node oor:name="c7" oor:op="replace">
-        <prop oor:name="Command">
           <value>.uno:LanguageStatus</value>
         </prop>
         <prop oor:name="Module">
