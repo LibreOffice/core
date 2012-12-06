@@ -19,6 +19,9 @@
  *
  *************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_framework.hxx"
+
 #include <uielement/statusbarmerger.hxx>
 
 using rtl::OUString;
@@ -128,7 +131,8 @@ static bool lcl_MergeItems( StatusBar* pStatusbar,
                             const ::rtl::OUString& rModuleIdentifier,
                             const AddonStatusbarItemContainer& rAddonItems )
 {
-    const sal_uInt16 nSize( rAddonItems.size() );
+    OSL_ENSURE(rAddonItems.size() <= 0xffff, "Caution: Not all items get handled (!)");
+    const sal_uInt16 nSize( static_cast< sal_uInt16 >(rAddonItems.size()) );
     for ( sal_Int32 i = 0; i < nSize; i++ )
     {
         const AddonStatusbarItem& rItem = rAddonItems[i];
