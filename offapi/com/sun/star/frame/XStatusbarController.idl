@@ -19,16 +19,18 @@
 #ifndef __com_sun_star_frame_XStatusbarController_idl__
 #define __com_sun_star_frame_XStatusbarController_idl__
 
-#include <com/sun/star/awt/Point.idl>
 #include <com/sun/star/awt/MouseEvent.idl>
+#include <com/sun/star/awt/Point.idl>
 #include <com/sun/star/awt/Rectangle.idl>
 #include <com/sun/star/awt/XGraphics.idl>
-
+#include <com/sun/star/frame/XStatusListener.idl>
+#include <com/sun/star/lang/XInitialization.idl>
+#include <com/sun/star/util/XUpdatable.idl>
 
 module com {  module sun {  module star {  module frame {
 
-/** is an abstract service for a component which offers a more complex user interface
-    to users within a status bar.
+/** interface to be implemented by a component offering a more complex user
+    interface to users within a status bar.
 
     <p>
     A generic status bar field is represented as a simple text field. A status
@@ -42,9 +44,61 @@ module com {  module sun {  module star {  module frame {
     @see com::sun::star::frame::XDispatchProvider
 
     @since OOo 2.0
- */
-interface XStatusbarController : ::com::sun::star::uno::XInterface
+*/
+interface XStatusbarController
 {
+    /** used to initialize a component with required arguments.
+
+        <p>A status bar controller is initialized with <b>five</b> additional
+        arguments provided as a sequence of
+        <type scope="com::sun::star::beans">PropertyValue</type>:</p>
+
+        <ul>
+            <li><b>Frame</b><br/>a <type scope="com::sun::star::frame">XFrame</type>
+                instance to which the status bar controller belongs.
+            </li>
+            <li><b>CommandURL</b><br/>a string which specifies the command
+                associated with the statusbar controller.</br>
+                The command is used to identify the status bar controller
+                implementation.
+            </li>
+            <li><b>StatusbarItem</b><br/>a <type scope="com::sun::star::ui">XStatusbarItem</type>
+                instance which represents the status bar item asociated with
+                this controller.
+            </li>
+            <li><b>ParentWindow</b><br/>a <type scope="com::sun::star::awt">Window</type>
+                instance which represents the parent window (status bar window).
+            </li>
+            <li><b>ModuleName</b><br/>a string which specifies the name of the
+                office module attached to the frame to which this controller
+                belongs; the value is taken from
+                <member scope="com::sun::star::frame">XModuleManager::identify()</member>.
+            </li>
+        </ul>
+    */
+    interface com::sun::star::lang::XInitialization;
+
+    /** with this interface a component can receive events if a feature has
+        changed.
+
+        <p>The status bar controller implementation should register itself as a
+        listener when its <member scope="com::sun::star::util">XUpdatable</member>
+        interface has been called.</p>
+    */
+    interface com::sun::star::frame::XStatusListener;
+
+    /** used to notify an implementation that it needs to add its listener or
+        remove and add them again.
+
+        <p>
+        A status bar controller instance is ready for use after this call has
+        been made the first time. The status bar implementation guarentees that
+        the controller's item window has been added to the status bar and its
+        reference is held by it.
+        </p>
+    */
+    interface com::sun::star::util::XUpdatable;
+
     /** is called by a status bar if the mouse position is within the controller
         and a mouse button has been pressed. If the controller has captured the
         mouse input this function is also called when the mouse position is not
@@ -94,6 +148,8 @@ interface XStatusbarController : ::com::sun::star::uno::XInterface
 
         @param nCommand
             describes which command has been invoked.
+            <br/>See <type scope="com::sun::star::awt">Command</type> for
+            possible values.
 
         @param bMouseEvent
             <TRUE/> if the command is based on a mouse event, otherwise <FALSE/>.
@@ -117,26 +173,28 @@ interface XStatusbarController : ::com::sun::star::uno::XInterface
             a <type scope="com::sun::star::awt">Rectangle</type> which
             determine the output rectangle for all drawing operations
 
-        @param nItemID
-            the unique ID of the control within the status bar.
-
         @param nStyle
             reserved for future use.
     */
     void paint( [in] ::com::sun::star::awt::XGraphics xGraphics,
                 [in] ::com::sun::star::awt::Rectangle rOutputRectangle,
-                [in] long nItemId,
                 [in] long nStyle );
 
     /** is called by a status bar if the user clicked with mouse into the
         field of the corresponding control.
+
+        @param aPos
+            the current mouse position in pixel.
     */
-    void click();
+    void click( [in] ::com::sun::star::awt::Point aPos );
 
     /** is called by a status bar if the user double-clicked with mouse
         into the field of the corresponding control.
+
+        @param aPos
+            the current mouse position in pixel.
     */
-    void doubleClick();
+    void doubleClick( [in] ::com::sun::star::awt::Point aPos );
 };
 
 }; }; }; };
