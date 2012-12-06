@@ -12254,9 +12254,6 @@ fi
 
 AC_SUBST(LO_PATH)
 
-# make sure config.guess is +x; we execute config.guess, so it has to be so
-chmod +x ./config.guess
-
 # Generate a configuration timestamp we can use for deps
 if test -f config_host.mk; then
     mv -f config_host.mk config_host.mk.last
