@@ -30,7 +30,7 @@ namespace oox { namespace drawingml {
 class DiagramDataFragmentHandler : public ::oox::core::FragmentHandler
 {
 public:
-    DiagramDataFragmentHandler( oox::core::XmlFilterBase& rFilter, const ::rtl::OUString& rFragmentPath, const DiagramDataPtr pDataPtr ) throw();
+    DiagramDataFragmentHandler( oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath, const DiagramDataPtr pDataPtr ) throw();
     virtual ~DiagramDataFragmentHandler() throw();
 
     virtual void SAL_CALL endDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
@@ -46,7 +46,7 @@ private:
 class DiagramLayoutFragmentHandler : public ::oox::core::FragmentHandler
 {
 public:
-    DiagramLayoutFragmentHandler( oox::core::XmlFilterBase& rFilter, const ::rtl::OUString& rFragmentPath, const DiagramLayoutPtr pDataPtr ) throw();
+    DiagramLayoutFragmentHandler( oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath, const DiagramLayoutPtr pDataPtr ) throw();
     virtual ~DiagramLayoutFragmentHandler() throw();
 
     virtual void SAL_CALL endDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
