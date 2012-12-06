@@ -2625,7 +2625,7 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
             break;
         }
         ExpStr = sStr.toString().copy( nExpStart );    // part following the "E+"
-        sStr.remove( nExPos );
+        sStr.truncate( nExPos );
         // cut any decimal delimiter
         sal_Int32 index = 0;
 
@@ -2692,7 +2692,7 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
     // weiter Hauptzahl:
     if ( !bCont )
     {
-        sStr.remove();
+        sStr.truncate();
     }
     else
     {
@@ -2739,7 +2739,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     if (rInfo.nCntExp == 0)
     {
         SAL_WARN( "svl.numbers", "SvNumberformat:: Bruch, nCntExp == 0");
-        sBuff.remove();
+        sBuff.truncate();
         return false;
     }
 
@@ -2944,7 +2944,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     }
     if (rInfo.nCntPre > 0 && nFrac == 0)
     {
-        sDiv.remove();
+        sDiv.truncate();
     }
     else
     {
@@ -2980,7 +2980,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     // weiter Zaehler:
     if ( !bCont )
     {
-        sFrac.remove();
+        sFrac.truncate();
     }
     else
     {
@@ -3001,7 +3001,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     // weiter Hauptzahl
     if ( !bCont )
     {
-        sStr.remove();
+        sStr.truncate();
     }
     else
     {
@@ -4376,7 +4376,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
         sal_Int32 nLen = rDecSep.getLength();
         if ( sStr.getLength() > nLen && ( sStr.indexOf( rDecSep, sStr.getLength() - nLen) == sStr.getLength() - nLen) )
         {
-            sStr.remove( sStr.getLength() - nLen );        // no decimals => strip DecSep
+            sStr.truncate( sStr.getLength() - nLen );        // no decimals => strip DecSep
         }
     }
     if (bSign)
