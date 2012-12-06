@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAARH///xM\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 2835,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-12-06T15:45:51Z",
+      "side": 1,
+      "message": "nitpick: can you clean-up the tabs please",
+      "revId": "f9a687719960a6636186cbd2db917ad660139a11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAARH///xI\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 3044,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-12-06T15:45:51Z",
+      "side": 1,
+      "message": "nitpick : consistent layout and indentation please\nsee your reg_get_value() above for template",
+      "revId": "f9a687719960a6636186cbd2db917ad660139a11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
