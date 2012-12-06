@@ -44,6 +44,10 @@
 #define ADDONSMENUITEM_STRING_CONTROLTYPE               "ControlType"
 #define ADDONSMENUITEM_STRING_WIDTH                     "Width"
 
+#define STATUSBARITEM_STRING_ALIGN                      "Alignment"
+#define STATUSBARITEM_STRING_AUTOSIZE                   "AutoSize"
+#define STATUSBARITEM_STRING_OWNERDRAW                  "OwnerDraw"
+
 #define ADDONSMENUITEM_URL_LEN                          3
 #define ADDONSMENUITEM_TITLE_LEN                        5
 #define ADDONSMENUITEM_TARGET_LEN                       6
@@ -59,6 +63,10 @@
 #define ADDONSMENUITEM_PROPERTYNAME_SUBMENU             OUString(ADDONSMENUITEM_STRING_SUBMENU         )
 #define ADDONSMENUITEM_PROPERTYNAME_CONTROLTYPE         OUString(ADDONSMENUITEM_STRING_CONTROLTYPE     )
 #define ADDONSMENUITEM_PROPERTYNAME_WIDTH               OUString(ADDONSMENUITEM_STRING_WIDTH           )
+
+#define STATUSBARITEM_PROPERTYNAME_ALIGN                OUString(STATUSBARITEM_STRING_ALIGN            )
+#define STATUSBARITEM_PROPERTYNAME_AUTOSIZE             OUString(STATUSBARITEM_STRING_AUTOSIZE         )
+#define STATUSBARITEM_PROPERTYNAME_OWNERDRAW            OUString(STATUSBARITEM_STRING_OWNERDRAW        )
 
 #define ADDONSPOPUPMENU_URL_PREFIX_STR                  "private:menu/Addon"
 
@@ -92,6 +100,18 @@ struct FWE_DLLPUBLIC MergeToolbarInstruction
 };
 
 typedef ::std::vector< MergeToolbarInstruction > MergeToolbarInstructionContainer;
+
+struct FWE_DLLPUBLIC MergeStatusbarInstruction
+{
+    ::rtl::OUString     aMergePoint;
+    ::rtl::OUString     aMergeCommand;
+    ::rtl::OUString     aMergeCommandParameter;
+    ::rtl::OUString     aMergeFallback;
+    ::rtl::OUString     aMergeContext;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > aMergeStatusbarItems;
+};
+
+typedef ::std::vector< MergeStatusbarInstruction > MergeStatusbarInstructionContainer;
 
 //_________________________________________________________________________________________________________________
 //  forward declarations
@@ -273,6 +293,8 @@ class FWE_DLLPUBLIC AddonsOptions
             @onerror    We return sal_False
         *//*-*****************************************************************************************************/
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& GetAddonsHelpMenu() const;
+
+        const MergeStatusbarInstructionContainer& GetMergeStatusbarInstructions() const;
 
         /*-****************************************************************************************************//**
             @short      Retrieve an image for a command URL which is defined inside the addon menu configuration
