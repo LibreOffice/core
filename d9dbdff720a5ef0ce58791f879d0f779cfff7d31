@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAARH///x0\u003d",
+        "filename": "cppunit/ExternalProject_cppunit.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-12-06T12:31:09Z",
+      "side": 1,
+      "message": "this is wrong, this is for MinGW so should be filter instead of filter-out",
+      "revId": "d9dbdff720a5ef0ce58791f879d0f779cfff7d31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
