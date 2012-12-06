@@ -1674,20 +1674,4 @@ boost::shared_ptr<OGLTransitionImpl> makeNewsflash()
     return makeSimpleTransition(aLeavingSlide, aEnteringSlide, aOverallOperations);
 }
 
-namespace
-{
-
-/** various transitions helper methods
- */
-void prepareDiamond( double nTime, double SlideWidth, double SlideHeight,double DispWidth, double DispHeight );
-void displaySlidesFadeSmoothly( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale );
-    void displaySlidesFadeThroughBlack( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale );
-    void displaySlidesRochade( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale );
-void displaySlidesShaders( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale );
-void prepareStatic( ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex );
-void prepareDissolve( ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex );
-void preparePermShader();
-
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
