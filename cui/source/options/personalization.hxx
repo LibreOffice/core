@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SVX_PERSONALIZATION_HXX
-#define SVX_PERSONALIZATION_HXX
+#ifndef CUI_PERSONALIZATION_HXX
+#define CUI_PERSONALIZATION_HXX
 
 #include <sfx2/tabdlg.hxx>
 
@@ -29,6 +29,7 @@ private:
     RadioButton *m_pDefaultPersona;         ///< Use the built-in bitmap
     RadioButton *m_pOwnPersona;             ///< Use the user-defined bitmap
     PushButton *m_pSelectPersona;           ///< Let the user select in the 'own' case
+    OUString m_aPersonaSettings;            ///< Header and footer images + color to be set in the settings.
 
 public:
     SvxPersonalizationTabPage( Window *pParent, const SfxItemSet &rSet );
@@ -48,8 +49,11 @@ private:
 
     /// Handle the Persona selection
     DECL_LINK( SelectPersona, PushButton* );
+
+    /// Download the bitmaps + color settings, and copy them to user's profile.
+    bool CopyPersonaToGallery( const OUString &rURL );
 };
 
-#endif // SVX_PERSONALIZATION_HXX
+#endif // CUI_PERSONALIZATION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

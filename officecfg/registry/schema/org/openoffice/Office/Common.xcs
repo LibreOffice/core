@@ -6734,6 +6734,16 @@
         </constraints>
         <value>default</value>
       </prop>
+      <prop oor:name="PersonaSettings" oor:type="xs:string" oor:nillable="false">
+        <!-- UIHints: Tools  Options General Personalization -->
+        <info>
+          <author>kendy</author>
+          <desc>Names of the header and footer images, and colors for text and
+            accent.  When set, the value has form
+            "header.jpg;footer.jpg;#RGBTXT;#RGBACC".</desc>
+        </info>
+        <value></value>
+      </prop>
       <prop oor:name="ToolboxStyle" oor:type="xs:short" oor:nillable="false">
         <!-- UIHints: Tools  Options General View -->
         <info>
