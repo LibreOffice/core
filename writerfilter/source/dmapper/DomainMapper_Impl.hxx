@@ -302,7 +302,6 @@ private:
     TextContentStack                                                                m_aAnchoredStack;
 
     FieldStack                                                                      m_aFieldStack;
-    bool                                                                            m_bFieldMode;
     bool                                                                            m_bSetUserFieldContent;
     bool                                                                            m_bIsFirstSection;
     bool                                                                            m_bIsColumnBreakDeferred;

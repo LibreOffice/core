@@ -163,7 +163,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_xTextDocument( xModel, uno::UNO_QUERY ),
         m_xTextFactory( xModel, uno::UNO_QUERY ),
         m_xComponentContext( xContext ),
-        m_bFieldMode( false ),
         m_bSetUserFieldContent( false ),
         m_bIsFirstSection( true ),
         m_bIsColumnBreakDeferred( false ),
