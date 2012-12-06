@@ -60,10 +60,6 @@ CXXFILES = \
 
 SLOFILES = $(patsubst %.cxx,$(OUT_COMP_SLO)/%.$(OBJ_EXT),$(CXXFILES))
 
-# Add OSL_DEBUG_LEVEL to compiler the flags (for OSL_TRACE et. al.)
-ifeq "$(DEBUG)" "yes"
-CC_FLAGS += -DOSL_DEBUG_LEVEL=2
-endif
 
 # Targets
 .PHONY: ALL
