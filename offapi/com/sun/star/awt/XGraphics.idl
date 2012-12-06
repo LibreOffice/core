@@ -20,98 +20,86 @@
 #define __com_sun_star_awt_XGraphics_idl__
 
 #include <com/sun/star/uno/XInterface.idl>
-
 #include <com/sun/star/util/Color.idl>
 #include <com/sun/star/awt/SimpleFontMetric.idl>
-
 #include <com/sun/star/awt/FontDescriptor.idl>
-
 #include <com/sun/star/awt/RasterOperation.idl>
-
 #include <com/sun/star/awt/Gradient.idl>
+#include <com/sun/star/awt/Rectangle.idl>
+#include <com/sun/star/graphic/XGraphic.idl>
 
+module com {  module sun {  module star {  module awt {
 
- module com {  module sun {  module star {  module awt {
-
- published interface XRegion;
- published interface XDisplayBitmap;
- published interface XFont;
- published interface XDevice;
-
+published interface XRegion;
+published interface XDisplayBitmap;
+published interface XFont;
+published interface XDevice;
 
 /** provides the basic output operation of a device.
  */
 published interface XGraphics: com::sun::star::uno::XInterface
 {
-
-    /** returns the device of this graphics.
+    /** the device of this graphics
      */
-    XDevice getDevice();
+    [attribute, readonly] XDevice Device;
 
-
-    /** returns the font metric of the current font.
+    /** the text color used by text operations.
      */
-    SimpleFontMetric getFontMetric();
+    [attribute] com::sun::star::util::Color TextColor;
 
-
-    /** sets the font used by text operations.
+    /** the fill color used by text operations.
      */
-    void setFont( [in] XFont xNewFont );
+    [attribute] com::sun::star::util::Color TextFillColor;
 
+    /** the line color.
+     */
+    [attribute] com::sun::star::util::Color LineColor;
+
+    /** the fill color.
+     */
+    [attribute] com::sun::star::util::Color FillColor;
+
+    /** the raster operation.
+
+        <p>If the device does not support raster operations,
+        this attribute is ignored.</p>
+     */
+    [attribute] RasterOperation RasterOp;
+
+    /** the font used by text operations.
+     */
+    [attribute] XFont Font;
+
+    /** the font metric of the current font.
+     */
+    [attribute, readonly] SimpleFontMetric FontMetric;
 
     /** creates a new font and sets the font.
      */
     void selectFont( [in] FontDescriptor aDescription );
 
-
-    /** sets the text color used by text operations.
-     */
-    void setTextColor( [in] com::sun::star::util::Color nColor );
-
-
-    /** sets the fill color used by text operations.
-     */
-    void setTextFillColor( [in] com::sun::star::util::Color nColor );
-
-
-    /** sets the line color.
-     */
-    void setLineColor( [in] com::sun::star::util::Color nColor );
-
-
-    /** sets the fill color.
-     */
-    void setFillColor( [in] com::sun::star::util::Color nColor );
-
-
-    /** sets the raster operation.
-
-        <p>If the device does not support raster operations
-        then this call is ignored.</p>
-     */
-    void setRasterOp( [in] RasterOperation ROP );
-
-
     /** sets the clip region to specified clipping.
      */
     void setClipRegion( [in] XRegion Clipping );
 
-
     /** builds the intersection with the current region.
      */
     void intersectClipRegion( [in] XRegion xClipping );
-
 
     /** saves all current settings (Font, TextColor, TextFillColor,
         LineColor, FillColor, RasterOp, ClipRegion).
      */
     void push();
 
-
     /** restores all previous saved settings.
      */
     void pop();
 
+    /** clears the given rectangle on the device
+
+        @since LibreOffice 4.1
+     */
+    void clear( [in] Rectangle aRect );
 
     /** copies a rectangle of pixels from another device into this one.
      */
@@ -125,7 +113,6 @@ published interface XGraphics: com::sun::star::uno::XInterface
              [in] long nDestWidth,
              [in] long nDestHeight );
 
-
     /** draws a part of the specified bitmap to the output device.
      */
     void draw( [in] XDisplayBitmap xBitmapHandle,
@@ -138,12 +125,10 @@ published interface XGraphics: com::sun::star::uno::XInterface
              [in] long DestWidth,
              [in] long DestHeight );
 
-
     /** sets a single pixel in the output device.
      */
     void drawPixel( [in] long X,
              [in] long Y );
-
 
     /** draws a line in the output device.
      */
@@ -152,14 +137,12 @@ published interface XGraphics: com::sun::star::uno::XInterface
              [in] long X2,
              [in] long Y2 );
 
-
     /** draws a rectangle in the output device.
      */
     void drawRect( [in] long X,
              [in] long Y,
              [in] long Width,
              [in] long Height );
-
 
     /** draws a rectangle with rounded corners in the output device.
      */
@@ -170,24 +153,20 @@ published interface XGraphics: com::sun::star::uno::XInterface
              [in] long nHorzRound,
              [in] long nVertRound );
 
-
     /** draws multiple lines in the output device at once.
      */
     void drawPolyLine( [in] sequence<long> DataX,
              [in] sequence<long> DataY );
-
 
     /** draws a polygon line in the output device.
      */
     void drawPolygon( [in] sequence<long> DataX,
              [in] sequence<long> DataY );
 
-
     /** draws multiple polygons in the output device at once.
      */
     void drawPolyPolygon( [in] sequence< sequence<long> > DataX,
              [in] sequence< sequence<long> > DataY );
-
 
     /** draws an ellipse in the output device.
      */
@@ -195,7 +174,6 @@ published interface XGraphics: com::sun::star::uno::XInterface
              [in] long Y,
              [in] long Width,
              [in] long Height );
-
 
     /** draws an arc (part of a circle) in the output device.
      */
@@ -208,7 +186,6 @@ published interface XGraphics: com::sun::star::uno::XInterface
              [in] long X2,
              [in] long Y2 );
 
-
     /** draws a circular area in the output device.
      */
     void drawPie( [in] long X,
@@ -219,7 +196,6 @@ published interface XGraphics: com::sun::star::uno::XInterface
              [in] long Y1,
              [in] long X2,
              [in] long Y2 );
-
 
     /** draws a chord of a circular area in the output device.
 
@@ -236,7 +212,6 @@ published interface XGraphics: com::sun::star::uno::XInterface
              [in] long nX2,
              [in] long nY2 );
 
-
     /** draws a color dispersion in the output device.
      */
     void drawGradient( [in] long nX,
@@ -245,13 +220,11 @@ published interface XGraphics: com::sun::star::uno::XInterface
              [in] long Height,
              [in] Gradient aGradient );
 
-
     /** draws text in the output device.
      */
     void drawText( [in] long X,
              [in] long Y,
              [in] string Text );
-
 
     /** draws texts in the output device using an explicit kerning table.
      */
@@ -260,8 +233,41 @@ published interface XGraphics: com::sun::star::uno::XInterface
              [in] string Text,
              [in] sequence<long> Longs );
 
-};
+    /** draws a <type scope="com::sun::star::graphic">XGraphic</type>
+        in the output device.
 
+        <p>Note that some devices may not support this operation.</p>
+
+        @since LibreOffice 4.1
+
+        @param  nX
+            the X coordinate on the device where the graphic will be drawn
+
+        @param  nY
+            the Y coordinate on the device where the graphic will be drawn
+
+        @param  nWidth
+            the width of the region on the device
+
+        @param  nHeight
+            the height of the region on the device
+
+        @param  nStyle
+            the style used to draw the image.
+            See <type scope="com::sun::star::awt">ImageDrawMode</type>.
+
+        @param  aGraphic
+            the <type scope="com::sun::star::graphic">XGraphic</type>
+            to be drawn onto the device
+     */
+    void drawImage( [in] long nX,
+                             [in] long nY,
+                             [in] long nWidth,
+                             [in] long nHeight,
+                             [in] short nStyle,
+                             [in] ::com::sun::star::graphic::XGraphic aGraphic );
+
+};
 
 }; }; }; };
 

@@ -1723,6 +1723,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/awt,\
 	FontWidth \
 	Gradient \
 	GradientStyle \
+	ImageDrawMode \
 	ImageAlign \
 	ImagePosition \
 	ImageScaleMode \
