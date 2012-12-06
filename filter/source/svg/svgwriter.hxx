@@ -196,7 +196,6 @@ class SVGTextWriter
 
   private:
     SVGExport&                                  mrExport;
-    SVGFontExport&                              mrFontExport;
     SVGAttributeWriter*                         mpContext;
     VirtualDevice*                              mpVDev;
     sal_Bool                                    mbIsTextShapeStarted;
@@ -230,7 +229,7 @@ class SVGTextWriter
     Font                                        maParentFont;
 
   public:
-    SVGTextWriter( SVGExport& rExport, SVGFontExport& rFontExport );
+    SVGTextWriter( SVGExport& rExport );
     virtual ~SVGTextWriter();
 
     sal_Int32 setTextPosition( const GDIMetaFile& rMtf, sal_uLong& nCurAction );

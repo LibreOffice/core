@@ -440,9 +440,8 @@ void SVGAttributeWriter::setFontFamily()
 // - SVGTextWriter -
 // -------------------
 
-SVGTextWriter::SVGTextWriter( SVGExport& rExport, SVGFontExport& rFontExport )
+SVGTextWriter::SVGTextWriter( SVGExport& rExport )
     :   mrExport( rExport ),
-        mrFontExport( rFontExport ),
         mpContext( NULL ),
         mpVDev( NULL ),
         mbIsTextShapeStarted( sal_False ),
@@ -1941,7 +1940,7 @@ SVGActionWriter::SVGActionWriter( SVGExport& rExport, SVGFontExport& rFontExport
     mrExport( rExport ),
     mrFontExport( rFontExport ),
     mpContext( NULL ),
-    maTextWriter( rExport, rFontExport ),
+    maTextWriter( rExport ),
     mnInnerMtfCount( 0 ),
     mbClipAttrChanged( sal_False )
 {
