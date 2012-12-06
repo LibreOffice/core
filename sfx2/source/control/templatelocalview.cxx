@@ -128,7 +128,7 @@ void TemplateLocalView::Populate ()
             aRegionName += "...";
         }
 
-        TemplateLocalViewItem* pItem = new TemplateLocalViewItem( *this, this );
+        TemplateLocalViewItem* pItem = new TemplateLocalViewItem( *this );
         pItem->mnId = i+1;
         pItem->maTitle = aRegionName;
         pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnItemSelected));
@@ -224,8 +224,6 @@ void TemplateLocalView::showOverlay (bool bVisible)
         }
 
         mpItemView->Clear();
-
-        setSelectionMode(mbSelectionMode);
     }
 }
 
@@ -278,7 +276,7 @@ sal_uInt16 TemplateLocalView::createRegion(const OUString &rName)
         aRegionName += "...";
     }
 
-    TemplateLocalViewItem* pItem = new TemplateLocalViewItem( *this, this );
+    TemplateLocalViewItem* pItem = new TemplateLocalViewItem( *this );
     pItem->mnId = nRegionId+1;
     pItem->maTitle = aRegionName;
     pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnItemSelected));
@@ -702,7 +700,7 @@ bool TemplateLocalView::isTemplateNameUnique(const sal_uInt16 nRegionItemId, con
     return true;
 }
 
-void TemplateLocalView::OnItemClicked (ThumbnailViewItem *pRegionItem)
+void TemplateLocalView::OnItemDblClicked (ThumbnailViewItem *pRegionItem)
 {
     // Fill templates
     sal_uInt16 nRegionId = pRegionItem->mnId-1;
@@ -710,9 +708,6 @@ void TemplateLocalView::OnItemClicked (ThumbnailViewItem *pRegionItem)
     mpItemView->setId(nRegionId);
     mpItemView->setName(mpDocTemplates->GetRegionName(nRegionId));
     mpItemView->InsertItems(static_cast<TemplateLocalViewItem*>(pRegionItem)->maTemplates);
-
-    if (mbSelectionMode)
-        mpItemView->setSelectionMode(true);
 
     mpItemView->filterItems(ViewFilter_Application(meFilterOption));
 

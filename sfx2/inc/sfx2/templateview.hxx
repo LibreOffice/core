@@ -37,7 +37,7 @@ public:
 
     void InsertItems (const std::vector<TemplateItemProperties> &rTemplates);
 
-    void setClickHdl (const Link &rLink) { maClickHdl = rLink; }
+    void setDblClickHdl (const Link &rLink) { maDblClickHdl = rLink; }
 
     void setChangeNameHdl (const Link &rLink) { maChangeNameHdl = rLink; }
 
@@ -49,7 +49,7 @@ protected:
 
     virtual void MouseButtonDown (const MouseEvent &rMEvt);
 
-    virtual void OnItemClicked (ThumbnailViewItem *pItem);
+    virtual void OnItemDblClicked (ThumbnailViewItem *pItem);
 
     DECL_LINK (ChangeNameHdl, void*);
 
@@ -59,7 +59,7 @@ private:
     bool mbRenderTitle;
     sal_uInt16 mnId;
     OUString maName;
-    Link maClickHdl;
+    Link maDblClickHdl;
     Link maChangeNameHdl;
     Link maCloseHdl;
 

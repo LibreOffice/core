@@ -41,18 +41,14 @@ using namespace ::com::sun::star;
 using namespace drawinglayer::attribute;
 using namespace drawinglayer::primitive2d;
 
-ThumbnailViewItem::ThumbnailViewItem(ThumbnailView &rView, Window *pParent)
+ThumbnailViewItem::ThumbnailViewItem(ThumbnailView &rView)
     : mrParent(rView)
     , mnId(0)
     , mbVisible(true)
     , mbSelected(false)
     , mbHover(false)
     , mpxAcc(NULL)
-    , mbMode(false)
-    , mpSelectBox(new CheckBox(pParent,WB_HIDE | WB_NOPOINTERFOCUS))
 {
-    mpSelectBox->SetSizePixel(Size(20,20));
-    mpSelectBox->SetClickHdl(LINK(this,ThumbnailViewItem,OnClick));
 }
 
 ThumbnailViewItem::~ThumbnailViewItem()
@@ -62,37 +58,21 @@ ThumbnailViewItem::~ThumbnailViewItem()
         static_cast< ThumbnailViewItemAcc* >( mpxAcc->get() )->ParentDestroyed();
         delete mpxAcc;
     }
-
-    delete mpSelectBox;
 }
 
 void ThumbnailViewItem::show (bool bVisible)
 {
     mbVisible = bVisible;
-
-    if (mbMode)
-        mpSelectBox->Show(bVisible);
-    else if (!bVisible)
-        mpSelectBox->Show(bVisible);
-    else if (mbSelected)
-        mpSelectBox->Show(bVisible);
 }
 
 void ThumbnailViewItem::setSelection (bool state)
 {
     mbSelected = state;
-    mpSelectBox->SetState(state ? STATE_CHECK : STATE_NOCHECK);
-
-    if (!isHighlighted())
-        mpSelectBox->Show(state);
 }
 
 void ThumbnailViewItem::setHighlight (bool state)
 {
     mbHover = state;
-
-    if (!isSelected())
-        mpSelectBox->Show(state);
 }
 
 uno::Reference< accessibility::XAccessible > ThumbnailViewItem::GetAccessible( bool bIsTransientChildrenDisabled )
@@ -131,20 +111,6 @@ void ThumbnailViewItem::calculateItemsPosition (const long nThumbnailHeight, con
     aPos.Y() = aPos.Y() + aTextDev.getTextHeight() + (nDisplayHeight - aTextDev.getTextHeight())/2;
     aPos.X() = maDrawArea.Left() + (aRectSize.Width() - aTextDev.getTextWidth(maTitle,0,nMaxTextLenght))/2;
     maTextPos = aPos;
-
-    // Calculate checkbox position
-    aPos.Y() -= aTextDev.getTextHeight();
-    aPos.X() = maDrawArea.Left() + 15;
-
-    mpSelectBox->SetPosPixel(aPos);
-}
-
-void ThumbnailViewItem::setSelectionMode (bool mode)
-{
-    mbMode = mode;
-
-    if (!mbHover && !mbSelected && mbVisible)
-        mpSelectBox->Show(mode);
 }
 
 void ThumbnailViewItem::setSelectClickHdl (const Link &link)
@@ -210,9 +176,6 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
                                                  Color(COL_BLACK).getBColor() ) );
 
     pProcessor->process(aSeq);
-
-    if (mbMode || mbHover || mbSelected)
-        mpSelectBox->Paint(maDrawArea);
 }
 
 drawinglayer::primitive2d::BorderLinePrimitive2D*
@@ -221,14 +184,6 @@ ThumbnailViewItem::createBorderLine (const basegfx::B2DPoint &rStart, const base
     return new BorderLinePrimitive2D(rStart,rEnd,0.5,0,0,0,0,0,0,
                                      BColor(),Color(COL_BLACK).getBColor(),BColor(),
                                      false,STYLE_SOLID);
-}
-
-IMPL_LINK (ThumbnailViewItem, OnClick, CheckBox*, )
-{
-    mbSelected = mpSelectBox->GetState() == STATE_CHECK;
-    mpSelectBox->Invalidate();
-    maClickHdl.Call(this);
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

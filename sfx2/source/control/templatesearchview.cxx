@@ -25,7 +25,7 @@ void TemplateSearchView::AppendItem(sal_uInt16 nItemId, sal_uInt16 nRegionId, sa
                                     const OUString &rPath,
                                     const BitmapEx &rImage)
 {
-    TemplateSearchViewItem *pItem = new TemplateSearchViewItem(*this,this);
+    TemplateSearchViewItem *pItem = new TemplateSearchViewItem(*this);
     pItem->mnId = nItemId;
     pItem->mnIdx = nIdx;
     pItem->mnRegionId = nRegionId;

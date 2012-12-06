@@ -71,7 +71,7 @@ public:
     rtl::OUString maTitle;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >* mpxAcc;
 
-    ThumbnailViewItem (ThumbnailView &rView, Window *pParent);
+    ThumbnailViewItem (ThumbnailView &rView);
 
     virtual ~ThumbnailViewItem ();
 
@@ -102,8 +102,6 @@ public:
 
     const Point& getPrev1Pos () const { return maPrev1Pos; }
 
-    void setSelectionMode (bool mode);
-
     void setSelectClickHdl (const Link &link);
 
     virtual void Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,
@@ -112,18 +110,12 @@ public:
     static drawinglayer::primitive2d::BorderLinePrimitive2D*
         createBorderLine (const basegfx::B2DPoint &rStart, const basegfx::B2DPoint &rEnd);
 
-private:
-
-    DECL_LINK (OnClick, CheckBox *);
-
 protected:
 
-    bool mbMode;
     Point maTextPos;
     Point maPrev1Pos;
     Rectangle maDrawArea;
     Link maClickHdl;
-    CheckBox *mpSelectBox;
 };
 
 #endif // THUMBNAILVIEWITEM_HXX

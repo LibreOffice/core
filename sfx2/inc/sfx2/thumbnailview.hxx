@@ -233,23 +233,18 @@ public:
 
     long            GetScrollWidth() const;
 
-    void setSelectionMode (bool mode);
-
     void filterItems (const boost::function<bool (const ThumbnailViewItem*) > &func);
 
     void sortItems (const boost::function<bool (const ThumbnailViewItem*,
                                                 const ThumbnailViewItem*) > &func);
 
     void setItemStateHdl (const Link &aLink) { maItemStateHdl = aLink; }
-    void setSelectionModeHdl (const Link &aLink) { maSelectionModeHdl = aLink; }
 
 protected:
 
     virtual void MouseButtonDown( const MouseEvent& rMEvt );
 
     virtual void MouseButtonUp( const MouseEvent& rMEvt );
-
-    virtual void MouseMove( const MouseEvent& rMEvt );
 
     virtual void Command( const CommandEvent& rCEvt );
 
@@ -275,9 +270,7 @@ protected:
 
     virtual void DrawItem (ThumbnailViewItem *pItem);
 
-    virtual void OnSelectionMode (bool bMode);
-
-    virtual void OnItemClicked (ThumbnailViewItem *pItem);
+    virtual void OnItemDblClicked (ThumbnailViewItem *pItem);
 
 protected:
 
@@ -327,11 +320,9 @@ protected:
     bool mbScroll : 1;
     bool mbIsTransientChildrenDisabled : 1;
     bool mbHasVisibleItems : 1;
-    bool mbSelectionMode;
     Color maColor;
 
     Link maItemStateHdl;
-    Link maSelectionModeHdl;
     ThumbnailItemAttributes *mpItemAttrs;
     drawinglayer::processor2d::BaseProcessor2D *mpProcessor;
     boost::function<bool (const ThumbnailViewItem*) > maFilterFunc;

@@ -78,7 +78,7 @@ void TemplateRemoteView::Populate()
 
     for (sal_Int32 i = 0; i < aUrls.getLength() && i < aNames.getLength(); ++i)
     {
-        TemplateRemoteViewItem *pItem = new TemplateRemoteViewItem(*this,this);
+        TemplateRemoteViewItem *pItem = new TemplateRemoteViewItem(*this);
 
         pItem->mnId = i+1;
         pItem->maTitle = aNames[i];
@@ -107,8 +107,6 @@ void TemplateRemoteView::showOverlay (bool bVisible)
     if (!bVisible)
     {
         mpItemView->Clear();
-
-        setSelectionMode(mbSelectionMode);
     }
 }
 
@@ -261,7 +259,7 @@ bool TemplateRemoteView::insertRepository(const OUString &rName, const OUString 
             return false;
     }
 
-    TemplateRemoteViewItem *pItem = new TemplateRemoteViewItem(*this,this);
+    TemplateRemoteViewItem *pItem = new TemplateRemoteViewItem(*this);
 
     pItem->mnId = maRepositories.size()+1;
     pItem->maTitle = rName;

@@ -16,7 +16,7 @@ class TemplateViewItem : public ThumbnailViewItem
 {
 public:
 
-    TemplateViewItem (ThumbnailView &rView, Window *pParent);
+    TemplateViewItem (ThumbnailView &rView);
 
     virtual ~TemplateViewItem ();
 

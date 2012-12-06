@@ -108,7 +108,7 @@ void TemplateView::InsertItems (const std::vector<TemplateItemProperties> &rTemp
 {
     for (size_t i = 0, n = rTemplates.size(); i < n; ++i )
     {
-        TemplateViewItem *pItem = new TemplateViewItem(*this,this);
+        TemplateViewItem *pItem = new TemplateViewItem(*this);
         const TemplateItemProperties *pCur = &rTemplates[i];
 
         pItem->mnId = pCur->nId;
@@ -208,9 +208,9 @@ void TemplateView::MouseButtonDown (const MouseEvent &rMEvt)
     ThumbnailView::MouseButtonDown(rMEvt);
 }
 
-void TemplateView::OnItemClicked(ThumbnailViewItem *pItem)
+void TemplateView::OnItemDblClicked(ThumbnailViewItem *pItem)
 {
-    maClickHdl.Call(pItem);
+    maDblClickHdl.Call(pItem);
 }
 
 IMPL_LINK_NOARG(TemplateView, ChangeNameHdl)
