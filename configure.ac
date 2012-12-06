@@ -10713,7 +10713,7 @@ AC_MSG_CHECKING([for Numbertext extension integration])
 NUMBERTEXT_EXTENSION_PACK=
 if test "x$enable_ext_numbertext" = "xyes" -a "x$enable_extension_integration" != "xno"; then
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_NUMBERTEXT"
-    NUMBERTEXT_EXTENSION_PACK="b8cbca7b3363e6ca2d02bc0ba2b63904-numbertext_0.9.4.oxt"
+    NUMBERTEXT_EXTENSION_PACK="b7cae45ad2c23551fd6ccb8ae2c1f59e-numbertext_0.9.5.oxt"
     WITH_EXTRA_EXTENSIONS=YES
     AC_MSG_RESULT([yes])
 else
