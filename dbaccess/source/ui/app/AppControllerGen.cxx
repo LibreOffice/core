@@ -52,6 +52,7 @@
 #include <com/sun/star/util/XRefreshable.hpp>
 
 #include <cppuhelper/exc_hlp.hxx>
+#include <comphelper/processfactory.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/sqlerror.hxx>
@@ -143,7 +144,7 @@ void OApplicationController::convertToView(const ::rtl::OUString& _sName)
         String aDefaultName = ::dbaui::createDefaultName(xMeta,xTables,aName);
 
         DynamicTableOrQueryNameCheck aNameChecker( xConnection, CommandType::TABLE );
-        OSaveAsDlg aDlg( getView(), CommandType::TABLE, getORB(), xConnection, aDefaultName, aNameChecker );
+        OSaveAsDlg aDlg( getView(), CommandType::TABLE, comphelper::getComponentContext(getORB()), xConnection, aDefaultName, aNameChecker );
         if ( aDlg.Execute() == RET_OK )
         {
             ::rtl::OUString sName = aDlg.getName();
@@ -666,7 +667,7 @@ sal_Bool OApplicationController::insertHierachyElement(ElementType _eType,const 
 {
     Reference<XHierarchicalNameContainer> xNames(getElements(_eType), UNO_QUERY);
     return dbaui::insertHierachyElement(getView()
-                           ,getORB()
+                           ,comphelper::getComponentContext(getORB())
                            ,xNames
                            ,_sParentFolder
                            ,_eType == E_FORM

@@ -96,6 +96,24 @@ Reference< XInterface > SAL_CALL OSQLMessageDialog::Create(const Reference< XMul
 }
 
 //-------------------------------------------------------------------------
+void OSQLMessageDialog::initialize(Sequence<Any> const & args) throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException)
+{
+  OUString title;
+  Reference< com::sun::star::awt::XWindow > parentWindow;
+  Reference< com::sun::star::sdbc::SQLException > sqlException;
+
+  if ((args.getLength() == 3) && (args[0] >>= title) && (args[1] >>= parentWindow) && (args[2] >>= sqlException)) {
+    Sequence<Any> s(3);
+    s[0] <<= PropertyValue( "Title", -1, makeAny(title), PropertyState_DIRECT_VALUE);
+    s[1] <<= PropertyValue( "ParentWindow", -1, makeAny(parentWindow), PropertyState_DIRECT_VALUE);
+    s[2] <<= PropertyValue( "SQLException", -1, makeAny(sqlException), PropertyState_DIRECT_VALUE);
+    OGenericUnoDialog::initialize(s);
+  } else {
+    OGenericUnoDialog::initialize(args);
+  }
+}
+
+//-------------------------------------------------------------------------
 sal_Bool SAL_CALL OSQLMessageDialog::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue) throw(IllegalArgumentException)
 {
     switch (_nHandle)

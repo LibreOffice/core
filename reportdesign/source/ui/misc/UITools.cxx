@@ -1049,7 +1049,7 @@ bool openDialogFormula_nothrow( ::rtl::OUString& _in_out_rFormula
     }
 
     if ( aErrorInfo.isValid() )
-        ::dbtools::showError( aErrorInfo, xInspectorWindow, xServiceFactory );
+        ::dbtools::showError( aErrorInfo, xInspectorWindow, _xContext );
 
     return bSuccess;
 }

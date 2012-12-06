@@ -188,13 +188,13 @@ namespace
 //==================================================================
 OSaveAsDlg::OSaveAsDlg( Window * pParent,
                         const sal_Int32& _rType,
-                        const Reference< XMultiServiceFactory >& _rxORB,
+                        const Reference< XComponentContext >& _rxContext,
                         const Reference< XConnection>& _xConnection,
                         const String& rDefault,
                         const IObjectNameCheck& _rObjectNameCheck,
                         sal_Int32 _nFlags)
     :ModalDialog( pParent, ModuleRes(DLG_SAVE_AS))
-    ,m_xORB( _rxORB )
+    ,m_xContext( _rxContext )
 {
     m_pImpl = new OSaveAsDlgImpl(this,_rType,_xConnection,rDefault,_rObjectNameCheck,_nFlags);
 
@@ -303,13 +303,13 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
 }
 // -----------------------------------------------------------------------------
 OSaveAsDlg::OSaveAsDlg( Window * pParent,
-                        const Reference< XMultiServiceFactory >& _rxORB,
+                        const Reference< XComponentContext >& _rxContext,
                         const String& rDefault,
                         const String& _sLabel,
                         const IObjectNameCheck& _rObjectNameCheck,
                         sal_Int32 _nFlags)
              :ModalDialog( pParent, ModuleRes(DLG_SAVE_AS))
-             ,m_xORB( _rxORB )
+             ,m_xContext( _rxContext )
 {
     m_pImpl = new OSaveAsDlgImpl(this,rDefault,_rObjectNameCheck,_nFlags);
     implInitOnlyTitle(_sLabel);
@@ -345,7 +345,7 @@ IMPL_LINK(OSaveAsDlg, ButtonClickHdl, Button *, pButton)
         if ( m_pImpl->m_rObjectNameCheck.isNameValid( sNameToCheck, aNameError ) )
             EndDialog( RET_OK );
 
-        showError( aNameError, this, m_xORB );
+        showError( aNameError, this, m_xContext );
         m_pImpl->m_aTitle.GrabFocus();
     }
     return 0;

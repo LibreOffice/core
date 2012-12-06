@@ -1047,7 +1047,7 @@ Reference< XConnection > OGenericUnoController::connect( const Reference< XDataS
 {
     WaitObject aWaitCursor( getView() );
 
-    ODatasourceConnector aConnector( getORB(), getView(), ::rtl::OUString() );
+    ODatasourceConnector aConnector( comphelper::getComponentContext(getORB()), getView(), ::rtl::OUString() );
     Reference< XConnection > xConnection = aConnector.connect( _xDataSource, _pErrorInfo );
     startConnectionListening( xConnection );
 
@@ -1059,7 +1059,7 @@ Reference< XConnection > OGenericUnoController::connect( const ::rtl::OUString& 
 {
     WaitObject aWaitCursor( getView() );
 
-    ODatasourceConnector aConnector( getORB(), getView(), _rContextInformation );
+    ODatasourceConnector aConnector( comphelper::getComponentContext(getORB()), getView(), _rContextInformation );
     Reference<XConnection> xConnection = aConnector.connect( _rDataSourceName, _pErrorInfo );
     startConnectionListening( xConnection );
 
@@ -1069,7 +1069,7 @@ Reference< XConnection > OGenericUnoController::connect( const ::rtl::OUString& 
 // -----------------------------------------------------------------------------
 void OGenericUnoController::showError(const SQLExceptionInfo& _rInfo)
 {
-    ::dbaui::showError(_rInfo,getView(),getORB());
+    ::dbaui::showError(_rInfo,getView(),comphelper::getComponentContext(getORB()));
 }
 // -----------------------------------------------------------------------------
 Reference< XLayoutManager > OGenericUnoController::getLayoutManager(const Reference< XFrame >& _xFrame) const

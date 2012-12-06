@@ -65,7 +65,7 @@ DBG_NAME(OCollectionView)
 OCollectionView::OCollectionView( Window * pParent
                                  ,const Reference< XContent>& _xContent
                                  ,const ::rtl::OUString& _sDefaultName
-                                 ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB)
+                                 ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext)
     : ModalDialog( pParent, ModuleRes(DLG_COLLECTION_VIEW))
     , m_aFTCurrentPath( this, ModuleRes( FT_EXPLORERFILE_CURRENTPATH ) )
     , m_aNewFolder(     this, ModuleRes( BTN_EXPLORERFILE_NEWFOLDER ) )
@@ -79,7 +79,7 @@ OCollectionView::OCollectionView( Window * pParent
     , m_aPB_HELP(       this, ModuleRes( PB_HELP ) )
     , m_sPath(          ModuleRes( STR_PATHNAME ) )
     , m_xContent(_xContent)
-    , m_xORB(_xORB)
+    , m_xContext(_rxContext)
     , m_bCreateForm(sal_True)
 {
     DBG_CTOR(OCollectionView,NULL);
@@ -170,7 +170,7 @@ IMPL_LINK_NOARG(OCollectionView, Save_Click)
 
 
                     Reference<XInteractionHandler2> xHandler(
-                        InteractionHandler::createWithParent(comphelper::getComponentContext(m_xORB), VCLUnoHelper::GetInterface( this )));
+                        InteractionHandler::createWithParent(m_xContext, VCLUnoHelper::GetInterface( this )));
                     OInteractionRequest* pRequest = new OInteractionRequest(makeAny(aException));
                     Reference< XInteractionRequest > xRequest(pRequest);
 
@@ -208,12 +208,12 @@ IMPL_LINK_NOARG(OCollectionView, NewFolder_Click)
     try
     {
         Reference<XHierarchicalNameContainer> xNameContainer(m_xContent,UNO_QUERY);
-        if ( dbaui::insertHierachyElement(this,m_xORB,xNameContainer,String(),m_bCreateForm) )
+        if ( dbaui::insertHierachyElement(this,m_xContext,xNameContainer,String(),m_bCreateForm) )
             m_aView.Initialize(m_xContent,String());
     }
     catch( const SQLException& )
     {
-        showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ), this, m_xORB );
+        showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ), this, m_xContext );
     }
     catch( const Exception& )
     {

@@ -372,7 +372,7 @@ void ODbDataSourceAdministrationHelper::clearPassword()
         catch (const SQLWarning& e) { aErrorInfo = SQLExceptionInfo(e); }
         catch (const SQLException& e) { aErrorInfo = SQLExceptionInfo(e); }
 
-        showError(aErrorInfo,m_pParent,getORB());
+        showError(aErrorInfo,m_pParent,comphelper::getComponentContext(getORB()));
     }
     if ( aRet.first.is() )
         successfullyConnected();// notify the admindlg to save the password

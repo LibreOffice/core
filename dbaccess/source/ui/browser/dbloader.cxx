@@ -41,6 +41,7 @@
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -274,7 +275,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         else if ( !sDataSourceName.isEmpty() )
         {
             ::dbtools::SQLExceptionInfo aError;
-            xDataSource.set( getDataSourceByName( sDataSourceName, NULL, m_xServiceFactory, &aError ) );
+            xDataSource.set( getDataSourceByName( sDataSourceName, NULL, comphelper::getComponentContext(m_xServiceFactory), &aError ) );
             xDatabaseDocument.set( getDataSourceOrModel( xDataSource ), UNO_QUERY );
         }
         else if ( xConnection.is() )

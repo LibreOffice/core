@@ -215,10 +215,9 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
 }
 // -----------------------------------------------------------------------------
 Reference< XDataSource > getDataSourceByName( const ::rtl::OUString& _rDataSourceName,
-    Window* _pErrorMessageParent, Reference< XMultiServiceFactory > _rxORB, ::dbtools::SQLExceptionInfo* _pErrorInfo )
+    Window* _pErrorMessageParent, Reference< XComponentContext > _rxContext, ::dbtools::SQLExceptionInfo* _pErrorInfo )
 {
-    ::comphelper::ComponentContext aContext( _rxORB );
-    Reference< XDatabaseContext > xDatabaseContext = DatabaseContext::create(aContext.getUNOContext());
+    Reference< XDatabaseContext > xDatabaseContext = DatabaseContext::create(_rxContext);
 
     Reference< XDataSource > xDatasource;
     Any aError;
@@ -264,7 +263,7 @@ Reference< XDataSource > getDataSourceByName( const ::rtl::OUString& _rDataSourc
         }
         else
         {
-            showError( aSQLError, _pErrorMessageParent, _rxORB );
+            showError( aSQLError, _pErrorMessageParent, _rxContext );
         }
     }
 
@@ -288,10 +287,10 @@ Reference< XInterface > getDataSourceOrModel(const Reference< XInterface >& _xOb
     return xRet;
 }
 // -----------------------------------------------------------------------------
-void showError(const SQLExceptionInfo& _rInfo,Window* _pParent,const Reference< XMultiServiceFactory >& _xFactory)
+void showError(const SQLExceptionInfo& _rInfo,Window* _pParent,const Reference< XComponentContext >& _rxContext)
 {
     OSL_ENSURE(_pParent,"showError: Parent window must be NOT NULL!");
-    ::dbtools::showError(_rInfo,VCLUnoHelper::GetInterface(_pParent),_xFactory);
+    ::dbtools::showError(_rInfo,VCLUnoHelper::GetInterface(_pParent), _rxContext);
 }
 
 // -----------------------------------------------------------------------------
@@ -1500,7 +1499,7 @@ Reference<XPropertySet> createView( const ::rtl::OUString& _rName, const Referen
 }
 
 // -----------------------------------------------------------------------------
-sal_Bool insertHierachyElement( Window* _pParent, const Reference< XMultiServiceFactory >& _rxORB,
+sal_Bool insertHierachyElement( Window* _pParent, const Reference< XComponentContext >& _rxContext,
                            const Reference<XHierarchicalNameContainer>& _xNames,
                            const String& _sParentFolder,
                            sal_Bool _bForm,
@@ -1548,7 +1547,7 @@ sal_Bool insertHierachyElement( Window* _pParent, const Reference< XMultiService
             HierarchicalNameCheck aNameChecker( _xNames.get(), sName );
             // ... ehm, except a new name
             OSaveAsDlg aAskForName( _pParent,
-                                    _rxORB,
+                                    _rxContext,
                                     sTargetName,
                                     sLabel,
                                     aNameChecker,

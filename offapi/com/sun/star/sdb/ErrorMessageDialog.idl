@@ -20,14 +20,11 @@
 #ifndef __com_sun_star_sdb_ErrorMessageDialog_idl__
 #define __com_sun_star_sdb_ErrorMessageDialog_idl__
 
-#include <com/sun/star/ui/dialogs/XExecutableDialog.idl>
 #include <com/sun/star/awt/XWindow.idl>
-#include <com/sun/star/lang/XInitialization.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
-
+#include <com/sun/star/ui/dialogs/XExecutableDialog.idl>
 
 module com {  module sun {  module star {  module sdb {
-
 
 /** provides a dialog for displaying database related exceptions.
     <p>
@@ -60,47 +57,8 @@ module com {  module sun {  module star {  module sdb {
     @see com.sun.star.sdb.InteractionHandler
     </p>
 */
-published service ErrorMessageDialog
+published service ErrorMessageDialog : com::sun::star::ui::dialogs::XExecutableDialog
 {
-    /** the title of the (dialog) window
-    */
-    [property] string Title;
-
-    /** parent window to use for the dialog
-        <p>
-        This property can't be set while the dialog is being displayed.
-        </p>
-    */
-    [property] com::sun::star::awt::XWindow ParentWindow;
-
-    /** is the exception displayed by the dialog
-        <p>
-        This should contain a
-        <type scope="com::sun::star::sdbc">SQLException</type>
-        instance, or an instance
-        of any class derived from this exception.
-        </p>
-        <p>
-        This property can't be set while the dialog is being displayed.
-        </p>
-    */
-    [property] any SQLException;
-
-    /** specifies the URL to the help topic to associate with the dialog.
-
-        <p>If This URL is not empty, then the dialog will get a "Help" button, which
-        directs the user to the given help topic.</p>
-    */
-    [optional, property] string HelpURL;
-
-    /** allows access to the properties of the object
-    */
-    interface com::sun::star::beans::XPropertySet;
-
-    /** allows starting execution of the dialog
-    */
-    interface com::sun::star::ui::dialogs::XExecutableDialog;
-
     /** allows initializing the dialog
         <p>
         You do not need to call the initialize method directly, instead you may use the createInstanceWithArguments
@@ -123,14 +81,14 @@ published service ErrorMessageDialog
         <br/>
         allowed parameters are
         <ul>
-            <li><b>Title</b><br/>
+            <li><b>title</b><br/>
                 String describing the initial title of the dialog. If not specified, a default title is used.
             </li>
-            <li><b>ParentWindow</b><br/>
+            <li><b>parentWindow</b><br/>
                 <type scope="com::sun::star::awt">XWindow</type>
                 describing the parent window to use for the dialog.
             </li>
-            <li><b>SQLException</b><br/>
+            <li><b>sqlException</b><br/>
                 <type scope="com::sun::star::sdbc">SQLException</type>
                 describing the error which is being displayed.<br/>
                 When initializing this value, you may use any derivative of
@@ -140,7 +98,7 @@ published service ErrorMessageDialog
         </ul>
         </p>
     */
-    interface com::sun::star::lang::XInitialization;
+    create([in] string initialTitle, [in] com::sun::star::awt::XWindow parentWindow, [in] any sqlException);
 };
 
 

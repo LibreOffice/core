@@ -33,6 +33,7 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdb/ErrorMessageDialog.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdb/XBookmarksSupplier.hpp>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
@@ -77,6 +78,7 @@
 #include <comphelper/types.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <vcl/msgbox.hxx>
 #include <vcl/stdtext.hxx>
@@ -2128,7 +2130,7 @@ void OApplicationController::renameEntry()
                                 }
                                 pNameChecker.reset( new HierarchicalNameCheck( xHNames.get(), String() ) );
                                 aDialog.reset( new OSaveAsDlg(
-                                    getView(), getORB(), sName, sLabel, *pNameChecker, SAD_TITLE_RENAME ) );
+                                    getView(), comphelper::getComponentContext(getORB()), sName, sLabel, *pNameChecker, SAD_TITLE_RENAME ) );
                             }
                         }
                     }
@@ -2147,7 +2149,7 @@ void OApplicationController::renameEntry()
                         ensureConnection();
                         pNameChecker.reset( new DynamicTableOrQueryNameCheck( getConnection(), nCommandType ) );
                         aDialog.reset( new OSaveAsDlg(
-                            getView(), nCommandType, getORB(), getConnection(),
+                            getView(), nCommandType, comphelper::getComponentContext(getORB()), getConnection(),
                                 *aList.begin(), *pNameChecker, SAD_TITLE_RENAME ) );
                     }
                     break;
@@ -2687,12 +2689,7 @@ IMPL_LINK( OApplicationController, OnFirstControllerConnected, void*, /**/ )
         aDetail.Message = String( ModuleRes( STR_SUB_DOCS_WITH_SCRIPTS_DETAIL ) );
         aWarning.NextException <<= aDetail;
 
-        ::comphelper::ComponentContext aContext( getORB() );
-        Sequence< Any > aArgs(1);
-        aArgs[0] <<= NamedValue( PROPERTY_SQLEXCEPTION, makeAny( aWarning ) );
-        Reference< XExecutableDialog > xDialog(
-            aContext.createComponentWithArguments( "com.sun.star.sdb.ErrorMessageDialog", aArgs ),
-            UNO_QUERY_THROW );
+        Reference< XExecutableDialog > xDialog = ErrorMessageDialog::create( ::comphelper::getComponentContext( getORB() ), "", NULL, makeAny( aWarning ) );
         xDialog->execute();
     }
     catch( const Exception& )

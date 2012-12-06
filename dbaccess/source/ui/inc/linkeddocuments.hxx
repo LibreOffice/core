@@ -23,7 +23,7 @@
 #include "AppElementType.hxx"
 
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -46,8 +46,8 @@ namespace dbaui
     class OLinkedDocumentsAccess
     {
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                    m_xORB;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+                    m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
                     m_xDocumentContainer;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>
@@ -63,7 +63,7 @@ namespace dbaui
         OLinkedDocumentsAccess(
             Window* _pDialogParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& i_rDocumentUI,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxContainer,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
             const ::rtl::OUString& _sDataSourceName

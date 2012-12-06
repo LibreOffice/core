@@ -47,7 +47,7 @@ namespace dbaui
         HelpButton      m_aPB_HELP;
         String          m_sPath;
         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>                  m_xContent;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
         Size            m_aDlgSize;
         Size            m_a6Size;
         sal_Bool        m_bCreateForm;
@@ -63,7 +63,7 @@ namespace dbaui
         OCollectionView( Window * pParent
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent
                         ,const ::rtl::OUString& _sDefaultName
-                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB);
+                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
         virtual ~OCollectionView();
 
         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent> getSelectedFolder() const;

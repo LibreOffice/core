@@ -108,9 +108,9 @@ void OTableGrantControl::setTablesSupplier(const Reference< XTablesSupplier >& _
     OSL_ENSURE(m_xTables.is(),"No tables supported!");
 }
 // -----------------------------------------------------------------------------
-void OTableGrantControl::setORB(const Reference< ::com::sun::star::lang::XMultiServiceFactory>& _xORB)
+void OTableGrantControl::setComponentContext(const Reference< ::com::sun::star::uno::XComponentContext>& _rxContext)
 {
-    m_xORB = _xORB;
+  m_xContext = _rxContext;
 }
 //------------------------------------------------------------------------
 void OTableGrantControl::UpdateTables()
@@ -263,7 +263,7 @@ sal_Bool OTableGrantControl::SaveModified()
     catch(SQLException& e)
     {
         bErg = sal_False;
-        ::dbaui::showError(::dbtools::SQLExceptionInfo(e),GetParent(),m_xORB);
+        ::dbaui::showError(::dbtools::SQLExceptionInfo(e),GetParent(),m_xContext);
     }
     if(bErg && Controller().Is())
         Controller()->ClearModified();
@@ -327,7 +327,7 @@ void OTableGrantControl::fillPrivilege(sal_Int32 _nRow) const
         }
         catch(SQLException& e)
         {
-            ::dbaui::showError(::dbtools::SQLExceptionInfo(e),GetParent(),m_xORB);
+            ::dbaui::showError(::dbtools::SQLExceptionInfo(e),GetParent(),m_xContext);
         }
         catch(Exception& )
         {

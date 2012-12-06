@@ -341,7 +341,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
             }
 
             DynamicTableOrQueryNameCheck aNameChecker( getConnection(), CommandType::TABLE );
-            OSaveAsDlg aDlg( getView(), CommandType::TABLE, getORB(), getConnection(), aDefaultName, aNameChecker );
+            OSaveAsDlg aDlg( getView(), CommandType::TABLE, comphelper::getComponentContext(getORB()), getConnection(), aDefaultName, aNameChecker );
             if ( aDlg.Execute() != RET_OK )
                 return sal_False;
 
@@ -514,7 +514,7 @@ void OTableController::doEditIndexes()
     if (!xIndexes.is())
         return;
 
-    DbaIndexDialog aDialog(getView(), aFieldNames, xIndexes, getConnection(),getORB(),isConnected() ? getConnection()->getMetaData().is() && getConnection()->getMetaData()->getMaxColumnsInIndex() : sal_Int32(0));
+    DbaIndexDialog aDialog(getView(), aFieldNames, xIndexes, getConnection(), comphelper::getComponentContext(getORB()), isConnected() ? getConnection()->getMetaData().is() && getConnection()->getMetaData()->getMaxColumnsInIndex() : sal_Int32(0));
     if (RET_OK != aDialog.Execute())
         return;
 

@@ -113,9 +113,9 @@ namespace dbaui
     DBG_NAME(OLinkedDocumentsAccess)
     //------------------------------------------------------------------
     OLinkedDocumentsAccess::OLinkedDocumentsAccess( Window* _pDialogParent, const Reference< XDatabaseDocumentUI >& i_rDocumentUI,
-        const Reference< XMultiServiceFactory >& _rxORB, const Reference< XNameAccess >& _rxContainer,
+        const Reference< XComponentContext >& _rxContext, const Reference< XNameAccess >& _rxContainer,
         const Reference< XConnection>& _xConnection, const ::rtl::OUString& _sDataSourceName )
-        :m_xORB(_rxORB)
+        :m_xContext(_rxContext)
         ,m_xDocumentContainer(_rxContainer)
         ,m_xConnection(_xConnection)
         ,m_xDocumentUI( i_rDocumentUI )
@@ -123,7 +123,7 @@ namespace dbaui
         ,m_sDataSourceName(_sDataSourceName)
     {
         DBG_CTOR(OLinkedDocumentsAccess,NULL);
-        OSL_ENSURE(m_xORB.is(), "OLinkedDocumentsAccess::OLinkedDocumentsAccess: invalid service factory!");
+        OSL_ENSURE(m_xContext.is(), "OLinkedDocumentsAccess::OLinkedDocumentsAccess: invalid service factory!");
         OSL_ENSURE(m_pDialogParent, "OLinkedDocumentsAccess::OLinkedDocumentsAccess: really need a dialog parent!");
     }
     //------------------------------------------------------------------
@@ -208,9 +208,10 @@ namespace dbaui
             Reference< XJobExecutor > xWizard;
             {
                 WaitObject aWaitCursor( m_pDialogParent );
-                xWizard.set( m_xORB->createInstanceWithArguments(
+                xWizard.set( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                     ::rtl::OUString::createFromAscii( _pWizardService ),
-                    aArgs.getWrappedPropertyValues()
+                    aArgs.getWrappedPropertyValues(),
+                    m_xContext
                     ), UNO_QUERY_THROW );
             }
 
@@ -387,7 +388,7 @@ namespace dbaui
         }
         if (aInfo.isValid())
         {
-            showError(aInfo, VCLUnoHelper::GetInterface(m_pDialogParent), m_xORB );
+            showError(aInfo, VCLUnoHelper::GetInterface(m_pDialogParent), m_xContext );
         }
         return xRet;
     }

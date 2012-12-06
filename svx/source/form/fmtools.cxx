@@ -40,6 +40,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/ErrorCondition.hpp>
+#include <com/sun/star/sdb/ErrorMessageDialog.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
@@ -136,19 +137,10 @@ void displayException(const Any& _rExcept, Window* _pParent)
         Window* pParentWindow = _pParent ? _pParent : GetpApp()->GetDefDialogParent();
         Reference< XWindow > xParentWindow = VCLUnoHelper::GetInterface(pParentWindow);
 
-        Sequence< Any > aArgs(2);
-        aArgs[0] <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQLException")), 0, _rExcept, PropertyState_DIRECT_VALUE);
-        aArgs[1] <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow")), 0, makeAny(xParentWindow), PropertyState_DIRECT_VALUE);
-
-        static ::rtl::OUString s_sDialogServiceName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.ErrorMessageDialog") );
-        Reference< XExecutableDialog > xErrorDialog(
-            ::comphelper::getProcessServiceFactory()->createInstanceWithArguments(s_sDialogServiceName, aArgs), UNO_QUERY);
-        if (xErrorDialog.is())
-            xErrorDialog->execute();
-        else
-            ShowServiceNotAvailableError(pParentWindow, s_sDialogServiceName, sal_True);
+        Reference< XExecutableDialog > xErrorDialog = ErrorMessageDialog::create(::comphelper::getProcessComponentContext(), "", xParentWindow, _rExcept);
+        xErrorDialog->execute();
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         OSL_FAIL("displayException: could not display the error message!");
     }

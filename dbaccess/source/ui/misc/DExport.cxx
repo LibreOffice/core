@@ -88,7 +88,7 @@ DBG_NAME(ODatabaseExport)
 ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
                                  const TPositions &_rColumnPositions,
                                  const Reference< XNumberFormatter >& _rxNumberF,
-                                 const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
+                                 const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                                  const TColumnVector* pList,
                                  const OTypeInfoMap* _pInfoMap,
                                  sal_Bool _bAutoIncrementEnabled,
@@ -96,7 +96,7 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
     :m_vColumns(_rColumnPositions)
     ,m_aDestColumns(sal_True)
     ,m_xFormatter(_rxNumberF)
-    ,m_xFactory(_rM)
+    ,m_xContext(_rxContext)
     ,m_pFormatter(NULL)
     ,m_rInputStream( _rInputStream )
     ,m_pTypeInfo()
@@ -146,14 +146,14 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
 //---------------------------------------------------------------------------
 ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
                                  const Reference< XNumberFormatter >& _rxNumberF,
-                                 const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
+                                 const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                                  const TColumnVector* pList,
                                  const OTypeInfoMap* _pInfoMap,
                                  SvStream& _rInputStream)
     :m_aDestColumns(_rxConnection->getMetaData().is() && _rxConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers() == sal_True)
     ,m_xConnection(_rxConnection)
     ,m_xFormatter(_rxNumberF)
-    ,m_xFactory(_rM)
+    ,m_xContext(_rxContext)
     ,m_pFormatter(NULL)
     ,m_rInputStream( _rInputStream )
     ,m_pTypeInfo()
@@ -715,7 +715,7 @@ sal_Bool ODatabaseExport::executeWizard(const ::rtl::OUString& _rTableName,const
         m_xFormatter,
         getTypeSelectionPageFactory(),
         m_rInputStream,
-        comphelper::getComponentContext(m_xFactory)
+        m_xContext
     );
 
     sal_Bool bError = sal_False;
@@ -754,7 +754,7 @@ sal_Bool ODatabaseExport::executeWizard(const ::rtl::OUString& _rTableName,const
     }
     catch( const SQLException&)
     {
-        ::dbaui::showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ), &aWizard, m_xFactory );
+        ::dbaui::showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ), &aWizard, m_xContext );
         bError = sal_True;
     }
     catch( const Exception& )

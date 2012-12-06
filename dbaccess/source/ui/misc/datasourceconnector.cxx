@@ -63,17 +63,17 @@ namespace dbaui
     //= ODatasourceConnector
     //=====================================================================
     //---------------------------------------------------------------------
-    ODatasourceConnector::ODatasourceConnector(const Reference< XMultiServiceFactory >& _rxORB, Window* _pMessageParent)
+    ODatasourceConnector::ODatasourceConnector(const Reference< XComponentContext >& _rxContext, Window* _pMessageParent)
         :m_pErrorMessageParent(_pMessageParent)
-        ,m_xORB(_rxORB)
+        ,m_xContext(_rxContext)
     {
     }
 
     //---------------------------------------------------------------------
-    ODatasourceConnector::ODatasourceConnector( const Reference< XMultiServiceFactory >& _rxORB, Window* _pMessageParent,
+    ODatasourceConnector::ODatasourceConnector( const Reference< XComponentContext >& _rxContext, Window* _pMessageParent,
         const ::rtl::OUString& _rContextInformation )
         :m_pErrorMessageParent(_pMessageParent)
-        ,m_xORB(_rxORB)
+        ,m_xContext(_rxContext)
         ,m_sContextInformation( _rContextInformation )
     {
     }
@@ -90,7 +90,7 @@ namespace dbaui
 
         // get the data source
         Reference< XDataSource > xDatasource(
-            getDataSourceByName( _rDataSourceName, m_pErrorMessageParent, m_xORB, _pErrorInfo ),
+            getDataSourceByName( _rDataSourceName, m_pErrorMessageParent, m_xContext, _pErrorInfo ),
             UNO_QUERY
         );
 
@@ -139,7 +139,7 @@ namespace dbaui
                 if ( !xHandler.is() )
                 {
                     // instantiate the default SDB interaction handler
-                    xHandler = Reference< XInteractionHandler >( InteractionHandler::createWithParent(comphelper::getComponentContext(m_xORB), 0), UNO_QUERY );
+                    xHandler = Reference< XInteractionHandler >( InteractionHandler::createWithParent(m_xContext, 0), UNO_QUERY );
                 }
 
                 xConnection = xConnectionCompletion->connectWithCompletion(xHandler);
@@ -207,7 +207,7 @@ namespace dbaui
             }
             else
             {
-                showError( aInfo, m_pErrorMessageParent, m_xORB );
+                showError( aInfo, m_pErrorMessageParent, m_xContext );
             }
         }
         return xConnection;

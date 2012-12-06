@@ -105,15 +105,15 @@ namespace dbaui
         SvTreeListEntry*            m_pPreviousSelection;
         sal_Bool                m_bEditAgain;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                                m_xORB;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+                                m_xContext;
     public:
         DbaIndexDialog(
             Window* _pParent,
             const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rFieldNames,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxIndexes,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
             sal_Int32 _nMaxColumnsInIndex
             );
         virtual ~DbaIndexDialog();

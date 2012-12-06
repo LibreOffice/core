@@ -37,6 +37,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/sdb/BooleanComparisonMode.hpp>
+#include <com/sun/star/sdb/ErrorMessageDialog.hpp>
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -742,20 +743,8 @@ namespace frm
     {
         try
         {
-            Sequence< Any > aArgs(2);
-            aArgs[0] <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQLException") ), 0, makeAny( _rExcept ), PropertyState_DIRECT_VALUE);
-            aArgs[1] <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow") ), 0, makeAny( m_xMessageParent ), PropertyState_DIRECT_VALUE);
-
-            static ::rtl::OUString s_sDialogServiceName (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.ErrorMessageDialog") );
-
-            Reference< XExecutableDialog > xErrorDialog( maContext.createComponentWithArguments( s_sDialogServiceName, aArgs ), UNO_QUERY );
-            if ( xErrorDialog.is() )
-                xErrorDialog->execute();
-            else
-            {
-                Window* pMessageParent = VCLUnoHelper::GetWindow( m_xMessageParent );
-                ShowServiceNotAvailableError( pMessageParent, s_sDialogServiceName, sal_True );
-            }
+            Reference< XExecutableDialog > xErrorDialog = ErrorMessageDialog::create( maContext.getUNOContext(), "",  m_xMessageParent, makeAny(_rExcept));
+            xErrorDialog->execute();
         }
         catch( const Exception& )
         {

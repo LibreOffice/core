@@ -1378,7 +1378,7 @@ sal_Bool OQueryController::askForNewName(const Reference<XNameAccess>& _xElement
         OSaveAsDlg aDlg(
                 getView(),
                 m_nCommandType,
-                getORB(),
+                comphelper::getComponentContext(getORB()),
                 getConnection(),
                 aDefaultName,
                 aNameChecker,

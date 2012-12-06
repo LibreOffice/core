@@ -173,7 +173,7 @@ DBG_NAME(DbaIndexDialog)
     DbaIndexDialog::DbaIndexDialog( Window* _pParent, const Sequence< ::rtl::OUString >& _rFieldNames,
                                     const Reference< XNameAccess >& _rxIndexes,
                                     const Reference< XConnection >& _rxConnection,
-                                    const Reference< XMultiServiceFactory >& _rxORB,sal_Int32 _nMaxColumnsInIndex)
+                                    const Reference< XComponentContext >& _rxContext,sal_Int32 _nMaxColumnsInIndex)
         :ModalDialog( _pParent, ModuleRes(DLG_INDEXDESIGN))
         ,m_xConnection(_rxConnection)
         ,m_aGeometrySettings(E_DIALOG, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dbaccess.tabledesign.indexdialog")))
@@ -190,7 +190,7 @@ DBG_NAME(DbaIndexDialog)
         ,m_pIndexes(NULL)
         ,m_pPreviousSelection(NULL)
         ,m_bEditAgain(sal_False)
-        ,m_xORB(_rxORB)
+        ,m_xContext(_rxContext)
     {
         DBG_CTOR(DbaIndexDialog,NULL);
 
@@ -215,7 +215,7 @@ DBG_NAME(DbaIndexDialog)
         }
         catch(SQLException& e)
         {
-            ::dbaui::showError(SQLExceptionInfo(e),_pParent,_rxORB);
+            ::dbaui::showError(SQLExceptionInfo(e),_pParent,_rxContext);
         }
         catch(Exception&)
         {
@@ -354,7 +354,7 @@ DBG_NAME(DbaIndexDialog)
         updateToolbox();
 
         if (aExceptionInfo.isValid())
-            showError(aExceptionInfo, this, m_xORB);
+            showError(aExceptionInfo, this, m_xContext);
         else
         {
             m_aUnique.SaveValue();
@@ -456,7 +456,7 @@ DBG_NAME(DbaIndexDialog)
         catch(SQLException& e) { aExceptionInfo = SQLExceptionInfo(e); }
 
         if (aExceptionInfo.isValid())
-            showError(aExceptionInfo, this, m_xORB);
+            showError(aExceptionInfo, this, m_xContext);
         else if (bSuccess && _bRemoveFromCollection)
         {
             SvTreeList* pModel = m_aIndexes.GetModel();
@@ -540,7 +540,7 @@ DBG_NAME(DbaIndexDialog)
         catch(SQLException& e) { aExceptionInfo = SQLExceptionInfo(e); }
 
         if (aExceptionInfo.isValid())
-            showError(aExceptionInfo, this, m_xORB);
+            showError(aExceptionInfo, this, m_xContext);
         else
             m_aIndexes.SetEntryText(pSelected, aResetPos->sName);
 

@@ -2386,7 +2386,7 @@ namespace pcr
     //------------------------------------------------------------------------
     void FormComponentPropertyHandler::impl_displaySQLError_nothrow( const ::dbtools::SQLExceptionInfo& _rErrorDescriptor ) const
     {
-        ::dbtools::showError( _rErrorDescriptor, VCLUnoHelper::GetInterface( impl_getDefaultDialogParent_nothrow() ), m_aContext.getLegacyServiceFactory() );
+        ::dbtools::showError( _rErrorDescriptor, VCLUnoHelper::GetInterface( impl_getDefaultDialogParent_nothrow() ), m_aContext.getUNOContext() );
     }
 
     //------------------------------------------------------------------------
@@ -2682,7 +2682,7 @@ namespace pcr
             return false;
 
 
-        FormLinkDialog aDialog( impl_getDefaultDialogParent_nothrow(), m_xComponent, xMasterProp, m_aContext.getLegacyServiceFactory() );
+        FormLinkDialog aDialog( impl_getDefaultDialogParent_nothrow(), m_xComponent, xMasterProp, m_aContext.getUNOContext() );
         _rClearBeforeDialog.clear();
         return ( RET_OK == aDialog.Execute() );
     }

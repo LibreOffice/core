@@ -148,7 +148,7 @@ namespace pcr
     //========================================================================
     //------------------------------------------------------------------------
     FormLinkDialog::FormLinkDialog( Window* _pParent, const Reference< XPropertySet >& _rxDetailForm,
-            const Reference< XPropertySet >& _rxMasterForm, const Reference< XMultiServiceFactory >& _rxORB,
+            const Reference< XPropertySet >& _rxMasterForm, const Reference< XComponentContext >& _rxContext,
             const ::rtl::OUString& _sExplanation,
             const ::rtl::OUString& _sDetailLabel,
             const ::rtl::OUString& _sMasterLabel)
@@ -164,7 +164,7 @@ namespace pcr
         ,m_aCancel     ( this, PcrRes( PB_CANCEL       ) )
         ,m_aHelp       ( this, PcrRes( PB_HELP         ) )
         ,m_aSuggest    ( this, PcrRes( PB_SUGGEST      ) )
-        ,m_xORB       ( _rxORB        )
+        ,m_xContext    ( _rxContext        )
         ,m_xDetailForm( _rxDetailForm )
         ,m_xMasterForm( _rxMasterForm )
         ,m_sDetailLabel(_sDetailLabel)
@@ -436,7 +436,7 @@ namespace pcr
             SQLContext aContext;
             aContext.Message = sErrorMessage;
             aContext.NextException = aErrorInfo.get();
-            ::dbtools::showError( aContext, VCLUnoHelper::GetInterface( const_cast< FormLinkDialog* >( this ) ), m_xORB );
+            ::dbtools::showError( aContext, VCLUnoHelper::GetInterface( const_cast< FormLinkDialog* >( this ) ), m_xContext );
         }
     }
 
@@ -450,7 +450,7 @@ namespace pcr
             _rxConnection.set(_rxFormProps->getPropertyValue(PROPERTY_ACTIVE_CONNECTION),UNO_QUERY);
 
         if ( !_rxConnection.is() )
-            _rxConnection = ::dbtools::connectRowset( Reference< XRowSet >( _rxFormProps, UNO_QUERY ), comphelper::getComponentContext(m_xORB), sal_True );
+            _rxConnection = ::dbtools::connectRowset( Reference< XRowSet >( _rxFormProps, UNO_QUERY ), m_xContext, sal_True );
     }
 
     //------------------------------------------------------------------------
@@ -472,7 +472,7 @@ namespace pcr
         Reference< XPropertySet > xTable;
         try
         {
-            Reference< XTablesSupplier > xTablesInForm( ::dbtools::getCurrentSettingsComposer( _rxFormProps, comphelper::getComponentContext(m_xORB) ), UNO_QUERY );
+            Reference< XTablesSupplier > xTablesInForm( ::dbtools::getCurrentSettingsComposer( _rxFormProps, m_xContext ), UNO_QUERY );
             Reference< XNameAccess > xTables;
             if ( xTablesInForm.is() )
                 xTables = xTablesInForm->getTables();

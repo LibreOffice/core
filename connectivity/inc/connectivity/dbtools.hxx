@@ -546,7 +546,7 @@ namespace dbtools
     OOO_DLLPUBLIC_DBTOOLS
     void showError( const SQLExceptionInfo& _rInfo,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>& _pParent,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext);
 
     /** implements <method scope="com.sun.star.sdb">XRowUpdate::updateObject</method>
         <p>The object which is to be set is analyzed, and in case it is a simlpe scalar type for which there

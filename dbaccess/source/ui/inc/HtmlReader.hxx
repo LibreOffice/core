@@ -53,7 +53,7 @@ namespace dbaui
         OHTMLReader(SvStream& rIn,
                     const SharedConnection& _rxConnection,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                     const TColumnVector* rList = 0,
                     const OTypeInfoMap* _pInfoMap = 0);
         // required for automatic type recognition
@@ -61,7 +61,7 @@ namespace dbaui
                     sal_Int32 nRows,
                     const TPositions &_rColumnPositions,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                     const TColumnVector* rList,
                     const OTypeInfoMap* _pInfoMap,
                     sal_Bool _bAutoIncrementEnabled);

@@ -40,7 +40,6 @@ namespace com { namespace sun { namespace star {
     namespace lang
     {
         class XEventListener;
-        class XMultiServiceFactory;
     }
     namespace awt
     {
@@ -107,11 +106,11 @@ namespace dbaui
     /**  creates a error dialog which displays the SQLExceptionInfo. Also it supports a "more" button where detailed information are available
         @param  _rInfo                  the error which should be shown, if the info is not valid no error dialog will appear
         @param  _pParent                the parent of the error dialog
-        @param  _xFactory               need to create the dialog
+        @param  _rxContext              need to create the dialog
     */
     void showError( const ::dbtools::SQLExceptionInfo& _rInfo,
                     Window* _pParent,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xFactory);
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
 
     /** fills a map and a vector with localized type names
         @param  _rxConnection   the connection to acces the metadata
@@ -158,7 +157,7 @@ namespace dbaui
             the URL of the database document, or the name of a registered data source
         @param _pErrorMessageParent
             the window to use as parent for error messages
-        @param _rxORB
+        @param _rxContext
             a service factory to use for components to be created
         @param _pErrorInfo
             takes the error info in case of failure. If <NULL/>, the error is displayed to the user.
@@ -167,7 +166,7 @@ namespace dbaui
         getDataSourceByName(
                 const ::rtl::OUString& _rDataSourceName,
                 Window* _pErrorMessageParent,
-                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxORB,
+                ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > _rxContext,
                 ::dbtools::SQLExceptionInfo* _pErrorInfo
             );
 
@@ -210,7 +209,7 @@ namespace dbaui
     /** append a name to tablefilter of a datasource
         @param  _xConnection    the connection is need to get the datasource
         @param  _sName          the name which should be appended
-        @param  _xFactory       needed to check if datasource is available
+        @param  _rxContext      needed to check if datasource is available
         @param  _pParent        needed when an error must be shown
         @return false when datsource is not available otherwise true
     */
@@ -381,7 +380,7 @@ namespace dbaui
     /** opens a save dialog to store a form or report folder in the current hierachy.
         @param  _pParent
             The parent of the dialog.
-        @param _rxORB
+        @param _rxContext
             a multi service factory which can be used to instantiate usual global services
         @param  _xNames
             Where to insert the new object.
@@ -400,7 +399,7 @@ namespace dbaui
     */
     sal_Bool insertHierachyElement(
                 Window* _pParent,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameContainer>& _xNames,
                 const String& _sParentFolder,
                 sal_Bool _bForm,
@@ -412,7 +411,7 @@ namespace dbaui
     /** creates a number formatter
         @param  _rxConnection
             The connection is needed to create the formatter
-        @param  _rMF
+        @param  _rxContext
             The multi service factory
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > getNumberFormatter(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext );

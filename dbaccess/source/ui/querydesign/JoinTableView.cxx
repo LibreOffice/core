@@ -41,6 +41,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include "UITools.hxx"
 #include <cppuhelper/exc_hlp.hxx>
+#include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
 #include <boost/bind.hpp>
 #include <algorithm>
@@ -302,13 +303,13 @@ TTableWindowData::value_type OJoinTableView::createTableWindowData(const ::rtl::
     catch ( const SQLException& )
     {
         ::dbaui::showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ),
-            pParent, pParent->getController().getORB() );
+            pParent, comphelper::getComponentContext(pParent->getController().getORB()) );
     }
     catch( const WrappedTargetException& e )
     {
         SQLException aSql;
         if ( e.TargetException >>= aSql )
-            ::dbaui::showError( ::dbtools::SQLExceptionInfo( aSql ), pParent, pParent->getController().getORB() );
+            ::dbaui::showError( ::dbtools::SQLExceptionInfo( aSql ), pParent, comphelper::getComponentContext(pParent->getController().getORB()) );
     }
     catch( const Exception& )
     {

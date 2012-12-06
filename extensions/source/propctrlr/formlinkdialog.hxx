@@ -57,8 +57,8 @@ namespace pcr
         HelpButton                      m_aHelp;
         PushButton                      m_aSuggest;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                                        m_xORB;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+                                        m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                         m_xDetailForm;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
@@ -77,7 +77,7 @@ namespace pcr
             Window* _pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDetailForm,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxMasterForm,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
             const ::rtl::OUString& _sExplanation = ::rtl::OUString(),
             const ::rtl::OUString& _sDetailLabel = ::rtl::OUString(),
             const ::rtl::OUString& _sMasterLabel = ::rtl::OUString()

@@ -36,6 +36,7 @@
 #include "RTableConnectionData.hxx"
 #include "RelationControl.hxx"
 #include <cppuhelper/exc_hlp.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <algorithm>
 
@@ -209,7 +210,7 @@ IMPL_LINK( ORelationDialog, OKClickHdl, Button*, /*pButton*/ )
     {
         ::dbaui::showError( SQLExceptionInfo( ::cppu::getCaughtException() ),
                             this,
-                            static_cast<OJoinTableView*>(GetParent())->getDesignView()->getController().getORB());
+                            comphelper::getComponentContext(static_cast<OJoinTableView*>(GetParent())->getDesignView()->getController().getORB()));
     }
     catch( const Exception& )
     {

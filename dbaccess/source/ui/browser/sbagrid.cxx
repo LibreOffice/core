@@ -1574,7 +1574,7 @@ IMPL_LINK(SbaGridControl, AsynchDropEvent, void*, /*EMPTY_ARG*/)
         {
             AfterDrop();
             Show();
-            ::dbaui::showError(::dbtools::SQLExceptionInfo(e),this,getServiceManager());
+            ::dbaui::showError(::dbtools::SQLExceptionInfo(e),this,comphelper::getComponentContext(getServiceManager()));
         }
         catch(const Exception& )
         {

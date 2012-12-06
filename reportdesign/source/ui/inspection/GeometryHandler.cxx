@@ -1570,11 +1570,9 @@ bool GeometryHandler::impl_dialogFilter_nothrow( ::rtl::OUString& _out_rSelected
     ::dbtools::SQLExceptionInfo aErrorInfo;
     uno::Reference< awt::XWindow > xInspectorWindow;
     uno::Reference< lang::XMultiComponentFactory > xFactory;
-    uno::Reference<lang::XMultiServiceFactory> xServiceFactory;
     try
     {
         xFactory = m_xContext->getServiceManager();
-        xServiceFactory.set(xFactory,uno::UNO_QUERY);
         xInspectorWindow.set(m_xContext->getValueByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DialogParentWindow"))) ,uno::UNO_QUERY);
         uno::Reference<sdbc::XConnection> xCon(m_xContext->getValueByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ActiveConnection"))) ,uno::UNO_QUERY);
         if ( !xCon.is() )
@@ -1627,7 +1625,7 @@ bool GeometryHandler::impl_dialogFilter_nothrow( ::rtl::OUString& _out_rSelected
     }
 
     if ( aErrorInfo.isValid() )
-        ::dbtools::showError( aErrorInfo, xInspectorWindow, xServiceFactory );
+        ::dbtools::showError( aErrorInfo, xInspectorWindow, m_xContext );
 
     return bSuccess;
 }

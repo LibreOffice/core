@@ -66,8 +66,8 @@ namespace dbaui
     //= BasicInteractionHandler
     //=========================================================================
     //-------------------------------------------------------------------------
-    BasicInteractionHandler::BasicInteractionHandler( const Reference< XMultiServiceFactory >& _rxORB, const bool i_bFallbackToGeneric )
-        :m_xORB( _rxORB )
+    BasicInteractionHandler::BasicInteractionHandler( const Reference< XComponentContext >& rxContext, const bool i_bFallbackToGeneric )
+        :m_xContext( rxContext )
         ,m_bFallbackToGeneric( i_bFallbackToGeneric )
     {
         OSL_ENSURE( !m_bFallbackToGeneric,
@@ -139,7 +139,7 @@ namespace dbaui
             xParamCallback = Reference< XInteractionSupplyParameters >(_rContinuations[nParamPos], UNO_QUERY);
         OSL_ENSURE(xParamCallback.is(), "BasicInteractionHandler::implHandle(ParametersRequest): can't set the parameters without an appropriate interaction handler!s");
 
-        OParameterDialog aDlg(NULL, _rParamRequest.Parameters, _rParamRequest.Connection, comphelper::getComponentContext(m_xORB));
+        OParameterDialog aDlg(NULL, _rParamRequest.Parameters, _rParamRequest.Connection, m_xContext);
         sal_Int16 nResult = aDlg.Execute();
         try
         {
@@ -270,7 +270,7 @@ namespace dbaui
                 Reference< XInteractionDocumentSave > xCallback(_rContinuations[nDocuPos], UNO_QUERY);
                 OSL_ENSURE(xCallback.is(), "BasicInteractionHandler::implHandle(DocumentSaveRequest): can't save document without an appropriate interaction handler!s");
 
-                OCollectionView aDlg(NULL,_rDocuRequest.Content,_rDocuRequest.Name,m_xORB);
+                OCollectionView aDlg(NULL, _rDocuRequest.Content, _rDocuRequest.Name, m_xContext);
                 sal_Int16 nResult = aDlg.Execute();
                 try
                 {
@@ -304,10 +304,10 @@ namespace dbaui
     //-------------------------------------------------------------------------
     bool BasicInteractionHandler::implHandleUnknown( const Reference< XInteractionRequest >& _rxRequest )
     {
-        if ( m_xORB.is() )
+        if ( m_xContext.is() )
         {
             Reference< XInteractionHandler2 > xFallbackHandler(
-                InteractionHandler::createWithParent(comphelper::getComponentContext(m_xORB), 0) );
+                InteractionHandler::createWithParent(m_xContext, 0) );
             xFallbackHandler->handle( _rxRequest );
             return true;
         }
@@ -355,12 +355,29 @@ namespace dbaui
     //==========================================================================
     //= SQLExceptionInteractionHandler
     //==========================================================================
-    IMPLEMENT_SERVICE_INFO1_STATIC( SQLExceptionInteractionHandler, "com.sun.star.comp.dbaccess.DatabaseInteractionHandler", "com.sun.star.sdb.DatabaseInteractionHandler" );
+    IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(SQLExceptionInteractionHandler, "com.sun.star.comp.dbaccess.DatabaseInteractionHandler")
+    IMPLEMENT_SERVICE_INFO_SUPPORTS(SQLExceptionInteractionHandler)
+    IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(SQLExceptionInteractionHandler, "com.sun.star.sdb.DatabaseInteractionHandler")
+
+    Reference< XInterface >
+        SAL_CALL SQLExceptionInteractionHandler::Create(const Reference< XMultiServiceFactory >& _rxORB)
+    {
+        return static_cast< XServiceInfo* >(new SQLExceptionInteractionHandler(comphelper::getComponentContext(_rxORB)));
+    }
 
     //==========================================================================
     //= LegacyInteractionHandler
     //==========================================================================
-    IMPLEMENT_SERVICE_INFO1_STATIC( LegacyInteractionHandler, "com.sun.star.comp.dbaccess.LegacyInteractionHandler", "com.sun.star.sdb.InteractionHandler" );
+    IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(LegacyInteractionHandler, "com.sun.star.comp.dbaccess.LegacyInteractionHandler")
+    IMPLEMENT_SERVICE_INFO_SUPPORTS(LegacyInteractionHandler)
+    IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(LegacyInteractionHandler, "com.sun.star.sdb.LegacyInteractionHandler")
+
+
+    Reference< XInterface >
+        SAL_CALL LegacyInteractionHandler::Create(const Reference< XMultiServiceFactory >& _rxORB)
+    {
+        return static_cast< XServiceInfo* >(new LegacyInteractionHandler(comphelper::getComponentContext(_rxORB)));
+    }
 
 //.........................................................................
 }   // namespace dbaui

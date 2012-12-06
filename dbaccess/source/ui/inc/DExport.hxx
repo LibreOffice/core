@@ -76,7 +76,7 @@ namespace dbaui
         ::boost::shared_ptr<IUpdateHelper>                                              m_pUpdateHelper;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >          m_xResultSet;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;   ///< a number formatter working with the connection's NumberFormatsSupplier
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xFactory;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>     m_xContext;
         ::com::sun::star::util::Date                                                    m_aNullDate;
 
         SvNumberFormatter*  m_pFormatter;
@@ -135,7 +135,7 @@ namespace dbaui
         ODatabaseExport(
             const SharedConnection& _rxConnection,
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
             const TColumnVector* rList,
             const OTypeInfoMap* _pInfoMap,
             SvStream& _rInputStream
@@ -146,7 +146,7 @@ namespace dbaui
             sal_Int32 nRows,
             const TPositions& _rColumnPositions,
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
             const TColumnVector* rList,
             const OTypeInfoMap* _pInfoMap,
             sal_Bool _bAutoIncrementEnabled,

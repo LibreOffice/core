@@ -86,11 +86,11 @@ DBG_NAME(OHTMLReader)
 // ==========================================================================
 OHTMLReader::OHTMLReader(SvStream& rIn,const SharedConnection& _rxConnection,
                         const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                         const TColumnVector* pList,
                         const OTypeInfoMap* _pInfoMap)
     :HTMLParser(rIn)
-    ,ODatabaseExport( _rxConnection, _rxNumberF, _rM, pList, _pInfoMap, rIn )
+    ,ODatabaseExport( _rxConnection, _rxNumberF, _rxContext, pList, _pInfoMap, rIn )
     ,m_nTableCount(0)
     ,m_nColumnWidth(87)
     ,m_bMetaOptions(sal_False)
@@ -107,12 +107,12 @@ OHTMLReader::OHTMLReader(SvStream& rIn,
                          sal_Int32 nRows,
                          const TPositions &_rColumnPositions,
                          const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-                         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
+                         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                          const TColumnVector* pList,
                          const OTypeInfoMap* _pInfoMap,
                          sal_Bool _bAutoIncrementEnabled)
     :HTMLParser(rIn)
-    ,ODatabaseExport( nRows, _rColumnPositions, _rxNumberF, _rM, pList, _pInfoMap, _bAutoIncrementEnabled, rIn )
+    ,ODatabaseExport( nRows, _rColumnPositions, _rxNumberF, _rxContext, pList, _pInfoMap, _bAutoIncrementEnabled, rIn )
     ,m_nTableCount(0)
     ,m_nColumnWidth(87)
     ,m_bMetaOptions(sal_False)

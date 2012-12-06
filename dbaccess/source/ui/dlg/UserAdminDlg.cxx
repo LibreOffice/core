@@ -30,6 +30,7 @@
 #include "UserAdminDlg.hxx"
 
 #include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <connectivity/dbmetadata.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <svl/eitem.hxx>
@@ -114,7 +115,7 @@ DBG_NAME(OUserAdminDlg)
         }
         catch(const SQLException&)
         {
-            ::dbaui::showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ), GetParent(), getORB() );
+            ::dbaui::showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ), GetParent(), ::comphelper::getComponentContext( getORB() ) );
             return RET_CANCEL;
         }
         catch(const Exception&)

@@ -473,7 +473,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
     }
 
     ::std::auto_ptr< OLinkedDocumentsAccess > pDocuments( new OLinkedDocumentsAccess(
-        getView(), this, getORB(), xDocContainer, xConnection, getDatabaseName()
+        getView(), this, comphelper::getComponentContext(getORB()), xDocContainer, xConnection, getDatabaseName()
     ) );
     return pDocuments;
 }
@@ -610,7 +610,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                     {
                         // the concrete query
                         Reference< XQueryDefinitionsSupplier > xSourceQuerySup(
-                            getDataSourceByName( sDataSourceName, getView(), getORB(), NULL ),
+                            getDataSourceByName( sDataSourceName, getView(), comphelper::getComponentContext(getORB()), NULL ),
                             UNO_QUERY_THROW );
                         Reference< XNameAccess > xQueries( xSourceQuerySup->getQueryDefinitions(), UNO_SET_THROW );
                         if ( xQueries->hasByName( sCommand ) )
@@ -657,7 +657,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                 {
                     OSaveAsDlg aAskForName( getView(),
                                             CommandType::QUERY,
-                                            getORB(),
+                                            comphelper::getComponentContext(getORB()),
                                             getConnection(),
                                             sTargetName,
                                             aNameChecker,

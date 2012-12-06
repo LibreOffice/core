@@ -33,6 +33,7 @@
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/BooleanComparisonMode.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdb/ErrorMessageDialog.hpp>
 #include <com/sun/star/sdb/ParametersRequest.hpp>
 #include <com/sun/star/sdb/RowSetVetoException.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
@@ -1479,27 +1480,16 @@ sal_Int32 getSearchColumnFlag( const Reference< XConnection>& _rxConn,sal_Int32 
 // -----------------------------------------------------------------------------
 void showError(const SQLExceptionInfo& _rInfo,
                const Reference< XWindow>& _xParent,
-               const Reference< XMultiServiceFactory >& _xFactory)
+               const Reference< XComponentContext >& _rxContext)
 {
     if (_rInfo.isValid())
     {
         try
         {
-            Sequence< Any > aArgs(2);
-            aArgs[0] <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQLException")), 0, _rInfo.get(), PropertyState_DIRECT_VALUE);
-            aArgs[1] <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow")), 0, makeAny(_xParent), PropertyState_DIRECT_VALUE);
-
-            static ::rtl::OUString s_sDialogServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.ErrorMessageDialog" ));
-            Reference< XExecutableDialog > xErrorDialog(
-                _xFactory->createInstanceWithArguments(s_sDialogServiceName, aArgs), UNO_QUERY);
-            if (xErrorDialog.is())
-                xErrorDialog->execute();
-            else
-            {
-                OSL_FAIL("dbtools::showError: no XExecutableDialog found!");
-            }
+            Reference< XExecutableDialog > xErrorDialog = ErrorMessageDialog::create( _rxContext, "", _xParent, _rInfo.get() );
+            xErrorDialog->execute();
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
             OSL_FAIL("showError: could not display the error message!");
         }

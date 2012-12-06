@@ -63,13 +63,13 @@ namespace dbaui
                 :public BasicInteractionHandler_Base
     {
         const OModuleClient m_aModuleClient;
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                            m_xORB;
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+                            m_xContext;
         const bool          m_bFallbackToGeneric;
 
     public:
         BasicInteractionHandler(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_rORB,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
             const bool i_bFallbackToGeneric
         );
 
@@ -131,9 +131,9 @@ namespace dbaui
     {
     public:
         SQLExceptionInteractionHandler(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_rORB
+                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext
             )
-            :BasicInteractionHandler( i_rORB, false )
+            :BasicInteractionHandler( rxContext, false )
         {
         }
 
@@ -161,9 +161,9 @@ namespace dbaui
     {
     public:
         LegacyInteractionHandler(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_rORB
+                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext
             )
-            :BasicInteractionHandler( i_rORB, true )
+            :BasicInteractionHandler( rxContext, true )
         {
         }
 

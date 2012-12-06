@@ -3527,7 +3527,7 @@ void SbaTableQueryBrowser::implAdministrate( SvTreeListEntry* _pApplyTo )
             if (pTopLevelSelected)
                 sInitialSelection = getDataSourceAcessor( pTopLevelSelected );
 
-            Reference< XDataSource > xDataSource( getDataSourceByName( sInitialSelection, getView(), getORB(), NULL ) );
+            Reference< XDataSource > xDataSource( getDataSourceByName( sInitialSelection, getView(), comphelper::getComponentContext(getORB()), NULL ) );
             Reference< XModel > xDocumentModel( getDataSourceOrModel( xDataSource ), UNO_QUERY );
 
             if ( xDocumentModel.is() )

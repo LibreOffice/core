@@ -44,7 +44,7 @@ class OTableGrantControl : public ::svt::EditBrowseBox
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xUsers;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xTables;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xORB;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>     m_xContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XAuthorizable>       m_xGrantUser;
     ::com::sun::star::uno::Sequence< ::rtl::OUString>                               m_aTableNames;
 
@@ -63,7 +63,7 @@ public:
     void setGrantUser(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XAuthorizable>& _xGrantUser);
 
     void setTablesSupplier(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier >& _xTablesSup);
-    void setORB(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _xORB);
+    void setComponentContext(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext);
 
     virtual void Init();
 

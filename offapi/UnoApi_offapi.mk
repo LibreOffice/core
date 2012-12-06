@@ -242,6 +242,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/sdb,\
 	DataAccessDescriptorFactory \
 	DatabaseContext \
 	DatabaseInteractionHandler \
+	ErrorMessageDialog \
 	InteractionHandler \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/sdb/application,\
@@ -982,7 +983,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/sdb,\
 	DocumentContainer \
 	DocumentDataSource \
 	DocumentDefinition \
-	ErrorMessageDialog \
 	Forms \
 	OfficeDatabaseDocument \
 	OrderColumn \

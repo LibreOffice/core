@@ -636,7 +636,7 @@ sal_Bool ORTFImportExport::Read()
     SvParserState eState = SVPAR_ERROR;
     if ( m_pStream )
     {
-        m_pReader = new ORTFReader((*m_pStream),m_xConnection,m_xFormatter,m_xFactory);
+        m_pReader = new ORTFReader((*m_pStream),m_xConnection,m_xFormatter,comphelper::getComponentContext(m_xFactory));
         ((ORTFReader*)m_pReader)->AddRef();
         if ( isCheckEnabled() )
             m_pReader->enableCheckOnly();
@@ -715,7 +715,7 @@ sal_Bool OHTMLImportExport::Read()
     SvParserState eState = SVPAR_ERROR;
     if ( m_pStream )
     {
-        m_pReader = new OHTMLReader((*m_pStream),m_xConnection,m_xFormatter,m_xFactory);
+        m_pReader = new OHTMLReader((*m_pStream),m_xConnection,m_xFormatter,comphelper::getComponentContext(m_xFactory));
         ((OHTMLReader*)m_pReader)->AddRef();
         if ( isCheckEnabled() )
             m_pReader->enableCheckOnly();

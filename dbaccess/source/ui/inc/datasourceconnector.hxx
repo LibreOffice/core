@@ -21,7 +21,7 @@
 #define _DBAUI_DATASOURCECONNECTOR_HXX_
 
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 
@@ -43,23 +43,23 @@ namespace dbaui
     {
     protected:
         Window*         m_pErrorMessageParent;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                        m_xORB;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+                        m_xContext;
         ::rtl::OUString m_sContextInformation;
 
     public:
         ODatasourceConnector(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
             Window* _pMessageParent
         );
         ODatasourceConnector(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
             Window* _pMessageParent,
             const ::rtl::OUString& _rContextInformation
         );
 
         /// returns <TRUE/> if the object is able to create data source connections
-        sal_Bool    isValid() const { return m_xORB.is(); }
+        sal_Bool    isValid() const { return m_xContext.is(); }
 
         /** creates a connection to the data source, displays the possible error to the user, or returns it
         */
