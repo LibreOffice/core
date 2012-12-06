@@ -41,7 +41,7 @@ class vector;
 
 //------------------------------------------------------------------------
 
-class SvxNumberPreviewImpl : public Window
+class SvxNumberPreview : public Window
 {
 private:
     String          aPrevStr;
@@ -56,8 +56,7 @@ protected:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 public:
-    SvxNumberPreviewImpl( Window* pParent, const ResId& rResId );
-    ~SvxNumberPreviewImpl();
+    SvxNumberPreview(Window* pParent, WinBits nStyle = WB_BORDER);
 
     void            NotifyChange( const String& rPrevStr, const Color* pColor = NULL );
 };
@@ -90,31 +89,31 @@ public:
 private:
     SvxNumberFormatTabPage( Window* pParent,
                             const SfxItemSet& rCoreAttrs );
-    FixedText               aFtCategory;
-    ListBox                 aLbCategory;
-    FixedText               aFtFormat;
-    ListBox                 aLbCurrency;
-    SvxFontListBox          aLbFormat;
-    FixedText               aFtLanguage;
-    SvxLanguageBox          aLbLanguage;
-    CheckBox                aCbSourceFormat;
-    SvxNumberPreviewImpl    aWndPreview;
-    FixedLine               aFlOptions;
-    FixedText               aFtDecimals;
-    NumericField            aEdDecimals;
-    CheckBox                aBtnNegRed;
-    FixedText               aFtLeadZeroes;
-    NumericField            aEdLeadZeroes;
-    CheckBox                aBtnThousand;
+    FixedText*              m_pFtCategory;
+    ListBox*                m_pLbCategory;
+    FixedText*              m_pFtFormat;
+    ListBox*                m_pLbCurrency;
+    SvxFontListBox*         m_pLbFormat;
+    FixedText*              m_pFtLanguage;
+    SvxLanguageBox*         m_pLbLanguage;
+    CheckBox*               m_pCbSourceFormat;
+    SvxNumberPreview*       m_pWndPreview;
+    FixedText*              m_pFtOptions;
+    FixedText*              m_pFtDecimals;
+    NumericField*           m_pEdDecimals;
+    CheckBox*               m_pBtnNegRed;
+    FixedText*              m_pFtLeadZeroes;
+    NumericField*           m_pEdLeadZeroes;
+    CheckBox*               m_pBtnThousand;
 
-    FixedText               aFtEdFormat;
-    Edit                    aEdFormat;
-    ImageButton             aIbAdd;
-    ImageButton             aIbInfo;
-    ImageButton             aIbRemove;
+    FixedText*              m_pFtEdFormat;
+    Edit*                   m_pEdFormat;
+    PushButton*             m_pIbAdd;
+    PushButton*             m_pIbInfo;
+    PushButton*             m_pIbRemove;
 
-    FixedText               aFtComment;
-    Edit                    aEdComment;
+    FixedText*              m_pFtComment;
+    Edit*                   m_pEdComment;
     Timer                   aResetWinTimer;
 
 
@@ -127,17 +126,10 @@ private:
     sal_Bool                bOneAreaFlag;
     short                   nFixedCategory;
 
-    long                    nCatHeight;
-
-    long                    nCurFormatY;
-    long                    nCurFormatHeight;
-    long                    nStdFormatY;
-    long                    nStdFormatHeight;
     String sAutomaticEntry;
 
     Window*                 pLastActivWindow;
 
-#ifdef _SVX_NUMFMT_CXX
     void    Init_Impl();
     void    FillCurrencyBox();
     void    FillFormatListBox_Impl( std::vector<String*>& rEntries );
@@ -155,12 +147,10 @@ private:
     DECL_LINK( LostFocusHdl_Impl, Edit* pEd );
     DECL_LINK( DoubleClickHdl_Impl, SvxFontListBox* pLb );
     DECL_LINK( SelFormatHdl_Impl, void * );
-    DECL_LINK( ClickHdl_Impl, ImageButton* pIB );
+    DECL_LINK( ClickHdl_Impl, PushButton* pIB );
     DECL_LINK( EditHdl_Impl, Edit* pEdFormat );
     DECL_LINK( OptHdl_Impl, void * );
     DECL_LINK(TimeHdl_Impl, void *);
-
-#endif
 };
 
 #endif

@@ -18,6 +18,7 @@
  */
 
 #include "svx/fontlb.hxx"
+#include <vcl/builder.hxx>
 #include <vcl/svapp.hxx>
 #include "svtools/treelistentry.hxx"
 #include "svtools/viewdataentry.hxx"
@@ -87,13 +88,27 @@ void SvLBoxFontString::InitViewData( SvTreeListBox* pView, SvTreeListEntry* pEnt
 
 // ============================================================================
 
-SvxFontListBox::SvxFontListBox( Window* pParent, const ResId& rResId ) :
-    SvTabListBox( pParent, rResId ),
-    maStdFont( GetFont() ),
-    mbUseFont( false )
+SvxFontListBox::SvxFontListBox(Window* pParent, const ResId& rResId)
+    : SvTabListBox(pParent, rResId)
+    , maStdFont(GetFont())
+    , mbUseFont(false)
 {
-    maStdFont.SetTransparent( sal_True );
+    maStdFont.SetTransparent(sal_True);
     maEntryFont = maStdFont;
+}
+
+SvxFontListBox::SvxFontListBox(Window* pParent, WinBits nStyle)
+    : SvTabListBox(pParent, nStyle)
+    , maStdFont(GetFont())
+    , mbUseFont(false)
+{
+    maStdFont.SetTransparent(sal_True);
+    maEntryFont = maStdFont;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxFontListBox(Window *pParent, VclBuilder::stringmap &)
+{
+    return new SvxFontListBox(pParent, 0);
 }
 
 void SvxFontListBox::InsertFontEntry( const String& rString, const Font& rFont, const Color* pColor )

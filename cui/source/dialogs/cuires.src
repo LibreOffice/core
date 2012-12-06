@@ -49,6 +49,11 @@ String RID_SVXSTR_COL
     Text [ en-US ] = "Insert Columns" ;
 };
 
+String RID_SVXSTR_AUTO_ENTRY
+{
+    Text [ en-US ] = "Automatic";
+};
+
 #define MASKCOLOR  MaskColor = \
     Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 
