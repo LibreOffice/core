@@ -267,21 +267,6 @@ Module gid_Module_Optional_Extensions_MySQLConnector
 End
 #endif
 
-/* ** oooblogger ** */
-
-#ifdef WITH_EXTENSION_OOOBLOGGER
-Module gid_Module_Optional_Extensions_OOoBlogger
-    PackageInfo = "packinfo_extensions.txt";
-    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_OOOBLOGGER);
-    ParentID = gid_Module_Optional_Extensions;
-    Files = (
-        gid_File_Oxt_OOoBlogger );
-    Minimal = NO;
-    Default = YES;
-    Styles = ( );
-End
-#endif
-
 /* ** Sun Template Pack ** */
 
 #ifdef WITH_EXTENSION_SUN_TEMPLATE_PACK

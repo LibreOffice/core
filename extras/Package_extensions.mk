@@ -26,9 +26,6 @@ endif
 ifneq ($(NUMBERTEXT_EXTENSION_PACK),)
 $(eval $(call gb_Package_add_file,extras_extensions,bin/numbertext.oxt,$(NUMBERTEXT_EXTENSION_PACK)))
 endif
-ifneq ($(OOOBLOGGER_EXTENSION_PACK),)
-$(eval $(call gb_Package_add_file,extras_extensions,bin/oooblogger.oxt,$(OOOBLOGGER_EXTENSION_PACK)))
-endif
 ifneq ($(SUNTEMPLATES_DE_PACK),)
 $(eval $(call gb_Package_add_file,extras_extensions,bin/Sun-ODF-Template-Pack-de,$(SUNTEMPLATES_DE_PACK)))
 endif

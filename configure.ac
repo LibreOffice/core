@@ -618,11 +618,6 @@ AC_ARG_ENABLE(ext-numbertext,
         [Enable the Numbertext extension.])
 )
 
-AC_ARG_ENABLE(ext-oooblogger,
-    AS_HELP_STRING([--enable-ext-oooblogger],
-        [Enable the OOo Blogger extension.])
-)
-
 AC_ARG_ENABLE(ext-presenter-minimizer,
     AS_HELP_STRING([--disable-ext-presenter-minimizer],
         [Disable the Presentation Minimizer extension.])
@@ -10794,22 +10789,6 @@ if test "x$enable_ext_languagetool" = "xyes" -a "x$enable_extension_integration"
 else
     AC_MSG_RESULT([no])
 fi
-
-dnl ===================================================================
-dnl Test whether to include oooblogger extension
-dnl ===================================================================
-AC_MSG_CHECKING([for oooblogger extension integration])
-OOOBLOGGER_EXTENSION_PACK=
-if test "x$enable_ext_oooblogger" = "xyes" -a "x$enable_extension_integration" != "xno"; then
-    SCPDEFS="$SCPDEFS -DWITH_EXTENSION_OOOBLOGGER"
-    OOOBLOGGER_EXTENSION_PACK="b7b2d0e04e142f26dd96119c80757d1f-oooblogger_0.1.oxt"
-    WITH_EXTRA_EXTENSIONS=YES
-    AC_MSG_RESULT([yes])
-else
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(OOOBLOGGER_EXTENSION_PACK)
-###############################################################################
 
 dnl ===================================================================
 dnl Test whether to include Sun Professional Template Pack
