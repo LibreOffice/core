@@ -19,13 +19,11 @@
 #ifndef __com_sun_star_frame_StatusbarController_idl__
 #define __com_sun_star_frame_StatusbarController_idl__
 
-#include <com/sun/star/lang/XInitialization.idl>
-#include <com/sun/star/util/XUpdatable.idl>
-#include <com/sun/star/frame/XStatusListener.idl>
 #include <com/sun/star/frame/XStatusbarController.idl>
 
+module com {  module sun {  module star {  module frame {
 
- module com {  module sun {  module star {  module frame {
+interface XStatusbarController;
 
 /** is an abstract service for a component which offers a more complex user
     interface to users within a status bar.
@@ -45,73 +43,9 @@
 
     @since OOo 2.0
  */
-
-service StatusbarController
+service StatusbarController : XStatusbarController
 {
-    /** with this interface a component can receive events if a feature has
-        changed.
-
-        <p>
-        The status bar controller implementation should register itself as a
-        listener when its <member scope="com::sun::star::util">XUpdatable</member>
-        interface has been called.
-        </p>
-     */
-    interface com::sun::star::frame::XStatusListener;
-
-    /** used to initialize a component with required arguments.
-
-        <b>A status bar controller needs at least three additional arguments
-        provided as <type scope="com::sun::star::beans">PropertyValue</type>:
-        <ul>
-            <li><b>Frame</b><br>a
-                   <type scope="com::sun::star::frame">XFrame</type> instance
-                   to which the status bar controller belongs.</li>
-            <li><b>CommandURL</b><br>a string which specifies the command
-                   associated with the statusbar controller. The command is
-                   used to identify the status bar controller
-                   implementation.</li>
-            <li><b>ServiceManager</b><br>a <type scope="com::sun::star::lang">
-                   XMultiServiceFactory</type> instance which can be used to
-                   create additional UNO services.</li>
-            <li><b>Parent</b><br>a <type scope="com::sun::star::awt">Window</type>
-                   instance which represents the parent window (status bar
-                   window).</li>
-            <li><b>Identifier</b><br>an integer value which is the unique id
-                   used by the status bar implementation to identify a status
-                   bar entry. This value is currently only used by internal
-                   OpenOffice.org status bar controller implementations.</li>
-        </ul>
-    */
-    interface com::sun::star::lang::XInitialization;
-
-    /** used to notify an implementation that it needs to add its listener or
-        remove and add them again.
-
-        <p>
-        A status bar controller instance is ready for use after this call has
-        been made the first time. The status bar implementation guarantees that
-        the controller's item window has been added to the status bar and its
-        reference is held by it.
-        </p>
-    */
-    interface com::sun::star::util::XUpdatable;
-
-    /** used to notify changed features and requests for additional user
-        interface items.
-
-        <p>
-        Mostly used by a status bar implementation to forward information to
-        and request services from a status bar controller component. This
-        interface must be usable after
-        <member scope="com::sun::star::lang">XInitialitation::initialize</member>
-        has been called.  The behavior of the interface is undefined if the
-        controller component hasn't been initialized.
-        </p>
-     */
-    interface com::sun::star::frame::XStatusbarController;
 };
-
 
 }; }; }; };
 
