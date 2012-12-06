@@ -575,10 +575,10 @@ en-US = "< &Back"
 en-US = "Cancel"
 
 [OOO_CONTROL_255]
-en-US = "[ProductName] will be installed with the default components, including spelling dictionaries in all available languages."
+en-US = "[ProductName] will be installed with the default components, including user interface languages and spelling dictionaries matching your current language settings."
 
 [OOO_CONTROL_256]
-en-US = "Choose which program features you want installed and where they will be installed. For example here you can select additional user interface languages or deselect unwanted dictionaries."
+en-US = "Choose which program features you want installed and where they will be installed. For example here you can select additional user interface languages and spelling dictionaries."
 
 [OOO_CONTROL_257]
 en-US = "Choose the setup type that best suits your needs."
