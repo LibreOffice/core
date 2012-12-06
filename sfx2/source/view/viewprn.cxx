@@ -829,7 +829,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 // execute PrinterSetupDialog
                 PrinterSetupDialog* pPrintSetupDlg = new PrinterSetupDialog( GetWindow() );
 
-                if (pImp->m_bHasPrintOptions)
+                if (pImp->m_bHasPrintOptions && HasPrintOptionsPage())
                 {
                     // additional controls for dialog
                     pExecutor = new SfxDialogExecutor_Impl( this, pPrintSetupDlg );
@@ -917,6 +917,11 @@ SfxTabPage* SfxViewShell::CreatePrintOptionsPage
 )
 {
     return 0;
+}
+
+bool SfxViewShell::HasPrintOptionsPage() const
+{
+    return false;
 }
 
 JobSetup SfxViewShell::GetJobSetup() const

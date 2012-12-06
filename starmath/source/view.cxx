@@ -1381,6 +1381,10 @@ sal_uInt16 SmViewShell::SetPrinter(SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlag
     return 0;
 }
 
+bool SmViewShell::HasPrintOptionsPage() const
+{
+    return true;
+}
 
 SfxTabPage* SmViewShell::CreatePrintOptionsPage(Window *pParent,
                                                 const SfxItemSet &rOptions)

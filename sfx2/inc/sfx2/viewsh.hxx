@@ -214,7 +214,8 @@ public:
 
     // Printing Interface
     virtual SfxPrinter*         GetPrinter( sal_Bool bCreate = sal_False );
-    virtual sal_uInt16              SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=sal_False );
+    virtual sal_uInt16          SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=sal_False );
+    virtual bool                HasPrintOptionsPage() const;
     virtual SfxTabPage*         CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions );
     virtual JobSetup            GetJobSetup() const;
     Printer*                    GetActivePrinter() const;

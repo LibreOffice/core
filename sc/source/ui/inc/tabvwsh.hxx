@@ -353,6 +353,7 @@ public:
     virtual sal_uInt16          SetPrinter( SfxPrinter* pNewPrinter,
                                           sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsApi=false );
 
+    virtual bool            HasPrintOptionsPage() const;
     virtual SfxTabPage*     CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions );
 
     void            ConnectObject( SdrOle2Obj* pObj );

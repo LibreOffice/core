@@ -266,6 +266,7 @@ protected:
     bool        Insert( SfxMedium& rMedium );
     bool        InsertFrom(SfxMedium &rMedium);
 
+    virtual bool HasPrintOptionsPage() const;
     virtual SfxTabPage *CreatePrintOptionsPage(Window           *pParent,
                                                const SfxItemSet &rOptions);
     virtual void Deactivate(sal_Bool IsMDIActivate);

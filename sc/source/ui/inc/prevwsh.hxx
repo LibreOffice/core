@@ -110,7 +110,8 @@ public:
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     virtual SfxPrinter*     GetPrinter( sal_Bool bCreate = false );
-    virtual sal_uInt16          SetPrinter( SfxPrinter* pNewPrinter, sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
+    virtual sal_uInt16      SetPrinter( SfxPrinter* pNewPrinter, sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
+    virtual bool            HasPrintOptionsPage() const;
     virtual SfxTabPage*     CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions );
 
     void    AddAccessibilityObject( SfxListener& rObject );

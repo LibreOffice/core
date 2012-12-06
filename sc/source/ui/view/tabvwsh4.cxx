@@ -1093,6 +1093,11 @@ sal_uInt16 ScTabViewShell::SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiff
     return GetViewData()->GetDocShell()->SetPrinter( pNewPrinter, nDiffFlags );
 }
 
+bool ScTabViewShell::HasPrintOptionsPage() const
+{
+    return true;
+}
+
 SfxTabPage* ScTabViewShell::CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions )
 {
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();

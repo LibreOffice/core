@@ -626,18 +626,6 @@ sal_uInt16 ViewShellBase::SetPrinter (
 
 
 
-SfxTabPage*  ViewShellBase::CreatePrintOptionsPage(
-    ::Window *pParent,
-    const SfxItemSet &rOptions)
-{
-    (void)pParent;
-    (void)rOptions;
-    return NULL;
-}
-
-
-
-
 void ViewShellBase::UIActivating( SfxInPlaceClient* pClient )
 {
     mpImpl->ShowViewTabBar(false);

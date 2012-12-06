@@ -1759,6 +1759,11 @@ sal_uInt16  SwPagePreView::SetPrinter( SfxPrinter *pNew, sal_uInt16 nDiffFlags, 
     return 0;
 }
 
+bool SwPagePreView::HasPrintOptionsPage() const
+{
+    return true;
+}
+
 SfxTabPage*  SwPagePreView::CreatePrintOptionsPage( Window *pParent,
                                                 const SfxItemSet &rOptions )
 {

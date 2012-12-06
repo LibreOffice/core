@@ -139,11 +139,6 @@ public:
         SfxPrinter* pNewPrinter,
         sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsApi=false);
 
-    /// Forwarded to the print manager.
-    virtual SfxTabPage* CreatePrintOptionsPage (
-        ::Window *pParent,
-        const SfxItemSet &rOptions);
-
     /// Forward methods to main sub shell.
     virtual void WriteUserDataSequence (
         ::com::sun::star::uno::Sequence <

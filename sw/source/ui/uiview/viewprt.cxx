@@ -141,6 +141,11 @@ sal_uInt16 SwView::SetPrinter(SfxPrinter* pNew, sal_uInt16 nDiffFlags, bool  )
     return 0;
 }
 
+bool SwView::HasPrintOptionsPage() const
+{
+    return true;
+}
+
 /*--------------------------------------------------------------------
     Beschreibung:   TabPage fuer applikationsspezifische Druckoptionen
  --------------------------------------------------------------------*/

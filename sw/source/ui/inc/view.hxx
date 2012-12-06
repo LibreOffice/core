@@ -329,13 +329,14 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SW_DLLPRIVATE void          SpellEnd( SwConversionArgs *pConvArgs = 0 );
 
     SW_DLLPRIVATE void          HyphStart( SvxSpellArea eSpell );
-    SW_DLLPRIVATE sal_Bool          CheckSpecialCntnt();
+    SW_DLLPRIVATE sal_Bool      CheckSpecialCntnt();
     SW_DLLPRIVATE void          SpellKontext(sal_Bool bOn = sal_True)
                             { bCenterCrsr = bOn; bAllwaysShowSel = bOn; }
 
     // methods for printing
     SW_DLLPRIVATE virtual   SfxPrinter*     GetPrinter( sal_Bool bCreate = sal_False );
-            SfxTabPage*     CreatePrintOptionsPage( Window* pParent,
+    SW_DLLPRIVATE virtual bool  HasPrintOptionsPage() const;
+    SW_DLLPRIVATE virtual SfxTabPage*       CreatePrintOptionsPage( Window* pParent,
                                                     const SfxItemSet& rSet);
     // for readonly switching
     SW_DLLPRIVATE virtual void  Notify( SfxBroadcaster& rBC, const SfxHint& rHint );

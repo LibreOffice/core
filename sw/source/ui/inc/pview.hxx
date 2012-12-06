@@ -211,7 +211,8 @@ class SW_DLLPUBLIC SwPagePreView: public SfxViewShell
 
 
     SW_DLLPRIVATE virtual SfxPrinter*     GetPrinter( sal_Bool bCreate = sal_False );
-    SW_DLLPRIVATE virtual sal_uInt16          SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
+    SW_DLLPRIVATE virtual sal_uInt16      SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
+    SW_DLLPRIVATE virtual bool            HasPrintOptionsPage() const;
     SW_DLLPRIVATE virtual SfxTabPage*     CreatePrintOptionsPage( Window *pParent,
                                                 const SfxItemSet &rOptions );
 
