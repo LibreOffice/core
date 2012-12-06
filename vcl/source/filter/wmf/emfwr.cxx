@@ -130,6 +130,9 @@
 #define WIN_SRCPAINT                        0x00EE0086L
 #define WIN_SRCAND                          0x008800C6L
 #define WIN_SRCINVERT                       0x00660046L
+#define WIN_EMR_COMMENT_EMFSPOOL            0x00000000L
+#define WIN_EMR_COMMENT_EMFPLUS             0x2B464D45L
+#define WIN_EMR_COMMENT_PUBLIC              0x43494447L
 
 #define HANDLE_INVALID                      0xffffffff
 #define MAXHANDLES                          65000
@@ -154,9 +157,193 @@
 
 #define MM_ANISOTROPIC                      8
 
+typedef enum
+{
+  EmfPlusHeader                     = 0x4001,
+  EmfPlusEndOfFile                  = 0x4002,
+  EmfPlusComment                    = 0x4003,
+  EmfPlusGetDC                      = 0x4004,
+  EmfPlusMultiFormatStart           = 0x4005,
+  EmfPlusMultiFormatSection         = 0x4006,
+  EmfPlusMultiFormatEnd             = 0x4007,
+  EmfPlusObject                     = 0x4008,
+  EmfPlusClear                      = 0x4009,
+  EmfPlusFillRects                  = 0x400A,
+  EmfPlusDrawRects                  = 0x400B,
+  EmfPlusFillPolygon                = 0x400C,
+  EmfPlusDrawLines                  = 0x400D,
+  EmfPlusFillEllipse                = 0x400E,
+  EmfPlusDrawEllipse                = 0x400F,
+  EmfPlusFillPie                    = 0x4010,
+  EmfPlusDrawPie                    = 0x4011,
+  EmfPlusDrawArc                    = 0x4012,
+  EmfPlusFillRegion                 = 0x4013,
+  EmfPlusFillPath                   = 0x4014,
+  EmfPlusDrawPath                   = 0x4015,
+  EmfPlusFillClosedCurve            = 0x4016,
+  EmfPlusDrawClosedCurve            = 0x4017,
+  EmfPlusDrawCurve                  = 0x4018,
+  EmfPlusDrawBeziers                = 0x4019,
+  EmfPlusDrawImage                  = 0x401A,
+  EmfPlusDrawImagePoints            = 0x401B,
+  EmfPlusDrawstring                 = 0x401C,
+  EmfPlusSetRenderingOrigin         = 0x401D,
+  EmfPlusSetAntiAliasMode           = 0x401E,
+  EmfPlusSetTextRenderingHint       = 0x401F,
+  EmfPlusSetTextContrast            = 0x4020,
+  EmfPlusSetInterpolationMode       = 0x4021,
+  EmfPlusSetPixelOffsetMode         = 0x4022,
+  EmfPlusSetCompositingMode         = 0x4023,
+  EmfPlusSetCompositingQuality      = 0x4024,
+  EmfPlusSave                       = 0x4025,
+  EmfPlusRestore                    = 0x4026,
+  EmfPlusBeginContainer             = 0x4027,
+  EmfPlusBeginContainerNoParams     = 0x4028,
+  EmfPlusEndContainer               = 0x4029,
+  EmfPlusSetWorldTransform          = 0x402A,
+  EmfPlusResetWorldTransform        = 0x402B,
+  EmfPlusMultiplyWorldTransform     = 0x402C,
+  EmfPlusTranslateWorldTransform    = 0x402D,
+  EmfPlusScaleWorldTransform        = 0x402E,
+  EmfPlusRotateWorldTransform       = 0x402F,
+  EmfPlusSetPageTransform           = 0x4030,
+  EmfPlusResetClip                  = 0x4031,
+  EmfPlusSetClipRect                = 0x4032,
+  EmfPlusSetClipPath                = 0x4033,
+  EmfPlusSetClipRegion              = 0x4034,
+  EmfPlusOffsetClip                 = 0x4035,
+  EmfPlusDrawDriverstring           = 0x4036,
+  EmfPlusStrokeFillPath             = 0x4037,
+  EmfPlusSerializableObject         = 0x4038,
+  EmfPlusSetTSGraphics              = 0x4039,
+  EmfPlusSetTSClip                  = 0x403A
+} EmfPlusRecordType;
+
+
 // -------------
 // - EMFWriter -
 // -------------
+
+void EMFWriter::ImplBeginCommentRecord( sal_Int32 nCommentType )
+{
+    ImplBeginRecord( WIN_EMR_GDICOMMENT );
+    m_rStm.SeekRel( 4 );
+    m_rStm<< (sal_Int32) nCommentType;
+}
+
+void EMFWriter::ImplEndCommentRecord()
+{
+    if( mbRecordOpen )
+    {
+        sal_Int32 nActPos = m_rStm.Tell();
+        m_rStm.Seek( mnRecordPos + 8 );
+        m_rStm << (sal_uInt32)( nActPos - mnRecordPos - 0xc );
+        m_rStm.Seek( nActPos );
+    }
+    ImplEndRecord();
+}
+
+void EMFWriter::ImplBeginPlusRecord( sal_uInt16 nType, sal_uInt16 nFlags )
+{
+    DBG_ASSERT( !mbRecordPlusOpen, "Another EMF+ record is already opened!" );
+
+    if( !mbRecordPlusOpen )
+    {
+        mbRecordPlusOpen = sal_True;
+        mnRecordPlusPos = m_rStm.Tell();
+
+        m_rStm << (sal_uInt16) nType << (sal_uInt16) nFlags;
+        m_rStm.SeekRel( 8 );
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void EMFWriter::ImplEndPlusRecord()
+{
+    DBG_ASSERT( mbRecordPlusOpen, "EMF+ Record was not opened!" );
+
+    if( mbRecordPlusOpen )
+    {
+        sal_Int32 nActPos = m_rStm.Tell();
+        sal_Int32 nSize = nActPos - mnRecordPlusPos;
+        m_rStm.Seek( mnRecordPlusPos + 4 );
+        m_rStm << (sal_uInt32)( nSize )         // Size
+               << (sal_uInt32) ( nSize - 0xc ); // Data Size
+        m_rStm.Seek( nActPos );
+        mbRecordPlusOpen = sal_False;
+    }
+}
+
+void EMFWriter::ImplPlusRecord( sal_uInt16 nType, sal_uInt16 nFlags )
+{
+    ImplBeginPlusRecord( nType, nFlags );
+    ImplEndPlusRecord();
+}
+
+void EMFWriter::WriteEMFPlusHeader( const Size &rMtfSizePix, const Size &rMtfSizeLog )
+{
+    ImplBeginCommentRecord( WIN_EMR_COMMENT_EMFPLUS );
+    m_rStm<< (sal_Int16) EmfPlusHeader;
+    m_rStm<< (sal_Int16) 0x01  // Flags - Dual Mode // TODO: Check this
+          << (sal_Int32) 0x1C  // Size
+          << (sal_Int32) 0x10  // Data Size
+          << (sal_Int32) 0xdbc01002 // (lower 12bits) 1-> v1 2-> v1.1 // TODO: Check this
+          << (sal_Int32) 0x01 // Video display
+          << (sal_Int32) ( rMtfSizePix.Width()*25 / (rMtfSizeLog.Width()/100) )    // DPI X
+          << (sal_Int32) ( rMtfSizePix.Height()*25 / (rMtfSizeLog.Height()/100) ); // DPI Y
+    ImplEndCommentRecord();
+
+    // Write more properties
+    ImplBeginCommentRecord( WIN_EMR_COMMENT_EMFPLUS );
+    ImplPlusRecord( EmfPlusSetPixelOffsetMode, 0x0 );
+    ImplPlusRecord( EmfPlusSetAntiAliasMode, 0x09 );      // TODO: Check actual values for AntiAlias
+    ImplPlusRecord( EmfPlusSetCompositingQuality, 0x0100 ); // Default Quality
+    ImplPlusRecord( EmfPlusSetPageTransform, 1 );
+    ImplPlusRecord( EmfPlusSetInterpolationMode, 0x00 );  // Default
+    ImplPlusRecord( EmfPlusGetDC, 0x00 );
+    ImplEndCommentRecord();
+}
+
+void EMFWriter::ImplWritePlusEOF()
+{
+    ImplBeginCommentRecord( WIN_EMR_COMMENT_EMFPLUS );
+    ImplPlusRecord( EmfPlusEndOfFile, 0x0 );
+    ImplEndCommentRecord();
+}
+
+void EMFWriter::ImplWritePlusColor( const Color& rColor, const sal_uInt32& nTrans )
+{
+    sal_uInt32 nAlpha = ((100-nTrans)*0xFF)/100;
+    sal_uInt32 nCol = rColor.GetBlue();
+
+    nCol |= ( (sal_uInt32) rColor.GetGreen() ) << 8;
+    nCol |= ( (sal_uInt32) rColor.GetRed() ) << 16;
+    nCol |= ( nAlpha << 24 );
+    m_rStm << nCol;
+}
+
+void EMFWriter::ImplWritePlusPoint( const Point& rPoint )
+{
+    // Convert to pixels
+    const Point aPoint(maVDev.LogicToPixel( rPoint, maDestMapMode ));
+    m_rStm << (sal_uInt16) aPoint.X() << (sal_uInt16) aPoint.Y();
+}
+
+void EMFWriter::ImplWritePlusFillPolygonRecord( const Polygon& rPoly, const sal_uInt32& nTrans )
+{
+    ImplBeginCommentRecord( WIN_EMR_COMMENT_EMFPLUS );
+    if( rPoly.GetSize() )
+    {
+        ImplBeginPlusRecord( EmfPlusFillPolygon, 0xC000 ); // Sets the color as well
+        ImplWritePlusColor( maVDev.GetFillColor(), nTrans );
+        m_rStm << (sal_uInt32) rPoly.GetSize();
+        for( sal_uInt16 i = 0; i < rPoly.GetSize(); i++ )
+            ImplWritePlusPoint( rPoly[ i ] );
+        ImplEndPlusRecord();
+    }
+    ImplEndCommentRecord();
+}
 
 sal_Bool EMFWriter::WriteEMF( const GDIMetaFile& rMtf, FilterConfigItem* pFilterConfigItem )
 {
@@ -165,8 +352,11 @@ sal_Bool EMFWriter::WriteEMF( const GDIMetaFile& rMtf, FilterConfigItem* pFilter
     mpHandlesUsed = new sal_Bool[ MAXHANDLES ];
     memset( mpHandlesUsed, 0, MAXHANDLES * sizeof( sal_Bool ) );
     mnHorTextAlign = mnHandleCount = mnLastPercent = mnRecordPos = mnRecordCount = 0;
+    mnRecordPlusPos = 0;
     mnLineHandle = mnFillHandle = mnTextHandle = HANDLE_INVALID;
     mbRecordOpen = sal_False;
+    mbRecordPlusOpen = false;
+
 
     maVDev.EnableOutput( sal_False );
     maVDev.SetMapMode( rMtf.GetPrefMapMode() );
@@ -181,6 +371,9 @@ sal_Bool EMFWriter::WriteEMF( const GDIMetaFile& rMtf, FilterConfigItem* pFilter
     // seek over header
     // use [MS-EMF 2.2.11] HeaderExtension2 Object, otherwise resulting EMF cannot be converted with GetWinMetaFileBits()
     m_rStm.SeekRel( 108 );
+
+    // Write EMF+ Header
+    WriteEMFPlusHeader( aMtfSizePix, aMtfSizeLog );
 
     // write initial values
 
@@ -213,6 +406,8 @@ sal_Bool EMFWriter::WriteEMF( const GDIMetaFile& rMtf, FilterConfigItem* pFilter
 
     // write emf data
     ImplWrite( rMtf );
+
+    ImplWritePlusEOF();
 
     ImplBeginRecord( WIN_EMR_EOF );
     m_rStm<< (sal_uInt32)0      // nPalEntries
@@ -1107,9 +1302,16 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case META_TRANSPARENT_ACTION:
             {
+                const PolyPolygon& rPolyPoly = ( (MetaTransparentAction*) pAction )->GetPolyPolygon();
+                if( rPolyPoly.Count() )
+                    ImplWritePlusFillPolygonRecord( rPolyPoly[0], ( (MetaTransparentAction*)pAction)->GetTransparence() );
                 ImplCheckFillAttr();
                 ImplCheckLineAttr();
-                ImplWritePolyPolygonRecord( ( (MetaTransparentAction*) pAction )->GetPolyPolygon() );
+                ImplWritePolyPolygonRecord( rPolyPoly );
+
+                ImplBeginCommentRecord( WIN_EMR_COMMENT_EMFPLUS );
+                ImplPlusRecord( EmfPlusGetDC, 0x00 );
+                ImplEndCommentRecord();
             }
             break;
 
