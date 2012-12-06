@@ -28,7 +28,6 @@
 #endif
 
 #ifdef WIN32
-  #undef MSC // Unset a legacy define, as otherwise ws2bth.h breaks
   #include <winsock2.h>
   #include <ws2bth.h>
 #endif

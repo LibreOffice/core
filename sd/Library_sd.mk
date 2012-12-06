@@ -534,6 +534,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 
 $(eval $(call gb_Library_add_defs,sd,\
     -DENABLE_SDREMOTE_BLUETOOTH \
+	$(if $(filter MSC,$(COM)),-UMSC) \
 ))
 endif
 
