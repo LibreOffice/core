@@ -19,64 +19,17 @@
 
 
 #include <sal/config.h>
-#include <stdio.h>
 
-#include <osl/mutex.hxx>
-#include <osl/thread.h>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/security/XSerialNumberAdapter.hpp>
 
+#include "serialnumberadapter.hxx"
 #include "xmlelementwrapper_xmlsecimpl.hxx"
 #include "xmldocumentwrapper_xmlsecimpl.hxx"
-#include "xmlsecurity/biginteger.hxx"
 
-using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::registry;
-
-namespace
-{
-class SerialNumberAdapterImpl : public WeakImplHelper1<
-        ::com::sun::star::security::XSerialNumberAdapter >
-{
-    virtual OUString SAL_CALL toString( const Sequence< sal_Int8 >& rSerialNumber )
-        throw (RuntimeException)
-    {
-        return bigIntegerToNumericString(rSerialNumber);
-    }
-    virtual Sequence< sal_Int8 > SAL_CALL toSequence( const OUString& rSerialNumber )
-        throw (RuntimeException)
-    {
-        return numericStringToBigInteger(rSerialNumber);
-    }
-};
-
-OUString SerialNumberAdapterImpl_getImplementationName()
-    throw (RuntimeException)
-{
-    return OUString( "com.sun.star.security.SerialNumberAdapter");
-}
-
-Sequence< OUString > SerialNumberAdapterImpl_getSupportedServiceNames()
-    throw (RuntimeException)
-{
-    Sequence < OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( "com.sun.star.security.SerialNumberAdapter"  );
-    return aRet;
-}
-
-Reference< XInterface > SerialNumberAdapterImpl_createInstance(
-    const Reference< XComponentContext > &) throw( Exception )
-{
-    return Reference< XInterface >( *new SerialNumberAdapterImpl() );
-}
-
-}
 
 extern "C"
 {
@@ -107,12 +60,12 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL xsec_xmlsec_component_getFactory( const sal_
                 OUString::createFromAscii( pImplName ),
                 XMLDocumentWrapper_XmlSecImpl_createInstance, XMLDocumentWrapper_XmlSecImpl_getSupportedServiceNames() ) );
         }
-        else if( SerialNumberAdapterImpl_getImplementationName().equals( OUString::createFromAscii( pImplName ) ) )
+        else if( xml_security::serial_number_adapter::implementationName().equals( OUString::createFromAscii( pImplName ) ) )
         {
             xFactory = ::cppu::createSingleComponentFactory(
-              SerialNumberAdapterImpl_createInstance,
+              xml_security::serial_number_adapter::create,
               OUString::createFromAscii( pImplName ),
-              SerialNumberAdapterImpl_getSupportedServiceNames() );
+              xml_security::serial_number_adapter::serviceNames() );
         }
     }
 
