@@ -27,7 +27,6 @@
 using namespace ::oox::core;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
 
 namespace oox { namespace drawingml {
 
@@ -197,7 +196,7 @@ void DiagramQStylesFragmentHandler::onEndElement( )
 }
 
 ColorFragmentHandler::ColorFragmentHandler( ::oox::core::XmlFilterBase& rFilter,
-                                            const ::rtl::OUString& rFragmentPath,
+                                            const OUString& rFragmentPath,
                                             DiagramColorMap& rColorsMap ) :
     FragmentHandler2(rFilter,rFragmentPath),
     maColorName(),

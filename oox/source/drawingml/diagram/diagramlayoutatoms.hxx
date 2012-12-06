@@ -64,7 +64,7 @@ struct ConditionAttr
     sal_Int32 mnFunc;
     sal_Int32 mnArg;
     sal_Int32 mnOp;
-    ::rtl::OUString msVal;
+    OUString msVal;
 };
 
 struct LayoutAtomVisitor;
@@ -82,9 +82,9 @@ public:
      */
     virtual void accept( LayoutAtomVisitor& ) = 0;
 
-    void setName( const ::rtl::OUString& sName )
+    void setName( const OUString& sName )
         { msName = sName; }
-    const ::rtl::OUString& getName() const
+    const OUString& getName() const
         { return msName; }
 
     virtual void addChild( const LayoutAtomPtr & pNode )
@@ -96,7 +96,7 @@ public:
     void dump(int level = 0);
 protected:
     std::vector< LayoutAtomPtr > mpChildNodes;
-    ::rtl::OUString              msName;
+    OUString                     msName;
 };
 
 class ConstraintAtom
@@ -114,7 +114,7 @@ public:
 
     void setFor( sal_Int32 nToken )
         { mnFor = nToken; }
-    void setForName( const ::rtl::OUString & sName )
+    void setForName( const OUString & sName )
         { msForName = sName; }
     void setPointType( sal_Int32 nToken )
         { mnPointType = nToken; }
@@ -122,7 +122,7 @@ public:
         { mnType = nToken; }
     void setRefFor( sal_Int32 nToken )
         { mnRefFor = nToken; }
-    void setRefForName( const ::rtl::OUString & sName )
+    void setRefForName( const OUString & sName )
         { msRefForName = sName; }
     void setRefType( sal_Int32 nToken )
         { mnRefType = nToken; }
@@ -136,11 +136,11 @@ public:
         { mnOperator = nToken; }
 private:
     sal_Int32 mnFor;
-    ::rtl::OUString msForName;
+    OUString msForName;
     sal_Int32 mnPointType;
     sal_Int32 mnType;
     sal_Int32 mnRefFor;
-    ::rtl::OUString msRefForName;
+    OUString msRefForName;
     sal_Int32 mnRefType;
     sal_Int32 mnRefPointType;
     double mfFactor;
@@ -168,7 +168,7 @@ public:
         { maMap[nType]=nVal; }
     void layoutShape( const ShapePtr& rShape,
                       const Diagram& rDgm,
-                      const rtl::OUString& rName ) const;
+                      const OUString& rName ) const;
 private:
     sal_Int32 mnType;
     ParamMap  maMap;
@@ -256,9 +256,9 @@ public:
     virtual void accept( LayoutAtomVisitor& );
     VarMap & variables()
         { return mVariables; }
-    void setMoveWith( const ::rtl::OUString & sName )
+    void setMoveWith( const OUString & sName )
         { msMoveWith = sName; }
-    void setStyleLabel( const ::rtl::OUString & sLabel )
+    void setStyleLabel( const OUString & sLabel )
         { msStyleLabel = sLabel; }
     void setChildOrder( sal_Int32 nOrder )
         { mnChildOrder = nOrder; }
@@ -273,8 +273,8 @@ public:
 
 private:
     VarMap                       mVariables;
-    ::rtl::OUString              msMoveWith;
-    ::rtl::OUString              msStyleLabel;
+    OUString                     msMoveWith;
+    OUString                     msStyleLabel;
     ShapePtr                     mpShape;
     sal_Int32                    mnChildOrder;
 };

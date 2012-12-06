@@ -155,7 +155,7 @@ void AlgAtom::accept( LayoutAtomVisitor& rVisitor )
 
 void AlgAtom::layoutShape( const ShapePtr& rShape,
                            const Diagram&  /*rDgm*/,
-                           const rtl::OUString& rName ) const
+                           const OUString& rName ) const
 {
     switch(mnType)
     {
@@ -516,7 +516,7 @@ class ShapeLayoutingVisitor : public LayoutAtomVisitor
 {
     ShapePtr mpParentShape;
     const Diagram& mrDgm;
-    rtl::OUString maName;
+    OUString maName;
 
     virtual void visit(ConstraintAtom& rAtom);
     virtual void visit(AlgAtom& rAtom);
@@ -528,7 +528,7 @@ class ShapeLayoutingVisitor : public LayoutAtomVisitor
 public:
     ShapeLayoutingVisitor(const ShapePtr& rParentShape,
                           const Diagram& rDgm,
-                          const rtl::OUString& rName) :
+                          const OUString& rName) :
         mpParentShape(rParentShape),
         mrDgm(rDgm),
         maName(rName)

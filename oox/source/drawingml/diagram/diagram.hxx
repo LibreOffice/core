@@ -52,12 +52,12 @@ struct Connection
     void dump();
 
     sal_Int32 mnType;
-    ::rtl::OUString msModelId;
-    ::rtl::OUString msSourceId;
-    ::rtl::OUString msDestId;
-    ::rtl::OUString msParTransId;
-    ::rtl::OUString msPresId;
-    ::rtl::OUString msSibTransId;
+    OUString msModelId;
+    OUString msSourceId;
+    OUString msDestId;
+    OUString msParTransId;
+    OUString msPresId;
+    OUString msSibTransId;
     sal_Int32 mnSourceOrder;
     sal_Int32 mnDestOrder;
     
@@ -103,18 +103,18 @@ struct Point
 
     ShapePtr      mpShape;
 
-    rtl::OUString msCnxId;
-    rtl::OUString msModelId;
-    rtl::OUString msColorTransformCategoryId;
-    rtl::OUString msColorTransformTypeId;
-    rtl::OUString msLayoutCategoryId;
-    rtl::OUString msLayoutTypeId;
-    rtl::OUString msPlaceholderText;
-    rtl::OUString msPresentationAssociationId;
-    rtl::OUString msPresentationLayoutName;
-    rtl::OUString msPresentationLayoutStyleLabel;
-    rtl::OUString msQuickStyleCategoryId;
-    rtl::OUString msQuickStyleTypeId; 
+    OUString msCnxId;
+    OUString msModelId;
+    OUString msColorTransformCategoryId;
+    OUString msColorTransformTypeId;
+    OUString msLayoutCategoryId;
+    OUString msLayoutTypeId;
+    OUString msPlaceholderText;
+    OUString msPresentationAssociationId;
+    OUString msPresentationLayoutName;
+    OUString msPresentationLayoutStyleLabel;
+    OUString msQuickStyleCategoryId;
+    OUString msQuickStyleTypeId;
 
     sal_Int32     mnType;
     sal_Int32     mnMaxChildren;
@@ -157,13 +157,13 @@ typedef boost::shared_ptr< LayoutNode > LayoutNodePtr;
 class DiagramData
 {
 public:
-    ::std::vector<rtl::OUString>  maExtDrawings;
-    typedef std::map< rtl::OUString, dgm::Point* > PointNameMap;
-    typedef std::map< rtl::OUString,
+    ::std::vector<OUString>  maExtDrawings;
+    typedef std::map< OUString, dgm::Point* > PointNameMap;
+    typedef std::map< OUString,
                       std::vector<dgm::Point*> >   PointsNameMap;
-    typedef std::map< rtl::OUString, const dgm::Connection* > ConnectionNameMap;
-    typedef std::map< rtl::OUString,
-                      std::vector<std::pair<rtl::OUString,sal_Int32> > > StringMap;
+    typedef std::map< OUString, const dgm::Connection* > ConnectionNameMap;
+    typedef std::map< OUString,
+                      std::vector<std::pair<OUString,sal_Int32> > > StringMap;
 
     DiagramData();
     FillPropertiesPtr & getFillProperties()
@@ -180,7 +180,7 @@ public:
         { return maPointNameMap; }
     PointsNameMap & getPointsPresNameMap()
         { return maPointsPresNameMap; }
-    ::std::vector<rtl::OUString> &getExtDrawings()
+    ::std::vector<OUString> &getExtDrawings()
         { return maExtDrawings; }
     void dump();
 private:
@@ -202,17 +202,17 @@ typedef boost::shared_ptr< DiagramData > DiagramDataPtr;
 class DiagramLayout
 {
 public:
-    void setDefStyle( const ::rtl::OUString & sDefStyle )
+    void setDefStyle( const OUString & sDefStyle )
         { msDefStyle = sDefStyle; }
-    void setMinVer( const ::rtl::OUString & sMinVer )
+    void setMinVer( const OUString & sMinVer )
         { msMinVer = sMinVer; }
-    void setUniqueId( const ::rtl::OUString & sUniqueId )
+    void setUniqueId( const OUString & sUniqueId )
         { msUniqueId = sUniqueId; }
-    const ::rtl::OUString & getUniqueId()
+    const OUString & getUniqueId()
         { return msUniqueId; }
-    void setTitle( const ::rtl::OUString & sTitle )
+    void setTitle( const OUString & sTitle )
         { msTitle = sTitle; }
-    void setDesc( const ::rtl::OUString & sDesc )
+    void setDesc( const OUString & sDesc )
         { msDesc = sDesc; }
 
     LayoutNodePtr & getNode()
@@ -229,12 +229,12 @@ public:
         { return mpStyleData; }
 
 private:
-    ::rtl::OUString msDefStyle;
-    ::rtl::OUString msMinVer;
-    ::rtl::OUString msUniqueId;
+    OUString msDefStyle;
+    OUString msMinVer;
+    OUString msUniqueId;
 
-    ::rtl::OUString msTitle;
-    ::rtl::OUString msDesc;
+    OUString msTitle;
+    OUString msDesc;
     LayoutNodePtr  mpNode;
     DiagramDataPtr mpSampData;
     DiagramDataPtr mpStyleData;
@@ -255,7 +255,7 @@ struct DiagramStyle
     ShapeStyleRef maTextStyle;
 };
 
-typedef std::map<rtl::OUString,DiagramStyle> DiagramQStyleMap;
+typedef std::map<OUString,DiagramStyle> DiagramQStyleMap;
 
 struct DiagramColor
 {
@@ -267,7 +267,7 @@ struct DiagramColor
     oox::drawingml::Color maTextEffectColor;
 };
 
-typedef std::map<rtl::OUString,DiagramColor> DiagramColorMap;
+typedef std::map<OUString,DiagramColor> DiagramColorMap;
 
 ///////////////////////
 
@@ -297,7 +297,7 @@ private:
     DiagramLayoutPtr                           mpLayout;
     DiagramQStyleMap                           maStyles;
     DiagramColorMap                            maColors;
-    std::map< ::rtl::OUString, ShapePtr >      maShapeMap;
+    std::map< OUString, ShapePtr >             maShapeMap;
 };
 
 

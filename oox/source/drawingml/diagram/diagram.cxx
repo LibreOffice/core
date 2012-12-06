@@ -40,7 +40,6 @@
 #include <iostream>
 #include <fstream>
 
-using rtl::OUString;
 using namespace ::com::sun::star;
 
 namespace oox { namespace drawingml {
@@ -99,9 +98,9 @@ void Diagram::setLayout( const DiagramLayoutPtr & pLayout)
 }
 
 #if OSL_DEBUG_LEVEL > 1
-rtl::OString normalizeDotName( const rtl::OUString& rStr )
+OString normalizeDotName( const OUString& rStr )
 {
-    rtl::OUStringBuffer aBuf;
+    OUStringBuffer aBuf;
     aBuf.append((sal_Unicode)'N');
 
     const sal_Int32 nLen(rStr.getLength());
@@ -113,12 +112,12 @@ rtl::OString normalizeDotName( const rtl::OUString& rStr )
             aBuf.append((sal_Unicode)aChar);
     }
 
-    return rtl::OUStringToOString(aBuf.makeStringAndClear(),
+    return OUStringToOString(aBuf.makeStringAndClear(),
                                   RTL_TEXTENCODING_UTF8);
 }
 #endif
 
-static sal_Int32 calcDepth( const rtl::OUString& rNodeName,
+static sal_Int32 calcDepth( const OUString& rNodeName,
                             const dgm::Connections& rCnx )
 {
     // find length of longest path in 'isChild' graph, ending with rNodeName
@@ -166,12 +165,12 @@ void Diagram::build(  )
 
         if( !aCurrPoint->msPresentationLayoutName.isEmpty() )
             output << "label=\""
-                   << rtl::OUStringToOString(
+                   << OUStringToOString(
                        aCurrPoint->msPresentationLayoutName,
                        RTL_TEXTENCODING_UTF8).getStr() << "\", ";
         else
             output << "label=\""
-                   << rtl::OUStringToOString(
+                   << OUStringToOString(
                        aCurrPoint->msModelId,
                        RTL_TEXTENCODING_UTF8).getStr() << "\", ";
 
@@ -200,7 +199,7 @@ void Diagram::build(  )
                    << "textNode" << nCount
                    << " ["
                    << "label=\""
-                   << rtl::OUStringToOString(
+                   << OUStringToOString(
                        aCurrPoint->mpShape->getTextBody()->getParagraphs().front()->getRuns().front()->getText(),
                        RTL_TEXTENCODING_UTF8).getStr()
                    << "\"" << "];" << std::endl;
@@ -249,7 +248,7 @@ void Diagram::build(  )
                        << " [style=dotted,"
                        << ((aCurrCxn->mnType == XML_presOf) ? " color=red, " : ((aCurrCxn->mnType == XML_presParOf) ? " color=green, " : " "))
                        << "label=\""
-                       << rtl::OUStringToOString(aCurrCxn->msModelId,
+                       << OUStringToOString(aCurrCxn->msModelId,
                                                  RTL_TEXTENCODING_UTF8 ).getStr()
                        << "\"];" << std::endl;
             }
@@ -262,7 +261,7 @@ void Diagram::build(  )
                        << " ["
                        << ((aCurrCxn->mnType == XML_presOf) ? " color=red, " : ((aCurrCxn->mnType == XML_presParOf) ? " color=green, " : " "))
                        << "label=\""
-                       << rtl::OUStringToOString(aCurrCxn->msModelId,
+                       << OUStringToOString(aCurrCxn->msModelId,
                                                  RTL_TEXTENCODING_UTF8 ).getStr()
                        << "\"];" << std::endl;
             }
@@ -274,7 +273,7 @@ void Diagram::build(  )
                    << " -> "
                    << normalizeDotName(aCurrCxn->msDestId).getStr()
                    << " [label=\""
-                   << rtl::OUStringToOString(aCurrCxn->msModelId,
+                   << OUStringToOString(aCurrCxn->msModelId,
                                              RTL_TEXTENCODING_UTF8 ).getStr()
                    << ((aCurrCxn->mnType == XML_presOf) ? "\", color=red]" : ((aCurrCxn->mnType == XML_presParOf) ? "\", color=green]" : "\"]"))
                    << ";" << std::endl;
@@ -356,10 +355,10 @@ void importFragment( core::XmlFilterBase& rFilter,
 
 void loadDiagram( ShapePtr& pShape,
                   core::XmlFilterBase& rFilter,
-                  const ::rtl::OUString& rDataModelPath,
-                  const ::rtl::OUString& rLayoutPath,
-                  const ::rtl::OUString& rQStylePath,
-                  const ::rtl::OUString& rColorStylePath )
+                  const OUString& rDataModelPath,
+                  const OUString& rLayoutPath,
+                  const OUString& rQStylePath,
+                  const OUString& rColorStylePath )
 {
     DiagramPtr pDiagram( new Diagram() );
 
