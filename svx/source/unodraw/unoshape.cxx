@@ -1486,8 +1486,7 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const ::rtl::OUStr
         // we did not find such item in one of the pools, so we check
         // the property lists that are loaded for the model for items
         // that support such.
-        String aStrName;
-        SvxUnogetInternalNameForItem( (sal_Int16)nWID, rName, aStrName );
+        OUString aStrName = SvxUnogetInternalNameForItem((sal_Int16)nWID, rName);
 
         switch( nWID )
         {
@@ -1611,10 +1610,9 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const ::rtl::OUStr
 
 sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName, SfxItemSet& rSet )
 {
-    String aName;
-    SvxUnogetInternalNameForItem( (sal_Int16)nWID, rName, aName );
+    OUString aName = SvxUnogetInternalNameForItem((sal_Int16)nWID, rName);
 
-    if( aName.Len() == 0 )
+    if (aName.isEmpty())
     {
         switch( nWID )
         {

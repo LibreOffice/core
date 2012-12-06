@@ -188,13 +188,12 @@ String NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uIn
 {
     sal_Bool bForceNew = sal_False;
 
-    String aUniqueName;
-    SvxUnogetInternalNameForItem( nWhich, pCheckItem->GetName(), aUniqueName );
+    OUString aUniqueName = SvxUnogetInternalNameForItem(nWhich, pCheckItem->GetName());
 
     // 2. if we have a name check if there is already an item with the
     // same name in the documents pool with a different line end or start
 
-    if( aUniqueName.Len() && pPool1 )
+    if (!aUniqueName.isEmpty() && pPool1)
     {
         const sal_uInt32 nCount = pPool1->GetItemCount2( nWhich );
 
@@ -220,7 +219,7 @@ String NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uIn
 
     // if we have no name yet, find existing item with same conent or
     // create a unique name
-    if( aUniqueName.Len() == 0 )
+    if (aUniqueName.isEmpty())
     {
         sal_Int32 nUserIndex = 1;
         const ResId aRes(SVX_RES(nPrefixResId));
@@ -276,7 +275,7 @@ String NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uIn
             }
         }
 
-        if( (aUniqueName.Len() == 0) && pPool1 )
+        if (aUniqueName.isEmpty() && pPool1)
         {
             const sal_uInt32 nCount = pPool1->GetItemCount2( nWhich );
             const NameOrIndex *pItem;
@@ -989,8 +988,7 @@ bool XLineDashItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMem
             aLineDash.DashLen = rXD.GetDashLen();
             aLineDash.Distance = rXD.GetDistance();
 
-            rtl::OUString aApiName;
-            SvxUnogetApiNameForItem( Which(), GetName(), aApiName );
+            OUString aApiName = SvxUnogetApiNameForItem(Which(), GetName());
             aPropSeq[0].Name    = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ));
             aPropSeq[0].Value   = uno::makeAny( aApiName );
             aPropSeq[1].Name    = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LineDash" ));
@@ -1001,8 +999,7 @@ bool XLineDashItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMem
 
         case MID_NAME:
         {
-            rtl::OUString aApiName;
-            SvxUnogetApiNameForItem( Which(), GetName(), aApiName );
+            OUString aApiName = SvxUnogetApiNameForItem(Which(), GetName());
             rVal <<= aApiName;
             break;
         }
@@ -1696,8 +1693,7 @@ bool XLineStartItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMe
     nMemberId &= ~CONVERT_TWIPS;
     if( nMemberId == MID_NAME )
     {
-        rtl::OUString aApiName;
-        SvxUnogetApiNameForItem( Which(), GetName(), aApiName );
+        OUString aApiName = SvxUnogetApiNameForItem(Which(), GetName());
         rVal <<= aApiName;
     }
     else
@@ -2344,8 +2340,7 @@ bool XLineEndItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemb
     nMemberId &= ~CONVERT_TWIPS;
     if( nMemberId == MID_NAME )
     {
-        rtl::OUString aApiName;
-        SvxUnogetApiNameForItem( Which(), GetName(), aApiName );
+        OUString aApiName = SvxUnogetApiNameForItem(Which(), GetName());
         rVal <<= aApiName;
     }
     else
@@ -3370,8 +3365,7 @@ bool XFillGradientItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 
             aGradient2.EndIntensity = aXGradient.GetEndIntens();
             aGradient2.StepCount = aXGradient.GetSteps();
 
-            rtl::OUString aApiName;
-            SvxUnogetApiNameForItem( Which(), GetName(), aApiName );
+            OUString aApiName = SvxUnogetApiNameForItem(Which(), GetName());
             aPropSeq[0].Name    = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ));
             aPropSeq[0].Value   = uno::makeAny( aApiName );
             aPropSeq[1].Name    = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillGradient" ));
@@ -3402,8 +3396,7 @@ bool XFillGradientItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 
 
         case MID_NAME:
         {
-            rtl::OUString aApiName;
-            SvxUnogetApiNameForItem( Which(), GetName(), aApiName );
+            OUString aApiName = SvxUnogetApiNameForItem(Which(), GetName());
             rVal <<= aApiName;
             break;
         }
@@ -3960,8 +3953,7 @@ bool XFillHatchItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMe
             aUnoHatch.Distance = aHatch.GetDistance();
             aUnoHatch.Angle = aHatch.GetAngle();
 
-            rtl::OUString aApiName;
-            SvxUnogetApiNameForItem( Which(), GetName(), aApiName );
+            OUString aApiName = SvxUnogetApiNameForItem(Which(), GetName());
             aPropSeq[0].Name    = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ));
             aPropSeq[0].Value   = uno::makeAny( aApiName );
             aPropSeq[1].Name    = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillHatch" ));
@@ -3984,8 +3976,7 @@ bool XFillHatchItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMe
 
         case MID_NAME:
         {
-            rtl::OUString aApiName;
-            SvxUnogetApiNameForItem( Which(), GetName(), aApiName );
+            OUString aApiName = SvxUnogetApiNameForItem(Which(), GetName());
             rVal <<= aApiName;
             break;
         }

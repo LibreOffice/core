@@ -158,9 +158,8 @@ void SvxLineStyleToolBoxControl::Update( const SfxPoolItem* pState )
             {
                 if( pDashItem )
                 {
-                    String aString;
-                    SvxUnogetInternalNameForItem(
-                        XATTR_LINEDASH, pDashItem->GetName(), aString );
+                    OUString aString = SvxUnogetInternalNameForItem(
+                        XATTR_LINEDASH, pDashItem->GetName());
                     pBox->SelectEntry( aString );
                 }
                 else

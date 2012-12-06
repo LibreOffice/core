@@ -181,8 +181,7 @@ void SAL_CALL SvxUnoMarkerTable::insertByName( const OUString& aApiName, const u
     if( hasByName( aApiName ) )
         throw container::ElementExistException();
 
-    String aName;
-    SvxUnogetInternalNameForItem( XATTR_LINEEND, aApiName, aName );
+    OUString aName = SvxUnogetInternalNameForItem(XATTR_LINEEND, aApiName);
 
     ImplInsertByName( aName, aElement );
 }
@@ -200,8 +199,7 @@ void SAL_CALL SvxUnoMarkerTable::removeByName( const OUString& aApiName )
         return;
     }
 
-    String Name;
-    SvxUnogetInternalNameForItem( XATTR_LINEEND, aApiName, Name );
+    OUString Name = SvxUnogetInternalNameForItem(XATTR_LINEEND, aApiName);
 
     ItemPoolVector::iterator aIter = maItemSetVector.begin();
     const ItemPoolVector::iterator aEnd = maItemSetVector.end();
@@ -231,8 +229,7 @@ void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const 
 {
     SolarMutexGuard aGuard;
 
-    String aName;
-    SvxUnogetInternalNameForItem( XATTR_LINEEND, aApiName, aName );
+    OUString aName = SvxUnogetInternalNameForItem(XATTR_LINEEND, aApiName);
 
     ItemPoolVector::iterator aIter = maItemSetVector.begin();
     const ItemPoolVector::iterator aEnd = maItemSetVector.end();
@@ -320,20 +317,18 @@ uno::Any SAL_CALL SvxUnoMarkerTable::getByName( const OUString& aApiName )
 {
     SolarMutexGuard aGuard;
 
-    String aName;
-    SvxUnogetInternalNameForItem( XATTR_LINEEND, aApiName, aName );
+    OUString aName = SvxUnogetInternalNameForItem(XATTR_LINEEND, aApiName);
 
     uno::Any aAny;
 
-    if( mpModelPool && aName.Len() != 0 )
+    if (mpModelPool && !aName.isEmpty())
     {
         do
         {
-            const String aSearchName( aName );
-            if( getByNameFromPool( aSearchName, mpModelPool, XATTR_LINESTART, aAny ) )
+            if (getByNameFromPool(aName, mpModelPool, XATTR_LINESTART, aAny))
                 break;
 
-            if( getByNameFromPool( aSearchName, mpModelPool, XATTR_LINEEND, aAny ) )
+            if (getByNameFromPool(aName, mpModelPool, XATTR_LINEEND, aAny))
                 break;
 
             throw container::NoSuchElementException();
@@ -347,19 +342,15 @@ uno::Any SAL_CALL SvxUnoMarkerTable::getByName( const OUString& aApiName )
 static void createNamesForPool( SfxItemPool* pPool, sal_uInt16 nWhich, std::set< OUString, comphelper::UStringLess >& rNameSet )
 {
     const sal_uInt32 nSuroCount = pPool->GetItemCount2( nWhich );
-    sal_uInt32 nSurrogate;
 
-    NameOrIndex* pItem;
-    OUString aName;
-
-    for( nSurrogate = 0; nSurrogate < nSuroCount; nSurrogate++ )
+    for(sal_uInt32 nSurrogate = 0; nSurrogate < nSuroCount; ++nSurrogate)
     {
-        pItem = (NameOrIndex*)pPool->GetItem2( nWhich, nSurrogate );
+        NameOrIndex* pItem = (NameOrIndex*)pPool->GetItem2( nWhich, nSurrogate );
 
         if( pItem == NULL || pItem->GetName().Len() == 0 )
             continue;
 
-        SvxUnogetApiNameForItem( XATTR_LINEEND, pItem->GetName(), aName );
+        OUString aName = SvxUnogetApiNameForItem(XATTR_LINEEND, pItem->GetName());
         rNameSet.insert( aName );
     }
 }
@@ -403,7 +394,7 @@ sal_Bool SAL_CALL SvxUnoMarkerTable::hasByName( const OUString& aName )
 
     NameOrIndex *pItem;
 
-    SvxUnogetInternalNameForItem( XATTR_LINESTART, aName, aSearchName );
+    aSearchName = SvxUnogetInternalNameForItem(XATTR_LINESTART, aName);
     sal_uInt32 nStartCount = mpModelPool ? mpModelPool->GetItemCount2( XATTR_LINESTART ) : 0;
     sal_uInt32 nSurrogate;
     for( nSurrogate = 0; nSurrogate < nStartCount; nSurrogate++ )
@@ -413,7 +404,7 @@ sal_Bool SAL_CALL SvxUnoMarkerTable::hasByName( const OUString& aName )
             return sal_True;
     }
 
-    SvxUnogetInternalNameForItem( XATTR_LINEEND, aName, aSearchName );
+    aSearchName = SvxUnogetInternalNameForItem(XATTR_LINEEND, aName);
     sal_uInt32 nEndCount = mpModelPool ? mpModelPool->GetItemCount2( XATTR_LINEEND ) : 0;
     for( nSurrogate = 0; nSurrogate < nEndCount; nSurrogate++ )
     {

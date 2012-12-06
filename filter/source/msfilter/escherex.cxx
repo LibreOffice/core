@@ -729,10 +729,9 @@ sal_Bool EscherPropertyContainer::GetLineArrow( const sal_Bool bLineStart,
                 aAny, rXPropSet, sLineName, sal_False ) )
             {
                 String          aArrowStartName = *(::rtl::OUString*)aAny.getValue();
-                rtl::OUString   aApiName;
                 sal_Int16       nWhich = bLineStart ? XATTR_LINESTART : XATTR_LINEEND;
 
-                SvxUnogetApiNameForItem( nWhich, aArrowStartName, aApiName );
+                OUString aApiName = SvxUnogetApiNameForItem(nWhich, aArrowStartName);
                 if ( !aApiName.isEmpty() )
                 {
 

@@ -1327,7 +1327,7 @@ bool SvxUnoConvertResourceString( sal_uInt16* pSourceResIds, sal_uInt16* pDestRe
 /** if the given name is a predefined name for the current language it is replaced by
     the corresponding api name.
 */
-void SvxUnogetApiNameForItem( const sal_Int16 nWhich, const String& rInternalName, rtl::OUString& rApiName ) throw()
+OUString SvxUnogetApiNameForItem(const sal_Int16 nWhich, const OUString& rInternalName) throw()
 {
     String aNew = rInternalName;
 
@@ -1335,8 +1335,7 @@ void SvxUnogetApiNameForItem( const sal_Int16 nWhich, const String& rInternalNam
     {
         if( SvxUnoConvertResourceString( (sal_uInt16*)SvxUnoColorNameResId, (sal_uInt16*)SvxUnoColorNameDefResId, sizeof( SvxUnoColorNameResId ) / sizeof( sal_uInt16 ), aNew ) )
         {
-            rApiName = aNew;
-            return;
+            return aNew;
         }
     }
     else
@@ -1349,20 +1348,19 @@ void SvxUnogetApiNameForItem( const sal_Int16 nWhich, const String& rInternalNam
         {
             if(SvxUnoConvertResourceString( nIntResIds, nApiResIds, nCount, aNew ) )
             {
-                rApiName = aNew;
-                return;
+                return aNew;
             }
         }
     }
 
     // just use previous name, if nothing else was found.
-    rApiName = rInternalName;
+    return rInternalName;
 }
 
 /** if the given name is a predefined api name it is replaced by the predefined name
     for the current language.
 */
-void SvxUnogetInternalNameForItem( const sal_Int16 nWhich, const rtl::OUString& rApiName, String& rInternalName ) throw()
+OUString SvxUnogetInternalNameForItem(const sal_Int16 nWhich, const rtl::OUString& rApiName) throw()
 {
     String aNew = rApiName;
 
@@ -1370,8 +1368,7 @@ void SvxUnogetInternalNameForItem( const sal_Int16 nWhich, const rtl::OUString& 
     {
         if( SvxUnoConvertResourceString( (sal_uInt16*)SvxUnoColorNameDefResId, (sal_uInt16*)SvxUnoColorNameResId, sizeof( SvxUnoColorNameResId ) / sizeof( sal_uInt16 ), aNew ) )
         {
-            rInternalName = aNew;
-            return;
+            return aNew;
         }
     }
     else
@@ -1384,14 +1381,13 @@ void SvxUnogetInternalNameForItem( const sal_Int16 nWhich, const rtl::OUString& 
         {
             if(SvxUnoConvertResourceString( nApiResIds, nIntResIds, nCount, aNew ) )
             {
-                rInternalName = aNew;
-                return;
+                return aNew;
             }
         }
     }
 
     // just use previous name, if nothing else was found.
-    rInternalName = rApiName;
+    return rApiName;
 }
 
 ///////////////////////////////////////////////////////////////////////

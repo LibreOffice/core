@@ -617,7 +617,7 @@ bool XFillBitmapItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nM
 
     if( nMemberId == MID_NAME )
     {
-         SvxUnogetApiNameForItem( Which(), GetName(), aApiName );
+         aApiName = SvxUnogetApiNameForItem(Which(), GetName());
     }
     else if( nMemberId == 0  )
     {

@@ -52,8 +52,6 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 
 
-void SvxUnogetInternalNameForItem( const sal_Int16 nWhich, const rtl::OUString& rApiName, String& rInternalName ) throw();
-
 namespace accessibility {
 
 
@@ -334,9 +332,9 @@ void DescriptionGenerator::AddString (const OUString& sPropertyName,
             if (nWhichId >= 0)
             {
                 SolarMutexGuard aGuard;
-                String sLocalizedValue;
-                SvxUnogetInternalNameForItem (sal::static_int_cast<sal_Int16>(nWhichId),
-                                              sValue, sLocalizedValue);
+                OUString sLocalizedValue =
+                    SvxUnogetInternalNameForItem(sal::static_int_cast<sal_Int16>(nWhichId),
+                                              sValue);
                 msDescription.append (sLocalizedValue);
             }
             else

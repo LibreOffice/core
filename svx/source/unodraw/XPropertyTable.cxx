@@ -121,8 +121,7 @@ void SAL_CALL SvxUnoXPropertyTable::insertByName( const  OUString& aName, const 
     if( hasByName( aName ) )
         throw container::ElementExistException();
 
-    String aInternalName;
-    SvxUnogetInternalNameForItem( mnWhich, aName, aInternalName );
+    OUString aInternalName = SvxUnogetInternalNameForItem(mnWhich, aName);
 
     XPropertyEntry* pNewEntry = getEntry( aInternalName, aElement );
     if( NULL == pNewEntry )
@@ -137,8 +136,7 @@ void SAL_CALL SvxUnoXPropertyTable::removeByName( const  OUString& Name )
 {
     SolarMutexGuard aGuard;
 
-    String aInternalName;
-    SvxUnogetInternalNameForItem( mnWhich, Name, aInternalName );
+    OUString aInternalName = SvxUnogetInternalNameForItem(mnWhich, Name);
 
     const long nCount = getCount();
     long i;
@@ -146,7 +144,7 @@ void SAL_CALL SvxUnoXPropertyTable::removeByName( const  OUString& Name )
     for( i = 0; i < nCount; i++ )
     {
         pEntry = get( i );
-        if( pEntry && pEntry->GetName() == aInternalName )
+        if (pEntry && aInternalName.equals(pEntry->GetName()))
         {
             if( mpList )
                 delete mpList->Remove( i );
@@ -163,8 +161,7 @@ void SAL_CALL SvxUnoXPropertyTable::replaceByName( const  OUString& aName, const
 {
     SolarMutexGuard aGuard;
 
-    String aInternalName;
-    SvxUnogetInternalNameForItem( mnWhich, aName, aInternalName );
+    OUString aInternalName = SvxUnogetInternalNameForItem(mnWhich, aName);
 
     const long nCount = getCount();
     long i;
@@ -172,7 +169,7 @@ void SAL_CALL SvxUnoXPropertyTable::replaceByName( const  OUString& aName, const
     for( i = 0; i < nCount; i++ )
     {
         pEntry = get( i );
-        if( pEntry && pEntry->GetName() == aInternalName )
+        if (pEntry && aInternalName.equals(pEntry->GetName()))
         {
             XPropertyEntry* pNewEntry = getEntry( aInternalName, aElement );
             if( NULL == pNewEntry )
@@ -193,8 +190,7 @@ uno::Any SAL_CALL SvxUnoXPropertyTable::getByName( const  OUString& aName )
 {
     SolarMutexGuard aGuard;
 
-    String aInternalName;
-    SvxUnogetInternalNameForItem( mnWhich, aName, aInternalName );
+    OUString aInternalName = SvxUnogetInternalNameForItem(mnWhich, aName);
 
     const long nCount = getCount();
     long i;
@@ -203,7 +199,7 @@ uno::Any SAL_CALL SvxUnoXPropertyTable::getByName( const  OUString& aName )
     {
         pEntry = get( i );
 
-        if( pEntry && pEntry->GetName() == aInternalName )
+        if (pEntry && aInternalName.equals(pEntry->GetName()))
             return getAny( pEntry );
     }
 
@@ -224,11 +220,8 @@ uno::Sequence<  OUString > SAL_CALL SvxUnoXPropertyTable::getElementNames()
     {
         pEntry = get( i );
 
-        if( pEntry )
-        {
-            SvxUnogetApiNameForItem( mnWhich, pEntry->GetName(), *pNames );
-            pNames++;
-        }
+        if (pEntry)
+            *pNames++ = SvxUnogetApiNameForItem(mnWhich, pEntry->GetName());
     }
 
     return aNames;
@@ -239,8 +232,7 @@ sal_Bool SAL_CALL SvxUnoXPropertyTable::hasByName( const  OUString& aName )
 {
     SolarMutexGuard aGuard;
 
-    String aInternalName;
-    SvxUnogetInternalNameForItem( mnWhich, aName, aInternalName );
+    OUString aInternalName = SvxUnogetInternalNameForItem(mnWhich, aName);
 
     const long nCount = mpList?mpList->Count():0;
     long i;
@@ -248,7 +240,7 @@ sal_Bool SAL_CALL SvxUnoXPropertyTable::hasByName( const  OUString& aName )
     for( i = 0; i < nCount; i++ )
     {
         pEntry = get( i );
-        if( pEntry && pEntry->GetName() == aInternalName )
+        if (pEntry && aInternalName.equals(pEntry->GetName()))
             return sal_True;
     }
 

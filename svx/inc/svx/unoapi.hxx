@@ -83,12 +83,14 @@ SVX_DLLPUBLIC sal_Bool SvxFieldUnitToMeasureUnit( const short nVcl, short& eApi 
 /** if the given name is a predefined name for the current language it is replaced by
     the corresponding api name.
 */
-SVX_DLLPUBLIC void SvxUnogetApiNameForItem( const sal_Int16 nWhich, const String& rInternalName, rtl::OUString& rApiName ) throw();
+SVX_DLLPUBLIC SAL_WARN_UNUSED_RESULT OUString
+    SvxUnogetApiNameForItem(const sal_Int16 nWhich, const OUString& rInternalName) throw();
 
 /** if the given name is a predefined api name it is replaced by the predefined name
     for the current language.
 */
-SVX_DLLPUBLIC void SvxUnogetInternalNameForItem( const sal_Int16 nWhich, const rtl::OUString& rApiName, String& rInternalName ) throw();
+SVX_DLLPUBLIC SAL_WARN_UNUSED_RESULT OUString
+    SvxUnogetInternalNameForItem(const sal_Int16 nWhich, const OUString& rApiName) throw();
 
 #endif // _SVX_UNOAPI_HXX_
 

@@ -110,8 +110,7 @@ void SAL_CALL SvxUnoNameItemTable::insertByName( const OUString& aApiName, const
     if( hasByName( aApiName ) )
         throw container::ElementExistException();
 
-    String aName;
-    SvxUnogetInternalNameForItem( mnWhich, aApiName, aName );
+    OUString aName = SvxUnogetInternalNameForItem(mnWhich, aApiName);
 
     ImplInsertByName( aName, aElement );
 }
@@ -131,19 +130,17 @@ void SAL_CALL SvxUnoNameItemTable::removeByName( const OUString& aApiName )
         return;
     }
 
-    String Name;
-    SvxUnogetInternalNameForItem( mnWhich, aApiName, Name );
+    OUString sName = SvxUnogetInternalNameForItem(mnWhich, aApiName);
 
     ItemPoolVector::iterator aIter = maItemSetVector.begin();
     const ItemPoolVector::iterator aEnd = maItemSetVector.end();
 
     NameOrIndex *pItem;
-    const String aSearchName( Name );
 
     while( aIter != aEnd )
     {
         pItem = (NameOrIndex *)&((*aIter)->Get( mnWhich ) );
-        if( pItem->GetName() == aSearchName )
+        if (sName.equals(pItem->GetName()))
         {
             delete (*aIter);
             maItemSetVector.erase( aIter );
@@ -152,7 +149,7 @@ void SAL_CALL SvxUnoNameItemTable::removeByName( const OUString& aApiName )
         ++aIter;
     }
 
-    if( !hasByName( Name ) )
+    if (!hasByName(sName))
         throw container::NoSuchElementException();
 }
 
@@ -162,22 +159,20 @@ void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aApiName, cons
 {
     SolarMutexGuard aGuard;
 
-    String aName;
-    SvxUnogetInternalNameForItem( mnWhich, aApiName, aName );
+    OUString aName = SvxUnogetInternalNameForItem(mnWhich, aApiName);
 
     ItemPoolVector::iterator aIter = maItemSetVector.begin();
     const ItemPoolVector::iterator aEnd = maItemSetVector.end();
 
     NameOrIndex *pItem;
-    const String aSearchName( aName );
 
     while( aIter != aEnd )
     {
         pItem = (NameOrIndex *)&((*aIter)->Get( mnWhich ) );
-        if( pItem->GetName() == aSearchName )
+        if (aName.equals(pItem->GetName()))
         {
             NameOrIndex* pNewItem = createItem();
-            pNewItem->SetName( aSearchName );
+            pNewItem->SetName(aName);
             if( !pNewItem->PutValue( aElement, mnMemberId ) || !isValid( pNewItem ) )
                 throw lang::IllegalArgumentException();
 
@@ -195,7 +190,7 @@ void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aApiName, cons
     for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
     {
         pItem = (NameOrIndex*)mpModelPool->GetItem2( mnWhich, nSurrogate);
-        if( pItem && pItem->GetName() == aSearchName )
+        if (pItem && aName.equals(pItem->GetName()))
         {
             pItem->PutValue( aElement, mnMemberId );
             bFound = sal_True;
@@ -218,14 +213,12 @@ uno::Any SAL_CALL SvxUnoNameItemTable::getByName( const OUString& aApiName )
 {
     SolarMutexGuard aGuard;
 
-    String aName;
-    SvxUnogetInternalNameForItem( mnWhich, aApiName, aName );
+    OUString aName = SvxUnogetInternalNameForItem(mnWhich, aApiName);
 
     uno::Any aAny;
 
-    if( mpModelPool && aName.Len() != 0 )
+    if (mpModelPool && !aName.isEmpty())
     {
-        const String aSearchName( aName );
         NameOrIndex *pItem;
         sal_uInt32 nSurrogate;
 
@@ -234,7 +227,7 @@ uno::Any SAL_CALL SvxUnoNameItemTable::getByName( const OUString& aApiName )
         {
             pItem = (NameOrIndex*)mpModelPool->GetItem2( mnWhich, nSurrogate );
 
-            if( isValid( pItem ) && (pItem->GetName() == aSearchName) )
+            if (isValid(pItem) && aName.equals(pItem->GetName()))
             {
                 pItem->QueryValue( aAny, mnMemberId );
                 return aAny;
@@ -253,7 +246,6 @@ uno::Sequence< OUString > SAL_CALL SvxUnoNameItemTable::getElementNames(  )
     std::set< OUString, comphelper::UStringLess > aNameSet;
 
     NameOrIndex *pItem;
-    OUString aApiName;
 
     const sal_uInt32 nSurrogateCount = mpModelPool ? mpModelPool->GetItemCount2( mnWhich ) : 0;
     sal_uInt32 nSurrogate;
@@ -264,8 +256,8 @@ uno::Sequence< OUString > SAL_CALL SvxUnoNameItemTable::getElementNames(  )
         if( !isValid( pItem ) )
             continue;
 
-        SvxUnogetApiNameForItem( mnWhich, pItem->GetName(), aApiName );
-        aNameSet.insert( aApiName );
+        OUString aApiName = SvxUnogetApiNameForItem(mnWhich, pItem->GetName());
+        aNameSet.insert(aApiName);
     }
 
     uno::Sequence< OUString > aSeq( aNameSet.size() );
@@ -287,13 +279,11 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::hasByName( const OUString& aApiName )
 {
     SolarMutexGuard aGuard;
 
-    String aName;
-    SvxUnogetInternalNameForItem( mnWhich, aApiName, aName );
+    OUString aName = SvxUnogetInternalNameForItem(mnWhich, aApiName);
 
-    if( aName.Len() == 0 )
+    if (aName.isEmpty())
         return sal_False;
 
-    const String aSearchName( aName );
     sal_uInt32 nSurrogate;
 
     const NameOrIndex *pItem;
@@ -302,7 +292,7 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::hasByName( const OUString& aApiName )
     for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
     {
         pItem = (NameOrIndex*)mpModelPool->GetItem2( mnWhich, nSurrogate );
-        if( isValid( pItem ) && (pItem->GetName() == aSearchName) )
+        if (isValid(pItem) && aName.equals(pItem->GetName()))
             return sal_True;
     }
 
