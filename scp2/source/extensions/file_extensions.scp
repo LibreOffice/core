@@ -228,19 +228,6 @@ End
 
 #endif
 
-/* ** oooblogger ** */
-
-#ifdef WITH_EXTENSION_OOOBLOGGER
-
-File gid_File_Oxt_OOoBlogger
-    TXT_FILE_BODY;
-    Styles = (PACKED, ARCHIVE);
-    Dir = gid_Brand_Dir_Share_Extensions_OOoBlogger;
-    Name = "oooblogger.oxt";
-End
-
-#endif
-
 /* ** Sun Template Pack ** */
 
 #ifdef WITH_EXTENSION_SUN_TEMPLATE_PACK

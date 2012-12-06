@@ -198,17 +198,6 @@ End
 
 #endif
 
-/* ** oooblogger ** */
-
-#ifdef WITH_EXTENSION_OOOBLOGGER
-
-Directory gid_Brand_Dir_Share_Extensions_OOoBlogger
-	ParentID = gid_Brand_Dir_Share_Extensions;
-	DosName = "oooblogger";
-End
-
-#endif
-
 /* ** Sun Template Pack ** */
 
 #ifdef WITH_EXTENSION_SUN_TEMPLATE_PACK
