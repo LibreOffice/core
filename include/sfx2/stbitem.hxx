@@ -90,10 +90,10 @@ protected:
                                     ::sal_Bool bMouseEvent,
                                     const ::com::sun::star::uno::Any& aData ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL paint( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >& xGraphics,
-                                    const ::com::sun::star::awt::Rectangle& rOutputRectangle,
-                                    ::sal_Int32 nItemId, ::sal_Int32 nStyle ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL click() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL doubleClick() throw (::com::sun::star::uno::RuntimeException);
+                                 const ::com::sun::star::awt::Rectangle& rOutputRectangle,
+                                 ::sal_Int32 nStyle ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL click( const ::com::sun::star::awt::Point& aPos ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL doubleClick( const ::com::sun::star::awt::Point& aPos ) throw (::com::sun::star::uno::RuntimeException);
 
     // Old sfx2 interface
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
