@@ -32,6 +32,11 @@
   #include <ws2bth.h>
 #endif
 
+#ifdef __MINGW32__
+// Value taken from http://msdn.microsoft.com/en-us/library/windows/desktop/ms738518%28v=vs.85%29.aspx
+#define NS_BTH 16
+#endif
+
 // FIXME: move this into an external file and look at sharing definitions
 // across OS's (i.e. UUID and port ).
 // Also look at determining which ports are available.
@@ -311,16 +316,16 @@ void SAL_CALL BluetoothServer::run()
     socklen_t  aRemoteAddrLen = sizeof(aRemoteAddr);
     while ( true )
     {
-        int bSocket;
+        SOCKET socket;
         SAL_INFO( "sdremote.bluetooth", "waiting on accept" );
-        if ( (bSocket = accept(aSocket, (sockaddr*) &aRemoteAddr, &aRemoteAddrLen)) < 0 )
+        if ( (socket = accept(aSocket, (sockaddr*) &aRemoteAddr, &aRemoteAddrLen)) == INVALID_SOCKET )
         {
-            SAL_WARN( "sdremote.bluetooth", "accept failed with error" << bSocket );
+            SAL_WARN( "sdremote.bluetooth", "accept failed with error " << WSAGetLastError() );
             close( aSocket );
             return;
         } else {
             SAL_INFO( "sdremote.bluetooth", "connection accepted" );
-            Communicator* pCommunicator = new Communicator( new BufferedStreamSocket( bSocket) );
+            Communicator* pCommunicator = new Communicator( new BufferedStreamSocket( socket ) );
             mpCommunicators->push_back( pCommunicator );
             pCommunicator->launch();
         }
@@ -406,14 +411,14 @@ void SAL_CALL BluetoothServer::run()
     int aRemoteAddrLen = sizeof(aRemoteAddr);
     while ( true )
     {
-        int bSocket;
-        if ( (bSocket = accept(aSocket, (sockaddr*) &aRemoteAddr, &aRemoteAddrLen)) == INVALID_SOCKET )
+        SOCKET socket;
+        if ( (socket = accept(aSocket, (sockaddr*) &aRemoteAddr, &aRemoteAddrLen)) == INVALID_SOCKET )
         {
             closesocket( aSocket );
             WSACleanup();
             return;
         } else {
-            Communicator* pCommunicator = new Communicator( new BufferedStreamSocket( bSocket) );
+            Communicator* pCommunicator = new Communicator( new BufferedStreamSocket( socket) );
             mpCommunicators->push_back( pCommunicator );
             pCommunicator->launch();
         }

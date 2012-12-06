@@ -76,6 +76,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_uimpress,\
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_CppunitTest_use_system_win32_libs,sd_uimpress,\
+	uuid \
 	ws2_32 \
 ))
 endif

@@ -113,6 +113,7 @@ $(eval $(call gb_Library_use_externals,sd,\
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_system_win32_libs,sd,\
+	uuid \
 	ws2_32 \
 ))
 endif
