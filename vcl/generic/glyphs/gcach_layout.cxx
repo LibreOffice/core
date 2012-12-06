@@ -266,6 +266,7 @@ private:
     IcuFontFromServerFont   maIcuFont;
 
     le_int32                meScriptCode;
+    le_int32                mnLayoutFlags;
     LayoutEngine*           mpIcuLE;
 
 public:
@@ -280,6 +281,7 @@ public:
 IcuLayoutEngine::IcuLayoutEngine( ServerFont& rServerFont )
 :   maIcuFont( rServerFont ),
     meScriptCode( USCRIPT_INVALID_CODE ),
+    mnLayoutFlags( 0 ),
     mpIcuLE( NULL )
 {}
 
@@ -367,13 +369,14 @@ bool IcuLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
         if( eScriptCode < 0 )   // TODO: handle errors better
             eScriptCode = latnScriptCode;
 
-        // get layout engine matching to this script
+        // get layout engine matching to this script and ligature/kerning combination
         // no engine change necessary if script is latin
-        if( !mpIcuLE || ((eScriptCode != meScriptCode) && (eScriptCode > USCRIPT_INHERITED)) )
+        if( !mpIcuLE || ((eScriptCode != meScriptCode) && (eScriptCode > USCRIPT_INHERITED)) || (mnLayoutFlags != nLayoutFlags) )
         {
             // TODO: cache multiple layout engines when multiple scripts are used
             delete mpIcuLE;
             meScriptCode = eScriptCode;
+            mnLayoutFlags = nLayoutFlags;
             le_int32 eLangCode = 0; // TODO: get better value
             mpIcuLE = LayoutEngine::layoutEngineFactory( &maIcuFont, eScriptCode, eLangCode, nLayoutFlags, rcIcu );
             if( LE_FAILURE(rcIcu) )
