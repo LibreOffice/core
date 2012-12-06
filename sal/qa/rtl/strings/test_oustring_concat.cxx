@@ -60,7 +60,7 @@ CPPUNIT_TEST_SUITE_END();
 void test::oustring::StringConcat::checkConcat()
 {
 // All the extra () are to protect commas againsts being treated as separators of macro arguments.
-    CPPUNIT_ASSERT_EQUAL( OUString(), OUString(OUString() + OUString()) );
+    CPPUNIT_ASSERT_EQUAL( OUString(), OUString(OUString() + OUString()));
     CPPUNIT_ASSERT_EQUAL( OUString( "foobar" ), OUString( OUString( "foo" ) + OUString( "bar" )));
     TYPES_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, OUString > )), typeid( OUString( "foo" ) + OUString( "bar" )));
     CPPUNIT_ASSERT_EQUAL( OUString( "foobar" ), OUString( OUString( "foo" ) + "bar" ));
@@ -81,33 +81,33 @@ void test::oustring::StringConcat::checkEnsureCapacity()
     rtl_uString* str = NULL;
     rtl_uString_newFromLiteral( &str, "test", strlen( "test" ), 0 );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 4 ), str->length );
-    CPPUNIT_ASSERT_EQUAL( 1, str->refCount );
+    CPPUNIT_ASSERT_EQUAL( 1, int( str->refCount ));
 
     rtl_uString* oldStr = str;
     rtl_uString_ensureCapacity( &str, 4 ); // should be no-op
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 4 ), str->length );
-    CPPUNIT_ASSERT_EQUAL( 1, str->refCount );
+    CPPUNIT_ASSERT_EQUAL( 1, int( str->refCount ));
     CPPUNIT_ASSERT( oldStr == str );
 
     rtl_uString_acquire( oldStr );
-    CPPUNIT_ASSERT_EQUAL( 2, str->refCount );
+    CPPUNIT_ASSERT_EQUAL( 2, int( str->refCount ));
     rtl_uString_ensureCapacity( &str, 4 );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 4 ), str->length );
-    CPPUNIT_ASSERT_EQUAL( 1, str->refCount );
+    CPPUNIT_ASSERT_EQUAL( 1, int( str->refCount ));
     // a copy was forced because of refcount
     CPPUNIT_ASSERT( oldStr != str );
     CPPUNIT_ASSERT( rtl_ustr_compare( oldStr->buffer, str->buffer ) == 0 );
-    CPPUNIT_ASSERT_EQUAL( 1, oldStr->refCount );
+    CPPUNIT_ASSERT_EQUAL( 1, int( oldStr->refCount ));
     rtl_uString_release( str );
     str = oldStr;
 
     rtl_uString_acquire( oldStr );
     rtl_uString_ensureCapacity( &str, 1024 );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 4 ), str->length ); // size is still 4
-    CPPUNIT_ASSERT_EQUAL( 1, str->refCount );
+    CPPUNIT_ASSERT_EQUAL( 1, int( str->refCount ));
     CPPUNIT_ASSERT( oldStr != str );
     CPPUNIT_ASSERT( rtl_ustr_compare( oldStr->buffer, str->buffer ) == 0 );
-    CPPUNIT_ASSERT_EQUAL( 1, oldStr->refCount );
+    CPPUNIT_ASSERT_EQUAL( 1, int( oldStr->refCount ));
     // but there should be extra capacity
     for( int i = 0;
          i < 20;
