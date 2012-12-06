@@ -100,6 +100,7 @@ IDLFILES=\
     Gradient.idl\
     GradientStyle.idl\
     ImageAlign.idl\
+    ImageDrawMode.idl\
     ImagePosition.idl\
     ImageScaleMode.idl\
     ImageStatus.idl\
